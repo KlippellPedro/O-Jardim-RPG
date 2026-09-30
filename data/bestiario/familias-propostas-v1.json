@@ -1288,7 +1288,7 @@
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "15m",
-        "descricao": "O maior animal que já pisou nas planícies, e ele sabe. Quando corre, o chão faz eco por três dias, e as manadas dividem o caminho antes que ele peça.",
+        "descricao": "O maior animal que já pisou nas planícies, e ele sabe. Quando corre, o chão treme por três dias, e as manadas dividem o caminho antes que ele peça.",
         "ataques": [
           {
             "nome": "Chifrada Devastadora",

@@ -262,7 +262,7 @@ Esta é a página de consulta: todas as contas que a ficha faz por você, reunid
 
 ### Maestria de atributo
 
-Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Atributo não tem valor máximo: passando do 20 ele segue subindo, e o modificador continua sendo a conta de sempre.
+Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Não confunda com a Maestria de classe, que vem dos níveis 21 a 50 de uma classe (ver Poderes e Habilidades). Atributo não tem valor máximo: passando do 20 ele segue subindo, e o modificador continua sendo a conta de sempre.
 
 - **Força:** uma vez por turno, +2 no dano de um ataque corpo a corpo.
 
@@ -278,7 +278,7 @@ Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeit
 
 ### Fluxo
 
-**Fluxo** é o sétimo atributo, e mede o quanto você controla aquilo que canaliza. Em magia ele entra no lugar do atributo que normalmente acompanharia Misticismo, e é ele que limita o maior círculo que você conjura com segurança. Fluxo alto sozinho não ensina magia nenhuma: alguém precisa te dar acesso, seja uma classe, uma habilidade, um item ou o Mestre.
+**Fluxo** é o sétimo atributo, e mede o quanto você controla aquilo que canaliza. Em magia ele entra no lugar do atributo que normalmente acompanharia Misticismo, e é ele que diz até que círculo a conjuração sai com folga (o Fluxo recomendado de cada círculo está em Magia e Fluxo). Fluxo alto sozinho não ensina magia nenhuma: alguém precisa te dar acesso, seja uma classe, uma habilidade, um item ou o Mestre.
 
 ## pericias
 
@@ -296,7 +296,7 @@ d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau
 
 ### Graus de perícia
 
-- Grau | Bônus | Nível mínimo
+- Grau | Bônus | Nível total mínimo
 
 - Iniciante | +0 | 1
 
@@ -322,7 +322,9 @@ d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau
 
 - Absoluto | +22 | 500
 
-Lendário, Mítico, Cósmico, Eterno e Absoluto só abrem a partir dos níveis 60, 100, 150, 250 e 500, os mesmos patamares em que o personagem passa do jogo padrão (ver Experiência e Níveis). Até o 60, o degrau mais alto que o nível permite é Renomado.
+Lendário, Mítico, Cósmico, Eterno e Absoluto só abrem quando o nível total chega a 60, 100, 150, 250 e 500, que são os patamares de Experiência e Níveis. É onde o personagem já passou do jogo padrão. Até o 60, o degrau mais alto que o nível permite é Renomado.
+
+Duas palavras iguais: o **grau Mestre** é um degrau de perícia (+8), e o **Mestre** da mesa é quem conduz o jogo. O livro escreve os dois com M maiúsculo e o contexto diz qual é.
 
 ### Graus de resultado
 
@@ -1194,7 +1196,7 @@ São dois caminhos diferentes e vale não confundir. Quando uma **classe** te d�
 
 - Cada dia custa seis horas e deixa 1 de Cansaço no fim. Uma noite normal de sono resolve.
 
-- Um instrutor de grau superior ao seu corta 20% do tempo, arredondando para cima.
+- Instrutor é alguém que já tem o grau que você quer alcançar, ou um maior. Quando a linha da tabela pede instrutor, sem ele você não sobe; nas outras linhas, ter um de grau superior ao seu corta 20% do tempo, arredondando para cima.
 
 - Parar no meio não apaga o que já foi feito. Mas mais de 30 dias largado cobra um dia de revisão antes de continuar.
 
@@ -1317,6 +1319,32 @@ Nem todo dia livre precisa render número. Se você não souber o que o seu pers
 **Status:** Regra oficial
 
 Uma tabela de XP sem teto de nível: a conta de sempre até o 100 e uma faixa fixa por patamar depois. As recompensas saem do nível total, nunca de cada classe separada.
+
+### O que muda depois do nível 20 e do nível 60
+
+Se a dúvida é "o que eu ganho quando passo do 20?", esta parte responde sem você precisar caçar em outros capítulos. As regras completas continuam nas páginas indicadas.
+
+- Quando você chega em | O que passa a valer | Onde ler
+
+- Nível 20 de uma classe | Acabam os poderes e as habilidades escritas dessa classe. Ela segue somando Vida, Mana e Estamina a cada nível, e você já pode abrir a segunda classe comum. | Sistema Base
+
+- Níveis 25, 35 e 45 da classe | Reforço de recursos: Vida, Mana e Estamina como se você tivesse 2 níveis a mais nela. | Poderes e Habilidades
+
+- Níveis 30, 40 e 50 da classe | Mais um grau de perícia, à sua escolha. No nível 50 a classe fecha, e quem quer continuar abre outra. | Poderes e Habilidades
+
+- Nível 25 da fonte de magia | Quem conjura segue ganhando vagas de magia (2 a cada 5 níveis, 22 no nível 50) e passa a ter um limite de 4 magias do mesmo círculo. | Magia e Fluxo
+
+- Nível total 29 | O grau Renomado (+12) fica disponível para as perícias. | Perícias e Treinar
+
+- Nível total 60 | Termina o jogo padrão (duas classes comuns e uma especial). Você pode continuar, ganha a Conquista e o selo do Patamar I, e o grau Lendário (+14) fica disponível. | Esta página e Perícias
+
+- Níveis totais 100, 150, 250 e 500 | Patamares II a V. Cada um traz Conquista, moldura nova no retrato e um grau de perícia novo: Mítico, Cósmico, Eterno e Absoluto. | Esta página e Perícias
+
+- Nada disso trava a ficha. Passou do que a regra padrão prevê, a ficha só mostra o aviso do patamar novo e a mesa decide o que fazer com isso.
+
+- O atributo não tem teto, e a rolagem de magia soma metade do nível como qualquer teste. O Fluxo recomendado de cada círculo é aviso, e a DT do círculo decide se a magia sai.
+
+- Personagens de nível muito alto costumam ser NPCs do Mestre, como o dono de um banco ou um guardião antigo. Eles usam a mesma ficha, sem cumprir regra de criação.
 
 ### Progressão do nível total
 
@@ -1634,7 +1662,7 @@ Nem todo mundo que luta ao seu lado é um personagem de jogador. Cavalo, cão de
 
 Cada aliado ocupa uma entrada na aba Aliados, com os mesmos campos que o Mestre usa para qualquer criatura: nome, espécie, papel, nível, Vida atual e máxima, Defesa, Movimento, Iniciativa, ataque principal, condições ativas e observações.
 
-- Tudo ali é editável. O aliado que veio da Loja chega com os números do catálogo, e você ajusta conforme a história muda: ele treina, se fere, ganha equipamento, cria mania.
+- Tudo ali é editável. O aliado que veio da Loja chega com os números do catálogo (com a Vida já ajustada para aliado), e você ajusta conforme a história muda: ele treina, se fere, ganha equipamento, cria mania.
 
 - Marque quem está em cena. Aliado guardado no estábulo continua na lista sem ocupar espaço na mesa.
 
@@ -2609,7 +2637,7 @@ DT de conjuração = 7 + (3 × círculo)
 
 - Toda magia de círculo precisa alcançar a DT do próprio círculo para se estabilizar.
 
-- Se houver alvo hostil, compare a *mesma* rolagem também com Reflexos, Fortitude ou Vontade dele.
+- Se houver alvo hostil, o mesmo total também é lido contra ele. Magia de ataque compara o total com a Defesa do alvo, como um golpe. Magia de efeito diz qual resistência vale (Reflexos, Fortitude ou Vontade): o alvo rola d20 + o bônus dessa resistência e resiste se igualar ou superar o seu total.
 
 - Ou seja: a magia pode estabilizar e ainda assim ser resistida. É uma rolagem só, lida duas vezes.
 
@@ -2645,9 +2673,41 @@ Esses custos são a referência do círculo. Cada entrada do catálogo declara o
 
 O Fluxo recomendado não trava nada. A classe diz até que círculo você aprende; o Fluxo diz até onde a conjuração sai com folga. Quem aprende um círculo acima do próprio Fluxo pode tentar, mas a rolagem precisa alcançar a DT do círculo, e a ficha avisa quando isso acontece. As Marcas de círculo continuam seguindo o círculo que o seu Fluxo sustenta.
 
-### Vagas depois do nível 20
+### Magia por nível da classe
 
-A fonte de magia não para no 20. Canalizador, Sintonizador e Elementarista ganham mais 2 vagas de magia a cada 5 níveis (22 no nível 50), e Canalizador e Sintonizador ganham mais 1 vaga de Selo e de Encantamento a cada 5 níveis. Do nível 25 em diante, no máximo 4 magias do mesmo círculo: as vagas novas obrigam a espalhar o repertório.
+Cada marco libera um círculo mais alto e mais vagas. A vaga é o total de magias que a ficha pode conhecer, somando todas as fontes. O círculo liberado é o que a classe permite aprender, e o Fluxo recomendado é aviso. A tabela mostra círculo e vagas de magia por nível da classe (Canalizador e Sintonizador seguem a mesma coluna).
+
+- Nível da classe | Canalizador e Sintonizador | Elementarista | Cartista Arcano
+
+- 1 | 2º · 2 | 2º · 1 | 1º · 1
+
+- 5 | 4º · 4 | 4º · 4 | 1º · 3
+
+- 10 | 6º · 6 | 6º · 6 | 2º · 4
+
+- 15 | 8º · 8 | 8º · 8 | 2º · 5
+
+- 20 | 10º · 10 | 10º · 10 | 2º · 6
+
+- 25 | 10º · 12 | 10º · 12 | 2º · 7
+
+- 30 | 10º · 14 | 10º · 14 | 2º · 8
+
+- 35 | 10º · 16 | 10º · 16 | 2º · 9
+
+- 40 | 10º · 18 | 10º · 18 | 2º · 10
+
+- 45 | 10º · 20 | 10º · 20 | 2º · 11
+
+- 50 | 10º · 22 | 10º · 22 | 2º · 12
+
+- A fonte de magia não para no 20: Canalizador, Sintonizador e Elementarista ganham mais 2 vagas a cada 5 níveis, e o Cartista Arcano mais 1, sempre até o nível 50.
+
+- Do nível 25 em diante vale um limite de 4 magias do mesmo círculo, para as vagas novas espalharem o repertório. Antes do 25 não há limite por círculo.
+
+- Selos e Encantamentos seguem o mesmo ritmo: Canalizador e Sintonizador ganham mais 1 vaga de cada a cada 5 níveis depois do 20, e Ritualista e Cartista Arcano mais 1 a cada 10.
+
+- A aba Magias da ficha mostra quantas magias de cada círculo você já conhece e quantas ainda pode escolher.
 
 ### Concentração
 
@@ -3128,6 +3188,8 @@ Classe comum serve a qualquer Árvore. Classe especial segue o mesmo orçamento 
 
 Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes e eventos por nível) fica no catálogo interativo da página de Regras, que lê o mesmo arquivo.
 
+Toda classe vai até o nível 50. As recompensas escritas (habilidades, poderes e eventos) vão até o 20, e do 21 ao 50 entra a Maestria, igual para todas. A página de cada classe mostra tudo isso nível a nível, e as classes que conjuram mostram também o círculo e as vagas de magia. Se quiser um resumo do que muda depois do 20 e do 60, ele está em Experiência e Níveis.
+
 - **Guerreiro** (comum) - Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo pra si e comanda um batalhão que luta melhor quando ele está por perto.
 - **Piloto** (comum) - Luta de dentro de um veículo que ele mesmo vai melhorando peça por peça. Quanto mais o personagem sobe, mais o veículo cresce junto.
 - **Ninja** (comum) - Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Rende muito mais quando ninguém percebeu que ele chegou.
@@ -3226,7 +3288,7 @@ Evento não é poder. É um gancho que a classe entrega ao Mestre: uma arena que
 
 ### Depois do nível 20: a Maestria
 
-A grade das classes termina no nível 20. Cada classe pode ir até o 50, e do 21 ao 50 ela soma Vida, Mana e Estamina a cada nível, do jeito de sempre, mais a Maestria a cada 5 níveis. A Maestria é igual para todas as classes e conta pelo nível da própria classe.
+A grade das classes termina no nível 20. Cada classe pode ir até o 50, e do 21 ao 50 ela soma Vida, Mana e Estamina a cada nível, do jeito de sempre, mais a Maestria a cada 5 níveis. A Maestria é igual para todas as classes e conta pelo nível da própria classe. Não confunda com a maestria de atributo do Sistema Base, que vem de um atributo chegar a 20 por mérito próprio.
 
 - Nível da classe | Recompensa | O que dá
 
@@ -3306,13 +3368,23 @@ Criatura neste jogo não é item de mochila: é alguém que anda com você. Exis
 
 ### Como uma criatura chega até você
 
-- Comprar no catálogo da Loja cria o aliado direto na sua ficha, com Vida, Defesa, Iniciativa e ataque principal preenchidos. Comprou três, aparecem três fichas.
+- Comprar no catálogo da Loja cria o aliado direto na sua ficha, com Vida, Defesa, Iniciativa e ataque principal preenchidos. Comprou três, aparecem três fichas. A Vida que a ficha recebe já é a de aliado, menor que a da criatura como inimigo (ver abaixo).
 
 - Daí em diante ela é sua responsabilidade: vida anotada, condições anotadas, turno próprio na iniciativa. O capítulo Aliados e Contratados explica como ela se comporta na mesa.
 
 - Invocação sustentada por um poder seu não vira entrada permanente: ela existe enquanto o poder existir.
 
 - O que aparece à venda depende da campanha. Uma criatura que o Mestre não liberou não está no catálogo, e isso não é falha do sistema.
+
+### Lendo a ficha de uma criatura no Bestiário
+
+- **VD (Valor de Desafio):** o nível do grupo que a criatura enfrenta sozinha. Um VD 30 é um encontro inteiro para um grupo de nível 30. Quanto maior o VD, mais difícil de matar e mais XP ela vale.
+
+- **Vida como inimigo e como aliado:** na mão do Mestre a criatura aguenta o grupo inteiro, então a Vida dela é alta. Comprada ou contratada, ela luta ao seu lado e nasce com no máximo o dobro da Vida média de um personagem do mesmo nível. A Loja mostra os dois números.
+
+- **Família:** criaturas do mesmo corpo e tema formam uma escada de estágios, como o Dragão que vai de filhote a ancião. Quem sobe de estágio muda de nível, e o texto de cada uma diz o que ela ganhou.
+
+- **Única:** tem uma versão só, sem estágios, e não está à venda. As de VD muito alto também ficam só no Bestiário: servem ao Mestre, e não ao balcão da Loja.
 
 Servo é o único tipo que já nasce com um problema junto. Antes de comprar um, combine com a mesa o que a sanidade abalada dele significa na sua história, porque essa parte não se resolve com número.
 

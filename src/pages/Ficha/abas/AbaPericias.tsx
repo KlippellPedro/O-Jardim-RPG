@@ -8,7 +8,7 @@ import { IPericiaCatalogo, IRaca } from '../../../types/catalogo';
 import { ModalVantagensPericia } from '../components/ModalVantagensPericia';
 import { ModalCalculoPericia } from '../components/ModalCalculoPericia';
 import { aplicarAjustesAtributosRaciais, obterAjustesPericiasRaciais } from '../../../services/calculoService';
-import { BONUS_GRAU, GRAUS_PERICIA, nomeDoGrauPericia } from '../../../services/progressaoNiveis';
+import { BONUS_GRAU, GRAUS_PERICIA, NIVEL_MINIMO_GRAU, nomeDoGrauPericia } from '../../../services/progressaoNiveis';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
 import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeCansacoTeste } from '../../../services/statusService';
 import { AjusteButton, AjustesFichaModal } from '../components/AjustesFichaModal';
@@ -455,9 +455,10 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                       title={`Grau de treinamento: ${nomeDoGrauPericia(grauAtual)} (+${BONUS_GRAU[grauAtual] || 0})`}
                       value={grauAtual}
                       onChange={(grau) => handleGrauChange(p.id, grau)}
-                      options={GRAUS_PERICIA.map((grau) => ({
+                      options={GRAUS_PERICIA.map((grau, indiceDoGrau) => ({
                         value: grau,
-                        label: `${nomeDoGrauPericia(grau)} (+${BONUS_GRAU[grau]})`,
+                        // Grau que pede mais nível total do que a ficha tem: só um aviso, o Mestre decide.
+                        label: `${nomeDoGrauPericia(grau)} (+${BONUS_GRAU[grau]})${NIVEL_MINIMO_GRAU[indiceDoGrau] > nivel ? ` · pede nível ${NIVEL_MINIMO_GRAU[indiceDoGrau]}` : ''}`,
                         triggerLabel: `${nomeDoGrauPericia(grau)} +${BONUS_GRAU[grau]}`,
                         labelClassName: CORES_GRAU[grau],
                       }))}

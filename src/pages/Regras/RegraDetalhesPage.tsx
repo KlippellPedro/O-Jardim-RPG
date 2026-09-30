@@ -19,6 +19,7 @@ import { RACA_PAGES } from '../../redesign/raca/registry';
 import { CLASSE_PAGES } from '../../redesign/classe/registry';
 import { useResolvedRules } from '../../hooks/useResolvedRules';
 import { obterPosicaoRetornoRegras } from './regrasScrollRestoration';
+import { NIVEL_MAXIMO_CLASSE } from '../../services/progressaoNiveis';
 
 export const RegraDetalhesPage = () => {
   const { categoria, itemId } = useParams<{ categoria: string; itemId: string }>();
@@ -244,7 +245,7 @@ export const RegraDetalhesPage = () => {
                 <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-gray-300">
                   {classe.categoria === 'padrao' ? 'Classe comum' : <SeloEspecial texto="Classe especial" cor={particleColor} />}
                 </span>
-                <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-gray-300">Progressão: 20 níveis</span>
+                <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-gray-300">Progressão: 20 níveis escritos, Maestria até o {NIVEL_MAXIMO_CLASSE}</span>
               </div>
             </PremiumCard>
           )}

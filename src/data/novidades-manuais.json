@@ -2,6 +2,17 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-09-30-onde-ler-as-regras-novas",
+      "data": "2026-09-30",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Onde ler as regras novas",
+      "detalhes": [
+        "Em Experiência e Níveis, uma tabela nova responde \"o que ganho depois do 20 e do 60?\" sem você precisar caçar em outros capítulos.",
+        "A página de cada classe de magia agora mostra o círculo e as vagas de magia nível a nível, e o capítulo de Magia traz a mesma grade para comparar as classes. O capítulo do Bestiário explica o que é o VD e por que a criatura comprada tem menos Vida que a do inimigo."
+      ]
+    },
+    {
       "id": "2026-09-30-doze-graus-de-pericia",
       "data": "2026-09-30",
       "tipo": "novo",

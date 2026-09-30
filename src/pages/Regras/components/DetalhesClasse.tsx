@@ -4,6 +4,7 @@ import { classeTemProgressaoPublicada, formatarRecompensaClasse } from '../../..
 import { rotuloCustoDePoder } from '../../../services/statusService';
 import { MARCOS_MAESTRIA, descreverMarcoMaestria } from '../../../services/maestriaClasse';
 import { NIVEL_CONTEUDO_CLASSE, NIVEL_MAXIMO_CLASSE } from '../../../services/progressaoNiveis';
+import { linhasDeMagiaDaClasse } from '../../../services/progressaoMagiaClasse';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
 import { AuraEspecial, SeloEspecial } from '../../../redesign/components/premium/AuraEspecial';
 import { obterTemaPorId } from '../../../redesign/themeMap';
@@ -278,9 +279,9 @@ export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasse
       </div>
 
       <div className="rounded-2xl border border-white/10 bg-black/30 p-5 text-sm leading-relaxed text-gray-300">
-        <p className="font-bold uppercase tracking-wider text-gray-400">Nível 20 exige uma segunda classe</p>
+        <p className="font-bold uppercase tracking-wider text-gray-400">Sozinha até o {NIVEL_MAXIMO_CLASSE}, ou com outras classes</p>
         <p className="mt-1">
-          Não dá para maximizar {classe.titulo} sozinho: uma classe só chega ao nível 20 se outra classe da ficha já tiver nível 10 ou mais. Os níveis podem ser intercalados como o jogador preferir, contanto que essa segunda classe chegue lá primeiro.
+          Dá para subir {classe.titulo} sozinho até o nível {NIVEL_MAXIMO_CLASSE}: as recompensas escritas vão até o {NIVEL_CONTEUDO_CLASSE} e, do {NIVEL_CONTEUDO_CLASSE + 1} em diante, a classe segue somando Vida, Mana e Estamina e ganha a Maestria. Para abrir uma segunda classe comum, uma das suas classes precisa ter chegado ao nível {NIVEL_CONTEUDO_CLASSE}. Depois disso os níveis podem ser intercalados como o jogador preferir.
         </p>
       </div>
 
@@ -392,6 +393,40 @@ export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasse
             ))}
           </div>
         </div>
+        {classe.progressao_magia && (() => {
+          const linhas = linhasDeMagiaDaClasse(classe).filter((linha) => linha.vagasMagia !== null);
+          const teto = linhas.find((linha) => linha.tetoPorCirculo !== null);
+          return (
+            <div className="mt-4 rounded-2xl border border-sky-500/20 bg-sky-500/5 p-5" data-testid="magia-da-classe">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-sky-300">Magia da classe, nível a nível</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-300">
+                A cada marco você libera um círculo mais alto e ganha vagas para aprender magias. As vagas são o total que a ficha pode conhecer{teto ? `; do nível ${teto.nivel} em diante, no máximo ${teto.tetoPorCirculo} magias do mesmo círculo` : ''}. O Fluxo recomendado de cada círculo é um aviso: você aprende o que a classe libera, e a DT do círculo decide se a magia sai.
+              </p>
+              <div className="mt-3 overflow-x-auto">
+                <table className="w-full min-w-[20rem] text-left text-sm text-gray-300">
+                  <thead>
+                    <tr className="border-b border-white/10 text-[11px] uppercase tracking-wider text-gray-500">
+                      <th className="py-2 pr-4 font-bold">Nível da classe</th>
+                      <th className="py-2 pr-4 font-bold">Círculo liberado</th>
+                      <th className="py-2 pr-4 font-bold">Vagas de magia</th>
+                      <th className="py-2 font-bold">Limite por círculo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {linhas.map((linha) => (
+                      <tr key={linha.nivel} className="border-b border-white/5 last:border-0">
+                        <td className="py-2 pr-4 font-bold text-sky-200">{linha.nivel}</td>
+                        <td className="py-2 pr-4">{linha.circulo}º</td>
+                        <td className="py-2 pr-4">{linha.vagasMagia}</td>
+                        <td className="py-2">{linha.tetoPorCirculo ?? 'sem limite'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        })()}
       </section>
 
       {(classe.habilidades || []).length > 0 && (

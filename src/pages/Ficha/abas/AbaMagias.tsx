@@ -917,7 +917,7 @@ ${avisoDeFluxo}` : ''}`)) return;
             </div>
             {porCirculo.tetoAPartirDoNivel && (
               <small className="mt-2 block text-[10px] text-gray-500">
-                Do nível {porCirculo.tetoAPartirDoNivel.nivel} da fonte em diante, no máximo {porCirculo.tetoAPartirDoNivel.teto} magias do mesmo círculo.
+                Do nível {porCirculo.tetoAPartirDoNivel.nivel} da classe em diante, no máximo {porCirculo.tetoAPartirDoNivel.teto} magias do mesmo círculo.
               </small>
             )}
           </div>

@@ -261,6 +261,11 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                 </div>
               ))}
             </div>
+            {typeof dadosBrutos.pv === 'number' && vidaDeAliado(dadosBrutos.vd, dadosBrutos.pv) !== dadosBrutos.pv && (
+              <p className="text-xs leading-relaxed text-gray-400">
+                Comprada ou contratada, a criatura luta ao seu lado e nasce com a Vida de aliado. A Vida como inimigo é a que o Mestre usa quando ela enfrenta o grupo inteiro.
+              </p>
+            )}
             {ataques.length > 0 && (
               <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                 <div className="mb-2 text-xs uppercase text-gray-400">Ataques</div>

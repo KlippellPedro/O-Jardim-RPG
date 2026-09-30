@@ -11,6 +11,7 @@ import progressaoNiveisData from '../ficha/progressao-niveis.json';
 import type { IClasse } from '../../src/types/catalogo';
 import { MARCOS_MAESTRIA } from '../../src/services/maestriaClasse';
 import { modeloDeCriatura, VD_ONDE_A_VIDA_ESCALA } from '../../src/services/curvaCriatura';
+import { linhasDeMagiaDaClasse } from '../../src/services/progressaoMagiaClasse';
 import {
   GRAUS_PERICIA_DADOS,
   NIVEL_CONTEUDO_CLASSE,
@@ -169,6 +170,21 @@ const linhasCriaturaPorVd = () => VDS_DA_TABELA_DE_CRIATURA.map((vd) => {
   const [lacaio, padrao, elite, chefe] = (['lacaio', 'padrao', 'elite', 'chefe'] as const).map((papel) => modeloDeCriatura(vd, papel));
   return `<tr><td><strong>${vd}</strong></td><td>+${solo.pericias[0].replace('Luta +', '')}</td><td>${solo.defesa}</td><td>${solo.danoMedio}</td><td>${chefe.golpeAnunciadoMedio}</td><td>${formatarXP(lacaio.pv)}</td><td>${formatarXP(padrao.pv)}</td><td>${formatarXP(elite.pv)}</td><td>${formatarXP(chefe.pv)}</td><td>${formatarXP(solo.pv)}</td><td>${formatarXP(solo.xp)}</td></tr>`;
 }).join('\n');
+/** Círculo e vagas de magia por nível da classe, lidos dos marcos de classes.json. */
+const NIVEIS_DA_TABELA_DE_MAGIA = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+const celulaDeMagia = (classeId: string, nivel: number) => {
+  const linha = linhasDeMagiaDaClasse(classesData.find((classe) => classe.id === classeId) ?? {})
+    .filter((item) => item.nivel <= nivel && item.vagasMagia !== null).pop();
+  return linha ? `${linha.circulo}º · ${linha.vagasMagia}` : 'nada ainda';
+};
+const linhasMagiaPorClasse = () => NIVEIS_DA_TABELA_DE_MAGIA.map((nivel) => (
+  `<tr><td><strong>${nivel}</strong></td><td>${celulaDeMagia('canalizador', nivel)}</td><td>${celulaDeMagia('elementarista', nivel)}</td><td>${celulaDeMagia('cartista-arcano', nivel)}</td></tr>`
+)).join('\n');
+const niveisDaMaestria = (tipo: string) => MARCOS_MAESTRIA.filter((marco) => marco.tipo === tipo).map((marco) => marco.nivel);
+const listaComE = (numeros: number[]) => numeros.join(', ').replace(/, ([^,]*)$/, ' e $1');
+const marcosDoCanalizador = linhasDeMagiaDaClasse(classesData.find((classe) => classe.id === 'canalizador') ?? {});
+const vagasDeMagiaNoTeto = marcosDoCanalizador[marcosDoCanalizador.length - 1]?.vagasMagia;
+const grauPorNome = (id: string) => GRAUS_PERICIA_DADOS.find((grau) => grau.id === id);
 const linhasItemEspecial = () => [
   ['1 a 7', '1'], ['8 a 11', '2'], ['12 a 15', '3'], ['16 a 19', '4'], ['20 a 23', '5'],
 ].map(([faixa, vagas]) => `<tr><td>${faixa}</td><td>${vagas}</td></tr>`).join('\n')
@@ -629,7 +645,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Maestria de atributo</h3>
-      <p class="regras-note">Quando um atributo chega a 20 <strong>por mérito próprio</strong>, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Atributo não tem valor máximo: passando do 20 ele segue subindo, e o modificador continua sendo a conta de sempre.</p>
+      <p class="regras-note">Quando um atributo chega a 20 <strong>por mérito próprio</strong>, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Não confunda com a Maestria de classe, que vem dos níveis 21 a 50 de uma classe (ver Poderes e Habilidades). Atributo não tem valor máximo: passando do 20 ele segue subindo, e o modificador continua sendo a conta de sempre.</p>
       <ul class="regras-sublist regras-sublist--grid">
         <li><strong>Força:</strong> uma vez por turno, +2 no dano de um ataque corpo a corpo.</li>
         <li><strong>Destreza:</strong> +1 na Defesa Natural ou +1,5 m de movimento.</li>
@@ -640,7 +656,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Fluxo</h3>
-      <p class="regras-note"><strong>Fluxo</strong> é o sétimo atributo, e mede o quanto você controla aquilo que canaliza. Em magia ele entra no lugar do atributo que normalmente acompanharia Misticismo, e é ele que limita o maior círculo que você conjura com segurança. Fluxo alto sozinho não ensina magia nenhuma: alguém precisa te dar acesso, seja uma classe, uma habilidade, um item ou o Mestre.</p>
+      <p class="regras-note"><strong>Fluxo</strong> é o sétimo atributo, e mede o quanto você controla aquilo que canaliza. Em magia ele entra no lugar do atributo que normalmente acompanharia Misticismo, e é ele que diz até que círculo a conjuração sai com folga (o Fluxo recomendado de cada círculo está em Magia e Fluxo). Fluxo alto sozinho não ensina magia nenhuma: alguém precisa te dar acesso, seja uma classe, uma habilidade, um item ou o Mestre.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Esta é a página que você consulta para saber com quem está lidando. As fórmulas são as mesmas para todo mundo, então dá para prever a ficha de um personagem sabendo só o nível e o tipo de classe dele.</p>
@@ -689,12 +705,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Graus de perícia</h3>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Grau</th><th>Bônus</th><th>Nível mínimo</th></tr></thead>
+        <thead><tr><th>Grau</th><th>Bônus</th><th>Nível total mínimo</th></tr></thead>
         <tbody>
           ${linhasGrausPericia()}
         </tbody>
       </table></div>
-      <p>${nomesDosGrausDoPatamar} só abrem a partir dos níveis ${niveisDosGrausDoPatamar}, os mesmos patamares em que o personagem passa do jogo padrão (ver Experiência e Níveis). Até o ${NIVEL_TOTAL_PADRAO}, o degrau mais alto que o nível permite é ${GRAUS_PERICIA_DADOS[GRAUS_PERICIA_DADOS.length - grausPericiaDoPatamar.length - 1].rotulo}.</p>
+      <p>${nomesDosGrausDoPatamar} só abrem quando o nível total chega a ${niveisDosGrausDoPatamar}, que são os patamares de Experiência e Níveis. É onde o personagem já passou do jogo padrão. Até o ${NIVEL_TOTAL_PADRAO}, o degrau mais alto que o nível permite é ${GRAUS_PERICIA_DADOS[GRAUS_PERICIA_DADOS.length - grausPericiaDoPatamar.length - 1].rotulo}.</p>
+
+      <p class="regras-note">Duas palavras iguais: o <strong>grau Mestre</strong> é um degrau de perícia (+8), e o <strong>Mestre</strong> da mesa é quem conduz o jogo. O livro escreve os dois com M maiúsculo e o contexto diz qual é.</p>
 
       <h3 class="regras-subtitle">Graus de resultado</h3>
       <ul class="regras-list">
@@ -1416,7 +1434,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Regras de treinamento</h3>
       <ul class="regras-list">
         <li>Cada dia custa seis horas e deixa 1 de Cansaço no fim. Uma noite normal de sono resolve.</li>
-        <li>Um instrutor de grau superior ao seu corta 20% do tempo, arredondando para cima.</li>
+        <li>Instrutor é alguém que já tem o grau que você quer alcançar, ou um maior. Quando a linha da tabela pede instrutor, sem ele você não sobe; nas outras linhas, ter um de grau superior ao seu corta 20% do tempo, arredondando para cima.</li>
         <li>Parar no meio não apaga o que já foi feito. Mas mais de 30 dias largado cobra um dia de revisão antes de continuar.</li>
         <li>Não se rola nada para treinar. Cumpriu o tempo, o Nível Total e o requisito da linha, subiu.</li>
       </ul>
@@ -1437,7 +1455,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Trate cada um desses como aventura pequena. Encontrar quem ensina, provar o feito e conseguir o item são três sessões prontas que o próprio jogador pediu.</li>
         <li>${nomesDosGrausDoPatamar} seguem a mesma lógica, com o pedido crescendo junto com o nome: feito à altura do grau (lendário, mítico, de alcance cósmico, que o tempo não apaga, absoluto), e em alguns deles instrutor e item especial. Quase ninguém tem grau para ensinar aí, e é justamente por isso que o instrutor vira um NPC importante da campanha.</li>
         <li>Esses degraus custam de ${diasTreinoDoPatamar} a ${diasTreinoMaximo} dias, o que ocupa um arco inteiro da campanha. Ou o mundo dá uma pausa grande de propósito, ou o personagem carrega o treino durante várias aventuras. O servidor só avisa você quando o nível ainda não permite o grau; o resto fica com a mesa.</li>
-        <li>Um instrutor de grau superior corta 20% do tempo. Isso torna o NPC professor uma recompensa concreta, e não só um nome no mapa.</li>
+        <li>Instrutor é quem já tem o grau que o jogador quer, ou um maior; corta 20% do tempo e, nas linhas que pedem instrutor, é condição para subir. Nos graus mais altos quase ninguém tem grau para ensinar, e o NPC professor vira uma recompensa concreta, e não só um nome no mapa.</li>
         <li>Interromper não apaga o progresso. Mas passar de 30 dias largado cobra um dia de revisão, o que é motivo suficiente para o jogador querer voltar.</li>
       </ul>
 
@@ -1586,6 +1604,26 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Atributo', '+1 a cada 4, 8 ou 16 níveis'],
     ],
     corpo: `
+      <h3 class="regras-subtitle">O que muda depois do nível ${NIVEL_CONTEUDO_CLASSE} e do nível ${NIVEL_TOTAL_PADRAO}</h3>
+      <p class="regras-lead">Se a dúvida é "o que eu ganho quando passo do ${NIVEL_CONTEUDO_CLASSE}?", esta parte responde sem você precisar caçar em outros capítulos. As regras completas continuam nas páginas indicadas.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Quando você chega em</th><th>O que passa a valer</th><th>Onde ler</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nível ${NIVEL_CONTEUDO_CLASSE} de uma classe</strong></td><td>Acabam os poderes e as habilidades escritas dessa classe. Ela segue somando Vida, Mana e Estamina a cada nível, e você já pode abrir a segunda classe comum.</td><td>Sistema Base</td></tr>
+          <tr><td><strong>Níveis ${listaComE(niveisDaMaestria('bonus_recursos'))} da classe</strong></td><td>Reforço de recursos: Vida, Mana e Estamina como se você tivesse 2 níveis a mais nela.</td><td>Poderes e Habilidades</td></tr>
+          <tr><td><strong>Níveis ${listaComE(niveisDaMaestria('grau_pericia'))} da classe</strong></td><td>Mais um grau de perícia, à sua escolha. No nível ${NIVEL_MAXIMO_CLASSE} a classe fecha, e quem quer continuar abre outra.</td><td>Poderes e Habilidades</td></tr>
+          <tr><td><strong>Nível ${marcosDoCanalizador.find((linha) => linha.tetoPorCirculo !== null)?.nivel ?? 25} da fonte de magia</strong></td><td>Quem conjura segue ganhando vagas de magia (2 a cada 5 níveis, ${vagasDeMagiaNoTeto} no nível ${NIVEL_MAXIMO_CLASSE}) e passa a ter um limite de ${marcosDoCanalizador.find((linha) => linha.tetoPorCirculo !== null)?.tetoPorCirculo ?? 4} magias do mesmo círculo.</td><td>Magia e Fluxo</td></tr>
+          <tr><td><strong>Nível total ${grauPorNome('renomado')?.nivel_minimo}</strong></td><td>O grau Renomado (+${grauPorNome('renomado')?.bonus}) fica disponível para as perícias.</td><td>Perícias e Treinar</td></tr>
+          <tr><td><strong>Nível total ${NIVEL_TOTAL_PADRAO}</strong></td><td>Termina o jogo padrão (duas classes comuns e uma especial). Você pode continuar, ganha a Conquista e o selo do Patamar I, e o grau Lendário (+${grauPorNome('lendario')?.bonus}) fica disponível.</td><td>Esta página e Perícias</td></tr>
+          <tr><td><strong>Níveis totais ${listaComE(PATAMARES_NIVEL.slice(1))}</strong></td><td>Patamares II a V. Cada um traz Conquista, moldura nova no retrato e um grau de perícia novo: Mítico, Cósmico, Eterno e Absoluto.</td><td>Esta página e Perícias</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li>Nada disso trava a ficha. Passou do que a regra padrão prevê, a ficha só mostra o aviso do patamar novo e a mesa decide o que fazer com isso.</li>
+        <li>O atributo não tem teto, e a rolagem de magia soma metade do nível como qualquer teste. O Fluxo recomendado de cada círculo é aviso, e a DT do círculo decide se a magia sai.</li>
+        <li>Personagens de nível muito alto costumam ser NPCs do Mestre, como o dono de um banco ou um guardião antigo. Eles usam a mesma ficha, sem cumprir regra de criação.</li>
+      </ul>
+
       <h3 class="regras-subtitle">Progressão do nível total</h3>
       <p class="regras-lead">Toda vez que você sobe de nível, escolhe uma das suas classes e aumenta o nível dela em 1. As recompensas da tabela olham para o <strong>nível total</strong>, então multiclasse não recebe nada em dobro.</p>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -1727,7 +1765,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">A ficha do aliado</h3>
       <p>Cada aliado ocupa uma entrada na aba Aliados, com os mesmos campos que o Mestre usa para qualquer criatura: nome, espécie, papel, nível, Vida atual e máxima, Defesa, Movimento, Iniciativa, ataque principal, condições ativas e observações.</p>
       <ul class="regras-list">
-        <li>Tudo ali é editável. O aliado que veio da Loja chega com os números do catálogo, e você ajusta conforme a história muda: ele treina, se fere, ganha equipamento, cria mania.</li>
+        <li>Tudo ali é editável. O aliado que veio da Loja chega com os números do catálogo (com a Vida já ajustada para aliado), e você ajusta conforme a história muda: ele treina, se fere, ganha equipamento, cria mania.</li>
         <li>Marque quem está em cena. Aliado guardado no estábulo continua na lista sem ocupar espaço na mesa.</li>
         <li>Vida do aliado é sua responsabilidade, não do Mestre. Se ele apanhou, anote.</li>
       </ul>
@@ -2087,7 +2125,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <div class="regras-formula">DT de conjuração = 7 + (3 × círculo)</div>
       <ul class="regras-list">
         <li>Toda magia de círculo precisa alcançar a DT do próprio círculo para se estabilizar.</li>
-        <li>Se houver alvo hostil, compare a <em>mesma</em> rolagem também com Reflexos, Fortitude ou Vontade dele.</li>
+        <li>Se houver alvo hostil, o mesmo total também é lido contra ele. Magia de ataque compara o total com a Defesa do alvo, como um golpe. Magia de efeito diz qual resistência vale (Reflexos, Fortitude ou Vontade): o alvo rola d20 + o bônus dessa resistência e resiste se igualar ou superar o seu total.</li>
         <li>Ou seja: a magia pode estabilizar e ainda assim ser resistida. É uma rolagem só, lida duas vezes.</li>
         <li>A metade do nível entra aqui como em qualquer teste. Sem ela, um conjurador de nível alto nunca venceria o teste de resistência de uma criatura do próprio nível.</li>
         <li>A Mana sai no momento em que você declara a conjuração, e não volta se o teste falhar.</li>
@@ -2101,8 +2139,18 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-note">Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa.</p>
       <p>O Fluxo recomendado não trava nada. A classe diz até que círculo você aprende; o Fluxo diz até onde a conjuração sai com folga. Quem aprende um círculo acima do próprio Fluxo pode tentar, mas a rolagem precisa alcançar a DT do círculo, e a ficha avisa quando isso acontece. As Marcas de círculo continuam seguindo o círculo que o seu Fluxo sustenta.</p>
 
-      <h3 class="regras-subtitle">Vagas depois do nível 20</h3>
-      <p>A fonte de magia não para no 20. Canalizador, Sintonizador e Elementarista ganham mais 2 vagas de magia a cada 5 níveis (22 no nível 50), e Canalizador e Sintonizador ganham mais 1 vaga de Selo e de Encantamento a cada 5 níveis. Do nível 25 em diante, no máximo 4 magias do mesmo círculo: as vagas novas obrigam a espalhar o repertório.</p>
+      <h3 class="regras-subtitle">Magia por nível da classe</h3>
+      <p>Cada marco libera um círculo mais alto e mais vagas. A vaga é o total de magias que a ficha pode conhecer, somando todas as fontes. O círculo liberado é o que a classe permite aprender, e o Fluxo recomendado é aviso. A tabela mostra círculo e vagas de magia por nível da classe (Canalizador e Sintonizador seguem a mesma coluna).</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível da classe</th><th>Canalizador e Sintonizador</th><th>Elementarista</th><th>Cartista Arcano</th></tr></thead>
+        <tbody>${linhasMagiaPorClasse()}</tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li>A fonte de magia não para no 20: Canalizador, Sintonizador e Elementarista ganham mais 2 vagas a cada 5 níveis, e o Cartista Arcano mais 1, sempre até o nível 50.</li>
+        <li>Do nível 25 em diante vale um limite de 4 magias do mesmo círculo, para as vagas novas espalharem o repertório. Antes do 25 não há limite por círculo.</li>
+        <li>Selos e Encantamentos seguem o mesmo ritmo: Canalizador e Sintonizador ganham mais 1 vaga de cada a cada 5 níveis depois do 20, e Ritualista e Cartista Arcano mais 1 a cada 10.</li>
+        <li>A aba Magias da ficha mostra quantas magias de cada círculo você já conhece e quantas ainda pode escolher.</li>
+      </ul>
 
       <h3 class="regras-subtitle">Concentração</h3>
       <ul class="regras-list">
@@ -2126,7 +2174,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">A DT de conjuração trabalha por você</h3>
       <ul class="regras-list">
         <li>A DT é 7 mais três vezes o círculo, e a Mana sai na declaração, mesmo se o teste falhar. Um conjurador que tenta o círculo máximo dele está apostando recurso, não gastando de graça.</li>
-        <li>A mesma rolagem é lida duas vezes: contra a DT do círculo para estabilizar e contra a defesa do alvo. Estabilizar e ser resistido acontece, e vale explicar na primeira vez.</li>
+        <li>A mesma rolagem é lida duas vezes: contra a DT do círculo, para estabilizar, e contra o alvo, que rola a resistência dele contra o seu total (ou é comparada com a Defesa, se a magia for de ataque). Estabilizar e ainda assim ser resistido acontece, e vale explicar na primeira vez.</li>
         <li>A metade do nível entra na rolagem, como em todo teste. Ela mantém o conjurador na mesma curva do resto do grupo: sem ela, o teste de resistência de uma criatura do mesmo nível ficaria fora do alcance a partir do nível 50.</li>
         <li>O Fluxo recomendado é aviso, e a DT é o portão de verdade. No nível 20, com Fluxo 20 e grau Veterano, a rolagem soma +25: o 10º círculo (DT 37) sai com 12 ou mais no d20, e no nível 10 ele nem alcança a DT. Se quiser mais rigor na sua mesa, peça o Fluxo recomendado como condição para aprender.</li>
       </ul>
@@ -2346,6 +2394,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     ],
     corpo: `
       <p class="regras-lead">Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes e eventos por nível) fica no catálogo interativo da página de Regras, que lê o mesmo arquivo.</p>
+      <p>Toda classe vai até o nível ${NIVEL_MAXIMO_CLASSE}. As recompensas escritas (habilidades, poderes e eventos) vão até o ${NIVEL_CONTEUDO_CLASSE}, e do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} entra a Maestria, igual para todas. A página de cada classe mostra tudo isso nível a nível, e as classes que conjuram mostram também o círculo e as vagas de magia. Se quiser um resumo do que muda depois do ${NIVEL_CONTEUDO_CLASSE} e do ${NIVEL_TOTAL_PADRAO}, ele está em Experiência e Níveis.</p>
       <ul class="regras-list">${listaClassesPublicas}</ul>
     `,
     corpoMestre: `
@@ -2424,7 +2473,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Se o grupo estiver no meio de outra coisa, o evento espera. Ele é oportunidade, não interrupção.</li>
       </ul>
       <h3 class="regras-subtitle">Depois do nível 20: a Maestria</h3>
-      <p>A grade das classes termina no nível ${NIVEL_CONTEUDO_CLASSE}. Cada classe pode ir até o ${NIVEL_MAXIMO_CLASSE}, e do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela soma Vida, Mana e Estamina a cada nível, do jeito de sempre, mais a Maestria a cada 5 níveis. A Maestria é igual para todas as classes e conta pelo nível da própria classe.</p>
+      <p>A grade das classes termina no nível ${NIVEL_CONTEUDO_CLASSE}. Cada classe pode ir até o ${NIVEL_MAXIMO_CLASSE}, e do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela soma Vida, Mana e Estamina a cada nível, do jeito de sempre, mais a Maestria a cada 5 níveis. A Maestria é igual para todas as classes e conta pelo nível da própria classe. Não confunda com a maestria de atributo do Sistema Base, que vem de um atributo chegar a 20 por mérito próprio.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível da classe</th><th>Recompensa</th><th>O que dá</th></tr></thead>
         <tbody>
@@ -2516,10 +2565,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Como uma criatura chega até você</h3>
       <ul class="regras-list">
-        <li>Comprar no catálogo da Loja cria o aliado direto na sua ficha, com Vida, Defesa, Iniciativa e ataque principal preenchidos. Comprou três, aparecem três fichas.</li>
+        <li>Comprar no catálogo da Loja cria o aliado direto na sua ficha, com Vida, Defesa, Iniciativa e ataque principal preenchidos. Comprou três, aparecem três fichas. A Vida que a ficha recebe já é a de aliado, menor que a da criatura como inimigo (ver abaixo).</li>
         <li>Daí em diante ela é sua responsabilidade: vida anotada, condições anotadas, turno próprio na iniciativa. O capítulo Aliados e Contratados explica como ela se comporta na mesa.</li>
         <li>Invocação sustentada por um poder seu não vira entrada permanente: ela existe enquanto o poder existir.</li>
         <li>O que aparece à venda depende da campanha. Uma criatura que o Mestre não liberou não está no catálogo, e isso não é falha do sistema.</li>
+      </ul>
+      <h3 class="regras-subtitle">Lendo a ficha de uma criatura no Bestiário</h3>
+      <ul class="regras-list">
+        <li><strong>VD (Valor de Desafio):</strong> o nível do grupo que a criatura enfrenta sozinha. Um VD 30 é um encontro inteiro para um grupo de nível 30. Quanto maior o VD, mais difícil de matar e mais XP ela vale.</li>
+        <li><strong>Vida como inimigo e como aliado:</strong> na mão do Mestre a criatura aguenta o grupo inteiro, então a Vida dela é alta. Comprada ou contratada, ela luta ao seu lado e nasce com no máximo o dobro da Vida média de um personagem do mesmo nível. A Loja mostra os dois números.</li>
+        <li><strong>Família:</strong> criaturas do mesmo corpo e tema formam uma escada de estágios, como o Dragão que vai de filhote a ancião. Quem sobe de estágio muda de nível, e o texto de cada uma diz o que ela ganhou.</li>
+        <li><strong>Única:</strong> tem uma versão só, sem estágios, e não está à venda. As de VD muito alto também ficam só no Bestiário: servem ao Mestre, e não ao balcão da Loja.</li>
       </ul>
       <p class="regras-note">Servo é o único tipo que já nasce com um problema junto. Antes de comprar um, combine com a mesa o que a sanidade abalada dele significa na sua história, porque essa parte não se resolve com número.</p>
     `,
