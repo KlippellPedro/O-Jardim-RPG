@@ -105,11 +105,29 @@ regra estão em [Balanceamento](BALANCEAMENTO.md#níveis-além-do-60-2026-09-29)
 
 - **Dados compartilhados.** [progressao-niveis.json](../../data/ficha/progressao-niveis.json)
   (XP, Legado, atributo, item especial, graus de perícia, patamares, teto de
-  classe) e [maestria-classe.json](../../data/ficha/maestria-classe.json). O
+  classe, VD máximo e XP por VD) e [maestria-classe.json](../../data/ficha/maestria-classe.json). O
   site e a plataforma são pacotes separados, então cada lado tem seu módulo
   (`progressaoNiveis.ts` e `progressao_niveis.py`; `maestriaClasse.ts` e
   `maestria_classe.py`) e um teste com os mesmos valores. `data/ficha/` já vai
   no ZIP da plataforma.
+- **VD igual ao nível do grupo.** `sessao_participantes.vd` e o `vd` de cada
+  monstro do catálogo guardam o nível que a criatura desafia sozinha (1 a
+  `VD_MAXIMO`). A migração 46 converte as cenas antigas (VD 1 a 10 vira
+  3, 8, ..., 48) e roda uma única vez; o catálogo vem do reseed no restart da
+  API. `xp_por_vd` (`core/progressao_niveis.py`, espelhado em `xpPorVd`) é um
+  quinto do custo do nível de mesmo número.
+- **Famílias do Bestiário.** `data/bestiario/familias-v1.json` declara as 11
+  famílias e os 13 únicos (o site importa este arquivo);
+  `familias-propostas-v1.json` guarda os estágios novos (os 9 primeiros foram
+  aprovados e aplicados em 2026-09-30; proposta nova entra por aqui) e nunca
+  pode ser importado pelo site (há teste). `npm run check:familias`
+  confere se o catálogo traz `familia`, `estagio`, `papel` e `unico` em cada
+  ficha; `npm run bestiario:familias -- --metadados` grava esses campos (só
+  metadado) e `-- --novos` grava os estágios propostos, que só entram depois da
+  revisão de texto e nunca sobrescrevem ficha escrita à mão. Depois de `--novos`
+  rode `npm run precos:normalizar`, `npm run audit:balance` e
+  `npm run generate:editorial-rules`. `/bestiario` devolve `familia`, `estagio`,
+  `papel` e `unico`.
 - **Validação da ficha continua sendo alerta.** `validar_regras_ficha` só devolve
   erro que vira "Alerta de Regras" para o Mestre quando o jogador salva fora do
   padrão; Mestre e assistente nem passam por ela. Acima do nível total 60 as

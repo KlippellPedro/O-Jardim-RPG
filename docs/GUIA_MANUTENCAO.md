@@ -48,6 +48,20 @@ npm run audit:balance
 npm run check:balance
 ```
 
+O `audit:balance` também grava `data/regras/curva-criatura-v1.json` (uma linha por
+VD, de 1 a 1.000), que o gerador de criaturas (`src/services/curvaCriatura.ts`,
+aba "Sob medida" do Bestiário) lê. Famílias, únicos e estágios do Bestiário
+ficam em `data/bestiario/`:
+
+```powershell
+npm run check:familias
+npm run bestiario:familias -- --metadados   # grava familia/estagio/papel/unico nas fichas
+npm run bestiario:familias -- --novos       # só depois de aprovar os textos propostos
+```
+
+Depois de `--novos`: `npm run precos:normalizar`, `npm run audit:balance` e
+`npm run generate:editorial-rules`.
+
 A voz do Grande Sábio (`public/audio/sabio/`) precisa ser regravada quando muda
 uma frase do painel de subida, um nome de Conquista ou uma classe. O script só
 gera o que falta e um teste confere a cobertura:

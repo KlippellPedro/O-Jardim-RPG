@@ -2,6 +2,60 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-09-30-doze-graus-de-pericia",
+      "data": "2026-09-30",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Doze graus de perícia",
+      "detalhes": [
+        "Depois de Renomado entram cinco graus novos, um por patamar: Lendário (nível 60, +14), Mítico (100, +16), Cósmico (150, +18), Eterno (250, +20) e Absoluto (500, +22).",
+        "Subir por treino leva de 90 a 365 dias nesses graus, e cada um pede um feito à altura do nome. A aba Perícias e o livro já mostram os doze."
+      ]
+    },
+    {
+      "id": "2026-09-30-magia-depois-do-20",
+      "data": "2026-09-30",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Magia depois do nível 20",
+      "detalhes": [
+        "As vagas de magia continuam crescendo do nível 25 ao 50 (mais 2 a cada 5 níveis), e do 25 em diante vale no máximo 4 magias do mesmo círculo.",
+        "O Fluxo mínimo do círculo virou recomendação: você aprende o que a sua classe libera, a ficha avisa quando o Fluxo está baixo, e a DT do círculo decide se a magia sai.",
+        "A rolagem de magia agora soma metade do nível, como todo teste. Na aba Magias, um bloco novo mostra quantas magias de cada círculo você já conhece e quantas ainda pode escolher."
+      ]
+    },
+    {
+      "id": "2026-09-30-bestiario-todos-os-niveis",
+      "data": "2026-09-30",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Criaturas de todos os níveis",
+      "detalhes": [
+        "O Valor de Desafio agora é o nível do grupo que a criatura enfrenta sozinha, e o XP acompanha: um quinto do custo do nível de mesmo número.",
+        "O Bestiário ganhou 44 criaturas novas e famílias com estágios, do rato de esgoto às ameaças que passam do nível 100. A aba Sob medida monta uma criatura de qualquer nível, com seis jeitos de lutar."
+      ]
+    },
+    {
+      "id": "2026-09-30-aliado-comprado",
+      "data": "2026-09-30",
+      "tipo": "melhoria",
+      "area": "Loja",
+      "titulo": "Criatura comprada luta ao seu lado, não no lugar de você",
+      "detalhes": [
+        "Uma criatura comprada ou contratada agora nasce com no máximo o dobro da Vida média de um personagem do mesmo nível. A Loja mostra a Vida como aliado e a Vida como inimigo."
+      ]
+    },
+    {
+      "id": "2026-09-30-reliquias-mais-fortes",
+      "data": "2026-09-30",
+      "tipo": "melhoria",
+      "area": "Loja",
+      "titulo": "Relíquias da Criação bem mais fortes",
+      "detalhes": [
+        "As armas das Relíquias da Criação passaram a causar 2,5 vezes o dano de antes, e os poderes com dado cresceram na mesma medida. Elas continuam precisando da autorização do Mestre, e agora fazem jus ao nome."
+      ]
+    },
+    {
       "id": "2026-09-29-niveis-alem-do-60",
       "data": "2026-09-29",
       "tipo": "novo",

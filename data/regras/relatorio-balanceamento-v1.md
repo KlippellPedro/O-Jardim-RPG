@@ -66,43 +66,43 @@ A Vida mostra a menor, a média e a maior entre as 18 classes comuns. O dano da 
 | 30 | padrão | 76 / 128 / 204 | 27 | +31 | 59 | 30 | 40 | 1010 |
 | 40 | padrão | 100 / 171 / 276 | 33 | +37 | 77 | 35 | 45 | 1320 |
 | 50 | padrão | 124 / 214 / 348 | 38 | +42 | 77 | 40 | 50 | 1320 |
-| 60 | Patamar I | 154 / 244 / 378 | 43 | +48 | 78 | 45 | 55 | 1330 |
-| 80 | Patamar I | 224 / 314 / 448 | 53 | +58 | 78 | 55 | 65 | 1330 |
-| 100 | Patamar II | 296 / 386 / 520 | 64 | +69 | 79 | 65 | 75 | 1350 |
-| 150 | Patamar III | 446 / 536 / 670 | 89 | +95 | 80 | 90 | 100 | 1370 |
-| 200 | Patamar III | 600 / 690 / 824 | 115 | +120 | 80 | 115 | 125 | 1370 |
+| 60 | Patamar I | 154 / 244 / 378 | 43 | +50 | 78 | 45 | 55 | 1330 |
+| 80 | Patamar I | 224 / 314 / 448 | 53 | +60 | 78 | 55 | 65 | 1330 |
+| 100 | Patamar II | 296 / 386 / 520 | 64 | +73 | 79 | 65 | 75 | 1350 |
+| 150 | Patamar III | 446 / 536 / 670 | 89 | +101 | 80 | 90 | 100 | 1370 |
+| 200 | Patamar III | 600 / 690 / 824 | 115 | +126 | 80 | 115 | 125 | 1370 |
 
 ## Bestiário contra a referência
 
-Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimigo padrão do nível mais alto da faixa. O bestiário vai até o nível 50; acima disso a tabela de NPCs e inimigos é o guia. A Defesa da tabela é a natural, sem armadura: a partir do nível 29 quem investe na perícia de combate acerta quase sempre um inimigo do mesmo nível, então armadura, escudo e efeitos de cena é que sustentam a Defesa dos NPCs fortes.
+Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimigo padrão e da Vida solo que o gerador de criaturas (src/services/curvaCriatura.ts) dá ao nível mais alto da faixa. O bestiário vai até o nível 500; acima disso a tabela de NPCs e inimigos é o guia. A Defesa da tabela é a natural, sem armadura: a partir do nível 29 quem investe na perícia de combate acerta quase sempre um inimigo do mesmo nível, então armadura, escudo e efeitos de cena é que sustentam a Defesa dos NPCs fortes.
 
-| Faixa de nível | Monstros | Vida mediana | Vida de inimigo padrão |
-|---|---:|---:|---:|
-| 1 a 10 | 41 | 140 | 330 |
-| 11 a 20 | 31 | 330 | 510 |
-| 21 a 30 | 25 | 570 | 1010 |
-| 31 a 40 | 23 | 900 | 1320 |
-| 41 a 50 | 11 | 1490 | 1320 |
+| Faixa de nível | Monstros | Vida mediana | Vida de inimigo padrão | Vida solo da curva |
+|---|---:|---:|---:|---:|
+| 1 a 10 | 43 | 140 | 330 | 265 |
+| 11 a 20 | 33 | 330 | 510 | 410 |
+| 21 a 30 | 31 | 600 | 1010 | 810 |
+| 31 a 40 | 24 | 900 | 1320 | 1055 |
+| 41 a 50 | 14 | 1395 | 1320 | 1320 |
 
 ## Maiores danos do arsenal
 
 | Arma | Raridade | Dano | Média normal | Média com crítico | Nível recomendado | Mestre |
 |---|---|---|---:|---:|---:|---|
-| Excalibur | reliquia da criacao | 8d12+20 | 72.0 | 82.8 | 35 | sim |
-| Mjolnir | reliquia da criacao | 8d12+18 | 70.0 | 80.5 | 35 | sim |
-| Keraunos | reliquia da criacao | 8d12+18 | 70.0 | 80.5 | 35 | sim |
-| Martelo das Chamas | reliquia da criacao | 8d12+16 | 68.0 | 78.2 | 35 | sim |
-| Murasame | reliquia da criacao | 8d12+16 | 68.0 | 71.4 | 35 | sim |
-| Durandal | reliquia da criacao | 10d10+12 | 67.0 | 77.0 | 35 | sim |
-| Gungnir | reliquia da criacao | 8d12+14 | 66.0 | 75.9 | 35 | sim |
-| Gáe Bolg | reliquia da criacao | 8d12+14 | 66.0 | 72.6 | 35 | sim |
-| Kusanagi no Tsurugi | reliquia da criacao | 8d12+14 | 66.0 | 75.9 | 35 | sim |
-| Masamune | reliquia da criacao | 10d10+10 | 65.0 | 74.8 | 35 | sim |
-| Rhaast | reliquia da criacao | 8d12+12 | 64.0 | 73.6 | 35 | sim |
-| Arco de Hou Yi | reliquia da criacao | 8d12+12 | 64.0 | 73.6 | 35 | sim |
-| Sharur | reliquia da criacao | 8d12+12 | 64.0 | 73.6 | 35 | sim |
-| Triceratops | reliquia da criacao | 10d10+8 | 63.0 | 72.4 | 35 | sim |
-| Zangetsu | reliquia da criacao | 8d12+10 | 62.0 | 71.3 | 35 | sim |
+| Excalibur | reliquia da criacao | 20d12+50 | 180.0 | 207.0 | 35 | sim |
+| Mjolnir | reliquia da criacao | 20d12+45 | 175.0 | 201.2 | 35 | sim |
+| Keraunos | reliquia da criacao | 20d12+45 | 175.0 | 201.2 | 35 | sim |
+| Martelo das Chamas | reliquia da criacao | 20d12+40 | 170.0 | 195.5 | 35 | sim |
+| Murasame | reliquia da criacao | 20d12+40 | 170.0 | 178.5 | 35 | sim |
+| Durandal | reliquia da criacao | 25d10+30 | 167.5 | 192.6 | 35 | sim |
+| Gungnir | reliquia da criacao | 20d12+35 | 165.0 | 189.7 | 35 | sim |
+| Gáe Bolg | reliquia da criacao | 20d12+35 | 165.0 | 181.5 | 35 | sim |
+| Kusanagi no Tsurugi | reliquia da criacao | 20d12+35 | 165.0 | 189.7 | 35 | sim |
+| Masamune | reliquia da criacao | 25d10+25 | 162.5 | 186.9 | 35 | sim |
+| Rhaast | reliquia da criacao | 20d12+30 | 160.0 | 184.0 | 35 | sim |
+| Arco de Hou Yi | reliquia da criacao | 20d12+30 | 160.0 | 184.0 | 35 | sim |
+| Sharur | reliquia da criacao | 20d12+30 | 160.0 | 184.0 | 35 | sim |
+| Triceratops | reliquia da criacao | 25d10+20 | 157.5 | 181.1 | 35 | sim |
+| Zangetsu | reliquia da criacao | 20d12+25 | 155.0 | 178.3 | 35 | sim |
 
 ## Magias publicadas para playtest
 

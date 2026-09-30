@@ -10,7 +10,9 @@ import catalogoLojaData from '../loja/catalogo.json';
 import progressaoNiveisData from '../ficha/progressao-niveis.json';
 import type { IClasse } from '../../src/types/catalogo';
 import { MARCOS_MAESTRIA } from '../../src/services/maestriaClasse';
+import { modeloDeCriatura, VD_ONDE_A_VIDA_ESCALA } from '../../src/services/curvaCriatura';
 import {
+  GRAUS_PERICIA_DADOS,
   NIVEL_CONTEUDO_CLASSE,
   NIVEL_MAXIMO_CLASSE,
   NIVEL_TOTAL_PADRAO,
@@ -19,6 +21,7 @@ import {
   legadosPorNivel,
   vagasItemEspecialPorNivel,
   xpParaNivel,
+  xpPorVd,
 } from '../../src/services/progressaoNiveis';
 import {
   NIVEIS_DE_REFERENCIA,
@@ -158,12 +161,47 @@ const linhasMaestria = () => MARCOS_MAESTRIA.map((marco) => {
     : `Vida, Mana e Estamina da classe como se você tivesse ${marco.niveis_equivalentes} níveis a mais nela.`;
   return `<tr><td><strong>${marco.nivel}</strong></td><td>${nome}</td><td>${efeito}</td></tr>`;
 }).join('\n');
+/** Criatura de cada papel em alguns VDs, calculada pelo mesmo gerador da aba Sob
+ * medida do Bestiário (src/services/curvaCriatura.ts). */
+const VDS_DA_TABELA_DE_CRIATURA = [3, 10, 20, 30, 40, 60, 100, 150, 200, 500];
+const linhasCriaturaPorVd = () => VDS_DA_TABELA_DE_CRIATURA.map((vd) => {
+  const solo = modeloDeCriatura(vd, 'solo');
+  const [lacaio, padrao, elite, chefe] = (['lacaio', 'padrao', 'elite', 'chefe'] as const).map((papel) => modeloDeCriatura(vd, papel));
+  return `<tr><td><strong>${vd}</strong></td><td>+${solo.pericias[0].replace('Luta +', '')}</td><td>${solo.defesa}</td><td>${solo.danoMedio}</td><td>${chefe.golpeAnunciadoMedio}</td><td>${formatarXP(lacaio.pv)}</td><td>${formatarXP(padrao.pv)}</td><td>${formatarXP(elite.pv)}</td><td>${formatarXP(chefe.pv)}</td><td>${formatarXP(solo.pv)}</td><td>${formatarXP(solo.xp)}</td></tr>`;
+}).join('\n');
 const linhasItemEspecial = () => [
   ['1 a 7', '1'], ['8 a 11', '2'], ['12 a 15', '3'], ['16 a 19', '4'], ['20 a 23', '5'],
 ].map(([faixa, vagas]) => `<tr><td>${faixa}</td><td>${vagas}</td></tr>`).join('\n')
   + `\n<tr><td>24 a 50</td><td>nível ÷ 4, arredondado para baixo (${vagasItemEspecialPorNivel(24)} no 24 e ${vagasItemEspecialPorNivel(50)} no 50)</td></tr>`
   + `\n<tr><td>51 a 100</td><td>mais uma a cada 8 níveis depois do 50 (${vagasItemEspecialPorNivel(58)} no 58 e ${vagasItemEspecialPorNivel(100)} no 100)</td></tr>`
   + `\n<tr><td>101 em diante</td><td>mais uma a cada 16 níveis (${vagasItemEspecialPorNivel(116)} no 116 e ${vagasItemEspecialPorNivel(200)} no 200)</td></tr>`;
+
+/** Graus de perícia lidos de data/ficha/progressao-niveis.json, a mesma fonte da
+ * ficha e do servidor: bônus, nível, dias de treino e requisito saem daqui. */
+const NUMEROS_POR_EXTENSO = [
+  'zero', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
+  'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove', 'vinte',
+];
+const primeiroGrauPericia = GRAUS_PERICIA_DADOS[0];
+const ultimoGrauPericia = GRAUS_PERICIA_DADOS[GRAUS_PERICIA_DADOS.length - 1];
+const totalGrausPericia = GRAUS_PERICIA_DADOS.length;
+const totalGrausPericiaPorExtenso = NUMEROS_POR_EXTENSO[totalGrausPericia] ?? String(totalGrausPericia);
+const totalGrausPericiaPorExtensoCapitalizado = `${totalGrausPericiaPorExtenso.charAt(0).toLocaleUpperCase('pt-BR')}${totalGrausPericiaPorExtenso.slice(1)}`;
+const grausPericiaDoPatamar =GRAUS_PERICIA_DADOS.filter((grau) => grau.nivel_minimo >= NIVEL_TOTAL_PADRAO);
+const grausPericiaComTreino = GRAUS_PERICIA_DADOS.filter((grau) => grau.treino_dias > 0);
+const diasTreinoDoPatamar = grausPericiaDoPatamar[0]?.treino_dias ?? 0;
+const diasTreinoMinimo =Math.min(...grausPericiaComTreino.map((grau) => grau.treino_dias));
+const diasTreinoMaximo = Math.max(...grausPericiaComTreino.map((grau) => grau.treino_dias));
+const linhasGrausPericia = () => GRAUS_PERICIA_DADOS.map((grau) => (
+  `<tr><td>${grau.rotulo}</td><td>+${grau.bonus}</td><td>${grau.nivel_minimo}</td></tr>`
+)).join('\n');
+const linhasTreinoPericia = () => GRAUS_PERICIA_DADOS.slice(1).map((grau, indice) => {
+  const ligacao = /,| e /.test(grau.requisito) ? ', ' : ' e ';
+  const condicao = grau.requisito ? `${ligacao}${grau.requisito}` : '';
+  return `<tr><td>${GRAUS_PERICIA_DADOS[indice].rotulo} → ${grau.rotulo}</td><td>${grau.treino_dias} dias</td><td>Nível Total ${grau.nivel_minimo}${condicao}</td></tr>`;
+}).join('\n');
+const nomesDosGrausDoPatamar = grausPericiaDoPatamar.map((grau) => grau.rotulo).join(', ').replace(/, ([^,]*)$/, ' e $1');
+const niveisDosGrausDoPatamar = grausPericiaDoPatamar.map((grau) => grau.nivel_minimo).join(', ').replace(/, ([^,]*)$/, ' e $1');
 
 /** Personagem de referência do Guia do Mestre e tabela de NPCs e inimigos: as
  * duas saem da fórmula da ficha (src/services/referenciaBalanceamento.ts), a
@@ -378,7 +416,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tbody>
             <tr><td><strong>DT</strong></td><td>Dificuldade do Teste. O número que sua rolagem precisa alcançar.</td></tr>
             <tr><td><strong>Teste</strong></td><td>Qualquer rolagem de d20 contra uma DT.</td></tr>
-            <tr><td><strong>Grau</strong></td><td>O quanto você treinou uma perícia, de Iniciante a Renomado. Cada degrau vale um bônus fixo.</td></tr>
+            <tr><td><strong>Grau</strong></td><td>O quanto você treinou uma perícia, de ${primeiroGrauPericia.rotulo} a ${ultimoGrauPericia.rotulo}. Cada degrau vale um bônus fixo.</td></tr>
             <tr><td><strong>Atributo</strong></td><td>Os sete números que descrevem o personagem: Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo.</td></tr>
             <tr><td><strong>Vida, Mana e Estamina</strong></td><td>Quanto dano você aguenta, quanto combustível mágico você tem e quanto fôlego físico você tem para golpes, posturas e esforço.</td></tr>
             <tr><td><strong>Sanidade</strong></td><td>Uma barra de 0 a 100 que cai diante de horror e trauma.</td></tr>
@@ -638,10 +676,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   pericias: {
     categoria: 'Livro do Jogador',
     status: 'Regra oficial',
-    resumo: 'Uma fórmula só, usada em perícia, ataque e resistência. Sete graus, e vantagem e desvantagem que se cancelam uma a uma.',
+    resumo: `Uma fórmula só, usada em perícia, ataque e resistência. ${totalGrausPericiaPorExtensoCapitalizado} graus, e vantagem e desvantagem que se cancelam uma a uma.`,
     destaques: [
       ['Base', 'd20 + atributo + nível/2 + grau'],
-      ['Graus', '7 estágios'],
+      ['Graus', `${totalGrausPericia} estágios`],
       ['Crítico', '20 natural'],
     ],
     corpo: `
@@ -653,15 +691,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Grau</th><th>Bônus</th><th>Nível mínimo</th></tr></thead>
         <tbody>
-          <tr><td>Iniciante</td><td>+0</td><td>1</td></tr>
-          <tr><td>Aprendiz</td><td>+2</td><td>1</td></tr>
-          <tr><td>Treinado</td><td>+4</td><td>3</td></tr>
-          <tr><td>Especialista</td><td>+6</td><td>7</td></tr>
-          <tr><td>Mestre</td><td>+8</td><td>13</td></tr>
-          <tr><td>Veterano</td><td>+10</td><td>19</td></tr>
-          <tr><td>Renomado</td><td>+12</td><td>29</td></tr>
+          ${linhasGrausPericia()}
         </tbody>
       </table></div>
+      <p>${nomesDosGrausDoPatamar} só abrem a partir dos níveis ${niveisDosGrausDoPatamar}, os mesmos patamares em que o personagem passa do jogo padrão (ver Experiência e Níveis). Até o ${NIVEL_TOTAL_PADRAO}, o degrau mais alto que o nível permite é ${GRAUS_PERICIA_DADOS[GRAUS_PERICIA_DADOS.length - grausPericiaDoPatamar.length - 1].rotulo}.</p>
 
       <h3 class="regras-subtitle">Graus de resultado</h3>
       <ul class="regras-list">
@@ -1367,7 +1400,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     destaques: [
       ['Dia de treino', '6 horas'],
       ['Requisito', 'Nível total e condição adicional'],
-      ['Maior grau', 'Renomado'],
+      ['Maior grau', ultimoGrauPericia.rotulo],
     ],
     corpo: `
       <p class="regras-lead">São dois caminhos diferentes e vale não confundir. Quando uma <strong>classe</strong> te dá um Grau de Treinamento, escolha uma perícia e suba um grau imediatamente, sem tempo, sem tabela e sem requisito. Quando você quer subir <strong>por treino</strong>, aí sim cumpre o tempo da linha, o Nível Total mínimo e o requisito extra, quando existir.</p>
@@ -1376,12 +1409,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Avanço</th><th>Tempo</th><th>Nível Total e requisito adicional</th></tr></thead>
         <tbody>
-          <tr><td>Iniciante → Aprendiz</td><td>3 dias</td><td>Nível Total 1</td></tr>
-          <tr><td>Aprendiz → Treinado</td><td>7 dias</td><td>Nível Total 3</td></tr>
-          <tr><td>Treinado → Especialista</td><td>14 dias</td><td>Nível Total 7</td></tr>
-          <tr><td>Especialista → Mestre</td><td>21 dias</td><td>Nível Total 13 e instrutor</td></tr>
-          <tr><td>Mestre → Veterano</td><td>32 dias</td><td>Nível Total 19 e feito notável</td></tr>
-          <tr><td>Veterano → Renomado</td><td>62 dias</td><td>Nível Total 29, feito e item especial</td></tr>
+          ${linhasTreinoPericia()}
         </tbody>
       </table></div>
 
@@ -1405,8 +1433,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Os requisitos são ganchos</h3>
       <ul class="regras-list">
-        <li>Os três últimos degraus não abrem só com tempo. Especialista para Mestre pede um instrutor; Mestre para Veterano pede um feito notável; Veterano para Renomado pede feito e um item especial.</li>
+        <li>Do Mestre em diante os degraus não abrem só com tempo. Especialista para Mestre pede um instrutor; Mestre para Veterano pede um feito notável; Veterano para Renomado pede feito e um item especial.</li>
         <li>Trate cada um desses como aventura pequena. Encontrar quem ensina, provar o feito e conseguir o item são três sessões prontas que o próprio jogador pediu.</li>
+        <li>${nomesDosGrausDoPatamar} seguem a mesma lógica, com o pedido crescendo junto com o nome: feito à altura do grau (lendário, mítico, de alcance cósmico, que o tempo não apaga, absoluto), e em alguns deles instrutor e item especial. Quase ninguém tem grau para ensinar aí, e é justamente por isso que o instrutor vira um NPC importante da campanha.</li>
+        <li>Esses degraus custam de ${diasTreinoDoPatamar} a ${diasTreinoMaximo} dias, o que ocupa um arco inteiro da campanha. Ou o mundo dá uma pausa grande de propósito, ou o personagem carrega o treino durante várias aventuras. O servidor só avisa você quando o nível ainda não permite o grau; o resto fica com a mesa.</li>
         <li>Um instrutor de grau superior corta 20% do tempo. Isso torna o NPC professor uma recompensa concreta, e não só um nome no mapa.</li>
         <li>Interromper não apaga o progresso. Mas passar de 30 dias largado cobra um dia de revisão, o que é motivo suficiente para o jogador querer voltar.</li>
       </ul>
@@ -1443,7 +1473,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Atividade</th><th>Como é vivida, e o que rende</th></tr></thead>
         <tbody>
-          <tr><td><strong>Treinar uma perícia.</strong></td><td>Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.<small class="regras-mecanica">Custa de 3 a 62 dias, conforme o grau. Rende um grau de treinamento. Regra completa em Treinar Perícias.</small></td></tr>
+          <tr><td><strong>Treinar uma perícia.</strong></td><td>Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.<small class="regras-mecanica">Custa de ${diasTreinoMinimo} a ${diasTreinoMaximo} dias, conforme o grau. Rende um grau de treinamento. Regra completa em Treinar Perícias.</small></td></tr>
           <tr><td><strong>Fabricar ou reparar.</strong></td><td>Cheiro de metal quente, farpa no dedo, uma peça que não encaixa e depois encaixa. No fim, a coisa existe porque você fez.<small class="regras-mecanica">Custa os dias do projeto. Rende o item pronto, com um teste no fim. Regra completa em Fabricação e Reparo.</small></td></tr>
           <tr><td><strong>Preparar ritual, selo ou encantamento.</strong></td><td>Velas acesas sempre nas mesmas horas, símbolos redesenhados até saírem perfeitos, e uma paciência que ninguém de fora entende.<small class="regras-mecanica">Custa o tempo da própria obra. Rende o efeito preparado, pronto para usar. Regra completa em Rituais, Selos e Encantamentos.</small></td></tr>
           <tr><td><strong>Trabalhar no ofício.</strong></td><td>Acordar cedo, voltar cansado com moeda no bolso e conhecer gente que nem imagina que você já enfrentou um monstro.<small class="regras-mecanica">Custa 1 dia por vez. Rende dinheiro, pela tabela Trabalhar pelo dia. Regra completa em Economia.</small></td></tr>
@@ -1618,7 +1648,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Descoberta ou objetivo menor vale 10% do próximo nível; missão relevante, 25%; fim de arco, 50%. Trabalhando com esses três, o grupo sobe um nível a cada arco mais algumas conquistas no caminho.</li>
         <li>XP de combate se divide pelo grupo, mas XP de descoberta e de arco vai inteiro para cada um. Um grupo grande sobe mais devagar pela luta e na mesma velocidade pela história: use isso se a mesa tiver seis pessoas.</li>
-        <li>O XP de combate por Valor de Desafio para no VD 10, que paga 11 mil. Perto dos níveis 50 e acima disso ele rende pouco diante do custo de um nível, então nos patamares altos dê o XP por marco, em porcentagem.</li>
+        <li>O XP de combate por Valor de Desafio acompanha o nível: o VD é o nível do grupo que a criatura desafia sozinha, e uma criatura solo vale um quinto do custo do nível de mesmo número (${formatarXP(xpPorVd(20))} no VD 20, ${formatarXP(xpPorVd(60))} no 60, ${formatarXP(xpPorVd(100))} no 100). Esse total se divide pelo grupo. Criatura mais fraca que o grupo rende o VD dela, então rende menos; mais forte, rende mais. Nos patamares altos o XP por marco continua sendo o caminho mais simples.</li>
         <li>Prefira anunciar o marco quando ele acontece, em vez de somar tudo no fim da sessão. O grupo joga melhor quando sabe que aquilo ali contou.</li>
       </ul>
 
@@ -1689,7 +1719,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">De onde vem um aliado</h3>
       <ul class="regras-list">
-        <li><strong>Compra:</strong> comprar uma criatura do Bestiário na Loja cria o aliado direto na sua ficha, já com Vida, Defesa, Iniciativa, deslocamento e ataque principal preenchidos. Comprou três, aparecem três, cada um com sua ficha separada.</li>
+        <li><strong>Compra:</strong> comprar uma criatura do Bestiário na Loja cria o aliado direto na sua ficha, já com Vida, Defesa, Iniciativa, deslocamento e ataque principal preenchidos. Comprou três, aparecem três, cada um com sua ficha separada. A Vida do aliado é menor que a da mesma criatura como inimigo: no Bestiário ela aguenta sozinha o grupo inteiro, e ao seu lado ela vale no máximo o dobro da Vida média de um personagem do mesmo nível. A loja mostra os dois números.</li>
         <li><strong>História:</strong> o Mestre pode entregar um aliado sem venda nenhuma. É a mesma ficha, criada à mão.</li>
         <li><strong>Poder ou magia:</strong> invocações e servos que um poder seu sustenta seguem o texto do próprio poder. Eles somem quando o poder acaba, então não viram entrada permanente.</li>
       </ul>
@@ -1865,10 +1895,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <thead><tr><th>Faixa</th><th>Dano médio no topo</th><th>Nível recomendado</th></tr></thead>
         <tbody>
           <tr><td><strong>Lendário</strong></td><td>Cerca de 45 por acerto</td><td>25</td></tr>
-          <tr><td><strong>Relíquia da Criação</strong></td><td>De 62 a 72 por acerto</td><td>35</td></tr>
+          <tr><td><strong>Relíquia da Criação</strong></td><td>De 150 a 180 por acerto, com crítico ×4 na maioria</td><td>35</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">Um personagem marcial de nível 10 tem 79 de Vida. Uma Relíquia numa mesa desse nível resolve qualquer inimigo em um ou dois golpes, e é exatamente por isso que as duas faixas exigem sua autorização.</p>
+      <p class="regras-note">A Relíquia da Criação é quebrada de propósito: é a criação mais forte que existe, e o dano dela passa da curva do jogo em duas ou três vezes. Por isso a referência de balanceamento e a Vida das criaturas não a seguem, e continuam contando o topo do arsenal comum. Quem empunha uma Relíquia derruba sozinho o que um grupo levaria rodadas para derrubar, e a cena tem que aceitar isso.</p>
 
       <h3 class="regras-subtitle">Carga e Resistência</h3>
       <ul class="regras-list">
@@ -2052,22 +2083,26 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </tbody>
       </table></div>
       <h3 class="regras-subtitle">Teste e DT de magia</h3>
-      <div class="regras-formula">Teste = d20 + Mod. Fluxo + Grau de Misticismo + bônus específico da classe</div>
+      <div class="regras-formula">Teste = d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus específico da classe</div>
       <div class="regras-formula">DT de conjuração = 7 + (3 × círculo)</div>
       <ul class="regras-list">
         <li>Toda magia de círculo precisa alcançar a DT do próprio círculo para se estabilizar.</li>
         <li>Se houver alvo hostil, compare a <em>mesma</em> rolagem também com Reflexos, Fortitude ou Vontade dele.</li>
         <li>Ou seja: a magia pode estabilizar e ainda assim ser resistida. É uma rolagem só, lida duas vezes.</li>
-        <li>Metade do nível não entra aqui. Essa fórmula é diferente da fórmula geral de testes, de propósito.</li>
+        <li>A metade do nível entra aqui como em qualquer teste. Sem ela, um conjurador de nível alto nunca venceria o teste de resistência de uma criatura do próprio nível.</li>
         <li>A Mana sai no momento em que você declara a conjuração, e não volta se o teste falhar.</li>
       </ul>
 
       <h3 class="regras-subtitle">Círculos, Fluxo e DT</h3>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Círculo</th><th>Fluxo mínimo</th><th>DT</th><th>Mana base</th></tr></thead>
+        <thead><tr><th>Círculo</th><th>Fluxo recomendado</th><th>DT</th><th>Mana base</th></tr></thead>
         <tbody>${tabelaCirculos}</tbody>
       </table></div>
       <p class="regras-note">Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa.</p>
+      <p>O Fluxo recomendado não trava nada. A classe diz até que círculo você aprende; o Fluxo diz até onde a conjuração sai com folga. Quem aprende um círculo acima do próprio Fluxo pode tentar, mas a rolagem precisa alcançar a DT do círculo, e a ficha avisa quando isso acontece. As Marcas de círculo continuam seguindo o círculo que o seu Fluxo sustenta.</p>
+
+      <h3 class="regras-subtitle">Vagas depois do nível 20</h3>
+      <p>A fonte de magia não para no 20. Canalizador, Sintonizador e Elementarista ganham mais 2 vagas de magia a cada 5 níveis (22 no nível 50), e Canalizador e Sintonizador ganham mais 1 vaga de Selo e de Encantamento a cada 5 níveis. Do nível 25 em diante, no máximo 4 magias do mesmo círculo: as vagas novas obrigam a espalhar o repertório.</p>
 
       <h3 class="regras-subtitle">Concentração</h3>
       <ul class="regras-list">
@@ -2092,7 +2127,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>A DT é 7 mais três vezes o círculo, e a Mana sai na declaração, mesmo se o teste falhar. Um conjurador que tenta o círculo máximo dele está apostando recurso, não gastando de graça.</li>
         <li>A mesma rolagem é lida duas vezes: contra a DT do círculo para estabilizar e contra a defesa do alvo. Estabilizar e ser resistido acontece, e vale explicar na primeira vez.</li>
-        <li>Metade do nível não entra nessa fórmula, de propósito. Isso mantém o conjurador dependente do atributo Fluxo e do grau de Misticismo, e não do nível puro.</li>
+        <li>A metade do nível entra na rolagem, como em todo teste. Ela mantém o conjurador na mesma curva do resto do grupo: sem ela, o teste de resistência de uma criatura do mesmo nível ficaria fora do alcance a partir do nível 50.</li>
+        <li>O Fluxo recomendado é aviso, e a DT é o portão de verdade. No nível 20, com Fluxo 20 e grau Veterano, a rolagem soma +25: o 10º círculo (DT 37) sai com 12 ou mais no d20, e no nível 10 ele nem alcança a DT. Se quiser mais rigor na sua mesa, peça o Fluxo recomendado como condição para aprender.</li>
       </ul>
 
     `,
@@ -2208,7 +2244,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Antes de escolher uma entrada</h3>
       <ul class="regras-list">
         <li>Confirme se o personagem possui a classe, habilidade, item, Legado ou concessão que dá acesso àquela forma.</li>
-        <li>Para magia de círculo, confira Fluxo mínimo, Mana final e DT de conjuração no texto da própria entrada.</li>
+        <li>Para magia de círculo, confira Fluxo recomendado, Mana final e DT de conjuração no texto da própria entrada.</li>
         <li>Ritual não pertence a círculo e não entra em combate. Selo e encantamento dependem da preparação descrita no capítulo correspondente.</li>
         <li>Fluxo do Fim continua exigindo autorização do Mestre antes da escolha.</li>
       </ul>
@@ -2218,7 +2254,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Conferir uma escolha mágica</h3>
       <ul class="regras-list">
-        <li>Verifique primeiro a fonte de acesso; depois confira círculo, Fluxo mínimo, custo final e qualquer autorização indicada.</li>
+        <li>Verifique primeiro a fonte de acesso; depois confira círculo, Fluxo recomendado, custo final e qualquer autorização indicada.</li>
         <li>Uma manifestação muda como o Fluxo expressa a entrada, sem apagar os limites da magia ou da forma principal.</li>
         <li>Magias concedidas fora da classe seguem a concessão registrada e não criam automaticamente novo Fluxo, círculo ou Cicatriz.</li>
         <li>Se a entrada depender de ritual, selo, encantamento ou fusão, aplique também as regras da página correspondente.</li>
@@ -3764,7 +3800,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ol class="regras-steps">
         <li><strong>Escreva o que a mesa deve sentir, numa linha só.</strong> "Eles precisam fugir e não conseguem" pede uma criatura. "Eles vão se arrepender de ter matado" pede outra. Essa linha decide todo o resto, inclusive a hora em que a ameaça deve cair.</li>
         <li><strong>Decida o papel antes do nome.</strong> Lacaio, inimigo padrão, elite ou chefe. O papel define quanto ela acerta, quanto machuca e quanto tempo fica de pé.</li>
-        <li><strong>Copie o Modelo de Criatura do VD da mesa.</strong> O bestiário traz um modelo por Valor de Desafio, já com Vida, Defesa, Iniciativa e testes na média. Ele é o ponto de partida honesto.</li>
+        <li><strong>Peça a criatura do VD da mesa.</strong> O VD é o nível do grupo que ela desafia sozinha. Na Sessão, a aba Sob medida do Bestiário monta a criatura de qualquer VD e papel, já com Vida, Defesa, Iniciativa, ataques e testes na média, e a tabela logo abaixo mostra a mesma conta. É o ponto de partida honesto.</li>
         <li><strong>Meça o dano do grupo por rodada.</strong> Some o dano real que eles causaram nas últimas três rodadas de combate e divida por três. Anotação de mesa erra bem menos que estimativa feita em casa.</li>
         <li><strong>Feche a Vida do encontro inteiro.</strong> Encontro padrão aguenta o dano do grupo vezes 4,5. Use 3 para confronto curto e 6 para chefe resistente. Divida esse total entre os corpos que vão entrar.</li>
         <li><strong>Ajuste ataque e dano pelo papel</strong>, com a tabela abaixo. O dano vem escrito como fatia da Vida do alvo, porque é assim que ele continua valendo do nível 1 ao 40.</li>
@@ -3782,6 +3818,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </tbody>
       </table></div>
       <p class="regras-note">A Vida do alvo apropriado é a da linha de frente para golpe físico, e a de quem fica atrás para a ameaça que pune posicionamento. Um golpe anunciado de chefe pode tirar metade da Vida de um personagem, e é justamente por isso que ele precisa ser anunciado na rodada anterior.</p>
+
+      <h3 class="regras-subtitle">Criatura de qualquer VD</h3>
+      <p>A conta é a mesma em todo VD: ataque e testes iguais ao ataque de um personagem do nível, Defesa três pontos abaixo da natural (criatura não veste armadura) e dano por acerto como fatia da Vida de um personagem, como na tabela de papéis. A Vida de cada papel é uma fatia da Vida de inimigo padrão do VD. A solo é a criatura que basta sozinha, como as do Bestiário, e vale 80% do encontro. Lacaio subtrai 4 do ataque, padrão subtrai 2 e chefe soma 2.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>VD</th><th>Ataque e testes (solo)</th><th>Defesa</th><th>Dano por acerto</th><th>Golpe anunciado (chefe)</th><th>Vida de lacaio</th><th>Vida de padrão</th><th>Vida de elite</th><th>Vida de chefe</th><th>Vida solo</th><th>XP solo</th></tr></thead>
+        <tbody>
+          ${linhasCriaturaPorVd()}
+        </tbody>
+      </table></div>
+      <p class="regras-note">Até o VD ${VD_ONDE_A_VIDA_ESCALA} a Vida acompanha o que o grupo consegue tirar em 4,5 rodadas, e por isso sobe aos degraus, nos níveis em que a arma do grupo melhora. Depois do ${VD_ONDE_A_VIDA_ESCALA} o dano do personagem quase para de crescer, e a Vida passa a crescer com o VD de propósito: um VD 100 tem duas vezes e meia a Vida do VD ${VD_ONDE_A_VIDA_ESCALA}, e é para ser difícil de matar. Se a sua mesa dá mais dano ao grupo do que a tabela supõe, divida a Vida por esse fator.</p>
+      <p>Na aba Sob medida você ainda escolhe o jeito de lutar da criatura, que mexe em Vida, Defesa, ataque, dano e iniciativa por cima do papel, sem mexer no XP: Bruto (muita Vida e dano, lento e fácil de acertar), Ágil (frágil, rápido, difícil de acertar), Atirador (fica longe e acerta bem), Conjurador (Mana alta, dano em área e pouca Vida), Defensor (Vida e Defesa altas, pouco dano, protege quem está perto) e Assassino (dano alto no primeiro golpe e cai fácil). O Comum é o modelo neutro da tabela.</p>
 
       <details class="regras-details">
         <summary>Decisões prontas <span class="regras-details-contagem">1d8</span></summary>
@@ -3822,7 +3869,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p>Quatro personagens de nível 3 escoltam uma caravana de refugiados pela beira de um rio. O que a mesa deve sentir é pressa: as crianças estão dentro da última carroça, e a carroça pegou fogo.</p>
       <p>Nas últimas três rodadas de combate, o grupo tirou 126 de dano no total, o que dá 42 por rodada. O encontro padrão pede 42 × 4,5, ou seja, <strong>189 de Vida</strong> no total, e de três a quatro ações inimigas por rodada.</p>
       <ul class="regras-list">
-        <li><strong>A Mãe da Lama, elite, 95 de Vida.</strong> É metade do orçamento e bate com a Vida do Modelo de Criatura de VD 1. Uma coisa grande feita de barro de rio e ossos de peixe, que se levanta da margem devagar, pingando.</li>
+        <li><strong>A Mãe da Lama, elite, 95 de Vida.</strong> É metade do orçamento e fica perto da Vida solo de uma criatura de VD 3, que é 90. Uma coisa grande feita de barro de rio e ossos de peixe, que se levanta da margem devagar, pingando.</li>
         <li><strong>Dois filhotes, padrões, 45 de Vida cada.</strong> Somam os outros 90. Do tamanho de cachorros, rápidos, e sempre voltando para perto da mãe.</li>
         <li><strong>Três corpos, três ações por rodada.</strong> Se você quiser a quarta ação, tire 20 de Vida da Mãe e acrescente um filhote menor, como lacaio.</li>
         <li><strong>A decisão dela é puxar de volta.</strong> Quando alguém corre para a carroça, um braço de barro agarra o tornozelo e arrasta a pessoa de volta para a margem. Agora chegar às crianças custa alguma coisa.</li>
@@ -3836,7 +3883,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Escreva a primeira frase da aparição antes da segunda habilidade.</strong> Se você ainda não sabe como ela chega na cena, ainda não sabe quem ela é. A tabela "Uma criatura aparece", em Dar peso à cena, tem seis começos prontos.</li>
         <li><strong>Deixe uma fraqueza para o grupo descobrir em cena.</strong> Descobrir é o que transforma o combate em conversa entre jogadores, e é a melhor sensação que um combate pode dar.</li>
         <li><strong>Decida como ela sai da luta sem morrer.</strong> Fugir, se render, ser convencida, conseguir o que queria. Combate que só termina em morte tira da mesa a escolha mais interessante.</li>
-        <li><strong>Se faltar tempo,</strong> use o Modelo de Criatura do VD certo direto: troque o nome, troque um ataque por algo que combine com a história, role uma decisão e um rosto nas tabelas acima. É uma ameaça pronta em três minutos, e com alma.</li>
+        <li><strong>Se faltar tempo,</strong> use a criatura do VD certo direto, da aba Sob medida ou da tabela acima: troque o nome, troque um ataque por algo que combine com a história, role uma decisão e um rosto nas tabelas acima. É uma ameaça pronta em três minutos, e com alma.</li>
       </ul>
 
       <h3 class="regras-subtitle">Criatura que ninguém quer enfrentar</h3>
@@ -3851,19 +3898,19 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>VD</th><th>Presença Aterradora</th><th>Golpe comum</th><th>Golpe anunciado</th></tr></thead>
         <tbody>
-          <tr><td>1</td><td>Vontade DT 15, 1d6</td><td>2d6+3 (10)</td><td>4d6 (14)</td></tr>
-          <tr><td>2</td><td>Vontade DT 15, 1d6</td><td>3d6+5 (15)</td><td>4d8+3 (21)</td></tr>
-          <tr><td>3</td><td>Vontade DT 15, 1d6</td><td>3d8+7 (20)</td><td>5d8+6 (28)</td></tr>
-          <tr><td>4</td><td>Vontade DT 20, 1d8</td><td>4d8+8 (26)</td><td>6d8+8 (35)</td></tr>
-          <tr><td>5</td><td>Vontade DT 20, 1d8</td><td>4d10+10 (32)</td><td>6d10+11 (44)</td></tr>
-          <tr><td>6</td><td>Vontade DT 20, 1d8</td><td>5d10+10 (37)</td><td>7d10+13 (51)</td></tr>
-          <tr><td>7</td><td>Vontade DT 25, 2d6</td><td>6d10+10 (43)</td><td>9d10+11 (60)</td></tr>
-          <tr><td>8</td><td>Vontade DT 25, 2d6</td><td>7d10+10 (48)</td><td>10d10+11 (66)</td></tr>
-          <tr><td>9</td><td>Vontade DT 25, 2d6</td><td>8d10+10 (54)</td><td>11d10+14 (74)</td></tr>
-          <tr><td>10</td><td>Vontade DT 25, 2d6</td><td>9d10+10 (59)</td><td>12d10+16 (82)</td></tr>
+          <tr><td>3</td><td>Vontade DT 15, 1d6</td><td>2d6+3 (10)</td><td>4d6 (14)</td></tr>
+          <tr><td>8</td><td>Vontade DT 15, 1d6</td><td>3d6+5 (15)</td><td>4d8+3 (21)</td></tr>
+          <tr><td>13</td><td>Vontade DT 15, 1d6</td><td>3d8+7 (20)</td><td>5d8+6 (28)</td></tr>
+          <tr><td>18</td><td>Vontade DT 20, 1d8</td><td>4d8+8 (26)</td><td>6d8+8 (35)</td></tr>
+          <tr><td>23</td><td>Vontade DT 20, 1d8</td><td>4d10+10 (32)</td><td>6d10+11 (44)</td></tr>
+          <tr><td>28</td><td>Vontade DT 20, 1d8</td><td>5d10+10 (37)</td><td>7d10+13 (51)</td></tr>
+          <tr><td>33</td><td>Vontade DT 25, 2d6</td><td>6d10+10 (43)</td><td>9d10+11 (60)</td></tr>
+          <tr><td>38</td><td>Vontade DT 25, 2d6</td><td>7d10+10 (48)</td><td>10d10+11 (66)</td></tr>
+          <tr><td>43</td><td>Vontade DT 25, 2d6</td><td>8d10+10 (54)</td><td>11d10+14 (74)</td></tr>
+          <tr><td>48</td><td>Vontade DT 25, 2d6</td><td>9d10+10 (59)</td><td>12d10+16 (82)</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">A Vida da criatura do Vazio fica cerca de 20% acima do Modelo de Criatura do mesmo VD, e a Defesa dois pontos acima. Os números vêm da Vida de um personagem de nível igual ao dobro do VD, e servem para você montar uma criatura nova que se comporte como as do Bestiário.</p>
+      <p class="regras-note">A Vida da criatura do Vazio fica cerca de 20% acima da Vida solo do mesmo VD (a do Bestiário e a da aba Sob medida), e a Defesa dois pontos acima. As linhas cobrem os VD das fichas do Vazio do Bestiário (3, 8, 13, 18, 23, 28, 33, 38, 43 e 48); entre dois degraus, use o de baixo. Servem para você montar uma criatura nova que se comporte como as do Bestiário.</p>
       <ul class="regras-list">
         <li>Se a mesa lutar mesmo assim, deixe a luta ser tão feia quanto a ficha promete. Não amoleça o golpe no meio da cena, porque o medo do grupo na próxima criatura depende de você ter cumprido a promessa nesta.</li>
         <li>Fugir tem que funcionar quando o plano é bom. Uma boa fuga custa recurso, tempo ou alguém para trás, e nunca deve ser impossível.</li>

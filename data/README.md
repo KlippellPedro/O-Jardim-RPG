@@ -20,10 +20,16 @@ Todos os JSONs devem permanecer em UTF-8 e ser validados pelos testes antes de p
 
 Dois arquivos de `ficha/` guardam a progressão de nível e são lidos também pela
 plataforma: `progressao-niveis.json` (curva de XP, ritmo de Legado, atributo e
-item especial, nível mínimo de cada grau de perícia, patamares e teto de
-classe) e `maestria-classe.json` (os marcos do nível 21 ao 50 de uma classe,
+item especial, os doze graus de perícia com bônus, nível mínimo e treino,
+patamares e teto de classe) e `maestria-classe.json` (os marcos do nível 21 ao 50 de uma classe,
 iguais para todas). O nível total não tem teto: esses arquivos dizem quanto vale
 cada faixa. Os capítulos de Experiência, Legados e Sistema Base leem os dois.
+
+`bestiario/familias-v1.json` declara as famílias e os únicos do Bestiário (o site
+importa); `bestiario/familias-propostas-v1.json` guarda estágios novos ainda em
+revisão e nunca vai para o site. `regras/curva-criatura-v1.json` é gerado pelo
+`npm run audit:balance` e não se edita à mão. Os marcos de magia de
+`ficha/classes.json` vão até o nível 50 (`teto_por_circulo` do 25 em diante).
 
 `ficha/magias.json` guarda a configuração do sistema de dez círculos e o
 catálogo ativo dos onze Fluxos. A versão 3.1 reúne magias, rituais, selos,

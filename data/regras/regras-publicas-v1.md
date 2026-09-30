@@ -66,7 +66,7 @@ Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar
 
 - Teste | Qualquer rolagem de d20 contra uma DT.
 
-- Grau | O quanto você treinou uma perícia, de Iniciante a Renomado. Cada degrau vale um bônus fixo.
+- Grau | O quanto você treinou uma perícia, de Iniciante a Absoluto. Cada degrau vale um bônus fixo.
 
 - Atributo | Os sete números que descrevem o personagem: Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo.
 
@@ -286,7 +286,7 @@ Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeit
 
 **Status:** Regra oficial
 
-Uma fórmula só, usada em perícia, ataque e resistência. Sete graus, e vantagem e desvantagem que se cancelam uma a uma.
+Uma fórmula só, usada em perícia, ataque e resistência. Doze graus, e vantagem e desvantagem que se cancelam uma a uma.
 
 ### Fórmula de teste
 
@@ -311,6 +311,18 @@ d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau
 - Veterano | +10 | 19
 
 - Renomado | +12 | 29
+
+- Lendário | +14 | 60
+
+- Mítico | +16 | 100
+
+- Cósmico | +18 | 150
+
+- Eterno | +20 | 250
+
+- Absoluto | +22 | 500
+
+Lendário, Mítico, Cósmico, Eterno e Absoluto só abrem a partir dos níveis 60, 100, 150, 250 e 500, os mesmos patamares em que o personagem passa do jogo padrão (ver Experiência e Níveis). Até o 60, o degrau mais alto que o nível permite é Renomado.
 
 ### Graus de resultado
 
@@ -1168,6 +1180,16 @@ São dois caminhos diferentes e vale não confundir. Quando uma **classe** te d�
 
 - Veterano → Renomado | 62 dias | Nível Total 29, feito e item especial
 
+- Renomado → Lendário | 90 dias | Nível Total 60, feito lendário e instrutor
+
+- Lendário → Mítico | 120 dias | Nível Total 100, feito mítico e item especial
+
+- Mítico → Cósmico | 180 dias | Nível Total 150, feito de alcance cósmico e instrutor
+
+- Cósmico → Eterno | 270 dias | Nível Total 250, feito que o tempo não apaga e item especial
+
+- Eterno → Absoluto | 365 dias | Nível Total 500, feito absoluto, instrutor e item especial
+
 ### Regras de treinamento
 
 - Cada dia custa seis horas e deixa 1 de Cansaço no fim. Uma noite normal de sono resolve.
@@ -1208,7 +1230,7 @@ Cada atividade abaixo já tem a regra completa em outra página. Aqui elas apare
 
 - Atividade | Como é vivida, e o que rende
 
-- Treinar uma perícia. | Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.Custa de 3 a 62 dias, conforme o grau. Rende um grau de treinamento. Regra completa em Treinar Perícias.
+- Treinar uma perícia. | Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.Custa de 3 a 365 dias, conforme o grau. Rende um grau de treinamento. Regra completa em Treinar Perícias.
 
 - Fabricar ou reparar. | Cheiro de metal quente, farpa no dedo, uma peça que não encaixa e depois encaixa. No fim, a coisa existe porque você fez.Custa os dias do projeto. Rende o item pronto, com um teste no fim. Regra completa em Fabricação e Reparo.
 
@@ -1602,7 +1624,7 @@ Nem todo mundo que luta ao seu lado é um personagem de jogador. Cavalo, cão de
 
 ### De onde vem um aliado
 
-- **Compra:** comprar uma criatura do Bestiário na Loja cria o aliado direto na sua ficha, já com Vida, Defesa, Iniciativa, deslocamento e ataque principal preenchidos. Comprou três, aparecem três, cada um com sua ficha separada.
+- **Compra:** comprar uma criatura do Bestiário na Loja cria o aliado direto na sua ficha, já com Vida, Defesa, Iniciativa, deslocamento e ataque principal preenchidos. Comprou três, aparecem três, cada um com sua ficha separada. A Vida do aliado é menor que a da mesma criatura como inimigo: no Bestiário ela aguenta sozinha o grupo inteiro, e ao seu lado ela vale no máximo o dobro da Vida média de um personagem do mesmo nível. A loja mostra os dois números.
 
 - **História:** o Mestre pode entregar um aliado sem venda nenhuma. É a mesma ficha, criada à mão.
 
@@ -2581,7 +2603,7 @@ A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai d
 
 ### Teste e DT de magia
 
-Teste = d20 + Mod. Fluxo + Grau de Misticismo + bônus específico da classe
+Teste = d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus específico da classe
 
 DT de conjuração = 7 + (3 × círculo)
 
@@ -2591,13 +2613,13 @@ DT de conjuração = 7 + (3 × círculo)
 
 - Ou seja: a magia pode estabilizar e ainda assim ser resistida. É uma rolagem só, lida duas vezes.
 
-- Metade do nível não entra aqui. Essa fórmula é diferente da fórmula geral de testes, de propósito.
+- A metade do nível entra aqui como em qualquer teste. Sem ela, um conjurador de nível alto nunca venceria o teste de resistência de uma criatura do próprio nível.
 
 - A Mana sai no momento em que você declara a conjuração, e não volta se o teste falhar.
 
 ### Círculos, Fluxo e DT
 
-- Círculo | Fluxo mínimo | DT | Mana base
+- Círculo | Fluxo recomendado | DT | Mana base
 
 - 1º | 14 | 10 | 2
 
@@ -2620,6 +2642,12 @@ DT de conjuração = 7 + (3 × círculo)
 - 10º | 50 | 37 | 55
 
 Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa.
+
+O Fluxo recomendado não trava nada. A classe diz até que círculo você aprende; o Fluxo diz até onde a conjuração sai com folga. Quem aprende um círculo acima do próprio Fluxo pode tentar, mas a rolagem precisa alcançar a DT do círculo, e a ficha avisa quando isso acontece. As Marcas de círculo continuam seguindo o círculo que o seu Fluxo sustenta.
+
+### Vagas depois do nível 20
+
+A fonte de magia não para no 20. Canalizador, Sintonizador e Elementarista ganham mais 2 vagas de magia a cada 5 níveis (22 no nível 50), e Canalizador e Sintonizador ganham mais 1 vaga de Selo e de Encantamento a cada 5 níveis. Do nível 25 em diante, no máximo 4 magias do mesmo círculo: as vagas novas obrigam a espalhar o repertório.
 
 ### Concentração
 
@@ -2897,7 +2925,7 @@ Os filtros abaixo reúnem magias, manifestações de cada Fluxo, rituais, selos,
 
 - Confirme se o personagem possui a classe, habilidade, item, Legado ou concessão que dá acesso àquela forma.
 
-- Para magia de círculo, confira Fluxo mínimo, Mana final e DT de conjuração no texto da própria entrada.
+- Para magia de círculo, confira Fluxo recomendado, Mana final e DT de conjuração no texto da própria entrada.
 
 - Ritual não pertence a círculo e não entra em combate. Selo e encantamento dependem da preparação descrita no capítulo correspondente.
 
@@ -3392,7 +3420,7 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 976 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 985 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 ### Os quatro locais
 
@@ -3402,9 +3430,9 @@ O catálogo inteiro tem 976 itens, e você nunca vê todos de uma vez. Cada item
 
 - Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 248
 
-- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 235
+- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 240
 
-- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 215
+- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 219
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 

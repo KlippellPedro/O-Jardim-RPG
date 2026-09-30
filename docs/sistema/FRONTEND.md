@@ -60,6 +60,16 @@ registro não pode depender somente de esconder o componente na tela.
 | Compras avançadas | Detalhes e saldo insuficiente foram exercitados na interface; compra completa exige conta de teste com recursos adequados. |
 | Nós 3D móveis | A dificuldade da ferramenta de clicar no alvo não comprovou defeito do produto. Fazer a passagem humana por mouse, touch e teclado. |
 
+<a id="niveis-alem-do-60-30-09"></a>
+
+## Níveis além do 60: telas tocadas (30 de setembro de 2026)
+
+| Tela | O que mudou |
+| --- | --- |
+| Ficha, aba Perícias | Doze graus (Lendário a Absoluto além dos sete antigos), lidos de `progressao-niveis.json`; cores dos graus novos escritas por extenso em [AbaPericias.tsx](../../src/pages/Ficha/abas/AbaPericias.tsx) porque o Tailwind descarta nome de classe montado em runtime. Nome de grau na tela vem de `nomeDoGrauPericia` (o id não tem acento). |
+| Ficha, aba Magias | Bloco "Magias por círculo" (quantas magias de cada círculo a ficha conhece, o teto e as vagas livres), aviso de Fluxo abaixo do recomendado ao aprender ou conjurar, e a rolagem passou a somar metade do nível. |
+| Sessão, Bestiário | Faixas de VD 1-10, 11-25, 26-50 e 51+, filtro de família e de criaturas únicas, selo "Única", e a aba "Sob medida" (gerador de criatura por VD e papel) no lugar dos modelos universais. O editor de criatura aceita VD até o máximo do arquivo de dados. |
+
 <a id="avisos-e-consistencia-21-09"></a>
 
 ## Avisos-relâmpago, cartaz e atalhos (21 de setembro de 2026)
