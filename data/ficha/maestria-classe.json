@@ -1,0 +1,11 @@
+{
+  "_nota": "Maestria de classe: o que qualquer classe ganha do nível 21 ao teto (progressao-niveis.json, classe.nivel_maximo), de 5 em 5 níveis. Vale igual para as 29 classes, sem texto escrito por classe. Além disso, cada nível da classe acima do 20 segue somando a Vida, a Mana e a Estamina dela, como sempre. O site (src/services/maestriaClasse.ts) e a plataforma (plataforma/core/maestria_classe.py) leem este arquivo.",
+  "marcos": [
+    { "nivel": 25, "tipo": "bonus_recursos", "titulo": "Reforço de recursos", "niveis_equivalentes": 2 },
+    { "nivel": 30, "tipo": "grau_pericia", "titulo": "Grau de perícia", "quantidade": 1 },
+    { "nivel": 35, "tipo": "bonus_recursos", "titulo": "Reforço de recursos", "niveis_equivalentes": 2 },
+    { "nivel": 40, "tipo": "grau_pericia", "titulo": "Grau de perícia", "quantidade": 1 },
+    { "nivel": 45, "tipo": "bonus_recursos", "titulo": "Reforço de recursos", "niveis_equivalentes": 2 },
+    { "nivel": 50, "tipo": "grau_pericia", "titulo": "Grau de perícia", "quantidade": 1 }
+  ]
+}

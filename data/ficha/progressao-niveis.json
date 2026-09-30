@@ -1,0 +1,51 @@
+{
+  "_nota": "Fonte única dos ritmos de nível. O frontend (src/services/progressaoNiveis.ts) e a plataforma (plataforma/core/progressao_niveis.py) leem este arquivo; mudou um número aqui, mudou nos dois. Faixa = a partir do nível indicado até o começo da próxima. Não é um limite de nível: o nível total não tem teto, e a ficha só avisa quando algo passa do esperado.",
+  "xp": {
+    "_nota": "Até 'ate_nivel' o custo de sair do nível N é N x custo_por_nivel (500 x N x (N - 1) de XP acumulado, a tabela de sempre). Depois disso cada faixa cobra um valor fixo por nível, sem tabela: cada faixa custa o número do nível em que começa, vezes 1.000.",
+    "formula": { "ate_nivel": 100, "custo_por_nivel": 1000 },
+    "faixas": [
+      { "a_partir_do_nivel": 100, "custo_por_nivel": 100000 },
+      { "a_partir_do_nivel": 150, "custo_por_nivel": 150000 },
+      { "a_partir_do_nivel": 250, "custo_por_nivel": 250000 },
+      { "a_partir_do_nivel": 500, "custo_por_nivel": 500000 }
+    ]
+  },
+  "classe": {
+    "_nota": "nivel_conteudo é onde as classes deixam de ter recompensa escrita (poderes, habilidades). Do 21 ao nivel_maximo a classe só dá recursos e os marcos de Maestria. O nivel_maximo vale para o botão de subir nível; digitar um número maior continua livre, com aviso.",
+    "nivel_conteudo": 20,
+    "nivel_maximo": 50
+  },
+  "legados": {
+    "_nota": "Um Legado a cada 'a_cada' níveis totais dentro de cada faixa. 1 a cada 5 até o 50, a cada 10 do 50 ao 100, a cada 20 depois.",
+    "faixas": [
+      { "a_partir_do_nivel": 0, "a_cada": 5 },
+      { "a_partir_do_nivel": 50, "a_cada": 10 },
+      { "a_partir_do_nivel": 100, "a_cada": 20 }
+    ]
+  },
+  "aumento_atributo": {
+    "_nota": "+1 em um atributo a cada 'a_cada' níveis totais dentro de cada faixa. O limite natural 20 não existe mais.",
+    "faixas": [
+      { "a_partir_do_nivel": 0, "a_cada": 4 },
+      { "a_partir_do_nivel": 50, "a_cada": 8 },
+      { "a_partir_do_nivel": 100, "a_cada": 16 }
+    ]
+  },
+  "item_especial": {
+    "_nota": "Slots de item especial seguem o ritmo do aumento de atributo, com pelo menos 1 slot desde o começo.",
+    "minimo": 1,
+    "faixas": [
+      { "a_partir_do_nivel": 0, "a_cada": 4 },
+      { "a_partir_do_nivel": 50, "a_cada": 8 },
+      { "a_partir_do_nivel": 100, "a_cada": 16 }
+    ]
+  },
+  "graus_pericia": {
+    "_nota": "Nível total mínimo para cada grau de perícia, na ordem iniciante, aprendiz, treinado, especialista, mestre, veterano e renomado. O servidor confere na ficha e a referência de balanceamento usa para saber o maior grau que o nível permite.",
+    "nivel_minimo": [1, 1, 3, 7, 13, 19, 29]
+  },
+  "patamares": {
+    "_nota": "Níveis totais em que o personagem 'muda de patamar': aviso na tela, moldura e Conquista. Coincidem com as faixas de XP. O 60 é onde terminam as regras padrão.",
+    "niveis": [60, 100, 150, 250, 500]
+  }
+}
