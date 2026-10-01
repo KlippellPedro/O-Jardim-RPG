@@ -2,6 +2,73 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-01-comidas-bebidas-e-itens-de-cena",
+      "data": "2026-10-01",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Comidas, bebidas e itens de cena",
+      "detalhes": [
+        "16 consumíveis novos. Oito são de comer e beber, como o Pão de Raiz Escura, o Ensopado do Viajante, o Chá de Casca-Amarga e a Aguardente de Fluxo: efeito pequeno, às vezes com um custo, e dura até o próximo Descanso ou por algumas horas. Só vale um efeito de comida e um de bebida por vez.",
+        "Os outros oito resolvem uma cena: Bomba de Pimenta, Rede de Lastro, Óleo Escorregadio, Armadilha de Corda e Sino, Pó de Revelação e mais alguns. Cada um diz o teste e a DT na própria descrição.",
+        "Na Loja, a aba Consumíveis ganhou o filtro Comidas e Bebidas. Comida e bebida já aparecem na Feira de Vila; as ferramentas, a partir da Metrópole."
+      ]
+    },
+    {
+      "id": "2026-10-01-lesoes-sequelas-e-saude-mental",
+      "data": "2026-10-01",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Lesões, sequelas e saúde mental prontas",
+      "detalhes": [
+        "46 condições de longo prazo já escritas: braço ou perna quebrados, concussão, perda de membro ou sentido, dor crônica, ansiedade, depressão, trauma e fobias. Cada uma traz o efeito e como sair dela.",
+        "Na aba Descanso, o catálogo tem filtros (Em cena, Lesões, Perdas e sequelas, Mente) e busca que atravessa todos. O Mestre também encontra a lista no editor da Sessão ao Vivo.",
+        "Um descanso completo de qualidade Boa ou melhor, com tratamento, conta para o Ferido e para todas as lesões ao mesmo tempo. No resultado Fratura da tabela de trauma, o Mestre pode escolher uma lesão em vez do −2 genérico."
+      ]
+    },
+    {
+      "id": "2026-10-01-cartoes-de-condicao-para-imprimir",
+      "data": "2026-10-01",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Cartões de condição para imprimir",
+      "detalhes": [
+        "Três PDFs de cartões para recortar, 9 por folha A4: condições de cena e crises, lesões e sequelas, e saúde mental. Dá para deixar o cartão na frente do jogador em vez de abrir o livro."
+      ]
+    },
+    {
+      "id": "2026-10-01-passivos-do-jardim",
+      "data": "2026-10-01",
+      "tipo": "novo",
+      "area": "Jardim",
+      "titulo": "Passivos no Jardim",
+      "detalhes": [
+        "27 Únicos novos que só mexem na ficha, para quem não quer ficar lembrando de usar poder: mais Vida, Mana e Estamina, bônus em Fortitude, Reflexos e Vontade, vantagem em Percepção, mais Defesa, mais ataque, +2 em um atributo (que vale +1 no modificador) e alguns combos lendários.",
+        "O efeito entra sozinho na ficha assim que você planta o Único, e some se você podar. Únicos que dão o mesmo bônus não somam: vale o maior."
+      ]
+    },
+    {
+      "id": "2026-10-01-vantagem-nos-graus-de-pericia",
+      "data": "2026-10-01",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Vantagem nos graus de perícia",
+      "detalhes": [
+        "Do grau Veterano em diante, o próprio grau já dá vantagem na perícia, além do bônus. Veterano dá 1 fonte de vantagem, Renomado 2, e assim até 7 no Absoluto.",
+        "Como vantagem e desvantagem se cancelam uma a uma, as fontes extras servem de escudo: um Renomado ainda rola com vantagem mesmo com uma desvantagem em cima. Vale também no ataque com Luta ou Pontaria e na conjuração com Misticismo."
+      ]
+    },
+    {
+      "id": "2026-10-01-gastar-aumentos-de-atributo",
+      "data": "2026-10-01",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Gastar os aumentos de atributo",
+      "detalhes": [
+        "Na seção Atributos, o botão Gastar abre um painel para distribuir os aumentos que o seu nível libera. Só o que você confirma ali conta como gasto.",
+        "Se um atributo subir por bênção ou recompensa de sessão e você mudar o número direto na ficha, isso aparece à parte e não consome os aumentos do nível."
+      ]
+    },
+    {
       "id": "2026-09-30-onde-ler-as-regras-novas",
       "data": "2026-09-30",
       "tipo": "melhoria",

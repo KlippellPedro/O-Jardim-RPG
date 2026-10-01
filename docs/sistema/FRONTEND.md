@@ -102,14 +102,44 @@ experiência da ficha:
 
 | Assunto | Fechamento |
 | --- | --- |
-| A Aba Ficha travava o botão de subir nível no 20 por classe e no 60 no total, e o "Adicionar classe" em 3 classes. | O botão de subir para no 50 da classe; digitar o nível é livre, com um aviso acima do 50. Qualquer classe liberada e ainda fora da ficha pode ser adicionada. [AbaFicha.tsx](../../src/pages/Ficha/abas/AbaFicha.tsx). |
+| A Aba Ficha travava o botão de subir nível no 20 por classe e no 60 no total, e o "Adicionar classe" em 3 classes. | Desde 1/10 o 50 é teto de verdade: o botão, o campo de nível e o servidor (`validar_regras_ficha`) não deixam uma classe passar dele. Ficha antiga que já estava acima abre e salva, só não sobe mais. Qualquer classe liberada e ainda fora da ficha pode ser adicionada. [AbaFicha.tsx](../../src/pages/Ficha/abas/AbaFicha.tsx). |
 | O nível total cortava cada classe em 20, então Legados e slots saíam errados. | `classesDaFicha` e `magiaService` contam o nível real. A consulta das recompensas escritas continua parando no 20. |
-| Nada mostrava quantos aumentos de atributo o nível liberava. | Seção Atributos: "Aumentos pelo nível: X de Y usados · N para gastar" (só informa). |
+| Nada mostrava quantos aumentos de atributo o nível liberava. | Seção Atributos: "Aumentos pelo nível: X de Y usados · N para gastar" e o botão **Gastar** abre o painel que soma +1 e registra em `ficha.aumentosAtributo`. Só esse registro conta como gasto; número mexido à mão (bênção, sessão) aparece como "+N de bênção ou sessão". Ficha sem o registro conta toda subida como gasto. |
 | O painel de progressão não sabia o que fazer acima do 20. | Mostra o nível real, a Maestria (seis marcos, acesos ou apagados) e o próximo marco. O Simulador de Nível sobe até o 50 e lista os marcos da Maestria. A página de cada classe no livro ganhou o bloco da Maestria. |
 | O painel de subida de nível só falava das recompensas da classe. | Avisa também Maestria, Legado, aumento de atributo e vaga de item especial, com voz gravada. |
 | Patamares 60, 100, 150, 250 e 500. | O aviso é a Conquista lendária (o cartão que desce, fala e some sozinho), mais o selo "Patamar I a V" na linha de classes e a moldura nova do retrato e do cartaz. |
-| As molduras do cartaz de Procurado nunca apareciam. O nome da classe CSS é montado em tempo de execução (`wanted-poster--${chave}`) e o Tailwind descartava as regras. | `safelist` no [tailwind.config.js](../../tailwind.config.js) e um teste que confere que toda moldura da escada tem regra de CSS e está na lista. |
+| As molduras do cartaz de Procurado nunca apareciam. O nome da classe CSS era montado em tempo de execução (`wanted-poster--${chave}`) e o Tailwind descartava as regras. | Desde 1/10 o cartaz não tem regra por grau: as cores e o desenho do aro chegam por variáveis inline do componente, e as classes genéricas (`wanted-poster--moldura`, `--grossa`, `--aros-1`, `--aros-2`, `--pulsa`) estão escritas por inteiro no [PersonagemWantedCard.tsx](../../src/pages/Ficha/components/PersonagemWantedCard.tsx). Sem `safelist`. |
 | A recompensa do cartaz crescia 22% por nível e passaria de 10^40 Lunaris no nível 500. | Até o 60 a conta é a mesma; depois soma mais 10% do valor do 60 por nível (o 100 vale 5 vezes o 60). |
+
+### Molduras: um degrau a cada 5 níveis, do 5 ao 500 (1 de outubro de 2026)
+
+A escada em [retrato.ts](../../src/pages/Ficha/utils/retrato.ts) tem 101 degraus (`ESCADA_MOLDURAS`). Os 13 primeiros (comum a Lendário, até o 60) são escolhidos à mão; do 65 ao 495 cada degrau é gerado, com nome próprio (gemas, metais, céu e depois forças e conceitos). Os marcos 100, 150, 250 e 500 (Mítico, Cósmico, Eterno e Absoluto) mantêm visual escolhido à mão.
+
+| Característica | Como varia |
+| --- | --- |
+| Cor | Ângulo áureo (137,5°) pelo círculo de matizes, então degraus vizinhos nunca ficam parecidos. |
+| Joia | Losango, círculo, estrela, hexágono, cruz ou gota. 4 joias até o 119, 6 até o 249 e 8 depois (cantos e meio dos lados). |
+| Aros | Duplo desde o 20; um aro a mais a partir do 180 e outro a partir do 330. |
+| Aro de fora | Liso, tracejado, pontilhado ou linha dupla. |
+| Movimento | Brilho girando (nos dois sentidos), luz pulsando ou joias cintilando. Só com movimento reduzido desligado. |
+
+O retrato (CSS), o cartaz de Procurado e o PNG do cartão (canvas em [cartaoPersonagem.ts](../../src/pages/Ficha/utils/cartaoPersonagem.ts)) leem os mesmos campos de `EstiloMoldura`. Entre dois degraus vale o de baixo (o nível 69 usa a moldura do 65).
+
+### Card da classe acima do 20 e teto de 50 (1 de outubro de 2026)
+
+O "slot" de cada classe na Aba Ficha (`.ficha-class-slot`) ganha um degrau visual a partir do nível 21 da própria classe e a cada marco de Maestria. A cor e o símbolo de fundo vêm da classe (o mesmo glifo da atmosfera dela), então duas classes no mesmo degrau ficam diferentes; o enfeite vem do degrau. A escada está em [degrauClasse.ts](../../src/pages/Ficha/utils/degrauClasse.ts) e um teste confere que ela segue os marcos de [maestria-classe.json](../../data/ficha/maestria-classe.json).
+
+| Nível da classe | Degrau | O que aparece |
+| --- | --- | --- |
+| 21 a 24 | Veterano | Selo com o nome e símbolo da classe ao fundo. |
+| 25 a 29 | Especialista | Cantos marcados. |
+| 30 a 34 | Mestre | Brilho de fundo e símbolo mais visível. |
+| 35 a 39 | Grão-Mestre | Cantos maiores e uma faixa de luz que atravessa o card. |
+| 40 a 44 | Paragão | Segundo aro por fora. |
+| 45 a 49 | Epítome | Selo mais forte. |
+| 50 | Apoteose | O teto da classe: aro de luz girando. |
+
+O teto de 50 por classe é o único bloqueio duro nesta parte. O nível total continua sem teto (quem quer evoluir mais abre outra classe). A trava mora em `limitarNivelClasse` ([progressaoNiveis.ts](../../src/services/progressaoNiveis.ts)) e em `validar_regras_ficha` ([character_summary.py](../../plataforma/core/character_summary.py)), que só barra quem *sobe* acima do 50, para não trancar fichas antigas.
 
 Cobertura: `npm run test:frontend` (767 testes em 29/09, incluindo
 [progressaoNiveis.test.ts](../../tests/frontend/progressaoNiveis.test.ts),

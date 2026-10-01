@@ -296,33 +296,35 @@ d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau
 
 ### Graus de perícia
 
-- Grau | Bônus | Nível total mínimo
+- Grau | Bônus | Vantagem do grau | Nível total mínimo
 
-- Iniciante | +0 | 1
+- Iniciante | +0 | nenhuma | 1
 
-- Aprendiz | +2 | 1
+- Aprendiz | +2 | nenhuma | 1
 
-- Treinado | +4 | 3
+- Treinado | +4 | nenhuma | 3
 
-- Especialista | +6 | 7
+- Especialista | +6 | nenhuma | 7
 
-- Mestre | +8 | 13
+- Mestre | +8 | nenhuma | 13
 
-- Veterano | +10 | 19
+- Veterano | +10 | 1 fonte | 19
 
-- Renomado | +12 | 29
+- Renomado | +12 | 2 fontes | 29
 
-- Lendário | +14 | 60
+- Lendário | +14 | 3 fontes | 60
 
-- Mítico | +16 | 100
+- Mítico | +16 | 4 fontes | 100
 
-- Cósmico | +18 | 150
+- Cósmico | +18 | 5 fontes | 150
 
-- Eterno | +20 | 250
+- Eterno | +20 | 6 fontes | 250
 
-- Absoluto | +22 | 500
+- Absoluto | +22 | 7 fontes | 500
 
 Lendário, Mítico, Cósmico, Eterno e Absoluto só abrem quando o nível total chega a 60, 100, 150, 250 e 500, que são os patamares de Experiência e Níveis. É onde o personagem já passou do jogo padrão. Até o 60, o degrau mais alto que o nível permite é Renomado.
+
+**Vantagem do grau.** Do Veterano em diante o próprio grau conta como fonte de vantagem em todo teste daquela perícia, e também no ataque quando a perícia é Luta ou Pontaria e na conjuração quando é Misticismo. É uma fonte no Veterano e mais uma a cada grau acima. Como as fontes de vantagem e de desvantagem se cancelam uma a uma e nunca viram vantagem dupla, as fontes extras compram segurança: um Renomado (2 fontes) ainda rola com vantagem com uma desvantagem em cima, e só perde a vantagem quando as desvantagens passam das fontes dele.
 
 Duas palavras iguais: o **grau Mestre** é um degrau de perícia (+8), e o **Mestre** da mesa é quem conduz o jogo. O livro escreve os dois com M maiúsculo e o contexto diz qual é.
 
@@ -1006,6 +1008,8 @@ Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes 
 
 - Um descanso completo de qualidade Boa ou melhor tira 1 de Ferido, se o personagem for tratado e terminar o descanso consciente.
 
+- O mesmo descanso conta também para cada lesão de longo prazo do personagem (veja Condições). Um descanso, todas as contagens andam.
+
 - É uma redução por descanso completo, mesmo que várias pessoas curem a mesma pessoa.
 
 - Poder ou tratamento que remova Ferido fora do descanso precisa dizer isso com todas as letras.
@@ -1026,7 +1030,7 @@ Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes 
 
 - 3–4 | 13,9% | Hemorragia: desvantagem no próximo teste de Morrendo até ser estabilizado.
 
-- 5–6 | 25% | Fratura: −2 em testes físicos até tratamento e descanso completo.
+- 5–6 | 25% | Fratura: −2 em testes físicos até tratamento e descanso completo. Se a mesa preferir, o Mestre escolhe onde o osso quebrou e aplica Braço Dominante Quebrado, Braço de Apoio Quebrado, Perna Quebrada ou Costelas Fraturadas no lugar do −2.
 
 - 7–8 | 30,6% | Choque: perca 1d4 Mana e sua próxima reação.
 
@@ -1378,7 +1382,7 @@ Atributo não tem valor máximo. Passando do 20 ele segue subindo, e o modificad
 
 ### Depois do nível 60
 
-O nível 60 é onde terminam as regras padrão. A ficha não trava nada acima dele: você continua subindo, abre mais classes e passa do 50 numa classe se a mesa quiser. O que muda é que o personagem entra num patamar novo.
+O nível 60 é onde terminam as regras padrão. O nível total não tem teto: você continua subindo e abre mais classes. Cada classe, porém, para no 50; para evoluir além disso, abra outra. O que muda acima do 60 é que o personagem entra num patamar novo.
 
 - Os patamares são os níveis totais 60, 100, 150, 250 e 500.
 
@@ -3069,6 +3073,140 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 - Concentrando | Só pode manter um efeito de concentração por vez. Ao sofrer dano, teste Vontade DT 10 ou metade do dano, o que for maior. Falha encerra o efeito. | Encerre voluntariamente, fique incapacitado ou falhe no teste de concentração.
 
+### Lesões, sequelas e saúde mental
+
+Condições que duram mais que uma cena já vêm escritas, para ninguém precisar inventar uma na hora. A ficha as aplica como texto: o efeito é lido e aplicado na mesa.
+
+- **Lesões** saram com tratamento e descansos completos de qualidade Boa ou melhor. Cada descanso assim, com tratamento, conta 1 até chegar ao número da condição. O mesmo descanso conta ao mesmo tempo para Ferido e para todas as lesões que o personagem tiver.
+
+- **Perdas de membro e sentido** espelham a tabela de Mutilação em Ferimentos. Sem Regeneração ou implante, ficam para sempre.
+
+- **Condições mentais permanentes** não somem com descanso. Acompanhamento profissional abranda cada uma do jeito que a própria condição descreve, e só uma resolução na história ou tratamento longo as encerra.
+
+- Na Quebra de Sanidade, a condição permanente definida com o jogador pode sair daqui.
+
+### Ossos e articulações
+
+- Condição | Duração | Efeito | Como sair
+
+- Braço Dominante Quebrado | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | A mão desse braço não segura nada: sem armas de duas mãos, sem escudo e sem gestos de conjuração com ela. Ataques com a outra mão sofrem -2. Desvantagem em Atletismo para escalar e nadar. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina. Cura que cite ossos encerra na hora.
+
+- Braço de Apoio Quebrado | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | Sem escudo e sem armas de duas mãos. Desvantagem em Atletismo para escalar. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina. Cura que cite ossos encerra na hora.
+
+- Perna Quebrada | 4 descansos completos de qualidade Boa ou melhor, com tratamento. | Deslocamento pela metade e sem correr. Desvantagem em Acrobacia e Furtividade. Em terreno difícil ou ao ser empurrado, Acrobacia DT 12 ou fique Caído. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 4 contados a lesão termina. Cura que cite ossos encerra na hora.
+
+- Tornozelo Torcido | 1 descanso completo de qualidade Boa ou melhor, com tratamento. | Sem correr. Desvantagem em Acrobacia e em Atletismo para saltar. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 1 contados a lesão termina.
+
+- Ombro Deslocado | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Desvantagem em ataques corpo a corpo e em Atletismo que exijam esse braço. Enquanto o ombro não for recolocado, a condição não melhora. | Cura DT 15 recoloca o ombro. Depois disso, 2 descansos completos de qualidade Boa ou melhor, com tratamento, encerram a lesão.
+
+- Mão Fraturada | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Ataques com essa mão sofrem -2. Desvantagem em Ladinagem, Pontaria e testes de precisão manual. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados a lesão termina.
+
+- Costelas Fraturadas | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | Respirar fundo dói: -2 em Atletismo. Desvantagem em Fortitude contra falta de ar, fumaça e esforço prolongado. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina.
+
+- Mandíbula Quebrada | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | Só fala frases curtas e arrastadas: desvantagem em Diplomacia, Atuação e Intimidação faladas. Componente verbal de magia só sai claro com Vontade DT 12. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina.
+
+### Ferimentos graves
+
+- Condição | Duração | Efeito | Como sair
+
+- Concussão | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | A cabeça lateja: desvantagem em Percepção, Investigação e Conhecimento. Ao sofrer dano de impacto, Fortitude DT 12 ou fique Atordoado até o fim do próximo turno. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados a lesão termina. Nova pancada forte na cabeça antes do fim zera a contagem.
+
+- Queimadura Grave | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | A pele repuxa sob peso e atrito: com armadura pesada, -2 em testes físicos. Desvantagem em Fortitude contra fogo e calor. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina.
+
+- Congelamento | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Dedos dormentes: desvantagem em Ladinagem e Pontaria. Desvantagem em Fortitude contra frio. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados a lesão termina. Passar uma cena inteira em local aquecido dá vantagem no teste de Cura.
+
+- Lesão Interna | Até ser operada. | No fim de cada cena de esforço intenso, sofre 1d4 de dano que nada evita. Descanso Excelente não recupera nada enquanto a lesão durar. | Cura DT 18, com ferramentas e uma hora de calma, para operar. Cura mágica de pelo menos 1 PV também encerra.
+
+- Surdo | Conforme a fonte. | Não ouve: falha automaticamente em Percepção que dependa de som. Não recebe ordens faladas nem ouve ataques vindos de fora do campo de visão. | Remova ou supere a fonte. Cura DT 15 trata a causa quando ela for física.
+
+### Membros e sentidos perdidos
+
+- Condição | Duração | Efeito | Como sair
+
+- Perda da Mão Dominante | Permanente. | Não segura nada com ela: sem armas de duas mãos e sem gestos de conjuração com ela. Ataques com a outra mão sofrem -2. Vale também para quem perdeu o braço inteiro. | Só volta com Regeneração de um Fluxo que cite membro perdido ou com um implante que cubra o que sumiu, e o implante anula a penalidade enquanto funcionar.
+
+- Perda da Mão de Apoio | Permanente. | Sem escudo e sem armas de duas mãos. Desvantagem em Atletismo para escalar. Vale também para quem perdeu o braço inteiro. | Só volta com Regeneração de um Fluxo que cite membro perdido ou com um implante que cubra o que sumiu, e o implante anula a penalidade enquanto funcionar.
+
+- Perda de uma Perna | Permanente. | Deslocamento pela metade e sem correr. Desvantagem em Acrobacia e Furtividade. Perder as duas pernas deixa o personagem sem andar, só com apoio ou implante. | Só volta com Regeneração de um Fluxo que cite membro perdido ou com um implante que cubra o que sumiu, e o implante anula a penalidade enquanto funcionar.
+
+- Perda de um Olho | Permanente. | -2 em ataques à distância e em Percepção que dependa de visão. Perder o segundo olho vira Cegueira Permanente. | Só volta com Regeneração de um Fluxo que cite membro perdido ou com um implante que cubra o que sumiu, e o implante anula a penalidade enquanto funcionar.
+
+- Cegueira Permanente | Permanente. | Vale tudo que a condição Cego já faz: desvantagem em testes que dependam de visão, e ataques contra você recebem +2 se o atacante puder vê-lo. Audição, tato e memória do lugar passam a guiar o personagem. Combinem com o Mestre o que ele consegue fazer sem ver. | Só volta com Regeneração de um Fluxo que cite membro perdido ou com um implante que cubra o que sumiu, e o implante anula a penalidade enquanto funcionar.
+
+- Perda de um Ouvido | Permanente. | Desvantagem em Percepção que dependa de som. Perder o segundo ouvido vira Surdez Permanente. | Só volta com Regeneração de um Fluxo que cite membro perdido ou com um implante que cubra o que sumiu, e o implante anula a penalidade enquanto funcionar.
+
+- Surdez Permanente | Permanente. | Vale tudo que a condição Surdo já faz: falha automaticamente em Percepção que dependa de som, não recebe ordens faladas e não ouve ataques vindos de fora do campo de visão. Leitura labial, escrita e sinais continuam funcionando. Combinem com a mesa como o personagem se comunica. | Só volta com Regeneração de um Fluxo que cite membro perdido ou com um implante que cubra o que sumiu, e o implante anula a penalidade enquanto funcionar.
+
+- Perda da Voz | Permanente. | Não fala: sem componente verbal em magia e sem persuasão falada. Escrita e gestos continuam funcionando. | Regeneração de um Fluxo que cite a voz. O Mestre decide se a Laringe Sintética Camaleão devolve a fala.
+
+### Sequelas do corpo
+
+- Condição | Duração | Efeito | Como sair
+
+- Dor Crônica | Permanente. | No começo de cada cena de esforço, Fortitude DT 12 ou o primeiro teste físico da cena sofre desvantagem. Existem dias melhores: o Mestre pode dispensar o teste numa cena tranquila. | Cura DT 18 ao longo de um arco baixa a DT para 10. Só cura de Fluxo explícita ou resolução na história encerra.
+
+- Tremor nas Mãos | Permanente. | Desvantagem em Ladinagem, Pontaria e ofícios de precisão. Respirar fundo e apoiar o braço permite repetir um teste de precisão por cena. | Tratamento com Cura DT 18 ao longo de um arco reduz o efeito a -2. Só cura de Fluxo explícita ou implante encerra.
+
+- Manqueira | Permanente. | Desvantagem em Acrobacia e em Atletismo para saltar. Em perseguição a pé, o teste oposto sofre -2. | Cirurgia de Cura DT 20 pode corrigir a perna, ao custo de 3 descansos de recuperação. Implante ou Regeneração também encerram.
+
+- Pulmões Danificados | Permanente. | Desvantagem em Fortitude contra fumaça, gases e afogamento. Esforço longo, como correr ou nadar por uma cena, exige Fortitude DT 12 ou +1 Cansaço. | Só cura de Fluxo explícita, implante respiratório ou resolução na história encerra.
+
+- Sensibilidade à Luz | Permanente. | Desvantagem em Percepção sob luz forte. Lentes escuras ou capuz removem a desvantagem, mas o personagem ouve melhor do que vê nesses lugares. | Tratamento com Cura DT 18 ao longo de um arco reduz a sensibilidade a uma incomodação sem efeito mecânico.
+
+- Cicatriz Marcante | Permanente. | +2 em Intimidação diante de quem a vê e entende o que ela custou. -2 em Diplomacia com quem se assusta ou a julga antes de ouvir. O Mestre decide quais cenas contam. A história da marca pertence a quem joga. | Cirurgia ou magia pode escondê-la. A marca em si fica como parte do personagem.
+
+### Transtornos e traumas
+
+- Condição | Duração | Efeito | Como sair
+
+- Ansiedade | Permanente, com altos e baixos. | No começo de uma cena de tensão (combate, prazo, multidão), Vontade DT 12 ou o primeiro teste da cena sofre desvantagem. Quem já está Abalado perde +1 de Sanidade em cada perda. Quem joga decide como o personagem esconde ou mostra isso. | Descanso comum não apaga. Acompanhamento profissional reduz a DT desta condição em 2, e só uma resolução na história ou tratamento longo a encerra.
+
+- Depressão | Permanente, com altos e baixos. | Descanso completo recupera Sanidade como se a qualidade fosse um degrau abaixo. Desvantagem em Vontade contra desânimo, medo e provocação. Dias melhores existem: uma cena com alguém querido pode dispensar a desvantagem. | Descanso comum não apaga. Acompanhamento profissional tira a perda no descanso e deixa só a desvantagem em Vontade, e só uma resolução na história ou tratamento longo a encerra.
+
+- Estresse Pós-Traumático | Permanente. | Defina com o Mestre um gatilho: um som, um cheiro, uma criatura ou um lugar. Diante do gatilho, Vontade DT 15 ou entre em Pânico ou Dissociação, à escolha de quem joga. Fora do gatilho, o personagem funciona normalmente. | Descanso comum não apaga. Acompanhamento profissional reduz a DT desta condição em 2, e só uma resolução na história ou tratamento longo a encerra.
+
+- Ataques de Pânico | Permanente. | Ao perder Sanidade, Vontade DT 12 ou o personagem sofre a crise Pânico por 1d4 rodadas. Respirar com ajuda de um aliado (ação padrão) dá vantagem no teste. | Descanso comum não apaga. Acompanhamento profissional reduz a DT desta condição em 2, e só uma resolução na história ou tratamento longo a encerra.
+
+- Insônia | Permanente. | Descanso completo reduz Cansaço como se a qualidade fosse um degrau abaixo. Desvantagem em Percepção na primeira cena depois de um descanso. | Descanso comum não apaga. Acompanhamento profissional tira a desvantagem em Percepção e deixa só o descanso um degrau abaixo, e só uma resolução na história ou tratamento longo a encerra.
+
+- Pesadelos Recorrentes | Permanente. | Ao fim de cada descanso completo, Vontade DT 12 ou a Sanidade recuperada naquele descanso cai pela metade. Dormir ao lado de alguém de confiança dá vantagem no teste. | Descanso comum não apaga. Acompanhamento profissional reduz a DT desta condição em 2, e só uma resolução na história ou tratamento longo a encerra.
+
+- Dissociação Recorrente | Permanente. | Em cena de grande tensão, Vontade DT 12 ou o personagem sofre a crise Dissociação por 1d4 rodadas. Um toque firme de um aliado (ação de movimento) encerra a crise sem teste. | Descanso comum não apaga. Acompanhamento profissional reduz a DT desta condição em 2, e só uma resolução na história ou tratamento longo a encerra.
+
+### Humor e comportamento
+
+- Condição | Duração | Efeito | Como sair
+
+- Luto Profundo | Até o fim do arco ou até a despedida. | Desvantagem em Diplomacia e Atuação para animar ou liderar. Ao ouvir o nome de quem se perdeu, Vontade DT 12 ou fique sem reações até o fim do próximo turno. | Uma cena de despedida na história, ou o apoio de duas cenas de descanso em grupo, encerra a condição.
+
+- Culpa do Sobrevivente | Permanente, até uma resolução na história. | Ao deixar um aliado para trás ou ver alguém cair, Vontade DT 12 ou perca 1d4 de Sanidade. Em troca, o personagem tem +2 em Vontade para salvar alguém que corre risco de verdade. | Descanso comum não apaga. Acompanhamento profissional reduz a DT desta condição em 2, e só uma resolução na história ou tratamento longo a encerra.
+
+- Paranoia Persistente | Permanente. | Não recebe bônus de ajuda de quem acabou de conhecer. Vontade DT 12 para aceitar cura ou comida de alguém fora do grupo. Vantagem em Intuição contra quem tenta enganá-lo, e desvantagem contra quem diz a verdade. | Descanso comum não apaga. Acompanhamento profissional reduz a DT desta condição em 2, e só uma resolução na história ou tratamento longo a encerra.
+
+- Rituais Obsessivos | Permanente. | Antes de uma ação importante, o personagem cumpre um ritual curto que quem joga define, como contar passos ou checar a arma. Sem tempo para o ritual, o primeiro teste da cena sofre -2. | Descanso comum não apaga. Acompanhamento profissional reduz o -2 para -1 quando falta tempo para o ritual, e só uma resolução na história ou tratamento longo a encerra.
+
+- Temperamento Explosivo | Permanente. | Ao sofrer dano ou ouvir provocação grave, Vontade DT 12 ou entre na crise Fúria por 1d4 rodadas. Um aliado que acalma o personagem (ação padrão, Diplomacia DT 12) encerra a crise. | Descanso comum não apaga. Acompanhamento profissional reduz a DT desta condição em 2, e só uma resolução na história ou tratamento longo a encerra.
+
+- Dificuldade de Confiar | Permanente. | Desvantagem em Diplomacia para pedir ajuda. Quem já provou lealdade ao personagem deixa de contar como estranho, e a desvantagem some com essa pessoa. | Descanso comum não apaga. Acompanhamento profissional limita a desvantagem a um pedido de ajuda por cena, e só uma resolução na história ou tratamento longo a encerra.
+
+### Medos e fobias
+
+- Condição | Duração | Efeito | Como sair
+
+- Medo de Escuridão | Permanente. | Em escuridão total ou penumbra pesada, Vontade DT 12 ou fique Amedrontado até haver luz. Dorme mal sem uma luz acesa por perto. | A cada três cenas em que o personagem encara o escuro de propósito, com apoio, e passa em Vontade DT 15, a DT baixa em 2. São seis cenas para ir de 12 a 8, e com DT 8 sobra só desconforto. Resolução na história encerra.
+
+- Medo de Altura | Permanente. | Ao olhar para baixo de um lugar alto, Vontade DT 12 ou fique Amedrontado até descer ou desviar o olhar. Desvantagem em Atletismo para escalar. | A cada três cenas em que o personagem encara um lugar alto de propósito, com apoio, e passa em Vontade DT 15, a DT baixa em 2. São seis cenas para ir de 12 a 8, e com DT 8 sobra só desconforto. Resolução na história encerra.
+
+- Medo de Fogo | Permanente. | Diante de chamas grandes, Vontade DT 12 ou o personagem se afasta pelo caminho mais curto. Desvantagem em Fortitude contra fogo, porque o medo atrapalha a reação. | A cada três cenas em que o personagem encara o fogo de propósito, com apoio, e passa em Vontade DT 15, a DT baixa em 2. São seis cenas para ir de 12 a 8, e com DT 8 sobra só desconforto. Resolução na história encerra.
+
+- Medo de Água Funda | Permanente. | Em água onde não alcança o fundo, Vontade DT 12 ou fique Amedrontado até sair. Desvantagem em Atletismo para nadar. | A cada três cenas em que o personagem encara a água funda de propósito, com apoio, e passa em Vontade DT 15, a DT baixa em 2. São seis cenas para ir de 12 a 8, e com DT 8 sobra só desconforto. Resolução na história encerra.
+
+- Claustrofobia | Permanente. | Em lugar apertado ou sem saída à vista, Vontade DT 12 ou o personagem sofre -2 em tudo até ver uma saída. Portas trancadas pesam mais: a DT sobe 2. | A cada três cenas em que o personagem encara um espaço fechado de propósito, com apoio, e passa em Vontade DT 15, a DT baixa em 2. São seis cenas para ir de 12 a 8, e com DT 8 sobra só desconforto. Resolução na história encerra.
+
+- Medo de Sangue | Permanente. | Ao ver sangue em quantidade, Vontade DT 12 ou fique Atordoado até o fim do próximo turno. Desvantagem em Cura em quem sangra. | A cada três cenas em que o personagem encara o sangue de propósito, com apoio, e passa em Vontade DT 15, a DT baixa em 2. São seis cenas para ir de 12 a 8, e com DT 8 sobra só desconforto. Resolução na história encerra.
+
+- Medo de Multidões | Permanente. | No meio de muita gente, Vontade DT 12 ou o primeiro teste da cena sofre desvantagem. Desvantagem em Furtividade para se misturar à multidão. | A cada três cenas em que o personagem encara uma multidão de propósito, com apoio, e passa em Vontade DT 15, a DT baixa em 2. São seis cenas para ir de 12 a 8, e com DT 8 sobra só desconforto. Resolução na história encerra.
+
 ## aflicoes
 
 **Categoria:** Combate e Mecânicas
@@ -3494,15 +3632,15 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 985 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 1001 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 ### Os quatro locais
 
 - Local | O que vende | Itens
 
-- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 278
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 286
 
-- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 249
+- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 257
 
 - Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 238
 

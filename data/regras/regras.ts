@@ -35,6 +35,7 @@ import { REGRA_AFLICOES } from './aflicoes';
 import { REGRA_ATAQUES_COMBINADOS } from './ataquesCombinados';
 import { REGRA_BASES } from './bases';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from './condicoes';
+import { CONDICOES_LONGO_PRAZO, GRUPOS_LONGO_PRAZO } from './condicoes-longo-prazo';
 import { REGRA_CONFLITO_SOCIAL } from './conflitoSocial';
 import { REGRA_CRAFTING } from './crafting';
 import { REGRA_MUNDO_FACCOES } from './faccoes';
@@ -99,6 +100,22 @@ const tabelaCrisesSanidade = CRISES_SANIDADE.map((crise) => `
     <td>${crise.remocao}</td>
   </tr>
 `).join('');
+
+/** Gerada de data/regras/condicoes-longo-prazo.ts: lesões, sequelas e saúde
+ * mental, uma tabela por grupo, para o livro seguir o que a ficha oferece. */
+const tabelasCondicoesLongoPrazo = GRUPOS_LONGO_PRAZO.map((grupo) => `
+      <h3 class="regras-subtitle">${grupo}</h3>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Condição</th><th>Duração</th><th>Efeito</th><th>Como sair</th></tr></thead>
+        <tbody>${CONDICOES_LONGO_PRAZO.filter((condicao) => condicao.grupo === grupo).map((condicao) => `
+          <tr>
+            <td><strong>${condicao.titulo}</strong></td>
+            <td>${condicao.duracao}</td>
+            <td>${condicao.efeitos.join(' ')}</td>
+            <td>${condicao.remocao}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>`).join('');
 
 /** Geradas de data/ficha/classes.json e racas.json: o livro público lista nome,
  * tipo e conceito de cada entrada em vez de repetir a progressão inteira, que
@@ -209,7 +226,7 @@ const diasTreinoDoPatamar = grausPericiaDoPatamar[0]?.treino_dias ?? 0;
 const diasTreinoMinimo =Math.min(...grausPericiaComTreino.map((grau) => grau.treino_dias));
 const diasTreinoMaximo = Math.max(...grausPericiaComTreino.map((grau) => grau.treino_dias));
 const linhasGrausPericia = () => GRAUS_PERICIA_DADOS.map((grau) => (
-  `<tr><td>${grau.rotulo}</td><td>+${grau.bonus}</td><td>${grau.nivel_minimo}</td></tr>`
+  `<tr><td>${grau.rotulo}</td><td>+${grau.bonus}</td><td>${grau.vantagens ? `${grau.vantagens} ${grau.vantagens === 1 ? 'fonte' : 'fontes'}` : 'nenhuma'}</td><td>${grau.nivel_minimo}</td></tr>`
 )).join('\n');
 const linhasTreinoPericia = () => GRAUS_PERICIA_DADOS.slice(1).map((grau, indice) => {
   const ligacao = /,| e /.test(grau.requisito) ? ', ' : ' e ';
@@ -705,12 +722,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Graus de perícia</h3>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Grau</th><th>Bônus</th><th>Nível total mínimo</th></tr></thead>
+        <thead><tr><th>Grau</th><th>Bônus</th><th>Vantagem do grau</th><th>Nível total mínimo</th></tr></thead>
         <tbody>
           ${linhasGrausPericia()}
         </tbody>
       </table></div>
       <p>${nomesDosGrausDoPatamar} só abrem quando o nível total chega a ${niveisDosGrausDoPatamar}, que são os patamares de Experiência e Níveis. É onde o personagem já passou do jogo padrão. Até o ${NIVEL_TOTAL_PADRAO}, o degrau mais alto que o nível permite é ${GRAUS_PERICIA_DADOS[GRAUS_PERICIA_DADOS.length - grausPericiaDoPatamar.length - 1].rotulo}.</p>
+
+      <p><strong>Vantagem do grau.</strong> Do ${grauPorNome('veterano')?.rotulo} em diante o próprio grau conta como fonte de vantagem em todo teste daquela perícia, e também no ataque quando a perícia é Luta ou Pontaria e na conjuração quando é Misticismo. É uma fonte no ${grauPorNome('veterano')?.rotulo} e mais uma a cada grau acima. Como as fontes de vantagem e de desvantagem se cancelam uma a uma e nunca viram vantagem dupla, as fontes extras compram segurança: um ${grauPorNome('renomado')?.rotulo} (${grauPorNome('renomado')?.vantagens} fontes) ainda rola com vantagem com uma desvantagem em cima, e só perde a vantagem quando as desvantagens passam das fontes dele.</p>
 
       <p class="regras-note">Duas palavras iguais: o <strong>grau Mestre</strong> é um degrau de perícia (+8), e o <strong>Mestre</strong> da mesa é quem conduz o jogo. O livro escreve os dois com M maiúsculo e o contexto diz qual é.</p>
 
@@ -1199,6 +1218,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Remover Ferido</h3>
       <ul class="regras-list">
         <li>Um descanso completo de qualidade Boa ou melhor tira 1 de Ferido, se o personagem for tratado e terminar o descanso consciente.</li>
+        <li>O mesmo descanso conta também para cada lesão de longo prazo do personagem (veja Condições). Um descanso, todas as contagens andam.</li>
         <li>É uma redução por descanso completo, mesmo que várias pessoas curem a mesma pessoa.</li>
         <li>Poder ou tratamento que remova Ferido fora do descanso precisa dizer isso com todas as letras.</li>
       </ul>
@@ -1216,7 +1236,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <tbody>
           <tr><td>2</td><td>2,8%</td><td><strong>Trauma mortal:</strong> aumente Morrendo em 1.</td></tr>
           <tr><td>3–4</td><td>13,9%</td><td><strong>Hemorragia:</strong> desvantagem no próximo teste de Morrendo até ser estabilizado.</td></tr>
-          <tr><td>5–6</td><td>25%</td><td><strong>Fratura:</strong> −2 em testes físicos até tratamento e descanso completo.</td></tr>
+          <tr><td>5–6</td><td>25%</td><td><strong>Fratura:</strong> −2 em testes físicos até tratamento e descanso completo. Se a mesa preferir, o Mestre escolhe onde o osso quebrou e aplica Braço Dominante Quebrado, Braço de Apoio Quebrado, Perna Quebrada ou Costelas Fraturadas no lugar do −2.</td></tr>
           <tr><td>7–8</td><td>30,6%</td><td><strong>Choque:</strong> perca 1d4 Mana e sua próxima reação.</td></tr>
           <tr><td>9–10</td><td>19,4%</td><td><strong>Cicatriz:</strong> consequência narrativa e −1 contextual até ser tratada.</td></tr>
           <tr><td>11</td><td>5,6%</td><td><strong>Instinto:</strong> vantagem no próximo teste de Morrendo.</td></tr>
@@ -1646,7 +1666,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Depois do nível ${NIVEL_TOTAL_PADRAO}</h3>
-      <p>O nível ${NIVEL_TOTAL_PADRAO} é onde terminam as regras padrão. A ficha não trava nada acima dele: você continua subindo, abre mais classes e passa do ${NIVEL_MAXIMO_CLASSE} numa classe se a mesa quiser. O que muda é que o personagem entra num patamar novo.</p>
+      <p>O nível ${NIVEL_TOTAL_PADRAO} é onde terminam as regras padrão. O nível total não tem teto: você continua subindo e abre mais classes. Cada classe, porém, para no ${NIVEL_MAXIMO_CLASSE}; para evoluir além disso, abra outra. O que muda acima do ${NIVEL_TOTAL_PADRAO} é que o personagem entra num patamar novo.</p>
       <ul class="regras-list">
         <li>Os patamares são os níveis totais ${PATAMARES_NIVEL.slice(0, -1).join(', ')} e ${PATAMARES_NIVEL[PATAMARES_NIVEL.length - 1]}.</li>
         <li>Cada um traz uma Conquista, uma moldura própria no retrato e no cartaz de Procurado e um selo na ficha, de Patamar I a Patamar V. O aviso aparece uma vez e some sozinho.</li>
@@ -2319,6 +2339,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Sanidade', '0–100'],
       ['Condições', `${CONDICOES_OFICIAIS.length} oficiais`],
       ['Crises', `${CRISES_SANIDADE.length} catalogadas`],
+      ['Longo prazo', `${CONDICOES_LONGO_PRAZO.length} prontas`],
     ],
     corpo: `
       <h3 class="regras-subtitle">Sanidade</h3>
@@ -2354,6 +2375,15 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <thead><tr><th>Condição</th><th>Efeito principal</th><th>Remoção</th></tr></thead>
         <tbody>${tabelaCondicoesGerais}</tbody>
       </table></div>
+
+      <h3 class="regras-subtitle">Lesões, sequelas e saúde mental</h3>
+      <p class="regras-lead">Condições que duram mais que uma cena já vêm escritas, para ninguém precisar inventar uma na hora. A ficha as aplica como texto: o efeito é lido e aplicado na mesa.</p>
+      <ul class="regras-list">
+        <li><strong>Lesões</strong> saram com tratamento e descansos completos de qualidade Boa ou melhor. Cada descanso assim, com tratamento, conta 1 até chegar ao número da condição. O mesmo descanso conta ao mesmo tempo para Ferido e para todas as lesões que o personagem tiver.</li>
+        <li><strong>Perdas de membro e sentido</strong> espelham a tabela de Mutilação em Ferimentos. Sem Regeneração ou implante, ficam para sempre.</li>
+        <li><strong>Condições mentais permanentes</strong> não somem com descanso. Acompanhamento profissional abranda cada uma do jeito que a própria condição descreve, e só uma resolução na história ou tratamento longo as encerra.</li>
+        <li>Na Quebra de Sanidade, a condição permanente definida com o jogador pode sair daqui.</li>
+      </ul>${tabelasCondicoesLongoPrazo}
     `,
     corpoMestre: `
       <p class="regras-lead">Sanidade é a única barra do jogo que você controla sozinho: nada a consome sem você pedir um teste. Por isso ela vira ferramenta de tom, e não de dano.</p>
@@ -2378,6 +2408,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Toda condição precisa de uma saída conhecida. Se o jogador não sabe como sair, você não aplicou uma condição, aplicou uma sentença.</li>
         <li>Exposto não acumula consigo mesmo e Atordoado só renova duração. Segure a tentação de empilhar: duas fontes da mesma condição não valem o dobro.</li>
         <li>Iniciativa é número fixo de ficha. Surpreendido tira 5 na primeira rodada, e é assim que uma emboscada bem armada se paga, sem precisar de dano extra.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Lesões e saúde mental na mesa</h3>
+      <ul class="regras-list">
+        <li>Condição de saúde mental é combinada, não imposta. Converse com quem joga antes de aplicar, escolham juntos o gatilho e o jeito de interpretar, e troque por outra se a pessoa não quiser aquele tema.</li>
+        <li>Os números são um ponto de partida. Dias melhores existem: dispense o teste de uma condição crônica numa cena tranquila e cobre mais quando a cena for pesada.</li>
+        <li>Lesão que dura vários descansos precisa de uma cena de cuidado. Quem trata o braço quebrado de um amigo faz mais pela história que o teste de Cura.</li>
+        <li>Perda permanente pede uma porta de volta ou uma forma nova de jogar, como a que Mutilação já descreve. Se a mesa ainda não decidiu qual, não aplique.</li>
       </ul>
     `,
   },
