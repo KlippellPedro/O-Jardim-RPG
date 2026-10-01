@@ -286,6 +286,9 @@ export interface IUnicoJardim extends IFichaTecnicaClasse {
   custo_mana: number;
   custo_estamina?: number;
   descricao: string;
+  /** Único passivo que só mexe na ficha: entra sozinho nos cálculos, sem ninguém
+   * precisar lembrar. Só o maior bônus de cada alvo vale entre os Únicos. */
+  efeitos?: IEfeitoFichaClasse[];
 }
 
 export interface ICatalogo {

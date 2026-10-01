@@ -88,7 +88,7 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
               </span>
             </div>
             <p className="mt-1 text-xs text-gray-500">
-              Vêm de itens, poderes, habilidades ou condições da ficha e já entram na rolagem. Para removê-las, altere a fonte que concede o efeito.
+              Vêm do grau da perícia (do Veterano em diante), de itens, poderes, habilidades ou condições da ficha e já entram na rolagem. Para removê-las, altere a fonte que concede o efeito.
             </p>
           </div>
         )}

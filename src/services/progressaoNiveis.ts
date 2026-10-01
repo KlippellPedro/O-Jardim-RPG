@@ -22,14 +22,24 @@ const ITEM_ESPECIAL_MINIMO = Math.max(0, Math.trunc(Number(progressaoData.item_e
 
 /** Onde a classe deixa de ter recompensa escrita (poderes, habilidades). */
 export const NIVEL_CONTEUDO_CLASSE: number = progressaoData.classe.nivel_conteudo;
-/** Teto do botão de subir nível numa classe. Digitar mais continua livre. */
+/** Teto do nível de uma classe: nem o botão de subir nem o campo de nível passam dele. */
 export const NIVEL_MAXIMO_CLASSE: number = progressaoData.classe.nivel_maximo;
+
+/** Nível de classe depois de uma edição: pelo menos 1 e nunca acima do teto. Uma
+ * ficha antiga que já estava acima do teto pode ser reduzida, mas não sobe mais. */
+export function limitarNivelClasse(novo: unknown, atual: unknown = 0): number {
+  const pedido = Math.max(1, Math.trunc(Number(novo) || 1));
+  const teto = Math.max(NIVEL_MAXIMO_CLASSE, Math.trunc(Number(atual) || 0));
+  return Math.min(pedido, teto);
+}
 /** Níveis totais em que o personagem muda de patamar, em ordem crescente. */
 export const PATAMARES_NIVEL: readonly number[] = [...progressaoData.patamares.niveis].sort((a, b) => a - b);
 export interface IGrauPericia {
   id: string;
   rotulo: string;
   bonus: number;
+  /** Fontes de vantagem que o grau dá sozinho em todo teste da perícia. */
+  vantagens: number;
   nivel_minimo: number;
   /** Dias de treino para subir até este grau (0 = o grau de partida). */
   treino_dias: number;
@@ -45,6 +55,15 @@ export const GRAUS_PERICIA: readonly string[] = GRAUS_PERICIA_DADOS.map((grau) =
 export const BONUS_GRAU: Record<string, number> = Object.fromEntries(
   GRAUS_PERICIA_DADOS.map((grau) => [grau.id, grau.bonus]),
 );
+/** Fontes de vantagem de cada grau, por id (0 nos graus de baixo). */
+export const VANTAGENS_GRAU: Record<string, number> = Object.fromEntries(
+  GRAUS_PERICIA_DADOS.map((grau) => [grau.id, Math.max(0, Math.trunc(Number(grau.vantagens)) || 0)]),
+);
+/** Fontes de vantagem que o grau dá no teste da perícia; entram junto das de
+ * itens e poderes e se cancelam uma a uma com as desvantagens. */
+export function vantagensDoGrau(grau: unknown): number {
+  return VANTAGENS_GRAU[String(grau ?? '').trim().toLowerCase()] ?? 0;
+}
 /** Nome de cada grau para mostrar (com acento), por id. */
 export const ROTULO_GRAU: Record<string, string> = Object.fromEntries(
   GRAUS_PERICIA_DADOS.map((grau) => [grau.id, grau.rotulo]),

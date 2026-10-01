@@ -8,7 +8,7 @@ import { IPericiaCatalogo, IRaca } from '../../../types/catalogo';
 import { ModalVantagensPericia } from '../components/ModalVantagensPericia';
 import { ModalCalculoPericia } from '../components/ModalCalculoPericia';
 import { aplicarAjustesAtributosRaciais, obterAjustesPericiasRaciais } from '../../../services/calculoService';
-import { BONUS_GRAU, GRAUS_PERICIA, NIVEL_MINIMO_GRAU, nomeDoGrauPericia } from '../../../services/progressaoNiveis';
+import { BONUS_GRAU, GRAUS_PERICIA, NIVEL_MINIMO_GRAU, nomeDoGrauPericia, vantagensDoGrau } from '../../../services/progressaoNiveis';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
 import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeCansacoTeste } from '../../../services/statusService';
 import { AjusteButton, AjustesFichaModal } from '../components/AjustesFichaModal';
@@ -121,6 +121,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const vantagensAutomaticasDaPericia = (periciaId: string) => (
     (resumoEquipamento.vantagens[periciaId] || 0)
     + (resumoEquipamento.vantagens['testes'] || 0)
+    + vantagensDoGrau(pericias[periciaId])
   );
   const desvantagensAutomaticasDaPericia = (periciaId: string, atributo: string) => (
     desvantagensAutomaticasTeste(status.cansacoAtual, periciaFisica(atributo), resumoEquipamento.sobrecarregado)
@@ -310,7 +311,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             { value: '', label: 'Todos os graus' },
             ...GRAUS_PERICIA.map((grau) => ({
               value: grau,
-              label: `${nomeDoGrauPericia(grau)} (+${BONUS_GRAU[grau] || 0})`,
+              label: `${nomeDoGrauPericia(grau)} (+${BONUS_GRAU[grau] || 0}${vantagensDoGrau(grau) ? ` · ${vantagensDoGrau(grau)}V` : ''})`,
               labelClassName: CORES_GRAU[grau],
             })),
           ]}
@@ -452,14 +453,14 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                   <div className="ml-auto shrink-0" data-tour="pericia-grau">
                     <Select
                       ariaLabel={`Alterar grau da perícia ${p.titulo}. Atual: ${nomeDoGrauPericia(grauAtual)}`}
-                      title={`Grau de treinamento: ${nomeDoGrauPericia(grauAtual)} (+${BONUS_GRAU[grauAtual] || 0})`}
+                      title={`Grau de treinamento: ${nomeDoGrauPericia(grauAtual)} (+${BONUS_GRAU[grauAtual] || 0}${vantagensDoGrau(grauAtual) ? `, ${vantagensDoGrau(grauAtual)} fonte(s) de vantagem` : ''})`}
                       value={grauAtual}
                       onChange={(grau) => handleGrauChange(p.id, grau)}
                       menuMinWidth={250}
                       options={GRAUS_PERICIA.map((grau, indiceDoGrau) => ({
                         value: grau,
                         // Grau que pede mais nível total do que a ficha tem: só um aviso, o Mestre decide.
-                        label: `${nomeDoGrauPericia(grau)} (+${BONUS_GRAU[grau]})${NIVEL_MINIMO_GRAU[indiceDoGrau] > nivel ? ` · nível ${NIVEL_MINIMO_GRAU[indiceDoGrau]}` : ''}`,
+                        label: `${nomeDoGrauPericia(grau)} (+${BONUS_GRAU[grau]}${vantagensDoGrau(grau) ? ` · ${vantagensDoGrau(grau)}V` : ''})${NIVEL_MINIMO_GRAU[indiceDoGrau] > nivel ? ` · nível ${NIVEL_MINIMO_GRAU[indiceDoGrau]}` : ''}`,
                         triggerLabel: `${nomeDoGrauPericia(grau)} +${BONUS_GRAU[grau]}`,
                         labelClassName: CORES_GRAU[grau],
                       }))}

@@ -1,5 +1,5 @@
 import { aplicarAjustesAtributosRaciais } from './calculoService';
-import { RACAS_CATALOGO } from './catalogoService';
+import { RACAS_CATALOGO, UNICOS_JARDIM_CATALOGO } from './catalogoService';
 import { opcoesHabilidadeSelecionadas } from './progressaoFichaService';
 import { resumirLimiteItensEspeciais } from './itensEspeciaisService';
 import { efeitosBrutosDoFrutoEden } from './frutoEdenAwakening';
@@ -58,6 +58,33 @@ export interface IModificacaoEquipamento {
 }
 
 export const EFEITOS_FICHA_MAXIMOS = 5;
+
+export interface IEfeitoUnicoJardim extends IEfeitoEquipamento {
+  unicoId: string;
+  unicoTitulo: string;
+}
+
+/**
+ * Efeitos dos Únicos passivos que a ficha plantou no Jardim. Entre Únicos, só o
+ * maior de cada alvo vale (Raiz Funda e Tronco do Jardim não somam a Vida), para
+ * que a escada de preços não vire pilha de bônus.
+ */
+export function efeitosDosUnicosJardim(ficha: any): IEfeitoUnicoJardim[] {
+  const comprados: unknown[] = Array.isArray(ficha?.jardim?.unicosComprados) ? ficha.jardim.unicosComprados : [];
+  const melhores = new Map<string, IEfeitoUnicoJardim>();
+  comprados.forEach((id) => {
+    const unico = UNICOS_JARDIM_CATALOGO.find((item) => item.id === id);
+    if (!unico) return;
+    normalizarEfeitosEquipamento(unico.efeitos).forEach((efeito) => {
+      const chave = `${efeito.categoria}:${efeito.alvo}:${efeito.modo}`;
+      const atual = melhores.get(chave);
+      if (!atual || Math.abs(efeito.valor) > Math.abs(atual.valor)) {
+        melhores.set(chave, { ...efeito, unicoId: unico.id, unicoTitulo: unico.titulo });
+      }
+    });
+  });
+  return [...melhores.values()];
+}
 
 const CATEGORIAS_EFEITO = new Set<TCategoriaEfeitoEquipamento>(['atributo', 'recurso', 'combate', 'pericia']);
 const MODOS_EFEITO = new Set<TModoEfeitoEquipamento>(['bonus', 'vantagem', 'desvantagem']);
@@ -238,6 +265,11 @@ export function resumirEquipamentos(
       }
     });
   });
+  efeitosDosUnicosJardim(ficha).forEach(({ unicoId, unicoTitulo, ...efeito }) => adicionarEfeitos([efeito], {
+    itemId: `jardim-unico:${unicoId}`,
+    itemNome: unicoTitulo,
+    origem: `Único do Jardim: ${unicoTitulo}`,
+  }));
   const aliadosAtivos = [
     ...(Array.isArray(ficha?.aliados) ? ficha.aliados : []),
     ...(Array.isArray(aliadosCompartilhados) ? aliadosCompartilhados : []),

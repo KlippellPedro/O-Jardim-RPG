@@ -4,6 +4,7 @@ import unittest
 
 from core.progressao_niveis import (
     BONUS_GRAU,
+    VANTAGENS_GRAU,
     GRAUS_PERICIA,
     GRAUS_PERICIA_DADOS,
     NIVEL_CONTEUDO_CLASSE,
@@ -91,6 +92,7 @@ class ProgressaoNiveisTests(unittest.TestCase):
             "lendario", "mitico", "cosmico", "eterno", "absoluto",
         ))
         self.assertEqual([BONUS_GRAU[grau] for grau in GRAUS_PERICIA], [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22])
+        self.assertEqual([VANTAGENS_GRAU[grau] for grau in GRAUS_PERICIA], [0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7])
         self.assertEqual(NIVEL_MINIMO_GRAU, (1, 1, 3, 7, 13, 19, 29, 60, 100, 150, 250, 500))
         self.assertEqual(
             [grau["treino_dias"] for grau in GRAUS_PERICIA_DADOS],

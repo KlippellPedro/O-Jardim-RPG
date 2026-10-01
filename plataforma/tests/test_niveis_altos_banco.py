@@ -169,7 +169,15 @@ class NiveisAltosBancoTests(unittest.TestCase):
         from tests.test_character_rules import _ficha_criacao
 
         ficha = _ficha_criacao()
-        ficha["classes"] = [{"classeId": "guerreiro", "nivel": nivel}]
+        # Uma classe vai até o 50: o nível total sobe repartido entre várias.
+        restante, classes = nivel, []
+        for classe_id in ("guerreiro", "ninja", "atirador"):
+            parte = min(50, restante)
+            if parte:
+                classes.append({"classeId": classe_id, "nivel": parte})
+            restante -= parte
+        assert restante == 0, "o teste só reparte até o nível 150"
+        ficha["classes"] = classes
         ficha["nivel"] = nivel
         return ficha
 

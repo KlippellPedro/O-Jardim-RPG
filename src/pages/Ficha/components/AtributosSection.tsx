@@ -55,6 +55,8 @@ interface AtributosSectionProps {
   detalhesAutomaticos?: Partial<Record<TAtributo, IDetalheEfeitoAutomatico[]>>;
   onChange: (atributo: TAtributo, valorEfetivo: number) => void;
   onRoll: (atributo: TAtributo) => void;
+  /** Abre o painel para gastar os aumentos de nível; sem ele a linha só informa. */
+  onGastarAumentos?: () => void;
   onOpenInfo: (modal: any) => void;
   onOpenAdjust: (
     chave: string,
@@ -77,6 +79,7 @@ export function AtributosSection({
   detalhesAutomaticos = {},
   onChange,
   onRoll,
+  onGastarAumentos,
   onOpenInfo,
   onOpenAdjust,
 }: AtributosSectionProps) {
@@ -93,6 +96,17 @@ export function AtributosSection({
             {aumentos.usados} de {aumentos.direito} usados
           </span>
           {aumentos.livres > 0 ? ` · ${aumentos.livres} para gastar` : ''}
+          {aumentos.extras > 0 ? ` · +${aumentos.extras} de bênção ou sessão (não gastam o nível)` : ''}
+          {aumentos.livres > 0 && onGastarAumentos && (
+            <button
+              type="button"
+              onClick={onGastarAumentos}
+              data-testid="gastar-aumentos-abrir"
+              className="ml-2 rounded-md border border-emerald-400/40 px-2 py-0.5 font-bold text-emerald-300 transition-colors hover:bg-emerald-400/10"
+            >
+              Gastar
+            </button>
+          )}
         </p>
       )}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-7">

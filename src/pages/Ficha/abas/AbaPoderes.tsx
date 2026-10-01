@@ -123,7 +123,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     id: item.id,
     nome: item.titulo,
     fonte: `Classe: ${item.origem}`,
-    tipo: item.descricao.toLocaleLowerCase('pt-BR').startsWith('passivo') ? 'Passiva' : 'Ativa',
+    tipo: item.passivo ? 'Passiva' : 'Ativa',
     nivelAdquirido: String(item.nivel),
     custo: custoDePoder(item),
     acao: '',

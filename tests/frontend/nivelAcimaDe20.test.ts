@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   aumentosDeAtributo,
+  gastarAumentosDeAtributo,
   classesDaFicha,
   habilidadesAutomaticas,
   nivelTotalFicha,
@@ -77,10 +78,29 @@ test('contador de aumentos de atributo compara o nível com o que a ficha já su
     atributosBase: base,
     atributosFinais: { ...base, ...Object.fromEntries(Object.entries(extra).map(([chave, valor]) => [chave, base[chave as keyof typeof base] + valor])) },
   });
-  assert.deepEqual(aumentosDeAtributo(comAumentos(20, { forca: 3, constituicao: 2 })), { direito: 5, usados: 5, livres: 0 });
-  assert.deepEqual(aumentosDeAtributo(comAumentos(60, { forca: 8 })), { direito: 13, usados: 8, livres: 5 });
-  assert.deepEqual(aumentosDeAtributo(comAumentos(20, { forca: 9 })), { direito: 5, usados: 9, livres: 0 });
+  assert.deepEqual(aumentosDeAtributo(comAumentos(20, { forca: 3, constituicao: 2 })), { direito: 5, usados: 5, livres: 0, extras: 0 });
+  assert.deepEqual(aumentosDeAtributo(comAumentos(60, { forca: 8 })), { direito: 13, usados: 8, livres: 5, extras: 0 });
+  assert.deepEqual(aumentosDeAtributo(comAumentos(20, { forca: 9 })), { direito: 5, usados: 9, livres: 0, extras: 0 });
   assert.equal(aumentosDeAtributo(ficha([{ classeId: 'guerreiro', nivel: 20 }])), null, 'sem os atributos de criação não dá para saber');
+});
+
+test('só o que o jogador gasta conta no direito do nível; subida de sessão vira extra', () => {
+  const base = { forca: 15, destreza: 14, constituicao: 13, inteligencia: 12, sabedoria: 10, carisma: 8, fluxo: 8 };
+  const nivel20 = ficha([{ classeId: 'guerreiro', nivel: 20 }]);
+  const semGasto = { ...nivel20, atributosBase: base, atributosFinais: { ...base, forca: 17 }, aumentosAtributo: {} };
+  // Força subiu 2 (bênção), mas nada foi gasto: os 5 aumentos do nível seguem livres.
+  assert.deepEqual(aumentosDeAtributo(semGasto), { direito: 5, usados: 0, livres: 5, extras: 2 });
+
+  const gasto = gastarAumentosDeAtributo(semGasto, { forca: 1, destreza: 2 })!;
+  assert.deepEqual(gasto.atributosFinais, { ...base, forca: 18, destreza: 16 });
+  assert.deepEqual(gasto.aumentosAtributo, { ...Object.fromEntries(Object.keys(base).map((chave) => [chave, 0])), forca: 1, destreza: 2 });
+  const depois = { ...semGasto, ...gasto };
+  assert.deepEqual(aumentosDeAtributo(depois), { direito: 5, usados: 3, livres: 2, extras: 2 });
+
+  // Baixar o número devolve o aumento: o gasto nunca passa do que o atributo subiu.
+  assert.equal(aumentosDeAtributo({ ...depois, atributosFinais: base })!.usados, 0);
+  // Ficha sem o registro continua contando toda subida como gasto.
+  assert.deepEqual(aumentosDeAtributo({ ...nivel20, atributosBase: base, atributosFinais: { ...base, forca: 17 } }), { direito: 5, usados: 2, livres: 3, extras: 0 });
 });
 
 test('bônus racial de atributo vale mesmo com o atributo já acima de 20', () => {

@@ -11,7 +11,7 @@
     ]
   },
   "classe": {
-    "_nota": "nivel_conteudo é onde as classes deixam de ter recompensa escrita (poderes, habilidades). Do 21 ao nivel_maximo a classe só dá recursos e os marcos de Maestria. O nivel_maximo vale para o botão de subir nível; digitar um número maior continua livre, com aviso.",
+    "_nota": "nivel_conteudo é onde as classes deixam de ter recompensa escrita (poderes, habilidades). Do 21 ao nivel_maximo a classe só dá recursos e os marcos de Maestria. O nivel_maximo é um teto de verdade: a ficha e o servidor não deixam uma classe passar dele (o nível total não tem teto, quem quer continuar abre outra classe). Ficha antiga que já estava acima continua abrindo, só não sobe mais.",
     "nivel_conteudo": 20,
     "nivel_maximo": 50
   },
@@ -41,20 +41,20 @@
     ]
   },
   "graus_pericia": {
-    "_nota": "Os graus de perícia do menor para o maior. 'bonus' entra no teste (d20 + atributo + metade do nível + grau), 'nivel_minimo' é o Nível Total em que o grau abre, 'treino_dias' e 'requisito' são o que o Livro cobra para subir até ele por treino (a classe entrega grau na hora, sem isso). Os cinco últimos abrem nos patamares (60, 100, 150, 250, 500). O servidor só avisa o Mestre; a referência de balanceamento usa o nível para saber o maior grau possível.",
+    "_nota": "Os graus de perícia do menor para o maior. 'bonus' entra no teste (d20 + atributo + metade do nível + grau), 'vantagens' é quantas fontes de vantagem o grau dá sozinho em todo teste daquela perícia (do Veterano em diante, uma a mais por grau; como fontes de vantagem e desvantagem se cancelam uma a uma e nunca viram vantagem dupla, as fontes extras servem de escudo contra desvantagem), 'nivel_minimo' é o Nível Total em que o grau abre, 'treino_dias' e 'requisito' são o que o Livro cobra para subir até ele por treino (a classe entrega grau na hora, sem isso). Os cinco últimos abrem nos patamares (60, 100, 150, 250, 500). O servidor só avisa o Mestre; a referência de balanceamento usa o nível para saber o maior grau possível.",
     "graus": [
-      { "id": "iniciante", "rotulo": "Iniciante", "bonus": 0, "nivel_minimo": 1, "treino_dias": 0, "requisito": "" },
-      { "id": "aprendiz", "rotulo": "Aprendiz", "bonus": 2, "nivel_minimo": 1, "treino_dias": 3, "requisito": "" },
-      { "id": "treinado", "rotulo": "Treinado", "bonus": 4, "nivel_minimo": 3, "treino_dias": 7, "requisito": "" },
-      { "id": "especialista", "rotulo": "Especialista", "bonus": 6, "nivel_minimo": 7, "treino_dias": 14, "requisito": "" },
-      { "id": "mestre", "rotulo": "Mestre", "bonus": 8, "nivel_minimo": 13, "treino_dias": 21, "requisito": "instrutor" },
-      { "id": "veterano", "rotulo": "Veterano", "bonus": 10, "nivel_minimo": 19, "treino_dias": 32, "requisito": "feito notável" },
-      { "id": "renomado", "rotulo": "Renomado", "bonus": 12, "nivel_minimo": 29, "treino_dias": 62, "requisito": "feito e item especial" },
-      { "id": "lendario", "rotulo": "Lendário", "bonus": 14, "nivel_minimo": 60, "treino_dias": 90, "requisito": "feito lendário e instrutor" },
-      { "id": "mitico", "rotulo": "Mítico", "bonus": 16, "nivel_minimo": 100, "treino_dias": 120, "requisito": "feito mítico e item especial" },
-      { "id": "cosmico", "rotulo": "Cósmico", "bonus": 18, "nivel_minimo": 150, "treino_dias": 180, "requisito": "feito de alcance cósmico e instrutor" },
-      { "id": "eterno", "rotulo": "Eterno", "bonus": 20, "nivel_minimo": 250, "treino_dias": 270, "requisito": "feito que o tempo não apaga e item especial" },
-      { "id": "absoluto", "rotulo": "Absoluto", "bonus": 22, "nivel_minimo": 500, "treino_dias": 365, "requisito": "feito absoluto, instrutor e item especial" }
+      { "id": "iniciante", "rotulo": "Iniciante", "bonus": 0, "vantagens": 0, "nivel_minimo": 1, "treino_dias": 0, "requisito": "" },
+      { "id": "aprendiz", "rotulo": "Aprendiz", "bonus": 2, "vantagens": 0, "nivel_minimo": 1, "treino_dias": 3, "requisito": "" },
+      { "id": "treinado", "rotulo": "Treinado", "bonus": 4, "vantagens": 0, "nivel_minimo": 3, "treino_dias": 7, "requisito": "" },
+      { "id": "especialista", "rotulo": "Especialista", "bonus": 6, "vantagens": 0, "nivel_minimo": 7, "treino_dias": 14, "requisito": "" },
+      { "id": "mestre", "rotulo": "Mestre", "bonus": 8, "vantagens": 0, "nivel_minimo": 13, "treino_dias": 21, "requisito": "instrutor" },
+      { "id": "veterano", "rotulo": "Veterano", "bonus": 10, "vantagens": 1, "nivel_minimo": 19, "treino_dias": 32, "requisito": "feito notável" },
+      { "id": "renomado", "rotulo": "Renomado", "bonus": 12, "vantagens": 2, "nivel_minimo": 29, "treino_dias": 62, "requisito": "feito e item especial" },
+      { "id": "lendario", "rotulo": "Lendário", "bonus": 14, "vantagens": 3, "nivel_minimo": 60, "treino_dias": 90, "requisito": "feito lendário e instrutor" },
+      { "id": "mitico", "rotulo": "Mítico", "bonus": 16, "vantagens": 4, "nivel_minimo": 100, "treino_dias": 120, "requisito": "feito mítico e item especial" },
+      { "id": "cosmico", "rotulo": "Cósmico", "bonus": 18, "vantagens": 5, "nivel_minimo": 150, "treino_dias": 180, "requisito": "feito de alcance cósmico e instrutor" },
+      { "id": "eterno", "rotulo": "Eterno", "bonus": 20, "vantagens": 6, "nivel_minimo": 250, "treino_dias": 270, "requisito": "feito que o tempo não apaga e item especial" },
+      { "id": "absoluto", "rotulo": "Absoluto", "bonus": 22, "vantagens": 7, "nivel_minimo": 500, "treino_dias": 365, "requisito": "feito absoluto, instrutor e item especial" }
     ]
   },
   "combate": {

@@ -546,5 +546,648 @@
     "dano": "4d12; metade em sucesso",
     "usos": "Uma vez por sessão; ao terminar, ganhe 1 nível de Cansaço",
     "descricao": "Um único golpe abre o terreno como quem rasga um pano. Quem estiver na linha sofre 4d12 de dano, com metade em caso de sucesso em Fortitude. O campo se parte em dois lados por 3 rodadas, e só quem voa consegue passar de um para o outro."
+  },
+  {
+    "id": "raiz-de-vigor",
+    "titulo": "Raiz de Vigor",
+    "tipo": "suporte",
+    "tier": "simples",
+    "custoSementes": 60,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Algo no seu corpo aprendeu a se agarrar à vida como raiz em chão duro. Você aguenta um pouco mais do que devia.\nEfeito: +6 de Vida máxima.",
+    "efeitos": [
+      {
+        "categoria": "recurso",
+        "alvo": "vidaMaxima",
+        "modo": "bonus",
+        "valor": 6,
+        "id": "raiz-de-vigor:0"
+      }
+    ]
+  },
+  {
+    "id": "fonte-pequena",
+    "titulo": "Fonte Pequena",
+    "tipo": "suporte",
+    "tier": "simples",
+    "custoSementes": 60,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Existe uma nascente miúda dentro de você. Nunca seca e nunca transborda.\nEfeito: +4 de Mana máxima.",
+    "efeitos": [
+      {
+        "categoria": "recurso",
+        "alvo": "manaMaxima",
+        "modo": "bonus",
+        "valor": 4,
+        "id": "fonte-pequena:0"
+      }
+    ]
+  },
+  {
+    "id": "folego-de-sobra",
+    "titulo": "Fôlego de Sobra",
+    "tipo": "suporte",
+    "tier": "simples",
+    "custoSementes": 60,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Quando o ar parece acabar, ainda sobra um pouco que você nem sabia ter.\nEfeito: +3 de Estamina máxima.",
+    "efeitos": [
+      {
+        "categoria": "recurso",
+        "alvo": "estaminaMaxima",
+        "modo": "bonus",
+        "valor": 3,
+        "id": "folego-de-sobra:0"
+      }
+    ]
+  },
+  {
+    "id": "casca-do-corpo",
+    "titulo": "Casca do Corpo",
+    "tipo": "suporte",
+    "tier": "simples",
+    "custoSementes": 70,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "A pele endurece onde precisa e o estômago aprende a perdoar. Doença, veneno e cansaço batem e voltam um pouco mais fracos.\nEfeito: +1 nos testes de Fortitude.",
+    "efeitos": [
+      {
+        "categoria": "pericia",
+        "alvo": "fortitude",
+        "modo": "bonus",
+        "valor": 1,
+        "id": "casca-do-corpo:0"
+      }
+    ]
+  },
+  {
+    "id": "pe-no-chao",
+    "titulo": "Pé no Chão",
+    "tipo": "suporte",
+    "tier": "simples",
+    "custoSementes": 70,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Você sente o tropeço antes de ele acontecer, e o corpo se ajeita sozinho.\nEfeito: +1 nos testes de Reflexos.",
+    "efeitos": [
+      {
+        "categoria": "pericia",
+        "alvo": "reflexos",
+        "modo": "bonus",
+        "valor": 1,
+        "id": "pe-no-chao:0"
+      }
+    ]
+  },
+  {
+    "id": "cabeca-fria",
+    "titulo": "Cabeça Fria",
+    "tipo": "suporte",
+    "tier": "simples",
+    "custoSementes": 70,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "O medo ainda chega, só que chega devagar, e dá tempo de decidir o que fazer com ele.\nEfeito: +1 nos testes de Vontade.",
+    "efeitos": [
+      {
+        "categoria": "pericia",
+        "alvo": "vontade",
+        "modo": "bonus",
+        "valor": 1,
+        "id": "cabeca-fria:0"
+      }
+    ]
+  },
+  {
+    "id": "alerta-de-raiz",
+    "titulo": "Alerta de Raiz",
+    "tipo": "utilidade",
+    "tier": "simples",
+    "custoSementes": 75,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Você acorda por dentro um segundo antes de o mundo acordar.\nEfeito: +2 de Iniciativa.",
+    "efeitos": [
+      {
+        "categoria": "combate",
+        "alvo": "iniciativa",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "alerta-de-raiz:0"
+      }
+    ]
+  },
+  {
+    "id": "raiz-funda",
+    "titulo": "Raiz Funda",
+    "tipo": "suporte",
+    "tier": "notavel",
+    "custoSementes": 150,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "A raiz desceu até onde a terra ainda guarda água. Quem tem esse chão dificilmente cai.\nEfeito: +12 de Vida máxima.",
+    "efeitos": [
+      {
+        "categoria": "recurso",
+        "alvo": "vidaMaxima",
+        "modo": "bonus",
+        "valor": 12,
+        "id": "raiz-funda:0"
+      }
+    ]
+  },
+  {
+    "id": "fonte-funda",
+    "titulo": "Fonte Funda",
+    "tipo": "suporte",
+    "tier": "notavel",
+    "custoSementes": 150,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "A nascente achou o lençol de água por baixo da terra, e agora ela volta sozinha.\nEfeito: +8 de Mana máxima.",
+    "efeitos": [
+      {
+        "categoria": "recurso",
+        "alvo": "manaMaxima",
+        "modo": "bonus",
+        "valor": 8,
+        "id": "fonte-funda:0"
+      }
+    ]
+  },
+  {
+    "id": "folego-longo",
+    "titulo": "Fôlego Longo",
+    "tipo": "suporte",
+    "tier": "notavel",
+    "custoSementes": 170,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Seu corpo guarda uma segunda respiração. Quem vê de fora jura que você nunca se cansa.\nEfeito: +6 de Estamina máxima.",
+    "efeitos": [
+      {
+        "categoria": "recurso",
+        "alvo": "estaminaMaxima",
+        "modo": "bonus",
+        "valor": 6,
+        "id": "folego-longo:0"
+      }
+    ]
+  },
+  {
+    "id": "olhos-de-orvalho",
+    "titulo": "Olhos de Orvalho",
+    "tipo": "utilidade",
+    "tier": "notavel",
+    "custoSementes": 190,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "A manhã deixa gotas nas coisas que se escondem, e você enxerga o brilho que os outros deixam passar.\nEfeito: Vantagem nos testes de Percepção.",
+    "efeitos": [
+      {
+        "categoria": "pericia",
+        "alvo": "percepcao",
+        "modo": "vantagem",
+        "valor": 1,
+        "id": "olhos-de-orvalho:0"
+      }
+    ]
+  },
+  {
+    "id": "pele-de-casca",
+    "titulo": "Pele de Casca",
+    "tipo": "suporte",
+    "tier": "notavel",
+    "custoSementes": 200,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Doença e veneno encontram uma casca que ninguém ensinou a atravessar.\nEfeito: Vantagem nos testes de Fortitude.",
+    "efeitos": [
+      {
+        "categoria": "pericia",
+        "alvo": "fortitude",
+        "modo": "vantagem",
+        "valor": 1,
+        "id": "pele-de-casca:0"
+      }
+    ]
+  },
+  {
+    "id": "guarda-baixa",
+    "titulo": "Guarda Baixa",
+    "tipo": "suporte",
+    "tier": "notavel",
+    "custoSementes": 200,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Você nunca está parado de verdade. Os ombros já dão o desvio que o golpe ainda vai pedir.\nEfeito: +1 de Defesa.",
+    "efeitos": [
+      {
+        "categoria": "combate",
+        "alvo": "defesa",
+        "modo": "bonus",
+        "valor": 1,
+        "id": "guarda-baixa:0"
+      }
+    ]
+  },
+  {
+    "id": "mira-de-orvalho",
+    "titulo": "Mira de Orvalho",
+    "tipo": "ataque",
+    "tier": "notavel",
+    "custoSementes": 210,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "A gota cai sempre no mesmo ponto da folha, e suas mãos aprenderam esse ponto.\nEfeito: +1 nos testes de ataque.",
+    "efeitos": [
+      {
+        "categoria": "combate",
+        "alvo": "ataque",
+        "modo": "bonus",
+        "valor": 1,
+        "id": "mira-de-orvalho:0"
+      }
+    ]
+  },
+  {
+    "id": "braco-de-raiz",
+    "titulo": "Braço de Raiz",
+    "tipo": "ataque",
+    "tier": "extraordinaria",
+    "custoSementes": 360,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Os músculos aprendem o que as raízes sabem: empurrar a pedra bem devagar até a pedra ceder.\nEfeito: +2 em Força (+1 no modificador).",
+    "efeitos": [
+      {
+        "categoria": "atributo",
+        "alvo": "forca",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "braco-de-raiz:0"
+      }
+    ]
+  },
+  {
+    "id": "passo-de-folha",
+    "titulo": "Passo de Folha",
+    "tipo": "ataque",
+    "tier": "extraordinaria",
+    "custoSementes": 380,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Folha não pesa, e cai onde quiser.\nEfeito: +2 em Destreza (+1 no modificador).",
+    "efeitos": [
+      {
+        "categoria": "atributo",
+        "alvo": "destreza",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "passo-de-folha:0"
+      }
+    ]
+  },
+  {
+    "id": "casco-do-jardim",
+    "titulo": "Casco do Jardim",
+    "tipo": "suporte",
+    "tier": "extraordinaria",
+    "custoSementes": 360,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "O corpo vira casco de árvore velha, rústico por fora e firme por dentro.\nEfeito: +2 em Constituição (+1 no modificador).",
+    "efeitos": [
+      {
+        "categoria": "atributo",
+        "alvo": "constituicao",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "casco-do-jardim:0"
+      }
+    ]
+  },
+  {
+    "id": "mente-de-ramos",
+    "titulo": "Mente de Ramos",
+    "tipo": "utilidade",
+    "tier": "extraordinaria",
+    "custoSementes": 380,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Os pensamentos passam a se ramificar sozinhos, e cada galho acha outro galho.\nEfeito: +2 em Inteligência (+1 no modificador).",
+    "efeitos": [
+      {
+        "categoria": "atributo",
+        "alvo": "inteligencia",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "mente-de-ramos:0"
+      }
+    ]
+  },
+  {
+    "id": "olho-fundo",
+    "titulo": "Olho Fundo",
+    "tipo": "utilidade",
+    "tier": "extraordinaria",
+    "custoSementes": 360,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Você olha para o fundo do poço e enxerga o que a água esconde.\nEfeito: +2 em Sabedoria (+1 no modificador).",
+    "efeitos": [
+      {
+        "categoria": "atributo",
+        "alvo": "sabedoria",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "olho-fundo:0"
+      }
+    ]
+  },
+  {
+    "id": "voz-de-flor",
+    "titulo": "Voz de Flor",
+    "tipo": "utilidade",
+    "tier": "extraordinaria",
+    "custoSementes": 340,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Abrir a boca vira abrir uma flor. Ninguém decide olhar, e todo mundo olha.\nEfeito: +2 em Carisma (+1 no modificador).",
+    "efeitos": [
+      {
+        "categoria": "atributo",
+        "alvo": "carisma",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "voz-de-flor:0"
+      }
+    ]
+  },
+  {
+    "id": "sopro-do-jardim",
+    "titulo": "Sopro do Jardim",
+    "tipo": "utilidade",
+    "tier": "extraordinaria",
+    "custoSementes": 420,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "O Fluxo passa por você como vento pela copa, sem pedir licença e sem ser mal recebido.\nEfeito: +2 em Fluxo (+1 no modificador).",
+    "efeitos": [
+      {
+        "categoria": "atributo",
+        "alvo": "fluxo",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "sopro-do-jardim:0"
+      }
+    ]
+  },
+  {
+    "id": "tronco-do-jardim",
+    "titulo": "Tronco do Jardim",
+    "tipo": "suporte",
+    "tier": "extraordinaria",
+    "custoSementes": 330,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Quem vê não acredita que o tronco aguentou tanto tempo em pé.\nEfeito: +20 de Vida máxima.",
+    "efeitos": [
+      {
+        "categoria": "recurso",
+        "alvo": "vidaMaxima",
+        "modo": "bonus",
+        "valor": 20,
+        "id": "tronco-do-jardim:0"
+      }
+    ]
+  },
+  {
+    "id": "sangue-frio",
+    "titulo": "Sangue Frio",
+    "tipo": "suporte",
+    "tier": "extraordinaria",
+    "custoSementes": 400,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "O susto é um visitante que você aprendeu a deixar na porta.\nEfeito: Vantagem nos testes de Reflexos e de Vontade.",
+    "efeitos": [
+      {
+        "categoria": "pericia",
+        "alvo": "reflexos",
+        "modo": "vantagem",
+        "valor": 1,
+        "id": "sangue-frio:0"
+      },
+      {
+        "categoria": "pericia",
+        "alvo": "vontade",
+        "modo": "vantagem",
+        "valor": 1,
+        "id": "sangue-frio:1"
+      }
+    ]
+  },
+  {
+    "id": "arvore-inteira",
+    "titulo": "Árvore Inteira",
+    "tipo": "suporte",
+    "tier": "lendaria",
+    "custoSementes": 800,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "O Jardim te plantou inteiro, do chão até a copa, e agora tudo em você dá fruto.\nEfeito: +30 de Vida máxima, +15 de Mana máxima e +10 de Estamina máxima.",
+    "efeitos": [
+      {
+        "categoria": "recurso",
+        "alvo": "vidaMaxima",
+        "modo": "bonus",
+        "valor": 30,
+        "id": "arvore-inteira:0"
+      },
+      {
+        "categoria": "recurso",
+        "alvo": "manaMaxima",
+        "modo": "bonus",
+        "valor": 15,
+        "id": "arvore-inteira:1"
+      },
+      {
+        "categoria": "recurso",
+        "alvo": "estaminaMaxima",
+        "modo": "bonus",
+        "valor": 10,
+        "id": "arvore-inteira:2"
+      }
+    ]
+  },
+  {
+    "id": "escudo-de-casca",
+    "titulo": "Escudo de Casca",
+    "tipo": "suporte",
+    "tier": "lendaria",
+    "custoSementes": 700,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Todas as portas do corpo ganharam o mesmo selo, e nenhum mal sabe qual delas abrir.\nEfeito: Vantagem nos testes de Fortitude, Reflexos e Vontade.",
+    "efeitos": [
+      {
+        "categoria": "pericia",
+        "alvo": "fortitude",
+        "modo": "vantagem",
+        "valor": 1,
+        "id": "escudo-de-casca:0"
+      },
+      {
+        "categoria": "pericia",
+        "alvo": "reflexos",
+        "modo": "vantagem",
+        "valor": 1,
+        "id": "escudo-de-casca:1"
+      },
+      {
+        "categoria": "pericia",
+        "alvo": "vontade",
+        "modo": "vantagem",
+        "valor": 1,
+        "id": "escudo-de-casca:2"
+      }
+    ]
+  },
+  {
+    "id": "corpo-de-tita",
+    "titulo": "Corpo de Titã",
+    "tipo": "ataque",
+    "tier": "lendaria",
+    "custoSementes": 900,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Quando a árvore cresce o bastante, ela deixa de pedir licença à floresta.\nEfeito: +2 em Força e +2 em Constituição (+1 no modificador de cada).",
+    "efeitos": [
+      {
+        "categoria": "atributo",
+        "alvo": "forca",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "corpo-de-tita:0"
+      },
+      {
+        "categoria": "atributo",
+        "alvo": "constituicao",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "corpo-de-tita:1"
+      }
+    ]
+  },
+  {
+    "id": "mente-desperta",
+    "titulo": "Mente Desperta",
+    "tipo": "utilidade",
+    "tier": "lendaria",
+    "custoSementes": 900,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "Pessoal",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Um dia o pensamento e a intuição se encontram no meio do caminho e passam a andar juntos.\nEfeito: +2 em Inteligência e +2 em Sabedoria (+1 no modificador de cada).",
+    "efeitos": [
+      {
+        "categoria": "atributo",
+        "alvo": "inteligencia",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "mente-desperta:0"
+      },
+      {
+        "categoria": "atributo",
+        "alvo": "sabedoria",
+        "modo": "bonus",
+        "valor": 2,
+        "id": "mente-desperta:1"
+      }
+    ]
   }
 ]

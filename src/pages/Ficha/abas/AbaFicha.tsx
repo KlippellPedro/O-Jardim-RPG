@@ -5,7 +5,10 @@ import { ModalInfoFicha } from '../components/ModalInfoFicha';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { ICatalogo } from '../../../types/catalogo';
 import { aplicarAjustesAtributosRaciais, ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, bonusTesteAtributo, calcularDerivadosComClasses, xpParaNivel, nivelPorXp, TAtributo } from '../../../services/calculoService';
-import { NIVEL_MAXIMO_CLASSE, NIVEL_TOTAL_PADRAO, patamarAtual, rotuloDoPatamar } from '../../../services/progressaoNiveis';
+import { NIVEL_MAXIMO_CLASSE, NIVEL_TOTAL_PADRAO, limitarNivelClasse, patamarAtual, rotuloDoPatamar } from '../../../services/progressaoNiveis';
+import { obterEfeitoAtmosfericoFicha } from '../fichaTheme';
+import { degrauDaClasse } from '../utils/degrauClasse';
+import { GLIFOS } from '../utils/retrato';
 import { limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -34,7 +37,7 @@ import {
   resumirEquipamentos,
   type IDetalheEfeitoAutomatico,
 } from '../../../services/equipamentoService';
-import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/condicoes';
+import { SeletorCondicaoOficial } from '../components/SeletorCondicaoOficial';
 import { ORIGENS, obterOrigem, resumoAjustesOrigem } from '../../../../data/ficha/origensData';
 import { AjusteButton, AjustesFichaModal } from '../components/AjustesFichaModal';
 import { FichaModal } from '../components/FichaModal';
@@ -47,6 +50,8 @@ import {
   type IAjusteFicha,
 } from '../../../services/ajustesFichaService';
 import { AtributosSection, NOMES_ATRIBUTOS } from '../components/AtributosSection';
+import { GastarAumentosModal } from '../components/GastarAumentosModal';
+import { aumentosDeAtributo, gastarAumentosDeAtributo } from '../../../services/progressaoFichaService';
 import { StatusVitaisSection } from '../components/StatusVitaisSection';
 import { ModoMesa } from '../components/ModoMesa';
 import { FamaPrestigioSection } from '../components/FamaPrestigioSection';
@@ -385,6 +390,25 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
     onUpdate(['ficha'], { ...f, atributosFinais: novosAtributos, derivados });
   };
 
+  // Gasta os aumentos de atributo do nível: soma o +1 e registra o gasto em
+  // `aumentosAtributo`, separado de qualquer subida feita à mão (bênção, sessão).
+  const [gastandoAumentos, setGastandoAumentos] = useState(false);
+  const gastarAumentos = (distribuicao: Partial<Record<TAtributo, number>>) => {
+    const resultado = gastarAumentosDeAtributo(f, distribuicao);
+    if (!resultado) return;
+    const derivados = catalogo
+      ? calcularDerivadosComClasses(
+          atributosParaDerivados(resultado.atributosFinais, f),
+          racaAtual,
+          classes,
+          catalogo.classes,
+          nivelTotalClasses,
+          f.escolhaRacial,
+        )
+      : f.derivados;
+    onUpdate(['ficha'], { ...f, atributosFinais: resultado.atributosFinais, aumentosAtributo: resultado.aumentosAtributo, derivados });
+  };
+
   // BUG-FIX: "Rolar Teste" mostrava só Força/Destreza com bônus fixo (+2/+0)
   // que não refletia os atributos reais. Lista os 7 atributos com o
   // modificador calculado ao vivo e rola de verdade no servidor.
@@ -688,9 +712,9 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   };
 
   const handleClasseNivelChange = (index: number, nivel: number) => {
-    // Digitar é livre: o teto de NIVEL_MAXIMO_CLASSE vale para o botão de subir
-    // nível, e passar dele só gera o aviso abaixo da lista de classes.
-    const nivelLimpo = Math.max(1, Math.trunc(nivel) || 1);
+    // Uma classe vai até NIVEL_MAXIMO_CLASSE; quem quer continuar abre outra.
+    // Ficha antiga que já passava do teto só consegue reduzir.
+    const nivelLimpo = limitarNivelClasse(nivel, classes[index]?.nivel);
     salvarClasses(classes.map((c, i) => (i === index ? { ...c, nivel: nivelLimpo } : c)));
   };
 
@@ -874,9 +898,27 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
                 '--class-slot-secondary': temaClasse.secondary,
                 '--class-slot-glow': temaClasse.glow,
               } as CSSProperties;
+              const degrauClasse = degrauDaClasse(classeSlot.nivel);
+              const glifoClasse = GLIFOS[obterEfeitoAtmosfericoFicha(classeSlot.classeId)];
 
               return (
-              <div key={index} className="ficha-class-slot" style={slotStyle}>
+              <div
+                key={index}
+                className="ficha-class-slot"
+                style={slotStyle}
+                data-degrau={degrauClasse.degrau}
+                data-degrau-chave={degrauClasse.chave}
+              >
+                {degrauClasse.degrau > 0 ? (
+                  <>
+                    <svg className="ficha-class-slot__glifo" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                      <path d={glifoClasse.d} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span className="ficha-class-slot__rank" title={`Nível ${classeSlot.nivel} na classe${Number(classeSlot.nivel) >= NIVEL_MAXIMO_CLASSE ? ': o teto de uma classe' : ''}`}>
+                      {degrauClasse.rotulo}
+                    </span>
+                  </>
+                ) : null}
                 <div className="min-w-0 flex-1">
                   <LabeledModalSelect
                     label={`Classe ${index + 1}`}
@@ -906,7 +948,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
                     id={`nivel-classe-${index}`}
                     type="number"
                     min={1}
-                    max={NIVEL_MAXIMO_CLASSE}
+                    max={Math.max(NIVEL_MAXIMO_CLASSE, Number(classeSlot.nivel) || 0)}
                     value={classeSlot.nivel}
                     onChange={(e) => handleClasseNivelChange(index, parseInt(e.target.value) || 1)}
                     className="ficha-class-slot__level-input"
@@ -929,7 +971,12 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
             )}
             {classes.some(classe => (Number(classe.nivel) || 0) > NIVEL_MAXIMO_CLASSE) && (
               <p className="text-xs text-amber-300/90" role="status">
-                Uma classe passou do nível {NIVEL_MAXIMO_CLASSE}, o teto do sistema. Serve para NPCs e exceções: acima dele a classe só soma Vida, Mana e Estamina.
+                Uma classe está acima do nível {NIVEL_MAXIMO_CLASSE}, o teto de uma classe. Esta ficha é anterior à regra: dá para reduzir, mas não para subir mais. Para continuar evoluindo, adicione outra classe.
+              </p>
+            )}
+            {classes.some(classe => (Number(classe.nivel) || 0) === NIVEL_MAXIMO_CLASSE) && (
+              <p className="text-xs text-gray-500" role="status">
+                Uma classe chegou ao nível {NIVEL_MAXIMO_CLASSE}, o teto. Para continuar evoluindo, adicione outra classe.
               </p>
             )}
           </div>
@@ -956,8 +1003,16 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
         ]))}
         onChange={handleAttrChange}
         onRoll={handleRolarTeste}
+        onGastarAumentos={character.somenteLeitura ? undefined : () => setGastandoAumentos(true)}
         onOpenInfo={setActiveModal}
         onOpenAdjust={abrirAjustes}
+      />
+      <GastarAumentosModal
+        isOpen={gastandoAumentos}
+        onClose={() => setGastandoAumentos(false)}
+        valores={attrsNaturais}
+        livres={aumentosDeAtributo(f)?.livres ?? 0}
+        onConfirmar={gastarAumentos}
       />
 
       {!character.somenteLeitura && (
@@ -1283,20 +1338,13 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
         >
           <div className="space-y-5">
             {activeModal.editIndex === undefined && (
-              <div className="rounded-xl border border-red-500/15 bg-red-500/5 p-4">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">Aplicar condição oficial</p>
-                <div className="custom-scrollbar grid max-h-44 grid-cols-1 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
-                  {[...CONDICOES_OFICIAIS, ...CRISES_SANIDADE].map((regra) => (
-                    <button key={regra.id} type="button" onClick={() => {
-                      const resultado = adicionarCondicaoOficial(f.condicoesAtivas, regra);
-                      if (resultado.adicionada) onUpdate(['ficha', 'condicoesAtivas'], resultado.condicoes);
-                      setActiveModal(null);
-                    }} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-left text-xs font-bold text-gray-300 hover:border-red-500/30 hover:text-red-300">
-                      {regra.titulo}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <SeletorCondicaoOficial
+                onEscolher={(regra) => {
+                  const resultado = adicionarCondicaoOficial(f.condicoesAtivas, regra);
+                  if (resultado.adicionada) onUpdate(['ficha', 'condicoesAtivas'], resultado.condicoes);
+                  setActiveModal(null);
+                }}
+              />
             )}
             
             <form onSubmit={(e) => {

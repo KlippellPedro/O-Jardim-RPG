@@ -2,6 +2,7 @@ import magiasData from '../../data/ficha/magias.json';
 import marcasData from '../../data/ficha/marcas-de-circulo.json';
 import setesData from '../../data/ficha/pecados-e-virtudes.json';
 import { ARVORES } from '../../data/mundo/arvoresCatalog';
+import { vantagensDoGrau } from './progressaoNiveis';
 import { BONUS_GRAU, aplicarAjustesAtributosRaciais, modificador, obterAjustesPericiasRaciais } from './calculoService';
 import { CLASSES_CATALOGO, RACAS_CATALOGO } from './catalogoService';
 import { ajusteOrigem, chaveAjuste, totalAjustesManuais } from './ajustesFichaService';
@@ -512,7 +513,7 @@ export function obterPerfilMagico(
       ajustesManuais: bonusManual,
       equipamento: bonusEquipamento,
     },
-    vantagensConjuracao: resumoEquipamento.vantagens.misticismo || 0,
+    vantagensConjuracao: (resumoEquipamento.vantagens.misticismo || 0) + vantagensDoGrau(grauMisticismo),
     desvantagensConjuracao: resumoEquipamento.desvantagens.misticismo || 0,
     dtMagia: dtConjuracaoPorCirculo(circuloDaFonte),
     dtLimiteFluxo: dtConjuracaoPorCirculo(circuloDoFluxo),

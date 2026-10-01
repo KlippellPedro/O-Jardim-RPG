@@ -7,6 +7,7 @@ import {
   comprarHabilidadeNoJardim,
   comprarPoderNoJardim,
   comprarUnicoNoJardim,
+  descricaoDoUnico,
   habilidadesVendaveisJardim,
   poderesVendaveisJardim,
   resumoFichaTecnica,
@@ -128,7 +129,7 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
   const descricaoDe = (item: TCatalogo): string => {
     if (item.tipo === 'poder') return item.dado.poder.descricao || '';
     if (item.tipo === 'habilidade') return item.dado.descricaoNoNivelAtual || '';
-    return item.dado.unico.descricao || '';
+    return descricaoDoUnico(item.dado.unico) || '';
   };
   const jaAdquiridoDe = (item: TCatalogo): boolean => {
     if (item.tipo === 'poder') return item.dado.jaAdquirido;

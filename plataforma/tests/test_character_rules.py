@@ -10,8 +10,10 @@ from core.character_summary import (
     _fluxo_efetivo,
     _circulo_por_fluxo,
     bonus_escolhas_habilidade,
+    bonus_unicos_jardim,
     carregar_catalogos,
     efeitos_escolhas_habilidade,
+    iniciativa_fixa,
     resumir_ficha,
     validar_regras_ficha,
 )
@@ -132,6 +134,37 @@ class TestCharacterRules:
         anterior, atual = self._ficha_com_classes([("guerreiro", 35)])
         assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
 
+    def test_class_level_stops_at_the_50_cap(self):
+        # O 50 é o teto de uma classe: quem quer continuar abre outra, o nível
+        # total é que não tem teto.
+        anterior, atual = self._ficha_com_classes([("guerreiro", 50)])
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+        anterior, atual = self._ficha_com_classes([("guerreiro", 51)])
+        assert "ate o nivel 50" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        anterior, atual = self._ficha_com_classes([("guerreiro", 999)])
+        assert "ate o nivel 50" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+    def test_old_sheet_above_the_cap_still_saves_but_cannot_climb(self):
+        # Ficha criada antes da regra, com a classe já no 70: salvar outra coisa
+        # não pode travar o jogador, mas subir mais continua barrado.
+        anterior = _ficha_criacao()
+        anterior["classes"] = [{"classeId": "guerreiro", "nivel": 70}]
+        anterior["nivel"] = 70
+        igual = deepcopy(anterior)
+        assert validar_regras_ficha(igual, {}, ficha_anterior=anterior) is None
+        reduzida = deepcopy(anterior)
+        reduzida["classes"][0]["nivel"] = 60
+        reduzida["nivel"] = 60
+        assert validar_regras_ficha(reduzida, {}, ficha_anterior=anterior) is None
+        subindo = deepcopy(anterior)
+        subindo["classes"][0]["nivel"] = 71
+        subindo["nivel"] = 71
+        assert "ate o nivel 50" in validar_regras_ficha(subindo, {}, ficha_anterior=anterior)
+
+    def test_total_level_has_no_cap_when_classes_stay_under_50(self):
+        anterior, atual = self._ficha_com_classes([("guerreiro", 50), ("ninja", 50), ("atirador", 30)])
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
     def test_class_needs_at_least_one_level(self):
         anterior, atual = self._ficha_com_classes([("guerreiro", 0)])
         assert "pelo menos 1 nivel" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
@@ -180,11 +213,24 @@ class TestCharacterRules:
     def test_graus_novos_abrem_so_nos_patamares(self):
         # Lendario abre no nivel total 60, Absoluto no 500: antes disso a ficha
         # avisa que o nivel ainda nao permite o grau.
+        # Uma classe para no 50, entao o nivel total sobe repartido entre varias.
+        outras = ("guerreiro", "ninja", "atirador", "lutador", "cacador", "medico", "piloto", "espadachim", "guardiao", "comerciante", "cozinheiro")
+
+        def repartir(total):
+            restante, classes = total, []
+            for classe in outras:
+                parte = min(50, restante)
+                if parte:
+                    classes.append((classe, parte))
+                restante -= parte
+            assert restante == 0
+            return classes
+
         for grau, nivel_minimo in (("lendario", 60), ("mitico", 100), ("cosmico", 150), ("eterno", 250), ("absoluto", 500)):
-            anterior, atual = self._ficha_com_classes([("guerreiro", nivel_minimo - 1)])
+            anterior, atual = self._ficha_com_classes(repartir(nivel_minimo - 1))
             atual["pericias"]["atletismo"] = grau
             assert f"nivel total ainda nao permite o grau {grau}" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
-            anterior, atual = self._ficha_com_classes([("guerreiro", nivel_minimo)])
+            anterior, atual = self._ficha_com_classes(repartir(nivel_minimo))
             atual["pericias"]["atletismo"] = grau
             erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
             assert erro is None or "nivel total ainda nao permite" not in erro
@@ -445,6 +491,18 @@ class TestCharacterRules:
             assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None, classes
             atual["atributosFinais"]["forca"] = 15 + direito + 1
             assert "aumentos de atributo" in validar_regras_ficha(atual, {}, ficha_anterior=anterior), classes
+
+    def test_aumento_de_sessao_nao_gasta_o_direito_do_nivel(self):
+        # Subida por bencao/sessao nao conta; so o que o jogador gastou (aumentosAtributo).
+        anterior, atual = self._ficha_de_nivel_alto([("guerreiro", 30), ("ninja", 30)])
+        atual["atributosFinais"]["forca"] = 15 + 13 + 4
+        assert "aumentos de atributo" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        atual["aumentosAtributo"] = {"forca": 13}
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+        atual["aumentosAtributo"] = {"forca": 14}
+        assert "aumentos de atributo" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        atual["aumentosAtributo"] = {"forca": -1}
+        assert "aumentosAtributo" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
 
     def test_legados_seguem_as_faixas_do_nivel(self):
         # 1 a cada 5 níveis até o 50, a cada 10 até o 100, a cada 20 depois:
@@ -943,3 +1001,18 @@ class TestPoderesComRequisitoDeNivel:
     def test_arsenal_liberado_no_nivel_15(self):
         atual, anterior = self._guerreiro(15, ["arma-do-arsenal", "armadura-do-arsenal"])
         assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+
+class TestUnicosPassivosDoJardim:
+    def test_so_o_maior_bonus_de_cada_alvo_vale(self):
+        ficha = {"jardim": {"unicosComprados": ["raiz-de-vigor", "raiz-funda", "tronco-do-jardim"]}}
+        assert bonus_unicos_jardim(ficha, "recurso", "vidaMaxima") == 20
+        assert bonus_unicos_jardim(ficha, "recurso", "manaMaxima") == 0
+        assert bonus_unicos_jardim({}, "recurso", "vidaMaxima") == 0
+        assert bonus_unicos_jardim({"jardim": {"unicosComprados": ["inexistente", 7]}}, "recurso", "vidaMaxima") == 0
+
+    def test_vida_do_painel_do_mestre_e_iniciativa_da_sessao_incluem_o_passivo(self):
+        base = {"derivados": {"vida": 40, "iniciativa": 12}}
+        com = {**base, "jardim": {"unicosComprados": ["raiz-funda", "alerta-de-raiz"]}}
+        assert resumir_ficha(com)["vida_maxima"] == resumir_ficha(base)["vida_maxima"] + 12
+        assert iniciativa_fixa(com) == iniciativa_fixa(base) + 2

@@ -13,6 +13,7 @@ import {
   normalizarCriticoBalanceado,
 } from '../../../services/criticalService';
 import { carregarCatalogo } from '../../../services/catalogoService';
+import { vantagensDoGrau } from '../../../services/progressaoNiveis';
 import { aplicarAjustesAtributosRaciais, BONUS_GRAU, modificador, obterAjustesPericiasRaciais } from '../../../services/calculoService';
 import { obterAtributoPericia } from '../../../services/periciasFichaService';
 import type { ICatalogo } from '../../../types/catalogo';
@@ -317,7 +318,8 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
         personagemId: character.id,
         titulo: `Ataque: ${item.nome}`,
         bonus: calcularBonusAtaque(item),
-        vantagens: (resumoEquipamento.vantagens[periciaDoAtaque(item)] || 0) + (resumoEquipamento.vantagens['ataque'] || 0),
+        vantagens: (resumoEquipamento.vantagens[periciaDoAtaque(item)] || 0) + (resumoEquipamento.vantagens['ataque'] || 0)
+          + vantagensDoGrau(ficha.pericias?.[periciaDoAtaque(item)]),
         desvantagens: desvantagensAutomaticasAtaque + (resumoEquipamento.desvantagens[periciaDoAtaque(item)] || 0) + (resumoEquipamento.desvantagens['ataque'] || 0),
         dt: defesaInformada ? defesa : null,
         origem: {

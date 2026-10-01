@@ -11,6 +11,7 @@ from core.maestria_classe import graus_de_maestria
 from core.progressao_niveis import (
     GRAUS_PERICIA,
     NIVEL_CONTEUDO_CLASSE,
+    NIVEL_MAXIMO_CLASSE,
     NIVEL_MINIMO_GRAU,
     NIVEL_TOTAL_PADRAO,
     aumentos_atributo_por_nivel,
@@ -22,7 +23,7 @@ log = logging.getLogger("jardim-plataforma")
 
 _NOMES: dict[str, dict[str, str]] = {
     "raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {},
-    "ritual": {}, "selo": {}, "encantamento": {},
+    "ritual": {}, "selo": {}, "encantamento": {}, "unico": {},
 }
 # (fluxo_minimo, circulo) em ordem decrescente, lido de data/ficha/magias.json.
 _CIRCULOS_POR_FLUXO: list[tuple[int, int]] = []
@@ -78,6 +79,18 @@ def carregar_catalogos(data_root: Path) -> None:
             for item in itens
             if isinstance(item, dict) and item.get("id")
         }
+
+    # Unicos passivos do Jardim: o servidor espelha so os efeitos que ele mesmo
+    # calcula (Vida maxima do painel do mestre e Iniciativa da sessao).
+    caminho_unicos = data_root / "jardim" / "unicos.json"
+    try:
+        _CATALOGO["unico"] = {
+            str(item.get("id")): item
+            for item in json.loads(caminho_unicos.read_text(encoding="utf-8"))
+            if isinstance(item, dict) and item.get("id")
+        }
+    except (OSError, json.JSONDecodeError, TypeError, AttributeError):
+        log.warning("Catalogo de Unicos do Jardim ausente em %s", caminho_unicos)
 
     caminho_pericias = data_root / "ficha" / "pericias.json"
     try:
@@ -403,6 +416,34 @@ def bonus_escolhas_habilidade(ficha: dict | None, categoria: str, alvo: str) -> 
         if isinstance(valor, (int, float)) and not isinstance(valor, bool) and math.isfinite(valor):
             total += int(valor)
     return total
+
+
+def bonus_unicos_jardim(ficha: dict | None, categoria: str, alvo: str) -> int:
+    """Bonus dos Unicos passivos plantados no Jardim para um alvo.
+
+    Espelha `efeitosDosUnicosJardim` do front-end: entre Unicos so o maior bonus
+    de cada alvo vale, para a escada de precos nao virar pilha de bonus.
+    """
+    jardim = ficha.get("jardim") if isinstance(ficha, dict) else None
+    comprados = jardim.get("unicosComprados") if isinstance(jardim, dict) else None
+    if not isinstance(comprados, list):
+        return 0
+    melhor = 0
+    for unico_id in comprados:
+        unico = _CATALOGO["unico"].get(str(unico_id))
+        for efeito in (unico or {}).get("efeitos") or []:
+            if (
+                not isinstance(efeito, dict)
+                or efeito.get("categoria") != categoria
+                or efeito.get("alvo") != alvo
+                or efeito.get("modo", "bonus") != "bonus"
+            ):
+                continue
+            valor = efeito.get("valor")
+            if isinstance(valor, (int, float)) and not isinstance(valor, bool) and math.isfinite(valor):
+                if abs(valor) > abs(melhor):
+                    melhor = int(valor)
+    return melhor
 
 
 def _indice_grau(grau) -> int:
@@ -949,6 +990,12 @@ def validar_regras_ficha(
         return "informe ao menos uma classe"
     ids: list[str] = []
     classes: list[tuple[dict, int]] = []
+    # Ficha antiga que já tinha uma classe acima do teto continua abrindo e salvando;
+    # o que não pode é subir mais (ver NIVEL_MAXIMO_CLASSE).
+    niveis_anteriores = {
+        str(item.get("classeId") or item.get("id") or ""): _inteiro(item.get("nivel")) or 0
+        for item in _classes_da_ficha(anterior)
+    }
     for referencia in referencias:
         classe_id = str(referencia.get("classeId") or referencia.get("id") or "")
         nivel = _inteiro(referencia.get("nivel"))
@@ -957,6 +1004,8 @@ def validar_regras_ficha(
             return "classe inexistente no catalogo oficial"
         if nivel is None or nivel < 1:
             return "cada classe deve ter pelo menos 1 nivel"
+        if nivel > max(NIVEL_MAXIMO_CLASSE, niveis_anteriores.get(classe_id, 0)):
+            return f"uma classe vai ate o nivel {NIVEL_MAXIMO_CLASSE}; para continuar, abra outra classe"
         if classe_id in ids:
             return "a mesma classe nao pode ocupar dois espacos"
         ids.append(classe_id)
@@ -1039,7 +1088,18 @@ def validar_regras_ficha(
     aumentos = [final - inicial for inicial, final in zip(valores_base, valores_finais)]
     if any(aumento < 0 for aumento in aumentos):
         return "atributos adquiridos nao podem ficar abaixo dos valores de criacao"
-    if sum(aumentos) > aumentos_atributo_por_nivel(nivel_total):
+    # So o que o jogador gastou de proposito (aumentosAtributo) pesa no direito do
+    # nivel; bencao, recompensa de sessao ou ajuste do Mestre sobem o atributo
+    # sem gastar. Ficha sem o registro conta toda subida, como antes.
+    gastos = ficha.get("aumentosAtributo")
+    if gastos is None:
+        aumentos_de_nivel = sum(aumentos)
+    else:
+        valores_gastos = [_inteiro(gastos.get(atributo, 0)) for atributo in _ATRIBUTOS] if isinstance(gastos, dict) else [None]
+        if any(valor is None or valor < 0 for valor in valores_gastos):
+            return "aumentosAtributo deve guardar inteiros nao negativos por atributo"
+        aumentos_de_nivel = sum(min(gasto, max(0, aumento)) for gasto, aumento in zip(valores_gastos, aumentos))
+    if aumentos_de_nivel > aumentos_atributo_por_nivel(nivel_total):
         return "a ficha possui mais aumentos de atributo do que os niveis permitem"
     if criacao and any(aumentos):
         return "atributos de criacao ainda nao recebem aumentos de nivel"
@@ -1226,6 +1286,8 @@ def iniciativa_fixa(ficha: dict | None, *, condicoes=None) -> int | float:
     if "surpreendido" in condicoes_ativas:
         total -= 5
 
+    total += bonus_unicos_jardim(ficha, "combate", "iniciativa")
+
     ativos = ficha.get("efeitosAtivos") if isinstance(ficha.get("efeitosAtivos"), dict) else {}
     for colecao in ("poderes", "habilidades", "magias"):
         itens = ficha.get(colecao)
@@ -1287,6 +1349,7 @@ def resumir_ficha(ficha: dict | None) -> dict:
     vida_maxima = derivados.get("vida")
     if isinstance(vida_maxima, (int, float)):
         vida_maxima += bonus_escolhas_habilidade(ficha, "recurso", "vidaMaxima")
+        vida_maxima += bonus_unicos_jardim(ficha, "recurso", "vidaMaxima")
     vida_atual = status.get("vidaAtual")
 
     raca_id = str(ficha.get("racaId") or "")

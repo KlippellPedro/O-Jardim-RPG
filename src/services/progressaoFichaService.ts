@@ -7,7 +7,7 @@ import {
   obterGruposEscolhaRacial,
   tracoDisponivelNoNivel,
 } from './racaService';
-import { ATRIBUTOS, obterFragmentosRaciaisExpressos, obterModificacoesRaciaisInstaladas } from './calculoService';
+import { ATRIBUTOS, obterFragmentosRaciaisExpressos, obterModificacoesRaciaisInstaladas, type TAtributo } from './calculoService';
 import { GRAUS_PERICIA, aumentosAtributoPorNivel, legadosPorNivel, nomeDoGrauPericia } from './progressaoNiveis';
 
 export interface IReferenciaClasseFicha {
@@ -30,6 +30,8 @@ export interface IConteudoAutomatico {
   custoMana?: number;
   custoEstamina?: number;
   subtipo?: 'habilidade' | 'escolha';
+  /** Só mexe na ficha: o efeito já entra sozinho nos cálculos, sem ação a lembrar. */
+  passivo?: boolean;
 }
 
 export interface IOpcaoHabilidadeSelecionada extends IConteudoAutomatico {
@@ -817,6 +819,15 @@ export function unicosComprasJardim(ficha: any): string[] {
   return bruto.filter((id: any) => typeof id === 'string');
 }
 
+/** Texto do Único como o jogador lê: o do catálogo e, nos passivos, o aviso de que
+ * Únicos com o mesmo bônus não somam. */
+export function descricaoDoUnico(unico: IUnicoJardim): string {
+  return unico.efeitos?.length
+    ? `${unico.descricao}
+Não soma com outro Único que dê o mesmo bônus: vale o maior.`
+    : unico.descricao;
+}
+
 /** Únicos que o personagem já plantou, resolvidos contra o catálogo. Não têm
  * classe de origem nem nível: uma vez plantados, são seus, ponto final. */
 export function unicosJardimSelecionados(ficha: any): IConteudoAutomatico[] {
@@ -826,11 +837,12 @@ export function unicosJardimSelecionados(ficha: any): IConteudoAutomatico[] {
     return [{
       id: `jardim-unico:${unico.id}`,
       titulo: unico.titulo,
-      descricao: comFichaTecnica(unico.descricao, unico),
+      descricao: comFichaTecnica(descricaoDoUnico(unico), unico),
       origem: 'Jardim',
       nivel: 0,
       custoMana: Math.max(0, Number(unico.custo_mana) || 0),
       custoEstamina: Math.max(0, Number(unico.custo_estamina) || 0),
+      passivo: Boolean(unico.efeitos?.length) || unico.acao === 'Passivo',
     }];
   });
 }
@@ -932,25 +944,72 @@ export function vagasLegado(ficha: any): number {
 export interface IAumentosAtributo {
   /** Aumentos de +1 que o nível total libera. */
   direito: number;
-  /** Quanto os atributos da ficha já passaram dos valores de criação. */
+  /** Aumentos de nível que o jogador já gastou (ver `ficha.aumentosAtributo`). */
   usados: number;
   /** O que ainda dá para gastar (nunca negativo). */
   livres: number;
+  /** Quanto os atributos passaram da criação por outros motivos: bênção,
+   * recompensa de sessão, ajuste do Mestre. Não gasta o direito do nível. */
+  extras: number;
 }
 
-/** Aumentos de atributo pelo nível: o que o nível libera contra o que a ficha
- * já subiu em relação à criação (mesma conta do servidor). Sem os atributos de
- * criação, como numa ficha bem antiga, não dá para saber e devolve null. */
-export function aumentosDeAtributo(ficha: any): IAumentosAtributo | null {
+type GastosAtributo = Record<TAtributo, number>;
+
+/** Quanto de cada atributo já passou dos valores de criação. */
+function subidasDeAtributo(ficha: any): GastosAtributo | null {
   const base = ficha?.atributosBase;
   const finais = ficha?.atributosFinais;
   if (!base || typeof base !== 'object' || !finais || typeof finais !== 'object') return null;
-  const usados = ATRIBUTOS.reduce(
-    (total, atributo) => total + Math.max(0, (Number(finais[atributo]) || 0) - (Number(base[atributo]) || 0)),
-    0,
-  );
+  return Object.fromEntries(ATRIBUTOS.map((atributo) => [
+    atributo,
+    Math.max(0, (Number(finais[atributo]) || 0) - (Number(base[atributo]) || 0)),
+  ])) as GastosAtributo;
+}
+
+/** Quantos aumentos de nível foram gastos em cada atributo. Fichas que ainda não
+ * guardam `aumentosAtributo` contam toda subida como gasto (era a conta antiga);
+ * com o registro, só vale o que o jogador gastou de propósito, limitado ao que o
+ * atributo realmente subiu (baixar o número devolve o aumento). */
+export function gastosDeAtributo(ficha: any): GastosAtributo | null {
+  const subidas = subidasDeAtributo(ficha);
+  if (!subidas) return null;
+  const registro = ficha?.aumentosAtributo;
+  if (!registro || typeof registro !== 'object') return subidas;
+  return Object.fromEntries(ATRIBUTOS.map((atributo) => [
+    atributo,
+    Math.min(subidas[atributo], Math.max(0, Math.trunc(Number(registro[atributo])) || 0)),
+  ])) as GastosAtributo;
+}
+
+/** Aumentos de atributo pelo nível: o que o nível libera contra o que o jogador
+ * já gastou (mesma conta do servidor). Sem os atributos de criação, como numa
+ * ficha bem antiga, não dá para saber e devolve null. */
+export function aumentosDeAtributo(ficha: any): IAumentosAtributo | null {
+  const subidas = subidasDeAtributo(ficha);
+  const gastos = gastosDeAtributo(ficha);
+  if (!subidas || !gastos) return null;
+  const somar = (valores: GastosAtributo) => ATRIBUTOS.reduce((total, atributo) => total + valores[atributo], 0);
+  const usados = somar(gastos);
   const direito = aumentosAtributoPorNivel(nivelTotalFicha(ficha));
-  return { direito, usados, livres: Math.max(0, direito - usados) };
+  return { direito, usados, livres: Math.max(0, direito - usados), extras: somar(subidas) - usados };
+}
+
+/** Gasta aumentos de nível: soma `distribuicao` (+1 por aumento) aos atributos e
+ * registra o gasto em `aumentosAtributo`, separado de qualquer outra subida. */
+export function gastarAumentosDeAtributo(
+  ficha: any,
+  distribuicao: Partial<Record<TAtributo, number>>,
+): { atributosFinais: GastosAtributo; aumentosAtributo: GastosAtributo } | null {
+  const gastos = gastosDeAtributo(ficha);
+  if (!gastos) return null;
+  const atributosFinais = { ...ficha.atributosFinais } as GastosAtributo;
+  const aumentosAtributo = { ...gastos };
+  for (const atributo of ATRIBUTOS) {
+    const quantidade = Math.max(0, Math.trunc(Number(distribuicao[atributo])) || 0);
+    atributosFinais[atributo] = (Number(atributosFinais[atributo]) || 0) + quantidade;
+    aumentosAtributo[atributo] += quantidade;
+  }
+  return { atributosFinais, aumentosAtributo };
 }
 
 function grauPericia(ficha: any, id: string): number {

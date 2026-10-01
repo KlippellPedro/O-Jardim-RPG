@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import progressaoData from '../../data/ficha/progressao-niveis.json';
 import {
   BONUS_GRAU,
+  vantagensDoGrau,
   GRAUS_PERICIA,
   GRAUS_PERICIA_DADOS,
   NIVEL_CONTEUDO_CLASSE,
@@ -130,6 +131,11 @@ test('doze graus de perícia: os sete de sempre e cinco novos, um por patamar', 
   ]);
   // Os mesmos valores estão em plataforma/tests/test_progressao_niveis.py.
   assert.deepEqual(GRAUS_PERICIA.map((grau) => BONUS_GRAU[grau]), [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]);
+  // Do Veterano em diante o grau dá uma fonte de vantagem a mais por degrau.
+  assert.deepEqual(GRAUS_PERICIA.map((grau) => vantagensDoGrau(grau)), [0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7]);
+  assert.equal(vantagensDoGrau('Absoluto'), 7);
+  assert.equal(vantagensDoGrau('inexistente'), 0);
+  assert.equal(vantagensDoGrau(undefined), 0);
   assert.deepEqual([...NIVEL_MINIMO_GRAU], [1, 1, 3, 7, 13, 19, 29, 60, 100, 150, 250, 500]);
   assert.deepEqual(GRAUS_PERICIA_DADOS.map((grau) => grau.treino_dias), [0, 3, 7, 14, 21, 32, 62, 90, 120, 180, 270, 365]);
   assert.deepEqual(

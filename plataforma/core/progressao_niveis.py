@@ -36,13 +36,14 @@ _FAIXAS_ATRIBUTO = sorted(_DADOS["aumento_atributo"]["faixas"], key=lambda faixa
 _FAIXAS_ITEM_ESPECIAL = sorted(_DADOS["item_especial"]["faixas"], key=lambda faixa: faixa["a_partir_do_nivel"])
 _ITEM_ESPECIAL_MINIMO = max(0, int(_DADOS["item_especial"].get("minimo") or 0))
 
-# Onde a classe deixa de ter recompensa escrita e teto do botão de subir nível.
+# Onde a classe deixa de ter recompensa escrita e teto do nível de uma classe.
 NIVEL_CONTEUDO_CLASSE: int = _DADOS["classe"]["nivel_conteudo"]
 NIVEL_MAXIMO_CLASSE: int = _DADOS["classe"]["nivel_maximo"]
 # Graus de perícia do menor para o maior (iniciante ... absoluto): fonte única do site e da plataforma.
 GRAUS_PERICIA_DADOS: tuple[dict, ...] = tuple(_DADOS["graus_pericia"]["graus"])
 GRAUS_PERICIA: tuple[str, ...] = tuple(grau["id"] for grau in GRAUS_PERICIA_DADOS)
 BONUS_GRAU: dict[str, int] = {grau["id"]: int(grau["bonus"]) for grau in GRAUS_PERICIA_DADOS}
+VANTAGENS_GRAU: dict[str, int] = {grau["id"]: max(0, int(grau.get("vantagens") or 0)) for grau in GRAUS_PERICIA_DADOS}
 ROTULO_GRAU: dict[str, str] = {grau["id"]: grau["rotulo"] for grau in GRAUS_PERICIA_DADOS}
 # Nível total mínimo de cada grau de perícia, na ordem dos graus.
 NIVEL_MINIMO_GRAU: tuple[int, ...] = tuple(int(grau["nivel_minimo"]) for grau in GRAUS_PERICIA_DADOS)

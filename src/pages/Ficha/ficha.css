@@ -913,6 +913,155 @@
   outline: none;
 }
 
+/* Classe acima do nível 20: o card ganha um degrau novo no 21 e a cada marco de
+   Maestria (25, 30, 35, 40, 45 e 50). A cor e o símbolo de fundo vêm da própria
+   classe, então dois personagens com classes diferentes no mesmo degrau ficam
+   diferentes; o enfeite (cantos, brilho, aro girando) vem do degrau. Os níveis
+   conferem com degrauClasse.ts. */
+.ficha-class-slot[data-degrau]:not([data-degrau='0']) {
+  --slot-realce: color-mix(in srgb, var(--class-slot-color) 52%, white);
+  position: relative;
+  margin-top: 0.35rem;
+}
+
+.ficha-class-slot[data-degrau]:not([data-degrau='0']) > :not(.ficha-class-slot__glifo):not(.ficha-class-slot__rank) {
+  position: relative;
+  z-index: 1;
+}
+
+.ficha-class-slot__glifo {
+  position: absolute;
+  top: 50%;
+  right: 5.6rem;
+  width: 4.4rem;
+  height: 4.4rem;
+  color: var(--class-slot-color);
+  opacity: 0.07;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.ficha-class-slot__rank {
+  position: absolute;
+  top: -0.6rem;
+  left: 0.9rem;
+  z-index: 2;
+  padding: 0.05rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--class-slot-color) 55%, transparent);
+  border-radius: 999px;
+  background: #0b0a10;
+  color: var(--slot-realce);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.ficha-class-slot:not([data-degrau='0']) .ficha-class-slot__level-input {
+  border-color: color-mix(in srgb, var(--class-slot-color) 38%, rgb(255 255 255 / 0.05));
+}
+
+/* 1 (Veterano): borda e glifo um pouco mais presentes. */
+.ficha-class-slot[data-degrau='1'] {
+  border-color: color-mix(in srgb, var(--class-slot-color) 32%, rgb(255 255 255 / 0.04));
+}
+
+/* 2 em diante: cantos marcados, cada vez maiores. */
+.ficha-class-slot:is([data-degrau='2'], [data-degrau='3'], [data-degrau='4'], [data-degrau='5'], [data-degrau='6'])::before {
+  --canto: 0.7rem;
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 0.7rem;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--slot-realce), var(--slot-realce)) 0 0 / var(--canto) 2px no-repeat,
+    linear-gradient(var(--slot-realce), var(--slot-realce)) 0 0 / 2px var(--canto) no-repeat,
+    linear-gradient(var(--slot-realce), var(--slot-realce)) 100% 0 / var(--canto) 2px no-repeat,
+    linear-gradient(var(--slot-realce), var(--slot-realce)) 100% 0 / 2px var(--canto) no-repeat,
+    linear-gradient(var(--slot-realce), var(--slot-realce)) 0 100% / var(--canto) 2px no-repeat,
+    linear-gradient(var(--slot-realce), var(--slot-realce)) 0 100% / 2px var(--canto) no-repeat,
+    linear-gradient(var(--slot-realce), var(--slot-realce)) 100% 100% / var(--canto) 2px no-repeat,
+    linear-gradient(var(--slot-realce), var(--slot-realce)) 100% 100% / 2px var(--canto) no-repeat;
+}
+
+.ficha-class-slot:is([data-degrau='4'], [data-degrau='5'], [data-degrau='6'])::before { --canto: 1rem; }
+
+/* 3 (Mestre) em diante: brilho de fundo e glifo mais visível. */
+.ficha-class-slot:is([data-degrau='3'], [data-degrau='4'], [data-degrau='5'], [data-degrau='6'], [data-degrau='7']) {
+  border-color: color-mix(in srgb, var(--class-slot-color) 45%, transparent);
+  box-shadow: 0 0 1rem color-mix(in srgb, var(--class-slot-glow) 40%, transparent);
+}
+
+.ficha-class-slot:is([data-degrau='3'], [data-degrau='4'], [data-degrau='5'], [data-degrau='6'], [data-degrau='7']) .ficha-class-slot__glifo { opacity: 0.11; }
+
+/* 4 (Grão-Mestre) em diante: uma faixa de luz atravessa o card. */
+.ficha-class-slot:is([data-degrau='4'], [data-degrau='5'], [data-degrau='6'], [data-degrau='7'])::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 42%, color-mix(in srgb, var(--class-slot-color) 20%, transparent) 50%, transparent 58%) 100% 0 / 250% 100% no-repeat;
+}
+
+/* 5 (Paragão): segundo aro por fora. */
+.ficha-class-slot:is([data-degrau='5'], [data-degrau='6'], [data-degrau='7']) {
+  outline: 1px solid color-mix(in srgb, var(--class-slot-color) 38%, transparent);
+  outline-offset: 3px;
+}
+
+/* 6 (Epítome): selo mais forte. */
+.ficha-class-slot:is([data-degrau='6'], [data-degrau='7']) .ficha-class-slot__rank {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--class-slot-color) 45%, #0b0a10), #0b0a10);
+  box-shadow: 0 0 0.6rem var(--class-slot-glow);
+}
+
+/* 7 (Apoteose, o teto da classe): aro de luz que gira. */
+@property --slot-giro {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.ficha-class-slot[data-degrau='7'] {
+  box-shadow: 0 0 1.6rem color-mix(in srgb, var(--class-slot-glow) 70%, transparent);
+}
+
+.ficha-class-slot[data-degrau='7']::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  padding: 2px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(from var(--slot-giro), var(--slot-realce), var(--class-slot-secondary), var(--slot-realce), var(--class-slot-secondary), var(--slot-realce));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ficha-class-slot:is([data-degrau='4'], [data-degrau='5'], [data-degrau='6'], [data-degrau='7'])::after {
+    animation: ficha-class-slot-brilho 6s ease-in-out infinite;
+  }
+  .ficha-class-slot[data-degrau='7']::before {
+    animation: ficha-class-slot-giro 8s linear infinite;
+  }
+}
+
+@keyframes ficha-class-slot-brilho {
+  0%, 55% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+@keyframes ficha-class-slot-giro {
+  to { --slot-giro: 360deg; }
+}
+
 /* Atributos: sete cores sem mudar nenhuma regra de cálculo. */
 .ficha-attribute-card {
   position: relative;

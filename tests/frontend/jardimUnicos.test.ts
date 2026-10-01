@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { UNICOS_JARDIM_CATALOGO } from '../../src/services/catalogoService';
+import { PERICIAS_CATALOGO, UNICOS_JARDIM_CATALOGO } from '../../src/services/catalogoService';
+import { efeitosDosUnicosJardim, resumirEquipamentos } from '../../src/services/equipamentoService';
 import {
   catalogoJardimUnicosDisponivel,
   comprarUnicoNoJardim,
+  descricaoDoUnico,
   sementesPorVenderUnico,
   unicosComprasJardim,
   unicosJardimSelecionados,
@@ -14,10 +16,14 @@ import {
 const TIPOS_VALIDOS = new Set(['ataque', 'suporte', 'utilidade']);
 const TIERS_VALIDOS = new Set(['simples', 'notavel', 'extraordinaria', 'lendaria']);
 
-test('o catálogo de Únicos tem 40 exemplares, sem id nem título repetido', () => {
-  assert.equal(UNICOS_JARDIM_CATALOGO.length, 40);
-  assert.equal(new Set(UNICOS_JARDIM_CATALOGO.map((u) => u.id)).size, 40);
-  assert.equal(new Set(UNICOS_JARDIM_CATALOGO.map((u) => u.titulo)).size, 40);
+const TOTAL_UNICOS = 67;
+const passivosComEfeito = UNICOS_JARDIM_CATALOGO.filter((u) => u.efeitos?.length);
+
+test('o catálogo de Únicos tem 67 exemplares (40 ativos e 27 passivos de ficha), sem id nem título repetido', () => {
+  assert.equal(UNICOS_JARDIM_CATALOGO.length, TOTAL_UNICOS);
+  assert.equal(new Set(UNICOS_JARDIM_CATALOGO.map((u) => u.id)).size, TOTAL_UNICOS);
+  assert.equal(new Set(UNICOS_JARDIM_CATALOGO.map((u) => u.titulo)).size, TOTAL_UNICOS);
+  assert.equal(passivosComEfeito.length, 27);
 });
 
 test('todo Único tem tipo e tier válidos, preço positivo e descrição não vazia', () => {
@@ -86,13 +92,13 @@ test('comprar um Único novo funciona, e comprar o mesmo de novo é recusado', (
 test('catalogoJardimUnicosDisponivel não depende de classe nem nível: aparece tudo, só marca o que já foi plantado', () => {
   const fichaVazia: any = {};
   const catalogo = catalogoJardimUnicosDisponivel(fichaVazia);
-  assert.equal(catalogo.length, 40);
+  assert.equal(catalogo.length, TOTAL_UNICOS);
   assert.ok(catalogo.every((item) => !item.jaAdquirido));
 
   const idAlvo = UNICOS_JARDIM_CATALOGO[3].id;
   const fichaComUnico: any = { jardim: { unicosComprados: [idAlvo] } };
   const catalogo2 = catalogoJardimUnicosDisponivel(fichaComUnico);
-  assert.equal(catalogo2.length, 40, 'já plantado continua listado, só marcado');
+  assert.equal(catalogo2.length, TOTAL_UNICOS, 'já plantado continua listado, só marcado');
   assert.equal(catalogo2.find((item) => item.unico.id === idAlvo)?.jaAdquirido, true);
 });
 
@@ -152,4 +158,77 @@ test('os Únicos gastam Mana ou Estamina, nunca os dois, e não repetem título 
     assert.ok(!(Number(unico.custo_mana) > 0 && Number(unico.custo_estamina) > 0), `${unico.id}: mana e estamina juntas`);
     assert.ok(!/\u2014/.test(JSON.stringify(unico)), `${unico.id}: travessão`);
   }
+});
+
+const ALVOS_RECURSO = new Set(['vidaMaxima', 'manaMaxima', 'estaminaMaxima', 'sanidadeMaxima', 'cansacoMaximo']);
+const ALVOS_COMBATE = new Set(['ataque', 'dano', 'defesa', 'iniciativa', 'movimento', 'margemAmeaca', 'multiplicadorCritico']);
+const ATRIBUTOS_VALIDOS = new Set(['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'fluxo']);
+const PERICIAS_VALIDAS = new Set(PERICIAS_CATALOGO.map((p) => p.id));
+
+test('todo Único passivo é Passivo, sem custo, e cada efeito mira um alvo que a ficha realmente calcula', () => {
+  for (const unico of passivosComEfeito) {
+    assert.equal(unico.acao, 'Passivo', `${unico.id}: ação`);
+    assert.equal(Number(unico.custo_mana) || 0, 0, `${unico.id}: passivo não gasta Mana`);
+    assert.equal(Number(unico.custo_estamina) || 0, 0, `${unico.id}: passivo não gasta Estamina`);
+    assert.ok(unico.efeitos!.length <= 5, `${unico.id}: a ficha só aceita 5 efeitos por fonte`);
+    assert.equal(new Set(unico.efeitos!.map((e) => e.id)).size, unico.efeitos!.length, `${unico.id}: ids de efeito repetidos`);
+    for (const efeito of unico.efeitos!) {
+      assert.ok(efeito.valor > 0, `${unico.id}: valor deve ser positivo`);
+      if (efeito.categoria === 'recurso') assert.ok(ALVOS_RECURSO.has(efeito.alvo), `${unico.id}: recurso ${efeito.alvo}`);
+      else if (efeito.categoria === 'combate') assert.ok(ALVOS_COMBATE.has(efeito.alvo), `${unico.id}: combate ${efeito.alvo}`);
+      else if (efeito.categoria === 'atributo') assert.ok(ATRIBUTOS_VALIDOS.has(efeito.alvo), `${unico.id}: atributo ${efeito.alvo}`);
+      else assert.ok(PERICIAS_VALIDAS.has(efeito.alvo), `${unico.id}: perícia ${efeito.alvo}`);
+    }
+  }
+});
+
+test('plantar um passivo muda mesmo a ficha: cada um aparece no resumo de equipamento', () => {
+  for (const unico of passivosComEfeito) {
+    const resumo = resumirEquipamentos([], { jardim: { unicosComprados: [unico.id] } }, []);
+    for (const efeito of unico.efeitos!) {
+      const mapa = efeito.modo === 'vantagem'
+        ? resumo.vantagens
+        : efeito.categoria === 'atributo' ? resumo.bonusAtributos
+        : efeito.categoria === 'recurso' ? resumo.bonusRecursos
+        : efeito.categoria === 'combate' ? resumo.bonusCombate
+        : resumo.bonusPericias;
+      assert.equal(mapa[efeito.alvo], efeito.valor, `${unico.id}: ${efeito.categoria}/${efeito.alvo}`);
+    }
+    assert.ok(resumo.efeitosAtivos.every((e) => e.origem === `Único do Jardim: ${unico.titulo}`), `${unico.id}: origem`);
+  }
+});
+
+test('Únicos com o mesmo alvo não somam: vale o maior, em qualquer ordem de compra', () => {
+  const vida = (ids: string[]) => resumirEquipamentos([], { jardim: { unicosComprados: ids } }, []).bonusRecursos.vidaMaxima;
+  assert.equal(vida(['raiz-de-vigor']), 6);
+  assert.equal(vida(['raiz-de-vigor', 'raiz-funda', 'tronco-do-jardim']), 20);
+  assert.equal(vida(['tronco-do-jardim', 'raiz-de-vigor']), 20);
+  assert.equal(vida(['arvore-inteira', 'tronco-do-jardim']), 30);
+  const bonus = (ids: string[]) => resumirEquipamentos([], { jardim: { unicosComprados: ids } }, []).bonusAtributos;
+  assert.equal(bonus(['braco-de-raiz', 'corpo-de-tita']).forca, 2, 'Força +2 de dois Únicos não vira +4');
+  // Alvos diferentes continuam somando.
+  assert.equal(bonus(['braco-de-raiz', 'casco-do-jardim']).forca, 2);
+  assert.equal(bonus(['braco-de-raiz', 'casco-do-jardim']).constituicao, 2);
+  assert.equal(efeitosDosUnicosJardim({ jardim: { unicosComprados: ['inexistente'] } }).length, 0);
+});
+
+test('podar o passivo tira o efeito, e o texto avisa que Únicos iguais não somam', () => {
+  const ficha = { jardim: { unicosComprados: ['guarda-baixa'] } };
+  assert.equal(resumirEquipamentos([], ficha, []).bonusCombate.defesa, 1);
+  const podada = { jardim: { unicosComprados: venderUnicoNoJardim(ficha, 'guarda-baixa') } };
+  assert.equal(resumirEquipamentos([], podada, []).bonusCombate.defesa, undefined);
+  const guarda = UNICOS_JARDIM_CATALOGO.find((u) => u.id === 'guarda-baixa')!;
+  assert.match(descricaoDoUnico(guarda), /Não soma com outro Único/);
+  assert.equal(unicosJardimSelecionados(ficha)[0].passivo, true);
+  assert.equal(unicosJardimSelecionados({ jardim: { unicosComprados: ['golpe-sem-nome'] } })[0].passivo, false);
+});
+
+test('passivos cobrem Vida, Mana, Estamina, os sete atributos, as três resistências, Defesa, ataque e iniciativa', () => {
+  const alvos = new Set(passivosComEfeito.flatMap((u) => u.efeitos!.map((e) => `${e.categoria}:${e.alvo}:${e.modo}`)));
+  for (const esperado of [
+    'recurso:vidaMaxima:bonus', 'recurso:manaMaxima:bonus', 'recurso:estaminaMaxima:bonus',
+    ...[...ATRIBUTOS_VALIDOS].map((a) => `atributo:${a}:bonus`),
+    ...['fortitude', 'reflexos', 'vontade'].flatMap((p) => [`pericia:${p}:bonus`, `pericia:${p}:vantagem`]),
+    'combate:defesa:bonus', 'combate:ataque:bonus', 'combate:iniciativa:bonus', 'pericia:percepcao:vantagem',
+  ]) assert.ok(alvos.has(esperado), `faltou ${esperado}`);
 });
