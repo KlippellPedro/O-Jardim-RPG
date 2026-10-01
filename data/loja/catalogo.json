@@ -27540,6 +27540,406 @@
       }
     },
     {
+      "tipo": "consumivel",
+      "id": "consumivel-pao-raiz-escura",
+      "titulo": "Pão de Raiz Escura",
+      "conteudo": {
+        "descricao": "Um pão preto, denso e azedo, assado com raiz moída. Pesa no estômago e segura o corpo de pé o dia inteiro. Ao comer, você tem +1 em Fortitude até o próximo Descanso completo.",
+        "preco": {
+          "Lunaris": 8
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "+1 em Fortitude",
+          "Duração: até o Descanso"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 1 minuto",
+        "duracao": "Até o próximo Descanso completo",
+        "efeito": "+1 em Fortitude até o próximo Descanso completo",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-ensopado-viajante",
+      "titulo": "Ensopado do Viajante",
+      "conteudo": {
+        "descricao": "Uma panela grande, feita pra dividir. Quem se senta em volta dela confia mais em quem está do lado. Alimenta até 4 pessoas que comam juntas; cada uma tem +1 nos testes que fizer para Ajudar até o próximo Descanso completo.",
+        "preco": {
+          "Lunaris": 16
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Serve 4",
+          "+1 para Ajudar",
+          "Duração: até o Descanso"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 10 minutos",
+        "duracao": "Até o próximo Descanso completo",
+        "efeito": "Até 4 pessoas: +1 nos testes para Ajudar até o próximo Descanso completo",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-caldo-osso-quente",
+      "titulo": "Caldo de Osso Quente",
+      "conteudo": {
+        "descricao": "Fumegante, salgado, servido em tigela de barro com as duas mãos em volta. Esquenta de dentro pra fora e tira o tremor dos dedos. Por 4 horas, você tem vantagem em Fortitude contra frio, calor ou clima hostil.",
+        "preco": {
+          "Lunaris": 9
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Vantagem: Fortitude (clima)",
+          "Duração: 4 horas"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 1 minuto",
+        "duracao": "4 horas",
+        "efeito": "Vantagem em Fortitude contra frio, calor ou clima hostil por 4 horas",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-torta-conserva-casa",
+      "titulo": "Torta de Conserva da Casa",
+      "conteudo": {
+        "descricao": "Recheada com a receita de alguém que gostava de você. A primeira garfada dá uma sensação rara, a de estar em casa. Recupere 1d6 de Sanidade. Comer mais de uma entre dois Descansos completos não adianta.",
+        "preco": {
+          "Lunaris": 28
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Recupera 1d6 de Sanidade",
+          "Uma por Descanso"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 1 minuto",
+        "efeito": "Recupera 1d6 de Sanidade (uma vez entre Descansos completos)",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-cha-casca-amarga",
+      "titulo": "Chá de Casca-Amarga",
+      "conteudo": {
+        "descricao": "Tão amargo que o rosto franze sozinho, mas acorda até o que estava dormindo por dentro. Por 4 horas, você tem +2 em Percepção.",
+        "preco": {
+          "Lunaris": 25
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "+2 em Percepção",
+          "Duração: 4 horas"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 1 minuto",
+        "duracao": "4 horas",
+        "efeito": "+2 em Percepção por 4 horas",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-aguardente-fluxo",
+      "titulo": "Aguardente de Fluxo",
+      "conteudo": {
+        "descricao": "Transparente, cheira a ozônio e acende um calor azulado na garganta. Recupere 1d6 de Mana. As mãos ficam soltas demais: desvantagem em Pontaria por 1 hora.",
+        "preco": {
+          "Lunaris": 32
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Recupera 1d6 de Mana",
+          "Custo: desvantagem em Pontaria"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "duracao": "1 hora",
+        "custo": "Desvantagem em Pontaria por 1 hora",
+        "efeito": "Recupera 1d6 de Mana; desvantagem em Pontaria por 1 hora",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-cerveja-coragem",
+      "titulo": "Cerveja de Coragem",
+      "conteudo": {
+        "descricao": "Espuma grossa e gosto de pão queimado. O medo fica longe, e a pressa também. Por 1 hora, você tem vantagem em Vontade contra medo, mas sofre -2 de Iniciativa.",
+        "preco": {
+          "Lunaris": 6
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Vantagem: Vontade (medo)",
+          "Custo: -2 Iniciativa",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "duracao": "1 hora",
+        "custo": "-2 de Iniciativa",
+        "efeito": "Vantagem em Vontade contra medo e -2 de Iniciativa por 1 hora",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-vinho-safra-boa",
+      "titulo": "Vinho de Safra Boa",
+      "conteudo": {
+        "descricao": "Escuro, encorpado, servido numa taça que alguém lavou de verdade. Solta a língua e abre portas, e deixa a atenção um pouco turva. Por 1 hora, você tem +2 em Diplomacia e Atuação e -2 em Percepção.",
+        "preco": {
+          "Lunaris": 70
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "+2 em Diplomacia e Atuação",
+          "Custo: -2 em Percepção",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 1 minuto",
+        "duracao": "1 hora",
+        "custo": "-2 em Percepção por 1 hora",
+        "efeito": "+2 em Diplomacia e Atuação, -2 em Percepção por 1 hora",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-bomba-pimenta",
+      "titulo": "Bomba de Pimenta",
+      "conteudo": {
+        "descricao": "Uma casca de ovo recheada de pimenta moída e selada com cera. Ao arremessar num ponto a alcance Curto, uma nuvem de 3 m arde nos olhos de todos dentro dela: Fortitude DT 12 ou a criatura fica Cega até o começo do seu próximo turno.",
+        "preco": {
+          "Lunaris": 18
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Ferramenta",
+          "Área 3 m",
+          "Fortitude DT 12",
+          "Condição: Cego"
+        ],
+        "subtipo": "ferramenta",
+        "consumivel": true,
+        "ativacao": "Ação Padrão, alcance Curto",
+        "efeito": "Área de 3 m: Fortitude DT 12 ou Cego até o começo do seu próximo turno",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-armadilha-corda-sino",
+      "titulo": "Armadilha de Corda e Sino",
+      "conteudo": {
+        "descricao": "Uma corda esticada na altura do tornozelo, amarrada a um sino de latão. Montar leva uma Ação Padrão, em um espaço de até 3 m, como uma porta ou um corredor. Quem atravessar sem notar a corda (Percepção DT 12) faz Reflexos DT 12 ou fica Caído, e o sino avisa quem estiver a até 30 m.",
+        "preco": {
+          "Lunaris": 20
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Ferramenta",
+          "Armadilha",
+          "Reflexos DT 12",
+          "Condição: Caído"
+        ],
+        "subtipo": "ferramenta",
+        "consumivel": true,
+        "ativacao": "Ação Padrão (montar)",
+        "efeito": "Reflexos DT 12 ou Caído; alerta num raio de 30 m",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-oleo-escorregadio",
+      "titulo": "Óleo Escorregadio",
+      "conteudo": {
+        "descricao": "Um frasco de óleo grosso, bom pra fugir e melhor ainda pra impedir quem persegue. Ao derramar numa área de 3 m a alcance Curto, quem entrar nela ou começar o turno ali faz Acrobacia DT 12 ou fica Caído. Dura 3 rodadas.",
+        "preco": {
+          "Lunaris": 16
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Ferramenta",
+          "Área 3 m",
+          "Acrobacia DT 12",
+          "Condição: Caído",
+          "Duração: 3 rodadas"
+        ],
+        "subtipo": "ferramenta",
+        "consumivel": true,
+        "ativacao": "Ação Padrão, alcance Curto",
+        "duracao": "3 rodadas",
+        "efeito": "Área de 3 m por 3 rodadas: Acrobacia DT 12 ou Caído",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-bombinha-estalo",
+      "titulo": "Bombinha de Estalo",
+      "conteudo": {
+        "descricao": "Papel enrolado com pólvora fraca e pavio curto. Ao arremessar num ponto a alcance Médio, estoura com barulho de tiro. Criaturas a até 9 m dele fazem Vontade DT 12 ou olham pro estalo: você tem vantagem em Furtividade contra elas por 1 rodada.",
+        "preco": {
+          "Lunaris": 12
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Ferramenta",
+          "Distração",
+          "Vontade DT 12",
+          "Alcance Médio"
+        ],
+        "subtipo": "ferramenta",
+        "consumivel": true,
+        "ativacao": "Ação Padrão, alcance Médio",
+        "duracao": "1 rodada",
+        "efeito": "Vontade DT 12 ou distraída; vantagem em Furtividade contra ela por 1 rodada",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-rojao-sinalizacao",
+      "titulo": "Rojão de Sinalização",
+      "conteudo": {
+        "descricao": "Um tubo de papel grosso que sobe assobiando e estoura em cor. Combinar as cores antes transforma o rojão em mensagem. Disparado pro alto, é visto a até 1 km de dia e a até 3 km à noite.",
+        "preco": {
+          "Lunaris": 10
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Ferramenta",
+          "Sinal",
+          "Visível: 1 km (dia) / 3 km (noite)"
+        ],
+        "subtipo": "ferramenta",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "efeito": "Sinal visível a 1 km de dia ou 3 km à noite",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-isca-presa",
+      "titulo": "Isca de Presa",
+      "conteudo": {
+        "descricao": "Um embrulho de carne curada, ervas e sangue que fede de longe. Largado no chão, atrai animais e feras num raio de 60 m por 10 minutos, e eles vão até ele antes de qualquer outra coisa, a menos que sejam atacados. Criaturas treinadas ou inteligentes fazem Vontade DT 14 para ignorar.",
+        "preco": {
+          "Lunaris": 45
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Ferramenta",
+          "Raio 60 m",
+          "Vontade DT 14",
+          "Duração: 10 minutos"
+        ],
+        "subtipo": "ferramenta",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "duracao": "10 minutos",
+        "efeito": "Atrai animais e feras num raio de 60 m por 10 minutos (Vontade DT 14 ignora)",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-rede-lastro",
+      "titulo": "Rede de Lastro",
+      "conteudo": {
+        "descricao": "Uma rede com chumbo nas bordas, dobrada para abrir no ar. Ao arremessar contra uma criatura de até o tamanho de uma pessoa, a alcance Curto, ela faz Reflexos DT 14 ou fica Imobilizada. Como Ação Padrão, pode tentar Atletismo ou Acrobacia DT 14 para se soltar.",
+        "preco": {
+          "Lunaris": 55
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Ferramenta",
+          "Reflexos DT 14",
+          "Condição: Imobilizado"
+        ],
+        "subtipo": "ferramenta",
+        "consumivel": true,
+        "ativacao": "Ação Padrão, alcance Curto",
+        "efeito": "Reflexos DT 14 ou Imobilizado; escapa com Atletismo ou Acrobacia DT 14",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-po-revelacao",
+      "titulo": "Pó de Revelação",
+      "conteudo": {
+        "descricao": "Um pó prateado que gruda em tudo o que toca, inclusive no que não queria ser visto. Soprado num cone Curto, criaturas invisíveis ou escondidas ali ficam delineadas por 1 minuto e perdem qualquer bônus de invisibilidade ou camuflagem.",
+        "preco": {
+          "Lunaris": 50
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Ferramenta",
+          "Cone Curto",
+          "Revela invisíveis",
+          "Duração: 1 minuto"
+        ],
+        "subtipo": "ferramenta",
+        "consumivel": true,
+        "ativacao": "Ação Padrão, cone Curto",
+        "duracao": "1 minuto",
+        "efeito": "Revela criaturas invisíveis ou escondidas no cone por 1 minuto",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
       "tipo": "veiculo-completo",
       "id": "veiculo-bicicleta-gazela",
       "titulo": "Bicicleta Elétrica Gazela",

@@ -412,9 +412,9 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
-  // 976 fichas escritas à mão, mais os estágios de família gerados (tools/aplicar-familias-bestiario.mjs).
+  // 992 fichas escritas à mão, mais os estágios de família gerados (tools/aplicar-familias-bestiario.mjs).
   const geradas = entradas.filter((item) => item.conteudo?.geradoPorFamilia).length;
-  assert.equal(entradas.length - geradas, 976);
+  assert.equal(entradas.length - geradas, 992);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 

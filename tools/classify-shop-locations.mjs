@@ -118,6 +118,8 @@ export const classifyShopLocation = (entry) => {
       return level;
 
     case 'consumivel':
+      // Comida e bebida de balcao e suprimento de Feira de Vila: a raridade manda.
+      if (subtype === 'comida' || subtype === 'bebida') return level;
       return Math.max(level, rarity === 'raro' || rarity === 'epico' ? 3 : 2);
 
     case 'veiculo': {

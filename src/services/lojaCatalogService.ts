@@ -562,13 +562,19 @@ if (categoria === 'Modificações') {
   }
 
   if (categoria === 'Consumíveis') {
-    const pocao = ['pocao', 'elixir', 'frasco', 'cura'].some((termo) => descricao.includes(termo));
+    // Comida e bebida declaram o `subtipo`; ferramenta também, e por isso um
+    // "frasco" de óleo não cai em Poções só pela palavra na descrição.
+    const subtipo = normalizarMarcador(dados.subtipo);
+    const comida = subtipo === 'comida' || subtipo === 'bebida';
+    const pocao = !comida && subtipo !== 'ferramenta'
+      && ['pocao', 'elixir', 'frasco', 'cura'].some((termo) => descricao.includes(termo));
     const selo = marcadores.has('selo');
-    const ritual = !selo && ['ritual', 'pergaminho'].some((termo) => descricao.includes(termo));
+    const ritual = !selo && !comida && ['ritual', 'pergaminho'].some((termo) => descricao.includes(termo));
     if (subfiltro === 'Poções') return pocao;
+    if (subfiltro === 'Comidas e Bebidas') return comida;
     if (subfiltro === 'Selos') return selo;
     if (subfiltro === 'Rituais') return ritual;
-    if (subfiltro === 'Ferramentas') return !pocao && !selo && !ritual;
+    if (subfiltro === 'Ferramentas') return !comida && !pocao && !selo && !ritual;
   }
 
   if (categoria === 'Mercenários') {
