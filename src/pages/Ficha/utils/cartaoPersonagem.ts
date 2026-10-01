@@ -1,7 +1,7 @@
 import type { EfeitoAtmosfericoFicha } from '../fichaTheme';
 import type { IResumoFicha } from './exportarFicha';
 import { formatarModificador } from './exportarFicha';
-import { GLIFOS, escurecerHex, iniciaisDoNome, molduraDoRetrato } from './retrato';
+import { GLIFOS, escurecerHex, iniciaisDoNome, molduraDoRetrato, type EstiloMoldura } from './retrato';
 
 /** Cartão do personagem em PNG, no formato de carta: retrato no alto, moldura
  * por nível, recursos e atributos embaixo. Desenhado à mão no canvas (sem
@@ -32,6 +32,36 @@ const espacado = (ctx: CanvasRenderingContext2D, valor: string) => {
 };
 
 /** roundRect não existe em navegadores antigos: cai para retângulo em vez de travar. */
+/** Uma joia de canto, centrada na origem, com o formato da moldura. */
+const desenharJoia = (ctx: CanvasRenderingContext2D, forma: EstiloMoldura['forma']) => {
+  ctx.beginPath();
+  if (forma === 'circulo') {
+    ctx.arc(0, 0, 11, 0, Math.PI * 2);
+  } else if (forma === 'estrela') {
+    [[0, -16], [4, -4], [16, 0], [4, 4], [0, 16], [-4, 4], [-16, 0], [-4, -4]].forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+  } else if (forma === 'hexagono') {
+    for (let i = 0; i < 6; i += 1) {
+      const angulo = (Math.PI / 3) * i;
+      const x = Math.cos(angulo) * 13;
+      const y = Math.sin(angulo) * 13;
+      if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+    }
+  } else if (forma === 'cruz') {
+    [[-4, -14], [4, -14], [4, -4], [14, -4], [14, 4], [4, 4], [4, 14], [-4, 14], [-4, 4], [-14, 4], [-14, -4], [-4, -4]].forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+  } else if (forma === 'gota') {
+    ctx.moveTo(0, -15);
+    ctx.bezierCurveTo(14, 0, 12, 13, 0, 13);
+    ctx.bezierCurveTo(-12, 13, -14, 0, 0, -15);
+  } else {
+    ctx.moveTo(0, -13);
+    ctx.lineTo(13, 0);
+    ctx.lineTo(0, 13);
+    ctx.lineTo(-13, 0);
+  }
+  ctx.closePath();
+  ctx.fill();
+};
+
 const retanguloArredondado = (ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, raio: number) => {
   ctx.beginPath();
   if (typeof ctx.roundRect === 'function') ctx.roundRect(x, y, w, h, raio);
@@ -93,23 +123,48 @@ export async function gerarImagemCartao(dados: IDadosCartao): Promise<Blob> {
   ctx.shadowBlur = moldura.degrau === 0 ? 6 : 24;
   ctx.strokeStyle = moldura.fio;
   ctx.lineWidth = moldura.animada ? 10 : moldura.degrau === 0 ? 4 : 7;
+  if (moldura.padrao === 'tracejado') ctx.setLineDash([34, 18]);
+  if (moldura.padrao === 'pontilhado') ctx.setLineDash([2, 14]);
+  ctx.lineCap = moldura.padrao === 'pontilhado' ? 'round' : 'butt';
   retanguloArredondado(ctx, 14, 14, LARGURA - 28, ALTURA - 28, 30);
   ctx.stroke();
   ctx.restore();
+  if (moldura.padrao === 'duplo') {
+    ctx.save();
+    ctx.strokeStyle = moldura.fio;
+    ctx.lineWidth = 2;
+    retanguloArredondado(ctx, 22, 22, LARGURA - 44, ALTURA - 44, 24);
+    ctx.stroke();
+    ctx.restore();
+  }
+  // Aros a mais (a partir do nível 180) por dentro da moldura.
+  for (let aro = 0; aro < moldura.aroExtra; aro += 1) {
+    ctx.save();
+    ctx.strokeStyle = moldura.fio2;
+    ctx.globalAlpha = 0.85;
+    ctx.lineWidth = 2.5;
+    const recuo = 38 + aro * 9;
+    retanguloArredondado(ctx, recuo, recuo, LARGURA - recuo * 2, ALTURA - recuo * 2, Math.max(12, 22 - aro * 4));
+    ctx.stroke();
+    ctx.restore();
+  }
   ctx.strokeStyle = 'rgba(255,255,255,0.12)';
   ctx.lineWidth = 1.5;
   retanguloArredondado(ctx, 30, 30, LARGURA - 60, ALTURA - 60, 22);
   ctx.stroke();
   if (moldura.joias > 0) {
-    const cantos: Array<[number, number]> = [[22, 22], [LARGURA - 22, 22], [22, ALTURA - 22], [LARGURA - 22, ALTURA - 22]];
-    cantos.slice(0, moldura.joias === 2 ? 2 : 4).forEach(([x, y]) => {
+    // Cantos primeiro; as de 6 e 8 joias ganham o meio dos lados.
+    const posicoes: Array<[number, number]> = [
+      [22, 22], [LARGURA - 22, 22], [22, ALTURA - 22], [LARGURA - 22, ALTURA - 22],
+      [LARGURA / 2, 22], [LARGURA / 2, ALTURA - 22], [22, ALTURA / 2], [LARGURA - 22, ALTURA / 2],
+    ];
+    posicoes.slice(0, moldura.joias).forEach(([x, y]) => {
       ctx.save();
       ctx.translate(x, y);
-      ctx.rotate(Math.PI / 4);
       ctx.fillStyle = moldura.fio;
       ctx.shadowColor = moldura.brilho;
       ctx.shadowBlur = 12;
-      ctx.fillRect(-9, -9, 18, 18);
+      desenharJoia(ctx, moldura.forma);
       ctx.restore();
     });
   }

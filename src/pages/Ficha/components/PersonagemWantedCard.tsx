@@ -44,6 +44,19 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
   const recompensa = calcularRecompensa(personagem.nivel, fama);
   const moldura = molduraDoCartaz(personagem.nivel);
   const rotuloTier = moldura.rotulo;
+  // Literais completos de propósito: o Tailwind só mantém as classes do index.css
+  // que aparecem escritas por inteiro no código.
+  const classesMoldura = [
+    moldura.degrau > 0 ? 'wanted-poster--moldura' : '',
+    moldura.aro ? 'wanted-poster--grossa' : '',
+    moldura.aroExtra === 1 ? 'wanted-poster--aros-1' : moldura.aroExtra === 2 ? 'wanted-poster--aros-2' : '',
+    moldura.animada ? 'wanted-poster--pulsa' : '',
+  ].filter(Boolean).join(' ');
+  const estiloMoldura = {
+    '--cartaz-fio': moldura.fio,
+    '--cartaz-brilho': moldura.brilho,
+    '--cartaz-estilo': moldura.padrao === 'liso' ? 'solid' : moldura.padrao === 'duplo' ? 'double' : moldura.padrao === 'pontilhado' ? 'dotted' : 'dashed',
+  } as React.CSSProperties;
   const [aviso, setAviso] = useState<string | null>(null);
   const [gerando, setGerando] = useState(false);
   const timerAviso = useRef<number | undefined>(undefined);
@@ -97,7 +110,8 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
       exit={{ opacity: 0, scale: 0.9 }}
       whileHover={{ rotate: 0, y: -8, scale: 1.02 }}
       transition={{ duration: 0.4, delay: Math.min(index * 0.1, 0.5) }}
-      className={`wanted-poster wanted-poster--${moldura.chave} performance-expensive-effects group relative flex cursor-pointer flex-col overflow-hidden rounded-sm p-5 pt-4 shadow-[0_18px_30px_-12px_rgba(0,0,0,0.6)]`}
+      style={estiloMoldura}
+      className={`wanted-poster wanted-poster--${moldura.chave} ${classesMoldura} performance-expensive-effects group relative flex cursor-pointer flex-col overflow-hidden rounded-sm p-5 pt-4 shadow-[0_18px_30px_-12px_rgba(0,0,0,0.6)]`}
     >
       {rotuloTier ? <span aria-hidden="true" className="wanted-poster-faixa">{rotuloTier}</span> : null}
       {/* Textura de arranhões envelhecidos */}

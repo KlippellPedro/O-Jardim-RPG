@@ -5,7 +5,7 @@ import { ESCADA_MOLDURAS, GLIFOS, escurecerHex, iniciaisDoNome, molduraDoRetrato
 import { PATAMARES_NIVEL } from '../../src/services/progressaoNiveis';
 import { formatarModificador, montarResumoFicha, nomeDeArquivo } from '../../src/pages/Ficha/utils/exportarFicha';
 
-test('moldura do retrato muda a cada 5 niveis ate o 60', () => {
+test('moldura do retrato muda a cada 5 niveis', () => {
   assert.equal(molduraDoRetrato(1).chave, 'comum');
   assert.equal(molduraDoRetrato(4).chave, 'comum');
   assert.equal(molduraDoRetrato(5).chave, 'bronze');
@@ -14,49 +14,82 @@ test('moldura do retrato muda a cada 5 niveis ate o 60', () => {
   assert.equal(molduraDoRetrato(15).chave, 'ouro');
   assert.equal(molduraDoRetrato(22).chave, 'esmeralda');
   assert.equal(molduraDoRetrato(60).chave, 'lenda');
-  assert.equal(molduraDoRetrato(99).chave, 'lenda');
+  assert.equal(molduraDoRetrato(64).chave, 'lenda');
+  assert.equal(molduraDoRetrato(65).chave, 'topazio');
+  assert.equal(molduraDoRetrato(69).chave, 'topazio');
+  assert.equal(molduraDoRetrato(70).chave, 'jade');
   assert.equal(molduraDoRetrato(1).rotulo, null);
   assert.equal(molduraDoRetrato(60).rotulo, 'Lendário');
+  assert.equal(molduraDoRetrato(65).rotulo, 'Topázio');
   assert.equal(molduraDoRetrato(Number.NaN).chave, 'comum');
 });
 
-test('cada degrau de 5 em 5 niveis tem uma moldura diferente', () => {
-  const niveis = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
+test('cada degrau de 5 em 5 niveis, do 1 ao 500, tem uma moldura diferente', () => {
+  const niveis = [1, ...Array.from({ length: 100 }, (_, indice) => (indice + 1) * 5)];
   const molduras = niveis.map((nivel) => molduraDoRetrato(nivel));
-  assert.equal(new Set(molduras.map((moldura) => moldura.chave)).size, 13);
-  assert.equal(new Set(molduras.map((moldura) => moldura.fio + moldura.fio2)).size, 13);
+  assert.equal(molduras.length, 101);
+  assert.equal(new Set(molduras.map((moldura) => moldura.chave)).size, 101);
+  assert.equal(new Set(molduras.map((moldura) => moldura.fio + moldura.fio2)).size, 101);
+  assert.equal(new Set(molduras.map((moldura) => moldura.rotulo)).size, 101);
   assert.deepEqual(molduras.map((moldura) => moldura.degrau), niveis.map((_, indice) => indice));
+  assert.equal(ESCADA_MOLDURAS.length, 101);
 });
 
-test('depois do 60 cada patamar ganha a sua moldura: 100, 150, 250 e 500', () => {
+test('os patamares 100, 150, 250 e 500 são marcos com visual próprio', () => {
   assert.deepEqual(
-    [59, 60, 99, 100, 149, 150, 249, 250, 499, 500, 1450].map((nivel) => molduraDoRetrato(nivel).chave),
-    ['solar', 'lenda', 'lenda', 'mitico', 'mitico', 'cosmico', 'cosmico', 'eterno', 'eterno', 'absoluto', 'absoluto'],
+    [59, 60, 64, 99, 100, 104, 149, 150, 249, 250, 499, 500, 1450].map((nivel) => molduraDoRetrato(nivel).chave),
+    ['solar', 'lenda', 'lenda', 'alexandrita', 'mitico', 'mitico', 'vanadio', 'cosmico', 'mare', 'eterno', 'insondavel', 'absoluto', 'absoluto'],
   );
   assert.deepEqual(
     [100, 150, 250, 500].map((nivel) => molduraDoRetrato(nivel).rotulo),
     ['Mítico', 'Cósmico', 'Eterno', 'Absoluto'],
   );
-  // Os degraus a partir do 60 batem com os patamares do arquivo de dados.
-  assert.deepEqual(ESCADA_MOLDURAS.filter((degrau) => degrau.nivelMinimo >= 60).map((degrau) => degrau.nivelMinimo), [...PATAMARES_NIVEL]);
-});
-
-test('toda moldura tem cores próprias e as altas têm joia, aro e brilho em movimento', () => {
-  const cores = ESCADA_MOLDURAS.map((degrau) => degrau.fio + degrau.fio2);
-  assert.equal(new Set(cores).size, ESCADA_MOLDURAS.length);
-  assert.equal(new Set(ESCADA_MOLDURAS.map((degrau) => degrau.chave)).size, ESCADA_MOLDURAS.length);
-  [100, 150, 250, 500].forEach((nivel) => {
-    const moldura = molduraDoRetrato(nivel);
-    assert.equal(moldura.joias, 4);
-    assert.equal(moldura.aro, true);
-    assert.equal(moldura.animada, true);
+  // Cada patamar do arquivo de dados tem degrau próprio na escada.
+  PATAMARES_NIVEL.forEach((patamar) => {
+    assert.ok(ESCADA_MOLDURAS.some((degrau) => degrau.nivelMinimo === patamar), `patamar ${patamar} sem moldura`);
   });
 });
 
-test('joias, aro e brilho em movimento crescem com o degrau', () => {
+test('as molduras geradas cobrem formas, padroes e movimentos variados', () => {
+  const geradas = ESCADA_MOLDURAS.filter((degrau) => degrau.nivelMinimo >= 65);
+  assert.equal(new Set(geradas.map((degrau) => degrau.forma)).size, 6);
+  assert.equal(new Set(geradas.map((degrau) => degrau.padrao)).size, 4);
+  assert.equal(new Set(geradas.map((degrau) => degrau.movimento)).size, 4);
+  geradas.forEach((degrau) => {
+    assert.match(degrau.fio, /^#[0-9a-f]{6}$/);
+    assert.match(degrau.fio2, /^#[0-9a-f]{6}$/);
+    assert.match(degrau.chave, /^[a-z0-9-]+$/);
+  });
+});
+
+test('toda moldura tem cores próprias e as altas têm joia, aro e borda em movimento', () => {
+  const cores = ESCADA_MOLDURAS.map((degrau) => degrau.fio + degrau.fio2);
+  assert.equal(new Set(cores).size, ESCADA_MOLDURAS.length);
+  assert.equal(new Set(ESCADA_MOLDURAS.map((degrau) => degrau.chave)).size, ESCADA_MOLDURAS.length);
+  [65, 100, 150, 250, 500].forEach((nivel) => {
+    const moldura = molduraDoRetrato(nivel);
+    assert.ok(moldura.joias >= 4);
+    assert.equal(moldura.aro, true);
+    assert.equal(moldura.animada, true);
+    assert.ok(moldura.movimento);
+  });
+});
+
+test('joias, aros e brilho em movimento crescem com o degrau', () => {
   assert.deepEqual([1, 5, 10, 15, 20].map((nivel) => molduraDoRetrato(nivel).joias), [0, 2, 2, 4, 4]);
   assert.deepEqual([15, 20].map((nivel) => molduraDoRetrato(nivel).aro), [false, true]);
   assert.deepEqual([40, 45, 60].map((nivel) => molduraDoRetrato(nivel).animada), [false, true, true]);
+  assert.deepEqual([65, 115, 120, 245, 250, 500].map((nivel) => molduraDoRetrato(nivel).joias), [4, 4, 6, 6, 8, 8]);
+  assert.deepEqual([60, 175, 180, 325, 330, 500].map((nivel) => molduraDoRetrato(nivel).aroExtra), [0, 0, 1, 1, 2, 2]);
+  // Nunca perde joia nem aro ao subir de nível.
+  let joias = 0;
+  let aros = 0;
+  for (let nivel = 1; nivel <= 500; nivel += 5) {
+    const moldura = molduraDoRetrato(nivel);
+    assert.ok(moldura.joias >= joias && moldura.aroExtra >= aros, `nível ${nivel}`);
+    joias = moldura.joias;
+    aros = moldura.aroExtra;
+  }
 });
 
 test('iniciais ignoram particulas e caracteres estranhos', () => {

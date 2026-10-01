@@ -21,7 +21,7 @@ export const calcularRecompensa = (nivel: number, fama = 0): number => {
 };
 
 /** Moldura do cartaz: a mesma escada do retrato (um grau novo a cada 5
- * níveis, até o 60, e um por patamar depois), para o personagem ter a mesma "patente" nas duas telas
+ * níveis, até o 500), para o personagem ter a mesma "patente" nas duas telas
  * em vez de um selo próprio que parava no nível 20. */
 export const molduraDoCartaz = molduraDoRetrato;
 export type { EstiloMoldura };

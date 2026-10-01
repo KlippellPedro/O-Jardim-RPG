@@ -22,7 +22,7 @@ interface RetratoPersonagemProps {
 
 /** Retrato do personagem: a foto quando existe, ou uma composição feita com as
  * cores da classe e da raça, o símbolo da atmosfera da classe e as iniciais.
- * A moldura muda a cada 5 níveis, até o 60, e depois a cada patamar. */
+ * A moldura muda a cada 5 níveis, até o 500. */
 export const RetratoPersonagem = ({
   nome,
   foto,
@@ -47,11 +47,20 @@ export const RetratoPersonagem = ({
     '--moldura-brilho': moldura.brilho,
   } as CSSProperties;
 
-  const posicoesJoias = (['tl', 'tr', 'bl', 'br'] as const).slice(0, moldura.joias);
+  const posicoesJoias = (['tl', 'tr', 'bl', 'br', 'tm', 'bm', 'ml', 'mr'] as const).slice(0, moldura.joias);
+  const classes = [
+    'retrato',
+    `retrato--${moldura.chave}`,
+    moldura.aro ? 'retrato--aro' : '',
+    moldura.aroExtra ? `retrato--aros-${moldura.aroExtra}` : '',
+    moldura.padrao !== 'liso' ? `retrato--padrao-${moldura.padrao}` : '',
+    moldura.animada ? 'retrato--animada' : '',
+    moldura.movimento ? `retrato--mov-${moldura.movimento}` : '',
+  ].filter(Boolean).join(' ');
 
   return (
     <div
-      className={`retrato retrato--${moldura.chave}${moldura.aro ? ' retrato--aro' : ''}${moldura.animada ? ' retrato--animada' : ''}`}
+      className={classes}
       style={estilo}
       title={moldura.rotulo ? `${moldura.rotulo} • nível ${nivel}` : `Nível ${nivel}`}
     >
