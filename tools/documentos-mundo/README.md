@@ -10,6 +10,7 @@ propósitos diferentes:
 | `npm run docs:livro` | `docs/livro/` | **O livro de regras inteiro**, diagramado como livro de RPG impresso. |
 | `npm run docs:livro:mestre` | `docs/livro/` | O mesmo livro mais a edição que carrega os trechos do Mestre. |
 | `npm run docs:mestre` | `docs/mestre/` | **Kit do Mestre.** Folha de preparação de sessão e a aventura pronta de nível 1. |
+| `npm run docs:cartoes` | `docs/cartoes/` | **Cartões de condição** para imprimir e recortar: A4, 9 por folha (63 x 88 mm), com marca de corte. Três PDFs: cena e crises, lesões e sequelas, saúde mental. O texto sai de `data/regras/condicoes.ts` e `condicoes-longo-prazo.ts`; cada cartão encolhe a fonte sozinho até caber e o gerador avisa se algum não couber. |
 
 ## De onde vem o conteúdo
 

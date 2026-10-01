@@ -8,7 +8,21 @@
  * A automação parcial que existe (Defesa, Iniciativa, bloqueio de
  * movimento) está documentada em src/services/statusService.ts, logo antes
  * de `penalidadeDefesaCondicoes`.
+ *
+ * `CONDICOES_LONGO_PRAZO` (em condicoes-longo-prazo.ts) guarda lesões,
+ * sequelas e condições mentais prontas para a ficha. É só consulta e aplicação
+ * manual: nada ali entra em cálculo automático, e o livro, a sessão ao vivo e
+ * o export editorial continuam lendo apenas as listas deste arquivo.
  */
+export type GrupoLongoPrazo =
+  | 'Ossos e articulações'
+  | 'Ferimentos graves'
+  | 'Membros e sentidos perdidos'
+  | 'Sequelas do corpo'
+  | 'Transtornos e traumas'
+  | 'Humor e comportamento'
+  | 'Medos e fobias';
+
 export interface ICondicaoRegra {
   id: string;
   titulo: string;
@@ -16,6 +30,10 @@ export interface ICondicaoRegra {
   duracao: string;
   efeitos: string[];
   remocao: string;
+  /** Só nas condições de longo prazo: agrupa os cartões do catálogo. */
+  grupo?: GrupoLongoPrazo;
+  /** Só nas condições de longo prazo: não some com descanso comum. */
+  permanente?: boolean;
 }
 
 export const CONDICOES_OFICIAIS: ICondicaoRegra[] = [

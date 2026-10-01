@@ -5,15 +5,21 @@ import {
   Brain,
   Check,
   HeartPulse,
+  Search,
   ShieldAlert,
   Sparkles,
   Swords,
 } from 'lucide-react';
 import {
-  CONDICOES_OFICIAIS,
   CRISES_SANIDADE,
   type ICondicaoRegra,
 } from '../../../../data/regras/condicoes';
+import type { FiltroCondicao } from '../../../../data/regras/condicoes-longo-prazo';
+import {
+  AVISO_SAUDE_MENTAL,
+  FILTROS_CATALOGO,
+  listarCondicoes,
+} from '../utils/catalogoCondicoes';
 import {
   aplicarDescansoCompleto,
   aplicarRelaxamento,
@@ -61,6 +67,16 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
   const [tratamento, setTratamento] = useState(false);
   const [fatores, setFatores] = useState<string[]>([]);
   const [mensagem, setMensagem] = useState('');
+  const [filtroCondicao, setFiltroCondicao] = useState<FiltroCondicao>('cena');
+  const [buscaCondicao, setBuscaCondicao] = useState('');
+  const condicoesVisiveis = useMemo(
+    () => listarCondicoes(filtroCondicao, buscaCondicao),
+    [filtroCondicao, buscaCondicao],
+  );
+  const filtroAtual = FILTROS_CATALOGO.find((filtro) => filtro.id === filtroCondicao) ?? FILTROS_CATALOGO[0];
+  const mostraAvisoMental = buscaCondicao.trim()
+    ? condicoesVisiveis.some((item) => item.categoria === 'mental')
+    : filtroCondicao === 'mente';
   const resolucao = useMemo(
     () => resolverQualidadeDescanso(qualidade, fatores, isMestre),
     [qualidade, fatores, isMestre],
@@ -172,12 +188,20 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
       >
         <div className="flex items-start justify-between gap-3">
           <div>
+            {item.grupo && <span className="mb-1 block text-[9px] font-bold uppercase tracking-[0.18em] text-gray-600">{item.grupo}</span>}
             <strong className="text-sm text-white">{item.titulo}</strong>
             <p className="mt-1 text-xs leading-relaxed text-gray-500">{item.duracao}</p>
           </div>
-          <span className={`shrink-0 rounded-full border px-2 py-1 text-[9px] font-bold uppercase tracking-[0.16em] ${ESTILO_CATEGORIA[item.categoria]}`}>
-            {item.categoria}
-          </span>
+          <div className="flex shrink-0 flex-col items-end gap-1.5">
+            <span className={`rounded-full border px-2 py-1 text-[9px] font-bold uppercase tracking-[0.16em] ${ESTILO_CATEGORIA[item.categoria]}`}>
+              {item.categoria}
+            </span>
+            {item.permanente && (
+              <span className="rounded-full border border-amber-300/25 bg-amber-300/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-amber-200">
+                permanente
+              </span>
+            )}
+          </div>
         </div>
 
         <ul className="mt-4 space-y-2 text-xs leading-relaxed text-gray-300">
@@ -394,13 +418,62 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
         <div className="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div>
             <h3 className="flex items-center gap-2 text-lg font-bold text-white"><ShieldAlert size={19} className="text-orange-300" />Condições oficiais</h3>
-            <p className="mt-1 max-w-2xl text-xs leading-relaxed text-gray-500">Consulte o efeito e aplique a condição. O botão leva você ao painel de Condições Ativas para revisar ou editar o registro.</p>
+            <p className="mt-1 max-w-2xl text-xs leading-relaxed text-gray-500">Consulte o efeito e aplique a condição. O botão leva você ao painel de Condições Ativas para revisar ou editar o registro. Lesões, sequelas permanentes e condições mentais já vêm escritas: é só escolher.</p>
           </div>
           <span className="self-start rounded-full border border-emerald-400/20 bg-emerald-400/[0.06] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-200 sm:self-auto">
             {condicoesAtivas.length} ativa(s)
           </span>
         </div>
-        <div className="grid gap-3 lg:grid-cols-2">{CONDICOES_OFICIAIS.map((item) => renderCondicao(item))}</div>
+
+        <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Tipo de condição">
+            {FILTROS_CATALOGO.map((filtro) => {
+              const ativo = !buscaCondicao.trim() && filtro.id === filtroCondicao;
+              return (
+                <button
+                  key={filtro.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={ativo}
+                  onClick={() => { setFiltroCondicao(filtro.id); setBuscaCondicao(''); }}
+                  className={`rounded-full border px-3.5 py-1.5 text-xs font-bold transition-colors ${
+                    ativo
+                      ? 'border-[#c7a44c]/60 bg-[#c7a44c]/15 text-[#e1c76f]'
+                      : 'border-white/10 bg-black/20 text-gray-400 hover:border-white/20 hover:text-white'
+                  }`}
+                >
+                  {filtro.rotulo}
+                </button>
+              );
+            })}
+          </div>
+          <label className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/25 px-3 py-2 focus-within:border-[#c7a44c]/40 lg:w-72">
+            <Search size={14} className="shrink-0 text-gray-500" aria-hidden="true" />
+            <input
+              type="search"
+              value={buscaCondicao}
+              onChange={(event) => setBuscaCondicao(event.target.value)}
+              placeholder="Buscar em todas: braço, ansiedade..."
+              aria-label="Buscar condição"
+              className="w-full bg-transparent text-xs text-white placeholder:text-gray-600 focus:outline-none"
+            />
+          </label>
+        </div>
+        <p className="mb-4 text-xs leading-relaxed text-gray-500">
+          {buscaCondicao.trim()
+            ? `${condicoesVisiveis.length} resultado(s) em todo o catálogo.`
+            : `${filtroAtual.descricao} ${condicoesVisiveis.length} no total.`}
+        </p>
+        {mostraAvisoMental && (
+          <p className="mb-4 flex items-start gap-3 rounded-2xl border border-fuchsia-400/15 bg-fuchsia-400/[0.04] p-4 text-xs leading-relaxed text-gray-400">
+            <Brain size={17} className="mt-0.5 shrink-0 text-fuchsia-300" aria-hidden="true" />
+            {AVISO_SAUDE_MENTAL}
+          </p>
+        )}
+
+        {condicoesVisiveis.length > 0
+          ? <div className="grid gap-3 lg:grid-cols-2">{condicoesVisiveis.map((item) => renderCondicao(item))}</div>
+          : <p className="rounded-2xl border border-white/[0.06] bg-black/20 p-5 text-center text-xs text-gray-500">Nenhuma condição encontrada. Se faltar uma, crie a sua em Condições Ativas.</p>}
       </section>
 
       <section className="rounded-3xl border border-fuchsia-400/10 bg-[#0f0e15] p-5 sm:p-6" data-tour="descanso-sanidade">
@@ -411,7 +484,7 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
         <div className="grid gap-3 lg:grid-cols-2">{CRISES_SANIDADE.map((item) => renderCondicao(item, true))}</div>
         <div className="mt-4 flex items-start gap-3 rounded-2xl border border-emerald-400/10 bg-emerald-400/[0.035] p-4 text-xs leading-relaxed text-gray-400">
           <HeartPulse size={17} className="mt-0.5 shrink-0 text-emerald-300" />
-          Tratamento em local seguro recupera Sanidade somente pelo descanso. Ajuda profissional pode conceder vantagem contra uma crise, mas não apaga uma condição permanente sem resolução narrativa.
+          Tratamento em local seguro recupera Sanidade somente pelo descanso. Ajuda profissional pode conceder vantagem contra uma crise, mas não apaga uma condição permanente sem resolução narrativa. A condição permanente da Quebra, definida com o jogador, está pronta no catálogo acima, na aba Mente.
         </div>
       </section>
     </div>

@@ -35,3 +35,12 @@ test('editor de condições da sessão continua aceitando condição personaliza
   // flexibilidade de anotar uma condição narrativa que não está no catálogo.
   assert.match(codigoEditorSessao, /placeholder="Nova condição/);
 });
+
+test('o editor da sessão oferece as condições de longo prazo agrupadas, sem duplicar a lista', () => {
+  assert.match(
+    codigoEditorSessao,
+    /import\s*\{\s*CONDICOES_LONGO_PRAZO,\s*GRUPOS_LONGO_PRAZO\s*\}\s*from\s*'..\/..\/..\/..\/data\/regras\/condicoes-longo-prazo'/,
+  );
+  assert.match(codigoEditorSessao, /GRUPOS_LONGO_PRAZO\.map/);
+  assert.match(codigoEditorSessao, /CONDICOES_LONGO_PRAZO\.filter\(\(regra\) => regra\.grupo === grupo\)/);
+});

@@ -11,6 +11,7 @@ import type {
 import type { NivelVisibilidade, ParticipantePayload } from '../../../services/sessaoApi';
 import { OPCOES_VISIBILIDADE } from '../sessionUtils';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/condicoes';
+import { CONDICOES_LONGO_PRAZO, GRUPOS_LONGO_PRAZO } from '../../../../data/regras/condicoes-longo-prazo';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { VD_MAXIMO } from '../../../services/progressaoNiveis';
 
@@ -292,6 +293,31 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               </button>
             ))}
           </div>
+          <details className="mt-2 rounded-md border border-white/10 bg-black/15 px-2 py-1.5">
+            <summary className="cursor-pointer select-none text-[10px] uppercase tracking-wider text-white/40 hover:text-white/70">
+              Lesões, sequelas e saúde mental ({CONDICOES_LONGO_PRAZO.length})
+            </summary>
+            <div className="mt-2 space-y-2">
+              {GRUPOS_LONGO_PRAZO.map((grupo) => (
+                <div key={grupo}>
+                  <span className="text-[9px] uppercase tracking-[0.18em] text-white/30">{grupo}</span>
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {CONDICOES_LONGO_PRAZO.filter((regra) => regra.grupo === grupo).map((regra) => (
+                      <button
+                        key={regra.id}
+                        type="button"
+                        onClick={() => addConditionNamed(regra.titulo)}
+                        title={regra.efeitos.join(' ')}
+                        className="rounded-full border border-white/10 bg-black/20 px-2 py-0.5 text-[10px] text-white/50 hover:border-[#c7a44c]/40 hover:text-[#c7a44c]"
+                      >
+                        {regra.titulo}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </details>
           <div className="mt-2 flex gap-1.5">
             <input
               value={conditionName}
