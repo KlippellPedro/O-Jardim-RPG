@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import { BookOpenText, Clock3, Download, Globe2, Library, Loader2, Store } from 'lucide-react';
+import { BookOpenText, Clock3, Download, Feather, Globe2, Library, Loader2, Store } from 'lucide-react';
 import { ConteudoLorePanel } from './ConteudoLorePanel';
+import { ConteudoEntidadesPanel } from './ConteudoEntidadesPanel';
 import { CronologiaPanel } from './CronologiaPanel';
 import { CatalogoLojaPanel } from './CatalogoLojaPanel';
 import { RegrasEditorPanel } from './RegrasEditorPanel';
 import { RegistrosUniversaisPanel } from './RegistrosUniversaisPanel';
 import { conteudoEditorialApi } from '../../services/conteudoEditorialApi';
 
-type AbaConteudo = 'lore' | 'cronologia' | 'loja' | 'regras' | 'registros';
+type AbaConteudo = 'lore' | 'cronologia' | 'entidades' | 'loja' | 'regras' | 'registros';
 
 interface ConteudoMestrePanelProps {
   campanhaId: string;
@@ -41,7 +42,7 @@ export function ConteudoMestrePanel({ campanhaId, initialAba = 'lore', initialIt
     setExporting(true);
     setExportMessage(null);
     try {
-      const isWorld = aba === 'lore' || aba === 'cronologia';
+      const isWorld = aba === 'lore' || aba === 'cronologia' || aba === 'entidades';
       const snapshot = isWorld
         ? await conteudoEditorialApi.exportarPublicadosGlobais()
         : await conteudoEditorialApi.exportarPublicados(campanhaId);
@@ -75,6 +76,7 @@ export function ConteudoMestrePanel({ campanhaId, initialAba = 'lore', initialIt
         <div className="horizontal-scroll custom-scrollbar flex gap-3 overflow-x-auto">
           <button type="button" onClick={() => trocarAba('lore')} className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-2 pb-3 text-xs font-bold uppercase tracking-widest ${aba === 'lore' ? 'border-primary text-primary' : 'border-transparent text-gray-500'}`}><BookOpenText size={15} /> Lore</button>
           <button type="button" onClick={() => trocarAba('cronologia')} className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-2 pb-3 text-xs font-bold uppercase tracking-widest ${aba === 'cronologia' ? 'border-primary text-primary' : 'border-transparent text-gray-500'}`}><Clock3 size={15} /> Árvores e Crônicas</button>
+          <button type="button" onClick={() => trocarAba('entidades')} className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-2 pb-3 text-xs font-bold uppercase tracking-widest ${aba === 'entidades' ? 'border-primary text-primary' : 'border-transparent text-gray-500'}`}><Feather size={15} /> Entidades</button>
           <button type="button" onClick={() => trocarAba('loja')} className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-2 pb-3 text-xs font-bold uppercase tracking-widest ${aba === 'loja' ? 'border-primary text-primary' : 'border-transparent text-gray-500'}`}><Store size={15} /> Loja</button>
           <button type="button" onClick={() => trocarAba('regras')} className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-2 pb-3 text-xs font-bold uppercase tracking-widest ${aba === 'regras' ? 'border-primary text-primary' : 'border-transparent text-gray-500'}`}><Library size={15} /> Regras</button>
           <button type="button" onClick={() => trocarAba('registros')} className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-2 pb-3 text-xs font-bold uppercase tracking-widest ${aba === 'registros' ? 'border-primary text-primary' : 'border-transparent text-gray-500'}`}><Globe2 size={15} /> Registros</button>
@@ -84,9 +86,10 @@ export function ConteudoMestrePanel({ campanhaId, initialAba = 'lore', initialIt
         </button>
       </div>
       {exportMessage && <div role="status" className="mb-4 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-gray-300">{exportMessage}</div>}
-      {(aba === 'lore' || aba === 'cronologia') && <div className="mb-4 rounded-xl border border-primary/20 bg-primary/[0.05] px-4 py-3 text-xs leading-5 text-gray-300">Esta seção é global. Tudo que for publicado ou excluído aqui vale para todas as campanhas.</div>}
+      {(aba === 'lore' || aba === 'cronologia' || aba === 'entidades') && <div className="mb-4 rounded-xl border border-primary/20 bg-primary/[0.05] px-4 py-3 text-xs leading-5 text-gray-300">Esta seção é global. Tudo que for publicado ou excluído aqui vale para todas as campanhas.</div>}
       {aba === 'lore' && <ConteudoLorePanel initialItem={initialItem} onDirtyChange={registrarDirty} />}
       {aba === 'cronologia' && <CronologiaPanel initialItem={initialItem} onDirtyChange={registrarDirty} />}
+      {aba === 'entidades' && <ConteudoEntidadesPanel onDirtyChange={registrarDirty} />}
       {aba === 'loja' && <CatalogoLojaPanel campanhaId={campanhaId} onDirtyChange={registrarDirty} />}
       {aba === 'registros' && <RegistrosUniversaisPanel campanhaId={campanhaId} onAbrirLore={() => trocarAba('lore')} />}
       {aba === 'regras' && <RegrasEditorPanel campanhaId={campanhaId} initialItem={initialItem} onDirtyChange={registrarDirty} />}

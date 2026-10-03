@@ -43,7 +43,7 @@ export default function CreatorPage() {
   const [activeTab, setActiveTab] = useState<AbaCriador>(abaInicial);
   const secaoSolicitada = searchParams.get('secao');
   const itemSolicitado = searchParams.get('item') || undefined;
-  const secaoConteudo = secaoSolicitada === 'cronologia' || secaoSolicitada === 'loja' || secaoSolicitada === 'regras'
+  const secaoConteudo = secaoSolicitada === 'cronologia' || secaoSolicitada === 'entidades' || secaoSolicitada === 'loja' || secaoSolicitada === 'regras'
     ? secaoSolicitada
     : 'lore';
 

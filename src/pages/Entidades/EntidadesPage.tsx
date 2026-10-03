@@ -1,10 +1,11 @@
 import { useResolvedWorld } from '../../hooks/useResolvedWorld';
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, BookOpen, Library, Search, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Feather, Library, Search, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CLASSIFICACOES_ENTIDADE, RANKS_PERIGO } from '../../../data/mundo/entidades';
 import { useAuthStore } from '../../store/useAuthStore';
+import { usePermissoes } from '../../hooks/usePermissoes';
 import { loreBloqueado } from '../Mundo/loreVisibility';
 import './entidades.css';
 
@@ -17,6 +18,7 @@ export function EntidadesPage() {
   const [busca, setBusca] = useState('');
   const termo = normalizar(busca.trim());
   const { usuario, campanhaAtiva } = useAuthStore();
+  const { podeEditarConteudo } = usePermissoes();
   const isMestre = usuario?.papel_plataforma === 'admin'
     || usuario?.papel_plataforma === 'criador'
     || campanhaAtiva?.papel === 'mestre'
@@ -72,6 +74,16 @@ export function EntidadesPage() {
             <strong>O que são Entidades?</strong>
             <small>Conheça os ranks de perigo e as classificações <ArrowRight size={14} /></small>
           </Link>
+          {podeEditarConteudo && (
+            <Link
+              to={`/criador?aba=conteudo&secao=entidades${campanhaAtiva ? `&campanha_id=${encodeURIComponent(campanhaAtiva.id)}` : ''}`}
+              className="entity-book__guide-link"
+            >
+              <span><Feather size={18} aria-hidden="true" /> Painel do Criador</span>
+              <strong>Escrever um conto novo</strong>
+              <small>Uma Entidade nova entra no Livro de todas as campanhas <ArrowRight size={14} /></small>
+            </Link>
+          )}
         </motion.header>
 
         <section className="entity-book__archive" aria-labelledby="arquivo-entidades">

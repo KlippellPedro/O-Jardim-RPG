@@ -402,9 +402,92 @@ def _validate_rules_content(entry_type: str, data: dict, base: dict) -> None:
     _validate_narrative_fields(data, editable)
 
 
-def _require_editable_world_type(entry_type):
-    if entry_type in {"entidade", "faccao"}:
+def _require_editable_world_type(entry_type, *, allow_new_entity: bool = False):
+    """Facções e as Entidades oficiais ficam nos arquivos. Só o editor global
+    aceita Entidade, e só uma nova (sem base oficial): ver _validate_entity_content."""
+    if entry_type == "faccao" or (entry_type == "entidade" and not allow_new_entity):
         raise HTTPException(status_code=422, detail="este catálogo é mantido nos arquivos oficiais")
+
+
+_ENTITY_RANKS = frozenset({"azul", "verde", "laranja", "vermelho", "preto"})
+_ENTITY_CLASSIFICATIONS = frozenset({"pacifico", "agressivo", "neutro", "negociador", "propria"})
+_ENTITY_FIELDS = frozenset({
+    "id", "nome", "registroUniversal", "epiteto", "epigrafe", "resumo",
+    "rankPerigo", "classificacao", "tema", "conto", "revelado",
+})
+_ENTITY_THEME_REQUIRED = ("destaque", "destaqueSuave", "fundo", "superficie", "texto", "textoSuave")
+_ENTITY_THEME_FIELDS = frozenset({*_ENTITY_THEME_REQUIRED, "destaqueSecundario"})
+_ENTITY_COLOR = re.compile(
+    r"^(#[0-9a-fA-F]{3,8}|rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*(0|1|0?\.\d+)\s*)?\))$"
+)
+
+
+def _validate_entity_content(resource_key: str, data: dict) -> None:
+    """Conto de Entidade criado no Painel do Criador.
+
+    Aceita só o que a página do Livro das Entidades sabe mostrar, sem imagem,
+    música ou moldura (esses continuam exclusivos das Entidades oficiais, que
+    dependem de arquivos em public/).
+    """
+    def fail(message: str):
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=message)
+
+    def text(field: str, limit: int, *, required: bool = False) -> None:
+        value = data.get(field)
+        if value is None and not required:
+            return
+        if not isinstance(value, str) or not value.strip() or len(value) > limit:
+            fail(f"o campo {field} do conto precisa ser um texto de até {limit} caracteres")
+
+    unknown = sorted(set(data) - _ENTITY_FIELDS)
+    if unknown:
+        fail(f"o conto não aceita o campo {unknown[0]}")
+    if data.get("id") != resource_key:
+        fail("o id do conto precisa ser igual ao da entrada")
+    text("nome", 120, required=True)
+    text("epiteto", 160)
+    text("epigrafe", 400)
+    text("resumo", 600)
+    if data.get("registroUniversal", True) is not True:
+        fail("toda Entidade é um registro universal")
+    if "revelado" in data and not isinstance(data["revelado"], bool):
+        fail("revelado precisa ser verdadeiro ou falso")
+    if data.get("rankPerigo") not in _ENTITY_RANKS:
+        fail("escolha um rank de perigo válido")
+    classification = data.get("classificacao")
+    if (
+        not isinstance(classification, list)
+        or not classification
+        or len(set(classification)) != len(classification)
+        or any(item not in _ENTITY_CLASSIFICATIONS for item in classification)
+    ):
+        fail("escolha ao menos uma classificação válida, sem repetir")
+    theme = data.get("tema")
+    if not isinstance(theme, dict) or set(theme) - _ENTITY_THEME_FIELDS:
+        fail("o tema do conto só aceita cores")
+    for field in _ENTITY_THEME_REQUIRED:
+        if not isinstance(theme.get(field), str) or not _ENTITY_COLOR.match(theme[field]):
+            fail(f"a cor {field} do tema é inválida")
+    if "destaqueSecundario" in theme and (
+        not isinstance(theme["destaqueSecundario"], str) or not _ENTITY_COLOR.match(theme["destaqueSecundario"])
+    ):
+        fail("a cor destaqueSecundario do tema é inválida")
+    sections = data.get("conto")
+    if not isinstance(sections, list) or not 1 <= len(sections) <= 30:
+        fail("o conto precisa ter de 1 a 30 partes")
+    for section in sections:
+        if not isinstance(section, dict) or set(section) - {"titulo", "paragrafos"}:
+            fail("cada parte do conto tem só título e parágrafos")
+        title = section.get("titulo")
+        if title is not None and (not isinstance(title, str) or not title.strip() or len(title) > 160):
+            fail("o título de uma parte do conto precisa ter até 160 caracteres")
+        paragraphs = section.get("paragrafos")
+        if (
+            not isinstance(paragraphs, list)
+            or not 1 <= len(paragraphs) <= 200
+            or any(not isinstance(item, str) or not item.strip() or len(item) > 5000 for item in paragraphs)
+        ):
+            fail("cada parte do conto precisa de parágrafos com texto, de até 5000 caracteres")
 
 
 def _validate_editorial_content(module: str, entry_type: str, data: dict, base: dict) -> None:
@@ -426,6 +509,8 @@ def _validate_custom_world_entry(entry_type: str, resource_key: str, data: dict)
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="a nova entrada de Mundo está incompleta",
         )
+    if entry_type == "entidade":
+        _validate_entity_content(resource_key, data)
 
 
 def _is_editorial_document(value: object) -> bool:
@@ -1211,7 +1296,10 @@ def _global_editor_entries(connection) -> list[dict]:
                 ),
             }
         )
-    entries = [entry for entry in entries if entry["tipo"] not in {"entidade", "faccao"}]
+    entries = [
+        entry for entry in entries
+        if entry["tipo"] != "faccao" and not (entry["tipo"] == "entidade" and entry["chave"] in official_keys)
+    ]
     entries.sort(key=lambda item: (item["tipo"], item["titulo"].casefold(), item["chave"]))
     return entries
 
@@ -1239,8 +1327,8 @@ def save_global_editorial_draft(
     source_composite_key = payload.chave_origem or composite_key
     source_type, separator, source_resource_key = source_composite_key.partition(":")
     if getattr(payload, "modulo", "mundo") == "mundo":
-        _require_editable_world_type(source_type)
-        _require_editable_world_type(payload.tipo)
+        _require_editable_world_type(source_type, allow_new_entity=True)
+        _require_editable_world_type(payload.tipo, allow_new_entity=True)
     if (
         not separator
         or not source_type
@@ -1257,6 +1345,11 @@ def save_global_editorial_draft(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="a cronologia não pode ser movida para outra categoria",
         )
+    if moving_category and "entidade" in {source_type, payload.tipo}:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="uma Entidade não pode virar outra categoria, nem o contrário",
+        )
     document = {
         "tipo": payload.tipo,
         "id": payload.chave_recurso,
@@ -1267,6 +1360,11 @@ def save_global_editorial_draft(
         base = _editorial_library_entry(
             connection, "mundo", source_type, source_resource_key
         )
+        if base and payload.tipo == "entidade":
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="as Entidades oficiais ficam nos arquivos; publique o conto como uma Entidade nova",
+            )
         if moving_category and _editorial_library_entry(
             connection, "mundo", payload.tipo, payload.chave_recurso
         ):
@@ -1763,7 +1861,15 @@ def resolved_content(
         entries.append(resolved)
     if modulo == "mundo":
         entries.extend(
-            {**document, "chave_origem": composite_key}
+            {
+                **document,
+                "chave_origem": composite_key,
+                **(
+                    {"registro_universal": document["conteudo"].get("registroUniversal", True) is True}
+                    if document.get("tipo") == "entidade"
+                    else {}
+                ),
+            }
             for composite_key, document in override_by_key.items()
             if (
                 composite_key not in official_keys

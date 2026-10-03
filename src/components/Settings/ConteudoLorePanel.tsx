@@ -78,7 +78,7 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
     setErro(null);
     try {
       const resposta = await conteudoEditorialApi.listarMundoGlobal(signal);
-      const loreEntries = (resposta.entradas || []).filter((entry) => entry.tipo !== 'cronologia');
+      const loreEntries = (resposta.entradas || []).filter((entry) => entry.tipo !== 'cronologia' && entry.tipo !== 'entidade');
       setEntradas(loreEntries);
       const alvo = preferredKey && loreEntries.find((entry) => entry.chave === preferredKey);
       setTiposAbertos((atuais) => {

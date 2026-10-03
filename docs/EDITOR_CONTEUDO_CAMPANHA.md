@@ -10,6 +10,7 @@ pertencendo à campanha selecionada.
 | --- | --- | --- |
 | Lore / Conteúdo do Mundo | Global: vale para todas as campanhas | Somente o Criador |
 | Cronologia | Global: vale para todas as campanhas | Somente o Criador |
+| Entidades novas (Livro das Entidades) | Global: vale para todas as campanhas | Somente o Criador |
 | Loja | Campanha selecionada | Criador responsável pela campanha |
 | Regras narrativas | Campanha selecionada | Criador responsável pela campanha |
 | Visibilidade e liberações | Campanha selecionada | Criador/Mestre conforme a permissão da tela |
@@ -168,6 +169,8 @@ concorrente retorna HTTP 409 e nunca deve ser sobrescrito silenciosamente.
 | `src/components/Settings/ConteudoMestrePanel.tsx` | Abas e exportação conforme o escopo. |
 | `src/components/Settings/ConteudoLorePanel.tsx` | CRUD global de Lore e movimentação de categorias. |
 | `src/components/Settings/CronologiaPanel.tsx` | Editor global da ficha narrativa das Árvores e de suas cronologias. |
+| `src/components/Settings/ConteudoEntidadesPanel.tsx` | Entidades novas do Livro das Entidades (formulário e conto). |
+| `src/services/entidadesEditorService.ts` | Conversões do formulário de Entidade para o documento do conto. |
 | `src/components/Settings/CatalogoLojaPanel.tsx` | Editor da Loja por campanha. |
 | `src/components/Settings/RegrasEditorPanel.tsx` | Editor narrativo de Regras por campanha. |
 | `src/services/conteudoEditorialApi.ts` | Contratos HTTP globais e por campanha. |
@@ -221,8 +224,18 @@ editorial e nunca deve ir para `public/` ou ser servido como asset.
 
 Verificações adicionais: `npm run test:security` e `npm run check:server-content`.
 
-Contos e facções continuam mantidos nas fontes oficiais, sem novos campos
-editáveis no painel. A listagem de facções vem do Mundo autorizado; as regras
+Facções e as Entidades oficiais continuam mantidas nas fontes oficiais, sem
+campos editáveis no painel. A exceção é a **Entidade nova**: a aba Entidades
+do Painel do Criador publica um conto que não existe em
+`data/mundo/entidades.ts` (é o caminho do Escritor de Contos no nível 20). Ela
+usa o mesmo editor global (`tipo: "entidade"`, rascunho, publicação, exclusão e
+restauração) e chega ao Livro de todas as campanhas como registro universal.
+O servidor recusa editar uma Entidade oficial, mudar uma Entidade de categoria
+e qualquer campo fora do que a página do conto mostra: nada de imagem, música
+ou moldura, que dependem de arquivos em `public/`
+(`_validate_entity_content` em `plataforma/routers/content.py`). A
+visibilidade da campanha (Contos das Entidades e Registros Universais) vale
+para ela como para as oficiais. A listagem de facções vem do Mundo autorizado; as regras
 conservam as mecânicas de Prestígio e Fama e remetem a essa listagem.
 Os endpoints legados de conhecimento, conteúdo visível e busca também consultam
 a resolução atual para referências editoriais. Conhecimento avulso conserva
