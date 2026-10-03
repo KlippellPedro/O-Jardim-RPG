@@ -1,6 +1,7 @@
 import { aplicarAjustesAtributosRaciais } from './calculoService';
-import { RACAS_CATALOGO, UNICOS_JARDIM_CATALOGO } from './catalogoService';
-import { opcoesHabilidadeSelecionadas } from './progressaoFichaService';
+import { PERICIAS_CATALOGO, RACAS_CATALOGO, UNICOS_JARDIM_CATALOGO } from './catalogoService';
+import { nivelTotalFicha, opcoesHabilidadeSelecionadas } from './progressaoFichaService';
+import { CONJUNTOS_EQUIPAMENTO, type IBonusConjunto, type IConjuntoEquipamento } from '../../data/regras/conjuntos';
 import { resumirLimiteItensEspeciais } from './itensEspeciaisService';
 import { efeitosBrutosDoFrutoEden } from './frutoEdenAwakening';
 
@@ -25,6 +26,10 @@ export interface IResumoEquipamento {
   vantagens: Record<string, number>;
   desvantagens: Record<string, number>;
   efeitosAtivos: IEfeitoEquipamentoAtivo[];
+  /** Itens equipados que têm formas: a forma de agora e a próxima. */
+  formas: IFormaAtivaItem[];
+  /** Conjuntos com pelo menos uma peça equipada, com o que já vale e o que falta. */
+  conjuntos: IProgressoConjunto[];
 }
 
 export type TCategoriaEfeitoEquipamento = 'atributo' | 'recurso' | 'combate' | 'pericia';
@@ -55,6 +60,29 @@ export interface IModificacaoEquipamento {
   efeito: string;
   tipo: 'comum' | 'especial';
   efeitos: IEfeitoEquipamento[];
+}
+
+/** Uma forma de item: o que ele é e faz a partir de certo nível total do dono. */
+export interface IFormaItem {
+  nivel: number;
+  titulo: string;
+  descricao: string;
+  efeitos: IEfeitoEquipamento[];
+}
+
+export interface IFormaAtivaItem {
+  itemId: string;
+  itemNome: string;
+  atual: IFormaItem;
+  proxima?: IFormaItem;
+}
+
+export interface IProgressoConjunto {
+  conjunto: IConjuntoEquipamento;
+  /** Ids do catálogo das peças equipadas, sem repetição. */
+  equipadas: string[];
+  ativos: IBonusConjunto[];
+  proximo?: IBonusConjunto;
 }
 
 export const EFEITOS_FICHA_MAXIMOS = 5;
@@ -106,6 +134,96 @@ export function normalizarEfeitosEquipamento(valor: unknown): IEfeitoEquipamento
       valor: valorNumerico,
     }];
   });
+}
+
+/**
+ * Formas de um item (`formas` no catálogo): da menor para a maior por nível
+ * total do dono. A forma de agora é a de maior nível que o dono já alcançou, e
+ * ela SUBSTITUI a anterior em vez de somar com ela. Item sem `formas` não tem
+ * nada a normalizar.
+ */
+export function normalizarFormasItem(valor: unknown): IFormaItem[] {
+  if (!Array.isArray(valor)) return [];
+  return valor
+    .flatMap((forma: any) => {
+      const nivel = Math.trunc(Number(forma?.nivel));
+      if (!Number.isFinite(nivel) || nivel < 1) return [];
+      return [{
+        nivel,
+        titulo: String(forma?.titulo || '').trim(),
+        descricao: String(forma?.descricao || '').trim(),
+        efeitos: normalizarEfeitosEquipamento(forma?.efeitos).map((efeito, indice) => ({
+          ...efeito,
+          id: efeito.id === `efeito-${indice}` ? `forma-${nivel}-${indice}` : efeito.id,
+        })),
+      }];
+    })
+    .sort((a, b) => a.nivel - b.nivel);
+}
+
+export function formaAtualDoItem(
+  formas: readonly IFormaItem[],
+  nivelTotal: number,
+): { atual?: IFormaItem; proxima?: IFormaItem } {
+  const nivel = Math.max(1, Math.trunc(Number(nivelTotal) || 1));
+  const alcancadas = formas.filter((forma) => forma.nivel <= nivel);
+  return {
+    atual: alcancadas[alcancadas.length - 1],
+    proxima: formas.find((forma) => forma.nivel > nivel),
+  };
+}
+
+/** O id do catálogo de um item do inventário, sem o sufixo de raridade. */
+export function idCatalogoDoItem(item: any): string {
+  return String(item?.dados?.catalogo_item_id || item?.item_id || '').split('::')[0];
+}
+
+/**
+ * Quais bônus de cada conjunto estão valendo para as peças equipadas. Os bônus
+ * são cumulativos e uma peça repetida conta uma vez.
+ */
+export function progressoDosConjuntos(idsEquipados: Iterable<string>): IProgressoConjunto[] {
+  const equipados = new Set(idsEquipados);
+  return CONJUNTOS_EQUIPAMENTO.flatMap((conjunto) => {
+    const equipadas = conjunto.pecas.map((peca) => peca.id).filter((id) => equipados.has(id));
+    if (equipadas.length === 0) return [];
+    const ordenados = [...conjunto.bonus].sort((a, b) => a.pecas - b.pecas);
+    return [{
+      conjunto,
+      equipadas,
+      ativos: ordenados.filter((bonus) => bonus.pecas <= equipadas.length),
+      proximo: ordenados.find((bonus) => bonus.pecas > equipadas.length),
+    }];
+  });
+}
+
+const ROTULOS_ATRIBUTO: Record<string, string> = {
+  forca: 'Força', destreza: 'Destreza', constituicao: 'Constituição', inteligencia: 'Inteligência',
+  sabedoria: 'Sabedoria', carisma: 'Carisma', fluxo: 'Fluxo',
+};
+const ROTULOS_RECURSO: Record<string, string> = {
+  vidaMaxima: 'Vida máxima', manaMaxima: 'Mana máxima', estaminaMaxima: 'Estamina máxima',
+  sanidadeMaxima: 'Sanidade máxima', cansacoMaximo: 'Cansaço máximo',
+};
+const ROTULOS_COMBATE: Record<string, string> = {
+  defesa: 'Defesa', iniciativa: 'Iniciativa', movimento: 'Movimento', ataque: 'Ataques',
+  dano: 'Dano', margemAmeaca: 'Margem de Ameaça', multiplicadorCritico: 'Multiplicador Crítico',
+};
+
+/** "+1 em Fortitude", "−10 de Sanidade máxima", "vantagem em Percepção": o efeito como o jogador lê. */
+export function rotuloEfeitoEquipamento(efeito: Pick<IEfeitoEquipamento, 'categoria' | 'alvo' | 'modo' | 'valor'>): string {
+  const alvo = efeito.categoria === 'atributo' ? ROTULOS_ATRIBUTO[efeito.alvo]
+    : efeito.categoria === 'recurso' ? ROTULOS_RECURSO[efeito.alvo]
+      : efeito.categoria === 'combate' ? ROTULOS_COMBATE[efeito.alvo]
+        : PERICIAS_CATALOGO.find((pericia) => pericia.id === efeito.alvo)?.titulo;
+  const nome = alvo ?? efeito.alvo;
+  if (efeito.modo === 'vantagem') return `vantagem em ${nome}`;
+  if (efeito.modo === 'desvantagem') return `desvantagem em ${nome}`;
+  const numero = Math.abs(efeito.valor).toLocaleString('pt-BR');
+  const sinal = efeito.valor < 0 ? '−' : '+';
+  if (efeito.categoria === 'recurso') return `${sinal}${numero} de ${nome}`;
+  if (efeito.categoria === 'combate' && efeito.alvo === 'movimento') return `${sinal}${numero} m de ${nome}`;
+  return `${sinal}${numero} em ${nome}`;
 }
 
 export function normalizarEfeitosFicha(valor: unknown): IEfeitoEquipamento[] {
@@ -239,6 +357,30 @@ export function resumirEquipamentos(
       }));
   });
 
+  // Formas que despertam com o dono: só a forma de agora vale, e só equipado.
+  const nivelDoDono = Math.max(1, nivelTotalFicha(ficha));
+  const formas: IFormaAtivaItem[] = [];
+  equipados.forEach((item) => {
+    const lista = normalizarFormasItem(item?.dados?.formas);
+    if (lista.length === 0) return;
+    const { atual, proxima } = formaAtualDoItem(lista, nivelDoDono);
+    const itemId = String(item?.item_id || '');
+    const itemNome = String(item?.titulo || 'Item');
+    if (!atual) return;
+    formas.push({ itemId, itemNome, atual, proxima });
+    adicionarEfeitos(atual.efeitos, { itemId, itemNome, origem: `Forma: ${atual.titulo || `nível ${atual.nivel}`}` });
+  });
+
+  // Conjuntos: bônus de coleção das peças equipadas.
+  const conjuntos = progressoDosConjuntos(equipados.map(idCatalogoDoItem));
+  conjuntos.forEach(({ conjunto, equipadas, ativos }) => {
+    ativos.forEach((bonus) => adicionarEfeitos(bonus.efeitos, {
+      itemId: `conjunto:${conjunto.id}`,
+      itemNome: conjunto.titulo,
+      origem: `${bonus.pecas} peças (${equipadas.length} de ${conjunto.pecas.length} em uso)`,
+    }));
+  });
+
   const efeitosFruto = efeitosBrutosDoFrutoEden(ficha);
   const fontesDaFicha = [
     { itens: ficha?.poderes, rotulo: 'Poder' },
@@ -335,6 +477,8 @@ export function resumirEquipamentos(
     vantagens,
     desvantagens,
     efeitosAtivos,
+    formas,
+    conjuntos,
   };
 }
 

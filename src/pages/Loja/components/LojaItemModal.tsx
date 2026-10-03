@@ -12,6 +12,8 @@ import { itemLojaContaComoEspecial, resumirLimiteItensEspeciais } from '../../..
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 import { temModeloFruto } from '../../../services/frutoEdenModelo';
 import { FrutoEdenDetalhes } from './FrutoEdenDetalhes';
+import { FormasEConjunto } from './FormasEConjunto';
+import { nivelTotalFicha } from '../../../services/progressaoFichaService';
 import { vidaDeAliado } from '../../../services/curvaCriatura';
 
 const FrutoEdenViewer = lazy(() => import('../../../components/FrutoEdenViewer'));
@@ -633,6 +635,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
           )}
 
           {renderDetails()}
+          <FormasEConjunto dados={dadosBrutos} itemId={item.id} nivelDoComprador={compradorAtivo?.ficha ? nivelTotalFicha(compradorAtivo.ficha) : 0} />
         </div>
 
         {dadosBrutos.efeito && !ehFrutoEden && (

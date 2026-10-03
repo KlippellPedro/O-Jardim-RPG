@@ -25060,6 +25060,346 @@
       }
     },
     {
+      "tipo": "equipamento",
+      "id": "equipamento-capa-de-caminhante",
+      "titulo": "Capa de Caminhante",
+      "conteudo": {
+        "descricao": "Lã grossa, costura dupla e cheiro de fogueira que nunca sai. Já viu mais chuva do que o dono. Em uso, dá +1 em Fortitude. Peça do Conjunto do Caminhante.",
+        "preco": {
+          "Lunaris": 80
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Equipamento",
+          "Conjunto: Caminhante"
+        ],
+        "conjunto": "caminhante",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Capa de Caminhante",
+            "descricao": "Lã grossa, costura dupla e cheiro de fogueira que nunca sai. Já viu mais chuva do que o dono.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "fortitude",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "equipamento-botas-de-longa-marcha",
+      "titulo": "Botas de Longa Marcha",
+      "conteudo": {
+        "descricao": "Solado remendado tantas vezes que ninguém sabe qual era o original. Os pés agradecem no fim do dia. Em uso, dá +1 em Atletismo. Peça do Conjunto do Caminhante.",
+        "preco": {
+          "Lunaris": 90
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Equipamento",
+          "Conjunto: Caminhante"
+        ],
+        "conjunto": "caminhante",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Botas de Longa Marcha",
+            "descricao": "Solado remendado tantas vezes que ninguém sabe qual era o original. Os pés agradecem no fim do dia.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "atletismo",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "equipamento-cinto-de-alforjes",
+      "titulo": "Cinto de Alforjes",
+      "conteudo": {
+        "descricao": "Um cinto largo cheio de bolsinhos. Tem lugar para corda, faca, pederneira e o resto do almoço. Em uso, dá +1 em Sobrevivência. Peça do Conjunto do Caminhante.",
+        "preco": {
+          "Lunaris": 85
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Equipamento",
+          "Conjunto: Caminhante"
+        ],
+        "conjunto": "caminhante",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Cinto de Alforjes",
+            "descricao": "Um cinto largo cheio de bolsinhos. Tem lugar para corda, faca, pederneira e o resto do almoço.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "sobrevivencia",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "equipamento-lentes-de-leitura",
+      "titulo": "Lentes de Leitura",
+      "conteudo": {
+        "descricao": "Duas lentes grossas num aro de latão. Deixam a letra miúda grande o bastante para ler à luz de vela. Em uso, dá +1 em Investigação. Peça do Conjunto do Estudioso.",
+        "preco": {
+          "Lunaris": 95
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Equipamento",
+          "Conjunto: Estudioso"
+        ],
+        "conjunto": "estudioso",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Lentes de Leitura",
+            "descricao": "Duas lentes grossas num aro de latão. Deixam a letra miúda grande o bastante para ler à luz de vela.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "investigacao",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "equipamento-tinteiro-de-viagem",
+      "titulo": "Tinteiro de Viagem",
+      "conteudo": {
+        "descricao": "Vidro fosco, rolha de cera e uma tinta que não seca na bolsa. Sempre sobra uma pena. Em uso, dá +1 em Conhecimento. Peça do Conjunto do Estudioso.",
+        "preco": {
+          "Lunaris": 80
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Equipamento",
+          "Conjunto: Estudioso"
+        ],
+        "conjunto": "estudioso",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Tinteiro de Viagem",
+            "descricao": "Vidro fosco, rolha de cera e uma tinta que não seca na bolsa. Sempre sobra uma pena.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "conhecimento",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "equipamento-livro-de-bolso-anotado",
+      "titulo": "Livro de Bolso Anotado",
+      "conteudo": {
+        "descricao": "Cada margem tem a letra de alguém. Ninguém sabe quem começou. Em uso, dá +1 em Misticismo. Peça do Conjunto do Estudioso.",
+        "preco": {
+          "Lunaris": 90
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Equipamento",
+          "Conjunto: Estudioso"
+        ],
+        "conjunto": "estudioso",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Livro de Bolso Anotado",
+            "descricao": "Cada margem tem a letra de alguém. Ninguém sabe quem começou.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "misticismo",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "equipamento-apito-de-sentinela",
+      "titulo": "Apito de Sentinela",
+      "conteudo": {
+        "descricao": "Aço fino que se ouve do outro lado do vale. Quando ele toca, a guarda inteira acorda. Em uso, dá +1 em Percepção. Peça do Conjunto do Sentinela.",
+        "preco": {
+          "Lunaris": 70
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Equipamento",
+          "Conjunto: Sentinela"
+        ],
+        "conjunto": "sentinela",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Apito de Sentinela",
+            "descricao": "Aço fino que se ouve do outro lado do vale. Quando ele toca, a guarda inteira acorda.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "percepcao",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "equipamento-manto-de-vigilia",
+      "titulo": "Manto de Vigília",
+      "conteudo": {
+        "descricao": "Lã escura e grossa, feita para passar a noite em cima do muro sem ser visto e sem passar frio. Em uso, dá +1 em Furtividade. Peça do Conjunto do Sentinela.",
+        "preco": {
+          "Lunaris": 100
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Equipamento",
+          "Conjunto: Sentinela"
+        ],
+        "conjunto": "sentinela",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Manto de Vigília",
+            "descricao": "Lã escura e grossa, feita para passar a noite em cima do muro sem ser visto e sem passar frio.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "furtividade",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "equipamento-luvas-de-ronda",
+      "titulo": "Luvas de Ronda",
+      "conteudo": {
+        "descricao": "Couro macio nas pontas, forrado de pelo. Com os dedos quentes, a mão responde rápido. Em uso, dá +1 em Reflexos. Peça do Conjunto do Sentinela.",
+        "preco": {
+          "Lunaris": 85
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Equipamento",
+          "Conjunto: Sentinela"
+        ],
+        "conjunto": "sentinela",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Luvas de Ronda",
+            "descricao": "Couro macio nas pontas, forrado de pelo. Com os dedos quentes, a mão responde rápido.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "reflexos",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "equipamento-bracadeira-de-ronda",
+      "titulo": "Braçadeira de Ronda",
+      "conteudo": {
+        "descricao": "Uma faixa de pano com o símbolo da guarda. Ninguém discute com quem a veste. Em uso, dá +1 em Intuição. Peça do Conjunto do Sentinela.",
+        "preco": {
+          "Lunaris": 75
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Equipamento",
+          "Conjunto: Sentinela"
+        ],
+        "conjunto": "sentinela",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Braçadeira de Ronda",
+            "descricao": "Uma faixa de pano com o símbolo da guarda. Ninguém discute com quem a veste.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "intuicao",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
       "tipo": "arma",
       "id": "reliquia-arco-hou-yi",
       "titulo": "Arco de Hou Yi",
@@ -27620,7 +27960,7 @@
       "id": "consumivel-torta-conserva-casa",
       "titulo": "Torta de Conserva da Casa",
       "conteudo": {
-        "descricao": "Recheada com a receita de alguém que gostava de você. A primeira garfada dá uma sensação rara, a de estar em casa. Recupere 1d6 de Sanidade. Comer mais de uma entre dois Descansos completos não adianta.",
+        "descricao": "Recheada com a receita de alguém que gostava de você. A primeira garfada tem gosto de casa. Recupere 1d6 de Sanidade. Comer mais de uma entre dois Descansos completos não adianta.",
         "preco": {
           "Lunaris": 28
         },
@@ -27644,7 +27984,7 @@
       "id": "consumivel-cha-casca-amarga",
       "titulo": "Chá de Casca-Amarga",
       "conteudo": {
-        "descricao": "Tão amargo que o rosto franze sozinho, mas acorda até o que estava dormindo por dentro. Por 4 horas, você tem +2 em Percepção.",
+        "descricao": "Amargo de franzir o rosto, mas espanta o sono na hora. Por 4 horas, você tem +2 em Percepção.",
         "preco": {
           "Lunaris": 25
         },
@@ -27695,7 +28035,7 @@
       "id": "consumivel-cerveja-coragem",
       "titulo": "Cerveja de Coragem",
       "conteudo": {
-        "descricao": "Espuma grossa e gosto de pão queimado. O medo fica longe, e a pressa também. Por 1 hora, você tem vantagem em Vontade contra medo, mas sofre -2 de Iniciativa.",
+        "descricao": "Espuma grossa e gosto de pão queimado. Dá coragem e deixa a pessoa mais lenta para reagir. Por 1 hora, você tem vantagem em Vontade contra medo, mas sofre -2 de Iniciativa.",
         "preco": {
           "Lunaris": 6
         },
@@ -29963,6 +30303,503 @@
         "ativacao": "Ação Padrão",
         "frequencia": "1/dia",
         "efeito": "Produz comida e água para 10 pessoas por um dia, ou um item comum de até 1 espaço"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-anel-do-herdeiro",
+      "titulo": "Anel do Herdeiro",
+      "conteudo": {
+        "descricao": "Um aro liso de metal escuro, sem pedra nem inscrição. Quem o usa por muito tempo começa a lembrar do que os donos anteriores aprenderam a aguentar. Formas, pelo nível total do dono: nível 1, Aro Liso (+1 em Vontade); nível 15, Aro Lembrado (+2 em Vontade e +5 de Sanidade máxima); nível 30, Aro Herdado (+3 em Vontade e +5 de Sanidade máxima).",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Artefato",
+          "Mágico",
+          "Desperta com o dono"
+        ],
+        "subtipo": "magico",
+        "ativacao": "Passivo, enquanto equipado",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Aro Liso",
+            "descricao": "Um aro de metal escuro, sem nada a dizer.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "vontade",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          },
+          {
+            "nivel": 15,
+            "titulo": "Aro Lembrado",
+            "descricao": "O metal esquenta quando o dono hesita, como quem aconselha.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "vontade",
+                "modo": "bonus",
+                "valor": 2
+              },
+              {
+                "categoria": "recurso",
+                "alvo": "sanidadeMaxima",
+                "modo": "bonus",
+                "valor": 5
+              }
+            ]
+          },
+          {
+            "nivel": 30,
+            "titulo": "Aro Herdado",
+            "descricao": "O dono já reconhece as lembranças que não são dele, e elas ajudam.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "vontade",
+                "modo": "bonus",
+                "valor": 3
+              },
+              {
+                "categoria": "recurso",
+                "alvo": "sanidadeMaxima",
+                "modo": "bonus",
+                "valor": 5
+              }
+            ]
+          }
+        ],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-manto-do-andarilho",
+      "titulo": "Manto do Andarilho",
+      "conteudo": {
+        "descricao": "Uma capa de viagem que parece comum. Quanto mais o dono anda com ela, mais ela parece saber o caminho. Formas, pelo nível total do dono: nível 1, Capa de Viagem (+1 em Sobrevivência); nível 12, Manto de Estrada Longa (+2 em Sobrevivência e +1,5 m de Movimento); nível 25, Manto do Andarilho (+3 em Sobrevivência e +3 m de Movimento).",
+        "preco": {
+          "Solares": 28
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Artefato",
+          "Mágico",
+          "Desperta com o dono"
+        ],
+        "subtipo": "magico",
+        "ativacao": "Passivo, enquanto equipado",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Capa de Viagem",
+            "descricao": "Lã comum, remendada, que aquece mais do que devia.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "sobrevivencia",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          },
+          {
+            "nivel": 12,
+            "titulo": "Manto de Estrada Longa",
+            "descricao": "A barra acumula poeira de lugares que o dono nem lembra.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "sobrevivencia",
+                "modo": "bonus",
+                "valor": 2
+              },
+              {
+                "categoria": "combate",
+                "alvo": "movimento",
+                "modo": "bonus",
+                "valor": 1.5
+              }
+            ]
+          },
+          {
+            "nivel": 25,
+            "titulo": "Manto do Andarilho",
+            "descricao": "Quem o veste sente a trilha antes de vê-la.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "sobrevivencia",
+                "modo": "bonus",
+                "valor": 3
+              },
+              {
+                "categoria": "combate",
+                "alvo": "movimento",
+                "modo": "bonus",
+                "valor": 3
+              }
+            ]
+          }
+        ],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-diario-que-responde",
+      "titulo": "Diário que Responde",
+      "conteudo": {
+        "descricao": "Um caderno de capa mole. Depois de algumas semanas de uso, passa a completar as anotações com o que o dono ainda não sabia. Formas, pelo nível total do dono: nível 1, Caderno Vazio (+1 em Investigação); nível 10, Caderno Anotado (+2 em Investigação); nível 20, Caderno Curioso (+2 em Investigação e +2 em Conhecimento); nível 35, Diário Completo (+3 em Investigação e +3 em Conhecimento).",
+        "preco": {
+          "Solares": 32
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Artefato",
+          "Mágico",
+          "Desperta com o dono"
+        ],
+        "subtipo": "magico",
+        "ativacao": "Passivo, enquanto equipado",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Caderno Vazio",
+            "descricao": "Páginas em branco. Por enquanto, só guarda o que o dono escreve.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "investigacao",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          },
+          {
+            "nivel": 10,
+            "titulo": "Caderno Anotado",
+            "descricao": "As margens já têm letra que o dono não reconhece como sua.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "investigacao",
+                "modo": "bonus",
+                "valor": 2
+              }
+            ]
+          },
+          {
+            "nivel": 20,
+            "titulo": "Caderno Curioso",
+            "descricao": "Liga uma anotação à outra sem pedir licença.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "investigacao",
+                "modo": "bonus",
+                "valor": 2
+              },
+              {
+                "categoria": "pericia",
+                "alvo": "conhecimento",
+                "modo": "bonus",
+                "valor": 2
+              }
+            ]
+          },
+          {
+            "nivel": 35,
+            "titulo": "Diário Completo",
+            "descricao": "Já responde antes de a pergunta terminar.",
+            "efeitos": [
+              {
+                "categoria": "pericia",
+                "alvo": "investigacao",
+                "modo": "bonus",
+                "valor": 3
+              },
+              {
+                "categoria": "pericia",
+                "alvo": "conhecimento",
+                "modo": "bonus",
+                "valor": 3
+              }
+            ]
+          }
+        ],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-coracao-de-pedra-mansa",
+      "titulo": "Coração de Pedra Mansa",
+      "conteudo": {
+        "descricao": "Um seixo morno do tamanho de um punho, que bate devagar quando ninguém está olhando. Cresce junto com quem o carrega. Formas, pelo nível total do dono: nível 1, Seixo Morno (+5 de Vida máxima); nível 20, Pedra que Respira (+10 de Vida máxima e +1 em Defesa); nível 35, Coração de Pedra (+20 de Vida máxima e +2 em Defesa); nível 50, Coração da Montanha (+30 de Vida máxima e +3 em Defesa).",
+        "preco": {
+          "Solares": 130
+        },
+        "raridade": "lendario",
+        "atributos": [
+          "Artefato",
+          "Mágico",
+          "Desperta com o dono",
+          "Lendário"
+        ],
+        "subtipo": "magico",
+        "ativacao": "Passivo, enquanto equipado",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Seixo Morno",
+            "descricao": "Pequeno e quente, como um animal que dorme.",
+            "efeitos": [
+              {
+                "categoria": "recurso",
+                "alvo": "vidaMaxima",
+                "modo": "bonus",
+                "valor": 5
+              }
+            ]
+          },
+          {
+            "nivel": 20,
+            "titulo": "Pedra que Respira",
+            "descricao": "Já se ouve a batida de longe.",
+            "efeitos": [
+              {
+                "categoria": "recurso",
+                "alvo": "vidaMaxima",
+                "modo": "bonus",
+                "valor": 10
+              },
+              {
+                "categoria": "combate",
+                "alvo": "defesa",
+                "modo": "bonus",
+                "valor": 1
+              }
+            ]
+          },
+          {
+            "nivel": 35,
+            "titulo": "Coração de Pedra",
+            "descricao": "Pesa o que pesaria uma pessoa, e o dono mal sente.",
+            "efeitos": [
+              {
+                "categoria": "recurso",
+                "alvo": "vidaMaxima",
+                "modo": "bonus",
+                "valor": 20
+              },
+              {
+                "categoria": "combate",
+                "alvo": "defesa",
+                "modo": "bonus",
+                "valor": 2
+              }
+            ]
+          },
+          {
+            "nivel": 50,
+            "titulo": "Coração da Montanha",
+            "descricao": "Do tamanho de uma cabeça e pesado como pedra de rio. Só o dono consegue levantar.",
+            "efeitos": [
+              {
+                "categoria": "recurso",
+                "alvo": "vidaMaxima",
+                "modo": "bonus",
+                "valor": 30
+              },
+              {
+                "categoria": "combate",
+                "alvo": "defesa",
+                "modo": "bonus",
+                "valor": 3
+              }
+            ]
+          }
+        ],
+        "requer_autorizacao_mestre": true,
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-anel-da-pressa-emprestada",
+      "titulo": "Anel da Pressa Emprestada",
+      "conteudo": {
+        "descricao": "Um anel fino que faz o mundo parecer devagar. Quem usa chega antes de todo mundo e se cansa antes também. Preço: enquanto o anel estiver no dedo, o Cansaço máximo cai em 1. Tirar o anel devolve o fôlego. Na ficha: +3 em Iniciativa, +3 m de Movimento e −1 de Cansaço máximo.",
+        "preco": {
+          "Solares": 28
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Artefato",
+          "Mágico",
+          "Dilema"
+        ],
+        "subtipo": "magico",
+        "ativacao": "Passivo, enquanto equipado",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Pressa Emprestada",
+            "descricao": "O pulso acelera sozinho e o corpo cobra depois.",
+            "efeitos": [
+              {
+                "categoria": "combate",
+                "alvo": "iniciativa",
+                "modo": "bonus",
+                "valor": 3
+              },
+              {
+                "categoria": "combate",
+                "alvo": "movimento",
+                "modo": "bonus",
+                "valor": 3
+              },
+              {
+                "categoria": "recurso",
+                "alvo": "cansacoMaximo",
+                "modo": "bonus",
+                "valor": -1
+              }
+            ]
+          }
+        ],
+        "dilema": "enquanto o anel estiver no dedo, o Cansaço máximo cai em 1. Tirar o anel devolve o fôlego.",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-colar-de-vida-emprestada",
+      "titulo": "Colar de Vida Emprestada",
+      "conteudo": {
+        "descricao": "Um fio de couro com uma conta de osso polido. Deixa o corpo mais difícil de derrubar e a cabeça mais frágil, e piora com o tempo. Preço: cada forma dá mais Vida máxima e tira mais Sanidade máxima enquanto o colar estiver no pescoço. Sem o colar, as duas voltam ao normal. Formas, pelo nível total do dono: nível 1, Fio Fino (+10 de Vida máxima e −10 de Sanidade máxima); nível 20, Fio Grosso (+20 de Vida máxima e −15 de Sanidade máxima); nível 40, Corrente (+30 de Vida máxima e −20 de Sanidade máxima).",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Artefato",
+          "Mágico",
+          "Dilema",
+          "Desperta com o dono"
+        ],
+        "subtipo": "magico",
+        "ativacao": "Passivo, enquanto equipado",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Fio Fino",
+            "descricao": "A conta esquenta na pele, e a cabeça fica um pouco mais quieta do que devia.",
+            "efeitos": [
+              {
+                "categoria": "recurso",
+                "alvo": "vidaMaxima",
+                "modo": "bonus",
+                "valor": 10
+              },
+              {
+                "categoria": "recurso",
+                "alvo": "sanidadeMaxima",
+                "modo": "bonus",
+                "valor": -10
+              }
+            ]
+          },
+          {
+            "nivel": 20,
+            "titulo": "Fio Grosso",
+            "descricao": "A conta já não esfria. O dono dorme menos e come mais.",
+            "efeitos": [
+              {
+                "categoria": "recurso",
+                "alvo": "vidaMaxima",
+                "modo": "bonus",
+                "valor": 20
+              },
+              {
+                "categoria": "recurso",
+                "alvo": "sanidadeMaxima",
+                "modo": "bonus",
+                "valor": -15
+              }
+            ]
+          },
+          {
+            "nivel": 40,
+            "titulo": "Corrente",
+            "descricao": "O osso ganhou o formato de uma vértebra. Ninguém lembra de ter visto crescer.",
+            "efeitos": [
+              {
+                "categoria": "recurso",
+                "alvo": "vidaMaxima",
+                "modo": "bonus",
+                "valor": 30
+              },
+              {
+                "categoria": "recurso",
+                "alvo": "sanidadeMaxima",
+                "modo": "bonus",
+                "valor": -20
+              }
+            ]
+          }
+        ],
+        "dilema": "cada forma dá mais Vida máxima e tira mais Sanidade máxima enquanto o colar estiver no pescoço. Sem o colar, as duas voltam ao normal.",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-mascara-do-sabio-cego",
+      "titulo": "Máscara do Sábio Cego",
+      "conteudo": {
+        "descricao": "Uma máscara de madeira clara, sem furos para os olhos. Quem a veste entende o que as pessoas escondem e tropeça no que está na frente. Preço: enquanto a máscara estiver no rosto, o dono tem desvantagem em Percepção. Na ficha: +2 em Sabedoria e desvantagem em Percepção.",
+        "preco": {
+          "Lunaris": 700
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Artefato",
+          "Mágico",
+          "Dilema"
+        ],
+        "subtipo": "magico",
+        "ativacao": "Passivo, enquanto equipado",
+        "formas": [
+          {
+            "nivel": 1,
+            "titulo": "Máscara do Sábio Cego",
+            "descricao": "Madeira clara e fria, que cheira a papel velho.",
+            "efeitos": [
+              {
+                "categoria": "atributo",
+                "alvo": "sabedoria",
+                "modo": "bonus",
+                "valor": 2
+              },
+              {
+                "categoria": "pericia",
+                "alvo": "percepcao",
+                "modo": "desvantagem",
+                "valor": 1
+              }
+            ]
+          }
+        ],
+        "dilema": "enquanto a máscara estiver no rosto, o dono tem desvantagem em Percepção.",
+        "nivelMinimoLoja": 3
       }
     },
     {

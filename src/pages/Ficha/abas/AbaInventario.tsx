@@ -46,6 +46,7 @@ import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamento
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 import { SaldoAnimado } from '../components/SaldoAnimado';
 import { BonecoEquipamento } from '../components/BonecoEquipamento';
+import { ResumoFormasEConjuntos } from '../components/ResumoFormasEConjuntos';
 import { GaragemPessoal } from '../components/bens/GaragemPessoal';
 import { VeiculoModal } from '../components/bens/VeiculoModal';
 import { sfx } from '../../../utils/audioSynth';
@@ -804,6 +805,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
             </div>
             <Link to="/regras?topico=raridades-modificacoes" className="inline-flex shrink-0 items-center gap-1.5 text-xs font-bold text-cyan-300 hover:text-cyan-100"><BookOpen size={13} /> Ver regra</Link>
           </div>}
+          {!modoVeiculos && <ResumoFormasEConjuntos resumo={resumoEquipamento} />}
           {!modoVeiculos && feedbackEquipamento ? <p role="alert" className="mt-2 rounded-lg border border-amber-400/20 bg-amber-400/[0.06] px-3 py-2 text-xs text-amber-200">{feedbackEquipamento}</p> : null}
           {!modoVeiculos && resumoEquipamento.sobrecarregado && <p className="mt-2 text-xs font-bold text-red-300">Sobrecarregado: movimento reduzido em 3 m e desvantagem em testes físicos.</p>}
           {!modoVeiculos && resumoEquipamento.conflitos.map((conflito) => <p key={conflito} className="mt-1 text-xs text-amber-300">{conflito}</p>)}
