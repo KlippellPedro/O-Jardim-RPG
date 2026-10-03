@@ -152,6 +152,44 @@ desenvolvimento (painel de progressão, contador de atributos, molduras, cartaz,
 aviso de Conquista e painel de subida). A ficha completa não foi exercitada,
 porque exige API e banco.
 
+## Mesa, troca e convites (2 e 3 de outubro de 2026)
+
+Telas novas desta leva, com o contrato de servidor em
+[Integração](INTEGRACAO.md#loot-das-criaturas):
+
+- **Bestiário da Sessão** ([BestiarioPicker.tsx](../../src/pages/Sessao/components/BestiarioPicker.tsx),
+  [CriaturaDetalhe.tsx](../../src/pages/Sessao/components/CriaturaDetalhe.tsx)): clicar no
+  cartão abre a ficha grande da criatura, os filtros ficaram legíveis e o `Select`
+  é o escuro do site. A ficha mostra o saque ao Mestre.
+- **Saque** ([LootPanel.tsx](../../src/pages/Sessao/components/LootPanel.tsx),
+  [EditorLootCampanha.tsx](../../src/pages/Sessao/components/EditorLootCampanha.tsx)): o
+  Mestre rola, escolhe quem recebe cada linha e, se quiser, ajusta a tabela só
+  na campanha dele. O jogador nunca vê tabela nem chance.
+- **Aflições** ([AflicoesSessaoPanel.tsx](../../src/pages/Sessao/components/AflicoesSessaoPanel.tsx),
+  [AflicoesSection.tsx](../../src/pages/Ficha/components/AflicoesSection.tsx)): o
+  Mestre aplica pelo cartão de quem está em cena; o jogador vê e rola o teste
+  na própria ficha.
+- **Escalar para outro VD** ([EntityEditor.tsx](../../src/pages/Sessao/components/EntityEditor.tsx),
+  `escalarCriatura` em [curvaCriatura.ts](../../src/services/curvaCriatura.ts)): no editor de
+  uma criatura em cena, o Mestre digita o VD e o formulário recebe Vida (mesma proporção
+  em relação à curva), Defesa, Mana, Estamina, iniciativa, ataques (bônus, dano e DTs do
+  texto) e perícias. Só grava ao salvar. Visto no navegador (Aranha Gigante do VD 18 para o 40:
+  Vida 380 para 1000, ataque +21 para +38, DT 15 para 26) e a 375 px sem rolagem lateral.
+- **Mandar e trocar** ([MandarItemModal.tsx](../../src/pages/Ficha/components/MandarItemModal.tsx),
+  [MandarMoedasModal.tsx](../../src/pages/Ficha/components/MandarMoedasModal.tsx),
+  [PropostaTrocaModal.tsx](../../src/pages/Ficha/components/PropostaTrocaModal.tsx),
+  [TrocasPanel.tsx](../../src/pages/Ficha/components/TrocasPanel.tsx)).
+- **Convites** (aba do Painel do Criador,
+  [ConvitesPlataformaPanel.tsx](../../src/components/Settings/ConvitesPlataformaPanel.tsx));
+  o cadastro lê `?convite=` do link.
+
+Verificação: as telas foram exercitadas no navegador contra API e banco
+descartáveis em desktop e em **375 px**. A passada móvel achou e corrigiu cinco
+problemas de layout (rodapé do resumo da troca, linha do editor de saque, rótulo
+de atributo na ficha da criatura, código e link do convite, nota de rodapé do
+saque). Continua valendo o limite da seção abaixo: Chromium emulado, sem Safari
+nem aparelho real.
+
 ## Responsividade e acessibilidade
 
 O fechamento de agosto corrigiu sete problemas reproduzidos:

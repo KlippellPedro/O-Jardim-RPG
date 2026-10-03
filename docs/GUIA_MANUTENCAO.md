@@ -85,6 +85,23 @@ servidor; não deve ser publicado como asset. O build já executa sua geração.
 Os detalhes de rascunho, publicação, snapshots e visibilidade ficam apenas no
 [guia do editor](EDITOR_CONTEUDO_CAMPANHA.md).
 
+### Loja, preços e saque das criaturas
+
+`data/loja/catalogo.json` é o catálogo único (Discord e site). Depois de mexer
+nele:
+
+```powershell
+npm run catalogo:classificar   # onde cada item aparece na Loja
+npm run precos:normalizar      # preços pela escala em data/economia/escala-precos-v1.json
+npm run catalogo:check
+```
+
+O ZIP do Banqueiro carrega esse catálogo, então mudança nele pede reenviar o
+Banqueiro. O saque das criaturas fica em `data/bestiario/loot-criaturas.json`,
+lido **só pelo servidor** (`plataforma/core/loot_criaturas.py`); ele não entra no
+bundle do navegador nem pode ser importado por `src/` fora do editor do Mestre,
+e o ZIP da plataforma precisa levar `dataestiario`.
+
 ## Backend e bots
 
 - `plataforma/main.py`: inicialização da API.
@@ -113,7 +130,14 @@ Para alterações na fronteira de conteúdo público/reservado, rode
 `npm run test:security`. Para backend, execute `python -m pytest -q` no
 ambiente de `plataforma/`; para bots, no ambiente do bot correspondente.
 Casos dependentes de PostgreSQL exigem `TEST_DATABASE_URL` de banco descartável.
-Teste pulado não equivale a teste aprovado.
+Teste pulado não equivale a teste aprovado. Sem banco, só uma parte dos testes
+roda; o fechamento de 2026-10-03 usou um Postgres efêmero em Docker (998 testes da
+plataforma passando). Para subir a API contra esse banco, defina `DATABASE_URL`,
+`APP_ENV=development` e `AUTOMATIC_BACKUP_ENABLED=false`: o `.env` da plataforma
+pode ligar o backup automático, que rodaria a rotação dos backups reais.
+
+Tabela nova no schema precisa entrar em `TABELAS` de `plataforma/core/backup.py`;
+um teste confere que o backup cobre todas as tabelas.
 
 Mudanças apenas em documentação exigem revisão de referências, links e
 coerência de status; não precisam de rebuild da aplicação.

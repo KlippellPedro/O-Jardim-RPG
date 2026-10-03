@@ -29,5 +29,6 @@ npm run dev
 npm run test:frontend
 npm run check:mundo
 npm run check:rules-source
+npm run test:security   # build + fronteira de conteúdo reservado
 npm run build
 ```

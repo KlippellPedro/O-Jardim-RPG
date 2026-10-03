@@ -3,7 +3,7 @@
 API central da futura plataforma web: contas, campanhas, personagens,
 permissões do mestre, vínculo Discord, economia e auditoria.
 
-## O que esta primeira versão entrega
+## O que a API entrega
 
 - cadastro, login e logout com senha Argon2;
 - sessão opaca em cookie `HttpOnly` e proteção CSRF;
@@ -27,7 +27,14 @@ permissões do mestre, vínculo Discord, economia e auditoria.
 - convites listáveis e revogáveis, remoção de membro sem perder fichas;
 - avisos automáticos para quem é afetado por uma mudança de painel;
 - `GET /api/v1/contexto` com todo o estado inicial em uma requisição;
-- migrações incrementais do PostgreSQL.
+- sessão ao vivo com iniciativa, vida em tempo real e mesa (mapa, trilha, votação,
+  relógios, bilhetes), com segredos filtrados no servidor;
+- saque das criaturas rolado e entregue pelo Mestre, ajustável por campanha
+  (`data/bestiario/loot-criaturas.json`, lido só pelo servidor);
+- envio direto e troca com aceite de itens e moedas entre personagens (`/trocas`);
+- convites de plataforma para criar conta, com tela no Painel do Criador;
+- backup lógico do banco, sob demanda e automático;
+- migrações incrementais do PostgreSQL (49 até 3 de outubro de 2026).
 
 O site usa os adaptadores de `src/plataforma` para autenticação, campanhas,
 personagens, conteúdo liberado, Discord e cofre. A campanha selecionada é a
@@ -44,7 +51,7 @@ personagens, conteúdo liberado, Discord e cofre. A campanha selecionada é a
 
 ```env
 CADASTRO=aberto    # qualquer pessoa (padrão fora de produção)
-CADASTRO=convite   # exige código de convite de campanha (padrão em produção)
+CADASTRO=convite   # exige convite de plataforma, gerado no Painel do Criador (padrão em produção)
 CADASTRO=fechado   # só o administrador cria contas
 ```
 
@@ -81,10 +88,11 @@ uvicorn main:app --host 127.0.0.1 --port 8080 --reload
 
 ## Testes
 
-Testes unitários não acessam o banco:
+A suíte usa pytest. Sem banco, os testes que dependem de PostgreSQL são
+pulados (pulado não é aprovado):
 
 ```powershell
-python -m unittest tests.test_unit -v
+.venv\Scripts\python.exe -m pytest tests
 ```
 
 Para validar as migrações, configure `TEST_DATABASE_URL` com um banco
@@ -92,8 +100,15 @@ descartável. O teste cria e apaga somente um schema aleatório. Ele recusa roda
 se `TEST_DATABASE_URL` for igual a `DATABASE_URL`.
 
 ```powershell
-python -m unittest tests.test_database_integration -v
+$env:TEST_DATABASE_URL = "postgresql://...@127.0.0.1:55432/..."
+.venv\Scripts\python.exe -m pytest tests
 ```
+
+Um Postgres efêmero em Docker serve bem (em 3 de outubro, 998 testes aprovados
+contra ele). Para subir a API contra um banco de teste, defina também
+`APP_ENV=development` e `AUTOMATIC_BACKUP_ENABLED=false`, senão a rotina de
+backup automático pode rotacionar backups reais guardados em `backups/`. Toda
+tabela nova precisa entrar em `TABELAS` de `core/backup.py`; há um teste que cobra.
 
 ## Discloud
 

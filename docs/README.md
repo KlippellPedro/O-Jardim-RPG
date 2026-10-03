@@ -15,6 +15,8 @@ reconstruir sua história em vários arquivos.
 | [Bots e sistemas do Discord](sistema/BOTS_DISCORD.md) | Arquitetura aprovada, evolução dos bots, Cofre/roubo e operação do Salão do Banco Lunar. |
 | [Guia de manutenção](GUIA_MANUTENCAO.md) | Onde alterar código/dados, como regenerar arquivos e quais verificações executar. |
 | [Editor de conteúdo](EDITOR_CONTEUDO_CAMPANHA.md) | Conteúdo oficial, publicações globais, campanha, rascunhos e visibilidade. |
+| [Propostas](propostas/) | Propostas de conteúdo aprovadas pelo Pedro e o que ficou aplicado (hoje: [comida por Árvore](propostas/comida-por-arvore.md), aplicada em 2026-10). |
+| [Plano de campanhas e materiais](plano-campanhas-e-materiais.md) e [medições de VD e magia](plano-vd-e-magia-medicoes-2026-09.md) | Planos antigos, hoje com faixa de status no topo dizendo o que já foi feito. |
 
 ## Material para consulta e mesa
 

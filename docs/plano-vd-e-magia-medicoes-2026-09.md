@@ -2,7 +2,7 @@
 
 > Atualização de 2026-09-30: as decisões saíram daqui e foram aplicadas (curva solo com Vida opção B, XP ÷ 5, famílias, e na magia: Fluxo mínimo virou recomendação e a rolagem passou a somar metade do nível). A Parte 2 abaixo mede a regra **antiga** de magia (sem metade do nível), e o resumo do que vale hoje está em `docs/sistema/BALANCEAMENTO.md`.
 
-Só medição e proposta. Nada disso foi aplicado: não mexi em criatura, magia, classe, XP nem regra. Cada bloco termina em decisão sua. Os números saem dos mesmos módulos da ficha (`referenciaBalanceamento.ts`, `progressaoNiveis.ts`) e do catálogo, então se algo mudar dá para refazer.
+Texto original, escrito antes da decisão: só medição e proposta, sem mexer em criatura, magia, classe, XP nem regra. As decisões já foram aplicadas (ver a atualização acima). Cada bloco termina na decisão que o Pedro tomou na época. Os números saem dos mesmos módulos da ficha (`referenciaBalanceamento.ts`, `progressaoNiveis.ts`) e do catálogo, então se algo mudar dá para refazer.
 
 ## Parte 1. Curva do bestiário
 

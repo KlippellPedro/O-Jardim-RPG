@@ -118,14 +118,72 @@ Discloud leva `data/bestiario` junto.
 
 ### Troca de itens entre jogadores
 
-`POST /personagens/{id}/inventario/{item_id}/enviar` move a quantidade para
-outro personagem ativo da campanha (dono da ficha ou Mestre), com
-idempotência em `comandos_economia` e um lançamento `inventario.enviar` em
-cada ponta. O item chega desequipado. Não viajam: Aliado, Base e veículo
-completo (a outra metade mora fora do inventário), item modificado pela
-metade da pilha e item que colidiria com outro diferente de mesmo `item_id`.
-`GET /personagens/{id}/destinos-de-envio` lista só nome e jogador, porque o
-jogador não lê a ficha dos outros.
+As regras de movimento ficam em [troca.py](../../plataforma/core/troca.py)
+(`travar_par`, `mover_item`, `mover_moeda`), usadas por três rotas:
+
+- `POST /personagens/{id}/inventario/{item_id}/enviar` e
+  `POST /personagens/{id}/carteira/enviar` mandam item ou moeda direto para
+  outro personagem ativo da campanha (dono da ficha ou Mestre), com
+  idempotência em `comandos_economia` e lançamento nas duas pontas do extrato.
+- `/trocas` ([trades.py](../../plataforma/routers/trades.py)) é a troca com
+  aceite: a proposta guarda oferta e pedido (itens e moedas) em
+  `propostas_troca` (migração 48) e nada muda de mão até o outro lado aceitar.
+  O aceite trava os dois personagens e move tudo numa transação; se um lado
+  já não tem o que prometeu, nada acontece e a proposta segue aberta. Só quem
+  recebe aceita ou recusa; só quem propôs cancela. Até 10 abertas por
+  personagem.
+
+O item chega desequipado. Não viajam: Aliado, Base e veículo completo (a outra
+metade mora fora do inventário), item modificado pela metade da pilha e item
+que colidiria com outro diferente de mesmo `item_id`. `GET
+/personagens/{id}/destinos-de-envio` lista só nome e jogador, e `GET
+/trocas/itens/{alvo}` mostra só nome e quantidade dos itens do outro: a
+carteira e o resto da ficha continuam fechados.
+
+### Deidades no Bestiário da Sessão
+
+As onze fichas das Deidades vivem em `data/bestiario/deidades-v1.json`, lido só
+por [deidades.py](../../plataforma/core/deidades.py). `GET /sessao/bestiario`
+(que só quem comanda a mesa acessa) acrescenta as fichas ao fim da lista, com
+`categoria: "Deidade"` e ids `deidade-<nome>`; o seletor mostra uma aba
+"Deidades" só quando elas vêm na resposta. Cada ficha entra com os números fora
+do Domínio (VD 500, ou 400 para A.X.I.S) e o Mestre leva ao Domínio com "Escalar para outro VD" (1000, ou 800).
+O arquivo não é importável pelo navegador (a fronteira de conteúdo o barra) e o
+campo Estado cita o que a mesa só descobre pela história. Testes:
+[test_deidades_e_ids.py](../../plataforma/tests/test_deidades_e_ids.py) e
+`test_deidades_so_chegam_ao_mestre_e_entram_na_cena` em test_loot_e_troca.py.
+
+### Ids das criaturas lendárias
+
+A migração 50 levou os ids antigos das 28 criaturas de VD 45 em diante para os
+novos (`dragao-primordial` virou `anzhur`, `leviata` virou `vaelthor` e assim por
+diante; o mapa está em `IDS_ANTIGOS_DAS_CRIATURAS`, em `core/schema.py`) em
+`sessao_participantes`, `loot_campanha`, `inventario_personagem`, cofre,
+publicações do catálogo e ajustes do Mestre no Bestiário do Mundo
+(`campanha_registros_universais`, seção `bestiario`). O Banqueiro migra o `inventario` dele pelo mesmo mapa.
+Quem estava com uma criatura dessas em cena continua com o saque dela.
+
+### Loot ajustado por campanha
+
+`PUT /sessao/bestiario/loot/{monstro_id}?campanha_id=` grava em `loot_campanha`
+(migração 48) uma tabela que vale só naquela campanha; `DELETE` volta para a
+oficial. `tabela_efetiva` em `loot_criaturas.py` decide qual vale na hora de
+mostrar e de rolar. A tabela oficial do arquivo nunca é tocada.
+
+A criatura sob medida (id `sob-medida-<vd>-<papel>-<arquétipo>`) não tem tabela
+no arquivo: `tabela_sob_medida` monta uma com moedas pela faixa de VD, materiais
+à venda da raridade do VD (preferindo os que combinam com o arquétipo) e mais
+linhas quanto mais forte o papel. A semente é o próprio id, então a mesma
+criatura mostra e rola sempre a mesma tabela.
+
+### Aflição pela Sessão
+
+`POST /sessao/{id}/participantes/{pid}/aflicoes` deixa o Mestre aplicar, mudar
+de estágio ou tirar uma aflição da ficha de quem está em cena
+(`ficha.aflicoesAtivas`). O catálogo de aflições mora no site; o servidor só
+guarda id e estágio, e soma o Cansaço que o site contou para os estágios
+atravessados ("Ganhe 1 Cansaço."), respeitando o teto de 6. A ficha do jogador
+faz a mesma soma quando o estágio sobe por teste de intervalo ou exposição.
 
 ### Aflições na ficha
 
@@ -140,8 +198,6 @@ ficha do personagem com a mesma visibilidade das condições.
 Testes: [test_loot_e_troca.py](../../plataforma/tests/test_loot_e_troca.py),
 [lootCriaturas.test.ts](../../tests/frontend/lootCriaturas.test.ts) e
 [aflicoesFicha.test.ts](../../tests/frontend/aflicoesFicha.test.ts).
-
-<a id="veiculos-e-propriedades"></a>
 
 ## Níveis além do 60
 
@@ -198,6 +254,8 @@ regra estão em [Balanceamento](BALANCEAMENTO.md#níveis-além-do-60-2026-09-29)
   ao 50) e [falasSubida.json](../../src/pages/Ficha/components/falasSubida.json).
   Um teste confere que toda frase do painel tem áudio gravado. Regravar exige
   `pip install edge-tts` e internet; o script só gera o que falta.
+
+<a id="veiculos-e-propriedades"></a>
 
 ## Veículos e propriedades
 
@@ -278,6 +336,17 @@ Cobertura:
 [test_engajamento_banco.py](../../plataforma/tests/test_engajamento_banco.py)
 (27 testes contra PostgreSQL descartável, 4 novos para a crônica).
 
+## Convites da plataforma
+
+A aba **Convites** do Painel do Criador (`ConvitesPlataformaPanel`) usa
+`/admin/convites`: gera convite com validade, número de contas e uma nota de
+para quem é (migração 49, coluna `nota`), mostra o código e um link
+`/cadastro?convite=...` uma única vez (depois só existe o hash), lista os
+ativos ou, com `todos=true`, também os usados, vencidos e revogados dos
+últimos 30 dias, e revoga. O convite só cria conta; entrar numa mesa continua
+sendo o convite de campanha que o Mestre gera. A tela de cadastro lê o código
+do link. Testes: [test_convites_plataforma.py](../../plataforma/tests/test_convites_plataforma.py).
+
 <a id="evidencia-de-validacao-e-limites"></a>
 
 ## Evidência de validação e limites
@@ -285,11 +354,13 @@ Cobertura:
 - O relatório E2E de agosto registrou execução com PostgreSQL descartável e
   captura de eventos. Isso supera a limitação dos relatórios intermediários
   que só tinham testes isolados; não comprova cada navegador ou ambiente atual.
-- Na correção de setembro desta tarefa, foram registrados **507 testes do
-  backend aprovados**, **456 subtestes aprovados** e **165 testes pulados** por
-  dependência de PostgreSQL, além de **425 testes de frontend/segurança
-  aprovados** e build aprovado. São resultados daquela execução, não desta
-  reorganização documental.
+- Na correção de setembro foram registrados 507 testes do backend aprovados
+  (165 pulados por falta de PostgreSQL) e 425 de frontend/segurança. Esses
+  números são daquela execução. O fechamento de **3 de outubro de 2026**, com
+  Postgres descartável em Docker, registrou **998 testes da plataforma
+  aprovados** (974 subtestes), **851 testes de frontend** e `npm run
+  test:security` com build e fronteira de conteúdo aprovados (4 de 4), além de
+  1.225 entradas do catálogo carregadas pelo Banqueiro sem erro.
 - A API e o banco de produção não foram revalidados para consolidar estes
   documentos. Testes novos de integração continuam exigindo ambiente de teste.
 
@@ -297,3 +368,8 @@ Para a próxima mudança, executar as verificações do
 [guia de manutenção](../GUIA_MANUTENCAO.md) e as suítes do domínio alterado.
 Pendências de preço e de regra pertencem a [Balanceamento](BALANCEAMENTO.md);
 limitações de navegador, hardware e jornada pertencem a [Frontend](FRONTEND.md).
+
+Limites conhecidos do que foi entregue em outubro: a troca com aceite e o saque foram
+exercitados no navegador (desktop e 375 px) contra banco descartável, não em
+produção; e as migrações 46 a 49 só rodam em produção quando a API sobe com o
+código novo.

@@ -106,6 +106,35 @@ P10 (“ajuda sem teste”) foi retirado pela própria auditoria: o teste já ex
 P14 (avisos fora da fila) foi encerrado pela B2. O plano também registrou falta
 de throttle para DMs como risco de volume, separado da existência do opt-in.
 
+## O que mudou nos bots depois da consolidação
+
+Mudanças registradas no Git depois de 7 de setembro. Os READMEs de cada bot têm
+os comandos; aqui ficam só os fatos que afetam decisões.
+
+- **16/09, reputação e conquistas.** O Banqueiro concede reputação por comando e
+  por mensagem (intervalo guardado em `reputacao_mensagens`) e passou a gravar
+  débito, entrega e extrato na mesma transação em lavanderia, contratos e Mercado
+  Negro. O Jornalista ganhou conquistas com cargos e cooldown de furos.
+- **21/09, avisos por categoria.** A plataforma marca o aviso como `sessao` ou
+  `liberacao` ao enfileirar (`avisos_pendentes.categoria`) e o Jornalista publica
+  no canal definido por `/jornal canal`. Aviso sem categoria continua indo ao
+  canal de dinheiro, sujeito ao interruptor de avisos econômicos.
+- **Barista descontinuado.** Dados e música saíram do conjunto; os três bots
+  vivos são Banqueiro, Jornalista e Gerente.
+- **Catálogo da Loja.** O Banqueiro lê `data/loja/catalogo.json` (1.225 entradas em
+  3 de outubro, todas carregadas sem erro). Mudança no catálogo exige reenviar o
+  ZIP do Banqueiro.
+- **Câmbio.** `/cambio` converte Lunaris, Solares e Fragmentos, sempre passando
+  por Solares. Em 3 de outubro Créditos Sombrios saíram do câmbio (moeda do
+  mercado negro). A lavanderia foi encerrada (os Créditos que estavam lavando
+  voltaram à carteira) e a entrada passou a ser `/mercado_negro_vender`, em que
+  o doleiro paga Créditos por item do inventário.
+- **Fases B4, B5 e B6 continuam não entregues.** Nenhuma das três apareceu no
+  código na conferência de 3 de outubro (`mercado_listagens`, `eventos_campanha`
+  e a abstração de ação reativa seguem ausentes). Troca e loot entre jogadores no
+  site ([Integração](INTEGRACAO.md#troca-de-itens-entre-jogadores)) não são o
+  mercado persistente da B4.
+
 ## Cofre e roubo
 
 O plano de Cofre mais antigo mistura parâmetros entregues e expansões que

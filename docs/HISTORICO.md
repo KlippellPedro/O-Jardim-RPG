@@ -96,6 +96,14 @@ Os PDFs de `livro/`, `players/` e `props/` foram mantidos: são livros, guias e
 materiais de mesa com finalidades próprias. Não são versões sucessivas de
 um relatório de balanceamento. Esta tarefa não os regenerou nem alterou seu conteúdo.
 
+## Documentos que ficaram como histórico dentro de `docs/`
+
+`plano-campanhas-e-materiais.md` e `plano-vd-e-magia-medicoes-2026-09.md` seguem
+na pasta porque as decisões que registram são citadas pelos documentos
+temáticos. Cada um tem uma faixa de status no topo dizendo o que já foi
+aplicado; o corpo é a proposta original, não o estado atual. A proposta
+`propostas/comida-por-arvore.md` foi aprovada e aplicada em 2026-10.
+
 ## Recuperar um original
 
 Além dos links acima, a versão integral pode ser lida localmente, por exemplo:

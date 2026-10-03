@@ -9,7 +9,9 @@ podem ser espelhadas em `editorial/campanhas/`; veja
 - `ficha/`: classes, raças, perícias, Legados, magias e origens.
 - `mundo/`: lore organizada por Árvore e a configuração canônica das Árvores.
 - `regras/`: regras públicas, regras internas, condições e balanceamento.
-- `loja/`: catálogo econômico, veículos, bestiário e instruções de edição.
+- `loja/`: catálogo econômico (1.225 entradas: itens, veículos, propriedades, bestiário e drops) e instruções de edição.
+- `economia/`: escala de preços (`escala-precos-v1.json`) e tiers do Cofre.
+- `bestiario/`: famílias e únicos do Bestiário e as tabelas de saque das criaturas.
 - `gerado/`: saídas mecânicas consumidas pelo código. Não edite à mão.
 - `editorial/`: snapshots das publicações por campanha para revisão no Git; não
   são consumidos automaticamente pelo site.
@@ -25,7 +27,10 @@ patamares e teto de classe) e `maestria-classe.json` (os marcos do nível 21 ao 
 iguais para todas). O nível total não tem teto: esses arquivos dizem quanto vale
 cada faixa. Os capítulos de Experiência, Legados e Sistema Base leem os dois.
 
-`bestiario/familias-v1.json` declara as famílias e os únicos do Bestiário (o site
+`bestiario/deidades-v1.json` são as fichas das onze Deidades, também só do servidor e só para o Mestre.
+`bestiario/loot-criaturas.json` é a tabela de saque de cada criatura e **só o servidor
+lê**: não pode ser importado pelo navegador (a fronteira de conteúdo barra) e o
+ZIP da plataforma precisa levar a pasta `bestiario`. `bestiario/familias-v1.json` declara as famílias e os únicos do Bestiário (o site
 importa); `bestiario/familias-propostas-v1.json` guarda estágios novos ainda em
 revisão e nunca vai para o site. `regras/curva-criatura-v1.json` é gerado pelo
 `npm run audit:balance` e não se edita à mão. Os marcos de magia de

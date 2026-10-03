@@ -23,4 +23,22 @@ Regras essenciais:
 - Nunca exponha rascunhos ou `corpoMestre` a jogadores e nunca transforme campos
   mecânicos em campos editáveis sem uma decisão explícita de arquitetura.
 - Não faça commit, gere ZIP ou publique na Discloud sem pedido explícito do
-  usuário.
+  usuário. Ao commitar, liste os arquivos um a um (nunca `git add -u`): o usuário
+  edita em paralelo e o WIP dele não pode entrar junto.
+- `data/bestiario/loot-criaturas.json` (saque das criaturas) é lido só pelo
+  servidor. Não importe esse arquivo no navegador nem o coloque no bundle.
+- `data/bestiario/deidades-v1.json` (fichas das Deidades) também é só do
+  servidor e só chega a quem comanda a mesa; o campo Estado revela segredos de
+  lore. O texto de referência é a seção "Fichas das Deidades" do Guia do Mestre.
+- Mudar o id de uma criatura do catálogo exige migração que leve as chaves
+  (`sessao_participantes.monstro_id`, `loot_campanha`, inventário, cofre,
+  publicações do catálogo). Foi o que a migração 50 fez em 2026-10-03.
+- Toda tabela nova do schema da plataforma entra em `TABELAS` de
+  `plataforma/core/backup.py`; um teste cobra.
+- Para testes com banco, use um PostgreSQL descartável (`TEST_DATABASE_URL`) e,
+  ao subir a API contra ele, `APP_ENV=development` e
+  `AUTOMATIC_BACKUP_ENABLED=false`, senão o `.env` pode rotacionar backups
+  reais. Detalhes em `docs/GUIA_MANUTENCAO.md`.
+- Texto para o jogador: sem travessão, sem "eco" e sem a antítese "não é X, é Y".
+- O mural de novidades (`src/data/novidades-manuais.json`) é manual: toda leva
+  de mudança visível ao jogador ganha uma entrada em linguagem de jogador.

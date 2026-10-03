@@ -95,15 +95,15 @@ ele não publica mudanças feitas no JSON.
 
 ## O que já está feito
 
-- **Armas:** 78, todas com descrição, dano rolável, crítico e modo
+- **Armas:** 87, todas com descrição, dano rolável, crítico e modo
   (`subtipo` `simples`/`marcial` e `modo`
   `Corpo a corpo`/`À distância`, margem de ameaça e multiplicador crítico;
   inclui Obstinadas e Relíquias da Criação).
-- **Equipamentos:** 56 (descrição e `espacos` explícitos; material e efeitos
+- **Equipamentos:** 135 (descrição e `espacos` explícitos; material e efeitos
   revisados quando havia fonte ou comparação segura).
-- **Armaduras e escudos:** 52 (com `bonus`, `penalidade`, `espacos` e material
+- **Armaduras e escudos:** 94 (com `bonus`, `penalidade`, `espacos` e material
   quando aplicável).
-- **Modificações:** 51 (`tipo: "modificacao"`). São as mesmas de
+- **Modificações:** 63 (`tipo: "modificacao"`). São as mesmas de
   `data/regras/raridadesEquipamentos.ts`, uma entrada por modificação, com
   `modificacao_id` apontando para a fonte. O preço sai de
   `PRECO_MODIFICACAO_POR_VALOR` — 20, 70, 290 e 1.200 Lunaris para técnica,
@@ -111,17 +111,20 @@ ele não publica mudanças feitas no JSON.
   (`nivelMinimoLoja >= 2`); efeitos épicos ou proibidos avançam ao Mercado
   Negro. Ao acrescentar uma modificação nas regras, replique a
   entrada aqui com o mesmo preço da faixa.
-- **Veículos:** 65, sendo 49 sistemas/peças e 16 veículos completos, todos com
+- **Veículos:** 83, sendo 49 sistemas/peças (`veiculo`) e 34 veículos completos (`veiculo-completo`), todos com
   ficha estruturada e efeitos veiculares completos.
-- **Bestiário:** 128 seres (`tipo: "monstro"`, preço por fórmula), incluindo
+- **Bestiário:** 165 seres (`tipo: "monstro"`, preço por fórmula), incluindo
   seis criaturas Marítimas, seis Espíritos, seis Golens e seis criaturas do
   Vazio com fichas e filtros próprios.
-- **Componentes e drops:** 259 entradas (`tipo: "drop"`), incluindo os
-  catálogos próprios de classe, Matéria-prima e Componentes Veiculares.
-- **Especiais:** 26 Frutos do Éden (15 Místicos e 11 Frutos dos Fluxos), 10 Implantes, 8 Artefatos Mágicos e 11 Selos
-  consumíveis sincronizados com o catálogo mágico.
+- **Componentes e drops:** 406 entradas (`tipo: "drop"`): 259 materiais e
+  componentes (catálogos próprios de classe, Matéria-prima e Componentes
+  Veiculares) e 147 `loot-*`, que existem para as tabelas de saque das criaturas.
+- **Especiais:** 26 Frutos do Éden (15 Místicos e 11 Frutos dos Fluxos), 43 Implantes,
+  31 Artefatos (inclui as Relíquias de todos os tipos), 71 Consumíveis (Selos, comidas,
+  bebidas e itens de cena, entre eles 25 comidas e bebidas por Árvore) e 21 Propriedades
+  compráveis.
 
-Total: **832 entradas**.
+Total: **1.225 entradas**. Conferir com `npm run catalogo:check`.
 
 ### Frutos do Éden
 
@@ -231,7 +234,7 @@ não entrou na loja; fica citado na descrição do chassi como liberação do me
 
 Além dos campos já documentados acima, toda entrada `tipo: "drop"` declara dentro de
 `conteudo` os campos do sistema de Materiais e Ingredientes (`data/regras/materiais.ts`).
-Esses campos são obrigatórios para todos os materiais. O catálogo atual possui 259 entradas.
+Esses campos são obrigatórios para todos os materiais. O catálogo atual possui 259 entradas de material (os 147 `loot-*` ficam fora desta regra).
 
 - **categoria:** `Biológico | Botânico | Mineral | Espiritual | Arcano | Artificial`.
 - **origem:** texto curto — espécie, local ou processo típico de obtenção. Distinto de
@@ -254,19 +257,16 @@ Qualidade (`corrompida | danificada | conservada | padrao | abate-limpo | lendar
 validado como único por personagem em `plataforma/schemas.py`. Ver o capítulo "Materiais e
 Ingredientes" nas regras para a tabela completa.
 
-O comando `npm run materiais:retrofit` reaplica a curadoria oficial dos 66 materiais e
-preenche `lootIds` de monstros somente quando o nome de um loot textual corresponde a um
-drop real. `npm run materiais:check` verifica que o catálogo está sincronizado. A auditoria
-da Fase 4 encontrou zero correspondências exatas entre os loots textuais dos 90 monstros e
-os 51 drops então existentes; a Fase 5 preserva o mesmo critério para os 66 atuais. Por isso
-nenhum `lootIds` foi inventado. Quando uma correspondência real for
-publicada, `lootIds` fica como campo irmão de `loot` e aponta apenas para ids `tipo: "drop"`.
+O comando `npm run materiais:retrofit` reaplica a curadoria oficial dos materiais e
+`npm run materiais:check` verifica que o catálogo está sincronizado. O campo `lootIds` nunca
+foi preenchido: o saque das criaturas hoje vive em `data/bestiario/loot-criaturas.json`, que só
+o servidor lê (a Sessão ao vivo rola e o Mestre entrega). Ver `docs/sistema/INTEGRACAO.md`.
 
 ## Bestiário e Drops — FEITO
 
 Convertidos de `data/loja/bestiario_precos.json`.
 
-**Bestiário (`tipo: "monstro"`, 128 seres):** preço calculado pela fórmula
+**Bestiário (`tipo: "monstro"`, 165 seres):** preço calculado pela fórmula
 
 ```text
 preço = (PreçoPorLevel[faixa] × nível) + Espécie[faixa] + Classe[faixa] + Σ(extras)
@@ -277,9 +277,9 @@ Poder Ass/Legado/Variável. Há seres dos seis sub-tipos (Criatura, Familiar, Se
 Invocação, Ajudante, Ser Lendário), guardados em `conteudo` com `nivel` e `classe`
 (o sub-tipo). Pra adicionar mais criaturas, use a mesma fórmula por sub-tipo.
 
-**Drops (`tipo: "drop"`, 66 itens):** 22 entradas por par espécie×parte com preço
-(Carne/Órgãos/Essência), 29 componentes ritualísticos e 15 materiais-base da
-Fase 5 (cinco Minerais, cinco Artificiais e cinco Botânicos). Pares com ❌ na
+**Drops (`tipo: "drop"`, 406 itens):** 22 entradas por par espécie×parte com preço
+(Carne/Órgãos/Essência), 29 componentes ritualísticos, 15 materiais-base da
+Fase 5 e o restante de materiais e `loot-*` das criaturas. Pares com ❌ na
 tabela foram ignorados. A descrição já cita os modificadores (conservação,
 qualidade do abate, ser lendário, falta de material).
 

@@ -1,6 +1,16 @@
 # Plano: Campanhas e Materiais
 
-Proposta para você aprovar, cortar ou mudar. Nada aqui foi implementado.
+> **Status (2026-10-03): plano concluído, mantido como histórico.** A Parte 1 foi
+> implementada em 2026-09-21: página `/campanha` com identidade (capa, cor e
+> frase), mesa, "Anteriormente", duplicar e epílogo, e seletor rápido de
+> campanha na Home. Os convites com validade, limite de usos e papel (1.3) já
+> existiam no painel do Mestre. A Parte 2 está resumida no fim do arquivo. Fora
+> deste plano, os convites para criar conta na plataforma ganharam tela no Painel
+> do Criador em 2026-10 (ver `docs/sistema/INTEGRACAO.md`). Sobra uma decisão:
+> comprar lotes soltos na Loja (2.2) foi descartada, porque a Loja já vende o
+> material e o botão "Transformar em lote" converte em estoque.
+>
+> O texto abaixo é a proposta original e **não** descreve o estado atual.
 
 ## Como está hoje
 
