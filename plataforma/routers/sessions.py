@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+from datetime import datetime, timezone
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -9,8 +10,9 @@ from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
 from core.character_summary import iniciativa_fixa, sabedoria_desempate
+from core.deidades import para_o_bestiario as deidades_do_bestiario
 from core.progressao_niveis import xp_por_vd
-from core.combate_intenso import encerrar_combate_e_cansar, iniciar_marcas, registrar_minimos
+from core.combate_intenso import CANSACO_MAXIMO, encerrar_combate_e_cansar, iniciar_marcas, registrar_minimos
 from core.condicoes import decrementar_condicoes, normalizar_condicoes
 from core.database import Database
 from core.dependencies import (
@@ -24,7 +26,15 @@ from core.dependencies import (
 from core import live_session
 from core.mesa_eventos import registrar as registrar_evento
 from core.discord_avisos import avisar_discord
-from core.loot_criaturas import resumo_da_tabela, rolar_loot, tabela_da_criatura
+from core.loot_criaturas import (
+    ajustes_da_campanha,
+    eh_sob_medida,
+    resumo_da_tabela,
+    rolar_loot,
+    tabela_da_criatura,
+    tabela_efetiva,
+    tem_loot,
+)
 from core.notifications import campaign_member_ids, character_owner_ids, notify
 from routers.shop import (
     _any_active_character,
@@ -36,6 +46,8 @@ from schemas import (
     DistributeXpInput,
     GrantXpInput,
     ParticipantCreateInput,
+    LootTableInput,
+    ParticipantAfflictionInput,
     ParticipantLootDeliverInput,
     ParticipantLootRollInput,
     ParticipantReorderInput,
@@ -212,6 +224,7 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
         ).fetchall()
     }
 
+    ajustes_loot = ajustes_da_campanha(connection, sessao["campanha_id"]) if manda else {}
     participantes = []
     for indice, linha in enumerate(linhas):
         item = dict(linha)
@@ -270,7 +283,9 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             # A tabela e o loot rolado são do Mestre: o jogador fica sabendo
             # do que caiu quando o item chega na ficha dele.
             publico["monstro_id"] = item["monstro_id"]
-            publico["tem_loot"] = tabela_da_criatura(item["monstro_id"]) is not None
+            publico["tem_loot"] = eh_sob_medida(item["monstro_id"]) or tem_loot(
+                ajustes_loot.get(item["monstro_id"]) or tabela_da_criatura(item["monstro_id"])
+            )
             publico["loot"] = item["loot"]
         participantes.append(publico)
 
@@ -1318,6 +1333,7 @@ def listar_bestiario(
             ORDER BY titulo
             """
         ).fetchall()
+        ajustes_loot = ajustes_da_campanha(connection, campanha_id)
     monstros = []
     for linha in linhas:
         conteudo = linha["conteudo"] or {}
@@ -1336,7 +1352,8 @@ def listar_bestiario(
                 "estagio": conteudo.get("estagio"),
                 "papel": conteudo.get("papel"),
                 "unico": bool(conteudo.get("unico")),
-                "tem_loot": tabela_da_criatura(linha["id"]) is not None,
+                "tem_loot": tem_loot(ajustes_loot.get(linha["id"]) or tabela_da_criatura(linha["id"])),
+                "loot_ajustado": linha["id"] in ajustes_loot,
                 "pv": _inteiro_do_catalogo(conteudo.get("pv")),
                 "defesa": _inteiro_do_catalogo(conteudo.get("defesa")),
                 "mana": _inteiro_do_catalogo(conteudo.get("mana")),
@@ -1353,15 +1370,17 @@ def listar_bestiario(
                 "funcao": conteudo.get("funcao"),
             }
         )
+    # As Deidades vêm de um arquivo só do servidor e só chegam a quem comanda a mesa.
+    monstros.extend(deidades_do_bestiario())
     return {"monstros": monstros}
 
 
 # ---------------------------------------------------------------- loot
 
-def _catalogo_do_loot(connection, campanha_id: UUID, monstro_id: str) -> dict[str, dict]:
+def _catalogo_do_loot(connection, campanha_id: UUID, monstro_id: str, tabela: dict | None = None) -> dict[str, dict]:
     """Itens que a tabela da criatura cita, já com as publicações da campanha
     por cima: item que a campanha tirou do jogo (lápide) some do loot."""
-    tabela = tabela_da_criatura(monstro_id) or {}
+    tabela = tabela if tabela is not None else (tabela_da_criatura(monstro_id) or {})
     ids = sorted({str(regra.get("item")) for regra in tabela.get("itens") or [] if regra.get("item")})
     if not ids:
         return {}
@@ -1379,10 +1398,95 @@ def tabela_de_loot(
     quem comanda a mesa vê: o jogador descobre o loot saqueando."""
     with database.connection() as connection:
         require_campaign_manager(connection, campanha_id, user.id)
-        resumo = resumo_da_tabela(monstro_id, _catalogo_do_loot(connection, campanha_id, monstro_id))
+        tabela, ajustada = tabela_efetiva(connection, campanha_id, monstro_id)
+        resumo = resumo_da_tabela(monstro_id, _catalogo_do_loot(connection, campanha_id, monstro_id, tabela), tabela) if tabela is not None else None
+        oficial = None
+        if ajustada and tabela_da_criatura(monstro_id) is not None:
+            oficial = resumo_da_tabela(monstro_id, _catalogo_do_loot(connection, campanha_id, monstro_id))
     if resumo is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="essa criatura nao tem tabela de loot")
-    return resumo
+    return {**resumo, "ajustada": ajustada, "oficial": oficial}
+
+
+@router.put("/bestiario/loot/{monstro_id}")
+def ajustar_tabela_de_loot(
+    monstro_id: str,
+    campanha_id: UUID,
+    payload: LootTableInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """O Mestre troca a tabela de loot de uma criatura só na campanha dele.
+    A tabela oficial continua intacta para as outras mesas."""
+    with database.connection() as connection:
+        require_campaign_manager(connection, campanha_id, user.id)
+        monstro = connection.execute(
+            "SELECT id FROM catalogo_itens WHERE id=%s AND tipo='monstro' AND ativo=TRUE",
+            (monstro_id,),
+        ).fetchone()
+        if not monstro:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="criatura nao encontrada")
+        ids = [linha.item_id for linha in payload.itens]
+        catalogo = {row["id"]: row for row in _resolved_catalog_rows(connection, campanha_id, ids)} if ids else {}
+        for item_id in ids:
+            item = catalogo.get(item_id)
+            if item is None:
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=f"o item {item_id} nao existe no catalogo")
+            if item["tipo"] in {"monstro", "propriedade"}:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail="criatura e propriedade nao entram como loot",
+                )
+        tabela = {
+            "moedas": payload.moedas.model_dump() if payload.moedas else None,
+            "itens": [{"item": linha.item_id, "chance": linha.chance, "quantidade": linha.quantidade} for linha in payload.itens],
+        }
+        connection.execute(
+            """
+            INSERT INTO loot_campanha (campanha_id, monstro_id, tabela, atualizado_por)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (campanha_id, monstro_id) DO UPDATE SET
+                tabela=EXCLUDED.tabela, atualizado_por=EXCLUDED.atualizado_por,
+                atualizado_em=CURRENT_TIMESTAMP
+            """,
+            (campanha_id, monstro_id, Jsonb(tabela), user.id),
+        )
+        record_audit(
+            connection,
+            action="loot.tabela_ajustada",
+            actor_user_id=user.id,
+            campaign_id=campanha_id,
+            target_type="monstro",
+            target_id=monstro_id,
+            details=tabela,
+        )
+        resumo = resumo_da_tabela(monstro_id, _catalogo_do_loot(connection, campanha_id, monstro_id, tabela), tabela)
+    return {**resumo, "ajustada": True}
+
+
+@router.delete("/bestiario/loot/{monstro_id}", status_code=status.HTTP_204_NO_CONTENT)
+def restaurar_tabela_de_loot(
+    monstro_id: str,
+    campanha_id: UUID,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Volta a criatura para a tabela oficial nesta campanha."""
+    with database.connection() as connection:
+        require_campaign_manager(connection, campanha_id, user.id)
+        connection.execute(
+            "DELETE FROM loot_campanha WHERE campanha_id=%s AND monstro_id=%s",
+            (campanha_id, monstro_id),
+        )
+        record_audit(
+            connection,
+            action="loot.tabela_restaurada",
+            actor_user_id=user.id,
+            campaign_id=campanha_id,
+            target_type="monstro",
+            target_id=monstro_id,
+        )
+    return None
 
 
 def _participante_travado(connection, sessao_id: UUID, participante_id: UUID):
@@ -1427,8 +1531,9 @@ def rolar_loot_do_participante(
                     status_code=status.HTTP_409_CONFLICT,
                     detail="parte do loot ja foi entregue; nao da para rolar de novo",
                 )
-        catalogo = _catalogo_do_loot(connection, sessao["campanha_id"], participante["monstro_id"])
-        loot = rolar_loot(participante["monstro_id"], catalogo)
+        tabela, _ajustada = tabela_efetiva(connection, sessao["campanha_id"], participante["monstro_id"])
+        catalogo = _catalogo_do_loot(connection, sessao["campanha_id"], participante["monstro_id"], tabela)
+        loot = rolar_loot(participante["monstro_id"], catalogo, tabela=tabela) if tabela is not None else None
         if loot is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="essa criatura nao tem tabela de loot")
         connection.execute(
@@ -1571,6 +1676,95 @@ def entregar_loot_do_participante(
     live_session.publicar(campanha_id, "loot_entregue", versao)
     _avisar_fichas_alteradas(campanha_id, fichas_alteradas)
     return {"loot": loot, "entregues": entregues, "versao": versao}
+
+
+@router.post("/{sessao_id}/participantes/{participante_id}/aflicoes")
+def mexer_na_aflicao(
+    sessao_id: UUID,
+    participante_id: UUID,
+    payload: ParticipantAfflictionInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """O Mestre aplica, muda de estágio ou tira uma aflição de um personagem
+    em cena. Grava na ficha (ficha.aflicoesAtivas), que é onde o jogador
+    acompanha e rola os testes de intervalo."""
+    with database.connection() as connection:
+        sessao = _sessao_sob_comando(connection, sessao_id, user.id)
+        participante = connection.execute(
+            "SELECT personagem_id, nome FROM sessao_participantes WHERE id=%s AND sessao_id=%s",
+            (participante_id, sessao_id),
+        ).fetchone()
+        if not participante:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="participante nao encontrado")
+        if not participante["personagem_id"]:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="aflicao fica na ficha; este participante nao tem ficha",
+            )
+        personagem = connection.execute(
+            "SELECT id, ficha FROM personagens WHERE id=%s AND status='ativo' FOR UPDATE",
+            (participante["personagem_id"],),
+        ).fetchone()
+        if not personagem:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="personagem nao encontrado")
+        ficha = dict(personagem["ficha"]) if isinstance(personagem["ficha"], dict) else {}
+        ativas = [item for item in (ficha.get("aflicoesAtivas") or []) if isinstance(item, dict)]
+        existente = next((item for item in ativas if item.get("aflicaoId") == payload.aflicao_id), None)
+
+        if payload.acao == "remover":
+            if existente is None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="essa aflicao nao esta na ficha")
+            ativas = [item for item in ativas if item is not existente]
+        elif payload.acao == "estagio":
+            if existente is None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="essa aflicao nao esta na ficha")
+            existente["estagio"] = payload.estagio
+            existente["incubando"] = False
+        elif existente is not None:
+            # Nova exposição à mesma aflição: o Mestre decide o estágio.
+            existente["estagio"] = max(int(existente.get("estagio") or 1), payload.estagio)
+        else:
+            ativas.append({
+                "id": f"{payload.aflicao_id}-{uuid4().hex[:10]}",
+                "aflicaoId": payload.aflicao_id,
+                "estagio": payload.estagio,
+                "desde": datetime.now(timezone.utc).isoformat(),
+                "incubando": payload.incubando,
+                "ultimoTeste": None,
+            })
+        ficha["aflicoesAtivas"] = ativas
+        status_ficha = dict(ficha.get("status")) if isinstance(ficha.get("status"), dict) else {}
+        if payload.cansaco and payload.acao != "remover":
+            atual = status_ficha.get("cansacoAtual")
+            atual = int(atual) if isinstance(atual, (int, float)) and not isinstance(atual, bool) else 0
+            status_ficha["cansacoAtual"] = min(CANSACO_MAXIMO, max(0, atual) + payload.cansaco)
+            ficha["status"] = status_ficha
+        versao_ficha = connection.execute(
+            """
+            UPDATE personagens SET ficha=%s, versao=versao+1, atualizado_em=CURRENT_TIMESTAMP
+            WHERE id=%s RETURNING versao
+            """,
+            (Jsonb(ficha), personagem["id"]),
+        ).fetchone()["versao"]
+        record_audit(
+            connection,
+            action=f"sessao.aflicao_{payload.acao}",
+            actor_user_id=user.id,
+            campaign_id=sessao["campanha_id"],
+            target_type="personagem",
+            target_id=str(personagem["id"]),
+            details={"aflicao_id": payload.aflicao_id, "estagio": payload.estagio, "cansaco": payload.cansaco},
+        )
+        versao = _tocar(connection, sessao_id)
+        campanha_id = sessao["campanha_id"]
+    live_session.publicar(campanha_id, "aflicao_atualizada", versao)
+    _avisar_fichas_alteradas(campanha_id, [{"personagem_id": personagem["id"], "versao": versao_ficha}])
+    return {
+        "aflicoes": _aflicoes_da_ficha(ativas),
+        "cansaco_atual": status_ficha.get("cansacoAtual"),
+        "versao": versao,
+    }
 
 
 def _passar_rodada_condicoes(connection, sessao_id) -> None:

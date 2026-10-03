@@ -2,6 +2,84 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-03-doleiro",
+      "data": "2026-10-03",
+      "tipo": "melhoria",
+      "area": "Discord",
+      "titulo": "O doleiro agora compra itens e paga em Créditos Sombrios",
+      "detalhes": [
+        "No Discord, /mercado_negro_vender leva um item do seu inventário ao doleiro, que mostra quanto paga e só fecha o negócio depois que você aceita.",
+        "Créditos Sombrios não se trocam mais por Lunaris nem por Solares, e a lavanderia acabou: quem tinha Créditos lavando recebeu tudo de volta."
+      ]
+    },
+    {
+      "id": "2026-10-03-criaturas-lendarias",
+      "data": "2026-10-03",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "As criaturas lendárias ganharam nome e história",
+      "detalhes": [
+        "Dragões, hidras, anjos, elementais, serpentes e os seres do Vazio de nível alto agora têm nome próprio, uma história curta e habilidades que contam quem eles são.",
+        "Cada um deixa uma marca no mundo se cair, e quase todos têm um jeito de a cena terminar sem luta."
+      ]
+    },
+    {
+      "id": "2026-10-03-caldo-e-lesoes",
+      "data": "2026-10-03",
+      "tipo": "melhoria",
+      "area": "Loja",
+      "titulo": "O Caldo de Osso Quente cuida de queimadura e de frio",
+      "detalhes": [
+        "A vantagem em Fortitude do Caldo de Osso Quente agora cancela a desvantagem de Queimadura Grave e de Congelamento enquanto durar, por 4 horas.",
+        "Os cartões dessas duas lesões, na ficha e nos cartões para imprimir, já avisam disso."
+      ]
+    },
+    {
+      "id": "2026-10-03-troca-com-aceite",
+      "data": "2026-10-03",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Troque itens e moedas com os outros jogadores",
+      "detalhes": [
+        "No Inventário, o botão Propor troca deixa você escolher o que oferece e o que pede de volta, itens e moedas, e escrever um recado. Nada muda de mão até a outra pessoa aceitar.",
+        "Na Carteira, o botão Mandar passa moedas para outro personagem da campanha.",
+        "Se na hora de aceitar um dos lados já não tiver o que prometeu, a troca não acontece e ninguém perde nada. Tudo fica no extrato dos dois."
+      ]
+    },
+    {
+      "id": "2026-10-03-saque-ajustavel",
+      "data": "2026-10-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "O Mestre pode ajustar o saque das criaturas",
+      "detalhes": [
+        "Na ficha de cada criatura do Bestiário, o Mestre vê o que ela pode deixar cair e troca a tabela só na campanha dele. As outras mesas continuam com a oficial, e dá para voltar a ela quando quiser.",
+        "As criaturas sob medida também deixam saque, calculado pelo VD e pelo papel."
+      ]
+    },
+    {
+      "id": "2026-10-03-aflicao-pelo-cartao",
+      "data": "2026-10-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Aflições direto no cartão do personagem",
+      "detalhes": [
+        "O Mestre aplica um veneno, doença ou vício, muda o estágio ou tira a aflição sem sair da cena. A mudança aparece na sua ficha, onde você continua rolando os testes.",
+        "O Cansaço que alguns estágios dão ao entrar agora é somado sozinho na ficha."
+      ]
+    },
+    {
+      "id": "2026-10-03-comida-das-arvores",
+      "data": "2026-10-03",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Comidas e bebidas das Árvores",
+      "detalhes": [
+        "25 itens novos. Gênese cozinha com o que tem em casa: o pão de Lionês, a broa de Khazad, o chá de Salém, o mel de Alfarn. As outras Árvores entram como ingrediente trazido do próprio Galho, com o sabor do tema de cada uma.",
+        "O cartão mostra de onde o item veio. Comum e incomum vendem na Feira de Vila, e os raros na Metrópole."
+      ]
+    },
+    {
       "id": "2026-10-03-loot-das-criaturas",
       "data": "2026-10-03",
       "tipo": "novo",

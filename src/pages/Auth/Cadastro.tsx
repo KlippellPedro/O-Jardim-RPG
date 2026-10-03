@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { authApi } from '../../services/authApi';
 import { useAuthStore } from '../../store/useAuthStore';
 import { Loader2, KeyRound, Mail, User, Lock, AlertCircle, CheckCircle2 } from 'lucide-react';
@@ -11,13 +11,15 @@ import { AuthField } from './components/AuthField';
 export const Cadastro: React.FC = () => {
   const navigate = useNavigate();
   const { initContexto } = useAuthStore();
+  // O link que o Criador copia já traz o código: /cadastro?convite=...
+  const [searchParams] = useSearchParams();
 
   const [modoCadastro, setModoCadastro] = useState<'aberto' | 'convite' | 'fechado' | 'loading'>('loading');
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [codigoConvite, setCodigoConvite] = useState('');
+  const [codigoConvite, setCodigoConvite] = useState(() => searchParams.get('convite')?.trim() ?? '');
 
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
@@ -191,7 +193,7 @@ export const Cadastro: React.FC = () => {
                 >
                   <AuthField
                     id="register-invite"
-                    label="Código de convite da campanha"
+                    label="Código de convite"
                     icon={KeyRound}
                     type="text"
                     autoComplete="off"

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, Coins, Dices, Gem, Gift, RefreshCw, ScrollText } from 'lucide-react';
 import { useSessaoStore, type EntidadeIniciativa } from '../../../store/useSessaoStore';
 import { sessaoApi, type TabelaDeLoot } from '../../../services/sessaoApi';
+import { Select } from '../../../components/ui/Select';
 
 interface LootPanelProps {
   entity: EntidadeIniciativa;
@@ -76,7 +77,9 @@ export const LootPanel: React.FC<LootPanelProps> = ({ entity, jogadores }) => {
     setDestino(Object.fromEntries(pendentes.map((linha) => [linha.linha, personagemId])));
   };
 
-  const seletor = 'h-8 rounded-md border border-white/10 bg-black/40 px-2 text-[11px] text-white/80 outline-none focus:border-[#c7a44c]/50';
+  // Menu do próprio site (o <select> nativo abre branco no Windows).
+  const seletor = '!h-8 !min-h-0 rounded-md !py-0 px-2 text-[11px]';
+  const opcoesJogadores = jogadores.map((jogador) => ({ value: jogador.personagemId ?? '', label: jogador.nome }));
 
   return (
     <div className="border-t border-white/[0.06]">
@@ -129,7 +132,7 @@ export const LootPanel: React.FC<LootPanelProps> = ({ entity, jogadores }) => {
                   <span className="shrink-0 text-white/35">{tabela.moedas.dados}</span>
                 </li>
               ) : null}
-              <li className="pt-1 text-[10px] text-white/30">★ só cai desta criatura e não vende na Loja.</li>
+              {tabela.itens.some((item) => item.exclusivo) ? <li className="pt-1 text-[10px] text-white/30">★ só cai desta criatura e não vende na Loja.</li> : null}
             </ul>
           ) : null}
 
@@ -148,15 +151,15 @@ export const LootPanel: React.FC<LootPanelProps> = ({ entity, jogadores }) => {
                       {linha.entregue_para ? (
                         <span className="shrink-0 text-emerald-200/70">com {linha.entregue_para.nome}</span>
                       ) : (
-                        <select
+                        <Select
                           value={destino[linha.linha] ?? ''}
-                          onChange={(evento) => setDestino((atual) => ({ ...atual, [linha.linha]: evento.target.value }))}
-                          aria-label={`Quem leva ${linha.titulo}`}
-                          className={`${seletor} max-w-[8.5rem]`}
-                        >
-                          <option value="">Quem leva?</option>
-                          {jogadores.map((jogador) => <option key={jogador.id} value={jogador.personagemId ?? ''}>{jogador.nome}</option>)}
-                        </select>
+                          onChange={(valor) => setDestino((atual) => ({ ...atual, [linha.linha]: valor }))}
+                          ariaLabel={`Quem leva ${linha.titulo}`}
+                          placeholder="Quem leva?"
+                          options={[{ value: '', label: 'Ninguém por enquanto', triggerLabel: 'Quem leva?', labelClassName: 'text-white/40' }, ...opcoesJogadores]}
+                          menuMinWidth={160}
+                          className={`${seletor} w-[8.5rem] shrink-0 ${destino[linha.linha] ? '!border-emerald-400/40 !bg-emerald-400/10' : ''}`}
+                        />
                       )}
                     </li>
                   ))}
@@ -165,10 +168,15 @@ export const LootPanel: React.FC<LootPanelProps> = ({ entity, jogadores }) => {
                 {pendentes.length ? (
                   jogadores.length ? (
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <select value="" onChange={(evento) => evento.target.value && tudoPara(evento.target.value)} aria-label="Dar tudo para" className={seletor}>
-                        <option value="">Tudo para...</option>
-                        {jogadores.map((jogador) => <option key={jogador.id} value={jogador.personagemId ?? ''}>{jogador.nome}</option>)}
-                      </select>
+                      <Select
+                        value=""
+                        onChange={(valor) => valor && tudoPara(valor)}
+                        ariaLabel="Dar tudo para"
+                        placeholder="Tudo para..."
+                        options={opcoesJogadores}
+                        menuMinWidth={160}
+                        className={`${seletor} w-32`}
+                      />
                       <button
                         type="button"
                         disabled={busy || escolhidos.length === 0}

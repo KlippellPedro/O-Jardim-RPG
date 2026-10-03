@@ -28,17 +28,26 @@ from psycopg.types.json import Jsonb
 from core import loot_criaturas
 from core.database import Database
 from core.dependencies import AuthenticatedUser
-from routers.characters import list_send_targets, send_inventory_item
+from routers.characters import list_send_targets, send_currency, send_inventory_item
+from routers.trades import aceitar_troca, cancelar_troca, itens_para_pedir, listar_trocas, propor_troca, recusar_troca
 from routers.sessions import (
     _montar_estado,
     _sessao_ativa,
     abrir_sessao,
     adicionar_participante,
+    listar_bestiario,
+    ajustar_tabela_de_loot,
+    mexer_na_aflicao,
+    restaurar_tabela_de_loot,
     entregar_loot_do_participante,
     rolar_loot_do_participante,
     tabela_de_loot,
 )
 from schemas import (
+    ParticipantAfflictionInput,
+    CurrencySendInput,
+    LootTableInput,
+    TradeProposalInput,
     InventorySendInput,
     ParticipantCreateInput,
     ParticipantLootDeliverInput,
@@ -193,6 +202,28 @@ class LootETrocaTests(unittest.TestCase):
         return int(row["saldo"]) if row else 0
 
     # -- loot --------------------------------------------------------------
+
+    def test_deidades_so_chegam_ao_mestre_e_entram_na_cena(self):
+        lista = listar_bestiario(self.campanha_id, user=self.mestre, database=self.database)["monstros"]
+        deidades = [item for item in lista if item["categoria"] == "Deidade"]
+        self.assertEqual(len(deidades), 11)
+        self.assertTrue(all(item["id"].startswith("deidade-") and item["vd"] in (400, 500) for item in deidades))
+        with self.assertRaises(HTTPException) as erro:
+            listar_bestiario(self.campanha_id, user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        # A deidade entra na cena como qualquer criatura, sem tabela de loot.
+        sessao = abrir_sessao(
+            SessionOpenInput(campanha_id=self.campanha_id, titulo="Audiência", incluir_personagens=False),
+            user=self.mestre, database=self.database,
+        )
+        criado = adicionar_participante(
+            sessao["sessao"]["id"],
+            ParticipantCreateInput(nome="Chronus", vida_maxima=18125, monstro_id="deidade-chronus"),
+            user=self.mestre, database=self.database,
+        )
+        participante = next(p for p in self._estado("mestre", self.mestre_id)["participantes"] if p["id"] == criado["id"])
+        self.assertEqual(participante["monstro_id"], "deidade-chronus")
+        self.assertFalse(participante["tem_loot"])
 
     def test_jogador_nao_ve_a_tabela_nem_o_loot(self):
         self._cena_com_bandido()
@@ -420,6 +451,265 @@ class LootETrocaTests(unittest.TestCase):
         with self.assertRaises(HTTPException) as erro:
             self._enviar(self.ana, self.heroi_ana, "espada", self.heroi_bia)
         self.assertEqual(erro.exception.status_code, 409)
+
+
+    # -- moedas ---------------------------------------------------------------
+
+    def _carteira(self, personagem_id, valor, moeda="Lunaris"):
+        with self.database.connection() as connection:
+            connection.execute(
+                """
+                INSERT INTO saldos_personagem (campanha_id, personagem_id, moeda, saldo) VALUES (%s, %s, %s, %s)
+                ON CONFLICT (campanha_id, personagem_id, moeda) DO UPDATE SET saldo=EXCLUDED.saldo
+                """,
+                (self.campanha_id, personagem_id, moeda, valor),
+            )
+
+    def test_mandar_moedas_tira_de_um_e_poe_no_outro(self):
+        self._carteira(self.heroi_ana, 100)
+        send_currency(
+            self.heroi_ana,
+            CurrencySendInput(destino_personagem_id=self.heroi_bia, moeda="Lunaris", valor=30, idempotencia="moeda-teste-1"),
+            user=self.ana, database=self.database,
+        )
+        self.assertEqual((self._saldo(self.heroi_ana), self._saldo(self.heroi_bia)), (70, 30))
+        with self.assertRaises(HTTPException) as erro:
+            send_currency(
+                self.heroi_ana,
+                CurrencySendInput(destino_personagem_id=self.heroi_bia, moeda="Lunaris", valor=500, idempotencia="moeda-teste-2"),
+                user=self.ana, database=self.database,
+            )
+        self.assertEqual(erro.exception.status_code, 409)
+        self.assertEqual(self._saldo(self.heroi_ana), 70)
+
+    # -- troca com aceite -----------------------------------------------------
+
+    def _propor(self, ator, de, para, oferta=None, pedido=None):
+        return propor_troca(
+            TradeProposalInput(de_personagem_id=de, para_personagem_id=para, oferta=oferta or {}, pedido=pedido or {}),
+            user=ator, database=self.database,
+        )["proposta"]
+
+    def test_troca_aceita_move_os_dois_lados_de_uma_vez(self):
+        self._dar(self.heroi_ana, "loot-dente-teste", 3)
+        self._carteira(self.heroi_ana, 50)
+        self._dar(self.heroi_bia, "espada", 1)
+        proposta = self._propor(
+            self.ana, self.heroi_ana, self.heroi_bia,
+            oferta={"itens": [{"item_id": "loot-dente-teste", "quantidade": 2}], "moedas": [{"moeda": "Lunaris", "valor": 20}]},
+            pedido={"itens": [{"item_id": "espada", "quantidade": 1}]},
+        )
+        self.assertEqual(proposta["oferta"]["itens"][0]["titulo"], "Loot-Dente-Teste")
+        # Nada muda até aceitar.
+        self.assertEqual(self._inventario(self.heroi_ana)["loot-dente-teste"]["quantidade"], 3)
+        recebidas = listar_trocas(self.heroi_bia, user=self.bia, database=self.database)["propostas"]
+        self.assertTrue(recebidas[0]["recebida"])
+
+        aceitar_troca(proposta["id"], user=self.bia, database=self.database)
+        ana, bia = self._inventario(self.heroi_ana), self._inventario(self.heroi_bia)
+        self.assertEqual(ana["loot-dente-teste"]["quantidade"], 1)
+        self.assertEqual(ana["espada"]["quantidade"], 1)
+        self.assertNotIn("espada", bia)
+        self.assertEqual(bia["loot-dente-teste"]["quantidade"], 2)
+        self.assertEqual((self._saldo(self.heroi_ana), self._saldo(self.heroi_bia)), (30, 20))
+        with self.assertRaises(HTTPException) as erro:
+            aceitar_troca(proposta["id"], user=self.bia, database=self.database)
+        self.assertEqual(erro.exception.status_code, 409)
+
+    def test_quem_propoe_nao_aceita_a_propria_troca(self):
+        self._dar(self.heroi_ana, "loot-dente-teste", 1)
+        proposta = self._propor(self.ana, self.heroi_ana, self.heroi_bia, oferta={"itens": [{"item_id": "loot-dente-teste", "quantidade": 1}]})
+        with self.assertRaises(HTTPException) as erro:
+            aceitar_troca(proposta["id"], user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 404)
+
+    def test_se_um_lado_nao_tem_o_que_prometeu_nada_muda_de_mao(self):
+        self._dar(self.heroi_bia, "espada", 1)
+        self._carteira(self.heroi_ana, 10)
+        proposta = self._propor(
+            self.bia, self.heroi_bia, self.heroi_ana,
+            oferta={"itens": [{"item_id": "espada", "quantidade": 1}]},
+            pedido={"moedas": [{"moeda": "Lunaris", "valor": 999}]},
+        )
+        with self.assertRaises(HTTPException) as erro:
+            aceitar_troca(proposta["id"], user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 409)
+        self.assertIn("espada", self._inventario(self.heroi_bia))
+        self.assertNotIn("espada", self._inventario(self.heroi_ana))
+        self.assertEqual(self._saldo(self.heroi_ana), 10)
+        aberta = listar_trocas(self.heroi_ana, user=self.ana, database=self.database)["propostas"][0]
+        self.assertEqual(aberta["status"], "aberta")
+
+    def test_recusar_e_cancelar(self):
+        self._dar(self.heroi_ana, "loot-dente-teste", 2)
+        uma = self._propor(self.ana, self.heroi_ana, self.heroi_bia, oferta={"itens": [{"item_id": "loot-dente-teste", "quantidade": 1}]})
+        outra = self._propor(self.ana, self.heroi_ana, self.heroi_bia, oferta={"itens": [{"item_id": "loot-dente-teste", "quantidade": 1}]})
+        with self.assertRaises(HTTPException):
+            cancelar_troca(uma["id"], user=self.bia, database=self.database)
+        recusar_troca(uma["id"], user=self.bia, database=self.database)
+        cancelar_troca(outra["id"], user=self.ana, database=self.database)
+        status_ = {p["id"]: p["status"] for p in listar_trocas(self.heroi_ana, user=self.ana, database=self.database)["propostas"]}
+        self.assertEqual(status_, {uma["id"]: "recusada", outra["id"]: "cancelada"})
+        self.assertEqual(self._inventario(self.heroi_ana)["loot-dente-teste"]["quantidade"], 2)
+
+    def test_proposta_confere_o_que_se_oferece_e_o_que_se_pede(self):
+        with self.assertRaises(HTTPException):
+            self._propor(self.ana, self.heroi_ana, self.heroi_bia, oferta={"itens": [{"item_id": "nao-tenho", "quantidade": 1}]})
+        with self.assertRaises(HTTPException):
+            self._propor(self.ana, self.heroi_ana, self.heroi_bia, oferta={"moedas": [{"moeda": "Lunaris", "valor": 5}]})
+        with self.assertRaises(HTTPException):
+            self._propor(self.ana, self.heroi_ana, self.estranho, pedido={"moedas": [{"moeda": "Lunaris", "valor": 5}]})
+
+    def test_itens_para_pedir_mostram_so_o_que_viaja(self):
+        self._dar(self.heroi_bia, "espada", 1)
+        self._dar(self.heroi_bia, "lobo", 1, tipo="monstro")
+        itens = itens_para_pedir(self.heroi_bia, self.heroi_ana, user=self.ana, database=self.database)["itens"]
+        self.assertEqual([item["item_id"] for item in itens], ["espada"])
+        with self.assertRaises(HTTPException):
+            itens_para_pedir(self.heroi_bia, self.heroi_ana, user=self.bia, database=self.database)
+
+    # -- loot ajustado na campanha -------------------------------------------
+
+    def test_mestre_ajusta_o_loot_so_na_campanha_dele(self):
+        sessao_id, bandido = self._cena_com_bandido()
+        ajustar_tabela_de_loot(
+            "bandido-teste", self.campanha_id,
+            LootTableInput(itens=[{"item_id": "loot-raro-teste", "chance": 100, "quantidade": "2"}]),
+            user=self.mestre, database=self.database,
+        )
+        tabela = tabela_de_loot("bandido-teste", self.campanha_id, user=self.mestre, database=self.database)
+        self.assertTrue(tabela["ajustada"])
+        self.assertEqual([item["item_id"] for item in tabela["itens"]], ["loot-raro-teste"])
+        self.assertEqual(len(tabela["oficial"]["itens"]), 3)
+        loot = rolar_loot_do_participante(sessao_id, bandido, ParticipantLootRollInput(), user=self.mestre, database=self.database)["loot"]
+        self.assertEqual([(linha["item_id"], linha["quantidade"]) for linha in loot["linhas"]], [("loot-raro-teste", 2)])
+
+        # A outra campanha continua com a tabela oficial.
+        outra = tabela_de_loot("bandido-teste", self.outra_campanha_id, user=self.mestre, database=self.database)
+        self.assertFalse(outra["ajustada"])
+        self.assertEqual(len(outra["itens"]), 3)
+
+        restaurar_tabela_de_loot("bandido-teste", self.campanha_id, user=self.mestre, database=self.database)
+        self.assertFalse(tabela_de_loot("bandido-teste", self.campanha_id, user=self.mestre, database=self.database)["ajustada"])
+
+    def test_ajuste_de_loot_valida_itens_e_permissao(self):
+        with self.assertRaises(HTTPException) as erro:
+            ajustar_tabela_de_loot(
+                "bandido-teste", self.campanha_id,
+                LootTableInput(itens=[{"item_id": "nao-existe", "chance": 50}]),
+                user=self.mestre, database=self.database,
+            )
+        self.assertEqual(erro.exception.status_code, 422)
+        with self.assertRaises(HTTPException) as erro:
+            ajustar_tabela_de_loot(
+                "bandido-teste", self.campanha_id,
+                LootTableInput(itens=[{"item_id": "bandido-teste", "chance": 50}]),
+                user=self.mestre, database=self.database,
+            )
+        self.assertEqual(erro.exception.status_code, 422)
+        with self.assertRaises(HTTPException) as erro:
+            ajustar_tabela_de_loot(
+                "bandido-teste", self.campanha_id, LootTableInput(itens=[]),
+                user=self.ana, database=self.database,
+            )
+        self.assertEqual(erro.exception.status_code, 403)
+
+
+    # -- criatura sob medida ---------------------------------------------------
+
+    def test_criatura_sob_medida_ganha_loot_pelo_vd_e_papel(self):
+        with self.database.connection() as connection:
+            for indice in range(4):
+                connection.execute(
+                    "INSERT INTO catalogo_itens (id, tipo, titulo, conteudo) VALUES (%s, 'drop', %s, %s)",
+                    (f"mat-teste-{indice}", f"Material {indice}", Jsonb({"raridade": "comum", "usos": ["forja"]})),
+                )
+        sessao_id = abrir_sessao(
+            SessionOpenInput(campanha_id=self.campanha_id, titulo="Sob medida"), user=self.mestre, database=self.database,
+        )["sessao"]["id"]
+        criada = adicionar_participante(
+            sessao_id,
+            ParticipantCreateInput(nome="Criatura de VD 3", vida_maxima=20, monstro_id="sob-medida-3-elite-bruto"),
+            user=self.mestre, database=self.database,
+        )
+        participante = next(p for p in self._estado("mestre", self.mestre_id)["participantes"] if p["id"] == criada["id"])
+        self.assertTrue(participante["tem_loot"])
+        tabela = tabela_de_loot("sob-medida-3-elite-bruto", self.campanha_id, user=self.mestre, database=self.database)
+        # Elite leva três linhas (100, 50, 15) e moedas da faixa de VD baixo.
+        self.assertEqual([item["chance"] for item in tabela["itens"]], [100, 50, 15])
+        self.assertTrue(all(item["item_id"].startswith("mat-teste-") for item in tabela["itens"]))
+        self.assertEqual(tabela["moedas"]["dados"], "2d6")
+        # A mesma criatura mostra sempre a mesma tabela.
+        de_novo = tabela_de_loot("sob-medida-3-elite-bruto", self.campanha_id, user=self.mestre, database=self.database)
+        self.assertEqual(tabela["itens"], de_novo["itens"])
+        loot = rolar_loot_do_participante(sessao_id, criada["id"], ParticipantLootRollInput(), user=self.mestre, database=self.database)["loot"]
+        # d100 fixo em 50: caem a linha de 100%, a de 50% e as moedas.
+        self.assertEqual(len(loot["linhas"]), 3)
+
+    # -- aflição pela Sessão ---------------------------------------------------
+
+    def _ficha(self, personagem_id):
+        with self.database.connection() as connection:
+            return connection.execute("SELECT ficha FROM personagens WHERE id=%s", (personagem_id,)).fetchone()["ficha"]
+
+    def test_mestre_aplica_e_ajusta_aflicao_pela_sessao(self):
+        sessao = abrir_sessao(
+            SessionOpenInput(campanha_id=self.campanha_id, titulo="Pântano", incluir_personagens=True),
+            user=self.mestre, database=self.database,
+        )
+        ana = next(p for p in sessao["participantes"] if p["nome"] == "Ana")
+        mexer_na_aflicao(
+            sessao["sessao"]["id"], ana["id"],
+            ParticipantAfflictionInput(acao="aplicar", aflicao_id="febre-dos-esporos", estagio=2, incubando=True, cansaco=1),
+            user=self.mestre, database=self.database,
+        )
+        ficha = self._ficha(self.heroi_ana)
+        self.assertEqual([(a["aflicaoId"], a["estagio"], a["incubando"]) for a in ficha["aflicoesAtivas"]], [("febre-dos-esporos", 2, True)])
+        self.assertEqual(ficha["status"]["cansacoAtual"], 1)
+        estado = self._estado("mestre", self.mestre_id)
+        self.assertEqual(next(p for p in estado["participantes"] if p["nome"] == "Ana")["aflicoes"][0]["estagio"], 2)
+
+        mexer_na_aflicao(
+            sessao["sessao"]["id"], ana["id"],
+            ParticipantAfflictionInput(acao="estagio", aflicao_id="febre-dos-esporos", estagio=3, cansaco=6),
+            user=self.mestre, database=self.database,
+        )
+        ficha = self._ficha(self.heroi_ana)
+        self.assertEqual(ficha["aflicoesAtivas"][0]["estagio"], 3)
+        self.assertFalse(ficha["aflicoesAtivas"][0]["incubando"])
+        self.assertEqual(ficha["status"]["cansacoAtual"], 6, "Cansaço para no teto de 6")
+
+        mexer_na_aflicao(
+            sessao["sessao"]["id"], ana["id"],
+            ParticipantAfflictionInput(acao="remover", aflicao_id="febre-dos-esporos"),
+            user=self.mestre, database=self.database,
+        )
+        self.assertEqual(self._ficha(self.heroi_ana)["aflicoesAtivas"], [])
+
+    def test_aflicao_pela_sessao_so_para_o_mestre_e_so_em_quem_tem_ficha(self):
+        sessao = abrir_sessao(
+            SessionOpenInput(campanha_id=self.campanha_id, titulo="Pântano", incluir_personagens=True),
+            user=self.mestre, database=self.database,
+        )
+        ana = next(p for p in sessao["participantes"] if p["nome"] == "Ana")
+        with self.assertRaises(HTTPException) as erro:
+            mexer_na_aflicao(
+                sessao["sessao"]["id"], ana["id"],
+                ParticipantAfflictionInput(acao="aplicar", aflicao_id="febre-dos-esporos"),
+                user=self.ana, database=self.database,
+            )
+        self.assertEqual(erro.exception.status_code, 403)
+        npc = adicionar_participante(
+            sessao["sessao"]["id"], ParticipantCreateInput(nome="Capanga", vida_maxima=5),
+            user=self.mestre, database=self.database,
+        )
+        with self.assertRaises(HTTPException) as erro:
+            mexer_na_aflicao(
+                sessao["sessao"]["id"], npc["id"],
+                ParticipantAfflictionInput(acao="aplicar", aflicao_id="febre-dos-esporos"),
+                user=self.mestre, database=self.database,
+            )
+        self.assertEqual(erro.exception.status_code, 422)
 
 
 if __name__ == "__main__":

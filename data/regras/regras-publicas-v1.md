@@ -874,6 +874,8 @@ Dá para jogar O Jardim inteiro no papel. Mas a mesa ao vivo existe para resolve
 
 - Todo participante vira uma linha na lista: personagem, aliado ou inimigo, cada um com Vida, Defesa, Iniciativa e condições ativas.
 
+- Venenos, doenças e vícios que um personagem carrega aparecem no cartão dele, com o estágio em que estão.
+
 - A ordem sai da Iniciativa da ficha, que aqui não se rola. Quem comanda pode reordenar à mão quando a ficção pedir.
 
 ### Turno e rodada
@@ -917,6 +919,8 @@ Rolar fora do site continua valendo: quem prefere dado físico anuncia o resulta
 ### Fechar a sessão
 
 - O XP do encontro é distribuído pela própria sessão e cai nas fichas escolhidas, seguindo as regras do capítulo de Experiência.
+
+- O saque das criaturas derrotadas também sai pela sessão: o Mestre rola e escolhe quem leva cada coisa. O item cai direto no inventário e as moedas na carteira, com registro no extrato. O que cada criatura pode deixar você só descobre saqueando.
 
 - Encerrar a sessão guarda o estado. O que estava preparado continua preparado para a próxima.
 
@@ -3169,9 +3173,9 @@ Condições que duram mais que uma cena já vêm escritas, para ninguém precisa
 
 - Concussão | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | A cabeça lateja: desvantagem em Percepção, Investigação e Conhecimento. Ao sofrer dano de impacto, Fortitude DT 12 ou fique Atordoado até o fim do próximo turno. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados a lesão termina. Nova pancada forte na cabeça antes do fim zera a contagem.
 
-- Queimadura Grave | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | A pele repuxa sob peso e atrito: com armadura pesada, -2 em testes físicos. Desvantagem em Fortitude contra fogo e calor. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina.
+- Queimadura Grave | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | A pele repuxa sob peso e atrito: com armadura pesada, -2 em testes físicos. Desvantagem em Fortitude contra fogo e calor. Um Caldo de Osso Quente dá vantagem em Fortitude contra calor e cancela essa desvantagem por 4 horas. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina.
 
-- Congelamento | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Dedos dormentes: desvantagem em Ladinagem e Pontaria. Desvantagem em Fortitude contra frio. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados a lesão termina. Passar uma cena inteira em local aquecido dá vantagem no teste de Cura.
+- Congelamento | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Dedos dormentes: desvantagem em Ladinagem e Pontaria. Desvantagem em Fortitude contra frio. Um Caldo de Osso Quente dá vantagem em Fortitude contra frio e cancela essa desvantagem por 4 horas. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados a lesão termina. Passar uma cena inteira em local aquecido dá vantagem no teste de Cura.
 
 - Lesão Interna | Até ser operada. | No fim de cada cena de esforço intenso, sofre 1d4 de dano que nada evita. Descanso Excelente não recupera nada enquanto a lesão durar. | Cura DT 18, com ferramentas e uma hora de calma, para operar. Cura mágica de pelo menos 1 PV também encerra.
 
@@ -3308,6 +3312,16 @@ Use a extensão exata da característica racial. Golem não contrai doenças com
 - Durante abstinência, aplique apenas os efeitos mecânicos do estágio. O jogador continua decidindo as ações do personagem.
 
 - Usar a substância pode suspender efeitos conforme o catálogo, mas não reduz o estágio nem substitui tratamento.
+
+### Na ficha
+
+A ficha tem uma seção Aflições para acompanhar o que o personagem carrega. Escolha a aflição e role Fortitude contra a DT dela, ou aplique sem teste quando o Mestre já decidiu. A cada intervalo, o botão Teste do intervalo rola de novo e sobe, mantém ou desce o estágio conforme o resultado, e o estágio mostra o que ele faz com você.
+
+- O Cansaço que um estágio dá ao entrar é somado na ficha sozinho, até o teto de 6. Perda de Sanidade e drenagem de atributo você ajusta à mão.
+
+- Raça com imunidade só ganha um aviso. A decisão de aplicar ou não continua com a mesa.
+
+- O Mestre também aplica e muda aflições pelo cartão do personagem na Mesa ao Vivo, e a mudança aparece na sua ficha.
 
 ### Aflições por região
 
@@ -3850,17 +3864,17 @@ Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 60 Fragmentos, exis
 
 ### Câmbio
 
-O Banqueiro converte qualquer par de moedas no Discord, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa.
+O Banqueiro converte Lunaris, Solares e Fragmentos de Estrela no Discord, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa. Créditos Sombrios ficam de fora: o banco não os compra nem os vende.
 
 - Moeda | Vale em Solares | Vale em Lunaris
 
 - 1 Fragmento de Estrela ✧ | 50 Solares | 5.000 Lunaris
 
-- 1 Crédito Sombrio ♆ | 2 Solares | 200 Lunaris
-
 - 1 Solar ☉ | 1 Solar | 100 Lunaris
 
 - 100 Lunaris ☾ | 1 Solar | 100 Lunaris
+
+Créditos Sombrios ♆ são a moeda do mercado negro, das ruas que o Banco Lunar finge não ver. Não existe câmbio para eles: nenhum balcão do banco devolve Lunaris por Créditos, e nenhum vende Créditos por Lunaris. Eles chegam por negócio sujo, como vender uma mercadoria a um doleiro, e é no mercado negro que se gastam.
 
 A conta é sempre a mesma: converta para Solares, converta para a moeda de destino e desconte os 2%. Trocar 10 Fragmentos por Lunaris dá 500 Solares, ou seja 50.000 Lunaris, menos a taxa: você recebe 49.000.
 
@@ -3878,6 +3892,20 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 - Pela página do Cofre você saca o que precisar direto para a ficha do personagem.
 
+### Mandar e trocar entre personagens
+
+- No Inventário, o botão de avião manda um item para outro personagem da campanha, na quantidade que você escolher. O item chega desequipado.
+
+- Na Carteira, o botão Mandar passa moedas para outro personagem. Ninguém manda mais do que tem.
+
+- Aliado, Base e veículo completo ficam com o dono, porque parte deles vive fora do inventário. Equipamento com modificações instaladas só viaja com a pilha inteira.
+
+- Para negociar, use Propor troca: escolha o que oferece e o que pede de volta, itens e moedas, e escreva um recado se quiser. A proposta mostra o nome e a quantidade dos itens do outro personagem, e a carteira dele continua fechada.
+
+- Nada muda de mão até a outra pessoa aceitar. Se na hora do aceite um dos lados já não tiver o que prometeu, a troca não acontece e nada se perde.
+
+- Cada movimento fica no extrato dos dois personagens, com quem mandou e quem recebeu.
+
 ## loja
 
 **Categoria:** Livro do Jogador
@@ -3886,15 +3914,15 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 1137 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 1162 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 ### Os quatro locais
 
 - Local | O que vende | Itens
 
-- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 346
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 367
 
-- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 278
+- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 282
 
 - Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 275
 

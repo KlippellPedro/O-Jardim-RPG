@@ -40,6 +40,7 @@ from routers import (
     rolls,
     sessions,
     shop,
+    trades,
     vault,
     bounties,
     vehicles,
@@ -208,6 +209,7 @@ for api_router in (
     rolls.router,
     sessions.router,
     shop.router,
+    trades.router,
 ):
     app.include_router(api_router, prefix="/api/v1")
 app.include_router(vault.router, prefix="/api/v1")

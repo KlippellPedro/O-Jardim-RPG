@@ -1,5 +1,5 @@
 {
-  "_nota": "Rascunhos de estágios novos por família, a revisar antes de entrar no catálogo. NÃO importar no site. Textos aprovados em 2026-09-30 e já aplicados ao catálogo; o arquivo continua fora do site. `preco`, `preco_contratacao` e `contrato_mensal` foram fixados depois de `npm run precos:normalizar` (dentro da banda da raridade), para `--novos` reproduzir o catálogo. Criaturas com `disponivelNaLoja: false` ficam só no Bestiário. tools/aplicar-familias-bestiario.mjs --novos monta cada um pela curva de criatura (src/services/curvaCriatura.ts) e nunca sobrescreve ficha que já existe.",
+  "_nota": "Rascunhos de estágios novos por família, a revisar antes de entrar no catálogo. NÃO importar no site. Textos aprovados em 2026-09-30 e já aplicados ao catálogo; o arquivo continua fora do site. `preco`, `preco_contratacao` e `contrato_mensal` foram fixados depois de `npm run precos:normalizar` (dentro da banda da raridade), para `--novos` reproduzir o catálogo. Criaturas com `disponivelNaLoja: false` ficam só no Bestiário. tools/aplicar-familias-bestiario.mjs --novos monta cada um pela curva de criatura (src/services/curvaCriatura.ts) e nunca sobrescreve ficha que já existe. Em 2026-10-03 os títulos, as descrições e os nomes de ataque das criaturas de VD 45 em diante foram reescritos com nome próprio e personalidade; as habilidades novas moram no catálogo e este arquivo não as espelha.",
   "porFamilia": {
     "elemental": [
       {
@@ -42,23 +42,23 @@
         "nivelMinimoLoja": 3
       },
       {
-        "id": "elemental-de-fogo-primordial",
-        "titulo": "Elemental de Fogo Primordial",
+        "id": "ignarrak",
+        "titulo": "Ignarrak, o Primeiro Pavio",
         "vd": 45,
         "estagio": "Primordial",
         "papel": "solo",
         "classe": "Ser Lendário",
         "categoria": "Elemental",
         "deslocamento": "15m",
-        "descricao": "O fogo que o mundo usou para começar. Ele negocia, e o preço quase sempre é lembrar o que queimou da última vez.",
+        "descricao": "O fogo que o mundo usou para começar, ainda aceso porque ninguém lhe disse que podia parar. Fala em estalidos e negocia como mercador: oferece calor, luz e passagem, e cobra do outro lado uma lembrança do que queimou da última vez. Quem aceita o trato nunca esquece o que perdeu, só esquece por que valia a pena. Se Ignarrak cair, todo fogo comum do mundo demora um pouco mais para pegar, como se faltasse a faísca original.",
         "ataques": [
           {
-            "nome": "Toque Primordial",
+            "nome": "Mão de Brasa Viva",
             "tipo": "fogo",
             "modo": "corpo"
           },
           {
-            "nome": "Tempestade de Brasas",
+            "nome": "Chuva de Primeiras Faíscas",
             "tipo": "fogo, em área",
             "modo": "distancia"
           }
@@ -120,23 +120,23 @@
         "nivelMinimoLoja": 3
       },
       {
-        "id": "elemental-de-gelo-primordial",
-        "titulo": "Elemental de Gelo Primordial",
+        "id": "hiemara",
+        "titulo": "Hiemara, a Primeira Geada",
         "vd": 48,
         "estagio": "Primordial",
         "papel": "solo",
         "classe": "Ser Lendário",
         "categoria": "Elemental",
         "deslocamento": "15m",
-        "descricao": "O frio de antes de haver calor para comparar. Espera sem pressa, e o mundo em volta vai ficando do tamanho da paciência dele.",
+        "descricao": "O frio de antes de haver calor para comparar. Espera sem pressa, e o mundo em volta vai ficando do tamanho da paciência dela. Quem fala com Hiemara descobre uma voz doce e cansada, que pergunta por que tanta gente corre se tudo acaba parando. Se Hiemara cair, o inverno do mundo perde o primeiro dia e a primeira geada de cada ano chega mais tarde.",
         "ataques": [
           {
-            "nome": "Toque Primordial",
+            "nome": "Beijo de Geada",
             "tipo": "gelo",
             "modo": "corpo"
           },
           {
-            "nome": "Nevasca Primordial",
+            "nome": "Primeira Nevasca",
             "tipo": "gelo, em área",
             "modo": "distancia"
           }
@@ -159,23 +159,23 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "elemental-de-fogo-ancestral",
-        "titulo": "Elemental de Fogo Ancestral",
+        "id": "kalderon",
+        "titulo": "Kalderon, o Fogo Que Não Perdoou",
         "vd": 140,
         "estagio": "Ancestral",
         "papel": "solo",
         "classe": "Ser Lendário",
         "categoria": "Elemental",
         "deslocamento": "30m",
-        "descricao": "O fogo que continuou depois que o mundo esfriou. Cada passo dele deixa vidro no chão e um cheiro de pedra derretida no ar, e ele nunca perdoou o mundo por ter esfriado.",
+        "descricao": "O fogo que continuou depois que o mundo esfriou. Cada passo dele deixa vidro no chão e um cheiro de pedra derretida no ar, e ele nunca perdoou o mundo por ter esfriado. Quando fala, as rochas em volta racham em tom de pergunta. Se Kalderon cair, o vulcão mais antigo da região se apaga por mil anos, e o mundo agradece em silêncio.",
         "ataques": [
           {
-            "nome": "Toque Ancestral",
+            "nome": "Toque de Caldeira",
             "tipo": "fogo",
             "modo": "corpo"
           },
           {
-            "nome": "Coluna de Fogo",
+            "nome": "Coluna de Pedra Derretida",
             "tipo": "fogo, em área grande",
             "modo": "distancia"
           }
@@ -200,23 +200,23 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "elemental-de-gelo-ancestral",
-        "titulo": "Elemental de Gelo Ancestral",
+        "id": "hiemark",
+        "titulo": "Hiemark, o Inverno Que Ficou",
         "vd": 165,
         "estagio": "Ancestral",
         "papel": "solo",
         "classe": "Ser Lendário",
         "categoria": "Elemental",
         "deslocamento": "30m",
-        "descricao": "O inverno que decidiu ficar. Onde ele para, o tempo passa mais devagar, e as pegadas dele continuam congeladas por séculos depois que ele se foi.",
+        "descricao": "O inverno que decidiu ficar. Onde ele para, o tempo passa mais devagar, e as pegadas dele continuam congeladas por séculos depois que ele se foi. Quando fala, o ar da sala vira cristal por um instante e quem escuta lembra, com clareza, a última vez que sentiu frio de verdade. Se Hiemark cair, o inverno que ele guardava se espalha pelas estações, e o próximo ano terá três meses a mais de neve.",
         "ataques": [
           {
-            "nome": "Toque Ancestral",
+            "nome": "Toque de Séculos",
             "tipo": "gelo",
             "modo": "corpo"
           },
           {
-            "nome": "Nevasca Ancestral",
+            "nome": "Nevasca de Muitas Eras",
             "tipo": "gelo, em área grande",
             "modo": "distancia"
           }
@@ -321,23 +321,23 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "dragao-primordial",
-        "titulo": "Dragão Primordial",
+        "id": "anzhur",
+        "titulo": "Anzhur, o Avô do Fogo",
         "vd": 60,
         "estagio": "Primordial",
         "papel": "solo",
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "24m (Voo)",
-        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele.",
+        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele. Fala sumeriano, em frases curtas, e pergunta primeiro o que o visitante veio pedir antes de decidir se vai ouvir. Se Anzhur cair, o fogo do mundo perde o nome mais antigo e passa uma geração inteira sem saber como se chamar.",
         "ataques": [
           {
-            "nome": "Sopro Primordial",
+            "nome": "Sopro Que Nomeia",
             "tipo": "fogo, em área grande",
             "modo": "sopro"
           },
           {
-            "nome": "Garras e Mordida",
+            "nome": "Garras do Avô",
             "tipo": "cortante",
             "modo": "corpo"
           }
@@ -362,17 +362,17 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "dragao-ancestral",
-        "titulo": "Dragão Ancestral",
+        "id": "kurnagal",
+        "titulo": "Kurnagal, o Dragão em Crescimento",
         "vd": 110,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "30m (Voo)",
-        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência dele tem o tamanho do território.",
+        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência tem o tamanho do território. Em sumeriano arcaico, diz que ainda não terminou, e que o dia em que parar de crescer será o dia em que escolher onde morrer. Se Kurnagal cair, o continente perde o ponto mais alto, e as montanhas passam a ser a ruína da cauda dele.",
         "ataques": [
           {
-            "nome": "Sopro Ancestral",
+            "nome": "Sopro do Continente",
             "tipo": "fogo, em área grande",
             "modo": "sopro"
           },
@@ -488,14 +488,14 @@
     ],
     "avulsas": [
       {
-        "id": "dragao-do-fim-dos-tempos",
-        "titulo": "O Dragão do Fim dos Tempos",
+        "id": "apokalyx",
+        "titulo": "Apokalyx, o Dragão do Último Dia",
         "vd": 250,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "36m (Voo)",
-        "descricao": "Diz a lenda que espera o último dia de tudo, e que o sopro dele é a última coisa que o mundo conhece. Quem duvida da lenda nunca chegou perto das asas dele.",
+        "descricao": "Diz a lenda que espera o último dia de tudo, e que o sopro dele é a última coisa que o mundo conhece. Quem duvida da lenda nunca chegou perto das asas dele. Dorme sobre uma montanha de ouro, relógios e armas quebradas, e acorda só quando o que ele guarda deixa de fazer sentido. Se Apokalyx cair, o último dia se adia, e o mundo ganha um prazo que não pediu.",
         "ataques": [
           {
             "nome": "Sopro do Último Dia",
@@ -607,14 +607,14 @@
         "nivelMinimoLoja": 3
       },
       {
-        "id": "cavaleiro-da-ultima-hora",
-        "titulo": "O Cavaleiro da Última Hora",
+        "id": "ser-horario",
+        "titulo": "Ser Horário, da Última Hora",
         "vd": 90,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Morto-Vivo",
         "deslocamento": "18m",
-        "descricao": "Chega sempre um instante depois de tudo acabar, e é isso que o torna terrível: ele decide o que a última hora significou. Os que sobreviveram a ele evitam relógios.",
+        "descricao": "Chega sempre um instante depois de tudo acabar, e é isso que o torna terrível: ele decide o que a última hora significou. Os que sobreviveram a ele evitam relógios. Monta um cavalo pálido que não deixa pegada, e as armas dele são ponteiros de um relógio que ninguém sabe onde fica. Se Ser Horário cair, a hora em que perdeu passa a ser lembrada como o dia em que algo terminou de verdade.",
         "ataques": [
           {
             "nome": "Lâmina de Ponteiro",
@@ -649,14 +649,14 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "serpente-do-mundo",
-        "titulo": "A Serpente que Abraça o Mundo",
+        "id": "jormund",
+        "titulo": "Jörmund, a Serpente do Abraço",
         "vd": 100,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "30m (Nado)",
-        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Quando afrouxa o abraço, as marés respondem.",
+        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Dizem em nórdico antigo que, quando ela afrouxa o abraço, as marés respondem, e que, quando soltar de vez, o mundo não vai ter onde se apoiar. Dorme de olhos abertos e sonha com o mar de antes de haver mar. Se Jörmund cair, o abraço se desfaz e o mundo precisa descobrir de repente como ficar de pé sozinho.",
         "ataques": [
           {
             "nome": "Constrição do Mundo",
@@ -664,7 +664,7 @@
             "modo": "corpo"
           },
           {
-            "nome": "Maré Ancestral",
+            "nome": "Maré do Abraço",
             "tipo": "água, em área imensa",
             "modo": "distancia"
           }
@@ -690,14 +690,14 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "come-tempo",
-        "titulo": "O Que Come o Tempo",
+        "id": "ussurr",
+        "titulo": "Ussurr, o Ladrão de Instantes",
         "vd": 150,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Aberração",
         "deslocamento": "24m",
-        "descricao": "Nunca é visto duas vezes do mesmo jeito. O que ele deixou para trás são relógios parados em horas diferentes e pessoas com idade demais ou de menos.",
+        "descricao": "Nunca é visto duas vezes do mesmo jeito. O que ele deixou para trás são relógios parados em horas diferentes e pessoas com idade demais ou de menos. Quem ele alcança perde segundos, e quem fica sem segundos perde, devagar, a vez de agir. Se Ussurr cair, os segundos que roubou voltam, todos ao mesmo tempo, e quem os recebe vive um instante de sobra por cada um que perdeu.",
         "ataques": [
           {
             "nome": "Mordida de Segundos",
@@ -733,14 +733,14 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "fim-que-anda",
-        "titulo": "O Fim Que Anda",
+        "id": "teleios",
+        "titulo": "Teleios, o Fim Que Anda",
         "vd": 200,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "24m",
-        "descricao": "Uma figura sem pressa, com o passo de quem já sabe como cada caminho termina. Aparece onde tudo já estava terminando, e o que sobra é silêncio educado.",
+        "descricao": "Uma figura sem pressa, com o passo de quem já sabe como cada caminho termina. Aparece onde tudo já estava terminando, e o que sobra é um silêncio educado. Ninguém o vê chegar, só percebe que ele já estava lá, de pé, esperando o fim da frase. Se Teleios cair, o que ele ia encerrar continua aberto, e alguém no Jardim precisa decidir se quer terminar sozinho.",
         "ataques": [
           {
             "nome": "Toque do Encerramento",
@@ -775,14 +775,14 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "titan-que-sustenta-o-ceu",
-        "titulo": "O Titã que Sustenta o Céu",
+        "id": "atlarion",
+        "titulo": "Atlarion, o Que Sustenta o Céu",
         "vd": 400,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "30m",
-        "descricao": "Carrega o céu nos ombros desde antes de haver quem olhasse para cima. Quando muda de posição, as estações mudam de lugar, e o que ele diz em voz baixa vira lei nos vales.",
+        "descricao": "Carrega o céu nos ombros desde antes de haver quem olhasse para cima. Quando muda de posição, as estações mudam de lugar, e o que diz em voz baixa vira lei nos vales. Está cansado, mas a palavra cansaço soa nele como um favor pedido a um vizinho. Se Atlarion cair, o céu cai com ele, ou alguém precisa de ombros que ninguém tem.",
         "ataques": [
           {
             "nome": "Punho de Céu e Terra",
@@ -1185,14 +1185,14 @@
         "nivelMinimoLoja": 3
       },
       {
-        "id": "gigante-ancestral",
-        "titulo": "Gigante Ancestral",
+        "id": "peloros",
+        "titulo": "Pelóros, o Avô das Montanhas",
         "vd": 55,
         "papel": "solo",
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "18m",
-        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e ele pergunta sempre o mesmo: por que tanta gente pequena em cima do meu chão?",
+        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e a pergunta é sempre a mesma: por que tanta gente pequena em cima do meu chão? Fala grego antigo, devagar, como quem escolhe cada pedra. Se Pelóros cair, a cordilheira onde dormia perde a forma que tinha, e a cidade que ficava à sombra dela passa a ficar à luz.",
         "ataques": [
           {
             "nome": "Punho do Mundo",
@@ -1228,22 +1228,22 @@
     ],
     "hidra": [
       {
-        "id": "hidra-de-sete-cabecas",
-        "titulo": "Hidra de Sete Cabeças",
+        "id": "lerneia",
+        "titulo": "Lerneia, a Que Discute Consigo",
         "vd": 47,
         "papel": "solo",
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "12m",
-        "descricao": "Sete pescoços, sete opiniões, uma única fome. Corte um e o pescoço volta com um irmão, então a luta não se ganha por força: ganha-se por fogo, por tempo ou por sorte.",
+        "descricao": "Sete pescoços, sete opiniões, uma fome só. Cada cabeça tem voz própria, e elas passam a luta discordando em voz alta sobre quem deve ser mordido primeiro, o que costuma dar tempo ao grupo para respirar e, às vezes, para negociar com a cabeça certa. Corte uma e o pescoço volta com um irmão, então a luta não se ganha por força: ganha-se por fogo, por ácido ou por sorte. Se Lerneia cair, o pântano onde vive seca em uma noite e as cabeças restantes passam a ser lembradas como sete testemunhas.",
         "ataques": [
           {
-            "nome": "Mordidas Múltiplas",
+            "nome": "Sete Bocas",
             "tipo": "perfurante",
             "modo": "corpo"
           },
           {
-            "nome": "Cuspe Ácido",
+            "nome": "Cuspe do Pântano",
             "tipo": "ácido",
             "modo": "distancia"
           }
@@ -1270,14 +1270,14 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "hidra-primordial",
-        "titulo": "Hidra Primordial",
+        "id": "hydrath",
+        "titulo": "Hydrath, a Soma de Todas as Hidras",
         "vd": 80,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "15m",
-        "descricao": "Uma hidra tão antiga que cada cabeça dela já foi uma hidra inteira. Ocupa um lago sem esforço, e o lago não ousa esvaziar.",
+        "descricao": "Uma hidra tão antiga que cada cabeça já foi uma hidra inteira. Ocupa um lago sem esforço, e o lago não ousa esvaziar. As cabeças moram em corpos diferentes, e quando uma morre a outra a sepulta em silêncio com a língua. Se Hydrath cair, o lago que a abrigava devolve as sete mil pedras que ela usava para contar as cabeças.",
         "ataques": [
           {
             "nome": "Mordidas de Muitas Cabeças",
@@ -1285,7 +1285,7 @@
             "modo": "corpo"
           },
           {
-            "nome": "Torrente Ácida",
+            "nome": "Torrente de Lago",
             "tipo": "ácido, em área",
             "modo": "distancia"
           }
@@ -1355,17 +1355,17 @@
     ],
     "golem": [
       {
-        "id": "golem-titanico",
-        "titulo": "Golem Titânico",
+        "id": "mutis",
+        "titulo": "Mutis, o Guardião da Cidade Muda",
         "vd": 65,
         "papel": "solo",
         "classe": "Ser Lendário",
         "categoria": "Constructo",
         "deslocamento": "12m",
-        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra.",
+        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra. Os golens falam por Libras, e ele aprendeu a ordem por gestos que o último arquiteto fez antes de desaparecer; quem sabe repetir esses gestos descobre que ele ainda espera a ordem de parar. Se Mutis cair, a cidade que guardava para de existir de repente, como se tivesse sido uma ordem a segurá-la de pé.",
         "ataques": [
           {
-            "nome": "Punho Titânico",
+            "nome": "Punho de Torre",
             "tipo": "impacto",
             "modo": "corpo"
           },
@@ -1439,22 +1439,22 @@
         "nivelMinimoLoja": 3
       },
       {
-        "id": "vampiro-anciao",
-        "titulo": "Vampiro Ancião",
+        "id": "dragomir",
+        "titulo": "Dragomir, o Conde do Último Baile",
         "vd": 49,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Morto-Vivo",
         "deslocamento": "12m",
-        "descricao": "Viu séculos passarem em salões que hoje são ruínas, e ainda se veste como quem vai a um baile. Educado até o último segundo, e o último segundo costuma chegar rápido.",
+        "descricao": "Viu séculos passarem em salões que hoje são ruínas, e ainda se veste como quem vai a um baile. Educado até o último segundo, e o último segundo costuma chegar rápido. Em cada cidade que habita deixa convites com o nome do convidado escrito à mão, e quem aceita descobre que o baile é uma luta em que todos dançam e só ele escolhe a música. Se Dragomir cair, os convites que ainda circulam perdem a tinta, mas quem já aceitou continua devendo uma dança a alguém.",
         "ataques": [
           {
-            "nome": "Garras de Seda",
+            "nome": "Luvas de Seda",
             "tipo": "cortante",
             "modo": "corpo"
           },
           {
-            "nome": "Olhar Dominante",
+            "nome": "Olhar do Anfitrião",
             "tipo": "psíquico",
             "modo": "distancia"
           }
@@ -1482,17 +1482,17 @@
     ],
     "vazio": [
       {
-        "id": "devorador-de-eras",
-        "titulo": "Devorador de Eras",
+        "id": "aionofagos",
+        "titulo": "Aionofagos, o Devorador de Eras",
         "vd": 120,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Aberração",
         "deslocamento": "18m",
-        "descricao": "Devora o momento em que as coisas aconteceram. Onde ele passa, as pessoas esquecem que o lugar existiu, e as estações perdem a ordem e se repetem.",
+        "descricao": "Devora o momento em que as coisas aconteceram. Onde ele passa, as pessoas esquecem que o lugar existiu, e as estações perdem a ordem e se repetem. O que ele morde é a memória que o presente guarda. Se Aionofagos cair, o que ele devorou não volta, mas as pessoas lembram, devagar, de que algo foi comido.",
         "ataques": [
           {
-            "nome": "Mordida do Depois",
+            "nome": "Dentada do Depois",
             "tipo": "Vazio",
             "modo": "corpo"
           },
@@ -1525,14 +1525,14 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "ausencia-faminta",
-        "titulo": "A Ausência Faminta",
+        "id": "lacuna",
+        "titulo": "Lacuna, a Ausência Faminta",
         "vd": 300,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Aberração",
         "deslocamento": "24m",
-        "descricao": "Um lugar onde deveria haver alguma coisa e não há. Cresce sobre o que consome, e o que resta parece sempre um pouco menor do que era.",
+        "descricao": "Um lugar onde deveria haver alguma coisa e não há. Cresce sobre o que consome, e o que resta parece sempre um pouco menor do que era. Quem chama por ela ouve a própria voz voltar mais fraca, e quem não chama é esquecido por ela por último. Se Lacuna cair, o que consumiu não volta, mas passa a doer, e é a primeira vez que a falta incomoda quem a sente.",
         "ataques": [
           {
             "nome": "Toque de Falta",
@@ -1568,17 +1568,17 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "ultimo-silencio",
-        "titulo": "O Último Silêncio",
+        "id": "selah",
+        "titulo": "Selah, o Último Silêncio",
         "vd": 500,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Aberração",
         "deslocamento": "30m",
-        "descricao": "Vem depois de todo o resto, quando não sobra ninguém para chamá-lo de nada. Os que o viram descrevem só uma coisa: o momento antes de a voz falhar.",
+        "descricao": "Vem depois de todo o resto, quando não sobra ninguém para chamá-lo de nada. Os que o viram descrevem só uma coisa: o momento antes de a voz falhar. Selah é a pausa que existe no fim de todas as frases, esticada até virar criatura. Se Selah cair, o que estava calado pode finalmente falar, e o primeiro som do mundo é a voz de quem se despede.",
         "ataques": [
           {
-            "nome": "Silêncio que Corta",
+            "nome": "Silêncio Que Corta",
             "tipo": "Vazio",
             "modo": "corpo"
           },
@@ -1590,7 +1590,7 @@
         ],
         "habilidades": [
           "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT {dt}; em falha, perde 5d6 de Sanidade e fica Amedrontado)",
-          "Fim do Som (1/cena: como Ação Padrão, criaturas na área fazem Vontade DT {dt}. Sofrem 25d10 de Vazio e ficam Surdas até o fim da cena, metade e sem condição em sucesso; esse dano não gera crítico)",
+          "Fim do Som (1/cena: como Ação Padrão, criaturas na área fazem Vontade DT {dt}. Sofrem 25d10 de Vazio e ficam Desorientadas, sem ouvir nada, até o fim da cena; metade do dano e sem condição em sucesso; esse dano não gera crítico)",
           "Sinais (o som some de um lugar de cada vez, até a respiração do grupo)",
           "Como Evitar (ele reage a quem tenta fazer barulho: a cena é de fuga em silêncio, ou de fechar o Vão por onde ele veio)"
         ],
@@ -1653,22 +1653,22 @@
         "nivelMinimoLoja": 3
       },
       {
-        "id": "arcanjo",
-        "titulo": "Arcanjo",
+        "id": "ezrakael",
+        "titulo": "Ezrakael, o Portador da Ordem",
         "vd": 85,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Espírito",
         "deslocamento": "24m (Voo)",
-        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que ele traz não pede licença, e o que ele decide proteger fica protegido.",
+        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala enoquiano, e cada palavra dele soa como uma frase de lei. Se Ezrakael cair, a ordem que carregava fica por cumprir, e algum lugar do Jardim espera uma resposta que não vem.",
         "ataques": [
           {
-            "nome": "Espada de Luz",
+            "nome": "Espada de Mensagem",
             "tipo": "luz",
             "modo": "corpo"
           },
           {
-            "nome": "Sentença Radiante",
+            "nome": "Sentença de Luz",
             "tipo": "luz, em área",
             "modo": "distancia"
           }
@@ -1694,14 +1694,14 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "serafim",
-        "titulo": "Serafim",
+        "id": "seraquiel",
+        "titulo": "Seraquiel, o Cântico de Seis Asas",
         "vd": 150,
         "papel": "chefe",
         "classe": "Ser Lendário",
         "categoria": "Espírito",
         "deslocamento": "30m (Voo)",
-        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível.",
+        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em enoquiano, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas. Se Seraquiel cair, o canto continua em algum lugar, mais baixo, esperando alguém que o escute até o fim.",
         "ataques": [
           {
             "nome": "Lâmina do Cântico",
@@ -1709,7 +1709,7 @@
             "modo": "corpo"
           },
           {
-            "nome": "Cântico Devastador",
+            "nome": "Coro Devastador",
             "tipo": "luz, em área grande",
             "modo": "distancia"
           }
@@ -1737,22 +1737,22 @@
     ],
     "mar": [
       {
-        "id": "serpente-marinha-ancestral",
-        "titulo": "Serpente Marinha Ancestral",
+        "id": "marenostra",
+        "titulo": "Marenostra, a de Mil Nomes",
         "vd": 70,
         "papel": "solo",
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "24m (Nado)",
-        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão nomes diferentes a ela em cada porto, e ela atende por todos.",
+        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão a ela um nome diferente em cada porto, e ela atende por todos, em latim de sereia, sem nunca corrigir ninguém. Navios que a chamam pelo nome certo costumam atravessar; os que a chamam de monstro raramente chegam em casa. Se Marenostra cair, os portos perdem o nome que davam a ela e nenhum marinheiro lembra por que rezava de olhos fechados.",
         "ataques": [
           {
-            "nome": "Constrição Oceânica",
+            "nome": "Anel Oceânico",
             "tipo": "impacto",
             "modo": "corpo"
           },
           {
-            "nome": "Jato de Maré",
+            "nome": "Jato de Todas as Marés",
             "tipo": "água, em área",
             "modo": "distancia"
           }
@@ -1778,23 +1778,23 @@
         "nivelMinimoLoja": 4
       },
       {
-        "id": "maremoto-que-anda",
-        "titulo": "O Maremoto que Anda",
+        "id": "mareia",
+        "titulo": "Mareia, a Onda Que Escolheu Andar",
         "vd": 130,
         "estagio": "Maremoto",
         "papel": "solo",
         "classe": "Ser Lendário",
         "categoria": "Elemental",
         "deslocamento": "30m (Nado)",
-        "descricao": "Uma onda que aprendeu a ir para onde quer. Passa por cima de cais, faróis e cidades pequenas, e volta para o mar como quem termina uma tarefa.",
+        "descricao": "Uma onda que aprendeu a ir para onde quer. Passa por cima de cais, faróis e cidades pequenas, e volta para o mar como quem termina uma tarefa. Os que sobrevivem juram ter ouvido uma risada de criança dentro da água. Se Mareia cair, o oceano esquece que podia caminhar, e as marés voltam a obedecer só à lua.",
         "ataques": [
           {
-            "nome": "Muralha de Água",
+            "nome": "Parede de Água",
             "tipo": "água",
             "modo": "corpo"
           },
           {
-            "nome": "Onda Devastadora",
+            "nome": "Onda Que Passa",
             "tipo": "água, em área imensa",
             "modo": "distancia"
           }

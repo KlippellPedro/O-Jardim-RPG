@@ -727,6 +727,13 @@ export const REGRA_AFLICOES = {
       <li>Durante abstinência, aplique apenas os efeitos mecânicos do estágio. O jogador continua decidindo as ações do personagem.</li>
       <li>Usar a substância pode suspender efeitos conforme o catálogo, mas não reduz o estágio nem substitui tratamento.</li>
     </ul>
+    <h3 class="regras-subtitle">Na ficha</h3>
+    <p>A ficha tem uma seção Aflições para acompanhar o que o personagem carrega. Escolha a aflição e role Fortitude contra a DT dela, ou aplique sem teste quando o Mestre já decidiu. A cada intervalo, o botão Teste do intervalo rola de novo e sobe, mantém ou desce o estágio conforme o resultado, e o estágio mostra o que ele faz com você.</p>
+    <ul class="regras-list">
+      <li>O Cansaço que um estágio dá ao entrar é somado na ficha sozinho, até o teto de 6. Perda de Sanidade e drenagem de atributo você ajusta à mão.</li>
+      <li>Raça com imunidade só ganha um aviso. A decisão de aplicar ou não continua com a mesa.</li>
+      <li>O Mestre também aplica e muda aflições pelo cartão do personagem na Mesa ao Vivo, e a mudança aparece na sua ficha.</li>
+    </ul>
     <h3 class="regras-subtitle">Aflições por região</h3>
     <p>Cada região do Jardim tem as próprias doenças e venenos. A tabela diz onde cada aflição costuma ser pega, para o grupo saber o que levar antes de entrar: pano no rosto em Baluarte, sombra para os olhos em Alétheia, companhia no Vazio. Fora da região, só vale se alguém levou a exposição junto, como um pó, uma amostra ou um ferimento aberto.</p>
     <div class="regras-table-wrap"><table class="regras-table">
@@ -756,6 +763,9 @@ export const REGRA_AFLICOES = {
       <li>Drenagem de atributo é temporária e para em menos 3 por aflição. Não improvise drenagem permanente: isso é território de maldição, que é outra coisa.</li>
       <li>O Cansaço ganho ao entrar num estágio fica até o descanso reduzir. Some ao que a campanha já está cobrando antes de aplicar mais uma.</li>
     </ul>
+
+    <h3 class="regras-subtitle">Aplicar pela mesa</h3>
+    <p>Na Sessão ao Vivo, o cartão de cada personagem tem um painel de Aflições: aplique, mude o estágio ou tire sem sair da cena. O jogador vê a mudança na ficha e continua rolando os testes de intervalo. Use o estágio de entrada para a exposição que a história já resolveu, e deixe o teste de Fortitude para quando houver dúvida de verdade.</p>
 
     <h3 class="regras-subtitle">Respeitar as imunidades</h3>
     <p>Use a extensão exata escrita na raça: Golem escapa de doença comum, Auleth escapa de comum e sobrenatural, Autômato escapa de doença e veneno enquanto não tiver Máquina Viva. Não estenda por analogia, e não invente imunidade para fisiologia que não a declara.</p>

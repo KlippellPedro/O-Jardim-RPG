@@ -1,6 +1,49 @@
 from __future__ import annotations
 
 
+# As 28 criaturas de VD 45 em diante ganharam nome próprio em 2026-10-03 e, com ele, um
+# id novo. O id antigo é chave de loot por campanha, de participante da sessão, de
+# inventário e de publicação do catálogo, então a migração 50 leva tudo para o novo.
+IDS_ANTIGOS_DAS_CRIATURAS: dict[str, str] = {
+    "leviata": "vaelthor",
+    "elemental-de-fogo-primordial": "ignarrak",
+    "hidra-de-sete-cabecas": "lerneia",
+    "devorador-de-mundos": "gulhar",
+    "apagador-de-constelacoes": "nyxhael",
+    "elemental-de-gelo-primordial": "hiemara",
+    "vampiro-anciao": "dragomir",
+    "fenix-imortal": "aurelith",
+    "gigante-ancestral": "peloros",
+    "dragao-primordial": "anzhur",
+    "golem-titanico": "mutis",
+    "serpente-marinha-ancestral": "marenostra",
+    "hidra-primordial": "hydrath",
+    "arcanjo": "ezrakael",
+    "cavaleiro-da-ultima-hora": "ser-horario",
+    "serpente-do-mundo": "jormund",
+    "dragao-ancestral": "kurnagal",
+    "devorador-de-eras": "aionofagos",
+    "maremoto-que-anda": "mareia",
+    "elemental-de-fogo-ancestral": "kalderon",
+    "serafim": "seraquiel",
+    "come-tempo": "ussurr",
+    "elemental-de-gelo-ancestral": "hiemark",
+    "fim-que-anda": "teleios",
+    "dragao-do-fim-dos-tempos": "apokalyx",
+    "ausencia-faminta": "lacuna",
+    "titan-que-sustenta-o-ceu": "atlarion",
+    "ultimo-silencio": "selah",
+}
+
+
+def _renomear_ids(tabela: str, coluna: str, extra: str = "") -> str:
+    valores = ", ".join(f"('{antigo}', '{novo}')" for antigo, novo in IDS_ANTIGOS_DAS_CRIATURAS.items())
+    return (
+        f"UPDATE {tabela} SET {coluna} = m.novo FROM (VALUES {valores}) AS m(antigo, novo) "
+        f"WHERE {tabela}.{coluna} = m.antigo{extra}"
+    )
+
+
 MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
     (
         1,
@@ -1746,6 +1789,80 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             ALTER TABLE sessao_participantes
             ADD COLUMN IF NOT EXISTS loot JSONB
             """,
+        ),
+    ),
+    (
+        48,
+        "troca_com_aceite_e_loot_por_campanha",
+        (
+            # Proposta de troca entre dois personagens. Nada muda de mão até o
+            # outro lado aceitar; aceitar move tudo numa transação só.
+            """
+            CREATE TABLE IF NOT EXISTS propostas_troca (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                de_personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                para_personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                oferta JSONB NOT NULL DEFAULT '{}'::jsonb,
+                pedido JSONB NOT NULL DEFAULT '{}'::jsonb,
+                mensagem TEXT NOT NULL DEFAULT '',
+                status TEXT NOT NULL DEFAULT 'aberta'
+                    CHECK (status IN ('aberta', 'aceita', 'recusada', 'cancelada')),
+                criada_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                resolvida_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                resolvida_em TIMESTAMPTZ,
+                CHECK (de_personagem_id <> para_personagem_id)
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS propostas_troca_abertas_idx
+            ON propostas_troca (campanha_id, status, criado_em DESC)
+            """,
+            # Tabela de loot ajustada pelo Mestre só para a campanha dele. Sem
+            # linha aqui, vale a tabela oficial (data/bestiario/loot-criaturas.json).
+            """
+            CREATE TABLE IF NOT EXISTS loot_campanha (
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                monstro_id TEXT NOT NULL,
+                tabela JSONB NOT NULL,
+                atualizado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (campanha_id, monstro_id)
+            )
+            """,
+        ),
+    ),
+    (
+        49,
+        "nota_no_convite_de_plataforma",
+        (
+            # Para quem foi o convite ("Marina, mesa de sexta"). O código em si
+            # só existe no momento em que é gerado; a nota é o que sobra para
+            # reconhecer o convite depois.
+            """
+            ALTER TABLE convites_plataforma
+            ADD COLUMN IF NOT EXISTS nota TEXT NOT NULL DEFAULT ''
+            """,
+        ),
+    ),
+    (
+        50,
+        "ids_novos_das_criaturas_lendarias",
+        tuple(
+            _renomear_ids(tabela, coluna)
+            for tabela, coluna in (
+                ("sessao_participantes", "monstro_id"),
+                ("loot_campanha", "monstro_id"),
+                ("inventario_personagem", "item_id"),
+                ("cofre_itens_usuario", "item_id"),
+                ("reservas_cofre", "item_id"),
+                ("catalogo_itens_campanha", "item_id"),
+                ("revisoes_catalogo_campanha", "item_id"),
+            )
+        ) + (
+            # Ajustes do Mestre sobre a criatura no Bestiário do Mundo (registros universais).
+            _renomear_ids("campanha_registros_universais", "origem_id", " AND campanha_registros_universais.secao = 'bestiario'"),
         ),
     ),
 )

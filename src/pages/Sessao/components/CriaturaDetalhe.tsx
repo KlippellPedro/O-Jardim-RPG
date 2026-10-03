@@ -1,12 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { Activity, Check, Footprints, Gem, Heart, Minus, Plus, RefreshCw, Shield, Sparkles, Swords, Timer, X, Zap } from 'lucide-react';
-import type { BestiarioMonstro } from '../../../services/sessaoApi';
+import { Activity, Check, Coins, Footprints, Gem, Heart, Minus, Pencil, Plus, RefreshCw, RotateCcw, Shield, Sparkles, Star, Swords, Timer, X, Zap } from 'lucide-react';
+import { sessaoApi, type BestiarioMonstro, type TabelaDeLoot } from '../../../services/sessaoApi';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { PAPEIS_CRIATURA, type PapelCriatura } from '../../../services/curvaCriatura';
+import { EditorLootCampanha } from './EditorLootCampanha';
 
 interface CriaturaDetalheProps {
+  /** Para buscar a tabela de loot, que só o Mestre recebe. */
+  campanhaId?: string;
   monstro: BestiarioMonstro;
   familia?: string | null;
   cor: string;
@@ -29,6 +32,117 @@ const RARIDADES: Record<string, string> = {
   comum: 'Comum', incomum: 'Incomum', raro: 'Raro', epico: 'Épico', lendario: 'Lendário',
 };
 
+const COR_RARIDADE: Record<string, string> = {
+  comum: 'text-white/75', incomum: 'text-emerald-200', raro: 'text-sky-200', epico: 'text-fuchsia-200', lendario: 'text-amber-200',
+};
+
+/** A chance pesa na cor: o que sempre cai fica verde, o raro vai esfriando. */
+const corDaChance = (chance: number) => (
+  chance >= 100 ? 'border-emerald-300/40 bg-emerald-300/10 text-emerald-200'
+    : chance >= 50 ? 'border-sky-300/30 bg-sky-300/10 text-sky-200'
+      : chance >= 15 ? 'border-amber-300/30 bg-amber-300/10 text-amber-200'
+        : 'border-fuchsia-300/30 bg-fuchsia-300/10 text-fuchsia-200'
+);
+
+const quantidadeLegivel = (texto: string) => (/^\d+$/.test(texto) ? `${texto}x` : texto);
+
+/** Tabela de loot da criatura: o que pode cair e com que chance. */
+const SecaoLoot = ({ campanhaId, monstroId }: { campanhaId: string; monstroId: string }) => {
+  const [tabela, setTabela] = useState<TabelaDeLoot | null>(null);
+  const [erro, setErro] = useState(false);
+  const [editando, setEditando] = useState(false);
+  const [voltando, setVoltando] = useState(false);
+  const carregar = React.useCallback(() => {
+    let cancelado = false;
+    setErro(false);
+    sessaoApi.tabelaDeLoot(campanhaId, monstroId)
+      .then((resposta) => { if (!cancelado) setTabela(resposta); })
+      .catch(() => { if (!cancelado) setErro(true); });
+    return () => { cancelado = true; };
+  }, [campanhaId, monstroId]);
+  useEffect(() => {
+    setTabela(null);
+    setEditando(false);
+    return carregar();
+  }, [carregar]);
+
+  const voltarParaOficial = async () => {
+    if (!window.confirm('Voltar esta criatura para a tabela de loot oficial nesta campanha?')) return;
+    setVoltando(true);
+    try {
+      await sessaoApi.restaurarTabelaDeLoot(campanhaId, monstroId);
+      carregar();
+    } catch {
+      setErro(true);
+    } finally {
+      setVoltando(false);
+    }
+  };
+
+  return (
+    <section id="criatura-detalhe-loot" className="scroll-mt-4">
+      <div className="mb-2 flex flex-wrap items-center gap-2">
+        <h4 className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40"><Gem size={12} /> Loot</h4>
+        {tabela?.ajustada ? <span className="rounded-full border border-[#c7a44c]/40 bg-[#c7a44c]/10 px-2 py-0.5 text-[10px] font-semibold text-[#f0d685]">Ajustada nesta campanha</span> : null}
+        {tabela && !editando ? (
+          <div className="ml-auto flex gap-1.5">
+            {tabela.ajustada ? (
+              <button type="button" disabled={voltando} onClick={() => void voltarParaOficial()} className="flex items-center gap-1 rounded-md border border-white/10 px-2 py-1 text-[11px] text-white/55 hover:text-white disabled:opacity-40">
+                {voltando ? <RefreshCw size={11} className="animate-spin" /> : <RotateCcw size={11} />} Voltar à oficial
+              </button>
+            ) : null}
+            <button type="button" onClick={() => setEditando(true)} className="flex items-center gap-1 rounded-md border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-2 py-1 text-[11px] font-semibold text-[#f0d685] hover:bg-[#c7a44c]/20">
+              <Pencil size={11} /> Ajustar nesta campanha
+            </button>
+          </div>
+        ) : null}
+      </div>
+      {erro ? (
+        <p className="text-xs text-red-200/80">Não foi possível carregar a tabela de loot.</p>
+      ) : !tabela ? (
+        <p className="flex items-center gap-2 text-xs text-white/40"><RefreshCw size={12} className="animate-spin" /> Carregando a tabela…</p>
+      ) : editando ? (
+        <EditorLootCampanha
+          campanhaId={campanhaId}
+          monstroId={monstroId}
+          tabela={tabela}
+          onSalvo={(nova) => { setTabela(nova); setEditando(false); }}
+          onCancelar={() => setEditando(false)}
+        />
+      ) : tabela.itens.length === 0 && !tabela.moedas ? (
+        <p className="text-xs text-white/40">Nesta campanha, esta criatura não deixa nada.</p>
+      ) : (
+        <>
+          <ul className="space-y-1">
+            {[...tabela.itens].sort((a, b) => b.chance - a.chance).map((item) => (
+              <li key={item.item_id} className="flex items-center gap-2.5 rounded-lg border border-white/[0.07] bg-black/25 px-3 py-2">
+                <span className={`w-12 shrink-0 rounded-md border py-0.5 text-center text-[11px] font-bold tabular-nums ${corDaChance(item.chance)}`}>{item.chance}%</span>
+                <span className={`min-w-0 flex-1 truncate text-sm ${COR_RARIDADE[item.raridade ?? ''] ?? 'text-white/75'}`}>
+                  {item.titulo}
+                  {item.exclusivo ? <Star size={11} className="ml-1.5 inline -translate-y-px fill-amber-300 text-amber-300" aria-label="Exclusivo" /> : null}
+                </span>
+                {item.raridade ? <span className="hidden shrink-0 text-[10px] uppercase tracking-wider text-white/35 sm:inline">{RARIDADES[item.raridade] ?? item.raridade}</span> : null}
+                <span className="w-12 shrink-0 text-right font-mono text-xs text-white/55">{quantidadeLegivel(item.quantidade)}</span>
+              </li>
+            ))}
+            {tabela.moedas ? (
+              <li className="flex items-center gap-2.5 rounded-lg border border-amber-300/15 bg-amber-300/[0.04] px-3 py-2">
+                <span className={`w-12 shrink-0 rounded-md border py-0.5 text-center text-[11px] font-bold tabular-nums ${corDaChance(tabela.moedas.chance)}`}>{tabela.moedas.chance}%</span>
+                <span className="flex min-w-0 flex-1 items-center gap-1.5 text-sm text-amber-100"><Coins size={13} /> {tabela.moedas.moeda}</span>
+                <span className="w-12 shrink-0 text-right font-mono text-xs text-white/55">{tabela.moedas.dados}</span>
+              </li>
+            ) : null}
+          </ul>
+          <p className="mt-2 text-[11px] leading-5 text-white/35">
+            Cada linha rola sozinha (d100 contra a chance) quando você rolar o loot no card da criatura em cena.
+            {tabela.itens.some((item) => item.exclusivo) ? ' A estrela marca o que só cai desta criatura e não existe na Loja.' : ''}
+          </p>
+        </>
+      )}
+    </section>
+  );
+};
+
 /** "Presença Aterradora (cada personagem...)" vira nome em destaque e regra embaixo. */
 const separarHabilidade = (texto: string): { nome: string; regra: string } => {
   const casamento = texto.match(/^([^()]{1,60}?)\s*\(([\s\S]*)\)\s*$/);
@@ -45,7 +159,7 @@ const Numero = ({ icone, rotulo, valor, tom }: { icone: React.ReactNode; rotulo:
 );
 
 /** A ficha inteira de uma criatura do Bestiário, para consultar durante a sessão. */
-export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ monstro, familia, cor, adicionados, ocupado, onAdicionar, onFechar }) => {
+export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ campanhaId, monstro, familia, cor, adicionados, ocupado, onAdicionar, onFechar }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const [quantidade, setQuantidade] = useState(1);
   useDialogAccessibility({ open: true, dialogRef, onClose: onFechar });
@@ -98,7 +212,15 @@ export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ monstro, famil
               ))}
               {monstro.nivel != null ? <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[11px] text-white/65">Nível {monstro.nivel}</span> : null}
               {monstro.vd != null ? <span className="rounded-full border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-2 py-0.5 text-[11px] font-semibold text-[#f0d685]">{monstro.xp} XP</span> : null}
-              {monstro.tem_loot ? <span className="flex items-center gap-1 rounded-full border border-emerald-300/25 bg-emerald-300/10 px-2 py-0.5 text-[11px] text-emerald-200"><Gem size={10} /> Tem loot</span> : null}
+              {monstro.tem_loot ? (
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('criatura-detalhe-loot')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                  className="flex items-center gap-1 rounded-full border border-emerald-300/25 bg-emerald-300/10 px-2 py-0.5 text-[11px] text-emerald-200 hover:bg-emerald-300/20"
+                >
+                  <Gem size={10} /> Ver loot
+                </button>
+              ) : null}
             </div>
           </div>
           <button type="button" onClick={onFechar} className="rounded-lg p-2 text-white/50 hover:bg-white/5 hover:text-white" aria-label="Fechar ficha da criatura">
@@ -124,7 +246,7 @@ export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ monstro, famil
               <div className="grid grid-cols-5 gap-1.5">
                 {ATRIBUTOS_CRIATURA.map(([chave, rotulo]) => (
                   <div key={chave} className="rounded-lg border border-white/[0.07] bg-black/30 py-2 text-center">
-                    <span className="block text-[9px] font-bold uppercase tracking-wider text-white/40">{rotulo}</span>
+                    <span className="block text-[9px] font-bold uppercase tracking-tight text-white/40 sm:tracking-wider">{rotulo}</span>
                     <span className="text-base font-black tabular-nums text-white">{atributos[chave] ?? '-'}</span>
                   </div>
                 ))}
@@ -168,6 +290,8 @@ export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ monstro, famil
               </ul>
             </section>
           ) : null}
+
+          {(monstro.tem_loot || monstro.loot_ajustado) && campanhaId ? <SecaoLoot campanhaId={campanhaId} monstroId={monstro.id} /> : null}
 
           {monstro.funcao ? <p className="text-xs leading-5 text-white/45"><strong className="text-white/60">Contratada para:</strong> {monstro.funcao}</p> : null}
         </div>

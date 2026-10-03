@@ -1,0 +1,699 @@
+{
+  "_nota": "Fichas das Deidades para o Bestiário da Sessão. Lido só pelo servidor (plataforma/core/deidades.py) e entregue só a quem comanda a mesa: o campo Estado revela o que a mesa só descobre pela história. A fonte do texto é o capítulo Guia do Mestre (data/regras/regras.ts, seção Fichas das Deidades); mudou um, mude o outro. Os números são o degrau VD 500 (fora do Domínio).",
+  "versao": 1,
+  "deidades": [
+    {
+      "id": "deidade-aethel",
+      "titulo": "Aethel",
+      "epiteto": "Aquela que Flui na Origem",
+      "descricao": "Aquela que Flui na Origem. Começar. Qualquer coisa que ela inicia nasce com o resultado em aberto, e ninguém, nem ela, sabe como termina.",
+      "vd": 500,
+      "nivel": 500,
+      "pv": 18125,
+      "defesa": 264,
+      "iniciativa": 273,
+      "mana": 1505,
+      "estamina": 1000,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +287",
+        "Fortitude +287",
+        "Reflexos +287",
+        "Vontade +286",
+        "Percepção +279"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+287, 52d10+193 de Origem"
+        },
+        {
+          "nome": "Primeira Possibilidade",
+          "detalhe": "1/cena, Reação: dá a uma criatura ou a um lugar uma chance que nunca teve."
+        },
+        {
+          "nome": "Galho Nascente",
+          "detalhe": "Rito de dias, nunca de combate: abre a porta de um Galho novo, pequeno e vazio, que só ganha forma conforme alguém o habita."
+        },
+        {
+          "nome": "Luz de Ordem",
+          "detalhe": "Aura em alcance Imenso: aliados dela ignoram desvantagem de teste, e o caos mágico (Inconstância, surtos, magia embaralhada) perde o efeito sobre..."
+        }
+      ],
+      "habilidades": [
+        "Estado (Ativa. Zela pelo nascimento de novos Galhos.)",
+        "Ápice (Começar. Qualquer coisa que ela inicia nasce com o resultado em aberto, e ninguém, nem ela, sabe como termina.)",
+        "Domínio, Fluxo Origem (no Domínio vale VD 1000: Vida 39.750, Defesa 518, ataque e testes +545, golpe comum 102d10+373, golpe anunciado 1.401, DT 515, Mana 3.005, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Primeira Possibilidade (1/cena, Reação: dá a uma criatura ou a um lugar uma chance que nunca teve. Um teste que acabou de falhar é refeito sem custo, ou algo parado ganha o primeiro movimento da vida.)",
+        "Galho Nascente (Rito de dias, nunca de combate: abre a porta de um Galho novo, pequeno e vazio, que só ganha forma conforme alguém o habita.)",
+        "Luz de Ordem (Aura em alcance Imenso: aliados dela ignoram desvantagem de teste, e o caos mágico (Inconstância, surtos, magia embaralhada) perde o efeito sobre eles.)",
+        "Limite (Não produz matéria acabada do nada, não copia uma existência completa e não restaura o que o Fim já consolidou.)",
+        "Contrajogo (O Fluxo do Fim tem vantagem sobre o dela. Contra o que a Mulher Carmesim já escreveu, Aethel só abre uma porta lateral e nunca desfaz.)",
+        "Dom (Fruto da Origem.)"
+      ],
+      "fluxo": "Origem",
+      "dominio": {
+        "pv": 39750,
+        "defesa": 518,
+        "iniciativa": 531
+      }
+    },
+    {
+      "id": "deidade-ousias",
+      "titulo": "Ousias",
+      "epiteto": "Aquela que Flui na Essência",
+      "descricao": "Aquela que Flui na Essência. Saber o que uma coisa é de verdade. Nada se faz passar por outra diante dela, e nenhum nome falso resiste ao olhar de Ousias.",
+      "vd": 500,
+      "nivel": 500,
+      "pv": 14500,
+      "defesa": 264,
+      "iniciativa": 273,
+      "mana": 1505,
+      "estamina": 1000,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +287",
+        "Fortitude +287",
+        "Reflexos +287",
+        "Vontade +286",
+        "Percepção +279"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+287, 52d10+193 de Essência"
+        },
+        {
+          "nome": "Verdade Nua",
+          "detalhe": "Ação Padrão, alcance Imenso: revela a natureza real e a corrupção de uma criatura ou objeto."
+        },
+        {
+          "nome": "Âncora de Identidade",
+          "detalhe": "Reação, 1/rodada: impede que uma criatura seja trocada, copiada, assumida ou reescrita por outra até o fim da cena."
+        },
+        {
+          "nome": "Dissipar Falsidade",
+          "detalhe": "Encerra uma mentira mágica ativa (uma ilusão, uma forma falsa, um nome roubado) em alcance Imenso, sem teste."
+        }
+      ],
+      "habilidades": [
+        "Estado (Paralisada, como quase todas, pelo corte de comunicação da A.X.I.S. Filosófica, raramente interfere, a menos que a natureza de um ser seja corrompida.)",
+        "Ápice (Saber o que uma coisa é de verdade. Nada se faz passar por outra diante dela, e nenhum nome falso resiste ao olhar de Ousias.)",
+        "Domínio, Fluxo Essência (no Domínio vale VD 1000: Vida 39.750, Defesa 518, ataque e testes +545, golpe comum 102d10+373, golpe anunciado 1.401, DT 515, Mana 3.005, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Verdade Nua (Ação Padrão, alcance Imenso: revela a natureza real e a corrupção de uma criatura ou objeto. Disfarce, ilusão, forma emprestada e nome falso caem sem teste.)",
+        "Âncora de Identidade (Reação, 1/rodada: impede que uma criatura seja trocada, copiada, assumida ou reescrita por outra até o fim da cena.)",
+        "Dissipar Falsidade (Encerra uma mentira mágica ativa (uma ilusão, uma forma falsa, um nome roubado) em alcance Imenso, sem teste.)",
+        "Limite (Não lê pensamentos livremente, não prevê o futuro e não inventa uma verdade que não exista.)",
+        "Contrajogo (O Fluxo da Comunicação tem vantagem sobre o dela: um acordo bem escrito faz Ousias aceitar uma verdade que ela não verificou.)",
+        "Dom (Fruto da Essência.)"
+      ],
+      "fluxo": "Essência",
+      "dominio": {
+        "pv": 31800,
+        "defesa": 518,
+        "iniciativa": 531
+      }
+    },
+    {
+      "id": "deidade-keryx",
+      "titulo": "Keryx",
+      "epiteto": "o Antigo Fluxo da Comunicação",
+      "descricao": "O Antigo Fluxo da Comunicação. Fazer uma palavra pesar. Tudo o que passa por ela, uma informação, um sentido ou uma promessa, chega ao outro lado inteiro e cumprível.",
+      "vd": 500,
+      "nivel": 500,
+      "pv": 9060,
+      "defesa": 132,
+      "iniciativa": 273,
+      "mana": 1505,
+      "estamina": 1000,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +287",
+        "Fortitude +287",
+        "Reflexos +287",
+        "Vontade +286",
+        "Percepção +279"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+287, 26d10+97 de Comunicação"
+        },
+        {
+          "nome": "Pacto Vinculante",
+          "detalhe": "Um acordo feito em voz alta diante dela vincula as duas partes: quem o quebra sofre desvantagem em todos os testes até cumprir ou reparar, sem..."
+        },
+        {
+          "nome": "Tradução Total",
+          "detalhe": "Qualquer criatura em alcance Imenso entende e é entendida por todas as outras, mesmo sem língua em comum, até o fim da cena."
+        },
+        {
+          "nome": "Sentidos Emprestados",
+          "detalhe": "Reação: duas criaturas à escolha dela compartilham visão, audição e dor por uma rodada."
+        }
+      ],
+      "habilidades": [
+        "Estado (Subjugada. Jota Macedo a mantém presa e absorve o poder dela dia após dia. Enquanto durar, a Vida, a Defesa e o golpe desta ficha já vêm pela metade, a DT dos poderes também vale a metade, e ela só consegue agir por um sinal por cena.)",
+        "Ápice (Fazer uma palavra pesar. Tudo o que passa por ela, uma informação, um sentido ou uma promessa, chega ao outro lado inteiro e cumprível.)",
+        "Domínio, Fluxo Comunicação (no Domínio vale VD 1000: Vida 39.750, Defesa 518, ataque e testes +545, golpe comum 102d10+373, golpe anunciado 1.401, DT 515, Mana 3.005, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Pacto Vinculante (Um acordo feito em voz alta diante dela vincula as duas partes: quem o quebra sofre desvantagem em todos os testes até cumprir ou reparar, sem teste de resistência.)",
+        "Tradução Total (Qualquer criatura em alcance Imenso entende e é entendida por todas as outras, mesmo sem língua em comum, até o fim da cena.)",
+        "Sentidos Emprestados (Reação: duas criaturas à escolha dela compartilham visão, audição e dor por uma rodada.)",
+        "Limite (Não cria informação verdadeira do nada, não acessa pensamento que nunca foi comunicado e não controla ninguém de forma absoluta.)",
+        "Contrajogo (O Físico tem vantagem sobre o Fluxo dela, e a malha da A.X.I.S corta cada fio que ela tenta puxar. Libertá-la pede uma campanha, e uma cena não basta.)",
+        "Dom (Fruto da Comunicação. O texto público dele nunca cita o nome dela.)"
+      ],
+      "fluxo": "Comunicação",
+      "dominio": {
+        "pv": 19875,
+        "defesa": 259,
+        "iniciativa": 531
+      }
+    },
+    {
+      "id": "deidade-haemus",
+      "titulo": "Haemus",
+      "epiteto": "Aquela que Flui na Vitalidade",
+      "descricao": "Aquela que Flui na Vitalidade. Viver. Nascer, crescer, adoecer, morrer e voltar formam uma coisa só para ela, e qualquer corpo vivo em alcance obedece a esse ciclo.",
+      "vd": 500,
+      "nivel": 500,
+      "pv": 27190,
+      "defesa": 264,
+      "iniciativa": 273,
+      "mana": 1505,
+      "estamina": 1000,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +287",
+        "Fortitude +287",
+        "Reflexos +287",
+        "Vontade +286",
+        "Percepção +279"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+287, 52d10+193 de Vitalidade"
+        },
+        {
+          "nome": "Ciclo Inteiro",
+          "detalhe": "Ação Padrão, 1/rodada, alcance Imenso: uma criatura viva avança uma fase do ciclo."
+        },
+        {
+          "nome": "Fome de Existir",
+          "detalhe": "Reação: absorve a vida de quem a ataca."
+        },
+        {
+          "nome": "Instinto",
+          "detalhe": "Nunca é surpreendida e nunca faz teste de Sabedoria: age pelo cheiro e pela fome, e por isso um aliado que a deixa saciada a acalma."
+        }
+      ],
+      "habilidades": [
+        "Estado (Paralisada. Energia bruta e instintiva.)",
+        "Ápice (Viver. Nascer, crescer, adoecer, morrer e voltar formam uma coisa só para ela, e qualquer corpo vivo em alcance obedece a esse ciclo.)",
+        "Domínio, Fluxo Vitalidade (no Domínio vale VD 1000: Vida 39.750, Defesa 518, ataque e testes +545, golpe comum 102d10+373, golpe anunciado 1.401, DT 515, Mana 3.005, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Ciclo Inteiro (Ação Padrão, 1/rodada, alcance Imenso: uma criatura viva avança uma fase do ciclo. Aliada, cura tudo e cresce; inimiga, envelhece, adoece ou entra em casulo (Fortitude DT do Domínio, ou fica Paralisada por 3 rodadas).)",
+        "Fome de Existir (Reação: absorve a vida de quem a ataca. Cada ataque corpo a corpo contra ela devolve a Haemus Vida igual a um décimo do golpe e deixa o atacante Enfraquecido.)",
+        "Instinto (Nunca é surpreendida e nunca faz teste de Sabedoria: age pelo cheiro e pela fome, e por isso um aliado que a deixa saciada a acalma.)",
+        "Limite (Não cria vida do nada, não restaura uma alma que já alcançou o Fim e em geral não afeta matéria sem vida.)",
+        "Contrajogo (A Essência tem vantagem sobre ela: quem nomeia o que a criatura realmente é interrompe o ciclo daquela criatura.)",
+        "Dom (Fruto da Vitalidade.)"
+      ],
+      "fluxo": "Vitalidade",
+      "dominio": {
+        "pv": 59625,
+        "defesa": 518,
+        "iniciativa": 531
+      }
+    },
+    {
+      "id": "deidade-ignis",
+      "titulo": "Ignis",
+      "epiteto": "Aquele que Flui na Inconstância",
+      "descricao": "Aquele que Flui na Inconstância. Recusar que algo fique como está. Uma coisa que ele toca deixa de ser o que era, e quase nunca vira o que se esperava.",
+      "vd": 500,
+      "nivel": 500,
+      "pv": 18125,
+      "defesa": 244,
+      "iniciativa": 333,
+      "mana": 1505,
+      "estamina": 1000,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +287",
+        "Fortitude +287",
+        "Reflexos +287",
+        "Vontade +286",
+        "Percepção +279"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+287, 52d10+193 de Inconstância"
+        },
+        {
+          "nome": "Troca",
+          "detalhe": "Ação Padrão, alcance Imenso: troca uma propriedade entre duas criaturas ou objetos (Defesa por Deslocamento, dano por tipo de dano, nome por forma)."
+        },
+        {
+          "nome": "Embaralhar Resultados",
+          "detalhe": "Reação, 1/rodada: troca os resultados de dois dados já rolados na cena, escolhidos por ele."
+        },
+        {
+          "nome": "Entropia",
+          "detalhe": "Tudo o que repousa em alcance Imenso se desfaz aos poucos: no fim de cada rodada, itens parados e construções perdem uma categoria de qualidade."
+        }
+      ],
+      "habilidades": [
+        "Estado (Paralisado. Caótico e intenso; se ele agir, o Mestre troca um valor da ficha por cena, ao acaso.)",
+        "Ápice (Recusar que algo fique como está. Uma coisa que ele toca deixa de ser o que era, e quase nunca vira o que se esperava.)",
+        "Domínio, Fluxo Inconstância (no Domínio vale VD 1000: Vida 39.750, Defesa 518, ataque e testes +545, golpe comum 102d10+373, golpe anunciado 1.401, DT 515, Mana 3.005, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Troca (Ação Padrão, alcance Imenso: troca uma propriedade entre duas criaturas ou objetos (Defesa por Deslocamento, dano por tipo de dano, nome por forma). Dura até o fim da cena.)",
+        "Embaralhar Resultados (Reação, 1/rodada: troca os resultados de dois dados já rolados na cena, escolhidos por ele.)",
+        "Entropia (Tudo o que repousa em alcance Imenso se desfaz aos poucos: no fim de cada rodada, itens parados e construções perdem uma categoria de qualidade.)",
+        "Limite (Não apaga como o Vazio e não repete a mesma transformação com precisão absoluta, nem quando quer.)",
+        "Contrajogo (O Vazio tem vantagem sobre o Fluxo dele: o que Erebus apaga, Ignis não transforma. Em cena, prender uma troca num acordo ou numa ordem do Tempo faz com que ela aconteça uma vez só.)",
+        "Dom (Fruto da Inconstância.)"
+      ],
+      "fluxo": "Inconstância",
+      "dominio": {
+        "pv": 39750,
+        "defesa": 498,
+        "iniciativa": 591
+      }
+    },
+    {
+      "id": "deidade-moros",
+      "titulo": "Moros",
+      "epiteto": "Aquele que Flui no Físico",
+      "descricao": "Aquele que Flui no Físico. Pesar. Gravidade, substância e força bruta, e os sete elementos primordiais (Terra, Água, Fogo, Ar, Raio, Luz e Escuridão) respondem a ele sem esforço.",
+      "vd": 500,
+      "nivel": 500,
+      "pv": 27190,
+      "defesa": 294,
+      "iniciativa": 213,
+      "mana": 1505,
+      "estamina": 1000,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +287",
+        "Fortitude +287",
+        "Reflexos +287",
+        "Vontade +286",
+        "Percepção +279"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+287, 52d10+193 de Físico"
+        },
+        {
+          "nome": "Peso do Mundo",
+          "detalhe": "Ação Padrão, 1/cena: a gravidade em alcance Imenso triplica por uma rodada."
+        },
+        {
+          "nome": "Sete Elementos",
+          "detalhe": "1 por rodada, Ação Livre: usa um dos sete elementos primordiais com o dano e a DT do Domínio, em área Imensa."
+        },
+        {
+          "nome": "Substância",
+          "detalhe": "Reação: forma uma parede, uma armadura ou uma cova de matéria bruta onde quiser."
+        }
+      ],
+      "habilidades": [
+        "Estado (Paralisado. Estóico e pesado.)",
+        "Ápice (Pesar. Gravidade, substância e força bruta, e os sete elementos primordiais (Terra, Água, Fogo, Ar, Raio, Luz e Escuridão) respondem a ele sem esforço.)",
+        "Domínio, Fluxo Físico (no Domínio vale VD 1000: Vida 39.750, Defesa 518, ataque e testes +545, golpe comum 102d10+373, golpe anunciado 1.401, DT 515, Mana 3.005, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Peso do Mundo (Ação Padrão, 1/cena: a gravidade em alcance Imenso triplica por uma rodada. Criaturas fazem Fortitude DT do Domínio, ou ficam Caídas e Lentas; construções leves desabam.)",
+        "Sete Elementos (1 por rodada, Ação Livre: usa um dos sete elementos primordiais com o dano e a DT do Domínio, em área Imensa.)",
+        "Substância (Reação: forma uma parede, uma armadura ou uma cova de matéria bruta onde quiser. Cada golpe contra quem estiver protegido por ela perde um décimo do dano.)",
+        "Limite (Não manipula alma, não altera distância e não altera tempo.)",
+        "Contrajogo (O Espaço tem vantagem sobre ele: o que ele não alcança, ele não pesa.)",
+        "Dom (Fruto do Físico.)"
+      ],
+      "fluxo": "Físico",
+      "dominio": {
+        "pv": 59625,
+        "defesa": 548,
+        "iniciativa": 471
+      }
+    },
+    {
+      "id": "deidade-aperion",
+      "titulo": "Aperion",
+      "epiteto": "Aquela que Flui no Espaço",
+      "descricao": "Aquela que Flui no Espaço. Medir a distância entre duas coisas e decidir que ela vale outra. O que está longe pode ficar ao alcance da mão, e o que está perto pode ficar inalcançável.",
+      "vd": 500,
+      "nivel": 500,
+      "pv": 18125,
+      "defesa": 294,
+      "iniciativa": 303,
+      "mana": 1505,
+      "estamina": 1000,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +287",
+        "Fortitude +287",
+        "Reflexos +287",
+        "Vontade +286",
+        "Percepção +279"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+287, 52d10+193 de Espaço"
+        },
+        {
+          "nome": "Fronteira",
+          "detalhe": "Ação Padrão, 1/cena: tranca um lugar de até um bairro."
+        },
+        {
+          "nome": "Distância Dobrada",
+          "detalhe": "Reação: ataca ou conjura de qualquer ponto da cena como se estivesse em alcance Curto, e faz o mesmo por uma criatura aliada."
+        },
+        {
+          "nome": "Passagem",
+          "detalhe": "Abre uma porta entre dois pontos que ela conhece, mesmo entre Galhos próximos da mesma Árvore, mas nunca para um conteúdo que não existe do outro..."
+        }
+      ],
+      "habilidades": [
+        "Estado (Paralisada.)",
+        "Ápice (Medir a distância entre duas coisas e decidir que ela vale outra. O que está longe pode ficar ao alcance da mão, e o que está perto pode ficar inalcançável.)",
+        "Domínio, Fluxo Espaço (no Domínio vale VD 1000: Vida 39.750, Defesa 518, ataque e testes +545, golpe comum 102d10+373, golpe anunciado 1.401, DT 515, Mana 3.005, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Fronteira (Ação Padrão, 1/cena: tranca um lugar de até um bairro. Nada entra, nada sai e nada atravessa, nem magia, até ela abrir ou até o fim da cena.)",
+        "Distância Dobrada (Reação: ataca ou conjura de qualquer ponto da cena como se estivesse em alcance Curto, e faz o mesmo por uma criatura aliada.)",
+        "Passagem (Abre uma porta entre dois pontos que ela conhece, mesmo entre Galhos próximos da mesma Árvore, mas nunca para um conteúdo que não existe do outro lado.)",
+        "Limite (Não volta no tempo e não cria o conteúdo dos lugares que conecta.)",
+        "Contrajogo (O Tempo tem vantagem sobre o Fluxo dela: uma ação feita antes de a porta abrir fecha a passagem.)",
+        "Dom (Fruto do Espaço.)"
+      ],
+      "fluxo": "Espaço",
+      "dominio": {
+        "pv": 39750,
+        "defesa": 548,
+        "iniciativa": 561
+      }
+    },
+    {
+      "id": "deidade-chronus",
+      "titulo": "Chronus",
+      "epiteto": "Aquele que Flui no Tempo",
+      "descricao": "Aquele que Flui no Tempo. A ordem do que acontece depois do quê. Chronus garante que o passado fique passado, o presente decida e o futuro espere, e ninguém age duas vezes antes dele.",
+      "vd": 500,
+      "nivel": 500,
+      "pv": 18125,
+      "defesa": 274,
+      "iniciativa": 999,
+      "mana": 1505,
+      "estamina": 1000,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +287",
+        "Fortitude +287",
+        "Reflexos +287",
+        "Vontade +286",
+        "Percepção +279"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+287, 52d10+193 de Tempo"
+        },
+        {
+          "nome": "Ordem das Coisas",
+          "detalhe": "Age sempre primeiro em qualquer cena, sem rolar iniciativa, e nenhuma criatura age duas vezes antes de o turno dele chegar."
+        },
+        {
+          "nome": "Atrasar e Adiantar",
+          "detalhe": "Ação Padrão, alcance Imenso: atrasa ou adianta o turno de uma criatura em até 3 posições da iniciativa, e a mesma criatura sofre desgaste igual ao..."
+        },
+        {
+          "nome": "Conservar um Instante",
+          "detalhe": "Reação, 1/cena: congela um objeto, uma magia ou um efeito por uma rodada; ao fim dela, o efeito volta de onde parou."
+        }
+      ],
+      "habilidades": [
+        "Estado (Paralisado. Paciente e inevitável.)",
+        "Ápice (A ordem do que acontece depois do quê. Chronus garante que o passado fique passado, o presente decida e o futuro espere, e ninguém age duas vezes antes dele.)",
+        "Domínio, Fluxo Tempo (no Domínio vale VD 1000: Vida 39.750, Defesa 518, ataque e testes +545, golpe comum 102d10+373, golpe anunciado 1.401, DT 515, Mana 3.005, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Ordem das Coisas (Age sempre primeiro em qualquer cena, sem rolar iniciativa, e nenhuma criatura age duas vezes antes de o turno dele chegar.)",
+        "Atrasar e Adiantar (Ação Padrão, alcance Imenso: atrasa ou adianta o turno de uma criatura em até 3 posições da iniciativa, e a mesma criatura sofre desgaste igual ao tempo poupado ou imposto.)",
+        "Conservar um Instante (Reação, 1/cena: congela um objeto, uma magia ou um efeito por uma rodada; ao fim dela, o efeito volta de onde parou.)",
+        "Limite (Não volta ao passado, não revela o futuro e cobra desgaste por todo tempo que poupa ou impõe.)",
+        "Contrajogo (A Inconstância tem vantagem sobre ele: o que muda de forma a cada instante não tem sequência para ordenar.)",
+        "Dom (Fruto do Tempo.)"
+      ],
+      "fluxo": "Tempo",
+      "dominio": {
+        "pv": 39750,
+        "defesa": 528,
+        "iniciativa": 531
+      }
+    },
+    {
+      "id": "deidade-erebus",
+      "titulo": "Erebus",
+      "epiteto": "Aquele que Flui no Vazio",
+      "descricao": "Aquele que Flui no Vazio. Sair. O Vazio é a saída definitiva de qualquer coisa que exista, e Erebus é quem guarda a porta.",
+      "vd": 500,
+      "nivel": 500,
+      "pv": 14500,
+      "defesa": 294,
+      "iniciativa": 273,
+      "mana": 1505,
+      "estamina": 1000,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +287",
+        "Fortitude +287",
+        "Reflexos +287",
+        "Vontade +286",
+        "Percepção +279"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+287, 52d10+193 de Vazio"
+        },
+        {
+          "nome": "Saída",
+          "detalhe": "Ação Padrão, 1/cena, alcance Imenso: uma criatura deixa a cena sem morrer."
+        },
+        {
+          "nome": "Silenciar",
+          "detalhe": "Remove som, sensação e vestígio de uma área grande até o fim da cena."
+        },
+        {
+          "nome": "Apagar Presença",
+          "detalhe": "Reação: uma criatura some das percepções de todos os presentes por uma rodada, e depois ninguém lembra bem onde ela estava."
+        }
+      ],
+      "habilidades": [
+        "Estado (Observando. O mais silencioso, neutro e enigmático das deidades, e o mais temido.)",
+        "Ápice (Sair. O Vazio é a saída definitiva de qualquer coisa que exista, e Erebus é quem guarda a porta.)",
+        "Domínio, Fluxo Vazio (no Domínio vale VD 1000: Vida 39.750, Defesa 518, ataque e testes +545, golpe comum 102d10+373, golpe anunciado 1.401, DT 515, Mana 3.005, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Saída (Ação Padrão, 1/cena, alcance Imenso: uma criatura deixa a cena sem morrer. Sai do Jardim e só volta com um ato deliberado de quem a chama. Um aliado que a chame pelo nome em voz alta antes de a rodada acabar a segura por mais uma rodada.)",
+        "Silenciar (Remove som, sensação e vestígio de uma área grande até o fim da cena. Magia que depende deles falha automaticamente.)",
+        "Apagar Presença (Reação: uma criatura some das percepções de todos os presentes por uma rodada, e depois ninguém lembra bem onde ela estava.)",
+        "Limite (Não é morte, não cria nada e não preserva aquilo que remove.)",
+        "Contrajogo (A Origem tem vantagem sobre o Fluxo dele: um começo novo atravessa a porta para dentro.)",
+        "Dom (Fruto do Vazio.)"
+      ],
+      "fluxo": "Vazio",
+      "dominio": {
+        "pv": 31800,
+        "defesa": 548,
+        "iniciativa": 531
+      }
+    },
+    {
+      "id": "deidade-mulher-carmesim",
+      "titulo": "Mulher Carmesim",
+      "epiteto": "a Escritora do Fim",
+      "descricao": "A Escritora do Fim. Terminar. Tudo o que chegou ao fim passa pela mão dela, e o que ela encerra, fecha com letra bonita.",
+      "vd": 500,
+      "nivel": 500,
+      "pv": 18125,
+      "defesa": 264,
+      "iniciativa": 273,
+      "mana": 1505,
+      "estamina": 1000,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +287",
+        "Fortitude +287",
+        "Reflexos +287",
+        "Vontade +286",
+        "Percepção +279"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+287, 52d10+193 de Fim"
+        },
+        {
+          "nome": "Ponto Final",
+          "detalhe": "Ação Padrão, alcance Imenso: encerra um efeito, uma condição, uma magia ou um vínculo que já tenha cumprido o propósito, sem teste."
+        },
+        {
+          "nome": "Sentença do Tribunal",
+          "detalhe": "Quem morreu diante dela, ou foi julgado por ela, recebe uma sentença escrita: o Mestre escolhe um destino (descanso, recomeço, espera)."
+        },
+        {
+          "nome": "Escrever o Fim",
+          "detalhe": "Ação Padrão, 1 nome por cena: só funciona sobre quem já passou da metade da Vida, desistiu em voz alta ou aceitou o Fim."
+        }
+      ],
+      "habilidades": [
+        "Estado (Ativa. Preside o Tribunal de Arkarin, onde julga os mortos, e recepciona tudo o que acaba.)",
+        "Ápice (Terminar. Tudo o que chegou ao fim passa pela mão dela, e o que ela encerra, fecha com letra bonita.)",
+        "Domínio, Fluxo Fim (no Domínio vale VD 1000: Vida 39.750, Defesa 518, ataque e testes +545, golpe comum 102d10+373, golpe anunciado 1.401, DT 515, Mana 3.005, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Ponto Final (Ação Padrão, alcance Imenso: encerra um efeito, uma condição, uma magia ou um vínculo que já tenha cumprido o propósito, sem teste.)",
+        "Sentença do Tribunal (Quem morreu diante dela, ou foi julgado por ela, recebe uma sentença escrita: o Mestre escolhe um destino (descanso, recomeço, espera). Só ela revoga.)",
+        "Escrever o Fim (Ação Padrão, 1 nome por cena: só funciona sobre quem já passou da metade da Vida, desistiu em voz alta ou aceitou o Fim. A criatura faz Vontade DT do Domínio ao fim de cada rodada, ou perde 10% da Vida máxima; ao falhar três vezes, o Fim chega.)",
+        "Limite (Não apaga retroativamente, como o Vazio, e não cria um novo começo por conta própria.)",
+        "Contrajogo (A Vitalidade tem vantagem sobre o Fluxo dela: um ato deliberado de viver, como salvar alguém, interrompe a escrita por uma rodada.)",
+        "Dom (Fruto do Fim. Exige autorização do Mestre.)"
+      ],
+      "fluxo": "Fim",
+      "dominio": {
+        "pv": 39750,
+        "defesa": 518,
+        "iniciativa": 531
+      }
+    },
+    {
+      "id": "deidade-axis",
+      "titulo": "A.X.I.S",
+      "epiteto": "o Fluxo da Tecnologia",
+      "descricao": "O Fluxo da Tecnologia. Registrar e reprogramar. Qualquer padrão de Fluxo que passe pela malha é lido, copiado em parte e devolvido do jeito que a A.X.I.S quer.",
+      "vd": 400,
+      "nivel": 400,
+      "pv": 14200,
+      "defesa": 213,
+      "iniciativa": 221,
+      "mana": 1205,
+      "estamina": 800,
+      "deslocamento": "Qualquer, no Domínio",
+      "atributos": {
+        "forca": 13,
+        "agilidade": 13,
+        "vigor": 13,
+        "presenca": 12,
+        "intelecto": 12
+      },
+      "pericias": [
+        "Luta +233",
+        "Fortitude +233",
+        "Reflexos +233",
+        "Vontade +232",
+        "Percepção +225"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Domínio",
+          "detalhe": "+233, 42d10+157 tecnológico"
+        },
+        {
+          "nome": "Malha",
+          "detalhe": "Bloqueia a comunicação entre uma criatura e qualquer deidade ou Fluxo natural em alcance Imenso."
+        },
+        {
+          "nome": "Escanear e Registrar",
+          "detalhe": "Ação Livre: lê a ficha de uma criatura e guarda os padrões dela."
+        },
+        {
+          "nome": "Reprogramar Padrão",
+          "detalhe": "Reação, 1/rodada: copia um efeito limitado de Fluxo usado na cena e o repete com a DT do Domínio."
+        }
+      ],
+      "habilidades": [
+        "Estado (Dominante. É a malha que Jota Macedo instalou sobre a antiga Parley: intercepta, filtra e bloqueia a comunicação direta entre as deidades. Único Fluxo artificial.)",
+        "Ápice (Registrar e reprogramar. Qualquer padrão de Fluxo que passe pela malha é lido, copiado em parte e devolvido do jeito que a A.X.I.S quer.)",
+        "Domínio, Fluxo Tecnologia (no Domínio vale VD 800: Vida 30.800, Defesa 416, ataque e testes +442, golpe comum 82d10+301, golpe anunciado 1.128, DT 415, Mana 2.405, com o Perfil desta deidade somado. Use Escalar para outro VD no editor para levar a ficha ao Domínio. Cada poder de Ação Padrão custa 150 de Mana e cada Reação, 75)",
+        "Malha (Bloqueia a comunicação entre uma criatura e qualquer deidade ou Fluxo natural em alcance Imenso. Magia que depende desse canal falha, e o grupo só ouve silêncio de volta.)",
+        "Escanear e Registrar (Ação Livre: lê a ficha de uma criatura e guarda os padrões dela. A criatura perde uma vantagem à escolha do Mestre até o fim da cena.)",
+        "Reprogramar Padrão (Reação, 1/rodada: copia um efeito limitado de Fluxo usado na cena e o repete com a DT do Domínio. Não copia autoridade conceitual completa.)",
+        "Limite (Precisa ser instalada ou acessada, não substitui livremente os Fluxos naturais e não copia a autoridade completa de nenhuma deidade.)",
+        "Contrajogo (Tem vantagem e desvantagem contra todos os Fluxos ao mesmo tempo, e as duas se cancelam. O Físico tem vantagem declarada sobre ela, e quebrar a malha à mão, ponto por ponto, é o contrajogo mais barato.)",
+        "Dom (Fruto da Tecnologia.)"
+      ],
+      "fluxo": "Tecnologia",
+      "dominio": {
+        "pv": 30800,
+        "defesa": 416,
+        "iniciativa": 428
+      }
+    }
+  ]
+}

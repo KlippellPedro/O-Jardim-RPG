@@ -185,6 +185,10 @@ interface SessaoState {
   distribuirXp: (participanteIds: string[]) => Promise<DistribuirXpResponse>;
   darXp: (participanteIds: string[], xp: number) => Promise<void>;
   rolarLoot: (participanteId: string, refazer?: boolean) => Promise<void>;
+  mexerNaAflicao: (
+    participanteId: string,
+    payload: { acao: 'aplicar' | 'estagio' | 'remover'; aflicao_id: string; estagio?: number; incubando?: boolean; cansaco?: number },
+  ) => Promise<number | null>;
   entregarLoot: (participanteId: string, entregas: Array<{ linha: string; personagem_id: string }>) => Promise<void>;
 
   clearError: () => void;
@@ -513,6 +517,14 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
     await Promise.all(ids.map((id) => sessaoApi.atualizarParticipante(sessaoId, id, payload)));
     await get().fetchEstadoSessao();
+  },
+
+  mexerNaAflicao: async (participanteId, payload) => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    const resposta = await sessaoApi.mexerNaAflicao(sessaoId, participanteId, payload);
+    await get().fetchEstadoSessao();
+    return resposta.cansaco_atual;
   },
 
   rolarLoot: async (participanteId, refazer = false) => {

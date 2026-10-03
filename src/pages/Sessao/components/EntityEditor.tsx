@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ExternalLink, GraduationCap, Plus, RefreshCw, Save, Swords, X } from 'lucide-react';
+import { ExternalLink, GraduationCap, Plus, RefreshCw, Save, Scaling, Swords, X } from 'lucide-react';
 import type {
   EntidadeIniciativa,
   SessionAttack,
@@ -14,6 +14,7 @@ import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/con
 import { CONDICOES_LONGO_PRAZO, GRUPOS_LONGO_PRAZO } from '../../../../data/regras/condicoes-longo-prazo';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { VD_MAXIMO } from '../../../services/progressaoNiveis';
+import { escalarCriatura } from '../../../services/curvaCriatura';
 
 const CONDICOES_RAPIDAS = [...CONDICOES_OFICIAIS, ...CRISES_SANIDADE];
 
@@ -49,6 +50,8 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
   const [attackDetail, setAttackDetail] = useState('');
   const [pericias, setPericias] = useState<string[]>(entity.pericias ?? []);
   const [periciaTexto, setPericiaTexto] = useState('');
+  const [vdAlvo, setVdAlvo] = useState('');
+  const [resumoDaEscala, setResumoDaEscala] = useState<string | null>(null);
   useDialogAccessibility({ open: true, dialogRef, initialFocusRef: closeButtonRef, onClose: onCancel });
 
   const addConditionNamed = (name: string) => {
@@ -78,6 +81,43 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
     if (!texto || pericias.some((item) => item.toLocaleLowerCase('pt-BR') === texto.toLocaleLowerCase('pt-BR'))) return;
     setPericias((current) => [...current, texto]);
     setPericiaTexto('');
+  };
+
+  const vdAtual = Number(vd);
+  const podeEscalar = !entity.personagemId && Number.isFinite(vdAtual) && vdAtual >= 1 && hpMax > 0;
+  const vdDoAlvo = Math.trunc(Number(vdAlvo));
+  const alvoValido = Number.isFinite(vdDoAlvo) && vdDoAlvo >= 1 && vdDoAlvo <= VD_MAXIMO && vdDoAlvo !== Math.trunc(vdAtual);
+
+  /** Põe os números da criatura no VD escolhido, só no formulário: nada é gravado até Salvar. */
+  const escalarParaVd = () => {
+    if (!podeEscalar || !alvoValido) return;
+    const numeroOuNulo = (valor: string) => (valor.trim() === '' ? null : Number(valor) || 0);
+    const feita = escalarCriatura({
+      vd: Math.trunc(vdAtual),
+      pv: hpMax,
+      pvAtual: hpCurrent,
+      defesa: numeroOuNulo(defense),
+      mana: numeroOuNulo(manaMax),
+      manaAtual: numeroOuNulo(manaCurrent),
+      estamina: numeroOuNulo(estaminaMax),
+      estaminaAtual: numeroOuNulo(estaminaCurrent),
+      iniciativa: initiative,
+      ataques: attacks,
+      pericias,
+    }, vdDoAlvo);
+    setHpMax(feita.pv);
+    setHpCurrent(feita.pvAtual ?? feita.pv);
+    setDefense(feita.defesa == null ? '' : String(feita.defesa));
+    setManaMax(feita.mana == null ? '' : String(feita.mana));
+    setManaCurrent(feita.manaAtual == null ? '' : String(feita.manaAtual));
+    setEstaminaMax(feita.estamina == null ? '' : String(feita.estamina));
+    setEstaminaCurrent(feita.estaminaAtual == null ? '' : String(feita.estaminaAtual));
+    setInitiative(feita.iniciativa);
+    setAttacks(feita.ataques);
+    setPericias(feita.pericias);
+    setVd(String(feita.vd));
+    setResumoDaEscala(`Do VD ${feita.de} para o VD ${feita.vd}: Vida ${hpMax} → ${feita.pv}, ataque ${feita.deltaDeAtaque >= 0 ? '+' : ''}${feita.deltaDeAtaque}. Confira os números e salve.`);
+    setVdAlvo('');
   };
 
   const parseOptionalInt = (value: string, min: number, max: number) =>
@@ -262,6 +302,50 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
             />
           </label>
         </div>
+
+        {!entity.personagemId ? (
+          <div className="mt-4 rounded-lg border border-[#c7a44c]/20 bg-[#c7a44c]/[0.04] p-3">
+            <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#e3c363]/80">
+              <Scaling size={12} /> Escalar para outro VD
+            </span>
+            {podeEscalar ? (
+              <>
+                <p className="mt-1 text-[11px] leading-5 text-white/45">
+                  Refaz Vida, Defesa, Mana, Estamina, iniciativa, ataques e perícias para o VD que você escolher, mantendo o que a criatura tem de próprio. Nada é gravado até você salvar.
+                </p>
+                <div className="mt-2 flex gap-1.5">
+                  <input
+                    type="number"
+                    min={1}
+                    max={VD_MAXIMO}
+                    value={vdAlvo}
+                    onChange={(event) => setVdAlvo(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        event.preventDefault();
+                        escalarParaVd();
+                      }
+                    }}
+                    placeholder={`Novo VD (atual ${Math.trunc(vdAtual)})`}
+                    aria-label="VD para o qual escalar a criatura"
+                    className="min-w-0 flex-1 rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-xs text-white outline-none focus:border-[#c7a44c]/50"
+                  />
+                  <button
+                    type="button"
+                    onClick={escalarParaVd}
+                    disabled={!alvoValido}
+                    className="flex items-center gap-1.5 rounded-md border border-[#c7a44c]/40 bg-[#c7a44c]/12 px-3 text-xs font-bold text-[#f0d685] hover:bg-[#c7a44c]/25 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <Scaling size={13} /> Escalar
+                  </button>
+                </div>
+                {resumoDaEscala ? <p role="status" className="mt-2 text-[11px] leading-5 text-emerald-200/80">{resumoDaEscala}</p> : null}
+              </>
+            ) : (
+              <p className="mt-1 text-[11px] leading-5 text-white/40">Preencha o VD atual e a Vida máxima da criatura para poder escalá-la.</p>
+            )}
+          </div>
+        ) : null}
 
         <div className="mt-4">
           <span className="text-[10px] uppercase tracking-wider text-white/40">Condições</span>

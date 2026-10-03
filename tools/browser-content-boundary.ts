@@ -49,7 +49,7 @@ export function browserContentBoundary(): Plugin {
     enforce: 'pre',
     load(id) {
       const filename = id.split('?')[0].replaceAll('\\', '/');
-      if (/\/data\/(editorial\/|gerado\/conteudo-servidor\.json|bestiario\/loot-criaturas\.json)|\/data\/regras\/(regras-editorial|mestre-v1)\.json$/.test(filename)) {
+      if (/\/data\/(editorial\/|gerado\/conteudo-servidor\.json|bestiario\/(loot-criaturas|deidades-v1)\.json)|\/data\/regras\/(regras-editorial|mestre-v1)\.json$/.test(filename)) {
         throw new Error('Conteúdo reservado ao servidor não pode ser importado pelo navegador.');
       }
       const restricted = filename.endsWith('/data/gerado/mundoCatalog.ts')

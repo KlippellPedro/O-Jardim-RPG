@@ -100,3 +100,25 @@ test('a Sessão mostra as aflições e o card da ficha tem a seção', () => {
   const abaFicha = readFileSync(new URL('../../src/pages/Ficha/abas/AbaFicha.tsx', import.meta.url), 'utf8');
   assert.match(abaFicha, /<AflicoesSection/);
 });
+
+test('troca: o resumo de cada lado é o que a outra pessoa lê antes de aceitar', async () => {
+  const { resumoDoLado, MOEDAS_TROCA } = await import('../../src/services/trocasApi');
+  assert.equal(resumoDoLado({ itens: [{ item_id: 'adaga', titulo: 'Adaga', quantidade: 2 }], moedas: [{ moeda: 'Lunaris', valor: 5 }] }), '2x Adaga, 5 Lunaris');
+  assert.equal(resumoDoLado({ itens: [], moedas: [] }), 'nada');
+  assert.deepEqual(MOEDAS_TROCA, ['Lunaris', 'Solares', 'Fragmentos de Estrela', 'Créditos Sombrios']);
+  const inventario = readFileSync(new URL('../../src/pages/Ficha/abas/AbaInventario.tsx', import.meta.url), 'utf8');
+  assert.match(inventario, /<TrocasPanel/);
+  assert.match(inventario, /<MandarMoedasModal/);
+});
+
+test('entrar num estágio que dá Cansaço soma o Cansaço; descer não devolve', async () => {
+  const { cansacoAoEntrar } = await import('../../src/services/aflicoesFichaService');
+  // Febre dos Esporos: estágios 2 e 3 dão 1 Cansaço cada ao entrar.
+  assert.equal(cansacoAoEntrar(febre, 1, 2), 1);
+  assert.equal(cansacoAoEntrar(febre, 1, 3), 2);
+  assert.equal(cansacoAoEntrar(febre, 0, 1), 0);
+  assert.equal(cansacoAoEntrar(febre, 3, 2), 0);
+  assert.equal(cansacoAoEntrar(toxina, 0, 3), 0);
+  const tracker = readFileSync(new URL('../../src/pages/Sessao/InitiativeTracker.tsx', import.meta.url), 'utf8');
+  assert.match(tracker, /<AflicoesSessaoPanel/);
+});

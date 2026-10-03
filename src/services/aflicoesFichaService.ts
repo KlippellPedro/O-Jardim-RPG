@@ -86,6 +86,21 @@ export function estagioDaNovaExposicao(aflicao: IAflicao, atual: number, grau: G
     : atual;
 }
 
+/** Cansaço que os estágios dão ao entrar ("Ganhe 1 Cansaço."), somando cada
+ * estágio atravessado entre `de` e `para`. Descer de estágio não devolve nada. */
+export function cansacoAoEntrar(aflicao: IAflicao, de: number, para: number): number {
+  if (para <= de) return 0;
+  return aflicao.estagios
+    .filter((estagio) => estagio.numero > de && estagio.numero <= para)
+    .flatMap((estagio) => estagio.aoEntrar ?? [])
+    .reduce((total, texto) => {
+      const casamento = texto.match(/Ganhe (\d+) Cansaço/i);
+      return total + (casamento ? Number(casamento[1]) : 0);
+    }, 0);
+}
+
+export const CANSACO_MAXIMO = 6;
+
 export function efeitosDoEstagio(aflicao: IAflicao, estagio: number) {
   return aflicao.estagios.find((item) => item.numero === estagio) ?? { numero: estagio, efeitos: [] };
 }

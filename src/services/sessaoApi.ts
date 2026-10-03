@@ -70,6 +70,16 @@ export interface TabelaDeLoot {
     quantidade: string;
   }>;
   moedas: null | { dados: string; moeda: string; chance: number };
+  /** O Mestre trocou a tabela só nesta campanha. */
+  ajustada?: boolean;
+  /** A tabela oficial, quando a da campanha foi ajustada (para comparar ou voltar). */
+  oficial?: TabelaDeLoot | null;
+}
+
+/** Tabela de loot que o Mestre grava para a campanha dele. */
+export interface TabelaDeLootPayload {
+  itens: Array<{ item_id: string; chance: number; quantidade: string }>;
+  moedas: null | { moeda: 'Lunaris' | 'Solares'; dados: string; chance: number };
 }
 
 export interface SessaoParticipanteResponse {
@@ -129,6 +139,8 @@ export interface BestiarioMonstro {
   unico?: boolean;
   /** Tem tabela de loot no servidor. */
   tem_loot?: boolean;
+  /** A tabela de loot foi ajustada nesta campanha. */
+  loot_ajustado?: boolean;
   pv: number | null;
   defesa: number | null;
   mana: number | null;
@@ -291,6 +303,32 @@ export const sessaoApi = {
   tabelaDeLoot(campanhaId: string, monstroId: string) {
     return api<TabelaDeLoot>(
       `/sessao/bestiario/loot/${encodeURIComponent(monstroId)}?campanha_id=${campanhaId}`,
+    );
+  },
+
+  ajustarTabelaDeLoot(campanhaId: string, monstroId: string, tabela: TabelaDeLootPayload) {
+    return api<TabelaDeLoot>(
+      `/sessao/bestiario/loot/${encodeURIComponent(monstroId)}?campanha_id=${campanhaId}`,
+      { method: 'PUT', body: tabela },
+    );
+  },
+
+  restaurarTabelaDeLoot(campanhaId: string, monstroId: string) {
+    return api(
+      `/sessao/bestiario/loot/${encodeURIComponent(monstroId)}?campanha_id=${campanhaId}`,
+      { method: 'DELETE' },
+    );
+  },
+
+  /** O Mestre aplica, muda de estágio ou tira uma aflição da ficha de quem está em cena. */
+  mexerNaAflicao(
+    sessaoId: string,
+    participanteId: string,
+    payload: { acao: 'aplicar' | 'estagio' | 'remover'; aflicao_id: string; estagio?: number; incubando?: boolean; cansaco?: number },
+  ) {
+    return api<{ aflicoes: Array<{ aflicao_id: string; estagio: number; incubando: boolean }>; cansaco_atual: number | null; versao: number }>(
+      `/sessao/${sessaoId}/participantes/${participanteId}/aflicoes`,
+      { method: 'POST', body: payload },
     );
   },
 

@@ -603,10 +603,10 @@ def create_platform_invite(
         connection.execute(
             """
             INSERT INTO convites_plataforma
-                (id, criado_por, codigo_hash, max_usos, expira_em)
-            VALUES (%s, %s, %s, %s, %s)
+                (id, criado_por, codigo_hash, max_usos, expira_em, nota)
+            VALUES (%s, %s, %s, %s, %s, %s)
             """,
-            (invite_id, actor.id, hash_token(raw_code), payload.max_usos, expires),
+            (invite_id, actor.id, hash_token(raw_code), payload.max_usos, expires, payload.nota),
         )
         record_audit(
             connection,
@@ -614,31 +614,50 @@ def create_platform_invite(
             actor_user_id=actor.id,
             target_type="convite_plataforma",
             target_id=str(invite_id),
-            details={"max_usos": payload.max_usos},
+            details={"max_usos": payload.max_usos, "nota": payload.nota},
         )
-    return {"id": invite_id, "codigo": raw_code, "expira_em": expires}
+    return {"id": invite_id, "codigo": raw_code, "expira_em": expires, "max_usos": payload.max_usos, "nota": payload.nota}
+
+
+def _situacao_do_convite(row, agora: datetime) -> str:
+    if row["revogado_em"] is not None:
+        return "revogado"
+    if row["usos"] >= row["max_usos"]:
+        return "usado"
+    if row["expira_em"] <= agora:
+        return "expirado"
+    return "ativo"
 
 
 @router.get("/convites")
 def list_platform_invites(
+    todos: bool = False,
     user: AuthenticatedUser = Depends(require_platform_admin),
     database: Database = Depends(get_database),
 ):
-    """Convites de plataforma ainda utilizáveis. O código nunca volta, só o hash existe."""
+    """Convites de plataforma ainda utilizáveis; com `todos=true`, também os
+    usados, vencidos e revogados dos últimos 30 dias. O código nunca volta,
+    só o hash existe."""
     now = datetime.now(timezone.utc)
+    filtro = (
+        "i.criado_em > %s - INTERVAL '30 days' OR (i.revogado_em IS NULL AND i.expira_em > %s AND i.usos < i.max_usos)"
+        if todos
+        else "i.revogado_em IS NULL AND i.expira_em > %s AND i.usos < i.max_usos"
+    )
     with database.connection() as connection:
         rows = connection.execute(
-            """
+            f"""
             SELECT i.id, i.max_usos, i.usos, i.expira_em, i.revogado_em,
-                   i.criado_em, u.nome_exibicao AS criado_por_nome
+                   i.criado_em, i.nota, u.nome_exibicao AS criado_por_nome
             FROM convites_plataforma i
             LEFT JOIN usuarios u ON u.id=i.criado_por
-            WHERE i.revogado_em IS NULL AND i.expira_em > %s AND i.usos < i.max_usos
+            WHERE {filtro}
             ORDER BY i.criado_em DESC
+            LIMIT 200
             """,
-            (now,),
+            (now, now) if todos else (now,),
         ).fetchall()
-    return {"convites": [dict(row) for row in rows]}
+    return {"convites": [{**dict(row), "situacao": _situacao_do_convite(row, now)} for row in rows]}
 
 
 @router.delete("/convites/{invite_id}", status_code=status.HTTP_204_NO_CONTENT)

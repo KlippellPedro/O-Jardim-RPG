@@ -5826,10 +5826,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "leviata",
-      "titulo": "Leviatã",
+      "id": "vaelthor",
+      "titulo": "Vaelthor, o Leviatã Espelhado",
       "conteudo": {
-        "descricao": "Serpente marinha grande o bastante para enrolar um navio. Vive em águas muito fundas e sobe quando sente vibração de casco, explosão ou grande quantidade de sangue. As escamas refletem um céu de estrelas de outro universo, e quem encara demais vê o reflexo se mexer antes do corpo.",
+        "descricao": "Uma serpente do tamanho de um porto, que vive onde o mar deixa de ter fundo. Cada escama devolve um céu que não é o nosso, com estrelas de outro universo, e quem encara demais vê o reflexo se mexer um instante antes do corpo. Os marinheiros juram que ele coleta o que balança, bate, sangra ou explode na superfície. Se Vaelthor cair, o mar onde viveu passa a refletir o céu verdadeiro, e as estrelas de outro universo somem da água.",
         "preco": {
           "Solares": 3100
         },
@@ -5864,15 +5864,16 @@
         ],
         "ataques": [
           {
-            "nome": "Engolir",
+            "nome": "Boca de Maré",
             "detalhe": "+44, 8d10+10 (agarra e engole o alvo)"
           }
         ],
         "habilidades": [
-          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
-          "Maremoto (1/cena: criaturas na área fazem Reflexos DT 30; em falha, são empurradas 6 m e ficam Caídas)",
-          "Arrastar às Profundezas (Fortitude DT 30; em falha, o alvo fica Agarrado e começa a sufocar. Repete o teste no fim de cada turno para escapar)",
-          "Arrancar (anunciado: Dentes de Espelho, no lugar do Engolir; Reflexos DT 32; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano de 11d10+14 de qualquer jeito)",
+          "Céu Invertido (Presença Aterradora: cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
+          "Maré de Vidro (Maremoto, 1/cena: criaturas na área fazem Reflexos DT 30; em falha, são empurradas 6 m e ficam Caídas)",
+          "Fundo sem Fundo (Arrastar às Profundezas: Fortitude DT 30; em falha, o alvo fica Agarrado e começa a sufocar. Repete o teste no fim de cada turno para escapar)",
+          "Dentes de Espelho (Arrancar: anunciado, no lugar do Engolir; Reflexos DT 32; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano de 11d10+14 de qualquer jeito)",
+          "Reflexo Adiantado (1/rodada, Reação: quando uma criatura em alcance Longo o ataca ou conjura contra ele, o reflexo das escamas age primeiro. O alvo faz Vontade DT 37; em falha, o ataque ou a magia acerta o próprio autor no lugar dele)",
           "Sinais (o mar reflete estrelas em pleno dia e ondas correm contra o vento)",
           "Como Evitar (barulho, sangue e explosões atraem; um casco silencioso, sem fogo e sem feridos a bordo passa por cima dele)"
         ],
@@ -5887,10 +5888,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "fenix-imortal",
-      "titulo": "Fênix",
+      "id": "aurelith",
+      "titulo": "Aurelith, a Que Sempre Volta",
       "conteudo": {
-        "descricao": "Uma fênix adulta pode viver por eras, queimando e renascendo sempre que o corpo envelhece. O calor das asas fecha ferimentos e a ave defende com ferocidade quem considera parte do ninho.",
+        "descricao": "Uma fênix adulta vive por eras, queimando e renascendo toda vez que o corpo envelhece. O calor das asas fecha ferimentos, e a ave defende com ferocidade quem considera parte do ninho. Aurelith tem a memória de todas as suas mortes e escolhe com cuidado quem permanece perto, porque quem entra no ninho sai com uma pena e uma dívida. Se Aurelith cair por vontade própria, o fogo do mundo ganha mais uma vida; se cair por força, o ninho se apaga por um ano.",
         "preco": {
           "Solares": 3200
         },
@@ -5931,7 +5932,9 @@
           }
         ],
         "habilidades": [
-          "Renascimento Absoluto (ao morrer, ressurge com Vida cheia, 1/campanha)"
+          "Cinzas que Lembram (Renascimento Absoluto: ao morrer, ressurge com Vida cheia, 1/campanha. A cada renascimento ela lembra a morte anterior e, na primeira rodada, ataca com +5 contra quem a matou)",
+          "Asa do Ninho (Reação, 1/rodada: quando um aliado dela ou uma criatura que ela tenha escolhido como parte do ninho sofreria dano, ela recebe esse dano no lugar dele; criaturas do ninho recuperam Vida igual a um décimo do golpe dela no começo de cada turno dela)",
+          "Pena e Dívida (Ação Padrão, 1/cena: entrega uma pena a uma criatura aliada ou rendida. A criatura, uma vez, volta de 0 PV com 149 de Vida, e deve a Aurelith um favor que o Mestre cobra depois)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -22892,10 +22895,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "devorador-de-mundos",
-      "titulo": "Devorador de Mundos",
+      "id": "gulhar",
+      "titulo": "Gulhar, o Estômago do Vazio",
       "conteudo": {
-        "descricao": "Criatura do Vazio grande o bastante para atacar um reino inteiro. Ela se alimenta de matéria e magia, cresce durante o ataque e deixa áreas onde construções, corpos e registros simplesmente desapareceram. Quem estava perto conta que a fome dela tem um som, e que o som continua depois que ela vai embora.",
+        "descricao": "Uma criatura do Vazio grande o bastante para atacar um reino inteiro. Alimenta-se de matéria e de magia, cresce durante o ataque e deixa para trás áreas onde construções, corpos e registros simplesmente desapareceram, e quem estava perto lembra do lugar com um buraco no meio. Não fala, mas todos os que a viram sonham, depois, com uma boca que se abre por dentro de um quarto. Se Gulhar cair, o Vão de onde veio fica sem a fome que o mantinha aberto e começa a fechar sozinho.",
         "preco": {
           "Solares": 3200
         },
@@ -22931,14 +22934,15 @@
         ],
         "ataques": [
           {
-            "nome": "Fome Sem Fim",
+            "nome": "Mordida de Reino",
             "detalhe": "+46, 9d10+10 (cura o Devorador pela metade do dano)"
           }
         ],
         "habilidades": [
-          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
-          "Colapso da Realidade (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT 34. Sofrem 10d10 de vazio, metade em sucesso; esse dano não gera crítico)",
-          "Arrancar (anunciado: Fome Sem Fim em mordida inteira, no lugar do ataque normal; Reflexos DT 34; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano de 12d10+16 de qualquer jeito)",
+          "Boca no Quarto (Presença Aterradora: cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
+          "Fome que Se Abre (Colapso da Realidade, 1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT 34. Sofrem 10d10 de vazio, metade em sucesso; esse dano não gera crítico)",
+          "Bocado Inteiro (Arrancar: anunciado, mordida inteira no lugar do ataque normal; Reflexos DT 34; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano de 12d10+16 de qualquer jeito)",
+          "Cresce Comendo (cada vez que reduz uma criatura a 0 PV ou destrói uma construção grande, cresce: ganha +1 de dano por dado em todos os ataques até o fim da cena, no máximo +5)",
           "Sinais (prédios e nomes em placas sumindo por trás do grupo, um som grave que sobe pelo chão)",
           "Como Evitar (não é um encontro para vencer no dano: a cena é de fuga, de evacuação ou de fechar o Vão por onde ele veio)"
         ],
@@ -27946,10 +27950,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "apagador-de-constelacoes",
-      "titulo": "Devorador de Estrelas",
+      "id": "nyxhael",
+      "titulo": "Nyxhael, Apagador de Constelações",
       "conteudo": {
-        "descricao": "Aberração gigantesca que chegou de fora do universo durante a Era do Vazio. Vaga entre as Árvores e ataca qualquer fonte de vida ou luz que encontra. Sua aproximação é percebida quando estrelas começam a desaparecer do céu, e quem olha para cima na hora errada percebe que o espaço vazio entre as estrelas tem a forma de uma boca.",
+        "descricao": "Chegou de fora do universo durante a Era do Vazio e vaga entre as Árvores atacando qualquer fonte de vida ou luz. Os astrônomos do Jardim perceberam primeiro: uma estrela some, depois outra, sempre em linha reta, e a linha aponta para o mundo seguinte. Ele é lento para quem o vê e rápido para quem o sente. Se Nyxhael cair, as constelações que apagou voltam ao céu uma a uma, e quem as nomeou de novo é lembrado por elas.",
         "preco": {
           "Solares": 3150
         },
@@ -27986,17 +27990,18 @@
         ],
         "ataques": [
           {
-            "nome": "Mordida",
+            "nome": "Mordida do Escuro",
             "detalhe": "+46, 9d10+10 de Vazio; ignora metade da Resistência de Vazio"
           }
         ],
         "habilidades": [
-          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
-          "Presença do Vazio (inimigos em alcance Médio não recebem vantagem e não podem usar reações concedidas por aliados)",
-          "Rajada do Vazio (1/cena: escolha até cinco criaturas em alcance Longo; cada uma faz Vontade DT 34, sofre 8d10 de Vazio e fica Cega até o fim do próximo turno dela em falha, ou metade do dano sem condição em sucesso)",
-          "Devorar (1/turno, quando reduz uma criatura a 0 PV, recupera 60 PV; esta habilidade não apaga a ficha, as memórias ou o personagem do jogador)",
-          "Arrancar (anunciado: a Mordida Arrancadora, no lugar da Mordida; Reflexos DT 34; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano de 12d10+16 de qualquer jeito)",
+          "Céu Sem Estrelas (Presença Aterradora: cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
+          "Silêncio de Luz (Presença do Vazio: inimigos em alcance Médio não recebem vantagem e não podem usar reações concedidas por aliados)",
+          "Constelação Apagada (Rajada do Vazio, 1/cena: escolha até cinco criaturas em alcance Longo; cada uma faz Vontade DT 34, sofre 8d10 de Vazio e fica Cega até o fim do próximo turno dela em falha, ou metade do dano sem condição em sucesso)",
+          "Fome de Brilho (Devorar, 1/turno, quando reduz uma criatura a 0 PV, recupera 60 PV; esta habilidade não apaga a ficha, as memórias ou o personagem do jogador)",
+          "Mordida Arrancadora (Arrancar: anunciado, no lugar da Mordida; Reflexos DT 34; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano de 12d10+16 de qualquer jeito)",
           "Corpo do Vazio (imune a medo, veneno, doença, sono e efeitos de envelhecimento)",
+          "Rastro de Estrelas Mortas (ao fim de cada rodada, uma fonte de luz mágica ou de fogo em alcance Longo se apaga; criaturas que dependem dela fazem Vontade DT 39 ou ficam Cegas até a luz voltar)",
           "Sinais (estrelas se apagando em fila, animais em silêncio total, luz das tochas ficando fraca)",
           "Como Evitar (não é um encontro para vencer no dano: o grupo ganha ao fechar o Vão de onde ela veio, atrair o corpo para longe de algo vivo ou sobreviver até ela perder o interesse; o Mestre define qual porta a cena abre)"
         ],
@@ -31245,7 +31250,7 @@
       "id": "consumivel-caldo-osso-quente",
       "titulo": "Caldo de Osso Quente",
       "conteudo": {
-        "descricao": "Fumegante, salgado, servido em tigela de barro com as duas mãos em volta. Esquenta de dentro pra fora e tira o tremor dos dedos. Por 4 horas, você tem vantagem em Fortitude contra frio, calor ou clima hostil.",
+        "descricao": "Fumegante, salgado, servido em tigela de barro com as duas mãos em volta. Esquenta de dentro pra fora e tira o tremor dos dedos. Por 4 horas, você tem vantagem em Fortitude contra frio, calor ou clima hostil. Essa vantagem cancela a desvantagem de Fortitude de Queimadura Grave e de Congelamento enquanto durar.",
         "preco": {
           "Lunaris": 9
         },
@@ -31260,7 +31265,7 @@
         "consumivel": true,
         "ativacao": "Fora de combate, 1 minuto",
         "duracao": "4 horas",
-        "efeito": "Vantagem em Fortitude contra frio, calor ou clima hostil por 4 horas",
+        "efeito": "Vantagem em Fortitude contra frio, calor ou clima hostil por 4 horas; cancela a desvantagem de Queimadura Grave e de Congelamento no mesmo teste",
         "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
         "nivelMinimoLoja": 1
       }
@@ -31392,6 +31397,677 @@
         "efeito": "+2 em Diplomacia e Atuação, -2 em Percepção por 1 hora",
         "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
         "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-pao-safra-continua",
+      "titulo": "Pão de Safra Contínua",
+      "conteudo": {
+        "descricao": "Lionês assa o mesmo pão há séculos, com trigo que nunca teve ano ruim. A casca estala e o miolo continua morno muito depois de sair do forno. Recupera 1d6 de Estamina.",
+        "preco": {
+          "Lunaris": 8
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Lionês, Gênese",
+          "Recupera 1d6 de Estamina"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 1 minuto",
+        "efeito": "Recupera 1d6 de Estamina",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-vinho-chuva-certa",
+      "titulo": "Vinho da Chuva Certa",
+      "conteudo": {
+        "descricao": "Das vinhas que recebem chuva no momento certo, todo ano, sem falhar. Quem bebe fica com a calma de quem nunca passou fome. +2 em Nobreza por 1 hora e vantagem no primeiro teste de Diplomacia da cena.",
+        "preco": {
+          "Lunaris": 60
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Lionês, Gênese",
+          "+2 Nobreza",
+          "Vantagem: 1º teste de Diplomacia da cena",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "+2 em Nobreza por 1 hora e vantagem no primeiro teste de Diplomacia da cena",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "1 hora"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-mel-jasmim-alfarn",
+      "titulo": "Mel de Jasmim de Alfarn",
+      "conteudo": {
+        "descricao": "Colhido nas flores da ilha que flutua no alto de Nadalon. Muda de sabor conforme o humor de quem prova, e quase sempre melhora o humor junto. Vantagem em Vontade contra medo, encanto e desespero por 4 horas.",
+        "preco": {
+          "Lunaris": 45
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Alfarn, Nadalon",
+          "Vantagem: Vontade (medo, encanto, desespero)",
+          "Duração: 4 horas"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Vantagem em Vontade contra medo, encanto e desespero por 4 horas",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "4 horas"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-broa-fundo-de-mina",
+      "titulo": "Broa de Fundo de Mina",
+      "conteudo": {
+        "descricao": "Assada no calor das forjas de Khazad, dura de quebrar dente e boa por um mês na mochila. Anão nenhum desce sem uma. +1 em Atletismo até o próximo Descanso completo; não estraga.",
+        "preco": {
+          "Lunaris": 10
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Khazad, Gênese",
+          "+1 Atletismo",
+          "Não estraga",
+          "Até o próximo Descanso completo"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 1 minuto",
+        "efeito": "+1 em Atletismo até o próximo Descanso completo; não estraga",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "Até o próximo Descanso completo"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-cerveja-de-cadinho",
+      "titulo": "Cerveja de Cadinho",
+      "conteudo": {
+        "descricao": "Fermentada no calor que sobra da forja, grossa, escura e com gosto de fumaça. Vantagem em Fortitude contra calor e fogo e -1 em Furtividade por 4 horas.",
+        "preco": {
+          "Lunaris": 12
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Khazad, Gênese",
+          "Vantagem: Fortitude (calor e fogo)",
+          "Custo: -1 Furtividade",
+          "Duração: 4 horas"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Vantagem em Fortitude contra calor e fogo e -1 em Furtividade por 4 horas",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "4 horas",
+        "custo": "-1 em Furtividade (o hálito denuncia)"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-cha-dez-cadeiras",
+      "titulo": "Chá das Dez Cadeiras",
+      "conteudo": {
+        "descricao": "Dez ervas, uma escolhida por cada Cadeira de Salém. Nenhuma xícara sai igual à outra, e as bruxas dizem que é de propósito. Recupera 1d4 de Mana e +1 em Misticismo por 1 hora.",
+        "preco": {
+          "Lunaris": 40
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Salém, Gênese",
+          "Recupera 1d4 de Mana",
+          "+1 Misticismo",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Recupera 1d4 de Mana e +1 em Misticismo por 1 hora",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "1 hora"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-racao-marcha-imperial",
+      "titulo": "Ração de Marcha Imperial",
+      "conteudo": {
+        "descricao": "Biscoito duro, carne salgada e uma ordem do dia impressa no papel que embrulha tudo. Recupera 1d6 de Estamina (uma por dia).",
+        "preco": {
+          "Lunaris": 6
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Império, Gênese",
+          "Recupera 1d6 de Estamina",
+          "Uma por dia"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 1 minuto",
+        "efeito": "Recupera 1d6 de Estamina (uma por dia)",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-vinho-de-ferro",
+      "titulo": "Vinho de Ferro",
+      "conteudo": {
+        "descricao": "O que os anfitriões de Întuneric servem aos convidados que não estão no cardápio. Gosto de ferro e terra úmida. Vampiro recupera 1d8 de Vida; os outros têm vantagem em Fortitude contra Envenenado e -1 em Percepção por 1 hora.",
+        "preco": {
+          "Lunaris": 50
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Întuneric, Gênese",
+          "Vampiro: recupera 1d8 de Vida",
+          "Outros: vantagem em Fortitude contra Envenenado",
+          "Custo: -1 Percepção",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Vampiro recupera 1d8 de Vida; os outros têm vantagem em Fortitude contra Envenenado e -1 em Percepção por 1 hora",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "1 hora",
+        "custo": "-1 em Percepção para quem não é vampiro"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-sal-ambar",
+      "titulo": "Sal Âmbar",
+      "conteudo": {
+        "descricao": "Recolhido em Anámnesis, onde tudo deixa a marca do que é de verdade. Uma pitada, e a comida tem o gosto que realmente tem. Ao temperar comida ou bebida, escurece na hora se houver veneno ou droga nela.",
+        "preco": {
+          "Lunaris": 14
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Anámnesis, Alétheia",
+          "Tempero",
+          "Revela veneno ou droga"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Ao preparar ou servir",
+        "efeito": "Ao temperar comida ou bebida, escurece na hora se houver veneno ou droga nela",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-infusao-olhos-claros",
+      "titulo": "Infusão de Olhos Claros",
+      "conteudo": {
+        "descricao": "Feita com flores que só abrem sob a luz âmbar. Depois de beber, as coisas param de fingir por um tempo. +2 em Intuição e desvantagem em Enganação por 1 hora.",
+        "preco": {
+          "Lunaris": 55
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Anámnesis, Alétheia",
+          "+2 Intuição",
+          "Custo: desvantagem em Enganação",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "+2 em Intuição e desvantagem em Enganação por 1 hora",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "1 hora",
+        "custo": "Desvantagem em Enganação"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-cubo-nutritivo-padronizado",
+      "titulo": "Cubo Nutritivo Padronizado",
+      "conteudo": {
+        "descricao": "Quadrado, cinza, sem cheiro, com tudo que um corpo precisa medido em miligrama. Ninguém gosta, todo mundo come. Recupera 1d6 de Estamina e +1 em Tecnologia por 1 hora.",
+        "preco": {
+          "Lunaris": 12
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: A.X.I.S",
+          "Recupera 1d6 de Estamina",
+          "+1 Tecnologia",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Recupera 1d6 de Estamina e +1 em Tecnologia por 1 hora",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "1 hora"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-isotonico-de-malha",
+      "titulo": "Isotônico de Malha",
+      "conteudo": {
+        "descricao": "Brilha em ciano dentro do copo e deixa um zumbido leve atrás das orelhas. Remove Desorientado e dá vantagem contra ficar Desorientado por 1 hora.",
+        "preco": {
+          "Lunaris": 35
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: A.X.I.S",
+          "Remove Desorientado",
+          "Vantagem contra Desorientado",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "efeito": "Remove Desorientado e dá vantagem contra ficar Desorientado por 1 hora",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "1 hora"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-fruta-do-viveiro",
+      "titulo": "Fruta do Viveiro",
+      "conteudo": {
+        "descricao": "Cresceu de semente a fruta numa noite só. Precisa ser comida no mesmo dia: no seguinte, já apodreceu. Recupera 1d8 de Vida; estraga 24 horas depois de colhida.",
+        "preco": {
+          "Lunaris": 6
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Viveiro, Anima",
+          "Recupera 1d8 de Vida",
+          "Estraga em 24 horas"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "efeito": "Recupera 1d8 de Vida; estraga 24 horas depois de colhida",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-caca-gigante-defumada",
+      "titulo": "Caça Gigante Defumada",
+      "conteudo": {
+        "descricao": "Tudo no Viveiro nasce grande demais. Uma fatia dessa carne alimenta um grupo inteiro. Até 4 pessoas que comam juntas recuperam 1d6 de Estamina e têm +1 em Sobrevivência até o próximo Descanso completo.",
+        "preco": {
+          "Lunaris": 40
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Viveiro, Anima",
+          "Até 4 pessoas",
+          "Recupera 1d6 de Estamina",
+          "+1 Sobrevivência",
+          "Até o próximo Descanso completo"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 10 minutos",
+        "efeito": "Até 4 pessoas que comam juntas recuperam 1d6 de Estamina e têm +1 em Sobrevivência até o próximo Descanso completo",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "Até o próximo Descanso completo"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-pimenta-de-espiral",
+      "titulo": "Pimenta de Espiral",
+      "conteudo": {
+        "descricao": "Nunca arde igual duas vezes. Quem cozinha com ela aposta, porque planejar não adianta. Role 1d6: 1 ou 2, desvantagem em Percepção por 1 hora; 3 ou 4, +2 em Iniciativa por 1 hora; 5 ou 6, fica Apressado até o fim da próxima cena.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Espiral, Vórtice",
+          "Tempero",
+          "Efeito sorteado (1d6)"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Role 1d6: 1 ou 2, desvantagem em Percepção por 1 hora; 3 ou 4, +2 em Iniciativa por 1 hora; 5 ou 6, fica Apressado até o fim da próxima cena",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "1 hora ou até o fim da próxima cena"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-licor-parado",
+      "titulo": "Licor Parado",
+      "conteudo": {
+        "descricao": "Destilado das frutas colhidas no último dia em que Espiral mudou de forma. Desde então, elas não mudam mais, e quem bebe também demora a mudar. Vantagem para resistir a ser empurrado, derrubado ou movido contra a vontade e -2 em Iniciativa por 1 hora.",
+        "preco": {
+          "Lunaris": 180
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Espiral, Vórtice",
+          "Vantagem contra ser movido ou derrubado",
+          "Custo: -2 Iniciativa",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Vantagem para resistir a ser empurrado, derrubado ou movido contra a vontade e -2 em Iniciativa por 1 hora",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 2,
+        "duracao": "1 hora",
+        "custo": "-2 de Iniciativa"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-pao-de-pedra-moida",
+      "titulo": "Pão de Pedra Moída",
+      "conteudo": {
+        "descricao": "Feito de um grão que cresce entre as rochas. Pesado como o nome promete. +1 em Fortitude e vantagem para não ser derrubado, -1 em Acrobacia, até o próximo Descanso completo.",
+        "preco": {
+          "Lunaris": 8
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Baluarte",
+          "+1 Fortitude",
+          "Vantagem contra ser derrubado",
+          "Custo: -1 Acrobacia",
+          "Até o próximo Descanso completo"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 1 minuto",
+        "efeito": "+1 em Fortitude e vantagem para não ser derrubado, -1 em Acrobacia, até o próximo Descanso completo",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "Até o próximo Descanso completo",
+        "custo": "-1 em Acrobacia"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-agua-de-alicerce",
+      "titulo": "Água de Alicerce",
+      "conteudo": {
+        "descricao": "Desceu tão fundo que ficou mais pesada que água comum. O copo pesa o dobro na mão. Recupera 1d6 de Estamina e dá vantagem em Atletismo para carregar, empurrar e erguer por 1 hora.",
+        "preco": {
+          "Lunaris": 50
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Alicerce, Baluarte",
+          "Recupera 1d6 de Estamina",
+          "Vantagem: Atletismo (carregar, empurrar, erguer)",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Recupera 1d6 de Estamina e dá vantagem em Atletismo para carregar, empurrar e erguer por 1 hora",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "1 hora"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-pao-de-bolso",
+      "titulo": "Pão de Bolso",
+      "conteudo": {
+        "descricao": "Do tamanho de uma noz. Partido ao meio, rende um prato inteiro: a massa foi dobrada pelo Fluxo do Espaço. Ocupa o espaço de um item pequeno e serve uma refeição farta para até 2 pessoas, que recuperam 1d4 de Estamina cada.",
+        "preco": {
+          "Lunaris": 35
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Interstício, Matriz",
+          "Até 2 pessoas",
+          "Recupera 1d4 de Estamina",
+          "Ocupa pouco espaço"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 1 minuto",
+        "efeito": "Ocupa o espaço de um item pequeno e serve uma refeição farta para até 2 pessoas, que recuperam 1d4 de Estamina cada",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-cha-de-intersticio",
+      "titulo": "Chá de Interstício",
+      "conteudo": {
+        "descricao": "Os guias dimensionais bebem antes de atravessar. Dizem que é o que faz a pessoa chegar do outro lado inteira. Vantagem em Fortitude e Vontade contra efeitos de travessia entre Galhos e contra ficar Desorientado por 4 horas.",
+        "preco": {
+          "Lunaris": 180
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Interstício, Matriz",
+          "Vantagem: Fortitude e Vontade (travessia e Desorientado)",
+          "Duração: 4 horas"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Vantagem em Fortitude e Vontade contra efeitos de travessia entre Galhos e contra ficar Desorientado por 4 horas",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 2,
+        "duracao": "4 horas"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-conserva-de-sucessao",
+      "titulo": "Conserva de Sucessão",
+      "conteudo": {
+        "descricao": "Lacrada num pote que não envelhece enquanto o lacre estiver inteiro. A fruta lá dentro foi colhida há cem anos e continua do dia. +2 em Iniciativa até o fim do próximo combate; não estraga.",
+        "preco": {
+          "Lunaris": 45
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Sucessão, Éon",
+          "+2 Iniciativa",
+          "Não estraga",
+          "Até o fim do próximo combate"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "+2 em Iniciativa até o fim do próximo combate; não estraga",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "Até o fim do próximo combate"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-cafe-hora-emprestada",
+      "titulo": "Café de Hora Emprestada",
+      "conteudo": {
+        "descricao": "Segura você acordado a noite inteira. A conta chega depois, e chega certa. Ignora as penalidades de Cansaço por 8 horas; quando o efeito acaba, ganha 1 Cansaço.",
+        "preco": {
+          "Lunaris": 55
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Éon",
+          "Ignora Cansaço por 8 horas",
+          "Custo: +1 Cansaço ao acabar"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Ignora as penalidades de Cansaço por 8 horas; quando o efeito acaba, ganha 1 Cansaço",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1,
+        "duracao": "8 horas",
+        "custo": "+1 Cansaço quando o efeito acaba"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-pao-de-velorio",
+      "titulo": "Pão de Velório",
+      "conteudo": {
+        "descricao": "Assado para quem ficou. Comido em silêncio, ao lado de quem foi. Até 6 pessoas que comam juntas recuperam 1d4 de Sanidade (uma vez entre Descansos completos).",
+        "preco": {
+          "Lunaris": 6
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Comida",
+          "Origem: Limiar",
+          "Até 6 pessoas",
+          "Recupera 1d4 de Sanidade",
+          "Uma por Descanso"
+        ],
+        "subtipo": "comida",
+        "consumivel": true,
+        "ativacao": "Fora de combate, 10 minutos",
+        "efeito": "Até 6 pessoas que comam juntas recuperam 1d4 de Sanidade (uma vez entre Descansos completos)",
+        "acumulo": "Só vale um efeito de Comida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-vinho-carmesim",
+      "titulo": "Vinho Carmesim",
+      "conteudo": {
+        "descricao": "Escuro como sangue seco. Contam que é o que se serve em Arkarin para quem acabou de chegar. Recupera 1d6 de Vida e 1d6 de Mana; desvantagem em Vontade contra medo por 1 hora.",
+        "preco": {
+          "Lunaris": 180
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Arkarin, Limiar",
+          "Recupera 1d6 de Vida e 1d6 de Mana",
+          "Custo: desvantagem em Vontade contra medo",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "Recupera 1d6 de Vida e 1d6 de Mana; desvantagem em Vontade contra medo por 1 hora",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 2,
+        "duracao": "1 hora",
+        "custo": "Desvantagem em Vontade contra medo"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-agua-sem-gosto",
+      "titulo": "Água Sem Gosto",
+      "conteudo": {
+        "descricao": "Não tem gosto, cheiro nem cor. Depois de beber, você esquece que estava com sede, e os outros demoram a lembrar que você está ali. +2 em Furtividade por 1 hora; no mesmo tempo, aliados têm -2 para perceber você.",
+        "preco": {
+          "Lunaris": 180
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Consumível",
+          "Bebida",
+          "Origem: Bordo, O Vazio",
+          "+2 Furtividade",
+          "Custo: aliados -2 para perceber você",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "bebida",
+        "consumivel": true,
+        "ativacao": "Ação Livre",
+        "efeito": "+2 em Furtividade por 1 hora; no mesmo tempo, aliados têm -2 para perceber você",
+        "acumulo": "Só vale um efeito de Bebida por vez; a mais recente substitui a anterior.",
+        "nivelMinimoLoja": 2,
+        "duracao": "1 hora",
+        "custo": "Aliados também têm -2 para perceber você"
       }
     },
     {
@@ -34114,10 +34790,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "golem-titanico",
-      "titulo": "Golem Titânico",
+      "id": "mutis",
+      "titulo": "Mutis, o Guardião da Cidade Muda",
       "conteudo": {
-        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra.",
+        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra. Os golens falam por Libras, e ele aprendeu a ordem por gestos que o último arquiteto fez antes de desaparecer; quem sabe repetir esses gestos descobre que ele ainda espera a ordem de parar. Se Mutis cair, a cidade que guardava para de existir de repente, como se tivesse sido uma ordem a segurá-la de pé.",
         "preco": {
           "Solares": 3200
         },
@@ -34153,7 +34829,7 @@
         ],
         "ataques": [
           {
-            "nome": "Punho Titânico",
+            "nome": "Punho de Torre",
             "detalhe": "+52, 6d10+21 impacto"
           },
           {
@@ -34162,8 +34838,10 @@
           }
         ],
         "habilidades": [
-          "Corpo de Cidade (imune a Amedrontado, Atordoado e a efeitos de mente; reduz em 6 o dano físico de cada golpe)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Corpo de Muralha (Corpo de Cidade: imune a Amedrontado, Atordoado e a efeitos de mente; reduz em 6 o dano físico de cada golpe)",
+          "Dois Gestos Pesados (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Última Ordem (enquanto a ordem não for revogada, ele ataca primeiro quem estiver tentando atravessar a cidade; um personagem que domine Libras, ou um golem aliado, pode fazer o gesto de revogação com Misticismo ou Diplomacia DT 47 e ele para por uma cena)",
+          "Rua Que Cai (1/cena: como Ação Padrão, derruba um pedaço de prédio em alcance Longo; criaturas na área fazem Reflexos DT 47 ou sofrem 6d10+21 de impacto e ficam Caídas)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -34239,10 +34917,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "vampiro-anciao",
-      "titulo": "Vampiro Ancião",
+      "id": "dragomir",
+      "titulo": "Dragomir, o Conde do Último Baile",
       "conteudo": {
-        "descricao": "Viu séculos passarem em salões que hoje são ruínas, e ainda se veste como quem vai a um baile. Educado até o último segundo, e o último segundo costuma chegar rápido.",
+        "descricao": "Viu séculos passarem em salões que hoje são ruínas, e ainda se veste como quem vai a um baile. Educado até o último segundo, e o último segundo costuma chegar rápido. Em cada cidade que habita deixa convites com o nome do convidado escrito à mão, e quem aceita descobre que o baile é uma luta em que todos dançam e só ele escolhe a música. Se Dragomir cair, os convites que ainda circulam perdem a tinta, mas quem já aceitou continua devendo uma dança a alguém.",
         "preco": {
           "Solares": 3200
         },
@@ -34278,18 +34956,20 @@
         ],
         "ataques": [
           {
-            "nome": "Garras de Seda",
+            "nome": "Luvas de Seda",
             "detalhe": "+43, 7d10+25 cortante"
           },
           {
-            "nome": "Olhar Dominante",
+            "nome": "Olhar do Anfitrião",
             "detalhe": "+43, 7d10+25 psíquico"
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 10d10+40, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Sede Antiga (uma vez por turno, ao causar dano a uma criatura viva, recupera Vida igual a um quinto do dano)",
-          "Olhar Dominante (Ação Padrão, alcance Médio: Vontade DT 39 ou o alvo obedece a um comando de uma palavra)"
+          "Valsa de Sangue (Golpe Anunciado: anuncie na rodada anterior; acerta 10d10+40, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Taça Sem Fundo (Sede Antiga: uma vez por turno, ao causar dano a uma criatura viva, recupera Vida igual a um quinto do dano)",
+          "Convite Irrecusável (Olhar Dominante: Ação Padrão, alcance Médio: Vontade DT 39 ou o alvo obedece a um comando de uma palavra)",
+          "Etiqueta (quem é cortês com ele em voz alta, cumprimentando e se apresentando, tem vantagem em testes de Vontade contra ele até o fim da cena; quem o ataca antes de ele atacar perde essa vantagem e ele recebe +2 de Defesa)",
+          "Sem Espelho (não projeta reflexo, e ao ver o reflexo de uma criatura em espelho ou água ele sabe o nome verdadeiro dela; chamá-la por esse nome faz o alvo falhar automaticamente no teste de Vontade contra o Convite Irrecusável uma vez)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -34303,10 +34983,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "devorador-de-eras",
-      "titulo": "Devorador de Eras",
+      "id": "aionofagos",
+      "titulo": "Aionofagos, o Devorador de Eras",
       "conteudo": {
-        "descricao": "Devora o momento em que as coisas aconteceram. Onde ele passa, as pessoas esquecem que o lugar existiu, e as estações perdem a ordem e se repetem.",
+        "descricao": "Devora o momento em que as coisas aconteceram. Onde ele passa, as pessoas esquecem que o lugar existiu, e as estações perdem a ordem e se repetem. O que ele morde é a memória que o presente guarda. Se Aionofagos cair, o que ele devorou não volta, mas as pessoas lembram, devagar, de que algo foi comido.",
         "preco": {
           "Solares": 3200
         },
@@ -34342,7 +35022,7 @@
         ],
         "ataques": [
           {
-            "nome": "Mordida do Depois",
+            "nome": "Dentada do Depois",
             "detalhe": "+85, 15d10+52 Vazio"
           },
           {
@@ -34351,9 +35031,11 @@
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 22d10+80, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 75; em falha, perde 3d6 de Sanidade e fica Amedrontado)",
+          "Mordida de Séculos (Golpe Anunciado: anuncie na rodada anterior; acerta 22d10+80, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Esquecimento Súbito (Presença Aterradora: cada personagem que a veja pela primeira vez na cena faz Vontade DT 75; em falha, perde 3d6 de Sanidade e fica Amedrontado)",
           "Bocado de Eras (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT 75. Sofrem 15d10 de Vazio, metade em sucesso; esse dano não gera crítico)",
+          "Memória Comida (quando causa dano a uma criatura, ela faz Vontade DT 75; em falha, esquece uma habilidade, magia ou lembrança escolhida pelo Mestre até o fim da cena)",
+          "Estação Repetida (a cada rodada, o clima e a luz da cena se repetem: o grupo vive de novo, sem nova rolagem, o efeito de uma condição que sofreu na rodada anterior, a critério do Mestre)",
           "Sinais (relógios que erram por dentro do grupo e lembranças que faltam, uma a uma)",
           "Como Evitar (a cena é de fuga, ou de fazer o grupo lembrar em voz alta o que ele já levou)"
         ],
@@ -34369,10 +35051,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "ausencia-faminta",
-      "titulo": "A Ausência Faminta",
+      "id": "lacuna",
+      "titulo": "Lacuna, a Ausência Faminta",
       "conteudo": {
-        "descricao": "Um lugar onde deveria haver alguma coisa e não há. Cresce sobre o que consome, e o que resta parece sempre um pouco menor do que era.",
+        "descricao": "Um lugar onde deveria haver alguma coisa e não há. Cresce sobre o que consome, e o que resta parece sempre um pouco menor do que era. Quem chama por ela ouve a própria voz voltar mais fraca, e quem não chama é esquecido por ela por último. Se Lacuna cair, o que consumiu não volta, mas passa a doer, e é a primeira vez que a falta incomoda quem a sente.",
         "preco": {
           "Solares": 3200
         },
@@ -34417,10 +35099,12 @@
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 49d10+178, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 165; em falha, perde 4d6 de Sanidade e fica Amedrontado)",
+          "Pedido de Nada (Golpe Anunciado: anuncie na rodada anterior; acerta 49d10+178, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Voz Que Volta Fraca (Presença Aterradora: cada personagem que a veja pela primeira vez na cena faz Vontade DT 165; em falha, perde 4d6 de Sanidade e fica Amedrontado)",
           "Ausência Total (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT 165. Sofrem 20d10 de Vazio, metade em sucesso; esse dano não gera crítico)",
-          "Sinais (coisas que somem sem barulho e vozes que perdem o eco, uma a uma)",
+          "Chamado Consumido (toda criatura que fala o nome dela ou grita por ajuda em voz alta fica Marcada: sofre desvantagem em testes de resistência contra Lacuna até o fim da cena)",
+          "Resto Menor (cada vez que consome uma criatura ou item, tudo o que restou parece menor: a Vida máxima do grupo diminui em 10% por rodada em que ela causa dano, recuperável apenas com descanso completo)",
+          "Sinais (coisas que somem sem barulho e vozes que voltam mais fracas, uma a uma)",
           "Como Evitar (ela só consome o que está sendo chamado: a cena é de fuga, ou de calar quem chama e sair do alcance)"
         ],
         "classe": "Ser Lendário",
@@ -34435,10 +35119,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "ultimo-silencio",
-      "titulo": "O Último Silêncio",
+      "id": "selah",
+      "titulo": "Selah, o Último Silêncio",
       "conteudo": {
-        "descricao": "Vem depois de todo o resto, quando não sobra ninguém para chamá-lo de nada. Os que o viram descrevem só uma coisa: o momento antes de a voz falhar.",
+        "descricao": "Vem depois de todo o resto, quando não sobra ninguém para chamá-lo de nada. Os que o viram descrevem só uma coisa: o momento antes de a voz falhar. Selah é a pausa que existe no fim de todas as frases, esticada até virar criatura. Se Selah cair, o que estava calado pode finalmente falar, e o primeiro som do mundo é a voz de quem se despede.",
         "preco": {
           "Solares": 3200
         },
@@ -34474,7 +35158,7 @@
         ],
         "ataques": [
           {
-            "nome": "Silêncio que Corta",
+            "nome": "Silêncio Que Corta",
             "detalhe": "+287, 52d10+193 Vazio"
           },
           {
@@ -34483,9 +35167,11 @@
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 78d10+290, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT 265; em falha, perde 5d6 de Sanidade e fica Amedrontado)",
-          "Fim do Som (1/cena: como Ação Padrão, criaturas na área fazem Vontade DT 265. Sofrem 25d10 de Vazio e ficam Surdas até o fim da cena, metade e sem condição em sucesso; esse dano não gera crítico)",
+          "Pausa Anunciada (Golpe Anunciado: anuncie na rodada anterior; acerta 78d10+290, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Voz Que Falhou (Presença Aterradora: cada personagem que o veja pela primeira vez na cena faz Vontade DT 265; em falha, perde 5d6 de Sanidade e fica Amedrontado)",
+          "Fim do Som (1/cena: como Ação Padrão, criaturas na área fazem Vontade DT 265. Sofrem 25d10 de Vazio e ficam Desorientadas, sem ouvir nada, até o fim da cena; metade do dano e sem condição em sucesso; esse dano não gera crítico)",
+          "Quem Fala Perde (toda criatura que fala em voz alta na cena sofre dano de Vazio igual a um décimo do golpe dele no começo do turno; quem se comunica por gestos, escrita ou olhar não sofre nada)",
+          "Pausa (Reação, 1/rodada: quando uma criatura em alcance Longo fala, grita ou conjura com palavras, ela faz Vontade DT 265 ou fica incapaz de falar até o fim da cena)",
           "Sinais (o som some de um lugar de cada vez, até a respiração do grupo)",
           "Como Evitar (ele reage a quem tenta fazer barulho: a cena é de fuga em silêncio, ou de fechar o Vão por onde ele veio)"
         ],
@@ -34561,10 +35247,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "elemental-de-fogo-primordial",
-      "titulo": "Elemental de Fogo Primordial",
+      "id": "ignarrak",
+      "titulo": "Ignarrak, o Primeiro Pavio",
       "conteudo": {
-        "descricao": "O fogo que o mundo usou para começar. Ele negocia, e o preço quase sempre é lembrar o que queimou da última vez.",
+        "descricao": "O fogo que o mundo usou para começar, ainda aceso porque ninguém lhe disse que podia parar. Fala em estalidos e negocia como mercador: oferece calor, luz e passagem, e cobra do outro lado uma lembrança do que queimou da última vez. Quem aceita o trato nunca esquece o que perdeu, só esquece por que valia a pena. Se Ignarrak cair, todo fogo comum do mundo demora um pouco mais para pegar, como se faltasse a faísca original.",
         "preco": {
           "Solares": 2500
         },
@@ -34600,16 +35286,18 @@
         ],
         "ataques": [
           {
-            "nome": "Toque Primordial",
+            "nome": "Mão de Brasa Viva",
             "detalhe": "+39, 4d10+19 fogo"
           },
           {
-            "nome": "Tempestade de Brasas",
+            "nome": "Chuva de Primeiras Faíscas",
             "detalhe": "+39, 4d10+19 fogo, em área"
           }
         ],
         "habilidades": [
-          "Calor Insuportável (quem termina o turno em alcance Curto sofre dano de fogo igual a um décimo do golpe dele)"
+          "Hálito de Forja (Calor Insuportável: quem termina o turno em alcance Curto sofre dano de fogo igual a um décimo do golpe dele)",
+          "Trato de Brasa (Ação Padrão, alcance Médio: oferece a um alvo vantagem em todos os testes até o fim da próxima rodada. Se aceitar, o alvo sofre dano de fogo igual a um décimo do golpe dele quando o efeito acaba e o Mestre escolhe uma lembrança boa dele, que fica apagada até o fim da cena; se recusar, nada acontece)",
+          "Pavio Curto (ao ser atingido por gelo ou água, perde a Hálito de Forja até o fim da próxima rodada; um acordo recusado em voz alta pelo grupo inteiro encerra a cena sem combate)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -34682,10 +35370,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "elemental-de-gelo-primordial",
-      "titulo": "Elemental de Gelo Primordial",
+      "id": "hiemara",
+      "titulo": "Hiemara, a Primeira Geada",
       "conteudo": {
-        "descricao": "O frio de antes de haver calor para comparar. Espera sem pressa, e o mundo em volta vai ficando do tamanho da paciência dele.",
+        "descricao": "O frio de antes de haver calor para comparar. Espera sem pressa, e o mundo em volta vai ficando do tamanho da paciência dela. Quem fala com Hiemara descobre uma voz doce e cansada, que pergunta por que tanta gente corre se tudo acaba parando. Se Hiemara cair, o inverno do mundo perde o primeiro dia e a primeira geada de cada ano chega mais tarde.",
         "preco": {
           "Solares": 2920
         },
@@ -34721,16 +35409,18 @@
         ],
         "ataques": [
           {
-            "nome": "Toque Primordial",
+            "nome": "Beijo de Geada",
             "detalhe": "+41, 5d10+16 gelo"
           },
           {
-            "nome": "Nevasca Primordial",
+            "nome": "Primeira Nevasca",
             "detalhe": "+41, 5d10+16 gelo, em área"
           }
         ],
         "habilidades": [
-          "Inverno Longo (no fim de cada rodada, criaturas em alcance Médio fazem Fortitude DT 39 ou perdem 1 ponto de Estamina)"
+          "Paciência do Gelo (Inverno Longo: no fim de cada rodada, criaturas em alcance Médio fazem Fortitude DT 39 ou perdem 1 ponto de Estamina)",
+          "Quietude (Reação, 1/rodada: quando uma criatura em alcance Curto faz uma ação de movimento, ela faz Fortitude DT 39; em falha, para onde está, com Deslocamento 0 até o fim do próximo turno)",
+          "Degelo Teimoso (fogo forte reduz o dano dela em um décimo do golpe por rodada em que a atinja, mas quem ataca com fogo faz Vontade DT 39 ou sente vontade de sentar e descansar)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -34743,10 +35433,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "elemental-de-fogo-ancestral",
-      "titulo": "Elemental de Fogo Ancestral",
+      "id": "kalderon",
+      "titulo": "Kalderon, o Fogo Que Não Perdoou",
       "conteudo": {
-        "descricao": "O fogo que continuou depois que o mundo esfriou. Cada passo dele deixa vidro no chão e um cheiro de pedra derretida no ar, e ele nunca perdoou o mundo por ter esfriado.",
+        "descricao": "O fogo que continuou depois que o mundo esfriou. Cada passo dele deixa vidro no chão e um cheiro de pedra derretida no ar, e ele nunca perdoou o mundo por ter esfriado. Quando fala, as rochas em volta racham em tom de pergunta. Se Kalderon cair, o vulcão mais antigo da região se apaga por mil anos, e o mundo agradece em silêncio.",
         "preco": {
           "Solares": 3200
         },
@@ -34782,17 +35472,19 @@
         ],
         "ataques": [
           {
-            "nome": "Toque Ancestral",
+            "nome": "Toque de Caldeira",
             "detalhe": "+93, 12d10+40 fogo"
           },
           {
-            "nome": "Coluna de Fogo",
+            "nome": "Coluna de Pedra Derretida",
             "detalhe": "+93, 12d10+40 fogo, em área grande"
           }
         ],
         "habilidades": [
-          "Calor Insuportável (quem termina o turno em alcance Médio sofre dano de fogo igual a um décimo do golpe dele)",
-          "Explosão ao Cair (ao chegar a 0 PV, criaturas em alcance Longo fazem Reflexos DT 85; sofrem o dano de um ataque dele, metade em sucesso)"
+          "Hálito de Caldeira (Calor Insuportável: quem termina o turno em alcance Médio sofre dano de fogo igual a um décimo do golpe dele)",
+          "Última Erupção (Explosão ao Cair: ao chegar a 0 PV, criaturas em alcance Longo fazem Reflexos DT 85; sofrem o dano de um ataque dele, metade em sucesso)",
+          "Rancor (cada vez que sofre dano de gelo ou água, recebe +10 de dano em todos os ataques até o fim da rodada seguinte)",
+          "Vidro Pelos Pés (terreno em alcance Curto vira vidro derretido: criaturas fazem Reflexos DT 85 no começo do turno ou sofrem dano de fogo igual a um décimo do golpe dele e ficam Lentas)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -34806,10 +35498,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "elemental-de-gelo-ancestral",
-      "titulo": "Elemental de Gelo Ancestral",
+      "id": "hiemark",
+      "titulo": "Hiemark, o Inverno Que Ficou",
       "conteudo": {
-        "descricao": "O inverno que decidiu ficar. Onde ele para, o tempo passa mais devagar, e as pegadas dele continuam congeladas por séculos depois que ele se foi.",
+        "descricao": "O inverno que decidiu ficar. Onde ele para, o tempo passa mais devagar, e as pegadas dele continuam congeladas por séculos depois que ele se foi. Quando fala, o ar da sala vira cristal por um instante e quem escuta lembra, com clareza, a última vez que sentiu frio de verdade. Se Hiemark cair, o inverno que ele guardava se espalha pelas estações, e o próximo ano terá três meses a mais de neve.",
         "preco": {
           "Solares": 3200
         },
@@ -34845,16 +35537,18 @@
         ],
         "ataques": [
           {
-            "nome": "Toque Ancestral",
+            "nome": "Toque de Séculos",
             "detalhe": "+108, 13d10+52 gelo"
           },
           {
-            "nome": "Nevasca Ancestral",
+            "nome": "Nevasca de Muitas Eras",
             "detalhe": "+108, 13d10+52 gelo, em área grande"
           }
         ],
         "habilidades": [
-          "Inverno Longo (no fim de cada rodada, criaturas em alcance Longo fazem Fortitude DT 97 ou perdem 2 pontos de Estamina)"
+          "Estação Que Ficou (Inverno Longo: no fim de cada rodada, criaturas em alcance Longo fazem Fortitude DT 97 ou perdem 2 pontos de Estamina)",
+          "Pegada Congelada (terreno onde ele pisou fica congelado até o fim da cena; criaturas que o atravessam fazem Fortitude DT 97 ou ficam Lentas por uma rodada)",
+          "Memória de Frio (Ação Padrão, 1/cena: fala em voz baixa e todas as criaturas em alcance Longo fazem Vontade DT 97; em falha, revivem o pior frio que já sentiram e ficam Atordoadas por uma rodada)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -34988,10 +35682,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "dragao-primordial",
-      "titulo": "Dragão Primordial",
+      "id": "anzhur",
+      "titulo": "Anzhur, o Avô do Fogo",
       "conteudo": {
-        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele.",
+        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele. Fala sumeriano, em frases curtas, e pergunta primeiro o que o visitante veio pedir antes de decidir se vai ouvir. Se Anzhur cair, o fogo do mundo perde o nome mais antigo e passa uma geração inteira sem saber como se chamar.",
         "preco": {
           "Solares": 3200
         },
@@ -35027,17 +35721,19 @@
         ],
         "ataques": [
           {
-            "nome": "Sopro Primordial",
+            "nome": "Sopro Que Nomeia",
             "detalhe": "+50, 6d10+18 fogo, em área grande"
           },
           {
-            "nome": "Garras e Mordida",
+            "nome": "Garras do Avô",
             "detalhe": "+50, 6d10+18 cortante"
           }
         ],
         "habilidades": [
-          "Pele Antiga (reduz em 5 o dano físico e mágico de cada golpe)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Pele Sem Idade (Pele Antiga: reduz em 5 o dano físico e mágico de cada golpe)",
+          "Garra e Sopro (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Nome do Fogo (1/cena: como Ação Padrão, escolhe um nome para o fogo e o sopro passa a ter esse nome até o fim da cena: se o nome for o de uma pessoa presente, ela faz Vontade DT 45 ou fica Amedrontada; se for o de um lugar, esse lugar sofre o sopro mesmo fora de alcance)",
+          "Audiência (se um visitante pedir algo com respeito antes de a luta começar, Anzhur ouve; se o pedido for cabível e o preço justo, a cena vira negociação. O preço é sempre uma lembrança de fogo, contada em voz alta)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -35050,10 +35746,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "dragao-ancestral",
-      "titulo": "Dragão Ancestral",
+      "id": "kurnagal",
+      "titulo": "Kurnagal, o Dragão em Crescimento",
       "conteudo": {
-        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência dele tem o tamanho do território.",
+        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência tem o tamanho do território. Em sumeriano arcaico, diz que ainda não terminou, e que o dia em que parar de crescer será o dia em que escolher onde morrer. Se Kurnagal cair, o continente perde o ponto mais alto, e as montanhas passam a ser a ruína da cauda dele.",
         "preco": {
           "Solares": 3200
         },
@@ -35089,7 +35785,7 @@
         ],
         "ataques": [
           {
-            "nome": "Sopro Ancestral",
+            "nome": "Sopro do Continente",
             "detalhe": "+80, 14d10+48 fogo, em área grande"
           },
           {
@@ -35098,9 +35794,11 @@
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 20d10+77, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Pele Ancestral (reduz em 8 o dano físico e mágico de cada golpe)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Sopro Pronunciado (Golpe Anunciado: anuncie na rodada anterior; acerta 20d10+77, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Escama de Continente (Pele Ancestral: reduz em 8 o dano físico e mágico de cada golpe)",
+          "Garra e Fogo (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Crescer (no fim de cada rodada em que ele sofreu dano, ele cresce: ganha +1 de Defesa e +371 de Vida máxima e atual, até o fim da cena, no máximo cinco vezes)",
+          "Território (criaturas que ele marca como intrusas, uma por rodada, têm desvantagem em testes de Vontade e Percepção contra ele até o fim da cena)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -35175,10 +35873,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "arcanjo",
-      "titulo": "Arcanjo",
+      "id": "ezrakael",
+      "titulo": "Ezrakael, o Portador da Ordem",
       "conteudo": {
-        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que ele traz não pede licença, e o que ele decide proteger fica protegido.",
+        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala enoquiano, e cada palavra dele soa como uma frase de lei. Se Ezrakael cair, a ordem que carregava fica por cumprir, e algum lugar do Jardim espera uma resposta que não vem.",
         "preco": {
           "Solares": 3200
         },
@@ -35214,18 +35912,20 @@
         ],
         "ataques": [
           {
-            "nome": "Espada de Luz",
+            "nome": "Espada de Mensagem",
             "detalhe": "+64, 11d10+41 luz"
           },
           {
-            "nome": "Sentença Radiante",
+            "nome": "Sentença de Luz",
             "detalhe": "+64, 11d10+41 luz, em área"
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 16d10+63, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Aura Sagrada (aliados a até 9 m têm vantagem em testes de Vontade; inimigos Mortos-Vivos e Demoníacos têm desvantagem em ataques contra ele)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Ordem Pronunciada (Golpe Anunciado: anuncie na rodada anterior; acerta 16d10+63, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Luz Que Protege (Aura Sagrada: aliados a até 9 m têm vantagem em testes de Vontade; inimigos Mortos-Vivos e Demoníacos têm desvantagem em ataques contra ele)",
+          "Dois Versos (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Ordem a Cumprir (no começo da cena, o Mestre escolhe em segredo uma ordem curta que ele carrega, como \"não deixem ninguém passar\" ou \"entreguem isto a quem pede\". Enquanto ele a cumpre, recebe metade de todo dano; se o grupo descobrir a ordem e agir de modo que ela se cumpra, ele para)",
+          "Selo da Sentença (Ação Padrão, 1/cena: uma criatura que viu a ordem violada faz Vontade DT 57 ou fica Atordoada por uma rodada)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -35239,10 +35939,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "serafim",
-      "titulo": "Serafim",
+      "id": "seraquiel",
+      "titulo": "Seraquiel, o Cântico de Seis Asas",
       "conteudo": {
-        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível.",
+        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em enoquiano, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas. Se Seraquiel cair, o canto continua em algum lugar, mais baixo, esperando alguém que o escute até o fim.",
         "preco": {
           "Solares": 3200
         },
@@ -35282,14 +35982,16 @@
             "detalhe": "+103, 18d10+62 luz"
           },
           {
-            "nome": "Cântico Devastador",
+            "nome": "Coro Devastador",
             "detalhe": "+103, 18d10+62 luz, em área grande"
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 26d10+98, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Cântico Constante (no começo de cada rodada, aliados a até 18 m recuperam Vida igual a um vigésimo do golpe dele; inimigos sofrem esse valor em luz)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Verso Final (Golpe Anunciado: anuncie na rodada anterior; acerta 26d10+98, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Canto de Seis Asas (Cântico Constante: no começo de cada rodada, aliados a até 18 m recuperam Vida igual a um vigésimo do golpe dele; inimigos sofrem esse valor em luz)",
+          "Lâmina e Voz (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Mil Olhos (nada que aconteça em alcance Longo escapa dele: criaturas em alcance Longo não têm bônus de Furtividade contra ele, e ele sabe quando uma mentira é dita em voz alta)",
+          "Biografia (1/cena, Ação Padrão: canta a história de uma criatura em cena, e ela faz Vontade DT 90; em falha, é obrigada a reconhecer a verdade de uma coisa da própria vida diante de todos, fica Atordoada por uma rodada e perde a vantagem de qualquer segredo)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -35423,10 +36125,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "serpente-marinha-ancestral",
-      "titulo": "Serpente Marinha Ancestral",
+      "id": "marenostra",
+      "titulo": "Marenostra, a de Mil Nomes",
       "conteudo": {
-        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão nomes diferentes a ela em cada porto, e ela atende por todos.",
+        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão a ela um nome diferente em cada porto, e ela atende por todos, em latim de sereia, sem nunca corrigir ninguém. Navios que a chamam pelo nome certo costumam atravessar; os que a chamam de monstro raramente chegam em casa. Se Marenostra cair, os portos perdem o nome que davam a ela e nenhum marinheiro lembra por que rezava de olhos fechados.",
         "preco": {
           "Solares": 3200
         },
@@ -35462,17 +36164,19 @@
         ],
         "ataques": [
           {
-            "nome": "Constrição Oceânica",
+            "nome": "Anel Oceânico",
             "detalhe": "+55, 6d10+25 impacto"
           },
           {
-            "nome": "Jato de Maré",
+            "nome": "Jato de Todas as Marés",
             "detalhe": "+55, 6d10+25 água, em área"
           }
         ],
         "habilidades": [
-          "Maré Viva (criaturas a bordo de embarcações a até 30 m fazem Reflexos DT 50 ou caem na água)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Maré de Muitos Portos (Maré Viva: criaturas a bordo de embarcações a até 30 m fazem Reflexos DT 50 ou caem na água)",
+          "Cabeça e Cauda (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Nome do Porto (quem a chama pelo nome de um porto que conheça de verdade, em voz alta, faz Diplomacia DT 50: em sucesso ela recua uma rodada, em falha ela repete o nome de volta e o alvo faz Vontade DT 50 ou fica Amedrontado)",
+          "Corpo de Horizonte (os ataques dela têm alcance dobrado contra criaturas a bordo de embarcações; destruir o leme não adianta, mas acender uma luz de farol faz ela perder a próxima ação)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -35486,10 +36190,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "maremoto-que-anda",
-      "titulo": "O Maremoto que Anda",
+      "id": "mareia",
+      "titulo": "Mareia, a Onda Que Escolheu Andar",
       "conteudo": {
-        "descricao": "Uma onda que aprendeu a ir para onde quer. Passa por cima de cais, faróis e cidades pequenas, e volta para o mar como quem termina uma tarefa.",
+        "descricao": "Uma onda que aprendeu a ir para onde quer. Passa por cima de cais, faróis e cidades pequenas, e volta para o mar como quem termina uma tarefa. Os que sobrevivem juram ter ouvido uma risada de criança dentro da água. Se Mareia cair, o oceano esquece que podia caminhar, e as marés voltam a obedecer só à lua.",
         "preco": {
           "Solares": 3200
         },
@@ -35525,17 +36229,19 @@
         ],
         "ataques": [
           {
-            "nome": "Muralha de Água",
+            "nome": "Parede de Água",
             "detalhe": "+88, 11d10+40 água"
           },
           {
-            "nome": "Onda Devastadora",
+            "nome": "Onda Que Passa",
             "detalhe": "+88, 11d10+40 água, em área imensa"
           }
         ],
         "habilidades": [
-          "Maré Viva (criaturas a até 30 m fazem Reflexos DT 80 ou são arrastadas 9 m)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Passada de Maré (Maré Viva: criaturas a até 30 m fazem Reflexos DT 80 ou são arrastadas 9 m)",
+          "Crista e Recuo (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Volta ao Mar (Reação, 1/rodada: quando sofre dano, recua 18 m e se esconde sob a superfície; criaturas na água ou a bordo de embarcações em alcance Longo ficam Desorientadas até o fim da próxima rodada)",
+          "Risada na Água (criaturas em alcance Médio fazem Vontade DT 80 no começo de cada rodada; em falha, ficam Desorientadas olhando a superfície até o fim do próximo turno)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -36101,10 +36807,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "gigante-ancestral",
-      "titulo": "Gigante Ancestral",
+      "id": "peloros",
+      "titulo": "Pelóros, o Avô das Montanhas",
       "conteudo": {
-        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e ele pergunta sempre o mesmo: por que tanta gente pequena em cima do meu chão?",
+        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e a pergunta é sempre a mesma: por que tanta gente pequena em cima do meu chão? Fala grego antigo, devagar, como quem escolhe cada pedra. Se Pelóros cair, a cordilheira onde dormia perde a forma que tinha, e a cidade que ficava à sombra dela passa a ficar à luz.",
         "preco": {
           "Solares": 3200
         },
@@ -36149,8 +36855,10 @@
           }
         ],
         "habilidades": [
-          "Passo que Muda o Chão (1/rodada, Ação de Movimento: terreno em alcance Médio vira difícil; Reflexos DT 42 ou cai)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Mapa Que Anda (Passo que Muda o Chão, 1/rodada, Ação de Movimento: terreno em alcance Médio vira difícil; Reflexos DT 42 ou cai)",
+          "Duas Pedras por Vez (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Sono de Pedra (Reação, 1/cena: ao chegar a metade da Vida, faz uma pausa e se agacha; até o fim da próxima rodada ele reduz em 10 o dano de cada golpe recebido e ganha Defesa +5, e quem falar com ele em grego antigo ou com humildade sincera faz Diplomacia DT 42 para encerrar a cena sem mais luta)",
+          "Gente Pequena (criaturas de tamanho Médio ou menor em alcance Curto têm vantagem em testes de Furtividade contra ele e desvantagem em testes de Atletismo para se manter de pé)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -36164,10 +36872,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "hidra-de-sete-cabecas",
-      "titulo": "Hidra de Sete Cabeças",
+      "id": "lerneia",
+      "titulo": "Lerneia, a Que Discute Consigo",
       "conteudo": {
-        "descricao": "Sete pescoços, sete opiniões, uma única fome. Corte um e o pescoço volta com um irmão, então a luta não se ganha por força: ganha-se por fogo, por tempo ou por sorte.",
+        "descricao": "Sete pescoços, sete opiniões, uma fome só. Cada cabeça tem voz própria, e elas passam a luta discordando em voz alta sobre quem deve ser mordido primeiro, o que costuma dar tempo ao grupo para respirar e, às vezes, para negociar com a cabeça certa. Corte uma e o pescoço volta com um irmão, então a luta não se ganha por força: ganha-se por fogo, por ácido ou por sorte. Se Lerneia cair, o pântano onde vive seca em uma noite e as cabeças restantes passam a ser lembradas como sete testemunhas.",
         "preco": {
           "Solares": 3200
         },
@@ -36203,17 +36911,19 @@
         ],
         "ataques": [
           {
-            "nome": "Mordidas Múltiplas",
+            "nome": "Sete Bocas",
             "detalhe": "+40, 5d10+16 perfurante"
           },
           {
-            "nome": "Cuspe Ácido",
+            "nome": "Cuspe do Pântano",
             "detalhe": "+40, 5d10+16 ácido"
           }
         ],
         "habilidades": [
-          "Cabeças que Voltam (no fim de cada rodada recupera Vida igual a um décimo do golpe dela, a menos que tenha sofrido fogo ou ácido na rodada)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Pescoço Reincidente (Cabeças que Voltam: no fim de cada rodada recupera Vida igual a um décimo do golpe dela, a menos que tenha sofrido fogo ou ácido na rodada)",
+          "Assembleia de Bocas (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Voto da Cabeça (no começo de cada rodada, role 1d7: a cabeça sorteada decide o que Lerneia faz de especial até o fim da rodada. 1 e 2: morde duas vezes, mas sem Cuspe do Pântano; 3 e 4: cospe em área, mas sem Sete Bocas; 5: protege as outras e a Defesa sobe 3; 6: tenta negociar, e quem falar com ela com sinceridade faz Diplomacia DT 38 para ela perder a rodada; 7: foge de uma luta que não escolheu e não ataca)",
+          "Ponto Cego (cortar uma cabeça com fogo na mesma rodada impede a regeneração de todas; a cabeça cauterizada deixa de votar até o fim da cena)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -36227,10 +36937,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "hidra-primordial",
-      "titulo": "Hidra Primordial",
+      "id": "hydrath",
+      "titulo": "Hydrath, a Soma de Todas as Hidras",
       "conteudo": {
-        "descricao": "Uma hidra tão antiga que cada cabeça dela já foi uma hidra inteira. Ocupa um lago sem esforço, e o lago não ousa esvaziar.",
+        "descricao": "Uma hidra tão antiga que cada cabeça já foi uma hidra inteira. Ocupa um lago sem esforço, e o lago não ousa esvaziar. As cabeças moram em corpos diferentes, e quando uma morre a outra a sepulta em silêncio com a língua. Se Hydrath cair, o lago que a abrigava devolve as sete mil pedras que ela usava para contar as cabeças.",
         "preco": {
           "Solares": 3200
         },
@@ -36270,14 +36980,16 @@
             "detalhe": "+62, 10d10+39 perfurante"
           },
           {
-            "nome": "Torrente Ácida",
+            "nome": "Torrente de Lago",
             "detalhe": "+62, 10d10+39 ácido, em área"
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 15d10+59, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Cabeças que Voltam (no fim de cada rodada recupera Vida igual a um décimo do golpe dela, a menos que tenha sofrido fogo ou ácido na rodada)",
-          "Pescoços em Todo Lugar (1/rodada, Reação: ataca quem entrar em alcance Curto)"
+          "Coro de Mordidas (Golpe Anunciado: anuncie na rodada anterior; acerta 15d10+59, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Todas Voltam (Cabeças que Voltam: no fim de cada rodada recupera Vida igual a um décimo do golpe dela, a menos que tenha sofrido fogo ou ácido na rodada)",
+          "Pescoços do Lago (Pescoços em Todo Lugar, 1/rodada, Reação: ataca quem entrar em alcance Curto)",
+          "Cabeça Que Foi Hidra (a cada vez que perde 266 de Vida, uma cabeça nova nasce e ganha uma ação própria uma vez: pode morder, cuspir ou segurar uma criatura, e tem Vida igual a um vigésimo da Vida máxima de Hydrath)",
+          "Língua de Sepultar (cabeças mortas viram o chão do lago: terreno em alcance Médio vira difícil, e quem cai ali faz Atletismo DT 55 para sair antes de ser mordido)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -36352,10 +37064,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "dragao-do-fim-dos-tempos",
-      "titulo": "O Dragão do Fim dos Tempos",
+      "id": "apokalyx",
+      "titulo": "Apokalyx, o Dragão do Último Dia",
       "conteudo": {
-        "descricao": "Diz a lenda que espera o último dia de tudo, e que o sopro dele é a última coisa que o mundo conhece. Quem duvida da lenda nunca chegou perto das asas dele.",
+        "descricao": "Diz a lenda que espera o último dia de tudo, e que o sopro dele é a última coisa que o mundo conhece. Quem duvida da lenda nunca chegou perto das asas dele. Dorme sobre uma montanha de ouro, relógios e armas quebradas, e acorda só quando o que ele guarda deixa de fazer sentido. Se Apokalyx cair, o último dia se adia, e o mundo ganha um prazo que não pediu.",
         "preco": {
           "Solares": 3200
         },
@@ -36400,9 +37112,11 @@
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 41d10+153, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Pele do Último Dia (reduz em 12 o dano físico e mágico de cada golpe)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Sopro Marcado (Golpe Anunciado: anuncie na rodada anterior; acerta 41d10+153, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Pele de Fim (Pele do Último Dia: reduz em 12 o dano físico e mágico de cada golpe)",
+          "Sopro e Garra (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Tesouro do Fim (a montanha onde dorme guarda objetos de todos os fins: uma vez por cena, ele pode lançar um objeto de lá, que faz um efeito aleatório escolhido pelo Mestre entre fogo, tempo parado, silêncio ou queda)",
+          "Prazo (no começo da cena, o Mestre define um número de rodadas igual a 5; a cada rodada, o número cai em 1. Quando chega a 0, ele faz o Sopro do Último Dia sem anúncio; destruir os relógios do tesouro adia o prazo em 1 rodada por relógio)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -36533,10 +37247,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "cavaleiro-da-ultima-hora",
-      "titulo": "O Cavaleiro da Última Hora",
+      "id": "ser-horario",
+      "titulo": "Ser Horário, da Última Hora",
       "conteudo": {
-        "descricao": "Chega sempre um instante depois de tudo acabar, e é isso que o torna terrível: ele decide o que a última hora significou. Os que sobreviveram a ele evitam relógios.",
+        "descricao": "Chega sempre um instante depois de tudo acabar, e é isso que o torna terrível: ele decide o que a última hora significou. Os que sobreviveram a ele evitam relógios. Monta um cavalo pálido que não deixa pegada, e as armas dele são ponteiros de um relógio que ninguém sabe onde fica. Se Ser Horário cair, a hora em que perdeu passa a ser lembrada como o dia em que algo terminou de verdade.",
         "preco": {
           "Solares": 3200
         },
@@ -36581,9 +37295,11 @@
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 17d10+65, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT 60; em falha, perde 3d6 de Sanidade e fica Amedrontado)",
+          "Hora de Despedida (Golpe Anunciado: anuncie na rodada anterior; acerta 17d10+65, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Hora Que Chegou (Presença Aterradora: cada personagem que o veja pela primeira vez na cena faz Vontade DT 60; em falha, perde 3d6 de Sanidade e fica Amedrontado)",
           "Hora Marcada (ao entrar em cena, escolhe uma criatura: ela sofre desvantagem em todos os testes até o fim da cena, ou até ele cair)",
+          "Cavalo Pálido (1/rodada, Ação de Movimento: avança até 30 m sem sofrer ataques de oportunidade; criaturas no caminho fazem Reflexos DT 60 ou sofrem 11d10+45 de Vazio)",
+          "Última Badalada (quando chega a metade da Vida, soa uma badalada que ninguém ouviu: todas as criaturas na cena perdem uma ação à escolha delas na próxima rodada; quem estava prestes a morrer pode usá-la para um último gesto sem custo)",
           "Sinais (relógios que batem uma hora que ninguém ouviu, e um cavalo que não deixa pegadas)"
         ],
         "classe": "Ser Lendário",
@@ -36597,10 +37313,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "serpente-do-mundo",
-      "titulo": "A Serpente que Abraça o Mundo",
+      "id": "jormund",
+      "titulo": "Jörmund, a Serpente do Abraço",
       "conteudo": {
-        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Quando afrouxa o abraço, as marés respondem.",
+        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Dizem em nórdico antigo que, quando ela afrouxa o abraço, as marés respondem, e que, quando soltar de vez, o mundo não vai ter onde se apoiar. Dorme de olhos abertos e sonha com o mar de antes de haver mar. Se Jörmund cair, o abraço se desfaz e o mundo precisa descobrir de repente como ficar de pé sozinho.",
         "preco": {
           "Solares": 3200
         },
@@ -36640,14 +37356,16 @@
             "detalhe": "+75, 13d10+45 impacto"
           },
           {
-            "nome": "Maré Ancestral",
+            "nome": "Maré do Abraço",
             "detalhe": "+75, 13d10+45 água, em área imensa"
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 19d10+70, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Aperto Pronunciado (Golpe Anunciado: anuncie na rodada anterior; acerta 19d10+70, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
           "Abraço do Mundo (Ação Padrão: ataque de agarrar; alvo agarrado não pode se afastar e sofre o dano do ataque no começo de cada turno dele)",
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+          "Boca e Cauda (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
+          "Cauda na Boca (1/cena, Ação Padrão: morde a própria cauda e todo o terreno em alcance Imenso treme; criaturas fazem Fortitude DT 65 ou ficam Caídas e perdem um turno; ao fim da rodada, a água nas proximidades sobe um nível)",
+          "Abraço Frouxo (se o grupo reduzir a Vida dela a um terço sem nunca atacar a cauda, ela afrouxa por uma rodada e as marés baixam; quem aproveita para atacar a cauda recebe vantagem, mas a cauda tem Defesa 5 menor e Vida de 337)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -36660,10 +37378,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "come-tempo",
-      "titulo": "O Que Come o Tempo",
+      "id": "ussurr",
+      "titulo": "Ussurr, o Ladrão de Instantes",
       "conteudo": {
-        "descricao": "Nunca é visto duas vezes do mesmo jeito. O que ele deixou para trás são relógios parados em horas diferentes e pessoas com idade demais ou de menos.",
+        "descricao": "Nunca é visto duas vezes do mesmo jeito. O que ele deixou para trás são relógios parados em horas diferentes e pessoas com idade demais ou de menos. Quem ele alcança perde segundos, e quem fica sem segundos perde, devagar, a vez de agir. Se Ussurr cair, os segundos que roubou voltam, todos ao mesmo tempo, e quem os recebe vive um instante de sobra por cada um que perdeu.",
         "preco": {
           "Solares": 3200
         },
@@ -36708,10 +37426,12 @@
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 26d10+98, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT 90; em falha, perde 4d6 de Sanidade e fica Amedrontado)",
-          "Tempo Roubado (uma vez por rodada, Reação: rouba a ação de um alvo em alcance Médio; Vontade DT 90 nega)",
-          "Sinais (ecos que chegam antes do som e sombras que andam mais devagar que o dono)",
+          "Corte do Meio-Segundo (Golpe Anunciado: anuncie na rodada anterior; acerta 26d10+98, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Segundo Que Faltou (Presença Aterradora: cada personagem que o veja pela primeira vez na cena faz Vontade DT 90; em falha, perde 4d6 de Sanidade e fica Amedrontado)",
+          "Instante Furtado (Tempo Roubado: uma vez por rodada, Reação: rouba a ação de um alvo em alcance Médio; Vontade DT 90 nega)",
+          "Idade Trocada (quando acerta uma criatura, ela faz Fortitude DT 90; em falha, envelhece ou rejuvenesce dez anos até o fim da cena, a critério do Mestre, e recebe -2 em todos os testes)",
+          "Sem Duas Vezes (cada vez que alguém tenta o mesmo truque contra ele duas rodadas seguidas, ele reconhece e se defende sem rolar; variar a estratégia a cada rodada impede isso)",
+          "Sinais (relógios parados em horas diferentes e sombras que andam mais devagar que o dono)",
           "Como Evitar (ele perde o interesse em quem age fora de ordem: a cena é de fuga, ou de quebrar o ritmo que ele espera)"
         ],
         "classe": "Ser Lendário",
@@ -36725,10 +37445,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "fim-que-anda",
-      "titulo": "O Fim Que Anda",
+      "id": "teleios",
+      "titulo": "Teleios, o Fim Que Anda",
       "conteudo": {
-        "descricao": "Uma figura sem pressa, com o passo de quem já sabe como cada caminho termina. Aparece onde tudo já estava terminando, e o que sobra é silêncio educado.",
+        "descricao": "Uma figura sem pressa, com o passo de quem já sabe como cada caminho termina. Aparece onde tudo já estava terminando, e o que sobra é um silêncio educado. Ninguém o vê chegar, só percebe que ele já estava lá, de pé, esperando o fim da frase. Se Teleios cair, o que ele ia encerrar continua aberto, e alguém no Jardim precisa decidir se quer terminar sozinho.",
         "preco": {
           "Solares": 3200
         },
@@ -36773,8 +37493,10 @@
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 34d10+124, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT 115; em falha, perde 5d6 de Sanidade e fica Amedrontado)",
+          "Última Palavra (Golpe Anunciado: anuncie na rodada anterior; acerta 34d10+124, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Passo de Quem Sabe (Presença Aterradora: cada personagem que o veja pela primeira vez na cena faz Vontade DT 115; em falha, perde 5d6 de Sanidade e fica Amedrontado)",
+          "Só o Que Já Acaba (ele só pode reduzir a 0 PV uma criatura que já esteja com metade da Vida ou menos, ou que tenha desistido em voz alta; quem recusa o fim com um ato deliberado, como salvar alguém ou acender uma luz, fica fora do alcance dele naquela rodada)",
+          "Ponto Final (1/cena, Ação Padrão: encerra um efeito ativo, uma condição ou uma magia em alcance Longo; o efeito simplesmente termina, sem teste)",
           "Sinais (velas que se apagam sozinhas e um silêncio educado que se espalha primeiro pelos cantos)",
           "Como Evitar (ele só encerra o que já começou a acabar: quem recusa o fim com um ato deliberado, como salvar alguém ou acender a luz, fica fora do alcance por uma rodada)"
         ],
@@ -36789,10 +37511,10 @@
     },
     {
       "tipo": "monstro",
-      "id": "titan-que-sustenta-o-ceu",
-      "titulo": "O Titã que Sustenta o Céu",
+      "id": "atlarion",
+      "titulo": "Atlarion, o Que Sustenta o Céu",
       "conteudo": {
-        "descricao": "Carrega o céu nos ombros desde antes de haver quem olhasse para cima. Quando muda de posição, as estações mudam de lugar, e o que ele diz em voz baixa vira lei nos vales.",
+        "descricao": "Carrega o céu nos ombros desde antes de haver quem olhasse para cima. Quando muda de posição, as estações mudam de lugar, e o que diz em voz baixa vira lei nos vales. Está cansado, mas a palavra cansaço soa nele como um favor pedido a um vizinho. Se Atlarion cair, o céu cai com ele, ou alguém precisa de ombros que ninguém tem.",
         "preco": {
           "Solares": 3200
         },
@@ -36837,9 +37559,11 @@
           }
         ],
         "habilidades": [
-          "Golpe Anunciado (anuncie na rodada anterior; acerta 63d10+236, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Peso Sustentado (reduz em 15 o dano físico e mágico de cada golpe)",
-          "Passo que Muda o Chão (1/rodada, Ação de Movimento: terreno em alcance Longo vira difícil; Reflexos DT 215 ou cai)"
+          "Sacudida do Céu (Golpe Anunciado: anuncie na rodada anterior; acerta 63d10+236, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Peso do Firmamento (Peso Sustentado: reduz em 15 o dano físico e mágico de cada golpe)",
+          "Passo das Estações (Passo que Muda o Chão, 1/rodada, Ação de Movimento: terreno em alcance Longo vira difícil; Reflexos DT 215 ou cai)",
+          "Voz Baixa (1/cena, Ação Padrão: diz uma palavra, e ela vira lei na área por uma rodada; todas as criaturas em alcance Imenso fazem Vontade DT 215 ou obedecem à palavra, a critério do Mestre, como \"parem\", \"recuem\" ou \"sentem\")",
+          "Ombros Cansados (cada vez que ele sofre dano de uma única fonte maior que 1420, o céu sobre a cena balança: todas as criaturas fazem Reflexos DT 215 ou sofrem 42d10+157 de impacto; se o grupo ajudar a sustentar o céu por uma rodada, ele fica Atordoado)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,

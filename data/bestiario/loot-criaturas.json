@@ -70,7 +70,7 @@
         }
       ]
     },
-    "apagador-de-constelacoes": {
+    "nyxhael": {
       "moedas": null,
       "itens": [
         {
@@ -115,7 +115,7 @@
         }
       ]
     },
-    "arcanjo": {
+    "ezrakael": {
       "moedas": null,
       "itens": [
         {
@@ -261,7 +261,7 @@
         }
       ]
     },
-    "ausencia-faminta": {
+    "lacuna": {
       "moedas": null,
       "itens": [
         {
@@ -557,7 +557,7 @@
         }
       ]
     },
-    "cavaleiro-da-ultima-hora": {
+    "ser-horario": {
       "moedas": null,
       "itens": [
         {
@@ -652,7 +652,7 @@
         }
       ]
     },
-    "come-tempo": {
+    "ussurr": {
       "moedas": null,
       "itens": [
         {
@@ -844,7 +844,7 @@
         }
       ]
     },
-    "devorador-de-eras": {
+    "aionofagos": {
       "moedas": null,
       "itens": [
         {
@@ -864,7 +864,7 @@
         }
       ]
     },
-    "devorador-de-mundos": {
+    "gulhar": {
       "moedas": null,
       "itens": [
         {
@@ -898,7 +898,7 @@
         }
       ]
     },
-    "dragao-ancestral": {
+    "kurnagal": {
       "moedas": {
         "dados": "2d100",
         "moeda": "Solares",
@@ -946,7 +946,7 @@
         }
       ]
     },
-    "dragao-do-fim-dos-tempos": {
+    "apokalyx": {
       "moedas": {
         "dados": "2d100",
         "moeda": "Solares",
@@ -989,7 +989,7 @@
         }
       ]
     },
-    "dragao-primordial": {
+    "anzhur": {
       "moedas": {
         "dados": "2d100",
         "moeda": "Solares",
@@ -1072,7 +1072,7 @@
         }
       ]
     },
-    "elemental-de-fogo-ancestral": {
+    "kalderon": {
       "moedas": null,
       "itens": [
         {
@@ -1127,7 +1127,7 @@
         }
       ]
     },
-    "elemental-de-fogo-primordial": {
+    "ignarrak": {
       "moedas": null,
       "itens": [
         {
@@ -1142,7 +1142,7 @@
         }
       ]
     },
-    "elemental-de-gelo-ancestral": {
+    "hiemark": {
       "moedas": null,
       "itens": [
         {
@@ -1187,7 +1187,7 @@
         }
       ]
     },
-    "elemental-de-gelo-primordial": {
+    "hiemara": {
       "moedas": null,
       "itens": [
         {
@@ -1355,7 +1355,7 @@
         }
       ]
     },
-    "fenix-imortal": {
+    "aurelith": {
       "moedas": null,
       "itens": [
         {
@@ -1395,7 +1395,7 @@
         }
       ]
     },
-    "fim-que-anda": {
+    "teleios": {
       "moedas": null,
       "itens": [
         {
@@ -1460,7 +1460,7 @@
         }
       ]
     },
-    "gigante-ancestral": {
+    "peloros": {
       "moedas": {
         "dados": "4d10",
         "moeda": "Solares",
@@ -1668,7 +1668,7 @@
         }
       ]
     },
-    "golem-titanico": {
+    "mutis": {
       "moedas": null,
       "itens": [
         {
@@ -1810,7 +1810,7 @@
         }
       ]
     },
-    "hidra-de-sete-cabecas": {
+    "lerneia": {
       "moedas": null,
       "itens": [
         {
@@ -1830,7 +1830,7 @@
         }
       ]
     },
-    "hidra-primordial": {
+    "hydrath": {
       "moedas": null,
       "itens": [
         {
@@ -1958,7 +1958,7 @@
         }
       ]
     },
-    "leviata": {
+    "vaelthor": {
       "moedas": null,
       "itens": [
         {
@@ -2043,7 +2043,7 @@
         }
       ]
     },
-    "maremoto-que-anda": {
+    "mareia": {
       "moedas": null,
       "itens": [
         {
@@ -2601,7 +2601,7 @@
         }
       ]
     },
-    "serafim": {
+    "seraquiel": {
       "moedas": null,
       "itens": [
         {
@@ -2631,7 +2631,7 @@
         }
       ]
     },
-    "serpente-do-mundo": {
+    "jormund": {
       "moedas": null,
       "itens": [
         {
@@ -2651,7 +2651,7 @@
         }
       ]
     },
-    "serpente-marinha-ancestral": {
+    "marenostra": {
       "moedas": null,
       "itens": [
         {
@@ -2740,7 +2740,7 @@
         }
       ]
     },
-    "titan-que-sustenta-o-ceu": {
+    "atlarion": {
       "moedas": null,
       "itens": [
         {
@@ -2824,7 +2824,7 @@
         }
       ]
     },
-    "ultimo-silencio": {
+    "selah": {
       "moedas": null,
       "itens": [
         {
@@ -2869,7 +2869,7 @@
         }
       ]
     },
-    "vampiro-anciao": {
+    "dragomir": {
       "moedas": {
         "dados": "2d100",
         "moeda": "Solares",

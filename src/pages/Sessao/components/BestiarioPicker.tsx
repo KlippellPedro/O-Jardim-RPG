@@ -148,7 +148,7 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [search, setSearch] = useState('');
-  const [aba, setAba] = useState<'criaturas' | 'sobmedida'>('criaturas');
+  const [aba, setAba] = useState<'criaturas' | 'deidades' | 'sobmedida'>('criaturas');
   const [vdSobMedida, setVdSobMedida] = useState('20');
   const [papelSobMedida, setPapelSobMedida] = useState<PapelCriatura>('solo');
   const [arquetipoSobMedida, setArquetipoSobMedida] = useState<ArquetipoCriatura>('comum');
@@ -170,7 +170,9 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
     return () => { cancelado = true; };
   }, [campanhaId]);
 
-  const criaturas = useMemo(() => monstros.filter((m) => m.categoria !== 'Universal'), [monstros]);
+  const criaturas = useMemo(() => monstros.filter((m) => m.categoria !== 'Universal' && m.categoria !== 'Deidade'), [monstros]);
+  // As Deidades vêm de um arquivo só do servidor; sem elas na resposta, a aba nem aparece.
+  const deidades = useMemo(() => monstros.filter((m) => m.categoria === 'Deidade').sort((a, b) => a.titulo.localeCompare(b.titulo, 'pt-BR')), [monstros]);
   const vdEscolhido = vdValido(vdSobMedida);
   const sobMedida = useMemo(() => monstroSobMedida(vdEscolhido, papelSobMedida, arquetipoSobMedida), [vdEscolhido, papelSobMedida, arquetipoSobMedida]);
 
@@ -279,9 +281,9 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
         <div className="space-y-3 border-b border-white/[0.08] px-5 py-3">
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex rounded-lg border border-white/10 p-0.5" role="tablist" aria-label="Tipo de criatura">
-              {(['criaturas', 'sobmedida'] as const).map((valor) => (
+              {(['criaturas', ...(deidades.length ? ['deidades' as const] : []), 'sobmedida'] as const).map((valor) => (
                 <button key={valor} type="button" role="tab" aria-selected={aba === valor} onClick={() => setAba(valor)} className={`rounded-md px-3 py-1.5 text-xs font-bold ${aba === valor ? 'bg-[#c7a44c]/18 text-[#f0d685]' : 'text-white/45 hover:text-white/80'}`}>
-                  {valor === 'criaturas' ? `Criaturas · ${criaturas.length}` : 'Sob medida'}
+                  {valor === 'criaturas' ? `Criaturas · ${criaturas.length}` : valor === 'deidades' ? `Deidades · ${deidades.length}` : 'Sob medida'}
                 </button>
               ))}
             </div>
@@ -348,7 +350,19 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
 
         <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto p-4 sm:p-5">
           {error ? <p role="alert" className="mb-3 rounded-md bg-red-400/10 px-3 py-2 text-xs text-red-200">{error}</p> : null}
-          {aba === 'sobmedida' ? (
+          {aba === 'deidades' ? (
+            <div className="space-y-4">
+              <p className="flex items-start gap-1.5 text-xs leading-5 text-white/45">
+                <Sparkles size={14} className="mt-0.5 shrink-0 text-[#c7a44c]/70" />
+                Fichas do teto do Jardim, só para o Mestre. Cada uma entra com os números fora do Domínio (VD 500); para levá-la ao Domínio, use "Escalar para outro VD" no editor e ponha 1000 (A.X.I.S fica um degrau abaixo: entra no VD 400 e vai a 800). O campo Estado da ficha revela segredos: deixe a visibilidade em Oculto ou Desconhecido até a história pedir.
+              </p>
+              <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {deidades.map((monstro) => (
+                  <Cartao key={monstro.id} monstro={monstro} adicionados={adicionados[monstro.id] ?? 0} ocupado={busy === monstro.id} onAdicionar={(m, quantidade) => void adicionar(m, quantidade)} onAbrir={setAberto} />
+                ))}
+              </ul>
+            </div>
+          ) : aba === 'sobmedida' ? (
             <div className="mx-auto max-w-xl space-y-4">
               <p className="flex items-start gap-1.5 text-xs leading-5 text-white/45">
                 <Sparkles size={14} className="mt-0.5 shrink-0 text-[#c7a44c]/70" />
@@ -405,6 +419,7 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
       </motion.div>
       {aberto ? (
         <CriaturaDetalhe
+          campanhaId={campanhaId}
           monstro={aberto}
           familia={aberto.familia ? TITULO_DA_FAMILIA[aberto.familia] ?? aberto.familia : null}
           cor={corDoVd(aberto.vd)}

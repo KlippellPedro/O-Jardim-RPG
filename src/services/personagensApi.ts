@@ -175,6 +175,16 @@ export const personagensApi = {
     );
   },
 
+  mandarMoedas(personagemId: string, destinoId: string, moeda: string, valor: number, idempotencia: string) {
+    return api<{ moeda: string; valor: number; saldo: number; destino: { id: string; nome: string } }>(
+      `/personagens/${encodeURIComponent(personagemId)}/carteira/enviar`,
+      {
+        method: 'POST',
+        body: { destino_personagem_id: destinoId, moeda, valor, idempotencia },
+      },
+    );
+  },
+
   despertarFrutoEden(personagemId: string, payload: DespertarFrutoEdenPayload) {
     return api<{
       fruto: Record<string, any>;

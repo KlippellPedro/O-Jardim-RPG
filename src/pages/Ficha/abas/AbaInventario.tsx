@@ -43,6 +43,9 @@ import { materialPorId } from '../../../services/materialsCatalogService';
 import { converterMaterialEmLote, destinosDoMaterial, raridadeDoLote } from '../../../services/loteDeMaterialService';
 import { TransformarEmLoteModal } from '../components/TransformarEmLoteModal';
 import { MandarItemModal } from '../components/MandarItemModal';
+import { MandarMoedasModal } from '../components/MandarMoedasModal';
+import { TrocasPanel } from '../components/TrocasPanel';
+import type { ItemTrocavel } from '../../../services/trocasApi';
 import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 import { SaldoAnimado } from '../components/SaldoAnimado';
@@ -752,6 +755,10 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
   const [avisoLote, setAvisoLote] = useState('');
   const [mandandoId, setMandandoId] = useState<string | null>(null);
   const itemParaMandar = mandandoId ? inventario.find((item) => item.id === mandandoId) : undefined;
+  const [mandandoMoedas, setMandandoMoedas] = useState(false);
+  const itensTrocaveis: ItemTrocavel[] = useMemo(() => inventario
+    .filter(itemPodeSerMandado)
+    .map((item) => ({ item_id: item.id, titulo: item.nome, quantidade: item.quantidade, raridade: item.raridade })), [inventario]);
   const materialDoItem = (item: IInventoryItem) => (!modoVeiculos ? materialPorId(item.id) : undefined);
   const itemParaLote = transformandoId ? inventario.find((item) => item.id === transformandoId) : undefined;
   const materialParaLote = itemParaLote ? materialDoItem(itemParaLote) : undefined;
@@ -824,6 +831,9 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
             <div className="flex items-center gap-2">
               <Coins size={18} className="text-primary" />
               <h3 className="text-white font-bold tracking-widest uppercase text-xs">Carteira</h3>
+              <button type="button" onClick={() => setMandandoMoedas(true)} title="Mandar moedas para outro personagem" className="flex items-center gap-1 rounded-md border border-amber-300/20 bg-amber-300/[0.06] px-2 py-1 text-[10px] font-bold text-amber-200/80 hover:bg-amber-300/15 hover:text-amber-100">
+                <Send size={11} /> Mandar
+              </button>
             </div>
             {moedasFaltantes.length > 0 && (
               <Select
@@ -880,6 +890,16 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       </div>
 
       {!modoVeiculos && (
+        <TrocasPanel
+          personagemId={character.id}
+          meusItens={itensTrocaveis}
+          carteira={carteiraSalva}
+          antesDeTrocar={() => flushCharacterSaves(character.id)}
+          onTrocou={() => { void refreshCharacter(character.id); }}
+        />
+      )}
+
+      {!modoVeiculos && (
         <BonecoEquipamento
           itens={inventario.filter((item) => !['veiculo', 'modulo-veicular', 'propriedade'].includes(item.categoria))}
           vagasEspeciais={resumoEquipamento.itensEspeciais.limite}
@@ -912,6 +932,19 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       </section>}
 
       {avisoLote ? <p role="status" className="flex items-center justify-between gap-3 rounded-xl border border-emerald-300/25 bg-emerald-300/10 px-4 py-3 text-sm text-emerald-100">{avisoLote}<button type="button" onClick={() => setAvisoLote('')} className="text-xs font-bold text-emerald-200/70 hover:text-white">ok</button></p> : null}
+      {mandandoMoedas ? (
+        <MandarMoedasModal
+          personagemId={character.id}
+          carteira={carteiraSalva}
+          antesDeMandar={() => flushCharacterSaves(character.id)}
+          onMandado={(texto) => {
+            setMandandoMoedas(false);
+            setAvisoLote(texto);
+            void refreshCharacter(character.id);
+          }}
+          onFechar={() => setMandandoMoedas(false)}
+        />
+      ) : null}
       {itemParaMandar ? (
         <MandarItemModal
           personagemId={character.id}

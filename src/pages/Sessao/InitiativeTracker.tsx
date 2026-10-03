@@ -27,6 +27,7 @@ import { useSessaoStore, type EntidadeIniciativa } from '../../store/useSessaoSt
 import { EntityEditor } from './components/EntityEditor';
 import { BestiarioPicker } from './components/BestiarioPicker';
 import { LootPanel } from './components/LootPanel';
+import { AflicoesSessaoPanel } from './components/AflicoesSessaoPanel';
 import type { BestiarioMonstro, NivelVisibilidade } from '../../services/sessaoApi';
 import { OPCOES_VISIBILIDADE, comExtraTemporario, rotuloVisibilidade } from './sessionUtils';
 import { aflicaoPorId, estagioMaximo } from '../../services/aflicoesFichaService';
@@ -190,12 +191,13 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
       pericias: monstro.pericias,
     };
     // Só a primeira entrada leva a criatura: o "2º turno" é a mesma criatura,
-    // e o loot cairia duas vezes se as duas apontassem para a tabela.
+    // e o loot cairia duas vezes se as duas apontassem para a tabela. A sob
+    // medida também leva: o servidor monta a tabela dela pelo VD e pelo papel.
     await adicionarEntidade({
       ...base,
       nome: nomeBase,
       iniciativa: iniciativaBase,
-      monstro_id: monstro.id.startsWith('sob-medida-') ? undefined : monstro.id,
+      monstro_id: monstro.id,
     });
 
     // Multiataque age duas vezes por rodada: a segunda entrada some 10 da
@@ -350,6 +352,10 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
               }, `Não foi possível atualizar ${entity.nome}.`);
             }}
           />
+        ) : null}
+
+        {comando && entity.tipo === 'jogador' && entity.personagemId && editingId !== entity.id ? (
+          <AflicoesSessaoPanel entity={entity} />
         ) : null}
 
         {comando && entity.temLoot && editingId !== entity.id ? (

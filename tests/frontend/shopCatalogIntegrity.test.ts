@@ -297,7 +297,7 @@ test('expansão do bestiário publica ao menos seis fichas por família e manté
   assert.ok(criaturasDoVazio.every(item => item.conteudo.nivelMinimoLoja >= 3), 'Vazio não pode aparecer no comércio comum');
   assert.ok(criaturasDoVazio.every(item => !/morto-vivo|fluxo do fim|limiar/i.test(item.conteudo.descricao)));
   assert.match(
-    criaturasDoVazio.find(item => item.id === 'apagador-de-constelacoes')?.conteudo.descricao ?? '',
+    criaturasDoVazio.find(item => item.id === 'nyxhael')?.conteudo.descricao ?? '',
     /fora do universo.*Era do Vazio/i,
   );
 });

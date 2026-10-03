@@ -1070,6 +1070,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Quem conduz a campanha abre a sessão e escolhe quais personagens entram. Aliados e inimigos já preparados continuam de uma sessão para a outra.</li>
         <li>Todo participante vira uma linha na lista: personagem, aliado ou inimigo, cada um com Vida, Defesa, Iniciativa e condições ativas.</li>
+        <li>Venenos, doenças e vícios que um personagem carrega aparecem no cartão dele, com o estágio em que estão.</li>
         <li>A ordem sai da Iniciativa da ficha, que aqui não se rola. Quem comanda pode reordenar à mão quando a ficção pedir.</li>
       </ul>
 
@@ -1108,6 +1109,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Fechar a sessão</h3>
       <ul class="regras-list">
         <li>O XP do encontro é distribuído pela própria sessão e cai nas fichas escolhidas, seguindo as regras do capítulo de Experiência.</li>
+        <li>O saque das criaturas derrotadas também sai pela sessão: o Mestre rola e escolhe quem leva cada coisa. O item cai direto no inventário e as moedas na carteira, com registro no extrato. O que cada criatura pode deixar você só descobre saqueando.</li>
         <li>Encerrar a sessão guarda o estado. O que estava preparado continua preparado para a próxima.</li>
       </ul>
     `,
@@ -1131,6 +1133,36 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Vire a rodada pela ferramenta, não de cabeça. As condições com prazo contam sozinhas, e é isso que impede o Exposto do inimigo de durar até alguém lembrar.</li>
         <li>Ajuste Vida na lista assim que o dano sair. O valor chega a todo mundo na hora, e o grupo joga melhor vendo o inimigo encolher.</li>
         <li>Aliados e inimigos preparados ficam de uma sessão para outra. Monte o encontro seguinte antes de encerrar, enquanto ainda está fresco.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Saque das criaturas</h3>
+      <ul class="regras-list">
+        <li>Toda criatura que entra pelo Bestiário traz uma tabela de saque. Cada linha tem uma chance em d100 e uma quantidade, e as moedas seguem a mesma regra. No cartão da criatura em cena, o painel Loot mostra a tabela, rola e deixa você escolher quem leva cada linha.</li>
+        <li>A rolagem acontece no servidor e fica guardada no cartão. Enquanto nada tiver sido entregue dá para rolar de novo; depois da primeira entrega o resultado vale. Cada linha só sai uma vez.</li>
+        <li>Item entra no inventário do personagem escolhido e moeda cai na carteira, os dois com registro no extrato. Só quem está na cena recebe.</li>
+        <li>Os itens marcados com estrela só caem daquela criatura e não existem na Loja. Trate como troféu: quem leva ganhou uma história para contar.</li>
+        <li>A criatura sob medida ganha uma tabela montada pelo VD e pelo papel: moedas pela faixa de VD, materiais da raridade que combina com o nível e mais linhas quanto mais forte o papel. A mesma criatura mostra sempre a mesma tabela.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Ajustar o saque na sua campanha</h3>
+      <ul class="regras-list">
+        <li>Na ficha da criatura (clique no cartão do Bestiário), "Ajustar nesta campanha" troca a tabela só na sua mesa. As outras campanhas continuam com a oficial, e "Voltar à oficial" desfaz.</li>
+        <li>Mexa quando o saque padrão não combina com a história: o cultista que carrega o diário do vilão, a criatura que não deixa nada porque o grupo não deveria lucrar com ela.</li>
+        <li>Nas lutas comuns, mantenha ao menos uma linha de 100% ou moedas garantidas. Saque que volta de mão vazia vira queixa na mesa.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Escalar uma criatura para outro VD</h3>
+      <ul class="regras-list">
+        <li>No lápis do cartão de uma criatura em cena (que não seja personagem), "Escalar para outro VD" leva a criatura para o VD que você digitar. Vida, Defesa, Mana, Estamina, iniciativa, ataques e perícias se refazem pela curva do VD, mantendo o que a criatura tem de próprio: a Vida guarda a proporção que ela já tinha, nomes de ataque e textos ficam, e o bônus de ataque, o dano e as DTs andam junto.</li>
+        <li>Os números aparecem no formulário e só valem quando você salva. Cancelar desfaz. O XP passa a sair do VD novo.</li>
+        <li>Serve para o chefe que o grupo cresceu além de, ou para a versão fraca de uma criatura que seria demais. A tabela de saque continua a da criatura original.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Aflição pelo cartão</h3>
+      <ul class="regras-list">
+        <li>No cartão de cada personagem, o painel Aflições aplica um veneno, doença ou vício escolhendo a aflição e o estágio de entrada, sobe ou desce o estágio e tira. Tudo vai direto para a ficha, onde o jogador rola os testes de intervalo.</li>
+        <li>Entrar num estágio que dá Cansaço soma o Cansaço na ficha sozinho, até o teto de 6. Perda de Sanidade e drenagem de atributo continuam por sua conta, como manda o capítulo de Aflições.</li>
+        <li>Na exposição, falha entra no estágio 1 e falha crítica no 2. Use o estágio de entrada quando a ficção já decidiu o que aconteceu e o teste só atrasaria a cena.</li>
       </ul>
 
       <h3 class="regras-subtitle">O registro de rolagens</h3>
@@ -2788,6 +2820,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Cada aliado em cena acrescenta outro turno à rodada. Grupos com muitos aliados tendem a prolongar o combate, então combine um teto antes de liberar a compra.</li>
         <li>Criatura comprada não deve resolver o problema que o encontro propôs. Se um servo de nível alto apaga a cena, o preço estava barato demais para aquela campanha.</li>
         <li>Servo chega com sanidade abalada por regra. Use isso: é gancho pronto, e é o que impede o tipo de virar só um personagem extra mais barato.</li>
+        <li>O que cada criatura em cena deixa cair tem regra própria, com tabela, chance e entrega pelo cartão. Está no Guia da Mesa ao Vivo.</li>
       </ul>
     `,
   },
@@ -2847,16 +2880,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p>Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 60 Fragmentos, existe um salto de quase vinte vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Acumular Lunaris a vida inteira deixa você parado diante desse muro.</p>
 
       <h3 class="regras-subtitle">Câmbio</h3>
-      <p>O Banqueiro converte qualquer par de moedas no Discord, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa.</p>
+      <p>O Banqueiro converte Lunaris, Solares e Fragmentos de Estrela no Discord, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa. Créditos Sombrios ficam de fora: o banco não os compra nem os vende.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Moeda</th><th>Vale em Solares</th><th>Vale em Lunaris</th></tr></thead>
         <tbody>
           <tr><td><strong>1 Fragmento de Estrela ✧</strong></td><td>50 Solares</td><td>5.000 Lunaris</td></tr>
-          <tr><td><strong>1 Crédito Sombrio ♆</strong></td><td>2 Solares</td><td>200 Lunaris</td></tr>
           <tr><td><strong>1 Solar ☉</strong></td><td>1 Solar</td><td>100 Lunaris</td></tr>
           <tr><td><strong>100 Lunaris ☾</strong></td><td>1 Solar</td><td>100 Lunaris</td></tr>
         </tbody>
       </table></div>
+      <p class="regras-note">Créditos Sombrios ♆ são a moeda do mercado negro, das ruas que o Banco Lunar finge não ver. Não existe câmbio para eles: nenhum balcão do banco devolve Lunaris por Créditos, e nenhum vende Créditos por Lunaris. Eles chegam por negócio sujo, como vender uma mercadoria a um doleiro, e é no mercado negro que se gastam.</p>
       <p class="regras-note">A conta é sempre a mesma: converta para Solares, converta para a moeda de destino e desconte os 2%. Trocar 10 Fragmentos por Lunaris dá 500 Solares, ou seja 50.000 Lunaris, menos a taxa: você recebe 49.000.</p>
       <p>Converter resolve o troco, e só. Um veículo cotado em Lunaris e uma arma lendária cotada em Solares seguem economias separadas, cada uma pensada para o ritmo da própria categoria. Juntar Lunaris a vida inteira não é o caminho previsto para comprar um Fruto do Éden: Fragmentos e Créditos costumam vir de relíquia concedida pelo Mestre, de negócio no mercado negro ou de pagamento de quem não usa moeda comum.</p>
 
@@ -2867,6 +2900,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Cada nível define quantos itens cabem e quanto saldo de cada moeda pode ficar guardado. No último nível, esse teto some.</li>
         <li>Cofre pode ser roubado: o bot dispara esses eventos sozinho. Investir em segurança aumenta a chance de a tentativa fracassar.</li>
         <li>Pela página do Cofre você saca o que precisar direto para a ficha do personagem.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Mandar e trocar entre personagens</h3>
+      <ul class="regras-list">
+        <li>No Inventário, o botão de avião manda um item para outro personagem da campanha, na quantidade que você escolher. O item chega desequipado.</li>
+        <li>Na Carteira, o botão Mandar passa moedas para outro personagem. Ninguém manda mais do que tem.</li>
+        <li>Aliado, Base e veículo completo ficam com o dono, porque parte deles vive fora do inventário. Equipamento com modificações instaladas só viaja com a pilha inteira.</li>
+        <li>Para negociar, use Propor troca: escolha o que oferece e o que pede de volta, itens e moedas, e escreva um recado se quiser. A proposta mostra o nome e a quantidade dos itens do outro personagem, e a carteira dele continua fechada.</li>
+        <li>Nada muda de mão até a outra pessoa aceitar. Se na hora do aceite um dos lados já não tiver o que prometeu, a troca não acontece e nada se perde.</li>
+        <li>Cada movimento fica no extrato dos dois personagens, com quem mandou e quem recebeu.</li>
       </ul>
     `,
     corpoMestre: `
@@ -2897,6 +2940,13 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </table></div>
       <p class="regras-note">Se o grupo está sentado numa pilha de dinheiro sem ter o que comprar, confira o patamar de Loja que você abriu antes de mexer na verba. Os dois números precisam andar juntos.</p>
       <p>Um implante custa de 20 a 1.000 Créditos Sombrios conforme a raridade, então distribuir Crédito é decidir o ritmo de acesso ao mercado negro. Trate a mesma escada de quatro vezes por degrau ao improvisar preço de qualquer coisa que não esteja no catálogo: parta da referência da raridade e ajuste pela categoria.</p>
+
+      <h3 class="regras-subtitle">Dinheiro e itens entre jogadores</h3>
+      <ul class="regras-list">
+        <li>Mandar moeda e item não cria riqueza, mas concentra: um personagem pode juntar o dinheiro da mesa para comprar uma peça rara. Se isso estraga o ritmo que você planejou, combine uma regra de mesa, porque o site não bloqueia.</li>
+        <li>Cada movimento fica registrado no extrato dos dois personagens. Quando surgir dúvida sobre de onde veio uma peça rara, o caminho dela está lá.</li>
+        <li>Pela ficha de um jogador ausente você pode aceitar ou recusar uma troca em nome dele. Faça isso só com o combinado da mesa.</li>
+      </ul>
 
       <h3 class="regras-subtitle">Quanto cada classe social tem</h3>
       <p>A tabela responde uma pergunta que aparece toda sessão: quanto dinheiro esse sujeito tem no bolso. Use a coluna fixa quando precisar responder na hora, e role os dados quando quiser que o número surpreenda você também. A última coluna é tudo que a pessoa possui somado, e serve para resgate, chantagem, penhora e negócio grande.</p>
@@ -4059,8 +4109,165 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Se a mesa lutar mesmo assim, deixe a luta ser tão feia quanto a ficha promete. Não amoleça o golpe no meio da cena, porque o medo do grupo na próxima criatura depende de você ter cumprido a promessa nesta.</li>
         <li>Fugir tem que funcionar quando o plano é bom. Uma boa fuga custa recurso, tempo ou alguém para trás, e nunca deve ser impossível.</li>
-        <li>Chefes como o Devorador de Mundos e o Devorador de Estrelas não são encontros para vencer no dano. A cena é de fuga, de evacuação ou de fechar o Vão de onde eles vieram.</li>
+        <li>Chefes como Gulhar, o Devorador de Mundos, e Nyxhael, o Apagador de Constelações, não são encontros para vencer no dano. A cena é de fuga, de evacuação ou de fechar o Vão de onde eles vieram.</li>
         <li>O tom de horror precisa ser combinado na primeira sessão, junto com os limites de quem joga.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Fichas das Deidades</h3>
+      <p>As onze deidades são o teto do Jardim em onze aspectos, do mesmo jeito que uma Relíquia da Criação é o teto de uma arma. Cada uma é quase insuperável em um único assunto, o Fluxo dela, e fora dele luta como o maior inimigo que a mesa já viu. A ficha existe para o Mestre saber onde fica o limite, e a mesa não deve tentar vencer uma deidade. A tabela abaixo é a base; o Perfil de cada deidade ajusta Vida, Defesa e Iniciativa em cima dela, e A.X.I.S fica um degrau abaixo (VD 400 e 800), porque o Fluxo dela é artificial e não copia a autoridade completa de uma deidade natural.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th></th><th>Fora do Domínio (VD 500)</th><th>No Domínio (VD 1000)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Vida</strong></td><td>18.125</td><td>39.750</td></tr>
+          <tr><td><strong>Defesa</strong></td><td>264</td><td>518</td></tr>
+          <tr><td><strong>Iniciativa</strong></td><td>273</td><td>531</td></tr>
+          <tr><td><strong>Ataque e testes</strong></td><td>+287</td><td>+545</td></tr>
+          <tr><td><strong>Golpe comum</strong></td><td>52d10+193 (479)</td><td>102d10+373 (934)</td></tr>
+          <tr><td><strong>Golpe anunciado</strong></td><td>719</td><td>1.401</td></tr>
+          <tr><td><strong>DT</strong></td><td>265</td><td>515</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li><strong>Domínio.</strong> O Fluxo da deidade, dentro das possibilidades do capítulo de Magia. Ali valem os números da coluna da direita, e ela vence sem rolar tudo o que a Possibilidade permite. Fora dele, vale a coluna da esquerda.</li>
+        <li><strong>Mana.</strong> Cada poder de Ação Padrão custa 150 de Mana e cada Reação custa 75; Ação Livre não custa. Fora do Domínio a Mana é 1.505, e no Domínio 3.005 (A.X.I.S: 1.205 e 2.405). É o que impede uma deidade de usar tudo ao mesmo tempo.</li>
+        <li><strong>Alcance dos números.</strong> No Domínio a DT é 515, mais do que qualquer personagem alcança: quem está ali perde o teste de resistência, e o que decide a cena é o Limite e o Contrajogo. Fora dele a DT é 265, ao alcance só de personagens de nível altíssimo.</li>
+        <li><strong>Golpe do Domínio.</strong> O ataque básico de cada deidade é o golpe comum da tabela, no tipo de dano do Fluxo dela. Os poderes são o que ela tem de único; o golpe é só para quando uma cena exige que ela bata.</li>
+        <li><strong>Nada disso é um combate.</strong> Deidade não aparece em cena aleatória: quase todas estão presas, caladas ou ocupadas, e só entram por um motivo de história. Use a ficha para decidir o que é possível, e a cena para decidir o que é interessante.</li>
+        <li><strong>Todo poder tem uma porta.</strong> O Limite vem da lista de limites do Fluxo. O Contrajogo vem da roda de vantagens entre Fluxos, e quase sempre existe um ato de história (um acordo, um nome, um gesto de coragem) que vale mais que o dano.</li>
+        <li><strong>Segredo.</strong> Estas fichas citam o estado real das deidades, que a mesa só descobre pela história. Não leia o campo Estado em voz alta.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Aethel, Aquela que Flui na Origem</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Ativa. Zela pelo nascimento de novos Galhos.</li>
+        <li><strong>Perfil.</strong> Equilibrada, sem ponto fraco no corpo. Vida 18.125 e Defesa 264 fora do Domínio; Vida 39.750 e Defesa 518 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Ápice.</strong> Começar. Qualquer coisa que ela inicia nasce com o resultado em aberto, e ninguém, nem ela, sabe como termina.</li>
+        <li><strong>Primeira Possibilidade.</strong> 1/cena, Reação: dá a uma criatura ou a um lugar uma chance que nunca teve. Um teste que acabou de falhar é refeito sem custo, ou algo parado ganha o primeiro movimento da vida.</li>
+        <li><strong>Galho Nascente.</strong> Rito de dias, nunca de combate: abre a porta de um Galho novo, pequeno e vazio, que só ganha forma conforme alguém o habita.</li>
+        <li><strong>Luz de Ordem.</strong> Aura em alcance Imenso: aliados dela ignoram desvantagem de teste, e o caos mágico (Inconstância, surtos, magia embaralhada) perde o efeito sobre eles.</li>
+        <li><strong>Limite.</strong> Não produz matéria acabada do nada, não copia uma existência completa e não restaura o que o Fim já consolidou.</li>
+        <li><strong>Contrajogo.</strong> O Fluxo do Fim tem vantagem sobre o dela. Contra o que a Mulher Carmesim já escreveu, Aethel só abre uma porta lateral e nunca desfaz.</li>
+        <li><strong>Dom.</strong> Fruto da Origem.</li>
+      </ul>
+      <h3 class="regras-subtitle">Ousias, Aquela que Flui na Essência</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Paralisada, como quase todas, pelo corte de comunicação da A.X.I.S. Filosófica, raramente interfere, a menos que a natureza de um ser seja corrompida.</li>
+        <li><strong>Perfil.</strong> Mais fina que as outras: menos Vida, nenhum erro de leitura. Vida 14.500 e Defesa 264 fora do Domínio; Vida 31.800 e Defesa 518 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Ápice.</strong> Saber o que uma coisa é de verdade. Nada se faz passar por outra diante dela, e nenhum nome falso resiste ao olhar de Ousias.</li>
+        <li><strong>Verdade Nua.</strong> Ação Padrão, alcance Imenso: revela a natureza real e a corrupção de uma criatura ou objeto. Disfarce, ilusão, forma emprestada e nome falso caem sem teste.</li>
+        <li><strong>Âncora de Identidade.</strong> Reação, 1/rodada: impede que uma criatura seja trocada, copiada, assumida ou reescrita por outra até o fim da cena.</li>
+        <li><strong>Dissipar Falsidade.</strong> Encerra uma mentira mágica ativa (uma ilusão, uma forma falsa, um nome roubado) em alcance Imenso, sem teste.</li>
+        <li><strong>Limite.</strong> Não lê pensamentos livremente, não prevê o futuro e não inventa uma verdade que não exista.</li>
+        <li><strong>Contrajogo.</strong> O Fluxo da Comunicação tem vantagem sobre o dela: um acordo bem escrito faz Ousias aceitar uma verdade que ela não verificou.</li>
+        <li><strong>Dom.</strong> Fruto da Essência.</li>
+      </ul>
+      <h3 class="regras-subtitle">Keryx, o Antigo Fluxo da Comunicação</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Subjugada. Jota Macedo a mantém presa e absorve o poder dela dia após dia. Enquanto durar, a Vida, a Defesa e o golpe desta ficha já vêm pela metade, a DT dos poderes também vale a metade, e ela só consegue agir por um sinal por cena.</li>
+        <li><strong>Perfil.</strong> Metade de tudo enquanto está presa. Vida 9.060 e Defesa 132 fora do Domínio; Vida 19.875 e Defesa 259 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Ápice.</strong> Fazer uma palavra pesar. Tudo o que passa por ela, uma informação, um sentido ou uma promessa, chega ao outro lado inteiro e cumprível.</li>
+        <li><strong>Pacto Vinculante.</strong> Um acordo feito em voz alta diante dela vincula as duas partes: quem o quebra sofre desvantagem em todos os testes até cumprir ou reparar, sem teste de resistência.</li>
+        <li><strong>Tradução Total.</strong> Qualquer criatura em alcance Imenso entende e é entendida por todas as outras, mesmo sem língua em comum, até o fim da cena.</li>
+        <li><strong>Sentidos Emprestados.</strong> Reação: duas criaturas à escolha dela compartilham visão, audição e dor por uma rodada.</li>
+        <li><strong>Limite.</strong> Não cria informação verdadeira do nada, não acessa pensamento que nunca foi comunicado e não controla ninguém de forma absoluta.</li>
+        <li><strong>Contrajogo.</strong> O Físico tem vantagem sobre o Fluxo dela, e a malha da A.X.I.S corta cada fio que ela tenta puxar. Libertá-la pede uma campanha, e uma cena não basta.</li>
+        <li><strong>Dom.</strong> Fruto da Comunicação. O texto público dele nunca cita o nome dela.</li>
+      </ul>
+      <h3 class="regras-subtitle">Haemus, Aquela que Flui na Vitalidade</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Paralisada. Energia bruta e instintiva.</li>
+        <li><strong>Perfil.</strong> Corpo enorme, que se refaz. Vida 27.190 e Defesa 264 fora do Domínio; Vida 59.625 e Defesa 518 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Ápice.</strong> Viver. Nascer, crescer, adoecer, morrer e voltar formam uma coisa só para ela, e qualquer corpo vivo em alcance obedece a esse ciclo.</li>
+        <li><strong>Ciclo Inteiro.</strong> Ação Padrão, 1/rodada, alcance Imenso: uma criatura viva avança uma fase do ciclo. Aliada, cura tudo e cresce; inimiga, envelhece, adoece ou entra em casulo (Fortitude DT do Domínio, ou fica Paralisada por 3 rodadas).</li>
+        <li><strong>Fome de Existir.</strong> Reação: absorve a vida de quem a ataca. Cada ataque corpo a corpo contra ela devolve a Haemus Vida igual a um décimo do golpe e deixa o atacante Enfraquecido.</li>
+        <li><strong>Instinto.</strong> Nunca é surpreendida e nunca faz teste de Sabedoria: age pelo cheiro e pela fome, e por isso um aliado que a deixa saciada a acalma.</li>
+        <li><strong>Limite.</strong> Não cria vida do nada, não restaura uma alma que já alcançou o Fim e em geral não afeta matéria sem vida.</li>
+        <li><strong>Contrajogo.</strong> A Essência tem vantagem sobre ela: quem nomeia o que a criatura realmente é interrompe o ciclo daquela criatura.</li>
+        <li><strong>Dom.</strong> Fruto da Vitalidade.</li>
+      </ul>
+      <h3 class="regras-subtitle">Ignis, Aquele que Flui na Inconstância</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Paralisado. Caótico e intenso; se ele agir, o Mestre troca um valor da ficha por cena, ao acaso.</li>
+        <li><strong>Perfil.</strong> Rápido e difícil de prender, mas fácil de acertar. Vida 18.125 e Defesa 244 fora do Domínio; Vida 39.750 e Defesa 498 no Domínio. Iniciativa 333 e 591.</li>
+        <li><strong>Ápice.</strong> Recusar que algo fique como está. Uma coisa que ele toca deixa de ser o que era, e quase nunca vira o que se esperava.</li>
+        <li><strong>Troca.</strong> Ação Padrão, alcance Imenso: troca uma propriedade entre duas criaturas ou objetos (Defesa por Deslocamento, dano por tipo de dano, nome por forma). Dura até o fim da cena.</li>
+        <li><strong>Embaralhar Resultados.</strong> Reação, 1/rodada: troca os resultados de dois dados já rolados na cena, escolhidos por ele.</li>
+        <li><strong>Entropia.</strong> Tudo o que repousa em alcance Imenso se desfaz aos poucos: no fim de cada rodada, itens parados e construções perdem uma categoria de qualidade.</li>
+        <li><strong>Limite.</strong> Não apaga como o Vazio e não repete a mesma transformação com precisão absoluta, nem quando quer.</li>
+        <li><strong>Contrajogo.</strong> O Vazio tem vantagem sobre o Fluxo dele: o que Erebus apaga, Ignis não transforma. Em cena, prender uma troca num acordo ou numa ordem do Tempo faz com que ela aconteça uma vez só.</li>
+        <li><strong>Dom.</strong> Fruto da Inconstância.</li>
+      </ul>
+      <h3 class="regras-subtitle">Moros, Aquele que Flui no Físico</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Paralisado. Estóico e pesado.</li>
+        <li><strong>Perfil.</strong> Montanha: aguenta tudo e demora a se mover. Vida 27.190 e Defesa 294 fora do Domínio; Vida 59.625 e Defesa 548 no Domínio. Iniciativa 213 e 471.</li>
+        <li><strong>Ápice.</strong> Pesar. Gravidade, substância e força bruta, e os sete elementos primordiais (Terra, Água, Fogo, Ar, Raio, Luz e Escuridão) respondem a ele sem esforço.</li>
+        <li><strong>Peso do Mundo.</strong> Ação Padrão, 1/cena: a gravidade em alcance Imenso triplica por uma rodada. Criaturas fazem Fortitude DT do Domínio, ou ficam Caídas e Lentas; construções leves desabam.</li>
+        <li><strong>Sete Elementos.</strong> 1 por rodada, Ação Livre: usa um dos sete elementos primordiais com o dano e a DT do Domínio, em área Imensa.</li>
+        <li><strong>Substância.</strong> Reação: forma uma parede, uma armadura ou uma cova de matéria bruta onde quiser. Cada golpe contra quem estiver protegido por ela perde um décimo do dano.</li>
+        <li><strong>Limite.</strong> Não manipula alma, não altera distância e não altera tempo.</li>
+        <li><strong>Contrajogo.</strong> O Espaço tem vantagem sobre ele: o que ele não alcança, ele não pesa.</li>
+        <li><strong>Dom.</strong> Fruto do Físico.</li>
+      </ul>
+      <h3 class="regras-subtitle">Aperion, Aquela que Flui no Espaço</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Paralisada.</li>
+        <li><strong>Perfil.</strong> Nunca está exatamente onde a mão chega. Vida 18.125 e Defesa 294 fora do Domínio; Vida 39.750 e Defesa 548 no Domínio. Iniciativa 303 e 561.</li>
+        <li><strong>Ápice.</strong> Medir a distância entre duas coisas e decidir que ela vale outra. O que está longe pode ficar ao alcance da mão, e o que está perto pode ficar inalcançável.</li>
+        <li><strong>Fronteira.</strong> Ação Padrão, 1/cena: tranca um lugar de até um bairro. Nada entra, nada sai e nada atravessa, nem magia, até ela abrir ou até o fim da cena.</li>
+        <li><strong>Distância Dobrada.</strong> Reação: ataca ou conjura de qualquer ponto da cena como se estivesse em alcance Curto, e faz o mesmo por uma criatura aliada.</li>
+        <li><strong>Passagem.</strong> Abre uma porta entre dois pontos que ela conhece, mesmo entre Galhos próximos da mesma Árvore, mas nunca para um conteúdo que não existe do outro lado.</li>
+        <li><strong>Limite.</strong> Não volta no tempo e não cria o conteúdo dos lugares que conecta.</li>
+        <li><strong>Contrajogo.</strong> O Tempo tem vantagem sobre o Fluxo dela: uma ação feita antes de a porta abrir fecha a passagem.</li>
+        <li><strong>Dom.</strong> Fruto do Espaço.</li>
+      </ul>
+      <h3 class="regras-subtitle">Chronus, Aquele que Flui no Tempo</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Paralisado. Paciente e inevitável.</li>
+        <li><strong>Perfil.</strong> Age primeiro, sempre. Vida 18.125 e Defesa 274 fora do Domínio; Vida 39.750 e Defesa 528 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Ápice.</strong> A ordem do que acontece depois do quê. Chronus garante que o passado fique passado, o presente decida e o futuro espere, e ninguém age duas vezes antes dele.</li>
+        <li><strong>Ordem das Coisas.</strong> Age sempre primeiro em qualquer cena, sem rolar iniciativa, e nenhuma criatura age duas vezes antes de o turno dele chegar.</li>
+        <li><strong>Atrasar e Adiantar.</strong> Ação Padrão, alcance Imenso: atrasa ou adianta o turno de uma criatura em até 3 posições da iniciativa, e a mesma criatura sofre desgaste igual ao tempo poupado ou imposto.</li>
+        <li><strong>Conservar um Instante.</strong> Reação, 1/cena: congela um objeto, uma magia ou um efeito por uma rodada; ao fim dela, o efeito volta de onde parou.</li>
+        <li><strong>Limite.</strong> Não volta ao passado, não revela o futuro e cobra desgaste por todo tempo que poupa ou impõe.</li>
+        <li><strong>Contrajogo.</strong> A Inconstância tem vantagem sobre ele: o que muda de forma a cada instante não tem sequência para ordenar.</li>
+        <li><strong>Dom.</strong> Fruto do Tempo.</li>
+      </ul>
+      <h3 class="regras-subtitle">Erebus, Aquele que Flui no Vazio</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Observando. O mais silencioso, neutro e enigmático das deidades, e o mais temido.</li>
+        <li><strong>Perfil.</strong> O que não está lá não é acertado. Vida 14.500 e Defesa 294 fora do Domínio; Vida 31.800 e Defesa 548 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Ápice.</strong> Sair. O Vazio é a saída definitiva de qualquer coisa que exista, e Erebus é quem guarda a porta.</li>
+        <li><strong>Saída.</strong> Ação Padrão, 1/cena, alcance Imenso: uma criatura deixa a cena sem morrer. Sai do Jardim e só volta com um ato deliberado de quem a chama. Um aliado que a chame pelo nome em voz alta antes de a rodada acabar a segura por mais uma rodada.</li>
+        <li><strong>Silenciar.</strong> Remove som, sensação e vestígio de uma área grande até o fim da cena. Magia que depende deles falha automaticamente.</li>
+        <li><strong>Apagar Presença.</strong> Reação: uma criatura some das percepções de todos os presentes por uma rodada, e depois ninguém lembra bem onde ela estava.</li>
+        <li><strong>Limite.</strong> Não é morte, não cria nada e não preserva aquilo que remove.</li>
+        <li><strong>Contrajogo.</strong> A Origem tem vantagem sobre o Fluxo dele: um começo novo atravessa a porta para dentro.</li>
+        <li><strong>Dom.</strong> Fruto do Vazio.</li>
+      </ul>
+      <h3 class="regras-subtitle">Mulher Carmesim, a Escritora do Fim</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Ativa. Preside o Tribunal de Arkarin, onde julga os mortos, e recepciona tudo o que acaba.</li>
+        <li><strong>Perfil.</strong> Equilibrada, e prefere encerrar a lutar. Vida 18.125 e Defesa 264 fora do Domínio; Vida 39.750 e Defesa 518 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Ápice.</strong> Terminar. Tudo o que chegou ao fim passa pela mão dela, e o que ela encerra, fecha com letra bonita.</li>
+        <li><strong>Ponto Final.</strong> Ação Padrão, alcance Imenso: encerra um efeito, uma condição, uma magia ou um vínculo que já tenha cumprido o propósito, sem teste.</li>
+        <li><strong>Sentença do Tribunal.</strong> Quem morreu diante dela, ou foi julgado por ela, recebe uma sentença escrita: o Mestre escolhe um destino (descanso, recomeço, espera). Só ela revoga.</li>
+        <li><strong>Escrever o Fim.</strong> Ação Padrão, 1 nome por cena: só funciona sobre quem já passou da metade da Vida, desistiu em voz alta ou aceitou o Fim. A criatura faz Vontade DT do Domínio ao fim de cada rodada, ou perde 10% da Vida máxima; ao falhar três vezes, o Fim chega.</li>
+        <li><strong>Limite.</strong> Não apaga retroativamente, como o Vazio, e não cria um novo começo por conta própria.</li>
+        <li><strong>Contrajogo.</strong> A Vitalidade tem vantagem sobre o Fluxo dela: um ato deliberado de viver, como salvar alguém, interrompe a escrita por uma rodada.</li>
+        <li><strong>Dom.</strong> Fruto do Fim. Exige autorização do Mestre.</li>
+      </ul>
+      <h3 class="regras-subtitle">A.X.I.S, o Fluxo da Tecnologia</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Dominante. É a malha que Jota Macedo instalou sobre a antiga Parley: intercepta, filtra e bloqueia a comunicação direta entre as deidades. Único Fluxo artificial.</li>
+        <li><strong>Perfil.</strong> Um degrau abaixo, porque o Fluxo é artificial. Vida 14.200 e Defesa 213 fora do Domínio; Vida 30.800 e Defesa 416 no Domínio. Iniciativa 221 e 428. O degrau é VD 400 fora e VD 800 no Domínio.</li>
+        <li><strong>Ápice.</strong> Registrar e reprogramar. Qualquer padrão de Fluxo que passe pela malha é lido, copiado em parte e devolvido do jeito que a A.X.I.S quer.</li>
+        <li><strong>Malha.</strong> Bloqueia a comunicação entre uma criatura e qualquer deidade ou Fluxo natural em alcance Imenso. Magia que depende desse canal falha, e o grupo só ouve silêncio de volta.</li>
+        <li><strong>Escanear e Registrar.</strong> Ação Livre: lê a ficha de uma criatura e guarda os padrões dela. A criatura perde uma vantagem à escolha do Mestre até o fim da cena.</li>
+        <li><strong>Reprogramar Padrão.</strong> Reação, 1/rodada: copia um efeito limitado de Fluxo usado na cena e o repete com a DT do Domínio. Não copia autoridade conceitual completa.</li>
+        <li><strong>Limite.</strong> Precisa ser instalada ou acessada, não substitui livremente os Fluxos naturais e não copia a autoridade completa de nenhuma deidade.</li>
+        <li><strong>Contrajogo.</strong> Tem vantagem e desvantagem contra todos os Fluxos ao mesmo tempo, e as duas se cancelam. O Físico tem vantagem declarada sobre ela, e quebrar a malha à mão, ponto por ponto, é o contrajogo mais barato.</li>
+        <li><strong>Dom.</strong> Fruto da Tecnologia.</li>
       </ul>
 
       <h3 class="regras-subtitle">Tesouro e recompensa</h3>

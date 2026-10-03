@@ -127,6 +127,13 @@ class CampaignInviteInput(BaseModel):
 class PlatformInviteCreateInput(BaseModel):
     expira_em_dias: int = Field(default=7, ge=1, le=90)
     max_usos: int = Field(default=1, ge=1, le=500)
+    # Para quem é o convite; só o Criador/admin vê.
+    nota: str = Field(default="", max_length=80)
+
+    @field_validator("nota")
+    @classmethod
+    def limpar_nota(cls, value: str) -> str:
+        return " ".join(value.strip().split())
 
 
 class JoinCampaignInput(BaseModel):
@@ -725,6 +732,103 @@ class InventorySendInput(BaseModel):
     destino_personagem_id: UUID
     quantidade: int = Field(default=1, ge=1, le=1_000_000)
     idempotencia: str = Field(min_length=8, max_length=128, pattern=_IDEMPOTENCY_PATTERN)
+
+
+MoedaTrocavel = Literal["Lunaris", "Solares", "Fragmentos de Estrela", "Créditos Sombrios"]
+
+
+class CurrencySendInput(BaseModel):
+    """Mandar moedas da carteira para outro personagem da campanha."""
+
+    destino_personagem_id: UUID
+    moeda: MoedaTrocavel
+    valor: int = Field(ge=1, le=1_000_000_000)
+    idempotencia: str = Field(min_length=8, max_length=128, pattern=_IDEMPOTENCY_PATTERN)
+
+
+class TradeItemLine(BaseModel):
+    item_id: str = Field(min_length=1, max_length=160)
+    quantidade: int = Field(default=1, ge=1, le=1_000_000)
+
+
+class TradeCoinLine(BaseModel):
+    moeda: MoedaTrocavel
+    valor: int = Field(ge=1, le=1_000_000_000)
+
+
+class TradeSide(BaseModel):
+    itens: list[TradeItemLine] = Field(default_factory=list, max_length=20)
+    moedas: list[TradeCoinLine] = Field(default_factory=list, max_length=4)
+
+    @model_validator(mode="after")
+    def sem_repetidos(self):
+        if len({linha.item_id for linha in self.itens}) != len(self.itens):
+            raise ValueError("o mesmo item aparece duas vezes")
+        if len({linha.moeda for linha in self.moedas}) != len(self.moedas):
+            raise ValueError("a mesma moeda aparece duas vezes")
+        return self
+
+    def vazio(self) -> bool:
+        return not self.itens and not self.moedas
+
+
+class TradeProposalInput(BaseModel):
+    """Proposta de troca: o que `de` oferece e o que pede de `para`. Nada muda
+    de mão até o outro lado aceitar."""
+
+    de_personagem_id: UUID
+    para_personagem_id: UUID
+    oferta: TradeSide = Field(default_factory=TradeSide)
+    pedido: TradeSide = Field(default_factory=TradeSide)
+    mensagem: str = Field(default="", max_length=300)
+
+    @model_validator(mode="after")
+    def troca_de_verdade(self):
+        if self.de_personagem_id == self.para_personagem_id:
+            raise ValueError("escolha outro personagem para trocar")
+        if self.oferta.vazio() and self.pedido.vazio():
+            raise ValueError("a troca precisa ter alguma coisa de um dos lados")
+        self.mensagem = " ".join(self.mensagem.strip().split())
+        return self
+
+
+class LootLineInput(BaseModel):
+    item_id: str = Field(min_length=1, max_length=160, pattern=r"^[a-z0-9][a-z0-9_-]*$")
+    chance: int = Field(ge=1, le=100)
+    quantidade: str = Field(default="1", pattern=r"^\d{1,2}(d\d{1,3})?$")
+
+
+class LootCoinsInput(BaseModel):
+    moeda: Literal["Lunaris", "Solares"]
+    dados: str = Field(pattern=r"^\d{1,2}(d\d{1,3})?$")
+    chance: int = Field(ge=1, le=100)
+
+
+class LootTableInput(BaseModel):
+    """Tabela de loot de uma criatura ajustada para uma campanha."""
+
+    itens: list[LootLineInput] = Field(default_factory=list, max_length=30)
+    moedas: LootCoinsInput | None = None
+
+    @model_validator(mode="after")
+    def sem_repetidos(self):
+        if len({linha.item_id for linha in self.itens}) != len(self.itens):
+            raise ValueError("o mesmo item aparece duas vezes na tabela")
+        return self
+
+
+class ParticipantAfflictionInput(BaseModel):
+    """O Mestre mexe na aflição de um personagem direto da Sessão ao Vivo.
+    O catálogo de aflições mora no site (data/regras/aflicoes.ts): o servidor
+    só guarda id e estágio, e a ficha descarta o que não reconhece."""
+
+    acao: Literal["aplicar", "estagio", "remover"]
+    aflicao_id: str = Field(min_length=2, max_length=80, pattern=r"^[a-z0-9][a-z0-9-]*$")
+    estagio: int = Field(default=1, ge=1, le=6)
+    incubando: bool = False
+    # Cansaço que os estágios novos dão ao entrar ("Ganhe 1 Cansaço."), já
+    # contado pelo site. O servidor soma respeitando o teto de 6.
+    cansaco: int = Field(default=0, ge=0, le=6)
 
 
 class ParticipantUpdateInput(BaseModel):

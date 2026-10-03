@@ -242,3 +242,103 @@ export function modeloDeCriatura(vd: unknown, papel: PapelCriatura = 'solo', arq
     xp: Math.round(xpPorVd(alvo) * regra.fatiaDeXp),
   };
 }
+
+/** Os números de uma criatura em cena que mudam quando ela muda de VD. */
+export interface ICriaturaEscalavel {
+  vd: number;
+  pv: number;
+  pvAtual?: number;
+  defesa?: number | null;
+  mana?: number | null;
+  manaAtual?: number | null;
+  estamina?: number | null;
+  estaminaAtual?: number | null;
+  iniciativa: number;
+  ataques: IAtaqueDeCriatura[];
+  pericias: string[];
+}
+
+export interface ICriaturaEscalada extends Omit<ICriaturaEscalavel, 'vd'> {
+  vd: number;
+  de: number;
+  /** Quantos pontos o bônus de ataque e de perícia andaram. */
+  deltaDeAtaque: number;
+}
+
+const DADO_NO_TEXTO = /(\d+)d(\d+)(?:\s*\+\s*(\d+))?/;
+const BONUS_NO_FIM = /^(.*?)([+-]\d+)\s*$/;
+const BONUS_NO_INICIO = /^([+-]\d+)(.*)$/;
+const DT_NO_TEXTO = /\bDT\s*(\d+)/g;
+
+const proporcional = (valor: number, de: number, para: number): number => (
+  de > 0 ? Math.max(0, Math.round((valor * para) / de)) : valor
+);
+
+/** Muda só o dado de dano de um texto como "+7, 2d8+4 cortante", pela razão entre os danos de referência. */
+const escalarDano = (detalhe: string, razao: number): string => detalhe.replace(DADO_NO_TEXTO, (_inteiro, quantos, faces, fixo) => {
+  const media = Number(quantos) * ((Number(faces) + 1) / 2) + Number(fixo ?? 0);
+  return expressaoDeDano(media * razao);
+});
+
+/** As DTs citadas no texto andam o mesmo que a DT do gerador (15 + metade do VD). */
+const escalarDt = (detalhe: string, delta: number): string => (
+  delta === 0 ? detalhe : detalhe.replace(DT_NO_TEXTO, (_inteiro, dt) => `DT ${Math.max(1, Number(dt) + delta)}`)
+);
+
+const escalarBonusDoAtaque = (detalhe: string, delta: number): string => {
+  const partes = detalhe.match(BONUS_NO_INICIO);
+  if (!partes) return detalhe;
+  return `${sinal(Number(partes[1]) + delta)}${partes[2]}`;
+};
+
+/**
+ * Leva uma criatura que já está em cena para outro VD sem trocar quem ela é: a
+ * Vida mantém a proporção que a criatura tinha em relação à curva, o ataque e
+ * as perícias andam o mesmo tanto que o ataque de referência, a Defesa e a
+ * iniciativa andam a diferença entre os dois VDs, e o dano segue a razão entre
+ * os danos de referência. Nomes de ataque e habilidades ficam como estão.
+ */
+export function escalarCriatura(criatura: ICriaturaEscalavel, vdAlvo: unknown): ICriaturaEscalada {
+  const de = vdValido(criatura.vd);
+  const para = vdValido(vdAlvo);
+  const antes = modeloDeCriatura(de);
+  const depois = modeloDeCriatura(para);
+  const deltaDeAtaque = (LINHAS.get(para) as ILinhaDaCurva).ataque - (LINHAS.get(de) as ILinhaDaCurva).ataque;
+  const deltaDeDt = Math.floor(para / 2) - Math.floor(de / 2);
+  const razaoDeDano = antes.danoMedio > 0 ? depois.danoMedio / antes.danoMedio : 1;
+
+  const pv = Math.max(1, arredondarVida(proporcional(criatura.pv, vidaDeCriatura(de), vidaDeCriatura(para))));
+  const pvAtual = criatura.pvAtual === undefined
+    ? undefined
+    : criatura.pv > 0 ? Math.max(0, Math.round((criatura.pvAtual * pv) / criatura.pv)) : pv;
+  const escalarRecurso = (maximo: number | null | undefined, atual: number | null | undefined, referenciaAntes: number, referenciaDepois: number) => {
+    if (maximo == null) return { maximo, atual };
+    const novoMaximo = proporcional(maximo, referenciaAntes, referenciaDepois);
+    const novoAtual = atual == null ? atual : maximo > 0 ? Math.min(novoMaximo, Math.round((atual * novoMaximo) / maximo)) : novoMaximo;
+    return { maximo: novoMaximo, atual: novoAtual };
+  };
+  const mana = escalarRecurso(criatura.mana, criatura.manaAtual, antes.mana, depois.mana);
+  const estamina = escalarRecurso(criatura.estamina, criatura.estaminaAtual, antes.estamina, depois.estamina);
+
+  return {
+    vd: para,
+    de,
+    deltaDeAtaque,
+    pv,
+    pvAtual,
+    defesa: criatura.defesa == null ? criatura.defesa : Math.max(0, criatura.defesa + depois.defesa - antes.defesa),
+    mana: mana.maximo,
+    manaAtual: mana.atual,
+    estamina: estamina.maximo,
+    estaminaAtual: estamina.atual,
+    iniciativa: criatura.iniciativa + depois.iniciativa - antes.iniciativa,
+    ataques: criatura.ataques.map((ataque) => ({
+      nome: ataque.nome,
+      detalhe: escalarDt(escalarDano(escalarBonusDoAtaque(ataque.detalhe, deltaDeAtaque), razaoDeDano), deltaDeDt),
+    })),
+    pericias: criatura.pericias.map((pericia) => {
+      const partes = pericia.match(BONUS_NO_FIM);
+      return partes ? `${partes[1]}${sinal(Number(partes[2]) + deltaDeAtaque)}` : pericia;
+    }),
+  };
+}

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Crown, BookOpenText, Eye, UserCog, Loader2 } from 'lucide-react';
+import { Crown, BookOpenText, Eye, UserCog, Loader2, Ticket } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Select } from '../../components/ui/Select';
 import { ConteudoMestrePanel } from '../../components/Settings/ConteudoMestrePanel';
 import { VisibilidadeCampanha } from '../../components/Settings/VisibilidadeCampanha';
 import { LiberacoesIndividuaisPanel } from '../../components/Settings/LiberacoesIndividuaisPanel';
+import { ConvitesPlataformaPanel } from '../../components/Settings/ConvitesPlataformaPanel';
 import { campanhasApi } from '../../services/campanhasApi';
 import { personagensApi } from '../../services/personagensApi';
 
@@ -20,7 +21,8 @@ interface CampanhaDetalhe {
   membros: Array<{ id: string; nome_exibicao: string; papel: string }>;
 }
 
-type AbaCriador = 'conteudo' | 'visibilidade' | 'liberacoes';
+type AbaCriador = 'conteudo' | 'visibilidade' | 'liberacoes' | 'convites';
+const ABAS_CRIADOR: AbaCriador[] = ['conteudo', 'visibilidade', 'liberacoes', 'convites'];
 
 /** Painel exclusivo do criador da plataforma: edita o Mundo global e também
  * regras/loja/visibilidade/liberações de QUALQUER campanha ativa, sem depender da
@@ -37,9 +39,8 @@ export default function CreatorPage() {
   const [erro, setErro] = useState<string | null>(null);
   const [conteudoDirty, setConteudoDirty] = useState(false);
 
-  const abaInicial = searchParams.get('aba') === 'visibilidade' || searchParams.get('aba') === 'liberacoes'
-    ? (searchParams.get('aba') as AbaCriador)
-    : 'conteudo';
+  const abaPedida = searchParams.get('aba') as AbaCriador | null;
+  const abaInicial: AbaCriador = abaPedida && ABAS_CRIADOR.includes(abaPedida) ? abaPedida : 'conteudo';
   const [activeTab, setActiveTab] = useState<AbaCriador>(abaInicial);
   const secaoSolicitada = searchParams.get('secao');
   const itemSolicitado = searchParams.get('item') || undefined;
@@ -86,7 +87,16 @@ export default function CreatorPage() {
       && !window.confirm('Existem alterações de conteúdo não salvas. Deseja descartá-las?')) return;
     setConteudoDirty(false);
     setActiveTab(proxima);
+    const proximosParametros = new URLSearchParams(searchParams);
+    proximosParametros.set('aba', proxima);
+    setSearchParams(proximosParametros, { replace: true });
   };
+
+  const botaoAba = (aba: AbaCriador) => `flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
+    activeTab === aba ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
+  }`;
+  // Convites são da plataforma inteira: a aba funciona sem campanha escolhida.
+  const precisaDeCampanha = activeTab !== 'convites';
 
   const salvarVisibilidade = async (configuracoes: Record<string, any>) => {
     if (!campanhaId) return;
@@ -104,7 +114,7 @@ export default function CreatorPage() {
           </h1>
           <p className="text-gray-400 text-lg">Mundo global, regras, loja e visibilidade das campanhas da plataforma.</p>
         </div>
-        <div className="w-full md:w-80">
+        <div className={`w-full md:w-80 ${precisaDeCampanha ? '' : 'invisible'}`}>
           <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Campanha</label>
           {carregandoLista ? (
             <div className="flex items-center gap-2 text-sm text-gray-500"><Loader2 size={14} className="animate-spin" /> Carregando campanhas...</div>
@@ -124,76 +134,71 @@ export default function CreatorPage() {
 
       {erro && <div className="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">{erro}</div>}
 
-      {!campanhaId ? (
+      <div className="horizontal-scroll mb-6 flex gap-4 overflow-x-auto border-b border-white/10 pb-1 custom-scrollbar">
+        <button onClick={() => trocarAba('conteudo')} className={botaoAba('conteudo')}>
+          <BookOpenText size={16} /> Conteúdo
+        </button>
+        <button onClick={() => trocarAba('visibilidade')} className={botaoAba('visibilidade')}>
+          <Eye size={16} /> Visibilidade
+        </button>
+        <button onClick={() => trocarAba('liberacoes')} className={botaoAba('liberacoes')}>
+          <UserCog size={16} /> Liberações Individuais
+        </button>
+        <button onClick={() => trocarAba('convites')} className={botaoAba('convites')}>
+          <Ticket size={16} /> Convites
+        </button>
+      </div>
+
+      {activeTab === 'convites' ? (
+        <motion.div
+          key="convites"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] p-6 shadow-2xl md:p-8"
+        >
+          <ConvitesPlataformaPanel />
+        </motion.div>
+      ) : precisaDeCampanha && !campanhaId ? (
         <p className="py-16 text-center text-sm italic text-gray-600">Escolha uma campanha acima para começar.</p>
       ) : carregandoDetalhe || !detalhe ? (
         <div className="flex items-center justify-center gap-2 py-16 text-sm text-gray-500"><Loader2 size={16} className="animate-spin" /> Carregando campanha...</div>
       ) : (
-        <>
-          <div className="horizontal-scroll mb-6 flex gap-4 overflow-x-auto border-b border-white/10 pb-1 custom-scrollbar">
-            <button
-              onClick={() => trocarAba('conteudo')}
-              className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-                activeTab === 'conteudo' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-              }`}
-            >
-              <BookOpenText size={16} /> Conteúdo
-            </button>
-            <button
-              onClick={() => trocarAba('visibilidade')}
-              className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-                activeTab === 'visibilidade' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-              }`}
-            >
-              <Eye size={16} /> Visibilidade
-            </button>
-            <button
-              onClick={() => trocarAba('liberacoes')}
-              className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-                activeTab === 'liberacoes' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-              }`}
-            >
-              <UserCog size={16} /> Liberações Individuais
-            </button>
-          </div>
+        <AnimatePresence mode="wait">
+          {activeTab === 'conteudo' && (
+            <motion.div key="conteudo" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+              <ConteudoMestrePanel campanhaId={campanhaId} initialAba={secaoConteudo} initialItem={itemSolicitado} onDirtyChange={setConteudoDirty} />
+            </motion.div>
+          )}
 
-          <AnimatePresence mode="wait">
-            {activeTab === 'conteudo' && (
-              <motion.div key="conteudo" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                <ConteudoMestrePanel campanhaId={campanhaId} initialAba={secaoConteudo} initialItem={itemSolicitado} onDirtyChange={setConteudoDirty} />
-              </motion.div>
-            )}
+          {activeTab === 'visibilidade' && (
+            <motion.div
+              key="visibilidade"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] p-6 shadow-2xl md:p-8"
+            >
+              <VisibilidadeCampanha
+                campanhaId={campanhaId}
+                configuracoes={detalhe.campanha.configuracoes}
+                membros={detalhe.membros}
+                onSalvar={salvarVisibilidade}
+              />
+            </motion.div>
+          )}
 
-            {activeTab === 'visibilidade' && (
-              <motion.div
-                key="visibilidade"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] p-6 shadow-2xl md:p-8"
-              >
-                <VisibilidadeCampanha
-                  campanhaId={campanhaId}
-                  configuracoes={detalhe.campanha.configuracoes}
-                  membros={detalhe.membros}
-                  onSalvar={salvarVisibilidade}
-                />
-              </motion.div>
-            )}
-
-            {activeTab === 'liberacoes' && (
-              <motion.div
-                key="liberacoes"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] p-6 shadow-2xl md:p-8"
-              >
-                <LiberacoesIndividuaisPanel campanhaId={campanhaId} membros={detalhe.membros} personagens={personagens} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </>
+          {activeTab === 'liberacoes' && (
+            <motion.div
+              key="liberacoes"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] p-6 shadow-2xl md:p-8"
+            >
+              <LiberacoesIndividuaisPanel campanhaId={campanhaId} membros={detalhe.membros} personagens={personagens} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       )}
     </div>
   );

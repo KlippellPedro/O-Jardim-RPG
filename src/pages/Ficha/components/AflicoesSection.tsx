@@ -6,10 +6,13 @@ import { carregarCatalogo } from '../../../services/catalogoService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { calcularTestePericia } from '../../../services/testePericiaService';
+import { Select, type SelectOption } from '../../../components/ui/Select';
 import type { IRaca } from '../../../types/catalogo';
 import {
   aflicaoPorId,
   avisoDeImunidade,
+  CANSACO_MAXIMO,
+  cansacoAoEntrar,
   efeitosDoEstagio,
   estagioDaExposicao,
   estagioDaNovaExposicao,
@@ -30,6 +33,18 @@ interface IAflicoesSectionProps {
 }
 
 const ROTULO_TIPO: Record<IAflicao['tipo'], string> = { veneno: 'Veneno', doenca: 'Doença', vicio: 'Vício' };
+
+// Separadas por região: o nome da região entra como linha desabilitada, no
+// lugar do <optgroup> (o menu nativo abre branco no Windows).
+const OPCOES_AFLICAO: SelectOption[] = REGIOES_AFLICAO.flatMap((regiao) => {
+  const daRegiao = CATALOGO_AFLICOES.filter((aflicao) => aflicao.regiao === regiao);
+  return daRegiao.length
+    ? [
+      { value: `regiao:${regiao}`, label: regiao, disabled: true, labelClassName: 'text-[10px] font-bold uppercase tracking-widest text-lime-300/70' },
+      ...daRegiao.map((aflicao) => ({ value: aflicao.id, label: `${aflicao.titulo} (DT ${aflicao.dtFortitude})` })),
+    ]
+    : [];
+});
 const ROTULO_GRAU: Record<GrauTeste, string> = {
   'sucesso critico': 'sucesso crítico',
   sucesso: 'sucesso',
@@ -83,10 +98,18 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
     return { grau, natural: Number(registro.detalhes?.natural) || 0, total: Number(registro.resultado) || 0 };
   };
 
+  // Entrar num estágio pode cobrar alguma coisa ("Ganhe 1 Cansaço."). O
+  // Cansaço a ficha soma sozinha, até o teto; o resto vira aviso.
   const textoAoEntrar = (aflicao: IAflicao, de: number, para: number) => {
     if (para <= de) return '';
     const notas = aflicao.estagios.filter((estagio) => estagio.numero > de && estagio.numero <= para).flatMap((estagio) => estagio.aoEntrar ?? []);
-    return notas.length ? ` Ao entrar: ${notas.join(' ')}` : '';
+    const cansaco = cansacoAoEntrar(aflicao, de, para);
+    if (cansaco > 0) {
+      const atual = Math.max(0, Number(f.status?.cansacoAtual) || 0);
+      onUpdate(['ficha', 'status', 'cansacoAtual'], Math.min(CANSACO_MAXIMO, atual + cansaco));
+    }
+    if (!notas.length) return '';
+    return ` Ao entrar: ${notas.join(' ')}${cansaco > 0 ? ' O Cansaço já foi somado na ficha.' : ''}`;
   };
 
   const executar = async (chave: string, acao: () => Promise<void>) => {
@@ -154,6 +177,8 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
       return;
     }
     salvar(ativas.map((item) => (item.id === ativa.id ? { ...item, estagio: para } : item)));
+    const aoEntrar = textoAoEntrar(aflicao, ativa.estagio, para);
+    if (aoEntrar) setAviso({ tipo: 'ok', texto: `${aflicao.titulo} foi para o estágio ${para}.${aoEntrar}` });
   };
 
   const encerrar = (ativa: IAflicaoAtiva, aflicao: IAflicao) => {
@@ -241,17 +266,14 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
         {escolhendo ? (
           <div className="space-y-2 rounded-xl border border-white/10 bg-black/30 p-3">
             <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500" htmlFor="aflicao-escolhida">Exposição a</label>
-            <select id="aflicao-escolhida" value={escolhida} onChange={(evento) => setEscolhida(evento.target.value)} className="h-10 w-full rounded-lg border border-white/10 bg-[#121118] px-3 text-sm text-white outline-none focus:border-lime-300/40">
-              <option value="">Escolha a aflição...</option>
-              {REGIOES_AFLICAO.map((regiao) => {
-                const daRegiao = CATALOGO_AFLICOES.filter((aflicao) => aflicao.regiao === regiao);
-                return daRegiao.length ? (
-                  <optgroup key={regiao} label={regiao}>
-                    {daRegiao.map((aflicao) => <option key={aflicao.id} value={aflicao.id}>{aflicao.titulo} (DT {aflicao.dtFortitude})</option>)}
-                  </optgroup>
-                ) : null;
-              })}
-            </select>
+            <Select
+              id="aflicao-escolhida"
+              value={escolhida}
+              onChange={setEscolhida}
+              placeholder="Escolha a aflição..."
+              options={OPCOES_AFLICAO}
+              className="w-full bg-[#121118]"
+            />
             {aflicaoEscolhida ? (
               <>
                 <p className="text-xs leading-5 text-gray-400">{aflicaoEscolhida.exposicao.gatilho}</p>

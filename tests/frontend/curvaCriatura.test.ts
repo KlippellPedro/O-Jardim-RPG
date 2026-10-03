@@ -7,6 +7,7 @@ import {
   ORDEM_DOS_PAPEIS,
   PAPEIS_CRIATURA,
   escalaDeVida,
+  escalarCriatura,
   expressaoDeDano,
   mediaDaExpressao,
   modeloDeCriatura,
@@ -174,4 +175,78 @@ test('arquétipos dão variedade sem tirar o modelo neutro: comum é idêntico a
   }
   assert.equal(modeloDeCriatura(30, 'solo', 'assassino').habilidades[0].startsWith('Golpe Furtivo'), true);
   assert.match(modeloDeCriatura(30, 'solo', 'bruto').habilidades[0], /DT 30/);
+});
+
+test('escalar uma criatura do modelo para outro VD dá o modelo daquele VD', () => {
+  const origem = modeloDeCriatura(20);
+  const alvo = modeloDeCriatura(35);
+  const feita = escalarCriatura({
+    vd: 20,
+    pv: origem.pv,
+    pvAtual: origem.pv,
+    defesa: origem.defesa,
+    mana: origem.mana,
+    estamina: origem.estamina,
+    iniciativa: origem.iniciativa,
+    ataques: origem.ataques,
+    pericias: origem.pericias,
+  }, 35);
+  assert.equal(feita.vd, 35);
+  assert.equal(feita.de, 20);
+  assert.equal(feita.pv, alvo.pv);
+  assert.equal(feita.pvAtual, alvo.pv);
+  assert.equal(feita.defesa, alvo.defesa);
+  assert.equal(feita.mana, alvo.mana);
+  assert.equal(feita.estamina, alvo.estamina);
+  assert.equal(feita.iniciativa, alvo.iniciativa);
+  assert.deepEqual(feita.pericias, alvo.pericias);
+  assert.deepEqual(feita.ataques, alvo.ataques);
+});
+
+test('escalar mantém a proporção de Vida e a Vida atual, e deixa nome de ataque e texto livre quietos (a DT anda com o VD)', () => {
+  const ferida = escalarCriatura({
+    vd: 10,
+    pv: Math.round(vidaDeCriatura(10) * 1.5),
+    pvAtual: Math.round(vidaDeCriatura(10) * 0.75),
+    iniciativa: 12,
+    ataques: [{ nome: 'Mordida venenosa', detalhe: '+9, 2d8+4 perfurante, causa Veneno' }, { nome: 'Rugido', detalhe: 'DT 18 de Vontade' }],
+    pericias: ['Furtividade +10', 'Ficar de tocaia'],
+  }, 30);
+  const esperado = vidaDeCriatura(30) * 1.5;
+  assert.ok(Math.abs(ferida.pv - esperado) <= esperado * 0.03, `${ferida.pv} perto de ${esperado}`);
+  assert.ok(Math.abs((ferida.pvAtual as number) / ferida.pv - 0.5) < 0.02);
+  assert.equal(ferida.defesa, undefined);
+  assert.equal(ferida.mana, undefined);
+  assert.equal(ferida.ataques[0].nome, 'Mordida venenosa');
+  assert.match(ferida.ataques[0].detalhe, /^\+\d+, \d+d\d+(\+\d+)? perfurante, causa Veneno$/);
+  assert.equal(ferida.ataques[1].detalhe, 'DT 28 de Vontade');
+  assert.equal(ferida.pericias[1], 'Ficar de tocaia');
+  assert.equal(ferida.pericias[0], `Furtividade +${10 + ferida.deltaDeAtaque}`);
+  assert.ok(mediaDaExpressao(ferida.ataques[0].detalhe.match(/\d+d\d+(?:\+\d+)?/)?.[0] ?? '') > mediaDaExpressao('2d8+4'));
+});
+
+test('escalar para baixo e para o mesmo VD é coerente', () => {
+  const base = { vd: 40, pv: vidaDeCriatura(40), iniciativa: 30, ataques: [{ nome: 'Golpe', detalhe: '+30, 8d10+20 contundente' }], pericias: ['Luta +30'] };
+  const igual = escalarCriatura(base, 40);
+  assert.equal(igual.pv, base.pv);
+  assert.equal(igual.iniciativa, 30);
+  assert.equal(igual.ataques[0].detalhe.startsWith('+30, '), true);
+  assert.equal(igual.deltaDeAtaque, 0);
+  const menor = escalarCriatura(base, 5);
+  assert.ok(menor.pv < base.pv && menor.pv >= 1);
+  assert.ok(menor.deltaDeAtaque < 0);
+  assert.equal(escalarCriatura(base, 99999).vd, VD_MAXIMO);
+});
+
+test('escalar leva junto a DT escrita no texto do ataque, a mesma distância que a DT do gerador', () => {
+  const feita = escalarCriatura({
+    vd: 18,
+    pv: 380,
+    iniciativa: 26,
+    ataques: [{ nome: 'Picada', detalhe: '+21, 2d8+4 perfurante; expõe à Toxina, Fortitude DT 15' }],
+    pericias: [],
+  }, 40);
+  assert.match(feita.ataques[0].detalhe, /Fortitude DT 26$/);
+  const mesmo = escalarCriatura({ vd: 18, pv: 380, iniciativa: 26, ataques: [{ nome: 'Picada', detalhe: 'DT 15' }], pericias: [] }, 19);
+  assert.equal(mesmo.ataques[0].detalhe, 'DT 15');
 });

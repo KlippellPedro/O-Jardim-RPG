@@ -1,5 +1,17 @@
 import { api } from './apiClient';
 
+export interface ConvitePlataforma {
+  id: string;
+  max_usos: number;
+  usos: number;
+  expira_em: string;
+  revogado_em: string | null;
+  criado_em: string;
+  nota: string;
+  criado_por_nome: string | null;
+  situacao: 'ativo' | 'usado' | 'expirado' | 'revogado';
+}
+
 export const adminApi = {
   resumo() {
     return api('/admin/resumo');
@@ -45,5 +57,19 @@ export const adminApi = {
     return api(`/admin/usuarios/${encodeURIComponent(usuarioId)}/senha`, {
       method: 'POST',
     });
+  },
+  /** Convites para criar conta na plataforma (nunca entram numa campanha). */
+  listarConvites(todos = false) {
+    return api<{ convites: ConvitePlataforma[] }>(`/admin/convites${todos ? '?todos=true' : ''}`);
+  },
+  /** O código só volta aqui, na criação: depois só existe o hash. */
+  criarConvite(dados: { expira_em_dias: number; max_usos: number; nota: string }) {
+    return api<{ id: string; codigo: string; expira_em: string; max_usos: number; nota: string }>('/admin/convites', {
+      method: 'POST',
+      body: dados,
+    });
+  },
+  revogarConvite(conviteId: string) {
+    return api(`/admin/convites/${encodeURIComponent(conviteId)}`, { method: 'DELETE' });
   },
 };
