@@ -10,12 +10,18 @@ import {
 } from 'lucide-react';
 import {
   CATALOGO_AFLICOES,
+  REGIOES_AFLICAO,
   type IAflicao,
   type IPeriodoAflicao,
+  type RegiaoAflicao,
   type TipoAflicao,
 } from '../../../../data/regras/aflicoes';
 
 type FiltroAflicao = 'todas' | TipoAflicao;
+type FiltroRegiao = 'todas' | RegiaoAflicao;
+
+/** Só as regiões que têm alguma aflição: o filtro nunca oferece uma lista vazia. */
+const REGIOES_COM_AFLICAO = REGIOES_AFLICAO.filter((regiao) => CATALOGO_AFLICOES.some((aflicao) => aflicao.regiao === regiao));
 
 const CONFIG_TIPO = {
   veneno: {
@@ -140,6 +146,7 @@ function CardAflicao({ aflicao }: { aflicao: IAflicao }) {
             <div className="flex flex-wrap justify-end gap-2">
               <span className={`rounded-full border px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.14em] ${config.selo}`}>{config.rotulo}</span>
               <span className="rounded-full border border-white/10 bg-black/20 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-gray-500">{aflicao.classificacao}</span>
+              <span className="rounded-full border border-[#c7a44c]/25 bg-[#c7a44c]/10 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-[#ead79d]">{aflicao.regiao}</span>
             </div>
           </div>
           <h3 className="mt-4 text-xl font-bold text-[#f2ead7] sm:text-2xl" style={{ fontFamily: 'Cinzel, serif' }}>{aflicao.titulo}</h3>
@@ -203,22 +210,25 @@ function CardAflicao({ aflicao }: { aflicao: IAflicao }) {
 
 export function CatalogoAflicoes() {
   const [filtro, setFiltro] = useState<FiltroAflicao>('todas');
+  const [regiao, setRegiao] = useState<FiltroRegiao>('todas');
   const [busca, setBusca] = useState('');
   const visiveis = useMemo(() => {
     const termo = normalizar(busca.trim());
     return CATALOGO_AFLICOES.filter((aflicao) => {
       if (filtro !== 'todas' && aflicao.tipo !== filtro) return false;
+      if (regiao !== 'todas' && aflicao.regiao !== regiao) return false;
       if (!termo) return true;
       const alvo = normalizar([
         aflicao.titulo,
         aflicao.tipo,
         aflicao.classificacao,
+        aflicao.regiao,
         aflicao.exposicao.gatilho,
         ...aflicao.estagios.flatMap((estagio) => estagio.efeitos),
       ].join(' '));
       return termo.split(/\s+/).filter(Boolean).every((palavra) => alvo.includes(palavra));
     });
-  }, [busca, filtro]);
+  }, [busca, filtro, regiao]);
 
   const filtros: Array<{ id: FiltroAflicao; rotulo: string; quantidade: number }> = [
     { id: 'todas', rotulo: 'Todas', quantidade: CATALOGO_AFLICOES.length },
@@ -234,7 +244,7 @@ export function CatalogoAflicoes() {
       <header>
         <span className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[#c7a44c]"><ShieldCheck size={15} /> Referência rápida</span>
         <h2 id="catalogo-aflicoes-titulo" className="text-3xl font-bold text-[#f2ead7] sm:text-4xl" style={{ fontFamily: 'Cinzel, serif' }}>Catálogo de aflições</h2>
-        <p className="mt-3 max-w-[76ch] text-sm leading-7 text-gray-400">Escolha um tipo ou pesquise pelo efeito. Cada ficha separa exposição, resistência, relógio da aflição, estágios e tratamento.</p>
+        <p className="mt-3 max-w-[76ch] text-sm leading-7 text-gray-400">Escolha um tipo, uma região ou pesquise pelo efeito. Cada ficha separa exposição, resistência, relógio da aflição, estágios e tratamento.</p>
       </header>
 
       <div className="mt-7 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-4" aria-label="Como uma aflição funciona">
@@ -284,6 +294,23 @@ export function CatalogoAflicoes() {
             className="w-full rounded-xl border border-white/10 bg-black/25 py-3 pl-10 pr-4 text-sm text-white outline-none placeholder:text-gray-600 focus:border-[#c7a44c]/50"
           />
         </label>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Filtrar aflições por região">
+        {(['todas', ...REGIOES_COM_AFLICAO] as FiltroRegiao[]).map((item) => {
+          const selecionado = regiao === item;
+          return (
+            <button
+              key={item}
+              type="button"
+              onClick={() => setRegiao(item)}
+              aria-pressed={selecionado}
+              className={`rounded-full border px-3 py-1.5 text-[11px] font-bold transition ${selecionado ? 'border-[#c7a44c]/45 bg-[#c7a44c]/15 text-[#ead79d]' : 'border-white/10 bg-black/20 text-gray-500 hover:border-white/20 hover:text-gray-300'}`}
+            >
+              {item === 'todas' ? 'Todas as regiões' : item}
+            </button>
+          );
+        })}
       </div>
 
       <div className="mt-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.12em] text-gray-600" aria-live="polite">

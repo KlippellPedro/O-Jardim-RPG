@@ -3,15 +3,17 @@ import test from 'node:test';
 
 import {
   CATALOGO_AFLICOES,
+  REGIOES_AFLICAO,
   REGRA_AFLICOES,
   TIPOS_AFLICAO,
   VIAS_EXPOSICAO,
 } from '../../data/regras/aflicoes.ts';
+import { ARVORES_REAIS } from '../../data/mundo/arvoresCatalog.ts';
 
 test('catálogo possui ids únicos e tipos válidos', () => {
   const ids = CATALOGO_AFLICOES.map(aflicao => aflicao.id);
   assert.equal(new Set(ids).size, ids.length);
-  assert.ok(CATALOGO_AFLICOES.length >= 5);
+  assert.ok(CATALOGO_AFLICOES.length >= 17);
 
   for (const aflicao of CATALOGO_AFLICOES) {
     assert.match(aflicao.id, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
@@ -90,4 +92,48 @@ test('regra referencia Cansaço e imunidades raciais sem ampliá-las', () => {
   assert.match(REGRA_AFLICOES.corpo, /Auleth é imune a doenças comuns e sobrenaturais/i);
   assert.match(REGRA_AFLICOES.corpo, /Autômato é imune a doenças e venenos/i);
   assert.match(REGRA_AFLICOES.corpo, /Máquina Viva/i);
+});
+
+test('toda aflição declara uma região conhecida, e cada Árvore e o Vazio têm a sua', () => {
+  for (const aflicao of CATALOGO_AFLICOES) {
+    assert.ok(REGIOES_AFLICAO.includes(aflicao.regiao), `${aflicao.id}: região "${aflicao.regiao}" fora da lista`);
+  }
+  for (const regiao of REGIOES_AFLICAO.filter((item) => item !== 'Em qualquer lugar')) {
+    assert.ok(CATALOGO_AFLICOES.some((aflicao) => aflicao.regiao === regiao), `nenhuma aflição em ${regiao}`);
+  }
+});
+
+test('as regiões batem com as Árvores do catálogo do Mundo, mais o Vazio e o "qualquer lugar"', () => {
+  const nomesDasArvores = ARVORES_REAIS.map((arvore) => arvore.nome).filter((nome) => nome !== 'Parley');
+  const regioes: string[] = REGIOES_AFLICAO.filter((item) => item !== 'Em qualquer lugar' && item !== 'O Vazio');
+  assert.deepEqual([...regioes].sort(), [...nomesDasArvores].sort());
+});
+
+test('as aflições de região ficam na faixa de DT que o guia do Mestre promete', () => {
+  for (const aflicao of CATALOGO_AFLICOES) {
+    assert.ok(aflicao.dtFortitude >= 14 && aflicao.dtFortitude <= 20, `${aflicao.id}: DT ${aflicao.dtFortitude} fora de 14 a 20`);
+  }
+});
+
+test('o livro traz a tabela por região com todas as aflições e o catálogo diz a região de cada uma', () => {
+  assert.match(REGRA_AFLICOES.corpo, /Aflições por região/);
+  for (const aflicao of CATALOGO_AFLICOES) {
+    assert.ok(REGRA_AFLICOES.corpo.includes(`<td>${aflicao.titulo}</td>`), `${aflicao.titulo} fora da tabela por região`);
+    assert.ok(REGRA_AFLICOES.corpo.includes(`${aflicao.regiao} · Fortitude DT ${aflicao.dtFortitude}`), `${aflicao.titulo} sem região no catálogo`);
+  }
+});
+
+test('texto das aflições segue o tom da mesa: sem travessão e sem a palavra eco', () => {
+  for (const aflicao of CATALOGO_AFLICOES) {
+    const texto = JSON.stringify(aflicao);
+    assert.doesNotMatch(texto, /[—–]/, `${aflicao.id} tem travessão`);
+    assert.doesNotMatch(texto, /eco/i, `${aflicao.id} usa a palavra eco`);
+  }
+});
+
+test('imunidades raciais continuam valendo para as aflições novas: só as sobrenaturais escapam do Golem', () => {
+  const comuns = CATALOGO_AFLICOES.filter((aflicao) => aflicao.tipo === 'doenca' && aflicao.classificacao === 'comum');
+  const sobrenaturais = CATALOGO_AFLICOES.filter((aflicao) => aflicao.tipo === 'doenca' && aflicao.classificacao === 'sobrenatural');
+  assert.ok(comuns.length >= 4, 'precisa haver doenças comuns para o Golem não ser imune a tudo');
+  assert.ok(sobrenaturais.length >= 6, 'as regiões sobrenaturais precisam da classificação certa');
 });

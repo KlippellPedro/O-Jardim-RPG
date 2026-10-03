@@ -5,6 +5,22 @@ export const VIAS_EXPOSICAO = ['contato', 'ferimento', 'ingestao', 'inalacao', '
 export type ViaExposicao = typeof VIAS_EXPOSICAO[number];
 
 export type ClassificacaoAflicao = 'comum' | 'sobrenatural';
+
+/** Onde a aflição costuma ser pega: uma das dez Árvores, o Vazio ou qualquer lugar. */
+export const REGIOES_AFLICAO = [
+  'Em qualquer lugar',
+  'Gênese',
+  'Alétheia',
+  'A.X.I.S',
+  'Anima',
+  'Vórtice',
+  'Baluarte',
+  'Matriz',
+  'Éon',
+  'Limiar',
+  'O Vazio',
+] as const;
+export type RegiaoAflicao = typeof REGIOES_AFLICAO[number];
 export type UnidadeTempoAflicao = 'rodada' | 'minuto' | 'hora' | 'dia';
 export type AtributoDrenado = 'Força' | 'Destreza' | 'Constituição' | 'Inteligência' | 'Sabedoria' | 'Carisma';
 
@@ -59,6 +75,8 @@ export interface IDependenciaAflicao {
 export interface IAflicao {
   id: string;
   titulo: string;
+  /** Onde o Mestre a encontra primeiro. Fora dela, só com a exposição levada junto. */
+  regiao: RegiaoAflicao;
   tipo: TipoAflicao;
   classificacao: ClassificacaoAflicao;
   exposicao: IExposicaoAflicao;
@@ -84,6 +102,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
   {
     id: 'toxina-paralisante',
     titulo: 'Toxina Paralisante',
+    regiao: 'Em qualquer lugar',
     tipo: 'veneno',
     classificacao: 'comum',
     exposicao: {
@@ -112,6 +131,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
   {
     id: 'peconha-hemorragica',
     titulo: 'Peçonha Hemorrágica',
+    regiao: 'Em qualquer lugar',
     tipo: 'veneno',
     classificacao: 'comum',
     exposicao: {
@@ -140,6 +160,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
   {
     id: 'febre-dos-esporos',
     titulo: 'Febre dos Esporos',
+    regiao: 'Em qualquer lugar',
     tipo: 'doenca',
     classificacao: 'comum',
     exposicao: {
@@ -168,6 +189,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
   {
     id: 'definhamento-arcano',
     titulo: 'Definhamento Arcano',
+    regiao: 'Em qualquer lugar',
     tipo: 'doenca',
     classificacao: 'sobrenatural',
     exposicao: {
@@ -215,6 +237,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
   {
     id: 'dependencia-de-estimulante',
     titulo: 'Dependência de Estimulante',
+    regiao: 'Em qualquer lugar',
     tipo: 'vicio',
     classificacao: 'comum',
     exposicao: {
@@ -246,6 +269,400 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
       restricaoAgencia: 'A abstinência não obriga o personagem a procurar, comprar ou usar a substância.',
     },
   },
+  {
+    id: 'tosse-cinzenta',
+    titulo: 'Tosse Cinzenta',
+    regiao: 'Gênese',
+    tipo: 'doenca',
+    classificacao: 'comum',
+    exposicao: {
+      vias: ['inalacao', 'contato'],
+      gatilho: 'Uma noite num cômodo fechado com alguém doente, ou respirar a fumaça de um incêndio sem proteção.',
+    },
+    dtFortitude: 14,
+    incubacao: { quantidade: 1, unidade: 'dia' },
+    intervalo: { quantidade: 1, unidade: 'dia' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['−1 em Fortitude contra fumaça, gases e esforço prolongado.'] },
+      { numero: 2, efeitos: ['−1 em Fortitude e −1 em Atletismo.'], aoEntrar: ['Ganhe 1 Cansaço.'] },
+      { numero: 3, efeitos: ['Desvantagem em Fortitude contra fumaça e gases e em Atletismo para correr e nadar.'], aoEntrar: ['Ganhe 1 Cansaço.'] },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 14,
+      tempo: '1 hora de repouso, com ervas e vapor.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por dia.',
+      antidoto: 'encerra_se_especifico',
+    },
+  },
+  {
+    id: 'beladona-destilada',
+    titulo: 'Beladona Destilada',
+    regiao: 'Gênese',
+    tipo: 'veneno',
+    classificacao: 'comum',
+    exposicao: {
+      vias: ['ingestao', 'ferimento'],
+      gatilho: 'Beber o extrato ou ser ferido por arma untada com ele.',
+    },
+    dtFortitude: 16,
+    incubacao: { quantidade: 10, unidade: 'minuto' },
+    intervalo: { quantidade: 10, unidade: 'minuto' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['Visão turva: −1 em Percepção e Pontaria.'] },
+      { numero: 2, efeitos: ['−2 em Percepção e Pontaria.', 'Boca seca: desvantagem em Diplomacia e Atuação faladas.'] },
+      { numero: 3, efeitos: ['Desvantagem em testes que dependam de visão.', 'Movimento reduzido pela metade.'] },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 16,
+      tempo: 'Ação padrão.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por intervalo.',
+      antidoto: 'encerra',
+    },
+  },
+  {
+    id: 'ofuscamento-ambar',
+    titulo: 'Ofuscamento Âmbar',
+    regiao: 'Alétheia',
+    tipo: 'doenca',
+    classificacao: 'sobrenatural',
+    exposicao: {
+      vias: ['ambiente'],
+      gatilho: 'Uma hora sob a luz âmbar constante de Alétheia sem proteger os olhos.',
+    },
+    dtFortitude: 17,
+    incubacao: { quantidade: 0, unidade: 'hora' },
+    intervalo: { quantidade: 1, unidade: 'hora' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['−1 em Percepção que dependa de visão.'] },
+      { numero: 2, efeitos: ['−2 em Percepção que dependa de visão.', '+2 em Ressonância: você enxerga o que as coisas são de verdade, querendo ou não.'] },
+      { numero: 3, efeitos: ['Desvantagem em Percepção que dependa de visão.', '+2 em Ressonância.'], aoEntrar: ['Ganhe 1 Cansaço.'] },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 17,
+      tempo: '1 hora na sombra, de olhos cobertos.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por dia.',
+      antidoto: 'encerra_se_especifico',
+    },
+  },
+  {
+    id: 'dependencia-de-sincronia',
+    titulo: 'Dependência de Sincronia',
+    regiao: 'A.X.I.S',
+    tipo: 'vicio',
+    classificacao: 'comum',
+    exposicao: {
+      vias: ['uso'],
+      gatilho: 'Uso repetido de interface neural, conforme o gatilho de dependência.',
+    },
+    dtFortitude: 16,
+    incubacao: { quantidade: 0, unidade: 'dia' },
+    intervalo: { quantidade: 1, unidade: 'dia' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['−1 em Iniciativa e em Tecnologia durante abstinência.'] },
+      { numero: 2, efeitos: ['−2 em Iniciativa e em Tecnologia durante abstinência.'] },
+      { numero: 3, efeitos: ['Desvantagem em Tecnologia e em testes de Inteligência durante abstinência.'], aoEntrar: ['Ganhe 1 Cansaço.'] },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 16,
+      tempo: '1 hora de acompanhamento durante um descanso.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por dia.',
+      antidoto: 'nao_se_aplica',
+    },
+    dependencia: {
+      gatilhoDependencia: 'Depois de usar uma interface neural em três dias seguidos, teste Fortitude. Falha aplica o estágio 1. Só conta como uso um implante ou item cuja descrição o identifique como interface neural.',
+      inicioAbstinencia: { quantidade: 1, unidade: 'dia' },
+      usoDuranteAbstinencia: 'Um uso suspende os efeitos e o próximo teste de progressão por um intervalo, mas não reduz o estágio.',
+      restricaoAgencia: 'A abstinência não obriga o personagem a procurar, comprar ou usar a interface.',
+    },
+  },
+  {
+    id: 'podridao-do-viveiro',
+    titulo: 'Podridão do Viveiro',
+    regiao: 'Anima',
+    tipo: 'doenca',
+    classificacao: 'comum',
+    exposicao: {
+      vias: ['ferimento', 'ambiente'],
+      gatilho: 'Ferimento aberto em contato com a mata do Viveiro ou com uma criatura infestada.',
+    },
+    dtFortitude: 17,
+    incubacao: { quantidade: 1, unidade: 'hora' },
+    intervalo: { quantidade: 1, unidade: 'dia' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['Os ferimentos não fecham sozinhos: toda cura de Vida que você recebe cai pela metade.'] },
+      { numero: 2, efeitos: ['Cura de Vida pela metade.', '−1 em testes físicos.'], aoEntrar: ['Ganhe 1 Cansaço.'] },
+      { numero: 3, efeitos: ['Cura de Vida pela metade.', '−2 em testes físicos.'], aoEntrar: ['Ganhe 1 Cansaço.'] },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 17,
+      tempo: '1 hora, limpando e cauterizando a ferida.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por dia.',
+      antidoto: 'encerra_se_especifico',
+    },
+  },
+  {
+    id: 'nectar-soninfero',
+    titulo: 'Néctar Sonífero',
+    regiao: 'Anima',
+    tipo: 'veneno',
+    classificacao: 'comum',
+    exposicao: {
+      vias: ['ingestao', 'inalacao'],
+      gatilho: 'Comer o fruto ou respirar o pólen de uma flor que dá sono.',
+    },
+    dtFortitude: 15,
+    incubacao: { quantidade: 1, unidade: 'minuto' },
+    intervalo: { quantidade: 1, unidade: 'minuto' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['−1 em Iniciativa e em Percepção.'] },
+      { numero: 2, efeitos: ['−2 em Iniciativa e em Percepção.', 'Movimento reduzido pela metade.'] },
+      { numero: 3, efeitos: ['Adormece: fica Inconsciente até sofrer dano ou até o próximo intervalo.'] },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 15,
+      tempo: 'Ação padrão.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por intervalo.',
+      antidoto: 'encerra',
+    },
+  },
+  {
+    id: 'mal-da-inconstancia',
+    titulo: 'Mal da Inconstância',
+    regiao: 'Vórtice',
+    tipo: 'doenca',
+    classificacao: 'sobrenatural',
+    exposicao: {
+      vias: ['ambiente', 'contato'],
+      gatilho: 'Uma hora numa área em que o Fluxo da Inconstância refez o terreno, sem proteção.',
+    },
+    dtFortitude: 18,
+    incubacao: { quantidade: 1, unidade: 'hora' },
+    intervalo: { quantidade: 1, unidade: 'dia' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['−1 em testes de precisão (Pontaria, Ladinagem e Pilotagem).'] },
+      { numero: 2, efeitos: ['−2 em testes de precisão.', 'No começo de cada cena, role 1d6: com 1, a primeira rolagem da cena sofre desvantagem.'] },
+      { numero: 3, efeitos: ['Desvantagem em testes de precisão.', 'No começo de cada cena, role 1d6: com 1 ou 2, a primeira rolagem da cena sofre desvantagem.'] },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 18,
+      tempo: '1 hora de repouso longe do lugar contaminado.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por dia.',
+      antidoto: 'encerra_se_especifico',
+    },
+  },
+  {
+    id: 'pulmao-de-pedra',
+    titulo: 'Pulmão de Pedra',
+    regiao: 'Baluarte',
+    tipo: 'doenca',
+    classificacao: 'comum',
+    exposicao: {
+      vias: ['inalacao', 'ambiente'],
+      gatilho: 'Uma hora respirando pó de rocha sem pano ou máscara.',
+    },
+    dtFortitude: 15,
+    incubacao: { quantidade: 2, unidade: 'dia' },
+    intervalo: { quantidade: 1, unidade: 'dia' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['−1 em Fortitude contra fumaça e gases.'] },
+      { numero: 2, efeitos: ['−2 em Fortitude contra fumaça, gases e esforço prolongado.'], aoEntrar: ['Ganhe 1 Cansaço.'] },
+      { numero: 3, efeitos: ['Desvantagem em Fortitude contra fumaça, gases e esforço prolongado.', 'Movimento reduzido em 3 m.'], aoEntrar: ['Ganhe 1 Cansaço.'] },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 15,
+      tempo: '1 hora de vapores medicinais em ar limpo.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por dia.',
+      antidoto: 'encerra_se_especifico',
+    },
+  },
+  {
+    id: 'mal-do-intersticio',
+    titulo: 'Mal do Interstício',
+    regiao: 'Matriz',
+    tipo: 'doenca',
+    classificacao: 'sobrenatural',
+    exposicao: {
+      vias: ['ambiente'],
+      gatilho: 'Atravessar entre Galhos sem guia dimensional ou âncora, ou passar uma hora no Interstício.',
+    },
+    dtFortitude: 18,
+    incubacao: { quantidade: 1, unidade: 'hora' },
+    intervalo: { quantidade: 1, unidade: 'dia' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['−1 em Pontaria e em Percepção: a distância engana.'] },
+      { numero: 2, efeitos: ['−2 em Pontaria e em Percepção.'], aoEntrar: ['Ganhe 1 Cansaço.'] },
+      { numero: 3, efeitos: ['Desvantagem em Pontaria, Percepção e Acrobacia.'], aoEntrar: ['Ganhe 1 Cansaço.'] },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 18,
+      tempo: '1 hora de descanso com os pés firmes no chão, longe do Interstício.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por dia.',
+      antidoto: 'encerra_se_especifico',
+    },
+  },
+  {
+    id: 'desgaste-do-tempo',
+    titulo: 'Desgaste do Tempo',
+    regiao: 'Éon',
+    tipo: 'doenca',
+    classificacao: 'sobrenatural',
+    exposicao: {
+      vias: ['ambiente', 'contato'],
+      gatilho: 'Uma hora numa área em que o Fluxo do Tempo foi usado em excesso.',
+    },
+    dtFortitude: 19,
+    incubacao: { quantidade: 1, unidade: 'dia' },
+    intervalo: { quantidade: 1, unidade: 'dia' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['−1 em Iniciativa.'] },
+      {
+        numero: 2,
+        efeitos: ['−2 em Iniciativa.'],
+        aoEntrar: ['Ganhe 1 Cansaço.'],
+        drenagemAtributo: {
+          atributo: 'Destreza',
+          valor: 1,
+          temporaria: true,
+          recuperacao: 'Restaure o valor quando a aflição chegar ao estágio 0.',
+        },
+      },
+      {
+        numero: 3,
+        efeitos: ['−2 em Iniciativa.', 'Desvantagem em Reflexos.'],
+        aoEntrar: ['Ganhe 1 Cansaço.'],
+        drenagemAtributo: {
+          atributo: 'Destreza',
+          valor: 2,
+          temporaria: true,
+          recuperacao: 'Restaure o valor quando a aflição chegar ao estágio 0.',
+        },
+      },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 19,
+      tempo: '1 hora e um reagente mágico de 50 Lunaris, consumido na tentativa.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por dia.',
+      antidoto: 'encerra_se_especifico',
+    },
+    observacoes: ['A drenagem indicada pelo estágio atual substitui a anterior; não acumule os valores.'],
+  },
+  {
+    id: 'frio-do-fim',
+    titulo: 'Frio do Fim',
+    regiao: 'Limiar',
+    tipo: 'doenca',
+    classificacao: 'sobrenatural',
+    exposicao: {
+      vias: ['ambiente'],
+      gatilho: 'Um dia inteiro num lugar onde o Fluxo do Fim é forte, como Arkarin, sem proteção nem companhia viva.',
+    },
+    dtFortitude: 17,
+    incubacao: { quantidade: 1, unidade: 'dia' },
+    intervalo: { quantidade: 1, unidade: 'dia' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['−1 em Vontade.'] },
+      { numero: 2, efeitos: ['−2 em Vontade.'], aoEntrar: ['Perca 1d4 de Sanidade.'] },
+      { numero: 3, efeitos: ['Desvantagem em Vontade.', 'Descanso recupera metade da Sanidade.'], aoEntrar: ['Perca 1d6 de Sanidade.'] },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 17,
+      tempo: '1 hora junto a uma fogueira, com alguém vivo ao lado.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por dia.',
+      antidoto: 'encerra_se_especifico',
+    },
+  },
+  {
+    id: 'apagamento',
+    titulo: 'Apagamento',
+    regiao: 'O Vazio',
+    tipo: 'doenca',
+    classificacao: 'sobrenatural',
+    exposicao: {
+      vias: ['ambiente', 'contato'],
+      gatilho: 'Uma hora no Vazio, longe de qualquer Árvore, sem âncora nem companhia que lembre o nome de quem entrou.',
+    },
+    dtFortitude: 20,
+    incubacao: { quantidade: 1, unidade: 'hora' },
+    intervalo: { quantidade: 1, unidade: 'dia' },
+    progressao: PROGRESSAO_PADRAO,
+    estagios: [
+      { numero: 0, efeitos: [] },
+      { numero: 1, efeitos: ['−1 em Diplomacia, Atuação e Intimidação.'] },
+      {
+        numero: 2,
+        efeitos: ['−2 em Diplomacia, Atuação e Intimidação.'],
+        drenagemAtributo: {
+          atributo: 'Carisma',
+          valor: 1,
+          temporaria: true,
+          recuperacao: 'Restaure o valor quando a aflição chegar ao estágio 0.',
+        },
+      },
+      {
+        numero: 3,
+        efeitos: ['Desvantagem em Diplomacia, Atuação e Intimidação.'],
+        drenagemAtributo: {
+          atributo: 'Carisma',
+          valor: 2,
+          temporaria: true,
+          recuperacao: 'Restaure o valor quando a aflição chegar ao estágio 0.',
+        },
+      },
+    ],
+    tratamento: {
+      pericia: 'Cura',
+      dt: 20,
+      tempo: '1 hora ao lado de alguém que conheça o nome do paciente e o diga em voz alta.',
+      efeitoSucesso: 'Reduza o estágio em 1.',
+      limite: 'Uma tentativa por dia.',
+      antidoto: 'encerra_se_especifico',
+    },
+    observacoes: ['A drenagem indicada pelo estágio atual substitui a anterior; não acumule os valores.'],
+  },
 ];
 
 const formatarPeriodo = (periodo: IPeriodoAflicao) =>
@@ -254,7 +671,7 @@ const formatarPeriodo = (periodo: IPeriodoAflicao) =>
 const catalogoPublicado = CATALOGO_AFLICOES.map((aflicao) => `
   <section>
     <h4>${aflicao.titulo}</h4>
-    <p><strong>${aflicao.tipo}</strong> ${aflicao.classificacao} · Fortitude DT ${aflicao.dtFortitude} · incubação ${formatarPeriodo(aflicao.incubacao)} · intervalo ${formatarPeriodo(aflicao.intervalo)}</p>
+    <p><strong>${aflicao.tipo}</strong> ${aflicao.classificacao} · ${aflicao.regiao} · Fortitude DT ${aflicao.dtFortitude} · incubação ${formatarPeriodo(aflicao.incubacao)} · intervalo ${formatarPeriodo(aflicao.intervalo)}</p>
     <p><strong>Exposição:</strong> ${aflicao.exposicao.gatilho}</p>
     <ul class="regras-list">${aflicao.estagios.map((estagio) => `<li><strong>Estágio ${estagio.numero}:</strong> ${[
       ...estagio.efeitos,
@@ -264,6 +681,17 @@ const catalogoPublicado = CATALOGO_AFLICOES.map((aflicao) => `
     <p><strong>Tratamento:</strong> Cura DT ${aflicao.tratamento.dt}; ${aflicao.tratamento.tempo} ${aflicao.tratamento.efeitoSucesso} ${aflicao.tratamento.limite}</p>
   </section>
 `).join('');
+
+const tabelaAflicoesPorRegiao = REGIOES_AFLICAO.flatMap((regiao) => CATALOGO_AFLICOES
+  .filter((aflicao) => aflicao.regiao === regiao)
+  .map((aflicao) => `
+        <tr>
+          <td><strong>${regiao}</strong></td>
+          <td>${aflicao.titulo}</td>
+          <td>${aflicao.tipo}, ${aflicao.classificacao}</td>
+          <td>${aflicao.dtFortitude}</td>
+          <td>${aflicao.exposicao.gatilho}</td>
+        </tr>`)).join('');
 
 export const REGRA_AFLICOES = {
   status: 'Regra oficial',
@@ -299,6 +727,13 @@ export const REGRA_AFLICOES = {
       <li>Durante abstinência, aplique apenas os efeitos mecânicos do estágio. O jogador continua decidindo as ações do personagem.</li>
       <li>Usar a substância pode suspender efeitos conforme o catálogo, mas não reduz o estágio nem substitui tratamento.</li>
     </ul>
+    <h3 class="regras-subtitle">Aflições por região</h3>
+    <p>Cada região do Jardim tem as próprias doenças e venenos. A tabela diz onde cada aflição costuma ser pega, para o grupo saber o que levar antes de entrar: pano no rosto em Baluarte, sombra para os olhos em Alétheia, companhia no Vazio. Fora da região, só vale se alguém levou a exposição junto, como um pó, uma amostra ou um ferimento aberto.</p>
+    <div class="regras-table-wrap"><table class="regras-table">
+      <thead><tr><th>Região</th><th>Aflição</th><th>Tipo</th><th>DT</th><th>Como se pega</th></tr></thead>
+      <tbody>${tabelaAflicoesPorRegiao}
+      </tbody>
+    </table></div>
     <h3 class="regras-subtitle">Catálogo de aflições</h3>
     ${catalogoPublicado}
   `,
@@ -310,6 +745,8 @@ export const REGRA_AFLICOES = {
       <li>O que decide o peso não é a DT, é o intervalo. Veneno de combate cobra teste a cada rodada e resolve dentro da cena; doença cobra a cada dia e atravessa sessões.</li>
       <li>O catálogo publicado anda entre DT 14 e DT 20. Fique nessa faixa: acima dela a aflição vira sentença, porque o alvo falha em quase todo intervalo.</li>
       <li>Falha crítica na exposição já entra direto no estágio 2. Isso é duro, e é o motivo para não distribuir exposição em cena banal.</li>
+      <li>Use a tabela por região. A aflição de um lugar funciona melhor quando o grupo foi avisado do perigo antes: quem ouviu falar do Pulmão de Pedra em Baluarte leva pano para o rosto, e aí a escolha passa a ser dele.</li>
+      <li>As aflições sobrenaturais das regiões (Alétheia, Vórtice, Matriz, Éon, Limiar e o Vazio) pedem tratamento que o grupo nem sempre alcança. Antes de aplicar uma, tenha na cabeça como a mesa vai sair dela.</li>
     </ul>
 
     <h3 class="regras-subtitle">Não virar imposto</h3>
