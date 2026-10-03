@@ -21,7 +21,7 @@ CATEGORIAS = {
             ("/item <busca>", "Consulta os detalhes de um item; compras e revendas ficam na Loja do site."),
             ("/monstro <busca>", "Mostra a ficha de um monstro do bestiário."),
             ("/inventario", "Mostra seu inventário."),
-            ("/cambio <de> <para> <quantia>", "Troca Lunaris ⇄ Solares."),
+            ("/cambio <de> <para> <quantia>", "Troca Lunaris, Solares e Fragmentos (Créditos Sombrios não entram)."),
             ("/cambio_ver", "Mostra a taxa de câmbio atual e se o ajuste automático está ligado."),
             ("/cofre", "Mostra seu cofre/armazém (itens, dinheiro guardado e segurança)."),
             ("/cofre_melhorias", "Mostra apenas os próximos upgrades disponíveis, seus ganhos e custos."),
@@ -123,8 +123,7 @@ CATEGORIAS = {
             ("/emprestar_para <membro> <valor> <juros_diarios_percent> <prazo_dias>", "Propõe um empréstimo a outro jogador (ele precisa aceitar)."),
             ("/emprestimo_pagar <emprestimo_id> <valor>", "Paga parte ou tudo de um empréstimo ativo que você deve."),
             ("/emprestimos_ver", "Mostra seus empréstimos (como credor ou devedor)."),
-            ("/lavar_dinheiro <valor>", "Lava Créditos Sombrios para transformá-los em Lunaris (taxa de 15%). Demora 24h."),
-            ("/lavanderia_resgatar", "Resgata o dinheiro limpo da lavanderia que já terminou."),
+            ("/mercado_negro_vender <item> <quantidade>", "Vende um item do seu inventário ao doleiro, que paga em Créditos Sombrios."),
         ],
     },
     "integracao": {

@@ -28,14 +28,13 @@ log = logging.getLogger("banqueiro")
 COR_RARIDADE = ui.COR_RARIDADE
 SIMBOLO = ui.SIMBOLO_MOEDA
 MOEDAS_CHOICES = ui.MOEDAS_CHOICES
-# /cambio só sabe converter Lunaris <-> Solares (core/economia.py:converter);
-# oferecer as 4 moedas fazia o usuário levar uma exceção crua ao escolher
-# Fragmentos/Créditos.
+# /cambio converte Lunaris, Solares e Fragmentos, sempre passando por Solares
+# (core/economia.py:converter). Créditos Sombrios ficam de fora de propósito:
+# são moeda do mercado negro.
 CAMBIO_CHOICES = [
     app_commands.Choice(name="Lunaris ☾", value="Lunaris"),
     app_commands.Choice(name="Solares ☉", value="Solares"),
     app_commands.Choice(name="Fragmentos de Estrela ✧", value="Fragmentos de Estrela"),
-    app_commands.Choice(name="Créditos Sombrios ♆", value="Créditos Sombrios"),
 ]
 ROUBO_ABORDAGEM_CHOICES = [
     app_commands.Choice(name=info["nome"], value=abordagem_id)
@@ -740,7 +739,7 @@ class Economia(commands.Cog):
         emb.set_footer(text=f"{ui.MARCA} · Cofre: {ui.barra(await self.bot.inventario.contar(sid, uid), cap)}")
         await interaction.response.send_message(embed=emb)
 
-    @app_commands.command(description="Troca moedas (Todas as Moedas) no banco.")
+    @app_commands.command(description="Troca Lunaris, Solares e Fragmentos de Estrela no banco.")
     @app_commands.describe(de="Moeda que dá.", para="Moeda que quer.", quantia="Quanto trocar.")
     @app_commands.choices(de=CAMBIO_CHOICES, para=CAMBIO_CHOICES)
     async def cambio(self, interaction, de: app_commands.Choice[str], para: app_commands.Choice[str], quantia: app_commands.Range[int, 1]):
@@ -2377,56 +2376,6 @@ class Economia(commands.Cog):
         await interaction.followup.send(embed=emb)
 
 
-
-    # ── Lavagem de Dinheiro ──
-    @app_commands.command(name="lavar_dinheiro", description="Lava seus Créditos Sombrios em Solares limpos. Leva 24h.")
-    @app_commands.describe(quantia="Quantidade de Créditos Sombrios para lavar.")
-    async def lavar_dinheiro(self, interaction: discord.Interaction, quantia: app_commands.Range[int, 1, 2_000_000_000]):
-        if quantia <= 0:
-            await interaction.response.send_message("A quantia precisa ser positiva.", ephemeral=True)
-            return
-
-        sid, uid = _sid(interaction), str(interaction.user.id)
-        db = self.bot.db
-        
-        try:
-            lavagem = db.iniciar_lavagem(sid, uid, quantia, datetime.now(timezone.utc))
-        except SaldoInsuficiente as exc:
-            await interaction.response.send_message(f"💸 {exc}", ephemeral=True)
-            return
-
-        pronto_ts = int(lavagem["pronto_em"].timestamp())
-        await interaction.response.send_message(
-            f"🕴️ **O Doleiro pegou a grana.**\n"
-            f"Você entregou ♆ {quantia} Créditos Sombrios.\n"
-            f"Eles estarão limpos e prontos para resgate em <t:{pronto_ts}:R>.\n"
-            f"Use `/lavanderia_resgatar` depois desse prazo para pegar sua parte (menos a taxa dele).",
-            ephemeral=True
-        )
-
-    @app_commands.command(name="lavanderia_resgatar", description="Resgata seu dinheiro já lavado (conversão em Solares com -15% de taxa).")
-    async def lavanderia_resgatar(self, interaction: discord.Interaction):
-        sid, uid = _sid(interaction), str(interaction.user.id)
-        db = self.bot.db
-        
-        resultado = db.resgatar_lavagem(sid, uid, datetime.now(timezone.utc))
-        if resultado["status"] == "ausente":
-            await interaction.response.send_message("Você não tem nenhum dinheiro lavando.", ephemeral=True)
-            return
-            
-        if resultado["status"] == "aguardando":
-            pronto_ts = int(resultado["pronto_em"].timestamp())
-            await interaction.response.send_message(f"Seu dinheiro ainda não está limpo. Volte <t:{pronto_ts}:R>.", ephemeral=True)
-            return
-            
-        solares_limpos, taxa = resultado["recebido"], resultado["taxa"]
-        
-        await interaction.response.send_message(
-            f"💼 **Maleta na mão.**\n"
-            f"O Doleiro te entregou ☉ {solares_limpos} Solares limpos.\n"
-            f"A taxa cobrada por ele foi de ☉ {taxa} Solares.",
-            ephemeral=True
-        )
 
     @app_commands.command(name="contratar_guarda", description="Consome um contrato de guarda-costas para proteger sua carteira e cofre de um roubo.")
     async def contratar_guarda(self, interaction: discord.Interaction):

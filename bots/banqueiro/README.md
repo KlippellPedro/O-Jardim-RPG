@@ -140,12 +140,16 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   dinheiro antes da conclusão e devolvem a reserva quando a operação falha,
   é recusada ou expira. `/economia_diagnostico` dá ao mestre uma visão
   privada de circulação, dívida, concentração, fluxo, roubos e reservas.
-- **Lavanderia** — `/lavar_dinheiro` debita Créditos Sombrios e registra a
-  reserva na mesma transação, inclusive quando o saldo restante é zero.
-  Novos depósitos se somam à reserva e reiniciam seu prazo de 24 horas.
-  `/lavanderia_resgatar` aplica o câmbio e a taxa bancária configurados, mais
-  a taxa de 15% do doleiro. O resgate é único e aparece no extrato; se a
-  gravação falhar, a reserva permanece disponível.
+- **Créditos Sombrios** — não têm câmbio e não viram Lunaris nem Solares. A
+  lavanderia (`/lavar_dinheiro`, `/lavanderia_resgatar`) foi encerrada em
+  2026-10-03; quem ainda tinha Créditos lavando recebe tudo de volta, com
+  extrato, na migração do banco. A entrada da moeda é `/mercado_negro_vender`:
+  o doleiro examina um item do inventário (o catálogo dá o valor em Solares),
+  oferece 40% desse valor em Créditos, com humor que muda por dia (entre 85% e
+  115%), e só fecha depois do botão de aceite. O item sai pela fachada de
+  inventário (cofre ou legado) e os Créditos entram com extrato; se o
+  pagamento falhar, o item volta. Monstros, propriedades e veículos completos
+  não se vendem.
 - **Contratos e Mercado Negro** — a ativação de `/contratar_guarda` consome
   o contrato do inventário local junto com a criação da proteção. Na compra
   pelo Mercado Negro, débito, entrega local, reputação e extrato são gravados
@@ -158,8 +162,7 @@ Além das operações acima, a migração de IDs antigos de itens agora combina
 as quantidades quando o inventário já contém o ID novo. Isso evita falha de
 inicialização por chave duplicada e não soma novamente ao reiniciar.
 
-As regressões estão em `tests/test_revisao_banqueiro.py`: saldo exato na
-lavanderia, resgates e contratos concorrentes, reversão de operações com falha,
+As regressões estão em `tests/test_revisao_banqueiro.py`: contratos concorrentes, reversão de operações com falha,
 moedas dos baús, preço cobrado e migração repetida. Os testes de integração
 exigem `TEST_DATABASE_URL` apontando para um PostgreSQL descartável, diferente
 do banco de produção. Cada teste usa um schema isolado.

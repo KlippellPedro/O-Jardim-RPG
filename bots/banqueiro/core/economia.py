@@ -137,6 +137,9 @@ def converter(
 ) -> Tuple[int, int]:
     """Converte entre moedas.
     Retorna (recebido, taxa_cobrada), ambos na moeda de destino (inteiros).
+
+    Créditos Sombrios são moeda do mercado negro e não passam pelo câmbio do
+    banco, nem para comprar nem para vender: só entram pelo mercado negro.
     """
     if not isinstance(quantia, int) or isinstance(quantia, bool) or quantia <= 0:
         raise ValueError("A quantia precisa ser um número inteiro positivo.")
@@ -148,6 +151,8 @@ def converter(
     d, p = normalizar(de), normalizar(para)
     if d == p:
         raise ValueError("As moedas de origem e destino são iguais.")
+    if "creditos sombrios" in (d, p):
+        raise ValueError("Créditos Sombrios não passam pelo câmbio do banco: só se conseguem no mercado negro.")
 
     # Taxas relativas a Solares
     # 1 Solar = rate_solares_para_lunaris Lunaris
@@ -172,6 +177,50 @@ def converter(
     if taxa_cobrada < 0:
         taxa_cobrada = 0
     return recebido, taxa_cobrada
+
+
+# ──────────────────────────── Doleiro do mercado negro ───────────────────────
+
+# O doleiro compra itens e paga em Créditos Sombrios. Não existe câmbio de volta:
+# Créditos só se gastam no mercado negro. O valor do item sai do preço do catálogo
+# (convertido em Solares) e o doleiro paga uma fração dele, que varia um pouco por dia.
+DOLEIRO_FRACAO = 0.4
+CREDITO_EM_SOLARES = 2.0
+DOLEIRO_NAO_COMPRA = frozenset({"monstro", "propriedade", "veiculo-completo"})
+
+
+def valor_em_solares(preco: object, rate_solares_para_lunaris: int = CAMBIO_RATE_PADRAO) -> Optional[float]:
+    """Preço do catálogo em Solares, em qualquer moeda em que ele esteja escrito."""
+    for moeda, fator in (
+        ("Solares", 1.0),
+        ("Lunaris", 1.0 / max(1, int(rate_solares_para_lunaris))),
+        ("Fragmentos de Estrela", 50.0),
+        ("Créditos Sombrios", CREDITO_EM_SOLARES),
+    ):
+        valor = resolver_preco(preco, moeda)
+        if valor is not None:
+            return valor * fator
+    return None
+
+
+def fator_do_doleiro(dia) -> float:
+    """O humor do doleiro muda a cada dia (entre 0,85 e 1,15), igual para todo mundo."""
+    return 0.85 + random.Random(int(dia.strftime("%Y%m%d")) * 7919).random() * 0.30
+
+
+def oferta_do_doleiro(
+    preco: object,
+    quantidade: int,
+    dia,
+    rate_solares_para_lunaris: int = CAMBIO_RATE_PADRAO,
+) -> int:
+    """Créditos Sombrios que o doleiro paga por `quantidade` unidades. 0 = não se interessa."""
+    if type(quantidade) is not int or quantidade <= 0:
+        raise ValueError("quantidade inválida")
+    valor = valor_em_solares(preco, rate_solares_para_lunaris)
+    if valor is None or valor <= 0:
+        return 0
+    return int(valor * quantidade * DOLEIRO_FRACAO * fator_do_doleiro(dia) / CREDITO_EM_SOLARES)
 
 
 # ─────────────────────────────── Cofre / Armazém ─────────────────────────────

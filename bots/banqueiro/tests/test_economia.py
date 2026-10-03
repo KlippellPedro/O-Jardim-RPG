@@ -35,6 +35,13 @@ def test_converter():
     assert rec == 1 and taxa == 1, (rec, taxa)
     rec, taxa = economia.converter(1, "Solares", "Lunaris")
     assert rec == 98 and taxa == 2, (rec, taxa)
+    # Créditos Sombrios não têm câmbio: nem para comprar, nem para vender.
+    for entrada in [(10, "Créditos Sombrios", "Lunaris"), (10, "Solares", "Créditos Sombrios")]:
+        try:
+            economia.converter(*entrada)
+            raise AssertionError(f"deveria ter falhado: {entrada}")
+        except ValueError:
+            pass
     for entrada in [(-1, "Lunaris", "Solares"), (10, "Lunaris", "Lunaris"), (10, "Ecos", "Lunaris")]:
         try:
             economia.converter(*entrada)
@@ -654,3 +661,26 @@ if __name__ == "__main__":
         fn()
         print("ok:", fn.__name__)
     print(f"\n✅ {len(testes)} grupos de teste passaram.")
+
+
+def test_doleiro_paga_uma_fracao_do_valor_em_creditos():
+    from datetime import date
+    dia = date(2026, 10, 3)
+    fator = economia.fator_do_doleiro(dia)
+    assert 0.85 <= fator <= 1.15
+    assert fator == economia.fator_do_doleiro(dia)  # o humor do dia é igual para todos
+    # 100 Solares valem 50 Créditos na régua de valor; o doleiro paga 40% disso, vezes o humor do dia.
+    esperado = int(100 * 3 * economia.DOLEIRO_FRACAO * fator / economia.CREDITO_EM_SOLARES)
+    assert economia.oferta_do_doleiro({"Solares": 100}, 3, dia) == esperado
+    # Lunaris entram pela régua: 10.000 Lunaris são 100 Solares.
+    assert economia.oferta_do_doleiro({"Lunaris": 10_000}, 1, dia) == economia.oferta_do_doleiro({"Solares": 100}, 1, dia)
+    # Barato demais: não vale nem 1 Crédito.
+    assert economia.oferta_do_doleiro({"Lunaris": 3}, 1, dia) == 0
+    # Sem preço legível, o doleiro não oferece nada.
+    assert economia.oferta_do_doleiro(None, 1, dia) == 0
+    for quantidade in (0, -1, True):
+        try:
+            economia.oferta_do_doleiro({"Solares": 10}, quantidade, dia)
+            raise AssertionError(f"deveria ter falhado: {quantidade}")
+        except ValueError:
+            pass

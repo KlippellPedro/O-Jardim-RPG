@@ -96,9 +96,12 @@ def test_perfil_universal_do_bestiario_fica_fora_do_balcao():
     assert catalogo.get("universal-vd-3") is None
 
     fora_do_balcao = [it for it in catalogo.listar() if not it.disponivel_na_loja]
-    # Fora do balcão: perfil universal ou criatura gerada só para o Bestiário (VD alto, únicas).
+    # Fora do balcão: perfil universal, criatura gerada só para o Bestiário (VD alto,
+    # únicas) ou item exclusivo de saque (`loot-*`, que só cai de criatura).
     assert all(
-        it.conteudo.get("categoria") == "Universal" or it.conteudo.get("geradoPorFamilia")
+        it.conteudo.get("categoria") == "Universal"
+        or it.conteudo.get("geradoPorFamilia")
+        or (it.tipo == "drop" and it.id.startswith("loot-"))
         for it in fora_do_balcao
     )
 

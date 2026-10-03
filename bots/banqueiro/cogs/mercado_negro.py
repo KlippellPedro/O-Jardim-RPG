@@ -25,6 +25,59 @@ def _extrair_preco(preco) -> tuple[str, int]:
 def _sid(interaction: discord.Interaction) -> str:
     return str(interaction.guild_id) if interaction.guild_id else "global"
 
+
+class VenderAoDoleiroView(discord.ui.View):
+    """Oferta do doleiro: o jogador vê quanto vão pagar e aceita ou recusa."""
+
+    def __init__(self, bot, sid: str, uid: str, item, quantidade: int, creditos: int, chave: str):
+        super().__init__(timeout=90)
+        self.bot, self.sid, self.uid = bot, sid, uid
+        self.item, self.quantidade, self.creditos, self.chave = item, quantidade, creditos, chave
+        self.resolvido = False
+
+    @discord.ui.button(label="Fechar negócio", style=discord.ButtonStyle.danger)
+    async def aceitar(self, interaction: discord.Interaction, button: discord.ui.Button):
+        from core.inventario import InventarioErro, ItemIndisponivel
+
+        if str(interaction.user.id) != self.uid or self.resolvido:
+            await interaction.response.send_message("Este negócio não é seu, ou já foi resolvido.", ephemeral=True)
+            return
+        self.resolvido = True
+        self.stop()
+        motivo = f"Mercado Negro: venda de {self.item.titulo} x{self.quantidade}"
+        try:
+            await self.bot.inventario.tirar(self.sid, self.uid, self.item.id, self.quantidade, motivo=motivo, chave=self.chave)
+        except ItemIndisponivel:
+            await interaction.response.edit_message(content="Você não tem mais essa quantidade. O doleiro guarda o sobretudo.", embed=None, view=None)
+            return
+        except InventarioErro:
+            await interaction.response.edit_message(content="O cofre não respondeu agora. Nada foi vendido, tente de novo em instantes.", embed=None, view=None)
+            return
+        try:
+            self.bot.db.receber_do_doleiro(self.sid, self.uid, self.creditos, motivo)
+        except Exception:
+            # O item já saiu: devolve para o jogador nunca ficar sem nenhum dos dois.
+            await self.bot.inventario.dar(
+                self.sid, self.uid, self.item.id, self.item.titulo, self.item.tipo, self.quantidade,
+                motivo=f"Devolução: {motivo}", chave=f"{self.chave}:devolucao",
+            )
+            await interaction.response.edit_message(content="O doleiro desistiu na hora de pagar. O item voltou para o seu inventário.", embed=None, view=None)
+            return
+        simbolo = ui.simbolo_moeda("Créditos Sombrios")
+        await interaction.response.edit_message(
+            content=f"🤝 O doleiro levou {self.quantidade}× **{self.item.titulo}** e deixou {simbolo} **{self.creditos} Créditos Sombrios** na sua carteira.",
+            embed=None, view=None,
+        )
+
+    @discord.ui.button(label="Recusar", style=discord.ButtonStyle.secondary)
+    async def recusar(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if str(interaction.user.id) != self.uid:
+            await interaction.response.send_message("Este negócio não é seu.", ephemeral=True)
+            return
+        self.resolvido = True
+        self.stop()
+        await interaction.response.edit_message(content="Você guardou o item. O doleiro dá de ombros.", embed=None, view=None)
+
 class ComprarMercadoNegroModal(discord.ui.Modal, title="Comprar do Mercado Negro"):
     def __init__(self, bot, item_data):
         super().__init__()
@@ -154,6 +207,63 @@ class MercadoNegro(commands.Cog):
             
         view = MercadoNegroView(self.bot, ofertas)
         await interaction.response.send_message(embed=emb, view=view, ephemeral=True)
+
+
+    @app_commands.command(
+        name="mercado_negro_vender",
+        description="Vende um item do seu inventário ao doleiro, que paga em Créditos Sombrios (não há câmbio).",
+    )
+    @app_commands.describe(item="Item do seu inventário", quantidade="Quantas unidades vender")
+    async def mercado_negro_vender(self, interaction: discord.Interaction, item: str, quantidade: app_commands.Range[int, 1, 99] = 1):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        possuidos = {p.item_id: p for p in await self.bot.inventario.listar(sid, uid)}
+        posse = possuidos.get(item)
+        if posse is None or posse.quantidade < quantidade:
+            await interaction.response.send_message("Você não tem essa quantidade desse item no inventário.", ephemeral=True)
+            return
+        entrada = self.bot.catalogo.get(item)
+        if entrada is None or entrada.tipo in economia.DOLEIRO_NAO_COMPRA:
+            await interaction.response.send_message("O doleiro não compra isso.", ephemeral=True)
+            return
+        rate, _taxa = self.bot.db.get_cambio(sid)
+        hoje = datetime.now(timezone.utc).date()
+        creditos = economia.oferta_do_doleiro(entrada.conteudo.get("preco"), quantidade, hoje, rate)
+        if creditos < 1:
+            await interaction.response.send_message("Isso vale pouco demais até para o doleiro. Ele nem olha.", ephemeral=True)
+            return
+        simbolo = ui.simbolo_moeda("Créditos Sombrios")
+        emb = ui.embed(
+            "🕵️ O doleiro examina a mercadoria",
+            descricao=(
+                f"{quantidade}× **{entrada.titulo}**\n"
+                f"Ele oferece {simbolo} **{creditos} Créditos Sombrios**, sem perguntas.\n\n"
+                "*Créditos Sombrios não se trocam por Lunaris nem por Solares: só se gastam no mercado negro.*"
+            ),
+            categoria="economia",
+        )
+        chave = f"mn-venda:{sid}:{uid}:{interaction.id}"
+        view = VenderAoDoleiroView(self.bot, sid, uid, entrada, quantidade, creditos, chave)
+        await interaction.response.send_message(embed=emb, view=view, ephemeral=True)
+
+    @mercado_negro_vender.autocomplete("item")
+    async def _ac_venda(self, interaction: discord.Interaction, current: str):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        termo = (current or "").strip().lower()
+        try:
+            possuidos = await self.bot.inventario.listar(sid, uid)
+        except Exception:
+            return []
+        out = []
+        for p in possuidos:
+            entrada = self.bot.catalogo.get(p.item_id)
+            if entrada is None or entrada.tipo in economia.DOLEIRO_NAO_COMPRA:
+                continue
+            if termo and termo not in p.titulo.lower():
+                continue
+            out.append(app_commands.Choice(name=f"{p.titulo} (x{p.quantidade})"[:100], value=p.item_id))
+            if len(out) >= 25:
+                break
+        return out
 
 
 async def setup(bot):

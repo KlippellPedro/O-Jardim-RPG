@@ -685,6 +685,27 @@ _SCHEMA = (
     ON CONFLICT (guild_id, user_id, item_id) DO UPDATE SET
         quantidade = inventario.quantidade + EXCLUDED.quantidade
     """,
+    # A lavanderia acabou (Créditos Sombrios não viram Lunaris nem Solares: só se
+    # gastam no mercado negro). Quem ainda tinha Créditos lavando recebe tudo de
+    # volta, com extrato. Roda uma vez e depois vira no-op, porque a tabela esvazia.
+    """
+    WITH pendentes AS (
+        DELETE FROM lavagem_dinheiro WHERE quantia > 0 RETURNING guild_id, user_id, quantia
+    ), devolvidos AS (
+        INSERT INTO carteira (guild_id, user_id, moeda, saldo)
+        SELECT guild_id, user_id, 'Créditos Sombrios', quantia FROM pendentes
+        ON CONFLICT (guild_id, user_id, moeda) DO UPDATE SET saldo = carteira.saldo + EXCLUDED.saldo
+        RETURNING 1
+    )
+    INSERT INTO extrato (guild_id, user_id, delta, moeda, descricao)
+    SELECT guild_id, user_id, quantia, 'Créditos Sombrios', 'Lavanderia encerrada: Créditos devolvidos' FROM pendentes
+    """,
+    # As criaturas de VD 45 em diante ganharam nome próprio (e id novo) em
+    # 2026-10-03; o inventário acompanha o catálogo. No-op depois da primeira vez.
+    """
+    UPDATE inventario SET item_id = m.novo FROM (VALUES ('leviata', 'vaelthor'), ('elemental-de-fogo-primordial', 'ignarrak'), ('hidra-de-sete-cabecas', 'lerneia'), ('devorador-de-mundos', 'gulhar'), ('apagador-de-constelacoes', 'nyxhael'), ('elemental-de-gelo-primordial', 'hiemara'), ('vampiro-anciao', 'dragomir'), ('fenix-imortal', 'aurelith'), ('gigante-ancestral', 'peloros'), ('dragao-primordial', 'anzhur'), ('golem-titanico', 'mutis'), ('serpente-marinha-ancestral', 'marenostra'), ('hidra-primordial', 'hydrath'), ('arcanjo', 'ezrakael'), ('cavaleiro-da-ultima-hora', 'ser-horario'), ('serpente-do-mundo', 'jormund'), ('dragao-ancestral', 'kurnagal'), ('devorador-de-eras', 'aionofagos'), ('maremoto-que-anda', 'mareia'), ('elemental-de-fogo-ancestral', 'kalderon'), ('serafim', 'seraquiel'), ('come-tempo', 'ussurr'), ('elemental-de-gelo-ancestral', 'hiemark'), ('fim-que-anda', 'teleios'), ('dragao-do-fim-dos-tempos', 'apokalyx'), ('ausencia-faminta', 'lacuna'), ('titan-que-sustenta-o-ceu', 'atlarion'), ('ultimo-silencio', 'selah')) AS m(antigo, novo)
+    WHERE inventario.item_id = m.antigo
+    """,
 )
 
 
@@ -6207,63 +6228,21 @@ class Database:
             ).fetchall()
         return [dict(row) for row in rows]
 
-    def iniciar_lavagem(self, guild_id: str, user_id: str, quantia: int, agora: datetime) -> dict:
-        """Débito e reserva da lavanderia são confirmados juntos."""
-        if not isinstance(quantia, int) or isinstance(quantia, bool) or quantia <= 0:
+    def receber_do_doleiro(self, guild_id: str, user_id: str, quantia: int, descricao: str) -> int:
+        """Credita Créditos Sombrios do doleiro e grava o extrato na mesma transação."""
+        if type(quantia) is not int or quantia <= 0:
             raise ValueError("a quantia deve ser um inteiro positivo")
         with self._conn() as con:
-            # A mesma ordem também é usada pelo resgate: a lavagem não pode
-            # receber um depósito enquanto outra transação a está encerrando.
-            con.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))", (f"lavagem:{guild_id}:{user_id}",))
             self._garantir_jogador(con, guild_id, user_id)
             moeda = self._nome_moeda_real(con, guild_id, user_id, "Créditos Sombrios")
-            saldo = con.execute(
-                """UPDATE carteira SET saldo=saldo-%s WHERE guild_id=%s AND user_id=%s
-                   AND moeda=%s AND saldo>=%s RETURNING saldo""",
-                (quantia, guild_id, user_id, moeda, quantia),
-            ).fetchone()
-            if saldo is None:
-                raise SaldoInsuficiente(f"precisa de {quantia} Créditos Sombrios")
             row = con.execute(
-                """INSERT INTO lavagem_dinheiro (guild_id, user_id, quantia, pronto_em)
-                   VALUES (%s, %s, %s, %s) ON CONFLICT (guild_id, user_id) DO UPDATE SET
-                   quantia=lavagem_dinheiro.quantia+EXCLUDED.quantia,
-                   pronto_em=EXCLUDED.pronto_em RETURNING *""",
-                (guild_id, user_id, quantia, agora + timedelta(hours=24)),
-            ).fetchone()
-            self._registrar_extrato_tx(con, guild_id, user_id, -quantia, moeda, "Enviado para a lavanderia")
-        return dict(row)
-
-    def resgatar_lavagem(self, guild_id: str, user_id: str, agora: datetime) -> dict:
-        """Somente um resgate credita o saldo; falhas preservam a reserva."""
-        with self._conn() as con:
-            con.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))", (f"lavagem:{guild_id}:{user_id}",))
-            lavagem = con.execute(
-                "SELECT * FROM lavagem_dinheiro WHERE guild_id=%s AND user_id=%s FOR UPDATE",
-                (guild_id, user_id),
-            ).fetchone()
-            if not lavagem or lavagem["quantia"] <= 0:
-                return {"status": "ausente"}
-            if lavagem["pronto_em"] > agora:
-                return {"status": "aguardando", "pronto_em": lavagem["pronto_em"]}
-            config = con.execute("SELECT cambio_rate, cambio_taxa FROM config WHERE guild_id=%s", (guild_id,)).fetchone()
-            bruto = economia.converter(
-                int(lavagem["quantia"]), "Créditos Sombrios", "Solares",
-                int(config["cambio_rate"]) if config else economia.CAMBIO_RATE_PADRAO,
-                float(config["cambio_taxa"]) if config else economia.CAMBIO_TAXA_PADRAO,
-            )[0]
-            # Mantém a taxa de 15% do doleiro, calculada com inteiros.
-            recebido = max(1, bruto * 85 // 100)
-            self._garantir_jogador(con, guild_id, user_id)
-            moeda = self._nome_moeda_real(con, guild_id, user_id, "Solares")
-            con.execute(
                 """INSERT INTO carteira (guild_id, user_id, moeda, saldo) VALUES (%s, %s, %s, %s)
-                   ON CONFLICT (guild_id, user_id, moeda) DO UPDATE SET saldo=carteira.saldo+EXCLUDED.saldo""",
-                (guild_id, user_id, moeda, recebido),
-            )
-            con.execute("DELETE FROM lavagem_dinheiro WHERE guild_id=%s AND user_id=%s", (guild_id, user_id))
-            self._registrar_extrato_tx(con, guild_id, user_id, recebido, moeda, "Resgate da lavanderia")
-        return {"status": "resgatada", "recebido": recebido, "taxa": bruto - recebido}
+                   ON CONFLICT (guild_id, user_id, moeda) DO UPDATE SET saldo=carteira.saldo+EXCLUDED.saldo
+                   RETURNING saldo""",
+                (guild_id, user_id, moeda, quantia),
+            ).fetchone()
+            self._registrar_extrato_tx(con, guild_id, user_id, quantia, moeda, descricao)
+        return int(row["saldo"])
 
     def contratar_guarda(self, guild_id: str, user_id: str) -> bool:
         """Consome um contrato local e ativa a proteção na mesma transação."""
@@ -6316,35 +6295,6 @@ class Database:
             )
             con.execute("UPDATE cartao SET credito=credito+1 WHERE guild_id=%s AND user_id=%s", (guild_id, user_id))
             self._registrar_extrato_tx(con, guild_id, user_id, -custo, nome, f"Mercado Negro: {titulo} x{quantidade}")
-
-    def adicionar_lavagem(self, guild_id: str, user_id: str, quantia: int, pronto_em: datetime) -> None:
-        with self._conn() as con:
-            con.execute(
-                """
-                INSERT INTO lavagem_dinheiro (guild_id, user_id, quantia, pronto_em)
-                VALUES (%s, %s, %s, %s)
-                ON CONFLICT (guild_id, user_id)
-                DO UPDATE SET
-                    quantia = lavagem_dinheiro.quantia + EXCLUDED.quantia,
-                    pronto_em = EXCLUDED.pronto_em
-                """,
-                (guild_id, user_id, quantia, pronto_em),
-            )
-
-    def get_lavagem(self, guild_id: str, user_id: str) -> dict:
-        with self._conn() as con:
-            row = con.execute(
-                "SELECT quantia, pronto_em FROM lavagem_dinheiro WHERE guild_id=%s AND user_id=%s",
-                (guild_id, user_id),
-            ).fetchone()
-        return dict(row) if row else None
-
-    def remover_lavagem(self, guild_id: str, user_id: str) -> None:
-        with self._conn() as con:
-            con.execute(
-                "DELETE FROM lavagem_dinheiro WHERE guild_id=%s AND user_id=%s",
-                (guild_id, user_id),
-            )
 
     def adicionar_fofoca(self, guild_id: str, user_id: str, texto_fofoca: str, suborno_valor: int, prazo: datetime) -> None:
         with self._conn() as con:

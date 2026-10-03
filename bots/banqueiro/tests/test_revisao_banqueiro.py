@@ -20,27 +20,6 @@ def interacao():
                            followup=SimpleNamespace(send=AsyncMock()))
 
 
-def test_lavar_todo_o_saldo_registra_lavagem():
-    db = novo_db()
-    db.creditar("1", "7", "Créditos Sombrios", 100)
-    cog = _cog(db, None)
-    asyncio.run(Economia.lavar_dinheiro.callback(cog, interacao(), 100))
-    assert db.get_saldo("1", "7", "Créditos Sombrios") == 0
-    assert db.get_lavagem("1", "7")["quantia"] == 100
-
-
-def test_falha_ao_gravar_lavagem_preserva_saldo():
-    db = novo_db()
-    db.creditar("1", "7", "Créditos Sombrios", 200)
-    with db._conn() as con:
-        con.execute("""CREATE FUNCTION falhar() RETURNS trigger LANGUAGE plpgsql AS $$
-                       BEGIN RAISE EXCEPTION 'falha simulada'; END; $$""")
-        con.execute("CREATE TRIGGER falhar BEFORE INSERT ON lavagem_dinheiro FOR EACH ROW EXECUTE FUNCTION falhar()")
-    with pytest.raises(psycopg.errors.RaiseException):
-        asyncio.run(Economia.lavar_dinheiro.callback(_cog(db, None), interacao(), 100))
-    assert db.get_saldo("1", "7", "Créditos Sombrios") == 200
-
-
 @pytest.mark.parametrize("vinculado", [True, False])
 def test_bau_sombrio_paga_creditos_sombrios(monkeypatch, vinculado):
     _premio_fixo(monkeypatch)
@@ -86,39 +65,6 @@ def test_falha_na_ativacao_do_guarda_devolve_contrato():
     with pytest.raises(psycopg.errors.RaiseException):
         asyncio.run(Economia.contratar_guarda.callback(_cog(db, None), interacao()))
     assert db.listar_inventario("1", "7")[0]["quantidade"] == 1
-
-
-def test_resgates_concorrentes_nao_duplicam_solares():
-    db = novo_db()
-    agora = datetime.now(timezone.utc)
-    db.adicionar_lavagem("1", "7", 100, agora - timedelta(hours=1))
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        resultados = list(pool.map(lambda _: db.resgatar_lavagem("1", "7", agora), range(2)))
-    assert sorted(r["status"] for r in resultados) == ["ausente", "resgatada"]
-    assert db.get_saldo("1", "7", "Solares") == 166
-
-
-def test_lavagem_respeita_taxa_configurada_e_separa_servidores():
-    db = novo_db()
-    agora = datetime.now(timezone.utc)
-    db.set_cambio("1", 100, 0.05)
-    db.adicionar_lavagem("1", "7", 100, agora - timedelta(hours=1))
-    assert db.resgatar_lavagem("2", "7", agora)["status"] == "ausente"
-    assert db.resgatar_lavagem("1", "7", agora)["recebido"] == 161
-
-
-def test_falha_no_resgate_preserva_reserva_e_saldo():
-    db = novo_db()
-    agora = datetime.now(timezone.utc)
-    db.adicionar_lavagem("1", "7", 100, agora - timedelta(hours=1))
-    with db._conn() as con:
-        con.execute("""CREATE FUNCTION falhar() RETURNS trigger LANGUAGE plpgsql AS $$
-                       BEGIN RAISE EXCEPTION 'falha simulada'; END; $$""")
-        con.execute("CREATE TRIGGER falhar BEFORE DELETE ON lavagem_dinheiro FOR EACH ROW EXECUTE FUNCTION falhar()")
-    with pytest.raises(psycopg.errors.RaiseException):
-        db.resgatar_lavagem("1", "7", agora)
-    assert db.get_lavagem("1", "7")["quantia"] == 100
-    assert db.get_saldo("1", "7", "Solares") == 0
 
 
 def test_um_contrato_so_ativa_um_guarda_em_chamadas_concorrentes():
