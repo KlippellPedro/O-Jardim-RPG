@@ -34,6 +34,9 @@ export interface ICondicaoRegra {
   grupo?: GrupoLongoPrazo;
   /** Só nas condições de longo prazo: não some com descanso comum. */
   permanente?: boolean;
+  /** Condição que ajuda quem a recebe (Inspirado, Resguardado...). O livro e os
+   * cartões listam essas separadas das que atrapalham. */
+  positiva?: boolean;
 }
 
 export const CONDICOES_OFICIAIS: ICondicaoRegra[] = [
@@ -48,6 +51,21 @@ export const CONDICOES_OFICIAIS: ICondicaoRegra[] = [
   { id: 'inconsciente', titulo: 'Inconsciente', categoria: 'física', duracao: 'Enquanto persistir a causa.', efeitos: ['Não pode agir nem reagir.', 'Defesa reduzida em 5 e falha automaticamente em testes de Força e Destreza.', 'Veja também Atordoado: use Atordoado para efeitos temporários que não vêm de perder toda a Vida.'], remocao: 'Recupere-se da causa. Em Morrendo, volte a pelo menos 1 PV.' },
   { id: 'surpreendido', titulo: 'Surpreendido', categoria: 'combate', duracao: 'Primeira rodada.', efeitos: ['Iniciativa reduzida em 5 na primeira rodada.', 'Sem reação até realizar o primeiro turno.'], remocao: 'Termina depois do primeiro turno.' },
   { id: 'concentrando', titulo: 'Concentrando', categoria: 'mental', duracao: 'Enquanto mantiver o efeito.', efeitos: ['Só pode manter um efeito de concentração por vez.', 'Ao sofrer dano, teste Vontade DT 10 ou metade do dano, o que for maior. Falha encerra o efeito.'], remocao: 'Encerre voluntariamente, fique incapacitado ou falhe no teste de concentração.' },
+  // Estados que atrapalham e já aparecem em fichas de criatura, magias e itens.
+  { id: 'queimando', titulo: 'Queimando', categoria: 'física', duracao: 'Até ser apagado.', efeitos: ['Sofra 1d6 de dano de Fogo no fim do turno.', 'Pegar fogo de novo não soma: continua 1d6.'], remocao: 'Ação padrão e Acrobacia ou Atletismo DT 12 rolando no chão, ou entrar em água.' },
+  { id: 'envenenado', titulo: 'Envenenado', categoria: 'física', duracao: 'Até ser tratado.', efeitos: ['Sofra 1d6 de dano de veneno no fim do turno.', 'Se o veneno for uma aflição do catálogo, use o estágio dela em vez deste dano.'], remocao: 'O Antídoto da Loja encerra. Cura DT 15, gastando uma ação padrão, também.' },
+  { id: 'lento', titulo: 'Lento', categoria: 'física', duracao: 'Conforme a fonte.', efeitos: ['Movimento pela metade e sem correr.', 'Iniciativa reduzida em 2.'], remocao: 'Termina ao fim da duração da fonte.' },
+  { id: 'enfraquecido', titulo: 'Enfraquecido', categoria: 'física', duracao: 'Conforme a fonte.', efeitos: ['−2 em testes de Força e no dano de ataques corpo a corpo.'], remocao: 'Termina ao fim da duração da fonte.' },
+  { id: 'paralisado', titulo: 'Paralisado', categoria: 'física', duracao: 'Conforme a fonte.', efeitos: ['Não pode agir, reagir nem se mover, mas segue consciente e ouve tudo.', 'Falha automaticamente em testes de Força e Destreza.', 'Defesa reduzida em 2.'], remocao: 'Fortitude contra a DT da fonte no fim de cada turno encerra a condição.' },
+  { id: 'silenciado', titulo: 'Silenciado', categoria: 'mental', duracao: 'Conforme a fonte.', efeitos: ['Não fala: sem componente verbal em magia e sem ordens faladas.', 'Gestos e escrita continuam funcionando.'], remocao: 'Termina ao fim da duração da fonte ou quando a fonte for superada.' },
+  { id: 'desorientado', titulo: 'Desorientado', categoria: 'mental', duracao: 'Até o fim da cena ou até superar a fonte.', efeitos: ['Desvantagem em ataques e em Percepção.'], remocao: 'No fim do turno, Fortitude ou Vontade, à escolha de quem joga, contra a DT da fonte encerra a condição.' },
+  // Estados que ajudam. Não acumulam consigo mesmos e duram pouco de propósito.
+  { id: 'inspirado', titulo: 'Inspirado', categoria: 'mental', positiva: true, duracao: 'Até usar ou até o fim da cena.', efeitos: ['Antes de rolar um teste, ganhe +2 nele. A condição termina depois do teste.', 'Não acumula consigo mesmo.'], remocao: 'Termina ao ser usada ou ao fim da cena.' },
+  { id: 'favorecido', titulo: 'Favorecido', categoria: 'mental', positiva: true, duracao: 'Até o fim da cena.', efeitos: ['+1 em Fortitude, Reflexos e Vontade.', 'Não acumula consigo mesmo.'], remocao: 'Termina ao fim da duração.' },
+  { id: 'resguardado', titulo: 'Resguardado', categoria: 'combate', positiva: true, duracao: '3 rodadas.', efeitos: ['+2 de Defesa.', 'Não acumula consigo mesmo.'], remocao: 'Termina ao fim da duração.' },
+  { id: 'focado', titulo: 'Focado', categoria: 'mental', positiva: true, duracao: 'Até o fim da cena.', efeitos: ['+2 em Vontade contra efeitos mentais.', 'Se estiver Concentrando e sofrer dano, ganha +2 no teste de Vontade.'], remocao: 'Termina ao fim da duração ou ao ficar Inconsciente.' },
+  { id: 'apressado', titulo: 'Apressado', categoria: 'combate', positiva: true, duracao: '3 rodadas.', efeitos: ['Movimento +3 m.', 'Iniciativa +2.', 'Não acumula consigo mesmo.'], remocao: 'Termina ao fim da duração.' },
+  { id: 'revigorado', titulo: 'Revigorado', categoria: 'física', positiva: true, duracao: '3 rodadas.', efeitos: ['No começo do seu turno, recupere 1d4 de Vida.', 'Não acumula consigo mesmo.'], remocao: 'Termina ao fim da duração.' },
 ];
 
 export const CRISES_SANIDADE: ICondicaoRegra[] = [

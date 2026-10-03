@@ -140,16 +140,20 @@ export function adicionarCondicaoOficial(
  * criada, isto só documenta o que já existia.
  *
  * Automatizadas aqui (Defesa/Iniciativa/movimento/ataque):
- *  - Atordoado, Inconsciente, Exposto, crise Fúria → penalidadeDefesaCondicoes
- *  - Surpreendido → penalidadeIniciativaCondicoes
+ *  - Atordoado, Inconsciente, Paralisado, Exposto, crise Fúria → penalidadeDefesaCondicoes
+ *  - Resguardado → bonusDefesaCondicoes
+ *  - Surpreendido, Lento, Apressado → penalidadeIniciativaCondicoes
  *  - Caído → penalidadeAtaqueCondicoes
- *  - Agarrado, Imobilizado, Inconsciente → movimentoBloqueadoPorCondicao
+ *  - Agarrado, Imobilizado, Paralisado, Inconsciente → movimentoBloqueadoPorCondicao
  *
  * Só informativas aqui (efeito descrito em condicoes.ts, aplicado na mesa,
  * não calculado por nenhuma função deste arquivo):
- *  - Sangramento (dano periódico), Cego (desvantagem em teste visual),
- *    Concentrando (teste de Vontade ao sofrer dano), Amedrontado, Caído
- *    (efeito sobre quem ataca você), e as 5 crises de sanidade além de Fúria.
+ *  - Sangramento, Queimando e Envenenado (dano periódico), Cego (desvantagem em
+ *    teste visual), Concentrando (teste de Vontade ao sofrer dano), Amedrontado,
+ *    Caído (efeito sobre quem ataca você), Lento e Apressado (Movimento, que
+ *    depende do que a mesa decide), Enfraquecido, Silenciado, Desorientado,
+ *    Inspirado, Favorecido, Focado, Revigorado, e as 5 crises de sanidade além
+ *    de Fúria.
  */
 export function penalidadeDefesaCondicoes(condicoes: unknown): number {
   const ids = idsCondicoes(condicoes);
@@ -157,12 +161,25 @@ export function penalidadeDefesaCondicoes(condicoes: unknown): number {
   if (ids.has('exposto')) penalidade += 2;
   if (ids.has('atordoado')) penalidade += 5;
   if (ids.has('inconsciente')) penalidade += 5;
+  if (ids.has('paralisado')) penalidade += 2;
   if (ids.has('furia') || ids.has('crise-furia')) penalidade += 2;
   return penalidade;
 }
 
+/** Defesa que uma condição benéfica soma. Fica separada da penalidade para a
+ * ficha mostrar "Penalidade da Defesa" sem número negativo. */
+export function bonusDefesaCondicoes(condicoes: unknown): number {
+  return condicaoAtiva(condicoes, 'resguardado') ? 2 : 0;
+}
+
+/** Soma de Iniciativa das condições: negativa quando atrapalha, positiva quando ajuda. */
 export function penalidadeIniciativaCondicoes(condicoes: unknown): number {
-  return condicaoAtiva(condicoes, 'surpreendido') ? -5 : 0;
+  const ids = idsCondicoes(condicoes);
+  let ajuste = 0;
+  if (ids.has('surpreendido')) ajuste -= 5;
+  if (ids.has('lento')) ajuste -= 2;
+  if (ids.has('apressado')) ajuste += 2;
+  return ajuste;
 }
 
 export function bonusIniciativaFicha(ficha: Record<string, any> | null | undefined): number {
@@ -191,7 +208,7 @@ export function penalidadeAtaqueCondicoes(condicoes: unknown): number {
 
 export function movimentoBloqueadoPorCondicao(condicoes: unknown): boolean {
   const ids = idsCondicoes(condicoes);
-  return ids.has('agarrado') || ids.has('imobilizado') || ids.has('inconsciente');
+  return ids.has('agarrado') || ids.has('imobilizado') || ids.has('paralisado') || ids.has('inconsciente');
 }
 
 /** Vida, Mana, Estamina e Sanidade aceitam um extra temporário acima do

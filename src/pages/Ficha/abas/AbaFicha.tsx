@@ -29,6 +29,7 @@ import {
   obterStatusFicha,
   penalidadeCansacoIniciativa,
   penalidadeCansacoTeste,
+  bonusDefesaCondicoes,
   penalidadeDefesaCondicoes,
   penalidadeIniciativaCondicoes,
 } from '../../../services/statusService';
@@ -190,8 +191,9 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   const maxCansaco = Math.max(1, maxCansacoBase + totalAjustesManuais(f, chaveAjuste('recurso', 'cansacoMaximo')) + (resumoEquipamento.bonusRecursos.cansacoMaximo || 0));
   const defesaNatural = (Number(f.derivados?.defesaNatural ?? character.derivados?.defesaNatural) || 10) + deltaDerivado('defesaNatural');
   const penalidadeDefesa = penalidadeDefesaCondicoes(f.condicoesAtivas);
+  const bonusDefesaCondicao = bonusDefesaCondicoes(f.condicoesAtivas);
   const ajusteDefesa = totalAjustesManuais(f, chaveAjuste('combate', 'defesa'));
-  const defesaTotal = defesaNatural + resumoEquipamento.defesaEquipamento + (resumoEquipamento.bonusCombate.defesa || 0) - penalidadeDefesa + ajusteDefesa;
+  const defesaTotal = defesaNatural + resumoEquipamento.defesaEquipamento + (resumoEquipamento.bonusCombate.defesa || 0) - penalidadeDefesa + bonusDefesaCondicao + ajusteDefesa;
   const iniciativaBase = (Number(f.derivados?.iniciativa ?? character.derivados?.iniciativa) || 10) + deltaDerivado('iniciativa');
   const penalidadeIniciativa = penalidadeCansacoIniciativa(status.cansacoAtual)
     + penalidadeIniciativaCondicoes(f.condicoesAtivas);
@@ -294,7 +296,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
     detalhesDerivadosPorFonte.defesaNatural,
     resumoEquipamento.defesaItens,
     detalharEfeitosAutomaticos(resumoEquipamento, 'combate', 'defesa'),
-    [{ nome: 'Condições ativas', valor: -penalidadeDefesa }],
+    [{ nome: 'Condições ativas', valor: bonusDefesaCondicao - penalidadeDefesa }],
   );
   const automaticosIniciativa = combinarDetalhesAutomaticos(
     detalhesDerivadosPorFonte.iniciativa,

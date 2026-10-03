@@ -135,7 +135,7 @@ const documentos = [
     arquivo: 'Cartoes-Cena-e-Crises',
     titulo: 'Cartões de condição: cena e crises de Sanidade',
     cartoes: [
-      ...CONDICOES_OFICIAIS.map((c) => cartao(c, c.categoria === 'combate' ? 'Combate' : `Condição ${c.categoria}`)),
+      ...CONDICOES_OFICIAIS.map((c) => cartao(c, c.positiva ? 'Condição benéfica' : c.categoria === 'combate' ? 'Combate' : `Condição ${c.categoria}`)),
       ...CRISES_SANIDADE.map((c) => cartao(c, 'Crise de Sanidade')),
     ],
   },

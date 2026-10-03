@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   adicionarCondicaoOficial,
   atualizarStatusVital,
+  bonusDefesaCondicoes,
   bonusIniciativaFicha,
   desvantagensAutomaticasTeste,
   estadoVida,
@@ -70,6 +71,17 @@ test('condições oficiais alteram defesa, iniciativa, ataques e movimento', () 
   assert.equal(penalidadeIniciativaCondicoes(condicoes), -5);
   assert.equal(penalidadeAtaqueCondicoes(condicoes), -2);
   assert.equal(movimentoBloqueadoPorCondicao([{ nome: 'Imobilizado' }]), true);
+});
+
+test('condições novas de cena entram nas contas de Defesa, Iniciativa e movimento', () => {
+  assert.equal(penalidadeDefesaCondicoes([{ nome: 'Paralisado' }]), 2);
+  assert.equal(bonusDefesaCondicoes([{ nome: 'Resguardado' }]), 2);
+  assert.equal(bonusDefesaCondicoes([{ nome: 'Exposto' }]), 0);
+  assert.equal(penalidadeIniciativaCondicoes([{ nome: 'Lento' }]), -2);
+  assert.equal(penalidadeIniciativaCondicoes([{ nome: 'Apressado' }]), 2);
+  assert.equal(penalidadeIniciativaCondicoes([{ nome: 'Lento' }, { nome: 'Apressado' }]), 0);
+  assert.equal(movimentoBloqueadoPorCondicao([{ nome: 'Paralisado' }]), true);
+  assert.equal(movimentoBloqueadoPorCondicao([{ nome: 'Lento' }]), false);
 });
 
 test('status atual prevalece sobre recursos legados', () => {

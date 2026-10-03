@@ -196,6 +196,11 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
             <span className={`rounded-full border px-2 py-1 text-[9px] font-bold uppercase tracking-[0.16em] ${ESTILO_CATEGORIA[item.categoria]}`}>
               {item.categoria}
             </span>
+            {item.positiva && (
+              <span className="rounded-full border border-emerald-300/25 bg-emerald-300/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-emerald-200">
+                benéfica
+              </span>
+            )}
             {item.permanente && (
               <span className="rounded-full border border-amber-300/25 bg-amber-300/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-amber-200">
                 permanente

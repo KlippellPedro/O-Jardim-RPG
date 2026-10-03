@@ -30,6 +30,20 @@ const ESTILOS: Record<string, Estilo> = {
   exposto: { cor: '#fb923c', efeito: 'pulso', prioridade: 8 },
   surpreendido: { cor: '#fbbf24', efeito: 'pulso', prioridade: 8 },
   concentrando: { cor: '#22d3ee', efeito: 'lento', prioridade: 9 },
+  paralisado: { cor: '#facc15', efeito: 'estatica', prioridade: 2 },
+  queimando: { cor: '#ea580c', efeito: 'pulso', prioridade: 4 },
+  envenenado: { cor: '#84cc16', efeito: 'pulso', prioridade: 4 },
+  desorientado: { cor: '#e879f9', efeito: 'tremor', prioridade: 5 },
+  lento: { cor: '#7dd3fc', efeito: 'lento', prioridade: 6 },
+  enfraquecido: { cor: '#a8a29e', efeito: 'lento', prioridade: 7 },
+  silenciado: { cor: '#94a3b8', efeito: 'lento', prioridade: 8 },
+  // As benéficas ficam por último: nunca escondem uma condição que atrapalha.
+  inspirado: { cor: '#fde68a', efeito: 'pulso', prioridade: 10 },
+  favorecido: { cor: '#fcd34d', efeito: 'lento', prioridade: 10 },
+  resguardado: { cor: '#60a5fa', efeito: 'lento', prioridade: 10 },
+  focado: { cor: '#67e8f9', efeito: 'lento', prioridade: 10 },
+  apressado: { cor: '#86efac', efeito: 'pulso', prioridade: 10 },
+  revigorado: { cor: '#4ade80', efeito: 'pulso', prioridade: 10 },
 };
 
 const semAcento = (texto: string) => texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
