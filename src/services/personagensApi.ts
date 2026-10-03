@@ -158,6 +158,23 @@ export const personagensApi = {
     );
   },
 
+  /** Outros personagens ativos da campanha, para mandar um item. */
+  destinosDeEnvio(personagemId: string) {
+    return api<{ personagens: Array<{ id: string; nome: string; dono_nome: string | null }> }>(
+      `/personagens/${encodeURIComponent(personagemId)}/destinos-de-envio`,
+    );
+  },
+
+  mandarItem(personagemId: string, itemId: string, destinoId: string, quantidade: number, idempotencia: string) {
+    return api<{ titulo: string; quantidade: number; restante: number; destino: { id: string; nome: string } }>(
+      `/personagens/${encodeURIComponent(personagemId)}/inventario/${encodeURIComponent(itemId)}/enviar`,
+      {
+        method: 'POST',
+        body: { destino_personagem_id: destinoId, quantidade, idempotencia },
+      },
+    );
+  },
+
   despertarFrutoEden(personagemId: string, payload: DespertarFrutoEdenPayload) {
     return api<{
       fruto: Record<string, any>;

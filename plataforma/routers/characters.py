@@ -20,7 +20,13 @@ from core.character_summary import (
 from core.conquistas import avaliar as avaliar_conquistas
 from core.diario import montar as montar_diario
 from core.database import Database
-from core.economy_commands import MAX_ECONOMY_AMOUNT
+from core.economy_commands import (
+    MAX_ECONOMY_AMOUNT,
+    begin_economy_command,
+    command_fingerprint,
+    complete_economy_command,
+    get_economy_command_replay,
+)
 from core.equipment_rules import equipped_special_item_count, special_item_use_limit
 from core.economy_models import (
     AdjustInventoryQuantityOperation,
@@ -47,6 +53,7 @@ from schemas import (
     EdenFruitAwakenInput,
     EdenFruitConsumeInput,
     EconomyReplaceInput,
+    InventorySendInput,
 )
 
 
@@ -1778,6 +1785,267 @@ def archive_character(
         },
     )
     return None
+
+
+# Itens que não são só uma linha do inventário: a criatura comprada virou um
+# Aliado na ficha, a casa virou uma Base e o veículo completo tem registro
+# próprio. Mandar só a linha deixaria a outra metade para trás.
+_TIPOS_QUE_NAO_VIAJAM = frozenset({"monstro", "propriedade", "veiculo-completo"})
+# Chaves que, se diferentes, fazem dois registros com o mesmo item_id serem
+# itens diferentes (não dá para empilhar um no outro).
+_CHAVES_DE_IDENTIDADE = ("origem", "catalogo_item_id", "loja_item_id", "raridade")
+
+
+@router.get("/{character_id}/destinos-de-envio")
+def list_send_targets(
+    character_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Para quem dá para mandar um item: os outros personagens ativos da
+    campanha, só com nome e quem joga. O jogador não lê a ficha dos outros,
+    então esta lista é tudo que ele precisa (e pode) ver."""
+    with database.connection() as connection:
+        authorized = _authorized_character(connection, character_id, user.id)
+        rows = connection.execute(
+            """
+            SELECT p.id, p.nome, u.nome_exibicao AS dono_nome
+            FROM personagens p
+            LEFT JOIN usuarios u ON u.id=p.dono_usuario_id
+            WHERE p.campanha_id=%s AND p.status='ativo' AND p.id<>%s
+            ORDER BY p.nome
+            """,
+            (authorized["campanha_id"], character_id),
+        ).fetchall()
+    return {"personagens": [dict(row) for row in rows]}
+
+
+@router.post(
+    "/{character_id}/inventario/{item_id}/enviar",
+    status_code=status.HTTP_200_OK,
+)
+def send_inventory_item(
+    character_id: UUID,
+    item_id: str,
+    payload: InventorySendInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Manda um item do inventário para outro personagem da mesma campanha.
+    Quem pode mandar é o dono da ficha (ou o Mestre). O item chega desequipado
+    e as duas pontas ganham lançamento no extrato."""
+    with database.connection() as connection:
+        authorized = _authorized_character(connection, character_id, user.id)
+        campanha_id = authorized["campanha_id"]
+        fingerprint = command_fingerprint({
+            "personagem_id": str(character_id),
+            "item_id": item_id,
+            "destino_personagem_id": str(payload.destino_personagem_id),
+            "quantidade": payload.quantidade,
+        })
+        replay = get_economy_command_replay(
+            connection,
+            campaign_id=campanha_id,
+            user_id=user.id,
+            command_type="inventario.enviar",
+            idempotency_key=payload.idempotencia,
+            fingerprint=fingerprint,
+        )
+        if replay is not None:
+            return replay.replay_result
+        if payload.destino_personagem_id == character_id:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="escolha outro personagem para receber o item",
+            )
+        # Trava os dois personagens sempre na mesma ordem para que duas trocas
+        # cruzadas (A manda para B enquanto B manda para A) não se esperem.
+        travados = {
+            row["id"]: row
+            for row in connection.execute(
+                """
+                SELECT id, nome, dono_usuario_id
+                FROM personagens
+                WHERE campanha_id=%s AND status='ativo' AND id = ANY(%s)
+                ORDER BY id
+                FOR UPDATE
+                """,
+                (campanha_id, [character_id, payload.destino_personagem_id]),
+            ).fetchall()
+        }
+        if character_id not in travados:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="personagem nao encontrado")
+        if payload.destino_personagem_id not in travados:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="o personagem que vai receber precisa estar ativo nesta campanha",
+            )
+        origem_personagem = travados[character_id]
+        destino_personagem = travados[payload.destino_personagem_id]
+        command = begin_economy_command(
+            connection,
+            campaign_id=campanha_id,
+            user_id=user.id,
+            command_type="inventario.enviar",
+            idempotency_key=payload.idempotencia,
+            fingerprint=fingerprint,
+        )
+        if command.replay_result is not None:
+            return command.replay_result
+
+        linhas = {
+            (row["personagem_id"], row["item_id"]): row
+            for row in connection.execute(
+                """
+                SELECT personagem_id, item_id, titulo, quantidade, dados
+                FROM inventario_personagem
+                WHERE campanha_id=%s AND item_id=%s AND personagem_id = ANY(%s)
+                ORDER BY personagem_id
+                FOR UPDATE
+                """,
+                (campanha_id, item_id, [character_id, payload.destino_personagem_id]),
+            ).fetchall()
+        }
+        estoque = linhas.get((character_id, item_id))
+        if not estoque:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="item nao encontrado no inventario")
+        dados = dict(estoque["dados"]) if isinstance(estoque["dados"], dict) else {}
+        quantidade_atual = int(estoque["quantidade"])
+        if quantidade_atual < payload.quantidade:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={"mensagem": f"so ha {quantidade_atual} de {estoque['titulo']}", "disponivel": quantidade_atual},
+            )
+        if str(dados.get("tipo") or "") in _TIPOS_QUE_NAO_VIAJAM:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="aliados, bases e veiculos completos nao podem ser mandados pelo inventario",
+            )
+        if dados.get("modificacoes") and payload.quantidade < quantidade_atual:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="este item tem modificacoes instaladas; mande a pilha inteira ou tire as modificacoes antes",
+            )
+
+        chegada = linhas.get((payload.destino_personagem_id, item_id))
+        dados_chegada = {**dados, "equipado": False}
+        if chegada:
+            dados_destino = chegada["dados"] if isinstance(chegada["dados"], dict) else {}
+            if any(dados_destino.get(chave) != dados.get(chave) for chave in _CHAVES_DE_IDENTIDADE) or (
+                dados.get("modificacoes") or dados_destino.get("modificacoes")
+            ):
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail=f"{destino_personagem['nome']} ja tem um {estoque['titulo']} diferente deste; nao da para juntar os dois",
+                )
+            nova_chegada = int(chegada["quantidade"]) + payload.quantidade
+            if nova_chegada > 1_000_000:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail="a quantidade resultante excede o limite do inventario",
+                )
+            connection.execute(
+                """
+                UPDATE inventario_personagem
+                SET quantidade=%s, atualizado_em=CURRENT_TIMESTAMP
+                WHERE campanha_id=%s AND personagem_id=%s AND item_id=%s
+                """,
+                (nova_chegada, campanha_id, payload.destino_personagem_id, item_id),
+            )
+        else:
+            connection.execute(
+                """
+                INSERT INTO inventario_personagem
+                    (campanha_id, personagem_id, item_id, titulo, quantidade, dados)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    campanha_id, payload.destino_personagem_id, item_id,
+                    estoque["titulo"], payload.quantidade, Jsonb(dados_chegada),
+                ),
+            )
+
+        restante = quantidade_atual - payload.quantidade
+        if restante:
+            connection.execute(
+                """
+                UPDATE inventario_personagem
+                SET quantidade=%s, atualizado_em=CURRENT_TIMESTAMP
+                WHERE campanha_id=%s AND personagem_id=%s AND item_id=%s
+                """,
+                (restante, campanha_id, character_id, item_id),
+            )
+        else:
+            connection.execute(
+                "DELETE FROM inventario_personagem WHERE campanha_id=%s AND personagem_id=%s AND item_id=%s",
+                (campanha_id, character_id, item_id),
+            )
+
+        versoes = {
+            row["id"]: int(row["economia_versao"])
+            for row in connection.execute(
+                """
+                UPDATE personagens
+                SET economia_versao=economia_versao+1, atualizado_em=CURRENT_TIMESTAMP
+                WHERE id = ANY(%s)
+                RETURNING id, economia_versao
+                """,
+                ([character_id, payload.destino_personagem_id],),
+            ).fetchall()
+        }
+        for personagem_id, delta, motivo in (
+            (character_id, -payload.quantidade, f"Mandou para {destino_personagem['nome']}"),
+            (payload.destino_personagem_id, payload.quantidade, f"Recebeu de {origem_personagem['nome']}"),
+        ):
+            connection.execute(
+                """
+                INSERT INTO lancamentos_economia
+                    (id, campanha_id, personagem_id, item_id, delta, motivo,
+                     origem, idempotencia, ator_usuario_id)
+                VALUES (%s, %s, %s, %s, %s, %s, 'inventario.enviar', %s, %s)
+                """,
+                (
+                    uuid4(), campanha_id, personagem_id, item_id, delta, motivo,
+                    f"{command.id}:{'saida' if delta < 0 else 'entrada'}", user.id,
+                ),
+            )
+        from core import notifications
+
+        notifications.notify(
+            connection,
+            user_ids=[destino_personagem["dono_usuario_id"]],
+            category="campanha",
+            title=f"{origem_personagem['nome']} mandou um item",
+            message=f"**{destino_personagem['nome']}** recebeu {payload.quantidade}x {estoque['titulo']} de **{origem_personagem['nome']}**.",
+            campaign_id=campanha_id,
+            actor_user_id=user.id,
+        )
+        record_audit(
+            connection,
+            action="inventario.item_enviado",
+            actor_user_id=user.id,
+            campaign_id=campanha_id,
+            target_type="personagem",
+            target_id=str(payload.destino_personagem_id),
+            details={
+                "de": str(character_id),
+                "para": str(payload.destino_personagem_id),
+                "item_id": item_id,
+                "quantidade": payload.quantidade,
+            },
+        )
+        result = {
+            "operacao_id": str(command.id),
+            "repetida": False,
+            "item_id": item_id,
+            "titulo": estoque["titulo"],
+            "quantidade": payload.quantidade,
+            "restante": restante,
+            "destino": {"id": str(payload.destino_personagem_id), "nome": destino_personagem["nome"]},
+            "economia_versao": versoes[character_id],
+        }
+        complete_economy_command(connection, command.id, result)
+    return result
 
 
 @router.post(

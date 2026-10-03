@@ -683,6 +683,9 @@ class ParticipantCreateInput(BaseModel):
     # Referência rápida ("Luta +12"); não valida nada, só evita reabrir o
     # Bestiário no meio da cena.
     pericias: list[Any] = Field(default_factory=list, max_length=8)
+    # Id da criatura no catálogo, quando ela entra pelo Bestiário. É o que liga
+    # o participante à tabela de loot (data/bestiario/loot-criaturas.json).
+    monstro_id: str | None = Field(default=None, max_length=160, pattern=r"^[a-z0-9][a-z0-9_-]*$")
 
     @field_validator("nome")
     @classmethod
@@ -698,6 +701,30 @@ class ParticipantCreateInput(BaseModel):
     @classmethod
     def clean_pericias(cls, value: list[Any]) -> list[str]:
         return _normalizar_pericias(value)
+
+
+class ParticipantLootRollInput(BaseModel):
+    """Rolar o loot de uma criatura da cena. `refazer` só vale enquanto nada
+    foi entregue: depois disso o loot rolado é o que existe."""
+
+    refazer: bool = False
+
+
+class ParticipantLootDeliveryLine(BaseModel):
+    linha: str = Field(min_length=4, max_length=40, pattern=r"^[a-f0-9]+$")
+    personagem_id: UUID
+
+
+class ParticipantLootDeliverInput(BaseModel):
+    entregas: list[ParticipantLootDeliveryLine] = Field(min_length=1, max_length=60)
+
+
+class InventorySendInput(BaseModel):
+    """Mandar um item do próprio inventário para outro personagem da campanha."""
+
+    destino_personagem_id: UUID
+    quantidade: int = Field(default=1, ge=1, le=1_000_000)
+    idempotencia: str = Field(min_length=8, max_length=128, pattern=_IDEMPOTENCY_PATTERN)
 
 
 class ParticipantUpdateInput(BaseModel):

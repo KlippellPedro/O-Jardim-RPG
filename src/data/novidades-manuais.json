@@ -2,6 +2,62 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-03-loot-das-criaturas",
+      "data": "2026-10-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "As criaturas deixam loot",
+      "detalhes": [
+        "Toda criatura do Bestiário tem o que deixar para trás: peças do corpo, materiais, moedas e, em algumas, equipamento. As criaturas únicas guardam itens que não existem em lugar nenhum da Loja.",
+        "Quando a luta acaba, o Mestre rola o loot na Sessão ao Vivo e escolhe quem leva cada coisa. O item cai direto no inventário e as moedas na carteira, com registro no extrato.",
+        "O que cada criatura pode deixar continua em segredo: você descobre saqueando."
+      ]
+    },
+    {
+      "id": "2026-10-03-mandar-itens",
+      "data": "2026-10-03",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Mande itens para os outros personagens",
+      "detalhes": [
+        "No Inventário, o botão de avião manda um item para outro personagem da campanha. Dá para escolher quantos, e o item chega desequipado.",
+        "Aliados, casas e veículos completos ficam com o dono, porque parte deles vive fora do inventário."
+      ]
+    },
+    {
+      "id": "2026-10-03-aflicoes-na-ficha",
+      "data": "2026-10-03",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Venenos e doenças acompanhados na ficha",
+      "detalhes": [
+        "A ficha ganhou a seção Aflições. Escolha a aflição, role Fortitude e a ficha mostra o estágio e o que ele faz com você.",
+        "A cada intervalo, o botão de teste rola de novo e o estágio sobe ou desce sozinho. Tratamento e antídoto também ficam ali.",
+        "Na Sessão ao Vivo, o Mestre vê no seu card as aflições que você carrega."
+      ]
+    },
+    {
+      "id": "2026-10-03-bestiario-da-sessao",
+      "data": "2026-10-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Bestiário da Sessão mais fácil de consultar",
+      "detalhes": [
+        "Clicar numa criatura abre a ficha inteira dela: atributos, deslocamento, ataques, testes e cada habilidade escrita por extenso.",
+        "Os filtros ligados ficam dourados e aparece quantas criaturas sobraram, com um botão para limpar tudo."
+      ]
+    },
+    {
+      "id": "2026-10-03-entidades-novas",
+      "data": "2026-10-03",
+      "tipo": "novo",
+      "area": "Jardim",
+      "titulo": "Entidades novas entram no Livro das Entidades",
+      "detalhes": [
+        "Quando um Escritor de Contos termina o seu conto mais importante, a Entidade que nasce dele pode entrar no Livro das Entidades e passa a valer em todas as mesas do Jardim."
+      ]
+    },
+    {
       "id": "2026-10-03-itens-que-despertam",
       "data": "2026-10-03",
       "tipo": "novo",

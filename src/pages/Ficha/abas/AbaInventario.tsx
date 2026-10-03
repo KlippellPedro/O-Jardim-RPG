@@ -1,6 +1,6 @@
 import { useDeferredValue, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter, Cpu, Apple, Eye, EyeOff, CircleGauge, BookOpen, Sparkles, ChevronDown, ShoppingBag, Package } from 'lucide-react';
+import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter, Cpu, Apple, Eye, EyeOff, CircleGauge, BookOpen, Sparkles, ChevronDown, ShoppingBag, Package, Send } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -42,6 +42,7 @@ import {
 import { materialPorId } from '../../../services/materialsCatalogService';
 import { converterMaterialEmLote, destinosDoMaterial, raridadeDoLote } from '../../../services/loteDeMaterialService';
 import { TransformarEmLoteModal } from '../components/TransformarEmLoteModal';
+import { MandarItemModal } from '../components/MandarItemModal';
 import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 import { SaldoAnimado } from '../components/SaldoAnimado';
@@ -304,6 +305,11 @@ const itemEhManual = (item: IInventoryItem): boolean => (
 
 const itemVeioDaLoja = (item: IInventoryItem): boolean => (
   Boolean(item._dadosOriginais.catalogo_item_id) || item._dadosOriginais.origem === 'loja'
+);
+
+// Aliado, Base e veículo completo têm a outra metade fora do inventário: não viajam.
+const itemPodeSerMandado = (item: IInventoryItem): boolean => (
+  !['monstro', 'propriedade', 'veiculo-completo'].includes(String(item._dadosOriginais.tipo ?? ''))
 );
 
 interface AbaInventarioProps {
@@ -744,6 +750,8 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
   // Material nomeado (as "drops" da Loja) que pode virar lote: só ele ganha o botão.
   const [transformandoId, setTransformandoId] = useState<string | null>(null);
   const [avisoLote, setAvisoLote] = useState('');
+  const [mandandoId, setMandandoId] = useState<string | null>(null);
+  const itemParaMandar = mandandoId ? inventario.find((item) => item.id === mandandoId) : undefined;
   const materialDoItem = (item: IInventoryItem) => (!modoVeiculos ? materialPorId(item.id) : undefined);
   const itemParaLote = transformandoId ? inventario.find((item) => item.id === transformandoId) : undefined;
   const materialParaLote = itemParaLote ? materialDoItem(itemParaLote) : undefined;
@@ -904,6 +912,21 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       </section>}
 
       {avisoLote ? <p role="status" className="flex items-center justify-between gap-3 rounded-xl border border-emerald-300/25 bg-emerald-300/10 px-4 py-3 text-sm text-emerald-100">{avisoLote}<button type="button" onClick={() => setAvisoLote('')} className="text-xs font-bold text-emerald-200/70 hover:text-white">ok</button></p> : null}
+      {itemParaMandar ? (
+        <MandarItemModal
+          personagemId={character.id}
+          itemId={itemParaMandar.id}
+          nome={itemParaMandar.nome}
+          quantidade={itemParaMandar.quantidade}
+          antesDeMandar={() => flushCharacterSaves(character.id)}
+          onMandado={(texto) => {
+            setMandandoId(null);
+            setAvisoLote(texto);
+            void refreshCharacter(character.id);
+          }}
+          onFechar={() => setMandandoId(null)}
+        />
+      ) : null}
       {itemParaLote && materialParaLote ? (
         <TransformarEmLoteModal
           nome={itemParaLote.nome}
@@ -1176,6 +1199,11 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                                 {materialDoItem(item) ? (
                                   <button type="button" onClick={() => setTransformandoId(item.id)} aria-label={`Transformar ${item.nome} em lote`} title="Transformar em lote de material" className="w-6 h-6 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 hover:bg-emerald-500/20 flex items-center justify-center transition-colors">
                                     <Package size={11} />
+                                  </button>
+                                ) : null}
+                                {itemPodeSerMandado(item) ? (
+                                  <button type="button" onClick={() => setMandandoId(item.id)} aria-label={`Mandar ${item.nome} para outro personagem`} title="Mandar para outro personagem" className="w-6 h-6 rounded bg-sky-500/10 border border-sky-500/20 text-sky-300 hover:bg-sky-500/20 flex items-center justify-center transition-colors">
+                                    <Send size={11} />
                                   </button>
                                 ) : null}
                                 <button onClick={() => handleRemoveItem(item.id, item.nome)} className="w-6 h-6 rounded bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 flex items-center justify-center transition-colors">

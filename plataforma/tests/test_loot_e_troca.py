@@ -1,0 +1,426 @@
+"""Loot das criaturas na Sessão ao Vivo e troca de itens entre jogadores.
+
+Loot: o Mestre vê a tabela da criatura, rola no servidor e escolhe quem leva
+cada linha; item entra no inventário pelo mesmo caminho da concessão da Loja
+e moeda entra na carteira com lançamento no extrato. Jogador não vê a tabela
+nem o loot rolado.
+
+Troca: o dono manda um item do próprio inventário para outro personagem da
+campanha; o item chega desequipado e as duas pontas ficam no extrato.
+
+Só roda com TEST_DATABASE_URL configurada, nunca contra o banco de produção.
+"""
+
+from __future__ import annotations
+
+import functools
+import os
+import unittest
+import uuid
+from unittest.mock import patch
+
+import psycopg
+from fastapi import HTTPException
+from psycopg import sql
+from psycopg.conninfo import make_conninfo
+from psycopg.types.json import Jsonb
+
+from core import loot_criaturas
+from core.database import Database
+from core.dependencies import AuthenticatedUser
+from routers.characters import list_send_targets, send_inventory_item
+from routers.sessions import (
+    _montar_estado,
+    _sessao_ativa,
+    abrir_sessao,
+    adicionar_participante,
+    entregar_loot_do_participante,
+    rolar_loot_do_participante,
+    tabela_de_loot,
+)
+from schemas import (
+    InventorySendInput,
+    ParticipantCreateInput,
+    ParticipantLootDeliverInput,
+    ParticipantLootDeliveryLine,
+    ParticipantLootRollInput,
+    SessionOpenInput,
+)
+
+TEST_DSN = (os.getenv("TEST_DATABASE_URL") or "").strip()
+
+TABELAS = {
+    "bandido-teste": {
+        "moedas": {"dados": "40", "moeda": "Lunaris", "chance": 100},
+        "itens": [
+            {"item": "loot-dente-teste", "chance": 100, "quantidade": "3"},
+            {"item": "loot-joia-teste", "chance": 100, "quantidade": "1"},
+            # d100 fixo em 50: esta linha nunca cai nos testes.
+            {"item": "loot-raro-teste", "chance": 10, "quantidade": "1"},
+        ],
+    },
+}
+# A rolagem fica previsível: d100 sempre 50.
+_ROLAR_FIXO = functools.partial(loot_criaturas.rolar_loot, d100=lambda: 50)
+
+
+@unittest.skipUnless(TEST_DSN, "TEST_DATABASE_URL nao configurada")
+class LootETrocaTests(unittest.TestCase):
+    def setUp(self):
+        production_dsn = (os.getenv("DATABASE_URL") or "").strip()
+        if TEST_DSN == production_dsn:
+            self.fail("TEST_DATABASE_URL nao pode ser o banco de producao")
+        self.schema = f"jardim_test_{uuid.uuid4().hex}"
+        with psycopg.connect(TEST_DSN, autocommit=True) as connection:
+            connection.execute(sql.SQL("CREATE SCHEMA {}").format(sql.Identifier(self.schema)))
+        self.database = Database(make_conninfo(TEST_DSN, options=f"-c search_path={self.schema}"))
+        self.database.open()
+        patches = [
+            patch("core.loot_criaturas.tabelas", return_value=TABELAS),
+            patch("routers.sessions.rolar_loot", _ROLAR_FIXO),
+        ]
+        for item in patches:
+            item.start()
+            self.addCleanup(item.stop)
+        self._montar()
+
+    def tearDown(self):
+        self.database.close()
+        with psycopg.connect(TEST_DSN, autocommit=True) as connection:
+            connection.execute(sql.SQL("DROP SCHEMA IF EXISTS {} CASCADE").format(sql.Identifier(self.schema)))
+
+    # -- montagem ----------------------------------------------------------
+
+    def _ator(self, usuario_id, email):
+        return AuthenticatedUser(
+            id=usuario_id, email=email, nome_exibicao=email.split("@")[0], admin_plataforma=False,
+            papel_plataforma="player", session_id=uuid.uuid4(), csrf_hash="hash",
+        )
+
+    def _montar(self):
+        self.mestre_id, self.ana_id, self.bia_id = uuid.uuid4(), uuid.uuid4(), uuid.uuid4()
+        self.campanha_id, self.outra_campanha_id = uuid.uuid4(), uuid.uuid4()
+        self.heroi_ana, self.heroi_bia, self.estranho = uuid.uuid4(), uuid.uuid4(), uuid.uuid4()
+        with self.database.connection() as connection:
+            for usuario_id, email in (
+                (self.mestre_id, "mestre@example.com"),
+                (self.ana_id, "ana@example.com"),
+                (self.bia_id, "bia@example.com"),
+            ):
+                connection.execute(
+                    "INSERT INTO usuarios (id, email, nome_exibicao, senha_hash, papel_plataforma) VALUES (%s, %s, %s, 'hash', 'player')",
+                    (usuario_id, email, email.split("@")[0]),
+                )
+            for campanha_id in (self.campanha_id, self.outra_campanha_id):
+                connection.execute(
+                    "INSERT INTO campanhas (id, dono_id, nome) VALUES (%s, %s, 'Mesa')", (campanha_id, self.mestre_id),
+                )
+                connection.execute(
+                    "INSERT INTO membros_campanha (campanha_id, usuario_id, papel) VALUES (%s, %s, 'mestre')",
+                    (campanha_id, self.mestre_id),
+                )
+            for usuario_id in (self.ana_id, self.bia_id):
+                connection.execute(
+                    "INSERT INTO membros_campanha (campanha_id, usuario_id, papel) VALUES (%s, %s, 'jogador')",
+                    (self.campanha_id, usuario_id),
+                )
+            connection.execute(
+                "INSERT INTO membros_campanha (campanha_id, usuario_id, papel) VALUES (%s, %s, 'jogador')",
+                (self.outra_campanha_id, self.ana_id),
+            )
+            for personagem_id, campanha_id, dono, nome in (
+                (self.heroi_ana, self.campanha_id, self.ana_id, "Ana"),
+                (self.heroi_bia, self.campanha_id, self.bia_id, "Bia"),
+                (self.estranho, self.outra_campanha_id, self.ana_id, "Estranho"),
+            ):
+                connection.execute(
+                    "INSERT INTO personagens (id, campanha_id, dono_usuario_id, nome, criado_por) VALUES (%s, %s, %s, %s, %s)",
+                    (personagem_id, campanha_id, dono, nome, dono),
+                )
+            for item_id, titulo, conteudo in (
+                ("loot-dente-teste", "Dente de Teste", {"raridade": "Comum", "preco": {"Lunaris": 30}}),
+                (
+                    "loot-joia-teste", "Joia Exclusiva",
+                    {"raridade": "Raro", "exclusivo": True, "disponivelNaLoja": False, "preco": {"Solares": 30}},
+                ),
+                ("loot-raro-teste", "Coisa Rara", {"raridade": "Raro", "preco": {"Solares": 1}}),
+                ("bandido-teste", "Bandido de Teste", {"categoria": "Humanoide", "vd": 3, "pv": 20}),
+            ):
+                connection.execute(
+                    """
+                    INSERT INTO catalogo_itens (id, tipo, titulo, conteudo) VALUES (%s, %s, %s, %s)
+                    ON CONFLICT (id) DO UPDATE SET tipo=EXCLUDED.tipo, titulo=EXCLUDED.titulo, conteudo=EXCLUDED.conteudo
+                    """,
+                    (item_id, "monstro" if item_id == "bandido-teste" else "drop", titulo, Jsonb(conteudo)),
+                )
+        self.mestre = self._ator(self.mestre_id, "mestre@example.com")
+        self.ana = self._ator(self.ana_id, "ana@example.com")
+        self.bia = self._ator(self.bia_id, "bia@example.com")
+
+    def _cena_com_bandido(self):
+        sessao = abrir_sessao(
+            SessionOpenInput(campanha_id=self.campanha_id, titulo="Emboscada", incluir_personagens=True),
+            user=self.mestre, database=self.database,
+        )
+        sessao_id = sessao["sessao"]["id"]
+        criado = adicionar_participante(
+            sessao_id,
+            ParticipantCreateInput(nome="Bandido", vida_maxima=20, monstro_id="bandido-teste"),
+            user=self.mestre, database=self.database,
+        )
+        return sessao_id, criado["id"]
+
+    def _estado(self, papel, usuario_id):
+        with self.database.connection() as connection:
+            sessao = _sessao_ativa(connection, self.campanha_id)
+            return _montar_estado(connection, sessao, papel, usuario_id)
+
+    def _inventario(self, personagem_id):
+        with self.database.connection() as connection:
+            return {
+                row["item_id"]: row
+                for row in connection.execute(
+                    "SELECT item_id, quantidade, dados FROM inventario_personagem WHERE personagem_id=%s",
+                    (personagem_id,),
+                ).fetchall()
+            }
+
+    def _saldo(self, personagem_id, moeda="Lunaris"):
+        with self.database.connection() as connection:
+            row = connection.execute(
+                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda=%s", (personagem_id, moeda),
+            ).fetchone()
+        return int(row["saldo"]) if row else 0
+
+    # -- loot --------------------------------------------------------------
+
+    def test_jogador_nao_ve_a_tabela_nem_o_loot(self):
+        self._cena_com_bandido()
+        with self.assertRaises(HTTPException) as erro:
+            tabela_de_loot("bandido-teste", self.campanha_id, user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        bandido_jogador = next(p for p in self._estado("jogador", self.ana_id)["participantes"] if p["nome"] == "Bandido")
+        self.assertNotIn("loot", bandido_jogador)
+        self.assertNotIn("monstro_id", bandido_jogador)
+        bandido_mestre = next(p for p in self._estado("mestre", self.mestre_id)["participantes"] if p["nome"] == "Bandido")
+        self.assertEqual(bandido_mestre["monstro_id"], "bandido-teste")
+        self.assertTrue(bandido_mestre["tem_loot"])
+        self.assertIsNone(bandido_mestre["loot"])
+
+    def test_mestre_ve_a_tabela_com_chance(self):
+        tabela = tabela_de_loot("bandido-teste", self.campanha_id, user=self.mestre, database=self.database)
+        chances = {item["item_id"]: item["chance"] for item in tabela["itens"]}
+        self.assertEqual(chances, {"loot-dente-teste": 100, "loot-joia-teste": 100, "loot-raro-teste": 10})
+        self.assertTrue(next(i for i in tabela["itens"] if i["item_id"] == "loot-joia-teste")["exclusivo"])
+        self.assertEqual(tabela["moedas"]["moeda"], "Lunaris")
+
+    def test_rolar_respeita_a_chance_e_nao_rola_duas_vezes(self):
+        sessao_id, bandido = self._cena_com_bandido()
+        loot = rolar_loot_do_participante(
+            sessao_id, bandido, ParticipantLootRollInput(), user=self.mestre, database=self.database,
+        )["loot"]
+        caiu = {linha.get("item_id") or linha["moeda"]: linha["quantidade"] for linha in loot["linhas"]}
+        self.assertEqual(caiu, {"loot-dente-teste": 3, "loot-joia-teste": 1, "Lunaris": 40})
+        with self.assertRaises(HTTPException) as erro:
+            rolar_loot_do_participante(sessao_id, bandido, ParticipantLootRollInput(), user=self.mestre, database=self.database)
+        self.assertEqual(erro.exception.status_code, 409)
+        refeito = rolar_loot_do_participante(
+            sessao_id, bandido, ParticipantLootRollInput(refazer=True), user=self.mestre, database=self.database,
+        )["loot"]
+        self.assertEqual(len(refeito["linhas"]), 3)
+
+    def test_participante_sem_criatura_nao_tem_loot(self):
+        sessao_id, _ = self._cena_com_bandido()
+        solto = adicionar_participante(
+            sessao_id, ParticipantCreateInput(nome="Capanga", vida_maxima=5), user=self.mestre, database=self.database,
+        )
+        with self.assertRaises(HTTPException) as erro:
+            rolar_loot_do_participante(sessao_id, solto["id"], ParticipantLootRollInput(), user=self.mestre, database=self.database)
+        self.assertEqual(erro.exception.status_code, 422)
+
+    def test_entregar_item_e_moeda_para_jogadores_diferentes(self):
+        sessao_id, bandido = self._cena_com_bandido()
+        loot = rolar_loot_do_participante(
+            sessao_id, bandido, ParticipantLootRollInput(), user=self.mestre, database=self.database,
+        )["loot"]
+        linha = {l.get("item_id") or l["moeda"]: l["linha"] for l in loot["linhas"]}
+        resposta = entregar_loot_do_participante(
+            sessao_id, bandido,
+            ParticipantLootDeliverInput(entregas=[
+                ParticipantLootDeliveryLine(linha=linha["loot-dente-teste"], personagem_id=self.heroi_ana),
+                ParticipantLootDeliveryLine(linha=linha["loot-joia-teste"], personagem_id=self.heroi_ana),
+                ParticipantLootDeliveryLine(linha=linha["Lunaris"], personagem_id=self.heroi_bia),
+            ]),
+            user=self.mestre, database=self.database,
+        )
+        self.assertEqual(len(resposta["entregues"]), 3)
+        inventario = self._inventario(self.heroi_ana)
+        self.assertEqual(inventario["loot-dente-teste"]["quantidade"], 3)
+        # Item exclusivo (fora do balcão) também chega: quem entrega é o Mestre.
+        self.assertEqual(inventario["loot-joia-teste"]["quantidade"], 1)
+        self.assertEqual(inventario["loot-joia-teste"]["dados"]["origem"], "loja")
+        self.assertEqual(self._saldo(self.heroi_bia), 40)
+        self.assertEqual(self._saldo(self.heroi_ana), 0)
+        with self.database.connection() as connection:
+            extrato = connection.execute(
+                "SELECT delta, origem, motivo FROM lancamentos_economia WHERE personagem_id=%s", (self.heroi_bia,),
+            ).fetchall()
+        self.assertEqual([(e["delta"], e["origem"]) for e in extrato], [(40, "sessao.loot")])
+        self.assertIn("Bandido", extrato[0]["motivo"])
+
+        # A mesma linha não sai duas vezes, e depois de entregar não se rola de novo.
+        with self.assertRaises(HTTPException) as erro:
+            entregar_loot_do_participante(
+                sessao_id, bandido,
+                ParticipantLootDeliverInput(entregas=[
+                    ParticipantLootDeliveryLine(linha=linha["Lunaris"], personagem_id=self.heroi_ana),
+                ]),
+                user=self.mestre, database=self.database,
+            )
+        self.assertEqual(erro.exception.status_code, 409)
+        with self.assertRaises(HTTPException) as erro:
+            rolar_loot_do_participante(
+                sessao_id, bandido, ParticipantLootRollInput(refazer=True), user=self.mestre, database=self.database,
+            )
+        self.assertEqual(erro.exception.status_code, 409)
+        self.assertEqual(self._saldo(self.heroi_bia), 40)
+
+    def test_entrega_parcial_deixa_o_resto_para_depois(self):
+        sessao_id, bandido = self._cena_com_bandido()
+        loot = rolar_loot_do_participante(
+            sessao_id, bandido, ParticipantLootRollInput(), user=self.mestre, database=self.database,
+        )["loot"]
+        dente = next(l for l in loot["linhas"] if l.get("item_id") == "loot-dente-teste")
+        resposta = entregar_loot_do_participante(
+            sessao_id, bandido,
+            ParticipantLootDeliverInput(entregas=[ParticipantLootDeliveryLine(linha=dente["linha"], personagem_id=self.heroi_bia)]),
+            user=self.mestre, database=self.database,
+        )
+        pendentes = [l for l in resposta["loot"]["linhas"] if not l["entregue_para"]]
+        self.assertEqual(len(pendentes), 2)
+        self.assertEqual(
+            next(l for l in resposta["loot"]["linhas"] if l["linha"] == dente["linha"])["entregue_para"]["nome"], "Bia",
+        )
+
+    def test_nao_entrega_para_personagem_de_outra_campanha(self):
+        sessao_id, bandido = self._cena_com_bandido()
+        loot = rolar_loot_do_participante(
+            sessao_id, bandido, ParticipantLootRollInput(), user=self.mestre, database=self.database,
+        )["loot"]
+        with self.assertRaises(HTTPException) as erro:
+            entregar_loot_do_participante(
+                sessao_id, bandido,
+                ParticipantLootDeliverInput(entregas=[
+                    ParticipantLootDeliveryLine(linha=loot["linhas"][0]["linha"], personagem_id=self.estranho),
+                ]),
+                user=self.mestre, database=self.database,
+            )
+        self.assertEqual(erro.exception.status_code, 422)
+
+    def test_sessao_mostra_as_aflicoes_da_ficha(self):
+        with self.database.connection() as connection:
+            connection.execute(
+                "UPDATE personagens SET ficha=%s WHERE id=%s",
+                (Jsonb({"aflicoesAtivas": [
+                    {"id": "x", "aflicaoId": "febre-dos-esporos", "estagio": 2, "incubando": False},
+                    "lixo",
+                ]}), self.heroi_ana),
+            )
+        self._cena_com_bandido()
+        ana = next(p for p in self._estado("jogador", self.bia_id)["participantes"] if p["nome"] == "Ana")
+        self.assertEqual(ana["aflicoes"], [{"aflicao_id": "febre-dos-esporos", "estagio": 2, "incubando": False}])
+        bandido = next(p for p in self._estado("mestre", self.mestre_id)["participantes"] if p["nome"] == "Bandido")
+        self.assertEqual(bandido["aflicoes"], [])
+
+    # -- troca entre jogadores ----------------------------------------------
+
+    def _dar(self, personagem_id, item_id, quantidade, **dados):
+        with self.database.connection() as connection:
+            connection.execute(
+                """
+                INSERT INTO inventario_personagem (campanha_id, personagem_id, item_id, titulo, quantidade, dados)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    self.campanha_id, personagem_id, item_id, item_id.title(), quantidade,
+                    Jsonb({"origem": "loja", "catalogo_item_id": item_id, "tipo": "drop", **dados}),
+                ),
+            )
+
+    def _enviar(self, ator, de, item_id, para, quantidade=1, chave=None):
+        return send_inventory_item(
+            de, item_id,
+            InventorySendInput(destino_personagem_id=para, quantidade=quantidade, idempotencia=chave or uuid.uuid4().hex),
+            user=ator, database=self.database,
+        )
+
+    def test_mandar_item_move_a_quantidade_e_chega_desequipado(self):
+        self._dar(self.heroi_ana, "loot-dente-teste", 5, equipado=True)
+        resultado = self._enviar(self.ana, self.heroi_ana, "loot-dente-teste", self.heroi_bia, quantidade=2)
+        self.assertEqual(resultado["restante"], 3)
+        self.assertEqual(self._inventario(self.heroi_ana)["loot-dente-teste"]["quantidade"], 3)
+        chegou = self._inventario(self.heroi_bia)["loot-dente-teste"]
+        self.assertEqual(chegou["quantidade"], 2)
+        self.assertFalse(chegou["dados"]["equipado"])
+        with self.database.connection() as connection:
+            extrato = connection.execute(
+                "SELECT personagem_id, delta FROM lancamentos_economia WHERE origem='inventario.enviar' ORDER BY delta",
+            ).fetchall()
+        self.assertEqual([(e["personagem_id"], e["delta"]) for e in extrato], [(self.heroi_ana, -2), (self.heroi_bia, 2)])
+
+    def test_mandar_tudo_tira_da_origem_e_empilha_no_destino(self):
+        self._dar(self.heroi_ana, "loot-dente-teste", 2)
+        self._dar(self.heroi_bia, "loot-dente-teste", 1)
+        self._enviar(self.ana, self.heroi_ana, "loot-dente-teste", self.heroi_bia, quantidade=2)
+        self.assertNotIn("loot-dente-teste", self._inventario(self.heroi_ana))
+        self.assertEqual(self._inventario(self.heroi_bia)["loot-dente-teste"]["quantidade"], 3)
+
+    def test_repetir_a_mesma_chave_nao_manda_duas_vezes(self):
+        self._dar(self.heroi_ana, "loot-dente-teste", 5)
+        self._enviar(self.ana, self.heroi_ana, "loot-dente-teste", self.heroi_bia, chave="troca-unica-1")
+        self._enviar(self.ana, self.heroi_ana, "loot-dente-teste", self.heroi_bia, chave="troca-unica-1")
+        self.assertEqual(self._inventario(self.heroi_bia)["loot-dente-teste"]["quantidade"], 1)
+
+    def test_jogador_nao_manda_item_da_ficha_dos_outros(self):
+        self._dar(self.heroi_ana, "loot-dente-teste", 5)
+        with self.assertRaises(HTTPException) as erro:
+            self._enviar(self.bia, self.heroi_ana, "loot-dente-teste", self.heroi_bia)
+        self.assertEqual(erro.exception.status_code, 404)
+
+    def test_nao_manda_para_outra_campanha_nem_mais_do_que_tem(self):
+        self._dar(self.heroi_ana, "loot-dente-teste", 1)
+        with self.assertRaises(HTTPException) as erro:
+            self._enviar(self.ana, self.heroi_ana, "loot-dente-teste", self.estranho)
+        self.assertEqual(erro.exception.status_code, 422)
+        with self.assertRaises(HTTPException) as erro:
+            self._enviar(self.ana, self.heroi_ana, "loot-dente-teste", self.heroi_bia, quantidade=2)
+        self.assertEqual(erro.exception.status_code, 409)
+
+    def test_aliado_e_item_modificado_pela_metade_nao_viajam(self):
+        self._dar(self.heroi_ana, "lobo", 1, tipo="monstro")
+        self._dar(self.heroi_ana, "espada", 2, modificacoes=[{"id": "fio"}])
+        with self.assertRaises(HTTPException) as erro:
+            self._enviar(self.ana, self.heroi_ana, "lobo", self.heroi_bia)
+        self.assertEqual(erro.exception.status_code, 422)
+        with self.assertRaises(HTTPException) as erro:
+            self._enviar(self.ana, self.heroi_ana, "espada", self.heroi_bia, quantidade=1)
+        self.assertEqual(erro.exception.status_code, 422)
+        self._enviar(self.ana, self.heroi_ana, "espada", self.heroi_bia, quantidade=2)
+        self.assertEqual(self._inventario(self.heroi_bia)["espada"]["dados"]["modificacoes"], [{"id": "fio"}])
+
+    def test_destinos_sao_os_outros_personagens_da_mesma_campanha(self):
+        destinos = list_send_targets(self.heroi_ana, user=self.ana, database=self.database)["personagens"]
+        self.assertEqual([d["nome"] for d in destinos], ["Bia"])
+        with self.assertRaises(HTTPException):
+            list_send_targets(self.heroi_ana, user=self.bia, database=self.database)
+
+    def test_nao_junta_itens_diferentes_com_o_mesmo_id(self):
+        self._dar(self.heroi_ana, "espada", 1, raridade="Raro")
+        self._dar(self.heroi_bia, "espada", 1, raridade="Comum")
+        with self.assertRaises(HTTPException) as erro:
+            self._enviar(self.ana, self.heroi_ana, "espada", self.heroi_bia)
+        self.assertEqual(erro.exception.status_code, 409)
+
+
+if __name__ == "__main__":
+    unittest.main()

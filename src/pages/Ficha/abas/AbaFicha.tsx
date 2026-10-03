@@ -57,6 +57,7 @@ import { StatusVitaisSection } from '../components/StatusVitaisSection';
 import { ModoMesa } from '../components/ModoMesa';
 import { FamaPrestigioSection } from '../components/FamaPrestigioSection';
 import { FrutoEdenSection } from '../components/FrutoEdenSection';
+import { AflicoesSection } from '../components/AflicoesSection';
 import { obterTemaPorId } from '../../../redesign/themeMap';
 import { Select } from '../../../components/ui/Select';
 
@@ -1255,6 +1256,8 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
       </div>
 
       <FamaPrestigioSection ficha={f} onUpdate={onUpdate} />
+
+      <AflicoesSection character={character} onUpdate={onUpdate} />
 
       <FrutoEdenSection character={character} />
 

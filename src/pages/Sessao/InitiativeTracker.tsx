@@ -26,8 +26,10 @@ import {
 import { useSessaoStore, type EntidadeIniciativa } from '../../store/useSessaoStore';
 import { EntityEditor } from './components/EntityEditor';
 import { BestiarioPicker } from './components/BestiarioPicker';
+import { LootPanel } from './components/LootPanel';
 import type { BestiarioMonstro, NivelVisibilidade } from '../../services/sessaoApi';
 import { OPCOES_VISIBILIDADE, comExtraTemporario, rotuloVisibilidade } from './sessionUtils';
+import { aflicaoPorId, estagioMaximo } from '../../services/aflicoesFichaService';
 
 interface InitiativeTrackerProps {
   onClose?: () => void;
@@ -187,7 +189,14 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
       ataques: monstro.ataques,
       pericias: monstro.pericias,
     };
-    await adicionarEntidade({ ...base, nome: nomeBase, iniciativa: iniciativaBase });
+    // Só a primeira entrada leva a criatura: o "2º turno" é a mesma criatura,
+    // e o loot cairia duas vezes se as duas apontassem para a tabela.
+    await adicionarEntidade({
+      ...base,
+      nome: nomeBase,
+      iniciativa: iniciativaBase,
+      monstro_id: monstro.id.startsWith('sob-medida-') ? undefined : monstro.id,
+    });
 
     // Multiataque age duas vezes por rodada: a segunda entrada some 10 da
     // iniciativa pra não ficar colada na primeira na fila.
@@ -305,6 +314,20 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
           ) : null}
         </div>
 
+        {entity.aflicoes.length && editingId !== entity.id ? (
+          <div className="flex flex-wrap gap-1 border-t border-white/[0.06] px-3 py-2">
+            {entity.aflicoes.map((item) => {
+              const aflicao = aflicaoPorId(item.aflicaoId);
+              if (!aflicao) return null;
+              return (
+                <span key={item.aflicaoId} className="rounded-full bg-lime-300/[0.08] px-2 py-0.5 text-[11px] text-lime-100/75" title={item.incubando ? 'Ainda incubando' : `Fortitude DT ${aflicao.dtFortitude}`}>
+                  {aflicao.titulo} · {item.estagio}/{estagioMaximo(aflicao)}{item.incubando ? ' · incubando' : ''}
+                </span>
+              );
+            })}
+          </div>
+        ) : null}
+
         {entity.condicoes.length && editingId !== entity.id ? (
           <div className="flex flex-wrap gap-1 border-t border-white/[0.06] px-3 py-2">
             {entity.condicoes.map((condition) => (
@@ -327,6 +350,10 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
               }, `Não foi possível atualizar ${entity.nome}.`);
             }}
           />
+        ) : null}
+
+        {comando && entity.temLoot && editingId !== entity.id ? (
+          <LootPanel entity={entity} jogadores={iniciativa.filter((item) => item.tipo === 'jogador' && item.personagemId)} />
         ) : null}
 
         {comando ? (

@@ -739,7 +739,7 @@ class SessaoAoVivoTests(unittest.TestCase):
     def test_vd_antigo_vira_o_meio_da_faixa_e_a_migracao_faz_a_mesma_conta(self):
         from core.schema import MIGRATIONS
         self.assertEqual([vd_antigo_para_nivel(vd) for vd in range(1, 11)], [3, 8, 13, 18, 23, 28, 33, 38, 43, 48])
-        versao, nome, comandos = MIGRATIONS[-1]
+        versao, nome, comandos = next(m for m in MIGRATIONS if m[0] == 46)
         self.assertEqual(nome, "vd_igual_ao_nivel_do_grupo")
         sql = " ".join(comandos[0].split())
         self.assertIn("SET vd = 5 * vd - 2", sql)

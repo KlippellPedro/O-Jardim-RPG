@@ -1777,6 +1777,185 @@ def purchase_batch(
     return result
 
 
+def conceder_itens_do_catalogo(
+    connection,
+    campaign_id: UUID,
+    character,
+    lines: list[tuple[str, int]],
+) -> tuple[list[dict[str, Any]], int, int | None]:
+    """Põe itens do catálogo (resolvido para a campanha) no inventário de um
+    personagem já travado com FOR UPDATE, sem cobrar nada. É o miolo da
+    concessão do Mestre, usado também pela entrega de loot da Sessão ao Vivo.
+    Item fora do balcão (``disponivelNaLoja: false``) entra normalmente: quem
+    chama já é a autorização. Devolve (itens, economia_versao, versao_da_ficha
+    ou None quando a ficha não mudou)."""
+
+    character_id = character["id"]
+    requested_ids = [item_id for item_id, _quantity in lines]
+    catalog = {
+        row["id"]: row
+        for row in _active_catalog_rows(
+            connection, campaign_id, requested_ids, lock=True,
+        )
+    }
+    missing = next((item_id for item_id in requested_ids if item_id not in catalog), None)
+    if missing:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"o item {missing} nao existe no catalogo",
+        )
+
+    existing_inventory = _locked_inventory(connection, campaign_id, character_id, requested_ids)
+    for item_id, existing in existing_inventory.items():
+        data = existing["dados"] if isinstance(existing["dados"], dict) else {}
+        if data.get("origem") != "loja" or data.get("catalogo_item_id") != item_id:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"o item_id {item_id} ja e usado por um item sem origem verificavel",
+            )
+
+    granted_items = []
+    new_allies: list[dict[str, Any]] = []
+    new_properties: list[dict[str, Any]] = []
+    # Duas linhas do mesmo item (dois drops iguais) somam no mesmo registro.
+    running_quantity = {item_id: int(row.get("quantidade", 0)) for item_id, row in existing_inventory.items()}
+    for item_id, quantity in lines:
+        item = catalog[item_id]
+        existing = existing_inventory.get(item_id, {})
+        new_quantity = running_quantity.get(item_id, 0) + quantity
+        if new_quantity > 1_000_000:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail=f"a quantidade de {item['titulo']} excede o limite do inventario",
+            )
+        running_quantity[item_id] = new_quantity
+        existing_data = existing.get("dados") if isinstance(existing.get("dados"), dict) else {}
+        editable_state = _editable_instance_metadata(existing_data)
+        item_data = {
+            **editable_state,
+            **(item["conteudo"] or {}),
+            "tipo": item["tipo"],
+            "categoria": _inventory_category(item["tipo"]),
+            "origem": "loja",
+            "catalogo_item_id": item["id"],
+        }
+        connection.execute(
+            """
+            INSERT INTO inventario_personagem
+                (campanha_id, personagem_id, item_id, titulo, quantidade, dados)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON CONFLICT (campanha_id, personagem_id, item_id) DO UPDATE SET
+                titulo=EXCLUDED.titulo,
+                quantidade=EXCLUDED.quantidade,
+                dados=EXCLUDED.dados,
+                atualizado_em=CURRENT_TIMESTAMP
+            """,
+            (
+                campaign_id,
+                character_id,
+                item["id"],
+                item["titulo"],
+                new_quantity,
+                Jsonb(item_data),
+            ),
+        )
+        if item["tipo"] == "monstro":
+            new_allies.extend(_build_mercenary_allies(item, quantity))
+        elif item["tipo"] == "propriedade":
+            new_properties.extend(_build_properties(item, quantity))
+
+        price = resolve_catalog_price(item["conteudo"])
+        granted_items.append({
+            "item_id": item["id"],
+            "titulo": item["titulo"],
+            "quantidade": quantity,
+            "valor_referencia": {"moeda": price.moeda, "valor": price.valor} if price else None,
+        })
+
+    if new_allies or new_properties:
+        ficha_atual = character["ficha"] if isinstance(character["ficha"], dict) else {}
+        aliados_atuais = ficha_atual.get("aliados") if isinstance(ficha_atual.get("aliados"), list) else []
+        propriedades_atuais = ficha_atual.get("propriedades") if isinstance(ficha_atual.get("propriedades"), list) else []
+        ficha_atualizada = {
+            **ficha_atual,
+            "aliados": [*aliados_atuais, *new_allies],
+            "propriedades": [*propriedades_atuais, *new_properties],
+        }
+        versions = connection.execute(
+            """
+            UPDATE personagens
+            SET economia_versao=economia_versao+1, versao=versao+1,
+                atualizado_em=CURRENT_TIMESTAMP, ficha=%s
+            WHERE id=%s
+            RETURNING economia_versao, versao
+            """,
+            (Jsonb(ficha_atualizada), character_id),
+        ).fetchone()
+        return granted_items, int(versions["economia_versao"]), int(versions["versao"])
+    version = connection.execute(
+        """
+        UPDATE personagens
+        SET economia_versao=economia_versao+1, atualizado_em=CURRENT_TIMESTAMP
+        WHERE id=%s
+        RETURNING economia_versao
+        """,
+        (character_id,),
+    ).fetchone()["economia_versao"]
+    return granted_items, int(version), None
+
+
+def creditar_carteira(
+    connection,
+    *,
+    campaign_id: UUID,
+    character_id: UUID,
+    currency: str,
+    amount: int,
+    actor_user_id: UUID,
+    origin: str,
+    reason: str,
+    idempotency: str,
+) -> dict[str, Any]:
+    """Soma moeda na carteira de um personagem já travado e lança no extrato.
+    A chave de idempotência do extrato é única por (campanha, origem), então
+    a mesma entrega nunca credita duas vezes."""
+
+    wallet = _locked_wallet(connection, campaign_id, character_id)
+    balance = wallet.get(normalize_currency(currency))
+    current = int(balance["saldo"]) if balance else 0
+    new_balance = current + int(amount)
+    if new_balance > MAX_ECONOMY_AMOUNT:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=f"o saldo em {currency} excederia o limite economico",
+        )
+    row = connection.execute(
+        """
+        INSERT INTO saldos_personagem
+            (campanha_id, personagem_id, moeda, saldo)
+        VALUES (%s, %s, %s, %s)
+        ON CONFLICT (campanha_id, personagem_id, moeda) DO UPDATE SET
+            saldo=EXCLUDED.saldo,
+            atualizado_em=CURRENT_TIMESTAMP
+        RETURNING moeda, saldo
+        """,
+        (campaign_id, character_id, balance["moeda"] if balance else currency, new_balance),
+    ).fetchone()
+    connection.execute(
+        """
+        INSERT INTO lancamentos_economia
+            (id, campanha_id, personagem_id, moeda, delta, saldo_apos,
+             motivo, origem, idempotencia, ator_usuario_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """,
+        (
+            uuid4(), campaign_id, character_id, row["moeda"], int(amount),
+            int(row["saldo"]), reason, origin, idempotency, actor_user_id,
+        ),
+    )
+    return {"moeda": row["moeda"], "valor": int(amount), "saldo": int(row["saldo"])}
+
+
 @router.post("/concessoes", status_code=status.HTTP_201_CREATED)
 def grant_batch(
     payload: ShopGrantCommandInput,
@@ -1820,117 +1999,12 @@ def grant_batch(
         if command.replay_result is not None:
             return command.replay_result
 
-        requested_ids = [line.item_id for line in payload.itens]
-        catalog = {
-            row["id"]: row
-            for row in _active_catalog_rows(
-                connection, payload.campanha_id, requested_ids, lock=True,
-            )
-        }
-        missing = next((item_id for item_id in requested_ids if item_id not in catalog), None)
-        if missing:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"o item {missing} nao existe no catalogo",
-            )
-
-        existing_inventory = _locked_inventory(connection, payload.campanha_id, payload.personagem_id, requested_ids)
-        for item_id, existing in existing_inventory.items():
-            data = existing["dados"] if isinstance(existing["dados"], dict) else {}
-            if data.get("origem") != "loja" or data.get("catalogo_item_id") != item_id:
-                raise HTTPException(
-                    status_code=status.HTTP_409_CONFLICT,
-                    detail=f"o item_id {item_id} ja e usado por um item sem origem verificavel",
-                )
-
-        granted_items = []
-        new_allies: list[dict[str, Any]] = []
-        new_properties: list[dict[str, Any]] = []
-        for line in payload.itens:
-            item = catalog[line.item_id]
-            existing = existing_inventory.get(line.item_id, {})
-            existing_quantity = int(existing.get("quantidade", 0))
-            new_quantity = existing_quantity + line.quantidade
-            if new_quantity > 1_000_000:
-                raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
-                    detail=f"a quantidade de {item['titulo']} excede o limite do inventario",
-                )
-            existing_data = existing.get("dados") if isinstance(existing.get("dados"), dict) else {}
-            editable_state = _editable_instance_metadata(existing_data)
-            item_data = {
-                **editable_state,
-                **(item["conteudo"] or {}),
-                "tipo": item["tipo"],
-                "categoria": _inventory_category(item["tipo"]),
-                "origem": "loja",
-                "catalogo_item_id": item["id"],
-            }
-            connection.execute(
-                """
-                INSERT INTO inventario_personagem
-                    (campanha_id, personagem_id, item_id, titulo, quantidade, dados)
-                VALUES (%s, %s, %s, %s, %s, %s)
-                ON CONFLICT (campanha_id, personagem_id, item_id) DO UPDATE SET
-                    titulo=EXCLUDED.titulo,
-                    quantidade=EXCLUDED.quantidade,
-                    dados=EXCLUDED.dados,
-                    atualizado_em=CURRENT_TIMESTAMP
-                """,
-                (
-                    payload.campanha_id,
-                    payload.personagem_id,
-                    item["id"],
-                    item["titulo"],
-                    new_quantity,
-                    Jsonb(item_data),
-                ),
-            )
-            if item["tipo"] == "monstro":
-                new_allies.extend(_build_mercenary_allies(item, line.quantidade))
-            elif item["tipo"] == "propriedade":
-                new_properties.extend(_build_properties(item, line.quantidade))
-
-            price = resolve_catalog_price(item["conteudo"])
-            granted_items.append({
-                "item_id": item["id"],
-                "titulo": item["titulo"],
-                "quantidade": line.quantidade,
-                "valor_referencia": {"moeda": price.moeda, "valor": price.valor} if price else None,
-            })
-
-        if new_allies or new_properties:
-            ficha_atual = character["ficha"] if isinstance(character["ficha"], dict) else {}
-            aliados_atuais = ficha_atual.get("aliados") if isinstance(ficha_atual.get("aliados"), list) else []
-            propriedades_atuais = ficha_atual.get("propriedades") if isinstance(ficha_atual.get("propriedades"), list) else []
-            ficha_atualizada = {
-                **ficha_atual,
-                "aliados": [*aliados_atuais, *new_allies],
-                "propriedades": [*propriedades_atuais, *new_properties],
-            }
-            versions = connection.execute(
-                """
-                UPDATE personagens
-                SET economia_versao=economia_versao+1, versao=versao+1,
-                    atualizado_em=CURRENT_TIMESTAMP, ficha=%s
-                WHERE id=%s
-                RETURNING economia_versao, versao
-                """,
-                (Jsonb(ficha_atualizada), payload.personagem_id),
-            ).fetchone()
-            version = versions["economia_versao"]
-            sheet_version = versions["versao"]
-        else:
-            version = connection.execute(
-                """
-                UPDATE personagens
-                SET economia_versao=economia_versao+1, atualizado_em=CURRENT_TIMESTAMP
-                WHERE id=%s
-                RETURNING economia_versao
-                """,
-                (payload.personagem_id,),
-            ).fetchone()["economia_versao"]
-            sheet_version = None
+        granted_items, version, sheet_version = conceder_itens_do_catalogo(
+            connection,
+            payload.campanha_id,
+            character,
+            [(line.item_id, line.quantidade) for line in payload.itens],
+        )
 
         result = {
             "operacao_id": str(command.id),

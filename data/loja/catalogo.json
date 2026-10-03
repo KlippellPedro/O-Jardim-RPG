@@ -4677,10 +4677,6 @@
           }
         ],
         "habilidades": [],
-        "loot": [
-          "Pelego de Lobo (10 Solares)",
-          "Presas Afiadas (6 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "familia": "cao-e-lobo",
@@ -4737,10 +4733,6 @@
           }
         ],
         "habilidades": [],
-        "loot": [
-          "Pele de Urso (25 Solares)",
-          "Garras de Urso (12 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo"
@@ -4795,10 +4787,6 @@
           }
         ],
         "habilidades": [],
-        "loot": [
-          "Glândula de Veneno (30 Solares)",
-          "Seda de Teia (18 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "familia": "aranha",
@@ -4851,10 +4839,6 @@
         ],
         "habilidades": [
           "Olhar Petrificante (1/cena: Vontade DT 24; em falha, fica Imobilizado até o fim do próximo turno)"
-        ],
-        "loot": [
-          "Olho Petrificado (80 Solares)",
-          "Escamas de Basilisco (60 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -4913,10 +4897,6 @@
         "habilidades": [
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
-        "loot": [
-          "Escama Ígnea (150 Solares)",
-          "Presas Tríplices (90 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "papel": "solo"
@@ -4970,9 +4950,6 @@
         "habilidades": [
           "Sussurro Arcano (concede Vantagem em 1 teste de Intelecto do vínculo, 1/cena)"
         ],
-        "loot": [
-          "Pena Arcana (20 Solares)"
-        ],
         "classe": "Familiar",
         "nivelMinimoLoja": 2,
         "papel": "solo"
@@ -5025,9 +5002,6 @@
         ],
         "habilidades": [
           "Aviso Espectral (concede +2 de Defesa ao vínculo contra o próximo ataque surpresa)"
-        ],
-        "loot": [
-          "Fragmento Etéreo (45 Solares)"
         ],
         "classe": "Familiar",
         "nivelMinimoLoja": 2,
@@ -5085,9 +5059,6 @@
           }
         ],
         "habilidades": [],
-        "loot": [
-          "Escama de Dragonete (100 Solares)"
-        ],
         "classe": "Familiar",
         "nivelMinimoLoja": 3,
         "familia": "dragao",
@@ -5142,10 +5113,6 @@
         ],
         "habilidades": [
           "Renascer das Cinzas (1/dia: se cai a 0 PV, volta com metade da Vida)"
-        ],
-        "loot": [
-          "Pena Incandescente (300 Solares)",
-          "Cinzas Renascentes (150 Solares)"
         ],
         "classe": "Familiar",
         "nivelMinimoLoja": 4,
@@ -5202,10 +5169,6 @@
         "habilidades": [
           "Aparar (+2 de Defesa até o próximo turno)"
         ],
-        "loot": [
-          "Ossos Antigos (5 Solares)",
-          "Arma Enferrujada (8 Solares)"
-        ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "familia": "morto-vivo",
@@ -5261,9 +5224,6 @@
           }
         ],
         "habilidades": [],
-        "loot": [
-          "Carne Podre (3 Solares)"
-        ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "familia": "morto-vivo",
@@ -5316,9 +5276,6 @@
         ],
         "habilidades": [
           "Faro de Sangue (Vantagem em testes pra rastrear alvos feridos)"
-        ],
-        "loot": [
-          "Garras Necróticas (20 Solares)"
         ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
@@ -5374,10 +5331,6 @@
         "habilidades": [
           "Comando aos Mortos (1/cena: usa Ação Padrão para convocar 1 Esqueleto Guerreiro por 3 rodadas. O esqueleto só age quando o Cavaleiro gasta a própria Ação Padrão para comandá-lo)"
         ],
-        "loot": [
-          "Armadura Amaldiçoada (120 Solares)",
-          "Espada Amaldiçoada (200 Solares)"
-        ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "familia": "morto-vivo",
@@ -5431,9 +5384,6 @@
         ],
         "habilidades": [
           "Explosão ao Cair (ao chegar a 0 PV, criaturas em alcance Curto fazem Reflexos DT 16; sofrem 1d6 de fogo, metade em sucesso)"
-        ],
-        "loot": [
-          "Núcleo Flamejante (15 Solares)"
         ],
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
@@ -5489,9 +5439,6 @@
         "habilidades": [
           "Postura Inabalável (não pode ser empurrado e fica imune à condição Caído)"
         ],
-        "loot": [
-          "Fragmento de Núcleo (60 Solares)"
-        ],
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
         "familia": "golem",
@@ -5546,10 +5493,6 @@
         "habilidades": [
           "Tentação (1/cena: Vontade DT 24; em falha, o alvo fica Exposto até o começo do próximo turno)"
         ],
-        "loot": [
-          "Chifre Infernal (100 Solares)",
-          "Contrato Rasgado (150 Solares)"
-        ],
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
         "papel": "solo"
@@ -5603,9 +5546,6 @@
         "habilidades": [
           "Escudo Celestial (1/cena: como Ação Padrão, concede +4 de Defesa a um aliado até o começo do próximo turno do Anjo)"
         ],
-        "loot": [
-          "Pena Celestial (400 Solares)"
-        ],
         "classe": "Invocação",
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
@@ -5658,10 +5598,6 @@
           }
         ],
         "habilidades": [],
-        "loot": [
-          "Espada Simples (10 Solares)",
-          "Bolsa de Moedas (15 Solares)"
-        ],
         "classe": "Ajudante",
         "nivelMinimoLoja": 1,
         "funcao": "Escolta",
@@ -5716,9 +5652,6 @@
         "habilidades": [
           "Curativo de Campo (1/cena: como Ação Padrão, cura 2d6+2 PV de um aliado adjacente)"
         ],
-        "loot": [
-          "Kit Médico (20 Solares)"
-        ],
         "classe": "Ajudante",
         "nivelMinimoLoja": 1,
         "funcao": "Ofício",
@@ -5772,9 +5705,6 @@
         "habilidades": [
           "Interceptar (1/rodada: como Reação, torna-se o alvo de um ataque dirigido a um aliado adjacente)"
         ],
-        "loot": [
-          "Escudo Reforçado (35 Solares)"
-        ],
         "classe": "Ajudante",
         "nivelMinimoLoja": 2,
         "funcao": "Escolta",
@@ -5827,9 +5757,6 @@
         ],
         "habilidades": [
           "Reparo de Campo (1/cena: como Ação Padrão, devolve a funcionalidade a um equipamento danificado até o fim da cena; não recupera Durabilidade)"
-        ],
-        "loot": [
-          "Ferramentas de Forja (50 Solares)"
         ],
         "classe": "Ajudante",
         "nivelMinimoLoja": 2,
@@ -5888,10 +5815,6 @@
         ],
         "habilidades": [
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [
-          "Escama Ancestral (2000 Solares)",
-          "Dente de Dragão (800 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -5953,9 +5876,6 @@
           "Sinais (o mar reflete estrelas em pleno dia e ondas correm contra o vento)",
           "Como Evitar (barulho, sangue e explosões atraem; um casco silencioso, sem fogo e sem feridos a bordo passa por cima dele)"
         ],
-        "loot": [
-          "Couro de Leviatã (3000 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
@@ -6012,9 +5932,6 @@
         ],
         "habilidades": [
           "Renascimento Absoluto (ao morrer, ressurge com Vida cheia, 1/campanha)"
-        ],
-        "loot": [
-          "Chama Eterna Engarrafada (5000 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -6076,10 +5993,6 @@
           "Nuvem de Tinta (1/cena: a área fica escura; ataques à distância têm desvantagem e criaturas dentro dela ficam Cegas até saírem)",
           "Sinais (peixes fugindo em massa, água parada demais, bolhas subindo em linha reta)",
           "Como Evitar (ele só ataca o que está sobre a fossa: um casco que mude de rota antes do primeiro tentáculo passa sem um arranhão)"
-        ],
-        "loot": [
-          "Tentáculo Seco (2500 Solares)",
-          "Tinta Negra (1000 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -6143,10 +6056,6 @@
           "Sinais (o mar fica liso como vidro num trecho só, e destroços de navios giram devagar no mesmo lugar)",
           "Como Evitar (ela não sai do estreito: qualquer rota que passe a mais de 12 m da corrente central é segura)"
         ],
-        "loot": [
-          "Núcleo do Sorvedouro (1800 Solares)",
-          "Água que Nunca Seca (700 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
@@ -6204,10 +6113,6 @@
           "Corpo de Vento (passivo: atravessa vãos apertados e ignora terreno difícil; imune a ser Agarrado, Imobilizado ou derrubado por efeito não mágico)",
           "Rajada Evasiva (1/combate, reação: ao ser atingido, mova-se até 6 m e reduza o dano recebido pela metade)",
           "Olho da Tempestade (1/cena: criaturas em 6 m ao redor fazem Reflexos DT 27; em falha, sofrem 4d10 de Raio e ficam Atordoadas até o fim do próximo turno delas; em sucesso, sofrem metade do dano e não ficam Atordoadas)"
-        ],
-        "loot": [
-          "Pena de Tempestade (900 Solares)",
-          "Núcleo de Vendaval (500 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -12805,6 +12710,3751 @@
       }
     },
     {
+      "tipo": "drop",
+      "id": "loot-presas-de-fera",
+      "titulo": "Presas de Fera",
+      "conteudo": {
+        "descricao": "Dentes compridos, ainda presos a um pedaço de gengiva seca. Viram ponta de flecha ou amuleto de caçador.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Arrancadas de lobos, hienas e outros predadores abatidos.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-dente-de-rato",
+      "titulo": "Dente de Rato",
+      "conteudo": {
+        "descricao": "Amarelo, curvo e afiado como agulha. Boticário compra em punhado para moer.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Ratos de esgoto e roedores grandes.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-penas-comuns",
+      "titulo": "Penas de Ave",
+      "conteudo": {
+        "descricao": "Um maço de penas firmes, boas para emplumar flecha ou adornar um amuleto.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Aves de rapina e corvos.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-glandula-de-veneno",
+      "titulo": "Glândula de Veneno",
+      "conteudo": {
+        "descricao": "Um saquinho úmido que ainda pinga. Precisa de luva e de pressa antes que estrague.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Serpentes, aranhas e lâmias abatidas sem estourar a bolsa.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Volátil"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-ossos-antigos",
+      "titulo": "Ossos Antigos",
+      "conteudo": {
+        "descricao": "Ossos secos e encardidos, que ainda guardam um frio que não é do tempo.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Esqueletos animados que pararam de se mexer.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Necrótico"
+        ],
+        "usos": [
+          "ritual",
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-nucleo-flamejante",
+      "titulo": "Núcleo Flamejante",
+      "conteudo": {
+        "descricao": "Uma brasa que não apaga, do tamanho de um ovo. Esquenta a mão mesmo através do couro.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Arcano",
+        "origem": "O centro de elementais de fogo desfeitos.",
+        "potencia": 2,
+        "afinidade": "Fogo",
+        "propriedades": [
+          "Inflamável",
+          "Canalizador"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-nucleo-de-gelo",
+      "titulo": "Núcleo de Gelo",
+      "conteudo": {
+        "descricao": "Gelo que não derrete nem no sol do meio-dia. Conserva o que ficar perto dele.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Arcano",
+        "origem": "O centro de elementais de gelo desfeitos.",
+        "potencia": 2,
+        "afinidade": "Água",
+        "propriedades": [
+          "Conservante",
+          "Canalizador"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-faisca-engarrafada",
+      "titulo": "Faísca Engarrafada",
+      "conteudo": {
+        "descricao": "Um raio pequeno preso num frasco grosso. Estala quando alguém chega perto.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Arcano",
+        "origem": "O que sobra de tempestades vivas e gigantes da tormenta.",
+        "potencia": 3,
+        "afinidade": "Raio",
+        "propriedades": [
+          "Condutor",
+          "Volátil"
+        ],
+        "usos": [
+          "engenharia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-dente-de-dragao",
+      "titulo": "Dente de Dragão",
+      "conteudo": {
+        "descricao": "Do tamanho de um antebraço e mais duro que aço. Ferreiro bom sabe o que fazer com ele.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Dragões adultos e mais velhos.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado",
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-ancestral",
+      "titulo": "Escama Ancestral",
+      "conteudo": {
+        "descricao": "Uma placa escura do tamanho de um escudo, riscada por séculos de batalha.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Dragões anciões e ancestrais.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-garras-necroticas",
+      "titulo": "Garras Necróticas",
+      "conteudo": {
+        "descricao": "Unhas pretas e compridas que deixam a ferida acinzentada.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Carniçais e outros mortos que caçam.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado",
+          "Necrótico"
+        ],
+        "usos": [
+          "forja",
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-aco-amaldicoado",
+      "titulo": "Aço Amaldiçoado",
+      "conteudo": {
+        "descricao": "Pedaços de armadura e lâmina que esfriam a mão de quem segura. Forjados de novo, ainda lembram o dono.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Mineral",
+        "origem": "Cavaleiros mortos que continuaram de pé.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Corruptor"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pena-celestial",
+      "titulo": "Pena Celestial",
+      "conteudo": {
+        "descricao": "Branca e morna, não suja nem na lama. Brilha de leve quando alguém mente perto dela.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Espiritual",
+        "origem": "Anjos guardiões e arcanjos.",
+        "potencia": 5,
+        "afinidade": "Luz",
+        "propriedades": [
+          "Purificador",
+          "Espiritual"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-chifre-colossal",
+      "titulo": "Chifre Colossal",
+      "conteudo": {
+        "descricao": "Precisa de dois para carregar. Vira cabo de martelo, viga ou troféu de parede inteira.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Behemoths das planícies.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Fortificante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-couro-colossal",
+      "titulo": "Couro Colossal",
+      "conteudo": {
+        "descricao": "Uma manta de couro grosso como tábua, que segura flecha sem curtir.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Behemoths das planícies.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-presa-de-hidra",
+      "titulo": "Presa de Hidra",
+      "conteudo": {
+        "descricao": "Uma presa que continua pingando ácido dias depois de arrancada.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Hidras de muitas cabeças.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado",
+          "Corrosivo"
+        ],
+        "usos": [
+          "forja",
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-sangue-de-hidra",
+      "titulo": "Sangue de Hidra",
+      "conteudo": {
+        "descricao": "Grosso e esverdeado. Uma gota fecha um corte pequeno sozinha.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Hidras de muitas cabeças.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Regenerativo",
+          "Vital"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-coracao-de-fogo-primordial",
+      "titulo": "Coração de Fogo Primordial",
+      "conteudo": {
+        "descricao": "Uma chama do tamanho de um punho que bate como coração. Aquece a sala inteira.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Arcano",
+        "origem": "Elementais de fogo primordiais e ancestrais.",
+        "potencia": 5,
+        "afinidade": "Fogo",
+        "propriedades": [
+          "Inflamável",
+          "Amplificador",
+          "Canalizador"
+        ],
+        "usos": [
+          "engenharia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-coracao-de-gelo-primordial",
+      "titulo": "Coração de Gelo Primordial",
+      "conteudo": {
+        "descricao": "Um bloco azul que pulsa devagar. A respiração de quem chega perto vira névoa.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Arcano",
+        "origem": "Elementais de gelo primordiais e ancestrais.",
+        "potencia": 5,
+        "afinidade": "Água",
+        "propriedades": [
+          "Conservante",
+          "Amplificador",
+          "Canalizador"
+        ],
+        "usos": [
+          "engenharia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-dedo-fino-do-vazio",
+      "titulo": "Dedo Fino do Vazio",
+      "conteudo": {
+        "descricao": "Comprido demais para ser de gente, frio como pedra de rio. Aponta sozinho para frestas.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Arcano",
+        "origem": "Sussurrantes que saem das frestas entre as coisas.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Anímico"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-cera-de-fresta",
+      "titulo": "Cera de Fresta",
+      "conteudo": {
+        "descricao": "Uma cera cinzenta que tapava a rachadura por onde a criatura passou. Sela outras do mesmo jeito.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Arcano",
+        "origem": "Raspada das frestas onde os sussurrantes se escondem.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-garra-palida",
+      "titulo": "Garra Pálida",
+      "conteudo": {
+        "descricao": "Branca como osso velho e fina como lâmina de barbear.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Rastejantes do Vazio.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-fragmento-de-selo-apagado",
+      "titulo": "Fragmento de Selo Apagado",
+      "conteudo": {
+        "descricao": "Um caco de pedra com um nome raspado. Quem segura esquece por um instante o próprio.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Arcano",
+        "origem": "Carregado pelos rastejantes que comem nomes.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-essencia-umbral",
+      "titulo": "Essência Umbral",
+      "conteudo": {
+        "descricao": "Uma fumaça escura que não sobe nem desce. Fica parada no frasco como água.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Espiritual",
+        "origem": "Bestas do umbral desfeitas.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Espiritual"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-presa-do-vazio",
+      "titulo": "Presa do Vazio",
+      "conteudo": {
+        "descricao": "Uma presa que não faz sombra em luz nenhuma.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Cães do Vazio.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado",
+          "Corruptor"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-coleira-de-contencao-quebrada",
+      "titulo": "Coleira de Contenção Quebrada",
+      "conteudo": {
+        "descricao": "Ferro gravado com runas de prender, partido ao meio. Alguém tentou segurar o cão e não conseguiu.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Artificial",
+        "origem": "Presa ao pescoço de cães do Vazio que fugiram.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-fragmento-do-vazio",
+      "titulo": "Fragmento do Vazio",
+      "conteudo": {
+        "descricao": "Um pedaço de nada com borda. A luz entra nele e não sai.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Arcano",
+        "origem": "O que sobra de um vulto do Vazio quando ele se desfaz.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Arcano"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-garra-de-fenda",
+      "titulo": "Garra de Fenda",
+      "conteudo": {
+        "descricao": "Corta o ar e deixa uma linha que demora a fechar.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Biológico",
+        "origem": "Saltadores de fendas.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-fibra-espacial",
+      "titulo": "Fibra Espacial",
+      "conteudo": {
+        "descricao": "Um fio que estica mais do que o próprio comprimento sem arrebentar.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Arcano",
+        "origem": "Tecida pelos saltadores para costurar as fendas por onde passam.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível",
+          "Arcano"
+        ],
+        "usos": [
+          "engenharia",
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-presa-em-brasa",
+      "titulo": "Presa em Brasa",
+      "conteudo": {
+        "descricao": "Continua vermelha e quente semanas depois de arrancada.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Biológico",
+        "origem": "Cães infernais de portão.",
+        "potencia": 3,
+        "afinidade": "Fogo",
+        "propriedades": [
+          "Afiado",
+          "Inflamável"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-elo-de-corrente-negra",
+      "titulo": "Elo de Corrente Negra",
+      "conteudo": {
+        "descricao": "Um elo pesado de metal escuro, de uma corrente que alguém cortou.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Mineral",
+        "origem": "Preso à coleira de cães infernais.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Corruptor"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-dente-sem-sombra",
+      "titulo": "Dente Sem Sombra",
+      "conteudo": {
+        "descricao": "Um dente triangular do tamanho de uma mão aberta, que não reflete luz.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Megalodons do Vazio.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado",
+          "Corruptor"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-barbatana-de-osso-branco",
+      "titulo": "Barbatana de Osso Branco",
+      "conteudo": {
+        "descricao": "Leve, firme e branca como giz.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Megalodons do Vazio.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Flexível"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-chifre-infernal",
+      "titulo": "Chifre Infernal",
+      "conteudo": {
+        "descricao": "Torcido, quente e marcado por arranhões de quem tentou arrancá-lo antes.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Demônios menores.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Resistente"
+        ],
+        "usos": [
+          "ritual",
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-contrato-rasgado",
+      "titulo": "Contrato Rasgado",
+      "conteudo": {
+        "descricao": "Metade de um pergaminho com uma assinatura em sangue. O nome ainda está legível.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Artificial",
+        "origem": "Carregado pelos demônios que cobram dívidas.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante",
+          "Corruptor"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-teia-gravitacional",
+      "titulo": "Teia Gravitacional",
+      "conteudo": {
+        "descricao": "Fios que puxam para o centro tudo que encostam.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Arcano",
+        "origem": "Teias das aranhas do Vazio.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível",
+          "Vinculante"
+        ],
+        "usos": [
+          "forja",
+          "engenharia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-fragmento-orbital",
+      "titulo": "Fragmento Orbital",
+      "conteudo": {
+        "descricao": "Uma pedrinha que gira devagar em volta da mão de quem a segura.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Mineral",
+        "origem": "Presos na teia das aranhas do Vazio.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano",
+          "Condutor"
+        ],
+        "usos": [
+          "engenharia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-nucleo-do-sorvedouro",
+      "titulo": "Núcleo do Sorvedouro",
+      "conteudo": {
+        "descricao": "Uma esfera escura que puxa a água do copo ao lado. É o centro do redemoinho.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Arcano",
+        "origem": "Caríbdis, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Água",
+        "propriedades": [
+          "Amplificador",
+          "Canalizador"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-agua-que-nunca-seca",
+      "titulo": "Água que Nunca Seca",
+      "conteudo": {
+        "descricao": "Um frasco que continua cheio por mais que se beba.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Mineral",
+        "origem": "Caríbdis, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Água",
+        "propriedades": [
+          "Purificador",
+          "Conservante"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-olho-desperto",
+      "titulo": "Olho Desperto",
+      "conteudo": {
+        "descricao": "Ainda pisca. Segue quem passa pelo laboratório.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Rastejantes de olhos.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano",
+          "Anímico"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-icor-de-vigia",
+      "titulo": "Icor de Vigia",
+      "conteudo": {
+        "descricao": "Um sangue grosso e esverdeado que corrói o vidro devagar.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Rastejantes de olhos.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corrosivo",
+          "Volátil"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-linha-de-costura-viva",
+      "titulo": "Linha de Costura Viva",
+      "conteudo": {
+        "descricao": "Uma linha que se mexe sozinha procurando o que costurar.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Do estojo do Colecionador de Membros.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível",
+          "Vinculante"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-agulha-de-osso",
+      "titulo": "Agulha de Osso",
+      "conteudo": {
+        "descricao": "Comprida como um dedo e feita de osso de gente.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Do estojo do Colecionador de Membros.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-orgao-vibratorio",
+      "titulo": "Órgão Vibratório",
+      "conteudo": {
+        "descricao": "Um órgão que zumbe baixinho, no mesmo tom de cem vozes.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "A Multidão sem Rosto, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Amplificador",
+          "Anímico"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-mascara-lisa",
+      "titulo": "Máscara Lisa",
+      "conteudo": {
+        "descricao": "Uma máscara sem olhos nem boca. Quem a segura de frente sente que está sendo olhado.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Artificial",
+        "origem": "A Multidão sem Rosto, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante",
+          "Corruptor"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-tentaculo-seco",
+      "titulo": "Tentáculo Seco",
+      "conteudo": {
+        "descricao": "Um tentáculo do tamanho de um mastro, que ainda se enrola quando molhado.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "O Kraken, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Regenerativo",
+          "Nutritivo"
+        ],
+        "usos": [
+          "cozinha"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-tinta-negra-do-kraken",
+      "titulo": "Tinta Negra do Kraken",
+      "conteudo": {
+        "descricao": "Um negro tão fundo que apaga a letra embaixo dele.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "O Kraken, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Conservante"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-couro-de-leviata",
+      "titulo": "Couro de Leviatã",
+      "conteudo": {
+        "descricao": "Uma peça de couro que faria a vela de um navio.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "O Leviatã, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-fragmento-de-realidade-devorada",
+      "titulo": "Fragmento de Realidade Devorada",
+      "conteudo": {
+        "descricao": "Um pedaço de paisagem do tamanho de uma mão, com céu e tudo, que não pertence a lugar nenhum.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Arcano",
+        "origem": "O Devorador de Mundos, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Amplificador"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-placa-do-vazio",
+      "titulo": "Placa do Vazio",
+      "conteudo": {
+        "descricao": "Uma placa de carapaça que engole a luz das estrelas ao redor.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Mineral",
+        "origem": "O Devorador de Estrelas, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Corruptor"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-ampulheta-roida",
+      "titulo": "Ampulheta Roída",
+      "conteudo": {
+        "descricao": "O vidro tem marcas de dente. A areia cai para cima.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Artificial",
+        "origem": "O Devorador de Eras, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano",
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-relogio-sem-ponteiros",
+      "titulo": "Relógio Sem Ponteiros",
+      "conteudo": {
+        "descricao": "Faz tique-taque sem ponteiro nenhum. Quem escuta perde a noção da hora.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Artificial",
+        "origem": "O Que Come o Tempo, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano",
+          "Estável"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-fragmento-de-ausencia",
+      "titulo": "Fragmento de Ausência",
+      "conteudo": {
+        "descricao": "Um lugar vazio que dá para segurar. O bolso onde ele fica parece mais leve.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Arcano",
+        "origem": "A Ausência Faminta, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Absorvente"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-poeira-de-silencio",
+      "titulo": "Poeira de Silêncio",
+      "conteudo": {
+        "descricao": "Um pó cinza que apaga o som de onde cai.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Espiritual",
+        "origem": "O Último Silêncio, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Anímico",
+          "Isolante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-presas-de-javali",
+      "titulo": "Presas de Javali",
+      "conteudo": {
+        "descricao": "Duas presas curvas, boas para cabo de faca ou para pendurar na porta.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Javalis selvagens.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado",
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-couro-grosso",
+      "titulo": "Couro Grosso",
+      "conteudo": {
+        "descricao": "Couro áspero e duro, que pede muito sal antes de virar alguma coisa.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Javalis e outros bichos de pele grossa.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-casco-luminoso",
+      "titulo": "Casco Luminoso",
+      "conteudo": {
+        "descricao": "Uma carapaça que continua brilhando de leve no escuro por alguns dias.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Caranguejos luminosos.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-glandula-luminosa",
+      "titulo": "Glândula Luminosa",
+      "conteudo": {
+        "descricao": "Um saquinho que acende quando apertado. Pescador usa de isca.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Caranguejos luminosos.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Volátil"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pelego-de-lobo",
+      "titulo": "Pelego de Lobo",
+      "conteudo": {
+        "descricao": "Pele cinzenta e grossa, quente o bastante para uma noite no mato.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Lobos cinzentos.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Isolante",
+          "Flexível"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pelagem-suja",
+      "titulo": "Pelagem Suja",
+      "conteudo": {
+        "descricao": "Pelo embaraçado e fedido. Lavado, ainda serve de forro.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Ratos gigantes.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pele-manchada",
+      "titulo": "Pele Manchada",
+      "conteudo": {
+        "descricao": "Couro claro com manchas escuras, fino e fácil de trabalhar.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Hienas.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pele-de-serpente",
+      "titulo": "Pele de Serpente",
+      "conteudo": {
+        "descricao": "Uma pele inteira, do focinho ao rabo, macia como luva.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Serpentes de guarda.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pele-de-coral-flexivel",
+      "titulo": "Pele de Coral Flexível",
+      "conteudo": {
+        "descricao": "Áspera de um lado e lisa do outro, colorida como recife.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Moreias de coral.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível",
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pele-de-urso",
+      "titulo": "Pele de Urso",
+      "conteudo": {
+        "descricao": "Um tapete inteiro de pelo marrom. Uma noite embaixo dela e ninguém sente frio.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Ursos das cavernas.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Isolante",
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-garras-de-urso",
+      "titulo": "Garras de Urso",
+      "conteudo": {
+        "descricao": "Do tamanho de um dedo, curvas e duras.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Ursos das cavernas.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-bolsa-voltaica",
+      "titulo": "Bolsa Voltaica",
+      "conteudo": {
+        "descricao": "Um órgão que ainda dá choque se apertado. Engenheiro usa de bateria.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Arraias elétricas.",
+        "potencia": 2,
+        "afinidade": "Raio",
+        "propriedades": [
+          "Condutor",
+          "Volátil"
+        ],
+        "usos": [
+          "engenharia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-couro-de-manta",
+      "titulo": "Couro de Manta",
+      "conteudo": {
+        "descricao": "Liso, escuro e frio. Isola bem contra choque.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Arraias elétricas.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível",
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pele-de-lobo-atroz",
+      "titulo": "Pele de Lobo Atroz",
+      "conteudo": {
+        "descricao": "Pelo preto e grosso, com cicatrizes de outras brigas.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Lobos atrozes.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Isolante",
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-presa-de-lobo-atroz",
+      "titulo": "Presa de Lobo Atroz",
+      "conteudo": {
+        "descricao": "Uma presa do tamanho de uma adaga pequena.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Lobos atrozes.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-cauda-entrelacada",
+      "titulo": "Cauda Entrelaçada",
+      "conteudo": {
+        "descricao": "Dezenas de caudas presas num nó que ninguém desfaz.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "O Rei dos Ratos.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante",
+          "Corruptor"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pele-de-lobo-alfa",
+      "titulo": "Pele de Lobo Alfa",
+      "conteudo": {
+        "descricao": "Pelo prateado no lombo, sinal de quem mandou na matilha.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Biológico",
+        "origem": "Lobos alfa.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Isolante",
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-presa-de-lobo-alfa",
+      "titulo": "Presa de Lobo Alfa",
+      "conteudo": {
+        "descricao": "Grossa e lascada de tanto uso. Caçador pendura no pescoço.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Biológico",
+        "origem": "Lobos alfa.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado",
+          "Fortificante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-argila-animada",
+      "titulo": "Argila Animada",
+      "conteudo": {
+        "descricao": "Barro que ainda se mexe quando ninguém está olhando.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Mineral",
+        "origem": "Golems de argila desfeitos.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual",
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-selo-de-comando",
+      "titulo": "Selo de Comando",
+      "conteudo": {
+        "descricao": "Uma plaquinha de barro com a ordem que o golem obedecia.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Artificial",
+        "origem": "Na testa dos golems de argila.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante",
+          "Arcano"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-nucleo-de-sal",
+      "titulo": "Núcleo de Sal",
+      "conteudo": {
+        "descricao": "Um cristal de sal compactado que segurava o golem de pé.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Mineral",
+        "origem": "Golems de sal.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Purificador",
+          "Conservante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-palha-encantada",
+      "titulo": "Palha Encantada",
+      "conteudo": {
+        "descricao": "Palha seca que continua se mexendo com o vento, mesmo sem vento.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Botânico",
+        "origem": "Espantalhos vivos.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano",
+          "Inflamável"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-cantaria-viva",
+      "titulo": "Cantaria Viva",
+      "conteudo": {
+        "descricao": "Pedra talhada que ainda guarda a forma de asa ou garra.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Mineral",
+        "origem": "Gárgulas de telhado.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Vinculante"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-nucleo-de-bronze",
+      "titulo": "Núcleo de Bronze",
+      "conteudo": {
+        "descricao": "Uma esfera de bronze que zumbe uma nota só.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Mineral",
+        "origem": "Golems de bronze.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Condutor",
+          "Amplificador"
+        ],
+        "usos": [
+          "engenharia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-placa-ressonante",
+      "titulo": "Placa Ressonante",
+      "conteudo": {
+        "descricao": "Uma chapa de bronze que vibra quando alguém fala perto.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Mineral",
+        "origem": "Golems de bronze.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Condutor"
+        ],
+        "usos": [
+          "forja",
+          "engenharia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-placas-de-ferro-encantado",
+      "titulo": "Placas de Ferro Encantado",
+      "conteudo": {
+        "descricao": "Ferro grosso com runas que ainda brilham fraco.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Mineral",
+        "origem": "Golems de ferro.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Arcano"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-seiva-regeneradora",
+      "titulo": "Seiva Regeneradora",
+      "conteudo": {
+        "descricao": "Uma seiva âmbar que fecha casca rachada e, diluída, pele cortada.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Botânico",
+        "origem": "Golems de raízes.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Regenerativo"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-coracao-de-cantaria",
+      "titulo": "Coração de Cantaria",
+      "conteudo": {
+        "descricao": "Uma pedra lisa e pesada, morna no centro, que segurava o portão de pé.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Mineral",
+        "origem": "Golems de portão.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual",
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-placa-de-espelho-encantado",
+      "titulo": "Placa de Espelho Encantado",
+      "conteudo": {
+        "descricao": "Um espelho que mostra o lugar como ele era há um minuto.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Mineral",
+        "origem": "Golems de espelhos.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano",
+          "Purificador"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-cinza-de-efreeti",
+      "titulo": "Cinza de Efreeti",
+      "conteudo": {
+        "descricao": "Uma cinza dourada e quente que acende pavio só de encostar.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Espiritual",
+        "origem": "Efreetis do deserto.",
+        "potencia": 4,
+        "afinidade": "Fogo",
+        "propriedades": [
+          "Inflamável",
+          "Amplificador"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-nucleo-de-coral-vivo",
+      "titulo": "Núcleo de Coral Vivo",
+      "conteudo": {
+        "descricao": "Um coral que continua crescendo devagar fora da água.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Corais vivos.",
+        "potencia": 4,
+        "afinidade": "Água",
+        "propriedades": [
+          "Regenerativo",
+          "Resistente"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-perola-de-colonia",
+      "titulo": "Pérola de Colônia",
+      "conteudo": {
+        "descricao": "Uma pérola grande, de várias cores, que limpa a água onde é deixada.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Mineral",
+        "origem": "Corais vivos.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Purificador"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-cinza-ancestral",
+      "titulo": "Cinza Ancestral",
+      "conteudo": {
+        "descricao": "Uma cinza quase branca de uma chama mais velha que qualquer cidade.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Espiritual",
+        "origem": "Elementais de fogo ancestrais.",
+        "potencia": 5,
+        "afinidade": "Fogo",
+        "propriedades": [
+          "Amplificador",
+          "Anímico"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-cristal-de-inverno-ancestral",
+      "titulo": "Cristal de Inverno Ancestral",
+      "conteudo": {
+        "descricao": "Um cristal que guarda um inverno inteiro dentro dele.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Mineral",
+        "origem": "Elementais de gelo ancestrais.",
+        "potencia": 5,
+        "afinidade": "Água",
+        "propriedades": [
+          "Conservante",
+          "Resistente",
+          "Amplificador"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-cinza-luminosa",
+      "titulo": "Cinza Luminosa",
+      "conteudo": {
+        "descricao": "Uma pitada de cinza que brilha fraquinho no escuro.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Espiritual",
+        "origem": "Fogos-fátuos apagados.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Espiritual"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-nucleo-de-luz",
+      "titulo": "Núcleo de Luz",
+      "conteudo": {
+        "descricao": "Uma esfera morna que ilumina como lampião e não esquenta.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Espiritual",
+        "origem": "Guardiões de Aethel.",
+        "potencia": 2,
+        "afinidade": "Luz",
+        "propriedades": [
+          "Purificador",
+          "Espiritual"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-residuo-sombrio",
+      "titulo": "Resíduo Sombrio",
+      "conteudo": {
+        "descricao": "Uma mancha escura que gruda no frasco e sussurra quando ninguém fala.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Espiritual",
+        "origem": "Sombras parasitas.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Necrótico"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-agua-espectral",
+      "titulo": "Água Espectral",
+      "conteudo": {
+        "descricao": "Água salgada e gelada que não seca. Cheira a porão de navio.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Espiritual",
+        "origem": "Fantasmas afogados.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Necrótico",
+          "Espiritual"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-fragmento-etereo",
+      "titulo": "Fragmento Etéreo",
+      "conteudo": {
+        "descricao": "Um pedaço de névoa sólida que some se alguém olhar fixo.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Espiritual",
+        "origem": "Gatos espectrais.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Espiritual",
+          "Anímico"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-corrente-espectral",
+      "titulo": "Corrente Espectral",
+      "conteudo": {
+        "descricao": "Uma corrente fria que pesa mais para quem tem culpa.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Espiritual",
+        "origem": "Espectros vingativos.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante",
+          "Necrótico"
+        ],
+        "usos": [
+          "ritual",
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-veu-de-prata-fria",
+      "titulo": "Véu de Prata Fria",
+      "conteudo": {
+        "descricao": "Um véu leve como teia, que deixa a pele gelada.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Espiritual",
+        "origem": "Noivas do espelho.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível",
+          "Espiritual"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pena-de-tempestade",
+      "titulo": "Pena de Tempestade",
+      "conteudo": {
+        "descricao": "Uma pena que puxa vento de onde estiver.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Espiritual",
+        "origem": "O Fantasma de Naufrágio, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Ar",
+        "propriedades": [
+          "Flexível",
+          "Amplificador"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-nucleo-de-vendaval",
+      "titulo": "Núcleo de Vendaval",
+      "conteudo": {
+        "descricao": "Uma esfera onde um vendaval inteiro gira preso.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Arcano",
+        "origem": "O Fantasma de Naufrágio, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Ar",
+        "propriedades": [
+          "Canalizador",
+          "Volátil"
+        ],
+        "usos": [
+          "engenharia"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-registro-espectral",
+      "titulo": "Registro Espectral",
+      "conteudo": {
+        "descricao": "Uma folha que mostra nomes de mortos e apaga o de quem a lê em voz alta.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Espiritual",
+        "origem": "Escribas fantasmas.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante",
+          "Arcano"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-vela-espectral",
+      "titulo": "Vela Espectral",
+      "conteudo": {
+        "descricao": "Uma vela de cera branca com chama azul que não queima o pavio.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Espiritual",
+        "origem": "A Procissão dos Mortos, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Necrótico",
+          "Anímico"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-manto-de-cinzas",
+      "titulo": "Manto de Cinzas",
+      "conteudo": {
+        "descricao": "Um manto que deixa um rastro de cinza fria por onde passa.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Espiritual",
+        "origem": "A Procissão dos Mortos, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Isolante",
+          "Necrótico"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pena-de-arcanjo",
+      "titulo": "Pena de Arcanjo",
+      "conteudo": {
+        "descricao": "Comprida como uma espada e leve como papel.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Espiritual",
+        "origem": "Arcanjos.",
+        "potencia": 5,
+        "afinidade": "Luz",
+        "propriedades": [
+          "Purificador",
+          "Amplificador"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pena-de-serafim",
+      "titulo": "Pena de Serafim",
+      "conteudo": {
+        "descricao": "Uma pena que ilumina o quarto inteiro e não deixa ninguém dormir perto.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Espiritual",
+        "origem": "Serafins.",
+        "potencia": 5,
+        "afinidade": "Luz",
+        "propriedades": [
+          "Purificador",
+          "Amplificador",
+          "Espiritual"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-asa-iridescente",
+      "titulo": "Asa Iridescente",
+      "conteudo": {
+        "descricao": "Fina como papel de seda e muda de cor conforme o ângulo.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Vespas feéricas.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível",
+          "Arcano"
+        ],
+        "usos": [
+          "forja",
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-semente-feerica",
+      "titulo": "Semente Feérica",
+      "conteudo": {
+        "descricao": "Uma semente prateada. Plantada em lua cheia, brota antes do amanhecer.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Botânico",
+        "origem": "Presas no pelo dos cervos espinhosos.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano",
+          "Nutritivo"
+        ],
+        "usos": [
+          "cozinha"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-lamina-celestial-fragmentada",
+      "titulo": "Lâmina Celestial Fragmentada",
+      "conteudo": {
+        "descricao": "Metade de uma lâmina branca que ainda corta o que é falso.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Mineral",
+        "origem": "O Arconte, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Luz",
+        "propriedades": [
+          "Afiado",
+          "Purificador"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-nucleo-de-gelo-eterno",
+      "titulo": "Núcleo de Gelo Eterno",
+      "conteudo": {
+        "descricao": "Um gelo azul-escuro que congela o ar ao redor num palmo de distância.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Arcano",
+        "origem": "O Titã de Gelo, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Água",
+        "propriedades": [
+          "Conservante",
+          "Amplificador"
+        ],
+        "usos": [
+          "engenharia",
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-fragmento-de-sombra-pura",
+      "titulo": "Fragmento de Sombra Pura",
+      "conteudo": {
+        "descricao": "Uma sombra que dá para segurar e que não some com luz nenhuma.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Arcano",
+        "origem": "A Sombra Viva, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Escuridão",
+        "propriedades": [
+          "Corruptor",
+          "Amplificador"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-osso-ressonante",
+      "titulo": "Osso Ressonante",
+      "conteudo": {
+        "descricao": "Um osso do tamanho de uma coluna que canta baixinho quando o mar está perto.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "A Baleia de Recife, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Amplificador",
+          "Resistente"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-placa-de-nacar",
+      "titulo": "Placa de Nácar",
+      "conteudo": {
+        "descricao": "Uma placa de madrepérola do tamanho de uma porta.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Mineral",
+        "origem": "A Baleia de Recife, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Purificador"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-nucleo-de-obsidiana",
+      "titulo": "Núcleo de Obsidiana",
+      "conteudo": {
+        "descricao": "Vidro negro, liso e morno, que segurava o colosso inteiro de pé.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Mineral",
+        "origem": "Golems de obsidiana.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Canalizador"
+        ],
+        "usos": [
+          "forja",
+          "engenharia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-chama-eterna-engarrafada",
+      "titulo": "Chama Eterna Engarrafada",
+      "conteudo": {
+        "descricao": "Uma chama num frasco que acende de novo cada vez que se apaga.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Arcano",
+        "origem": "A Fênix, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Fogo",
+        "propriedades": [
+          "Regenerativo",
+          "Inflamável",
+          "Amplificador"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-primordial",
+      "titulo": "Escama Primordial",
+      "conteudo": {
+        "descricao": "Uma escama do tamanho de uma mesa, com veios que brilham como brasa.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Dragões primordiais.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Isolante",
+          "Fortificante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-do-mundo",
+      "titulo": "Escama do Mundo",
+      "conteudo": {
+        "descricao": "Uma escama larga como um telhado. Quem deita nela ouve o mar de todos os lados.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "A Serpente que Abraça o Mundo, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Isolante",
+          "Amplificador"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-poeira-do-fim",
+      "titulo": "Poeira do Fim",
+      "conteudo": {
+        "descricao": "Um pó cinzento. O que ele toca envelhece um pouco.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Espiritual",
+        "origem": "O Fim Que Anda, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Necrótico",
+          "Amplificador"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-do-ultimo-dia",
+      "titulo": "Escama do Último Dia",
+      "conteudo": {
+        "descricao": "Uma escama cor de céu de fim de tarde, fria como cinza.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "O Dragão do Fim dos Tempos, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Necrótico",
+          "Amplificador"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pedra-do-ceu",
+      "titulo": "Pedra do Céu",
+      "conteudo": {
+        "descricao": "Um pedaço azul de pedra que puxa para cima em vez de para baixo.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Mineral",
+        "origem": "O Titã que Sustenta o Céu, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Amplificador",
+          "Estável"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pena-arcana",
+      "titulo": "Pena Arcana",
+      "conteudo": {
+        "descricao": "Uma pena com desenhos que lembram letras de outro alfabeto.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Corujas encantadas.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-presa-de-ogro",
+      "titulo": "Presa de Ogro",
+      "conteudo": {
+        "descricao": "Um dente amarelado do tamanho de um punho.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Ogros de estrada.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escamas-de-lamia",
+      "titulo": "Escamas de Lâmia",
+      "conteudo": {
+        "descricao": "Escamas verdes e douradas, que brilham mais à luz de vela.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Lâmias.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível",
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-penas-de-tempestade",
+      "titulo": "Penas de Tempestade",
+      "conteudo": {
+        "descricao": "Penas cinzentas que estalam quando esfregadas.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Harpias da tempestade.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível",
+          "Volátil"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-lasca-de-rocha-viva",
+      "titulo": "Lasca de Rocha Viva",
+      "conteudo": {
+        "descricao": "Uma lasca de pedra quente que pulsa como coração lento.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Mineral",
+        "origem": "Gigantes de pedra.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Vinculante"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-de-dragonete",
+      "titulo": "Escama de Dragonete",
+      "conteudo": {
+        "descricao": "Pequena, brilhante e dura como moeda.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Dragonetes.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-ferrao-de-wyvern",
+      "titulo": "Ferrão de Wyvern",
+      "conteudo": {
+        "descricao": "Um ferrão curvo do tamanho de uma lança curta, ainda com veneno na ponta.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Wyverns das montanhas.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado",
+          "Corrosivo"
+        ],
+        "usos": [
+          "alquimia",
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-asas-de-wyvern",
+      "titulo": "Asas de Wyvern",
+      "conteudo": {
+        "descricao": "Membrana grossa e leve, que dobra como vela de barco.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Wyverns das montanhas.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Flexível",
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-dente-reforcado",
+      "titulo": "Dente Reforçado",
+      "conteudo": {
+        "descricao": "Um dente de tubarão com metal fundido por cima.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Biológico",
+        "origem": "Tubarões de sucata.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado",
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-serpente-petrificada",
+      "titulo": "Serpente Petrificada",
+      "conteudo": {
+        "descricao": "Uma das serpentes do cabelo, virada pedra no meio do bote.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Mineral",
+        "origem": "Górgonas.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Estável",
+          "Corruptor"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escamas-de-basilisco",
+      "titulo": "Escamas de Basilisco",
+      "conteudo": {
+        "descricao": "Escamas cinza-esverdeadas, pesadas como ardósia.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Biológico",
+        "origem": "Basiliscos.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-olho-petrificado",
+      "titulo": "Olho Petrificado",
+      "conteudo": {
+        "descricao": "Um olho de pedra que deixa a mão dormente se segurado muito tempo.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Mineral",
+        "origem": "Basiliscos.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano",
+          "Estável"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-chifres-de-minotauro",
+      "titulo": "Chifres de Minotauro",
+      "conteudo": {
+        "descricao": "Um par de chifres grossos, com as pontas gastas de tanto bater em parede.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Biológico",
+        "origem": "Minotauros guardiões.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Afiado"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-cabeca-regenerativa",
+      "titulo": "Cabeça Regenerativa",
+      "conteudo": {
+        "descricao": "Uma cabeça cortada que tenta crescer um pescoço novo.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Hidras de duas cabeças.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Regenerativo",
+          "Vital"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-de-dragao-jovem",
+      "titulo": "Escama de Dragão Jovem",
+      "conteudo": {
+        "descricao": "Ainda fina na borda, mas já segura uma flecha.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Dragões jovens.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pena-incandescente",
+      "titulo": "Pena Incandescente",
+      "conteudo": {
+        "descricao": "Uma pena que brilha como brasa e não queima a mão de quem a merece.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Fênix menores.",
+        "potencia": 5,
+        "afinidade": "Fogo",
+        "propriedades": [
+          "Inflamável",
+          "Regenerativo"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-de-dragao-adulto",
+      "titulo": "Escama de Dragão Adulto",
+      "conteudo": {
+        "descricao": "Grossa como tábua e quente ao toque.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Dragões adultos.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-presas-triplices",
+      "titulo": "Presas Tríplices",
+      "conteudo": {
+        "descricao": "Três presas diferentes, de três bocas diferentes, amarradas juntas.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Quimeras.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Afiado"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-ignea",
+      "titulo": "Escama Ígnea",
+      "conteudo": {
+        "descricao": "Uma escama que segura calor como pedra de lareira.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Quimeras.",
+        "potencia": 4,
+        "afinidade": "Fogo",
+        "propriedades": [
+          "Resistente",
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-pedra-ancestral",
+      "titulo": "Pedra Ancestral",
+      "conteudo": {
+        "descricao": "Uma pedra gasta, coberta de marcas que ninguém sabe ler.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Mineral",
+        "origem": "Gigantes ancestrais.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Amplificador"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-oceanica",
+      "titulo": "Escama Oceânica",
+      "conteudo": {
+        "descricao": "Azul-escura e lisa, sempre úmida, como se o mar não largasse dela.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Serpentes marinhas ancestrais.",
+        "potencia": 5,
+        "afinidade": "Água",
+        "propriedades": [
+          "Resistente",
+          "Flexível",
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-cabeca-primordial",
+      "titulo": "Cabeça Primordial",
+      "conteudo": {
+        "descricao": "Uma cabeça que continua viva e com fome muito depois de cortada.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Hidras primordiais.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Regenerativo",
+          "Vital",
+          "Amplificador"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-carne-podre",
+      "titulo": "Carne Podre",
+      "conteudo": {
+        "descricao": "Ninguém quer carregar. Alquimista paga para não ter que buscar.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Zumbis.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Necrótico"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-amuleto-funerario",
+      "titulo": "Amuleto Funerário",
+      "conteudo": {
+        "descricao": "Um amuleto de bronze esverdeado, posto no pescoço dos mortos para que ficassem.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Artificial",
+        "origem": "Guardiões de tumba.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Anímico",
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-poeira-de-ossos-reais",
+      "titulo": "Poeira de Ossos Reais",
+      "conteudo": {
+        "descricao": "Um pó fino de ossos de quem já usou coroa.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Reis carniçais.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Necrótico",
+          "Amplificador"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-coroa-enferrujada",
+      "titulo": "Coroa Enferrujada",
+      "conteudo": {
+        "descricao": "Ouro velho comido pela ferrugem de outros metais. Ainda pesa como coroa.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Mineral",
+        "origem": "Reis carniçais.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corruptor",
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-elmo-vazio",
+      "titulo": "Elmo Vazio",
+      "conteudo": {
+        "descricao": "Um elmo que ecoa por dentro como poço fundo.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Mineral",
+        "origem": "Cavaleiros sem rosto.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Necrótico"
+        ],
+        "usos": [
+          "forja",
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-anel-de-sangue-antigo",
+      "titulo": "Anel de Sangue Antigo",
+      "conteudo": {
+        "descricao": "Um anel de prata escurecida com uma gota vermelha que nunca seca.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Mineral",
+        "origem": "Vampiros anciãos.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vital",
+          "Vinculante",
+          "Amplificador"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-ponteiro-quebrado",
+      "titulo": "Ponteiro Quebrado",
+      "conteudo": {
+        "descricao": "O ponteiro de um relógio enorme, parado numa hora que ninguém escolheu.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Mineral",
+        "origem": "O Cavaleiro da Última Hora, uma vez só.",
+        "potencia": 5,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano",
+          "Necrótico"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-seiva-acida",
+      "titulo": "Seiva Ácida",
+      "conteudo": {
+        "descricao": "Uma seiva amarela que fura couro fino.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Botânico",
+        "origem": "Trepadeiras devoradoras.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corrosivo"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-amostra-de-micelio",
+      "titulo": "Amostra de Micélio",
+      "conteudo": {
+        "descricao": "Um emaranhado branco que fecha ferida quando posto em cima dela.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Botânico",
+        "origem": "Colônias de fungos.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Medicinal",
+          "Regenerativo"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
       "tipo": "arma",
       "id": "reliquia-excalibur",
       "titulo": "Excalibur",
@@ -13189,9 +16839,6 @@
         "habilidades": [
           "Escudo de Chassi (Resistência física 2)"
         ],
-        "loot": [
-          "Placas de Chassi (30 Solares)"
-        ],
         "classe": "Ajudante",
         "subtipo": "merc-basico",
         "ataques": [
@@ -13248,9 +16895,6 @@
           "Cura Divina (1/cena: como Ação Padrão, cura 2d6+2 PV de um aliado a até 9 m)",
           "Aura de Paz (1/cena: como Ação Padrão, aliados em alcance Curto recebem +2 de Defesa até o começo do próximo turno do Espírito)"
         ],
-        "loot": [
-          "Núcleo de Luz (90 Solares)"
-        ],
         "classe": "Ajudante",
         "subtipo": "merc-avancado",
         "ataques": [
@@ -13306,9 +16950,6 @@
         "habilidades": [
           "Frenesi Sangrento (1/cena: ao acertar um alvo com metade da Vida máxima ou menos, causa +1d8 de escuridão. Não concede ataque nem ação adicional)",
           "Manto do Abismo (recebe vantagem em Furtividade enquanto estiver em escuridão)"
-        ],
-        "loot": [
-          "Essência Umbral (120 Solares)"
         ],
         "classe": "Criatura",
         "subtipo": "merc-mestre",
@@ -18165,9 +21806,6 @@
         "habilidades": [
           "Grito de Alarme (avisa o vínculo de perigo próximo, 1/cena)"
         ],
-        "loot": [
-          "Pena de Corvo (8 Solares)"
-        ],
         "classe": "Familiar",
         "nivelMinimoLoja": 2,
         "papel": "solo"
@@ -18222,10 +21860,6 @@
           }
         ],
         "habilidades": [],
-        "loot": [
-          "Presas de Javali (10 Solares)",
-          "Couro Grosso (15 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo"
@@ -18277,9 +21911,6 @@
         ],
         "habilidades": [
           "Dispersar (1/cena, como Reação, recebe Resistência 5 contra um ataque em área)"
-        ],
-        "loot": [
-          "Caudas de Rato (2 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
@@ -18334,10 +21965,6 @@
         "habilidades": [
           "Cântico Sombrio (1/cena: como Ação Padrão, concede +2 em Vontade a outro cultista até o começo do próximo turno)"
         ],
-        "loot": [
-          "Adaga Ritual (25 Solares)",
-          "Tomo Corrompido (40 Solares)"
-        ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "papel": "solo"
@@ -18389,9 +22016,6 @@
         ],
         "habilidades": [
           "Cerco em Bando (+2 no ataque quando há outra hiena adjacente ao alvo; não concede ataques extras)"
-        ],
-        "loot": [
-          "Pele Manchada (12 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
@@ -18447,9 +22071,6 @@
         "habilidades": [
           "Sussurro de Dúvida (1/cena: Vontade DT 16; em falha, o alvo sofre desvantagem no próximo teste)"
         ],
-        "loot": [
-          "Resíduo Sombrio (35 Solares)"
-        ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "familia": "espirito",
@@ -18504,9 +22125,6 @@
         "habilidades": [
           "Olhar Sedutor (1/cena: Vontade DT 18; em falha, o alvo sofre desvantagem em ataques contra a Lamia até o fim do próximo turno)"
         ],
-        "loot": [
-          "Escamas de Lamia (70 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo"
@@ -18558,9 +22176,6 @@
         ],
         "habilidades": [
           "Regeneração (cura 2d8 PV no início do turno, a menos que tenha sofrido dano de fogo)"
-        ],
-        "loot": [
-          "Sangue Regenerativo (100 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
@@ -18615,9 +22230,6 @@
         "habilidades": [
           "Silêncio Absoluto (1/cena: cria uma área Média até o começo do próximo turno. Quem conjura nela faz Vontade DT 20; em falha, a magia falha e o recurso não é gasto)"
         ],
-        "loot": [
-          "Fragmento do Vazio (200 Solares)"
-        ],
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
         "familia": "vazio",
@@ -18671,9 +22283,6 @@
         "habilidades": [
           "Grito Agudo (1/cena: Fortitude DT 20; em falha, o alvo fica Atordoado até o fim do próximo turno)"
         ],
-        "loot": [
-          "Penas de Tempestade (60 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo"
@@ -18725,9 +22334,6 @@
         ],
         "habilidades": [
           "Postura de Muralha (1/cena: como Ação de Movimento, recebe Resistência física 3 até o começo do próximo turno)"
-        ],
-        "loot": [
-          "Placas de Ferro Encantado (250 Solares)"
         ],
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
@@ -18782,9 +22388,6 @@
         ],
         "habilidades": [
           "Erguer Servo (1/cena: usa Ação Padrão para convocar 1 Zumbi Bruto por 3 rodadas. O servo só age quando o Necromante gasta a própria Ação Padrão para comandá-lo)"
-        ],
-        "loot": [
-          "Grimório Decadente (180 Solares)"
         ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
@@ -18841,10 +22444,6 @@
           }
         ],
         "habilidades": [],
-        "loot": [
-          "Ferrão de Wyvern (220 Solares)",
-          "Asas de Wyvern (150 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "familia": "dragao",
@@ -18898,9 +22497,6 @@
         ],
         "habilidades": [
           "Grito de Rancor (1/cena: criaturas em alcance Curto fazem Vontade DT 22; em falha, ficam Amedrontadas até o fim do próximo turno)"
-        ],
-        "loot": [
-          "Corrente Espectral (180 Solares)"
         ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
@@ -18959,9 +22555,6 @@
         "habilidades": [
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
-        "loot": [
-          "Chifres de Minotauro (150 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "papel": "solo"
@@ -19013,9 +22606,6 @@
         ],
         "habilidades": [
           "Regeneração de Cabeça (1/cena: no começo do turno, recupera 4d10 PV, salvo se sofreu dano de fogo desde o turno anterior)"
-        ],
-        "loot": [
-          "Cabeça Regenerativa (400 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -19071,9 +22661,6 @@
         ],
         "habilidades": [
           "Tempestade de Areia (1/cena: Reflexos DT 26; em falha, fica Cego até o fim do próximo turno)"
-        ],
-        "loot": [
-          "Cinza de Efreeti (600 Solares)"
         ],
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
@@ -19132,10 +22719,6 @@
         "habilidades": [
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
-        "loot": [
-          "Chifre Colossal (500 Solares)",
-          "Couro Colossal (700 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "papel": "solo",
@@ -19191,9 +22774,6 @@
         "habilidades": [
           "Julgamento (1/cena: Vontade DT 26; em falha, o alvo fica Atordoado até o fim do próximo turno)"
         ],
-        "loot": [
-          "Lâmina Celestial Fragmentada (1200 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
@@ -19247,9 +22827,6 @@
         ],
         "habilidades": [
           "Nevasca (1/cena: criaturas na área fazem Reflexos DT 28. Sofrem 4d8 de frio, metade em sucesso; quem falha também fica Caído)"
-        ],
-        "loot": [
-          "Núcleo de Gelo Eterno (2200 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -19305,9 +22882,6 @@
         ],
         "habilidades": [
           "Multiplicar Sombras (1/cena: o próximo ataque que acertar causa +4d8 de escuridão. Esse dano não multiplica no crítico e não concede ataques extras)"
-        ],
-        "loot": [
-          "Fragmento de Sombra Pura (4000 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -19368,9 +22942,6 @@
           "Sinais (prédios e nomes em placas sumindo por trás do grupo, um som grave que sobe pelo chão)",
           "Como Evitar (não é um encontro para vencer no dano: a cena é de fuga, de evacuação ou de fechar o Vão por onde ele veio)"
         ],
-        "loot": [
-          "Fragmento de Realidade Devorada (10000 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
@@ -19428,9 +22999,6 @@
         "habilidades": [
           "Alarme Vivo (como Reação ao perceber um intruso a até 18 m, late e concede +5 em Percepção a todos os aliados no local até o fim da cena)",
           "Faro Treinado (rastreia um cheiro conhecido por até 1 km)"
-        ],
-        "loot": [
-          "Coleira Reforçada (2 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
@@ -19492,10 +23060,6 @@
           "Posto Fixo (enquanto não se afastar mais de 3 m do ponto que guarda, recebe +2 de Defesa)",
           "Revista (testa Percepção contra Enganação de quem tenta entrar com arma ou carga escondida)"
         ],
-        "loot": [
-          "Insígnia da Guarda (3 Solares)",
-          "Lança de Guarda (2 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 1,
@@ -19551,10 +23115,6 @@
         "habilidades": [
           "Ronda (não sofre penalidade por vigília durante uma noite inteira e enxerga na penumbra sem precisar de luz)",
           "Toque de Sino (como Ação Livre, acorda e alerta todo mundo dentro da propriedade)"
-        ],
-        "loot": [
-          "Lanterna de Ronda (3 Solares)",
-          "Sino de Alarme (2 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
@@ -19613,9 +23173,6 @@
         ],
         "habilidades": [
           "Não Solta (enquanto mantém um alvo agarrado, causa 1d10+3 automático no início de cada turno dele)"
-        ],
-        "loot": [
-          "Peitoral de Couro Canino (4 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
@@ -19677,10 +23234,6 @@
           "Linha de Tiro (+2 em ataques à distância contra alvo a mais de 9 m e num nível abaixo do dele)",
           "Tiro de Cobertura (1/cena: como Ação Padrão, um aliado à vista recebe +3 de Defesa até o próximo turno do Arqueiro)"
         ],
-        "loot": [
-          "Arco Longo de Posto (6 Solares)",
-          "Aljava Cheia (2 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 2,
@@ -19739,10 +23292,6 @@
         "habilidades": [
           "Vigília Perpétua (não dorme, não cansa e não pode ser enganado por efeito que dependa de emoção)",
           "Protocolo de Perímetro (só persegue até o limite da propriedade que recebeu como perímetro, e volta ao posto em seguida)"
-        ],
-        "loot": [
-          "Núcleo de Engrenagem (12 Solares)",
-          "Chapa de Bronze (5 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
@@ -19803,9 +23352,6 @@
           "Sussurro de Aviso (o dono da propriedade sempre sabe quantas criaturas entraram e por onde)",
           "Trancar Sozinho (1/cena: como Ação Padrão, fecha e prende toda porta e janela de um cômodo por 1 minuto)"
         ],
-        "loot": [
-          "Chave Velha da Casa (14 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 2,
@@ -19863,10 +23409,6 @@
         "habilidades": [
           "Selo de Soleira (1/dia: grava uma passagem; abri-la sem a marca do dono exige DT 24 e dispara um alarme audível a 90 m)",
           "Barreira de Cômodo (1/cena: como Ação Completa, um cômodo ganha cobertura mágica que dá +4 de Defesa a quem estiver dentro por 1 minuto)"
-        ],
-        "loot": [
-          "Estilete de Gravação (20 Solares)",
-          "Tinta Rúnica (11 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
@@ -19928,10 +23470,6 @@
           "Comandar Posto (aliados com função de guarda em alcance Médio recebem +2 em ataque e em Percepção enquanto o Capitão estiver consciente)",
           "Fechar Formação (1/cena: como Ação Padrão, todos os guardas aliados adjacentes recebem +3 de Defesa até o próximo turno do Capitão)"
         ],
-        "loot": [
-          "Espada de Comando (34 Solares)",
-          "Brasão do Posto (18 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 2,
@@ -19990,10 +23528,6 @@
           "Peso Inamovível (não pode ser empurrado, derrubado nem teleportado para fora do vão que guarda)",
           "Vão Trancado (enquanto ocupa uma entrada, o espaço dela conta como terreno difícil e atravessá-lo provoca um ataque de oportunidade)",
           "Imune a veneno, sono, medo e sangramento"
-        ],
-        "loot": [
-          "Coração de Cantaria (95 Solares)",
-          "Selo do Portal (48 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
@@ -20055,10 +23589,6 @@
           "Marcha Longa (o grupo escoltado viaja um dia inteiro sem sofrer penalidade por cansaço)",
           "Olho de Emboscada (+5 em Percepção para notar tocaia em estrada)"
         ],
-        "loot": [
-          "Espada Curta (3 Solares)",
-          "Capa de Estrada (2 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Escolta",
         "nivelMinimoLoja": 1,
@@ -20119,10 +23649,6 @@
           "Ir na Frente (1/cena: relata o terreno adiante e concede vantagem na primeira rolagem de iniciativa do grupo)",
           "Acampamento Seguro (escolhe o local do descanso; quem descansa ali recebe +5 em Percepção contra ataque noturno)"
         ],
-        "loot": [
-          "Arco Curto (3 Solares)",
-          "Mapa Rabiscado (2 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Escolta",
         "nivelMinimoLoja": 1,
@@ -20176,9 +23702,6 @@
         "habilidades": [
           "Correio (leva uma mensagem escrita a um lugar que já conheça, a até um dia de viagem, e volta)",
           "Olho de Cima (1/cena: sobrevoa e revela a posição de todas as criaturas a céu aberto num raio de 90 m)"
-        ],
-        "loot": [
-          "Anilha de Correio (2 Solares)"
         ],
         "classe": "Familiar",
         "funcao": "Escolta",
@@ -20240,10 +23763,6 @@
           "Interceptar Sempre (como Reação, 2/rodada, torna-se o alvo de um ataque dirigido ao contratante)",
           "Nunca Sozinho (se o contratante cair, age imediatamente fora da ordem de iniciativa uma vez por combate)"
         ],
-        "loot": [
-          "Lâmina Jurada (26 Solares)",
-          "Anel de Contrato (12 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Escolta",
         "nivelMinimoLoja": 2,
@@ -20299,9 +23818,6 @@
         "habilidades": [
           "Assume o Leme (ocupa o posto de Piloto do veículo e usa Pilotagem +19 nas manobras da cena)",
           "Mão Firme (1/cena: repete um teste de manobra falhado)"
-        ],
-        "loot": [
-          "Luvas de Timoneiro (5 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
@@ -20362,9 +23878,6 @@
           "Posto de Artilharia (ocupa o posto de Artilheiro do veículo e dispara a arma montada sem tirar o Piloto do leme)",
           "Recarga Rápida (1/cena: dispara a arma montada uma segunda vez na mesma rodada)"
         ],
-        "loot": [
-          "Cinto de Munição (5 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
         "nivelMinimoLoja": 2,
@@ -20419,9 +23932,6 @@
         "habilidades": [
           "Reparo em Marcha (1/cena: como Ação Completa, remove uma avaria do veículo sem parar de andar)",
           "Remendo de Casco (fora de combate, devolve 25% da Vida máxima do veículo por hora de trabalho e material)"
-        ],
-        "loot": [
-          "Caixa de Ferramenta Completa (14 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
@@ -20480,10 +23990,6 @@
           "Traçar Rota (reduz em um quarto o tempo de uma viagem conhecida e evita a primeira faixa de perseguição)",
           "Passagem Discreta (1/dia: escolhe uma rota que impõe desvantagem a quem tentar rastrear o veículo naquele trecho)"
         ],
-        "loot": [
-          "Cartas de Rota (22 Solares)",
-          "Sextante de Latão (9 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
         "nivelMinimoLoja": 2,
@@ -20538,9 +24044,6 @@
         "habilidades": [
           "Refeição de Guarnição (quem descansa na propriedade recupera Vida como se tivesse uma noite de qualidade um grau acima)",
           "Despensa Organizada (reduz em 10% o custo mensal de manutenção da propriedade onde trabalha)"
-        ],
-        "loot": [
-          "Cutelo de Cozinha (2 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
@@ -20598,10 +24101,6 @@
           "Livro em Dia (1/mês: aponta qualquer desvio no caixa da propriedade e quem o fez)",
           "Papelada Correta (contratos e escrituras da propriedade passam a resistir a contestação; DT 20 para forjar em cima)"
         ],
-        "loot": [
-          "Livro-Caixa (3 Solares)",
-          "Selo de Escriba (2 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Ofício",
         "nivelMinimoLoja": 1,
@@ -20658,9 +24157,6 @@
           "Boato Certo (1/semana: responde uma pergunta sobre gente, dívida ou movimento estranho na cidade onde atua)",
           "Boca Dupla (se alguém oferecer o dobro, o Mestre rola em segredo se o informante troca de lado)"
         ],
-        "loot": [
-          "Bolsa de Moedas Trocadas (4 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Ofício",
         "nivelMinimoLoja": 1,
@@ -20716,9 +24212,6 @@
         "habilidades": [
           "Mão Boa (aliados de tipo Animal sob seus cuidados recuperam o dobro de Vida por descanso)",
           "Acalmar (1/cena: como Ação Padrão, um Animal hostil a até 9 m testa Vontade DT 16 ou para de atacar por uma rodada)"
-        ],
-        "loot": [
-          "Kit de Tratador (7 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
@@ -20781,10 +24274,6 @@
           "Bancada Ativa (com laboratório instalado na propriedade, produz por semana até três consumíveis Comuns ou um Incomum, cobrando só o material)",
           "Antídoto de Casa (1/dia: prepara um antídoto que remove uma condição de veneno de um aliado)"
         ],
-        "loot": [
-          "Alambique Portátil (24 Solares)",
-          "Caderno de Fórmulas (14 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Ofício",
         "nivelMinimoLoja": 2,
@@ -20842,10 +24331,6 @@
           "Enfermaria (aliado que descansa sob seus cuidados recupera Vida máxima em vez da recuperação normal do descanso)",
           "Estabilizar (1/cena: como Ação Padrão, um aliado caído a até 9 m volta com 25% da Vida máxima)",
           "Sem Ir ao Front (não acompanha o grupo em combate fora da propriedade)"
-        ],
-        "loot": [
-          "Maleta Cirúrgica (30 Solares)",
-          "Frascos de Éter (12 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
@@ -20906,10 +24391,6 @@
           "Enrolar (enquanto agarra um alvo, causa 1d10+3 automático no início do turno dele)",
           "Guarda de Corredor (não sai do prédio que guarda)"
         ],
-        "loot": [
-          "Pele de Serpente (5 Solares)",
-          "Glândula de Veneno (4 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo"
@@ -20967,9 +24448,6 @@
           "Estátua (enquanto imóvel, é indistinguível de ornamento; DT 22 de Percepção para notar)",
           "Imune a veneno, sangramento e sono"
         ],
-        "loot": [
-          "Fragmento de Cantaria Viva (11 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo"
@@ -21026,10 +24504,6 @@
         "habilidades": [
           "Preso ao Túmulo (não sai da câmara que guarda e se refaz em uma noite se for destruído dentro dela)",
           "Imune a veneno, medo e sangramento"
-        ],
-        "loot": [
-          "Alabarda Enferrujada (9 Solares)",
-          "Amuleto Funerário (16 Solares)"
         ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
@@ -21090,10 +24564,6 @@
           "Latido de Alarme (o dono do local sempre sabe quando o Cão entra em combate)",
           "Acorrentado (não se afasta mais de 30 m do portão que guarda)"
         ],
-        "loot": [
-          "Presa em Brasa (24 Solares)",
-          "Elo de Corrente Negra (18 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "familia": "cao-e-lobo",
@@ -21152,9 +24622,6 @@
         "habilidades": [
           "Selo de Ancoragem (some se o selo gravado no piso for quebrado; DT 24 de Misticismo para apagá-lo)",
           "Reflexo Cristalino (devolve ao atacante metade do dano de energia que sofrer)"
-        ],
-        "loot": [
-          "Estilhaço de Quartzo Desperto (46 Solares)"
         ],
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
@@ -21216,10 +24683,6 @@
           "Mil Olhos (não pode ser pego de surpresa e enxerga em todas as direções, inclusive invisível, a até 27 m)",
           "Relato ao Dono (quem controla a câmara recebe, ao acordar, a lista de tudo que entrou)",
           "Preso ao Teto (não sai da câmara que ocupa)"
-        ],
-        "loot": [
-          "Olho Desperto (120 Solares)",
-          "Icor de Vigia (58 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -21535,10 +24998,6 @@
           "Escudo de Sangue (1/cena, como Reação: torna-se o alvo de um ataque dirigido a um aliado a até 3 m e ganha Resistência 10 contra esse dano)",
           "Juramento Inquebrável (imune a Medo e a efeitos que forcem abandonar quem protege)"
         ],
-        "loot": [
-          "Selo de Sangue (60 Solares)",
-          "Cinto da Vanguarda (35 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Escolta",
         "nivelMinimoLoja": 3,
@@ -21591,9 +25050,6 @@
         ],
         "habilidades": [
           "Mão Extra (1/cena: ajuda em uma tarefa simples de bordo sem gastar ação)"
-        ],
-        "loot": [
-          "Corda Trançada (5 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
@@ -21651,10 +25107,6 @@
           "Comandar a Tripulação (aliados com função de Tripulação a bordo do mesmo veículo recebem +2 em Pilotagem e Ofício (Navegação) enquanto o Almirante estiver consciente)",
           "Manobra Impossível (1/cena: como Reação, o veículo ignora uma faixa de dano numa colisão ou avaria)"
         ],
-        "loot": [
-          "Luneta de Latão (70 Solares)",
-          "Carta Náutica Completa (40 Solares)"
-        ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
         "nivelMinimoLoja": 3,
@@ -21709,10 +25161,6 @@
         "habilidades": [
           "Retrofit de Campo (1/cena: como Ação Padrão, concede a um equipamento ou veículo aliado +2 de Defesa ou +2 de Resistência até o fim da cena)",
           "Projeto Avançado (fora de combate, reduz em um quarto o tempo de qualquer reparo ou construção que supervisionar)"
-        ],
-        "loot": [
-          "Kit de Ferramentas de Precisão (90 Solares)",
-          "Manual de Engenharia Avançada (55 Solares)"
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
@@ -21771,10 +25219,6 @@
         "habilidades": [
           "Fuga de Duelista (1/cena: como Reação, ao ser alvo de um ataque corpo a corpo, move-se até 6 m sem provocar ataque de oportunidade)"
         ],
-        "loot": [
-          "Rapieira Roubada (28 Solares)",
-          "Máscara de Renegado (14 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo"
@@ -21828,10 +25272,6 @@
         "habilidades": [
           "Teleporte de Emergência (1/cena, como Reação: ao cair abaixo de metade da Vida, desloca-se até 18 m e fica Invisível até o fim do turno)",
           "Magia Instável (ao tirar 1 natural num teste de ataque mágico, sofre 2d6 de dano de energia aleatório)"
-        ],
-        "loot": [
-          "Grimório Corrompido (200 Solares)",
-          "Anel de Contenção Rachado (90 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -21890,10 +25330,6 @@
           "Camuflagem Vegetal (impõe desvantagem em Percepção para notá-la antes do primeiro ataque)",
           "Enraizada (não pode se mover do local)"
         ],
-        "loot": [
-          "Seiva Ácida (15 Solares)",
-          "Fibra Constritora (8 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo"
@@ -21951,10 +25387,6 @@
           "Regeneração Fúngica (recupera 15 PV no início do turno enquanto tiver ao menos 1 PV)",
           "Vulnerável a Fogo (dano de fogo contra ele ignora Resistência)"
         ],
-        "loot": [
-          "Esporo Concentrado (35 Solares)",
-          "Amostra de Micélio (20 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo"
@@ -22007,10 +25439,6 @@
         "habilidades": [
           "Piscar entre Véus (1/rodada: como Ação de Movimento, fica Invisível até atacar ou até o fim do turno)",
           "Enxame de Um (ataques de área contra ele têm 50% de chance de errar)"
-        ],
-        "loot": [
-          "Pólen Onírico (22 Solares)",
-          "Asa Iridescente (12 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
@@ -22069,10 +25497,6 @@
           "Fase Lunar (à noite ou sob luz da lua, ganha +2 de Defesa e +9 m de Movimento)",
           "Trilha Feérica (deixa uma trilha de flores que se fecha em 1 rodada, servindo como terreno difícil para perseguidores)"
         ],
-        "loot": [
-          "Chifre Lunar (55 Solares)",
-          "Semente Feérica (30 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo"
@@ -22125,9 +25549,6 @@
         "habilidades": [
           "Núcleo Congelante (ao ser atingido por dano físico corpo a corpo, o atacante faz Fortitude DT 13 ou tem o Movimento reduzido à metade até o fim do próximo turno)",
           "Vulnerável a Fogo, Resistente a Frio"
-        ],
-        "loot": [
-          "Núcleo de Gelo Perpétuo (26 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
@@ -22188,10 +25609,6 @@
           "Comandar os Mortos (1/cena: como Ação Padrão, até dois Carniçais ou Esqueletos aliados a até 12 m agem imediatamente)",
           "Imune a veneno, sono e medo",
           "Regeneração Sombria (recupera 20 PV no início do turno, a menos que tenha sofrido dano radiante ou de fogo na última rodada)"
-        ],
-        "loot": [
-          "Coroa Enferrujada (140 Solares)",
-          "Poeira de Ossos Reais (60 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -23253,10 +26670,6 @@
           "Casco Grosso (Resistência física 2 enquanto não estiver Caído)",
           "Luz Ofuscante (1/cena: criaturas em alcance Curto fazem Reflexos DT 12; em falha, ficam Cegas até o começo do próximo turno delas)"
         ],
-        "loot": [
-          "Casco Luminoso (8 Solares)",
-          "Glândula Luminosa (5 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "familia": "mar",
@@ -23311,10 +26724,6 @@
         "habilidades": [
           "Camuflagem de Coral (vantagem em Furtividade enquanto estiver entre pedra, coral ou ruínas submersas)",
           "Enrolar (ao acertar a Mordida, pode deixar o alvo Agarrado; Fortitude DT 16 encerra o efeito)"
-        ],
-        "loot": [
-          "Pele de Coral Flexível (18 Solares)",
-          "Presa de Moreia (9 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
@@ -23372,10 +26781,6 @@
           "Descarga na Água (1/cena: criaturas dentro d'água em alcance Médio fazem Fortitude DT 18; sofrem 2d8 de Raio e ficam Atordoadas até o fim do próximo turno da Manta em falha, ou metade do dano sem condição em sucesso)",
           "Nado em Água Agitada (ignora terreno difícil causado por ondas, vento e chuva)"
         ],
-        "loot": [
-          "Bolsa Voltaica (45 Solares)",
-          "Couro de Manta (24 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "familia": "mar",
@@ -23431,10 +26836,6 @@
           "Faro de Sangue (sabe a direção de toda criatura ferida ou veículo avariado em alcance Longo)",
           "Investida (se nadar pelo menos 9 m em linha reta antes da Mordida, causa +2d8 de impacto; Reflexos DT 22 evita ficar Caído)",
           "Placas de Metal (Resistência física 3)"
-        ],
-        "loot": [
-          "Dente Reforçado (110 Solares)",
-          "Placa de Metal Incrustada (75 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -23493,10 +26894,6 @@
           "Muralha de Coral (1/cena: ergue até três placas adjacentes de coral, cada uma com 80 PV e Defesa 20, que concedem cobertura total)",
           "Regeneração na Água (recupera 30 PV no começo do turno enquanto estiver submerso; fogo impede esta recuperação por uma rodada)"
         ],
-        "loot": [
-          "Núcleo de Coral Vivo (650 Solares)",
-          "Pérola de Colônia (280 Solares)"
-        ],
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
         "familia": "elemental",
@@ -23553,10 +26950,6 @@
           "Canto Grave (1/cena: inimigos em alcance Longo fazem Vontade DT 30; em falha, sofrem 4d10 de Água e ficam Atordoados até o fim do próximo turno deles; em sucesso, sofrem metade do dano e não ficam Atordoados)",
           "Onda (1/cena: move todas as criaturas e veículos na água em alcance Médio até 9 m na mesma direção; Reflexos DT 30 reduz o movimento à metade)",
           "Recife no Dorso (aliados sobre a Baleia têm cobertura parcial e vantagem em Vontade)"
-        ],
-        "loot": [
-          "Osso Ressonante (2800 Solares)",
-          "Placa de Nácar (1400 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -23616,9 +27009,6 @@
           "Mostrar Caminho (o vínculo recebe vantagem no primeiro teste de Sobrevivência de cada viagem)",
           "Clarão (1/cena, reação: impõe desvantagem a um ataque contra o vínculo em alcance Curto)"
         ],
-        "loot": [
-          "Cinza Luminosa (12 Solares)"
-        ],
         "classe": "Familiar",
         "nivelMinimoLoja": 2,
         "familia": "espirito",
@@ -23675,10 +27065,6 @@
           "Sussurro (1/cena: um alvo em alcance Curto faz Vontade DT 16; em falha, não usa reações até o começo do próximo turno dele)",
           "Corpo de Água (atravessa frestas e respira em qualquer líquido; recebe Resistência física 2 contra ataques não mágicos)"
         ],
-        "loot": [
-          "Gargalheira Encharcada (28 Solares)",
-          "Frasco de Água Espectral (16 Solares)"
-        ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "familia": "espirito",
@@ -23734,10 +27120,6 @@
         "habilidades": [
           "Proteger (no começo da cena, escolhe um aliado; enquanto estiver adjacente a ele, ambos recebem +2 de Defesa)",
           "Conter Agressor (1/cena: um alvo que tenha atacado o protegido faz Vontade DT 18; em falha, fica Imobilizado até o fim do próximo turno dele)"
-        ],
-        "loot": [
-          "Placa de Guarda (55 Solares)",
-          "Elmo Antigo (32 Solares)"
         ],
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
@@ -23796,10 +27178,6 @@
           "Troca de Lugar (1/cena: troca de posição com uma criatura em alcance Curto; Vontade DT 22 evita a troca)",
           "Azar (o primeiro alvo que falhar em Troca de Lugar recebe desvantagem no próximo teste de resistência)"
         ],
-        "loot": [
-          "Véu de Prata Fria (180 Solares)",
-          "Estilhaço Assombrado (95 Solares)"
-        ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "familia": "espirito",
@@ -23856,10 +27234,6 @@
           "Memória Protegida (aliados em alcance Curto recebem vantagem em Vontade e não podem ter suas memórias alteradas enquanto o Escriba estiver consciente)",
           "Marcar Agressor (1/turno, quando um inimigo causa dano, o Escriba o registra; até o fim da cena, ataques contra esse inimigo ignoram 3 pontos de Resistência)",
           "Restaurar Memória (1/cena: encerra uma condição mental ou espiritual em até três aliados em alcance Médio)"
-        ],
-        "loot": [
-          "Registro Espectral (900 Solares)",
-          "Tinteiro Assombrado (420 Solares)"
         ],
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
@@ -23918,10 +27292,6 @@
           "Lamento (1/cena: inimigos na área fazem Vontade DT 30; sofrem 4d10 espiritual e ficam Imobilizados até o fim do próximo turno deles em falha, ou metade do dano sem condição em sucesso)",
           "Última Vela (1/cena, quando um aliado em alcance Curto chegaria a 0 PV, ele permanece com 1 PV)"
         ],
-        "loot": [
-          "Vela Espectral (3000 Solares)",
-          "Manto de Cinzas (1500 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
@@ -23979,10 +27349,6 @@
           "Comando (não pode ser amedrontado, enfeitiçado ou convencido a contrariar a frase escrita em seu selo)",
           "Remendo de Argila (fora de combate, recupera todos os PV após dez minutos e um balde de argila molhada)"
         ],
-        "loot": [
-          "Selo de Comando (10 Solares)",
-          "Argila Animada (6 Solares)"
-        ],
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
         "familia": "golem",
@@ -24037,10 +27403,6 @@
         "habilidades": [
           "Círculo de Sal (criaturas invocadas e espíritos tratam o espaço adjacente ao Golem como terreno difícil)",
           "Corpo de Sal (sofre +1d6 de dano de Água, mas ignora veneno, doença e sangramento)"
-        ],
-        "loot": [
-          "Núcleo de Sal Compactado (24 Solares)",
-          "Sal de Proteção (14 Solares)"
         ],
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
@@ -24097,10 +27459,6 @@
         "habilidades": [
           "Batida de Marcha (aliados em alcance Curto recebem +2 na Iniciativa)",
           "Som Ensurdecedor (1/cena: criaturas em alcance Curto fazem Fortitude DT 18; sofrem 2d8 sonoro e perdem reações até o começo do próximo turno delas em falha, ou metade do dano em sucesso)"
-        ],
-        "loot": [
-          "Núcleo de Bronze (70 Solares)",
-          "Placa Ressonante (38 Solares)"
         ],
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
@@ -24159,10 +27517,6 @@
           "Enraizar (como Ação de Movimento, recebe Resistência física 4 e não pode ser empurrado até decidir voltar a se mover)",
           "Regeneração (recupera 20 PV no começo do turno quando estiver sobre solo natural; fogo impede esta recuperação por uma rodada)"
         ],
-        "loot": [
-          "Raiz Endurecida (190 Solares)",
-          "Seiva Regeneradora (85 Solares)"
-        ],
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
         "familia": "golem",
@@ -24220,10 +27574,6 @@
           "Imagens Falsas (1/cena: cria duplicatas em alcance Curto até o começo do próximo turno; ataques contra o Golem têm desvantagem)",
           "Visão Total (não pode ser surpreendido enquanto pelo menos metade de suas placas estiver intacta)"
         ],
-        "loot": [
-          "Placa de Espelho Encantado (780 Solares)",
-          "Prisma de Vigilância (360 Solares)"
-        ],
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
         "familia": "golem",
@@ -24280,10 +27630,6 @@
           "Corpo de Obsidiana (Resistência física 6; aliados adjacentes recebem cobertura parcial)",
           "Estilhaços (1/cena: criaturas em cone de 12 m fazem Reflexos DT 30; sofrem 5d8 cortante e ficam Caídas em falha, ou metade do dano sem condição em sucesso)",
           "Núcleo Instável (ao chegar a 0 PV, criaturas em alcance Curto fazem Reflexos DT 30; sofrem 4d10 de Fogo, metade em sucesso)"
-        ],
-        "loot": [
-          "Núcleo de Obsidiana (3200 Solares)",
-          "Lâmina Grande de Obsidiana (1700 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -24346,10 +27692,6 @@
           "Sinais (a área fica em silêncio e os objetos escritos ao redor perdem as letras aos poucos)",
           "Como Evitar (foge de luz forte e de barulho constante; quem canta ou fala sem parar não é escolhido como alvo)"
         ],
-        "loot": [
-          "Fragmento de Selo Apagado (70 Solares)",
-          "Garra Pálida (35 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "familia": "vazio",
@@ -24409,10 +27751,6 @@
           "Arrancar (gatilho: dois ou mais Cães acertaram o mesmo alvo nesta rodada; Fortitude DT 18; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; a perda é sempre uma Perna, sem sorteio)",
           "Sinais (cães do lugar ficam mudos e cabisbaixos; pegadas param no meio de um campo aberto)",
           "Como Evitar (ficar de costas para uma parede ou dentro de uma construção com uma só entrada; em terreno aberto o grupo é cercado)"
-        ],
-        "loot": [
-          "Coleira de Contenção Quebrada (95 Solares)",
-          "Presa do Vazio (60 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -24474,10 +27812,6 @@
           "Arrancar (anunciado: a fenda criada por Fechar Caminho se fecha sobre quem a estiver atravessando; Reflexos DT 21; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento)",
           "Sinais (o ar dobra como papel, e sons chegam do lado errado do cômodo)",
           "Como Evitar (não atravessar a linha da fenda; contornar custa tempo, mas não custa carne)"
-        ],
-        "loot": [
-          "Garra de Fenda (260 Solares)",
-          "Fibra Espacial (140 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -24541,10 +27875,6 @@
           "Sinais (destroços flutuando parados no meio do caminho e fios brilhando no alto)",
           "Como Evitar (fogo corta a teia; a Aranha não persegue quem sai da área dos destroços)"
         ],
-        "loot": [
-          "Teia Gravitacional (620 Solares)",
-          "Fragmento Orbital (310 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "familia": "vazio",
@@ -24605,10 +27935,6 @@
           "Sem Rosto (imune a Cego e a efeitos que dependam de reconhecer identidade ou expressão)",
           "Sinais (vozes do grupo somem uma a uma, e a sombra de todos fica com um contorno a mais do que o número de pessoas)",
           "Como Evitar (oferecer outro alvo por escolha própria, ou esconder o rosto de quem foi escolhido; a Multidão perde o interesse em quem ninguém vê)"
-        ],
-        "loot": [
-          "Órgão Vibratório (3400 Solares)",
-          "Máscara Lisa (1600 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -24673,10 +27999,6 @@
           "Corpo do Vazio (imune a medo, veneno, doença, sono e efeitos de envelhecimento)",
           "Sinais (estrelas se apagando em fila, animais em silêncio total, luz das tochas ficando fraca)",
           "Como Evitar (não é um encontro para vencer no dano: o grupo ganha ao fechar o Vão de onde ela veio, atrair o corpo para longe de algo vivo ou sobreviver até ela perder o interesse; o Mestre define qual porta a cena abre)"
-        ],
-        "loot": [
-          "Núcleo Estelar (12000 Solares)",
-          "Placa do Vazio (6000 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -25832,10 +29154,6 @@
           "Sinais (sussurros que param quando alguém escuta, e arranhões do lado de dentro da parede)",
           "Como Evitar (ninguém perde nada se ninguém enfia a mão na fresta; responder à voz também não ajuda, e ela fica pior quando percebe que foi ouvida)"
         ],
-        "loot": [
-          "Dedo Fino do Vazio (30 Solares)",
-          "Cera de Fresta (12 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "familia": "vazio",
@@ -25898,10 +29216,6 @@
           "Sinais (a superfície fica lisa como vidro, aves em silêncio e uma sombra branca sem fim passando por baixo do casco)",
           "Como Evitar (sair da água e da névoa, ou não deixar ninguém sangrar sobre a rota; sem sangue o Faro de Medo só encontra quem está com medo)"
         ],
-        "loot": [
-          "Dente Sem Sombra (220 Solares)",
-          "Barbatana de Osso Branco (140 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "familia": "vazio",
@@ -25961,10 +29275,6 @@
           "Costurar (quando arranca um membro, recupera 60 PV e ganha +2 de Defesa até o fim da cena)",
           "Sinais (cheiro de linha encerada, o estalar de uma tesoura sem dono e sombras com um braço a mais)",
           "Como Evitar (aceita uma troca: se alguém lhe entregar por vontade própria algo que o grupo valorize de verdade, ele leva o objeto e some por uma cena inteira)"
-        ],
-        "loot": [
-          "Linha de Costura Viva (700 Solares)",
-          "Agulha de Osso (420 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -30855,9 +34165,6 @@
           "Corpo de Cidade (imune a Amedrontado, Atordoado e a efeitos de mente; reduz em 6 o dano físico de cada golpe)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
-        "loot": [
-          "Núcleo Titânico (260 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "solo",
@@ -30921,9 +34228,6 @@
           "Sem Rosto (não pode ser Enfeitiçado nem lido por efeitos de mente)",
           "Carga Fantasma (1/cena, Ação de Movimento: atravessa criaturas e obstáculos até 18 m em linha reta)"
         ],
-        "loot": [
-          "Elmo Vazio (150 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "papel": "solo",
@@ -30986,9 +34290,6 @@
           "Golpe Anunciado (anuncie na rodada anterior; acerta 10d10+40, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
           "Sede Antiga (uma vez por turno, ao causar dano a uma criatura viva, recupera Vida igual a um quinto do dano)",
           "Olhar Dominante (Ação Padrão, alcance Médio: Vontade DT 39 ou o alvo obedece a um comando de uma palavra)"
-        ],
-        "loot": [
-          "Anel de Sangue Antigo (200 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -31056,9 +34357,6 @@
           "Sinais (relógios que erram por dentro do grupo e lembranças que faltam, uma a uma)",
           "Como Evitar (a cena é de fuga, ou de fazer o grupo lembrar em voz alta o que ele já levou)"
         ],
-        "loot": [
-          "Ampulheta Roída (480 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "chefe",
@@ -31124,9 +34422,6 @@
           "Ausência Total (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT 165. Sofrem 20d10 de Vazio, metade em sucesso; esse dano não gera crítico)",
           "Sinais (coisas que somem sem barulho e vozes que perdem o eco, uma a uma)",
           "Como Evitar (ela só consome o que está sendo chamado: a cena é de fuga, ou de calar quem chama e sair do alcance)"
-        ],
-        "loot": [
-          "Fragmento de Ausência (1200 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -31194,9 +34489,6 @@
           "Sinais (o som some de um lugar de cada vez, até a respiração do grupo)",
           "Como Evitar (ele reage a quem tenta fazer barulho: a cena é de fuga em silêncio, ou de fechar o Vão por onde ele veio)"
         ],
-        "loot": [
-          "Poeira de Silêncio (2000 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "chefe",
@@ -31259,9 +34551,6 @@
         "habilidades": [
           "Explosão ao Cair (ao chegar a 0 PV, criaturas em alcance Curto fazem Reflexos DT 27; sofrem metade do dano de um ataque dele, metade em sucesso)"
         ],
-        "loot": [
-          "Núcleo Flamejante (100 Solares)"
-        ],
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
         "papel": "solo",
@@ -31321,9 +34610,6 @@
         ],
         "habilidades": [
           "Calor Insuportável (quem termina o turno em alcance Curto sofre dano de fogo igual a um décimo do golpe dele)"
-        ],
-        "loot": [
-          "Coração de Fogo Primordial (180 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -31386,9 +34672,6 @@
         "habilidades": [
           "Chão Gelado (o chão em alcance Curto é terreno difícil; Reflexos DT 29 ou cai ao correr)"
         ],
-        "loot": [
-          "Núcleo de Gelo (110 Solares)"
-        ],
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
         "papel": "solo",
@@ -31448,9 +34731,6 @@
         ],
         "habilidades": [
           "Inverno Longo (no fim de cada rodada, criaturas em alcance Médio fazem Fortitude DT 39 ou perdem 1 ponto de Estamina)"
-        ],
-        "loot": [
-          "Coração de Gelo Primordial (190 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -31514,9 +34794,6 @@
           "Calor Insuportável (quem termina o turno em alcance Médio sofre dano de fogo igual a um décimo do golpe dele)",
           "Explosão ao Cair (ao chegar a 0 PV, criaturas em alcance Longo fazem Reflexos DT 85; sofrem o dano de um ataque dele, metade em sucesso)"
         ],
-        "loot": [
-          "Cinza Ancestral (560 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "solo",
@@ -31578,9 +34855,6 @@
         ],
         "habilidades": [
           "Inverno Longo (no fim de cada rodada, criaturas em alcance Longo fazem Fortitude DT 97 ou perdem 2 pontos de Estamina)"
-        ],
-        "loot": [
-          "Cristal de Inverno Ancestral (660 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -31644,9 +34918,6 @@
         "habilidades": [
           "Sopro Largo (1/cena: cone de 9m; Reflexos DT 30, metade do dano em sucesso)"
         ],
-        "loot": [
-          "Escama de Dragão Jovem (120 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "solo",
@@ -31706,10 +34977,6 @@
         ],
         "habilidades": [
           "Presença de Dragão (ao entrar em cena, cada inimigo faz Vontade DT 32 ou fica Amedrontado até o fim da rodada; uma vez por criatura por cena)"
-        ],
-        "loot": [
-          "Escama de Dragão Adulto (140 Solares)",
-          "Dente de Dragão (140 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -31771,10 +35038,6 @@
         "habilidades": [
           "Pele Antiga (reduz em 5 o dano físico e mágico de cada golpe)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [
-          "Escama Primordial (240 Solares)",
-          "Dente de Dragão (240 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -31839,10 +35102,6 @@
           "Pele Ancestral (reduz em 8 o dano físico e mágico de cada golpe)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
-        "loot": [
-          "Escama Ancestral (440 Solares)",
-          "Dente de Dragão (440 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "chefe",
@@ -31904,9 +35163,6 @@
         ],
         "habilidades": [
           "Ventania (criaturas em alcance Curto fazem Fortitude DT 29 no começo de cada rodada ou são empurradas 3 m)"
-        ],
-        "loot": [
-          "Faísca Engarrafada (120 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -31970,9 +35226,6 @@
           "Golpe Anunciado (anuncie na rodada anterior; acerta 16d10+63, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
           "Aura Sagrada (aliados a até 9 m têm vantagem em testes de Vontade; inimigos Mortos-Vivos e Demoníacos têm desvantagem em ataques contra ele)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [
-          "Pena de Arcanjo (340 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -32038,9 +35291,6 @@
           "Cântico Constante (no começo de cada rodada, aliados a até 18 m recuperam Vida igual a um vigésimo do golpe dele; inimigos sofrem esse valor em luz)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
-        "loot": [
-          "Pena de Serafim (600 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "chefe",
@@ -32103,10 +35353,6 @@
         "habilidades": [
           "Faro de Ferida (tem vantagem em ataques contra quem está abaixo da metade da Vida)"
         ],
-        "loot": [
-          "Presa de Lobo Atroz (60 Solares)",
-          "Pele de Lobo Atroz (60 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo",
@@ -32166,10 +35412,6 @@
         ],
         "habilidades": [
           "Uivo do Bando (1/cena, Ação Padrão: chama 1d4 Lobos Cinzentos, que entram no começo da rodada seguinte)"
-        ],
-        "loot": [
-          "Presa de Lobo Alfa (100 Solares)",
-          "Pele de Lobo Alfa (100 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -32231,9 +35473,6 @@
         "habilidades": [
           "Maré Viva (criaturas a bordo de embarcações a até 30 m fazem Reflexos DT 50 ou caem na água)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [
-          "Escama Oceânica (280 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -32298,9 +35537,6 @@
           "Maré Viva (criaturas a até 30 m fazem Reflexos DT 80 ou são arrastadas 9 m)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
-        "loot": [
-          "Sal do Maremoto (520 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "solo",
@@ -32363,9 +35599,6 @@
         "habilidades": [
           "Doença do Esgoto (quem sofre a mordida faz Fortitude DT 15 ou fica Enjoado por 1 hora)"
         ],
-        "loot": [
-          "Dente de Rato (10 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
@@ -32426,9 +35659,6 @@
         ],
         "habilidades": [
           "Bando (tem vantagem em ataques contra alvo que já esteja adjacente a outro Roedor)"
-        ],
-        "loot": [
-          "Pelagem Suja (30 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
@@ -32492,10 +35722,6 @@
           "Golpe Anunciado (anuncie na rodada anterior; acerta 3d10+15, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
           "Chamado do Esgoto (1/cena, Ação Padrão: 2d4 Ratos Gigantes entram no começo da rodada seguinte)"
         ],
-        "loot": [
-          "Cauda Entrelaçada (70 Solares)",
-          "Dente de Rei (70 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "chefe",
@@ -32557,9 +35783,6 @@
         "habilidades": [
           "Bolsa Cortada (ao acertar, pode trocar o dano por roubar um item pequeno do alvo; Furtividade contra a Percepção do alvo)"
         ],
-        "loot": [
-          "Bolsa Surrada (10 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
@@ -32620,9 +35843,6 @@
         ],
         "habilidades": [
           "Ordem de Ataque (Reação: um aliado a até 9 m faz um ataque imediato)"
-        ],
-        "loot": [
-          "Insígnia do Bando (50 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
@@ -32687,10 +35907,6 @@
           "Pedágio (ao entrar em cena, quem não pagar faz Vontade DT 27 ou fica Intimidado até o fim da rodada)",
           "Guarda Pessoal (1/cena, Ação Padrão: 1d4 Capitães de Bando chegam na rodada seguinte)"
         ],
-        "loot": [
-          "Selo do Pedágio (100 Solares)",
-          "Mapa da Estrada (100 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "papel": "chefe",
@@ -32751,9 +35967,6 @@
         ],
         "habilidades": [
           "Pancada Descuidada (quando erra um ataque, o alvo mais próximo faz Reflexos DT 19 ou é atingido por metade do dano)"
-        ],
-        "loot": [
-          "Presa de Ogro (40 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
@@ -32816,9 +36029,6 @@
         "habilidades": [
           "Pele de Rocha (reduz em 3 o dano físico de cada golpe)"
         ],
-        "loot": [
-          "Lasca de Rocha Viva (80 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "papel": "solo",
@@ -32879,9 +36089,6 @@
         ],
         "habilidades": [
           "Ar de Tormenta (no começo de cada rodada, criaturas a até 9 m fazem Reflexos DT 32 ou perdem 1 ponto de Estamina)"
-        ],
-        "loot": [
-          "Faísca de Tormenta (140 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -32945,9 +36152,6 @@
           "Passo que Muda o Chão (1/rodada, Ação de Movimento: terreno em alcance Médio vira difícil; Reflexos DT 42 ou cai)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
-        "loot": [
-          "Pedra Ancestral (220 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "solo",
@@ -33010,10 +36214,6 @@
         "habilidades": [
           "Cabeças que Voltam (no fim de cada rodada recupera Vida igual a um décimo do golpe dela, a menos que tenha sofrido fogo ou ácido na rodada)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [
-          "Presa de Hidra (190 Solares)",
-          "Sangue de Hidra (190 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -33079,9 +36279,6 @@
           "Cabeças que Voltam (no fim de cada rodada recupera Vida igual a um décimo do golpe dela, a menos que tenha sofrido fogo ou ácido na rodada)",
           "Pescoços em Todo Lugar (1/rodada, Reação: ataca quem entrar em alcance Curto)"
         ],
-        "loot": [
-          "Cabeça Primordial (320 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "chefe",
@@ -33143,9 +36340,6 @@
         ],
         "habilidades": [
           "Estouro da Manada (1/cena, Ação Padrão: investida em linha de 18 m; criaturas no caminho fazem Reflexos DT 37 ou sofrem o dano de um ataque e caem)"
-        ],
-        "loot": [
-          "Chifre de Behemoth (180 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -33210,9 +36404,6 @@
           "Pele do Último Dia (reduz em 12 o dano físico e mágico de cada golpe)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
-        "loot": [
-          "Escama do Último Dia (1000 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "chefe",
@@ -33274,9 +36465,6 @@
         "habilidades": [
           "Corvos do Campo (1/cena, Ação Padrão: criaturas a até 6 m fazem Reflexos DT 20 ou ficam Cegas até o fim da rodada)"
         ],
-        "loot": [
-          "Palha Encantada (40 Solares)"
-        ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo",
@@ -33335,9 +36523,6 @@
         ],
         "habilidades": [
           "Olhar de Pedra (Ação Padrão, alcance Médio: Fortitude DT 27 ou o alvo fica Lento; se falhar de novo na rodada seguinte, fica Petrificado até o fim da cena)"
-        ],
-        "loot": [
-          "Serpente Petrificada (100 Solares)"
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
@@ -33401,9 +36586,6 @@
           "Hora Marcada (ao entrar em cena, escolhe uma criatura: ela sofre desvantagem em todos os testes até o fim da cena, ou até ele cair)",
           "Sinais (relógios que batem uma hora que ninguém ouviu, e um cavalo que não deixa pegadas)"
         ],
-        "loot": [
-          "Ponteiro Quebrado (360 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "chefe",
@@ -33466,9 +36648,6 @@
           "Golpe Anunciado (anuncie na rodada anterior; acerta 19d10+70, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
           "Abraço do Mundo (Ação Padrão: ataque de agarrar; alvo agarrado não pode se afastar e sofre o dano do ataque no começo de cada turno dele)",
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [
-          "Escama do Mundo (400 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -33535,9 +36714,6 @@
           "Sinais (ecos que chegam antes do som e sombras que andam mais devagar que o dono)",
           "Como Evitar (ele perde o interesse em quem age fora de ordem: a cena é de fuga, ou de quebrar o ritmo que ele espera)"
         ],
-        "loot": [
-          "Relógio Sem Ponteiros (600 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "chefe",
@@ -33602,9 +36778,6 @@
           "Sinais (velas que se apagam sozinhas e um silêncio educado que se espalha primeiro pelos cantos)",
           "Como Evitar (ele só encerra o que já começou a acabar: quem recusa o fim com um ato deliberado, como salvar alguém ou acender a luz, fica fora do alcance por uma rodada)"
         ],
-        "loot": [
-          "Poeira do Fim (800 Solares)"
-        ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "papel": "chefe",
@@ -33667,9 +36840,6 @@
           "Golpe Anunciado (anuncie na rodada anterior; acerta 63d10+236, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
           "Peso Sustentado (reduz em 15 o dano físico e mágico de cada golpe)",
           "Passo que Muda o Chão (1/rodada, Ação de Movimento: terreno em alcance Longo vira difícil; Reflexos DT 215 ou cai)"
-        ],
-        "loot": [
-          "Pedra do Céu (1600 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,

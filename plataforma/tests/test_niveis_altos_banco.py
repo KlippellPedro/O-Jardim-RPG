@@ -85,7 +85,7 @@ class NiveisAltosBancoTests(unittest.TestCase):
 
     # ------------------------------------------------------------------ migração 46
     def test_migracao_46_converte_o_vd_antigo_e_deixa_o_novo_em_paz(self):
-        versao, nome, comandos = MIGRATIONS[-1]
+        versao, nome, comandos = next(m for m in MIGRATIONS if m[0] == 46)
         self.assertEqual((versao, nome), (46, "vd_igual_ao_nivel_do_grupo"))
         campanha_id, mestre, _ = self._mesa()
         sessao_id = uuid.uuid4()

@@ -96,6 +96,51 @@ e [test_combate_intenso.py](../../plataforma/tests/test_combate_intenso.py).
 O catálogo de condições não implica que todos os efeitos tenham execução
 automática; a cobertura efetiva continua sendo a implementada nos serviços.
 
+### Loot das criaturas
+
+A tabela de loot de cada criatura mora em `data/bestiario/loot-criaturas.json`,
+fora do catálogo público e fora do bundle (a fronteira em
+`tools/browser-content-boundary.ts` barra o arquivo). Só o servidor lê, por
+[loot_criaturas.py](../../plataforma/core/loot_criaturas.py), e o pacote da
+Discloud leva `data/bestiario` junto.
+
+- Criatura adicionada pelo Bestiário grava `sessao_participantes.monstro_id`;
+  o loot rolado fica em `sessao_participantes.loot` (migração 47). Os dois só
+  aparecem no estado de quem comanda a mesa.
+- `GET /sessao/bestiario/loot/{monstro_id}` mostra a tabela ao Mestre;
+  `POST /sessao/{id}/participantes/{pid}/loot` rola cada linha (d100 contra a
+  chance, no servidor) e `.../loot/entregar` manda cada linha para um
+  personagem. Item entra por `conceder_itens_do_catalogo` (o mesmo miolo da
+  concessão da Loja, que aceita item fora do balcão); moeda entra por
+  `creditar_carteira`, com lançamento `sessao.loot` no extrato cuja chave é a
+  própria linha, então nada sai duas vezes. Rolar de novo só vale enquanto
+  nada foi entregue.
+
+### Troca de itens entre jogadores
+
+`POST /personagens/{id}/inventario/{item_id}/enviar` move a quantidade para
+outro personagem ativo da campanha (dono da ficha ou Mestre), com
+idempotência em `comandos_economia` e um lançamento `inventario.enviar` em
+cada ponta. O item chega desequipado. Não viajam: Aliado, Base e veículo
+completo (a outra metade mora fora do inventário), item modificado pela
+metade da pilha e item que colidiria com outro diferente de mesmo `item_id`.
+`GET /personagens/{id}/destinos-de-envio` lista só nome e jogador, porque o
+jogador não lê a ficha dos outros.
+
+### Aflições na ficha
+
+`ficha.aflicoesAtivas` guarda aflição e estágio; a lógica fica em
+[aflicoesFichaService.ts](../../src/services/aflicoesFichaService.ts). O teste de
+Fortitude é rolado em `/registros/rolagem` (com DT, então o servidor devolve o
+grau) e a ficha aplica a progressão da regra. O bônus sai de
+[testePericiaService.ts](../../src/services/testePericiaService.ts), a mesma
+conta da aba Perícias. A Sessão só exibe: `_montar_estado` lê as aflições da
+ficha do personagem com a mesma visibilidade das condições.
+
+Testes: [test_loot_e_troca.py](../../plataforma/tests/test_loot_e_troca.py),
+[lootCriaturas.test.ts](../../tests/frontend/lootCriaturas.test.ts) e
+[aflicoesFicha.test.ts](../../tests/frontend/aflicoesFicha.test.ts).
+
 <a id="veiculos-e-propriedades"></a>
 
 ## Níveis além do 60

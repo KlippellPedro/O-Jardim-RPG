@@ -118,9 +118,9 @@ test('afinidade elemental não é inferida por associação temática', () => {
   assert.equal(obterMaterial('comp-amostra-elemental').afinidade, 'Escolha na compra');
 });
 
-test('catálogo expandido entrega ficha completa para os 259 materiais', () => {
-  assert.equal(MATERIAIS_CATALOGO.length, 259);
-  assert.equal(new Set(MATERIAIS_IDS).size, 259);
+test('catálogo expandido entrega ficha completa para os 406 materiais', () => {
+  assert.equal(MATERIAIS_CATALOGO.length, 406);
+  assert.equal(new Set(MATERIAIS_IDS).size, 406);
 
   for (const id of MATERIAIS_IDS) {
     const material = obterMaterial(id);
@@ -355,17 +355,13 @@ function normalizarTitulo(texto: string): string {
   return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 }
 
-test('lootIds liga somente correspondências textuais existentes, sem inventar drops', () => {
-  const idPorTitulo = new Map(MATERIAIS_CATALOGO.map((item) => [normalizarTitulo(item.titulo), item.id]));
+test('o loot saiu do catálogo público: a tabela mora em data/bestiario/loot-criaturas.json', () => {
+  // O jogador descobre o que cai saqueando; o texto antigo (com preço de antes
+  // da escala) e os lootIds derivados dele não voltam para o catálogo.
   const monstros = catalogo.entradas.filter((item) => item.tipo === 'monstro');
-
   for (const monstro of monstros) {
-    const conteudo = monstro.conteudo as { loot?: string[]; lootIds?: string[] };
-    const esperados = [...new Set((conteudo.loot ?? [])
-      .map((loot) => loot.replace(/\s*\([^)]*\)\s*$/, ''))
-      .map((loot) => idPorTitulo.get(normalizarTitulo(loot)))
-      .filter((id): id is string => Boolean(id)))];
-    assert.deepEqual(conteudo.lootIds ?? [], esperados, `${monstro.id}: lootIds não corresponde ao loot textual`);
-    assert.ok((conteudo.lootIds ?? []).every((id) => MATERIAIS_IDS.includes(id)));
+    assert.equal('loot' in monstro.conteudo, false, `${monstro.id}: loot textual voltou ao catálogo`);
+    assert.equal('lootIds' in monstro.conteudo, false, `${monstro.id}: lootIds voltou ao catálogo`);
   }
+  assert.ok(normalizarTitulo('Pelego') === 'pelego');
 });

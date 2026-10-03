@@ -273,7 +273,8 @@ test('criaturas comercializadas possuem ficha e listas estruturadas', () => {
     }
     assert.ok(String(monstro.conteudo.deslocamento ?? '').trim(), `${monstro.id}: deslocamento ausente`);
     assert.ok(monstro.conteudo.atributos && typeof monstro.conteudo.atributos === 'object', `${monstro.id}: atributos ausentes`);
-    for (const campo of ['pericias', 'ataques', 'habilidades', 'loot']) {
+    // O loot saiu daqui: mora em data/bestiario/loot-criaturas.json, que só o servidor lê.
+    for (const campo of ['pericias', 'ataques', 'habilidades']) {
       assert.ok(Array.isArray(monstro.conteudo[campo]), `${monstro.id}: ${campo} deve ser lista`);
     }
     assert.ok(monstro.conteudo.ataques.length > 0, `${monstro.id}: criatura sem ataque publicado`);
@@ -316,8 +317,11 @@ test('perfil universal, se existir, fica só no bestiário e na sessão, fora do
   // Também saem do balcão as criaturas geradas só para o Bestiário (VD alto e únicas): elas não são para comprar.
   const emBalcao = catalogo.entradas.filter(item => item.conteudo.disponivelNaLoja === false);
   const soBestiario = emBalcao.filter(item => item.conteudo.geradoPorFamilia === true);
-  assert.equal(emBalcao.length, universais.length + soBestiario.length, 'só perfil universal e criatura só de Bestiário saem do balcão');
+  // E os materiais exclusivos de loot: só caem de uma criatura (data/bestiario/loot-criaturas.json).
+  const exclusivos = emBalcao.filter(item => item.conteudo.exclusivo === true);
+  assert.equal(emBalcao.length, universais.length + soBestiario.length + exclusivos.length, 'só perfil universal, criatura só de Bestiário e loot exclusivo saem do balcão');
   assert.ok(soBestiario.every(item => item.tipo === 'monstro'));
+  assert.ok(exclusivos.every(item => item.tipo === 'drop' && item.id.startsWith('loot-')));
 });
 
 const FUNCOES = new Set(['Guarda de local', 'Escolta', 'Tripulação', 'Ofício']);

@@ -35,6 +35,41 @@ export interface ParticipantePayload {
   vd?: number | null;
   /** Referência rápida ("Luta +12"); não valida nada. */
   pericias?: string[];
+  /** Só na criação: a criatura do Bestiário, que liga o participante à tabela de loot. */
+  monstro_id?: string | null;
+}
+
+/** Uma linha do loot rolado. `entregue_para` fica vazio até o Mestre escolher quem leva. */
+export interface LootLinha {
+  linha: string;
+  tipo: 'item' | 'moedas';
+  item_id?: string;
+  moeda?: string;
+  titulo: string;
+  raridade?: string | null;
+  quantidade: number;
+  rolagem: number;
+  chance: number;
+  entregue_para: null | { personagem_id: string; nome: string };
+}
+
+export interface LootRolado {
+  monstro_id: string;
+  linhas: LootLinha[];
+}
+
+/** O que a criatura pode deixar cair. Só o Mestre recebe. */
+export interface TabelaDeLoot {
+  monstro_id: string;
+  itens: Array<{
+    item_id: string;
+    titulo: string;
+    raridade: string | null;
+    exclusivo: boolean;
+    chance: number;
+    quantidade: string;
+  }>;
+  moedas: null | { dados: string; moeda: string; chance: number };
 }
 
 export interface SessaoParticipanteResponse {
@@ -68,6 +103,12 @@ export interface SessaoParticipanteResponse {
   pericias?: string[];
   /** Anotação privada de quem comanda a mesa, usada para planejar o turno. */
   anotacao?: string;
+  /** Aflições da ficha do personagem (mesma regra de visibilidade das condições). */
+  aflicoes?: Array<{ aflicao_id: string; estagio: number; incubando: boolean }>;
+  /** Loot: só vem para quem comanda a mesa. */
+  monstro_id?: string | null;
+  tem_loot?: boolean;
+  loot?: LootRolado | null;
 }
 
 export interface BestiarioMonstro {
@@ -86,6 +127,8 @@ export interface BestiarioMonstro {
   papel?: string | null;
   /** Criatura de uma versão só, sem estágios. */
   unico?: boolean;
+  /** Tem tabela de loot no servidor. */
+  tem_loot?: boolean;
   pv: number | null;
   defesa: number | null;
   mana: number | null;
@@ -94,6 +137,12 @@ export interface BestiarioMonstro {
   ataques: AtaquePayload[];
   pericias: string[];
   habilidades: string[];
+  deslocamento?: string | null;
+  /** Bloco de criatura: forca, agilidade, vigor, presenca, intelecto. */
+  atributos?: Record<string, number> | null;
+  raridade?: string | null;
+  subtipo?: string | null;
+  funcao?: string | null;
 }
 
 export interface DistribuirXpResponse {
@@ -237,6 +286,26 @@ export const sessaoApi = {
 
   listarBestiario(campanhaId: string) {
     return api<{ monstros: BestiarioMonstro[] }>(`/sessao/bestiario?campanha_id=${campanhaId}`);
+  },
+
+  tabelaDeLoot(campanhaId: string, monstroId: string) {
+    return api<TabelaDeLoot>(
+      `/sessao/bestiario/loot/${encodeURIComponent(monstroId)}?campanha_id=${campanhaId}`,
+    );
+  },
+
+  rolarLoot(sessaoId: string, participanteId: string, refazer = false) {
+    return api<{ loot: LootRolado; versao: number }>(`/sessao/${sessaoId}/participantes/${participanteId}/loot`, {
+      method: 'POST',
+      body: { refazer },
+    });
+  },
+
+  entregarLoot(sessaoId: string, participanteId: string, entregas: Array<{ linha: string; personagem_id: string }>) {
+    return api<{ loot: LootRolado; entregues: Array<{ linha: string; titulo: string; quantidade: number; personagem_id: string }>; versao: number }>(
+      `/sessao/${sessaoId}/participantes/${participanteId}/loot/entregar`,
+      { method: 'POST', body: { entregas } },
+    );
   },
 
   darXp(sessaoId: string, participanteIds: string[], xp: number) {

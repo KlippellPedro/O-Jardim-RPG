@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { Activity, Check, Heart, Minus, Plus, RefreshCw, Search, Shield, Skull, Sparkles, X, Zap } from 'lucide-react';
+import { Activity, Check, Gem, Heart, Maximize2, Minus, Plus, RefreshCw, Search, Shield, Skull, Sparkles, X, Zap } from 'lucide-react';
 import { sessaoApi, type BestiarioMonstro } from '../../../services/sessaoApi';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
+import { Select } from '../../../components/ui/Select';
+import { CriaturaDetalhe } from './CriaturaDetalhe';
 import { ARQUETIPOS_CRIATURA, ORDEM_DOS_ARQUETIPOS, ORDEM_DOS_PAPEIS, PAPEIS_CRIATURA, modeloDeCriatura, vdValido, type ArquetipoCriatura, type PapelCriatura } from '../../../services/curvaCriatura';
 import { VD_MAXIMO } from '../../../services/progressaoNiveis';
 import familiasData from '../../../../data/bestiario/familias-v1.json';
@@ -47,6 +49,8 @@ interface ICartaoProps {
   adicionados: number;
   ocupado: boolean;
   onAdicionar: (monstro: BestiarioMonstro, quantidade: number) => void;
+  /** Abre a ficha completa da criatura. */
+  onAbrir?: (monstro: BestiarioMonstro) => void;
 }
 
 /** A ficha que o gerador monta para um VD e um papel, no formato do Bestiário. */
@@ -72,12 +76,12 @@ const monstroSobMedida = (vd: number, papel: PapelCriatura, arquetipo: Arquetipo
   };
 };
 
-const Cartao = ({ monstro, adicionados, ocupado, onAdicionar }: ICartaoProps) => {
+const Cartao = ({ monstro, adicionados, ocupado, onAdicionar, onAbrir }: ICartaoProps) => {
   const [quantidade, setQuantidade] = useState(1);
   const cor = corDoVd(monstro.vd);
-  return (
-    <li className="flex flex-col overflow-hidden rounded-xl border border-white/[0.08] bg-[#100f17] transition-colors hover:border-white/20">
-      <div className="flex items-start gap-3 p-3.5">
+  const conteudo = (
+    <>
+      <div className={`flex items-start gap-3 p-3.5 ${onAbrir ? 'pr-8' : ''}`}>
         <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-lg border text-center" style={{ borderColor: `${cor}66`, backgroundColor: `${cor}14`, color: cor }} title={monstro.vd != null ? `Valor de desafio ${monstro.vd}` : 'Sem VD'}>
           <span className="text-[8px] font-bold uppercase leading-none tracking-wider opacity-70">VD</span>
           <span className="text-lg font-black leading-tight">{monstro.vd ?? '-'}</span>
@@ -93,6 +97,7 @@ const Cartao = ({ monstro, adicionados, ocupado, onAdicionar }: ICartaoProps) =>
             {monstro.mana != null ? <span className="flex items-center gap-1 rounded-md bg-sky-400/10 px-1.5 py-0.5 text-sky-200"><Zap size={10} aria-hidden="true" /> {monstro.mana}</span> : null}
             {monstro.estamina != null ? <span className="flex items-center gap-1 rounded-md bg-emerald-400/10 px-1.5 py-0.5 text-emerald-200" title="Estamina"><Activity size={10} aria-hidden="true" /> {monstro.estamina}</span> : null}
             {monstro.iniciativa != null ? <span className="rounded-md bg-white/[0.06] px-1.5 py-0.5 text-white/60">Ini {monstro.iniciativa}</span> : null}
+            {monstro.tem_loot ? <span className="flex items-center gap-1 rounded-md bg-emerald-300/10 px-1.5 py-0.5 text-emerald-200/80" title="Tem tabela de loot"><Gem size={10} aria-hidden="true" /> Loot</span> : null}
           </div>
         </div>
       </div>
@@ -104,6 +109,21 @@ const Cartao = ({ monstro, adicionados, ocupado, onAdicionar }: ICartaoProps) =>
           {monstro.ataques.length > 4 ? <span className="px-1 text-[10px] text-white/30">+{monstro.ataques.length - 4}</span> : null}
         </div>
       ) : null}
+    </>
+  );
+  return (
+    <li className={`group flex flex-col overflow-hidden rounded-xl border bg-[#100f17] transition-colors ${adicionados > 0 ? 'border-emerald-400/25' : 'border-white/[0.08]'} hover:border-white/25`}>
+      {onAbrir ? (
+        <button
+          type="button"
+          onClick={() => onAbrir(monstro)}
+          className="relative block w-full text-left outline-none transition-colors hover:bg-white/[0.02] focus-visible:bg-white/[0.04] focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[#c7a44c]/50"
+          aria-label={`Ver a ficha completa de ${monstro.titulo}`}
+        >
+          {conteudo}
+          <Maximize2 size={13} aria-hidden="true" className="pointer-events-none absolute right-3 top-3.5 text-white/0 transition-colors group-hover:text-white/55" />
+        </button>
+      ) : conteudo}
 
       <div className="mt-auto flex items-center gap-2 p-3.5 pt-3">
         <div className="flex items-center rounded-lg border border-white/10">
@@ -137,6 +157,7 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
   const [familiaFiltro, setFamiliaFiltro] = useState('');
   const [ordem, setOrdem] = useState<'nome' | 'vd'>('nome');
   const [adicionados, setAdicionados] = useState<Record<string, number>>({});
+  const [aberto, setAberto] = useState<BestiarioMonstro | null>(null);
   useDialogAccessibility({ open: true, dialogRef, initialFocusRef: searchRef, onClose: onCancel });
 
   useEffect(() => {
@@ -181,6 +202,18 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
   }, [criaturas, categoriaFiltro, faixa, familiaFiltro, ordem, search]);
 
   const totalAdicionados = Object.values(adicionados).reduce((soma, valor) => soma + valor, 0);
+  const filtrosLigados = [
+    search.trim() ? `"${search.trim()}"` : null,
+    faixa !== 'todos' ? FAIXAS.find((item) => item.id === faixa)?.rotulo : null,
+    categoriaFiltro,
+    familiaFiltro ? (familiaFiltro === 'unicas' ? 'Criaturas únicas' : TITULO_DA_FAMILIA[familiaFiltro] ?? familiaFiltro) : null,
+  ].filter((item): item is string => !!item);
+  const limparFiltros = () => {
+    setSearch('');
+    setFaixa('todos');
+    setCategoriaFiltro(null);
+    setFamiliaFiltro('');
+  };
 
   const adicionar = async (monstro: BestiarioMonstro, quantidade: number) => {
     if (busy) return;
@@ -202,9 +235,11 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
 
   if (typeof document === 'undefined') return null;
 
-  const botaoFiltro = (ativo: boolean) => `shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors ${
-    ativo ? 'border-[#c7a44c]/55 bg-[#c7a44c]/15 text-[#f0d685]' : 'border-white/10 text-white/50 hover:border-white/25 hover:text-white/80'
+  // O filtro ligado tem que saltar aos olhos: fundo dourado cheio e um check.
+  const botaoFiltro = (ativo: boolean) => `flex shrink-0 items-center gap-1 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+    ativo ? 'border-[#e3c363] bg-[#c7a44c] text-black shadow-[0_0_12px_rgba(199,164,76,0.35)]' : 'border-white/10 bg-white/[0.02] text-white/55 hover:border-white/30 hover:text-white'
   }`;
+  const marca = (ativo: boolean) => (ativo ? <Check size={11} strokeWidth={3} aria-hidden="true" /> : null);
 
   return createPortal(
     <motion.div
@@ -256,30 +291,58 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
               <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
               <input ref={searchRef} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar criatura pelo nome..." className="h-10 w-full rounded-lg border border-white/10 bg-black/30 pl-9 pr-3 text-sm text-white outline-none focus:border-[#c7a44c]/50" />
             </div>
-            <select value={ordem} onChange={(evento) => setOrdem(evento.target.value as 'nome' | 'vd')} aria-label="Ordenar" className="h-10 rounded-lg border border-white/10 bg-black/30 px-3 text-xs font-semibold text-white/80 outline-none">
-              <option value="nome">Ordem: nome</option>
-              <option value="vd">Ordem: mais fracas primeiro</option>
-            </select>
-            <select value={familiaFiltro} onChange={(evento) => setFamiliaFiltro(evento.target.value)} aria-label="Família" className="h-10 rounded-lg border border-white/10 bg-black/30 px-3 text-xs font-semibold text-white/80 outline-none">
-              <option value="">Todas as famílias</option>
-              <option value="unicas">Criaturas únicas</option>
-              {familiasDisponiveis.map((familia) => <option key={familia.id} value={familia.id}>{familia.titulo}</option>)}
-            </select>
+            <Select
+              value={ordem}
+              onChange={(valor) => setOrdem(valor as 'nome' | 'vd')}
+              ariaLabel="Ordenar"
+              options={[
+                { value: 'nome', label: 'Ordem: nome' },
+                { value: 'vd', label: 'Ordem: mais fracas primeiro' },
+              ]}
+              menuMinWidth={220}
+              className="!h-10 !min-h-0 w-auto min-w-[11rem] rounded-lg border-white/10 bg-black/30 !py-0 px-3 text-xs font-semibold text-white/80"
+            />
+            <Select
+              value={familiaFiltro}
+              onChange={setFamiliaFiltro}
+              ariaLabel="Família"
+              options={[
+                { value: '', label: 'Todas as famílias' },
+                { value: 'unicas', label: 'Criaturas únicas', labelClassName: 'text-[#f0d685]' },
+                ...familiasDisponiveis.map((familia) => ({ value: familia.id, label: familia.titulo })),
+              ]}
+              menuMinWidth={220}
+              className={`!h-10 !min-h-0 w-auto min-w-[11rem] rounded-lg !py-0 px-3 text-xs font-semibold ${familiaFiltro ? '!border-[#e3c363] !bg-[#c7a44c]/20 text-[#f6e3a1]' : 'border-white/10 bg-black/30 text-white/80'}`}
+            />
             </>
             ) : null}
           </div>
 
           {aba === 'criaturas' ? (
           <div className="custom-scrollbar flex gap-1.5 overflow-x-auto pb-1">
-            {FAIXAS.map((item) => <button key={item.id} type="button" aria-pressed={faixa === item.id} onClick={() => setFaixa(item.id)} className={botaoFiltro(faixa === item.id)}>{item.rotulo}</button>)}
+            {FAIXAS.map((item) => <button key={item.id} type="button" aria-pressed={faixa === item.id} onClick={() => setFaixa(item.id)} className={botaoFiltro(faixa === item.id)}>{marca(faixa === item.id)}{item.rotulo}</button>)}
             {aba === 'criaturas' && categoriasDisponiveis.length ? <span className="mx-1 w-px shrink-0 self-stretch bg-white/10" aria-hidden="true" /> : null}
             {aba === 'criaturas' && categoriasDisponiveis.length ? (
               <>
-                <button type="button" aria-pressed={categoriaFiltro === null} onClick={() => setCategoriaFiltro(null)} className={botaoFiltro(categoriaFiltro === null)}>Todas</button>
-                {categoriasDisponiveis.map((categoria) => <button key={categoria} type="button" aria-pressed={categoriaFiltro === categoria} onClick={() => setCategoriaFiltro(categoria)} className={botaoFiltro(categoriaFiltro === categoria)}>{categoria}</button>)}
+                <button type="button" aria-pressed={categoriaFiltro === null} onClick={() => setCategoriaFiltro(null)} className={botaoFiltro(categoriaFiltro === null)}>{marca(categoriaFiltro === null)}Todas</button>
+                {categoriasDisponiveis.map((categoria) => <button key={categoria} type="button" aria-pressed={categoriaFiltro === categoria} onClick={() => setCategoriaFiltro(categoriaFiltro === categoria ? null : categoria)} className={botaoFiltro(categoriaFiltro === categoria)}>{marca(categoriaFiltro === categoria)}{categoria}</button>)}
               </>
             ) : null}
           </div>
+          ) : null}
+          {aba === 'criaturas' && !loading ? (
+            <div className="flex flex-wrap items-center gap-2 text-[11px]" role="status">
+              <span className="font-semibold text-white/70">{filtrados.length} de {criaturas.length} criaturas</span>
+              {filtrosLigados.length ? (
+                <>
+                  <span className="text-white/30">filtrando por</span>
+                  {filtrosLigados.map((filtro) => <span key={filtro} className="rounded-md bg-[#c7a44c]/15 px-1.5 py-0.5 font-semibold text-[#f0d685]">{filtro}</span>)}
+                  <button type="button" onClick={limparFiltros} className="ml-1 flex items-center gap-1 rounded-md px-1.5 py-0.5 font-semibold text-white/50 hover:bg-white/5 hover:text-white">
+                    <X size={11} /> Limpar filtros
+                  </button>
+                </>
+              ) : <span className="text-white/30">· clique numa criatura para ver a ficha completa</span>}
+            </div>
           ) : null}
         </div>
 
@@ -334,12 +397,23 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
           ) : (
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {filtrados.map((monstro) => (
-                <Cartao key={monstro.id} monstro={monstro} adicionados={adicionados[monstro.id] ?? 0} ocupado={busy === monstro.id} onAdicionar={(m, quantidade) => void adicionar(m, quantidade)} />
+                <Cartao key={monstro.id} monstro={monstro} adicionados={adicionados[monstro.id] ?? 0} ocupado={busy === monstro.id} onAdicionar={(m, quantidade) => void adicionar(m, quantidade)} onAbrir={setAberto} />
               ))}
             </ul>
           )}
         </div>
       </motion.div>
+      {aberto ? (
+        <CriaturaDetalhe
+          monstro={aberto}
+          familia={aberto.familia ? TITULO_DA_FAMILIA[aberto.familia] ?? aberto.familia : null}
+          cor={corDoVd(aberto.vd)}
+          adicionados={adicionados[aberto.id] ?? 0}
+          ocupado={busy === aberto.id}
+          onAdicionar={(m, quantidade) => void adicionar(m, quantidade)}
+          onFechar={() => setAberto(null)}
+        />
+      ) : null}
     </motion.div>,
     document.body,
   );

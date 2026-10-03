@@ -76,7 +76,6 @@ function montarEntrada(familia, novo) {
   const parecida = catalogo.entradas
     .filter((entrada) => entrada.tipo === 'monstro' && entrada.conteudo.preco && !entrada.conteudo.geradoPorFamilia)
     .sort((a, b) => Math.abs(a.conteudo.vd - novo.vd) - Math.abs(b.conteudo.vd - novo.vd))[0];
-  const valorDoLoot = arredondar10(novo.vd * 4);
   const conteudo = {
     descricao: novo.descricao,
     preco: novo.precoSolares ? { Solares: novo.precoSolares } : (novo.preco ?? parecida.conteudo.preco),
@@ -96,7 +95,7 @@ function montarEntrada(familia, novo) {
     pericias: modelo.pericias,
     ataques: novo.ataques.map((ataque) => ({ nome: ataque.nome, detalhe: `${bonus}, ${dano} ${ataque.tipo}` })),
     habilidades: [...modelo.habilidades, ...novo.habilidades.map((texto) => texto.replaceAll('{dt}', String(dt)))],
-    loot: novo.loot.map((item) => `${item} (${valorDoLoot} Solares)`),
+    // O loot da criatura mora em data/bestiario/loot-criaturas.json (só o servidor lê).
     classe: novo.classe,
     // O classificador do catálogo (`npm run catalogo:classificar`) é quem manda; o valor dele fica gravado na proposta.
     nivelMinimoLoja: novo.nivelMinimoLoja ?? lojaMinimaDoVd(novo.vd),

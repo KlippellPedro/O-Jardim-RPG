@@ -1731,4 +1731,21 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        47,
+        "loot_das_criaturas_na_sessao",
+        (
+            # Qual criatura do Bestiário o participante é (para achar a tabela de
+            # loot em data/bestiario/loot-criaturas.json) e o loot já rolado,
+            # com o que foi entregue a quem. NULL para jogador e para NPC solto.
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS monstro_id TEXT
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS loot JSONB
+            """,
+        ),
+    ),
 )

@@ -3,6 +3,7 @@ import { useMesaStore } from './useMesaStore';
 import {
   sessaoApi,
   type DistribuirXpResponse,
+  type LootRolado,
   type NivelVisibilidade,
   type ParticipantePayload,
   type SessaoParticipanteResponse,
@@ -48,6 +49,11 @@ export interface EntidadeIniciativa {
   eMeu?: boolean;
   ordem?: number;
   condicoes: SessionCondition[];
+  aflicoes: Array<{ aflicaoId: string; estagio: number; incubando: boolean }>;
+  /** Loot: só chega para quem comanda a mesa. */
+  monstroId?: string | null;
+  temLoot?: boolean;
+  loot?: LootRolado | null;
 }
 
 export type SessionConnectionStatus = 'connecting' | 'online' | 'offline';
@@ -119,6 +125,14 @@ function mapParticipantes(participantes: SessaoParticipanteResponse[] | undefine
       eMeu: !!participante.e_meu,
       ordem: typeof participante.ordem === 'number' ? participante.ordem : undefined,
       condicoes: normalizeConditions(participante.condicoes),
+      aflicoes: (Array.isArray(participante.aflicoes) ? participante.aflicoes : []).map((item) => ({
+        aflicaoId: String(item.aflicao_id),
+        estagio: Number(item.estagio) || 1,
+        incubando: !!item.incubando,
+      })),
+      monstroId: participante.monstro_id ?? null,
+      temLoot: !!participante.tem_loot,
+      loot: participante.loot ?? null,
     };
   });
 }
@@ -170,6 +184,8 @@ interface SessaoState {
   aplicarEmMassa: (ids: string[], payload: ParticipantePayload) => Promise<void>;
   distribuirXp: (participanteIds: string[]) => Promise<DistribuirXpResponse>;
   darXp: (participanteIds: string[], xp: number) => Promise<void>;
+  rolarLoot: (participanteId: string, refazer?: boolean) => Promise<void>;
+  entregarLoot: (participanteId: string, entregas: Array<{ linha: string; personagem_id: string }>) => Promise<void>;
 
   clearError: () => void;
 }
@@ -496,6 +512,20 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     const { sessaoId } = get();
     if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
     await Promise.all(ids.map((id) => sessaoApi.atualizarParticipante(sessaoId, id, payload)));
+    await get().fetchEstadoSessao();
+  },
+
+  rolarLoot: async (participanteId, refazer = false) => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    await sessaoApi.rolarLoot(sessaoId, participanteId, refazer);
+    await get().fetchEstadoSessao();
+  },
+
+  entregarLoot: async (participanteId, entregas) => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    await sessaoApi.entregarLoot(sessaoId, participanteId, entregas);
     await get().fetchEstadoSessao();
   },
 

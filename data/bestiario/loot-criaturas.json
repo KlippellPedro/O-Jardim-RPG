@@ -1,0 +1,3030 @@
+{
+  "_nota": "Tabelas de loot das criaturas do Bestiário. Fonte única: o servidor lê este arquivo para rolar o loot na Sessão ao Vivo e mostrar a tabela ao Mestre. Nunca é empacotado para o navegador, porque o jogador só descobre o que cai saqueando. Cada linha rola d100 contra `chance`; a quantidade e as moedas usam dados (1, 1d2, 2d4...). Item `loot-*` com `exclusivo: true` só existe como loot daquela criatura e não vende na Loja.",
+  "versao": 1,
+  "criaturas": {
+    "almirante-de-fortuna": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "comp-objeto-valor-pessoal",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "binoculo-longo-alcance",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-pocao-cura-maior",
+          "chance": 25,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "alquimista-residente": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "mat-alcool-alquimico",
+          "chance": 60,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-vidro-alquimico",
+          "chance": 50,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-ampola-acido",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-elixir-mana",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "anjo-guardiao": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pena-celestial",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "drop-espirito-essência",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "apagador-de-constelacoes": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-nucleo-estrela-engarrafada",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-placa-do-vazio",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "aranha-gigante": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-glandula-de-veneno",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-seda-de-aranha-gigante",
+          "chance": 70,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "arauto-do-vazio": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-fragmento-do-vazio",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-vazio-condensado",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "arcanjo": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pena-de-arcanjo",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-pena-celestial",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "arconte-da-ordem": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-lamina-celestial-fragmentada",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-simbolo-virtude",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "arqueiro-de-torre": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "arco-longo",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "equipamento-luvas-de-ronda",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "arquimago-banido": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "consumivel-elixir-mana",
+          "chance": 60,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-pedra-de-mana-lapidada",
+          "chance": 50,
+          "quantidade": "1"
+        },
+        {
+          "item": "livro-dos-sussurros",
+          "chance": 10,
+          "quantidade": "1"
+        },
+        {
+          "item": "lente-arcana",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "arquiteto-de-maquinas": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "kit-de-ferramentas",
+          "chance": 50,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-giroscopio-arcano",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-processador-axis",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "arquivista-dos-nomes": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-registro-espectral",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "equipamento-tinteiro-de-viagem",
+          "chance": 25,
+          "quantidade": "1"
+        },
+        {
+          "item": "livro-dos-sussurros",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "artilheiro-de-bordo": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "mosquete",
+          "chance": 20,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-bomba-fumaca",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-carga-estabilizada",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "ausencia-faminta": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-fragmento-de-ausencia",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-vazio-condensado",
+          "chance": 100,
+          "quantidade": "2d4"
+        }
+      ]
+    },
+    "automato-de-ronda": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-engrenagens-ferro",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-servomotor-precisao",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-sensor-optico",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "avatar-das-sombras": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-fragmento-de-sombra-pura",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "baleia-catedral": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-osso-ressonante",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-placa-de-nacar",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-sal-safira",
+          "chance": 100,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "basilisco": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-bile-de-basilisco",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-escamas-de-basilisco",
+          "chance": 70,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-olho-petrificado",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "batedor-de-estrada": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "arco-curto",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "bussola-de-precisao",
+          "chance": 20,
+          "quantidade": "1"
+        },
+        {
+          "item": "equipamento-botas-de-longa-marcha",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "behemoth-anciao": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-chifre-colossal",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-couro-colossal",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-osso-de-colosso",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "behemoth-das-planicies": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-chifre-colossal",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-couro-colossal",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-osso-de-colosso",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "cao-de-guarda": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-presas-de-fera",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-amostra-biologica",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "cao-infernal-de-portao": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-presa-em-brasa",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-elo-de-corrente-negra",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "capitao-da-guarda": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "espada-longa",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "equipamento-bracadeira-de-ronda",
+          "chance": 25,
+          "quantidade": "1"
+        },
+        {
+          "item": "ferro",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "capitao-de-bando": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "espada-longa",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-pocao-cura",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-objeto-valor-pessoal",
+          "chance": 60,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "caranguejo-lanterna": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-casco-luminoso",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-glandula-luminosa",
+          "chance": 50,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-peixe-fresco",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "caribdis": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-nucleo-do-sorvedouro",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-agua-que-nunca-seca",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-vazio-condensado",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "carnical": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-garras-necroticas",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "cavaleiro-da-morte": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Solares",
+        "chance": 50
+      },
+      "itens": [
+        {
+          "item": "loot-aco-amaldicoado",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "espada-longa",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "cavaleiro-da-ultima-hora": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-ponteiro-quebrado",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-aco-amaldicoado",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-engrenagem-relogio-mundo",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "cavaleiro-sem-rosto": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-elmo-vazio",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-aco-amaldicoado",
+          "chance": 60,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "cervo-espinho-lua-cheia": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-po-de-chifre-feerico",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-semente-feerica",
+          "chance": 50,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-trufa-feerica",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "colecionador-de-membros": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-linha-de-costura-viva",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-agulha-de-osso",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-pertence-pessoal",
+          "chance": 80,
+          "quantidade": "1d4"
+        }
+      ]
+    },
+    "colosso-de-obsidiana": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-nucleo-de-obsidiana",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "drop-golem-essência",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "armadura-placas-obsidiana",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "come-tempo": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-relogio-sem-ponteiros",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-ambar-do-instante-eterno",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-engrenagem-relogio-mundo",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "coro-sem-rosto": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-orgao-vibratorio",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-mascara-lisa",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "cortejo-das-mil-velas": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-vela-espectral",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-manto-de-cinzas",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-cera-lunar",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "comp-pertence-pessoal",
+          "chance": 100,
+          "quantidade": "2d4"
+        }
+      ]
+    },
+    "coruja-arcana": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pena-arcana",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "corvo-arauto": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-penas-comuns",
+          "chance": 100,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "costureiro-de-fendas": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-garra-de-fenda",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-fibra-espacial",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "cozinheiro-de-guarnicao": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "faca",
+          "chance": 50,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-ensopado-viajante",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-ervas-aromaticas",
+          "chance": 60,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "cultista-fanatico": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "adaga",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-papel-e-tinta",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-incenso-de-mirra-espectral",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-simbolo-pecado",
+          "chance": 5,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "curandeiro-errante": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "comp-material-medicinal",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-flor-medicinal",
+          "chance": 60,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "consumivel-pocao-cura",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "demonio-menor": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-chifre-infernal",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-contrato-rasgado",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-simbolo-pecado",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "devorador-de-eras": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-ampulheta-roida",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-ambar-do-instante-eterno",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-engrenagem-relogio-mundo",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "devorador-de-mundos": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-fragmento-de-realidade-devorada",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-vazio-condensado",
+          "chance": 100,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "dragao-adulto": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 80
+      },
+      "itens": [
+        {
+          "item": "loot-escama-de-dragao-adulto",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "dragao-ancestral": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-escama-ancestral",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-osso-do-primeiro-dragao",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "dragao-anciao": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "mat-couro-de-dragao-anciao",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-escama-ancestral",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 70,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "dragao-do-fim-dos-tempos": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-escama-do-ultimo-dia",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-sangue-de-dragao-primordial",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-osso-do-primeiro-dragao",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "dragao-jovem": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Solares",
+        "chance": 60
+      },
+      "itens": [
+        {
+          "item": "loot-escama-de-dragao-jovem",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "dragao-primordial": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-escama-primordial",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-sangue-de-dragao-primordial",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 100,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "dragonete": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-escama-de-dragonete",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "duelista-renegado": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "rapieira",
+          "chance": 35,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-pocao-cura",
+          "chance": 25,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "eco-do-afogado": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-agua-espectral",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-pertence-pessoal",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "efreeti-do-deserto": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-cinza-de-efreeti",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-coracao-de-magma-destilado",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "elemental-de-fogo-ancestral": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-cinza-ancestral",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-coracao-de-fogo-primordial",
+          "chance": 50,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-cinza-do-ultimo-sol",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "elemental-de-fogo-maior": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-nucleo-flamejante",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "comp-amostra-elemental",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-oleo-de-salamandra",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "elemental-de-fogo-menor": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-nucleo-flamejante",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-amostra-elemental",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "elemental-de-fogo-primordial": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-coracao-de-fogo-primordial",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-coracao-de-magma-destilado",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "elemental-de-gelo-ancestral": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-cristal-de-inverno-ancestral",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-coracao-de-gelo-primordial",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "elemental-de-gelo-maior": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-nucleo-de-gelo",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "comp-amostra-elemental",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "elemental-de-gelo-menor": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-nucleo-de-gelo",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-amostra-elemental",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "elemental-de-gelo-primordial": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-coracao-de-gelo-primordial",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-nucleo-de-gelo",
+          "chance": 100,
+          "quantidade": "1d4"
+        }
+      ]
+    },
+    "enxame-de-ratos": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-dente-de-rato",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "comp-amostra-biologica",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "escolta-de-caravana": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "espada-curta",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "racao-de-viagem",
+          "chance": 60,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "equipamento-capa-de-caminhante",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "escriba-contador": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "comp-papel-e-tinta",
+          "chance": 80,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "equipamento-tinteiro-de-viagem",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "espantalho-vivo": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-palha-encantada",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-fibra-vegetal",
+          "chance": 60,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "espectro-vingativo": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-corrente-espectral",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "drop-espirito-essência",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "espirito-do-lar": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "comp-objeto-valor-pessoal",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "drop-espirito-essência",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "esqueleto-guerreiro": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-ossos-antigos",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "espada-curta",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "falcao-mensageiro": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-penas-comuns",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "comp-objeto-pessoal",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "fantasma-do-vendaval": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pena-de-tempestade",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-nucleo-de-vendaval",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "drop-espirito-essência",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "fenix-imortal": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-chama-eterna-engarrafada",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-lagrima-de-fenix",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-sangue-de-fenix-estabilizado",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-pocao-segunda-chance",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "fenix-menor": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pena-incandescente",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-lagrima-de-fenix",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "fim-que-anda": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-poeira-do-fim",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-cinza-do-ultimo-sol",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "fogo-fatuo-do-caminho": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-cinza-luminosa",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "fungo-colmeia-ambulante": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-amostra-de-micelio",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-cogumelos-comuns",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "mat-esporo-carmesim",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "gargula-de-telhado": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-cantaria-viva",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "gato-espectral": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-fragmento-etereo",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "gigante-ancestral": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 60
+      },
+      "itens": [
+        {
+          "item": "loot-pedra-ancestral",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-pedra-coracao-da-montanha",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "gigante-da-tormenta": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Solares",
+        "chance": 50
+      },
+      "itens": [
+        {
+          "item": "mat-cristal-de-tempestade",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-faisca-engarrafada",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "gigante-de-pedra": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-lasca-de-rocha-viva",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-minerio-de-ferro",
+          "chance": 60,
+          "quantidade": "1d4"
+        }
+      ]
+    },
+    "golem-de-argila-selada": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-argila-animada",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-selo-de-comando",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "golem-de-bronze-cantante": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-nucleo-de-bronze",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-placa-ressonante",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-metal-para-forja",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "golem-de-espelhos": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-placa-de-espelho-encantado",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-espelho-enevoado",
+          "chance": 60,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-cristal-de-luz-solida",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "golem-de-ferro": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-placas-de-ferro-encantado",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "drop-golem-essência",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-servo-golem",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "golem-de-pedra": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "drop-golem-essência",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "drop-golem-orgaos",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-servo-golem",
+          "chance": 25,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "golem-de-raizes-encouracadas": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-madeira-de-ferro",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-seiva-regeneradora",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "drop-golem-essência",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "golem-de-sal": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-sal-purificador",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "loot-nucleo-de-sal",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-sal-consagrado",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "golem-guardiao-de-portal": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-coracao-de-cantaria",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "drop-golem-essência",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-ancora-de-pedra",
+          "chance": 70,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "golem-titanico": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-coracao-mecanico-colosso",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "drop-golem-essência",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "mat-pedra-coracao-da-montanha",
+          "chance": 25,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "gorgona": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-serpente-petrificada",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-gas-de-medusa",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "grumete-aprendiz": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "corda-de-escalada",
+          "chance": 50,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-peixe-fresco",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "guarda-costas": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "redondo",
+          "chance": 25,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-pocao-cura",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "guardiao-das-promessas": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-placas-metalicas",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "drop-espirito-essência",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "ferro",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "guardiao-de-tumba": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Lunaris",
+        "chance": 60
+      },
+      "itens": [
+        {
+          "item": "loot-ossos-antigos",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "loot-amuleto-funerario",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "alabarda",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "harpia-tempestuosa": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-penas-de-tempestade",
+          "chance": 100,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "hidra-de-duas-cabecas": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-cabeca-regenerativa",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-carne-de-hidra-curada",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "hidra-de-sete-cabecas": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-presa-de-hidra",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-sangue-de-hidra",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-carne-de-hidra-curada",
+          "chance": 100,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "hidra-primordial": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-cabeca-primordial",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-sangue-de-hidra",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-presa-de-hidra",
+          "chance": 100,
+          "quantidade": "1d4"
+        }
+      ]
+    },
+    "hiena-risonha": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pele-manchada",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-presas-de-fera",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "informante-de-rua": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "comp-objeto-valor-pessoal",
+          "chance": 40,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "kit-de-disfarce",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "javali-selvagem": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-presas-de-javali",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-couro-grosso",
+          "chance": 80,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-carne-de-caca",
+          "chance": 100,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "kraken": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-tentaculo-seco",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-tinta-negra-do-kraken",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-file-de-kraken-jovem",
+          "chance": 100,
+          "quantidade": "1d4"
+        }
+      ]
+    },
+    "lamia-encantadora": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-escamas-de-lamia",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-glandula-de-veneno",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "lamina-jurada": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "katana",
+          "chance": 25,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-fio-de-prata-para-vinculos",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "leviata": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-couro-de-leviata",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-osso-de-leviata",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-caviar-de-leviata",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "lobo-alfa": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pele-de-lobo-alfa",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-presa-de-lobo-alfa",
+          "chance": 80,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "lobo-atroz": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pele-de-lobo-atroz",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-presa-de-lobo-atroz",
+          "chance": 70,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "lobo-cinzento": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pelego-de-lobo",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-presas-de-fera",
+          "chance": 60,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-carne-de-caca",
+          "chance": 70,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "manta-trovao": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-bolsa-voltaica",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-couro-de-manta",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "maremoto-que-anda": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-sal-primeiro-oceano",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-sal-safira",
+          "chance": 100,
+          "quantidade": "1d4"
+        }
+      ]
+    },
+    "mastim-de-guerra": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-presas-de-fera",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-tecido-reforcado",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "mastim-sem-sombra": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-presa-do-vazio",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-coleira-de-contencao-quebrada",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "mecanico-de-bordo": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "kit-de-ferramentas",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-engrenagens-ferro",
+          "chance": 60,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-servomotor-precisao",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "medico-de-enfermaria": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "comp-material-medicinal",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "consumivel-pocao-cura-maior",
+          "chance": 25,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-antidoto-universal",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "megalodon-do-vazio": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-dente-sem-sombra",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-barbatana-de-osso-branco",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "merc-aethel": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-nucleo-de-luz",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "merc-automato": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-parafusos-reaproveitados",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "mat-placas-metalicas",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-engrenagens-ferro",
+          "chance": 70,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "merc-umbral": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-essencia-umbral",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-vestigio-material",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "mercenario-novato": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "espada-curta",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-pocao-cura-menor",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "mestre-ferreiro": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "comp-metal-para-forja",
+          "chance": 80,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-liga-de-aco",
+          "chance": 50,
+          "quantidade": "1"
+        },
+        {
+          "item": "kit-de-ferramentas",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "minotauro-guardiao": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-chifres-de-minotauro",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "machado-taurino",
+          "chance": 25,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "moreia-de-coral": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pele-de-coral-flexivel",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-presas-de-fera",
+          "chance": 50,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-peixe-fresco",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "navegador-de-rotas": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "bussola-de-precisao",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "binoculo-longo-alcance",
+          "chance": 15,
+          "quantidade": "1"
+        },
+        {
+          "item": "equipamento-lentes-de-leitura",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "necromante-decadente": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "mat-osso-gravado",
+          "chance": 80,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "consumivel-elixir-mana",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-simbolo-pecado",
+          "chance": 10,
+          "quantidade": "1"
+        },
+        {
+          "item": "livro-dos-sussurros",
+          "chance": 5,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "noiva-do-espelho-partido": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-veu-de-prata-fria",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-espelho-enevoado",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "ogro-de-estrada": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Lunaris",
+        "chance": 60
+      },
+      "itens": [
+        {
+          "item": "loot-presa-de-ogro",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-objeto-valor-pessoal",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "quimera": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-icor-de-quimera",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-presas-triplices",
+          "chance": 70,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-escama-ignea",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "rainha-dos-corais": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-nucleo-de-coral-vivo",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-perola-de-colonia",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-sal-safira",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "raspador-de-nomes": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-garra-palida",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-fragmento-de-selo-apagado",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "rato-de-esgoto": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-dente-de-rato",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "comp-amostra-biologica",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "rato-gigante": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pelagem-suja",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-dente-de-rato",
+          "chance": 60,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "rei-carnical": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 70
+      },
+      "itens": [
+        {
+          "item": "loot-poeira-de-ossos-reais",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-garras-necroticas",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-coroa-enferrujada",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "rei-dos-ratos": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-cauda-entrelacada",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-dente-de-rato",
+          "chance": 100,
+          "quantidade": "2d4"
+        },
+        {
+          "item": "comp-objeto-valor-pessoal",
+          "chance": 40,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "runista-de-barreira": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "comp-papel-e-tinta",
+          "chance": 80,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "selo-fechamento",
+          "chance": 25,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-prata-runica",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "salteador-de-estrada": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "adaga",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-pocao-cura-menor",
+          "chance": 15,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-objeto-valor-pessoal",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "senhor-da-estrada": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "comp-objeto-valor-pessoal",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "espadao",
+          "chance": 20,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-pocao-cura",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "sentinela-de-cristal": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-quartzo-estavel",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "mat-cristal-calibrado",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-pedra-de-mana-lapidada",
+          "chance": 20,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "sentinela-de-portao": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "lanca",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "equipamento-bracadeira-de-ronda",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "serafim": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pena-de-serafim",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-orvalho-da-fonte-do-eden",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "serpente-de-guarda": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pele-de-serpente",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-glandula-de-veneno",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "serpente-do-mundo": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-escama-do-mundo",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-couro-da-serpente-mundo",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-veneno-da-serpente-mundo",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "serpente-marinha-ancestral": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-escama-oceanica",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-ovas-de-serpente-marinha",
+          "chance": 100,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "sombra-sussurrante": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-residuo-sombrio",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "sussurrante-de-frestas": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-dedo-fino-do-vazio",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-cera-de-fresta",
+          "chance": 50,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "tempestade-viva": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-faisca-engarrafada",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-cristal-de-tempestade",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "timoneiro-contratado": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "bussola-de-precisao",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "corda-de-escalada",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "titan-de-gelo": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-nucleo-de-gelo-eterno",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-nucleo-de-gelo",
+          "chance": 100,
+          "quantidade": "1d4"
+        }
+      ]
+    },
+    "titan-que-sustenta-o-ceu": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pedra-do-ceu",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-pedra-coracao-da-montanha",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-lingote-de-metal-celestial",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "tratador-de-feras": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "consumivel-isca-presa",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "corda-de-escalada",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "trepadeira-devoradora": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-seiva-acida",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-fibra-vegetal",
+          "chance": 70,
+          "quantidade": "1d3"
+        }
+      ]
+    },
+    "troll-regenerador": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "mat-sangue-de-troll-estabilizado",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "tubarao-de-ferro": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-dente-reforcado",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-placas-metalicas",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-sucata-chassi",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "ultimo-silencio": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-poeira-de-silencio",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-vazio-condensado",
+          "chance": 100,
+          "quantidade": "3d4"
+        },
+        {
+          "item": "mat-eco-do-primeiro-juramento",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "urso-das-cavernas": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-pele-de-urso",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-garras-de-urso",
+          "chance": 70,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-carne-de-caca",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "mat-mel-silvestre",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "vampiro-anciao": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "drop-vampiro-essência",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "drop-vampiro-orgaos",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-anel-de-sangue-antigo",
+          "chance": 100,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "vanguarda-selada": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "mat-fio-de-prata-para-vinculos",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "consumivel-pocao-cura-maior",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "guerra",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "vigia-de-mil-olhos": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-olho-desperto",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-icor-de-vigia",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "vigia-noturno": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "lampiao",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "equipamento-apito-de-sentinela",
+          "chance": 15,
+          "quantidade": "1"
+        },
+        {
+          "item": "equipamento-manto-de-vigilia",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "viuva-de-orbitas": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-teia-gravitacional",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-seda-de-aranha-gigante",
+          "chance": 60,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-fragmento-orbital",
+          "chance": 50,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "wyvern-das-montanhas": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-ferrao-de-wyvern",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-asas-de-wyvern",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "zangao-do-veu": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-asa-iridescente",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-mel-silvestre",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-polen-de-lotus-onirico",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "zumbi-bruto": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-carne-podre",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "comp-pertence-pessoal",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    }
+  }
+}

@@ -24,11 +24,20 @@ from core.dependencies import (
 from core import live_session
 from core.mesa_eventos import registrar as registrar_evento
 from core.discord_avisos import avisar_discord
+from core.loot_criaturas import resumo_da_tabela, rolar_loot, tabela_da_criatura
 from core.notifications import campaign_member_ids, character_owner_ids, notify
+from routers.shop import (
+    _any_active_character,
+    _resolved_catalog_rows,
+    conceder_itens_do_catalogo,
+    creditar_carteira,
+)
 from schemas import (
     DistributeXpInput,
     GrantXpInput,
     ParticipantCreateInput,
+    ParticipantLootDeliverInput,
+    ParticipantLootRollInput,
     ParticipantReorderInput,
     ParticipantUpdateInput,
     SessionCharactersInput,
@@ -145,13 +154,33 @@ def _participantes(connection, sessao_id: UUID):
                vida_maxima, condicoes, anotacao, visibilidade, ordem, defesa,
                mana_atual, mana_maxima, ataques, vd, pericias,
                vida_temporaria, mana_temporaria,
-               estamina_atual, estamina_maxima, estamina_temporaria
+               estamina_atual, estamina_maxima, estamina_temporaria,
+               monstro_id, loot,
+               (SELECT p.ficha->'aflicoesAtivas' FROM personagens p
+                WHERE p.id=sessao_participantes.personagem_id) AS aflicoes
         FROM sessao_participantes
         WHERE sessao_id=%s
         ORDER BY ordem, iniciativa DESC, nome
         """,
         (sessao_id,),
     ).fetchall()
+
+
+def _aflicoes_da_ficha(valor) -> list[dict]:
+    """Só o que o card da Sessão precisa: qual aflição e em que estágio."""
+    if not isinstance(valor, list):
+        return []
+    saida = []
+    for item in valor[:20]:
+        if not isinstance(item, dict) or not isinstance(item.get("aflicaoId"), str):
+            continue
+        estagio = item.get("estagio")
+        saida.append({
+            "aflicao_id": item["aflicaoId"][:80],
+            "estagio": int(estagio) if isinstance(estagio, (int, float)) and not isinstance(estagio, bool) else 1,
+            "incubando": item.get("incubando") is True,
+        })
+    return saida
 
 
 def _tocar(connection, sessao_id: UUID) -> int:
@@ -208,6 +237,8 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             "tipo": item["tipo"],
             "iniciativa": item["iniciativa"],
             "condicoes": normalizar_condicoes(item["condicoes"]) if mostra_identidade else [],
+            # Aflições vivem na ficha (ficha.aflicoesAtivas); a Sessão só mostra.
+            "aflicoes": _aflicoes_da_ficha(item["aflicoes"]) if mostra_identidade else [],
             "ordem": item["ordem"],
             "indice": indice,
             "e_meu": proprio,
@@ -236,6 +267,11 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             publico["personagem_id"] = item["personagem_id"]
         if manda:
             publico["anotacao"] = item["anotacao"]
+            # A tabela e o loot rolado são do Mestre: o jogador fica sabendo
+            # do que caiu quando o item chega na ficha dele.
+            publico["monstro_id"] = item["monstro_id"]
+            publico["tem_loot"] = tabela_da_criatura(item["monstro_id"]) is not None
+            publico["loot"] = item["loot"]
         participantes.append(publico)
 
     turno_de = None
@@ -836,8 +872,8 @@ def adicionar_participante(
             INSERT INTO sessao_participantes
                 (id, sessao_id, nome, tipo, iniciativa, vida_atual, vida_maxima,
                  visibilidade, ordem, defesa, mana_atual, mana_maxima, ataques, vd,
-                 pericias, estamina_atual, estamina_maxima)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                 pericias, estamina_atual, estamina_maxima, monstro_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 participante_id,
@@ -857,6 +893,7 @@ def adicionar_participante(
                 Jsonb(payload.pericias),
                 payload.estamina_maxima,
                 payload.estamina_maxima,
+                payload.monstro_id,
             ),
         )
         versao = _tocar(connection, sessao_id)
@@ -1299,6 +1336,7 @@ def listar_bestiario(
                 "estagio": conteudo.get("estagio"),
                 "papel": conteudo.get("papel"),
                 "unico": bool(conteudo.get("unico")),
+                "tem_loot": tabela_da_criatura(linha["id"]) is not None,
                 "pv": _inteiro_do_catalogo(conteudo.get("pv")),
                 "defesa": _inteiro_do_catalogo(conteudo.get("defesa")),
                 "mana": _inteiro_do_catalogo(conteudo.get("mana")),
@@ -1307,9 +1345,232 @@ def listar_bestiario(
                 "ataques": conteudo.get("ataques") or [],
                 "pericias": conteudo.get("pericias") or [],
                 "habilidades": conteudo.get("habilidades") or [],
+                # Para a ficha completa que abre ao clicar no card.
+                "deslocamento": conteudo.get("deslocamento"),
+                "atributos": conteudo.get("atributos") if isinstance(conteudo.get("atributos"), dict) else None,
+                "raridade": conteudo.get("raridade"),
+                "subtipo": conteudo.get("subtipo"),
+                "funcao": conteudo.get("funcao"),
             }
         )
     return {"monstros": monstros}
+
+
+# ---------------------------------------------------------------- loot
+
+def _catalogo_do_loot(connection, campanha_id: UUID, monstro_id: str) -> dict[str, dict]:
+    """Itens que a tabela da criatura cita, já com as publicações da campanha
+    por cima: item que a campanha tirou do jogo (lápide) some do loot."""
+    tabela = tabela_da_criatura(monstro_id) or {}
+    ids = sorted({str(regra.get("item")) for regra in tabela.get("itens") or [] if regra.get("item")})
+    if not ids:
+        return {}
+    return {row["id"]: row for row in _resolved_catalog_rows(connection, campanha_id, ids)}
+
+
+@router.get("/bestiario/loot/{monstro_id}")
+def tabela_de_loot(
+    monstro_id: str,
+    campanha_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """O que uma criatura pode deixar cair, com a chance de cada linha. Só
+    quem comanda a mesa vê: o jogador descobre o loot saqueando."""
+    with database.connection() as connection:
+        require_campaign_manager(connection, campanha_id, user.id)
+        resumo = resumo_da_tabela(monstro_id, _catalogo_do_loot(connection, campanha_id, monstro_id))
+    if resumo is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="essa criatura nao tem tabela de loot")
+    return resumo
+
+
+def _participante_travado(connection, sessao_id: UUID, participante_id: UUID):
+    row = connection.execute(
+        """
+        SELECT id, nome, tipo, monstro_id, loot
+        FROM sessao_participantes
+        WHERE id=%s AND sessao_id=%s
+        FOR UPDATE
+        """,
+        (participante_id, sessao_id),
+    ).fetchone()
+    if not row:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="participante nao encontrado")
+    return row
+
+
+@router.post("/{sessao_id}/participantes/{participante_id}/loot")
+def rolar_loot_do_participante(
+    sessao_id: UUID,
+    participante_id: UUID,
+    payload: ParticipantLootRollInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Rola a tabela de loot da criatura (d100 por linha, no servidor) e guarda
+    o resultado no participante, para o Mestre escolher quem leva o quê."""
+    with database.connection() as connection:
+        sessao = _sessao_sob_comando(connection, sessao_id, user.id)
+        participante = _participante_travado(connection, sessao_id, participante_id)
+        if not participante["monstro_id"]:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="esse participante nao veio do Bestiario, entao nao tem tabela de loot",
+            )
+        atual = participante["loot"] if isinstance(participante["loot"], dict) else None
+        if atual is not None:
+            if not payload.refazer:
+                raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="o loot dessa criatura ja foi rolado")
+            if any(linha.get("entregue_para") for linha in atual.get("linhas") or []):
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="parte do loot ja foi entregue; nao da para rolar de novo",
+                )
+        catalogo = _catalogo_do_loot(connection, sessao["campanha_id"], participante["monstro_id"])
+        loot = rolar_loot(participante["monstro_id"], catalogo)
+        if loot is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="essa criatura nao tem tabela de loot")
+        connection.execute(
+            "UPDATE sessao_participantes SET loot=%s WHERE id=%s",
+            (Jsonb(loot), participante_id),
+        )
+        record_audit(
+            connection,
+            action="sessao.loot_rolado",
+            actor_user_id=user.id,
+            campaign_id=sessao["campanha_id"],
+            target_type="sessao_participante",
+            target_id=str(participante_id),
+            details={
+                "monstro_id": participante["monstro_id"],
+                "refeito": atual is not None,
+                "linhas": [
+                    {k: linha.get(k) for k in ("tipo", "item_id", "moeda", "quantidade", "rolagem", "chance")}
+                    for linha in loot["linhas"]
+                ],
+            },
+        )
+        versao = _tocar(connection, sessao_id)
+        campanha_id = sessao["campanha_id"]
+    live_session.publicar(campanha_id, "loot_rolado", versao)
+    return {"loot": loot, "versao": versao}
+
+
+@router.post("/{sessao_id}/participantes/{participante_id}/loot/entregar")
+def entregar_loot_do_participante(
+    sessao_id: UUID,
+    participante_id: UUID,
+    payload: ParticipantLootDeliverInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Entrega linhas do loot rolado aos personagens escolhidos pelo Mestre:
+    item vai para o inventário (mesmo caminho da concessão da Loja), moeda
+    vai para a carteira com lançamento no extrato. Cada linha só sai uma vez."""
+    with database.connection() as connection:
+        sessao = _sessao_sob_comando(connection, sessao_id, user.id)
+        campanha_id = sessao["campanha_id"]
+        participante = _participante_travado(connection, sessao_id, participante_id)
+        loot = participante["loot"] if isinstance(participante["loot"], dict) else None
+        if loot is None:
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="role o loot antes de entregar")
+        linhas = {linha.get("linha"): linha for linha in loot.get("linhas") or []}
+
+        pedidas: dict[str, UUID] = {}
+        for entrega in payload.entregas:
+            linha = linhas.get(entrega.linha)
+            if linha is None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="essa linha nao esta no loot rolado")
+            if linha.get("entregue_para"):
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail=f"{linha.get('titulo')} ja foi entregue",
+                )
+            if entrega.linha in pedidas:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="a mesma linha veio duas vezes")
+            pedidas[entrega.linha] = entrega.personagem_id
+
+        por_personagem: dict[UUID, list[dict]] = {}
+        for linha_id, personagem_id in pedidas.items():
+            por_personagem.setdefault(personagem_id, []).append(linhas[linha_id])
+
+        entregues: list[dict] = []
+        fichas_alteradas: list[dict] = []
+        destinatarios: dict[UUID, dict] = {}
+        # Trava os personagens sempre na mesma ordem, como a Loja faz.
+        for personagem_id in sorted(por_personagem, key=str):
+            personagem = _any_active_character(connection, campanha_id, personagem_id, lock=True)
+            destinatarios[personagem_id] = {"nome": personagem["nome"], "recebeu": []}
+            itens = [linha for linha in por_personagem[personagem_id] if linha.get("tipo") == "item"]
+            moedas = [linha for linha in por_personagem[personagem_id] if linha.get("tipo") == "moedas"]
+            if itens:
+                _concedidos, _economia, versao_ficha = conceder_itens_do_catalogo(
+                    connection,
+                    campanha_id,
+                    personagem,
+                    [(str(linha["item_id"]), int(linha["quantidade"])) for linha in itens],
+                )
+                if versao_ficha is not None:
+                    fichas_alteradas.append({"personagem_id": personagem_id, "versao": versao_ficha})
+            for linha in moedas:
+                creditar_carteira(
+                    connection,
+                    campaign_id=campanha_id,
+                    character_id=personagem_id,
+                    currency=str(linha.get("moeda") or "Lunaris"),
+                    amount=int(linha["quantidade"]),
+                    actor_user_id=user.id,
+                    origin="sessao.loot",
+                    reason=f"Loot de {participante['nome']}",
+                    idempotency=f"{participante_id}:{linha['linha']}",
+                )
+            if moedas and not itens:
+                connection.execute(
+                    """
+                    UPDATE personagens
+                    SET economia_versao=economia_versao+1, atualizado_em=CURRENT_TIMESTAMP
+                    WHERE id=%s
+                    """,
+                    (personagem_id,),
+                )
+            for linha in [*itens, *moedas]:
+                linha["entregue_para"] = {"personagem_id": str(personagem_id), "nome": personagem["nome"]}
+                destinatarios[personagem_id]["recebeu"].append(f"{linha['quantidade']}x {linha['titulo']}")
+                entregues.append({
+                    "linha": linha["linha"],
+                    "titulo": linha["titulo"],
+                    "quantidade": linha["quantidade"],
+                    "personagem_id": str(personagem_id),
+                })
+
+        connection.execute(
+            "UPDATE sessao_participantes SET loot=%s WHERE id=%s",
+            (Jsonb(loot), participante_id),
+        )
+        for personagem_id, info in destinatarios.items():
+            notify(
+                connection,
+                user_ids=character_owner_ids(connection, campanha_id, [personagem_id]),
+                category="sessao",
+                title=f"Loot de {participante['nome']}",
+                message=f"**{info['nome']}** pegou:\n" + "\n".join(f"- {texto}" for texto in info["recebeu"]),
+                campaign_id=campanha_id,
+                actor_user_id=user.id,
+            )
+        record_audit(
+            connection,
+            action="sessao.loot_entregue",
+            actor_user_id=user.id,
+            campaign_id=campanha_id,
+            target_type="sessao_participante",
+            target_id=str(participante_id),
+            details={"monstro_id": participante["monstro_id"], "entregues": entregues},
+        )
+        versao = _tocar(connection, sessao_id)
+    live_session.publicar(campanha_id, "loot_entregue", versao)
+    _avisar_fichas_alteradas(campanha_id, fichas_alteradas)
+    return {"loot": loot, "entregues": entregues, "versao": versao}
 
 
 def _passar_rodada_condicoes(connection, sessao_id) -> None:
