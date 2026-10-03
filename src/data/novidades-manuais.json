@@ -2,6 +2,51 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-03-itens-que-despertam",
+      "data": "2026-10-03",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Itens que crescem com você e itens que cobram um preço",
+      "detalhes": [
+        "Quatro artefatos novos mudam de forma conforme o seu nível total: o Anel do Herdeiro, o Manto do Andarilho, o Diário que Responde e o Coração de Pedra Mansa. A forma nova substitui a anterior, e a ficha aplica o bônus sozinha enquanto o item estiver equipado.",
+        "Três itens dão poder em troca de alguma coisa: o Anel da Pressa Emprestada tira fôlego, o Colar de Vida Emprestada tira Sanidade e a Máscara do Sábio Cego atrapalha a Percepção. O preço também entra na ficha, e tirar o item devolve tudo.",
+        "No Inventário aparece a forma de agora de cada item e em que nível vem a próxima."
+      ]
+    },
+    {
+      "id": "2026-10-03-conjuntos-de-equipamento",
+      "data": "2026-10-03",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Conjuntos de equipamento",
+      "detalhes": [
+        "Três conjuntos de peças baratas: Caminhante, Estudioso e Sentinela. Cada peça já dá +1 numa perícia, e usar várias do mesmo conjunto ao mesmo tempo libera bônus extras.",
+        "Na Loja, a peça mostra o conjunto inteiro e o que cada quantidade de peças dá. No Inventário, você vê quantas peças está usando e o que falta para o próximo bônus."
+      ]
+    },
+    {
+      "id": "2026-10-03-condicoes-de-cena",
+      "data": "2026-10-03",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Condições novas, inclusive as que ajudam",
+      "detalhes": [
+        "Sete condições que já apareciam em criaturas e magias agora têm regra própria: Queimando, Envenenado, Lento, Enfraquecido, Paralisado, Silenciado e Desorientado.",
+        "Seis condições que ajudam: Inspirado, Favorecido, Resguardado, Focado, Apressado e Revigorado. Resguardado, Lento, Apressado e Paralisado já mexem na Defesa, na Iniciativa ou no movimento da ficha sozinhos."
+      ]
+    },
+    {
+      "id": "2026-10-03-aflicoes-por-regiao",
+      "data": "2026-10-03",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Doenças e venenos de cada região",
+      "detalhes": [
+        "O catálogo de aflições passou de 5 para 17, com pelo menos uma por Árvore e uma do Vazio, como o Pulmão de Pedra em Baluarte e o Apagamento no Vazio.",
+        "Em Regras, dá para filtrar as aflições por região, e o capítulo traz uma tabela dizendo onde cada uma costuma ser pega e como."
+      ]
+    },
+    {
       "id": "2026-10-01-comidas-bebidas-e-itens-de-cena",
       "data": "2026-10-01",
       "tipo": "novo",

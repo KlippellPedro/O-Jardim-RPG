@@ -1008,7 +1008,7 @@ Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes 
 
 - Um descanso completo de qualidade Boa ou melhor tira 1 de Ferido, se o personagem for tratado e terminar o descanso consciente.
 
-- O mesmo descanso conta também para cada lesão de longo prazo do personagem (veja Condições). Um descanso, todas as contagens andam.
+- O mesmo descanso conta também para cada lesão de longo prazo do personagem (veja Condições). Não é preciso descansar separado para cada uma.
 
 - É uma redução por descanso completo, mesmo que várias pessoas curem a mesma pessoa.
 
@@ -1814,7 +1814,7 @@ Orçamento de poder fica em **Raridades de Equipamento**; as opções prontas e 
 
 **Status:** Regra oficial
 
-Como cada raridade aumenta preço e propriedades de armas e proteções, além dos limites de modificações e efeitos.
+Como cada raridade aumenta preço e propriedades de armas e proteções, além dos limites de modificações e efeitos, dos itens que despertam com o dono e dos conjuntos de equipamento.
 
 ### Raridades e orçamento de poder
 
@@ -1887,6 +1887,32 @@ Fora do bônus automático de armas e proteções, o ganho de uma raridade mais 
 - 51 a 100 | mais uma a cada 8 níveis depois do 50 (13 no 58 e 18 no 100)
 
 - 101 em diante | mais uma a cada 16 níveis (19 no 116 e 24 no 200)
+
+### Itens que despertam com o dono
+
+Alguns itens da Loja têm **formas**. Cada forma pede um nível total mínimo do dono. Vale sempre a mais alta que ele já alcançou, e ela **substitui** a anterior em vez de somar.
+
+- A forma só vale com o item equipado, e esses itens são artefatos: ocupam uma das vagas da tabela acima.
+
+- Se o item mudar de dono, a forma muda junto: vale a que o nível total do novo dono alcança.
+
+- Cada forma lista os efeitos que a ficha aplica sozinha. A Loja mostra todas as formas do item, e o Inventário mostra a de agora e quando vem a próxima.
+
+- **Itens de dilema** dão poder e cobram um preço, que vem escrito na descrição. O preço também entra na ficha como efeito automático: menos Sanidade máxima, menos Cansaço máximo ou desvantagem numa perícia. Tirar o item devolve tudo na hora.
+
+### Conjuntos de equipamento
+
+Peças do mesmo conjunto dão um **bônus de coleção** quando estão equipadas ao mesmo tempo. Os bônus se somam: com 3 peças valem os de 2 e os de 3. Peça repetida conta uma vez, e peça guardada na mochila não conta.
+
+- Conjunto | Peças | Bônus
+
+- Conjunto do Caminhante | Capa de Caminhante, Botas de Longa Marcha, Cinto de Alforjes | 2 peças: O corpo aprende o ritmo da viagem: +5 de Estamina máxima. 3 peças: Tudo no lugar e nenhum passo desperdiçado: +3 m de Movimento.
+
+- Conjunto do Estudioso | Lentes de Leitura, Tinteiro de Viagem, Livro de Bolso Anotado | 2 peças: Anotar rende: +5 de Mana máxima. 3 peças: Com tudo à mão, pensar fica mais fácil: +1 em Inteligência.
+
+- Conjunto do Sentinela | Apito de Sentinela, Manto de Vigília, Luvas de Ronda, Braçadeira de Ronda | 2 peças: Pronto antes do alarme: +1 em Iniciativa. 3 peças: Quem faz ronda aprende a não dar as costas: +1 de Defesa. 4 peças: Nada passa despercebido: vantagem em Percepção.
+
+Cada peça de conjunto também tem um efeito próprio de valor 1, que a ficha aplica sozinha. O bônus de coleção vem por cima.
 
 ## modificacoes-equipamentos
 
@@ -3073,6 +3099,38 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 - Concentrando | Só pode manter um efeito de concentração por vez. Ao sofrer dano, teste Vontade DT 10 ou metade do dano, o que for maior. Falha encerra o efeito. | Encerre voluntariamente, fique incapacitado ou falhe no teste de concentração.
 
+- Queimando | Sofra 1d6 de dano de Fogo no fim do turno. Pegar fogo de novo não soma: continua 1d6. | Ação padrão e Acrobacia ou Atletismo DT 12 rolando no chão, ou entrar em água.
+
+- Envenenado | Sofra 1d6 de dano de veneno no fim do turno. Se o veneno for uma aflição do catálogo, use o estágio dela em vez deste dano. | O Antídoto da Loja encerra. Cura DT 15, gastando uma ação padrão, também.
+
+- Lento | Movimento pela metade e sem correr. Iniciativa reduzida em 2. | Termina ao fim da duração da fonte.
+
+- Enfraquecido | −2 em testes de Força e no dano de ataques corpo a corpo. | Termina ao fim da duração da fonte.
+
+- Paralisado | Não pode agir, reagir nem se mover, mas segue consciente e ouve tudo. Falha automaticamente em testes de Força e Destreza. Defesa reduzida em 2. | Fortitude contra a DT da fonte no fim de cada turno encerra a condição.
+
+- Silenciado | Não fala: sem componente verbal em magia e sem ordens faladas. Gestos e escrita continuam funcionando. | Termina ao fim da duração da fonte ou quando a fonte for superada.
+
+- Desorientado | Desvantagem em ataques e em Percepção. | No fim do turno, Fortitude ou Vontade, à escolha de quem joga, contra a DT da fonte encerra a condição.
+
+### Condições benéficas
+
+São as condições que ajudam. Vêm de uma palavra de ânimo, de uma magia de apoio ou de um escudo erguido na hora certa. Duram pouco e nenhuma soma com ela mesma.
+
+- Condição | Efeito principal | Remoção
+
+- Inspirado | Antes de rolar um teste, ganhe +2 nele. A condição termina depois do teste. Não acumula consigo mesmo. | Termina ao ser usada ou ao fim da cena.
+
+- Favorecido | +1 em Fortitude, Reflexos e Vontade. Não acumula consigo mesmo. | Termina ao fim da duração.
+
+- Resguardado | +2 de Defesa. Não acumula consigo mesmo. | Termina ao fim da duração.
+
+- Focado | +2 em Vontade contra efeitos mentais. Se estiver Concentrando e sofrer dano, ganha +2 no teste de Vontade. | Termina ao fim da duração ou ao ficar Inconsciente.
+
+- Apressado | Movimento +3 m. Iniciativa +2. Não acumula consigo mesmo. | Termina ao fim da duração.
+
+- Revigorado | No começo do seu turno, recupere 1d4 de Vida. Não acumula consigo mesmo. | Termina ao fim da duração.
+
 ### Lesões, sequelas e saúde mental
 
 Condições que duram mais que uma cena já vêm escritas, para ninguém precisar inventar uma na hora. A ficha as aplica como texto: o efeito é lido e aplicado na mesa.
@@ -3081,7 +3139,7 @@ Condições que duram mais que uma cena já vêm escritas, para ninguém precisa
 
 - **Perdas de membro e sentido** espelham a tabela de Mutilação em Ferimentos. Sem Regeneração ou implante, ficam para sempre.
 
-- **Condições mentais permanentes** não somem com descanso. Acompanhamento profissional abranda cada uma do jeito que a própria condição descreve, e só uma resolução na história ou tratamento longo as encerra.
+- **Condições mentais permanentes** não somem com descanso. Com acompanhamento profissional, cada uma fica mais leve do jeito que o próprio texto explica. Só uma resolução na história ou um tratamento longo encerra.
 
 - Na Quebra de Sanidade, a condição permanente definida com o jogador pode sair daqui.
 
@@ -3251,11 +3309,51 @@ Use a extensão exata da característica racial. Golem não contrai doenças com
 
 - Usar a substância pode suspender efeitos conforme o catálogo, mas não reduz o estágio nem substitui tratamento.
 
+### Aflições por região
+
+Cada região do Jardim tem as próprias doenças e venenos. A tabela diz onde cada aflição costuma ser pega, para o grupo saber o que levar antes de entrar: pano no rosto em Baluarte, sombra para os olhos em Alétheia, companhia no Vazio. Fora da região, só vale se alguém levou a exposição junto, como um pó, uma amostra ou um ferimento aberto.
+
+- Região | Aflição | Tipo | DT | Como se pega
+
+- Em qualquer lugar | Toxina Paralisante | veneno, comum | 15 | Contato da toxina com o sangue ou ingestão de uma dose.
+
+- Em qualquer lugar | Peçonha Hemorrágica | veneno, comum | 16 | Ferimento causado por presa, ferrão ou arma contaminada.
+
+- Em qualquer lugar | Febre dos Esporos | doenca, comum | 14 | Uma hora em área contaminada sem proteção respiratória.
+
+- Em qualquer lugar | Definhamento Arcano | doenca, sobrenatural | 20 | Contato direto com foco infeccioso sobrenatural.
+
+- Em qualquer lugar | Dependência de Estimulante | vicio, comum | 15 | Uso repetido conforme o gatilho de dependência.
+
+- Gênese | Tosse Cinzenta | doenca, comum | 14 | Uma noite num cômodo fechado com alguém doente, ou respirar a fumaça de um incêndio sem proteção.
+
+- Gênese | Beladona Destilada | veneno, comum | 16 | Beber o extrato ou ser ferido por arma untada com ele.
+
+- Alétheia | Ofuscamento Âmbar | doenca, sobrenatural | 17 | Uma hora sob a luz âmbar constante de Alétheia sem proteger os olhos.
+
+- A.X.I.S | Dependência de Sincronia | vicio, comum | 16 | Uso repetido de interface neural, conforme o gatilho de dependência.
+
+- Anima | Podridão do Viveiro | doenca, comum | 17 | Ferimento aberto em contato com a mata do Viveiro ou com uma criatura infestada.
+
+- Anima | Néctar Sonífero | veneno, comum | 15 | Comer o fruto ou respirar o pólen de uma flor que dá sono.
+
+- Vórtice | Mal da Inconstância | doenca, sobrenatural | 18 | Uma hora numa área em que o Fluxo da Inconstância refez o terreno, sem proteção.
+
+- Baluarte | Pulmão de Pedra | doenca, comum | 15 | Uma hora respirando pó de rocha sem pano ou máscara.
+
+- Matriz | Mal do Interstício | doenca, sobrenatural | 18 | Atravessar entre Galhos sem guia dimensional ou âncora, ou passar uma hora no Interstício.
+
+- Éon | Desgaste do Tempo | doenca, sobrenatural | 19 | Uma hora numa área em que o Fluxo do Tempo foi usado em excesso.
+
+- Limiar | Frio do Fim | doenca, sobrenatural | 17 | Um dia inteiro num lugar onde o Fluxo do Fim é forte, como Arkarin, sem proteção nem companhia viva.
+
+- O Vazio | Apagamento | doenca, sobrenatural | 20 | Uma hora no Vazio, longe de qualquer Árvore, sem âncora nem companhia que lembre o nome de quem entrou.
+
 ### Catálogo de aflições
 
 Toxina Paralisante
 
-**veneno** comum · Fortitude DT 15 · incubação imediata · intervalo 1 rodada
+**veneno** comum · Em qualquer lugar · Fortitude DT 15 · incubação imediata · intervalo 1 rodada
 
 **Exposição:** Contato da toxina com o sangue ou ingestão de uma dose.
 
@@ -3268,7 +3366,7 @@ Toxina Paralisante
 
 Peçonha Hemorrágica
 
-**veneno** comum · Fortitude DT 16 · incubação imediata · intervalo 1 rodada
+**veneno** comum · Em qualquer lugar · Fortitude DT 16 · incubação imediata · intervalo 1 rodada
 
 **Exposição:** Ferimento causado por presa, ferrão ou arma contaminada.
 
@@ -3281,7 +3379,7 @@ Peçonha Hemorrágica
 
 Febre dos Esporos
 
-**doenca** comum · Fortitude DT 14 · incubação 6 horas · intervalo 1 dia
+**doenca** comum · Em qualquer lugar · Fortitude DT 14 · incubação 6 horas · intervalo 1 dia
 
 **Exposição:** Uma hora em área contaminada sem proteção respiratória.
 
@@ -3294,7 +3392,7 @@ Febre dos Esporos
 
 Definhamento Arcano
 
-**doenca** sobrenatural · Fortitude DT 20 · incubação 1 dia · intervalo 1 dia
+**doenca** sobrenatural · Em qualquer lugar · Fortitude DT 20 · incubação 1 dia · intervalo 1 dia
 
 **Exposição:** Contato direto com foco infeccioso sobrenatural.
 
@@ -3307,7 +3405,7 @@ Definhamento Arcano
 
 Dependência de Estimulante
 
-**vicio** comum · Fortitude DT 15 · incubação imediata · intervalo 1 dia
+**vicio** comum · Em qualquer lugar · Fortitude DT 15 · incubação imediata · intervalo 1 dia
 
 **Exposição:** Uso repetido conforme o gatilho de dependência.
 
@@ -3317,6 +3415,162 @@ Dependência de Estimulante
 - **Estágio 3:** Desvantagem em testes de Inteligência durante abstinência. Ganhe 1 Cansaço.
 
 **Tratamento:** Cura DT 15; 1 hora de acompanhamento durante um descanso. Reduza o estágio em 1. Uma tentativa por dia.
+
+Tosse Cinzenta
+
+**doenca** comum · Gênese · Fortitude DT 14 · incubação 1 dia · intervalo 1 dia
+
+**Exposição:** Uma noite num cômodo fechado com alguém doente, ou respirar a fumaça de um incêndio sem proteção.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Fortitude contra fumaça, gases e esforço prolongado.
+- **Estágio 2:** −1 em Fortitude e −1 em Atletismo. Ganhe 1 Cansaço.
+- **Estágio 3:** Desvantagem em Fortitude contra fumaça e gases e em Atletismo para correr e nadar. Ganhe 1 Cansaço.
+
+**Tratamento:** Cura DT 14; 1 hora de repouso, com ervas e vapor. Reduza o estágio em 1. Uma tentativa por dia.
+
+Beladona Destilada
+
+**veneno** comum · Gênese · Fortitude DT 16 · incubação 10 minutos · intervalo 10 minutos
+
+**Exposição:** Beber o extrato ou ser ferido por arma untada com ele.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** Visão turva: −1 em Percepção e Pontaria.
+- **Estágio 2:** −2 em Percepção e Pontaria. Boca seca: desvantagem em Diplomacia e Atuação faladas.
+- **Estágio 3:** Desvantagem em testes que dependam de visão. Movimento reduzido pela metade.
+
+**Tratamento:** Cura DT 16; Ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
+
+Ofuscamento Âmbar
+
+**doenca** sobrenatural · Alétheia · Fortitude DT 17 · incubação imediata · intervalo 1 hora
+
+**Exposição:** Uma hora sob a luz âmbar constante de Alétheia sem proteger os olhos.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Percepção que dependa de visão.
+- **Estágio 2:** −2 em Percepção que dependa de visão. +2 em Ressonância: você enxerga o que as coisas são de verdade, querendo ou não.
+- **Estágio 3:** Desvantagem em Percepção que dependa de visão. +2 em Ressonância. Ganhe 1 Cansaço.
+
+**Tratamento:** Cura DT 17; 1 hora na sombra, de olhos cobertos. Reduza o estágio em 1. Uma tentativa por dia.
+
+Dependência de Sincronia
+
+**vicio** comum · A.X.I.S · Fortitude DT 16 · incubação imediata · intervalo 1 dia
+
+**Exposição:** Uso repetido de interface neural, conforme o gatilho de dependência.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Iniciativa e em Tecnologia durante abstinência.
+- **Estágio 2:** −2 em Iniciativa e em Tecnologia durante abstinência.
+- **Estágio 3:** Desvantagem em Tecnologia e em testes de Inteligência durante abstinência. Ganhe 1 Cansaço.
+
+**Tratamento:** Cura DT 16; 1 hora de acompanhamento durante um descanso. Reduza o estágio em 1. Uma tentativa por dia.
+
+Podridão do Viveiro
+
+**doenca** comum · Anima · Fortitude DT 17 · incubação 1 hora · intervalo 1 dia
+
+**Exposição:** Ferimento aberto em contato com a mata do Viveiro ou com uma criatura infestada.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** Os ferimentos não fecham sozinhos: toda cura de Vida que você recebe cai pela metade.
+- **Estágio 2:** Cura de Vida pela metade. −1 em testes físicos. Ganhe 1 Cansaço.
+- **Estágio 3:** Cura de Vida pela metade. −2 em testes físicos. Ganhe 1 Cansaço.
+
+**Tratamento:** Cura DT 17; 1 hora, limpando e cauterizando a ferida. Reduza o estágio em 1. Uma tentativa por dia.
+
+Néctar Sonífero
+
+**veneno** comum · Anima · Fortitude DT 15 · incubação 1 minuto · intervalo 1 minuto
+
+**Exposição:** Comer o fruto ou respirar o pólen de uma flor que dá sono.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Iniciativa e em Percepção.
+- **Estágio 2:** −2 em Iniciativa e em Percepção. Movimento reduzido pela metade.
+- **Estágio 3:** Adormece: fica Inconsciente até sofrer dano ou até o próximo intervalo.
+
+**Tratamento:** Cura DT 15; Ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
+
+Mal da Inconstância
+
+**doenca** sobrenatural · Vórtice · Fortitude DT 18 · incubação 1 hora · intervalo 1 dia
+
+**Exposição:** Uma hora numa área em que o Fluxo da Inconstância refez o terreno, sem proteção.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em testes de precisão (Pontaria, Ladinagem e Pilotagem).
+- **Estágio 2:** −2 em testes de precisão. No começo de cada cena, role 1d6: com 1, a primeira rolagem da cena sofre desvantagem.
+- **Estágio 3:** Desvantagem em testes de precisão. No começo de cada cena, role 1d6: com 1 ou 2, a primeira rolagem da cena sofre desvantagem.
+
+**Tratamento:** Cura DT 18; 1 hora de repouso longe do lugar contaminado. Reduza o estágio em 1. Uma tentativa por dia.
+
+Pulmão de Pedra
+
+**doenca** comum · Baluarte · Fortitude DT 15 · incubação 2 dias · intervalo 1 dia
+
+**Exposição:** Uma hora respirando pó de rocha sem pano ou máscara.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Fortitude contra fumaça e gases.
+- **Estágio 2:** −2 em Fortitude contra fumaça, gases e esforço prolongado. Ganhe 1 Cansaço.
+- **Estágio 3:** Desvantagem em Fortitude contra fumaça, gases e esforço prolongado. Movimento reduzido em 3 m. Ganhe 1 Cansaço.
+
+**Tratamento:** Cura DT 15; 1 hora de vapores medicinais em ar limpo. Reduza o estágio em 1. Uma tentativa por dia.
+
+Mal do Interstício
+
+**doenca** sobrenatural · Matriz · Fortitude DT 18 · incubação 1 hora · intervalo 1 dia
+
+**Exposição:** Atravessar entre Galhos sem guia dimensional ou âncora, ou passar uma hora no Interstício.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Pontaria e em Percepção: a distância engana.
+- **Estágio 2:** −2 em Pontaria e em Percepção. Ganhe 1 Cansaço.
+- **Estágio 3:** Desvantagem em Pontaria, Percepção e Acrobacia. Ganhe 1 Cansaço.
+
+**Tratamento:** Cura DT 18; 1 hora de descanso com os pés firmes no chão, longe do Interstício. Reduza o estágio em 1. Uma tentativa por dia.
+
+Desgaste do Tempo
+
+**doenca** sobrenatural · Éon · Fortitude DT 19 · incubação 1 dia · intervalo 1 dia
+
+**Exposição:** Uma hora numa área em que o Fluxo do Tempo foi usado em excesso.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Iniciativa.
+- **Estágio 2:** −2 em Iniciativa. Ganhe 1 Cansaço. Drenagem temporária: −1 Destreza.
+- **Estágio 3:** −2 em Iniciativa. Desvantagem em Reflexos. Ganhe 1 Cansaço. Drenagem temporária: −2 Destreza.
+
+**Tratamento:** Cura DT 19; 1 hora e um reagente mágico de 50 Lunaris, consumido na tentativa. Reduza o estágio em 1. Uma tentativa por dia.
+
+Frio do Fim
+
+**doenca** sobrenatural · Limiar · Fortitude DT 17 · incubação 1 dia · intervalo 1 dia
+
+**Exposição:** Um dia inteiro num lugar onde o Fluxo do Fim é forte, como Arkarin, sem proteção nem companhia viva.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Vontade.
+- **Estágio 2:** −2 em Vontade. Perca 1d4 de Sanidade.
+- **Estágio 3:** Desvantagem em Vontade. Descanso recupera metade da Sanidade. Perca 1d6 de Sanidade.
+
+**Tratamento:** Cura DT 17; 1 hora junto a uma fogueira, com alguém vivo ao lado. Reduza o estágio em 1. Uma tentativa por dia.
+
+Apagamento
+
+**doenca** sobrenatural · O Vazio · Fortitude DT 20 · incubação 1 hora · intervalo 1 dia
+
+**Exposição:** Uma hora no Vazio, longe de qualquer Árvore, sem âncora nem companhia que lembre o nome de quem entrou.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Diplomacia, Atuação e Intimidação.
+- **Estágio 2:** −2 em Diplomacia, Atuação e Intimidação. Drenagem temporária: −1 Carisma.
+- **Estágio 3:** Desvantagem em Diplomacia, Atuação e Intimidação. Drenagem temporária: −2 Carisma.
+
+**Tratamento:** Cura DT 20; 1 hora ao lado de alguém que conheça o nome do paciente e o diga em voz alta. Reduza o estágio em 1. Uma tentativa por dia.
 
 ## classes
 
@@ -3632,19 +3886,19 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 1001 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 1018 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 ### Os quatro locais
 
 - Local | O que vende | Itens
 
-- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 286
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 296
 
 - Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 257
 
-- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 238
+- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 244
 
-- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 220
+- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 221
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 

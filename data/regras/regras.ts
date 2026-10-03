@@ -35,6 +35,7 @@ import { REGRA_AFLICOES } from './aflicoes';
 import { REGRA_ATAQUES_COMBINADOS } from './ataquesCombinados';
 import { REGRA_BASES } from './bases';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from './condicoes';
+import { CONJUNTOS_EQUIPAMENTO } from './conjuntos';
 import { CONDICOES_LONGO_PRAZO, GRUPOS_LONGO_PRAZO } from './condicoes-longo-prazo';
 import { REGRA_CONFLITO_SOCIAL } from './conflitoSocial';
 import { REGRA_CRAFTING } from './crafting';
@@ -84,13 +85,23 @@ const tabelaRaridadesEquipamento = RARIDADES_EQUIPAMENTO.map((raridade) => `
 
 /** Gerado de data/regras/condicoes.ts para o livro público nunca divergir do
  * que a ficha e a sessão ao vivo realmente aplicam. */
-const tabelaCondicoesGerais = CONDICOES_OFICIAIS.map((condicao) => `
+const linhaCondicaoGeral = (condicao: (typeof CONDICOES_OFICIAIS)[number]) => `
   <tr>
     <td><strong>${condicao.titulo}</strong></td>
     <td>${condicao.efeitos.join(' ')}</td>
     <td>${condicao.remocao}</td>
   </tr>
-`).join('');
+`;
+const tabelaCondicoesGerais = CONDICOES_OFICIAIS.filter((condicao) => !condicao.positiva).map(linhaCondicaoGeral).join('');
+const tabelaCondicoesBeneficas = CONDICOES_OFICIAIS.filter((condicao) => condicao.positiva).map(linhaCondicaoGeral).join('');
+
+/** Gerada de data/regras/conjuntos.ts: o livro lista os mesmos bônus que a ficha aplica. */
+const tabelaConjuntosEquipamento = CONJUNTOS_EQUIPAMENTO.map((conjunto) => `
+          <tr>
+            <td><strong>${conjunto.titulo}</strong></td>
+            <td>${conjunto.pecas.map((peca) => peca.titulo).join(', ')}</td>
+            <td>${conjunto.bonus.map((bonus) => `<strong>${bonus.pecas} peças:</strong> ${bonus.descricao}`).join(' ')}</td>
+          </tr>`).join('');
 
 const tabelaCrisesSanidade = CRISES_SANIDADE.map((crise) => `
   <tr>
@@ -1218,7 +1229,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Remover Ferido</h3>
       <ul class="regras-list">
         <li>Um descanso completo de qualidade Boa ou melhor tira 1 de Ferido, se o personagem for tratado e terminar o descanso consciente.</li>
-        <li>O mesmo descanso conta também para cada lesão de longo prazo do personagem (veja Condições). Um descanso, todas as contagens andam.</li>
+        <li>O mesmo descanso conta também para cada lesão de longo prazo do personagem (veja Condições). Não é preciso descansar separado para cada uma.</li>
         <li>É uma redução por descanso completo, mesmo que várias pessoas curem a mesma pessoa.</li>
         <li>Poder ou tratamento que remova Ferido fora do descanso precisa dizer isso com todas as letras.</li>
       </ul>
@@ -1973,7 +1984,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   'raridades-modificacoes': {
     categoria: 'Combate e Mecânicas',
     status: 'Regra oficial',
-    resumo: 'Como cada raridade aumenta preço e propriedades de armas e proteções, além dos limites de modificações e efeitos.',
+    resumo: 'Como cada raridade aumenta preço e propriedades de armas e proteções, além dos limites de modificações e efeitos, dos itens que despertam com o dono e dos conjuntos de equipamento.',
     destaques: [
       ['Raridade', 'melhora a ficha do equipamento'],
       ['Faixas', 'Comum a Relíquia da Criação'],
@@ -2017,6 +2028,24 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           ${linhasItemEspecial()}
         </tbody>
       </table></div>
+
+      <h3 class="regras-subtitle">Itens que despertam com o dono</h3>
+      <p class="regras-lead">Alguns itens da Loja têm <strong>formas</strong>. Cada forma pede um nível total mínimo do dono. Vale sempre a mais alta que ele já alcançou, e ela <strong>substitui</strong> a anterior em vez de somar.</p>
+      <ul class="regras-list">
+        <li>A forma só vale com o item equipado, e esses itens são artefatos: ocupam uma das vagas da tabela acima.</li>
+        <li>Se o item mudar de dono, a forma muda junto: vale a que o nível total do novo dono alcança.</li>
+        <li>Cada forma lista os efeitos que a ficha aplica sozinha. A Loja mostra todas as formas do item, e o Inventário mostra a de agora e quando vem a próxima.</li>
+        <li><strong>Itens de dilema</strong> dão poder e cobram um preço, que vem escrito na descrição. O preço também entra na ficha como efeito automático: menos Sanidade máxima, menos Cansaço máximo ou desvantagem numa perícia. Tirar o item devolve tudo na hora.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Conjuntos de equipamento</h3>
+      <p class="regras-lead">Peças do mesmo conjunto dão um <strong>bônus de coleção</strong> quando estão equipadas ao mesmo tempo. Os bônus se somam: com 3 peças valem os de 2 e os de 3. Peça repetida conta uma vez, e peça guardada na mochila não conta.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Conjunto</th><th>Peças</th><th>Bônus</th></tr></thead>
+        <tbody>${tabelaConjuntosEquipamento}
+        </tbody>
+      </table></div>
+      <p class="regras-note">Cada peça de conjunto também tem um efeito próprio de valor 1, que a ficha aplica sozinha. O bônus de coleção vem por cima.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">O orçamento de uma raridade é o que você está aprovando de fato ao liberar um item. As três faixas de cima passam pela sua autorização antes de existir.</p>
@@ -2048,6 +2077,20 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>O teto (1 vaga e mais uma a cada 4 níveis totais até o 50, a cada 8 até o 100 e a cada 16 depois) é compartilhado por itens de perícia e artefatos. Arma, armadura, escudo e os demais equipamentos não entram nessa conta.</li>
         <li>A ficha impede uma nova ativação acima do teto. Se uma ficha antiga já estiver acima dele, as peças permanecem no inventário, mas os efeitos excedentes ficam inativos até o jogador liberar vagas.</li>
         <li>A compra continua permitida mesmo sem vaga: o limite controla o que está em uso, não o que o personagem possui.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Aprovar item que desperta ou que cobra preço</h3>
+      <ul class="regras-list">
+        <li>As formas de um item já respeitam o orçamento da raridade dele: nenhuma forma passa dos efeitos nem do valor por efeito da tabela. Se criar um item novo, faça o mesmo, e deixe a forma de nível mais alto para o fim da campanha.</li>
+        <li>Dilema só funciona quando o preço dói um pouco. Se o grupo nunca sente o custo, o item virou bônus de graça. Se sente a cada cena, ele fica na mochila.</li>
+        <li>O nível total do dono decide a forma, então um item que mudou de mãos também muda de forma. É bom gancho de história: quem herda o anel recebe a forma mais simples e precisa crescer para ela voltar.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Conjuntos</h3>
+      <ul class="regras-list">
+        <li>Peça de conjunto é barata de propósito, de raridade Incomum. O conjunto inteiro custa menos que um item Raro e rende um bônus parecido com o de um item Épico, por isso é o patamar mais alto que faz diferença na mesa.</li>
+        <li>Ao criar um conjunto novo, deixe o bônus de 2 peças pequeno e o do conjunto completo como o que o jogador persegue. Um conjunto com o bônus forte nas primeiras peças só dá motivo para parar de comprar.</li>
+        <li>Se a mesa quiser limitar, conte o conjunto como um item especial no limite acima. Por padrão ele não conta, porque suas peças não são artefatos.</li>
       </ul>
     `,
   },
@@ -2376,12 +2419,19 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <tbody>${tabelaCondicoesGerais}</tbody>
       </table></div>
 
+      <h3 class="regras-subtitle">Condições benéficas</h3>
+      <p class="regras-lead">São as condições que ajudam. Vêm de uma palavra de ânimo, de uma magia de apoio ou de um escudo erguido na hora certa. Duram pouco e nenhuma soma com ela mesma.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Condição</th><th>Efeito principal</th><th>Remoção</th></tr></thead>
+        <tbody>${tabelaCondicoesBeneficas}</tbody>
+      </table></div>
+
       <h3 class="regras-subtitle">Lesões, sequelas e saúde mental</h3>
       <p class="regras-lead">Condições que duram mais que uma cena já vêm escritas, para ninguém precisar inventar uma na hora. A ficha as aplica como texto: o efeito é lido e aplicado na mesa.</p>
       <ul class="regras-list">
         <li><strong>Lesões</strong> saram com tratamento e descansos completos de qualidade Boa ou melhor. Cada descanso assim, com tratamento, conta 1 até chegar ao número da condição. O mesmo descanso conta ao mesmo tempo para Ferido e para todas as lesões que o personagem tiver.</li>
         <li><strong>Perdas de membro e sentido</strong> espelham a tabela de Mutilação em Ferimentos. Sem Regeneração ou implante, ficam para sempre.</li>
-        <li><strong>Condições mentais permanentes</strong> não somem com descanso. Acompanhamento profissional abranda cada uma do jeito que a própria condição descreve, e só uma resolução na história ou tratamento longo as encerra.</li>
+        <li><strong>Condições mentais permanentes</strong> não somem com descanso. Com acompanhamento profissional, cada uma fica mais leve do jeito que o próprio texto explica. Só uma resolução na história ou um tratamento longo encerra.</li>
         <li>Na Quebra de Sanidade, a condição permanente definida com o jogador pode sair daqui.</li>
       </ul>${tabelasCondicoesLongoPrazo}
     `,
@@ -2412,7 +2462,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Lesões e saúde mental na mesa</h3>
       <ul class="regras-list">
-        <li>Condição de saúde mental é combinada, não imposta. Converse com quem joga antes de aplicar, escolham juntos o gatilho e o jeito de interpretar, e troque por outra se a pessoa não quiser aquele tema.</li>
+        <li>Condição de saúde mental se decide junto com quem joga. Converse antes de aplicar, escolham juntos o gatilho e o jeito de interpretar, e troque por outra se a pessoa não quiser aquele tema.</li>
         <li>Os números são um ponto de partida. Dias melhores existem: dispense o teste de uma condição crônica numa cena tranquila e cobre mais quando a cena for pesada.</li>
         <li>Lesão que dura vários descansos precisa de uma cena de cuidado. Quem trata o braço quebrado de um amigo faz mais pela história que o teste de Cura.</li>
         <li>Perda permanente pede uma porta de volta ou uma forma nova de jogar, como a que Mutilação já descreve. Se a mesa ainda não decidiu qual, não aplique.</li>
