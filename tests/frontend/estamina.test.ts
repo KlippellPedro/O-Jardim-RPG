@@ -184,9 +184,3 @@ test('resumo da classe mostra a Estamina quando a classe já migrou e some quand
   assert.equal(formatarResumoClasse(classeFisica), 'Vida: 5 | Mana: 1 | Estamina: 3');
   assert.equal(formatarResumoClasse(classeSemEstamina), 'Vida: 5 | Mana: 2');
 });
-
-test('combate intenso também vale quando gasta metade da Estamina', async () => {
-  const { combateFoiIntenso } = await import('../../src/services/descansoService');
-  assert.equal(combateFoiIntenso({ gastouMetadeEstamina: true }), true);
-  assert.equal(combateFoiIntenso({}), false);
-});

@@ -27,9 +27,10 @@ um orçamento universal de poder. A classificação comparativa das propostas
 
 - A interpretação de ataques naturais como “armado/desarmado” para Código de
   Ética não foi encerrada pela aprovação do teto de dano.
-- A raça Entidade continua `indisponivel: true`, sem características no
-  catálogo atual. Não reaplicar automaticamente a proposta antiga de “Legado
-  extra” antes de definir seu pacote racial.
+- A raça Entidade fica `indisponivel: true` por design: cada Entidade existe
+  pelo próprio conto no Livro das Entidades (`data/mundo/entidades.ts`), e só
+  o Escritor de Contos cria uma nova, no nível 20 (habilidade Último
+  Capítulo). Não reaplicar a proposta antiga de “Legado extra”.
 
 ## Cofre e Investimentos
 
@@ -225,7 +226,6 @@ Leituras que a tabela deixa claras, sem mudança de regra:
 | --- | --- |
 | Câmbio ampliado versus textos e premissas antigas | Confirmar a intenção atual e alinhar as fontes contraditórias identificadas acima. |
 | Código de Ética contra ataques naturais | Definir o significado de armado/desarmado, sem alterar silenciosamente o teto já aprovado. |
-| Raça Entidade | Desenvolver seu pacote antes de liberar seleção ou documentar bônus que não está no dado atual. |
 | Exceção do Marco de Pedra | Manter até uma decisão específica de preço; comparar com os componentes atuais. |
 | Juros, risco e concentração de patrimônio | Calibrar com dados de uso; números de simulação antiga não substituem acompanhamento de campanha. |
 | Modificações aplicadas a veículos e distinção de escudos | Ver as decisões ainda abertas em Integração. |

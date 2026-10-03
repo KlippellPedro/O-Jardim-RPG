@@ -147,7 +147,3 @@ export function aplicarRelaxamento(
     recuperadoEstamina: recuperaEstamina ? estaminaFinal - estaminaAtual : 0,
   };
 }
-
-export function combateFoiIntenso(evento: { caiuMetadeVida?: boolean; gastouMetadeMana?: boolean; gastouMetadeEstamina?: boolean; entrouMorrendo?: boolean }): boolean {
-  return Boolean(evento.caiuMetadeVida || evento.gastouMetadeMana || evento.gastouMetadeEstamina || evento.entrouMorrendo);
-}

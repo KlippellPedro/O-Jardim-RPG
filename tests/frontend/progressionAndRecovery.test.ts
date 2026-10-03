@@ -6,7 +6,6 @@ import { CLASSES_CATALOGO, LEGADOS_CATALOGO } from '../../src/services/catalogoS
 import {
   aplicarDescansoCompleto,
   aplicarRelaxamento,
-  combateFoiIntenso,
   descansoPermitido,
   FATORES_DESCANSO,
   resolverQualidadeDescanso,
@@ -89,7 +88,6 @@ test('descanso recupera percentuais, Sanidade, Cansaço e trata Ferido uma vez',
   const relaxado = aplicarRelaxamento({ manaAtual: 2 }, 20, 14, 8, 4);
   assert.equal(relaxado.recuperado, 8);
   assert.equal(relaxado.status.relaxouDesdeDescanso, true);
-  assert.equal(combateFoiIntenso({ gastouMetadeMana: true }), true);
 });
 
 test('equipamento aplica carga, combinações e Resistência sem dano negativo', () => {

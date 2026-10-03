@@ -3,7 +3,7 @@
 Regra do livro (capítulo Descanso): o combate conta como intenso quando o
 personagem desce à metade dos PV, gasta metade da Mana ou da Estamina, ou entra
 em Morrendo. A cena inteira gera 1 de Cansaço, mesmo que vários gatilhos
-aconteçam. O espelho no site é `combateFoiIntenso` em descansoService.ts.
+aconteçam. A regra mora só aqui: o site não calcula combate intenso.
 
 Como o servidor sabe disso sem olhar cada clique: ao iniciar o combate cada
 participante ganha uma "marca" com os valores de partida e os piores pontos
