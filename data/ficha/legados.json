@@ -193,7 +193,7 @@
     {
       "id": "desonroso",
       "titulo": "Desonroso",
-      "descricao": "Se estiver enfrentando um oponente desarmado, tem vantagem em testes de ataque e recebe +4 para desviar de qualquer ataque.",
+      "descricao": "Se estiver enfrentando um oponente desarmado, tem vantagem em testes de ataque e recebe +4 para desviar de qualquer ataque. Quem tem arma natural declarada (garra, presa, chifre, punho de golem) não conta como desarmado.",
       "pre_requisitos": [
         {
           "nivel_personagem": 6
@@ -204,7 +204,7 @@
     {
       "id": "codigo-de-etica",
       "titulo": "Código de Ética",
-      "descricao": "Você se torna incapaz de atacar seres desarmados. Porém, se o oponente estiver armado, seus ataques causam dano adicional igual à metade do seu nível (arredondado para baixo, até um máximo de +30) e você sempre age antes dele na iniciativa.",
+      "descricao": "Você não ataca quem está desarmado. Contra oponente armado, receba +2 na iniciativa e cause +2 de dano uma vez por turno. Arma natural declarada (garra, presa, chifre, punho de golem) conta como arma, aqui e em Desonroso.",
       "pre_requisitos": [
         {
           "nivel_personagem": 6

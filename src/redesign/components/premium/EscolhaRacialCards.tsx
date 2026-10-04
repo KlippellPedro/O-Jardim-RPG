@@ -98,6 +98,11 @@ export const EscolhaRacialCards = ({ raca, tema, paleta, fundoCards = 'bg-black/
                         Fluxo {String(opcao.fluxo)}
                       </span>
                     )}
+                    {opcao.requer_autorizacao_mestre === true && (
+                      <span className={`ml-auto rounded-full border ${estilo.border} px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] ${estilo.text}`}>
+                        Com aval do Mestre
+                      </span>
+                    )}
                   </div>
 
                   {temDescricaoPropria(opcao) && (

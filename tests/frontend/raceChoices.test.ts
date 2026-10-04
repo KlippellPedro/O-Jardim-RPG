@@ -23,7 +23,7 @@ const casosEsperados = [
   ['gigante', 'varianteId', 4],
   ['sereia', 'varianteId', 4],
   ['golem', 'varianteId', 6],
-  ['vampiro', 'varianteId', 6],
+  ['vampiro', 'varianteId', 7],
   ['auleth', 'varianteId', 6],
   ['simbionte', 'varianteId', 4],
   ['mimico', 'varianteId', 4],

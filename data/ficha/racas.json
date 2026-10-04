@@ -68,7 +68,7 @@
     ],
     "recursos_provisorios": false,
     "rotulo_variante": "Clã",
-    "descricao_variantes": "Escolha o Clã que virou você. Nenhum dos seis é mais forte que os outros em Întuneric; cada um lida com a fome do seu jeito.",
+    "descricao_variantes": "Escolha o Clã que virou você. Os seis Clãs comuns se equivalem em Întuneric, e cada um lida com a fome do seu jeito. Acima de todos está a Noite Eterna, a realeza dos vampiros, que só entra na mesa com o aval do Mestre.",
     "variantes": [
       {
         "id": "voievod",
@@ -302,6 +302,75 @@
             "recuperacao": "sessao",
             "custo_mana": 8,
             "alcance_m": 9,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "noite-eterna",
+        "titulo": "Noite Eterna",
+        "vida": 2,
+        "mana": 2,
+        "requer_autorizacao_mestre": true,
+        "descricao": "A família mais antiga de Întuneric. Dizem que já bebiam quando a lua parou no céu e nunca mais se pôs, e foi dessa noite sem fim que veio o nome. Quando um deles entra no salão, os outros seis Clãs baixam a cabeça: são a realeza dos vampiros, os únicos recebidos no castelo da Transilvânia sem precisar pedir. O sangue rende mais neles do que em qualquer outro, e a fome também. Começa com +2 de Vida e +2 de Mana além do que a raça dá, e só entra na mesa com o aval do Mestre.",
+        "caracteristicas": [
+          {
+            "id": "sangue-real",
+            "titulo": "Sangue Real",
+            "tipo": "passiva",
+            "nivel_minimo": 1,
+            "descricao": "Todo vampiro reconhece você pelo cheiro do sangue. Com vampiros de outros Clãs, receba vantagem em Persuasão e Intimidação, e eles sofrem desvantagem no primeiro ataque contra você em cada cena. Sua Hemofagia recupera 1d6 de Vida a mais.",
+            "automatizada": false
+          },
+          {
+            "id": "fome-antiga",
+            "titulo": "Fome Antiga",
+            "tipo": "limitacao",
+            "nivel_minimo": 1,
+            "descricao": "Sangue tão velho não sabe esperar. A Fome de Sangue chega depois de 12 horas sem se alimentar, em vez de 24, e sangue de animal não conta como refeição.",
+            "automatizada": false
+          },
+          {
+            "id": "mandato-da-coroa",
+            "titulo": "Mandato da Coroa",
+            "tipo": "acao",
+            "nivel_minimo": 17,
+            "descricao": "Dê uma ordem curta a qualquer criatura a até 18 m que consiga ouvir você: ela testa Vontade contra o seu Carisma e, se falhar, cumpre a ordem no próximo turno. Vampiro de outro Clã faz o teste com desvantagem. Custa uma ação e 4 Mana, duas vezes por cena. Ordem abertamente suicida ela não cumpre.",
+            "usos": 2,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
+            "id": "veu-de-nevoa",
+            "titulo": "Véu de Névoa",
+            "tipo": "reacao",
+            "nivel_minimo": 17,
+            "descricao": "Quando um ataque acertar você, gaste sua reação e 2 Mana para se desfazer em névoa por um instante: o dano cai pela metade e você se move até 3 m sem provocar ataque de oportunidade. Duas vezes por cena.",
+            "usos": 2,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "automatizada": false
+          },
+          {
+            "id": "lua-que-nao-se-poe",
+            "titulo": "Lua que Não se Põe",
+            "tipo": "acao_completa",
+            "nivel_minimo": 42,
+            "descricao": "Chame a lua de Întuneric sobre a cena. Numa área de 18 m em volta de você, a luz do dia some e o céu vira a noite sem fim da sua família até a cena acabar. Lá dentro, você e os vampiros aliados enxergam normalmente, recuperam 2 de Vida no início de cada turno e não sentem a Fome de Sangue. Criatura hostil que começar o turno na área testa Vontade e, se falhar, fica Amedrontada por uma rodada. Uma ação completa e 10 Mana, uma vez por sessão.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 10,
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
+            "id": "coroa-de-sangue",
+            "titulo": "Coroa de Sangue",
+            "tipo": "passiva",
+            "nivel_minimo": 42,
+            "descricao": "Você pode usar Hemofagia em qualquer criatura que esteja agarrando, mesmo que ela resista, e recebe vantagem em testes de Vontade. Vampiro que já bebeu do seu sangue precisa passar num teste de Vontade contra o seu Carisma toda vez que quiser atacar você.",
             "automatizada": false
           }
         ]

@@ -1,6 +1,6 @@
 {
   "versao": "1.0",
-  "descricao": "Legados adicionados à versão oficial. Não fazem parte dos 36 Legados confirmados nos PDFs originais.",
+  "descricao": "Legados adicionados à versão oficial. Não fazem parte dos 36 Legados confirmados nos PDFs originais. Os seis primeiros vêm da versão 1.0; os demais, de 2026-10-04, cobrem do nível 20 ao 500 e foram escritos para o ritmo de Legado do fim da estrada: efeitos de \"uma vez por cena, sessão ou descanso\", vantagem, Redução e frações do nível total, e nunca bônus fixo grande.",
   "novos": [
     {
       "id": "eco-do-fluxo",
@@ -69,6 +69,1021 @@
         }
       ],
       "fonte": "Criação da versão 1.0, revisada no Obsidian"
+    },
+    {
+      "id": "mao-que-nao-treme",
+      "titulo": "Mão que Não Treme",
+      "descricao": "Uma vez por cena, ao falhar em um ataque ou em um teste de perícia por 3 ou menos, o resultado vira sucesso.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 20
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "pele-de-veterano",
+      "titulo": "Pele de Veterano",
+      "descricao": "Redução 3 contra dano físico e Redução 1 contra dano mágico. Não acumula com outra Redução fixa.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 20
+        },
+        {
+          "atributo": "constituicao",
+          "valor_minimo": 16
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "folego-de-maratonista",
+      "titulo": "Fôlego de Maratonista",
+      "descricao": "Ao fim de cada combate, uma vez por descanso, recupere Estamina igual à metade do seu nível total.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 20
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "nome-que-pesa",
+      "titulo": "Nome que Pesa",
+      "descricao": "Receba +2 em Diplomacia e Intimidação contra quem já ouviu falar de você. Uma vez por sessão, um NPC neutro passa a ser favorável nessa cena.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 20
+        },
+        {
+          "atributo": "carisma",
+          "valor_minimo": 14
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "reserva-de-fluxo",
+      "titulo": "Reserva de Fluxo",
+      "descricao": "Uma vez por descanso, ao chegar a 0 de Mana, recupere Mana igual à metade do seu nível total.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 20
+        },
+        {
+          "atributo": "fluxo",
+          "valor_minimo": 14
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "olho-treinado",
+      "titulo": "Olho Treinado",
+      "descricao": "Uma vez por cena, role com vantagem um teste de Percepção, Investigação ou Intuição.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 20
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "ultimo-recurso",
+      "titulo": "Último Recurso",
+      "descricao": "Uma vez por descanso, ao cair em Morrendo, fique com 1 de Vida e aja normalmente até o fim da sua próxima rodada. Depois dela, volte a Morrendo.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 25
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "tatico-de-mesa",
+      "titulo": "Tático de Mesa",
+      "descricao": "Uma vez por combate, depois de definida a ordem de iniciativa, troque seu lugar na ordem com o de um aliado que concorde.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 25
+        },
+        {
+          "atributo": "inteligencia",
+          "valor_minimo": 14
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "gume-afiado",
+      "titulo": "Gume Afiado",
+      "descricao": "Seus ataques ignoram 2 pontos de Redução, e um crítico ignora toda a Redução do alvo.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 25
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "fala-mansa",
+      "titulo": "Fala Mansa",
+      "descricao": "Uma vez por cena, afaste uma criatura inteligente de um combate com Diplomacia contra a DT da cena. Ela só volta a lutar se for atacada.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 25
+        },
+        {
+          "atributo": "carisma",
+          "valor_minimo": 14
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "recomeco",
+      "titulo": "Recomeço",
+      "descricao": "Uma vez por sessão, conclua qualquer descanso como se tivesse qualidade Boa, mesmo num lugar ruim.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 30
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "acerto-de-contas",
+      "titulo": "Acerto de Contas",
+      "descricao": "Quando um aliado a até 9 m cair para 0 de Vida, seu próximo ataque contra quem causou o dano recebe vantagem e causa dano extra igual a um décimo do seu nível total.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 30
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "mestre-de-si",
+      "titulo": "Mestre de Si",
+      "descricao": "Uma vez por cena, como ação livre, remova de si uma condição, exceto Morrendo.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 30
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "mochila-sem-fundo",
+      "titulo": "Mochila Sem Fundo",
+      "descricao": "Receba 3 espaços de inventário adicionais. Item que exija as duas mãos para ser carregado continua ocupando o espaço normal.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 30
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "mira-longa",
+      "titulo": "Mira Longa",
+      "descricao": "O alcance das suas armas à distância aumenta em 50% e o alcance Longo deixa de impor desvantagem a você.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 30
+        },
+        {
+          "atributo": "destreza",
+          "valor_minimo": 16
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "eu-ja-vi-isso",
+      "titulo": "Eu Já Vi Isso",
+      "descricao": "Uma vez por sessão, ao encontrar uma criatura que o grupo já enfrentou, receba vantagem no primeiro ataque e na primeira resistência contra ela.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 30
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "voz-de-comando",
+      "titulo": "Voz de Comando",
+      "descricao": "Uma vez por cena, como reação, dê vantagem a um aliado a até 18 m em um teste que ele está prestes a fazer.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 35
+        },
+        {
+          "atributo": "carisma",
+          "valor_minimo": 16
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "escudo-de-vontade",
+      "titulo": "Escudo de Vontade",
+      "descricao": "Role com vantagem Vontade contra medo e, quando uma Presença Aterradora cobrar Sanidade de você, perca só metade, arredondada para cima.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 35
+        },
+        {
+          "atributo": "sabedoria",
+          "valor_minimo": 16
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "combo-aprendido",
+      "titulo": "Combo Aprendido",
+      "descricao": "Depois de acertar um ataque, o próximo ataque no mesmo turno contra o mesmo alvo causa +1 de dano por dado.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 35
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "fera-ferida",
+      "titulo": "Fera Ferida",
+      "descricao": "Enquanto estiver com metade da Vida ou menos, seus ataques causam +1 de dano por dado.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 40
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "muralha-viva",
+      "titulo": "Muralha Viva",
+      "descricao": "Uma vez por cena, como reação, receba no lugar de um aliado a até 3 m o golpe que o atingiria. Você sofre metade do dano.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 40
+        },
+        {
+          "atributo": "constituicao",
+          "valor_minimo": 20
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "palavra-que-fecha-porta",
+      "titulo": "Palavra que Fecha Porta",
+      "descricao": "Uma vez por sessão, refaça com vantagem uma negociação que acabou de falhar, desde que o outro lado ainda esteja disposto a ouvir.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 40
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "sentido-do-perigo",
+      "titulo": "Sentido do Perigo",
+      "descricao": "Você nunca fica Surpreendido e recebe +5 na iniciativa estática.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 40
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "segundo-estoque",
+      "titulo": "Segundo Estoque",
+      "descricao": "Consumíveis que você usa curam 25% a mais ou duram 50% mais, a sua escolha no momento do uso.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 40
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "arsenal-de-bolso",
+      "titulo": "Arsenal de Bolso",
+      "descricao": "Uma vez por descanso, tire do próprio equipamento um item comum e barato que a cena peça, como corda, tocha ou antídoto simples. Ele some no fim da sessão.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 40
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "segundo-rosto",
+      "titulo": "Segundo Rosto",
+      "descricao": "Uma vez por sessão, ao ser descoberto numa mentira ou num disfarce, invente uma explicação que a cena aceita: o teste vira sucesso.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 50
+        },
+        {
+          "atributo": "carisma",
+          "valor_minimo": 18
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "sangue-frio",
+      "titulo": "Sangue Frio",
+      "descricao": "Imunidade a medo comum e metade da Sanidade perdida por efeitos de terror, arredondada para cima. Presença Aterradora segue a regra normal.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 50
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "golpe-do-maestro",
+      "titulo": "Golpe do Maestro",
+      "descricao": "Uma vez por cena, um ataque seu causa o dano máximo dos dados, sem rolar.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 50
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "caminho-aberto",
+      "titulo": "Caminho Aberto",
+      "descricao": "Uma vez por cena, você e até 2 aliados atravessam terreno difícil como se fosse terreno normal até o fim da cena.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 50
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "vontade-de-ferro",
+      "titulo": "Vontade de Ferro",
+      "descricao": "Role com vantagem todo teste de Vontade contra controle mental, ilusão e compulsão.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 50
+        },
+        {
+          "atributo": "sabedoria",
+          "valor_minimo": 20
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "conhecimento-acumulado",
+      "titulo": "Conhecimento Acumulado",
+      "descricao": "Uma vez por sessão, peça ao Mestre um fato verdadeiro e útil sobre uma criatura, um lugar ou um objeto presentes na cena.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 50
+        },
+        {
+          "atributo": "inteligencia",
+          "valor_minimo": 18
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "um-pe-no-vazio",
+      "titulo": "Um Pé no Vazio",
+      "descricao": "Uma vez por cena, como reação, saia das percepções de todos por uma rodada e evite um ataque contra você. Receba 1 de Cansaço.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 60
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "lingua-de-todos-os-povos",
+      "titulo": "Língua de Todos os Povos",
+      "descricao": "Você entende e fala os treze idiomas do Jardim, incluindo os que não têm criador registrado. Não decifra código nem linguagem inventada.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 60
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "coracao-de-muitas-vidas",
+      "titulo": "Coração de Muitas Vidas",
+      "descricao": "Uma vez por sessão, ao chegar a 0 de Vida, fique com metade da Vida máxima em vez de cair.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 60
+        },
+        {
+          "atributo": "constituicao",
+          "valor_minimo": 24
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "nome-nos-registros",
+      "titulo": "Nome nos Registros",
+      "descricao": "O Banco Lunar, a Guilda dos Caçadores e a Caravana do Limiar conhecem você: uma vez por sessão, um favor deles que cabe em um dia (crédito, passagem ou abrigo) sai sem custo.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 60
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "arma-que-lembra",
+      "titulo": "Arma que Lembra",
+      "descricao": "Escolha uma arma sua. Ela passa a contar como mágica para efeitos de resistência e causa +1 de dano por dado contra uma criatura que já feriu você antes.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 60
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "cicatrizes-de-guerra",
+      "titulo": "Cicatrizes de Guerra",
+      "descricao": "Escolha uma condição de longo prazo que você já sofreu. Você tem vantagem em testes contra ela, e ela deixa de lhe impor penalidade.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 60
+        }
+      ],
+      "repetivel": true,
+      "limite": 2,
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "passo-que-nao-pesa",
+      "titulo": "Passo que Não Pesa",
+      "descricao": "Seu deslocamento aumenta em 3 m. Uma vez por turno, mova-se sem provocar reações e atravesse criaturas menores que você.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 80
+        },
+        {
+          "atributo": "destreza",
+          "valor_minimo": 24
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "onda-de-choque",
+      "titulo": "Onda de Choque",
+      "descricao": "Uma vez por cena, ao acertar um golpe, empurre todas as criaturas a até 3 m do alvo. Elas fazem Fortitude contra a DT da cena para não cair.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 80
+        },
+        {
+          "atributo": "forca",
+          "valor_minimo": 24
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "fluxo-que-sobra",
+      "titulo": "Fluxo que Sobra",
+      "descricao": "Uma vez por cena, uma magia sua não gasta Mana. A magia não pode ser de círculo maior que o seu círculo máximo menos 2.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 80
+        },
+        {
+          "atributo": "fluxo",
+          "valor_minimo": 24
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "cabeca-no-lugar",
+      "titulo": "Cabeça no Lugar",
+      "descricao": "Uma vez por sessão, cancele uma crise de Sanidade ou uma condição mental que acabou de lhe ser imposta.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 80
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "quando-parece-impossivel",
+      "titulo": "Quando Parece Impossível",
+      "descricao": "Uma vez por sessão, quando o grupo estiver diante de um obstáculo que parece intransponível, descreva o que seu personagem já fez uma vez e peça ao Mestre uma solução plausível: ele oferece um caminho com custo.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 100
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "golpe-que-atravessa",
+      "titulo": "Golpe que Atravessa",
+      "descricao": "Uma vez por cena, um ataque corpo a corpo seu ignora toda Redução e toda imunidade a dano físico do alvo.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 100
+        },
+        {
+          "atributo": "forca",
+          "valor_minimo": 28
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "mira-do-fim",
+      "titulo": "Mira do Fim",
+      "descricao": "Uma vez por cena, um ataque à distância seu não sofre desvantagem nem cobertura e atinge um alvo que você viu apenas por um instante.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 100
+        },
+        {
+          "atributo": "destreza",
+          "valor_minimo": 28
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "pele-de-pedra-viva",
+      "titulo": "Pele de Pedra Viva",
+      "descricao": "Redução 5 contra dano físico e Redução 3 contra os demais tipos. Não acumula com Pele de Veterano nem com Ossos Duros.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 100
+        },
+        {
+          "atributo": "constituicao",
+          "valor_minimo": 28
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "mente-dividida",
+      "titulo": "Mente Dividida",
+      "descricao": "Uma vez por rodada, você pode manter dois efeitos de concentração ao mesmo tempo. Se sofrer dano, faça um teste para cada um.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 100
+        },
+        {
+          "atributo": "inteligencia",
+          "valor_minimo": 28
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "presenca-de-lenda",
+      "titulo": "Presença de Lenda",
+      "descricao": "Criaturas de nível menor que a metade do seu fazem Vontade contra a DT da cena ao atacar você pela primeira vez na cena, ou hesitam e perdem a ação.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 100
+        },
+        {
+          "atributo": "carisma",
+          "valor_minimo": 28
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "dominio-de-uma-escola",
+      "titulo": "Domínio de uma Escola",
+      "descricao": "Escolha um Fluxo que você conjura. Suas magias desse Fluxo têm a DT aumentada em 2 e custam 1 de Mana a menos, com mínimo de 1.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 100
+        },
+        {
+          "atributo": "fluxo",
+          "valor_minimo": 28
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "segunda-chance-do-mundo",
+      "titulo": "Segunda Chance do Mundo",
+      "descricao": "Uma vez por sessão, depois que uma rolagem sua for feita, refaça a rolagem e fique com a melhor.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 100
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "companheiro-de-estrada",
+      "titulo": "Companheiro de Estrada",
+      "descricao": "Um aliado ou criatura sob seu controle, escolhido por você, passa a usar o seu nível total como limite do nível dele e a seguir o seu ritmo de descanso. Só um por vez.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 120
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "inventario-do-impossivel",
+      "titulo": "Inventário do Impossível",
+      "descricao": "Uma vez por sessão, \"você já tinha pensado nisso\": declare que trouxe um item que caiba numa mochila e que o grupo poderia ter comprado até o seu nível. O Mestre pode vetar o item, mas nunca a ideia.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 120
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "fora-da-regua",
+      "titulo": "Fora da Régua",
+      "descricao": "Uma vez por sessão, um teste que o Mestre declarou impossível para o seu nível vira um teste normal com desvantagem.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 150
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "pacto-de-sangue-e-fluxo",
+      "titulo": "Pacto de Sangue e Fluxo",
+      "descricao": "Uma vez por descanso, converta Vida em Mana ou Mana em Vida na razão de 1 para 1, até um décimo do seu nível total por conversão, como ação livre.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 150
+        },
+        {
+          "atributo": "fluxo",
+          "valor_minimo": 30
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "reflexo-de-um-mundo-inteiro",
+      "titulo": "Reflexo de um Mundo Inteiro",
+      "descricao": "Uma vez por rodada, como reação, redirecione um ataque que o atingiria para outra criatura a até 3 m de você, que sofre o dano no seu lugar.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 150
+        },
+        {
+          "atributo": "destreza",
+          "valor_minimo": 30
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "pulso-de-comando",
+      "titulo": "Pulso de Comando",
+      "descricao": "Uma vez por cena, uma ordem sua de uma palavra, falada para uma criatura de nível menor que o seu, é obedecida na hora, sem teste, desde que não custe a vida dela.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 150
+        },
+        {
+          "atributo": "carisma",
+          "valor_minimo": 30
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "maos-que-curam-um-mundo",
+      "titulo": "Mãos que Curam um Mundo",
+      "descricao": "Uma vez por descanso, restaure toda a Vida de uma criatura que você toque, remova uma lesão ou sequela de longo prazo e retire dela até 2 níveis de Cansaço.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 150
+        },
+        {
+          "atributo": "sabedoria",
+          "valor_minimo": 30
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "registro-da-propria-historia",
+      "titulo": "Registro da Própria História",
+      "descricao": "Escreva uma linha na ficha sobre algo que o personagem fez. Uma vez por sessão, ela vale como vantagem num teste relacionado, e o Mestre reconhece a linha como verdade do mundo.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 150
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "duas-vezes-no-mesmo-turno",
+      "titulo": "Duas Vezes no Mesmo Turno",
+      "descricao": "Uma vez por cena, repita no mesmo turno uma ação padrão que você acabou de usar, sem repetir o custo de recurso dela.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 200
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "parede-de-quem-ficou",
+      "titulo": "Parede de Quem Ficou",
+      "descricao": "Uma vez por cena, como reação, torne-se inalcançável por um golpe qualquer: ele não o atinge e não causa nenhum efeito adicional.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 200
+        },
+        {
+          "atributo": "constituicao",
+          "valor_minimo": 34
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "tempo-emprestado",
+      "titulo": "Tempo Emprestado",
+      "descricao": "Uma vez por sessão, encerre a rodada atual e comece uma nova antes de qualquer outra criatura agir. Depois, receba 2 de Cansaço.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 200
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "mao-do-artesao-do-mundo",
+      "titulo": "Mão do Artesão do Mundo",
+      "descricao": "Uma vez por descanso, conserte ou aprimore um item não mágico até a raridade Lendária, em uma cena, sem custo de material. O aprimoramento dura até o próximo descanso.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 200
+        },
+        {
+          "atributo": "inteligencia",
+          "valor_minimo": 34
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "voz-que-chega-longe",
+      "titulo": "Voz que Chega Longe",
+      "descricao": "Uma vez por sessão, sua voz é ouvida por qualquer criatura inteligente a até 1 km, e você entende quem a ouve responder em voz alta.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 200
+        },
+        {
+          "atributo": "carisma",
+          "valor_minimo": 34
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "guardiao-de-quem-dorme",
+      "titulo": "Guardião de Quem Dorme",
+      "descricao": "Enquanto você montar guarda, ninguém do seu grupo é surpreendido durante um descanso, e todos recuperam um nível extra de Cansaço.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 200
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "caminho-ja-trilhado",
+      "titulo": "Caminho Já Trilhado",
+      "descricao": "Uma vez por sessão, o grupo atravessa para uma Dimensão ou um Reino que você já visitou, sem teste e sem custo, levando consigo quem estiver a até 9 m.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 250
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "golpe-sem-resposta",
+      "titulo": "Golpe sem Resposta",
+      "descricao": "Uma vez por sessão, um ataque seu atinge automaticamente e causa o dobro do dano máximo dos dados.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 250
+        },
+        {
+          "atributo": "forca",
+          "valor_minimo": 36
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "magia-sem-nome",
+      "titulo": "Magia sem Nome",
+      "descricao": "Uma vez por sessão, conjure uma magia de qualquer Fluxo que você conjura, de círculo até o seu máximo, sem tê-la aprendido. O Mestre decide o efeito exato.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 250
+        },
+        {
+          "atributo": "fluxo",
+          "valor_minimo": 36
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "saber-de-uma-vida",
+      "titulo": "Saber de uma Vida",
+      "descricao": "Uma vez por sessão, saiba o ponto fraco, o Limite ou o Contrajogo de qualquer criatura ou entidade que esteja diante de você, de acordo com o que o Mestre tem na ficha.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 250
+        },
+        {
+          "atributo": "inteligencia",
+          "valor_minimo": 36
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "o-que-nao-cai",
+      "titulo": "O Que Não Cai",
+      "descricao": "Uma vez por sessão, ao receber um dano que o levaria a 0 de Vida, fique com 1 de Vida e recupere um décimo do seu nível total em Vida no fim do turno seguinte.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 300
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "passo-entre-fronteiras",
+      "titulo": "Passo Entre Fronteiras",
+      "descricao": "Uma vez por cena, mova-se até metade do seu deslocamento sem passar pelo espaço entre os dois pontos. Isso não atravessa barreira de Fluxo do Espaço.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 300
+        },
+        {
+          "atributo": "destreza",
+          "valor_minimo": 38
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "palavra-que-vira-lei",
+      "titulo": "Palavra que Vira Lei",
+      "descricao": "Uma vez por sessão, uma afirmação sua sobre o que um grupo de NPCs deve fazer vira a regra do lugar por uma cena, desde que seja coerente com o que eles podem fazer.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 300
+        },
+        {
+          "atributo": "carisma",
+          "valor_minimo": 38
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "tres-rodadas-de-folga",
+      "titulo": "Três Rodadas de Folga",
+      "descricao": "Uma vez por sessão, escolha três criaturas: nas próximas 3 rodadas, cada uma delas age por último na iniciativa, independentemente do valor dela.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 300
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "peso-de-um-patamar",
+      "titulo": "Peso de um Patamar",
+      "descricao": "Uma vez por sessão, escolha uma criatura de nível menor que o seu. Ela não pode atacar você até o fim da cena, a não ser que você a ataque primeiro.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 400
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "corpo-que-aprende",
+      "titulo": "Corpo que Aprende",
+      "descricao": "Depois de sofrer um tipo de dano duas vezes numa mesma sessão, receba Redução 5 contra esse tipo até o fim da sessão.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 400
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "vontade-do-jardim",
+      "titulo": "Vontade do Jardim",
+      "descricao": "Uma vez por sessão, anule um efeito de Fluxo em alcance Longo, ativo ou prestes a ser conjurado, de círculo até o seu máximo. Não afeta Domínio de Deidade.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 400
+        },
+        {
+          "atributo": "sabedoria",
+          "valor_minimo": 44
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "o-ultimo-a-ficar-de-pe",
+      "titulo": "O Último a Ficar de Pé",
+      "descricao": "Enquanto você for o único aliado do grupo em pé, seus ataques e testes têm vantagem e você recupera um décimo do seu nível total em Vida no começo de cada turno seu.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 400
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "tres-dados",
+      "titulo": "Três Dados",
+      "descricao": "Uma vez por sessão, escolha um teste, ataque ou resistência: você pode rolar até 3 dados e ficar com o melhor, descartando os outros.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 500
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "a-historia-continua",
+      "titulo": "A História Continua",
+      "descricao": "Uma vez por campanha, ao morrer, o Mestre narra como o seu personagem volta, com o custo que a história pedir. Ele volta com Vida, Mana e Estamina pela metade.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 500
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "ultima-palavra-do-fluxo",
+      "titulo": "Última Palavra do Fluxo",
+      "descricao": "Uma vez por sessão, uma magia sua, de qualquer círculo que você conjure, não pode ser resistida nem anulada por efeito de nível menor que o seu.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 500
+        },
+        {
+          "atributo": "fluxo",
+          "valor_minimo": 50
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
+    },
+    {
+      "id": "o-peso-de-quinhentos",
+      "titulo": "O Peso de Quinhentos",
+      "descricao": "Criaturas de nível menor que a metade do seu não conseguem atacar você nem usar poder contra você sem antes vencer uma Vontade contra a DT da cena.",
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 500
+        }
+      ],
+      "fonte": "Criação de 2026-10-04, níveis altos"
     }
   ]
 }

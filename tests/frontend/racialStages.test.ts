@@ -298,6 +298,22 @@ test('os traços disponíveis respeitam o nível exigido, e só os da escolha fe
   assert.ok(sangvin(42).includes('Fome de Senhor'), 'no topo a fome cobra mais caro');
   assert.ok(!sangvin(42).includes('Garras do Strigoi'), 'Clã escolhido não vaza para os outros');
 
+  // Vampiro da Noite Eterna: a realeza tem dois traços por degrau e pede o aval do Mestre.
+  const noiteEterna = (nivel: number) => titulos('vampiro', { varianteId: 'noite-eterna' }, nivel);
+  assert.ok(noiteEterna(1).includes('Sangue Real'));
+  assert.ok(noiteEterna(1).includes('Fome Antiga'), 'o poder vem com uma fome mais curta');
+  assert.ok(!noiteEterna(16).includes('Mandato da Coroa'));
+  assert.ok(noiteEterna(17).includes('Mandato da Coroa'));
+  assert.ok(noiteEterna(17).includes('Véu de Névoa'));
+  assert.ok(!noiteEterna(41).includes('Lua que Não se Põe'));
+  assert.ok(noiteEterna(42).includes('Lua que Não se Põe'));
+  assert.ok(noiteEterna(42).includes('Coroa de Sangue'));
+  assert.ok(!noiteEterna(42).includes('Maré Vermelha'), 'a realeza não herda o poder dos outros Clãs');
+  const vampiro = racas.find(raca => raca.id === 'vampiro')!;
+  const realeza = vampiro.variantes!.find(variante => variante.id === 'noite-eterna')!;
+  assert.equal(realeza.requer_autorizacao_mestre, true);
+  assert.ok((realeza.vida || 0) > 0 && (realeza.mana || 0) > 0, 'a família mais antiga começa acima dos outros Clãs');
+
   // Golem de Argila: o material decide, e os reforços valem para todo Golem.
   const argila = (nivel: number) => titulos('golem', { varianteId: 'argila' }, nivel);
   assert.ok(argila(1).includes('Forma Refeita'));
