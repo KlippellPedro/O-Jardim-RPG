@@ -34,9 +34,12 @@ const pe = (texto) => `<div class="pe"><span>O Jardim · folha de preparação</
  *  Mestre não precisar abrir o livro na hora de decidir o tesouro. */
 const verbaEmLinha = ESCALA.verba_de_aventura.faixas.map((faixa) => {
   const valor = faixa.moeda === 'Solares'
-    ? `${faixa.por_sessao_solares} Solares`
-    : `${faixa.por_sessao_lunaris} Lunaris`;
-  return `níveis ${faixa.niveis.replace('-', ' a ')}, ${valor}`;
+    ? `${faixa.por_sessao_solares} S`
+    : faixa.moeda === 'Fragmentos de Estrela'
+      ? `${faixa.por_sessao_fragmentos} F`
+      : `${faixa.por_sessao_lunaris} L`;
+  const niveis = faixa.niveis.endsWith('+') ? `${faixa.niveis.slice(0, -1)}+` : faixa.niveis.replace('-', ' a ');
+  return `${niveis}: ${valor}`;
 }).join(' · ');
 
 const paginaUm = () => `
@@ -126,7 +129,7 @@ const paginaDois = () => `
       <div>${campo('Jogadores × verba')}${campo('Em que forma chega')}</div>
       <div>${campo('Acesso, favor ou contato')}${campo('Item, e de que raridade')}</div>
     </div>
-    <p><small><b>Verba por sessão, por jogador:</b> ${verbaEmLinha}. Dobre num fim de arco e triplique num fim de temporada.</small></p>`)}
+    <p><small><b>Verba por sessão, por jogador (L Lunaris, S Solares, F Fragmentos):</b> ${verbaEmLinha}. Dobre num fim de arco e triplique num fim de temporada.</small></p>`)}
 
   ${caixa('Ganchos que ficam abertos', pauta(3, true))}
 

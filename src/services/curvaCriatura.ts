@@ -298,16 +298,24 @@ const escalarBonusDoAtaque = (detalhe: string, delta: number): string => {
  * iniciativa andam a diferença entre os dois VDs, e o dano segue a razão entre
  * os danos de referência. Nomes de ataque e habilidades ficam como estão.
  */
-export function escalarCriatura(criatura: ICriaturaEscalavel, vdAlvo: unknown): ICriaturaEscalada {
+export function escalarCriatura(
+  criatura: ICriaturaEscalavel,
+  vdAlvo: unknown,
+  /** Troca de papel junto com o VD: a criatura escrita é solo; um lacaio dela tem uma fatia da Vida e do dano. */
+  opcoes: { papelDe?: PapelCriatura; papelPara?: PapelCriatura } = {},
+): ICriaturaEscalada {
   const de = vdValido(criatura.vd);
   const para = vdValido(vdAlvo);
   const antes = modeloDeCriatura(de);
   const depois = modeloDeCriatura(para);
-  const deltaDeAtaque = (LINHAS.get(para) as ILinhaDaCurva).ataque - (LINHAS.get(de) as ILinhaDaCurva).ataque;
+  const papelDe = PAPEIS_CRIATURA[opcoes.papelDe ?? 'solo'];
+  const papelPara = PAPEIS_CRIATURA[opcoes.papelPara ?? opcoes.papelDe ?? 'solo'];
+  const deltaDeAtaque = (LINHAS.get(para) as ILinhaDaCurva).ataque - (LINHAS.get(de) as ILinhaDaCurva).ataque + papelPara.ajusteDeAtaque - papelDe.ajusteDeAtaque;
   const deltaDeDt = Math.floor(para / 2) - Math.floor(de / 2);
-  const razaoDeDano = antes.danoMedio > 0 ? depois.danoMedio / antes.danoMedio : 1;
+  const razaoDeDano = (antes.danoMedio > 0 ? depois.danoMedio / antes.danoMedio : 1) * (papelPara.fatiaDeDano / papelDe.fatiaDeDano);
+  const fatorDeVida = papelPara.fatiaDeVida / papelDe.fatiaDeVida;
 
-  const pv = Math.max(1, arredondarVida(proporcional(criatura.pv, vidaDeCriatura(de), vidaDeCriatura(para))));
+  const pv = Math.max(1, arredondarVida(proporcional(criatura.pv, vidaDeCriatura(de), vidaDeCriatura(para)) * fatorDeVida));
   const pvAtual = criatura.pvAtual === undefined
     ? undefined
     : criatura.pv > 0 ? Math.max(0, Math.round((criatura.pvAtual * pv) / criatura.pv)) : pv;

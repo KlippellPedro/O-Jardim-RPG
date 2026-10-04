@@ -447,5 +447,48 @@ class DuracaoRepeticaoEDiasExtrasTests(unittest.TestCase):
         self.assertEqual(dias[28]["do_ano"], [])
 
 
+
+class EfeitosDoMundoTests(unittest.TestCase):
+    """Efeitos que a queda de uma lenda deixa no calendário (estação forçada e preço)."""
+
+    @staticmethod
+    def _fim(hoje, meses):
+        estado = novo()
+        cal.definir_hoje(estado, hoje)
+        efeito = cal.adicionar_efeito(estado, {"tipo": "estacao", "estacao": "inverno", "meses": meses, "origem": "teste"})
+        return cal.de_dia_absoluto(efeito["ate"], cal._dias_do_estado(estado)), efeito, estado
+
+    def test_tres_meses_acabam_na_vespera_do_mesmo_dia_tres_meses_depois(self):
+        fim, _efeito, _estado = self._fim({"ano": 1, "mes": 0, "dia": 5}, 3)
+        self.assertEqual(fim, {"ano": 1, "mes": 3, "dia": 4})
+
+    def test_a_contagem_vira_o_ano_e_respeita_meses_de_29_dias(self):
+        fim, _efeito, _estado = self._fim({"ano": 2, "mes": 8, "dia": 10}, 3)
+        self.assertEqual(fim, {"ano": 3, "mes": 1, "dia": 9})
+        # dia 29 de um mês de 29 dias cai num mês de 28: encaixa no último dia dele e acaba na véspera
+        fim, _efeito, estado = self._fim({"ano": 1, "mes": 7, "dia": 29}, 2)
+        self.assertEqual(fim["mes"], 9)
+        self.assertLessEqual(fim["dia"], cal._dias_do_estado(estado)[9])
+
+    def test_comecando_no_dia_um_acaba_no_ultimo_dia_do_mes_anterior(self):
+        fim, _efeito, estado = self._fim({"ano": 1, "mes": 0, "dia": 1}, 3)
+        self.assertEqual(fim, {"ano": 1, "mes": 2, "dia": cal._dias_do_estado(estado)[2]})
+
+    def test_o_efeito_vale_ate_o_ultimo_dia_e_deixa_de_valer_no_seguinte(self):
+        _fim, efeito, estado = self._fim({"ano": 1, "mes": 0, "dia": 5}, 1)
+        self.assertEqual([e["id"] for e in cal.efeitos_ativos(estado)], [efeito["id"]])
+        cal.definir_hoje(estado, {"ano": 1, "mes": 1, "dia": 4})
+        self.assertEqual(len(cal.efeitos_ativos(estado)), 1, "último dia ainda vale")
+        cal.definir_hoje(estado, {"ano": 1, "mes": 1, "dia": 5})
+        self.assertEqual(cal.efeitos_ativos(estado), [], "no dia seguinte já não vale")
+        self.assertEqual(cal.estacao_atual(estado), cal.estacao_do_mes(1))
+
+    def test_estado_antigo_sem_efeitos_ou_com_lixo_nao_quebra(self):
+        for lixo in (None, "x", 3, [None, 1, "a"], [{"tipo": "preco"}]):
+            estado = cal.completar({"versao": cal.VERSAO_DO_ESTADO, "efeitos": lixo})
+            self.assertIsInstance(cal.efeitos_para_a_tela(estado), list)
+            cal.estacao_atual(estado)
+
+
 if __name__ == "__main__":
     unittest.main()

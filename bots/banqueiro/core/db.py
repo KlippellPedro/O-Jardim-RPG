@@ -4,7 +4,7 @@ import math
 import secrets
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
-from typing import Dict, List, Mapping, Optional
+from typing import Dict, List, Mapping, Optional, Tuple
 from uuid import uuid4
 
 from psycopg.rows import dict_row
@@ -13,6 +13,10 @@ from psycopg_pool import ConnectionPool, PoolTimeout
 
 from . import economia
 from . import cassino as cassino_mod
+
+
+class EncomendasDemais(Exception):
+    """O jogador já tem o máximo de encomendas pendentes."""
 
 
 class SaldoInsuficiente(Exception):
@@ -592,6 +596,37 @@ _SCHEMA = (
         atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (guild_id, user_id)
     )
+    """,
+    # Mercadoria quente: unidades de um item que o Mestre marcou como de procedência suja. Vender ao
+    # doleiro soma Calor (core/economia.py). A marca nunca vale mais que a posse atual do jogador.
+    """
+    CREATE TABLE IF NOT EXISTS mercadoria_quente (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        item_id TEXT NOT NULL,
+        quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+        PRIMARY KEY (guild_id, user_id, item_id)
+    )
+    """,
+    # Encomendas ao contrabandista: pagas em Créditos Sombrios na hora e entregues em `pronto_em`.
+    """
+    CREATE TABLE IF NOT EXISTS encomendas_mercado_negro (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        item_id TEXT NOT NULL,
+        titulo TEXT NOT NULL,
+        tipo TEXT NOT NULL,
+        quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+        creditos INTEGER NOT NULL CHECK (creditos > 0),
+        status TEXT NOT NULL DEFAULT 'pendente' CHECK (status IN ('pendente', 'entregando', 'entregue', 'cancelada')),
+        criada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        pronto_em TIMESTAMPTZ NOT NULL
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS encomendas_mn_pendentes_idx
+    ON encomendas_mercado_negro (status, pronto_em)
     """,
     """
     CREATE TABLE IF NOT EXISTS preparos_roubo (
@@ -3759,6 +3794,7 @@ class Database:
                 "roubo_cooldown", "roubo_cofre_cooldown",
                 "roubo_protecao_vitima", "roubo_alvo_reserva", "roubo_calor",
                 "preparos_roubo", "alertas_banco", "seguro_cofre",
+                "mercadoria_quente", "encomendas_mercado_negro",
                 "cassino_corrida_apostas", "cassino_rodadas", "cassino_jogadores",
                 "cassino_contrato_atividades", "cassino_contrato_resgates", "cassino_conquistas",
                 "cassino_torneio_entradas",
@@ -3808,6 +3844,7 @@ class Database:
                 "roubo_protecao_vitima", "roubo_alvo_reserva", "roubo_calor",
                 "preparos_roubo", "alertas_banco", "seguro_cofre",
                 "custodia_moeda", "ciclos_guild", "avisos_pendentes",
+                "mercadoria_quente", "encomendas_mercado_negro",
                 "cassino_corrida_apostas", "cassino_corridas",
                 "cassino_rodadas", "cassino_jogadores",
                 "cassino_contrato_atividades", "cassino_contrato_resgates", "cassino_conquistas",
@@ -4025,28 +4062,28 @@ class Database:
             raise ValueError("pontos de calor devem ser positivos")
         agora = agora or datetime.now(timezone.utc)
         with self._conn() as con:
-            row = con.execute(
-                """
-                SELECT pontos, atualizado_em FROM roubo_calor
-                WHERE guild_id=%s AND user_id=%s FOR UPDATE
-                """,
-                (guild_id, user_id),
-            ).fetchone()
-            atual = (
-                self._calor_decaido(row["pontos"], row["atualizado_em"], agora)
-                if row
-                else 0
-            )
-            novo = min(economia.ROUBO_CALOR_MAXIMO, atual + int(pontos))
-            con.execute(
-                """
-                INSERT INTO roubo_calor (guild_id, user_id, pontos, atualizado_em)
-                VALUES (%s, %s, %s, %s)
-                ON CONFLICT (guild_id, user_id) DO UPDATE SET
-                    pontos=EXCLUDED.pontos, atualizado_em=EXCLUDED.atualizado_em
-                """,
-                (guild_id, user_id, novo, agora),
-            )
+            return self._somar_calor(con, guild_id, user_id, int(pontos), agora)
+
+    def _somar_calor(self, con, guild_id: str, user_id: str, pontos: int, agora) -> int:
+        """Soma Calor dentro de uma transação já aberta (o Calor decai sozinho com o tempo)."""
+        row = con.execute(
+            """
+            SELECT pontos, atualizado_em FROM roubo_calor
+            WHERE guild_id=%s AND user_id=%s FOR UPDATE
+            """,
+            (guild_id, user_id),
+        ).fetchone()
+        atual = self._calor_decaido(row["pontos"], row["atualizado_em"], agora) if row else 0
+        novo = min(economia.ROUBO_CALOR_MAXIMO, atual + int(pontos))
+        con.execute(
+            """
+            INSERT INTO roubo_calor (guild_id, user_id, pontos, atualizado_em)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (guild_id, user_id) DO UPDATE SET
+                pontos=EXCLUDED.pontos, atualizado_em=EXCLUDED.atualizado_em
+            """,
+            (guild_id, user_id, novo, agora),
+        )
         return novo
 
     def adicionar_preparo_roubo(
@@ -6228,10 +6265,18 @@ class Database:
             ).fetchall()
         return [dict(row) for row in rows]
 
-    def receber_do_doleiro(self, guild_id: str, user_id: str, quantia: int, descricao: str) -> int:
-        """Credita Créditos Sombrios do doleiro e grava o extrato na mesma transação."""
+    def receber_do_doleiro(
+        self, guild_id: str, user_id: str, quantia: int, descricao: str,
+        *, item_id: Optional[str] = None, quentes: int = 0,
+    ) -> int:
+        """Credita Créditos Sombrios do doleiro e grava o extrato na mesma transação.
+
+        Com `quentes`, a mesma transação também gasta essas unidades da marca de mercadoria
+        quente do item e soma o Calor que elas dão ao vendedor."""
         if type(quantia) is not int or quantia <= 0:
             raise ValueError("a quantia deve ser um inteiro positivo")
+        if type(quentes) is not int or quentes < 0 or (quentes and not item_id):
+            raise ValueError("mercadoria quente inválida")
         with self._conn() as con:
             self._garantir_jogador(con, guild_id, user_id)
             moeda = self._nome_moeda_real(con, guild_id, user_id, "Créditos Sombrios")
@@ -6242,7 +6287,171 @@ class Database:
                 (guild_id, user_id, moeda, quantia),
             ).fetchone()
             self._registrar_extrato_tx(con, guild_id, user_id, quantia, moeda, descricao)
+            if quentes:
+                self._gastar_mercadoria_quente(con, guild_id, user_id, item_id, quentes)
+                self._somar_calor(con, guild_id, user_id, economia.calor_da_mercadoria_quente(quentes), datetime.now(timezone.utc))
         return int(row["saldo"])
+
+    # ── Mercadoria quente ────────────────────────────────────────────────────
+
+    def marcar_mercadoria_quente(self, guild_id: str, user_id: str, item_id: str, quantidade: int) -> int:
+        """[Mestre] marca `quantidade` unidades do item como de procedência suja. Devolve o total marcado."""
+        if not item_id or type(quantidade) is not int or quantidade <= 0:
+            raise ValueError("item ou quantidade inválidos")
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            row = con.execute(
+                """INSERT INTO mercadoria_quente (guild_id, user_id, item_id, quantidade)
+                   VALUES (%s, %s, %s, %s)
+                   ON CONFLICT (guild_id, user_id, item_id)
+                   DO UPDATE SET quantidade = mercadoria_quente.quantidade + EXCLUDED.quantidade
+                   RETURNING quantidade""",
+                (guild_id, user_id, item_id, quantidade),
+            ).fetchone()
+        return int(row["quantidade"])
+
+    def limpar_mercadoria_quente(self, guild_id: str, user_id: str, item_id: Optional[str] = None) -> int:
+        """[Mestre] tira a marca de um item (ou de todos). Devolve quantas linhas saíram."""
+        with self._conn() as con:
+            if item_id:
+                cur = con.execute(
+                    "DELETE FROM mercadoria_quente WHERE guild_id=%s AND user_id=%s AND item_id=%s",
+                    (guild_id, user_id, item_id),
+                )
+            else:
+                cur = con.execute("DELETE FROM mercadoria_quente WHERE guild_id=%s AND user_id=%s", (guild_id, user_id))
+            return cur.rowcount
+
+    def get_mercadoria_quente(self, guild_id: str, user_id: str) -> Dict[str, int]:
+        with self._conn() as con:
+            rows = con.execute(
+                "SELECT item_id, quantidade FROM mercadoria_quente WHERE guild_id=%s AND user_id=%s",
+                (guild_id, user_id),
+            ).fetchall()
+        return {row["item_id"]: int(row["quantidade"]) for row in rows}
+
+    @staticmethod
+    def _gastar_mercadoria_quente(con, guild_id: str, user_id: str, item_id: str, quantidade: int) -> None:
+        # A coluna não aceita zero: quem gasta tudo some da tabela, quem gasta parte só diminui.
+        con.execute(
+            "DELETE FROM mercadoria_quente WHERE guild_id=%s AND user_id=%s AND item_id=%s AND quantidade <= %s",
+            (guild_id, user_id, item_id, quantidade),
+        )
+        con.execute(
+            """UPDATE mercadoria_quente SET quantidade = quantidade - %s
+               WHERE guild_id=%s AND user_id=%s AND item_id=%s""",
+            (quantidade, guild_id, user_id, item_id),
+        )
+
+    # ── Encomendas ao contrabandista ─────────────────────────────────────────
+
+    def criar_encomenda(
+        self, guild_id: str, user_id: str, item_id: str, titulo: str, tipo: str,
+        quantidade: int, creditos: int, pronto_em: datetime,
+    ) -> int:
+        """Debita os Créditos Sombrios e registra a encomenda, tudo ou nada. Devolve o id."""
+        if (not item_id or type(quantidade) is not int or not 1 <= quantidade <= economia.ENCOMENDA_MAXIMO_POR_PEDIDO
+                or type(creditos) is not int or creditos <= 0):
+            raise ValueError("encomenda inválida")
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            nome = self._nome_moeda_real(con, guild_id, user_id, "Créditos Sombrios")
+            # Debita primeiro: o UPDATE trava a linha do saldo, então dois pedidos simultâneos do mesmo
+            # jogador se enfileiram e o segundo já enxerga o primeiro na contagem abaixo.
+            saldo = con.execute(
+                """UPDATE carteira SET saldo=saldo-%s WHERE guild_id=%s AND user_id=%s
+                   AND moeda=%s AND saldo>=%s RETURNING saldo""",
+                (creditos, guild_id, user_id, nome, creditos),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"precisa de {creditos} {nome}")
+            pendentes = con.execute(
+                "SELECT COUNT(*) AS total FROM encomendas_mercado_negro WHERE guild_id=%s AND user_id=%s AND status IN ('pendente', 'entregando')",
+                (guild_id, user_id),
+            ).fetchone()["total"]
+            if int(pendentes) >= economia.ENCOMENDA_MAXIMO_PENDENTES:
+                raise EncomendasDemais(f"máximo de {economia.ENCOMENDA_MAXIMO_PENDENTES} encomendas pendentes")
+            row = con.execute(
+                """INSERT INTO encomendas_mercado_negro
+                       (guild_id, user_id, item_id, titulo, tipo, quantidade, creditos, pronto_em)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+                (guild_id, user_id, item_id, titulo, tipo, quantidade, creditos, pronto_em),
+            ).fetchone()
+            self._registrar_extrato_tx(con, guild_id, user_id, -creditos, nome, f"Mercado Negro: encomenda de {titulo} x{quantidade}")
+        return int(row["id"])
+
+    def listar_encomendas(self, guild_id: str, user_id: str) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """SELECT id, item_id, titulo, tipo, quantidade, creditos, status, pronto_em
+                   FROM encomendas_mercado_negro
+                   WHERE guild_id=%s AND user_id=%s AND status IN ('pendente', 'entregando')
+                   ORDER BY pronto_em, id""",
+                (guild_id, user_id),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def cancelar_encomenda(self, guild_id: str, user_id: str, encomenda_id: int) -> Optional[int]:
+        """Cancela uma encomenda pendente e devolve parte dos Créditos. None se não dá mais para cancelar."""
+        with self._conn() as con:
+            row = con.execute(
+                """UPDATE encomendas_mercado_negro SET status='cancelada'
+                   WHERE id=%s AND guild_id=%s AND user_id=%s AND status='pendente'
+                   RETURNING creditos, titulo, quantidade""",
+                (encomenda_id, guild_id, user_id),
+            ).fetchone()
+            if row is None:
+                return None
+            devolvido = economia.creditos_devolvidos_ao_cancelar(int(row["creditos"]))
+            if devolvido > 0:
+                nome = self._nome_moeda_real(con, guild_id, user_id, "Créditos Sombrios")
+                con.execute(
+                    """INSERT INTO carteira (guild_id, user_id, moeda, saldo) VALUES (%s, %s, %s, %s)
+                       ON CONFLICT (guild_id, user_id, moeda) DO UPDATE SET saldo=carteira.saldo+EXCLUDED.saldo""",
+                    (guild_id, user_id, nome, devolvido),
+                )
+                self._registrar_extrato_tx(
+                    con, guild_id, user_id, devolvido, nome,
+                    f"Mercado Negro: encomenda cancelada de {row['titulo']} x{row['quantidade']}",
+                )
+        return devolvido
+
+    def encomendas_prontas(self, agora: datetime, limite: int = 50) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """SELECT id, guild_id, user_id, item_id, titulo, tipo, quantidade
+                   FROM encomendas_mercado_negro
+                   WHERE status='pendente' AND pronto_em <= %s ORDER BY pronto_em, id LIMIT %s""",
+                (agora, int(limite)),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def reivindicar_encomenda(self, encomenda_id: int) -> bool:
+        """Marca como 'entregando' para só um ciclo entregar. False se outro já pegou ou ela foi cancelada."""
+        with self._conn() as con:
+            return con.execute(
+                "UPDATE encomendas_mercado_negro SET status='entregando' WHERE id=%s AND status='pendente' RETURNING id",
+                (encomenda_id,),
+            ).fetchone() is not None
+
+    def retomar_encomendas_interrompidas(self) -> int:
+        """Na largada do bot: o que ficou 'entregando' por uma queda volta para 'pendente'. A entrega usa
+        chave de idempotência, então reentregar o que já chegou não duplica o item."""
+        with self._conn() as con:
+            return con.execute(
+                "UPDATE encomendas_mercado_negro SET status='pendente' WHERE status='entregando'"
+            ).rowcount
+
+    def concluir_encomenda(self, encomenda_id: int, entregue: bool) -> None:
+        with self._conn() as con:
+            con.execute(
+                "UPDATE encomendas_mercado_negro SET status=%s WHERE id=%s AND status='entregando'",
+                ("entregue" if entregue else "pendente", encomenda_id),
+            )
+
+    def enfileirar_aviso(self, guild_id: str, mensagem: str) -> None:
+        with self._conn() as con:
+            con.execute("INSERT INTO avisos_pendentes (guild_id, mensagem) VALUES (%s, %s)", (guild_id, mensagem[:1800]))
 
     def contratar_guarda(self, guild_id: str, user_id: str) -> bool:
         """Consome um contrato local e ativa a proteção na mesma transação."""

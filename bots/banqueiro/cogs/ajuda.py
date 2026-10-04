@@ -124,6 +124,9 @@ CATEGORIAS = {
             ("/emprestimo_pagar <emprestimo_id> <valor>", "Paga parte ou tudo de um empréstimo ativo que você deve."),
             ("/emprestimos_ver", "Mostra seus empréstimos (como credor ou devedor)."),
             ("/mercado_negro_vender <item> <quantidade>", "Vende um item do seu inventário ao doleiro, que paga em Créditos Sombrios."),
+            ("/mercado_negro_encomendar <item> [quantidade]", "Encomenda um item ao contrabandista, pago em Créditos Sombrios. Chega em horas ou dias."),
+            ("/mercado_negro_encomendas", "Mostra as suas encomendas que ainda não chegaram."),
+            ("/mercado_negro_encomenda_cancelar <numero>", "Cancela uma encomenda pendente e devolve 80% dos Créditos."),
         ],
     },
     "integracao": {
@@ -161,6 +164,7 @@ CATEGORIAS = {
             ("/mestre_curar <membro>", "Zera os ferimentos de um jogador."),
             ("/mestre_ferimentos <membro> <pontos>", "Define manualmente os pontos de ferimento de um jogador."),
             ("/mestre_calor <membro> [valor]", "Zera ou define o Calor de roubo de um jogador."),
+            ("/mestre_mercadoria_quente <membro> <item> [quantidade]", "Marca itens de um jogador como mercadoria quente: vender ao doleiro soma Calor."),
             ("/mestre_cooldown <membro> [tipo]", "Remove o cooldown de roubo de um jogador (carteira e/ou cofre)."),
             ("/mestre_divida <membro> [novo_valor]", "Zera ou ajusta a dívida do Cartão Lunar de um jogador."),
             ("/mestre_investimentos <membro> [historico]", "Mostra os Títulos do Jardim ativos e vencidos de um jogador."),

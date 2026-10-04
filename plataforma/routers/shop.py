@@ -40,6 +40,7 @@ from core.economy_commands import (
     resolve_catalog_price,
 )
 from core.equipment_rules import modification_limit_for_rarity
+from core.efeitos_do_mundo import ajustes_de_preco, preco_com_efeitos
 from core.promotions import resolve_promotion
 from schemas import (
     ShopBatchCommandInput,
@@ -1062,6 +1063,8 @@ def get_shop_catalog(
         campaign_access(connection, campanha_id, user.id)
         rows = _visible_catalog_rows(connection, campanha_id)
         hidden_rarities, _hidden_items, _hidden_locations = _shop_config(connection, campanha_id)
+        # Ajuste de preço que a queda de uma lenda deixou no mundo da campanha (core/lendas.py).
+        efeitos_do_mundo = ajustes_de_preco(connection, campanha_id)
     now = datetime.now(timezone.utc)
     items = []
     for row in rows:
@@ -1142,6 +1145,10 @@ def get_shop_catalog(
                     "preco_original": {base_price.moeda: base_price.valor},
                     "promocao": {"ativa": True, "rotulo": promo.label, "desconto_percentual": promo.discount_percent},
                 }
+            # O efeito do mundo vem depois da promoção e só mexe em tipo sem variante de raridade.
+            price, efeito_do_mundo = preco_com_efeitos(price, row["tipo"], efeitos_do_mundo)
+            if efeito_do_mundo is not None:
+                content = {**content, "efeito_do_mundo": efeito_do_mundo}
         items.append(
             {
                 "id": row["id"],
@@ -1249,6 +1256,7 @@ def purchase_batch(
         purchased_items = []
         selected_prices: dict[tuple[str, str | None, str, str], Any] = {}
         now = datetime.now(timezone.utc)
+        efeitos_do_mundo = ajustes_de_preco(connection, payload.campanha_id)
         for line in payload.itens:
             line_key = (line.item_id, line.alvo_item_id, line.modo, line.raridade or "")
             item = catalog[line.item_id]
@@ -1287,6 +1295,7 @@ def purchase_batch(
                 )
                 if promotion is not None:
                     price, _promo = promotion
+                price, _efeito_do_mundo = preco_com_efeitos(price, item["tipo"], efeitos_do_mundo)
             selected_prices[line_key] = price
             _add_total(totals, price.moeda, price.valor * line.quantidade)
             purchased_items.append(

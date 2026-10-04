@@ -27,7 +27,7 @@ test('catálogos completos não entram na projeção do navegador', () => {
 test('importações brutas e snapshots privados são recusados', () => {
   const load = browserContentBoundary().load as (id: string) => unknown;
   for (const file of ['data/editorial/global.json', 'data/gerado/conteudo-servidor.json',
-    'data/regras/regras-editorial.json', 'data/regras/mestre-v1.json', 'data/bestiario/loot-criaturas.json', 'data/bestiario/deidades-v1.json',
+    'data/regras/regras-editorial.json', 'data/regras/mestre-v1.json', 'data/bestiario/loot-criaturas.json', 'data/bestiario/deidades-v1.json', 'data/bestiario/lendas-v1.json',
     'data/gerado/mundoCatalog.ts?raw', 'data/mundo/entidades.ts?raw',
     'data/mundo/cronicas-arvores.json?raw', 'data/mundo/faccoes.json?raw']) {
     assert.throws(() => load('/repo/' + file), undefined, file);

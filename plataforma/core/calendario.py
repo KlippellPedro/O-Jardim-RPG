@@ -173,6 +173,8 @@ def estado_inicial() -> dict:
         "config": {"meses": list(MESES_PADRAO), "sincronizar_discord": True, "dias_extras": []},
         "hoje": {"ano": 1, "mes": 0, "dia": 1},
         "estacao_especial": None,
+        # Efeitos que a queda de uma lenda deixa no mundo (core/lendas.py): estação forçada e preço.
+        "efeitos": [],
         "eventos": [],
         "historico": [],
     }
@@ -214,6 +216,8 @@ def completar(estado: dict | None) -> dict:
         base["config"]["dias_extras"] = []
     if not isinstance(base.get("historico"), list):
         base["historico"] = []
+    if not isinstance(base.get("efeitos"), list):
+        base["efeitos"] = []
     return base
 
 
@@ -318,10 +322,14 @@ def estacao_do_mes(mes: int) -> str:
 
 
 def estacao_atual(estado: dict) -> str:
-    """A estação que vale hoje: a especial (Noite Eterna, Eclipse), se o Mestre a declarou, senão a do mês."""
+    """A estação que vale hoje: a especial (Noite Eterna, Eclipse), se o Mestre a declarou; depois a que um efeito
+    do mundo força (a queda de uma lenda); senão a do mês."""
     especial = estado.get("estacao_especial")
     if especial in ESTACOES_ESPECIAIS:
         return especial
+    forcadas = efeitos_ativos(estado, "estacao")
+    if forcadas and forcadas[-1].get("estacao") in ESTACOES_NORMAIS:
+        return forcadas[-1]["estacao"]
     return estacao_do_mes(estado["hoje"]["mes"])
 
 
@@ -451,6 +459,88 @@ def definir_config(estado: dict, dados: dict) -> dict:
             raise ErroCalendario("evento do ano desconhecido")
         estado["config"]["eventos_desligados"] = sorted(set(desligados))
     return estado
+
+
+# ------------------------------------------------------------ efeitos do mundo
+
+MAX_EFEITOS = 20
+TIPOS_DE_EFEITO = ("estacao", "preco")
+#: Tipos de item da Loja em que um efeito de preço pode mexer (sem variante de raridade, sem contratação).
+TIPOS_AJUSTAVEIS_NA_LOJA = frozenset({"equipamento", "veiculo", "veiculo-completo", "artefato", "consumivel"})
+
+
+def _hoje_absoluto(estado: dict) -> int:
+    hoje = estado["hoje"]
+    return para_dia_absoluto(hoje["ano"], hoje["mes"], hoje["dia"], _dias_do_estado(estado))
+
+
+def efeitos_ativos(estado: dict, tipo: str | None = None) -> list[dict]:
+    """Os efeitos do mundo que ainda valem hoje, do mais antigo ao mais novo."""
+    efeitos = estado.get("efeitos")
+    if not isinstance(efeitos, list):
+        return []
+    hoje = _hoje_absoluto(estado)
+    return [
+        efeito for efeito in efeitos
+        if isinstance(efeito, dict) and efeito.get("de", hoje) <= hoje <= efeito.get("ate", -1)
+        and (tipo is None or efeito.get("tipo") == tipo)
+    ]
+
+
+def _ultimo_dia_do_efeito(estado: dict, meses: int) -> int:
+    """O dia (absoluto) em que um efeito de `meses` meses de calendário termina: a véspera do mesmo dia do mês,
+    `meses` meses adiante. Os meses têm 28 ou 29 dias, então não dá para contar 28 dias por mês."""
+    hoje = estado["hoje"]
+    dias = _dias_do_estado(estado)
+    contagem = hoje["mes"] + meses
+    ano, mes = hoje["ano"] + contagem // MESES_POR_ANO, contagem % MESES_POR_ANO
+    return para_dia_absoluto(ano, mes, min(hoje["dia"], dias[mes]), dias) - 1
+
+
+def adicionar_efeito(estado: dict, dados: dict) -> dict | None:
+    """Põe um efeito que dura `meses` meses de calendário a partir de hoje. None quando não cabe ou é inválido."""
+    tipo = dados.get("tipo")
+    if tipo not in TIPOS_DE_EFEITO or len(estado["efeitos"]) >= MAX_EFEITOS:
+        return None
+    meses = dados.get("meses")
+    if isinstance(meses, bool) or not isinstance(meses, int) or not 1 <= meses <= 24:
+        return None
+    efeito = {
+        "id": uuid4().hex[:10],
+        "origem": str(dados.get("origem") or "")[:60],
+        "tipo": tipo,
+        "texto": _texto(dados.get("texto"), 300, "texto", obrigatorio=False),
+        "de": _hoje_absoluto(estado),
+        "ate": _ultimo_dia_do_efeito(estado, meses),
+    }
+    if tipo == "estacao":
+        if dados.get("estacao") not in ESTACOES_NORMAIS:
+            return None
+        efeito["estacao"] = dados["estacao"]
+    else:
+        alvos = [alvo for alvo in dados.get("alvos") or [] if alvo in TIPOS_AJUSTAVEIS_NA_LOJA]
+        percentual = dados.get("percentual")
+        if not alvos or isinstance(percentual, bool) or not isinstance(percentual, int) or not -50 <= percentual <= 100 or percentual == 0:
+            return None
+        efeito["alvos"] = alvos
+        efeito["percentual"] = percentual
+    estado["efeitos"].append(efeito)
+    return efeito
+
+
+def remover_efeitos_da_origem(estado: dict, origem: str) -> int:
+    antes = len(estado["efeitos"])
+    estado["efeitos"] = [efeito for efeito in estado["efeitos"] if not (isinstance(efeito, dict) and efeito.get("origem") == origem)]
+    return antes - len(estado["efeitos"])
+
+
+def efeitos_para_a_tela(estado: dict) -> list[dict]:
+    """O que a mesa vê: o texto de cada efeito que ainda vale e até quando."""
+    dias = _dias_do_estado(estado)
+    return [
+        {"id": efeito["id"], "tipo": efeito["tipo"], "texto": efeito.get("texto", ""), "ate": de_dia_absoluto(efeito["ate"], dias)}
+        for efeito in efeitos_ativos(estado)
+    ]
 
 
 # ------------------------------------------------------------ acontecimentos do Mestre
@@ -751,6 +841,7 @@ def visao(estado: dict, *, gestor: bool, ano: int | None = None, mes: int | None
         "hoje_extenso": f"Dia {hoje['dia']} · {meses[hoje['mes']]}, ano {hoje['ano']}",
         "estacao": info_da_estacao(chave),
         "estacao_especial": estado["estacao_especial"],
+        "efeitos_do_mundo": efeitos_para_a_tela(estado),
         "estacao_normal": estacao_do_mes(hoje["mes"]),
         "hoje_lua_carmesim": any(
             evento["id"] == "lua-carmesim" and evento["mes"] == hoje["mes"] and hoje["dia"] == DIA_EXTRA

@@ -119,6 +119,26 @@ os comandos; aqui ficam só os fatos que afetam decisões.
   `liberacao` ao enfileirar (`avisos_pendentes.categoria`) e o Jornalista publica
   no canal definido por `/jornal canal`. Aviso sem categoria continua indo ao
   canal de dinheiro, sujeito ao interruptor de avisos econômicos.
+- **04/10, manchete de lenda.** Quando uma lenda do Bestiário cai na Sessão, a plataforma enfileira a
+  manchete como aviso `manchete` (categoria `noticia`, ligado por padrão no painel de avisos do Mestre).
+  O Jornalista não mudou: ele já publica a fila e usa o canal definido em `/jornal canal` para Notícia.
+  Sem servidor do Discord vinculado à campanha, nada é enfileirado.
+- **04/10, mercadoria quente e encomendas.** O doleiro (`/mercado_negro_vender`) passou a usar sempre
+  o câmbio padrão. O Mestre marca com `/mestre_mercadoria_quente` as unidades de um item que são de
+  procedência suja (tabela `mercadoria_quente`); vender ao doleiro soma 4 de Calor por unidade quente
+  (na mesma transação do pagamento) e ele recusa mercadoria quente de quem já está com 90 de Calor.
+  `/mestre_calor` e `/mestre_ver` agora usam o máximo real de 100 (antes o limite era 10). Nasceram também
+  as encomendas: `/mercado_negro_encomendar`, `/mercado_negro_encomendas` e
+  `/mercado_negro_encomenda_cancelar`. O pagamento é em Créditos Sombrios na hora (ágio de 50% sobre o
+  valor do item, no máximo 3 pendentes, 10 por pedido), a entrega vem de um ciclo de 5 minutos
+  (12, 24, 48 ou 96 horas conforme o valor), o aviso sai pela fila `avisos_pendentes` e cancelar devolve
+  80%. Não se encomenda monstro, imóvel, fruto, implante nem relíquia.
+  O débito vem antes da contagem de pendentes (o saldo trava a linha, então pedidos simultâneos não furam o limite
+  de 3), e na largada o bot devolve à fila qualquer encomenda que uma queda deixou em `entregando` (a chave de
+  idempotência impede item duplicado). **O Banqueiro está com 96 de 100 comandos de barra** (o limite global do
+  Discord); `test_cabe_nos_limites_de_comandos_do_discord` trava o teto, então comando novo precisa de um
+  grupo ou da saída de outro. Os dois ZIPs, do Banqueiro e do
+  Jornalista, não precisam de nada novo além do Banqueiro.
 - **Barista descontinuado.** Dados e música saíram do conjunto; os três bots
   vivos são Banqueiro, Jornalista e Gerente.
 - **Catálogo da Loja.** O Banqueiro lê `data/loja/catalogo.json` (1.225 entradas em

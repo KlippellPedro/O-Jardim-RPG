@@ -1,0 +1,133 @@
+{
+  "_nota": "Dádivas dos Fluxos: o que uma oferenda bem-sucedida rende, uma por Fluxo (ver o capítulo Frutos do Éden e Implantes). Texto público: nunca cita o estado de nenhuma deidade; o que o Mestre decide sobre quem responde fica só no corpoMestre do capítulo.",
+  "versao": 1,
+  "oferendas": {
+    "teste": [
+      "Religião",
+      "Ressonância"
+    ],
+    "duracao": "até o próximo descanso longo ou o fim da sessão, o que vier primeiro",
+    "graus": [
+      {
+        "id": "humilde",
+        "rotulo": "Humilde",
+        "valor_em_sessoes_de_verba": 0.25,
+        "dt_ajuste": 5
+      },
+      {
+        "id": "valiosa",
+        "rotulo": "Valiosa",
+        "valor_em_sessoes_de_verba": 1,
+        "dt_ajuste": 0
+      },
+      {
+        "id": "preciosa",
+        "rotulo": "Preciosa",
+        "valor_em_sessoes_de_verba": 4,
+        "dt_ajuste": -3
+      }
+    ],
+    "bonus_ampliada": 3
+  },
+  "dadivas": [
+    {
+      "fluxo": "origem",
+      "rotulo_do_fluxo": "Origem",
+      "nome": "Palma Aberta",
+      "gosto": "sementes plantadas, o primeiro objeto de algo novo, uma carta ainda lacrada",
+      "bonus": "+2 em Cura.",
+      "uma_vez": "Uma vez, como Ação de Movimento, toque um aliado: ele deixa de estar Caído ou Amedrontado.",
+      "autorizacao_do_mestre": false
+    },
+    {
+      "fluxo": "essencia",
+      "rotulo_do_fluxo": "Essência",
+      "nome": "Olhar Sem Máscara",
+      "gosto": "uma verdade dita em voz alta, uma máscara abandonada, um nome verdadeiro",
+      "bonus": "+2 em Intuição.",
+      "uma_vez": "Uma vez, olhando uma criatura, você sabe se ela está disfarçada ou usando um nome que não é o dela.",
+      "autorizacao_do_mestre": false
+    },
+    {
+      "fluxo": "comunicacao",
+      "rotulo_do_fluxo": "Comunicação",
+      "nome": "Palavra que Pesa",
+      "gosto": "uma carta entregue, um acordo cumprido, uma mensagem levada a quem ela devia",
+      "bonus": "+2 em Diplomacia.",
+      "uma_vez": "Uma vez, um acordo feito em voz alta diante de duas testemunhas passa a valer: quem o quebrar sofre desvantagem em todos os testes até reparar o que quebrou.",
+      "autorizacao_do_mestre": false
+    },
+    {
+      "fluxo": "vitalidade",
+      "rotulo_do_fluxo": "Vitalidade",
+      "nome": "Seiva",
+      "gosto": "o que cresce: uma muda, um pão, o cuidado de graça com um ferido",
+      "bonus": "Vida temporária igual ao seu nível ao receber a dádiva, e +2 em Fortitude.",
+      "uma_vez": "Uma vez, durante um descanso curto, recupere de Vida o seu nível a mais.",
+      "autorizacao_do_mestre": false
+    },
+    {
+      "fluxo": "inconstancia",
+      "rotulo_do_fluxo": "Inconstância",
+      "nome": "Dado Trocado",
+      "gosto": "um dado, uma aposta perdida de propósito, algo que trocou de dono por sorteio",
+      "bonus": "+2 em Jogatina e em Acrobacia.",
+      "uma_vez": "Uma vez, um 1 natural no seu d20 vale 10.",
+      "autorizacao_do_mestre": false
+    },
+    {
+      "fluxo": "fisico",
+      "rotulo_do_fluxo": "Físico",
+      "nome": "Mão Pesada",
+      "gosto": "uma pedra de rio carregada o dia todo, ferro forjado à mão, uma carga levada até o fim",
+      "bonus": "+2 em Atletismo.",
+      "uma_vez": "Uma vez por cena, ganhe Resistência a dano físico igual à metade do seu nível até o fim da rodada.",
+      "autorizacao_do_mestre": false
+    },
+    {
+      "fluxo": "espaco",
+      "rotulo_do_fluxo": "Espaço",
+      "nome": "Passo Curto",
+      "gosto": "um mapa desenhado de verdade, a chave de uma porta que já não existe, uma viagem inteira",
+      "bonus": "+3 m de deslocamento.",
+      "uma_vez": "Uma vez, como Ação de Movimento, vá a qualquer ponto livre que você veja a até 9 m.",
+      "autorizacao_do_mestre": false
+    },
+    {
+      "fluxo": "tempo",
+      "rotulo_do_fluxo": "Tempo",
+      "nome": "Hora Certa",
+      "gosto": "um relógio parado, uma ampulheta, uma promessa feita para o futuro",
+      "bonus": "+2 em Iniciativa.",
+      "uma_vez": "Uma vez, aja logo depois do turno de qualquer outra criatura, como se a ordem de iniciativa fosse outra.",
+      "autorizacao_do_mestre": false
+    },
+    {
+      "fluxo": "vazio",
+      "rotulo_do_fluxo": "Vazio",
+      "nome": "Sair de Cena",
+      "gosto": "o que foi deixado de propósito: uma lembrança contada e abandonada, um nome riscado, uma porta fechada para sempre",
+      "bonus": "+2 em Furtividade.",
+      "uma_vez": "Uma vez, como Ação de Movimento, ninguém na cena lembra de ter visto você até a sua próxima ação hostil.",
+      "autorizacao_do_mestre": false
+    },
+    {
+      "fluxo": "fim",
+      "rotulo_do_fluxo": "Fim",
+      "nome": "Ponto Final",
+      "gosto": "um último capítulo, uma carta de despedida, uma vela deixada queimar até o fim",
+      "bonus": "+2 em Sanidade e em Vontade.",
+      "uma_vez": "Uma vez, um golpe contra uma criatura com menos da metade da Vida causa dano extra igual ao seu nível.",
+      "autorizacao_do_mestre": true
+    },
+    {
+      "fluxo": "tecnologia",
+      "rotulo_do_fluxo": "Tecnologia",
+      "nome": "Registro",
+      "gosto": "uma peça de máquina que funciona, um registro bem guardado, um código copiado",
+      "bonus": "+2 em Tecnologia e em Investigação.",
+      "uma_vez": "Uma vez, como Ação Livre, leia uma criatura que você veja: o Mestre diz a Defesa dela e uma fraqueza, se houver.",
+      "autorizacao_do_mestre": false
+    }
+  ]
+}

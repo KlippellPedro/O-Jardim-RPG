@@ -11,6 +11,8 @@ export interface IConquista {
   desbloqueada: boolean;
   desbloqueada_em: string | null;
   progresso: { atual: number; minimo: number };
+  /** Selo escondido (lendas): enquanto está bloqueado, nome e descrição vêm genéricos. */
+  secreta?: boolean;
 }
 
 /** O que a rolagem e o uso devolvem quando algo acabou de ser desbloqueado. */

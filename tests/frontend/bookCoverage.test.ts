@@ -225,13 +225,16 @@ test('o tesouro do Guia do Mestre segue a escala de preços oficial', () => {
   const corpo = REGRAS_OFICIAIS.mestre.corpo;
 
   escala.verba_de_aventura.faixas.forEach((faixa: any) => {
-    const [inicio, fim] = faixa.niveis.split('-');
+    const aberta = faixa.niveis.endsWith('+');
+    const [inicio, fim] = aberta ? [faixa.niveis.slice(0, -1), ''] : faixa.niveis.split('-');
     const valor = faixa.moeda === 'Solares'
       ? `${faixa.por_sessao_solares} Solares`
-      : `${faixa.por_sessao_lunaris} Lunaris`;
+      : faixa.moeda === 'Fragmentos de Estrela'
+        ? `${faixa.por_sessao_fragmentos} Fragmentos`
+        : `${faixa.por_sessao_lunaris} Lunaris`;
     assert.match(
       corpo,
-      new RegExp(`<td>${inicio} a ${fim}</td><td>[^<]+</td><td>${valor}</td>`),
+      new RegExp(`<td>${inicio} ${aberta ? 'ou mais' : `a ${fim}`}</td><td>[^<]+</td><td>${valor}</td>`),
       `verba de ${faixa.niveis} fora da escala: deveria ser ${valor} por sessão`,
     );
   });

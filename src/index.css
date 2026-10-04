@@ -601,7 +601,7 @@
     min-height: 2.75rem;
   }
 
-  input:not([type='hidden']):not([type='file']):not(.sr-only),
+  input:not([type='hidden']):not([type='file']):not([type='checkbox']):not(.sr-only),
   select,
   textarea,
   [role='combobox'],

@@ -34,6 +34,11 @@ export interface LojaItem {
     rotulo: string;
     descontoPercentual: number;
   };
+  /** A queda de uma lenda mexeu neste preço por alguns meses (sobe ou desce em percentual). */
+  efeitoDoMundo?: {
+    percentual: number;
+    texto: string;
+  };
   /** Só em Mercenários: preço para contratar (menor, gera mensalidade) e o
    * valor dessa mensalidade. `valorOriginal`/`moedaPreco` seguem sendo o
    * preço de COMPRA (vira servo/escravo permanente, sem mensalidade). */
@@ -703,6 +708,7 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
     precosAnterioresRaridade: mapearPrecosRaridade(c.precos_originais_por_raridade),
     propriedadesRaridade: mapearPropriedadesRaridade(c.propriedades_por_raridade),
     raridadeConfiguravel: Boolean(mapearPrecosRaridade(c.precos_por_raridade)),
+    efeitoDoMundo: mapearEfeitoDoMundo(c.efeito_do_mundo),
     promocao: promocaoValida ? {
       rotulo: typeof promocaoBruta.rotulo === 'string' && promocaoBruta.rotulo.trim()
         ? promocaoBruta.rotulo.trim().slice(0, 40)
@@ -710,6 +716,13 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
       descontoPercentual,
     } : undefined,
   };
+};
+
+const mapearEfeitoDoMundo = (bruto: unknown): LojaItem['efeitoDoMundo'] => {
+  if (!bruto || typeof bruto !== 'object' || Array.isArray(bruto)) return undefined;
+  const { percentual, texto } = bruto as Record<string, unknown>;
+  if (typeof percentual !== 'number' || !Number.isFinite(percentual) || percentual === 0) return undefined;
+  return { percentual: Math.round(percentual), texto: typeof texto === 'string' ? texto.trim().slice(0, 300) : '' };
 };
 
 /** O catálogo exibido vem exclusivamente da lista publicada pelo backend. */

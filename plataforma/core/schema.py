@@ -1865,4 +1865,46 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             _renomear_ids("campanha_registros_universais", "origem_id", " AND campanha_registros_universais.secao = 'bestiario'"),
         ),
     ),
+    (
+        51,
+        "fase_do_chefe_na_sessao",
+        (
+            # Fase de chefe (core/fases.py): 1 é o começo da luta, e a fase só sobe.
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS fase INTEGER NOT NULL DEFAULT 1
+            """,
+        ),
+    ),
+    (
+        52,
+        "livro_da_verdade",
+        (
+            # Livro da Verdade (core/lendas.py): uma linha por lenda caída (ou por Deidade
+            # encarada) em cada sessão. `personagens` guarda quem estava na mesa, para o
+            # selo "Matador de ..." e para a manchete; o evento do calendário fica anotado
+            # para a queda poder ser desfeita.
+            """
+            CREATE TABLE IF NOT EXISTS campanha_lendas (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                sessao_id UUID REFERENCES sessoes_mesa(id) ON DELETE SET NULL,
+                participante_id UUID,
+                monstro_id TEXT NOT NULL,
+                tipo TEXT NOT NULL CHECK (tipo IN ('queda', 'encontro_deidade')),
+                personagens JSONB NOT NULL DEFAULT '[]'::jsonb,
+                evento_calendario_id TEXT,
+                criada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE UNIQUE INDEX IF NOT EXISTS campanha_lendas_sessao_unica
+            ON campanha_lendas (sessao_id, monstro_id, tipo) WHERE sessao_id IS NOT NULL
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS campanha_lendas_campanha_idx
+            ON campanha_lendas (campanha_id, tipo, monstro_id)
+            """,
+        ),
+    ),
 )

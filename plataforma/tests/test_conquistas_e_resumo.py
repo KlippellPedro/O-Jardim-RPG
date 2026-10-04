@@ -80,7 +80,9 @@ class ConquistasEResumoTests(unittest.TestCase):
         chaves = [conquista.chave for conquista in CATALOGO]
         self.assertEqual(len(chaves), len(set(chaves)))
         conhecidas = {"rolagens", "criticos", "falhas", "dano_maximo", "usos", "sessoes", "nivel", "classe_max", "fama", "lunaris"}
-        self.assertTrue(all(conquista.metrica in conhecidas for conquista in CATALOGO))
+        # Os selos de lenda medem "lenda:<id>" (uma métrica por lenda) e o da Deidade mede "deidades_encaradas".
+        conhecidas |= {"deidades_encaradas"}
+        self.assertTrue(all(conquista.metrica in conhecidas or conquista.metrica.startswith("lenda:") for conquista in CATALOGO))
         self.assertTrue(all(conquista.raridade in {"comum", "rara", "lendaria"} for conquista in CATALOGO))
 
     def test_ficha_sem_historico_so_desbloqueia_o_que_o_nivel_da(self):

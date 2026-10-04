@@ -80,9 +80,9 @@
 .session-focus-card {
   position: relative;
   overflow: hidden;
-  padding: 18px;
+  padding: 24px 26px;
   border: 1px solid rgba(199, 164, 76, 0.23);
-  border-radius: 18px;
+  border-radius: 20px;
   background: linear-gradient(135deg, rgba(31, 27, 21, 0.94), rgba(12, 11, 16, 0.96) 54%);
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
 }
@@ -104,20 +104,20 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
 }
 
 .session-focus-card__portrait {
   position: relative;
   display: flex;
-  width: 58px;
-  height: 58px;
+  width: 80px;
+  height: 80px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 15px;
+  border-radius: 18px;
   background: rgba(0, 0, 0, 0.3);
   color: rgba(255, 255, 255, 0.28);
 }
@@ -130,15 +130,15 @@
 
 .session-focus-card__portrait span {
   position: absolute;
-  right: 3px;
-  bottom: 3px;
-  min-width: 20px;
-  padding: 2px 4px;
-  border-radius: 6px;
+  right: 4px;
+  bottom: 4px;
+  min-width: 26px;
+  padding: 3px 5px;
+  border-radius: 7px;
   background: rgba(5, 5, 8, 0.88);
   color: #f3db91;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   text-align: center;
 }
@@ -150,7 +150,7 @@
   align-items: center;
   gap: 6px;
   color: var(--session-gold);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 750;
   letter-spacing: 0.17em;
   text-transform: uppercase;
@@ -160,7 +160,7 @@
   overflow: hidden;
   margin-top: 3px;
   color: #fff;
-  font-size: clamp(20px, 2vw, 27px);
+  font-size: clamp(26px, 2.6vw, 36px);
   font-weight: 680;
   line-height: 1.1;
   text-overflow: ellipsis;
@@ -169,23 +169,24 @@
 
 .session-focus-card__name > span {
   display: block;
-  margin-top: 4px;
-  color: rgba(255, 255, 255, 0.38);
-  font-size: 11px;
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
 }
 
 .session-focus-card__sheet-link {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 8px 11px;
+  gap: 8px;
+  padding: 10px 14px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 9px;
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 11px;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13px;
   transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
 }
 
+.session-focus-card__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
 .session-focus-card__sheet-link:hover {
   border-color: rgba(199, 164, 76, 0.34);
   background: rgba(199, 164, 76, 0.07);
@@ -194,17 +195,17 @@
 
 .session-focus-card__resources {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 84px;
-  gap: 10px;
-  margin-top: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
 }
 
 .session-resource,
 .session-focus-card__defense {
   min-width: 0;
-  padding: 9px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.065);
-  border-radius: 10px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 12px;
   background: rgba(0, 0, 0, 0.19);
 }
 
@@ -213,25 +214,25 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.38);
-  font-size: 9px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .session-resource__meta strong {
   overflow: hidden;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.9);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11px;
+  font-size: 15px;
   letter-spacing: normal;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .session-resource__track {
-  height: 4px;
-  margin-top: 7px;
+  height: 7px;
+  margin-top: 10px;
   overflow: hidden;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.065);
@@ -282,23 +283,28 @@
   color: rgba(255, 255, 255, 0.46);
 }
 
-.session-focus-card__defense svg { grid-row: span 2; color: #d6bd7a; }
-.session-focus-card__defense span { font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; }
-.session-focus-card__defense strong { color: #fff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 15px; }
+.session-focus-card__defense svg { grid-row: span 2; width: 22px; height: 22px; color: #d6bd7a; }
+.session-focus-card__defense span { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+.session-focus-card__defense strong { color: #fff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 24px; line-height: 1; }
 
 .session-focus-card__details {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 12px;
-  padding-top: 12px;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: 22px;
+  margin-top: 20px;
+  padding-top: 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .session-focus-card__detail-group { min-width: 0; }
-.session-focus-card__detail-group > span { color: rgba(255, 255, 255, 0.3); font-size: 9px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
-.session-focus-card__detail-group > div { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
-.session-focus-card__detail-group em { overflow: hidden; max-width: 100%; padding: 4px 7px; border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 999px; background: rgba(255, 255, 255, 0.025); color: rgba(255, 255, 255, 0.62); font-size: 9px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
+.session-focus-card__detail-group > span { display: block; color: rgba(255, 255, 255, 0.45); font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
+.session-focus-card__detail-group > div { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+.session-focus-card__detail-gap { margin-top: 18px; }
+.session-focus-card__attacks { display: grid; gap: 8px; margin-top: 9px; list-style: none; padding: 0; }
+.session-focus-card__attacks li { padding: 10px 13px; border: 1px solid rgba(255, 255, 255, 0.075); border-radius: 11px; background: rgba(0, 0, 0, 0.2); }
+.session-focus-card__attacks strong { display: block; color: #fff; font-size: 14px; font-weight: 650; }
+.session-focus-card__attacks p { margin-top: 3px; color: rgba(255, 255, 255, 0.66); font-size: 13px; line-height: 1.55; }
+.session-focus-card__detail-group em { overflow: hidden; max-width: 100%; padding: 6px 11px; border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 999px; background: rgba(255, 255, 255, 0.03); color: rgba(255, 255, 255, 0.72); font-size: 12px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
 
 .session-battlefield {
   display: grid;
@@ -426,14 +432,21 @@
   .session-team-lane__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+@media (max-width: 899px) {
+  .session-focus-card__details { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 639px) {
   .session-stage { padding: 12px; }
   .session-stage__toolbar { align-items: flex-start; }
   .session-stage__summary { display: none; }
-  .session-focus-card { padding: 14px; border-radius: 15px; }
+  .session-focus-card { padding: 16px; border-radius: 15px; }
+  .session-focus-card__portrait { width: 64px; height: 64px; }
   .session-focus-card__identity { grid-template-columns: auto minmax(0, 1fr); }
-  .session-focus-card__sheet-link { grid-column: 1 / -1; justify-content: center; }
-  .session-focus-card__resources { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .session-focus-card__actions { grid-column: 1 / -1; }
+  .session-focus-card__actions .session-focus-card__sheet-link { flex: 1; justify-content: center; }
+  .session-focus-card__resources { grid-template-columns: 1fr; }
+  .session-resource__meta span { white-space: nowrap; }
   .session-focus-card__defense { grid-column: 1 / -1; grid-template-columns: auto 1fr auto; }
   .session-focus-card__defense svg { grid-row: auto; }
   .session-focus-card__details { grid-template-columns: 1fr; }
@@ -446,3 +459,12 @@
   .session-roster-card,
   .session-focus-card__sheet-link { transition: none; }
 }
+
+/* Fases de chefe */
+.session-roster-card__fase { margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: rgba(224, 100, 95, 0.16); color: #f19a96; font-size: 9px; font-style: normal; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.session-focus-card__name > .session-focus-card__fase { display: inline-block; margin-top: 8px; padding: 3px 10px; border: 1px solid rgba(224, 100, 95, 0.4); border-radius: 999px; background: rgba(224, 100, 95, 0.12); color: #f6aaa6; font-size: 12px; font-weight: 700; }
+.session-focus-card__phase { margin-top: 18px; padding: 14px 16px; border: 1px solid rgba(224, 100, 95, 0.28); border-radius: 12px; background: rgba(224, 100, 95, 0.06); }
+.session-focus-card__phase > span { display: block; color: #f19a96; font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
+.session-focus-card__phase-anuncio { margin-top: 8px; color: rgba(255, 255, 255, 0.82); font-size: 14px; font-style: italic; line-height: 1.6; }
+.session-focus-card__phase ul { display: grid; gap: 6px; margin-top: 10px; padding: 0; list-style: none; }
+.session-focus-card__phase li { color: rgba(255, 255, 255, 0.7); font-size: 13px; line-height: 1.55; }

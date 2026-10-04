@@ -14,6 +14,8 @@ import json
 import unittest
 from pathlib import Path
 
+from core.economy_commands import resolve_catalog_price
+
 from routers.shop import (
     _is_hidden_catalog_item,
     _mercenary_ally_from_catalog_item,
@@ -163,9 +165,27 @@ class ContratarOuComprarTests(unittest.TestCase):
     def test_mensalidade_e_sempre_vinte_por_cento_da_taxa_de_contratacao(self):
         for entrada in _MONSTROS:
             with self.subTest(entrada["id"]):
-                contratacao = entrada["conteudo"]["preco_contratacao"]["Lunaris"]
-                mensal = entrada["conteudo"]["contrato_mensal"]["Lunaris"]
+                # Criatura de VD 50 em diante cobra em Fragmentos de Estrela; as outras, em Lunaris.
+                moeda, contratacao = next(iter(entrada["conteudo"]["preco_contratacao"].items()))
+                self.assertEqual(list(entrada["conteudo"]["contrato_mensal"]), [moeda])
+                mensal = entrada["conteudo"]["contrato_mensal"][moeda]
                 self.assertEqual(mensal, round(contratacao * 0.2))
+
+    def test_criatura_de_vd_alto_se_contrata_em_fragmentos_e_a_mensalidade_acompanha(self):
+        # data/economia/escala-precos-v1.json, criaturas_de_vd_alto: metade da verba de uma sessao.
+        atlarion = next(e for e in _MONSTROS if e["id"] == "atlarion")
+        self.assertEqual(atlarion["conteudo"]["preco_contratacao"], {"Fragmentos de Estrela": 160})
+        self.assertEqual(atlarion["conteudo"]["preco"], {"Fragmentos de Estrela": 1600})
+        aliado = _mercenary_ally_from_catalog_item(atlarion, modo="contratar")
+        self.assertEqual(aliado["mensalidade"], {"moeda": "Fragmentos de Estrela", "valor": 32})
+        self.assertEqual(resolve_catalog_price(atlarion["conteudo"], field="preco_contratacao").moeda, "Fragmentos de Estrela")
+        # Contratar nunca custa mais que comprar (nas criaturas baratas custa o mesmo; tudo em Solares: 1 Lunaris = 0,01, 1 Fragmento = 50).
+        em_solares = {"Lunaris": 0.01, "Solares": 1, "Fragmentos de Estrela": 50}
+        for entrada in _MONSTROS:
+            with self.subTest(entrada["id"]):
+                compra = resolve_catalog_price(entrada["conteudo"])
+                contratacao = resolve_catalog_price(entrada["conteudo"], field="preco_contratacao")
+                self.assertLessEqual(contratacao.valor * em_solares[contratacao.moeda], compra.valor * em_solares[compra.moeda])
 
     def test_contratar_nao_muda_papel_nem_posto_fixo(self):
         guarda = next(e for e in _MONSTROS if e["conteudo"].get("funcao") == "Guarda de local")

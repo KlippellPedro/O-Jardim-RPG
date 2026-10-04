@@ -175,6 +175,42 @@ Telas novas desta leva, com o contrato de servidor em
   em relação à curva), Defesa, Mana, Estamina, iniciativa, ataques (bônus, dano e DTs do
   texto) e perícias. Só grava ao salvar. Visto no navegador (Aranha Gigante do VD 18 para o 40:
   Vida 380 para 1000, ataque +21 para +38, DT 15 para 26) e a 375 px sem rolagem lateral.
+- **Montador de encontro** ([MontadorEncontro.tsx](../../src/pages/Sessao/components/MontadorEncontro.tsx),
+  [montadorEncontro.ts](../../src/services/montadorEncontro.ts)): o botão "Encontro" do controle da
+  cena pede nível do grupo, jogadores e dificuldade (fácil 0,65, padrão 1, difícil 1,3, mortal 1,6
+  do orçamento de um encontro padrão para quatro, calibrados por simulação: ver BALANCEAMENTO). O orçamento é gasto em fatias de Vida por papel
+  (lacaio 0,1, padrão 0,25, elite 0,5, chefe 1) e há cinco estilos (bando, líder e capangas, chefe e
+  escolta, elites, duelo). As criaturas vêm do Bestiário já carregado e passam por
+  `escalarCriatura` com troca de papel, então Vida, dano e ataque seguem a fatia do papel; sem
+  criatura que sirva, a vaga sai do gerador por VD. Única só entra de chefe se o Mestre marcar.
+  O sorteio usa semente (mesmo pedido, mesmo encontro; "Sortear de novo" muda a semente) e cada
+  vaga pode ser trocada ou tirada. "Adicionar tudo à cena" reaproveita `pickFromBestiario`, então
+  nomes numerados, multiataque e loot funcionam como no Bestiário. Visto no navegador a 1400 px e a
+  375 px, sem rolagem lateral. Na mesma passada: `input[type=checkbox]` saiu da regra de 44 px
+  de altura dos ponteiros de toque (`index.css`), que esticava toda caixinha de marcar no celular.
+- **Fases de chefe** ([AvisoDeFaseDeChefe.tsx](../../src/pages/Sessao/components/AvisoDeFaseDeChefe.tsx),
+  `avisosDeFaseNova` em [useSessaoStore.ts](../../src/store/useSessaoStore.ts)): quando a fase de um
+  participante sobe entre duas leituras do estado, aparece um aviso. O Mestre vê as mudanças e fecha
+  à mão; a mesa vê só a frase de cena e o aviso some em 14 s. O cartão em foco mostra "Fase N de M" e o
+  bloco "O que mudou", a ficha completa lista as fases, e o editor da criatura tem botões para
+  trocar a fase à mão. Ver [Integração](INTEGRACAO.md#fases-de-chefe).
+- **Livro da Verdade** ([LivroDaVerdadePage.tsx](../../src/pages/Mundo/LivroDaVerdadePage.tsx),
+  `/mundo/livro-da-verdade`, botão na página do Mundo): grade de páginas. A mesa vê as lendas caídas
+  abertas (verdade, "O que mudou no mundo", data, sessão e quem estava lá) e, no lugar das outras, uma
+  página rasurada (`RasuraTitulo`, `RasuraTexto`, `CarimboRetido`) cuja semente é só o número da vaga. O
+  Mestre vê as 28, pode ler a página antes da queda, marcar uma queda fora da Sessão e desfazer uma
+  queda (com confirmação). Na Sessão, [AvisoDeLendaCaida.tsx](../../src/pages/Sessao/components/AvisoDeLendaCaida.tsx)
+  mostra para a mesa inteira "Uma lenda caiu" com um link para a página (`avisosDeLendaNova` no
+  `useSessaoStore`; a primeira leitura da sessão nunca avisa). A galeria de conquistas junta os
+  selos de lenda bloqueados num cartão só, "Matador de Lendas", com a contagem dos já conquistados.
+  Visto no navegador a 1400 px como Mestre e como jogador.
+- **Efeitos do mundo:** a página do Livro mostra, em cada lenda caída, a lista "Efeitos em jogo" (e o
+  Mestre lê os efeitos antes da queda). O calendário mostra uma faixa com os efeitos que ainda valem
+  e até quando, e o cartão do item na Loja ganha a etiqueta "Efeito no mundo +10%" com o texto no
+  `title`.
+- **Montador e habilidades:** o cartão de cada vaga mostra as marcas Cura, Controle e Área
+  (`ameacaDeHabilidades` em `montadorEncontro.ts`) e o topo mostra "Habilidades pesam N". Cada tipo
+  gasta 8%, 12% e 10% do custo da vaga (limite de 25%), e a Vida da criatura cai na mesma proporção.
 - **Mandar e trocar** ([MandarItemModal.tsx](../../src/pages/Ficha/components/MandarItemModal.tsx),
   [MandarMoedasModal.tsx](../../src/pages/Ficha/components/MandarMoedasModal.tsx),
   [PropostaTrocaModal.tsx](../../src/pages/Ficha/components/PropostaTrocaModal.tsx),

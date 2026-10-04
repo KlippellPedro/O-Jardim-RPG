@@ -25,8 +25,15 @@ export const ConquistasGaleria = ({ personagemId }: { personagemId: string }) =>
     return () => { ativo = false; };
   }, [personagemId]);
 
+  // Selos de lenda ainda bloqueados não aparecem um a um (cada nome seria uma pista):
+  // viram um cartão só, "Matador de Lendas", que conta quantos já saíram.
+  const lendas = useMemo(() => {
+    const secretas = (dados?.catalogo ?? []).filter((item) => item.secreta);
+    return { conquistadas: secretas.filter((item) => item.desbloqueada).length, restam: secretas.some((item) => !item.desbloqueada) };
+  }, [dados]);
+
   const ordenadas = useMemo(() => {
-    const lista = dados?.catalogo ?? [];
+    const lista = (dados?.catalogo ?? []).filter((item) => !item.secreta || item.desbloqueada);
     // Desbloqueadas primeiro (raras antes), depois as mais próximas de sair.
     return [...lista].sort((a: IConquista, b: IConquista) => {
       if (a.desbloqueada !== b.desbloqueada) return a.desbloqueada ? -1 : 1;
@@ -80,6 +87,16 @@ export const ConquistasGaleria = ({ personagemId }: { personagemId: string }) =>
             </article>
           );
         })}
+        {lendas.restam ? (
+          <article className="flex items-center gap-3 rounded-xl border border-white/[0.04] bg-black/20 p-3" data-testid="selos-de-lenda">
+            <SeloConquista raridade="lendaria" icone="lenda" tamanho={52} bloqueada />
+            <div className="min-w-0 flex-1">
+              <strong className="block truncate text-sm text-gray-500">Matador de Lendas</strong>
+              <p className="text-[11px] leading-snug text-gray-500">Cada lenda do Jardim guarda um selo, e o nome dele só aparece depois que ela cai.</p>
+              {lendas.conquistadas ? <p className="mt-1 font-mono text-[10px] text-gray-600">{lendas.conquistadas} já conquistado{lendas.conquistadas === 1 ? '' : 's'}</p> : null}
+            </div>
+          </article>
+        ) : null}
       </div>
     </section>
   );

@@ -116,6 +116,16 @@ export default function CalendarioMundoPage() {
                 </p>
               </div>
             </div>
+            {dados.efeitos_do_mundo?.length ? (
+              <ul className="mt-5 space-y-2" aria-label="Efeitos no mundo" data-testid="efeitos-do-mundo">
+                {dados.efeitos_do_mundo.map((efeito) => (
+                  <li key={efeito.id} className="rounded-xl border border-[#c7a44c]/25 bg-[#c7a44c]/[0.06] px-4 py-2.5 text-sm leading-6 text-white/80">
+                    {efeito.texto}
+                    <span className="ml-2 text-[11px] text-white/40">até o dia {efeito.ate.dia} · {dados.config.meses[efeito.ate.mes]}, ano {efeito.ate.ano}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
             <ol className="mt-6 grid grid-cols-4 gap-2" aria-label="Estações do ano">
               {ESTACOES_DO_ANO.map((chave) => {
                 const atual = dados.estacao_normal === chave;

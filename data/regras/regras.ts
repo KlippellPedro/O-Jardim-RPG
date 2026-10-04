@@ -7,6 +7,7 @@ import marcasCirculoData from '../ficha/marcas-de-circulo.json';
 import periciasData from '../ficha/pericias.json';
 import racasData from '../ficha/racas.json';
 import catalogoLojaData from '../loja/catalogo.json';
+import dadivasData from './dadivas-v1.json';
 import progressaoNiveisData from '../ficha/progressao-niveis.json';
 import type { IClasse } from '../../src/types/catalogo';
 import { MARCOS_MAESTRIA } from '../../src/services/maestriaClasse';
@@ -272,6 +273,9 @@ const armasParaReferencia = catalogoLojaData.entradas
     raridade: String(item.conteudo?.raridade ?? ''),
     mediaNormal: mediaDeDados(item.conteudo?.dano),
   }));
+const linhasDeDadivas = () => dadivasData.dadivas.map((dadiva) => `
+          <tr><td><strong>${dadiva.rotulo_do_fluxo}</strong></td><td>${dadiva.gosto}</td><td><strong>${dadiva.nome}.</strong> ${dadiva.bonus} ${dadiva.uma_vez}</td></tr>`).join('');
+
 const linhasNpcsEInimigos = () => NIVEIS_DE_REFERENCIA.map((nivel) => {
   const referencia = referenciaDoNivel(nivel, classesComunsParaReferencia, armasParaReferencia);
   return `<tr><td><strong>${nivel}</strong></td><td>${referencia.patamar ?? 'padrão'}</td><td>${referencia.vida.media} <small>(${referencia.vida.minima} a ${referencia.vida.maxima})</small></td><td>${referencia.defesaNatural}</td><td>+${referencia.bonusDeAtaque}</td><td>${formatarXP(referencia.danoPorAcerto)}</td><td>${referencia.dt.padrao} / ${referencia.dt.extrema}</td><td>${formatarXP(referencia.vidaDeInimigoPadrao)}</td></tr>`;
@@ -1766,7 +1770,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p>Uma classe vai até o 50, e a segunda classe comum só entra depois que uma classe chega ao 20. Quem quer maximizar uma classe sozinho pode, e vai ganhar Vida, Mana, Estamina e a Maestria do 21 ao 50, mas nenhum poder novo: avise quando o personagem estiver no 15, para a escolha ser consciente.</p>
 
       <h3 class="regras-subtitle">Legados no fim da estrada</h3>
-      <p>O catálogo tem ${(legadosData.legados?.length || 0) + (legadosNovosData.novos?.length || 0)} Legados e nem todos se repetem. Numa mesa que passe dos 500 níveis o catálogo vai faltar: combine com o grupo se os Legados novos vêm da história ou se a vaga vira outra coisa.</p>
+      <p>O catálogo tem ${(legadosData.legados?.length || 0) + (legadosNovosData.novos?.length || 0)} Legados e nem todos se repetem. Quem chega ao 500 junta 35 escolhas, e o catálogo foi escrito para isso: os Legados vão do nível 20 ao 500, em degraus (20, 25, 30, 35, 40, 50, 60, 80, 100, 120, 150, 200, 250, 300, 400 e 500), e os de nível alto trocam bônus fixo por efeitos de uma vez por cena, por sessão ou por descanso. Mesmo assim, uma mesa que passe muito do 500 ainda pode pedir Legados novos: combine com o grupo se eles vêm da história ou se a vaga vira outra coisa.</p>
     `,
   },
 
@@ -1872,7 +1876,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   'frutos-implantes': {
     categoria: 'Livro do Jogador',
     status: 'Regra oficial',
-    resumo: 'Duas formas de ganhar poder sem subir de nível: comer um Fruto do Éden, que se liga à alma, ou instalar um implante, que é peça de máquina no corpo.',
+    resumo: 'Duas formas de ganhar poder sem subir de nível: comer um Fruto do Éden, que se liga à alma, ou instalar um implante, que é peça de máquina no corpo. Traz também as oferendas aos Fluxos e as dádivas que elas rendem.',
     destaques: [
       ['Fruto', '1 por criatura, permanente'],
       ['Despertar', 'Escolha só de ida'],
@@ -1909,6 +1913,23 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-note">Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. A passiva e as técnicas são substituídas pelas versões aprimoradas, sem somar com as antigas, e a manifestação final passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.</p>
       <p>Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos ${totalFrutosEden} está no catálogo da Loja.</p>
 
+      <h3 class="regras-subtitle">Dádivas e oferendas</h3>
+      <p>Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feito diante do que o Fluxo aprecia, e o que ele devolve é uma dádiva: pequena, curta e uma por vez. A dádiva não substitui o Fruto. O Fruto muda você para sempre, e a dádiva dura o tempo de uma jornada.</p>
+      <ul class="regras-list">
+        <li><strong>Onde:</strong> num lugar em que o Fluxo se faz sentir (o Mestre diz qual) ou, se você carrega o Fruto do mesmo Fluxo, em qualquer lugar: quem comeu o fruto leva o altar no corpo.</li>
+        <li><strong>O que oferecer:</strong> algo do gosto do Fluxo, na tabela abaixo. A oferenda se perde: queima, afunda ou fica para trás. Nunca ofereça um Fruto do Éden.</li>
+        <li><strong>O valor:</strong> Humilde vale um quarto da verba de uma sessão do seu nível, Valiosa vale uma sessão e Preciosa vale quatro. Um sacrifício de história, algo que dinheiro não compra e que o Mestre aceita, conta como Preciosa e dispensa o teste.</li>
+        <li><strong>O teste:</strong> Religião ou Ressonância contra a DT Padrão do nível, com +5 na DT se a oferenda for Humilde, nenhum ajuste se for Valiosa e −3 se for Preciosa.</li>
+        <li><strong>O resultado:</strong> falhar é ouvir silêncio, e a oferenda se perde. Passar rende a dádiva do Fluxo até o próximo descanso longo ou o fim da sessão, o que vier primeiro. Passar por 5 ou mais, ou tirar 20 natural, faz o Mestre acrescentar um sinal: uma visão curta, um nome, um cheiro, uma pista sobre algo ligado ao Fluxo.</li>
+        <li><strong>Os limites:</strong> uma oferenda por pessoa por sessão, uma dádiva ativa por vez (aceitar outra encerra a anterior) e o mesmo altar responde uma vez por mês do calendário do mundo.</li>
+      </ul>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Fluxo</th><th>O que agrada</th><th>Dádiva</th></tr></thead>
+        <tbody>${linhasDeDadivas()}
+        </tbody>
+      </table></div>
+      <p class="regras-note">Quem carrega o Fruto do mesmo Fluxo recebe a dádiva ampliada: o bônus passa de +2 para +3 (de +3 m para +5 m no Passo Curto), o efeito de uma vez pode ser usado duas vezes e ela dura até o fim da sessão. A dádiva do Fim exige a autorização do Mestre, como todo acesso ao Fim. Algumas deidades respondem pouco, e o silêncio também é resposta: quem decide é o Mestre.</p>
+
       <h3 class="regras-subtitle">Implantes cibernéticos</h3>
       <p>Enquanto o Fruto mexe na alma, o implante mexe na carne. São ${totalImplantes} peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.</p>
       <ul class="regras-list">
@@ -1940,6 +1961,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Todo fruto declara uma fraqueza, e é ela que permite montar uma cena em que o portador não é a resposta.</li>
         <li>Use com parcimônia. Anular o fruto em toda sessão apaga a compra mais cara que o jogador fez.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Oferendas e dádivas</h3>
+      <ul class="regras-list">
+        <li>Você decide quem responde. O silêncio é uma resposta legítima: use quando o altar é falso, o gesto foi mesquinho ou a deidade tem motivo para não ouvir. Um grupo que oferece em toda cidade e sempre ganha dádiva está sendo pago por existir.</li>
+        <li>Calibre a dádiva como um Legado por cena: bônus pequeno e um uso único. Ela não soma com o Dom do Fruto do mesmo Fluxo, que já cobre o mesmo terreno: se os dois coincidirem na cena, vale o maior.</li>
+        <li><strong>Comunicação:</strong> a Malha da A.X.I.S corta quase todo fio que a deidade tenta puxar. Faça o teste normalmente, mas entregue só a dádiva comum, nunca a ampliada, enquanto a deidade estiver presa. Um sucesso por 5 ou mais é o sinal mais valioso da campanha: use-o para plantar o Arco da Malha (ver o Guia do Mestre).</li>
+        <li><strong>Tecnologia:</strong> a A.X.I.S lê quem a procura. Quem faz uma oferenda a ela é registrado, e Jota Macedo passa a conhecer o nome do personagem. A dádiva funciona, e o registro é o preço.</li>
+        <li><strong>Fim:</strong> só com a sua autorização. Deixe a oferenda ser uma cena de despedida de verdade, e lembre que o Fruto do Fim e esta dádiva são o mesmo acesso.</li>
+        <li>Um sacrifício de história aceito é decisão sua e pesa na campanha: cobre algo que o jogador sinta falta, e nunca dinheiro.</li>
       </ul>
 
       <h3 class="regras-subtitle">Implantes</h3>
@@ -2703,6 +2734,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     corpoMestre: `
       <p class="regras-lead">Este capítulo não publica uma lista fechada de preços: publica a fórmula. Você monta a criatura, aplica a faixa de nível e os traços, e o preço sai daí. Para vender ou contratar uma criatura específica, crie uma entrada do tipo monstro na Loja com o preço calculado por estas tabelas.</p>
 
+      <p class="regras-note">Acima do nível 50 a verba por sessão cresce mais depressa que o nível, então o valor por nível das tabelas abaixo sobe em degraus: de 51 a 99 vale a taxa de sempre, de 100 a 299 ela dobra, e do 300 em diante ela é 2,25 vezes a de sempre. Os extras (Arma, Perícia, Poder Ass e os outros) seguem o mesmo multiplicador. Assim contratar gente de nível alto custa a mesma fração de uma sessão de aventura que custava no nível 50, e não vira troco. As criaturas do Bestiário de VD 50 em diante não usam estas tabelas: o preço delas está no catálogo, em Fragmentos de Estrela, e acompanha a verba do VD (contratar custa metade da verba de uma sessão de um jogador do nível, e comprar custa dez contratações).</p>
+
       <h3 class="regras-subtitle">Criaturas</h3>
       <p>Animais, monstros ou seres naturais capturados, domesticados ou criados em cativeiro. Variam desde feras pequenas até predadores perigosos. Suas habilidades geralmente vêm de sua natureza física ou de seu habitat.</p>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -2713,7 +2746,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>21 a 30</td><td>+15 L / nível</td><td>+15 L / nível</td></tr>
           <tr><td>31 a 40</td><td>+40 L / nível</td><td>+40 L / nível</td></tr>
           <tr><td>41 a 50</td><td>+52 L / nível</td><td>+52 L / nível</td></tr>
-          <tr><td>50+</td><td>+62 L / nível</td><td>+62 L / nível</td></tr>
+          <tr><td>51 a 99</td><td>+62 L / nível</td><td>+62 L / nível</td></tr>
+        <tr><td>100 a 299</td><td>+125 L / nível</td><td>+125 L / nível</td></tr>
+        <tr><td>300+</td><td>+140 L / nível</td><td>+140 L / nível</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">Extras: Arma +15 L, Perícia +12 L, Poder Ass +120 L, Legado +18 L, Variável +70 L.</p>
@@ -2728,7 +2763,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>21 a 30</td><td>+42 L / nível</td><td>+38 L / nível</td></tr>
           <tr><td>31 a 40</td><td>+56 L / nível</td><td>+52 L / nível</td></tr>
           <tr><td>41 a 50</td><td>+68 L / nível</td><td>+65 L / nível</td></tr>
-          <tr><td>50+</td><td>+84 L / nível</td><td>+80 L / nível</td></tr>
+          <tr><td>51 a 99</td><td>+84 L / nível</td><td>+80 L / nível</td></tr>
+        <tr><td>100 a 299</td><td>+170 L / nível</td><td>+160 L / nível</td></tr>
+        <tr><td>300+</td><td>+190 L / nível</td><td>+180 L / nível</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">Extras: Arma +46 L, Perícia +24 L, Poder Ass +650 L, Legado +52 L, Variável +250 L.</p>
@@ -2743,7 +2780,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>21 a 30</td><td>+12 L / nível</td><td>+10 L / nível</td></tr>
           <tr><td>31 a 40</td><td>+25 L / nível</td><td>+25 L / nível</td></tr>
           <tr><td>41 a 50</td><td>+35 L / nível</td><td>+35 L / nível</td></tr>
-          <tr><td>50+</td><td>+50 L / nível</td><td>+50 L / nível</td></tr>
+          <tr><td>51 a 99</td><td>+50 L / nível</td><td>+50 L / nível</td></tr>
+        <tr><td>100 a 299</td><td>+100 L / nível</td><td>+100 L / nível</td></tr>
+        <tr><td>300+</td><td>+110 L / nível</td><td>+110 L / nível</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">Extras: Arma +12 L, Perícia +8 L, Pet +14 L, Poder Ass +230 L, Legado +16 L, Variável +52 L.</p>
@@ -2758,7 +2797,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>21 a 30</td><td>+18 L / nível</td><td>+14 L / nível</td></tr>
           <tr><td>31 a 40</td><td>+32 L / nível</td><td>+28 L / nível</td></tr>
           <tr><td>41 a 50</td><td>+48 L / nível</td><td>+38 L / nível</td></tr>
-          <tr><td>50+</td><td>+60 L / nível</td><td>+46 L / nível</td></tr>
+          <tr><td>51 a 99</td><td>+60 L / nível</td><td>+46 L / nível</td></tr>
+        <tr><td>100 a 299</td><td>+120 L / nível</td><td>+90 L / nível</td></tr>
+        <tr><td>300+</td><td>+135 L / nível</td><td>+105 L / nível</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">Extras: Arma +24 L, Perícia +14 L, Poder Ass +460 L, Legado +25 L, Variável +65 L.</p>
@@ -2773,7 +2814,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>21 a 30</td><td>+14 L / nível</td><td>+12 L / nível</td></tr>
           <tr><td>31 a 40</td><td>+32 L / nível</td><td>+30 L / nível</td></tr>
           <tr><td>41 a 50</td><td>+50 L / nível</td><td>+48 L / nível</td></tr>
-          <tr><td>50+</td><td>+75 L / nível</td><td>+70 L / nível</td></tr>
+          <tr><td>51 a 99</td><td>+75 L / nível</td><td>+70 L / nível</td></tr>
+        <tr><td>100 a 299</td><td>+150 L / nível</td><td>+140 L / nível</td></tr>
+        <tr><td>300+</td><td>+170 L / nível</td><td>+160 L / nível</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">Extras: Arma +16 L, Perícia +12 L, Pet +28 L, Poder Ass +450 L, Legado +20 L, Variável +60 L.</p>
@@ -2788,7 +2831,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>21 a 30</td><td>+240 L / nível</td><td>+240 L / nível</td></tr>
           <tr><td>31 a 40</td><td>+320 L / nível</td><td>+320 L / nível</td></tr>
           <tr><td>41 a 50</td><td>+450 L / nível</td><td>+450 L / nível</td></tr>
-          <tr><td>50+</td><td>+650 L / nível</td><td>+650 L / nível</td></tr>
+          <tr><td>51 a 99</td><td>+650 L / nível</td><td>+650 L / nível</td></tr>
+        <tr><td>100 a 299</td><td>+1300 L / nível</td><td>+1300 L / nível</td></tr>
+        <tr><td>300+</td><td>+1460 L / nível</td><td>+1460 L / nível</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">Extras: Arma +225 L, Perícia +36 L, Pet +210 L, Poder Ass +1.200 L, Legado +80 L, Variável +650 L.</p>
@@ -2936,8 +2981,18 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td><strong>25 a 29</strong></td><td>Épico e Lendário</td><td>50 Solares</td></tr>
           <tr><td><strong>30 a 34</strong></td><td>Lendário</td><td>200 Solares</td></tr>
           <tr><td><strong>35 a 40</strong></td><td>Lendário e acima</td><td>500 Solares</td></tr>
+          <tr><td><strong>41 a 49</strong></td><td>Lendário</td><td>600 Solares</td></tr>
+          <tr><td><strong>50 a 59</strong></td><td>Lendário e Mítico</td><td>20 Fragmentos</td></tr>
+          <tr><td><strong>60 a 79</strong></td><td>Mítico</td><td>35 Fragmentos</td></tr>
+          <tr><td><strong>80 a 99</strong></td><td>Mítico</td><td>55 Fragmentos</td></tr>
+          <tr><td><strong>100 a 149</strong></td><td>Mítico e Relíquia</td><td>90 Fragmentos</td></tr>
+          <tr><td><strong>150 a 199</strong></td><td>Mítico e Relíquia</td><td>140 Fragmentos</td></tr>
+          <tr><td><strong>200 a 299</strong></td><td>Relíquia</td><td>220 Fragmentos</td></tr>
+          <tr><td><strong>300 a 499</strong></td><td>Relíquia</td><td>320 Fragmentos</td></tr>
+          <tr><td><strong>500 ou mais</strong></td><td>Relíquia</td><td>450 Fragmentos</td></tr>
         </tbody>
       </table></div>
+      <p class="regras-note">Do nível 41 em diante a escada de compra acaba e a verba passa a ser contada em Fragmentos de Estrela. Ela mede o que o grupo tem para gastar quando você abre a porta do Mítico e da Relíquia, e a conta é a mesma de antes: quatro sessões pagam uma peça nova da raridade da faixa. A última linha vale para qualquer nível acima dela. A conversão é a de sempre, 1 Fragmento para 5.000 Lunaris, então 20 Fragmentos por sessão são 100 mil Lunaris.</p>
       <p class="regras-note">Se o grupo está sentado numa pilha de dinheiro sem ter o que comprar, confira o patamar de Loja que você abriu antes de mexer na verba. Os dois números precisam andar juntos.</p>
       <p>Um implante custa de 20 a 1.000 Créditos Sombrios conforme a raridade, então distribuir Crédito é decidir o ritmo de acesso ao mercado negro. Trate a mesma escada de quatro vezes por degrau ao improvisar preço de qualquer coisa que não esteja no catálogo: parta da referência da raridade e ajuste pela categoria.</p>
 
@@ -3005,7 +3060,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </tbody>
       </table></div>
       <p class="regras-note">Aqui está a resposta para por que um grupo de aventureiros anda com dinheiro de nobre e origem de trabalhador: um único contrato de criatura Rara paga mais de um ano de salário mínimo. A contradição é boa matéria de cena, e o custo de vida triplicado do Vazio é o freio natural dela.</p>
-      <p class="regras-note">Nenhum desses quatro degraus se alcança acumulando. A verba de aventura topa em 500 Solares por jogador por sessão, então um grupo de quatro no nível 40 junta 40 Fragmentos por sessão, e chegar aos 400 de uma Realeza exigiria dez sessões sem ninguém gastar nada. Daqui para cima o acesso vem de título, conquista, pacto ou herança.</p>
+      <p class="regras-note">Até o nível 49 nenhum desses degraus se alcança acumulando: a verba topa em 600 Solares por jogador por sessão, e um grupo de quatro no nível 40 junta 40 Fragmentos por sessão, longe dos 400 de uma Realeza. Do 50 em diante a conta vira: a verba passa a ser contada em Fragmentos, e um grupo de quatro que junte tudo sem gastar tem o patrimônio de uma Realeza em cerca de 5 sessões no nível 50, em 3 no nível 60 e em 2 no nível 100. O de um Dono de Dimensão, 1.600 Fragmentos, fica a umas 5 sessões no nível 100, 3 no nível 150 e 2 no nível 200. O Soberano nunca se alcança, porque uma Cadeira requisita e não compra. Por isso, no nível alto, o dinheiro deixa de ser o obstáculo e quem manda é o título, o território e o pacto: não ofereça moeda para destravar uma cena que pede um favor.</p>
+
+      <p class="regras-note">A Guilda dos Caçadores também tem teto: paga no máximo 1.600 Solares por criatura, o contrato de uma Lendária. Toda criatura Lendária do Bestiário de VD 45 a 49 custa entre 2.500 e 3.200 Solares no catálogo, então o contrato de Vaelthor e o de Ignarrak ficam entre 1.250 e 1.600 Solares. A partir do VD 50 o preço de catálogo sobe com a verba (dezenas a milhares de Fragmentos de Estrela), e o contrato continua parando no teto. Acima desse porte a Guilda paga em título, terra ou favor, e nunca em moeda. Contratar gente de nível alto segue a fórmula de preço do capítulo de Bestiário, com os degraus de 100 e de 300, e acima do 500 ninguém aceita salário: convence-se, ou se deve um favor.</p>
 
       <h3 class="regras-subtitle">Usando a tabela na mesa</h3>
       <ul class="regras-list">
@@ -3166,11 +3223,29 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Meça o dano real do grupo por rodada antes de decidir a Vida dos inimigos. Estimativa no papel erra bem mais que anotação de mesa.</li>
         <li>Um encontro padrão costuma aguentar cerca de quatro rodadas e meia de dano do grupo. Confronto curto usa três; chefe resistente, seis.</li>
+        <li>Na Sessão, o botão Encontro faz essa conta por você. Escolha o nível do grupo, quantos jogadores e a dificuldade: fácil, padrão, difícil e mortal pedem 0,65, 1, 1,3 e 1,6 vezes a Vida de um encontro padrão para quatro jogadores, o que dá cerca de 3, 4,5, 6 e 7 rodadas. Ele sorteia criaturas do Bestiário, leva cada uma ao VD do grupo, ajusta a Vida delas à curva do nível e mostra o XP e as rodadas esperadas. Criatura que cura, controla ou atinge em área gasta mais orçamento: o montador tira Vida dela na mesma proporção (até 25%) e marca o cartão com Cura, Controle ou Área. Troque ou tire o que não servir antes de pôr na cena.</li>
         <li>Conte ações, não corpos. As ações inimigas por rodada devem ficar perto das ações relevantes do grupo, um pouco abaixo ou um pouco acima.</li>
         <li>Chefe sozinho precisa de reação, fase ou ação de cenário. Chefe que só tem Vida alta produz um combate longo e parado.</li>
+        <li>Toda criatura única do Bestiário já traz as fases escritas. Na Sessão, quando a Vida do chefe cai ao limiar da fase, ela muda sozinha: você vê o que mudou, a mesa lê só a frase de cena, e a fase não volta atrás quando alguém cura o chefe. Dá para trocar a fase à mão no editor da criatura.</li>
+        <li>As 28 criaturas lendárias do Bestiário (as que trazem "Se X cair" na ficha) abrem uma página no Livro da Verdade, no Mundo, quando chegam a 0 de Vida na Sessão. Na primeira queda de cada lenda na campanha, a consequência entra no calendário como acontecimento aberto no dia de hoje, o Jornalista publica a manchete no Discord e a mesa recebe um aviso. Quem estava na cena ganha o selo "Matador de" daquela lenda, e quem encara uma Deidade pela primeira vez ganha "Cara a Cara com um Deus". Até a queda, a mesa só enxerga páginas rasuradas, e você vê todas. Se o dano foi um engano, ou se a lenda caiu fora da Sessão, o próprio Livro permite desfazer a queda ou marcá-la à mão. A manchete já publicada não volta atrás.</li>
+        <li>Cinco lendas deixam um efeito de verdade por alguns meses de calendário. Hiemark força o inverno por três meses. Ignarrak, Anzhur e Marenostra encarecem 10% uma classe de itens na Loja do site (equipamentos, artefatos e veículos, respectivamente), e Mareia barateia veículos em 10%. O efeito aparece no calendário, na página do Livro e no cartão do item na Loja, e desfazer a queda também o desfaz. O calendário só reflete a estação: o clima e o preço do Discord continuam sendo decisão sua.</li>
         <li>Terreno, cobertura e objetivo existem para mudar decisão, não para conceder mais um bônus numérico.</li>
         <li>Nunca tire o turno inteiro de um jogador por mais de uma rodada seguida. Ficar olhando não é jogar.</li>
       </ul>
+
+      <h3 class="regras-subtitle">Aventuras prontas</h3>
+      <p>O kit do Mestre (a pasta <em>docs/mestre</em> do projeto) traz cinco aventuras de uma sessão, cada uma no mesmo molde de quatro páginas: abertura, estrada, caso e desfecho. Todas trazem trecho para ler em voz alta, relógio de pressão, ficha de criatura saída da curva do Bestiário, tabela de desfechos e um corte para quando faltar tempo. Nenhuma vira lore canônica: cabem em qualquer campanha com uma estrada, um porto ou uma cidade.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Aventura</th><th>Nível</th><th>O que ela ensina</th></tr></thead>
+        <tbody>
+          <tr><td>Dois Passageiros</td><td>1</td><td>Relógio de pressão, conflito social e a primeira perseguição a pé.</td></tr>
+          <tr><td>O Moinho da Terceira Roda</td><td>5</td><td>Uma escolha sem vilão: quem perde o quê quando ninguém quer ser o culpado.</td></tr>
+          <tr><td>O Leilão da Casa Vazia</td><td>12</td><td>Infiltração, perseguição pelos telhados e mercadoria quente (o Calor do Discord).</td></tr>
+          <tr><td>O Redemoinho de Caribdis</td><td>30</td><td>Viagem de navio e criatura única com fases, com a saída que o Bestiário já escreveu.</td></tr>
+          <tr><td>A Queda do Leviatã Espelhado</td><td>45</td><td>Lenda do Bestiário: a Sessão avisa as fases, abre a página no Livro da Verdade e dá o selo.</td></tr>
+        </tbody>
+      </table></div>
+      <p>Há também o <strong>Arco da Malha</strong>, de cinco sessões, para personagens de nível 40 a 55. Ele é só do Mestre e revela o que a mesa ainda não sabe, então fica separado das aventuras e não deve ser impresso para os jogadores. A regra de Dádivas e oferendas (capítulo Frutos do Éden e Implantes) é o gancho natural da primeira sessão do arco.</p>
 
       <h3 class="regras-subtitle">NPCs e inimigos de nível alto</h3>
       <p>Para montar um NPC ou um chefe acima do nível 20, parta desta tabela. Ela usa a mesma conta da ficha: a Vida é a média das ${classesComunsParaReferencia.length} classes comuns, o atributo principal começa em 15 e os aumentos de nível se distribuem em rodízio, a arma é a melhor que o nível alcança e o grau de perícia é o maior que o nível permite. A última coluna é a Vida de um inimigo que aguenta quatro rodadas e meia de um grupo de quatro personagens do mesmo nível.</p>
@@ -4284,13 +4359,23 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>25 a 29</td><td>Épico e Lendário</td><td>50 Solares</td></tr>
           <tr><td>30 a 34</td><td>Lendário</td><td>200 Solares</td></tr>
           <tr><td>35 a 40</td><td>Lendário e acima</td><td>500 Solares</td></tr>
+          <tr><td>41 a 49</td><td>Lendário</td><td>600 Solares</td></tr>
+          <tr><td>50 a 59</td><td>Lendário e Mítico</td><td>20 Fragmentos</td></tr>
+          <tr><td>60 a 79</td><td>Mítico</td><td>35 Fragmentos</td></tr>
+          <tr><td>80 a 99</td><td>Mítico</td><td>55 Fragmentos</td></tr>
+          <tr><td>100 a 149</td><td>Mítico e Relíquia</td><td>90 Fragmentos</td></tr>
+          <tr><td>150 a 199</td><td>Mítico e Relíquia</td><td>140 Fragmentos</td></tr>
+          <tr><td>200 a 299</td><td>Relíquia</td><td>220 Fragmentos</td></tr>
+          <tr><td>300 a 499</td><td>Relíquia</td><td>320 Fragmentos</td></tr>
+          <tr><td>500 ou mais</td><td>Relíquia</td><td>450 Fragmentos</td></tr>
         </tbody>
       </table></div>
+      <p class="regras-note">Do nível 41 em diante a verba passa a ser contada em Fragmentos de Estrela (1 Fragmento são 5.000 Lunaris) e mede o que o grupo tem para gastar quando você abre a porta do Mítico e da Relíquia. A conta é a mesma: quatro sessões pagam uma peça nova da raridade da faixa. A última linha vale para qualquer nível acima.</p>
       <ul class="regras-list">
         <li><strong>A verba é uma média de longo prazo.</strong> Três sessões de mão vazia e uma com o dobro dão uma campanha melhor que quatro sessões pagando igual, porque é a sessão farta que a mesa lembra.</li>
         <li><strong>Divida o arco em três partes:</strong> uma em dinheiro, uma em algo que serve na hora, e uma em algo que só vale se o grupo decidir o que fazer com aquilo, como uma chave sem porta, um mapa pela metade ou um item que alguém quer de volta.</li>
         <li><strong>Item acima da faixa é empréstimo do futuro.</strong> Se entregar, conte como várias sessões de verba adiantadas e pague menos depois.</li>
-        <li><strong>Mítico e Relíquia da Criação ficam fora da escada da compra.</strong> Entre Lendário e Mítico existe um salto de quase vinte vezes, que salário nenhum atravessa. Essas duas faixas chegam por decisão sua, por negócio de Mercado Negro ou por pagamento de quem não usa moeda comum, e cada uma delas deveria ser o assunto de uma sessão inteira.</li>
+        <li><strong>Mítico e Relíquia da Criação ficam fora da escada da compra.</strong> Entre Lendário e Mítico existe um salto de quase vinte vezes, que salário nenhum atravessa. Essas duas faixas chegam por decisão sua, por negócio de Mercado Negro ou por pagamento de quem não usa moeda comum, e cada uma delas deveria ser o assunto de uma sessão inteira. A verba do nível 50 em diante só atravessa esse salto porque você abriu a porta: dinheiro sem balcão aberto continua sem comprar nada.</li>
       </ul>
 
       <details class="regras-details">

@@ -24,6 +24,7 @@ AVISOS_PADRAO: dict[str, bool] = {
     "liberacao": True,
     "critico": False,
     "mural": False,
+    "manchete": True,
 }
 
 ROTULOS_AVISO: dict[str, str] = {
@@ -32,6 +33,7 @@ ROTULOS_AVISO: dict[str, str] = {
     "liberacao": "O Mestre liberou algo",
     "critico": "Crítico na mesa (20 natural)",
     "mural": "Novidades do mural",
+    "manchete": "Manchete quando uma lenda cai",
 }
 
 
@@ -42,6 +44,8 @@ CATEGORIA_DISCORD: dict[str, str] = {
     "critico": "sessao",
     "liberacao": "liberacao",
     "mural": "liberacao",
+    # Vai para o canal de notícias do Jornalista (/jornal canal categoria:noticia).
+    "manchete": "noticia",
 }
 
 

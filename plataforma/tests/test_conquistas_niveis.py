@@ -32,6 +32,8 @@ class _ConexaoDuble:
             return _Resultado([{"ficha": self.ficha}])
         if "FROM registros_mesa" in texto:
             return _Resultado([{"rolagens": 0, "criticos": 0, "falhas": 0, "dano_maximo": 0, "usos": 0}])
+        if "FROM campanha_lendas" in texto:
+            return _Resultado([])
         if "FROM sessao_participantes" in texto or "FROM saldos_personagem" in texto:
             return _Resultado([{"total": 0}])
         if texto.startswith("SELECT chave, desbloqueada_em FROM personagem_conquistas"):

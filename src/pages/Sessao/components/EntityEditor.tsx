@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ExternalLink, GraduationCap, Plus, RefreshCw, Save, Scaling, Swords, X } from 'lucide-react';
+import { ExternalLink, Flame, GraduationCap, Plus, RefreshCw, Save, Scaling, Swords, X } from 'lucide-react';
 import type {
   EntidadeIniciativa,
   SessionAttack,
@@ -51,6 +51,8 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
   const [pericias, setPericias] = useState<string[]>(entity.pericias ?? []);
   const [periciaTexto, setPericiaTexto] = useState('');
   const [vdAlvo, setVdAlvo] = useState('');
+  const faseInicial = entity.fase ?? 1;
+  const [fase, setFase] = useState(faseInicial);
   const [resumoDaEscala, setResumoDaEscala] = useState<string | null>(null);
   useDialogAccessibility({ open: true, dialogRef, initialFocusRef: closeButtonRef, onClose: onCancel });
 
@@ -347,6 +349,26 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
           </div>
         ) : null}
 
+        {entity.fasesResumo?.length ? (
+          <div className="mt-4 rounded-lg border border-[#e0645f]/25 bg-[#e0645f]/[0.04] p-3">
+            <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#f19a96]"><Flame size={12} /> Fase do chefe</span>
+            <p className="mt-1 text-[11px] leading-5 text-white/45">A Vida avança a fase sozinha e curar não a desfaz. Use isto quando a história pedir outra fase, ou para voltar uma que subiu por engano.</p>
+            <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Fase do chefe">
+              {entity.fasesResumo.map((item, indice) => (
+                <button
+                  key={`${item.nome}-${indice}`}
+                  type="button"
+                  aria-pressed={fase === indice + 1}
+                  onClick={() => setFase(indice + 1)}
+                  className={`rounded-full border px-3 py-1 text-[11px] font-semibold ${fase === indice + 1 ? 'border-[#e0645f] bg-[#e0645f]/20 text-[#f6aaa6]' : 'border-white/10 text-white/55 hover:border-white/30 hover:text-white'}`}
+                >
+                  {indice + 1}. {item.nome}{item.quando ? ` · ${Math.round(item.quando * 100)}%` : ''}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         <div className="mt-4">
           <span className="text-[10px] uppercase tracking-wider text-white/40">Condições</span>
           {conditions.length ? (
@@ -552,6 +574,7 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               visibilidade,
               defesa: parseOptionalInt(defense, 0, 999),
               vd: parseOptionalInt(vd, 1, VD_MAXIMO),
+              ...(entity.fasesResumo?.length && fase !== faseInicial ? { fase } : {}),
             })}
             disabled={busy}
             className="flex items-center gap-1.5 rounded-md bg-[#c7a44c] px-3 py-1.5 text-xs font-bold text-black disabled:opacity-50"

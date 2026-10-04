@@ -149,7 +149,9 @@ def nomes_das_conquistas() -> list[str]:
     modulo = importlib.util.module_from_spec(especificacao)
     sys.modules["conquistas_catalogo"] = modulo  # dataclass precisa do modulo registrado
     especificacao.loader.exec_module(modulo)
-    return [conquista.nome for conquista in modulo.CATALOGO]
+    # Selo secreto (Matador de ... de cada lenda) fica sem voz de propósito: o manifest.json é
+    # público e usa o texto exibido como chave, então gravar o nome entregaria a lenda antes da queda.
+    return [conquista.nome for conquista in modulo.CATALOGO if not getattr(conquista, "secreta", False)]
 
 
 def frases() -> dict[str, str]:

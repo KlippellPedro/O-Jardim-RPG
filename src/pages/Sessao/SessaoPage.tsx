@@ -21,6 +21,8 @@ import {
   X,
 } from 'lucide-react';
 import { ActiveTurnCard } from './components/ActiveTurnCard';
+import { AvisoDeFaseDeChefe } from './components/AvisoDeFaseDeChefe';
+import { AvisoDeLendaCaida } from './components/AvisoDeLendaCaida';
 import { InitiativeTracker } from './InitiativeTracker';
 import { SessionLogPanel } from './components/SessionLogPanel';
 import { MasterScreenPanel } from './components/MasterScreenPanel';
@@ -467,6 +469,8 @@ export const SessaoPage: React.FC = () => {
           ) : null}
 
           <main className="relative min-h-0 min-w-0 overflow-hidden">
+            <AvisoDeFaseDeChefe />
+            <AvisoDeLendaCaida />
             <RelogiosFaixa onAbrir={() => setMesaAba('relogios')} />
             {isLoading ? (
               <div className="flex h-full items-center justify-center text-sm text-white/50" role="status">

@@ -855,6 +855,8 @@ class ParticipantUpdateInput(BaseModel):
     defesa: int | None = Field(default=None, ge=0, le=999)
     vd: int | None = Field(default=None, ge=1, le=VD_MAXIMO)
     pericias: list[Any] | None = Field(default=None, max_length=8)
+    # Fase de chefe (1 é o começo). O Mestre pode mudar à mão; a Vida avança sozinha.
+    fase: int | None = Field(default=None, ge=1, le=9)
 
     @field_validator("condicoes")
     @classmethod

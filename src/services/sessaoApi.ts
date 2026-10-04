@@ -37,6 +37,16 @@ export interface ParticipantePayload {
   pericias?: string[];
   /** Só na criação: a criatura do Bestiário, que liga o participante à tabela de loot. */
   monstro_id?: string | null;
+  /** Fase de chefe (1 é o começo). A Vida avança a fase sozinha; o Mestre pode ajustar à mão. */
+  fase?: number;
+}
+
+/** Uma fase de chefe: o que a mesa ouve (`anuncio`) e o que muda de regra (`mudancas`, só do Mestre). */
+export interface FaseDeChefe {
+  quando: number | null;
+  nome: string;
+  anuncio: string;
+  mudancas: string[];
 }
 
 /** Uma linha do loot rolado. `entregue_para` fica vazio até o Mestre escolher quem leva. */
@@ -119,6 +129,13 @@ export interface SessaoParticipanteResponse {
   monstro_id?: string | null;
   tem_loot?: boolean;
   loot?: LootRolado | null;
+  /** Fase de chefe. A mesa recebe só o número e a frase de cena; o resto é do Mestre. */
+  fase?: number;
+  fase_anuncio?: string;
+  fases_total?: number;
+  fases_resumo?: Array<{ nome: string; quando: number | null }>;
+  fase_nome?: string;
+  fase_mudancas?: string[];
 }
 
 export interface BestiarioMonstro {
@@ -155,6 +172,8 @@ export interface BestiarioMonstro {
   raridade?: string | null;
   subtipo?: string | null;
   funcao?: string | null;
+  /** Fases de chefe (criaturas únicas). */
+  fases?: FaseDeChefe[];
 }
 
 export interface DistribuirXpResponse {
@@ -176,9 +195,19 @@ export interface SessaoResponse {
     turno_de: null | { id: string | null; nome: string; indice: number };
   };
   participantes: SessaoParticipanteResponse[];
+  /** Lendas que caíram nesta sessão (Livro da Verdade). A mesa inteira recebe. */
+  lendas?: LendaCaidaResponse[];
   meu_papel: string;
   comando: boolean;
   bloqueada: boolean;
+}
+
+export interface LendaCaidaResponse {
+  id: string;
+  nome: string;
+  epiteto: string;
+  consequencia: string;
+  em: string;
 }
 
 export interface ResumoDestaque {

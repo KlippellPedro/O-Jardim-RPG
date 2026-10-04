@@ -25,6 +25,7 @@ const RegrasPage = lazy(() => import('./pages/Regras/RegrasPage').then((module) 
 const RegraDetalhesPage = lazy(() => import('./pages/Regras/RegraDetalhesPage').then((module) => ({ default: module.RegraDetalhesPage })));
 const QuadroPage = lazy(() => import('./pages/Quadro/QuadroPage').then((module) => ({ default: module.QuadroPage })));
 const CalendarioMundoPage = lazy(() => import('./pages/Mundo/CalendarioMundoPage'));
+const LivroDaVerdadePage = lazy(() => import('./pages/Mundo/LivroDaVerdadePage'));
 const CampanhaPage = lazy(() => import('./pages/Campanha/CampanhaPage'));
 const FrotaPage = lazy(() => import('./pages/Frota/FrotaPage'));
 const SessaoPage = lazy(() => import('./pages/Sessao/SessaoPage').then((module) => ({ default: module.SessaoPage })));
@@ -346,6 +347,15 @@ function App() {
                 element={
                   <ProtectedRoute requireCampaign>
                     <CalendarioMundoPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/mundo/livro-da-verdade"
+                element={
+                  <ProtectedRoute requireCampaign>
+                    <LivroDaVerdadePage />
                   </ProtectedRoute>
                 }
               />

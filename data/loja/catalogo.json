@@ -5883,7 +5883,26 @@
         "subtipo": "Vazio",
         "familia": "vazio",
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Céu Quebrado",
+            "anuncio": "O reflexo do mar se estilhaça, e o céu errado se despeja na água.",
+            "mudancas": [
+              "Reflexo Adiantado deixa de ser uma vez por rodada e vale em toda a cena.",
+              "As escamas viram espelhos: ataques à distância contra ele se refletem na primeira falha, e o atacante sofre metade do dano."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Maré de Estrelas",
+            "anuncio": "As ondas correm contra o vento, e todas as estrelas da água se apagam juntas.",
+            "mudancas": [
+              "Maré de Vidro roda a cada rodada, mas ele perde Reflexo Adiantado e fica Lento por ter perdido o reflexo."
+            ]
+          }
+        ]
       }
     },
     {
@@ -5893,13 +5912,13 @@
       "conteudo": {
         "descricao": "Uma fênix adulta vive por eras, queimando e renascendo toda vez que o corpo envelhece. O calor das asas fecha ferimentos, e a ave defende com ferocidade quem considera parte do ninho. Aurelith tem a memória de todas as suas mortes e escolhe com cuidado quem permanece perto, porque quem entra no ninho sai com uma pena e uma dívida. Se Aurelith cair por vontade própria, o fogo do mundo ganha mais uma vida; se cair por força, o ninho se apaga por um ano.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 100
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 10
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 2
         },
         "raridade": "lendario",
         "categoria": "Lendário",
@@ -5942,7 +5961,25 @@
         "familia": "fenix",
         "estagio": "Imortal",
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Brasa do Ninho",
+            "anuncio": "A ave abre as asas, e o fogo do ninho se acende nas penas.",
+            "mudancas": [
+              "Asa do Ninho protege todos os aliados dela ao mesmo tempo, não só um."
+            ]
+          },
+          {
+            "quando": 0.15,
+            "nome": "Última Pena",
+            "anuncio": "A ave pousa e deixa de bater as asas. Há uma pena caída no chão.",
+            "mudancas": [
+              "Se o grupo parar de atacá-la por uma rodada inteira, ela entrega a pena (Pena e Dívida) em vez de morrer. Se alguém a atacar de novo, a Fênix queima a pena e renasce uma vez, com metade da Vida."
+            ]
+          }
+        ]
       }
     },
     {
@@ -6003,7 +6040,25 @@
         "subtipo": "Vazio",
         "familia": "vazio",
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.6,
+            "nome": "A Tinta Sobe",
+            "anuncio": "O mar escurece de uma vez.",
+            "mudancas": [
+              "A Nuvem de Tinta cobre toda a cena: ataques contra ele de mais de 3 m têm desvantagem, e ele ganha vantagem em Furtividade."
+            ]
+          },
+          {
+            "quando": 0.25,
+            "nome": "Fúria das Profundezas",
+            "anuncio": "Os tentáculos batem na água como tambores.",
+            "mudancas": [
+              "Arrastar às Profundezas agarra duas criaturas por rodada em vez de uma."
+            ]
+          }
+        ]
       }
     },
     {
@@ -6065,7 +6120,26 @@
         "subtipo": "Vazio",
         "familia": "vazio",
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "O Estreito se Fecha",
+            "anuncio": "As paredes de água do estreito se juntam como uma boca.",
+            "mudancas": [
+              "O Sorvedouro deixa de ser uma vez por cena e roda no começo de cada rodada: quem está em alcance Longo refaz a resistência ou é puxado 3 m para o centro.",
+              "O Corpo de Maré recupera Vida igual a um décimo do golpe no fim de cada rodada, a não ser que ela tenha sofrido dano de fogo ou raio nessa rodada."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Maré Baixa",
+            "anuncio": "A água recua de repente e o fundo do estreito aparece, cheio de ossos.",
+            "mudancas": [
+              "Ela perde o Corpo de Maré e fica Lenta, mas o Arrancar passa a valer em toda rodada em que ela acerta um alvo agarrado."
+            ]
+          }
+        ]
       }
     },
     {
@@ -6122,7 +6196,18 @@
         "requer_autorizacao_mestre": true,
         "familia": "espirito",
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Naufrágio Revivido",
+            "anuncio": "O convés de um navio aparece em volta de vocês, com o casco rangendo e o mar a bordo.",
+            "mudancas": [
+              "O terreno vira o convés de um navio: toda criatura faz Reflexos no começo da rodada ou fica Caída.",
+              "Ele ganha uma ação de movimento extra por rodada, mas perde a Rajada Evasiva."
+            ]
+          }
+        ]
       }
     },
     {
@@ -22781,7 +22866,26 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Veredito Aberto",
+            "anuncio": "O arconte ergue a balança, e o salão inteiro se cala para ouvir a sentença.",
+            "mudancas": [
+              "Julgamento passa a valer sobre duas criaturas por rodada.",
+              "Quem mentir em voz alta diante dele sofre desvantagem no próximo ataque."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Sentença Final",
+            "anuncio": "A balança pende para um lado, e o arconte pronuncia o nome de alguém.",
+            "mudancas": [
+              "Toda criatura que ele julgou e que não cumpriu a sentença perde uma ação por rodada. Cumprir a sentença, ou aceitá-la em voz alta, encerra o efeito."
+            ]
+          }
+        ]
       }
     },
     {
@@ -22835,7 +22939,18 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Tempestade por Dentro",
+            "anuncio": "O gelo do peito racha, e uma nevasca sai de dentro do titã.",
+            "mudancas": [
+              "Nevasca vira aura permanente em alcance Médio: criaturas ali perdem 1 de Estamina no fim de cada rodada.",
+              "O gelo trincado baixa a Defesa dele em 3 e o deixa vulnerável a fogo."
+            ]
+          }
+        ]
       }
     },
     {
@@ -22890,7 +23005,18 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Sombras Soltas",
+            "anuncio": "Cada sombra do salão se solta do dono.",
+            "mudancas": [
+              "Multiplicar Sombras cria uma sombra a mais no começo de cada rodada, até um máximo de quatro.",
+              "Acender luzes revela o corpo verdadeiro: ele perde 5 de Defesa enquanto estiver sob luz forte."
+            ]
+          }
+        ]
       }
     },
     {
@@ -22952,7 +23078,19 @@
         "subtipo": "Vazio",
         "familia": "vazio",
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "A Boca Maior",
+            "anuncio": "A boca se abre por dentro da sala inteira.",
+            "mudancas": [
+              "Cresce Comendo passa a ir até +10, em vez de +5.",
+              "O Vão por onde ele veio se alarga: a cada rodada, uma criatura aleatória em alcance Longo faz Fortitude ou é puxada 6 m na direção da boca.",
+              "Fechar o Vão agora pede o dobro do esforço: o relógio do Vão ganha mais duas casas."
+            ]
+          }
+        ]
       }
     },
     {
@@ -26960,7 +27098,18 @@
         "requer_autorizacao_mestre": true,
         "familia": "mar",
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "O Recife Acorda",
+            "anuncio": "O recife no dorso da baleia acende como um vitral.",
+            "mudancas": [
+              "O Recife no Dorso vira terreno ativo: criaturas nele recuperam Vida igual a um vigésimo do golpe da baleia no começo do turno, e as dela têm vantagem em resistência.",
+              "O Canto Grave passa a ser mantido enquanto ela se concentra: se ela sofrer um golpe maior que um décimo da Vida, o canto cai."
+            ]
+          }
+        ]
       }
     },
     {
@@ -27301,7 +27450,18 @@
         "requer_autorizacao_mestre": true,
         "familia": "morto-vivo",
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "As Velas se Apagam",
+            "anuncio": "Uma a uma, as velas da procissão se apagam, e o cortejo acelera.",
+            "mudancas": [
+              "A cada rodada uma vela se apaga: o cortejo causa +1 de dano por dado, cumulativo até quatro velas.",
+              "Reacender uma vela (ação padrão, Religião contra a DT da cena) remove um acúmulo."
+            ]
+          }
+        ]
       }
     },
     {
@@ -27945,7 +28105,26 @@
         "requer_autorizacao_mestre": true,
         "familia": "vazio",
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Os Rostos Roubados",
+            "anuncio": "Alguns rostos da multidão agora têm o rosto de quem está na cena.",
+            "mudancas": [
+              "Tomar o Rosto passa a mirar uma criatura diferente por rodada.",
+              "A multidão se divide: o Mestre cria uma segunda entrada do coro, 10 abaixo na iniciativa, que age com metade do dano."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Sem Ninguém",
+            "anuncio": "A multidão para de falar de uma vez e olha para um só de vocês.",
+            "mudancas": [
+              "Todo o coro age contra a criatura que perdeu o rosto por último. Quem a defende, falando por ela, interrompe o efeito."
+            ]
+          }
+        ]
       }
     },
     {
@@ -28010,7 +28189,18 @@
         "requer_autorizacao_mestre": true,
         "familia": "vazio",
         "papel": "solo",
-        "unico": true
+        "unico": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Noite sem Constelação",
+            "anuncio": "O céu da cena perde mais uma constelação, e a luz some em círculo.",
+            "mudancas": [
+              "Rastro de Estrelas Mortas apaga uma fonte de luz por criatura em cena a cada rodada, em vez de uma só.",
+              "Fome de Brilho cura o dobro."
+            ]
+          }
+        ]
       }
     },
     {
@@ -34795,13 +34985,13 @@
       "conteudo": {
         "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra. Os golens falam por Libras, e ele aprendeu a ordem por gestos que o último arquiteto fez antes de desaparecer; quem sabe repetir esses gestos descobre que ele ainda espera a ordem de parar. Se Mutis cair, a cidade que guardava para de existir de repente, como se tivesse sido uma ordem a segurá-la de pé.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 180
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 18
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 4
         },
         "raridade": "lendario",
         "categoria": "Constructo",
@@ -34988,13 +35178,13 @@
       "conteudo": {
         "descricao": "Devora o momento em que as coisas aconteceram. Onde ele passa, as pessoas esquecem que o lugar existiu, e as estações perdem a ordem e se repetem. O que ele morde é a memória que o presente guarda. Se Aionofagos cair, o que ele devorou não volta, mas as pessoas lembram, devagar, de que algo foi comido.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 450
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 45
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 9
         },
         "raridade": "lendario",
         "categoria": "Aberração",
@@ -35046,7 +35236,26 @@
         "familia": "vazio",
         "unico": true,
         "disponivelNaLoja": false,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Antes de Ontem",
+            "anuncio": "O dia de ontem some, e vocês não lembram mais o que fizeram para chegar aqui.",
+            "mudancas": [
+              "Memória Comida passa a atingir todas as criaturas que ele ferir na rodada.",
+              "Estação Repetida: a cena repete, sem rolar, o efeito da última condição de cada criatura."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Esquecido de Si",
+            "anuncio": "Ele para, como quem esqueceu por que veio.",
+            "mudancas": [
+              "Quem lembrar a ele, em voz alta, o que ele devorou (Diplomacia contra a DT do Esquecimento Súbito) o faz perder a próxima ação."
+            ]
+          }
+        ]
       }
     },
     {
@@ -35056,13 +35265,13 @@
       "conteudo": {
         "descricao": "Um lugar onde deveria haver alguma coisa e não há. Cresce sobre o que consome, e o que resta parece sempre um pouco menor do que era. Quem chama por ela ouve a própria voz voltar mais fraca, e quem não chama é esquecido por ela por último. Se Lacuna cair, o que consumiu não volta, mas passa a doer, e é a primeira vez que a falta incomoda quem a sente.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 1600
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 160
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 32
         },
         "raridade": "lendario",
         "categoria": "Aberração",
@@ -35114,7 +35323,26 @@
         "familia": "vazio",
         "unico": true,
         "disponivelNaLoja": false,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Menor que Antes",
+            "anuncio": "Tudo na cena parece um pouco menor do que era.",
+            "mudancas": [
+              "Resto Menor passa a diminuir a Vida máxima do grupo em 15% por rodada em que ela causa dano.",
+              "Chamado Consumido passa a marcar também quem fala em voz baixa."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "O Que Não Foi Chamado",
+            "anuncio": "Lacuna procura alguém para consumir e não acha ninguém.",
+            "mudancas": [
+              "Se todos calam e ficam imóveis por uma rodada, ela perde o turno. Quem volta a chamar por ela é Marcado de novo."
+            ]
+          }
+        ]
       }
     },
     {
@@ -35124,13 +35352,13 @@
       "conteudo": {
         "descricao": "Vem depois de todo o resto, quando não sobra ninguém para chamá-lo de nada. Os que o viram descrevem só uma coisa: o momento antes de a voz falhar. Selah é a pausa que existe no fim de todas as frases, esticada até virar criatura. Se Selah cair, o que estava calado pode finalmente falar, e o primeiro som do mundo é a voz de quem se despede.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 2250
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 225
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 45
         },
         "raridade": "lendario",
         "categoria": "Aberração",
@@ -35182,7 +35410,26 @@
         "familia": "vazio",
         "unico": true,
         "disponivelNaLoja": false,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Pausa Longa",
+            "anuncio": "O som de tudo na cena baixa uma casa.",
+            "mudancas": [
+              "Quem Fala Perde passa a cobrar também de quem sussurra.",
+              "Pausa passa a valer sem limite de uso por rodada."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Silêncio Completo",
+            "anuncio": "Ninguém mais ouve a própria voz.",
+            "mudancas": [
+              "Ninguém consegue falar na cena: a comunicação é só por gestos, escrita ou olhar. Quem tenta falar sofre o dano de Quem Fala Perde em dobro."
+            ]
+          }
+        ]
       }
     },
     {
@@ -35438,13 +35685,13 @@
       "conteudo": {
         "descricao": "O fogo que continuou depois que o mundo esfriou. Cada passo dele deixa vidro no chão e um cheiro de pedra derretida no ar, e ele nunca perdoou o mundo por ter esfriado. Quando fala, as rochas em volta racham em tom de pergunta. Se Kalderon cair, o vulcão mais antigo da região se apaga por mil anos, e o mundo agradece em silêncio.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 450
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 45
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 9
         },
         "raridade": "lendario",
         "categoria": "Elemental",
@@ -35503,13 +35750,13 @@
       "conteudo": {
         "descricao": "O inverno que decidiu ficar. Onde ele para, o tempo passa mais devagar, e as pegadas dele continuam congeladas por séculos depois que ele se foi. Quando fala, o ar da sala vira cristal por um instante e quem escuta lembra, com clareza, a última vez que sentiu frio de verdade. Se Hiemark cair, o inverno que ele guardava se espalha pelas estações, e o próximo ano terá três meses a mais de neve.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 700
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 70
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 14
         },
         "raridade": "lendario",
         "categoria": "Elemental",
@@ -35687,13 +35934,13 @@
       "conteudo": {
         "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele. Fala sumeriano, em frases curtas, e pergunta primeiro o que o visitante veio pedir antes de decidir se vai ouvir. Se Anzhur cair, o fogo do mundo perde o nome mais antigo e passa uma geração inteira sem saber como se chamar.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 180
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 18
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 4
         },
         "raridade": "lendario",
         "categoria": "Lendário",
@@ -35751,13 +35998,13 @@
       "conteudo": {
         "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência tem o tamanho do território. Em sumeriano arcaico, diz que ainda não terminou, e que o dia em que parar de crescer será o dia em que escolher onde morrer. Se Kurnagal cair, o continente perde o ponto mais alto, e as montanhas passam a ser a ruína da cauda dele.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 450
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 45
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 9
         },
         "raridade": "lendario",
         "categoria": "Lendário",
@@ -35878,13 +36125,13 @@
       "conteudo": {
         "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala enoquiano, e cada palavra dele soa como uma frase de lei. Se Ezrakael cair, a ordem que carregava fica por cumprir, e algum lugar do Jardim espera uma resposta que não vem.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 280
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 28
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 6
         },
         "raridade": "lendario",
         "categoria": "Espírito",
@@ -35944,13 +36191,13 @@
       "conteudo": {
         "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em enoquiano, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas. Se Seraquiel cair, o canto continua em algum lugar, mais baixo, esperando alguém que o escute até o fim.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 700
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 70
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 14
         },
         "raridade": "lendario",
         "categoria": "Espírito",
@@ -36130,13 +36377,13 @@
       "conteudo": {
         "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão a ela um nome diferente em cada porto, e ela atende por todos, em latim de sereia, sem nunca corrigir ninguém. Navios que a chamam pelo nome certo costumam atravessar; os que a chamam de monstro raramente chegam em casa. Se Marenostra cair, os portos perdem o nome que davam a ela e nenhum marinheiro lembra por que rezava de olhos fechados.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 180
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 18
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 4
         },
         "raridade": "lendario",
         "categoria": "Monstro",
@@ -36195,13 +36442,13 @@
       "conteudo": {
         "descricao": "Uma onda que aprendeu a ir para onde quer. Passa por cima de cais, faróis e cidades pequenas, e volta para o mar como quem termina uma tarefa. Os que sobrevivem juram ter ouvido uma risada de criança dentro da água. Se Mareia cair, o oceano esquece que podia caminhar, e as marés voltam a obedecer só à lua.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 450
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 45
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 9
         },
         "raridade": "lendario",
         "categoria": "Elemental",
@@ -36812,13 +37059,13 @@
       "conteudo": {
         "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e a pergunta é sempre a mesma: por que tanta gente pequena em cima do meu chão? Fala grego antigo, devagar, como quem escolhe cada pedra. Se Pelóros cair, a cordilheira onde dormia perde a forma que tinha, e a cidade que ficava à sombra dela passa a ficar à luz.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 100
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 10
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 2
         },
         "raridade": "lendario",
         "categoria": "Monstro",
@@ -36942,13 +37189,13 @@
       "conteudo": {
         "descricao": "Uma hidra tão antiga que cada cabeça já foi uma hidra inteira. Ocupa um lago sem esforço, e o lago não ousa esvaziar. As cabeças moram em corpos diferentes, e quando uma morre a outra a sepulta em silêncio com a língua. Se Hydrath cair, o lago que a abrigava devolve as sete mil pedras que ela usava para contar as cabeças.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 280
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 28
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 6
         },
         "raridade": "lendario",
         "categoria": "Monstro",
@@ -37069,13 +37316,13 @@
       "conteudo": {
         "descricao": "Diz a lenda que espera o último dia de tudo, e que o sopro dele é a última coisa que o mundo conhece. Quem duvida da lenda nunca chegou perto das asas dele. Dorme sobre uma montanha de ouro, relógios e armas quebradas, e acorda só quando o que ele guarda deixa de fazer sentido. Se Apokalyx cair, o último dia se adia, e o mundo ganha um prazo que não pediu.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 1100
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 110
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 22
         },
         "raridade": "lendario",
         "categoria": "Lendário",
@@ -37124,7 +37371,26 @@
         "geradoPorFamilia": true,
         "unico": true,
         "disponivelNaLoja": false,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Montanha Desperta",
+            "anuncio": "A montanha de relógios e armas quebradas desaba atrás dele.",
+            "mudancas": [
+              "Tesouro do Fim pode ser lançado em toda rodada, não só uma vez por cena.",
+              "O Prazo cai mais uma rodada de uma vez."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Sopro sem Aviso",
+            "anuncio": "O dragão não anuncia mais nada. O ar em volta já está quente.",
+            "mudancas": [
+              "Se o Prazo chegou a 0, ele faz o Sopro do Último Dia sem anunciar. Se o Prazo ainda não chegou, destruir os relógios restantes do tesouro o faz perder a ação."
+            ]
+          }
+        ]
       }
     },
     {
@@ -37252,13 +37518,13 @@
       "conteudo": {
         "descricao": "Chega sempre um instante depois de tudo acabar, e é isso que o torna terrível: ele decide o que a última hora significou. Os que sobreviveram a ele evitam relógios. Monta um cavalo pálido que não deixa pegada, e as armas dele são ponteiros de um relógio que ninguém sabe onde fica. Se Ser Horário cair, a hora em que perdeu passa a ser lembrada como o dia em que algo terminou de verdade.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 280
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 28
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 6
         },
         "raridade": "lendario",
         "categoria": "Morto-Vivo",
@@ -37308,7 +37574,26 @@
         "geradoPorFamilia": true,
         "unico": true,
         "disponivelNaLoja": false,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Meia-Noite",
+            "anuncio": "Ao longe, um relógio bate doze vezes.",
+            "mudancas": [
+              "Última Badalada passa a soar a cada rodada ímpar, não só uma vez.",
+              "O Cavalo Pálido ganha uma investida extra por rodada."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Hora Zero",
+            "anuncio": "Todos os relógios da cena marcam a mesma hora, e ela é a deles.",
+            "mudancas": [
+              "Hora Marcada passa a valer sobre duas criaturas ao mesmo tempo."
+            ]
+          }
+        ]
       }
     },
     {
@@ -37318,13 +37603,13 @@
       "conteudo": {
         "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Dizem em nórdico antigo que, quando ela afrouxa o abraço, as marés respondem, e que, quando soltar de vez, o mundo não vai ter onde se apoiar. Dorme de olhos abertos e sonha com o mar de antes de haver mar. Se Jörmund cair, o abraço se desfaz e o mundo precisa descobrir de repente como ficar de pé sozinho.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 450
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 45
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 9
         },
         "raridade": "lendario",
         "categoria": "Lendário",
@@ -37373,7 +37658,26 @@
         "geradoPorFamilia": true,
         "unico": true,
         "disponivelNaLoja": false,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Afrouxando o Abraço",
+            "anuncio": "As marés recuam de uma vez, e a terra sente falta do peso.",
+            "mudancas": [
+              "A cauda fica exposta o tempo todo: atacá-la causa dano normal a Jörmund, com Defesa 5 menor, sem o grupo precisar tê-la reduzido a um terço.",
+              "Cauda na Boca passa a ser usada a cada duas rodadas."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Quando Soltar",
+            "anuncio": "A boca solta a cauda, e o chão inteiro cede por um instante.",
+            "mudancas": [
+              "Todos fazem Fortitude contra o efeito de Cauda na Boca, mas Jörmund perde Abraço do Mundo até o fim da cena. Se o grupo se afastar da cauda solta, a luta pode acabar em recuo."
+            ]
+          }
+        ]
       }
     },
     {
@@ -37383,13 +37687,13 @@
       "conteudo": {
         "descricao": "Nunca é visto duas vezes do mesmo jeito. O que ele deixou para trás são relógios parados em horas diferentes e pessoas com idade demais ou de menos. Quem ele alcança perde segundos, e quem fica sem segundos perde, devagar, a vez de agir. Se Ussurr cair, os segundos que roubou voltam, todos ao mesmo tempo, e quem os recebe vive um instante de sobra por cada um que perdeu.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 700
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 70
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 14
         },
         "raridade": "lendario",
         "categoria": "Aberração",
@@ -37440,7 +37744,26 @@
         "geradoPorFamilia": true,
         "unico": true,
         "disponivelNaLoja": false,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Segundos Contados",
+            "anuncio": "Os relógios de quem está na cena batem fora de compasso.",
+            "mudancas": [
+              "Instante Furtado passa a roubar a ação de duas criaturas por rodada.",
+              "O efeito de Idade Trocada dura até o próximo descanso, em vez de até o fim da cena."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Sem Tempo para Ele",
+            "anuncio": "O ladrão de instantes acelera e começa a perder os seus.",
+            "mudancas": [
+              "Ussurr perde Sem Duas Vezes e age duas vezes por rodada, mas cada ação sua gasta um segundo do relógio do Mestre: depois de três rodadas ele foge."
+            ]
+          }
+        ]
       }
     },
     {
@@ -37450,13 +37773,13 @@
       "conteudo": {
         "descricao": "Uma figura sem pressa, com o passo de quem já sabe como cada caminho termina. Aparece onde tudo já estava terminando, e o que sobra é um silêncio educado. Ninguém o vê chegar, só percebe que ele já estava lá, de pé, esperando o fim da frase. Se Teleios cair, o que ele ia encerrar continua aberto, e alguém no Jardim precisa decidir se quer terminar sozinho.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 1100
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 110
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 22
         },
         "raridade": "lendario",
         "categoria": "Lendário",
@@ -37506,7 +37829,26 @@
         "geradoPorFamilia": true,
         "unico": true,
         "disponivelNaLoja": false,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Passo que Acelera",
+            "anuncio": "O passo dele não muda, mas a sala fica mais perto do fim.",
+            "mudancas": [
+              "Ponto Final passa a ser usado uma vez por rodada, só sobre efeitos de quem já está com metade da Vida.",
+              "Só o Que Já Acaba passa a incluir quem desistiu em voz alta, mesmo com a Vida alta."
+            ]
+          },
+          {
+            "quando": 0.15,
+            "nome": "Reticências",
+            "anuncio": "Teleios hesita pela primeira vez, como quem lê uma frase que não terminou.",
+            "mudancas": [
+              "Qualquer ato deliberado de salvar alguém ou acender uma luz faz Teleios perder a ação do turno."
+            ]
+          }
+        ]
       }
     },
     {
@@ -37516,13 +37858,13 @@
       "conteudo": {
         "descricao": "Carrega o céu nos ombros desde antes de haver quem olhasse para cima. Quando muda de posição, as estações mudam de lugar, e o que diz em voz baixa vira lei nos vales. Está cansado, mas a palavra cansaço soa nele como um favor pedido a um vizinho. Se Atlarion cair, o céu cai com ele, ou alguém precisa de ombros que ninguém tem.",
         "preco": {
-          "Solares": 3200
+          "Fragmentos de Estrela": 1600
         },
         "preco_contratacao": {
-          "Lunaris": 30000
+          "Fragmentos de Estrela": 160
         },
         "contrato_mensal": {
-          "Lunaris": 6000
+          "Fragmentos de Estrela": 32
         },
         "raridade": "lendario",
         "categoria": "Lendário",
@@ -37571,7 +37913,26 @@
         "geradoPorFamilia": true,
         "unico": true,
         "disponivelNaLoja": false,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "O Céu Pesa",
+            "anuncio": "O céu desce um palmo.",
+            "mudancas": [
+              "Peso do Firmamento reduz o deslocamento de todos à metade.",
+              "Ombros Cansados passa a disparar com qualquer dano acima de um vigésimo da Vida dele."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Quem Segura o Céu",
+            "anuncio": "Atlarion respira fundo e, por um instante, olha para vocês em vez de olhar para cima.",
+            "mudancas": [
+              "Se o grupo ajudar a sustentar o céu por uma rodada, Atlarion fica Atordoado e a luta pode terminar em acordo. Se não, o céu pesa de novo sobre todos."
+            ]
+          }
+        ]
       }
     }
   ]

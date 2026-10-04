@@ -99,8 +99,12 @@ COMANDOS_ESPERADOS = {
     "cacar",
     "contratar_guarda",
     "mercado_negro",
+    "mercado_negro_encomenda_cancelar",
+    "mercado_negro_encomendar",
+    "mercado_negro_encomendas",
     "mercado_negro_vender",
     "mestre_calor",
+    "mestre_mercadoria_quente",
     "mestre_cooldown",
     "mestre_curar",
     "mestre_dar_protecao",
@@ -174,6 +178,28 @@ async def _inventario_real() -> set[str]:
         }
     finally:
         await bot.close()
+
+
+async def _comandos_de_primeiro_nivel() -> list[str]:
+    bot = commands.Bot(command_prefix="!", intents=discord.Intents.default())
+    bot.db = object()
+    bot.catalogo = object()
+    bot.platform = None
+    try:
+        for extensao in EXTENSOES:
+            await bot.load_extension(extensao)
+        return [comando.name for comando in bot.tree.get_commands()]
+    finally:
+        await bot.close()
+
+
+def test_cabe_nos_limites_de_comandos_do_discord():
+    # O Discord aceita 100 comandos globais por bot (um grupo conta como um) e nomes de até 32 caracteres.
+    # Passando disso o sync inteiro falha e o bot fica sem nenhum comando novo.
+    nomes = asyncio.run(_comandos_de_primeiro_nivel())
+    assert len(nomes) <= 100, f"{len(nomes)} comandos: passou do limite do Discord"
+    assert all(len(nome) <= 32 for nome in nomes), [n for n in nomes if len(n) > 32]
+    assert all(nome == nome.lower() and " " not in nome for nome in nomes)
 
 
 def _inventario_ajuda() -> set[str]:

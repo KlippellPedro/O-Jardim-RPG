@@ -1,7 +1,7 @@
 import type { LoreEntry } from '../../../data/gerado/mundoCatalog';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { BookMarked, BookOpen, CalendarDays, Compass, History, Lock, ShoppingBag } from 'lucide-react';
+import { BookMarked, BookOpen, CalendarDays, Compass, History, Lock, ScrollText, ShoppingBag } from 'lucide-react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useResolvedWorld } from '../../hooks/useResolvedWorld';
 import { ARVORES, VAZIO_ID, arvoreVisivel, corDeInterface } from '../../../data/mundo/arvoresCatalog';
@@ -323,6 +323,15 @@ export const MundoPage: React.FC = () => {
             >
               <CalendarDays size={15} /> Calendário e estações
             </button>}
+            {campanhaAtiva && (
+              <button
+                type="button"
+                onClick={() => navigate('/mundo/livro-da-verdade')}
+                className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-black/25 px-4 py-2 text-xs font-bold uppercase tracking-widest text-red-300 transition hover:border-red-300/60 hover:bg-red-400/5"
+              >
+                <ScrollText size={15} /> Livro da Verdade
+              </button>
+            )}
             {registrosUniversaisVisiveis && (
               <button
                 type="button"

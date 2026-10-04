@@ -1,9 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Eye, Shield, Sparkles, Swords, Target, User, Users } from 'lucide-react';
+import { BookOpen, Eye, Shield, Sparkles, Swords, Target, User, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useSessaoStore, type EntidadeIniciativa } from '../../../store/useSessaoStore';
 import { useCharacterStore } from '../../../store/useCharacterStore';
+import { sessaoApi, type BestiarioMonstro } from '../../../services/sessaoApi';
+import { CriaturaDetalhe } from './CriaturaDetalhe';
+import { corDoVd } from './BestiarioPicker';
 
 interface EntityMetrics {
   hpCurrent?: number;
@@ -98,6 +101,7 @@ const RosterCard: React.FC<RosterCardProps> = ({ entity, metrics, active, select
       <span className="session-roster-card__body">
         <span className="session-roster-card__heading">
           <strong>{entity.nome}</strong>
+          {entity.fase ? <em className="session-roster-card__fase" title={entity.faseNome ?? 'Fase de chefe'}>Fase {entity.fase}</em> : null}
           {active ? <em>Turno</em> : null}
         </span>
         <span className="session-roster-card__subline">
@@ -192,9 +196,12 @@ const TeamLane: React.FC<TeamLaneProps> = ({
 );
 
 export const ActiveTurnCard: React.FC = () => {
-  const { iniciativa, turnoAtualIndex, turnoAtualId, emCombate, rodada, comando } = useSessaoStore();
+  const { iniciativa, turnoAtualIndex, turnoAtualId, emCombate, rodada, comando, campanhaId } = useSessaoStore();
   const { characters, fetchCharacters } = useCharacterStore();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  // Ficha completa da criatura (habilidades, atributos, saque): só o Mestre recebe `monstroId`.
+  const [bestiario, setBestiario] = useState<BestiarioMonstro[] | null>(null);
+  const [fichaAberta, setFichaAberta] = useState<BestiarioMonstro | null>(null);
   const reduceMotion = useReducedMotion();
   const navigate = useNavigate();
 
@@ -224,6 +231,16 @@ export const ActiveTurnCard: React.FC = () => {
   }, [iniciativa, selectedId]);
 
   const selectedEntity = iniciativa.find((entity) => entity.id === selectedId) ?? activeEntity ?? iniciativa[0];
+  const monstroDoFoco = selectedEntity?.monstroId ? bestiario?.find((item) => item.id === selectedEntity.monstroId) ?? null : null;
+
+  useEffect(() => {
+    if (!comando || !campanhaId || !selectedEntity?.monstroId || bestiario) return;
+    let cancelado = false;
+    sessaoApi.listarBestiario(campanhaId)
+      .then((resposta) => { if (!cancelado) setBestiario(resposta?.monstros ?? []); })
+      .catch(() => { if (!cancelado) setBestiario([]); });
+    return () => { cancelado = true; };
+  }, [comando, campanhaId, selectedEntity?.monstroId, bestiario]);
   const party = iniciativa.filter((entity) => entity.tipo !== 'inimigo');
   const enemies = iniciativa.filter((entity) => entity.tipo === 'inimigo');
 
@@ -303,16 +320,32 @@ export const ActiveTurnCard: React.FC = () => {
                 <p>{isSelectedTurn ? <><Swords size={13} /> Turno atual</> : 'Ficha em foco'}</p>
                 <h1>{selectedEntity.nome}</h1>
                 <span>{entityTypeLabel(selectedEntity.tipo)} · iniciativa {selectedEntity.iniciativa}</span>
+                {selectedEntity.fase ? (
+                  <span className="session-focus-card__fase">Fase {selectedEntity.fase}{selectedEntity.fasesTotal ? ` de ${selectedEntity.fasesTotal}` : ''}{selectedEntity.faseNome ? ` · ${selectedEntity.faseNome}` : ''}</span>
+                ) : null}
               </div>
-              {selectedEntity.personagemId ? (
-                <button
-                  type="button"
-                  onClick={() => navigate(`/ficha/${selectedEntity.personagemId}`)}
-                  className="session-focus-card__sheet-link"
-                  data-tour="session-sheet-link"
-                >
-                  <Eye size={15} /> Abrir ficha
-                </button>
+              {monstroDoFoco || selectedEntity.personagemId ? (
+                <div className="session-focus-card__actions">
+                  {monstroDoFoco ? (
+                    <button
+                      type="button"
+                      onClick={() => setFichaAberta(monstroDoFoco)}
+                      className="session-focus-card__sheet-link"
+                    >
+                      <BookOpen size={15} /> Ficha completa
+                    </button>
+                  ) : null}
+                  {selectedEntity.personagemId ? (
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/ficha/${selectedEntity.personagemId}`)}
+                      className="session-focus-card__sheet-link"
+                      data-tour="session-sheet-link"
+                    >
+                      <Eye size={15} /> Abrir ficha
+                    </button>
+                  ) : null}
+                </div>
               ) : null}
             </div>
 
@@ -336,34 +369,53 @@ export const ActiveTurnCard: React.FC = () => {
               </div>
             </div>
 
+            {selectedEntity.fase && (selectedEntity.faseMudancas?.length || selectedEntity.faseAnuncio) ? (
+              <div className="session-focus-card__phase">
+                <span>O que mudou na fase {selectedEntity.fase}</span>
+                {selectedEntity.faseAnuncio ? <p className="session-focus-card__phase-anuncio">{selectedEntity.faseAnuncio}</p> : null}
+                {selectedEntity.faseMudancas?.length ? (
+                  <ul>
+                    {selectedEntity.faseMudancas.map((mudanca) => <li key={mudanca}>{mudanca}</li>)}
+                  </ul>
+                ) : null}
+              </div>
+            ) : null}
+
             {selectedEntity.condicoes.length || selectedEntity.ataques?.length || selectedEntity.pericias?.length ? (
               <div className="session-focus-card__details">
-                {selectedEntity.condicoes.length ? (
-                  <div className="session-focus-card__detail-group">
-                    <span>Condições</span>
-                    <div>
-                      {selectedEntity.condicoes.slice(0, 4).map((condition) => (
-                        <em key={`${condition.nome}-${condition.turnos ?? 'p'}`}>
-                          {condition.nome}{condition.turnos ? ` · ${condition.turnos}` : ''}
-                        </em>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
                 {selectedEntity.ataques?.length ? (
-                  <div className="session-focus-card__detail-group">
-                    <span>Ataques</span>
-                    <div>
-                      {selectedEntity.ataques.slice(0, 3).map((attack, index) => (
-                        <em key={`${attack.nome}-${index}`}>{attack.nome}{attack.detalhe ? ` · ${attack.detalhe}` : ''}</em>
+                  <div className="session-focus-card__detail-group session-focus-card__detail-group--wide">
+                    <span>Ataques e poderes</span>
+                    <ul className="session-focus-card__attacks">
+                      {selectedEntity.ataques.map((attack, index) => (
+                        <li key={`${attack.nome}-${index}`}>
+                          <strong>{attack.nome}</strong>
+                          {attack.detalhe ? <p>{attack.detalhe}</p> : null}
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
                 ) : null}
-                {selectedEntity.pericias?.length ? (
+                {selectedEntity.pericias?.length || selectedEntity.condicoes.length ? (
                   <div className="session-focus-card__detail-group">
-                    <span>Perícias</span>
-                    <div>{selectedEntity.pericias.slice(0, 4).map((skill) => <em key={skill}>{skill}</em>)}</div>
+                    {selectedEntity.pericias?.length ? (
+                      <>
+                        <span>Perícias</span>
+                        <div>{selectedEntity.pericias.map((skill) => <em key={skill}>{skill}</em>)}</div>
+                      </>
+                    ) : null}
+                    {selectedEntity.condicoes.length ? (
+                      <>
+                        <span className="session-focus-card__detail-gap">Condições</span>
+                        <div>
+                          {selectedEntity.condicoes.map((condition) => (
+                            <em key={`${condition.nome}-${condition.turnos ?? 'p'}`}>
+                              {condition.nome}{condition.turnos ? ` · ${condition.turnos}` : ''}
+                            </em>
+                          ))}
+                        </div>
+                      </>
+                    ) : null}
                   </div>
                 ) : null}
               </div>
@@ -395,6 +447,16 @@ export const ActiveTurnCard: React.FC = () => {
             onSelect={setSelectedId}
           />
         </div>
+
+        {fichaAberta ? (
+          <CriaturaDetalhe
+            campanhaId={campanhaId ?? undefined}
+            monstro={fichaAberta}
+            familia={null}
+            cor={corDoVd(fichaAberta.vd)}
+            onFechar={() => setFichaAberta(null)}
+          />
+        ) : null}
 
         <p className="session-stage__hint">Selecione uma ficha na mesa para consultar seus recursos sem perder a visão do combate.</p>
       </motion.div>

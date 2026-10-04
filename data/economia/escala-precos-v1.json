@@ -345,7 +345,7 @@
     "Fragmentos de Estrela": 50
   },
   "verba_de_aventura": {
-    "_nota": "Quanto pagar por sessao, por jogador, para que o grupo acompanhe a propria faixa de equipamento sem estourar a escada. A conta e simples: cerca de 1/4 de um item da raridade que aquela faixa de nivel deveria estar usando, entao ~4 sessoes compram uma peca nova. Dobre num fim de arco, triplique num fim de temporada.",
+    "_nota": "Quanto pagar por sessao, por jogador, para que o grupo acompanhe a propria faixa de equipamento sem estourar a escada. A conta e simples: cerca de 1/4 de um item da raridade que aquela faixa de nivel deveria estar usando, entao ~4 sessoes compram uma peca nova. Dobre num fim de arco, triplique num fim de temporada. Do nivel 41 em diante a escada de compra acaba e a verba passa a medir o que o grupo tem para gastar quando o Mestre abre a porta do Mitico e da Reliquia: a conta continua a mesma (4 sessoes, uma peca), so que a peca agora vem das faixas de Fragmentos. A partir do 41 a verba nao tem teto de nivel: a ultima faixa vale para qualquer nivel acima dela.",
     "faixas": [
       {
         "niveis": "1-4",
@@ -398,6 +398,69 @@
         "por_sessao_lunaris": 50000,
         "moeda": "Solares",
         "por_sessao_solares": 500
+      },
+      {
+        "niveis": "41-49",
+        "raridade_alvo": "lendario",
+        "por_sessao_lunaris": 60000,
+        "moeda": "Solares",
+        "por_sessao_solares": 600
+      },
+      {
+        "niveis": "50-59",
+        "raridade_alvo": "lendario/mitico",
+        "por_sessao_lunaris": 100000,
+        "moeda": "Fragmentos de Estrela",
+        "por_sessao_fragmentos": 20
+      },
+      {
+        "niveis": "60-79",
+        "raridade_alvo": "mitico",
+        "por_sessao_lunaris": 175000,
+        "moeda": "Fragmentos de Estrela",
+        "por_sessao_fragmentos": 35
+      },
+      {
+        "niveis": "80-99",
+        "raridade_alvo": "mitico",
+        "por_sessao_lunaris": 275000,
+        "moeda": "Fragmentos de Estrela",
+        "por_sessao_fragmentos": 55
+      },
+      {
+        "niveis": "100-149",
+        "raridade_alvo": "mitico/reliquia",
+        "por_sessao_lunaris": 450000,
+        "moeda": "Fragmentos de Estrela",
+        "por_sessao_fragmentos": 90
+      },
+      {
+        "niveis": "150-199",
+        "raridade_alvo": "mitico/reliquia",
+        "por_sessao_lunaris": 700000,
+        "moeda": "Fragmentos de Estrela",
+        "por_sessao_fragmentos": 140
+      },
+      {
+        "niveis": "200-299",
+        "raridade_alvo": "reliquia",
+        "por_sessao_lunaris": 1100000,
+        "moeda": "Fragmentos de Estrela",
+        "por_sessao_fragmentos": 220
+      },
+      {
+        "niveis": "300-499",
+        "raridade_alvo": "reliquia",
+        "por_sessao_lunaris": 1600000,
+        "moeda": "Fragmentos de Estrela",
+        "por_sessao_fragmentos": 320
+      },
+      {
+        "niveis": "500+",
+        "raridade_alvo": "reliquia",
+        "por_sessao_lunaris": 2250000,
+        "moeda": "Fragmentos de Estrela",
+        "por_sessao_fragmentos": 450
       }
     ]
   },
@@ -508,5 +571,96 @@
       }
     ],
     "por_que_aventureiro_enriquece": "Um contrato de criatura Rara paga 50 Solares, ou 5.000 Lunaris, que e mais de um ano de salario minimo numa Arvore. E por isso que um grupo de nivel medio anda com dinheiro de nobre e origem de trabalhador. A contradicao e boa materia de cena, e o custo de vida triplicado do Vazio e o freio natural dela."
+  },
+  "alcance_das_classes_sociais": {
+    "_nota": "Quando um grupo, juntando a verba de todos sem gastar, passa a ter o patrimonio de uma classe social. Quatro jogadores, uma sessao por vez. Serve para o Mestre saber a partir de que nivel o dinheiro deixa de ser obstaculo e o que passa a mandar e o titulo, o territorio e o pacto.",
+    "degraus": [
+      {
+        "classe": "Realeza de reino",
+        "patrimonio_fragmentos": 400,
+        "sessoes_de_um_grupo_de_quatro": {
+          "nivel_50": 5,
+          "nivel_60": 3,
+          "nivel_100": 2
+        }
+      },
+      {
+        "classe": "Dono de Dimensao",
+        "patrimonio_fragmentos": 1600,
+        "sessoes_de_um_grupo_de_quatro": {
+          "nivel_100": 5,
+          "nivel_150": 3,
+          "nivel_200": 2
+        }
+      },
+      {
+        "classe": "Soberano",
+        "patrimonio_fragmentos": null,
+        "observacao": "nao se conta: uma Cadeira requisita, nao compra"
+      }
+    ]
+  },
+  "guilda_dos_cacadores_alto": {
+    "_nota": "Teto do que a Guilda dos Cacadores paga por uma criatura de VD alto. A contratacao de gente (mercenario, ajudante) segue a formula de preco do capitulo de Bestiario, que vale em qualquer nivel.",
+    "regra": "O contrato vale metade do preco de catalogo da criatura; a Guilda fica com a outra metade.",
+    "teto_por_criatura_solares": 1600,
+    "motivo": "Toda criatura Lendaria do Bestiario de VD 45 a 49 esta no catalogo entre 2.500 e 3.200 Solares, e a partir do VD 50 o preco sobe com a verba (ver criaturas_de_vd_alto). O contrato nao passa de 1.600 Solares: acima desse porte a Guilda paga em titulo, terra ou favor, e nunca em moeda."
+  },
+  "criaturas_de_vd_alto": {
+    "_nota": "Preco das criaturas do Bestiario de VD 50 em diante, que seguem a verba por sessao em vez da banda de raridade (a banda Lendaria termina em 3.200 Solares, que no nivel 500 e uma fracao de sessao). Contratar custa metade da verba de uma sessao de um jogador do nivel, em Fragmentos de Estrela; comprar custa dez contratacoes; a mensalidade e 20% da contratacao. De VD 45 a 49 vale a banda Lendaria de sempre. O normalizador de precos (tools/normalize-shop-prices.mjs) grava estes valores no catalogo e o teste de integridade confere.",
+    "fracao_da_verba_na_contratacao": 0.5,
+    "compra_em_contratacoes": 10,
+    "mensalidade_da_contratacao": 0.2,
+    "vd_minimo": 50,
+    "faixas": [
+      {
+        "vd": "50-59",
+        "contratacao_fragmentos": 10,
+        "mensalidade_fragmentos": 2,
+        "compra_fragmentos": 100
+      },
+      {
+        "vd": "60-79",
+        "contratacao_fragmentos": 18,
+        "mensalidade_fragmentos": 4,
+        "compra_fragmentos": 180
+      },
+      {
+        "vd": "80-99",
+        "contratacao_fragmentos": 28,
+        "mensalidade_fragmentos": 6,
+        "compra_fragmentos": 280
+      },
+      {
+        "vd": "100-149",
+        "contratacao_fragmentos": 45,
+        "mensalidade_fragmentos": 9,
+        "compra_fragmentos": 450
+      },
+      {
+        "vd": "150-199",
+        "contratacao_fragmentos": 70,
+        "mensalidade_fragmentos": 14,
+        "compra_fragmentos": 700
+      },
+      {
+        "vd": "200-299",
+        "contratacao_fragmentos": 110,
+        "mensalidade_fragmentos": 22,
+        "compra_fragmentos": 1100
+      },
+      {
+        "vd": "300-499",
+        "contratacao_fragmentos": 160,
+        "mensalidade_fragmentos": 32,
+        "compra_fragmentos": 1600
+      },
+      {
+        "vd": "500+",
+        "contratacao_fragmentos": 225,
+        "mensalidade_fragmentos": 45,
+        "compra_fragmentos": 2250
+      }
+    ]
   }
 }

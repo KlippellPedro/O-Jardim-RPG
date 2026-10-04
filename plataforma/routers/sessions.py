@@ -11,6 +11,8 @@ from psycopg.types.json import Jsonb
 from core.audit import record_audit
 from core.character_summary import iniciativa_fixa, sabedoria_desempate
 from core.deidades import para_o_bestiario as deidades_do_bestiario
+from core.fases import fase_alcancada, fases_do_catalogo, fases_limpas
+from core import lendas as livro_da_verdade
 from core.progressao_niveis import xp_por_vd
 from core.combate_intenso import CANSACO_MAXIMO, encerrar_combate_e_cansar, iniciar_marcas, registrar_minimos
 from core.condicoes import decrementar_condicoes, normalizar_condicoes
@@ -167,7 +169,7 @@ def _participantes(connection, sessao_id: UUID):
                mana_atual, mana_maxima, ataques, vd, pericias,
                vida_temporaria, mana_temporaria,
                estamina_atual, estamina_maxima, estamina_temporaria,
-               monstro_id, loot,
+               monstro_id, loot, fase,
                (SELECT p.ficha->'aflicoesAtivas' FROM personagens p
                 WHERE p.id=sessao_participantes.personagem_id) AS aflicoes
         FROM sessao_participantes
@@ -225,6 +227,7 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
     }
 
     ajustes_loot = ajustes_da_campanha(connection, sessao["campanha_id"]) if manda else {}
+    fases_por_criatura = fases_do_catalogo(connection, (linha["monstro_id"] for linha in linhas))
     participantes = []
     for indice, linha in enumerate(linhas):
         item = dict(linha)
@@ -274,6 +277,21 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             publico["vd"] = item["vd"]
         if mostra_identidade:
             publico["estado_vida"] = _estado_da_vida(item["vida_atual"], item["vida_maxima"])
+        fases = fases_por_criatura.get(item["monstro_id"]) or []
+        fase_atual = int(item["fase"] or 1)
+        if fases and mostra_identidade and fase_atual > 1:
+            # A mesa ouve só a frase de cena da fase em que a criatura está.
+            publico["fase"] = fase_atual
+            publico["fase_anuncio"] = fases[min(fase_atual, len(fases) + 1) - 2]["anuncio"]
+        if fases and manda:
+            # O que muda de regra e o resumo das fases são do Mestre.
+            publico["fase"] = fase_atual
+            publico["fases_total"] = len(fases) + 1
+            publico["fases_resumo"] = [{"nome": "Começo", "quando": None}] + [{"nome": f["nome"], "quando": f["quando"]} for f in fases]
+            if fase_atual > 1:
+                atual_da_fase = fases[min(fase_atual, len(fases) + 1) - 2]
+                publico["fase_nome"] = atual_da_fase["nome"]
+                publico["fase_mudancas"] = atual_da_fase["mudancas"]
         # O id da ficha abre o atalho "Abrir ficha": vai para quem comanda e
         # para o dono do personagem, nunca para quem não pode ver aquela ficha.
         if revela_tudo:
@@ -311,6 +329,8 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             "turno_de": turno_de,
         },
         "participantes": participantes,
+        # Lendas que caíram nesta sessão (a mesa inteira vê: a queda é um fato público).
+        "lendas": livro_da_verdade.da_sessao(connection, sessao["id"]),
         "meu_papel": papel,
         "comando": manda,
         "bloqueada": False,
@@ -911,6 +931,10 @@ def adicionar_participante(
                 payload.monstro_id,
             ),
         )
+        if sessao["em_combate"] and payload.monstro_id:
+            livro_da_verdade.registrar_encontro_sem_quebrar(
+                connection, campanha_id=sessao["campanha_id"], sessao_id=sessao_id
+            )
         versao = _tocar(connection, sessao_id)
         campanha_id = sessao["campanha_id"]
     live_session.publicar(campanha_id, "participante_adicionado", versao)
@@ -931,7 +955,8 @@ def atualizar_participante(
         atual = connection.execute(
             """
             SELECT id, nome, vida_atual, vida_maxima, personagem_id,
-                   vida_temporaria, mana_temporaria, estamina_temporaria
+                   vida_temporaria, mana_temporaria, estamina_temporaria,
+                   monstro_id, fase
             FROM sessao_participantes
             WHERE id=%s AND sessao_id=%s FOR UPDATE
             """,
@@ -961,9 +986,21 @@ def atualizar_participante(
         # deixamos ultrapassar o máximo por cura.
         vida_atual = max(-999, min(vida_atual, vida_maxima if vida_maxima else vida_atual))
 
+        # Fase de chefe: a Vida avança sozinha, o Mestre pode ajustar à mão, e a fase
+        # nunca desce por cura. Só criatura do catálogo com `fases` tem fase.
+        fase = int(atual["fase"] or 1)
+        fases_da_criatura = fases_do_catalogo(connection, [atual["monstro_id"]]).get(atual["monstro_id"]) or []
+        if payload.fase is not None:
+            if not fases_da_criatura or payload.fase > len(fases_da_criatura) + 1:
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="essa criatura nao tem essa fase")
+            fase = payload.fase
+        elif fases_da_criatura:
+            fase = fase_alcancada(fases_da_criatura, vida_atual, vida_maxima, fase)
+
         row = connection.execute(
             """
             UPDATE sessao_participantes SET
+                fase=%s,
                 nome=COALESCE(%s, nome),
                 iniciativa=COALESCE(%s, iniciativa),
                 vida_atual=%s,
@@ -984,9 +1021,10 @@ def atualizar_participante(
                 pericias=COALESCE(%s, pericias),
                 atualizado_em=CURRENT_TIMESTAMP
             WHERE id=%s AND sessao_id=%s
-            RETURNING id, nome, vida_atual, vida_maxima
+            RETURNING id, nome, vida_atual, vida_maxima, fase
             """,
             (
+                fase,
                 payload.nome,
                 payload.iniciativa,
                 vida_atual,
@@ -1070,6 +1108,16 @@ def atualizar_participante(
             ).fetchone()
             versao_ficha = int(linha_ficha["versao"]) if linha_ficha else versao_ficha
         registrar_minimos(connection, sessao_id)
+        # Lenda do Bestiário a 0 de Vida: o Livro da Verdade abre a página dela (core/lendas.py).
+        if alterou_vida and vida_maxima > 0 and vida_atual <= 0 and livro_da_verdade.eh_lenda(atual["monstro_id"]):
+            livro_da_verdade.registrar_queda_sem_quebrar(
+                connection,
+                campanha_id=sessao["campanha_id"],
+                monstro_id=atual["monstro_id"],
+                sessao_id=sessao_id,
+                participante_id=participante_id,
+                ator_id=user.id,
+            )
         # Estamina segue o mesmo caminho da Mana: o que o Mestre ajusta no HUD
         # tem que chegar na ficha, senão o jogador vê outro número.
         campos_estamina = {}
@@ -1368,6 +1416,7 @@ def listar_bestiario(
                 "raridade": conteudo.get("raridade"),
                 "subtipo": conteudo.get("subtipo"),
                 "funcao": conteudo.get("funcao"),
+                "fases": fases_limpas(conteudo.get("fases")),
             }
         )
     # As Deidades vêm de um arquivo só do servidor e só chegam a quem comanda a mesa.
@@ -1860,6 +1909,9 @@ def controlar_turno(
         cansados: list[dict] = []
         if payload.acao == "iniciar":
             iniciar_marcas(connection, sessao_id)
+            livro_da_verdade.registrar_encontro_sem_quebrar(
+                connection, campanha_id=sessao["campanha_id"], sessao_id=sessao_id
+            )
         elif payload.acao == "encerrar":
             cansados = encerrar_combate_e_cansar(connection, sessao_id)
         atualizada = _sessao_ativa(connection, sessao["campanha_id"])

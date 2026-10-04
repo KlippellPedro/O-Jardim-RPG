@@ -15,7 +15,7 @@ Esta organização documental não altera números, regras ou aprovações.
 | Não é Tão Pesado | Repetível, limite de 3 escolhas. | Mesmo catálogo. |
 | Rapidinho | Repetível, limite de 2 escolhas; mantém o requisito de Destreza. | Mesmo catálogo. |
 | Tô ficando bom, Bala Ágil e Mágico? | Pré-requisito de nível 5. A intervenção aprovada adiou o acesso, sem reescrever seus efeitos. | Mesmo catálogo. |
-| Código de Ética | Dano adicional de metade do nível, arredondado para baixo, limitado a +30 contra oponente armado. O restante da descrição permanece aplicável. | Mesmo catálogo. |
+| Código de Ética | Decidido em 2026-10-04: um texto só, nos dois arquivos de Legado. O personagem não ataca quem está desarmado; contra oponente armado, +2 na iniciativa e +2 de dano uma vez por turno. O dano de metade do nível (que passava de uma arma-relíquia no nível 60) e o "sempre age antes" saíram de vez, como já estava no texto que o jogador via. Arma natural declarada (garra, presa, chifre, punho de golem) conta como arma, também para Desonroso. | Mesmo catálogo. |
 | Legado racial adicional | A implementação de agosto documentou o bônus em Humano, Desperto, Auleth, Autômato, Clone, Amálgamo e Bruxa. O dado e a característica devem permanecer coerentes. | [racas.json](../../data/ficha/racas.json) |
 | Seis Legados novos (Eco do Fluxo, Passo Entre Galhos, Memória do Eclipse, Vínculo Lunar, Segundo Tempo e Âncora da Árvore) | Oficiais. Não fazem parte dos 36 Legados confirmados nos PDFs originais, mas entram no mesmo catálogo de escolha do personagem (frontend e backend carregam `legados.json` e `legados-novos.json` juntos, sem distinção de status). Cada um já tem pré-requisito e limitador de uso (uma vez por cena, turno, sessão ou descanso, conforme o Legado); não há pendência de revisão editorial aberta. | [legados-novos.json](../../data/ficha/legados-novos.json) |
 
@@ -25,8 +25,8 @@ um orçamento universal de poder. A classificação comparativa das propostas
 
 ### Questões de Legados ainda separadas
 
-- A interpretação de ataques naturais como “armado/desarmado” para Código de
-  Ética não foi encerrada pela aprovação do teto de dano.
+- Armado e desarmado (Código de Ética e Desonroso) foi fechado em 2026-10-04: arma
+  natural declarada conta como arma.
 - A raça Entidade fica `indisponivel: true` por design: cada Entidade existe
   pelo próprio conto no Livro das Entidades (`data/mundo/entidades.ts`), e só
   o Escritor de Contos cria uma nova, no nível 20 (habilidade Último
@@ -81,9 +81,13 @@ banco de uma campanha nesta revisão.
 **Como os Créditos Sombrios entram e saem (decidido em 2026-10-03):** entram
 por baús sombrios, recompensa do Mestre e pela venda de itens ao doleiro
 (`/mercado_negro_vender`: 40% do valor do item em Créditos, com humor do dia de
-85% a 115%; monstro, propriedade e veículo completo não se vendem). Saem só
-gastos no mercado negro. Não há câmbio nem lavanderia. O 40% foi escolha minha e
-pode subir ou descer em `DOLEIRO_FRACAO` (`core/economia.py`).
+85% a 115%; monstro, propriedade e veículo completo não se vendem). Saem
+gastos em implantes (35 itens do catálogo, 10 a 100 Créditos) e em ofertas do mercado
+negro cobradas em Créditos. Não há câmbio nem lavanderia. O 40% foi escolha minha e
+pode subir ou descer em `DOLEIRO_FRACAO` (`core/economia.py`). Revisado em 2026-10-04
+(`bots/banqueiro/tests/test_doleiro_balanco.py`): em todo o catálogo o doleiro paga no máximo 46% do preço (1 Crédito vale 2 Solares); fracionar a venda não rende mais; comprar uma oferta do
+mercado negro no dia mais barato e revender ao doleiro dá prejuízo; e o valor do item passou a usar o câmbio padrão, porque com o
+Lunaris forte (rate 50) um item pago em Lunaris valia o dobro e o doleiro quase não cobrava nada. Juntar 30 Créditos custa itens de uns 150 Solares.
 
 ### Comparações de preços superadas
 
@@ -103,9 +107,9 @@ mudança dos dados não comprova, por si só, equilíbrio em mesa.
 - A correção de agosto alinhou a tabela de partes de criaturas ao rótulo de
   Solares. Partes `drop-*` e componentes ritualísticos `comp-*` não são uma
   categoria homogênea cuja moeda deva ser trocada em bloco.
-- `comp-marco-de-pedra` continua raro e custa 100 Lunaris. A exceção foi
-  preservada; não há, nos documentos consolidados, autorização para substituí-la
-  automaticamente pelo padrão de outros materiais raros.
+- `comp-marco-de-pedra` é raro e custa 100 Lunaris. Isso já foi uma exceção, mas
+  hoje cabe na banda dos materiais raros pela escala (60 a 240 Lunaris; os outros
+  raros custam 60, 80 e 100). Não há mais nada a decidir aqui (fechado em 2026-10-04).
 - Terreno sem estrutura paga metade da manutenção correspondente ao fator do
   patamar. A exceção está em [bases.ts](../../data/regras/bases.ts); o Terreno
   Baldio tem manutenção 50 no catálogo. Não aplicar essa redução a toda base.
@@ -230,17 +234,19 @@ Leituras que a tabela deixa claras, sem mudança de regra:
 
 | Questão | Próximo passo |
 | --- | --- |
-| Créditos Sombrios fora do câmbio | Decidido e aplicado em 2026-10-03, junto com o fim da lavanderia e a venda de itens ao doleiro (ver acima). Resta calibrar a fração do doleiro com dados de uso. |
-| Código de Ética contra ataques naturais | Definir o significado de armado/desarmado, sem alterar silenciosamente o teto já aprovado. |
-| Exceção do Marco de Pedra | Manter até uma decisão específica de preço; comparar com os componentes atuais. |
+| Créditos Sombrios fora do câmbio | Decidido e aplicado em 2026-10-03, junto com o fim da lavanderia e a venda de itens ao doleiro (ver acima). A fração de 40% segue como decidida, revisada por teste em 2026-10-04 (nenhuma brecha achada); ajustar só com dados de uso. |
 | Juros, risco e concentração de patrimônio | Calibrar com dados de uso; números de simulação antiga não substituem acompanhamento de campanha. |
 | Modificações aplicadas a veículos e distinção de escudos | Ver as decisões ainda abertas em Integração. |
-| Economia acima do nível 50 | Salário, recompensa de missão e faixas de preço não têm linha própria depois do 50 (a linha "50+" da tabela de trabalho é a última). |
+| Economia acima do nível 50 | Feita em 2026-10-04 em `data/economia/escala-precos-v1.json` e no livro. A verba por sessão (por jogador) passou a ter nove faixas novas: 600 Solares no 41 a 49 e, em Fragmentos de Estrela, 20 (50 a 59), 35 (60 a 79), 55 (80 a 99), 90 (100 a 149), 140 (150 a 199), 220 (200 a 299), 320 (300 a 499) e 450 (500 em diante). Quatro sessões pagam uma peça da raridade da faixa, e o muro dos Fragmentos só é atravessado pela verba a partir do nível 50 (teste confere). A nota de alcance diz em quantas sessões um grupo de quatro junta o patrimônio de uma Realeza (5 no nível 50, 3 no 60, 2 no 100) e de um Dono de Dimensão (5 no 100, 3 no 150, 2 no 200). A Guilda dos Caçadores ganhou teto, 1.600 Solares por criatura. A contratação de gente de nível alto continua pela fórmula do capítulo de Bestiário; a fórmula "50+" segue linear e não foi reescalada, o que deixa o contratado de nível 500 barato perto da verba (pendência na linha seguinte). |
+| Contratação acima do nível 100 | Fechado em 2026-10-04, em duas frentes. **Tabelas do livro** (Criaturas, Familiares, Servos, Invocações, Ajudantes e Seres Lendários): a linha "50+" virou 51 a 99 (taxa de sempre), 100 a 299 (o dobro) e 300+ (2,25 vezes), porque a verba por sessão cresce mais depressa que o nível e o preço de um ajudante caía de 3,75% de uma sessão no nível 45 para 1,6% no 500. Os extras seguem o mesmo multiplicador. **Criaturas do Bestiário de VD 50 em diante** (21 lendas, antes todas a 3.200 Solares e 300 Solares de contratação, o que no nível 500 era 0,01 sessão): preço próprio em `criaturas_de_vd_alto` na escala, em Fragmentos de Estrela. Contratar custa metade da verba de uma sessão de um jogador do nível (10 F no 50 a 59 até 225 F no 500+), comprar custa dez contratações (100 F a 2.250 F) e a mensalidade é 20% da contratação. De VD 45 a 49 vale a banda Lendária de sempre. O normalizador de preços grava a tabela e o teste de integridade confere; a Guilda dos Caçadores continua no teto de 1.600 Solares. Fica anotada uma incoerência antiga, sem mexer: o Javali Selvagem (VD 3) custa 300 Lunaris para comprar e 300 para contratar. |
 | Criaturas de VD alto reescritas | Em 2026-10-03 as 28 criaturas de VD 45 em diante ganharam nome próprio, descrição, nomes de ataque e habilidades com personalidade (inspiradas em mitologia, RPG de mesa e nos monstros únicos de Shangri-La Frontier: nome, epíteto, consequência no mundo se cair, ponto fraco). Ids, famílias, números e tabelas de saque não mudaram. As habilidades novas moram só no catálogo; `familias-propostas-v1.json` espelha títulos, descrições e nomes de ataque. |
+| Montador de encontro e fases de chefe | Feitos em 2026-10-04. O montador usa as fatias de Vida por papel que o Guia já traz (lacaio 0,1, padrão 0,25, elite 0,5, chefe 1) como custo de cada vaga e multiplicadores de dificuldade sobre o encontro padrão de quatro jogadores: fácil 0,65, padrão 1, difícil 1,3 e mortal 1,6. Calibrado por simulação (`tests/frontend/montadorEEfasesDeChefe.test.ts`): o grupo tem a Vida da curva por jogador, causa a Vida de um inimigo padrão dividida por 4,5 por rodada, os inimigos acertam 60% e agem primeiro, sem cura nem mitigação. Para um grupo de quatro, do nível 5 ao 500, o desgaste médio é de cerca de 22% (fácil), 47% (padrão), 74% (difícil) e 80% a 96% (mortal) da Vida do grupo, e as rodadas vão de 3 a 7,2, dentro do que o Guia já diz (3 para confronto curto, 6 para chefe resistente). A primeira versão usava 0,6, 1, 1,5 e 2,2 e dava 20%, 47%, 105% e 175%: difícil já era uma derrota certa e mortal passava de 10 rodadas. A Vida das vagas é levada à curva do nível (as criaturas do Bestiário fogem dela em até 40%), então "cerca de N rodadas" bate com a conta. Limites que sobram: o custo ainda é só de Vida (cura, controle e área de inimigo não entram) e a simulação não tem Defesa, cura nem posicionamento, então é um teto. Grupos de 2 a 8 jogadores ficam a menos de 30 pontos do grupo de quatro. Fases: as 22 criaturas únicas ganharam 37 fases no total (7 com uma fase extra, 15 com duas). A segunda começa na metade da Vida (60% em uma criatura) e a terceira entre 15% e 25%; a fase muda o comportamento, não a Vida. Conferir com mesa real. |
+| Livro da Verdade, manchete e selos de lenda | Feitos em 2026-10-04. Os 28 textos (verdade, consequência, manchete) são propostas minhas a partir da ficha de cada lenda, sem lore nova de Deidade nem de Soberano; a consequência é a frase "Se X cair" no passado. O efeito no calendário é só um marco aberto no dia de hoje: não muda estação, Árvore nem preço, então "o próximo ano terá três meses a mais de neve" (Hiemark) continua sendo decisão de narração. O selo vai para todos os personagens de jogador que estavam na cena, não só quem deu o golpe; Mestre desfaz ou marca à mão no próprio Livro. "Cara a Cara com um Deus" conta quando o combate começa com a Deidade na cena. |
+| Etapa 3 (2026-10-04): dádivas, efeitos das lendas, encomendas, Calor e habilidades no Montador | Tudo escrito por mim, com defaults, para ajustar com o uso. **Dádivas dos Fluxos** (`data/regras/dadivas-v1.json`): uma por Fluxo, bônus de +2, um efeito de uma vez, duração até o descanso longo; oferenda de um quarto, uma ou quatro sessões de verba, Religião ou Ressonância contra a DT Padrão; ampliada para quem carrega o Fruto do mesmo Fluxo; a do Fim exige o Mestre. Não somam com o Dom do Fruto (vale o maior). **Efeitos das lendas:** ±10% e 2 a 3 meses, só em tipos sem variante de raridade, e só 5 das 28 lendas (Hiemark, Ignarrak, Anzhur, Marenostra, Mareia) mexem em algo mecânico. **Mercadoria quente:** 4 de Calor por unidade, doleiro recusa a partir de 90. **Encomendas:** ágio de 50%, 3 pendentes, devolução de 80%; custam sempre mais do que o doleiro devolve, então não há laço de lucro (teste cobre o catálogo inteiro). **Montador:** cura 8%, controle 12%, área 10%, limite de 25%; a Vida da criatura cai na mesma proporção, e as faixas de desgaste medidas na calibração seguem valendo. Aventuras e arco: ver `docs/mestre`. |
 | Fichas das Deidades | Feitas em 2026-10-03, só no Guia do Mestre (capítulo Somente Mestre): onze fichas com dois degraus (VD 500 fora do Domínio, VD 1000 dentro; A.X.I.S um degrau abaixo, 400 e 800), Perfil (Vida, Defesa e Iniciativa ajustadas ao conceito), Ápice, três poderes com custo de Mana (150 por Ação Padrão, 75 por Reação), Limite (da lista de limites do Fluxo), Contrajogo (da roda de vantagens) e Dom (o Fruto). Keryx entra pela metade enquanto subjugada. Revisadas no mesmo dia: poderes sem frequência ganharam limite por rodada ou cena, os que eram quase abate automático (Saída, Escrever o Fim) ganharam condição, e o que era lore inventado no campo Estado foi reduzido ao que o Códice diz. Também estão no Bestiário da Sessão, só para o Mestre. |
 | Chefes e criaturas do nível 55 em diante | Há criatura em todos os VDs relevantes até 500 (44 fichas geradas em 2026-09-30, entre elas 9 únicas), mas as geradas têm números e texto padronizados. Falta escrever à mão rosto e habilidades dos chefes mais importantes. O botão "Escalar para outro VD" do editor da Sessão (3 de outubro) já cobre o resto: refaz os números de uma criatura em cena pela curva sem trocar quem ela é. |
-| Legados nos níveis muito altos | O catálogo tem 42 Legados e nem todos se repetem; passa a faltar perto dos 500 níveis. |
-| Regra da segunda classe comum | O livro dizia "classe 20 exige outra no 10"; o servidor exige uma classe no 20 antes da segunda comum. O texto foi alinhado ao servidor. Confirmar se essa é a intenção. |
+| Legados nos níveis muito altos | Feito em 2026-10-04: 79 Legados novos, do nível 20 ao 500, em `legados-novos.json` (121 no total). Degraus de entrada: 20, 25, 30, 35, 40, 50, 60, 80, 100, 120, 150, 200, 250, 300, 400 e 500. Só um repete (Cicatrizes de Guerra, limite 2). Os de nível alto usam "uma vez por cena, sessão ou descanso", vantagem, Redução e frações do nível, nunca bônus fixo grande. Nunca passaram por rodada de mesa: calibrar com uso. |
+| Regra da segunda classe comum | O livro dizia "classe 20 exige outra no 10"; o servidor exige uma classe no 20 antes da segunda comum. O texto foi alinhado ao servidor. Confirmado em 2026-10-04: a segunda classe comum abre no nível 20, para a primeira classe ter identidade antes de misturar. |
 
 ## Fontes e verificações
 

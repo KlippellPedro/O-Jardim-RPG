@@ -141,13 +141,45 @@ const aplicarPrecoOriginal = (entry, moeda, valor) => {
   entry.conteudo.preco_original = { [moeda]: arredondar(moeda, valor / (1 - desconto / 100)) };
 };
 
+/**
+ * Criatura de VD alto (50 em diante) nao segue a banda de raridade: a banda Lendaria
+ * termina em 3.200 Solares, que no nivel 500 e uma fracao de sessao de verba. O preco
+ * dela vem da tabela `criaturas_de_vd_alto` da escala (compra, contratacao e mensalidade,
+ * em Fragmentos de Estrela).
+ */
+const CRIATURAS_ALTAS = scale.criaturas_de_vd_alto;
+const faixaDeCriaturaAlta = (entry) => {
+  if (entry.tipo !== 'monstro') return null;
+  const vd = Number(entry.conteudo?.vd);
+  if (!(vd >= CRIATURAS_ALTAS.vd_minimo)) return null;
+  return CRIATURAS_ALTAS.faixas.find((faixa) => {
+    const [inicio, fim] = faixa.vd.replace('+', '').split('-').map(Number);
+    return vd >= inicio && (faixa.vd.endsWith('+') || vd <= fim);
+  }) ?? null;
+};
+
 const run = ({ checkOnly, forcar = false }) => {
   const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+  const mudancasAltas = [];
+  for (const entry of catalog.entradas) {
+    const faixaAlta = faixaDeCriaturaAlta(entry);
+    if (!faixaAlta) continue;
+    const alvo = {
+      preco: { 'Fragmentos de Estrela': faixaAlta.compra_fragmentos },
+      preco_contratacao: { 'Fragmentos de Estrela': faixaAlta.contratacao_fragmentos },
+      contrato_mensal: { 'Fragmentos de Estrela': faixaAlta.mensalidade_fragmentos },
+    };
+    if (Object.keys(alvo).some((campo) => JSON.stringify(entry.conteudo[campo]) !== JSON.stringify(alvo[campo]))) {
+      mudancasAltas.push(entry.id);
+      Object.assign(entry.conteudo, alvo);
+    }
+  }
 
   const grupos = new Map();
   for (const entry of catalog.entradas) {
     const preco = entry.conteudo?.preco;
     if (preco === undefined || preco === null) continue;
+    if (faixaDeCriaturaAlta(entry)) continue;
     const faixa = faixaPorRaridade.get(raridadeDe(entry));
     if (!faixa) throw new Error(`${entry.id}: raridade desconhecida "${entry.conteudo.raridade}"`);
     if (faixa.congelada) continue;
@@ -208,8 +240,8 @@ const run = ({ checkOnly, forcar = false }) => {
     }
   }
 
-  if (checkOnly && mudancas.length > 0) {
-    throw new Error(`${mudancas.length} item(ns) fora da escala de precos. Rode sem --check para corrigir.`);
+  if (checkOnly && (mudancas.length > 0 || mudancasAltas.length > 0)) {
+    throw new Error(`${mudancas.length + mudancasAltas.length} item(ns) fora da escala de precos. Rode sem --check para corrigir.`);
   }
   if (!checkOnly) fs.writeFileSync(catalogPath, `${JSON.stringify(catalog, null, 2)}\n`, 'utf8');
 

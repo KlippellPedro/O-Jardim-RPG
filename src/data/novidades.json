@@ -1,6 +1,105 @@
 {
   "itens": [
     {
+      "id": "2026-10-04-dadivas-e-oferendas",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Dádivas e oferendas: os Fluxos agora respondem",
+      "detalhes": [
+        "Quem faz uma oferenda do gosto de um Fluxo pode ganhar uma dádiva por uma jornada: um bônus pequeno e um efeito de uma vez. Há uma dádiva para cada um dos onze Fluxos, e o texto está no capítulo dos Frutos do Éden.",
+        "Quem carrega o Fruto do mesmo Fluxo recebe a dádiva ampliada. Algumas deidades respondem pouco, e o silêncio também é resposta."
+      ]
+    },
+    {
+      "id": "2026-10-04-encomendas-no-mercado-negro",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "Encomendas ao contrabandista, pagas em Créditos Sombrios",
+      "detalhes": [
+        "Com /mercado_negro_encomendar você pede um item e paga em Créditos Sombrios na hora. O contrabandista entrega em algumas horas ou dias, direto no inventário. Dá para ter três encomendas ao mesmo tempo, e cancelar devolve 80%.",
+        "Mercadoria de procedência suja vendida ao doleiro deixa você mais exposto: soma Calor, o mesmo que atrapalha os roubos."
+      ]
+    },
+    {
+      "id": "2026-10-04-precos-de-criaturas-altas",
+      "data": "2026-10-04",
+      "tipo": "melhoria",
+      "area": "Loja",
+      "titulo": "Criaturas de nível alto agora custam à altura",
+      "detalhes": [
+        "Comprar ou contratar uma criatura do Bestiário de VD 50 em diante passou a custar Fragmentos de Estrela, na medida do que um grupo do nível ganha por sessão. Antes todas custavam o mesmo preço, do nível 50 ao 500.",
+        "As tabelas de contratação do livro também ganharam degraus a partir do nível 100. Ajudante de nível muito alto deixou de custar troco."
+      ]
+    },
+    {
+      "id": "2026-10-04-livro-da-verdade",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Mundo",
+      "titulo": "Livro da Verdade: cada lenda guarda uma página",
+      "detalhes": [
+        "Quando uma lenda do Bestiário cai na Sessão, a página dela abre no Mundo, com a verdade sobre ela e o que mudou no mundo. Até lá, a página fica rasurada.",
+        "A queda também vira um acontecimento no calendário, e o Jornalista publica a manchete no Discord."
+      ]
+    },
+    {
+      "id": "2026-10-04-matador-de-lendas",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Selos de Matador de Lendas",
+      "detalhes": [
+        "Quem estava na mesa quando uma lenda caiu ganha o selo dela. Os nomes só aparecem depois da queda.",
+        "Também há um selo para o primeiro encontro do grupo com uma Deidade."
+      ]
+    },
+    {
+      "id": "2026-10-04-fases-de-chefe",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Os chefes únicos mudam de fase no meio da luta",
+      "detalhes": [
+        "Quando a Vida de um chefe único chega à metade, a Sessão avisa com uma frase de cena, tipo \"o reflexo do mar se estilhaça\". O que mudou de verdade fica com o Mestre, e a mesa descobre jogando.",
+        "Vale para as 22 criaturas únicas do Bestiário. Curar o chefe não o devolve para a fase anterior."
+      ]
+    },
+    {
+      "id": "2026-10-04-montador-de-encontro",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Montador de encontro para o Mestre",
+      "detalhes": [
+        "Um botão novo na Sessão pede o nível do grupo, quantos jogadores e a dificuldade, e devolve criaturas do Bestiário já escaladas para o VD, com XP e rodadas esperadas.",
+        "Dá para trocar ou tirar cada criatura, sortear de novo e pôr tudo na cena de uma vez."
+      ]
+    },
+    {
+      "id": "2026-10-04-vampiros-noite-eterna",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Vampiros ganharam um sétimo Clã: a Noite Eterna",
+      "detalhes": [
+        "A família mais antiga de Întuneric, a realeza dos vampiros. Começa com mais Vida e mais Mana que os outros Clãs e tem dois poderes a cada idade do sangue, do Sangue Real ao Mandato da Coroa e à Lua que Não se Põe.",
+        "Em troca, a fome aperta com metade do tempo e sangue de animal não sustenta. Só entra na mesa com o aval do Mestre."
+      ]
+    },
+    {
+      "id": "2026-10-04-legados-altos",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "79 Legados novos para o nível 20 em diante",
+      "detalhes": [
+        "Quem passa do nível 20 agora encontra Legados de verdade para escolher em cada marco, até o nível 500: de Mão que Não Treme, no 20, a Três Dados, no 500.",
+        "Os de nível alto funcionam por cena, por sessão ou por descanso, e alguns pedem um atributo alto. A ficha confere os requisitos na hora da escolha."
+      ]
+    },
+    {
       "id": "2026-10-03-doleiro",
       "data": "2026-10-03",
       "tipo": "melhoria",

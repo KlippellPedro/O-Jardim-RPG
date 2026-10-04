@@ -35,6 +35,7 @@ from routers.sessions import (
     _sessao_ativa,
     abrir_sessao,
     adicionar_participante,
+    atualizar_participante,
     listar_bestiario,
     ajustar_tabela_de_loot,
     mexer_na_aflicao,
@@ -50,6 +51,7 @@ from schemas import (
     TradeProposalInput,
     InventorySendInput,
     ParticipantCreateInput,
+    ParticipantUpdateInput,
     ParticipantLootDeliverInput,
     ParticipantLootDeliveryLine,
     ParticipantLootRollInput,
@@ -224,6 +226,75 @@ class LootETrocaTests(unittest.TestCase):
         participante = next(p for p in self._estado("mestre", self.mestre_id)["participantes"] if p["id"] == criado["id"])
         self.assertEqual(participante["monstro_id"], "deidade-chronus")
         self.assertFalse(participante["tem_loot"])
+
+    def _chefe_com_fases(self, visibilidade="total"):
+        with self.database.connection() as connection:
+            connection.execute(
+                """
+                INSERT INTO catalogo_itens (id, tipo, titulo, conteudo) VALUES ('chefe-teste', 'monstro', 'Chefe de Teste', %s)
+                ON CONFLICT (id) DO UPDATE SET conteudo=EXCLUDED.conteudo
+                """,
+                (Jsonb({"vd": 20, "pv": 100, "fases": [
+                    {"quando": 0.5, "nome": "Segunda Forma", "anuncio": "O chefe muda de cor.", "mudancas": ["Ganha uma ação extra."]},
+                    {"quando": 0.2, "nome": "Última Forma", "anuncio": "O chefe ruge.", "mudancas": ["Perde a Defesa."]},
+                ]}),),
+            )
+        sessao = abrir_sessao(
+            SessionOpenInput(campanha_id=self.campanha_id, titulo="Chefe", incluir_personagens=False),
+            user=self.mestre, database=self.database,
+        )
+        sessao_id = sessao["sessao"]["id"]
+        criado = adicionar_participante(
+            sessao_id,
+            ParticipantCreateInput(nome="Chefe", vida_maxima=100, visibilidade=visibilidade, monstro_id="chefe-teste"),
+            user=self.mestre, database=self.database,
+        )
+        return sessao_id, criado["id"]
+
+    def _bater(self, sessao_id, participante_id, **campos):
+        return atualizar_participante(
+            sessao_id, participante_id, ParticipantUpdateInput(**campos), user=self.mestre, database=self.database,
+        )["participante"]
+
+    def test_fase_de_chefe_sobe_com_a_vida_e_nunca_desce_por_cura(self):
+        sessao_id, pid = self._chefe_com_fases()
+        self.assertEqual(self._bater(sessao_id, pid, dano=30)["fase"], 1)
+        self.assertEqual(self._bater(sessao_id, pid, dano=25)["fase"], 2)
+        self.assertEqual(self._bater(sessao_id, pid, cura=50)["fase"], 2)
+        self.assertEqual(self._bater(sessao_id, pid, dano=80)["fase"], 3)
+        # Chefe caído não avança além da fase em que estava, e ajuste manual funciona.
+        self.assertEqual(self._bater(sessao_id, pid, fase=2)["fase"], 2)
+        with self.assertRaises(HTTPException) as erro:
+            self._bater(sessao_id, pid, fase=4)
+        self.assertEqual(erro.exception.status_code, 422)
+
+    def test_criatura_sem_fases_nao_aceita_fase(self):
+        sessao_id, pid = self._cena_com_bandido()
+        with self.assertRaises(HTTPException) as erro:
+            self._bater(sessao_id, pid, fase=2)
+        self.assertEqual(erro.exception.status_code, 422)
+        self.assertEqual(self._bater(sessao_id, pid, dano=15)["fase"], 1)
+
+    def test_fase_so_revela_para_a_mesa_a_frase_de_cena(self):
+        sessao_id, pid = self._chefe_com_fases()
+        mestre = next(p for p in self._estado("mestre", self.mestre_id)["participantes"] if p["id"] == pid)
+        self.assertEqual((mestre["fase"], mestre["fases_total"]), (1, 3))
+        self.assertNotIn("fase_nome", mestre)
+        self._bater(sessao_id, pid, dano=55)
+        mestre = next(p for p in self._estado("mestre", self.mestre_id)["participantes"] if p["id"] == pid)
+        self.assertEqual(mestre["fase_nome"], "Segunda Forma")
+        self.assertEqual(mestre["fase_mudancas"], ["Ganha uma ação extra."])
+        self.assertEqual([f["nome"] for f in mestre["fases_resumo"]], ["Começo", "Segunda Forma", "Última Forma"])
+        jogador = next(p for p in self._estado("jogador", self.ana_id)["participantes"] if p["id"] == pid)
+        self.assertEqual(jogador["fase"], 2)
+        self.assertEqual(jogador["fase_anuncio"], "O chefe muda de cor.")
+        for campo in ("fase_nome", "fase_mudancas", "fases_total", "fases_resumo", "monstro_id"):
+            self.assertNotIn(campo, jogador)
+        # Escondido da mesa: nem a frase de cena vaza.
+        self._bater(sessao_id, pid, visibilidade="desconhecido")
+        jogador = next(p for p in self._estado("jogador", self.ana_id)["participantes"] if p["id"] == pid)
+        self.assertNotIn("fase", jogador)
+        self.assertNotIn("fase_anuncio", jogador)
 
     def test_jogador_nao_ve_a_tabela_nem_o_loot(self):
         self._cena_com_bandido()

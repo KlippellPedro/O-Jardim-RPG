@@ -36,7 +36,7 @@ const FAIXAS: Array<{ id: FaixaVd; rotulo: string; testar: (vd: number | null) =
 ];
 
 /** A cor do selo sobe com a ameaça: verde tranquilo até vermelho mortal. */
-const corDoVd = (vd: number | null): string => {
+export const corDoVd = (vd: number | null): string => {
   if (vd == null) return '#9ca3af';
   if (vd <= 10) return '#4ade80';
   if (vd <= 25) return '#fbbf24';
@@ -354,7 +354,7 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
             <div className="space-y-4">
               <p className="flex items-start gap-1.5 text-xs leading-5 text-white/45">
                 <Sparkles size={14} className="mt-0.5 shrink-0 text-[#c7a44c]/70" />
-                Fichas do teto do Jardim, só para o Mestre. Cada uma entra com os números fora do Domínio (VD 500); para levá-la ao Domínio, use "Escalar para outro VD" no editor e ponha 1000 (A.X.I.S fica um degrau abaixo: entra no VD 400 e vai a 800). O campo Estado da ficha revela segredos: deixe a visibilidade em Oculto ou Desconhecido até a história pedir.
+                Fichas do teto do Jardim, só para o Mestre. Cada uma entra com os números fora do Domínio (VD 500); para levá-la ao Domínio, use "Escalar para outro VD" no editor e ponha 1000 (A.X.I.S fica um degrau abaixo: entra no VD 400 e vai a 800). O campo Estado da ficha revela segredos: ela entra Oculta; mude a visibilidade quando a história pedir.
               </p>
               <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {deidades.map((monstro) => (

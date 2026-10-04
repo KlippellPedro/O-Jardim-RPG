@@ -96,6 +96,8 @@ export interface ICalendarioMundo {
   hoje_extenso: string;
   estacao: IEstacao;
   estacao_especial: ChaveEstacao | null;
+  /** Efeitos que a queda de uma lenda deixou no mundo e ainda valem (estação forçada, preço na Loja). */
+  efeitos_do_mundo?: Array<{ id: string; tipo: 'estacao' | 'preco'; texto: string; ate: { ano: number; mes: number; dia: number } }>;
   /** A estação do mês de hoje, sem contar a especial. */
   estacao_normal: ChaveEstacao;
   /** Hoje é o dia da Lua Carmesim (e o evento está ligado). */

@@ -18,6 +18,7 @@ import {
   Shield,
   Skull,
   Sword,
+  Swords,
   Trash2,
   UserRound,
   X,
@@ -26,6 +27,7 @@ import {
 import { useSessaoStore, type EntidadeIniciativa } from '../../store/useSessaoStore';
 import { EntityEditor } from './components/EntityEditor';
 import { BestiarioPicker } from './components/BestiarioPicker';
+import { MontadorEncontro } from './components/MontadorEncontro';
 import { LootPanel } from './components/LootPanel';
 import { AflicoesSessaoPanel } from './components/AflicoesSessaoPanel';
 import type { BestiarioMonstro, NivelVisibilidade } from '../../services/sessaoApi';
@@ -77,6 +79,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [batchAmount, setBatchAmount] = useState(1);
   const [showBestiario, setShowBestiario] = useState(false);
+  const [showMontador, setShowMontador] = useState(false);
   const [xpMessage, setXpMessage] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'fila' | 'grupos'>('grupos');
 
@@ -182,7 +185,8 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
     const base = {
       tipo: 'inimigo' as const,
       vida_maxima: monstro.pv ?? 0,
-      visibilidade: 'parcial' as const,
+      // Deidade entra oculta: o nome e o estado dela revelam lore que a mesa ainda não descobriu.
+      visibilidade: (monstro.categoria === 'Deidade' ? 'oculto' : 'parcial') as 'oculto' | 'parcial',
       vd: monstro.vd ?? undefined,
       defesa: monstro.defesa ?? undefined,
       mana_maxima: monstro.mana ?? undefined,
@@ -406,7 +410,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
         </div>
 
         {comando ? (
-          <div className="mt-4 grid grid-cols-3 gap-1.5" aria-label="Ferramentas da cena">
+          <div className={`mt-4 grid gap-1.5 ${campanhaId ? 'grid-cols-4' : 'grid-cols-3'}`} aria-label="Ferramentas da cena">
             {campanhaId ? (
               <button
                 type="button"
@@ -416,6 +420,17 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                 title="Adicionar criaturas do Bestiário"
               >
                 <Skull size={18} /> Bestiário
+              </button>
+            ) : null}
+            {campanhaId ? (
+              <button
+                type="button"
+                onClick={() => setShowMontador(true)}
+                className="flex flex-col items-center gap-1 rounded-xl border border-[#c7a44c]/25 bg-[#c7a44c]/[0.06] px-2 py-2.5 text-[11px] font-bold text-[#e3c363] transition-colors hover:bg-[#c7a44c]/15"
+                aria-label="Abrir o montador de encontro"
+                title="Escolher nível e dificuldade e receber criaturas já escaladas"
+              >
+                <Swords size={18} /> Encontro
               </button>
             ) : null}
             <button
@@ -643,6 +658,15 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
         {xpMessage ? <p className="mt-3 rounded-md bg-[#c7a44c]/10 px-3 py-2 text-xs text-[#e3c363]" role="status">{xpMessage}</p> : null}
         {message ? <p className="mt-3 rounded-md bg-red-400/10 px-3 py-2 text-xs text-red-200" role="alert">{message}</p> : null}
       </div>
+
+      {showMontador && campanhaId ? (
+        <MontadorEncontro
+          campanhaId={campanhaId}
+          jogadoresNaCena={iniciativa.filter((entity) => entity.tipo === 'jogador').length}
+          onCancel={() => setShowMontador(false)}
+          onPick={pickFromBestiario}
+        />
+      ) : null}
 
       {showBestiario && campanhaId ? (
         <BestiarioPicker

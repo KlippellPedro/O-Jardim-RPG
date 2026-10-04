@@ -20,7 +20,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from core import ui
+from core import economia, ui
 
 
 def _sid(interaction: discord.Interaction) -> str:
@@ -89,7 +89,7 @@ class Mestre(commands.Cog):
             descricao=f"Estado atual de <@{membro.id}> no servidor.",
         )
         emb.add_field(name="🩸 Ferimentos",    value=f"**{ferimentos}/6**", inline=True)
-        emb.add_field(name="🔥 Calor de roubo", value=f"**{calor}/10**",    inline=True)
+        emb.add_field(name="🔥 Calor de roubo", value=f"**{calor}/{economia.ROUBO_CALOR_MAXIMO}**", inline=True)
         emb.add_field(name="💳 Dívida",         value=f"**{divida} ☾**",    inline=True)
         emb.add_field(
             name="💰 Carteira",
@@ -180,7 +180,7 @@ class Mestre(commands.Cog):
         self,
         interaction: discord.Interaction,
         membro: discord.Member,
-        valor: app_commands.Range[int, 0, 10] = 0,
+        valor: app_commands.Range[int, 0, economia.ROUBO_CALOR_MAXIMO] = 0,
     ):
         sid, uid = _sid(interaction), _uid(membro)
         antes = self.bot.db.get_calor_roubo(sid, uid)
@@ -200,6 +200,55 @@ class Mestre(commands.Cog):
             f"✅ Calor de <@{membro.id}>: **{antes} → {valor}**.",
             ephemeral=True,
         )
+
+    # ─── /mestre_mercadoria_quente ────────────────────────────────────────────
+
+    @app_commands.command(
+        name="mestre_mercadoria_quente",
+        description="[Mestre] Marca itens que um jogador tem como mercadoria quente: vendê-los ao doleiro soma Calor.",
+    )
+    @app_commands.default_permissions(manage_guild=True)
+    @app_commands.checks.has_permissions(manage_guild=True)
+    @app_commands.describe(
+        membro="Jogador.", item="Item do catálogo.", quantidade="Quantas unidades são quentes (0 tira a marca do item).",
+    )
+    async def mestre_mercadoria_quente(
+        self,
+        interaction: discord.Interaction,
+        membro: discord.Member,
+        item: str,
+        quantidade: app_commands.Range[int, 0, 99] = 1,
+    ):
+        sid, uid = _sid(interaction), _uid(membro)
+        entrada = self.bot.catalogo.get(item)
+        if entrada is None:
+            await interaction.response.send_message("Esse item não existe no catálogo.", ephemeral=True)
+            return
+        if quantidade == 0:
+            self.bot.db.limpar_mercadoria_quente(sid, uid, entrada.id)
+            await interaction.response.send_message(
+                f"✅ <@{membro.id}> não tem mais **{entrada.titulo}** marcado como mercadoria quente.", ephemeral=True,
+            )
+            return
+        total = self.bot.db.marcar_mercadoria_quente(sid, uid, entrada.id, quantidade)
+        await interaction.response.send_message(
+            f"🔥 <@{membro.id}> agora tem **{total}× {entrada.titulo}** de mercadoria quente. "
+            f"Cada unidade vendida ao doleiro soma {economia.CALOR_POR_UNIDADE_QUENTE} de Calor. "
+            "A marca nunca vale mais do que ele ainda tem no inventário.",
+            ephemeral=True,
+        )
+
+    @mestre_mercadoria_quente.autocomplete("item")
+    async def _ac_mercadoria_quente(self, interaction: discord.Interaction, current: str):
+        termo = (current or "").strip().lower()
+        saida = []
+        for entrada in self.bot.catalogo.listar():
+            if entrada.tipo in economia.DOLEIRO_NAO_COMPRA or (termo and termo not in entrada.titulo.lower()):
+                continue
+            saida.append(app_commands.Choice(name=entrada.titulo[:100], value=entrada.id))
+            if len(saida) >= 25:
+                break
+        return saida
 
     # ─── /mestre_cooldown ─────────────────────────────────────────────────────
 

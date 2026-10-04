@@ -68,7 +68,7 @@ const PASSOS_COMANDO: GuidedTourStep[] = [
   {
     id: 'controle-da-cena',
     titulo: 'Controle da cena e Bestiário',
-    descricao: 'No painel “Controle da cena”, o Bestiário monta o encontro com filtros por VD, categoria e família (dá para adicionar várias cópias de uma vez), e a aba “Sob medida” cria uma criatura de qualquer VD e papel já com os números na conta, “Novo” cria um NPC à mão e “Em massa” aplica dano ou cura em vários. Use “Por grupo” para administrar fichas ou “Fila de turnos” para avançar o combate.',
+    descricao: 'No painel “Controle da cena”, o Bestiário monta o encontro com filtros por VD, categoria e família (dá para adicionar várias cópias de uma vez), e a aba “Sob medida” cria uma criatura de qualquer VD e papel já com os números na conta, “Encontro” sugere criaturas pelo nível do grupo e pela dificuldade, “Novo” cria um NPC à mão e “Em massa” aplica dano ou cura em vários. Use “Por grupo” para administrar fichas ou “Fila de turnos” para avançar o combate.',
     alvos: ['[data-tour="session-cena"]'],
     opcional: true,
   },

@@ -78,7 +78,13 @@ catálogo de tabelas produziria uma sequência de páginas pela metade.
 `docs/mestre/` tem duas peças de trabalho, não de ficção: a **Folha de
 Preparação de Sessão**, duas páginas para preencher a lápis antes da mesa, e
 **Dois Passageiros**, uma aventura de uma sessão para o nível 1 que usa o prop
-`Avulso-Aviso-Caravana` como material de apoio.
+`Avulso-Aviso-Caravana` como material de apoio. Junto vêm outras quatro aventuras de uma
+sessão (`aventuras-do-jardim.mjs`: *O Moinho da Terceira Roda*, nível 5, *O Leilão da Casa Vazia*,
+nível 12, *O Redemoinho de Caribdis*, nível 30, e *A Queda do Leviatã Espelhado*, nível 45) e o
+**Arco da Malha** (`arco-da-malha.mjs`), cinco sessões para os níveis 40 a 55, só do Mestre. As fichas
+inventadas saem de `modeloDeCriatura` (`componentes-aventura.mjs`), por isso `npm run docs:mestre`
+roda com o carregador de TypeScript. As criaturas únicas das duas últimas aventuras usam a ficha do
+Bestiário e as fases que a Sessão avisa, e um teste confere o nome de cada fase.
 
 Elas usam `estilo-mestre.mjs`, que é claro e seco de propósito: papel
 envelhecido gasta tinta e atrapalha quem escreve por cima. As páginas têm

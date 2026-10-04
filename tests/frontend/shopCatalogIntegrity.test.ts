@@ -122,6 +122,11 @@ test('catálogo não hardcoda promoção: a vitrine gira sozinha pelo servidor',
   }
 });
 
+/** Criatura de VD 50 em diante tem preço próprio (escala.criaturas_de_vd_alto), fora da banda de raridade. */
+const criaturaDeVdAlto = (entrada: { tipo: string; conteudo: { vd?: number } }) => (
+  entrada.tipo === 'monstro' && (entrada.conteudo.vd ?? 0) >= escala.criaturas_de_vd_alto.vd_minimo
+);
+
 test('todo preço cai na banda da própria raridade, pela escala oficial', () => {
   // A escada multiplica por 4 a cada degrau e a banda vai de 0,5x a 2,0x da
   // referência, então degraus vizinhos se encostam sem vão e sem cruzar. Se este
@@ -131,7 +136,7 @@ test('todo preço cai na banda da própria raridade, pela escala oficial', () =>
   const pisoComum = escala.escada_raridade.piso_comum_por_categoria ?? {};
   for (const entrada of catalogo.entradas) {
     const preco = lerPreco(entrada.conteudo.preco);
-    if (!preco) continue;
+    if (!preco || criaturaDeVdAlto(entrada)) continue;
     const raridade = normalizar(entrada.conteudo.raridade);
     const faixa = faixaDe(raridade);
     assert.ok(faixa, `${entrada.id}: raridade "${entrada.conteudo.raridade}" fora da escala`);
@@ -156,7 +161,7 @@ test('a raridade ordena o preço dentro de cada categoria, sem inversão', () =>
   const grupos = new Map<string, number[]>();
   for (const entrada of catalogo.entradas) {
     const preco = lerPreco(entrada.conteudo.preco);
-    if (!preco) continue;
+    if (!preco || criaturaDeVdAlto(entrada)) continue;
     const raridade = normalizar(entrada.conteudo.raridade);
     const chave = `${entrada.tipo}|${raridade === 'reliquia' ? 'reliquia da criacao' : raridade}`;
     if (!grupos.has(chave)) grupos.set(chave, []);

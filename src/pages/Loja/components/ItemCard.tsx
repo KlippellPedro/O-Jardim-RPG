@@ -72,6 +72,11 @@ export const ItemCard: React.FC<ItemCardProps> = React.memo(function ItemCard({ 
       {item.raridade === 'Relíquia da Criação' && (
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-300/10 via-white/10 to-fuchsia-300/10 pointer-events-none rounded-3xl mix-blend-screen animate-pulse" />
       )}
+      {item.efeitoDoMundo ? (
+        <div className="mb-1 inline-flex rounded-full border border-[#c7a44c]/40 bg-[#c7a44c]/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#e3c363]" title={item.efeitoDoMundo.texto} data-testid="efeito-do-mundo">
+          Efeito no mundo {item.efeitoDoMundo.percentual > 0 ? '+' : ''}{item.efeitoDoMundo.percentual}%
+        </div>
+      ) : null}
       {item.promocao ? (
         <div className="relative z-[1] flex items-center justify-between gap-3 border-b border-rose-400/30 bg-gradient-to-r from-rose-600/30 to-orange-500/10 px-4 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-rose-200">
           <span>{item.promocao.rotulo}</span>

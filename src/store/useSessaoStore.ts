@@ -54,6 +54,46 @@ export interface EntidadeIniciativa {
   monstroId?: string | null;
   temLoot?: boolean;
   loot?: LootRolado | null;
+  /** Fase de chefe: 1 é o começo. Só criatura do Bestiário com fases tem os campos abaixo. */
+  fase?: number;
+  fasesTotal?: number;
+  fasesResumo?: Array<{ nome: string; quando: number | null }>;
+  faseNome?: string;
+  faseMudancas?: string[];
+  faseAnuncio?: string;
+}
+
+/** Uma lenda do Bestiário que caiu nesta sessão: a mesa inteira ouve a manchete. */
+export interface AvisoDeLenda {
+  chave: string;
+  id: string;
+  nome: string;
+  epiteto: string;
+  consequencia: string;
+}
+
+/** Lendas que caíram entre duas leituras do estado. A primeira leitura da sessão nunca avisa. */
+export function avisosDeLendaNova(
+  antes: Array<{ id: string }> | null,
+  depois: Array<{ id: string; nome: string; epiteto: string; consequencia: string }>,
+): AvisoDeLenda[] {
+  if (antes === null) return [];
+  const conhecidas = new Set(antes.map((lenda) => lenda.id));
+  return depois
+    .filter((lenda) => !conhecidas.has(lenda.id))
+    .map((lenda) => ({ chave: `lenda:${lenda.id}`, id: lenda.id, nome: lenda.nome, epiteto: lenda.epiteto, consequencia: lenda.consequencia }));
+}
+
+/** Aviso de que um chefe entrou numa fase nova. O Mestre vê as mudanças; a mesa, só a frase de cena. */
+export interface AvisoDeFase {
+  chave: string;
+  participanteId: string;
+  nome: string;
+  fase: number;
+  fasesTotal?: number;
+  nomeDaFase?: string;
+  anuncio: string;
+  mudancas: string[];
 }
 
 export type SessionConnectionStatus = 'connecting' | 'online' | 'offline';
@@ -133,7 +173,33 @@ function mapParticipantes(participantes: SessaoParticipanteResponse[] | undefine
       monstroId: participante.monstro_id ?? null,
       temLoot: !!participante.tem_loot,
       loot: participante.loot ?? null,
+      fase: typeof participante.fase === 'number' && participante.fase > 1 ? participante.fase : undefined,
+      fasesTotal: typeof participante.fases_total === 'number' ? participante.fases_total : undefined,
+      fasesResumo: Array.isArray(participante.fases_resumo) ? participante.fases_resumo : undefined,
+      faseNome: typeof participante.fase_nome === 'string' ? participante.fase_nome : undefined,
+      faseMudancas: Array.isArray(participante.fase_mudancas) ? participante.fase_mudancas.filter((item): item is string => typeof item === 'string') : undefined,
+      faseAnuncio: typeof participante.fase_anuncio === 'string' ? participante.fase_anuncio : undefined,
     };
+  });
+}
+
+/** Compara a lista anterior com a nova e devolve um aviso para cada chefe que subiu de fase. */
+export function avisosDeFaseNova(antes: EntidadeIniciativa[], depois: EntidadeIniciativa[]): AvisoDeFase[] {
+  if (!antes.length) return [];
+  const faseAntes = new Map(antes.map((item) => [item.id, item.fase ?? 1]));
+  return depois.flatMap((item) => {
+    const nova = item.fase ?? 1;
+    if (!faseAntes.has(item.id) || nova <= (faseAntes.get(item.id) ?? 1)) return [];
+    return [{
+      chave: `${item.id}:${nova}`,
+      participanteId: item.id,
+      nome: item.nome,
+      fase: nova,
+      fasesTotal: item.fasesTotal,
+      nomeDaFase: item.faseNome,
+      anuncio: item.faseAnuncio ?? '',
+      mudancas: item.faseMudancas ?? [],
+    }];
   });
 }
 
@@ -147,6 +213,13 @@ interface SessaoState {
   meuPapel: string | null;
   bloqueada: boolean;
   iniciativa: EntidadeIniciativa[];
+  /** Chefes que acabaram de mudar de fase e ainda não foram dispensados da tela. */
+  avisosDeFase: AvisoDeFase[];
+  dispensarAvisoDeFase: (chave: string) => void;
+  /** Lendas que já caíram nesta sessão (null antes da primeira leitura) e os avisos ainda na tela. */
+  lendasDaSessao: Array<{ id: string; nome: string; epiteto: string; consequencia: string }> | null;
+  avisosDeLenda: AvisoDeLenda[];
+  dispensarAvisoDeLenda: (chave: string) => void;
   turnoAtualIndex: number;
   turnoAtualId: string | null;
   emCombate: boolean;
@@ -210,6 +283,11 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
   meuPapel: null,
   bloqueada: true,
   iniciativa: [],
+  avisosDeFase: [],
+  dispensarAvisoDeFase: (chave) => set((estado) => ({ avisosDeFase: estado.avisosDeFase.filter((aviso) => aviso.chave !== chave) })),
+  lendasDaSessao: null,
+  avisosDeLenda: [],
+  dispensarAvisoDeLenda: (chave) => set((estado) => ({ avisosDeLenda: estado.avisosDeLenda.filter((aviso) => aviso.chave !== chave) })),
   turnoAtualIndex: 0,
   turnoAtualId: null,
   emCombate: false,
@@ -300,7 +378,14 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     try {
       const response = await sessaoApi.obterSessao(campanhaId);
       if (response?.sessao) {
+        const participantes = mapParticipantes(response.participantes);
+        const novosAvisos = avisosDeFaseNova(get().iniciativa, participantes);
+        const lendas = response.lendas ?? [];
+        const lendasNovas = avisosDeLendaNova(get().sessaoId === response.sessao.id ? get().lendasDaSessao : null, lendas);
         set({
+          avisosDeFase: novosAvisos.length ? [...get().avisosDeFase, ...novosAvisos] : get().avisosDeFase,
+          lendasDaSessao: lendas,
+          avisosDeLenda: lendasNovas.length ? [...get().avisosDeLenda, ...lendasNovas] : get().avisosDeLenda,
           sessaoId: response.sessao.id,
           sessaoStatus: response.sessao.status,
           tituloSessao: response.sessao.titulo ?? 'Sessão ao vivo',
@@ -308,7 +393,7 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
           comando: !!response.comando,
           meuPapel: response.meu_papel ?? null,
           bloqueada: false,
-          iniciativa: mapParticipantes(response.participantes),
+          iniciativa: participantes,
           turnoAtualIndex: response.sessao.turno_de?.indice ?? 0,
           turnoAtualId: response.sessao.turno_de?.id ?? null,
           emCombate: !!response.sessao.em_combate,
@@ -330,6 +415,9 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
         tituloSessao: null,
         iniciadaEm: null,
         iniciativa: [],
+        avisosDeFase: [],
+        avisosDeLenda: [],
+        lendasDaSessao: null,
         turnoAtualIndex: 0,
         turnoAtualId: null,
         emCombate: false,

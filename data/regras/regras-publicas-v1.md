@@ -1706,7 +1706,7 @@ Um grupo com muitos aliados atrasa a mesa inteira. Combine um teto com o Mestre 
 
 **Status:** Regra oficial
 
-Duas formas de ganhar poder sem subir de nível: comer um Fruto do Éden, que se liga à alma, ou instalar um implante, que é peça de máquina no corpo.
+Duas formas de ganhar poder sem subir de nível: comer um Fruto do Éden, que se liga à alma, ou instalar um implante, que é peça de máquina no corpo. Traz também as oferendas aos Fluxos e as dádivas que elas rendem.
 
 Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o caminho caro: você compra, aceita o que vem junto e não desfaz depois.
 
@@ -1747,6 +1747,48 @@ Existe um Fruto para cada um dos onze Fluxos. Ele aproxima quem come do Fluxo e 
 Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. A passiva e as técnicas são substituídas pelas versões aprimoradas, sem somar com as antigas, e a manifestação final passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.
 
 Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos 26 está no catálogo da Loja.
+
+### Dádivas e oferendas
+
+Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feito diante do que o Fluxo aprecia, e o que ele devolve é uma dádiva: pequena, curta e uma por vez. A dádiva não substitui o Fruto. O Fruto muda você para sempre, e a dádiva dura o tempo de uma jornada.
+
+- **Onde:** num lugar em que o Fluxo se faz sentir (o Mestre diz qual) ou, se você carrega o Fruto do mesmo Fluxo, em qualquer lugar: quem comeu o fruto leva o altar no corpo.
+
+- **O que oferecer:** algo do gosto do Fluxo, na tabela abaixo. A oferenda se perde: queima, afunda ou fica para trás. Nunca ofereça um Fruto do Éden.
+
+- **O valor:** Humilde vale um quarto da verba de uma sessão do seu nível, Valiosa vale uma sessão e Preciosa vale quatro. Um sacrifício de história, algo que dinheiro não compra e que o Mestre aceita, conta como Preciosa e dispensa o teste.
+
+- **O teste:** Religião ou Ressonância contra a DT Padrão do nível, com +5 na DT se a oferenda for Humilde, nenhum ajuste se for Valiosa e −3 se for Preciosa.
+
+- **O resultado:** falhar é ouvir silêncio, e a oferenda se perde. Passar rende a dádiva do Fluxo até o próximo descanso longo ou o fim da sessão, o que vier primeiro. Passar por 5 ou mais, ou tirar 20 natural, faz o Mestre acrescentar um sinal: uma visão curta, um nome, um cheiro, uma pista sobre algo ligado ao Fluxo.
+
+- **Os limites:** uma oferenda por pessoa por sessão, uma dádiva ativa por vez (aceitar outra encerra a anterior) e o mesmo altar responde uma vez por mês do calendário do mundo.
+
+- Fluxo | O que agrada | Dádiva
+
+- Origem | sementes plantadas, o primeiro objeto de algo novo, uma carta ainda lacrada | Palma Aberta. +2 em Cura. Uma vez, como Ação de Movimento, toque um aliado: ele deixa de estar Caído ou Amedrontado.
+
+- Essência | uma verdade dita em voz alta, uma máscara abandonada, um nome verdadeiro | Olhar Sem Máscara. +2 em Intuição. Uma vez, olhando uma criatura, você sabe se ela está disfarçada ou usando um nome que não é o dela.
+
+- Comunicação | uma carta entregue, um acordo cumprido, uma mensagem levada a quem ela devia | Palavra que Pesa. +2 em Diplomacia. Uma vez, um acordo feito em voz alta diante de duas testemunhas passa a valer: quem o quebrar sofre desvantagem em todos os testes até reparar o que quebrou.
+
+- Vitalidade | o que cresce: uma muda, um pão, o cuidado de graça com um ferido | Seiva. Vida temporária igual ao seu nível ao receber a dádiva, e +2 em Fortitude. Uma vez, durante um descanso curto, recupere de Vida o seu nível a mais.
+
+- Inconstância | um dado, uma aposta perdida de propósito, algo que trocou de dono por sorteio | Dado Trocado. +2 em Jogatina e em Acrobacia. Uma vez, um 1 natural no seu d20 vale 10.
+
+- Físico | uma pedra de rio carregada o dia todo, ferro forjado à mão, uma carga levada até o fim | Mão Pesada. +2 em Atletismo. Uma vez por cena, ganhe Resistência a dano físico igual à metade do seu nível até o fim da rodada.
+
+- Espaço | um mapa desenhado de verdade, a chave de uma porta que já não existe, uma viagem inteira | Passo Curto. +3 m de deslocamento. Uma vez, como Ação de Movimento, vá a qualquer ponto livre que você veja a até 9 m.
+
+- Tempo | um relógio parado, uma ampulheta, uma promessa feita para o futuro | Hora Certa. +2 em Iniciativa. Uma vez, aja logo depois do turno de qualquer outra criatura, como se a ordem de iniciativa fosse outra.
+
+- Vazio | o que foi deixado de propósito: uma lembrança contada e abandonada, um nome riscado, uma porta fechada para sempre | Sair de Cena. +2 em Furtividade. Uma vez, como Ação de Movimento, ninguém na cena lembra de ter visto você até a sua próxima ação hostil.
+
+- Fim | um último capítulo, uma carta de despedida, uma vela deixada queimar até o fim | Ponto Final. +2 em Sanidade e em Vontade. Uma vez, um golpe contra uma criatura com menos da metade da Vida causa dano extra igual ao seu nível.
+
+- Tecnologia | uma peça de máquina que funciona, um registro bem guardado, um código copiado | Registro. +2 em Tecnologia e em Investigação. Uma vez, como Ação Livre, leia uma criatura que você veja: o Mestre diz a Defesa dela e uma fraqueza, se houver.
+
+Quem carrega o Fruto do mesmo Fluxo recebe a dádiva ampliada: o bônus passa de +2 para +3 (de +3 m para +5 m no Passo Curto), o efeito de uma vez pode ser usado duas vezes e ela dura até o fim da sessão. A dádiva do Fim exige a autorização do Mestre, como todo acesso ao Fim. Algumas deidades respondem pouco, e o silêncio também é resposta: quem decide é o Mestre.
 
 ### Implantes cibernéticos
 

@@ -1128,7 +1128,9 @@ function aplicarRetrofit(catalogo) {
     Object.assign(entrada.conteudo, novo.conteudo);
   }
 
-  const drops = catalogo.entradas.filter((entrada) => entrada.tipo === 'drop');
+  // `loot-*` são partes de criatura que só existem para o saque (data/bestiario/loot-criaturas.json):
+  // não passam pela curadoria de materiais de ofício.
+  const drops = catalogo.entradas.filter((entrada) => entrada.tipo === 'drop' && !entrada.id.startsWith('loot-'));
   const idsDrops = new Set(drops.map((entrada) => entrada.id));
   const idsComponentes = new Set(Object.keys(fichasComponentes));
 

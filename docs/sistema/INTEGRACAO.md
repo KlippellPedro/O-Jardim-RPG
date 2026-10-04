@@ -140,6 +140,84 @@ que colidiria com outro diferente de mesmo `item_id`. `GET
 /trocas/itens/{alvo}` mostra só nome e quantidade dos itens do outro: a
 carteira e o resto da ficha continuam fechados.
 
+### Fases de chefe
+
+As 22 criaturas únicas do catálogo (`data/loja/catalogo.json`, entradas `tipo: monstro` com
+`conteudo.unico`) têm `conteudo.fases`: uma lista de `{quando, nome, anuncio, mudancas[]}`. O item
+`i` da lista é a fase `i + 2`; `quando` é a fração da Vida em que ela começa (0,5 é a metade) e os
+limiares descem. `quando: null` marca fase só do Mestre, sem gatilho pela Vida.
+
+- `sessao_participantes.fase` (migração 51) guarda a fase atual, de 1 em diante.
+- [fases.py](../../plataforma/core/fases.py) lê as fases do catálogo e decide a fase alcançada. Ela
+  só sobe: cura não devolve o chefe à fase anterior, e criatura caída não avança.
+- `PUT /sessao/{id}/participantes/{pid}` recalcula a fase a cada mudança de Vida. O Mestre pode
+  mandar `fase` (1 a 9) para trocar à mão; o servidor recusa fase que a criatura não tem (422).
+- O estado da sessão leva `fase` e `fase_anuncio` (só a frase de cena) a quem enxerga a criatura, e
+  `fases_total`, `fases_resumo`, `fase_nome` e `fase_mudancas` só a quem comanda a mesa. A mesa nunca
+  recebe número de Vida do chefe, nome interno da fase nem mudança de regra.
+- `GET /sessao/bestiario` devolve `fases` na ficha (rota só do Mestre).
+
+Testes: `plataforma/tests/test_loot_e_troca.py` (subida pela Vida, cura sem descer, criatura sem
+fases, o que a mesa vê) e `tests/frontend/montadorEEfasesDeChefe.test.ts` (dados do catálogo, tom e
+`avisosDeFaseNova`).
+
+### Livro da Verdade
+
+As 28 lendas são as criaturas do catálogo cuja ficha traz "Se X cair" (13 únicas e 15 estágios de
+família). O texto de cada uma (a verdade, a consequência no passado, o marco do calendário e a
+manchete) mora em `data/bestiario/lendas-v1.json`, lido só pelo servidor por
+[lendas.py](../../plataforma/core/lendas.py); a fronteira de conteúdo barra o arquivo no navegador.
+
+- `campanha_lendas` (migração 52, no backup) guarda uma linha por lenda caída ou Deidade encarada em
+  cada sessão: `tipo` (`queda` ou `encontro_deidade`), `personagens` (quem estava na mesa) e o id do
+  evento de calendário criado, para a queda poder ser desfeita. O índice único
+  `(sessao_id, monstro_id, tipo)` torna tudo idempotente.
+- `PUT /sessao/{id}/participantes/{pid}` chama `registrar_queda_sem_quebrar` quando uma lenda
+  (`monstro_id` da lista) chega a 0 de Vida por uma mudança de Vida. Dentro de um savepoint: erro aqui
+  nunca desfaz o golpe. O grupo é o conjunto de personagens de jogador que estão na cena.
+- **Primeira queda da lenda na campanha:** abre a página no Livro, grava o acontecimento no calendário
+  (aberto, no dia de hoje, com a consequência como nota), avisa os membros no site e enfileira a
+  manchete em `avisos_pendentes` (tipo de aviso `manchete`, ligado por padrão, categoria `noticia`, então
+  vai para o canal definido em `/jornal canal` para Notícia). Quedas seguintes da mesma lenda em outra
+  sessão só creditam o selo.
+- **Estado ao vivo:** `lendas` (id, nome, epíteto, consequência, data) com as quedas da sessão, para a
+  mesa inteira; o cliente compara duas leituras e mostra o aviso uma vez.
+- **Selos** ([conquistas.py](../../plataforma/core/conquistas.py)): um "Matador de X" por lenda
+  (`secreta`, métrica `lenda:<id>`, lendário) mais "Cara a Cara com um Deus" (métrica
+  `deidades_encaradas`). Enquanto bloqueado, o selo secreto sai da API mascarado (nome, chave e métrica
+  genéricos) e a galeria mostra um cartão único. O encontro com a Deidade conta quando o combate começa
+  com ela na cena, ou quando ela entra com o combate aberto; não vira lenda, página nem manchete. O
+  gerador de voz do Sábio ignora selos secretos, porque o `manifest.json` é público.
+- **Rotas** (`routers/livro_da_verdade.py`): `GET /livro-da-verdade/{campanha}` (membros; a mesa recebe
+  páginas abertas e `retida` sem nome nem VD, o Mestre e o assistente recebem tudo),
+  `POST .../{lenda}/queda` (Mestre: marca à mão uma queda fora da Sessão; 409 se já caiu) e
+  `DELETE .../{lenda}/queda` (Mestre: some a página, o marco do calendário e o selo de quem foi
+  creditado; a manchete publicada continua). As duas gravam em `eventos_auditoria`.
+
+Testes: `plataforma/tests/test_livro_da_verdade.py` (dados, tom, queda, calendário, manchete, Livro por
+papel, desfazer, selos, Deidade) e `tests/frontend/livroDaVerdade.test.ts`.
+
+### Efeitos do mundo (lendas)
+
+Cinco lendas (`efeitos` em `data/bestiario/lendas-v1.json`) deixam algo de verdade no mundo da
+campanha na primeira queda: Hiemark força o inverno por 3 meses, Ignarrak (equipamento), Anzhur
+(artefato) e Marenostra (veículo) encarecem 10% por 2 a 3 meses, e Mareia barateia veículo em 10%.
+
+- O estado fica em `campanha_calendario.estado.efeitos` (`core/calendario.py`: `adicionar_efeito`,
+  `efeitos_ativos`, `remover_efeitos_da_origem`). Cada efeito guarda `origem` (a lenda), `de` e `ate`
+  em dias absolutos; a duração conta meses de calendário (o efeito acaba na véspera do mesmo dia, N meses depois). Limite de 20.
+- **Estação:** `estacao_atual` passa a olhar o efeito mais novo (a estação especial do Mestre ainda
+  manda por cima). A mudança vai para o Jornalista pelo mesmo espelho do calendário.
+- **Preço:** [efeitos_do_mundo.py](../../plataforma/core/efeitos_do_mundo.py) aplica o percentual na
+  listagem (`GET /loja/catalogo`, campo `conteudo.efeito_do_mundo`) e na compra
+  (`POST /loja/compras`), com a mesma conta. Só tipos sem variante de raridade
+  (equipamento, veículo, veículo-completo, artefato, consumível); arma, armadura, modificação e
+  contratação ficam de fora. O efeito vem depois da promoção em destaque. O Discord não recebe o
+  efeito de preço: o clima de lá continua sendo outro mecanismo.
+- `desfazer_queda` tira os efeitos junto com o marco do calendário. A manchete leva uma linha 📌 por
+  efeito. O calendário (`efeitos_do_mundo`), a página do Livro (`efeitos`) e o cartão da Loja
+  (`efeitoDoMundo`) mostram o texto.
+
 ### Deidades no Bestiário da Sessão
 
 As onze fichas das Deidades vivem em `data/bestiario/deidades-v1.json`, lido só

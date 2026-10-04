@@ -1,0 +1,508 @@
+{
+  "_nota": "Livro da Verdade: o que a campanha descobre quando uma lenda cai. Só o servidor lê este arquivo (core/lendas.py); o navegador nunca o importa, porque o texto de uma lenda que ainda está de pé é segredo da mesa. A consequência de cada lenda é a frase \"Se X cair\" da ficha, no passado. Algumas lendas trazem `efeitos`: o que a primeira queda muda de verdade no mundo da campanha (estação forçada no calendário e ajuste de preço na Loja, por alguns meses). O texto de cada efeito é o que a mesa lê.",
+  "versao": 1,
+  "lendas": [
+    {
+      "id": "ignarrak",
+      "nome": "Ignarrak",
+      "epiteto": "o Primeiro Pavio",
+      "vd": 45,
+      "verdade": [
+        "Ignarrak foi o fogo que começou o mundo e ficou aceso porque ninguém lhe disse que podia parar. Cobrava uma lembrança por cada calor que dava, e guardava todas como um mercador guarda o que não pode vender.",
+        "Com a queda, o trato ficou sem credor. O que foi dado não volta, mas ninguém mais vai ser cobrado."
+      ],
+      "consequencia": "Todo fogo comum do mundo demora um pouco mais para pegar, como se faltasse a faísca original.",
+      "calendario": {
+        "titulo": "A queda de Ignarrak",
+        "nota": "Todo fogo comum do mundo demora um pouco mais para pegar, como se faltasse a faísca original."
+      },
+      "manchete": "Ignarrak, o Primeiro Pavio, caiu. Acender uma fogueira ficou um pouco mais difícil.",
+      "efeitos": [
+        {
+          "tipo": "preco",
+          "alvos": [
+            "equipamento"
+          ],
+          "percentual": 10,
+          "meses": 2,
+          "texto": "Sem a faísca original, tochas, lanternas e acendedores custam 10% a mais por dois meses."
+        }
+      ]
+    },
+    {
+      "id": "vaelthor",
+      "nome": "Vaelthor",
+      "epiteto": "o Leviatã Espelhado",
+      "vd": 45,
+      "verdade": [
+        "Vaelthor nunca foi dono do céu que carregava nas escamas. Era a janela por onde um universo distante olhava para o nosso mar.",
+        "Quando o corpo se desfez, os marinheiros mais velhos reconheceram o que sentiam há gerações: a sensação de estar sendo observado de baixo."
+      ],
+      "consequencia": "O mar onde ele viveu passou a refletir o céu verdadeiro, e as estrelas de outro universo sumiram da água.",
+      "calendario": {
+        "titulo": "A queda de Vaelthor",
+        "nota": "O mar onde ele viveu passou a refletir o céu verdadeiro, e as estrelas de outro universo sumiram da água."
+      },
+      "manchete": "O Leviatã Espelhado caiu, e o mar voltou a mostrar o céu de verdade."
+    },
+    {
+      "id": "lerneia",
+      "nome": "Lerneia",
+      "epiteto": "a Que Discute Consigo",
+      "vd": 47,
+      "verdade": [
+        "Lerneia tinha sete pescoços e sete opiniões, e passava a luta discutindo sobre quem morder primeiro. A cabeça que o grupo ouviu primeiro costuma ser a que o grupo lembra.",
+        "As cabeças restantes viraram testemunhas. Cada uma conta a luta de um jeito, e nenhuma concorda com a outra."
+      ],
+      "consequencia": "O pântano onde vivia secou em uma noite, e as cabeças restantes passaram a ser lembradas como sete testemunhas.",
+      "calendario": {
+        "titulo": "A queda de Lerneia",
+        "nota": "O pântano onde vivia secou em uma noite, e as cabeças restantes passaram a ser lembradas como sete testemunhas."
+      },
+      "manchete": "Lerneia caiu. O pântano onde ela vivia secou numa noite só."
+    },
+    {
+      "id": "gulhar",
+      "nome": "Gulhar",
+      "epiteto": "o Estômago do Vazio",
+      "vd": 48,
+      "verdade": [
+        "Gulhar era a fome de uma fenda. O Vão de onde veio ficou aberto enquanto havia o que comer, e cada reino atacado alimentou a abertura um pouco mais.",
+        "Os sobreviventes que sonhavam com uma boca dentro do quarto passaram a dormir sem ela. Os lugares comidos continuam com o buraco no meio, mas o buraco parou de crescer."
+      ],
+      "consequencia": "O Vão de onde ele veio ficou sem a fome que o mantinha aberto e começou a fechar sozinho.",
+      "calendario": {
+        "titulo": "A queda de Gulhar",
+        "nota": "O Vão de onde ele veio ficou sem a fome que o mantinha aberto e começou a fechar sozinho."
+      },
+      "manchete": "Gulhar caiu. O Vão que o sustentava começou a fechar."
+    },
+    {
+      "id": "nyxhael",
+      "nome": "Nyxhael",
+      "epiteto": "Apagador de Constelações",
+      "vd": 48,
+      "verdade": [
+        "Nyxhael seguia uma linha reta entre as estrelas, e cada uma que sumia apontava para o mundo seguinte do caminho dele.",
+        "Os astrônomos do Jardim guardaram o mapa do que desapareceu. Agora têm uma lista de constelações para devolver aos seus nomes."
+      ],
+      "consequencia": "As constelações que ele apagou voltaram ao céu uma a uma, e quem as nomeou de novo é lembrado por elas.",
+      "calendario": {
+        "titulo": "A queda de Nyxhael",
+        "nota": "As constelações que ele apagou voltaram ao céu uma a uma, e quem as nomeou de novo é lembrado por elas."
+      },
+      "manchete": "Nyxhael caiu. As constelações apagadas voltam ao céu, uma a uma."
+    },
+    {
+      "id": "hiemara",
+      "nome": "Hiemara",
+      "epiteto": "a Primeira Geada",
+      "vd": 48,
+      "verdade": [
+        "Hiemara esperava sem pressa, e o mundo em volta ia ficando do tamanho da paciência dela. Perguntava por que tanta gente corre se tudo acaba parando.",
+        "Quem a ouviu guarda a pergunta. Com a queda, o frio de antes de haver calor ficou sem voz, e o inverno aprendeu a chegar sem ela."
+      ],
+      "consequencia": "O inverno do mundo perdeu o primeiro dia, e a primeira geada de cada ano passou a chegar mais tarde.",
+      "calendario": {
+        "titulo": "A queda de Hiemara",
+        "nota": "O inverno do mundo perdeu o primeiro dia, e a primeira geada de cada ano passou a chegar mais tarde."
+      },
+      "manchete": "Hiemara caiu. A primeira geada de cada ano vai chegar mais tarde."
+    },
+    {
+      "id": "dragomir",
+      "nome": "Dragomir",
+      "epiteto": "o Conde do Último Baile",
+      "vd": 49,
+      "verdade": [
+        "Dragomir mandava convites escritos à mão porque nunca aprendeu a ser convidado. Cada dança que ganhou foi uma dívida cobrada em companhia.",
+        "O salão onde ele dançava pela última vez está vazio, e a música que ele escolhia deixou de tocar."
+      ],
+      "consequencia": "Os convites que ainda circulavam perderam a tinta, mas quem já tinha aceitado continua devendo uma dança a alguém.",
+      "calendario": {
+        "titulo": "A queda de Dragomir",
+        "nota": "Os convites que ainda circulavam perderam a tinta, mas quem já tinha aceitado continua devendo uma dança a alguém."
+      },
+      "manchete": "O Conde do Último Baile caiu. Os convites com o nome de cada um perderam a tinta."
+    },
+    {
+      "id": "aurelith",
+      "nome": "Aurelith",
+      "epiteto": "a Que Sempre Volta",
+      "vd": 50,
+      "verdade": [
+        "Aurelith guardava a lembrança de cada morte e escolhia com cuidado quem ficava perto do ninho. Quem saiu dali com uma pena descobriu que a dívida era cuidar do fogo.",
+        "Ela podia ter voltado das cinzas quantas vezes quisesse. Que tenha caído diante de um grupo diz mais sobre o grupo do que sobre ela."
+      ],
+      "consequencia": "Se caiu por vontade própria, o fogo do mundo ganhou mais uma vida; se foi vencida à força, o ninho se apagou por um ano.",
+      "calendario": {
+        "titulo": "A queda de Aurelith",
+        "nota": "Se caiu por vontade própria, o fogo do mundo ganhou mais uma vida; se foi vencida à força, o ninho se apagou por um ano."
+      },
+      "manchete": "Aurelith, a Que Sempre Volta, caiu. O ninho decide agora se é o fim ou só mais uma volta."
+    },
+    {
+      "id": "peloros",
+      "nome": "Pelóros",
+      "epiteto": "o Avô das Montanhas",
+      "vd": 55,
+      "verdade": [
+        "Pelóros nasceu quando a montanha ainda aprendia a ter forma, e cada passo dele mudava um pedaço do mapa. Perguntava por que tanta gente pequena em cima do chão dele, sem raiva, só curioso.",
+        "Dormia sob a própria cordilheira. Com a queda, ela perdeu a forma, e a cidade que vivia à sombra dela passou a viver à luz."
+      ],
+      "consequencia": "A cordilheira onde dormia perdeu a forma que tinha, e a cidade que ficava à sombra dela passou a ficar à luz.",
+      "calendario": {
+        "titulo": "A queda de Pelóros",
+        "nota": "A cordilheira onde dormia perdeu a forma que tinha, e a cidade que ficava à sombra dela passou a ficar à luz."
+      },
+      "manchete": "Pelóros caiu. A cordilheira perdeu a forma, e uma cidade inteira ganhou sol."
+    },
+    {
+      "id": "anzhur",
+      "nome": "Anzhur",
+      "epiteto": "o Avô do Fogo",
+      "vd": 60,
+      "verdade": [
+        "Anzhur nasceu antes de o fogo ter nome, e todo dragão de fogo que veio depois herdou dele um pedaço do nome. Os anciões o chamavam de avô por isso.",
+        "O nome mais antigo do fogo estava com ele. Agora não está com ninguém, e os dragões mais novos vão precisar escolher um."
+      ],
+      "consequencia": "O fogo do mundo perdeu o nome mais antigo e passou uma geração inteira sem saber como se chamar.",
+      "calendario": {
+        "titulo": "A queda de Anzhur",
+        "nota": "O fogo do mundo perdeu o nome mais antigo e passou uma geração inteira sem saber como se chamar."
+      },
+      "manchete": "Anzhur, o Avô do Fogo, caiu. O fogo ficou sem nome.",
+      "efeitos": [
+        {
+          "tipo": "preco",
+          "alvos": [
+            "artefato"
+          ],
+          "percentual": 10,
+          "meses": 3,
+          "texto": "Sem o nome mais antigo do fogo, os encantamentos de forja custam 10% a mais por três meses."
+        }
+      ]
+    },
+    {
+      "id": "mutis",
+      "nome": "Mutis",
+      "epiteto": "o Guardião da Cidade Muda",
+      "vd": 65,
+      "verdade": [
+        "Mutis esperou a vida inteira uma ordem de parar. O último arquiteto deixou os gestos para mandá-lo cumprir e esqueceu os gestos para mandá-lo descansar.",
+        "A cidade que ele guardava ficou de pé por teimosia dele, e só por isso."
+      ],
+      "consequencia": "A cidade que guardava deixou de existir de repente, como se tivesse sido uma ordem a segurá-la de pé.",
+      "calendario": {
+        "titulo": "A queda de Mutis",
+        "nota": "A cidade que guardava deixou de existir de repente, como se tivesse sido uma ordem a segurá-la de pé."
+      },
+      "manchete": "Mutis, o Guardião da Cidade Muda, caiu. A cidade que ele guardava desapareceu junto."
+    },
+    {
+      "id": "marenostra",
+      "nome": "Marenostra",
+      "epiteto": "a de Mil Nomes",
+      "vd": 70,
+      "verdade": [
+        "Marenostra atendia por todos os nomes que os portos lhe davam e nunca corrigia ninguém. Os navios que a chamavam pelo nome certo atravessavam.",
+        "O nome certo era o que o capitão dizia com carinho, fosse qual fosse. Agora que ela caiu, ninguém sabe dizer qual era."
+      ],
+      "consequencia": "Os portos perderam o nome que davam a ela, e nenhum marinheiro lembra por que rezava de olhos fechados.",
+      "calendario": {
+        "titulo": "A queda de Marenostra",
+        "nota": "Os portos perderam o nome que davam a ela, e nenhum marinheiro lembra por que rezava de olhos fechados."
+      },
+      "manchete": "Marenostra caiu. Os marinheiros esqueceram por que rezavam.",
+      "efeitos": [
+        {
+          "tipo": "preco",
+          "alvos": [
+            "veiculo",
+            "veiculo-completo"
+          ],
+          "percentual": 10,
+          "meses": 2,
+          "texto": "Os portos perderam o nome que davam a ela e o frete subiu: embarcações e veículos custam 10% a mais por dois meses."
+        }
+      ]
+    },
+    {
+      "id": "hydrath",
+      "nome": "Hydrath",
+      "epiteto": "a Soma de Todas as Hidras",
+      "vd": 80,
+      "verdade": [
+        "Hydrath era a soma de todas as hidras: cada cabeça dela já foi uma hidra inteira. Quando uma morria, as outras a sepultavam com a língua, em silêncio.",
+        "As sete mil pedras do fundo do lago eram a contagem dela. Contar cabeças era a única coisa que fazia sozinha."
+      ],
+      "consequencia": "O lago que a abrigava devolveu as sete mil pedras que ela usava para contar as cabeças.",
+      "calendario": {
+        "titulo": "A queda de Hydrath",
+        "nota": "O lago que a abrigava devolveu as sete mil pedras que ela usava para contar as cabeças."
+      },
+      "manchete": "Hydrath caiu. O lago devolveu as sete mil pedras que ela guardava."
+    },
+    {
+      "id": "ezrakael",
+      "nome": "Ezrakael",
+      "epiteto": "o Portador da Ordem",
+      "vd": 85,
+      "verdade": [
+        "Ezrakael carregava uma ordem de quem está acima dele e cumpria cada detalhe, até o que ninguém pediu. A luz dele protegia quem ele decidia proteger, quisesse o protegido ou não.",
+        "Com a queda, a ordem ficou sem portador, e quem a enviou ainda espera uma resposta."
+      ],
+      "consequencia": "A ordem que carregava ficou por cumprir, e algum lugar do Jardim espera uma resposta que não vem.",
+      "calendario": {
+        "titulo": "A queda de Ezrakael",
+        "nota": "A ordem que carregava ficou por cumprir, e algum lugar do Jardim espera uma resposta que não vem."
+      },
+      "manchete": "Ezrakael caiu. A ordem que ele levava não chegou ao destino."
+    },
+    {
+      "id": "ser-horario",
+      "nome": "Ser Horário",
+      "epiteto": "da Última Hora",
+      "vd": 90,
+      "verdade": [
+        "Ser Horário chegava sempre um instante depois de tudo acabar, e decidia o que a última hora tinha significado. Montava um cavalo pálido que não deixava pegada, e as armas dele eram ponteiros de um relógio que ninguém sabe onde fica.",
+        "Quem sobreviveu a ele passou a olhar a hora com outros olhos."
+      ],
+      "consequencia": "A hora em que perdeu passou a ser lembrada como o dia em que algo terminou de verdade.",
+      "calendario": {
+        "titulo": "A queda de Ser Horário",
+        "nota": "A hora em que perdeu passou a ser lembrada como o dia em que algo terminou de verdade."
+      },
+      "manchete": "Ser Horário caiu. A última hora ganhou um dia para ser lembrada."
+    },
+    {
+      "id": "jormund",
+      "nome": "Jörmund",
+      "epiteto": "a Serpente do Abraço",
+      "vd": 100,
+      "verdade": [
+        "Jörmund segurava a própria cauda com a boca desde antes de haver mar. Quando afrouxava o abraço, as marés respondiam.",
+        "Com a queda, o abraço se desfez, e o mundo teve que descobrir de repente como ficar de pé sozinho."
+      ],
+      "consequencia": "O abraço se desfez, e o mundo precisou descobrir de repente como ficar de pé sozinho.",
+      "calendario": {
+        "titulo": "A queda de Jörmund",
+        "nota": "O abraço se desfez, e o mundo precisou descobrir de repente como ficar de pé sozinho."
+      },
+      "manchete": "Jörmund caiu. O abraço que segurava o mundo se desfez."
+    },
+    {
+      "id": "kurnagal",
+      "nome": "Kurnagal",
+      "epiteto": "o Dragão em Crescimento",
+      "vd": 110,
+      "verdade": [
+        "Kurnagal dizia que ainda não tinha terminado. Em sumeriano arcaico, prometia escolher onde morrer no dia em que parasse de crescer.",
+        "Caiu ainda crescendo. A cauda dele virou a ruína que as montanhas passaram a ser."
+      ],
+      "consequencia": "O continente perdeu o ponto mais alto, e as montanhas passaram a ser a ruína da cauda dele.",
+      "calendario": {
+        "titulo": "A queda de Kurnagal",
+        "nota": "O continente perdeu o ponto mais alto, e as montanhas passaram a ser a ruína da cauda dele."
+      },
+      "manchete": "Kurnagal caiu ainda crescendo. O continente perdeu o ponto mais alto."
+    },
+    {
+      "id": "aionofagos",
+      "nome": "Aionofagos",
+      "epiteto": "o Devorador de Eras",
+      "vd": 120,
+      "verdade": [
+        "Aionofagos mordia o momento em que as coisas aconteceram, e o presente guardava o que sobrava como se sempre tivesse sido assim.",
+        "Com a queda, nada do que ele comeu voltou. O que voltou foi a suspeita: aos poucos, as pessoas passaram a notar os buracos na própria memória."
+      ],
+      "consequencia": "O que ele devorou não voltou, mas as pessoas passaram a lembrar, devagar, de que algo foi comido.",
+      "calendario": {
+        "titulo": "A queda de Aionofagos",
+        "nota": "O que ele devorou não voltou, mas as pessoas passaram a lembrar, devagar, de que algo foi comido."
+      },
+      "manchete": "Aionofagos caiu. O que ele comeu não volta, mas o mundo começa a notar que faltava."
+    },
+    {
+      "id": "mareia",
+      "nome": "Mareia",
+      "epiteto": "a Onda Que Escolheu Andar",
+      "vd": 130,
+      "verdade": [
+        "Mareia era uma onda que aprendeu a andar. Passava por cima de cais e de faróis e voltava ao mar como quem termina uma tarefa, e os sobreviventes juravam ter ouvido uma risada de criança dentro da água.",
+        "A risada era dela. Mareia andava por brincadeira, e ninguém tinha percebido."
+      ],
+      "consequencia": "O oceano esqueceu que podia caminhar, e as marés voltaram a obedecer só à lua.",
+      "calendario": {
+        "titulo": "A queda de Mareia",
+        "nota": "O oceano esqueceu que podia caminhar, e as marés voltaram a obedecer só à lua."
+      },
+      "manchete": "Mareia caiu. As marés voltam a obedecer só à lua.",
+      "efeitos": [
+        {
+          "tipo": "preco",
+          "alvos": [
+            "veiculo",
+            "veiculo-completo"
+          ],
+          "percentual": -10,
+          "meses": 2,
+          "texto": "Com as marés obedecendo só à lua, o mar ficou previsível: embarcações e veículos custam 10% menos por dois meses."
+        }
+      ]
+    },
+    {
+      "id": "kalderon",
+      "nome": "Kalderon",
+      "epiteto": "o Fogo Que Não Perdoou",
+      "vd": 140,
+      "verdade": [
+        "Kalderon nunca perdoou o mundo por ter esfriado. Cada passo dele deixava vidro no chão, e cada pergunta, uma rocha rachada.",
+        "Com ele de pé, sempre havia um fogo que lembrava como era antes. Agora a lembrança acabou, e a terra perto dos vulcões ficou em paz."
+      ],
+      "consequencia": "O vulcão mais antigo da região se apagou por mil anos, e o mundo agradeceu em silêncio.",
+      "calendario": {
+        "titulo": "A queda de Kalderon",
+        "nota": "O vulcão mais antigo da região se apagou por mil anos, e o mundo agradeceu em silêncio."
+      },
+      "manchete": "Kalderon caiu. O vulcão mais antigo da região dorme por mil anos."
+    },
+    {
+      "id": "ussurr",
+      "nome": "Ussurr",
+      "epiteto": "o Ladrão de Instantes",
+      "vd": 150,
+      "verdade": [
+        "Ussurr nunca era visto duas vezes do mesmo jeito. Deixava para trás relógios parados em horas diferentes e pessoas com idade demais ou de menos.",
+        "Cada segundo roubado ficou guardado nele, e voltou todos ao mesmo tempo quando ele caiu."
+      ],
+      "consequencia": "Os segundos que roubou voltaram, todos ao mesmo tempo, e quem os recebeu viveu um instante de sobra por cada um que perdeu.",
+      "calendario": {
+        "titulo": "A queda de Ussurr",
+        "nota": "Os segundos que roubou voltaram, todos ao mesmo tempo, e quem os recebeu viveu um instante de sobra por cada um que perdeu."
+      },
+      "manchete": "Ussurr caiu. Os segundos roubados voltaram todos de uma vez."
+    },
+    {
+      "id": "seraquiel",
+      "nome": "Seraquiel",
+      "epiteto": "o Cântico de Seis Asas",
+      "vd": 150,
+      "verdade": [
+        "Seraquiel guardava o que os outros anjos apenas mensageiam. O canto dele contava a vida de cada criatura da cena, em ordem, sem pular as partes vergonhosas.",
+        "Quem o ouviu até o fim reconheceu o próprio nome no meio do canto. O canto não parou: ficou mais baixo."
+      ],
+      "consequencia": "O canto continuou em algum lugar, mais baixo, esperando alguém que o escute até o fim.",
+      "calendario": {
+        "titulo": "A queda de Seraquiel",
+        "nota": "O canto continuou em algum lugar, mais baixo, esperando alguém que o escute até o fim."
+      },
+      "manchete": "Seraquiel caiu. O canto continua em algum lugar, mais baixo."
+    },
+    {
+      "id": "hiemark",
+      "nome": "Hiemark",
+      "epiteto": "o Inverno Que Ficou",
+      "vd": 165,
+      "verdade": [
+        "Hiemark decidiu ficar quando o inverno devia ir. Onde parava, o tempo andava mais devagar, e as pegadas dele duravam séculos.",
+        "O inverno que ele guardava não tinha para onde ir. Espalhou-se pelas estações, como água solta de uma represa."
+      ],
+      "consequencia": "O inverno que ele guardava se espalhou pelas estações, e o ano seguinte teve três meses a mais de neve.",
+      "calendario": {
+        "titulo": "A queda de Hiemark",
+        "nota": "O inverno que ele guardava se espalhou pelas estações, e o ano seguinte teve três meses a mais de neve."
+      },
+      "manchete": "Hiemark caiu. O inverno que ele guardava se soltou, e vem neve em dobro.",
+      "efeitos": [
+        {
+          "tipo": "estacao",
+          "estacao": "inverno",
+          "meses": 3,
+          "texto": "O inverno que Hiemark guardava se espalhou: por três meses o calendário só conhece neve."
+        }
+      ]
+    },
+    {
+      "id": "teleios",
+      "nome": "Teleios",
+      "epiteto": "o Fim Que Anda",
+      "vd": 200,
+      "verdade": [
+        "Teleios aparecia onde tudo já estava terminando e deixava um silêncio educado. Ninguém o via chegar, só percebia que já estava lá, de pé, esperando o fim da frase.",
+        "Com a queda, o que ele ia encerrar continua aberto. Alguém no Jardim vai ter que decidir se quer terminar sozinho."
+      ],
+      "consequencia": "O que ele ia encerrar continuou aberto, e alguém no Jardim precisa decidir se quer terminar sozinho.",
+      "calendario": {
+        "titulo": "A queda de Teleios",
+        "nota": "O que ele ia encerrar continuou aberto, e alguém no Jardim precisa decidir se quer terminar sozinho."
+      },
+      "manchete": "Teleios caiu. O que ele ia encerrar continua aberto."
+    },
+    {
+      "id": "apokalyx",
+      "nome": "Apokalyx",
+      "epiteto": "o Dragão do Último Dia",
+      "vd": 250,
+      "verdade": [
+        "Apokalyx esperava o último dia de tudo. Dormia sobre uma montanha de ouro, relógios e armas quebradas, e acordava só quando o que guardava deixava de fazer sentido.",
+        "Apokalyx funcionava como um aviso pendurado sobre o mundo, e avisos também caem, mesmo os que ninguém queria ler."
+      ],
+      "consequencia": "O último dia se adiou, e o mundo ganhou um prazo que não pediu.",
+      "calendario": {
+        "titulo": "A queda de Apokalyx",
+        "nota": "O último dia se adiou, e o mundo ganhou um prazo que não pediu."
+      },
+      "manchete": "Apokalyx caiu. O último dia foi adiado, e ninguém sabe até quando."
+    },
+    {
+      "id": "lacuna",
+      "nome": "Lacuna",
+      "epiteto": "a Ausência Faminta",
+      "vd": 300,
+      "verdade": [
+        "Lacuna era um lugar onde devia haver alguma coisa. Crescia sobre o que consumia, e a falta que deixava parecia sempre menor do que era.",
+        "Agora a falta tem peso. Quem perdeu algo para ela sente a perda inteira pela primeira vez, e isso dói e, de um jeito torto, ajuda."
+      ],
+      "consequencia": "O que consumiu não voltou, mas passou a doer, e é a primeira vez que a falta incomoda quem a sente.",
+      "calendario": {
+        "titulo": "A queda de Lacuna",
+        "nota": "O que consumiu não voltou, mas passou a doer, e é a primeira vez que a falta incomoda quem a sente."
+      },
+      "manchete": "Lacuna caiu. O que ela levou não volta, mas finalmente dói."
+    },
+    {
+      "id": "atlarion",
+      "nome": "Atlarion",
+      "epiteto": "o Que Sustenta o Céu",
+      "vd": 400,
+      "verdade": [
+        "Atlarion carregava o céu nos ombros desde antes de haver quem olhasse para cima. Quando mudava de posição, as estações mudavam de lugar, e o que dizia em voz baixa virava lei nos vales.",
+        "Cansaço, nele, soava como um favor pedido a um vizinho, e ele nunca pediu esse favor a ninguém."
+      ],
+      "consequencia": "O céu desceu com ele, ou alguém precisou de ombros que ninguém tem.",
+      "calendario": {
+        "titulo": "A queda de Atlarion",
+        "nota": "O céu desceu com ele, ou alguém precisou de ombros que ninguém tem."
+      },
+      "manchete": "Atlarion caiu. O céu desce, e alguém vai precisar de ombros."
+    },
+    {
+      "id": "selah",
+      "nome": "Selah",
+      "epiteto": "o Último Silêncio",
+      "vd": 500,
+      "verdade": [
+        "Selah era a pausa no fim de todas as frases, esticada até virar criatura. Só aparecia quando não restava ninguém para chamá-lo de nada.",
+        "O silêncio que ele guardava era um recado atrasado. Agora que ele caiu, o recado começa a ser dito."
+      ],
+      "consequencia": "O que estava calado pôde finalmente falar, e o primeiro som do mundo foi a voz de quem se despede.",
+      "calendario": {
+        "titulo": "A queda de Selah",
+        "nota": "O que estava calado pôde finalmente falar, e o primeiro som do mundo foi a voz de quem se despede."
+      },
+      "manchete": "Selah caiu. O silêncio acabou, e a primeira voz que se ouve é a de uma despedida."
+    }
+  ]
+}

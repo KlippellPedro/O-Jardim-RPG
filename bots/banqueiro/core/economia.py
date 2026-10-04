@@ -223,6 +223,66 @@ def oferta_do_doleiro(
     return int(valor * quantidade * DOLEIRO_FRACAO * fator_do_doleiro(dia) / CREDITO_EM_SOLARES)
 
 
+# ── Mercadoria quente ────────────────────────────────────────────────────────
+# Item que o Mestre marcou como de procedência suja (veio de um roubo, de um saque, de um contrabando).
+# Ele se vende ao doleiro como qualquer outro, mas cada unidade quente deixa o vendedor mais exposto:
+# soma Calor, o mesmo Calor que torna as tentativas de /roubar mais lentas e arriscadas. O doleiro
+# não encosta em mercadoria quente de quem já está queimado demais.
+CALOR_POR_UNIDADE_QUENTE = 4
+CALOR_QUE_ESPANTA_O_DOLEIRO = 90
+
+
+def calor_da_mercadoria_quente(unidades: int) -> int:
+    """Calor somado ao vender `unidades` de mercadoria quente (nunca passa do máximo)."""
+    if type(unidades) is not int or unidades < 0:
+        raise ValueError("unidades inválidas")
+    return min(ROUBO_CALOR_MAXIMO, unidades * CALOR_POR_UNIDADE_QUENTE)
+
+
+def unidades_quentes_na_venda(quentes_registradas: int, possuidas: int, vendidas: int) -> int:
+    """Quantas das unidades vendidas são quentes. A marca nunca vale mais do que o jogador ainda tem
+    (quem gastou, trocou ou deu o item perde a marca junto), e a mercadoria quente sai primeiro."""
+    if min(quentes_registradas, possuidas, vendidas) < 0:
+        raise ValueError("quantidades inválidas")
+    return min(quentes_registradas, possuidas, vendidas)
+
+
+# ── Encomendas no mercado negro ──────────────────────────────────────────────
+# O jogador paga em Créditos Sombrios, na hora, e o contrabandista entrega depois. O preço é o do item
+# em Créditos acrescido de ágio, então comprar por encomenda e vender ao doleiro nunca dá lucro.
+ENCOMENDA_AGIO = 1.5
+ENCOMENDA_MAXIMO_PENDENTES = 3
+ENCOMENDA_MAXIMO_POR_PEDIDO = 10
+ENCOMENDA_REEMBOLSO = 0.8
+ENCOMENDA_NAO_ACEITA = DOLEIRO_NAO_COMPRA | frozenset({"fruto-eden", "implante"})
+ENCOMENDA_RARIDADES_FORA = frozenset({"mitico", "mitica", "reliquia", "reliquia da criacao"})
+
+
+def creditos_da_encomenda(preco: object, quantidade: int, rate_solares_para_lunaris: int = CAMBIO_RATE_PADRAO) -> int:
+    """Créditos Sombrios que o contrabandista cobra por `quantidade` unidades. 0 = não encomenda."""
+    if type(quantidade) is not int or not 1 <= quantidade <= ENCOMENDA_MAXIMO_POR_PEDIDO:
+        raise ValueError("quantidade inválida")
+    valor = valor_em_solares(preco, rate_solares_para_lunaris)
+    if valor is None or valor <= 0:
+        return 0
+    return max(1, math.ceil(valor * quantidade * ENCOMENDA_AGIO / CREDITO_EM_SOLARES))
+
+
+def horas_da_encomenda(valor_total_em_solares: float) -> int:
+    """Quanto o contrabandista demora: mercadoria barata chega na manhã seguinte, a cara leva dias."""
+    if valor_total_em_solares < 50:
+        return 12
+    if valor_total_em_solares < 500:
+        return 24
+    if valor_total_em_solares < 5000:
+        return 48
+    return 96
+
+
+def creditos_devolvidos_ao_cancelar(creditos: int) -> int:
+    return int(creditos * ENCOMENDA_REEMBOLSO)
+
+
 # ─────────────────────────────── Cofre / Armazém ─────────────────────────────
 
 def cofre_por_id(tier_id: str) -> Optional[Dict]:

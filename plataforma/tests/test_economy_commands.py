@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import unittest
+from unittest.mock import patch
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 
@@ -302,6 +303,11 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
         isolated_dsn = make_conninfo(TEST_DSN, options=f"-c search_path={self.schema}")
         self.database = Database(isolated_dsn)
         self.database.open()
+        # A loja sorteia ofertas em destaque por janela de tempo; o preço de lista da adaga
+        # não pode depender do dia em que o teste roda.
+        sem_promocao = patch("routers.shop.resolve_promotion", return_value=None)
+        sem_promocao.start()
+        self.addCleanup(sem_promocao.stop)
 
         self.master_id = uuid.uuid4()
         self.player_id = uuid.uuid4()
@@ -446,6 +452,64 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
                 **({"raridade": rarity} if rarity else {}),
             }],
         )
+
+    def _tocha_com_efeito_do_mundo(self, percentual):
+        """Põe uma tocha (equipamento) na loja e um efeito de preço do mundo no calendário da campanha."""
+        from core import calendario
+
+        estado = calendario.completar(None)
+        efeito = calendario.adicionar_efeito(
+            estado, {"tipo": "preco", "alvos": ["equipamento"], "percentual": percentual, "meses": 2, "origem": "ignarrak", "texto": "A faisca se foi."},
+        )
+        self.assertIsNotNone(efeito)
+        with self.database.connection() as connection:
+            connection.execute(
+                "INSERT INTO catalogo_itens (id, tipo, titulo, conteudo) VALUES ('tocha', 'equipamento', 'Tocha', %s)",
+                (Jsonb({"preco": {"Lunaris": 100}, "raridade": "comum"}),),
+            )
+            connection.execute(
+                """
+                INSERT INTO informacoes_campanha
+                    (id, campanha_id, tipo, chave_recurso, titulo, dados_completos, acesso_padrao, criado_por)
+                VALUES (%s, %s, 'loja', 'equipamento:tocha', 'Tocha', %s, 'completo', %s)
+                """,
+                (uuid.uuid4(), self.campaign_id, Jsonb({"id": "tocha"}), self.master_id),
+            )
+            connection.execute(
+                "INSERT INTO campanha_calendario (campanha_id, estado) VALUES (%s, %s)",
+                (self.campaign_id, Jsonb(estado)),
+            )
+
+    def test_efeito_de_preco_do_mundo_vale_igual_na_listagem_e_na_compra(self):
+        self._tocha_com_efeito_do_mundo(10)
+        itens = {item["id"]: item for item in get_shop_catalog(self.campaign_id, user=self.player, database=self.database)["itens"]}
+        self.assertEqual(itens["tocha"]["preco"], {"moeda": "Lunaris", "valor": 110})
+        self.assertEqual(itens["tocha"]["conteudo"]["efeito_do_mundo"]["percentual"], 10)
+        # A arma não tem efeito: o ajuste só vale para os tipos que a lenda cita.
+        self.assertEqual(itens["adaga"]["preco"], {"moeda": "Lunaris", "valor": PRECO_ADAGA_LUNARIS})
+        self.assertNotIn("efeito_do_mundo", itens["adaga"]["conteudo"])
+
+        payload = ShopBatchCommandInput(
+            campanha_id=self.campaign_id, personagem_id=self.hunter_id, economia_versao_esperada=1, localizacao_loja=1,
+            idempotencia="checkout-tocha-1", itens=[{"item_id": "tocha", "quantidade": 3}],
+        )
+        resultado = purchase_batch(payload, user=self.player, database=self.database)
+        self.assertEqual(resultado["debitos"][0]["valor"], 3 * 110)
+
+    def test_efeito_negativo_barateia_e_efeito_vencido_nao_conta(self):
+        self._tocha_com_efeito_do_mundo(-10)
+        itens = {item["id"]: item for item in get_shop_catalog(self.campaign_id, user=self.player, database=self.database)["itens"]}
+        self.assertEqual(itens["tocha"]["preco"], {"moeda": "Lunaris", "valor": 90})
+        from core import calendario
+
+        with self.database.connection() as connection:
+            linha = connection.execute("SELECT estado FROM campanha_calendario WHERE campanha_id=%s", (self.campaign_id,)).fetchone()
+            estado = calendario.completar(linha["estado"])
+            estado["hoje"] = {"ano": 1, "mes": 9, "dia": 1}  # bem depois dos dois meses do efeito
+            connection.execute("UPDATE campanha_calendario SET estado=%s WHERE campanha_id=%s", (Jsonb(estado), self.campaign_id))
+        itens = {item["id"]: item for item in get_shop_catalog(self.campaign_id, user=self.player, database=self.database)["itens"]}
+        self.assertEqual(itens["tocha"]["preco"], {"moeda": "Lunaris", "valor": 100})
+        self.assertNotIn("efeito_do_mundo", itens["tocha"]["conteudo"])
 
     def test_catalog_and_purchase_are_server_authoritative_and_replayable(self):
         catalog = get_shop_catalog(self.campaign_id, user=self.player, database=self.database)

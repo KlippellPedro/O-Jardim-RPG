@@ -338,19 +338,21 @@ class TestCharacterRules:
             no_nivel_5["legadosSelecionados"] = [legado_id]
             assert validar_regras_ficha(no_nivel_5, {}, ficha_anterior=anterior) is None, legado_id
 
-    def test_codigo_de_etica_tem_teto_de_escala_documentado(self):
-        # Decisão de balanceamento 2026-08: a fórmula antiga ("+nível") não
-        # tinha teto e ultrapassava o dano de uma arma-relíquia no nível 60.
+    def test_codigo_de_etica_tem_um_texto_so_e_define_arma_natural(self):
+        # Decisão de 2026-10-04: o dano de metade do nível (que passava de uma
+        # arma-relíquia no nível 60) saiu de vez, e o texto que o jogador vê é o
+        # mesmo nos dois arquivos. Arma natural declarada conta como arma.
         import json
 
         legados = json.loads((DATA_ROOT / "ficha" / "legados.json").read_text(encoding="utf-8"))
-        codigo_de_etica = next(l for l in legados["legados"] if l["id"] == "codigo-de-etica")
-        assert "metade do seu nível" in codigo_de_etica["descricao"]
-        # +30, não +33: nível máximo do sistema é 60, e metade de 60 é 30 —
-        # o texto precisa bater com o maior valor que a fórmula de fato produz
-        # (corrigido na revisão pós-implementação de 2026-08).
-        assert "+30" in codigo_de_etica["descricao"]
-        assert "+33" not in codigo_de_etica["descricao"]
+        regras = json.loads((DATA_ROOT / "ficha" / "legados-regras-v1.json").read_text(encoding="utf-8"))["regras"]
+        original = next(l for l in legados["legados"] if l["id"] == "codigo-de-etica")["descricao"]
+        assert original == regras["codigo-de-etica"]["descricao"]
+        assert "metade do seu nível" not in original and "+30" not in original
+        assert "não ataca quem está desarmado" in original
+        assert "arma natural declarada" in original.lower()
+        desonroso = regras["desonroso"]["descricao"]
+        assert "arma natural declarada" in desonroso
 
     def test_rejects_class_power_without_required_power(self):
         anterior = _ficha_criacao()
@@ -526,6 +528,33 @@ class TestCharacterRules:
             assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None, classes
             atual["legadosSelecionados"] = livres[:vagas + 1]
             assert "mais Legados" in validar_regras_ficha(atual, {}, ficha_anterior=anterior), classes
+
+    def test_legados_de_nivel_alto_respeitam_nivel_e_atributo(self):
+        # Os Legados de 2026-10-04 cobrem do 20 ao 500. Nível e atributo são
+        # conferidos na escolha, como nos 42 anteriores.
+        cem = [("guerreiro", 25), ("ninja", 25), ("piloto", 25), ("pop-star", 25)]
+        anterior, atual = self._ficha_de_nivel_alto(cem)
+        atual["legadosSelecionados"] = ["quando-parece-impossivel"]
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+        # Pele de Pedra Viva pede Constituição 28.
+        atual["legadosSelecionados"] = ["pele-de-pedra-viva"]
+        atual["atributosFinais"]["constituicao"] = 15
+        assert "pre-requisitos" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        atual["atributosFinais"]["constituicao"] = 28
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+        # No nível 60 o Legado de 100 ainda não abre.
+        anterior60, atual60 = self._ficha_de_nivel_alto([("guerreiro", 30), ("ninja", 30)])
+        atual60["legadosSelecionados"] = ["quando-parece-impossivel"]
+        assert "pre-requisitos" in validar_regras_ficha(atual60, {}, ficha_anterior=anterior60)
+
+        # Cicatrizes de Guerra é repetível até 2 vezes.
+        atual["atributosFinais"]["constituicao"] = 15
+        atual["legadosSelecionados"] = ["cicatrizes-de-guerra"] * 2
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+        atual["legadosSelecionados"] = ["cicatrizes-de-guerra"] * 3
+        assert "mais vezes que o permitido" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
 
     def test_bonus_racial_de_atributo_nao_tem_mais_teto(self):
         # Elfo (+4 Int), Auleth (+2 Sab), Clone e Anomalia (bônus escolhido) e as

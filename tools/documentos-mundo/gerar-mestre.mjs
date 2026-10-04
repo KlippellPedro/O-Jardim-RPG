@@ -1,7 +1,7 @@
 /**
  * Gera o kit do Mestre em PDF.
  *
- *   node tools/documentos-mundo/gerar-mestre.mjs     (ou: npm run docs:mestre)
+ *   node tools/documentos-mundo/gerar-mestre.mjs     (ou: npm run docs:mestre, que já traz o carregador de TypeScript)
  *
  * São páginas de tamanho fixo, desenhadas folha a folha: diferente do livro e
  * dos cadernos, aqui não existe texto corrido para paginar. O que existe é o
@@ -17,6 +17,8 @@ import { RAIZ } from './dados.mjs';
 import { abrirChrome, imprimir } from './render.mjs';
 import { folhaDePreparacao } from './folha-preparacao.mjs';
 import { aventuraInicial } from './aventura-inicial.mjs';
+import { AVENTURAS_DO_JARDIM } from './aventuras-do-jardim.mjs';
+import { arcoDaMalha } from './arco-da-malha.mjs';
 
 const SAIDA = join(RAIZ, 'docs', 'mestre');
 const HTML_DIR = join(SAIDA, '_html');
@@ -48,7 +50,7 @@ const montarHtml = (titulo, paginas) => `<!doctype html>
 ${paginas.join('\n')}
 </body></html>`;
 
-const documentos = [folhaDePreparacao(), aventuraInicial()];
+const documentos = [folhaDePreparacao(), aventuraInicial(), ...AVENTURAS_DO_JARDIM(), arcoDaMalha()];
 // Com --folga, o gerador também diz quanto espaço sobra em cada folha. Serve
 // para reescrever um texto sabendo de antemão quanto ele pode crescer.
 const mostrarFolga = process.argv.includes('--folga');

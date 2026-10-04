@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { Activity, Check, Coins, Footprints, Gem, Heart, Minus, Pencil, Plus, RefreshCw, RotateCcw, Shield, Sparkles, Star, Swords, Timer, X, Zap } from 'lucide-react';
+import { Activity, Check, Coins, Flame, Footprints, Gem, Heart, Minus, Pencil, Plus, RefreshCw, RotateCcw, Shield, Sparkles, Star, Swords, Timer, X, Zap } from 'lucide-react';
 import { sessaoApi, type BestiarioMonstro, type TabelaDeLoot } from '../../../services/sessaoApi';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { PAPEIS_CRIATURA, type PapelCriatura } from '../../../services/curvaCriatura';
@@ -13,9 +13,10 @@ interface CriaturaDetalheProps {
   monstro: BestiarioMonstro;
   familia?: string | null;
   cor: string;
-  adicionados: number;
-  ocupado: boolean;
-  onAdicionar: (monstro: BestiarioMonstro, quantidade: number) => void;
+  /** Sem `onAdicionar` a ficha vira só consulta, sem o rodapé de adicionar à cena. */
+  adicionados?: number;
+  ocupado?: boolean;
+  onAdicionar?: (monstro: BestiarioMonstro, quantidade: number) => void;
   onFechar: () => void;
 }
 
@@ -159,7 +160,7 @@ const Numero = ({ icone, rotulo, valor, tom }: { icone: React.ReactNode; rotulo:
 );
 
 /** A ficha inteira de uma criatura do Bestiário, para consultar durante a sessão. */
-export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ campanhaId, monstro, familia, cor, adicionados, ocupado, onAdicionar, onFechar }) => {
+export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ campanhaId, monstro, familia, cor, adicionados = 0, ocupado = false, onAdicionar, onFechar }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const [quantidade, setQuantidade] = useState(1);
   useDialogAccessibility({ open: true, dialogRef, onClose: onFechar });
@@ -173,7 +174,7 @@ export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ campanhaId, mo
     monstro.subtipo,
     papel,
     monstro.raridade ? RARIDADES[monstro.raridade] ?? monstro.raridade : null,
-  ].filter((item): item is string => !!item);
+  ].filter((item): item is string => !!item).filter((item, indice, lista) => lista.indexOf(item) === indice);
   const atributos = monstro.atributos ?? null;
   const habilidades = monstro.habilidades.map(separarHabilidade);
 
@@ -291,11 +292,29 @@ export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ campanhaId, mo
             </section>
           ) : null}
 
+          {monstro.fases?.length ? (
+            <section>
+              <h4 className="mb-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40"><Flame size={12} /> Fases do chefe</h4>
+              <ol className="space-y-2">
+                {monstro.fases.map((fase, indice) => (
+                  <li key={fase.nome} className="rounded-lg border border-[#e0645f]/20 bg-[#e0645f]/[0.04] px-3 py-2.5 text-sm leading-6 text-white/70">
+                    <strong className="block text-white">Fase {indice + 2}: {fase.nome}{fase.quando ? <span className="ml-2 text-[11px] font-semibold text-[#f19a96]">a partir de {Math.round(fase.quando * 100)}% da Vida</span> : <span className="ml-2 text-[11px] font-semibold text-white/40">só pelo Mestre</span>}</strong>
+                    {fase.anuncio ? <span className="mt-0.5 block italic text-white/80">{fase.anuncio}</span> : null}
+                    <ul className="mt-1.5 list-disc space-y-1 pl-5 text-white/65">
+                      {fase.mudancas.map((mudanca) => <li key={mudanca}>{mudanca}</li>)}
+                    </ul>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          ) : null}
+
           {(monstro.tem_loot || monstro.loot_ajustado) && campanhaId ? <SecaoLoot campanhaId={campanhaId} monstroId={monstro.id} /> : null}
 
           {monstro.funcao ? <p className="text-xs leading-5 text-white/45"><strong className="text-white/60">Contratada para:</strong> {monstro.funcao}</p> : null}
         </div>
 
+        {onAdicionar ? (
         <footer className="flex items-center gap-2 border-t border-white/[0.08] p-4">
           <div className="flex items-center rounded-lg border border-white/10">
             <button type="button" aria-label="Menos uma cópia" className="flex h-10 w-9 items-center justify-center text-white/50 hover:text-white disabled:opacity-30" disabled={quantidade <= 1} onClick={() => setQuantidade((valor) => Math.max(1, valor - 1))}><Minus size={14} /></button>
@@ -307,6 +326,7 @@ export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ campanhaId, mo
             {ocupado ? 'Adicionando...' : adicionados > 0 ? `Adicionar mais (${adicionados} na cena)` : 'Adicionar à cena'}
           </button>
         </footer>
+        ) : null}
       </motion.div>
     </motion.div>,
     document.body,

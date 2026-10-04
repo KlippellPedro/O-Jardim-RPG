@@ -29,6 +29,9 @@ permissões do mestre, vínculo Discord, economia e auditoria.
 - `GET /api/v1/contexto` com todo o estado inicial em uma requisição;
 - sessão ao vivo com iniciativa, vida em tempo real e mesa (mapa, trilha, votação,
   relógios, bilhetes), com segredos filtrados no servidor;
+- Livro da Verdade: a queda de uma lenda do Bestiário abre a página dela, marca o calendário,
+  vira manchete no Discord e dá o selo "Matador de ..." a quem estava na mesa
+  (`core/lendas.py`, `data/bestiario/lendas-v1.json`, lido só pelo servidor);
 - saque das criaturas rolado e entregue pelo Mestre, ajustável por campanha
   (`data/bestiario/loot-criaturas.json`, lido só pelo servidor);
 - envio direto e troca com aceite de itens e moedas entre personagens (`/trocas`);
