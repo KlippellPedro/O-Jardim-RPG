@@ -1,4 +1,4 @@
-import { api } from './apiClient';
+import { api, ApiError } from './apiClient';
 
 export type ChaveEstacao = 'primavera' | 'verao' | 'outono' | 'inverno' | 'noite_eterna' | 'eclipse';
 export type Revelacao = 'oculto' | 'rasurado' | 'aberto';
@@ -135,11 +135,20 @@ export interface INovoEvento {
 
 const base = (campanhaId: string) => `/calendario/${encodeURIComponent(campanhaId)}`;
 
+/** Resposta que não é um calendário (corpo vazio ou que não é JSON, comum com o servidor fora do ar
+ * ou numa versão diferente do site) vira erro legível, em vez de quebrar quem lê `.mes` e `.hoje`. */
+function garantirCalendario(resposta: ICalendarioMundo | null | undefined): ICalendarioMundo {
+  if (!resposta || !resposta.mes || !resposta.hoje) {
+    throw new ApiError('O servidor devolveu uma resposta vazia para o calendário. Recarregue a página; se continuar, avise o Criador.', 0);
+  }
+  return resposta;
+}
+
 // As regras e o recorte por papel são do servidor: evento rasurado chega sem texto.
 export const calendarioMundoApi = {
-  obter: (campanhaId: string, ano?: number, mes?: number) => {
+  obter: async (campanhaId: string, ano?: number, mes?: number) => {
     const consulta = ano !== undefined && mes !== undefined ? `?ano=${ano}&mes=${mes}` : '';
-    return api<ICalendarioMundo>(`${base(campanhaId)}${consulta}`);
+    return garantirCalendario(await api<ICalendarioMundo>(`${base(campanhaId)}${consulta}`));
   },
   definirHoje: (campanhaId: string, dados: { ano: number; mes: number; dia: number }) =>
     api<ICalendarioMundo>(`${base(campanhaId)}/hoje`, { method: 'PUT', body: dados }),
