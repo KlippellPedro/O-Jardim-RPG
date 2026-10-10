@@ -1043,7 +1043,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ol class="regras-steps">
         <li>Role o dano e aplique o multiplicador crítico aos dados e modificadores que fazem parte do ataque.</li>
         <li>Some os dados extras declarados pelo efeito. Dado extra só multiplica se a fonte disser que multiplica.</li>
-        <li>Aplique vulnerabilidade ou redução percentual.</li>
+        <li>Aplique vulnerabilidade, que dobra o dano daquele tipo, ou redução percentual.</li>
         <li>Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.</li>
       </ol>
       <p class="regras-note">Resistência física geral cobre corte, perfuração e impacto. Balístico fica de fora, de propósito. E Resistência de um tipo específico não faz nada contra os outros tipos.</p>

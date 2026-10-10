@@ -4,6 +4,7 @@ import { nivelTotalFicha, opcoesHabilidadeSelecionadas } from './progressaoFicha
 import { CONJUNTOS_EQUIPAMENTO, type IBonusConjunto, type IConjuntoEquipamento } from '../../data/regras/conjuntos';
 import { resumirLimiteItensEspeciais } from './itensEspeciaisService';
 import { efeitosBrutosDoFrutoEden } from './frutoEdenAwakening';
+import { drenagensAtivas } from './aflicoesFichaService';
 import { temProficienciaEquipamento } from '../pages/Ficha/utils/catalogoResistProf';
 
 /** Defesa perdida por armadura ou escudo marcial usado sem a proficiência. */
@@ -432,6 +433,18 @@ export function resumirEquipamentos(
       }
     });
   });
+  // Aflição que drena atributo (Definhamento Arcano, Desgaste do Tempo...) entra como efeito enquanto durar.
+  drenagensAtivas(ficha?.aflicoesAtivas).forEach((drenagem) => adicionarEfeitos([{
+    id: `drenagem:${drenagem.aflicaoId}`,
+    categoria: 'atributo',
+    alvo: drenagem.atributo,
+    valor: drenagem.valor,
+    modo: 'bonus',
+  }], {
+    itemId: `aflicao:${drenagem.aflicaoId}`,
+    itemNome: drenagem.titulo,
+    origem: `Aflição: ${drenagem.titulo}`,
+  }, true));
   efeitosDosUnicosJardim(ficha).forEach(({ unicoId, unicoTitulo, ...efeito }) => adicionarEfeitos([efeito], {
     itemId: `jardim-unico:${unicoId}`,
     itemNome: unicoTitulo,

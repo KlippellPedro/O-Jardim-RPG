@@ -95,3 +95,11 @@ test('Inspirado é achado e removido da ficha depois do teste', () => {
   assert.deepEqual(removerCondicao(undefined, 'inspirado'), []);
   assert.equal(BONUS_INSPIRADO, 2);
 });
+
+test('teste de atributo puro também sente a condição', () => {
+  assert.equal(efeitosCondicoesNoTeste(com('enfraquecido'), { atributoId: 'forca' }).bonus, -2);
+  assert.equal(efeitosCondicoesNoTeste(com('enfraquecido'), { atributoId: 'destreza' }).bonus, 0);
+  // Regras de perícia não vazam para o teste de atributo puro.
+  assert.equal(efeitosCondicoesNoTeste(com('costelas-fraturadas', 'concussao'), { atributoId: 'forca' }).bonus, 0);
+  assert.equal(efeitosCondicoesNoTeste(com('concussao'), { atributoId: 'inteligencia' }).desvantagens, 0);
+});

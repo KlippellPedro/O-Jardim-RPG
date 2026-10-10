@@ -852,7 +852,7 @@ A ordem importa: multiplicar depois de subtrair a Resistência daria um número 
 
 - Some os dados extras declarados pelo efeito. Dado extra só multiplica se a fonte disser que multiplica.
 
-- Aplique vulnerabilidade ou redução percentual.
+- Aplique vulnerabilidade, que dobra o dano daquele tipo, ou redução percentual.
 
 - Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.
 
@@ -3365,7 +3365,7 @@ Use a extensão exata da característica racial. Golem não contrai doenças com
 
 A ficha tem uma seção Aflições para acompanhar o que o personagem carrega. Escolha a aflição e role Fortitude contra a DT dela, ou aplique sem teste quando o Mestre já decidiu. A cada intervalo, o botão Teste do intervalo rola de novo e sobe, mantém ou desce o estágio conforme o resultado, e o estágio mostra o que ele faz com você.
 
-- O Cansaço que um estágio dá ao entrar é somado na ficha sozinho, até o teto de 6. Perda de Sanidade e drenagem de atributo você ajusta à mão.
+- O que um estágio cobra ao entrar a ficha aplica sozinha: o Cansaço (até o teto de 6) e a perda de Sanidade, rolada no servidor e com Desfazer. A drenagem de atributo do estágio atual entra nos atributos enquanto a aflição durar e some quando ela chega ao estágio 0.
 
 - Raça com imunidade só ganha um aviso. A decisão de aplicar ou não continua com a mesa.
 

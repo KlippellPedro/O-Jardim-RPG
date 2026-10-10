@@ -730,7 +730,7 @@ export const REGRA_AFLICOES = {
     <h3 class="regras-subtitle">Na ficha</h3>
     <p>A ficha tem uma seção Aflições para acompanhar o que o personagem carrega. Escolha a aflição e role Fortitude contra a DT dela, ou aplique sem teste quando o Mestre já decidiu. A cada intervalo, o botão Teste do intervalo rola de novo e sobe, mantém ou desce o estágio conforme o resultado, e o estágio mostra o que ele faz com você.</p>
     <ul class="regras-list">
-      <li>O Cansaço que um estágio dá ao entrar é somado na ficha sozinho, até o teto de 6. Perda de Sanidade e drenagem de atributo você ajusta à mão.</li>
+      <li>O que um estágio cobra ao entrar a ficha aplica sozinha: o Cansaço (até o teto de 6) e a perda de Sanidade, rolada no servidor e com Desfazer. A drenagem de atributo do estágio atual entra nos atributos enquanto a aflição durar e some quando ela chega ao estágio 0.</li>
       <li>Raça com imunidade só ganha um aviso. A decisão de aplicar ou não continua com a mesa.</li>
       <li>O Mestre também aplica e muda aflições pelo cartão do personagem na Mesa ao Vivo, e a mudança aparece na sua ficha.</li>
     </ul>

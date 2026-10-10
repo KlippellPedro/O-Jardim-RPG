@@ -39,22 +39,29 @@ export function efeitoDoTurnoDaCondicao(condicao: unknown): IEfeitoDoTurno | nul
 export interface IDanoResolvido {
   /** Dano que de fato entra na Vida. */
   final: number;
-  /** Quanto a Resistência tirou. */
+  /** Quanto a Resistência tirou (depois de dobrar, se houver vulnerabilidade). */
   reduzido: number;
   imune: boolean;
+  /** Vulnerabilidade dobrou o dano antes da Resistência. */
+  dobrado: boolean;
 }
 
-/** Aplica a Resistência ou Imunidade da ficha ao dano do turno. Vulnerabilidade não tem número fixo no livro e fica com a mesa. */
+/**
+ * Aplica a ficha ao dano do turno, na ordem do livro: Imunidade zera; Vulnerabilidade dobra; depois a
+ * Resistência do tipo é subtraída, até o mínimo 0.
+ */
 export function resolverDanoDoTurno(dano: number, resistenciasDaFicha: unknown, resistenciaId?: string): IDanoResolvido {
   const bruto = Math.max(0, Math.trunc(Number(dano) || 0));
-  if (!resistenciaId) return { final: bruto, reduzido: 0, imune: false };
+  if (!resistenciaId) return { final: bruto, reduzido: 0, imune: false, dobrado: false };
   const entradas = normalizarResistencias(resistenciasDaFicha).filter((entrada) => entrada.id === resistenciaId);
-  if (entradas.some((entrada) => entrada.modo === 'imunidade')) return { final: 0, reduzido: bruto, imune: true };
+  if (entradas.some((entrada) => entrada.modo === 'imunidade')) return { final: 0, reduzido: bruto, imune: true, dobrado: false };
+  const dobrado = entradas.some((entrada) => entrada.modo === 'vulnerabilidade');
+  const base = dobrado ? bruto * 2 : bruto;
   const resistencia = entradas
     .filter((entrada) => entrada.modo === 'resistencia')
     .reduce((soma, entrada) => soma + Math.max(0, entrada.valor ?? 0), 0);
-  const final = Math.max(0, bruto - resistencia);
-  return { final, reduzido: bruto - final, imune: false };
+  const final = Math.max(0, base - resistencia);
+  return { final, reduzido: base - final, imune: false, dobrado };
 }
 
 /** Tira ou devolve Vida pelo mesmo caminho do painel de status (Vida temporária, Morrendo e Ferido incluídos). */

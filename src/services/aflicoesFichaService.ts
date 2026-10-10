@@ -101,6 +101,60 @@ export function cansacoAoEntrar(aflicao: IAflicao, de: number, para: number): nu
 
 export const CANSACO_MAXIMO = 6;
 
+/** Perda de Sanidade que os estágios cobram ao entrar ("Perca 1d4 de Sanidade."), uma fórmula por estágio
+ * atravessado entre `de` e `para`. Descer de estágio não cobra nada. */
+export function sanidadeAoEntrar(aflicao: IAflicao, de: number, para: number): string[] {
+  if (para <= de) return [];
+  return aflicao.estagios
+    .filter((estagio) => estagio.numero > de && estagio.numero <= para)
+    .flatMap((estagio) => estagio.aoEntrar ?? [])
+    .flatMap((texto) => {
+      const casamento = texto.match(/Perca (\d*d\d+|\d+) de Sanidade/i);
+      return casamento ? [casamento[1].toLowerCase()] : [];
+    });
+}
+
+const ATRIBUTO_POR_NOME: Record<string, string> = {
+  'Força': 'forca',
+  Destreza: 'destreza',
+  'Constituição': 'constituicao',
+  'Inteligência': 'inteligencia',
+  Sabedoria: 'sabedoria',
+  Carisma: 'carisma',
+};
+
+/** A drenagem de uma aflição nunca passa disso (regra de Venenos, Doenças e Vícios). */
+export const DRENAGEM_MAXIMA_POR_AFLICAO = 3;
+
+export interface IDrenagemAtiva {
+  aflicaoId: string;
+  titulo: string;
+  /** Id do atributo da ficha (forca, constituicao...). */
+  atributo: string;
+  /** Valor negativo que entra no atributo. */
+  valor: number;
+}
+
+/**
+ * Drenagens de atributo em vigor na ficha. Vale só a do estágio atual (não acumula entre estágios), só depois
+ * da incubação, e no máximo −3 por aflição. Ao chegar ao estágio 0 a aflição sai da lista e o atributo volta.
+ */
+export function drenagensAtivas(valor: unknown): IDrenagemAtiva[] {
+  return normalizarAflicoesAtivas(valor).flatMap((ativa) => {
+    if (ativa.incubando) return [];
+    const aflicao = AFLICAO_POR_ID.get(ativa.aflicaoId);
+    const drenagem = aflicao?.estagios.find((estagio) => estagio.numero === ativa.estagio)?.drenagemAtributo;
+    const atributo = drenagem ? ATRIBUTO_POR_NOME[drenagem.atributo] : undefined;
+    if (!aflicao || !drenagem || !atributo || !(drenagem.valor > 0)) return [];
+    return [{
+      aflicaoId: aflicao.id,
+      titulo: aflicao.titulo,
+      atributo,
+      valor: -Math.min(DRENAGEM_MAXIMA_POR_AFLICAO, drenagem.valor),
+    }];
+  });
+}
+
 export function efeitosDoEstagio(aflicao: IAflicao, estagio: number) {
   return aflicao.estagios.find((item) => item.numero === estagio) ?? { numero: estagio, efeitos: [] };
 }

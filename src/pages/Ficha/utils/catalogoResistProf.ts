@@ -18,7 +18,7 @@ export type ModoResistencia = 'resistencia' | 'vulnerabilidade' | 'imunidade';
 
 export const MODOS_RESISTENCIA: ReadonlyArray<{ id: ModoResistencia; rotulo: string }> = [
   { id: 'resistencia', rotulo: 'Resistência' },
-  { id: 'vulnerabilidade', rotulo: 'Vulnerabilidade' },
+  { id: 'vulnerabilidade', rotulo: 'Vulnerabilidade ×2' },
   { id: 'imunidade', rotulo: 'Imunidade' },
 ];
 
