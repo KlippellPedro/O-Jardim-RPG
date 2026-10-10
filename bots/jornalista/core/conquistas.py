@@ -27,6 +27,8 @@ CONQUISTAS = (
     Conquista("pena_lunar", "Pena da Lua", "pautas", 3, "3 pautas de sua autoria publicadas"),
     Conquista("destino", "Queridinho do Destino", "loterias", 1, "1 vitória na Loteria Dominical"),
     Conquista("olho_rua", "Olho da Rua", "furos", 5, "5 furos comprados pelo Jornalista"),
+    Conquista("cronista", "Cronista das Dez Árvores", "paginas", 10, "10 páginas completas da coleção das Árvores"),
+    Conquista("mecenas", "Mecenas do Jardim", "doado", 300, "300 Lunaris doados ao Cofre do Jardim"),
     Conquista("cacador_lendas", "Caçador de Lendas", "capturas", 5, "5 recompensas por captura recebidas"),
 )
 POR_CHAVE = {c.chave: c for c in CONQUISTAS}

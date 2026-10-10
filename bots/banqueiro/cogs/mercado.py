@@ -54,27 +54,41 @@ class LanceModal(discord.ui.Modal, title="Dar lance no leilão"):
         await self.cog.processar_lance(interaction, self.leilao_id, valor)
 
 
-class LeilaoView(discord.ui.View):
-    def __init__(self, cog: "Mercado", leilao_id: int):
-        # Sem persistência entre reinícios do processo de propósito: a
-        # resolução por tempo roda pelo banco (ciclo_leiloes), não pela view;
-        # só o BOTÃO de lance fica indisponível se o bot reiniciar no meio.
-        super().__init__(timeout=3600 * economia.LEILAO_DURACAO_MAX_HORAS)
-        self.cog = cog
-        self.leilao_id = leilao_id
+LEILAO_LANCE_TEMPLATE = r"leilao_lance:(?P<id>\d+)"
 
-    @discord.ui.button(label="Dar lance 💰", style=discord.ButtonStyle.success)
-    async def lance(self, interaction: discord.Interaction, button: discord.ui.Button):
+
+class LeilaoLanceButton(discord.ui.DynamicItem[discord.ui.Button], template=LEILAO_LANCE_TEMPLATE):
+    """Botão de lance que sobrevive a reinício do bot: o id do leilão vai no
+    custom_id, e o leilão em si é lido do banco a cada clique."""
+
+    def __init__(self, cog: "Mercado", leilao_id: int):
+        super().__init__(
+            discord.ui.Button(
+                label="Dar lance 💰", style=discord.ButtonStyle.success,
+                custom_id=f"leilao_lance:{int(leilao_id)}",
+            )
+        )
+        self.cog = cog
+        self.leilao_id = int(leilao_id)
+
+    @classmethod
+    async def from_custom_id(cls, interaction: discord.Interaction, item, match):
+        return cls(interaction.client.get_cog("Mercado"), int(match["id"]))
+
+    async def callback(self, interaction: discord.Interaction) -> None:
         await interaction.response.send_modal(LanceModal(self.cog, self.leilao_id))
 
-    async def on_timeout(self):
-        for child in self.children:
-            child.disabled = True
+
+class LeilaoView(discord.ui.View):
+    def __init__(self, cog: "Mercado", leilao_id: int):
+        super().__init__(timeout=None)
+        self.add_item(LeilaoLanceButton(cog, leilao_id))
 
 
 class Mercado(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.bot.add_dynamic_items(LeilaoLanceButton)
         registrar_reinicio_em_erro(self.ciclo_leiloes, "ciclo_leiloes", log)
         registrar_reinicio_em_erro(self.ciclo_cambio_flutuante, "ciclo_cambio_flutuante", log)
         self.ciclo_leiloes.start()
@@ -99,15 +113,20 @@ class Mercado(commands.Cog):
             else "Nenhum lance ainda"
         )
         vencedor_txt = f"<@{leilao['vencedor_id']}>" if leilao.get("vencedor_id") else "Sem vencedor"
+        casa = leilao.get("modo_posse") == "casa"
+        vendedor_txt = "🌿 **Casa do Jardim**" if casa else f"<@{leilao['vendedor_id']}>"
         emb = ui.embed(
             f"🔨 Leilão: {leilao['titulo']}", categoria="troca",
-            descricao=f"Vendedor: <@{leilao['vendedor_id']}>\nLance mínimo: {simb} {leilao['lance_minimo']} {leilao['moeda']}",
+            descricao=f"Vendedor: {vendedor_txt}\nLance mínimo: {simb} {leilao['lance_minimo']} {leilao['moeda']}",
         )
         emb.add_field(name="Lance atual", value=lance_txt, inline=True)
         emb.add_field(name="Na frente", value=vencedor_txt, inline=True)
         emb.add_field(name="Status", value=status_txt, inline=True)
         if isinstance(leilao.get("expira_em"), datetime):
             emb.add_field(name="Encerra", value=discord.utils.format_dt(leilao["expira_em"], style="R"), inline=False)
+        if casa:
+            emb.set_footer(text=f"{ui.MARCA} · leilão #{leilao['id']} · leilão semanal do Jardim")
+            return emb
         corte = self.bot.db.get_economia_config(leilao["guild_id"])["leilao_corte"]
         emb.set_footer(text=f"{ui.MARCA} · leilão #{leilao['id']} · corte da casa: {int(corte * 100)}%")
         return emb
@@ -116,6 +135,21 @@ class Mercado(commands.Cog):
         """Entrega ao vencedor, ou devolve ao vendedor (destinatario_id ==
         vendedor_id) quando não houve lance ou o vencedor ficou sem saldo."""
         guild_id, kind, ref, titulo = leilao["guild_id"], leilao["kind"], leilao["ref"], leilao["titulo"]
+        if leilao.get("modo_posse") == "casa":
+            if destinatario_id == leilao["vendedor_id"]:
+                return  # ninguém levou: o item volta pro estoque da casa
+            it = self.bot.catalogo.get(ref)
+            nome, tipo = (it.titulo, it.tipo) if it else (titulo, "equipamento")
+            try:
+                await self.bot.inventario.dar(
+                    guild_id, destinatario_id, ref, nome, tipo, 1,
+                    motivo=f"Leilão do Jardim: {titulo}", chave=f"leilao-casa:{guild_id}:{leilao['id']}",
+                )
+            except Exception:
+                # O lance já foi cobrado e o leilão fechado: o item nunca pode se perder.
+                log.exception("leilao da casa %s: falha ao entregar no cofre; usando o inventario local", leilao["id"])
+                self.bot.db.add_item(guild_id, destinatario_id, ref, nome, tipo, 1)
+            return
         if kind == "bau":
             self.bot.db.add_bau(guild_id, destinatario_id, ref, 1)
             return
@@ -304,6 +338,9 @@ class Mercado(commands.Cog):
         if leilao is None or leilao["status"] != "ativo":
             await interaction.response.send_message("Esse leilão já foi encerrado.", ephemeral=True)
             return
+        if isinstance(leilao.get("expira_em"), datetime) and leilao["expira_em"] <= datetime.now(timezone.utc):
+            await interaction.response.send_message("Esse leilão já terminou: o resultado sai em instantes.", ephemeral=True)
+            return
         sid, uid = str(interaction.guild_id), str(interaction.user.id)
         if uid == leilao["vendedor_id"]:
             await interaction.response.send_message("Você não pode dar lance no seu próprio leilão.", ephemeral=True)
@@ -361,7 +398,7 @@ class Mercado(commands.Cog):
             corte = db.get_economia_config(leilao["guild_id"])["leilao_corte"]
             liquidacao = db.liquidar_leilao_com_custodia(leilao["id"], corte)
             pago = liquidacao is not None
-            if not pago:
+            if not pago and leilao.get("modo_posse") != "casa":
                 # Compatibilidade com leilões ativos criados antes da versão
                 # de custódia: eles ainda cobram no encerramento uma vez.
                 try:
@@ -398,17 +435,23 @@ class Mercado(commands.Cog):
                 # duas vezes.
                 try:
                     await self._entregar_posse(leilao, leilao["vencedor_id"])
-                except (ItemIndisponivel, CofreIndisponivel):
+                except Exception:
                     log.exception(
                         "leilao %s pago mas a entrega falhou: item continua reservado na plataforma",
                         leilao["id"],
                     )
-                    db.criar_aviso(
-                        leilao["guild_id"],
-                        f"⚠️ O leilão de **{leilao['titulo']}** foi pago, mas a entrega falhou. "
-                        f"O item continua reservado: peça pra um admin da plataforma liberar "
-                        f"manualmente (leilão #{leilao['id']}).",
-                    )
+                    if leilao.get("modo_posse") == "casa":
+                        texto_falha = (
+                            f"⚠️ O leilão de **{leilao['titulo']}** foi pago, mas a entrega falhou. "
+                            f"Avise um admin para entregar o item manualmente (leilão #{leilao['id']})."
+                        )
+                    else:
+                        texto_falha = (
+                            f"⚠️ O leilão de **{leilao['titulo']}** foi pago, mas a entrega falhou. "
+                            f"O item continua reservado: peça pra um admin da plataforma liberar "
+                            f"manualmente (leilão #{leilao['id']})."
+                        )
+                    db.criar_aviso(leilao["guild_id"], texto_falha)
                 db.encerrar_leilao(leilao["id"], "encerrado")
                 db.criar_aviso(
                     leilao["guild_id"],
@@ -419,7 +462,7 @@ class Mercado(commands.Cog):
 
         if resultado["status"] == "encerrado":
             vencedor = self.bot.get_user(int(leilao["vencedor_id"]))
-            vendedor = self.bot.get_user(int(leilao["vendedor_id"]))
+            vendedor = None if leilao.get("modo_posse") == "casa" else self.bot.get_user(int(leilao["vendedor_id"]))
             if vencedor:
                 await enviar_alerta_banco(
                     self.bot,

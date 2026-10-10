@@ -72,7 +72,7 @@ ENIGMAS = (
     # Lendários: problemas que exigem mais de uma etapa ou reconhecer um padrão.
     Enigma("Complete a sequência descritiva: 1, 11, 21, 1211, 111221, ...", ("312211",), "lendario", "Sequência"),
     Enigma("Três caixas dizem Maçãs, Laranjas e Mista, mas todos os rótulos estão errados. De qual caixa você tira uma fruta primeiro?", ("mista", "caixa mista", "da caixa mista"), "lendario", "Lógica"),
-    Enigma("Uma corda é acesa nas duas pontas e outra em uma ponta. Quando a primeira acaba, acende-se a outra ponta da segunda. Quanto tempo passou quando a segunda acaba?", ("45 minutos", "45", "quarenta e cinco minutos"), "lendario", "Lógica"),
+    Enigma("Duas cordas iguais queimam de forma irregular e cada uma leva 60 minutos para acabar. Uma é acesa nas duas pontas e a outra em uma só. Quando a primeira acaba, acende-se também a outra ponta da segunda. Quantos minutos passaram quando a segunda acaba?", ("45 minutos", "45", "quarenta e cinco minutos"), "lendario", "Lógica"),
     Enigma("Há oito bolas iguais, mas uma é mais pesada. Qual o mínimo de pesagens numa balança de pratos para encontrá-la?", ("2", "duas", "duas pesagens"), "lendario", "Lógica"),
     Enigma("Um relógio leva 5 segundos para dar 6 badaladas. Quanto leva para dar 12 badaladas?", ("11 segundos", "11", "onze segundos"), "lendario", "Tempo"),
     Enigma("Um caracol sobe 3 metros de dia e desce 2 à noite. Em qual dia alcança o topo de um muro de 10 metros?", ("8", "oitavo", "oitavo dia", "dia 8"), "lendario", "Lógica"),

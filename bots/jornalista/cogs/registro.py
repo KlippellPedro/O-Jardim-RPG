@@ -467,6 +467,35 @@ class Registro(commands.Cog):
             f"📋 Canal de registro das boas-vindas: {canal.mention}.", ephemeral=True
         )
 
+    @registro.command(
+        name="cargo_arvore",
+        description="Liga uma Árvore a um cargo existente (usado pelo bônus do horóscopo nos baús).",
+    )
+    @app_commands.checks.has_permissions(manage_guild=True)
+    @app_commands.describe(arvore="A Árvore do Jardim.", cargo="O cargo que representa essa Árvore.")
+    @app_commands.choices(
+        arvore=[app_commands.Choice(name=a.nome, value=a.id) for a in arvores_mod.ARVORES]
+    )
+    async def cargo_arvore(
+        self,
+        interaction: discord.Interaction,
+        arvore: app_commands.Choice[str],
+        cargo: discord.Role,
+    ):
+        """O vínculo Árvore e cargo só era gravado por /registro preset_arvores.
+        Quem montou o painel à mão ficava com o bônus do horóscopo parado, sem
+        nenhum comando que o ligasse."""
+        if not interaction.guild_id:
+            await interaction.response.send_message("⚠️ Só dentro de um servidor.", ephemeral=True)
+            return
+        self.bot.db.set_cargo_arvore(str(interaction.guild_id), arvore.value, str(cargo.id))
+        await interaction.response.send_message(
+            f"✅ **{arvore.name}** agora é o cargo {cargo.mention}. "
+            "Quem tem esse cargo recebe o bônus quando a Árvore é a do horóscopo do dia.",
+            ephemeral=True,
+            allowed_mentions=discord.AllowedMentions.none(),
+        )
+
     @registro.command(name="preset_arvores", description="Cria um painel pronto com as 10 Árvores do Jardim (cria os cargos).")
     @app_commands.checks.has_permissions(manage_guild=True)
     async def preset_arvores(self, interaction: discord.Interaction):

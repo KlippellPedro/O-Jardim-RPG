@@ -104,9 +104,8 @@ CLIMAS: List[ItemClima] = [
     ),
     ItemClima(
         "estrelas_cadentes", "🌠 Estrelas Cadentes",
-        "+1 narrativo num teste à escolha do jogador nessa sessão (fez um pedido). A chuva estelar traz sorte: **Todos os baús têm o dobro de chance de dropar Fragmentos de Estrela.**",
+        "+1 narrativo num teste à escolha do jogador nessa sessão (fez um pedido).",
         estacoes=None, peso=PESO_RARO,
-        modificador_economico="loot_up"
     ),
 ]
 

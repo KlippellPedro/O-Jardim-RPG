@@ -9,10 +9,24 @@ from discord.ext import commands
 from core import ui
 
 CATEGORIAS = {
+    "guia": {
+        "rotulo": "🌿 Comece por aqui",
+        "descricao": "O que o Banco Lunar faz, em poucas linhas.",
+        "comandos": [
+            ("🏦 O painel /banco", "Abre, só para você, a sua conta: carteira, cofre, cartão, o que pede atenção e o que está acontecendo no servidor, com um menu para qualquer tela. É o jeito mais fácil de usar o Banco."),
+            ("💰 O básico", "A moeda de todo dia é o Lunaris. 1 Solar vale 100 Lunaris. Itens e equipamentos você compra na Loja do site; o Banco cuida de carteira, cofre, câmbio, empréstimos, leilões e baús."),
+            ("🏛️ Cofre do Jardim", "Uma meta de Lunaris que o Mestre abre para a mesa inteira. Doe pelo `/banco` (seção Cofre do Jardim): ☾ 10, ☾ 50 ou o valor que quiser. Bateu a meta, vem a recompensa. Não bateu até o prazo, cada um recebe de volta o que doou."),
+            ("🗝️ Chaves do Jardim", "Custam ☾ 40, você guarda até 10 (`/banco`, seção Chaves do Jardim). Uma Chave é gasta sozinha no próximo baú Incomum ou melhor que você pegar e abre o fundo falso: mais Lunaris e um item extra. Ninguém precisa de Chave para abrir baú."),
+            ("🔨 Leilão do Jardim", "Todo sábado às 18h a casa leiloa um item Raro ou melhor por 24 horas. Toque em **Dar lance** na mensagem. Quem é superado recebe o dinheiro de volta na hora, e o lance vencedor sai da economia. Os leilões entre jogadores continuam em `/leilao_iniciar`."),
+            ("📈 Dia de Bolsa", "Toda quarta ao meio-dia, por 24 horas, o humor da Bolsa muda: ou os Títulos do Jardim têm 90% de chance de render, ou só 50%, ou o câmbio fica sem taxa. O humor do dia aparece no `/banco` e no jornal."),
+            ("🎁 Baús do servidor", "Os baús que aparecem sozinhos nos canais são do Jornalista. Veja o dia deles com `/jardim`. Os baús que você compra e abre moram aqui no Banco."),
+        ],
+    },
     "economia": {
         "rotulo": "💰 Economia",
         "descricao": "Carteira, câmbio, cofre e Cartão Lunar. Itens são comprados na Loja do site.",
         "comandos": [
+            ("/banco", "Abre o painel do Banco Lunar: resumo da conta, avisos, o que acontece no servidor e um menu para qualquer tela de consulta."),
             ("/carteira [membro]", "Mostra seus dados financeiros em privado; só mestres podem consultar outra pessoa."),
             ("/perfil [membro]", "Mostra o perfil econômico em privado; só mestres podem consultar outra pessoa."),
             ("/pagar <membro> <quantia>", "Transfere dinheiro da sua carteira pra de outro jogador."),
@@ -83,7 +97,7 @@ CATEGORIAS = {
             ("/loteria_comprar <quantidade>", "Compra bilhetes da Loteria Dominical (sorteio semanal no jornal)."),
             ("/loteria_meus_bilhetes", "Mostra quantos bilhetes você tem na rodada atual."),
             ("/loteria_bolo", "Mostra bilhetes vendidos, participantes e prêmio estimado antes de comprar."),
-            ("/mercado_negro", "Acesso restrito. Vende itens exóticos por Créditos Sombrios."),
+            ("/mercado_negro", "Mostra os preços do contrabandista de hoje, pagos em Créditos Sombrios."),
         ],
     },
     "cassino": {
@@ -139,7 +153,7 @@ CATEGORIAS = {
         ],
     },
     "mestre": {
-        "rotulo": "🛡️ Mestre",
+        "rotulo": "🛡️ Mestre: economia",
         "descricao": "Comandos administrativos (requer permissão Gerenciar Servidor).",
         "comandos": [
             ("/dar <membro> <moeda> <quantia>", "Dá moeda a um jogador."),
@@ -179,24 +193,54 @@ CATEGORIAS = {
 }
 
 
-def _pagina(chave: str, rodape: str = "Escolha outra categoria no menu abaixo") -> discord.Embed:
+# O Discord aceita no máximo 25 campos por embed e a lista do Mestre passava de 30: sem esta divisão,
+# abrir a categoria dava erro para quem mais usa o /ajuda. A segunda parte vira uma categoria própria.
+_MESTRE = CATEGORIAS["mestre"]["comandos"]
+CATEGORIAS["mestre"]["comandos"] = _MESTRE[:17]
+CATEGORIAS["mestre_jogadores"] = {
+    "rotulo": "🛡️ Mestre: jogadores e catálogo",
+    "descricao": "Painéis e ajustes por jogador, proteções, saldo e catálogo (Gerenciar Servidor).",
+    "comandos": _MESTRE[17:],
+}
+
+
+def _eh_mestre(interaction: discord.Interaction) -> bool:
+    permissoes = getattr(interaction, "permissions", None)
+    return bool(permissoes and (permissoes.manage_guild or permissoes.administrator))
+
+
+def _entradas(chave: str, mestre: bool = True) -> list:
+    """Entradas visíveis da categoria. Quem não é Mestre não vê os comandos marcados [Mestre]
+    nem a categoria dos comandos administrativos."""
+    if chave.startswith("mestre") and not mestre:
+        return []
+    todas = CATEGORIAS[chave]["comandos"]
+    return todas if mestre else [(c, d) for c, d in todas if not d.startswith("[Mestre]")]
+
+
+def _categorias_visiveis(mestre: bool = True) -> list:
+    return [chave for chave in CATEGORIAS if _entradas(chave, mestre)]
+
+
+def _pagina(chave: str, rodape: str = "Escolha outra categoria no menu abaixo", mestre: bool = True) -> discord.Embed:
     info = CATEGORIAS[chave]
     emb = ui.embed(info["rotulo"], categoria="ajuda", descricao=info["descricao"])
     # Um campo por comando evita o corte silencioso em 1.024 caracteres que
     # escondia o fim de categorias grandes como Economia e Mestre.
-    for cmd, desc in info["comandos"]:
+    for cmd, desc in _entradas(chave, mestre):
         emb.add_field(name=cmd, value=desc, inline=False)
     emb.set_footer(text=f"{ui.MARCA} · {rodape}")
     return emb
 
 
 class MenuAjuda(discord.ui.View):
-    def __init__(self, autor_id: int, timeout: float = 120):
+    def __init__(self, autor_id: int, timeout: float = 120, mestre: bool = False):
         super().__init__(timeout=timeout)
         self.autor_id = autor_id
+        self.mestre = mestre
         self.select.options = [
-            discord.SelectOption(label=info["rotulo"], value=chave, description=info["descricao"][:100])
-            for chave, info in CATEGORIAS.items()
+            discord.SelectOption(label=CATEGORIAS[chave]["rotulo"], value=chave, description=CATEGORIAS[chave]["descricao"][:100])
+            for chave in _categorias_visiveis(mestre)
         ]
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
@@ -208,7 +252,7 @@ class MenuAjuda(discord.ui.View):
     @discord.ui.select(placeholder="Escolha uma categoria de comandos…")
     async def select(self, interaction: discord.Interaction, select: discord.ui.Select):
         chave = select.values[0]
-        await interaction.response.edit_message(embed=_pagina(chave), view=self)
+        await interaction.response.edit_message(embed=_pagina(chave, mestre=self.mestre), view=self)
 
     async def on_timeout(self) -> None:
         for child in self.children:
@@ -221,13 +265,19 @@ class Ajuda(commands.Cog):
 
     @app_commands.command(description="Mostra o menu de comandos do Banqueiro por categoria.")
     async def ajuda(self, interaction: discord.Interaction):
-        primeira_chave = next(iter(CATEGORIAS))
-        view = MenuAjuda(autor_id=interaction.user.id)
-        await interaction.response.send_message(embed=_pagina(primeira_chave), view=view, ephemeral=True)
+        mestre = _eh_mestre(interaction)
+        view = MenuAjuda(autor_id=interaction.user.id, mestre=mestre)
+        await interaction.response.send_message(
+            embed=_pagina(_categorias_visiveis(mestre)[0], mestre=mestre), view=view, ephemeral=True
+        )
 
     @app_commands.command(description="Lista TODOS os comandos do Banqueiro, um bloco por categoria.")
     async def comandos(self, interaction: discord.Interaction):
-        paginas = [_pagina(chave, rodape="Use ◀ ▶ pra navegar entre categorias") for chave in CATEGORIAS]
+        mestre = _eh_mestre(interaction)
+        paginas = [
+            _pagina(chave, rodape="Use ◀ ▶ pra navegar entre categorias", mestre=mestre)
+            for chave in _categorias_visiveis(mestre)
+        ]
         view = ui.Paginador(paginas, autor_id=interaction.user.id)
         await interaction.response.send_message(embed=view.pagina_atual, view=view, ephemeral=True)
 

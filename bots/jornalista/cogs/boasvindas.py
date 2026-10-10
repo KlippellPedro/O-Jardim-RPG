@@ -78,6 +78,8 @@ class Boasvindas(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
+        if member.bot:  # outros bots no servidor não ganham "EXTRA! EXTRA!"
+            return
         gid = str(member.guild.id)
         if not self.bot.db.automacao_ativa(gid, "boas_vindas", True):
             return
@@ -112,6 +114,8 @@ class Boasvindas(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: discord.Member):
+        if member.bot:
+            return
         gid = str(member.guild.id)
         if not self.bot.db.automacao_ativa(gid, "despedidas", True):
             return

@@ -32,10 +32,13 @@ EXTENSOES = (
     "cogs.ajuda",
     "cogs.mercado_negro",
     "cogs.mestre",
+    "cogs.painel",
+    "cogs.eventos",
 )
 
 COMANDOS_ESPERADOS = {
     "abrir_bau",
+    "banco",
     "abrir_todos",
     "ajuda",
     "alertas_banco",
@@ -206,6 +209,8 @@ def _inventario_ajuda() -> set[str]:
     inventario = set()
     for categoria in CATEGORIAS.values():
         for assinatura, _descricao in categoria["comandos"]:
+            if not assinatura.startswith("/"):
+                continue  # entradas do guia, em prosa
             nome = assinatura.removeprefix("/").split(" <", 1)[0].split(" [", 1)[0]
             inventario.add(nome)
     return inventario

@@ -15,11 +15,15 @@ from discord.ext import commands, tasks
 from core import arvores as arvores_mod
 from core import publicacoes
 from core import ui
+from core.loot import TZ
 from core.tasks_util import registrar_reinicio_em_erro
 
 log = logging.getLogger("jornalista")
 
-HOROSCOPO_INTERVALO_HORAS = 24
+
+def _hoje():
+    """Data de hoje em São Paulo (o dia do servidor, não o dia UTC)."""
+    return (datetime.now(TZ) if TZ else datetime.now(timezone.utc)).date()
 
 
 class Horoscopo(commands.Cog):
@@ -31,27 +35,22 @@ class Horoscopo(commands.Cog):
     def cog_unload(self):
         self.ciclo.cancel()
 
-    # O loop roda de hora em hora, não a cada HOROSCOPO_INTERVALO_HORAS: o
-    # temporizador do tasks.loop é em memória e só reagenda depois de dormir
-    # o período inteiro, então um loop de 24h só dispara de novo se o bot
-    # ficar 24h ininterruptas no ar — raro num bot com deploys frequentes.
-    # ciclo_guild_devido (Postgres, sobrevive a restart) é quem decide a
-    # cadência diária de verdade.
+    # O loop roda de hora em hora e o banco decide se o dia de hoje (São Paulo)
+    # já tem horóscopo. Antes a decisão era "24h desde o último sorteio": como
+    # o carimbo era gravado depois do envio, o ciclo derivava uma hora por dia
+    # (25h na prática) e, a cada ~24 dias, um dia inteiro ficava sem sorteio.
+    # Por data do calendário não há deriva, e reiniciar o bot no meio do dia
+    # não sorteia de novo (horoscopo_definido_hoje).
     @tasks.loop(hours=1)
     async def ciclo(self):
         for guild in self.bot.guilds:
             gid = str(guild.id)
             if not self.bot.db.automacao_ativa(gid, "horoscopo", True):
                 continue
-            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
-            # isto, todo restart (cada deploy na Discloud) sorteava um novo
-            # horoscopo do dia, mesmo horas depois do ultimo.
-            if not self.bot.db.ciclo_guild_devido(gid, "horoscopo", HOROSCOPO_INTERVALO_HORAS):
+            if self.bot.db.horoscopo_definido_hoje(gid):
                 continue
             try:
-                resultado = await self._publicar(guild)
-                if resultado in {"entregue", "falha", "adiada", "agendada"}:
-                    self.bot.db.marcar_ciclo_guild(gid, "horoscopo")
+                await self._publicar(guild)
             except Exception:
                 log.exception("erro no ciclo do horoscopo (guild %s)", guild.id)
 
@@ -74,10 +73,10 @@ class Horoscopo(commands.Cog):
 
     async def _publicar(self, guild: discord.Guild) -> str:
         gid = str(guild.id)
-        data_utc = datetime.now(timezone.utc).date().isoformat()
+        data_dia = _hoje().isoformat()
         # Determinístico por guild/dia: duas instâncias durante um deploy não
         # podem anunciar uma Árvore e deixar outra salva como bônus vigente.
-        arvore = random.Random(f"{gid}:{data_utc}").choice(arvores_mod.ARVORES)
+        arvore = random.Random(f"{gid}:{data_dia}").choice(arvores_mod.ARVORES)
         self.bot.db.set_horoscopo(gid, arvore.id)
         canal_id = self.bot.db.get_canal_categoria(gid, "noticia")
         emb = self._montar_embed(gid, arvore)
@@ -87,7 +86,7 @@ class Horoscopo(commands.Cog):
             embed=emb,
             origem="horoscopo",
             dedupe_key=(
-                f"horoscopo:{gid}:{data_utc}"
+                f"horoscopo:{gid}:{data_dia}"
             ),
             categoria="noticia",
             canal_id=canal_id,

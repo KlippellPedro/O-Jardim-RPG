@@ -10,6 +10,51 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
 
 ## Mecânicas
 
+- **Painel `/banco`** — uma mensagem privada que reúne a conta (carteira, cofre,
+  Cartão Lunar), o que pede atenção (dívida, fatura perto de vencer, recompensa
+  na sua cabeça, mandato semanal pronto) e o que acontece no servidor (baús do
+  Jornalista no ar e se você já pegou o seu, loteria, eventos do Mestre). O menu
+  abre as telas de consulta reaproveitando os comandos atuais (carteira, cartão,
+  cofre, extrato, inventário, faturas, dívida, empréstimos, procurados, baús,
+  leilões, Mercado Negro, câmbio, títulos, loteria, Salão, mandato, ranking),
+  sempre em privado e sem poluir o canal. Três botões fazem ações
+  rápidas: guardar e sacar do cofre (Lunaris) e comprar bilhetes da loteria.
+  A seção **Cofre do Jardim** mostra a meta coletiva que o Mestre abriu (progresso,
+  prazo, o que a mesa ganha, quem mais doou) e recebe doações de ☾10, ☾50 ou outro
+  valor. A doação é atômica (débito, total da meta e extrato juntos) e limitada ao
+  que falta; ao bater a meta, a mesma transação fecha a meta, abre o festival
+  prometido (se houver) e enfileira o aviso do jornal. Sem bater a meta no prazo,
+  o Jornalista devolve tudo. O menu do painel está no limite de 25 seções do Discord.
+  A seção **Chaves do Jardim** vende Chaves (☾ 40 cada, até 10 guardadas, compra
+  atômica com extrato) e liga ou desliga o uso automático; o Jornalista gasta uma
+  Chave sozinho no próximo baú Incomum ou melhor, abrindo o "fundo falso" (+50% de
+  Lunaris e um item extra). A Chave nunca é exigida para abrir um baú.
+  **Eventos da semana** (cog `eventos`, automáticos, sem comando): todo **sábado
+  às 18h** (horário de São Paulo) a casa abre o **Leilão do Jardim** no canal de
+  dinheiro do jornal: um item Raro ou melhor (Raro 55%, Épico 30%, Lendário 12%,
+  Mítico 3%; nunca monstro, bem, Fruto do Éden ou Relíquia, e só itens pagos em Lunaris ou Solares com
+  preço de até ☾ 2.400, para o lance inicial ficar ao alcance da mesa), lance mínimo de 25%
+  do preço de balcão (piso ☾ 50), 24h de duração. O vendedor é a "Casa do
+  Jardim" (`vendedor_id='jardim'`, `modo_posse='casa'`): o lance vencedor sai da
+  economia e o item vai ao cofre do vencedor, com idempotência
+  `leilao-casa:{guild}:{id}`. Toda **quarta às 12h** abre o **Dia de Bolsa** por
+  24h, com humor sorteado: *Bolsa em alta* (Títulos rendem com 90%), *Bolsa em
+  baixa* (50%) ou *Câmbio livre* (sem taxa em `/cambio`). Crise econômica
+  continua valendo acima da Bolsa. Cada evento ocorre uma vez por semana ISO e
+  por servidor (trava `ciclos_guild`, chave `evento:leilao:2026-W41`), é
+  recuperado até o dia seguinte se o bot estiver fora do ar e pode ser desligado
+  em `/jornal automacao leilao_semanal|dia_de_bolsa`. O botão de lance dos
+  leilões agora sobrevive a reinício do bot. O início do `/banco` mostra o
+  leilão e o humor da Bolsa em "Acontecendo agora".
+  O `/ajuda` e o `/comandos` começam por um guia "Comece por aqui" (painel, Cofre do Jardim,
+  Chaves, Leilão do Jardim, Dia de Bolsa) e escondem de quem não é Mestre os comandos
+  `[Mestre]`. A lista do Mestre ganhou duas categorias (economia e jogadores/catálogo): em uma
+  só passava de 25 campos e o Discord recusava a página.
+  Abrir uma tela pelo painel rende o mesmo ponto de reputação do comando. Os
+  comandos de consulta continuam existindo; o painel é um caminho a mais e
+  prepara a aposentadoria deles quando o limite de 100 comandos do Discord
+  apertar (o Banqueiro está em 97). O código do painel (`core/painel.py`) é o
+  mesmo do Jornalista.
 - **Reputação bancária e Cartão Lunar** — são valores diferentes. A reputação
   é a confiança do Banqueiro no jogador: ela libera raridades da Loja do site, baús,
   níveis de cartão, cofre e segurança, além de benefícios como descontos,

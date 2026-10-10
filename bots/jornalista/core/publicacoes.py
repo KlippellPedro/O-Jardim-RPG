@@ -116,11 +116,18 @@ async def tentar_publicacao(bot, publicacao: dict) -> str:
     payload = publicacao.get("payload") or {}
     embed_dados = payload.get("embed")
     embed = discord.Embed.from_dict(embed_dados) if embed_dados else None
+    extras = {}
+    classificado_id = payload.get("classificado_id")
+    if classificado_id:
+        cog = bot.get_cog("Classificados")
+        if cog is not None:
+            extras["view"] = cog.view_do(int(classificado_id))
     try:
         mensagem = await canal.send(
             content=payload.get("content"),
             embed=embed,
             allowed_mentions=_mencoes(str(payload.get("mencoes") or "nenhuma")),
+            **extras,
         )
     except discord.HTTPException as exc:
         log.warning(
@@ -130,6 +137,8 @@ async def tentar_publicacao(bot, publicacao: dict) -> str:
         bot.db.marcar_publicacao_falha(publicacao["id"], str(exc))
         return "falha"
     bot.db.marcar_publicacao_entregue(publicacao["id"], str(mensagem.id))
+    if classificado_id:
+        bot.db.vincular_mensagem_classificado(int(classificado_id), str(canal.id), str(mensagem.id))
     return "entregue"
 
 

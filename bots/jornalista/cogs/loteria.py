@@ -7,7 +7,8 @@ from __future__ import annotations
 
 import logging
 import random
-from datetime import datetime, time as dtime
+from datetime import datetime, timedelta
+from typing import Optional
 
 import discord
 from discord.ext import commands, tasks
@@ -19,7 +20,28 @@ from core.tasks_util import registrar_reinicio_em_erro
 
 log = logging.getLogger("jornalista")
 
-LOTERIA_HORARIO_SORTEIO = dtime(hour=21, minute=0)  # UTC: ~18h em São Paulo
+LOTERIA_DIA_SORTEIO = 6  # domingo (weekday(): 0=segunda ... 6=domingo)
+LOTERIA_HORA_SORTEIO = 18  # horário de São Paulo
+# Quanto tempo depois do horário o sorteio ainda pode ser recuperado. Sem
+# isso, um bot fora do ar (deploy, queda) às 18h de domingo pulava a semana.
+LOTERIA_JANELA_RECUPERACAO = timedelta(hours=24)
+
+
+def sorteio_devido(agora: datetime) -> Optional[datetime]:
+    """O domingo 18h que deveria ter sorteado, se ainda estiver na janela.
+
+    Devolve o instante do sorteio (a data dele vira o `rodada_id`, então rodar
+    de novo na segunda-feira de manhã continua sendo a mesma rodada de domingo
+    e nunca paga duas vezes). `None` fora da janela."""
+    dias = (agora.weekday() - LOTERIA_DIA_SORTEIO) % 7
+    domingo = (agora - timedelta(days=dias)).replace(
+        hour=LOTERIA_HORA_SORTEIO, minute=0, second=0, microsecond=0
+    )
+    if domingo > agora:  # hoje é domingo, mas ainda antes das 18h
+        domingo -= timedelta(days=7)
+    if agora - domingo >= LOTERIA_JANELA_RECUPERACAO:
+        return None
+    return domingo
 
 
 def sortear_vencedor(bilhetes: list[dict], rng=None):
@@ -40,14 +62,19 @@ class Loteria(commands.Cog):
     def cog_unload(self):
         self.ciclo.cancel()
 
-    @tasks.loop(time=LOTERIA_HORARIO_SORTEIO)
+    # Loop curto em vez de `tasks.loop(time=...)`: aquele só dispara se o bot
+    # estiver no ar no segundo exato. Aqui, a cada 5 minutos, o ciclo vê se
+    # existe um sorteio devido (domingo 18h até 24h depois); a rodada é
+    # idempotente por (guild, data) em encerrar_loteria_atomica.
+    @tasks.loop(minutes=5)
     async def ciclo(self):
         agora = datetime.now(TZ) if TZ else datetime.now()
-        if agora.weekday() != 6:  # só domingo (0=segunda ... 6=domingo)
+        referencia = sorteio_devido(agora)
+        if referencia is None:
             return
         for guild in self.bot.guilds:
             try:
-                await self._sortear_guild(guild, agora)
+                await self._sortear_guild(guild, referencia)
             except Exception:
                 log.exception("erro no sorteio da loteria (guild %s)", guild.id)
 

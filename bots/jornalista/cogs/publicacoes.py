@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 
 from discord.ext import commands, tasks
 
+from core import furos as furos_mod
 from core import publicacoes
 from core.tasks_util import registrar_reinicio_em_erro
 
@@ -38,7 +39,9 @@ class Publicacoes(commands.Cog):
                 emb = ui.embed(
                     "📸 Furo de Reportagem!",
                     categoria="noticia",
-                    descricao=fofoca["texto_fofoca"]
+                    descricao=furos_mod.descricao_publicada(
+                        fofoca["texto_fofoca"], fofoca["user_id"], bool(fofoca.get("desmentida")),
+                    ),
                 )
                 publicacao = self.bot.db.enfileirar_fofoca(
                     fofoca["id"], publicacoes.payload_embed(emb), agora,

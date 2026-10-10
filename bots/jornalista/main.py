@@ -34,6 +34,10 @@ EXTENSOES = (
     "cogs.entrevista",
     "cogs.loteria",
     "cogs.cassino",
+    "cogs.painel",
+    "cogs.classificados",
+    "cogs.furos",
+    "cogs.mural",
     "cogs.ajuda",
 )
 

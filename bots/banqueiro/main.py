@@ -38,6 +38,8 @@ EXTENSOES = (
     "cogs.ajuda",
     "cogs.mercado_negro",
     "cogs.mestre",
+    "cogs.painel",
+    "cogs.eventos",
 )
 
 

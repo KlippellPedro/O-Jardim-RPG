@@ -17,6 +17,7 @@ from discord.ext import commands, tasks
 from core import cargos as cargos_mod
 from core import economia
 from core import entrega as entrega_mod
+from core import eventos
 from core import loot as loot_mod
 from core import ui
 from core.db import AlvoProtegido, SaldoInsuficiente, UpgradeDesatualizado
@@ -747,6 +748,7 @@ class Economia(commands.Cog):
         rate, taxa = self.bot.db.get_cambio(sid)
         benef = economia.beneficios_reputacao(self.bot.db.get_cartao(sid, uid)["credito"])
         taxa_aj = max(0.0, min(0.99, taxa * benef["taxa_mult"] * (1 - benef["desconto"])))
+        taxa_aj = eventos.taxa_com_cambio_livre(taxa_aj, self.bot.db.humor_bolsa_ativo(sid))
         try:
             recebido, taxa_cobrada = economia.converter(quantia, de.value, para.value, rate, taxa_aj)
         except ValueError as e:
@@ -787,6 +789,10 @@ class Economia(commands.Cog):
         sid = _sid(interaction)
         rate, taxa = self.bot.db.get_cambio(sid)
         auto = self.bot.db.get_cambio_auto(sid)
+        livre = (
+            "\n💱 **Câmbio livre hoje:** sem taxa na conversão."
+            if self.bot.db.humor_bolsa_ativo(sid) == "cambio_livre" else ""
+        )
         status_auto = (
             "🟢 Ligado: a taxa se ajusta sozinha 1x/dia conforme a demanda."
             if auto
@@ -796,7 +802,7 @@ class Economia(commands.Cog):
             "💱 Câmbio do Banco Lunar", categoria="economia",
             descricao=(
                 f"☉ 1 Solares = ☾ **{rate} Lunaris**\n"
-                f"Taxa cobrada na conversão: **{round(taxa * 100, 1)}%**\n\n"
+                f"Taxa cobrada na conversão: **{round(taxa * 100, 1)}%**{livre}\n\n"
                 f"**Ajuste automático:** {status_auto}"
             ),
         )

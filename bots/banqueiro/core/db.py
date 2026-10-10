@@ -144,6 +144,81 @@ _SCHEMA = (
         publicado BOOLEAN NOT NULL DEFAULT FALSE
     )
     """,
+    # Eventos do Mestre (aparecem em "Acontecendo agora" nos painéis dos dois
+    # bots). Tabela compartilhada: o Jornalista cria e publica, o Banqueiro lê.
+    """
+    CREATE TABLE IF NOT EXISTS jardim_eventos (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        titulo TEXT NOT NULL,
+        texto TEXT NOT NULL DEFAULT '',
+        tipo TEXT NOT NULL DEFAULT 'aviso',
+        criado_por TEXT,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        expira_em TIMESTAMPTZ NOT NULL,
+        encerrado BOOLEAN NOT NULL DEFAULT FALSE
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS jardim_eventos_guild_idx ON jardim_eventos (guild_id, expira_em)
+    """,
+    # Chaves do Jardim: o Banqueiro vende, o Jornalista gasta nos baús e dá de
+    # brinde. Tabela compartilhada (criada pelos dois bots).
+    """
+    CREATE TABLE IF NOT EXISTS jardim_chaves (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        quantidade INTEGER NOT NULL DEFAULT 0 CHECK (quantidade >= 0),
+        auto_usar BOOLEAN NOT NULL DEFAULT TRUE,
+        PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    # Cofre do Jardim: meta coletiva que o Mestre abre (Jornalista) e a mesa
+    # enche com Lunaris (Banqueiro). Tabelas compartilhadas.
+    """
+    CREATE TABLE IF NOT EXISTS jardim_metas (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        titulo TEXT NOT NULL,
+        descricao TEXT NOT NULL DEFAULT '',
+        alvo INTEGER NOT NULL CHECK (alvo > 0),
+        arrecadado INTEGER NOT NULL DEFAULT 0 CHECK (arrecadado >= 0),
+        status TEXT NOT NULL DEFAULT 'aberta'
+            CHECK (status IN ('aberta', 'concluida', 'expirada', 'cancelada')),
+        recompensa TEXT NOT NULL DEFAULT '',
+        festival_horas INTEGER NOT NULL DEFAULT 0 CHECK (festival_horas >= 0),
+        criado_por TEXT,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        prazo TIMESTAMPTZ NOT NULL,
+        encerrada_em TIMESTAMPTZ
+    )
+    """,
+    """
+    CREATE UNIQUE INDEX IF NOT EXISTS jardim_metas_uma_aberta
+    ON jardim_metas (guild_id) WHERE status = 'aberta'
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS jardim_doacoes (
+        id BIGSERIAL PRIMARY KEY,
+        meta_id BIGINT NOT NULL,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        valor INTEGER NOT NULL CHECK (valor > 0),
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        reembolsada BOOLEAN NOT NULL DEFAULT FALSE
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS jardim_doacoes_meta_idx ON jardim_doacoes (meta_id)
+    """,
+    # O efeito que um evento aplica ao jogo (hoje: "baus_especiais", do festival
+    # que uma meta concluída abre) e a categoria dos avisos da fila.
+    """
+    ALTER TABLE jardim_eventos ADD COLUMN IF NOT EXISTS efeito TEXT
+    """,
+    """
+    ALTER TABLE avisos_pendentes ADD COLUMN IF NOT EXISTS categoria TEXT
+    """,
     """
     CREATE TABLE IF NOT EXISTS extrato (
         id SERIAL PRIMARY KEY,
@@ -589,6 +664,23 @@ _SCHEMA = (
     )
     """,
     """
+    CREATE TABLE IF NOT EXISTS jornal_automacoes (
+        guild_id TEXT NOT NULL,
+        tipo TEXT NOT NULL,
+        ativo BOOLEAN NOT NULL,
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, tipo)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS canais_jornal (
+        guild_id TEXT NOT NULL,
+        categoria TEXT NOT NULL,
+        canal_id TEXT NOT NULL,
+        PRIMARY KEY (guild_id, categoria)
+    )
+    """,
+    """
     CREATE TABLE IF NOT EXISTS roubo_calor (
         guild_id TEXT NOT NULL,
         user_id TEXT NOT NULL,
@@ -972,6 +1064,81 @@ class Database:
                 """,
                 (guild_id, ciclo),
             )
+
+    def reivindicar_ciclo_unico(self, guild_id: str, ciclo: str) -> bool:
+        """Marca `ciclo` como feito e diz se ESTA chamada foi a primeira. Serve aos
+        eventos de calendário ("2026-W41"): vale uma vez por chave, e duas
+        instâncias do bot não disputam a mesma semana."""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO ciclos_guild (guild_id, ciclo, executado_em)
+                VALUES (%s, %s, CURRENT_TIMESTAMP)
+                ON CONFLICT (guild_id, ciclo) DO NOTHING
+                RETURNING 1 AS ok
+                """,
+                (guild_id, ciclo),
+            ).fetchone()
+        return row is not None
+
+    def liberar_ciclo_unico(self, guild_id: str, ciclo: str) -> None:
+        """Desfaz a reivindicação quando o evento falhou, para a próxima hora tentar de novo."""
+        with self._conn() as con:
+            con.execute("DELETE FROM ciclos_guild WHERE guild_id=%s AND ciclo=%s", (guild_id, ciclo))
+
+    def automacao_ativa(self, guild_id: str, tipo: str, padrao: bool = True) -> bool:
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT ativo FROM jornal_automacoes WHERE guild_id=%s AND tipo=%s",
+                (guild_id, tipo),
+            ).fetchone()
+        return bool(row["ativo"]) if row else bool(padrao)
+
+    def canal_do_jornal(self, guild_id: str, categoria: str):
+        """Canal da categoria no Jornalista; sem ele, o canal principal do jornal."""
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT canal_id FROM canais_jornal WHERE guild_id=%s AND categoria=%s",
+                (guild_id, categoria),
+            ).fetchone()
+        if row and row["canal_id"]:
+            return row["canal_id"]
+        return self.get_jornal_canal(guild_id)
+
+    def humor_bolsa_ativo(self, guild_id: str) -> Optional[str]:
+        """Efeito do Dia de Bolsa em vigor (bolsa_alta, bolsa_baixa ou cambio_livre)."""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT efeito FROM jardim_eventos
+                WHERE guild_id=%s AND NOT encerrado AND expira_em > CURRENT_TIMESTAMP
+                  AND efeito IN ('bolsa_alta', 'bolsa_baixa', 'cambio_livre')
+                ORDER BY id DESC LIMIT 1
+                """,
+                (guild_id,),
+            ).fetchone()
+        return row["efeito"] if row else None
+
+    def abrir_dia_de_bolsa(
+        self, guild_id: str, humor: str, titulo: str, texto: str, horas: int, aviso: Optional[str] = None,
+    ) -> int:
+        """Abre o evento e, na MESMA transação, enfileira o aviso do jornal: nunca nasce um sem o outro."""
+        with self._conn() as con:
+            if aviso:
+                con.execute(
+                    "INSERT INTO avisos_pendentes (guild_id, mensagem, categoria) VALUES (%s, %s, 'noticia')",
+                    (guild_id, aviso[:1800]),
+                )
+            row = con.execute(
+                """
+                INSERT INTO jardim_eventos (guild_id, titulo, texto, tipo, criado_por, expira_em, efeito)
+                VALUES (%s, %s, %s, 'mercado', 'dia-de-bolsa',
+                        CURRENT_TIMESTAMP + make_interval(hours => %s), %s)
+                RETURNING id
+                """,
+                (guild_id, titulo[:100], texto[:900], int(horas), humor),
+            ).fetchone()
+        return int(row["id"])
 
     def get_carteira(self, guild_id: str, user_id: str) -> Dict[str, int]:
         with self._conn() as con:
@@ -1414,7 +1581,7 @@ class Database:
             rows = con.execute(
                 """
                 SELECT vendedor_id AS user_id, COUNT(*) AS quantidade FROM leiloes
-                WHERE guild_id=%s AND status='encerrado'
+                WHERE guild_id=%s AND status='encerrado' AND modo_posse <> 'casa'
                 GROUP BY vendedor_id
                 ORDER BY quantidade DESC
                 LIMIT %s
@@ -3748,12 +3915,226 @@ class Database:
             ).fetchall()
         return [{"user_id": row["user_id"], "credito": int(row["credito"])} for row in rows]
 
-    # ── Avisos pendentes (fila de anúncios pro Jornalista) ──────────────────
-    def criar_aviso(self, guild_id: str, mensagem: str) -> None:
+    # ── Painéis: eventos do Mestre e baús no ar (tabelas compartilhadas) ─────
+    def listar_eventos_ativos(self, guild_id: str, limite: int = 5) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT id, titulo, texto, tipo, expira_em FROM jardim_eventos
+                WHERE guild_id=%s AND NOT encerrado AND expira_em > CURRENT_TIMESTAMP
+                ORDER BY expira_em LIMIT %s
+                """,
+                (guild_id, max(1, int(limite))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def baus_no_ar_para(self, guild_id: str, user_id: str) -> List[dict]:
+        """Baús ainda no ar neste servidor e se `user_id` já pegou o seu
+        (nos baús coletivos). A tabela é do Jornalista; num banco sem ela
+        quem chama trata o erro e mostra o painel sem esta linha."""
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT b.canal_id, b.mensagem_id, b.expira_em,
+                       b.premio->'bau'->>'raridade' AS raridade,
+                       b.premio->'bau'->>'nome' AS nome,
+                       COALESCE((b.premio->'bau'->>'coletivo')::boolean, FALSE) AS coletivo,
+                       EXISTS (
+                           SELECT 1 FROM baus_entregas e
+                           WHERE e.guild_id=b.guild_id
+                             AND e.mensagem_id = b.mensagem_id || ':' || %s
+                       ) AS ja_peguei
+                FROM baus_no_ar b
+                WHERE b.guild_id=%s AND b.expira_em > CURRENT_TIMESTAMP
+                ORDER BY b.expira_em
+                """,
+                (user_id, guild_id),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    # ── Chaves do Jardim ────────────────────────────────────────────────────
+    def get_chaves(self, guild_id: str, user_id: str) -> dict:
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT quantidade, auto_usar FROM jardim_chaves WHERE guild_id=%s AND user_id=%s",
+                (guild_id, user_id),
+            ).fetchone()
+        return (
+            {"quantidade": int(row["quantidade"]), "auto_usar": bool(row["auto_usar"])}
+            if row else {"quantidade": 0, "auto_usar": True}
+        )
+
+    def set_chaves_auto(self, guild_id: str, user_id: str, ativo: bool) -> None:
         with self._conn() as con:
             con.execute(
-                "INSERT INTO avisos_pendentes (guild_id, mensagem) VALUES (%s, %s)",
-                (guild_id, mensagem),
+                """
+                INSERT INTO jardim_chaves (guild_id, user_id, auto_usar) VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, user_id) DO UPDATE SET auto_usar = EXCLUDED.auto_usar
+                """,
+                (guild_id, user_id, bool(ativo)),
+            )
+
+    def comprar_chaves(
+        self, guild_id: str, user_id: str, quantidade: int, preco_unitario: int, maximo: int,
+    ) -> dict:
+        """Compra `quantidade` Chaves do Jardim com Lunaris, numa transação só:
+        débito, estoque e extrato. `status`: ok | saldo | limite."""
+        if quantidade <= 0 or preco_unitario <= 0:
+            raise ValueError("quantidade ou preco invalido")
+        custo = int(quantidade) * int(preco_unitario)
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            atual = con.execute(
+                """
+                SELECT quantidade FROM jardim_chaves
+                WHERE guild_id=%s AND user_id=%s FOR UPDATE
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+            tem = int(atual["quantidade"]) if atual else 0
+            if tem + int(quantidade) > int(maximo):
+                return {"status": "limite", "quantidade": tem}
+            moeda = self._nome_moeda_real(con, guild_id, user_id, "Lunaris")
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (custo, guild_id, user_id, moeda, custo),
+            ).fetchone()
+            if saldo is None:
+                return {"status": "saldo", "quantidade": tem, "custo": custo}
+            novo = con.execute(
+                """
+                INSERT INTO jardim_chaves (guild_id, user_id, quantidade) VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, user_id)
+                DO UPDATE SET quantidade = jardim_chaves.quantidade + EXCLUDED.quantidade
+                RETURNING quantidade
+                """,
+                (guild_id, user_id, int(quantidade)),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -custo, moeda,
+                f"Comprou {quantidade} Chave(s) do Jardim",
+            )
+        return {"status": "ok", "quantidade": int(novo["quantidade"]), "custo": custo}
+
+    # ── Cofre do Jardim (meta coletiva) ─────────────────────────────────────
+    def get_meta_ativa(self, guild_id: str) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT * FROM jardim_metas WHERE guild_id=%s AND status='aberta' AND prazo > CURRENT_TIMESTAMP",
+                (guild_id,),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def get_ultima_meta_encerrada(self, guild_id: str) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT * FROM jardim_metas WHERE guild_id=%s AND status <> 'aberta'
+                ORDER BY id DESC LIMIT 1
+                """,
+                (guild_id,),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def top_doadores(self, meta_id: int, limite: int = 5) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT user_id, SUM(valor)::int AS total FROM jardim_doacoes
+                WHERE meta_id=%s AND NOT reembolsada
+                GROUP BY user_id ORDER BY total DESC, MIN(criado_em) LIMIT %s
+                """,
+                (int(meta_id), max(1, int(limite))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def doar_meta(self, guild_id: str, user_id: str, valor: int) -> dict:
+        """Doa Lunaris ao Cofre do Jardim numa transação só: débito, doação,
+        total da meta e extrato. A doação é limitada ao que falta para a meta
+        (ninguém paga a mais). Ao bater a meta, a mesma transação fecha a meta
+        e, se ela prometia um festival, abre o evento e enfileira o aviso.
+        `status`: ok | sem_meta | saldo."""
+        if valor <= 0:
+            raise ValueError("valor invalido")
+        with self._conn() as con:
+            meta = con.execute(
+                """
+                SELECT * FROM jardim_metas
+                WHERE guild_id=%s AND status='aberta' AND prazo > CURRENT_TIMESTAMP FOR UPDATE
+                """,
+                (guild_id,),
+            ).fetchone()
+            if meta is None:
+                return {"status": "sem_meta"}
+            doado = min(int(valor), int(meta["alvo"]) - int(meta["arrecadado"]))
+            self._garantir_jogador(con, guild_id, user_id)
+            moeda = self._nome_moeda_real(con, guild_id, user_id, "Lunaris")
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (doado, guild_id, user_id, moeda, doado),
+            ).fetchone()
+            if saldo is None:
+                return {"status": "saldo", "valor": doado}
+            con.execute(
+                "INSERT INTO jardim_doacoes (meta_id, guild_id, user_id, valor) VALUES (%s, %s, %s, %s)",
+                (meta["id"], guild_id, user_id, doado),
+            )
+            arrecadado = int(meta["arrecadado"]) + doado
+            concluida = arrecadado >= int(meta["alvo"])
+            con.execute(
+                """
+                UPDATE jardim_metas SET arrecadado=%s,
+                    status=CASE WHEN %s THEN 'concluida' ELSE status END,
+                    encerrada_em=CASE WHEN %s THEN CURRENT_TIMESTAMP ELSE encerrada_em END
+                WHERE id=%s
+                """,
+                (arrecadado, concluida, concluida, meta["id"]),
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -doado, moeda,
+                f"Doou ao Cofre do Jardim: {meta['titulo'][:60]}",
+            )
+            if concluida:
+                texto = f"🏛️ **O Cofre do Jardim bateu a meta: {meta['titulo']}!**"
+                if meta["recompensa"]:
+                    texto += f"\n{meta['recompensa']}"
+                if int(meta["festival_horas"]) > 0:
+                    con.execute(
+                        """
+                        INSERT INTO jardim_eventos (guild_id, titulo, texto, tipo, criado_por, expira_em, efeito)
+                        VALUES (%s, %s, %s, 'festival', 'cofre-do-jardim',
+                                CURRENT_TIMESTAMP + make_interval(hours => %s), 'baus_especiais')
+                        """,
+                        (
+                            guild_id, f"Festival: {meta['titulo']}"[:100],
+                            "Os baús estão mais generosos enquanto o festival durar.",
+                            int(meta["festival_horas"]),
+                        ),
+                    )
+                    texto += f"\n🎉 Começa um festival de **{int(meta['festival_horas'])}h**: baús muito mais generosos."
+                con.execute(
+                    "INSERT INTO avisos_pendentes (guild_id, mensagem, categoria) VALUES (%s, %s, 'noticia')",
+                    (guild_id, texto[:1800]),
+                )
+        return {
+            "status": "ok", "valor": doado, "arrecadado": arrecadado, "alvo": int(meta["alvo"]),
+            "concluida": concluida, "meta_id": int(meta["id"]),
+        }
+
+    # ── Avisos pendentes (fila de anúncios pro Jornalista) ──────────────────
+    def criar_aviso(self, guild_id: str, mensagem: str, categoria: Optional[str] = None) -> None:
+        with self._conn() as con:
+            con.execute(
+                "INSERT INTO avisos_pendentes (guild_id, mensagem, categoria) VALUES (%s, %s, %s)",
+                (guild_id, mensagem, categoria),
             )
 
     # ── Extrato (histórico de transações) ───────────────────────────────────
@@ -3858,6 +4239,20 @@ class Database:
                 (guild_id,),
             )
             resultado["leiloes_cancelados"] = cur.rowcount
+            # Cofre do Jardim: as carteiras acabaram de ser zeradas, então a meta aberta é cancelada e as
+            # doações marcadas como devolvidas. Sem isto o Jornalista "reembolsaria" dinheiro que já não
+            # existe e criaria Lunaris do nada. As Chaves, compradas com esse dinheiro, também zeram.
+            con.execute(
+                "UPDATE jardim_doacoes SET reembolsada=TRUE WHERE guild_id=%s AND NOT reembolsada", (guild_id,)
+            )
+            cur = con.execute(
+                "UPDATE jardim_metas SET status='cancelada', encerrada_em=CURRENT_TIMESTAMP "
+                "WHERE guild_id=%s AND status='aberta'",
+                (guild_id,),
+            )
+            resultado["metas_canceladas"] = cur.rowcount
+            cur = con.execute("DELETE FROM jardim_chaves WHERE guild_id=%s", (guild_id,))
+            resultado["jardim_chaves"] = cur.rowcount
             con.execute(
                 "UPDATE cofre SET tier=%s, seguranca_tier=%s WHERE guild_id=%s",
                 (economia.COFRE_TIER_INICIAL, economia.SEGURANCA_TIER_INICIAL, guild_id),
@@ -4617,6 +5012,7 @@ class Database:
                 or int(valor) <= int(leilao["lance_atual"])
                 or int(valor) < int(leilao["lance_minimo"])
                 or user_id == leilao["vendedor_id"]
+                or leilao["expira_em"] <= datetime.now(timezone.utc)
             ):
                 return None
             atual = con.execute(
@@ -4708,21 +5104,22 @@ class Database:
                 int(leilao["lance_atual"]), taxa=taxa
             )
             con.execute("DELETE FROM custodia_moeda WHERE chave=%s", (chave,))
-            self._creditar_carteira_tx(
-                con,
-                leilao["guild_id"],
-                leilao["vendedor_id"],
-                leilao["moeda"],
-                liquido,
-            )
-            self._registrar_extrato_tx(
-                con,
-                leilao["guild_id"],
-                leilao["vendedor_id"],
-                liquido,
-                leilao["moeda"],
-                f"Vendeu {leilao['titulo']} em leilão",
-            )
+            if leilao["modo_posse"] != "casa":
+                self._creditar_carteira_tx(
+                    con,
+                    leilao["guild_id"],
+                    leilao["vendedor_id"],
+                    leilao["moeda"],
+                    liquido,
+                )
+                self._registrar_extrato_tx(
+                    con,
+                    leilao["guild_id"],
+                    leilao["vendedor_id"],
+                    liquido,
+                    leilao["moeda"],
+                    f"Vendeu {leilao['titulo']} em leilão",
+                )
             con.execute(
                 "UPDATE leiloes SET status='encerrado' WHERE id=%s",
                 (int(leilao_id),),

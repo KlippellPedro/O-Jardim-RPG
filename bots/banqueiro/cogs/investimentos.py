@@ -13,7 +13,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
-from core import economia, ui
+from core import economia, eventos, ui
 from core.db import SaldoInsuficiente
 from core.tasks_util import registrar_reinicio_em_erro
 from cogs.servicos import enviar_alerta_banco
@@ -64,7 +64,8 @@ class Investimentos(commands.Cog):
                 "(⚠️ servidor em Crise Econômica)."
             )
         else:
-            chance_ganho = int(economia.INVESTIMENTO_CHANCE_GANHO * 100)
+            humor = db.humor_bolsa_ativo(sid)
+            chance_ganho = round(eventos.chance_ganho_com_bolsa(humor, economia.INVESTIMENTO_CHANCE_GANHO) * 100)
             previsao = (
                 f"Título de risco: **{chance_ganho}%** de chance de vencer com "
                 f"**+{int(economia.INVESTIMENTO_TAXA_GANHO * 100)}%**, "
@@ -147,7 +148,9 @@ class Investimentos(commands.Cog):
     async def _maturar(self, inv: dict) -> None:
         db = self.bot.db
         em_crise = db.get_crise_economica(inv["guild_id"])
-        final = economia.valor_maturado_investimento(inv["valor"], em_crise)
+        humor = db.humor_bolsa_ativo(inv["guild_id"])
+        chance = eventos.chance_ganho_com_bolsa(humor, economia.INVESTIMENTO_CHANCE_GANHO)
+        final = economia.valor_maturado_investimento(inv["valor"], em_crise, chance)
         processado = db.pagar_investimento_maturado(inv["id"], final)
         if processado is None:
             return

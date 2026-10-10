@@ -139,6 +139,101 @@ os comandos; aqui ficam só os fatos que afetam decisões.
   Discord); `test_cabe_nos_limites_de_comandos_do_discord` trava o teto, então comando novo precisa de um
   grupo ou da saída de outro. Os dois ZIPs, do Banqueiro e do
   Jornalista, não precisam de nada novo além do Banqueiro.
+- **04/10, revisão do Jornalista.** Correções achadas por revisão e reproduzidas contra um PostgreSQL de
+  teste (`tests/test_revisao_2026_10.py`): `ciclo_guild_devido` ganhou folga de 15 minutos
+  (`CICLO_TOLERANCIA`), porque o carimbo vinha depois do envio e o ciclo de 24h virava 25h; o horóscopo passou
+  a ser decidido por data de São Paulo e expira em 36h; o `UPDATE` que reescrevia a janela dos baús para 0h-23h
+  saiu do schema (rodava a cada boot); Créditos Sombrios entram na transação que fecha a entrega e no caminho
+  legado; o agendador por rolagem solta (média de 2 por dia, com rajadas de 7) foi trocado pelas faixas dos Baús v2
+  (ver abaixo); a loteria é recuperada por até 24h se o bot estiver fora às 18h de domingo; `/vender_furo` e
+  `/anunciar_classificado` passaram de Solares para Lunaris (1 Solar vale 100 Lunaris: o furo pagava de 5.000
+  a 15.000 Lunaris), com aviso por DM à vítima e interruptores `fofocas` e `classificados`. **O Banqueiro tem
+  o mesmo `ciclo_guild_devido`, sem a folga, e ainda precisa do mesmo conserto** (juros e demais ciclos
+  derivam 1h por período). Só o ZIP do Jornalista precisa de redeploy por estas mudanças.
+- **04/10, Baús v2** (só o ZIP do Jornalista). `baus_por_dia` (padrão 4) divide a janela em faixas e sorteia um
+  horário por faixa (`agendar_proximo_bau`). Comum e Incomum viram baús **coletivos**: o estado em `baus_no_ar`
+  guarda os parâmetros (`premio.coletivo`) e cada pessoa recebe um prêmio sorteado na hora, gravado em
+  `baus_entregas` com a chave composta `mensagem:usuario` (o recovery e o `/bau_reprocessar` aceitam essa chave).
+  Do Raro para cima segue a corrida do enigma. Tabelas novas: `baus_historico`, `baus_sorte`, `baus_tentativas`,
+  `baus_mural` (já no backup da plataforma). Proteção de azar do servidor (8 baús fracos seguidos viram Raro) e
+  Pistas de Sorte por pessoa. Comandos novos: `/bau_mural` e `/baus_hoje`; `/bau_config` ganhou `baus_por_dia`.
+  Ficou para as próximas fases: Chaves vendidas pelo Banqueiro e coleção das Dez Árvores.
+- **04/10, painéis `/banco` e `/jardim`** (os dois ZIPs). `core/painel.py` é um framework idêntico nos dois
+  bots (copiado de propósito): um `PainelView` com menu de seções e botões, e uma `InteracaoPainel` que
+  repassa a cada comando existente uma interação-proxy que troca "enviar mensagem" por "editar o painel", então
+  nenhuma tela foi duplicada. O clique é confirmado antes de consultar o banco (adeus "Algo deu errado" por
+  lentidão). `/banco` fica em `bots/banqueiro/cogs/painel.py` (97 de 100 comandos); `/jardim` e
+  `/jornal evento criar|listar|encerrar` no Jornalista. Tabela nova compartilhada `jardim_eventos` (criada pelos
+  dois bots, escrita pelo Jornalista, no backup da plataforma). Nada foi aposentado ainda; os comandos de
+  consulta do Banqueiro que o painel cobre são os candidatos quando faltar vaga.
+- **04/10, Chaves do Jardim** (os dois ZIPs). Tabela compartilhada `jardim_chaves` (quantidade e `auto_usar` por
+  pessoa). O Banqueiro vende pela seção Chaves do `/banco` (`comprar_chaves`: débito, estoque e extrato numa
+  transação; `CHAVE_PRECO` 40 e `CHAVES_MAX` 10 em `core/economia.py`, e o limite também em `core/loot.py` do
+  Jornalista, mantenha iguais). O Jornalista gasta uma no baú Incomum ou melhor (`_usar_chave`, devolvida em
+  qualquer falha ou corrida perdida) e dá de brinde (`_sorteou_chave`). Ajuste de equilíbrio sem tocar em
+  código além destas constantes: preço, `CHAVE_BONUS_LUNARIS` e `CHANCE_CHAVE_COLETIVO`. Ficou para a próxima
+  fase a coleção das Dez Árvores.
+- **09/10, coleção das Dez Árvores** (só o ZIP do Jornalista, que passa a levar `data/colecao_arvores.json`;
+  o `tools/build-discloud-packages.ps1` já o copia). Fragmentos nos baús (`jardim_fragmentos`, 3 por página),
+  uma camada de lore revelada por fragmento (atmosfera, tese e primeiro parágrafo da história, tudo de
+  `cronicas-arvores.json` via `tools/gerar-colecao-arvores.py`), Afinidade de +10% de Lunaris para quem tem a
+  página e o cargo da Árvore, e o título secreto Cronista das Dez Árvores. Constantes em `core/colecao.py`
+  (`FRAGMENTOS_POR_PAGINA`, `CHANCE_FRAGMENTO_COLETIVO`, `FRAGMENTOS_NA_CORRIDA`, `AFINIDADE_BONUS`). O
+  Abismo (O Vazio) entra como décima página porque o registro do bot trata as dez como Árvores, embora a lore
+  diga que ele é o espaço entre elas.
+- **09/10, Cofre do Jardim** (os dois ZIPs). Meta coletiva: o Mestre abre pelo Jornalista (`/jornal meta`,
+  tabela `jardim_metas`, uma aberta por servidor por índice parcial) e a mesa doa pelo Banqueiro (`doar_meta`:
+  `FOR UPDATE` na meta, doação limitada ao que falta, débito, extrato e fechamento na mesma transação). Ao
+  bater a meta o próprio Banqueiro abre o evento `festival` com `efeito='baus_especiais'` (lido por
+  `festival_ativo` no `_dropar` do Jornalista) e enfileira o aviso em `avisos_pendentes` com
+  `categoria='noticia'` (coluna criada também pelo Banqueiro). Prazo vencido ou cancelamento: o
+  `ciclo_metas` (5 min) chama `encerrar_meta_com_reembolso`, que devolve cada doação uma vez. O menu do
+  `/banco` chegou às 25 seções (a de Proteções saiu, o comando `/protecao_ver` continua).
+- **09/10, Eventos recorrentes** (Banqueiro; o Jornalista só guarda as chaves de automação). Cog
+  `eventos` com loop de 15 min e janelas em `core/eventos.py` (puro): Leilão do Jardim sáb 18h → dom 23h59 e Dia
+  de Bolsa qua 12h → qui 11h59, fuso America/Sao_Paulo. A trava é `ciclos_guild` com chave por semana ISO
+  (`reivindicar_ciclo_unico`, devolvida em falha). Leilão da casa: `vendedor_id='jardim'`, `modo_posse='casa'`;
+  `liquidar_leilao_com_custodia` não credita ninguém nesse modo (ralo) e `_entregar_posse` entrega pelo
+  `Inventario.dar`. Dia de Bolsa grava `jardim_eventos` (`tipo='mercado'`, `efeito` em `bolsa_alta`,
+  `bolsa_baixa`, `cambio_livre`), lido por `humor_bolsa_ativo` em `_maturar` e `/cambio`. O Banqueiro passou a
+  criar `jornal_automacoes` e `canais_jornal` (idênticas às do Jornalista). `LeilaoLanceButton` é
+  `DynamicItem` (`leilao_lance:{id}`): o botão de lance persiste entre reinícios.
+- **09/10, As sete ideias do Jornalista** (ZIPs do Jornalista e da plataforma; o do Banqueiro não muda):
+  1) entrevistas com 48+8 perguntas, sem repetir as últimas 20 e com pergunta de Árvore pelo cargo registrado;
+  2) classificados com categoria, validade de 7 dias e botão Responder (`DynamicItem`
+  `classificado_resp:{id}`; a publicação da fila anexa a view quando o payload tem `classificado_id`);
+  3) furo escrito pelo jogador, com botões Subornar/Desmentir na DM da vítima (`furo_subornar:{id}`,
+  `furo_desmentir:{id}`) e `/jornal furo listar|vetar` para o Mestre (colunas `autor_id`, `desmentida`, status `vetada`);
+  4) Mural de Procurados fixo (`mural_procurados`, lê a tabela `recompensa` do Banqueiro, que o Jornalista passou a
+  declarar); 5) edição semanal de domingo 19h montada por `core/edicao.py`; 6) destaques da mesa: a plataforma
+  enfileira em `avisos_pendentes` (categoria `noticia`) quando um jogador sobe de nível (`routers/characters.py`) ou
+  ganha um selo público (`core/conquistas.py`, nunca secreto nem de nível), com os tipos `nivel` e `selo` em
+  `campanha_agenda.avisos` (o Mestre liga e desliga no Quadro); 7) ranking mensal de caçadores no mural dos baús.
+  Morte de personagem não ganhou destaque: a plataforma não tem um sinal estruturado de morte.
+  Tabelas novas `classificados`, `classificado_respostas` e `mural_procurados` entraram no backup (junto com
+  `fofocas`, que faltava).
+- **09/10, Revisão geral** (os três ZIPs). Dois revisores independentes leram o código novo; o que foi corrigido:
+  descrição de `/mercado_negro_encomendar` com 101 caracteres (o Discord recusaria o `tree.sync` inteiro; um teste
+  de contrato agora cobra os limites de nome, descrição, opções, escolhas e 8000 caracteres por comando nos dois
+  bots); leilão da casa sem implante em Créditos Sombrios e sem item acima de ☾ 2.400 (`LEILAO_PRECO_MAXIMO`);
+  `/ranking leilao` sem a "Casa do Jardim"; lance recusado depois do `expira_em`; entrega da casa cai no
+  inventário local em qualquer erro; reset da economia cancela a meta aberta, marca as doações como devolvidas
+  e zera as Chaves (antes o Jornalista "reembolsaria" dinheiro zerado); Dia de Bolsa e aviso na mesma transação;
+  início do `/banco` corta linhas inteiras e prioriza eventos e leilão; botões Guardar/Sacar/Bilhetes respondem em
+  privado (`InteracaoEfemera` em `core/painel.py`, igual nos dois bots); `ler_inteiro` recusa "50,5" em vez de
+  virar 505; links, convites e domínios soltos barrados em classificados, recados e furos (`core/furos.py::limpar_texto`);
+  `conceder_chave` soma no banco; classificado que esgota as 12 tentativas de publicação é reembolsado; edição
+  semanal por semana de São Paulo e gate de 144h; destaques da mesa sem selos comuns, sem o selo da Deidade
+  (spoiler de lore) e com cada nível anunciado uma vez só e nunca acima do 60 (tabela `personagem_nivel_anunciado`,
+  migração 53). Backup ganhou `jornal_publicacoes`, `jornal_automacoes`, `jornal_pautas` e `ciclos_guild`.
+  Conhecido e deixado: o humor da Bolsa vale no momento em que o ciclo de maturação roda (de hora em hora), não na
+  hora exata do vencimento; com `cambio_livre` e câmbio automático ligado, manipular a taxa fica uns 2% mais barato.
+- **09/10, Segunda revisão (entrevistas, ajuda e testes de comando).** Entrevista com preview e botões
+  Publicar/Reescrever (`entrevista_ok:{id}`, `entrevista_refazer:{id}`, coluna `entrevistas.rascunho`) e
+  `_nova_entrevista` à prova de erro de DM. `/ajuda` com guia em prosa e filtro por permissão nos dois bots; a
+  categoria Mestre do Banqueiro tinha 33 campos (limite 25 do Discord) e foi dividida. Um teste de fumaça chamou o
+  callback dos 68 comandos do Jornalista e dos 114 do Banqueiro com argumentos mínimos: nenhuma exceção; só
+  `/resetjogador` e `/catalogo_republicar` ficam esperando a confirmação por botão, como projetado.
 - **Barista descontinuado.** Dados e música saíram do conjunto; os três bots
   vivos são Banqueiro, Jornalista e Gerente.
 - **Catálogo da Loja.** O Banqueiro lê `data/loja/catalogo.json` (1.225 entradas em

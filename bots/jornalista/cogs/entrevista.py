@@ -13,7 +13,9 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
+from core import arvores as arvores_mod
 from core import entrevista_perguntas as perguntas_mod
+from core import furos as furos_mod
 from core import publicacoes
 from core import ui
 from core.tasks_util import registrar_reinicio_em_erro
@@ -22,6 +24,10 @@ log = logging.getLogger("jornalista")
 
 ENTREVISTA_INTERVALO_HORAS = 168  # semanal
 ENTREVISTA_PRAZO_DIAS = 7
+RESPOSTA_MAX = 1800
+
+PUBLICAR_TEMPLATE = r"entrevista_ok:(?P<id>\d+)"
+REFAZER_TEMPLATE = r"entrevista_refazer:(?P<id>\d+)"
 
 
 def _titulo_entrevista(autor: object) -> str:
@@ -47,7 +53,12 @@ class RespostaEntrevistaModal(discord.ui.Modal, title="Responder à Entrevista")
         self.resposta.placeholder = str(entrevista.get("pergunta") or "")[:100]
 
     async def on_submit(self, interaction: discord.Interaction):
-        resposta = str(self.resposta.value).strip()
+        resposta, erro = furos_mod.limpar_texto(
+            self.resposta.value, minimo=1, maximo=RESPOSTA_MAX, tirar_mencoes=False, preservar_linhas=True,
+        )
+        if erro:
+            await interaction.response.send_message(f"⚠️ {erro}", ephemeral=True)
+            return
         if not self.cog.bot.db.responder_entrevista(self.entrevista["id"], resposta):
             await interaction.response.send_message(
                 "Essa entrevista não está mais pendente. Talvez ela já tenha expirado.", ephemeral=True
@@ -66,9 +77,46 @@ class RespostaEntrevistaModal(discord.ui.Modal, title="Responder à Entrevista")
         )
 
 
+class PublicarButton(discord.ui.DynamicItem[discord.ui.Button], template=PUBLICAR_TEMPLATE):
+    """Confirma o preview da resposta. Persistente: sobrevive a reinício do bot."""
+
+    def __init__(self, cog: "Entrevista", entrevista_id: int):
+        super().__init__(discord.ui.Button(
+            label="Publicar", emoji="✅", style=discord.ButtonStyle.success,
+            custom_id=f"entrevista_ok:{int(entrevista_id)}",
+        ))
+        self.cog = cog
+        self.entrevista_id = int(entrevista_id)
+
+    @classmethod
+    async def from_custom_id(cls, interaction: discord.Interaction, item, match):
+        return cls(interaction.client.get_cog("Entrevista"), int(match["id"]))
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        await self.cog.publicar_rascunho(interaction, self.entrevista_id)
+
+
+class RefazerButton(discord.ui.DynamicItem[discord.ui.Button], template=REFAZER_TEMPLATE):
+    def __init__(self, cog: "Entrevista", entrevista_id: int):
+        super().__init__(discord.ui.Button(
+            label="Reescrever", emoji="✏️", style=discord.ButtonStyle.secondary,
+            custom_id=f"entrevista_refazer:{int(entrevista_id)}",
+        ))
+        self.cog = cog
+        self.entrevista_id = int(entrevista_id)
+
+    @classmethod
+    async def from_custom_id(cls, interaction: discord.Interaction, item, match):
+        return cls(interaction.client.get_cog("Entrevista"), int(match["id"]))
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        await self.cog.refazer_rascunho(interaction, self.entrevista_id)
+
+
 class Entrevista(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.bot.add_dynamic_items(PublicarButton, RefazerButton)
         registrar_reinicio_em_erro(self.ciclo, "ciclo_entrevista", log)
         self.ciclo.start()
 
@@ -147,21 +195,45 @@ class Entrevista(commands.Cog):
         novos = [m for m in disponiveis if str(m.id) not in ja_entrevistados]
         alvo = random.choice(novos) if novos else random.choice(disponiveis)
 
-        pergunta = perguntas_mod.sortear_pergunta()
+        pergunta = perguntas_mod.sortear_pergunta(
+            arvore=self._arvore_do_membro(gid, alvo),
+            recentes=db.perguntas_recentes_entrevista(gid),
+        )
         # Persiste antes da tentativa de DM para o fallback
         # /entrevista_responder existir de verdade quando a DM estiver fechada.
         entrevista_id = db.criar_entrevista(gid, str(alvo.id), pergunta)
+        # Daqui em diante a entrevista EXISTE. Qualquer erro ao avisar a pessoa (DM, convite no canal)
+        # é registrado e engolido: se subisse, o ciclo não seria marcado como feito e a próxima hora
+        # sortearia OUTRA pessoa, e assim por diante, mandando uma entrevista por hora.
         try:
             await alvo.send(
                 "👋 Olá! Sou o Jornalista do Jornal Lunar. Pergunta da semana:\n\n"
-                f"**{pergunta}**\n\nResponda esta DM e eu publico no jornal do servidor!"
+                f"**{pergunta}**\n\nResponda esta DM, eu mostro como vai ficar e você confirma antes de eu "
+                "publicar no jornal do servidor."
             )
         except (discord.Forbidden, discord.HTTPException):
             log.info("nao consegui mandar DM de entrevista pra %s", alvo.id)
-            await self._avisar_entrevista_sem_dm(
-                guild, alvo, pergunta, entrevista_id
-            )
+            try:
+                await self._avisar_entrevista_sem_dm(guild, alvo, pergunta, entrevista_id)
+            except Exception:
+                log.exception("falha ao publicar o convite da entrevista %s", entrevista_id)
+        except Exception:
+            log.exception("erro inesperado ao avisar %s da entrevista %s", alvo.id, entrevista_id)
         return True
+
+    def _arvore_do_membro(self, gid: str, membro) -> "str | None":
+        """Nome da Árvore do entrevistado, pelo cargo de Árvore registrado
+        (`/registro cargo_arvore`). Sem cargo, sem pergunta de Árvore."""
+        try:
+            cargos = self.bot.db.get_cargos_arvore(gid)
+        except Exception:
+            log.exception("nao consegui ler os cargos de Arvore (guild %s)", gid)
+            return None
+        meus = {str(getattr(cargo, "id", cargo)) for cargo in getattr(membro, "roles", [])}
+        for arvore in arvores_mod.ARVORES:
+            if cargos.get(arvore.id) and str(cargos[arvore.id]) in meus:
+                return arvore.nome
+        return None
 
     async def _avisar_entrevista_sem_dm(
         self, guild: discord.Guild, alvo: discord.Member, pergunta: str,
@@ -197,21 +269,75 @@ class Entrevista(commands.Cog):
         entrevista = self.bot.db.entrevista_pendente_do_usuario(str(message.author.id))
         if entrevista is None:
             return
-        resposta = (message.content or "").strip()
-        if not resposta:
-            try:
-                await message.channel.send("Manda a resposta em texto, por favor: não consegui ler nada aí. 🙂")
-            except discord.HTTPException:
-                pass
+        texto = (message.content or "").strip()
+        if not texto:
+            await self._responder_dm(message.channel, "Manda a resposta em texto, por favor: não consegui ler nada aí. 🙂")
             return
-        resposta = resposta[:1800]
-        if not self.bot.db.responder_entrevista(entrevista["id"], resposta):
+        resposta, erro = furos_mod.limpar_texto(
+            texto, minimo=1, maximo=RESPOSTA_MAX, tirar_mencoes=False, preservar_linhas=True,
+        )
+        if erro:
+            await self._responder_dm(message.channel, f"⚠️ {erro} Tente de novo.")
             return
+        if not self.bot.db.salvar_rascunho_entrevista(entrevista["id"], resposta):
+            return
+        # Nada é publicado só porque a pessoa mandou uma mensagem: ela pode estar conversando com o bot.
+        # Primeiro um preview, depois o botão.
+        emb = ui.embed(
+            "👀 Assim vai ficar no jornal", categoria="noticia",
+            descricao=f"**P:** {entrevista['pergunta']}\n\n**R:** {resposta}",
+        )
         try:
-            await message.channel.send("✅ Recebi sua resposta! Já vou publicar no jornal do servidor. Obrigado!")
+            await message.channel.send(
+                "Confira abaixo. Se estiver bom, toque em **Publicar**. Para mudar, toque em **Reescrever** "
+                "ou mande outra resposta.",
+                embed=emb, view=self.view_do(entrevista["id"]),
+            )
+        except discord.HTTPException:
+            log.info("nao consegui mandar o preview da entrevista %s", entrevista["id"])
+
+    async def _responder_dm(self, canal, texto: str) -> None:
+        try:
+            await canal.send(texto)
         except discord.HTTPException:
             pass
-        await self._publicar(entrevista["id"], entrevista["guild_id"], message.author, entrevista["pergunta"], resposta)
+
+    def view_do(self, entrevista_id: int) -> discord.ui.View:
+        view = discord.ui.View(timeout=None)
+        view.add_item(PublicarButton(self, entrevista_id))
+        view.add_item(RefazerButton(self, entrevista_id))
+        return view
+
+    async def publicar_rascunho(self, interaction: discord.Interaction, entrevista_id: int) -> None:
+        entrevista = self.bot.db.get_entrevista(entrevista_id)
+        if entrevista is None or entrevista["user_id"] != str(interaction.user.id):
+            await interaction.response.send_message("Essa entrevista não é sua.", ephemeral=True)
+            return
+        if entrevista["status"] != "pendente" or not entrevista.get("rascunho"):
+            await self._fechar_preview(interaction, "Essa entrevista já foi publicada ou não está mais aberta.")
+            return
+        resposta = entrevista["rascunho"]
+        if not self.bot.db.responder_entrevista(entrevista["id"], resposta):
+            await self._fechar_preview(interaction, "Essa entrevista já foi publicada ou não está mais aberta.")
+            return
+        await self._fechar_preview(interaction, "✅ Publicado! Obrigado por participar do Jornal Lunar.")
+        await self._publicar(entrevista["id"], entrevista["guild_id"], interaction.user, entrevista["pergunta"], resposta)
+
+    async def refazer_rascunho(self, interaction: discord.Interaction, entrevista_id: int) -> None:
+        entrevista = self.bot.db.get_entrevista(entrevista_id)
+        if entrevista is None or entrevista["user_id"] != str(interaction.user.id):
+            await interaction.response.send_message("Essa entrevista não é sua.", ephemeral=True)
+            return
+        if entrevista["status"] == "pendente":
+            self.bot.db.limpar_rascunho_entrevista(entrevista["id"])
+        await self._fechar_preview(interaction, "Tudo bem, descartei esse rascunho. Mande a nova resposta quando quiser.")
+
+    async def _fechar_preview(self, interaction: discord.Interaction, texto: str) -> None:
+        try:
+            await interaction.response.edit_message(content=texto, embed=None, view=None)
+        except discord.HTTPException:
+            if not interaction.response.is_done():
+                await interaction.response.send_message(texto, ephemeral=True)
 
     @app_commands.command(
         name="entrevista_responder",
@@ -251,6 +377,9 @@ class Entrevista(commands.Cog):
         canal_id = self.bot.db.get_canal_categoria(guild_id, "noticia")
         guild = self.bot.get_guild(int(guild_id))
         canal = guild.get_channel(int(canal_id)) if guild and canal_id else None
+        if guild is not None and not isinstance(autor, discord.Member) and hasattr(autor, "id"):
+            # Numa DM o autor é um User (nome global). No servidor ele tem o apelido que a mesa conhece.
+            autor = guild.get_member(autor.id) or autor
         emb = ui.embed(
             _titulo_entrevista(autor), categoria="noticia",
             descricao=f"**P:** {pergunta}\n\n**R:** {resposta}",

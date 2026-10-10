@@ -842,14 +842,16 @@ INVESTIMENTO_TAXA_GANHO = 0.08     # retorno se vencer bem
 INVESTIMENTO_TAXA_PERDA = -0.03    # retorno se vencer mal
 
 
-def valor_maturado_investimento(valor: int, em_crise: bool) -> int:
+def valor_maturado_investimento(valor: int, em_crise: bool, chance_ganho: Optional[float] = None) -> int:
     """Resolve o rendimento na hora da maturação (não antes) — em crise é
     sempre o mesmo prejuízo controlado pelo mestre; fora de crise, sorteia
-    entre o retorno bom e o ruim a cada título que vence."""
+    entre o retorno bom e o ruim a cada título que vence. `chance_ganho`
+    troca a chance padrão (o Dia de Bolsa a muda por um dia)."""
     if em_crise:
         taxa = INVESTIMENTO_TAXA_CRISE
     else:
-        taxa = INVESTIMENTO_TAXA_GANHO if random.random() < INVESTIMENTO_CHANCE_GANHO else INVESTIMENTO_TAXA_PERDA
+        chance = INVESTIMENTO_CHANCE_GANHO if chance_ganho is None else chance_ganho
+        taxa = INVESTIMENTO_TAXA_GANHO if random.random() < chance else INVESTIMENTO_TAXA_PERDA
     return max(0, int(valor) + math.floor(valor * taxa))
 
 
@@ -866,6 +868,12 @@ def compor_juros_emprestimo(valor_devido: int, juros_diarios: float) -> int:
 
 
 # ──────────────────────────────── Loteria Dominical ────────────────────────────
+# Chaves do Jardim: vendidas aqui, gastas pelo Jornalista num baú Incomum ou melhor
+# (+50% de Lunaris e um item extra). O limite de estoque também existe em
+# bots/jornalista/core/loot.py (CHAVES_MAX): os dois ZIPs são separados, mantenha iguais.
+CHAVE_PRECO = 40
+CHAVES_MAX = 10
+
 LOTERIA_PRECO_BILHETE = 25
 LOTERIA_CORTE_CASA = 0.10
 

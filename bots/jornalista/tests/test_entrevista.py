@@ -224,6 +224,12 @@ def test_nova_entrevista_nao_duplica_quem_ja_tem_pendente():
         def usuarios_fora_das_entrevistas(self, _gid):
             return []
 
+        def perguntas_recentes_entrevista(self, _gid):
+            return []
+
+        def get_cargos_arvore(self, _gid):
+            return {}
+
         def criar_entrevista(self, gid, uid, pergunta):
             self.criadas.append((gid, uid, pergunta))
             return 1

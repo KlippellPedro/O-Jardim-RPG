@@ -32,12 +32,14 @@ BAU_RARIDADES = {
         "peso": 550, "peso_especial": 160, "expira_minutos": 180,
         "dificuldade_enigma": None, "bonus_itens": 0, "lunaris_mult": 1.0,
         "pesos_itens": {"comum": 90, "incomum": 10},
+        "coletivo": True, "chance_item": 0.35,
     },
     "incomum": {
         "nome": "Baú Incomum", "emoji": "🌿", "cor": 0x2ECC71,
         "peso": 290, "peso_especial": 260, "expira_minutos": 120,
         "dificuldade_enigma": None, "bonus_itens": 0, "lunaris_mult": 1.25,
         "pesos_itens": {"comum": 25, "incomum": 65, "raro": 10},
+        "coletivo": True, "chance_item": 0.55,
     },
     "raro": {
         "nome": "Baú Raro", "emoji": "💎", "cor": 0x3498DB,
@@ -113,6 +115,188 @@ def parametros_premio_bau(
         "expira_minutos": int(perfil["expira_minutos"]),
     }
 
+# ── Baús v2 ──────────────────────────────────────────────────────────────────
+# Baús Comum e Incomum são COLETIVOS: cada pessoa pega o seu (uma vez por baú),
+# sem corrida. Do Raro para cima continua valendo o primeiro a acertar o enigma.
+BAUS_POR_DIA_PADRAO = 4
+BAUS_POR_DIA_MAX = 8
+
+# Proteção de azar do servidor: depois de tantos baús seguidos só Comum/Incomum,
+# o próximo sai pelo menos Raro.
+PROTECAO_BAUS_SEM_BOM = 8
+_ORDEM_BAU = tuple(BAU_RARIDADES)
+_RARIDADES_BOAS = frozenset({"raro", "epico", "lendario", "mitico"})
+
+# Pistas de Sorte: consolo de quem tentou o enigma e não levou. Cada Pista
+# vira bônus no próximo baú que a pessoa levar.
+PISTAS_MAX = 5
+PISTA_BONUS_LUNARIS = 0.20     # +20% de Lunaris por Pista
+PISTA_CHANCE_ITEM_EXTRA = 0.15  # +15% de chance de um item extra por Pista
+
+
+# Chaves do Jardim: o Banqueiro vende (CHAVE_PRECO em bots/banqueiro/core/economia.py,
+# que repete CHAVES_MAX: os ZIPs são separados, mantenha iguais). Uma Chave é gasta
+# sozinha no próximo baú Incomum ou melhor e abre o "fundo falso": mais Lunaris e um
+# item extra de um degrau acima. Nunca é exigida para abrir um baú.
+CHAVES_MAX = 10
+CHAVE_BONUS_LUNARIS = 0.5
+# Chance de achar uma Chave ao pegar o seu num baú coletivo. Quem vence a corrida
+# de um baú Raro ou melhor sempre leva uma.
+CHANCE_CHAVE_COLETIVO = {"comum": 0.08, "incomum": 0.12}
+
+
+def chave_vale_para(raridade: str) -> bool:
+    """A Chave não é gasta em baú Comum."""
+    return str(raridade) != "comum"
+
+
+def chave_cai_na_corrida(raridade: str) -> bool:
+    return str(raridade) in _RARIDADES_BOAS
+
+
+def aplicar_chave_ao_premio(
+    premio: dict, catalogo, rng=_random,
+    pesos: Optional[Dict[str, int]] = None, tipos=None,
+) -> dict:
+    """Fundo falso: +50% de Lunaris e um item extra sorteado nos pesos do degrau
+    acima. Sem item elegível no catálogo, só o bônus de Lunaris."""
+    novo = dict(premio)
+    novo["lunaris"] = round(int(premio.get("lunaris") or 0) * (1 + CHAVE_BONUS_LUNARIS))
+    existentes = {(i["id"] if isinstance(i, dict) else i.id) for i in premio.get("itens") or []}
+    item = sortear_item(catalogo, rng=rng, pesos=pesos, tipos=tipos, excluir_ids=existentes)
+    novo["itens"] = list(premio.get("itens") or []) + ([item] if item is not None else [])
+    novo["chave"] = {"item_extra": item is not None}
+    return novo
+
+
+def eh_coletivo(raridade: str) -> bool:
+    return bool(perfil_bau(raridade).get("coletivo"))
+
+
+def aplicar_protecao_de_azar(raridade: str, baus_sem_bom: int) -> str:
+    """Sobe para Raro o baú que viria Comum/Incomum depois de uma longa
+    sequência sem nenhum baú bom."""
+    if raridade in _RARIDADES_BOAS or int(baus_sem_bom) < PROTECAO_BAUS_SEM_BOM:
+        return raridade
+    return "raro"
+
+
+def raridade_acima(raridade: str) -> str:
+    """Próximo degrau da escala de baús (o Mítico não sobe)."""
+    try:
+        indice = _ORDEM_BAU.index(raridade)
+    except ValueError:
+        return "incomum"
+    return _ORDEM_BAU[min(indice + 1, len(_ORDEM_BAU) - 1)]
+
+
+def horarios_do_dia(min_hora: int, max_hora: int, por_dia: int, dia: datetime):
+    """Divide a janela [min_hora, max_hora] do dia em `por_dia` faixas iguais.
+    Devolve [(inicio, fim)] como datetimes do mesmo fuso de `dia`."""
+    if min_hora > max_hora:
+        min_hora, max_hora = max_hora, min_hora
+    min_hora = max(0, min(23, int(min_hora)))
+    max_hora = max(0, min(23, int(max_hora)))
+    por_dia = max(1, min(BAUS_POR_DIA_MAX, int(por_dia)))
+    inicio_janela = dia.replace(hour=min_hora, minute=0, second=0, microsecond=0)
+    minutos = (max_hora - min_hora + 1) * 60
+    tamanho = minutos / por_dia
+    faixas = []
+    for i in range(por_dia):
+        ini = inicio_janela + timedelta(minutes=round(i * tamanho))
+        fim = inicio_janela + timedelta(minutes=round((i + 1) * tamanho))
+        faixas.append((ini, fim))
+    return faixas
+
+
+def agendar_proximo_bau(
+    min_hora: int,
+    max_hora: int,
+    por_dia: int,
+    rng=_random,
+    agora: Optional[datetime] = None,
+    *,
+    apos_drop: bool = False,
+) -> datetime:
+    """Horário do próximo baú: um sorteio por faixa do dia, para os baús não
+    virarem rajada nem ficarem todos de madrugada.
+
+    `apos_drop=True` (logo depois de um baú cair) só considera faixas que
+    COMEÇAM depois de agora; sem isso (ao ligar os baús) vale a faixa em
+    andamento, no tempo que ainda resta dela."""
+    if agora is None:
+        agora = datetime.now(TZ) if TZ else datetime.now()
+    for deslocamento in (0, 1, 2):
+        dia = agora + timedelta(days=deslocamento)
+        for ini, fim in horarios_do_dia(min_hora, max_hora, por_dia, dia):
+            if apos_drop:
+                if ini <= agora:
+                    continue
+                piso = ini
+            else:
+                if fim <= agora + timedelta(minutes=1):
+                    continue
+                piso = max(ini, agora + timedelta(minutes=1))
+            teto = fim - timedelta(minutes=1)
+            if teto <= piso:
+                return piso.replace(second=0, microsecond=0)
+            espaco = int((teto - piso).total_seconds() // 60)
+            return (piso + timedelta(minutes=rng.randint(0, espaco))).replace(second=0, microsecond=0)
+    return agora + timedelta(days=1)  # inalcançável, só por segurança
+
+
+def sortear_premio_coletivo(
+    catalogo, params: dict, rng=_random, pesos_bonus: Optional[Dict[str, int]] = None,
+    pistas: int = 0,
+) -> dict:
+    """Prêmio individual de um baú coletivo: Lunaris na faixa do baú e uma
+    chance de um item. Cada Pista de Sorte soma Lunaris e chance de item extra."""
+    pistas = max(0, min(PISTAS_MAX, int(pistas)))
+    lunaris = rng.randint(int(params["lunaris_min"]), int(params["lunaris_max"]))
+    lunaris = round(lunaris * (1 + PISTA_BONUS_LUNARIS * pistas))
+    itens = []
+    if rng.random() < float(params.get("chance_item", 0)):
+        item = sortear_item(
+            catalogo, rng=rng, pesos=params.get("pesos_itens"), tipos=params.get("tipos"),
+        )
+        if item is not None:
+            itens.append(item)
+    extras = _itens_extras_de_sorte(catalogo, rng, pistas, pesos_bonus or params.get("pesos_itens"),
+                                    params.get("tipos"), {i.id for i in itens})
+    itens += extras
+    premio = {"lunaris": lunaris, "itens": itens, "creditos_sombrios": 0}
+    if pistas > 0:
+        premio["sorte"] = {"pistas": pistas, "item_extra": bool(extras)}
+    return premio
+
+
+def _itens_extras_de_sorte(catalogo, rng, pistas, pesos, tipos, excluir) -> list:
+    if pistas <= 0:
+        return []
+    if rng.random() >= min(0.9, PISTA_CHANCE_ITEM_EXTRA * pistas):
+        return []
+    item = sortear_item(catalogo, rng=rng, pesos=pesos, tipos=tipos, excluir_ids=excluir)
+    return [item] if item is not None else []
+
+
+def aplicar_pistas_ao_premio(
+    premio: dict, pistas: int, catalogo, rng=_random,
+    pesos: Optional[Dict[str, int]] = None, tipos=None,
+) -> dict:
+    """Bônus das Pistas de Sorte sobre um prêmio já sorteado (baú de corrida):
+    mais Lunaris e, às vezes, um item extra. Não mexe em Créditos Sombrios."""
+    pistas = max(0, min(PISTAS_MAX, int(pistas)))
+    if pistas <= 0:
+        return premio
+    novo = dict(premio)
+    novo["lunaris"] = round(int(premio.get("lunaris") or 0) * (1 + PISTA_BONUS_LUNARIS * pistas))
+    existentes = {(i["id"] if isinstance(i, dict) else i.id) for i in premio.get("itens") or []}
+    extras = _itens_extras_de_sorte(catalogo, rng, pistas, pesos, tipos, existentes)
+    novo["itens"] = list(premio.get("itens") or []) + extras
+    novo["sorte"] = {"pistas": pistas, "item_extra": bool(extras)}
+    return novo
+
+
 # Só objetos que fazem sentido como achado físico vão automaticamente para o
 # cofre. Monstros são contratos do bestiário e veículos/peças agora pertencem
 # à página de Bens, não ao inventário. A lista explícita também impede que um
@@ -129,20 +313,27 @@ TIPOS_PERMITIDOS_BAU = frozenset({
     "modificacao",
 })
 
-# Pesos de raridade especiais para itens do baú sombrio (mais épicos/lendários)
+# Pesos de raridade especiais para itens do baú sombrio (mais épicos/lendários).
+# A raridade Mítica de um item vive no catálogo como "reliquia" (ver
+# core/catalogo.py); a chave era "mitico", que nunca casava com nenhum item.
 PESOS_SOMBRIO = {
     "incomum": 5,
     "raro": 30,
     "epico": 45,
     "lendario": 15,
-    "mitico": 5,
+    "reliquia": 5,
 }
 
-# Créditos Sombrios que caem no baú sombrio (por raridade do baú)
+# Créditos Sombrios que caem no baú sombrio (por raridade do baú). Só havia
+# comum, raro e lendário: incomum, épico e mítico caíam no padrão (5, 15), que
+# pagava menos que um baú raro.
 CREDITOS_SOMBRIOS_BAU = {
     "comum":    (3,  8),
+    "incomum":  (5,  14),
     "raro":     (10, 25),
+    "epico":    (18, 40),
     "lendario": (30, 70),
+    "mitico":   (60, 120),
 }
 
 
@@ -160,7 +351,7 @@ def sortear_item_sombrio(catalogo, rng=_random, excluir_ids=None):
         itens = [
             it for it in catalogo.listar()
             if it.tipo in TIPOS_PERMITIDOS_BAU
-            and it.raridade in ("raro", "epico", "lendario", "mitico")
+            and it.raridade in ("raro", "epico", "lendario", "reliquia")
             and it.id not in ids_bloqueados
         ]
     if not itens:
@@ -241,7 +432,22 @@ def sortear_bau(catalogo, qtd_itens: int = 1, rng=_random,
     return {"itens": itens, "lunaris": rng.randint(lunaris_min, lunaris_max), "creditos_sombrios": 0}
 
 
-def agendar_proximo(min_hora: int, max_hora: int, rng=_random, agora: Optional[datetime] = None) -> datetime:
+def agendar_proximo(
+    min_hora: int,
+    max_hora: int,
+    rng=_random,
+    agora: Optional[datetime] = None,
+    *,
+    proximo_dia: bool = False,
+) -> datetime:
+    """Sorteia o horário do próximo baú dentro da janela [min_hora, max_hora].
+
+    `proximo_dia=True` (usado logo depois de um baú cair) sempre agenda para
+    amanhã: um por dia, como o cog promete. Sem isso, o sorteio do horário de
+    hoje que ainda estivesse no futuro valia, e o servidor via em média 2 baús
+    por dia, com rajadas de até 7. Sem `proximo_dia`, o próximo horário
+    possível vale (hoje, se ainda der tempo), que é o que se quer ao ligar os
+    baús."""
     if min_hora > max_hora:
         min_hora, max_hora = max_hora, min_hora
     min_hora = max(0, min(23, int(min_hora)))
@@ -249,6 +455,6 @@ def agendar_proximo(min_hora: int, max_hora: int, rng=_random, agora: Optional[d
     if agora is None:
         agora = datetime.now(TZ) if TZ else datetime.now()
     cand = agora.replace(hour=rng.randint(min_hora, max_hora), minute=rng.randint(0, 59), second=0, microsecond=0)
-    if cand <= agora:
+    if proximo_dia or cand <= agora:  # replace() mantém a data de `agora`
         cand = cand + timedelta(days=1)
     return cand

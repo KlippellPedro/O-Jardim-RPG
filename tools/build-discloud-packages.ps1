@@ -174,8 +174,11 @@ try {
   # a divergir (ver auditoria 2026-08, achado 10).
   $jornalistaData = Join-Path $jornalistaStage 'data'
   New-Item -ItemType Directory -Path $jornalistaData -Force | Out-Null
+  # A coleção das Dez Árvores lê data/colecao_arvores.json (gerado por
+  # tools/gerar-colecao-arvores.py a partir das Crônicas do Jardim).
   @(
-    'data\economia\cofre_seguranca_tiers.json'
+    'data\economia\cofre_seguranca_tiers.json',
+    'bots\jornalista\data\colecao_arvores.json'
   ) | ForEach-Object { Copy-ProjectItem $_ $jornalistaData }
 
   @(

@@ -17,11 +17,16 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
+from core import arvores as arvores_mod
 from core import clima as clima_mod
+from core import db as db_mod
 from core import economia
+from core.edicao import janela_edicao, montar_edicao, semana_da_edicao
 from core import enigmas as enigmas_mod
+from core import furos as furos_mod
 from core import publicacoes
 from core import ui
+from cogs.classificados import embed_classificado
 from core.tasks_util import registrar_reinicio_em_erro
 
 log = logging.getLogger("jornalista")
@@ -46,6 +51,7 @@ CATEGORIAS_CANAL = [
     app_commands.Choice(name="Dinheiro e economia", value="dinheiro"),
     app_commands.Choice(name="Sessão (começou, lembretes, crítico)", value="sessao"),
     app_commands.Choice(name="Liberações do Mestre e mural", value="liberacao"),
+    app_commands.Choice(name="Mural de Procurados (mensagem fixa, editada no lugar)", value="procurados"),
 ]
 
 AUTOMACOES = {
@@ -55,14 +61,25 @@ AUTOMACOES = {
     "loteria_resultado": ("Resultado da Loteria Dominical", True),
     "boas_vindas": ("Boas-vindas", True),
     "despedidas": ("Despedidas", True),
-    "resumo_semanal": ("Resumo semanal da campanha", True),
+    "resumo_semanal": ("Edição semanal do jornal (domingo à noite)", True),
     "pautas_agendadas": ("Pautas agendadas", True),
     "rumores_baus": ("Baús agendados por rumores", True),
     "clima_auto": ("Clima automático", False),
     "estacao_auto": ("Rotação automática de estação", False),
     "baus_auto": ("Baús automáticos", False),
     "conquistas_secretas": ("Cargos secretos por conquistas", True),
+    "fofocas": ("Furos e fofocas dos jogadores", True),
+    "classificados": ("Classificados pagos pelos jogadores", True),
+    "colecao": ("Coleção das Árvores (fragmentos e Afinidade nos baús)", True),
+    "mural_procurados": ("Mural de Procurados (precisa de canal em /jornal canal)", True),
+    "leilao_semanal": ("Leilão semanal do Jardim (Banqueiro)", True),
+    "dia_de_bolsa": ("Dia de Bolsa (Banqueiro)", True),
 }
+
+CLASSIFICADO_CATEGORIAS_CHOICES = [
+    app_commands.Choice(name=nome, value=chave)
+    for chave, (nome, _emoji) in db_mod.CLASSIFICADO_CATEGORIAS.items()
+]
 
 AUTOMACAO_CHOICES = [
     app_commands.Choice(name=rotulo, value=chave)
@@ -70,6 +87,34 @@ AUTOMACAO_CHOICES = [
 ]
 
 TZ_SAO_PAULO = ZoneInfo("America/Sao_Paulo")
+
+# Tipos de evento do Mestre (só mudam o ícone; o texto é livre).
+TIPOS_EVENTO = [
+    app_commands.Choice(name="Aviso", value="aviso"),
+    app_commands.Choice(name="Mercado", value="mercado"),
+    app_commands.Choice(name="Festival", value="festival"),
+    app_commands.Choice(name="Perigo", value="perigo"),
+]
+EMOJI_EVENTO = {"aviso": "📢", "mercado": "💹", "festival": "🎉", "perigo": "⚠️"}
+
+
+def barra_meta(atual: int, alvo: int, tamanho: int = 10) -> str:
+    cheio = max(0, min(tamanho, round(tamanho * max(0, atual) / max(1, alvo))))
+    return "▰" * cheio + "▱" * (tamanho - cheio) + f"  {atual}/{alvo}"
+
+
+def embed_meta_anuncio(meta: dict, titulo: str, extra: str = "") -> discord.Embed:
+    """Anúncio público do Cofre do Jardim (abertura, fim sem sucesso, cancelamento)."""
+    descricao = meta.get("descricao") or "Uma meta de todos: cada Lunaris doado conta."
+    if meta.get("recompensa"):
+        descricao += f"\n\n🎁 **Se a meta for batida:** {meta['recompensa']}"
+    if int(meta.get("festival_horas") or 0) > 0:
+        descricao += f"\n🎉 Abre um **festival de {int(meta['festival_horas'])}h** com baús muito mais generosos."
+    if extra:
+        descricao += f"\n\n{extra}"
+    emb = ui.embed(titulo, categoria="dinheiro", descricao=descricao)
+    emb.add_field(name="Meta", value=f"{barra_meta(meta['arrecadado'], meta['alvo'])}", inline=False)
+    return emb
 
 
 def _url_imagem_valida(url: str) -> bool:
@@ -481,6 +526,21 @@ class Jornal(commands.Cog):
         description="Rascunhos, aprovação e agendamento de notícias.",
         parent=jornal,
     )
+    meta = app_commands.Group(
+        name="meta",
+        description="Cofre do Jardim: a meta coletiva que a mesa enche com Lunaris.",
+        parent=jornal,
+    )
+    evento = app_commands.Group(
+        name="evento",
+        description="Eventos do Mestre: aparecem no jornal e nos painéis /jardim e /banco.",
+        parent=jornal,
+    )
+    furo = app_commands.Group(
+        name="furo",
+        description="Furos vendidos pelos jogadores: o Mestre pode barrar um antes de sair.",
+        parent=jornal,
+    )
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -489,11 +549,13 @@ class Jornal(commands.Cog):
         registrar_reinicio_em_erro(self.ciclo_estacao_auto, "ciclo_estacao_auto", log)
         registrar_reinicio_em_erro(self.ciclo_rumores, "ciclo_rumores", log)
         registrar_reinicio_em_erro(self.ciclo_pautas, "ciclo_pautas", log)
+        registrar_reinicio_em_erro(self.ciclo_metas, "ciclo_metas", log)
         registrar_reinicio_em_erro(self.ciclo_resumo, "ciclo_resumo", log)
         self.ciclo_clima.start()
         self.ciclo_estacao_auto.start()
         self.ciclo_rumores.start()
         self.ciclo_pautas.start()
+        self.ciclo_metas.start()
         self.ciclo_resumo.start()
 
     def cog_unload(self):
@@ -501,6 +563,7 @@ class Jornal(commands.Cog):
         self.ciclo_estacao_auto.cancel()
         self.ciclo_rumores.cancel()
         self.ciclo_pautas.cancel()
+        self.ciclo_metas.cancel()
         self.ciclo_resumo.cancel()
 
     # ── Pautas agendadas e resumo semanal ──────────────────────────────────
@@ -520,52 +583,105 @@ class Jornal(commands.Cog):
     async def _antes_ciclo_pautas(self):
         await self.bot.wait_until_ready()
 
+    # ── Cofre do Jardim: metas que o prazo venceu ──────────────────────────
+    @tasks.loop(minutes=5)
+    async def ciclo_metas(self):
+        for meta in self.bot.db.metas_vencidas():
+            try:
+                await self._encerrar_meta(meta, "expirada")
+            except Exception:
+                log.exception("erro ao encerrar a meta vencida %s", meta.get("id"))
+
+    @ciclo_metas.before_loop
+    async def _antes_ciclo_metas(self):
+        await self.bot.wait_until_ready()
+
+    async def _encerrar_meta(self, meta: dict, status: str) -> Optional[dict]:
+        """Fecha a meta, devolve as doações e anuncia. None se ela já tinha
+        sido batida ou fechada por outro caminho."""
+        gid = str(meta["guild_id"])
+        resultado = self.bot.db.encerrar_meta_com_reembolso(gid, meta["id"], status)
+        if resultado is None:
+            return None
+        canal_id = self.bot.db.get_canal_categoria(gid, "dinheiro")
+        if canal_id:
+            fim = "O prazo acabou e a meta não foi batida." if status == "expirada" else "O Mestre encerrou a meta."
+            devolvido = (
+                f"☾ **{resultado['total']}** voltaram para **{resultado['doadores']}** doador(es)."
+                if resultado["total"] else "Ninguém tinha doado."
+            )
+            await publicacoes.publicar_ou_enfileirar(
+                self.bot,
+                guild_id=gid,
+                embed=embed_meta_anuncio(
+                    resultado["meta"],
+                    f"🏛️ Cofre do Jardim: {meta['titulo']}",
+                    f"{fim} {devolvido}",
+                ),
+                origem="meta",
+                referencia=str(meta["id"]),
+                dedupe_key=f"meta-fim:{meta['id']}",
+                categoria="dinheiro",
+                canal_id=str(canal_id),
+            )
+        return resultado
+
+    def _coletar_edicao(self, gid: str, desde) -> dict:
+        """Reúne o que a edição semanal conta. Cada bloco falha sozinho: o jornal
+        sai mesmo que uma consulta secundária dê erro."""
+        db = self.bot.db
+
+        def tentar(nome, funcao, padrao):
+            try:
+                return funcao()
+            except Exception:
+                log.exception("edicao semanal: falha ao coletar %s (guild %s)", nome, gid)
+                return padrao
+
+        def meta_da_semana():
+            ultima = db.get_ultima_meta_encerrada(gid)
+            if ultima and ultima.get("encerrada_em") and ultima["encerrada_em"] >= desde:
+                return ultima
+            return None
+
+        return {
+            "resumo": tentar("resumo", lambda: db.resumo_semanal(gid, desde), None),
+            "estacao": tentar("estacao", lambda: db.get_estacao(gid), None),
+            "clima": tentar("clima", lambda: db.get_modificador_clima(gid), None),
+            "horoscopo": tentar(
+                "horoscopo",
+                lambda: db.get_horoscopo(gid) if db.automacao_ativa(gid, "horoscopo", True) else None,
+                None,
+            ),
+            "cacadores": tentar("cacadores", lambda: db.ranking_cacadores(gid, desde, 3), []),
+            "procurados": tentar("procurados", lambda: db.listar_procurados(gid, 3), []),
+            "furos": tentar("furos", lambda: db.furos_publicados_desde(gid, desde), []),
+            "classificados": tentar("classificados", lambda: db.classificados_ativos(gid, 3), []),
+            "entrevista": tentar("entrevista", lambda: db.entrevista_da_semana(gid, desde), None),
+            "meta": tentar("meta", lambda: db.get_meta_ativa(gid), None),
+            "meta_encerrada": tentar("meta encerrada", meta_da_semana, None),
+            "loteria": tentar("loteria", lambda: db.loteria_desde(gid, desde), None),
+            "eventos": tentar("eventos", lambda: db.listar_eventos_ativos(gid), []),
+        }
+
     def _montar_resumo_semanal(self, gid: str) -> discord.Embed:
-        dados = self.bot.db.resumo_semanal(
-            gid, datetime.now(timezone.utc) - timedelta(days=7)
-        )
-        emb = ui.embed(
-            "🗞️ A semana no Jardim", categoria="noticia",
-            descricao="Um resumo dos movimentos registrados nos últimos sete dias.",
-        )
-        emb.add_field(
-            name="Exploração",
-            value=(
-                f"• Baús abertos: **{dados['baus']}**\n"
-                f"• Exploradores premiados: **{dados['vencedores_baus']}**\n"
-                f"• Desafios resolvidos: **{dados['desafios']}**"
-            ),
-            inline=True,
-        )
-        emb.add_field(
-            name="Economia registrada",
-            value=(
-                f"• Entradas: ☾ **{dados['entradas']}**\n"
-                f"• Saídas: ☾ **{dados['saidas']}**\n"
-                f"• Jogadores ativos: **{dados['jogadores']}**"
-            ),
-            inline=True,
-        )
-        emb.add_field(
-            name="Jornal Lunar",
-            value=(
-                f"• Entrevistas publicadas: **{dados['entrevistas']}**\n"
-                f"• Prêmios editoriais: ☾ **{dados['premios_desafios']}**"
-            ),
-            inline=False,
-        )
-        emb.set_footer(text="Somente atividades registradas pelos bots entram neste resumo.")
-        return emb
+        desde = datetime.now(timezone.utc) - timedelta(days=7)
+        return montar_edicao(self._coletar_edicao(gid, desde))
 
     @tasks.loop(hours=1)
     async def ciclo_resumo(self):
         agora = datetime.now(timezone.utc)
-        iso = agora.isocalendar()
+        semana = semana_da_edicao(agora)
         for guild in self.bot.guilds:
             gid = str(guild.id)
             if not self.bot.db.automacao_ativa(gid, "resumo_semanal", AUTOMACOES["resumo_semanal"][1]):
                 continue
-            if not self.bot.db.ciclo_guild_devido(gid, "resumo_semanal", 168):
+            if not janela_edicao(agora):
+                continue
+            # 144h (6 dias) e não 168h: a edição sai no domingo à noite ou, se o bot estava fora do ar,
+            # na segunda de manhã. Com 168h essa recuperação empurrava o domingo seguinte para depois
+            # da janela e a edição passava a sair sempre na segunda.
+            if not self.bot.db.ciclo_guild_devido(gid, "resumo_semanal", 144):
                 continue
             try:
                 resultado = await publicacoes.publicar_ou_enfileirar(
@@ -573,12 +689,13 @@ class Jornal(commands.Cog):
                     guild_id=gid,
                     embed=self._montar_resumo_semanal(gid),
                     origem="resumo_semanal",
-                    dedupe_key=f"resumo:{iso.year}:{iso.week}",
+                    dedupe_key=f"resumo:{semana}",
                     categoria="noticia",
                     automacao="resumo_semanal",
                 )
-                if resultado in {"entregue", "falha", "adiada", "agendada"}:
-                    self.bot.db.marcar_ciclo_guild(gid, "resumo_semanal")
+                # Qualquer resultado significa que a publicação está
+                # persistida na fila durável (que entrega ou tenta de novo).
+                self.bot.db.marcar_ciclo_guild(gid, "resumo_semanal")
             except Exception:
                 log.exception("erro ao preparar resumo semanal (guild %s)", gid)
 
@@ -622,9 +739,8 @@ class Jornal(commands.Cog):
             if not self.bot.db.ciclo_guild_devido(gid, "estacao_auto", ESTACAO_AUTO_INTERVALO_HORAS):
                 continue
             try:
-                resultado = await self._avancar_estacao_auto(gid)
-                if resultado in {"entregue", "falha", "adiada", "agendada"}:
-                    self.bot.db.marcar_ciclo_guild(gid, "estacao_auto")
+                await self._avancar_estacao_auto(gid)
+                self.bot.db.marcar_ciclo_guild(gid, "estacao_auto")
             except Exception:
                 log.exception("erro no ciclo de rotacao automatica de estacao (guild %s)", gid)
 
@@ -635,7 +751,6 @@ class Jornal(commands.Cog):
     async def _avancar_estacao_auto(self, gid: str) -> str:
         atual = self.bot.db.get_estacao(gid)
         proxima = economia.proxima_estacao_normal(atual)
-        self.bot.db.set_estacao(gid, proxima)
         info = economia.estacao_info(proxima)
         canal_id = self.bot.db.get_canal_categoria(gid, "clima")
         emb = ui.embed(
@@ -644,7 +759,11 @@ class Jornal(commands.Cog):
             descricao=info["descricao"],
         )
         iso = datetime.now(timezone.utc).isocalendar()
-        return await publicacoes.publicar_ou_enfileirar(
+        # Primeiro a publicação (idempotente pela chave da semana), depois a
+        # mudança de estação. Antes era o contrário: se a publicação não
+        # fechasse o ciclo, a hora seguinte avançava a estação outra vez e
+        # só uma mensagem saía (primavera virava outono em duas horas).
+        resultado = await publicacoes.publicar_ou_enfileirar(
             self.bot,
             guild_id=gid,
             embed=emb,
@@ -654,6 +773,11 @@ class Jornal(commands.Cog):
             canal_id=canal_id,
             automacao="estacao_auto",
         )
+        self.bot.db.set_estacao(gid, proxima)
+        # O clima sorteado pertencia à estação anterior (a Onda de Calor do
+        # Verão seguia valendo no Inverno): a nova estação começa limpa.
+        self.bot.db.set_modificador_clima(gid, None)
+        return resultado
 
     def _montar_embed_clima(self, guild_id: str) -> discord.Embed:
         """Boletim do Jornal Lunar para o clima da estação atual."""
@@ -684,7 +808,8 @@ class Jornal(commands.Cog):
             canal_id=canal_id,
             automacao="clima_auto",
         )
-        return resultado in {"entregue", "falha", "adiada", "agendada"}
+        # Qualquer resultado é uma publicação já persistida na fila durável.
+        return bool(resultado)
 
     async def _canal_do_jornal(
         self, interaction: discord.Interaction, categoria: str = "noticia"
@@ -889,6 +1014,217 @@ class Jornal(commands.Cog):
             ephemeral=True,
         )
 
+    # ── Cofre do Jardim (meta coletiva) ─────────────────────────────────────
+    @meta.command(name="criar", description="Abre a meta coletiva do servidor: a mesa doa Lunaris pelo /banco.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    @app_commands.describe(
+        titulo="Nome da meta (ex.: Reconstruir a ponte).",
+        alvo="Quantos Lunaris a mesa precisa juntar.",
+        dias="Prazo em dias (1 a 60; padrão 7). Sem bater a meta, tudo é devolvido.",
+        descricao="Para que serve o dinheiro (opcional).",
+        recompensa="O que a mesa ganha ao bater a meta (texto livre, decisão sua, mestre).",
+        festival_horas="Se maior que 0, bater a meta abre um festival de baús generosos por tantas horas (máx. 72).",
+    )
+    async def meta_criar(
+        self, interaction: discord.Interaction,
+        titulo: app_commands.Range[str, 1, 100],
+        alvo: app_commands.Range[int, 10, 1_000_000],
+        dias: app_commands.Range[int, 1, 60] = 7,
+        descricao: app_commands.Range[str, 0, 500] = "",
+        recompensa: app_commands.Range[str, 0, 300] = "",
+        festival_horas: app_commands.Range[int, 0, 72] = 0,
+    ):
+        gid = str(interaction.guild_id)
+        meta_id = self.bot.db.criar_meta(
+            gid, titulo.strip(), descricao.strip(), alvo, dias, recompensa.strip(), festival_horas,
+            str(interaction.user.id),
+        )
+        if meta_id is None:
+            await interaction.response.send_message(
+                "⚠️ Já existe uma meta aberta. Veja com `/jornal meta listar` e encerre com `/jornal meta cancelar`.",
+                ephemeral=True,
+            )
+            return
+        meta = self.bot.db.get_meta_ativa(gid)
+        canal_id = self.bot.db.get_canal_categoria(gid, "dinheiro")
+        publicado = ""
+        if canal_id and meta:
+            await interaction.response.defer(ephemeral=True)
+            await publicacoes.publicar_ou_enfileirar(
+                self.bot,
+                guild_id=gid,
+                embed=embed_meta_anuncio(
+                    meta, f"🏛️ Cofre do Jardim: {meta['titulo']}",
+                    f"Doe pelo **/banco**, na seção *Cofre do Jardim*. Prazo: <t:{int(meta['prazo'].timestamp())}:R>.",
+                ),
+                origem="meta",
+                referencia=str(meta_id),
+                dedupe_key=f"meta-abre:{meta_id}",
+                categoria="dinheiro",
+                canal_id=str(canal_id),
+            )
+            publicado = " Anunciada no canal de dinheiro."
+            enviar = interaction.followup.send
+        else:
+            publicado = " (Sem canal de dinheiro configurado: ela só aparece nos painéis.)"
+            enviar = interaction.response.send_message
+        await enviar(
+            f"✅ Meta **#{meta_id}** aberta: ☾ {alvo} em {dias} dia(s).{publicado}", ephemeral=True
+        )
+
+    @meta.command(name="listar", description="Lista as metas recentes e como terminaram.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def meta_listar(self, interaction: discord.Interaction):
+        metas = self.bot.db.listar_metas(str(interaction.guild_id))
+        if not metas:
+            await interaction.response.send_message("Nenhuma meta criada ainda.", ephemeral=True)
+            return
+        rotulo = {"aberta": "🟢 aberta", "concluida": "🏆 batida", "expirada": "⌛ expirou", "cancelada": "⏹️ cancelada"}
+        linhas = [
+            f"**#{m['id']}** {m['titulo'][:60]} · {rotulo.get(m['status'], m['status'])} · "
+            f"☾ {m['arrecadado']}/{m['alvo']} · prazo <t:{int(m['prazo'].timestamp())}:d>"
+            for m in metas
+        ]
+        await interaction.response.send_message(
+            embed=ui.embed("🏛️ Metas do Cofre do Jardim", categoria="dinheiro", descricao="\n".join(linhas)[:4000]),
+            ephemeral=True,
+        )
+
+    @meta.command(name="cancelar", description="Cancela a meta aberta e devolve as doações.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def meta_cancelar(self, interaction: discord.Interaction, meta_id: int):
+        gid = str(interaction.guild_id)
+        meta = next((m for m in self.bot.db.listar_metas(gid, 30) if m["id"] == meta_id), None)
+        if meta is None or meta["status"] != "aberta":
+            await interaction.response.send_message("Meta não encontrada ou já encerrada.", ephemeral=True)
+            return
+        await interaction.response.defer(ephemeral=True)
+        resultado = await self._encerrar_meta(meta, "cancelada")
+        if resultado is None:
+            await interaction.followup.send("A meta já tinha sido encerrada.", ephemeral=True)
+            return
+        await interaction.followup.send(
+            f"⏹️ Meta #{meta_id} cancelada. ☾ {resultado['total']} devolvidos a {resultado['doadores']} doador(es).",
+            ephemeral=True,
+        )
+
+    # ── Eventos do Mestre ───────────────────────────────────────────────────
+    @evento.command(name="criar", description="Anuncia um evento: sai no jornal e aparece nos painéis até acabar.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    @app_commands.describe(
+        titulo="Manchete do evento (ex.: Feira de outono na praça).",
+        texto="Detalhes e regras do evento (opcional). O efeito no jogo é decisão sua, mestre.",
+        horas="Por quantas horas o evento vale (1 a 336; padrão 24).",
+        tipo="Ícone do evento.",
+    )
+    @app_commands.choices(tipo=TIPOS_EVENTO)
+    async def evento_criar(
+        self, interaction: discord.Interaction,
+        titulo: app_commands.Range[str, 1, 100],
+        texto: app_commands.Range[str, 0, 600] = "",
+        horas: app_commands.Range[int, 1, 336] = 24,
+        tipo: Optional[app_commands.Choice[str]] = None,
+    ):
+        gid = str(interaction.guild_id)
+        tipo_valor = tipo.value if tipo else "aviso"
+        evento_id = self.bot.db.criar_evento(
+            gid, titulo.strip(), (texto or "").strip(), tipo_valor, horas, str(interaction.user.id),
+        )
+        expira = datetime.now(timezone.utc) + timedelta(hours=horas)
+        emb = ui.embed(
+            f"{EMOJI_EVENTO.get(tipo_valor, '📢')} {titulo.strip()}",
+            categoria="noticia",
+            descricao=(texto or "").strip() or None,
+        )
+        emb.add_field(name="Vale até", value=f"<t:{int(expira.timestamp())}:F> (<t:{int(expira.timestamp())}:R>)", inline=False)
+        canal_id = self.bot.db.get_canal_categoria(gid, "noticia")
+        if canal_id:
+            await interaction.response.defer(ephemeral=True)
+            await publicacoes.publicar_ou_enfileirar(
+                self.bot,
+                guild_id=gid,
+                embed=emb,
+                origem="evento",
+                referencia=str(evento_id),
+                dedupe_key=f"evento:{evento_id}",
+                categoria="noticia",
+                canal_id=str(canal_id),
+            )
+            enviar = interaction.followup.send
+            aviso = "Anunciado no canal de notícias e "
+        else:
+            enviar = interaction.response.send_message
+            aviso = "Sem canal de notícias configurado (`/jornal canal`), então só "
+        await enviar(
+            f"✅ Evento **#{evento_id}** criado. {aviso}aparece em `/jardim` e `/banco` por {horas}h. "
+            f"Encerre antes com `/jornal evento encerrar {evento_id}`.",
+            ephemeral=True,
+        )
+
+    @evento.command(name="listar", description="Lista os eventos recentes e se ainda estão valendo.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def evento_listar(self, interaction: discord.Interaction):
+        eventos = self.bot.db.listar_eventos(str(interaction.guild_id))
+        if not eventos:
+            await interaction.response.send_message("Nenhum evento criado ainda.", ephemeral=True)
+            return
+        linhas = []
+        for ev in eventos:
+            estado = "🟢 ativo" if ev["ativo"] else ("⏹️ encerrado" if ev["encerrado"] else "⌛ expirou")
+            linhas.append(
+                f"**#{ev['id']}** {EMOJI_EVENTO.get(ev['tipo'], '📢')} {ev['titulo'][:80]} · {estado} · "
+                f"até <t:{int(ev['expira_em'].timestamp())}:f>"
+            )
+        await interaction.response.send_message(
+            embed=ui.embed("📢 Eventos do Mestre", categoria="noticia", descricao="\n".join(linhas)[:4000]),
+            ephemeral=True,
+        )
+
+    @evento.command(name="encerrar", description="Encerra um evento antes do prazo.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def evento_encerrar(self, interaction: discord.Interaction, evento_id: int):
+        ok = self.bot.db.encerrar_evento(str(interaction.guild_id), evento_id)
+        await interaction.response.send_message(
+            f"⏹️ Evento #{evento_id} encerrado." if ok else "Evento não encontrado ou já encerrado.",
+            ephemeral=True,
+        )
+
+    # ── Furos dos jogadores ─────────────────────────────────────────────────
+    @furo.command(name="listar", description="Mostra os furos recentes, quem vendeu, sobre quem e se ainda dá para barrar.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def furo_listar(self, interaction: discord.Interaction):
+        furos = self.bot.db.listar_fofocas_para_mestre(str(interaction.guild_id))
+        if not furos:
+            await interaction.response.send_message("Nenhum furo nos últimos 3 dias.", ephemeral=True)
+            return
+        rotulo = {
+            "pendente": "⏳ aguardando", "subornada": "🤐 subornada", "publicada": "📰 publicada",
+            "notificada": "📰 publicada", "vetada": "⛔ vetada",
+        }
+        linhas = []
+        for f in furos:
+            quem = f"<@{f['autor_id']}>" if f.get("autor_id") else "o Jornalista"
+            extra = " · desmentida" if f.get("desmentida") else ""
+            linhas.append(
+                f"**#{f['id']}** {rotulo.get(f['status'], f['status'])}{extra} · {quem} sobre <@{f['user_id']}>\n"
+                f"> {f['texto_fofoca'][:200]}"
+            )
+        await interaction.response.send_message(
+            embed=ui.embed("📸 Furos recentes", categoria="noticia", descricao="\n".join(linhas)[:4000]
+                           + "\n\nBarre um que ainda esteja aguardando com `/jornal furo vetar`."),
+            ephemeral=True,
+        )
+
+    @furo.command(name="vetar", description="Barra um furo que ainda não saiu. Quem vendeu fica com o pagamento.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def furo_vetar(self, interaction: discord.Interaction, furo_id: int):
+        barrada = self.bot.db.vetar_fofoca(str(interaction.guild_id), furo_id)
+        await interaction.response.send_message(
+            f"⛔ Furo #{furo_id} barrado: não será publicado." if barrada
+            else "Furo não encontrado ou já saiu (só dá para barrar os que estão aguardando).",
+            ephemeral=True,
+        )
+
     @jornal.command(name="principal", description="Define o canal principal do Jornalista.")
     @app_commands.describe(canal="Fallback para notícias, clima, avisos e boas-vindas.")
     @app_commands.checks.has_permissions(manage_guild=True)
@@ -1027,6 +1363,9 @@ class Jornal(commands.Cog):
 
         linhas_canais = [f"**Principal:** {descrever_canal(principal_id, fallback=False)}"]
         for escolha in CATEGORIAS_CANAL:
+            if escolha.value == "procurados" and not rotas.get("procurados"):
+                linhas_canais.append(f"**{escolha.name}:** ⏸️ desligado")
+                continue
             linhas_canais.append(
                 f"**{escolha.name}:** {descrever_canal(rotas.get(escolha.value))}"
             )
@@ -1070,6 +1409,15 @@ class Jornal(commands.Cog):
             ),
             inline=False,
         )
+        est = self.bot.db.estatisticas_baus(gid, 7)
+        linhas_est = (
+            f"• Lançados: **{est['lancados']}** · abertos: **{est['abertos']}** · "
+            f"expiraram sem ninguém: **{est['expirados']}**\n"
+            f"• Pessoas diferentes que levaram algo: **{est['pessoas']}**"
+        )
+        if est["lancados"] >= 4 and est["expirados"] * 2 > est["lancados"]:
+            linhas_est += "\n• Mais da metade expirou: vale apertar a janela em `/bau_config`."
+        emb.add_field(name="Baús nos últimos 7 dias", value=linhas_est, inline=False)
         pendencias = []
         if not principal_id:
             pendencias.append("definir o canal principal com `/jornal configurar`")
@@ -1077,6 +1425,15 @@ class Jornal(commands.Cog):
             pendencias.append("adicionar ao menos um canal de baú")
         if canais_baus and canais_baus_validos < len(canais_baus):
             pendencias.append("corrigir canais de baú apagados ou sem permissão")
+        if self.bot.db.automacao_ativa(gid, "horoscopo", True):
+            mapa_arvores = self.bot.db.get_cargos_arvore(gid)
+            sem_cargo = [a.nome for a in arvores_mod.ARVORES if a.id not in mapa_arvores]
+            if sem_cargo:
+                pendencias.append(
+                    "o bônus do horóscopo precisa do cargo de cada Árvore: ligue com "
+                    "`/registro cargo_arvore` (faltam: " + ", ".join(sem_cargo[:4])
+                    + (f" e mais {len(sem_cargo) - 4}" if len(sem_cargo) > 4 else "") + ")"
+                )
         if pendencias:
             emb.add_field(
                 name="Próximos ajustes",
@@ -1220,6 +1577,9 @@ class Jornal(commands.Cog):
             )
             return
         self.bot.db.set_estacao(str(interaction.guild_id), estacao.value)
+        # O clima sorteado na estação anterior deixa de valer (Onda de Calor no
+        # Inverno, por exemplo): sem isso o modificador econômico ficava preso.
+        self.bot.db.set_modificador_clima(str(interaction.guild_id), None)
         info = economia.estacao_info(estacao.value)
         await interaction.response.send_message(
             f"🍂 Estação: **{info['rotulo']}**: {info['descricao']}", ephemeral=True
@@ -1379,7 +1739,8 @@ class Jornal(commands.Cog):
         linhas = [f"**Canal principal:** {principal}", ""]
         for escolha in CATEGORIAS_CANAL:
             cid = rotas.get(escolha.value)
-            destino = f"<#{cid}>" if cid else "↳ canal principal"
+            vazio = "⏸️ desligado (escolha um canal)" if escolha.value == "procurados" else "↳ canal principal"
+            destino = f"<#{cid}>" if cid else vazio
             linhas.append(f"**{escolha.name}:** {destino}")
         await interaction.response.send_message("\n".join(linhas), ephemeral=True)
 
@@ -1657,59 +2018,106 @@ class Jornal(commands.Cog):
         await interaction.response.send_message(embed=emb, ephemeral=True)
 
     @app_commands.command(name="anunciar_classificado", description="Paga o Jornalista para publicar um anúncio no jornal (Ex: 'Compro Espada' ou 'Procuro guilda').")
-    @app_commands.describe(texto="O texto do seu anúncio.", valor="Gorjeta extra em Solares para dar destaque (mínimo 50).")
+    @app_commands.describe(
+        texto="O texto do seu anúncio.",
+        valor=f"Quanto pagar em Lunaris pelo anúncio (mínimo {db_mod.CLASSIFICADO_VALOR_MINIMO}).",
+        categoria="Tipo de anúncio (ajuda quem lê o jornal).",
+    )
+    @app_commands.choices(categoria=CLASSIFICADO_CATEGORIAS_CHOICES)
     async def anunciar_classificado(
         self, interaction: discord.Interaction, texto: app_commands.Range[str, 1, 3000],
-        valor: app_commands.Range[int, 50, 2_000_000_000] = 50,
+        valor: app_commands.Range[int, db_mod.CLASSIFICADO_VALOR_MINIMO, 2_000_000_000] = db_mod.CLASSIFICADO_VALOR_MINIMO,
+        categoria: Optional[app_commands.Choice[str]] = None,
     ):
         if not interaction.guild_id:
             await interaction.response.send_message("Isso só funciona em um servidor.", ephemeral=True)
             return
-            
-        texto = texto.strip()
-        if not texto or len(texto) > 3000 or not 50 <= valor <= 2_000_000_000:
-            await interaction.response.send_message("Informe um anúncio de 1 a 3.000 caracteres e um valor válido a partir de 50 Solares.", ephemeral=True)
+        if not self.bot.db.automacao_ativa(str(interaction.guild_id), "classificados", True):
+            await interaction.response.send_message(
+                "⏸️ A redação não está aceitando classificados no momento.", ephemeral=True
+            )
             return
-            
+
+        texto, erro_texto = furos_mod.limpar_texto(texto, minimo=1, maximo=3000, tirar_mencoes=False)
+        if erro_texto:
+            await interaction.response.send_message(f"⚠️ {erro_texto}", ephemeral=True)
+            return
+        if not db_mod.CLASSIFICADO_VALOR_MINIMO <= valor <= 2_000_000_000:
+            await interaction.response.send_message(
+                "Informe um anúncio de 1 a 3.000 caracteres e um valor válido a partir de "
+                f"☾ {db_mod.CLASSIFICADO_VALOR_MINIMO} Lunaris.",
+                ephemeral=True,
+            )
+            return
+
         guild_id, user_id = str(interaction.guild_id), str(interaction.user.id)
-        
-        emb = ui.embed(
-            "📰 CLASSIFICADOS",
-            categoria="noticia",
-            descricao=f"*{texto}*\n\n— *Anúncio pago por <@{user_id}> ({valor} Solares)*"
+        chave_categoria = categoria.value if categoria else "outros"
+        agora = datetime.now(timezone.utc)
+
+        # O cartaz definitivo (com validade e botão Responder) é o do cog
+        # Classificados; este vai na fila e é refeito com o id do anúncio.
+        emb = embed_classificado(
+            {
+                "texto": texto, "user_id": user_id, "valor": valor, "categoria": chave_categoria,
+                "expira_em": agora + timedelta(days=db_mod.CLASSIFICADO_VALIDADE_DIAS),
+            }
         )
-        
+
         await interaction.response.defer(ephemeral=True)
         publicacao = self.bot.db.comprar_classificado(
             guild_id, user_id, valor, f"classificado:{interaction.id}", publicacoes.payload_embed(emb),
+            texto=texto, categoria=chave_categoria, agora=agora,
         )
         if publicacao is None:
-            await interaction.followup.send(f"Você não tem ☀️ {valor} Solares para pagar pelo anúncio.", ephemeral=True)
+            await interaction.followup.send(f"Você não tem ☾ {valor} Lunaris para pagar pelo anúncio.", ephemeral=True)
             return
         await interaction.followup.send("Seu classificado foi entregue à redação e logo será publicado!", ephemeral=True)
         await publicacoes.tentar_publicacao(self.bot, publicacao)
 
-    @app_commands.command(name="vender_furo", description="Trabalho freelance! Venda fotos e segredos de outros pro Jornalista em troca de Solares.")
-    @app_commands.describe(jogador="De quem é o segredo que você está vendendo?")
-    async def vender_furo(self, interaction: discord.Interaction, jogador: discord.Member):
+    @app_commands.command(name="vender_furo", description="Trabalho freelance! Venda fotos e segredos de outros pro Jornalista em troca de Lunaris.")
+    @app_commands.describe(
+        jogador="De quem é o segredo que você está vendendo?",
+        historia=f"O furo em si, em {furos_mod.HISTORIA_MIN} a {furos_mod.HISTORIA_MAX} caracteres. Sem texto, o Jornalista inventa a manchete.",
+    )
+    async def vender_furo(
+        self, interaction: discord.Interaction, jogador: discord.Member,
+        historia: Optional[app_commands.Range[str, 0, 600]] = None,
+    ):
         if not interaction.guild_id:
             await interaction.response.send_message("Isso só funciona em um servidor.", ephemeral=True)
             return
-            
+
+        if not self.bot.db.automacao_ativa(str(interaction.guild_id), "fofocas", True):
+            await interaction.response.send_message(
+                "⏸️ O Jornalista não está comprando furos no momento.", ephemeral=True
+            )
+            return
         if jogador.id == interaction.user.id:
             await interaction.response.send_message("Você não pode vender um furo sobre si mesmo.", ephemeral=True)
             return
         if jogador.bot:
             await interaction.response.send_message("Escolha outro jogador, não um bot.", ephemeral=True)
             return
-            
+
+        historia_limpa = None
+        if historia and historia.strip():
+            historia_limpa, erro = furos_mod.limpar_historia(historia)
+            if erro:
+                await interaction.response.send_message(f"⚠️ {erro}", ephemeral=True)
+                return
+
         guild_id, user_id = str(interaction.guild_id), str(interaction.user.id)
-        
+
         import random
-        # Chance e recompensa preservadas; inclusive tentativas ruins têm intervalo.
-        recompensa = random.randint(50, 150) if random.random() < 0.30 else 0
+        # Inclusive tentativas ruins têm intervalo. A recompensa é em Lunaris, na
+        # escala do bot (a de Solares valia de 5.000 a 15.000 Lunaris por furo).
+        recompensa = (
+            random.randint(db_mod.FURO_RECOMPENSA_MIN, db_mod.FURO_RECOMPENSA_MAX)
+            if random.random() < db_mod.FURO_CHANCE else 0
+        )
         resultado = self.bot.db.tentar_vender_furo(
             guild_id, user_id, str(jogador.id), recompensa, datetime.now(timezone.utc),
+            historia=historia_limpa,
         )
         if resultado["status"] == "cooldown":
             quando = int(resultado["proxima_tentativa"].timestamp())
@@ -1719,7 +2127,16 @@ class Jornal(commands.Cog):
             emb = ui.embed(
                 "📸 Furo Comprado!",
                 categoria="cofre",
-                descricao=f"Ótimo material! Te paguei ☀️ **{recompensa} Solares** pelas fotos compromedoras do {jogador.mention}.\nA fofoca poderá ser publicada em 30 minutos; até lá, ele pode usar `/subornar_jornalista`."
+                descricao=(
+                    f"Ótimo material! Te paguei ☾ **{recompensa} Lunaris** pelas fotos comprometedoras do {jogador.mention}.\n"
+                    f"A fofoca poderá ser publicada em {db_mod.FURO_PRAZO_SUBORNO_MINUTOS} minutos; "
+                    "até lá, ele pode subornar ou desmentir, e o Mestre pode barrar a história."
+                ),
+            )
+            # A vítima é avisada ANTES de responder ao vendedor: o pagamento e a fofoca já estão gravados
+            # e, se a resposta estourar os 3s do Discord, o aviso (com os botões) não pode se perder.
+            await self._avisar_vitima_do_furo(
+                jogador, int(resultado.get("suborno") or recompensa * 2), resultado.get("fofoca_id"), historia_limpa,
             )
             await interaction.response.send_message(embed=emb, ephemeral=True)
         else:
@@ -1729,6 +2146,30 @@ class Jornal(commands.Cog):
                 descricao=f"Ninguém se importa com o que {jogador.mention} tomou de café da manhã. Tente encontrar um segredo mais suculento."
             )
             await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    async def _avisar_vitima_do_furo(
+        self, vitima: discord.Member, suborno: int, fofoca_id: Optional[int] = None,
+        historia: Optional[str] = None,
+    ) -> None:
+        """Sem este aviso a vítima nunca sabia que tinha uma fofoca a caminho e
+        a janela de suborno passava despercebida. Vai com os botões Subornar e
+        Desmentir quando o cog Furos está carregado. Não revela quem vendeu; DM
+        fechada não impede nada (o `/subornar_jornalista` continua valendo)."""
+        texto = (
+            "📸 O Jornalista recebeu um furo sobre você"
+            + (f": *{historia}*" if historia else ".")
+            + f"\nA história sai no jornal em {db_mod.FURO_PRAZO_SUBORNO_MINUTOS} minutos. "
+            f"Para abafar, pague o suborno (☾ {suborno} Lunaris) no botão abaixo ou com `/subornar_jornalista`. "
+            "Se preferir, desminta de graça: ela sai com a sua negativa."
+        )
+        get_cog = getattr(self.bot, "get_cog", None)
+        cog = get_cog("Furos") if get_cog else None
+        extras = {"view": cog.view_da_vitima(fofoca_id, suborno)} if cog is not None and fofoca_id else {}
+        try:
+            await vitima.send(texto, **extras)
+        except (discord.HTTPException, AttributeError):
+            log.info("nao consegui avisar a vitima do furo por DM (%s)", getattr(vitima, "id", "?"))
+
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Jornal(bot))

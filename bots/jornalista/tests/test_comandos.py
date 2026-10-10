@@ -27,6 +27,10 @@ EXTENSOES = (
     "cogs.entrevista",
     "cogs.loteria",
     "cogs.cassino",
+    "cogs.painel",
+    "cogs.classificados",
+    "cogs.furos",
+    "cogs.mural",
     "cogs.ajuda",
 )
 
@@ -41,12 +45,23 @@ COMANDOS_ESPERADOS = {
     "bau_canal_remover",
     "bau_canal_tema",
     "bau_config",
+    "bau_mural",
+    "baus_hoje",
     "bau_pendentes",
     "bau_reprocessar",
     "entrevista_responder",
     "entrevista_participar",
     "estacao",
     "horoscopo",
+    "jardim",
+    "jornal evento criar",
+    "jornal meta criar",
+    "jornal meta listar",
+    "jornal meta cancelar",
+    "jornal evento listar",
+    "jornal evento encerrar",
+    "jornal furo listar",
+    "jornal furo vetar",
     "jornal avancar_mes",
     "jornal canais",
     "jornal clima_auto",
@@ -79,6 +94,7 @@ COMANDOS_ESPERADOS = {
     "jornal status",
     "registro apagar",
     "registro canal",
+    "registro cargo_arvore",
     "registro criar",
     "registro modo",
     "registro opcao",
@@ -121,6 +137,8 @@ def _inventario_ajuda() -> set[str]:
     inventario = set()
     for categoria in CATEGORIAS.values():
         for assinatura, _descricao in categoria["comandos"]:
+            if not assinatura.startswith("/"):
+                continue  # entradas do guia, em prosa
             nome = assinatura.removeprefix("/").split(" <", 1)[0].split(" [", 1)[0]
             inventario.add(nome)
     return inventario

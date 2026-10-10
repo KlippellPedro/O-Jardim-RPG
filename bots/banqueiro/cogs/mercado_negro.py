@@ -335,7 +335,7 @@ class MercadoNegro(commands.Cog):
 
     @app_commands.command(
         name="mercado_negro_encomendar",
-        description="Encomenda um item ao contrabandista, pago em Créditos Sombrios. Ele entrega em algumas horas ou dias.",
+        description="Encomenda um item ao contrabandista, pago em Créditos Sombrios. Chega em horas ou dias.",
     )
     @app_commands.describe(item="O que você quer", quantidade="Quantas unidades")
     async def mercado_negro_encomendar(

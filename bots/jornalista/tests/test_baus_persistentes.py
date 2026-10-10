@@ -75,6 +75,25 @@ class _DB:
     def get_bau_entrega(self, guild_id, mensagem_id):
         return None
 
+    # Baús v2: histórico, proteção de azar, Pistas de Sorte e mural.
+    def contar_baus_sem_bom(self, guild_id):
+        return 0
+
+    def festival_ativo(self, guild_id):
+        return False
+
+    def registrar_bau_historico(self, *args):
+        self.historico = getattr(self, "historico", []) + [args]
+
+    def marcar_bau_historico_expirado(self, guild_id, mensagem_id):
+        pass
+
+    def conceder_pistas_aos_que_tentaram(self, guild_id, mensagem_id, excluir=None):
+        return []
+
+    def get_baus_config(self, guild_id):
+        return {"mural_canal_id": None}
+
 
 def _cog(db):
     cog = object.__new__(Baus)

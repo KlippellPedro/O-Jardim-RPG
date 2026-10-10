@@ -134,6 +134,20 @@ def test_bau_confirma_interacao_e_reserva_primeiro_clique_em_falha_ambigua():
         def get_cargos_arvore(self, guild_id):
             return {}
 
+        # Baús v2
+        def get_pistas(self, guild_id, user_id):
+            return 0
+
+        def consumir_pistas(self, *args):
+            eventos.append(("consumir_pistas", args))
+
+        def marcar_bau_historico_aberto(self, *args):
+            eventos.append(("historico_aberto", args))
+
+        def conceder_pistas_aos_que_tentaram(self, *args):
+            eventos.append(("pistas_consolo", args))
+            return []
+
         def registrar_bau_entrega_pendente(
             self, guild_id, mensagem_id, canal_id, vencedor_user_id, premio, modo_entrega
         ):
@@ -160,6 +174,22 @@ def test_bau_confirma_interacao_e_reserva_primeiro_clique_em_falha_ambigua():
         aplicar_bonus_horoscopo = Baus.aplicar_bonus_horoscopo
         abrir_bau_click = Baus.abrir_bau_click
         _resolver_abertura = Baus._resolver_abertura
+        _processar_e_responder = Baus._processar_e_responder
+        _tentar = Baus._tentar
+        _usar_chave = Baus._usar_chave
+        _devolver_chave = Baus._devolver_chave
+        _sorteou_chave = Baus._sorteou_chave
+        _pesos_e_tipos = Baus._pesos_e_tipos
+        _aplicar_afinidade = Baus._aplicar_afinidade
+        _sortear_fragmentos = Baus._sortear_fragmentos
+        _avisar_fragmentos = Baus._avisar_fragmentos
+
+        async def atualizar_mural(self, guild_id):
+            eventos.append(("mural", guild_id))
+
+        @staticmethod
+        def embed_recibo_privado(vencedor_user_id, resultado):
+            return Baus.embed_recibo_privado(vencedor_user_id, resultado)
 
         @staticmethod
         def resultado_pendente(entrega, erro=""):
@@ -176,9 +206,11 @@ def test_bau_confirma_interacao_e_reserva_primeiro_clique_em_falha_ambigua():
         cog = _Cog()
         await cog.abrir_bau_click(_Interacao(), "abc123")
 
-        assert eventos[0] == ("get_bau_no_ar", "abc123")
-        assert eventos[1][0] == "defer"
-        assert eventos[1][1] == {"ephemeral": True, "thinking": True}
+        # O clique é confirmado ao Discord antes de qualquer consulta ao banco
+        # (que é síncrona): com o banco lento, o prazo de 3s estourava.
+        assert eventos[0][0] == "defer"
+        assert eventos[0][1] == {"ephemeral": True, "thinking": True}
+        assert eventos[1] == ("get_bau_no_ar", "abc123")
         assert next(i for i, evento in enumerate(eventos) if evento[0] == "registrar") < next(
             i for i, evento in enumerate(eventos) if evento[0] == "processar"
         )

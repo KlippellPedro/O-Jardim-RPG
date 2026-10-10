@@ -40,6 +40,9 @@ class _DB:
     def get_cambio_auto(self, guild_id):
         return self.auto
 
+    def humor_bolsa_ativo(self, guild_id):
+        return None
+
 
 def _cog(db):
     cog = object.__new__(Economia)

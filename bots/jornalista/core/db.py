@@ -14,6 +14,8 @@ from . import economia
 from . import cassino as cassino_mod
 from . import loot as loot_mod
 from . import conquistas as conquistas_mod
+from . import colecao as colecao_mod
+from . import furos as furos_mod
 
 
 class DatabaseUnavailable(RuntimeError):
@@ -26,6 +28,31 @@ class DatabaseUnavailable(RuntimeError):
 LOTERIA_PRECO_BILHETE_PADRAO = 25
 LOTERIA_CORTE_CASA_PADRAO = 0.10
 ORCAMENTO_EDITORIAL_PADRAO = 1000
+
+# /vender_furo paga em Lunaris, na escala do resto do bot (carteira inicial de
+# 20, baús de 5 a 40). Já foi em Solares, que valem 100 Lunaris cada: uma
+# tentativa boa pagava de 5.000 a 15.000 Lunaris. A vítima paga o dobro para
+# abafar a história (/subornar_jornalista, também em Lunaris).
+FURO_CHANCE = 0.30
+FURO_RECOMPENSA_MIN = 10
+FURO_RECOMPENSA_MAX = 40
+FURO_PRAZO_SUBORNO_MINUTOS = 30
+CLASSIFICADO_VALOR_MINIMO = 50
+CLASSIFICADO_VALIDADE_DIAS = 7
+CLASSIFICADO_CATEGORIAS = {
+    "compro": ("Compro", "🛒"),
+    "vendo": ("Vendo", "🏷️"),
+    "procuro_grupo": ("Procuro grupo", "🧭"),
+    "servico": ("Serviço", "🛠️"),
+    "outros": ("Outros", "📌"),
+}
+
+# O carimbo de um ciclo é gravado depois do envio (alguns décimos de segundo
+# após o tick do loop de hora em hora). Sem uma folga, o tick exatamente 24h
+# depois ainda enxerga o carimbo como "recente" e o ciclo só roda 1h depois:
+# o ciclo de 24h virava 25h, o semanal 169h. A folga precisa ser bem menor que
+# o período do loop (1h) para nunca antecipar uma rodada inteira.
+CICLO_TOLERANCIA = timedelta(minutes=15)
 
 
 # Mesmo PostgreSQL central do Banqueiro (VLAN da Discloud). O Jornalista só
@@ -357,6 +384,9 @@ _SCHEMA = (
     """
     ALTER TABLE entrevistas ADD COLUMN IF NOT EXISTS publicado_em TIMESTAMPTZ
     """,
+    """
+    ALTER TABLE entrevistas ADD COLUMN IF NOT EXISTS rascunho TEXT
+    """,
     # Mesma tabela que o Banqueiro usa pra vender bilhetes (bots/banqueiro/cogs/loteria.py);
     # o Jornalista sorteia, paga o vencedor e limpa a rodada.
     """
@@ -574,11 +604,151 @@ _SCHEMA = (
     ON jornal_publicacoes (proxima_tentativa)
     WHERE status='pendente'
     """,
+    # Eventos do Mestre (aparecem em "Acontecendo agora" nos painéis dos dois
+    # bots). Tabela compartilhada: o Jornalista cria e publica, o Banqueiro lê.
     """
-    UPDATE baus_config
-    SET min_hora = 0, max_hora = 23
-    WHERE min_hora = 10 AND max_hora = 22
+    CREATE TABLE IF NOT EXISTS jardim_eventos (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        titulo TEXT NOT NULL,
+        texto TEXT NOT NULL DEFAULT '',
+        tipo TEXT NOT NULL DEFAULT 'aviso',
+        criado_por TEXT,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        expira_em TIMESTAMPTZ NOT NULL,
+        encerrado BOOLEAN NOT NULL DEFAULT FALSE
+    )
     """,
+    """
+    CREATE INDEX IF NOT EXISTS jardim_eventos_guild_idx ON jardim_eventos (guild_id, expira_em)
+    """,
+    # Coleção das Dez Árvores: fragmentos por pessoa e Árvore (3 completam a página).
+    """
+    CREATE TABLE IF NOT EXISTS jardim_fragmentos (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        arvore_id TEXT NOT NULL,
+        quantidade INTEGER NOT NULL DEFAULT 0 CHECK (quantidade >= 0),
+        PRIMARY KEY (guild_id, user_id, arvore_id)
+    )
+    """,
+    # Chaves do Jardim: o Banqueiro vende, o Jornalista gasta nos baús e dá de
+    # brinde. Tabela compartilhada (criada pelos dois bots).
+    """
+    CREATE TABLE IF NOT EXISTS jardim_chaves (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        quantidade INTEGER NOT NULL DEFAULT 0 CHECK (quantidade >= 0),
+        auto_usar BOOLEAN NOT NULL DEFAULT TRUE,
+        PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    # Cofre do Jardim: meta coletiva que o Mestre abre (Jornalista) e a mesa
+    # enche com Lunaris (Banqueiro). Tabelas compartilhadas.
+    """
+    CREATE TABLE IF NOT EXISTS jardim_metas (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        titulo TEXT NOT NULL,
+        descricao TEXT NOT NULL DEFAULT '',
+        alvo INTEGER NOT NULL CHECK (alvo > 0),
+        arrecadado INTEGER NOT NULL DEFAULT 0 CHECK (arrecadado >= 0),
+        status TEXT NOT NULL DEFAULT 'aberta'
+            CHECK (status IN ('aberta', 'concluida', 'expirada', 'cancelada')),
+        recompensa TEXT NOT NULL DEFAULT '',
+        festival_horas INTEGER NOT NULL DEFAULT 0 CHECK (festival_horas >= 0),
+        criado_por TEXT,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        prazo TIMESTAMPTZ NOT NULL,
+        encerrada_em TIMESTAMPTZ
+    )
+    """,
+    """
+    CREATE UNIQUE INDEX IF NOT EXISTS jardim_metas_uma_aberta
+    ON jardim_metas (guild_id) WHERE status = 'aberta'
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS jardim_doacoes (
+        id BIGSERIAL PRIMARY KEY,
+        meta_id BIGINT NOT NULL,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        valor INTEGER NOT NULL CHECK (valor > 0),
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        reembolsada BOOLEAN NOT NULL DEFAULT FALSE
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS jardim_doacoes_meta_idx ON jardim_doacoes (meta_id)
+    """,
+    # O efeito que um evento aplica ao jogo (hoje: "baus_especiais", do festival
+    # que uma meta concluída abre) e a categoria dos avisos da fila.
+    """
+    ALTER TABLE jardim_eventos ADD COLUMN IF NOT EXISTS efeito TEXT
+    """,
+    """
+    ALTER TABLE avisos_pendentes ADD COLUMN IF NOT EXISTS categoria TEXT
+    """,
+    # ── Baús v2 ──────────────────────────────────────────────────────────────
+    # Quantos baús por dia (divide a janela em faixas) e canal do mural.
+    """
+    ALTER TABLE baus_config ADD COLUMN IF NOT EXISTS baus_por_dia INTEGER NOT NULL DEFAULT 4
+    """,
+    """
+    ALTER TABLE baus_config ADD COLUMN IF NOT EXISTS mural_canal_id TEXT
+    """,
+    # Registro de TODO baú lançado: alimenta o mural, a proteção de azar e as
+    # estatísticas (quantos expiram sem ninguém abrir).
+    """
+    CREATE TABLE IF NOT EXISTS baus_historico (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        canal_id TEXT NOT NULL,
+        mensagem_id TEXT NOT NULL,
+        token TEXT NOT NULL,
+        raridade TEXT NOT NULL,
+        nome TEXT NOT NULL,
+        coletivo BOOLEAN NOT NULL DEFAULT FALSE,
+        status TEXT NOT NULL DEFAULT 'no_ar' CHECK (status IN ('no_ar', 'aberto', 'expirado')),
+        vencedor_user_id TEXT,
+        coletas INTEGER NOT NULL DEFAULT 0,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        expira_em TIMESTAMPTZ NOT NULL,
+        UNIQUE (guild_id, mensagem_id)
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS baus_historico_guild_idx ON baus_historico (guild_id, id DESC)
+    """,
+    # Pistas de Sorte (consolo de quem tentou o enigma e não levou).
+    """
+    CREATE TABLE IF NOT EXISTS baus_sorte (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        pistas INTEGER NOT NULL DEFAULT 0 CHECK (pistas >= 0),
+        PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS baus_tentativas (
+        guild_id TEXT NOT NULL,
+        mensagem_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        PRIMARY KEY (guild_id, mensagem_id, user_id)
+    )
+    """,
+    # Mural do dia: uma mensagem por servidor, editada ao longo do dia.
+    """
+    CREATE TABLE IF NOT EXISTS baus_mural (
+        guild_id TEXT PRIMARY KEY,
+        dia DATE NOT NULL,
+        canal_id TEXT NOT NULL,
+        mensagem_id TEXT NOT NULL
+    )
+    """,
+    # (Removido: um UPDATE que trocava a janela 10h-22h por 0h-23h. Ele estava
+    # no schema, que roda a cada boot, e por isso desfazia a janela que o
+    # Mestre escolhesse em /bau_config sempre que o bot reiniciava.)
     """
     CREATE TABLE IF NOT EXISTS fofocas (
         id SERIAL PRIMARY KEY,
@@ -590,6 +760,19 @@ _SCHEMA = (
         status TEXT NOT NULL DEFAULT 'pendente' CHECK (status IN ('pendente', 'subornada', 'publicada', 'notificada')),
         criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
+    """,
+    """
+    ALTER TABLE fofocas ADD COLUMN IF NOT EXISTS autor_id TEXT
+    """,
+    """
+    ALTER TABLE fofocas ADD COLUMN IF NOT EXISTS desmentida BOOLEAN NOT NULL DEFAULT FALSE
+    """,
+    """
+    ALTER TABLE fofocas DROP CONSTRAINT IF EXISTS fofocas_status_check
+    """,
+    """
+    ALTER TABLE fofocas ADD CONSTRAINT fofocas_status_check
+        CHECK (status IN ('pendente', 'subornada', 'publicada', 'notificada', 'vetada'))
     """,
     """
     CREATE TABLE IF NOT EXISTS jornal_conquistas (
@@ -606,6 +789,52 @@ _SCHEMA = (
         chave TEXT NOT NULL,
         cargo_id TEXT NOT NULL,
         PRIMARY KEY (guild_id, chave)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS recompensa (
+        guild_id TEXT NOT NULL,
+        alvo_user_id TEXT NOT NULL,
+        valor_jogadores INTEGER NOT NULL DEFAULT 0,
+        valor_sistema INTEGER NOT NULL DEFAULT 0,
+        atualizada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, alvo_user_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS mural_procurados (
+        guild_id TEXT PRIMARY KEY,
+        canal_id TEXT NOT NULL,
+        mensagem_id TEXT,
+        assinatura TEXT NOT NULL DEFAULT '',
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS classificados (
+        id SERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        categoria TEXT NOT NULL DEFAULT 'outros',
+        texto TEXT NOT NULL,
+        valor INTEGER NOT NULL,
+        canal_id TEXT,
+        mensagem_id TEXT,
+        status TEXT NOT NULL DEFAULT 'ativo' CHECK (status IN ('ativo', 'expirado')),
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        expira_em TIMESTAMPTZ NOT NULL
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS classificados_ativos_idx ON classificados (status, expira_em)
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS classificado_respostas (
+        classificado_id INTEGER NOT NULL,
+        user_id TEXT NOT NULL,
+        mensagem TEXT NOT NULL,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (classificado_id, user_id)
     )
     """,
     """
@@ -1105,6 +1334,49 @@ class Database:
             return row["canal_id"]
         return self.get_jornal_canal(guild_id)
 
+    def canal_exato_categoria(self, guild_id: str, categoria: str) -> Optional[str]:
+        """Só o canal escolhido para a categoria, sem cair no canal principal."""
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT canal_id FROM canais_jornal WHERE guild_id=%s AND categoria=%s",
+                (guild_id, categoria),
+            ).fetchone()
+        return row["canal_id"] if row and row["canal_id"] else None
+
+    def listar_procurados(self, guild_id: str, limite: int = 10) -> List[dict]:
+        """Recompensas do Banqueiro (tabela dele), das maiores para as menores."""
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT alvo_user_id, valor_jogadores + valor_sistema AS valor, valor_sistema > 0 AS tem_sistema
+                FROM recompensa
+                WHERE guild_id=%s AND valor_jogadores + valor_sistema > 0
+                ORDER BY valor DESC, alvo_user_id
+                LIMIT %s
+                """,
+                (guild_id, max(1, int(limite))),
+            ).fetchall()
+        return [
+            {"alvo_user_id": r["alvo_user_id"], "valor": int(r["valor"]), "tem_sistema": bool(r["tem_sistema"])}
+            for r in rows
+        ]
+
+    def get_mural_procurados(self, guild_id: str) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute("SELECT * FROM mural_procurados WHERE guild_id=%s", (guild_id,)).fetchone()
+        return dict(row) if row else None
+
+    def salvar_mural_procurados(self, guild_id: str, canal_id: str, mensagem_id: str, assinatura: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                """INSERT INTO mural_procurados (guild_id, canal_id, mensagem_id, assinatura)
+                   VALUES (%s, %s, %s, %s)
+                   ON CONFLICT (guild_id) DO UPDATE SET canal_id=EXCLUDED.canal_id,
+                       mensagem_id=EXCLUDED.mensagem_id, assinatura=EXCLUDED.assinatura,
+                       atualizado_em=CURRENT_TIMESTAMP""",
+                (guild_id, canal_id, mensagem_id, assinatura),
+            )
+
     def set_canal_categoria(self, guild_id: str, categoria: str, canal_id: str) -> None:
         with self._conn() as con:
             con.execute(
@@ -1192,6 +1464,8 @@ class Database:
         "chance_enigma_percent": None,
         "lunaris_min": None,
         "lunaris_max": None,
+        "baus_por_dia": loot_mod.BAUS_POR_DIA_PADRAO,
+        "mural_canal_id": None,
     }
 
     @staticmethod
@@ -1205,6 +1479,10 @@ class Database:
         cfg["lunaris_min"] = cfg.get("lunaris_min") if cfg.get("lunaris_min") is not None else loot_mod.LUNARIS_MIN
         cfg["lunaris_max"] = cfg.get("lunaris_max") if cfg.get("lunaris_max") is not None else loot_mod.LUNARIS_MAX
         cfg["ativo"] = bool(cfg["ativo"])
+        por_dia = cfg.get("baus_por_dia")
+        cfg["baus_por_dia"] = max(
+            1, min(loot_mod.BAUS_POR_DIA_MAX, int(por_dia or loot_mod.BAUS_POR_DIA_PADRAO))
+        )
         return cfg
 
     def get_baus_config(self, guild_id: str) -> dict:
@@ -1500,11 +1778,13 @@ class Database:
         *,
         vencedor_user_id: Optional[str] = None,
         lunaris: int = 0,
+        creditos_sombrios: int = 0,
     ) -> None:
-        """`vencedor_user_id`/`lunaris`: credita a carteira local na MESMA
-        transação que fecha a entrega (`WHERE status<>'entregue'` faz o
-        crédito só acontecer uma vez mesmo se `processar_entrega` for
-        chamado de novo por um retry do recovery)."""
+        """`vencedor_user_id`/`lunaris`/`creditos_sombrios`: credita a carteira
+        local na MESMA transação que fecha a entrega (`WHERE status<>'entregue'`
+        faz o crédito só acontecer uma vez mesmo se `processar_entrega` for
+        chamado de novo por um retry do recovery). Os Créditos Sombrios eram
+        creditados fora desta transação e um retry podia pagá-los em dobro."""
         with self._conn() as con:
             fechada = con.execute(
                 """
@@ -1517,17 +1797,23 @@ class Database:
                 """,
                 (Jsonb(resultado), guild_id, mensagem_id),
             ).fetchone()
-            if fechada is not None and lunaris and vencedor_user_id is not None:
-                self._garantir_jogador(con, guild_id, vencedor_user_id)
-                con.execute(
-                    """
-                    INSERT INTO carteira (guild_id, user_id, moeda, saldo)
-                    VALUES (%s, %s, 'Lunaris', %s)
-                    ON CONFLICT (guild_id, user_id, moeda)
-                    DO UPDATE SET saldo = carteira.saldo + EXCLUDED.saldo
-                    """,
-                    (guild_id, vencedor_user_id, int(lunaris)),
-                )
+            if fechada is not None and vencedor_user_id is not None:
+                for moeda, quantia in (
+                    ("Lunaris", int(lunaris or 0)),
+                    ("Créditos Sombrios", int(creditos_sombrios or 0)),
+                ):
+                    if quantia <= 0:
+                        continue
+                    self._garantir_jogador(con, guild_id, vencedor_user_id)
+                    con.execute(
+                        """
+                        INSERT INTO carteira (guild_id, user_id, moeda, saldo)
+                        VALUES (%s, %s, %s, %s)
+                        ON CONFLICT (guild_id, user_id, moeda)
+                        DO UPDATE SET saldo = carteira.saldo + EXCLUDED.saldo
+                        """,
+                        (guild_id, vencedor_user_id, moeda, quantia),
+                    )
 
     # ── Escrita direta no cofre da plataforma ──────────────────────────────
     # Espelha bots/banqueiro/core/db.py::depositar_cofre_plataforma, que por
@@ -1697,8 +1983,10 @@ class Database:
             self._garantir_jogador(con, guild_id, vencedor_user_id)
 
             lunaris = int(premio.get("lunaris") or 0)
-            if lunaris < 0:
-                raise ValueError("prêmio de Lunaris inválido")
+            creditos_sombrios = int(premio.get("creditos_sombrios") or 0)
+            if lunaris < 0 or creditos_sombrios < 0:
+                raise ValueError("prêmio de moeda inválido")
+            ganhos = []
             if lunaris:
                 con.execute(
                     """
@@ -1709,6 +1997,20 @@ class Database:
                     """,
                     (guild_id, vencedor_user_id, lunaris),
                 )
+                ganhos.append(f"☾ {lunaris} Lunaris")
+            # Baú Sombrio: no caminho legado os Créditos Sombrios simplesmente
+            # não eram creditados (e o card mostrava "☾ 0 Lunaris").
+            if creditos_sombrios:
+                con.execute(
+                    """
+                    INSERT INTO carteira (guild_id, user_id, moeda, saldo)
+                    VALUES (%s, %s, 'Créditos Sombrios', %s)
+                    ON CONFLICT (guild_id, user_id, moeda)
+                    DO UPDATE SET saldo=carteira.saldo + EXCLUDED.saldo
+                    """,
+                    (guild_id, vencedor_user_id, creditos_sombrios),
+                )
+                ganhos.append(f"🕳️ {creditos_sombrios} Créditos Sombrios")
 
             tier_row = con.execute(
                 """
@@ -1725,7 +2027,6 @@ class Database:
                 (guild_id, vencedor_user_id),
             ).fetchone()
             total_itens = int(total_row["total"])
-            ganhos = [f"☾ {lunaris} Lunaris"]
 
             for item in premio.get("itens") or []:
                 quantidade = int(item.get("quantidade") or 1)
@@ -1763,7 +2064,7 @@ class Database:
                     )
 
             resultado = {
-                "ganhos": ganhos,
+                "ganhos": ganhos or ["Recompensa reservada"],
                 "destino": "carteira do Banqueiro",
                 "confirmado": True,
                 "bau": dict(premio.get("bau") or {}),
@@ -1843,6 +2144,517 @@ class Database:
                     lunaris_min,
                     lunaris_max,
                 ),
+            )
+
+    # ── Painéis: eventos do Mestre e baús no ar (tabelas compartilhadas) ─────
+    def listar_eventos_ativos(self, guild_id: str, limite: int = 5) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT id, titulo, texto, tipo, expira_em FROM jardim_eventos
+                WHERE guild_id=%s AND NOT encerrado AND expira_em > CURRENT_TIMESTAMP
+                ORDER BY expira_em LIMIT %s
+                """,
+                (guild_id, max(1, int(limite))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def baus_no_ar_para(self, guild_id: str, user_id: str) -> List[dict]:
+        """Baús ainda no ar neste servidor e se `user_id` já pegou o seu
+        (nos baús coletivos). A tabela é do Jornalista; num banco sem ela
+        quem chama trata o erro e mostra o painel sem esta linha."""
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT b.canal_id, b.mensagem_id, b.expira_em,
+                       b.premio->'bau'->>'raridade' AS raridade,
+                       b.premio->'bau'->>'nome' AS nome,
+                       COALESCE((b.premio->'bau'->>'coletivo')::boolean, FALSE) AS coletivo,
+                       EXISTS (
+                           SELECT 1 FROM baus_entregas e
+                           WHERE e.guild_id=b.guild_id
+                             AND e.mensagem_id = b.mensagem_id || ':' || %s
+                       ) AS ja_peguei
+                FROM baus_no_ar b
+                WHERE b.guild_id=%s AND b.expira_em > CURRENT_TIMESTAMP
+                ORDER BY b.expira_em
+                """,
+                (user_id, guild_id),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def criar_evento(
+        self, guild_id: str, titulo: str, texto: str, tipo: str, horas: int, criado_por: str,
+    ) -> int:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO jardim_eventos (guild_id, titulo, texto, tipo, criado_por, expira_em)
+                VALUES (%s, %s, %s, %s, %s, CURRENT_TIMESTAMP + make_interval(hours => %s))
+                RETURNING id
+                """,
+                (guild_id, titulo, texto, tipo, criado_por, max(1, int(horas))),
+            ).fetchone()
+        return int(row["id"])
+
+    def listar_eventos(self, guild_id: str, limite: int = 15) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT *, (NOT encerrado AND expira_em > CURRENT_TIMESTAMP) AS ativo
+                FROM jardim_eventos WHERE guild_id=%s ORDER BY id DESC LIMIT %s
+                """,
+                (guild_id, max(1, min(50, int(limite)))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def encerrar_evento(self, guild_id: str, evento_id: int) -> bool:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE jardim_eventos SET encerrado=TRUE
+                WHERE guild_id=%s AND id=%s AND NOT encerrado
+                RETURNING id
+                """,
+                (guild_id, int(evento_id)),
+            ).fetchone()
+        return row is not None
+
+    # ── Chaves do Jardim ────────────────────────────────────────────────────
+    def get_chaves(self, guild_id: str, user_id: str) -> dict:
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT quantidade, auto_usar FROM jardim_chaves WHERE guild_id=%s AND user_id=%s",
+                (guild_id, user_id),
+            ).fetchone()
+        return (
+            {"quantidade": int(row["quantidade"]), "auto_usar": bool(row["auto_usar"])}
+            if row else {"quantidade": 0, "auto_usar": True}
+        )
+
+    def set_chaves_auto(self, guild_id: str, user_id: str, ativo: bool) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO jardim_chaves (guild_id, user_id, auto_usar) VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, user_id) DO UPDATE SET auto_usar = EXCLUDED.auto_usar
+                """,
+                (guild_id, user_id, bool(ativo)),
+            )
+
+    # ── Coleção das Dez Árvores ─────────────────────────────────────────────
+    def get_colecao(self, guild_id: str, user_id: str) -> Dict[str, int]:
+        """{arvore_id: fragmentos} da pessoa."""
+        with self._conn() as con:
+            rows = con.execute(
+                "SELECT arvore_id, quantidade FROM jardim_fragmentos WHERE guild_id=%s AND user_id=%s",
+                (guild_id, user_id),
+            ).fetchall()
+        return {r["arvore_id"]: int(r["quantidade"]) for r in rows}
+
+    def conceder_fragmento(self, guild_id: str, user_id: str, arvore_id: str) -> dict:
+        """Soma um fragmento (até completar a página) e diz como ficou."""
+        maximo = colecao_mod.FRAGMENTOS_POR_PAGINA
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO jardim_fragmentos (guild_id, user_id, arvore_id, quantidade)
+                VALUES (%s, %s, %s, 1)
+                ON CONFLICT (guild_id, user_id, arvore_id)
+                DO UPDATE SET quantidade = LEAST(jardim_fragmentos.quantidade + 1, %s)
+                RETURNING quantidade
+                """,
+                (guild_id, user_id, arvore_id, maximo),
+            ).fetchone()
+            paginas = con.execute(
+                """
+                SELECT COUNT(*) AS n FROM jardim_fragmentos
+                WHERE guild_id=%s AND user_id=%s AND quantidade >= %s
+                """,
+                (guild_id, user_id, maximo),
+            ).fetchone()
+        quantidade = int(row["quantidade"])
+        return {
+            "quantidade": quantidade,
+            "completa": quantidade >= maximo,
+            "paginas_total": int(paginas["n"]),
+        }
+
+    def consumir_chave(self, guild_id: str, user_id: str) -> bool:
+        """Gasta uma Chave se a pessoa tem e deixou o uso automático ligado."""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE jardim_chaves SET quantidade = quantidade - 1
+                WHERE guild_id=%s AND user_id=%s AND quantidade > 0 AND auto_usar
+                RETURNING quantidade
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+        return row is not None
+
+    def conceder_chave(self, guild_id: str, user_id: str, quantidade: int = 1) -> int:
+        """Soma Chaves até o limite do estoque e devolve quantas entraram de fato."""
+        maximo = loot_mod.CHAVES_MAX
+        soma = max(0, int(quantidade))
+        with self._conn() as con:
+            # Um único upsert que SOMA no banco: a primeira concessão de um jogador (linha ainda inexistente)
+            # não pode sobrescrever uma compra feita ao mesmo tempo no Banqueiro.
+            linha = con.execute(
+                """
+                WITH antes AS (
+                    SELECT quantidade FROM jardim_chaves WHERE guild_id=%s AND user_id=%s
+                ), gravado AS (
+                    INSERT INTO jardim_chaves (guild_id, user_id, quantidade) VALUES (%s, %s, LEAST(%s, %s))
+                    ON CONFLICT (guild_id, user_id) DO UPDATE
+                        SET quantidade = LEAST(%s, jardim_chaves.quantidade + %s)
+                    RETURNING quantidade
+                )
+                SELECT gravado.quantidade AS novo, COALESCE((SELECT quantidade FROM antes), 0) AS antes FROM gravado
+                """,
+                (guild_id, user_id, guild_id, user_id, maximo, soma, maximo, soma),
+            ).fetchone()
+        return max(0, int(linha["novo"]) - int(linha["antes"]))
+
+    # ── Cofre do Jardim (meta coletiva) ─────────────────────────────────────
+    def get_meta_ativa(self, guild_id: str) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT * FROM jardim_metas WHERE guild_id=%s AND status='aberta' AND prazo > CURRENT_TIMESTAMP",
+                (guild_id,),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def get_ultima_meta_encerrada(self, guild_id: str) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT * FROM jardim_metas WHERE guild_id=%s AND status <> 'aberta'
+                ORDER BY id DESC LIMIT 1
+                """,
+                (guild_id,),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def top_doadores(self, meta_id: int, limite: int = 5) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT user_id, SUM(valor)::int AS total FROM jardim_doacoes
+                WHERE meta_id=%s AND NOT reembolsada
+                GROUP BY user_id ORDER BY total DESC, MIN(criado_em) LIMIT %s
+                """,
+                (int(meta_id), max(1, int(limite))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def criar_meta(
+        self, guild_id: str, titulo: str, descricao: str, alvo: int, dias: int,
+        recompensa: str, festival_horas: int, criado_por: str,
+    ) -> Optional[int]:
+        """Abre a meta do servidor. Devolve None se já houver uma aberta."""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO jardim_metas
+                    (guild_id, titulo, descricao, alvo, recompensa, festival_horas, criado_por, prazo)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP + make_interval(days => %s))
+                ON CONFLICT (guild_id) WHERE status = 'aberta' DO NOTHING
+                RETURNING id
+                """,
+                (guild_id, titulo, descricao, int(alvo), recompensa, int(festival_horas), criado_por, int(dias)),
+            ).fetchone()
+        return int(row["id"]) if row else None
+
+    def listar_metas(self, guild_id: str, limite: int = 10) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                "SELECT * FROM jardim_metas WHERE guild_id=%s ORDER BY id DESC LIMIT %s",
+                (guild_id, max(1, min(30, int(limite)))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def metas_vencidas(self) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                "SELECT * FROM jardim_metas WHERE status='aberta' AND prazo <= CURRENT_TIMESTAMP"
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def encerrar_meta_com_reembolso(self, guild_id: str, meta_id: int, status: str) -> Optional[dict]:
+        """Fecha uma meta ainda aberta (`expirada` ou `cancelada`) e devolve a
+        cada doador o que ele deu, na mesma transação. None se ela já tinha
+        sido fechada por outro caminho (por exemplo, batida ao mesmo tempo)."""
+        if status not in ("expirada", "cancelada"):
+            raise ValueError("status invalido")
+        with self._conn() as con:
+            meta = con.execute(
+                "SELECT * FROM jardim_metas WHERE id=%s AND guild_id=%s AND status='aberta' FOR UPDATE",
+                (int(meta_id), guild_id),
+            ).fetchone()
+            if meta is None:
+                return None
+            con.execute(
+                "UPDATE jardim_metas SET status=%s, encerrada_em=CURRENT_TIMESTAMP WHERE id=%s",
+                (status, int(meta_id)),
+            )
+            doadores = con.execute(
+                """
+                SELECT user_id, SUM(valor)::int AS total FROM jardim_doacoes
+                WHERE meta_id=%s AND NOT reembolsada GROUP BY user_id
+                """,
+                (int(meta_id),),
+            ).fetchall()
+            for d in doadores:
+                self._garantir_jogador(con, guild_id, d["user_id"])
+                con.execute(
+                    """
+                    INSERT INTO carteira (guild_id, user_id, moeda, saldo) VALUES (%s, %s, 'Lunaris', %s)
+                    ON CONFLICT (guild_id, user_id, moeda)
+                    DO UPDATE SET saldo = carteira.saldo + EXCLUDED.saldo
+                    """,
+                    (guild_id, d["user_id"], int(d["total"])),
+                )
+                con.execute(
+                    """
+                    INSERT INTO extrato (guild_id, user_id, delta, moeda, descricao)
+                    VALUES (%s, %s, %s, 'Lunaris', %s)
+                    """,
+                    (guild_id, d["user_id"], int(d["total"]), f"Reembolso do Cofre do Jardim: {meta['titulo'][:60]}"),
+                )
+            con.execute("UPDATE jardim_doacoes SET reembolsada=TRUE WHERE meta_id=%s", (int(meta_id),))
+        return {
+            "meta": dict(meta),
+            "doadores": len(doadores),
+            "total": sum(int(d["total"]) for d in doadores),
+        }
+
+    def festival_ativo(self, guild_id: str) -> bool:
+        """Há um evento ativo que torna os baús generosos (festival de meta)?"""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT 1 AS ok FROM jardim_eventos
+                WHERE guild_id=%s AND efeito='baus_especiais' AND NOT encerrado AND expira_em > CURRENT_TIMESTAMP
+                LIMIT 1
+                """,
+                (guild_id,),
+            ).fetchone()
+        return row is not None
+
+    # ── Baús v2: configuração, histórico, sorte e mural ────────────────────
+    def set_baus_por_dia(self, guild_id: str, quantidade: int) -> int:
+        quantidade = max(1, min(loot_mod.BAUS_POR_DIA_MAX, int(quantidade)))
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO baus_config (guild_id, baus_por_dia) VALUES (%s, %s)
+                ON CONFLICT (guild_id) DO UPDATE SET baus_por_dia = EXCLUDED.baus_por_dia
+                """,
+                (guild_id, quantidade),
+            )
+        return quantidade
+
+    def set_bau_mural_canal(self, guild_id: str, canal_id: Optional[str]) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO baus_config (guild_id, mural_canal_id) VALUES (%s, %s)
+                ON CONFLICT (guild_id) DO UPDATE SET mural_canal_id = EXCLUDED.mural_canal_id
+                """,
+                (guild_id, canal_id),
+            )
+
+    def registrar_bau_historico(
+        self, guild_id: str, canal_id: str, mensagem_id: str, token: str,
+        raridade: str, nome: str, coletivo: bool, expira_em,
+    ) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO baus_historico
+                    (guild_id, canal_id, mensagem_id, token, raridade, nome, coletivo, expira_em)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (guild_id, mensagem_id) DO NOTHING
+                """,
+                (guild_id, canal_id, mensagem_id, token, raridade, nome, bool(coletivo), expira_em),
+            )
+
+    def get_bau_historico(self, guild_id: str, mensagem_id: str):
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT * FROM baus_historico WHERE guild_id=%s AND mensagem_id=%s",
+                (guild_id, mensagem_id),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def contar_baus_sem_bom(self, guild_id: str) -> int:
+        """Quantos baús seguidos, do mais recente para trás, foram só
+        Comum/Incomum (para a proteção de azar)."""
+        with self._conn() as con:
+            rows = con.execute(
+                "SELECT raridade FROM baus_historico WHERE guild_id=%s ORDER BY id DESC LIMIT 30",
+                (guild_id,),
+            ).fetchall()
+        total = 0
+        for row in rows:
+            if row["raridade"] in ("comum", "incomum"):
+                total += 1
+            else:
+                break
+        return total
+
+    def marcar_bau_historico_aberto(self, guild_id: str, mensagem_id: str, vencedor_user_id: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                UPDATE baus_historico SET status='aberto', vencedor_user_id=%s
+                WHERE guild_id=%s AND mensagem_id=%s
+                """,
+                (vencedor_user_id, guild_id, mensagem_id),
+            )
+
+    def registrar_coleta_historico(self, guild_id: str, mensagem_id: str) -> int:
+        """Soma uma coleta num baú coletivo e devolve o total até agora."""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE baus_historico SET coletas = coletas + 1, status='aberto'
+                WHERE guild_id=%s AND mensagem_id=%s RETURNING coletas
+                """,
+                (guild_id, mensagem_id),
+            ).fetchone()
+        return int(row["coletas"]) if row else 0
+
+    def marcar_bau_historico_expirado(self, guild_id: str, mensagem_id: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                UPDATE baus_historico SET status='expirado'
+                WHERE guild_id=%s AND mensagem_id=%s AND status='no_ar'
+                """,
+                (guild_id, mensagem_id),
+            )
+
+    def listar_baus_do_dia(self, guild_id: str) -> List[dict]:
+        """Baús lançados hoje (data de São Paulo), em ordem."""
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT * FROM baus_historico
+                WHERE guild_id=%s
+                  AND (criado_em AT TIME ZONE 'America/Sao_Paulo')::date
+                    = (CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo')::date
+                ORDER BY id
+                """,
+                (guild_id,),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def estatisticas_baus(self, guild_id: str, dias: int = 7) -> dict:
+        with self._conn() as con:
+            h = con.execute(
+                """
+                SELECT COUNT(*) AS lancados,
+                       COUNT(*) FILTER (WHERE status='aberto') AS abertos,
+                       COUNT(*) FILTER (WHERE status='expirado') AS expirados
+                FROM baus_historico
+                WHERE guild_id=%s AND criado_em >= CURRENT_TIMESTAMP - make_interval(days => %s)
+                """,
+                (guild_id, int(dias)),
+            ).fetchone()
+            pessoas = con.execute(
+                """
+                SELECT COUNT(DISTINCT vencedor_user_id) AS n FROM baus_entregas
+                WHERE guild_id=%s AND status='entregue'
+                  AND entregue_em >= CURRENT_TIMESTAMP - make_interval(days => %s)
+                """,
+                (guild_id, int(dias)),
+            ).fetchone()
+        return {
+            "lancados": int(h["lancados"]),
+            "abertos": int(h["abertos"]),
+            "expirados": int(h["expirados"]),
+            "pessoas": int(pessoas["n"]),
+        }
+
+    # Pistas de Sorte
+    def get_pistas(self, guild_id: str, user_id: str) -> int:
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT pistas FROM baus_sorte WHERE guild_id=%s AND user_id=%s",
+                (guild_id, user_id),
+            ).fetchone()
+        return int(row["pistas"]) if row else 0
+
+    def consumir_pistas(self, guild_id: str, user_id: str, quantidade: int) -> None:
+        if quantidade <= 0:
+            return
+        with self._conn() as con:
+            con.execute(
+                """
+                UPDATE baus_sorte SET pistas = GREATEST(pistas - %s, 0)
+                WHERE guild_id=%s AND user_id=%s
+                """,
+                (int(quantidade), guild_id, user_id),
+            )
+
+    def registrar_tentativa_bau(self, guild_id: str, mensagem_id: str, user_id: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO baus_tentativas (guild_id, mensagem_id, user_id)
+                VALUES (%s, %s, %s) ON CONFLICT DO NOTHING
+                """,
+                (guild_id, mensagem_id, user_id),
+            )
+
+    def conceder_pistas_aos_que_tentaram(
+        self, guild_id: str, mensagem_id: str, excluir_user_id: Optional[str] = None,
+    ) -> List[str]:
+        """Quando o baú se resolve (alguém levou ou expirou), quem tentou o
+        enigma e não levou ganha uma Pista de Sorte (até PISTAS_MAX). As
+        tentativas são apagadas: cada baú só concede uma vez."""
+        with self._conn() as con:
+            rows = con.execute(
+                "DELETE FROM baus_tentativas WHERE guild_id=%s AND mensagem_id=%s RETURNING user_id",
+                (guild_id, mensagem_id),
+            ).fetchall()
+            ids = [r["user_id"] for r in rows if r["user_id"] != excluir_user_id]
+            for uid in ids:
+                con.execute(
+                    """
+                    INSERT INTO baus_sorte (guild_id, user_id, pistas) VALUES (%s, %s, 1)
+                    ON CONFLICT (guild_id, user_id)
+                    DO UPDATE SET pistas = LEAST(baus_sorte.pistas + 1, %s)
+                    """,
+                    (guild_id, uid, loot_mod.PISTAS_MAX),
+                )
+        return ids
+
+    # Mural do dia
+    def get_bau_mural(self, guild_id: str):
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT dia, canal_id, mensagem_id,
+                       (dia = (CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo')::date) AS de_hoje
+                FROM baus_mural WHERE guild_id=%s
+                """,
+                (guild_id,),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def set_bau_mural(self, guild_id: str, canal_id: str, mensagem_id: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO baus_mural (guild_id, dia, canal_id, mensagem_id)
+                VALUES (%s, (CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo')::date, %s, %s)
+                ON CONFLICT (guild_id) DO UPDATE SET
+                    dia = EXCLUDED.dia, canal_id = EXCLUDED.canal_id, mensagem_id = EXCLUDED.mensagem_id
+                """,
+                (guild_id, canal_id, mensagem_id),
             )
 
     def set_proximo_drop(self, guild_id: str, iso: str) -> None:
@@ -1929,7 +2741,8 @@ class Database:
             ).fetchone()
         if row is None:
             return True
-        return row["executado_em"] <= datetime.now(timezone.utc) - timedelta(hours=intervalo_horas)
+        limite = datetime.now(timezone.utc) - timedelta(hours=intervalo_horas) + CICLO_TOLERANCIA
+        return row["executado_em"] <= limite
 
     def marcar_ciclo_guild(self, guild_id: str, ciclo: str) -> None:
         with self._conn() as con:
@@ -1985,11 +2798,35 @@ class Database:
             )
 
     def get_horoscopo(self, guild_id: str):
+        """Árvore do horóscopo vigente. Passadas 36h sem um novo sorteio o
+        horóscopo expira (antes valia para sempre, e o "dobro de hoje" nos
+        baús continuava com a Árvore de dias atrás)."""
         with self._conn() as con:
             row = con.execute(
-                "SELECT arvore_id FROM horoscopo_atual WHERE guild_id=%s", (guild_id,)
+                """
+                SELECT arvore_id FROM horoscopo_atual
+                WHERE guild_id=%s
+                  AND definido_em > CURRENT_TIMESTAMP - INTERVAL '36 hours'
+                """,
+                (guild_id,),
             ).fetchone()
         return row["arvore_id"] if row else None
+
+    def horoscopo_definido_hoje(self, guild_id: str) -> bool:
+        """Já houve sorteio na data de hoje em São Paulo? É o que decide se o
+        ciclo precisa sortear: por data do calendário, não por "24h desde o
+        último", que derivava uma hora por dia e pulava dias."""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT 1 AS ok FROM horoscopo_atual
+                WHERE guild_id=%s
+                  AND (definido_em AT TIME ZONE 'America/Sao_Paulo')::date
+                    = (CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo')::date
+                """,
+                (guild_id,),
+            ).fetchone()
+        return row is not None
 
     # ── Entrevista Exclusiva ────────────────────────────────────────────────
     def criar_entrevista(self, guild_id: str, user_id: str, pergunta: str) -> int:
@@ -2061,6 +2898,33 @@ class Database:
                 (guild_id,),
             ).fetchall()
         return [dict(row) for row in rows]
+
+    def perguntas_recentes_entrevista(self, guild_id: str, limite: int = 20) -> List[str]:
+        """Últimas perguntas feitas (qualquer status), para o sorteio não repetir assunto."""
+        with self._conn() as con:
+            rows = con.execute(
+                "SELECT pergunta FROM entrevistas WHERE guild_id=%s ORDER BY id DESC LIMIT %s",
+                (guild_id, max(1, int(limite))),
+            ).fetchall()
+        return [row["pergunta"] for row in rows]
+
+    def get_entrevista(self, entrevista_id: int) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute("SELECT * FROM entrevistas WHERE id=%s", (int(entrevista_id),)).fetchone()
+        return dict(row) if row else None
+
+    def salvar_rascunho_entrevista(self, entrevista_id: int, texto: str) -> bool:
+        """Guarda a resposta para o jogador conferir antes de publicar (só enquanto pendente)."""
+        with self._conn() as con:
+            row = con.execute(
+                "UPDATE entrevistas SET rascunho=%s WHERE id=%s AND status='pendente' RETURNING id",
+                (texto, int(entrevista_id)),
+            ).fetchone()
+        return row is not None
+
+    def limpar_rascunho_entrevista(self, entrevista_id: int) -> None:
+        with self._conn() as con:
+            con.execute("UPDATE entrevistas SET rascunho=NULL WHERE id=%s", (int(entrevista_id),))
 
     def usuarios_ja_entrevistados(self, guild_id: str) -> List[str]:
         with self._conn() as con:
@@ -2470,7 +3334,7 @@ class Database:
 
     def marcar_publicacao_falha(self, publicacao_id: int, erro: str) -> None:
         with self._conn() as con:
-            con.execute(
+            row = con.execute(
                 """
                 UPDATE jornal_publicacoes SET
                     tentativas=tentativas + 1,
@@ -2481,9 +3345,36 @@ class Database:
                     reivindicado_em=NULL,
                     atualizado_em=CURRENT_TIMESTAMP
                 WHERE id=%s AND status='pendente' AND reivindicado_em IS NOT NULL
+                RETURNING status, origem, payload
                 """,
                 (str(erro)[:1000], int(publicacao_id)),
-            )
+            ).fetchone()
+            if row and row["status"] == "falha" and row["origem"] == "classificados":
+                self._reembolsar_classificado_nao_publicado(con, (row["payload"] or {}).get("classificado_id"))
+
+    def _reembolsar_classificado_nao_publicado(self, con, classificado_id) -> None:
+        """Classificado cuja publicação esgotou as tentativas: devolve o que o jogador pagou."""
+        if not classificado_id:
+            return
+        anuncio = con.execute(
+            """
+            UPDATE classificados SET status='expirado'
+            WHERE id=%s AND status='ativo' AND mensagem_id IS NULL RETURNING guild_id, user_id, valor
+            """,
+            (int(classificado_id),),
+        ).fetchone()
+        if anuncio is None:
+            return
+        self._garantir_jogador(con, anuncio["guild_id"], anuncio["user_id"])
+        con.execute(
+            "UPDATE carteira SET saldo=saldo+%s WHERE guild_id=%s AND user_id=%s AND moeda='Lunaris'",
+            (anuncio["valor"], anuncio["guild_id"], anuncio["user_id"]),
+        )
+        con.execute(
+            """INSERT INTO extrato (guild_id, user_id, delta, moeda, descricao)
+               VALUES (%s, %s, %s, 'Lunaris', 'Reembolso: classificado que não pôde ser publicado')""",
+            (anuncio["guild_id"], anuncio["user_id"], anuncio["valor"]),
+        )
 
     def adiar_publicacao(self, publicacao_id: int, minutos: int = 30) -> None:
         with self._conn() as con:
@@ -2585,6 +3476,58 @@ class Database:
             "premios_desafios": int(desafios["premios"]),
             "entrevistas": int(entrevistas["total"]),
         }
+
+    # ── Edição semanal e ranking de caçadores ───────────────────────────────
+    def ranking_cacadores(self, guild_id: str, desde, limite: int = 3) -> List[dict]:
+        """Quem mais abriu/pegou baús desde `desde` (cada coleta de baú coletivo conta)."""
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT vencedor_user_id AS user_id, COUNT(*) AS baus, MAX(entregue_em) AS ultimo
+                FROM baus_entregas
+                WHERE guild_id=%s AND status='entregue' AND entregue_em >= %s
+                GROUP BY vencedor_user_id
+                ORDER BY baus DESC, ultimo ASC
+                LIMIT %s
+                """,
+                (guild_id, desde, max(1, int(limite))),
+            ).fetchall()
+        return [{"user_id": r["user_id"], "baus": int(r["baus"])} for r in rows]
+
+    def furos_publicados_desde(self, guild_id: str, desde, limite: int = 5) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT id, user_id, texto_fofoca FROM fofocas
+                WHERE guild_id=%s AND status IN ('publicada', 'notificada') AND criado_em >= %s
+                ORDER BY id DESC LIMIT %s
+                """,
+                (guild_id, desde, max(1, int(limite))),
+            ).fetchall()
+        return [dict(r) for r in rows]
+
+    def entrevista_da_semana(self, guild_id: str, desde) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT user_id, pergunta, resposta FROM entrevistas
+                WHERE guild_id=%s AND status='publicada' AND publicado_em >= %s AND resposta IS NOT NULL
+                ORDER BY publicado_em DESC LIMIT 1
+                """,
+                (guild_id, desde),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def loteria_desde(self, guild_id: str, desde) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT vencedor_user_id, premio, participantes FROM loteria_rodadas
+                WHERE guild_id=%s AND encerrada_em >= %s ORDER BY encerrada_em DESC LIMIT 1
+                """,
+                (guild_id, desde),
+            ).fetchone()
+        return dict(row) if row else None
 
     # ── Loteria Dominical (bilhetes vendidos pelo Banqueiro; sorteio aqui) ──
     def listar_bilhetes_loteria(self, guild_id: str) -> List[dict]:
@@ -2884,14 +3827,23 @@ class Database:
                     SELECT vencedor_user_id, 'loterias', COUNT(*) FROM loteria_rodadas
                     WHERE guild_id=%(guild)s AND premio>0 GROUP BY vencedor_user_id
                     UNION ALL
+                    SELECT user_id, 'doado', COALESCE(SUM(valor), 0) FROM jardim_doacoes
+                    WHERE guild_id=%(guild)s AND NOT reembolsada GROUP BY user_id
+                    UNION ALL
+                    SELECT user_id, 'paginas', COUNT(*) FROM jardim_fragmentos
+                    WHERE guild_id=%(guild)s AND quantidade >= %(fragmentos)s GROUP BY user_id
+                    UNION ALL
                     SELECT user_id, 'furos', COUNT(*) FROM extrato
-                    WHERE guild_id=%(guild)s AND delta>0 AND moeda='Solares'
+                    WHERE guild_id=%(guild)s AND delta>0 AND moeda IN ('Solares', 'Lunaris')
                       AND descricao='Furo comprado pelo Jornalista' GROUP BY user_id
                 )
                 SELECT * FROM fatos WHERE user_id IS NOT NULL
                   AND (%(usuario)s::text IS NULL OR user_id=%(usuario)s)
                 """,
-                {"guild": guild_id, "usuario": user_id},
+                {
+                    "guild": guild_id, "usuario": user_id,
+                    "fragmentos": colecao_mod.FRAGMENTOS_POR_PAGINA,
+                },
             ).fetchall()
             metricas = {}
             for row in rows:
@@ -2931,9 +3883,13 @@ class Database:
                 (guild_id, chave, cargo_id),
             )
 
-    def tentar_vender_furo(self, guild_id: str, user_id: str, alvo_id: str, recompensa: int, agora: datetime) -> dict:
-        """Reserva 1 tentativa/hora e grava pagamento + fofoca na mesma transação."""
-        if user_id == alvo_id or not 0 <= recompensa <= 150:
+    def tentar_vender_furo(
+        self, guild_id: str, user_id: str, alvo_id: str, recompensa: int, agora: datetime,
+        *, historia: Optional[str] = None,
+    ) -> dict:
+        """Reserva 1 tentativa/hora e grava pagamento + fofoca na mesma transação.
+        `historia` é o texto escrito pelo jogador (já limpo por core/furos.py)."""
+        if user_id == alvo_id or not 0 <= recompensa <= FURO_RECOMPENSA_MAX:
             raise ValueError("furo inválido")
         with self._conn() as con:
             tentativa = con.execute(
@@ -2952,28 +3908,30 @@ class Database:
             if recompensa:
                 self._garantir_jogador(con, guild_id, user_id)
                 con.execute(
-                    "UPDATE carteira SET saldo=saldo+%s WHERE guild_id=%s AND user_id=%s AND moeda='Solares'",
+                    "UPDATE carteira SET saldo=saldo+%s WHERE guild_id=%s AND user_id=%s AND moeda='Lunaris'",
                     (recompensa, guild_id, user_id),
                 )
                 con.execute(
                     """INSERT INTO extrato (guild_id, user_id, delta, moeda, descricao)
-                       VALUES (%s, %s, %s, 'Solares', 'Furo comprado pelo Jornalista')""",
+                       VALUES (%s, %s, %s, 'Lunaris', 'Furo comprado pelo Jornalista')""",
                     (guild_id, user_id, recompensa),
                 )
-                con.execute(
-                    """INSERT INTO fofocas (guild_id, user_id, texto_fofoca, suborno_valor, prazo)
-                       VALUES (%s, %s, %s, %s, %s)""",
-                    (guild_id, alvo_id, f"Vazaram segredos obscuros de <@{alvo_id}>!", recompensa * 2,
-                     agora + timedelta(minutes=30)),
-                )
-        return {"status": "comprado" if recompensa else "recusado"}
+                fofoca = con.execute(
+                    """INSERT INTO fofocas (guild_id, user_id, texto_fofoca, suborno_valor, prazo, autor_id)
+                       VALUES (%s, %s, %s, %s, %s, %s) RETURNING id""",
+                    (guild_id, alvo_id, furos_mod.texto_da_manchete(alvo_id, historia), recompensa * 2,
+                     agora + timedelta(minutes=FURO_PRAZO_SUBORNO_MINUTOS), user_id),
+                ).fetchone()
+                return {"status": "comprado", "suborno": recompensa * 2, "fofoca_id": int(fofoca["id"])}
+        return {"status": "recusado", "suborno": 0}
 
-    def subornar_fofoca(self, guild_id: str, user_id: str, agora: datetime) -> dict:
+    def subornar_fofoca(self, guild_id: str, user_id: str, agora: datetime, fofoca_id: Optional[int] = None) -> dict:
         with self._conn() as con:
             row = con.execute(
                 """SELECT * FROM fofocas WHERE guild_id=%s AND user_id=%s
-                   AND status='pendente' AND prazo>%s ORDER BY prazo, id LIMIT 1 FOR UPDATE""",
-                (guild_id, user_id, agora),
+                   AND status='pendente' AND prazo>%s AND (%s::int IS NULL OR id=%s::int)
+                   ORDER BY prazo, id LIMIT 1 FOR UPDATE""",
+                (guild_id, user_id, agora, fofoca_id, fofoca_id),
             ).fetchone()
             if row is None:
                 return {"status": "ausente"}
@@ -2995,6 +3953,40 @@ class Database:
             )
         return {"status": "subornada", "valor": valor}
 
+    def get_fofoca(self, fofoca_id: int) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute("SELECT * FROM fofocas WHERE id=%s", (int(fofoca_id),)).fetchone()
+        return dict(row) if row else None
+
+    def desmentir_fofoca(self, fofoca_id: int, user_id: str, agora: datetime) -> dict:
+        """A vítima nega de graça: a história sai mesmo assim, com a negativa dela."""
+        with self._conn() as con:
+            row = con.execute(
+                """UPDATE fofocas SET desmentida=TRUE
+                   WHERE id=%s AND user_id=%s AND status='pendente' AND prazo>%s AND NOT desmentida
+                   RETURNING id""",
+                (int(fofoca_id), user_id, agora),
+            ).fetchone()
+        return {"status": "desmentida" if row else "ausente"}
+
+    def listar_fofocas_para_mestre(self, guild_id: str, limite: int = 15) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """SELECT * FROM fofocas WHERE guild_id=%s AND criado_em > CURRENT_TIMESTAMP - interval '3 days'
+                   ORDER BY id DESC LIMIT %s""",
+                (guild_id, max(1, int(limite))),
+            ).fetchall()
+        return [dict(r) for r in rows]
+
+    def vetar_fofoca(self, guild_id: str, fofoca_id: int) -> Optional[dict]:
+        """O Mestre barra uma história antes de sair. Quem vendeu fica com o pagamento."""
+        with self._conn() as con:
+            row = con.execute(
+                "UPDATE fofocas SET status='vetada' WHERE id=%s AND guild_id=%s AND status='pendente' RETURNING *",
+                (int(fofoca_id), guild_id),
+            ).fetchone()
+        return dict(row) if row else None
+
     def enfileirar_fofoca(self, fofoca_id: int, payload: dict, agora: datetime):
         """A fila e o fim do prazo de suborno são confirmados juntos."""
         with self._conn() as con:
@@ -3005,17 +3997,26 @@ class Database:
             if fofoca is None:
                 return None
             row = con.execute(
-                """INSERT INTO jornal_publicacoes (guild_id, categoria, origem, dedupe_key, payload)
-                   VALUES (%s, 'noticia', 'fofoca', %s, %s)
+                """INSERT INTO jornal_publicacoes
+                       (guild_id, categoria, origem, automacao, dedupe_key, payload)
+                   VALUES (%s, 'noticia', 'fofoca', 'fofocas', %s, %s)
                    ON CONFLICT (guild_id, dedupe_key) DO NOTHING RETURNING *""",
                 (fofoca["guild_id"], f"fofoca_{fofoca_id}", Jsonb(payload)),
             ).fetchone()
             con.execute("UPDATE fofocas SET status='publicada' WHERE id=%s", (fofoca_id,))
         return dict(row) if row else None
 
-    def comprar_classificado(self, guild_id: str, user_id: str, valor: int, chave: str, payload: dict):
-        if not 50 <= valor <= 2_000_000_000:
+    def comprar_classificado(
+        self, guild_id: str, user_id: str, valor: int, chave: str, payload: dict,
+        *, texto: Optional[str] = None, categoria: str = "outros", agora: Optional[datetime] = None,
+    ):
+        """Cobra e enfileira o anúncio. Com `texto`, também grava o classificado
+        (categoria e validade de 7 dias) e põe `classificado_id` no payload, o que
+        faz a publicação sair com o botão Responder."""
+        if not CLASSIFICADO_VALOR_MINIMO <= valor <= 2_000_000_000:
             raise ValueError("valor inválido")
+        if categoria not in CLASSIFICADO_CATEGORIAS:
+            categoria = "outros"
         with self._conn() as con:
             # Serializa a mesma interação sem impedir anúncios de outros jogadores.
             con.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))", (f"classificado:{guild_id}:{chave}",))
@@ -3026,22 +4027,91 @@ class Database:
                 return dict(existente)
             pago = con.execute(
                 """UPDATE carteira SET saldo=saldo-%s WHERE guild_id=%s AND user_id=%s
-                   AND moeda='Solares' AND saldo>=%s RETURNING saldo""",
+                   AND moeda='Lunaris' AND saldo>=%s RETURNING saldo""",
                 (valor, guild_id, user_id, valor),
             ).fetchone()
             if pago is None:
                 return None
+            if texto is not None:
+                inicio = agora or datetime.now(timezone.utc)
+                anuncio = con.execute(
+                    """INSERT INTO classificados (guild_id, user_id, categoria, texto, valor, expira_em)
+                       VALUES (%s, %s, %s, %s, %s, %s) RETURNING id""",
+                    (guild_id, user_id, categoria, texto, valor, inicio + timedelta(days=CLASSIFICADO_VALIDADE_DIAS)),
+                ).fetchone()
+                payload = {**payload, "classificado_id": int(anuncio["id"])}
             row = con.execute(
-                """INSERT INTO jornal_publicacoes (guild_id, categoria, origem, dedupe_key, payload)
-                   VALUES (%s, 'noticia', 'classificados', %s, %s) RETURNING *""",
+                """INSERT INTO jornal_publicacoes
+                       (guild_id, categoria, origem, automacao, dedupe_key, payload)
+                   VALUES (%s, 'noticia', 'classificados', 'classificados', %s, %s) RETURNING *""",
                 (guild_id, chave, Jsonb(payload)),
             ).fetchone()
             con.execute(
                 """INSERT INTO extrato (guild_id, user_id, delta, moeda, descricao)
-                   VALUES (%s, %s, %s, 'Solares', 'Classificado no Jornal Lunar')""",
+                   VALUES (%s, %s, %s, 'Lunaris', 'Classificado no Jornal Lunar')""",
                 (guild_id, user_id, -valor),
             )
         return dict(row)
+
+    def get_classificado(self, classificado_id: int) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute("SELECT * FROM classificados WHERE id=%s", (int(classificado_id),)).fetchone()
+        return dict(row) if row else None
+
+    def vincular_mensagem_classificado(self, classificado_id: int, canal_id: str, mensagem_id: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                "UPDATE classificados SET canal_id=%s, mensagem_id=%s WHERE id=%s",
+                (canal_id, mensagem_id, int(classificado_id)),
+            )
+
+    def responder_classificado(
+        self, classificado_id: int, user_id: str, mensagem: str, agora: Optional[datetime] = None
+    ) -> dict:
+        """Uma resposta por pessoa por anúncio. Devolve o anúncio para quem for avisar o autor."""
+        agora = agora or datetime.now(timezone.utc)
+        with self._conn() as con:
+            anuncio = con.execute(
+                "SELECT * FROM classificados WHERE id=%s FOR UPDATE", (int(classificado_id),)
+            ).fetchone()
+            if anuncio is None or anuncio["status"] != "ativo" or anuncio["expira_em"] <= agora:
+                return {"status": "encerrado"}
+            if anuncio["user_id"] == user_id:
+                return {"status": "proprio"}
+            nova = con.execute(
+                """INSERT INTO classificado_respostas (classificado_id, user_id, mensagem)
+                   VALUES (%s, %s, %s) ON CONFLICT DO NOTHING RETURNING 1 AS ok""",
+                (int(classificado_id), user_id, mensagem),
+            ).fetchone()
+            total = con.execute(
+                "SELECT COUNT(*) AS n FROM classificado_respostas WHERE classificado_id=%s", (int(classificado_id),)
+            ).fetchone()["n"]
+        if nova is None:
+            return {"status": "ja_respondeu", "anuncio": dict(anuncio), "total": int(total)}
+        return {"status": "ok", "anuncio": dict(anuncio), "total": int(total)}
+
+    def contar_respostas_classificado(self, classificado_id: int) -> int:
+        with self._conn() as con:
+            return int(con.execute(
+                "SELECT COUNT(*) AS n FROM classificado_respostas WHERE classificado_id=%s", (int(classificado_id),)
+            ).fetchone()["n"])
+
+    def expirar_classificados(self, agora: datetime) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                "UPDATE classificados SET status='expirado' WHERE status='ativo' AND expira_em <= %s RETURNING *",
+                (agora,),
+            ).fetchall()
+        return [dict(r) for r in rows]
+
+    def classificados_ativos(self, guild_id: str, limite: int = 15) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """SELECT * FROM classificados WHERE guild_id=%s AND status='ativo' AND expira_em > CURRENT_TIMESTAMP
+                   ORDER BY criado_em DESC LIMIT %s""",
+                (guild_id, max(1, int(limite))),
+            ).fetchall()
+        return [dict(r) for r in rows]
 
     def adicionar_fofoca(
         self, guild_id: str, user_id: str, texto_fofoca: str, suborno_valor: int, prazo: datetime

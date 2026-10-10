@@ -33,7 +33,27 @@ def novo_db() -> Database:
     dsn_isolado = make_conninfo(dsn, options=f"-c search_path={schema}")
     db = Database(dsn_isolado)
     _recursos.append((db, dsn, schema))
+    _soltar_conexoes_antigas()
     return db
+
+
+# Cada Database mantém ao menos uma conexão aberta até o fim da sessão. Com a
+# suíte passando de 300 testes isso estourava o max_connections (100) do
+# Postgres de teste. Os bancos mais antigos já não são usados por ninguém, então
+# o pool deles é fechado (o schema só é apagado no final).
+MANTER_ABERTOS = 40
+_pools_fechados = set()
+
+
+def _soltar_conexoes_antigas() -> None:
+    for db, _dsn, _schema in _recursos[:-MANTER_ABERTOS]:
+        if id(db) in _pools_fechados:
+            continue
+        _pools_fechados.add(id(db))
+        try:
+            db.fechar()
+        except Exception:
+            pass
 
 
 @atexit.register

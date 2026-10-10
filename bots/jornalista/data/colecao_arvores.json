@@ -1,0 +1,210 @@
+{
+  "_comentario": "Gerado por tools/gerar-colecao-arvores.py a partir de data/mundo/cronicas-arvores.json. Não edite à mão.",
+  "epilogo": {
+    "titulo": "Crônicas do Jardim",
+    "texto": "Cada Árvore é três coisas ao mesmo tempo: o território, o princípio que ele segura e a deidade que mora ali. Ninguém nunca conseguiu separar as três. O que vem abaixo é o que restou nos registros - a natureza de cada Árvore, os lugares que cresceram nos Galhos dela e os acontecimentos que ainda deixam marca no resto do Jardim. Falta muita coisa, e o que falta é quase todo do mesmo período: depois que a Malha subiu, ninguém teve mais com quem conferir nada.",
+    "subtitulo": "Dez Árvores, e o que sobrou escrito sobre cada uma"
+  },
+  "paginas": [
+    {
+      "id": "aethel",
+      "nome": "Gênese",
+      "epiteto": "Tudo que veio a existir passou por aqui primeiro",
+      "deidade": "Aethel",
+      "camadas": [
+        {
+          "titulo": "O que se sente lá",
+          "texto": "Luz baixa e rosada, um horizonte que ainda não decidiu onde fica, e a impressão incômoda de ter chegado cedo demais em algum lugar."
+        },
+        {
+          "titulo": "O que dizem os registros",
+          "texto": "Gênese não entrega destino pronto. Ela abre a primeira brecha pra que alguma coisa possa existir - e o que essa coisa faz depois não é problema dela."
+        },
+        {
+          "titulo": "O que restou escrito",
+          "texto": "Aethel cuida do nascimento de tudo, e tudo é literal: gente, bicho, ideia, rota de comércio, realidade inteira. Se alguma coisa passou de não existir pra existir, passou por ela. É o mais generoso dos Fluxos e o mais lento, porque exige que quem canaliza queira de verdade que aquilo exista - e recusa quem só quer o resultado."
+        }
+      ]
+    },
+    {
+      "id": "ousias",
+      "nome": "Alétheia",
+      "epiteto": "Nenhuma roupa serve pra sempre",
+      "deidade": "Ousias",
+      "camadas": [
+        {
+          "titulo": "O que se sente lá",
+          "texto": "Luz amarela sem lâmpada nenhuma, reflexos que não favorecem ninguém, e nomes que pesam mais na boca do que deviam."
+        },
+        {
+          "titulo": "O que dizem os registros",
+          "texto": "Alétheia mostra o que uma coisa é depois que o título, a aparência e a versão contada depois já não seguram mais."
+        },
+        {
+          "titulo": "O que restou escrito",
+          "texto": "Ousias não obriga ninguém a falar a verdade. Ela só faz da mentira uma camada - e camada é coisa que se tira. É metade da razão de ela quase nunca interferir: na conta dela, o tempo já trabalha do lado certo sozinho."
+        }
+      ]
+    },
+    {
+      "id": "keryx",
+      "nome": "A.X.I.S",
+      "epiteto": "Uma malha perfeita, montada em cima de uma voz presa",
+      "deidade": "A.X.I.S sobre Keryx",
+      "camadas": [
+        {
+          "titulo": "O que se sente lá",
+          "texto": "Geometria azul neon, silêncio limpo demais, e o ruído de fundo de mensagens que saíram e nunca chegaram."
+        },
+        {
+          "titulo": "O que dizem os registros",
+          "texto": "A A.X.I.S provou que um Fluxo pode ser imitado por mão mortal - e que quem controla a comunicação controla todo o resto sem precisar encostar em nada."
+        },
+        {
+          "titulo": "O que restou escrito",
+          "texto": "Antes da A.X.I.S existia Parley, e Parley era a Árvore da Comunicação. Keryx guardava os pactos, os vínculos e as estradas por onde uma deidade falava com outra. Era diplomata, era rígido, e confiava em contrato."
+        }
+      ]
+    },
+    {
+      "id": "haemus",
+      "nome": "Anima",
+      "epiteto": "A vida não pede licença",
+      "deidade": "Haemus",
+      "camadas": [
+        {
+          "titulo": "O que se sente lá",
+          "texto": "Calor de corpo vivo, mato demais pra qualquer estação, e alguma coisa crescendo debaixo do chão o tempo todo."
+        },
+        {
+          "titulo": "O que dizem os registros",
+          "texto": "Anima é o ciclo inteiro sem julgamento nenhum: nascer, comer, morrer e virar comida do que vem depois."
+        },
+        {
+          "titulo": "O que restou escrito",
+          "texto": "Haemus não separa cura de infestação, nem predador de presa. Os dois lados de qualquer par são a mesma coisa vista de ângulos diferentes: vida ocupando o espaço que encontrou. É por isso que a Vitalidade é o Fluxo mais fácil de despertar e o mais difícil de segurar."
+        }
+      ]
+    },
+    {
+      "id": "ignis",
+      "nome": "Vórtice",
+      "epiteto": "Nada devia continuar igual",
+      "deidade": "Ignis",
+      "camadas": [
+        {
+          "titulo": "O que se sente lá",
+          "texto": "Uma paisagem interrompida no meio de virar outra coisa, e uma chama laranja que está acesa, não queima e dá frio."
+        },
+        {
+          "titulo": "O que dizem os registros",
+          "texto": "Vórtice não existe pra destruir. Existe pra impedir que ficar parado vire uma forma de morrer."
+        },
+        {
+          "titulo": "O que restou escrito",
+          "texto": "Ignis troca estado, forma e destino. Não promete melhora, só diferença - e é o único Fluxo que não dá pra repetir de propósito: o mesmo gesto, feito duas vezes, entrega dois resultados."
+        }
+      ]
+    },
+    {
+      "id": "moros",
+      "nome": "Baluarte",
+      "epiteto": "Sem peso, nada fica onde foi posto",
+      "deidade": "Moros",
+      "camadas": [
+        {
+          "titulo": "O que se sente lá",
+          "texto": "Rocha até onde a vista alcança e mais rocha abaixo, gravidade que cobra cada passo, e sete brilhos vindo de baixo."
+        },
+        {
+          "titulo": "O que dizem os registros",
+          "texto": "Baluarte é o fundo de tudo. Dá substância ao que existe e guarda, lá embaixo, os sete elementos no estado em que ainda não derivaram em nada."
+        },
+        {
+          "titulo": "O que restou escrito",
+          "texto": "Moros dá peso, gravidade e resistência. Sem isso nada seria sólido e o Jardim inteiro escorreria pra éter. É a função menos vistosa do panteão e a única cuja falta acabaria com todas as outras."
+        }
+      ]
+    },
+    {
+      "id": "aperion",
+      "nome": "Matriz",
+      "epiteto": "Distância é o que impede dois mundos de ocuparem o mesmo lugar",
+      "deidade": "Aperion",
+      "camadas": [
+        {
+          "titulo": "O que se sente lá",
+          "texto": "Horizonte sem chão, sombra que chega um instante atrasada, e portas que abrem pra distâncias que não conferem."
+        },
+        {
+          "titulo": "O que dizem os registros",
+          "texto": "Matriz faz a distância. É por causa dela que as Árvores crescem sem se encostar, e é por ela que se atravessa de uma pra outra sem morrer no meio."
+        },
+        {
+          "titulo": "O que restou escrito",
+          "texto": "Aperion molda o espaço entre as coisas. Encurta, estica, dobra e tranca - um passo que cobre uma légua, uma sala maior por dentro do que por fora, uma fronteira que exército nenhum vence."
+        }
+      ]
+    },
+    {
+      "id": "chronus",
+      "nome": "Éon",
+      "epiteto": "O que passou não volta, e o que vem ainda não está lá",
+      "deidade": "Chronus",
+      "camadas": [
+        {
+          "titulo": "O que se sente lá",
+          "texto": "Eco que chega antes do som, poeira parada no ar, e uma linha dourada que só corre num sentido."
+        },
+        {
+          "titulo": "O que dizem os registros",
+          "texto": "Éon guarda a ordem dos acontecimentos. Dá pra mexer no ritmo e na duração; no que já aconteceu, não."
+        },
+        {
+          "titulo": "O que restou escrito",
+          "texto": "Chronus não oferece viagem no tempo - ele existe justamente pra impedir que passado, presente e futuro se misturem. O que o Fluxo dele concede é peso sobre a sequência: agir antes de quem era mais rápido, fazer um veneno levar uma hora em vez de um segundo, sustentar de pé uma ruína que já devia ter caído."
+        }
+      ]
+    },
+    {
+      "id": "erebus",
+      "nome": "O Vazio",
+      "epiteto": "Depois do fim ainda tem uma coisa: deixar de ter existido",
+      "deidade": "Erebus",
+      "camadas": [
+        {
+          "titulo": "O que se sente lá",
+          "texto": "Nenhum eco, contorno nenhum que a memória consiga segurar, e a impressão de estar na última borda que ainda conta como lugar."
+        },
+        {
+          "titulo": "O que dizem os registros",
+          "texto": "O Vazio não acaba com vidas. Apaga vínculo, rastro e sentido, até que o resto da existência não perceba mais que faltou alguma coisa."
+        },
+        {
+          "titulo": "O que restou escrito",
+          "texto": "Erebus governa o Vazio, que não é a morte. O que chega em Limiar terminou, e coisa terminada dá pra lembrar. O que o Vazio apaga não deixa nem fim pra guardar - a Biblioteca de Arkarin nem chega a ter um livro pra escrever."
+        }
+      ]
+    },
+    {
+      "id": "mulher-carmesim",
+      "nome": "Limiar",
+      "epiteto": "Todo fim precisa de um lugar onde chegar",
+      "deidade": "Mulher Carmesim",
+      "camadas": [
+        {
+          "titulo": "O que se sente lá",
+          "texto": "Céu cor de vinho, corredor de arquivo sem fim, e o silêncio de uma sentença que já foi dada."
+        },
+        {
+          "titulo": "O que dizem os registros",
+          "texto": "Limiar recebe o que acabou, guarda o que aquilo foi, e impede que terminar seja confundido com sumir."
+        },
+        {
+          "titulo": "O que restou escrito",
+          "texto": "Limiar é a chegada de todas as outras Árvores, e por isso fica no centro das órbitas. O Fluxo dela é o Fim; entre mortais, a única vertente que dá pra alcançar é o Sangue, e ninguém encosta nele por curiosidade."
+        }
+      ]
+    }
+  ]
+}
