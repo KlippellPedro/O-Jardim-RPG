@@ -29,7 +29,7 @@ cada faixa. Os capítulos de Experiência, Legados e Sistema Base leem os dois.
 
 `bestiario/deidades-v1.json` são as fichas das onze Deidades, também só do servidor e só para o Mestre.
 `regras/dadivas-v1.json` traz as onze Dádivas dos Fluxos e os graus da oferenda (público: o livro gera a tabela dele). O texto nunca cita o estado de uma deidade; o que o Mestre decide sobre quem responde fica só no `corpoMestre` do capítulo Frutos do Éden e Implantes.
-`bestiario/lendas-v1.json` é o Livro da Verdade (a verdade, a consequência e a manchete das 28 lendas), só do servidor: a mesa só recebe a página de uma lenda depois que ela cai.
+`bestiario/lendas-v1.json` é o Livro da Verdade (o registro do cronista, o que muda no mundo, a consequência e a manchete das 28 lendas), só do servidor: a mesa só recebe a página de uma lenda depois que ela cai.
 `bestiario/loot-criaturas.json` é a tabela de saque de cada criatura e **só o servidor
 lê**: não pode ser importado pelo navegador (a fronteira de conteúdo barra) e o
 ZIP da plataforma precisa levar a pasta `bestiario`. `bestiario/familias-v1.json` declara as famílias e os únicos do Bestiário (o site

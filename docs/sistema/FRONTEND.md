@@ -195,11 +195,12 @@ Telas novas desta leva, com o contrato de servidor em
   bloco "O que mudou", a ficha completa lista as fases, e o editor da criatura tem botões para
   trocar a fase à mão. Ver [Integração](INTEGRACAO.md#fases-de-chefe).
 - **Livro da Verdade** ([LivroDaVerdadePage.tsx](../../src/pages/Mundo/LivroDaVerdadePage.tsx),
-  `/mundo/livro-da-verdade`, botão na página do Mundo): grade de páginas. A mesa vê as lendas caídas
-  abertas (verdade, "O que mudou no mundo", data, sessão e quem estava lá) e, no lugar das outras, uma
-  página rasurada (`RasuraTitulo`, `RasuraTexto`, `CarimboRetido`) cuja semente é só o número da vaga. O
-  Mestre vê as 28, pode ler a página antes da queda, marcar uma queda fora da Sessão e desfazer uma
-  queda (com confirmação). Na Sessão, [AvisoDeLendaCaida.tsx](../../src/pages/Sessao/components/AvisoDeLendaCaida.tsx)
+  `/mundo/livro-da-verdade`, botão na página do Mundo): sumário à esquerda e uma página por vez à direita (no celular, sumário em
+  cima e a escolha rola até a página). A mesa vê as lendas caídas abertas ("Registro do cronista", "O
+  que muda no mundo", "No site" com os efeitos, data, sessão e quem estava lá) e, no lugar das outras,
+  uma linha e uma página rasuradas (`RasuraTitulo`, `RasuraTexto`, `CarimboRetido`) cuja semente é só o
+  número da vaga. O Mestre vê as 28 por inteiro antes da queda, inclusive o que sai sozinho (manchete,
+  marco do calendário e selo), marca uma queda fora da Sessão e desfaz uma queda (com confirmação). Na Sessão, [AvisoDeLendaCaida.tsx](../../src/pages/Sessao/components/AvisoDeLendaCaida.tsx)
   mostra para a mesa inteira "Uma lenda caiu" com um link para a página (`avisosDeLendaNova` no
   `useSessaoStore`; a primeira leitura da sessão nunca avisa). A galeria de conquistas junta os
   selos de lenda bloqueados num cartão só, "Matador de Lendas", com a contagem dos já conquistados.

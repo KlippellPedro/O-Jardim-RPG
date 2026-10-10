@@ -73,10 +73,13 @@ class DadosDasLendasTests(unittest.TestCase):
             self.assertLessEqual(len(lenda["calendario"]["nota"]), 600)
             self.assertEqual(lenda["calendario"]["nota"], lenda["consequencia"])
             self.assertLessEqual(len(lenda["manchete"]), 160)
+            # O que acontece vem dito por inteiro: de dois a quatro fatos, cada um uma frase de verdade.
+            self.assertTrue(2 <= len(lenda["acontece"]) <= 4, lenda["id"])
+            self.assertTrue(all(30 <= len(fato) <= 300 for fato in lenda["acontece"]), lenda["id"])
 
     def test_tom_do_texto_para_o_jogador(self):
         for lenda in self.lendas:
-            texto = " ".join([lenda["nome"], lenda["epiteto"], lenda["manchete"], lenda["consequencia"], *lenda["verdade"], lenda["calendario"]["titulo"]])
+            texto = " ".join([lenda["nome"], lenda["epiteto"], lenda["manchete"], lenda["consequencia"], *lenda["verdade"], *lenda["acontece"], lenda["calendario"]["titulo"]])
             self.assertNotRegex(texto, "[—–]", lenda["id"])
             self.assertNotRegex(texto, r"(?i)\beco(s)?\b", lenda["id"])
             self.assertNotRegex(texto, r"(?i)não é [^.;:]{1,60}, é ", lenda["id"])
@@ -276,7 +279,8 @@ class LivroDaVerdadeBancoTests(unittest.TestCase):
         self.assertIn("céu verdadeiro", eventos[0]["nota"])
 
         self.assertEqual(len(self.manchetes), 1)
-        self.assertIn("Leviatã Espelhado", self.manchetes[0])
+        self.assertIn("Vaelthor caiu", self.manchetes[0])
+        self.assertIn("• O mar onde ele viveu volta a refletir", self.manchetes[0], "a manchete conta o que acontece")
         self.assertIn("Estavam lá: Ana e Bia.", self.manchetes[0])
         self.assertNotIn("campanha", self.manchetes[0].lower())
 
@@ -326,6 +330,7 @@ class LivroDaVerdadeBancoTests(unittest.TestCase):
         self.assertTrue(aberta["caida"])
         self.assertEqual(aberta["nome"], "Nyxhael")
         self.assertEqual(len(aberta["verdade"]), 2)
+        self.assertTrue(aberta["acontece"], "a página aberta diz o que aconteceu no mundo")
         self.assertEqual(aberta["sessao"], "Caçada")
         self.assertEqual(sorted(aberta["por"]), ["Ana", "Bia"])
         retidas = [item for item in depois["entradas"] if not item["caida"]]
@@ -343,7 +348,9 @@ class LivroDaVerdadeBancoTests(unittest.TestCase):
         livro = self._livro(self.mestre)
         self.assertTrue(livro["gestor"])
         self.assertEqual(len(livro["entradas"]), 28)
-        self.assertTrue(all(item["nome"] and item["verdade"] and item["consequencia"] and not item["caida"] for item in livro["entradas"]))
+        self.assertTrue(all(item["nome"] and item["verdade"] and item["consequencia"] and item["acontece"] and not item["caida"] for item in livro["entradas"]))
+        # O Mestre sabe antes o que o site vai publicar sozinho na queda.
+        self.assertTrue(all(item["manchete"] and item["selo"].startswith("Matador de ") for item in livro["entradas"]))
         self.assertEqual([item["vd"] for item in livro["entradas"]], sorted(item["vd"] for item in livro["entradas"]))
 
     def test_o_estado_da_sessao_lista_as_lendas_caidas_para_todos(self):

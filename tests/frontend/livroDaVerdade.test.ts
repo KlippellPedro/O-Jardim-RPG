@@ -10,7 +10,7 @@ import { avisosDeLendaNova } from '../../src/store/useSessaoStore';
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const lerJson = (relativo: string) => JSON.parse(readFileSync(path.join(raiz, relativo), 'utf-8'));
 
-type Lenda = { id: string; nome: string; epiteto: string; vd: number; verdade: string[]; consequencia: string; manchete: string; calendario: { titulo: string; nota: string } };
+type Lenda = { id: string; nome: string; epiteto: string; vd: number; verdade: string[]; consequencia: string; acontece: string[]; manchete: string; calendario: { titulo: string; nota: string } };
 const lendas: Lenda[] = lerJson('data/bestiario/lendas-v1.json').lendas;
 
 const lenda = (id: string) => ({ id, nome: id.toUpperCase(), epiteto: 'o teste', consequencia: 'Algo mudou.' });
@@ -29,7 +29,7 @@ test('o aviso de lenda só dispara para quem caiu depois da primeira leitura da 
 
 test('a página retida é a única sem nome, e o Mestre nunca recebe página retida', () => {
   const retida: PaginaDoLivro = { id: 'retida-0', caida: false, retida: true };
-  const aberta: PaginaDoLivro = { id: 'vaelthor', caida: true, nome: 'V', epiteto: 'e', verdade: [], consequencia: 'c', caiu_em: null, sessao: null, por: [] };
+  const aberta: PaginaDoLivro = { id: 'vaelthor', caida: true, nome: 'V', epiteto: 'e', verdade: [], consequencia: 'c', acontece: [], efeitos: [], caiu_em: null, sessao: null, por: [] };
   assert.equal(paginaEstaRetida(retida), true);
   assert.equal(paginaEstaRetida(aberta), false);
 });
@@ -50,10 +50,11 @@ test('as 28 lendas do Livro batem com as fichas do Bestiário', () => {
 
 test('o texto do Livro segue o tom do livro de regras', () => {
   for (const item of lendas) {
-    const texto = [item.nome, item.epiteto, item.manchete, item.consequencia, ...item.verdade, item.calendario.titulo, item.calendario.nota].join(' ');
+    const texto = [item.nome, item.epiteto, item.manchete, item.consequencia, ...item.verdade, ...item.acontece, item.calendario.titulo, item.calendario.nota].join(' ');
     assert.doesNotMatch(texto, /[—–]/, `${item.id}: travessão`);
     assert.doesNotMatch(texto, /\beco(s)?\b/i, `${item.id}: "eco"`);
     assert.doesNotMatch(texto, /não é [^.;:]{1,60}, é /i, `${item.id}: antítese`);
+    assert.ok(item.acontece.length >= 2 && item.acontece.length <= 4, `${item.id}: o que acontece`);
     assert.ok(item.calendario.titulo.length <= 80 && item.calendario.nota.length <= 600, `${item.id}: limite do calendário`);
   }
 });

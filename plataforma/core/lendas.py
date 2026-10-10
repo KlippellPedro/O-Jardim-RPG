@@ -168,8 +168,8 @@ def _texto_da_manchete(lenda: dict, grupo: list[dict]) -> str:
     linhas = [
         "🗞️ **EXTRA NO JARDIM**",
         f"**{lenda['manchete']}**",
-        lenda["consequencia"],
     ]
+    linhas.extend(f"• {fato}" for fato in lenda.get("acontece") or [])
     linhas.extend(f"📌 {efeito['texto']}" for efeito in lenda.get("efeitos") or [] if efeito.get("texto"))
     if grupo:
         nomes = [item["nome"] for item in grupo]
@@ -353,6 +353,7 @@ def livro(connection, campanha_id: UUID, *, gestor: bool) -> dict:
                 "epiteto": lenda["epiteto"],
                 "verdade": lenda["verdade"],
                 "consequencia": lenda["consequencia"],
+                "acontece": list(lenda.get("acontece") or []),
                 "efeitos": [efeito["texto"] for efeito in lenda.get("efeitos") or [] if efeito.get("texto")],
                 "caiu_em": linha["criada_em"].isoformat() if isinstance(linha["criada_em"], datetime) else None,
                 "sessao": titulos.get(linha["sessao_id"]) or None,
@@ -372,7 +373,11 @@ def livro(connection, campanha_id: UUID, *, gestor: bool) -> dict:
                 "vd": lenda["vd"],
                 "verdade": lenda["verdade"],
                 "consequencia": lenda["consequencia"],
+                "acontece": list(lenda.get("acontece") or []),
                 "efeitos": [efeito["texto"] for efeito in lenda.get("efeitos") or [] if efeito.get("texto")],
+                # O que o site publica sozinho na queda, para o Mestre saber antes.
+                "manchete": lenda["manchete"],
+                "selo": f"Matador de {lenda['nome']}",
             }
             for lenda in todas()
             if lenda["id"] not in caidas

@@ -164,9 +164,12 @@ fases, o que a mesa vê) e `tests/frontend/montadorEEfasesDeChefe.test.ts` (dado
 ### Livro da Verdade
 
 As 28 lendas são as criaturas do catálogo cuja ficha traz "Se X cair" (13 únicas e 15 estágios de
-família). O texto de cada uma (a verdade, a consequência no passado, o marco do calendário e a
-manchete) mora em `data/bestiario/lendas-v1.json`, lido só pelo servidor por
+família). O texto de cada uma mora em `data/bestiario/lendas-v1.json`, lido só pelo servidor por
 [lendas.py](../../plataforma/core/lendas.py); a fronteira de conteúdo barra o arquivo no navegador.
+Cada lenda traz `verdade` (o registro do cronista: seco, com data, número e fato, sem frase de
+efeito), `acontece` (de dois a quatro fatos que dizem por inteiro o que muda no mundo e na mesa),
+`consequencia` (a frase "Se X cair" da ficha, no passado, que vai no aviso e na nota do calendário),
+`manchete` e, em cinco delas, `efeitos`.
 
 - `campanha_lendas` (migração 52, no backup) guarda uma linha por lenda caída ou Deidade encarada em
   cada sessão: `tipo` (`queda` ou `encontro_deidade`), `personagens` (quem estava na mesa) e o id do
@@ -177,7 +180,7 @@ manchete) mora em `data/bestiario/lendas-v1.json`, lido só pelo servidor por
   nunca desfaz o golpe. O grupo é o conjunto de personagens de jogador que estão na cena.
 - **Primeira queda da lenda na campanha:** abre a página no Livro, grava o acontecimento no calendário
   (aberto, no dia de hoje, com a consequência como nota), avisa os membros no site e enfileira a
-  manchete em `avisos_pendentes` (tipo de aviso `manchete`, ligado por padrão, categoria `noticia`, então
+  manchete em `avisos_pendentes` (a manchete seguida da lista `acontece`, dos efeitos e de quem estava lá; tipo de aviso `manchete`, ligado por padrão, categoria `noticia`, então
   vai para o canal definido em `/jornal canal` para Notícia). Quedas seguintes da mesma lenda em outra
   sessão só creditam o selo.
 - **Estado ao vivo:** `lendas` (id, nome, epíteto, consequência, data) com as quedas da sessão, para a
@@ -189,7 +192,8 @@ manchete) mora em `data/bestiario/lendas-v1.json`, lido só pelo servidor por
   com ela na cena, ou quando ela entra com o combate aberto; não vira lenda, página nem manchete. O
   gerador de voz do Sábio ignora selos secretos, porque o `manifest.json` é público.
 - **Rotas** (`routers/livro_da_verdade.py`): `GET /livro-da-verdade/{campanha}` (membros; a mesa recebe
-  páginas abertas e `retida` sem nome nem VD, o Mestre e o assistente recebem tudo),
+  páginas abertas e `retida` sem nome nem VD, o Mestre e o assistente recebem tudo, inclusive a
+  `manchete` e o `selo` que a queda vai publicar),
   `POST .../{lenda}/queda` (Mestre: marca à mão uma queda fora da Sessão; 409 se já caiu) e
   `DELETE .../{lenda}/queda` (Mestre: some a página, o marco do calendário e o selo de quem foi
   creditado; a manchete publicada continua). As duas gravam em `eventos_auditoria`.

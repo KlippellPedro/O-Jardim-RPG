@@ -9,7 +9,9 @@ export interface IPaginaAberta {
   epiteto: string;
   verdade: string[];
   consequencia: string;
-  /** O que a queda mudou de verdade no mundo (estação forçada, preço), por alguns meses. */
+  /** O que mudou no mundo e na mesa, dito por inteiro. */
+  acontece: string[];
+  /** O que a queda mudou de verdade no site (estação forçada, preço), por alguns meses. */
   efeitos: string[];
   caiu_em: string | null;
   sessao: string | null;
@@ -26,7 +28,11 @@ export interface IPaginaDeLendaEmPe {
   vd: number;
   verdade: string[];
   consequencia: string;
+  acontece: string[];
   efeitos: string[];
+  /** O que o site publica sozinho na queda: a manchete no Discord e o selo secreto de quem estava na cena. */
+  manchete: string;
+  selo: string;
 }
 
 /** Para a mesa: uma página rasurada, sem nome nem pista. */

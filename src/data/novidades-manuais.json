@@ -2,6 +2,18 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-10-livro-da-verdade-cronista",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Livro da Verdade reescrito e mais fácil de ler",
+      "detalhes": [
+        "Cada página agora é o registro de um cronista: o que se viu depois da queda, com data, número e o detalhe estranho que ninguém explica.",
+        "Embaixo do registro vem a lista completa do que muda no mundo e na mesa, e o que muda na Loja e no calendário, com valor e duração.",
+        "O livro abre com um sumário ao lado. As páginas que ainda não abriram continuam rasuradas."
+      ]
+    },
+    {
       "id": "2026-10-10-loja-filtros-notebook",
       "data": "2026-10-10",
       "tipo": "correcao",
