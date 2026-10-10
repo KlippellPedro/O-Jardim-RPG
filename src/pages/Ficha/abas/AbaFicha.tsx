@@ -24,6 +24,7 @@ import {
   obterTemporario,
   bonusIniciativaFicha,
   desvantagensAutomaticasTeste,
+  efeitosCondicoesNoTeste,
   movimentoBloqueadoPorCondicao,
   movimentoComCondicoes,
   multiplicadorMovimentoCansaco,
@@ -439,18 +440,23 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   const [rolandoTeste, setRolandoTeste] = useState(false);
   const [resultadoTeste, setResultadoTeste] = useState<{ atributo: TAtributo; resultado: number | null } | null>(null);
 
+  // Teste de atributo puro: Cansaço e as condições que valem para o atributo (Enfraquecido tira 2 de Força).
   const modificadorTeste = (attr: TAtributo) => {
     const fisico = ['forca', 'destreza', 'constituicao'].includes(attr);
-    return bonusTesteAtributo(attrs[attr], penalidadeCansacoTeste(status.cansacoAtual, fisico));
+    return bonusTesteAtributo(attrs[attr], penalidadeCansacoTeste(status.cansacoAtual, fisico))
+      + efeitosCondicoesNoTeste(f.condicoesAtivas, { atributoId: attr }).bonus;
   };
+  const desvantagensTesteAtributo = (attr: TAtributo) => (
+    desvantagensAutomaticasTeste(status.cansacoAtual, ['forca', 'destreza', 'constituicao'].includes(attr), resumoEquipamento.sobrecarregado)
+    + efeitosCondicoesNoTeste(f.condicoesAtivas, { atributoId: attr }).desvantagens
+  );
 
   const handleRolarTeste = async (attr: TAtributo) => {
     if (!campanhaAtiva?.id) {
       avisar.aviso('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
       return;
     }
-    const fisico = ['forca', 'destreza', 'constituicao'].includes(attr);
-    const desvantagens = desvantagensAutomaticasTeste(status.cansacoAtual, fisico, resumoEquipamento.sobrecarregado);
+    const desvantagens = desvantagensTesteAtributo(attr);
     setRolandoTeste(true);
     setResultadoTeste(null);
     try {
@@ -1079,7 +1085,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
             chave: attr,
             rotulo: NOMES_ATRIBUTOS[attr],
             mod: modificadorTeste(attr),
-            desvantagens: desvantagensAutomaticasTeste(status.cansacoAtual, ['forca', 'destreza', 'constituicao'].includes(attr), resumoEquipamento.sobrecarregado),
+            desvantagens: desvantagensTesteAtributo(attr),
           }))}
           condicoes={(f.condicoesAtivas || []).map((c: any) => ({ id: c.id, nome: c.nome, descricao: c.descricao }))}
           onRemoverCondicao={(indice) => {

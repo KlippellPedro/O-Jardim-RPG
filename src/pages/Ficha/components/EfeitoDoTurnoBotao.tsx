@@ -51,11 +51,11 @@ export const EfeitoDoTurnoBotao = ({ condicao, character, onUpdate }: IProps) =>
       const { maxVida, constituicao } = calcularVidaDaFicha(character, catalogo);
       const resolvido = efeito.tipo === 'dano'
         ? resolverDanoDoTurno(rolado, character.ficha?.resistencias, efeito.resistenciaId)
-        : { final: rolado, reduzido: 0, imune: false };
+        : { final: rolado, reduzido: 0, imune: false, dobrado: false };
 
       onUpdate(['ficha', 'status'], aplicarEfeitoNaVida(statusAntes, efeito.tipo, resolvido.final, maxVida, constituicao));
 
-      const base = `${efeito.rotulo}: ${efeito.formula} deu ${rolado}.`;
+      const base = `${efeito.rotulo}: ${efeito.formula} deu ${rolado}.${resolvido.dobrado ? ` Vulnerável a ${efeito.tipoDeDano}: o dano dobrou para ${rolado * 2}.` : ''}`;
       const texto = efeito.tipo === 'cura'
         ? `${base} Você recuperou ${resolvido.final} de Vida.`
         : resolvido.imune

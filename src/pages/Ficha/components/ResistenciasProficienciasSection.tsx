@@ -203,7 +203,7 @@ export const ResistenciasSection = ({ ficha, isMestre, onUpdate }: IResistencias
                 ) : (
                   <span className="shrink-0 rounded-md bg-white/[0.05] px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#c7a44c]">
                     {MODOS_RESISTENCIA.find((modo) => modo.id === entrada.modo)?.rotulo}
-                    {entrada.modo !== 'imunidade' && entrada.valor !== null ? ` ${entrada.valor}` : ''}
+                    {entrada.modo === 'resistencia' && entrada.valor !== null ? ` ${entrada.valor}` : ''}
                   </span>
                 )}
               </div>
@@ -212,12 +212,12 @@ export const ResistenciasSection = ({ ficha, isMestre, onUpdate }: IResistencias
                   <select
                     aria-label={`Tipo de proteção contra ${entrada.nome}`}
                     value={entrada.modo}
-                    onChange={(event) => alterar(indice, { modo: event.target.value as ModoResistencia, ...(event.target.value === 'imunidade' ? { valor: null } : {}) })}
+                    onChange={(event) => alterar(indice, { modo: event.target.value as ModoResistencia, ...(event.target.value !== 'resistencia' ? { valor: null } : {}) })}
                     className="min-w-0 flex-1 rounded-md border border-white/10 bg-[#0d0c12] px-1.5 py-1 text-[11px] text-gray-300 focus:border-[#c7a44c]/50 focus:outline-none"
                   >
                     {MODOS_RESISTENCIA.map((modo) => <option key={modo.id} value={modo.id}>{modo.rotulo}</option>)}
                   </select>
-                  {entrada.modo !== 'imunidade' && (
+                  {entrada.modo === 'resistencia' && (
                     <input
                       type="number"
                       min={0}

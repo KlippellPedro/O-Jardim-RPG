@@ -21,12 +21,15 @@ import {
   grauValido,
   normalizarAflicoesAtivas,
   novaAflicaoAtiva,
+  sanidadeAoEntrar,
   textoDoPeriodo,
   type GrauTeste,
   type IAflicaoAtiva,
   type ITesteAflicao,
 } from '../../../services/aflicoesFichaService';
 import { confirmar } from '../../../components/avisos/confirmacao';
+import { avisar } from '../../../components/avisos/avisos';
+import { atualizarStatusVital, campoTemporario, obterStatusFicha } from '../../../services/statusService';
 
 interface IAflicoesSectionProps {
   character: any;
@@ -113,6 +116,41 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
     return ` Ao entrar: ${notas.join(' ')}${cansaco > 0 ? ' O Cansaço já foi somado na ficha.' : ''}`;
   };
 
+  // "Perca 1d4 de Sanidade." ao entrar no estágio: rola no servidor (fica no registro da mesa) e desconta.
+  // Grava só os campos de Sanidade, para não atropelar o Cansaço que o mesmo passo já somou.
+  const cobrarSanidade = async (aflicao: IAflicao, de: number, para: number) => {
+    const formulas = sanidadeAoEntrar(aflicao, de, para);
+    if (!formulas.length || !campanhaAtiva?.id) return;
+    let perda = 0;
+    for (const formula of formulas) {
+      const { registro } = await registrosApi.rolar({
+        campanhaId: campanhaAtiva.id,
+        personagemId: character.id,
+        titulo: `${aflicao.titulo}: perda de Sanidade`,
+        formula,
+        origem: { tipo: 'aflicao', aflicaoId: aflicao.id, motivo: 'sanidade' },
+      });
+      perda += Math.max(0, Math.trunc(Number(registro.resultado) || 0));
+    }
+    if (perda <= 0) return;
+    const antes = obterStatusFicha(character.ficha);
+    const campoExtra = campoTemporario('sanidadeAtual');
+    const depois = atualizarStatusVital(antes, 'sanidadeAtual', -perda, Number(antes.sanidadeMaxima) || 100, 10);
+    onUpdate(['ficha', 'status', 'sanidadeAtual'], depois.sanidadeAtual);
+    if (depois[campoExtra] !== antes[campoExtra]) onUpdate(['ficha', 'status', campoExtra], depois[campoExtra]);
+    avisar.info(`${aflicao.titulo}: ${formulas.join(' + ')} deu ${perda}. Você perdeu ${perda} de Sanidade.`, {
+      titulo: 'Perda de Sanidade',
+      chave: `sanidade-aflicao:${aflicao.id}`,
+      acao: {
+        rotulo: 'Desfazer',
+        aoClicar: () => {
+          onUpdate(['ficha', 'status', 'sanidadeAtual'], antes.sanidadeAtual ?? (Number(antes.sanidadeMaxima) || 100));
+          if (depois[campoExtra] !== antes[campoExtra]) onUpdate(['ficha', 'status', campoExtra], antes[campoExtra] ?? 0);
+        },
+      },
+    });
+  };
+
   const executar = async (chave: string, acao: () => Promise<void>) => {
     if (rolando) return;
     setRolando(chave);
@@ -136,6 +174,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
       const teste: ITesteAflicao | null = comTeste ? { quando: new Date().toISOString(), motivo: 'nova-exposicao', ...resultado, de: existente.estagio, para } : existente.ultimoTeste ?? null;
       salvar(ativas.map((ativa) => (ativa.id === existente.id ? { ...ativa, estagio: para, ultimoTeste: teste } : ativa)));
       setAviso({ tipo: 'ok', texto: para > existente.estagio ? `${aflicao.titulo} piorou para o estágio ${para}.${textoAoEntrar(aflicao, existente.estagio, para)}` : `${aflicao.titulo} não piorou desta vez.` });
+      await cobrarSanidade(aflicao, existente.estagio, para);
     } else {
       const resultado = comTeste ? await rolarFortitude(aflicao, 'exposicao') : { grau: 'falha' as GrauTeste, natural: 0, total: 0 };
       if (!resultado) return;
@@ -147,6 +186,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
         salvar([...ativas, novaAflicaoAtiva(aflicao, estagio, teste)]);
         const incubacao = aflicao.incubacao.quantidade > 0 ? ` Começa depois de ${textoDoPeriodo(aflicao.incubacao)} de incubação.` : '';
         setAviso({ tipo: 'ok', texto: `Pegou ${aflicao.titulo}, estágio ${estagio}.${incubacao}${textoAoEntrar(aflicao, 0, estagio)}` });
+        await cobrarSanidade(aflicao, 0, estagio);
       }
     }
     setEscolhendo(false);
@@ -159,7 +199,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
     const para = estagioDoIntervalo(aflicao, ativa.estagio, resultado.grau);
     if (para === 0) {
       salvar(ativas.filter((item) => item.id !== ativa.id));
-      setAviso({ tipo: 'ok', texto: `${aflicao.titulo} passou (${ROTULO_GRAU[resultado.grau]}). Atributo drenado volta conforme a recuperação.` });
+      setAviso({ tipo: 'ok', texto: `${aflicao.titulo} passou (${ROTULO_GRAU[resultado.grau]}). Se havia atributo drenado, ele já voltou na ficha.` });
       return;
     }
     const teste: ITesteAflicao = { quando: new Date().toISOString(), motivo: 'intervalo', ...resultado, de: ativa.estagio, para };
@@ -168,6 +208,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
       tipo: 'ok',
       texto: `${ROTULO_GRAU[resultado.grau][0].toUpperCase()}${ROTULO_GRAU[resultado.grau].slice(1)} (${resultado.total}): ${para === ativa.estagio ? `segue no estágio ${para}` : `vai para o estágio ${para}`}.${textoAoEntrar(aflicao, ativa.estagio, para)}`,
     });
+    await cobrarSanidade(aflicao, ativa.estagio, para);
   });
 
   const mudarEstagio = (ativa: IAflicaoAtiva, aflicao: IAflicao, delta: number) => {
@@ -180,6 +221,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
     salvar(ativas.map((item) => (item.id === ativa.id ? { ...item, estagio: para } : item)));
     const aoEntrar = textoAoEntrar(aflicao, ativa.estagio, para);
     if (aoEntrar) setAviso({ tipo: 'ok', texto: `${aflicao.titulo} foi para o estágio ${para}.${aoEntrar}` });
+    void cobrarSanidade(aflicao, ativa.estagio, para).catch(() => undefined);
   };
 
   const encerrar = async (ativa: IAflicaoAtiva, aflicao: IAflicao) => {
@@ -239,7 +281,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
               <ul className="mt-2 space-y-0.5 text-xs leading-5 text-gray-300">
                 <li className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Estágio {ativa.estagio}</li>
                 {estagio.efeitos.map((efeito) => <li key={efeito}>{efeito}</li>)}
-                {estagio.drenagemAtributo ? <li>{estagio.drenagemAtributo.atributo} −{estagio.drenagemAtributo.valor} (temporário)</li> : null}
+                {estagio.drenagemAtributo ? <li>{estagio.drenagemAtributo.atributo} −{estagio.drenagemAtributo.valor} (temporário, já aplicado na ficha)</li> : null}
               </ul>
 
               {ativa.ultimoTeste ? (

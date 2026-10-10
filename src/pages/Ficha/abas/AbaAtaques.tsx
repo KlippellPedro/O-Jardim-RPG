@@ -120,6 +120,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
   }, []);
 
   const campanhaId = useAuthStore(state => state.campanhaAtiva?.id);
+  const usuarioId = useAuthStore(state => state.usuario?.id);
   const mutateEconomy = useCharacterStore((state) => state.mutateEconomy);
 
   const ataquesManuais: IAtaque[] = (character.ficha?.ataques || []).map((ataque: Partial<IAtaque>) => ({
@@ -148,6 +149,36 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     }));
 
   const ordemAtaques: string[] = character.ficha?.ordemAtaques || [];
+
+  // Ataques corpo a corpo criados à mão antes da opção "somar atributo" não somam nada no dano, para não dobrar
+  // um bônus que o jogador já tinha posto na fórmula. Um aviso, uma vez só e só para o dono, oferece ligar.
+  useEffect(() => {
+    const fichaAtual = character.ficha || {};
+    if (!character.id || fichaAtual.avisoAtributoDanoVisto) return;
+    if (!usuarioId || (character.donoUsuarioId && character.donoUsuarioId !== usuarioId)) return;
+    const antigos = (Array.isArray(fichaAtual.ataques) ? fichaAtual.ataques : [])
+      .filter((ataque: Partial<IAtaque>) => ataque.somarForca === undefined && (ataque.tipo || TIPO_CORPO_A_CORPO) === TIPO_CORPO_A_CORPO && ataque.dano);
+    if (antigos.length === 0) return;
+    onUpdate(['ficha', 'avisoAtributoDanoVisto'], true);
+    const ids = new Set(antigos.map((ataque: Partial<IAtaque>) => ataque.id));
+    const nomes = antigos.map((ataque: Partial<IAtaque>) => ataque.nome).filter(Boolean).join(', ');
+    avisar.info(
+      `Seus ataques corpo a corpo criados à mão (${nomes}) não somam atributo no dano, porque são de antes dessa opção. Se a fórmula deles ainda não tem esse bônus, toque em Somar. Dá para mudar um por um em Editar.`,
+      {
+        titulo: 'Atributo no dano',
+        chave: `atributo-dano:${character.id}`,
+        acao: {
+          rotulo: 'Somar',
+          aoClicar: () => {
+            // Lê a lista mais nova do store; se o personagem não estiver lá, usa a que o aviso viu (nunca grava vazio).
+            const atual = useCharacterStore.getState().characters.find((item) => item.id === character.id);
+            const lista = Array.isArray(atual?.ficha?.ataques) ? atual.ficha.ataques : fichaAtual.ataques;
+            onUpdate(['ficha', 'ataques'], lista.map((ataque: Partial<IAtaque>) => (ids.has(ataque.id) ? { ...ataque, somarForca: true } : ataque)));
+          },
+        },
+      },
+    );
+  }, [character.id, usuarioId]); // eslint-disable-line react-hooks/exhaustive-deps
   const ataques: IAtaque[] = [...armasEquipadas, ...ataquesManuais];
   const ficha = character.ficha || {};
   const status = obterStatusFicha(ficha);

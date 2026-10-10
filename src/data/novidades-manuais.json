@@ -2,6 +2,19 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-10-atributos-aflicoes-vulnerabilidade",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Testes de atributo, aflições e vulnerabilidade fazendo as contas",
+      "detalhes": [
+        "O teste de atributo (na ficha e no Modo Mesa) agora conta as condições, como o Enfraquecido tirando 2 dos testes de Força.",
+        "Aflições que drenam atributo já tiram o valor da ficha enquanto duram, e ele volta sozinho quando a aflição passa. A perda de Sanidade de um estágio é rolada e descontada na hora, com Desfazer.",
+        "Vulnerabilidade agora dobra o dano daquele tipo, antes da Resistência. O dano do turno das condições já usa isso.",
+        "Quem tem ataques corpo a corpo antigos criados à mão recebe um aviso, uma vez só, para escolher se eles passam a somar o atributo no dano."
+      ]
+    },
+    {
       "id": "2026-10-10-dano-do-turno-lesoes-inspirado-guias",
       "data": "2026-10-10",
       "tipo": "melhoria",

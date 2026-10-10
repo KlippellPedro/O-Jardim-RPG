@@ -20,7 +20,13 @@ test('a lista junta so entradas validas, sem repetir id, da mais nova para a mai
 test('o mural publicado vem so das novidades escritas a mao, sem travessao', () => {
   const manuais = JSON.parse(readFileSync(new URL('../../src/data/novidades-manuais.json', import.meta.url), 'utf8'));
   const publicado = JSON.parse(readFileSync(new URL('../../src/data/novidades.json', import.meta.url), 'utf8'));
-  assert.deepEqual(publicado.itens.map((i: { id: string }) => i.id).sort(), manuais.itens.map((i: { id: string }) => i.id).sort());
+  // O publicado é exatamente o que o gerador monta das entradas escritas à mão (as mais recentes, até o limite).
+  assert.deepEqual(
+    publicado.itens.map((i: { id: string }) => i.id),
+    montarNovidades(manuais.itens).map((i: { id: string }) => i.id),
+  );
+  const idsManuais = new Set(manuais.itens.map((i: { id: string }) => i.id));
+  assert.ok(publicado.itens.every((i: { id: string }) => idsManuais.has(i.id)), 'o mural só publica entradas escritas à mão');
   assert.ok(!JSON.stringify(publicado).includes('—'));
 });
 
