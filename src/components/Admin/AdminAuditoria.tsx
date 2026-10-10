@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { adminApi } from '../../services/adminApi';
 import { ScrollText, Loader2, RefreshCw, Trash2 } from 'lucide-react';
+import { confirmar } from '../avisos/confirmacao';
 
 interface IEventoAuditoria {
   id: string;
@@ -39,7 +40,7 @@ export const AdminAuditoria: React.FC = () => {
   }, []);
 
   const handleLimpar = async () => {
-    if (!window.confirm('Apagar todo o histórico de auditoria da plataforma? Essa ação não pode ser desfeita.')) return;
+    if (!(await confirmar({ titulo: 'Apagar a auditoria', mensagem: 'Apagar todo o histórico de auditoria da plataforma? Essa ação não pode ser desfeita.', rotuloConfirmar: 'Apagar tudo', tom: 'perigo' }))) return;
     setIsClearing(true);
     try {
       await adminApi.limparAuditoria();

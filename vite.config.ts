@@ -12,6 +12,15 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          // O que o app inteiro usa (React, Zustand, o helper de preload do Vite)
+          // tem chunk próprio. Sem isso o Rollup põe esses módulos compartilhados
+          // dentro do primeiro chunk 3D que os importa, e a entrada do site passa
+          // a baixar Three.js e drei só para abrir o login.
+          if (id.includes('preload-helper')) return 'vendor-base'
+          const pacotes = id.split('/node_modules/')
+          if (pacotes.length === 2 && /^(react|react-dom|scheduler|zustand|use-sync-external-store)\//.test(pacotes[1])) {
+            return 'vendor-base'
+          }
           if (id.includes('/node_modules/three/')) return 'vendor-three'
           if (id.includes('/node_modules/@react-three/fiber/')) return 'vendor-react-three'
           if (id.includes('/node_modules/@react-three/drei/')) return 'vendor-react-three-drei'

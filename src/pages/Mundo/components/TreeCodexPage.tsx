@@ -16,7 +16,6 @@ import {
 import type { LoreEntry } from '../../../../data/gerado/mundoCatalog';
 import { VAZIO_ID } from '../../../../data/mundo/arvoresCatalog';
 import { secaoCronicaOculta, eventoCronicaOculto } from '../chronicleVisibility';
-import { loreBloqueado } from '../loreVisibility';
 import { useRecemRevelado } from '../revelacao';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { CarimboRetido, RasuraTexto, RasuraTitulo } from '../../../components/ui/Rasura';
@@ -24,6 +23,7 @@ import {
   buildTreeCodex,
   findCodexEntry,
   findCodexNode,
+  mapaDeBloqueios,
   type WorldCodexNode,
 } from '../worldCodex';
 import { getTreeChronicle, type WorldChronicleCatalog } from '../worldChronicles';
@@ -384,27 +384,10 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
   const selectedEntry = findCodexEntry(codex, entryType, entryId);
   const selectedNode = selectedEntry ? findCodexNode(codex.roots, selectedEntry) : undefined;
 
-  const lockedEntries = useMemo(() => {
-    const result = new Map<string, boolean>();
-    const walk = (nodes: WorldCodexNode[], parentLocked: boolean) => {
-      nodes.forEach((node) => {
-        const locked = loreBloqueado(node.entry, {
-          isMestre,
-          loreRevelado,
-          loreOculto,
-          paiBloqueado: parentLocked,
-        });
-        result.set(entryKey(node.entry), locked);
-        walk(node.children, locked);
-      });
-    };
-    walk(codex.roots, false);
-    [codex.deity, ...codex.flows, ...codex.crossTreeConcepts].forEach((entry) => {
-      if (!entry) return;
-      result.set(entryKey(entry), loreBloqueado(entry, { isMestre, loreRevelado, loreOculto }));
-    });
-    return result;
-  }, [codex, isMestre, loreOculto, loreRevelado]);
+  const lockedEntries = useMemo(
+    () => mapaDeBloqueios(codex, { isMestre, loreRevelado, loreOculto }),
+    [codex, isMestre, loreOculto, loreRevelado],
+  );
 
   const selectedLocked = selectedEntry ? lockedEntries.get(entryKey(selectedEntry)) === true : false;
   const counts = useMemo(() => ({

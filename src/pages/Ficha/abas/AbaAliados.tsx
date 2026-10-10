@@ -16,6 +16,9 @@ import { EFEITOS_FICHA_MAXIMOS, normalizarEfeitosFicha, type IEfeitoEquipamento 
 import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
 import { periciasDisponiveisParaEfeitos } from '../../../services/periciasFichaService';
 import { Select } from '../../../components/ui/Select';
+import { avisar } from '../../../components/avisos/avisos';
+import { confirmar } from '../../../components/avisos/confirmacao';
+import { listaAgora } from '../desfazerNaFicha';
 
 interface IAliado {
   id: string;
@@ -265,18 +268,23 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
     setModalAberto(false);
   };
 
-  const handleExcluir = (aliado: IAliado) => {
+  const handleExcluir = async (aliado: IAliado) => {
     if (aliado.somenteLeitura || aliado.compartilhadoDe || (!isMestre && aliado.personagensVinculados?.length)) return;
-    if (!window.confirm(`Remover o aliado "${aliado.nome}"? Esta ação não pode ser desfeita.`)) {
-      return;
-    }
-    commit(itensLocais.filter((a) => a.id !== aliado.id));
+    const confirmado = await confirmar({
+      titulo: 'Remover o aliado',
+      mensagem: `Remover o aliado "${aliado.nome}"? Esta ação não pode ser desfeita.`,
+      rotuloConfirmar: 'Remover',
+      tom: 'perigo',
+    });
+    if (!confirmado) return;
+    // A lista pode ter mudado enquanto a pergunta estava aberta: a escrita parte da de agora.
+    commit(listaAgora<IAliado>(character.id, (personagem) => personagem.ficha?.aliados).filter((a) => a.id !== aliado.id));
   };
 
   const handleAjustarVida = (aliado: IAliado, delta: number) => {
     if (aliado.somenteLeitura || aliado.compartilhadoDe || (!isMestre && aliado.personagensVinculados?.length)) return;
     if (aliado.categoria === 'complexo') {
-      alert("A vida de aliados complexos é sincronizada com a ficha deles. Modifique na ficha original.");
+      avisar.aviso("A vida de aliados complexos é sincronizada com a ficha deles. Modifique na ficha original.");
       return;
     }
     const maxima = aliado.vidaMaxima || 1;

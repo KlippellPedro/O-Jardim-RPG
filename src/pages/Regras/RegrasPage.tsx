@@ -24,6 +24,8 @@ import { useResolvedRules } from '../../hooks/useResolvedRules';
 import { useAuthStore } from '../../store/useAuthStore';
 import { usePermissoes } from '../../hooks/usePermissoes';
 import { GuidedTour } from '../../components/ui/GuidedTour';
+import { guiasAutomaticosLigados } from '../../utils/guias';
+import { classesVisiveis, liberacoesDoMembro, racasVisiveis } from '../../services/visibilidadeRegras';
 import { REGRAS_TOUR_STEPS, regrasTourJaVisto, serializarRegrasTourVisto } from './regrasTourConfig';
 import { CatalogoLegados } from './components/CatalogoLegados';
 import { CatalogoMagico } from './components/CatalogoMagico';
@@ -403,31 +405,23 @@ export const RegrasPage = () => {
     onClose: () => setMenuAberto(false),
   });
   const config = campanhaAtiva?.configuracoes ?? {};
-  const racasLiberadas = useMemo(() => new Set([
-    ...(config.racas_liberadas ?? []),
-    ...((usuario?.id && config.racas_liberadas_membros?.[usuario.id]) ?? []),
-  ]), [config.racas_liberadas, config.racas_liberadas_membros, usuario?.id]);
-  const classesLiberadas = useMemo(() => new Set([
-    ...(config.classes_liberadas ?? []),
-    ...((usuario?.id && config.classes_liberadas_membros?.[usuario.id]) ?? []),
-  ]), [config.classes_liberadas, config.classes_liberadas_membros, usuario?.id]);
+  const liberacoes = useMemo(
+    () => liberacoesDoMembro(config, usuario?.id),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [config.racas_liberadas, config.racas_liberadas_membros, config.classes_liberadas, config.classes_liberadas_membros, usuario?.id],
+  );
 
   const catalogKeys = useMemo(
     () => ordenarTopicosPorNavegacao(Object.keys(regrasCatalog).filter((key) => key !== 'mestre' || isMestre)),
     [isMestre, regrasCatalog],
   );
-  const racasVisiveis = useMemo(
-    () => isMestre
-      ? racasCatalogo
-      : racasCatalogo.filter((raca) => raca.id === 'entidade'
-        || (!raca.indisponivel && (raca.categoria !== 'esquecida' || racasLiberadas.has(raca.id)))),
-    [isMestre, racasCatalogo, racasLiberadas],
+  const racasVisiveisNoLivro = useMemo(
+    () => racasVisiveis(racasCatalogo, isMestre, liberacoes.racas),
+    [isMestre, racasCatalogo, liberacoes.racas],
   );
-  const classesVisiveis = useMemo(
-    () => isMestre
-      ? classesCatalogo
-      : classesCatalogo.filter((classe) => !classe.indisponivel && (classe.categoria !== 'esquecida' || classesLiberadas.has(classe.id))),
-    [isMestre, classesCatalogo, classesLiberadas],
+  const classesVisiveisNoLivro = useMemo(
+    () => classesVisiveis(classesCatalogo, isMestre, liberacoes.classes),
+    [isMestre, classesCatalogo, liberacoes.classes],
   );
   const topicoSolicitado = searchParams.get('topico');
   const activeTopic = topicoSolicitado && catalogKeys.includes(topicoSolicitado)
@@ -518,7 +512,7 @@ export const RegrasPage = () => {
   };
 
   useEffect(() => {
-    if (activeTopic || tourAberto || tourTentadoRef.current) return;
+    if (activeTopic || tourAberto || tourTentadoRef.current || !guiasAutomaticosLigados()) return;
     try {
       if (regrasTourJaVisto(localStorage.getItem(chaveTour))) return;
     } catch {
@@ -652,9 +646,9 @@ export const RegrasPage = () => {
                 )}
 
                 {activeTopic === 'racas' ? (
-                  <GridRacas racas={racasVisiveis} />
+                  <GridRacas racas={racasVisiveisNoLivro} />
                 ) : activeTopic === 'classes' ? (
-                  <GridClasses classes={classesVisiveis} />
+                  <GridClasses classes={classesVisiveisNoLivro} />
                 ) : activeTopic === 'catalogo-magico' ? (
                   <>
                     <RegrasContent htmlContent={topicData.corpo} />

@@ -11,6 +11,7 @@ import {
   type IPaginaRetida,
 } from '../../services/livroDaVerdadeApi';
 import { CarimboRetido, RasuraTexto, RasuraTitulo } from '../../components/ui/Rasura';
+import { confirmar } from '../../components/avisos/confirmacao';
 
 const botao = 'inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 text-xs font-bold text-gray-200 transition hover:bg-white/10 hover:text-white disabled:opacity-40';
 
@@ -147,8 +148,8 @@ export default function LivroDaVerdadePage() {
                 pagina={pagina}
                 gestor={ehMestre}
                 ocupado={ocupado}
-                onDesfazer={() => {
-                  if (window.confirm(`Desfazer a queda de ${pagina.nome}? A página fecha, o marco some do calendário e o selo sai de quem o ganhou. A manchete já publicada no Discord continua lá.`)) {
+                onDesfazer={async () => {
+                  if (await confirmar({ titulo: 'Desfazer a queda', mensagem: `Desfazer a queda de ${pagina.nome}? A página fecha, o marco some do calendário e o selo sai de quem o ganhou. A manchete já publicada no Discord continua lá.`, rotuloConfirmar: 'Desfazer a queda', tom: 'perigo' })) {
                     void agir(() => livroDaVerdadeApi.desfazerQueda(campanhaId, pagina.id));
                   }
                 }}
@@ -160,8 +161,8 @@ export default function LivroDaVerdadePage() {
               key={pagina.id}
               pagina={pagina}
               ocupado={ocupado || !ehMestre}
-              onMarcar={() => {
-                if (window.confirm(`Marcar ${pagina.nome} como caída? A página abre para a mesa, a consequência entra no calendário e o grupo ganha o selo.`)) {
+              onMarcar={async () => {
+                if (await confirmar({ titulo: 'Marcar a queda', mensagem: `Marcar ${pagina.nome} como caída? A página abre para a mesa, a consequência entra no calendário e o grupo ganha o selo.`, rotuloConfirmar: 'Marcar como caída' })) {
                   void agir(() => livroDaVerdadeApi.marcarQueda(campanhaId, pagina.id));
                 }
               }}

@@ -86,6 +86,19 @@ def _gravar(connection, *, campanha_id, sessao_id, user, personagem_id, autor_no
     return dict(linha)
 
 
+def _destaque_da_mesa(tipo: str, dados: dict, sessao) -> str | None:
+    """Devolve "critico" (20 natural) ou "falha" (1 natural) de um teste de d20 feito com a mesa ao vivo; senão, None.
+
+    Dano e cura (fórmulas) nunca viram destaque, e na preparação a mesa ainda é privada do Mestre."""
+    if tipo != "rolagem" or not sessao or sessao["status"] != "aberta":
+        return None
+    if dados.get("critico_natural"):
+        return "critico"
+    if dados.get("falha_natural"):
+        return "falha"
+    return None
+
+
 @router.post("/rolagem", status_code=status.HTTP_201_CREATED)
 def rolar(
     payload: RollInput,
@@ -136,6 +149,8 @@ def rolar(
             detalhes={**dados, "origem": payload.origem},
         )
         conquistas_novas = avaliar_sem_quebrar(connection, personagem_id, user.id)
+        # 20 e 1 natural no teste de d20 durante a sessão ao vivo aparecem na mesa toda (ver `destaque_mesa` abaixo).
+        destaque_da_mesa = _destaque_da_mesa(tipo, dados, sessao)
         # 20 natural durante a sessão ao vivo: a mesa toda fica sabendo (site e, se o Mestre quiser, Discord).
         if tipo == "rolagem" and dados.get("critico_natural") and sessao and sessao["status"] == "aberta":
             notify(
@@ -150,6 +165,16 @@ def rolar(
             )
             avisar_discord(connection, payload.campanha_id, "critico", f"🎯 **{autor_nome}** tirou **20 natural** em {payload.titulo[:80]}!")
     live_session.publicar(payload.campanha_id, "registro", 0)
+    if destaque_da_mesa:
+        # Só o suficiente para a faixa da Sessão: quem rolou, o que rolou e se foi 20 ou 1. O resultado, a DT e o
+        # bônus continuam no registro, que cada um lê pelo recorte que o papel permite. Quem rolou já viu o próprio
+        # dado: o `usuario_id` deixa o cliente dele não repetir a faixa.
+        live_session.publicar(payload.campanha_id, "destaque_mesa", 0, {
+            "destaque": destaque_da_mesa,
+            "autor": autor_nome,
+            "titulo": payload.titulo[:80],
+            "usuario_id": str(user.id),
+        })
     return {"registro": registro, "conquistas_novas": conquistas_novas}
 
 

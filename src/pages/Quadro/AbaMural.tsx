@@ -4,6 +4,7 @@ import { mesaApi, type ISessaoResumo } from '../../services/mesaApi';
 import { engajamentoApi, type IItemMural, type IMvp } from '../../services/engajamentoApi';
 import { reduzirImagem } from './reduzirImagem';
 import { separarMural } from './quadro';
+import { confirmar } from '../../components/avisos/confirmacao';
 
 interface IAbaMuralProps {
   campanhaId: string;
@@ -157,8 +158,9 @@ export const AbaMural = ({ campanhaId, gestor }: IAbaMuralProps) => {
     void engajamentoApi.alternarVoto(campanhaId, item.id).then(() => carregar()).catch(() => carregar());
   };
 
-  const apagar = (item: IItemMural) => {
-    if (window.confirm(item.tipo === 'foto' ? 'Apagar esta foto do mural?' : 'Apagar esta frase do mural?')) void executar(() => engajamentoApi.apagarItem(campanhaId, item.id));
+  const apagar = async (item: IItemMural) => {
+    const foto = item.tipo === 'foto';
+    if (await confirmar({ titulo: foto ? 'Apagar a foto' : 'Apagar a frase', mensagem: foto ? 'Apagar esta foto do mural?' : 'Apagar esta frase do mural?', rotuloConfirmar: 'Apagar', tom: 'perigo' })) void executar(() => engajamentoApi.apagarItem(campanhaId, item.id));
   };
 
   const { fotos, frases } = separarMural(itens ?? []);

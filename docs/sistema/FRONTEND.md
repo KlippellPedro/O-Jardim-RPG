@@ -226,6 +226,174 @@ de atributo na ficha da criatura, código e link do convite, nota de rodapé do
 saque). Continua valendo o limite da seção abaixo: Chromium emulado, sem Safari
 nem aparelho real.
 
+<a id="avisos-combate-clima-e-app"></a>
+
+## Avisos, combate vivo, clima do mundo e app instalável (9 e 10 de outubro de 2026)
+
+Cinco mudanças de uma leva só. Nenhuma toca em regra de jogo nem em dado do servidor
+além do aviso novo do calendário (ver [Integração](INTEGRACAO.md#canal-ao-vivo-compartilhado-e-calendario)).
+
+- **Avisos e confirmações com a cara do site** ([components/avisos](../../src/components/avisos/)):
+  no lugar do `alert()` e do `window.confirm()` do navegador, que não sobrou nenhum em `src/`.
+  `avisar.erro/aviso/info/sucesso(texto)` e `avisarErro(erro, padrao)` mostram um aviso embaixo (some
+  sozinho, pausa com o mouse em cima, no máximo quatro por vez, repetido conta como um só);
+  `await confirmar({ titulo, mensagem, rotuloConfirmar, tom })` abre o diálogo, que no tom `perigo`
+  pinta o botão de vermelho e deixa o foco em Cancelar; `escolher` aceita uma terceira saída. O estado
+  mora em módulos comuns (`avisos.ts`, `confirmacao.ts`), então serviço e store também podem avisar;
+  o `AvisosHost` (montado uma vez no `App`, dentro do Router) desenha. **Toda confirmação é
+  assíncrona**: quem chama precisa de `await` (o TypeScript não acusa `if (!promise)`), inclusive o
+  `confirmarDescarte()` de `useUnsavedChanges`. Depois do `await`, quem escreve numa lista da ficha lê
+  a lista de agora (`listaAgora` e `fichaAgora`, em [desfazerNaFicha.ts](../../src/pages/Ficha/desfazerNaFicha.ts)),
+  porque a ficha pode ter mudado enquanto a pergunta estava aberta.
+- **Desfazer no lugar de perguntar** ([desfazer.ts](../../src/components/avisos/desfazer.ts),
+  [desfazerNaFicha.ts](../../src/pages/Ficha/desfazerNaFicha.ts)): ataque, habilidade, poder, nota,
+  vínculo, Prestígio e propriedade da ficha saem na hora e o aviso traz o botão "Desfazer", que
+  devolve o item no lugar em que estava (a lista é lida de novo na hora de desfazer). Desequipar uma
+  arma na aba Ataques também. O que mora no servidor ou não tem volta continua perguntando antes:
+  aliado, perícia criada, item do inventário, veículo e propriedade da campanha, ficha inteira,
+  conflito de salvamento, magia aprendida, troca, Fruto do Éden.
+- **Iniciar combate em ordem** ([filaDeIniciativa.ts](../../src/pages/Sessao/filaDeIniciativa.ts),
+  [InitiativeTracker.tsx](../../src/pages/Sessao/InitiativeTracker.tsx)): o servidor começa o combate
+  pelo primeiro da fila, então uma fila fora de ordem fazia quem tem iniciativa menor jogar antes.
+  Agora, se a fila está fora de ordem, "Iniciar combate" pergunta "Ordenar e começar", "Começar assim"
+  ou "Voltar" (iniciativa igual conta como em ordem), e o botão "Ordenar fila" fica em destaque. É só
+  do cliente: o servidor não mudou.
+- **Combate vivo na Sessão** ([combateVivo.ts](../../src/pages/Sessao/combateVivo.ts),
+  [combateVivo.css](../../src/pages/Sessao/combateVivo.css),
+  [ReacaoDeVida.tsx](../../src/pages/Sessao/components/ReacaoDeVida.tsx),
+  [AvisoDeCombate.tsx](../../src/pages/Sessao/components/AvisoDeCombate.tsx)): quando uma barra de Vida,
+  Mana ou Estamina muda entre duas leituras, o número do dano ou da cura flutua (+/- e cor do
+  recurso), a barra de Vida treme em proporção ao golpe e, com Vida baixa (25%) ou crítica (10%), pulsa;
+  quem cai (Vida 0) vira um cartão cinza com a etiqueta "Caído". Início de combate, cada rodada nova
+  e o fim aparecem como faixa para a mesa toda (`mudancaDeCombate` em `useSessaoStore`; a primeira
+  leitura da página e a troca de sessão nunca anunciam). Tudo parte do que o cliente já recebe: criatura
+  de visibilidade parcial não manda número, então só o texto de estado ("Ferido", "Quase morto") reage,
+  e criatura escondida não ganha nome na faixa. Com movimento reduzido (preferência do sistema ou modo de desempenho) os números e o tremor não disparam e o batimento para: a barra já mostra o valor novo.
+- **Clima do mundo** ([components/clima](../../src/components/clima/),
+  [campanhaEventos.ts](../../src/services/campanhaEventos.ts)): o fundo do site segue o calendário do
+  Mundo da campanha ativa. `ClimaDoMundoHost` busca o calendário e escreve `data-clima-estacao`
+  (primavera, verão, outono, inverno, noite_eterna, eclipse) e `data-clima-lua` no `<html>`;
+  [index.css](../../src/index.css) pinta uma camada por estação (só `opacity`) e o
+  `AtmosphericBackground` desenha as partículas no canvas (pétalas, vagalumes, folhas, neve, brasas),
+  proporcionais à área da tela. A estação já vem "efetiva" do servidor (a especial do Mestre ou a que
+  uma lenda forçou). Quando o Mestre avança o dia, declara estação ou marca a queda de uma lenda, o
+  servidor avisa o canal ao vivo (`calendario`) e a mesa toda atualiza na hora; voltar para a aba
+  também atualiza. Calendário ainda fechado para a mesa (403) ou campanha sem calendário (404) deixa o
+  fundo sem clima, para não entregar a estação antes da hora. Desligável em Configurações >
+  Preferências > Clima do mundo (`climaDoMundo` em `usePerformanceStore`). Com movimento reduzido ou modo de
+  desempenho não há partículas (a cor da estação fica). A Ficha abre até quatro canais ao vivo na mesma aba, e o HTTP/1.1 do desenvolvimento
+  só aceita seis conexões por origem: por isso `campanhaEventos.ts` mantém **um único `EventSource` por
+  campanha** e reparte os eventos (o `useCampaignSSE` antigo passou a usá-lo).
+- **Instalar como app** ([public/sw.js](../../public/sw.js),
+  [manifest.webmanifest](../../public/manifest.webmanifest), [src/pwa](../../src/pwa/),
+  [InstalarComoApp.tsx](../../src/components/Settings/InstalarComoApp.tsx)): o site é instalável (ícone
+  próprio, abre em tela cheia, abre sem internet até a tela; ficha e sessão continuam precisando de
+  conexão). Em Preferências aparece o cartão "Instalar como app": no Chrome e no Edge o botão usa o
+  `beforeinstallprompt`; onde o navegador não oferece, o cartão mostra o caminho manual (iOS inclusive,
+  que usa o `apple-touch-icon`). O service worker só é registrado no build de produção. Estratégia:
+  API, canal ao vivo, `/audio/`, `/models/`, `/data/` e pedidos `Range` vão direto à rede; a página
+  vai à rede primeiro e só cai no cache quando a rede falha; arquivos com hash em `/assets/` ficam no
+  cache para sempre; imagens e ícones saem do cache e se atualizam em segundo plano. **Mudou a
+  estratégia? Suba `VERSAO` em `public/sw.js`**: os caches da versão anterior são apagados na
+  ativação. O manifesto e o `sw.js` são servidos pela API na raiz (`/sw.js` sem cache e com
+  `Service-Worker-Allowed: /`), porque um service worker só controla o que está abaixo do caminho dele.
+
+Verificação: `npx tsc -b`, `npm run test:frontend` (1038 testes, oito arquivos novos: avisos e
+confirmação, desfazer, fila de iniciativa, combate vivo, canal compartilhado, clima, service worker e
+erro de rede) e a plataforma inteira contra Postgres descartável. No navegador, contra API e banco
+descartáveis: o diálogo e o aviso a 1280 px e a 375 px (sem rolagem lateral, alvos de 44 px), excluir e
+desfazer ataque, nota e arma equipada, remover aliado e item com confirmação, a ordenação da fila, as
+faixas e os números do combate, a troca de estação pelo canal ao vivo e o interruptor do clima. A
+instalação e o modo sem internet foram vistos num Chrome de verdade (CDP), porque o painel
+embutido do app não registra service worker. **Não visto:** as partículas animadas rodando em tela
+visível (o painel de teste fica oculto e não dispara `requestAnimationFrame`), Safari/iOS e aparelho real.
+
+<a id="busca-sessao-transicoes-e-nascimento"></a>
+
+## Busca, sessão ao vivo, transições e nascimento do personagem (10 de outubro de 2026)
+
+Segunda leva do dia, sobre a primeira ([acima](#avisos-combate-clima-e-app)):
+
+- **Busca do Jardim** ([components/busca](../../src/components/busca/), [buscaDoJardim.ts](../../src/services/buscaDoJardim.ts),
+  [buscaDoJardimFontes.ts](../../src/services/buscaDoJardimFontes.ts)): `Ctrl+K` (ou `Cmd+K`) em qualquer tela, `/` fora de campo de
+  texto e a lupa fixa ao lado da engrenagem (a lupa some na Sessão ao vivo, onde o cabeçalho usa o canto direito; o atalho segue
+  valendo). A paleta é um pedaço separado do código e só baixa na primeira abertura; ela junta atalhos, fichas, Livro (capítulos,
+  classes, raças, magias, rituais, selos, encantamentos e condições), Mundo, Registros Universais e Loja, ranqueia por título, depois
+  detalhe, depois texto corrido (com trecho e marcação do que casou) e navega por teclado (setas, Enter, Esc) ou toque. **Regra de
+  ouro: nada entra no índice que a tela correspondente não mostraria àquela pessoa.** Por isso cada fonte reaproveita a regra da
+  própria página: `visibilidadeRegras.ts` (raças e classes esquecidas ou indisponíveis, o mesmo módulo que o Livro usa),
+  `mapaDeBloqueios` em [worldCodex.ts](../../src/pages/Mundo/worldCodex.ts) (lore trancado, hierarquia, Árvore trancada, a mesma
+  conta da página da Árvore), `registrosDeFabrica` e `mesclarRegistros` (registro rasurado, oculto e seção escondida), os mercados
+  abertos da Loja (por padrão o Negro e o Banco Lunar ficam de fora) e `corpoMestre` e o Guia do Mestre só para quem comanda. O
+  Painel do Mestre só aparece para Mestre ou assistente **da campanha**. Cada resultado abre a tela já no ponto certo:
+  `/regras?topico=catalogo-magico&aba=...&item=...`, `/mundo/universal?secao=...&registro=...`, `/loja?busca=...&localizacao=...`
+  e o caminho de cada entrada do Mundo. Teste: [buscaDoJardim.test.ts](../../tests/frontend/buscaDoJardim.test.ts), que cobre o
+  ranqueamento e, principalmente, o que cada papel não pode encontrar.
+- **Sessão ao vivo no menu e na Home** ([components/sessao](../../src/components/sessao/),
+  [situacaoDaMesa.ts](../../src/services/situacaoDaMesa.ts), [ContinuarDeOndeParou.tsx](../../src/pages/ContinuarDeOndeParou.tsx)):
+  o `SituacaoDaMesaHost` consulta `GET /sessao/campanha/{id}/situacao` (ver [Integração](INTEGRACAO.md#situacao-da-mesa)) e refaz a
+  consulta quando o canal ao vivo compartilhado avisa `sessao_preparada`, `sessao_aberta` ou `sessao_encerrada`. O item Sessão do menu
+  ganha um ponto (verde ao vivo, âmbar em preparação, esta só para quem comanda) e o nome acessível "Sessão, ao vivo agora". A Home
+  mostra o cartão "Ao vivo agora" (ou "Em preparação") e o "Continuar" da última ficha aberta (`ultimaFicha.ts`, só id e nome no
+  navegador, separado por pessoa e campanha). Se a mesa abre com a pessoa em outra tela, chega o aviso "A sessão começou" com o botão
+  Entrar na sessão; quem abre o site com a mesa já aberta só vê o indicador.
+- **Transições, esqueleto e guias**: [TransicaoDeRota.tsx](../../src/components/TransicaoDeRota.tsx) envolve as rotas com um fade de
+  240 ms, só de `opacity` (um `transform` viraria o bloco de contenção dos elementos fixos das páginas). A chave da transição vem de
+  `chaveDeTransicao` ([transicaoDeRota.ts](../../src/utils/transicaoDeRota.ts)): navegar por dentro do Mundo é a mesma tela, e não
+  remonta a `MundoPage`. [EsqueletoDePagina.tsx](../../src/components/ui/EsqueletoDePagina.tsx) substitui o spinner do `Suspense` e só
+  aparece depois de 180 ms (quase toda tela já está em cache e o esqueleto piscaria). Os dois guias (`GuidedTour` e
+  `FichaGuidedTour`) ganharam "Pular todos os guias": ele liga `guiasAutomaticos = false` em `usePerformanceStore` (também em
+  Preferências), e os cinco gatilhos automáticos (Ficha, Loja, Livro, Mundo, Sessão) conferem `guiasAutomaticosLigados()` antes de
+  abrir; o botão de guia de cada página continua funcionando.
+- **Nascimento do personagem** ([Wizard](../../src/pages/Ficha/Wizard/)): os cartões de Árvore, raça e classe ganharam emblemas
+  (`EmblemaDoCartao`: o ícone do catálogo na cor da paleta aprovada; paleta muito escura, como a do Ninja, é clareada só até
+  `corLegivel`). "Rolar 7d20" passa por `animarDadosLocais` ([rolagemDados.ts](../../src/components/dados/rolagemDados.ts)): o
+  sorteio continua local, os sete d20 em duas fileiras só rolam e pousam nos valores sorteados, e os atributos entram quando eles
+  pousam (sem 3D, por preferência ou movimento reduzido, entra na hora). O limite de seis dados vale só para rolagem vinda do
+  servidor (`MAX_DADOS_3D`); a local aceita até `MAX_DADOS_LOCAIS`. O `RolagemHost` agora isola o Esc, o Enter e o espaço da cena (sem
+  isso o Esc que fecha o dado fechava também o assistente por baixo). Depois de "Finalizar Criação", `NascimentoDoPersonagem` mostra
+  os 20 níveis da classe como um céu apagado em que a primeira estrela acende, na cor da classe, e o assistente fica inerte até a
+  pessoa escolher "Abrir a ficha" ou "Voltar à lista" (Esc também volta). Com movimento reduzido, modo de desempenho ou celebrações
+  desligadas a tela aparece pronta, sem animar. O "Pular pra Ficha" do assistente continua indo direto, sem cerimônia.
+
+Verificação: `npx tsc -b`, `npm run test:frontend` (1092 testes) e a plataforma inteira contra Postgres descartável (1568). Os
+percursos foram vistos num Chrome de verdade (headless, com WebGL) contra API e banco descartáveis, a 1280 e a 390 px: o assistente
+inteiro (emblemas, os sete dados, o Esc, a cerimônia e "Abrir a ficha"), a paleta de busca, a transição do indicador ao vivo pelo
+canal e as páginas principais em busca de sobreposição com a lupa. **Não visto:** a busca com o papel de jogador na tela (a
+visibilidade está coberta por teste, não por navegação), Safari/iOS e aparelho real.
+
+<a id="criticos-dado-3d-e-layout"></a>
+
+## Críticos na mesa, vibração, dado 3D e acabamentos (10 de outubro de 2026)
+
+Terceira leva do dia:
+
+- **20 e 1 naturais na mesa** ([destaqueDaMesa.ts](../../src/pages/Sessao/destaqueDaMesa.ts),
+  [AvisoDeDestaque.tsx](../../src/pages/Sessao/components/AvisoDeDestaque.tsx)): o servidor publica `destaque_mesa` no canal ao vivo
+  (ver [Integração](INTEGRACAO.md#destaque-da-mesa)) e a Sessão mostra a faixa "20 natural" ou "1 natural" com quem rolou e o título da
+  rolagem, para todos os papéis. O 20 natural já avisava a mesa pelo painel de avisos e pelo Discord; o 1 natural é novo e só aparece
+  nesta faixa (sem aviso gravado). Quem rolou já viu o próprio dado, então não ganha o som nem a vibração de novo. Interruptor
+  "20 e 1 naturais da mesa" em Preferências (`destaquesDaMesa`).
+- **Vibração** ([vibracao.ts](../../src/utils/vibracao.ts), [vibracaoDoApp.ts](../../src/utils/vibracaoDoApp.ts)): um só lugar para os
+  padrões (`toque`, `critico`, `falha`, `dano`, `suaVez`) e o interruptor "Vibração" (`vibracao`). Vibra no pouso do dado (padrão
+  conforme o 20 ou o 1), na faixa do destaque, quando um personagem da própria pessoa perde Vida entre duas leituras da Sessão
+  (`houveDanoNosMeus`, só com número dos dois lados) e na "sua vez". O Modo mesa e o aviso de "sua vez" passaram a usar o mesmo
+  módulo, então o interruptor vale para todos. Sem suporte (desktop, iOS) nada acontece; o Chrome do Android só deixa vibrar depois
+  do primeiro toque na página.
+- **Dado 3D** ([cenaDados.ts](../../src/components/dados/cenaDados.ts), [rolagem.css](../../src/components/dados/rolagem.css)): o fundo
+  do overlay ficou mais escuro e desfocado (`backdrop-filter`, sem o desfoque no modo de desempenho), porque o resultado e a ficha por
+  baixo se misturavam com os dados. O 20 natural entra em câmera lenta na reta final (`escalaDoTempo`, o tempo da cena corre à parte do
+  relógio), a câmera aproxima ao pousar e a tela pisca em dourado; o 1 natural pisca em vermelho. Movimento reduzido apaga os piscares.
+- **Acabamentos**: a Home usa cinco colunas a partir de 1240 px, seis colunas (três em cima, dois dividindo a fileira de baixo) de 1024
+  a 1239 px e duas (o último cartão ocupa a fileira inteira) de 520 a 1023 px, em vez de sobrar um cartão sozinho; no celular o
+  cabeçalho da Home ficou mais compacto; e o rótulo "Campanha" do menu de baixo deixou de ser cortado (fonte e folgas ajustadas, e
+  abaixo de 340 px ele vira "Mesa").
+
+Verificação: `npx tsc -b`, os testes novos (destaque, vibração, dano nos meus, câmera lenta, e 5 de banco para o evento) e capturas num
+Chrome de verdade: o dado de 20 natural e de 1 natural sobre a lista de fichas, a faixa na Sessão e a Home a 1280, 1100, 800, 390, 360 e
+320 px (conferindo 5 cartões na fileira e nenhum rótulo cortado). **Não visto:** a vibração em si (precisa de celular) e a faixa chegando
+pelo canal ao vivo vinda de uma rolagem real de outra pessoa; o evento foi testado no servidor e a faixa foi disparada pelo store.
+
 ## Responsividade e acessibilidade
 
 O fechamento de agosto corrigiu sete problemas reproduzidos:
@@ -258,6 +426,7 @@ perfil complementa o primeiro. As escolhas registradas foram:
 | --- | --- |
 | Entrada do site | Fundo global em CSS; carregamento de bibliotecas 3D restrito às rotas que precisam delas. |
 | Divisão do frontend | Rotas e painéis sob demanda, seletores específicos de estado e estabilização de cálculos/callbacks. |
+| Chunk de base (9/10/2026) | O build estava puxando Three.js e drei na entrada de todas as páginas: o Rollup pôs React, Zustand e o helper de preload do Vite dentro do primeiro chunk 3D que os importava, e o `index.html` passou a pré-carregar cerca de 1,2 MB de JS 3D (330 KB comprimidos) até no login. `manualChunks` em [vite.config.ts](../../vite.config.ts) agora manda esses módulos para `vendor-base`. Medido com `vite preview` (Chromium, sem limitação de rede) na Home: de 481 KB para 179 KB de JS na rede, e `vendor-three` só baixa quando o dado 3D ou o Mundo abrem. Se alguém mexer nas regras de chunk, conferir o `modulepreload` do `dist/index.html`: só `vendor-base` deve aparecer. |
 | Modelos do Mundo | Carregamento progressivo; retirada do preload global; reaproveitamento de objetos e materiais. |
 | Loop de renderização | Teto de renderização no modo completo, suspensão quando a aba fica oculta e renderização sob demanda no modo econômico. |
 | Imagens e listas | Fundos WebP, carregamento tardio, `content-visibility` e remoção de texturas externas substituídas por CSS. |

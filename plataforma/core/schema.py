@@ -1907,4 +1907,19 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        53,
+        "nivel_anunciado_no_discord",
+        (
+            # Maior nível já anunciado no Discord por personagem: descer e subir de novo na ficha
+            # não repete o destaque (routers/characters.py::_anunciar_nivel).
+            """
+            CREATE TABLE IF NOT EXISTS personagem_nivel_anunciado (
+                personagem_id UUID PRIMARY KEY REFERENCES personagens(id) ON DELETE CASCADE,
+                nivel INTEGER NOT NULL CHECK (nivel > 0),
+                anunciado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+        ),
+    ),
 )

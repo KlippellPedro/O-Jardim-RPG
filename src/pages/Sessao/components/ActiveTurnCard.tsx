@@ -7,6 +7,8 @@ import { useCharacterStore } from '../../../store/useCharacterStore';
 import { sessaoApi, type BestiarioMonstro } from '../../../services/sessaoApi';
 import { CriaturaDetalhe } from './CriaturaDetalhe';
 import { corDoVd } from './BestiarioPicker';
+import { ReacaoDeVida } from './ReacaoDeVida';
+import { situacaoDaVida } from '../combateVivo';
 
 interface EntityMetrics {
   hpCurrent?: number;
@@ -41,13 +43,21 @@ interface ResourceBarProps {
   tone: 'health' | 'mana' | 'stamina';
   /** Extra temporário acima do máximo. */
   extra?: number;
+  /** De quem é a barra: com ele a barra reage a dano, cura e gasto (número flutuante, clarão). */
+  escopo?: string;
+  /** O valor que o servidor mandou, sem o "máximo" que a tela usa quando falta número. Só ele gera reação. */
+  valorReal?: number;
+  /** Texto de estado do servidor ("Ferido"), a única pista de Vida quando o número está escondido. */
+  estado?: string;
 }
 
-const ResourceBar: React.FC<ResourceBarProps> = ({ label, current, maximum, fallback = 'N/D', tone, extra = 0 }) => {
+const ResourceBar: React.FC<ResourceBarProps> = ({ label, current, maximum, fallback = 'N/D', tone, extra = 0, escopo, valorReal, estado }) => {
   const ratio = percentage(current, maximum);
   const extraRatio = extra > 0 ? percentage(extra, maximum) ?? 100 : 0;
+  const situacao = tone === 'health' ? situacaoDaVida(current, maximum, estado) : 'normal';
   return (
-    <div className="session-resource">
+    <div className={`session-resource${situacao !== 'normal' ? ` sessao-vida-${situacao}` : ''}`}>
+      {escopo ? <ReacaoDeVida escopo={`${escopo}:${tone}`} valor={valorReal} maximo={maximum} tom={tone} tremer={tone === 'health'} /> : null}
       <div className="session-resource__meta">
         <span>{label}</span>
         <strong>
@@ -79,15 +89,17 @@ const RosterCard: React.FC<RosterCardProps> = ({ entity, metrics, active, select
   const hpRatio = percentage(metrics.hpCurrent, metrics.hpMax);
   const tone = entity.tipo === 'inimigo' ? 'enemy' : entity.tipo === 'aliado' ? 'ally' : 'player';
   const visibleConditions = entity.condicoes.slice(0, 2);
+  const situacao = situacaoDaVida(entity.hpAtual, metrics.hpMax, entity.estado_vida);
 
   return (
     <button
       type="button"
       onClick={onSelect}
-      className={`session-roster-card session-roster-card--${tone}${active ? ' is-active' : ''}${selected ? ' is-selected' : ''}`}
+      className={`session-roster-card session-roster-card--${tone}${active ? ' is-active' : ''}${selected ? ' is-selected' : ''}${situacao !== 'normal' ? ` sessao-vida-${situacao}` : ''}`}
       aria-pressed={selected}
       aria-label={`Ver ficha de ${entity.nome}`}
     >
+      <ReacaoDeVida escopo={`${entity.id}:hp`} valor={entity.hpAtual} maximo={metrics.hpMax} compacto tremer />
       <span className="session-roster-card__initiative" title={`Iniciativa ${entity.iniciativa}`}>
         {entity.iniciativa}
       </span>
@@ -103,6 +115,7 @@ const RosterCard: React.FC<RosterCardProps> = ({ entity, metrics, active, select
           <strong>{entity.nome}</strong>
           {entity.fase ? <em className="session-roster-card__fase" title={entity.faseNome ?? 'Fase de chefe'}>Fase {entity.fase}</em> : null}
           {active ? <em>Turno</em> : null}
+          {situacao === 'caida' ? <em className="session-roster-card__caido">Caído</em> : null}
         </span>
         <span className="session-roster-card__subline">
           <span>{entityTypeLabel(entity.tipo)}</span>
@@ -357,10 +370,13 @@ export const ActiveTurnCard: React.FC = () => {
                 fallback={selectedEntity.estado_vida ?? 'N/D'}
                 tone="health"
                 extra={selectedMetrics.hpExtra}
+                escopo={selectedEntity.id}
+                valorReal={selectedEntity.hpAtual}
+                estado={selectedEntity.estado_vida}
               />
-              <ResourceBar label="Mana" current={selectedMetrics.manaCurrent} maximum={selectedMetrics.manaMax} tone="mana" extra={selectedMetrics.manaExtra} />
+              <ResourceBar label="Mana" current={selectedMetrics.manaCurrent} maximum={selectedMetrics.manaMax} tone="mana" extra={selectedMetrics.manaExtra} escopo={selectedEntity.id} valorReal={selectedEntity.manaAtual} />
               {selectedMetrics.estaminaCurrent != null || selectedMetrics.estaminaMax != null ? (
-                <ResourceBar label="Estamina" current={selectedMetrics.estaminaCurrent} maximum={selectedMetrics.estaminaMax} tone="stamina" extra={selectedMetrics.estaminaExtra} />
+                <ResourceBar label="Estamina" current={selectedMetrics.estaminaCurrent} maximum={selectedMetrics.estaminaMax} tone="stamina" extra={selectedMetrics.estaminaExtra} escopo={selectedEntity.id} valorReal={selectedEntity.estaminaAtual} />
               ) : null}
               <div className="session-focus-card__defense">
                 <Shield size={16} />

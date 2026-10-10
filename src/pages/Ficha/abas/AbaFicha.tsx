@@ -60,6 +60,7 @@ import { FrutoEdenSection } from '../components/FrutoEdenSection';
 import { AflicoesSection } from '../components/AflicoesSection';
 import { obterTemaPorId } from '../../../redesign/themeMap';
 import { Select } from '../../../components/ui/Select';
+import { avisar, avisarErro } from '../../../components/avisos/avisos';
 
 interface IClasseSlot {
   classeId: string;
@@ -435,7 +436,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
 
   const handleRolarTeste = async (attr: TAtributo) => {
     if (!campanhaAtiva?.id) {
-      alert('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
+      avisar.aviso('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
       return;
     }
     const fisico = ['forca', 'destreza', 'constituicao'].includes(attr);
@@ -452,7 +453,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
       });
       setResultadoTeste({ atributo: attr, resultado: registro.resultado });
     } catch (e: any) {
-      alert(e?.message || 'Falha ao rolar o teste.');
+      avisarErro(e, 'Falha ao rolar o teste.');
     } finally {
       setRolandoTeste(false);
     }
@@ -1255,7 +1256,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
         </div>
       </div>
 
-      <FamaPrestigioSection ficha={f} onUpdate={onUpdate} />
+      <FamaPrestigioSection ficha={f} onUpdate={onUpdate} personagemId={character.id} />
 
       <AflicoesSection character={character} onUpdate={onUpdate} />
 

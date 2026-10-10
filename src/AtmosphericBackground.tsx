@@ -1,4 +1,18 @@
 import { useEffect, useRef } from 'react';
+import {
+  ESTACOES_DO_CLIMA,
+  PARTICULAS_DA_ESTACAO,
+  lerClimaDaRaiz,
+  quantidadeDeParticulas,
+} from './components/clima/climaDoMundo';
+import {
+  avancarParticula,
+  avancarVida,
+  criarParticula,
+  desenharParticula,
+  type Particula,
+} from './components/clima/particulasDoClima';
+import type { ChaveEstacao } from './services/calendarioMundoApi';
 
 type Star = {
   x: number;
@@ -71,14 +85,47 @@ export default function AtmosphericBackground() {
     let stars: Star[] = [];
     let width = 1;
     let height = 1;
+    const randomDoClima = createRandom(0x51ed270b);
     let animationFrame = 0;
     let lastFrame = performance.now();
     let lastDraw = 0;
+    // Partículas da estação do calendário do Mundo (ver components/clima).
+    let particulas: Particula[] = [];
+    let estacaoDoClima: ChaveEstacao | null = null;
 
     const hasReducedEffects = () => (
       motionQuery.matches
       || document.documentElement.dataset.performanceMode === 'reduced'
     );
+
+    const semearParticulas = (estacao: ChaveEstacao) => {
+      const spec = PARTICULAS_DA_ESTACAO[estacao];
+      const quantidade = quantidadeDeParticulas(spec.quantidade, width, height);
+      for (let indice = 0; indice < quantidade; indice += 1) {
+        particulas.push(criarParticula(spec, randomDoClima, true));
+      }
+    };
+
+    // Estação nova: as partículas antigas somem devagar e as novas entram. Com
+    // movimento reduzido, modo de desempenho ou o clima desligado, não há partícula.
+    const sincronizarClima = () => {
+      const clima = hasReducedEffects() ? null : lerClimaDaRaiz(document.documentElement);
+      const estacao = clima?.estacao ?? null;
+      if (estacao === estacaoDoClima) return;
+      estacaoDoClima = estacao;
+      if (!estacao) {
+        if (hasReducedEffects()) particulas = [];
+        else particulas.forEach((particula) => { particula.morrendo = true; });
+        return;
+      }
+      particulas.forEach((particula) => { particula.morrendo = true; });
+      semearParticulas(estacao);
+    };
+
+    const repovoarParticulas = () => {
+      particulas = [];
+      if (estacaoDoClima) semearParticulas(estacaoDoClima);
+    };
 
     const resize = () => {
       width = Math.max(1, window.innerWidth);
@@ -95,6 +142,7 @@ export default function AtmosphericBackground() {
         ? Math.round(Math.min(230, Math.max(120, area / 9000)))
         : Math.round(Math.min(520, Math.max(220, area / 4300)));
       stars = createStars(count);
+      repovoarParticulas();
     };
 
     const draw = (elapsed: number, deltaSeconds = 0) => {
@@ -162,6 +210,19 @@ export default function AtmosphericBackground() {
           context.stroke();
         }
       }
+
+      for (let indice = particulas.length - 1; indice >= 0; indice -= 1) {
+        const particula = particulas[indice];
+        if (deltaSeconds > 0) {
+          avancarParticula(particula, deltaSeconds, elapsed, randomDoClima);
+          avancarVida(particula, deltaSeconds);
+        }
+        if (particula.morrendo && particula.vida <= 0.01) {
+          particulas.splice(indice, 1);
+        } else {
+          desenharParticula(context, particula, width, height, elapsed);
+        }
+      }
     };
 
     const animate = (now: number) => {
@@ -178,20 +239,26 @@ export default function AtmosphericBackground() {
     };
 
     const refreshMotion = () => {
+      sincronizarClima();
       resize();
       draw(performance.now());
     };
 
+    sincronizarClima();
     resize();
     draw(lastFrame);
     animationFrame = window.requestAnimationFrame(animate);
     window.addEventListener('resize', resize, { passive: true });
     motionQuery.addEventListener('change', refreshMotion);
 
-    const performanceObserver = new MutationObserver(refreshMotion);
+    // O desempenho muda a densidade de tudo; o clima só troca as partículas (e o CSS troca as cores).
+    const performanceObserver = new MutationObserver((mutacoes) => {
+      if (mutacoes.some((mutacao) => mutacao.attributeName === 'data-performance-mode')) refreshMotion();
+      else sincronizarClima();
+    });
     performanceObserver.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['data-performance-mode'],
+      attributeFilter: ['data-performance-mode', 'data-clima-estacao', 'data-clima-mundo'],
     });
 
     return () => {
@@ -205,6 +272,12 @@ export default function AtmosphericBackground() {
   return (
     <div className="atmospheric-background fixed inset-0 z-0 overflow-hidden bg-background pointer-events-none" aria-hidden="true">
       <div className="atmospheric-glows performance-decorative" />
+      <div className="atmospheric-clima performance-decorative">
+        {ESTACOES_DO_CLIMA.map((estacao) => (
+          <div key={estacao} className={`atmospheric-clima__camada atmospheric-clima__camada--${estacao}`} />
+        ))}
+        <div className="atmospheric-clima__camada atmospheric-clima__camada--lua-carmesim" />
+      </div>
       <canvas ref={canvasRef} className="atmospheric-starfield" />
     </div>
   );

@@ -33,6 +33,9 @@ import {
 } from '../../../services/periciasFichaService';
 import { Select } from '../../../components/ui/Select';
 import { LabeledSelect } from '../components/SharedFichaComponents';
+import { avisar, avisarErro } from '../../../components/avisos/avisos';
+import { confirmar } from '../../../components/avisos/confirmacao';
+import { fichaAgora } from '../desfazerNaFicha';
 
 const NOMES_ATRIBUTOS = ATRIBUTOS_PERICIA;
 // Classes escritas por extenso: o Tailwind descarta nome montado em runtime.
@@ -159,7 +162,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
 
   const handleRolar = async (pericia: any, totalBonus: number, vantagens: number, desvantagens: number) => {
     if (!campanhaAtiva?.id) {
-      alert('Nenhuma campanha ativa. Selecione uma campanha no Menu para rolar dados.');
+      avisar.aviso('Nenhuma campanha ativa. Selecione uma campanha no Menu para rolar dados.');
       return;
     }
     setRolando(pericia.id);
@@ -174,7 +177,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
       });
       setActiveModal({ type: 'resultado', periciaId: pericia.id, registro });
     } catch (e: any) {
-      alert(e?.message || 'Falha ao rolar a perícia.');
+      avisarErro(e, 'Falha ao rolar a perícia.');
     } finally {
       setRolando(null);
     }
@@ -205,9 +208,16 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
     onUpdate(['ficha', 'periciasAtributos'], definirAtributoPericia(f, periciaId, atributo, atributo));
   };
 
-  const handleExcluirCustomizada = (periciaId: string, titulo: string) => {
-    if (!window.confirm(`Excluir "${titulo}"? O grau, os ajustes e os favoritos dessa perícia saem junto.`)) return;
-    const limpeza = removerPericiaCustomizada(f, periciaId);
+  const handleExcluirCustomizada = async (periciaId: string, titulo: string) => {
+    const confirmado = await confirmar({
+      titulo: 'Excluir a perícia',
+      mensagem: `Excluir "${titulo}"? O grau, os ajustes e os favoritos dessa perícia saem junto.`,
+      rotuloConfirmar: 'Excluir',
+      tom: 'perigo',
+    });
+    if (!confirmado) return;
+    // A limpeza mexe em seis campos de uma vez: ela parte da ficha de agora, não da de antes da pergunta.
+    const limpeza = removerPericiaCustomizada(fichaAgora(character.id, f), periciaId);
     onUpdate(['ficha', 'periciasCustomizadas'], limpeza.periciasCustomizadas);
     onUpdate(['ficha', 'pericias'], limpeza.pericias);
     onUpdate(['ficha', 'periciasFavoritas'], limpeza.periciasFavoritas);

@@ -33,6 +33,11 @@ import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 import { Select } from '../../../components/ui/Select';
 import { dispararEscolhaImpacto } from '../components/escolhaImpacto';
 import { EscolhaImpactoHost } from '../components/EscolhaImpactoHost';
+import { animarDadosLocais } from '../../../components/dados/rolagemDados';
+import { EmblemaDoCartao } from './EmblemaDoCartao';
+import { NascimentoDoPersonagem, type DadosDoNascimento } from './NascimentoDoPersonagem';
+
+const MENSAGEM_FALHA_CRIACAO = 'Não foi possível criar o personagem agora. Confira a conexão e tente de novo.';
 
 interface WizardProps {
   onClose: () => void;
@@ -102,6 +107,21 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
 
   const [infoModal, setInfoModal] = useState<{ titulo: string; texto: string } | null>(null);
   const [criandoRapido, setCriandoRapido] = useState(false);
+  const [criando, setCriando] = useState(false);
+  const [erroCriacao, setErroCriacao] = useState<string | null>(null);
+  // Depois de criar, a cerimônia de nascimento ocupa a tela até a pessoa escolher entre abrir a ficha ou voltar à lista.
+  const [nascimento, setNascimento] = useState<DadosDoNascimento | null>(null);
+  const [rolandoDados, setRolandoDados] = useState(false);
+  const rolandoRef = useRef(false);
+  const montadoRef = useRef(true);
+  // O StrictMode monta, desmonta e monta de novo em desenvolvimento: a marca precisa voltar a true a cada montagem.
+  useEffect(() => {
+    montadoRef.current = true;
+    return () => { montadoRef.current = false; };
+  }, []);
+  const ocupado = criando || criandoRapido || rolandoDados;
+  // O estado só vale no próximo render; a trava precisa valer já no segundo clique.
+  const enviandoRef = useRef(false);
 
   useEffect(() => {
     previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
@@ -141,6 +161,14 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
     };
   }, [onClose, infoModal]);
 
+  // Com a cerimônia na tela, o assistente fica "de fora": sem foco nem cliques por baixo.
+  useEffect(() => {
+    const caixa = dialogRef.current;
+    if (!nascimento || !caixa) return undefined;
+    caixa.setAttribute('inert', '');
+    return () => caixa.removeAttribute('inert');
+  }, [nascimento]);
+
   useEffect(() => {
     carregarCatalogo()
       .then((data) => {
@@ -172,9 +200,19 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
     setClasseId(null);
   }, [arvoreId]);
 
-  const handleRolar = () => {
-    if (!rolagemAtributosPermitida(isMestre)) return;
+  const handleRolar = async () => {
+    if (!rolagemAtributosPermitida(isMestre) || rolandoRef.current) return;
     const rolados = rolarAtributos();
+    rolandoRef.current = true;
+    setRolandoDados(true);
+    try {
+      // O sorteio é este (local), o dado 3D só rola e pousa nesses valores; sem 3D (preferência, movimento reduzido) resolve na hora.
+      await animarDadosLocais({ titulo: 'Atributos do personagem', valores: rolados, faces: 20, formula: '7d20' });
+    } finally {
+      rolandoRef.current = false;
+      if (montadoRef.current) setRolandoDados(false);
+    }
+    if (!montadoRef.current) return;
     setMetodoAtributos('rolado');
     setValoresDisponiveis(rolados);
     setAtribuicao(distribuirValoresAtributos(rolados));
@@ -218,7 +256,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
   };
 
   const handleCreate = async () => {
-    if (!catalogo || !racaId || !classeId) return;
+    if (enviandoRef.current || !catalogo || !racaId || !classeId) return;
 
     const raca = catalogo.racas.find((r) => r.id === racaId);
     const classe = catalogo.classes.find((item) => item.id === classeId);
@@ -256,9 +294,30 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
       ...(racaId === RACA_PERSONALIZADA_ID ? { racaNomePersonalizado: racaNomePersonalizado.trim() } : {}),
     };
 
-    const novoId = await createCharacter(payload);
-    if (novoId) {
-      onClose();
+    // Sem a trava, dois cliques seguidos criavam dois personagens; e uma falha
+    // do servidor não aparecia em lugar nenhum, o assistente só ficava parado.
+    enviandoRef.current = true;
+    setCriando(true);
+    setErroCriacao(null);
+    try {
+      const novoId = await createCharacter(payload);
+      if (novoId) {
+        setNascimento({
+          id: novoId,
+          nome: nome.trim() || nome,
+          racaId,
+          racaTitulo: nomeExibicaoRaca(racaId, racaNomePersonalizado, raca.titulo),
+          classeId,
+          classeTitulo: classe.titulo,
+          arvoreId,
+          arvoreNome: ARVORES.find((arvore) => arvore.id === arvoreId)?.nome || 'Sem Árvore',
+        });
+      } else {
+        setErroCriacao(useCharacterStore.getState().error || MENSAGEM_FALHA_CRIACAO);
+      }
+    } finally {
+      enviandoRef.current = false;
+      setCriando(false);
     }
   };
 
@@ -267,11 +326,13 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
   // genérico) - tudo isso continua editável na Ficha depois de criado, então
   // não há nada aqui que trave o personagem num estado ruim.
   const handleCriarRapido = async () => {
-    if (!catalogo || criandoRapido) return;
+    if (!catalogo || enviandoRef.current) return;
     const nomeFinal = nome.trim();
     if (nomeFinal.length < 2) return;
 
+    enviandoRef.current = true;
     setCriandoRapido(true);
+    setErroCriacao(null);
     try {
       const arvoreFinal = arvoreId || SEM_ARVORE_ID;
       const racasDisponiveisRapido = isMestre
@@ -328,8 +389,11 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
       if (novoId) {
         onClose();
         navigate(`/ficha/${novoId}`);
+      } else {
+        setErroCriacao(useCharacterStore.getState().error || MENSAGEM_FALHA_CRIACAO);
       }
     } finally {
+      enviandoRef.current = false;
       setCriandoRapido(false);
     }
   };
@@ -414,8 +478,13 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                   onClick={() => setArvoreId(SEM_ARVORE_ID)}
                   className={`rounded-2xl border p-4 text-left transition-all sm:p-6 ${arvoreId === SEM_ARVORE_ID ? 'border-primary/50 bg-gradient-to-br from-gray-400/20 to-slate-300/5 shadow-[0_0_20px_rgba(var(--color-primary),0.2)]' : 'border-white/5 bg-black/30 hover:border-white/20'}`}
                 >
-                  <h3 className="text-lg font-bold text-white sm:text-xl" style={{fontFamily: 'Cinzel, serif'}}>Sem Árvore</h3>
-                  <p className="text-xs text-gray-500 mt-1">Árvore oculta ou indefinida: libera acesso a todas as opções do compêndio.</p>
+                  <div className="flex items-start gap-3">
+                    <EmblemaDoCartao tipo="arvore" id="universal" ativo={arvoreId === SEM_ARVORE_ID} />
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-bold text-white sm:text-xl" style={{fontFamily: 'Cinzel, serif'}}>Sem Árvore</h3>
+                      <p className="text-xs text-gray-500 mt-1">Árvore oculta ou indefinida: libera acesso a todas as opções do compêndio.</p>
+                    </div>
+                  </div>
                 </button>
                 {arvoresDisponiveis.map(arvore => (
                   <div key={arvore.id} className="relative">
@@ -424,8 +493,13 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                       onClick={() => setArvoreId(arvore.id)}
                       className={`w-full rounded-2xl border p-4 text-left transition-all sm:p-6 ${arvoreId === arvore.id ? 'border-primary/50 bg-gradient-to-br shadow-[0_0_20px_rgba(var(--color-primary),0.2)] ' + arvore.cor : 'border-white/5 bg-black/30 hover:border-white/20'}`}
                     >
-                      <h3 className="pr-6 text-lg font-bold text-white sm:text-xl" style={{fontFamily: 'Cinzel, serif'}}>{arvore.nome}</h3>
-                      <p className="text-xs text-gray-500 mt-1">Deidade: {arvore.deidadeTitulo}</p>
+                      <div className="flex items-start gap-3">
+                        <EmblemaDoCartao tipo="arvore" id={arvore.id} ativo={arvoreId === arvore.id} />
+                        <div className="min-w-0">
+                          <h3 className="pr-6 text-lg font-bold text-white sm:text-xl" style={{fontFamily: 'Cinzel, serif'}}>{arvore.nome}</h3>
+                          <p className="text-xs text-gray-500 mt-1">Deidade: {arvore.deidadeTitulo}</p>
+                        </div>
+                      </div>
                     </button>
                     <div className="absolute right-3 top-3 sm:right-5 sm:top-5">
                       <InfoButton
@@ -463,10 +537,13 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                     if (raca.id !== racaId) dispararEscolhaImpacto({ tipo: 'raca', id: raca.id, nome: raca.titulo, especial: raca.categoria !== 'padrao' });
                     setRacaId(raca.id); setEscolhaRacial({}); setPericiasIniciais([]);
                   }}
-                  className={`w-full p-4 rounded-2xl border text-left transition-all flex flex-col gap-1 ${racaId === raca.id ? 'border-primary bg-primary/10' : 'border-white/5 bg-black/40 hover:border-white/20'}`}
+                  className={`w-full p-4 rounded-2xl border text-left transition-all flex items-start gap-3 ${racaId === raca.id ? 'border-primary bg-primary/10' : 'border-white/5 bg-black/40 hover:border-white/20'}`}
                 >
-                  <h3 className="text-lg font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>{raca.titulo}</h3>
-                  <p className="text-xs text-gray-400 line-clamp-2">{raca.descricao}</p>
+                  <EmblemaDoCartao tipo="raca" id={raca.id} tamanho="p" ativo={racaId === raca.id} />
+                  <span className="flex min-w-0 flex-1 flex-col gap-1">
+                    <h3 className="text-lg font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>{raca.titulo}</h3>
+                    <p className="text-xs text-gray-400 line-clamp-2">{raca.descricao}</p>
+                  </span>
                 </button>
               ))}
             </div>
@@ -539,7 +616,10 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                   }}
                   className={`p-5 rounded-2xl border text-left transition-all flex flex-col gap-2 ${classeId === classe.id ? 'border-purple-500 bg-purple-500/10 shadow-[0_0_20px_rgba(168,85,247,0.2)]' : 'border-white/10 bg-black/40 hover:border-white/30'}`}
                 >
-                  <h3 className="text-xl font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>{classe.titulo}</h3>
+                  <div className="flex items-center gap-3">
+                    <EmblemaDoCartao tipo="classe" id={classe.id} ativo={classeId === classe.id} />
+                    <h3 className="text-xl font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>{classe.titulo}</h3>
+                  </div>
                   <p className="text-xs text-gray-400 line-clamp-3">{classe.descricao}</p>
                 </button>
               ))}
@@ -603,7 +683,8 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                 {rolagemAtributosPermitida(isMestre) ? (
                   <button
                     onClick={handleRolar}
-                    className={`px-4 py-2.5 rounded-full border font-bold tracking-wide flex items-center gap-2 transition-all ${metodoAtributos === 'rolado' ? 'bg-amber-600 text-white border-amber-500' : 'bg-amber-500/10 text-amber-400 border-amber-500/40 hover:bg-amber-500/20'}`}
+                    disabled={rolandoDados}
+                    className={`px-4 py-2.5 rounded-full border font-bold tracking-wide flex items-center gap-2 transition-all disabled:cursor-wait disabled:opacity-60 ${metodoAtributos === 'rolado' ? 'bg-amber-600 text-white border-amber-500' : 'bg-amber-500/10 text-amber-400 border-amber-500/40 hover:bg-amber-500/20'}`}
                   >
                     <Dices size={18} />
                     Rolar 7d20
@@ -874,7 +955,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={handleCriarRapido}
-                disabled={nome.trim().length < 2 || criandoRapido}
+                disabled={nome.trim().length < 2 || ocupado}
                 title={nome.trim().length < 2 ? 'Escreva um nome pra pular direto pra Ficha' : 'Cria a Ficha com valores padrão; dá pra trocar raça, classe e tudo mais depois'}
                 className="flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/10 bg-white/5 px-3 py-2.5 text-xs font-medium text-gray-400 transition-colors hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
               >
@@ -898,6 +979,12 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
           </AnimatePresence>
         </div>
 
+        {erroCriacao ? (
+          <div role="alert" className="border-t border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200 sm:px-6 md:px-8">
+            {erroCriacao}
+          </div>
+        ) : null}
+
         {/* Footer */}
         <div className="flex items-center justify-between gap-2 border-t border-white/5 bg-black/40 p-4 backdrop-blur-xl sm:p-6 md:p-8">
           <button 
@@ -918,16 +1005,25 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
               Avançar <ChevronRight size={20} />
             </button>
           ) : (
-            <button 
+            <button
               onClick={handleCreate}
-              className="flex items-center gap-1 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-4 text-white font-bold transition-all hover:from-green-400 hover:to-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-105 sm:gap-2 sm:px-10"
+              disabled={ocupado}
+              className="flex items-center gap-1 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-4 text-white font-bold transition-all hover:from-green-400 hover:to-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-105 disabled:cursor-wait disabled:opacity-60 disabled:hover:scale-100 sm:gap-2 sm:px-10"
             >
               <Sparkles size={20} />
-              Finalizar Criação
+              {criando ? 'Criando...' : 'Finalizar Criação'}
             </button>
           )}
         </div>
       </motion.div>
+
+      {nascimento ? (
+        <NascimentoDoPersonagem
+          dados={nascimento}
+          onAbrirFicha={() => { onClose(); navigate(`/ficha/${nascimento.id}`); }}
+          onVoltar={onClose}
+        />
+      ) : null}
 
       <AnimatePresence>
         {infoModal && (

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { ApiError } from '../services/apiClient';
+import { esquecerUltimaFicha, recordarUltimaFicha } from '../services/ultimaFicha';
 import {
   AutosaveQueue,
   type AutosaveQueueState,
@@ -1018,6 +1019,11 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
       await personagensApi.arquivar(id);
       clearSheetCoordinator(id);
       clearEconomyCoordinator(id);
+      // O "Continuar" da Home não pode levar a uma ficha que acabou de sair da lista.
+      const { usuario, campanhaAtiva } = useAuthStore.getState();
+      if (usuario?.id && campanhaAtiva?.id && recordarUltimaFicha(usuario.id, campanhaAtiva.id)?.id === id) {
+        esquecerUltimaFicha(usuario.id, campanhaAtiva.id);
+      }
       set((state) => {
         const persistence = { ...state.persistence };
         delete persistence[id];

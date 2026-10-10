@@ -2,6 +2,265 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-10-loja-filtros-notebook",
+      "data": "2026-10-10",
+      "tipo": "correcao",
+      "area": "Loja",
+      "titulo": "Filtros da Loja cabem em telas de notebook",
+      "detalhes": [
+        "Em telas de 1280 pixels a linha de filtros do balcão passava da borda e a página ganhava uma barra de rolagem para o lado. Agora ela se ajusta e tudo fica à vista.",
+        "Quem arquiva uma ficha também deixa de ver o atalho Continuar apontando para ela na Home, e a lista de resultados da Busca do Jardim não rola mais sozinha quando o mouse para na borda."
+      ]
+    },
+    {
+      "id": "2026-10-10-criticos-na-mesa",
+      "data": "2026-10-10",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "20 e 1 naturais aparecem para a mesa toda",
+      "detalhes": [
+        "Na Sessão ao vivo, quando alguém tira 20 natural ou 1 natural no d20, uma faixa avisa a mesa inteira, com som. Só aparece quem rolou, o que rolou e se foi 20 ou 1; o resultado continua no registro de cada um.",
+        "No celular o aparelho também vibra no 20 e no 1, quando você leva dano e quando é a sua vez. Os dois avisos dá para desligar em Configurações, Preferências."
+      ]
+    },
+    {
+      "id": "2026-10-10-dado-3d-capricho",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Dado 3D mais caprichado",
+      "detalhes": [
+        "Atrás do dado a tela agora fica escura e desfocada, então o resultado não se mistura mais com o texto da ficha.",
+        "O 20 natural entra em câmera lenta, a câmera dá um soco ao pousar e a tela pisca em dourado. O 1 natural pisca em vermelho."
+      ]
+    },
+    {
+      "id": "2026-10-10-home-e-menu-arrumados",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Home e menu do celular mais arrumados",
+      "detalhes": [
+        "Em telas largas os cinco cartões da Home ficam na mesma fileira, e nas menores eles se dividem sem deixar um sozinho no fim.",
+        "No celular o cabeçalho da Home ocupa menos espaço, e o nome Campanha deixou de ser cortado no menu de baixo."
+      ]
+    },
+    {
+      "id": "2026-10-10-busca-do-jardim",
+      "data": "2026-10-10",
+      "tipo": "novo",
+      "area": "Jardim",
+      "titulo": "Busca do Jardim: Ctrl+K encontra o que você procura",
+      "detalhes": [
+        "Aperte Ctrl+K (ou toque na lupa no canto de cima) e escreva. A busca olha o Livro, o Mundo, os Registros Universais, a Loja e as suas fichas, e leva direto ao que achou. Magias, rituais, selos e encantamentos abrem o Catálogo mágico já no item certo.",
+        "Só aparece o que você já pode ver: o que o Mestre ainda não liberou, os mercados escondidos e o texto reservado a quem comanda a mesa ficam de fora."
+      ]
+    },
+    {
+      "id": "2026-10-10-sessao-ao-vivo-no-menu",
+      "data": "2026-10-10",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Sessão ao vivo no menu e na Home",
+      "detalhes": [
+        "Quando há mesa ao vivo, o ícone da Sessão no menu ganha uma luz verde e a Home mostra um cartão Ao vivo agora com o botão para entrar. O Mestre vê uma luz âmbar enquanto a sessão está só em preparação.",
+        "Se você estiver em outra tela quando o Mestre abrir a mesa, aparece um aviso com o botão Entrar na sessão. A Home também leva de volta à última ficha que você abriu."
+      ]
+    },
+    {
+      "id": "2026-10-10-telas-e-guias",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Telas que entram suavemente e guias que dá para pular",
+      "detalhes": [
+        "As telas agora entram com uma transição curta, e enquanto a página chega aparece o desenho dela no lugar do círculo girando.",
+        "Cada guia ganhou o botão Pular todos os guias. Ele desliga a abertura automática em todas as páginas; o botão de guia de cada página continua lá, e dá para religar em Configurações, Preferências, Guias automáticos."
+      ]
+    },
+    {
+      "id": "2026-10-10-nascimento-do-personagem",
+      "data": "2026-10-10",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "O nascimento do personagem",
+      "detalhes": [
+        "Os cartões de Árvore, raça e classe do assistente de criação ganharam emblemas coloridos.",
+        "Rolar 7d20 agora joga sete dados 3D na tela, e os valores entram nos atributos quando os dados pousam.",
+        "Depois de Finalizar Criação o personagem nasce numa cerimônia: a constelação da classe acende a primeira estrela, na cor dela, e você escolhe entre abrir a ficha ou voltar à lista."
+      ]
+    },
+    {
+      "id": "2026-10-10-iniciativa-em-ordem",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Iniciar combate já na ordem da iniciativa",
+      "detalhes": [
+        "Se a fila estiver fora de ordem na hora de começar, o Mestre recebe um aviso e pode escolher Ordenar e começar, Começar assim ou Voltar. Antes, quem tinha a iniciativa menor podia acabar jogando primeiro."
+      ]
+    },
+    {
+      "id": "2026-10-10-combate-vivo",
+      "data": "2026-10-10",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "O combate ganhou vida na tela",
+      "detalhes": [
+        "Quando alguém leva dano ou é curado, o número sobe pela barra e a barra treme conforme o tamanho do golpe. Com a Vida baixa a barra pulsa, e quem cai fica em cinza com a etiqueta Caído.",
+        "O começo do combate, cada rodada nova e o fim aparecem numa faixa para a mesa toda.",
+        "Criatura com a Vida escondida continua escondida: só o texto de estado dela reage. Com movimento reduzido no aparelho ou o modo de desempenho ligado, nada disso se mexe."
+      ]
+    },
+    {
+      "id": "2026-10-10-avisos-e-desfazer",
+      "data": "2026-10-10",
+      "tipo": "novo",
+      "area": "Jardim",
+      "titulo": "Avisos com a cara do Jardim e botão Desfazer",
+      "detalhes": [
+        "As caixinhas cinzas do navegador saíram. Os avisos agora aparecem embaixo da tela e as perguntas de confirmação são janelas do próprio site.",
+        "Apagar um ataque, habilidade, poder, nota, vínculo, Prestígio ou propriedade da ficha não pergunta mais: o item some na hora e o botão Desfazer fica na tela por alguns segundos. Desequipar uma arma também tem Desfazer. O que não tem volta continua pedindo confirmação."
+      ]
+    },
+    {
+      "id": "2026-10-10-clima-do-mundo",
+      "data": "2026-10-10",
+      "tipo": "novo",
+      "area": "Mundo",
+      "titulo": "O fundo do site segue as estações do Mundo",
+      "detalhes": [
+        "O fundo acompanha a estação do calendário da sua campanha: pétalas na primavera, vagalumes no verão, folhas no outono, neve no inverno, e um clima próprio na Noite Eterna, no Eclipse e na Lua Carmesim.",
+        "Quando o Mestre avança o dia, a mudança chega para a mesa toda na hora. Se o calendário ainda não foi aberto para a mesa, o fundo fica como sempre. Dá para desligar em Configurações, Preferências, Clima do mundo."
+      ]
+    },
+    {
+      "id": "2026-10-10-instalar-como-app",
+      "data": "2026-10-10",
+      "tipo": "novo",
+      "area": "Jardim",
+      "titulo": "Instale o Jardim como app",
+      "detalhes": [
+        "O site agora pode ser instalado no celular ou no computador, com ícone próprio, tela cheia e abertura mais rápida. Sem internet a tela abre, mas ficha e sessão precisam de conexão.",
+        "Em Configurações, Preferências, Instalar como app aparece o botão de instalar ou o passo a passo do seu aparelho."
+      ]
+    },
+    {
+      "id": "2026-10-09-ajuda-e-entrevista",
+      "data": "2026-10-09",
+      "tipo": "melhoria",
+      "area": "Discord",
+      "titulo": "A /ajuda explica tudo, e a entrevista ficou mais segura",
+      "detalhes": [
+        "Os dois bots ganharam um guia no começo do /ajuda, em linguagem simples: baús, Chaves, Coleção das Árvores, Cofre do Jardim, leilão de sábado, Dia de Bolsa, classificados, furos e entrevistas. Quem não é Mestre agora só vê os comandos que pode usar.",
+        "Na entrevista da semana, a sua resposta na DM não sai direto no jornal: o Jornalista mostra como vai ficar e você toca em Publicar ou em Reescrever. Conversar com o bot não publica mais nada sem querer."
+      ]
+    },
+    {
+      "id": "2026-10-09-jornal-lunar-mais-vivo",
+      "data": "2026-10-09",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "O Jornal Lunar ficou mais vivo",
+      "detalhes": [
+        "Toda semana, no domingo à noite, sai uma edição do jornal com o tempo no Jardim, os caçadores de baú, os procurados, os furos, os classificados, a entrevista da semana e a Loteria.",
+        "Os classificados agora têm tipo (compro, vendo, procuro grupo, serviço), duram 7 dias e têm um botão Responder: o recado chega por DM para quem anunciou.",
+        "No furo você escreve a história de verdade. Quem é alvo pode subornar ou desmentir de graça, e o Mestre pode barrar uma história antes de sair.",
+        "Quando alguém sobe de nível ou ganha um selo, o jornal comenta. O Mestre decide no site se quer esses avisos.",
+        "O /baus_hoje mostra os maiores caçadores de baú do mês, e a entrevista agora tem muito mais perguntas, algumas sobre a sua Árvore."
+      ]
+    },
+    {
+      "id": "2026-10-09-eventos-da-semana",
+      "data": "2026-10-09",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "Leilão do Jardim e Dia de Bolsa toda semana",
+      "detalhes": [
+        "Todo sábado às 18h o Banco Lunar leiloa um item bom (Raro ou melhor) por 24 horas. O lance mínimo é baixo, então vale ficar de olho. Os lances do dia aparecem no /banco.",
+        "Toda quarta ao meio-dia é Dia de Bolsa: durante 24 horas os Títulos do Jardim podem render mais, render menos, ou o câmbio fica sem taxa. O humor do dia é sorteado e aparece no /banco.",
+        "O botão de dar lance agora continua funcionando mesmo se o bot reiniciar no meio do leilão."
+      ]
+    },
+    {
+      "id": "2026-10-09-cofre-do-jardim",
+      "data": "2026-10-09",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "Cofre do Jardim: uma meta que a mesa inteira enche",
+      "detalhes": [
+        "O Mestre pode abrir uma meta coletiva em Lunaris, com prazo e uma recompensa para todo mundo. Você doa pelo /banco, na seção Cofre do Jardim, e acompanha o progresso e os maiores doadores no /jardim.",
+        "Bateu a meta, o aviso sai no jornal e, se o Mestre prometeu, começa um festival com baús bem mais generosos. Se o prazo acabar sem bater a meta, todo mundo recebe de volta o que doou."
+      ]
+    },
+    {
+      "id": "2026-10-09-colecao-das-dez-arvores",
+      "data": "2026-10-09",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "Coleção das Dez Árvores: fragmentos nos baús revelam o que restou escrito",
+      "detalhes": [
+        "Os baús agora podem trazer um fragmento de uma Árvore. Cada fragmento revela na hora um pedaço do que as Crônicas do Jardim guardam sobre ela, e com três a página se completa. Veja o seu álbum na seção Coleção do /jardim.",
+        "Quem completa a página de uma Árvore e carrega o cargo dela ganha 10% a mais de Lunaris em todo baú. Quem completa as dez páginas lê o epílogo das Crônicas e vira Cronista do Jardim."
+      ]
+    },
+    {
+      "id": "2026-10-04-chaves-do-jardim",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "Chaves do Jardim: abra o fundo falso dos baús",
+      "detalhes": [
+        "Compre Chaves no /banco, na seção Chaves. Uma Chave é gasta sozinha no próximo baú Incomum ou melhor que você pegar e dá 50% mais Lunaris e um item extra. Ela nunca é exigida: sem Chave o baú abre do mesmo jeito.",
+        "Quem vence a corrida de um baú Raro ou melhor ganha uma Chave de brinde, e nos baús para todos há uma chance de achar uma. Dá para deixar as Chaves guardadas desligando o uso automático."
+      ]
+    },
+    {
+      "id": "2026-10-04-paineis-banco-e-jardim",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "Painéis /banco e /jardim: tudo num lugar só",
+      "detalhes": [
+        "Com /banco você vê sua conta, o que pede atenção (dívida, fatura, recompensa na sua cabeça) e o que está acontecendo no servidor, e abre carteira, cofre, extrato, leilões e o resto por um menu, sem encher o canal. Há botões para guardar ou sacar do cofre e comprar bilhetes da loteria.",
+        "Com /jardim você vê a estação, o horóscopo do dia, os baús no ar e os eventos do Mestre, com atalhos para anunciar um classificado, vender um furo e entrar ou sair das entrevistas. Os comandos de sempre continuam funcionando."
+      ]
+    },
+    {
+      "id": "2026-10-04-baus-v2",
+      "data": "2026-10-04",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "Baús v2: mais baús, um pra cada um e sorte que acumula",
+      "detalhes": [
+        "Agora caem vários baús por dia, espalhados em horários diferentes. Os Comuns e Incomuns têm um para cada pessoa: é só clicar em \"Pegar o meu\". Do Raro para cima continua a corrida do enigma.",
+        "Quem tenta o enigma e não leva ganha uma Pista de Sorte, que vira Lunaris extra e chance de item a mais no próximo baú que você levar. Depois de uma sequência de baús fracos, o próximo vem pelo menos Raro. Veja os baús de hoje com /baus_hoje.",
+        "O Mestre pode manter um mural \"Achados de hoje\" num canal, atualizado a cada baú."
+      ]
+    },
+    {
+      "id": "2026-10-04-jornalista-furos-e-classificados",
+      "data": "2026-10-04",
+      "tipo": "correcao",
+      "area": "Discord",
+      "titulo": "Furos e classificados do Jornalista agora valem Lunaris",
+      "detalhes": [
+        "O /vender_furo paga de 10 a 40 Lunaris por história comprada (antes eram Solares, que rendiam bem mais do que qualquer baú). Quem é alvo do furo recebe um aviso privado com o prazo e o preço do suborno.",
+        "O /anunciar_classificado passa a custar a partir de 50 Lunaris."
+      ]
+    },
+    {
+      "id": "2026-10-04-jornalista-baus-e-horoscopo",
+      "data": "2026-10-04",
+      "tipo": "melhoria",
+      "area": "Discord",
+      "titulo": "Baús, horóscopo e loteria mais certinhos",
+      "detalhes": [
+        "A janela de horário que o Mestre define para os baús deixa de voltar ao padrão quando o bot reinicia. O baú Sombrio entrega os Créditos Sombrios em qualquer caso.",
+        "O horóscopo sai uma vez por dia sem pular dias, e o bônus vale só enquanto o horóscopo está em vigor. A loteria de domingo é recuperada se o bot estiver fora do ar na hora do sorteio."
+      ]
+    },
+    {
       "id": "2026-10-04-dadivas-e-oferendas",
       "data": "2026-10-04",
       "tipo": "novo",

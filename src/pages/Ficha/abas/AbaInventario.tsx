@@ -55,6 +55,7 @@ import { GaragemPessoal } from '../components/bens/GaragemPessoal';
 import { VeiculoModal } from '../components/bens/VeiculoModal';
 import { sfx } from '../../../utils/audioSynth';
 import '../components/equiparItem.css';
+import { confirmar } from '../../../components/avisos/confirmacao';
 
 interface IInventoryItem {
   id: string;
@@ -382,7 +383,13 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
     const pergunta = substituir
       ? `Consumir ${item.nome} substituirá permanentemente ${frutoAtual.titulo || 'o Fruto do Éden atual'}. Continuar?`
       : `Consumir ${item.nome}? O fruto sairá do inventário e ficará vinculado permanentemente à ficha.`;
-    if (!window.confirm(pergunta)) return;
+    const confirmado = await confirmar({
+      titulo: substituir ? 'Trocar o Fruto do Éden' : 'Consumir o fruto',
+      mensagem: pergunta,
+      rotuloConfirmar: substituir ? 'Trocar o fruto' : 'Consumir',
+      tom: substituir ? 'perigo' : 'padrao',
+    });
+    if (!confirmado) return;
 
     setFrutoPendenteId(item.id);
     setFeedbackFruto(null);
@@ -566,10 +573,14 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
     setModalAberto(false);
   };
 
-  const handleRemoveItem = (id: string, nome: string) => {
-    if (window.confirm(`Remover o item "${nome}"?`)) {
-      mutarInventario((atual) => atual.filter((item) => item.id !== id));
-    }
+  const handleRemoveItem = async (id: string, nome: string) => {
+    const confirmado = await confirmar({
+      titulo: 'Remover o item',
+      mensagem: `Remover o item "${nome}"?`,
+      rotuloConfirmar: 'Remover',
+      tom: 'perigo',
+    });
+    if (confirmado) mutarInventario((atual) => atual.filter((item) => item.id !== id));
   };
 
   const handleAjustarQtd = (id: string, delta: number) => {
@@ -1094,10 +1105,10 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                   <div className="flex items-start justify-between gap-2">
                     <h4 className="font-bold text-white">{item.nome}</h4>
                     <div className="flex shrink-0 gap-1">
-                      <button onClick={() => abrirEdicao(item)} className="w-6 h-6 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 flex items-center justify-center transition-colors">
+                      <button type="button" onClick={() => abrirEdicao(item)} aria-label={`Editar ${item.nome}`} title="Editar" className="w-6 h-6 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 flex items-center justify-center transition-colors">
                         <Pencil size={11} />
                       </button>
-                      <button onClick={() => handleRemoveItem(item.id, item.nome)} className="w-6 h-6 rounded bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 flex items-center justify-center transition-colors">
+                      <button type="button" onClick={() => handleRemoveItem(item.id, item.nome)} aria-label={`Remover ${item.nome}`} title="Remover" className="w-6 h-6 rounded bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 flex items-center justify-center transition-colors">
                         <Trash2 size={11} />
                       </button>
                     </div>
@@ -1175,7 +1186,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                       {/* Área de Ícone, Favorito e Arraste */}
                       <div className="flex flex-col gap-2 items-center">
                         <div className="flex gap-1 mb-1">
-                          <button onClick={() => toggleFavorito(item.id)} className={`transition-colors ${item.favorito ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]' : 'text-gray-600 hover:text-gray-400'}`}>
+                          <button type="button" onClick={() => toggleFavorito(item.id)} aria-pressed={Boolean(item.favorito)} aria-label={item.favorito ? `Tirar ${item.nome} dos favoritos` : `Favoritar ${item.nome}`} className={`transition-colors ${item.favorito ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]' : 'text-gray-600 hover:text-gray-400'}`}>
                             <Star size={16} fill={item.favorito ? 'currentColor' : 'none'} />
                           </button>
                           <div className="cursor-grab active:cursor-grabbing text-gray-600 hover:text-gray-400 p-0.5">
@@ -1226,7 +1237,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                           <div className="text-right flex flex-col items-end gap-1.5">
                             <div className="flex gap-2 items-center">
                               <div className="flex gap-1 opacity-100 transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                                <button onClick={() => abrirEdicao(item)} className="w-6 h-6 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 flex items-center justify-center transition-colors">
+                                <button type="button" onClick={() => abrirEdicao(item)} aria-label={`Editar ${item.nome}`} title="Editar" className="w-6 h-6 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 flex items-center justify-center transition-colors">
                                   <Pencil size={11} />
                                 </button>
                                 {materialDoItem(item) ? (
@@ -1239,15 +1250,17 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                                     <Send size={11} />
                                   </button>
                                 ) : null}
-                                <button onClick={() => handleRemoveItem(item.id, item.nome)} className="w-6 h-6 rounded bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 flex items-center justify-center transition-colors">
+                                <button type="button" onClick={() => handleRemoveItem(item.id, item.nome)} aria-label={`Remover ${item.nome}`} title="Remover" className="w-6 h-6 rounded bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 flex items-center justify-center transition-colors">
                                   <Trash2 size={11} />
                                 </button>
                               </div>
                               <div className="flex items-center gap-1 bg-black/40 rounded border border-white/10 p-0.5">
-                                <button onClick={() => handleAjustarQtd(item.id, -1)} className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-white transition-colors"><Minus size={10}/></button>
+                                <button type="button" onClick={() => handleAjustarQtd(item.id, -1)} aria-label={`Diminuir a quantidade de ${item.nome}`} className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-white transition-colors"><Minus size={10}/></button>
                                 <span className="w-6 text-center text-sm font-bold text-gray-200 font-mono">{item.quantidade}</span>
                                 <button
+                                  type="button"
                                   onClick={() => handleAjustarQtd(item.id, 1)}
+                                  aria-label={`Aumentar a quantidade de ${item.nome}`}
                                   disabled={!podeGerenciarEconomia && !itemEhManual(item)}
                                   title={!podeGerenciarEconomia && !itemEhManual(item) ? 'A quantidade adquirida é validada pelo servidor.' : undefined}
                                   className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-gray-500"
@@ -1266,9 +1279,9 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                             <div className="flex items-center gap-2 text-xs bg-black/30 border border-white/5 px-2 py-1 rounded">
                               <Wrench size={12} className={item.durabilidadeAtual < item.durabilidadeMaxima / 3 ? 'text-red-400' : 'text-gray-400'} />
                               <div className="flex items-center gap-1 font-mono">
-                                <button onClick={() => handleAjustarStatusInterno(item.id, 'durabilidadeAtual', 'durabilidadeMaxima', -1)} className="text-gray-500 hover:text-white"><Minus size={10}/></button>
+                                <button type="button" onClick={() => handleAjustarStatusInterno(item.id, 'durabilidadeAtual', 'durabilidadeMaxima', -1)} aria-label={`Diminuir a durabilidade de ${item.nome}`} className="text-gray-500 hover:text-white"><Minus size={10}/></button>
                                 <span className={item.durabilidadeAtual < item.durabilidadeMaxima / 3 ? 'text-red-400 font-bold' : 'text-gray-300'}>{item.durabilidadeAtual} / {item.durabilidadeMaxima}</span>
-                                <button onClick={() => handleAjustarStatusInterno(item.id, 'durabilidadeAtual', 'durabilidadeMaxima', 1)} className="text-gray-500 hover:text-white"><Plus size={10}/></button>
+                                <button type="button" onClick={() => handleAjustarStatusInterno(item.id, 'durabilidadeAtual', 'durabilidadeMaxima', 1)} aria-label={`Aumentar a durabilidade de ${item.nome}`} className="text-gray-500 hover:text-white"><Plus size={10}/></button>
                               </div>
                             </div>
                           )}
@@ -1277,9 +1290,9 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                             <div className="flex items-center gap-2 text-xs bg-black/30 border border-white/5 px-2 py-1 rounded">
                               <span className="text-gray-400 uppercase font-bold tracking-wider text-[9px]">Munição</span>
                               <div className="flex items-center gap-1 font-mono">
-                                <button onClick={() => handleAjustarStatusInterno(item.id, 'municaoAtual', 'municaoMaxima', -1)} className="text-gray-500 hover:text-white"><Minus size={10}/></button>
+                                <button type="button" onClick={() => handleAjustarStatusInterno(item.id, 'municaoAtual', 'municaoMaxima', -1)} aria-label={`Diminuir a munição de ${item.nome}`} className="text-gray-500 hover:text-white"><Minus size={10}/></button>
                                 <span className="text-gray-300">{item.municaoAtual} / {item.municaoMaxima}</span>
-                                <button onClick={() => handleAjustarStatusInterno(item.id, 'municaoAtual', 'municaoMaxima', 1)} className="text-gray-500 hover:text-white"><Plus size={10}/></button>
+                                <button type="button" onClick={() => handleAjustarStatusInterno(item.id, 'municaoAtual', 'municaoMaxima', 1)} aria-label={`Aumentar a munição de ${item.nome}`} className="text-gray-500 hover:text-white"><Plus size={10}/></button>
                               </div>
                             </div>
                           ) : null}
@@ -1288,9 +1301,9 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                             <div className="flex items-center gap-2 text-xs bg-black/30 border border-white/5 px-2 py-1 rounded">
                               <span className="text-gray-400 uppercase font-bold tracking-wider text-[9px]">Combustível</span>
                               <div className="flex items-center gap-1 font-mono">
-                                <button onClick={() => handleAjustarStatusInterno(item.id, 'combustivelAtual', 'combustivelMaximo', -1)} className="text-gray-500 hover:text-white"><Minus size={10}/></button>
+                                <button type="button" onClick={() => handleAjustarStatusInterno(item.id, 'combustivelAtual', 'combustivelMaximo', -1)} aria-label={`Diminuir o combustível de ${item.nome}`} className="text-gray-500 hover:text-white"><Minus size={10}/></button>
                                 <span className="text-gray-300">{item.combustivelAtual} / {item.combustivelMaximo}</span>
-                                <button onClick={() => handleAjustarStatusInterno(item.id, 'combustivelAtual', 'combustivelMaximo', 1)} className="text-gray-500 hover:text-white"><Plus size={10}/></button>
+                                <button type="button" onClick={() => handleAjustarStatusInterno(item.id, 'combustivelAtual', 'combustivelMaximo', 1)} aria-label={`Aumentar o combustível de ${item.nome}`} className="text-gray-500 hover:text-white"><Plus size={10}/></button>
                               </div>
                             </div>
                           ) : null}

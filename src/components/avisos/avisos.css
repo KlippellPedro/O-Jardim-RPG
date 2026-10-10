@@ -1,0 +1,264 @@
+/* Avisos e confirmação do site (ver AvisosHost.tsx). Só transform e opacity animam. */
+
+.avisos-pilha {
+  position: fixed;
+  z-index: 10020;
+  left: 50%;
+  bottom: calc(var(--app-nav-block, 0px) + max(1rem, env(safe-area-inset-bottom, 0px)));
+  display: flex;
+  width: min(30rem, calc(100vw - 1.5rem));
+  flex-direction: column;
+  gap: 0.5rem;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.aviso {
+  --aviso-cor: #c7a44c;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  overflow: hidden;
+  padding: 0.8rem 0.7rem 0.95rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--aviso-cor) 38%, transparent);
+  border-radius: 0.9rem;
+  background: rgb(11 10 18 / 0.96);
+  box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(14px);
+  pointer-events: auto;
+}
+
+.aviso--sucesso { --aviso-cor: #34d399; }
+.aviso--info { --aviso-cor: #c7a44c; }
+.aviso--aviso { --aviso-cor: #f59e0b; }
+.aviso--erro { --aviso-cor: #f87171; }
+
+.aviso__icone {
+  display: flex;
+  width: 1.9rem;
+  height: 1.9rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.6rem;
+  background: color-mix(in srgb, var(--aviso-cor) 14%, transparent);
+  color: var(--aviso-cor);
+}
+
+.aviso__corpo {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.aviso__titulo {
+  margin: 0;
+  color: var(--aviso-cor);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.aviso__texto {
+  margin: 0.2rem 0 0;
+  color: rgb(255 255 255 / 0.88);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.aviso__repeticoes {
+  display: inline-block;
+  margin-top: 0.25rem;
+  color: rgb(255 255 255 / 0.45);
+  font-size: 0.68rem;
+}
+
+.aviso__acao {
+  min-height: 2rem;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--aviso-cor) 45%, transparent);
+  border-radius: 0.55rem;
+  background: color-mix(in srgb, var(--aviso-cor) 10%, transparent);
+  color: var(--aviso-cor);
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: background-color 150ms ease;
+}
+
+.aviso__acao:hover:not(:disabled) { background: color-mix(in srgb, var(--aviso-cor) 20%, transparent); }
+.aviso__acao:disabled { cursor: wait; opacity: 0.55; }
+
+.aviso__fechar {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  color: rgb(255 255 255 / 0.4);
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+.aviso__fechar:hover { background: rgb(255 255 255 / 0.06); color: #fff; }
+
+/* No toque o alvo precisa de uns 44 px: o "Desfazer" é o botão que mais importa aqui. */
+@media (pointer: coarse) {
+  .aviso__acao { min-height: 2.75rem; padding-inline: 1rem; }
+  .aviso__fechar { width: 2.75rem; height: 2.75rem; margin: -0.45rem -0.35rem -0.45rem 0; }
+}
+
+/* A barrinha mostra quanto falta para o aviso sumir; parar o mouse em cima pausa. */
+.aviso__tempo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--aviso-cor);
+  opacity: 0.6;
+  transform-origin: left center;
+  animation: aviso-tempo var(--aviso-duracao, 5s) linear forwards;
+}
+
+.aviso:hover .aviso__tempo,
+.aviso:focus-within .aviso__tempo { animation-play-state: paused; }
+
+@keyframes aviso-tempo {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* Confirmação: o que antes era a caixa cinza do navegador. */
+.confirmacao-fundo {
+  position: fixed;
+  z-index: 10030;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(3 3 8 / 0.74);
+  backdrop-filter: blur(4px);
+  animation: confirmacao-fundo 160ms ease-out both;
+}
+
+.confirmacao {
+  --confirmacao-cor: #c7a44c;
+  display: flex;
+  width: min(27rem, 100%);
+  max-height: 100%;
+  flex-direction: column;
+  gap: 0.9rem;
+  overflow-y: auto;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--confirmacao-cor) 35%, transparent);
+  border-radius: 1.1rem;
+  background:
+    radial-gradient(circle at 50% -30%, color-mix(in srgb, var(--confirmacao-cor) 14%, transparent), transparent 60%),
+    rgb(13 12 19 / 0.98);
+  box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 0.6);
+  animation: confirmacao-entrada 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.confirmacao--perigo { --confirmacao-cor: #f87171; }
+
+.confirmacao__cabeca {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.confirmacao__icone {
+  display: flex;
+  width: 2.2rem;
+  height: 2.2rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, var(--confirmacao-cor) 14%, transparent);
+  color: var(--confirmacao-cor);
+}
+
+.confirmacao__titulo {
+  margin: 0;
+  font-family: Cinzel, serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fff;
+}
+
+.confirmacao__texto {
+  margin: 0;
+  color: rgb(255 255 255 / 0.78);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.confirmacao__botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+}
+
+.confirmacao__botao {
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 0.7rem;
+  color: rgb(255 255 255 / 0.7);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.confirmacao__botao:hover { border-color: rgb(255 255 255 / 0.28); color: #fff; }
+
+.confirmacao__botao--alternativa {
+  border-color: color-mix(in srgb, var(--confirmacao-cor) 28%, transparent);
+  color: color-mix(in srgb, var(--confirmacao-cor) 80%, #fff);
+}
+
+.confirmacao__botao--principal {
+  border-color: color-mix(in srgb, var(--confirmacao-cor) 55%, transparent);
+  background: color-mix(in srgb, var(--confirmacao-cor) 16%, transparent);
+  color: color-mix(in srgb, var(--confirmacao-cor) 85%, #fff);
+}
+
+.confirmacao__botao--principal:hover {
+  border-color: var(--confirmacao-cor);
+  background: color-mix(in srgb, var(--confirmacao-cor) 26%, transparent);
+  color: #fff;
+}
+
+@media (max-width: 30rem) {
+  .confirmacao__botoes { flex-direction: column-reverse; }
+  .confirmacao__botao { width: 100%; }
+}
+
+@keyframes confirmacao-fundo {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes confirmacao-entrada {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aviso__tempo { display: none; }
+  .confirmacao,
+  .confirmacao-fundo { animation: none; }
+}
+
+html[data-performance-mode='reduced'] .aviso__tempo { display: none; }
+html[data-performance-mode='reduced'] .confirmacao-fundo { backdrop-filter: none; }

@@ -7,6 +7,7 @@ import { usePerformanceStore } from '../../store/usePerformanceStore';
 import { notificarForaDaAba } from '../../utils/notificacoesNavegador';
 import './suaVez.css';
 import { semMovimento } from '../../utils/movimento';
+import { vibrar } from '../../utils/vibracaoDoApp';
 
 const DURACAO_MS = 3400;
 
@@ -28,7 +29,7 @@ export const SuaVezHost = memo(function SuaVezHost() {
   useEffect(() => {
     if (!aviso || !temVez) return undefined;
     sfx.play('gongo');
-    try { navigator.vibrate?.([140, 70, 140]); } catch { /* sem vibração neste aparelho */ }
+    vibrar('suaVez');
     if (notificarLigado) {
       notificarForaDaAba('É a sua vez!', `Rodada ${aviso.rodada} · ${aviso.nome}`, 'jardim-sua-vez');
     }

@@ -17,6 +17,7 @@ import { EpilogoModal } from './EpilogoModal';
 import { SeletorDeCampanha } from './SeletorDeCampanha';
 import { CronicaCampanha } from './CronicaCampanha';
 import { ROTULO_PAPEL, corDaCampanha, textoDeDuracao, textoDeVisita, urlDaCapa } from './campanha';
+import { confirmar } from '../../components/avisos/confirmacao';
 
 const ATALHOS = [
   { rotulo: 'Ficha', caminho: '/ficha', icone: Shield },
@@ -64,7 +65,7 @@ export default function CampanhaPage() {
 
   const duplicar = async () => {
     if (!campanhaId || duplicando) return;
-    if (!window.confirm('Criar uma cópia desta campanha só com o conteúdo (Mundo, Loja, informações e calendário)? Fichas, jogadores e histórico não vão.')) return;
+    if (!(await confirmar({ titulo: 'Duplicar a campanha', mensagem: 'Criar uma cópia desta campanha só com o conteúdo (Mundo, Loja, informações e calendário)? Fichas, jogadores e histórico não vão.', rotuloConfirmar: 'Criar a cópia' }))) return;
     setDuplicando(true);
     setAviso('');
     try {

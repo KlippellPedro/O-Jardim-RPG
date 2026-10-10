@@ -1,5 +1,6 @@
 import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useSearchParams } from 'react-router-dom';
 import { BookMarked, ChevronRight, Search, SlidersHorizontal, Sparkles, X } from 'lucide-react';
 import { RitualComponents } from '../../../components/materials/RitualComponents';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
@@ -363,12 +364,30 @@ export const CatalogoMagico = ({
 }: CatalogoMagicoProps) => {
   const mobileDialogRef = useRef<HTMLDivElement>(null);
   const mobileCloseRef = useRef<HTMLButtonElement>(null);
-  const [aba, setAba] = useState<AbaCatalogo>('magias');
+  // A Busca do Jardim chega aqui com `?aba=...&item=...`: o Catálogo abre na aba e no item certos.
+  const [parametros] = useSearchParams();
+  const abaDaUrl = ABAS.find((item) => item.id === parametros.get('aba'))?.id;
+  const itemDaUrl = parametros.get('item') ?? '';
+  const [aba, setAba] = useState<AbaCatalogo>(abaDaUrl ?? 'magias');
   const [busca, setBusca] = useState('');
   const [fluxo, setFluxo] = useState<FluxoDeMagia | 'todos'>('todos');
   const [circulo, setCirculo] = useState<number | 'todos'>('todos');
-  const [selecionadoId, setSelecionadoId] = useState('');
+  const [selecionadoId, setSelecionadoId] = useState(abaDaUrl ? itemDaUrl : '');
   const [detalheMovelAberto, setDetalheMovelAberto] = useState(false);
+  useEffect(() => {
+    if (!abaDaUrl) return undefined;
+    setAba(abaDaUrl);
+    setSelecionadoId(itemDaUrl);
+    setBusca('');
+    setFluxo('todos');
+    setCirculo('todos');
+    // O Catálogo fica depois do texto do capítulo: leva a tela até ele e, na lista, até o item escolhido.
+    const timer = window.setTimeout(() => {
+      document.getElementById('catalogo-magico-titulo')?.scrollIntoView({ block: 'start', behavior: 'auto' });
+      document.querySelector('.content-auto-list-item[aria-pressed="true"]')?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+    }, 120);
+    return () => window.clearTimeout(timer);
+  }, [abaDaUrl, itemDaUrl]);
   const isMobile = useIsMobileViewport();
   useDialogAccessibility({
     open: detalheMovelAberto && isMobile,

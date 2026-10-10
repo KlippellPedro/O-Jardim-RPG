@@ -25,6 +25,16 @@ export const FACES_SUPORTADAS = [4, 6, 8, 10, 12, 20];
 export const MAX_DADOS_3D = 6;
 
 const DURACAO_ROLAGEM_S = 1.55;
+/** O 20 natural entra em câmera lenta na reta final da rolagem. */
+const COMECO_DA_CAMERA_LENTA = 0.55;
+const VELOCIDADE_DA_CAMERA_LENTA = 0.42;
+
+/** Velocidade do relógio da cena (1 é o normal). `progresso` vai de 0 (dados soltos) a 1 (todos pousados). */
+export function escalaDoTempo(destaque: OpcoesCena['destaque'], progresso: number): number {
+  if (destaque !== 'critico') return 1;
+  if (progresso < COMECO_DA_CAMERA_LENTA || progresso >= 1) return 1;
+  return VELOCIDADE_DA_CAMERA_LENTA;
+}
 const COLUNAS_ATLAS = 5;
 const TAMANHO_CELULA = 200;
 
@@ -340,6 +350,10 @@ export async function iniciarCenaDados(
   };
 
   const relogio = new tres.Clock();
+  // O tempo da cena corre à parte do relógio de verdade para poder desacelerar (20 natural).
+  const duracaoTotal = DURACAO_ROLAGEM_S + (animacoes.length - 1) * 0.09;
+  let tempoDaCena = 0;
+  let ultimoRelogio = 0;
   let pousou = false;
   let pousouEm = 0;
   let parado = false;
@@ -347,7 +361,12 @@ export async function iniciarCenaDados(
 
   const desenhar = () => {
     if (parado) return;
-    const t = relogio.getElapsedTime();
+    const agora = relogio.getElapsedTime();
+    // Aba parada não pode fazer o dado pular para o fim: o passo é limitado.
+    const passo = Math.min(0.1, agora - ultimoRelogio);
+    ultimoRelogio = agora;
+    tempoDaCena += passo * escalaDoTempo(opcoes.destaque, tempoDaCena / duracaoTotal);
+    const t = tempoDaCena;
 
     animacoes.forEach((anim) => {
       const local = Math.max(0, t - anim.atraso);
@@ -384,6 +403,16 @@ export async function iniciarCenaDados(
       pousouEm = t;
       if (opcoes.destaque === 'critico') criarFaiscas();
       opcoes.aoPousar();
+    }
+
+    // Murro de câmera ao pousar o 20: aproxima e volta.
+    if (pousou && opcoes.destaque === 'critico') {
+      const impulso = Math.max(0, 1 - (t - pousouEm) / 0.55);
+      const zoom = 1 + 0.1 * impulso * impulso;
+      if (camera.zoom !== zoom) {
+        camera.zoom = zoom;
+        camera.updateProjectionMatrix();
+      }
     }
 
     if (pousou && opcoes.destaque === 'falha') {

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Plus, RotateCcw, Trash2, X } from 'lucide-react';
 import type { IBlocoRegistro, IDadosRegistro, RevelacaoRegistro } from '../../../services/registrosUniversaisApi';
 import { ROTULO_REVELACAO, itensParaTexto, textoParaItens, type IRegistro, type ISecaoUniversal } from './registros';
+import { confirmar } from '../../../components/avisos/confirmacao';
 
 interface IEditorProps {
   secao: ISecaoUniversal;
@@ -59,7 +60,8 @@ export const EditorDeRegistro = ({ secao, registro, onSalvar, onDesfazer, onFech
   const desfazer = async () => {
     if (!onDesfazer) return;
     const aviso = registro?.origemId ? 'Voltar este registro ao texto original do site?' : 'Apagar este registro de vez?';
-    if (!window.confirm(aviso)) return;
+    const volta = Boolean(registro?.origemId);
+    if (!(await confirmar({ titulo: volta ? 'Voltar ao texto original' : 'Apagar o registro', mensagem: aviso, rotuloConfirmar: volta ? 'Voltar ao original' : 'Apagar', tom: 'perigo' }))) return;
     setSalvando(true);
     try {
       await onDesfazer();

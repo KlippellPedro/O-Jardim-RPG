@@ -1,0 +1,61 @@
+{
+  "name": "O Jardim RPG",
+  "short_name": "O Jardim",
+  "description": "Fichas, mundo, regras, itens e sessão ao vivo da sua campanha, tudo em um lugar.",
+  "id": "/",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#08070f",
+  "theme_color": "#0b0a12",
+  "categories": ["games", "entertainment", "utilities"],
+  "icons": [
+    {
+      "src": "/assets/img/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/img/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/img/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Sessão ao vivo",
+      "short_name": "Sessão",
+      "url": "/sessao",
+      "icons": [{ "src": "/assets/img/icons/menu/sessao-ao-vivo.png", "sizes": "256x256", "type": "image/png" }]
+    },
+    {
+      "name": "Minha ficha",
+      "short_name": "Ficha",
+      "url": "/ficha",
+      "icons": [{ "src": "/assets/img/icons/menu/ficha.webp", "sizes": "192x192", "type": "image/webp" }]
+    },
+    {
+      "name": "Livro de regras",
+      "short_name": "Livro",
+      "url": "/regras",
+      "icons": [{ "src": "/assets/img/icons/menu/regras.webp", "sizes": "192x192", "type": "image/webp" }]
+    },
+    {
+      "name": "Loja",
+      "short_name": "Loja",
+      "url": "/loja",
+      "icons": [{ "src": "/assets/img/icons/menu/loja.webp", "sizes": "192x192", "type": "image/webp" }]
+    }
+  ]
+}

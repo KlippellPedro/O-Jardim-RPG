@@ -10,6 +10,7 @@ import {
 import { RegrasContent } from '../../pages/Regras/components/RegrasContent';
 import { NarrativeFieldsEditor } from './NarrativeFieldsEditor';
 import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
+import { confirmar } from '../avisos/confirmacao';
 
 const TIPOS_EDITAVEIS = [
   ['regra', 'Capítulos'],
@@ -146,15 +147,15 @@ export function RegrasEditorPanel({ campanhaId, initialItem, onDirtyChange }: Re
     });
   };
 
-  const escolherTipo = (novoTipo: TipoRegra) => {
-    if (!confirmarDescarte()) return;
+  const escolherTipo = async (novoTipo: TipoRegra) => {
+    if (!(await confirmarDescarte())) return;
     setTipo(novoTipo);
     const primeira = entradas.find((entry) => entry.tipo === novoTipo);
     if (primeira) setSelecionadaChave(primeira.chave);
   };
 
-  const escolherEntrada = (chave: string) => {
-    if (chave === selecionadaChave || !confirmarDescarte()) return;
+  const escolherEntrada = async (chave: string) => {
+    if (chave === selecionadaChave || !(await confirmarDescarte())) return;
     setSelecionadaChave(chave);
   };
 
@@ -219,7 +220,8 @@ export function RegrasEditorPanel({ campanhaId, initialItem, onDirtyChange }: Re
   };
 
   const restaurarRevisao = async (revision: EditorialRevision) => {
-    if (!selecionada?.editorial?.id || !confirmarDescarte('Existem alterações não salvas. Deseja descartá-las para restaurar uma versão anterior?') || !window.confirm(`Restaurar a versão ${revision.versao} como novo rascunho? A versão pública continuará igual até você publicar.`)) return;
+    if (!selecionada?.editorial?.id || !(await confirmarDescarte('Existem alterações não salvas. Deseja descartá-las para restaurar uma versão anterior?'))) return;
+    if (!(await confirmar({ titulo: 'Restaurar versão', mensagem: `Restaurar a versão ${revision.versao} como novo rascunho? A versão pública continuará igual até você publicar.`, rotuloConfirmar: 'Restaurar' }))) return;
     setRestoring(true);
     setErro(null);
     try {

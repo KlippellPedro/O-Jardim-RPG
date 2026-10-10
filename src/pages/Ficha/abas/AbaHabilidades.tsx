@@ -37,6 +37,7 @@ import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutom
 import { ItensAutomaticosOcultos } from '../components/ItensAutomaticosOcultos';
 import { OcultarItemAutomaticoModal } from '../components/OcultarItemAutomaticoModal';
 import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
+import { excluirDaFichaComDesfazer } from '../desfazerNaFicha';
 
 // ---------------------------------------------------------------------------
 // Tipos locais da entidade "habilidade" (traços raciais, talentos, competências)
@@ -297,9 +298,13 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   };
 
   const excluir = (item: IHabilidade) => {
-    if (!window.confirm(`Excluir "${item.nome}"? Essa ação remove somente esta entrada da ficha.`)) return;
-    const novaLista = habilidades.filter((h: IHabilidade) => h.id !== item.id);
-    onUpdate(['ficha', 'habilidades'], novaLista);
+    excluirDaFichaComDesfazer<IHabilidade>({
+      personagemId: character.id,
+      lista: (personagem) => personagem.ficha?.habilidades,
+      id: item.id,
+      gravar: (lista) => onUpdate(['ficha', 'habilidades'], lista),
+      texto: `Habilidade "${item.nome}" excluída.`,
+    });
   };
 
   const usar = async (item: IHabilidade) => {

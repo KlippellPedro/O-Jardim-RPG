@@ -1,0 +1,27 @@
+/* Os emblemas dos cartões do assistente de criação. */
+.emblema {
+  --emblema-cor: #c7a44c;
+  --emblema-brilho: rgb(199 164 76 / 0.3);
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--emblema-cor) 45%, transparent);
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--emblema-cor) 28%, transparent), color-mix(in srgb, var(--emblema-cor) 8%, transparent) 70%);
+  color: var(--emblema-cor);
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+.emblema--m { width: 2.7rem; height: 2.7rem; }
+.emblema--p { width: 2rem; height: 2rem; }
+
+.emblema--ativo {
+  box-shadow: 0 0 0.9rem var(--emblema-brilho), inset 0 0 0.5rem var(--emblema-brilho);
+  transform: scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emblema { transition: none; }
+  .emblema--ativo { transform: none; }
+}

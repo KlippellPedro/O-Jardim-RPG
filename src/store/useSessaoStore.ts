@@ -9,6 +9,12 @@ import {
   type SessaoParticipanteResponse,
 } from '../services/sessaoApi';
 import { registrosApi, type IRegistro } from '../services/registrosApi';
+import { assinarEventosDaCampanha } from '../services/campanhaEventos';
+import { houveDanoNosMeus, mudancaDeCombate, type AvisoDeCombate } from '../pages/Sessao/combateVivo';
+import { vibrar } from '../utils/vibracaoDoApp';
+import { empilharDestaque, lerDestaque, type DestaqueDaMesa } from '../pages/Sessao/destaqueDaMesa';
+import { useAuthStore } from './useAuthStore';
+import { usePerformanceStore } from './usePerformanceStore';
 
 export interface SessionCondition {
   nome: string;
@@ -216,6 +222,12 @@ interface SessaoState {
   /** Chefes que acabaram de mudar de fase e ainda não foram dispensados da tela. */
   avisosDeFase: AvisoDeFase[];
   dispensarAvisoDeFase: (chave: string) => void;
+  /** Início de combate, rodada nova ou fim de combate que a mesa ainda não viu na tela (só o mais recente). */
+  avisosDeCombate: AvisoDeCombate[];
+  dispensarAvisoDeCombate: (chave: string) => void;
+  /** O 20 e o 1 natural de quem rolou na mesa ao vivo, ainda na tela (só o mais recente). */
+  destaquesDaMesa: DestaqueDaMesa[];
+  dispensarDestaque: (chave: string) => void;
   /** Lendas que já caíram nesta sessão (null antes da primeira leitura) e os avisos ainda na tela. */
   lendasDaSessao: Array<{ id: string; nome: string; epiteto: string; consequencia: string }> | null;
   avisosDeLenda: AvisoDeLenda[];
@@ -225,7 +237,8 @@ interface SessaoState {
   emCombate: boolean;
   rodada: number;
   rolagens: IRegistro[];
-  eventSource: EventSource | null;
+  /** Para de escutar o canal ao vivo da campanha (o canal em si é um só por aba: services/campanhaEventos). */
+  desassinarEventos: (() => void) | null;
   sessaoVersao: number;
   connectionStatus: SessionConnectionStatus;
   isLoading: boolean;
@@ -273,6 +286,8 @@ interface SessaoState {
 // um criava, o outro batia num 409.
 let buscaEstadoEmVoo: Promise<void> | null = null;
 
+let contadorDeAvisoDeCombate = 0;
+
 export const useSessaoStore = create<SessaoState>((set, get) => ({
   campanhaId: null,
   sessaoId: null,
@@ -285,6 +300,10 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
   iniciativa: [],
   avisosDeFase: [],
   dispensarAvisoDeFase: (chave) => set((estado) => ({ avisosDeFase: estado.avisosDeFase.filter((aviso) => aviso.chave !== chave) })),
+  avisosDeCombate: [],
+  dispensarAvisoDeCombate: (chave) => set((estado) => ({ avisosDeCombate: estado.avisosDeCombate.filter((aviso) => aviso.chave !== chave) })),
+  destaquesDaMesa: [],
+  dispensarDestaque: (chave) => set((estado) => ({ destaquesDaMesa: estado.destaquesDaMesa.filter((destaque) => destaque.chave !== chave) })),
   lendasDaSessao: null,
   avisosDeLenda: [],
   dispensarAvisoDeLenda: (chave) => set((estado) => ({ avisosDeLenda: estado.avisosDeLenda.filter((aviso) => aviso.chave !== chave) })),
@@ -293,7 +312,7 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
   emCombate: false,
   rodada: 0,
   rolagens: [],
-  eventSource: null,
+  desassinarEventos: null,
   sessaoVersao: 0,
   connectionStatus: 'offline',
   isLoading: false,
@@ -302,44 +321,48 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
   limparResumoPendente: () => set({ resumoPendenteId: null }),
 
   conectarSSE: (campanhaId) => {
-    get().eventSource?.close();
+    get().desassinarEventos?.();
     set({ campanhaId, connectionStatus: 'connecting', error: null });
 
     void get().fetchEstadoSessao().then(() => get().fetchRolagens());
 
-    const eventSource = new EventSource(`/api/v1/sessao/${campanhaId}/eventos`);
-    eventSource.onopen = () => {
-      set({ connectionStatus: 'online', error: null });
+    const desassinar = assinarEventosDaCampanha(campanhaId, {
+      aoEstado: (estado) => {
+        if (estado === 'connected') set({ connectionStatus: 'online', error: null });
+        else if (estado === 'reconnecting') {
+          set({
+            connectionStatus: 'offline',
+            error: 'A conexão ao vivo foi interrompida. O navegador tentará reconectar automaticamente.',
+          });
+        } else set({ connectionStatus: 'connecting' });
+      },
       // Reconectou: pode ter perdido eventos, então a mesa se atualiza também.
-      void useMesaStore.getState().sincronizar();
-    };
-    eventSource.onerror = () => set({
-      connectionStatus: 'offline',
-      error: 'A conexão ao vivo foi interrompida. O navegador tentará reconectar automaticamente.',
-    });
-    eventSource.onmessage = (event) => {
-      if (event.data === 'ping' || event.data === 'conectado') return;
-      try {
-        const payload = JSON.parse(event.data) as { tipo?: string };
-        if (payload.tipo === 'mesa') {
+      aoConectar: () => { void useMesaStore.getState().sincronizar(); },
+      aoEvento: (tipo, carga) => {
+        if (tipo === 'destaque_mesa') {
+          // Só a faixa: o registro em si chega pelo evento "registro", no recorte que o papel permite.
+          if (!usePerformanceStore.getState().destaquesDaMesa) return;
+          const destaque = lerDestaque(carga, useAuthStore.getState().usuario?.id);
+          if (destaque) set((estado) => ({ destaquesDaMesa: empilharDestaque(estado.destaquesDaMesa, destaque) }));
+        } else if (tipo === 'mesa') {
           // Mapa, relógios, votação e bilhetes não mexem em iniciativa nem rolagens.
           void useMesaStore.getState().sincronizar();
-        } else if (payload.tipo === 'registro') {
+        } else if (tipo === 'registro') {
           void get().fetchRolagens();
+        } else if (tipo === 'calendario') {
+          // O calendário do mundo não mexe na sessão: quem se interessa é o fundo do site.
         } else {
           void get().fetchEstadoSessao().then(() => get().fetchRolagens());
         }
-      } catch (error) {
-        console.error('Falha ao ler evento SSE', error);
-      }
-    };
-    set({ eventSource });
+      },
+    });
+    set({ desassinarEventos: desassinar });
   },
 
   desconectarSSE: () => {
-    get().eventSource?.close();
+    get().desassinarEventos?.();
     set({
-      eventSource: null,
+      desassinarEventos: null,
       campanhaId: null,
       sessaoId: null,
       sessaoStatus: null,
@@ -349,6 +372,8 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
       meuPapel: null,
       bloqueada: true,
       iniciativa: [],
+      avisosDeCombate: [],
+      destaquesDaMesa: [],
       turnoAtualIndex: 0,
       turnoAtualId: null,
       emCombate: false,
@@ -382,7 +407,22 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
         const novosAvisos = avisosDeFaseNova(get().iniciativa, participantes);
         const lendas = response.lendas ?? [];
         const lendasNovas = avisosDeLendaNova(get().sessaoId === response.sessao.id ? get().lendasDaSessao : null, lendas);
+        // Início de combate, rodada nova e fim: só a transição vista com a página aberta anuncia.
+        const anterior = get();
+        const mudancaDoCombate = mudancaDeCombate(
+          anterior.sessaoId ? { sessaoId: anterior.sessaoId, emCombate: anterior.emCombate, rodada: anterior.rodada } : null,
+          { sessaoId: response.sessao.id, emCombate: !!response.sessao.em_combate, rodada: response.sessao.rodada ?? 0 },
+        );
+        const idDaVez = response.sessao.turno_de?.id;
+        const avisoDeCombate: AvisoDeCombate | null = mudancaDoCombate && {
+          ...mudancaDoCombate,
+          chave: `combate:${mudancaDoCombate.tipo}:${mudancaDoCombate.rodada}:${++contadorDeAvisoDeCombate}`,
+          nomeDaVez: mudancaDoCombate.tipo === 'fim' ? undefined : participantes.find((item) => item.id === idDaVez)?.nome,
+        };
+        // O personagem da pessoa perdeu Vida desde a última leitura: um tranco no celular.
+        if (anterior.sessaoId === response.sessao.id && houveDanoNosMeus(anterior.iniciativa, participantes)) vibrar('dano');
         set({
+          avisosDeCombate: avisoDeCombate ? [avisoDeCombate] : get().avisosDeCombate,
           avisosDeFase: novosAvisos.length ? [...get().avisosDeFase, ...novosAvisos] : get().avisosDeFase,
           lendasDaSessao: lendas,
           avisosDeLenda: lendasNovas.length ? [...get().avisosDeLenda, ...lendasNovas] : get().avisosDeLenda,
@@ -416,6 +456,7 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
         iniciadaEm: null,
         iniciativa: [],
         avisosDeFase: [],
+        avisosDeCombate: [],
         avisosDeLenda: [],
         lendasDaSessao: null,
         turnoAtualIndex: 0,
@@ -510,6 +551,7 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
       tituloSessao: null,
       iniciadaEm: null,
       iniciativa: [],
+      avisosDeCombate: [],
       rolagens: [],
       emCombate: false,
       rodada: 0,

@@ -1,7 +1,9 @@
 import { type CSSProperties, useCallback, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { pularTodosOsGuias } from '../../utils/guias';
 import './guidedTour.css';
+import './guiaPular.css';
 
 export interface GuidedTourStep {
   id: string;
@@ -160,6 +162,7 @@ export function GuidedTour({ passos, onClose, onFinish, accent, nomeGuia, rootSe
             </button>
           </div>
         </div>
+        <button type="button" className="guia-pular" onClick={() => { pularTodosOsGuias(); onClose(); }}>Pular todos os guias</button>
       </div>
     </div>,
     document.body,

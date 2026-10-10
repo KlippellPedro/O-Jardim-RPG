@@ -9,6 +9,7 @@ import {
   type Revelacao,
 } from '../../services/calendarioMundoApi';
 import { atalhosDeTempo, rotuloDoEvento, tempoDesde } from './calendarioMundo';
+import { confirmar } from '../../components/avisos/confirmacao';
 
 const ROTULO_DO_TIPO = { fixo: 'dia fixo', extra: 'dia a mais', aleatorio: 'dia sorteado' } as const;
 
@@ -237,7 +238,7 @@ export const PainelCalendarioMestre = ({ campanhaId, dados, ocupado, agir, preen
                     <p className="text-[10px] uppercase tracking-widest text-gray-500">dia 29 · {meses[extra.mes]}</p>
                     {extra.descricao ? <p className="mt-1 text-xs leading-5 text-gray-400">{extra.descricao}</p> : null}
                   </div>
-                  <button type="button" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 text-gray-500 hover:text-red-400" aria-label={`Apagar o dia a mais ${extra.nome}`} disabled={ocupado} onClick={() => { if (window.confirm(`Apagar o dia a mais "${extra.nome}"? Acontecimentos marcados nele vão para o dia 28.`)) void agir(() => calendarioMundoApi.apagarDiaExtra(campanhaId, extra.mes)); }}><Trash2 size={14} /></button>
+                  <button type="button" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 text-gray-500 hover:text-red-400" aria-label={`Apagar o dia a mais ${extra.nome}`} disabled={ocupado} onClick={async () => { if (await confirmar({ titulo: 'Apagar o dia a mais', mensagem: `Apagar o dia a mais "${extra.nome}"? Acontecimentos marcados nele vão para o dia 28.`, rotuloConfirmar: 'Apagar', tom: 'perigo' })) void agir(() => calendarioMundoApi.apagarDiaExtra(campanhaId, extra.mes)); }}><Trash2 size={14} /></button>
                 </li>
               ))}
             </ul>
@@ -334,7 +335,7 @@ export const PainelCalendarioMestre = ({ campanhaId, dados, ocupado, agir, preen
               className={botao}
               disabled={ocupado || escondidosQueJaPassaram === 0}
               title="Abre para os jogadores tudo que já aconteceu e ainda estava escondido"
-              onClick={() => { if (window.confirm(`Abrir ${escondidosQueJaPassaram} ${escondidosQueJaPassaram === 1 ? 'acontecimento que já passou' : 'acontecimentos que já passaram'} para os jogadores? A mesa será avisada.`)) void agir(() => calendarioMundoApi.revelarPassados(campanhaId)); }}
+              onClick={async () => { if (await confirmar({ titulo: 'Abrir para os jogadores', mensagem: `Abrir ${escondidosQueJaPassaram} ${escondidosQueJaPassaram === 1 ? 'acontecimento que já passou' : 'acontecimentos que já passaram'} para os jogadores? A mesa será avisada.`, rotuloConfirmar: 'Abrir' })) void agir(() => calendarioMundoApi.revelarPassados(campanhaId)); }}
             >
               <Eye size={13} /> Revelar o que já passou{escondidosQueJaPassaram ? ` (${escondidosQueJaPassaram})` : ''}
             </button>
@@ -458,7 +459,7 @@ const LinhaDeAcontecimento = ({ evento, meses, diasPorMes, campanhaId, ocupado, 
         {evento.revelacao === 'oculto' ? <EyeOff size={14} className="text-amber-300" aria-label="Oculto dos jogadores" /> : null}
         <button type="button" className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-gray-500 hover:text-white" aria-label={`Editar ${evento.titulo}`} aria-pressed={editando} onClick={alternarEdicao}><Pencil size={14} /></button>
         <button type="button" className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-gray-500 hover:text-white" aria-label={`Duplicar ${evento.titulo}`} title="Copiar para o formulário, para marcar em outra data" onClick={duplicar}><Copy size={14} /></button>
-        <button type="button" className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-gray-500 hover:text-red-400" aria-label={`Apagar ${evento.titulo}`} onClick={() => { if (window.confirm(`Apagar "${evento.titulo}" do calendário?`)) void agir(() => calendarioMundoApi.apagarEvento(campanhaId, evento.id)); }}><Trash2 size={14} /></button>
+        <button type="button" className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-gray-500 hover:text-red-400" aria-label={`Apagar ${evento.titulo}`} onClick={async () => { if (await confirmar({ titulo: 'Apagar o acontecimento', mensagem: `Apagar "${evento.titulo}" do calendário?`, rotuloConfirmar: 'Apagar', tom: 'perigo' })) void agir(() => calendarioMundoApi.apagarEvento(campanhaId, evento.id)); }}><Trash2 size={14} /></button>
       </div>
 
       {editando ? (

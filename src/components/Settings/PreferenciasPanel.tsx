@@ -4,6 +4,8 @@ import { useAudioStore } from '../../store/useAudioStore';
 import { sfx } from '../../utils/audioSynth';
 import { usePerformanceStore } from '../../store/usePerformanceStore';
 import { usePrefersReducedMotion } from '../../hooks/usePerformance';
+import { InstalarComoApp } from './InstalarComoApp';
+import { vibracaoDisponivel } from '../../utils/vibracao';
 import { PERFIS_SONOROS, ROTULO_PERFIL } from '../../utils/somDeClasse';
 import { CATEGORIAS_SOM, CATEGORIAS_PADRAO } from '../../utils/categoriasSom';
 import { definirVozGrandeSabioLigada, vozGrandeSabioDisponivel, vozGrandeSabioLigada } from '../../pages/Ficha/components/vozGrandeSabio';
@@ -57,6 +59,10 @@ export const PreferenciasPanel: React.FC = () => {
   const setCategoria = useAudioStore((state) => state.setCategoria);
   const celebracoes = usePerformanceStore((state) => state.celebracoes);
   const dado3d = usePerformanceStore((state) => state.dado3d);
+  const climaDoMundo = usePerformanceStore((state) => state.climaDoMundo);
+  const guiasAutomaticos = usePerformanceStore((state) => state.guiasAutomaticos);
+  const destaquesDaMesa = usePerformanceStore((state) => state.destaquesDaMesa);
+  const vibracao = usePerformanceStore((state) => state.vibracao);
   const notificarSuaVez = usePerformanceStore((state) => state.notificarSuaVez);
   const setEfeito = usePerformanceStore((state) => state.setEfeito);
   const ligadoAutomaticamente = usePerformanceStore((state) => state.ligadoAutomaticamente);
@@ -67,6 +73,10 @@ export const PreferenciasPanel: React.FC = () => {
     CATEGORIAS_SOM.forEach((categoria) => setCategoria(categoria.id, CATEGORIAS_PADRAO[categoria.id]));
     setEfeito('celebracoes', true);
     setEfeito('dado3d', true);
+    setEfeito('climaDoMundo', true);
+    setEfeito('guiasAutomaticos', true);
+    setEfeito('destaquesDaMesa', true);
+    setEfeito('vibracao', true);
     setEfeito('notificarSuaVez', false);
     definirVozGrandeSabioLigada(true);
     setVoz(true);
@@ -268,6 +278,8 @@ export const PreferenciasPanel: React.FC = () => {
           <div className="divide-y divide-white/5">
             <Interruptor rotulo="Celebrações" descricao="Conquistas, chuva de moedas, cartas de item, círculo mágico e o aviso de “é a sua vez”." ligado={celebracoes} desabilitado={performanceMode} onMudar={(ligado) => setEfeito('celebracoes', ligado)} />
             <Interruptor rotulo="Dado 3D" descricao="O dado gira e pousa na tela. Desligado, o resultado aparece direto." ligado={dado3d} desabilitado={performanceMode} onMudar={(ligado) => setEfeito('dado3d', ligado)} />
+            <Interruptor rotulo="20 e 1 naturais da mesa" descricao="Na Sessão ao vivo, uma faixa avisa a mesa toda quando alguém tira 20 ou 1 natural no d20, com som." ligado={destaquesDaMesa} onMudar={(ligado) => setEfeito('destaquesDaMesa', ligado)} />
+            <Interruptor rotulo="Clima do mundo" descricao="O fundo do site acompanha a estação do calendário do Mundo, com pétalas, folhas, neve e a Lua Carmesim." ligado={climaDoMundo} desabilitado={performanceMode} onMudar={(ligado) => setEfeito('climaDoMundo', ligado)} />
           </div>
           {performanceMode ? <p className="mt-3 text-xs text-gray-500">O modo de desempenho já desliga estes efeitos.</p> : null}
         </section>
@@ -279,6 +291,13 @@ export const PreferenciasPanel: React.FC = () => {
           </div>
           <p className="mb-2 mt-1 text-sm text-gray-400">Avisa fora da aba quando o assunto não pode esperar você voltar a olhar.</p>
           <div className="divide-y divide-white/5">
+            <Interruptor
+              rotulo="Vibração"
+              descricao={vibracaoDisponivel() ? 'No 20 e no 1 naturais, ao levar dano e quando é a sua vez.' : 'Este aparelho não vibra (a vibração funciona no celular, em navegadores que a liberam).'}
+              ligado={vibracao}
+              desabilitado={!vibracaoDisponivel()}
+              onMudar={(ligado) => setEfeito('vibracao', ligado)}
+            />
             <Interruptor
               rotulo="É a sua vez"
               descricao="Notificação do navegador na Sessão ao Vivo, se outra aba estiver aberta na hora."
@@ -295,6 +314,16 @@ export const PreferenciasPanel: React.FC = () => {
             </p>
           ) : null}
         </section>
+
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+          <h3 className="text-lg font-bold text-white">Guias das páginas</h3>
+          <p className="mb-2 mt-1 text-sm text-gray-400">Cada página mostra um guia na primeira vez que você entra. O botão de guia da própria página abre quando você quiser.</p>
+          <div className="divide-y divide-white/5">
+            <Interruptor rotulo="Guias automáticos" descricao="Desligado, nenhum guia abre sozinho, em nenhuma página." ligado={guiasAutomaticos} onMudar={(ligado) => setEfeito('guiasAutomaticos', ligado)} />
+          </div>
+        </section>
+
+        <InstalarComoApp />
 
         <button type="button" onClick={restaurar} className="rounded-xl border border-white/10 px-4 py-2 text-xs font-bold text-gray-400 hover:text-white">Restaurar sons e efeitos ao padrão</button>
       </div>

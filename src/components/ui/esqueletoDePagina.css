@@ -1,0 +1,52 @@
+/* Só transform e opacity animam. */
+.esqueleto {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding-top: 1rem;
+  animation: esqueleto-aparece 220ms ease-out 180ms both;
+}
+
+.esqueleto__bloco {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.05);
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.04);
+}
+
+.esqueleto__bloco::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.06), transparent);
+  animation: esqueleto-brilho 1.6s ease-in-out infinite;
+}
+
+.esqueleto__titulo { width: min(24rem, 70%); height: 2.4rem; border-radius: 0.7rem; }
+.esqueleto__subtitulo { width: min(36rem, 90%); height: 1rem; margin-top: 0.9rem; border-radius: 0.5rem; }
+
+.esqueleto__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.esqueleto__cartao { height: 9.5rem; }
+
+@keyframes esqueleto-aparece {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes esqueleto-brilho {
+  to { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .esqueleto__bloco::after { animation: none; opacity: 0; }
+}
+
+html[data-performance-mode='reduced'] .esqueleto__bloco::after { animation: none; opacity: 0; }

@@ -18,6 +18,7 @@ import {
   BookText,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import type { LoreEntry } from '../../../../data/gerado/mundoCatalog';
 import type { FaccaoDocumentada } from '../../../../data/regras/faccoes';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -138,13 +139,25 @@ export const UniversalCodexPage: React.FC<IUniversalRecordsPageProps> = ({
   catalog, factions, secoesOcultas = [], isMestre, loreRevelado, loreOculto, onBack, onOpenGlobalTimeline, onEditEntry,
 }) => {
   const campanhaId = useAuthStore((estado) => estado.campanhaAtiva?.id);
-  const [secaoId, setSecaoId] = useState<SecaoUniversal>('bestiario');
-  const [selecionada, setSelecionada] = useState('');
+  // A Busca do Jardim chega aqui com `?secao=...&registro=...` e o registro já abre selecionado.
+  const [parametros] = useSearchParams();
+  const secaoDaUrl = SECOES_UNIVERSAIS.find((item) => item.id === parametros.get('secao'))?.id;
+  const registroDaUrl = parametros.get('registro') ?? '';
+  const [secaoId, setSecaoId] = useState<SecaoUniversal>(secaoDaUrl ?? 'bestiario');
+  const [selecionada, setSelecionada] = useState(secaoDaUrl ? registroDaUrl : '');
   const [busca, setBusca] = useState('');
   const [etiqueta, setEtiqueta] = useState('');
   const [doServidor, setDoServidor] = useState<IRegistroDoServidor[]>([]);
   const [aviso, setAviso] = useState('');
   const [editor, setEditor] = useState<{ registro: IRegistro | null } | null>(null);
+
+  useEffect(() => {
+    if (!secaoDaUrl) return;
+    setSecaoId(secaoDaUrl);
+    setSelecionada(registroDaUrl);
+    setBusca('');
+    setEtiqueta('');
+  }, [secaoDaUrl, registroDaUrl]);
 
   useEffect(() => {
     if (!campanhaId) return undefined;

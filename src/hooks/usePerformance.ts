@@ -85,6 +85,7 @@ export function PerformancePreferencesBridge() {
   const { pageVisible, performanceMode, prefersReducedMotion } = usePerformanceProfile();
   const celebracoes = usePerformanceStore((state) => state.celebracoes);
   const dado3d = usePerformanceStore((state) => state.dado3d);
+  const climaDoMundo = usePerformanceStore((state) => state.climaDoMundo);
 
   // Primeira visita neste aparelho: se ele parece fraco, começa no modo leve (a pessoa pode desligar).
   useEffect(() => {
@@ -104,7 +105,8 @@ export function PerformancePreferencesBridge() {
     root.dataset.reducedMotion = prefersReducedMotion ? 'true' : 'false';
     root.dataset.celebracoes = celebracoes ? 'on' : 'off';
     root.dataset.dado3d = dado3d ? 'on' : 'off';
-  }, [pageVisible, performanceMode, prefersReducedMotion, celebracoes, dado3d]);
+    root.dataset.climaMundo = climaDoMundo ? 'on' : 'off';
+  }, [pageVisible, performanceMode, prefersReducedMotion, celebracoes, dado3d, climaDoMundo]);
 
   return null;
 }

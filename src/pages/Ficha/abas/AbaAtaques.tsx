@@ -20,6 +20,8 @@ import type { ICatalogo } from '../../../types/catalogo';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
 import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeAtaqueCondicoes, penalidadeCansacoTeste } from '../../../services/statusService';
 import { ajusteOrigem, chaveAjuste, totalAjustesManuais } from '../../../services/ajustesFichaService';
+import { avisar, avisarErro } from '../../../components/avisos/avisos';
+import { excluirDaFichaComDesfazer } from '../desfazerNaFicha';
 
 interface IAtaque {
   id: string;
@@ -279,34 +281,45 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     fecharModal();
   };
 
+  const marcarEquipada = (itemId: string, equipado: boolean) => mutateEconomy(character.id, (current) => {
+    const inventario = current.inventario.map((itemAtual) => (
+      itemAtual.item_id === itemId
+        ? { ...itemAtual, dados: { ...itemAtual.dados, equipado } }
+        : itemAtual
+    ));
+    return { carteira: current.carteira, inventario };
+  });
+
+  // Sem pergunta: nenhuma das duas saídas é definitiva e o aviso traz o "Desfazer".
   const excluir = (item: IAtaque) => {
     if (item.isInventory) {
-      if (!window.confirm(`Desequipar a arma "${item.nome}"? Ela continuará na sua mochila.`)) return;
-      void mutateEconomy(character.id, (current) => {
-        const inventario = current.inventario.map((itemAtual) => (
-          itemAtual.item_id === item.id
-            ? { ...itemAtual, dados: { ...itemAtual.dados, equipado: false } }
-            : itemAtual
-        ));
-        return { carteira: current.carteira, inventario };
-      });
+      void marcarEquipada(item.id, false);
       if (resultado?.ataqueId === item.id) setResultado(null);
+      avisar.info(`"${item.nome}" continua na sua mochila.`, {
+        titulo: 'Arma desequipada',
+        chave: `desequipar:${item.id}`,
+        acao: { rotulo: 'Desfazer', aoClicar: () => { void marcarEquipada(item.id, true); } },
+      });
       return;
     }
 
-    if (!window.confirm(`Excluir o ataque "${item.nome}"?`)) return;
-    const novaLista = ataquesManuais.filter((a: IAtaque) => a.id !== item.id);
-    onUpdate(['ficha', 'ataques'], novaLista);
+    excluirDaFichaComDesfazer<IAtaque>({
+      personagemId: character.id,
+      lista: (personagem) => personagem.ficha?.ataques,
+      id: item.id,
+      gravar: (lista) => onUpdate(['ficha', 'ataques'], lista),
+      texto: `Ataque "${item.nome}" excluído.`,
+    });
     if (resultado?.ataqueId === item.id) setResultado(null);
   };
 
   const rolarAcerto = async (item: IAtaque) => {
     if (!campanhaId) {
-      alert('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
+      avisar.aviso('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
       return;
     }
     if (item.isInventory && Number(item.municaoMaxima) > 0 && Number(item.municaoAtual) <= 0) {
-      alert('Esta arma está sem munição. Recarregue no Inventário antes de atacar.');
+      avisar.aviso('Esta arma está sem munição. Recarregue no Inventário antes de atacar.');
       return;
     }
     setRolando(`${item.id}-acerto`);
@@ -340,7 +353,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       }
       setResultado({ ataqueId: item.id, tipo: 'acerto', resultado: registro.resultado, detalhes: registro.detalhes });
     } catch (erro: any) {
-      alert(erro?.message || 'Falha ao rolar o ataque.');
+      avisarErro(erro, 'Falha ao rolar o ataque.');
     } finally {
       setRolando(null);
     }
@@ -348,7 +361,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
 
   const rolarDano = async (item: IAtaque) => {
     if (!campanhaId) {
-      alert('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
+      avisar.aviso('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
       return;
     }
     if (!item.dano) return;
@@ -379,7 +392,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       });
       setResultado({ ataqueId: item.id, tipo: 'dano', resultado: registro.resultado, detalhes: registro.detalhes });
     } catch (erro: any) {
-      alert(erro?.message || 'Falha ao rolar o dano.');
+      avisarErro(erro, 'Falha ao rolar o dano.');
     } finally {
       setRolando(null);
     }

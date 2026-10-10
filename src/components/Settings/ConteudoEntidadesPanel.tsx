@@ -17,6 +17,7 @@ import {
   type FormularioEntidade,
 } from '../../services/entidadesEditorService';
 import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
+import { confirmar } from '../avisos/confirmacao';
 
 interface ConteudoEntidadesPanelProps {
   onDirtyChange?: (dirty: boolean) => void;
@@ -120,8 +121,8 @@ export function ConteudoEntidadesPanel({ onDirtyChange }: ConteudoEntidadesPanel
       : [...formulario.classificacao, id]);
   };
 
-  const escolher = (chave: string) => {
-    if (chave === selecionada || !confirmarDescarte()) return;
+  const escolher = async (chave: string) => {
+    if (chave === selecionada || !(await confirmarDescarte())) return;
     setSelecionada(chave);
     setErro(null);
     setAviso(null);
@@ -181,7 +182,7 @@ export function ConteudoEntidadesPanel({ onDirtyChange }: ConteudoEntidadesPanel
     const mensagem = publicada
       ? `Excluir “${formulario.nome}” do Livro das Entidades? Ele some de todas as campanhas, mas o histórico fica guardado e dá para restaurar.`
       : `Apagar o rascunho de “${formulario.nome}”? Ele nunca foi publicado e não dá para recuperar.`;
-    if (!window.confirm(mensagem)) return;
+    if (!(await confirmar({ titulo: publicada ? 'Excluir a Entidade' : 'Apagar o rascunho', mensagem, rotuloConfirmar: publicada ? 'Excluir' : 'Apagar', tom: 'perigo' }))) return;
     setOcupado('excluir');
     setErro(null);
     try {
@@ -201,7 +202,7 @@ export function ConteudoEntidadesPanel({ onDirtyChange }: ConteudoEntidadesPanel
     const editorial = entry.editorial;
     if (!editorial?.id) return;
     const documento = documentoEfetivo(entry);
-    if (!window.confirm(`Devolver “${documento.titulo}” ao Livro das Entidades em todas as campanhas?`)) return;
+    if (!(await confirmar({ titulo: 'Restaurar a Entidade', mensagem: `Devolver “${documento.titulo}” ao Livro das Entidades em todas as campanhas?`, rotuloConfirmar: 'Devolver' }))) return;
     setOcupado('restaurar');
     setErro(null);
     try {

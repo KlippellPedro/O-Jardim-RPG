@@ -1,0 +1,15 @@
+/* Só opacity: transform ou filter aqui virariam o bloco de contenção dos elementos fixos das páginas. */
+.rota-transicao {
+  animation: rota-entra 240ms ease-out both;
+}
+
+@keyframes rota-entra {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rota-transicao { animation: none; }
+}
+
+html[data-performance-mode='reduced'] .rota-transicao { animation: none; }

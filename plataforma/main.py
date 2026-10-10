@@ -356,3 +356,49 @@ async def frontend_not_found(request: Request, exc: HTTPException):
 @app.get("/index.html", include_in_schema=False)
 def frontend_index():
     return _frontend_index_response()
+
+
+def _arquivo_da_raiz_do_frontend(
+    nome: str,
+    media_type: str,
+    cache_control: str,
+    extras: dict[str, str] | None = None,
+) -> FileResponse | JSONResponse:
+    """Arquivo solto na raiz do bundle (vem de public/, não de assets/).
+
+    Arquivo ausente continua sendo 404 em JSON: devolver o index.html no lugar de um script
+    produz erros de MIME difíceis de diagnosticar no navegador."""
+
+    caminho = _FRONTEND_ROOT / nome
+    if not caminho.is_file():
+        return JSONResponse(
+            status_code=404,
+            content={"detail": "nao encontrado"},
+            headers={"Cache-Control": "no-store"},
+        )
+    resposta = FileResponse(caminho, media_type=media_type)
+    resposta.headers["Cache-Control"] = cache_control
+    for chave, valor in (extras or {}).items():
+        resposta.headers[chave] = valor
+    return resposta
+
+
+@app.get("/sw.js", include_in_schema=False)
+def frontend_service_worker():
+    # O navegador confere o service worker a cada abertura do site; um cache longo aqui
+    # seguraria uma versão velha dele (e do que ele serve) por dias.
+    return _arquivo_da_raiz_do_frontend(
+        "sw.js",
+        "text/javascript",
+        "no-cache",
+        {"Service-Worker-Allowed": "/"},
+    )
+
+
+@app.get("/manifest.webmanifest", include_in_schema=False)
+def frontend_manifest():
+    return _arquivo_da_raiz_do_frontend(
+        "manifest.webmanifest",
+        "application/manifest+json",
+        "public, max-age=3600",
+    )

@@ -3,6 +3,7 @@ import { Check, Copy, KeyRound, Loader2, Plus, Ticket, Trash2 } from 'lucide-rea
 import { adminApi, type ConvitePlataforma } from '../../services/adminApi';
 import { authApi } from '../../services/authApi';
 import { Select } from '../ui/Select';
+import { confirmar } from '../avisos/confirmacao';
 
 const VALIDADES = [
   { value: '1', label: '1 dia' },
@@ -77,7 +78,7 @@ export const ConvitesPlataformaPanel = () => {
   };
 
   const revogar = async (convite: ConvitePlataforma) => {
-    if (!window.confirm(`Revogar o convite${convite.nota ? ` de ${convite.nota}` : ''}? Quem ainda não usou não vai conseguir criar conta com ele.`)) return;
+    if (!(await confirmar({ titulo: 'Revogar o convite', mensagem: `Revogar o convite${convite.nota ? ` de ${convite.nota}` : ''}? Quem ainda não usou não vai conseguir criar conta com ele.`, rotuloConfirmar: 'Revogar', tom: 'perigo' }))) return;
     try {
       await adminApi.revogarConvite(convite.id);
       await carregar();

@@ -17,6 +17,8 @@ from dataclasses import asdict, dataclass
 from functools import lru_cache
 from pathlib import Path
 
+from core.discord_avisos import avisar_discord, texto_selo
+
 logger = logging.getLogger("jardim-plataforma")
 
 
@@ -226,6 +228,39 @@ def metricas(connection, personagem_id) -> dict[str, int]:
     }
 
 
+def _anunciar_selos(connection, personagem_id, selos: list) -> None:
+    """Destaque da mesa no Discord: só selos públicos, de personagens de jogadores.
+    Selo secreto nunca sai (o texto de uma lenda de pé é segredo da mesa) e o selo
+    de nível não repete o aviso de subida de nível."""
+    # Fora: secretos; o de nível (já há o aviso de subida); o da Deidade (spoiler de lore de
+    # quem comanda a mesa); e os comuns, que um jogador novo ganha em enxurrada nas primeiras sessões.
+    visiveis = [
+        c for c in selos
+        if not c.secreta and c.metrica not in {"nivel", "deidades_encaradas"} and c.raridade != "comum"
+    ]
+    if not visiveis:
+        return
+    try:
+        linha = connection.execute(
+            """
+            SELECT p.campanha_id, p.nome, m.papel
+            FROM personagens p
+            LEFT JOIN membros_campanha m
+              ON m.campanha_id = p.campanha_id AND m.usuario_id = p.dono_usuario_id AND m.status = 'ativo'
+            WHERE p.id = %s
+            """,
+            (personagem_id,),
+        ).fetchone()
+        if not linha or linha["papel"] != "jogador":
+            return
+        for selo in visiveis:
+            avisar_discord(
+                connection, linha["campanha_id"], "selo", texto_selo(linha["nome"], selo.nome, selo.descricao)
+            )
+    except Exception:  # noqa: BLE001 - destaque é cortesia, nunca derruba a conquista
+        logger.exception("falha ao anunciar selo do personagem %s", personagem_id)
+
+
 def avaliar(connection, personagem_id, *, gravar: bool = True) -> dict:
     """Avalia, grava as conquistas novas e devolve o catálogo com o progresso.
 
@@ -276,6 +311,8 @@ def avaliar(connection, personagem_id, *, gravar: bool = True) -> dict:
             maiores[conquista.metrica] = chave
     anunciadas = set(maiores.values())
     novas = [chave for chave in novas if chave in anunciadas]
+    if novas:
+        _anunciar_selos(connection, personagem_id, [POR_CHAVE[chave] for chave in novas])
 
     catalogo = []
     escondidas = 0

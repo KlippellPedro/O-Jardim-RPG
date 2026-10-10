@@ -3,6 +3,7 @@ import { Search, PackagePlus, UserCog, Loader2, Users, FolderPlus, Folder, Folde
 import { useAuthStore } from '../../store/useAuthStore';
 import { PersonagemApiRecord } from '../../services/personagensApi';
 import { RACAS_CATALOGO, CLASSES_CATALOGO } from '../../services/catalogoService';
+import { confirmar } from '../avisos/confirmacao';
 
 interface MembroCampanha {
   id: string;
@@ -117,8 +118,8 @@ export const PersonagensPainel: React.FC<PersonagensPainelProps> = ({
     setCriandoPasta(false);
   };
 
-  const excluirPasta = (pastaId: string) => {
-    if (!window.confirm('Excluir esta pasta? Os personagens dela voltam pra "Sem pasta".')) return;
+  const excluirPasta = async (pastaId: string) => {
+    if (!(await confirmar({ titulo: 'Excluir a pasta', mensagem: 'Excluir esta pasta? Os personagens dela voltam pra "Sem pasta".', rotuloConfirmar: 'Excluir', tom: 'perigo' }))) return;
     const proximasPastas = pastas.filter((p) => p.id !== pastaId);
     const proximoMapa = { ...pastaPorPersonagem };
     Object.keys(proximoMapa).forEach((personagemId) => {

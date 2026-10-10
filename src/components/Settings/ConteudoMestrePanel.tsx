@@ -7,6 +7,7 @@ import { CatalogoLojaPanel } from './CatalogoLojaPanel';
 import { RegrasEditorPanel } from './RegrasEditorPanel';
 import { RegistrosUniversaisPanel } from './RegistrosUniversaisPanel';
 import { conteudoEditorialApi } from '../../services/conteudoEditorialApi';
+import { perguntarDescarte } from '../../hooks/useUnsavedChanges';
 
 type AbaConteudo = 'lore' | 'cronologia' | 'entidades' | 'loja' | 'regras' | 'registros';
 
@@ -31,9 +32,9 @@ export function ConteudoMestrePanel({ campanhaId, initialAba = 'lore', initialIt
 
   const registrarDirty = useCallback((dirty: boolean) => setDirtyAtual(dirty), []);
 
-  const trocarAba = (next: AbaConteudo) => {
+  const trocarAba = async (next: AbaConteudo) => {
     if (next === aba) return;
-    if (dirtyAtual && !window.confirm('Existem alterações não salvas nesta seção. Deseja descartá-las e trocar de aba?')) return;
+    if (dirtyAtual && !(await perguntarDescarte('Existem alterações não salvas nesta seção. Deseja descartá-las e trocar de aba?'))) return;
     setDirtyAtual(false);
     setAba(next);
   };

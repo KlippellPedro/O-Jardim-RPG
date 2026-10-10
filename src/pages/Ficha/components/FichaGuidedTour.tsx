@@ -2,6 +2,8 @@ import { type CSSProperties, useCallback, useEffect, useId, useRef, useState } f
 import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { FichaTourStep } from '../fichaTourConfig';
+import { pularTodosOsGuias } from '../../../utils/guias';
+import '../../../components/ui/guiaPular.css';
 
 interface SpotlightRect {
   top: number;
@@ -209,6 +211,7 @@ export function FichaGuidedTour({ passos, onClose, onFinish, accent }: FichaGuid
             </button>
           </div>
         </div>
+        <button type="button" className="guia-pular" onClick={() => { pularTodosOsGuias(); onClose(); }}>Pular todos os guias</button>
       </div>
     </div>,
     document.body,

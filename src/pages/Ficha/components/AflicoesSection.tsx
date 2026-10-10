@@ -26,6 +26,7 @@ import {
   type IAflicaoAtiva,
   type ITesteAflicao,
 } from '../../../services/aflicoesFichaService';
+import { confirmar } from '../../../components/avisos/confirmacao';
 
 interface IAflicoesSectionProps {
   character: any;
@@ -181,8 +182,13 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
     if (aoEntrar) setAviso({ tipo: 'ok', texto: `${aflicao.titulo} foi para o estágio ${para}.${aoEntrar}` });
   };
 
-  const encerrar = (ativa: IAflicaoAtiva, aflicao: IAflicao) => {
-    if (!window.confirm(`Encerrar ${aflicao.titulo}? Use quando um antídoto ou tratamento acabou com ela.`)) return;
+  const encerrar = async (ativa: IAflicaoAtiva, aflicao: IAflicao) => {
+    const confirmado = await confirmar({
+      titulo: 'Encerrar a aflição',
+      mensagem: `Encerrar ${aflicao.titulo}? Use quando um antídoto ou tratamento acabou com ela.`,
+      rotuloConfirmar: 'Encerrar',
+    });
+    if (!confirmado) return;
     salvar(ativas.filter((item) => item.id !== ativa.id));
     setAviso({ tipo: 'ok', texto: `${aflicao.titulo} foi encerrada.` });
   };

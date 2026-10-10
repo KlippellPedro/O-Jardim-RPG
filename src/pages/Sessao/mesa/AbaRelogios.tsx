@@ -6,6 +6,7 @@ import { ATALHOS_DURACAO, duracaoDe, formatarTempo } from './cronometros';
 import { CronometroCartao } from './CronometroCartao';
 import { RelogioSvg } from './RelogioSvg';
 import { useTempo } from './useTempo';
+import { confirmar } from '../../../components/avisos/confirmacao';
 
 interface IAbaRelogiosProps {
   relogios: IRelogio[];
@@ -112,7 +113,7 @@ export const AbaRelogios = ({ relogios, cronometros, recebidoEm, gestor, ocupado
                           <button type="button" className="mesa-botao mesa-botao--pequeno mesa-botao--icone" aria-pressed={!relogio.visivel} aria-label={relogio.visivel ? 'Esconder dos jogadores' : 'Mostrar aos jogadores'} title={relogio.visivel ? 'Visível aos jogadores' : 'Escondido dos jogadores'} onClick={() => void agir('relogio_editar', { relogio_id: relogio.id, visivel: !relogio.visivel })}>
                             {relogio.visivel ? <Eye size={14} /> : <EyeOff size={14} className="text-amber-300" />}
                           </button>
-                          <button type="button" className="mesa-botao mesa-botao--pequeno mesa-botao--icone ml-auto" aria-label={`Apagar ${relogio.titulo}`} onClick={() => { if (window.confirm(`Apagar o relógio "${relogio.titulo}"?`)) void agir('relogio_apagar', { relogio_id: relogio.id }); }}><Trash2 size={14} /></button>
+                          <button type="button" className="mesa-botao mesa-botao--pequeno mesa-botao--icone ml-auto" aria-label={`Apagar ${relogio.titulo}`} onClick={async () => { if (await confirmar({ titulo: 'Apagar o relógio', mensagem: `Apagar o relógio "${relogio.titulo}"?`, rotuloConfirmar: 'Apagar', tom: 'perigo' })) void agir('relogio_apagar', { relogio_id: relogio.id }); }}><Trash2 size={14} /></button>
                         </div>
                       ) : null}
                     </div>

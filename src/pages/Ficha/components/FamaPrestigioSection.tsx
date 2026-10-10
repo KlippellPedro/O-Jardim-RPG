@@ -10,6 +10,7 @@ import { Select } from '../../../components/ui/Select';
 import { FichaModal } from './FichaModal';
 import { LabeledInput } from './SharedFichaComponents';
 import { EstrelasFama } from './EstrelasFama';
+import { excluirDaFichaComDesfazer } from '../desfazerNaFicha';
 
 interface IPrestigioFicha {
   id: string;
@@ -60,7 +61,7 @@ const normalizarPrestigios = (valor: unknown): IPrestigioFicha[] => {
 
 const textoComSinal = (valor: number) => valor > 0 ? `+${valor}` : String(valor);
 
-export const FamaPrestigioSection = ({ ficha, onUpdate }: { ficha: any; onUpdate: any }) => {
+export const FamaPrestigioSection = ({ ficha, onUpdate, personagemId }: { ficha: any; onUpdate: any; personagemId: string }) => {
   const fama = limitarFama(numeroFinito(ficha?.fama));
   const faixaFama = obterFaixaFama(fama);
   const prestigios = normalizarPrestigios(ficha?.prestigios);
@@ -99,9 +100,13 @@ export const FamaPrestigioSection = ({ ficha, onUpdate }: { ficha: any; onUpdate
   };
 
   const remover = (prestigio: IPrestigioFicha) => {
-    if (window.confirm(`Remover o Prestígio com "${prestigio.faccao}"?`)) {
-      salvarLista(prestigios.filter((item) => item.id !== prestigio.id));
-    }
+    excluirDaFichaComDesfazer<IPrestigioFicha>({
+      personagemId,
+      lista: (personagem) => normalizarPrestigios(personagem.ficha?.prestigios),
+      id: prestigio.id,
+      gravar: salvarLista,
+      texto: `Prestígio com "${prestigio.faccao}" removido.`,
+    });
   };
 
   return (

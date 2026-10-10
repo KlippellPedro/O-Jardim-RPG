@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import type { ICronometro } from '../../../services/mesaApi';
 import { COR_RELOGIO } from './relogios';
 import { formatarTempo, nivelDeUrgencia, restanteAgora } from './cronometros';
+import { confirmar } from '../../../components/avisos/confirmacao';
 
 interface ICronometroCartaoProps {
   cronometro: ICronometro;
@@ -50,7 +51,7 @@ export const CronometroCartao = ({ cronometro, recebidoEm, agora, gestor, ocupad
           <button type="button" className="mesa-botao mesa-botao--pequeno mesa-botao--icone" aria-pressed={!cronometro.visivel} aria-label={cronometro.visivel ? 'Esconder dos jogadores' : 'Mostrar aos jogadores'} title={cronometro.visivel ? 'Visível aos jogadores' : 'Escondido dos jogadores'} onClick={() => void agir('cronometro_editar', { ...id, visivel: !cronometro.visivel })}>
             {cronometro.visivel ? <Eye size={14} /> : <EyeOff size={14} className="text-amber-300" />}
           </button>
-          <button type="button" className="mesa-botao mesa-botao--pequeno mesa-botao--icone ml-auto" aria-label={`Apagar ${cronometro.titulo}`} onClick={() => { if (window.confirm(`Apagar o cronômetro "${cronometro.titulo}"?`)) void agir('cronometro_apagar', id); }}><Trash2 size={14} /></button>
+          <button type="button" className="mesa-botao mesa-botao--pequeno mesa-botao--icone ml-auto" aria-label={`Apagar ${cronometro.titulo}`} onClick={async () => { if (await confirmar({ titulo: 'Apagar o cronômetro', mensagem: `Apagar o cronômetro "${cronometro.titulo}"?`, rotuloConfirmar: 'Apagar', tom: 'perigo' })) void agir('cronometro_apagar', id); }}><Trash2 size={14} /></button>
         </div>
       ) : null}
     </li>

@@ -5,6 +5,12 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { useGlobalSfx } from './hooks/useGlobalSfx';
 import { PerformancePreferencesBridge } from './hooks/usePerformance';
 import AtmosphericBackground from './AtmosphericBackground';
+import { AvisosHost } from './components/avisos/AvisosHost';
+import { ClimaDoMundoHost } from './components/clima/ClimaDoMundoHost';
+import { SituacaoDaMesaHost } from './components/sessao/SituacaoDaMesaHost';
+import { BuscaDoJardimHost } from './components/busca/BuscaDoJardimHost';
+import { TransicaoDeRota } from './components/TransicaoDeRota';
+import { EsqueletoDePagina } from './components/ui/EsqueletoDePagina';
 
 const GlassMenu = lazy(() => import('./components/GlassMenu'));
 const SuaVezHost = lazy(() => import('./components/suaVez/SuaVezHost').then((modulo) => ({ default: modulo.SuaVezHost })));
@@ -39,15 +45,6 @@ const EntidadesPage = lazy(() => import('./pages/Entidades/EntidadesPage').then(
 const EntidadesSobrePage = lazy(() => import('./pages/Entidades/EntidadesSobrePage').then((module) => ({ default: module.EntidadesSobrePage })));
 const EntidadeContoPage = lazy(() => import('./pages/Entidades/EntidadeContoPage').then((module) => ({ default: module.EntidadeContoPage })));
 const GamblerCasinoPage = lazy(() => import('./pages/Entidades/GamblerCasinoPage').then((module) => ({ default: module.GamblerCasinoPage })));
-
-const PageLoading = () => (
-  <div className="flex min-h-[50vh] items-center justify-center text-white">
-    <div className="flex flex-col items-center gap-4">
-      <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
-      <p className="text-sm text-gray-400">Carregando página...</p>
-    </div>
-  </div>
-);
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ProtectedRoute - guarda de rota unificada
@@ -181,6 +178,14 @@ function App() {
 
           <AtmosphericBackground />
 
+          <AvisosHost />
+
+          {usuario && <ClimaDoMundoHost />}
+
+          {usuario && <SituacaoDaMesaHost />}
+
+          {usuario && <BuscaDoJardimHost />}
+
           {usuario && (
             <Suspense fallback={null}>
               <RolagemHost />
@@ -223,260 +228,262 @@ function App() {
             </Suspense>
           )}
 
-          <Suspense fallback={<PageLoading />}>
-            <Routes>
-              {/* Rota de teste do redesign (desprotegida) */}
-              <Route path="/redesign-preview" element={<PreviewGallery />} />
+          <Suspense fallback={<EsqueletoDePagina />}>
+            <TransicaoDeRota>
+              <Routes>
+                {/* Rota de teste do redesign (desprotegida) */}
+                <Route path="/redesign-preview" element={<PreviewGallery />} />
               
-              {/* Rotas públicas - redirecionam se já logado */}
-              <Route path="/login" element={!usuario ? <Login /> : <Navigate to="/" replace />} />
-              <Route path="/cadastro" element={!usuario ? <Cadastro /> : <Navigate to="/" replace />} />
+                {/* Rotas públicas - redirecionam se já logado */}
+                <Route path="/login" element={!usuario ? <Login /> : <Navigate to="/" replace />} />
+                <Route path="/cadastro" element={!usuario ? <Cadastro /> : <Navigate to="/" replace />} />
 
-              {/* Rotas protegidas - apenas usuários autenticados */}
-              <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-              <Route path="/campanhas" element={<ProtectedRoute><CampanhasList /></ProtectedRoute>} />
+                {/* Rotas protegidas - apenas usuários autenticados */}
+                <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                <Route path="/campanhas" element={<ProtectedRoute><CampanhasList /></ProtectedRoute>} />
 
-              {/* BUG-01: rota /admin agora exige papel de admin/criador */}
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute requireAdmin>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                }
-              />
+                {/* BUG-01: rota /admin agora exige papel de admin/criador */}
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* Rotas protegidas que requerem campanha ativa */}
-              <Route
-                path="/ficha"
-                element={
-                  <ProtectedRoute requireCampaign>
-                    <FichaList />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/ficha/:id"
-                element={
-                  <ProtectedRoute requireCampaign>
-                    <PersonagemSheet />
-                  </ProtectedRoute>
-                }
-              />
+                {/* Rotas protegidas que requerem campanha ativa */}
+                <Route
+                  path="/ficha"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <FichaList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/ficha/:id"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <PersonagemSheet />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/mestre"
-                element={
-                  <ProtectedRoute requireCampaign requireCampaignManager>
-                    <MasterPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/mestre"
+                  element={
+                    <ProtectedRoute requireCampaign requireCampaignManager>
+                      <MasterPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/criador"
-                element={
-                  <ProtectedRoute requireCreator>
-                    <CreatorPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/criador"
+                  element={
+                    <ProtectedRoute requireCreator>
+                      <CreatorPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* Páginas em construção */}
-              <Route
-                path="/mundo"
-                element={
-                  <ProtectedRoute>
-                    <MundoPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/mundo/arvores/:arvoreId"
-                element={
-                  <ProtectedRoute>
-                    <MundoPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/mundo/arvores/:arvoreId/:entryType/:entryId"
-                element={
-                  <ProtectedRoute>
-                    <MundoPage />
-                  </ProtectedRoute>
-                }
-              />
-              {/* O Vazio não é uma Árvore, então tem rota própria em vez de
-                  viver debaixo de /mundo/arvores/. */}
-              <Route
-                path="/mundo/vazio"
-                element={
-                  <ProtectedRoute>
-                    <MundoPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/mundo/vazio/:entryType/:entryId"
-                element={
-                  <ProtectedRoute>
-                    <MundoPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/mundo/universal"
-                element={
-                  <ProtectedRoute>
-                    <MundoPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/mundo/cronologia"
-                element={
-                  <ProtectedRoute>
-                    <MundoPage />
-                  </ProtectedRoute>
-                }
-              />
+                {/* Páginas em construção */}
+                <Route
+                  path="/mundo"
+                  element={
+                    <ProtectedRoute>
+                      <MundoPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mundo/arvores/:arvoreId"
+                  element={
+                    <ProtectedRoute>
+                      <MundoPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mundo/arvores/:arvoreId/:entryType/:entryId"
+                  element={
+                    <ProtectedRoute>
+                      <MundoPage />
+                    </ProtectedRoute>
+                  }
+                />
+                {/* O Vazio não é uma Árvore, então tem rota própria em vez de
+                    viver debaixo de /mundo/arvores/. */}
+                <Route
+                  path="/mundo/vazio"
+                  element={
+                    <ProtectedRoute>
+                      <MundoPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mundo/vazio/:entryType/:entryId"
+                  element={
+                    <ProtectedRoute>
+                      <MundoPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mundo/universal"
+                  element={
+                    <ProtectedRoute>
+                      <MundoPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mundo/cronologia"
+                  element={
+                    <ProtectedRoute>
+                      <MundoPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/mundo/calendario"
-                element={
-                  <ProtectedRoute requireCampaign>
-                    <CalendarioMundoPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/mundo/calendario"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <CalendarioMundoPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/mundo/livro-da-verdade"
-                element={
-                  <ProtectedRoute requireCampaign>
-                    <LivroDaVerdadePage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/mundo/livro-da-verdade"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <LivroDaVerdadePage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/loja"
-                element={
-                  <ProtectedRoute requireCampaign>
-                    <LojaPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/loja"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <LojaPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/materiais"
-                element={
-                  <ProtectedRoute>
-                    <MateriaisPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/materiais"
+                  element={
+                    <ProtectedRoute>
+                      <MateriaisPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/regras"
-                element={
-                  <ProtectedRoute>
-                    <RegrasPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/regras"
+                  element={
+                    <ProtectedRoute>
+                      <RegrasPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/regras/:categoria/:itemId"
-                element={
-                  <ProtectedRoute>
-                    <RegraDetalhesPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/regras/:categoria/:itemId"
+                  element={
+                    <ProtectedRoute>
+                      <RegraDetalhesPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/entidades"
-                element={
-                  <ProtectedRoute>
-                    <EntidadesPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/entidades"
+                  element={
+                    <ProtectedRoute>
+                      <EntidadesPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/entidades/gambler/cassino"
-                element={
-                  <ProtectedRoute requireCampaign>
-                    <GamblerCasinoPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/entidades/gambler/cassino"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <GamblerCasinoPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/entidades/:entidadeId"
-                element={
-                  <ProtectedRoute>
-                    <EntidadeContoPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/entidades/:entidadeId"
+                  element={
+                    <ProtectedRoute>
+                      <EntidadeContoPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/entidades/sobre"
-                element={
-                  <ProtectedRoute>
-                    <EntidadesSobrePage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/entidades/sobre"
+                  element={
+                    <ProtectedRoute>
+                      <EntidadesSobrePage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/sessao"
-                element={
-                  <ProtectedRoute>
-                    <SessaoPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/sessao"
+                  element={
+                    <ProtectedRoute>
+                      <SessaoPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/campanha"
-                element={
-                  <ProtectedRoute requireCampaign>
-                    <CampanhaPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/campanha"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <CampanhaPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/frota"
-                element={
-                  <ProtectedRoute requireCampaign>
-                    <FrotaPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/frota"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <FrotaPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/quadro"
-                element={
-                  <ProtectedRoute requireCampaign>
-                    <QuadroPage />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/quadro"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <QuadroPage />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/cofre"
-                element={
-                  <ProtectedRoute requireCampaign>
-                    <CofrePage />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
+                <Route
+                  path="/cofre"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <CofrePage />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </TransicaoDeRota>
           </Suspense>
         </div>
       </Router>

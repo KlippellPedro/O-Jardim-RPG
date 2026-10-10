@@ -12,6 +12,8 @@ import {
 } from '../../../services/notasFichaService';
 import { PainelDiario } from '../components/notas/PainelDiario';
 import { PainelVinculos } from '../components/notas/PainelVinculos';
+import { avisar } from '../../../components/avisos/avisos';
+import { excluirDaFichaComDesfazer } from '../desfazerNaFicha';
 
 interface INotaTopico {
   id: string;
@@ -190,15 +192,19 @@ const PainelNotas = ({ character, onUpdate }: { character: any, onUpdate: any })
       setTextoCopiadoId(nota.id);
       window.setTimeout(() => setTextoCopiadoId(atual => atual === nota.id ? null : atual), 1600);
     } catch {
-      window.alert('Não foi possível copiar esta nota neste navegador.');
+      avisar.erro('Não foi possível copiar esta nota neste navegador.');
     }
   };
 
   const handleExcluir = (id: string, titulo: string) => {
-    if (window.confirm(`Apagar a nota "${titulo}"?`)) {
-      commit(notas.filter(n => n.id !== id));
-      setLeituraAberta(null);
-    }
+    const saiu = excluirDaFichaComDesfazer<INota>({
+      personagemId: character.id,
+      lista: (personagem) => personagem.ficha?.notas || personagem.notas,
+      id,
+      gravar: commit,
+      texto: `Nota "${titulo}" apagada.`,
+    });
+    if (saiu) setLeituraAberta(null);
   };
 
   const alternarFavorito = (nota: INota) => {

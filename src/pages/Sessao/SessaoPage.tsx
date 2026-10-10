@@ -23,6 +23,8 @@ import {
 import { ActiveTurnCard } from './components/ActiveTurnCard';
 import { AvisoDeFaseDeChefe } from './components/AvisoDeFaseDeChefe';
 import { AvisoDeLendaCaida } from './components/AvisoDeLendaCaida';
+import { AvisoDeCombate } from './components/AvisoDeCombate';
+import { AvisoDeDestaque } from './components/AvisoDeDestaque';
 import { InitiativeTracker } from './InitiativeTracker';
 import { SessionLogPanel } from './components/SessionLogPanel';
 import { MasterScreenPanel } from './components/MasterScreenPanel';
@@ -46,6 +48,8 @@ import { MesaPanel } from './mesa/MesaPanel';
 import { MesaAvisos } from './mesa/MesaAvisos';
 import { RelogiosFaixa } from './mesa/RelogiosFaixa';
 import { contarPendencias, type AbaMesa } from './mesa/avisos';
+import { confirmar } from '../../components/avisos/confirmacao';
+import { guiasAutomaticosLigados } from '../../utils/guias';
 
 export const SessaoPage: React.FC = () => {
   const navigate = useNavigate();
@@ -177,7 +181,7 @@ export const SessaoPage: React.FC = () => {
 
   useEffect(() => {
     const overlayOpen = leftDrawerOpen || rightDrawerOpen || masterScreenOpen || mesaAba !== null || !!participantsDialogMode;
-    if (!activeCampaignId || isLoading || bloqueada || !sessaoStatus || tourOpen || overlayOpen || tourAttemptedRef.current) return undefined;
+    if (!activeCampaignId || isLoading || bloqueada || !sessaoStatus || tourOpen || overlayOpen || tourAttemptedRef.current || !guiasAutomaticosLigados()) return undefined;
     try {
       if (sessaoTourJaVisto(localStorage.getItem(tourStorageKey))) {
         tourAttemptedRef.current = true;
@@ -216,7 +220,7 @@ export const SessaoPage: React.FC = () => {
 
   const handleLiveToggle = async () => {
     if (isChangingLive) return;
-    if (sessaoStatus === 'aberta' && !window.confirm('Encerrar a sessão ao vivo para todos os jogadores?')) return;
+    if (sessaoStatus === 'aberta' && !(await confirmar({ titulo: 'Encerrar a sessão', mensagem: 'Encerrar a sessão ao vivo para todos os jogadores?', rotuloConfirmar: 'Encerrar a sessão', tom: 'perigo' }))) return;
     if (sessaoStatus !== 'aberta') {
       setParticipantsDialogMode('start');
       return;
@@ -471,6 +475,8 @@ export const SessaoPage: React.FC = () => {
           <main className="relative min-h-0 min-w-0 overflow-hidden">
             <AvisoDeFaseDeChefe />
             <AvisoDeLendaCaida />
+            <AvisoDeCombate />
+            <AvisoDeDestaque />
             <RelogiosFaixa onAbrir={() => setMesaAba('relogios')} />
             {isLoading ? (
               <div className="flex h-full items-center justify-center text-sm text-white/50" role="status">

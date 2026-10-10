@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { sfx } from '../../utils/audioSynth';
+import { vibrar } from '../../utils/vibracaoDoApp';
 import { iniciarCenaDados, type ControleCena } from './cenaDados';
 import { registrarApresentadorRolagem, type CenaRolagem, type GrauRolagem } from './rolagemDados';
 import './rolagem.css';
@@ -83,6 +84,7 @@ export const RolagemHost = memo(function RolagemHost() {
         if (cena.destaque === 'critico') sfx.playCritSound();
         else if (cena.destaque === 'falha') sfx.play('error');
         else sfx.playDiceClack();
+        vibrar(cena.destaque === 'critico' ? 'critico' : cena.destaque === 'falha' ? 'falha' : 'toque');
         // O fluxo de quem rolou (modal de resultado, registros) segue por
         // baixo; o resultado continua na tela até a pessoa fechar.
         terminar();
@@ -94,7 +96,11 @@ export const RolagemHost = memo(function RolagemHost() {
     }).catch(encerrar);
 
     const aoTecla = (evento: KeyboardEvent) => {
-      if (evento.key === 'Escape' || evento.key === 'Enter' || evento.key === ' ') aoClicar();
+      if (evento.key !== 'Escape' && evento.key !== 'Enter' && evento.key !== ' ') return;
+      // A tecla é da cena: sem isto o Esc que fecha o dado fecharia também o modal que está por baixo (o assistente de criação).
+      evento.preventDefault();
+      evento.stopPropagation();
+      aoClicar();
     };
     document.addEventListener('keydown', aoTecla, true);
     // Segurança: se o dado nunca pousar, não prende a tela. Depois do pouso
@@ -123,7 +129,7 @@ export const RolagemHost = memo(function RolagemHost() {
     <div
       role="status"
       aria-label={`${cena.titulo}: ${cena.total ?? ''}`}
-      className={`rolagem${saindo ? ' rolagem--saindo' : ''}${cena.destaque === 'falha' && pousou ? ' rolagem--tremor' : ''}`}
+      className={`rolagem${saindo ? ' rolagem--saindo' : ''}${cena.destaque === 'falha' && pousou ? ' rolagem--tremor' : ''}${pousou && cena.destaque ? ` rolagem--clarao-${cena.destaque}` : ''}`}
       style={estilo}
       onClick={() => aoClicarRef.current()}
     >
@@ -132,7 +138,11 @@ export const RolagemHost = memo(function RolagemHost() {
       <div className="rolagem__titulo">{cena.titulo}</div>
       {pousou && (
         <div className="rolagem__resultado">
-          <div className="rolagem__total">{cena.total}</div>
+          {cena.lista ? (
+            <div className="rolagem__total rolagem__total--lista">{cena.lista.map((valor, indice) => <span key={indice}>{valor}</span>)}</div>
+          ) : (
+            <div className="rolagem__total">{cena.total}</div>
+          )}
           {cena.natural !== null && (
             <div className="rolagem__conta">
               {cena.natural}

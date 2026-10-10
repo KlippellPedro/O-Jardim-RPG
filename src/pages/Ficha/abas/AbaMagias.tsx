@@ -65,6 +65,7 @@ import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutom
 import { Select } from '../../../components/ui/Select';
 import { dispararCirculoMagico } from '../components/circuloMagico';
 import { dispararAprendizado } from '../components/aprendizado';
+import { confirmar } from '../../../components/avisos/confirmacao';
 
 interface IMagiaAntiga {
   id?: string;
@@ -270,7 +271,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     });
   }, [busca, filtroFluxo, perfil.fluxoNativoId, tipoAtivo]);
 
-  const aprenderOuConceder = (magia: IMagiaCatalogo) => {
+  const aprenderOuConceder = async (magia: IMagiaCatalogo) => {
     if (isMestre) {
       const atuais = perfil.concedidasIds;
       const jaConcedida = atuais.includes(magia.id);
@@ -291,9 +292,12 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       return;
     }
     const avisoDeFluxo = avisoDeFluxoDaMagia(ficha, magia, inventarioCentral);
-    if (!window.confirm(`Aprender ${magia.titulo}? A escolha só poderá ser removida pelo Mestre.${avisoDeFluxo ? `
-
-${avisoDeFluxo}` : ''}`)) return;
+    const confirmado = await confirmar({
+      titulo: 'Aprender a magia',
+      mensagem: `Aprender ${magia.titulo}? A escolha só poderá ser removida pelo Mestre.${avisoDeFluxo ? `\n\n${avisoDeFluxo}` : ''}`,
+      rotuloConfirmar: 'Aprender',
+    });
+    if (!confirmado) return;
     onUpdate(['ficha', 'magiasConhecidasIds'], [...perfil.conhecidasIds, magia.id]);
     setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} foi aprendida.${avisoDeFluxo ? ` ${avisoDeFluxo}` : ''}` });
     dispararAprendizado({
@@ -319,7 +323,7 @@ ${avisoDeFluxo}` : ''}`)) return;
     },
   } as const;
 
-  const aprenderOuConcederManifestacao = (
+  const aprenderOuConcederManifestacao = async (
     tipo: 'ritual' | 'selo' | 'encantamento',
     item: IRitualCatalogo | ISeloCatalogo | IEncantamentoCatalogo,
   ) => {
@@ -342,7 +346,12 @@ ${avisoDeFluxo}` : ''}`)) return;
       setMensagem({ tipo: 'erro', texto: avaliacao.motivo || `Este(a) ${config.rotulo.toLowerCase()} ainda não pode ser aprendido(a).` });
       return;
     }
-    if (!window.confirm(`Aprender ${item.titulo}? A escolha só poderá ser removida pelo Mestre.`)) return;
+    const confirmado = await confirmar({
+      titulo: { ritual: 'Aprender o ritual', selo: 'Aprender o selo', encantamento: 'Aprender o encantamento' }[tipo],
+      mensagem: `Aprender ${item.titulo}? A escolha só poderá ser removida pelo Mestre.`,
+      rotuloConfirmar: 'Aprender',
+    });
+    if (!confirmado) return;
     onUpdate(['ficha', config.campoConhecidos], [...config.conhecidosIds, item.id]);
     setMensagem({ tipo: 'sucesso', texto: `${item.titulo} foi aprendido(a).` });
     dispararAprendizado({
@@ -458,7 +467,11 @@ ${avisoDeFluxo}` : ''}`)) return;
       magia.concentracao
       && concentracaoAtiva?.magiaId
       && concentracaoAtiva.magiaId !== magia.id
-      && !window.confirm(`Conjurar ${magia.titulo} encerrará ${concentracaoAtiva.titulo || 'a concentração atual'}. Continuar?`)
+      && !(await confirmar({
+        titulo: 'Trocar de concentração',
+        mensagem: `Conjurar ${magia.titulo} encerrará ${concentracaoAtiva.titulo || 'a concentração atual'}. Continuar?`,
+        rotuloConfirmar: 'Conjurar',
+      }))
     ) return;
 
     acaoMagicaEmAndamento.current = true;

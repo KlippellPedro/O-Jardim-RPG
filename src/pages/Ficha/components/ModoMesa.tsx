@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { BookOpen, Dices, Loader2, Package, ShieldAlert, Smartphone, Sparkles, Swords, X, Zap } from 'lucide-react';
 import { registrosApi } from '../../../services/registrosApi';
 import { useWakeLock } from '../../../hooks/useWakeLock';
+import { vibrar } from '../../../utils/vibracaoDoApp';
 import {
   PASSOS_RECURSO,
   descreverConta,
@@ -69,14 +70,6 @@ const COR_RESULTADO: Record<TomResultado, string> = {
   neutro: '#e5e7eb',
 };
 
-const vibrar = (ms = 14) => {
-  try {
-    navigator.vibrate?.(ms);
-  } catch {
-    // Sem suporte a vibração (iOS, desktop): tudo continua igual.
-  }
-};
-
 const sinal = (valor: number) => (valor > 0 ? `+${valor}` : String(valor));
 
 interface ICartaoRecursoProps {
@@ -115,7 +108,7 @@ const CartaoRecurso = ({ rotulo, cor, recurso, invertido = false, onMudar }: ICa
           <button
             key={passo}
             type="button"
-            onClick={() => { vibrar(); onMudar(passo); }}
+            onClick={() => { vibrar('toque'); onMudar(passo); }}
             aria-label={`${passo > 0 ? 'Somar' : 'Tirar'} ${Math.abs(passo)} de ${rotulo}`}
             className={`min-h-12 rounded-xl border text-base font-bold transition-transform active:scale-95 ${passo < 0
               ? 'border-red-400/30 bg-red-400/10 text-red-200'
@@ -183,12 +176,12 @@ export const ModoMesa = ({
     }
     setErro('');
     setRolando(true);
-    vibrar(20);
+    vibrar('toque');
     try {
       const { registro } = await registrosApi.rolar({ campanhaId, personagemId, titulo, bonus: bonusTeste, vantagens, desvantagens });
       const resultado = lerResultadoRolagem(registro);
       if (resultado) setUltimo({ titulo, resultado });
-      vibrar(resultado?.critico || resultado?.falha ? 60 : 25);
+      vibrar(resultado?.critico ? 'critico' : resultado?.falha ? 'falha' : 'toque');
     } catch (falha) {
       setErro(falha instanceof Error ? falha.message : 'Não foi possível rolar o dado.');
     } finally {
@@ -267,7 +260,7 @@ export const ModoMesa = ({
                 <button
                   key={passo}
                   type="button"
-                  onClick={() => { vibrar(); onStatus('cansacoAtual', passo, cansaco.max); }}
+                  onClick={() => { vibrar('toque'); onStatus('cansacoAtual', passo, cansaco.max); }}
                   aria-label={passo > 0 ? 'Somar 1 de Cansaço' : 'Tirar 1 de Cansaço'}
                   className="h-11 w-14 rounded-xl border border-white/15 bg-white/[0.04] text-base font-bold active:scale-95"
                 >

@@ -2,11 +2,15 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, Shield, Globe, BookOpen, Swords, ShoppingBag, ScrollText, Crown } from 'lucide-react';
 import { sfx } from '../utils/audioSynth';
+import { rotuloDoMenuSessao } from '../services/situacaoDaMesa';
+import { useSituacaoDaMesaStore } from '../store/useSituacaoDaMesaStore';
+import './sessao/situacaoDaMesa.css';
 
 export default function GlassMenu() {
+  const situacaoDaMesa = useSituacaoDaMesaStore((estado) => estado.situacao);
   const menuItems = [
     { name: 'Início', path: '/', icon: <Home size={22} /> },
-    { name: 'Campanha', path: '/campanha', icon: <Crown size={22} /> },
+    { name: 'Campanha', curto: 'Mesa', path: '/campanha', icon: <Crown size={22} /> },
     { name: 'Ficha', path: '/ficha', icon: <Shield size={22} /> },
     { name: 'Livro', path: '/regras', icon: <BookOpen size={22} /> },
     { name: 'Mundo', path: '/mundo', icon: <Globe size={22} /> },
@@ -27,7 +31,7 @@ export default function GlassMenu() {
             `app-nav-link group transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70
             ${isActive ? 'text-primary' : 'text-gray-300 hover:text-white hover:bg-white/10'}`
           }
-          aria-label={item.name}
+          aria-label={item.path === '/sessao' ? rotuloDoMenuSessao(situacaoDaMesa) : item.name}
         >
           {({ isActive }) => (
             <>
@@ -41,10 +45,20 @@ export default function GlassMenu() {
               )}
               
               <span className="relative z-10">{item.icon}</span>
-              <span className="app-nav-label relative z-10">{item.name}</span>
+              {item.path === '/sessao' && situacaoDaMesa !== 'nenhuma' ? (
+                <span className={`nav-mesa nav-mesa--${situacaoDaMesa} z-10`} aria-hidden="true" />
+              ) : null}
+              {item.curto ? (
+                <>
+                  <span className="app-nav-label app-nav-label--longo relative z-10">{item.name}</span>
+                  <span className="app-nav-label app-nav-label--curto relative z-10" aria-hidden="true">{item.curto}</span>
+                </>
+              ) : (
+                <span className="app-nav-label relative z-10">{item.name}</span>
+              )}
               
               <div className="app-nav-tooltip text-sm">
-                {item.name}
+                {item.path === '/sessao' ? rotuloDoMenuSessao(situacaoDaMesa) : item.name}
               </div>
             </>
           )}

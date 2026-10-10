@@ -267,6 +267,13 @@ export const sessaoApi = {
     return api<SessaoResponse>(`/sessao?campanha_id=${campanhaId}`);
   },
 
+  /** Só "há mesa ao vivo?" (ver `services/situacaoDaMesa.ts`), sem o estado de cena. */
+  situacaoDaMesa(campanhaId: string) {
+    return api<{ situacao: string; titulo: string | null; iniciada_em: string | null }>(
+      `/sessao/campanha/${campanhaId}/situacao`,
+    );
+  },
+
   abrirSessao(campanhaId: string, titulo: string, incluirPersonagens: boolean = false) {
     return api<SessaoResponse>('/sessao', {
       method: 'POST',

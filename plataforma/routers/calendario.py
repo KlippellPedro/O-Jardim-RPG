@@ -15,6 +15,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 
 from core import calendario as regras
+from core import live_session
 from core.calendario import ErroCalendario
 from core.database import Database
 from core.discord_avisos import avisar_discord
@@ -186,6 +187,8 @@ def _alterar(campanha_id: UUID, user: AuthenticatedUser, database: Database, mud
         _gravar(connection, campanha_id, estado)
         _sincronizar_discord(connection, campanha_id, estacao_antes, estado)
         _avisar_a_mesa(connection, campanha_id, user, estacao_antes, abertos_antes, estado)
+    # Depois de gravar: quem estiver com o site aberto atualiza o fundo (estação, Lua Carmesim) na hora.
+    live_session.publicar(campanha_id, "calendario", 0)
     return regras.visao(estado, gestor=True)
 
 

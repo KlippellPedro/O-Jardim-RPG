@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from datetime import datetime, timezone
 from uuid import UUID, uuid4
 
@@ -18,6 +19,7 @@ from core.character_summary import (
     validar_regras_ficha,
 )
 from core.conquistas import avaliar as avaliar_conquistas
+from core.discord_avisos import avisar_discord, texto_nivel
 from core.diario import montar as montar_diario
 from core.database import Database
 from core.troca import mover_item, mover_moeda, tocar_economia, travar_par
@@ -59,6 +61,7 @@ from schemas import (
 )
 
 
+logger = logging.getLogger("jardim-plataforma")
 router = APIRouter(prefix="/personagens", tags=["personagens"])
 _CENTRAL_FIELDS = {"carteira", "inventario", "lunaris", "lunarisInicial", "inventarioInicial"}
 _PROTECTED_INVENTORY_DATA_KEYS = {
@@ -596,6 +599,33 @@ def _complex_ally_summary(row: dict) -> dict:
     }
 
 
+def _anunciar_nivel(connection, personagem_id, campanha_id, nome: str, antes: int, depois: int) -> None:
+    """Destaque de subida de nível no Discord. Cada nível é anunciado uma vez só (descer e subir
+    de novo não repete) e nada acima do nível padrão sai: ali a ficha não trava nada e quem
+    decide se o personagem vale é o Mestre, que já é avisado em separado."""
+    if antes < 1 or depois <= antes or depois > NIVEL_TOTAL_PADRAO:
+        return
+    try:
+        with connection.transaction():  # savepoint: um erro aqui não pode abortar o salvamento da ficha
+            linha = connection.execute(
+                "SELECT nivel FROM personagem_nivel_anunciado WHERE personagem_id=%s", (personagem_id,)
+            ).fetchone()
+            ja_anunciado = int(linha["nivel"]) if linha else antes
+            if depois <= ja_anunciado:
+                return
+            connection.execute(
+                """
+                INSERT INTO personagem_nivel_anunciado (personagem_id, nivel) VALUES (%s, %s)
+                ON CONFLICT (personagem_id) DO UPDATE SET nivel = GREATEST(personagem_nivel_anunciado.nivel, EXCLUDED.nivel),
+                    anunciado_em = CURRENT_TIMESTAMP
+                """,
+                (personagem_id, depois),
+            )
+            avisar_discord(connection, campanha_id, "nivel", texto_nivel(nome, depois))
+    except Exception:  # noqa: BLE001 - destaque é cortesia, nunca derruba o salvamento da ficha
+        logger.exception("falha ao anunciar o nível do personagem %s", personagem_id)
+
+
 @router.post("", status_code=status.HTTP_201_CREATED)
 def create_character(
     payload: CharacterCreateInput,
@@ -1072,6 +1102,7 @@ def update_character(
                 # a mesa aceita o personagem ali.
                 nivel_antes = sum(int(item.get("nivel") or 0) for item in classes_antes)
                 nivel_depois = sum(int(item.get("nivel") or 0) for item in classes_depois)
+                _anunciar_nivel(connection, character_id, current["campanha_id"], name, nivel_antes, nivel_depois)
                 patamar = patamar_novo(nivel_antes, nivel_depois)
                 if patamar is not None:
                     notifications.notify(

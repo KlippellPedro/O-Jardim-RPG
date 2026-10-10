@@ -25,6 +25,9 @@ AVISOS_PADRAO: dict[str, bool] = {
     "critico": False,
     "mural": False,
     "manchete": True,
+    # Destaques da mesa: o jogador subiu de nível ou ganhou um selo (nunca selo secreto).
+    "nivel": True,
+    "selo": True,
 }
 
 ROTULOS_AVISO: dict[str, str] = {
@@ -34,6 +37,8 @@ ROTULOS_AVISO: dict[str, str] = {
     "critico": "Crítico na mesa (20 natural)",
     "mural": "Novidades do mural",
     "manchete": "Manchete quando uma lenda cai",
+    "nivel": "Destaque: personagem subiu de nível",
+    "selo": "Destaque: personagem ganhou um selo (os secretos nunca saem)",
 }
 
 
@@ -46,7 +51,17 @@ CATEGORIA_DISCORD: dict[str, str] = {
     "mural": "liberacao",
     # Vai para o canal de notícias do Jornalista (/jornal canal categoria:noticia).
     "manchete": "noticia",
+    "nivel": "noticia",
+    "selo": "noticia",
 }
+
+
+def texto_nivel(nome: str, nivel: int) -> str:
+    return f"⬆️ **{str(nome)[:60]}** subiu para o nível **{int(nivel)}**!"
+
+
+def texto_selo(nome: str, selo: str, descricao: str) -> str:
+    return f"🏅 **{str(nome)[:60]}** conquistou o selo **{str(selo)[:60]}**: {str(descricao)[:140]}"
 
 
 def avisos_da_campanha(avisos_salvos) -> dict[str, bool]:

@@ -24,6 +24,8 @@ import {
   podeGerenciarRecursoResumo,
   nivelEfetivoRecursoDetalhe,
 } from '../../../services/recursoCampanhaPermissoes';
+import { avisarErro } from '../../../components/avisos/avisos';
+import { confirmar } from '../../../components/avisos/confirmacao';
 
 const NIVEL_PERMISSAO_OPCOES = [
   { value: 'visualizar', label: 'Visualizar' },
@@ -209,7 +211,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
       const d = await propriedadesCampanhaApi.obter(campanhaAtiva.id, propriedadeId);
       abrirFormEditar(d);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao carregar propriedade.');
+      avisarErro(e, 'Erro ao carregar propriedade.');
     }
   };
 
@@ -225,7 +227,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
       await carregarPropriedades();
       setModalForm(false);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao salvar propriedade.');
+      avisarErro(e, 'Erro ao salvar propriedade.');
     } finally {
       setSalvando(false);
     }
@@ -233,13 +235,13 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
 
   const removerPropriedade = async (p: ICampanhaPropriedadeResumo) => {
     if (!campanhaAtiva?.id) return;
-    if (!window.confirm(`Remover a propriedade "${p.nome}" permanentemente?`)) return;
+    if (!(await confirmar({ titulo: 'Remover a propriedade', mensagem: `Remover a propriedade "${p.nome}" permanentemente?`, rotuloConfirmar: 'Remover', tom: 'perigo' }))) return;
     try {
       await propriedadesCampanhaApi.remover(campanhaAtiva.id, p.id);
       await carregarPropriedades();
       if (propriedadeAberta === p.id) { setPropriedadeAberta(null); setDetalhe(null); }
     } catch (e: any) {
-      alert(e?.message || 'Erro ao remover propriedade.');
+      avisarErro(e, 'Erro ao remover propriedade.');
     }
   };
 
@@ -266,7 +268,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
       setModalMigrar(false);
       await carregarPropriedades();
     } catch (e: any) {
-      alert(e?.message || 'Erro ao mover propriedade para a campanha.');
+      avisarErro(e, 'Erro ao mover propriedade para a campanha.');
     }
   };
 
@@ -295,7 +297,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
       const d = await propriedadesCampanhaApi.obter(campanhaAtiva.id, detalhe.id);
       setDetalhe(d);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao adicionar instalação.');
+      avisarErro(e, 'Erro ao adicionar instalação.');
     }
   };
 
@@ -306,7 +308,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
       const d = await propriedadesCampanhaApi.obter(campanhaAtiva.id, detalhe.id);
       setDetalhe(d);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao remover instalação.');
+      avisarErro(e, 'Erro ao remover instalação.');
     }
   };
 
@@ -320,7 +322,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
       setNovaPermPersonagemId('');
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao definir permissão.');
+      avisarErro(e, 'Erro ao definir permissão.');
     }
   };
 
@@ -330,7 +332,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
       await propriedadesCampanhaApi.removerPermissao(campanhaAtiva.id, detalhe.id, personagemId);
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao remover permissão.');
+      avisarErro(e, 'Erro ao remover permissão.');
     }
   };
 

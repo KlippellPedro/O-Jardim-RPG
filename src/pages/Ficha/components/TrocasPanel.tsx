@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ArrowLeftRight, Check, RefreshCw, X } from 'lucide-react';
 import { resumoDoLado, trocasApi, type ItemTrocavel, type PropostaTroca } from '../../../services/trocasApi';
 import { PropostaTrocaModal } from './PropostaTrocaModal';
+import { confirmar } from '../../../components/avisos/confirmacao';
 
 interface ITrocasPanelProps {
   personagemId: string;
@@ -50,7 +51,11 @@ export const TrocasPanel = ({ personagemId, meusItens, carteira, antesDeTrocar, 
 
   const agir = async (proposta: PropostaTroca, acao: 'aceitar' | 'recusar' | 'cancelar') => {
     if (busy) return;
-    if (acao === 'aceitar' && !window.confirm(`Aceitar a troca? Você dá ${resumoDoLado(proposta.pedido)} e recebe ${resumoDoLado(proposta.oferta)}.`)) return;
+    if (acao === 'aceitar' && !(await confirmar({
+      titulo: 'Aceitar a troca',
+      mensagem: `Aceitar a troca? Você dá ${resumoDoLado(proposta.pedido)} e recebe ${resumoDoLado(proposta.oferta)}.`,
+      rotuloConfirmar: 'Aceitar a troca',
+    }))) return;
     setBusy(proposta.id);
     setAviso(null);
     try {

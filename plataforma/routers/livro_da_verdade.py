@@ -11,7 +11,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from core import lendas
+from core import lendas, live_session
 from core.audit import record_audit
 from core.database import Database
 from core.dependencies import (
@@ -83,6 +83,8 @@ def marcar_queda(
             details={"nome": lenda["nome"]},
         )
         resposta = lendas.livro(connection, campanha_id, gestor=True)
+    # A queda mexe no calendário (marco do dia e efeitos no mundo, como a estação forçada).
+    live_session.publicar(campanha_id, "calendario", 0)
     return resposta
 
 
@@ -108,4 +110,6 @@ def desfazer_queda(
             target_id=monstro_id,
             details={"nome": lenda["nome"]},
         )
-        return lendas.livro(connection, campanha_id, gestor=True)
+        resposta = lendas.livro(connection, campanha_id, gestor=True)
+    live_session.publicar(campanha_id, "calendario", 0)
+    return resposta

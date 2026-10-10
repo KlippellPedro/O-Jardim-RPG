@@ -1,0 +1,17 @@
+/* "Pular todos os guias", no pé dos dois guias (Ficha e as demais páginas). */
+.guia-pular {
+  display: block;
+  margin: 0.85rem auto 0;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.5rem;
+  color: rgb(255 255 255 / 0.45);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 150ms ease;
+}
+
+.guia-pular:hover,
+.guia-pular:focus-visible { color: #fff; outline: none; }
+.guia-pular:focus-visible { box-shadow: 0 0 0 2px rgb(255 255 255 / 0.4); }

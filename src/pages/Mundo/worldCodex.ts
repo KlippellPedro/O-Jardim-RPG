@@ -1,5 +1,6 @@
 import type { LoreEntry } from '../../../data/gerado/mundoCatalog';
 import { ARVORES } from '../../../data/mundo/arvoresCatalog';
+import { loreBloqueado } from './loreVisibility';
 
 export interface WorldCodexNode {
   entry: LoreEntry;
@@ -120,4 +121,30 @@ export function universalLoreEntries(
 
 export function codexEntryPath(treeId: string, entry: LoreEntry): string {
   return `/mundo/arvores/${treeId}/${entry.tipo}/${entry.id}`;
+}
+
+export const chaveDaEntrada = (entry: LoreEntry): string => `${entry.tipo}:${entry.id}`;
+
+/** Quais entradas do códice de uma Árvore estão trancadas para esta pessoa (chave `tipo:id` para verdadeiro/falso).
+ *
+ * Trancar uma entrada tranca tudo o que está pendurado nela, de cima para baixo; a Deidade, os Fluxos e os
+ * conceitos que cruzam Árvores contam cada um por si. É a regra única da página da Árvore e da busca. */
+export function mapaDeBloqueios(
+  codex: TreeCodex,
+  { isMestre, loreRevelado, loreOculto }: { isMestre: boolean; loreRevelado: string[]; loreOculto: string[] },
+): Map<string, boolean> {
+  const resultado = new Map<string, boolean>();
+  const descer = (nodes: WorldCodexNode[], paiBloqueado: boolean) => {
+    nodes.forEach((node) => {
+      const bloqueado = loreBloqueado(node.entry, { isMestre, loreRevelado, loreOculto, paiBloqueado });
+      resultado.set(chaveDaEntrada(node.entry), bloqueado);
+      descer(node.children, bloqueado);
+    });
+  };
+  descer(codex.roots, false);
+  [codex.deity, ...codex.flows, ...codex.crossTreeConcepts].forEach((entry) => {
+    if (!entry) return;
+    resultado.set(chaveDaEntrada(entry), loreBloqueado(entry, { isMestre, loreRevelado, loreOculto }));
+  });
+  return resultado;
 }

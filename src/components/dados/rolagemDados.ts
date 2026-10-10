@@ -15,6 +15,8 @@ export interface CenaRolagem {
   dt: number | null;
   formula: string;
   destaque: 'critico' | 'falha' | null;
+  /** Rolagem local de vários dados sem soma (ex.: os sete atributos): o resultado mostra os valores em vez do total. */
+  lista?: number[];
 }
 
 type Apresentador = (cena: CenaRolagem, terminar: () => void) => void;
@@ -73,10 +75,38 @@ export const extrairCena = (registro: IRegistro): CenaRolagem | null => {
   };
 };
 
-/** Roda a cena e resolve quando ela termina (ou é pulada). Sem host, sem
- * suporte ou com "reduzir movimento", resolve na hora para o chamador seguir. */
-export const animarRolagem = (registro: IRegistro): Promise<void> => {
-  const cena = extrairCena(registro);
+/** Quantos dados cabem numa rolagem local (a cena arruma em duas fileiras). */
+export const MAX_DADOS_LOCAIS = 8;
+
+export interface OpcoesDadosLocais {
+  titulo: string;
+  /** O que cada dado mostra. Quem chama já sorteou: a cena só faz o dado rolar e pousar nesses valores. */
+  valores: readonly number[];
+  faces?: number;
+  /** A legenda do resultado (ex.: "7d20"). */
+  formula?: string;
+}
+
+/** A cena de uma rolagem que não passa pelo servidor (assistente de criação), ou null se não dá para mostrar em 3D. */
+export const cenaDeDadosLocais = ({ titulo, valores, faces = 20, formula = '' }: OpcoesDadosLocais): CenaRolagem | null => {
+  if (!valores.length || valores.length > MAX_DADOS_LOCAIS) return null;
+  if (!FACES_SUPORTADAS.includes(faces)) return null;
+  if (valores.some((valor) => !Number.isInteger(valor) || valor < 1 || valor > faces)) return null;
+  return {
+    titulo,
+    dados: valores.map((valor) => ({ faces, valor, ignorado: false })),
+    total: null,
+    bonus: 0,
+    natural: null,
+    grau: null,
+    dt: null,
+    formula,
+    destaque: null,
+    lista: [...valores],
+  };
+};
+
+const apresentar = (cena: CenaRolagem | null): Promise<void> => {
   if (!cena || !apresentador || semMovimento()) return Promise.resolve();
   // Uma rolagem nova encerra a anterior em vez de empilhar.
   terminarAtual?.();
@@ -89,3 +119,10 @@ export const animarRolagem = (registro: IRegistro): Promise<void> => {
     apresentador?.(cena, terminar);
   });
 };
+
+/** Roda a cena e resolve quando ela termina (ou é pulada). Sem host, sem
+ * suporte ou com "reduzir movimento", resolve na hora para o chamador seguir. */
+export const animarRolagem = (registro: IRegistro): Promise<void> => apresentar(extrairCena(registro));
+
+/** O mesmo para uma rolagem local: resolve no pouso (ou na hora, sem 3D) e o resultado fica na tela até a pessoa fechar. */
+export const animarDadosLocais = (opcoes: OpcoesDadosLocais): Promise<void> => apresentar(cenaDeDadosLocais(opcoes));

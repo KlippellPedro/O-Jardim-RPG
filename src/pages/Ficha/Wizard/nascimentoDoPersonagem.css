@@ -1,0 +1,162 @@
+/* A cerimônia de nascimento do personagem. Só transform e opacity animam. */
+.nascimento {
+  --nasc-cor: #c7a44c;
+  --nasc-brilho: rgb(199 164 76 / 0.35);
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1.5rem 1rem;
+  background: radial-gradient(ellipse at 50% 45%, #0d0b16 0%, #050408 70%);
+  animation: nasc-fundo 480ms ease-out both;
+}
+
+.nascimento__brilho {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: min(80vw, 46rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--nasc-cor) 34%, transparent) 0%, transparent 62%);
+  opacity: 0.85;
+  animation: nasc-brilho 3.2s ease-in-out 0.5s infinite alternate both;
+}
+
+.nascimento__ceu { position: absolute; inset: 8% 5%; }
+.nascimento__linhas { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+.nascimento__linha {
+  stroke: color-mix(in srgb, var(--nasc-cor) 38%, transparent);
+  stroke-width: 1;
+  animation: nasc-aparece 600ms ease-out both;
+}
+
+.nascimento__estrela {
+  position: absolute;
+  width: 0.34rem;
+  height: 0.34rem;
+  margin: -0.17rem 0 0 -0.17rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--nasc-cor) 70%, white);
+  box-shadow: 0 0 0.5rem var(--nasc-brilho);
+  animation: nasc-estrela 700ms ease-out both;
+}
+
+.nascimento__estrela--primeira {
+  width: 0.8rem;
+  height: 0.8rem;
+  margin: -0.4rem 0 0 -0.4rem;
+  background: #fff;
+  box-shadow: 0 0 1.4rem 0.3rem var(--nasc-cor), 0 0 3.4rem 0.8rem var(--nasc-brilho);
+  animation: nasc-primeira 1100ms cubic-bezier(0.2, 1.3, 0.4, 1) both;
+}
+
+.nascimento__estrela--primeira::after {
+  content: '';
+  position: absolute;
+  inset: -0.35rem;
+  border: 1px solid var(--nasc-cor);
+  border-radius: 50%;
+  animation: nasc-onda 1500ms ease-out 0.7s 2 both;
+}
+
+.nascimento__texto {
+  position: relative;
+  display: flex;
+  max-width: 34rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.nascimento__selo {
+  color: var(--nasc-cor);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  animation: nasc-sobe 700ms ease-out 1.3s both;
+}
+
+.nascimento__nome {
+  margin-top: 0.7rem;
+  color: #fff;
+  font-family: Cinzel, serif;
+  font-size: clamp(2.2rem, 9vw, 4rem);
+  font-weight: 700;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 2rem var(--nasc-brilho);
+  animation: nasc-sobe 800ms ease-out 1.5s both;
+}
+
+.nascimento__emblemas { display: flex; gap: 0.7rem; margin-top: 1.2rem; animation: nasc-sobe 700ms ease-out 1.8s both; }
+.nascimento__origem { margin-top: 1rem; color: rgb(255 255 255 / 0.88); font-size: 1.05rem; font-weight: 600; animation: nasc-sobe 700ms ease-out 2s both; }
+.nascimento__arvore { margin-top: 0.15rem; color: rgb(255 255 255 / 0.5); font-size: 0.85rem; animation: nasc-sobe 700ms ease-out 2.1s both; }
+
+.nascimento__acoes {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6rem;
+  margin-top: 2rem;
+  animation: nasc-sobe 700ms ease-out 2.4s both;
+}
+
+@media (min-width: 30rem) {
+  .nascimento__acoes { width: auto; flex-direction: row; align-items: center; }
+}
+
+.nascimento__botao {
+  display: inline-flex;
+  min-height: 2.9rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 999px;
+  background: rgb(14 12 22 / 0.88);
+  color: rgb(255 255 255 / 0.8);
+  font-weight: 600;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.nascimento__botao:hover,
+.nascimento__botao:focus-visible { background: rgb(40 36 54 / 0.95); color: #fff; outline: none; }
+.nascimento__botao:focus-visible { box-shadow: 0 0 0 2px var(--nasc-cor); }
+
+.nascimento__botao--principal {
+  border-color: color-mix(in srgb, var(--nasc-cor) 70%, transparent);
+  background: color-mix(in srgb, var(--nasc-cor) 24%, rgb(14 12 22));
+  color: #fff;
+  font-weight: 700;
+}
+
+.nascimento__botao--principal:hover,
+.nascimento__botao--principal:focus-visible { background: color-mix(in srgb, var(--nasc-cor) 38%, rgb(14 12 22)); }
+
+/* Sem movimento (preferência do sistema, modo de desempenho ou celebrações desligadas): tudo já está no lugar. */
+.nascimento--estatico,
+.nascimento--estatico * { animation: none !important; }
+
+@keyframes nasc-fundo { from { opacity: 0; } to { opacity: 1; } }
+@keyframes nasc-brilho { from { opacity: 0.55; transform: translate(-50%, -50%) scale(0.92); } to { opacity: 0.95; transform: translate(-50%, -50%) scale(1.05); } }
+@keyframes nasc-aparece { from { opacity: 0; } to { opacity: 1; } }
+@keyframes nasc-estrela { from { opacity: 0; transform: scale(0.2); } to { opacity: 1; transform: scale(1); } }
+@keyframes nasc-primeira { 0% { opacity: 0; transform: scale(0.1); } 55% { opacity: 1; transform: scale(2.1); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes nasc-onda { from { opacity: 0.8; transform: scale(1); } to { opacity: 0; transform: scale(5); } }
+@keyframes nasc-sobe { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .nascimento, .nascimento * { animation: none !important; }
+}
+
+html[data-performance-mode='reduced'] .nascimento,
+html[data-performance-mode='reduced'] .nascimento * { animation: none !important; }

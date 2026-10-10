@@ -38,6 +38,8 @@ import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutom
 import { ItensAutomaticosOcultos } from '../components/ItensAutomaticosOcultos';
 import { OcultarItemAutomaticoModal } from '../components/OcultarItemAutomaticoModal';
 import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
+import { confirmar } from '../../../components/avisos/confirmacao';
+import { excluirDaFichaComDesfazer } from '../desfazerNaFicha';
 
 interface ICustoPoder {
   recurso: TRecursoCusto;
@@ -241,7 +243,11 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
 
   const salvarDespertar = async (ativar: boolean) => {
     if (!frutoConsumido) return;
-    if (ativar && !window.confirm(`Despertar ${frutoConsumido.titulo}? O estado despertado ficará salvo permanentemente nesta ficha.`)) return;
+    if (ativar && !(await confirmar({
+      titulo: 'Despertar o Fruto',
+      mensagem: `Despertar ${frutoConsumido.titulo}? O estado despertado ficará salvo permanentemente nesta ficha.`,
+      rotuloConfirmar: 'Despertar',
+    }))) return;
     setDespertandoFruto(true);
     setErroDespertar('');
     try {
@@ -349,8 +355,13 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
   };
 
   const excluirItem = (item: IPoder) => {
-    if (!window.confirm(`Excluir ${item.nome}?`)) return;
-    salvarLista(poderes.filter((p) => p.id !== item.id));
+    excluirDaFichaComDesfazer<IPoder>({
+      personagemId: character.id,
+      lista: (personagem) => personagem.ficha?.poderes,
+      id: item.id,
+      gravar: salvarLista,
+      texto: `Poder "${item.nome}" excluído.`,
+    });
   };
 
   const atualizarCampoModal = (campo: keyof IPoder, valor: any) => {

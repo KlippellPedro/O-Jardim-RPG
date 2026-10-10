@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore, ICampanha } from '../../store/useAuthStore';
 import { Swords, Check, Loader2, PlusCircle, LogIn, Trash2 } from 'lucide-react';
 import { campanhasApi } from '../../services/campanhasApi';
+import { confirmar } from '../avisos/confirmacao';
 
 export const CampanhasPanel: React.FC = () => {
   const { usuario, campanhas, campanhaAtiva, setCampanhaAtiva, initContexto } = useAuthStore();
@@ -29,7 +30,7 @@ export const CampanhasPanel: React.FC = () => {
   };
 
   const handleExcluirCampanha = async (campanha: ICampanha) => {
-    if (!window.confirm(`Excluir a mesa "${campanha.nome}"? Fichas e histórico continuam salvos, mas a mesa some do acesso normal.`)) return;
+    if (!(await confirmar({ titulo: 'Excluir a mesa', mensagem: `Excluir a mesa "${campanha.nome}"? Fichas e histórico continuam salvos, mas a mesa some do acesso normal.`, rotuloConfirmar: 'Excluir', tom: 'perigo' }))) return;
     setExcluindoId(campanha.id);
     setError(null);
     try {

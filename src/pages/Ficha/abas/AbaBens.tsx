@@ -23,6 +23,7 @@ import {
   TIPOS_PROPRIEDADE,
 } from '../../../services/propriedadeService';
 import { normalizarCategoriaInventarioLoja } from '../../../services/lojaCatalogService';
+import { excluirDaFichaComDesfazer } from '../desfazerNaFicha';
 
 export const AbaBens = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
   const ficha = character.ficha || {};
@@ -78,9 +79,13 @@ export const AbaBens = ({ character, onUpdate }: { character: any; onUpdate: any
   };
 
   const removerPropriedade = (propriedade: IPropriedadeFicha) => {
-    if (window.confirm(`Remover a propriedade "${propriedade.nome}"?`)) {
-      salvarPropriedades(propriedades.filter((item) => item.id !== propriedade.id));
-    }
+    excluirDaFichaComDesfazer<IPropriedadeFicha>({
+      personagemId: character.id,
+      lista: (personagem) => normalizarPropriedades(personagem.ficha?.propriedades),
+      id: propriedade.id,
+      gravar: salvarPropriedades,
+      texto: `Propriedade "${propriedade.nome}" removida.`,
+    });
   };
 
   return (

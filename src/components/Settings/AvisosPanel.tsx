@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../../store/useAuthStore';
 import { avisosApi } from '../../services/avisosApi';
 import { Bell, Loader2, CheckCheck, CheckCheck as MarkAllIcon, Trash2 } from 'lucide-react';
+import { confirmar } from '../avisos/confirmacao';
 
 interface IAviso {
   id: string;
@@ -56,7 +57,7 @@ export const AvisosPanel: React.FC = () => {
   };
 
   const handleLimparLidos = async () => {
-    if (!window.confirm('Apagar os avisos já lidos?')) return;
+    if (!(await confirmar({ titulo: 'Apagar avisos lidos', mensagem: 'Apagar os avisos já lidos?', rotuloConfirmar: 'Apagar', tom: 'perigo' }))) return;
     setIsClearing(true);
     try {
       await avisosApi.limparLidos();

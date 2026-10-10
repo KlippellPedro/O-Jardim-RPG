@@ -8,6 +8,7 @@ import {
   type LoreDocument,
 } from '../../services/conteudoEditorialApi';
 import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
+import { confirmar } from '../avisos/confirmacao';
 
 interface ConteudoLorePanelProps {
   /** Chave composta ("tipo:id") de um registro pra abrir direto nele, vinda
@@ -191,14 +192,14 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
     marcarAlteracao();
   };
 
-  const escolherEntrada = (chave: string) => {
-    if ((!novaEntrada && chave === selecionadaChave) || !confirmarDescarte()) return;
+  const escolherEntrada = async (chave: string) => {
+    if ((!novaEntrada && chave === selecionadaChave) || !(await confirmarDescarte())) return;
     setNovaEntrada(false);
     setSelecionadaChave(chave);
   };
 
-  const iniciarNovaEntrada = () => {
-    if (!confirmarDescarte()) return;
+  const iniciarNovaEntrada = async () => {
+    if (!(await confirmarDescarte())) return;
     setNovaEntrada(true);
     setSelecionadaChave('__novo__');
     setNovoTipo('conceito');
@@ -216,8 +217,8 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
     setHistoricoAberto(false);
   };
 
-  const cancelarNovaEntrada = () => {
-    if (!confirmarDescarte('Descartar esta nova entrada ainda não salva?')) return;
+  const cancelarNovaEntrada = async () => {
+    if (!(await confirmarDescarte('Descartar esta nova entrada ainda não salva?'))) return;
     setNovaEntrada(false);
     setDirty(false);
     setSelecionadaChave(entradas[0]?.chave || '');
@@ -235,9 +236,9 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
   const excluirEntrada = async (entry: EditorialLibraryEntry) => {
     if (entry.excluido) return;
     const ehSelecionada = !novaEntrada && entry.chave === selecionadaChave;
-    if (ehSelecionada && dirty && !confirmarDescarte('Existem alterações não salvas nesta entrada. Deseja descartá-las e excluir o conteúdo?')) return;
+    if (ehSelecionada && dirty && !(await confirmarDescarte('Existem alterações não salvas nesta entrada. Deseja descartá-las e excluir o conteúdo?'))) return;
     const nome = documentoEfetivo(entry).titulo || entry.titulo;
-    if (!window.confirm(`Excluir “${nome}” do Conteúdo do Mundo? A entrada deixará de aparecer em todas as campanhas. O histórico será preservado para restauração.`)) return;
+    if (!(await confirmar({ titulo: 'Excluir a entrada', mensagem: `Excluir “${nome}” do Conteúdo do Mundo? A entrada deixará de aparecer em todas as campanhas. O histórico será preservado para restauração.`, rotuloConfirmar: 'Excluir', tom: 'perigo' }))) return;
     setDeletingId(entry.editorial?.id || entry.chave);
     setErro(null);
     setAvisoLista(null);
@@ -275,7 +276,7 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
     const editorial = entry.editorial;
     if (!entry.excluido || !editorial?.id) return;
     const documento = documentoEfetivo(entry);
-    if (!window.confirm(`Restaurar “${documento.titulo}” em todas as campanhas?`)) return;
+    if (!(await confirmar({ titulo: 'Restaurar a entrada', mensagem: `Restaurar “${documento.titulo}” em todas as campanhas?`, rotuloConfirmar: 'Restaurar' }))) return;
     setRestoring(true);
     setErro(null);
     setAvisoLista(null);
@@ -417,7 +418,8 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
   };
 
   const restaurarRevisao = async (revision: EditorialRevision) => {
-    if (!selecionada?.editorial?.id || !confirmarDescarte('Existem alterações não salvas. Deseja descartá-las para restaurar uma versão anterior?') || !window.confirm(`Restaurar a versão ${revision.versao} como novo rascunho? A publicação atual não será alterada.`)) return;
+    if (!selecionada?.editorial?.id || !(await confirmarDescarte('Existem alterações não salvas. Deseja descartá-las para restaurar uma versão anterior?'))) return;
+    if (!(await confirmar({ titulo: 'Restaurar versão', mensagem: `Restaurar a versão ${revision.versao} como novo rascunho? A publicação atual não será alterada.`, rotuloConfirmar: 'Restaurar' }))) return;
     setRestoring(true);
     setErro(null);
     try {

@@ -7,6 +7,7 @@ import { useAuthStore } from '../store/useAuthStore';
 import NovidadesMural from './NovidadesMural';
 import { SeletorDeCampanha } from './Campanha/SeletorDeCampanha';
 import CalendarioSessoes from './Quadro/CalendarioSessoes';
+import { ContinuarDeOndeParou } from './ContinuarDeOndeParou';
 
 import { SimboloOculto } from '../components/descobertas/SimboloOculto';
 
@@ -15,6 +16,14 @@ const ATALHOS_SECUNDARIOS = [
   { titulo: 'Quadro', path: '/quadro', icone: ScrollText },
   { titulo: 'Materiais', path: '/materiais', icone: FlaskConical },
 ];
+/** Cinco cartões não dividem bem nenhuma grade: em vez de sobrar um sozinho na última fileira, o último ocupa a fileira
+ * inteira (duas colunas), e em seis colunas os dois de baixo dividem a fileira ao meio. A partir de 1240 px cabem os cinco. */
+const classeDoCartao = (indice: number, total: number) => [
+  'h-full w-full text-left',
+  indice === total - 1 && total % 2 === 1 ? 'min-[520px]:max-lg:col-span-2' : '',
+  indice < 3 ? 'lg:max-[1239px]:col-span-2' : 'lg:max-[1239px]:col-span-3',
+].filter(Boolean).join(' ');
+
 export default function Home() {
   const navigate = useNavigate();
   const campanha = useAuthStore((estado) => estado.campanhaAtiva);
@@ -78,38 +87,40 @@ export default function Home() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="mb-10 text-center sm:mb-16 xl:mb-20"
+        className="mb-6 text-center sm:mb-16 xl:mb-20"
       >
-        <span className="uppercase tracking-[0.3em] text-primary/80 text-sm font-semibold mb-4 block">
+        <span className="mb-2 block text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-primary/80 sm:mb-4 sm:text-sm sm:tracking-[0.3em]">
           Plataforma de visualização de
         </span>
         <h1
           data-descoberta="jardineiro"
           data-cliques="7"
-          className="mb-6 text-[clamp(2.5rem,10vw,6rem)] font-bold leading-[1.05] tracking-wide text-white drop-shadow-[0_0_30px_rgba(196,160,82,0.15)]"
+          className="mb-3 text-[clamp(2.4rem,10vw,6rem)] font-bold sm:mb-6 leading-[1.05] tracking-wide text-white drop-shadow-[0_0_30px_rgba(196,160,82,0.15)]"
           style={{ fontFamily: 'Cinzel, serif' }}
         >
           O <span className="text-primary">Jardim</span> RPG
         </h1>
-        <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
+        <p className="mx-auto max-w-2xl text-sm leading-relaxed text-gray-400 sm:text-lg">
           Fichas, mundo, regras e itens reunidos no mesmo lugar. Cada informação fica visível apenas para
           quem deve vê-la.
         </p>
       </motion.div>
 
+      <ContinuarDeOndeParou />
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-4 sm:gap-6"
+        className="grid w-full grid-cols-1 gap-4 min-[520px]:grid-cols-2 lg:grid-cols-6 min-[1240px]:grid-cols-5 sm:gap-6"
       >
-        {modulos.map((mod) => (
+        {modulos.map((mod, indice) => (
           <motion.button
             type="button"
             key={mod.path}
             variants={itemVariants}
             onClick={() => navigate(mod.path)}
-            className="h-full w-full text-left"
+            className={classeDoCartao(indice, modulos.length)}
             aria-label={`Abrir ${mod.title}`}
           >
             <InteractiveModuleCard

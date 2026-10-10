@@ -708,6 +708,29 @@ def ultima_sessao_encerrada(
     return {"sessao_id": linha["id"] if linha else None}
 
 
+@router.get("/campanha/{campanha_id}/situacao")
+def situacao_da_mesa(
+    campanha_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Só o que o menu e a Home precisam saber: há mesa ao vivo agora?
+
+    Sem participantes nem estado de cena. A preparação é privada do Mestre, então para os
+    demais ela conta como "nenhuma", exatamente como no estado completo da sessão."""
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        sessao = _sessao_ativa(connection, campanha_id)
+    nenhuma = {"situacao": "nenhuma", "titulo": None, "iniciada_em": None}
+    if not sessao:
+        return nenhuma
+    if sessao["status"] == "preparacao":
+        if not acesso.manages_content:
+            return nenhuma
+        return {"situacao": "preparacao", "titulo": sessao["titulo"], "iniciada_em": None}
+    return {"situacao": "aberta", "titulo": sessao["titulo"], "iniciada_em": sessao["iniciada_em"]}
+
+
 @router.delete("/{sessao_id}", status_code=status.HTTP_204_NO_CONTENT)
 def encerrar_sessao(
     sessao_id: UUID,
@@ -1109,8 +1132,9 @@ def atualizar_participante(
             versao_ficha = int(linha_ficha["versao"]) if linha_ficha else versao_ficha
         registrar_minimos(connection, sessao_id)
         # Lenda do Bestiário a 0 de Vida: o Livro da Verdade abre a página dela (core/lendas.py).
+        calendario_mudou = False
         if alterou_vida and vida_maxima > 0 and vida_atual <= 0 and livro_da_verdade.eh_lenda(atual["monstro_id"]):
-            livro_da_verdade.registrar_queda_sem_quebrar(
+            queda = livro_da_verdade.registrar_queda_sem_quebrar(
                 connection,
                 campanha_id=sessao["campanha_id"],
                 monstro_id=atual["monstro_id"],
@@ -1118,6 +1142,8 @@ def atualizar_participante(
                 participante_id=participante_id,
                 ator_id=user.id,
             )
+            # Só a primeira queda mexe no calendário (marco do dia e efeitos no mundo).
+            calendario_mudou = bool(queda and queda.get("primeira"))
         # Estamina segue o mesmo caminho da Mana: o que o Mestre ajusta no HUD
         # tem que chegar na ficha, senão o jogador vê outro número.
         campos_estamina = {}
@@ -1146,6 +1172,8 @@ def atualizar_participante(
         versao = _tocar(connection, sessao_id)
         campanha_id = sessao["campanha_id"]
     live_session.publicar(campanha_id, "participante_atualizado", versao)
+    if calendario_mudou:
+        live_session.publicar(campanha_id, "calendario", 0)
     if versao_ficha is not None:
         # A ficha do jogador mudou por aqui: avisa a ficha aberta para buscar a
         # versão nova, senão o próximo autosave dela vira conflito.

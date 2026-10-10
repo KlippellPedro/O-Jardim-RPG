@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { BookText, Loader2, Pencil, Trash2 } from 'lucide-react';
 import { engajamentoApi, type IEntradaCronica } from '../../services/engajamentoApi';
+import { confirmar } from '../../components/avisos/confirmacao';
 
 const cartao = 'rounded-3xl border border-white/10 bg-[#0c0b11]/85 p-5';
 const tituloSecao = 'mb-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-gray-500';
@@ -73,7 +74,7 @@ export function CronicaCampanha({ campanhaId, cor }: CronicaCampanhaProps) {
   };
 
   const apagar = async (id: string) => {
-    if (!window.confirm('Apagar esta entrada da crônica?')) return;
+    if (!(await confirmar({ titulo: 'Apagar a entrada', mensagem: 'Apagar esta entrada da crônica?', rotuloConfirmar: 'Apagar', tom: 'perigo' }))) return;
     setErro('');
     try {
       await engajamentoApi.apagarCronica(campanhaId, id);

@@ -971,7 +971,7 @@ class FrontendRouteTests(unittest.TestCase):
         self.assertEqual(self.client.get("/audio/sabio/nao-existe.mp3", headers={"Accept": "text/html"}).status_code, 404)
 
     def test_arquivo_ausente_nao_devolve_index(self):
-        for caminho in ("/assets/inexistente.js", "/models/inexistente.glb", "/sw.js"):
+        for caminho in ("/assets/inexistente.js", "/models/inexistente.glb", "/service-worker.js"):
             resposta = self.client.get(caminho, headers={"Accept": "text/html"})
             self.assertEqual(resposta.status_code, 404, caminho)
             self.assertNotIn("text/html", resposta.headers.get("content-type", ""), caminho)

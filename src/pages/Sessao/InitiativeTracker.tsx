@@ -25,6 +25,11 @@ import {
   Zap,
 } from 'lucide-react';
 import { useSessaoStore, type EntidadeIniciativa } from '../../store/useSessaoStore';
+import { escolher } from '../../components/avisos/confirmacao';
+import { mensagemDeFilaForaDeOrdem, primeiraInversaoDaFila } from './filaDeIniciativa';
+import { situacaoDaVida } from './combateVivo';
+import { ReacaoDeVida } from './components/ReacaoDeVida';
+import './combateVivo.css';
 import { EntityEditor } from './components/EntityEditor';
 import { BestiarioPicker } from './components/BestiarioPicker';
 import { MontadorEncontro } from './components/MontadorEncontro';
@@ -125,6 +130,32 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
     } finally {
       setBusy(false);
     }
+  };
+
+  // O servidor começa o combate pelo primeiro da fila. Com a fila fora da ordem da
+  // iniciativa, quem tem número menor jogaria antes; em vez de decidir sozinho (o
+  // Mestre pode ter arrastado de propósito), a tela pergunta.
+  const inversaoDaFila = primeiraInversaoDaFila(iniciativa);
+  const iniciarComOrdem = async () => {
+    if (busy) return;
+    if (inversaoDaFila) {
+      const resposta = await escolher({
+        titulo: 'Fila fora de ordem',
+        mensagem: mensagemDeFilaForaDeOrdem(inversaoDaFila),
+        rotuloConfirmar: 'Ordenar e começar',
+        alternativa: { rotulo: 'Começar assim' },
+        rotuloCancelar: 'Voltar',
+      });
+      if (resposta === 'cancelar') return;
+      if (resposta === 'confirmar') {
+        await runAction(async () => {
+          await ordenarIniciativa();
+          await iniciarCombate();
+        }, 'Não foi possível iniciar o combate.');
+        return;
+      }
+    }
+    await runAction(iniciarCombate, 'Não foi possível iniciar o combate.');
   };
 
   const addEntity = async (event: React.FormEvent) => {
@@ -234,15 +265,17 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
     const hpRatio = entity.hpTotal && entity.hpAtual !== undefined
       ? Math.max(0, Math.min(100, (entity.hpAtual / entity.hpTotal) * 100))
       : null;
+    const situacao = situacaoDaVida(entity.hpAtual, entity.hpTotal, entity.estado_vida);
     return (
       <motion.article
         layout={!reduceMotion}
-        className={`overflow-hidden rounded-xl border ${
+        className={`relative overflow-hidden rounded-xl border ${
           active
-            ? 'border-[#c7a44c]/55 bg-[#c7a44c]/[0.09]'
+            ? 'border-[#c7a44c]/55 bg-[#c7a44c]/[0.09] sessao-cartao-da-vez'
             : 'border-white/[0.07] bg-black/25'
-        }`}
+        }${situacao !== 'normal' ? ` sessao-vida-${situacao}` : ''}`}
       >
+        <ReacaoDeVida escopo={`${entity.id}:fila`} valor={entity.hpAtual} maximo={entity.hpTotal} compacto tremer />
         <div className="flex items-center gap-3 p-3">
           {canReorder ? <GripVertical size={14} className="shrink-0 cursor-grab text-white/20 active:cursor-grabbing" /> : null}
           {batchMode && comando ? (
@@ -262,6 +295,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
             <div className="flex items-center gap-2">
               <h3 className="truncate text-sm font-semibold text-white/90">{entity.nome}</h3>
               {active ? <span className="rounded-full bg-[#c7a44c]/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#e2c465]">Turno</span> : null}
+              {situacao === 'caida' ? <span className="sessao-etiqueta-caido">Caído</span> : null}
               {comando && entity.visibilidade && entity.visibilidade !== 'total' ? (
                 <span
                   className="shrink-0 rounded-full border border-white/10 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white/40"
@@ -303,7 +337,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
               </span>
             </div>
             {hpRatio !== null ? (
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
+              <div className="sessao-barra-fila mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
                 <div className={`h-full rounded-full transition-[width] duration-500 ${hpRatio <= 25 ? 'bg-red-500' : hpRatio <= 50 ? 'bg-amber-400' : 'bg-emerald-400'}`} style={{ width: `${hpRatio}%` }} />
               </div>
             ) : null}
@@ -751,14 +785,15 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                   type="button"
                   onClick={() => void runAction(ordenarIniciativa, 'Não foi possível ordenar a iniciativa.')}
                   disabled={busy || iniciativa.length < 2}
-                  className="rounded-lg border border-white/10 px-2 py-2 text-[10px] text-white/55 hover:border-white/20 hover:text-white disabled:opacity-35"
+                  title={inversaoDaFila ? 'A fila está fora da ordem da iniciativa' : undefined}
+                  className={`rounded-lg border px-2 py-2 text-[10px] disabled:opacity-35 ${inversaoDaFila ? 'border-[#c7a44c]/50 bg-[#c7a44c]/10 text-[#e3c363] hover:bg-[#c7a44c]/20' : 'border-white/10 text-white/55 hover:border-white/20 hover:text-white'}`}
                 >
                   Ordenar fila
                 </button>
               </div>
               <button
                 type="button"
-                onClick={() => void runAction(iniciarCombate, 'Não foi possível iniciar o combate.')}
+                onClick={() => void iniciarComOrdem()}
                 disabled={busy || iniciativa.length === 0}
                 className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 py-3 text-xs font-bold uppercase tracking-wider text-white hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-35"
                 title={iniciativa.length === 0 ? 'Adicione ao menos um participante' : undefined}

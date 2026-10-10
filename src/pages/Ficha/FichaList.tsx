@@ -14,6 +14,7 @@ import { FichaWizard } from './Wizard/FichaWizard';
 import { ModalPortal } from './components/ModalPortal';
 import { PersonagemWantedCard } from './components/PersonagemWantedCard';
 import { AjustarFotoModal } from './components/AjustarFotoModal';
+import { confirmar } from '../../components/avisos/confirmacao';
 
 const FichaList: React.FC = () => {
   const navigate = useNavigate();
@@ -127,19 +128,19 @@ const FichaList: React.FC = () => {
           <button
             type="button"
             onClick={() => openSettingsPanel('campanhas')}
-            className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-gray-300 hover:text-white"
+            className="min-w-max flex items-center gap-2 px-5 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-gray-300 hover:text-white"
           >
             <ArrowLeftRight size={18} />
-            <span className="font-medium tracking-wide">Trocar Campanha</span>
+            <span className="font-medium tracking-wide whitespace-nowrap">Trocar Campanha</span>
           </button>
 
           <button
             onClick={() => setShowWizard(true)}
-            className="relative group px-6 py-3 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/30 transition-all shadow-[0_0_20px_rgba(var(--color-primary),0.1)] hover:shadow-[0_0_30px_rgba(var(--color-primary),0.3)] overflow-hidden flex items-center gap-2"
+            className="min-w-max relative group px-6 py-3 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/30 transition-all shadow-[0_0_20px_rgba(var(--color-primary),0.1)] hover:shadow-[0_0_30px_rgba(var(--color-primary),0.3)] overflow-hidden flex items-center gap-2"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
             <Plus size={20} className="text-primary" />
-            <span className="text-primary font-medium tracking-wide">Criar Personagem</span>
+            <span className="text-primary font-medium tracking-wide whitespace-nowrap">Criar Personagem</span>
           </button>
           
           <button 
@@ -147,7 +148,7 @@ const FichaList: React.FC = () => {
             onClick={() => setShowHelp(!showHelp)}
             aria-label={showHelp ? 'Ocultar ajuda' : 'Mostrar ajuda'}
             aria-expanded={showHelp}
-            className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-gray-400 hover:text-white"
+            className="!flex-none p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-gray-400 hover:text-white"
           >
             <HelpCircle size={20} />
           </button>
@@ -266,11 +267,15 @@ const FichaList: React.FC = () => {
                   salvandoFoto={salvandoFotoId === char.id}
                   onAbrir={() => navigate(`/ficha/${char.id}`)}
                   onAbrirEditorFoto={() => setPersonagemEditandoFoto(char)}
-                  onExcluir={(event) => {
+                  onExcluir={async (event) => {
                     event.stopPropagation();
-                    if (window.confirm(`Excluir ${char.nome}?`)) {
-                      archiveCharacter(char.id);
-                    }
+                    const confirmado = await confirmar({
+                      titulo: 'Excluir a ficha',
+                      mensagem: `Excluir ${char.nome}?`,
+                      rotuloConfirmar: 'Excluir',
+                      tom: 'perigo',
+                    });
+                    if (confirmado) archiveCharacter(char.id);
                   }}
                 />
               );

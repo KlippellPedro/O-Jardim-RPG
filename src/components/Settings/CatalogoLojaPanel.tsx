@@ -12,6 +12,7 @@ import {
 import { lerPrecoNativoLoja, mapearItemLoja } from '../../services/lojaCatalogService';
 import { ItemCard } from '../../pages/Loja/components/ItemCard';
 import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
+import { confirmar } from '../avisos/confirmacao';
 
 const TIPOS = [
   'arma', 'armadura', 'artefato', 'consumivel', 'drop', 'equipamento',
@@ -89,8 +90,8 @@ export function CatalogoLojaPanel({ campanhaId, onDirtyChange }: { campanhaId: s
     setDirty(false);
   }, []);
 
-  const selectEntry = (entry: LojaCatalogEditorEntry) => {
-    if (entry.item_id === selectedId || !confirmarDescarte()) return;
+  const selectEntry = async (entry: LojaCatalogEditorEntry) => {
+    if (entry.item_id === selectedId || !(await confirmarDescarte())) return;
     applyEntry(entry);
   };
 
@@ -141,8 +142,8 @@ export function CatalogoLojaPanel({ campanhaId, onDirtyChange }: { campanhaId: s
     setMessage(null);
   };
 
-  const startNew = () => {
-    if (!confirmarDescarte()) return;
+  const startNew = async () => {
+    if (!(await confirmarDescarte())) return;
     const next = documentoNovo();
     setSelectedId('__novo__');
     setDocument(next);
@@ -256,7 +257,8 @@ export function CatalogoLojaPanel({ campanhaId, onDirtyChange }: { campanhaId: s
 
   const restoreRevision = async (revision: LojaCatalogRevision) => {
     const editorial = selectedEntry?.editorial;
-    if (!editorial || !confirmarDescarte('Existem alterações não salvas. Deseja descartá-las para restaurar uma versão anterior?') || !window.confirm(`Restaurar a versão ${revision.versao} como rascunho? A loja publicada continuará igual.`)) return;
+    if (!editorial || !(await confirmarDescarte('Existem alterações não salvas. Deseja descartá-las para restaurar uma versão anterior?'))) return;
+    if (!(await confirmar({ titulo: 'Restaurar versão', mensagem: `Restaurar a versão ${revision.versao} como rascunho? A loja publicada continuará igual.`, rotuloConfirmar: 'Restaurar' }))) return;
     setWorking('history');
     try {
       await lojaApi.restaurarRevisaoCatalogo(editorial.id, revision.id, campanhaId, editorial.versao);
@@ -329,7 +331,7 @@ export function CatalogoLojaPanel({ campanhaId, onDirtyChange }: { campanhaId: s
                 <p className={`mt-2 text-xs font-bold ${dirty ? 'text-amber-300' : hasSavedDraft ? 'text-sky-300' : 'text-emerald-300'}`}>{dirty ? 'Alterações não salvas' : hasSavedDraft ? 'Rascunho salvo e pronto para publicar' : 'Tudo salvo e publicado'}</p>
               </div>
               <div className="flex flex-wrap gap-2">
-                <button type="button" onClick={() => { if (confirmarDescarte('Existem alterações não salvas. Deseja recarregar e descartá-las?')) void load(selectedEntry?.item_id); }} disabled={loading || working !== null} className="rounded-xl border border-white/10 p-2.5 text-gray-400 hover:text-white" title="Recarregar"><RefreshCw size={16} /></button>
+                <button type="button" onClick={async () => { if (await confirmarDescarte('Existem alterações não salvas. Deseja recarregar e descartá-las?')) void load(selectedEntry?.item_id); }} disabled={loading || working !== null} className="rounded-xl border border-white/10 p-2.5 text-gray-400 hover:text-white" title="Recarregar"><RefreshCw size={16} /></button>
                 {selectedEntry?.editorial && <button type="button" onClick={loadHistory} disabled={working !== null} className="flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs font-bold text-gray-300 hover:border-white/30"><Clock3 size={15} /> Histórico</button>}
                 <button type="button" onClick={save} disabled={working !== null || !dirty} className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-bold text-primary hover:bg-primary/20 disabled:opacity-50">{working === 'save' ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Salvar rascunho</button>
                 <button type="button" onClick={publish} disabled={working !== null || dirty || !hasSavedDraft} className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-black text-black hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40">{working === 'publish' ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />} Publicar</button>

@@ -46,6 +46,8 @@ import {
   type IVinculo,
   type TipoVinculo,
 } from '../../utils/vinculos';
+import { avisar } from '../../../../components/avisos/avisos';
+import { excluirDaFichaComDesfazer } from '../../desfazerNaFicha';
 
 interface IFormVinculo {
   nome: string;
@@ -258,8 +260,14 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
   };
 
   const excluir = (vinculo: IVinculo) => {
-    if (!window.confirm(`Apagar o vínculo com ${vinculo.nome}?`)) return;
-    commit(vinculos.filter((item) => item.id !== vinculo.id));
+    const saiu = excluirDaFichaComDesfazer<IVinculo>({
+      personagemId: character.id,
+      lista: (personagem) => normalizarVinculos(personagem.ficha?.vinculos),
+      id: vinculo.id,
+      gravar: commit,
+      texto: `Vínculo com ${vinculo.nome} apagado.`,
+    });
+    if (!saiu) return;
     setSelecionadoId((atual) => (atual === vinculo.id ? null : atual));
     setExpandidoId((atual) => (atual === vinculo.id ? null : atual));
   };
@@ -850,7 +858,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
               onCancelar={() => setEditandoFoto(false)}
               onConfirmar={(dataUrl) => {
                 if (!fotoVinculoValida(dataUrl)) {
-                  window.alert('Essa imagem ficou pesada demais para um retrato. Tente outra, mais simples.');
+                  avisar.aviso('Essa imagem ficou pesada demais para um retrato. Tente outra, mais simples.');
                   return;
                 }
                 setForm((atual) => ({ ...atual, foto: dataUrl }));

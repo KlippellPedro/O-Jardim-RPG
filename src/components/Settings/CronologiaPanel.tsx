@@ -10,6 +10,7 @@ import {
 } from '../../services/conteudoEditorialApi';
 import type { ChronicleEvent, ChroniclePlace, TreeChronicle, WorldChronicleCatalog } from '../../pages/Mundo/worldChronicles';
 import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
+import { confirmar } from '../avisos/confirmacao';
 
 interface CronologiaPanelProps {
   /** Id da Árvore (ou "erebus" pro Vazio) pra abrir direto na ficha dela,
@@ -160,8 +161,8 @@ export function CronologiaPanel({ initialItem, onDirtyChange }: CronologiaPanelP
     updateEvents(moverItem(events, events.findIndex((event) => event.id === selected.id), direction));
   };
 
-  const removeEvent = () => {
-    if (!selected || !window.confirm(`Remover o marco “${selected.titulo}” deste rascunho?`)) return;
+  const removeEvent = async () => {
+    if (!selected || !(await confirmar({ titulo: 'Remover o marco', mensagem: `Remover o marco “${selected.titulo}” deste rascunho?`, rotuloConfirmar: 'Remover', tom: 'perigo' }))) return;
     const next = events.filter((event) => event.id !== selected.id);
     updateEvents(next);
     setSelectedId(next[0]?.id || '');
@@ -224,7 +225,8 @@ export function CronologiaPanel({ initialItem, onDirtyChange }: CronologiaPanelP
   };
 
   const restaurarRevisao = async (revision: EditorialRevision) => {
-    if (!entry?.editorial?.id || !confirmarDescarte('Existem alterações não salvas. Deseja descartá-las para restaurar uma versão anterior?') || !window.confirm(`Restaurar a versão ${revision.versao} das Crônicas como rascunho?`)) return;
+    if (!entry?.editorial?.id || !(await confirmarDescarte('Existem alterações não salvas. Deseja descartá-las para restaurar uma versão anterior?'))) return;
+    if (!(await confirmar({ titulo: 'Restaurar versão', mensagem: `Restaurar a versão ${revision.versao} das Crônicas como rascunho?`, rotuloConfirmar: 'Restaurar' }))) return;
     setRestoring(true);
     setErro(null);
     try {

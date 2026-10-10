@@ -11,6 +11,17 @@ export class ApiError extends Error {
   }
 }
 
+export const MENSAGEM_SEM_CONEXAO = 'Sem conexão com o servidor. Confira a internet e tente de novo.';
+export const MENSAGEM_DEMORA = 'O servidor demorou demais para responder. Tente de novo em instantes.';
+
+/** Falha de rede com texto que a pessoa entende (o navegador diz só "Failed to fetch"). Cancelamento
+ * de propósito (`AbortError`) e qualquer outro erro seguem como vieram: quem cancela depende do nome. */
+export function traduzirFalhaDeRede(erro: unknown): unknown {
+  if (erro instanceof DOMException && erro.name === 'TimeoutError') return new ApiError(MENSAGEM_DEMORA, 0);
+  if (erro instanceof TypeError) return new ApiError(MENSAGEM_SEM_CONEXAO, 0);
+  return erro;
+}
+
 function extrairMensagem(detalhe: any, status: number): string {
   if (typeof detalhe === 'string') return detalhe;
   if (Array.isArray(detalhe)) {
@@ -66,14 +77,19 @@ async function executeRequest<T>(
   const effectiveSignal =
     signal ?? (!keepalive ? AbortSignal.timeout(DEFAULT_TIMEOUT_MS) : undefined);
 
-  const response = await fetch(`${API_BASE}${caminho}`, {
-    method,
-    credentials: 'same-origin',
-    headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
-    signal: effectiveSignal,
-    ...(keepalive ? { keepalive: true } : {}),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${caminho}`, {
+      method,
+      credentials: 'same-origin',
+      headers,
+      body: body === undefined ? undefined : JSON.stringify(body),
+      signal: effectiveSignal,
+      ...(keepalive ? { keepalive: true } : {}),
+    });
+  } catch (erro) {
+    throw traduzirFalhaDeRede(erro);
+  }
 
   const semCorpo = response.status === 204 || response.status === 205;
   const tipo = response.headers.get('content-type') || '';

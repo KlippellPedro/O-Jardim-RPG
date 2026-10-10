@@ -9,6 +9,7 @@ import { LiberacoesIndividuaisPanel } from '../../components/Settings/Liberacoes
 import { ConvitesPlataformaPanel } from '../../components/Settings/ConvitesPlataformaPanel';
 import { campanhasApi } from '../../services/campanhasApi';
 import { personagensApi } from '../../services/personagensApi';
+import { perguntarDescarte } from '../../hooks/useUnsavedChanges';
 
 interface CampanhaResumo {
   id: string;
@@ -81,10 +82,10 @@ export default function CreatorPage() {
     setSearchParams(proximosParametros, { replace: true });
   };
 
-  const trocarAba = (proxima: AbaCriador) => {
+  const trocarAba = async (proxima: AbaCriador) => {
     if (proxima === activeTab) return;
     if (activeTab === 'conteudo' && conteudoDirty
-      && !window.confirm('Existem alterações de conteúdo não salvas. Deseja descartá-las?')) return;
+      && !(await perguntarDescarte('Existem alterações de conteúdo não salvas. Deseja descartá-las?'))) return;
     setConteudoDirty(false);
     setActiveTab(proxima);
     const proximosParametros = new URLSearchParams(searchParams);

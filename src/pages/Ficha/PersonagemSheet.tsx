@@ -90,6 +90,9 @@ import { dispararSuaVez } from '../../components/suaVez/suaVez';
 
 
 import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
+import { confirmar } from '../../components/avisos/confirmacao';
+import { guiasAutomaticosLigados } from '../../utils/guias';
+import { esquecerUltimaFicha, lembrarUltimaFicha, recordarUltimaFicha } from '../../services/ultimaFicha';
 /** O autosave da ficha espera 900 ms (useCharacterStore); com folga para a rede. */
 const ESPERA_AUTOSAVE_CONQUISTAS_MS = 1800;
 
@@ -304,6 +307,16 @@ export const PersonagemSheet: React.FC = () => {
   const usuarioId = useAuthStore((state) => state.usuario?.id);
   const chaveTour = `jardim:ficha-tour:v1:${usuarioId || 'local'}`;
 
+  // O "Continuar" da Home leva de volta à última ficha aberta (some se ela deixou de existir).
+  useEffect(() => {
+    if (!id || !usuarioId || !campanhaId) return;
+    if (character) {
+      lembrarUltimaFicha(usuarioId, campanhaId, { id, nome: character.nome });
+    } else if (!isLoading && !error && recordarUltimaFicha(usuarioId, campanhaId)?.id === id) {
+      esquecerUltimaFicha(usuarioId, campanhaId);
+    }
+  }, [campanhaId, character, error, id, isLoading, usuarioId]);
+
   const iniciarTour = useCallback((aba: FichaTourTabId) => {
     setShowAjuda(false);
     setShowPendencias(false);
@@ -324,7 +337,7 @@ export const PersonagemSheet: React.FC = () => {
   }, [chaveTour, tourTab]);
 
   useEffect(() => {
-    if (!character || tourTab || showAjuda || showPendencias) return undefined;
+    if (!character || tourTab || showAjuda || showPendencias || !guiasAutomaticosLigados()) return undefined;
     if (abasVistasNestaSessao.current.has(activeTab)) return undefined;
     try {
       const vistas = lerAbasVistasTourFicha(localStorage.getItem(chaveTour));
@@ -554,10 +567,16 @@ export const PersonagemSheet: React.FC = () => {
     void retryCharacterSave(character.id, domain);
   };
 
-  const handleConflict = (domain: CharacterSaveDomain, strategy: 'reload' | 'overwrite') => {
+  const handleConflict = async (domain: CharacterSaveDomain, strategy: 'reload' | 'overwrite') => {
     if (
       strategy === 'overwrite'
-      && !window.confirm('Manter sua ficha substituirá integralmente a ficha que está no servidor. Deseja continuar?')
+      && !(await confirmar({
+        titulo: 'Manter a sua ficha',
+        mensagem: 'Manter sua ficha substituirá integralmente a ficha que está no servidor. Deseja continuar?',
+        rotuloConfirmar: 'Manter a minha',
+        rotuloCancelar: 'Voltar',
+        tom: 'perigo',
+      }))
     ) return;
     void resolveCharacterConflict(character.id, domain, strategy);
   };

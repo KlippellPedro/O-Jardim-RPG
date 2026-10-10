@@ -414,6 +414,80 @@ Cobertura:
 [test_engajamento_banco.py](../../plataforma/tests/test_engajamento_banco.py)
 (27 testes contra PostgreSQL descartável, 4 novos para a crônica).
 
+<a id="canal-ao-vivo-compartilhado-e-calendario"></a>
+
+## Canal ao vivo compartilhado e calendário
+
+O canal ao vivo da campanha (`GET /api/v1/sessao/{campanha}/eventos`, SSE) só carrega o tipo e a
+versão do que mudou; cada tela refaz o GET de que precisa e o recorte por papel continua no servidor.
+Dois detalhes novos de **9 de outubro de 2026**:
+
+- **Um canal por aba.** O navegador em HTTP/1.1 aceita seis conexões por origem e a Ficha chegava a
+  abrir quatro `EventSource` iguais, o que travava as chamadas normais à API. O
+  [campanhaEventos.ts](../../src/services/campanhaEventos.ts) abre um só por campanha, reparte os
+  eventos entre quem assinou (`assinarEventosDaCampanha`) e fecha 2 s depois que o último ouvinte sai.
+  `useCampaignSSE`, o store da Sessão e o `ClimaDoMundoHost` usam o mesmo canal. Quem entra num canal
+  que já estava aberto se atualiza na hora (`aoConectar`), porque não viu o que passou antes.
+  Teste: [campanhaEventos.test.ts](../../tests/frontend/campanhaEventos.test.ts).
+- **Evento `calendario`** (versão 0, sem corpo). O servidor publica depois de gravar quando o Mestre
+  muda o calendário ([calendario.py](../../plataforma/routers/calendario.py), em `_alterar`: avançar o
+  dia, estação especial, acontecimentos, Lua Carmesim), quando marca ou desfaz a queda de uma lenda
+  ([livro_da_verdade.py](../../plataforma/routers/livro_da_verdade.py)) e quando a primeira queda de uma
+  lenda acontece pela Sessão ([sessions.py](../../plataforma/routers/sessions.py)). Quem está com o site
+  aberto refaz `GET /calendario/{campanha}` e redesenha o fundo (ver
+  [Frontend](FRONTEND.md#avisos-combate-clima-e-app)).
+  A Sessão ignora o evento: o calendário não mexe em iniciativa nem em rolagens, e sem esse caso
+  explícito um tipo desconhecido recarregaria o estado inteiro. Como o evento não leva dado nenhum, o
+  calendário ainda fechado para a mesa (`calendario_oculto`) continua respondendo 403 a quem não comanda
+  e o fundo fica sem clima. Teste:
+  [test_calendario_eventos_ao_vivo.py](../../plataforma/tests/test_calendario_eventos_ao_vivo.py).
+
+<a id="destaque-da-mesa"></a>
+
+## Destaque da mesa
+
+Quando alguém rola um d20 com a mesa **ao vivo** (`sessoes_mesa.status = 'aberta'`) e o natural é 20 ou 1,
+`POST /registros/rolagem` ([rolls.py](../../plataforma/routers/rolls.py), `_destaque_da_mesa`) publica, depois de gravar, o evento
+`destaque_mesa` no canal ao vivo da campanha com `{ destaque: "critico" | "falha", autor, titulo, usuario_id }` (nome do personagem,
+título da rolagem cortado em 80 caracteres e o id de quem rolou, para o cliente dele não repetir som e vibração). **Não leva o
+resultado, o bônus nem a DT**: esses ficam no registro, lido pelo recorte que o papel permite. Dano e cura nunca destacam, e na preparação
+(mesa ainda privada do Mestre) nada é publicado. O 20 natural continua criando o aviso gravado ("tirou 20 natural!") e a mensagem do
+Discord; o 1 natural só gera o evento efêmero. Todo membro da campanha escuta o canal, observadores inclusive. A Sessão trata o tipo
+explicitamente (sem ele, um tipo desconhecido recarregaria o estado inteiro). Testes:
+[test_destaque_da_mesa.py](../../plataforma/tests/test_destaque_da_mesa.py).
+
+<a id="situacao-da-mesa"></a>
+
+## Situação da mesa
+
+`GET /sessao/campanha/{campanha_id}/situacao` ([sessions.py](../../plataforma/routers/sessions.py), `situacao_da_mesa`) responde só o
+que o menu e a Home precisam, sem participantes nem estado de cena: `{ situacao: "nenhuma" | "preparacao" | "aberta", titulo,
+iniciada_em }`. Qualquer membro da campanha consulta (`campaign_access`, o mesmo do estado completo). A preparação é privada do
+Mestre: para quem não comanda ela chega como `"nenhuma"`, sem título, exatamente como `GET /sessao` já tratava. O cliente refaz a
+consulta quando o canal ao vivo avisa `sessao_preparada`, `sessao_aberta` ou `sessao_encerrada` (ver
+[o canal compartilhado](#canal-ao-vivo-compartilhado-e-calendario)) e ao voltar para a aba. Teste contra Postgres descartável:
+[test_situacao_da_mesa.py](../../plataforma/tests/test_situacao_da_mesa.py) (sem sessão, preparação só para o Mestre, ao vivo para
+todos, encerrada e não-membro).
+
+## App instalável: service worker e manifesto
+
+O site é instalável como app. O service worker ([public/sw.js](../../public/sw.js)) e o manifesto
+([public/manifest.webmanifest](../../public/manifest.webmanifest)) saem da raiz do `dist/` e a API os
+serve em `GET /sw.js` (`Cache-Control: no-cache`, `Service-Worker-Allowed: /`, para o navegador
+conferir uma versão nova a cada abertura) e `GET /manifest.webmanifest` (`application/manifest+json`,
+uma hora de cache), pelo `_arquivo_da_raiz_do_frontend` de [main.py](../../plataforma/main.py). Arquivo
+ausente devolve 404 em JSON e nunca o `index.html`: um service worker que recebesse HTML ficaria
+registrado e quebrado. As duas rotas ficam fora da documentação da API. Os ícones (192, 512, o
+`apple-touch-icon` e o SVG) moram em `public/assets/img/icons/`.
+
+O que o service worker guarda: a casca da página (`/`) e os arquivos com hash em `/assets/`. Nunca guarda
+API, canal ao vivo, voz do Grande Sábio (`/audio/`), modelos (`/models/`), catálogos (`/data/`) nem
+pedidos `Range`; sem internet a tela abre, mas ficha e sessão precisam de conexão. Mudou a estratégia?
+Suba `VERSAO` no topo de `sw.js`. Testes:
+[test_pwa_rotas.py](../../plataforma/tests/test_pwa_rotas.py) (cabeçalhos e 404) e
+[pwa.test.ts](../../tests/frontend/pwa.test.ts) (a lógica do service worker rodando num sandbox
+`vm`: o que vai à rede, o que entra no cache e o que sai quando a versão sobe).
+
 ## Convites da plataforma
 
 A aba **Convites** do Painel do Criador (`ConvitesPlataformaPanel`) usa

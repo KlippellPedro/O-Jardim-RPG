@@ -100,7 +100,24 @@ O ZIP do Banqueiro carrega esse catálogo, então mudança nele pede reenviar o
 Banqueiro. O saque das criaturas fica em `data/bestiario/loot-criaturas.json`,
 lido **só pelo servidor** (`plataforma/core/loot_criaturas.py`); ele não entra no
 bundle do navegador nem pode ser importado por `src/` fora do editor do Mestre,
-e o ZIP da plataforma precisa levar `dataestiario`.
+e o ZIP da plataforma precisa levar `data/bestiario`.
+
+### App instalável (service worker)
+
+`public/sw.js` e `public/manifest.webmanifest` vão para a raiz do `dist/` (o Vite copia `public/`) e a
+API os serve em `/sw.js` e `/manifest.webmanifest`. O service worker só é registrado no build de
+produção, então para ver a instalação ou o modo sem internet use `npm run build` e a API servindo o
+`dist/`, não o `npm run dev`. Mudou a estratégia de cache em `sw.js`? Suba `VERSAO` no topo do arquivo:
+a ativação apaga os caches da versão anterior. Mudou o ícone? Os PNGs de `public/assets/img/icons/`
+(`icon-192`, `icon-512` e o `apple-touch-icon` de 180 px) são exportações do `app-icon.svg`, sem script
+no repositório; exporte os três de novo e suba `VERSAO`, senão o app já instalado segue com o ícone
+guardado. Detalhes em [Integração](sistema/INTEGRACAO.md#app-instalavel-service-worker-e-manifesto).
+
+### Mural de novidades
+
+O mural da Home sai de `src/data/novidades-manuais.json` (escrito à mão, em linguagem de jogador). Depois de editar, rode
+`npm run novidades:gerar` (o `prebuild` também roda) para regerar `src/data/novidades.json`: o teste `novidades` falha enquanto os
+dois arquivos não baterem.
 
 ## Backend e bots
 

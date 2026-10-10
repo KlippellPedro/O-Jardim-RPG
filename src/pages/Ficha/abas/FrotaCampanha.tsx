@@ -28,6 +28,8 @@ import {
   podeGerenciarRecursoResumo,
   nivelEfetivoRecursoDetalhe,
 } from '../../../services/recursoCampanhaPermissoes';
+import { avisarErro } from '../../../components/avisos/avisos';
+import { confirmar } from '../../../components/avisos/confirmacao';
 
 const NIVEL_PERMISSAO_OPCOES = [
   { value: 'visualizar', label: 'Visualizar' },
@@ -224,7 +226,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       const d = await veiculosCampanhaApi.obter(campanhaAtiva.id, veiculoId);
       abrirFormEditar(d);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao carregar veículo.');
+      avisarErro(e, 'Erro ao carregar veículo.');
     }
   };
 
@@ -270,7 +272,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       await carregarVeiculos();
       setModalForm(false);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao salvar veículo.');
+      avisarErro(e, 'Erro ao salvar veículo.');
     } finally {
       setSalvando(false);
     }
@@ -278,13 +280,13 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
 
   const removerVeiculo = async (v: ICampanhaVeiculoResumo) => {
     if (!campanhaAtiva?.id) return;
-    if (!window.confirm(`Remover o veículo "${v.nome}" permanentemente?`)) return;
+    if (!(await confirmar({ titulo: 'Remover o veículo', mensagem: `Remover o veículo "${v.nome}" permanentemente?`, rotuloConfirmar: 'Remover', tom: 'perigo' }))) return;
     try {
       await veiculosCampanhaApi.remover(campanhaAtiva.id, v.id);
       await carregarVeiculos();
       if (veiculoAberto === v.id) { setVeiculoAberto(null); setDetalhe(null); }
     } catch (e: any) {
-      alert(e?.message || 'Erro ao remover veículo.');
+      avisarErro(e, 'Erro ao remover veículo.');
     }
   };
 
@@ -300,7 +302,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       setModalMigrar(false);
       await carregarVeiculos();
     } catch (e: any) {
-      alert(e?.message || 'Erro ao migrar veículo.');
+      avisarErro(e, 'Erro ao migrar veículo.');
     }
   };
 
@@ -318,7 +320,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       setNovoOcupantePapel('');
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao adicionar ocupante.');
+      avisarErro(e, 'Erro ao adicionar ocupante.');
     }
   };
 
@@ -328,7 +330,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       await veiculosCampanhaApi.removerOcupante(campanhaAtiva.id, detalhe.id, personagemId);
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao remover ocupante.');
+      avisarErro(e, 'Erro ao remover ocupante.');
     }
   };
 
@@ -346,7 +348,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       setNovoModuloEspacos('1');
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao adicionar módulo.');
+      avisarErro(e, 'Erro ao adicionar módulo.');
     }
   };
 
@@ -356,7 +358,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       await veiculosCampanhaApi.alternarModulo(campanhaAtiva.id, detalhe.id, moduloId, ativo);
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao alternar módulo.');
+      avisarErro(e, 'Erro ao alternar módulo.');
     }
   };
 
@@ -366,7 +368,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       await veiculosCampanhaApi.removerModulo(campanhaAtiva.id, detalhe.id, moduloId);
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao remover módulo.');
+      avisarErro(e, 'Erro ao remover módulo.');
     }
   };
 
@@ -383,7 +385,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       setNovaCargaQtd('1');
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao adicionar item à carga.');
+      avisarErro(e, 'Erro ao adicionar item à carga.');
     }
   };
 
@@ -398,7 +400,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       }
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao atualizar carga.');
+      avisarErro(e, 'Erro ao atualizar carga.');
     }
   };
 
@@ -414,7 +416,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       setNovaPermPersonagemId('');
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao definir permissão.');
+      avisarErro(e, 'Erro ao definir permissão.');
     }
   };
 
@@ -424,7 +426,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
       await veiculosCampanhaApi.removerPermissao(campanhaAtiva.id, detalhe.id, personagemId);
       await recarregarDetalheAbertoImediato(detalhe.id);
     } catch (e: any) {
-      alert(e?.message || 'Erro ao remover permissão.');
+      avisarErro(e, 'Erro ao remover permissão.');
     }
   };
 

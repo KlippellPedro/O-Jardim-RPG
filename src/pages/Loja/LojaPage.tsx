@@ -15,6 +15,7 @@ import { CheckoutAttempt, createIdempotencyKey, hasVerifiableShopOrigin, lojaApi
 import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 import { Select } from '../../components/ui/Select';
 import { GuidedTour } from '../../components/ui/GuidedTour';
+import { guiasAutomaticosLigados } from '../../utils/guias';
 import { LOJA_TOUR_STEPS, lojaTourJaVisto, serializarLojaTourVisto } from './lojaTourConfig';
 import { grupoLimiteItemEspecial, resumirLimiteItensEspeciais } from '../../services/itensEspeciaisService';
 import { RARIDADES_EQUIPAMENTO } from '../../../data/regras/raridadesEquipamentos';
@@ -302,7 +303,7 @@ export const LojaPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!campanhaAtiva?.id || catalogoLoading || catalogoError || tourAberto || tourTentadoRef.current) return undefined;
+    if (!campanhaAtiva?.id || catalogoLoading || catalogoError || tourAberto || tourTentadoRef.current || !guiasAutomaticosLigados()) return undefined;
     try {
       if (lojaTourJaVisto(localStorage.getItem(chaveTour))) return undefined;
     } catch {
@@ -831,7 +832,7 @@ export const LojaPage: React.FC = () => {
       ) : null}
 
       <section className="mb-8 rounded-3xl border border-white/[0.08] bg-[#0b0a12]/75 p-4 shadow-xl backdrop-blur-md sm:p-5" aria-label="Filtros do catálogo" data-tour="loja-filtros">
-        <div className="grid gap-3 xl:grid-cols-[minmax(18rem,1.6fr)_minmax(12rem,.8fr)_minmax(12rem,.8fr)_minmax(12rem,.8fr)_minmax(12rem,.8fr)_auto] xl:items-end">
+        <div className="grid gap-3 xl:grid-cols-[minmax(14rem,1.6fr)_repeat(4,minmax(10rem,.8fr))_auto] xl:items-end">
           <label className="relative block"><span className="mb-1.5 block text-[9px] font-black uppercase tracking-[0.18em] text-gray-500">Buscar no balcão</span><Search className="absolute bottom-3 left-3 text-gray-600" size={17} /><input type="search" aria-label="Buscar itens da loja" placeholder="Nome, efeito, material ou uso..." value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} className="h-11 w-full rounded-xl border border-white/10 bg-black/35 py-2 pl-10 pr-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-[var(--loja-accent)]" /></label>
           <label className="min-w-0"><span className="mb-1.5 block text-[9px] font-black uppercase tracking-[0.18em] text-gray-500">Categoria</span><Select value={selectedCategoria} onChange={(valor) => setSelectedCategoria(valor as ItemCategoria | 'Todos')} options={CATEGORIAS_OPCOES} className="w-full" /></label>
           <label className="min-w-0"><span className="mb-1.5 block text-[9px] font-black uppercase tracking-[0.18em] text-gray-500">Tipo</span><Select value={subfiltro} onChange={setSubfiltro} disabled={modoLoja !== 'Comprar' || subfiltrosDisponiveis.length === 0} options={(subfiltrosDisponiveis.length ? subfiltrosDisponiveis : ['Todos']).map((value) => ({ value, label: value }))} className="w-full" /></label>

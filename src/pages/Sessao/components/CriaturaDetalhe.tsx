@@ -6,6 +6,7 @@ import { sessaoApi, type BestiarioMonstro, type TabelaDeLoot } from '../../../se
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { PAPEIS_CRIATURA, type PapelCriatura } from '../../../services/curvaCriatura';
 import { EditorLootCampanha } from './EditorLootCampanha';
+import { confirmar } from '../../../components/avisos/confirmacao';
 
 interface CriaturaDetalheProps {
   /** Para buscar a tabela de loot, que só o Mestre recebe. */
@@ -68,7 +69,7 @@ const SecaoLoot = ({ campanhaId, monstroId }: { campanhaId: string; monstroId: s
   }, [carregar]);
 
   const voltarParaOficial = async () => {
-    if (!window.confirm('Voltar esta criatura para a tabela de loot oficial nesta campanha?')) return;
+    if (!(await confirmar({ titulo: 'Voltar ao loot oficial', mensagem: 'Voltar esta criatura para a tabela de loot oficial nesta campanha?', rotuloConfirmar: 'Voltar ao oficial' }))) return;
     setVoltando(true);
     try {
       await sessaoApi.restaurarTabelaDeLoot(campanhaId, monstroId);

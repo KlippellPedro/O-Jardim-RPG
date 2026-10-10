@@ -5,6 +5,7 @@ import { discordApi, type IDiscordVinculo } from '../../services/discordApi';
 import { User, Lock, Loader2, AlertCircle, CheckCircle2, MessageSquare, Link2, Unlink, Copy, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sfx } from '../../utils/audioSynth';
+import { confirmar } from '../avisos/confirmacao';
 
 export const ContaPanel: React.FC = () => {
   const { usuario } = useAuthStore();
@@ -78,7 +79,7 @@ export const ContaPanel: React.FC = () => {
   };
 
   const handleDesvincular = async () => {
-    if (!window.confirm('Desvincular o Discord desta conta?')) return;
+    if (!(await confirmar({ titulo: 'Desvincular o Discord', mensagem: 'Desvincular o Discord desta conta?', rotuloConfirmar: 'Desvincular', tom: 'perigo' }))) return;
     setIsDesvinculando(true);
     setDiscordError(null);
     try {

@@ -9,6 +9,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { usePermissoes } from '../../hooks/usePermissoes';
 import { usePerformanceProfile } from '../../hooks/usePerformance';
 import { GuidedTour } from '../../components/ui/GuidedTour';
+import { guiasAutomaticosLigados } from '../../utils/guias';
 import { MUNDO_TOUR_STEPS, mundoTourJaVisto, serializarMundoTourVisto } from './mundoTourConfig';
 import { bancoLunarInfo } from './bancoLunarInfo';
 import { vazioInfo } from './vazioInfo';
@@ -125,7 +126,7 @@ export const MundoPage: React.FC = () => {
   }, [chaveTourMundo]);
 
   useEffect(() => {
-    if (!naPaginaRaiz || visaoSimples || tourAberto || tourTentadoRef.current) return;
+    if (!naPaginaRaiz || visaoSimples || tourAberto || tourTentadoRef.current || !guiasAutomaticosLigados()) return;
     try {
       if (mundoTourJaVisto(localStorage.getItem(chaveTourMundo))) return;
     } catch {
