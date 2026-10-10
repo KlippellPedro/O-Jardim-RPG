@@ -25,6 +25,7 @@ import {
   Radio,
   RefreshCw,
   ScrollText,
+  ShieldAlert,
   Sparkles,
   Sprout,
   Swords,
@@ -53,6 +54,7 @@ import { AbaAliados } from './abas/AbaAliados';
 import { AbaNotas } from './abas/AbaNotas';
 import { AbaProgressao } from './abas/AbaProgressao';
 import { AbaDescanso } from './abas/AbaDescanso';
+import { AbaCondicoes } from './abas/AbaCondicoes';
 import { AbaBens } from './abas/AbaBens';
 import { useCampaignSSE } from '../../hooks/useCampaignSSE';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -109,6 +111,7 @@ const TABS = [
   { id: 'Progressão', icon: TrendingUp },
   { id: 'Jardim', icon: Sprout },
   { id: 'Descanso', icon: Moon },
+  { id: 'Condições', icon: ShieldAlert },
   { id: 'Notas', icon: ScrollText },
 ] as const;
 
@@ -868,7 +871,8 @@ export const PersonagemSheet: React.FC = () => {
         { label: 'Ao vivo', value: 'Depois do autosave, alterações do jogador ou da equipe aparecem automaticamente nas outras telas abertas' },
         { label: 'Ficha', value: 'Identidade, classe, Fama, Prestígio, atributos, status vitais e experiência' },
         { label: 'Progressão', value: 'Características raciais, habilidades e eventos automáticos, poderes de classe e Legados' },
-        { label: 'Descanso', value: 'Recuperação, Cansaço, condições e crises de Sanidade' },
+        { label: 'Descanso', value: 'Recuperação de Vida, Mana, Estamina, Sanidade e Cansaço, em três passos' },
+        { label: 'Condições', value: 'Condições ativas, catálogo, crises de Sanidade e aflições (venenos, doenças e vícios)' },
         { label: 'Perícias', value: 'Graus, vantagens/desvantagens e rolagens' },
         { label: 'Inventário', value: 'Itens e moedas (sincronizados com o servidor)' },
         { label: 'Bens', value: 'Propriedades e veículos' },
@@ -922,7 +926,8 @@ export const PersonagemSheet: React.FC = () => {
       case 'Jardim': return <AbaJardim {...props} />;
       case 'Habilidades': return <AbaHabilidades {...props} />;
       case 'Ataques': return <AbaAtaques {...props} />;
-      case 'Descanso': return <AbaDescanso {...props} onOpenConditions={openActiveConditions} />;
+      case 'Descanso': return <AbaDescanso {...props} onAbrirAba={(aba) => handleTabChange(aba as FichaTourTabId)} />;
+      case 'Condições': return <AbaCondicoes {...props} onOpenConditions={openActiveConditions} />;
       case 'Magias': return <AbaMagias {...props} />;
       case 'Aliados': return <AbaAliados {...props} />;
       case 'Notas': return <AbaNotas {...props} />;

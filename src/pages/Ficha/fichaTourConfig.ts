@@ -11,6 +11,7 @@ export type FichaTourTabId =
   | 'Aliados'
   | 'Progressão'
   | 'Descanso'
+  | 'Condições'
   | 'Notas';
 
 export interface FichaTourStep {
@@ -26,10 +27,10 @@ export interface FichaTourStep {
 
 export const FICHA_TOUR_TABS: FichaTourTabId[] = [
   'Ficha', 'Perícias', 'Inventário', 'Bens', 'Habilidades', 'Poderes',
-  'Magias', 'Ataques', 'Aliados', 'Progressão', 'Jardim', 'Descanso', 'Notas',
+  'Magias', 'Ataques', 'Aliados', 'Progressão', 'Jardim', 'Descanso', 'Condições', 'Notas',
 ];
 
-const FICHA_TOUR_VERSAO = 3;
+const FICHA_TOUR_VERSAO = 4;
 
 const alvoAba = (aba: FichaTourTabId) => `[data-tour-tab="${aba}"]`;
 
@@ -47,7 +48,7 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
     },
     {
       id: 'ficha-identidade', titulo: 'Identidade e origem',
-      descricao: 'Aqui ficam Árvore, raça, origem, título, nível, tamanho e divindade. Raça e Árvore alimentam vários cálculos automáticos; campos bloqueados dependem do Mestre ou das escolhas de criação.',
+      descricao: 'Aqui ficam Árvore, raça, origem, título, nível, tamanho e divindade. Tamanho e Divindade têm listas prontas (os tamanhos do jogo e as Deidades das Árvores) e aceitam um valor seu em "Personalizado". Raça e Árvore alimentam vários cálculos automáticos; campos bloqueados dependem do Mestre ou das escolhas de criação.',
       alvos: ['[data-tour="ficha-identidade"]'],
     },
     {
@@ -72,7 +73,7 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
     },
     {
       id: 'ficha-condicoes', titulo: 'Resistências, proficiências e condições',
-      descricao: 'Resistências e proficiências resumem proteções e treinamentos do personagem. Condições ativas registram efeitos em cena e podem alterar cálculos oficiais; quando o campo estiver bloqueado, a mudança depende do Mestre.',
+      descricao: 'Resistências e Proficiências são listas: o Mestre escolhe no catálogo (tipos de dano, elementos, venenos, doenças, condições, armas, armaduras, escudos, ferramentas) ou cria uma própria. Cada resistência guarda tipo, valor e uma anotação. Armadura ou escudo marcial sem a proficiência perde 2 de Defesa e dobra a penalidade. Condições ativas mexem nos cálculos sozinhas.',
       alvos: ['[data-tour="ficha-condicoes"]'],
     },
     {
@@ -94,7 +95,7 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
   Perícias: [
     {
       id: 'pericias-resumo', titulo: 'Testes e treinamento',
-      descricao: 'Perícias representam ações específicas. O contador resume quantas existem e quantas estão treinadas; bônus de raça, classe, origem, itens, aliados, condições e Cansaço entram nos resultados quando aplicáveis.',
+      descricao: 'Perícias representam ações específicas. O contador resume quantas existem e quantas estão treinadas; bônus de raça, classe, origem, itens, aliados, Cansaço e condições (inclusive lesões como costelas fraturadas ou concussão) entram nos resultados quando aplicáveis. O ícone de cálculo mostra cada parcela.',
       alvos: ['[data-tour="pericias-resumo"]', '[data-tour="section-overview"]'],
     },
     {
@@ -116,6 +117,11 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
       id: 'pericias-vantagens', titulo: 'Vantagem, desvantagem e rolagem',
       descricao: 'Vantagens e desvantagens se anulam; o saldo muda quantos dados são rolados e qual resultado vale. O botão de dado executa o teste já com atributo, treinamento e modificadores atuais.',
       alvos: ['[data-tour="pericia-rolagem"]'], opcional: true,
+    },
+    {
+      id: 'pericias-inspirado', titulo: 'Inspirado: +2 num teste',
+      descricao: 'Quando o personagem está Inspirado, esta faixa aparece. Marque para somar +2 no próximo teste de perícia; depois dele a condição sai da ficha sozinha.',
+      alvos: ['[data-tour="pericias-inspirado"]'], opcional: true,
     },
   ],
   Inventário: [
@@ -333,13 +339,18 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
       alvos: ['[data-tour="ataques-ferramentas"]'],
     },
     {
+      id: 'ataques-atributo-dano', titulo: 'Atributo somado ao dano',
+      descricao: 'Corpo a corpo soma o atributo da perícia Luta (Força, ou o que um poder trocar). À distância vem sem atributo, e dá para ligar. Escolha aqui para a ficha toda; na confirmação do dano você troca só para aquela rolagem.',
+      alvos: ['[data-tour="ataques-atributo-dano"]'],
+    },
+    {
       id: 'ataques-cartao', titulo: 'Como ler um ataque',
       descricao: 'O cartão mostra tipo, alcance, fórmula de dano, margem de ameaça e multiplicador. Armas do inventário são identificadas; bônus atuais de equipamentos e personagem entram nos valores exibidos.',
       alvos: ['[data-tour="ataque-cartao"]', '[data-tour="ataques-lista"]'],
     },
     {
       id: 'ataques-rolagem', titulo: 'Acerto, dano e crítico',
-      descricao: '“Atacar” rola o acerto e compara com a Defesa informada. Depois, “Rolar Dano” aplica a fórmula; numa ameaça crítica, a ficha usa a margem e o multiplicador configurados e destaca o resultado.',
+      descricao: '“Atacar” e “Rolar Dano” abrem uma confirmação com a conta da ficha. Ali você soma vantagem ou desvantagem do momento, um bônus extra, um dado extra (como 1d4) e a Defesa do alvo, e gasta o Inspirado se tiver. No dano dá para marcar crítico, que multiplica só os dados da arma. Segure Shift ao clicar para rolar direto.',
       alvos: ['[data-tour="ataque-rolagem"]'], opcional: true,
     },
   ],
@@ -409,24 +420,67 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
   ],
   Descanso: [
     {
-      id: 'descanso-resumo', titulo: 'Recuperação e consequências',
-      descricao: 'Esta aba aplica as regras oficiais de descanso e mantém condições e crises ao lado da recuperação, para que nenhum efeito seja esquecido.',
+      id: 'descanso-resumo', titulo: 'Recuperação em três passos',
+      descricao: 'Esta aba cuida só da recuperação: Vida, Mana, Estamina, Sanidade e Cansaço. O topo mostra como o personagem está agora. Condições e aflições ficam na aba Condições.',
       alvos: ['[data-tour="descanso-resumo"]', '[data-tour="section-overview"]'],
     },
     {
-      id: 'descanso-completo', titulo: 'Qualidade do descanso',
-      descricao: 'Escolha a condição em que o personagem descansou para pré-visualizar Vida, Mana, Estamina, Sanidade e Cansaço recuperados. Algumas qualidades exigem autorização; confirme apenas depois de conferir o resultado. Combate intenso registra Cansaço uma vez por cena; na Sessão ao Vivo o servidor faz isso sozinho quando o Mestre encerra o combate.',
+      id: 'descanso-completo', titulo: 'Passo 1: como foi a pausa',
+      descricao: 'Escolha a qualidade do descanso. Cada cartão diz quanto volta de Vida, Mana e Estamina e quando ele se aplica. Excelente exige autorização do Mestre.',
       alvos: ['[data-tour="descanso-completo"]'],
     },
     {
-      id: 'descanso-condicoes', titulo: 'Condições oficiais',
-      descricao: 'Cada cartão informa duração, efeitos mecânicos e forma de remoção. “Aplicar e abrir na Ficha” registra a condição sem duplicar e leva direto ao painel de Condições Ativas; se ela já estiver ativa, o mesmo botão apenas abre o painel.',
-      alvos: ['[data-tour="descanso-condicoes"]'],
+      id: 'descanso-circunstancias', titulo: 'Passo 2: o que aconteceu',
+      descricao: 'Marque o que mudou a noite: guarda, fome, clima, cama boa, refeição quente. Cada item move a qualidade um degrau, para pior ou para melhor. É opcional, e o Mestre pode negar qualquer um.',
+      alvos: ['[data-tour="descanso-circunstancias"]'],
     },
     {
-      id: 'descanso-sanidade', titulo: 'Crises de Sanidade',
-      descricao: 'Ruptura e Quebra podem disparar crises. Os cartões descrevem duração, efeitos e recuperação; perdas continuam acumulando até o mínimo de Sanidade indicado pelas regras.',
-      alvos: ['[data-tour="descanso-sanidade"]'],
+      id: 'descanso-resultado', titulo: 'Passo 3: confira e aplique',
+      descricao: 'A prévia mostra, recurso por recurso, quanto havia e quanto passa a ter, com a mesma conta do botão. Marque o tratamento se houve e toque em “Aplicar descanso”.',
+      alvos: ['[data-tour="descanso-resultado"]'],
+    },
+    {
+      id: 'descanso-pausas', titulo: 'Pausas rápidas',
+      descricao: 'Relaxar por 1 hora devolve Mana e Estamina uma vez entre descansos completos. Combate intenso soma 1 Cansaço, no máximo uma vez por cena; na Sessão ao Vivo o servidor faz isso sozinho.',
+      alvos: ['[data-tour="descanso-pausas"]'],
+    },
+  ],
+  Condições: [
+    {
+      id: 'condicoes-resumo', titulo: 'Condições e aflições',
+      descricao: 'Aqui mora tudo o que pesa no personagem. Condições são efeitos de cena, lesões e marcas da mente; aflições são venenos, doenças e vícios. Os dois botões do topo alternam entre elas.',
+      alvos: ['[data-tour="condicoes-resumo"]', '[data-tour="section-overview"]'],
+      antes: '#condicoes-tab-condicoes',
+    },
+    {
+      id: 'condicoes-explicacao', titulo: 'Condição ou aflição?',
+      descricao: 'Abra este cartão quando bater a dúvida. Condição tem efeito fixo até acabar; aflição evolui por estágios e pede Fortitude a cada intervalo.',
+      alvos: ['[data-tour="condicoes-explicacao"]'],
+      antes: '#condicoes-tab-condicoes',
+    },
+    {
+      id: 'condicoes-ativas', titulo: 'Em vigor agora',
+      descricao: 'As condições que o personagem tem neste momento, com efeito e duração. O X remove. Sangramento, Queimando, Envenenado e Revigorado têm um botão que rola o efeito do turno e já aplica na Vida, descontando a Resistência da ficha, com Desfazer. Para criar uma condição própria ou editar o texto, use o atalho para a Ficha.',
+      alvos: ['[data-tour="condicoes-ativas"]'],
+      antes: '#condicoes-tab-condicoes',
+    },
+    {
+      id: 'condicoes-catalogo', titulo: 'Catálogo de condições',
+      descricao: 'Filtre por Em cena, Lesões, Perdas e sequelas ou Mente, ou busque em todas de uma vez. Cada cartão traz efeitos e como remover; “Aplicar no personagem” coloca a condição em vigor sem duplicar.',
+      alvos: ['[data-tour="condicoes-catalogo"]'],
+      antes: '#condicoes-tab-condicoes',
+    },
+    {
+      id: 'condicoes-sanidade', titulo: 'Crises de Sanidade',
+      descricao: 'Ruptura e Quebra podem disparar crises. Os cartões descrevem duração, efeitos e recuperação, e podem ser aplicados direto daqui.',
+      alvos: ['[data-tour="condicoes-sanidade"]'],
+      antes: '#condicoes-tab-condicoes',
+    },
+    {
+      id: 'condicoes-aflicoes', titulo: 'Aflições',
+      descricao: 'Venenos, doenças e vícios andam por estágios. Registre a exposição, role a Fortitude do intervalo e acompanhe a progressão. Embaixo está o catálogo completo, com estágios e tratamento.',
+      alvos: ['[data-tour="condicoes-aflicoes"]'],
+      antes: '#condicoes-tab-aflicoes',
     },
   ],
   Notas: [

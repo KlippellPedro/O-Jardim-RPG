@@ -16,6 +16,8 @@ interface ModalCalculoPericiaProps {
   bonusOutros?: number;
   penalidadeEquipamento?: number;
   penalidadeCansaco?: number;
+  /** Soma do que as condições em vigor dão ou tiram neste teste (Enfraquecido, Favorecido). */
+  bonusCondicoes?: number;
   desvantagensAutomaticas?: number;
   total: number;
   descricao?: string;
@@ -36,6 +38,7 @@ export const ModalCalculoPericia: React.FC<ModalCalculoPericiaProps> = ({
   bonusOutros = 0,
   penalidadeEquipamento = 0,
   penalidadeCansaco = 0,
+  bonusCondicoes = 0,
   desvantagensAutomaticas = 0,
   total,
   descricao
@@ -89,6 +92,13 @@ export const ModalCalculoPericia: React.FC<ModalCalculoPericiaProps> = ({
             <div className="flex justify-between items-center bg-red-500/5 border border-red-500/15 rounded-lg p-3">
               <span className="text-gray-400 text-sm">Cansaço</span>
               <span className="text-red-300 font-mono">{penalidadeCansaco}</span>
+            </div>
+          )}
+
+          {bonusCondicoes !== 0 && (
+            <div className={`flex justify-between items-center rounded-lg border p-3 ${bonusCondicoes > 0 ? 'border-emerald-500/15 bg-emerald-500/5' : 'border-red-500/15 bg-red-500/5'}`}>
+              <span className="text-gray-400 text-sm">Condições em vigor</span>
+              <span className={`font-mono ${bonusCondicoes > 0 ? 'text-emerald-300' : 'text-red-300'}`}>{bonusCondicoes > 0 ? '+' : ''}{bonusCondicoes}</span>
             </div>
           )}
 

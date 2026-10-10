@@ -1,6 +1,6 @@
 import type { GuidedTourStep } from '../../components/ui/GuidedTour';
 
-export const LOJA_TOUR_STORAGE_VERSION = 1;
+export const LOJA_TOUR_STORAGE_VERSION = 2;
 
 export const LOJA_TOUR_STEPS: GuidedTourStep[] = [
   {
@@ -50,7 +50,7 @@ export const LOJA_TOUR_STEPS: GuidedTourStep[] = [
   {
     id: 'carrinho',
     titulo: 'O servidor confirma a compra',
-    descricao: 'O carrinho reúne o lote por moeda. Ao finalizar, o servidor confere preço publicado, disponibilidade, saldo, alvo da modificação e versão do inventário antes de alterar qualquer coisa.',
+    descricao: 'O carrinho reúne o lote por moeda. Ao finalizar, o servidor confere preço publicado, disponibilidade, saldo, alvo da modificação e versão do inventário antes de alterar qualquer coisa. Arma, armadura ou escudo que cabe numa vaga livre já sai equipado, com um aviso e o botão Desfazer.',
     alvos: ['[data-tour="loja-carrinho"]'],
   },
   {

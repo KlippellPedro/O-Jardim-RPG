@@ -1,7 +1,8 @@
+import { useEffect, useRef, useState } from 'react';
 import InteractiveModuleCard from '../InteractiveModuleCard';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Crown, FlaskConical, ScrollText } from 'lucide-react';
+import { Compass, Crown, FlaskConical, ScrollText } from 'lucide-react';
 import { sfx } from '../utils/audioSynth';
 import { useAuthStore } from '../store/useAuthStore';
 import NovidadesMural from './NovidadesMural';
@@ -10,6 +11,9 @@ import CalendarioSessoes from './Quadro/CalendarioSessoes';
 import { ContinuarDeOndeParou } from './ContinuarDeOndeParou';
 
 import { SimboloOculto } from '../components/descobertas/SimboloOculto';
+import { GuidedTour } from '../components/ui/GuidedTour';
+import { guiasAutomaticosLigados } from '../utils/guias';
+import { INICIO_TOUR_STEPS, inicioTourJaVisto, serializarInicioTourVisto } from './inicioTourConfig';
 
 const ATALHOS_SECUNDARIOS = [
   { titulo: 'Campanha', path: '/campanha', icone: Crown },
@@ -27,6 +31,34 @@ const classeDoCartao = (indice: number, total: number) => [
 export default function Home() {
   const navigate = useNavigate();
   const campanha = useAuthStore((estado) => estado.campanhaAtiva);
+  const usuario = useAuthStore((estado) => estado.usuario);
+  const chaveTour = `jardim:inicio-tour:v1:${usuario?.id || 'local'}`;
+  const [tourAberto, setTourAberto] = useState(false);
+  const tourTentadoRef = useRef(false);
+
+  // O Guia do Início abre sozinho na primeira visita, como os guias das outras páginas.
+  useEffect(() => {
+    if (tourAberto || tourTentadoRef.current || !guiasAutomaticosLigados()) return undefined;
+    try {
+      if (inicioTourJaVisto(localStorage.getItem(chaveTour))) return undefined;
+    } catch {
+      // Sem armazenamento, o guia ainda abre uma vez nesta montagem.
+    }
+    const timer = window.setTimeout(() => {
+      tourTentadoRef.current = true;
+      setTourAberto(true);
+    }, 900);
+    return () => window.clearTimeout(timer);
+  }, [chaveTour, tourAberto]);
+
+  const encerrarTour = () => {
+    try {
+      localStorage.setItem(chaveTour, serializarInicioTourVisto());
+    } catch {
+      // Sem armazenamento, o guia só deixa de abrir até a página recarregar.
+    }
+    setTourAberto(false);
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -81,7 +113,17 @@ export default function Home() {
 
   return (
     <main className="app-page mx-auto flex max-w-[100rem] flex-col items-center justify-center">
-      {campanha?.id ? <div className="mb-4 flex w-full justify-end"><SeletorDeCampanha /></div> : null}
+      <div className="mb-4 flex w-full flex-wrap items-center justify-end gap-2">
+        <button
+          type="button"
+          onClick={() => setTourAberto(true)}
+          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold text-gray-300 transition-colors hover:border-primary/30 hover:text-white"
+        >
+          <Compass size={15} className="text-primary/80" aria-hidden="true" />
+          Guia do Início
+        </button>
+        {campanha?.id ? <div data-tour="inicio-campanha"><SeletorDeCampanha /></div> : null}
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -113,6 +155,7 @@ export default function Home() {
         initial="hidden"
         animate="show"
         className="grid w-full grid-cols-1 gap-4 min-[520px]:grid-cols-2 lg:grid-cols-6 min-[1240px]:grid-cols-5 sm:gap-6"
+        data-tour="inicio-modulos"
       >
         {modulos.map((mod, indice) => (
           <motion.button
@@ -138,6 +181,7 @@ export default function Home() {
         initial="hidden"
         animate="show"
         className="mt-4 flex w-full flex-wrap justify-center gap-3"
+        data-tour="inicio-atalhos"
       >
         {ATALHOS_SECUNDARIOS.map((atalho) => (
           <motion.button
@@ -167,6 +211,16 @@ export default function Home() {
         )}
       </div>
       <div className="mt-8 flex w-full justify-end"><SimboloOculto chave="runa_solitaria" glifo="ᛉ" /></div>
+
+      {tourAberto ? (
+        <GuidedTour
+          passos={INICIO_TOUR_STEPS}
+          accent="#c7a44c"
+          nomeGuia="Guia do Início"
+          onClose={encerrarTour}
+          onFinish={encerrarTour}
+        />
+      ) : null}
     </main>
   );
 }

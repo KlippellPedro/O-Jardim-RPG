@@ -10,7 +10,15 @@ import { ModalCalculoPericia } from '../components/ModalCalculoPericia';
 import { aplicarAjustesAtributosRaciais, obterAjustesPericiasRaciais } from '../../../services/calculoService';
 import { BONUS_GRAU, GRAUS_PERICIA, NIVEL_MINIMO_GRAU, nomeDoGrauPericia, vantagensDoGrau } from '../../../services/progressaoNiveis';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
-import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeCansacoTeste } from '../../../services/statusService';
+import {
+  BONUS_INSPIRADO,
+  desvantagensAutomaticasTeste,
+  efeitosCondicoesNoTeste,
+  inspiradoAtivo,
+  obterStatusFicha,
+  penalidadeCansacoTeste,
+  removerCondicao,
+} from '../../../services/statusService';
 import { AjusteButton, AjustesFichaModal } from '../components/AjustesFichaModal';
 import { FichaModal } from '../components/FichaModal';
 import {
@@ -86,6 +94,8 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const [filtroGrau, setFiltroGrau] = useState('');
   const [filtroFavoritos, setFiltroFavoritos] = useState('todos');
   const [rolando, setRolando] = useState<string | null>(null);
+  // Inspirado: o jogador escolhe gastar o +2 no próximo teste; depois de rolar a condição sai da ficha.
+  const [usarInspirado, setUsarInspirado] = useState(false);
   const [atributoForm, setAtributoForm] = useState('');
   const [atributoObrigatorioErro, setAtributoObrigatorioErro] = useState(false);
 
@@ -126,10 +136,12 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
     + (resumoEquipamento.vantagens['testes'] || 0)
     + vantagensDoGrau(pericias[periciaId])
   );
+  const condicoesDaPericia = (periciaId: string, atributo: string) => efeitosCondicoesNoTeste(f.condicoesAtivas, { periciaId, atributoId: atributo });
   const desvantagensAutomaticasDaPericia = (periciaId: string, atributo: string) => (
     desvantagensAutomaticasTeste(status.cansacoAtual, periciaFisica(atributo), resumoEquipamento.sobrecarregado)
     + (resumoEquipamento.desvantagens[periciaId] || 0)
     + (resumoEquipamento.desvantagens['testes'] || 0)
+    + condicoesDaPericia(periciaId, atributo).desvantagens
   );
   const bonusExtraDaPericia = (periciaId: string, tituloPericia?: string) => ajusteOrigem(f, 'pericia', periciaId, tituloPericia)
     + totalAjustesManuais(f, chaveAjuste('pericia', periciaId))
@@ -165,16 +177,21 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
       avisar.aviso('Nenhuma campanha ativa. Selecione uma campanha no Menu para rolar dados.');
       return;
     }
+    const comInspirado = usarInspirado && inspiradoAtivo(f.condicoesAtivas);
     setRolando(pericia.id);
     try {
       const { registro } = await registrosApi.rolar({
         campanhaId: campanhaAtiva.id,
         personagemId: character.id,
-        titulo: `Teste de ${pericia.titulo}`,
-        bonus: totalBonus,
+        titulo: comInspirado ? `Teste de ${pericia.titulo} (Inspirado +${BONUS_INSPIRADO})` : `Teste de ${pericia.titulo}`,
+        bonus: totalBonus + (comInspirado ? BONUS_INSPIRADO : 0),
         vantagens,
         desvantagens,
       });
+      if (comInspirado) {
+        onUpdate(['ficha', 'condicoesAtivas'], removerCondicao(f.condicoesAtivas, 'inspirado'));
+        setUsarInspirado(false);
+      }
       setActiveModal({ type: 'resultado', periciaId: pericia.id, registro });
     } catch (e: any) {
       avisarErro(e, 'Falha ao rolar a perícia.');
@@ -248,7 +265,8 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const activeBonusExtra = activePericiaObj ? bonusExtraDaPericia(activePericiaObj.id, activePericiaObj.titulo) : 0;
   const activeVantagensAutomaticas = vantagensAutomaticasDaPericia(activePericiaObj?.id || '');
   const activeDesvantagensAutomaticas = desvantagensAutomaticasDaPericia(activePericiaObj?.id || '', activePericiaObj?.atributo || '');
-  const activeTotal = activeMod + metadeNivelCalculado + activeBonusGrau + activeBonusRacial + activeBonusExtra - penalidadeDaPericia(activePericiaObj?.id || '') + penalidadeCansacoDaPericia(activePericiaObj?.atributo || '');
+  const activeBonusCondicoes = condicoesDaPericia(activePericiaObj?.id || '', activePericiaObj?.atributo || '').bonus;
+  const activeTotal = activeMod + metadeNivelCalculado + activeBonusGrau + activeBonusRacial + activeBonusExtra - penalidadeDaPericia(activePericiaObj?.id || '') + penalidadeCansacoDaPericia(activePericiaObj?.atributo || '') + activeBonusCondicoes;
 
   const periciasVisiveis = todasPericias
     .filter(p => !busca || p.titulo.toLowerCase().includes(busca.toLowerCase()))
@@ -340,6 +358,16 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
         />
       </div>
 
+      {inspiradoAtivo(f.condicoesAtivas) && (
+        <label className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-emerald-400/25 bg-emerald-400/[0.06] p-4" data-tour="pericias-inspirado">
+          <span>
+            <span className="block text-sm font-bold text-emerald-200">Você está Inspirado</span>
+            <span className="block text-xs text-gray-400">Marque para somar +{BONUS_INSPIRADO} no próximo teste de perícia. Depois dele a condição sai da ficha.</span>
+          </span>
+          <input type="checkbox" checked={usarInspirado} onChange={(event) => setUsarInspirado(event.target.checked)} className="h-5 w-5 shrink-0 accent-emerald-500" aria-label="Gastar Inspirado no próximo teste" />
+        </label>
+      )}
+
       {/* LISTA EM GRID */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4" data-tour="pericias-lista">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -354,7 +382,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             const penalidadeCansaco = penalidadeCansacoDaPericia(p.atributo);
             const vantagensAutomaticas = vantagensAutomaticasDaPericia(p.id);
             const desvantagensAutomaticas = desvantagensAutomaticasDaPericia(p.id, p.atributo);
-            const total = mod + metadeNivelCalculado + bonusG + bonusRacial + bonusExtra - penalidadeEquipamento + penalidadeCansaco;
+            const total = mod + metadeNivelCalculado + bonusG + bonusRacial + bonusExtra - penalidadeEquipamento + penalidadeCansaco + condicoesDaPericia(p.id, p.atributo).bonus;
             const totalStr = total >= 0 ? `+${total}` : `${total}`;
 
             const rolagem = rolagens[p.id] || { vantagens: 0, desvantagens: 0 };
@@ -579,6 +607,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
           bonusOutros={activeBonusExtra}
           penalidadeEquipamento={penalidadeDaPericia(activePericiaObj.id)}
           penalidadeCansaco={penalidadeCansacoDaPericia(activePericiaObj.atributo)}
+          bonusCondicoes={activeBonusCondicoes}
           total={activeTotal}
           desvantagensAutomaticas={activeDesvantagensAutomaticas}
           descricao={activePericiaObj.descricao}

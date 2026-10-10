@@ -7,6 +7,8 @@ import { ItemCard } from './components/ItemCard';
 import { LojaItemModal } from './components/LojaItemModal';
 import { CartDrawer, CartItem, cartItemKey } from './components/CartDrawer';
 import { useCharacterStore } from '../../store/useCharacterStore';
+import { avisar } from '../../components/avisos/avisos';
+import { escolherItensParaEquipar } from '../../services/equiparAoComprar';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useWishlist } from '../../hooks/useWishlist';
 import { listarRecompensas, reivindicarRecompensa, resolverRecompensa, Recompensa } from '../../services/bountiesApi';
@@ -131,7 +133,7 @@ const RARIDADES_OPCOES = (Object.keys(RARIDADES_CORES) as Array<ItemRaridade | '
   .map((value) => ({ value, label: value }));
 
 export const LojaPage: React.FC = () => {
-  const { characters, fetchCharacters, flushCharacterSaves, patchCharacter } = useCharacterStore();
+  const { characters, fetchCharacters, flushCharacterSaves, patchCharacter, mutateEconomy } = useCharacterStore();
   const { campanhaAtiva, usuario } = useAuthStore();
   const config = campanhaAtiva?.configuracoes || {};
   const locaisOcultos = config.locais_ocultos || [3, 4];
@@ -517,6 +519,25 @@ export const LojaPage: React.FC = () => {
     }
   };
 
+  /** Arma, armadura ou escudo comprado que cabe numa vaga livre já sai equipado, com aviso e Desfazer. */
+  const equiparPecasCompradas = async (personagemId: string, inventario: any[], catalogoIds: string[], proficiencias: unknown) => {
+    const ids = escolherItensParaEquipar(inventario, catalogoIds, proficiencias);
+    if (ids.length === 0) return;
+    const alterar = (equipado: boolean) => mutateEconomy(personagemId, (current) => ({
+      carteira: current.carteira,
+      inventario: current.inventario.map((entrada) => (
+        ids.includes(entrada.item_id) ? { ...entrada, dados: { ...entrada.dados, equipado } } : entrada
+      )),
+    }));
+    if (!(await alterar(true))) return;
+    const nomes = ids.map((id) => inventario.find((entrada) => entrada.item_id === id)?.titulo).filter(Boolean).join(', ');
+    avisar.info(`${nomes} ${ids.length === 1 ? 'já está equipado' : 'já estão equipados'}, porque a vaga estava livre.`, {
+      titulo: 'Equipado ao comprar',
+      chave: `equipar-compra:${ids.join(',')}`,
+      acao: { rotulo: 'Desfazer', aoClicar: () => { void alterar(false); } },
+    });
+  };
+
   const executeCheckout = async () => {
     if (!compradorAtivo || !campanhaAtiva || cart.length === 0 || modoLoja === 'Recompensas' || checkoutInFlightRef.current) return;
     checkoutInFlightRef.current = true;
@@ -563,6 +584,14 @@ export const LojaPage: React.FC = () => {
           quantidade,
         })));
         patchCharacter(personagemAtual.id, ['ficha', 'lootPendente'], novosPendentes);
+        if (!resultado.infracoes?.length) {
+          void equiparPecasCompradas(
+            personagemAtual.id,
+            personagemComFicha?.inventarioCentral ?? [],
+            cart.filter(({ modo }) => modo !== 'contratar').map(({ item }) => item.id),
+            personagemComFicha?.ficha?.proficiencias,
+          );
+        }
       }
       if (operation === 'compra' && resultado.infracoes?.length) {
         // Requisito de nível/classe não bloqueia a compra (o mestre já é avisado

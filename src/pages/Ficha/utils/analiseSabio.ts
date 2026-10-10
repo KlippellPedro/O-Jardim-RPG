@@ -54,7 +54,7 @@ export function analisarFicha(entrada: EntradaAnalise): ObservacaoAnalise[] {
     observacoes.push({ id: 'mana', fala: falas.manaBaixa, detalhe: `Mana em ${arred(entrada.mana)}% do máximo.`, gravidade: 'atencao', aba: 'Descanso' });
   }
   if (entrada.condicoesAtivas > 0) {
-    observacoes.push({ id: 'condicoes', fala: falas.condicoes, detalhe: plural(entrada.condicoesAtivas, 'condição ativa.', 'condições ativas.'), gravidade: 'atencao', aba: 'Descanso' });
+    observacoes.push({ id: 'condicoes', fala: falas.condicoes, detalhe: plural(entrada.condicoesAtivas, 'condição ativa.', 'condições ativas.'), gravidade: 'atencao', aba: 'Condições' });
   }
 
   const poderes = somar(entrada.pendencias, 'poder');

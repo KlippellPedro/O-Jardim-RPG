@@ -11,6 +11,7 @@ import {
   lojaTourJaVisto,
   serializarLojaTourVisto,
 } from '../../src/pages/Loja/lojaTourConfig';
+import { INICIO_TOUR_STEPS, inicioTourJaVisto, serializarInicioTourVisto } from '../../src/pages/inicioTourConfig';
 
 test('todas as abas da ficha têm um tour completo com alvos utilizáveis', () => {
   for (const aba of FICHA_TOUR_TABS) {
@@ -53,16 +54,16 @@ test('blocos condicionais são marcados como opcionais', () => {
 test('persistência ignora versões, valores e JSON inválidos', () => {
   assert.deepEqual([...lerAbasVistasTourFicha(null)], []);
   assert.deepEqual([...lerAbasVistasTourFicha('{incompleto')], []);
-  assert.deepEqual([...lerAbasVistasTourFicha('{"versao":2,"abas":["Ficha"]}')], []);
+  assert.deepEqual([...lerAbasVistasTourFicha('{"versao":3,"abas":["Ficha"]}')], []);
   assert.deepEqual(
-    [...lerAbasVistasTourFicha('{"versao":3,"abas":["Ficha","desconhecida",7,"Ficha"]}')],
+    [...lerAbasVistasTourFicha('{"versao":4,"abas":["Ficha","desconhecida",7,"Ficha"]}')],
     ['Ficha'],
   );
 });
 
 test('persistência serializa somente abas conhecidas e sem repetição', () => {
   const serializado = serializarAbasVistasTourFicha(['Ficha', 'Notas', 'Ficha']);
-  assert.deepEqual(JSON.parse(serializado), { versao: 3, abas: ['Ficha', 'Notas'] });
+  assert.deepEqual(JSON.parse(serializado), { versao: 4, abas: ['Ficha', 'Notas'] });
 });
 
 test('o inventário explica o limite compartilhado de itens especiais', () => {
@@ -92,4 +93,29 @@ test('o tour de Bens troca de aba interna antes de apontar para o alvo', () => {
   for (const id of ['bens-propriedades', 'bens-planta', 'bens-garagem', 'bens-veiculos']) {
     assert.equal(passos.find((passo) => passo.id === id)?.antes, '#bens-tab-meus');
   }
+});
+
+test('o guia cobre o que mudou na ficha: atributo do dano, Inspirado e condição ou aflição', () => {
+  const idsAtaques = obterPassosTourFicha('Ataques').map((passo) => passo.id);
+  assert.ok(idsAtaques.includes('ataques-atributo-dano'));
+  assert.ok(obterPassosTourFicha('Ataques').find((passo) => passo.id === 'ataques-rolagem')?.descricao.includes('Shift'));
+  const inspirado = obterPassosTourFicha('Perícias').find((passo) => passo.id === 'pericias-inspirado');
+  assert.equal(inspirado?.opcional, true);
+  const idsCondicoes = obterPassosTourFicha('Condições').map((passo) => passo.id);
+  assert.ok(idsCondicoes.indexOf('condicoes-explicacao') === idsCondicoes.indexOf('condicoes-resumo') + 1);
+});
+
+test('o Guia do Início explica o menu, a busca e as portas da página', () => {
+  const ids = INICIO_TOUR_STEPS.map((passo) => passo.id);
+  assert.equal(new Set(ids).size, ids.length);
+  for (const id of ['menu', 'busca', 'configuracoes', 'modulos', 'atalhos', 'novidades']) assert.ok(ids.includes(id), id);
+  assert.ok(INICIO_TOUR_STEPS.length <= 12);
+  for (const passo of INICIO_TOUR_STEPS) {
+    assert.ok(passo.descricao.trim().length > 0);
+    assert.ok(!passo.descricao.includes('—'), `${passo.id} usa travessão`);
+  }
+  assert.equal(inicioTourJaVisto(serializarInicioTourVisto()), true);
+  assert.equal(inicioTourJaVisto('{"versao":0,"concluido":true}'), false);
+  assert.equal(inicioTourJaVisto('{lixo'), false);
+  assert.equal(inicioTourJaVisto(null), false);
 });

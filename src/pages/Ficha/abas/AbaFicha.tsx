@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef, type CSSProperties } from 'react';
+import { useState, useEffect, type CSSProperties } from 'react';
 import { HelpCircle, X, Pencil } from 'lucide-react';
 import { SectionTitle, LabeledInput, LabeledModalSelect, LabeledSelect } from '../components/SharedFichaComponents';
 import { ModalInfoFicha } from '../components/ModalInfoFicha';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { ICatalogo } from '../../../types/catalogo';
-import { aplicarAjustesAtributosRaciais, ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, bonusTesteAtributo, calcularDerivadosComClasses, xpParaNivel, nivelPorXp, TAtributo } from '../../../services/calculoService';
+import { aplicarAjustesAtributosRaciais, obterVarianteRacial, ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, bonusTesteAtributo, calcularDerivadosComClasses, xpParaNivel, nivelPorXp, TAtributo } from '../../../services/calculoService';
 import { NIVEL_MAXIMO_CLASSE, NIVEL_TOTAL_PADRAO, limitarNivelClasse, patamarAtual, rotuloDoPatamar } from '../../../services/progressaoNiveis';
 import { obterEfeitoAtmosfericoFicha } from '../fichaTheme';
 import { degrauDaClasse } from '../utils/degrauClasse';
@@ -25,7 +25,9 @@ import {
   bonusIniciativaFicha,
   desvantagensAutomaticasTeste,
   movimentoBloqueadoPorCondicao,
+  movimentoComCondicoes,
   multiplicadorMovimentoCansaco,
+  textoMovimentoCondicoes,
   obterStatusFicha,
   penalidadeCansacoIniciativa,
   penalidadeCansacoTeste,
@@ -58,6 +60,10 @@ import { ModoMesa } from '../components/ModoMesa';
 import { FamaPrestigioSection } from '../components/FamaPrestigioSection';
 import { FrutoEdenSection } from '../components/FrutoEdenSection';
 import { AflicoesSection } from '../components/AflicoesSection';
+import { SeletorPersonalizavel } from '../components/SeletorPersonalizavel';
+import { EfeitoDoTurnoBotao } from '../components/EfeitoDoTurnoBotao';
+import { calcularVidaDaFicha } from '../../../services/vidaDaFichaService';
+import { ProficienciasSection, ResistenciasSection } from '../components/ResistenciasProficienciasSection';
 import { obterTemaPorId } from '../../../redesign/themeMap';
 import { Select } from '../../../components/ui/Select';
 import { avisar, avisarErro } from '../../../components/avisos/avisos';
@@ -113,6 +119,9 @@ interface IAbaFichaProps {
   onAbrirAba?: (aba: string) => void;
 }
 
+/** Tamanhos que o jogo usa nas raças; qualquer outro entra como personalizado. */
+const TAMANHOS_PRONTOS = ['Pequeno', 'Normal', 'Grande', 'Enorme'];
+
 export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMesaAberto, onAbrirAba }: IAbaFichaProps) => {
   const f = character.ficha || {};
   const [modoMesaAberto, setModoMesaAberto] = useState(false);
@@ -133,12 +142,6 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   useEffect(() => {
     carregarCatalogo().then(setCatalogo);
   }, []);
-
-  const [proficienciasTexto, setProficienciasTexto] = useState(() => (f.proficiencias || []).join(', '));
-  const proficienciasEmFocoRef = useRef(false);
-  useEffect(() => {
-    if (!proficienciasEmFocoRef.current) setProficienciasTexto((f.proficiencias || []).join(', '));
-  }, [f.proficiencias]);
 
   const status = obterStatusFicha(f);
   const racaAtual = catalogo?.racas.find(raca => raca.id === f.racaId) || null;
@@ -178,13 +181,13 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   const deltaDerivado = (campo: 'vida' | 'mana' | 'estamina' | 'defesaNatural' | 'iniciativa' | 'movimento') => (
     Number(derivadosComEquipamento?.[campo] || 0) - Number(derivadosSemEquipamento?.[campo] || 0)
   );
-  const maxVidaBase = Number(f.derivados?.vida ?? character.derivados?.vida) || 10;
   const maxManaBase = Number(f.derivados?.mana ?? character.derivados?.mana) || 10;
   // Fichas gravadas antes da Estamina existir não têm `derivados.estamina`
   // guardado; nesse caso vale o cálculo fresco dos atributos e classes atuais,
   // não um número solto como o 10 de Vida e Mana.
   const maxEstaminaBase = Number(f.derivados?.estamina ?? character.derivados?.estamina ?? derivadosSemEquipamento?.estamina) || 1;
-  const maxVida = Math.max(1, maxVidaBase + deltaDerivado('vida') + ajusteOrigem(f, 'vidaMaxima') + totalAjustesManuais(f, chaveAjuste('recurso', 'vidaMaxima')) + (resumoEquipamento.bonusRecursos.vidaMaxima || 0));
+  const maxVidaBase = Number(f.derivados?.vida ?? character.derivados?.vida) || 10;
+  const { maxVida } = calcularVidaDaFicha(character, catalogo);
   const maxMana = Math.max(1, maxManaBase + deltaDerivado('mana') + ajusteOrigem(f, 'manaMaxima') + totalAjustesManuais(f, chaveAjuste('recurso', 'manaMaxima')) + (resumoEquipamento.bonusRecursos.manaMaxima || 0));
   const maxEstamina = Math.max(1, maxEstaminaBase + deltaDerivado('estamina') + ajusteOrigem(f, 'estaminaMaxima') + totalAjustesManuais(f, chaveAjuste('recurso', 'estaminaMaxima')) + (resumoEquipamento.bonusRecursos.estaminaMaxima || 0));
   const maxSanidadeBase = Math.max(1, Number(status.sanidadeMaxima) || 100);
@@ -207,7 +210,10 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   const ajusteMovimento = ajusteOrigem(f, 'movimento') + totalAjustesManuais(f, chaveAjuste('combate', 'movimento'));
   const movimentoFinal = movimentoBloqueadoPorCondicao(f.condicoesAtivas)
     ? 0
-    : Math.max(0, (movimentoBase + ajusteMovimento + (resumoEquipamento.bonusCombate.movimento || 0) - penalidadeSobrecarga) * multiplicadorMovimentoCansaco(status.cansacoAtual));
+    : movimentoComCondicoes(
+      Math.max(0, (movimentoBase + ajusteMovimento + (resumoEquipamento.bonusCombate.movimento || 0) - penalidadeSobrecarga) * multiplicadorMovimentoCansaco(status.cansacoAtual)),
+      f.condicoesAtivas,
+    );
 
   const vAtual = Number(status.vidaAtual ?? maxVida);
   const mAtual = Number(status.manaAtual ?? maxMana);
@@ -426,6 +432,10 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
     || campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente';
   const configCampanha = campanhaAtiva?.configuracoes || {};
   const arvoresDisponiveis = ARVORES.filter(a => arvoreVisivel(a.id, configCampanha, isMestre));
+  // Uma Deidade por Árvore que a mesa deixa ver. A da Árvore do personagem vem marcada.
+  const deidadesDisponiveis = ARVORES
+    .filter((a) => a.id !== 'universal' && a.id !== SEM_ARVORE_ID && (a.id === f.arvoreId || arvoresDisponiveis.some((visivel) => visivel.id === a.id)))
+    .map((a) => ({ value: a.deidadeTitulo, label: a.id === f.arvoreId ? `${a.deidadeTitulo} (sua Árvore)` : `${a.deidadeTitulo} (${a.nome})` }));
   const [rolandoTeste, setRolandoTeste] = useState(false);
   const [resultadoTeste, setResultadoTeste] = useState<{ atributo: TAtributo; resultado: number | null } | null>(null);
 
@@ -868,8 +878,23 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
             </div>
             <LabeledInput label="Título" value={f.titulo} placeholder="Ex: O Assassino" onChange={(v:any) => onUpdate(['ficha', 'titulo'], v)} />
             <LabeledInput label="Nível Total" value={nivelTotalClasses} readOnly={true} type="number" />
-            <LabeledInput label="Tamanho" value={f.tamanho} placeholder="Ex: Normal" onChange={(v:any) => onUpdate(['ficha', 'tamanho'], v)} />
-            <LabeledInput label="Divindade" value={f.escolhaRacial?.divindade || ''} placeholder="Ex: Aion" onChange={(v:any) => handleEscolhaRacialChange('divindade', v)} />
+            <SeletorPersonalizavel
+              label="Tamanho"
+              value={f.tamanho || ''}
+              padrao={obterVarianteRacial(racaAtual, f.escolhaRacial)?.tamanho || 'Normal'}
+              opcoes={TAMANHOS_PRONTOS.map((tamanho) => ({ value: tamanho, label: tamanho }))}
+              onChange={(valor) => onUpdate(['ficha', 'tamanho'], valor)}
+              placeholderPersonalizado="Ex.: Minúsculo, Colossal..."
+            />
+            <SeletorPersonalizavel
+              label="Divindade"
+              value={f.escolhaRacial?.divindade || ''}
+              opcoes={deidadesDisponiveis}
+              onChange={(valor) => handleEscolhaRacialChange('divindade', valor)}
+              rotuloVazio="Nenhuma"
+              rotuloPersonalizada="Outra divindade..."
+              placeholderPersonalizado="Nome da divindade ou entidade"
+            />
           </div>
           {f.arvoreId === 'mulher-carmesim' && (
             <p className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-xs leading-relaxed text-amber-200">
@@ -1175,7 +1200,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
                     ...automaticosMovimento.map((item) => ({ label: item.nome, value: valorComSinal(item.valor) })),
                     ...obterAjustesManuais(f, chaveAjuste('combate', 'movimento')).map((item) => ({ label: `Ajuste: ${item.nome}`, value: valorComSinal(item.valor) })),
                     { label: 'Cansaço 5+', value: multiplicadorMovimentoCansaco(status.cansacoAtual) === 0.5 ? 'metade' : '' },
-                    { label: 'Condições', value: movimentoBloqueadoPorCondicao(f.condicoesAtivas) ? 'movimento 0' : '' },
+                    { label: 'Condições', value: movimentoBloqueadoPorCondicao(f.condicoesAtivas) ? 'movimento 0' : textoMovimentoCondicoes(f.condicoesAtivas) },
                   ],
                   total: { label: 'Movimento Final', value: `${movimentoFinal}m` },
                 })}>
@@ -1193,28 +1218,8 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
 
         {/* Textareas */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6" data-tour="ficha-condicoes">
-          <div className="flex flex-col gap-2">
-            <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Resistências</label>
-            <textarea aria-label="Resistências" readOnly={!isMestre} value={f.resistenciasTexto || ''} onChange={(event) => onUpdate(['ficha', 'resistenciasTexto'], event.target.value)} placeholder="Ex.: Fogo 5, Corte 3..." className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50 read-only:cursor-not-allowed read-only:opacity-70"></textarea>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Proficiências</label>
-            <textarea
-              aria-label="Proficiências"
-              readOnly={!isMestre}
-              value={proficienciasTexto}
-              onFocus={() => { proficienciasEmFocoRef.current = true; }}
-              onChange={(event) => setProficienciasTexto(event.target.value)}
-              onBlur={(event) => {
-                proficienciasEmFocoRef.current = false;
-                const lista = event.target.value.split(/[,\n]/).map((item) => item.trim().toLocaleLowerCase('pt-BR')).filter(Boolean);
-                setProficienciasTexto(lista.join(', '));
-                onUpdate(['ficha', 'proficiencias'], lista);
-              }}
-              placeholder="Ex.: armas marciais, armaduras leves..."
-              className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50 read-only:cursor-not-allowed read-only:opacity-70"
-            ></textarea>
-          </div>
+          <ResistenciasSection ficha={f} isMestre={isMestre} onUpdate={onUpdate} />
+          <ProficienciasSection ficha={f} isMestre={isMestre} onUpdate={onUpdate} />
           <div id="ficha-condicoes-ativas" className="relative flex scroll-mt-28 flex-col gap-2 rounded-2xl border border-red-400/10 bg-red-400/[0.025] p-3 transition-shadow">
             <div className="flex items-center justify-between gap-3">
               <label className="text-[10px] font-bold uppercase tracking-widest text-red-200/70">Condições Ativas</label>
@@ -1230,6 +1235,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
                       {c.afeta && <span className="rounded-md bg-white/[0.04] px-2 py-1">{c.afeta}</span>}
                       {c.duracao && <span className="rounded-md bg-white/[0.04] px-2 py-1 normal-case tracking-normal">{c.duracao}</span>}
                     </div>
+                    <EfeitoDoTurnoBotao condicao={c} character={character} onUpdate={onUpdate} />
                   </div>
                   <div className="flex shrink-0 gap-1 opacity-70 transition-opacity group-hover:opacity-100">
                     <button type="button" onClick={() => setActiveModal({ isCondicaoModal: true, condicao: c, editIndex: i })} className="rounded-md p-1.5 text-gray-500 transition-colors hover:bg-white/5 hover:text-white" aria-label={`Editar condição ${c.nome}`}>

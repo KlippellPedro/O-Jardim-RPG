@@ -2,6 +2,69 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-10-dano-do-turno-lesoes-inspirado-guias",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Dano do turno, lesões que contam, Inspirado e guias novos",
+      "detalhes": [
+        "Sangramento, Queimando, Envenenado e Revigorado ganharam um botão que rola o efeito do turno e já mexe na sua Vida. A Resistência da ficha entra sozinha, e o aviso traz Desfazer.",
+        "Lesões e sequelas com número fixo agora contam nos testes e ataques: braço ou mão dominante, ombro, olho, pernas, costelas, mandíbula, concussão, tremor e congelamento. Perna quebrada corta o Movimento pela metade.",
+        "Inspirado aparece na hora de rolar: marque para somar +2 num teste de perícia ou num ataque, e a condição sai da ficha depois.",
+        "A página inicial ganhou o Guia do Início, que explica o menu, a busca, as configurações e cada parte da página. Os guias da Ficha e da Loja foram atualizados com as novidades e vão abrir de novo uma vez."
+      ]
+    },
+    {
+      "id": "2026-10-10-condicoes-calculam-e-compra-equipa",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Condições que calculam, compra que já equipa e campos prontos",
+      "detalhes": [
+        "Condições agora mexem nos números da ficha: Enfraquecido tira 2 em testes de Força e no dano corpo a corpo, Favorecido soma 1 em Fortitude, Reflexos e Vontade, Desorientado e Cego dão desvantagem onde o cartão manda, e Lento e Apressado mudam o Movimento. O cálculo de cada perícia mostra a linha das condições.",
+        "Na aba Condições há uma explicação curta da diferença entre condição e aflição, para tirar a dúvida sem chamar o Mestre.",
+        "Arma, armadura ou escudo comprado que cabe numa vaga livre já sai equipado, com um aviso e o botão Desfazer. Peça marcial sem a proficiência fica na mochila.",
+        "Tamanho e Divindade viraram listas prontas (as Deidades do jogo, e Pequeno, Normal, Grande e Enorme), com a opção de escrever o seu próprio valor."
+      ]
+    },
+    {
+      "id": "2026-10-10-ataques-confirmacao-e-dano",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Ataques com confirmação, dado extra e dano certo",
+      "detalhes": [
+        "Ao clicar em Atacar ou Rolar Dano, abre uma telinha com a conta da ficha. Dá para somar vantagem ou desvantagem do momento, um bônus extra, um dado extra (1d4, 2d6+1, -1d4) e a Defesa do alvo. Segure Shift ao clicar para rolar direto, sem confirmar.",
+        "O dano das armas corpo a corpo agora soma o modificador de atributo (Força por padrão, e segue o atributo da perícia Luta se um poder trocar). Armas à distância vêm sem atributo, mas dá para ligar. Em Atributo somado ao dano você escolhe o atributo para a ficha toda, e na confirmação do dano pode trocar só para aquela rolagem. No dano há uma caixa de crítico: só os dados da arma são multiplicados.",
+        "Arcos e outras armas à distância compradas na Loja passavam a atacar como corpo a corpo, com Luta e Força. Agora usam Pontaria e Destreza. Armas híbridas deixam você escolher como usar na hora.",
+        "O bônus de ataque passou a considerar o grau de perícia concedido pela classe e as vantagens que valem para todos os testes."
+      ]
+    },
+    {
+      "id": "2026-10-10-ficha-resistencias-proficiencias",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Resistências e Proficiências em lista, com catálogo",
+      "detalhes": [
+        "Resistências e Proficiências deixaram de ser caixas de texto. Agora cada uma é uma lista que cresce sem bagunçar a ficha, e o Mestre escolhe no catálogo (tipos de dano, elementos, venenos, doenças, condições, armas, armaduras, escudos e ferramentas) ou cria uma própria.",
+        "Cada resistência tem tipo (Resistência, Vulnerabilidade ou Imunidade), valor e uma anotação curta.",
+        "Armadura ou escudo marcial usado sem a proficiência perde 2 de Defesa e dobra a penalidade da peça. A ficha avisa qual peça está nessa situação."
+      ]
+    },
+    {
+      "id": "2026-10-10-ficha-aba-condicoes",
+      "data": "2026-10-10",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Descanso mais claro e uma aba só para Condições e Aflições",
+      "detalhes": [
+        "A aba Descanso agora cuida só de recuperação, em três passos: como foi a pausa, o que aconteceu durante ela e a conferência do resultado. A prévia mostra, para cada recurso, quanto você tem e quanto vai ter antes de aplicar.",
+        "Condições e aflições ganharam a aba Condições, ao lado do Descanso. Lá ficam as condições em vigor, o catálogo para aplicar, as crises de Sanidade e, em outro painel, as aflições (venenos, doenças e vícios) com o catálogo completo.",
+        "Ao aplicar uma condição, ela aparece na hora em Em vigor agora, sem sair da página. Tocar de novo no cartão remove."
+      ]
+    },
+    {
       "id": "2026-10-10-livro-da-verdade-cronista",
       "data": "2026-10-10",
       "tipo": "melhoria",

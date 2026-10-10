@@ -9,19 +9,38 @@ import { useCharacterStore } from '../../../store/useCharacterStore';
 import {
   ameacaCritico,
   formatarCritico,
-  formulaDanoCritico,
   normalizarCriticoBalanceado,
 } from '../../../services/criticalService';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { vantagensDoGrau } from '../../../services/progressaoNiveis';
 import { aplicarAjustesAtributosRaciais, BONUS_GRAU, modificador, obterAjustesPericiasRaciais } from '../../../services/calculoService';
-import { obterAtributoPericia } from '../../../services/periciasFichaService';
+import { grausComConcedidos, obterAtributoPericia } from '../../../services/periciasFichaService';
 import type { ICatalogo } from '../../../types/catalogo';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
-import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeAtaqueCondicoes, penalidadeCansacoTeste } from '../../../services/statusService';
+import {
+  desvantagensAutomaticasTeste,
+  BONUS_INSPIRADO,
+  efeitosCondicoesNoTeste,
+  inspiradoAtivo,
+  removerCondicao,
+  obterStatusFicha,
+  penalidadeAtaqueCondicoes,
+  penalidadeCansacoTeste,
+  penalidadeDanoCorpoACorpoCondicoes,
+} from '../../../services/statusService';
 import { ajusteOrigem, chaveAjuste, totalAjustesManuais } from '../../../services/ajustesFichaService';
 import { avisar, avisarErro } from '../../../components/avisos/avisos';
 import { excluirDaFichaComDesfazer } from '../desfazerNaFicha';
+import { temProficienciaEquipamento } from '../utils/catalogoResistProf';
+import { ATRIBUTOS_DANO, TIPO_CORPO_A_CORPO, montarDano, normalizarConfigDano, resolverAtributoDano, tipoAtaqueDaArma } from '../utils/rolagemAtaque';
+import { ConfigDanoAtaque } from '../components/ConfigDanoAtaque';
+import {
+  ConfirmarAcertoModal,
+  ConfirmarDanoModal,
+  type IOpcoesAcerto,
+  type IOpcoesDano,
+  type IParteRolagem,
+} from '../components/ConfirmarRolagemAtaque';
 
 interface IAtaque {
   id: string;
@@ -34,6 +53,10 @@ interface IAtaque {
   multiplicadorCritico: number;
   favorito?: boolean;
   isInventory?: boolean;
+  /** Ataque manual: soma o modificador de atributo ao dano (o atributo vem da configuração da ficha). Armas do inventário seguem a configuração. */
+  somarForca?: boolean;
+  /** Arma híbrida: o jogador escolhe corpo a corpo ou à distância na hora de atacar. */
+  hibrida?: boolean;
   subtipo?: string;
   municaoAtual?: number;
   municaoMaxima?: number;
@@ -47,6 +70,16 @@ interface IResultadoRolagem {
 }
 
 const TIPOS_ATAQUE = ['Corpo a Corpo', 'Distância', 'Alcance'];
+
+const NOMES_ATRIBUTO: Record<string, string> = {
+  forca: 'Força',
+  destreza: 'Destreza',
+  constituicao: 'Constituição',
+  inteligencia: 'Inteligência',
+  sabedoria: 'Sabedoria',
+  carisma: 'Carisma',
+  fluxo: 'Fluxo',
+};
 
 const TIPO_ATAQUE_COLORS: Record<string, string> = {
   'Corpo a Corpo': 'bg-red-500/10 border-red-500/30 text-red-400',
@@ -62,6 +95,7 @@ const FORM_VAZIO = {
   alcance: '',
   margemAmeaca: '20',
   multiplicadorCritico: '2',
+  somarForca: true,
 };
 
 function gerarId(): string {
@@ -78,6 +112,8 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
   const [resultado, setResultado] = useState<IResultadoRolagem | null>(null);
   const [defesaAlvo, setDefesaAlvo] = useState('');
   const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
+  const [confirmacao, setConfirmacao] = useState<{ tipo: 'acerto' | 'dano'; id: string } | null>(null);
+  const [tipoUso, setTipoUso] = useState(TIPO_CORPO_A_CORPO);
 
   useEffect(() => {
     carregarCatalogo().then(setCatalogo);
@@ -97,7 +133,8 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     .map((i: any) => ({
       id: i.item_id,
       nome: i.titulo,
-      tipo: i.dados?.tipoAtaque || 'Corpo a Corpo',
+      tipo: tipoAtaqueDaArma(i.dados).tipo,
+      hibrida: tipoAtaqueDaArma(i.dados).hibrida,
       bonusAcerto: i.dados?.bonusAcerto || 0,
       dano: i.dados?.dano || '',
       alcance: i.dados?.alcance || '1,5m',
@@ -129,39 +166,88 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     : atributosAntesRaca;
   const ajustesRaciaisPericias = obterAjustesPericiasRaciais(racaAtual, ficha.escolhaRacial);
   const metadeNivel = Math.floor(Math.max(1, Number(character.nivel) || 1) / 2);
-  const proficiencias = new Set((Array.isArray(ficha.proficiencias) ? ficha.proficiencias : []).map((item: unknown) => String(item).toLocaleLowerCase('pt-BR')));
 
   const penalidadeFaltaProficiencia = (item: IAtaque) => {
     if (!item.isInventory || !item.subtipo || item.subtipo.toLocaleLowerCase('pt-BR') === 'simples') return 0;
-    const subtipo = item.subtipo.toLocaleLowerCase('pt-BR');
-    return proficiencias.has(subtipo) || proficiencias.has(`armas_${subtipo}`) || proficiencias.has(`armas ${subtipo}`) ? 0 : -5;
+    return temProficienciaEquipamento(ficha.proficiencias, 'armas', item.subtipo) ? 0 : -5;
   };
 
-  const calcularBonusAtaque = (item: IAtaque) => {
-    const periciaId = item.tipo === 'Corpo a Corpo' ? 'luta' : 'pontaria';
+  const periciaDoAtaque = (item: IAtaque) => item.tipo === TIPO_CORPO_A_CORPO ? 'luta' : 'pontaria';
+  const tipoDaCondicao = (item: IAtaque) => (item.tipo === TIPO_CORPO_A_CORPO ? 'corpo' : 'distancia') as 'corpo' | 'distancia';
+  const grausDaFicha = grausComConcedidos(ficha);
+  const atributoDoAtaqueEhFisico = (item: IAtaque) => {
+    const periciaId = periciaDoAtaque(item);
+    return ['forca', 'destreza', 'constituicao'].includes(obterAtributoPericia(ficha, periciaId, periciaId === 'luta' ? 'forca' : 'destreza'));
+  };
+
+  /** A conta do acerto, parcela por parcela. A soma e o bonus que vai para o servidor. */
+  const detalharBonusAtaque = (item: IAtaque): IParteRolagem[] => {
+    const periciaId = periciaDoAtaque(item);
     // A ficha pode trocar o atributo base de Luta e Pontaria; o ataque segue a troca.
     const atributoId = obterAtributoPericia(ficha, periciaId, periciaId === 'luta' ? 'forca' : 'destreza');
-    const grau = ficha.pericias?.[periciaId] || 'iniciante';
-    return modificador(atributos[atributoId] ?? 10)
-      + metadeNivel
-      + (BONUS_GRAU[grau] || 0)
-      + (ajustesRaciaisPericias[periciaId] || 0)
-      + ajusteOrigem(ficha, 'pericia', periciaId)
-      + totalAjustesManuais(ficha, chaveAjuste('pericia', periciaId))
-      + (resumoEquipamento.bonusPericias[periciaId] || 0)
-      + (resumoEquipamento.bonusCombate.ataque || 0)
-      + (Number(item.bonusAcerto) || 0)
-      + penalidadeFaltaProficiencia(item)
-      + penalidadeCansacoTeste(status.cansacoAtual, true)
-      + penalidadeAtaqueCondicoes(ficha.condicoesAtivas);
+    const grau = grausDaFicha[periciaId] || 'iniciante';
+    const partes: IParteRolagem[] = [
+      { rotulo: `${NOMES_ATRIBUTO[atributoId] || atributoId} (modificador)`, valor: modificador(atributos[atributoId] ?? 10) },
+      { rotulo: 'Metade do nível', valor: metadeNivel },
+      { rotulo: `Grau da perícia (${grau})`, valor: BONUS_GRAU[grau] || 0 },
+      { rotulo: 'Raça', valor: ajustesRaciaisPericias[periciaId] || 0 },
+      { rotulo: 'Origem e ajustes manuais', valor: ajusteOrigem(ficha, 'pericia', periciaId) + totalAjustesManuais(ficha, chaveAjuste('pericia', periciaId)) },
+      { rotulo: 'Itens e efeitos (perícia)', valor: resumoEquipamento.bonusPericias[periciaId] || 0 },
+      { rotulo: 'Itens e efeitos (ataque)', valor: resumoEquipamento.bonusCombate.ataque || 0 },
+      { rotulo: 'Bônus da arma', valor: Number(item.bonusAcerto) || 0 },
+      { rotulo: 'Sem proficiência na arma', valor: penalidadeFaltaProficiencia(item) },
+      { rotulo: 'Cansaço', valor: penalidadeCansacoTeste(status.cansacoAtual, atributoDoAtaqueEhFisico(item)) },
+      { rotulo: 'Condições (Caído)', valor: penalidadeAtaqueCondicoes(ficha.condicoesAtivas) },
+    ];
+    for (const parte of efeitosCondicoesNoTeste(ficha.condicoesAtivas, { periciaId, atributoId, ataque: true, tipoAtaque: tipoDaCondicao(item) }).partes) {
+      partes.push({ rotulo: `Condição: ${parte.nome}`, valor: parte.valor });
+    }
+    return partes.filter((parte, indice) => indice < 2 || parte.valor !== 0);
+  };
+  const calcularBonusAtaque = (item: IAtaque) => detalharBonusAtaque(item).reduce((soma, parte) => soma + parte.valor, 0);
+
+  const vantagensAutomaticasAtaque = (item: IAtaque) => {
+    const periciaId = periciaDoAtaque(item);
+    return vantagensDoGrau(grausDaFicha[periciaId])
+      + (resumoEquipamento.vantagens[periciaId] || 0)
+      + (resumoEquipamento.vantagens['ataque'] || 0)
+      + (resumoEquipamento.vantagens['testes'] || 0);
+  };
+  const desvantagensAutomaticasDoAtaque = (item: IAtaque) => {
+    const periciaId = periciaDoAtaque(item);
+    return desvantagensAutomaticasTeste(status.cansacoAtual, atributoDoAtaqueEhFisico(item), resumoEquipamento.sobrecarregado)
+      + (resumoEquipamento.desvantagens[periciaId] || 0)
+      + (resumoEquipamento.desvantagens['ataque'] || 0)
+      + (resumoEquipamento.desvantagens['testes'] || 0)
+      + efeitosCondicoesNoTeste(ficha.condicoesAtivas, { periciaId, ataque: true, tipoAtaque: tipoDaCondicao(item) }).desvantagens;
   };
 
-  const desvantagensAutomaticasAtaque = desvantagensAutomaticasTeste(
-    status.cansacoAtual,
-    true,
-    resumoEquipamento.sobrecarregado,
+  /** Atributo da perícia de combate de cada tipo: segue a troca de atributo feita na ficha. */
+  const atributoPadraoDaPericia = (tipo: string) => {
+    const periciaId = tipo === TIPO_CORPO_A_CORPO ? 'luta' : 'pontaria';
+    return obterAtributoPericia(ficha, periciaId, periciaId === 'luta' ? 'forca' : 'destreza');
+  };
+  const configDano = normalizarConfigDano(ficha.danoAtaque);
+  const modificadoresDosAtributos: Record<string, number> = Object.fromEntries(
+    ATRIBUTOS_DANO.map((atributo) => [atributo.id, modificador(atributos[atributo.id] ?? 10)]),
   );
-  const periciaDoAtaque = (item: IAtaque) => item.tipo === 'Corpo a Corpo' ? 'luta' : 'pontaria';
+  /** Corpo a corpo soma o atributo por padrão, a distância não; a ficha muda isso. Ataque manual segue a própria caixa. */
+  const regraDoDano = (item: IAtaque) => {
+    const regra = resolverAtributoDano(configDano, item.tipo, atributoPadraoDaPericia(item.tipo));
+    return item.isInventory ? regra : { ...regra, ativo: Boolean(item.somarForca) };
+  };
+  const atributoDoDano = (item: IAtaque): IParteRolagem | null => {
+    const regra = regraDoDano(item);
+    return regra.ativo
+      ? { rotulo: `${NOMES_ATRIBUTO[regra.atributoId] || regra.atributoId} (modificador)`, valor: modificadoresDosAtributos[regra.atributoId] ?? 0 }
+      : null;
+  };
+  const bonusDanoEquipamento = resumoEquipamento.bonusCombate.dano || 0;
+  const ajusteDanoCondicoes = (item: IAtaque) => item.tipo === TIPO_CORPO_A_CORPO ? penalidadeDanoCorpoACorpoCondicoes(ficha.condicoesAtivas) : 0;
+  const formulaDanoDoCartao = (item: IAtaque) => item.dano
+    ? montarDano({ dano: item.dano, modificadorAtributo: atributoDoDano(item)?.valor, bonusEquipamento: bonusDanoEquipamento, ajusteCondicoes: ajusteDanoCondicoes(item) }).formula || item.dano
+    : '';
+  const ataqueComTipo = (item: IAtaque): IAtaque => (item.hibrida ? { ...item, tipo: tipoUso } : item);
 
   const ataquesVisiveis = ataques
     .filter((a: any) => !busca || a.nome?.toLowerCase().includes(busca.toLowerCase()))
@@ -220,6 +306,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       alcance: item.alcance || '',
       margemAmeaca: String(item.margemAmeaca ?? 20),
       multiplicadorCritico: String(item.multiplicadorCritico ?? 2),
+      somarForca: Boolean(item.somarForca),
     });
     setModalAberto(true);
   };
@@ -269,6 +356,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
         alcance: form.alcance.trim(),
         margemAmeaca: critico.margemAmeaca,
         multiplicadorCritico: critico.multiplicadorCritico,
+        somarForca: form.somarForca,
       };
 
       const novaLista = editandoId
@@ -313,27 +401,46 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     if (resultado?.ataqueId === item.id) setResultado(null);
   };
 
-  const rolarAcerto = async (item: IAtaque) => {
+  const podeRolar = (item: IAtaque, paraAcerto: boolean) => {
     if (!campanhaId) {
       avisar.aviso('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
-      return;
+      return false;
     }
-    if (item.isInventory && Number(item.municaoMaxima) > 0 && Number(item.municaoAtual) <= 0) {
+    if (paraAcerto && item.isInventory && Number(item.municaoMaxima) > 0 && Number(item.municaoAtual) <= 0) {
       avisar.aviso('Esta arma está sem munição. Recarregue no Inventário antes de atacar.');
+      return false;
+    }
+    return true;
+  };
+
+  /** Clique normal abre a confirmação; Shift rola direto com o que está na ficha. */
+  const pedirRolagem = (item: IAtaque, tipo: 'acerto' | 'dano', evento: { shiftKey: boolean }) => {
+    if (!podeRolar(item, tipo === 'acerto')) return;
+    if (tipo === 'dano' && !item.dano) return;
+    if (evento.shiftKey) {
+      void (tipo === 'acerto' ? executarAcerto(item, null) : executarDano(item, null));
       return;
     }
+    setTipoUso(item.tipo === 'Distância' ? 'Distância' : TIPO_CORPO_A_CORPO);
+    setConfirmacao({ tipo, id: item.id });
+  };
+
+  const executarAcerto = async (item: IAtaque, opcoes: IOpcoesAcerto | null) => {
+    if (!podeRolar(item, true)) return;
     setRolando(`${item.id}-acerto`);
     try {
-      const defesa = Number(defesaAlvo);
-      const defesaInformada = defesaAlvo.trim() !== '' && Number.isFinite(defesa) && defesa >= 1;
+      const defesaTexto = opcoes ? opcoes.defesa : defesaAlvo;
+      const defesa = Number(defesaTexto);
+      const defesaInformada = defesaTexto.trim() !== '' && Number.isFinite(defesa) && defesa >= 1;
+      if (opcoes) setDefesaAlvo(opcoes.defesa);
       const { registro } = await registrosApi.rolar({
-        campanhaId,
+        campanhaId: campanhaId as string,
         personagemId: character.id,
         titulo: `Ataque: ${item.nome}`,
-        bonus: calcularBonusAtaque(item),
-        vantagens: (resumoEquipamento.vantagens[periciaDoAtaque(item)] || 0) + (resumoEquipamento.vantagens['ataque'] || 0)
-          + vantagensDoGrau(ficha.pericias?.[periciaDoAtaque(item)]),
-        desvantagens: desvantagensAutomaticasAtaque + (resumoEquipamento.desvantagens[periciaDoAtaque(item)] || 0) + (resumoEquipamento.desvantagens['ataque'] || 0),
+        bonus: calcularBonusAtaque(item) + (opcoes?.bonusExtra || 0) + (opcoes?.usarInspirado ? BONUS_INSPIRADO : 0),
+        vantagens: vantagensAutomaticasAtaque(item) + (opcoes?.vantagensExtras || 0),
+        desvantagens: desvantagensAutomaticasDoAtaque(item) + (opcoes?.desvantagensExtras || 0),
+        dadosExtras: opcoes?.dadoExtra || null,
         dt: defesaInformada ? defesa : null,
         origem: {
           tipo: 'ataque',
@@ -341,6 +448,10 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
           defesa_alvo: defesaInformada ? defesa : null,
           margem_ameaca: Math.max(2, item.margemAmeaca - (resumoEquipamento.bonusCombate.margemAmeaca || 0)),
           multiplicador_critico: item.multiplicadorCritico + (resumoEquipamento.bonusCombate.multiplicadorCritico || 0),
+          ...(opcoes?.bonusExtra ? { bonus_extra: opcoes.bonusExtra } : {}),
+          ...(opcoes?.usarInspirado ? { inspirado: BONUS_INSPIRADO } : {}),
+          ...(opcoes?.vantagensExtras ? { vantagens_extras: opcoes.vantagensExtras } : {}),
+          ...(opcoes?.desvantagensExtras ? { desvantagens_extras: opcoes.desvantagensExtras } : {}),
         },
       });
       if (item.isInventory && Number(item.municaoMaxima) > 0) {
@@ -351,6 +462,8 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
             : entrada),
         }));
       }
+      // Inspirado vale para um teste só: depois de rolar, a condição sai.
+      if (opcoes?.usarInspirado) onUpdate(['ficha', 'condicoesAtivas'], removerCondicao(ficha.condicoesAtivas, 'inspirado'));
       setResultado({ ataqueId: item.id, tipo: 'acerto', resultado: registro.resultado, detalhes: registro.detalhes });
     } catch (erro: any) {
       avisarErro(erro, 'Falha ao rolar o ataque.');
@@ -359,33 +472,44 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     }
   };
 
-  const rolarDano = async (item: IAtaque) => {
-    if (!campanhaId) {
-      avisar.aviso('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
-      return;
-    }
-    if (!item.dano) return;
+  /** O critico padrao vem do d20 natural do ultimo ataque desta arma. */
+  const criticoDoUltimoAtaque = (item: IAtaque) => {
     const natural = resultado?.ataqueId === item.id && resultado.tipo === 'acerto'
       ? resultado.detalhes?.natural
       : null;
+    return ameacaCritico(natural, Math.max(2, item.margemAmeaca - (resumoEquipamento.bonusCombate.margemAmeaca || 0)));
+  };
+
+  const executarDano = async (item: IAtaque, opcoes: IOpcoesDano | null) => {
+    if (!podeRolar(item, false) || !item.dano) return;
     const margemEfetiva = Math.max(2, item.margemAmeaca - (resumoEquipamento.bonusCombate.margemAmeaca || 0));
     const multiplicadorEfetivo = item.multiplicadorCritico + (resumoEquipamento.bonusCombate.multiplicadorCritico || 0);
-    const critico = ameacaCritico(natural, margemEfetiva);
-    const bonusDano = resumoEquipamento.bonusCombate.dano || 0;
-    const formulaExtra = item.dano && bonusDano ? `${item.dano}${bonusDano > 0 ? '+' : ''}${bonusDano}` : item.dano;
-    const formulaCritica = critico ? formulaDanoCritico(formulaExtra, multiplicadorEfetivo) : null;
-    const formula = formulaCritica || formulaExtra;
+    const critico = opcoes ? opcoes.critico : criticoDoUltimoAtaque(item);
+    const montagem = montarDano({
+      dano: item.dano,
+      modificadorAtributo: opcoes ? (opcoes.atributoId ? modificadoresDosAtributos[opcoes.atributoId] ?? 0 : 0) : atributoDoDano(item)?.valor ?? 0,
+      bonusEquipamento: bonusDanoEquipamento,
+      ajusteCondicoes: ajusteDanoCondicoes(item),
+      bonusExtra: opcoes?.bonusExtra,
+      dadoExtra: opcoes?.dadoExtra,
+      critico,
+      multiplicadorCritico: multiplicadorEfetivo,
+    });
+    if (montagem.erro) {
+      avisar.aviso(montagem.erro);
+      return;
+    }
     setRolando(`${item.id}-dano`);
     try {
       const { registro } = await registrosApi.rolar({
-        campanhaId,
+        campanhaId: campanhaId as string,
         personagemId: character.id,
-        titulo: critico ? `Dano crítico x${item.multiplicadorCritico}: ${item.nome}` : `Dano: ${item.nome}`,
-        formula,
+        titulo: critico ? `Dano crítico x${multiplicadorEfetivo}: ${item.nome}` : `Dano: ${item.nome}`,
+        formula: montagem.formula,
         origem: {
           tipo: critico ? 'dano_critico' : 'dano',
           ataque_id: item.id,
-          formula_base: formulaExtra,
+          formula_base: montagem.formulaBase,
           margem_ameaca: margemEfetiva,
           multiplicador_critico: multiplicadorEfetivo,
         },
@@ -442,6 +566,12 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
           + Novo Ataque
         </button>
       </div>
+
+      <ConfigDanoAtaque
+        config={configDano}
+        atributoDaPericia={{ corpo: atributoPadraoDaPericia(TIPO_CORPO_A_CORPO), distancia: atributoPadraoDaPericia('Distância') }}
+        onChange={(config) => onUpdate(['ficha', 'danoAtaque'], config)}
+      />
 
       {/* LISTA */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4" data-tour="ataques-lista">
@@ -522,7 +652,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                       <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
                         <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Dano</span>
                         <span className="text-lg font-bold text-red-400 font-mono">
-                          {a.dano ? `${a.dano}${resumoEquipamento.bonusCombate.dano ? (resumoEquipamento.bonusCombate.dano > 0 ? `+${resumoEquipamento.bonusCombate.dano}` : resumoEquipamento.bonusCombate.dano) : ''}` : 'Não informado'}
+                          {a.dano ? formulaDanoDoCartao(a) : 'Não informado'}
                         </span>
                       </div>
                       <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
@@ -557,9 +687,19 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                             <span className="text-gray-600 normal-case font-normal">(natural {resultadoAtual.detalhes.natural})</span>
                           )}
                         </div>
-                        <span className={`text-2xl font-bold font-mono ${criticoAtual ? 'text-yellow-400' : 'text-white'}`}>
-                          {resultadoAtual.resultado}
-                        </span>
+                        <div className="text-right">
+                          <span className={`text-2xl font-bold font-mono ${criticoAtual ? 'text-yellow-400' : 'text-white'}`}>
+                            {resultadoAtual.resultado}
+                          </span>
+                          {resultadoAtual.tipo === 'dano' && resultadoAtual.detalhes?.formula && (
+                            <span className="block font-mono text-[10px] text-gray-600">{resultadoAtual.detalhes.formula}</span>
+                          )}
+                          {resultadoAtual.tipo === 'acerto' && resultadoAtual.detalhes?.extras && (
+                            <span className="block font-mono text-[10px] text-gray-600">
+                              extra {resultadoAtual.detalhes.extras.formula} [{(resultadoAtual.detalhes.extras.dados || []).join(', ')}]
+                            </span>
+                          )}
+                        </div>
                       </div>
                     )}
 
@@ -568,7 +708,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                       <div className="flex items-center gap-2">
                         {a.dano && (
                           <button
-                            onClick={() => rolarDano(a)}
+                            onClick={(evento) => pedirRolagem(a, 'dano', evento)}
                             disabled={rolando === `${a.id}-dano` || acertouAtual === false}
                             title={acertouAtual === false ? 'O ataque errou a Defesa informada.' : undefined}
                             className="px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50"
@@ -581,7 +721,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                           </button>
                         )}
                         <button
-                          onClick={() => rolarAcerto(a)}
+                          onClick={(evento) => pedirRolagem(a, 'acerto', evento)}
                           disabled={rolando === `${a.id}-acerto`}
                           className="px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/30 text-red-500 hover:bg-red-500/20 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50 hover:scale-105 disabled:hover:scale-100"
                         >
@@ -615,7 +755,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
             label="Tipo"
             value={form.tipo}
             options={TIPOS_ATAQUE}
-            onChange={(v: string) => setForm(f => ({ ...f, tipo: v }))}
+            onChange={(v: string) => setForm(f => ({ ...f, tipo: v, ...(editandoId ? {} : { somarForca: v === TIPO_CORPO_A_CORPO }) }))}
           />
           <div className="grid grid-cols-2 gap-4">
             <LabeledInput
@@ -631,6 +771,20 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
               onChange={(v: string) => setForm(f => ({ ...f, dano: v }))}
             />
           </div>
+          {!editandoInventario && (
+            <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/5 bg-[#121118] p-3">
+              <input
+                type="checkbox"
+                checked={form.somarForca}
+                onChange={(event) => setForm(f => ({ ...f, somarForca: event.target.checked }))}
+                className="mt-0.5 accent-red-500"
+              />
+              <span className="text-xs text-gray-400">
+                <strong className="block text-sm text-gray-200">Somar o modificador de atributo ao dano</strong>
+                O atributo vem da configuração "Atributo somado ao dano" da aba. Desmarque se a fórmula acima já inclui esse bônus.
+              </span>
+            </label>
+          )}
           <LabeledInput
             label="Alcance"
             value={form.alcance}
@@ -675,6 +829,49 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
           </div>
         </div>
       </FichaModal>
+
+      {(() => {
+        const alvo = ataques.find((a) => a.id === confirmacao?.id);
+        if (!alvo) return null;
+        const efetivo = ataqueComTipo(alvo);
+        const aoFechar = () => setConfirmacao(null);
+        const multiplicador = efetivo.multiplicadorCritico + (resumoEquipamento.bonusCombate.multiplicadorCritico || 0);
+        return (
+          <>
+            <ConfirmarAcertoModal
+              aberto={confirmacao?.tipo === 'acerto'}
+              onClose={aoFechar}
+              nomeArma={efetivo.nome}
+              partesBonus={detalharBonusAtaque(efetivo)}
+              vantagensAuto={vantagensAutomaticasAtaque(efetivo)}
+              desvantagensAuto={desvantagensAutomaticasDoAtaque(efetivo)}
+              defesaInicial={defesaAlvo}
+              inspirado={inspiradoAtivo(ficha.condicoesAtivas)}
+              hibrida={alvo.hibrida}
+              tipoUso={tipoUso}
+              onTipoUso={setTipoUso}
+              onConfirmar={(opcoes) => { aoFechar(); void executarAcerto(efetivo, opcoes); }}
+            />
+            <ConfirmarDanoModal
+              aberto={confirmacao?.tipo === 'dano'}
+              onClose={aoFechar}
+              nomeArma={efetivo.nome}
+              dano={efetivo.dano}
+              modificadores={modificadoresDosAtributos}
+              atributoInicial={regraDoDano(efetivo).atributoId}
+              somarInicial={regraDoDano(efetivo).ativo}
+              bonusEquipamento={bonusDanoEquipamento}
+              ajusteCondicoes={ajusteDanoCondicoes(efetivo)}
+              multiplicadorCritico={multiplicador}
+              criticoInicial={criticoDoUltimoAtaque(efetivo)}
+              hibrida={alvo.hibrida}
+              tipoUso={tipoUso}
+              onTipoUso={setTipoUso}
+              onConfirmar={(opcoes) => { aoFechar(); void executarDano(efetivo, opcoes); }}
+            />
+          </>
+        );
+      })()}
     </div>
   );
 };
