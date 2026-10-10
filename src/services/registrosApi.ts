@@ -25,6 +25,8 @@ export const registrosApi = {
     vantagens?: number;
     desvantagens?: number;
     dt?: number | null;
+    /** Dado ou bônus pontual somado ao teste de d20 (`1d4`, `-2`), sem mexer no d20 natural. */
+    dadosExtras?: string | null;
     formula?: string | null;
     origem?: Record<string, any>;
   }) {
@@ -38,6 +40,7 @@ export const registrosApi = {
         vantagens: payload.vantagens ?? 0,
         desvantagens: payload.desvantagens ?? 0,
         dt: payload.dt ?? null,
+        dados_extras: payload.dadosExtras?.trim() || null,
         formula: payload.formula ?? null,
         origem: payload.origem ?? {},
       },

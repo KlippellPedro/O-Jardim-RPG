@@ -2004,7 +2004,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>No máximo uma armadura principal, uma malha compatível por baixo e um escudo.</li>
         <li>A Defesa dessas três peças soma. Duas armaduras principais nunca somam, por mais criativa que seja a justificativa.</li>
         <li>A penalidade total de armadura cai sobre Acrobacia, Atletismo e Furtividade.</li>
-        <li>Sem proficiência no subtipo, a penalidade da peça dobra e você não usa habilidades que exijam proficiência.</li>
+        <li>Armadura e escudo simples qualquer um usa. Peça marcial sem a proficiência perde 2 de Defesa, tem a penalidade dobrada e não deixa você usar habilidades que exijam proficiência.</li>
       </ul>
 
       <p class="regras-note">Como a Resistência entra na conta do dano, em que ordem e o que cada tipo de dano cobre ficam no capítulo <strong>Tipos de Dano</strong>.</p>
@@ -2448,6 +2448,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Longo prazo', `${CONDICOES_LONGO_PRAZO.length} prontas`],
     ],
     corpo: `
+      <h3 class="regras-subtitle">Condição ou aflição?</h3>
+      <p><strong>Condição</strong> é um estado com efeito fixo, que termina pela duração, por uma ação ou pelo tratamento indicado. <strong>Aflição</strong> é veneno, doença ou vício: evolui por estágios, e a cada intervalo um teste de Fortitude decide se ela sobe, fica ou desce. Na dúvida, pergunte se o problema muda com o tempo e pede teste para melhorar. Se sim, é aflição.</p>
+      <p class="regras-note">A ficha aplica sozinha o que dá para calcular: Enfraquecido tira 2 em testes de Força e no dano corpo a corpo, Favorecido soma 1 em Fortitude, Reflexos e Vontade, Desorientado e Cego dão desvantagem onde o cartão manda, e Lento, Apressado e as lesões de perna mudam o Movimento. As lesões e sequelas com número fixo também entram: braço ou mão dominante, ombro, olho, pernas, costelas, mandíbula, concussão, tremor e congelamento. Sangramento, Queimando, Envenenado e Revigorado ganham um botão que rola o efeito do turno e já desconta a Resistência da ficha. Inspirado aparece na hora de rolar ataque ou perícia, e sai da ficha depois do teste. O que depende da cena, como "para escalar" ou "diante do gatilho", continua com a mesa.</p>
+
       <h3 class="regras-subtitle">Sanidade</h3>
       <div class="regras-formula">d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25</div>
       <ul class="regras-list">

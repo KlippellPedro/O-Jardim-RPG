@@ -4,11 +4,17 @@ import { nivelTotalFicha, opcoesHabilidadeSelecionadas } from './progressaoFicha
 import { CONJUNTOS_EQUIPAMENTO, type IBonusConjunto, type IConjuntoEquipamento } from '../../data/regras/conjuntos';
 import { resumirLimiteItensEspeciais } from './itensEspeciaisService';
 import { efeitosBrutosDoFrutoEden } from './frutoEdenAwakening';
+import { temProficienciaEquipamento } from '../pages/Ficha/utils/catalogoResistProf';
+
+/** Defesa perdida por armadura ou escudo marcial usado sem a proficiência. */
+export const PENALIDADE_DEFESA_SEM_PROFICIENCIA = 2;
 
 export interface IResumoEquipamento {
   defesaEquipamento: number;
   defesaItens: IDetalheEfeitoAutomatico[];
   penalidadeArmadura: number;
+  /** Nomes das peças marciais equipadas sem a proficiência (cada uma custa Defesa e dobra a própria penalidade). */
+  semProficienciaArmadura: string[];
   espacosUsados: number;
   capacidade: number;
   sobrecarregado: boolean;
@@ -286,6 +292,25 @@ export function capacidadeCarga(forca: number, nivel: number): number {
   return Math.max(5, 10 + Math.max(0, modificador) * 2 + Math.floor(Math.max(1, Number(nivel) || 1) / 2));
 }
 
+export type SlotEquipamento = 'arma' | 'armadura' | 'malha' | 'escudo';
+
+/**
+ * Em que vaga do corpo o item entra: uma armadura principal, uma malha por baixo, um escudo. Arma tem vaga própria.
+ * Devolve `null` para o que não ocupa vaga (consumíveis, implantes, bens).
+ */
+export function slotDeEquipamento(item: any): SlotEquipamento | null {
+  const categoria = item?.dados?.categoria;
+  if (categoria === 'arma') return 'arma';
+  if (categoria !== 'armadura') return null;
+  const ehEscudo = item?.dados?.categoria_protecao
+    ? item.dados.categoria_protecao === 'escudo'
+    // Peça comprada antes da separação escudo/armadura ainda não tem
+    // categoria_protecao: cai pro subtipo antigo ou pro título.
+    : String(item?.dados?.subtipo || item?.titulo || '').toLowerCase().includes('escudo');
+  if (ehEscudo) return 'escudo';
+  return String(item?.dados?.material || item?.titulo || '').toLowerCase().includes('malha') ? 'malha' : 'armadura';
+}
+
 export function resumirEquipamentos(
   inventarioCentral: any[],
   ficha: any,
@@ -431,25 +456,33 @@ export function resumirEquipamentos(
     }, true);
   });
   const armaduras = equipados.filter((item) => item?.dados?.categoria === 'armadura');
-  const escudos = armaduras.filter((item) => (
-    item?.dados?.categoria_protecao
-      ? item.dados.categoria_protecao === 'escudo'
-      // Peça comprada antes da separação escudo/armadura ainda não tem
-      // categoria_protecao: cai pro subtipo antigo ou pro título.
-      : String(item?.dados?.subtipo || item?.titulo || '').toLowerCase().includes('escudo')
-  ));
-  const malhas = armaduras.filter((item) => String(item?.dados?.material || item?.titulo || '').toLowerCase().includes('malha'));
-  const principais = armaduras.filter((item) => !escudos.includes(item) && !malhas.includes(item));
+  const escudos = armaduras.filter((item) => slotDeEquipamento(item) === 'escudo');
+  const malhas = armaduras.filter((item) => slotDeEquipamento(item) === 'malha');
+  const principais = armaduras.filter((item) => slotDeEquipamento(item) === 'armadura');
   if (principais.length > 1) conflitos.push('Equipe no máximo uma armadura principal.');
   if (escudos.length > 1) conflitos.push('Equipe no máximo um escudo.');
   if (malhas.length > 1) conflitos.push('Equipe no máximo uma malha sob a armadura.');
   const validas = [principais[0], malhas[0], escudos[0]].filter(Boolean);
+  // Armadura e escudo simples qualquer um usa; o marcial exige a proficiência.
+  // Sem ela, a peça perde Defesa e a penalidade dela dobra.
+  const semProficiencia = validas.filter((item) => (
+    String(item?.dados?.subtipo || '').toLowerCase() === 'marcial'
+    && !temProficienciaEquipamento(ficha?.proficiencias, escudos.includes(item) ? 'escudos' : 'armaduras', 'marcial')
+  ));
   const defesaItens = validas.flatMap((item) => {
     const valor = numero(item?.dados?.defesa ?? item?.dados?.bonus);
-    return valor === 0 ? [] : [{ nome: String(item?.titulo || 'Armadura ou escudo'), valor }];
+    const nome = String(item?.titulo || 'Armadura ou escudo');
+    const detalhes = valor === 0 ? [] : [{ nome, valor }];
+    if (semProficiencia.includes(item)) detalhes.push({ nome: `${nome}: sem proficiência`, valor: -PENALIDADE_DEFESA_SEM_PROFICIENCIA });
+    return detalhes;
   });
   const defesaEquipamento = defesaItens.reduce((total, item) => total + item.valor, 0);
-  const penalidadeArmadura = validas.reduce((total, item) => total + Math.abs(numero(item?.dados?.penalidade)), 0);
+  const penalidadeArmadura = validas.reduce((total, item) => (
+    total + Math.abs(numero(item?.dados?.penalidade)) * (semProficiencia.includes(item) ? 2 : 1)
+  ), 0);
+  semProficiencia.forEach((item) => conflitos.push(
+    `${String(item?.titulo || 'Peça')} é marcial e você não tem a proficiência: −${PENALIDADE_DEFESA_SEM_PROFICIENCIA} de Defesa e a penalidade da peça dobra.`,
+  ));
   const espacosUsados = itensPessoais.reduce((total, item) => total + Math.max(0, numero(item?.dados?.espacos ?? 1)) * Math.max(1, numero(item?.quantidade ?? 1)), 0);
   const raca = RACAS_CATALOGO.find((item) => item.id === ficha?.racaId);
   const atributosEfetivos = raca
@@ -460,6 +493,7 @@ export function resumirEquipamentos(
     defesaEquipamento,
     defesaItens,
     penalidadeArmadura,
+    semProficienciaArmadura: semProficiencia.map((item) => String(item?.titulo || 'Peça')),
     espacosUsados,
     capacidade,
     sobrecarregado: espacosUsados > capacidade,

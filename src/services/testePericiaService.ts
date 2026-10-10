@@ -2,7 +2,7 @@ import type { IRaca } from '../types/catalogo';
 import { aplicarAjustesAtributosRaciais, obterAjustesPericiasRaciais } from './calculoService';
 import { BONUS_GRAU, vantagensDoGrau } from './progressaoNiveis';
 import { resumirEquipamentos } from './equipamentoService';
-import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeCansacoTeste } from './statusService';
+import { desvantagensAutomaticasTeste, efeitosCondicoesNoTeste, obterStatusFicha, penalidadeCansacoTeste } from './statusService';
 import { ajusteOrigem, chaveAjuste, totalAjustesManuais } from './ajustesFichaService';
 import { ATRIBUTOS_PERICIA, grausComConcedidos, obterAtributoPericia } from './periciasFichaService';
 
@@ -50,9 +50,10 @@ export function calcularTestePericia(
   const armadura = ['acrobacia', 'atletismo', 'furtividade'].includes(periciaId) ? resumoEquipamento.penalidadeArmadura : 0;
   const cansaco = penalidadeCansacoTeste(status.cansacoAtual, fisico);
   const manual = (f.rolagensPericias || {})[periciaId] || { vantagens: 0, desvantagens: 0 };
+  const condicoes = efeitosCondicoesNoTeste(f.condicoesAtivas, { periciaId, atributoId: atributo });
 
   return {
-    bonus: modificador + metadeNivel + (BONUS_GRAU[grau] || 0) + racial + extra - armadura + cansaco,
+    bonus: modificador + metadeNivel + (BONUS_GRAU[grau] || 0) + racial + extra - armadura + cansaco + condicoes.bonus,
     vantagens: (Number(manual.vantagens) || 0)
       + (resumoEquipamento.vantagens[periciaId] || 0)
       + (resumoEquipamento.vantagens['testes'] || 0)
@@ -60,6 +61,7 @@ export function calcularTestePericia(
     desvantagens: (Number(manual.desvantagens) || 0)
       + desvantagensAutomaticasTeste(status.cansacoAtual, fisico, resumoEquipamento.sobrecarregado)
       + (resumoEquipamento.desvantagens[periciaId] || 0)
-      + (resumoEquipamento.desvantagens['testes'] || 0),
+      + (resumoEquipamento.desvantagens['testes'] || 0)
+      + condicoes.desvantagens,
   };
 }

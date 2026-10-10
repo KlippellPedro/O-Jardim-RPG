@@ -1,0 +1,56 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import {
+  aplicarEfeitoNaVida,
+  efeitoDoTurnoDaCondicao,
+  resolverDanoDoTurno,
+} from '../../src/services/efeitosDoTurnoService.ts';
+
+test('as quatro condições de turno são achadas por id ou por nome', () => {
+  assert.equal(efeitoDoTurnoDaCondicao({ id: 'sangramento' })?.formula, '1d6');
+  assert.equal(efeitoDoTurnoDaCondicao({ nome: 'Queimando' })?.resistenciaId, 'elemento-fogo');
+  assert.equal(efeitoDoTurnoDaCondicao({ id: 'x', nome: 'Envenenado' })?.tipo, 'dano');
+  assert.deepEqual(efeitoDoTurnoDaCondicao({ id: 'revigorado' }), { formula: '1d4', tipo: 'cura', rotulo: 'Revigorado' });
+  assert.equal(efeitoDoTurnoDaCondicao({ id: 'caido' }), null);
+  assert.equal(efeitoDoTurnoDaCondicao(null), null);
+  assert.equal(efeitoDoTurnoDaCondicao('sangramento'), null);
+});
+
+test('a Resistência do tipo certo tira do dano, até zero', () => {
+  const resistencias = [
+    { id: 'elemento-fogo', nome: 'Fogo', modo: 'resistencia', valor: 3, nota: '' },
+    { id: 'elemento-fogo', nome: 'Fogo', modo: 'resistencia', valor: 1, nota: 'anel' },
+    { id: 'corte', nome: 'Corte', modo: 'resistencia', valor: 5, nota: '' },
+  ];
+  assert.deepEqual(resolverDanoDoTurno(6, resistencias, 'elemento-fogo'), { final: 2, reduzido: 4, imune: false });
+  assert.deepEqual(resolverDanoDoTurno(2, resistencias, 'elemento-fogo'), { final: 0, reduzido: 2, imune: false });
+  assert.deepEqual(resolverDanoDoTurno(5, resistencias, 'sangramento'), { final: 5, reduzido: 0, imune: false });
+  assert.deepEqual(resolverDanoDoTurno(5, undefined, 'sangramento'), { final: 5, reduzido: 0, imune: false });
+});
+
+test('Imunidade zera o dano e Vulnerabilidade fica com a mesa', () => {
+  assert.deepEqual(
+    resolverDanoDoTurno(4, [{ id: 'veneno-dano', nome: 'Veneno', modo: 'imunidade', valor: null, nota: '' }], 'veneno-dano'),
+    { final: 0, reduzido: 4, imune: true },
+  );
+  assert.deepEqual(
+    resolverDanoDoTurno(4, [{ id: 'veneno-dano', nome: 'Veneno', modo: 'vulnerabilidade', valor: 2, nota: '' }], 'veneno-dano'),
+    { final: 4, reduzido: 0, imune: false },
+  );
+});
+
+test('o dano do turno tira Vida e pode levar a Morrendo; a cura não passa do máximo', () => {
+  assert.equal(aplicarEfeitoNaVida({ vidaAtual: 10 }, 'dano', 4, 20, 10).vidaAtual, 6);
+  const caindo = aplicarEfeitoNaVida({ vidaAtual: 2 }, 'dano', 5, 20, 10);
+  assert.equal(caindo.vidaAtual, -3);
+  assert.ok(Number(caindo.morrendo) >= 1);
+  assert.equal(aplicarEfeitoNaVida({ vidaAtual: 19 }, 'cura', 4, 20, 10).vidaAtual, 20);
+  const semMudar = { vidaAtual: 7 };
+  assert.equal(aplicarEfeitoNaVida(semMudar, 'dano', 0, 20, 10), semMudar);
+});
+
+test('Vida temporária absorve o dano do turno primeiro', () => {
+  const r = aplicarEfeitoNaVida({ vidaAtual: 10, vidaTemporaria: 3 }, 'dano', 5, 20, 10);
+  assert.equal(r.vidaTemporaria, 0);
+  assert.equal(r.vidaAtual, 8);
+});

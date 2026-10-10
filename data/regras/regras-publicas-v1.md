@@ -1838,7 +1838,7 @@ Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋, mínimo 
 
 - A penalidade total de armadura cai sobre Acrobacia, Atletismo e Furtividade.
 
-- Sem proficiência no subtipo, a penalidade da peça dobra e você não usa habilidades que exijam proficiência.
+- Armadura e escudo simples qualquer um usa. Peça marcial sem a proficiência perde 2 de Defesa, tem a penalidade dobrada e não deixa você usar habilidades que exijam proficiência.
 
 Como a Resistência entra na conta do dano, em que ordem e o que cada tipo de dano cobre ficam no capítulo **Tipos de Dano**.
 
@@ -3076,6 +3076,12 @@ Os filtros abaixo reúnem magias, manifestações de cada Fluxo, rituais, selos,
 **Status:** Regra oficial
 
 Sanidade, crises e as condições que ficam grudadas no personagem, cada uma com o que faz e como sai.
+
+### Condição ou aflição?
+
+**Condição** é um estado com efeito fixo, que termina pela duração, por uma ação ou pelo tratamento indicado. **Aflição** é veneno, doença ou vício: evolui por estágios, e a cada intervalo um teste de Fortitude decide se ela sobe, fica ou desce. Na dúvida, pergunte se o problema muda com o tempo e pede teste para melhorar. Se sim, é aflição.
+
+A ficha aplica sozinha o que dá para calcular: Enfraquecido tira 2 em testes de Força e no dano corpo a corpo, Favorecido soma 1 em Fortitude, Reflexos e Vontade, Desorientado e Cego dão desvantagem onde o cartão manda, e Lento, Apressado e as lesões de perna mudam o Movimento. As lesões e sequelas com número fixo também entram: braço ou mão dominante, ombro, olho, pernas, costelas, mandíbula, concussão, tremor e congelamento. Sangramento, Queimando, Envenenado e Revigorado ganham um botão que rola o efeito do turno e já desconta a Resistência da ficha. Inspirado aparece na hora de rolar ataque ou perícia, e sai da ficha depois do teste. O que depende da cena, como "para escalar" ou "diante do gatilho", continua com a mesa.
 
 ### Sanidade
 

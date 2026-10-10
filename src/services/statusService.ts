@@ -139,21 +139,26 @@ export function adicionarCondicaoOficial(
  * explicitamente por pedido de auditoria (2026-08): nenhuma automação nova foi
  * criada, isto só documenta o que já existia.
  *
- * Automatizadas aqui (Defesa/Iniciativa/movimento/ataque):
+ * Automatizadas aqui (Defesa/Iniciativa/movimento/ataque/testes):
  *  - Atordoado, Inconsciente, Paralisado, Exposto, crise Fúria → penalidadeDefesaCondicoes
  *  - Resguardado → bonusDefesaCondicoes
  *  - Surpreendido, Lento, Apressado → penalidadeIniciativaCondicoes
  *  - Caído → penalidadeAtaqueCondicoes
  *  - Agarrado, Imobilizado, Paralisado, Inconsciente → movimentoBloqueadoPorCondicao
+ *  - Lento, Perna Quebrada e Perda de uma Perna (metade) e Apressado (+3 m) → movimentoComCondicoes
+ *  - Testes e ataques (tabela REGRAS_TESTE_CONDICOES → efeitosCondicoesNoTeste): Enfraquecido,
+ *    Favorecido, Desorientado, Cego, e as lesões e sequelas de longo prazo que têm número fixo
+ *    e valem sempre (mãos, braços, olho, pernas, costelas, mandíbula, concussão, tremor, congelamento)
+ *  - Enfraquecido (−2 no dano corpo a corpo) → penalidadeDanoCorpoACorpoCondicoes
+ *  - Inspirado (+2 num teste, consumido) → oferecido na hora de rolar ataque e perícia
+ *  - Sangramento, Queimando, Envenenado e Revigorado → botão de turno (efeitosDoTurnoService)
  *
  * Só informativas aqui (efeito descrito em condicoes.ts, aplicado na mesa,
- * não calculado por nenhuma função deste arquivo):
- *  - Sangramento, Queimando e Envenenado (dano periódico), Cego (desvantagem em
- *    teste visual), Concentrando (teste de Vontade ao sofrer dano), Amedrontado,
- *    Caído (efeito sobre quem ataca você), Lento e Apressado (Movimento, que
- *    depende do que a mesa decide), Enfraquecido, Silenciado, Desorientado,
- *    Inspirado, Favorecido, Focado, Revigorado, e as 5 crises de sanidade além
- *    de Fúria.
+ * não calculado por nenhuma função deste arquivo): o que depende da cena,
+ * como "para escalar", "contra fumaça", "diante do gatilho" ou "com armadura
+ * pesada"; Concentrando, Amedrontado, Silenciado, Focado (+2 em Vontade só
+ * contra efeito mental), os transtornos, as fobias, e as crises de sanidade
+ * além de Fúria.
  */
 export function penalidadeDefesaCondicoes(condicoes: unknown): number {
   const ids = idsCondicoes(condicoes);
@@ -204,6 +209,157 @@ export function bonusIniciativaFicha(ficha: Record<string, any> | null | undefin
 
 export function penalidadeAtaqueCondicoes(condicoes: unknown): number {
   return condicaoAtiva(condicoes, 'caido') ? -2 : 0;
+}
+
+export interface IEfeitoCondicaoTeste {
+  bonus: number;
+  vantagens: number;
+  desvantagens: number;
+  /** Uma linha por condição que mexeu no bônus, para a ficha mostrar de onde veio o número. */
+  partes: Array<{ nome: string; valor: number }>;
+  /** Nome das condições que deram desvantagem. */
+  fontesDesvantagem: string[];
+}
+
+export type TipoAtaqueCondicao = 'corpo' | 'distancia';
+
+interface IRegraTesteCondicao {
+  /** Perícias afetadas. */
+  pericias?: string[];
+  /** Todo teste que usa este atributo como base. */
+  atributo?: string;
+  /** Rolagem de ataque: todas, só corpo a corpo ou só à distância. */
+  ataque?: 'todos' | TipoAtaqueCondicao;
+  bonus?: number;
+  desvantagem?: boolean;
+  /** Regras com o mesmo grupo não somam entre si, como duas condições que tiram 2 da mesma mão. */
+  grupo?: string;
+}
+
+/**
+ * Efeitos de condição que a ficha calcula sozinha em testes e ataques. Só entra o que tem número fixo e vale sempre;
+ * o que depende da cena ("para escalar", "contra fumaça", "diante do gatilho") fica com a mesa.
+ * O texto de cada condição continua em data/regras/condicoes.ts e condicoes-longo-prazo.ts.
+ */
+export const REGRAS_TESTE_CONDICOES: Readonly<Record<string, { nome: string; regras: IRegraTesteCondicao[] }>> = {
+  enfraquecido: { nome: 'Enfraquecido', regras: [{ atributo: 'forca', bonus: -2 }] },
+  favorecido: { nome: 'Favorecido', regras: [{ pericias: ['fortitude', 'reflexos', 'vontade'], bonus: 1 }] },
+  desorientado: { nome: 'Desorientado', regras: [{ ataque: 'todos', desvantagem: true }, { pericias: ['percepcao'], desvantagem: true }] },
+  cego: { nome: 'Cego', regras: [{ pericias: ['percepcao'], desvantagem: true, grupo: 'visao' }] },
+  'cegueira-permanente': { nome: 'Cegueira Permanente', regras: [{ pericias: ['percepcao'], desvantagem: true, grupo: 'visao' }] },
+  'braco-dominante-quebrado': { nome: 'Braço Dominante Quebrado', regras: [{ ataque: 'todos', bonus: -2, grupo: 'mao-dominante' }] },
+  'perda-mao-dominante': { nome: 'Perda da Mão Dominante', regras: [{ ataque: 'todos', bonus: -2, grupo: 'mao-dominante' }] },
+  'ombro-deslocado': { nome: 'Ombro Deslocado', regras: [{ ataque: 'corpo', desvantagem: true }] },
+  'perda-olho': { nome: 'Perda de um Olho', regras: [{ ataque: 'distancia', bonus: -2 }, { pericias: ['percepcao'], bonus: -2 }] },
+  'perna-quebrada': { nome: 'Perna Quebrada', regras: [{ pericias: ['acrobacia', 'furtividade'], desvantagem: true, grupo: 'perna' }] },
+  'perda-perna': { nome: 'Perda de uma Perna', regras: [{ pericias: ['acrobacia', 'furtividade'], desvantagem: true, grupo: 'perna' }] },
+  'tornozelo-torcido': { nome: 'Tornozelo Torcido', regras: [{ pericias: ['acrobacia'], desvantagem: true }] },
+  manqueira: { nome: 'Manqueira', regras: [{ pericias: ['acrobacia'], desvantagem: true }] },
+  'costelas-fraturadas': { nome: 'Costelas Fraturadas', regras: [{ pericias: ['atletismo'], bonus: -2 }] },
+  'mao-fraturada': { nome: 'Mão Fraturada', regras: [{ pericias: ['ladinagem', 'pontaria'], desvantagem: true }] },
+  congelamento: { nome: 'Congelamento', regras: [{ pericias: ['ladinagem', 'pontaria'], desvantagem: true }] },
+  'tremor-nas-maos': { nome: 'Tremor nas Mãos', regras: [{ pericias: ['ladinagem', 'pontaria'], desvantagem: true }] },
+  'mandibula-quebrada': { nome: 'Mandíbula Quebrada', regras: [{ pericias: ['diplomacia', 'atuacao', 'intimidacao'], desvantagem: true }] },
+  concussao: { nome: 'Concussão', regras: [{ pericias: ['percepcao', 'investigacao', 'conhecimento'], desvantagem: true }] },
+};
+
+/** A condição está na ficha, salva pelo id ou pelo nome. */
+function condicaoNaFicha(ids: Set<string>, id: string, nome: string): boolean {
+  return ids.has(id) || ids.has(normalizarIdentificador(nome));
+}
+
+/**
+ * O que as condições em vigor somam, tiram ou dão de desvantagem num teste. `atributoId` é o atributo base da
+ * perícia (Enfraquecido mexe em tudo que usa Força), `ataque` marca a rolagem de acerto e `tipoAtaque` separa
+ * corpo a corpo de à distância.
+ */
+export function efeitosCondicoesNoTeste(
+  condicoes: unknown,
+  contexto: { periciaId?: string; atributoId?: string; ataque?: boolean; tipoAtaque?: TipoAtaqueCondicao },
+): IEfeitoCondicaoTeste {
+  const ids = idsCondicoes(condicoes);
+  const pericia = contexto.periciaId || '';
+  const partes: Array<{ nome: string; valor: number }> = [];
+  const fontesDesvantagem: string[] = [];
+  const gruposUsados = new Set<string>();
+  let bonus = 0;
+
+  for (const [id, { nome, regras }] of Object.entries(REGRAS_TESTE_CONDICOES)) {
+    if (!condicaoNaFicha(ids, id, nome)) continue;
+    for (const regra of regras) {
+      const vale = (regra.pericias?.includes(pericia) ?? false)
+        || (regra.atributo !== undefined && regra.atributo === contexto.atributoId)
+        || (regra.ataque !== undefined && Boolean(contexto.ataque)
+          && (regra.ataque === 'todos' || regra.ataque === contexto.tipoAtaque));
+      if (!vale) continue;
+      if (regra.grupo) {
+        if (gruposUsados.has(regra.grupo)) continue;
+        gruposUsados.add(regra.grupo);
+      }
+      if (regra.bonus) {
+        bonus += regra.bonus;
+        partes.push({ nome, valor: regra.bonus });
+      }
+      if (regra.desvantagem) fontesDesvantagem.push(nome);
+    }
+  }
+  return { bonus, vantagens: 0, desvantagens: fontesDesvantagem.length, partes, fontesDesvantagem };
+}
+
+/** Enfraquecido tira 2 do dano de ataques corpo a corpo. */
+export function penalidadeDanoCorpoACorpoCondicoes(condicoes: unknown): number {
+  return condicaoAtiva(condicoes, 'enfraquecido') ? -2 : 0;
+}
+
+/** Condições que cortam o Movimento pela metade. Lento só vale quando Apressado não está junto. */
+const METADE_DO_MOVIMENTO: ReadonlyArray<[string, string]> = [
+  ['perna-quebrada', 'Perna Quebrada'],
+  ['perda-perna', 'Perda de uma Perna'],
+];
+
+function efeitoNoMovimento(condicoes: unknown): { metade: string[]; apressado: boolean; anulados: boolean } {
+  const ids = idsCondicoes(condicoes);
+  const lento = condicaoAtiva(condicoes, 'lento');
+  const apressado = condicaoAtiva(condicoes, 'apressado');
+  const metade = METADE_DO_MOVIMENTO.filter(([id, nome]) => condicaoNaFicha(ids, id, nome)).map(([, nome]) => nome);
+  if (lento && !apressado) metade.unshift('Lento');
+  return { metade, apressado: apressado && !lento, anulados: lento && apressado };
+}
+
+/**
+ * Movimento depois das condições: Lento e as lesões de perna cortam pela metade (uma vez só, não empilha) e
+ * Apressado soma 3 m. Lento e Apressado juntos se anulam. Quem não pode se mover (Agarrado, Paralisado...)
+ * continua tratado em `movimentoBloqueadoPorCondicao`.
+ */
+export function movimentoComCondicoes(movimento: number, condicoes: unknown): number {
+  const efeito = efeitoNoMovimento(condicoes);
+  let resultado = efeito.metade.length > 0 ? Math.floor(movimento / 2) : movimento;
+  if (efeito.apressado) resultado += 3;
+  return resultado;
+}
+
+/** Frase curta para o cálculo do Movimento: o que as condições fizeram. Vazio quando nenhuma vale. */
+export function textoMovimentoCondicoes(condicoes: unknown): string {
+  const efeito = efeitoNoMovimento(condicoes);
+  const partes: string[] = [];
+  if (efeito.metade.length > 0) partes.push(`${efeito.metade.join(' e ')}: metade`);
+  if (efeito.apressado) partes.push('Apressado: +3 m');
+  if (efeito.anulados) partes.push('Lento e Apressado se anulam');
+  return partes.join('; ');
+}
+
+/** Inspirado: +2 num teste à escolha de quem joga, e a condição acaba depois dele. */
+export const BONUS_INSPIRADO = 2;
+
+export function inspiradoAtivo(condicoes: unknown): boolean {
+  return condicaoAtiva(condicoes, 'inspirado');
+}
+
+/** Tira uma condição da lista salva na ficha, achada por id ou nome. */
+export function removerCondicao(condicoes: unknown, id: string): unknown[] {
+  const lista = Array.isArray(condicoes) ? condicoes : [];
+  const alvo = normalizarIdentificador(id);
+  return lista.filter((item) => !idsCondicoes([item]).has(alvo));
 }
 
 export function movimentoBloqueadoPorCondicao(condicoes: unknown): boolean {
