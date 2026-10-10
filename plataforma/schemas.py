@@ -921,8 +921,10 @@ class RollInput(BaseModel):
     vantagens: int = Field(default=0, ge=0, le=9)
     desvantagens: int = Field(default=0, ge=0, le=9)
     dt: int | None = Field(default=None, ge=1, le=60)
+    # Dado ou bônus extra somado ao teste de d20 (`1d4`, `-2`); não afeta o d20 natural.
+    dados_extras: str | None = Field(default=None, max_length=30)
     # Preenchido para dano/cura; quando presente, ignora o teste de d20.
-    formula: str | None = Field(default=None, max_length=20)
+    formula: str | None = Field(default=None, max_length=60)
     origem: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("titulo")

@@ -125,14 +125,21 @@ def rolar(
                 raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(erro)) from None
             tipo, formula_usada = "dano", dados["formula"]
         else:
-            dados = rolar_teste(
-                payload.bonus,
-                payload.vantagens,
-                payload.desvantagens,
-                payload.dt,
-            )
+            try:
+                dados = rolar_teste(
+                    payload.bonus,
+                    payload.vantagens,
+                    payload.desvantagens,
+                    payload.dt,
+                    payload.dados_extras,
+                )
+            except ValueError as erro:
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(erro)) from None
             tipo = "rolagem"
             formula_usada = f"d20{payload.bonus:+d}" if payload.bonus else "d20"
+            if dados.get("extras"):
+                extra = dados["extras"]["formula"]
+                formula_usada += extra if extra[0] in "+-" else f"+{extra}"
 
         sessao = _sessao_atual(connection, payload.campanha_id)
         registro = _gravar(

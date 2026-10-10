@@ -956,7 +956,7 @@ def validar_regras_ficha(
         # continua caindo no "raca inexistente"/liberação acima se não bater).
         if raca.get("categoria") != "esquecida" or raca_id not in liberados_raca:
             return "jogador so pode trocar de raca para uma raca especial liberada pelo mestre"
-    for campo in ("proficiencias", "resistenciasTexto"):
+    for campo in ("proficiencias", "resistencias", "resistenciasTexto"):
         if not criacao and ficha.get(campo) != anterior.get(campo):
             return f"somente o mestre pode alterar {campo}"
     if not criacao:

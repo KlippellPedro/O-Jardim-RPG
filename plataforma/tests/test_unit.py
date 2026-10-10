@@ -805,6 +805,33 @@ class DadosTests(unittest.TestCase):
         resultado = rolar_teste(7)
         self.assertEqual(resultado["total"], resultado["natural"] + 7)
 
+    def test_dado_extra_soma_no_total_sem_mexer_no_d20_natural(self):
+        for _ in range(200):
+            resultado = rolar_teste(3, extras="1d4")
+            extra = resultado["extras"]
+            self.assertEqual(extra["formula"], "1d4")
+            self.assertEqual(len(extra["dados"]), 1)
+            self.assertTrue(1 <= extra["total"] <= 4)
+            self.assertEqual(resultado["total"], resultado["natural"] + 3 + extra["total"])
+            self.assertEqual(resultado["critico_natural"], resultado["natural"] == 20)
+
+    def test_bonus_extra_fixo_e_negativo_valem_como_dado_extra(self):
+        resultado = rolar_teste(0, extras="-2")
+        self.assertEqual(resultado["total"], resultado["natural"] - 2)
+        self.assertEqual(rolar_teste(0)["natural"] >= 1, True)
+        self.assertNotIn("extras", rolar_teste(0))
+        self.assertNotIn("extras", rolar_teste(0, extras="  "))
+
+    def test_dado_extra_invalido_e_recusado(self):
+        with self.assertRaises(ValueError):
+            rolar_teste(0, extras="3#d4")
+        with self.assertRaises(ValueError):
+            rolar_teste(0, extras="abc")
+
+    def test_dado_extra_conta_na_classificacao_contra_a_dt(self):
+        resultado = rolar_teste(0, dt=2, extras="+100")
+        self.assertIn(resultado["grau"], {"sucesso", "sucesso critico", "falha critica"})
+
     def test_classificacao_contra_a_dt(self):
         self.assertEqual(_classificar(25, 10, 15), "sucesso")
         self.assertEqual(_classificar(15, 10, 15), "sucesso")

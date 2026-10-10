@@ -49,8 +49,18 @@ def rolar_dado(faces: int) -> int:
     return secrets.randbelow(faces) + 1
 
 
-def rolar_teste(bonus: int, vantagens: int = 0, desvantagens: int = 0, dt: int | None = None) -> dict:
-    """Teste de d20 do sistema, já classificado contra a DT quando informada."""
+def rolar_teste(
+    bonus: int,
+    vantagens: int = 0,
+    desvantagens: int = 0,
+    dt: int | None = None,
+    extras: str | None = None,
+) -> dict:
+    """Teste de d20 do sistema, já classificado contra a DT quando informada.
+
+    `extras` é um dado ou bônus pontual que entra na soma sem mexer no d20 natural
+    (por exemplo `1d4` de uma bênção): crítico e falha natural seguem só o d20.
+    """
     saldo = (vantagens or 0) - (desvantagens or 0)
     dados = [rolar_dado(20)] if saldo == 0 else [rolar_dado(20), rolar_dado(20)]
     if saldo > 0:
@@ -64,6 +74,13 @@ def rolar_teste(bonus: int, vantagens: int = 0, desvantagens: int = 0, dt: int |
         modo = "normal"
 
     total = natural + bonus
+    detalhe_extras = None
+    if extras and extras.strip():
+        if "#" in extras:
+            raise ExpressaoInvalida("o dado extra não aceita repetição com #.")
+        extra = rolar_formula(extras)
+        total += extra["total"]
+        detalhe_extras = {"formula": extra["formula"], "dados": extra["dados"], "total": extra["total"]}
     resultado = {
         "dados": dados,
         "natural": natural,
@@ -73,6 +90,8 @@ def rolar_teste(bonus: int, vantagens: int = 0, desvantagens: int = 0, dt: int |
         "critico_natural": natural == 20,
         "falha_natural": natural == 1,
     }
+    if detalhe_extras:
+        resultado["extras"] = detalhe_extras
     if dt is not None:
         resultado["dt"] = dt
         resultado["grau"] = _classificar(total, natural, dt)
