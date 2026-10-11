@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { rotuloDoEvento, somarMes, textoEmDias } from '../../src/pages/Mundo/calendarioMundo';
 import { larguraDasFaixas } from '../../src/components/ui/rasuraUtil';
+import { ApiError, MENSAGEM_RESPOSTA_INCOMPLETA } from '../../src/services/apiClient';
+import { calendarioMundoApi, detalheTecnico } from '../../src/services/calendarioMundoApi';
 
 test('navegar entre meses vira o ano nos dois sentidos', () => {
   assert.deepEqual(somarMes(3, 9, 1), { ano: 4, mes: 0 });
@@ -103,4 +105,116 @@ test('tempoDesde escreve o tempo passado em portugues curto', async () => {
   assert.equal(tempoDesde('2026-09-24T11:55:00Z', agora), 'há 5 min');
   assert.equal(tempoDesde('2026-09-24T09:00:00Z', agora), 'há 3 h');
   assert.equal(tempoDesde('2026-09-21T12:00:00Z', agora), 'há 3 dias');
+});
+
+// ---------------------------------------------------------------- ler o calendário sem quebrar a tela
+
+const CALENDARIO_MINIMO = {
+  hoje: { ano: 1, mes: 0, dia: 1 },
+  mes: { ano: 1, mes: 0, nome: 'Gênese', dias: [] },
+  proximos: [],
+  gestor: false,
+};
+const jsonDoCalendario = () => new Response(JSON.stringify(CALENDARIO_MINIMO), { status: 200, headers: { 'content-type': 'application/json' } });
+const htmlNoLugar = () => new Response('<!doctype html><html></html>', { status: 200, headers: { 'content-type': 'text/html; charset=utf-8' } });
+
+/** Troca o fetch por uma fila de respostas (a última se repete) e conta as chamadas. */
+const comRespostas = (fila: Array<() => Response>) => {
+  const fetchOriginal = globalThis.fetch;
+  (globalThis as { document?: unknown }).document = { cookie: '' };
+  let chamadas = 0;
+  globalThis.fetch = (async () => {
+    const resposta = fila[Math.min(chamadas, fila.length - 1)];
+    chamadas += 1;
+    return resposta();
+  }) as typeof fetch;
+  return {
+    chamadas: () => chamadas,
+    restaurar: () => {
+      globalThis.fetch = fetchOriginal;
+      delete (globalThis as { document?: unknown }).document;
+    },
+  };
+};
+
+test('o calendário chega na primeira tentativa quando a resposta é boa', async () => {
+  const rede = comRespostas([jsonDoCalendario]);
+  try {
+    const calendario = await calendarioMundoApi.obter('c1');
+    assert.equal(calendario.mes.nome, 'Gênese');
+    assert.equal(rede.chamadas(), 1);
+  } finally {
+    rede.restaurar();
+  }
+});
+
+test('resposta cortada ou trocada por HTML ganha uma segunda tentativa, e a segunda boa resolve', async () => {
+  for (const ruim of [htmlNoLugar, () => new Response('{"hoje":', { status: 200, headers: { 'content-type': 'application/json' } })]) {
+    const rede = comRespostas([ruim, jsonDoCalendario]);
+    try {
+      const calendario = await calendarioMundoApi.obter('c1', 1, 3);
+      assert.equal(calendario.hoje.dia, 1);
+      assert.equal(rede.chamadas(), 2);
+    } finally {
+      rede.restaurar();
+    }
+  }
+});
+
+test('se as duas tentativas vierem sem calendário, o erro diz o que o navegador recebeu', async () => {
+  const rede = comRespostas([htmlNoLugar]);
+  try {
+    await assert.rejects(
+      () => calendarioMundoApi.obter('c1'),
+      (erro: unknown) => erro instanceof ApiError
+        && erro.message === MENSAGEM_RESPOSTA_INCOMPLETA
+        && detalheTecnico(erro) === 'HTTP 200 · text/html; charset=utf-8 · tipo inesperado',
+    );
+    assert.equal(rede.chamadas(), 2, 'uma tentativa a mais, não um laço');
+  } finally {
+    rede.restaurar();
+  }
+});
+
+test('JSON de outro formato (sem mes e hoje) também é erro legível, não um quebra-tela', async () => {
+  const rede = comRespostas([() => new Response('{"ok":true}', { status: 200, headers: { 'content-type': 'application/json' } })]);
+  try {
+    await assert.rejects(
+      () => calendarioMundoApi.obter('c1'),
+      (erro: unknown) => erro instanceof ApiError && detalheTecnico(erro) === 'application/json · formato inesperado',
+    );
+  } finally {
+    rede.restaurar();
+  }
+});
+
+test('erro do servidor (403, 404, 500) não tenta de novo e mantém a mensagem dele', async () => {
+  for (const status of [403, 404, 500]) {
+    const rede = comRespostas([() => new Response(JSON.stringify({ detail: 'o calendario do mundo ainda nao foi liberado' }), { status, headers: { 'content-type': 'application/json' } })]);
+    try {
+      await assert.rejects(
+        () => calendarioMundoApi.obter('c1'),
+        (erro: unknown) => erro instanceof ApiError && erro.status === status && erro.message === 'o calendario do mundo ainda nao foi liberado',
+      );
+      assert.equal(rede.chamadas(), 1, `status ${status}`);
+    } finally {
+      rede.restaurar();
+    }
+  }
+});
+
+test('ação do Mestre sem corpo de calendário avisa, e não repete (agir duas vezes não é a mesma coisa)', async () => {
+  const rede = comRespostas([htmlNoLugar]);
+  try {
+    await assert.rejects(() => calendarioMundoApi.avancar('c1', 3), (erro: unknown) => erro instanceof ApiError && erro.status === 0);
+    assert.equal(rede.chamadas(), 1);
+  } finally {
+    rede.restaurar();
+  }
+});
+
+test('detalheTecnico só fala de resposta sem corpo; o resto do erro fica quieto', () => {
+  assert.equal(detalheTecnico(new Error('qualquer')), '');
+  assert.equal(detalheTecnico(new ApiError('o servidor disse não', 403, 'texto solto')), '');
+  assert.equal(detalheTecnico(new ApiError('x', 0, { http: 0, tipo: 'application/json', motivo: 'corpo vazio' })), 'application/json · corpo vazio');
 });

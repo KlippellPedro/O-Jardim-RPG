@@ -1,4 +1,4 @@
-import { api, ApiError } from './apiClient';
+import { api, ApiError, MENSAGEM_DEMORA, MENSAGEM_RESPOSTA_INCOMPLETA, type IDetalheDeRespostaVazia } from './apiClient';
 
 export type ChaveEstacao = 'primavera' | 'verao' | 'outono' | 'inverno' | 'noite_eterna' | 'eclipse';
 export type Revelacao = 'oculto' | 'rasurado' | 'aberto';
@@ -135,41 +135,71 @@ export interface INovoEvento {
 
 const base = (campanhaId: string) => `/calendario/${encodeURIComponent(campanhaId)}`;
 
-/** Resposta que não é um calendário (corpo vazio ou que não é JSON, comum com o servidor fora do ar
- * ou numa versão diferente do site) vira erro legível, em vez de quebrar quem lê `.mes` e `.hoje`. */
+/** Resposta "ok" com JSON que não é um calendário vira erro legível, em vez de quebrar quem lê `.mes` e `.hoje`. */
 function garantirCalendario(resposta: ICalendarioMundo | null | undefined): ICalendarioMundo {
   if (!resposta || !resposta.mes || !resposta.hoje) {
-    throw new ApiError('O servidor devolveu uma resposta vazia para o calendário. Recarregue a página; se continuar, avise o Criador.', 0);
+    const detalhes: IDetalheDeRespostaVazia = { http: 0, tipo: 'application/json', motivo: 'formato inesperado' };
+    throw new ApiError(MENSAGEM_RESPOSTA_INCOMPLETA, 0, detalhes);
   }
   return resposta;
 }
 
+/** Uma linha com o que o navegador recebeu (status, tipo e o que faltou), para quem for ajudar a achar o defeito. */
+export function detalheTecnico(erro: unknown): string {
+  if (!(erro instanceof ApiError)) return '';
+  const detalhes = erro.details as Partial<IDetalheDeRespostaVazia> | null;
+  if (!detalhes || typeof detalhes !== 'object' || typeof detalhes.tipo !== 'string') return '';
+  return [detalhes.http ? `HTTP ${detalhes.http}` : '', detalhes.tipo, detalhes.motivo].filter(Boolean).join(' · ');
+}
+
+const PAUSA_ENTRE_TENTATIVAS_MS = 600;
+const esperar = (ms: number) => new Promise<void>((resolver) => setTimeout(resolver, ms));
+
+/** Falha que costuma passar sozinha: a resposta não chegou inteira ou a rede piscou. Demora e erro do servidor ficam de fora. */
+const valeTentarDeNovo = (erro: unknown) => erro instanceof ApiError && erro.status === 0 && erro.message !== MENSAGEM_DEMORA;
+
+/** Ler o calendário não muda nada, então uma segunda tentativa é segura. */
+async function lerCalendario(caminho: string): Promise<ICalendarioMundo> {
+  const uma = async () => garantirCalendario(await api<ICalendarioMundo>(caminho, { exigirCorpo: true }));
+  try {
+    return await uma();
+  } catch (erro) {
+    if (!valeTentarDeNovo(erro)) throw erro;
+    await esperar(PAUSA_ENTRE_TENTATIVAS_MS);
+    return uma();
+  }
+}
+
+/** Ação do Mestre: o servidor devolve o calendário novo. Sem segunda tentativa, porque agir duas vezes não é a mesma coisa. */
+const mudar = async (caminho: string, method: string, body?: unknown) =>
+  garantirCalendario(await api<ICalendarioMundo>(caminho, { method, body, exigirCorpo: true }));
+
 // As regras e o recorte por papel são do servidor: evento rasurado chega sem texto.
 export const calendarioMundoApi = {
-  obter: async (campanhaId: string, ano?: number, mes?: number) => {
+  obter: (campanhaId: string, ano?: number, mes?: number) => {
     const consulta = ano !== undefined && mes !== undefined ? `?ano=${ano}&mes=${mes}` : '';
-    return garantirCalendario(await api<ICalendarioMundo>(`${base(campanhaId)}${consulta}`));
+    return lerCalendario(`${base(campanhaId)}${consulta}`);
   },
   definirHoje: (campanhaId: string, dados: { ano: number; mes: number; dia: number }) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/hoje`, { method: 'PUT', body: dados }),
+    mudar(`${base(campanhaId)}/hoje`, 'PUT', dados),
   avancar: (campanhaId: string, dias: number) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/avancar`, { method: 'POST', body: { dias } }),
+    mudar(`${base(campanhaId)}/avancar`, 'POST', { dias }),
   estacaoEspecial: (campanhaId: string, estacao: ChaveEstacao | null) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/estacao-especial`, { method: 'PUT', body: { estacao } }),
+    mudar(`${base(campanhaId)}/estacao-especial`, 'PUT', { estacao }),
   config: (campanhaId: string, dados: { meses?: string[]; sincronizar_discord?: boolean; eventos_desligados?: string[] }) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/config`, { method: 'PUT', body: dados }),
+    mudar(`${base(campanhaId)}/config`, 'PUT', dados),
   desfazer: (campanhaId: string) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/desfazer`, { method: 'POST' }),
+    mudar(`${base(campanhaId)}/desfazer`, 'POST'),
   revelarPassados: (campanhaId: string) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/revelar-passados`, { method: 'POST' }),
+    mudar(`${base(campanhaId)}/revelar-passados`, 'POST'),
   criarDiaExtra: (campanhaId: string, dados: { mes: number; nome: string; descricao: string }) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/dias-extras`, { method: 'POST', body: dados }),
+    mudar(`${base(campanhaId)}/dias-extras`, 'POST', dados),
   apagarDiaExtra: (campanhaId: string, mes: number) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/dias-extras/${mes}`, { method: 'DELETE' }),
+    mudar(`${base(campanhaId)}/dias-extras/${mes}`, 'DELETE'),
   criarEvento: (campanhaId: string, dados: INovoEvento) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/eventos`, { method: 'POST', body: dados }),
+    mudar(`${base(campanhaId)}/eventos`, 'POST', dados),
   editarEvento: (campanhaId: string, id: string, dados: Partial<INovoEvento>) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/eventos/${encodeURIComponent(id)}`, { method: 'PATCH', body: dados }),
+    mudar(`${base(campanhaId)}/eventos/${encodeURIComponent(id)}`, 'PATCH', dados),
   apagarEvento: (campanhaId: string, id: string) =>
-    api<ICalendarioMundo>(`${base(campanhaId)}/eventos/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+    mudar(`${base(campanhaId)}/eventos/${encodeURIComponent(id)}`, 'DELETE'),
 };

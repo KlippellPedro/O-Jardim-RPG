@@ -2,6 +2,17 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-11-calendario-e-app-mais-firmes",
+      "data": "2026-10-11",
+      "tipo": "correcao",
+      "area": "Mundo",
+      "titulo": "Calendário do mundo e app instalável mais firmes",
+      "detalhes": [
+        "Se o servidor falhar na hora de abrir o calendário, a tela tenta de novo sozinha. Se ainda assim não abrir, ela mostra o que o navegador recebeu e um botão Tentar de novo.",
+        "O app instalável parou de travar páginas quando o navegador não consegue guardar arquivos para uso sem internet. Nesse caso ele só deixa de guardar e abre o site normalmente."
+      ]
+    },
+    {
       "id": "2026-10-10-atributos-aflicoes-vulnerabilidade",
       "data": "2026-10-10",
       "tipo": "melhoria",

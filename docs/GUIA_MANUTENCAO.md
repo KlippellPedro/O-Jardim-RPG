@@ -113,6 +113,13 @@ a ativação apaga os caches da versão anterior. Mudou o ícone? Os PNGs de `pu
 no repositório; exporte os três de novo e suba `VERSAO`, senão o app já instalado segue com o ícone
 guardado. Detalhes em [Integração](sistema/INTEGRACAO.md#app-instalavel-service-worker-e-manifesto).
 
+Para ver o service worker com o armazenamento do navegador **quebrado** (o defeito que a v3 corrige), abra um
+Chrome com `--user-data-dir` num caminho bem longo: com um perfil de 154 caracteres no Windows,
+`caches.open` falhou com `UnknownError: Unexpected internal error` (a causa provável é o limite de 260
+caracteres de caminho do sistema, porque os arquivos do `CacheStorage` ficam uns 140 caracteres abaixo da
+pasta do perfil; num perfil curto, `C:\jcp1`, tudo funcionou). Com a v3 as páginas abrem do mesmo jeito; com a
+v2 cada navegação dava `ERR_FAILED`.
+
 ### Mural de novidades
 
 O mural da Home sai de `src/data/novidades-manuais.json` (escrito à mão, em linguagem de jogador). Depois de editar, rode

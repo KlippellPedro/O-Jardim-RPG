@@ -294,9 +294,12 @@ além do aviso novo do calendário (ver [Integração](INTEGRACAO.md#canal-ao-vi
   que usa o `apple-touch-icon`). O service worker só é registrado no build de produção. Estratégia:
   API, canal ao vivo, `/audio/`, `/models/`, `/data/` e pedidos `Range` vão direto à rede; a página
   vai à rede primeiro e só cai no cache quando a rede falha; arquivos com hash em `/assets/` ficam no
-  cache para sempre; imagens e ícones saem do cache e se atualizam em segundo plano. **Mudou a
-  estratégia? Suba `VERSAO` em `public/sw.js`**: os caches da versão anterior são apagados na
-  ativação. O manifesto e o `sw.js` são servidos pela API na raiz (`/sw.js` sem cache e com
+  cache para sempre; imagens e ícones saem do cache e se atualizam em segundo plano. Só a página e
+  `/assets/` passam pelo service worker. **O cache é só otimização e nunca derruba o site**: guardar
+  acontece depois de a resposta seguir para a página e qualquer falha do armazenamento do navegador
+  vira "nada guardado" (v3; a v2 dava `ERR_FAILED` em todas as páginas quando o `CacheStorage`
+  quebrava). **Mudou a estratégia? Suba `VERSAO` em `public/sw.js`**: os caches da versão anterior são
+  apagados na ativação. O manifesto e o `sw.js` são servidos pela API na raiz (`/sw.js` sem cache e com
   `Service-Worker-Allowed: /`), porque um service worker só controla o que está abaixo do caminho dele.
 
 Verificação: `npx tsc -b`, `npm run test:frontend` (1038 testes, oito arquivos novos: avisos e

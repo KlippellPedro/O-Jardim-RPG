@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, CalendarDays, CalendarPlus, ChevronLeft, ChevronRight, Moon, Sparkles, Sunrise } from 'lucide-react';
+import { ArrowLeft, CalendarDays, CalendarPlus, ChevronLeft, ChevronRight, Moon, RefreshCw, Sparkles, Sunrise } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import {
   calendarioMundoApi,
+  detalheTecnico,
   type ChaveEstacao,
   type ICalendarioMundo,
   type IEventoCalendario,
@@ -30,6 +31,7 @@ export default function CalendarioMundoPage() {
   const [dados, setDados] = useState<ICalendarioMundo | null>(null);
   const [visto, setVisto] = useState<{ ano: number; mes: number } | null>(null);
   const [erro, setErro] = useState('');
+  const [detalheDoErro, setDetalheDoErro] = useState('');
   const [ocupado, setOcupado] = useState(false);
   const [diaAberto, setDiaAberto] = useState<number | null>(null);
   const [preencher, setPreencher] = useState<IPreenchimento | null>(null);
@@ -41,8 +43,10 @@ export default function CalendarioMundoPage() {
       setDados(resposta);
       setVisto({ ano: resposta.mes.ano, mes: resposta.mes.mes });
       setErro('');
+      setDetalheDoErro('');
     } catch (falha) {
       setErro(falha instanceof Error ? falha.message : 'Não foi possível abrir o calendário.');
+      setDetalheDoErro(detalheTecnico(falha));
     }
   }, [campanhaId]);
   const escondido = Boolean(campanha?.configuracoes && (campanha.configuracoes as Record<string, unknown>).calendario_oculto === true) && campanha?.papel !== 'mestre' && campanha?.papel !== 'assistente';
@@ -53,15 +57,24 @@ export default function CalendarioMundoPage() {
   const agir = async (acao: () => Promise<ICalendarioMundo>) => {
     setOcupado(true);
     setErro('');
+    setDetalheDoErro('');
     try {
       const resposta = await acao();
       setDados(resposta);
       setVisto({ ano: resposta.mes.ano, mes: resposta.mes.mes });
     } catch (falha) {
       setErro(falha instanceof Error ? falha.message : 'Não foi possível concluir.');
+      setDetalheDoErro(detalheTecnico(falha));
     } finally {
       setOcupado(false);
     }
+  };
+
+  /** Sem calendário na tela, o erro some e a leitura recomeça (com o aviso "Abrindo o calendário..."). */
+  const tentarDeNovo = () => {
+    setErro('');
+    setDetalheDoErro('');
+    void carregar();
   };
 
   const ir = (delta: number) => {
@@ -92,8 +105,18 @@ export default function CalendarioMundoPage() {
         <h1 className="mt-1 text-[clamp(1.9rem,6vw,3rem)] font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>Calendário e Estações</h1>
       </header>
 
-      {erro ? <p role="alert" className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">{erro}</p> : null}
-      {!dados ? <p className="py-16 text-center text-sm text-gray-500" aria-busy="true">Abrindo o calendário...</p> : (
+      {erro ? (
+        <div role="alert" className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+          <p>{erro}</p>
+          {detalheDoErro ? <p className="mt-1 text-[11px] text-red-200/60">Detalhe técnico: {detalheDoErro}</p> : null}
+          {!dados ? (
+            <button type="button" className={`${botao} mt-3`} onClick={tentarDeNovo}>
+              <RefreshCw size={13} /> Tentar de novo
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+      {!dados ? (erro ? null : <p className="py-16 text-center text-sm text-gray-500" aria-busy="true">Abrindo o calendário...</p>) : (
         <>
           <section
             className="relative overflow-hidden rounded-3xl border p-6 sm:p-8"

@@ -1,6 +1,17 @@
 {
   "itens": [
     {
+      "id": "2026-10-11-calendario-e-app-mais-firmes",
+      "data": "2026-10-11",
+      "tipo": "correcao",
+      "area": "Mundo",
+      "titulo": "Calendário do mundo e app instalável mais firmes",
+      "detalhes": [
+        "Se o servidor falhar na hora de abrir o calendário, a tela tenta de novo sozinha. Se ainda assim não abrir, ela mostra o que o navegador recebeu e um botão Tentar de novo.",
+        "O app instalável parou de travar páginas quando o navegador não consegue guardar arquivos para uso sem internet. Nesse caso ele só deixa de guardar e abre o site normalmente."
+      ]
+    },
+    {
       "id": "2026-10-10-atributos-aflicoes-vulnerabilidade",
       "data": "2026-10-10",
       "tipo": "melhoria",
@@ -904,19 +915,6 @@
         "Onze Frutos novos, um para cada Fluxo, que aproximam o personagem da deidade daquele Fluxo.",
         "Os Frutos do Éden físicos agora gastam Estamina em vez de Mana.",
         "Poção de Vigor e Elixir de Vigor restauram Estamina, e vários itens de Vida e Mana passaram a devolver Estamina também."
-      ]
-    },
-    {
-      "id": "2026-09-23-jardim",
-      "data": "2026-09-23",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Jardim mais fácil de navegar",
-      "detalhes": [
-        "Filtros fixos no topo, com a quantidade de itens em cada tipo.",
-        "A busca também olha o texto do efeito.",
-        "Ordenação por preço ou nome, e opções para ver só o que você pode pagar ou esconder o que já plantou.",
-        "Cartões compactos com Ler tudo, e a confirmação de podar virou uma janela do site."
       ]
     }
   ]

@@ -130,11 +130,28 @@ const pedido = (caminho: string, extra: Partial<PedidoFalso> & { headers?: Recor
   headers: new Headers(extra.headers ?? {}),
 });
 
+/** Um `caches` que sempre falha, como o armazenamento do navegador quebrado de verdade (Chrome:
+ * "UnknownError: Failed to execute 'open' on 'CacheStorage': Unexpected internal error"). */
+const criarCachesQuebrados = () => {
+  const falhar = async (): Promise<never> => { throw new DOMException('Unexpected internal error.', 'UnknownError'); };
+  return { open: falhar, match: falhar, keys: falhar, delete: falhar };
+};
+
+/** Um `caches` que aceita o pedido e nunca responde. */
+const criarCachesTravados = () => {
+  const travar = () => new Promise<never>(() => undefined);
+  return { open: travar, match: travar, keys: travar, delete: travar };
+};
+
 /** Carrega o sw.js num ambiente falso e devolve como disparar eventos nele. */
-const carregarSw = (redeResponde: (url: string) => Promise<Response>) => {
+const carregarSw = (
+  redeResponde: (url: string) => Promise<Response>,
+  opcoes: { cachesDoNavegador?: unknown; esperaInstantanea?: boolean } = {},
+) => {
   const caches = criarCaches();
   const ouvintes: Record<string, (evento: unknown) => void> = {};
   const chamadasDeRede: string[] = [];
+  const avisos: unknown[][] = [];
   const self = {
     location: { origin: ORIGEM },
     addEventListener: (tipo: string, funcao: (evento: unknown) => void) => { ouvintes[tipo] = funcao; },
@@ -149,7 +166,21 @@ const carregarSw = (redeResponde: (url: string) => Promise<Response>) => {
     Object.defineProperty(resposta, 'type', { value: 'basic' });
     return resposta;
   };
-  vm.runInNewContext(codigoDoSw, { self, caches, fetch: fetchFalso, Response, URL, Promise, console });
+  // Com `esperaInstantanea`, o limite de espera do cache estoura na hora (o teste não precisa esperar 2,5 s).
+  const temporizador = opcoes.esperaInstantanea
+    ? (funcao: () => void) => setTimeout(funcao, 0)
+    : setTimeout;
+  vm.runInNewContext(codigoDoSw, {
+    self,
+    caches: opcoes.cachesDoNavegador ?? caches,
+    fetch: fetchFalso,
+    Response,
+    URL,
+    Promise,
+    console: { ...console, warn: (...argumentos: unknown[]) => { avisos.push(argumentos); } },
+    setTimeout: temporizador,
+    clearTimeout,
+  });
 
   const disparar = async (requisicao: PedidoFalso) => {
     let resposta: Promise<Response> | undefined;
@@ -163,12 +194,12 @@ const carregarSw = (redeResponde: (url: string) => Promise<Response>) => {
     await Promise.all(esperas);
     return { interceptou: Boolean(resposta), resposta: final };
   };
-  return { caches, chamadasDeRede, disparar, ouvintes };
+  return { caches, chamadasDeRede, disparar, ouvintes, avisos };
 };
 
 const html = () => new Response('<html></html>', { headers: { 'content-type': 'text/html' } });
 
-test('o service worker deixa passar direto: API, canal ao vivo, áudio, modelos, catálogos, Range, POST e terceiros', async () => {
+test('o service worker deixa passar direto: API, canal ao vivo, áudio, modelos, catálogos, Range, POST, terceiros e o que não é do site', async () => {
   const { disparar } = carregarSw(async () => new Response('x'));
   const direto: PedidoFalso[] = [
     pedido('/api/v1/contexto'),
@@ -179,6 +210,10 @@ test('o service worker deixa passar direto: API, canal ao vivo, áudio, modelos,
     pedido('/assets/img/fundo.webp', { headers: { range: 'bytes=0-100' } }),
     pedido('/api/v1/personagens', { method: 'POST' }),
     pedido('https://fonts.gstatic.com/s/cinzel.woff2'),
+    // Fora da página e de /assets/ o service worker não se mete (o Cloudflare serve coisas em /cdn-cgi/).
+    pedido('/manifest.webmanifest'),
+    pedido('/favicon.ico'),
+    pedido('/cdn-cgi/challenge-platform/scripts/jsd/main.js'),
   ];
   for (const requisicao of direto) {
     assert.equal((await disparar(requisicao)).interceptou, false, `${requisicao.method} ${requisicao.url}`);
@@ -200,7 +235,7 @@ test('a página vai à rede primeiro e guarda a casca; sem rede, abre a casca gu
   });
   const online = await disparar(pedido('/loja', { mode: 'navigate' }));
   assert.equal(await online.resposta?.text(), '<html></html>');
-  const casca = await (await caches.open('jardim-v2-casca')).match('/');
+  const casca = await (await caches.open('jardim-v3-casca')).match('/');
   assert.ok(casca, 'a casca ficou guardada');
 
   rede = false;
@@ -217,7 +252,7 @@ test('só página HTML boa vira casca: erro do servidor não entra no cache', as
   const { disparar, caches } = carregarSw(async () => new Response('quebrou', { status: 500, headers: { 'content-type': 'text/html' } }));
   const resposta = await disparar(pedido('/regras', { mode: 'navigate' }));
   assert.equal(resposta.resposta?.status, 500);
-  assert.equal(await (await caches.open('jardim-v2-casca')).match('/'), undefined);
+  assert.equal(await (await caches.open('jardim-v3-casca')).match('/'), undefined);
 });
 
 test('arquivo com hash no nome é buscado uma vez só e depois sai do cache', async () => {
@@ -242,14 +277,14 @@ test('imagem sem hash sai do cache na hora e é atualizada em segundo plano', as
 test('resposta de erro ou de outra origem nunca entra no cache de arquivos', async () => {
   const { disparar, caches } = carregarSw(async () => new Response('nao achei', { status: 404 }));
   await disparar(pedido('/assets/img/sumiu.webp'));
-  const loja = await caches.open('jardim-v2-arquivos');
+  const loja = await caches.open('jardim-v3-arquivos');
   assert.equal((await loja.keys()).length, 0);
 });
 
 test('o cache de arquivos tem teto: passou dele, saem os mais antigos', async () => {
   const { disparar, caches } = carregarSw(async (url) => new Response(url));
   for (let i = 0; i < 175; i += 1) await disparar(pedido(`/assets/chunk${i}-ABCDEFGH${i}.js`));
-  const loja = await caches.open('jardim-v2-arquivos');
+  const loja = await caches.open('jardim-v3-arquivos');
   const guardados = (await loja.keys()).map((item) => item.url);
   assert.equal(guardados.length, 160);
   assert.ok(!guardados.some((url) => url.includes('chunk0-')), 'o primeiro já saiu');
@@ -260,11 +295,66 @@ test('ao ativar, o service worker apaga os caches de versões antigas e fica com
   const { ouvintes, caches } = carregarSw(async () => new Response('x'));
   await caches.open('jardim-v1');
   await caches.open('jardim-v2-casca');
+  await caches.open('jardim-v2-arquivos');
+  await caches.open('jardim-v3-casca');
   await caches.open('outro-site');
   let espera: Promise<unknown> = Promise.resolve();
   ouvintes.activate({ waitUntil: (promessa: Promise<unknown>) => { espera = promessa; } });
   await espera;
-  assert.deepEqual([...caches.lojas.keys()].sort(), ['jardim-v2-casca']);
+  assert.deepEqual([...caches.lojas.keys()].sort(), ['jardim-v3-casca']);
+});
+
+// ---------------------------------------------------------------- o cache nunca derruba o site
+
+test('com o armazenamento do navegador quebrado, página, arquivo com hash e imagem chegam do mesmo jeito', async () => {
+  const { disparar, avisos } = carregarSw(
+    async (url) => (url.includes('/assets/') ? new Response('corpo do arquivo') : html()),
+    { cachesDoNavegador: criarCachesQuebrados() },
+  );
+  const pagina = await disparar(pedido('/mundo/calendario', { mode: 'navigate', headers: { accept: 'text/html' } }));
+  assert.equal(await pagina.resposta?.text(), '<html></html>', 'a página que a rede entregou abre');
+  const arquivo = await disparar(pedido('/assets/CalendarioMundoPage-TncyMvNT.js'));
+  assert.equal(await arquivo.resposta?.text(), 'corpo do arquivo', 'o arquivo com hash chega');
+  const imagem = await disparar(pedido('/assets/img/icons/app-icon.svg'));
+  assert.equal(await imagem.resposta?.text(), 'corpo do arquivo', 'a imagem chega');
+  assert.equal(avisos.length, 1, 'o defeito do armazenamento é avisado no console uma vez só, não a cada pedido');
+});
+
+test('com o armazenamento funcionando o service worker não reclama de nada', async () => {
+  const { disparar, avisos } = carregarSw(async () => html());
+  await disparar(pedido('/loja', { mode: 'navigate' }));
+  await disparar(pedido('/assets/img/icons/app-icon.svg'));
+  assert.equal(avisos.length, 0);
+});
+
+test('com o armazenamento quebrado e sem rede, a página falha como falharia sem service worker', async () => {
+  const { disparar } = carregarSw(async () => { throw new TypeError('sem rede'); }, { cachesDoNavegador: criarCachesQuebrados() });
+  await assert.rejects(() => disparar(pedido('/mundo/calendario', { mode: 'navigate' })), TypeError);
+  await assert.rejects(() => disparar(pedido('/assets/img/icons/app-icon.svg')), TypeError);
+});
+
+test('armazenamento que nunca responde não segura a resposta da rede', async () => {
+  const { disparar } = carregarSw(
+    async (url) => (url.includes('/assets/') ? new Response('corpo do arquivo') : html()),
+    { cachesDoNavegador: criarCachesTravados(), esperaInstantanea: true },
+  );
+  assert.equal(await (await disparar(pedido('/', { mode: 'navigate' }))).resposta?.text(), '<html></html>');
+  assert.equal(await (await disparar(pedido('/assets/Home-DKgoWxpF.js'))).resposta?.text(), 'corpo do arquivo');
+  assert.equal(await (await disparar(pedido('/assets/img/icons/menu/ficha.webp'))).resposta?.text(), 'corpo do arquivo');
+});
+
+test('ativar e instalar não falham quando o armazenamento está quebrado', async () => {
+  const { ouvintes } = carregarSw(async () => new Response('x'), { cachesDoNavegador: criarCachesQuebrados() });
+  let instalacao: Promise<unknown> = Promise.resolve();
+  ouvintes.install({ waitUntil: (promessa: Promise<unknown>) => { instalacao = promessa; } });
+  await instalacao;
+  let ativacao: Promise<unknown> = Promise.resolve();
+  ouvintes.activate({ waitUntil: (promessa: Promise<unknown>) => { ativacao = promessa; } });
+  await ativacao;
+});
+
+test('o service worker nunca inventa uma resposta de erro: o pedido falha ou vale o que a rede disse', () => {
+  assert.ok(!/Response\.error\s*\(/.test(codigoDoSw), 'Response.error() vira "resolved with an error response object" no console');
 });
 
 test('ao instalar, a casca (página, manifest e ícones) é guardada e o service worker não espera para assumir', async () => {
@@ -272,7 +362,7 @@ test('ao instalar, a casca (página, manifest e ícones) é guardada e o service
   let espera: Promise<unknown> = Promise.resolve();
   ouvintes.install({ waitUntil: (promessa: Promise<unknown>) => { espera = promessa; } });
   await espera;
-  const casca = await caches.open('jardim-v2-casca');
+  const casca = await caches.open('jardim-v3-casca');
   const urls = (await casca.keys()).map((item) => item.url.replace(ORIGEM, ''));
   assert.ok(urls.includes('/') && urls.includes('/manifest.webmanifest'));
   for (const url of urls.filter((item) => item.startsWith('/assets/'))) assert.ok(fs.existsSync(publico(url)), `a casca guarda um arquivo que não existe: ${url}`);

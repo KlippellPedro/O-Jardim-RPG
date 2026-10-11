@@ -53,7 +53,20 @@ interface ApiOptions {
   body?: any;
   signal?: AbortSignal;
   keepalive?: boolean;
+  /** Quem precisa de um corpo JSON de verdade (como o calendário) pede aqui: resposta "ok" que chega
+   * vazia, com outro tipo ou cortada no meio vira `ApiError` (status 0) com o que o navegador recebeu em
+   * `details`, em vez de um `null` que a tela só descobre ao ler um campo. Sem isso, o `null` segue como antes. */
+  exigirCorpo?: boolean;
 }
+
+/** O que o navegador recebeu de uma resposta "ok" sem corpo utilizável (vai em `ApiError.details`). */
+export interface IDetalheDeRespostaVazia {
+  http: number;
+  tipo: string;
+  motivo: string;
+}
+
+export const MENSAGEM_RESPOSTA_INCOMPLETA = 'O servidor respondeu, mas a resposta não chegou inteira.';
 
 // Componentes montados ao mesmo tempo podem pedir o mesmo recurso. Compartilhar
 // apenas GETs simultâneos remove tráfego duplicado sem introduzir cache stale.
@@ -61,7 +74,7 @@ const inFlightGets = new Map<string, Promise<unknown>>();
 
 async function executeRequest<T>(
   caminho: string,
-  { method = 'GET', body, signal, keepalive }: ApiOptions = {},
+  { method = 'GET', body, signal, keepalive, exigirCorpo = false }: ApiOptions = {},
 ): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' };
 
@@ -93,10 +106,16 @@ async function executeRequest<T>(
 
   const semCorpo = response.status === 204 || response.status === 205;
   const tipo = response.headers.get('content-type') || '';
-  const payload =
-    !semCorpo && tipo.includes('application/json')
-      ? await response.json().catch(() => null)
-      : null;
+  const ehJson = tipo.includes('application/json');
+  let payload: any = null;
+  let falhaDeLeitura: unknown = null;
+  if (!semCorpo && ehJson) {
+    try {
+      payload = await response.json();
+    } catch (erro) {
+      falhaDeLeitura = erro;
+    }
+  }
 
   if (!response.ok) {
     const detalhe = payload?.detail;
@@ -105,6 +124,16 @@ async function executeRequest<T>(
       window.dispatchEvent(new CustomEvent('jardim:unauthorized'));
     }
     throw new ApiError(extrairMensagem(detalhe, response.status), response.status, detalhe);
+  }
+  if (exigirCorpo && payload === null) {
+    // Cancelar de propósito segue como cancelamento; estourar o tempo no meio do corpo é demora, não "vazio".
+    if (falhaDeLeitura instanceof DOMException && falhaDeLeitura.name === 'AbortError') throw falhaDeLeitura;
+    const demorou = falhaDeLeitura instanceof DOMException && falhaDeLeitura.name === 'TimeoutError';
+    const motivo = falhaDeLeitura instanceof Error
+      ? `corpo ilegível (${falhaDeLeitura.name})`
+      : semCorpo ? 'sem corpo' : ehJson ? 'corpo vazio' : 'tipo inesperado';
+    const detalhes: IDetalheDeRespostaVazia = { http: response.status, tipo: tipo || 'sem tipo', motivo };
+    throw new ApiError(demorou ? MENSAGEM_DEMORA : MENSAGEM_RESPOSTA_INCOMPLETA, 0, detalhes);
   }
   return semCorpo ? (null as any) : payload;
 }

@@ -3,9 +3,11 @@ import test from 'node:test';
 import {
   ApiError,
   MENSAGEM_DEMORA,
+  MENSAGEM_RESPOSTA_INCOMPLETA,
   MENSAGEM_SEM_CONEXAO,
   api,
   traduzirFalhaDeRede,
+  type IDetalheDeRespostaVazia,
 } from '../../src/services/apiClient';
 
 test('sem rede, o erro do navegador vira um texto que a pessoa entende', () => {
@@ -61,5 +63,102 @@ test('api() não mexe no cancelamento do chamador', async () => {
   } finally {
     globalThis.fetch = fetchOriginal;
     delete (globalThis as { document?: unknown }).document;
+  }
+});
+
+// ---------------------------------------------------------------- resposta "ok" sem corpo utilizável
+
+const comFetch = (resposta: () => unknown) => {
+  const fetchOriginal = globalThis.fetch;
+  (globalThis as { document?: unknown }).document = { cookie: '' };
+  globalThis.fetch = (async () => resposta()) as typeof fetch;
+  return () => {
+    globalThis.fetch = fetchOriginal;
+    delete (globalThis as { document?: unknown }).document;
+  };
+};
+
+const jsonOk = () => new Response('{"a":1}', { status: 200, headers: { 'content-type': 'application/json' } });
+const html200 = () => new Response('<html></html>', { status: 200, headers: { 'content-type': 'text/html' } });
+
+test('exigirCorpo: resposta ok em HTML vira ApiError (status 0) com o que o navegador recebeu', async () => {
+  const restaurar = comFetch(html200);
+  try {
+    await assert.rejects(
+      () => api('/calendario/x', { exigirCorpo: true }),
+      (erro: unknown) => erro instanceof ApiError
+        && erro.message === MENSAGEM_RESPOSTA_INCOMPLETA
+        && erro.status === 0
+        && (erro.details as IDetalheDeRespostaVazia).http === 200
+        && (erro.details as IDetalheDeRespostaVazia).tipo === 'text/html'
+        && (erro.details as IDetalheDeRespostaVazia).motivo === 'tipo inesperado',
+    );
+  } finally {
+    restaurar();
+  }
+});
+
+test('exigirCorpo: JSON cortado no meio e corpo vazio dizem o motivo', async () => {
+  const cortado = comFetch(() => new Response('{"hoje":', { status: 200, headers: { 'content-type': 'application/json' } }));
+  try {
+    await assert.rejects(
+      () => api('/calendario/x', { exigirCorpo: true }),
+      (erro: unknown) => erro instanceof ApiError && (erro.details as IDetalheDeRespostaVazia).motivo === 'corpo ilegível (SyntaxError)',
+    );
+  } finally {
+    cortado();
+  }
+  const vazio = comFetch(() => new Response(null, { status: 204 }));
+  try {
+    await assert.rejects(
+      () => api('/calendario/x', { exigirCorpo: true }),
+      (erro: unknown) => erro instanceof ApiError && (erro.details as IDetalheDeRespostaVazia).motivo === 'sem corpo',
+    );
+  } finally {
+    vazio();
+  }
+});
+
+test('exigirCorpo: estourar o tempo no meio do corpo é demora, e cancelar de propósito continua cancelamento', async () => {
+  const corpoLento = (nome: string) => ({
+    ok: true,
+    status: 200,
+    headers: new Headers({ 'content-type': 'application/json' }),
+    json: async () => { throw new DOMException('x', nome); },
+  });
+  const demora = comFetch(() => corpoLento('TimeoutError'));
+  try {
+    await assert.rejects(
+      () => api('/calendario/x', { exigirCorpo: true }),
+      (erro: unknown) => erro instanceof ApiError && erro.message === MENSAGEM_DEMORA && erro.status === 0,
+    );
+  } finally {
+    demora();
+  }
+  const cancelado = comFetch(() => corpoLento('AbortError'));
+  try {
+    await assert.rejects(
+      () => api('/calendario/x', { exigirCorpo: true }),
+      (erro: unknown) => erro instanceof DOMException && erro.name === 'AbortError',
+    );
+  } finally {
+    cancelado();
+  }
+});
+
+test('sem exigirCorpo nada muda: HTML ou 204 seguem devolvendo null, e JSON bom segue passando', async () => {
+  for (const resposta of [html200, () => new Response(null, { status: 204 })]) {
+    const restaurar = comFetch(resposta);
+    try {
+      assert.equal(await api('/qualquer'), null);
+    } finally {
+      restaurar();
+    }
+  }
+  const restaurar = comFetch(jsonOk);
+  try {
+    assert.deepEqual(await api('/qualquer', { exigirCorpo: true }), { a: 1 });
+  } finally {
+    restaurar();
   }
 });

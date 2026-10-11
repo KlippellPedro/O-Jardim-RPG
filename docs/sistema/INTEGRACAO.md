@@ -445,6 +445,15 @@ Dois detalhes novos de **9 de outubro de 2026**:
   calendário ainda fechado para a mesa (`calendario_oculto`) continua respondendo 403 a quem não comanda
   e o fundo fica sem clima. Teste:
   [test_calendario_eventos_ao_vivo.py](../../plataforma/tests/test_calendario_eventos_ao_vivo.py).
+- **Leitura do calendário no cliente** (11 de outubro de 2026). `calendarioMundoApi` pede o JSON com
+  `exigirCorpo` ([apiClient.ts](../../src/services/apiClient.ts)): resposta "ok" que chega vazia, em outro
+  tipo (HTML de um proxy, por exemplo) ou cortada no meio vira `ApiError` com status 0 e, em `details`, o
+  que o navegador recebeu (`{ http, tipo, motivo }`). Sem `exigirCorpo`, `api()` segue devolvendo `null` como
+  antes. Na leitura (`obter`) há uma segunda tentativa depois de 600 ms, só para esse tipo de falha e para
+  queda de rede; 403, 404, 500 e demora não repetem, e as ações do Mestre nunca repetem. A tela mostra a
+  mensagem, uma linha "Detalhe técnico" (`detalheTecnico`) e o botão "Tentar de novo". Testes:
+  [calendarioMundo.test.ts](../../tests/frontend/calendarioMundo.test.ts) e
+  [apiClientRede.test.ts](../../tests/frontend/apiClientRede.test.ts).
 
 <a id="destaque-da-mesa"></a>
 
@@ -486,8 +495,22 @@ registrado e quebrado. As duas rotas ficam fora da documentação da API. Os íc
 
 O que o service worker guarda: a casca da página (`/`) e os arquivos com hash em `/assets/`. Nunca guarda
 API, canal ao vivo, voz do Grande Sábio (`/audio/`), modelos (`/models/`), catálogos (`/data/`) nem
-pedidos `Range`; sem internet a tela abre, mas ficha e sessão precisam de conexão. Mudou a estratégia?
-Suba `VERSAO` no topo de `sw.js`. Testes:
+pedidos `Range`; sem internet a tela abre, mas ficha e sessão precisam de conexão. Fora da página e de
+`/assets/` ele não se mete (manifesto, `favicon.ico` e o que o Cloudflare serve em `/cdn-cgi/` seguem o
+caminho normal do navegador).
+
+**O cache nunca derruba o site** (v3, 11 de outubro de 2026). Guardar acontece depois de a resposta já ter
+seguido para a página, dentro de `waitUntil`, e toda leitura ou escrita do cache é protegida por `tentar()`:
+erro vira "não tem nada guardado" e um armazenamento que nunca responde é abandonado depois de 2,5 s. A v2
+esperava a escrita no cache antes de devolver a resposta e tratava falha dela como falha de rede; com o
+armazenamento do navegador quebrado (Chrome: `UnknownError: Failed to execute 'open' on 'CacheStorage':
+Unexpected internal error`), toda página dava `ERR_FAILED` e imagens viravam `Response.error()` ("The
+FetchEvent for ... resulted in a network error response: the promise was resolved with an error response
+object" no console). O serviço também não devolve mais respostas de erro inventadas: sem rede e sem cache o
+pedido falha como falharia sem service worker. Um navegador que já esteja com a v2 quebrada só troca de
+versão quando a página abre (o `register()` do app confere o `sw.js`) ou, no máximo, em 24 horas; se a
+página nem abrir, desregistrar o service worker em `chrome://serviceworker-internals` resolve na hora.
+Mudou a estratégia? Suba `VERSAO` no topo de `sw.js`. Testes:
 [test_pwa_rotas.py](../../plataforma/tests/test_pwa_rotas.py) (cabeçalhos e 404) e
 [pwa.test.ts](../../tests/frontend/pwa.test.ts) (a lógica do service worker rodando num sandbox
 `vm`: o que vai à rede, o que entra no cache e o que sai quando a versão sobe).
