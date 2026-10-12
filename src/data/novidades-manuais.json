@@ -2,6 +2,141 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-12-elementos-derivacoes-ambiente",
+      "data": "2026-10-12",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Elementos e Derivações viraram um capítulo, com Frio e Calor de ambiente",
+      "detalhes": [
+        "O Livro do Jogador ganhou o capítulo Elementos e Derivações: os sete elementos do Fluxo Físico, quem os domina e as quatorze derivações, como Gelo, Magma, Areia e Plasma.",
+        "Cada derivação é um tipo de dano próprio. Resistência a uma derivação vale só para ela, e Resistência ao elemento de base vale pela metade contra a derivação.",
+        "Frio e Calor passaram a ser dano de ambiente, o de um deserto sem sombra ou de uma noite de nevasca. Quem ataca causa Gelo ou Fogo, nunca Frio ou Calor.",
+        "O Ácido entrou entre os danos persistentes, ao lado de sangramento, fogo e veneno."
+      ]
+    },
+    {
+      "id": "2026-10-12-revisao-pharos-banco-sonhar",
+      "data": "2026-10-12",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Pharos, Banco Lunar e Sonhar com texto revisado",
+      "detalhes": [
+        "Pharos e a Guilda dos Caçadores contam a mesma história: como funciona a Ronda, quanto o Quadro paga e por que a cidade só fica no escuro na Última Luz.",
+        "O Banco Lunar deixa claro que tem agência em todas as Árvores e a matriz no Vazio, e que a neutralidade dele só cai quando alguém paga muito.",
+        "Sonhar entre as Árvores ficou mais curto e sem repetição, e Grimm aparece com o título de Soberano dos Sonhos e Pesadelos."
+      ]
+    },
+    {
+      "id": "2026-10-12-sedes-fora-do-vazio",
+      "data": "2026-10-12",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Nem toda sede fica no Vazio",
+      "detalhes": [
+        "Astraluna entrou em Locais como a capital da Árvore A.X.I.S e sede da AstraTech.",
+        "A Casa do Primeiro Lume agora fica em Anima, o Salão das Treze Portas em Gênese e o Campanário no Limiar, num recanto que a Mulher Carmesim deixa para a Sociedade do Sino escrever sobre as Entidades.",
+        "Ficam no Vazio o Banco Lunar, Pharos, o Pátio das Rotas, a Agulha e o Acervo Prismático.",
+        "O Basalto passou a se chamar Pharos, e a Atalaia das Raízes virou A Agulha."
+      ]
+    },
+    {
+      "id": "2026-10-12-espirito-raca-especial",
+      "data": "2026-10-12",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Espírito agora é uma raça especial",
+      "detalhes": [
+        "O Espírito cresceu demais para ficar entre as raças comuns: tem seis degraus de escada e três Naturezas. Agora ele fica ao lado do Divino, do Desperto e das outras raças especiais.",
+        "Para criar um Espírito ou transformar o personagem em um, o Mestre precisa liberar a raça, para a mesa toda ou só para você. Ele pode surgir em qualquer Árvore.",
+        "Quem já joga com um Espírito não perde nada: a ficha continua abrindo e salvando normalmente, e a raça ganhou o Legado extra das raças especiais."
+      ]
+    },
+    {
+      "id": "2026-10-12-espirito-tres-naturezas",
+      "data": "2026-10-12",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Espírito ganhou três Naturezas: natural, demoníaca e angelical",
+      "detalhes": [
+        "Quem cria um Espírito agora escolhe primeiro a Natureza. O natural continua como era, preso a um Fluxo. O demoníaco carrega um dos sete Pecados, e o angelical uma das sete Virtudes.",
+        "As Cores viraram Fluxos. Em vez de Espírito Vermelho Vinho, agora é Espírito do Fim, e cada marca tem o nome do Fluxo, do Pecado ou da Virtude. O Fluxo que era Rosa agora se chama Origem, como no resto do jogo.",
+        "Demônios e anjos começam sem corpo e, a partir do nível 5, aprendem a entrar num corpo: o demônio possui, e o anjo encarna com a permissão de quem empresta.",
+        "Cada Pecado tem uma Virtude oposta, com poderes que se espelham. Todos evoluem em seis degraus, nos níveis 1, 8, 15, 28, 40 e 60, e quase todo poder cobra um preço. Do degrau Menor ao Superior o espírito só ganha ajustes passivos que a ficha soma sozinha: Mana, Vida, Movimento e resistências. As habilidades fortes começam no quinto degrau.",
+        "Para virar Primordial, no nível 60, não basta o nível: o espírito precisa cumprir uma Provação ligada à própria marca, e só o Mestre confirma. Em troca, o Primordial é o degrau mais forte do jogo.",
+        "Existe também um Fluxo Universal, que ninguém escolhe sozinho. Só o Mestre concede, e até hoje só a Blanc é conhecida por tê-lo.",
+        "Cada Natureza tem a sua língua: Enoquiano para os naturais, Aramaico para os demoníacos e Hebraico para os angelicais. A tabela de idiomas do Mundo já mostra as três."
+      ]
+    },
+    {
+      "id": "2026-10-12-bestiario-espiritos-novos",
+      "data": "2026-10-12",
+      "tipo": "novo",
+      "area": "Mundo",
+      "titulo": "Bestiário ganhou 26 espíritos: demônios, anjos e espíritos naturais",
+      "detalhes": [
+        "Dez demônios, dos Diabretes de Cinza que roubam coisa pequena até Belzarak, o Arquidemônio da Ira. Entre eles estão o Cobrador do Pacto, a Dama de Veludo, o Verdugo Rubro e o Devorador de Banquetes.",
+        "Dez anjos, da Centelha de Prece até Miraquel, o Escriba das Sete Virtudes. Há também o Árbitro de Balança, a Guardiã do Cálice e o Querubim de Pedra Clara.",
+        "Seis espíritos naturais, como o Sussurro da Chaminé, a Dama da Bruma e o Espírito Ancestral do Bosque.",
+        "Cada um solta uma parte própria no saque, e os mais fortes deixam equipamento. Ezrakael e Seraquiel agora falam hebraico, a língua dos anjos."
+      ]
+    },
+    {
+      "id": "2026-10-12-animalia-forma-morfologia-animal",
+      "data": "2026-10-12",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Animália: escolha a Forma, a Morfologia e o animal",
+      "detalhes": [
+        "A Animália agora tem três Formas: Fera (o bicho inteiro), Híbrido (metade bicho, metade gente) e Traços (gente com sinais de bicho). A Fera ganha mais corpo e a arma natural mais forte, mas armadura e arreio custam o dobro e são peças especiais. Os Traços usam qualquer equipamento e têm tamanho de pessoa.",
+        "A Morfologia passou de três para dez: Ágil, Robusta, Mística, Predadora, Alada, Aquática, Peçonhenta, Gregária, Blindada e Mítica. Vale para qualquer Forma.",
+        "Depois vem o animal. São mais de cem na lista, de gato e rato a leão, rinoceronte, coruja e dragão, separados pelas Morfologias que combinam com eles. É o animal que define o seu tamanho, e quem quiser um que não está na lista pode escrever o nome na ficha.",
+        "A página da raça virou uma porta de entrada com as três Formas. Cada Forma tem um montador, com busca e filtro por tamanho, que mostra na hora o que a sua combinação soma.",
+        "A Animália também amadurece sozinha, em três degraus: Jovem no nível 1, Adulta no 13 e Alfa no 36. Quem já joga com uma Animália não perde nada: a ficha continua abrindo normalmente e vale como Híbrido."
+      ]
+    },
+    {
+      "id": "2026-10-12-seres-textos-reescritos",
+      "data": "2026-10-12",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Deidades e governantes de Gênese com texto novo",
+      "detalhes": [
+        "As dez Deidades ganharam descrição e domínio reescritos, com frases inteiras no lugar dos pedaços soltos que sobravam.",
+        "Grimm, Amadheus, Jota Macedo e Keryx também foram revisados, junto com os governantes de Gênese: Kaiser, Noemi, Bergelmir, Davinor, Durin II, Augustos e as Irmãs da Noite.",
+        "Selah, o Último Silêncio, ganhou texto novo no Bestiário e em Seres: como o silêncio chega, o que fazer quando ele chega e o aviso que a Guilda deixa no Quadro.",
+        "Alguns textos das Árvores, como a Transilvânia, as Colônias de Întuneric e os mandamentos de Arkarin, perderam os travessões que ainda tinham."
+      ]
+    },
+    {
+      "id": "2026-10-11-mundo-textos-do-criador",
+      "data": "2026-10-11",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Textos do Mundo revisados: Fluxos, Galhos, reinos e as crônicas das Árvores",
+      "detalhes": [
+        "Os textos que o Criador reescreveu no Painel passaram a valer para todo mundo: Fluxos, Galhos, Dimensões, reinos, locais e as crônicas da Árvore de Gênese e de Parley.",
+        "Amadheus e o Banco Lunar ganharam mais história. Ele e Jota ainda são sócios, mas cada um tocou o seu negócio, e a neutralidade do Banco tem preço.",
+        "Sonhar passou a dizer quem abre a passagem entre as camadas de cada Árvore."
+      ]
+    },
+    {
+      "id": "2026-10-11-registros-universais-bestiario",
+      "data": "2026-10-11",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Registros Universais mais completos: Bestiário com loot, habilidades separadas e Seres reunidos",
+      "detalhes": [
+        "Cada criatura do Bestiário agora mostra o que costuma deixar para trás, com a chance de cada item. As habilidades vêm uma a uma, com selos como Medo, Mutilação e Reação, e os Sinais e o Como Evitar ficam numa caixa à parte, para quem vai enfrentar.",
+        "A ficha cresce com o peso da criatura: uma criatura comum é discreta, e uma Lenda ganha moldura, selo grande e brilho. Dá para filtrar por categoria e por peso, e ordenar pelas mais fortes.",
+        "Seres virou o lugar de quem é quem: Deidades, Entidades, Soberanos, Espíritos e gente notável, cada um com a sua cor. As pessoas notáveis que o Mestre cria moram aqui também.",
+        "São 12 facções oficiais, cada uma com a sua cor e o seu brasão, e a descrição de todas ficou um pouco mais completa.",
+        "Os Locais ganharam as sedes das facções, como Pharos, da Guilda dos Caçadores, a Casa do Primeiro Lume, da Ordem do Lume, e Astraluna, a capital da Árvore A.X.I.S e sede da AstraTech. O Banco Lunar e Sonhar entre as Árvores também ganharam texto bem maior. Da facção dá para pular para a sede, e da sede para a facção. Cada local tem a sua cor, o seu ícone e o seu desenho no cabeçalho, e a sede usa a cor da facção a que pertence.",
+        "Em Seres, os Soberanos agora são os dez seres mais fortes do Jardim inteiro, de qualquer Árvore, sem contar as Deidades. Os que já foram revelados aparecem em Seres, e os outros ainda vão aparecer.",
+        "O Glossário virou Alfabeto: os 15 idiomas do Jardim em ordem de alfabeto, cada um com o povo que o fala e quem o criou, e um filtro por letra.",
+        "Cada seção dos Registros ganhou uma cor própria, no lugar do azul de antes. Facções, Locais e Artefatos e Frutos também ganharam ficha própria: brasão para as facções, rosa dos ventos e \"onde fica\" para os locais, e para os artefatos a raridade manda na moldura, com os poderes do Fruto do Éden lado a lado, antes e depois do despertar."
+      ]
+    },
+    {
       "id": "2026-10-11-calendario-e-app-mais-firmes",
       "data": "2026-10-11",
       "tipo": "correcao",
