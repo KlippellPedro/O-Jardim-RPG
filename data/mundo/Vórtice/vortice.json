@@ -21,9 +21,9 @@
         "fluxo": "fluxo-da-inconstancia",
         "genero": "Masculino",
         "status": "paralisada",
-        "dominio": "A mudança constante e a entropia impede que o Jardim fique estagnado ou morra pela calmaria.",
+        "dominio": "A mudança constante e a entropia, que não deixam o Jardim parar nem morrer de calmaria.",
         "epiteto": "Aquele que flui na Inconstância",
-        "descricao": "Caótico e intenso. Governa a mudança constante e a entropia, impedindo que os Galhos fiquem estagnados. "
+        "descricao": "Ignis é caótico e intenso, e não aguenta nada parado. Governa a mudança e a entropia. Quando um Galho começa a se acomodar, ele chega mexendo em tudo até a coisa voltar a andar."
       },
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
       "_ajustado_para_bater_com_estrutura_do_jardim": "O panteon.json antigo tinha epíteto 'Aquela que flui na Mutação' e gênero 'Feminino'. A tabela mais recente 'Estrutura do Jardim' mostra epíteto 'Aquele que flui na Inconstância' e gênero 'Masculino' - usei a versão mais recente aqui. Se isso foi um erro de digitação na tabela em vez de uma mudança deliberada, é só ajustar este campo.",
@@ -55,8 +55,8 @@
       "titulo": "Espiral",
       "conteudo": {
         "arvore": "ignis",
-        "descricao": "O Galho que nunca era o mesmo duas vezes. Espiral não tinha mapa porque não fazia sentido ter: montanha virava planície, rio virava estrada, e quem passasse por ali duas vezes não reconhecia nada da primeira. Era o Galho onde nada apodrecia, porque nada durava o suficiente.\n\nHoje está parado. Desde que Ignis foi silenciado, Espiral congelou na última forma que assumiu - e é a coisa mais perturbadora do Jardim inteiro, porque essa forma não era pra ser final. Ficou uma paisagem no meio de virar outra coisa, e assim permanece.",
-        "nota": "É o argumento mais forte de que a paralisia é uma ferida e não uma trégua: o Fluxo da mudança estacionado é o único dano que se enxerga a olho nu."
+        "descricao": "O Galho que nunca é o mesmo duas vezes. Espiral não tem mapa porque não faz sentido ter, já que montanhas viravam planície, rio virava estrada, e quem passasse por ali duas vezes não reconhecia nada da primeira.",
+        "nota": "É o galho que nunca se mantém o mesmo por tempo suficiente pra alguém conseguir mapear."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29. Ancorado numa frase que já era canônica na descrição da Deidade: 'ironicamente, o próprio Fluxo da mudança está estacionado'. O Galho foi escrito pra tornar essa ironia visível.",
       "_pronto_para_importar": true

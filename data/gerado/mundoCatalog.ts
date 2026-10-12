@@ -29,7 +29,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
           "Dimensão",
           "Reino"
         ],
-        "descricao": "O Jardim é o todo. Dentro dele crescem nove Árvores, e cada Árvore é ao mesmo tempo três coisas: a Árvore em si, a Deidade que a habita e o Fluxo que ela rege não são coisas distintas que se associam, são a mesma coisa vista de três ângulos.\n\nDe cada Árvore saem Galhos, também chamados de Realidades. Dentro de cada Galho abrem-se Dimensões, e dentro de cada Dimensão existem Reinos e outros Locais. É essa a linha inteira, e é por ela que a exploração acontece descobrir uma Árvore não revela seus Galhos, descobrir um Galho não revela suas Dimensões.\n\nDuas Árvores fogem do padrão. Limiar tem um único Galho (Arkarin), todas as coisas das outras Árvores acabam nela. E Parley é a única Árvore com duas identidades sobrepostas: a original, de Keryx, e a A.X.I.S que Jota Macedo instalou por cima.\n\nFora dessa contagem existe o Vazio, que não é uma décima Árvore: é o espaço entre as nove e o resto do universo, inclusive o Banco Lunar, que só existe porque fica fora de todas elas ao mesmo tempo. Erebus governa esse espaço, não um pedaço de terra dentro dele."
+        "descricao": "O Jardim é o todo. Dentro dele crescem nove Árvores, e cada Árvore é ao mesmo tempo três coisas: a Árvore em si, a Deidade que a habita e o Fluxo que ela rege não são coisas distintas que se associam, são a mesma coisa vista de três ângulos.\n\nDe cada Árvore saem Galhos, também chamados de Realidades. Dentro de cada Galho abrem-se Dimensões, e dentro de cada Dimensão existem Reinos e outros Locais. É essa a linha inteira, e é por ela que a exploração acontece: descobrir uma Árvore não revela seus Galhos, descobrir um Galho não revela suas Dimensões.\n\nDuas Árvores fogem do padrão. Limiar tem um único Galho (Arkarin), todas as coisas das outras Árvores acabam nela. E Parley é a única Árvore com duas identidades sobrepostas: a original, de Keryx, e a A.X.I.S que Jota Macedo instalou por cima.\n\nO Abismo não é uma Árvore. É o Vazio, o espaço que existe entre as nove Árvores, entre tudo que tem e não tem no Jardim, inclusive o Banco Lunar e outros locais."
       },
       "revelado": true
     },
@@ -51,8 +51,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
           "ignis",
           "chronus"
         ],
-        "descricao": "Sonhar existe em todas as Árvores ao mesmo tempo. Cada Árvore, porém, possui sua própria camada onírica, separada das demais: seres de Árvores diferentes não conseguem se ver nem se encontrar em Sonhar apenas por estarem sonhando. A travessia entre essas separações exige uma ruptura, passagem ou intervenção capaz de vencer as fronteiras entre Árvores.",
-        "nota": "A Sonhar documentada na Realidade 0 é a manifestação de Gênese. Ela não é a única Sonhar existente, apenas a camada conhecida por seus habitantes."
+        "descricao": "Sonhar existe em todas as Árvores ao mesmo tempo, mas cada Árvore tem a sua camada, separada das outras. Quem sonha numa Árvore não vê nem encontra quem sonha em outra.\n\nNa prática, duas pessoas de Árvores diferentes podem dormir na mesma cama e passar a noite sem se cruzar uma vez. Cada uma sonha na sua camada, com os seus Sonhos e os seus Pesadelos, e acorda achando que o sono foi só dela. Quase todo mundo vive e morre assim, sem saber que existe uma camada ao lado.\n\nO que muda de uma camada para outra é o jeito das coisas. A de Gênese, a única que os habitantes de lá conhecem, tem Grimm no centro e uma hospitalidade que passa da conta. As outras têm outros donos, ou nenhum. Quem já esteve em mais de uma costuma dizer que a diferença se sente antes de se ver: o ar pesa de outro jeito, e as pessoas do sonho falam num ritmo que o visitante não reconhece.\n\nAtravessar de uma camada para outra é a parte difícil. Querer não basta, e dormir mais fundo também não ajuda. É preciso uma ruptura, uma passagem aberta por alguém ou a ajuda de Grimm, o Soberano dos Sonhos e Pesadelos, e mesmo assim quem atravessa acorda cansado, sem lembrar direito de ter dormido. Quem passou por isso conta quase sempre a mesma coisa: tudo o que conhecia da própria camada termina de repente numa borda reta, como uma folha cortada a tesoura.\n\nDo outro lado vale o que vale em Sonhar. O que se deseja ganha corpo nos Sonhos, o que se teme ganha corpo nos Pesadelos, e o visitante não escolhe em qual dos dois vai parar. Os Oníricos moram ali e não dependem de ninguém dormindo para existir. Todos sabem que visita de outra camada é coisa rara. Uns recebem com festa, outros com vontade de guardar.",
+        "nota": "Cada Árvore enxerga só a sua camada de Sonhar. A que está registrada na Realidade 0 é a de Gênese, a camada que os habitantes de lá conhecem."
       }
     },
     {
@@ -63,9 +63,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "fluxo": "fluxo-do-vazio",
         "genero": "Masculino",
         "status": "observando",
-        "dominio": "O vazio entre as coisas guarda a \"saída\" definitiva da existência.",
+        "dominio": "O vazio entre as coisas, onde fica a saída definitiva da existência.",
         "epiteto": "Aquele que Flui no Vazio",
-        "descricao": "Governa o Vazio, não uma Árvore, mas o nada que existe entre as Árvores, entre o Banco Lunar e entre tudo o que não tem lugar no Jardim. É a deidade mais silenciosa que guarda a saída definitiva da existência, sendo o mais temido, neutro e enigmático de todos."
+        "descricao": "Erebus governa o Vazio, o nada que fica entre as nove Árvores, em volta do Banco Lunar e de tudo o que não tem lugar no Jardim. É a mais calada das deidades e a mais temida também. Guarda a saída definitiva da existência e nunca tomou partido de ninguém, e quem tentou adivinhar o que ele pensa desistiu cedo."
       },
       "revelado": true,
       "arvore_origem": "erebus"
@@ -78,9 +78,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "fluxo": "fluxo-da-essencia",
         "genero": "Feminino",
         "status": "paralisada",
-        "dominio": "A alma e a verdade fundamental das coisas o que define a natureza real de um ser.",
+        "dominio": "A alma e a verdade de cada coisa, aquilo que define o que um ser é de fato.",
         "epiteto": "Aquela que flui na Essência",
-        "descricao": "Governa o que define a alma e a verdade fundamental das coisas. É filosófica e raramente interfere, a menos que a natureza de um ser seja corrompida. "
+        "descricao": "Ousias cuida da alma e da verdade de cada coisa, o que sobra de um ser quando se tira tudo o que ele mostra. Gosta mais de pensar do que de agir e quase nunca interfere. A exceção é quando a natureza de alguém começa a se corromper: aí ela aparece."
       },
       "revelado": true,
       "arvore_origem": "ousias"
@@ -93,9 +93,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "fluxo": "fluxo-da-vitalidade",
         "genero": "Ambos",
         "status": "paralisada",
-        "dominio": "O ciclo selvagem da vida nascer, viver, morrer, renascer e tudo que a existência tem a oferecer.",
+        "dominio": "O ciclo selvagem da vida: nascer, viver, morrer, renascer, e tudo o que a existência tem a oferecer no caminho.",
         "epiteto": "Aquela que flui na Vitalidade",
-        "descricao": "Entidade de energia bruta e instintiva. Governa o ciclo completo da vida, sempre aproveitando tudo que a existência lhe proporciona."
+        "descricao": "Haemus é energia bruta, instinto que vem antes do pensamento. Governa a vida inteira, do primeiro fôlego ao último e de volta ao primeiro, e não deixa passar nada do que a existência oferece: fome, festa, briga, cura. Tudo o que está vivo aproveita, e Haemus aproveita junto."
       },
       "revelado": true,
       "arvore_origem": "haemus"
@@ -108,9 +108,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "fluxo": "fluxo-do-fisico",
         "genero": "Masculino",
         "status": "paralisada",
-        "dominio": "Peso, gravidade e substância física sem sua proteção, nada seria sólido e tudo colapsaria.",
+        "dominio": "Peso, gravidade e substância. Sem ele nada seria sólido e tudo desabaria.",
         "epiteto": "Aquele que flui no Físico",
-        "descricao": "Estóico e pesado. É ele quem dá peso, gravidade e substância física ao mundo."
+        "descricao": "Moros é estoico e pesado, e fala como quem não tem pressa nenhuma. É ele quem dá peso, gravidade e corpo ao mundo. Cada pedra que fica no chão e cada passo que encontra apoio dependem dele."
       },
       "revelado": true,
       "arvore_origem": "moros"
@@ -125,7 +125,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "status": "ativa",
         "dominio": "Criação pura, nascimento de novos Galhos, luz e ordem.",
         "epiteto": "Aquela que flui na Origem",
-        "descricao": "Focada na criação pura, Aethel é uma entidade de luz e ordem que zela pelo nascimento de novos Galhos."
+        "descricao": "Aethel cuida do que ainda vai existir. É luz e é ordem, e cada Galho novo que brota de uma Árvore passa primeiro pelas mãos dela. É uma das poucas deidades que ainda agem, e Gênese cresce do jeito que cresce por causa disso."
       },
       "arvore_origem": "aethel"
     },
@@ -137,9 +137,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "fluxo": "fluxo-do-sangue",
         "genero": "Feminino",
         "status": "ativa",
-        "dominio": "O término de todas as coisas recepciona tudo o que acaba, transformando o fim em um local pro \"recomeço\".",
+        "dominio": "O fim de todas as coisas. Recebe tudo o que acaba e faz do fim um lugar para recomeçar.",
         "epiteto": "Aquela que Flui no Fim",
-        "descricao": "Também chamada de \"A Escritora do Fim\". Pacientemente recepciona tudo o que acaba, transformando o fim em local para o \"recomeço\". Preside o Tribunal de Arkarin, onde julga os mortos. Estruturalmente é igual às outras deidades tem Árvore, tem Fluxo, tem Galho, mas seu único Galho é Arkarin, o destino final de toda existência, o ponto de convergência de todas as outras Árvores: não uma origem, e sim uma chegada."
+        "descricao": "Também a chamam de Escritora do Fim. Recebe com paciência tudo o que acaba e faz do fim um lugar onde dá para recomeçar. Preside o Tribunal de Arkarin, onde os mortos são julgados.\n\nTem Árvore, Fluxo e Galho como qualquer outra deidade, mas o Galho dela é um só: Arkarin, o destino final de toda existência. As outras Árvores começam as coisas. Limiar é onde todas elas chegam."
       },
       "revelado": true,
       "arvore_origem": "mulher-carmesim"
@@ -152,9 +152,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "fluxo": "fluxo-do-espaco",
         "genero": "Feminino",
         "status": "paralisada",
-        "dominio": "As distâncias, as dimensões e as fronteiras necessárias pra Árvores e Galhos não colidirem.",
+        "dominio": "As distâncias, as dimensões e as fronteiras que impedem Árvores e Galhos de se chocarem.",
         "epiteto": "Aquela que flui no Espaço",
-        "descricao": "Governa as distâncias, as dimensões e as fronteiras. É ela quem molda esses espaços necessários para que existam Árvores e Galhos sem se colidirem."
+        "descricao": "Aperion governa as distâncias, as dimensões e as fronteiras. Foi ela quem abriu espaço entre as coisas, e é por causa dela que Árvores e Galhos crescem lado a lado sem se esmagar."
       },
       "revelado": true,
       "arvore_origem": "aperion"
@@ -170,7 +170,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "status": "dominante",
         "dominio": "A nova malha artificial que intercepta, filtra e bloqueia a comunicação direta entre todas as deidades, isolando-as umas das outras.",
         "epiteto": "Aquele que flui na Tecnologia",
-        "descricao": "Jota Macedo subjugou Keryx o antigo Fluxo da Comunicação, guardião das leis e pactos entre as Árvores. Keryx não foi morto mas sim aprisionado e tendo seu poder absorvido dia após dia. Desde então, Jota governa o que restou do Fluxo de Keryx através da A.X.I.S, uma malha tecnológica artificial que corta a comunicação direta entre as demais deidades é por isso que quase todas elas estão paralisadas e isoladas, sem conseguir se falar."
+        "descricao": "Esta Árvore era de Keryx, a deidade do Fluxo da Comunicação, guardião das leis e dos pactos entre as Árvores. Jota Macedo lutou contra ele e venceu, e foi o primeiro ser humano a vencer uma deidade.\n\nKeryx não morreu. Está preso num dos casulos da Malha, e o poder dele é puxado dia após dia para dentro da máscara de Jota. O que sobrou do Fluxo agora passa pela A.X.I.S, uma malha artificial que corta a conversa direta entre as deidades. É por isso que quase todas estão paralisadas, cada uma isolada na sua Árvore, sem conseguir falar com as outras."
       },
       "arvore_origem": "keryx"
     },
@@ -182,9 +182,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "fluxo": "fluxo-da-inconstancia",
         "genero": "Masculino",
         "status": "paralisada",
-        "dominio": "A mudança constante e a entropia impede que o Jardim fique estagnado ou morra pela calmaria.",
+        "dominio": "A mudança constante e a entropia, que não deixam o Jardim parar nem morrer de calmaria.",
         "epiteto": "Aquele que flui na Inconstância",
-        "descricao": "Caótico e intenso. Governa a mudança constante e a entropia, impedindo que os Galhos fiquem estagnados. "
+        "descricao": "Ignis é caótico e intenso, e não aguenta nada parado. Governa a mudança e a entropia. Quando um Galho começa a se acomodar, ele chega mexendo em tudo até a coisa voltar a andar."
       },
       "revelado": true,
       "arvore_origem": "ignis"
@@ -197,9 +197,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "fluxo": "fluxo-do-tempo",
         "genero": "Masculino",
         "status": "paralisada",
-        "dominio": "A linha sucessiva e imutável de eventos garante que passado, presente e futuro jamais se misturem.",
+        "dominio": "A fila dos acontecimentos, um depois do outro, que mantém passado, presente e futuro cada um no seu lugar.",
         "epiteto": "Aquele que flui no Tempo",
-        "descricao": "Paciente e inevitável. Ele zela pela linha sucessiva e imutável de eventos."
+        "descricao": "Chronus é paciente e não há como fugir dele. Cuida da fila dos acontecimentos, um depois do outro, e não deixa nenhum furar a vez. O que já passou continua no passado porque ele está olhando."
       },
       "revelado": true,
       "arvore_origem": "chronus"
@@ -210,8 +210,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Fluxo do Vazio",
       "conteudo": {
         "arvore": "O Vazio",
-        "descricao": "O Fluxo do que não está. Apaga em vez de destruir: o som some antes de chegar ao ouvido, a dor não é sentida, o nome de alguém deixa de ocorrer a quem o conhecia. É o mais silencioso e o mais temido de todos, porque não deixa ruína nenhuma pra provar que houve algo ali. Erebus não guarda a morte - isso é do Limiar - e sim a saída definitiva: o que passa pelo Vazio não vai a lugar nenhum, simplesmente deixa de ter existido, e nem a Biblioteca de Arkarin fica com um livro pra contar.",
-        "marca_corporal": "Estrelas no pulso - pontos brancos e frios sob a pele, que não refletem luz nenhuma."
+        "descricao": "O Fluxo do que não existe. Apaga em vez de destruir: o som some antes de chegar ao ouvido, a dor não é sentida, o nome de alguém deixa de ser lembrado a quem o conhecia. É o mais silencioso e o mais temido de todos, porque não deixa destruição nenhuma pra provar que houve algo ali. Erebus não guarda a morte, quem guarda é a Mulher Carmesim; ele guarda a saída definitiva. O que passa pelo Vazio não vai a lugar nenhum, simplesmente deixa de ter existido, e nem a Biblioteca de Arkarin fica com um livro pra contar essa história.",
+        "marca_corporal": "Estrelas no pulso que parecem quase que transparentes."
       },
       "arvore_origem": "erebus"
     },
@@ -245,7 +245,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Fluxo do Físico",
       "conteudo": {
         "arvore": "Baluarte",
-        "descricao": "A manifestação dos elementos primordiais - a forma mais comum e palpável de interagir com o mundo, e o ponto de partida natural pra maioria das pessoas que despertam seu Fluxo. Foca na manipulação da matéria bruta e da energia tangível: o portador desenvolve aptidão com uma força específica e mantém esse elemento como assinatura por toda a vida. As derivações comuns registradas são Terra/Areia (Estabilidade), Água/Gelo (Curiosidade), Fogo/Magma (Destruição), Ar/Fumaça (Liberdade), Raio/Plasma (Impulsividade), Luz/Pureza (Ordem) e Escuridão/Trevas (Esquecimento). Elementaristas aprofundam um desses pares. Uma minoria revela a aptidão de Avatar e consegue aprender os outros elementos sem apagar o primeiro, mas ainda deriva somente o elemento de origem. Derivações raras também podem existir; Cristal, Sangue, Fogo Astral, Vácuo, Magnetismo, Aurora e Eclipse são propostas em playtest e não substituem os sete pares já documentados. A essência do Fluxo do Físico pode ser imbuída diretamente em armas e armaduras pra conferir propriedades elementais ao combate; encontrar itens assim é raridade extrema, o que inflaciona severamente o preço deles no mercado. Em combate, as derivações guardam uma propriedade perigosa: resistência a um elemento base cai pela metade contra a derivação dele - quem tem 10 de resistência a Luz e sofre um ataque de Pureza absorve apenas 5 de dano, o que torna as derivações uma vantagem estratégica brutal.",
+        "descricao": "A manifestação dos elementos primordiais: a forma mais comum e palpável de interagir com o mundo, e o ponto de partida natural pra maioria das pessoas que despertam seu Fluxo. Foca na manipulação da matéria bruta e da energia tangível: o portador desenvolve aptidão com uma força específica e mantém esse elemento como assinatura por toda a vida. As derivações comuns registradas são Terra/Areia (Estabilidade), Água/Gelo (Curiosidade), Fogo/Magma (Destruição), Ar/Fumaça (Liberdade), Raio/Plasma (Impulsividade), Luz/Pureza (Ordem) e Escuridão/Trevas (Esquecimento). Elementaristas aprofundam um desses pares. Uma minoria revela a aptidão de Avatar e consegue aprender os outros elementos sem apagar o primeiro, mas ainda deriva somente o elemento de origem. Derivações raras também podem existir; Cristal, Sangue, Fogo Astral, Vácuo, Magnetismo, Aurora e Eclipse são propostas em playtest e não substituem os sete pares já documentados. A essência do Fluxo do Físico pode ser imbuída diretamente em armas e armaduras pra conferir propriedades elementais ao combate; encontrar itens assim é raridade extrema, o que inflaciona severamente o preço deles no mercado. Em combate, as derivações guardam uma propriedade perigosa: resistência a um elemento base cai pela metade contra a derivação dele. Quem tem 10 de resistência a Luz e sofre um ataque de Pureza absorve apenas 5 de dano, o que torna as derivações uma vantagem estratégica brutal.",
         "marca_corporal": "Placas minerais endurecem sobre as juntas e o dorso das mãos, na cor do elemento despertado."
       },
       "arvore_origem": "moros"
@@ -256,7 +256,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Fluxo da Origem",
       "conteudo": {
         "arvore": "Gênese",
-        "descricao": "O Fluxo do que ainda não existe. Quem o canaliza não faz a matéria surgir do nada, mas abre espaço pra que algo nasça: um vínculo, uma cura que o corpo ainda não sabia fazer, uma rota onde não havia caminho. É o mais generoso e o mais lento dos Fluxos, porque exige que o portador queira de verdade que aquilo exista, e recusa quem só quer o resultado. Aethel é a única deidade que nunca foi silenciada pela A.X.I.S, e é por isso que coisas novas continuam nascendo mesmo com o Jardim inteiro isolado.",
+        "descricao": "O Fluxo do que ainda não existe. Quem o canaliza não faz a matéria surgir do nada, mas abre espaço pra que algo nasça, seja um vínculo, uma cura que o corpo ainda não sabia fazer, uma rota onde não havia caminho. É o mais generoso e o mais lento dos Fluxos, porque exige que o portador queira de verdade que aquilo exista, e recusa quem só quer o resultado. Aethel é a única deidade que nunca foi silenciada pela A.X.I.S, e é por isso que coisas novas continuam nascendo mesmo com o Jardim inteiro isolado.",
         "marca_corporal": "Um rosa pálido aparece sob as palmas das mãos."
       },
       "revelado": true,
@@ -268,8 +268,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Fluxo do Fim",
       "conteudo": {
         "arvore": "Limiar",
-        "descricao": "O Fluxo do término de todas as eras e ciclos. Nas mãos da Mulher Carmesim ele encerra: fecha histórias, sela o que acabou e transforma o fim em solo pro recomeço. Mortal nenhum canaliza o Fim inteiro - o que se alcança é sua única vertente praticável, o Sangue.\n\nO Sangue é a manifestação do Fluxo da Origem transformada pela dor, pela perda e pela obsessão - nascida do final dos sonhos e da reconstrução cruel dos objetivos. Ele não é aprendido, ele é sentido por aqueles que foram quebrados e que, em seu desespero, escolheram sacrificar tudo pra renascer com novos propósitos. Não existe mais o que era ou seria: quem manipula esse Fluxo sabe que tudo é extremo, os sentimentos se intensificam, os objetivos se reconstroem e a história passa a ser moldada pelo sangue carmesim. Os que tocam o Sangue nunca mais serão os mesmos - uma vez que ele entra, contamina e transforma a alma em algo totalmente novo.\n\nTodos que usam o Sangue estão ligados a Arkarin, o berço do fim, porque o fim às vezes significa recomeço - e é a Mulher Carmesim quem concede esse privilégio aos escolhidos.",
-        "marca_corporal": "Carmesim sob as unhas e nas dobras das mãos, que não sai com água; com o tempo, linhas de escrita que ninguém consegue ler."
+        "descricao": "O Fluxo do término de todas as eras e ciclos. Nas mãos da Mulher Carmesim ele encerra, fecha histórias, sela o que acabou e transforma o fim em algo pro recomeço. Nenhum ser canaliza o Fim inteiro; o que se alcança é apenas uma fração utilizável desse fluxo.\n\nO Fim é a manifestação do Fluxo da Origem transformada pela dor, pela perda e pela obsessão, nascida do final dos sonhos e da reconstrução cruel dos objetivos. Ele não é aprendido, ele é sentido por aqueles que foram quebrados e que, em seu desespero, escolheram sacrificar tudo pra renascer com novos propósitos. Não existe mais o que era ou seria, quem manipula esse Fluxo sabe que tudo é extremo, os sentimentos se intensificam, os objetivos se reconstroem e a história passa a ser moldada pelo sangue carmesim. Os que tocam o fluxo do fim nunca mais serão os mesmos, uma vez que ele entra, contamina e transforma a alma em algo totalmente novo.\n\nTodos que usam o Fim estão ligados a Arkarin, o berço do fim, porque o fim às vezes significa recomeço, e é a Mulher Carmesim quem concede esse privilégio aos escolhidos.",
+        "marca_corporal": "Escritas carmesim aparecem sob partes do corpo, mostrando a todos que você não é mais o que um dia foi."
       },
       "arvore_origem": "mulher-carmesim"
     },
@@ -279,8 +279,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Fluxo do Espaço",
       "conteudo": {
         "arvore": "Matriz",
-        "descricao": "O Fluxo da distância. Encurta, estica, dobra e tranca: um passo que cobre uma légua, uma porta que não leva a lugar nenhum, uma sala maior por dentro do que por fora, uma fronteira que exército nenhum atravessa. É o Fluxo dos guias dimensionais e das Âncoras, e o único que permite atravessar de um Galho a outro sem morrer no caminho. Com Aperion paralisada, as fronteiras que ela sustentava vêm cedendo sozinhas - é por isso que fendas e rachaduras entre Dimensões têm aparecido onde nunca houve nada.",
-        "marca_corporal": "A sombra do portador chega um instante atrasada, e nunca no ângulo certo."
+        "descricao": "O Fluxo da distância: ele encurta, estica, dobra e para. Uma porta que não leva a lugar nenhum, uma sala maior por dentro do que por fora, uma fronteira que não dá pra atravessar. É o Fluxo dos guias dimensionais, e o único que permite atravessar de um Galho a outro sem morrer no caminho. Com Aperion paralisada, as fronteiras que ela sustentava vêm cedendo sozinhas, e é por isso que fendas e rachaduras entre Dimensões têm aparecido onde nunca existiram.",
+        "marca_corporal": "A sombra do portador nunca está no ângulo certo."
       },
       "arvore_origem": "aperion"
     },
@@ -305,7 +305,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "revelado": false,
       "conteudo": {
         "arvore": "A.X.I.S",
-        "citacao": "Se o fluir das árvores é visto como um milagre, então a A.X.I.S é a prova de que milagres podem ser replicados. - Jota Macedo",
+        "citacao": "Se o fluir das árvores é visto como um milagre, então a A.X.I.S é a prova de que milagres podem ser replicados. (Jota Macedo)",
         "descricao": "Uma ramificação artificial desenvolvida a partir do Fluxo original, resultado direto das ambições de Jota Macedo um homem determinado a desvendar e replicar os mistérios cósmicos usando apenas os princípios da ciência e da razão. Diferente do despertar tradicional das outras vertentes, que exige fé, emoção ou pactos, a A.X.I.S é inteiramente construída sobre experimentação, lógica e precisão matemática.\n\nA cor predominante é o azul neon artificial, refletindo uma natureza fria, racional e calculadamente estável. Sua estética é marcada por estruturas geométricas perfeitas, cristais simétricos e artefatos forjados com uma exatidão espetacular.\n\nPra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo possa enfim ser compreendida, reproduzida e evoluída por mãos mortais. Virou o símbolo de uma nova era, provando que os Fluxos das velhas deidades não são mais os únicos capazes de sustentar a realidade. O que quase ninguém sabe é o preço: essa mesma malha é o que intercepta e bloqueia a comunicação entre as demais Árvores, e é por isso que quase todas as deidades estão paralisadas.",
         "marca_corporal": "Veias de azul neon acendem sob a pele e pulsam como se respirassem."
       },
@@ -329,8 +329,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Fluxo do Tempo",
       "conteudo": {
         "arvore": "Éon",
-        "descricao": "O Fluxo da ordem dos acontecimentos. Não volta no tempo e não mostra o futuro - Chronus existe justamente pra impedir as duas coisas. O que ele concede é peso sobre a sequência: agir antes de quem era mais rápido, fazer um veneno levar uma hora em vez de um segundo, sustentar de pé uma ruína que já devia ter caído. Todo uso cobra do próprio portador o tempo que ele poupou de outra coisa, e ninguém canaliza Éon por muitos anos sem parecer ter vivido o dobro deles.",
-        "marca_corporal": "Uma parte do corpo envelhece fora de compasso com o resto - uma mecha branca, uma mão de velho num rosto jovem."
+        "descricao": "O Fluxo da ordem dos acontecimentos. Não volta no tempo e não mostra o futuro: Chronus existe justamente pra impedir as duas coisas. O que ele concede é agir antes de quem era mais rápido, fazer um veneno levar uma hora em vez de um segundo, sustentar de pé uma ruína que já devia ter caído. Todo uso cobra do próprio portador o tempo que ele poupou de outra coisa, e ninguém canaliza Éon por muitos anos sem parecer ter vivido o dobro deles.",
+        "marca_corporal": "Uma parte do corpo envelhece fora de ordem com o resto do corpo. Exemplo: uma mecha branca, uma mão de velho num rosto de jovem."
       },
       "arvore_origem": "chronus"
     },
@@ -340,7 +340,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Anámnesis",
       "conteudo": {
         "arvore": "ousias",
-        "descricao": "O Galho onde as coisas ainda sabem o que são. Não há povo em Anámnesis, nem construção: é uma extensão de campo aberto sob luz âmbar constante, onde tudo que já existiu em qualquer Árvore deixou uma impressão do que era de verdade - sem disfarce, sem título, sem versão contada depois.\n\nDesde que Ousias parou, o Galho continua registrando e não responde mais. Quem chega ali sente que está sendo lido, e não encontra ninguém do outro lado da leitura.",
+        "descricao": "O Galho onde as coisas ainda sabem o que são. Não há povo em Anámnesis, nem construção: esse Galho é uma extensão de campo aberto sob uma luz constante, onde tudo que já existiu em qualquer Árvore deixou uma impressão do que era de verdade, sem versões, apenas a verdade.",
         "nota": "Anámnesis é o Galho mais fácil de alcançar e o mais difícil de suportar: ninguém o atravessa sem descobrir alguma coisa sobre si mesmo que preferiria não saber."
       },
       "arvore_origem": "ousias"
@@ -351,7 +351,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Viveiro",
       "conteudo": {
         "arvore": "haemus",
-        "descricao": "O Galho mais cheio de todos, e o mais difícil de atravessar. O Viveiro não tem estações, dia nem clima: tem apenas crescimento. Tudo ali nasce grande demais, rápido demais, e morre do mesmo jeito - a mata cobre em uma noite o que outra mata levaria um século pra tomar, e por baixo dela apodrece a mata anterior.\n\nCom Haemus paralisada, nada disso parou. O Viveiro é o único Galho em que a ausência da deidade não travou o Fluxo: ele continua sozinho, sem ninguém pra regular, e por isso vem engolindo as próprias fronteiras.",
+        "descricao": "O Galho mais cheio de todos, e o mais difícil de atravessar. O Viveiro não tem estações, dia nem clima: tem apenas crescimento. Tudo ali nasce grande demais, rápido demais, e morre do mesmo jeito: a natureza cobre em uma noite o que outra levaria um século pra tomar, e por baixo dela apodrece do mesmo jeito.",
         "nota": "Haemus não escolhe lados entre o que come e o que é comido. Um Galho regido por essa lógica sem supervisão nenhuma é a coisa mais perigosa do Jardim que não tem intenção nenhuma de fazer mal."
       },
       "arvore_origem": "haemus"
@@ -362,8 +362,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Alicerce",
       "conteudo": {
         "arvore": "moros",
-        "descricao": "O Galho que sustenta o peso dos outros. Alicerce não tem paisagem no sentido comum: é rocha maciça até onde a vista alcança, e mais rocha abaixo dela, sem fim conhecido. A gravidade ali é várias vezes a de qualquer outro lugar do Jardim, e cada passo custa o que custaria carregar outra pessoa.\n\nNão foi feito pra ser habitado - foi feito pra ser fundo. Sem Alicerce, e sem Moros segurando Alicerce, nada em Árvore nenhuma seria sólido: tudo colapsaria em éter.\n\nCom Moros paralisado, o Galho continua de pé por inércia. Ninguém sabe por quanto tempo inércia basta.",
-        "nota": "É o único Galho cuja função é estrutural e não narrativa: ele existe pra os outros existirem."
+        "descricao": "Alicerce não tem uma paisagem comum, é apenas rocha e montanhas até onde a vista alcança. A gravidade ali é várias vezes a de qualquer outro lugar do Jardim, e cada passo parece ser mais pesado que o anterior.\n\nNão foi feito pra ser habitado, mas dizem que, se você quer deixar seu elemento mais forte, é pra lá que deve ir.",
+        "nota": "É o único Galho cuja função é servir como provação aos que se acham fortes o suficiente para carregar mais poder do que aguentam."
       },
       "arvore_origem": "moros"
     },
@@ -373,8 +373,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Realidade 0",
       "conteudo": {
         "arvore": "aethel",
-        "descricao": "O Galho principal da Árvore de Gênese, e o único que se sabe habitado - os outros nascidos de Aethel ainda não foram encontrados, ou nunca chegaram a vingar. Aqui vivem espécies inteiras que não têm outro lugar pra chamar de casa: humanos, elfos, vampiros, anões, oníricos, cada povo preso à Dimensão que aprendeu a sustentar sua espécie.\n\nContém seis Dimensões - a Padrão, com todos os reinos mortais, Nadalon, Întuneric, Sonhar, Espelhos e o Coliseu - e é o palco de tudo que está acontecendo agora: com a Malha subida sobre o Galho de Keryx e as Deidades paralisadas, é em Realidade 0 que se decide se o Jardim volta a se falar.",
-        "nota": "\"Realidade\" e \"Galho\" são sinônimos - \"Realidade 0\" é o rótulo imersivo preferido para este Galho específico."
+        "descricao": "O Galho principal da Árvore de Gênese. Aqui vivem espécies inteiras que não têm outro lugar pra chamar de casa: humanos, elfos, vampiros, anões, oníricos, cada povo ligado à Dimensão que melhor sustenta sua espécie.\n\nContém seis Dimensões: a Padrão, Nadalon, Întuneric, Sonhar, Espelhos e o Coliseu.",
+        "nota": "\"Realidade\" e \"Galho\" são sinônimos. \"Realidade 0\" é o rótulo imersivo preferido para este Galho específico."
       },
       "arvore_origem": "aethel"
     },
@@ -384,15 +384,15 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Arkarin",
       "conteudo": {
         "arvore": "mulher-carmesim",
-        "descricao": "O único Galho da Árvore de Limiar, e o ponto inevitável onde todas as existências convergem depois da morte. Representa o fim absoluto, o encerramento dos ciclos, o limite intransponível da vida. Não é céu, não é inferno, nem purgatório: Arkarin é simplesmente o lugar onde a existência acaba - um plano feito de silêncio, vazio e eternidade, onde tempo, espaço e realidade se desfazem lentamente, até restar apenas aquilo que foi. Não importa quão poderoso, divino ou insignificante: todos um dia estarão diante dos portões de Arkarin. É a chegada de todas as outras Árvores, não a origem de nenhuma.",
+        "descricao": "O único Galho da Árvore de Limiar, e o ponto inevitável onde todas as existências convergem depois da morte. Representa o fim absoluto, o encerramento dos ciclos, o limite intransponível da vida. Não é o céu, nem é o inferno, muito menos o purgatório. Na verdade, Arkarin é simplesmente o lugar onde a existência acaba: um plano feito de silêncio e eternidade, onde o tempo, espaço e a realidade se desfazem lentamente, até restar apenas aquilo que um dia foi. Não importa quão poderoso, divino ou insignificante tenha sido, todos um dia estarão diante dos portões de Arkarin.",
         "mandamentos": [
-          "1º - Ninguém entra em Arkarin, a não ser com a permissão da Mulher Carmesim.",
-          "2º - Ninguém sai de Arkarin, a não ser com a permissão da Mulher Carmesim.",
-          "3º - Nenhuma existência está acima da autoridade dela em Arkarin.",
-          "4º - Toda existência à beira de seu fim é notada pela Mulher Carmesim.",
-          "5º - Mulher Carmesim é um título, não uma pessoa, e de tempos em tempos deve ser escolhida uma nova mulher para esse posto."
+          "1º: Ninguém entra em Arkarin, a não ser com a permissão da Mulher Carmesim.",
+          "2º: Ninguém sai de Arkarin, a não ser com a permissão da Mulher Carmesim.",
+          "3º: Nenhuma existência está acima da autoridade dela em Arkarin.",
+          "4º: Toda existência à beira de seu fim é notada pela Mulher Carmesim.",
+          "5º: Mulher Carmesim é um título, não uma pessoa, e de tempos em tempos deve ser escolhida uma nova mulher para esse posto."
         ],
-        "nota": "Diferente das outras Árvores (que costumam ter vários Galhos), Limiar tem só este - reflexo de sua natureza: ela é o fim, não um entre múltiplos começos."
+        "nota": "Diferente das outras Árvores (que costumam ter vários Galhos), Limiar tem só este, reflexo de sua natureza: ele é o fim, não um entre múltiplos, mas o fim sem outros finais."
       },
       "arvore_origem": "mulher-carmesim"
     },
@@ -402,7 +402,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Interstício",
       "conteudo": {
         "arvore": "aperion",
-        "descricao": "O Galho que existe entre os outros Galhos - o vão que Aperion abriu pra que as Árvores pudessem crescer sem se colidirem. Não tem chão, céu nem direção: tem distância, e a distância ali é a única matéria de que as coisas são feitas.\n\nÉ o caminho. Toda travessia entre Galhos passa por Interstício, saiba o viajante disso ou não, e a maioria não sabe - o Fluxo do Espaço costuma atravessá-lo tão rápido que a pessoa nunca chega a perceber que esteve em lugar nenhum.\n\nCom Aperion paralisada, as distâncias pararam de ser mantidas. Trechos que separavam Galhos inteiros encolheram; outros esticaram até virar intransponíveis. É de Interstício que saem as fendas e rachaduras que vêm aparecendo pelas Dimensões.",
+        "descricao": "O Galho que existe entre os outros Galhos: o vão que Aperion abriu pra que as Árvores pudessem crescer sem se colidirem.\n\nToda travessia entre Galhos passa por Interstício, saiba o viajante disso ou não, e a maioria não sabe: o Fluxo do Espaço costuma atravessá-lo tão rápido que a pessoa nunca chega a perceber que esteve em lugar nenhum.\n\nCom Aperion paralisada, as distâncias pararam de ser mantidas. Trechos que separavam Galhos inteiros encolheram; outros esticaram até virar intransponíveis. É de Interstício que saem as fendas e rachaduras que vêm aparecendo pelas Dimensões.",
         "nota": "Se algum dia duas Árvores se tocarem, terá sido aqui."
       },
       "arvore_origem": "aperion"
@@ -414,8 +414,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "revelado": false,
       "conteudo": {
         "arvore": "keryx",
-        "descricao": "O Galho que Jota Macedo construiu por cima do de Keryx. A Malha não cresceu: foi instalada - uma treliça de azul neon estendida sobre toda a extensão do antigo Galho da Comunicação, ocupando exatamente o mesmo espaço, com exatidão geométrica onde antes havia caminho aberto.\n\nÉ por ela que toda palavra entre Árvores passa hoje. E é nela que toda palavra entre Árvores para: a Malha intercepta, registra, filtra e, quase sempre, não entrega. As deidades não foram silenciadas uma a uma - foram desligadas de uma vez, no dia em que a Malha subiu.\n\nPor baixo da treliça, o Galho original de Keryx ainda existe. Pálido, estreito e quase intransitável, mas existe.",
-        "nota": "É o único Galho do Jardim com dono, e o único que foi feito por um mortal."
+        "descricao": "O \"Galho\" que Jota Macedo construiu por cima do de Keryx. A Malha não cresceu: foi instalada: uma treliça de azul neon estendida sobre toda a extensão do antigo Galho da Comunicação.\n\nÉ por ela que toda comunicação entre Árvores passa hoje. E é nela que toda comunicação entre Árvores para: afinal, a Malha intercepta, registra, filtra e, quase sempre, não deixa mensagens passar. As deidades não foram silenciadas uma a uma: foram desligadas de uma vez, no dia em que a Malha foi instalada.\n\nPor baixo da treliça, o Galho original de Keryx ainda existe. Pálido, estreito e quase intransitável, mas existe.",
+        "nota": "É o único \"Galho\" do Jardim com dono, e o único que foi feito por um mortal."
       },
       "arvore_origem": "keryx"
     },
@@ -425,8 +425,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Espiral",
       "conteudo": {
         "arvore": "ignis",
-        "descricao": "O Galho que nunca era o mesmo duas vezes. Espiral não tinha mapa porque não fazia sentido ter: montanha virava planície, rio virava estrada, e quem passasse por ali duas vezes não reconhecia nada da primeira. Era o Galho onde nada apodrecia, porque nada durava o suficiente.\n\nHoje está parado. Desde que Ignis foi silenciado, Espiral congelou na última forma que assumiu - e é a coisa mais perturbadora do Jardim inteiro, porque essa forma não era pra ser final. Ficou uma paisagem no meio de virar outra coisa, e assim permanece.",
-        "nota": "É o argumento mais forte de que a paralisia é uma ferida e não uma trégua: o Fluxo da mudança estacionado é o único dano que se enxerga a olho nu."
+        "descricao": "O Galho que nunca é o mesmo duas vezes. Espiral não tem mapa porque não faz sentido ter, já que montanhas viravam planície, rio virava estrada, e quem passasse por ali duas vezes não reconhecia nada da primeira.",
+        "nota": "É o galho que nunca se mantém o mesmo por tempo suficiente pra alguém conseguir mapear."
       },
       "arvore_origem": "ignis"
     },
@@ -436,8 +436,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Sucessão",
       "conteudo": {
         "arvore": "chronus",
-        "descricao": "O Galho onde os acontecimentos ficam em fila. Sucessão é uma linha - literalmente uma linha, estendida sem largura por uma extensão que não se mede em distância e sim em ordem. Cada ponto dela é um instante que já aconteceu em alguma Árvore, encaixado atrás do anterior e à frente do seguinte, e é esse encaixe que impede o passado, o presente e o futuro de se misturarem.\n\nChronus caminha a linha. Sempre no mesmo sentido, sempre no mesmo passo, e nunca a percorreu duas vezes.\n\nCom ele paralisado, a fila não se desfez - mas parou de ser conferida. E já apareceram, em Dimensões distantes, coisas acontecendo levemente fora de ordem: um eco antes do som, uma ferida antes do golpe.",
-        "nota": "Nada em Sucessão pode ser revisitado. O Galho registra a ordem dos eventos, não os eventos - não há nada pra ver ali, só pra confirmar."
+        "descricao": "O Galho onde os acontecimentos ficam em fila. Sucessão é uma linha, literalmente uma linha, estendida sem largura por uma extensão que não se mede em distância e sim em ordem cronológica. Cada ponto dela é um instante que já aconteceu em alguma Árvore, encaixado atrás do anterior e à frente do seguinte, e é esse encaixe que impede o passado, o presente e o futuro de se misturarem.\n\nChronus caminha sobre a linha. Sempre no mesmo sentido, sempre no mesmo passo, e nunca a percorreu duas vezes.",
+        "nota": "Nada em Sucessão pode ser revisitado. O Galho registra a ordem dos eventos, não os eventos em si."
       },
       "arvore_origem": "chronus"
     },
@@ -483,8 +483,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Dimensão Padrão",
       "conteudo": {
         "galho": "realidade-0",
-        "descricao": "Comparada às outras Dimensões da Realidade 0, a Dimensão Padrão não tem nada de extraordinário - e é exatamente essa normalidade que a torna a mais povoada de todas. Gravidade, clima e estações seguem leis fixas, sem depender de sonho, Fluxo ou vontade de ninguém, o oposto de tudo que cresce ao redor dela.\n\nÉ onde ficam os grandes reinos mortais - Salém, o Império, Emberhold, Lionês, Khazad e Solaria - cada um resolvendo o problema que os outros quatro não resolvem: o Império guarda, Emberhold arma, Lionês alimenta, Khazad forja, Salém domina o Fluxo. É também onde fica Iwagakure, a vila escondida que treina os shinobi mais temidos da Realidade 0.",
-        "caracteristicas": "Dimensão comum. Sem magia ambiental, sem clima estranho - é onde a maioria dos mortais vive e morre."
+        "descricao": "A dimensão central e com mais habitantes da Realidade 0. Abriga os grandes reinos como Salém, o Império, Solaria, Emberhold, Lionês, Khazad, entre outros.",
+        "caracteristicas": "Dimensão onde o tempo e o espaço seguem regras consistentes."
       },
       "revelado": true,
       "arvore_origem": "aethel"
@@ -615,7 +615,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Alfarn",
       "conteudo": {
         "dimensao": "nadalon",
-        "descricao": "Não apenas a capital de Nadalon: o coração da dimensão e o ápice da visão de Noemi Finwë. Diferente das cidades humanas, Alfarn não foi construída sobre a terra - parece ter brotado dela, como uma flor de cristal e luz.\n\nA ilha flutua no ponto mais alto da dimensão, onde a gravidade é suave e o ar tem um leve perfume de pétalas de jasmim; o solo é de rocha branca translúcida que emite uma luminescência fraca. Cascatas de água pura caem das bordas pro vazio abaixo, mas antes de desaparecerem viram névoa dourada, que retorna às outras ilhas em forma de chuva com propriedades curativas e férteis - as Águas de Cristal.\n\nNo ponto mais alto fica o Palácio, sem portas trancadas: uma estrutura de arcos abertos onde o vento circula livre, e o trono de Noemi é esculpido numa única peça de ametista que parece pulsar. A Biblioteca de Luz não guarda informação em papel, e sim em cristais flutuantes - ao tocar um cristal, o elfo recebe o conhecimento direto na mente, o que permite compartilhar a sabedoria de milênios instantaneamente.\n\nAlfarn é protegida por uma frequência sonora: qualquer ser que chegue à ilha com intenções violentas sente uma sonolência profunda e paz, perdendo a vontade de lutar antes mesmo de desembarcar."
+        "descricao": "Não apenas a capital de Nadalon, mas sim o coração da dimensão e o ápice da visão de Noemi Finwë. Diferente das cidades humanas, Alfarn não foi construída sobre o chão ou qualquer outra coisa, na verdade foi construída a partir do poder de Noemi.\n\nA ilha flutua no ponto mais alto da dimensão, onde a gravidade é suave e o ar tem um leve perfume de pétalas de jasmim; o solo é de rocha branca translúcida que emite uma luminescência fraca. Cascatas de água pura caem das bordas pro vazio abaixo, mas antes de desaparecerem viram névoa dourada, que retorna às outras ilhas em forma de chuva com propriedades curativas e férteis: as Águas de Cristal.\n\nNo ponto mais alto fica o Palácio, sem portas trancadas, ele tem uma estrutura de arcos abertos onde o vento circula livre, e o trono de Noemi é esculpido numa única peça de ametista que parece pulsar. A Biblioteca de Luz não guarda informação em papel, e sim em cristais flutuantes: ao tocar um cristal, o elfo recebe o conhecimento direto na mente, o que permite compartilhar a sabedoria de milênios instantaneamente.\n\nAlfarn é protegida por uma frequência sonora: qualquer ser que chegue à ilha com intenções violentas sente uma sonolência profunda e paz, perdendo a vontade de lutar antes mesmo de desembarcar."
       },
       "arvore_origem": "aethel"
     },
@@ -625,7 +625,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Transilvânia",
       "conteudo": {
         "dimensao": "intuneric",
-        "descricao": "No coração da região conhecida como Transilvânia, o castelo de Davinor é uma construção colossal de obsidiana e ossos petrificados. Não tem guardas visíveis: a própria estrutura parece viva, reagindo aos intrusos - dizem que as paredes bebem o sangue de quem tenta invadir.\n\nAté ali chegam os Trens de Osso: enormes locomotivas feitas de metal fundido com esqueletos de gigantes, que correm sobre trilhos parecidos com veias pulsantes, transportando os barris de sangue das colônias distantes. O barulho que emitem não é de vapor, e sim um guincho metálico que soa como um grito.\n\nA Catedral funciona como um imenso filtro biológico, que tenta purificar todo o sangue sujo pra que o castelo de Davinor permaneça puro - e o deixe mais forte a cada morte que acontece."
+        "descricao": "No coração da região conhecida como Transilvânia fica o castelo de Davinor, uma construção enorme de obsidiana e ossos petrificados. Não tem guarda à vista. A própria estrutura parece viva e reage a quem entra sem ser chamado, e dizem que as paredes bebem o sangue de quem tenta invadir.\n\nAté ali chegam os Trens de Osso, locomotivas imensas de metal fundido com esqueletos de gigantes, correndo sobre trilhos que pulsam como veias e trazendo os barris de sangue das colônias distantes. O barulho que fazem lembra mais um grito do que uma máquina, um guincho metálico que se ouve de longe.\n\nA Catedral funciona como um filtro biológico gigante. Tenta purificar todo o sangue sujo para que o castelo de Davinor continue puro, e ele fica mais forte a cada morte que acontece."
       },
       "arvore_origem": "aethel"
     },
@@ -635,7 +635,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Colônias de Întuneric",
       "conteudo": {
         "dimensao": "intuneric",
-        "descricao": "Fazendas humanas. Diferente de cidades normais, as colônias são construídas de forma vertical e claustrofóbica, pra facilitar o monitoramento.\n\nOs dormitórios são estruturas de concreto bruto sem janelas, onde os humanos dormem em beliches de ferro empilhados até o teto; o ar é pesado, filtrado por máquinas que emitem um zumbido constante pra mascarar o som das conversas e impedir conspirações. Todas as ruas são levemente inclinadas em direção ao centro - não pra drenar chuva, que raramente cai, mas pra garantir que qualquer sangue derramado em incidentes ou execuções seja canalizado pros reservatórios subterrâneos. São as Calhas de Sangue.\n\nDentro de uma colônia os humanos não são iguais: são classificados pelo Mestre da Colheita local. Doadores Ativos são os saudáveis entre 18 e 40 anos, de sangue de alta qualidade. Matrizes são os selecionados pra reprodução contínua. Quebrados são doentes e idosos, que servem só pra trabalho pesado ou como ração pras criaturas. Vigilantes são humanos traidores, que ajudam os vampiros em troca de regalias.\n\nUma vez por mês, cada setor é levado às Estações de Sangria, onde válvulas orgânicas são conectadas diretamente às artérias. Cada humano deve entregar uma quantidade fixa - o Imposto Pela Vida - e, se o corpo não produz o suficiente por fraqueza, a punição é a retirada de um membro pra compensar o volume em carne."
+        "descricao": "Fazendas humanas. Diferente de cidades normais, as colônias são construídas de forma vertical e claustrofóbica, pra facilitar o monitoramento.\n\nOs dormitórios são estruturas de concreto bruto sem janelas, onde os humanos dormem em beliches de ferro empilhados até o teto; o ar é pesado, filtrado por máquinas que emitem um zumbido constante pra mascarar o som das conversas e impedir conspirações. Todas as ruas descem de leve em direção ao centro. A chuva quase nunca cai, e a inclinação está ali pra que todo sangue derramado em incidentes ou execuções escorra pros reservatórios subterrâneos. São as Calhas de Sangue.\n\nDentro de uma colônia os humanos não são iguais: são classificados pelo Mestre da Colheita local. Doadores Ativos são os saudáveis entre 18 e 40 anos, de sangue de alta qualidade. Matrizes são os selecionados pra reprodução contínua. Quebrados são doentes e idosos, que servem só pra trabalho pesado ou como ração pras criaturas. Vigilantes são humanos traidores, que ajudam os vampiros em troca de regalias.\n\nUma vez por mês, cada setor é levado às Estações de Sangria, onde válvulas orgânicas são conectadas diretamente às artérias. Cada humano deve entregar uma quantidade fixa, o Imposto Pela Vida, e, se o corpo não produz o suficiente por fraqueza, a punição é a retirada de um membro pra compensar o volume em carne."
       },
       "arvore_origem": "aethel"
     },
@@ -645,9 +645,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Salém",
       "conteudo": {
         "dimensao": "padrao",
-        "descricao": "Uma nação isolada e mística, governada por um conselho de dez bruxas ancestrais conhecidas como as Irmãs da Noite. Cada uma representa um arquétipo mágico distinto e detém autoridade sobre diferentes aspectos da política, da magia e da vida cotidiana; juntas, compõem o mais alto domínio de Fluxo e sabedoria do reino, sendo simultaneamente rainhas.\n\nSalém é território exclusivamente feminino - homens não entram sob nenhuma circunstância, a não ser como prisioneiros ou oferendas em rituais. A sociedade é matriarcal, mística e profundamente ritualística: mulheres que desejam viver ali devem provar sua aptidão com o Fluxo ou servir a alguma causa do reino, e as não mágicas podem ser acolhidas, mas ocupam posições inferiores e precisam jurar lealdade ao coven.\n\nO reino mantém política de isolamento. Raros são os que ousam provocar sua ira, porque os exércitos de Salém não marcham: eles amaldiçoam, invocam, envenenam. Espiãs e emissárias do coven atuam nas sombras, monitorando ameaças e coletando segredos, e bruxas exiladas ou renegadas de Salém costumam ser temidas em todos os cantos do mundo.\n\nDiferente de outras nações, o Fluxo é a base do governo, da justiça e da diplomacia: tudo é regido por rituais e profecias, e disputas políticas se resolvem em duelos místicos sancionados pelas Irmãs. O tempo ali parece fluir mais devagar que o comum - consequência das antigas magias que protegem suas fronteiras.\n\nÉ também o maior centro de comércio mágico do mundo conhecido. Sua influência atravessa fronteiras e realidades, porque ninguém domina as artes do Fluxo como as bruxas de Salém.",
-        "fundacao": "Anterior ao ano 0 - Salém é o único reino que existia antes do cataclismo que reiniciou a contagem dos anos.",
-        "governo": "Conselho das Irmãs da Noite - dez Cadeiras equivalentes entre si. A posição é passada adiante por linhagem ou escolha ritualística. Em caso de empate, a mais antiga das bruxas é chamada pra desempatar por um ritual que só as Irmãs conhecem."
+        "descricao": "Uma nação isolada e mística, governada por um conselho de dez bruxas ancestrais conhecidas como as Irmãs da Noite. Cada uma representa um arquétipo mágico distinto e detém autoridade sobre diferentes aspectos da política, da magia e da vida cotidiana; juntas, compõem o mais alto domínio de Fluxo e sabedoria do reino, sendo simultaneamente rainhas.\n\nSalém é território exclusivamente feminino: homens não entram sob nenhuma circunstância, a não ser como prisioneiros ou oferendas em rituais. A sociedade é matriarcal, mística e profundamente ritualística: mulheres que desejam viver ali devem provar sua aptidão com o Fluxo ou servir a alguma causa do reino, e as não mágicas podem ser acolhidas, mas ocupam posições inferiores e precisam jurar lealdade ao coven.\n\nO reino mantém política de isolamento. Raros são os que ousam provocar sua ira, porque os exércitos de Salém não marcham: eles amaldiçoam, invocam, envenenam. Espiãs e emissárias do coven atuam nas sombras, monitorando ameaças e coletando segredos, e bruxas exiladas ou renegadas de Salém costumam ser temidas em todos os cantos do mundo.\n\nDiferente de outras nações, o Fluxo é a base do governo, da justiça e da diplomacia: tudo é regido por rituais e profecias, e disputas políticas se resolvem em duelos místicos sancionados pelas Irmãs. O tempo ali parece fluir mais devagar que o comum, consequência das antigas magias que protegem suas fronteiras.\n\nÉ também o maior centro de comércio mágico do mundo conhecido. Sua influência atravessa fronteiras e realidades, porque ninguém domina as artes do Fluxo como as bruxas de Salém.",
+        "fundacao": "Anterior ao ano 0. Salém é o único reino que existia antes do cataclismo que reiniciou a contagem dos anos.",
+        "governo": "Conselho das Irmãs da Noite: dez Cadeiras equivalentes entre si. A posição é passada adiante por linhagem ou escolha ritualística. Em caso de empate, a mais antiga das bruxas é chamada pra desempatar por um ritual que só as Irmãs conhecem."
       },
       "arvore_origem": "aethel"
     },
@@ -657,7 +657,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Império",
       "conteudo": {
         "dimensao": "padrao",
-        "descricao": "O maior fornecedor de guardas e proteção do mundo conhecido, além de centro de mineração e da máquina de conquista de territórios que sustenta as duas coisas.\n\nÉ governado por um imperador, e o trono se chama Kaiser. Quem o ocupa hoje é Augusto I, portador do título de Deus da Guerra e senhor das batalhas - um Campeão Dimensional nascido na Árvore de Baluarte.\n\nO exército imperial conta com 6 mil guerreiros imperiais, 15 mil escravos de guerra e 6 mil comerciantes que mantêm mantimentos e suprimentos em campanha: 27 mil membros ao todo. A proporção diz quase tudo sobre o Império - pra cada soldado livre há mais de dois cativos em campo.",
+        "descricao": "O maior fornecedor de guardas e proteção do mundo conhecido, além de centro de mineração e da máquina de conquista de territórios que sustenta as duas coisas.\n\nÉ governado por um imperador, e o trono se chama Kaiser. Quem o ocupa hoje é Augusto I, portador do título de Deus da Guerra e senhor das batalhas, um Campeão Dimensional nascido na Árvore de Baluarte.\n\nO exército imperial conta com 6 mil guerreiros imperiais, 15 mil escravos de guerra e 6 mil comerciantes que mantêm mantimentos e suprimentos em campanha: 27 mil membros ao todo. A proporção diz quase tudo sobre o Império: pra cada soldado livre há mais de dois cativos em campo.",
         "fundacao": "Ano 1.261.",
         "governo": "Imperial. O trono é o Kaiser; o ocupante atual é Augusto I."
       },
@@ -669,7 +669,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Emberhold",
       "conteudo": {
         "dimensao": "padrao",
-        "descricao": "O principal fabricante e fornecedor de armas e armaduras do mundo conhecido - e, por consequência, o reino que arma todos os outros, inclusive os que estão em guerra entre si.\n\nNão tem rei. O governo é o conselho dos cinco líderes das cinco guildas de aventureiros mais famosas do reino: Asas de Prata, liderada por Valerius Orléans; Aurora Escarlate, por Mérida Doyle; Titãs da Guerra, por Brutus Guigs; Reis da Favela, por Pompom; e Trupe Fantasma, por Rick Albert.\n\nÉ também onde Erick, um dos filhos de Ofélia, trabalha hoje numa oficina de armas e armaduras.",
+        "descricao": "O principal fabricante e fornecedor de armas e armaduras do mundo conhecido e, por consequência, o reino que arma todos os outros, inclusive os que estão em guerra entre si.\n\nNão tem rei. O governo é o conselho dos cinco líderes das cinco guildas de aventureiros mais famosas do reino: Asas de Prata, liderada por Valerius Orléans; Aurora Escarlate, por Mérida Doyle; Titãs da Guerra, por Brutus Guigs; Reis da Favela, por Pompom; e Trupe Fantasma, por Rick Albert.\n\nÉ também onde Erick, um dos filhos de Ofélia, trabalha hoje numa oficina de armas e armaduras.",
         "fundacao": "Ano 1.510.",
         "governo": "Conselho das cinco guildas."
       },
@@ -681,8 +681,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Lionês",
       "conteudo": {
         "dimensao": "padrao",
-        "descricao": "O principal fabricante e fornecedor de alimentos, bebidas e plantações - o reino que alimenta os outros. Numa Realidade 0 onde o Império conquista e Emberhold arma, Lionês é o único que ninguém pode se dar ao luxo de atacar.\n\nAs terras de Lionês são um mosaico de plantações que nunca para: trigo numa estação, uva na outra, gado pastando onde a terra descansa. Não existe fome em Lionês porque não existe estação ruim - o solo é gentil demais e chove no momento certo com uma regularidade que ninguém sabe explicar.\n\nÉ essa fartura que garante a paz. Um embargo de Lionês esvazia despensas em semanas, não em meses, e os outros quatro reinos sabem disso melhor do que ninguém - por isso nenhum exército, por maior que seja, arrisca marchar contra quem alimenta a própria tropa.\n\nÉ governado pelo rei e seus conselheiros reais. O soberano de Lionês é Augustos Castilla, que ocupa a Cadeira do Comércio na assembleia dos dez Soberanos.",
-        "fundacao": "Ano 1.595 - o mais novo dos reinos com data registrada.",
+        "descricao": "O principal fabricante e fornecedor de alimentos, bebidas e plantações, o reino que alimenta os outros. Numa Realidade 0 onde o Império conquista e Emberhold arma, Lionês é o único que ninguém pode se dar ao luxo de atacar.\n\nAs terras de Lionês são um mosaico de plantações que nunca para: trigo numa estação, uva na outra, gado pastando onde a terra descansa. Não existe fome em Lionês porque não existe estação ruim: o solo é gentil demais e chove no momento certo com uma regularidade que ninguém sabe explicar.\n\nÉ essa fartura que garante a paz. Um embargo de Lionês esvazia despensas em semanas, não em meses, e os outros quatro reinos sabem disso melhor do que ninguém, por isso nenhum exército, por maior que seja, arrisca marchar contra quem alimenta a própria tropa.\n\nÉ governado pelo rei e seus conselheiros reais. O rei de Lionês é Augustos Castilla.",
+        "fundacao": "Ano 1.595. o mais novo dos reinos com data registrada.",
         "governo": "Monárquico, com conselho real."
       },
       "arvore_origem": "aethel"
@@ -693,9 +693,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Khazad",
       "conteudo": {
         "dimensao": "padrao",
-        "descricao": "O reino subterrâneo, e o mais fechado da Dimensão Padrão depois de Salém. Governado por Durin II, que ocupa a Cadeira da Forja entre os dez Soberanos.\n\nFica cavado nas raízes da própria Dimensão Padrão, camada sobre camada de salões e forjas que descem mais fundo do que qualquer mapa de superfície registra. Ninguém de fora sabe ao certo até onde Khazad vai - só que continua descendo.\n\nSe Emberhold fabrica em escala, Khazad forja em profundidade: cada peça sai da mão de um ferreiro, uma de cada vez, e quase nunca pra vender. Um anão vende uma peça sua uma vez na vida, no máximo duas, e o preço nunca é só em moedas - costuma vir com uma condição, um favor a ser cobrado depois, no momento que Khazad escolher. Os anões falam Nórdico Antigo entre si e raramente qualquer outra língua com estrangeiros, mesmo quando a entendem.",
+        "descricao": "O reino subterrâneo, e o mais fechado da Dimensão Padrão depois de Salém. Governado por Durin II.\n\nFica cavado nas raízes da própria Dimensão Padrão, camada sobre camada de salões e forjas que descem mais fundo do que qualquer mapa de superfície registra. Ninguém de fora sabe ao certo até onde Khazad vai, só que continua descendo.\n\nSe Emberhold fabrica em escala, Khazad forja em profundidade: cada peça sai da mão de um ferreiro, uma de cada vez, e quase nunca pra vender. Um anão vende uma peça sua uma vez na vida, no máximo duas, e o preço nunca é só em moedas: costuma vir com uma condição, um favor a ser cobrado depois, no momento que Khazad escolher. Os anões falam Nórdico Antigo entre si e raramente qualquer outra língua com estrangeiros, mesmo quando a entendem.",
         "fundacao": "Não registrada.",
-        "governo": "Monárquico. Durin II, Soberano da Forja."
+        "governo": "Monárquico. Durin II, Senhor da Forja."
       },
       "arvore_origem": "aethel"
     },
@@ -705,7 +705,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Tribunal de Arkarin",
       "conteudo": {
         "dimensao": "castelo-carmesim",
-        "descricao": "No coração do Castelo Carmesim, uma sala monumental onde o silêncio pesa mais que qualquer som. Sob um trono de ossos cristalizados e veludo carmesim, a Mulher Carmesim julga aqueles que ousaram se opor à ordem suprema - os que tentaram negar o fim.\n\nEsses julgamentos não são frequentes: poucos são insanos, poderosos ou tolos o bastante pra tentar fugir do que foi escrito. Mas quando ocorre, o tribunal se acende com chamas escarlates e sinos de bronze negro tocam em toda Arkarin, anunciando o início do julgamento.\n\nO tribunal é frio, impiedoso e absoluto. Nele não há espaço pra mentiras ou manipulações: diante da Mulher Carmesim a verdade de cada ser se revela por completo, pois ela detém seus livros, suas histórias, seus segredos, seus pecados e suas dores.\n\nQuando um ser não apenas desafia sua autoridade, mas representa ameaça direta à própria realidade, ao equilíbrio dos planos ou à existência dos ciclos, a Mulher Carmesim convoca o Conselho da Existência - formado por ela e pelos Arautos dos Fluxos, entidades poderosas vinculadas à própria realidade. São mestres que controlam o tecido existencial, mantenedores da ordem dos conceitos, das leis universais e dos fundamentos que mantêm tudo funcionando."
+        "descricao": "No coração do Castelo Carmesim, uma sala monumental onde o silêncio pesa mais que qualquer som. Sob um trono de ossos cristalizados e veludo carmesim, a Mulher Carmesim julga aqueles que ousaram se opor à ordem suprema, os que tentaram negar o fim.\n\nEsses julgamentos não são frequentes: poucos são insanos, poderosos ou tolos o bastante pra tentar fugir do que foi escrito. Mas quando ocorre, o tribunal se acende com chamas escarlates e sinos de bronze negro tocam em todos os fluxos, anunciando o início do julgamento.\n\nO tribunal é frio, impiedoso e absoluto. Nele não há espaço pra mentiras ou manipulações: diante da Mulher Carmesim, a verdade de cada ser se revela por completo, pois ela detém seus livros, suas histórias, seus segredos, seus pecados e suas dores.\n\nQuando um ser não apenas desafia sua autoridade, mas representa ameaça direta ao próprio universo, ao equilíbrio das Árvores ou à existência dos ciclos, a Mulher Carmesim convoca o Conselho da Existência, formado por ela e pelas deidades de cada fluxo."
       },
       "arvore_origem": "mulher-carmesim"
     },
@@ -715,8 +715,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Astraluna",
       "conteudo": {
         "galho": "a-malha",
-        "descricao": "O maior centro de tecnologia arcana do mundo, reconhecido como o berço da fusão perfeita entre magia e máquina. Suas oficinas e laboratórios produzem artefatos tão avançados que sustentam civilizações inteiras, o que torna o reino indispensável ao equilíbrio do continente. Cercado por barreiras poderosas e protocolos rigorosos de segurança, Astraluna guarda seus segredos com rigidez, impedindo que suas inovações caiam em mãos erradas. Misterioso e grandioso, é ao mesmo tempo um farol de progresso e um guardião ciumento das próprias maravilhas.\n\nÉ a sede da AstraTech e a base de operações de Jota Macedo, seu presidente - e é daqui que a A.X.I.S se espalhou pelo mundo. Pra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo enfim possa ser compreendida, reproduzida e evoluída por mãos mortais.",
-        "fundacao": "Ano 1.188 - o mais antigo dos reinos com data registrada.",
+        "descricao": "O maior centro de tecnologia arcana do mundo, reconhecido como o berço da fusão perfeita entre magia e máquina. Suas oficinas e laboratórios produzem artefatos tão avançados que sustentam civilizações inteiras. Cercado por barreiras poderosas e protocolos rigorosos de segurança, Astraluna guarda seus segredos com rigidez, impedindo que suas inovações caiam em mãos erradas.\n\nÉ a sede da AstraTech e a base de operações de Jota Macedo, seu presidente, e é daqui que a A.X.I.S se espalhou pelo mundo. Pra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo enfim possa ser compreendida, reproduzida e evoluída por mãos mortais.",
+        "fundacao": "Ano 1.188, no Galho de Gênese",
         "governo": "Corporativo. Presidido por Jota Macedo, através da AstraTech."
       },
       "arvore_origem": "keryx"
@@ -727,7 +727,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Máscaras da AstraTech",
       "conteudo": {
         "reino": "astraluna",
-        "descricao": "Forjadas a partir do Arkan'vel, a tecnologia avançada desenvolvida em Astraluna, as máscaras são artefatos tão poderosos quanto temidos. Criadas nas profundezas dos laboratórios, onde ciência e feitiçaria se misturaram, reluzem como veias azuis neon, pulsando como se respirassem.\n\nAo serem colocadas, conectam-se diretamente à Força Vital e à mente do usuário, concedendo habilidades que ultrapassam os limites comuns - aumento de atributos físicos e da percepção como um todo.\n\nMas as máscaras não apenas canalizam poder: elas reescrevem o portador. Cada comando, cada pensamento é filtrado pelas camadas encantadas de código vivo e, com o tempo, a máscara passa a decidir por si. Muitos usuários perdem gradualmente a própria identidade, tornando-se extensões da vontade de Astraluna.\n\nJota Macedo trabalha em segredo numa máscara biomecânica maior que todas as outras, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente - uma relíquia que lhe permitiria usar o poder de uma deidade, desde que ela estivesse num de seus estoques."
+        "descricao": "Forjadas a partir do Arkan'vel, a tecnologia avançada desenvolvida em Astraluna, as máscaras são artefatos tão poderosos quanto temidos. Criadas nas profundezas dos laboratórios, onde ciência e feitiçaria se misturaram, reluzem como veias azuis neon, pulsando como se respirassem.\n\nAo serem colocadas, conectam-se diretamente à Força Vital e à mente do usuário, concedendo habilidades que ultrapassam os limites comuns: aumento de atributos físicos e da percepção como um todo.\n\nMas as máscaras não apenas canalizam poder: elas reescrevem o portador. Cada comando, cada pensamento é filtrado pelas camadas encantadas de código vivo e, com o tempo, a máscara passa a decidir por si. Muitos usuários perdem gradualmente a própria identidade, tornando-se extensões da vontade de Astraluna.\n\nJota Macedo trabalha em segredo numa máscara biomecânica maior que todas as outras, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente: uma relíquia que lhe permitiria usar o poder de uma deidade, desde que ela estivesse num de seus estoques."
       },
       "arvore_origem": "keryx"
     },
@@ -737,7 +737,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Irmãs da Noite",
       "conteudo": {
         "epiteto": "As dez Cadeiras de Salém",
-        "descricao": "O conselho que governa Salém. Cada bruxa ocupa uma das Cadeiras, e a posição é passada adiante por linhagem ou escolha ritualística. As Cadeiras são equivalentes entre si; havendo empate, a mais antiga das bruxas é chamada pro desempate, por um ritual que só as Irmãs conhecem.\n\nCibele (nível 40, Decodificadora e Codificadora) e Marilia (nível 40, Decodificadora e Codificadora) são as duas mais altas - Cibele canaliza o Fluxo da Origem, Marilia o Divino. Beldam (30, Decodificadora e Ninja) canaliza o Fluxo do Sangue. Serie (25, Canalizador e Codificadora) domina Luz e Miranda (25, Canalizador) o Fogo Astral. As quatro seguintes são canalizadores de nível 20: Luminus (Raio), Beatrix (Fogo, também Lutadora), Elizabeth (Água, também Pop Star) e Sarah (Terra, também Guardiã).\n\nA décima Cadeira, a do Ar, está vaga.",
+        "descricao": "É o conselho que governa Salém. Cada bruxa ocupa uma Cadeira, e a Cadeira passa adiante por linhagem ou por escolha em ritual. Todas valem o mesmo. Quando dá empate, chamam a bruxa mais antiga para desempatar, num ritual que só as Irmãs conhecem.\n\nAs mais altas são Cibele e Marilia, as duas de nível 40: Cibele canaliza o Fluxo da Origem, e Marilia, o Divino. Beldam, Ninja de nível 30, canaliza o Fluxo do Fim. Serie e Miranda, Canalizadoras de nível 25, cuidam da Luz e do Fogo Astral. Depois vêm quatro canalizadoras de nível 20: Luminus no Raio, Beatrix no Fogo (também Lutadora), Elizabeth na Água (também Pop Star) e Sarah na Terra (também Guardiã).\n\nA décima Cadeira, a do Ar, continua vaga.",
         "status": "ativa"
       },
       "arvore_origem": "aethel"
@@ -747,23 +747,10 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "id": "kaiser",
       "titulo": "Kaiser",
       "conteudo": {
-        "epiteto": "Soberano da Guerra",
+        "epiteto": "Senhor da Guerra",
         "genero": "Masculino",
-        "descricao": "A Cadeira da Guerra na assembleia da criação não pertence a uma pessoa: pertence ao trono do Império. Kaiser é o título, e quem o carrega hoje é Augusto I, portador do título de Deus da Guerra e senhor das batalhas - um Campeão Dimensional, canalizador do Fluxo do Físico.\n\nÉ o único dos dez Soberanos cuja cadeira é herdada em vez de conquistada, o que é motivo recorrente de atrito na assembleia: os outros nove chegaram onde estão por si mesmos. Augusto I é jovem pros padrões do cargo, e não esconde que quer expandir o Império além do que o pai conquistou - o que deixa a Cadeira da Guerra mais barulhenta do que qualquer outra na assembleia de hoje.",
+        "descricao": "Kaiser é um título. Quem senta no trono do Império carrega o nome. Hoje quem o carrega é Augusto I, chamado de Deus da Guerra e senhor das batalhas, Campeão Dimensional e canalizador do Fluxo do Físico.\n\nHerdou o trono em vez de conquistá-lo, e a corte não deixa ele esquecer disso. Augusto I é novo para o cargo e não esconde que quer levar o Império além de onde o pai parou.",
         "cor": "Laranja",
-        "status": "ativo"
-      },
-      "arvore_origem": "aethel"
-    },
-    {
-      "tipo": "personagem",
-      "id": "soberanas-de-salem",
-      "titulo": "As Irmãs da Noite",
-      "conteudo": {
-        "epiteto": "Soberanas dos Fluxos",
-        "genero": "Feminino",
-        "descricao": "A única Cadeira ocupada por um coletivo: as dez Irmãs da Noite de Salém falam com uma só voz na assembleia. Quem comparece varia conforme o assunto e o ritual, e nenhuma das outras nove Cadeiras jamais soube ao certo quantas Irmãs de fato existem.\n\nSalém é o maior centro de comércio mágico do mundo conhecido, e sua influência atravessa fronteiras e realidades - ninguém domina as artes do Fluxo como suas bruxas.",
-        "cor": "Branco",
         "status": "ativo"
       },
       "arvore_origem": "aethel"
@@ -774,9 +761,10 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Grimm",
       "registro_universal": "ser",
       "conteudo": {
-        "epiteto": "Soberano dos Pesadelos",
+        "epiteto": "Soberano dos Sonhos e Pesadelos",
         "genero": "Masculino",
-        "descricao": "O soberano de Sonhar é um ser intrigante: admira todas as espécies de vida e gosta muito de seres que tenham um objetivo muito forte e aparente.\n\nÉ o único dos dez que não governa um território que se possa marcar num mapa - sua dimensão muda de forma toda vez que alguém a visita. Os outros nove o chamam de Soberano dos Pesadelos; ele próprio não faz distinção entre as duas metades da dimensão que governa.\n\nQuem entra em Sonhar sem ser convidado raramente encontra o caminho de volta sozinho, não porque Grimm proíba a saída, mas porque a própria dimensão prefere manter quem desperta o interesse dele.",
+        "descricao": "Grimm governa o Sonhar e é um ser curioso. Admira todo tipo de vida, e gosta mais ainda de quem carrega um objetivo forte, desses que a pessoa nem consegue esconder.\n\nO território dele não cabe num mapa, porque o Sonhar muda de forma a cada visita. Muita gente o chama de Soberano dos Pesadelos, e ele mesmo não separa as duas metades do lugar que governa.\n\nQuem entra no Sonhar sem convite quase nunca acha o caminho de volta. Grimm deixa a porta aberta, só que o Sonhar tem o costume de segurar quem desperta o interesse dele.",
+        "soberano": "sim",
         "cor": "Preto",
         "status": "ativo"
       },
@@ -790,7 +778,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "conteudo": {
         "epiteto": "Soberano dos Cosmos",
         "genero": "Masculino",
-        "descricao": "O Soberano dos Cosmos preside o Banco Lunar, a única instituição que opera em todas as Árvores ao mesmo tempo e a única que nenhum ser jamais ousou nacionalizar.\n\nAmadheus não comanda exército nem território. Ele administra o dinheiro de todos os seres que querem os próprios bens guardados, seguros e investidos.\n\nJá foi um ser comum da Gênese. Ao se tornar sócio de Jota Macedo, os dois ascenderam e alcançaram o que queriam: ser livres e governar a si mesmos. Amadheus apenas expandiu os negócios para todas as Árvores. Desde então mantém posição imparcial e assiste ao caos de fora, fornecendo a qualquer um dos lados os recursos que pedirem, desde que tenham com que pagar.",
+        "descricao": "Amadheus Colona preside o Banco Lunar, a única instituição financeira que funciona em todas as Árvores ao mesmo tempo.\n\nNão comanda exército nem território. Cuida do dinheiro de todo ser que quer os próprios bens guardados, seguros e rendendo.\n\nJá foi um ser comum de Gênese. Virou sócio de Jota Macedo, e juntos os dois subiram até conseguir o que queriam: ser livres e mandar em si mesmos. Foi aí que Amadheus levou os negócios para todas as Árvores.\n\nContinuam sócios, mas se afastaram. Jota ficou com a AstraTech e Amadheus com o Banco Lunar inteiro. Desde então ele assiste ao caos de fora e fornece recursos a qualquer lado que peça, desde que o lado tenha como pagar.\n\nEssa neutralidade tem preço. Ele só escolhe um lado quando alguém paga o bastante, e como Jota é um dos seres mais ricos do Jardim, Amadheus quase sempre acaba do lado dele.",
+        "soberano": "sim",
         "cor": "Verde",
         "status": "ativo"
       },
@@ -801,9 +790,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "id": "noemi-finwe",
       "titulo": "Noemi Finwë",
       "conteudo": {
-        "epiteto": "Soberana da Noite",
+        "epiteto": "Senhora da Noite",
         "genero": "Feminino",
-        "descricao": "Noemi não governa pelo medo, mas pela clarividência e pela empatia. Carrega o sobrenome Finwë, de uma linhagem ancestral de alta nobreza e imenso poder.\n\nDepois de séculos de guerras e dificuldades em outras dimensões, fundou Nadalon com a ajuda das Irmãs da Noite, por acreditar que os elfos só atingirão seu potencial máximo se abandonarem a arrogância e focarem na ascensão coletiva.\n\nCarrega o Cetro de Ametista, artefato que canaliza a energia vital da dimensão e lhe permite curar a terra e seus súditos apenas com a própria presença.\n\n\"O verdadeiro poder de um povo não reside nas muralhas que constrói, mas na paz que consegue manter dentro de si.\"",
+        "descricao": "Noemi governa pela clarividência e pela empatia, e quase nunca precisou de medo para ser obedecida. Carrega o sobrenome Finwë, de uma linhagem antiga, de nobreza alta e poder enorme.\n\nPassou séculos em guerras e apertos em outras dimensões. Depois disso fundou Nadalon com a ajuda das Irmãs da Noite, porque acredita que os elfos só chegam ao que podem ser quando largam a arrogância e sobem juntos.\n\nCarrega o Cetro de Ametista, que puxa a energia vital da dimensão e deixa que ela cure a terra e o povo só de estar por perto.\n\n\"O verdadeiro poder de um povo não reside nas muralhas que constrói, mas na paz que consegue manter dentro de si.\"",
         "cor": "Roxo",
         "status": "ativo"
       },
@@ -814,9 +803,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "id": "bergelmir-laufey",
       "titulo": "Bergelmir Laufey",
       "conteudo": {
-        "epiteto": "Soberano das Montanhas",
+        "epiteto": "Senhor das Montanhas",
         "genero": "Masculino",
-        "descricao": "O Soberano das Montanhas governa o que existe acima da linha onde nada mais cresce. Não há cidade, corte nem exército - o território dele é a altitude em si, e as poucas passagens que atravessam o continente pelo alto.\n\nQuem quer levar mercadoria de um reino a outro sem contornar meio mundo passa pelas montanhas de Laufey, e paga por isso. É o que dá a ele uma cadeira na assembleia sem ter um único súdito.\n\nFala pouco e cobra sempre o mesmo preço, não importa quem seja o viajante - rei, mercador ou fugitivo. Dizem que ele nunca desceu da própria cordilheira, nem pra sentar na assembleia: manda um mensageiro no lugar, e ninguém jamais reclamou disso na cara dele.",
+        "descricao": "Bergelmir manda no que fica acima da linha onde nada mais cresce. Não tem cidade, corte nem exército. O território dele é a própria altitude e as poucas passagens que cruzam o continente pelo alto.\n\nQuem quer levar carga de um reino a outro sem dar a volta no mundo passa pelas montanhas de Laufey e paga pedágio. É isso que obriga todos os reinos a tratá-lo bem sem que ele tenha um único súdito.\n\nFala pouco e cobra sempre o mesmo, seja de rei, de mercador ou de fugitivo. Dizem que nunca desceu da cordilheira, nem para negociar com rei. Manda um mensageiro no lugar, e ninguém teve coragem de reclamar disso na frente dele.",
         "cor": "Verde água",
         "status": "ativo"
       },
@@ -827,9 +816,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "id": "davinor-intuneric",
       "titulo": "Davinor Întuneric",
       "conteudo": {
-        "epiteto": "Soberano do Sangue",
+        "epiteto": "Senhor do Sangue",
         "genero": "Masculino",
-        "descricao": "No centro do caos de Întuneric e no topo da hierarquia predatória está Davinor. Não é um rei que busca expansão ou glória: é uma força da natureza indiferente.\n\nÉ o ápice da apatia. Raramente interfere nos massacres diários de sua dimensão - pra ele, se você é fraco demais pra sobreviver, sua morte é apenas um processo natural. Governa pelo silêncio e pelo medo: não existem leis escritas, apenas a vontade do sangue. Se algo ameaça a estabilidade da dimensão, ele elimina o problema com brutalidade impiedosa e volta ao isolamento.\n\n\"Não me peça para salvar o que nasceu apenas para morrer. O grito de sua vida é breve; já a minha paz é eterna.\"",
+        "descricao": "Davinor fica no meio do caos de Întuneric, no topo da cadeia de quem caça e de quem é caçado. Expansão e glória não interessam a ele. Funciona como uma força da natureza, e a natureza não se importa com ninguém.\n\nÉ a apatia no ponto mais alto. Quase nunca se mete nos massacres de todo dia da dimensão: para ele, quem é fraco demais para sobreviver morre, e é assim que as coisas andam. Governa pelo silêncio e pelo medo. Não existe lei escrita em Întuneric, só a vontade do sangue. Quando alguma coisa ameaça o equilíbrio da dimensão, ele acaba com o problema sem piedade nenhuma e volta a se isolar.\n\n\"Não me peça para salvar o que nasceu apenas para morrer. O grito de sua vida é breve; já a minha paz é eterna.\"",
         "falas": [
           "Sobre perda: \"Você fala de perda como se houvesse algo neste mundo que realmente valesse a pena possuir.\"",
           "Sobre falta de ordem: \"A ordem é uma ilusão que vocês criaram para não enlouquecerem no escuro. Se as feras estão com fome, que comam. Se os humanos são fracos, que morram. Întuneric sempre encontra seu equilíbrio no sangue derramado.\"",
@@ -845,9 +834,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "id": "durin-ii",
       "titulo": "Durin II",
       "conteudo": {
-        "epiteto": "Soberano da Forja",
+        "epiteto": "Senhor da Forja",
         "genero": "Masculino",
-        "descricao": "Rei de Khazad e o segundo a carregar o nome. Governa a forja mais profunda da Dimensão Padrão - e a distinção que ele faz questão de repetir na assembleia é que Emberhold fabrica, enquanto Khazad forja.\n\nÉ o Soberano que menos fala e o que mais é procurado: quase toda arma de valor histórico da Realidade 0 saiu, em algum ponto de sua linhagem, das mãos de um anão. É respeitado até pelos que não gostam dele, porque Khazad nunca quebrou um contrato - o que não se pode dizer de nenhum outro reino da Dimensão Padrão.",
+        "descricao": "Rei de Khazad, o segundo a usar o nome. Governa a forja mais funda da Dimensão Padrão e não perde uma chance de lembrar a todo mundo que Emberhold fabrica e Khazad forja.\n\nFala pouco e é procurado o tempo todo: quase toda arma que entrou para a história da Realidade 0 passou, em algum momento, pelas mãos de um anão. Até quem não gosta dele o respeita, porque Khazad nunca quebrou um contrato, e nenhum outro reino da Dimensão Padrão pode dizer o mesmo.",
         "cor": "Amarelo",
         "status": "ativo"
       },
@@ -858,9 +847,9 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "id": "augustos-castilla",
       "titulo": "Augustos Castilla",
       "conteudo": {
-        "epiteto": "Soberano do Comércio",
+        "epiteto": "Senhor do Comércio",
         "genero": "Masculino",
-        "descricao": "Rei de Lionês, o reino que alimenta os outros. Governa com seus conselheiros reais e é, entre os dez, o que tem o poder mais silencioso e o mais difícil de contestar: ninguém declara guerra a quem planta a comida de todo mundo.\n\nSe Amadheus Colona guarda a riqueza e Durin II controla o aço, Augustos controla a única coisa que nenhum dos dois consegue estocar por muito tempo. Governa sem precisar levantar a voz: sabe que uma safra ruim em Lionês assusta mais os outros Soberanos do que qualquer exército parado na fronteira.",
+        "descricao": "Rei de Lionês, o reino que dá de comer aos outros. Governa com os conselheiros da coroa e tem o poder mais quieto de todos, e o mais difícil de enfrentar: ninguém declara guerra a quem planta a comida de todo mundo.\n\nAmadheus Colona guarda a riqueza e Durin II controla o aço. Augustos controla a única coisa que nenhum dos dois consegue estocar por muito tempo. Nunca precisou levantar a voz, porque sabe que uma safra ruim em Lionês assusta os outros governantes mais do que qualquer exército parado na fronteira.",
         "cor": "Rosa",
         "status": "ativo"
       },
@@ -873,8 +862,91 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "registro_universal": "ser",
       "revelado": true,
       "conteudo": {
-        "epiteto": "Espírito Primordial",
-        "descricao": "Blanc é um Espírito Primordial e o único Espírito Branco existente."
+        "epiteto": "Soberana dos Espíritos",
+        "soberano": "sim",
+        "cor": "Branco",
+        "descricao": "Blanc é um Espírito Primordial e o único Espírito Universal que se conhece. É também o espírito natural mais forte que existe: é do Fluxo Universal e chegou mais longe do que qualquer outro.\n\nTodo espírito natural é de um Fluxo, aquele que o prendeu ao mundo: Criação, Comunicação, Fim, e assim por diante, onze ao todo. Blanc é do Fluxo Universal, o décimo segundo, que não prende ninguém a um lado só e deixa quem o carrega tocar em todos os outros. É por isso que a chamam de Espírito Universal.\n\nAo contrário da maioria dos espíritos, Blanc tem corpo, um corpo astral firme o bastante para ser visto, tocado e confundido com o de uma pessoa. Parece uma mulher de pele pálida e cabelo longo e solto, da cor da prata velha, com olhos vermelhos e um sorriso que nunca chega a ser inteiro. Veste um corpete claro de bordas douradas, um xale cor de areia caído nos ombros, luvas compridas da mesma cor e um vestido verde-escuro. Preso na gola, leva um broche com uma pedra vermelha. Costuma apoiar o queixo na mão enquanto escuta, como quem tem todo o tempo do mundo.\n\nEntre os espíritos corre uma história, e ela muda pouco de boca em boca. Antes de qualquer Fluxo ter nome existia uma coisa só, que sentia e não sabia o quê. Cada Fluxo, ao nascer, puxou um pedaço dela e deu uma cor ao pedaço, e os pedaços viraram os espíritos. Blanc seria o que sobrou depois que todos puxaram, o resto e o inteiro ao mesmo tempo. Ela nunca confirmou nem negou. Quando perguntam, responde em Enoquiano, devagar, e a resposta nunca é a mesma duas vezes.\n\nComo nenhum Fluxo manda sozinho nela, nenhum a reconhece como estrangeira, e ela toca em qualquer um deles sem pedir licença. É por isso que está entre os dez seres mais fortes do Jardim. O que faz com essa força é outra conversa. Blanc não sai atrás de poder nem de gente. Aparece perto de espíritos que estão para se apagar e fica até o fim, e quem presenciou conta que a cor do espírito, no último instante, fica branca por um segundo.\n\nNinguém sabe onde ela mora. Quem a procura costuma encontrar espíritos muito velhos que dizem tê-la visto na semana passada, e que já não sabem direito o que a semana quer dizer."
+      }
+    },
+    {
+      "tipo": "personagem",
+      "id": "ushumgal",
+      "titulo": "Ushumgal",
+      "registro_universal": "ser",
+      "revelado": false,
+      "conteudo": {
+        "epiteto": "Soberano dos Dragões",
+        "soberano": "sim",
+        "cor": "Dourado",
+        "descricao": "Os dragões crescem a vida inteira, e quase todos morrem no meio do caminho, porque o crescimento não tem fim marcado. Ushumgal é o único que chegou ao fim dele. Parou de crescer no ponto exato em que tudo o que um dragão pode ser coube numa criatura só, e é por isso que o chamam de Dragão Verdadeiro. Os outros estão a caminho de ser o que ele é.\n\nUshumgal quer dizer grande dragão em sumeriano, e é só a palavra mais próxima que os outros povos encontraram. O nome que os dragões usam entre si é uma palavra só, e os anciões a pronunciam em voz baixa, quando pronunciam.\n\nAnzhur, o Avô do Fogo, é mais velho. Kurnagal ainda cresce. Apokalyx dorme em cima do que guarda. Ushumgal é o único dos grandes que não espera nada de ninguém, nem de si mesmo, porque não falta nada a ele.\n\nNão tem território, porque território é coisa de dragão que ainda precisa defender alguma coisa. Pousa onde quer, e ninguém reclama. Quem já ficou diante dele conta que o que assusta é a calma, e que o tamanho e o fogo nem aparecem na lembrança depois."
+      }
+    },
+    {
+      "tipo": "personagem",
+      "id": "selah",
+      "titulo": "Selah",
+      "registro_universal": "ser",
+      "revelado": true,
+      "conteudo": {
+        "epiteto": "Soberano do Silêncio",
+        "soberano": "sim",
+        "cor": "Preto",
+        "bestiario": "selah",
+        "descricao": "Ninguém sabe quando Selah apareceu pela primeira vez, porque quem estava lá não conseguiu contar. As histórias mais antigas sobre ele começam todas do mesmo jeito: alguém tentou gritar e não saiu nada.\n\nEle vem do Vazio, mas Erebus não responde por ele. O Vazio apaga o que alcança, sem pressa e sem escolher. Selah escolhe. Chega devagar, e o começo é pequeno: um cachorro que late sem som, uma panela que cai no chão e não faz barulho. Depois somem os passos, o vento, a água. Por último some a respiração de quem está por perto, e é nessa hora que a maioria entende o que está acontecendo, quando já é tarde para correr.\n\nQuem sobreviveu aprendeu a mesma regra: ele vai atrás de quem faz barulho. Um caçador da Guilda passou uma noite inteira deitado no chão de um celeiro, de olhos abertos, enquanto Selah atravessava o lugar. Ficou contando as batidas do próprio coração até não conseguir ouvir nem elas. Saiu vivo de manhã e nunca mais falou alto. Diz que não consegue, que a voz trava no meio do caminho, como se ainda estivesse esperando permissão.\n\nNinguém sabe o que ele faz com o que tira. Uma aldeia por onde ele passou nunca mais ouviu o próprio sino. O sino continua no lugar e balança com o vento, sem tocar. Os velhos de lá dizem que o som está guardado em algum canto, junto com tudo o que as pessoas deixaram de dizer, e que um dia volta.\n\nEstá entre os dez seres mais fortes do Jardim, e ninguém que o encontrou chegou a ouvir a voz dele. Pode ser que ele não tenha nenhuma. Pode ser que tenha todas."
+      }
+    },
+    {
+      "tipo": "personagem",
+      "id": "circe",
+      "titulo": "Circe",
+      "registro_universal": "ser",
+      "revelado": false,
+      "conteudo": {
+        "epiteto": "Soberana da Magia",
+        "soberano": "sim",
+        "cor": "Roxo",
+        "descricao": "Circe e Jota Macedo cresceram juntos no orfanato de Ofélia, em Gênese, e eram melhores amigos. Os dois eram muito nerds: gostavam de estudar, de dividir o que descobriam e de passar horas discutindo a mesma ideia. Jota inventava. Circe era rígida e devota aos estudos, lia tudo o que o orfanato tinha sobre magia e, quando acabou, foi atrás do que não tinha.\n\nCresceu sabendo todas as magias do Fluxo da Origem, o de Gênese, uma por uma, com o nome, o custo e o jeito certo de errar. Dizem que ela é um grimório vivo. Se alguém pergunta por uma magia de Gênese, Circe responde sem consultar nada, e quase sempre corrige a pergunta.\n\nA morte de Ofélia separou os dois. Cada um tomou um rumo totalmente diferente: Jota foi construir, até virar dono de uma Árvore e quase uma deidade, e Circe foi estudar até o fim. Os outros irmãos do orfanato se espalharam, e Jota prendeu vários deles para criar a máscara. Circe foi uma das presas, e foi na prisão que ela descobriu uma forma de usar Fluxos que não eram o dela. Roubou, aos poucos, uma lasca de matéria de cada uma das nove Árvores, juntou tudo e transformou a soma numa Relíquia da Criação: o colar que usa até hoje. Com ele, Circe usa todos os Fluxos e conhece todas as magias de todos eles. Como conseguiu fazer isso de dentro de uma cela, nunca explicou.\n\nHoje está solta e raramente se mostra. De todos os que cresceram no orfanato, os dois são os que mais aparecem pelo mundo, e ela é a maior oposição a ele: ninguém quer tanto pará-lo quanto Circe, que o conhece desde criança. Para Jota, poder é uma coisa que se constrói, se mede e se melhora. Para Circe, é uma coisa que se estuda até o fim. Os dois não se falam desde a prisão, e nenhum dos dois admite sentir falta do outro. Ela está entre os dez seres mais fortes do Jardim."
+      }
+    },
+    {
+      "tipo": "personagem",
+      "id": "karnath",
+      "titulo": "Karnath",
+      "registro_universal": "ser",
+      "revelado": false,
+      "conteudo": {
+        "epiteto": "Soberano dos Monstros",
+        "soberano": "sim",
+        "cor": "Marrom",
+        "descricao": "Karnath é o primeiro. Antes de haver nome para predador, antes de haver Bestiário e de haver quem tivesse medo, existia uma coisa que caçava, e ele é essa coisa. Todo monstro de todas as Árvores, das aberrações do Vazio às feras das montanhas, carrega uma lasca do que Karnath é, e por isso nenhum deles o encara sem hesitar um segundo.\n\nOs monstros o reconhecem de longe. Os que vivem em bando se calam quando ele passa, e os que vivem sozinhos mudam de caminho. Os dragões ficam de fora: respondem a Ushumgal, e Karnath não tem nada a provar a eles.\n\nA Guilda dos Caçadores mantém no Quadro uma chapa em branco para ele, sem nome, sem valor e sem prazo. Ninguém nunca pegou. A chapa é limpa toda manhã, e quem faz isso diz que é o único serviço da Guilda que nunca atrasou."
+      }
+    },
+    {
+      "tipo": "personagem",
+      "id": "shinji-takamori",
+      "titulo": "Shinji Takamori",
+      "registro_universal": "ser",
+      "revelado": false,
+      "conteudo": {
+        "epiteto": "Soberano dos Caçadores",
+        "soberano": "sim",
+        "cor": "Laranja",
+        "lidera": "guilda-dos-cacadores",
+        "descricao": "Shinji Takamori comanda a Guilda dos Caçadores desde antes de o Quadro ter o tamanho que tem. É um Caçador das Almas, o mais antigo vivo, e o único que os outros chamam de Mestre sem que isso soe como cargo.\n\nA lâmina dele tem nome, como a de todos, e só ele sabe qual é. Quem já viu a lâmina inteira não costuma contar como foi, e o motivo não é segredo: a lembrança é curta, porque tudo acontece depressa demais para ser guardada.\n\nDorme na Lanterna, ao lado da lente, e é o Faroleiro-mor de Pharos. É ele quem apaga o Farol na Última Luz e quem lê, na escada, o nome de cada caçador que volta de uma expedição. Os guardas da escada nunca duvidam da voz dele. Dizem que um dia o nome do próprio Shinji foi esquecido por todos ao mesmo tempo, e que o feixe ficou parado sobre ele a noite inteira até alguém lembrar. Ele diz que isso nunca aconteceu."
+      }
+    },
+    {
+      "tipo": "personagem",
+      "id": "zero",
+      "titulo": "Zero",
+      "registro_universal": "ser",
+      "revelado": false,
+      "conteudo": {
+        "epiteto": "Soberano do Sacrifício",
+        "soberano": "sim",
+        "cor": "Vinho",
+        "lidera": "culto-carmesim",
+        "descricao": "Antes de o Culto Carmesim ter números, tinha um membro só. Zero é quem veio primeiro e quem decidiu que o nome é uma coisa que se deixa para trás. Conversa com a Mulher Carmesim todo dia e acha que ela responde.\n\nÉ o ser que mais sangue derramou em nome de outro, e o único que faz isso com delicadeza. Pede desculpa antes, agradece depois e guarda o nome de cada vítima, o que é raro num Culto que passa o resto do tempo ensinando a esquecer o próprio. O Fim, que só se alcança quebrado, ele alcançou mais fundo do que qualquer outro, e é esse o motivo de estar entre os dez seres mais fortes do Jardim.\n\nNinguém o viu sem o capuz. A Casa Vermelha é a casa dele, e onde ela estiver, ele está. O resto do Culto acredita que a Noite Carmesim começa quando ele terminar de contar, e ninguém sabe até onde ele já contou."
       }
     },
     {
@@ -885,7 +957,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "conteudo": {
         "epiteto": "O que restou de Aquele que fluía na Comunicação",
         "genero": "Masculino",
-        "descricao": "O que resta de Keryx depois do contrato com Jota Macedo. Ainda existe - fraco, preso, sem controle sobre o próprio Fluxo, que agora responde à A.X.I.S (entrada 'keryx' deste mesmo pacote). Diplomata e rígido por natureza, foi justamente sua confiança nos pactos e nas leis entre realidades que Jota usou contra ele. Rege (ou regia) as leis e os pactos entre as realidades.",
+        "descricao": "É o que sobrou de Keryx depois que ele perdeu para Jota Macedo. Continua vivo, fraco, preso num casulo da Malha, e o próprio Fluxo não obedece mais a ele: responde à A.X.I.S.\n\nSempre foi diplomata e rígido. Quando Jota apareceu com a tecnologia que tinha passado anos construindo, Keryx foi enfrentá-lo e perdeu. Era ele quem cuidava das leis e dos pactos entre as realidades, e ninguém sabe dizer se ainda cuida de alguma coisa lá de dentro.",
         "status": "preso",
         "subjugado_por": "A.X.I.S / Jota Macedo"
       },
@@ -895,10 +967,13 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "tipo": "personagem",
       "id": "jota-macedo",
       "titulo": "Jota Macedo",
+      "registro_universal": "ser",
+      "revelado": false,
       "conteudo": {
         "epiteto": "Soberano da Tecnologia",
         "genero": "Masculino",
-        "descricao": "Aclamado como o grande gênio da ciência moderna. É o criador da A.X.I.S e fundador da AstraTech, a maior corporação tecnológica já estabelecida na história. Mas o verdadeiro objetivo de Jota vai muito além do progresso industrial ou do sucesso empresarial: ele busca um feito inédito pra humanidade - quebrar as limitações mortais e ascender ao mesmo patamar de poder das deidades.\n\nPra alcançar esse ápice, trabalha secretamente numa máscara biomecânica, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente: uma relíquia que lhe permite usar o poder de uma deidade, desde que ela esteja num de seus estoques.\n\nEle já conseguiu uma vez. Convenceu Keryx, o antigo Fluxo da Comunicação e guardião das leis e pactos entre as Árvores, a assinar um contrato que se revelou uma prisão - Keryx não foi derrotado pela força, foi enganado pela diplomacia, a arma em que mais confiava. É por causa disso que quase todas as deidades do Jardim estão paralisadas e incomunicáveis.\n\nAntes de tudo isso, Jota foi um menino do orfanato de Ofélia: inteligente, curioso, e capaz de usar o Fluxo numa forma pura e poderosa demais pra idade.",
+        "descricao": "Chamam Jota Macedo de maior gênio da ciência moderna. Criou a A.X.I.S e fundou a AstraTech, a maior corporação de tecnologia que já existiu. O que ele quer fica bem longe de fábrica e de lucro: quer fazer o que nenhum humano fez, largar os limites de quem nasce mortal e chegar à altura das deidades.\n\nPara isso trabalha em segredo numa máscara biomecânica, feita para conter e estabilizar o maior e mais puro fragmento de A.X.I.S que existe. Com ela, Jota usa o poder de uma deidade, contanto que essa deidade esteja presa num dos estoques dele.\n\nUma já está. Keryx, a deidade do Fluxo da Comunicação e guardião das leis e dos pactos entre as Árvores, lutou com Jota e perdeu, e Jota virou o primeiro ser humano a vencer uma deidade. Prendeu Keryx num dos casulos da Malha e drena o poder dele até hoje. É por isso que quase todas as deidades do Jardim estão paralisadas e sem conseguir se falar.\n\nAntes de tudo isso, Jota foi um menino do orfanato de Ofélia: inteligente, curioso e incapaz de usar qualquer Fluxo. Lá, ele e Circe eram melhores amigos. Os dois eram muito nerds, adoravam estudar e dividiam tudo o que descobriam. A morte de Ofélia levou cada um para um lado, e hoje Circe é a maior oposição a ele, a que mais quer detê-lo.\n\nOs outros irmãos do orfanato também se espalharam. Para criar a máscara, Jota prendeu vários deles e drenou o poder que tinham. Circe foi uma das presas.",
+        "soberano": "sim",
         "cor": "Azul",
         "status": "ativo"
       },
@@ -910,8 +985,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "O Cataclismo do Ano Zero",
       "conteudo": {
         "galho": "realidade-0",
-        "era": "Ano 0 - o marco de onde toda a contagem parte",
-        "descricao": "Salém já existia havia muito tempo quando uma magia deu errado e inúmeros galhos foram devastados em morte e caos. Quando voltou ao normal, ele foi 'criado' de novo, e foi desse ponto que começaram a contar os anos.\n\nÉ por isso que todas as datas conhecidas da Realidade 0 são posteriores: o Império em 1.261, Emberhold em 1.510, Lionês em 1.595. E é por isso que Salém é o único reino que existiu dos dois lados do marco.",
+        "era": "Ano 0, o marco de onde toda a contagem parte",
+        "descricao": "Salém já existia havia muito tempo quando uma magia deu errado e inúmeros galhos foram devastados em morte e caos. Quando voltou ao normal, ele foi 'criado' de novo, e foi desse ponto que começaram a contar os anos.\n\nÉ por isso que todas as datas conhecidas da Realidade 0 são posteriores: Astraluna em 1.188, o Império em 1.261, Emberhold em 1.510, Lionês em 1.595. E é por isso que Salém é o único reino que existiu dos dois lados do marco.",
         "envolvidos": "Salém"
       },
       "revelado": true,
@@ -949,7 +1024,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Baile das Estações",
       "conteudo": {
         "dimensao": "padrao",
-        "era": "Recorrente - quatro vezes por ano",
+        "era": "Recorrente, quatro vezes por ano",
         "descricao": "Quatro bailes, um por estação, e cada um com uma função social diferente.\n\nO da Primavera acontece em grandes jardins repletos de flores, com músicas leves e danças circulares que envolvem todos. É visto como o baile do amor e das novas alianças: casamentos podem ser anunciados, pactos firmados e até bênçãos de sacerdotes concedidas.\n\nO do Verão é ao ar livre, com jardins e fogueiras iluminando a noite. As danças são vivas, há música forte, banquetes fartos e competições amistosas entre os convidados. É baile de celebração, mas também de ostentação, onde as famílias mostram poder e riqueza.\n\nO do Outono é mais calmo e reflexivo: os convidados se vestem em tons quentes e se reúnem pra agradecer pela colheita. Muitas vezes há discursos em memória dos que se foram e rituais simbólicos, e é comum que o baile seja interrompido por apresentações teatrais ou encenações sobre lendas antigas.\n\nO do Inverno reúne nobres e convidados em salões iluminados por candelabros e cristais de gelo, no auge do frio. É uma noite de máscaras, discursos formais e danças lentas, e muitos a usam pra selar acordos secretos.",
         "envolvidos": "A nobreza da Dimensão Padrão"
       },
@@ -961,8 +1036,25 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "id": "idiomas-do-jardim",
       "titulo": "Os Idiomas do Jardim",
       "conteudo": {
-        "descricao": "Treze povos, treze línguas. O Universal é falado por todos e foi criado por Auleth. O Romeno é dos Vampiros, criado por Davinor. O Finlandês é dos Elfos, criado pelos Finwë.\n\nOs demais não têm criador registrado: Grego entre os Gigantes, Alemão entre os Goblins, Nórdico Antigo entre os Anões, Libras entre os Golens, Enoquiano entre os Espíritos, Latim entre as Sereias, Sumeriano entre os Animálias, Ao Contrário entre os Clones, Inglês entre os Autômatos e Celta entre as Bruxas.",
-        "nota": "Que um idioma tenha criador conhecido diz algo sobre o povo: Vampiros e Elfos sabem quem lhes deu a língua. Os outros dez não."
+        "descricao": "Treze povos, quinze línguas. O Espírito é o único povo com mais de uma: fala Enoquiano entre os Espíritos naturais, Aramaico entre os Espíritos demoníacos e Hebraico entre os Espíritos angelicais. O Universal é falado por todos e foi criado por um Auleth. O Romeno é dos Vampiros, criado por Davinor. O Finlandês é dos Elfos, criado pelos Finwë.\n\nOs demais não têm criador registrado: Grego entre os Gigantes, Alemão entre os Goblins, Nórdico Antigo entre os Anões, Libras entre os Golens, Latim entre as Sereias, Sumeriano entre os Animálias, Ao Contrário entre os Clones, Inglês entre os Autômatos e Celta entre as Bruxas, além das três línguas dos Espíritos.",
+        "nota": "Que um idioma tenha criador conhecido diz algo sobre o povo: Vampiros e Elfos sabem quem lhes deu a língua. Os outros doze não.",
+        "tabela": [
+          "Universal | Todos os povos | Auleth",
+          "Romeno | Vampiros | Davinor",
+          "Finlandês | Elfos | Os Finwë",
+          "Grego | Gigantes |",
+          "Alemão | Goblins |",
+          "Nórdico Antigo | Anões |",
+          "Libras | Golens |",
+          "Enoquiano | Espíritos naturais |",
+          "Aramaico | Espíritos demoníacos |",
+          "Hebraico | Espíritos angelicais |",
+          "Latim | Sereias |",
+          "Sumeriano | Animálias |",
+          "Ao Contrário | Clones |",
+          "Inglês | Autômatos |",
+          "Celta | Bruxas |"
+        ]
       }
     },
     {
@@ -971,8 +1063,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Bordo",
       "conteudo": {
         "no_vazio": "erebus",
-        "descricao": "Bordo é a borda do Jardim: a faixa onde a existência ainda alcança, e depois da qual não alcança mais. Não é escuro - escuridão é uma coisa, e ali não há coisa nenhuma. Quem olha pra frente em Bordo não vê preto: não vê. É o único ponto do Vazio que ganhou nome próprio, porque é onde Erebus se sentou desde sempre.\n\nErebus fica sentado nessa borda, de costas pro Jardim, e é a única deidade que nunca precisou de um lugar habitável dentro de uma Árvore - o próprio Vazio já é o lugar dele. Ele não guarda Bordo contra invasores - guarda contra saídas.\n\nA paralisia não o afetou como às outras. Erebus continua onde sempre esteve, fazendo o que sempre fez, e é impossível dizer se ele chegou a notar que as demais pararam de falar.",
-        "nota": "Bordo não faz fronteira com nenhuma Árvore específica - faz fronteira com o fato de não haver mais nada. Diferente de um Galho, ele não pertence a uma Árvore: é onde o Vazio se torna palpável o bastante para ter um nome."
+        "descricao": "Bordo é a borda do Jardim, a faixa onde a existência ainda consegue existir, e depois de onde não alcança mais. Não é escuro: afinal, escuridão é algo, e ali não há nada. Quem olha pra frente em Bordo não vê preto, apenas não vê. É o único ponto do Vazio que ganhou nome próprio, porque é onde Erebus normalmente fica.\n\nErebus fica sentado nessa borda, de costas pro Jardim, e é a única deidade que nunca precisou de um lugar habitável dentro de uma Árvore: o próprio Vazio já é o lugar dele.\n\nA paralisia não o afetou como às outras. Erebus continua onde sempre esteve, fazendo o que sempre fez, e é impossível dizer se ele chegou a notar que as demais pararam de falar.",
+        "nota": "Bordo não faz fronteira com nenhuma Árvore específica: ele faz fronteira com o fato de não haver mais nada. Diferente de um Galho, ele não pertence a uma Árvore: ele é a demarcação do limite que se pode chegar no universo."
       },
       "arvore_origem": "erebus"
     },
@@ -981,7 +1073,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "id": "a-saida",
       "titulo": "A Saída",
       "conteudo": {
-        "descricao": "O ponto onde a borda se abre. Não tem porta, moldura nem linha marcando é apenas o lugar onde alguém pode deixar de existir por escolha própria, e o único lugar do Jardim onde isso é possível.\n\nA Mulher Carmesim recebe todos os que acabam, e cada um deles vira um livro na Biblioteca de Arkarin. Quem atravessa a Saída não vira livro. Não vira nada, e não deixa nada nem lembrança em quem ficou.\n\nErebus não impede ninguém. Ele apenas pergunta se tem certeza dessa escolha.",
+        "descricao": "O ponto onde a borda se abre. Não tem porta, moldura nem linha marcando: é apenas o lugar onde alguém pode deixar de existir por escolha própria, e o único lugar do Jardim onde isso é possível.\n\nA Mulher Carmesim recebe todos os que acabam, e cada um deles vira um livro na Biblioteca de Arkarin. Quem atravessa a Saída não vira livro. Não vira nada, e não deixa nada nem lembrança em quem ficou.\n\nErebus não impede ninguém de sair, ele apenas pergunta se tem certeza dessa escolha.",
         "caracteristicas": "Irreversível e sem registro. Não há como saber quem já passou por aqui, porque não sobra nada.",
         "no_vazio": "erebus",
         "local_pai": "bordo"
@@ -995,10 +1087,24 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Iwagakure",
       "conteudo": {
         "dimensao": "padrao",
-        "descricao": "\"Sempre o mesmo, não importa o adversário. Quebre-os até que estejam quebrados - tal é a maneira de Iwagakure.\"\n\nNa aldeia, as crianças são obrigadas a passar pelo treinamento ninja: as formas de matar, a resistência, e o aprendizado de abandonar os valores da vida. Uma das etapas é inalar a droga estimulante da dor e suportá-la por três dias e noites, até finalmente se acostumarem com ela - menos de uma em cada dez crianças sobrevive a essa parte sozinha. Matar entre pares é permitido, não importa o motivo, e qualquer disputa entre shinobi se resolve em luta até a morte.\n\nComo diz a lei shinobi, é proibido abandonar a aldeia: qualquer ação ou pensamento nesse sentido é punido com a morte. A principal razão pra querer sair sempre foi a mesma - querer viver uma vida normal. Iwagakure também proíbe seus moradores de circular livremente, a menos que seja em missão.\n\nAs demais leis: ninjas devem suprimir sentimentos, apego e humanidade, tornando-se vazios pra servirem como ferramentas de assassinato; a missão continua a qualquer custo, com quaisquer táticas necessárias; e a filosofia da vila é que a vida de um ninja não tem valor se ele não estiver servindo ao propósito de matar.\n\nO shinobi mais forte de Iwagakure é Gabimaru.",
-        "governo": "Lei shinobi. A sucessão não está definida."
+        "descricao": "\"Sempre o mesmo, não importa o adversário. Quebre-os até que estejam quebrados: tal é a maneira de Iwagakure.\"\n\nNa aldeia, as crianças são obrigadas a passar pelo treinamento ninja que as ensina as formas de matar, a resistência, e o aprendizado de abandonar os valores da vida. Uma das etapas é inalar a droga estimulante da dor e suportá-la por três dias e noites, até finalmente se acostumarem com ela: menos de uma em cada dez crianças sobrevive a essa parte sozinha. Matar seus colegas é permitido, não importa o motivo, e qualquer disputa entre shinobi se resolve em luta até a morte.\n\nComo diz a lei shinobi, é proibido abandonar a aldeia e qualquer ação ou pensamento nesse sentido é punido com a morte. Iwagakure também proíbe seus moradores de circular livremente, a menos que seja em missão.\n\nAs demais leis ninja são suprimir sentimentos, apego e humanidade, tornando-se vazios pra servirem como ferramentas de assassinato; a missão continua a qualquer custo, com quaisquer táticas necessárias; e a filosofia da vila é que a vida de um ninja não tem valor se ele não estiver servindo ao propósito de matar.\n\nO shinobi mais forte de Iwagakure é o Gabimaru, que é um título e não uma pessoa.",
+        "governo": "Lei shinobi."
       },
       "arvore_origem": "aethel"
+    },
+    {
+      "tipo": "local",
+      "id": "astraluna-capital",
+      "titulo": "Astraluna",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Capital da Árvore A.X.I.S, na Dimensão Padrão",
+        "responsavel": "AstraTech e Jota Macedo",
+        "dominio": "Tecnologia arcana, artefatos e a fusão entre magia e máquina",
+        "faccao": "astratech",
+        "descricao": "Astraluna é a capital da Árvore A.X.I.S e a sede da AstraTech. Foi fundada no ano 1.188 e cresceu até virar o maior centro de tecnologia arcana do mundo, reconhecido como o berço da fusão entre magia e máquina.\n\nAs oficinas e os laboratórios da cidade produzem artefatos que sustentam civilizações inteiras. Por isso Astraluna vive cercada de barreiras poderosas e de protocolos rígidos de segurança, e guarda as próprias invenções com um ciúme que nenhuma outra cidade tem. Quem quer comprar uma peça costuma assinar mais papel do que a peça vale.\n\nO governo é corporativo. Quem decide o que se constrói, e para quem, é a AstraTech, e Jota Macedo a preside daqui. Foi desta cidade que a A.X.I.S se espalhou pelo mundo, e para quem mora nela a A.X.I.S representa a esperança de que a energia do mundo enfim possa ser compreendida, reproduzida e evoluída por mãos mortais."
+      }
     },
     {
       "tipo": "local",
@@ -1009,7 +1115,146 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "conteudo": {
         "localizacao": "Vazio",
         "responsavel": "Amadheus Colona",
-        "descricao": "A única instituição que opera em todas as Árvores ao mesmo tempo, e a única que nenhum ser jamais ousou nacionalizar. Fica no Vazio, fora de todas as Árvores."
+        "dominio": "Cofres, empréstimos, seguros e o câmbio entre as nove Árvores",
+        "faccao": "banco-lunar",
+        "descricao": "O Banco Lunar é a única instituição financeira que funciona em todas as Árvores ao mesmo tempo, e ninguém nunca teve coragem de abrir outra para disputar com ele. Tem agência em todas as Árvores, mas a matriz fica no Vazio, fora de todas elas.\n\nIsso explica quase tudo o que o Banco é. Quem atende as nove Árvores não pode morar dentro de nenhuma, e um dinheiro que vale em todas precisa de uma casa que não pertença a nenhuma. Por isso um Solar compra a mesma coisa em qualquer canto do Jardim: existe um lugar fora de tudo garantindo o câmbio, e esse lugar nunca precisou tomar partido.\n\nA matriz é um bloco claro e baixo, sem janela, cercado de corredores cheios de balcões. O atendimento não para nunca, porque no Vazio não existe manhã para esperar. Os cofres ficam nos andares de baixo e são alugados por tamanho e por prazo. Ninguém confere o que tem dentro.\n\nO Banco guarda, empresta e faz seguro. Cofre para quem tem o que esconder, empréstimo para quem tem como pagar, seguro para quem tem medo do que vem pela frente. Nenhum funcionário pergunta de onde o dinheiro veio. Perguntam se ele existe e se a assinatura confere. Os cargos são poucos: o escriturário atende na agência, o gerente decide, e o que passa do tamanho de uma agência sobe até Amadheus Colona.\n\nAmadheus é o Soberano dos Cosmos e não governa um palmo de chão. Cuida do dinheiro e assiste ao resto de longe. Dois exércitos em guerra podem ser atendidos no mesmo balcão, em dias diferentes, pelo mesmo atendente, que cumprimenta os dois do mesmo jeito. Quem tentou usar o Banco contra um inimigo descobriu depressa que o inimigo também tinha conta ali.\n\nEssa neutralidade tem preço, e quase ninguém consegue pagar. Amadheus só escolhe um lado quando alguém paga o bastante. Jota Macedo está entre os seres mais ricos do Jardim, e é por isso que, nas poucas vezes em que o Banco tomou partido, quase sempre foi o dele. Os dois são sócios desde que Amadheus era um ser comum de Gênese, mas se afastaram faz tempo: Jota ficou com a AstraTech, e Amadheus com o Banco Lunar inteiro."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "pharos",
+      "titulo": "Pharos",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Vazio, em volta da Porta Baixa",
+        "responsavel": "Os Faroleiros e os Mestres de quadro",
+        "dominio": "Contratos, quadro de procurados e a formação dos Caçadores das Almas",
+        "faccao": "guilda-dos-cacadores",
+        "descricao": "Pharos é a sede da Guilda dos Caçadores e a única cidade do Vazio com luz própria. Cresceu em volta da Porta Baixa, a maior passagem conhecida por onde as criaturas do Vazio chegam às Árvores, e não tem muralha nenhuma. No lugar dela há o Farol.\n\nO Farol sobe de uma ilha de basalto escuro, no meio do nada, e a cidade leva o nome dele numa língua velha: Pharos, o farol. A luz dele existe para lembrar. Tudo o que está dentro do feixe guarda o próprio nome, e criatura nenhuma do Vazio atravessa a luz de bom grado. O feixe dá uma volta completa a cada hora, e é por isso que a cidade vive em turnos: enquanto a luz passa por um lado, o outro fica no escuro, e é do lado escuro que alguém precisa estar de olho. Essa tarefa se chama Ronda. Todo caçador contratado cumpre uma por semana, e quem está com a Ronda atrasada não pega contrato novo.\n\nA cidade se espalha em terraços, em espiral, no pé do Farol. O Terraço Baixo é onde chega gente: a estalagem, as forjas, o mercado e a cadeia onde esperam os procurados entregues vivos. O Terraço do Meio é onde moram os caçadores contratados e as famílias deles, em escadas estreitas onde dois carregadores mal se cruzam. No alto, logo abaixo da lente, fica a Lanterna, e só entra ali quem a Guilda aceitou de vez.\n\nNa subida do primeiro terraço fica o Quadro, uma parede de ferro de uns vinte metros onde cada contrato aberto é pregado numa chapa. Procurado, criatura do Vazio, espírito que passou da conta: tudo vira chapa, com nome, descrição, valor e prazo. Quem pega o contrato arranca a chapa e leva. Na volta, o Mestre de quadro confere o que foi trazido e só então paga: metade do que o alvo vale no mercado, porque a outra metade fica com a Guilda. Quem tem pressa paga mais caro para contratar, e a pressa nunca sai do bolso do caçador.\n\nO Vazio apaga nome. Quem passa muito tempo fora do alcance da luz começa a ser esquecido, primeiro pelos conhecidos e depois pelos colegas. Por isso cada caçador tem o nome gravado numa placa de bronze nos degraus do Farol. Quem volta de uma expedição espera no pé da escada enquanto o nome dele é lido em voz alta e o Faroleiro de turno mantém o feixe parado sobre ele, até alguém reconhecer. Em geral dura segundos. Já aconteceu de durar a noite inteira. Já aconteceu de ninguém reconhecer, e de a placa ficar na escada com um risco ao lado, e o Farol seguir girando.\n\nOs Faroleiros cuidam da lente e do óleo, são poucos, falam pouco e trabalham sempre em dupla, porque um Faroleiro sozinho no escuro acaba esquecido em uma noite. Os Caçadores das Almas, que ligam a própria alma a uma lâmina com nome e vontade próprios, são os únicos que dormem na Lanterna. A formação leva anos e se divide em quatro disciplinas: a espada, o passo, o espírito e o corpo a corpo. Ninguém aprende as quatro ao mesmo tempo, e o nome da lâmina não é ensinado. Cada um descobre o seu.\n\nNa base do Farol, de costas para a cidade, fica o Pouso, uma casa baixa de pedra, sem nenhum enfeite, onde os caçadores levam os espíritos que aceitam ir. O ritual se chama Última Luz e é curto: o Faroleiro-mor apaga o Farol por sete segundos, o único momento em que a cidade inteira fica no escuro, e o espírito atravessa. A cidade toda para de falar nesses sete segundos, de espada na mão. O que demora é a espera na porta do Pouso. Tem espírito que passa horas diante dela sem entrar, e caçador que passa as mesmas horas ao lado dele, esperando. Ninguém comenta isso depois.\n\nTudo em Pharos custa o triplo, como em todo o Vazio, e quase tudo o que se come chega pela Caravana do Limiar. A cidade reclama disso o tempo inteiro e nunca pensou em morar em outro lugar."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "patio-das-rotas",
+      "titulo": "Pátio das Rotas",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Vazio",
+        "responsavel": "Os Mestres de caravana",
+        "dominio": "Montagem das caravanas e lista das passagens abertas",
+        "faccao": "caravana-do-limiar",
+        "descricao": "Um pátio enorme de terra batida, sem teto, no ponto do Vazio onde as passagens conhecidas se abrem. É ali que as caravanas se montam antes de partir e se desmontam na volta. Cada passagem tem uma faixa numerada pintada no chão, e o Mestre de caravana de plantão sabe de cabeça quais estão abertas, quais cobram a mais e quais ninguém atravessa mais.\n\nComo nada nasce no Vazio, quase tudo o que se come por lá passa pelo Pátio primeiro, em fardos e barris. É por isso que os preços de todo o Vazio são o triplo, e a Caravana não finge que não sabe. Rota selada ela não atravessa, e a lista das seladas fica pregada na entrada, atualizada à mão."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "agulha",
+      "titulo": "A Agulha",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Vazio",
+        "responsavel": "Os vigias",
+        "dominio": "Vigilância das passagens e evacuação de áreas ameaçadas",
+        "faccao": "vigilia-das-raizes",
+        "descricao": "A Agulha é uma torre alta e fina, a mais alta do Vazio, onde a Vigília mantém vigias acordados dia e noite olhando para as passagens. Do topo se vê onde o Vazio encosta nas Árvores, e quando uma fronteira cede o primeiro aviso sai dali, uma luz acesa no alto que as outras casas da Vigília repetem uma a uma.\n\nEmbaixo ficam o alojamento, o depósito de corda, lona e carroça de evacuação, e uma sala só de mapas. Cada ruptura conhecida tem a própria folha, e cada folha tem data. A Vigília diz que a sala é maior que a torre, e quem já entrou lá confirma."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "acervo-prismatico",
+      "titulo": "Acervo Prismático",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Vazio",
+        "responsavel": "Os arquivistas",
+        "dominio": "Registros verificados, identificação de artefatos e consulta paga",
+        "faccao": "arquivo-prismatico",
+        "descricao": "Fica no Vazio de propósito, fora de qualquer Árvore, para que nenhuma possa reclamar o que está guardado. É um salão comprido de prateleiras de vidro fosco, e cada registro descansa numa peça que só deixa passar luz de uma cor. A cor diz de onde a informação veio. Cada Árvore tem a sua, e daí vem o nome.\n\nEntra no Acervo quem trouxe algo para guardar ou quem paga para consultar. Os arquivistas conferem tudo duas vezes, em núcleos diferentes, e quando as duas versões não batem a informação vai para uma prateleira à parte, com uma faixa preta, até alguém descobrir qual das duas mentiu."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "salao-das-treze-portas",
+      "titulo": "Salão das Treze Portas",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Gênese, na Dimensão Padrão",
+        "responsavel": "Os tradutores",
+        "dominio": "Tradução, intérpretes e o registro dos idiomas do Jardim",
+        "faccao": "casa-das-linguas",
+        "descricao": "Um salão redondo, em Gênese, com treze portas, uma para cada povo do Jardim. Atrás de cada porta fica uma sala de trabalho com dicionários, cartas e os tradutores daquele povo. O salão do meio serve a quem precisa de duas línguas na mesma conversa e espera a vez numa fila que anda devagar.\n\nA porta do Universal é a mais gasta e a única que ninguém tranca. A de Libras fica no centro do círculo e não tem maçaneta, porque ali se pede licença por sinal, e quem não sabe o sinal espera que alguém de dentro o ensine."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "campanario",
+      "titulo": "Campanário",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Limiar, num recanto cedido pela Mulher Carmesim",
+        "responsavel": "Os relatores",
+        "dominio": "Registro das aparições de Entidades e venda de avisos",
+        "faccao": "sociedade-do-sino",
+        "descricao": "No Limiar, num recanto pequeno que a Mulher Carmesim deixa à Sociedade, fica uma torre de pedra com um único sino, rachado, que só toca quando chega o aviso de uma Entidade. Quem mora perto aprendeu a contar as batidas: uma para cada rank de perigo, do azul ao preto. Cinco batidas seguidas só aconteceram duas vezes, e as duas estão anotadas na parede da escada.\n\nEmbaixo fica a sala dos relatos, onde os relatores escrevem e guardam o que se sabe, com uma estante para cada Entidade conhecida. Cada folha diz quem encontrou, quando, onde e o que perdeu. A Sociedade vende cópia do relato mais recente a quem pede, e recusa a venda para quem diz que quer ir atrás da Entidade."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "casa-do-primeiro-lume",
+      "titulo": "Casa do Primeiro Lume",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Anima",
+        "responsavel": "Os curandeiros da Ordem",
+        "dominio": "Cura, socorro e a lamparina que dá nome à Ordem",
+        "faccao": "ordem-do-lume",
+        "descricao": "A casa-mãe da Ordem do Lume fica em Anima e é a única que nunca fechou. Dizem que o primeiro lume foi aceso ali, numa lamparina pequena ao lado da porta, e que ela nunca se apagou desde então. Os curandeiros trocam o óleo de manhã e à noite, e fazem isso sem cerimônia, como quem lava a louça.\n\nAtende qualquer ferido que chegue pelo portão, sem perguntar de que lado ele estava. Dentro, as alas se separam só pela gravidade do caso, e rivais que acabam na mesma enfermaria aprendem a conviver sem arma. Quem se recupera deixa alguma coisa na parede para quem vem depois, um nome, um desenho, uma palavra. A parede de dentro já é mais grossa que a de fora."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "galpoes-do-meio",
+      "titulo": "Galpões do Meio",
+      "registro_universal": "local",
+      "revelado": false,
+      "conteudo": {
+        "localizacao": "Vazio",
+        "dominio": "Depósito de mercadoria não declarada",
+        "faccao": "a-ordem",
+        "descricao": "Uma fileira de armazéns num trecho do Vazio onde nenhuma outra facção quis construir. Por fora parecem velhos e vazios. Por dentro, a Ordem guarda caixas e barris que não foram declarados em balcão nenhum, e cada caixa leva um número que só o dono e o contador entendem.\n\nQuem negocia nos Galpões chega de capuz e sai pela porta dos fundos. Ninguém assina nada. O acordo se fecha pelo pagamento adiantado, e a Ordem cumpre, porque descumprir uma vez bastaria para acabar com o negócio de todo mundo."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "casa-vermelha",
+      "titulo": "Casa Vermelha",
+      "registro_universal": "local",
+      "revelado": false,
+      "conteudo": {
+        "localizacao": "Desconhecida, em alguma Árvore pequena e esquecida",
+        "dominio": "Reunião das células e sacrifícios",
+        "faccao": "culto-carmesim",
+        "descricao": "Ninguém sabe ao certo onde fica, e provavelmente ela não fica no mesmo lugar duas vezes. O pouco que se sabe vem de quem conseguiu sair: por fora é uma casa comum, de porta baixa e janelas fechadas com tábua. Por dentro, as paredes são pintadas de vermelho escuro todo ano, por cima da tinta do ano anterior, e as camadas já pesam.\n\nÉ onde as células se reencontram para dividir o que fizeram e escolher o próximo. Existe uma sala só para a Mulher Carmesim, vazia, com uma cadeira virada para a parede. Os membros acreditam que ela escuta dali, e que o silêncio da sala é a resposta."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "pomar",
+      "titulo": "O Pomar",
+      "registro_universal": "local",
+      "revelado": false,
+      "conteudo": {
+        "localizacao": "Escondido, com um só caminho de acesso",
+        "dominio": "Cofre dos Frutos do Éden e das relíquias colhidas",
+        "faccao": "colhedores-do-eden",
+        "descricao": "É onde os Colhedores guardam o que tiraram dos outros: Frutos do Éden ainda inteiros, relíquias da Criação trancadas em cofres de ferro, objetos que valem mais que a rua inteira de onde foram levados. O lugar tem um só caminho de entrada, e o caminho é vigiado.\n\nO nome começou como piada. Cada Fruto ganha uma árvore pintada na parede, e quando ele é vendido a árvore é riscada. Ninguém lembra quem começou isso. A parede do fundo já está quase toda riscada, e os Colhedores mais velhos evitam olhar para ela."
       }
     },
     {
@@ -1018,7 +1263,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Biblioteca de Arkarin",
       "conteudo": {
         "dimensao": "castelo-carmesim",
-        "descricao": "Nos níveis mais profundos do Castelo Carmesim, um espaço que não conhece limites, começo ou fim. Estende-se além do que a mente pode compreender: um oceano infinito de prateleiras feitas de matéria primordial, sustentadas por colunas de energia viva.\n\nAqui repousam todos os livros que a Mulher Carmesim já escreveu e que ainda irá escrever. Cada livro é a vida de um ser - não importa quão pequeno, insignificante, grandioso ou cósmico, sua história está ali. Cada livro é único: tamanho, formato e aparência refletem a natureza da existência que ele representa. Alguns são tomos imensos, com milhares de páginas douradas que brilham como estrelas; outros são pequenos, frágeis, quase efêmeros, escritos em folhas finas como névoa.\n\nNinguém além da Mulher Carmesim compreende inteiramente a organização da Biblioteca - não é linear, nem segue alfabetos, datas ou espécies. Ela existe não apenas como arquivo, mas como ferramenta de balanço, consulta e, às vezes, julgamento: quando um ser é trazido ao Tribunal, seu livro surge flutuando diante dela, que lê e sentencia com base no que está ali, na verdade pura, nua, sem interpretações.\n\nÉ dito que, em algum lugar da Biblioteca, existem livros que nunca foram abertos, cujos títulos não podem ser pronunciados. Livros que, se abertos, não mostram uma vida - mostram o próprio fim de tudo. Nem mesmo a Mulher Carmesim toca neles, a não ser que o fim do próprio universo assim o exija."
+        "descricao": "Nos níveis mais profundos do Castelo Carmesim, um espaço que não tem limites, começo ou fim. Estende-se além do que a mente pode compreender: é um oceano infinito de prateleiras cheias de histórias dos que se foram, dos que ainda vivem e dos que irão viver.\n\nAqui repousam todos os livros que a Mulher Carmesim já escreveu e que ainda irá escrever. Cada livro é a vida de um ser: não importa quão pequeno, insignificante, grandioso ou cósmico você foi, sua história está ali. Cada livro é único: tamanho, formato e aparência refletem a natureza da existência que ele representa. Alguns são imensos, com milhares de páginas douradas que brilham como estrelas; outros são pequenos, frágeis, quase efêmeros, escritos em folhas finas que quase não se dá pra ver.\n\nNinguém além da Mulher Carmesim compreende inteiramente a organização da Biblioteca: não é linear, nem segue ordem alfabética, datas ou espécies. Ela existe não apenas como arquivo, mas como ferramenta de balanço, consulta e, às vezes, julgamento: quando um ser é trazido ao Tribunal, seu livro surge flutuando diante dela, que lê e sentencia com base no que está ali, na verdade pura, nua, sem interpretações.\n\nÉ dito que, em algum lugar da Biblioteca, existem livros que nunca foram abertos, cujos títulos não podem ser pronunciados. Livros que, se abertos, não mostram uma vida, mostram o próprio fim de tudo. Nem mesmo a Mulher Carmesim toca neles, a não ser que o fim do próprio universo assim o exija."
       },
       "arvore_origem": "mulher-carmesim"
     }

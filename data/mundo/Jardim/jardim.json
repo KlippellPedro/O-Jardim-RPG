@@ -23,7 +23,7 @@
           "Dimensão",
           "Reino"
         ],
-        "descricao": "O Jardim é o todo. Dentro dele crescem nove Árvores, e cada Árvore é ao mesmo tempo três coisas: a Árvore em si, a Deidade que a habita e o Fluxo que ela rege não são coisas distintas que se associam, são a mesma coisa vista de três ângulos.\n\nDe cada Árvore saem Galhos, também chamados de Realidades. Dentro de cada Galho abrem-se Dimensões, e dentro de cada Dimensão existem Reinos e outros Locais. É essa a linha inteira, e é por ela que a exploração acontece descobrir uma Árvore não revela seus Galhos, descobrir um Galho não revela suas Dimensões.\n\nDuas Árvores fogem do padrão. Limiar tem um único Galho (Arkarin), todas as coisas das outras Árvores acabam nela. E Parley é a única Árvore com duas identidades sobrepostas: a original, de Keryx, e a A.X.I.S que Jota Macedo instalou por cima.\n\nFora dessa contagem existe o Vazio, que não é uma décima Árvore: é o espaço entre as nove e o resto do universo, inclusive o Banco Lunar, que só existe porque fica fora de todas elas ao mesmo tempo. Erebus governa esse espaço, não um pedaço de terra dentro dele."
+        "descricao": "O Jardim é o todo. Dentro dele crescem nove Árvores, e cada Árvore é ao mesmo tempo três coisas: a Árvore em si, a Deidade que a habita e o Fluxo que ela rege não são coisas distintas que se associam, são a mesma coisa vista de três ângulos.\n\nDe cada Árvore saem Galhos, também chamados de Realidades. Dentro de cada Galho abrem-se Dimensões, e dentro de cada Dimensão existem Reinos e outros Locais. É essa a linha inteira, e é por ela que a exploração acontece: descobrir uma Árvore não revela seus Galhos, descobrir um Galho não revela suas Dimensões.\n\nDuas Árvores fogem do padrão. Limiar tem um único Galho (Arkarin), todas as coisas das outras Árvores acabam nela. E Parley é a única Árvore com duas identidades sobrepostas: a original, de Keryx, e a A.X.I.S que Jota Macedo instalou por cima.\n\nO Abismo não é uma Árvore. É o Vazio, o espaço que existe entre as nove Árvores, entre tudo que tem e não tem no Jardim, inclusive o Banco Lunar e outros locais."
       },
       "_origem": "ESCRITO em 2026-07-29 a partir da estrutura documentada em data/mundo/_padrao.json e usada pelo catálogo React.",
       "_nota_id": "O id 'hierarquia-do-jardim' NÃO pode ser alterado - a view procura por ele literalmente (cosmologiaView.js, linha 67).",
@@ -50,8 +50,8 @@
           "ignis",
           "chronus"
         ],
-        "descricao": "Sonhar existe em todas as Árvores ao mesmo tempo. Cada Árvore, porém, possui sua própria camada onírica, separada das demais: seres de Árvores diferentes não conseguem se ver nem se encontrar em Sonhar apenas por estarem sonhando. A travessia entre essas separações exige uma ruptura, passagem ou intervenção capaz de vencer as fronteiras entre Árvores.",
-        "nota": "A Sonhar documentada na Realidade 0 é a manifestação de Gênese. Ela não é a única Sonhar existente, apenas a camada conhecida por seus habitantes."
+        "descricao": "Sonhar existe em todas as Árvores ao mesmo tempo, mas cada Árvore tem a sua camada, separada das outras. Quem sonha numa Árvore não vê nem encontra quem sonha em outra.\n\nNa prática, duas pessoas de Árvores diferentes podem dormir na mesma cama e passar a noite sem se cruzar uma vez. Cada uma sonha na sua camada, com os seus Sonhos e os seus Pesadelos, e acorda achando que o sono foi só dela. Quase todo mundo vive e morre assim, sem saber que existe uma camada ao lado.\n\nO que muda de uma camada para outra é o jeito das coisas. A de Gênese, a única que os habitantes de lá conhecem, tem Grimm no centro e uma hospitalidade que passa da conta. As outras têm outros donos, ou nenhum. Quem já esteve em mais de uma costuma dizer que a diferença se sente antes de se ver: o ar pesa de outro jeito, e as pessoas do sonho falam num ritmo que o visitante não reconhece.\n\nAtravessar de uma camada para outra é a parte difícil. Querer não basta, e dormir mais fundo também não ajuda. É preciso uma ruptura, uma passagem aberta por alguém ou a ajuda de Grimm, o Soberano dos Sonhos e Pesadelos, e mesmo assim quem atravessa acorda cansado, sem lembrar direito de ter dormido. Quem passou por isso conta quase sempre a mesma coisa: tudo o que conhecia da própria camada termina de repente numa borda reta, como uma folha cortada a tesoura.\n\nDo outro lado vale o que vale em Sonhar. O que se deseja ganha corpo nos Sonhos, o que se teme ganha corpo nos Pesadelos, e o visitante não escolhe em qual dos dois vai parar. Os Oníricos moram ali e não dependem de ninguém dormindo para existir. Todos sabem que visita de outra camada é coisa rara. Uns recebem com festa, outros com vontade de guardar.",
+        "nota": "Cada Árvore enxerga só a sua camada de Sonhar. A que está registrada na Realidade 0 é a de Gênese, a camada que os habitantes de lá conhecem."
       },
       "_origem": "Decisão canônica do autor em 2026-08-28.",
       "_pronto_para_importar": true
@@ -63,10 +63,27 @@
       "id": "idiomas-do-jardim",
       "titulo": "Os Idiomas do Jardim",
       "conteudo": {
-        "descricao": "Treze povos, treze línguas. O Universal é falado por todos e foi criado por Auleth. O Romeno é dos Vampiros, criado por Davinor. O Finlandês é dos Elfos, criado pelos Finwë.\n\nOs demais não têm criador registrado: Grego entre os Gigantes, Alemão entre os Goblins, Nórdico Antigo entre os Anões, Libras entre os Golens, Enoquiano entre os Espíritos, Latim entre as Sereias, Sumeriano entre os Animálias, Ao Contrário entre os Clones, Inglês entre os Autômatos e Celta entre as Bruxas.",
-        "nota": "Que um idioma tenha criador conhecido diz algo sobre o povo: Vampiros e Elfos sabem quem lhes deu a língua. Os outros dez não."
+        "descricao": "Treze povos, quinze línguas. O Espírito é o único povo com mais de uma: fala Enoquiano entre os Espíritos naturais, Aramaico entre os Espíritos demoníacos e Hebraico entre os Espíritos angelicais. O Universal é falado por todos e foi criado por um Auleth. O Romeno é dos Vampiros, criado por Davinor. O Finlandês é dos Elfos, criado pelos Finwë.\n\nOs demais não têm criador registrado: Grego entre os Gigantes, Alemão entre os Goblins, Nórdico Antigo entre os Anões, Libras entre os Golens, Latim entre as Sereias, Sumeriano entre os Animálias, Ao Contrário entre os Clones, Inglês entre os Autômatos e Celta entre as Bruxas, além das três línguas dos Espíritos.",
+        "nota": "Que um idioma tenha criador conhecido diz algo sobre o povo: Vampiros e Elfos sabem quem lhes deu a língua. Os outros doze não.",
+        "tabela": [
+          "Universal | Todos os povos | Auleth",
+          "Romeno | Vampiros | Davinor",
+          "Finlandês | Elfos | Os Finwë",
+          "Grego | Gigantes |",
+          "Alemão | Goblins |",
+          "Nórdico Antigo | Anões |",
+          "Libras | Golens |",
+                    "Enoquiano | Espíritos naturais |",
+          "Aramaico | Espíritos demoníacos |",
+          "Hebraico | Espíritos angelicais |",
+          "Latim | Sereias |",
+          "Sumeriano | Animálias |",
+          "Ao Contrário | Clones |",
+          "Inglês | Autômatos |",
+          "Celta | Bruxas |"
+        ]
       },
-      "_origem": "Conteúdo REAL - transcrito da tabela em 'O Jardim/Gênese/Realidade 0/Idiomas.md'. Corrigidas apenas as grafias do cofre: 'Goblim' → Goblins, 'Anãos' → Anões, 'Espiritos' → Espíritos, 'Animalias' → Animálias.",
+      "_origem": "Conteúdo REAL - transcrito da tabela em 'O Jardim/Gênese/Realidade 0/Idiomas.md'. Corrigidas apenas as grafias do cofre: 'Goblim' → Goblins, 'Anãos' → Anões, 'Espiritos' → Espíritos, 'Animalias' → Animálias. Em 2026-10-12 o Espírito passou a ter três línguas, uma por Natureza (Aramaico e Hebraico escolhidos pelo assistente; Enoquiano já era do Pedro).",
       "_por_que_isso_importa": "É a ÚNICA lista de raças que existe no cofre inteiro, e as 13 conversam parcialmente com data/ficha/racas.json (Autômato e Elfo já existem lá como raças jogáveis, ligadas a keryx e aethel respectivamente). Nenhuma das 13 tem nota própria no Obsidian.",
       "_o_que_falta": "'Auleth' - o criador do idioma Universal - aparece UMA vez no cofre inteiro, aqui, e nunca mais. É graficamente parecido com 'Aethel' (a deidade da Gênese), mas não é o mesmo nome, e nada indica que sejam a mesma figura. Vale decidir: é erro de digitação de Aethel, ou é outra entidade? Note que existe uma raça chamada 'auleth' em data/ficha/racas.json, o que sugere que é mesmo alguém à parte.",
       "_pronto_para_importar": true

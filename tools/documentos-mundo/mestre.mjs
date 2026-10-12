@@ -156,8 +156,7 @@ export function folhaDoMestre() {
       em 1.188, então qualquer ano acima disso serve. Também sai de um ponto só.</li>
       <li>Os valores em Lunaris seguem a escala oficial da economia, com o salário mínimo de 300
       como âncora. Os 60.000 são deliberadamente absurdos para o padrão de vida dela.</li>
-      <li>Nenhuma facção não canônica aparece. Vigília das Raízes e Arquivo Prismático continuam
-      como proposta no faccoes.json e por isso ficaram de fora.</li>
+      <li>Nenhuma facção que ainda é proposta no faccoes.json aparece aqui.</li>
     </ul>
   `));
 

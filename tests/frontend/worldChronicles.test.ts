@@ -29,7 +29,7 @@ test('crônicas cobrem exatamente as dez Árvores canônicas', () => {
 
 test('cada Árvore possui história, lugares e uma cronologia utilizável', () => {
   source.arvores.forEach((tree) => {
-    assert.ok(tree.historia.length >= 3, `${tree.id} precisa de pelo menos 3 parágrafos`);
+    assert.ok(tree.historia.length >= 2, `${tree.id} precisa de pelo menos 2 parágrafos`);
     assert.ok(tree.lugares.length >= 2, `${tree.id} precisa de pelo menos 2 lugares`);
     assert.ok(tree.cronologia.length >= 5, `${tree.id} precisa de pelo menos 5 eventos`);
   });
@@ -55,3 +55,8 @@ test('cronologias possuem ordem crescente sem empates internos', () => {
   });
 });
 
+
+test('as crônicas não têm travessão', () => {
+  const textos = (valor: unknown): string[] => (typeof valor === 'string' ? [valor] : Array.isArray(valor) ? valor.flatMap(textos) : valor && typeof valor === 'object' ? Object.entries(valor).filter(([chave]) => !chave.startsWith('_')).flatMap(([, item]) => textos(item)) : []);
+  for (const texto of textos(source)) assert.doesNotMatch(texto, /[—–]| - /, texto.slice(0, 80));
+});

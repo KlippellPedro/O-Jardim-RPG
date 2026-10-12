@@ -21,9 +21,9 @@
         "fluxo": "fluxo-do-tempo",
         "genero": "Masculino",
         "status": "paralisada",
-        "dominio": "A linha sucessiva e imutável de eventos garante que passado, presente e futuro jamais se misturem.",
+        "dominio": "A fila dos acontecimentos, um depois do outro, que mantém passado, presente e futuro cada um no seu lugar.",
         "epiteto": "Aquele que flui no Tempo",
-        "descricao": "Paciente e inevitável. Ele zela pela linha sucessiva e imutável de eventos."
+        "descricao": "Chronus é paciente e não há como fugir dele. Cuida da fila dos acontecimentos, um depois do outro, e não deixa nenhum furar a vez. O que já passou continua no passado porque ele está olhando."
       },
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
       "_pronto_para_importar": true,
@@ -38,8 +38,8 @@
       "titulo": "Fluxo do Tempo",
       "conteudo": {
         "arvore": "Éon",
-        "descricao": "O Fluxo da ordem dos acontecimentos. Não volta no tempo e não mostra o futuro - Chronus existe justamente pra impedir as duas coisas. O que ele concede é peso sobre a sequência: agir antes de quem era mais rápido, fazer um veneno levar uma hora em vez de um segundo, sustentar de pé uma ruína que já devia ter caído. Todo uso cobra do próprio portador o tempo que ele poupou de outra coisa, e ninguém canaliza Éon por muitos anos sem parecer ter vivido o dobro deles.",
-        "marca_corporal": "Uma parte do corpo envelhece fora de compasso com o resto - uma mecha branca, uma mão de velho num rosto jovem."
+        "descricao": "O Fluxo da ordem dos acontecimentos. Não volta no tempo e não mostra o futuro: Chronus existe justamente pra impedir as duas coisas. O que ele concede é agir antes de quem era mais rápido, fazer um veneno levar uma hora em vez de um segundo, sustentar de pé uma ruína que já devia ter caído. Todo uso cobra do próprio portador o tempo que ele poupou de outra coisa, e ninguém canaliza Éon por muitos anos sem parecer ter vivido o dobro deles.",
+        "marca_corporal": "Uma parte do corpo envelhece fora de ordem com o resto do corpo. Exemplo: uma mecha branca, uma mão de velho num rosto de jovem."
       },
 
       "_origem": "Domínio de Chronus (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (cor Dourado envelhecido). Reescrito em 2026-07-29. O 'não volta no tempo' é deliberado: a descrição da Deidade diz que ele garante que passado, presente e futuro jamais se misturem, então viagem no tempo não é um poder do Fluxo dele.",
@@ -54,8 +54,8 @@
       "titulo": "Sucessão",
       "conteudo": {
         "arvore": "chronus",
-        "descricao": "O Galho onde os acontecimentos ficam em fila. Sucessão é uma linha - literalmente uma linha, estendida sem largura por uma extensão que não se mede em distância e sim em ordem. Cada ponto dela é um instante que já aconteceu em alguma Árvore, encaixado atrás do anterior e à frente do seguinte, e é esse encaixe que impede o passado, o presente e o futuro de se misturarem.\n\nChronus caminha a linha. Sempre no mesmo sentido, sempre no mesmo passo, e nunca a percorreu duas vezes.\n\nCom ele paralisado, a fila não se desfez - mas parou de ser conferida. E já apareceram, em Dimensões distantes, coisas acontecendo levemente fora de ordem: um eco antes do som, uma ferida antes do golpe.",
-        "nota": "Nada em Sucessão pode ser revisitado. O Galho registra a ordem dos eventos, não os eventos - não há nada pra ver ali, só pra confirmar."
+        "descricao": "O Galho onde os acontecimentos ficam em fila. Sucessão é uma linha, literalmente uma linha, estendida sem largura por uma extensão que não se mede em distância e sim em ordem cronológica. Cada ponto dela é um instante que já aconteceu em alguma Árvore, encaixado atrás do anterior e à frente do seguinte, e é esse encaixe que impede o passado, o presente e o futuro de se misturarem.\n\nChronus caminha sobre a linha. Sempre no mesmo sentido, sempre no mesmo passo, e nunca a percorreu duas vezes.",
+        "nota": "Nada em Sucessão pode ser revisitado. O Galho registra a ordem dos eventos, não os eventos em si."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29. Ancorado no domínio de Chronus, que já era canônico ('a linha sucessiva e imutável de eventos', 'garante que passado, presente e futuro jamais se misturem') - e deliberadamente escrito pra NÃO permitir viagem no tempo, coerente com a descrição do Fluxo do Tempo na entrada 2 deste arquivo.",
       "_pronto_para_importar": true

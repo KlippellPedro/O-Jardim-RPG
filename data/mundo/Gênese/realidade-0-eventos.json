@@ -19,8 +19,8 @@
       "titulo": "O Cataclismo do Ano Zero",
       "conteudo": {
         "galho": "realidade-0",
-        "era": "Ano 0 - o marco de onde toda a contagem parte",
-        "descricao": "Salém já existia havia muito tempo quando uma magia deu errado e inúmeros galhos foram devastados em morte e caos. Quando voltou ao normal, ele foi 'criado' de novo, e foi desse ponto que começaram a contar os anos.\n\nÉ por isso que todas as datas conhecidas da Realidade 0 são posteriores: o Império em 1.261, Emberhold em 1.510, Lionês em 1.595. E é por isso que Salém é o único reino que existiu dos dois lados do marco.",
+        "era": "Ano 0, o marco de onde toda a contagem parte",
+        "descricao": "Salém já existia havia muito tempo quando uma magia deu errado e inúmeros galhos foram devastados em morte e caos. Quando voltou ao normal, ele foi 'criado' de novo, e foi desse ponto que começaram a contar os anos.\n\nÉ por isso que todas as datas conhecidas da Realidade 0 são posteriores: Astraluna em 1.188, o Império em 1.261, Emberhold em 1.510, Lionês em 1.595. E é por isso que Salém é o único reino que existiu dos dois lados do marco.",
         "envolvidos": "Salém"
       },
       "_origem": "Conteúdo REAL - transcrito de 'Reinos/Salém/Idade.md', que é a única nota do cofre inteiro a explicar de onde vem a contagem dos anos.",
@@ -71,7 +71,7 @@
       "titulo": "Baile das Estações",
       "conteudo": {
         "dimensao": "padrao",
-        "era": "Recorrente - quatro vezes por ano",
+        "era": "Recorrente, quatro vezes por ano",
         "descricao": "Quatro bailes, um por estação, e cada um com uma função social diferente.\n\nO da Primavera acontece em grandes jardins repletos de flores, com músicas leves e danças circulares que envolvem todos. É visto como o baile do amor e das novas alianças: casamentos podem ser anunciados, pactos firmados e até bênçãos de sacerdotes concedidas.\n\nO do Verão é ao ar livre, com jardins e fogueiras iluminando a noite. As danças são vivas, há música forte, banquetes fartos e competições amistosas entre os convidados. É baile de celebração, mas também de ostentação, onde as famílias mostram poder e riqueza.\n\nO do Outono é mais calmo e reflexivo: os convidados se vestem em tons quentes e se reúnem pra agradecer pela colheita. Muitas vezes há discursos em memória dos que se foram e rituais simbólicos, e é comum que o baile seja interrompido por apresentações teatrais ou encenações sobre lendas antigas.\n\nO do Inverno reúne nobres e convidados em salões iluminados por candelabros e cristais de gelo, no auge do frio. É uma noite de máscaras, discursos formais e danças lentas, e muitos a usam pra selar acordos secretos.",
         "envolvidos": "A nobreza da Dimensão Padrão"
       },

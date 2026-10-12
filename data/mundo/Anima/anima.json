@@ -21,9 +21,9 @@
         "fluxo": "fluxo-da-vitalidade",
         "genero": "Ambos",
         "status": "paralisada",
-        "dominio": "O ciclo selvagem da vida nascer, viver, morrer, renascer e tudo que a existência tem a oferecer.",
+        "dominio": "O ciclo selvagem da vida: nascer, viver, morrer, renascer, e tudo o que a existência tem a oferecer no caminho.",
         "epiteto": "Aquela que flui na Vitalidade",
-        "descricao": "Entidade de energia bruta e instintiva. Governa o ciclo completo da vida, sempre aproveitando tudo que a existência lhe proporciona."
+        "descricao": "Haemus é energia bruta, instinto que vem antes do pensamento. Governa a vida inteira, do primeiro fôlego ao último e de volta ao primeiro, e não deixa passar nada do que a existência oferece: fome, festa, briga, cura. Tudo o que está vivo aproveita, e Haemus aproveita junto."
       },
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
       "_ajustado_para_bater_com_estrutura_do_jardim": "O panteon.json antigo tinha epíteto 'Aquela que flui na Vida' e gênero 'Feminino'. A tabela mais recente 'Estrutura do Jardim' (a fonte mais atual que você me passou) mostra epíteto 'Aquela que flui na Vitalidade' e gênero 'Ambos' - usei a versão mais recente aqui. Se isso foi um erro de digitação na tabela em vez de uma mudança deliberada, é só ajustar este campo.",
@@ -55,7 +55,7 @@
       "titulo": "Viveiro",
       "conteudo": {
         "arvore": "haemus",
-        "descricao": "O Galho mais cheio de todos, e o mais difícil de atravessar. O Viveiro não tem estações, dia nem clima: tem apenas crescimento. Tudo ali nasce grande demais, rápido demais, e morre do mesmo jeito - a mata cobre em uma noite o que outra mata levaria um século pra tomar, e por baixo dela apodrece a mata anterior.\n\nCom Haemus paralisada, nada disso parou. O Viveiro é o único Galho em que a ausência da deidade não travou o Fluxo: ele continua sozinho, sem ninguém pra regular, e por isso vem engolindo as próprias fronteiras.",
+        "descricao": "O Galho mais cheio de todos, e o mais difícil de atravessar. O Viveiro não tem estações, dia nem clima: tem apenas crescimento. Tudo ali nasce grande demais, rápido demais, e morre do mesmo jeito: a natureza cobre em uma noite o que outra levaria um século pra tomar, e por baixo dela apodrece do mesmo jeito.",
         "nota": "Haemus não escolhe lados entre o que come e o que é comido. Um Galho regido por essa lógica sem supervisão nenhuma é a coisa mais perigosa do Jardim que não tem intenção nenhuma de fazer mal."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29. Ancorado no domínio de Haemus (o ciclo selvagem da vida, energia bruta e instintiva) e no fato de que ela é a deidade cujo Fluxo menos depende de decisão consciente - daí a escolha de fazer deste o único Galho que a paralisia não travou.",

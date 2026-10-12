@@ -11,8 +11,8 @@
  *    trabalha depois da Era do Silêncio, quando o próprio canon já diz que
  *    "ninguém teve mais com quem conferir nada".
  *  - Só emissores canônicos aparecem (Banco Lunar, Guilda dos Caçadores,
- *    Caravana do Limiar, A.X.I.S). Vigília das Raízes e Arquivo Prismático
- *    estão como `proposta` em faccoes.json e por isso ficaram de fora.
+ *    Caravana do Limiar, A.X.I.S). Facção ainda em `proposta` em faccoes.json
+ *    não aparece aqui.
  *
  * Pra renomear a personagem ou mudar o ano, mexa só em PESQUISADORA e ANO.
  */

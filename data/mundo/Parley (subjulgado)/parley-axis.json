@@ -26,7 +26,7 @@
         "status": "dominante",
         "dominio": "A nova malha artificial que intercepta, filtra e bloqueia a comunicação direta entre todas as deidades, isolando-as umas das outras.",
         "epiteto": "Aquele que flui na Tecnologia",
-        "descricao": "Jota Macedo subjugou Keryx o antigo Fluxo da Comunicação, guardião das leis e pactos entre as Árvores. Keryx não foi morto mas sim aprisionado e tendo seu poder absorvido dia após dia. Desde então, Jota governa o que restou do Fluxo de Keryx através da A.X.I.S, uma malha tecnológica artificial que corta a comunicação direta entre as demais deidades é por isso que quase todas elas estão paralisadas e isoladas, sem conseguir se falar."
+        "descricao": "Esta Árvore era de Keryx, a deidade do Fluxo da Comunicação, guardião das leis e dos pactos entre as Árvores. Jota Macedo lutou contra ele e venceu, e foi o primeiro ser humano a vencer uma deidade.\n\nKeryx não morreu. Está preso num dos casulos da Malha, e o poder dele é puxado dia após dia para dentro da máscara de Jota. O que sobrou do Fluxo agora passa pela A.X.I.S, uma malha artificial que corta a conversa direta entre as deidades. É por isso que quase todas estão paralisadas, cada uma isolada na sua Árvore, sem conseguir falar com as outras."
       },
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json (entrada 'keryx', que na época ainda tratava Keryx e A.X.I.S como uma coisa só) antes de ele ser removido nesta sessão, reconciliado com a tabela mais recente 'Estrutura do Jardim' (que separa Parley/Keryx subjugado da A.X.I.S/Jota Macedo em duas linhas distintas - segui essa divisão mais recente aqui).",
       "_pronto_para_importar": true,
@@ -56,7 +56,7 @@
       "revelado": false,
       "conteudo": {
         "arvore": "A.X.I.S",
-        "citacao": "Se o fluir das árvores é visto como um milagre, então a A.X.I.S é a prova de que milagres podem ser replicados. - Jota Macedo",
+        "citacao": "Se o fluir das árvores é visto como um milagre, então a A.X.I.S é a prova de que milagres podem ser replicados. (Jota Macedo)",
         "descricao": "Uma ramificação artificial desenvolvida a partir do Fluxo original, resultado direto das ambições de Jota Macedo um homem determinado a desvendar e replicar os mistérios cósmicos usando apenas os princípios da ciência e da razão. Diferente do despertar tradicional das outras vertentes, que exige fé, emoção ou pactos, a A.X.I.S é inteiramente construída sobre experimentação, lógica e precisão matemática.\n\nA cor predominante é o azul neon artificial, refletindo uma natureza fria, racional e calculadamente estável. Sua estética é marcada por estruturas geométricas perfeitas, cristais simétricos e artefatos forjados com uma exatidão espetacular.\n\nPra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo possa enfim ser compreendida, reproduzida e evoluída por mãos mortais. Virou o símbolo de uma nova era, provando que os Fluxos das velhas deidades não são mais os únicos capazes de sustentar a realidade. O que quase ninguém sabe é o preço: essa mesma malha é o que intercepta e bloqueia a comunicação entre as demais Árvores, e é por isso que quase todas as deidades estão paralisadas.",
         "marca_corporal": "Veias de azul neon acendem sob a pele e pulsam como se respirassem."
       },
@@ -74,7 +74,7 @@
       "conteudo": {
         "epiteto": "O que restou de Aquele que fluía na Comunicação",
         "genero": "Masculino",
-        "descricao": "O que resta de Keryx depois do contrato com Jota Macedo. Ainda existe - fraco, preso, sem controle sobre o próprio Fluxo, que agora responde à A.X.I.S (entrada 'keryx' deste mesmo pacote). Diplomata e rígido por natureza, foi justamente sua confiança nos pactos e nas leis entre realidades que Jota usou contra ele. Rege (ou regia) as leis e os pactos entre as realidades.",
+        "descricao": "É o que sobrou de Keryx depois que ele perdeu para Jota Macedo. Continua vivo, fraco, preso num casulo da Malha, e o próprio Fluxo não obedece mais a ele: responde à A.X.I.S.\n\nSempre foi diplomata e rígido. Quando Jota apareceu com a tecnologia que tinha passado anos construindo, Keryx foi enfrentá-lo e perdeu. Era ele quem cuidava das leis e dos pactos entre as realidades, e ninguém sabe dizer se ainda cuida de alguma coisa lá de dentro.",
         "status": "preso",
         "subjugado_por": "A.X.I.S / Jota Macedo"
       },
@@ -90,8 +90,8 @@
       "revelado": false,
       "conteudo": {
         "arvore": "keryx",
-        "descricao": "O Galho que Jota Macedo construiu por cima do de Keryx. A Malha não cresceu: foi instalada - uma treliça de azul neon estendida sobre toda a extensão do antigo Galho da Comunicação, ocupando exatamente o mesmo espaço, com exatidão geométrica onde antes havia caminho aberto.\n\nÉ por ela que toda palavra entre Árvores passa hoje. E é nela que toda palavra entre Árvores para: a Malha intercepta, registra, filtra e, quase sempre, não entrega. As deidades não foram silenciadas uma a uma - foram desligadas de uma vez, no dia em que a Malha subiu.\n\nPor baixo da treliça, o Galho original de Keryx ainda existe. Pálido, estreito e quase intransitável, mas existe.",
-        "nota": "É o único Galho do Jardim com dono, e o único que foi feito por um mortal."
+        "descricao": "O \"Galho\" que Jota Macedo construiu por cima do de Keryx. A Malha não cresceu: foi instalada: uma treliça de azul neon estendida sobre toda a extensão do antigo Galho da Comunicação.\n\nÉ por ela que toda comunicação entre Árvores passa hoje. E é nela que toda comunicação entre Árvores para: afinal, a Malha intercepta, registra, filtra e, quase sempre, não deixa mensagens passar. As deidades não foram silenciadas uma a uma: foram desligadas de uma vez, no dia em que a Malha foi instalada.\n\nPor baixo da treliça, o Galho original de Keryx ainda existe. Pálido, estreito e quase intransitável, mas existe.",
+        "nota": "É o único \"Galho\" do Jardim com dono, e o único que foi feito por um mortal."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29, seguindo a sugestão que o próprio placeholder anterior deixava ('algum tipo de servidor ou núcleo onde a malha da A.X.I.S de fato reside') e o vocabulário que já era canônico na entrada de Deidade ('malha tecnológica artificial que corta a comunicação direta entre as demais deidades').",
       "_nota_visual": "A imagem da treliça por cima do Galho pálido é a mesma do modelo 3D que já existe: tools/blender/generate_tree.py, modo '--axis', desenha uma gaiola tecnológica em volta de uma Parley pequena, pálida e semitransparente. O Galho e a Árvore contam a mesma coisa.",
@@ -120,8 +120,8 @@
       "titulo": "Astraluna",
       "conteudo": {
         "galho": "a-malha",
-        "descricao": "O maior centro de tecnologia arcana do mundo, reconhecido como o berço da fusão perfeita entre magia e máquina. Suas oficinas e laboratórios produzem artefatos tão avançados que sustentam civilizações inteiras, o que torna o reino indispensável ao equilíbrio do continente. Cercado por barreiras poderosas e protocolos rigorosos de segurança, Astraluna guarda seus segredos com rigidez, impedindo que suas inovações caiam em mãos erradas. Misterioso e grandioso, é ao mesmo tempo um farol de progresso e um guardião ciumento das próprias maravilhas.\n\nÉ a sede da AstraTech e a base de operações de Jota Macedo, seu presidente - e é daqui que a A.X.I.S se espalhou pelo mundo. Pra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo enfim possa ser compreendida, reproduzida e evoluída por mãos mortais.",
-        "fundacao": "Ano 1.188 - o mais antigo dos reinos com data registrada.",
+        "descricao": "O maior centro de tecnologia arcana do mundo, reconhecido como o berço da fusão perfeita entre magia e máquina. Suas oficinas e laboratórios produzem artefatos tão avançados que sustentam civilizações inteiras. Cercado por barreiras poderosas e protocolos rigorosos de segurança, Astraluna guarda seus segredos com rigidez, impedindo que suas inovações caiam em mãos erradas.\n\nÉ a sede da AstraTech e a base de operações de Jota Macedo, seu presidente, e é daqui que a A.X.I.S se espalhou pelo mundo. Pra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo enfim possa ser compreendida, reproduzida e evoluída por mãos mortais.",
+        "fundacao": "Ano 1.188, no Galho de Gênese",
         "governo": "Corporativo. Presidido por Jota Macedo, através da AstraTech."
       },
       "_origem": "Conteúdo REAL - transcrito de 'A.X.I.S/Astraluna/Astraluna.md' e 'Função.md'. O 2º parágrafo amarra com o que já estava em data/mundo/Parley (subjulgado)/parley-axis.json.",
@@ -136,7 +136,7 @@
       "titulo": "Máscaras da AstraTech",
       "conteudo": {
         "reino": "astraluna",
-        "descricao": "Forjadas a partir do Arkan'vel, a tecnologia avançada desenvolvida em Astraluna, as máscaras são artefatos tão poderosos quanto temidos. Criadas nas profundezas dos laboratórios, onde ciência e feitiçaria se misturaram, reluzem como veias azuis neon, pulsando como se respirassem.\n\nAo serem colocadas, conectam-se diretamente à Força Vital e à mente do usuário, concedendo habilidades que ultrapassam os limites comuns - aumento de atributos físicos e da percepção como um todo.\n\nMas as máscaras não apenas canalizam poder: elas reescrevem o portador. Cada comando, cada pensamento é filtrado pelas camadas encantadas de código vivo e, com o tempo, a máscara passa a decidir por si. Muitos usuários perdem gradualmente a própria identidade, tornando-se extensões da vontade de Astraluna.\n\nJota Macedo trabalha em segredo numa máscara biomecânica maior que todas as outras, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente - uma relíquia que lhe permitiria usar o poder de uma deidade, desde que ela estivesse num de seus estoques."
+        "descricao": "Forjadas a partir do Arkan'vel, a tecnologia avançada desenvolvida em Astraluna, as máscaras são artefatos tão poderosos quanto temidos. Criadas nas profundezas dos laboratórios, onde ciência e feitiçaria se misturaram, reluzem como veias azuis neon, pulsando como se respirassem.\n\nAo serem colocadas, conectam-se diretamente à Força Vital e à mente do usuário, concedendo habilidades que ultrapassam os limites comuns: aumento de atributos físicos e da percepção como um todo.\n\nMas as máscaras não apenas canalizam poder: elas reescrevem o portador. Cada comando, cada pensamento é filtrado pelas camadas encantadas de código vivo e, com o tempo, a máscara passa a decidir por si. Muitos usuários perdem gradualmente a própria identidade, tornando-se extensões da vontade de Astraluna.\n\nJota Macedo trabalha em segredo numa máscara biomecânica maior que todas as outras, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente: uma relíquia que lhe permitiria usar o poder de uma deidade, desde que ela estivesse num de seus estoques."
       },
       "_origem": "Conteúdo REAL - transcrito de 'A.X.I.S/Astraluna/AstraTech/Máscaras.md'; o último parágrafo, de 'A.X.I.S/Jota Macedo.md'.",
       "_nota_tipo": "Entrou como 'reino' porque é o único tipo de Local que o schema tem - a cascata do Mundo não prevê um tipo 'artefato'. Se quiser, dá pra mover pra uma entrada tipo 'personagem' sem perder nada.",
@@ -149,10 +149,13 @@
       "tipo": "personagem",
       "id": "jota-macedo",
       "titulo": "Jota Macedo",
+      "registro_universal": "ser",
+      "revelado": false,
       "conteudo": {
         "epiteto": "Soberano da Tecnologia",
         "genero": "Masculino",
-        "descricao": "Aclamado como o grande gênio da ciência moderna. É o criador da A.X.I.S e fundador da AstraTech, a maior corporação tecnológica já estabelecida na história. Mas o verdadeiro objetivo de Jota vai muito além do progresso industrial ou do sucesso empresarial: ele busca um feito inédito pra humanidade - quebrar as limitações mortais e ascender ao mesmo patamar de poder das deidades.\n\nPra alcançar esse ápice, trabalha secretamente numa máscara biomecânica, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente: uma relíquia que lhe permite usar o poder de uma deidade, desde que ela esteja num de seus estoques.\n\nEle já conseguiu uma vez. Convenceu Keryx, o antigo Fluxo da Comunicação e guardião das leis e pactos entre as Árvores, a assinar um contrato que se revelou uma prisão - Keryx não foi derrotado pela força, foi enganado pela diplomacia, a arma em que mais confiava. É por causa disso que quase todas as deidades do Jardim estão paralisadas e incomunicáveis.\n\nAntes de tudo isso, Jota foi um menino do orfanato de Ofélia: inteligente, curioso, e capaz de usar o Fluxo numa forma pura e poderosa demais pra idade.",
+        "descricao": "Chamam Jota Macedo de maior gênio da ciência moderna. Criou a A.X.I.S e fundou a AstraTech, a maior corporação de tecnologia que já existiu. O que ele quer fica bem longe de fábrica e de lucro: quer fazer o que nenhum humano fez, largar os limites de quem nasce mortal e chegar à altura das deidades.\n\nPara isso trabalha em segredo numa máscara biomecânica, feita para conter e estabilizar o maior e mais puro fragmento de A.X.I.S que existe. Com ela, Jota usa o poder de uma deidade, contanto que essa deidade esteja presa num dos estoques dele.\n\nUma já está. Keryx, a deidade do Fluxo da Comunicação e guardião das leis e dos pactos entre as Árvores, lutou com Jota e perdeu, e Jota virou o primeiro ser humano a vencer uma deidade. Prendeu Keryx num dos casulos da Malha e drena o poder dele até hoje. É por isso que quase todas as deidades do Jardim estão paralisadas e sem conseguir se falar.\n\nAntes de tudo isso, Jota foi um menino do orfanato de Ofélia: inteligente, curioso e incapaz de usar qualquer Fluxo. Lá, ele e Circe eram melhores amigos. Os dois eram muito nerds, adoravam estudar e dividiam tudo o que descobriam. A morte de Ofélia levou cada um para um lado, e hoje Circe é a maior oposição a ele, a que mais quer detê-lo.\n\nOs outros irmãos do orfanato também se espalharam. Para criar a máscara, Jota prendeu vários deles e drenou o poder que tinham. Circe foi uma das presas.",
+        "soberano": "sim",
         "cor": "Azul",
         "status": "ativo"
       },

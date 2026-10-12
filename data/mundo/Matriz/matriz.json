@@ -21,9 +21,9 @@
         "fluxo": "fluxo-do-espaco",
         "genero": "Feminino",
         "status": "paralisada",
-        "dominio": "As distâncias, as dimensões e as fronteiras necessárias pra Árvores e Galhos não colidirem.",
+        "dominio": "As distâncias, as dimensões e as fronteiras que impedem Árvores e Galhos de se chocarem.",
         "epiteto": "Aquela que flui no Espaço",
-        "descricao": "Governa as distâncias, as dimensões e as fronteiras. É ela quem molda esses espaços necessários para que existam Árvores e Galhos sem se colidirem."
+        "descricao": "Aperion governa as distâncias, as dimensões e as fronteiras. Foi ela quem abriu espaço entre as coisas, e é por causa dela que Árvores e Galhos crescem lado a lado sem se esmagar."
       },
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
       "_pronto_para_importar": true,
@@ -38,8 +38,8 @@
       "titulo": "Fluxo do Espaço",
       "conteudo": {
         "arvore": "Matriz",
-        "descricao": "O Fluxo da distância. Encurta, estica, dobra e tranca: um passo que cobre uma légua, uma porta que não leva a lugar nenhum, uma sala maior por dentro do que por fora, uma fronteira que exército nenhum atravessa. É o Fluxo dos guias dimensionais e das Âncoras, e o único que permite atravessar de um Galho a outro sem morrer no caminho. Com Aperion paralisada, as fronteiras que ela sustentava vêm cedendo sozinhas - é por isso que fendas e rachaduras entre Dimensões têm aparecido onde nunca houve nada.",
-        "marca_corporal": "A sombra do portador chega um instante atrasada, e nunca no ângulo certo."
+        "descricao": "O Fluxo da distância: ele encurta, estica, dobra e para. Uma porta que não leva a lugar nenhum, uma sala maior por dentro do que por fora, uma fronteira que não dá pra atravessar. É o Fluxo dos guias dimensionais, e o único que permite atravessar de um Galho a outro sem morrer no caminho. Com Aperion paralisada, as fronteiras que ela sustentava vêm cedendo sozinhas, e é por isso que fendas e rachaduras entre Dimensões têm aparecido onde nunca existiram.",
+        "marca_corporal": "A sombra do portador nunca está no ângulo certo."
       },
 
       "_origem": "Domínio de Aperion (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (cor Roxo). Reescrito em 2026-07-29; 'Âncora' e 'guia dimensional' vêm de data/ficha/racas.json e data/ficha/classes.json, que já existiam. As fendas conversam com o evento Noite Rubra do Obsidian.",
@@ -54,7 +54,7 @@
       "titulo": "Interstício",
       "conteudo": {
         "arvore": "aperion",
-        "descricao": "O Galho que existe entre os outros Galhos - o vão que Aperion abriu pra que as Árvores pudessem crescer sem se colidirem. Não tem chão, céu nem direção: tem distância, e a distância ali é a única matéria de que as coisas são feitas.\n\nÉ o caminho. Toda travessia entre Galhos passa por Interstício, saiba o viajante disso ou não, e a maioria não sabe - o Fluxo do Espaço costuma atravessá-lo tão rápido que a pessoa nunca chega a perceber que esteve em lugar nenhum.\n\nCom Aperion paralisada, as distâncias pararam de ser mantidas. Trechos que separavam Galhos inteiros encolheram; outros esticaram até virar intransponíveis. É de Interstício que saem as fendas e rachaduras que vêm aparecendo pelas Dimensões.",
+        "descricao": "O Galho que existe entre os outros Galhos: o vão que Aperion abriu pra que as Árvores pudessem crescer sem se colidirem.\n\nToda travessia entre Galhos passa por Interstício, saiba o viajante disso ou não, e a maioria não sabe: o Fluxo do Espaço costuma atravessá-lo tão rápido que a pessoa nunca chega a perceber que esteve em lugar nenhum.\n\nCom Aperion paralisada, as distâncias pararam de ser mantidas. Trechos que separavam Galhos inteiros encolheram; outros esticaram até virar intransponíveis. É de Interstício que saem as fendas e rachaduras que vêm aparecendo pelas Dimensões.",
         "nota": "Se algum dia duas Árvores se tocarem, terá sido aqui."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29. Ancorado no domínio de Aperion, que já era canônico ('molda os vazios necessários para que existam Árvores e Galhos sem se colidirem'), e conectado ao evento Noite Rubra do Obsidian, onde portais e fendas aparecem pelo mundo.",

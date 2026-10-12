@@ -21,9 +21,9 @@
         "fluxo": "fluxo-da-essencia",
         "genero": "Feminino",
         "status": "paralisada",
-        "dominio": "A alma e a verdade fundamental das coisas o que define a natureza real de um ser.",
+        "dominio": "A alma e a verdade de cada coisa, aquilo que define o que um ser é de fato.",
         "epiteto": "Aquela que flui na Essência",
-        "descricao": "Governa o que define a alma e a verdade fundamental das coisas. É filosófica e raramente interfere, a menos que a natureza de um ser seja corrompida. "
+        "descricao": "Ousias cuida da alma e da verdade de cada coisa, o que sobra de um ser quando se tira tudo o que ele mostra. Gosta mais de pensar do que de agir e quase nunca interfere. A exceção é quando a natureza de alguém começa a se corromper: aí ela aparece."
       },
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão (mesma fonte da entrada de Aethel em genese.json).",
       "_pronto_para_importar": true,
@@ -54,7 +54,7 @@
       "titulo": "Anámnesis",
       "conteudo": {
         "arvore": "ousias",
-        "descricao": "O Galho onde as coisas ainda sabem o que são. Não há povo em Anámnesis, nem construção: é uma extensão de campo aberto sob luz âmbar constante, onde tudo que já existiu em qualquer Árvore deixou uma impressão do que era de verdade - sem disfarce, sem título, sem versão contada depois.\n\nDesde que Ousias parou, o Galho continua registrando e não responde mais. Quem chega ali sente que está sendo lido, e não encontra ninguém do outro lado da leitura.",
+        "descricao": "O Galho onde as coisas ainda sabem o que são. Não há povo em Anámnesis, nem construção: esse Galho é uma extensão de campo aberto sob uma luz constante, onde tudo que já existiu em qualquer Árvore deixou uma impressão do que era de verdade, sem versões, apenas a verdade.",
         "nota": "Anámnesis é o Galho mais fácil de alcançar e o mais difícil de suportar: ninguém o atravessa sem descobrir alguma coisa sobre si mesmo que preferiria não saber."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29. Nenhuma fonte definia Galhos pra esta Árvore. Ancorado no domínio de Ousias (a verdade fundamental das coisas) e no detalhe já canônico de que ela sente que algo está errado mas não age. O nome é grego, como Alétheia e Ousias.",
@@ -72,7 +72,7 @@
         "caracteristicas": "Quem entra revela o próprio nome verdadeiro a todos os presentes, sem escolha."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
-      "_nota_conexao": "Foi escrita pra conversar com Keryx: pactos entre realidades eram o domínio dele, e a Sala dos Nomes é onde esses pactos ficavam à prova de mentira. Que Jota tenha conseguido enganar Keryx com um contrato sugere que o contrato NÃO foi assinado aqui - possível gancho.",
+      "_nota_conexao": "Foi escrita pra conversar com Keryx: pactos entre realidades eram o domínio dele, e a Sala dos Nomes é onde esses pactos ficavam à prova de mentira. Jota venceu Keryx em combate (decisão do autor em 2026-10-11): não houve contrato nenhum, então a Sala dos Nomes segue como o lugar dos pactos honestos.",
       "_pronto_para_importar": true,
       "revelado": true
     }

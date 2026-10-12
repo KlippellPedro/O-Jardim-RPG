@@ -72,20 +72,22 @@ test('reputação bancária permanece separada', () => {
   assert.match(REPUTACAO_BANCARIA_SEPARADA, /Prestígio e Fama não alteram/);
 });
 
-test('catálogo reúne quatro facções canônicas e duas propostas transdimensionais', () => {
+test('catálogo reúne doze facções canônicas, todas aprovadas', () => {
   assert.deepEqual(
     FACCOES_DOCUMENTADAS.map((faccao) => faccao.id),
     [
       'banco-lunar', 'astratech', 'caravana-do-limiar', 'vigilia-das-raizes',
       'arquivo-prismatico', 'guilda-dos-cacadores',
+      'casa-das-linguas', 'sociedade-do-sino', 'ordem-do-lume', 'a-ordem',
+      'culto-carmesim', 'colhedores-do-eden',
     ],
   );
-  assert.equal(FACCOES_DOCUMENTADAS.filter((faccao) => faccao.estado === 'canonica').length, 4);
-  assert.equal(FACCOES_DOCUMENTADAS.filter((faccao) => faccao.estado === 'proposta').length, 2);
+  assert.equal(FACCOES_DOCUMENTADAS.filter((faccao) => faccao.estado === 'canonica').length, 12);
+  assert.equal(FACCOES_DOCUMENTADAS.filter((faccao) => faccao.estado === 'proposta').length, 0);
   assert.ok(FACCOES_DOCUMENTADAS.every((faccao) => /Árvore/i.test(faccao.alcance)));
 });
 
-test('fontes das facções canônicas existem e propostas não fingem possuir fonte', () => {
+test('facções canônicas têm fonte no cofre ou aprovação do autor, e propostas não fingem possuir fonte', () => {
   const entradasPorArquivo: Record<string, Set<string>> = {
     'data/mundo/Gênese/realidade-0-reinos.json': new Set(reinosData.entradas.map((entrada) => entrada.id)),
     'data/mundo/Gênese/realidade-0-soberanos.json': new Set(soberanosData.entradas.map((entrada) => entrada.id)),
@@ -98,7 +100,10 @@ test('fontes das facções canônicas existem e propostas não fingem possuir fo
       assert.deepEqual(faccao.fontes, [], `${faccao.titulo} ainda não deveria possuir fonte canônica`);
       continue;
     }
-    assert.ok(faccao.fontes.length > 0, `${faccao.titulo} deveria possuir fonte canônica`);
+    if (faccao.fontes.length === 0) {
+      assert.ok(faccao.aprovacao?.em, `${faccao.titulo} é canônica sem fonte e sem aprovação do autor`);
+      continue;
+    }
     for (const fonte of faccao.fontes) {
       assert.ok(entradasPorArquivo[fonte.arquivo]?.has(fonte.entrada_id), `${faccao.titulo}: fonte ausente`);
     }

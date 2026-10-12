@@ -196,8 +196,8 @@
         "governa": "uma Dimensao inteira, com os Reinos dentro dela"
       },
       {
-        "classe": "Soberano",
-        "exemplo": "uma das dez Cadeiras da assembleia da criacao",
+        "classe": "Governante",
+        "exemplo": "quem governa uma Arvore",
         "renda_mensal": null,
         "a_mao_fixo": {
           "valor": 100,
@@ -206,7 +206,7 @@
         "a_mao_dados": "2d100 Fragmentos",
         "patrimonio": null,
         "compra_no_maximo": "nao compra, requisita",
-        "governa": "uma Cadeira, e o que a Cadeira alcanca"
+        "governa": "uma Arvore, e o que o cargo alcanca"
       }
     ],
     "modificador_por_lugar": {
@@ -491,8 +491,7 @@
           },
           {
             "cargo": "Cabeca da casa",
-            "classe_social": "Soberano",
-            "nota": "Amadheus Colona ocupa uma das dez Cadeiras."
+            "classe_social": "Governante"
           }
         ]
       },
@@ -594,9 +593,9 @@
         }
       },
       {
-        "classe": "Soberano",
+        "classe": "Governante",
         "patrimonio_fragmentos": null,
-        "observacao": "nao se conta: uma Cadeira requisita, nao compra"
+        "observacao": "nao se conta: quem governa uma Arvore requisita, nao compra"
       }
     ]
   },

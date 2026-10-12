@@ -1,14 +1,14 @@
 {
   "_versao": "2.0",
   "_criterio_publicacao": "Inclui apenas organizações cuja atuação pode alcançar personagens de qualquer Árvore.",
-  "_nota_aprovacao": "Banco Lunar e AstraTech pertencem ao cenario atual. Guilda dos Cacadores e Caravana do Limiar foram promovidas a canonicas em 19/08/2026, quando ganharam economia definida em data/economia/escala-precos-v1.json (contratos por criatura, cargos e salario por classe social) - ver a secao O Vazio entre as Arvores no Livro do Mestre. Vigilia das Raizes e Arquivo Prismatico continuam como propostas aguardando aprovacao.",
+  "_nota_aprovacao": "Banco Lunar e AstraTech pertencem ao cenario atual. Guilda dos Cacadores e Caravana do Limiar foram promovidas a canonicas em 19/08/2026, quando ganharam economia definida em data/economia/escala-precos-v1.json (contratos por criatura, cargos e salario por classe social) - ver a secao O Vazio entre as Arvores no Livro do Mestre. As outras oito (Vigilia das Raizes, Arquivo Prismatico, Casa das Linguas, Sociedade do Sino, Ordem do Lume, A Ordem, Culto Carmesim e Colhedores do Eden) foram aprovadas pelo autor em 11/10/2026 (campo 'aprovacao', sem fonte no cofre). Nenhuma facao e 'vila' no registro: o texto descreve o que cada uma faz, e quem a enfrenta ou apoia e escolha da mesa.",
   "faccoes": [
     {
       "id": "banco-lunar",
       "titulo": "Banco Lunar",
       "tipo": "instituicao-financeira",
       "alcance": "Todas as Árvores",
-      "atuacao_publica": "Guarda, administra e investe bens. Também fornece recursos a clientes capazes de pagar.",
+      "atuacao_publica": "Guarda, administra e investe bens. Também fornece recursos a clientes capazes de pagar. Atende os dois lados de qualquer conflito pelo mesmo preço e nunca discute para que o dinheiro vai servir. Tem agências em todas as Árvores, e a matriz fica no Vazio.",
       "estado": "canonica",
       "registro_universal": true,
       "fontes": [
@@ -23,7 +23,7 @@
       "titulo": "AstraTech",
       "tipo": "corporacao-tecnologica",
       "alcance": "Múltiplas Árvores",
-      "atuacao_publica": "Desenvolve tecnologia arcana e mantém projetos capazes de operar além de Astraluna.",
+      "atuacao_publica": "Desenvolve tecnologia arcana e mantém projetos capazes de operar além de Astraluna. Guarda os segredos com ciúme, e quem quer comprar uma peça costuma assinar mais papel do que a peça vale. A A.X.I.S saiu dela para o mundo, e Jota Macedo ainda a preside.",
       "estado": "canonica",
       "registro_universal": true,
       "fontes": [
@@ -38,7 +38,7 @@
       "titulo": "Caravana do Limiar",
       "tipo": "rede-de-transporte",
       "alcance": "Rotas acessíveis entre Árvores",
-      "atuacao_publica": "Transporta pessoas, cargas e mensagens por passagens dimensionais conhecidas. Não atravessa rotas seladas.",
+      "atuacao_publica": "Transporta pessoas, cargas e mensagens por passagens dimensionais conhecidas. Não atravessa rotas seladas. Cobra por peso, por distância e por quanto a passagem costuma ser instável. Os mestres de caravana conhecem as rotas de cabeça e não vendem o mapa a ninguém.",
       "estado": "canonica",
       "registro_universal": true,
       "fontes": [
@@ -53,27 +53,35 @@
       "titulo": "Vigília das Raízes",
       "tipo": "ordem-de-contencao",
       "alcance": "Todas as Árvores alcançáveis",
-      "atuacao_publica": "Investiga rupturas dimensionais, evacua áreas ameaçadas e contém criaturas que atravessam fronteiras entre Árvores.",
-      "estado": "proposta",
+      "atuacao_publica": "Investiga rupturas dimensionais, evacua áreas ameaçadas e contém criaturas que atravessam fronteiras entre Árvores. Os vigias ficam em torres, em campo e em cidades de fronteira, e a prioridade deles é tirar as pessoas do caminho antes de tentar resolver o problema.",
+      "estado": "canonica",
       "registro_universal": true,
-      "fontes": []
+      "fontes": [],
+      "aprovacao": {
+        "por": "o autor",
+        "em": "2026-10-11"
+      }
     },
     {
       "id": "arquivo-prismatico",
       "titulo": "Arquivo Prismático",
       "tipo": "instituicao-de-pesquisa",
       "alcance": "Núcleos em diferentes Árvores",
-      "atuacao_publica": "Preserva registros, identifica artefatos e reúne informações verificadas sobre fenômenos de diferentes Árvores.",
-      "estado": "proposta",
+      "atuacao_publica": "Preserva registros, identifica artefatos e reúne informações verificadas sobre fenômenos de diferentes Árvores. Aceita registro de qualquer um, mas só guarda como verdadeiro o que dois núcleos conseguem conferir. Cobra pela consulta e não vende cópia do que guarda.",
+      "estado": "canonica",
       "registro_universal": true,
-      "fontes": []
+      "fontes": [],
+      "aprovacao": {
+        "por": "o autor",
+        "em": "2026-10-11"
+      }
     },
     {
       "id": "guilda-dos-cacadores",
       "titulo": "Guilda dos Caçadores",
       "tipo": "guilda-de-cacadores",
       "alcance": "Todas as Árvores",
-      "atuacao_publica": "Aceita contrato para capturar criminoso procurado e para abater criatura vinda do Vazio. Paga por entrega confirmada, cobra caro por serviço urgente e mantém quadro de procurados aberto a quem quiser tentar.",
+      "atuacao_publica": "A Guilda aceita contrato para capturar procurado, abater criatura vinda do Vazio e cuidar de espírito que ficou mais do que devia. Só paga depois de conferir a entrega, cobra mais caro de quem tem pressa e deixa o Quadro aberto para qualquer um que queira tentar a sorte. Os Caçadores das Almas, que cuidam da fronteira entre os vivos e os mortos, são a parte mais fechada da Guilda e os únicos que dormem na Lanterna, no alto do Farol de Pharos.",
       "estado": "canonica",
       "registro_universal": true,
       "fontes": [
@@ -82,6 +90,90 @@
           "entrada_id": "vazio_entre_as_arvores"
         }
       ]
+    },
+    {
+      "id": "casa-das-linguas",
+      "titulo": "Casa das Línguas",
+      "tipo": "casa-de-traducao",
+      "alcance": "Todas as Árvores",
+      "atuacao_publica": "Traduz documentos, contratos e depoimentos entre os povos e guarda o registro dos idiomas do Jardim. Cobra por palavra e recusa serviço que dependa de falsificar o que foi dito. Cada idioma tem um tradutor responsável, que assina o trabalho e responde por ele.",
+      "estado": "canonica",
+      "registro_universal": true,
+      "fontes": [],
+      "aprovacao": {
+        "por": "o autor",
+        "em": "2026-10-11"
+      }
+    },
+    {
+      "id": "sociedade-do-sino",
+      "titulo": "Sociedade do Sino",
+      "tipo": "sociedade-de-registro",
+      "alcance": "Postos de escuta em diferentes Árvores",
+      "atuacao_publica": "Registra cada aparição de Entidade que chega ao seu conhecimento, classifica o perigo pelos ranks do Livro das Entidades e vende avisos a quem vai passar por onde elas costumam aparecer. Nunca negocia com uma Entidade. O aviso custa pouco e a cópia do relato custa mais, e quem pede o relato para ir atrás da Entidade não recebe.",
+      "estado": "canonica",
+      "registro_universal": true,
+      "fontes": [],
+      "aprovacao": {
+        "por": "o autor",
+        "em": "2026-10-11"
+      }
+    },
+    {
+      "id": "ordem-do-lume",
+      "titulo": "Ordem do Lume",
+      "tipo": "ordem-de-socorro",
+      "alcance": "Casas de cura em todas as Árvores",
+      "atuacao_publica": "Mantém casas de cura e postos de socorro em cidades e estradas de várias Árvores. Atende qualquer ferido sem perguntar de que lado ele estava, e pede em troca que a casa seja respeitada por quem passa. Quem leva arma para dentro é posto na rua. Cada casa deixa uma lamparina acesa na porta, e é por ela que o povo reconhece o lugar.",
+      "estado": "canonica",
+      "registro_universal": true,
+      "fontes": [],
+      "aprovacao": {
+        "por": "o autor",
+        "em": "2026-10-11"
+      }
+    },
+    {
+      "id": "a-ordem",
+      "titulo": "A Ordem",
+      "tipo": "rede-de-contrabando",
+      "alcance": "Entrepostos entre as Árvores",
+      "atuacao_publica": "Contrabandeia mercadoria proibida ou não declarada pelas passagens entre as Árvores, as mesmas que a Caravana do Limiar usa, e abastece o Mercado Negro. Aceita qualquer encomenda, desde que o pagamento venha antes. Não tem chefe à vista: o pedido vai numa caixa, num dos pontos de coleta, e a resposta chega em até três dias, com preço e prazo.",
+      "estado": "canonica",
+      "registro_universal": true,
+      "fontes": [],
+      "aprovacao": {
+        "por": "o autor",
+        "em": "2026-10-11"
+      }
+    },
+    {
+      "id": "culto-carmesim",
+      "titulo": "Culto Carmesim",
+      "tipo": "culto-sanguinario",
+      "alcance": "Células escondidas em diferentes Árvores",
+      "atuacao_publica": "Seita de assassinos que mata em série e entrega cada vítima como sacrifício à Mulher Carmesim, convencida de que a Noite Carmesim virá quando o sangue derramado bastar. Age em células pequenas e escondidas, escolhe a vítima com paciência e deixa o corpo marcado para quem souber ler. Cada célula tem de três a sete membros e não conhece as outras, e quem entra deixa o nome para trás e passa a ser um número.",
+      "estado": "canonica",
+      "registro_universal": true,
+      "fontes": [],
+      "aprovacao": {
+        "por": "o autor",
+        "em": "2026-10-11"
+      }
+    },
+    {
+      "id": "colhedores-do-eden",
+      "titulo": "Colhedores do Éden",
+      "tipo": "organizacao-criminosa",
+      "alcance": "Redes em todas as Árvores",
+      "atuacao_publica": "Caçadores de poder que perseguem portadores de Frutos do Éden e de relíquias da Criação. Roubam o que conseguem, matam quem resiste e vendem o que colheram a quem pagar mais. Quem encomenda um trabalho e não paga passa a ser o próximo alvo. Trabalham em equipes pequenas, com um batedor que chega primeiro fingindo ser comprador e um ladrão que entra depois.",
+      "estado": "canonica",
+      "registro_universal": true,
+      "fontes": [],
+      "aprovacao": {
+        "por": "o autor",
+        "em": "2026-10-11"
+      }
     }
   ]
 }

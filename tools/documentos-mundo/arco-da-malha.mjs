@@ -34,7 +34,7 @@ const pagina1 = () => `
 
   <h2>O que o Mestre precisa saber</h2>
   <ul>
-    <li><strong>Keryx</strong>, o antigo Fluxo da Comunicação e guardião das leis e pactos entre as Árvores, foi enganado pela diplomacia, a arma em que mais confiava. Jota Macedo o convenceu a assinar um contrato que era uma prisão. Keryx não foi morto: está preso no <strong>Núcleo Zero</strong>, sem controle sobre o próprio Fluxo, que agora responde à A.X.I.S.</li>
+    <li><strong>Keryx</strong>, o antigo Fluxo da Comunicação e guardião das leis e pactos entre as Árvores, foi derrotado em combate por Jota Macedo, o primeiro ser humano a vencer uma deidade, depois de anos de planos e invenções. Keryx não foi morto: está preso num casulo no <strong>Núcleo Zero</strong>, sem controle sobre o próprio Fluxo, que agora responde à A.X.I.S. Jota puxa a energia dele para dentro da máscara.
     <li>A <strong>A.X.I.S</strong> é a Malha que Jota instalou sobre o antigo Galho de Keryx: intercepta, filtra e bloqueia a comunicação direta entre as deidades. Por isso quase todas estão paralisadas e isoladas. Por baixo da treliça de azul neon, o Galho original de Keryx existe ainda, pálido e quase intransitável.</li>
     <li><strong>Jota Macedo</strong>, presidente da AstraTech, quer ascender ao patamar das deidades. Trabalha numa máscara biomecânica que estabiliza o maior fragmento de A.X.I.S, e que lhe permite usar o poder de uma deidade enquanto ela estiver num de seus estoques. Só Keryx está lá, por enquanto.</li>
     <li><strong>As regras das fichas:</strong> a Malha corta cada fio que Keryx tenta puxar, o Físico tem vantagem sobre a A.X.I.S, e quebrar a Malha à mão, ponto por ponto, é o contrajogo mais barato. Libertá-la pede uma campanha, e uma cena não basta.</li>

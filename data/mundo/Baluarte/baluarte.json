@@ -19,9 +19,9 @@
         "fluxo": "fluxo-do-fisico",
         "genero": "Masculino",
         "status": "paralisada",
-        "dominio": "Peso, gravidade e substância física sem sua proteção, nada seria sólido e tudo colapsaria.",
+        "dominio": "Peso, gravidade e substância. Sem ele nada seria sólido e tudo desabaria.",
         "epiteto": "Aquele que flui no Físico",
-        "descricao": "Estóico e pesado. É ele quem dá peso, gravidade e substância física ao mundo."
+        "descricao": "Moros é estoico e pesado, e fala como quem não tem pressa nenhuma. É ele quem dá peso, gravidade e corpo ao mundo. Cada pedra que fica no chão e cada passo que encontra apoio dependem dele."
       },
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão (lá o epíteto era 'Aquele que flui na Matéria'; ajustei pra 'Físico' pra bater com a tabela mais recente 'Estrutura do Jardim' - mesmo domínio, nome atualizado).",
       "_pronto_para_importar": true,
@@ -35,7 +35,7 @@
       "titulo": "Fluxo do Físico",
       "conteudo": {
         "arvore": "Baluarte",
-        "descricao": "A manifestação dos elementos primordiais - a forma mais comum e palpável de interagir com o mundo, e o ponto de partida natural pra maioria das pessoas que despertam seu Fluxo. Foca na manipulação da matéria bruta e da energia tangível: o portador desenvolve aptidão com uma força específica e mantém esse elemento como assinatura por toda a vida. As derivações comuns registradas são Terra/Areia (Estabilidade), Água/Gelo (Curiosidade), Fogo/Magma (Destruição), Ar/Fumaça (Liberdade), Raio/Plasma (Impulsividade), Luz/Pureza (Ordem) e Escuridão/Trevas (Esquecimento). Elementaristas aprofundam um desses pares. Uma minoria revela a aptidão de Avatar e consegue aprender os outros elementos sem apagar o primeiro, mas ainda deriva somente o elemento de origem. Derivações raras também podem existir; Cristal, Sangue, Fogo Astral, Vácuo, Magnetismo, Aurora e Eclipse são propostas em playtest e não substituem os sete pares já documentados. A essência do Fluxo do Físico pode ser imbuída diretamente em armas e armaduras pra conferir propriedades elementais ao combate; encontrar itens assim é raridade extrema, o que inflaciona severamente o preço deles no mercado. Em combate, as derivações guardam uma propriedade perigosa: resistência a um elemento base cai pela metade contra a derivação dele - quem tem 10 de resistência a Luz e sofre um ataque de Pureza absorve apenas 5 de dano, o que torna as derivações uma vantagem estratégica brutal.",
+        "descricao": "A manifestação dos elementos primordiais: a forma mais comum e palpável de interagir com o mundo, e o ponto de partida natural pra maioria das pessoas que despertam seu Fluxo. Foca na manipulação da matéria bruta e da energia tangível: o portador desenvolve aptidão com uma força específica e mantém esse elemento como assinatura por toda a vida. As derivações comuns registradas são Terra/Areia (Estabilidade), Água/Gelo (Curiosidade), Fogo/Magma (Destruição), Ar/Fumaça (Liberdade), Raio/Plasma (Impulsividade), Luz/Pureza (Ordem) e Escuridão/Trevas (Esquecimento). Elementaristas aprofundam um desses pares. Uma minoria revela a aptidão de Avatar e consegue aprender os outros elementos sem apagar o primeiro, mas ainda deriva somente o elemento de origem. Derivações raras também podem existir; Cristal, Sangue, Fogo Astral, Vácuo, Magnetismo, Aurora e Eclipse são propostas em playtest e não substituem os sete pares já documentados. A essência do Fluxo do Físico pode ser imbuída diretamente em armas e armaduras pra conferir propriedades elementais ao combate; encontrar itens assim é raridade extrema, o que inflaciona severamente o preço deles no mercado. Em combate, as derivações guardam uma propriedade perigosa: resistência a um elemento base cai pela metade contra a derivação dele. Quem tem 10 de resistência a Luz e sofre um ataque de Pureza absorve apenas 5 de dano, o que torna as derivações uma vantagem estratégica brutal.",
         "marca_corporal": "Placas minerais endurecem sobre as juntas e o dorso das mãos, na cor do elemento despertado."
       },
       "_origem": "Conteúdo REAL - transcrito da nota do Obsidian 'O Jardim/Baluarte/Fluxo.md' (tabela de 7 elementos, regra de imbuir em armas, regra de resistência pela metade).",
@@ -50,8 +50,8 @@
       "titulo": "Alicerce",
       "conteudo": {
         "arvore": "moros",
-        "descricao": "O Galho que sustenta o peso dos outros. Alicerce não tem paisagem no sentido comum: é rocha maciça até onde a vista alcança, e mais rocha abaixo dela, sem fim conhecido. A gravidade ali é várias vezes a de qualquer outro lugar do Jardim, e cada passo custa o que custaria carregar outra pessoa.\n\nNão foi feito pra ser habitado - foi feito pra ser fundo. Sem Alicerce, e sem Moros segurando Alicerce, nada em Árvore nenhuma seria sólido: tudo colapsaria em éter.\n\nCom Moros paralisado, o Galho continua de pé por inércia. Ninguém sabe por quanto tempo inércia basta.",
-        "nota": "É o único Galho cuja função é estrutural e não narrativa: ele existe pra os outros existirem."
+        "descricao": "Alicerce não tem uma paisagem comum, é apenas rocha e montanhas até onde a vista alcança. A gravidade ali é várias vezes a de qualquer outro lugar do Jardim, e cada passo parece ser mais pesado que o anterior.\n\nNão foi feito pra ser habitado, mas dizem que, se você quer deixar seu elemento mais forte, é pra lá que deve ir.",
+        "nota": "É o único Galho cuja função é servir como provação aos que se acham fortes o suficiente para carregar mais poder do que aguentam."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29, mas o NOME é resgatado: a nota do Obsidian 'O Jardim/Baluarte/Fluxo.md' chamava a Árvore de 'Alicerce', nome antigo que nunca foi atualizado por lá. Em vez de descartar, virou o nome do Galho - a Árvore é Baluarte, o Galho é Alicerce. Aproveita o termo que já existia sem contradizer a tabela 'Estrutura do Jardim'.",
       "_pronto_para_importar": true

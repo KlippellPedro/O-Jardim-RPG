@@ -5,7 +5,7 @@
     {
       "id": "aethel",
       "nome": "Gênese",
-      "tese": "Gênese não entrega destino pronto. Ela abre a primeira brecha pra que alguma coisa possa existir - e o que essa coisa faz depois não é problema dela.",
+      "tese": "Gênese não entrega um destino definido. Ela cria a primeira \"brecha\" pra que alguma coisa possa existir e o que essa coisa faz depois não é problema dela.",
       "fluxo": "Fluxo da Origem",
       "temas": [
         "origem",
@@ -20,17 +20,22 @@
         {
           "nome": "Realidade 0",
           "tipo": "Galho",
-          "resumo": "O único Galho habitado que se conhece, e onde 'O Último Eclipse' acontece. Seis Dimensões dentro dele."
+          "resumo": "O único Galho habitado que se conhece, e onde 'O Último Eclipse' aconteceu."
         },
         {
           "nome": "Dimensão Padrão",
           "tipo": "Dimensão",
-          "resumo": "Onde ficam os reinos mortais: Salém, o Império, Emberhold, Lionês, Khazad. É o palco da campanha."
+          "resumo": "Essa dimensão é o lar das raças que ainda não têm força ou influência para ter uma dimensão própria. Nela existem os reinos: Salém, o Império, Emberhold, Lionês, Khazad e Solaria."
         },
         {
           "nome": "Întuneric",
           "tipo": "Dimensão",
-          "resumo": "Céu de fuligem, lua que não se põe e uma cadeia alimentar que termina nos vampiros. Chega ao resto do mundo pelas fendas de Matriz."
+          "resumo": "Essa dimensão não é uma dimensão comum: todos vivem em um estado de agonia que não acaba, o céu é coberto por nuvens cor de fuligem que bloqueiam qualquer resquício de luz, e a única iluminação vem de uma lua pálida que nunca se põe."
+        },
+        {
+          "nome": "Nadalon",
+          "tipo": "Dimensão",
+          "resumo": "Essa dimensão é um lugar onde o ecossistema reage ao estado de espírito de seus habitantes. Diferente da Dimensão Padrão, as leis da física lá são ditadas pela Essência e pela harmonia."
         },
         {
           "nome": "Sonhar",
@@ -39,46 +44,45 @@
         }
       ],
       "historia": [
-        "Aethel cuida do nascimento de tudo, e tudo é literal: gente, bicho, ideia, rota de comércio, realidade inteira. Se alguma coisa passou de não existir pra existir, passou por ela. É o mais generoso dos Fluxos e o mais lento, porque exige que quem canaliza queira de verdade que aquilo exista - e recusa quem só quer o resultado.",
-        "Na Realidade 0, o Cataclismo apagou a continuidade antiga e obrigou o mundo a começar de novo. Por isso o Ano Zero não é o começo de nada: é o ponto em que as pessoas desistiram de remendar a contagem velha e recomeçaram do zero.",
-        "Aethel é uma das duas que a Malha não alcançou. Coisas novas continuam nascendo todo dia, no ritmo de sempre. O problema é que nascem num Jardim onde ninguém está mais cuidando da verdade, da mudança, do espaço, do tempo nem da forma - e crescem assim mesmo."
+        "Aethel cuida do nascimento de tudo, e tudo é literal: pessoas, bichos, ideias, rotas de comércio e realidades inteiras. Se alguma coisa passou de não existir pra existir, passou por ela. É o mais generoso dos Fluxos e o mais lento, porque exige que quem canaliza queira de verdade que aquilo exista e recusa quem só quer o resultado.",
+        "Na Realidade 0, o Cataclismo apagou a história antiga e obrigou o mundo a começar de novo. Por isso o Ano Zero marca o ponto em que as pessoas recomeçaram a contagem do zero."
       ],
-      "atmosfera": "Luz baixa e rosada, um horizonte que ainda não decidiu onde fica, e a impressão incômoda de ter chegado cedo demais em algum lugar.",
+      "atmosfera": "Luz baixa e rosada, e a impressão incômoda de ter chegado cedo demais em algum lugar.",
       "cronologia": [
         {
           "id": "genese-primeira-luz",
           "era": "Primeiro Brotar",
           "ordem": 10,
-          "resumo": "Aethel abre a possibilidade de nascer, e o Jardim ganha a ponta de onde tudo sai.",
+          "resumo": "Aethel abre a possibilidade de coisas existirem.",
           "titulo": "A primeira coisa a existir"
         },
         {
           "id": "genese-realidade-zero",
           "era": "Era da Formação",
           "ordem": 20,
-          "resumo": "Um Galho fértil junta seis Dimensões que não têm quase nada em comum e vira o território mais movimentado de Gênese.",
-          "titulo": "A Realidade 0 se assenta"
+          "resumo": "Um Galho junta seis Dimensões que não têm quase nada em comum e vira o território mais movimentado de Gênese.",
+          "titulo": "A Realidade 0 nasce"
         },
         {
           "id": "genese-cataclismo",
           "era": "Ano 0",
           "ordem": 30,
-          "resumo": "Uma magia deu errado, o mundo virou morte e caos, e a contagem dos anos recomeçou. Ninguém registrou quem lançou a magia.",
+          "resumo": "Uma magia de 10º círculo deu errado e diversos galhos viraram morte e caos, por conta disso a contagem dos anos recomeçou. Não se tem registros de quem lançou essa magia.",
           "titulo": "O Cataclismo"
         },
         {
           "id": "genese-chuva-roxa",
-          "era": "Recorrente",
+          "era": "Era de Ofélia",
           "ordem": 40,
-          "resumo": "Gotas violeta que drenam a vida de quem elas encostam. Três teorias disputam a origem, nenhuma vence, e cidades inteiras já sumiram em minutos.",
-          "titulo": "A Chuva Roxa"
+          "resumo": "Todos os reinos estavam estáveis pela primeira vez, e em um lugar que ninguém fazia ideia, um orfanato fundado por uma bruxa existia. Lá, diferentes crianças eram treinadas e cuidadas, com o objetivo de mudar o destino do mundo. Afinal, uma dessas crianças seria a escolhida dentre os fluxos. Como Ofélia não sabia qual das crianças era a certa, ela cuidou de todas como se fosse uma mãe, até que um dia um caçador apareceu e acabou com esse sonho, assassinando Ofélia e, sem querer, acabou sendo a causa de algumas crianças se corromperem e irem para um lado não tão agradável.",
+          "titulo": "A morte de uma bruxa"
         },
         {
           "id": "genese-ultimo-eclipse",
-          "era": "Presente",
+          "era": "A ascensão de Jota",
           "ordem": 50,
-          "resumo": "A Realidade 0 vira o tabuleiro onde se decide se o Jardim volta a se falar.",
-          "titulo": "O Último Eclipse"
+          "resumo": "A Realidade 0 que estava sendo o palco da disputa entre Jota e Circe tem um fim, Jota consegue aprisionar suas irmãs e, drenando os poderes delas, consegue criar a máscara capaz de utilizar o poder de uma deidade.",
+          "titulo": "Astratech venceu"
         }
       ]
     },
@@ -105,13 +109,13 @@
         {
           "nome": "Sala dos Nomes",
           "tipo": "Dimensão",
-          "resumo": "A única estrutura fechada de Anámnesis. Quem entra é chamado pelo nome verdadeiro na frente de quem estiver junto - por isso quase ninguém entra acompanhado."
+          "resumo": "A única estrutura fechada de Anámnesis. Quem entra é chamado pelo nome verdadeiro na frente de quem estiver junto, por isso quase ninguém entra acompanhado."
         }
       ],
       "historia": [
-        "Ousias não obriga ninguém a falar a verdade. Ela só faz da mentira uma camada - e camada é coisa que se tira. É metade da razão de ela quase nunca interferir: na conta dela, o tempo já trabalha do lado certo sozinho.",
+        "Ousias não obriga ninguém a falar a verdade. Ela só faz da mentira uma camada, e camada é coisa que se tira. É metade da razão de ela quase nunca interferir: na conta dela, o tempo já trabalha do lado certo sozinho.",
         "Anámnesis guarda a essência de tudo o que já existiu em qualquer Árvore, inclusive do que o resto do Jardim esqueceu. A Sala dos Nomes virou lugar de pacto por um motivo prático: lá dentro cada presente é chamado pelo nome que realmente tem, e acordo fechado assim é difícil de negar depois.",
-        "Com Ousias parada, mentira nenhuma virou verdade. Só passou a durar mais. Máscara social, memória adulterada e identidade roubada seguem rachando com o tempo - só que agora o tempo é o único trabalhando nisso, e ele é lento."
+        "Com Ousias parada, mentira nenhuma virou verdade. Só passou a durar mais. Máscara social, memória adulterada e identidade roubada seguem rachando com o tempo, só que agora o tempo é o único trabalhando nisso, e ele é lento."
       ],
       "atmosfera": "Luz amarela sem lâmpada nenhuma, reflexos que não favorecem ninguém, e nomes que pesam mais na boca do que deviam.",
       "cronologia": [
@@ -119,7 +123,7 @@
           "id": "aletheia-primeira-verdade",
           "era": "Primeiro Brotar",
           "ordem": 10,
-          "resumo": "Ousias abre a distância entre o que uma coisa é e o que ela mostra. Sem isso não existiria disfarce - nem mentira.",
+          "resumo": "Ousias abre a distância entre o que uma coisa é e o que ela mostra. Sem isso não existiria disfarce nem mentira.",
           "titulo": "Ser e parecer se separam"
         },
         {
@@ -155,13 +159,13 @@
     {
       "id": "keryx",
       "nome": "A.X.I.S",
-      "tese": "A A.X.I.S provou que um Fluxo pode ser imitado por mão mortal - e que quem controla a comunicação controla todo o resto sem precisar encostar em nada.",
+      "tese": "A A.X.I.S provou que um Fluxo pode ser imitado por mão mortal, e que quem controla a comunicação controla todo o resto sem precisar encostar em nada.",
       "fluxo": "Tecnologia sobre Comunicação",
       "temas": [
         "comunicação",
         "controle",
         "tecnologia",
-        "contrato",
+        "pactos",
         "o que se perde no silêncio"
       ],
       "estado": "Dominante; Parley segue subjugada",
@@ -176,7 +180,7 @@
         {
           "nome": "Núcleo Zero",
           "tipo": "Dimensão",
-          "resumo": "De onde a Malha é operada. Não aparece em mapa de Astraluna, e é lá que ficam as prisões de poder - uma delas ocupada."
+          "resumo": "De onde a Malha é operada. Não aparece em mapa de Astraluna, e é lá que ficam as prisões de poder, uma delas ocupada."
         },
         {
           "nome": "Astraluna",
@@ -186,7 +190,7 @@
       ],
       "historia": [
         "Antes da A.X.I.S existia Parley, e Parley era a Árvore da Comunicação. Keryx guardava os pactos, os vínculos e as estradas por onde uma deidade falava com outra. Era diplomata, era rígido, e confiava em contrato.",
-        "Jota Macedo não brigou com ele. Levou um documento. Keryx leu, achou que tinha entendido, e assinou o que virou a própria prisão. Por cima do Galho antigo, Jota instalou a Malha - uma treliça que intercepta, registra, filtra e quase nunca entrega.",
+        "Jota Macedo foi atrás dele. Passou anos construindo, plano por plano e invento por invento, o que ia usar, e quando chegou a hora enfrentou Keryx e venceu. Foi o primeiro ser humano a derrotar uma deidade. Prendeu Keryx num dos casulos e, por cima do Galho antigo, instalou a Malha, uma treliça que intercepta, registra, filtra e quase nunca entrega.",
         "Quem aparece hoje no lugar de Parley é a A.X.I.S. Keryx continua existindo por baixo, junto com o Fluxo dele, pálido e quase intransitável. Soltar os dois passa pelo Núcleo Zero, e o Núcleo Zero não consta em mapa nenhum."
       ],
       "atmosfera": "Geometria azul neon, silêncio limpo demais, e o ruído de fundo de mensagens que saíram e nunca chegaram.",
@@ -209,21 +213,21 @@
           "id": "axis-contrato",
           "era": "Era da Interceptação",
           "ordem": 30,
-          "resumo": "Jota usa a diplomacia de Keryx contra ele e fica com o caminho por onde as deidades se falavam.",
-          "titulo": "O contrato"
+          "resumo": "Depois de anos de planos e invenções, Jota usa suas tecnologias para subjugar Keryx e o aprisiona numa câmara que drena o poder dele. Fica responsável pelo caminho por onde as deidades se falavam.",
+          "titulo": "A queda de uma deidade"
         },
         {
           "id": "axis-malha",
           "era": "Era da Interceptação",
           "ordem": 40,
-          "resumo": "A treliça cobre Parley inteira. Oito deidades são desligadas no mesmo dia, sem que nenhuma tenha sido tocada.",
+          "resumo": "A treliça cobre Parley inteira. Oito deidades são desligadas no mesmo dia, sem que nenhuma tenha sido avisada de que isso iria acontecer.",
           "titulo": "A Malha sobe"
         },
         {
           "id": "axis-mascara",
           "era": "Presente",
           "ordem": 50,
-          "resumo": "Jota tenta terminar o artefato que estabiliza o maior fragmento de A.X.I.S que existe - e usar, com ele, o poder da deidade que já tem guardada.",
+          "resumo": "Jota tenta terminar o artefato que estabiliza o maior fragmento de A.X.I.S que existe e usar, com ele, o poder verdadeiro da deidade que já tem em sua posse.",
           "titulo": "A máscara"
         }
       ]
@@ -257,7 +261,7 @@
       "historia": [
         "Haemus não separa cura de infestação, nem predador de presa. Os dois lados de qualquer par são a mesma coisa vista de ângulos diferentes: vida ocupando o espaço que encontrou. É por isso que a Vitalidade é o Fluxo mais fácil de despertar e o mais difícil de segurar.",
         "O Viveiro sempre cresceu rápido demais. Com Haemus por perto isso tinha ritmo: mata nascia por cima de mata, e tudo que morria descia pro Ventre alimentar a próxima leva.",
-        "A paralisia não parou nada. É o único Galho em que a ausência da deidade não travou o Fluxo - ele continua sozinho, sem ninguém regulando, e vem comendo as próprias fronteiras. Não há maldade nenhuma nisso, o que só piora."
+        "A paralisia não parou nada. É o único Galho em que a ausência da deidade não travou o Fluxo: ele continua sozinho, sem ninguém regulando, e vem comendo as próprias fronteiras. Não há maldade nenhuma nisso, o que só piora."
       ],
       "atmosfera": "Calor de corpo vivo, mato demais pra qualquer estação, e alguma coisa crescendo debaixo do chão o tempo todo.",
       "cronologia": [
@@ -325,9 +329,9 @@
         }
       ],
       "historia": [
-        "Ignis troca estado, forma e destino. Não promete melhora, só diferença - e é o único Fluxo que não dá pra repetir de propósito: o mesmo gesto, feito duas vezes, entrega dois resultados.",
+        "Ignis troca estado, forma e destino. Não promete melhora, só diferença, e é o único Fluxo que não dá pra repetir de propósito: o mesmo gesto, feito duas vezes, entrega dois resultados.",
         "Espiral nunca teve mapa porque mapa ali não fazia sentido. Montanha virava planície, rio virava estrada, e quem passasse duas vezes não reconhecia nada da primeira. No centro ficava a Fornalha, que transformava o que entrasse sem que ninguém, nem Ignis, escolhesse no quê.",
-        "Quando Ignis parou, Espiral congelou na última forma que tinha assumido - e essa forma não era pra ser final. É o único estrago da paralisia que se enxerga a olho nu, e o argumento mais forte de que o Silêncio não é trégua."
+        "Quando Ignis parou, Espiral congelou na última forma que tinha assumido, e essa forma não era pra ser final. É o único estrago da paralisia que se enxerga a olho nu, e o argumento mais forte de que o Silêncio não é trégua."
       ],
       "atmosfera": "Uma paisagem interrompida no meio de virar outra coisa, e uma chama laranja que está acesa, não queima e dá frio.",
       "cronologia": [
@@ -396,7 +400,7 @@
       ],
       "historia": [
         "Moros dá peso, gravidade e resistência. Sem isso nada seria sólido e o Jardim inteiro escorreria pra éter. É a função menos vistosa do panteão e a única cuja falta acabaria com todas as outras.",
-        "Alicerce não foi feito pra ser habitado, foi feito pra ser fundo - e cada passo lá custa o que custaria carregar outra pessoa. Nas profundezas ficam os Sete Salões, que não guardam os elementos: produzem. É de lá que Terra, Água, Fogo, Ar, Raio, Luz e Escuridão chegam ao resto do Jardim.",
+        "Alicerce foi feito pra ser fundo, e cada passo lá custa o que custaria carregar outra pessoa. Nas profundezas ficam os Sete Salões, onde os elementos são produzidos. É de lá que Terra, Água, Fogo, Ar, Raio, Luz e Escuridão chegam ao resto do Jardim.",
         "Desde que Moros parou, o Galho segue de pé por inércia. Ninguém sabe por quanto tempo inércia basta, e não sobrou ninguém a quem perguntar."
       ],
       "atmosfera": "Rocha até onde a vista alcança e mais rocha abaixo, gravidade que cobra cada passo, e sete brilhos vindo de baixo.",
@@ -456,7 +460,7 @@
         {
           "nome": "Interstício",
           "tipo": "Galho",
-          "resumo": "O vão entre os Galhos. Sem chão, sem céu e sem direção - só distância, que ali é a única matéria que existe."
+          "resumo": "O vão entre os Galhos. Sem chão, sem céu e sem direção: só distância, que ali é a única matéria que existe."
         },
         {
           "nome": "Os Vãos",
@@ -465,9 +469,9 @@
         }
       ],
       "historia": [
-        "Aperion molda o espaço entre as coisas. Encurta, estica, dobra e tranca - um passo que cobre uma légua, uma sala maior por dentro do que por fora, uma fronteira que exército nenhum vence.",
+        "Aperion molda o espaço entre as coisas. Encurta, estica, dobra e tranca: um passo que cobre uma légua, uma sala maior por dentro do que por fora, uma fronteira que exército nenhum vence.",
         "Interstício fica entre os outros Galhos, e é por ele que passa toda travessia dimensional, saiba o viajante disso ou não. A maioria não sabe: o Fluxo do Espaço atravessa depressa demais pra alguém perceber que esteve em lugar nenhum.",
-        "Sem Aperion, as distâncias pararam de ser mantidas. Algumas esticaram até virar intransponíveis. Outras cederam de vez e os dois lados ficaram encostados - são os Vãos, e é por eles que criatura de Întuneric aparece num campo de Lionês sem explicação nenhuma."
+        "Sem Aperion, as distâncias pararam de ser mantidas. Algumas esticaram até virar intransponíveis. Outras cederam de vez e os dois lados ficaram encostados: são os Vãos, e é por eles que criatura de Întuneric aparece num campo de Lionês sem explicação nenhuma."
       ],
       "atmosfera": "Horizonte sem chão, sombra que chega um instante atrasada, e portas que abrem pra distâncias que não conferem.",
       "cronologia": [
@@ -535,9 +539,9 @@
         }
       ],
       "historia": [
-        "Chronus não oferece viagem no tempo - ele existe justamente pra impedir que passado, presente e futuro se misturem. O que o Fluxo dele concede é peso sobre a sequência: agir antes de quem era mais rápido, fazer um veneno levar uma hora em vez de um segundo, sustentar de pé uma ruína que já devia ter caído.",
-        "Em Sucessão cada acontecimento ocupa o lugar logo depois do anterior, e não há nada pra ver ali - só pra conferir. O Passo é o único ponto que se mexe: o instante exato onde Chronus está agora, avançando.",
-        "Desde a paralisia o Passo não avança. A realidade continua funcionando, mas com erros pequenos de ordem: eco antes do som, ferida antes do golpe, ruína que demora a reconhecer a própria queda. E é também por isso que a paralisia não passa - não corre tempo pra ela passar."
+        "Chronus não oferece viagem no tempo: ele existe justamente pra impedir que passado, presente e futuro se misturem. O que o Fluxo dele concede é peso sobre a sequência: agir antes de quem era mais rápido, fazer um veneno levar uma hora em vez de um segundo, sustentar de pé uma ruína que já devia ter caído.",
+        "Em Sucessão cada acontecimento ocupa o lugar logo depois do anterior, e não há nada pra ver ali, só pra conferir. O Passo é o único ponto que se mexe: o instante exato onde Chronus está agora, avançando.",
+        "Desde a paralisia o Passo não avança. A realidade continua funcionando, mas com erros pequenos de ordem: estrondo antes do raio, ferida antes do golpe, ruína que demora a reconhecer a própria queda. E é também por isso que a paralisia não passa: não corre tempo pra ela passar."
       ],
       "atmosfera": "Eco que chega antes do som, poeira parada no ar, e uma linha dourada que só corre num sentido.",
       "cronologia": [
@@ -552,7 +556,7 @@
           "id": "eon-linha",
           "era": "Era da Formação",
           "ordem": 20,
-          "resumo": "A ordem dos eventos ganha Galho próprio - conferível, e nunca percorrível de trás pra frente.",
+          "resumo": "A ordem dos eventos ganha Galho próprio, conferível, e nunca percorrível de trás pra frente.",
           "titulo": "Sucessão toma forma"
         },
         {
@@ -605,10 +609,10 @@
         }
       ],
       "historia": [
-        "Erebus governa o Vazio, que não é a morte. O que chega em Limiar terminou, e coisa terminada dá pra lembrar. O que o Vazio apaga não deixa nem fim pra guardar - a Biblioteca de Arkarin nem chega a ter um livro pra escrever.",
-        "Bordo é a borda: a faixa até onde a existência alcança, e depois da qual não alcança mais. Não é escuro. Escuridão é uma coisa, e ali não há coisa nenhuma. Mais adiante fica A Saída, que não mata e não leva a lugar algum - é só onde alguém pode deixar de existir por vontade própria. Erebus pergunta uma vez, e nunca duas.",
+        "Erebus governa o Vazio, que não é a morte. O que chega em Limiar terminou, e coisa terminada dá pra lembrar. O que o Vazio apaga não deixa nem fim pra guardar: a Biblioteca de Arkarin nem chega a ter um livro pra escrever.",
+        "Bordo é a borda: a faixa até onde a existência alcança, e depois da qual não alcança mais. Não é escuro. Escuridão é uma coisa, e ali não há coisa nenhuma. Mais adiante fica A Saída, que não mata e não leva a lugar algum, é só onde alguém pode deixar de existir por vontade própria. Erebus pergunta uma vez, e nunca duas.",
         "A paralisia não o pegou como pegou as outras. Ele continua sentado na mesma borda, de costas pro Jardim, fazendo exatamente o que sempre fez, e não dá pra dizer se chegou a reparar que as demais pararam de falar.",
-        "Na mesa: quem alcançar o Fluxo do Vazio pode canalizá-lo normalmente, e é extremamente difícil alcançá-lo. Não existe regra do mundo bloqueando isso - existe o Mestre, porque o que esse Fluxo faz com uma campanha é difícil de desfazer depois."
+        "Na mesa: quem alcançar o Fluxo do Vazio pode canalizá-lo normalmente, e é extremamente difícil alcançá-lo. Não existe regra do mundo bloqueando isso: existe o Mestre, porque o que esse Fluxo faz com uma campanha é difícil de desfazer depois."
       ],
       "atmosfera": "Nenhum eco, contorno nenhum que a memória consiga segurar, e a impressão de estar na última borda que ainda conta como lugar.",
       "cronologia": [
@@ -616,7 +620,7 @@
           "id": "abismo-primeira-ausencia",
           "era": "Primeiro Brotar",
           "ordem": 10,
-          "resumo": "Erebus separa o que acabou do que foi removido - duas coisas que até então eram a mesma.",
+          "resumo": "Erebus separa o que acabou do que foi removido: duas coisas que até então eram a mesma.",
           "titulo": "A primeira ausência"
         },
         {
@@ -644,7 +648,7 @@
           "id": "abismo-ultima-orbita",
           "era": "Presente",
           "ordem": 50,
-          "resumo": "O Vazio continua sendo tudo que fica entre as Árvores - difícil de alcançar de propósito, impossível de sair de perto.",
+          "resumo": "O Vazio continua sendo tudo que fica entre as Árvores: difícil de alcançar de propósito, impossível de sair de perto.",
           "titulo": "O que sobra entre as Árvores"
         }
       ]
@@ -689,7 +693,7 @@
       "historia": [
         "Limiar é a chegada de todas as outras Árvores, e por isso fica no centro das órbitas. O Fluxo dela é o Fim; entre mortais, a única vertente que dá pra alcançar é o Sangue, e ninguém encosta nele por curiosidade.",
         "Mulher Carmesim é um título, não uma pessoa eterna. Ele muda de dona de tempos em tempos, e quem assume aceita junto os cinco mandamentos e a função de receber tudo o que se encerra.",
-        "Arkarin tem o Castelo, o Tribunal e uma Biblioteca com um livro por vida concluída - tamanho, formato e capa conforme a existência que ele conta. Quem passou pelo Vazio é a exceção: não chega, não é julgado e não deixa volume nenhum.",
+        "Arkarin tem o Castelo, o Tribunal e uma Biblioteca com um livro por vida concluída: tamanho, formato e capa conforme a existência que ele conta. Quem passou pelo Vazio é a exceção: não chega, não é julgado e não deixa volume nenhum.",
         "Durante o Silêncio ela continua trabalhando, junto com Aethel. O Jardim ainda nasce e ainda termina no ritmo de sempre. O que travou foi tudo o que deveria acontecer no meio."
       ],
       "atmosfera": "Céu cor de vinho, corredor de arquivo sem fim, e o silêncio de uma sentença que já foi dada.",
@@ -719,7 +723,7 @@
           "id": "limiar-noite-rubra",
           "era": "Recorrente",
           "ordem": 40,
-          "resumo": "A Lua Carmesim rasga o céu, fendas se abrem, criaturas de Arkarin passam - e grupos dispostos a um sacrifício grande o bastante são chamados pra dentro.",
+          "resumo": "A Lua Carmesim rasga o céu, fendas se abrem, criaturas de Arkarin passam, e grupos dispostos a um sacrifício grande o bastante são chamados pra dentro.",
           "titulo": "As Noites Rubras"
         },
         {
@@ -734,7 +738,7 @@
   ],
   "introducao": {
     "titulo": "Crônicas do Jardim",
-    "descricao": "Cada Árvore é três coisas ao mesmo tempo: o território, o princípio que ele segura e a deidade que mora ali. Ninguém nunca conseguiu separar as três. O que vem abaixo é o que restou nos registros - a natureza de cada Árvore, os lugares que cresceram nos Galhos dela e os acontecimentos que ainda deixam marca no resto do Jardim. Falta muita coisa, e o que falta é quase todo do mesmo período: depois que a Malha subiu, ninguém teve mais com quem conferir nada.",
+    "descricao": "Cada Árvore é três coisas ao mesmo tempo: o território, o princípio que ele segura e a deidade que mora ali. Ninguém nunca conseguiu separar as três. O que vem abaixo é o que restou nos registros: a natureza de cada Árvore, os lugares que cresceram nos Galhos dela e os acontecimentos que ainda deixam marca no resto do Jardim. Falta muita coisa, e o que falta é quase todo do mesmo período: depois que a Malha subiu, ninguém teve mais com quem conferir nada.",
     "subtitulo": "Dez Árvores, e o que sobrou escrito sobre cada uma"
   },
   "linha_tempo_geral": [
@@ -823,7 +827,7 @@
       "id": "contrato-de-keryx",
       "era": "Era da Interceptação",
       "ordem": 90,
-      "resumo": "Jota Macedo derrota Keryx fazendo ele aceitar um pacto forçado que se revela uma prisão. A Malha artificial da A.X.I.S sobe sobre Parley e assume o controle das mensagens entre as Árvores.",
+      "resumo": "Jota Macedo derrota Keryx em combate, o primeiro ser humano a vencer uma deidade, e o prende num dos casulos. A Malha artificial da A.X.I.S sobe sobre Parley e assume o controle das mensagens entre as Árvores.",
       "titulo": "Keryx é subjugado",
       "arvores": [
         "keryx"

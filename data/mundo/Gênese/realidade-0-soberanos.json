@@ -1,10 +1,9 @@
 {
   "pacote": "realidade-0-soberanos",
   "_LEIA_ISSO_PRIMEIRO": {
-    "o_que_e_esse_arquivo": "Os dez Soberanos da Realidade 0, como entradas tipo 'personagem'.",
-    "SOBERANOS_NAO_SAO_DEIDADES": "Decisão canônica (2026-07-29): os Soberanos são habitantes de UM Galho - a Realidade 0, da Árvore Gênese. Não se comparam às Deidades e não têm nada a ver com a cascata Árvore/Fluxo. São os maiores poderes MORTAIS de um único Galho, e só. Por isso entram como 'personagem', que é a camada solta do schema, e nunca como 'deidade'. Antes disso o cofre tinha dois sistemas de poder paralelos sem nenhuma explicação de como se relacionavam.",
-    "origem_do_conteudo": "A lista dos dez, com títulos e cores, vem de 'O Jardim/Gênese/Realidade 0/Soberanos.md'. Quatro tinham lore de verdade em notas próprias (Jota Macedo, Noemi Finwë, Davinor Întuneric, e Salém coletivamente); Grimm tinha duas linhas; os cinco restantes (Kaiser, Amadheus Colona, Bergelmir Laufey [ex-Netuno Laufey, renomeado em 2026-09-01 pra não colidir com o jogo 2D], Durin II, Augustos Castilla) eram arquivos de 0 byte. Os escritos do zero estão marcados.",
-    "assembleia": "Os 10 se juntam uma vez por ano para a assembleia da criação, onde discutem assuntos que envolvem o universo - novas ameaças surgindo, guerras frequentes e afins."
+    "o_que_e_esse_arquivo": "Os grandes senhores da Realidade 0 (e Grimm, Amadheus e Jota, que também são Soberanos), como entradas tipo 'personagem'.",
+    "SOBERANOS_NAO_SAO_DEIDADES": "Revisto em 2026-10-12: Soberano passou a ser um dos dez seres mais fortes do Jardim inteiro, fora as Deidades, e a assembleia dos dez (com as Cadeiras) foi abandonada pelo autor. Os antigos 'Soberanos de Gênese' viraram Senhores e Senhoras de um território ou de um reino, e continuam como 'personagem', nunca como 'deidade'.",
+    "origem_do_conteudo": "A lista dos dez, com títulos e cores, vem de 'O Jardim/Gênese/Realidade 0/Soberanos.md'. Quatro tinham lore de verdade em notas próprias (Jota Macedo, Noemi Finwë, Davinor Întuneric, e Salém coletivamente); Grimm tinha duas linhas; os cinco restantes (Kaiser, Amadheus Colona, Bergelmir Laufey [ex-Netuno Laufey, renomeado em 2026-09-01 pra não colidir com o jogo 2D], Durin II, Augustos Castilla) eram arquivos de 0 byte. Os escritos do zero estão marcados."
   },
   "entradas": [
     {
@@ -13,31 +12,13 @@
       "id": "kaiser",
       "titulo": "Kaiser",
       "conteudo": {
-        "epiteto": "Soberano da Guerra",
+        "epiteto": "Senhor da Guerra",
         "genero": "Masculino",
-        "descricao": "A Cadeira da Guerra na assembleia da criação não pertence a uma pessoa: pertence ao trono do Império. Kaiser é o título, e quem o carrega hoje é Augusto I, portador do título de Deus da Guerra e senhor das batalhas - um Campeão Dimensional, canalizador do Fluxo do Físico.\n\nÉ o único dos dez Soberanos cuja cadeira é herdada em vez de conquistada, o que é motivo recorrente de atrito na assembleia: os outros nove chegaram onde estão por si mesmos. Augusto I é jovem pros padrões do cargo, e não esconde que quer expandir o Império além do que o pai conquistou - o que deixa a Cadeira da Guerra mais barulhenta do que qualquer outra na assembleia de hoje.",
+        "descricao": "Kaiser é um título. Quem senta no trono do Império carrega o nome. Hoje quem o carrega é Augusto I, chamado de Deus da Guerra e senhor das batalhas, Campeão Dimensional e canalizador do Fluxo do Físico.\n\nHerdou o trono em vez de conquistá-lo, e a corte não deixa ele esquecer disso. Augusto I é novo para o cargo e não esconde que quer levar o Império além de onde o pai parou.",
         "cor": "Laranja",
         "status": "ativo"
       },
       "_origem": "PARCIAL - o título e a cor vêm de 'Soberanos.md'; Augusto I e o Campeão Dimensional, de 'Reinos/Império/Governo.md'. O arquivo 'Império/Kaiser.md' está vazio no cofre. O 2º parágrafo é meu.",
-      "_pronto_para_importar": true
-    },
-    {
-      "_secao": "SOBERANO 2 - Cadeira dos Fluxos",
-      "tipo": "personagem",
-      "id": "soberanas-de-salem",
-      "titulo": "As Irmãs da Noite",
-      "conteudo": {
-        "epiteto": "Soberanas dos Fluxos",
-        "genero": "Feminino",
-        "descricao": "A única Cadeira ocupada por um coletivo: as dez Irmãs da Noite de Salém falam com uma só voz na assembleia. Quem comparece varia conforme o assunto e o ritual, e nenhuma das outras nove Cadeiras jamais soube ao certo quantas Irmãs de fato existem.\n\nSalém é o maior centro de comércio mágico do mundo conhecido, e sua influência atravessa fronteiras e realidades - ninguém domina as artes do Fluxo como suas bruxas.",
-        "cor": "Branco",
-        "status": "ativo"
-      },
-      "_origem": "PARCIAL - 'Soberanos.md' lista '[[Salém]] (Soberanas da Arkania)'; o resto vem de 'Reinos/Salém/Salém.md' e 'Função.md'. O 1º parágrafo é meu.",
-      "_retraducao_2026-07-29": "'Soberanas da Arkania' → 'Soberanas dos Fluxos'.",
-      "_nota_cor": "Em 'Soberanos.md' a cor de Salém está escrita como 'Branco #' - o '#' solto sugere um código hex que nunca foi preenchido. Registrei só 'Branco'.",
-      "_ver_tambem": "A composição das dez Cadeiras está em realidade-0-reinos.json, entrada 'irmas-da-noite'.",
       "_pronto_para_importar": true
     },
     {
@@ -47,9 +28,10 @@
       "titulo": "Grimm",
       "registro_universal": "ser",
       "conteudo": {
-        "epiteto": "Soberano dos Pesadelos",
+        "epiteto": "Soberano dos Sonhos e Pesadelos",
         "genero": "Masculino",
-        "descricao": "O soberano de Sonhar é um ser intrigante: admira todas as espécies de vida e gosta muito de seres que tenham um objetivo muito forte e aparente.\n\nÉ o único dos dez que não governa um território que se possa marcar num mapa - sua dimensão muda de forma toda vez que alguém a visita. Os outros nove o chamam de Soberano dos Pesadelos; ele próprio não faz distinção entre as duas metades da dimensão que governa.\n\nQuem entra em Sonhar sem ser convidado raramente encontra o caminho de volta sozinho, não porque Grimm proíba a saída, mas porque a própria dimensão prefere manter quem desperta o interesse dele.",
+        "descricao": "Grimm governa o Sonhar e é um ser curioso. Admira todo tipo de vida, e gosta mais ainda de quem carrega um objetivo forte, desses que a pessoa nem consegue esconder.\n\nO território dele não cabe num mapa, porque o Sonhar muda de forma a cada visita. Muita gente o chama de Soberano dos Pesadelos, e ele mesmo não separa as duas metades do lugar que governa.\n\nQuem entra no Sonhar sem convite quase nunca acha o caminho de volta. Grimm deixa a porta aberta, só que o Sonhar tem o costume de segurar quem desperta o interesse dele.",
+        "soberano": "sim",
         "cor": "Preto",
         "status": "ativo"
       },
@@ -66,7 +48,8 @@
       "conteudo": {
         "epiteto": "Soberano dos Cosmos",
         "genero": "Masculino",
-        "descricao": "O Soberano dos Cosmos preside o Banco Lunar, a única instituição que opera em todas as Árvores ao mesmo tempo e a única que nenhum ser jamais ousou nacionalizar.\n\nAmadheus não comanda exército nem território. Ele administra o dinheiro de todos os seres que querem os próprios bens guardados, seguros e investidos.\n\nJá foi um ser comum da Gênese. Ao se tornar sócio de Jota Macedo, os dois ascenderam e alcançaram o que queriam: ser livres e governar a si mesmos. Amadheus apenas expandiu os negócios para todas as Árvores. Desde então mantém posição imparcial e assiste ao caos de fora, fornecendo a qualquer um dos lados os recursos que pedirem, desde que tenham com que pagar.",
+        "descricao": "Amadheus Colona preside o Banco Lunar, a única instituição financeira que funciona em todas as Árvores ao mesmo tempo.\n\nNão comanda exército nem território. Cuida do dinheiro de todo ser que quer os próprios bens guardados, seguros e rendendo.\n\nJá foi um ser comum de Gênese. Virou sócio de Jota Macedo, e juntos os dois subiram até conseguir o que queriam: ser livres e mandar em si mesmos. Foi aí que Amadheus levou os negócios para todas as Árvores.\n\nContinuam sócios, mas se afastaram. Jota ficou com a AstraTech e Amadheus com o Banco Lunar inteiro. Desde então ele assiste ao caos de fora e fornece recursos a qualquer lado que peça, desde que o lado tenha como pagar.\n\nEssa neutralidade tem preço. Ele só escolhe um lado quando alguém paga o bastante, e como Jota é um dos seres mais ricos do Jardim, Amadheus quase sempre acaba do lado dele.",
+        "soberano": "sim",
         "cor": "Verde",
         "status": "ativo"
       },
@@ -80,9 +63,9 @@
       "id": "noemi-finwe",
       "titulo": "Noemi Finwë",
       "conteudo": {
-        "epiteto": "Soberana da Noite",
+        "epiteto": "Senhora da Noite",
         "genero": "Feminino",
-        "descricao": "Noemi não governa pelo medo, mas pela clarividência e pela empatia. Carrega o sobrenome Finwë, de uma linhagem ancestral de alta nobreza e imenso poder.\n\nDepois de séculos de guerras e dificuldades em outras dimensões, fundou Nadalon com a ajuda das Irmãs da Noite, por acreditar que os elfos só atingirão seu potencial máximo se abandonarem a arrogância e focarem na ascensão coletiva.\n\nCarrega o Cetro de Ametista, artefato que canaliza a energia vital da dimensão e lhe permite curar a terra e seus súditos apenas com a própria presença.\n\n\"O verdadeiro poder de um povo não reside nas muralhas que constrói, mas na paz que consegue manter dentro de si.\"",
+        "descricao": "Noemi governa pela clarividência e pela empatia, e quase nunca precisou de medo para ser obedecida. Carrega o sobrenome Finwë, de uma linhagem antiga, de nobreza alta e poder enorme.\n\nPassou séculos em guerras e apertos em outras dimensões. Depois disso fundou Nadalon com a ajuda das Irmãs da Noite, porque acredita que os elfos só chegam ao que podem ser quando largam a arrogância e sobem juntos.\n\nCarrega o Cetro de Ametista, que puxa a energia vital da dimensão e deixa que ela cure a terra e o povo só de estar por perto.\n\n\"O verdadeiro poder de um povo não reside nas muralhas que constrói, mas na paz que consegue manter dentro de si.\"",
         "cor": "Roxo",
         "status": "ativo"
       },
@@ -96,9 +79,9 @@
       "id": "bergelmir-laufey",
       "titulo": "Bergelmir Laufey",
       "conteudo": {
-        "epiteto": "Soberano das Montanhas",
+        "epiteto": "Senhor das Montanhas",
         "genero": "Masculino",
-        "descricao": "O Soberano das Montanhas governa o que existe acima da linha onde nada mais cresce. Não há cidade, corte nem exército - o território dele é a altitude em si, e as poucas passagens que atravessam o continente pelo alto.\n\nQuem quer levar mercadoria de um reino a outro sem contornar meio mundo passa pelas montanhas de Laufey, e paga por isso. É o que dá a ele uma cadeira na assembleia sem ter um único súdito.\n\nFala pouco e cobra sempre o mesmo preço, não importa quem seja o viajante - rei, mercador ou fugitivo. Dizem que ele nunca desceu da própria cordilheira, nem pra sentar na assembleia: manda um mensageiro no lugar, e ninguém jamais reclamou disso na cara dele.",
+        "descricao": "Bergelmir manda no que fica acima da linha onde nada mais cresce. Não tem cidade, corte nem exército. O território dele é a própria altitude e as poucas passagens que cruzam o continente pelo alto.\n\nQuem quer levar carga de um reino a outro sem dar a volta no mundo passa pelas montanhas de Laufey e paga pedágio. É isso que obriga todos os reinos a tratá-lo bem sem que ele tenha um único súdito.\n\nFala pouco e cobra sempre o mesmo, seja de rei, de mercador ou de fugitivo. Dizem que nunca desceu da cordilheira, nem para negociar com rei. Manda um mensageiro no lugar, e ninguém teve coragem de reclamar disso na frente dele.",
         "cor": "Verde água",
         "status": "ativo"
       },
@@ -113,9 +96,9 @@
       "id": "davinor-intuneric",
       "titulo": "Davinor Întuneric",
       "conteudo": {
-        "epiteto": "Soberano do Sangue",
+        "epiteto": "Senhor do Sangue",
         "genero": "Masculino",
-        "descricao": "No centro do caos de Întuneric e no topo da hierarquia predatória está Davinor. Não é um rei que busca expansão ou glória: é uma força da natureza indiferente.\n\nÉ o ápice da apatia. Raramente interfere nos massacres diários de sua dimensão - pra ele, se você é fraco demais pra sobreviver, sua morte é apenas um processo natural. Governa pelo silêncio e pelo medo: não existem leis escritas, apenas a vontade do sangue. Se algo ameaça a estabilidade da dimensão, ele elimina o problema com brutalidade impiedosa e volta ao isolamento.\n\n\"Não me peça para salvar o que nasceu apenas para morrer. O grito de sua vida é breve; já a minha paz é eterna.\"",
+        "descricao": "Davinor fica no meio do caos de Întuneric, no topo da cadeia de quem caça e de quem é caçado. Expansão e glória não interessam a ele. Funciona como uma força da natureza, e a natureza não se importa com ninguém.\n\nÉ a apatia no ponto mais alto. Quase nunca se mete nos massacres de todo dia da dimensão: para ele, quem é fraco demais para sobreviver morre, e é assim que as coisas andam. Governa pelo silêncio e pelo medo. Não existe lei escrita em Întuneric, só a vontade do sangue. Quando alguma coisa ameaça o equilíbrio da dimensão, ele acaba com o problema sem piedade nenhuma e volta a se isolar.\n\n\"Não me peça para salvar o que nasceu apenas para morrer. O grito de sua vida é breve; já a minha paz é eterna.\"",
         "falas": [
           "Sobre perda: \"Você fala de perda como se houvesse algo neste mundo que realmente valesse a pena possuir.\"",
           "Sobre falta de ordem: \"A ordem é uma ilusão que vocês criaram para não enlouquecerem no escuro. Se as feras estão com fome, que comam. Se os humanos são fracos, que morram. Întuneric sempre encontra seu equilíbrio no sangue derramado.\"",
@@ -134,9 +117,9 @@
       "id": "durin-ii",
       "titulo": "Durin II",
       "conteudo": {
-        "epiteto": "Soberano da Forja",
+        "epiteto": "Senhor da Forja",
         "genero": "Masculino",
-        "descricao": "Rei de Khazad e o segundo a carregar o nome. Governa a forja mais profunda da Dimensão Padrão - e a distinção que ele faz questão de repetir na assembleia é que Emberhold fabrica, enquanto Khazad forja.\n\nÉ o Soberano que menos fala e o que mais é procurado: quase toda arma de valor histórico da Realidade 0 saiu, em algum ponto de sua linhagem, das mãos de um anão. É respeitado até pelos que não gostam dele, porque Khazad nunca quebrou um contrato - o que não se pode dizer de nenhum outro reino da Dimensão Padrão.",
+        "descricao": "Rei de Khazad, o segundo a usar o nome. Governa a forja mais funda da Dimensão Padrão e não perde uma chance de lembrar a todo mundo que Emberhold fabrica e Khazad forja.\n\nFala pouco e é procurado o tempo todo: quase toda arma que entrou para a história da Realidade 0 passou, em algum momento, pelas mãos de um anão. Até quem não gosta dele o respeita, porque Khazad nunca quebrou um contrato, e nenhum outro reino da Dimensão Padrão pode dizer o mesmo.",
         "cor": "Amarelo",
         "status": "ativo"
       },
@@ -150,9 +133,9 @@
       "id": "augustos-castilla",
       "titulo": "Augustos Castilla",
       "conteudo": {
-        "epiteto": "Soberano do Comércio",
+        "epiteto": "Senhor do Comércio",
         "genero": "Masculino",
-        "descricao": "Rei de Lionês, o reino que alimenta os outros. Governa com seus conselheiros reais e é, entre os dez, o que tem o poder mais silencioso e o mais difícil de contestar: ninguém declara guerra a quem planta a comida de todo mundo.\n\nSe Amadheus Colona guarda a riqueza e Durin II controla o aço, Augustos controla a única coisa que nenhum dos dois consegue estocar por muito tempo. Governa sem precisar levantar a voz: sabe que uma safra ruim em Lionês assusta mais os outros Soberanos do que qualquer exército parado na fronteira.",
+        "descricao": "Rei de Lionês, o reino que dá de comer aos outros. Governa com os conselheiros da coroa e tem o poder mais quieto de todos, e o mais difícil de enfrentar: ninguém declara guerra a quem planta a comida de todo mundo.\n\nAmadheus Colona guarda a riqueza e Durin II controla o aço. Augustos controla a única coisa que nenhum dos dois consegue estocar por muito tempo. Nunca precisou levantar a voz, porque sabe que uma safra ruim em Lionês assusta os outros governantes mais do que qualquer exército parado na fronteira.",
         "cor": "Rosa",
         "status": "ativo"
       },
