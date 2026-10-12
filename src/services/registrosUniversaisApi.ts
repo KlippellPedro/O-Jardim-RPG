@@ -1,4 +1,5 @@
 import { api } from './apiClient';
+import type { TabelaDeLoot } from './sessaoApi';
 
 export type SecaoUniversal = 'bestiario' | 'seres' | 'faccoes' | 'locais' | 'artefatos' | 'personagens' | 'glossario' | 'rumores';
 export type RevelacaoRegistro = 'oculto' | 'rasurado' | 'aberto';
@@ -44,4 +45,7 @@ export const registrosUniversaisApi = {
     api<IResposta>(`${base(campanhaId)}/${encodeURIComponent(id)}`, { method: 'PUT', body: dados }),
   apagar: (campanhaId: string, id: string) =>
     api<IResposta>(`${base(campanhaId)}/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+  /** A tabela de loot que vale na campanha, para a ficha da criatura. Qualquer membro lê. */
+  loot: (campanhaId: string, monstroId: string) =>
+    api<TabelaDeLoot>(`${base(campanhaId)}/loot/${encodeURIComponent(monstroId)}`),
 };

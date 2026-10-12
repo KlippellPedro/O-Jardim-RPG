@@ -1,8 +1,10 @@
 """Loot das criaturas do Bestiário.
 
 A tabela de cada criatura mora em data/bestiario/loot-criaturas.json e só o
-servidor a lê: o jogador descobre o que cai saqueando, e o Mestre vê a tabela
-pela Sessão ao Vivo. Cada linha rola d100 contra a própria `chance`; a
+servidor a lê (o arquivo nunca vai para o navegador). A mesa inteira consulta a
+tabela na ficha do Bestiário, pela rota dos Registros Universais; o Mestre também
+a vê e a ajusta pela Sessão ao Vivo. O que caiu de verdade numa cena (a rolagem)
+continua sendo só do Mestre. Cada linha rola d100 contra a própria `chance`; a
 quantidade e as moedas usam dados (`1`, `1d2`, `2d4`...). A rolagem é feita
 aqui, no servidor, pelo mesmo motivo das outras rolagens da mesa: o resultado
 vale como prova.

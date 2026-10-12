@@ -29,6 +29,7 @@ from core import loot_criaturas
 from core.database import Database
 from core.dependencies import AuthenticatedUser
 from routers.characters import list_send_targets, send_currency, send_inventory_item
+from routers.registros_universais import RegistroInput, loot_da_criatura, salvar as salvar_registro
 from routers.trades import aceitar_troca, cancelar_troca, itens_para_pedir, listar_trocas, propor_troca, recusar_troca
 from routers.sessions import (
     _montar_estado,
@@ -684,6 +685,89 @@ class LootETrocaTests(unittest.TestCase):
                 user=self.ana, database=self.database,
             )
         self.assertEqual(erro.exception.status_code, 403)
+
+
+    # -- tabela de loot na ficha do Bestiário (Registros Universais) -----------
+
+    def _loot_da_mesa(self, usuario, campanha_id=None, criatura="bandido-teste"):
+        return loot_da_criatura(campanha_id or self.campanha_id, criatura, user=usuario, database=self.database)
+
+    def _fechar_criatura(self, revelacao):
+        salvar_registro(
+            self.campanha_id,
+            RegistroInput(secao="bestiario", origem_id="bandido-teste", revelacao=revelacao, dados={}),
+            user=self.mestre, database=self.database,
+        )
+
+    def test_a_mesa_inteira_le_a_tabela_com_a_chance_de_cada_linha(self):
+        for leitor in (self.ana, self.bia, self.mestre):
+            tabela = self._loot_da_mesa(leitor)
+            self.assertEqual(
+                {item["item_id"]: item["chance"] for item in tabela["itens"]},
+                {"loot-dente-teste": 100, "loot-joia-teste": 100, "loot-raro-teste": 10},
+            )
+            self.assertEqual(tabela["moedas"]["moeda"], "Lunaris")
+            self.assertFalse(tabela["ajustada"])
+        # O jogador não ganha a comparação com a oficial nem o que foi rolado na cena.
+        self.assertNotIn("oficial", self._loot_da_mesa(self.ana))
+        self._cena_com_bandido()
+        bandido = next(p for p in self._estado("jogador", self.ana_id)["participantes"] if p["nome"] == "Bandido")
+        self.assertNotIn("loot", bandido)
+        self.assertNotIn("monstro_id", bandido)
+
+    def test_quem_nao_e_da_campanha_nao_le_a_tabela(self):
+        forasteiro_id = uuid.uuid4()
+        with self.database.connection() as connection:
+            connection.execute(
+                "INSERT INTO usuarios (id, email, nome_exibicao, senha_hash, papel_plataforma) VALUES (%s, 'fora@example.com', 'fora', 'hash', 'player')",
+                (forasteiro_id,),
+            )
+        with self.assertRaises(HTTPException) as erro:
+            self._loot_da_mesa(self._ator(forasteiro_id, "fora@example.com"))
+        self.assertIn(erro.exception.status_code, (403, 404))
+
+    def test_criatura_fechada_pelo_mestre_nao_entrega_o_loot_ao_jogador(self):
+        for revelacao in ("rasurado", "oculto"):
+            self._fechar_criatura(revelacao)
+            with self.assertRaises(HTTPException) as erro:
+                self._loot_da_mesa(self.ana)
+            self.assertEqual(erro.exception.status_code, 404, revelacao)
+            # O Mestre continua lendo.
+            self.assertEqual(len(self._loot_da_mesa(self.mestre)["itens"]), 3)
+        self._fechar_criatura("aberto")
+        self.assertEqual(len(self._loot_da_mesa(self.ana)["itens"]), 3)
+
+    def test_secao_do_bestiario_escondida_esconde_o_loot_do_jogador(self):
+        with self.database.connection() as connection:
+            connection.execute(
+                "UPDATE campanhas SET configuracoes=%s WHERE id=%s",
+                (Jsonb({"registros_universais_secoes_ocultas": ["bestiario"]}), self.campanha_id),
+            )
+        with self.assertRaises(HTTPException) as erro:
+            self._loot_da_mesa(self.ana)
+        self.assertEqual(erro.exception.status_code, 404)
+        self.assertEqual(len(self._loot_da_mesa(self.mestre)["itens"]), 3)
+
+    def test_so_criatura_do_catalogo_tem_tabela_para_a_mesa(self):
+        # Um item qualquer do catálogo e uma criatura sob medida não são fichas do Bestiário.
+        for id_ in ("loot-dente-teste", "sob-medida-3-elite-bruto", "nao-existe"):
+            with self.assertRaises(HTTPException) as erro:
+                self._loot_da_mesa(self.ana, criatura=id_)
+            self.assertEqual(erro.exception.status_code, 404, id_)
+
+    def test_a_mesa_le_a_tabela_que_o_mestre_ajustou_so_na_campanha_dele(self):
+        ajustar_tabela_de_loot(
+            "bandido-teste", self.campanha_id,
+            LootTableInput(itens=[{"item_id": "loot-raro-teste", "chance": 100, "quantidade": "2"}]),
+            user=self.mestre, database=self.database,
+        )
+        ajustada = self._loot_da_mesa(self.ana)
+        self.assertTrue(ajustada["ajustada"])
+        self.assertEqual([(item["item_id"], item["chance"]) for item in ajustada["itens"]], [("loot-raro-teste", 100)])
+        # Na outra campanha da Ana vale a tabela oficial.
+        outra = self._loot_da_mesa(self.ana, campanha_id=self.outra_campanha_id)
+        self.assertFalse(outra["ajustada"])
+        self.assertEqual(len(outra["itens"]), 3)
 
 
     # -- criatura sob medida ---------------------------------------------------

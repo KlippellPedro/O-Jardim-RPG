@@ -333,6 +333,33 @@ Segunda leva do dia, sobre a primeira ([acima](#avisos-combate-clima-e-app)):
   `/regras?topico=catalogo-magico&aba=...&item=...`, `/mundo/universal?secao=...&registro=...`, `/loja?busca=...&localizacao=...`
   e o caminho de cada entrada do Mundo. Teste: [buscaDoJardim.test.ts](../../tests/frontend/buscaDoJardim.test.ts), que cobre o
   ranqueamento e, principalmente, o que cada papel não pode encontrar.
+- **Registros Universais** ([UniversalCodexPage.tsx](../../src/pages/Mundo/components/UniversalCodexPage.tsx) e a pasta
+  [universais](../../src/pages/Mundo/universais/)): o arquivo geral do Mundo, uma aba por seção e uma cor por seção (`temas.ts`
+  define `--sec-rgb`; `universais.css` pinta navegação, lista, fichas e editor a partir dela). **Bestiário:** cada criatura de
+  fábrica carrega uma `ICriatura` (VD, números, atributos, ataques, habilidades, fases) montada em `dadosPadrao.ts` e a ficha
+  ([FichaCriatura.tsx](../../src/pages/Mundo/universais/FichaCriatura.tsx)) cresce com o degrau de VD (`bestiario.ts`: Comum 1-10,
+  Perigosa 11-25, Temível 26-44, Calamidade 45-99, Lenda 100+). `separarHabilidade` e `agruparHabilidades` quebram o texto
+  "Nome (regra)" do catálogo em cartões com selos (Medo, Mutilação, Reação, 3 por dia) e tiram "Sinais" e "Como Evitar" para a caixa
+  "Para quem vai enfrentar"; o catálogo não muda. O loot é a mesma `SecaoLoot` da Sessão: o Mestre vê e ajusta, os jogadores leem
+  (`somenteLeitura`, rota `/registros-universais/{campanha}/loot/{criatura}`). As fases dos chefes só aparecem para o Mestre (na
+  tela: o catálogo já vai no bundle). **Seres** reúne os Soberanos (os dez seres mais fortes do Jardim, de qualquer Árvore: o campo `soberano: sim` na lore, universal e independente do epíteto; os antigos Soberanos de Gênese NÃO entram), as Deidades (do códice das Árvores, com o mesmo
+  `mapaDeBloqueios`), Entidades (`useResolvedWorld().entities`, só as marcadas `registroUniversal`), Espíritos e a gente notável do
+  Mestre (a seção `personagens`, que continua existindo para guardar e para a Visibilidade mas vive dentro de Seres,
+  `secaoNaTela`). Jota Macedo e o Dragão Verdadeiro (`ushumgal`) têm `revelado: false`: chegam rasurados ao jogador até o Mestre liberar
+  (o texto de Jota entrega o antagonista da campanha). **Fichas próprias:** Artefato e Fruto do Éden
+  ([FichaArtefato.tsx](../../src/pages/Mundo/universais/FichaArtefato.tsx), `IArtefato`; a raridade, ou a Árvore da Deidade no
+  Fruto, define `--deg-rgb` e o peso da moldura, a mesma escala das criaturas, em `artefatos.ts`), Facção
+  ([FichaFaccao.tsx](../../src/pages/Mundo/universais/FichaFaccao.tsx), brasão em SVG com monograma) e Local
+  ([FichaLocal.tsx](../../src/pages/Mundo/universais/FichaLocal.tsx)); registro sem a ficha estruturada (criado pelo Mestre) ou
+  rasurado cai no `Detalhe` genérico. **Sedes:** um local da lore com `faccao: <id>` no conteúdo é a sede dessa facção
+  (`data/mundo/Jardim/registros-universais.json`; a sede da AstraTech é `astraluna-capital`, o id não repete o do reino `astraluna` da lore da A.X.I.S); `ILocal.faccao` e `IFaccao.sede` ligam os dois lados, só quando o outro
+  lado já está visível para quem lê (sede com `revelado: false` chega rasurada ao jogador e some do link). **Alfabeto** (a seção `glossario`, renomeada na tela): os 15 idiomas (13 povos) saem da lista
+  `tabela` ("Idioma | Povo | Criador") da entrada de lore `idiomas-do-jardim` em `data/mundo/Jardim/jardim.json` (rode
+  `npm run build:mundo` depois de editar), seguem a Visibilidade dela e têm ficha própria
+  ([FichaIdioma.tsx](../../src/pages/Mundo/universais/FichaIdioma.tsx)); o `grupo` de cada registro é a letra inicial, e os termos que
+  o Mestre cria entram no mesmo alfabeto. O editor só grava o que o Mestre mudou em relação ao original (`dadosAjustados`), para a ficha
+  montada não travar num texto antigo; `camposAjustados` e `blocosAjustados` dizem quando o texto dele substitui a ficha. Teste:
+  [bestiarioUniversal.test.ts](../../tests/frontend/bestiarioUniversal.test.ts) e [fichasUniversais.test.ts](../../tests/frontend/fichasUniversais.test.ts).
 - **Sessão ao vivo no menu e na Home** ([components/sessao](../../src/components/sessao/),
   [situacaoDaMesa.ts](../../src/services/situacaoDaMesa.ts), [ContinuarDeOndeParou.tsx](../../src/pages/ContinuarDeOndeParou.tsx)):
   o `SituacaoDaMesaHost` consulta `GET /sessao/campanha/{id}/situacao` (ver [Integração](INTEGRACAO.md#situacao-da-mesa)) e refaz a

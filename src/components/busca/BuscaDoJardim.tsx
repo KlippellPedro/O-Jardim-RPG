@@ -125,9 +125,12 @@ export function BuscaDoJardim({ aberta, onFechar }: BuscaDoJardimProps) {
       isMestre: contexto.isMestre,
       loreRevelado: Array.isArray(configuracoes.lore_revelado) ? configuracoes.lore_revelado.map(String) : [],
       loreOculto: Array.isArray(configuracoes.lore_oculto) ? configuracoes.lore_oculto.map(String) : [],
+      entities: mundo.entities,
+      entidadesRevelado: Array.isArray(configuracoes.entidades_revelado) ? configuracoes.entidades_revelado.map(String) : [],
+      entidadesOculto: Array.isArray(configuracoes.entidades_oculto) ? configuracoes.entidades_oculto.map(String) : [],
     });
     return mesclarRegistros(fabrica, doServidor, contexto.isMestre);
-  }, [configuracoes, contexto.isMestre, doServidor, mundo.catalog, mundo.factions]);
+  }, [configuracoes, contexto.isMestre, doServidor, mundo.catalog, mundo.entities, mundo.factions]);
 
   const entradas = useMemo(() => [
     ...atalhosDaBusca(contexto),

@@ -1464,6 +1464,15 @@ def _catalogo_do_loot(connection, campanha_id: UUID, monstro_id: str, tabela: di
     return {row["id"]: row for row in _resolved_catalog_rows(connection, campanha_id, ids)}
 
 
+def resumo_do_loot(connection, campanha_id: UUID, monstro_id: str) -> tuple[dict | None, bool]:
+    """A tabela que vale nesta campanha, já legível (nome e raridade de cada
+    item), e se o Mestre a ajustou. `None` quando a criatura não tem tabela."""
+    tabela, ajustada = tabela_efetiva(connection, campanha_id, monstro_id)
+    if tabela is None:
+        return None, False
+    return resumo_da_tabela(monstro_id, _catalogo_do_loot(connection, campanha_id, monstro_id, tabela), tabela), ajustada
+
+
 @router.get("/bestiario/loot/{monstro_id}")
 def tabela_de_loot(
     monstro_id: str,
@@ -1471,12 +1480,14 @@ def tabela_de_loot(
     user: AuthenticatedUser = Depends(get_current_user),
     database: Database = Depends(get_database),
 ):
-    """O que uma criatura pode deixar cair, com a chance de cada linha. Só
-    quem comanda a mesa vê: o jogador descobre o loot saqueando."""
+    """O que uma criatura pode deixar cair, com a chance de cada linha, mais a
+    tabela oficial para comparar quando a campanha a ajustou. Só quem comanda a
+    mesa usa esta rota (ela também edita); a leitura da mesa inteira fica em
+    GET /registros-universais/{campanha}/loot/{criatura}. O que foi rolado numa
+    cena continua sendo só do Mestre."""
     with database.connection() as connection:
         require_campaign_manager(connection, campanha_id, user.id)
-        tabela, ajustada = tabela_efetiva(connection, campanha_id, monstro_id)
-        resumo = resumo_da_tabela(monstro_id, _catalogo_do_loot(connection, campanha_id, monstro_id, tabela), tabela) if tabela is not None else None
+        resumo, ajustada = resumo_do_loot(connection, campanha_id, monstro_id)
         oficial = None
         if ajustada and tabela_da_criatura(monstro_id) is not None:
             oficial = resumo_da_tabela(monstro_id, _catalogo_do_loot(connection, campanha_id, monstro_id))

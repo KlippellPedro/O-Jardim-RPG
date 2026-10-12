@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CalendarDays, Crown, Loader2, Pencil, Plus, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useResolvedWorld } from '../../hooks/useResolvedWorld';
+import { useAuthStore } from '../../store/useAuthStore';
 import {
   registrosUniversaisApi,
   type IDadosRegistro,
@@ -13,6 +14,8 @@ import { EditorDeRegistro } from '../../pages/Mundo/universais/EditorDeRegistro'
 import {
   ROTULO_REVELACAO,
   SECOES_UNIVERSAIS,
+  conteudoBasico,
+  dadosAjustados,
   filtrarRegistros,
   mesclarRegistros,
   type IRegistro,
@@ -30,7 +33,8 @@ const REVELACOES: RevelacaoRegistro[] = ['aberto', 'rasurado', 'oculto'];
 /** O editor dos Registros Universais da campanha: todos os registros (de fábrica e do Mestre),
  * de todas as seções, com a revelação de cada um a um toque. */
 export function RegistrosUniversaisPanel({ campanhaId, onAbrirLore }: IRegistrosUniversaisPanelProps) {
-  const { catalog, factions } = useResolvedWorld(campanhaId);
+  const { catalog, factions, entities } = useResolvedWorld(campanhaId);
+  const configuracoes = useAuthStore((estado) => estado.campanhaAtiva?.configuracoes) as Record<string, unknown> | undefined;
   const [doServidor, setDoServidor] = useState<IRegistroDoServidor[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState('');
@@ -49,7 +53,14 @@ export function RegistrosUniversaisPanel({ campanhaId, onAbrirLore }: IRegistros
     return () => { ativo = false; };
   }, [campanhaId]);
 
-  const fabrica = useMemo(() => registrosDeFabrica({ catalog, factions, isMestre: true, loreRevelado: [], loreOculto: [] }), [catalog, factions]);
+  const fabrica = useMemo(() => {
+    const lista = (chave: string) => (Array.isArray(configuracoes?.[chave]) ? (configuracoes?.[chave] as unknown[]).map(String) : []);
+    return registrosDeFabrica({
+      catalog, factions, isMestre: true, entities,
+      loreRevelado: lista('lore_revelado'), loreOculto: lista('lore_oculto'),
+      entidadesRevelado: lista('entidades_revelado'), entidadesOculto: lista('entidades_oculto'),
+    });
+  }, [catalog, factions, entities, configuracoes]);
   const todos = useMemo(() => mesclarRegistros(fabrica, doServidor, true), [fabrica, doServidor]);
   const daSecao = useMemo(() => todos.filter((registro) => registro.secao === secao.id), [todos, secao.id]);
   const lista = useMemo(() => filtrarRegistros(daSecao, busca, '', true).sort((a, b) => a.titulo.localeCompare(b.titulo, 'pt-BR')), [daSecao, busca]);
@@ -67,11 +78,9 @@ export function RegistrosUniversaisPanel({ campanhaId, onAbrirLore }: IRegistros
     setOcupado(registro.chave);
     setErro('');
     try {
-      // Registro de fábrica sem ajuste nasce só com a revelação (dados vazios = usa o original).
-      // Registro que já foi ajustado guarda de novo os mesmos campos, trocando só a revelação.
-      const dados: IDadosRegistro = registro.serverId
-        ? { titulo: registro.titulo, subtitulo: registro.subtitulo, descricao: registro.descricao, campos: registro.campos, blocos: registro.blocos, etiquetas: registro.etiquetas }
-        : {};
+      // Trocar a revelação não mexe no texto: registro de fábrica sem ajuste nasce só com a revelação (dados
+      // vazios = usa o original) e o já ajustado guarda de novo apenas o que difere do original.
+      const dados: IDadosRegistro = registro.original ? dadosAjustados(conteudoBasico(registro), registro.original) : conteudoBasico(registro);
       await salvar(registro, dados, revelacao);
     } catch (falha) {
       setErro(falha instanceof Error ? falha.message : 'Não foi possível salvar.');

@@ -1,0 +1,518 @@
+/* Registros Universais. A cor da seção entra por --sec-rgb (definida na página); a da criatura, por --deg-rgb. */
+
+.ru-pagina {
+  --sec-rgb: 232, 121, 74;
+  --sec: rgb(var(--sec-rgb));
+}
+
+.ru-fundo {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 78% 4%, rgba(var(--sec-rgb), 0.17), transparent 36%),
+    radial-gradient(circle at 6% 92%, rgba(var(--sec-rgb), 0.07), transparent 34%),
+    linear-gradient(180deg, #08090d 0%, #050508 100%);
+  transition: background 0.5s ease;
+}
+
+/* ---------------------------------------------------------------- navegação entre seções */
+
+.ru-aba {
+  --aba-rgb: var(--sec-rgb);
+  display: flex;
+  min-height: 3.25rem;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0 1rem;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+.ru-aba:hover { border-color: rgba(var(--aba-rgb), 0.5); }
+.ru-aba[aria-pressed='true'] {
+  border-color: rgba(var(--aba-rgb), 0.7);
+  background: linear-gradient(135deg, rgba(var(--aba-rgb), 0.2), rgba(var(--aba-rgb), 0.04));
+}
+.ru-aba__icone { color: rgba(var(--aba-rgb), 0.55); }
+.ru-aba[aria-pressed='true'] .ru-aba__icone { color: rgb(var(--aba-rgb)); }
+
+/* ---------------------------------------------------------------- busca e filtros */
+
+.ru-busca { caret-color: var(--sec); transition: border-color 0.2s; }
+.ru-busca:focus,
+.ru-campo:focus { border-color: rgba(var(--sec-rgb), 0.6); }
+
+
+.ru-filtro {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.ru-filtro:hover { border-color: rgba(var(--sec-rgb), 0.5); color: #e5e7eb; }
+.ru-filtro[aria-pressed='true'] {
+  border-color: rgba(var(--sec-rgb), 0.7);
+  background: rgba(var(--sec-rgb), 0.16);
+  color: #fff;
+}
+.ru-fileira { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.25rem; scrollbar-width: none; }
+.ru-fileira::-webkit-scrollbar { display: none; }
+.ru-fileira > * { flex-shrink: 0; white-space: nowrap; }
+@media (min-width: 1024px) {
+  .ru-fileira { flex-wrap: wrap; overflow: visible; }
+}
+
+.ru-filtro small { margin-left: 0.4rem; opacity: 0.55; font-weight: 600; }
+
+/* ---------------------------------------------------------------- lista */
+
+.ru-lista {
+  height: fit-content;
+  max-height: 78vh;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  background: rgba(11, 14, 19, 0.9);
+}
+
+.ru-item {
+  --item-rgb: var(--sec-rgb);
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.8rem 1.1rem;
+  text-align: left;
+  transition: background 0.15s;
+}
+.ru-item::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: rgba(var(--item-rgb), 0.35);
+  transition: width 0.15s, background 0.15s;
+}
+.ru-item:hover { background: rgba(255, 255, 255, 0.04); }
+.ru-item[aria-pressed='true'] { background: rgba(var(--item-rgb), 0.1); }
+.ru-item[aria-pressed='true']::before { width: 4px; background: rgb(var(--item-rgb)); }
+
+.ru-vd-mini {
+  display: flex;
+  height: 2.35rem;
+  width: 2.35rem;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(var(--item-rgb), 0.55);
+  border-radius: 0.65rem;
+  background: rgba(var(--item-rgb), 0.12);
+  line-height: 1;
+  color: #fff;
+}
+.ru-vd-mini small { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; opacity: 0.6; }
+.ru-vd-mini strong { font-size: 0.95rem; font-weight: 800; }
+
+.ru-ponto {
+  height: 0.6rem;
+  width: 0.6rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: rgb(var(--item-rgb));
+  box-shadow: 0 0 10px rgba(var(--item-rgb), 0.6);
+}
+
+/* ---------------------------------------------------------------- ficha (todas as seções) */
+
+.ru-ficha {
+  overflow: hidden;
+  border: 1px solid rgba(var(--sec-rgb), 0.28);
+  border-radius: 1.5rem;
+  background: rgba(13, 17, 22, 0.92);
+  box-shadow: 0 25px 60px -20px rgba(0, 0, 0, 0.8);
+}
+.ru-ficha__cabeca {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(var(--sec-rgb), 0.14), transparent 70%);
+}
+
+.ru-etiqueta {
+  border: 1px solid rgba(var(--sec-rgb), 0.35);
+  border-radius: 999px;
+  background: rgba(var(--sec-rgb), 0.1);
+  padding: 0.25rem 0.7rem;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(var(--sec-rgb));
+  filter: brightness(1.35);
+}
+
+.ru-bloco {
+  border-left: 2px solid rgba(var(--sec-rgb), 0.4);
+  padding-left: 1rem;
+}
+.ru-bloco h3 {
+  margin-bottom: 0.5rem;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(var(--sec-rgb));
+  filter: brightness(1.3);
+}
+
+/* ---------------------------------------------------------------- ficha de criatura: o peso muda a moldura */
+
+.ru-ficha--peso {
+  border-color: rgba(var(--deg-rgb), 0.3);
+}
+.ru-ficha--peso .ru-ficha__cabeca {
+  background: linear-gradient(135deg, rgba(var(--deg-rgb), 0.16), transparent 72%);
+}
+.ru-ficha--peso[data-peso='0'] { border-color: rgba(255, 255, 255, 0.14); }
+.ru-ficha--peso[data-peso='1'] { border-color: rgba(var(--deg-rgb), 0.4); }
+.ru-ficha--peso[data-peso='2'] {
+  border-color: rgba(var(--deg-rgb), 0.6);
+  box-shadow: 0 25px 60px -20px rgba(0, 0, 0, 0.8), 0 0 36px -14px rgba(var(--deg-rgb), 0.55);
+}
+.ru-ficha--peso[data-peso='3'] {
+  border: 2px solid rgba(var(--deg-rgb), 0.7);
+  box-shadow: 0 25px 60px -20px rgba(0, 0, 0, 0.8), 0 0 50px -12px rgba(var(--deg-rgb), 0.65);
+}
+.ru-ficha--peso[data-peso='4'] {
+  border: 2px solid rgba(var(--deg-rgb), 0.9);
+  box-shadow: 0 25px 60px -20px rgba(0, 0, 0, 0.8), 0 0 70px -10px rgba(var(--deg-rgb), 0.75), inset 0 0 60px -30px rgba(var(--deg-rgb), 0.5);
+}
+.ru-ficha--peso[data-peso='3'] .ru-ficha__cabeca,
+.ru-ficha--peso[data-peso='4'] .ru-ficha__cabeca {
+  background:
+    radial-gradient(circle at 15% 0%, rgba(var(--deg-rgb), 0.3), transparent 55%),
+    linear-gradient(135deg, rgba(var(--deg-rgb), 0.18), transparent 72%);
+}
+.ru-ficha--peso[data-peso='4'] .ru-ficha__cabeca::after {
+  content: '';
+  display: block;
+  height: 1px;
+  margin-top: 1.25rem;
+  background: linear-gradient(90deg, transparent, rgba(var(--deg-rgb), 0.9), transparent);
+  background-size: 200% 100%;
+  animation: ru-brilho 5s linear infinite;
+}
+@keyframes ru-brilho {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ru-ficha--peso[data-peso='4'] .ru-ficha__cabeca::after { animation: none; }
+}
+
+.ru-selo-vd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(var(--deg-rgb), 0.85);
+  border-radius: 1.1rem;
+  background: radial-gradient(circle at 50% 30%, rgba(var(--deg-rgb), 0.35), rgba(var(--deg-rgb), 0.08));
+  line-height: 1;
+  color: #fff;
+}
+.ru-selo-vd small { font-size: 0.6rem; font-weight: 800; letter-spacing: 0.16em; opacity: 0.7; }
+.ru-selo-vd strong { margin-top: 0.15rem; font-weight: 900; }
+.ru-ficha--peso[data-peso='4'] .ru-selo-vd {
+  border-radius: 999px;
+  box-shadow: 0 0 28px -4px rgba(var(--deg-rgb), 0.8);
+}
+
+.ru-degrau {
+  display: inline-block;
+  border: 1px solid rgba(var(--deg-rgb), 0.6);
+  border-radius: 999px;
+  background: rgba(var(--deg-rgb), 0.14);
+  padding: 0.18rem 0.7rem;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(var(--deg-rgb));
+  filter: brightness(1.3);
+}
+
+.ru-habilidade {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-left: 3px solid rgba(var(--deg-rgb), 0.7);
+  border-radius: 0.9rem;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 0.9rem 1.1rem;
+}
+
+.ru-dica {
+  border: 1px solid rgba(var(--dica-rgb), 0.35);
+  border-radius: 0.9rem;
+  background: rgba(var(--dica-rgb), 0.07);
+  padding: 0.9rem 1.1rem;
+}
+.ru-dica p { margin-top: 0.35rem; font-size: 0.95rem; line-height: 1.7; color: #d1d5db; }
+.ru-dica__rotulo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--dica-rgb));
+  filter: brightness(1.25);
+}
+.ru-dica--sinais { --dica-rgb: 79, 209, 165; }
+.ru-dica--evitar { --dica-rgb: 224, 179, 65; }
+
+/* ---------------------------------------------------------------- Seres: o retrato leva a cor do ser */
+
+.ru-ficha--ser .ru-ficha__cabeca {
+  background:
+    radial-gradient(circle at 88% 10%, rgba(var(--sec-rgb), 0.28), transparent 45%),
+    linear-gradient(135deg, rgba(var(--sec-rgb), 0.12), transparent 70%);
+}
+.ru-sigilo {
+  display: flex;
+  height: 5rem;
+  width: 5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(var(--sec-rgb), 0.6);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(var(--sec-rgb), 0.28), rgba(var(--sec-rgb), 0.04));
+  box-shadow: 0 0 34px -8px rgba(var(--sec-rgb), 0.7);
+  color: rgb(var(--sec-rgb));
+  filter: brightness(1.25);
+}
+
+/* ---------------------------------------------------------------- citação, faixa e caixas das outras fichas */
+
+.ru-citacao {
+  border-left: 3px solid rgba(var(--deg-rgb, var(--sec-rgb)), 0.7);
+  background: rgba(var(--deg-rgb, var(--sec-rgb)), 0.05);
+  border-radius: 0 1rem 1rem 0;
+  padding: 1rem 1.4rem;
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: #d8dbe2;
+}
+.ru-citacao p + p { margin-top: 0.8rem; }
+
+.ru-faixa {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border: 1px solid rgba(var(--sec-rgb), 0.4);
+  border-radius: 0.9rem;
+  background: rgba(var(--sec-rgb), 0.09);
+  padding: 0.8rem 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+.ru-faixa > svg { flex-shrink: 0; color: rgb(var(--sec-rgb)); filter: brightness(1.3); }
+.ru-faixa small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(var(--sec-rgb));
+  filter: brightness(1.3);
+}
+
+.ru-dica--fraqueza { --dica-rgb: 224, 90, 90; }
+.ru-dica--vinculo { --dica-rgb: 150, 160, 190; }
+.ru-dica--local { --dica-rgb: var(--sec-rgb); }
+
+/* Brasão da facção: escudo desenhado em SVG, com ícone do tipo e monograma. */
+.ru-brasao { position: relative; height: 6.5rem; width: 5.4rem; }
+.ru-brasao__escudo { fill: rgba(var(--sec-rgb), 0.16); stroke: rgb(var(--sec-rgb)); stroke-width: 3; }
+.ru-brasao__filete { fill: none; stroke: rgba(var(--sec-rgb), 0.45); stroke-width: 1.2; }
+.ru-brasao__icone { position: absolute; left: 50%; top: 19%; transform: translateX(-50%); color: rgb(var(--sec-rgb)); filter: brightness(1.35); }
+.ru-brasao__letras {
+  position: absolute;
+  inset: 40% 0 auto 0;
+  text-align: center;
+  font-family: Cinzel, serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.05em;
+  color: #fff;
+}
+
+/* Fruto do Éden: poderes lado a lado, antes e depois do despertar. */
+.ru-poderes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.ru-poderes__cabeca {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+.ru-poderes__cabeca--desperto { color: rgb(var(--deg-rgb)); filter: brightness(1.3); }
+.ru-poderes__celula {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 0.9rem;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 0.9rem 1.1rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: #cbd0d8;
+}
+.ru-poderes__celula small {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+.ru-poderes__celula--desperto {
+  border-color: rgba(var(--deg-rgb), 0.45);
+  background: linear-gradient(135deg, rgba(var(--deg-rgb), 0.12), rgba(0, 0, 0, 0.28));
+}
+@media (max-width: 640px) {
+  /* Empilhado, cada caixa diz sozinha em que estado está. */
+  .ru-poderes { grid-template-columns: 1fr; }
+  .ru-poderes__cabeca { display: none; }
+  .ru-poderes__celula small::after { content: ' · antes de despertar'; }
+  .ru-poderes__celula--desperto small::after { content: ' · despertado'; color: rgb(var(--deg-rgb)); }
+}
+
+/* Artefato que desperta com o dono: uma linha do tempo por nível. */
+.ru-formas { position: relative; display: grid; gap: 0.9rem; padding-left: 1.4rem; }
+.ru-formas::before {
+  content: '';
+  position: absolute;
+  inset: 0.4rem auto 0.4rem 0.35rem;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(var(--deg-rgb), 0.8), rgba(var(--deg-rgb), 0.15));
+}
+.ru-formas li { position: relative; }
+.ru-formas li::before {
+  content: '';
+  position: absolute;
+  left: -1.4rem;
+  top: 0.35rem;
+  height: 0.8rem;
+  width: 0.8rem;
+  border-radius: 999px;
+  background: rgb(var(--deg-rgb));
+  box-shadow: 0 0 12px rgba(var(--deg-rgb), 0.7);
+}
+.ru-formas__nivel {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(var(--deg-rgb));
+  filter: brightness(1.3);
+}
+
+/* Idioma: a inicial como letra capitular num selo. */
+.ru-inicial {
+  display: flex;
+  height: 5.5rem;
+  width: 5.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(var(--sec-rgb), 0.6);
+  border-radius: 1.2rem;
+  background: radial-gradient(circle at 50% 30%, rgba(var(--sec-rgb), 0.3), rgba(var(--sec-rgb), 0.05));
+  font-family: Cinzel, serif;
+  font-size: 3.4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  box-shadow: 0 0 30px -10px rgba(var(--sec-rgb), 0.7);
+}
+
+/* Brasão pequeno na lista de facções: contorno na cor da facção. */
+.ru-brasao-mini { height: 2.1rem; width: 1.75rem; flex-shrink: 0; }
+.ru-brasao__mini { fill: rgba(var(--item-rgb), 0.22); stroke: rgb(var(--item-rgb)); stroke-width: 6; }
+
+/* Faixa que leva a outro registro (sede de uma facção, facção de uma sede). */
+.ru-faixa--link { text-decoration: none; transition: background 0.2s, border-color 0.2s; }
+.ru-faixa--link:hover { background: rgba(var(--sec-rgb), 0.18); border-color: rgba(var(--sec-rgb), 0.7); }
+
+/* ---------------------------------------------------------------- Local: medalhão e padrão do cabeçalho */
+
+.ru-medalhao {
+  display: flex;
+  height: 5.5rem;
+  width: 5.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(var(--sec-rgb), 0.7);
+  border-radius: 999px;
+  background: radial-gradient(circle at 50% 35%, rgba(var(--sec-rgb), 0.32), rgba(var(--sec-rgb), 0.05));
+  box-shadow: 0 0 34px -8px rgba(var(--sec-rgb), 0.75), inset 0 0 0 5px rgba(0, 0, 0, 0.35), inset 0 0 0 6px rgba(var(--sec-rgb), 0.25);
+  color: rgb(var(--sec-rgb));
+  filter: brightness(1.25);
+}
+
+.ru-icone-mini {
+  display: flex;
+  height: 2.1rem;
+  width: 2.1rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(var(--item-rgb), 0.55);
+  border-radius: 999px;
+  background: rgba(var(--item-rgb), 0.14);
+  color: rgb(var(--item-rgb));
+  filter: brightness(1.2);
+}
+
+.ru-ficha--local .ru-ficha__cabeca { position: relative; isolation: isolate; }
+.ru-ficha--local[data-padrao] .ru-ficha__cabeca::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.16;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(100deg, transparent 15%, #000 100%);
+  mask-image: linear-gradient(100deg, transparent 15%, #000 100%);
+}
+.ru-ficha--local[data-padrao='raios'] .ru-ficha__cabeca::before {
+  background: repeating-conic-gradient(from 0deg at 85% 30%, rgb(var(--sec-rgb)) 0deg 1deg, transparent 1deg 12deg);
+}
+.ru-ficha--local[data-padrao='aneis'] .ru-ficha__cabeca::before {
+  background: repeating-radial-gradient(circle at 88% 20%, transparent 0 22px, rgb(var(--sec-rgb)) 22px 24px);
+}
+.ru-ficha--local[data-padrao='listras'] .ru-ficha__cabeca::before {
+  background: repeating-linear-gradient(135deg, transparent 0 14px, rgb(var(--sec-rgb)) 14px 16px);
+}
+.ru-ficha--local[data-padrao='colunas'] .ru-ficha__cabeca::before {
+  background: repeating-linear-gradient(90deg, transparent 0 26px, rgb(var(--sec-rgb)) 26px 28px);
+}
+.ru-ficha--local[data-padrao='grade'] .ru-ficha__cabeca::before {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 24px, rgb(var(--sec-rgb)) 24px 25px),
+    repeating-linear-gradient(90deg, transparent 0 24px, rgb(var(--sec-rgb)) 24px 25px);
+}
+.ru-ficha--local[data-padrao='ondas'] .ru-ficha__cabeca::before {
+  background: repeating-radial-gradient(ellipse at 90% 100%, transparent 0 16px, rgb(var(--sec-rgb)) 16px 18px);
+}
+.ru-ficha--local[data-padrao='pontos'] .ru-ficha__cabeca::before {
+  background: radial-gradient(circle, rgb(var(--sec-rgb)) 2px, transparent 3px) 0 0 / 22px 22px;
+}

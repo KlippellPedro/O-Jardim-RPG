@@ -8,7 +8,9 @@ da lore). O Mestre pode:
 - escolher quanto os jogadores enxergam: `oculto` (nem sabem), `rasurado` (sabem que
   existe, sem texto) ou `aberto`.
 
-O texto de um registro que não está `aberto` nunca sai do servidor para jogador.
+O texto de um registro que não está `aberto` nunca sai do servidor para jogador, mas só vale
+para o que o Mestre criou ou ajustou: o conteúdo de fábrica (criaturas, artefatos, lore) já vai
+no bundle do site, e a revelação de um registro de fábrica esconde na tela, não no pacote.
 Módulo puro: sem banco e sem HTTP.
 """
 
@@ -74,7 +76,7 @@ def normalizar_dados(dados) -> dict:
             if not isinstance(bloco, dict):
                 continue
             titulo = _texto(bloco.get("titulo"), 60)
-            itens = [_texto(item, 400) for item in (bloco.get("itens") if isinstance(bloco.get("itens"), list) else [])[:MAX_ITENS]]
+            itens = [_texto(item, 600) for item in (bloco.get("itens") if isinstance(bloco.get("itens"), list) else [])[:MAX_ITENS]]
             itens = [item for item in itens if item]
             if titulo and itens:
                 blocos.append({"titulo": titulo, "itens": itens})

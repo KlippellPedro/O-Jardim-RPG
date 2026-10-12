@@ -44,6 +44,8 @@ export interface FaccaoDocumentada {
   estado: 'canonica' | 'proposta';
   registro_universal: boolean;
   fontes: Array<{ arquivo: string; entrada_id: string }>;
+  /** Facção canônica sem fonte no cofre: o autor a aprovou direto. */
+  aprovacao?: { por: string; em: string };
 }
 
 export type RegraTopicoFaccoes = RegraTopicoDe<'Livro do Jogador'>;

@@ -72,7 +72,7 @@ export function atalhosDaBusca(contexto: ContextoDaBusca): EntradaDaBusca[] {
     atalhos.push(atalho('/mundo/cronologia', 'Linha do tempo do Jardim', 'A história geral', ['cronologia', 'historia', 'tempo']));
   }
   if (paginaVisivel(config.registros_universais_ocultos, isMestre)) {
-    atalhos.push(atalho('/mundo/universal', 'Registros Universais', 'Bestiário, seres, locais e rumores', ['bestiario', 'criaturas', 'monstros', 'glossario', 'rumores']));
+    atalhos.push(atalho('/mundo/universal', 'Registros Universais', 'Bestiário, seres, locais, idiomas e rumores', ['bestiario', 'criaturas', 'monstros', 'glossario', 'alfabeto', 'idiomas', 'rumores']));
   }
 
   if (gestorDaCampanha && temCampanha) atalhos.push(atalho('/mestre', 'Painel do Mestre', 'Ferramentas de quem comanda a mesa', ['mestre', 'painel']));
@@ -265,6 +265,8 @@ export function registrosDaBusca(registros: readonly IRegistro[], contexto: Cont
   return registros
     .filter((registro) => (
       registro.titulo.trim()
+      // Deidades e Soberanos já saem do códice das Árvores; aqui entrariam em dobro.
+      && !registro.indexadoNoMundo
       // Registro rasurado existe, mas o texto fica escondido para os jogadores; oculto o servidor nem envia.
       && (isMestre || (registro.revelacao === 'aberto' && !secoesOcultas.includes(registro.secao)))
     ))

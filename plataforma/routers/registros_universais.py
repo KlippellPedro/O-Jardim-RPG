@@ -23,6 +23,7 @@ from core.dependencies import (
     require_csrf,
 )
 from core.registros_universais import ErroRegistro
+from routers.sessions import resumo_do_loot
 
 router = APIRouter(prefix="/registros-universais", tags=["registros-universais"])
 
@@ -70,6 +71,44 @@ def obter(
         acesso = campaign_access(connection, campanha_id, user.id)
         registros = _listar(connection, campanha_id, gestor=acesso.manages_content)
     return {"registros": registros, "gestor": acesso.manages_content}
+
+
+def _criatura_liberada(connection, campanha_id: UUID, monstro_id: str) -> bool:
+    """Se o jogador pode saber desta criatura: ela é do catálogo, a seção do
+    Bestiário não está escondida e o Mestre não a fechou (rasurada ou oculta)."""
+    criatura = connection.execute(
+        "SELECT 1 FROM catalogo_itens WHERE id=%s AND tipo='monstro' AND ativo=TRUE", (monstro_id,)
+    ).fetchone()
+    if not criatura:
+        return False
+    campanha = connection.execute("SELECT configuracoes FROM campanhas WHERE id=%s", (campanha_id,)).fetchone()
+    if "bestiario" in regras.secoes_ocultas(campanha["configuracoes"] if campanha else None):
+        return False
+    ajuste = connection.execute(
+        "SELECT revelacao FROM campanha_registros_universais WHERE campanha_id=%s AND secao='bestiario' AND origem_id=%s",
+        (campanha_id, monstro_id),
+    ).fetchone()
+    return not ajuste or ajuste["revelacao"] == "aberto"
+
+
+@router.get("/{campanha_id}/loot/{monstro_id}")
+def loot_da_criatura(
+    campanha_id: UUID,
+    monstro_id: str,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """A tabela de loot que vale nesta campanha, com a chance de cada linha, para
+    a ficha da criatura no Bestiário. Qualquer membro lê, desde que a criatura
+    esteja liberada para ele. O que caiu de verdade numa cena não passa por aqui."""
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        if not acesso.manages_content and not _criatura_liberada(connection, campanha_id, monstro_id):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="essa criatura nao tem tabela de loot")
+        resumo, ajustada = resumo_do_loot(connection, campanha_id, monstro_id)
+    if resumo is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="essa criatura nao tem tabela de loot")
+    return {**resumo, "ajustada": ajustada}
 
 
 @router.put("/{campanha_id}")

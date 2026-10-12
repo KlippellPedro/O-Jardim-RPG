@@ -26,7 +26,10 @@ Regras essenciais:
   usuário. Ao commitar, liste os arquivos um a um (nunca `git add -u`): o usuário
   edita em paralelo e o WIP dele não pode entrar junto.
 - `data/bestiario/loot-criaturas.json` (saque das criaturas) é lido só pelo
-  servidor. Não importe esse arquivo no navegador nem o coloque no bundle.
+  servidor. Não importe esse arquivo no navegador nem o coloque no bundle. A mesa
+  lê a tabela (com a chance de cada linha) pela rota
+  `GET /registros-universais/{campanha}/loot/{criatura}`, por decisão do Pedro em
+  2026-10-11; o que caiu de verdade numa cena continua só do Mestre.
 - `data/bestiario/lendas-v1.json` (Livro da Verdade: a verdade, a consequência e a
   manchete de cada uma das 28 lendas) também é só do servidor: o texto de uma lenda
   que ainda está de pé é segredo da mesa. Os selos "Matador de ..." ficam fora do

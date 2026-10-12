@@ -1,11 +1,9 @@
 {
   "pacote": "registros-universais",
-
   "_LEIA_ISSO_PRIMEIRO": {
     "o_que_e_esse_arquivo": "Seres e locais que existem no universo geral do Jardim e não pertencem a nenhuma Árvore. A presença aqui é explícita para impedir que registros regionais sem relação estrutural sejam classificados como universais por engano.",
     "categorias_permitidas": "A página Registros Universais exibe apenas seres, facções e locais. Facções são mantidas separadamente em data/mundo/faccoes.json."
   },
-
   "entradas": [
     {
       "tipo": "personagem",
@@ -14,10 +12,45 @@
       "registro_universal": "ser",
       "revelado": true,
       "conteudo": {
-        "epiteto": "Espírito Primordial",
-        "descricao": "Blanc é um Espírito Primordial e o único Espírito Branco existente."
+        "epiteto": "Soberana dos Espíritos",
+        "soberano": "sim",
+        "cor": "Branco",
+        "descricao": "Blanc é um Espírito Primordial e o único Espírito Universal que se conhece. É também o espírito natural mais forte que existe: é do Fluxo Universal e chegou mais longe do que qualquer outro.\n\nTodo espírito natural é de um Fluxo, aquele que o prendeu ao mundo: Criação, Comunicação, Fim, e assim por diante, onze ao todo. Blanc é do Fluxo Universal, o décimo segundo, que não prende ninguém a um lado só e deixa quem o carrega tocar em todos os outros. É por isso que a chamam de Espírito Universal.\n\nAo contrário da maioria dos espíritos, Blanc tem corpo, um corpo astral firme o bastante para ser visto, tocado e confundido com o de uma pessoa. Parece uma mulher de pele pálida e cabelo longo e solto, da cor da prata velha, com olhos vermelhos e um sorriso que nunca chega a ser inteiro. Veste um corpete claro de bordas douradas, um xale cor de areia caído nos ombros, luvas compridas da mesma cor e um vestido verde-escuro. Preso na gola, leva um broche com uma pedra vermelha. Costuma apoiar o queixo na mão enquanto escuta, como quem tem todo o tempo do mundo.\n\nEntre os espíritos corre uma história, e ela muda pouco de boca em boca. Antes de qualquer Fluxo ter nome existia uma coisa só, que sentia e não sabia o quê. Cada Fluxo, ao nascer, puxou um pedaço dela e deu uma cor ao pedaço, e os pedaços viraram os espíritos. Blanc seria o que sobrou depois que todos puxaram, o resto e o inteiro ao mesmo tempo. Ela nunca confirmou nem negou. Quando perguntam, responde em Enoquiano, devagar, e a resposta nunca é a mesma duas vezes.\n\nComo nenhum Fluxo manda sozinho nela, nenhum a reconhece como estrangeira, e ela toca em qualquer um deles sem pedir licença. É por isso que está entre os dez seres mais fortes do Jardim. O que faz com essa força é outra conversa. Blanc não sai atrás de poder nem de gente. Aparece perto de espíritos que estão para se apagar e fica até o fim, e quem presenciou conta que a cor do espírito, no último instante, fica branca por um segundo.\n\nNinguém sabe onde ela mora. Quem a procura costuma encontrar espíritos muito velhos que dizem tê-la visto na semana passada, e que já não sabem direito o que a semana quer dizer."
       },
-      "_origem": "Decisão canônica do autor em 2026-08-28.",
+      "_origem": "Decisão canônica do autor em 2026-08-28 (Espírito Primordial, único Espírito Universal; até 2026-10-12 era chamada de Espírito Branco). Texto expandido em 2026-10-11 como PROPOSTA de história, aguardando aprovação do autor. Em 2026-10-12 a Cor virou Fluxo e Blanc passou a ser do Fluxo Universal (variante só do Mestre na raça Espírito); a revisão também aguarda aprovação. Soberana: um dos dez seres mais fortes do Jardim. Em 2026-10-12 o autor definiu que ela tem corpo astral, é espírito natural e universal, e o espírito natural mais forte; a aparência vem de uma imagem que ele enviou.",
+      "_o_que_falta": "O Fluxo Universal é a origem de todos os espíritos ou o que sobrou depois que todos os outros se formaram? O texto deixa as duas leituras de pé, e a escolha muda o que Blanc é para a mesa. Que relação ela tem com a Mulher Carmesim, que recebe tudo o que acaba, já que Blanc acompanha espíritos até o apagamento? E com Erebus, para quem o apagamento é o destino? Falta decidir se ela tem nome verdadeiro ou idade. O epíteto \"Soberana dos Espíritos\" é provisório: todo Soberano é Soberano de alguma coisa, e o dela o autor ainda não escolheu.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "personagem",
+      "id": "ushumgal",
+      "titulo": "Ushumgal",
+      "registro_universal": "ser",
+      "revelado": false,
+      "conteudo": {
+        "epiteto": "Soberano dos Dragões",
+        "soberano": "sim",
+        "cor": "Dourado",
+        "descricao": "Os dragões crescem a vida inteira, e quase todos morrem no meio do caminho, porque o crescimento não tem fim marcado. Ushumgal é o único que chegou ao fim dele. Parou de crescer no ponto exato em que tudo o que um dragão pode ser coube numa criatura só, e é por isso que o chamam de Dragão Verdadeiro. Os outros estão a caminho de ser o que ele é.\n\nUshumgal quer dizer grande dragão em sumeriano, e é só a palavra mais próxima que os outros povos encontraram. O nome que os dragões usam entre si é uma palavra só, e os anciões a pronunciam em voz baixa, quando pronunciam.\n\nAnzhur, o Avô do Fogo, é mais velho. Kurnagal ainda cresce. Apokalyx dorme em cima do que guarda. Ushumgal é o único dos grandes que não espera nada de ninguém, nem de si mesmo, porque não falta nada a ele.\n\nNão tem território, porque território é coisa de dragão que ainda precisa defender alguma coisa. Pousa onde quer, e ninguém reclama. Quem já ficou diante dele conta que o que assusta é a calma, e que o tamanho e o fogo nem aparecem na lembrança depois."
+      },
+      "_origem": "PROPOSTA escrita em 2026-10-11 a partir do pedido do autor: um dragão verdadeiro, no auge da força, o dragão mais forte de todos, entre os dez Soberanos. Nome provisório.",
+      "_o_que_falta": "O nome Ushumgal (grande dragão, em sumério) é provisório. Falta decidir como ele se relaciona com Anzhur, Kurnagal e Apokalyx: parente, rival, referência? Falta o número: um Soberano deveria passar dos degraus das Deidades no Bestiário (VD 500 e 1000). Falta dizer se os jogadores sabem que ele existe antes de uma cena com ele. Está escondido dos jogadores até o Mestre liberar.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "astraluna-capital",
+      "titulo": "Astraluna",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Capital da Árvore A.X.I.S, na Dimensão Padrão",
+        "responsavel": "AstraTech e Jota Macedo",
+        "dominio": "Tecnologia arcana, artefatos e a fusão entre magia e máquina",
+        "faccao": "astratech",
+        "descricao": "Astraluna é a capital da Árvore A.X.I.S e a sede da AstraTech. Foi fundada no ano 1.188 e cresceu até virar o maior centro de tecnologia arcana do mundo, reconhecido como o berço da fusão entre magia e máquina.\n\nAs oficinas e os laboratórios da cidade produzem artefatos que sustentam civilizações inteiras. Por isso Astraluna vive cercada de barreiras poderosas e de protocolos rígidos de segurança, e guarda as próprias invenções com um ciúme que nenhuma outra cidade tem. Quem quer comprar uma peça costuma assinar mais papel do que a peça vale.\n\nO governo é corporativo. Quem decide o que se constrói, e para quem, é a AstraTech, e Jota Macedo a preside daqui. Foi desta cidade que a A.X.I.S se espalhou pelo mundo, e para quem mora nela a A.X.I.S representa a esperança de que a energia do mundo enfim possa ser compreendida, reproduzida e evoluída por mãos mortais."
+      },
+      "_origem": "Escrito em 2026-10-12 a partir do reino 'astraluna' (parley-axis.json) e do pedido do autor: Astraluna é a sede da AstraTech e a capital da Árvore A.X.I.S. O Núcleo Zero, que fica fora de qualquer mapa da cidade, não é citado de propósito.",
       "_pronto_para_importar": true
     },
     {
@@ -29,9 +62,250 @@
       "conteudo": {
         "localizacao": "Vazio",
         "responsavel": "Amadheus Colona",
-        "descricao": "A única instituição que opera em todas as Árvores ao mesmo tempo, e a única que nenhum ser jamais ousou nacionalizar. Fica no Vazio, fora de todas as Árvores."
+        "dominio": "Cofres, empréstimos, seguros e o câmbio entre as nove Árvores",
+        "faccao": "banco-lunar",
+        "descricao": "O Banco Lunar é a única instituição financeira que funciona em todas as Árvores ao mesmo tempo, e ninguém nunca teve coragem de abrir outra para disputar com ele. Tem agência em todas as Árvores, mas a matriz fica no Vazio, fora de todas elas.\n\nIsso explica quase tudo o que o Banco é. Quem atende as nove Árvores não pode morar dentro de nenhuma, e um dinheiro que vale em todas precisa de uma casa que não pertença a nenhuma. Por isso um Solar compra a mesma coisa em qualquer canto do Jardim: existe um lugar fora de tudo garantindo o câmbio, e esse lugar nunca precisou tomar partido.\n\nA matriz é um bloco claro e baixo, sem janela, cercado de corredores cheios de balcões. O atendimento não para nunca, porque no Vazio não existe manhã para esperar. Os cofres ficam nos andares de baixo e são alugados por tamanho e por prazo. Ninguém confere o que tem dentro.\n\nO Banco guarda, empresta e faz seguro. Cofre para quem tem o que esconder, empréstimo para quem tem como pagar, seguro para quem tem medo do que vem pela frente. Nenhum funcionário pergunta de onde o dinheiro veio. Perguntam se ele existe e se a assinatura confere. Os cargos são poucos: o escriturário atende na agência, o gerente decide, e o que passa do tamanho de uma agência sobe até Amadheus Colona.\n\nAmadheus é o Soberano dos Cosmos e não governa um palmo de chão. Cuida do dinheiro e assiste ao resto de longe. Dois exércitos em guerra podem ser atendidos no mesmo balcão, em dias diferentes, pelo mesmo atendente, que cumprimenta os dois do mesmo jeito. Quem tentou usar o Banco contra um inimigo descobriu depressa que o inimigo também tinha conta ali.\n\nEssa neutralidade tem preço, e quase ninguém consegue pagar. Amadheus só escolhe um lado quando alguém paga o bastante. Jota Macedo está entre os seres mais ricos do Jardim, e é por isso que, nas poucas vezes em que o Banco tomou partido, quase sempre foi o dele. Os dois são sócios desde que Amadheus era um ser comum de Gênese, mas se afastaram faz tempo: Jota ficou com a AstraTech, e Amadheus com o Banco Lunar inteiro."
       },
       "_origem": "Consolidado em 2026-08-28 a partir da lore do Banco Lunar, de Amadheus Colona e da economia oficial.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "pharos",
+      "titulo": "Pharos",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Vazio, em volta da Porta Baixa",
+        "responsavel": "Os Faroleiros e os Mestres de quadro",
+        "dominio": "Contratos, quadro de procurados e a formação dos Caçadores das Almas",
+        "faccao": "guilda-dos-cacadores",
+        "descricao": "Pharos é a sede da Guilda dos Caçadores e a única cidade do Vazio com luz própria. Cresceu em volta da Porta Baixa, a maior passagem conhecida por onde as criaturas do Vazio chegam às Árvores, e não tem muralha nenhuma. No lugar dela há o Farol.\n\nO Farol sobe de uma ilha de basalto escuro, no meio do nada, e a cidade leva o nome dele numa língua velha: Pharos, o farol. A luz dele existe para lembrar. Tudo o que está dentro do feixe guarda o próprio nome, e criatura nenhuma do Vazio atravessa a luz de bom grado. O feixe dá uma volta completa a cada hora, e é por isso que a cidade vive em turnos: enquanto a luz passa por um lado, o outro fica no escuro, e é do lado escuro que alguém precisa estar de olho. Essa tarefa se chama Ronda. Todo caçador contratado cumpre uma por semana, e quem está com a Ronda atrasada não pega contrato novo.\n\nA cidade se espalha em terraços, em espiral, no pé do Farol. O Terraço Baixo é onde chega gente: a estalagem, as forjas, o mercado e a cadeia onde esperam os procurados entregues vivos. O Terraço do Meio é onde moram os caçadores contratados e as famílias deles, em escadas estreitas onde dois carregadores mal se cruzam. No alto, logo abaixo da lente, fica a Lanterna, e só entra ali quem a Guilda aceitou de vez.\n\nNa subida do primeiro terraço fica o Quadro, uma parede de ferro de uns vinte metros onde cada contrato aberto é pregado numa chapa. Procurado, criatura do Vazio, espírito que passou da conta: tudo vira chapa, com nome, descrição, valor e prazo. Quem pega o contrato arranca a chapa e leva. Na volta, o Mestre de quadro confere o que foi trazido e só então paga: metade do que o alvo vale no mercado, porque a outra metade fica com a Guilda. Quem tem pressa paga mais caro para contratar, e a pressa nunca sai do bolso do caçador.\n\nO Vazio apaga nome. Quem passa muito tempo fora do alcance da luz começa a ser esquecido, primeiro pelos conhecidos e depois pelos colegas. Por isso cada caçador tem o nome gravado numa placa de bronze nos degraus do Farol. Quem volta de uma expedição espera no pé da escada enquanto o nome dele é lido em voz alta e o Faroleiro de turno mantém o feixe parado sobre ele, até alguém reconhecer. Em geral dura segundos. Já aconteceu de durar a noite inteira. Já aconteceu de ninguém reconhecer, e de a placa ficar na escada com um risco ao lado, e o Farol seguir girando.\n\nOs Faroleiros cuidam da lente e do óleo, são poucos, falam pouco e trabalham sempre em dupla, porque um Faroleiro sozinho no escuro acaba esquecido em uma noite. Os Caçadores das Almas, que ligam a própria alma a uma lâmina com nome e vontade próprios, são os únicos que dormem na Lanterna. A formação leva anos e se divide em quatro disciplinas: a espada, o passo, o espírito e o corpo a corpo. Ninguém aprende as quatro ao mesmo tempo, e o nome da lâmina não é ensinado. Cada um descobre o seu.\n\nNa base do Farol, de costas para a cidade, fica o Pouso, uma casa baixa de pedra, sem nenhum enfeite, onde os caçadores levam os espíritos que aceitam ir. O ritual se chama Última Luz e é curto: o Faroleiro-mor apaga o Farol por sete segundos, o único momento em que a cidade inteira fica no escuro, e o espírito atravessa. A cidade toda para de falar nesses sete segundos, de espada na mão. O que demora é a espera na porta do Pouso. Tem espírito que passa horas diante dela sem entrar, e caçador que passa as mesmas horas ao lado dele, esperando. Ninguém comenta isso depois.\n\nTudo em Pharos custa o triplo, como em todo o Vazio, e quase tudo o que se come chega pela Caravana do Limiar. A cidade reclama disso o tempo inteiro e nunca pensou em morar em outro lugar."
+      },
+      "_origem": "Escrito em 2026-10-11 a pedido do autor, como sede de uma facção.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "patio-das-rotas",
+      "titulo": "Pátio das Rotas",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Vazio",
+        "responsavel": "Os Mestres de caravana",
+        "dominio": "Montagem das caravanas e lista das passagens abertas",
+        "faccao": "caravana-do-limiar",
+        "descricao": "Um pátio enorme de terra batida, sem teto, no ponto do Vazio onde as passagens conhecidas se abrem. É ali que as caravanas se montam antes de partir e se desmontam na volta. Cada passagem tem uma faixa numerada pintada no chão, e o Mestre de caravana de plantão sabe de cabeça quais estão abertas, quais cobram a mais e quais ninguém atravessa mais.\n\nComo nada nasce no Vazio, quase tudo o que se come por lá passa pelo Pátio primeiro, em fardos e barris. É por isso que os preços de todo o Vazio são o triplo, e a Caravana não finge que não sabe. Rota selada ela não atravessa, e a lista das seladas fica pregada na entrada, atualizada à mão."
+      },
+      "_origem": "Escrito em 2026-10-11 a pedido do autor, como sede de uma facção.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "agulha",
+      "titulo": "A Agulha",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Vazio",
+        "responsavel": "Os vigias",
+        "dominio": "Vigilância das passagens e evacuação de áreas ameaçadas",
+        "faccao": "vigilia-das-raizes",
+        "descricao": "A Agulha é uma torre alta e fina, a mais alta do Vazio, onde a Vigília mantém vigias acordados dia e noite olhando para as passagens. Do topo se vê onde o Vazio encosta nas Árvores, e quando uma fronteira cede o primeiro aviso sai dali, uma luz acesa no alto que as outras casas da Vigília repetem uma a uma.\n\nEmbaixo ficam o alojamento, o depósito de corda, lona e carroça de evacuação, e uma sala só de mapas. Cada ruptura conhecida tem a própria folha, e cada folha tem data. A Vigília diz que a sala é maior que a torre, e quem já entrou lá confirma."
+      },
+      "_origem": "Escrito em 2026-10-11 a pedido do autor, como sede de uma facção.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "acervo-prismatico",
+      "titulo": "Acervo Prismático",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Vazio",
+        "responsavel": "Os arquivistas",
+        "dominio": "Registros verificados, identificação de artefatos e consulta paga",
+        "faccao": "arquivo-prismatico",
+        "descricao": "Fica no Vazio de propósito, fora de qualquer Árvore, para que nenhuma possa reclamar o que está guardado. É um salão comprido de prateleiras de vidro fosco, e cada registro descansa numa peça que só deixa passar luz de uma cor. A cor diz de onde a informação veio. Cada Árvore tem a sua, e daí vem o nome.\n\nEntra no Acervo quem trouxe algo para guardar ou quem paga para consultar. Os arquivistas conferem tudo duas vezes, em núcleos diferentes, e quando as duas versões não batem a informação vai para uma prateleira à parte, com uma faixa preta, até alguém descobrir qual das duas mentiu."
+      },
+      "_origem": "Escrito em 2026-10-11 a pedido do autor, como sede de uma facção.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "salao-das-treze-portas",
+      "titulo": "Salão das Treze Portas",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Gênese, na Dimensão Padrão",
+        "responsavel": "Os tradutores",
+        "dominio": "Tradução, intérpretes e o registro dos idiomas do Jardim",
+        "faccao": "casa-das-linguas",
+        "descricao": "Um salão redondo, em Gênese, com treze portas, uma para cada povo do Jardim. Atrás de cada porta fica uma sala de trabalho com dicionários, cartas e os tradutores daquele povo. O salão do meio serve a quem precisa de duas línguas na mesma conversa e espera a vez numa fila que anda devagar.\n\nA porta do Universal é a mais gasta e a única que ninguém tranca. A de Libras fica no centro do círculo e não tem maçaneta, porque ali se pede licença por sinal, e quem não sabe o sinal espera que alguém de dentro o ensine."
+      },
+      "_origem": "Escrito em 2026-10-11 a pedido do autor, como sede de uma facção.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "campanario",
+      "titulo": "Campanário",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Limiar, num recanto cedido pela Mulher Carmesim",
+        "responsavel": "Os relatores",
+        "dominio": "Registro das aparições de Entidades e venda de avisos",
+        "faccao": "sociedade-do-sino",
+        "descricao": "No Limiar, num recanto pequeno que a Mulher Carmesim deixa à Sociedade, fica uma torre de pedra com um único sino, rachado, que só toca quando chega o aviso de uma Entidade. Quem mora perto aprendeu a contar as batidas: uma para cada rank de perigo, do azul ao preto. Cinco batidas seguidas só aconteceram duas vezes, e as duas estão anotadas na parede da escada.\n\nEmbaixo fica a sala dos relatos, onde os relatores escrevem e guardam o que se sabe, com uma estante para cada Entidade conhecida. Cada folha diz quem encontrou, quando, onde e o que perdeu. A Sociedade vende cópia do relato mais recente a quem pede, e recusa a venda para quem diz que quer ir atrás da Entidade."
+      },
+      "_origem": "Escrito em 2026-10-11 a pedido do autor, como sede de uma facção.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "casa-do-primeiro-lume",
+      "titulo": "Casa do Primeiro Lume",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Anima",
+        "responsavel": "Os curandeiros da Ordem",
+        "dominio": "Cura, socorro e a lamparina que dá nome à Ordem",
+        "faccao": "ordem-do-lume",
+        "descricao": "A casa-mãe da Ordem do Lume fica em Anima e é a única que nunca fechou. Dizem que o primeiro lume foi aceso ali, numa lamparina pequena ao lado da porta, e que ela nunca se apagou desde então. Os curandeiros trocam o óleo de manhã e à noite, e fazem isso sem cerimônia, como quem lava a louça.\n\nAtende qualquer ferido que chegue pelo portão, sem perguntar de que lado ele estava. Dentro, as alas se separam só pela gravidade do caso, e rivais que acabam na mesma enfermaria aprendem a conviver sem arma. Quem se recupera deixa alguma coisa na parede para quem vem depois, um nome, um desenho, uma palavra. A parede de dentro já é mais grossa que a de fora."
+      },
+      "_origem": "Escrito em 2026-10-11 a pedido do autor, como sede de uma facção.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "galpoes-do-meio",
+      "titulo": "Galpões do Meio",
+      "registro_universal": "local",
+      "revelado": false,
+      "conteudo": {
+        "localizacao": "Vazio",
+        "dominio": "Depósito de mercadoria não declarada",
+        "faccao": "a-ordem",
+        "descricao": "Uma fileira de armazéns num trecho do Vazio onde nenhuma outra facção quis construir. Por fora parecem velhos e vazios. Por dentro, a Ordem guarda caixas e barris que não foram declarados em balcão nenhum, e cada caixa leva um número que só o dono e o contador entendem.\n\nQuem negocia nos Galpões chega de capuz e sai pela porta dos fundos. Ninguém assina nada. O acordo se fecha pelo pagamento adiantado, e a Ordem cumpre, porque descumprir uma vez bastaria para acabar com o negócio de todo mundo."
+      },
+      "_origem": "Escrito em 2026-10-11 a pedido do autor, como sede de uma facção.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "casa-vermelha",
+      "titulo": "Casa Vermelha",
+      "registro_universal": "local",
+      "revelado": false,
+      "conteudo": {
+        "localizacao": "Desconhecida, em alguma Árvore pequena e esquecida",
+        "dominio": "Reunião das células e sacrifícios",
+        "faccao": "culto-carmesim",
+        "descricao": "Ninguém sabe ao certo onde fica, e provavelmente ela não fica no mesmo lugar duas vezes. O pouco que se sabe vem de quem conseguiu sair: por fora é uma casa comum, de porta baixa e janelas fechadas com tábua. Por dentro, as paredes são pintadas de vermelho escuro todo ano, por cima da tinta do ano anterior, e as camadas já pesam.\n\nÉ onde as células se reencontram para dividir o que fizeram e escolher o próximo. Existe uma sala só para a Mulher Carmesim, vazia, com uma cadeira virada para a parede. Os membros acreditam que ela escuta dali, e que o silêncio da sala é a resposta."
+      },
+      "_origem": "Escrito em 2026-10-11 a pedido do autor, como sede de uma facção.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "pomar",
+      "titulo": "O Pomar",
+      "registro_universal": "local",
+      "revelado": false,
+      "conteudo": {
+        "localizacao": "Escondido, com um só caminho de acesso",
+        "dominio": "Cofre dos Frutos do Éden e das relíquias colhidas",
+        "faccao": "colhedores-do-eden",
+        "descricao": "É onde os Colhedores guardam o que tiraram dos outros: Frutos do Éden ainda inteiros, relíquias da Criação trancadas em cofres de ferro, objetos que valem mais que a rua inteira de onde foram levados. O lugar tem um só caminho de entrada, e o caminho é vigiado.\n\nO nome começou como piada. Cada Fruto ganha uma árvore pintada na parede, e quando ele é vendido a árvore é riscada. Ninguém lembra quem começou isso. A parede do fundo já está quase toda riscada, e os Colhedores mais velhos evitam olhar para ela."
+      },
+      "_origem": "Escrito em 2026-10-11 a pedido do autor, como sede de uma facção.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "personagem",
+      "id": "selah",
+      "titulo": "Selah",
+      "registro_universal": "ser",
+      "revelado": true,
+      "conteudo": {
+        "epiteto": "Soberano do Silêncio",
+        "soberano": "sim",
+        "cor": "Preto",
+        "bestiario": "selah",
+        "descricao": "Ninguém sabe quando Selah apareceu pela primeira vez, porque quem estava lá não conseguiu contar. As histórias mais antigas sobre ele começam todas do mesmo jeito: alguém tentou gritar e não saiu nada.\n\nEle vem do Vazio, mas Erebus não responde por ele. O Vazio apaga o que alcança, sem pressa e sem escolher. Selah escolhe. Chega devagar, e o começo é pequeno: um cachorro que late sem som, uma panela que cai no chão e não faz barulho. Depois somem os passos, o vento, a água. Por último some a respiração de quem está por perto, e é nessa hora que a maioria entende o que está acontecendo, quando já é tarde para correr.\n\nQuem sobreviveu aprendeu a mesma regra: ele vai atrás de quem faz barulho. Um caçador da Guilda passou uma noite inteira deitado no chão de um celeiro, de olhos abertos, enquanto Selah atravessava o lugar. Ficou contando as batidas do próprio coração até não conseguir ouvir nem elas. Saiu vivo de manhã e nunca mais falou alto. Diz que não consegue, que a voz trava no meio do caminho, como se ainda estivesse esperando permissão.\n\nNinguém sabe o que ele faz com o que tira. Uma aldeia por onde ele passou nunca mais ouviu o próprio sino. O sino continua no lugar e balança com o vento, sem tocar. Os velhos de lá dizem que o som está guardado em algum canto, junto com tudo o que as pessoas deixaram de dizer, e que um dia volta.\n\nEstá entre os dez seres mais fortes do Jardim, e ninguém que o encontrou chegou a ouvir a voz dele. Pode ser que ele não tenha nenhuma. Pode ser que tenha todas."
+      },
+      "_origem": "Escolhido pelo autor em 2026-10-11 entre as propostas: Selah, o Último Silêncio (a criatura mais forte do Bestiário, VD 500) vira Soberano. Texto escrito a partir da descrição pública do catálogo, sem a verdade da lenda (que é segredo da mesa).",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "personagem",
+      "id": "circe",
+      "titulo": "Circe",
+      "registro_universal": "ser",
+      "revelado": false,
+      "conteudo": {
+        "epiteto": "Soberana da Magia",
+        "soberano": "sim",
+        "cor": "Roxo",
+        "descricao": "Circe e Jota Macedo cresceram juntos no orfanato de Ofélia, em Gênese, e eram melhores amigos. Os dois eram muito nerds: gostavam de estudar, de dividir o que descobriam e de passar horas discutindo a mesma ideia. Jota inventava. Circe era rígida e devota aos estudos, lia tudo o que o orfanato tinha sobre magia e, quando acabou, foi atrás do que não tinha.\n\nCresceu sabendo todas as magias do Fluxo da Origem, o de Gênese, uma por uma, com o nome, o custo e o jeito certo de errar. Dizem que ela é um grimório vivo. Se alguém pergunta por uma magia de Gênese, Circe responde sem consultar nada, e quase sempre corrige a pergunta.\n\nA morte de Ofélia separou os dois. Cada um tomou um rumo totalmente diferente: Jota foi construir, até virar dono de uma Árvore e quase uma deidade, e Circe foi estudar até o fim. Os outros irmãos do orfanato se espalharam, e Jota prendeu vários deles para criar a máscara. Circe foi uma das presas, e foi na prisão que ela descobriu uma forma de usar Fluxos que não eram o dela. Roubou, aos poucos, uma lasca de matéria de cada uma das nove Árvores, juntou tudo e transformou a soma numa Relíquia da Criação: o colar que usa até hoje. Com ele, Circe usa todos os Fluxos e conhece todas as magias de todos eles. Como conseguiu fazer isso de dentro de uma cela, nunca explicou.\n\nHoje está solta e raramente se mostra. De todos os que cresceram no orfanato, os dois são os que mais aparecem pelo mundo, e ela é a maior oposição a ele: ninguém quer tanto pará-lo quanto Circe, que o conhece desde criança. Para Jota, poder é uma coisa que se constrói, se mede e se melhora. Para Circe, é uma coisa que se estuda até o fim. Os dois não se falam desde a prisão, e nenhum dos dois admite sentir falta do outro. Ela está entre os dez seres mais fortes do Jardim."
+      },
+      "_origem": "Ideia do autor em 2026-10-11, texto reescrito no mesmo dia e de novo em 2026-10-12: Circe e Jota eram melhores amigos e muito nerds no orfanato de Ofélia, a morte de Ofélia os separou, Jota virou dono de uma Árvore e prendeu vários irmãos (Circe entre eles), e ela é hoje a maior oposição a ele. Os outros irmãos podem ser citados, mas não são seres do nível universal: só existem na Árvore deles. Já existia uma linha sobre ela na crônica 'O Último Eclipse' (Era dos Gênios).",
+      "_o_que_falta": "Escondida dos jogadores: a crônica O Último Eclipse diz que Circe tenta deter Jota Macedo juntando forças com as novas gerações prometidas, e isso revela o antagonista. O epíteto 'Soberana da Magia' é provisório. Faltam: o nome do colar (o texto não dá nome nenhum), quanto tempo ela ficou presa e quando saiu, como foi capturada, a idade, se o colar existe no catálogo como Relíquia da Criação com ficha, e o que ela quer das novas gerações.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "personagem",
+      "id": "karnath",
+      "titulo": "Karnath",
+      "registro_universal": "ser",
+      "revelado": false,
+      "conteudo": {
+        "epiteto": "Soberano dos Monstros",
+        "soberano": "sim",
+        "cor": "Marrom",
+        "descricao": "Karnath é o primeiro. Antes de haver nome para predador, antes de haver Bestiário e de haver quem tivesse medo, existia uma coisa que caçava, e ele é essa coisa. Todo monstro de todas as Árvores, das aberrações do Vazio às feras das montanhas, carrega uma lasca do que Karnath é, e por isso nenhum deles o encara sem hesitar um segundo.\n\nOs monstros o reconhecem de longe. Os que vivem em bando se calam quando ele passa, e os que vivem sozinhos mudam de caminho. Os dragões ficam de fora: respondem a Ushumgal, e Karnath não tem nada a provar a eles.\n\nA Guilda dos Caçadores mantém no Quadro uma chapa em branco para ele, sem nome, sem valor e sem prazo. Ninguém nunca pegou. A chapa é limpa toda manhã, e quem faz isso diz que é o único serviço da Guilda que nunca atrasou."
+      },
+      "_origem": "PROPOSTA escrita em 2026-10-11 a pedido do autor: o primeiro predador, Soberano de todos os monstros. Nome provisório.",
+      "_o_que_falta": "O nome é provisório. Falta decidir a aparência, a relação com as aberrações do Vazio e com Selah, e o poder numérico.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "personagem",
+      "id": "shinji-takamori",
+      "titulo": "Shinji Takamori",
+      "registro_universal": "ser",
+      "revelado": false,
+      "conteudo": {
+        "epiteto": "Soberano dos Caçadores",
+        "soberano": "sim",
+        "cor": "Laranja",
+        "lidera": "guilda-dos-cacadores",
+        "descricao": "Shinji Takamori comanda a Guilda dos Caçadores desde antes de o Quadro ter o tamanho que tem. É um Caçador das Almas, o mais antigo vivo, e o único que os outros chamam de Mestre sem que isso soe como cargo.\n\nA lâmina dele tem nome, como a de todos, e só ele sabe qual é. Quem já viu a lâmina inteira não costuma contar como foi, e o motivo não é segredo: a lembrança é curta, porque tudo acontece depressa demais para ser guardada.\n\nDorme na Lanterna, ao lado da lente, e é o Faroleiro-mor de Pharos. É ele quem apaga o Farol na Última Luz e quem lê, na escada, o nome de cada caçador que volta de uma expedição. Os guardas da escada nunca duvidam da voz dele. Dizem que um dia o nome do próprio Shinji foi esquecido por todos ao mesmo tempo, e que o feixe ficou parado sobre ele a noite inteira até alguém lembrar. Ele diz que isso nunca aconteceu."
+      },
+      "_origem": "PROPOSTA escrita em 2026-10-11 a pedido do autor: um Caçador das Almas, líder da Guilda dos Caçadores. Reescrito no mesmo dia: o nome anterior e o conceito da sede (três muralhas, Bankai, Konsō) lembravam demais Bleach, então o autor pediu um conceito próprio. Em 2026-10-12 o autor escolheu o nome Shinji Takamori (antes Ícaro Valdez, provisório).",
+      "_o_que_falta": "Falta o nome da lâmina, a aparência, a idade e como ele convive com o Mestre de quadro e com os Faroleiros.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "personagem",
+      "id": "zero",
+      "titulo": "Zero",
+      "registro_universal": "ser",
+      "revelado": false,
+      "conteudo": {
+        "epiteto": "Soberano do Sacrifício",
+        "soberano": "sim",
+        "cor": "Vinho",
+        "lidera": "culto-carmesim",
+        "descricao": "Antes de o Culto Carmesim ter números, tinha um membro só. Zero é quem veio primeiro e quem decidiu que o nome é uma coisa que se deixa para trás. Conversa com a Mulher Carmesim todo dia e acha que ela responde.\n\nÉ o ser que mais sangue derramou em nome de outro, e o único que faz isso com delicadeza. Pede desculpa antes, agradece depois e guarda o nome de cada vítima, o que é raro num Culto que passa o resto do tempo ensinando a esquecer o próprio. O Fim, que só se alcança quebrado, ele alcançou mais fundo do que qualquer outro, e é esse o motivo de estar entre os dez seres mais fortes do Jardim.\n\nNinguém o viu sem o capuz. A Casa Vermelha é a casa dele, e onde ela estiver, ele está. O resto do Culto acredita que a Noite Carmesim começa quando ele terminar de contar, e ninguém sabe até onde ele já contou."
+      },
+      "_origem": "PROPOSTA escrita em 2026-10-11 a pedido do autor: um psicopata do Culto Carmesim. Nome e epíteto provisórios.",
+      "_o_que_falta": "Nome e epíteto provisórios. Falta decidir quanto do Sangue ele alcança, o que a Mulher Carmesim pensa dele e o que a Noite Carmesim realmente é.",
       "_pronto_para_importar": true
     }
   ]

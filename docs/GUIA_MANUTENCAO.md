@@ -100,7 +100,9 @@ O ZIP do Banqueiro carrega esse catálogo, então mudança nele pede reenviar o
 Banqueiro. O saque das criaturas fica em `data/bestiario/loot-criaturas.json`,
 lido **só pelo servidor** (`plataforma/core/loot_criaturas.py`); ele não entra no
 bundle do navegador nem pode ser importado por `src/` fora do editor do Mestre,
-e o ZIP da plataforma precisa levar `data/bestiario`.
+e o ZIP da plataforma precisa levar `data/bestiario`. A mesa lê a tabela pela rota
+`GET /registros-universais/{campanha}/loot/{criatura}` (ficha do Bestiário), não
+pelo arquivo.
 
 ### App instalável (service worker)
 

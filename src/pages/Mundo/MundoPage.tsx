@@ -43,7 +43,7 @@ const WorldLoading = ({ label }: { label: string }) => (
 );
 
 export const MundoPage: React.FC = () => {
-  const { catalog: mundoCatalog, chronicles: worldChronicles, factions: mundoFaccoes, loading: worldLoading, error: worldError } = useResolvedWorld();
+  const { catalog: mundoCatalog, chronicles: worldChronicles, factions: mundoFaccoes, entities: mundoEntidades, loading: worldLoading, error: worldError } = useResolvedWorld();
   const BANCO_LUNAR_INFO = bancoLunarInfo(mundoCatalog);
   const VAZIO_INFO = vazioInfo(mundoCatalog, worldChronicles);
   const [selectedDeidadeId, setSelectedDeidadeId] = useState<string | null>(null);
@@ -281,6 +281,10 @@ export const MundoPage: React.FC = () => {
         <UniversalCodexPage
           catalog={mundoCatalog}
           factions={mundoFaccoes}
+          entities={mundoEntidades}
+          entidadesRevelado={(config.entidades_revelado as string[] | undefined) ?? []}
+          entidadesOculto={(config.entidades_oculto as string[] | undefined) ?? []}
+          arvoresTrancadas={lockedDeidades}
           secoesOcultas={secoesUniversaisOcultas}
           isMestre={isMestre}
           loreRevelado={loreRevelado}

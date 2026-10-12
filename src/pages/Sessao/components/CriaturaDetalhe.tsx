@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { Activity, Check, Coins, Flame, Footprints, Gem, Heart, Minus, Pencil, Plus, RefreshCw, RotateCcw, Shield, Sparkles, Star, Swords, Timer, X, Zap } from 'lucide-react';
 import { sessaoApi, type BestiarioMonstro, type TabelaDeLoot } from '../../../services/sessaoApi';
+import { registrosUniversaisApi } from '../../../services/registrosUniversaisApi';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { PAPEIS_CRIATURA, type PapelCriatura } from '../../../services/curvaCriatura';
 import { EditorLootCampanha } from './EditorLootCampanha';
@@ -48,8 +49,9 @@ const corDaChance = (chance: number) => (
 
 const quantidadeLegivel = (texto: string) => (/^\d+$/.test(texto) ? `${texto}x` : texto);
 
-/** Tabela de loot da criatura: o que pode cair e com que chance. */
-const SecaoLoot = ({ campanhaId, monstroId }: { campanhaId: string; monstroId: string }) => {
+/** Tabela de loot da criatura: o que pode cair e com que chance.
+ * `somenteLeitura` é a versão da mesa (Registros Universais): mesma tabela, sem ajustar. */
+export const SecaoLoot = ({ campanhaId, monstroId, somenteLeitura = false }: { campanhaId: string; monstroId: string; somenteLeitura?: boolean }) => {
   const [tabela, setTabela] = useState<TabelaDeLoot | null>(null);
   const [erro, setErro] = useState(false);
   const [editando, setEditando] = useState(false);
@@ -57,11 +59,11 @@ const SecaoLoot = ({ campanhaId, monstroId }: { campanhaId: string; monstroId: s
   const carregar = React.useCallback(() => {
     let cancelado = false;
     setErro(false);
-    sessaoApi.tabelaDeLoot(campanhaId, monstroId)
+    (somenteLeitura ? registrosUniversaisApi.loot(campanhaId, monstroId) : sessaoApi.tabelaDeLoot(campanhaId, monstroId))
       .then((resposta) => { if (!cancelado) setTabela(resposta); })
       .catch(() => { if (!cancelado) setErro(true); });
     return () => { cancelado = true; };
-  }, [campanhaId, monstroId]);
+  }, [campanhaId, monstroId, somenteLeitura]);
   useEffect(() => {
     setTabela(null);
     setEditando(false);
@@ -86,7 +88,7 @@ const SecaoLoot = ({ campanhaId, monstroId }: { campanhaId: string; monstroId: s
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <h4 className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40"><Gem size={12} /> Loot</h4>
         {tabela?.ajustada ? <span className="rounded-full border border-[#c7a44c]/40 bg-[#c7a44c]/10 px-2 py-0.5 text-[10px] font-semibold text-[#f0d685]">Ajustada nesta campanha</span> : null}
-        {tabela && !editando ? (
+        {tabela && !editando && !somenteLeitura ? (
           <div className="ml-auto flex gap-1.5">
             {tabela.ajustada ? (
               <button type="button" disabled={voltando} onClick={() => void voltarParaOficial()} className="flex items-center gap-1 rounded-md border border-white/10 px-2 py-1 text-[11px] text-white/55 hover:text-white disabled:opacity-40">
@@ -100,7 +102,7 @@ const SecaoLoot = ({ campanhaId, monstroId }: { campanhaId: string; monstroId: s
         ) : null}
       </div>
       {erro ? (
-        <p className="text-xs text-red-200/80">Não foi possível carregar a tabela de loot.</p>
+        <p className="text-xs text-red-200/80">{somenteLeitura ? 'Não há tabela de loot para mostrar desta criatura.' : 'Não foi possível carregar a tabela de loot.'}</p>
       ) : !tabela ? (
         <p className="flex items-center gap-2 text-xs text-white/40"><RefreshCw size={12} className="animate-spin" /> Carregando a tabela…</p>
       ) : editando ? (
@@ -136,7 +138,9 @@ const SecaoLoot = ({ campanhaId, monstroId }: { campanhaId: string; monstroId: s
             ) : null}
           </ul>
           <p className="mt-2 text-[11px] leading-5 text-white/35">
-            Cada linha rola sozinha (d100 contra a chance) quando você rolar o loot no card da criatura em cena.
+            {somenteLeitura
+              ? 'Cada linha rola de 1 a 100 contra a chance quando o Mestre saqueia a criatura.'
+              : 'Cada linha rola sozinha (d100 contra a chance) quando você rolar o loot no card da criatura em cena.'}
             {tabela.itens.some((item) => item.exclusivo) ? ' A estrela marca o que só cai desta criatura e não existe na Loja.' : ''}
           </p>
         </>

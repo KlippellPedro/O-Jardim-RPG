@@ -107,7 +107,15 @@ Discloud leva `data/bestiario` junto.
 - Criatura adicionada pelo Bestiário grava `sessao_participantes.monstro_id`;
   o loot rolado fica em `sessao_participantes.loot` (migração 47). Os dois só
   aparecem no estado de quem comanda a mesa.
-- `GET /sessao/bestiario/loot/{monstro_id}` mostra a tabela ao Mestre;
+- `GET /sessao/bestiario/loot/{monstro_id}` mostra a tabela ao Mestre (com a
+  oficial ao lado, quando a campanha a ajustou) e é a rota que o Mestre usa para
+  editar. A mesa inteira lê a mesma tabela, com a chance de cada linha, pela ficha
+  da criatura nos Registros Universais: `GET
+  /registros-universais/{campanha}/loot/{criatura}`. Ela vale para qualquer
+  membro, mas só para criatura do catálogo que o jogador já pode ver (seção do
+  Bestiário aberta e a criatura não fechada como `rasurado` ou `oculto` pelo
+  Mestre); fora disso responde 404. O que caiu de verdade numa cena
+  (`sessao_participantes.loot`) continua só do Mestre.
   `POST /sessao/{id}/participantes/{pid}/loot` rola cada linha (d100 contra a
   chance, no servidor) e `.../loot/entregar` manda cada linha para um
   personagem. Item entra por `conceder_itens_do_catalogo` (o mesmo miolo da
