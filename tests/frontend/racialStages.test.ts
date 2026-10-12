@@ -25,6 +25,7 @@ function tracoPorId(racaId: string, tracoId: string) {
     raca.caracteristicas || [],
     ...(raca.estagios || []).map(item => item.caracteristicas || []),
     ...(raca.variantes || []).map(item => item.caracteristicas || []),
+    ...(raca.naturezas || []).map(item => item.caracteristicas || []),
     ...(raca.linhagens || []).map(item => item.caracteristicas || []),
   ];
   return colecoes.flat().find(traco => traco.id === tracoId);
@@ -59,23 +60,31 @@ const ESCADAS: Array<[string, [number, number, number], string]> = [
   ['divino', [1, 18, 48], 'varianteId'],
 ];
 
+/** Uma escolha por Natureza para raças que têm mais de uma escada (Espírito). As
+ * outras usam a escada única, sem escolha. */
+const escolhasDaEscada = (raca: IRaca): Array<Record<string, string> | undefined> =>
+  raca.naturezas?.length ? raca.naturezas.map(natureza => ({ naturezaId: natureza.id })) : [undefined];
+
 test('cada raça com escada publica os degraus esperados, em ordem', () => {
   for (const [racaId, degraus] of ESCADAS) {
     const raca = porId(racaId);
     assert.ok(raca, `raça ausente: ${racaId}`);
-    assert.deepEqual(
-      obterEstagiosRaciais(raca).map(nivelMinimoTraco),
-      [...degraus],
-      `degraus inesperados em ${racaId}`,
-    );
+    for (const escolha of escolhasDaEscada(raca)) {
+      assert.deepEqual(
+        obterEstagiosRaciais(raca, escolha).map(nivelMinimoTraco),
+        [...degraus],
+        `degraus inesperados em ${racaId} ${escolha?.naturezaId ?? ''}`,
+      );
+    }
   }
 });
 
 test('o estágio ativo vira exatamente no limiar, nunca um nível antes', () => {
   for (const [racaId, [base, meio, topo]] of ESCADAS) {
     const raca = porId(racaId);
-    const estagios = obterEstagiosRaciais(raca);
-    const id = (nivel: number) => obterEstagioRacialAtivo(raca, nivel)?.id;
+    for (const escolha of escolhasDaEscada(raca)) {
+    const estagios = obterEstagiosRaciais(raca, escolha);
+    const id = (nivel: number) => obterEstagioRacialAtivo(raca, nivel, escolha)?.id;
 
     assert.equal(id(base), estagios[0].id, `${racaId}: nível ${base}`);
     assert.equal(id(meio - 1), estagios[0].id, `${racaId}: nível ${meio - 1} ainda é o primeiro degrau`);
@@ -85,7 +94,8 @@ test('o estágio ativo vira exatamente no limiar, nunca um nível antes', () => 
     assert.equal(id(60), estagios[2].id, `${racaId}: o topo não muda mais`);
 
     // Os degraus se acumulam - quem chegou no topo mantém o que o meio deu.
-    assert.equal(obterEstagiosRaciaisAlcancados(raca, topo).length, 3, `${racaId}: acúmulo no topo`);
+    assert.equal(obterEstagiosRaciaisAlcancados(raca, topo, escolha).length, 3, `${racaId}: acúmulo no topo`);
+    }
   }
 });
 
@@ -123,6 +133,9 @@ test('todo traço de escolha racial destrava num degrau que a raça realmente te
     const raca = porId(racaId);
     const degraus = new Set(obterEstagiosRaciais(raca).map(nivelMinimoTraco));
     for (const grupo of obterGruposEscolhaRacial(raca)) {
+      // Traço de Natureza vale a partir do próprio nível (a Possessão, no 5): só
+      // marca, não amadurece num degrau.
+      if (grupo.campo === 'naturezaId') continue;
       for (const opcao of grupo.opcoes) {
         for (const traco of opcao.caracteristicas || []) {
           assert.ok(
@@ -257,7 +270,7 @@ test('os traços disponíveis respeitam o nível exigido, e só os da escolha fe
   assert.ok(vinho(15).includes('Névoa Persistente'), 'o traço do estágio entra junto');
   assert.ok(!vinho(39).includes('Presságio do Fim'));
   assert.ok(vinho(40).includes('Presságio do Fim'));
-  assert.ok(!vinho(40).includes('Lembrança de Vida'), 'a Cor escolhida não traz as outras');
+  assert.ok(!vinho(40).includes('Lembrança de Vida'), 'o Fluxo escolhido não traz os outros');
 
   // Slime Ácido cresce comendo.
   const acido = (nivel: number) => titulos('slime', { varianteId: 'acido' }, nivel);

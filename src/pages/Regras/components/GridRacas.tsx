@@ -4,7 +4,7 @@ import { BookOpen, Search, Sparkles, UserCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { IRaca } from '../../../types/catalogo';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
-import { obterEstagiosRaciais } from '../../../services/racaService';
+import { nivelMinimoTraco, obterEstagiosRaciais } from '../../../services/racaService';
 import { AuraEspecial } from '../../../redesign/components/premium/AuraEspecial';
 import { obterTemaPorId } from '../../../redesign/themeMap';
 import { salvarPosicaoRetornoRegras } from '../regrasScrollRestoration';
@@ -142,6 +142,7 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
               const abreLivroEntidades = raca.id === 'entidade';
 
               const estagios = obterEstagiosRaciais(raca);
+              const degraus = [...new Set(estagios.map(nivelMinimoTraco))];
               const ajustes = Object.entries(raca.ajustes_atributos || {}).filter(([, valor]) => Number(valor) !== 0);
 
               return (
@@ -179,11 +180,11 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
                           title={estagios.map(estagio => estagio.titulo).join(' · ')}
                         >
                           <span className="flex gap-1" aria-hidden="true">
-                            {estagios.map(estagio => (
-                              <span key={estagio.id} className="h-1.5 w-1.5 rounded-full bg-current" />
+                            {degraus.map(degrau => (
+                              <span key={degrau} className="h-1.5 w-1.5 rounded-full bg-current" />
                             ))}
                           </span>
-                          Evolui em {estagios.length} estágios
+                          Evolui em {degraus.length} estágios
                         </p>
                       ) : null}
                     </>

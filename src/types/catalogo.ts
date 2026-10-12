@@ -228,6 +228,11 @@ export interface IOpcaoRacial {
   mana?: number;
   estamina?: number;
   movimento?: number;
+  /** Variante que só vale para uma Natureza da raça (Espírito: Fluxo para a
+   * natural, Virtude para a angelical, Pecado para a demoníaca). */
+  natureza?: string;
+  /** Opção que o Mestre concede e o jogador não escolhe sozinho. */
+  somente_mestre?: boolean;
   [key: string]: any;
 }
 
@@ -253,6 +258,13 @@ export interface IRaca {
   linhagens?: IOpcaoRacial[];
   condicoes_ancestrais?: IOpcaoRacial[];
   naturezas_divinas?: IOpcaoRacial[];
+  /** Natureza da raça (Espírito: natural, angelical, demoníaca). É a primeira
+   * escolha, e define quais `variantes` aparecem na segunda. */
+  naturezas?: IOpcaoRacial[];
+  rotulo_natureza?: string;
+  /** Natureza que vale para a ficha antiga que ainda não escolheu nenhuma. */
+  natureza_padrao?: string;
+  descricao_naturezas?: string;
   rotulo_variante?: string;
   descricao_variantes?: string;
   escolha_atributos?: {

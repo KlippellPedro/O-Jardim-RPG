@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import type { IRaca } from '../../../types/catalogo';
+import { FLUXO_TEMAS, TEMA_UNIVERSAL, type FluxoMagicoId } from '../../../services/magiaService';
 import {
   descreverOpcaoRacial,
   nivelMinimoTraco,
@@ -21,7 +22,7 @@ export interface EstiloOpcaoRacial {
 interface EscolhaRacialCardsProps {
   raca: IRaca;
   tema: ThemeEntry;
-  /** Paleta opcional por id de opção (as Cores da Alma do Espírito, o sangue
+  /** Paleta opcional por id de opção (os Fluxos do Espírito, o sangue
    * de cada Linhagem Gigante...). Sem ela, todos os cartões usam o tema da raça. */
   paleta?: Record<string, EstiloOpcaoRacial>;
   /** Fundo dos cartões quando uma página precisa manter uma direção visual
@@ -53,7 +54,7 @@ export const EscolhaRacialCards = ({ raca, tema, paleta, fundoCards = 'bg-black/
   return (
     <>
       {grupos.map(grupo => (
-        <section key={grupo.campo} className="pt-4 mb-16">
+        <section key={grupo.chave} className="pt-4 mb-16">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -95,7 +96,16 @@ export const EscolhaRacialCards = ({ raca, tema, paleta, fundoCards = 'bg-black/
                     </h3>
                     {opcao.fluxo && (
                       <span className="ml-auto text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">
-                        Fluxo {String(opcao.fluxo)}
+                        {opcao.fluxo === 'universal'
+                          ? TEMA_UNIVERSAL.arvore
+                          : FLUXO_TEMAS[opcao.fluxo as FluxoMagicoId]
+                            ? `Árvore ${FLUXO_TEMAS[opcao.fluxo as FluxoMagicoId].arvore}`
+                            : `Fluxo ${String(opcao.fluxo)}`}
+                      </span>
+                    )}
+                    {opcao.somente_mestre === true && (
+                      <span className={`ml-auto rounded-full border ${estilo.border} px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] ${estilo.text}`}>
+                        Só o Mestre concede
                       </span>
                     )}
                     {opcao.requer_autorizacao_mestre === true && (

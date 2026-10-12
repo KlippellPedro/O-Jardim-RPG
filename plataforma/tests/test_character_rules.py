@@ -8,6 +8,8 @@ from core.character_summary import (
     _CATALOGO,
     _atributo_efetivo,
     _fluxo_efetivo,
+    _natureza_racial_incoerente,
+    _opcao_racial_valida,
     _circulo_por_fluxo,
     bonus_escolhas_habilidade,
     bonus_unicos_jardim,
@@ -57,7 +59,7 @@ def _ficha_criacao() -> dict:
 
 
 class TestEscolhaRacialTardia:
-    """A Cor da Alma do Espirito nasceu depois de fichas de Espirito ja existirem.
+    """O Fluxo do Espirito nasceu depois de fichas de Espirito ja existirem.
     Preencher um campo de escolha racial vazio e liberado uma unica vez; trocar
     uma escolha ja feita continua sendo do mestre."""
 
@@ -90,6 +92,139 @@ class TestEscolhaRacialTardia:
     def test_apagar_a_cor_escolhida_continua_barrado(self):
         anterior = self._ficha_espirito("vermelho-vinho")
         atual = self._ficha_espirito("")
+        assert "escolhas raciais" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+
+class TestNaturezaRacial:
+    """A Natureza do Espirito (natural, angelical, demoniaca) decide quais variantes
+    a ficha pode ter. O catalogo ainda so tem a natural; a coerencia entre Natureza
+    e variante e testada com uma raca de teste."""
+
+    RACA = {
+        "naturezas": [{"id": "a"}, {"id": "b"}],
+        "variantes": [
+            {"id": "a1", "natureza": "a"},
+            {"id": "b1", "natureza": "b"},
+            {"id": "so-mestre", "natureza": "a", "somente_mestre": True},
+        ],
+    }
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    def test_variante_de_outra_natureza_e_barrada(self):
+        erro = _natureza_racial_incoerente(self.RACA, {"naturezaId": "a", "varianteId": "b1"})
+        assert "natureza" in erro
+
+    def test_variante_da_propria_natureza_passa(self):
+        assert _natureza_racial_incoerente(self.RACA, {"naturezaId": "b", "varianteId": "b1"}) is None
+
+    def test_ficha_antiga_so_com_variante_passa(self):
+        assert _natureza_racial_incoerente(self.RACA, {"varianteId": "a1"}) is None
+
+    def test_natureza_inexistente_e_barrada(self):
+        assert _natureza_racial_incoerente(self.RACA, {"naturezaId": "z"})
+
+    def test_variante_somente_mestre_nao_e_escolha_do_jogador(self):
+        assert _natureza_racial_incoerente(self.RACA, {"varianteId": "so-mestre"}, {})
+        assert not _opcao_racial_valida(self.RACA, "varianteId", "so-mestre")
+
+    def test_variante_somente_mestre_ja_concedida_continua_valendo(self):
+        escolha = {"naturezaId": "a", "varianteId": "so-mestre"}
+        assert _natureza_racial_incoerente(self.RACA, escolha, dict(escolha)) is None
+
+    def test_raca_sem_naturezas_nao_muda_nada(self):
+        assert _natureza_racial_incoerente({"variantes": [{"id": "x"}]}, {"varianteId": "x"}) is None
+
+    def test_espirito_natural_passa_na_validacao_completa(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "espirito"
+        ficha["escolhaRacial"] = {"naturezaId": "natural", "varianteId": "rosa"}
+        assert validar_regras_ficha(ficha, {}, criacao=True) is None
+
+    def test_espirito_com_natureza_inexistente_e_barrado(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "espirito"
+        ficha["escolhaRacial"] = {"naturezaId": "demoniaca", "varianteId": "rosa"}
+        assert "natureza" in validar_regras_ficha(ficha, {}, criacao=True)
+
+    def test_jogador_nao_escolhe_o_fluxo_universal(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "espirito"
+        ficha["escolhaRacial"] = {"naturezaId": "natural", "varianteId": "branco"}
+        assert "mestre" in validar_regras_ficha(ficha, {}, criacao=True)
+
+    def test_ficha_que_o_mestre_deu_o_universal_continua_salvando(self):
+        anterior = _ficha_criacao()
+        anterior["racaId"] = "espirito"
+        anterior["escolhaRacial"] = {"naturezaId": "natural", "varianteId": "branco"}
+        assert validar_regras_ficha(deepcopy(anterior), {}, ficha_anterior=anterior) is None
+
+    def test_jogador_nao_pula_para_o_universal_depois_de_criar(self):
+        anterior = _ficha_criacao()
+        anterior["racaId"] = "espirito"
+        anterior["escolhaRacial"] = {"naturezaId": "natural"}
+        atual = deepcopy(anterior)
+        atual["escolhaRacial"]["varianteId"] = "branco"
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+    def test_espirito_demoniaco_com_pecado_passa_na_validacao_completa(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "espirito"
+        ficha["escolhaRacial"] = {"naturezaId": "demoniaca", "varianteId": "demonio-ira"}
+        assert validar_regras_ficha(ficha, {}, criacao=True) is None
+
+    def test_pecado_com_natureza_natural_e_barrado(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "espirito"
+        ficha["escolhaRacial"] = {"naturezaId": "natural", "varianteId": "demonio-ira"}
+        assert "natureza" in validar_regras_ficha(ficha, {}, criacao=True)
+
+    def test_fluxo_com_natureza_demoniaca_e_barrado(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "espirito"
+        ficha["escolhaRacial"] = {"naturezaId": "demoniaca", "varianteId": "rosa"}
+        assert "natureza" in validar_regras_ficha(ficha, {}, criacao=True)
+
+    def test_ficha_antiga_so_com_fluxo_continua_natural(self):
+        anterior = _ficha_criacao()
+        anterior["racaId"] = "espirito"
+        anterior["escolhaRacial"] = {"varianteId": "rosa"}
+        assert validar_regras_ficha(deepcopy(anterior), {}, ficha_anterior=anterior) is None
+
+    def test_espirito_angelical_com_virtude_passa_na_validacao_completa(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "espirito"
+        ficha["escolhaRacial"] = {"naturezaId": "angelical", "varianteId": "anjo-paciencia"}
+        assert validar_regras_ficha(ficha, {}, criacao=True) is None
+
+    def test_pecado_com_natureza_angelical_e_barrado(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "espirito"
+        ficha["escolhaRacial"] = {"naturezaId": "angelical", "varianteId": "demonio-ira"}
+        assert "natureza" in validar_regras_ficha(ficha, {}, criacao=True)
+
+    def test_virtude_com_natureza_demoniaca_e_barrada(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "espirito"
+        ficha["escolhaRacial"] = {"naturezaId": "demoniaca", "varianteId": "anjo-paciencia"}
+        assert "natureza" in validar_regras_ficha(ficha, {}, criacao=True)
+
+    def test_queda_e_redencao_sao_do_mestre(self):
+        anterior = _ficha_criacao()
+        anterior["racaId"] = "espirito"
+        anterior["escolhaRacial"] = {"naturezaId": "angelical", "varianteId": "anjo-paciencia"}
+        atual = deepcopy(anterior)
+        atual["escolhaRacial"] = {"naturezaId": "demoniaca", "varianteId": "demonio-ira"}
+        assert "escolhas raciais" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+    def test_trocar_a_natureza_ja_escolhida_e_do_mestre(self):
+        anterior = _ficha_criacao()
+        anterior["racaId"] = "espirito"
+        anterior["escolhaRacial"] = {"naturezaId": "natural", "varianteId": "rosa"}
+        atual = deepcopy(anterior)
+        atual["escolhaRacial"]["naturezaId"] = ""
         assert "escolhas raciais" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
 
 

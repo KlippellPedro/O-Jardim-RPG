@@ -27,7 +27,7 @@ import {
   compraPontosValida,
   conjuntoAtributosValido,
 } from '../../../services/calculoService';
-import { descreverOpcaoRacial, escolhaRacialEstaCompleta, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
+import { descreverOpcaoRacial, escolhaRacialEstaCompleta, obterGruposEscolhaRacial, opcoesEscolhiveis, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
 import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 import { Select } from '../../../components/ui/Select';
@@ -411,7 +411,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
     if (isLoading) return <div className="p-20 text-center text-gray-400">Carregando Códice...</div>;
 
     const currentRaca = catalogo?.racas.find(r => r.id === racaId);
-    const gruposEscolhaRacial = obterGruposEscolhaRacial(currentRaca);
+    const gruposEscolhaRacial = obterGruposEscolhaRacial(currentRaca, escolhaRacial);
     const arvoreSelecionada = ARVORES.find(a => a.id === arvoreId);
     const semArvore = arvoreId === SEM_ARVORE_ID;
     // Sem Árvore não tem Deidade padroeira; Universal transcende todas elas e
@@ -569,15 +569,20 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                   )}
 
                   {gruposEscolhaRacial.map(grupo => (
-                    <div key={grupo.campo} className="mb-6 last:mb-0">
+                    <div key={grupo.chave} className="mb-6 last:mb-0">
                       <h4 className="text-sm font-bold text-white mb-1">Escolha: {grupo.rotulo}</h4>
                       <p className="text-xs text-gray-500 mb-3">{grupo.descricao}</p>
                       <div className="space-y-3">
-                        {grupo.opcoes.map(opcao => (
+                        {opcoesEscolhiveis(grupo.opcoes, isMestre, escolhaRacial[grupo.campo]).map(opcao => (
                           <button
                             type="button"
                             key={opcao.id}
-                            onClick={() => setEscolhaRacial(atual => ({ ...atual, [grupo.campo]: opcao.id }))}
+                            onClick={() => setEscolhaRacial(atual => {
+                              const nova = { ...atual, [grupo.campo]: opcao.id };
+                              // Trocar de Natureza invalida a variante, que pertence à anterior.
+                              if (grupo.campo === 'naturezaId' && atual.naturezaId !== opcao.id) delete nova.varianteId;
+                              return nova;
+                            })}
                             className={`w-full p-3 rounded-xl border text-left transition-all ${escolhaRacial[grupo.campo] === opcao.id ? 'border-green-500 bg-green-500/10' : 'border-white/10 bg-black/30 hover:border-white/30'}`}
                           >
                             <span className="text-white font-bold block">{opcao.titulo}</span>

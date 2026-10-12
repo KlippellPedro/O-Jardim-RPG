@@ -9,7 +9,7 @@ import { NIVEL_MAXIMO_CLASSE, NIVEL_TOTAL_PADRAO, limitarNivelClasse, patamarAtu
 import { obterEfeitoAtmosfericoFicha } from '../fichaTheme';
 import { degrauDaClasse } from '../utils/degrauClasse';
 import { GLIFOS } from '../utils/retrato';
-import { limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
+import { limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial, obterNaturezaRacialId, opcoesEscolhiveis, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, arvoresVisiveisComAtual, filtrarPorArvore, filtrarPorLiberacao, type ArvoreEntry } from '../../../../data/mundo/arvoresCatalog';
@@ -633,7 +633,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
       : classesFiltradas // slot vazio (classe nova): adicionar não é trocar, sem essa restrição
   );
 
-  const gruposEscolhaRacial = obterGruposEscolhaRacial(racaAtual);
+  const gruposEscolhaRacial = obterGruposEscolhaRacial(racaAtual, f.escolhaRacial || {});
 
   const salvarIdentidadeRacial = (novaRacaId: string, novaEscolhaRacial: Record<string, any>) => {
     const novaRaca = catalogo?.racas.find(raca => raca.id === novaRacaId) || null;
@@ -658,10 +658,10 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   };
 
   const handleEscolhaRacialChange = (campo: string, valor: string) => {
-    salvarIdentidadeRacial(f.racaId, {
-      ...(f.escolhaRacial || {}),
-      [campo]: valor,
-    });
+    const nova: Record<string, any> = { ...(f.escolhaRacial || {}), [campo]: valor };
+    // A variante pertence a uma Natureza: ao trocar de Natureza ela deixa de valer.
+    if (campo === 'naturezaId' && valor !== obterNaturezaRacialId(racaAtual, f.escolhaRacial)) delete nova.varianteId;
+    salvarIdentidadeRacial(f.racaId, nova);
   };
 
   const handleOrigemChange = (origemId: string) => {
@@ -822,8 +822,8 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
               <LabeledSelect
                 key={grupo.campo}
                 label={grupo.rotulo}
-                value={f.escolhaRacial?.[grupo.campo]}
-                options={grupo.opcoes.map(opcao => ({ value: opcao.id, label: opcao.titulo }))}
+                value={f.escolhaRacial?.[grupo.campo] ?? (grupo.campo === 'naturezaId' ? obterNaturezaRacialId(racaAtual, f.escolhaRacial) : undefined)}
+                options={opcoesEscolhiveis(grupo.opcoes, isMestre, f.escolhaRacial?.[grupo.campo]).map(opcao => ({ value: opcao.id, label: opcao.titulo }))}
                 onChange={(valor: string) => handleEscolhaRacialChange(grupo.campo, valor)}
                 disabled={!isMestre}
               />

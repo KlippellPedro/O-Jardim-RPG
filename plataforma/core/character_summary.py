@@ -636,6 +636,7 @@ def _opcao_racial_valida(raca: dict, campo: str, valor) -> bool:
     Campos que guardam listas (a escolha de atributos raciais) so precisam vir
     preenchidos - o conteudo deles ja e conferido em `_atributo_efetivo`."""
     colecao = {
+        "naturezaId": "naturezas",
         "varianteId": "variantes",
         "linhagemId": "linhagens",
         "condicaoAncestralId": "condicoes_ancestrais",
@@ -643,10 +644,39 @@ def _opcao_racial_valida(raca: dict, campo: str, valor) -> bool:
     }.get(campo)
     if colecao is None:
         return not _escolha_racial_vazia(valor)
+    # Opcao `somente_mestre` (o Fluxo Universal do Espirito) nunca e escolha do
+    # jogador: este validador so roda para ele.
     return any(
-        isinstance(item, dict) and str(item.get("id")) == str(valor)
+        isinstance(item, dict) and str(item.get("id")) == str(valor) and not item.get("somente_mestre")
         for item in raca.get(colecao) or []
     )
+
+
+def _natureza_racial_incoerente(raca: dict, escolha: dict, escolha_anterior: dict | None = None) -> str | None:
+    """A variante escolhida precisa pertencer a Natureza da ficha.
+
+    A Natureza e a escolhida ou, em ficha antiga que so guardou a variante, a da
+    propria variante. Uma variante `somente_mestre` so e aceita se ja estava na
+    ficha antes: o jogador nunca a escolhe."""
+    naturezas = {str(item.get("id")) for item in raca.get("naturezas") or [] if isinstance(item, dict)}
+    if not naturezas:
+        return None
+    natureza = escolha.get("naturezaId")
+    if natureza not in (None, "") and str(natureza) not in naturezas:
+        return "a natureza escolhida nao existe nesta raca"
+    variante_id = escolha.get("varianteId")
+    variante = next(
+        (item for item in raca.get("variantes") or [] if isinstance(item, dict) and str(item.get("id")) == str(variante_id)),
+        None,
+    )
+    if not variante:
+        return None
+    da_variante = variante.get("natureza")
+    if natureza not in (None, "") and da_variante and str(da_variante) != str(natureza):
+        return "a variante escolhida nao pertence a natureza da ficha"
+    if variante.get("somente_mestre") and variante_id != (escolha_anterior or {}).get("varianteId"):
+        return "esta escolha racial so pode ser concedida pelo mestre"
+    return None
 
 
 def _fluxo_efetivo(ficha: dict, raca: dict) -> int:
@@ -659,6 +689,7 @@ def _fluxo_efetivo(ficha: dict, raca: dict) -> int:
         ("linhagens", "linhagemId"),
         ("condicoes_ancestrais", "condicaoAncestralId"),
         ("naturezas_divinas", "naturezaDivinaId"),
+        ("naturezas", "naturezaId"),
     ):
         opcao = next(
             (
@@ -959,10 +990,15 @@ def validar_regras_ficha(
     for campo in ("proficiencias", "resistencias", "resistenciasTexto"):
         if not criacao and ficha.get(campo) != anterior.get(campo):
             return f"somente o mestre pode alterar {campo}"
+    escolha_atual = ficha.get("escolhaRacial") if isinstance(ficha.get("escolhaRacial"), dict) else {}
+    escolha_antes = anterior.get("escolhaRacial") if isinstance(anterior.get("escolhaRacial"), dict) else {}
+    erro = _natureza_racial_incoerente(raca, escolha_atual, None if criacao else escolha_antes)
+    if erro:
+        return erro
     if not criacao:
         escolha = ficha.get("escolhaRacial") if isinstance(ficha.get("escolhaRacial"), dict) else {}
         escolha_anterior = anterior.get("escolhaRacial") if isinstance(anterior.get("escolhaRacial"), dict) else {}
-        campos_fixos = {"varianteId", "linhagemId", "condicaoAncestralId", "naturezaDivinaId"}
+        campos_fixos = {"naturezaId", "varianteId", "linhagemId", "condicaoAncestralId", "naturezaDivinaId"}
         configuracao_atributos = raca.get("escolha_atributos")
         if isinstance(configuracao_atributos, dict) and configuracao_atributos.get("campo"):
             campos_fixos.add(str(configuracao_atributos["campo"]))
@@ -972,7 +1008,7 @@ def validar_regras_ficha(
             if atual == anterior_campo:
                 continue
             # Quando uma raca ganha uma escolha que nao existia na epoca em que a
-            # ficha foi criada (a Cor da Alma do Espirito, por exemplo), o jogador
+            # ficha foi criada (o Fluxo do Espirito, por exemplo), o jogador
             # preenche o campo vazio uma unica vez. Trocar um valor ja escolhido
             # continua sendo prerrogativa do mestre.
             if _escolha_racial_vazia(anterior_campo) and _opcao_racial_valida(raca, campo, atual):
@@ -1232,6 +1268,7 @@ def _atributo_efetivo(ficha: dict, atributo: str) -> int:
         ("linhagens", "linhagemId"),
         ("condicoes_ancestrais", "condicaoAncestralId"),
         ("naturezas_divinas", "naturezaDivinaId"),
+        ("naturezas", "naturezaId"),
     ):
         opcao = next((
             item for item in raca.get(colecao) or []

@@ -11,12 +11,14 @@ interface EstagiosRaciaisProps {
    * Alma" no Espírito, "Massa" no Slime, "Idade" no Elfo. */
   titulo?: string;
   descricao?: string;
+  /** Mostra só a escada desta Natureza (Espírito natural, demoníaco...). */
+  natureza?: string;
 }
 
 /** Escada de maturação por nível total. Só aparece para raças que declaram
  * `estagios` em data/ficha/racas.json. */
-export const EstagiosRaciais = ({ raca, tema, titulo = 'Estágios', descricao }: EstagiosRaciaisProps) => {
-  const estagios = obterEstagiosRaciais(raca);
+export const EstagiosRaciais = ({ raca, tema, titulo = 'Estágios', descricao, natureza }: EstagiosRaciaisProps) => {
+  const estagios = obterEstagiosRaciais(raca).filter(estagio => !natureza || !estagio.natureza || estagio.natureza === natureza);
   if (estagios.length === 0) return null;
 
   const texto = descricao

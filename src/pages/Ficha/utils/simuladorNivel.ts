@@ -250,8 +250,8 @@ export function simularCenario(ficha: any, cenario: ICenarioSimulacao): IResulta
   recompensas.sort((a, b) => a.nivel - b.nivel || a.classeTitulo.localeCompare(b.classeTitulo, 'pt-BR'));
 
   const raca = RACAS_CATALOGO.find((item) => item.id === ficha?.racaId) || null;
-  const estagiosAntes = new Set(obterEstagiosRaciaisAlcancados(raca, nivelAtual).map((estagio) => estagio.id));
-  const novosEstagiosRaciais = obterEstagiosRaciaisAlcancados(raca, nivelSimulado)
+  const estagiosAntes = new Set(obterEstagiosRaciaisAlcancados(raca, nivelAtual, ficha?.escolhaRacial ?? {}).map((estagio) => estagio.id));
+  const novosEstagiosRaciais = obterEstagiosRaciaisAlcancados(raca, nivelSimulado, ficha?.escolhaRacial ?? {})
     .filter((estagio) => !estagiosAntes.has(estagio.id))
     .map((estagio) => estagio.titulo);
 

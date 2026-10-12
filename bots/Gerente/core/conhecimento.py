@@ -201,10 +201,10 @@ class BaseConhecimento:
                     _campos_texto(caracteristica),
                     "raça",
                 )
-            # Sub-raças, linhagens e estágios (a Cor da Alma e os degraus do
+            # Sub-raças, linhagens e estágios (o Fluxo e os degraus do
             # Espírito, por exemplo) entram como trechos próprios: sem isso o
-            # jogador não acha "Espírito Vermelho" nem "Fúria Carmesim".
-            for colecao in ("variantes", "linhagens", "condicoes_ancestrais", "estagios"):
+            # jogador não acha "Espírito do Fluxo do Fim" nem "Fúria Carmesim".
+            for colecao in ("naturezas", "variantes", "linhagens", "condicoes_ancestrais", "estagios"):
                 for opcao in raca.get(colecao, []) or []:
                     titulo_opcao = opcao.get("titulo", opcao.get("id", "Opção"))
                     self._adicionar(

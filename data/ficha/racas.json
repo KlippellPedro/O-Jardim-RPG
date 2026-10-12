@@ -1082,11 +1082,11 @@
     "vida": -2,
     "mana": 3,
     "movimento": 0,
-    "descricao": "Não tem corpo pra alimentar nem pulmão pra encher. Enxerga no escuro, atravessa parede quando tem Mana sobrando e não usa armadura comum, porque não tem onde vestir. Cada espírito tem uma Cor, que é o Fluxo que prendeu ele ao mundo, e vai amadurecendo sozinho de Menor pra Maior e depois Primordial conforme sobe de nível. Fala Enoquiano.",
+    "descricao": "Não tem corpo pra alimentar nem pulmão pra encher. Enxerga no escuro, atravessa parede quando tem Mana sobrando e não usa armadura comum, porque não tem onde vestir. Quem morre fica assim, e a Natureza diz o que o espírito vira: natural, preso a um Fluxo; demoníaco, preso a um Pecado; ou angelical, sustentado por uma Virtude. Vai amadurecendo sozinho de Menor pra Maior e depois Primordial conforme sobe de nível. Fala Enoquiano.",
     "fisiologia": [
-      "Não precisa respirar, comer ou beber.",
+      "Não precisa respirar, comer ou beber enquanto está sem corpo.",
       "Enxerga normalmente em escuridão natural.",
-      "Não pode vestir armaduras comuns.",
+      "Sem corpo, não pode vestir armaduras comuns.",
       "Não envelhece: o que muda com o tempo é o estágio, não o corpo."
     ],
     "caracteristicas": [
@@ -1103,10 +1103,10 @@
       },
       {
         "id": "cor-da-alma",
-        "titulo": "Cor da Alma",
+        "titulo": "Natureza e Marca",
         "tipo": "escolha",
         "nivel_minimo": 1,
-        "descricao": "Na criação, escolha uma das onze Cores. Ela diz a qual Fluxo seu espírito ficou preso e quais características você desperta em cada estágio. Todas as Cores valem igual em poder; o que a escolha define é quais características você recebe.",
+        "descricao": "Na criação, escolha a Natureza do espírito e, dentro dela, a marca que prende você ao mundo: um dos onze Fluxos, se for natural, um dos sete Pecados, se for demoníaca, ou uma das sete Virtudes, se for angelical. A marca diz quais características você desperta em cada estágio, e todas valem igual em poder.",
         "automatizada": false
       },
       {
@@ -1114,17 +1114,75 @@
         "titulo": "Maturação Espiritual",
         "tipo": "progressao",
         "nivel_minimo": 1,
-        "descricao": "O que amadurece num Espírito é o estágio, e quem manda nele é o nível total. Você começa como Espírito Menor, vira Espírito Maior no nível total 15 e Espírito Primordial no 40. Cada degrau soma Mana, melhora a Passagem Etérea e desperta mais uma característica da sua Cor. Nada disso precisa de autorização.",
+        "descricao": "O que amadurece num espírito é o estágio, e quem manda nele é o nível total: Menor no começo, Maior no nível total 15 e Primordial no 40. Cada degrau soma Mana, melhora o que a Natureza dá e desperta mais uma característica da sua marca. Nada disso precisa de autorização.",
         "automatizada": false
       }
     ],
     "recursos_provisorios": false,
-    "rotulo_variante": "Cor da Alma",
-    "descricao_variantes": "Escolha uma única Cor, e ela vale para a vida inteira do personagem. As onze são equilibradas entre si: cada uma desperta uma característica no Espírito Menor, outra no Maior e outra no Primordial.",
+    "rotulo_natureza": "Natureza",
+    "descricao_naturezas": "Todo espírito é de uma Natureza. A natural é a de quem, depois de morrer, ficou preso a um Fluxo. A demoníaca é a de quem morreu carregando um Pecado e nunca largou, e que com o tempo aprende a vestir corpos alheios. A angelical é a de quem morreu carregando uma Virtude, e que com o tempo aprende a pedir um corpo emprestado.",
+    "naturezas": [
+      {
+        "id": "natural",
+        "titulo": "Espírito Natural",
+        "descricao": "Espírito sem corpo, preso a um Fluxo. É o espírito que todo mundo conhece. Atravessa parede e, a cada estágio, atravessa melhor.",
+        "rotulo_variante": "Fluxo"
+      },
+      {
+        "id": "demoniaca",
+        "titulo": "Espírito Demoníaco",
+        "descricao": "Morreu carregando um Pecado e nunca largou. O corpo ficou para trás, e o desejo ficou inteiro. Começa sem corpo como qualquer espírito. A partir do nível 5 aprende a entrar em corpos alheios e a usá-los, e cada degrau da evolução traz um poder do Pecado, quase sempre com um preço.",
+        "rotulo_variante": "Pecado",
+        "descricao_variantes": "Escolha um dos sete Pecados, e ele vale para a vida inteira do personagem. Os sete são equilibrados entre si: cada um desperta uma característica no Demônio Menor, outra no Maior e outra no Primordial, e quase todas cobram um preço.",
+        "fisiologia": [
+          "Sem corpo, não respira, não come, não bebe e não veste armadura comum.",
+          "Encarnado, respira, come e veste armadura como qualquer um, e perde a Passagem Etérea."
+        ],
+        "caracteristicas": [
+          {
+            "id": "possessao",
+            "titulo": "Possessão",
+            "tipo": "acao_completa",
+            "nivel_minimo": 5,
+            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura Média ou menor a até 1,5 m, ou num corpo morto há menos de um dia. Criatura viva e consciente testa Vontade contra o seu Misticismo; se passar, não pode ser alvo da sua Possessão até o próximo descanso. Em personagem de jogador, só com o consentimento dele. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Quem foi possuído apaga e acorda sem lembrar do que o corpo fez, e o mestre decide o que o corpo ainda sabe fazer. Sair do corpo é uma ação livre e devolve você à forma etérea. Se o corpo chegar a 0 de Vida, você é expulso e não consegue possuir ninguém até o próximo descanso.",
+            "custo_mana": 4,
+            "alcance_m": 1.5,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "angelical",
+        "titulo": "Espírito Angelical",
+        "descricao": "Morreu carregando uma Virtude, e ela não largou dele. O corpo ficou para trás, e a Virtude ficou inteira. Começa sem corpo como qualquer espírito. A partir do nível 5 aprende a encarnar, mas só com permissão: ou o dono do corpo empresta, ou o corpo já não tem dono. Cada degrau da evolução traz um poder da Virtude, quase sempre com um voto que limita.",
+        "rotulo_variante": "Virtude",
+        "descricao_variantes": "Escolha uma das sete Virtudes, e ela vale para a vida inteira do personagem. As sete são equilibradas entre si e espelham os sete Pecados: cada uma desperta uma característica no Anjo Menor, outra no Maior e outra no Primordial, e quase todas pedem um voto em troca.",
+        "fisiologia": [
+          "Sem corpo, não respira, não come, não bebe e não veste armadura comum.",
+          "Encarnado, respira, come e veste armadura como qualquer um, e perde a Passagem Etérea."
+        ],
+        "caracteristicas": [
+          {
+            "id": "encarnacao",
+            "titulo": "Encarnação",
+            "tipo": "acao_completa",
+            "nivel_minimo": 5,
+            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura Média ou menor, a até 1,5 m, que aceite, ou num corpo sem dono, morto há menos de um dia. Nunca à força: o dono voluntário continua desperto, ouve você e pode pedir que saia quando quiser, e personagem de jogador só empresta o corpo se o jogador quiser. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Sair do corpo é uma ação livre e devolve você à forma etérea, e o dono lembra de tudo o que viveu junto de você. Se o corpo chegar a 0 de Vida, você é expulso e não consegue encarnar até o próximo descanso.",
+            "custo_mana": 4,
+            "alcance_m": 1.5,
+            "automatizada": false
+          }
+        ]
+      }
+    ],
+    "rotulo_variante": "Fluxo",
+    "descricao_variantes": "Escolha um único Fluxo, e ele vale para a vida inteira do personagem. Os onze são equilibrados entre si: cada um desperta uma característica no Espírito Menor, outra no Maior e outra no Primordial. Há um décimo segundo, o Fluxo Universal, que o jogador não escolhe: só o Mestre concede.",
     "estagios": [
       {
         "id": "menor",
         "titulo": "Espírito Menor",
+        "natureza": "natural",
         "nivel_minimo": 1,
         "vida": 0,
         "mana": 0,
@@ -1133,6 +1191,7 @@
       {
         "id": "maior",
         "titulo": "Espírito Maior",
+        "natureza": "natural",
         "nivel_minimo": 15,
         "vida": 0,
         "mana": 3,
@@ -1161,6 +1220,7 @@
       {
         "id": "primordial",
         "titulo": "Espírito Primordial",
+        "natureza": "natural",
         "nivel_minimo": 40,
         "vida": 0,
         "mana": 6,
@@ -1196,10 +1256,178 @@
           },
           {
             "id": "fonte-da-cor",
-            "titulo": "Fonte da Cor",
+            "titulo": "Fonte do Fluxo",
             "tipo": "passiva",
             "nivel_minimo": 40,
-            "descricao": "Seu Fluxo já não vem de fora. Toda característica da sua Cor custa 3 Mana a menos, até o mínimo de zero, e você enxerga qualquer criatura incorpórea, invisível ou fora de fase a até 18 m, além de conseguir tocá-la normalmente.",
+            "descricao": "Seu Fluxo já não vem de fora. Toda característica do seu Fluxo custa 3 Mana a menos, até o mínimo de zero, e você enxerga qualquer criatura incorpórea, invisível ou fora de fase a até 18 m, além de conseguir tocá-la normalmente.",
+            "alcance_m": 18,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "demonio-menor",
+        "titulo": "Demônio Menor",
+        "natureza": "demoniaca",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "demonio-maior",
+        "titulo": "Demônio Maior",
+        "natureza": "demoniaca",
+        "nivel_minimo": 15,
+        "vida": 0,
+        "mana": 3,
+        "caracteristicas": [
+          {
+            "id": "pele-infernal",
+            "titulo": "Pele Infernal",
+            "tipo": "passiva",
+            "nivel_minimo": 15,
+            "descricao": "Receba Resistência 2 contra dano de fogo, com corpo ou sem ele.",
+            "automatizada": false
+          },
+          {
+            "id": "possessao-aprimorada",
+            "titulo": "Possessão Aprimorada",
+            "tipo": "passiva",
+            "nivel_minimo": 15,
+            "descricao": "Entrar num corpo custa 2 Mana em vez de 4 e vale também em criatura Grande. Um corpo possuído tem vantagem em testes de Vontade contra efeitos que tentem expulsar você.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "demonio-primordial",
+        "titulo": "Demônio Primordial",
+        "natureza": "demoniaca",
+        "nivel_minimo": 40,
+        "vida": 0,
+        "mana": 6,
+        "caracteristicas": [
+          {
+            "id": "posse-plena",
+            "titulo": "Posse Plena",
+            "tipo": "passiva",
+            "nivel_minimo": 40,
+            "descricao": "Sua Possessão não custa Mana e vale em criatura de qualquer tamanho. Trocar direto de um corpo para outro custa só uma ação de movimento, sem passar pela forma etérea. O teste de Vontade continua valendo, e personagem de jogador continua só com consentimento.",
+            "custo_mana": 0,
+            "automatizada": false
+          },
+          {
+            "id": "labareda-infernal",
+            "titulo": "Labareda Infernal",
+            "tipo": "acao",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação e 4 Mana para soltar o Inferno num cone de 9 m. Criaturas na área testam Reflexos contra o seu Misticismo e sofrem 6d6 de dano de fogo, ou metade se passarem.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 4,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_reflexos",
+            "automatizada": false
+          },
+          {
+            "id": "raiz-do-pecado",
+            "titulo": "Raiz do Pecado",
+            "tipo": "limitacao",
+            "nivel_minimo": 40,
+            "descricao": "Você tem uma Raiz, definida com o mestre: a pessoa, o lugar ou o hábito que alimenta o seu Pecado. Enquanto ela existir, você não envelhece e não morre de vez. Chegando a 0 de Vida, você se dispersa e se forma de novo junto da Raiz no fim da cena, com metade da Vida máxima e sem precisar de descanso. Destruir a Raiz exige descobrir o que ela é e alcançá-la; sem ela, você volta a morrer como qualquer um.",
+            "automatizada": false
+          },
+          {
+            "id": "fonte-do-pecado",
+            "titulo": "Fonte do Pecado",
+            "tipo": "passiva",
+            "nivel_minimo": 40,
+            "descricao": "Seu Pecado já não vem de fora. Toda característica do seu Pecado custa 3 Mana a menos, até o mínimo de zero, e você sente, a até 18 m, qualquer criatura que esteja agindo movida pelo seu Pecado, mesmo escondida, e sabe quem é.",
+            "alcance_m": 18,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "anjo-menor",
+        "titulo": "Anjo Menor",
+        "natureza": "angelical",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "anjo-maior",
+        "titulo": "Anjo Maior",
+        "natureza": "angelical",
+        "nivel_minimo": 15,
+        "vida": 0,
+        "mana": 3,
+        "caracteristicas": [
+          {
+            "id": "veu-de-luz",
+            "titulo": "Véu de Luz",
+            "tipo": "passiva",
+            "nivel_minimo": 15,
+            "descricao": "Receba Resistência 2 contra dano de raio, com corpo ou sem ele.",
+            "automatizada": false
+          },
+          {
+            "id": "encarnacao-aprimorada",
+            "titulo": "Encarnação Aprimorada",
+            "tipo": "passiva",
+            "nivel_minimo": 15,
+            "descricao": "Encarnar custa 2 Mana em vez de 4 e vale também em criatura Grande. Seu hospedeiro tem vantagem em testes de resistência contra medo e controle enquanto você estiver nele.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "anjo-primordial",
+        "titulo": "Anjo Primordial",
+        "natureza": "angelical",
+        "nivel_minimo": 40,
+        "vida": 0,
+        "mana": 6,
+        "caracteristicas": [
+          {
+            "id": "encarnacao-plena",
+            "titulo": "Encarnação Plena",
+            "tipo": "passiva",
+            "nivel_minimo": 40,
+            "descricao": "Sua Encarnação não custa Mana e vale em criatura de qualquer tamanho. Trocar direto de um corpo para outro custa só uma ação de movimento, sem passar pela forma etérea. O dono do corpo continua precisando aceitar.",
+            "custo_mana": 0,
+            "automatizada": false
+          },
+          {
+            "id": "coro-redentor",
+            "titulo": "Coro Redentor",
+            "tipo": "acao",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação e 4 Mana: aliados a até 9 m recuperam 4d6 de Vida e se livram de Amedrontado. Criaturas hostis na área testam Vontade contra o seu Misticismo e, falhando, perdem a próxima reação.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 4,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
+            "id": "voto-primordial",
+            "titulo": "Voto Primordial",
+            "tipo": "limitacao",
+            "nivel_minimo": 40,
+            "descricao": "Você tem um Voto, definido com o mestre: uma pessoa que jurou proteger, um lugar sagrado ou uma promessa. Enquanto ele existir, você não envelhece e não morre de vez. Chegando a 0 de Vida, você se dispersa e se forma de novo junto do Voto no fim da cena, com metade da Vida máxima e sem precisar de descanso. Se o Voto for quebrado, você volta a morrer como qualquer um.",
+            "automatizada": false
+          },
+          {
+            "id": "fonte-da-virtude",
+            "titulo": "Fonte da Virtude",
+            "tipo": "passiva",
+            "nivel_minimo": 40,
+            "descricao": "Sua Virtude já não vem de fora. Toda característica da sua Virtude custa 3 Mana a menos, até o mínimo de zero, e você sente, a até 18 m, qualquer criatura que esteja agindo movida pelo Pecado oposto à sua Virtude, mesmo escondida, e sabe quem é.",
             "alcance_m": 18,
             "automatizada": false
           }
@@ -1209,8 +1437,9 @@
     "variantes": [
       {
         "id": "rosa",
-        "titulo": "Rosa",
+        "titulo": "Origem",
         "fluxo": "origem",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1252,8 +1481,9 @@
       },
       {
         "id": "amarelo",
-        "titulo": "Amarelo",
+        "titulo": "Essência",
         "fluxo": "essencia",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1294,8 +1524,9 @@
       },
       {
         "id": "prata",
-        "titulo": "Prata",
+        "titulo": "Comunicação",
         "fluxo": "comunicacao",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1335,14 +1566,15 @@
       },
       {
         "id": "verde",
-        "titulo": "Verde",
+        "titulo": "Vitalidade",
         "fluxo": "vitalidade",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
           {
             "id": "sopro-verde",
-            "titulo": "Sopro Verde",
+            "titulo": "Sopro da Vitalidade",
             "tipo": "acao",
             "nivel_minimo": 1,
             "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para tocar uma criatura e recuperar 1d6 + Mod.Sabedoria de Vida dela.",
@@ -1379,8 +1611,9 @@
       },
       {
         "id": "laranja",
-        "titulo": "Laranja",
+        "titulo": "Inconstância",
         "fluxo": "inconstancia",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1423,8 +1656,9 @@
       },
       {
         "id": "marrom",
-        "titulo": "Marrom",
+        "titulo": "Físico",
         "fluxo": "fisico",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1461,8 +1695,9 @@
       },
       {
         "id": "roxo",
-        "titulo": "Roxo",
+        "titulo": "Espaço",
         "fluxo": "espaco",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1502,8 +1737,9 @@
       },
       {
         "id": "dourado",
-        "titulo": "Dourado Envelhecido",
+        "titulo": "Tempo",
         "fluxo": "tempo",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1545,8 +1781,9 @@
       },
       {
         "id": "preto",
-        "titulo": "Preto",
+        "titulo": "Vazio",
         "fluxo": "vazio",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1588,8 +1825,9 @@
       },
       {
         "id": "vermelho-vinho",
-        "titulo": "Vermelho Vinho",
+        "titulo": "Fim",
         "fluxo": "fim",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1632,8 +1870,9 @@
       },
       {
         "id": "azul-neon",
-        "titulo": "Azul Neon Artificial",
+        "titulo": "Tecnologia",
         "fluxo": "tecnologia",
+        "natureza": "natural",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1672,8 +1911,722 @@
             "automatizada": false
           }
         ]
+      },
+      {
+        "id": "branco",
+        "titulo": "Universal",
+        "fluxo": "universal",
+        "natureza": "natural",
+        "somente_mestre": true,
+        "descricao": "O Fluxo que toca todos os outros sem pertencer a nenhum. Quem o carrega usa o que qualquer Fluxo oferece, e paga com Mana extra por escolher na hora. Só o Mestre concede, e até hoje só Blanc é conhecida por tê-lo.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "toque-de-todos-os-fluxos",
+            "titulo": "Toque de Todos os Fluxos",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, escolha um dos onze Fluxos e use, uma vez, a característica de nível 1 dele, no tipo de ação que ela pede. Além do custo de Mana dela, pague 2 Mana. O limite de usos da característica emprestada não conta.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "automatizada": false
+          },
+          {
+            "id": "emprestimo-de-fluxo",
+            "titulo": "Empréstimo de Fluxo",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, escolha um dos onze Fluxos e use, uma vez, a característica de nível 15 dele, no tipo de ação que ela pede. Além do custo de Mana dela, pague 3 Mana. O limite de usos da característica emprestada não conta.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 3,
+            "automatizada": false
+          },
+          {
+            "id": "todos-os-fluxos-em-um",
+            "titulo": "Todos os Fluxos em Um",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, escolha um dos onze Fluxos e use, uma vez, a característica de nível 40 dele, no tipo de ação que ela pede. Além do custo de Mana dela, pague 4 Mana. A Fonte do Fluxo reduz o custo da característica emprestada, nunca esses 4. O limite de usos da característica emprestada não conta.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 4,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "demonio-soberba",
+        "titulo": "Soberba",
+        "natureza": "demoniaca",
+        "pecado": "pecado-soberba",
+        "virtude_oposta": "virtude-humildade",
+        "descricao": "Morreu convencido de que não devia nada a ninguém, e continua convencido. Toda ajuda alheia soa como ofensa.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "altivez",
+            "titulo": "Altivez",
+            "tipo": "rerrolagem",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste 2 Mana para rerrolar um teste que você acabou de falhar e que fez sem receber auxílio de ninguém. Mantenha o novo resultado.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "automatizada": false
+          },
+          {
+            "id": "olhar-de-cima",
+            "titulo": "Olhar de Cima",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 3 Mana: uma criatura que você veja a até 18 m testa Vontade contra o seu Misticismo. Falhando, ela tem desvantagem em todos os testes contra você por 3 rodadas. Nesse tempo, você não pode receber auxílio nem cura de aliados.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 3,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
+            "id": "coroa-propria",
+            "titulo": "Coroa Própria",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas você fica imune a Amedrontado e a controle mental e recebe +6 em todo teste que fizer sem auxílio. Nesse tempo, todo bônus e toda cura que viria de outra criatura vale zero em você.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "demonio-ganancia",
+        "titulo": "Ganância",
+        "natureza": "demoniaca",
+        "pecado": "pecado-avareza",
+        "virtude_oposta": "virtude-caridade",
+        "descricao": "Morreu contando o que tinha e ainda conta. Sente o brilho de tudo que vale alguma coisa, e não larga o que pega.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "faro-de-tesouro",
+            "titulo": "Faro de Tesouro",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste 2 Mana para sentir todo metal precioso e objeto de valor a até 18 m, mesmo escondido, e saber quanto vale cada um. Se você não for atrás de pelo menos um deles antes do fim da cena, tem desvantagem no seu próximo teste de Vontade.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
+            "id": "mao-pesada",
+            "titulo": "Mão Pesada",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana: um item que uma criatura a até 9 m carrega, na mão ou no cinto, vai parar na sua mão se ela falhar em Reflexos contra o seu Misticismo. Armadura vestida e item preso ao corpo não saem. Você não consegue devolver nem dar o item até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_reflexos",
+            "automatizada": false
+          },
+          {
+            "id": "avidez-sem-fundo",
+            "titulo": "Avidez Sem Fundo",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas, cada criatura hostil a até 9 m perde 2 Mana no início do turno dela, e você recupera metade do que foi tirado de todas, até o seu máximo. Nesse tempo, você não consegue largar nem entregar nada que esteja carregando.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 9,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "demonio-luxuria",
+        "titulo": "Luxúria",
+        "natureza": "demoniaca",
+        "pecado": "pecado-luxuria",
+        "virtude_oposta": "virtude-castidade",
+        "descricao": "Morreu querendo, e quer até hoje. Sabe o que cada um deseja e usa isso como quem usa uma chave.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "olhar-que-pede",
+            "titulo": "Olhar que Pede",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste 2 Mana: uma criatura que te veja a até 9 m testa Vontade contra o seu Misticismo. Falhando, ela tem desvantagem no próximo ataque contra você e você descobre o que ela mais deseja neste momento. Passando, você fica com desvantagem em Vontade contra ela até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
+            "id": "promessa-doce",
+            "titulo": "Promessa Doce",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana: uma criatura que entenda você, a até 9 m, testa Vontade contra o seu Misticismo. Falhando, ela passa 3 rodadas tratando você como aliado e fazendo o que não a coloque em perigo evidente. O efeito acaba se você ou um aliado seu a ferir. Ela lembra de tudo, e você tem desvantagem em testes contra encantamento até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
+            "id": "vicio-irresistivel",
+            "titulo": "Vício Irresistível",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: uma criatura a até 18 m testa Vontade contra o seu Misticismo. Falhando, por 1 minuto ela obedece a ordens simples que não a firam e não consegue atacar você. Quando o efeito termina, ela sabe quem foi, e você sofre 1 de Cansaço.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "demonio-inveja",
+        "titulo": "Inveja",
+        "natureza": "demoniaca",
+        "pecado": "pecado-inveja",
+        "virtude_oposta": "virtude-gratidao",
+        "descricao": "Morreu olhando o que era dos outros. Toma emprestado o talento de quem passa por perto, e nunca gosta do que sobra.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "cobica-de-talento",
+            "titulo": "Cobiça de Talento",
+            "tipo": "reacao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, quando uma criatura a até 18 m passar num teste de perícia à sua vista, gaste uma reação e 2 Mana: no seu próximo teste dessa perícia na cena, use o bônus dela no lugar do seu, se for maior. Até lá, você tem desvantagem em testes para ajudar essa criatura.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
+            "id": "rosto-emprestado",
+            "titulo": "Rosto Emprestado",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para assumir por 1 hora a aparência e a voz de alguém que você observou de perto por pelo menos um minuto. Quem desconfiar testa Percepção contra o seu Misticismo. A ilusão cai se você elogiar a pessoa imitada ou se ela aparecer na cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "roubo-de-poder",
+            "titulo": "Roubo de Poder",
+            "tipo": "reacao",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma reação e 8 Mana quando uma criatura a até 18 m usar uma habilidade ou magia: você a usa também, uma vez, logo em seguida, sem pagar o custo dela, mas só se for de nível ou círculo até o 5º. Depois disso, você sofre 2d6 de dano mental, porque a cópia nunca pesa o mesmo que o original.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 18,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "demonio-gula",
+        "titulo": "Gula",
+        "natureza": "demoniaca",
+        "pecado": "pecado-gula",
+        "virtude_oposta": "virtude-temperanca",
+        "descricao": "Morreu com fome e a fome ficou. Devora o que encontra, e quanto mais devora, menos sente.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "devorar",
+            "titulo": "Devorar",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para sorver a vitalidade de comida, bebida ou matéria orgânica fresca a até 1,5 m, que se desfaz: recupere 2d6 de Vida. Funciona mesmo sem corpo. Depois de usar, você tem desvantagem no próximo teste de Vontade da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 1.5,
+            "automatizada": false
+          },
+          {
+            "id": "dente-faminto",
+            "titulo": "Dente Faminto",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana: o seu próximo ataque corpo a corpo desta rodada causa +3d6 de dano e você recupera metade do dano causado em Vida. Se isso levar o alvo a 0, você gasta o resto do turno devorando-o.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "banquete-final",
+            "titulo": "Banquete Final",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: até três criaturas a até 9 m sofrem 4d6 de dano cada uma, e você recupera Vida igual a metade do total causado. Até o fim da cena, nenhuma cura que não venha de devorar rende mais de metade em você.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 9,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "demonio-ira",
+        "titulo": "Ira",
+        "natureza": "demoniaca",
+        "pecado": "pecado-ira",
+        "virtude_oposta": "virtude-paciencia",
+        "descricao": "Morreu furioso e a raiva nunca esfriou. Cada golpe que recebe vira combustível, e a calma é o que mais lhe falta.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "sangue-quente",
+            "titulo": "Sangue Quente",
+            "tipo": "reacao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, ao sofrer dano, gaste uma reação e 2 Mana: o seu próximo ataque nesta rodada causa +1d6 de dano. Até o fim da cena, recusar provocação ou desafio exige passar em Vontade DT 12.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "automatizada": false
+          },
+          {
+            "id": "corpo-em-brasa",
+            "titulo": "Corpo em Brasa",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana: por 3 rodadas, seus ataques causam +1d6 de dano de fogo e quem te acertar corpo a corpo sofre 1d6 de dano de fogo. Nesse tempo, sua Defesa cai 3.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "ira-dos-condenados",
+            "titulo": "Ira dos Condenados",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, você tem uma ação de ataque extra por turno e seus ataques ignoram até 5 de Resistência. Nesse tempo, você precisa atacar a criatura mais próxima, aliada ou não, e não consegue terminar o turno sem ter atacado.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 10,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "demonio-preguica",
+        "titulo": "Preguiça",
+        "natureza": "demoniaca",
+        "pecado": "pecado-preguica",
+        "virtude_oposta": "virtude-diligencia",
+        "descricao": "Morreu sem vontade de levantar e o mundo parou de pedir. Tudo ao redor anda mais devagar, ele inclusive.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "entorpecer",
+            "titulo": "Entorpecer",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste uma ação e 2 Mana: uma criatura a até 9 m testa Fortitude contra o seu Misticismo. Falhando, o Movimento dela cai pela metade até o fim do próximo turno dela. Você, em troca, perde 3 m de Movimento até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_fortitude",
+            "automatizada": false
+          },
+          {
+            "id": "cochilo-profundo",
+            "titulo": "Cochilo Profundo",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana: recupere 3d6 de Vida e remova 1 de Cansaço. Em troca, você não faz nada até o início do seu próximo turno, nem reações.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "mundo-em-camera-lenta",
+            "titulo": "Mundo em Câmera Lenta",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas, criaturas hostis a até 18 m testam Fortitude contra o seu Misticismo. Falhando, perdem a ação de movimento do turno delas e têm desvantagem em Iniciativa. Nesse tempo, seu Movimento cai pela metade.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_fortitude",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "anjo-humildade",
+        "titulo": "Humildade",
+        "natureza": "angelical",
+        "virtude": "virtude-humildade",
+        "pecado_oposto": "pecado-soberba",
+        "descricao": "Morreu sem pedir nada pelo que fez, e continua assim. Prefere que o outro vença.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "mao-estendida",
+            "titulo": "Mão Estendida",
+            "tipo": "reacao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, ao auxiliar o teste de um aliado a até 9 m, gaste 2 Mana: o auxílio vale +4 em vez de +2. Em troca, no próximo teste que você fizer sozinho nesta cena, você tem desvantagem.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "ceder-o-passo",
+            "titulo": "Ceder o Passo",
+            "tipo": "reacao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, quando um aliado a até 9 m for sofrer dano, gaste uma reação e 3 Mana: você sofre metade desse dano no lugar dele, e ele não sofre nada.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 3,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "escudo-dos-humildes",
+            "titulo": "Escudo dos Humildes",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas, todo aliado a até 9 m recebe +4 em testes feitos com auxílio de outro e Resistência 3 contra dano físico comum. Nesse tempo, você não recebe nenhum desses bônus e não pode ser curado.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 9,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "anjo-caridade",
+        "titulo": "Caridade",
+        "natureza": "angelical",
+        "virtude": "virtude-caridade",
+        "pecado_oposto": "pecado-avareza",
+        "descricao": "Morreu dando o que tinha e ainda dá. Percebe quem precisa antes de ouvir o pedido.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "olhar-atento",
+            "titulo": "Olhar Atento",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste 2 Mana para sentir toda criatura a até 18 m que esteja ferida, doente ou precisando de ajuda, e saber do que precisa. Se você não ajudar pelo menos uma delas antes do fim da cena, tem desvantagem no seu próximo teste de Vontade.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
+            "id": "mao-aberta",
+            "titulo": "Mão Aberta",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana: um item que você carrega, na mão ou no cinto, vai parar na mão de um aliado voluntário a até 18 m, e o primeiro teste que ele fizer usando o item recebe +4. Você não consegue pegar o item de volta até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
+            "id": "fartura",
+            "titulo": "Fartura",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas, cada aliado a até 9 m recupera 2 Mana no início do turno dele, e você perde a mesma quantidade de Mana, até o mínimo de zero.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 9,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "anjo-castidade",
+        "titulo": "Castidade",
+        "natureza": "angelical",
+        "virtude": "virtude-castidade",
+        "pecado_oposto": "pecado-luxuria",
+        "descricao": "Morreu inteiro, sem dever a desejo nenhum. Ninguém consegue puxá-lo para onde ele não quer ir.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "olhar-limpo",
+            "titulo": "Olhar Limpo",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste 2 Mana: você e os aliados a até 9 m têm vantagem no próximo teste de Vontade contra encantamento, sedução ou persuasão, e você percebe na hora quando alguém tenta manipular um de vocês. Em troca, você tem desvantagem em Enganação até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "recusa-firme",
+            "titulo": "Recusa Firme",
+            "tipo": "reacao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, quando você ou um aliado a até 9 m falhar num teste de resistência contra encantamento, medo ou controle, gaste uma reação e 4 Mana: o teste é refeito com vantagem. Quem tentou o efeito sabe que foi percebido, e você tem desvantagem em testes sociais com ele até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "voto-inquebravel",
+            "titulo": "Voto Inquebrável",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 1 minuto, você e os aliados a até 9 m ficam imunes a encantamento e a controle mental, e quem tentar um efeito assim contra o grupo sofre 4d6 de dano mental. Quando o efeito termina, você sofre 1 de Cansaço.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 9,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "anjo-gratidao",
+        "titulo": "Gratidão",
+        "natureza": "angelical",
+        "virtude": "virtude-gratidao",
+        "pecado_oposto": "pecado-inveja",
+        "descricao": "Morreu lembrando de cada mão que o ajudou. Faz questão de devolver, e de devolver em dobro.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "memoria-de-favores",
+            "titulo": "Memória de Favores",
+            "tipo": "reacao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, quando um aliado a até 18 m passar num teste de perícia à sua vista, gaste uma reação e 2 Mana: ele e outro aliado a até 18 m recebem +2 no próximo teste da mesma perícia nesta cena. Você não recebe o bônus.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
+            "id": "elo-de-gratidao",
+            "titulo": "Elo de Gratidão",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana: escolha um aliado a até 9 m. Por 3 rodadas, sempre que um de vocês acertar um ataque, o outro recebe +1d6 de dano no próximo ataque dele. Nesse tempo, você não pode atacar nem ferir quem tenha ajudado você nesta cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "divida-paga",
+            "titulo": "Dívida Paga",
+            "tipo": "reacao",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma reação e 8 Mana quando um aliado a até 18 m usar uma habilidade ou magia: o efeito se repete, uma vez, sem custo, sobre outro alvo à sua escolha, mas só se a habilidade ou magia for de nível ou círculo até o 5º. Depois disso, você perde 4 Mana pelo peso da dívida.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 18,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "anjo-moderacao",
+        "titulo": "Moderação",
+        "natureza": "angelical",
+        "virtude": "virtude-temperanca",
+        "pecado_oposto": "pecado-gula",
+        "descricao": "Morreu sabendo parar na hora certa. Conhece o tamanho exato de cada coisa.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "pouco-basta",
+            "titulo": "Pouco Basta",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para purgar o excesso: remova um veneno, uma doença ou uma embriaguez sobre você ou sobre um aliado a até 1,5 m, e o alvo recupera 1d6 de Vida. Depois de usar, você não recebe cura até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 1.5,
+            "automatizada": false
+          },
+          {
+            "id": "medida-certa",
+            "titulo": "Medida Certa",
+            "tipo": "reacao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma reação e 4 Mana quando uma criatura a até 9 m for causar dano: ela rola o dano e só metade vale, arredondada para baixo. Em troca, o seu próximo ataque também causa só metade do dano.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "mesa-posta",
+            "titulo": "Mesa Posta",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: até três aliados a até 9 m recuperam 4d6 de Vida cada um e ficam livres de veneno, doença e fome. Você não pode receber nenhuma cura até o fim da cena.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 9,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "anjo-paciencia",
+        "titulo": "Paciência",
+        "natureza": "angelical",
+        "virtude": "virtude-paciencia",
+        "pecado_oposto": "pecado-ira",
+        "descricao": "Morreu sem pressa e sem rancor. Espera o golpe passar e responde com calma.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "calma-subita",
+            "titulo": "Calma Súbita",
+            "tipo": "reacao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, ao sofrer dano, gaste uma reação e 2 Mana: reduza esse dano em 1d6. Até o fim da próxima rodada, você tem desvantagem no seu primeiro ataque.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "automatizada": false
+          },
+          {
+            "id": "corpo-de-pedra",
+            "titulo": "Corpo de Pedra",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana: por 3 rodadas, sua Defesa aumenta em 3 e você recebe Resistência 2 contra dano físico comum. Nesse tempo, seus ataques causam 1d6 a menos de dano.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "paz-imposta",
+            "titulo": "Paz Imposta",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, criaturas hostis a até 9 m testam Vontade contra o seu Misticismo no início de cada turno delas; falhando, não conseguem atacar naquele turno. Nesse tempo, você não pode atacar nem causar dano.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 10,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "anjo-diligencia",
+        "titulo": "Diligência",
+        "natureza": "angelical",
+        "virtude": "virtude-diligencia",
+        "pecado_oposto": "pecado-preguica",
+        "descricao": "Morreu trabalhando e continua. Quando todos descansam, ele já começou o dia.",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "passo-ligeiro",
+            "titulo": "Passo Ligeiro",
+            "tipo": "movimento",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste 2 Mana: ganhe +3 m de Movimento até o fim da cena e uma ação de movimento adicional neste turno. Em troca, você tem desvantagem em Furtividade até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "automatizada": false
+          },
+          {
+            "id": "trabalho-dobrado",
+            "titulo": "Trabalho Dobrado",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para ter uma ação adicional neste turno, que não pode ser de ataque nem de conjurar magia. No início do seu próximo turno, você perde a ação de movimento.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "mundo-em-pressa",
+            "titulo": "Mundo em Pressa",
+            "tipo": "acao_completa",
+            "nivel_minimo": 40,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas, você e os aliados a até 18 m recebem +6 m de Movimento, uma ação de movimento adicional por turno e vantagem em Iniciativa. Quando termina, você sofre 1 de Cansaço.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 18,
+            "automatizada": false
+          }
+        ]
       }
-    ]
+    ],
+    "natureza_padrao": "natural"
   },
   {
     "id": "gigante",

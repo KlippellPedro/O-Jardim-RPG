@@ -12,45 +12,128 @@ export function nomeExibicaoRaca(racaId: string | undefined, nomePersonalizado: 
   return tituloCatalogo || '';
 }
 
-export type CampoEscolhaRacial = 'varianteId' | 'linhagemId' | 'condicaoAncestralId' | 'naturezaDivinaId';
+export type CampoEscolhaRacial = 'naturezaId' | 'varianteId' | 'linhagemId' | 'condicaoAncestralId' | 'naturezaDivinaId';
 
 export interface GrupoEscolhaRacial {
   campo: CampoEscolhaRacial;
+  /** Identifica o grupo na tela: o campo, mais a Natureza quando as variantes
+   * de cada uma aparecem em seções separadas. */
+  chave: string;
   rotulo: string;
   descricao: string;
   opcoes: IOpcaoRacial[];
 }
 
 const CAMPOS_ESCOLHA_RACIAL: CampoEscolhaRacial[] = [
+  'naturezaId',
   'varianteId',
   'linhagemId',
   'condicaoAncestralId',
   'naturezaDivinaId',
 ];
 
-export function obterGruposEscolhaRacial(raca: IRaca | null | undefined): GrupoEscolhaRacial[] {
+/** Natureza que vale para a ficha: a escolhida, a única que a raça tem ou, em
+ * ficha antiga que só guardou a variante, a natureza dessa variante. Raça sem
+ * `naturezas` devolve null.
+ *
+ * `comPadrao` completa o que falta com `natureza_padrao` da raça. É para contas
+ * (estágios, traços), onde a ficha antiga sem escolha nenhuma precisa continuar
+ * valendo como era. A tela de escolha não usa: quem está criando decide. */
+export function obterNaturezaRacialId(
+  raca: IRaca | null | undefined,
+  escolhaRacial: Record<string, unknown> | null | undefined,
+  comPadrao = false,
+): string | null {
+  const naturezas = raca?.naturezas;
+  if (!Array.isArray(naturezas) || naturezas.length === 0) return null;
+  const existe = (id: unknown): id is string => typeof id === 'string' && naturezas.some(natureza => natureza.id === id);
+  const explicita = escolhaRacial?.naturezaId;
+  if (existe(explicita)) return explicita;
+  if (naturezas.length === 1) return naturezas[0].id;
+  const variante = raca?.variantes?.find(item => item.id === escolhaRacial?.varianteId);
+  if (existe(variante?.natureza)) return variante.natureza;
+  return comPadrao && existe(raca?.natureza_padrao) ? raca.natureza_padrao : null;
+}
+
+export function obterNaturezaRacial(
+  raca: IRaca | null | undefined,
+  escolhaRacial: Record<string, unknown> | null | undefined,
+  comPadrao = false,
+): IOpcaoRacial | null {
+  const id = obterNaturezaRacialId(raca, escolhaRacial, comPadrao);
+  return id ? raca?.naturezas?.find(natureza => natureza.id === id) ?? null : null;
+}
+
+/** Grupos de escolha da raça, na ordem em que o jogador decide.
+ *
+ * Com `escolhaRacial`, as variantes saem filtradas pela Natureza da ficha (e
+ * ficam de fora enquanto a Natureza não está definida). Sem ele, listam todas:
+ * é o que as páginas de regras mostram. Opções `somente_mestre` continuam na
+ * lista; quem oferece a escolha ao jogador filtra com `opcoesEscolhiveis`. */
+export function obterGruposEscolhaRacial(
+  raca: IRaca | null | undefined,
+  escolhaRacial?: Record<string, unknown> | null,
+): GrupoEscolhaRacial[] {
   if (!raca) return [];
 
   const grupos: GrupoEscolhaRacial[] = [];
+  const filtrarPorNatureza = escolhaRacial !== undefined && Array.isArray(raca.naturezas) && raca.naturezas.length > 0;
+  const natureza = filtrarPorNatureza ? obterNaturezaRacial(raca, escolhaRacial) : null;
+
   if (Array.isArray(raca.naturezas_divinas) && raca.naturezas_divinas.length > 0) {
     grupos.push({
       campo: 'naturezaDivinaId',
+      chave: 'naturezaDivinaId',
       rotulo: raca.rotulo_natureza_divina || 'Natureza Divina',
       descricao: raca.descricao_naturezas_divinas || 'Escolha se o personagem é Deus ou Semideus.',
       opcoes: raca.naturezas_divinas,
     });
   }
-  if (Array.isArray(raca.variantes) && raca.variantes.length > 0) {
+  // Uma Natureza só não é escolha: ela vale por padrão e não ocupa um passo.
+  if (Array.isArray(raca.naturezas) && raca.naturezas.length > 1) {
     grupos.push({
-      campo: 'varianteId',
-      rotulo: raca.rotulo_variante || (raca.id === 'automato' ? 'Chassi' : 'Variante racial'),
-      descricao: raca.descricao_variantes || 'Escolha uma das opções raciais disponíveis.',
-      opcoes: raca.variantes,
+      campo: 'naturezaId',
+      chave: 'naturezaId',
+      rotulo: raca.rotulo_natureza || 'Natureza',
+      descricao: raca.descricao_naturezas || 'Escolha a natureza da raça.',
+      opcoes: raca.naturezas,
     });
+  }
+  if (Array.isArray(raca.variantes) && raca.variantes.length > 0) {
+    const secoesPorNatureza = escolhaRacial === undefined && Array.isArray(raca.naturezas) && raca.naturezas.length > 1;
+    if (secoesPorNatureza) {
+      // Páginas de regras: uma seção por Natureza, cada uma com o seu rótulo.
+      for (const item of raca.naturezas!) {
+        const daNatureza = raca.variantes.filter(variante => !variante.natureza || variante.natureza === item.id);
+        if (daNatureza.length === 0) continue;
+        grupos.push({
+          campo: 'varianteId',
+          chave: `varianteId:${item.id}`,
+          rotulo: item.rotulo_variante || raca.rotulo_variante || 'Variante racial',
+          descricao: item.descricao_variantes || raca.descricao_variantes || 'Escolha uma das opções raciais disponíveis.',
+          opcoes: daNatureza,
+        });
+      }
+    } else {
+      const escondida = filtrarPorNatureza && !natureza;
+      const opcoes = filtrarPorNatureza
+        ? raca.variantes.filter(variante => !variante.natureza || variante.natureza === natureza?.id)
+        : raca.variantes;
+      if (!escondida && opcoes.length > 0) {
+        grupos.push({
+          campo: 'varianteId',
+          chave: 'varianteId',
+          rotulo: natureza?.rotulo_variante || raca.rotulo_variante || (raca.id === 'automato' ? 'Chassi' : 'Variante racial'),
+          descricao: natureza?.descricao_variantes || raca.descricao_variantes || 'Escolha uma das opções raciais disponíveis.',
+          opcoes,
+        });
+      }
+    }
   }
   if (Array.isArray(raca.linhagens) && raca.linhagens.length > 0) {
     grupos.push({
       campo: 'linhagemId',
+      chave: 'linhagemId',
       rotulo: 'Linhagem Élfica',
       descricao: 'Escolha uma das seis Linhagens Élficas. Ela vem de berço e não muda mais; nenhuma é mais forte que as outras, e cada uma resolve a cena do seu jeito.',
       opcoes: raca.linhagens,
@@ -59,6 +142,7 @@ export function obterGruposEscolhaRacial(raca: IRaca | null | undefined): GrupoE
   if (Array.isArray(raca.condicoes_ancestrais) && raca.condicoes_ancestrais.length > 0) {
     grupos.push({
       campo: 'condicaoAncestralId',
+      chave: 'condicaoAncestralId',
       rotulo: 'Condição Ancestral',
       descricao: 'Escolha a condição que explica o retorno do Desperto.',
       opcoes: raca.condicoes_ancestrais,
@@ -67,11 +151,21 @@ export function obterGruposEscolhaRacial(raca: IRaca | null | undefined): GrupoE
   return grupos;
 }
 
+/** O que o jogador pode marcar: opção `somente_mestre` só aparece para o
+ * Mestre, ou quando já é a escolha da ficha (senão o campo ficaria sem rótulo). */
+export function opcoesEscolhiveis(
+  opcoes: IOpcaoRacial[],
+  mestre: boolean,
+  atualId?: unknown,
+): IOpcaoRacial[] {
+  return opcoes.filter(opcao => opcao.somente_mestre !== true || mestre || opcao.id === atualId);
+}
+
 export function escolhaRacialEstaCompleta(
   raca: IRaca | null | undefined,
   escolhaRacial: Record<string, unknown> | null | undefined,
 ): boolean {
-  return obterGruposEscolhaRacial(raca).every(grupo => {
+  return obterGruposEscolhaRacial(raca, escolhaRacial ?? {}).every(grupo => {
     const valor = escolhaRacial?.[grupo.campo];
     return typeof valor === 'string' && grupo.opcoes.some(opcao => opcao.id === valor);
   });
@@ -89,7 +183,7 @@ export function obterOpcaoRacialSelecionada(
   raca: IRaca | null | undefined,
   escolhaRacial: Record<string, unknown> | null | undefined,
 ): IOpcaoRacial | null {
-  for (const grupo of obterGruposEscolhaRacial(raca)) {
+  for (const grupo of obterGruposEscolhaRacial(raca, escolhaRacial ?? {})) {
     const selecionada = grupo.opcoes.find(opcao => opcao.id === escolhaRacial?.[grupo.campo]);
     if (selecionada) return selecionada;
   }
@@ -102,10 +196,14 @@ export function obterOpcoesRaciaisSelecionadas(
   raca: IRaca | null | undefined,
   escolhaRacial: Record<string, unknown> | null | undefined,
 ): IOpcaoRacial[] {
-  return obterGruposEscolhaRacial(raca).flatMap(grupo => {
+  const selecionadas = obterGruposEscolhaRacial(raca, escolhaRacial ?? {}).flatMap(grupo => {
     const selecionada = grupo.opcoes.find(opcao => opcao.id === escolhaRacial?.[grupo.campo]);
     return selecionada ? [selecionada] : [];
   });
+  // Natureza única não vira grupo, mas os traços e bônus dela valem do mesmo jeito.
+  const natureza = obterNaturezaRacial(raca, escolhaRacial, true);
+  if (natureza && !selecionadas.includes(natureza)) selecionadas.unshift(natureza);
+  return selecionadas;
 }
 
 /** Nível total a partir do qual o traço passa a valer. Sem o campo, vale desde
@@ -118,28 +216,50 @@ export function tracoDisponivelNoNivel(traco: ICaracteristicaRacial, nivel: numb
   return Math.max(1, Math.trunc(Number(nivel) || 1)) >= nivelMinimoTraco(traco);
 }
 
-/** Escada de maturação da raça (hoje só o Espírito: Menor, Maior, Primordial),
- * sempre em ordem crescente de nível exigido. */
-export function obterEstagiosRaciais(raca: IRaca | null | undefined): IOpcaoRacial[] {
+/** Escada de maturação da raça (Espírito: Menor, Maior, Primordial), sempre em
+ * ordem crescente de nível exigido.
+ *
+ * Um estágio com `natureza` só vale para essa Natureza (o Demônio Menor não é
+ * um Espírito Menor). Com `escolhaRacial`, devolve só a escada da ficha; sem
+ * ele, todas, e é o que as páginas de regras mostram. */
+export function obterEstagiosRaciais(
+  raca: IRaca | null | undefined,
+  escolhaRacial?: Record<string, unknown> | null,
+): IOpcaoRacial[] {
   if (!Array.isArray(raca?.estagios)) return [];
-  return [...raca.estagios].sort((a, b) => nivelMinimoTraco(a) - nivelMinimoTraco(b));
+  let estagios = [...raca.estagios];
+  if (escolhaRacial !== undefined && Array.isArray(raca.naturezas) && raca.naturezas.length > 0) {
+    const natureza = obterNaturezaRacialId(raca, escolhaRacial, true);
+    estagios = estagios.filter(estagio => !estagio.natureza || estagio.natureza === natureza);
+  }
+  // Com mais de uma escada na lista, cada Natureza fica junta e na ordem em que a raça a declara.
+  const ordemDaNatureza = (estagio: IOpcaoRacial) => raca.naturezas?.findIndex(item => item.id === estagio.natureza) ?? -1;
+  return estagios.sort((a, b) => ordemDaNatureza(a) - ordemDaNatureza(b) || nivelMinimoTraco(a) - nivelMinimoTraco(b));
 }
 
 /** Estágios que o personagem já alcançou. Eles se somam: o Primordial continua
  * com o que o Maior deu. */
-export function obterEstagiosRaciaisAlcancados(raca: IRaca | null | undefined, nivel: number): IOpcaoRacial[] {
+export function obterEstagiosRaciaisAlcancados(
+  raca: IRaca | null | undefined,
+  nivel: number,
+  escolhaRacial?: Record<string, unknown> | null,
+): IOpcaoRacial[] {
   const nivelTotal = Math.max(1, Math.trunc(Number(nivel) || 1));
-  return obterEstagiosRaciais(raca).filter(estagio => nivelTotal >= nivelMinimoTraco(estagio));
+  return obterEstagiosRaciais(raca, escolhaRacial).filter(estagio => nivelTotal >= nivelMinimoTraco(estagio));
 }
 
 /** O estágio atual - o último já alcançado. */
-export function obterEstagioRacialAtivo(raca: IRaca | null | undefined, nivel: number): IOpcaoRacial | null {
-  const alcancados = obterEstagiosRaciaisAlcancados(raca, nivel);
+export function obterEstagioRacialAtivo(
+  raca: IRaca | null | undefined,
+  nivel: number,
+  escolhaRacial?: Record<string, unknown> | null,
+): IOpcaoRacial | null {
+  const alcancados = obterEstagiosRaciaisAlcancados(raca, nivel, escolhaRacial);
   return alcancados.length > 0 ? alcancados[alcancados.length - 1] : null;
 }
 
 /** Todos os traços que valem no nível informado: os da raça, os da opção racial
- * escolhida (Cor da Alma, linhagem, condição ancestral) e os dos estágios já
+ * escolhida (Fluxo, Virtude ou Pecado, linhagem, condição ancestral) e os dos estágios já
  * alcançados, cada um respeitando o próprio `nivel_minimo`. */
 export function obterTracosRaciaisDisponiveis(
   raca: IRaca | null | undefined,
@@ -151,7 +271,7 @@ export function obterTracosRaciaisDisponiveis(
   const tracos = [
     ...(raca.caracteristicas || []),
     ...opcoes.flatMap(obterTracosOpcaoRacial),
-    ...obterEstagiosRaciaisAlcancados(raca, nivel).flatMap(estagio => estagio.caracteristicas || []),
+    ...obterEstagiosRaciaisAlcancados(raca, nivel, escolhaRacial ?? {}).flatMap(estagio => estagio.caracteristicas || []),
   ];
   return tracos.filter(traco => tracoDisponivelNoNivel(traco, nivel));
 }

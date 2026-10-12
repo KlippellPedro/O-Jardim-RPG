@@ -4,7 +4,7 @@ import {
   nivelMinimoTraco,
   obterEstagiosRaciaisAlcancados,
   obterTracosOpcaoRacial,
-  obterGruposEscolhaRacial,
+  obterOpcoesRaciaisSelecionadas,
   tracoDisponivelNoNivel,
 } from './racaService';
 import { ATRIBUTOS, obterFragmentosRaciaisExpressos, obterModificacoesRaciaisInstaladas, type TAtributo } from './calculoService';
@@ -388,13 +388,12 @@ export function caracteristicasRaciaisAutomaticas(ficha: any): IConteudoAutomati
   if (!raca) return [];
   const nivel = nivelTotalFicha(ficha);
   const tracos: ICaracteristicaRacial[] = [...(raca.caracteristicas || [])];
-  for (const grupo of obterGruposEscolhaRacial(raca)) {
-    const opcao = grupo.opcoes.find((item) => item.id === ficha?.escolhaRacial?.[grupo.campo]);
-    if (opcao) tracos.push(...obterTracosOpcaoRacial(opcao));
+  for (const opcao of obterOpcoesRaciaisSelecionadas(raca, ficha?.escolhaRacial)) {
+    tracos.push(...obterTracosOpcaoRacial(opcao));
   }
   // Estágios raciais (Espírito Menor/Maior/Primordial) entram conforme o nível
-  // total alcançado, junto dos traços da Cor que destravam no mesmo degrau.
-  for (const estagio of obterEstagiosRaciaisAlcancados(raca, nivel)) {
+  // total alcançado, junto dos traços do Fluxo que destravam no mesmo degrau.
+  for (const estagio of obterEstagiosRaciaisAlcancados(raca, nivel, ficha?.escolhaRacial ?? {})) {
     tracos.push(...(estagio.caracteristicas || []));
   }
   tracos.push(...obterFragmentosRaciaisExpressos(raca, ficha?.escolhaRacial).map((item: any) => ({

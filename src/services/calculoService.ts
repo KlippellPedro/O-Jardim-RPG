@@ -268,7 +268,7 @@ function calcularDerivadosBase(
   
   // Estágios raciais (Espírito Menor/Maior/Primordial) se acumulam: quem chegou
   // no Primordial continua somando o que o Maior deu.
-  const estagiosRaciais = obterEstagiosRaciaisAlcancados(raca, nivel);
+  const estagiosRaciais = obterEstagiosRaciaisAlcancados(raca, nivel, escolhaRacial ?? {});
   const somaEstagios = (campo: 'vida' | 'mana' | 'estamina' | 'movimento' | 'defesa') => estagiosRaciais
     .reduce((total: number, estagio: any) => total + (Number(estagio?.[campo]) || 0), 0);
 
