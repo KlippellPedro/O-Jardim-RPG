@@ -5,7 +5,7 @@ import {
   obterEstagiosRaciaisAlcancados,
   obterTracosOpcaoRacial,
   obterOpcoesRaciaisSelecionadas,
-  tracoDisponivelNoNivel,
+  tracoLiberado,
 } from './racaService';
 import { ATRIBUTOS, obterFragmentosRaciaisExpressos, obterModificacoesRaciaisInstaladas, type TAtributo } from './calculoService';
 import { GRAUS_PERICIA, aumentosAtributoPorNivel, legadosPorNivel, nomeDoGrauPericia } from './progressaoNiveis';
@@ -405,7 +405,7 @@ export function caracteristicasRaciaisAutomaticas(ficha: any): IConteudoAutomati
     titulo: `Modificação: ${item.titulo}`,
   })));
   return tracos
-    .filter((traco) => tracoDisponivelNoNivel(traco, nivel))
+    .filter((traco) => tracoLiberado(traco, nivel, ficha?.escolhaRacial))
     .map((traco) => ({
       id: `raca:${raca.id}:${traco.id}`,
       titulo: traco.titulo,

@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShieldAlert, ArrowLeft, BookOpen, Pencil, Sparkles } from 'lucide-react';
 import {
@@ -25,6 +25,7 @@ export const RegraDetalhesPage = () => {
   const { categoria, itemId } = useParams<{ categoria: string; itemId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { usuario, campanhaAtiva } = useAuthStore();
   const { podeEditarConteudo } = usePermissoes();
   const isMestre = usuario?.papel_plataforma === 'admin'
@@ -59,6 +60,10 @@ export const RegraDetalhesPage = () => {
     rotaRetorno,
     posicaoRetorno ? { state: { retornoRegras: posicaoRetorno } } : undefined,
   );
+  // Páginas de raça com subpágina (o Espírito e suas Naturezas, a Animália e suas Formas) guardam a
+  // subpágina em `?natureza=` ou `?forma=`: o Voltar sai dela antes de sair da raça.
+  const emSubpagina = categoria === 'racas' && (searchParams.has('natureza') || searchParams.has('forma'));
+  const voltar = emSubpagina ? () => setSearchParams({}) : voltarParaCatalogo;
   const rotaEdicao = `/criador?aba=conteudo&secao=regras&item=${categoria === 'classes' ? 'classe' : 'raca'}:${encodeURIComponent(itemId || '')}${campanhaAtiva ? `&campanha_id=${encodeURIComponent(campanhaAtiva.id)}` : ''}`;
   const gruposEscolhaRacial = obterGruposEscolhaRacial(raca);
   const estagiosRaciais = obterEstagiosRaciais(raca);
@@ -121,7 +126,7 @@ export const RegraDetalhesPage = () => {
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          onClick={voltarParaCatalogo}
+          onClick={voltar}
           className="detail-back-button fixed z-[60] flex items-center gap-2 rounded-full border border-white/10 bg-black/60 px-4 py-2 text-sm font-bold uppercase tracking-wider text-gray-300 backdrop-blur-md transition-colors hover:text-white"
         >
           <ArrowLeft size={16} />

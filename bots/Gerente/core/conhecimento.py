@@ -204,7 +204,7 @@ class BaseConhecimento:
             # Sub-raças, linhagens e estágios (o Fluxo e os degraus do
             # Espírito, por exemplo) entram como trechos próprios: sem isso o
             # jogador não acha "Espírito do Fluxo do Fim" nem "Fúria Carmesim".
-            for colecao in ("naturezas", "variantes", "linhagens", "condicoes_ancestrais", "estagios"):
+            for colecao in ("naturezas", "variantes", "animais", "linhagens", "condicoes_ancestrais", "estagios"):
                 for opcao in raca.get(colecao, []) or []:
                     titulo_opcao = opcao.get("titulo", opcao.get("id", "Opção"))
                     self._adicionar(

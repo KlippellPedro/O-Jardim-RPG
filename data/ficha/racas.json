@@ -44,7 +44,7 @@
     "mana": 0,
     "estamina": 1,
     "movimento": 0,
-    "descricao": "Enxerga no escuro, fecha ferida bebendo sangue e sofre bastante quando fica sem. O Clã define o que ele faz com a fome, e o tempo cuida do resto: quanto mais velho, mais o sangue rende, e quem passa de séculos vira Senhor da Noite, com uma fome do mesmo tamanho. É um povo de Întuneric e fala Romeno.",
+    "descricao": "Enxerga no escuro, fecha ferida bebendo sangue e sofre bastante quando fica sem. O Clã define o que ele faz com a fome, e o tempo cuida do resto: quanto mais velho, mais o sangue rende, e quem passa de séculos vira Senhor da Noite, com uma fome do mesmo tamanho. É um povo de Întuneric.",
     "fisiologia": [
       "Enxerga normalmente em escuridão natural, mas não através de escuridão criada por magia ou Fluxo."
     ],
@@ -456,7 +456,7 @@
     "mana": 1,
     "estamina": 2,
     "movimento": 1.5,
-    "descricao": "Pequeno, rápido e com um talento chato pra vender qualquer coisa por mais do que ela vale, de preferência algo que já era dele. Entre os seus, fala Alemão.",
+    "descricao": "Pequeno, rápido e com um talento chato pra vender qualquer coisa por mais do que ela vale, de preferência algo que já era dele.",
     "fisiologia": [
       "Tamanho Pequeno."
     ],
@@ -489,7 +489,7 @@
     "mana": 0,
     "estamina": 3,
     "movimento": 0,
-    "descricao": "Baixinho, difícil de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e na segunda tentativa quase não erra. Na criação escolhe um Ofício de Forja e vai de Aprendiz a Mestre conforme passa tempo na bancada. Fala Nórdico Antigo, e o que sai das forjas do Reino dos Anões nenhum outro reino consegue igualar.",
+    "descricao": "Baixinho, difícil de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e na segunda tentativa quase não erra. Na criação escolhe um Ofício de Forja e vai de Aprendiz a Mestre conforme passa tempo na bancada. O que sai das forjas do Reino dos Anões nenhum outro reino consegue igualar.",
     "fisiologia": [
       "Tamanho Pequeno."
     ],
@@ -738,7 +738,7 @@
     "mana": -2,
     "estamina": 3,
     "movimento": 0,
-    "descricao": "Tem um corpo construído, grande ou enorme, que não respira, não come e não fica doente. Quando quebra, quem resolve é um artesão, e armadura de loja só serve depois de ajustada. O Material do Corpo diz do que ele é feito, e cada conserto deixa ele mais duro, de Recém-Erguido até Monumento. Fala Libras.",
+    "descricao": "Tem um corpo construído, grande ou enorme, que não respira, não come e não fica doente. Quando quebra, quem resolve é um artesão, e armadura de loja só serve depois de ajustada. O Material do Corpo diz do que ele é feito, e cada conserto deixa ele mais duro, de Recém-Erguido até Monumento.",
     "fisiologia": [
       "Tamanho Grande ou Enorme, definido na criação.",
       "Não precisa respirar, comer ou beber e não contrai doenças comuns."
@@ -1076,13 +1076,33 @@
     "id": "espirito",
     "tipo": "raca",
     "titulo": "Espírito",
-    "categoria": "padrao",
-    "disponibilidade": "geral",
+    "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "aethel",
+      "ousias",
+      "keryx",
+      "haemus",
+      "ignis",
+      "moros",
+      "aperion",
+      "chronus",
+      "erebus",
+      "mulher-carmesim"
+    ],
     "arvore": null,
+    "transformacao_em_qualquer_arvore": true,
     "vida": -2,
     "mana": 3,
     "movimento": 0,
-    "descricao": "Não tem corpo pra alimentar nem pulmão pra encher. Enxerga no escuro, atravessa parede quando tem Mana sobrando e não usa armadura comum, porque não tem onde vestir. Quem morre fica assim, e a Natureza diz o que o espírito vira: natural, preso a um Fluxo; demoníaco, preso a um Pecado; ou angelical, sustentado por uma Virtude. Vai amadurecendo sozinho de Menor pra Maior e depois Primordial conforme sobe de nível. Fala Enoquiano.",
+    "legados_adicionais": 1,
+    "descricao": "Quem morre e não vai embora fica como espírito. O que ele vira depende do que carregava: um Fluxo que o prendeu ao mundo, um Pecado que nunca largou ou uma Virtude que ainda o sustenta. Sem corpo, atravessa parede e enxerga no escuro. Amadurece sozinho, em seis degraus, e só o último pede mais que nível: pede uma Provação. Cada Natureza tem a sua língua: Enoquiano para os naturais, Aramaico para os demoníacos e Hebraico para os angelicais.",
     "fisiologia": [
       "Não precisa respirar, comer ou beber enquanto está sem corpo.",
       "Enxerga normalmente em escuridão natural.",
@@ -1106,7 +1126,7 @@
         "titulo": "Natureza e Marca",
         "tipo": "escolha",
         "nivel_minimo": 1,
-        "descricao": "Na criação, escolha a Natureza do espírito e, dentro dela, a marca que prende você ao mundo: um dos onze Fluxos, se for natural, um dos sete Pecados, se for demoníaca, ou uma das sete Virtudes, se for angelical. A marca diz quais características você desperta em cada estágio, e todas valem igual em poder.",
+        "descricao": "Na criação, escolha a Natureza do espírito e, dentro dela, a marca que segura você no mundo: um dos onze Fluxos, se for natural; um dos sete Pecados, se for demoníaca; ou uma das sete Virtudes, se for angelical. A marca diz quais características você desperta em cada degrau, e todas têm o mesmo peso.",
         "automatizada": false
       },
       {
@@ -1114,26 +1134,26 @@
         "titulo": "Maturação Espiritual",
         "tipo": "progressao",
         "nivel_minimo": 1,
-        "descricao": "O que amadurece num espírito é o estágio, e quem manda nele é o nível total: Menor no começo, Maior no nível total 15 e Primordial no 40. Cada degrau soma Mana, melhora o que a Natureza dá e desperta mais uma característica da sua marca. Nada disso precisa de autorização.",
+        "descricao": "O espírito amadurece em degraus, e quem manda neles é o nível total: Menor no começo, Mediano no nível 8, Maior no 15, Superior no 28 e o quinto degrau no 40 (Ancestral, Arquidemônio ou Arcanjo). Do Menor ao Superior, cada degrau só soma Mana e Vida e traz ajustes passivos que a ficha aplica sozinha; os poderes ativos vêm da sua marca. Do quinto degrau em diante entram também habilidades fortes. O Primordial, no nível 60, é o único que pede mais: a Provação Primordial, que só o mestre marca como cumprida.",
         "automatizada": false
       }
     ],
     "recursos_provisorios": false,
     "rotulo_natureza": "Natureza",
-    "descricao_naturezas": "Todo espírito é de uma Natureza. A natural é a de quem, depois de morrer, ficou preso a um Fluxo. A demoníaca é a de quem morreu carregando um Pecado e nunca largou, e que com o tempo aprende a vestir corpos alheios. A angelical é a de quem morreu carregando uma Virtude, e que com o tempo aprende a pedir um corpo emprestado.",
+    "descricao_naturezas": "Todo espírito é de uma Natureza. A natural é a de quem ficou preso a um Fluxo depois de morrer. A demoníaca é a de quem morreu carregando um Pecado e nunca largou, e com o tempo aprende a vestir corpos alheios. A angelical é a de quem morreu carregando uma Virtude, e com o tempo aprende a pedir um corpo emprestado.",
     "naturezas": [
       {
         "id": "natural",
         "titulo": "Espírito Natural",
-        "descricao": "Espírito sem corpo, preso a um Fluxo. É o espírito que todo mundo conhece. Atravessa parede e, a cada estágio, atravessa melhor.",
+        "descricao": "Morreu e ficou, preso ao Fluxo que o segurou no mundo. É o fantasma das histórias: nunca tem corpo, atravessa paredes e, a cada degrau, atravessa mais longe e com menos esforço. Fala Enoquiano.",
         "rotulo_variante": "Fluxo"
       },
       {
         "id": "demoniaca",
         "titulo": "Espírito Demoníaco",
-        "descricao": "Morreu carregando um Pecado e nunca largou. O corpo ficou para trás, e o desejo ficou inteiro. Começa sem corpo como qualquer espírito. A partir do nível 5 aprende a entrar em corpos alheios e a usá-los, e cada degrau da evolução traz um poder do Pecado, quase sempre com um preço.",
+        "descricao": "Morreu carregando um Pecado e nunca largou. O corpo ficou para trás, e o desejo ficou inteiro. No começo é só espírito; a partir do nível 5 aprende a tomar corpos alheios e usá-los como roupa. Cada degrau traz um poder do Pecado, e quase todo poder cobra um preço. Fala Aramaico.",
         "rotulo_variante": "Pecado",
-        "descricao_variantes": "Escolha um dos sete Pecados, e ele vale para a vida inteira do personagem. Os sete são equilibrados entre si: cada um desperta uma característica no Demônio Menor, outra no Maior e outra no Primordial, e quase todas cobram um preço.",
+        "descricao_variantes": "Escolha um Pecado, e ele vale para a vida inteira do personagem. Os sete têm o mesmo peso: cada um desperta uma característica em cada degrau da escada, e quase todas cobram um preço.",
         "fisiologia": [
           "Sem corpo, não respira, não come, não bebe e não veste armadura comum.",
           "Encarnado, respira, come e veste armadura como qualquer um, e perde a Passagem Etérea."
@@ -1144,7 +1164,7 @@
             "titulo": "Possessão",
             "tipo": "acao_completa",
             "nivel_minimo": 5,
-            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura Média ou menor a até 1,5 m, ou num corpo morto há menos de um dia. Criatura viva e consciente testa Vontade contra o seu Misticismo; se passar, não pode ser alvo da sua Possessão até o próximo descanso. Em personagem de jogador, só com o consentimento dele. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Quem foi possuído apaga e acorda sem lembrar do que o corpo fez, e o mestre decide o que o corpo ainda sabe fazer. Sair do corpo é uma ação livre e devolve você à forma etérea. Se o corpo chegar a 0 de Vida, você é expulso e não consegue possuir ninguém até o próximo descanso.",
+            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura Média ou menor a até 1,5 m, ou num corpo morto há menos de um dia. Criatura viva e consciente testa Vontade contra o seu Misticismo; se passar, fica livre da sua Possessão até o próximo descanso. Personagem de jogador só é possuído se o jogador aceitar. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Quem foi possuído apaga e acorda sem lembrar do que o corpo fez, e o mestre decide o que o corpo ainda sabe fazer. Sair do corpo é uma ação livre e devolve você à forma etérea. Se o corpo chegar a 0 de Vida, você é expulso e fica sem possuir ninguém até o próximo descanso.",
             "custo_mana": 4,
             "alcance_m": 1.5,
             "teste": "misticismo_vs_vontade",
@@ -1155,9 +1175,9 @@
       {
         "id": "angelical",
         "titulo": "Espírito Angelical",
-        "descricao": "Morreu carregando uma Virtude, e ela não largou dele. O corpo ficou para trás, e a Virtude ficou inteira. Começa sem corpo como qualquer espírito. A partir do nível 5 aprende a encarnar, mas só com permissão: ou o dono do corpo empresta, ou o corpo já não tem dono. Cada degrau da evolução traz um poder da Virtude, quase sempre com um voto que limita.",
+        "descricao": "Morreu carregando uma Virtude, e ela nunca o deixou. O corpo ficou para trás, e a Virtude ficou inteira. No começo é só espírito; a partir do nível 5 aprende a encarnar, mas só com permissão: o dono empresta o corpo, ou o corpo já não tem dono. Cada degrau traz um poder da Virtude, e quase todo poder pede um voto em troca. Fala Hebraico.",
         "rotulo_variante": "Virtude",
-        "descricao_variantes": "Escolha uma das sete Virtudes, e ela vale para a vida inteira do personagem. As sete são equilibradas entre si e espelham os sete Pecados: cada uma desperta uma característica no Anjo Menor, outra no Maior e outra no Primordial, e quase todas pedem um voto em troca.",
+        "descricao_variantes": "Escolha uma Virtude, e ela vale para a vida inteira do personagem. As sete têm o mesmo peso e espelham os sete Pecados: cada uma desperta uma característica em cada degrau da escada, e quase todas pedem um voto em troca.",
         "fisiologia": [
           "Sem corpo, não respira, não come, não bebe e não veste armadura comum.",
           "Encarnado, respira, come e veste armadura como qualquer um, e perde a Passagem Etérea."
@@ -1168,7 +1188,7 @@
             "titulo": "Encarnação",
             "tipo": "acao_completa",
             "nivel_minimo": 5,
-            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura Média ou menor, a até 1,5 m, que aceite, ou num corpo sem dono, morto há menos de um dia. Nunca à força: o dono voluntário continua desperto, ouve você e pode pedir que saia quando quiser, e personagem de jogador só empresta o corpo se o jogador quiser. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Sair do corpo é uma ação livre e devolve você à forma etérea, e o dono lembra de tudo o que viveu junto de você. Se o corpo chegar a 0 de Vida, você é expulso e não consegue encarnar até o próximo descanso.",
+            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura Média ou menor a até 1,5 m que aceite, ou num corpo sem dono, morto há menos de um dia. Nunca à força: o dono continua desperto, ouve você e pode pedir que saia quando quiser, e personagem de jogador só empresta o corpo se o jogador quiser. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Sair do corpo é uma ação livre e devolve você à forma etérea, e o dono lembra de tudo o que viveu ao seu lado. Se o corpo chegar a 0 de Vida, você é expulso e fica sem encarnar até o próximo descanso.",
             "custo_mana": 4,
             "alcance_m": 1.5,
             "automatizada": false
@@ -1177,7 +1197,7 @@
       }
     ],
     "rotulo_variante": "Fluxo",
-    "descricao_variantes": "Escolha um único Fluxo, e ele vale para a vida inteira do personagem. Os onze são equilibrados entre si: cada um desperta uma característica no Espírito Menor, outra no Maior e outra no Primordial. Há um décimo segundo, o Fluxo Universal, que o jogador não escolhe: só o Mestre concede.",
+    "descricao_variantes": "Escolha um Fluxo, e ele vale para a vida inteira do personagem. Os onze têm o mesmo peso: cada um desperta uma característica em cada degrau da escada. Existe um décimo segundo, o Fluxo Universal, que o jogador não escolhe. Só o mestre concede.",
     "estagios": [
       {
         "id": "menor",
@@ -1189,22 +1209,47 @@
         "caracteristicas": []
       },
       {
+        "id": "mediano",
+        "titulo": "Espírito Mediano",
+        "natureza": "natural",
+        "nivel_minimo": 8,
+        "vida": 0,
+        "mana": 1,
+        "caracteristicas": [
+          {
+            "id": "passo-de-fumaca",
+            "titulo": "Passo de Fumaça",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Seu Movimento sobe 3 m.",
+            "movimento": 3,
+            "automatizada": true
+          },
+          {
+            "id": "sentir-os-mortos",
+            "titulo": "Sentir os Mortos",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você sente qualquer espírito ou alma presa a até 18 m, mesmo escondida, e sabe se ela é amistosa ou hostil. Não descobre quem é.",
+            "alcance_m": 18,
+            "automatizada": false
+          }
+        ]
+      },
+      {
         "id": "maior",
         "titulo": "Espírito Maior",
         "natureza": "natural",
         "nivel_minimo": 15,
-        "vida": 0,
-        "mana": 3,
+        "vida": 3,
+        "mana": 2,
         "caracteristicas": [
           {
             "id": "travessia-ampliada",
             "titulo": "Travessia Ampliada",
-            "tipo": "movimento",
+            "tipo": "passiva",
             "nivel_minimo": 15,
-            "descricao": "Sua Passagem Etérea passa a valer duas vezes por cena e atravessa até 3 m de material sólido. O custo continua sendo 2 Mana por uso.",
-            "usos": 2,
-            "recuperacao": "cena",
-            "custo_mana": 2,
+            "descricao": "Sua Passagem Etérea melhora: atravessa até 3 m de material sólido e vale duas vezes por cena. O custo continua sendo 2 Mana por uso.",
             "automatizada": false
           },
           {
@@ -1212,18 +1257,36 @@
             "titulo": "Névoa Persistente",
             "tipo": "passiva",
             "nivel_minimo": 15,
-            "descricao": "Sua forma já não se rasga como fumaça: receba Resistência 2 contra dano físico comum (corte, perfuração e impacto). Isso compensa em parte não poder vestir armadura.",
+            "descricao": "Sua forma já não se desfaz como fumaça: receba Resistência 2 contra dano físico comum (corte, perfuração e impacto). É o que compensa, em parte, não poder vestir armadura.",
             "automatizada": false
           }
         ]
       },
       {
-        "id": "primordial",
-        "titulo": "Espírito Primordial",
+        "id": "superior",
+        "titulo": "Espírito Superior",
+        "natureza": "natural",
+        "nivel_minimo": 28,
+        "vida": 4,
+        "mana": 3,
+        "caracteristicas": [
+          {
+            "id": "nevoa-densa",
+            "titulo": "Névoa Densa",
+            "tipo": "passiva",
+            "nivel_minimo": 28,
+            "descricao": "A Resistência da Névoa Persistente sobe para 4 contra dano físico comum.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "ancestral",
+        "titulo": "Espírito Ancestral",
         "natureza": "natural",
         "nivel_minimo": 40,
-        "vida": 0,
-        "mana": 6,
+        "vida": 5,
+        "mana": 3,
         "caracteristicas": [
           {
             "id": "travessia-irrestrita",
@@ -1248,7 +1311,7 @@
           },
           {
             "id": "ancora-primordial",
-            "titulo": "Âncora Primordial",
+            "titulo": "Âncora do Espírito",
             "tipo": "limitacao",
             "nivel_minimo": 40,
             "descricao": "Você tem uma Âncora, definida com o mestre: um lugar, um objeto ou um juramento que prende você a este mundo. Enquanto ela existir, você não envelhece e não morre de vez. Chegando a 0 de Vida, você se dispersa e se forma de novo junto da Âncora no fim da cena, com metade da Vida máxima e sem precisar de descanso. Destruir a Âncora exige descobrir o que ela é e alcançá-la; sem ela, você volta a morrer como qualquer um.",
@@ -1266,6 +1329,73 @@
         ]
       },
       {
+        "id": "primordial",
+        "titulo": "Espírito Primordial",
+        "natureza": "natural",
+        "nivel_minimo": 60,
+        "vida": 15,
+        "mana": 12,
+        "requer_condicao": "provacao-primordial",
+        "caracteristicas": [
+          {
+            "id": "corpo-de-eternidade",
+            "titulo": "Corpo de Eternidade",
+            "tipo": "passiva",
+            "nivel_minimo": 60,
+            "descricao": "Você recebe Resistência 15 contra dano físico comum (corte, perfuração e impacto) e é imune a ser agarrado, derrubado ou empurrado. Dano mágico e dano de Fluxo atingem você normalmente.",
+            "requer_condicao": "provacao-primordial",
+            "automatizada": false
+          },
+          {
+            "id": "dobra-do-fluxo",
+            "titulo": "Dobra do Fluxo",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, todas as características da sua marca custam 0 Mana, e cada uma pode ser usada uma vez a mais, mesmo que já tenha gasto os usos.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 10,
+            "automatizada": false
+          },
+          {
+            "id": "vontade-primordial",
+            "titulo": "Vontade Primordial",
+            "tipo": "reacao",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por cena, passe automaticamente em um teste de resistência que você acabou de falhar.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "cena",
+            "automatizada": false
+          },
+          {
+            "id": "presenca-primordial",
+            "titulo": "Presença Primordial",
+            "tipo": "acao",
+            "nivel_minimo": 60,
+            "descricao": "Duas vezes por sessão, gaste uma ação e deixe o peso de todas as eras cair sobre o campo. Criaturas hostis a até 30 m testam Vontade contra o seu Misticismo. Falhando, ficam Amedrontadas e sem reações por 3 rodadas. Passando, ficam com desvantagem em ataques contra você até o fim do próximo turno delas.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "alcance_m": 30,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
+            "id": "eterno",
+            "titulo": "Eterno",
+            "tipo": "reacao",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, quando sua Vida chegar a 0, você se refaz no início do seu próximo turno com a Vida cheia, de pé e livre de qualquer condição. Para isso, você não precisa mais da Âncora.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "automatizada": false
+          }
+        ]
+      },
+      {
         "id": "demonio-menor",
         "titulo": "Demônio Menor",
         "natureza": "demoniaca",
@@ -1275,12 +1405,38 @@
         "caracteristicas": []
       },
       {
+        "id": "demonio-mediano",
+        "titulo": "Demônio Mediano",
+        "natureza": "demoniaca",
+        "nivel_minimo": 8,
+        "vida": 0,
+        "mana": 1,
+        "caracteristicas": [
+          {
+            "id": "possessao-pratica",
+            "titulo": "Possessão Prática",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Entrar num corpo custa 3 Mana em vez de 4. Se você for expulso, o bloqueio dura só até o fim da cena, em vez de até o próximo descanso.",
+            "automatizada": false
+          },
+          {
+            "id": "lingua-do-inferno",
+            "titulo": "Língua do Inferno",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Além do Aramaico, que já é seu, você entende e fala qualquer idioma de criatura demoníaca, infernal ou morta.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
         "id": "demonio-maior",
         "titulo": "Demônio Maior",
         "natureza": "demoniaca",
         "nivel_minimo": 15,
-        "vida": 0,
-        "mana": 3,
+        "vida": 3,
+        "mana": 2,
         "caracteristicas": [
           {
             "id": "pele-infernal",
@@ -1295,18 +1451,44 @@
             "titulo": "Possessão Aprimorada",
             "tipo": "passiva",
             "nivel_minimo": 15,
-            "descricao": "Entrar num corpo custa 2 Mana em vez de 4 e vale também em criatura Grande. Um corpo possuído tem vantagem em testes de Vontade contra efeitos que tentem expulsar você.",
+            "descricao": "Entrar num corpo passa a custar 2 Mana e vale também em criatura Grande. Um corpo possuído tem vantagem em testes de Vontade contra efeitos que tentem expulsar você.",
             "automatizada": false
           }
         ]
       },
       {
-        "id": "demonio-primordial",
-        "titulo": "Demônio Primordial",
+        "id": "demonio-superior",
+        "titulo": "Demônio Superior",
+        "natureza": "demoniaca",
+        "nivel_minimo": 28,
+        "vida": 4,
+        "mana": 3,
+        "caracteristicas": [
+          {
+            "id": "brasa-viva",
+            "titulo": "Brasa Viva",
+            "tipo": "passiva",
+            "nivel_minimo": 28,
+            "descricao": "A Resistência da Pele Infernal sobe para 5 contra dano de fogo, e seus ataques causam +1d6 de dano de fogo.",
+            "automatizada": false
+          },
+          {
+            "id": "calor-do-corpo",
+            "titulo": "Calor do Corpo",
+            "tipo": "passiva",
+            "nivel_minimo": 28,
+            "descricao": "Enquanto estiver encarnado, você recebe 10 de Vida temporária no início de cada cena.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "demonio-arquidemonio",
+        "titulo": "Arquidemônio",
         "natureza": "demoniaca",
         "nivel_minimo": 40,
-        "vida": 0,
-        "mana": 6,
+        "vida": 5,
+        "mana": 3,
         "caracteristicas": [
           {
             "id": "posse-plena",
@@ -1322,7 +1504,7 @@
             "titulo": "Labareda Infernal",
             "tipo": "acao",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação e 4 Mana para soltar o Inferno num cone de 9 m. Criaturas na área testam Reflexos contra o seu Misticismo e sofrem 6d6 de dano de fogo, ou metade se passarem.",
+            "descricao": "Duas vezes por sessão, gaste uma ação e 4 Mana para soltar o Inferno num cone de 9 m. Criaturas na área testam Reflexos contra o seu Misticismo e sofrem 8d6 de dano de fogo, ou metade se passarem.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 4,
@@ -1350,6 +1532,72 @@
         ]
       },
       {
+        "id": "demonio-primordial",
+        "titulo": "Demônio Primordial",
+        "natureza": "demoniaca",
+        "nivel_minimo": 60,
+        "vida": 15,
+        "mana": 12,
+        "requer_condicao": "provacao-primordial",
+        "caracteristicas": [
+          {
+            "id": "posse-absoluta",
+            "titulo": "Posse Absoluta",
+            "tipo": "passiva",
+            "nivel_minimo": 60,
+            "descricao": "Criaturas de VD igual ou menor que o seu nível total, e que não sejam personagens de jogador, deixam de testar Vontade contra a sua Possessão. Você pode manter dois corpos possuídos ao mesmo tempo e agir por qualquer um deles no seu turno.",
+            "requer_condicao": "provacao-primordial",
+            "automatizada": false
+          },
+          {
+            "id": "pecado-absoluto",
+            "titulo": "Pecado Absoluto",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, todas as características do seu Pecado custam 0 Mana, e cada uma pode ser usada uma vez a mais, mesmo que já tenha gasto os usos. Em troca, todo preço que elas cobram é dobrado.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 10,
+            "automatizada": false
+          },
+          {
+            "id": "chuva-do-inferno",
+            "titulo": "Chuva do Inferno",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 12 Mana para fazer o Inferno cair numa área de 18 m de raio. Criaturas na área testam Reflexos contra o seu Misticismo e sofrem 16d6 de dano de fogo, ou metade se passarem.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_reflexos",
+            "automatizada": false
+          },
+          {
+            "id": "corpo-de-brasa-eterna",
+            "titulo": "Corpo de Brasa Eterna",
+            "tipo": "passiva",
+            "nivel_minimo": 60,
+            "descricao": "Você é imune a dano de fogo e ignora qualquer calor ou chama, com corpo ou sem ele.",
+            "requer_condicao": "provacao-primordial",
+            "automatizada": false
+          },
+          {
+            "id": "eterno-demonio",
+            "titulo": "Eterno",
+            "tipo": "reacao",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, quando sua Vida chegar a 0, você se refaz no início do seu próximo turno com a Vida cheia, de pé e livre de qualquer condição, a até 9 m de onde caiu. Para isso, você não precisa mais da Raiz.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "automatizada": false
+          }
+        ]
+      },
+      {
         "id": "anjo-menor",
         "titulo": "Anjo Menor",
         "natureza": "angelical",
@@ -1359,12 +1607,38 @@
         "caracteristicas": []
       },
       {
+        "id": "anjo-mediano",
+        "titulo": "Anjo Mediano",
+        "natureza": "angelical",
+        "nivel_minimo": 8,
+        "vida": 0,
+        "mana": 1,
+        "caracteristicas": [
+          {
+            "id": "encarnacao-pratica",
+            "titulo": "Encarnação Prática",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Encarnar custa 3 Mana em vez de 4. Se você for expulso, o bloqueio dura só até o fim da cena, em vez de até o próximo descanso.",
+            "automatizada": false
+          },
+          {
+            "id": "lingua-dos-ceus",
+            "titulo": "Língua dos Céus",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Além do Hebraico, que já é seu, você entende e fala qualquer idioma de criatura angelical, celestial ou morta.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
         "id": "anjo-maior",
         "titulo": "Anjo Maior",
         "natureza": "angelical",
         "nivel_minimo": 15,
-        "vida": 0,
-        "mana": 3,
+        "vida": 3,
+        "mana": 2,
         "caracteristicas": [
           {
             "id": "veu-de-luz",
@@ -1379,18 +1653,46 @@
             "titulo": "Encarnação Aprimorada",
             "tipo": "passiva",
             "nivel_minimo": 15,
-            "descricao": "Encarnar custa 2 Mana em vez de 4 e vale também em criatura Grande. Seu hospedeiro tem vantagem em testes de resistência contra medo e controle enquanto você estiver nele.",
+            "descricao": "Encarnar passa a custar 2 Mana e vale também em criatura Grande. Seu hospedeiro tem vantagem em testes de resistência contra medo e controle enquanto você estiver nele.",
             "automatizada": false
           }
         ]
       },
       {
-        "id": "anjo-primordial",
-        "titulo": "Anjo Primordial",
+        "id": "anjo-superior",
+        "titulo": "Anjo Superior",
+        "natureza": "angelical",
+        "nivel_minimo": 28,
+        "vida": 4,
+        "mana": 3,
+        "caracteristicas": [
+          {
+            "id": "luz-interior",
+            "titulo": "Luz Interior",
+            "tipo": "passiva",
+            "nivel_minimo": 28,
+            "descricao": "A Resistência do Véu de Luz sobe para 5 contra dano de raio, e você emite uma luz de 9 m: aliados dentro dela recebem +1 de Defesa.",
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "graca-constante",
+            "titulo": "Graça Constante",
+            "tipo": "passiva",
+            "nivel_minimo": 28,
+            "descricao": "No início do turno de cada aliado a até 9 m que esteja com menos da metade da Vida máxima, ele recupera 1d4 de Vida.",
+            "alcance_m": 9,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "anjo-arcanjo",
+        "titulo": "Arcanjo",
         "natureza": "angelical",
         "nivel_minimo": 40,
-        "vida": 0,
-        "mana": 6,
+        "vida": 5,
+        "mana": 3,
         "caracteristicas": [
           {
             "id": "encarnacao-plena",
@@ -1416,7 +1718,7 @@
           },
           {
             "id": "voto-primordial",
-            "titulo": "Voto Primordial",
+            "titulo": "Voto do Anjo",
             "tipo": "limitacao",
             "nivel_minimo": 40,
             "descricao": "Você tem um Voto, definido com o mestre: uma pessoa que jurou proteger, um lugar sagrado ou uma promessa. Enquanto ele existir, você não envelhece e não morre de vez. Chegando a 0 de Vida, você se dispersa e se forma de novo junto do Voto no fim da cena, com metade da Vida máxima e sem precisar de descanso. Se o Voto for quebrado, você volta a morrer como qualquer um.",
@@ -1432,12 +1734,79 @@
             "automatizada": false
           }
         ]
+      },
+      {
+        "id": "anjo-primordial",
+        "titulo": "Anjo Primordial",
+        "natureza": "angelical",
+        "nivel_minimo": 60,
+        "vida": 15,
+        "mana": 12,
+        "requer_condicao": "provacao-primordial",
+        "caracteristicas": [
+          {
+            "id": "encarnacao-absoluta",
+            "titulo": "Encarnação Absoluta",
+            "tipo": "passiva",
+            "nivel_minimo": 60,
+            "descricao": "Você pode manter dois corpos ao mesmo tempo, sempre com permissão, e agir por qualquer um deles no seu turno. Enquanto estiver num corpo, o dono recebe vantagem em testes de resistência e Resistência 5 contra todo dano.",
+            "requer_condicao": "provacao-primordial",
+            "automatizada": false
+          },
+          {
+            "id": "virtude-absoluta",
+            "titulo": "Virtude Absoluta",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, todas as características da sua Virtude custam 0 Mana, ganham um uso a mais e alcançam aliados a até 30 m.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 10,
+            "automatizada": false
+          },
+          {
+            "id": "coro-dos-ceus",
+            "titulo": "Coro dos Céus",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 12 Mana: aliados a até 18 m recuperam 20d6 de Vida e se livram de qualquer condição de medo, controle ou veneno. Criaturas hostis na área testam Vontade contra o seu Misticismo e, falhando, perdem a ação do próximo turno.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
+            "id": "corpo-de-luz",
+            "titulo": "Corpo de Luz",
+            "tipo": "passiva",
+            "nivel_minimo": 60,
+            "descricao": "Você é imune a dano de raio, à cegueira e a efeitos de escuridão e de medo.",
+            "requer_condicao": "provacao-primordial",
+            "automatizada": false
+          },
+          {
+            "id": "eterno-anjo",
+            "titulo": "Eterno",
+            "tipo": "reacao",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, quando sua Vida chegar a 0, você se refaz no início do seu próximo turno com a Vida cheia, de pé e livre de qualquer condição, a até 9 m de onde caiu. Para isso, você não precisa mais do Voto.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "automatizada": false
+          }
+        ]
       }
     ],
     "variantes": [
       {
         "id": "rosa",
         "titulo": "Origem",
+        "nome_completo": "Espírito da Origem",
         "fluxo": "origem",
         "natureza": "natural",
         "vida": 0,
@@ -1455,6 +1824,18 @@
             "automatizada": false
           },
           {
+            "id": "lembranca-emprestada",
+            "titulo": "Lembrança Emprestada",
+            "tipo": "reacao",
+            "nivel_minimo": 8,
+            "descricao": "Uma vez por cena, gaste 2 Mana para refazer um teste de perícia que um aliado a até 9 m acabou de falhar, com a sua memória guiando a mão dele. Vale o novo resultado.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
             "id": "retorno-a-forma",
             "titulo": "Retorno à Forma",
             "tipo": "acao",
@@ -1467,6 +1848,17 @@
             "automatizada": false
           },
           {
+            "id": "refazer-o-corpo",
+            "titulo": "Refazer o Corpo",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para tocar um aliado caído ou inconsciente: ele se levanta com metade da Vida máxima e livre de condições que dependam do corpo.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "automatizada": false
+          },
+          {
             "id": "primeira-alma",
             "titulo": "Primeira Alma",
             "tipo": "reacao",
@@ -1476,12 +1868,27 @@
             "recuperacao": "sessao",
             "custo_mana": 8,
             "automatizada": false
+          },
+          {
+            "id": "origem-de-tudo",
+            "titulo": "Criação de Tudo",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: todos os aliados a até 18 m, de pé ou caídos, se refazem, recuperam toda a Vida e ficam livres de qualquer condição. Quem morreu há menos de 1 minuto volta com 1 de Vida.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Refazer, diante de quem o conheceu em vida, o gesto que definiu quem o espírito foi."
       },
       {
         "id": "amarelo",
         "titulo": "Essência",
+        "nome_completo": "Espírito da Essência",
         "fluxo": "essencia",
         "natureza": "natural",
         "vida": 0,
@@ -1492,9 +1899,18 @@
             "titulo": "Leitura de Essência",
             "tipo": "sensorial",
             "nivel_minimo": 1,
-            "descricao": "Gaste 2 Mana para examinar uma criatura a até 9 m: você percebe se ela está possuída, disfarçada por magia ou sob efeito sobrenatural ativo. Isso não revela qual é o efeito nem quem o causou.",
+            "descricao": "Gaste 2 Mana para examinar uma criatura a até 9 m: você percebe se ela está possuída, disfarçada por magia ou sob algum efeito sobrenatural. Você não descobre qual é o efeito nem quem o causou.",
             "custo_mana": 2,
             "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "leitura-ampliada",
+            "titulo": "Leitura Ampliada",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "A Leitura de Essência passa a alcançar 18 m e deixa de custar Mana.",
+            "alcance_m": 18,
             "automatizada": false
           },
           {
@@ -1502,10 +1918,23 @@
             "titulo": "Toque da Essência",
             "tipo": "acao",
             "nivel_minimo": 15,
-            "descricao": "Toque um aliado e encerre um efeito mágico de até 3º Círculo que esteja sobre ele. Se o efeito for de Círculo maior que isso, você não o encerra, mas o aliado ganha vantagem no próximo teste para resistir. Custa uma ação e 4 Mana, uma vez por cena.",
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para tocar um aliado e encerrar um efeito mágico de até 3º Círculo que esteja sobre ele. Se o efeito for de Círculo maior, ele continua, mas o aliado ganha vantagem no próximo teste para resistir.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "recusar-a-essencia",
+            "titulo": "Recusar a Essência",
+            "tipo": "reacao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma reação e 5 Mana quando uma criatura a até 18 m for usar uma magia de até 5º Círculo: ela testa Vontade contra o seu Misticismo. Falhando, a magia falha e o custo dela é perdido.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_vontade",
             "automatizada": false
           },
           {
@@ -1519,12 +1948,27 @@
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "verdade-nua",
+            "titulo": "Verdade Nua",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, num raio de 18 m, toda ilusão, disfarce, forma alternativa e invisibilidade deixa de funcionar, e criaturas hostis na área têm desvantagem em testes de resistência contra você.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Pronunciar, com sucesso, o nome verdadeiro de algo que ninguém conseguia nomear."
       },
       {
         "id": "prata",
         "titulo": "Comunicação",
+        "nome_completo": "Espírito da Comunicação",
         "fluxo": "comunicacao",
         "natureza": "natural",
         "vida": 0,
@@ -1540,6 +1984,14 @@
             "automatizada": false
           },
           {
+            "id": "lingua-de-muitos",
+            "titulo": "Língua de Muitos",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você entende e fala qualquer idioma que já tenha ouvido por uma rodada inteira.",
+            "automatizada": false
+          },
+          {
             "id": "coro-espiritual",
             "titulo": "Coro Espiritual",
             "tipo": "acao",
@@ -1552,21 +2004,50 @@
             "automatizada": false
           },
           {
+            "id": "palavra-que-convence",
+            "titulo": "Palavra que Convence",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: uma criatura que entenda você, a até 18 m, testa Vontade contra o seu Misticismo. Falhando, ela responde com sinceridade a três perguntas e esquece que respondeu.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
             "id": "voz-que-atravessa",
             "titulo": "Voz que Atravessa",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Escolha um dos dois: conversar por até um minuto com um morto ligado ao lugar onde você está, ou mandar uma mensagem de até vinte palavras para alguém que você conheça, a qualquer distância. O morto só sabe o que sabia em vida, e não é obrigado a colaborar. Custa uma ação completa e 6 Mana, duas vezes por sessão.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 6 Mana e escolha um dos dois: conversar por até um minuto com um morto ligado ao lugar onde você está, ou mandar uma mensagem de até vinte palavras para alguém que você conheça, a qualquer distância. O morto só sabe o que sabia em vida e não é obrigado a colaborar.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 6,
             "automatizada": false
+          },
+          {
+            "id": "voz-do-jardim",
+            "titulo": "Voz do Jardim",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, os aliados a até 30 m ouvem uns aos outros e agem com uma ação de movimento extra por turno e vantagem em Iniciativa. Criaturas hostis na área testam Vontade contra o seu Misticismo e, falhando, não conseguem falar nem se coordenar.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 30,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Fazer duas partes que se odeiam se entenderem, ou levar uma mensagem a quem ninguém alcançava."
       },
       {
         "id": "verde",
         "titulo": "Vitalidade",
+        "nome_completo": "Espírito da Vitalidade",
         "fluxo": "vitalidade",
         "natureza": "natural",
         "vida": 0,
@@ -1577,7 +2058,7 @@
             "titulo": "Sopro da Vitalidade",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para tocar uma criatura e recuperar 1d6 + Mod.Sabedoria de Vida dela.",
+            "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para tocar uma criatura: ela recupera 1d6 + Mod.Sabedoria de Vida.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
@@ -1585,14 +2066,35 @@
             "automatizada": false
           },
           {
+            "id": "broto-de-alma",
+            "titulo": "Broto de Alma",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "O Sopro da Vitalidade passa a curar 2d6 + Mod.Sabedoria e alcança uma criatura a até 9 m, sem precisar tocá-la.",
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
             "id": "raizes-de-alma",
             "titulo": "Raízes de Alma",
             "tipo": "acao",
             "nivel_minimo": 15,
-            "descricao": "Toque um aliado e escolha: encerrar uma Aflição de nível 1 nele, ou estabilizar na hora um aliado caído a 0 de Vida, sem precisar rolar nada. Custa uma ação e 4 Mana, uma vez por cena.",
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para tocar um aliado e escolher um dos dois: encerrar uma Aflição de nível 1 nele, ou estabilizar na hora um aliado caído a 0 de Vida, sem rolar nada.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "floresta-interior",
+            "titulo": "Floresta Interior",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: aliados a até 9 m recuperam 3d6 de Vida e encerram uma Aflição de nível 1 ou 2.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 9,
             "automatizada": false
           },
           {
@@ -1600,18 +2102,33 @@
             "titulo": "Fonte Perene",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Enraíze-se onde está. Enquanto mantiver concentração e não sair do lugar, você e os aliados a até 6 m recuperam 2d4 de Vida no início de cada turno, por até 8 rodadas. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana para se enraizar onde está. Enquanto mantiver concentração e não sair do lugar, você e os aliados a até 6 m recuperam 2d4 de Vida no início de cada turno, por até 8 rodadas.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
             "alcance_m": 6,
             "automatizada": false
+          },
+          {
+            "id": "primavera",
+            "titulo": "Primavera",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, os aliados a até 18 m recuperam 4d6 de Vida no início de cada turno e não conseguem cair abaixo de 1 de Vida.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Devolver a vida a um lugar que a tinha perdido de vez, como uma terra morta ou um rio envenenado."
       },
       {
         "id": "laranja",
         "titulo": "Inconstância",
+        "nome_completo": "Espírito da Inconstância",
         "fluxo": "inconstancia",
         "natureza": "natural",
         "vida": 0,
@@ -1629,6 +2146,18 @@
             "automatizada": false
           },
           {
+            "id": "sorte-torta",
+            "titulo": "Sorte Torta",
+            "tipo": "reacao",
+            "nivel_minimo": 8,
+            "descricao": "Uma vez por cena, gaste 2 Mana para somar ou subtrair 1d6 de um teste de qualquer criatura a até 9 m, depois de ver o resultado.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
             "id": "deriva-caotica",
             "titulo": "Deriva Caótica",
             "tipo": "movimento",
@@ -1641,22 +2170,49 @@
             "automatizada": false
           },
           {
+            "id": "troca-de-rumo",
+            "titulo": "Troca de Rumo",
+            "tipo": "reacao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma reação e 5 Mana quando uma criatura a até 18 m for alvo de um ataque: o ataque passa a ter como alvo outra criatura a até 3 m dela, à sua escolha.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
             "id": "reescrita-do-acaso",
             "titulo": "Reescrita do Acaso",
             "tipo": "reacao",
             "nivel_minimo": 40,
-            "descricao": "Escolha um dos dois: transformar em erro um acerto crítico que você ou um aliado a até 9 m acabou de sofrer, ou transformar um erro seu em acerto normal. Custa uma reação e 8 Mana, duas vezes por sessão.",
+            "descricao": "Duas vezes por sessão, gaste uma reação e 8 Mana e escolha um dos dois: transformar em erro um acerto crítico que você ou um aliado a até 9 m acabou de sofrer, ou transformar um erro seu em acerto normal.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "tempestade-de-acasos",
+            "titulo": "Tempestade de Acasos",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, no início de cada rodada, escolha até três criaturas a até 18 m. Cada uma rola dois d20 em tudo nessa rodada, e você decide se vale o maior ou o menor.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Virar uma batalha perdida com um único golpe de sorte, sem que ninguém tenha planejado."
       },
       {
         "id": "marrom",
         "titulo": "Físico",
+        "nome_completo": "Espírito do Físico",
         "fluxo": "fisico",
         "natureza": "natural",
         "vida": 0,
@@ -1667,17 +2223,36 @@
             "titulo": "Ectoplasma Denso",
             "tipo": "passiva",
             "nivel_minimo": 1,
-            "descricao": "Sua forma é densa o bastante para amortecer golpes: receba +2 Defesa. Isso não permite vestir armaduras comuns.",
+            "descricao": "Sua forma é densa o bastante para amortecer golpes: receba +2 de Defesa. Isso não permite vestir armaduras comuns.",
             "defesa": 2,
             "automatizada": true
+          },
+          {
+            "id": "ectoplasma-firme",
+            "titulo": "Ectoplasma Firme",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "O bônus de Defesa do Ectoplasma Denso sobe para +3, e você não pode ser derrubado nem empurrado por golpe ou por efeito que não seja mágico.",
+            "automatizada": false
           },
           {
             "id": "punho-espectral",
             "titulo": "Punho Espectral",
             "tipo": "passiva",
             "nivel_minimo": 15,
-            "descricao": "Você possui uma arma natural de dano-base 1d8 feita de ectoplasma compactado. Contra ela, o alvo conta até 2 pontos a menos de Resistência física.",
+            "descricao": "Você ganha uma arma natural feita de ectoplasma compactado, com dano-base 1d8. Contra ela, o alvo conta até 2 pontos a menos de Resistência física.",
             "dano_natural": "1d8",
+            "automatizada": false
+          },
+          {
+            "id": "punho-pesado",
+            "titulo": "Punho Pesado",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: um ataque seu com o Punho Espectral causa +4d6 de dano e empurra o alvo 3 m.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
             "automatizada": false
           },
           {
@@ -1690,12 +2265,26 @@
             "recuperacao": "cena",
             "custo_mana": 6,
             "automatizada": false
+          },
+          {
+            "id": "montanha-espectral",
+            "titulo": "Montanha Espectral",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, você fica do tamanho de uma criatura Enorme, recebe Resistência 10 contra todo dano físico, não pode ser movido contra a sua vontade, e o seu Punho Espectral causa +2 dados de dano.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Segurar sozinho, por uma cena inteira, algo que devia desabar, como uma ponte ou uma muralha."
       },
       {
         "id": "roxo",
         "titulo": "Espaço",
+        "nome_completo": "Espírito do Espaço",
         "fluxo": "espaco",
         "natureza": "natural",
         "vida": 0,
@@ -1707,6 +2296,17 @@
             "tipo": "movimento",
             "nivel_minimo": 1,
             "descricao": "Sua Passagem Etérea atravessa até 3 m de material sólido, em vez de 1,5 m.",
+            "automatizada": false
+          },
+          {
+            "id": "passo-largo",
+            "titulo": "Passo Largo",
+            "tipo": "movimento",
+            "nivel_minimo": 8,
+            "descricao": "Uma vez por cena, gaste 2 Mana para se teleportar até 3 m durante o seu movimento, sem passar pelo que estiver no caminho.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
             "automatizada": false
           },
           {
@@ -1722,22 +2322,50 @@
             "automatizada": false
           },
           {
+            "id": "troca-de-lugares",
+            "titulo": "Troca de Lugares",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: você troca de lugar com um aliado voluntário a até 30 m, ou duas criaturas a até 18 m trocam de lugar entre si. Criatura hostil testa Reflexos contra o seu Misticismo para impedir.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 30,
+            "teste": "misticismo_vs_reflexos",
+            "automatizada": false
+          },
+          {
             "id": "portal-menor",
             "titulo": "Portal Menor",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Abra uma passagem de 3 m ligando dois pontos que você enxergue, a até 30 m um do outro. Ela fica aberta por 1 minuto, e qualquer criatura pode atravessar, inclusive as hostis. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana para abrir uma passagem de 3 m ligando dois pontos que você enxergue, a até 30 m um do outro. Ela fica aberta por 1 minuto, e qualquer criatura pode atravessar, inclusive as hostis.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
             "alcance_m": 30,
             "automatizada": false
+          },
+          {
+            "id": "dobra-maior",
+            "titulo": "Dobra Maior",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: você e até seis criaturas voluntárias a até 9 m atravessam juntos para qualquer lugar da mesma Árvore que você conheça.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 9,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Abrir um caminho entre dois lugares que o mundo mantinha separados."
       },
       {
         "id": "dourado",
         "titulo": "Tempo",
+        "nome_completo": "Espírito do Tempo",
         "fluxo": "tempo",
         "natureza": "natural",
         "vida": 0,
@@ -1749,6 +2377,17 @@
             "tipo": "movimento",
             "nivel_minimo": 1,
             "descricao": "Uma vez por cena, gaste 2 Mana para receber uma ação de movimento adicional no seu turno.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "automatizada": false
+          },
+          {
+            "id": "adiantar-se",
+            "titulo": "Adiantar-se",
+            "tipo": "reacao",
+            "nivel_minimo": 8,
+            "descricao": "Uma vez por cena, gaste 2 Mana ao rolar Iniciativa: role dois d20 e fique com o maior.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
@@ -1767,6 +2406,18 @@
             "automatizada": false
           },
           {
+            "id": "desfazer-o-instante",
+            "titulo": "Desfazer o Instante",
+            "tipo": "reacao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma reação e 6 Mana quando você ou um aliado a até 9 m sofrer dano ou falhar num teste: o dano é cancelado, ou o teste é refeito com vantagem.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 6,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
             "id": "segundo-agora",
             "titulo": "Segundo Agora",
             "tipo": "acao_completa",
@@ -1776,12 +2427,26 @@
             "recuperacao": "sessao",
             "custo_mana": 10,
             "automatizada": false
+          },
+          {
+            "id": "parar-o-tempo",
+            "titulo": "Parar o Tempo",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 14 Mana: você recebe três turnos completos extras seguidos, logo depois do último turno da rodada.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 14,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Chegar a um instante que já aconteceu e mudar nele uma única coisa, sem desfazer o resto."
       },
       {
         "id": "preto",
         "titulo": "Vazio",
+        "nome_completo": "Espírito do Vazio",
         "fluxo": "vazio",
         "natureza": "natural",
         "vida": 0,
@@ -1792,10 +2457,18 @@
             "titulo": "Invisível ao Vazio",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Fique invisível até o fim do seu próximo turno. Atacar, conjurar ou mover qualquer objeto quebra a invisibilidade na hora. Custa uma ação e 2 Mana, uma vez por cena.",
+            "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para ficar invisível até o fim do seu próximo turno. Atacar, conjurar ou mover qualquer objeto quebra a invisibilidade na hora.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
+            "automatizada": false
+          },
+          {
+            "id": "passo-sem-rastro",
+            "titulo": "Passo Sem Rastro",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você não deixa pegada, cheiro nem som ao se mover, e criaturas têm desvantagem em rastrear você.",
             "automatizada": false
           },
           {
@@ -1803,10 +2476,23 @@
             "titulo": "Sorvedouro",
             "tipo": "reacao",
             "nivel_minimo": 15,
-            "descricao": "Quando uma magia tiver você como alvo, corte o dano dela pela metade e converta o que evitou em Mana, até no máximo 6. Custa uma reação e 4 Mana, uma vez por cena.",
+            "descricao": "Uma vez por cena, gaste uma reação e 4 Mana quando uma magia tiver você como alvo: o dano dela cai pela metade, e o que você evitou vira Mana para você, até no máximo 6.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "engolir-o-som",
+            "titulo": "Engolir o Som",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: uma criatura a até 9 m testa Vontade contra o seu Misticismo. Falhando, ela fica cega e surda por 2 rodadas.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_vontade",
             "automatizada": false
           },
           {
@@ -1814,18 +2500,33 @@
             "titulo": "Silêncio Absoluto",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Abra ao seu redor uma esfera de ausência com 9 m de raio. Por 1 minuto, magia de até 5º Círculo não funciona lá dentro, e isso vale para você e para os seus aliados também, não só para o inimigo. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana para abrir ao seu redor uma esfera de ausência com 9 m de raio. Por 1 minuto, magia de até 5º Círculo não funciona lá dentro, para ninguém: você e os seus aliados também ficam sem ela.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "eclipse",
+            "titulo": "Eclipse",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, num raio de 18 m, criaturas hostis ficam cegas e não conseguem conjurar magia de até 8º Círculo. Você e os seus aliados enxergam normalmente.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Voltar de dentro do Vazio, ou apagar sozinho algo que nunca devia ser lembrado."
       },
       {
         "id": "vermelho-vinho",
         "titulo": "Fim",
+        "nome_completo": "Espírito do Fim",
         "fluxo": "fim",
         "natureza": "natural",
         "vida": 0,
@@ -1844,14 +2545,34 @@
             "automatizada": false
           },
           {
+            "id": "sentir-o-fim",
+            "titulo": "Sentir o Fim",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você sabe quando uma criatura a até 18 m está com metade da Vida máxima ou menos.",
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
             "id": "furia-carmesim",
             "titulo": "Fúria Carmesim",
             "tipo": "acao",
             "nivel_minimo": 15,
-            "descricao": "Incendeie sua forma. Por 3 rodadas, seus ataques causam +2 de dano, mas você fica sem escolha: não pode se afastar de um inimigo visível por vontade própria, nem terminar o turno sem ter atacado. Custa uma ação e 4 Mana, uma vez por cena.",
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para incendiar sua forma. Por 3 rodadas, seus ataques causam +2 de dano, mas você perde o controle: não consegue se afastar de um inimigo à vista nem terminar o turno sem ter atacado.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "ultima-estocada",
+            "titulo": "Última Estocada",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: um ataque seu contra uma criatura com metade da Vida máxima ou menos causa +4d6 de dano.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
             "automatizada": false
           },
           {
@@ -1859,18 +2580,33 @@
             "titulo": "Presságio do Fim",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Escolha uma criatura a até 9 m que já esteja com metade da Vida máxima ou menos: ela sofre 10d6 de dano. Se isso a levar a 0, você recupera 4d6 de Vida. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana e escolha uma criatura a até 9 m que já esteja com metade da Vida máxima ou menos: ela sofre 14d6 de dano. Se isso a levar a 0, você recupera 4d6 de Vida.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "ceifa",
+            "titulo": "Ceifa",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: toda criatura hostil a até 9 m com metade da Vida máxima ou menos sofre 20d6 de dano, e você recupera Vida igual à metade do total causado.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 9,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Decidir, sozinho e pagando o custo, o fim de algo que merecia acabar."
       },
       {
         "id": "azul-neon",
         "titulo": "Tecnologia",
+        "nome_completo": "Espírito da Tecnologia",
         "fluxo": "tecnologia",
         "natureza": "natural",
         "vida": 0,
@@ -1881,9 +2617,18 @@
             "titulo": "Interferência",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Gaste 2 Mana para operar à distância um dispositivo eletrônico simples a até 9 m (tranca, luz, câmera, terminal destravado) como se estivesse tocando nele. Isso não substitui o teste exigido por um sistema protegido.",
+            "descricao": "Gaste 2 Mana para operar à distância um dispositivo eletrônico simples a até 9 m (tranca, luz, câmera, terminal destravado) como se estivesse tocando nele. Sistema protegido continua exigindo o teste normal.",
             "custo_mana": 2,
             "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "sinal-forte",
+            "titulo": "Sinal Forte",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "A Interferência passa a alcançar 18 m.",
+            "alcance_m": 18,
             "automatizada": false
           },
           {
@@ -1891,7 +2636,7 @@
             "titulo": "Possessão de Circuito",
             "tipo": "acao",
             "nivel_minimo": 15,
-            "descricao": "Entre num autômato inanimado ou num veículo sem tripulação a até 9 m e comande o corpo dele por 1 rodada. Construto que tenha vontade própria tem direito a um teste de resistência para expulsar você. Custa uma ação e 4 Mana, uma vez por cena.",
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para entrar num autômato inanimado ou num veículo sem tripulação a até 9 m e comandá-lo por 1 rodada. Construto com vontade própria tem direito a um teste de resistência para expulsar você.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -1899,26 +2644,54 @@
             "automatizada": false
           },
           {
+            "id": "surto",
+            "titulo": "Surto",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: um dispositivo eletrônico ou construto a até 18 m testa Fortitude contra o seu Misticismo. Falhando, fica desligado por 2 rodadas.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_fortitude",
+            "automatizada": false
+          },
+          {
             "id": "fantasma-na-rede",
             "titulo": "Fantasma na Rede",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Escolha um dos dois: percorrer um sistema conectado para tirar ou trocar uma informação guardada nele, ou desligar toda tecnologia não blindada num raio de 9 m por 1 minuto. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana e escolha um dos dois: percorrer um sistema conectado para tirar ou trocar uma informação guardada nele, ou desligar toda a tecnologia não blindada num raio de 9 m por 1 minuto.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "mente-na-rede",
+            "titulo": "Mente na Rede",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 1 minuto, você controla toda a tecnologia não blindada num raio de 30 m. Abre e fecha o que for eletrônico, desliga o que quiser, comanda construtos sem vontade própria e enxerga por qualquer câmera.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 30,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Invadir e libertar, sozinho, um sistema que mantinha gente aprisionada."
       },
       {
         "id": "branco",
         "titulo": "Universal",
+        "nome_completo": "Espírito do Fluxo Universal",
         "fluxo": "universal",
         "natureza": "natural",
         "somente_mestre": true,
-        "descricao": "O Fluxo que toca todos os outros sem pertencer a nenhum. Quem o carrega usa o que qualquer Fluxo oferece, e paga com Mana extra por escolher na hora. Só o Mestre concede, e até hoje só Blanc é conhecida por tê-lo.",
+        "descricao": "O Fluxo que toca todos os outros sem pertencer a nenhum. Quem o carrega usa o que qualquer Fluxo oferece e paga Mana extra por escolher na hora. Só o mestre concede, e até hoje só Blanc é conhecida por tê-lo.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1928,6 +2701,17 @@
             "tipo": "acao",
             "nivel_minimo": 1,
             "descricao": "Uma vez por cena, escolha um dos onze Fluxos e use, uma vez, a característica de nível 1 dele, no tipo de ação que ela pede. Além do custo de Mana dela, pague 2 Mana. O limite de usos da característica emprestada não conta.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "automatizada": false
+          },
+          {
+            "id": "mais-que-um-toque",
+            "titulo": "Mais que um Toque",
+            "tipo": "acao",
+            "nivel_minimo": 8,
+            "descricao": "Uma vez por cena, escolha um dos onze Fluxos e use, uma vez, a característica de nível 8 dele, no tipo de ação que ela pede. Além do custo de Mana dela, pague 2 Mana. O limite de usos da característica emprestada não conta.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
@@ -1945,6 +2729,17 @@
             "automatizada": false
           },
           {
+            "id": "fluxo-emprestado-maior",
+            "titulo": "Empréstimo Maior",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, escolha um dos onze Fluxos e use, uma vez, a característica de nível 28 dele, no tipo de ação que ela pede. Além do custo de Mana dela, pague 4 Mana. O limite de usos da característica emprestada não conta.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "automatizada": false
+          },
+          {
             "id": "todos-os-fluxos-em-um",
             "titulo": "Todos os Fluxos em Um",
             "tipo": "acao_completa",
@@ -1954,12 +2749,26 @@
             "recuperacao": "sessao",
             "custo_mana": 4,
             "automatizada": false
+          },
+          {
+            "id": "todos-os-fluxos-sem-fim",
+            "titulo": "Todos os Fluxos sem Fim",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, escolha um dos onze Fluxos e use, uma vez, a característica de nível 60 dele, no tipo de ação que ela pede. Além do custo de Mana dela, pague 6 Mana. A Fonte do Fluxo reduz o custo da característica emprestada, nunca esses 6. O limite de usos da característica emprestada não conta.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 6,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Ser reconhecido por todos os Fluxos ao mesmo tempo. Só o mestre decide quando isso aconteceu."
       },
       {
         "id": "demonio-soberba",
         "titulo": "Soberba",
+        "nome_completo": "Demônio da Soberba",
         "natureza": "demoniaca",
         "pecado": "pecado-soberba",
         "virtude_oposta": "virtude-humildade",
@@ -1979,6 +2788,14 @@
             "automatizada": false
           },
           {
+            "id": "queixo-erguido",
+            "titulo": "Queixo Erguido",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você fica imune a Amedrontado. Em troca, o auxílio de aliados não soma em nenhum teste de Vontade seu.",
+            "automatizada": false
+          },
+          {
             "id": "olhar-de-cima",
             "titulo": "Olhar de Cima",
             "tipo": "acao",
@@ -1992,21 +2809,48 @@
             "automatizada": false
           },
           {
+            "id": "sentenca",
+            "titulo": "Sentença",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: uma criatura a até 18 m testa Vontade contra o seu Misticismo. Falhando, ela cai de joelhos, fica Caída e perde a reação até o fim da próxima rodada. Nesse tempo, você não recebe auxílio nem cura de aliados.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
             "id": "coroa-propria",
             "titulo": "Coroa Própria",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas você fica imune a Amedrontado e a controle mental e recebe +6 em todo teste que fizer sem auxílio. Nesse tempo, todo bônus e toda cura que viria de outra criatura vale zero em você.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas, você fica imune a Amedrontado e a controle mental e recebe +6 em todo teste que fizer sem auxílio. Nesse tempo, nenhum bônus ou cura que venha de outra criatura vale em você.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
             "automatizada": false
+          },
+          {
+            "id": "trono-proprio",
+            "titulo": "Trono Próprio",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, você é imune a todas as condições e recebe +10 em tudo o que fizer sem auxílio. Nesse tempo, nenhum bônus, cura ou efeito benéfico de outra criatura vale em você.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Ser humilhado diante de todos e, mesmo assim, passar uma cena inteira sem aceitar ajuda nem pedir perdão."
       },
       {
         "id": "demonio-ganancia",
         "titulo": "Ganância",
+        "nome_completo": "Demônio da Ganância",
         "natureza": "demoniaca",
         "pecado": "pecado-avareza",
         "virtude_oposta": "virtude-caridade",
@@ -2027,6 +2871,14 @@
             "automatizada": false
           },
           {
+            "id": "olho-de-avaliador",
+            "titulo": "Olho de Avaliador",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Ao olhar para um objeto, você sabe quanto ele vale em Lunaris e se é mágico. Em troca, deixar para trás algo valioso que você viu exige passar em Vontade DT 12.",
+            "automatizada": false
+          },
+          {
             "id": "mao-pesada",
             "titulo": "Mão Pesada",
             "tipo": "acao",
@@ -2040,6 +2892,17 @@
             "automatizada": false
           },
           {
+            "id": "cofre-de-bolso",
+            "titulo": "Cofre de Bolso",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para guardar num bolso do Inferno até 10 itens que você carrega. Depois disso, tirar qualquer um deles é uma ação livre. Só você alcança esse bolso, e nada que sai dele pode ir parar nas mãos de outra pessoa.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "automatizada": false
+          },
+          {
             "id": "avidez-sem-fundo",
             "titulo": "Avidez Sem Fundo",
             "tipo": "acao_completa",
@@ -2050,12 +2913,28 @@
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "tudo-tem-preco",
+            "titulo": "Tudo Tem Preço",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: uma criatura a até 18 m testa Vontade contra o seu Misticismo. Falhando, por 3 rodadas toda característica, habilidade e magia dela custa o dobro de Mana, e tudo o que ela gastar vai para você, até o seu máximo.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Conquistar por conta própria algo que valia um reino e recusar-se a dividir uma parte."
       },
       {
         "id": "demonio-luxuria",
         "titulo": "Luxúria",
+        "nome_completo": "Demônio da Luxúria",
         "natureza": "demoniaca",
         "pecado": "pecado-luxuria",
         "virtude_oposta": "virtude-castidade",
@@ -2068,12 +2947,20 @@
             "titulo": "Olhar que Pede",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Uma vez por cena, gaste 2 Mana: uma criatura que te veja a até 9 m testa Vontade contra o seu Misticismo. Falhando, ela tem desvantagem no próximo ataque contra você e você descobre o que ela mais deseja neste momento. Passando, você fica com desvantagem em Vontade contra ela até o fim da cena.",
+            "descricao": "Uma vez por cena, gaste 2 Mana: uma criatura que veja você a até 9 m testa Vontade contra o seu Misticismo. Falhando, ela tem desvantagem no próximo ataque contra você, e você descobre o que ela mais deseja neste momento. Passando, quem fica com desvantagem em Vontade contra ela é você, até o fim da cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
             "alcance_m": 9,
             "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
+            "id": "voz-de-veludo",
+            "titulo": "Voz de Veludo",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você recebe +3 em testes de persuasão, sedução e leitura de intenção. Quem descobre o seu Pecado recebe +2 para manipular você.",
             "automatizada": false
           },
           {
@@ -2090,6 +2977,19 @@
             "automatizada": false
           },
           {
+            "id": "beijo-que-marca",
+            "titulo": "Beijo que Marca",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para marcar uma criatura adjacente que aceite ou que falhe em Vontade contra o seu Misticismo. Por 1 hora, você sempre sabe onde ela está, e ela tem desvantagem em Vontade contra você.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 1.5,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
             "id": "vicio-irresistivel",
             "titulo": "Vício Irresistível",
             "tipo": "acao_completa",
@@ -2101,12 +3001,28 @@
             "alcance_m": 18,
             "teste": "misticismo_vs_vontade",
             "automatizada": false
+          },
+          {
+            "id": "coro-de-desejos",
+            "titulo": "Coro de Desejos",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: criaturas hostis a até 18 m testam Vontade contra o seu Misticismo. Falhando, ficam Encantadas por 3 rodadas: seguem você e não atacam. O efeito acaba para quem for ferido por você ou por um aliado seu. Quando termina, cada uma sofre 2 de Cansaço, e você também.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Fazer alguém abrir mão do que mais amava, sem uma única ameaça."
       },
       {
         "id": "demonio-inveja",
         "titulo": "Inveja",
+        "nome_completo": "Demônio da Inveja",
         "natureza": "demoniaca",
         "pecado": "pecado-inveja",
         "virtude_oposta": "virtude-gratidao",
@@ -2127,6 +3043,15 @@
             "automatizada": false
           },
           {
+            "id": "olho-comprido",
+            "titulo": "Olho Comprido",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Quando uma criatura a até 18 m usar um poder, você descobre qual é e quanto Mana custou. Até o fim da cena, você tem desvantagem em testes para elogiar ou ajudar essa criatura.",
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
             "id": "rosto-emprestado",
             "titulo": "Rosto Emprestado",
             "tipo": "acao",
@@ -2135,6 +3060,18 @@
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "aprender-a-forca",
+            "titulo": "Aprender à Força",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: escolha uma criatura a até 9 m que usou uma característica nesta cena. Você a usa uma vez, sem custo, como se fosse sua, e ela não consegue usá-la de novo até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 9,
             "automatizada": false
           },
           {
@@ -2148,12 +3085,28 @@
             "custo_mana": 8,
             "alcance_m": 18,
             "automatizada": false
+          },
+          {
+            "id": "troca-de-vidas",
+            "titulo": "Troca de Vidas",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: uma criatura a até 9 m testa Vontade contra o seu Misticismo. Falhando, ela sofre 10d6 de dano e você recupera Vida igual ao dano causado. Depois, vocês dois trocam a Mana atual, cada um limitado ao próprio máximo.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Tomar de alguém, sem que ele perceba, aquilo pelo qual ele era admirado."
       },
       {
         "id": "demonio-gula",
         "titulo": "Gula",
+        "nome_completo": "Demônio da Gula",
         "natureza": "demoniaca",
         "pecado": "pecado-gula",
         "virtude_oposta": "virtude-temperanca",
@@ -2174,6 +3127,14 @@
             "automatizada": false
           },
           {
+            "id": "estomago-sem-fundo",
+            "titulo": "Estômago sem Fundo",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você fica imune a veneno ingerido e a comida estragada, e o Devorar recupera mais 1d6 de Vida. Um dia sem devorar nada rende 1 de Cansaço.",
+            "automatizada": false
+          },
+          {
             "id": "dente-faminto",
             "titulo": "Dente Faminto",
             "tipo": "acao",
@@ -2185,22 +3146,48 @@
             "automatizada": false
           },
           {
+            "id": "mordida-do-vazio",
+            "titulo": "Mordida Funda",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: o seu próximo ataque corpo a corpo desta rodada causa +6d6 de dano e você recupera Vida igual ao dano causado.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "automatizada": false
+          },
+          {
             "id": "banquete-final",
             "titulo": "Banquete Final",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: até três criaturas a até 9 m sofrem 4d6 de dano cada uma, e você recupera Vida igual a metade do total causado. Até o fim da cena, nenhuma cura que não venha de devorar rende mais de metade em você.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: até três criaturas a até 9 m sofrem 4d6 de dano cada uma, e você recupera Vida igual à metade do total causado. Até o fim da cena, nenhuma cura que não venha de devorar rende mais de metade em você.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "fome-que-devora-o-mundo",
+            "titulo": "Fome que Devora o Mundo",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: toda criatura hostil a até 18 m perde 6d6 de Vida e 3d6 de Mana, e você recupera metade de cada um, até o seu máximo. Até o fim da cena, nenhuma cura que não venha de devorar rende mais de metade em você.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Devorar algo grande demais para uma pessoa só, como uma criatura lendária ou o banquete de uma cidade, e carregar as consequências."
       },
       {
         "id": "demonio-ira",
         "titulo": "Ira",
+        "nome_completo": "Demônio da Ira",
         "natureza": "demoniaca",
         "pecado": "pecado-ira",
         "virtude_oposta": "virtude-paciencia",
@@ -2220,6 +3207,14 @@
             "automatizada": false
           },
           {
+            "id": "sangue-sobe",
+            "titulo": "Sangue Sobe",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você recebe +3 em Iniciativa. Em troca, não consegue esperar: não pode adiar o seu turno nem preparar uma ação.",
+            "automatizada": false
+          },
+          {
             "id": "corpo-em-brasa",
             "titulo": "Corpo em Brasa",
             "tipo": "acao",
@@ -2228,6 +3223,19 @@
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "berro",
+            "titulo": "Berro",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: criaturas hostis num cone de 9 m testam Vontade contra o seu Misticismo. Falhando, ficam Amedrontadas por 2 rodadas, e o seu próximo ataque causa +2d6 de dano.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_vontade",
             "automatizada": false
           },
           {
@@ -2240,12 +3248,26 @@
             "recuperacao": "sessao",
             "custo_mana": 10,
             "automatizada": false
+          },
+          {
+            "id": "furia-sem-fim",
+            "titulo": "Fúria sem Fim",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, enquanto houver um inimigo à vista, você não cai abaixo de 1 de Vida e seus ataques causam +4d6 de dano. Quando termina, você sofre 3 de Cansaço e fica inconsciente por 1 rodada.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Vencer, sozinho e furioso, uma batalha que devia ser perdida, e pagar o preço."
       },
       {
         "id": "demonio-preguica",
         "titulo": "Preguiça",
+        "nome_completo": "Demônio da Preguiça",
         "natureza": "demoniaca",
         "pecado": "pecado-preguica",
         "virtude_oposta": "virtude-diligencia",
@@ -2267,6 +3289,14 @@
             "automatizada": false
           },
           {
+            "id": "cochilo-leve",
+            "titulo": "Cochilo Leve",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Se você não se mover durante o seu turno, recupera 1 Mana no fim dele. Em troca, perde 1,5 m de Movimento permanentemente.",
+            "automatizada": false
+          },
+          {
             "id": "cochilo-profundo",
             "titulo": "Cochilo Profundo",
             "tipo": "acao",
@@ -2275,6 +3305,19 @@
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "peso-do-mundo",
+            "titulo": "Peso do Mundo",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: uma criatura a até 9 m testa Fortitude contra o seu Misticismo. Falhando, fica Lenta por 3 rodadas, com metade do Movimento e sem reações.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_fortitude",
             "automatizada": false
           },
           {
@@ -2289,12 +3332,28 @@
             "alcance_m": 18,
             "teste": "misticismo_vs_fortitude",
             "automatizada": false
+          },
+          {
+            "id": "eternidade-parada",
+            "titulo": "Eternidade Parada",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: criaturas hostis a até 18 m testam Fortitude contra o seu Misticismo. Falhando, ficam paralisadas por 2 rodadas; passando, ficam Lentas por 3. Nesse tempo, o seu Movimento cai a zero.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_fortitude",
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Ficar parado diante de um perigo imenso e deixar que ele passe sem agir."
       },
       {
         "id": "anjo-humildade",
         "titulo": "Humildade",
+        "nome_completo": "Anjo da Humildade",
         "natureza": "angelical",
         "virtude": "virtude-humildade",
         "pecado_oposto": "pecado-soberba",
@@ -2315,6 +3374,15 @@
             "automatizada": false
           },
           {
+            "id": "cabeca-baixa",
+            "titulo": "Cabeça Baixa",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Aliados a até 9 m recebem +1 em testes de resistência. Você não recebe esse bônus.",
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
             "id": "ceder-o-passo",
             "titulo": "Ceder o Passo",
             "tipo": "reacao",
@@ -2324,6 +3392,18 @@
             "recuperacao": "cena",
             "custo_mana": 3,
             "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "passar-a-vez",
+            "titulo": "Passar a Vez",
+            "tipo": "reacao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma reação e 5 Mana quando um aliado a até 18 m for alvo de um ataque: você troca de lugar com ele e o ataque acerta você.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 18,
             "automatizada": false
           },
           {
@@ -2337,12 +3417,27 @@
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "todos-antes-de-mim",
+            "titulo": "Todos antes de Mim",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, todo dano que os aliados a até 30 m sofreriam é reduzido a zero, e você sofre metade dele. Nesse tempo, você não pode ser curado.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 30,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Dar o crédito de uma grande vitória a outra pessoa e nunca reivindicá-lo."
       },
       {
         "id": "anjo-caridade",
         "titulo": "Caridade",
+        "nome_completo": "Anjo da Caridade",
         "natureza": "angelical",
         "virtude": "virtude-caridade",
         "pecado_oposto": "pecado-avareza",
@@ -2363,6 +3458,14 @@
             "automatizada": false
           },
           {
+            "id": "mao-leve",
+            "titulo": "Mão Leve",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Ao dar um item de valor a alguém que o aceite, você recebe +2 no próximo teste que fizer. Você não pode aceitar presente em troca.",
+            "automatizada": false
+          },
+          {
             "id": "mao-aberta",
             "titulo": "Mão Aberta",
             "tipo": "acao",
@@ -2372,6 +3475,18 @@
             "recuperacao": "cena",
             "custo_mana": 4,
             "alcance_m": 18,
+            "automatizada": false
+          },
+          {
+            "id": "dadiva",
+            "titulo": "Dádiva",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: um aliado voluntário a até 9 m recupera 3d6 de Vida e 3 Mana, e você perde 3 Mana.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 9,
             "automatizada": false
           },
           {
@@ -2385,12 +3500,27 @@
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "fartura-de-milagres",
+            "titulo": "Fartura de Milagres",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: todos os aliados a até 18 m recuperam toda a Mana e metade da Vida máxima. Em troca, você fica com 0 Mana até o próximo descanso.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Dar tudo o que tinha a quem precisava, sem esperar nada em troca."
       },
       {
         "id": "anjo-castidade",
         "titulo": "Castidade",
+        "nome_completo": "Anjo da Castidade",
         "natureza": "angelical",
         "virtude": "virtude-castidade",
         "pecado_oposto": "pecado-luxuria",
@@ -2411,6 +3541,14 @@
             "automatizada": false
           },
           {
+            "id": "olhar-firme",
+            "titulo": "Olhar Firme",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você recebe +3 em testes de Vontade contra encantamento, sedução e persuasão. Em troca, não consegue fingir interesse que não tem.",
+            "automatizada": false
+          },
+          {
             "id": "recusa-firme",
             "titulo": "Recusa Firme",
             "tipo": "reacao",
@@ -2423,8 +3561,20 @@
             "automatizada": false
           },
           {
+            "id": "escudo-limpo",
+            "titulo": "Escudo Limpo",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: todo aliado a até 9 m encerra na hora qualquer encantamento ou controle que esteja sobre ele. Você tem desvantagem em testes sociais até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
             "id": "voto-inquebravel",
-            "titulo": "Voto Inquebrável",
+            "titulo": "Mente Intocada",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
             "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 1 minuto, você e os aliados a até 9 m ficam imunes a encantamento e a controle mental, e quem tentar um efeito assim contra o grupo sofre 4d6 de dano mental. Quando o efeito termina, você sofre 1 de Cansaço.",
@@ -2433,12 +3583,28 @@
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "santuario",
+            "titulo": "Santuário",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, numa esfera de 9 m, ninguém pode ser encantado, controlado nem ter a mente lida, e criaturas hostis que tentem ferir quem está dentro testam Vontade contra o seu Misticismo ou perdem a ação.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 9,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Recusar, diante de quem a fez, uma oferta que lhe daria tudo."
       },
       {
         "id": "anjo-gratidao",
         "titulo": "Gratidão",
+        "nome_completo": "Anjo da Gratidão",
         "natureza": "angelical",
         "virtude": "virtude-gratidao",
         "pecado_oposto": "pecado-inveja",
@@ -2459,6 +3625,14 @@
             "automatizada": false
           },
           {
+            "id": "favor-lembrado",
+            "titulo": "Agradecimento",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Quem você ajudou ou curou nesta cena recebe +1 no próximo teste que fizer. Você não recebe esse bônus.",
+            "automatizada": false
+          },
+          {
             "id": "elo-de-gratidao",
             "titulo": "Elo de Gratidão",
             "tipo": "acao",
@@ -2468,6 +3642,18 @@
             "recuperacao": "cena",
             "custo_mana": 4,
             "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "retribuir",
+            "titulo": "Retribuir",
+            "tipo": "reacao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma reação e 5 Mana quando um aliado a até 18 m cair a 0 de Vida: ele fica com 1 de Vida e recupera 1d6 no início de cada turno dele, por 3 rodadas.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 18,
             "automatizada": false
           },
           {
@@ -2481,12 +3667,27 @@
             "custo_mana": 8,
             "alcance_m": 18,
             "automatizada": false
+          },
+          {
+            "id": "divida-de-honra",
+            "titulo": "Dívida de Honra",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, todo aliado a até 30 m que ajudou ou foi ajudado por outro aliado nesta sessão recebe +4 em tudo o que fizer. Quando termina, cada um recupera 4d6 de Vida.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 30,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Pagar em dobro uma dívida antiga, diante de todos que a conheciam."
       },
       {
         "id": "anjo-moderacao",
         "titulo": "Moderação",
+        "nome_completo": "Anjo da Moderação",
         "natureza": "angelical",
         "virtude": "virtude-temperanca",
         "pecado_oposto": "pecado-gula",
@@ -2507,6 +3708,16 @@
             "automatizada": false
           },
           {
+            "id": "meio-termo",
+            "titulo": "Meio-termo",
+            "tipo": "reacao",
+            "nivel_minimo": 8,
+            "descricao": "Uma vez por cena, quando um único golpe for tirar de você mais da metade da sua Vida atual, reduza esse dano em 1d6. Em troca, você não pode usar outra característica da sua Virtude na mesma rodada.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "automatizada": false
+          },
+          {
             "id": "medida-certa",
             "titulo": "Medida Certa",
             "tipo": "reacao",
@@ -2516,6 +3727,19 @@
             "recuperacao": "cena",
             "custo_mana": 4,
             "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "equilibrio",
+            "titulo": "Equilíbrio",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: uma criatura a até 18 m testa Vontade contra o seu Misticismo. Falhando, todos os bônus temporários e vantagens dela acabam, e todas as penalidades e desvantagens também.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 18,
+            "teste": "misticismo_vs_vontade",
             "automatizada": false
           },
           {
@@ -2529,12 +3753,27 @@
             "custo_mana": 8,
             "alcance_m": 9,
             "automatizada": false
+          },
+          {
+            "id": "medida-do-mundo",
+            "titulo": "Medida do Mundo",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, o dano causado por criaturas hostis a até 18 m cai pela metade, e a cura recebida por aliados na área aumenta em 50%. Nesse tempo, você não pode atacar.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 18,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Apartar uma guerra sem tomar partido nem deixar um lado vencer."
       },
       {
         "id": "anjo-paciencia",
         "titulo": "Paciência",
+        "nome_completo": "Anjo da Paciência",
         "natureza": "angelical",
         "virtude": "virtude-paciencia",
         "pecado_oposto": "pecado-ira",
@@ -2554,6 +3793,14 @@
             "automatizada": false
           },
           {
+            "id": "respirar-fundo",
+            "titulo": "Respirar Fundo",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você recebe +1 de Defesa e vantagem em testes contra provocação e contra efeitos que forcem você a agir. Em troca, nunca ataca primeiro: a sua primeira ação do combate não pode ser um ataque.",
+            "automatizada": false
+          },
+          {
             "id": "corpo-de-pedra",
             "titulo": "Corpo de Pedra",
             "tipo": "acao",
@@ -2565,23 +3812,49 @@
             "automatizada": false
           },
           {
+            "id": "esperar-a-hora",
+            "titulo": "Esperar a Hora",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: você adia o seu turno e age por último nesta rodada, e o seu primeiro ataque nesse turno causa +4d6 de dano.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "automatizada": false
+          },
+          {
             "id": "paz-imposta",
             "titulo": "Paz Imposta",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, criaturas hostis a até 9 m testam Vontade contra o seu Misticismo no início de cada turno delas; falhando, não conseguem atacar naquele turno. Nesse tempo, você não pode atacar nem causar dano.",
-            "usos": 2,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, criaturas hostis a até 9 m testam Vontade contra o seu Misticismo no início de cada turno delas; falhando, não conseguem atacar naquele turno. Nesse tempo, você não pode atacar nem causar dano.",
+            "usos": 1,
             "recuperacao": "sessao",
             "custo_mana": 10,
             "alcance_m": 9,
             "teste": "misticismo_vs_vontade",
             "automatizada": false
+          },
+          {
+            "id": "montanha-calma",
+            "titulo": "Muralha Serena",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, você e os aliados a até 9 m têm Resistência 10 contra todo dano físico e +4 de Defesa, e ninguém pode ser movido nem derrubado. Nesse tempo, você não pode atacar.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 9,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Esperar anos pela hora certa e agir nela sem errar."
       },
       {
         "id": "anjo-diligencia",
-        "titulo": "Diligência",
+        "titulo": "Dedicação",
+        "nome_completo": "Anjo da Dedicação",
         "natureza": "angelical",
         "virtude": "virtude-diligencia",
         "pecado_oposto": "pecado-preguica",
@@ -2601,6 +3874,14 @@
             "automatizada": false
           },
           {
+            "id": "mao-na-massa",
+            "titulo": "Mão na Massa",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Tarefas demoradas que você faz levam metade do tempo, e você ignora as penalidades do primeiro ponto de Cansaço. Em troca, o seu descanso completo exige 10 horas.",
+            "automatizada": false
+          },
+          {
             "id": "trabalho-dobrado",
             "titulo": "Trabalho Dobrado",
             "tipo": "acao",
@@ -2609,6 +3890,17 @@
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "duas-coisas-ao-mesmo-tempo",
+            "titulo": "Duas Coisas ao Mesmo Tempo",
+            "tipo": "acao",
+            "nivel_minimo": 28,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para ter uma ação de ataque adicional neste turno. No início do seu próximo turno, você perde a ação de movimento.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
             "automatizada": false
           },
           {
@@ -2622,11 +3914,32 @@
             "custo_mana": 8,
             "alcance_m": 18,
             "automatizada": false
+          },
+          {
+            "id": "dia-inteiro-numa-hora",
+            "titulo": "Dia Inteiro numa Hora",
+            "tipo": "acao_completa",
+            "nivel_minimo": 60,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, você e os aliados a até 30 m agem com uma ação padrão extra por turno e +6 m de Movimento. Quando termina, você sofre 1 de Cansaço.",
+            "requer_condicao": "provacao-primordial",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 12,
+            "alcance_m": 30,
+            "automatizada": false
           }
-        ]
+        ],
+        "provacao": "Terminar, sozinho e a tempo, um trabalho que pedia um exército."
       }
     ],
-    "natureza_padrao": "natural"
+    "natureza_padrao": "natural",
+    "condicoes_estagio": [
+      {
+        "id": "provacao-primordial",
+        "titulo": "Provação Primordial",
+        "descricao": "Chegar ao nível total 60 não basta para virar Primordial. O espírito precisa cumprir um feito grande ligado à própria marca, a Provação descrita na página dela. O jogador e o mestre combinam o feito, e só o mestre marca a Provação como cumprida na ficha. Até lá, o espírito fica no quinto degrau, por mais alto que seja o nível."
+      }
+    ]
   },
   {
     "id": "gigante",
@@ -2639,7 +3952,7 @@
     "mana": -1,
     "estamina": 3,
     "movimento": 0,
-    "descricao": "É tão grande que nada feito pros outros serve nele. Carrega o dobro, não sai do lugar quando tentam empurrar e vive batendo a cabeça em porta normal. A Linhagem define o que corre no sangue, e o porte só aumenta: Grande, Enorme e, no fim, Colossal. Fala Grego.",
+    "descricao": "É tão grande que nada feito pros outros serve nele. Carrega o dobro, não sai do lugar quando tentam empurrar e vive batendo a cabeça em porta normal. A Linhagem define o que corre no sangue, e o porte só aumenta: Grande, Enorme e, no fim, Colossal.",
     "fisiologia": [
       "Tamanho Grande; equipamentos precisam ter tamanho compatível."
     ],
@@ -2716,7 +4029,7 @@
             "titulo": "Golpe Congelante",
             "tipo": "passiva",
             "nivel_minimo": 14,
-            "descricao": "Cada acerto seu corpo a corpo congela um pouco quem apanhou: causa 1d6 de dano de frio a mais e reduz o Movimento do alvo em 3 m até o fim do próximo turno dele.",
+            "descricao": "Cada acerto seu corpo a corpo congela um pouco quem apanhou: causa 1d6 de dano de gelo a mais e reduz o Movimento do alvo em 3 m até o fim do próximo turno dele.",
             "automatizada": false
           },
           {
@@ -2724,7 +4037,7 @@
             "titulo": "Invérnia",
             "tipo": "acao_completa",
             "nivel_minimo": 36,
-            "descricao": "O inverno desce numa área de 9 m e fica lá por cinco rodadas. O chão vira gelo, criaturas hostis dentro da área andam com metade do Movimento e sofrem 4d6 de dano de frio sempre que começam o turno ali dentro. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "O inverno desce numa área de 9 m e fica lá por cinco rodadas. O chão vira gelo, criaturas hostis dentro da área andam com metade do Movimento e sofrem 4d6 de dano de gelo sempre que começam o turno ali dentro. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -2894,11 +4207,12 @@
     "vida": 0,
     "mana": 0,
     "movimento": 0,
-    "descricao": "Gente com corpo de bicho. Você escolhe o bicho, e a morfologia define se ele sai ágil, robusto ou místico. Consegue conversar coisas simples com animais, o que não quer dizer que eles vão obedecer. Fala Sumeriano.",
+    "descricao": "Gente com corpo de bicho, e todo animal do Jardim conta como Animália. Você escolhe a Forma (quanto do bicho aparece no corpo), a Morfologia (o instinto que veio mais forte) e o animal, que define o seu tamanho. Conversa coisas simples com bichos, o que não quer dizer que eles obedecem. Fala Sumeriano.",
     "rotulo_variante": "Morfologia",
-    "descricao_variantes": "Escolha o quanto do bicho aparece no corpo. As três morfologias valem igual; a diferença está em qual instinto veio mais forte.",
+    "descricao_variantes": "Escolha o instinto que veio mais forte no seu animal. As dez Morfologias têm o mesmo peso e servem a qualquer Forma: a diferença está em para que o corpo serve (correr, aguentar, farejar, caçar, voar, nadar, picar, andar em bando, resistir ou impressionar).",
     "fisiologia": [
-      "O tamanho e a aparência são definidos pelo animal representado e pela morfologia escolhida."
+      "O tamanho vem do animal escolhido: Pequeno, Normal, Grande ou Enorme. Quem escolhe a Forma Traços tem sempre tamanho Normal.",
+      "Equipamento de tamanho Grande ou Enorme precisa ser de tamanho compatível."
     ],
     "caracteristicas": [
       {
@@ -2913,6 +4227,7 @@
       {
         "id": "agil",
         "titulo": "Morfologia Ágil",
+        "descricao": "O corpo leve que corre, salta e escapa. Felinos, lebres, macacos e tudo que vive de reflexo.",
         "vida": -1,
         "mana": 1,
         "estamina": 2,
@@ -2930,6 +4245,7 @@
       {
         "id": "robusta",
         "titulo": "Morfologia Robusta",
+        "descricao": "O corpo largo que aguenta. Gorilas, rinocerontes, ursos e bichos que não saem do lugar.",
         "vida": 2,
         "mana": 0,
         "estamina": 3,
@@ -2947,6 +4263,7 @@
       {
         "id": "mistica",
         "titulo": "Morfologia Mística",
+        "descricao": "Os sentidos afiados e o jeito de quem sabe mais do que diz. Corujas, raposas, corvos e gatos.",
         "vida": 0,
         "mana": 2,
         "movimento": 0,
@@ -2959,9 +4276,1359 @@
             "automatizada": false
           }
         ]
+      },
+      {
+        "id": "predadora",
+        "titulo": "Morfologia Predadora",
+        "descricao": "Dentes e garras de quem caça. Lobos, tigres, leões e tubarões.",
+        "vida": 0,
+        "mana": 0,
+        "estamina": 3,
+        "caracteristicas": [
+          {
+            "id": "instinto-cacador",
+            "titulo": "Instinto Caçador",
+            "tipo": "passiva",
+            "descricao": "Você tem vantagem em Percepção e Sobrevivência para rastrear um alvo ferido ou que já atacou, e seus ataques causam +1 de dano contra criatura ferida.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "alada",
+        "titulo": "Morfologia Alada",
+        "descricao": "Asas, vento e vista de cima. Águias, falcões, morcegos e papagaios.",
+        "vida": -1,
+        "mana": 1,
+        "estamina": 2,
+        "caracteristicas": [
+          {
+            "id": "asas-e-voo-curto",
+            "titulo": "Asas e Voo Curto",
+            "tipo": "passiva",
+            "descricao": "Você não sofre dano de queda. Uma vez por cena, gaste 2 Mana para voar até o seu Movimento neste turno; ao terminar, precisa estar sobre uma superfície.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "aquatica",
+        "titulo": "Morfologia Aquática",
+        "descricao": "A água é casa. Golfinhos, polvos, focas e baleias.",
+        "vida": 1,
+        "mana": 0,
+        "estamina": 2,
+        "caracteristicas": [
+          {
+            "id": "nado-natural",
+            "titulo": "Nado Natural",
+            "tipo": "passiva",
+            "descricao": "Seu Movimento de nado é igual ao de terra, você respira debaixo d'água e enxerga em água turva.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "peconhenta",
+        "titulo": "Morfologia Peçonhenta",
+        "descricao": "Veneno na presa, no ferrão ou na pele. Cobras, escorpiões, aranhas e sapos.",
+        "vida": 0,
+        "mana": 1,
+        "estamina": 1,
+        "caracteristicas": [
+          {
+            "id": "peconha",
+            "titulo": "Peçonha",
+            "tipo": "passiva",
+            "descricao": "Seus ataques naturais causam +1 de dano de veneno, e você recebe Resistência 2 contra veneno.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "gregaria",
+        "titulo": "Morfologia Gregária",
+        "descricao": "Nunca anda sozinha. Formigas, abelhas, ratos e cães.",
+        "vida": 1,
+        "mana": 1,
+        "estamina": 1,
+        "caracteristicas": [
+          {
+            "id": "bando",
+            "titulo": "Bando",
+            "tipo": "passiva",
+            "descricao": "Você tem vantagem em ações coletivas e recebe +1 nos ataques contra uma criatura que tenha um aliado seu adjacente.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "blindada",
+        "titulo": "Morfologia Blindada",
+        "descricao": "Casco, carapaça e couraça. Tartarugas, tatus, crocodilos e besouros.",
+        "vida": 2,
+        "mana": 0,
+        "estamina": 1,
+        "movimento": -1.5,
+        "caracteristicas": [
+          {
+            "id": "couraca-natural",
+            "titulo": "Couraça Natural",
+            "tipo": "passiva",
+            "descricao": "Receba +1 de Defesa, mesmo sem armadura.",
+            "defesa": 1,
+            "automatizada": true
+          }
+        ]
+      },
+      {
+        "id": "mitica",
+        "titulo": "Morfologia Mítica",
+        "descricao": "Os animais das histórias. Dragões, grifos, fênix e unicórnios.",
+        "vida": 1,
+        "mana": 2,
+        "estamina": 0,
+        "caracteristicas": [
+          {
+            "id": "heranca-mitica",
+            "titulo": "Herança Mítica",
+            "tipo": "passiva",
+            "descricao": "Receba Resistência 2 contra o tipo de dano do seu animal mítico (fogo no dragão e na fênix, raio no grifo, luz no unicórnio) e vantagem em Intimidação.",
+            "automatizada": false
+          }
+        ]
       }
     ],
-    "recursos_provisorios": false
+    "recursos_provisorios": false,
+    "rotulo_natureza": "Forma",
+    "descricao_naturezas": "A Forma diz o quanto do bicho aparece no corpo. A Fera é o animal inteiro, o Híbrido é metade bicho e metade gente, e os Traços são gente com sinais de bicho. As três têm o mesmo peso: quem mostra mais bicho ganha mais corpo e perde em equipamento, e quem mostra menos ganha liberdade.",
+    "natureza_padrao": "hibrido",
+    "naturezas": [
+      {
+        "id": "fera",
+        "titulo": "Fera",
+        "descricao": "O bicho inteiro, do jeito que a natureza fez. Um gorila que fala, um dragão que pensa, uma coruja que escolhe um lado. Tem o corpo e o tamanho do animal e a arma natural mais forte, e paga no equipamento: tudo que veste precisa ser feito para ele.",
+        "vida": 2,
+        "mana": -1,
+        "estamina": 0,
+        "fisiologia": [
+          "Tem o corpo do animal por inteiro, andando do jeito dele."
+        ],
+        "caracteristicas": [
+          {
+            "id": "corpo-de-fera",
+            "titulo": "Corpo de Fera",
+            "tipo": "passiva",
+            "descricao": "Você é o animal por inteiro. A arma natural do bicho (mordida, garra, chifre) tem dano base 1d8. Se o seu animal não tem mãos hábeis, ferramenta fina, instrumento e arma de mão dão desvantagem, a menos que sejam adaptados para você.",
+            "automatizada": false
+          },
+          {
+            "id": "equipamento-adaptado",
+            "titulo": "Equipamento Adaptado",
+            "tipo": "passiva",
+            "descricao": "Armadura, arreio e qualquer peça vestida precisam ser feitos para o seu corpo: custam o dobro e são peças especiais, encomendadas ou achadas. Sem elas, você luta com o próprio corpo e a Defesa Natural.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "hibrido",
+        "titulo": "Híbrido",
+        "descricao": "Metade bicho, metade gente. Anda em duas pernas, tem mãos e um pedaço do animal no corpo: garra, presa, pelo, cauda. É a Forma de equilíbrio.",
+        "vida": 0,
+        "mana": 0,
+        "estamina": 0,
+        "fisiologia": [
+          "Anda em duas pernas, com mãos e traços visíveis do animal."
+        ],
+        "caracteristicas": [
+          {
+            "id": "corpo-dividido",
+            "titulo": "Corpo Dividido",
+            "tipo": "passiva",
+            "descricao": "Você é metade bicho, metade gente. Usa as mãos normalmente e tem uma arma natural (garra, presa, chifre curto) com dano base 1d6. Veste armadura e usa equipamento comum, ajustado por quem fez a peça.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "tracos",
+        "titulo": "Traços",
+        "descricao": "Gente com orelhas, rabo e os sentidos de um bicho. Passa por pessoa em qualquer rua, usa qualquer equipamento e tem sempre o tamanho de uma pessoa, seja qual for o animal. O bicho aparece menos no corpo e mais no instinto.",
+        "tamanho": "Normal",
+        "sem_arma_natural": true,
+        "vida": -1,
+        "mana": 1,
+        "estamina": -1,
+        "fisiologia": [
+          "Parece uma pessoa com sinais do animal: orelhas, rabo, pele, olhos."
+        ],
+        "caracteristicas": [
+          {
+            "id": "passa-por-gente",
+            "titulo": "Passa por Gente",
+            "tipo": "passiva",
+            "descricao": "Você parece uma pessoa com orelhas, rabo ou pele de bicho, e esconde isso com chapéu ou capuz. Tem vantagem em Enganação para se passar por humano. Não tem arma natural, mas usa qualquer equipamento sem custo extra.",
+            "automatizada": false
+          }
+        ]
+      }
+    ],
+    "rotulo_animal": "Animal",
+    "descricao_animais": "O animal define o tamanho e a arma natural. Escolha na lista, que já traz o bicho certo para cada Morfologia, ou escreva o seu.",
+    "animais": [
+      {
+        "id": "pantera",
+        "titulo": "Pantera",
+        "morfologias": [
+          "agil",
+          "predadora"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Garra",
+        "descricao": "Silêncio, sombra e um bote só."
+      },
+      {
+        "id": "leopardo",
+        "titulo": "Leopardo",
+        "morfologias": [
+          "agil",
+          "predadora"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Garra",
+        "descricao": "Sobe em qualquer árvore e leva a caça junto."
+      },
+      {
+        "id": "guepardo",
+        "titulo": "Guepardo",
+        "morfologias": [
+          "agil"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Garra",
+        "descricao": "Corre mais que qualquer um, por pouco tempo."
+      },
+      {
+        "id": "lince",
+        "titulo": "Lince",
+        "morfologias": [
+          "agil",
+          "mistica"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Garra",
+        "descricao": "Orelhas em pincel que escutam o que o vento esconde."
+      },
+      {
+        "id": "gato",
+        "titulo": "Gato",
+        "morfologias": [
+          "agil",
+          "mistica"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Garra",
+        "descricao": "Cai de pé, dorme quando quer e some quando convém."
+      },
+      {
+        "id": "lebre",
+        "titulo": "Lebre",
+        "morfologias": [
+          "agil"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Chute",
+        "descricao": "Dá o salto antes de pensar na fuga."
+      },
+      {
+        "id": "macaco",
+        "titulo": "Macaco",
+        "morfologias": [
+          "agil"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Mãos hábeis e a certeza de que tudo pode ser escalado."
+      },
+      {
+        "id": "esquilo",
+        "titulo": "Esquilo",
+        "morfologias": [
+          "agil"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Guarda tudo e nunca está onde você olhou."
+      },
+      {
+        "id": "gazela",
+        "titulo": "Gazela",
+        "morfologias": [
+          "agil"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Chifre",
+        "descricao": "Leve demais para ser alcançada."
+      },
+      {
+        "id": "canguru",
+        "titulo": "Canguru",
+        "morfologias": [
+          "agil",
+          "robusta"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Chute",
+        "descricao": "Salta longe e bate forte com as pernas de trás."
+      },
+      {
+        "id": "cabra-montesa",
+        "titulo": "Cabra-montesa",
+        "morfologias": [
+          "agil"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Chifre",
+        "descricao": "Anda onde só o vento chega."
+      },
+      {
+        "id": "gorila",
+        "titulo": "Gorila",
+        "morfologias": [
+          "robusta"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Punho",
+        "descricao": "Força de sobra e a paciência de quem não precisa provar nada."
+      },
+      {
+        "id": "rinoceronte",
+        "titulo": "Rinoceronte",
+        "morfologias": [
+          "robusta",
+          "blindada"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Chifre",
+        "descricao": "Pele grossa, cabeça baixa e nenhuma vontade de recuar."
+      },
+      {
+        "id": "urso",
+        "titulo": "Urso",
+        "morfologias": [
+          "robusta",
+          "predadora"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Garra",
+        "descricao": "Dorme meses e acorda de mau humor."
+      },
+      {
+        "id": "touro",
+        "titulo": "Touro",
+        "morfologias": [
+          "robusta"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Chifre",
+        "descricao": "Enxerga vermelho em qualquer pano e em qualquer provocação."
+      },
+      {
+        "id": "bufalo",
+        "titulo": "Búfalo",
+        "morfologias": [
+          "robusta",
+          "gregaria"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Chifre",
+        "descricao": "Anda em manada e atropela o que cruzar."
+      },
+      {
+        "id": "elefante",
+        "titulo": "Elefante",
+        "morfologias": [
+          "robusta"
+        ],
+        "tamanho": "Enorme",
+        "arma_natural": "Presa",
+        "descricao": "Memória longa, passo pesado e uma delicadeza que ninguém espera."
+      },
+      {
+        "id": "mamute",
+        "titulo": "Mamute",
+        "morfologias": [
+          "robusta"
+        ],
+        "tamanho": "Enorme",
+        "arma_natural": "Presa",
+        "descricao": "Peludo, antigo e lento de convencer."
+      },
+      {
+        "id": "hipopotamo",
+        "titulo": "Hipopótamo",
+        "morfologias": [
+          "robusta",
+          "aquatica"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Mordida",
+        "descricao": "Parece manso na lama e é o bicho mais perigoso do rio."
+      },
+      {
+        "id": "javali",
+        "titulo": "Javali",
+        "morfologias": [
+          "robusta"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Presa",
+        "descricao": "Baixo, teimoso e difícil de parar."
+      },
+      {
+        "id": "cavalo",
+        "titulo": "Cavalo",
+        "morfologias": [
+          "robusta",
+          "agil"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Coice",
+        "descricao": "Corre quilômetros e carrega o que for preciso."
+      },
+      {
+        "id": "camelo",
+        "titulo": "Camelo",
+        "morfologias": [
+          "robusta"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Mordida",
+        "descricao": "Atravessa o deserto sem reclamar de nada."
+      },
+      {
+        "id": "morsa",
+        "titulo": "Morsa",
+        "morfologias": [
+          "robusta",
+          "aquatica"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Presa",
+        "descricao": "Pesada, barulhenta e à vontade no gelo."
+      },
+      {
+        "id": "alce",
+        "titulo": "Alce",
+        "morfologias": [
+          "robusta"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Chifre",
+        "descricao": "Chifres largos como galhos de árvore velha."
+      },
+      {
+        "id": "coruja",
+        "titulo": "Coruja",
+        "morfologias": [
+          "mistica",
+          "alada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Garra",
+        "descricao": "Enxerga no escuro e escuta o coração de um rato."
+      },
+      {
+        "id": "corvo",
+        "titulo": "Corvo",
+        "morfologias": [
+          "mistica",
+          "alada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Bico",
+        "descricao": "Lembra de rostos, de dívidas e de histórias."
+      },
+      {
+        "id": "raposa",
+        "titulo": "Raposa",
+        "morfologias": [
+          "mistica",
+          "agil"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Esperta, dissimulada e muito boa de ouvido."
+      },
+      {
+        "id": "cervo",
+        "titulo": "Cervo",
+        "morfologias": [
+          "mistica"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Chifre",
+        "descricao": "Calmo na clareira e sempre pronto para a floresta."
+      },
+      {
+        "id": "gato-preto",
+        "titulo": "Gato-preto",
+        "morfologias": [
+          "mistica"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Garra",
+        "descricao": "Dizem que dá azar. Dizem muita coisa."
+      },
+      {
+        "id": "sapo",
+        "titulo": "Sapo",
+        "morfologias": [
+          "mistica"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Paciente, de olhos grandes, canta quando a chuva vem."
+      },
+      {
+        "id": "pavao",
+        "titulo": "Pavão",
+        "morfologias": [
+          "mistica"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Bico",
+        "descricao": "Mostra a cauda para que ninguém repare no resto."
+      },
+      {
+        "id": "cisne",
+        "titulo": "Cisne",
+        "morfologias": [
+          "mistica",
+          "aquatica"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Bico",
+        "descricao": "Calmo por cima da água e firme por baixo."
+      },
+      {
+        "id": "mariposa",
+        "titulo": "Mariposa",
+        "morfologias": [
+          "mistica",
+          "alada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Segue a luz errada de propósito."
+      },
+      {
+        "id": "lemure",
+        "titulo": "Lêmure",
+        "morfologias": [
+          "mistica"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Garra",
+        "descricao": "Olhos enormes que veem o que a noite guarda."
+      },
+      {
+        "id": "lobo",
+        "titulo": "Lobo",
+        "morfologias": [
+          "predadora",
+          "gregaria"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Mordida",
+        "descricao": "Caça em bando e nunca esquece um cheiro."
+      },
+      {
+        "id": "tigre",
+        "titulo": "Tigre",
+        "morfologias": [
+          "predadora",
+          "agil",
+          "robusta"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Garra",
+        "descricao": "Listras no escuro e um salto que ninguém ouve."
+      },
+      {
+        "id": "leao",
+        "titulo": "Leão",
+        "morfologias": [
+          "predadora",
+          "gregaria"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Garra",
+        "descricao": "Manda no grupo e come primeiro."
+      },
+      {
+        "id": "hiena",
+        "titulo": "Hiena",
+        "morfologias": [
+          "predadora",
+          "gregaria"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Mordida",
+        "descricao": "Ri de quem corre e come o que sobra."
+      },
+      {
+        "id": "onca",
+        "titulo": "Onça",
+        "morfologias": [
+          "predadora",
+          "agil"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Mordida",
+        "descricao": "Morde forte e nada bem."
+      },
+      {
+        "id": "coiote",
+        "titulo": "Coiote",
+        "morfologias": [
+          "predadora",
+          "mistica"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Mordida",
+        "descricao": "Sobrevive a tudo e ri de tudo."
+      },
+      {
+        "id": "urso-polar",
+        "titulo": "Urso-polar",
+        "morfologias": [
+          "predadora",
+          "robusta"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Garra",
+        "descricao": "Branco, enorme e paciente à beira do buraco no gelo."
+      },
+      {
+        "id": "tubarao",
+        "titulo": "Tubarão",
+        "morfologias": [
+          "predadora",
+          "aquatica"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Mordida",
+        "descricao": "Sente uma gota de sangue a léguas de distância."
+      },
+      {
+        "id": "orca",
+        "titulo": "Orca",
+        "morfologias": [
+          "predadora",
+          "aquatica",
+          "gregaria"
+        ],
+        "tamanho": "Enorme",
+        "arma_natural": "Mordida",
+        "descricao": "Caça em grupo e planeja como gente."
+      },
+      {
+        "id": "lagarto-de-komodo",
+        "titulo": "Lagarto-de-Komodo",
+        "morfologias": [
+          "predadora",
+          "peconhenta"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Mordida",
+        "descricao": "Morde e espera o veneno trabalhar."
+      },
+      {
+        "id": "aguia",
+        "titulo": "Águia",
+        "morfologias": [
+          "alada",
+          "predadora"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Garra",
+        "descricao": "Vê o rato a um quilômetro e desce sem avisar."
+      },
+      {
+        "id": "falcao",
+        "titulo": "Falcão",
+        "morfologias": [
+          "alada",
+          "predadora",
+          "agil"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Garra",
+        "descricao": "O mergulho mais rápido do céu."
+      },
+      {
+        "id": "morcego",
+        "titulo": "Morcego",
+        "morfologias": [
+          "alada",
+          "gregaria",
+          "mistica"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Enxerga com os ouvidos e dorme de cabeça para baixo."
+      },
+      {
+        "id": "gaviao",
+        "titulo": "Gavião",
+        "morfologias": [
+          "alada",
+          "predadora"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Garra",
+        "descricao": "Corta o vento entre os galhos."
+      },
+      {
+        "id": "albatroz",
+        "titulo": "Albatroz",
+        "morfologias": [
+          "alada"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Bico",
+        "descricao": "Cruza oceanos sem pousar."
+      },
+      {
+        "id": "condor",
+        "titulo": "Condor",
+        "morfologias": [
+          "alada"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Bico",
+        "descricao": "Asas largas e fome paciente."
+      },
+      {
+        "id": "beija-flor",
+        "titulo": "Beija-flor",
+        "morfologias": [
+          "alada",
+          "agil"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Bico",
+        "descricao": "Paira no ar e some antes de alguém piscar."
+      },
+      {
+        "id": "cegonha",
+        "titulo": "Cegonha",
+        "morfologias": [
+          "alada"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Bico",
+        "descricao": "Traz o que lhe pedem, e às vezes o que não pediram."
+      },
+      {
+        "id": "papagaio",
+        "titulo": "Papagaio",
+        "morfologias": [
+          "alada",
+          "mistica"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Bico",
+        "descricao": "Repete o que ouve e entende mais do que parece."
+      },
+      {
+        "id": "golfinho",
+        "titulo": "Golfinho",
+        "morfologias": [
+          "aquatica",
+          "gregaria",
+          "mistica"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Mordida",
+        "descricao": "Brinca nas ondas e fala com o bando por cliques."
+      },
+      {
+        "id": "polvo",
+        "titulo": "Polvo",
+        "morfologias": [
+          "aquatica",
+          "mistica"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Tentáculo",
+        "descricao": "Oito braços, três corações e nenhum osso."
+      },
+      {
+        "id": "foca",
+        "titulo": "Foca",
+        "morfologias": [
+          "aquatica"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Mordida",
+        "descricao": "Desajeitada em terra e ágil na água."
+      },
+      {
+        "id": "baleia",
+        "titulo": "Baleia",
+        "morfologias": [
+          "aquatica"
+        ],
+        "tamanho": "Enorme",
+        "arma_natural": "Cauda",
+        "descricao": "Canta de um oceano a outro."
+      },
+      {
+        "id": "lontra",
+        "titulo": "Lontra",
+        "morfologias": [
+          "aquatica",
+          "agil"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Brinca de dia e pesca de noite."
+      },
+      {
+        "id": "enguia",
+        "titulo": "Enguia",
+        "morfologias": [
+          "aquatica"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Descarga",
+        "descricao": "Guarda uma tempestade no corpo."
+      },
+      {
+        "id": "raia",
+        "titulo": "Raia",
+        "morfologias": [
+          "aquatica",
+          "peconhenta"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Ferrão",
+        "descricao": "Desliza pelo fundo e fere quem pisa nela."
+      },
+      {
+        "id": "cavalo-marinho",
+        "titulo": "Cavalo-marinho",
+        "morfologias": [
+          "aquatica",
+          "mistica"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Cauda",
+        "descricao": "Pequeno, calmo e teimoso."
+      },
+      {
+        "id": "agua-viva",
+        "titulo": "Água-viva",
+        "morfologias": [
+          "aquatica",
+          "peconhenta"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Tentáculo",
+        "descricao": "Flutua sem pressa e deixa um aviso na pele."
+      },
+      {
+        "id": "pinguim",
+        "titulo": "Pinguim",
+        "morfologias": [
+          "aquatica",
+          "gregaria"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Bico",
+        "descricao": "Anda torto em terra e voa debaixo d'água."
+      },
+      {
+        "id": "tartaruga-marinha",
+        "titulo": "Tartaruga-marinha",
+        "morfologias": [
+          "aquatica",
+          "blindada"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Casco",
+        "descricao": "Vive dezenas de anos e sempre acha o caminho de volta."
+      },
+      {
+        "id": "cobra",
+        "titulo": "Cobra",
+        "morfologias": [
+          "peconhenta"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Presa",
+        "descricao": "Quieta na grama, rápida na hora H."
+      },
+      {
+        "id": "jiboia",
+        "titulo": "Jiboia",
+        "morfologias": [
+          "peconhenta",
+          "predadora"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Constrição",
+        "descricao": "Não precisa de veneno: aperta até a conversa acabar."
+      },
+      {
+        "id": "escorpiao",
+        "titulo": "Escorpião",
+        "morfologias": [
+          "peconhenta",
+          "blindada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Ferrão",
+        "descricao": "Cauda erguida e casca dura."
+      },
+      {
+        "id": "aranha",
+        "titulo": "Aranha",
+        "morfologias": [
+          "peconhenta"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Presa",
+        "descricao": "Tece de noite e espera de dia."
+      },
+      {
+        "id": "sapo-venenoso",
+        "titulo": "Sapo-venenoso",
+        "morfologias": [
+          "peconhenta"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Toque",
+        "descricao": "Colorido de propósito: é o aviso."
+      },
+      {
+        "id": "centopeia",
+        "titulo": "Centopeia",
+        "morfologias": [
+          "peconhenta"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Cem pernas e nenhuma pressa de recuar."
+      },
+      {
+        "id": "vespa",
+        "titulo": "Vespa",
+        "morfologias": [
+          "peconhenta",
+          "gregaria",
+          "alada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Ferrão",
+        "descricao": "Ferroa uma vez e chama o ninho inteiro."
+      },
+      {
+        "id": "cascavel",
+        "titulo": "Cascavel",
+        "morfologias": [
+          "peconhenta"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Presa",
+        "descricao": "Avisa uma vez, com o guizo."
+      },
+      {
+        "id": "ornitorrinco",
+        "titulo": "Ornitorrinco",
+        "morfologias": [
+          "peconhenta",
+          "aquatica"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Esporão",
+        "descricao": "Bico de pato, cauda de castor e veneno no pé."
+      },
+      {
+        "id": "formiga",
+        "titulo": "Formiga",
+        "morfologias": [
+          "gregaria",
+          "blindada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Carrega dez vezes o próprio peso e nunca anda sozinha."
+      },
+      {
+        "id": "abelha",
+        "titulo": "Abelha",
+        "morfologias": [
+          "gregaria",
+          "alada",
+          "peconhenta"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Ferrão",
+        "descricao": "Trabalha para o ninho e morre pela colmeia."
+      },
+      {
+        "id": "rato",
+        "titulo": "Rato",
+        "morfologias": [
+          "gregaria",
+          "agil"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Está em todo lugar e sobrevive a tudo."
+      },
+      {
+        "id": "suricato",
+        "titulo": "Suricato",
+        "morfologias": [
+          "gregaria",
+          "mistica"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Garra",
+        "descricao": "Sempre de pé, sempre de vigia."
+      },
+      {
+        "id": "cachorro",
+        "titulo": "Cachorro",
+        "morfologias": [
+          "gregaria",
+          "predadora"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Mordida",
+        "descricao": "Leal até o fim, e depois dele."
+      },
+      {
+        "id": "estorninho",
+        "titulo": "Estorninho",
+        "morfologias": [
+          "gregaria",
+          "alada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Bico",
+        "descricao": "Voa em nuvem e muda de rumo como um só."
+      },
+      {
+        "id": "gafanhoto",
+        "titulo": "Gafanhoto",
+        "morfologias": [
+          "gregaria",
+          "agil",
+          "alada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Chute",
+        "descricao": "Salta alto e, em bando, escurece o céu."
+      },
+      {
+        "id": "piranha",
+        "titulo": "Piranha",
+        "morfologias": [
+          "gregaria",
+          "aquatica",
+          "predadora"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mordida",
+        "descricao": "Sozinha é um peixe, em cardume é um problema."
+      },
+      {
+        "id": "ovelha",
+        "titulo": "Ovelha",
+        "morfologias": [
+          "gregaria"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Chifre",
+        "descricao": "Segue o rebanho, e o rebanho segue ela."
+      },
+      {
+        "id": "tartaruga",
+        "titulo": "Tartaruga",
+        "morfologias": [
+          "blindada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Casco",
+        "descricao": "Leva a casa nas costas e sempre chega."
+      },
+      {
+        "id": "tatu",
+        "titulo": "Tatu",
+        "morfologias": [
+          "blindada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Garra",
+        "descricao": "Enrola e vira pedra."
+      },
+      {
+        "id": "crocodilo",
+        "titulo": "Crocodilo",
+        "morfologias": [
+          "blindada",
+          "predadora",
+          "aquatica"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Mordida",
+        "descricao": "Fica parado até o último segundo."
+      },
+      {
+        "id": "besouro",
+        "titulo": "Besouro",
+        "morfologias": [
+          "blindada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Mandíbula",
+        "descricao": "Carapaça brilhante e força que não cabe no tamanho."
+      },
+      {
+        "id": "caranguejo",
+        "titulo": "Caranguejo",
+        "morfologias": [
+          "blindada",
+          "aquatica"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Pinça",
+        "descricao": "Anda de lado, segura de frente."
+      },
+      {
+        "id": "pangolim",
+        "titulo": "Pangolim",
+        "morfologias": [
+          "blindada"
+        ],
+        "tamanho": "Pequeno",
+        "arma_natural": "Garra",
+        "descricao": "Escamas que viram escudo."
+      },
+      {
+        "id": "jacare",
+        "titulo": "Jacaré",
+        "morfologias": [
+          "blindada",
+          "predadora",
+          "aquatica"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Mordida",
+        "descricao": "Dorme de olho aberto na beira do rio."
+      },
+      {
+        "id": "tartaruga-gigante",
+        "titulo": "Tartaruga-gigante",
+        "morfologias": [
+          "blindada"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Casco",
+        "descricao": "Cem anos de calma debaixo de um casco do tamanho de uma porta."
+      },
+      {
+        "id": "dragao",
+        "titulo": "Dragão",
+        "morfologias": [
+          "mitica"
+        ],
+        "tamanho": "Enorme",
+        "arma_natural": "Mordida",
+        "descricao": "O mais antigo dos animais, e o mais convencido."
+      },
+      {
+        "id": "grifo",
+        "titulo": "Grifo",
+        "morfologias": [
+          "mitica",
+          "alada",
+          "predadora"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Garra",
+        "descricao": "Águia na frente, leão atrás e orgulho nos dois."
+      },
+      {
+        "id": "fenix",
+        "titulo": "Fênix",
+        "morfologias": [
+          "mitica",
+          "alada",
+          "mistica"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Garra",
+        "descricao": "Morre em chamas e volta com a mesma pergunta."
+      },
+      {
+        "id": "unicornio",
+        "titulo": "Unicórnio",
+        "morfologias": [
+          "mitica",
+          "mistica"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Chifre",
+        "descricao": "Branco, raro e muito difícil de enganar."
+      },
+      {
+        "id": "pegaso",
+        "titulo": "Pégaso",
+        "morfologias": [
+          "mitica",
+          "alada"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Coice",
+        "descricao": "Cavalo de nuvem que obedece só ao vento."
+      },
+      {
+        "id": "basilisco",
+        "titulo": "Basilisco",
+        "morfologias": [
+          "mitica",
+          "peconhenta"
+        ],
+        "tamanho": "Normal",
+        "arma_natural": "Presa",
+        "descricao": "Um olhar basta, e quase ninguém sobra para contar."
+      },
+      {
+        "id": "quimera",
+        "titulo": "Quimera",
+        "morfologias": [
+          "mitica",
+          "predadora"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Mordida",
+        "descricao": "Três cabeças, três opiniões e nenhuma paciência."
+      },
+      {
+        "id": "manticora",
+        "titulo": "Mantícora",
+        "morfologias": [
+          "mitica",
+          "predadora"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Garra",
+        "descricao": "Corpo de leão, cauda de escorpião e fome de enigmas."
+      },
+      {
+        "id": "cerbero",
+        "titulo": "Cérbero",
+        "morfologias": [
+          "mitica",
+          "predadora"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Mordida",
+        "descricao": "Guarda o portão e não aceita suborno."
+      },
+      {
+        "id": "hidra",
+        "titulo": "Hidra",
+        "morfologias": [
+          "mitica",
+          "aquatica",
+          "peconhenta"
+        ],
+        "tamanho": "Enorme",
+        "arma_natural": "Mordida",
+        "descricao": "Corta uma cabeça e nascem duas."
+      },
+      {
+        "id": "kraken",
+        "titulo": "Kraken",
+        "morfologias": [
+          "mitica",
+          "aquatica"
+        ],
+        "tamanho": "Enorme",
+        "arma_natural": "Tentáculo",
+        "descricao": "Dorme no fundo do mar e acorda de mau humor."
+      },
+      {
+        "id": "esfinge",
+        "titulo": "Esfinge",
+        "morfologias": [
+          "mitica",
+          "mistica"
+        ],
+        "tamanho": "Grande",
+        "arma_natural": "Garra",
+        "descricao": "Faz uma pergunta só, e é sempre a mais difícil."
+      }
+    ],
+    "estagios": [
+      {
+        "id": "jovem",
+        "titulo": "Animália Jovem",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "estamina": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "adulta",
+        "titulo": "Animália Adulta",
+        "nivel_minimo": 13,
+        "vida": 2,
+        "mana": 0,
+        "estamina": 2,
+        "caracteristicas": [
+          {
+            "id": "instinto-maduro",
+            "titulo": "Instinto Maduro",
+            "tipo": "passiva",
+            "nivel_minimo": 13,
+            "descricao": "Seu Movimento sobe 1,5 m.",
+            "movimento": 1.5,
+            "automatizada": true
+          }
+        ]
+      },
+      {
+        "id": "alfa",
+        "titulo": "Animália Alfa",
+        "nivel_minimo": 36,
+        "vida": 2,
+        "mana": 1,
+        "estamina": 1,
+        "caracteristicas": [
+          {
+            "id": "presenca-alfa",
+            "titulo": "Presença Alfa",
+            "tipo": "passiva",
+            "nivel_minimo": 36,
+            "descricao": "Você tem vantagem em Intimidação e em Adestramento. Animais que não estejam sob ordem de outra criatura não atacam você, a menos que sejam provocados.",
+            "automatizada": false
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "sereia",
@@ -2973,7 +5640,7 @@
     "vida": -1,
     "mana": 2,
     "movimento": 0,
-    "descricao": "Respira dentro e fora d'água e nada tão rápido quanto anda em terra. A Canção escolhida define o que a voz faz com quem ouve, e quanto mais fundo ela vai, da costa até o abismo, mais longe a voz alcança. Fala Latim.",
+    "descricao": "Respira dentro e fora d'água e nada tão rápido quanto anda em terra. A Canção escolhida define o que a voz faz com quem ouve, e quanto mais fundo ela vai, da costa até o abismo, mais longe a voz alcança.",
     "fisiologia": [
       "Anfíbio: respira no ar e na água; seu deslocamento de natação é igual ao Movimento terrestre."
     ],
@@ -3900,7 +6567,7 @@
             "titulo": "Agarrão Congelante",
             "tipo": "passiva",
             "nivel_minimo": 9,
-            "descricao": "Enquanto o agarrão durar, seja você agarrando ou sendo agarrado, a outra criatura sofre 1d6 de dano de frio no início de cada turno e fica com o Movimento reduzido à metade até o fim do turno seguinte.",
+            "descricao": "Enquanto o agarrão durar, seja você agarrando ou sendo agarrado, a outra criatura sofre 1d6 de dano de gelo no início de cada turno e fica com o Movimento reduzido à metade até o fim do turno seguinte.",
             "automatizada": false
           },
           {
@@ -4128,7 +6795,7 @@
       "itens_comuns_total": 2,
       "retroativos_em_transformacao": false
     },
-    "descricao": "Não envelhece e não esquece nada. São séculos de leitura acumulados num Intelecto que passa do limite que vale pra todo mundo. Vem de Nadalon, fala Finlandês e escolhe uma das seis Linhagens, que é o que diferencia um Elfo de Sombras de um Elfo de Tempestades. A Linhagem fica mais forte quando ele vira Ancião e se abre por completo quando chega a Milenar.",
+    "descricao": "Não envelhece e não esquece nada. São séculos de leitura acumulados num Intelecto que passa do limite que vale pra todo mundo. Vem de Nadalon e escolhe uma das seis Linhagens, que é o que diferencia um Elfo de Sombras de um Elfo de Tempestades. A Linhagem fica mais forte quando ele vira Ancião e se abre por completo quando chega a Milenar.",
     "fisiologia": [
       "Não envelhece e é imune a envelhecimento sobrenatural."
     ],
@@ -5202,7 +7869,7 @@
       "nivel_por_slot": 2,
       "formula": "1 + piso(Nível Total / 2)"
     },
-    "descricao": "Um construto consciente que saiu da A.X.I.S, com núcleo e vontade próprios, e que não deve obediência a criador nenhum. Cura não funciona nele; quando quebra, quem conserta é um engenheiro. Na criação você escolhe o chassi, bípede ou quadrúpede. Fala Inglês.",
+    "descricao": "Um construto consciente que saiu da A.X.I.S, com núcleo e vontade próprios, e que não deve obediência a criador nenhum. Cura não funciona nele; quando quebra, quem conserta é um engenheiro. Na criação você escolhe o chassi, bípede ou quadrúpede.",
     "rotulo_variante": "Chassi",
     "descricao_variantes": "Escolha o corpo em que o núcleo foi montado. Bípede tem mãos e usa equipamento comum; quadrúpede troca as mãos por velocidade.",
     "fisiologia": [
@@ -5738,7 +8405,7 @@
     "legados_adicionais": 1,
     "rotulo_variante": "Projeto de Clonagem",
     "descricao_variantes": "Escolha um único Projeto. Ele representa a finalidade para a qual o Clone foi criado.",
-    "descricao": "Foi feito à imagem de outra pessoa, e sabe disso. Tem a mesma aparência, voz, digital e retina do Original, e de vez em quando lembra de coisas que nunca viveu. O Projeto por trás da clonagem define o resto. Fala Ao Contrário.",
+    "descricao": "Foi feito à imagem de outra pessoa, e sabe disso. Tem a mesma aparência, voz, digital e retina do Original, e de vez em quando lembra de coisas que nunca viveu. O Projeto por trás da clonagem define o resto.",
     "fisiologia": [
       "É biologicamente vivo e precisa respirar, alimentar-se, dormir e descansar normalmente.",
       "A aparência pode reproduzir outra raça, mas o Clone possui somente as características raciais deste pacote."
@@ -6319,7 +8986,7 @@
       "conhecidas_base": 3,
       "campo": "maldicoesConhecidasIds"
     },
-    "descricao": "Bruxa é uma natureza mágica, e qualquer pessoa pode acabar virando uma. Depois que vem, não tem volta. Enxerga maldição, pacto e possessão de longe, cria as próprias maldições e, quando a Mana acaba, paga com Vida. Fala Celta, e ninguém entende tanto de Fluxo quanto as bruxas de Salém.",
+    "descricao": "Bruxa é uma natureza mágica, e qualquer pessoa pode acabar virando uma. Depois que vem, não tem volta. Enxerga maldição, pacto e possessão de longe, cria as próprias maldições e, quando a Mana acaba, paga com Vida. Ninguém entende tanto de Fluxo quanto as bruxas de Salém.",
     "fisiologia": [
       "Bruxa é uma natureza mágica adquirida, não uma profissão nem uma identidade de gênero.",
       "Permanece um ser vivo, salvo transformação narrativa posterior declarada pelo mestre."

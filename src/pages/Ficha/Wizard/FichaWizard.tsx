@@ -27,7 +27,7 @@ import {
   compraPontosValida,
   conjuntoAtributosValido,
 } from '../../../services/calculoService';
-import { descreverOpcaoRacial, escolhaRacialEstaCompleta, obterGruposEscolhaRacial, opcoesEscolhiveis, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
+import { CAMPO_ANIMAL_PERSONALIZADO, animalServeAMorfologia, varianteServeANatureza, descreverOpcaoRacial, escolhaRacialEstaCompleta, obterAnimalRacial, obterGruposEscolhaRacial, obterNaturezaRacial, obterTamanhoRacial, opcoesEscolhiveis, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
 import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 import { Select } from '../../../components/ui/Select';
@@ -579,19 +579,50 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                             key={opcao.id}
                             onClick={() => setEscolhaRacial(atual => {
                               const nova = { ...atual, [grupo.campo]: opcao.id };
-                              // Trocar de Natureza invalida a variante, que pertence à anterior.
-                              if (grupo.campo === 'naturezaId' && atual.naturezaId !== opcao.id) delete nova.varianteId;
+                              // Trocar de Natureza invalida a variante que pertence à anterior (a Morfologia da Animália vale para toda Forma).
+                              if (grupo.campo === 'naturezaId' && atual.naturezaId !== opcao.id && !varianteServeANatureza(currentRaca, nova.varianteId, opcao.id)) delete nova.varianteId;
+                              // O animal serve a certas Morfologias: se a nova não combina com ele, ele sai.
+                              if (grupo.campo === 'varianteId') {
+                                const animal = obterAnimalRacial(currentRaca, nova);
+                                if (animal && !animalServeAMorfologia(animal, opcao.id)) delete nova.animalId;
+                              }
+                              // Animal do catálogo e animal escrito pelo jogador não convivem.
+                              if (grupo.campo === 'animalId') delete nova[CAMPO_ANIMAL_PERSONALIZADO];
                               return nova;
                             })}
                             className={`w-full p-3 rounded-xl border text-left transition-all ${escolhaRacial[grupo.campo] === opcao.id ? 'border-green-500 bg-green-500/10' : 'border-white/10 bg-black/30 hover:border-white/30'}`}
                           >
-                            <span className="text-white font-bold block">{opcao.titulo}</span>
+                            <span className="text-white font-bold block">
+                              {opcao.titulo}
+                              {grupo.campo === 'animalId' && opcao.tamanho && (
+                                <span className="ml-2 text-[10px] font-normal uppercase tracking-widest text-gray-500">
+                                  {obterTamanhoRacial(currentRaca, { ...escolhaRacial, animalId: opcao.id }) || String(opcao.tamanho)}
+                                  {opcao.arma_natural && !obterNaturezaRacial(currentRaca, escolhaRacial)?.sem_arma_natural ? ` · ${String(opcao.arma_natural)}` : ''}
+                                </span>
+                              )}
+                            </span>
                             {grupo.campo !== 'linhagemId' && (
                               <span className="text-xs text-gray-400 block mt-1">{descreverOpcaoRacial(opcao)}</span>
                             )}
                           </button>
                         ))}
                       </div>
+                      {grupo.personalizavel && grupo.campoPersonalizado && (
+                        <div className="mt-3">
+                          <label className="block text-xs text-gray-500 mb-1 ml-1">Ou escreva o seu {grupo.rotulo.toLowerCase()}</label>
+                          <input
+                            type="text"
+                            value={escolhaRacial[grupo.campoPersonalizado] || ''}
+                            onChange={e => setEscolhaRacial(atual => {
+                              const nova = { ...atual, [grupo.campoPersonalizado!]: e.target.value };
+                              if (e.target.value.trim()) delete nova[grupo.campo];
+                              return nova;
+                            })}
+                            placeholder="Se o seu bicho não está na lista"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary/50 transition-colors"
+                          />
+                        </div>
+                      )}
                     </div>
                   ))}
 

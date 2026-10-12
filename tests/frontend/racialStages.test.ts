@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { calcularDerivados } from '../../src/services/calculoService';
@@ -45,7 +46,6 @@ const ATRIBUTOS = {
  * calibrada para o teto real da ficha, que é 60 e não 20: o degrau do meio caiu
  * onde ficava vezes 1,5 e o do topo vezes 2. */
 const ESCADAS: Array<[string, [number, number, number], string]> = [
-  ['espirito', [1, 15, 40], 'varianteId'],
   ['slime', [1, 9, 28], 'varianteId'],
   ['anao', [1, 11, 26], 'varianteId'],
   ['sereia', [1, 12, 32], 'varianteId'],
@@ -58,6 +58,7 @@ const ESCADAS: Array<[string, [number, number, number], string]> = [
   ['mimico', [1, 12, 34], 'varianteId'],
   ['onirico', [1, 15, 40], 'varianteId'],
   ['divino', [1, 18, 48], 'varianteId'],
+  ['animalia', [1, 13, 36], 'varianteId'],
 ];
 
 /** Uma escolha por Natureza para raças que têm mais de uma escada (Espírito). As
@@ -129,7 +130,7 @@ test('poderes raciais complexos publicam seus limites sem brechas de interpreta�
 });
 
 test('todo traço de escolha racial destrava num degrau que a raça realmente tem', () => {
-  for (const [racaId] of ESCADAS) {
+  for (const racaId of [...ESCADAS.map(([id]) => id), 'espirito']) {
     const raca = porId(racaId);
     const degraus = new Set(obterEstagiosRaciais(raca).map(nivelMinimoTraco));
     for (const grupo of obterGruposEscolhaRacial(raca)) {
@@ -154,11 +155,14 @@ test('Vida e Mana crescem nos limiares, e só neles', () => {
     return { vida: d.vida, mana: d.mana };
   };
 
-  // Espírito: +3 Mana no 15, +6 no 40.
-  assert.equal(recursos('espirito', 15, { varianteId: 'vermelho-vinho' }).mana,
-    recursos('espirito', 14, { varianteId: 'vermelho-vinho' }).mana + 3);
-  assert.equal(recursos('espirito', 40, { varianteId: 'vermelho-vinho' }).mana,
-    recursos('espirito', 39, { varianteId: 'vermelho-vinho' }).mana + 6);
+  // Espírito: +1 no 8, +2 no 15, +3 no 28, +3 no 40 (os marcos antigos somam o mesmo: +3 no 15 e +9 no 40).
+  const fluxo = { naturezaId: 'natural', varianteId: 'vermelho-vinho' };
+  const mana = (nivel: number, escolha: Record<string, unknown> = fluxo) => calcularDerivados(ATRIBUTOS, porId('espirito'), nivel, escolha as Record<string, string>).mana;
+  for (const [nivel, salto] of [[8, 1], [15, 2], [28, 3], [40, 3]] as const) {
+    assert.equal(mana(nivel), mana(nivel - 1) + salto, `Espírito: Mana no nível ${nivel}`);
+  }
+  assert.equal(mana(15), mana(7) + 3, 'o marco antigo do 15 continua valendo +3');
+  assert.equal(mana(40), mana(7) + 9, 'o marco antigo do 40 continua valendo +9');
 
   // Slime: +5 Vida no 9, +12 no 28.
   assert.equal(recursos('slime', 9, { varianteId: 'acido' }).vida,
@@ -397,4 +401,151 @@ test('os traços disponíveis respeitam o nível exigido, e só os da escolha fe
   assert.ok(guerra(48).includes('Nome de Batalha'));
   assert.ok(guerra(48).includes('Forma Divina'));
   assert.ok(!guerra(48).includes('Toque que Cura'), 'Domínio escolhido não vaza para os outros');
+});
+
+/** O Espírito é a única raça com escada acima do nível 40, e o último degrau pede uma Provação. */
+const DEGRAUS_DO_ESPIRITO = [1, 8, 15, 28, 40, 60];
+
+test('o Espírito tem seis degraus por Natureza, e só o Primordial do 60 exige uma condição', () => {
+  for (const escolha of escolhasDaEscada(espirito)) {
+    const estagios = obterEstagiosRaciais(espirito, escolha);
+    assert.deepEqual(estagios.map(nivelMinimoTraco), DEGRAUS_DO_ESPIRITO, escolha?.naturezaId);
+    const exigentes = estagios.filter(estagio => estagio.requer_condicao);
+    assert.deepEqual(exigentes.map(nivelMinimoTraco), [60], 'só o último degrau pede Provação');
+    assert.equal(exigentes[0].requer_condicao, 'provacao-primordial');
+  }
+  assert.equal(espirito.condicoes_estagio?.[0]?.id, 'provacao-primordial');
+});
+
+test('sem a Provação marcada pelo mestre, o nível 60 não vira Primordial', () => {
+  const natural = { naturezaId: 'natural', varianteId: 'rosa' };
+  const liberado = { ...natural, condicoesCumpridas: ['provacao-primordial'] };
+
+  assert.equal(obterEstagioRacialAtivo(espirito, 60, natural)?.id, 'ancestral');
+  assert.equal(obterEstagioRacialAtivo(espirito, 200, natural)?.id, 'ancestral', 'nível alto não substitui a Provação');
+  assert.equal(obterEstagioRacialAtivo(espirito, 59, liberado)?.id, 'ancestral', 'a Provação não adianta o nível');
+  assert.equal(obterEstagioRacialAtivo(espirito, 60, liberado)?.id, 'primordial');
+});
+
+test('a Provação libera o Mana, a Vida e os traços do Primordial, incluindo o da marca', () => {
+  const natural = { naturezaId: 'natural', varianteId: 'rosa' };
+  const liberado = { ...natural, condicoesCumpridas: ['provacao-primordial'] };
+  const derivados = (escolha: Record<string, unknown>) => calcularDerivados(ATRIBUTOS, espirito, 60, escolha as Record<string, string>);
+
+  assert.equal(derivados(liberado).mana, derivados(natural).mana + 12);
+  assert.equal(derivados(liberado).vida, derivados(natural).vida + 15);
+
+  const titulos = (escolha: Record<string, unknown>) =>
+    obterTracosRaciaisDisponiveis(espirito, escolha as Record<string, string>, 60).map(traco => traco.titulo);
+  for (const titulo of ['Corpo de Eternidade', 'Presença Primordial', 'Criação de Tudo']) {
+    assert.ok(!titulos(natural).includes(titulo), `${titulo} não vale sem a Provação`);
+    assert.ok(titulos(liberado).includes(titulo), `${titulo} vale com a Provação`);
+  }
+  assert.ok(titulos(natural).includes('Travessia Irrestrita'), 'o degrau Ancestral continua valendo');
+});
+
+test('as três Naturezas somam o mesmo Mana e a mesma Vida em cada degrau', () => {
+  const totais = (naturezaId: string) => obterEstagiosRaciais(espirito, { naturezaId })
+    .map(estagio => [estagio.mana, estagio.vida]);
+  assert.deepEqual(totais('demoniaca'), totais('natural'));
+  assert.deepEqual(totais('angelical'), totais('natural'));
+  assert.deepEqual(totais('natural').map(([mana]) => mana), [0, 1, 2, 3, 3, 12]);
+});
+
+test('do Menor ao Superior o Espírito só ganha ajustes passivos, e os poderes ativos ficam para a marca e para o quinto degrau em diante', () => {
+  for (const escolha of escolhasDaEscada(espirito)) {
+    const estagios = obterEstagiosRaciais(espirito, escolha);
+    const iniciais = estagios.filter(estagio => nivelMinimoTraco(estagio) < 40);
+    assert.equal(iniciais.length, 4, 'Menor, Mediano, Maior e Superior');
+    assert.deepEqual(iniciais[0].caracteristicas, [], 'o Menor não ganha nada');
+
+    for (const estagio of iniciais) {
+      for (const traco of estagio.caracteristicas || []) {
+        assert.equal(traco.tipo, 'passiva', `${estagio.id}/${traco.id} precisa ser passivo`);
+        assert.equal(traco.custo_mana, undefined, `${estagio.id}/${traco.id} não pode custar Mana`);
+        assert.equal(traco.usos, undefined, `${estagio.id}/${traco.id} não pode ter usos`);
+      }
+    }
+    // Do quinto degrau em diante entram as habilidades fortes.
+    const fortes = estagios.filter(estagio => nivelMinimoTraco(estagio) >= 40)
+      .flatMap(estagio => estagio.caracteristicas || []);
+    assert.ok(fortes.some(traco => traco.tipo !== 'passiva'), 'o Ancestral e o Primordial têm habilidades ativas');
+  }
+});
+
+test('o Movimento do Passo de Fumaça entra sozinho na ficha do Espírito Mediano', () => {
+  const natural = { naturezaId: 'natural', varianteId: 'rosa' };
+  const movimento = (nivel: number) => calcularDerivados(ATRIBUTOS, espirito, nivel, natural).movimento;
+  assert.equal(movimento(8), movimento(7) + 3);
+});
+
+/** A auditoria de equilíbrio do Espírito (tools/audit-espirito.mjs) compara cada habilidade com o
+ * acerto de NPC e a Vida de referência do mesmo nível e aplica as regras de desenho que um número
+ * sozinho não pega. Rode `node tools/audit-espirito.mjs` para ver a tabela inteira. */
+test('nenhuma habilidade do Espírito passa nas regras de equilíbrio da auditoria', () => {
+  const saida = execFileSync('node', ['tools/audit-espirito.mjs', '--json'], { encoding: 'utf8' });
+  const { linhas, violacoes } = JSON.parse(saida) as {
+    linhas: Array<{ id: string; nivel: number; mediaDeDados: number; emAcertosDeNpc: number }>;
+    violacoes: Array<{ id: string; regra: string; detalhe: string }>;
+  };
+
+  assert.ok(linhas.length >= 190, 'a auditoria precisa ler todas as habilidades');
+  assert.deepEqual(violacoes, [], violacoes.map(v => `${v.id}: ${v.regra} (${v.detalhe})`).join('\n'));
+
+  // O dano em dados do último degrau não pode ficar longe do que o nível pede: o Primordial é para ser forte.
+  const dadosDoUltimoDegrau = linhas.filter(l => l.nivel === 60 && l.mediaDeDados > 0);
+  const maisForte = Math.max(...dadosDoUltimoDegrau.map(l => l.emAcertosDeNpc));
+  assert.ok(maisForte >= 0.7, `a habilidade de dados mais forte do nível 60 vale só ${maisForte} acerto`);
+});
+
+test('as habilidades que repetem uso sem gastar nada têm teto de um uso a mais', () => {
+  const textos = (espirito.estagios || []).flatMap(estagio => estagio.caracteristicas || [])
+    .filter(traco => /custam 0 Mana/.test(String(traco.descricao)));
+  assert.equal(textos.length, 3, 'Dobra do Fluxo, Pecado Absoluto e Virtude Absoluta');
+  for (const traco of textos) assert.match(String(traco.descricao), /(uso|vez) a mais/, traco.titulo);
+});
+
+/** A auditoria da Animália (tools/audit-animalia.mjs) compara o pacote de cada Forma e Morfologia com o das
+ * outras raças comuns, confere o catálogo de animais e o tom dos textos. Rode `node tools/audit-animalia.mjs`
+ * para ver a tabela inteira. */
+test('a Animália passa na auditoria de pacote, catálogo e tom', () => {
+  const saida = execFileSync('node', ['tools/audit-animalia.mjs', '--json'], { encoding: 'utf8' });
+  const { combinacoes, violacoes } = JSON.parse(saida) as {
+    combinacoes: Array<{ forma: string; morfologia: string; pacote: Record<string, number> }>;
+    violacoes: Array<{ regra: string; origem: string; detalhe: string }>;
+  };
+
+  assert.equal(combinacoes.length, 30, 'três Formas vezes dez Morfologias');
+  assert.deepEqual(violacoes, [], violacoes.map(v => `${v.origem}: ${v.regra} (${v.detalhe})`).join('\n'));
+});
+
+test('Animália: Vida e Estamina sobem no 13, e Mana entra no 36, sem perder o degrau anterior', () => {
+  const animalia = porId('animalia');
+  const escolha = { naturezaId: 'hibrido', varianteId: 'robusta' };
+  const d = (nivel: number) => calcularDerivados(ATRIBUTOS, animalia, nivel, escolha);
+
+  assert.equal(d(13).vida, d(12).vida + 2);
+  assert.equal(d(13).estamina, d(12).estamina + 2);
+  assert.equal(d(13).mana, d(12).mana);
+  assert.equal(d(36).vida, d(35).vida + 2);
+  assert.equal(d(36).mana, d(35).mana + 1);
+  assert.equal(d(36).estamina, d(35).estamina + 1);
+  assert.equal(d(13).movimento, d(12).movimento + 1.5, 'Instinto Maduro soma 1,5 m de Movimento');
+});
+
+test('Animália: a Forma soma o corpo certo e a Morfologia vale para qualquer Forma', () => {
+  const animalia = porId('animalia');
+  const d = (naturezaId: string, varianteId = 'predadora') => calcularDerivados(ATRIBUTOS, animalia, 1, { naturezaId, varianteId });
+
+  assert.equal(d('fera').vida, d('hibrido').vida + 2);
+  assert.equal(d('fera').mana, d('hibrido').mana - 1);
+  assert.equal(d('tracos').vida, d('hibrido').vida - 1);
+  assert.equal(d('tracos').mana, d('hibrido').mana + 1);
+  assert.equal(d('tracos').estamina, d('hibrido').estamina - 1);
+  // Blindada vale -1,5 m de Movimento em qualquer Forma.
+  for (const forma of ['fera', 'hibrido', 'tracos']) {
+    assert.equal(d(forma, 'blindada').movimento, d(forma, 'predadora').movimento - 1.5, forma);
+  }
+  // Couraça Natural dá +1 de Defesa à Morfologia Blindada, e a Forma não muda isso.
+  assert.equal(d('fera', 'blindada').defesaNatural, d('fera', 'predadora').defesaNatural + 1);
 });

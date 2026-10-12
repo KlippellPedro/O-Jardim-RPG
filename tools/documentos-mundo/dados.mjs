@@ -101,7 +101,7 @@ export const RACAS_REAIS = RACAS.filter((r) => r.id !== 'raca-personalizada');
 
 /**
  * Idioma por povo, transcrito da entrada 'idiomas-do-jardim'
- * (data/mundo/Jardim/jardim.json). Só os doze com língua própria aparecem
+ * (data/mundo/Jardim/jardim.json). Só os doze povos com língua própria aparecem
  * aqui; o Universal é de todos e por isso não entra no mapa.
  */
 export const IDIOMAS = {
@@ -111,7 +111,7 @@ export const IDIOMAS = {
   goblim: { lingua: 'Alemão', criador: null },
   anao: { lingua: 'Nórdico Antigo', criador: null },
   golem: { lingua: 'Libras', criador: null },
-  espirito: { lingua: 'Enoquiano', criador: null },
+  espirito: { lingua: 'Enoquiano (naturais), Aramaico (demoníacos) e Hebraico (angelicais)', criador: null },
   sereia: { lingua: 'Latim', criador: null },
   animalia: { lingua: 'Sumeriano', criador: null },
   clone: { lingua: 'Ao Contrário', criador: null },

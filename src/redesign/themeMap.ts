@@ -344,11 +344,11 @@ const ELEMENTARISTA: ThemeEntry = {
 export const THEME_MAP: Record<string, ThemeEntry> = {
   // Racas Comuns
   humano: HUMANO, anao: ANAO, goblim: GOBLIM, golem: GOLEM,
-  espirito: ESPIRITO, gigante: GIGANTE, animalia: ANIMALIA,
+  gigante: GIGANTE, animalia: ANIMALIA,
   sereia: SEREIA, tritao: SEREIA, sereiaoututritao: SEREIA,
   mimico: MIMICO, simbionte: SIMBIONTE, feerico: FEERICO, slime: SLIME, vampiro: VAMPIRO,
   // Racas Especiais
-  elfo: ELFO, desperto: DESPERTO, auleth: AULETH, automato: AUTOMATO,
+  espirito: ESPIRITO, elfo: ELFO, desperto: DESPERTO, auleth: AULETH, automato: AUTOMATO,
   clone: CLONE, entidade: ENTIDADE, anomalia: ANOMALIA, bruxa: BRUXA, amalgamo: AMALGAMO,
   onirico: ONIRICO, divino: DIVINO,
   // Classes

@@ -262,6 +262,13 @@ export interface IRaca {
    * escolha, e define quais `variantes` aparecem na segunda. */
   naturezas?: IOpcaoRacial[];
   rotulo_natureza?: string;
+  /** Catálogo de animais de exemplo (Animália). Cada um diz a que Morfologias serve e o tamanho. */
+  animais?: IOpcaoRacial[];
+  rotulo_animal?: string;
+  descricao_animais?: string;
+  /** Condições que o Mestre marca como cumpridas e que liberam estágios e traços
+   * (`requer_condicao`), como a Provação Primordial do Espírito. */
+  condicoes_estagio?: IOpcaoRacial[];
   /** Natureza que vale para a ficha antiga que ainda não escolheu nenhuma. */
   natureza_padrao?: string;
   descricao_naturezas?: string;

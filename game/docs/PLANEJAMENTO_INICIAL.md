@@ -116,7 +116,7 @@ kits completos para a Fase 3 em diante, sem mudar a decisão de elenco.
 
 | Personagem | Papel de combate | Observações |
 | --- | --- | --- |
-| **Blanc** | suporte etéreo | Espírito Primordial, o único Espírito Branco existente. É o próprio Blanc canônico de [`data/mundo/Jardim/registros-universais.json`](../../data/mundo/Jardim/registros-universais.json) (confirmado pelo Criador em 01/09/2026). |
+| **Blanc** | suporte etéreo | Espírito Primordial, o único Espírito Universal que se conhece. É o próprio Blanc canônico de [`data/mundo/Jardim/registros-universais.json`](../../data/mundo/Jardim/registros-universais.json) (confirmado pelo Criador em 01/09/2026). |
 | **Galadriel** | dano à distância / velocidade | Elfa espadachim, katana e shurikens. |
 | **Ayato** | dano corpo a corpo | Guerreiro lutador, também usa katana; foco oposto ao de Galadriel (dano bruto em vez de velocidade). |
 | **Adoxios** | magia elemental | Usuário de Fluxo elemental com elemento escolhível pelo jogador. Mecanicamente equivale a escolher, na criação/seleção, qual dos 11 Fluxos (`FLUXO_TEMAS` em `magiaService.ts`) ele manifesta — a cor e a "família" do efeito já vêm prontas dos dados; falta só desenhar a forma do golpe elemental (projétil, explosão, etc.) de um jeito que sirva pra ser recolorida por Fluxo. Recomendado começar o vertical slice com um subconjunto pequeno de Fluxos (2 a 4) em vez dos 11 de uma vez, por causa do risco de escopo. |

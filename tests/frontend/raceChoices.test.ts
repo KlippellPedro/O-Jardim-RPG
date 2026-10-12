@@ -4,22 +4,34 @@ import test from 'node:test';
 import { calcularDerivados, obterVarianteRacial } from '../../src/services/calculoService';
 import { FLUXO_TEMAS, TEMA_UNIVERSAL } from '../../src/services/magiaService';
 import {
+  animalServeAMorfologia,
   escolhaRacialEstaCompleta,
+  obterAnimalRacial,
   obterGruposEscolhaRacial,
   obterNaturezaRacialId,
   obterEstagiosRaciais,
   obterOpcoesRaciaisSelecionadas,
+  obterTamanhoRacial,
   obterTracosRaciaisDisponiveis,
   opcoesEscolhiveis,
+  varianteServeANatureza,
 } from '../../src/services/racaService';
 import type { IRaca } from '../../src/types/catalogo';
+import {
+  etiquetasDoTraco,
+  marcaOposta,
+  marcaSelecionada,
+  marcasEscolhiveis,
+  nomeCurtoDoEstagio,
+  organizarEspirito,
+} from '../../src/redesign/raca/espirito/dados';
+import { ESTILO_MARCA_PADRAO, ESTILO_POR_MARCA, estiloDaMarca } from '../../src/redesign/raca/espirito/estilos';
 
 const racas = JSON.parse(
   readFileSync(new URL('../../data/ficha/racas.json', import.meta.url), 'utf8'),
 ) as IRaca[];
 
 const casosEsperados = [
-  ['animalia', 'varianteId', 3],
   ['elfo', 'linhagemId', 6],
   ['desperto', 'condicaoAncestralId', 6],
   ['automato', 'varianteId', 8],
@@ -160,7 +172,7 @@ test('cada Fluxo do Espírito natural usa o nome e a tinta do Fluxo que represen
   // repetir o `destaque` do Fluxo. Comparação feita sobre o texto do arquivo
   // porque os valores são literais, exigência do Tailwind.
   const pagina = readFileSync(
-    new URL('../../src/redesign/raca/Espirito.tsx', import.meta.url),
+    new URL('../../src/redesign/raca/espirito/estilos.ts', import.meta.url),
     'utf8',
   );
   for (const cor of cores) {
@@ -169,7 +181,7 @@ test('cada Fluxo do Espírito natural usa o nome e a tinta do Fluxo que represen
     const linha = pagina
       .split('\n')
       .find(item => new RegExp(`^\\s*'?${cor.id}'?:`).test(item));
-    assert.ok(linha, `Fluxo ${cor.id} ausente de ESTILO_POR_COR`);
+    assert.ok(linha, `Fluxo ${cor.id} ausente de ESTILO_POR_MARCA`);
 
     const erro = `Fluxo ${cor.id} fora da paleta do Fluxo ${cor.fluxo} (esperado ${destaque})`;
     assert.match(linha, new RegExp(`tinta: 'rgb\\(${canais.join(',')}\\)'`), `${erro} — tinta`);
@@ -288,6 +300,91 @@ test('o Espírito escolhe a Natureza primeiro, e só depois o Fluxo ou o Pecado'
   );
 });
 
+test('a Animália escolhe a Forma, depois a Morfologia e por fim o animal, que define o tamanho', () => {
+  const animalia = racas.find(item => item.id === 'animalia');
+  assert.ok(animalia);
+  assert.equal(animalia.rotulo_natureza, 'Forma');
+  assert.deepEqual(animalia.naturezas?.map(forma => forma.id), ['fera', 'hibrido', 'tracos']);
+  assert.equal(animalia.natureza_padrao, 'hibrido', 'ficha antiga, que só tem a Morfologia, vira Híbrido');
+
+  // As regras mostram as três escolhas, cada uma uma vez, na ordem em que o jogador decide.
+  assert.deepEqual(obterGruposEscolhaRacial(animalia).map(grupo => grupo.campo), ['naturezaId', 'varianteId', 'animalId']);
+  assert.equal(animalia.variantes?.length, 10);
+
+  // Com a ficha na mão: sem Forma só a Forma aparece; sem Morfologia o animal ainda não aparece, e depois só aparecem os que servem a ela.
+  assert.deepEqual(obterGruposEscolhaRacial(animalia, {}).map(grupo => grupo.campo), ['naturezaId']);
+  assert.deepEqual(obterGruposEscolhaRacial(animalia, { naturezaId: 'fera' }).map(grupo => grupo.campo), ['naturezaId', 'varianteId']);
+  const alada = obterGruposEscolhaRacial(animalia, { naturezaId: 'fera', varianteId: 'alada' });
+  assert.deepEqual(alada.map(grupo => grupo.campo), ['naturezaId', 'varianteId', 'animalId']);
+  const aves = alada[2].opcoes;
+  assert.ok(aves.some(animal => animal.id === 'coruja') && aves.some(animal => animal.id === 'aguia'));
+  assert.ok(!aves.some(animal => animal.id === 'rinoceronte'), 'rinoceronte não é Alada');
+  assert.equal(alada[2].personalizavel, true);
+
+  // Animal do catálogo ou animal escrito fecham a escolha; Morfologia ou animal que não servem, não.
+  assert.equal(escolhaRacialEstaCompleta(animalia, { naturezaId: 'hibrido', varianteId: 'robusta', animalId: 'rinoceronte' }), true);
+  assert.equal(escolhaRacialEstaCompleta(animalia, { naturezaId: 'hibrido', varianteId: 'robusta', animalPersonalizado: 'Tamanduá' }), true);
+  assert.equal(escolhaRacialEstaCompleta(animalia, { naturezaId: 'hibrido', varianteId: 'robusta' }), false);
+  assert.equal(escolhaRacialEstaCompleta(animalia, { naturezaId: 'hibrido', varianteId: 'robusta', animalId: 'coruja' }), false);
+  assert.equal(escolhaRacialEstaCompleta(animalia, { naturezaId: 'hibrido', varianteId: 'alada', animalId: 'inventado' }), false);
+
+  // O animal define o tamanho: o rato é Pequeno, o rinoceronte é Grande, e o animal vale mais que a Morfologia.
+  assert.equal(obterTamanhoRacial(animalia, { animalId: 'rato' }), 'Pequeno');
+  assert.equal(obterTamanhoRacial(animalia, { animalId: 'rinoceronte' }), 'Grande');
+  assert.equal(obterTamanhoRacial(animalia, { varianteId: 'robusta', animalId: 'rato' }), 'Pequeno');
+  assert.equal(obterTamanhoRacial(animalia, { varianteId: 'robusta' }), null, 'sem animal, a raça não impõe tamanho');
+  assert.equal(obterAnimalRacial(animalia, { animalId: 'dragao' })?.tamanho, 'Enorme');
+  assert.equal(obterTamanhoRacial(animalia, { naturezaId: 'fera', animalId: 'dragao' }), 'Enorme');
+  assert.equal(obterTamanhoRacial(animalia, { naturezaId: 'hibrido', animalId: 'rato' }), 'Pequeno');
+  // Traços tem corpo de pessoa: o tamanho é Normal qualquer que seja o animal, e não tem arma natural.
+  assert.equal(obterTamanhoRacial(animalia, { naturezaId: 'tracos', animalId: 'dragao' }), 'Normal');
+  assert.equal(obterTamanhoRacial(animalia, { naturezaId: 'tracos', animalId: 'rato' }), 'Normal');
+  assert.equal(animalia.naturezas?.find(forma => forma.id === 'tracos')?.sem_arma_natural, true);
+  assert.equal(animalServeAMorfologia(animalia.animais!.find(animal => animal.id === 'leao')!, 'predadora'), true);
+  assert.equal(animalServeAMorfologia(animalia.animais!.find(animal => animal.id === 'leao')!, 'aquatica'), false);
+});
+
+test('o catálogo de animais da Animália é coerente e cobre cada Morfologia', () => {
+  const animalia = racas.find(item => item.id === 'animalia')!;
+  const animais = animalia.animais || [];
+  const morfologias = new Set((animalia.variantes || []).map(variante => variante.id));
+  const tamanhos = new Set(['Pequeno', 'Normal', 'Grande', 'Enorme']);
+
+  assert.equal(new Set(animais.map(animal => animal.id)).size, animais.length, 'ids de animal repetidos');
+  assert.equal(new Set(animais.map(animal => animal.titulo)).size, animais.length, 'nomes de animal repetidos');
+  for (const animal of animais) {
+    assert.ok(tamanhos.has(String(animal.tamanho)), `${animal.id}: tamanho "${animal.tamanho}" inválido`);
+    assert.ok(animal.arma_natural, `${animal.id}: sem arma natural`);
+    assert.ok(String(animal.descricao).length > 10, `${animal.id}: sem descrição`);
+    assert.ok((animal.morfologias || []).length > 0, `${animal.id}: sem Morfologia`);
+    for (const id of animal.morfologias || []) assert.ok(morfologias.has(id), `${animal.id}: Morfologia "${id}" não existe`);
+  }
+  // Cada Morfologia tem animais de sobra para o jogador montar sem pedir ao Mestre.
+  for (const id of morfologias) {
+    const quantos = animais.filter(animal => animal.morfologias?.includes(id)).length;
+    assert.ok(quantos >= 6, `${id}: só ${quantos} animais no catálogo`);
+  }
+  // Os exemplos que o Pedro pediu de saída.
+  for (const id of ['leao', 'gorila', 'rinoceronte', 'pantera', 'leopardo', 'coruja', 'rato', 'gato', 'dragao']) {
+    assert.ok(animais.some(animal => animal.id === id), `faltou o animal "${id}"`);
+  }
+});
+
+test('as dez Morfologias da Animália têm o mesmo peso e cada uma tem um traço próprio', () => {
+  const animalia = racas.find(item => item.id === 'animalia')!;
+  const soma = (opcao: { vida?: number; mana?: number; estamina?: number }) => (opcao.vida || 0) + (opcao.mana || 0) + (opcao.estamina || 0);
+  const totais = (animalia.variantes || []).map(soma);
+  // As três antigas (Ágil, Robusta, Mística) ficam como estavam; as novas ficam dentro da mesma faixa.
+  assert.ok(Math.min(...totais) >= 2 && Math.max(...totais) <= 5, `faixa fora do esperado: ${totais.join(', ')}`);
+  for (const morfologia of animalia.variantes || []) {
+    assert.ok(morfologia.descricao, `${morfologia.id}: sem descrição`);
+    assert.ok((morfologia.caracteristicas || []).length >= 1, `${morfologia.id}: sem traço`);
+  }
+  // As Formas pesam pouco entre si: Fera ganha corpo, Traços ganha liberdade.
+  const formas = Object.fromEntries((animalia.naturezas || []).map(forma => [forma.id, soma(forma)]));
+  assert.deepEqual(formas, { fera: 1, hibrido: 0, tracos: -1 });
+});
+
 test('o Fluxo Universal do Espírito é só do Mestre, tem um traço por degrau e tinta própria', () => {
   const espirito = racas.find(item => item.id === 'espirito');
   const universal = espirito?.variantes?.find(variante => variante.fluxo === 'universal');
@@ -297,7 +394,7 @@ test('o Fluxo Universal do Espírito é só do Mestre, tem um traço por degrau 
   assert.equal(universal.natureza, 'natural');
   assert.deepEqual(
     (universal.caracteristicas || []).map(traco => traco.nivel_minimo),
-    [1, 15, 40],
+    [1, 8, 15, 28, 40, 60],
     'um traço por degrau, como os outros onze',
   );
 
@@ -309,9 +406,9 @@ test('o Fluxo Universal do Espírito é só do Mestre, tem um traço por degrau 
   // A ficha que já tem o Universal continua completa e mostra o próprio rótulo.
   assert.equal(escolhaRacialEstaCompleta(espirito, { naturezaId: 'natural', varianteId: universal.id }), true);
 
-  const pagina = readFileSync(new URL('../../src/redesign/raca/Espirito.tsx', import.meta.url), 'utf8');
+  const pagina = readFileSync(new URL('../../src/redesign/raca/espirito/estilos.ts', import.meta.url), 'utf8');
   const linha = pagina.split('\n').find(item => new RegExp(`^\\s*'?${universal.id}'?:`).test(item));
-  assert.ok(linha, 'Universal ausente de ESTILO_POR_COR');
+  assert.ok(linha, 'Universal ausente de ESTILO_POR_MARCA');
   const canais = [1, 3, 5].map(inicio => parseInt(TEMA_UNIVERSAL.destaque.slice(inicio, inicio + 2), 16));
   assert.match(linha, new RegExp(`tinta: 'rgb\\(${canais.join(',')}\\)'`));
   assert.match(linha, new RegExp(`text: 'text-\\[${TEMA_UNIVERSAL.destaque}\\]'`));
@@ -335,7 +432,7 @@ test('o Espírito Demoníaco tem os sete Pecados do rito, com um traço por degr
     assert.ok(variante, `falta o Pecado ${simbolo.id}`);
     assert.equal(variante.titulo, simbolo.titulo);
     assert.equal(variante.virtude_oposta, simbolo.virtude_oposta, 'o espelho do Anjo depende dessa ligação');
-    assert.deepEqual((variante.caracteristicas || []).map(traco => traco.nivel_minimo), [1, 15, 40], variante.id);
+    assert.deepEqual((variante.caracteristicas || []).map(traco => traco.nivel_minimo), [1, 8, 15, 28, 40, 60], variante.id);
   }
 });
 
@@ -350,7 +447,7 @@ test('o Espírito Angelical tem as sete Virtudes do rito, cada uma espelhando um
     assert.ok(variante, `falta a Virtude ${simbolo.id}`);
     assert.equal(variante.titulo, simbolo.titulo);
     assert.equal(variante.pecado_oposto, simbolo.pecado_oposto);
-    assert.deepEqual((variante.caracteristicas || []).map(traco => traco.nivel_minimo), [1, 15, 40], variante.id);
+    assert.deepEqual((variante.caracteristicas || []).map(traco => traco.nivel_minimo), [1, 8, 15, 28, 40, 60], variante.id);
   }
 
   // O espelho fecha nos dois sentidos: o Pecado aponta a Virtude e a Virtude aponta o Pecado.
@@ -424,24 +521,169 @@ test('cada Natureza leva só a própria escada e os próprios traços', () => {
 });
 
 /** Texto que o jogador lê: sem travessão, sem "eco" e sem a antítese "não é X, é Y". */
-test('o texto do Espírito Demoníaco e do Angelical segue o tom da casa', () => {
+test('todo o texto do Espírito segue o tom da casa', () => {
   const espirito = racas.find(item => item.id === 'espirito')!;
   const textos: string[] = [];
   const colher = (valor: unknown) => {
-    if (typeof valor === 'string') textos.push(valor);
+    // Id (kebab-case, sem espaço) não é texto lido pelo jogador: "eco-de-origem" é só uma chave antiga.
+    if (typeof valor === 'string') { if (valor.includes(' ')) textos.push(valor); }
     else if (Array.isArray(valor)) valor.forEach(colher);
     else if (valor && typeof valor === 'object') Object.values(valor).forEach(colher);
   };
-  const dosNovos = (item: { natureza?: string; id?: string }) => ['demoniaca', 'angelical'].includes(String(item.natureza ?? item.id));
-  colher(espirito.naturezas?.filter(dosNovos));
-  colher(espirito.variantes?.filter(dosNovos));
-  colher(espirito.estagios?.filter(dosNovos));
-  colher([espirito.descricao, espirito.descricao_naturezas]);
-  assert.ok(textos.length > 120);
+  colher(espirito);
+  assert.ok(textos.length > 400);
 
   for (const texto of textos) {
-    assert.doesNotMatch(texto, /[\u2013\u2014]/, `travessão em: ${texto.slice(0, 60)}`);
+    assert.doesNotMatch(texto, /[–—]/, `travessão em: ${texto.slice(0, 60)}`);
     assert.doesNotMatch(texto, /\beco\b/i, `"eco" em: ${texto.slice(0, 60)}`);
     assert.doesNotMatch(texto, /\bnão (é|são|foi|era)\b[^.]*,\s*(é|são|foi|era)\b/i, `antítese em: ${texto.slice(0, 60)}`);
   }
+});
+
+test('o Espírito não fala mais em Cor: o nome é o do Fluxo, do Pecado ou da Virtude', () => {
+  const espirito = racas.find(item => item.id === 'espirito')!;
+  const naturais = (espirito.variantes || []).filter(variante => variante.natureza === 'natural');
+  const nomesDeCor = ['Rosa', 'Amarelo', 'Prata', 'Verde', 'Laranja', 'Marrom', 'Roxo', 'Dourado Envelhecido', 'Preto', 'Vermelho Vinho', 'Azul Neon Artificial'];
+  for (const variante of naturais) {
+    assert.ok(!nomesDeCor.includes(variante.titulo), `${variante.id} ainda se chama ${variante.titulo}`);
+  }
+  assert.equal(espirito.rotulo_variante, 'Fluxo');
+
+  // Cada marca tem o nome completo ("Espírito da Origem") e uma Provação própria.
+  for (const marca of espirito.variantes || []) {
+    assert.match(String(marca.nome_completo), /^(Espírito|Demônio|Anjo) d/, marca.id);
+    assert.ok(String(marca.provacao).length > 30, `${marca.id} sem Provação`);
+  }
+  assert.equal(naturais.find(item => item.fluxo === 'origem')?.nome_completo, 'Espírito da Origem');
+
+  const textoDaRaca = JSON.stringify(espirito);
+  assert.doesNotMatch(textoDaRaca, /Cor da Alma|Cores da Alma|sua Cor|das onze Cores/);
+});
+
+test('o traço do nível 60 de toda marca só vale com a Provação, e os outros cinco não pedem nada', () => {
+  const espirito = racas.find(item => item.id === 'espirito')!;
+  for (const marca of espirito.variantes || []) {
+    for (const traco of marca.caracteristicas || []) {
+      if (traco.nivel_minimo === 60) assert.equal(traco.requer_condicao, 'provacao-primordial', `${marca.id}/${traco.id}`);
+      else assert.equal(traco.requer_condicao, undefined, `${marca.id}/${traco.id}`);
+    }
+  }
+});
+
+test('a página do Espírito separa as três Naturezas, cada uma com as próprias marcas e estágios', () => {
+  const espirito = racas.find(item => item.id === 'espirito')!;
+  const naturezas = organizarEspirito(espirito);
+
+  assert.deepEqual(naturezas.map(item => item.natureza.id), ['natural', 'demoniaca', 'angelical']);
+  assert.deepEqual(naturezas.map(item => item.rotuloMarca), ['Fluxo', 'Pecado', 'Virtude']);
+  assert.deepEqual(naturezas.map(item => item.marcas.length), [12, 7, 7]);
+  assert.deepEqual(naturezas.map(marcasEscolhiveis), [11, 7, 7], 'o Universal não conta: só o Mestre concede');
+  for (const item of naturezas) {
+    assert.equal(item.estagios.length, 6, item.natureza.id);
+    assert.ok(item.estagios.every(estagio => !estagio.natureza || estagio.natureza === item.natureza.id));
+  }
+  assert.deepEqual(naturezas.map(item => item.tracos.length), [0, 1, 1], 'só a demoníaca e a angelical dão corpo');
+  assert.deepEqual(
+    naturezas[1].estagios.map(nomeCurtoDoEstagio),
+    ['Menor', 'Mediano', 'Maior', 'Superior', 'Arquidemônio', 'Primordial'],
+  );
+});
+
+test('toda marca do Espírito tem paleta própria, e as de Natureza não caem na cor padrão', () => {
+  const espirito = racas.find(item => item.id === 'espirito')!;
+  for (const marca of espirito.variantes || []) {
+    assert.ok(marca.id in ESTILO_POR_MARCA, `${marca.id} sem paleta`);
+    assert.notEqual(estiloDaMarca(marca.id), ESTILO_MARCA_PADRAO);
+  }
+  assert.equal(estiloDaMarca('marca-inexistente'), ESTILO_MARCA_PADRAO);
+});
+
+test('a página liga cada Pecado à Virtude oposta e de volta', () => {
+  const espirito = racas.find(item => item.id === 'espirito')!;
+  const naturezas = organizarEspirito(espirito);
+  const demonios = naturezas[1].marcas;
+
+  for (const demonio of demonios) {
+    const ida = marcaOposta(demonio, naturezas);
+    assert.ok(ida, `${demonio.id} sem oposta`);
+    assert.equal(ida.natureza.natureza.id, 'angelical');
+    const volta = marcaOposta(ida.marca, naturezas);
+    assert.equal(volta?.marca.id, demonio.id, 'o espelho tem que fechar nos dois sentidos');
+  }
+  assert.equal(marcaOposta(naturezas[0].marcas[0], naturezas), null, 'Fluxo não tem oposto');
+});
+
+test('a marca aberta vem da URL, e uma marca de outra Natureza volta para a primeira', () => {
+  const espirito = racas.find(item => item.id === 'espirito')!;
+  const [natural, demoniaca] = organizarEspirito(espirito);
+
+  assert.equal(marcaSelecionada(demoniaca, 'demonio-ira')?.id, 'demonio-ira');
+  assert.equal(marcaSelecionada(demoniaca, null)?.id, demoniaca.marcas[0].id);
+  assert.equal(marcaSelecionada(demoniaca, 'rosa')?.id, demoniaca.marcas[0].id, 'rosa é do natural');
+  assert.equal(marcaSelecionada(natural, 'rosa')?.id, 'rosa');
+});
+
+test('catálogo antigo, sem Naturezas, ainda vira uma página com uma Natureza só', () => {
+  const antigo: IRaca = {
+    id: 'espirito',
+    titulo: 'Espírito',
+    variantes: [{ id: 'rosa', titulo: 'Rosa' }, { id: 'preto', titulo: 'Preto' }],
+    estagios: [{ id: 'menor', titulo: 'Espírito Menor', nivel_minimo: 1 }],
+  };
+  const naturezas = organizarEspirito(antigo);
+  assert.equal(naturezas.length, 1);
+  assert.equal(naturezas[0].natureza.id, 'natural');
+  assert.equal(naturezas[0].marcas.length, 2);
+  assert.equal(naturezas[0].estagios.length, 1);
+});
+
+test('as etiquetas de um traço resumem tipo, Mana, usos e alcance', () => {
+  assert.deepEqual(
+    etiquetasDoTraco({ id: 'x', titulo: 'X', tipo: 'acao', custo_mana: 4, usos: 1, recuperacao: 'cena', alcance_m: 1.5 }),
+    ['Ação', '4 Mana', '1 vez por cena', '1,5 m'],
+  );
+  assert.deepEqual(
+    etiquetasDoTraco({ id: 'y', titulo: 'Y', tipo: 'acao_completa', custo_mana: 8, usos: 2, recuperacao: 'sessao' }),
+    ['Ação completa', '8 Mana', '2 vezes por sessão'],
+  );
+  assert.deepEqual(etiquetasDoTraco({ id: 'z', titulo: 'Z', tipo: 'passiva', custo_mana: 0 }), ['Passiva']);
+});
+
+test('cada Natureza do Espírito tem a sua língua, e a tabela de idiomas do Mundo diz o mesmo', () => {
+  const jardim = JSON.parse(readFileSync(new URL('../../data/mundo/Jardim/jardim.json', import.meta.url), 'utf8'));
+  const idiomas = jardim.entradas.find((entrada: { id: string }) => entrada.id === 'idiomas-do-jardim');
+  const tabela: string[] = idiomas.conteudo.tabela;
+  const linhas = tabela.map(linha => linha.split('|').map(parte => parte.trim()));
+
+  assert.equal(linhas.length, 15, 'treze povos, quinze línguas');
+  assert.deepEqual(linhas.filter(l => l[1].startsWith('Espíritos')).map(l => [l[0], l[1]]), [
+    ['Enoquiano', 'Espíritos naturais'],
+    ['Aramaico', 'Espíritos demoníacos'],
+    ['Hebraico', 'Espíritos angelicais'],
+  ]);
+  assert.equal(new Set(linhas.map(l => l[0])).size, 15, 'idioma repetido');
+  assert.match(idiomas.conteudo.descricao, /quinze línguas/);
+
+  const espirito = racas.find(item => item.id === 'espirito')!;
+  const falas = Object.fromEntries((espirito.naturezas || []).map(n => [n.id, String(n.descricao)]));
+  assert.match(falas.natural, /Fala Enoquiano\.$/);
+  assert.match(falas.demoniaca, /Fala Aramaico\.$/);
+  assert.match(falas.angelical, /Fala Hebraico\.$/);
+});
+
+test('trocar a Forma da Animália mantém a Morfologia, mas trocar a Natureza do Espírito solta a marca', () => {
+  const animalia = racas.find(item => item.id === 'animalia');
+  const espirito = racas.find(item => item.id === 'espirito');
+  assert.ok(animalia && espirito);
+  // A Morfologia da Animália não pertence a uma Forma: vale para as três.
+  for (const forma of ['fera', 'hibrido', 'tracos']) {
+    assert.equal(varianteServeANatureza(animalia, 'alada', forma), true, forma);
+  }
+  // A marca do Espírito pertence a uma Natureza só.
+  assert.equal(varianteServeANatureza(espirito, 'rosa', 'natural'), true);
+  assert.equal(varianteServeANatureza(espirito, 'rosa', 'demoniaca'), false);
+  assert.equal(varianteServeANatureza(espirito, 'demonio-ira', 'demoniaca'), true);
+  assert.equal(varianteServeANatureza(espirito, 'demonio-ira', 'angelical'), false);
+  // Sem variante escolhida não há o que invalidar.
+  assert.equal(varianteServeANatureza(espirito, undefined, 'angelical'), true);
 });

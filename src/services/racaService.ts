@@ -12,7 +12,11 @@ export function nomeExibicaoRaca(racaId: string | undefined, nomePersonalizado: 
   return tituloCatalogo || '';
 }
 
-export type CampoEscolhaRacial = 'naturezaId' | 'varianteId' | 'linhagemId' | 'condicaoAncestralId' | 'naturezaDivinaId';
+/** Onde a ficha guarda as condições raciais que o Mestre marcou como cumpridas
+ * (a Provação Primordial do Espírito, por exemplo). */
+export const CAMPO_CONDICOES_RACIAIS = 'condicoesCumpridas';
+
+export type CampoEscolhaRacial = 'naturezaId' | 'animalId' | 'varianteId' | 'linhagemId' | 'condicaoAncestralId' | 'naturezaDivinaId';
 
 export interface GrupoEscolhaRacial {
   campo: CampoEscolhaRacial;
@@ -22,10 +26,24 @@ export interface GrupoEscolhaRacial {
   rotulo: string;
   descricao: string;
   opcoes: IOpcaoRacial[];
+  /** O jogador também pode escrever a própria opção (o animal que não está na lista).
+   * O texto fica em `campoPersonalizado` da escolha racial. */
+  personalizavel?: boolean;
+  campoPersonalizado?: string;
+}
+
+/** Onde a ficha guarda o animal que o jogador escreveu quando o dele não está no catálogo. */
+export const CAMPO_ANIMAL_PERSONALIZADO = 'animalPersonalizado';
+
+/** O animal serve à Morfologia? Animal sem lista de Morfologias serve a qualquer uma. */
+export function animalServeAMorfologia(animal: IOpcaoRacial, morfologiaId: unknown): boolean {
+  const lista = animal.morfologias;
+  return !morfologiaId || !Array.isArray(lista) || lista.length === 0 || lista.includes(morfologiaId);
 }
 
 const CAMPOS_ESCOLHA_RACIAL: CampoEscolhaRacial[] = [
   'naturezaId',
+  'animalId',
   'varianteId',
   'linhagemId',
   'condicaoAncestralId',
@@ -64,6 +82,17 @@ export function obterNaturezaRacial(
   return id ? raca?.naturezas?.find(natureza => natureza.id === id) ?? null : null;
 }
 
+/** A variante escolhida continua valendo se a ficha trocar para essa Natureza? Variante sem `natureza`
+ * vale para todas (a Morfologia da Animália vale para toda Forma); a do Espírito pertence a uma só. */
+export function varianteServeANatureza(
+  raca: IRaca | null | undefined,
+  varianteId: unknown,
+  naturezaId: unknown,
+): boolean {
+  const variante = raca?.variantes?.find(item => item.id === varianteId);
+  return !variante?.natureza || variante.natureza === naturezaId;
+}
+
 /** Grupos de escolha da raça, na ordem em que o jogador decide.
  *
  * Com `escolhaRacial`, as variantes saem filtradas pela Natureza da ficha (e
@@ -78,7 +107,8 @@ export function obterGruposEscolhaRacial(
 
   const grupos: GrupoEscolhaRacial[] = [];
   const filtrarPorNatureza = escolhaRacial !== undefined && Array.isArray(raca.naturezas) && raca.naturezas.length > 0;
-  const natureza = filtrarPorNatureza ? obterNaturezaRacial(raca, escolhaRacial) : null;
+  // Ficha que já tem uma escolha (a Morfologia, por exemplo) e não guardou a Natureza usa a padrão da raça.
+  const natureza = filtrarPorNatureza ? obterNaturezaRacial(raca, escolhaRacial, Boolean(escolhaRacial?.varianteId)) : null;
 
   if (Array.isArray(raca.naturezas_divinas) && raca.naturezas_divinas.length > 0) {
     grupos.push({
@@ -100,7 +130,10 @@ export function obterGruposEscolhaRacial(
     });
   }
   if (Array.isArray(raca.variantes) && raca.variantes.length > 0) {
-    const secoesPorNatureza = escolhaRacial === undefined && Array.isArray(raca.naturezas) && raca.naturezas.length > 1;
+    // Só divide as variantes por Natureza quando alguma variante pertence a uma Natureza (o Espírito).
+    // Na Animália a Morfologia vale para toda Forma, então a seção é uma só.
+    const secoesPorNatureza = escolhaRacial === undefined && Array.isArray(raca.naturezas) && raca.naturezas.length > 1
+      && raca.variantes.some(variante => Boolean(variante.natureza));
     if (secoesPorNatureza) {
       // Páginas de regras: uma seção por Natureza, cada uma com o seu rótulo.
       for (const item of raca.naturezas!) {
@@ -128,6 +161,22 @@ export function obterGruposEscolhaRacial(
           opcoes,
         });
       }
+    }
+  }
+  if (Array.isArray(raca.animais) && raca.animais.length > 0) {
+    const morfologiaId = escolhaRacial?.varianteId;
+    // Com a ficha na mão, o animal só aparece depois da Morfologia e já filtrado por ela.
+    const aindaSemMorfologia = escolhaRacial !== undefined && !morfologiaId;
+    if (!aindaSemMorfologia) {
+      grupos.push({
+        campo: 'animalId',
+        chave: 'animalId',
+        rotulo: raca.rotulo_animal || 'Animal',
+        descricao: raca.descricao_animais || 'Escolha o animal da sua ficha, ou escreva o seu.',
+        opcoes: escolhaRacial === undefined ? raca.animais : raca.animais.filter(animal => animalServeAMorfologia(animal, morfologiaId)),
+        personalizavel: true,
+        campoPersonalizado: CAMPO_ANIMAL_PERSONALIZADO,
+      });
     }
   }
   if (Array.isArray(raca.linhagens) && raca.linhagens.length > 0) {
@@ -167,7 +216,10 @@ export function escolhaRacialEstaCompleta(
 ): boolean {
   return obterGruposEscolhaRacial(raca, escolhaRacial ?? {}).every(grupo => {
     const valor = escolhaRacial?.[grupo.campo];
-    return typeof valor === 'string' && grupo.opcoes.some(opcao => opcao.id === valor);
+    if (typeof valor === 'string' && grupo.opcoes.some(opcao => opcao.id === valor)) return true;
+    // Opção escrita pelo jogador (o animal que não está na lista) também fecha o grupo.
+    const escrito = grupo.campoPersonalizado ? escolhaRacial?.[grupo.campoPersonalizado] : undefined;
+    return Boolean(grupo.personalizavel) && typeof escrito === 'string' && escrito.trim().length > 0;
   });
 }
 
@@ -176,6 +228,8 @@ export function limparEscolhasPrincipaisRaciais(
 ): Record<string, any> {
   const limpa = { ...(escolhaRacial || {}) };
   CAMPOS_ESCOLHA_RACIAL.forEach(campo => delete limpa[campo]);
+  delete limpa[CAMPO_CONDICOES_RACIAIS];
+  delete limpa[CAMPO_ANIMAL_PERSONALIZADO];
   return limpa;
 }
 
@@ -216,6 +270,34 @@ export function tracoDisponivelNoNivel(traco: ICaracteristicaRacial, nivel: numb
   return Math.max(1, Math.trunc(Number(nivel) || 1)) >= nivelMinimoTraco(traco);
 }
 
+/** A condição racial já foi marcada como cumprida na ficha? Só o Mestre marca. */
+export function condicaoRacialCumprida(
+  escolhaRacial: Record<string, unknown> | null | undefined,
+  condicaoId: string,
+): boolean {
+  const lista = escolhaRacial?.[CAMPO_CONDICOES_RACIAIS];
+  return Array.isArray(lista) && lista.includes(condicaoId);
+}
+
+/** Um estágio ou traço com `requer_condicao` só vale depois de o Mestre marcar a
+ * condição. Sem o campo, não depende de nada. */
+function liberadoPelaCondicao(
+  item: ICaracteristicaRacial | IOpcaoRacial,
+  escolhaRacial: Record<string, unknown> | null | undefined,
+): boolean {
+  const exigida = (item as { requer_condicao?: unknown }).requer_condicao;
+  return !exigida || condicaoRacialCumprida(escolhaRacial, String(exigida));
+}
+
+/** Traço que vale agora: o nível total já chegou e, se ele exige uma condição, ela foi cumprida. */
+export function tracoLiberado(
+  traco: ICaracteristicaRacial,
+  nivel: number,
+  escolhaRacial: Record<string, unknown> | null | undefined,
+): boolean {
+  return tracoDisponivelNoNivel(traco, nivel) && liberadoPelaCondicao(traco, escolhaRacial);
+}
+
 /** Escada de maturação da raça (Espírito: Menor, Maior, Primordial), sempre em
  * ordem crescente de nível exigido.
  *
@@ -245,7 +327,9 @@ export function obterEstagiosRaciaisAlcancados(
   escolhaRacial?: Record<string, unknown> | null,
 ): IOpcaoRacial[] {
   const nivelTotal = Math.max(1, Math.trunc(Number(nivel) || 1));
-  return obterEstagiosRaciais(raca, escolhaRacial).filter(estagio => nivelTotal >= nivelMinimoTraco(estagio));
+  return obterEstagiosRaciais(raca, escolhaRacial).filter(estagio => (
+    nivelTotal >= nivelMinimoTraco(estagio) && liberadoPelaCondicao(estagio, escolhaRacial)
+  ));
 }
 
 /** O estágio atual - o último já alcançado. */
@@ -273,7 +357,7 @@ export function obterTracosRaciaisDisponiveis(
     ...opcoes.flatMap(obterTracosOpcaoRacial),
     ...obterEstagiosRaciaisAlcancados(raca, nivel, escolhaRacial ?? {}).flatMap(estagio => estagio.caracteristicas || []),
   ];
-  return tracos.filter(traco => tracoDisponivelNoNivel(traco, nivel));
+  return tracos.filter(traco => tracoLiberado(traco, nivel, escolhaRacial));
 }
 
 export function obterTracosOpcaoRacial(opcao: IOpcaoRacial): ICaracteristicaRacial[] {
@@ -283,6 +367,30 @@ export function obterTracosOpcaoRacial(opcao: IOpcaoRacial): ICaracteristicaRaci
     if (traco && typeof traco === 'object' && traco.titulo) tracos.push(traco);
   }
   return tracos;
+}
+
+/** O animal escolhido no catálogo, se houver. */
+export function obterAnimalRacial(
+  raca: IRaca | null | undefined,
+  escolhaRacial: Record<string, unknown> | null | undefined,
+): IOpcaoRacial | null {
+  const id = escolhaRacial?.animalId;
+  return typeof id === 'string' ? raca?.animais?.find(animal => animal.id === id) ?? null : null;
+}
+
+/** Tamanho que a raça dá: o da Forma, quando ela fixa um (os Traços da Animália têm corpo de pessoa,
+ * qualquer que seja o animal); senão o do animal escolhido (um rato é Pequeno, um rinoceronte é Grande);
+ * senão o da variante, quando a raça fixa o tamanho por ela (Golem, Fada). */
+export function obterTamanhoRacial(
+  raca: IRaca | null | undefined,
+  escolhaRacial: Record<string, unknown> | null | undefined,
+): string | null {
+  const daForma = obterNaturezaRacial(raca, escolhaRacial, true)?.tamanho;
+  if (typeof daForma === 'string' && daForma) return daForma;
+  const doAnimal = obterAnimalRacial(raca, escolhaRacial)?.tamanho;
+  if (typeof doAnimal === 'string' && doAnimal) return doAnimal;
+  const variante = raca?.variantes?.find(item => item.id === escolhaRacial?.varianteId);
+  return typeof variante?.tamanho === 'string' && variante.tamanho ? variante.tamanho : null;
 }
 
 export function descreverOpcaoRacial(opcao: IOpcaoRacial): string {

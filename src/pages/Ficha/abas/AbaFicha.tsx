@@ -1,4 +1,4 @@
-import { useState, useEffect, type CSSProperties } from 'react';
+import { useState, useEffect, Fragment, type CSSProperties } from 'react';
 import { HelpCircle, X, Pencil } from 'lucide-react';
 import { SectionTitle, LabeledInput, LabeledModalSelect, LabeledSelect } from '../components/SharedFichaComponents';
 import { ModalInfoFicha } from '../components/ModalInfoFicha';
@@ -9,7 +9,7 @@ import { NIVEL_MAXIMO_CLASSE, NIVEL_TOTAL_PADRAO, limitarNivelClasse, patamarAtu
 import { obterEfeitoAtmosfericoFicha } from '../fichaTheme';
 import { degrauDaClasse } from '../utils/degrauClasse';
 import { GLIFOS } from '../utils/retrato';
-import { limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial, obterNaturezaRacialId, opcoesEscolhiveis, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
+import { CAMPO_ANIMAL_PERSONALIZADO, CAMPO_CONDICOES_RACIAIS, animalServeAMorfologia, varianteServeANatureza, condicaoRacialCumprida, obterAnimalRacial, obterTamanhoRacial, limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial, obterNaturezaRacialId, opcoesEscolhiveis, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, arvoresVisiveisComAtual, filtrarPorArvore, filtrarPorLiberacao, type ArvoreEntry } from '../../../../data/mundo/arvoresCatalog';
@@ -659,9 +659,29 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
 
   const handleEscolhaRacialChange = (campo: string, valor: string) => {
     const nova: Record<string, any> = { ...(f.escolhaRacial || {}), [campo]: valor };
-    // A variante pertence a uma Natureza: ao trocar de Natureza ela deixa de valer.
-    if (campo === 'naturezaId' && valor !== obterNaturezaRacialId(racaAtual, f.escolhaRacial)) delete nova.varianteId;
+    // A variante pode pertencer a uma Natureza: ao trocar de Natureza ela deixa de valer (a Morfologia da Animália vale para toda Forma).
+    if (campo === 'naturezaId' && valor !== obterNaturezaRacialId(racaAtual, f.escolhaRacial, true) && !varianteServeANatureza(racaAtual, nova.varianteId, valor)) delete nova.varianteId;
+    // O animal serve a certas Morfologias: ao trocar a Morfologia, um animal que não serve a ela sai.
+    if (campo === 'varianteId') {
+      const animal = obterAnimalRacial(racaAtual, nova);
+      if (animal && !animalServeAMorfologia(animal, valor)) delete nova.animalId;
+    }
+    // Animal do catálogo e animal escrito pelo jogador não convivem.
+    if (campo === 'animalId' && valor) delete nova[CAMPO_ANIMAL_PERSONALIZADO];
     salvarIdentidadeRacial(f.racaId, nova);
+  };
+
+  const handleAnimalPersonalizadoChange = (texto: string) => {
+    const nova: Record<string, any> = { ...(f.escolhaRacial || {}), [CAMPO_ANIMAL_PERSONALIZADO]: texto };
+    if (texto.trim()) delete nova.animalId;
+    salvarIdentidadeRacial(f.racaId, nova);
+  };
+
+  // Marcar uma condição racial como cumprida é decisão do Mestre (o servidor confere).
+  const handleCondicaoRacialChange = (condicaoId: string, cumprida: boolean) => {
+    const atuais: string[] = Array.isArray(f.escolhaRacial?.[CAMPO_CONDICOES_RACIAIS]) ? f.escolhaRacial[CAMPO_CONDICOES_RACIAIS] : [];
+    const lista = cumprida ? [...new Set([...atuais, condicaoId])] : atuais.filter(id => id !== condicaoId);
+    salvarIdentidadeRacial(f.racaId, { ...(f.escolhaRacial || {}), [CAMPO_CONDICOES_RACIAIS]: lista });
   };
 
   const handleOrigemChange = (origemId: string) => {
@@ -819,16 +839,40 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
             )}
 
             {gruposEscolhaRacial.map(grupo => (
+              <Fragment key={grupo.chave}>
+                <LabeledSelect
+                  label={grupo.rotulo}
+                  value={f.escolhaRacial?.[grupo.campo] ?? (grupo.campo === 'naturezaId' ? obterNaturezaRacialId(racaAtual, f.escolhaRacial, true) : undefined)}
+                  options={[
+                    ...(grupo.personalizavel ? [{ value: '', label: 'Outro (escrito ao lado)' }] : []),
+                    ...opcoesEscolhiveis(grupo.opcoes, isMestre, f.escolhaRacial?.[grupo.campo]).map(opcao => ({ value: opcao.id, label: opcao.titulo })),
+                  ]}
+                  onChange={(valor: string) => handleEscolhaRacialChange(grupo.campo, valor)}
+                  disabled={!isMestre}
+                />
+                {grupo.personalizavel && grupo.campoPersonalizado && (
+                  <LabeledInput
+                    label={`${grupo.rotulo} personalizado`}
+                    value={f.escolhaRacial?.[grupo.campoPersonalizado] || ''}
+                    placeholder="Se o seu bicho não está na lista"
+                    onChange={handleAnimalPersonalizadoChange}
+                    readOnly={!isMestre}
+                  />
+                )}
+              </Fragment>
+            ))}
+
+            {(racaAtual?.condicoes_estagio || []).map(condicao => (
               <LabeledSelect
-                key={grupo.campo}
-                label={grupo.rotulo}
-                value={f.escolhaRacial?.[grupo.campo] ?? (grupo.campo === 'naturezaId' ? obterNaturezaRacialId(racaAtual, f.escolhaRacial) : undefined)}
-                options={opcoesEscolhiveis(grupo.opcoes, isMestre, f.escolhaRacial?.[grupo.campo]).map(opcao => ({ value: opcao.id, label: opcao.titulo }))}
-                onChange={(valor: string) => handleEscolhaRacialChange(grupo.campo, valor)}
+                key={condicao.id}
+                label={condicao.titulo}
+                value={condicaoRacialCumprida(f.escolhaRacial, condicao.id) ? 'sim' : 'nao'}
+                options={[{ value: 'nao', label: 'Ainda não cumprida' }, { value: 'sim', label: 'Cumprida' }]}
+                onChange={(valor: string) => handleCondicaoRacialChange(condicao.id, valor === 'sim')}
                 disabled={!isMestre}
               />
             ))}
-            
+
             <div className="md:col-span-2 grid min-w-0 grid-cols-1 gap-3 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
               <LabeledModalSelect
                 label="Origem"
@@ -887,7 +931,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
             <SeletorPersonalizavel
               label="Tamanho"
               value={f.tamanho || ''}
-              padrao={obterVarianteRacial(racaAtual, f.escolhaRacial)?.tamanho || 'Normal'}
+              padrao={obterTamanhoRacial(racaAtual, f.escolhaRacial) || obterVarianteRacial(racaAtual, f.escolhaRacial)?.tamanho || 'Normal'}
               opcoes={TAMANHOS_PRONTOS.map((tamanho) => ({ value: tamanho, label: tamanho }))}
               onChange={(valor) => onUpdate(['ficha', 'tamanho'], valor)}
               placeholderPersonalizado="Ex.: Minúsculo, Colossal..."

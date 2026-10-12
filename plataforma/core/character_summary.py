@@ -637,6 +637,7 @@ def _opcao_racial_valida(raca: dict, campo: str, valor) -> bool:
     preenchidos - o conteudo deles ja e conferido em `_atributo_efetivo`."""
     colecao = {
         "naturezaId": "naturezas",
+        "animalId": "animais",
         "varianteId": "variantes",
         "linhagemId": "linhagens",
         "condicaoAncestralId": "condicoes_ancestrais",
@@ -650,6 +651,44 @@ def _opcao_racial_valida(raca: dict, campo: str, valor) -> bool:
         isinstance(item, dict) and str(item.get("id")) == str(valor) and not item.get("somente_mestre")
         for item in raca.get(colecao) or []
     )
+
+
+def _animal_racial_incoerente(raca: dict, escolha: dict) -> str | None:
+    """O animal da Animalia vem do catalogo da raca (ou e escrito pelo jogador) e precisa
+    servir a Morfologia escolhida: um animal que lista so Aquatica nao combina com Alada."""
+    escrito = escolha.get("animalPersonalizado")
+    if escrito not in (None, ""):
+        if not isinstance(escrito, str) or len(escrito.strip()) > 80:
+            return "o animal personalizado deve ser um texto curto"
+    animal_id = escolha.get("animalId")
+    if animal_id in (None, ""):
+        return None
+    animal = next(
+        (item for item in raca.get("animais") or [] if isinstance(item, dict) and str(item.get("id")) == str(animal_id)),
+        None,
+    )
+    if not animal:
+        return "o animal escolhido nao existe nesta raca"
+    morfologias = animal.get("morfologias")
+    morfologia = escolha.get("varianteId")
+    if isinstance(morfologias, list) and morfologias and morfologia not in (None, "") and str(morfologia) not in {str(m) for m in morfologias}:
+        return "o animal escolhido nao serve a morfologia da ficha"
+    return None
+
+
+def _condicoes_raciais_alteradas(escolha: dict, escolha_anterior: dict) -> str | None:
+    """`condicoesCumpridas` guarda o que o mestre marcou como cumprido (a Provacao
+    Primordial do Espirito). O jogador nunca muda essa lista: ela libera estagios e
+    tracos que ele nao pode conceder a si mesmo."""
+    atual = escolha.get("condicoesCumpridas")
+    if atual not in (None, []) and not isinstance(atual, list):
+        return "condicoesCumpridas deve ser uma lista"
+    antes = escolha_anterior.get("condicoesCumpridas")
+    ids_atual = {str(item) for item in atual} if isinstance(atual, list) else set()
+    ids_antes = {str(item) for item in antes} if isinstance(antes, list) else set()
+    if ids_atual != ids_antes:
+        return "somente o mestre pode marcar uma condicao racial como cumprida"
+    return None
 
 
 def _natureza_racial_incoerente(raca: dict, escolha: dict, escolha_anterior: dict | None = None) -> str | None:
@@ -973,7 +1012,13 @@ def validar_regras_ficha(
     # do mestre ("aparecem na criação/edição de fichas depois de liberadas").
     if criacao and raca.get("categoria") != "padrao" and raca_id not in liberados_raca:
         return "a criacao deve comecar com uma raca comum, ou uma raca especial liberada pelo mestre"
-    erro = _compativel_com_arvore("raca", raca_id, arvore_id, liberados_raca)
+    # A raça que a ficha já tem não é "adquirida" de novo a cada salvamento:
+    # uma raça que passou a ser especial depois da ficha criada (o Espírito,
+    # em 2026-10) não pode travar a edição dos personagens que já a usavam.
+    raca_ja_era_da_ficha = not criacao and raca_id == str(anterior.get("racaId") or "")
+    erro = _compativel_com_arvore(
+        "raca", raca_id, arvore_id, [*liberados_raca, raca_id] if raca_ja_era_da_ficha else liberados_raca
+    )
     if erro:
         return erro
 
@@ -995,10 +1040,16 @@ def validar_regras_ficha(
     erro = _natureza_racial_incoerente(raca, escolha_atual, None if criacao else escolha_antes)
     if erro:
         return erro
+    erro = _animal_racial_incoerente(raca, escolha_atual)
+    if erro:
+        return erro
+    erro = _condicoes_raciais_alteradas(escolha_atual, {} if criacao else escolha_antes)
+    if erro:
+        return erro
     if not criacao:
         escolha = ficha.get("escolhaRacial") if isinstance(ficha.get("escolhaRacial"), dict) else {}
         escolha_anterior = anterior.get("escolhaRacial") if isinstance(anterior.get("escolhaRacial"), dict) else {}
-        campos_fixos = {"naturezaId", "varianteId", "linhagemId", "condicaoAncestralId", "naturezaDivinaId"}
+        campos_fixos = {"naturezaId", "animalId", "animalPersonalizado", "varianteId", "linhagemId", "condicaoAncestralId", "naturezaDivinaId"}
         configuracao_atributos = raca.get("escolha_atributos")
         if isinstance(configuracao_atributos, dict) and configuracao_atributos.get("campo"):
             campos_fixos.add(str(configuracao_atributos["campo"]))

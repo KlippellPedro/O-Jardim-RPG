@@ -30,6 +30,7 @@ const AURAS_ESPECIAIS: Record<string, EstiloAuraFicha> = {
   bruxa: 'brasas',
   onirico: 'estrelas',
   divino: 'halo',
+  espirito: 'almas',
   entidade: 'sombra',
   // Classes
   'campeao-dimensional': 'estrelas',
