@@ -17,6 +17,7 @@ export const Amalgamo = ({ raca }: { raca: IRaca }) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
         style={{ backgroundImage: "url('/assets/img/amalgamo_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-pink-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0206]/40 via-transparent to-[#0a0206]/90" />
       </div>

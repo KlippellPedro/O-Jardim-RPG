@@ -20,6 +20,7 @@ export const Vampiro = ({ raca }: VampiroProps) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
         style={{ backgroundImage: "url('/assets/img/vampiro_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-slate-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#070101]/40 via-transparent to-[#070101]/90" />
       </div>
@@ -84,7 +85,7 @@ export const Vampiro = ({ raca }: VampiroProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-red-200/60 max-w-2xl mx-auto font-medium leading-relaxed font-serif"
           >
-            Enxerga no escuro natural, fecha feridas bebendo sangue e paga caro quando fica sem. O Clã define como lida com a fome, e a idade desperta poderes novos. Fala Romeno.
+            Enxerga no escuro natural, fecha feridas bebendo sangue e paga caro quando fica sem. O Clã define como lida com a fome, e a idade desperta poderes novos.
           </motion.p>
         </motion.header>
 

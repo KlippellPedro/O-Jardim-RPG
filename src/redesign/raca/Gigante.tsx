@@ -16,6 +16,7 @@ export const Gigante = ({ raca }: { raca: IRaca }) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
         style={{ backgroundImage: "url('/assets/img/gigante_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-stone-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f0e0c]/40 via-transparent to-[#0f0e0c]/90" />
       </div>
@@ -64,7 +65,7 @@ export const Gigante = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-xl text-stone-400 max-w-2xl mx-auto font-bold leading-relaxed"
           >
-            Grande a ponto de nada feito pros outros servir nele. Carrega o dobro, não sai do lugar quando tentam empurrar, e vive esbarrando em porta de tamanho normal. Fala Grego.
+            Grande a ponto de nada feito pros outros servir nele. Carrega o dobro, não sai do lugar quando tentam empurrar, e vive esbarrando em porta de tamanho normal.
           </motion.p>
         </motion.header>
 

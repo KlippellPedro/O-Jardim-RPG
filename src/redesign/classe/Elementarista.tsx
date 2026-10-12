@@ -28,7 +28,7 @@ export const Elementarista = ({ classe }: { classe: IClasse }) => {
   return (
     <div className={`relative min-h-screen overflow-hidden p-5 sm:p-8 ${tema.text}`}>
       <div className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(circle_at_50%_-10%,rgba(180,130,88,0.32),transparent_42%),linear-gradient(150deg,#080705_0%,#11100d_48%,#060608_100%)]" />
-      <div className="pointer-events-none fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.14]" style={{ backgroundImage: "url('/assets/img/elementarista_class_fantasy_bg.webp')" }} />
+      <div className="pointer-events-none fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.08]" style={{ backgroundImage: "url('/assets/img/elementarista_class_fantasy_bg.webp')" }} />
       <div className="pointer-events-none fixed inset-0 z-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:48px_48px]" />
 
       <div className="relative z-10 mx-auto max-w-6xl pt-10 sm:pt-16">

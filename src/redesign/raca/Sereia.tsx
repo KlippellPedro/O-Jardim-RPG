@@ -20,6 +20,7 @@ export const Sereia = ({ raca }: SereiaProps) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
         style={{ backgroundImage: "url('/assets/img/sereia_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-slate-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#051119]/40 via-transparent to-[#051119]/90" />
       </div>
@@ -97,7 +98,7 @@ export const Sereia = ({ raca }: SereiaProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-100/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Respira dentro e fora d'água, e nada tão rápido quanto anda em terra. O canto segura quem escuta pelo tempo exato de mudar uma cena, ou de sair dela viva. Fala Latim.
+            Respira dentro e fora d'água, e nada tão rápido quanto anda em terra. O canto segura quem escuta pelo tempo exato de mudar uma cena, ou de sair dela viva.
           </motion.p>
         </motion.header>
 

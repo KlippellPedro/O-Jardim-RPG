@@ -16,6 +16,7 @@ export const Anao = ({ raca }: { raca: IRaca }) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
         style={{ backgroundImage: "url('/assets/img/anao_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-stone-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#120a06]/40 via-transparent to-[#120a06]/90" />
       </div>
@@ -82,7 +83,7 @@ export const Anao = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-stone-400 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Baixo, duro de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e erra menos na segunda tentativa. Fala Nórdico Antigo.
+            Baixo, duro de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e erra menos na segunda tentativa.
           </motion.p>
         </motion.header>
 

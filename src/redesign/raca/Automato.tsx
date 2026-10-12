@@ -16,6 +16,7 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
         style={{ backgroundImage: "url('/assets/img/automato_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-slate-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#000508]/40 via-transparent to-[#000508]/90" />
       </div>
@@ -72,7 +73,7 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-200/60 max-w-2xl mx-auto font-mono leading-relaxed"
           >
-            Construto consciente saído da A.X.I.S, com núcleo e vontade próprios, que não deve obediência a nenhum criador. Cura comum ou mágica não repara seu corpo; esse trabalho exige Ofício (Engenharia). O chassi, bípede ou quadrúpede, é escolhido na criação. Fala Inglês.
+            Construto consciente saído da A.X.I.S, com núcleo e vontade próprios, que não deve obediência a nenhum criador. Cura comum ou mágica não repara seu corpo; esse trabalho exige Ofício (Engenharia). O chassi, bípede ou quadrúpede, é escolhido na criação.
           </motion.p>
         </motion.header>
 

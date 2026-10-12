@@ -20,6 +20,7 @@ export const Mimico = ({ raca }: MimicoProps) => {
         className="fixed inset-0 z-0 bg-black bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/assets/img/mimico_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <motion.div
           className="absolute inset-0"
           style={{

@@ -42,7 +42,7 @@ export const Divino = ({ raca }: DivinoProps) => {
   const imagemFundo = typeof raca.imagem_fundo === 'string' && raca.imagem_fundo
     ? raca.imagem_fundo
     : '/assets/img/divino_fantasy_bg.webp';
-  const fundoDaPagina = `linear-gradient(180deg, rgba(55,31,0,0.42), rgba(37,20,0,0.82)), url('${imagemFundo}'), radial-gradient(circle at 50% 8%, #9a6700 0%, #5b3500 40%, #2b1900 82%)`;
+  const fundoDaPagina = `linear-gradient(180deg, rgba(40,22,0,0.65), rgba(25,13,0,0.9)), url('${imagemFundo}'), radial-gradient(circle at 50% 8%, #9a6700 0%, #5b3500 40%, #2b1900 82%)`;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#2b1900] px-4 py-8 text-yellow-50 selection:bg-yellow-300/40 sm:px-8">

@@ -20,6 +20,7 @@ export const Goblim = ({ raca }: GoblimProps) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
         style={{ backgroundImage: "url('/assets/img/goblim_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-lime-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#080d08]/40 via-transparent to-[#080d08]/90" />
       </div>
@@ -82,7 +83,7 @@ export const Goblim = ({ raca }: GoblimProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-xl text-lime-100/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Pequeno, rápido e com um talento incômodo pra vender qualquer coisa por mais do que ela vale, de preferência coisa que já era dele. Fala Alemão entre os seus.
+            Pequeno, rápido e com um talento incômodo pra vender qualquer coisa por mais do que ela vale, de preferência coisa que já era dele.
           </motion.p>
         </motion.header>
 

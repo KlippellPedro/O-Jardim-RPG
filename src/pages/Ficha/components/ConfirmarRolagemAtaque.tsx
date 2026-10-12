@@ -349,7 +349,7 @@ export const ConfirmarDanoModal = ({ aberto, onClose, nomeArma, dano, modificado
 
         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
           <span className={CLASSE_ROTULO}>Vai rolar</span>
-          <p className="break-all font-mono text-base font-bold text-white">{montagem.formula || '—'}</p>
+          <p className="break-all font-mono text-base font-bold text-white">{montagem.formula || '-'}</p>
           {montagem.erro && <p className="mt-1 text-xs text-red-400">{montagem.erro}</p>}
         </div>
 

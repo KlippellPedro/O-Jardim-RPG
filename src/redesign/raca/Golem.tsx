@@ -16,6 +16,7 @@ export const Golem = ({ raca }: { raca: IRaca }) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
         style={{ backgroundImage: "url('/assets/img/golem_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-stone-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a08]/40 via-transparent to-[#0c0a08]/90" />
       </div>
@@ -69,7 +70,7 @@ export const Golem = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-xl text-stone-400 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Corpo construído, grande ou enorme, que não respira, não come e não adoece. Quem cuida dele é artesão, e nenhuma armadura de prateleira serve sem ajuste antes. Fala Libras.
+            Corpo construído, grande ou enorme, que não respira, não come e não adoece. Quem cuida dele é artesão, e nenhuma armadura de prateleira serve sem ajuste antes.
           </motion.p>
         </motion.header>
 

@@ -20,6 +20,7 @@ export const Simbionte = ({ raca }: SimbionteProps) => {
         className="fixed inset-0 z-0 bg-black bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/assets/img/simbionte_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div
           className="absolute inset-0"
           style={{

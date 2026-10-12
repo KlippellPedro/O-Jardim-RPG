@@ -11,7 +11,7 @@ export const PopStar = ({ classe }: { classe: IClasse }) => {
   return (
     <div className="min-h-screen text-pink-50 p-8 selection:bg-pink-500/30 overflow-hidden relative">
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/pop-star_class_fantasy_bg.webp')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.1] pointer-events-none" style={{ backgroundImage: "url('/assets/img/pop-star_class_fantasy_bg.webp')" }} />
 
       {/* Glamour / Flash Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0">

@@ -17,6 +17,7 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
         style={{ backgroundImage: "url('/assets/img/bruxa_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-purple-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0206]/40 via-transparent to-[#0a0206]/90" />
       </div>
@@ -88,7 +89,7 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-rose-200/60 max-w-2xl mx-auto font-serif leading-relaxed"
           >
-            Bruxa é uma natureza mágica que se adquire e não se perde depois. Enxerga maldição, pacto e possessão a distância, cria as próprias maldições e, quando falta Mana, paga o preço com a própria Vida. Fala Celta.
+            Bruxa é uma natureza mágica que se adquire e não se perde depois. Enxerga maldição, pacto e possessão a distância, cria as próprias maldições e, quando falta Mana, paga o preço com a própria Vida.
           </motion.p>
         </motion.header>
 

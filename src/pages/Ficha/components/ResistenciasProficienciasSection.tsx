@@ -223,7 +223,7 @@ export const ResistenciasSection = ({ ficha, isMestre, onUpdate }: IResistencias
                       min={0}
                       aria-label={`Valor de ${entrada.nome}`}
                       value={entrada.valor ?? ''}
-                      placeholder="—"
+                      placeholder="-"
                       onChange={(event) => alterar(indice, { valor: event.target.value === '' ? null : Math.max(0, Number(event.target.value)) })}
                       className="w-14 shrink-0 rounded-md border border-white/10 bg-[#0d0c12] px-1.5 py-1 text-center text-[11px] font-bold text-white focus:border-[#c7a44c]/50 focus:outline-none"
                     />

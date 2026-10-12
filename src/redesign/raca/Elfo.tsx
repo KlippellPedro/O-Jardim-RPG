@@ -15,6 +15,7 @@ export const Elfo = ({ raca }: { raca: IRaca }) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-[#070c06]"
         style={{ backgroundImage: "url('/assets/img/elfo_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         {/* Dark/Green overlay for readability and subtle fantasy vibe */}
         <div className="absolute inset-0 bg-[#070c06]/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#070c06]/50 via-emerald-950/40 to-[#070c06]/95" />
@@ -56,7 +57,7 @@ export const Elfo = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-emerald-100/50 max-w-2xl mx-auto font-medium leading-relaxed font-serif"
           >
-            Não envelhece e não esquece; carrega séculos de leitura empilhados num Intelecto fora do comum. Fala Finlandês e escolhe uma das seis Linhagens na criação, que define a diferença entre um Elfo de Sombras e um Elfo de Tempestades.
+            Não envelhece e não esquece; carrega séculos de leitura empilhados num Intelecto fora do comum. Escolhe uma das seis Linhagens na criação, que define a diferença entre um Elfo de Sombras e um Elfo de Tempestades.
           </motion.p>
         </motion.header>
 

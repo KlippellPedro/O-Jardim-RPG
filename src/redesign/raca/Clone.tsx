@@ -15,6 +15,7 @@ export const Clone = ({ raca }: { raca: IRaca }) => {
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
         style={{ backgroundImage: "url('/assets/img/clone_fantasy_bg.webp')" }}
       >
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-emerald-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#010805]/40 via-transparent to-[#010805]/90" />
       </div>
@@ -69,7 +70,7 @@ export const Clone = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-emerald-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Foi feito à imagem de outra pessoa e sabe muito bem disso. Copia aparência, voz, digital e retina do Original, e de vez em quando lembra de alguma coisa que nunca viveu. Fala Ao Contrário.
+            Foi feito à imagem de outra pessoa e sabe muito bem disso. Copia aparência, voz, digital e retina do Original, e de vez em quando lembra de alguma coisa que nunca viveu.
           </motion.p>
         </motion.header>
 
