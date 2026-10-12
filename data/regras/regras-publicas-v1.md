@@ -802,7 +802,7 @@ As famílias de dano, os sete elementos fixos e como a Resistência entra na con
 
 **Status:** Regra oficial
 
-Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos e a ordem certa para aplicar Resistência.
+Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos com as quatorze derivações, o dano de ambiente e a ordem certa para aplicar Resistência.
 
 Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade e qualquer efeito que "protege contra um tipo de dano" sempre apontam para uma entrada específica daqui, nunca para "dano" de forma genérica.
 
@@ -810,9 +810,9 @@ Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade
 
 - **Físicos:** corte, perfuração, impacto e balístico.
 
-- **Persistentes:** sangramento, fogo e veneno; batem de novo no fim do turno até alguém remover.
+- **Persistentes:** sangramento, fogo, veneno e ácido; batem de novo no fim do turno até alguém remover.
 
-- **Mágico:** elemental e os outros dez Fluxos naturais.
+- **Mágico:** elemental (os sete elementos e as quatorze derivações) e os outros dez Fluxos naturais.
 
 - **Tecnológico:** vem do Fluxo artificial de Tecnologia (A.X.I.S). Usa a mesma Mana e a mesma regra de Resistência que qualquer Fluxo, mas não conta como dano mágico.
 
@@ -820,7 +820,7 @@ Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade
 
 ### Dano elemental
 
-São estes sete, e não existe um oitavo. A **Polifonia Elemental** do Elementarista fixa um elemento de origem. Antes de conjurar uma magia catalogada como *Elemental*, ele declara qual elemento dominado está usando: quem possui afinidade única sempre declara o de origem; um Avatar pode declarar qualquer elemento que tenha aprendido. O elemento declarado define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração.
+São estes sete, e não existe um oitavo. Só elemento e derivação contam como dano elemental: ácido, por exemplo, não é elemento, então fica entre os persistentes. A **Polifonia Elemental** do Elementarista fixa um elemento de origem. Antes de conjurar uma magia catalogada como *Elemental*, ele declara qual elemento dominado está usando: quem possui afinidade única sempre declara o de origem; um Avatar pode declarar qualquer elemento que tenha aprendido. O elemento declarado define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração.
 
 - Elemento | Como costuma se manifestar
 
@@ -838,11 +838,25 @@ São estes sete, e não existe um oitavo. A **Polifonia Elemental** do Elementar
 
 - Escuridão | Sombra espessa o bastante pra engolir contorno e som. Apaga a luz mundana da área, confunde quem tenta mirar e esconde o que não quer ser visto.
 
+A relação de vantagem entre os elementos e as derivações do Elementarista estão no capítulo **Elementos e Derivações**.
+
 Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. O elemento de origem é permanente; aprender outro exige o Caminho do Avatar. Quando um item, modificação, encantamento ou Selo pedir "um elemento", esse elemento é escolhido ou fixado na criação conforme a própria fonte e não muda a afinidade de uma criatura.
 
 **Elementarista:** Polifonia Elemental fixa um único elemento de origem, libera as magias Elementais e concede uma vaga de magia no 1º nível. Somente quem desperta como Avatar no Julgamento da Aptidão pode aprender outros elementos; mesmo nesse caso, a derivação e os benefícios que citam o elemento de origem continuam ligados apenas a ele.
 
 **Acesso às magias:** o Fluxo Físico também produz força, peso e matéria bruta. Canalizador e Sintonizador continuam aprendendo essas magias materiais e cinéticas, mas as magias catalogadas como *Elementais* exigem níveis de Elementarista. Magias que combinam vários elementos exigem ainda Avatar desperto.
+
+### Derivações também são tipos de dano
+
+Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio, do mesmo jeito que o elemento: existe dano de Gelo, de Magma, de Areia, de Plasma, de Sangue, e assim por diante. Gelo é derivação de Água e tem Resistência própria. A lista completa, com o que cada derivação faz, está no capítulo **Elementos e Derivações**.
+
+- Resistência, vulnerabilidade e imunidade a uma derivação valem só para ela, por inteiro.
+
+- Resistência ao elemento base vale pela metade contra o dano da derivação, arredondada para baixo. Imunidade ao elemento base continua valendo por inteiro.
+
+### Dano de ambiente: Frio e Calor
+
+Frio e Calor vêm do lugar onde você está: um deserto sem sombra, uma noite de nevasca, uma câmara de forja. Gelo e Fogo vêm de um golpe que você levou. Por isso são tipos diferentes, e Resistência a um não vale para o outro. A Resistência contra Frio ou Calor de um Traje vale para o clima; a Resistência a Gelo de um Fruto vale para o golpe.
 
 ### Resistência e ordem de aplicação
 
@@ -920,7 +934,7 @@ Rolar fora do site continua valendo: quem prefere dado físico anuncia o resulta
 
 - O XP do encontro é distribuído pela própria sessão e cai nas fichas escolhidas, seguindo as regras do capítulo de Experiência.
 
-- O saque das criaturas derrotadas também sai pela sessão: o Mestre rola e escolhe quem leva cada coisa. O item cai direto no inventário e as moedas na carteira, com registro no extrato. O que cada criatura pode deixar você só descobre saqueando.
+- O saque das criaturas derrotadas também sai pela sessão: o Mestre rola e escolhe quem leva cada coisa. O item cai direto no inventário e as moedas na carteira, com registro no extrato. O que cada criatura pode deixar cair, e com que chance, está na ficha dela nos Registros Universais.
 
 - Encerrar a sessão guarda o estado. O que estava preparado continua preparado para a próxima.
 
@@ -2797,6 +2811,90 @@ Cada marco libera um círculo mais alto e mais vagas. A vaga é o total de magia
 
 - A duração máxima está escrita na magia. Pagar Mana de novo não estica uma conjuração que já está de pé.
 
+## elementos
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Os sete elementos do Fluxo Físico, quem os domina, como eles se enfrentam e as quatorze derivações que o Elementarista pode despertar.
+
+O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos primordiais moram nele: Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Não existe um oitavo elemento. Gelo, magma, magnetismo e afins são **derivações**: cada uma nasce de um dos sete e é, ela mesma, um tipo de dano. É isso que esta página explica.
+
+### Quem domina um elemento
+
+- **Elementarista:** escolhe um único **elemento de origem** no 1º nível, e a escolha é permanente. É ele quem libera as magias catalogadas como *Elementais*.
+
+- **Avatar:** no Julgamento da Aptidão (5º nível) o Mestre autoriza uma rolagem pública de 1d20, e só um 20 natural desperta o Avatar. Quem desperta aprende um elemento a mais nos níveis 5, 8, 11, 14, 17 e 20, e no 20º pode ter os sete. Quem não desperta fica com a afinidade única do elemento de origem, sem perder nada da progressão normal.
+
+- **Canalizador e Sintonizador:** continuam usando as magias materiais e cinéticas do Fluxo Físico (força, peso, proteção), mas as magias Elementais exigem níveis de Elementarista.
+
+- **Itens, encantamentos e Selos** que peçam "um elemento" têm esse elemento escolhido ou fixado na criação. Isso não muda a afinidade de ninguém.
+
+### Declarar o elemento
+
+Antes de rolar uma magia Elemental, quem conjura declara qual elemento dominado está usando. O elemento declarado define o tipo de dano, a aparência do efeito e a relação de vantagem ou desvantagem daquela conjuração. Quem tem afinidade única sempre declara o de origem; um Avatar declara qualquer um que tenha aprendido.
+
+### Como os elementos se enfrentam
+
+Cada elemento tem um que vence e um que o vence. A relação só conta quando duas manifestações elementais se enfrentam *diretamente*: atacar uma barreira, disputar o controle de uma área ou resistir a um efeito do elemento oposto. Quem está em vantagem rola o teste envolvido com vantagem, quem está em desvantagem rola com desvantagem, e as duas se anulam quando ambas se aplicam.
+
+- Elemento | Vantagem contra | Desvantagem contra
+
+- Terra | Raio | Escuridão
+
+- Água | Fogo | Raio
+
+- Fogo | Ar | Água
+
+- Ar | Luz | Fogo
+
+- Raio | Água | Terra
+
+- Luz | Escuridão | Ar
+
+- Escuridão | Terra | Luz
+
+A relação não dá dano extra, não remove imunidade e não vale só porque o alvo conhece ou domina outro elemento. Resistência e vulnerabilidade continuam por elemento, como no capítulo **Tipos de Dano**.
+
+### Derivações
+
+No 12º nível o Elementarista escolhe exatamente **uma derivação** do próprio elemento de origem, entre duas: a **comum** é o desenvolvimento esperado, e a **rara** exige uma Prova da Derivação e a autorização do Mestre. A escolha é permanente. Ser Avatar não dá derivação para os elementos adicionais.
+
+A partir do 13º nível (Domínio da Derivação), uma vez por rodada, ao conjurar uma magia Elemental do elemento de origem, o Elementarista pode gastar **+1 de Mana** para aplicar o efeito harmônico da derivação a um único alvo, ponto ou espaço válido da magia.
+
+- Elemento | Derivação | Efeito harmônico
+
+- Terra | Areia comum | Uma criatura afetada perde 3 m de Movimento até o começo do seu próximo turno. Não acumula consigo mesma.
+
+- Cristal rara | Quem falhar na resistência fica Exposto até o começo do seu próximo turno.
+
+- Água | Gelo comum | Um espaço de 1,5 m afetado vira terreno difícil até o começo do seu próximo turno.
+
+- Sangue rara | Uma criatura viva que falhar na resistência não recupera Vida até o começo do seu próximo turno. Nunca controla as ações ou o movimento do alvo.
+
+- Fogo | Magma comum | Um espaço de 1,5 m afetado fica em brasa até o começo do seu próximo turno; cada criatura sofre 1d6 de Magma na primeira vez que entrar ou começar o turno ali.
+
+- Fogo Astral rara | Quem sofrer dano da magia tem desvantagem no próximo teste de concentração que fizer até o começo do seu próximo turno.
+
+- Ar | Fumaça comum | Cria uma área de fumaça de 3 m num ponto afetado, com cobertura parcial até o começo do seu próximo turno.
+
+- Vácuo rara | Quem falhar na resistência perde as reações até o começo do seu próximo turno. Não causa morte instantânea nem ignora defesas.
+
+- Raio | Plasma comum | Depois de causar dano, outra criatura a até 3 m do alvo sofre 1d6 de Plasma, sem novo teste. Um salto por magia.
+
+- Magnetismo rara | Move até 3 m uma criatura afetada que carregue ou vista metal. Se for hostil, só move quando falhar na resistência.
+
+- Luz | Pureza comum | Um aliado afetado encerra a condição Exposto ou reduz em 1 rodada a duração restante de Cego.
+
+- Aurora rara | Uma criatura hostil que falhar na resistência fica Exposta até o começo do seu próximo turno e não recebe benefício de invisibilidade nesse período.
+
+- Escuridão | Trevas comum | Quem falhar na resistência faz o próximo ataque com desvantagem até o começo do seu próximo turno.
+
+- Eclipse rara | Apaga a luz mundana e suprime a luz mágica de círculo igual ou inferior ao da magia, numa área afetada de 3 m, até o começo do seu próximo turno. Eclipse não é o Fluxo do Vazio.
+
+**Derivação é tipo de dano.** Dano de Gelo, de Magma, de Areia e das outras tem Resistência, vulnerabilidade e imunidade próprias, que valem só para ela. A Resistência ao elemento base vale pela metade contra o dano da derivação (arredondada para baixo), e a imunidade ao elemento base continua valendo por inteiro. Para vantagens e desvantagens, a derivação conta como o elemento de origem, e ela não ganha nada além do que está escrito no efeito harmônico. Frio e Calor ficam de fora: são dano de ambiente, descrito em **Tipos de Dano**. Se o efeito exige que a criatura falhe na resistência, uma magia sem resistência não o ativa contra criatura hostil.
+
 ## marcas-cicatrizes
 
 **Categoria:** Livro do Jogador
@@ -3779,7 +3877,7 @@ Nome, tipo e ajustes iniciais de Vida, Mana, Estamina e Movimento de cada raça.
 - **Goblim** (comum) - Vida -1, Mana +1, Estamina +2, Movimento +1.5 m
 - **Anão** (comum) - Vida +2, Mana +0, Estamina +3
 - **Golem** (comum) - Vida +5, Mana -2, Estamina +3
-- **Espírito** (comum) - Vida -2, Mana +3
+- **Espírito** (especial) - Vida -2, Mana +3
 - **Gigante** (comum) - Vida +4, Mana -1, Estamina +3
 - **Animália** (comum) - Vida +0, Mana +0
 - **Sereia / Tritão** (comum) - Vida -1, Mana +2
@@ -3962,19 +4060,19 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 1162 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 1349 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 ### Os quatro locais
 
 - Local | O que vende | Itens
 
-- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 367
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 415
 
-- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 282
+- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 331
 
-- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 275
+- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 340
 
-- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 238
+- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 263
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 

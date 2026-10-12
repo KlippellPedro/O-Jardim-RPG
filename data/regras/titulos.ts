@@ -21,6 +21,7 @@ export const TITULOS_TOPICOS: Record<string, string> = {
   'raridades-modificacoes': 'Raridades de Equipamento',
   'modificacoes-equipamentos': 'Modificações de Equipamento',
   'magia-fluxo': 'Magia e Fluxo',
+  elementos: 'Elementos e Derivações',
   'marcas-cicatrizes': 'Marcas e Cicatrizes',
   'rituais-selos': 'Rituais, Selos e Fusão',
   'catalogo-magico': 'Catálogo Mágico',

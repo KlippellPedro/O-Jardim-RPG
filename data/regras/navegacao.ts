@@ -39,7 +39,7 @@ export const GRUPOS_NAVEGACAO: readonly GrupoNavegacaoRegras[] = [
     id: 'magia',
     titulo: 'Magia e Fluxos',
     descricao: 'Conjuração, preços dos círculos e formas mágicas.',
-    topicos: ['magia-fluxo', 'marcas-cicatrizes', 'rituais-selos', 'catalogo-magico'],
+    topicos: ['magia-fluxo', 'elementos', 'marcas-cicatrizes', 'rituais-selos', 'catalogo-magico'],
     cor: 'border-violet-300/20 from-violet-400/10',
   },
   {

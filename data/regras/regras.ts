@@ -1002,10 +1002,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   'tipos-de-dano': {
     categoria: 'Combate e Mecânicas',
     status: 'Regra oficial',
-    resumo: 'Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos e a ordem certa para aplicar Resistência.',
+    resumo: 'Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos com as quatorze derivações, o dano de ambiente e a ordem certa para aplicar Resistência.',
     destaques: [
       ['Famílias', 'Físico, Persistente, Mágico, Tecnológico, Mental'],
       ['Elementos', '7 fixos, sem oitavo'],
+      ['Derivações', '14 tipos próprios: Gelo, Magma, Areia...'],
+      ['Ambiente', 'Frio e Calor, que não são Gelo nem Fogo'],
       ['Resistência', 'sempre por tipo específico'],
     ],
     corpo: `
@@ -1014,14 +1016,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">As cinco famílias</h3>
       <ul class="regras-sublist regras-sublist--grid">
         <li><strong>Físicos:</strong> corte, perfuração, impacto e balístico.</li>
-        <li><strong>Persistentes:</strong> sangramento, fogo e veneno; batem de novo no fim do turno até alguém remover.</li>
-        <li><strong>Mágico:</strong> elemental e os outros dez Fluxos naturais.</li>
+        <li><strong>Persistentes:</strong> sangramento, fogo, veneno e ácido; batem de novo no fim do turno até alguém remover.</li>
+        <li><strong>Mágico:</strong> elemental (os sete elementos e as quatorze derivações) e os outros dez Fluxos naturais.</li>
         <li><strong>Tecnológico:</strong> vem do Fluxo artificial de Tecnologia (A.X.I.S). Usa a mesma Mana e a mesma regra de Resistência que qualquer Fluxo, mas não conta como dano mágico.</li>
         <li><strong>Mental:</strong> tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura.</li>
       </ul>
 
       <h3 class="regras-subtitle">Dano elemental</h3>
-      <p class="regras-lead">São estes sete, e não existe um oitavo. A <strong>Polifonia Elemental</strong> do Elementarista fixa um elemento de origem. Antes de conjurar uma magia catalogada como <em>Elemental</em>, ele declara qual elemento dominado está usando: quem possui afinidade única sempre declara o de origem; um Avatar pode declarar qualquer elemento que tenha aprendido. O elemento declarado define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração.</p>
+      <p class="regras-lead">São estes sete, e não existe um oitavo. Só elemento e derivação contam como dano elemental: ácido, por exemplo, não é elemento, então fica entre os persistentes. A <strong>Polifonia Elemental</strong> do Elementarista fixa um elemento de origem. Antes de conjurar uma magia catalogada como <em>Elemental</em>, ele declara qual elemento dominado está usando: quem possui afinidade única sempre declara o de origem; um Avatar pode declarar qualquer elemento que tenha aprendido. O elemento declarado define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Elemento</th><th>Como costuma se manifestar</th></tr></thead>
         <tbody>
@@ -1034,9 +1036,20 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td><strong>Escuridão</strong></td><td>Sombra espessa o bastante pra engolir contorno e som. Apaga a luz mundana da área, confunde quem tenta mirar e esconde o que não quer ser visto.</td></tr>
         </tbody>
       </table></div>
+      <p class="regras-note">A relação de vantagem entre os elementos e as derivações do Elementarista estão no capítulo <strong>Elementos e Derivações</strong>.</p>
       <p class="regras-note">Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. O elemento de origem é permanente; aprender outro exige o Caminho do Avatar. Quando um item, modificação, encantamento ou Selo pedir "um elemento", esse elemento é escolhido ou fixado na criação conforme a própria fonte e não muda a afinidade de uma criatura.</p>
       <p class="regras-note"><strong>Elementarista:</strong> Polifonia Elemental fixa um único elemento de origem, libera as magias Elementais e concede uma vaga de magia no 1º nível. Somente quem desperta como Avatar no Julgamento da Aptidão pode aprender outros elementos; mesmo nesse caso, a derivação e os benefícios que citam o elemento de origem continuam ligados apenas a ele.</p>
       <p class="regras-note"><strong>Acesso às magias:</strong> o Fluxo Físico também produz força, peso e matéria bruta. Canalizador e Sintonizador continuam aprendendo essas magias materiais e cinéticas, mas as magias catalogadas como <em>Elementais</em> exigem níveis de Elementarista. Magias que combinam vários elementos exigem ainda Avatar desperto.</p>
+
+      <h3 class="regras-subtitle">Derivações também são tipos de dano</h3>
+      <p class="regras-lead">Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio, do mesmo jeito que o elemento: existe dano de Gelo, de Magma, de Areia, de Plasma, de Sangue, e assim por diante. Gelo é derivação de Água e tem Resistência própria. A lista completa, com o que cada derivação faz, está no capítulo <strong>Elementos e Derivações</strong>.</p>
+      <ul class="regras-list">
+        <li>Resistência, vulnerabilidade e imunidade a uma derivação valem só para ela, por inteiro.</li>
+        <li>Resistência ao elemento base vale pela metade contra o dano da derivação, arredondada para baixo. Imunidade ao elemento base continua valendo por inteiro.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Dano de ambiente: Frio e Calor</h3>
+      <p class="regras-lead">Frio e Calor vêm do lugar onde você está: um deserto sem sombra, uma noite de nevasca, uma câmara de forja. Gelo e Fogo vêm de um golpe que você levou. Por isso são tipos diferentes, e Resistência a um não vale para o outro. A Resistência contra Frio ou Calor de um Traje vale para o clima; a Resistência a Gelo de um Fruto vale para o golpe.</p>
 
       <h3 class="regras-subtitle">Resistência e ordem de aplicação</h3>
       <p class="regras-lead">A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.</p>
@@ -1051,7 +1064,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     corpoMestre: `
       <p class="regras-lead">Tipo de dano é a etiqueta que faz Resistência, vulnerabilidade e imunidade funcionarem sem ambiguidade. Ao criar monstro, item ou poder novo, escolha o tipo daqui em vez de inventar um rótulo solto.</p>
       <ul class="regras-list">
-        <li>Não crie um oitavo elemento. Se a fantasia pede algo fora da lista, encaixe no elemento mais próximo e deixe a diferença na descrição, não na mecânica.</li>
+        <li>Não crie um oitavo elemento. Se a fantasia pede algo fora da lista, procure uma das quatorze derivações; se ainda assim não couber, encaixe no elemento mais próximo e deixe a diferença na descrição. Ao escrever o ataque de um monstro, use o tipo certo: um elemental de gelo causa dano de Gelo, nunca de Frio.</li>
+        <li>Frio e Calor são dano de ambiente (clima, deserto, nevasca, forja). Use quando a cena machuca sem que ninguém ataque, e nunca no lugar de Gelo ou Fogo num golpe.</li>
         <li>Dano Mental que vem de horror ou de uma revelação perturbadora tira Sanidade. Dano Mental que vem de um ataque voltado a atrapalhar quem conjura tira Mana. Decida qual dos dois antes de anunciar o efeito pra mesa.</li>
         <li>Resistência genérica a dano mágico cobre elemental e os outros Fluxos naturais ao mesmo tempo, mas não cobre dano tecnológico: são famílias separadas, e um item precisa declarar as duas se quiser proteger contra ambas. É mais forte que Resistência a um elemento só, então reserve para itens de raridade alta.</li>
       </ul>
@@ -1113,7 +1127,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Fechar a sessão</h3>
       <ul class="regras-list">
         <li>O XP do encontro é distribuído pela própria sessão e cai nas fichas escolhidas, seguindo as regras do capítulo de Experiência.</li>
-        <li>O saque das criaturas derrotadas também sai pela sessão: o Mestre rola e escolhe quem leva cada coisa. O item cai direto no inventário e as moedas na carteira, com registro no extrato. O que cada criatura pode deixar você só descobre saqueando.</li>
+        <li>O saque das criaturas derrotadas também sai pela sessão: o Mestre rola e escolhe quem leva cada coisa. O item cai direto no inventário e as moedas na carteira, com registro no extrato. O que cada criatura pode deixar cair, e com que chance, está na ficha dela nos Registros Universais.</li>
         <li>Encerrar a sessão guarda o estado. O que estava preparado continua preparado para a próxima.</li>
       </ul>
     `,
@@ -2309,6 +2323,80 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     `,
   },
 
+  elementos: {
+    categoria: 'Livro do Jogador',
+    status: 'Regra oficial',
+    resumo: 'Os sete elementos do Fluxo Físico, quem os domina, como eles se enfrentam e as quatorze derivações que o Elementarista pode despertar.',
+    destaques: [
+      ['Elementos', '7 fixos, todos do Fluxo Físico'],
+      ['Derivações', '14: uma comum e uma rara por elemento'],
+      ['Quem domina', 'Elementarista; só o Avatar aprende outros'],
+      ['Relação', 'vantagem e desvantagem só em disputa direta'],
+    ],
+    corpo: `
+      <p class="regras-lead">O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos primordiais moram nele: Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Não existe um oitavo elemento. Gelo, magma, magnetismo e afins são <strong>derivações</strong>: cada uma nasce de um dos sete e é, ela mesma, um tipo de dano. É isso que esta página explica.</p>
+
+      <h3 class="regras-subtitle">Quem domina um elemento</h3>
+      <ul class="regras-list">
+        <li><strong>Elementarista:</strong> escolhe um único <strong>elemento de origem</strong> no 1º nível, e a escolha é permanente. É ele quem libera as magias catalogadas como <em>Elementais</em>.</li>
+        <li><strong>Avatar:</strong> no Julgamento da Aptidão (5º nível) o Mestre autoriza uma rolagem pública de 1d20, e só um 20 natural desperta o Avatar. Quem desperta aprende um elemento a mais nos níveis 5, 8, 11, 14, 17 e 20, e no 20º pode ter os sete. Quem não desperta fica com a afinidade única do elemento de origem, sem perder nada da progressão normal.</li>
+        <li><strong>Canalizador e Sintonizador:</strong> continuam usando as magias materiais e cinéticas do Fluxo Físico (força, peso, proteção), mas as magias Elementais exigem níveis de Elementarista.</li>
+        <li><strong>Itens, encantamentos e Selos</strong> que peçam "um elemento" têm esse elemento escolhido ou fixado na criação. Isso não muda a afinidade de ninguém.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Declarar o elemento</h3>
+      <p class="regras-lead">Antes de rolar uma magia Elemental, quem conjura declara qual elemento dominado está usando. O elemento declarado define o tipo de dano, a aparência do efeito e a relação de vantagem ou desvantagem daquela conjuração. Quem tem afinidade única sempre declara o de origem; um Avatar declara qualquer um que tenha aprendido.</p>
+
+      <h3 class="regras-subtitle">Como os elementos se enfrentam</h3>
+      <p class="regras-lead">Cada elemento tem um que vence e um que o vence. A relação só conta quando duas manifestações elementais se enfrentam <em>diretamente</em>: atacar uma barreira, disputar o controle de uma área ou resistir a um efeito do elemento oposto. Quem está em vantagem rola o teste envolvido com vantagem, quem está em desvantagem rola com desvantagem, e as duas se anulam quando ambas se aplicam.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Elemento</th><th>Vantagem contra</th><th>Desvantagem contra</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Terra</strong></td><td>Raio</td><td>Escuridão</td></tr>
+          <tr><td><strong>Água</strong></td><td>Fogo</td><td>Raio</td></tr>
+          <tr><td><strong>Fogo</strong></td><td>Ar</td><td>Água</td></tr>
+          <tr><td><strong>Ar</strong></td><td>Luz</td><td>Fogo</td></tr>
+          <tr><td><strong>Raio</strong></td><td>Água</td><td>Terra</td></tr>
+          <tr><td><strong>Luz</strong></td><td>Escuridão</td><td>Ar</td></tr>
+          <tr><td><strong>Escuridão</strong></td><td>Terra</td><td>Luz</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">A relação não dá dano extra, não remove imunidade e não vale só porque o alvo conhece ou domina outro elemento. Resistência e vulnerabilidade continuam por elemento, como no capítulo <strong>Tipos de Dano</strong>.</p>
+
+      <h3 class="regras-subtitle">Derivações</h3>
+      <p class="regras-lead">No 12º nível o Elementarista escolhe exatamente <strong>uma derivação</strong> do próprio elemento de origem, entre duas: a <strong>comum</strong> é o desenvolvimento esperado, e a <strong>rara</strong> exige uma Prova da Derivação e a autorização do Mestre. A escolha é permanente. Ser Avatar não dá derivação para os elementos adicionais.</p>
+      <p class="regras-lead">A partir do 13º nível (Domínio da Derivação), uma vez por rodada, ao conjurar uma magia Elemental do elemento de origem, o Elementarista pode gastar <strong>+1 de Mana</strong> para aplicar o efeito harmônico da derivação a um único alvo, ponto ou espaço válido da magia.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Elemento</th><th>Derivação</th><th>Efeito harmônico</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="2"><strong>Terra</strong></td><td>Areia <small>comum</small></td><td>Uma criatura afetada perde 3 m de Movimento até o começo do seu próximo turno. Não acumula consigo mesma.</td></tr>
+          <tr><td>Cristal <small>rara</small></td><td>Quem falhar na resistência fica Exposto até o começo do seu próximo turno.</td></tr>
+          <tr><td rowspan="2"><strong>Água</strong></td><td>Gelo <small>comum</small></td><td>Um espaço de 1,5 m afetado vira terreno difícil até o começo do seu próximo turno.</td></tr>
+          <tr><td>Sangue <small>rara</small></td><td>Uma criatura viva que falhar na resistência não recupera Vida até o começo do seu próximo turno. Nunca controla as ações ou o movimento do alvo.</td></tr>
+          <tr><td rowspan="2"><strong>Fogo</strong></td><td>Magma <small>comum</small></td><td>Um espaço de 1,5 m afetado fica em brasa até o começo do seu próximo turno; cada criatura sofre 1d6 de Magma na primeira vez que entrar ou começar o turno ali.</td></tr>
+          <tr><td>Fogo Astral <small>rara</small></td><td>Quem sofrer dano da magia tem desvantagem no próximo teste de concentração que fizer até o começo do seu próximo turno.</td></tr>
+          <tr><td rowspan="2"><strong>Ar</strong></td><td>Fumaça <small>comum</small></td><td>Cria uma área de fumaça de 3 m num ponto afetado, com cobertura parcial até o começo do seu próximo turno.</td></tr>
+          <tr><td>Vácuo <small>rara</small></td><td>Quem falhar na resistência perde as reações até o começo do seu próximo turno. Não causa morte instantânea nem ignora defesas.</td></tr>
+          <tr><td rowspan="2"><strong>Raio</strong></td><td>Plasma <small>comum</small></td><td>Depois de causar dano, outra criatura a até 3 m do alvo sofre 1d6 de Plasma, sem novo teste. Um salto por magia.</td></tr>
+          <tr><td>Magnetismo <small>rara</small></td><td>Move até 3 m uma criatura afetada que carregue ou vista metal. Se for hostil, só move quando falhar na resistência.</td></tr>
+          <tr><td rowspan="2"><strong>Luz</strong></td><td>Pureza <small>comum</small></td><td>Um aliado afetado encerra a condição Exposto ou reduz em 1 rodada a duração restante de Cego.</td></tr>
+          <tr><td>Aurora <small>rara</small></td><td>Uma criatura hostil que falhar na resistência fica Exposta até o começo do seu próximo turno e não recebe benefício de invisibilidade nesse período.</td></tr>
+          <tr><td rowspan="2"><strong>Escuridão</strong></td><td>Trevas <small>comum</small></td><td>Quem falhar na resistência faz o próximo ataque com desvantagem até o começo do seu próximo turno.</td></tr>
+          <tr><td>Eclipse <small>rara</small></td><td>Apaga a luz mundana e suprime a luz mágica de círculo igual ou inferior ao da magia, numa área afetada de 3 m, até o começo do seu próximo turno. Eclipse não é o Fluxo do Vazio.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note"><strong>Derivação é tipo de dano.</strong> Dano de Gelo, de Magma, de Areia e das outras tem Resistência, vulnerabilidade e imunidade próprias, que valem só para ela. A Resistência ao elemento base vale pela metade contra o dano da derivação (arredondada para baixo), e a imunidade ao elemento base continua valendo por inteiro. Para vantagens e desvantagens, a derivação conta como o elemento de origem, e ela não ganha nada além do que está escrito no efeito harmônico. Frio e Calor ficam de fora: são dano de ambiente, descrito em <strong>Tipos de Dano</strong>. Se o efeito exige que a criatura falhe na resistência, uma magia sem resistência não o ativa contra criatura hostil.</p>
+    `,
+    corpoMestre: `
+      <p class="regras-lead">Ao criar criatura, item ou cenário com um elemento, escolha um dos sete. Gelo, magma, areia e os outros são derivações, e cada uma é um tipo de dano próprio. Um elemental de gelo causa dano de Gelo e é Resistente a Gelo, e quem tem Resistência a Água resiste só à metade contra ele.</p>
+      <ul class="regras-list">
+        <li>Use a relação de vantagem só em disputa direta entre manifestações (barreira contra ataque, controle de área, resistir ao elemento oposto). Ela não aumenta dano nem atravessa imunidade, então não vale como justificativa para dobrar dano de um monstro.</li>
+        <li>A derivação rara é decisão sua. Peça a Prova da Derivação quando o Elementarista chegar ao 12º nível, e faça dela uma cena, não uma conversa de bastidor.</li>
+        <li>O Avatar é raro de propósito: um em vinte. Se a mesa quiser outro resultado, você pode substituir o acaso por uma decisão narrativa antes da rolagem, mas o método e o resultado ficam permanentes.</li>
+      </ul>
+    `,
+  },
+
   'marcas-cicatrizes': {
     categoria: 'Livro do Jogador',
     status: 'Regra oficial',
@@ -2694,6 +2782,27 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Fisiologia estranha é a parte que rende. Um Slime ou um Espírito na mesa muda como o mundo reage ao grupo antes de mudar qualquer número, e essa é a parte que vale conduzir.</li>
         <li>O ajuste de Movimento é o único que continua pesando no nível alto, porque ele não escala com nada. Um Goblim com mais 1,5 m continua chegando primeiro no nível 30.</li>
       </ul>
+
+      <h3 class="regras-subtitle">Espíritos: Natureza, Queda e Redenção</h3>
+      <ul class="regras-list">
+        <li>O Espírito é uma raça especial: só entra na mesa com a sua liberação, na criação da ficha ou por transformação narrativa, e pode surgir em qualquer Árvore. Ele cresceu além do que uma raça comum comporta, com seis degraus de escada e três Naturezas, então decida quem o recebe como decidiria sobre o Divino ou o Desperto.</li>
+        <li>O Espírito tem três Naturezas: natural, demoníaca e angelical. A Natureza é a primeira escolha da criação e define se a marca do personagem é um Fluxo, um Pecado ou uma Virtude. Cada Pecado tem uma Virtude oposta, e as características de uma espelham as da outra.</li>
+        <li>Queda e Redenção são trocas que só você faz. Para um anjo cair ou um demônio se redimir, troque a Natureza e a marca na ficha do personagem. O jogador não consegue fazer essa troca sozinho, então combine a cena com a mesa antes de mexer na ficha.</li>
+        <li>O corpo abre no nível 5. O demônio possui com um teste de Vontade contra o Misticismo dele, e o anjo só encarna com permissão. Nenhum dos dois age à força contra personagem de jogador. Decida com a mesa o que o corpo emprestado ainda sabe fazer e o que o dono lembra ao acordar.</li>
+        <li>O Fluxo Universal é uma décima segunda marca do Espírito natural e só você concede. Blanc é a única conhecida por tê-lo. Dar o Universal a um jogador muda a cara da campanha, então faça dele um acontecimento da história.</li>
+        <li>A escada tem seis degraus, nos níveis 1, 8, 15, 28, 40 e 60, e vale para as três Naturezas com o mesmo Mana e a mesma Vida. O preço é que muda: o demônio paga em custo, e o anjo paga em voto.</li>
+        <li>O Espírito é a única raça com escada acima do nível 40, e o último degrau, o Primordial, é muito forte de propósito. Só o nível 60 não o libera: o jogador precisa cumprir a Provação Primordial, que está descrita na página de cada marca, e só você a marca como cumprida, na ficha, no campo Provação Primordial. Combine o feito com o jogador antes e deixe que ele custe alguma coisa.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Animália: Forma, Morfologia e animal</h3>
+      <ul class="regras-list">
+        <li>A Animália escolhe três coisas, nesta ordem: a Forma (Fera, Híbrido ou Traços), a Morfologia (uma das dez) e o animal. A Forma diz quanto do bicho aparece no corpo, a Morfologia diz o instinto que veio mais forte, e o animal dá o tamanho e a arma natural. A página da raça lista os animais de cada Morfologia, e o jogador também pode escrever um animal próprio na ficha.</li>
+        <li>O animal que o jogador escreve não vem pronto: você dá o tamanho dele e diz a que Morfologia ele serve. Procure na lista o bicho mais parecido e copie o tamanho. O tamanho muda o que o personagem consegue vestir e carregar, então resolva isso antes da primeira sessão.</li>
+        <li>A Fera é o bicho inteiro. Ganha Vida, perde um pouco de Mana e tem a arma natural mais forte. Armadura, arreio e roupa precisam ser feitos para o corpo dela: custam o dobro e são peças especiais, que o grupo encomenda ou encontra. Trate isso como gancho de aventura, porque o grupo vai atrás da armadura do tamanho dela.</li>
+        <li>O Híbrido anda em duas pernas, tem mãos e é a Forma de equilíbrio, sem ajuste de Vida, Mana ou Estamina. Os Traços são gente com sinais de bicho: perdem um pouco de corpo, ganham Mana, não têm arma natural, usam qualquer equipamento sem custo extra e têm sempre o tamanho de uma pessoa, seja qual for o animal.</li>
+        <li>As três Formas e as dez Morfologias foram comparadas com as outras raças comuns. Nenhuma combinação passa de 6 pontos somados de Vida, Mana e Estamina no nível 1, nem de 16 no nível 60. Se uma combinação pesar demais na sua mesa, a troca de Morfologia é sua, como as outras escolhas fixas da raça.</li>
+        <li>A escada tem três degraus (Jovem no 1, Adulta no 13 e Alfa no 36) e vale para qualquer combinação. Só soma Vida, Estamina e Mana, mais 1,5 m de Movimento na Adulta e a Presença Alfa no último degrau.</li>
+      </ul>
     `,
   },
 
@@ -3021,7 +3130,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td><strong>Casa nobre ou alto clero</strong><br><small>casa antiga, arcebispo</small></td><td>30.000 Lunaris</td><td>100 Solares</td><td>2d100 Solares</td><td>6.000 Solares</td></tr>
           <tr><td><strong>Realeza de reino</strong><br><small>Durin II, Augustos Castilla, quem senta num trono</small></td><td>1.000 Solares</td><td>7 Fragmentos</td><td>2d6 Fragmentos</td><td>400 Fragmentos</td></tr>
           <tr><td><strong>Dono de Dimensão</strong><br><small>Grimm, e quem governa uma Dimensão inteira</small></td><td>4.000 Solares</td><td>28 Fragmentos</td><td>5d10 Fragmentos</td><td>1.600 Fragmentos</td></tr>
-          <tr><td><strong>Soberano</strong><br><small>uma das dez Cadeiras da assembleia</small></td><td>o que a Cadeira mandar</td><td>100 Fragmentos</td><td>2d100 Fragmentos</td><td>não se conta</td></tr>
+          <tr><td><strong>Governante</strong><br><small>quem governa uma Árvore</small></td><td>o que o cargo mandar</td><td>100 Fragmentos</td><td>2d100 Fragmentos</td><td>não se conta</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">Cada degrau tem cerca de três vezes o dinheiro do anterior, no mesmo ritmo da escada de preços. Por isso a coluna do bolso já diz o que aquela pessoa consegue comprar: o trabalhador comum fecha um item Comum, o artesão alcança um Incomum, o nobre menor banca um Épico. Os dados também têm padrão, e ele se repete a cada troca de moeda: <strong>2d6, depois 5d10, depois 2d100</strong>. Se você lembrar dessa sequência, lembra da tabela inteira.</p>
@@ -3031,7 +3140,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li><strong>Realeza ainda tem conta bancária.</strong> Um rei guarda tesouro, cobra imposto e pode ser roubado. Os 400 Fragmentos de patrimônio compram exatamente uma Relíquia da Criação, uma vez só, e é essa a régua: o patrimônio inteiro de um reino equivale a um único objeto do topo do catálogo.</li>
         <li><strong>Dono de Dimensão possui o chão, não a bolsa.</strong> Os 1.600 Fragmentos são o que dá para liquidar sem desmontar a Dimensão. O resto é território, e território não entra em carteira. Grimm governa uma dimensão que muda de forma a cada visita, e ninguém consegue avaliar isso em moeda.</li>
-        <li><strong>Soberano requisita.</strong> Uma das dez Cadeiras não compra o que quer, ela manda buscar. Se um Soberano precisa de algo que os jogadores têm, o preço da conversa é político, e responder com número esvazia a cena.</li>
+        <li><strong>Governante requisita.</strong> Quem governa uma Árvore não compra o que quer, manda buscar. Se um Governante precisa de algo que os jogadores têm, o preço da conversa é político, e responder com número esvazia a cena.</li>
       </ul>
 
       <h3 class="regras-subtitle">O Vazio entre as Árvores</h3>
@@ -3045,7 +3154,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <tbody>
           <tr><td rowspan="3"><strong>Banco Lunar</strong></td><td>Escriturário de agência</td><td>Especialista ou oficial</td></tr>
           <tr><td>Gerente de agência</td><td>Mestre de guilda ou nobre menor</td></tr>
-          <tr><td>Cabeça da casa</td><td>Soberano <small>(Amadheus Colona ocupa uma Cadeira)</small></td></tr>
+          <tr><td>Cabeça da casa</td><td>Governante</td></tr>
           <tr><td rowspan="2"><strong>Guilda dos Caçadores</strong></td><td>Caçador contratado</td><td>vive de contrato, sem salário fixo</td></tr>
           <tr><td>Mestre de quadro</td><td>Especialista ou oficial</td></tr>
           <tr><td rowspan="2"><strong>Caravana do Limiar</strong></td><td>Tripulante</td><td>Artesão ou soldado veterano</td></tr>
@@ -3064,7 +3173,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </tbody>
       </table></div>
       <p class="regras-note">Aqui está a resposta para por que um grupo de aventureiros anda com dinheiro de nobre e origem de trabalhador: um único contrato de criatura Rara paga mais de um ano de salário mínimo. A contradição é boa matéria de cena, e o custo de vida triplicado do Vazio é o freio natural dela.</p>
-      <p class="regras-note">Até o nível 49 nenhum desses degraus se alcança acumulando: a verba topa em 600 Solares por jogador por sessão, e um grupo de quatro no nível 40 junta 40 Fragmentos por sessão, longe dos 400 de uma Realeza. Do 50 em diante a conta vira: a verba passa a ser contada em Fragmentos, e um grupo de quatro que junte tudo sem gastar tem o patrimônio de uma Realeza em cerca de 5 sessões no nível 50, em 3 no nível 60 e em 2 no nível 100. O de um Dono de Dimensão, 1.600 Fragmentos, fica a umas 5 sessões no nível 100, 3 no nível 150 e 2 no nível 200. O Soberano nunca se alcança, porque uma Cadeira requisita e não compra. Por isso, no nível alto, o dinheiro deixa de ser o obstáculo e quem manda é o título, o território e o pacto: não ofereça moeda para destravar uma cena que pede um favor.</p>
+      <p class="regras-note">Até o nível 49 nenhum desses degraus se alcança acumulando: a verba topa em 600 Solares por jogador por sessão, e um grupo de quatro no nível 40 junta 40 Fragmentos por sessão, longe dos 400 de uma Realeza. Do 50 em diante a conta vira: a verba passa a ser contada em Fragmentos, e um grupo de quatro que junte tudo sem gastar tem o patrimônio de uma Realeza em cerca de 5 sessões no nível 50, em 3 no nível 60 e em 2 no nível 100. O de um Dono de Dimensão, 1.600 Fragmentos, fica a umas 5 sessões no nível 100, 3 no nível 150 e 2 no nível 200. O Governante nunca se alcança, porque quem governa uma Árvore requisita e não compra. Por isso, no nível alto, o dinheiro deixa de ser o obstáculo e quem manda é o título, o território e o pacto: não ofereça moeda para destravar uma cena que pede um favor.</p>
 
       <p class="regras-note">A Guilda dos Caçadores também tem teto: paga no máximo 1.600 Solares por criatura, o contrato de uma Lendária. Toda criatura Lendária do Bestiário de VD 45 a 49 custa entre 2.500 e 3.200 Solares no catálogo, então o contrato de Vaelthor e o de Ignarrak ficam entre 1.250 e 1.600 Solares. A partir do VD 50 o preço de catálogo sobe com a verba (dezenas a milhares de Fragmentos de Estrela), e o contrato continua parando no teto. Acima desse porte a Guilda paga em título, terra ou favor, e nunca em moeda. Contratar gente de nível alto segue a fórmula de preço do capítulo de Bestiário, com os degraus de 100 e de 300, e acima do 500 ninguém aceita salário: convence-se, ou se deve um favor.</p>
 

@@ -240,7 +240,7 @@ test('o tesouro do Guia do Mestre segue a escala de preços oficial', () => {
   });
 
   escala.classes_sociais.degraus
-    .filter((degrau: any) => degrau.a_mao_dados && !['Dono de Dimensao', 'Soberano'].includes(degrau.classe))
+    .filter((degrau: any) => degrau.a_mao_dados && !['Dono de Dimensao', 'Governante'].includes(degrau.classe))
     .forEach((degrau: any) => {
       assert.ok(
         corpo.includes(`<td>${degrau.a_mao_dados}</td>`),
@@ -365,6 +365,7 @@ test('toda mecânica do sistema tem uma página', () => {
     ['veiculos-manutencao', 'reparo, manutenção e componentes veiculares'],
     ['transporte', 'custos e requisitos de viagens'],
     ['magia-fluxo', 'Fluxos, círculos, conjuração e concentração'],
+    ['elementos', 'os sete elementos, a relação entre eles e as derivações'],
     ['marcas-cicatrizes', 'preços mágicos dos círculos altos'],
     ['rituais-selos', 'rituais, selos, encantamentos e fusão'],
     ['catalogo-magico', 'magias, manifestações e formas mágicas'],
