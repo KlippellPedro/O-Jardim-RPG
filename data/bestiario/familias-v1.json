@@ -344,6 +344,32 @@
           "estagio": "Planícies"
         }
       ]
+    },
+    {
+      "id": "planta",
+      "titulo": "Planta",
+      "descricao": "Mato que aprendeu a escolher: o espinheiro prende, a flor atrai, o carvalho vigia e a mata inteira anda. A maioria só reage quando alguém invade.",
+      "membros": [
+        {
+          "id": "trepadeira-devoradora"
+        },
+        {
+          "id": "fungo-colmeia-ambulante"
+        }
+      ]
+    },
+    {
+      "id": "feerico",
+      "titulo": "Feérico",
+      "descricao": "Gente do outro lado do véu. Gosta de acordo, de nome e de piada, e cobra caro de quem aceita o primeiro sem ler o segundo.",
+      "membros": [
+        {
+          "id": "zangao-do-veu"
+        },
+        {
+          "id": "cervo-espinho-lua-cheia"
+        }
+      ]
     }
   ]
 }

@@ -238,6 +238,975 @@
           "Lunaris": 6000
         },
         "nivelMinimoLoja": 4
+      },
+      {
+        "id": "elemental-de-terra-menor",
+        "titulo": "Elemental de Terra Menor",
+        "vd": 9,
+        "estagio": "Menor",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "9m",
+        "descricao": "Um montículo de terra e cascalho que se levanta com o jeito torto de quem acabou de aprender a ficar de pé. Obedece ao invocador por pouco tempo, deixa poeira por onde passa e volta a ser chão quando a magia que o sustenta cansa.",
+        "ataques": [
+          {
+            "nome": "Punho de Cascalho",
+            "tipo": "terra",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pedregulho Atirado",
+            "tipo": "terra, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Enraizar (se não se mover desde o último turno, recebe Resistência física 2 até o começo do próximo)"
+        ],
+        "loot": [
+          "Cascalho Vivo"
+        ],
+        "preco": {
+          "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "elemental-de-terra-maior",
+        "titulo": "Elemental de Terra Maior",
+        "vd": 26,
+        "estagio": "Maior",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "9m",
+        "descricao": "Uma encosta que decidiu andar. Cada passo dele abre uma rachadura no chão, e quem mora por perto aprende a contar as passadas antes de contar as perdas.",
+        "ataques": [
+          {
+            "nome": "Esmagar",
+            "tipo": "terra",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Avalanche",
+            "tipo": "terra, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Passo Sísmico (1/cena, Ação de Movimento: bate o chão; criaturas em alcance Curto fazem Reflexos DT {dt} ou ficam Caídas)",
+          "Corpo de Rocha (reduz em 4 o dano físico de cada golpe)"
+        ],
+        "loot": [
+          "Coração de Basalto"
+        ],
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "elemental-de-agua-menor",
+        "titulo": "Elemental de Água Menor",
+        "vd": 7,
+        "estagio": "Menor",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "12m",
+        "descricao": "Um corpo de correnteza com a forma aproximada de um tronco, que gira por dentro sem nunca sair do lugar. Aparece em poço, calha e cais, e some quando a água que o sustenta escorre ou evapora.",
+        "ataques": [
+          {
+            "nome": "Pancada d'Água",
+            "tipo": "água",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Jato Forte",
+            "tipo": "água, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Corpo Fluido (atravessa frestas de até 5 cm e apaga chamas mundanas pequenas que toque)"
+        ],
+        "loot": [
+          "Gota Viva"
+        ],
+        "preco": {
+          "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "elemental-de-agua-maior",
+        "titulo": "Elemental de Água Maior",
+        "vd": 27,
+        "estagio": "Maior",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "12m",
+        "descricao": "Uma maré que se ergueu em pé. Chega com o som do mar mesmo a léguas da costa e leva consigo tudo que estava solto.",
+        "ataques": [
+          {
+            "nome": "Arrebentação",
+            "tipo": "água",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Jato de Maré",
+            "tipo": "água, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Arrastar (1/cena, Ação Padrão: criaturas numa linha de 9 m à frente dele fazem Fortitude DT {dt} ou são arrastadas 6 m e ficam Caídas)"
+        ],
+        "loot": [
+          "Pérola de Maré"
+        ],
+        "preco": {
+          "Solares": 90
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "elemental-de-ar-menor",
+        "titulo": "Elemental de Ar Menor",
+        "vd": 9,
+        "estagio": "Menor",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "15m (Voo)",
+        "descricao": "Um redemoinho com intenções. Levanta folha, poeira e chapéu, e puxa quem estiver desprevenido para onde ele quiser ir.",
+        "ataques": [
+          {
+            "nome": "Golpe de Vento",
+            "tipo": "ar",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Rajada",
+            "tipo": "ar, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Corpo de Vento (ataques à distância contra ele têm desvantagem)"
+        ],
+        "loot": [
+          "Sopro Engarrafado"
+        ],
+        "preco": {
+          "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "elemental-de-ar-maior",
+        "titulo": "Elemental de Ar Maior",
+        "vd": 24,
+        "estagio": "Maior",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "18m (Voo)",
+        "descricao": "Um ciclone que aprendeu a escolher o caminho. Derruba telhado com um suspiro, e quem mora em torre jura ouvir uma voz grave no meio do vendaval.",
+        "ataques": [
+          {
+            "nome": "Chicote de Ciclone",
+            "tipo": "ar",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Tornado Lançado",
+            "tipo": "ar, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Sucção (1/cena, Ação Padrão: criaturas em alcance Curto fazem Fortitude DT {dt} ou são puxadas 6 m na direção dele)",
+          "Corpo de Vento (ataques à distância contra ele têm desvantagem)"
+        ],
+        "loot": [
+          "Olho do Ciclone"
+        ],
+        "preco": {
+          "Solares": 105
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "elemental-de-raio-menor",
+        "titulo": "Elemental de Raio Menor",
+        "vd": 11,
+        "estagio": "Menor",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "15m",
+        "descricao": "Um novelo de faíscas do tamanho de um cão, que estala quando se mexe e deixa cheiro de ar queimado depois que passa. Gosta de metal, de água parada e de gente de armadura.",
+        "ataques": [
+          {
+            "nome": "Choque",
+            "tipo": "raio",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Faísca Arremessada",
+            "tipo": "raio, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Descarga de Contato (quem o acertar em corpo a corpo faz Fortitude DT {dt} ou perde a reação até o fim do próximo turno)"
+        ],
+        "loot": [
+          "Bobina de Faísca"
+        ],
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "elemental-de-raio-maior",
+        "titulo": "Elemental de Raio Maior",
+        "vd": 29,
+        "estagio": "Maior",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "18m",
+        "descricao": "Uma tempestade comprimida numa figura humana, que acende o céu inteiro quando levanta o braço. Gosta de ser chamado de trovão, e quem o chama de outra coisa descobre o motivo.",
+        "ataques": [
+          {
+            "nome": "Golpe de Trovão",
+            "tipo": "raio",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Relâmpago",
+            "tipo": "raio, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Tempestade Contida (no começo de cada rodada, uma criatura à escolha dele em alcance Longo sofre dano de raio igual a um décimo do golpe dele)"
+        ],
+        "loot": [
+          "Núcleo de Trovão"
+        ],
+        "preco": {
+          "Solares": 90
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "elemental-de-luz-menor",
+        "titulo": "Elemental de Luz Menor",
+        "vd": 12,
+        "estagio": "Menor",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "12m (Voo)",
+        "descricao": "Um clarão com jeito de gente. Acompanha quem anda no escuro com boa intenção e deixa uma ardência nos olhos de quem fez mal em silêncio.",
+        "ataques": [
+          {
+            "nome": "Toque Ofuscante",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Raio de Luz",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Clarão (1/cena, Reação: ao ser atacado, criaturas em alcance Curto fazem Reflexos DT {dt} ou ficam Cegas até o começo do próximo turno delas)"
+        ],
+        "loot": [
+          "Lasca de Luz"
+        ],
+        "preco": {
+          "Lunaris": 1350
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "elemental-de-luz-maior",
+        "titulo": "Elemental de Luz Maior",
+        "vd": 30,
+        "estagio": "Maior",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "15m (Voo)",
+        "descricao": "Um meio-dia que se levantou do chão. Não projeta sombra e não deixa esconderijo, e a gente aprende a olhar de lado para conversar com ele.",
+        "ataques": [
+          {
+            "nome": "Lâmina de Meio-Dia",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Feixe Solar",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Luz Que Expõe (criaturas em alcance Curto não podem se esconder nem receber benefício de invisibilidade)",
+          "Brilho Cego (1/cena, Ação Padrão: criaturas que o olharem fazem Fortitude DT {dt} ou ficam Cegas até o fim da próxima rodada)"
+        ],
+        "loot": [
+          "Fragmento de Meio-Dia"
+        ],
+        "preco": {
+          "Solares": 200
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "elemental-de-escuridao-menor",
+        "titulo": "Elemental de Escuridão Menor",
+        "vd": 11,
+        "estagio": "Menor",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "12m",
+        "descricao": "Uma mancha de sombra que se desgarrou do dono e anda sozinha, colada em parede e chão. Gosta de quarto fechado, de vela apagada e de quem prefere não olhar para trás.",
+        "ataques": [
+          {
+            "nome": "Toque de Sombra",
+            "tipo": "escuridão",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Estilhaço de Sombra",
+            "tipo": "escuridão, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Apagar a Luz (a luz mundana em alcance Curto se apaga, assim como luz mágica de círculo 1)"
+        ],
+        "loot": [
+          "Retalho de Sombra"
+        ],
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "elemental-de-escuridao-maior",
+        "titulo": "Elemental de Escuridão Maior",
+        "vd": 28,
+        "estagio": "Maior",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "12m",
+        "descricao": "Um poço de noite com contorno de gente. Onde chega, a luz da sala diminui sozinha, e quem estava sorrindo percebe que parou.",
+        "ataques": [
+          {
+            "nome": "Mão de Noite",
+            "tipo": "escuridão",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Onda de Breu",
+            "tipo": "escuridão, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Breu (1/cena, Ação Padrão: uma área Média escurece por completo até o fim da próxima rodada; quem começar o turno nela faz Vontade DT {dt} ou fica Desorientado)"
+        ],
+        "loot": [
+          "Coração de Noite"
+        ],
+        "preco": {
+          "Solares": 90
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "duna-andante",
+        "titulo": "Duna Andante",
+        "vd": 14,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "12m",
+        "descricao": "Uma duna que se levantou e foi atrás de quem atravessava o deserto devagar demais. Engole os passos, enterra as pegadas e deixa areia nos bolsos de quem escapou por semanas.",
+        "ataques": [
+          {
+            "nome": "Soterrar",
+            "tipo": "areia",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Tempestade de Areia",
+            "tipo": "areia, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Chão Que Afunda (criaturas adjacentes a ela perdem 3 m de Movimento)",
+          "Corpo de Areia (Resistência física 3; Vulnerável a Água)"
+        ],
+        "loot": [
+          "Vidro de Duna"
+        ],
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "geodo-vivo",
+        "titulo": "Geodo Vivo",
+        "vd": 22,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "9m",
+        "descricao": "Uma rocha oca por fora e cheia de cristal por dentro, que se abre aos poucos para mostrar o que guarda. Brilha mais quando tem plateia, e quem para para olhar descobre depois que perdeu a hora.",
+        "ataques": [
+          {
+            "nome": "Pancada de Quartzo",
+            "tipo": "cristal",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Estilhaço",
+            "tipo": "cristal, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Facetas (quem o acertar em corpo a corpo faz Reflexos DT {dt} ou fica Exposto até o começo do próximo turno)",
+          "Corpo de Cristal (reduz em 3 o dano físico de cada golpe)"
+        ],
+        "loot": [
+          "Geodo Aberto"
+        ],
+        "preco": {
+          "Solares": 140
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "mare-rubra",
+        "titulo": "Maré Rubra",
+        "vd": 24,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "12m (Nado)",
+        "descricao": "Uma poça de sangue que juntou o que escorreu de muitos campos de batalha e passou a andar. Pensa pouco, e o que pensa é fome, de um tipo que só passa com quem ainda está quente.",
+        "ataques": [
+          {
+            "nome": "Toque Rubro",
+            "tipo": "sangue",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Jato Carmesim",
+            "tipo": "sangue, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Sede (uma vez por turno, ao causar dano a uma criatura com Sangramento, recupera Vida igual a um décimo do golpe)",
+          "Corpo Líquido (atravessa frestas de até 5 cm)"
+        ],
+        "loot": [
+          "Sangue Vivo"
+        ],
+        "preco": {
+          "Solares": 105
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "rastejante-de-magma",
+        "titulo": "Rastejante de Magma",
+        "vd": 19,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "9m",
+        "descricao": "Uma língua de lava que sai das fendas dos vulcões e segue para onde o chão é mais frio. Anda devagar, derrete o que encosta e deixa para trás um caminho de vidro preto.",
+        "ataques": [
+          {
+            "nome": "Mordida Derretida",
+            "tipo": "magma",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Cuspe de Magma",
+            "tipo": "magma, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Rastro em Brasa (os espaços por onde passa ficam em brasa até o fim da cena; quem entra neles pela primeira vez ou começa o turno ali sofre dano de magma igual a um vigésimo do golpe dele)",
+          "Corpo de Lava (Resistência física 3; Vulnerável a Água)"
+        ],
+        "loot": [
+          "Vidro Vulcânico"
+        ],
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "chama-astral",
+        "titulo": "Chama Astral",
+        "vd": 26,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "15m (Voo)",
+        "descricao": "Uma chama sem lenha e sem calor, que queima olhando para outro lugar. Vem de cima das nuvens, e dizem os astrônomos que cada uma é uma estrela pequena que desistiu do céu.",
+        "ataques": [
+          {
+            "nome": "Toque Astral",
+            "tipo": "fogo astral",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Fagulha Distante",
+            "tipo": "fogo astral, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Chama Que Desfoca (criaturas que sofrerem dano dela têm desvantagem no próximo teste de concentração que fizerem)"
+        ],
+        "loot": [
+          "Fagulha Astral"
+        ],
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "fumaca-errante",
+        "titulo": "Fumaça Errante",
+        "vd": 13,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "12m (Voo)",
+        "descricao": "Uma nuvem cinzenta que sobrou de um incêndio grande demais e não encontrou o caminho de volta. Entra pelas frestas, enche o pulmão de quem dorme e deixa gosto de casa queimada na boca.",
+        "ataques": [
+          {
+            "nome": "Sufocar",
+            "tipo": "fumaça",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Nuvem Cinzenta",
+            "tipo": "fumaça, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Corpo de Fumaça (ataques à distância contra ela têm desvantagem; uma área de 3 m ao redor dela dá cobertura parcial)"
+        ],
+        "loot": [
+          "Fuligem Viva"
+        ],
+        "preco": {
+          "Solares": 26
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "bolsao-de-vacuo",
+        "titulo": "Bolsão de Vácuo",
+        "vd": 31,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "12m (Voo)",
+        "descricao": "Um pedaço de ar que foi embora e deixou o lugar vazio. Nada a ver com o Vazio de fora do universo: aqui falta ar, e só ar. Puxa tudo para dentro e devolve silêncio, e quem passa perto sente os ouvidos tamparem.",
+        "ataques": [
+          {
+            "nome": "Golpe Sem Ar",
+            "tipo": "vácuo",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Sucção Seca",
+            "tipo": "vácuo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Sem Ar (criaturas em alcance Curto fazem Fortitude DT {dt} ou perdem as reações até o começo do próximo turno delas)"
+        ],
+        "loot": [
+          "Ampola de Nada"
+        ],
+        "preco": {
+          "Solares": 200
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "esfera-de-plasma",
+        "titulo": "Esfera de Plasma",
+        "vd": 21,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "12m (Voo)",
+        "descricao": "Uma bola de luz roxa que dança no ar de laboratório abandonado e de céu em tempestade. Chega perto de quem tem metal, estala, e depois do estalo vem o cheiro.",
+        "ataques": [
+          {
+            "nome": "Toque de Plasma",
+            "tipo": "plasma",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Arco de Plasma",
+            "tipo": "plasma, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Salto de Plasma (depois de causar dano, outra criatura a até 3 m do alvo sofre dano de plasma igual a um quarto do golpe, sem novo teste)"
+        ],
+        "loot": [
+          "Bolha de Plasma"
+        ],
+        "preco": {
+          "Solares": 140
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "ima-de-tempestade",
+        "titulo": "Ímã de Tempestade",
+        "vd": 25,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "9m (Voo)",
+        "descricao": "Um bloco de ferro escuro que flutua dentro da própria tempestade e puxa para si tudo que tenha metal. Quando passa por uma cidade, as portas de ferro se abrem sozinhas e as moedas rolam para fora das bolsas.",
+        "ataques": [
+          {
+            "nome": "Pancada Magnética",
+            "tipo": "magnetismo",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Raio Atrator",
+            "tipo": "magnetismo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Atrair Metal (1/cena, Ação Padrão: criaturas em alcance Médio que vistam ou carreguem metal fazem Fortitude DT {dt} ou são puxadas 6 m na direção dele)"
+        ],
+        "loot": [
+          "Pedra-Ímã"
+        ],
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "lume-claro",
+        "titulo": "Lume Claro",
+        "vd": 15,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "12m (Voo)",
+        "descricao": "Uma luz branca e quieta que aparece em quarto de doente e em porta de templo. Não tem rosto, mas olha direto, e quem fica diante dela sente o peso do dia ficar um pouco mais leve.",
+        "ataques": [
+          {
+            "nome": "Toque Limpo",
+            "tipo": "pureza",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Raio Calmo",
+            "tipo": "pureza, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Presença Limpa (criaturas em alcance Curto não podem estar Envenenadas, e quem entrar na área encerra essa condição)"
+        ],
+        "loot": [
+          "Brilho Limpo"
+        ],
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "aurora-viva",
+        "titulo": "Aurora Viva",
+        "vd": 32,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "18m (Voo)",
+        "descricao": "Uma cortina de luz verde e rosa que desceu até o chão para ver de perto. Cada passo dela deixa uma faixa de cor no ar, e quem testemunha jura que ouviu música sem ninguém por perto.",
+        "ataques": [
+          {
+            "nome": "Cortina de Aurora",
+            "tipo": "aurora",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Lança de Aurora",
+            "tipo": "aurora, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Clarão da Manhã (1/cena, Ação Padrão: criaturas hostis em alcance Médio fazem Reflexos DT {dt} ou ficam Expostas até o começo do próximo turno delas e perdem o benefício de invisibilidade)"
+        ],
+        "loot": [
+          "Fita de Aurora"
+        ],
+        "preco": {
+          "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "breu-rastejante",
+        "titulo": "Breu Rastejante",
+        "vd": 14,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "9m",
+        "descricao": "Uma poça de escuridão que escorre pelo chão dos porões e sobe pela parede quando alguém desce a escada. Espera a vela falhar, e é nesse intervalo que mostra o que tem.",
+        "ataques": [
+          {
+            "nome": "Mão de Breu",
+            "tipo": "trevas",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Véu de Trevas",
+            "tipo": "trevas, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Sombra Faminta (criaturas que ela atingir fazem Vontade DT {dt} ou realizam o próximo ataque com desvantagem)"
+        ],
+        "loot": [
+          "Breu Sólido"
+        ],
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "eclipse-ambulante",
+        "titulo": "Eclipse Ambulante",
+        "vd": 34,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Elemental",
+        "deslocamento": "15m (Voo)",
+        "descricao": "Um disco negro com uma coroa de luz ao redor, que atravessa a paisagem na altura dos olhos de quem anda. Quando passa, o dia vira noite por um instante, e os animais se calam antes dos homens.",
+        "ataques": [
+          {
+            "nome": "Toque do Eclipse",
+            "tipo": "eclipse",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Coroa Negra",
+            "tipo": "eclipse, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Luz Apagada (a luz mundana em alcance Médio se apaga, assim como luz mágica de círculo 5 ou menor; Eclipse não é o Fluxo do Vazio)"
+        ],
+        "loot": [
+          "Aro de Eclipse"
+        ],
+        "preco": {
+          "Solares": 550
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "dragao": [
@@ -484,6 +1453,85 @@
           "Lunaris": 1600
         },
         "nivelMinimoLoja": 3
+      },
+      {
+        "id": "cerbero",
+        "titulo": "Cérbero",
+        "vd": 31,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "15m",
+        "descricao": "Três cabeças que discordam sobre quase tudo e concordam sobre quem passa. Guarda uma porta que não deve ser aberta, e a diferença entre a primeira cabeça e a terceira é o quanto de tempo você tem.",
+        "ataques": [
+          {
+            "nome": "Mordida Tripla",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Sopro de Enxofre",
+            "tipo": "fogo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Vigília Tripla (não pode ser Surpreendido e recebe +5 em Percepção)",
+          "Três Bocas (1/rodada, ao acertar a Mordida Tripla, o alvo faz Fortitude DT {dt} ou fica Enfraquecido até o fim do próximo turno dele)"
+        ],
+        "loot": [
+          "Baba de Cérbero"
+        ],
+        "preco": {
+          "Solares": 200
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "garum",
+        "titulo": "Gárum, o Lobo que Morde a Lua",
+        "vd": 68,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "30m",
+        "descricao": "Corre atrás da lua desde antes de haver nome para ela, e quando a alcança deixa no céu uma marca que dura três noites. Fala um rosnado que os velhos dizem entender e que nenhum jovem quer aprender. Nas noites de lua crescente, os cães da região uivam na mesma direção, e os donos fingem não notar.",
+        "ataques": [
+          {
+            "nome": "Mordida de Lua",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Uivo Que Rasga",
+            "tipo": "impacto, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Uivo da Lua (1/cena, Ação Padrão: chama 1d4 Lobos Atrozes, que entram no começo da rodada seguinte)",
+          "Pele de Lua (reduz em 6 o dano de cada golpe)"
+        ],
+        "loot": [
+          "Presa da Lua"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "avulsas": [
@@ -713,7 +1761,7 @@
         "habilidades": [
           "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT {dt}; em falha, perde 4d6 de Sanidade e fica Amedrontado)",
           "Tempo Roubado (uma vez por rodada, Reação: rouba a ação de um alvo em alcance Médio; Vontade DT {dt} nega)",
-          "Sinais (ecos que chegam antes do som e sombras que andam mais devagar que o dono)",
+          "Sinais (avisos que chegam antes do som e sombras que andam mais devagar que o dono)",
           "Como Evitar (ele perde o interesse em quem age fora de ordem: a cena é de fuga, ou de quebrar o ritmo que ele espera)"
         ],
         "loot": [
@@ -812,6 +1860,1429 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "mendigo-de-beco",
+        "titulo": "Mendigo de Beco",
+        "vd": 1,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "9m",
+        "descricao": "Dorme onde a cidade deixa, conhece cada porta dos fundos e viu tudo que ninguém queria ter visto. Pede moeda com um sorriso, e quem recusa descobre que ele também sabe morder.",
+        "ataques": [
+          {
+            "nome": "Cajado Torto",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pedra do Chão",
+            "tipo": "impacto, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Olhos de Beco (vantagem em Percepção na cidade onde mora)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 540
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 1
+      },
+      {
+        "id": "ladrao-de-bolsa",
+        "titulo": "Ladrão de Bolsa",
+        "vd": 2,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Trabalha em feira e em procissão, onde empurrão é normal e ninguém olha para as próprias mãos. Pega a bolsa antes de o dono perceber que ela existia.",
+        "ataques": [
+          {
+            "nome": "Faca de Manga",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pedra na Meia",
+            "tipo": "impacto, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Sumir na Multidão (Ação de Movimento: se houver ao menos três pessoas em alcance Curto, fica Escondido)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 540
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 1
+      },
+      {
+        "id": "campones-de-forquilha",
+        "titulo": "Camponês de Forquilha",
+        "vd": 2,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "9m",
+        "descricao": "Largou a enxada quando a colheita foi levada e pegou a forquilha, porque era o que tinha. Luta mal, mas luta com raiva, e raiva de fome costuma durar mais que técnica.",
+        "ataques": [
+          {
+            "nome": "Forquilhada",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pedra de Roça",
+            "tipo": "impacto, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Raiva de Fome (quando fica abaixo da metade da Vida, causa +2 de dano até o fim da cena)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 540
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 1
+      },
+      {
+        "id": "aprendiz-de-feiticaria",
+        "titulo": "Aprendiz de Feitiçaria",
+        "vd": 4,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "9m",
+        "descricao": "Segura o livro com as duas mãos e a magia com um dedo só, de olho no professor que não está aqui. Acerta uma em três, e as outras duas acertam o que estiver perto.",
+        "ataques": [
+          {
+            "nome": "Centelha Torta",
+            "tipo": "fogo, à distância",
+            "modo": "distancia"
+          },
+          {
+            "nome": "Cajadada",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Magia Instável (ao tirar 1 natural num ataque, a magia atinge um aliado ou o objeto mais próximo)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 1
+      },
+      {
+        "id": "menestrel-trapaceiro",
+        "titulo": "Menestrel Trapaceiro",
+        "vd": 5,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Canta de dia e rouba de noite, ou o contrário, dependendo da plateia. Tem uma voz que faz o salão chorar e uma lira com fundo falso.",
+        "ataques": [
+          {
+            "nome": "Lira Pesada",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Adaga de Manga",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Canção Distraída (1/cena, Ação Padrão: criaturas em alcance Curto fazem Vontade DT {dt} ou ficam Desorientadas até o fim do próximo turno delas)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 330
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 1
+      },
+      {
+        "id": "sacerdote-de-aldeia",
+        "titulo": "Sacerdote de Aldeia",
+        "vd": 6,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "9m",
+        "descricao": "Batiza, enterra e media briga de vizinho, tudo no mesmo dia. Raramente levanta a voz, mas quando levanta a aldeia inteira escuta, porque o tom é o mesmo do sino.",
+        "ataques": [
+          {
+            "nome": "Cajado do Altar",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Bênção Severa",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Bênção de Aldeia (1/cena, Ação Padrão: cura 2d6+2 PV de um aliado a até 9 m)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 1
+      },
+      {
+        "id": "contrabandista-de-porto",
+        "titulo": "Contrabandista de Porto",
+        "vd": 7,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Leva carga que não consta em manifesto e conhece cada doca onde o fiscal almoça tarde. Paga bem pelo silêncio e mais ainda pela distração.",
+        "ataques": [
+          {
+            "nome": "Cutelo de Estiva",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pistola de Cano Curto",
+            "tipo": "balístico, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Fundo Falso (carrega itens escondidos; Investigação DT {dt} para achá-los)",
+          "Fumaça de Fuga (1/cena, Ação Padrão: cria fumaça numa área de 3 m, que dá cobertura parcial)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 1
+      },
+      {
+        "id": "cacador-de-recompensas",
+        "titulo": "Caçador de Recompensas",
+        "vd": 8,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Lê cartaz de procurado como quem lê cardápio. Persegue com paciência, prende com corda e entrega sem perguntar o que o preso fez, desde que o preço seja o do cartaz.",
+        "ataques": [
+          {
+            "nome": "Besta de Mão",
+            "tipo": "perfurante, à distância",
+            "modo": "distancia"
+          },
+          {
+            "nome": "Maça de Prisão",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Marcar Alvo (Ação de Movimento: escolhe uma criatura; seus ataques contra ela recebem +2 até o fim da cena)",
+          "Rede de Captura (1/cena, Ação Padrão: lança uma rede; Reflexos DT {dt} ou o alvo fica Agarrado)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 640
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "gladiador-de-areia",
+        "titulo": "Gladiador de Areia",
+        "vd": 12,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Aprendeu a lutar para a plateia, que é pior que lutar para um senhor, porque a plateia nunca cansa. Conhece o gosto da areia e o peso do escudo, e sabe quando o público quer sangue e quando quer um final bonito.",
+        "ataques": [
+          {
+            "nome": "Gládio",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Escudada",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Escudo de Arena (recebe +2 de Defesa contra o primeiro ataque à distância de cada rodada)",
+          "Fôlego da Plateia (1/cena, Reação: ao ficar abaixo da metade da Vida, recupera Vida igual a um décimo da Vida máxima)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 1350
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "assassino-de-aluguel",
+        "titulo": "Assassino de Aluguel",
+        "vd": 14,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Não tem nome em cartaz nem rosto em retrato, e quem o contratou nunca o viu duas vezes com a mesma cara. Prefere esperar um mês a atacar com testemunha.",
+        "ataques": [
+          {
+            "nome": "Lâmina Curta",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Dardo Envenenado",
+            "tipo": "veneno, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Golpe de Surpresa (o primeiro ataque contra uma criatura que não o tenha notado causa o dobro do dano)",
+          "Sumir (1/cena, Ação de Movimento: fica Escondido se houver cobertura ou penumbra)"
+        ],
+        "loot": [],
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "bruxa-do-brejo",
+        "titulo": "Bruxa do Brejo",
+        "vd": 15,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "9m",
+        "descricao": "Mora num pântano que todos evitam, o que, para ela, é o jeito educado de pedir privacidade. Faz poção, desfaz maldição e cobra o preço em lembrança, nunca em moeda.",
+        "ataques": [
+          {
+            "nome": "Cajado de Salgueiro",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Praga Verde",
+            "tipo": "veneno, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Maldição Barata (1/cena, Ação Padrão: uma criatura em alcance Médio faz Vontade DT {dt} ou sofre desvantagem no próximo teste)",
+          "Caldeirão (fora de combate, prepara um consumível Comum em uma hora)"
+        ],
+        "loot": [],
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "corsario-de-casco-negro",
+        "titulo": "Corsário de Casco Negro",
+        "vd": 16,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Ataca navio com bandeira e sem bandeira, desde que a carga valha o risco. Paga a tripulação em dia, e é por isso que a tripulação o segue até onde ele manda.",
+        "ataques": [
+          {
+            "nome": "Sabre de Abordagem",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pistola de Pederneira",
+            "tipo": "balístico, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Abordar! (1/cena, Ação de Movimento: salta até 6 m para um veículo adjacente ou uma criatura em alcance Curto; o próximo ataque tem vantagem)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 1800
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "cavaleiro-andante",
+        "titulo": "Cavaleiro Andante",
+        "vd": 17,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Anda de estrada em estrada com um nome emprestado e um escudo sem brasão, e ajuda quem pede sem perguntar quanto vale. Tem a honra de quem já a perdeu uma vez e não pretende repetir.",
+        "ataques": [
+          {
+            "nome": "Espada Longa",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Lança de Justa",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Voto de Cavalaria (recebe +2 de Defesa enquanto houver um aliado ou inocente sob sua proteção em alcance Curto)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "monge-de-punho-de-ferro",
+        "titulo": "Monge de Punho de Ferro",
+        "vd": 19,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "15m",
+        "descricao": "Passou vinte anos quebrando tijolo com a mão antes de quebrar o primeiro osso. Luta descalço, fala pouco e tem uma serenidade que assusta mais do que grito.",
+        "ataques": [
+          {
+            "nome": "Punho de Ferro",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pontapé Giratório",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Respiração Serena (1/cena, Ação Livre: encerra Amedrontado e Desorientado)",
+          "Mãos Rápidas (1/rodada: ao acertar o Punho de Ferro, faz um Pontapé Giratório contra o mesmo alvo; isso não concede ações extras)"
+        ],
+        "loot": [],
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "inquisidor-de-toga-cinza",
+        "titulo": "Inquisidor de Toga Cinza",
+        "vd": 20,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Chega a uma cidade sem aviso e sai dela com alguém algemado. Julga em voz baixa, lê a sentença em pé e nunca explica por que acredita já saber a resposta.",
+        "ataques": [
+          {
+            "nome": "Mangual Benzido",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Palavra de Sentença",
+            "tipo": "psíquico, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Interrogar (1/cena, Ação Padrão: uma criatura em alcance Curto faz Vontade DT {dt} ou responde com a verdade a uma pergunta)",
+          "Fé Cega (imune a Amedrontado)"
+        ],
+        "loot": [],
+        "preco": {
+          "Solares": 60
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "mago-de-guerra",
+        "titulo": "Mago de Guerra",
+        "vd": 22,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Foi para o campo de batalha com o livro de feitiços na bolsa e voltou com um livro novo, escrito a ferro. Conjura de olho no relógio, porque cada rodada é uma fila de gente que ele não pode deixar passar.",
+        "ataques": [
+          {
+            "nome": "Bola Explosiva",
+            "tipo": "fogo, em área",
+            "modo": "distancia"
+          },
+          {
+            "nome": "Raio Encadeado",
+            "tipo": "raio, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Barreira de Campo (1/cena, Reação: reduz em 3d8 o dano que ele ou um aliado a até 6 m sofreria)",
+          "Conjurar sob Pressão (não sofre desvantagem por estar adjacente a um inimigo)"
+        ],
+        "loot": [],
+        "preco": {
+          "Solares": 140
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "shinobi-de-iwagakure",
+        "titulo": "Shinobi de Iwagakure",
+        "vd": 25,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "15m",
+        "descricao": "Cresceu numa aldeia onde a dor é aula e o silêncio é nota. Trabalha por contrato e termina o trabalho antes que o contratante termine o café, sem deixar pegada nem recibo.",
+        "ataques": [
+          {
+            "nome": "Kunai Pesada",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Shuriken em Leque",
+            "tipo": "cortante, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Passo da Sombra (1/cena, Ação de Movimento: teleporta-se até 9 m para um espaço de penumbra ou sombra)",
+          "Mão Treinada (ataques à distância em alcance Curto não sofrem desvantagem)"
+        ],
+        "loot": [],
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "general-de-campanha",
+        "titulo": "General de Campanha",
+        "vd": 38,
+        "papel": "chefe",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Venceu mais guerras do que se lembra e perdeu mais soldados do que admite. Comanda de cima de um cavalo ou de uma mesa, e a diferença entre os dois se mede em quantos voltam para casa.",
+        "ataques": [
+          {
+            "nome": "Espada de Comando",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Ordem de Fogo",
+            "tipo": "balístico, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Comandar a Linha (aliados a até 18 m recebem +2 em ataque e em Defesa enquanto ele estiver consciente)",
+          "Retirada Ordenada (1/cena, Reação: ele e os aliados a até 9 m se movem metade do Movimento sem provocar ataques)"
+        ],
+        "loot": [],
+        "preco": {
+          "Solares": 550
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "rei-dos-bandoleiros",
+        "titulo": "Rei dos Bandoleiros",
+        "vd": 41,
+        "papel": "chefe",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Tem uma coroa de lata e um reino de estrada que nenhum mapa reconhece. Cada pedágio que cobra paga um bandido, e cada bandido jura que ele é o último homem honesto do reino.",
+        "ataques": [
+          {
+            "nome": "Espada do Pedágio",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Arcabuz do Rei",
+            "tipo": "balístico, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Corte de Ladrões (1/cena, Ação Padrão: chama 1d4 Salteadores de Estrada, que entram no começo da rodada seguinte)"
+        ],
+        "loot": [],
+        "preco": {
+          "Solares": 530
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "cavaleiro-comandante",
+        "titulo": "Cavaleiro-Comandante",
+        "vd": 45,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Carrega a armadura mais velha da ordem e a promessa mais antiga, e as duas pesam o mesmo. Quando ergue o escudo, a tropa inteira se lembra de onde vem.",
+        "ataques": [
+          {
+            "nome": "Espada de Honra",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Escudo Erguido",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Escudo da Ordem (1/rodada, Reação: torna-se o alvo de um ataque dirigido a um aliado a até 6 m e recebe Resistência 10 contra esse dano)",
+          "Honra Inabalável (imune a Amedrontado)"
+        ],
+        "loot": [],
+        "preco": {
+          "Solares": 3100
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "mestre-das-mil-facas",
+        "titulo": "Mestre das Mil Facas",
+        "vd": 50,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "18m",
+        "descricao": "Ninguém o viu atacar, só viu o resultado. Diz que a faca certa é a que o alvo não notou, e carrega quantas for preciso para que ele nunca note nenhuma.",
+        "ataques": [
+          {
+            "nome": "Faca de Mestre",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Chuva de Facas",
+            "tipo": "cortante, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Mil Facas (1/rodada, ao acertar, faz um ataque extra com a Faca de Mestre contra outro alvo a até 3 m; isso não concede ações extras)",
+          "Passo Invisível (1/cena, Ação de Movimento: fica Invisível até atacar ou até o fim da rodada seguinte)"
+        ],
+        "loot": [],
+        "preco": {
+          "Fragmentos de Estrela": 100
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 10
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 2
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "mestre-de-guilda",
+        "titulo": "Mestre de Guilda",
+        "vd": 52,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Dirige uma guilda de aventureiros como se fosse um banco, com contas, favores e um livro de quem deve o quê. Já mandou mais gente para a morte do que gosta de lembrar, e todos aceitaram porque o pagamento era justo.",
+        "ataques": [
+          {
+            "nome": "Espada de Guilda",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Selo de Contrato",
+            "tipo": "psíquico, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Cobrar Favor (1/cena, Ação Padrão: um aliado a até 18 m faz um ataque imediato)",
+          "Livro de Dívidas (criaturas que lhe devem um favor têm desvantagem em ataques contra ele)"
+        ],
+        "loot": [],
+        "preco": {
+          "Fragmentos de Estrela": 100
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 10
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 2
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "grao-mago-da-torre-aberta",
+        "titulo": "Grão-Mago da Torre Aberta",
+        "vd": 60,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Abriu a torre aos alunos há cem anos, e desde então ninguém soube se ela é uma escola ou uma jaula. Fala com todo mundo, ensina quase todo mundo e esquece quase todo mundo, menos quem ousa discordar.",
+        "ataques": [
+          {
+            "nome": "Rajada Arcana",
+            "tipo": "raio, à distância",
+            "modo": "distancia"
+          },
+          {
+            "nome": "Palavra de Poder",
+            "tipo": "psíquico, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Teleporte de Torre (1/cena, Ação de Movimento: teleporta-se até 18 m)",
+          "Escudo de Mil Runas (reduz em 8 o dano de cada golpe mágico)",
+          "Magia em Cadeia (1/rodada: copia um efeito de dano seu em outro alvo a até 6 m)"
+        ],
+        "loot": [],
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "sumo-sacerdote",
+        "titulo": "Sumo Sacerdote",
+        "vd": 65,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Sente o peso de mil fiéis em cada decisão e responde a uma voz que ninguém mais ouve. Cura sem pedir recibo e condena sem levantar a voz, e quem o conhece diz que as duas coisas custam o mesmo a ele.",
+        "ataques": [
+          {
+            "nome": "Cajado de Luz",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Sentença Sagrada",
+            "tipo": "luz, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Cura em Massa (1/cena, Ação Padrão: aliados em alcance Médio recuperam Vida igual a um décimo do golpe dele)",
+          "Proteção Sagrada (imune a Amedrontado e Enfeitiçado)"
+        ],
+        "loot": [],
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "heroi-de-guerra-aposentado",
+        "titulo": "Herói de Guerra Aposentado",
+        "vd": 75,
+        "papel": "chefe",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Salvou um reino uma vez e foi esquecido pelo mesmo reino em seguida. Mora numa casa pequena, bebe devagar e ainda levanta antes de o sol nascer, porque o corpo lembra o que a cabeça jura ter esquecido.",
+        "ataques": [
+          {
+            "nome": "Espada Que Salvou o Reino",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Grito de Guerra",
+            "tipo": "impacto, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Velho Hábito (1/cena, Reação: quando atacado em corpo a corpo, faz um ataque imediato contra o agressor)",
+          "Lenda Viva (aliados a até 18 m têm vantagem em testes contra medo)"
+        ],
+        "loot": [],
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "escorpiao-gigante",
+        "titulo": "Escorpião Gigante",
+        "vd": 10,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Animal",
+        "deslocamento": "12m",
+        "descricao": "Do tamanho de uma mesa, com uma cauda que passa por cima de uma carroça. Fica enterrado na areia o dia inteiro e sai ao entardecer atrás do que ainda se mexe.",
+        "ataques": [
+          {
+            "nome": "Pinças",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Ferrão",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Veneno do Ferrão (quem sofrer o Ferrão faz Fortitude DT {dt} ou fica Envenenado por 1 hora)"
+        ],
+        "loot": [
+          "Ferrão de Escorpião"
+        ],
+        "preco": {
+          "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "lodo-corrosivo",
+        "titulo": "Lodo Corrosivo",
+        "vd": 9,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "6m",
+        "descricao": "Uma poça cinza-esverdeada, com brilho de óleo, que anda. Desce pelas calhas do esgoto e come o que encontra, inclusive o ferro da grade.",
+        "ataques": [
+          {
+            "nome": "Toque Corrosivo",
+            "tipo": "ácido",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Cuspe de Ácido",
+            "tipo": "ácido, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Corrosão (a arma de metal que o acerta em corpo a corpo fica com -1 de dano até ser reparada; uma vez por arma)"
+        ],
+        "loot": [
+          "Gosma Corrosiva"
+        ],
+        "preco": {
+          "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "cocatriz",
+        "titulo": "Cocatriz",
+        "vd": 11,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "12m",
+        "descricao": "Um galo com cauda de cobra e um olhar que enrijece o pescoço de quem encara por muito tempo. Canta cedo e canta errado, e quem acorda com o canto fica de pé, parado, olhando.",
+        "ataques": [
+          {
+            "nome": "Bicada",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Cauda de Cobra",
+            "tipo": "veneno",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Olhar Rijo (criaturas que o encararem fazem Fortitude DT {dt} ou ficam Lentas até o fim do próximo turno delas)"
+        ],
+        "loot": [
+          "Crista de Cocatriz"
+        ],
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "urso-coruja",
+        "titulo": "Urso-Coruja",
+        "vd": 11,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "12m",
+        "descricao": "Tem corpo de urso, cabeça de coruja e um mau humor que nenhum dos dois explica. Caça de noite com o olho aberto e de dia dorme com o bico torto, e leva a sério quem entra na toca.",
+        "ataques": [
+          {
+            "nome": "Garrada",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Bicada",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Abraço de Urso (se acertar as duas Garradas na mesma rodada, o alvo faz Fortitude DT {dt} ou fica Agarrado)",
+          "Olho de Noite (enxerga na penumbra sem precisar de luz)"
+        ],
+        "loot": [
+          "Bico de Urso-Coruja"
+        ],
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "grifo",
+        "titulo": "Grifo",
+        "vd": 16,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "18m (Voo)",
+        "descricao": "Corpo de leão, asas e cabeça de águia, e o orgulho que combina as duas coisas. Guarda penhasco e tesouro sem fazer distinção, e acredita que a diferença entre os dois é só a altura.",
+        "ataques": [
+          {
+            "nome": "Garras de Leão",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Bicada de Águia",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Mergulho (1/cena, Ação de Movimento: se descer pelo menos 9 m em linha reta, o próximo ataque causa dano extra igual a um quinto do golpe)"
+        ],
+        "loot": [
+          "Pena de Grifo"
+        ],
+        "preco": {
+          "Lunaris": 1800
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "lobisomem",
+        "titulo": "Lobisomem",
+        "vd": 19,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "15m",
+        "descricao": "Um homem comum durante o dia e um problema na lua cheia. Lembra de tudo depois, o que é o pior do castigo, e por isso alguns procuram quem os prenda antes do anoitecer.",
+        "ataques": [
+          {
+            "nome": "Garras",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Mordida",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Regeneração Lunar (recupera Vida igual a um décimo do golpe no começo de cada turno, a menos que tenha sofrido dano de prata)",
+          "Maldição da Mordida (a criatura mordida faz Fortitude DT {dt} ou fica Enfraquecida até o fim da cena)"
+        ],
+        "loot": [
+          "Pelo de Lua Cheia"
+        ],
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "manticora",
+        "titulo": "Mantícora",
+        "vd": 20,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "18m",
+        "descricao": "Cabeça de homem, corpo de leão e uma cauda de espinhos que ela dispara como flecha. Sorri enquanto caça e conversa enquanto come, e a conversa é pior que a mordida.",
+        "ataques": [
+          {
+            "nome": "Garras",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Espinhos da Cauda",
+            "tipo": "perfurante, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Chuva de Espinhos (1/cena, Ação Padrão: criaturas num cone de 9 m fazem Reflexos DT {dt} ou sofrem o dano de um ataque dela)"
+        ],
+        "loot": [
+          "Espinho de Mantícora"
+        ],
+        "preco": {
+          "Solares": 60
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "verme-das-dunas",
+        "titulo": "Verme das Dunas",
+        "vd": 26,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "12m (Escavar)",
+        "descricao": "Sobe da areia como uma torre mole e cai de volta como uma torre pesada. O deserto treme dois minutos antes, e quem sabe ler o chão tem tempo de rezar ou de correr.",
+        "ataques": [
+          {
+            "nome": "Mordida Engolidora",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Esmagar",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Emergir (1/cena, Ação de Movimento: surge da areia; criaturas em alcance Curto fazem Reflexos DT {dt} ou ficam Caídas)",
+          "Corpo de Verme (reduz em 3 o dano físico de cada golpe)"
+        ],
+        "loot": [
+          "Dente de Verme"
+        ],
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "roc",
+        "titulo": "Roc",
+        "vd": 32,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Animal",
+        "deslocamento": "30m (Voo)",
+        "descricao": "Uma ave tão grande que a sombra dela passa por cima de uma vila inteira e as galinhas rezam. Leva elefantes para o ninho e, às vezes, pessoas, só por curiosidade.",
+        "ataques": [
+          {
+            "nome": "Garras Colossais",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Rajada de Asas",
+            "tipo": "ar, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Sombra Gigante (criaturas abaixo dele em alcance Longo têm desvantagem em Furtividade)",
+          "Presa de Ninho (1/cena, ao acertar as Garras Colossais, o alvo faz Fortitude DT {dt} ou fica Agarrado e é carregado em voo)"
+        ],
+        "loot": [
+          "Pena de Roc"
+        ],
+        "preco": {
+          "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "skorvuld",
+        "titulo": "Skorvuld, o Cavador de Khazad",
+        "vd": 62,
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "12m (Escavar)",
+        "descricao": "Cava o fundo de Khazad desde antes de o primeiro anão descer a primeira escada. Os mineiros contam que o chão geme quando ele passa, e que cada salão novo que aparece nos mapas foi, antes, um túnel dele. Em Khazad, quem ouve o chão gemer à noite fala baixo até o amanhecer.",
+        "ataques": [
+          {
+            "nome": "Mordida de Pedra",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Abalo de Túnel",
+            "tipo": "impacto, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Escavar (move-se pela rocha sem deixar túnel aberto; surge em qualquer espaço de pedra a até 12 m)",
+          "Pele de Rocha (reduz em 6 o dano físico de cada golpe)"
+        ],
+        "loot": [
+          "Dente do Cavador"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "tarsis",
+        "titulo": "Tarsis, o Campeão da Arquibancada Cheia",
+        "vd": 88,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "15m",
+        "descricao": "Entrou no Coliseu para uma luta e nunca saiu, porque ninguém lhe disse como. Venceu todas as que vieram depois, e cada vitória aumentou a plateia, que nunca está vazia e nunca está satisfeita. Quem sobreviveu a uma luta com ele conta que o aplauso doeu mais que o golpe.",
+        "ataques": [
+          {
+            "nome": "Espada da Arena",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Rugido da Plateia",
+            "tipo": "impacto, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Plateia Infinita (no começo de cada rodada, recebe +1 cumulativo em ataque, até +5, enquanto houver criatura hostil em cena)",
+          "Último a Cair (1/cena, Reação: ao chegar a 0 PV, fica com metade da Vida)"
+        ],
+        "loot": [
+          "Laureola da Arena"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 280
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 28
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 6
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "insone",
+        "titulo": "Insone, a Que Não Deixa Sonhar",
+        "vd": 56,
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Aberração",
+        "deslocamento": "15m (Voo)",
+        "descricao": "Mora na fronteira entre os Sonhos e os Pesadelos e rouba o que passa de um lado para o outro. Quem encontra a Insone acorda cansado, e quem a enfrenta de olhos abertos descobre que ela nunca dormiu. Nas cidades por onde ela passa, as crianças dormem de lado e os velhos dormem de olho aberto, e ninguém sabe dizer qual dos dois está certo.",
+        "ataques": [
+          {
+            "nome": "Mão de Vigília",
+            "tipo": "psíquico",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Fio de Insônia",
+            "tipo": "psíquico, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Noite em Claro (criaturas em alcance Médio fazem Vontade DT {dt} no começo de cada rodada ou perdem 1 ponto de Estamina)",
+          "Nunca Dorme (imune a sono, a Inconsciente e a Enfeitiçado)"
+        ],
+        "loot": [
+          "Pálpebra Que Não Fecha"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 100
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 10
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 2
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "quintia",
+        "titulo": "Quíntia, a Esfinge dos Sete Salões",
+        "vd": 52,
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "15m (Voo)",
+        "descricao": "Guarda a entrada dos Sete Salões de Alicerce e faz a mesma pergunta a todo mundo, na língua de quem pergunta. Ninguém lembra a pergunta depois, só a sensação de ter errado, e a Esfinge cobra por isso devagar. Os guardas de Alicerce evitam o corredor dela e mandam aprendizes novos, que ainda acham a pergunta fácil.",
+        "ataques": [
+          {
+            "nome": "Garra de Pedra",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pergunta Pronunciada",
+            "tipo": "psíquico, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Enigma (1/cena, Ação Padrão: uma criatura em alcance Médio faz Vontade DT {dt} ou perde a ação do próximo turno)",
+          "Sete Respostas (no começo de cada rodada, escolhe um dos sete elementos e recebe Resistência 10 contra ele até o começo da rodada seguinte)"
+        ],
+        "loot": [
+          "Pena de Esfinge"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 100
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 10
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 2
         },
         "nivelMinimoLoja": 4
       }
@@ -1224,6 +3695,45 @@
           "Lunaris": 6000
         },
         "nivelMinimoLoja": 4
+      },
+      {
+        "id": "ciclope-ferreiro",
+        "titulo": "Ciclope Ferreiro",
+        "vd": 25,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "12m",
+        "descricao": "Um olho só e duas mãos que fazem o trabalho de dez. Forja no fundo de uma montanha o que ninguém encomendou, e sai de lá somente quando acaba o carvão ou a paciência.",
+        "ataques": [
+          {
+            "nome": "Martelo de Forja",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Brasa Arremessada",
+            "tipo": "fogo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Olho de Ferreiro (sabe a qualidade de qualquer arma ou armadura que veja)",
+          "Brasa da Forja (criaturas adjacentes a ele no começo do turno dele sofrem dano de fogo igual a um décimo do golpe)"
+        ],
+        "loot": [
+          "Olho de Ciclope"
+        ],
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
       }
     ],
     "hidra": [
@@ -1478,6 +3988,240 @@
           "Lunaris": 6000
         },
         "nivelMinimoLoja": 4
+      },
+      {
+        "id": "cao-de-cova",
+        "titulo": "Cão de Cova",
+        "vd": 6,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "12m",
+        "descricao": "Um cão magro que sai de cova rasa atrás de quem a cavou. Fareja pelo cheiro de terra mexida e late com a boca fechada, e o som vem de dentro do peito de quem escuta.",
+        "ataques": [
+          {
+            "nome": "Mordida de Cova",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Arranhão",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Faro de Cova (vantagem para rastrear quem mexeu em terra recente)",
+          "Uivo Rouco (1/cena, Ação Padrão: criaturas em alcance Curto fazem Vontade DT {dt} ou ficam Amedrontadas até o fim do próximo turno delas)"
+        ],
+        "loot": [
+          "Pelo de Cova"
+        ],
+        "preco": {
+          "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 1
+      },
+      {
+        "id": "soldado-do-fosso",
+        "titulo": "Soldado do Fosso",
+        "vd": 11,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "9m",
+        "descricao": "Um soldado levantado de vala comum, ainda de farda e com a ordem do último dia no peito. Marcha em formação mesmo sozinho, e fica mais teimoso quando outro igual a ele se aproxima.",
+        "ataques": [
+          {
+            "nome": "Espada Enferrujada",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Lança de Fileira",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Formação de Fosso (recebe +2 de Defesa enquanto houver um aliado adjacente)"
+        ],
+        "loot": [
+          "Insígnia Enferrujada"
+        ],
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "enforcado",
+        "titulo": "Enforcado",
+        "vd": 15,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "9m",
+        "descricao": "Um corpo que balançou tempo demais numa árvore à beira da estrada e voltou para pedir a corda de volta. Anda de cabeça torta, arrasta o pedaço de corda e olha quem passa como quem confere uma lista.",
+        "ataques": [
+          {
+            "nome": "Pancada Torta",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Corda Estranguladora",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Corda ao Pescoço (ao acertar a Corda Estranguladora, o alvo faz Fortitude DT {dt} ou fica Agarrado)",
+          "Imune a veneno, sono e medo"
+        ],
+        "loot": [
+          "Corda de Forca"
+        ],
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "mumia-de-sal",
+        "titulo": "Múmia de Sal",
+        "vd": 19,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "9m",
+        "descricao": "Um corpo conservado em sal de um mar que secou, enfaixado em linho duro como casca. Guarda uma cripta no meio do deserto e não gosta de visita, nem de água, nem de quem faz as duas coisas ao mesmo tempo.",
+        "ataques": [
+          {
+            "nome": "Punho Seco",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Nuvem de Sal",
+            "tipo": "cortante, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Maldição do Deserto (criaturas atingidas pelo Punho Seco fazem Fortitude DT {dt} ou ficam Enfraquecidas até o fim da cena)",
+          "Corpo de Sal (Vulnerável a Água)"
+        ],
+        "loot": [
+          "Linho Salgado"
+        ],
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "ceifador-de-ossos",
+        "titulo": "Ceifador de Ossos",
+        "vd": 26,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "12m",
+        "descricao": "Um esqueleto alto de capuz rasgado, com uma foice feita da própria costela. Passa por campo de batalha depois do fim, recolhendo o que sobrou, e não leva pressa.",
+        "ataques": [
+          {
+            "nome": "Foice de Costela",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Chamado da Colheita",
+            "tipo": "Fim, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Colheita (ao reduzir uma criatura a 0 PV, recupera Vida igual a um quinto do golpe dele)",
+          "Imune a veneno, sono e medo"
+        ],
+        "loot": [
+          "Costela de Ceifador"
+        ],
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "liche-esquecido",
+        "titulo": "Liche Esquecido",
+        "vd": 41,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "12m",
+        "descricao": "Um mago que escolheu não morrer e, com o tempo, esqueceu o motivo. Guarda uma biblioteca de páginas em branco, e o único livro ainda escrito é o que está aberto na mesa, com o nome de quem acabou de chegar.",
+        "ataques": [
+          {
+            "nome": "Dedo de Cinza",
+            "tipo": "Fim",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Palavra Final",
+            "tipo": "Fim, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Filactério (quando destruído, volta em 1d4 dias no lugar onde o filactério está guardado, a menos que ele seja encontrado e destruído)",
+          "Memória Apagada (1/cena, Ação Padrão: uma criatura em alcance Médio faz Vontade DT {dt} ou perde o uso de uma magia ou poder, à escolha dele, até o fim da cena)",
+          "Imune a veneno, sono e medo"
+        ],
+        "loot": [
+          "Filactério Rachado"
+        ],
+        "preco": {
+          "Solares": 530
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "vazio": [
@@ -1548,7 +4292,7 @@
         "habilidades": [
           "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT {dt}; em falha, perde 4d6 de Sanidade e fica Amedrontado)",
           "Ausência Total (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT {dt}. Sofrem 20d10 de Vazio, metade em sucesso; esse dano não gera crítico)",
-          "Sinais (coisas que somem sem barulho e vozes que perdem o eco, uma a uma)",
+          "Sinais (coisas que somem sem barulho e vozes que perdem a resposta, uma a uma)",
           "Como Evitar (ela só consome o que está sendo chamado: a cena é de fuga, ou de calar quem chama e sair do alcance)"
         ],
         "loot": [
@@ -1575,7 +4319,7 @@
         "classe": "Ser Lendário",
         "categoria": "Aberração",
         "deslocamento": "30m",
-        "descricao": "Vem depois de todo o resto, quando não sobra ninguém para chamá-lo de nada. Os que o viram descrevem só uma coisa: o momento antes de a voz falhar. Selah é a pausa que existe no fim de todas as frases, esticada até virar criatura. Se Selah cair, o que estava calado pode finalmente falar, e o primeiro som do mundo é a voz de quem se despede.",
+        "descricao": "O primeiro sinal é pequeno e fácil de ignorar: uma porta que bate sem fazer barulho, um copo que cai e não se ouve quebrar. Depois o silêncio se espalha, um lugar de cada vez. Some o vento, somem os passos, some a água correndo. A última coisa a sumir é a respiração de quem está perto, e quando isso acontece Selah já está no mesmo lugar que você.\n\nQuem o viu e voltou não consegue dizer que forma ele tem. Lembra só de uma sensação que não vai mais embora, a de ficar preso no instante em que a própria voz falha. Ele vem do Vazio e caça pelo som. Quem grita chama a atenção dele. Quem fica calado, às vezes, é deixado para trás.\n\nA Guilda dos Caçadores não aceita contrato contra ele. Sobre Selah existe só um aviso no Quadro, escrito à mão: se o som começar a sumir, pare de falar e saia sem correr. Se não der para sair, ache o Vão por onde ele entrou e feche.\n\nSe Selah cair, o que estava calado pode finalmente falar, e o primeiro som do mundo é a voz de quem se despede.",
         "ataques": [
           {
             "nome": "Silêncio Que Corta",
@@ -1660,7 +4404,7 @@
         "classe": "Ser Lendário",
         "categoria": "Espírito",
         "deslocamento": "24m (Voo)",
-        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala enoquiano, e cada palavra dele soa como uma frase de lei. Se Ezrakael cair, a ordem que carregava fica por cumprir, e algum lugar do Jardim espera uma resposta que não vem.",
+        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala hebraico, e cada palavra dele soa como uma frase de lei. Se Ezrakael cair, a ordem que carregava fica por cumprir, e algum lugar do Jardim espera uma resposta que não vem.",
         "ataques": [
           {
             "nome": "Espada de Mensagem",
@@ -1701,7 +4445,7 @@
         "classe": "Ser Lendário",
         "categoria": "Espírito",
         "deslocamento": "30m (Voo)",
-        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em enoquiano, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas. Se Seraquiel cair, o canto continua em algum lugar, mais baixo, esperando alguém que o escute até o fim.",
+        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em hebraico, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas. Se Seraquiel cair, o canto continua em algum lugar, mais baixo, esperando alguém que o escute até o fim.",
         "ataques": [
           {
             "nome": "Lâmina do Cântico",
@@ -1731,6 +4475,1052 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "sussurro-da-chamine",
+        "titulo": "Sussurro da Chaminé",
+        "vd": 4,
+        "papel": "solo",
+        "classe": "Familiar",
+        "categoria": "Espírito",
+        "subtipo": "Natural",
+        "deslocamento": "9m (Flutuar)",
+        "descricao": "Espírito minúsculo que mora no cano de fumaça das casas velhas e repete, em voz baixa, o que ouviu na sala. Não faz mal a ninguém, mas conta tudo a quem aprender a escutar.",
+        "ataques": [
+          {
+            "nome": "Pancada de Fuligem",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Brasa Solta",
+            "tipo": "fogo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Repetir (Ação de Movimento: guarda até 1 minuto do que ouviu e o repete com a voz de quem falou; o vínculo recebe vantagem no primeiro teste de Percepção de cada cena)"
+        ],
+        "loot": [
+          "Fuligem Falante"
+        ],
+        "preco": {
+          "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "dama-da-bruma",
+        "titulo": "Dama da Bruma",
+        "vd": 11,
+        "papel": "solo",
+        "classe": "Servo",
+        "categoria": "Espírito",
+        "subtipo": "Natural",
+        "deslocamento": "9m (Flutuar)",
+        "descricao": "Mulher feita de neblina que caminha à beira de brejos e rios ao amanhecer, procurando quem prometeu voltar. Deixa em paz quem anda acompanhado e perde a calma quando encontra alguém sozinho.",
+        "ataques": [
+          {
+            "nome": "Toque Gelado",
+            "tipo": "gelo",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Lágrima Gelada",
+            "tipo": "gelo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Névoa Densa (Ação Padrão, 1/cena: enche uma área de 6 m; quem está dentro tem cobertura total contra quem está fora)",
+          "Atravessar (passa por matéria sólida como se fosse espaço livre, mas não pode terminar o turno dentro dela)"
+        ],
+        "loot": [
+          "Gota de Bruma"
+        ],
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "pastor-de-brasas",
+        "titulo": "Pastor de Brasas",
+        "vd": 19,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Natural",
+        "deslocamento": "12m",
+        "descricao": "Espírito de um velho tropeiro que morreu tocando gado sob uma tempestade seca. Conduz uma manada de faíscas com um cajado de cinza e solta todas contra quem pisa na pastagem sem pedir licença.",
+        "ataques": [
+          {
+            "nome": "Cajado de Cinza",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Faísca da Manada",
+            "tipo": "fogo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Manada de Faíscas (Ação Padrão, 1/cena: três faíscas em alcance Médio; cada alvo faz Reflexos DT {dt} ou sofre o dano de um ataque dele)",
+          "Pasto Queimado (criaturas que começam o turno em alcance Curto dele e não sejam espíritos sofrem 1d6 de fogo)"
+        ],
+        "loot": [
+          "Brasa do Cajado"
+        ],
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "cantor-do-sino-rachado",
+        "titulo": "Cantor do Sino Rachado",
+        "vd": 27,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Natural",
+        "deslocamento": "9m (Flutuar)",
+        "descricao": "O sino da vila rachou numa noite de peste e o homem que o tocava nunca mais saiu da torre. Agora canta uma nota só, torta, que atravessa paredes e faz quem ouve esquecer o próprio nome por um instante.",
+        "ataques": [
+          {
+            "nome": "Badalada",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Nota Torta",
+            "tipo": "ar, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Nota Torta (Ação Padrão, 1/cena: criaturas em alcance Curto fazem Vontade DT {dt}; em falha, ficam Atordoadas até o fim do próximo turno delas)",
+          "Torre (enquanto estiver num ponto alto, recebe +2 de Defesa)"
+        ],
+        "loot": [
+          "Badalo Rachado"
+        ],
+        "preco": {
+          "Solares": 90
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "guardia-do-rio-seco",
+        "titulo": "Guardiã do Rio Seco",
+        "vd": 37,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Natural",
+        "deslocamento": "12m",
+        "descricao": "O rio secou há séculos e ela continua de pé no leito, contando as estações que passam. Quem cruza o leito sem pagar com um instante da própria vida sai mais velho do outro lado.",
+        "ataques": [
+          {
+            "nome": "Mão de Areia",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Maré do Tempo",
+            "tipo": "água, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Estação Roubada (Reação, 1/cena: quando um inimigo em alcance Curto ataca, ele refaz o ataque com desvantagem)",
+          "Cobrança de Instante (Ação Padrão, 1/cena: um alvo em alcance Médio faz Vontade DT {dt}; em falha, perde o próximo turno)"
+        ],
+        "loot": [
+          "Pedra do Leito Seco"
+        ],
+        "preco": {
+          "Solares": 550
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "ancestral-do-bosque",
+        "titulo": "Espírito Ancestral do Bosque",
+        "vd": 52,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Espírito",
+        "subtipo": "Natural",
+        "deslocamento": "9m",
+        "descricao": "Mil anos de raiz e nenhuma pressa. Desperta quando machado novo entra na mata, e a mata inteira o obedece. Fala enoquiano, devagar, e cada palavra dele leva uma estação para terminar.",
+        "ataques": [
+          {
+            "nome": "Galho Antigo",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Chuva de Espinhos",
+            "tipo": "perfuração, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Mata Obediente (no começo de cada rodada, uma área de 9 m cresce em raízes: criaturas dentro fazem Atletismo DT {dt} ou ficam Contidas)",
+          "Seiva Antiga (recupera Vida igual a um vigésimo do golpe dele no começo de cada turno, enquanto houver árvore em alcance Longo)"
+        ],
+        "loot": [
+          "Semente Ancestral"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 100
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 10
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 2
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "diabrete-de-cinza",
+        "titulo": "Diabrete de Cinza",
+        "vd": 6,
+        "papel": "solo",
+        "classe": "Familiar",
+        "categoria": "Espírito",
+        "subtipo": "Demoníaco",
+        "deslocamento": "9m (Voo)",
+        "descricao": "Demônio miúdo, sobra de um pacto que ninguém terminou de pagar. Rouba pequenas coisas e deixa em troca um favor que o dono só entende depois. Fala aramaico e xinga em qualquer idioma.",
+        "ataques": [
+          {
+            "nome": "Ferroada",
+            "tipo": "perfuração",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Fagulha",
+            "tipo": "fogo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Gatuno (o vínculo recebe vantagem no primeiro teste de Furtividade ou Prestidigitação de cada cena)",
+          "Fuga em Fumaça (Reação, 1/cena: some em fumaça e reaparece a até 6 m)"
+        ],
+        "loot": [
+          "Chifre de Diabrete"
+        ],
+        "preco": {
+          "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "tentador-de-esquina",
+        "titulo": "Tentador de Esquina",
+        "vd": 12,
+        "papel": "solo",
+        "classe": "Servo",
+        "categoria": "Espírito",
+        "subtipo": "Demoníaco",
+        "deslocamento": "9m",
+        "descricao": "Demônio de terno gasto que espera numa esquina movimentada com uma proposta pronta para cada passante. Nunca mente, e é por isso que tudo piora.",
+        "ataques": [
+          {
+            "nome": "Bengala de Ébano",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Cartada Marcada",
+            "tipo": "corte, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Oferta Irrecusável (Ação Padrão, 1/cena: um alvo em alcance Curto faz Vontade DT {dt}; em falha, fica Enfeitiçado até o fim da cena ou até ser ferido)",
+          "Letra Miúda (sabe o preço real de qualquer acordo que lhe mostrem)"
+        ],
+        "loot": [
+          "Contrato Rasurado"
+        ],
+        "preco": {
+          "Lunaris": 1350
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "cobrador-do-pacto",
+        "titulo": "Cobrador do Pacto",
+        "vd": 18,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Demoníaco",
+        "deslocamento": "9m",
+        "descricao": "Demônio de livro-caixa e dedos finos que aparece quando uma dívida vence. Cobra em ouro, em favor ou em tempo de vida, e sempre sabe quanto o devedor tem.",
+        "ataques": [
+          {
+            "nome": "Pena Afiada",
+            "tipo": "perfuração",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Moeda Quente",
+            "tipo": "fogo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Faro de Dívida (sabe se um alvo em alcance Médio carrega algo de valor e o que é)",
+          "Penhora (Ação Padrão, 1/cena: um alvo em alcance Curto faz Reflexos DT {dt}; em falha, um item dele vai parar na mão do Cobrador)"
+        ],
+        "loot": [
+          "Livro-Caixa Chamuscado"
+        ],
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "dama-de-veludo",
+        "titulo": "Dama de Veludo",
+        "vd": 24,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Demoníaco",
+        "deslocamento": "9m",
+        "descricao": "Demônio de beleza calculada que frequenta festas de gente rica e sai com o segredo de quem a olhou por mais de um minuto. Prefere conquistar a lutar.",
+        "ataques": [
+          {
+            "nome": "Unhas de Seda",
+            "tipo": "corte",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Beijo Lançado",
+            "tipo": "escuridão, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Olhar de Veludo (Ação Padrão, 1/cena: um alvo em alcance Médio faz Vontade DT {dt}; em falha, a trata como aliada até o fim da cena ou até ser ferido)",
+          "Conversa Fiada (recebe +4 em testes de Persuasão e Enganação)"
+        ],
+        "loot": [
+          "Luva de Veludo Negro"
+        ],
+        "preco": {
+          "Solares": 105
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "ladrao-de-rostos",
+        "titulo": "Ladrão de Rostos",
+        "vd": 21,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Demoníaco",
+        "deslocamento": "12m",
+        "descricao": "Demônio sem rosto que escolhe alguém admirado e passa a usar a cara dele em festas, tribunais e tavernas. Depois de uma semana, ninguém lembra qual dos dois era o original.",
+        "ataques": [
+          {
+            "nome": "Lâmina Emprestada",
+            "tipo": "corte",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Adaga Arremessada",
+            "tipo": "perfuração, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Rosto Emprestado (Ação Padrão, 1/cena: assume a aparência de uma criatura que viu de perto; quem desconfia faz Percepção contra DT {dt})",
+          "Cópia de Golpe (Reação, 1/cena: quando um inimigo usa uma habilidade contra ele, usa a mesma habilidade contra o inimigo)"
+        ],
+        "loot": [
+          "Máscara sem Dono"
+        ],
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "verdugo-rubro",
+        "titulo": "Verdugo Rubro",
+        "vd": 30,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Demoníaco",
+        "deslocamento": "12m",
+        "descricao": "Demônio de machado largo e capuz de couro que acompanha as guerras e os duelos que deviam ter acabado. Cada golpe que sofre o deixa mais furioso, e não há conversa depois do primeiro.",
+        "ataques": [
+          {
+            "nome": "Machado Rubro",
+            "tipo": "corte",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Machado Arremessado",
+            "tipo": "corte, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Fúria Crescente (a cada rodada em que sofre dano, seus ataques causam +1d6 até o fim da cena)",
+          "Corte da Sentença (Ação Completa, 1/cena: um golpe que ignora Resistência física; Reflexos DT {dt} reduz o dano à metade)"
+        ],
+        "loot": [
+          "Cabo do Machado Rubro"
+        ],
+        "preco": {
+          "Solares": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "devorador-de-banquetes",
+        "titulo": "Devorador de Banquetes",
+        "vd": 36,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Demoníaco",
+        "deslocamento": "9m",
+        "descricao": "Demônio enorme de barriga aberta que chega onde há fartura demais e devora a mesa, os convidados e a casa, nessa ordem. Quanto mais come, menos sente.",
+        "ataques": [
+          {
+            "nome": "Mordida de Mesa Posta",
+            "tipo": "perfuração",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Cuspe de Brasa",
+            "tipo": "fogo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Fome Sem Fundo (Ação Padrão: engole um alvo Médio ou menor que esteja agarrado; o alvo sofre dano a cada turno dele até escapar com Atletismo DT {dt})",
+          "Digestão (recupera Vida igual à metade do dano que causa)"
+        ],
+        "loot": [
+          "Dente de Glutão"
+        ],
+        "preco": {
+          "Solares": 550
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "principe-do-cochilo",
+        "titulo": "Príncipe do Cochilo",
+        "vd": 48,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Espírito",
+        "subtipo": "Demoníaco",
+        "deslocamento": "6m",
+        "descricao": "Reina sobre quartos de doente, bancos de espera e tardes de domingo. Nunca levanta a voz nem o corpo, e o mundo desacelera sozinho ao redor dele. Fala aramaico, e cada frase termina um pouco antes de acabar.",
+        "ataques": [
+          {
+            "nome": "Soco de Travesseiro",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Bocejo Pesado",
+            "tipo": "escuridão, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Peso do Sono (no começo de cada rodada, criaturas em alcance Médio fazem Fortitude DT {dt} ou perdem a ação de movimento)",
+          "Trono de Almofadas (não pode ser movido contra a vontade dele e ignora terreno difícil)"
+        ],
+        "loot": [
+          "Almofada do Último Cochilo"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "duque-altivo",
+        "titulo": "Duque Altivo",
+        "vd": 58,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Espírito",
+        "subtipo": "Demoníaco",
+        "deslocamento": "12m",
+        "descricao": "Demônio de coroa torta que nunca aceitou ordem de ninguém, nem a de cair. Prefere a morte à ajuda, e já morreu uma vez só para provar o ponto. Fala aramaico, olhando por cima da cabeça de quem ouve.",
+        "ataques": [
+          {
+            "nome": "Cetro Quebrado",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Decreto Cortante",
+            "tipo": "corte, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Orgulho (imune a Amedrontado; nenhum aliado pode curá-lo)",
+          "Decreto (Ação Padrão, 1/cena: um alvo em alcance Longo faz Vontade DT {dt}; em falha, se ajoelha, fica Caído e perde a reação)"
+        ],
+        "loot": [
+          "Coroa Torta"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 100
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 10
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 2
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "belzarak",
+        "titulo": "Belzarak, o Arquidemônio da Ira",
+        "vd": 90,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Espírito",
+        "subtipo": "Demoníaco",
+        "deslocamento": "15m (Voo)",
+        "descricao": "Arquidemônio de seis chifres e voz de forja. Comanda legiões que ninguém contou, e cada uma jurou vingança por uma coisa diferente. Fala aramaico, e cada ordem dele soa como uma martelada.",
+        "ataques": [
+          {
+            "nome": "Martelo de Fornalha",
+            "tipo": "fogo",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Brado das Legiões",
+            "tipo": "fogo, em área grande",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Aura de Fornalha (criaturas a até 9 m sofrem fogo no começo de cada turno)",
+          "Legião (1/cena, Ação Padrão: convoca 1d4 Diabretes de Cinza)",
+          "Fúria Crescente (a cada rodada em que sofre dano, seus ataques causam +2d6 até o fim da cena)"
+        ],
+        "loot": [
+          "Chifre de Arquidemônio"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 280
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 28
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 6
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "centelha-de-prece",
+        "titulo": "Centelha de Prece",
+        "vd": 5,
+        "papel": "solo",
+        "classe": "Familiar",
+        "categoria": "Espírito",
+        "subtipo": "Angelical",
+        "deslocamento": "9m (Voo)",
+        "descricao": "Luzinha morna que nasce de uma oração dita sem pedir nada. Acompanha quem a disse e acende mais forte quando essa pessoa está com medo.",
+        "ataques": [
+          {
+            "nome": "Pancada de Luz",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Raio Manso",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Calor de Prece (o vínculo recebe vantagem no primeiro teste de resistência contra medo de cada cena)",
+          "Clarão (Reação, 1/cena: cega o atacante até o começo do próximo turno dele)"
+        ],
+        "loot": [
+          "Cera de Prece"
+        ],
+        "preco": {
+          "Lunaris": 330
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "sentinela-de-clarao",
+        "titulo": "Sentinela de Clarão",
+        "vd": 11,
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Espírito",
+        "subtipo": "Angelical",
+        "deslocamento": "9m",
+        "descricao": "Anjo de armadura clara que fica parado diante de portas que não devem ser abertas. Responde em hebraico, devagar, e só deixa passar quem diz por que quer entrar.",
+        "ataques": [
+          {
+            "nome": "Lança de Clarão",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Dardo de Luz",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Posto (não pode ser empurrado nem derrubado)",
+          "Escudo Celestial (Ação Padrão, 1/cena: concede +4 de Defesa a um aliado até o começo do próximo turno do Sentinela)"
+        ],
+        "loot": [
+          "Placa de Clarão"
+        ],
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "mensageiro-do-sino-branco",
+        "titulo": "Mensageiro do Sino Branco",
+        "vd": 16,
+        "papel": "solo",
+        "classe": "Servo",
+        "categoria": "Espírito",
+        "subtipo": "Angelical",
+        "deslocamento": "12m (Voo)",
+        "descricao": "Anjo magro, de asas curtas, que leva avisos entre lugares que não se falam. Chega tocando um sino que só o destinatário escuta.",
+        "ataques": [
+          {
+            "nome": "Badalada",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pena Veloz",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Entrega Garantida (Ação Completa, 1/cena: leva uma mensagem de até vinte palavras a uma criatura que conheça, em qualquer distância)",
+          "Passo de Luz (Ação de Movimento, 1/cena: teletransporta-se até 12 m)"
+        ],
+        "loot": [
+          "Badalo de Sino Branco"
+        ],
+        "preco": {
+          "Lunaris": 1800
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "cuidador-de-leito",
+        "titulo": "Cuidador de Leito",
+        "vd": 21,
+        "papel": "solo",
+        "classe": "Servo",
+        "categoria": "Espírito",
+        "subtipo": "Angelical",
+        "deslocamento": "9m (Voo)",
+        "descricao": "Anjo de mãos grandes que aparece em leitos de doença e fica até a febre passar. Cuida de todo mundo do mesmo jeito, sem perguntar de que lado a pessoa estava.",
+        "ataques": [
+          {
+            "nome": "Mão Pesada",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Luz de Vigília",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Mãos que Curam (Ação Padrão, 1/cena: toca uma criatura e a cura em Vida igual a um quarto do golpe dele)",
+          "Vigília (Reação, 1/cena: quando um aliado em alcance Curto chega a 0 de Vida, ele fica com 1 de Vida)"
+        ],
+        "loot": [
+          "Pano de Leito Santo"
+        ],
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "arbitro-de-balanca",
+        "titulo": "Árbitro de Balança",
+        "vd": 27,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Angelical",
+        "deslocamento": "9m (Voo)",
+        "descricao": "Anjo de olhos vendados com uma balança de prata que decide disputas por peso. Nunca dá razão a ninguém: devolve a cada lado exatamente o que levou até ali.",
+        "ataques": [
+          {
+            "nome": "Prato de Prata",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Sentença de Luz",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Pesar (Ação Padrão, 1/cena: um alvo em alcance Médio faz Vontade DT {dt}; em falha, todos os bônus e vantagens dele acabam)",
+          "Medida Justa (Reação, 1/cena: reduz à metade o dano de um golpe que sofre, e o atacante sofre a outra metade)"
+        ],
+        "loot": [
+          "Prato de Balança"
+        ],
+        "preco": {
+          "Solares": 90
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "portador-do-escudo-manso",
+        "titulo": "Portador do Escudo Manso",
+        "vd": 32,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Angelical",
+        "deslocamento": "9m",
+        "descricao": "Anjo de joelhos dobrados que segura um escudo largo diante de quem chega depois. Nunca ataca primeiro e nunca cede o lugar de quem protege.",
+        "ataques": [
+          {
+            "nome": "Borda do Escudo",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pedra de Luz",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Passar à Frente (Reação, 1/cena: troca de lugar com um aliado em alcance Médio e sofre o ataque no lugar dele)",
+          "Escudo Manso (Resistência física 5; aliados a até 3 m têm +1 de Defesa)"
+        ],
+        "loot": [
+          "Fivela do Escudo Manso"
+        ],
+        "preco": {
+          "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "guardia-do-calice",
+        "titulo": "Guardiã do Cálice",
+        "vd": 38,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Angelical",
+        "deslocamento": "9m (Voo)",
+        "descricao": "Anjo de véu branco que guarda um cálice vazio e recusa qualquer oferta para enchê-lo. Quem tenta comprá-la, seduzi-la ou assustá-la sai sabendo exatamente o que queria e com vergonha do que ofereceu.",
+        "ataques": [
+          {
+            "nome": "Cálice Erguido",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Gota Pura",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Mente Intocada (imune a encantamento e controle mental)",
+          "Recusa (Reação, 1/cena: quando um efeito de encantamento a atinge ou atinge um aliado em alcance Curto, o efeito volta contra quem o lançou)"
+        ],
+        "loot": [
+          "Véu da Guardiã"
+        ],
+        "preco": {
+          "Solares": 550
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "anjo-da-divida-paga",
+        "titulo": "Anjo da Dívida Paga",
+        "vd": 44,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "subtipo": "Angelical",
+        "deslocamento": "12m (Voo)",
+        "descricao": "Anota cada favor feito e o devolve em dobro, na hora em que mais pesa. Aparece ao lado de quem ajudou alguém sem esperar nada.",
+        "ataques": [
+          {
+            "nome": "Pena de Cobrança",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Página Cortante",
+            "tipo": "luz, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Retribuição (Reação, 1/cena: quando um aliado que ajudou alguém nesta cena chega a 0 de Vida, ele fica com 1 de Vida e recupera 1d6 por rodada, por 3 rodadas)",
+          "Livro de Favores (sabe quem na cena já ajudou quem)"
+        ],
+        "loot": [
+          "Página do Livro de Favores"
+        ],
+        "preco": {
+          "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "querubim-de-pedra-clara",
+        "titulo": "Querubim de Pedra Clara",
+        "vd": 55,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Espírito",
+        "subtipo": "Angelical",
+        "deslocamento": "6m",
+        "descricao": "Feito de pedra branca, espera num pátio vazio há mais tempo do que existe pátio. Só se mexe quando já não resta alternativa, e quando se mexe termina o assunto. Fala hebraico, uma sílaba por estação.",
+        "ataques": [
+          {
+            "nome": "Punho de Pedra Clara",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Luz do Pátio",
+            "tipo": "luz, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Calma Imóvel (não pode ser movido nem derrubado; imune a Amedrontado)",
+          "Último Golpe (Ação Completa, 1/cena: um golpe que ignora Resistência; Fortitude DT {dt} reduz o dano à metade)"
+        ],
+        "loot": [
+          "Lasca de Pedra Clara"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 100
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 10
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 2
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "miraquel",
+        "titulo": "Miraquel, o Escriba das Sete Virtudes",
+        "vd": 70,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Espírito",
+        "subtipo": "Angelical",
+        "deslocamento": "18m (Voo)",
+        "descricao": "Escreve em sete livros ao mesmo tempo, um para cada Virtude, e anota quem as cumpriu e quem apenas as recitou. Fala hebraico, e cada palavra dele pesa como uma pena de ouro.",
+        "ataques": [
+          {
+            "nome": "Pena de Ouro",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Sentença Escrita",
+            "tipo": "luz, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Sete Livros (no começo de cada rodada, escolhe um efeito: aliados em alcance Longo recuperam Vida igual a um vigésimo do golpe dele, ou ganham +2 de Defesa, ou ficam imunes a medo até a próxima rodada)",
+          "Registro (sabe quem na cena agiu contra uma Virtude nesta rodada)"
+        ],
+        "loot": [
+          "Pena de Escriba"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
         },
         "nivelMinimoLoja": 4
       }
@@ -1817,6 +5607,549 @@
           "Lunaris": 6000
         },
         "nivelMinimoLoja": 4
+      }
+    ],
+    "planta": [
+      {
+        "id": "espinheiro-mordedor",
+        "titulo": "Espinheiro Mordedor",
+        "vd": 7,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Planta",
+        "deslocamento": "6m",
+        "descricao": "Um arbusto que cresce em beira de estrada, grosso de espinho e magro de folha. Quem se encosta para descansar acorda preso, e quem corta o mato aprende a respeitar o que não se mexe.",
+        "ataques": [
+          {
+            "nome": "Espinhos",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Chicote de Galho",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Moita Fechada (o terreno em alcance Curto é difícil para criaturas que não sejam Plantas)"
+        ],
+        "loot": [
+          "Espinho Curtido"
+        ],
+        "preco": {
+          "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 1
+      },
+      {
+        "id": "flor-isca",
+        "titulo": "Flor-Isca",
+        "vd": 12,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Planta",
+        "deslocamento": "3m",
+        "descricao": "Uma flor grande como uma cabeça, de perfume doce e pétala macia, plantada no meio de um caminho que não devia ter flor. O cheiro dá vontade de chegar mais perto, e é a única coisa nela que mente.",
+        "ataques": [
+          {
+            "nome": "Mordida de Pétala",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pólen Doce",
+            "tipo": "veneno, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Perfume Doce (criaturas em alcance Curto fazem Vontade DT {dt} ou se aproximam dela no próximo turno)"
+        ],
+        "loot": [
+          "Perfume Doce"
+        ],
+        "preco": {
+          "Lunaris": 1350
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "cogumelo-dancarino",
+        "titulo": "Cogumelo-Dançarino",
+        "vd": 15,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Planta",
+        "deslocamento": "9m",
+        "descricao": "Um cogumelo de chapéu vermelho que balança no ritmo de uma música que ninguém mais ouve. Os esporos dele fazem o chão virar pista, e quem dança com ele costuma acordar dias depois, descalço e sem lembrar o nome.",
+        "ataques": [
+          {
+            "nome": "Chapéu Giratório",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Nuvem de Esporos",
+            "tipo": "veneno, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Dança dos Esporos (1/cena, Ação Padrão: criaturas em alcance Curto fazem Vontade DT {dt} ou ficam Desorientadas até o fim do próximo turno delas)"
+        ],
+        "loot": [
+          "Chapéu Rubro"
+        ],
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "lodacal-vivo",
+        "titulo": "Lodaçal Vivo",
+        "vd": 21,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Planta",
+        "deslocamento": "6m",
+        "descricao": "Um trecho de pântano que respira. Dá bolha onde ninguém pisou, e o chão cede de leve, como um estômago que decide agora. Quem cai nele sente algo do outro lado puxar de volta.",
+        "ataques": [
+          {
+            "nome": "Braço de Lodo",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Cuspe de Lama",
+            "tipo": "impacto, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Sorvedouro (ao acertar o Braço de Lodo, o alvo faz Fortitude DT {dt} ou fica Agarrado; criatura Agarrada sofre dano de impacto igual a um quinto do golpe no começo de cada turno)"
+        ],
+        "loot": [
+          "Lama Fértil"
+        ],
+        "preco": {
+          "Solares": 140
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "carvalho-vigia",
+        "titulo": "Carvalho Vigia",
+        "vd": 24,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Planta",
+        "deslocamento": "6m",
+        "descricao": "Uma árvore com mais de mil anos que aprendeu a ficar de olho. Fica imóvel enquanto o bosque está em paz e acorda sem pressa quando machado, fogo ou pé errado se aproxima.",
+        "ataques": [
+          {
+            "nome": "Galho Pesado",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Chuva de Bolotas",
+            "tipo": "impacto, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Casca Antiga (reduz em 5 o dano físico de cada golpe; Vulnerável a Fogo)",
+          "Raízes do Bosque (o terreno em alcance Curto é difícil para criaturas hostis a ele)"
+        ],
+        "loot": [
+          "Bolota Antiga"
+        ],
+        "preco": {
+          "Solares": 105
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "mata-que-anda",
+        "titulo": "Mata Que Anda",
+        "vd": 38,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Planta",
+        "deslocamento": "12m",
+        "descricao": "Um bosque inteiro que levantou as raízes e saiu para ver o que mudou no mundo. Cada árvore é um membro, cada clareira é um passo, e quem entra para procurar o caminho descobre que o bosque inteiro estava procurando por ele.",
+        "ataques": [
+          {
+            "nome": "Galho Colossal",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Chuva de Troncos",
+            "tipo": "impacto, em área grande",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Floresta em Marcha (o terreno em alcance Médio é difícil para criaturas hostis a ela)",
+          "Corpo de Bosque (recupera Vida igual a um décimo do golpe dela no começo de cada turno, a menos que tenha sofrido fogo na rodada anterior)"
+        ],
+        "loot": [
+          "Coração de Bosque"
+        ],
+        "preco": {
+          "Solares": 550
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "humbra",
+        "titulo": "Humbra, a Raiz do Ventre",
+        "vd": 75,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Planta",
+        "deslocamento": "6m",
+        "descricao": "Mora no fundo do Viveiro, onde tudo o que cresceu morreu em cima do que cresceu antes. Respira devagar e pensa mais devagar ainda, e quem mexe nas raízes dela descobre que o chão inteiro era um único corpo. No Viveiro, ninguém planta sem antes pedir licença ao chão, e ninguém sabe a quem está pedindo.",
+        "ataques": [
+          {
+            "nome": "Raiz Esmagadora",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Enxame de Brotos",
+            "tipo": "perfurante, em área grande",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Corpo do Ventre (recupera Vida igual a um décimo do golpe dela no começo de cada turno, a menos que tenha sofrido fogo)",
+          "Chão Vivo (o terreno em alcance Longo é difícil para criaturas hostis a ela)"
+        ],
+        "loot": [
+          "Raiz do Ventre"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
+        },
+        "nivelMinimoLoja": 4
+      }
+    ],
+    "feerico": [
+      {
+        "id": "duende-do-atalho",
+        "titulo": "Duende do Atalho",
+        "vd": 6,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Feérico",
+        "deslocamento": "9m",
+        "descricao": "Um homenzinho do tamanho de um gato que mora entre duas portas e cobra um agrado de quem usa a passagem. Gosta de moeda brilhante, de doce e de piada boa, e transforma o resto em assunto.",
+        "ataques": [
+          {
+            "nome": "Cutucada",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pedrinha Certeira",
+            "tipo": "impacto, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Atalho (Ação de Movimento: teletransporta-se até 6 m para um espaço livre que enxergue)"
+        ],
+        "loot": [
+          "Sininho de Duende"
+        ],
+        "preco": {
+          "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 1
+      },
+      {
+        "id": "trasgo-do-moinho",
+        "titulo": "Trasgo do Moinho",
+        "vd": 9,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Feérico",
+        "deslocamento": "9m",
+        "descricao": "Um ajudante teimoso que vive atrás da roda do moinho e mexe nas coisas à noite. Se o dono deixa o leite, ele varre o chão; se não deixa, derruba a farinha e quebra o eixo.",
+        "ataques": [
+          {
+            "nome": "Garfada",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Saco de Farinha",
+            "tipo": "impacto, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Arruaça (1/cena, Ação Padrão: criaturas em alcance Curto fazem Reflexos DT {dt} ou ficam Caídas)"
+        ],
+        "loot": [
+          "Farinha Encantada"
+        ],
+        "preco": {
+          "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "raposa-de-muitos-rostos",
+        "titulo": "Raposa de Muitos Rostos",
+        "vd": 14,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Feérico",
+        "deslocamento": "15m",
+        "descricao": "Uma raposa cor de ferrugem com um sorriso que muda de dono. Aparece em festa de vila no rosto de quem todos esperavam ver, e o truque só se descobre quando o convidado volta para casa e o convidado de verdade já estava lá.",
+        "ataques": [
+          {
+            "nome": "Mordida Rápida",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Arranhão Esperto",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Rosto Emprestado (Ação Padrão: assume a aparência de uma pessoa que tenha visto; um teste de Percepção DT {dt} revela o truque)"
+        ],
+        "loot": [
+          "Pelo de Muitos Tons"
+        ],
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 2
+      },
+      {
+        "id": "ninfa-do-poco",
+        "titulo": "Ninfa do Poço",
+        "vd": 17,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Feérico",
+        "deslocamento": "9m (Nado)",
+        "descricao": "Mora no fundo de um poço velho e fala pela água. A voz sobe junto com o balde, e quem se debruça para ouvir melhor acaba falando também, sem saber o que prometeu.",
+        "ataques": [
+          {
+            "nome": "Mão d'Água",
+            "tipo": "água",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Jato do Fundo",
+            "tipo": "água, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Voz do Fundo (Ação Padrão: uma criatura em alcance Médio que a ouça faz Vontade DT {dt} ou caminha até a água mais próxima no próximo turno)"
+        ],
+        "loot": [
+          "Água do Fundo do Poço"
+        ],
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "cavaleiro-do-crepusculo",
+        "titulo": "Cavaleiro do Crepúsculo",
+        "vd": 27,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Feérico",
+        "deslocamento": "18m",
+        "descricao": "Um cavaleiro feérico de armadura de folha escura que só aparece entre o fim da tarde e o começo da noite. Cumpre um juramento antigo, e quem o ouve declarar a acusação percebe que não adianta pedir para ele esquecer.",
+        "ataques": [
+          {
+            "nome": "Lança de Espinhos",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Flecha do Fim da Tarde",
+            "tipo": "perfurante, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Juramento Feérico (não pode mentir; uma criatura que quebre uma promessa dita diante dele fica Exposta até o fim da cena)",
+          "Carga do Crepúsculo (1/cena, Ação de Movimento: avança em linha reta até 18 m atravessando criaturas; quem for atravessado faz Reflexos DT {dt} ou fica Caído)"
+        ],
+        "loot": [
+          "Folha de Crepúsculo"
+        ],
+        "preco": {
+          "Solares": 90
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 3
+      },
+      {
+        "id": "cacada-selvagem",
+        "titulo": "Caçada Selvagem",
+        "vd": 36,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Feérico",
+        "deslocamento": "24m",
+        "descricao": "Cães de olho vermelho, cavalos sem sombra e cavaleiros de chifre atravessam o céu das noites de tempestade, e quem ouve o trompete já foi marcado. A Caçada persegue por dívida: alguém deixou uma conta aberta para o inverno, e ela vem cobrar com cavalo, corneta e cão.",
+        "ataques": [
+          {
+            "nome": "Lança do Cavaleiro",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Flecha da Caçada",
+            "tipo": "perfurante, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Trompete da Caçada (1/cena, Ação Padrão: marca uma criatura; ela fica Exposta e não pode se esconder até o fim da cena)",
+          "Corpo Coletivo (reduz em 4 o dano físico de cada golpe; não pode ser Agarrada)"
+        ],
+        "loot": [
+          "Corneta da Caçada"
+        ],
+        "preco": {
+          "Solares": 550
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "kelpie-do-lago",
+        "titulo": "Kelpie do Lago",
+        "vd": 14,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Feérico",
+        "deslocamento": "18m (Nado)",
+        "descricao": "Um cavalo negro e molhado que espera na margem, de crina pingando, oferecendo o lombo a quem está cansado. Quem monta descobre que a pele dele cola e que a água, a partir dali, é o único caminho.",
+        "ataques": [
+          {
+            "nome": "Coice",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Mordida Fria",
+            "tipo": "água",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Pele Colante (a criatura que o montar ou tocar faz Fortitude DT {dt} ou fica Agarrada)",
+          "Arrastar para o Fundo (uma criatura Agarrada por ele é movida 6 m em direção à água)"
+        ],
+        "loot": [
+          "Crina de Kelpie"
+        ],
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 2
       }
     ]
   }

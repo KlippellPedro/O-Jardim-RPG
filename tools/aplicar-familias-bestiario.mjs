@@ -7,7 +7,12 @@
 //               à mão (só metadado: nenhum número de criatura muda)
 //   --novos     grava no catálogo os estágios de familias-propostas-v1.json, montados pela
 //               curva de criatura. NUNCA sobrescreve uma ficha que já existe: se o
-//               id está no catálogo e não foi gerado por aqui, aborta.
+//               id está no catálogo e não foi gerado por aqui, aborta. Atenção: ele
+//               REGERA todos os estágios já gerados, e várias fichas geradas foram
+//               refinadas à mão depois (preços, fases de chefe, habilidades). Para
+//               criaturas novas, prefira --acrescentar.
+//   --acrescentar só grava as propostas cujo id ainda não está no catálogo. Não toca
+//               em nenhuma ficha existente, gerada ou escrita à mão.
 //
 // Rode com o carregador de TypeScript: `npm run bestiario:familias -- --check`.
 import fs from 'node:fs';
@@ -103,6 +108,7 @@ function montarEntrada(familia, novo) {
     geradoPorFamilia: true,
   };
   if (familia) conteudo.familia = familia.id;
+  if (novo.subtipo) conteudo.subtipo = novo.subtipo;
   if (novo.estagio) conteudo.estagio = novo.estagio;
   if (novo.unico) conteudo.unico = true;
   // Criaturas de VD muito alto ou únicas ficam só no Bestiário, fora do balcão da Loja.
@@ -175,6 +181,15 @@ if (args.has('--check')) {
   catalogo.entradas = entradas;
   fs.writeFileSync(catalogoPath, serializar(catalogo), 'utf8');
   console.log(`${novos.length} estágios novos gravados no catálogo. Revise os textos e rode \`npm run precos:normalizar\` se quiser reajustar os preços.`);
+} else if (args.has('--acrescentar')) {
+  const ausentes = novos.filter(({ novo }) => !porId.has(novo.id));
+  if (!ausentes.length) {
+    console.log('Nenhuma proposta nova: todas já estão no catálogo.');
+  } else {
+    for (const { familia, novo } of ausentes) catalogo.entradas.push(montarEntrada(familia, novo));
+    fs.writeFileSync(catalogoPath, serializar(catalogo), 'utf8');
+    console.log(`${ausentes.length} criaturas acrescentadas ao catálogo (nenhuma ficha existente foi alterada). Rode \`npm run precos:normalizar\` e fixe os preços na proposta.`);
+  }
 } else {
   console.log(`Famílias: ${dados.familias.length}, membros: ${familiaDoMembro.size}, únicos: ${dados.unicos.length}, estágios propostos: ${novos.length}.`);
   console.log(`Fichas escritas fora do arquivo de famílias: ${monstrosEscritos.length - familiaDoMembro.size}. Divergências de metadado: ${divergentes.length}.`);

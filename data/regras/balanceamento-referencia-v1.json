@@ -4390,36 +4390,36 @@
     "faixas": [
       {
         "faixa": "1 a 10",
-        "monstros": 43,
-        "vidaMediana": 140,
+        "monstros": 63,
+        "vidaMediana": 135,
         "vidaDeInimigoPadraoNoNivel": 330,
         "vidaSoloDaCurva": 265
       },
       {
         "faixa": "11 a 20",
-        "monstros": 33,
+        "monstros": 67,
         "vidaMediana": 330,
         "vidaDeInimigoPadraoNoNivel": 510,
         "vidaSoloDaCurva": 410
       },
       {
         "faixa": "21 a 30",
-        "monstros": 31,
-        "vidaMediana": 600,
+        "monstros": 56,
+        "vidaMediana": 655,
         "vidaDeInimigoPadraoNoNivel": 1010,
         "vidaSoloDaCurva": 810
       },
       {
         "faixa": "31 a 40",
-        "monstros": 24,
+        "monstros": 36,
         "vidaMediana": 900,
         "vidaDeInimigoPadraoNoNivel": 1320,
         "vidaSoloDaCurva": 1055
       },
       {
         "faixa": "41 a 50",
-        "monstros": 14,
-        "vidaMediana": 1395,
+        "monstros": 20,
+        "vidaMediana": 1330,
         "vidaDeInimigoPadraoNoNivel": 1320,
         "vidaSoloDaCurva": 1320
       }

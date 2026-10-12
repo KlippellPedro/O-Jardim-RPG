@@ -456,3 +456,16 @@ test('modificações declaram aplicacao dentro do enum e pre_requisitos tipados 
   // As 15 modificações "marciais" com pré-requisito identificadas na auditoria, mais 5 da expansão 2026-09.
   assert.equal(comPreRequisitoTipado, 20);
 });
+
+// Elementos e derivações são tipos de dano de golpe (Gelo, Fogo, Raio, Magma...).
+// Frio e Calor são dano de ambiente (clima, deserto, nevasca) e nunca saem de um ataque.
+test('ataque de criatura usa Gelo, Fogo e Raio, nunca Frio, Calor ou "elétrico" como tipo de dano', () => {
+  const danoDeAmbiente = /\d+d\d+(?:\s*[+-]\s*\d+)?\s+(?:de\s+)?(?:frio|calor|el[eé]tric\w+)\b|\bdano (?:de |)(?:frio|calor|el[eé]tric\w+)\b|\b(?:frio|calor),? ou el[eé]trico/i;
+  for (const entrada of catalogo.entradas.filter((item) => item.tipo === 'monstro')) {
+    const trechos = [
+      ...(entrada.conteudo.ataques ?? []).flatMap((ataque: { nome: string; detalhe: string }) => [ataque.nome, ataque.detalhe]),
+      ...(entrada.conteudo.habilidades ?? []).map(String),
+    ];
+    for (const trecho of trechos) assert.doesNotMatch(trecho, danoDeAmbiente, `${entrada.id}: "${trecho}" usa dano de ambiente como golpe`);
+  }
+});

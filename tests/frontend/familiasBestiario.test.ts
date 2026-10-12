@@ -150,3 +150,67 @@ test('o site não importa os rascunhos de estágios: texto não aprovado não va
   varrer('data');
   assert.deepEqual(importadores, []);
 });
+
+test('--acrescentar só grava o que falta e nunca mexe numa ficha que já existe, gerada ou escrita à mão', () => {
+  const pasta = mkdtempSync(path.join(tmpdir(), 'familias-acrescentar-'));
+  const catalogoCopia = path.join(pasta, 'catalogo.json');
+  const original = JSON.parse(readFileSync('data/loja/catalogo.json', 'utf8'));
+  // Tira uma criatura nova do catálogo e adultera uma gerada antiga, para provar que --acrescentar não a refaz.
+  const faltante = 'esfera-de-plasma';
+  const adulterada = 'hiemara';
+  assert.ok(original.entradas.some((item: any) => item.id === faltante));
+  original.entradas = original.entradas.filter((item: any) => item.id !== faltante);
+  original.entradas.find((item: any) => item.id === adulterada).conteudo.contrato_mensal = { Lunaris: 1 };
+  writeFileSync(catalogoCopia, `${JSON.stringify(original, null, 2)}\n`);
+  const env = { BESTIARIO_CATALOGO: catalogoCopia };
+
+  const primeira = rodar(['--acrescentar'], env);
+  assert.equal(primeira.status, 0, primeira.stderr);
+  const depois = JSON.parse(readFileSync(catalogoCopia, 'utf8'));
+  assert.equal(depois.entradas.length, original.entradas.length + 1);
+  assert.equal(depois.entradas.at(-1).id, faltante);
+  assert.deepEqual(depois.entradas.find((item: any) => item.id === adulterada).conteudo.contrato_mensal, { Lunaris: 1 });
+
+  const segunda = rodar(['--acrescentar'], env);
+  assert.equal(segunda.status, 0, segunda.stderr);
+  assert.deepEqual(JSON.parse(readFileSync(catalogoCopia, 'utf8')), depois);
+});
+
+/** Criaturas antigas que também levam a marca Angelical ou Demoníaco (para o filtro do Bestiário achar todas), mas não são
+ * dos 26 espíritos escritos para as três Naturezas: duas são lendas do Livro da Verdade, uma é Invocação e uma é Aberração. */
+const ANTIGOS_COM_MARCA_DE_NATUREZA = ['anjo-guardiao', 'ezrakael', 'seraquiel', 'demonio-menor'];
+const espiritosDasNaturezas = () => monstros.filter((entrada) => ['Natural', 'Demoníaco', 'Angelical'].includes(entrada.conteudo.subtipo) && !ANTIGOS_COM_MARCA_DE_NATUREZA.includes(entrada.id));
+
+test('os espíritos do Bestiário cobrem as três Naturezas, e o idioma de cada um é o da sua Natureza', () => {
+  const espiritos = espiritosDasNaturezas();
+  const porSubtipo = (subtipo: string) => espiritos.filter((entrada) => entrada.conteudo.subtipo === subtipo);
+
+  assert.ok(porSubtipo('Natural').length >= 6, 'poucos espíritos naturais novos');
+  assert.ok(porSubtipo('Demoníaco').length >= 10, 'poucos demônios');
+  assert.ok(porSubtipo('Angelical').length >= 10, 'poucos anjos');
+  assert.ok(espiritos.every((entrada) => entrada.conteudo.familia === 'espirito'));
+
+  // O Enoquiano é dos espíritos naturais; demônio fala Aramaico e anjo fala Hebraico.
+  const anjos = [...porSubtipo('Angelical'), porId.get('ezrakael'), porId.get('seraquiel')].filter(Boolean);
+  for (const anjo of anjos) {
+    assert.doesNotMatch(String(anjo.conteudo.descricao), /enoquiano/i, `${anjo.id}: anjo fala hebraico`);
+  }
+  for (const demonio of porSubtipo('Demoníaco')) {
+    assert.doesNotMatch(String(demonio.conteudo.descricao), /enoquiano|hebraico/i, `${demonio.id}: demônio fala aramaico`);
+  }
+  assert.ok(String(porId.get('ezrakael')?.conteudo.descricao).includes('hebraico'));
+  assert.ok(String(porId.get('belzarak')?.conteudo.descricao).includes('aramaico'));
+  assert.ok(String(porId.get('miraquel')?.conteudo.descricao).includes('hebraico'));
+});
+
+test('a descrição dos espíritos novos segue o tom da mesa', () => {
+  const novos = espiritosDasNaturezas();
+  assert.ok(novos.length >= 26);
+  for (const entrada of novos) {
+    const texto = [entrada.conteudo.descricao, ...(entrada.conteudo.habilidades || [])].join(' ');
+    assert.doesNotMatch(texto, /[–—]/, `${entrada.id}: travessão`);
+    assert.doesNotMatch(texto, /\beco\b/i, `${entrada.id}: "eco"`);
+    assert.doesNotMatch(texto, /\bnão (é|são|foi|era)\b[^.]*,\s*(é|são|foi|era)\b/i, `${entrada.id}: antítese`);
+    assert.doesNotMatch(texto, /Se [A-ZÁÉÍÓÚ][^.]* cair/, `${entrada.id}: "Se X cair" pede uma lenda no Livro da Verdade`);
+  }
+});

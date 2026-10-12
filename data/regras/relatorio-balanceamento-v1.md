@@ -78,11 +78,11 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 
 | Faixa de nível | Monstros | Vida mediana | Vida de inimigo padrão | Vida solo da curva |
 |---|---:|---:|---:|---:|
-| 1 a 10 | 43 | 140 | 330 | 265 |
-| 11 a 20 | 33 | 330 | 510 | 410 |
-| 21 a 30 | 31 | 600 | 1010 | 810 |
-| 31 a 40 | 24 | 900 | 1320 | 1055 |
-| 41 a 50 | 14 | 1395 | 1320 | 1320 |
+| 1 a 10 | 63 | 135 | 330 | 265 |
+| 11 a 20 | 67 | 330 | 510 | 410 |
+| 21 a 30 | 56 | 655 | 1010 | 810 |
+| 31 a 40 | 36 | 900 | 1320 | 1055 |
+| 41 a 50 | 20 | 1330 | 1320 | 1320 |
 
 ## Maiores danos do arsenal
 

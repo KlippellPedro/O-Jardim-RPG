@@ -85,6 +85,47 @@ test('o texto das partes novas segue o tom da mesa', () => {
   }
 });
 
+const RARIDADE_ALTA = ['raro', 'epico', 'lendario'];
+const TETO_DE_CHANCE: Record<string, number> = { raro: 40, epico: 30, lendario: 30 };
+const linhasDeEquipamento = Object.entries(tabelas.criaturas).flatMap(([criatura, tabela]) =>
+  tabela.itens
+    .map((linha) => ({ criatura, linha, item: porId.get(linha.item)! }))
+    .filter(({ item }) => item.tipo !== 'drop'),
+);
+
+test('a mesma linha não aparece duas vezes na tabela de uma criatura', () => {
+  for (const [criatura, tabela] of Object.entries(tabelas.criaturas)) {
+    const ids = tabela.itens.map((linha) => linha.item);
+    assert.equal(new Set(ids).size, ids.length, `${criatura} repete um item`);
+  }
+});
+
+test('equipamento raro ou melhor só cai de criatura à altura e com chance de tesouro, não de rotina', () => {
+  for (const { criatura, linha, item } of linhasDeEquipamento) {
+    const raridade = String(item.conteudo.raridade);
+    if (!RARIDADE_ALTA.includes(raridade)) continue;
+    const vd = Number(porId.get(criatura)!.conteudo.vd);
+    assert.ok(vd >= 13, `${criatura} (VD ${vd}) deixa ${item.id} (${raridade})`);
+    assert.ok(linha.chance <= TETO_DE_CHANCE[raridade], `${criatura}: ${item.id} com ${linha.chance}% passa do teto de ${raridade}`);
+  }
+});
+
+test('Relíquia da Criação, item Mítico e Fruto do Éden não caem de criatura nenhuma', () => {
+  for (const { criatura, item } of linhasDeEquipamento) {
+    assert.ok(!['fruto-eden', 'veiculo', 'veiculo-completo', 'propriedade'].includes(item.tipo), `${criatura}: ${item.id} (${item.tipo})`);
+    assert.ok(!['mitico', 'reliquia da criacao', 'reliquia'].includes(String(item.conteudo.raridade)), `${criatura}: ${item.id} é peça de Mestre`);
+  }
+});
+
+test('o saque inclui artefatos, armas, armaduras, modificações e implantes, não só material', () => {
+  const distintos = (tipo: string) => new Set(linhasDeEquipamento.filter(({ item }) => item.tipo === tipo).map(({ item }) => item.id)).size;
+  assert.ok(distintos('artefato') >= 12, 'poucos artefatos no saque');
+  assert.ok(distintos('arma') >= 20, 'poucas armas no saque');
+  assert.ok(distintos('armadura') >= 15, 'poucas armaduras no saque');
+  assert.ok(distintos('modificacao') >= 8, 'poucas modificações no saque');
+  assert.ok(distintos('implante') >= 2, 'poucos implantes no saque');
+});
+
 test('nenhum arquivo do site importa a tabela de loot', () => {
   const pendentes = ['src'];
   while (pendentes.length) {

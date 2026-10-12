@@ -11,16 +11,16 @@ import {
 import { itemCorrespondeBusca, itemCorrespondeSubfiltro, mapearItemLoja } from '../../src/services/lojaCatalogService.ts';
 
 test('compêndio publica todos os materiais e receitas sem chaves duplicadas', () => {
-  // 259 materiais de ofício e 147 partes de criatura (loot-*, ver data/bestiario/loot-criaturas.json).
-  assert.equal(MATERIAIS_CATALOGO.length, 406);
-  assert.equal(new Set(MATERIAIS_CATALOGO.map((item) => item.id)).size, 406);
+  // 259 materiais de ofício e 208 partes de criatura (loot-*, ver data/bestiario/loot-criaturas.json).
+  assert.equal(MATERIAIS_CATALOGO.length, 493);
+  assert.equal(new Set(MATERIAIS_CATALOGO.map((item) => item.id)).size, 493);
   assert.equal(RECEITAS_CATALOGO.length, 91);
   assert.equal(new Set(RECEITAS_CATALOGO.map((item) => item.chave)).size, 91);
 });
 
 test('Alquimista possui alternativas químicas nos patamares altos', () => {
   const quimicos = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('alquimia'));
-  assert.equal(quimicos.length, 75);
+  assert.equal(quimicos.length, 100);
   assert.ok(quimicos.every((item) => item.usos.every((uso) => uso === 'alquimia' || uso === 'forja')));
   assert.ok(quimicos.filter((item) => item.raridade === 'raro').length >= 10);
   assert.ok(quimicos.filter((item) => item.raridade === 'epico').length >= 6);
@@ -29,7 +29,7 @@ test('Alquimista possui alternativas químicas nos patamares altos', () => {
 
 test('Chef possui Mantimentos próprios em todas as raridades', () => {
   const mantimentos = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('cozinha'));
-  assert.equal(mantimentos.length, 58);
+  assert.equal(mantimentos.length, 59);
   for (const raridade of ['comum', 'incomum', 'raro', 'epico', 'lendario']) {
     assert.ok(mantimentos.some((item) => item.raridade === raridade), raridade);
   }
@@ -38,7 +38,7 @@ test('Chef possui Mantimentos próprios em todas as raridades', () => {
 
 test('Engenheiro possui Sucata própria nos cinco patamares', () => {
   const sucatas = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('engenharia'));
-  assert.equal(sucatas.length, 68);
+  assert.equal(sucatas.length, 74);
   for (const raridade of ['comum', 'incomum', 'raro', 'epico', 'lendario']) {
     assert.ok(sucatas.some((item) => item.raridade === raridade), raridade);
   }
@@ -47,7 +47,7 @@ test('Engenheiro possui Sucata própria nos cinco patamares', () => {
 
 test('Ritualista possui focos mágicos próprios nos cinco patamares', () => {
   const ritualisticos = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('ritual'));
-  assert.equal(ritualisticos.length, 106);
+  assert.equal(ritualisticos.length, 144);
   for (const raridade of ['comum', 'incomum', 'raro', 'epico', 'lendario']) {
     assert.ok(ritualisticos.filter((item) => item.raridade === raridade).length >= 6, raridade);
   }
@@ -70,7 +70,7 @@ test('catálogos de classe não dividem materiais entre si e Matéria-prima pode
   }
 
   const materiasPrimas = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('forja'));
-  assert.equal(materiasPrimas.filter((item) => item.usos.length === 1).length, 79);
+  assert.equal(materiasPrimas.filter((item) => item.usos.length === 1).length, 96);
   assert.ok(materiasPrimas.some((item) => item.usos.includes('alquimia')));
   assert.ok(materiasPrimas.some((item) => item.usos.includes('ritual')));
   assert.ok(materiasPrimas.some((item) => item.usos.includes('engenharia')));
