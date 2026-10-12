@@ -580,7 +580,7 @@ const curadoria = {
   'reliquia-coroa-primeiro-nome': {
     ...comum,
     atributos: artefato('Revela natureza', 'Resistência: Vontade'),
-    lore: 'Antes dos títulos, das máscaras e das línguas, alguma coisa chamou cada ser pela primeira vez. A Coroa guarda o eco desses chamados. Ela nunca serve na cabeça de ninguém, e o que acontece é o espaço em volta se entortar até fingir que a medida sempre esteve certa.',
+    lore: 'Antes dos títulos, das máscaras e das línguas, alguma coisa chamou cada ser pela primeira vez. A Coroa guarda a lembrança desses chamados. Ela nunca serve na cabeça de ninguém, e o que acontece é o espaço em volta se entortar até fingir que a medida sempre esteve certa.',
     descricao: 'A coroa reconhece a essência por trás de máscaras. Uma vez por cena, gaste uma Ação Padrão para escolher uma criatura percebida a até 12 m. Ela revela sua natureza sobrenatural geral; se tentar ocultá-la, faz Vontade contra a DT de efeito do portador. Sucesso impede a revelação, mas informa que houve resistência.',
     ativacao: 'Ação Padrão, alcance 12 m',
     frequencia: '1/cena',

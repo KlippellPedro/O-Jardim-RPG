@@ -16421,7 +16421,7 @@
       "id": "loot-elmo-vazio",
       "titulo": "Elmo Vazio",
       "conteudo": {
-        "descricao": "Um elmo que ecoa por dentro como poço fundo.",
+        "descricao": "Um elmo oco por dentro, fundo como um poço.",
         "preco": {
           "Solares": 5
         },
@@ -39642,7 +39642,7 @@
           "Imune a veneno, sono e medo"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "morto-vivo"
@@ -39702,7 +39702,7 @@
           "Corpo de Sal (Vulnerável a Água)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "morto-vivo"
@@ -40786,7 +40786,7 @@
           "Corpo de Lava (Resistência física 3; Vulnerável a Água)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental"
@@ -41140,7 +41140,7 @@
           "Presença Limpa (criaturas em alcance Curto não podem estar Envenenadas, e quem entrar na área encerra essa condição)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental"
@@ -41317,7 +41317,7 @@
           "Luz Apagada (a luz mundana em alcance Médio se apaga, assim como luz mágica de círculo 5 ou menor; Eclipse não é o Fluxo do Vazio)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 4,
+        "nivelMinimoLoja": 3,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental"
@@ -41494,7 +41494,7 @@
           "Dança dos Esporos (1/cena, Ação Padrão: criaturas em alcance Curto fazem Vontade DT 22 ou ficam Desorientadas até o fim do próximo turno delas)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "planta"
@@ -41673,7 +41673,7 @@
           "Corpo de Bosque (recupera Vida igual a um décimo do golpe dela no começo de cada turno, a menos que tenha sofrido fogo na rodada anterior)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 4,
+        "nivelMinimoLoja": 3,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "planta"
@@ -41791,7 +41791,7 @@
           "Arruaça (1/cena, Ação Padrão: criaturas em alcance Curto fazem Reflexos DT 19 ou ficam Caídas)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 1,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "feerico"
@@ -41909,7 +41909,7 @@
           "Voz do Fundo (Ação Padrão: uma criatura em alcance Médio que a ouça faz Vontade DT 23 ou caminha até a água mais próxima no próximo turno)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "feerico"
@@ -42029,7 +42029,7 @@
           "Corpo Coletivo (reduz em 4 o dano físico de cada golpe; não pode ser Agarrada)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 4,
+        "nivelMinimoLoja": 3,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "feerico"
@@ -42802,7 +42802,7 @@
           "Rede de Captura (1/cena, Ação Padrão: lança uma rede; Reflexos DT 19 ou o alvo fica Agarrado)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 1,
         "papel": "solo",
         "geradoPorFamilia": true
       }
@@ -42979,7 +42979,7 @@
           "Caldeirão (fora de combate, prepara um consumível Comum em uma hora)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true
       }
@@ -43037,7 +43037,7 @@
           "Abordar! (1/cena, Ação de Movimento: salta até 6 m para um veículo adjacente ou uma criatura em alcance Curto; o próximo ataque tem vantagem)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true
       }
@@ -43095,7 +43095,7 @@
           "Voto de Cavalaria (recebe +2 de Defesa enquanto houver um aliado ou inocente sob sua proteção em alcance Curto)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true
       }
@@ -43154,7 +43154,7 @@
           "Mãos Rápidas (1/rodada: ao acertar o Punho de Ferro, faz um Pontapé Giratório contra o mesmo alvo; isso não concede ações extras)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true
       }
@@ -43213,7 +43213,7 @@
           "Fé Cega (imune a Amedrontado)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true
       }
@@ -43391,7 +43391,7 @@
           "Retirada Ordenada (1/cena, Reação: ele e os aliados a até 9 m se movem metade do Movimento sem provocar ataques)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 4,
+        "nivelMinimoLoja": 3,
         "papel": "chefe",
         "geradoPorFamilia": true
       }
@@ -43870,7 +43870,7 @@
           "Veneno do Ferrão (quem sofrer o Ferrão faz Fortitude DT 20 ou fica Envenenado por 1 hora)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 1,
         "papel": "solo",
         "geradoPorFamilia": true
       }
@@ -43928,7 +43928,7 @@
           "Corrosão (a arma de metal que o acerta em corpo a corpo fica com -1 de dano até ser reparada; uma vez por arma)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 1,
         "papel": "solo",
         "geradoPorFamilia": true
       }
@@ -44103,7 +44103,7 @@
           "Mergulho (1/cena, Ação de Movimento: se descer pelo menos 9 m em linha reta, o próximo ataque causa dano extra igual a um quinto do golpe)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true
       }
@@ -44162,7 +44162,7 @@
           "Maldição da Mordida (a criatura mordida faz Fortitude DT 24 ou fica Enfraquecida até o fim da cena)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true
       }
@@ -44220,7 +44220,7 @@
           "Chuva de Espinhos (1/cena, Ação Padrão: criaturas num cone de 9 m fazem Reflexos DT 25 ou sofrem o dano de um ataque dela)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true
       }
