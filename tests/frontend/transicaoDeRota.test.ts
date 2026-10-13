@@ -22,10 +22,8 @@ test('navegar por dentro do Mundo não refaz a tela (o estado da MundoPage fica)
   }
 });
 
-test('o calendário e o Livro da Verdade são telas próprias dentro de /mundo', () => {
+test('o calendário é tela própria dentro de /mundo', () => {
   assert.notEqual(chaveDeTransicao('/mundo/calendario'), chaveDeTransicao('/mundo'));
-  assert.notEqual(chaveDeTransicao('/mundo/livro-da-verdade'), chaveDeTransicao('/mundo'));
-  assert.notEqual(chaveDeTransicao('/mundo/calendario'), chaveDeTransicao('/mundo/livro-da-verdade'));
 });
 
 test('as regras separam o livro de um item aberto', () => {

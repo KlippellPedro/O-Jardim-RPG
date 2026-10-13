@@ -69,27 +69,6 @@ export interface EntidadeIniciativa {
   faseAnuncio?: string;
 }
 
-/** Uma lenda do Bestiário que caiu nesta sessão: a mesa inteira ouve a manchete. */
-export interface AvisoDeLenda {
-  chave: string;
-  id: string;
-  nome: string;
-  epiteto: string;
-  consequencia: string;
-}
-
-/** Lendas que caíram entre duas leituras do estado. A primeira leitura da sessão nunca avisa. */
-export function avisosDeLendaNova(
-  antes: Array<{ id: string }> | null,
-  depois: Array<{ id: string; nome: string; epiteto: string; consequencia: string }>,
-): AvisoDeLenda[] {
-  if (antes === null) return [];
-  const conhecidas = new Set(antes.map((lenda) => lenda.id));
-  return depois
-    .filter((lenda) => !conhecidas.has(lenda.id))
-    .map((lenda) => ({ chave: `lenda:${lenda.id}`, id: lenda.id, nome: lenda.nome, epiteto: lenda.epiteto, consequencia: lenda.consequencia }));
-}
-
 /** Aviso de que um chefe entrou numa fase nova. O Mestre vê as mudanças; a mesa, só a frase de cena. */
 export interface AvisoDeFase {
   chave: string;
@@ -228,10 +207,6 @@ interface SessaoState {
   /** O 20 e o 1 natural de quem rolou na mesa ao vivo, ainda na tela (só o mais recente). */
   destaquesDaMesa: DestaqueDaMesa[];
   dispensarDestaque: (chave: string) => void;
-  /** Lendas que já caíram nesta sessão (null antes da primeira leitura) e os avisos ainda na tela. */
-  lendasDaSessao: Array<{ id: string; nome: string; epiteto: string; consequencia: string }> | null;
-  avisosDeLenda: AvisoDeLenda[];
-  dispensarAvisoDeLenda: (chave: string) => void;
   turnoAtualIndex: number;
   turnoAtualId: string | null;
   emCombate: boolean;
@@ -304,9 +279,6 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
   dispensarAvisoDeCombate: (chave) => set((estado) => ({ avisosDeCombate: estado.avisosDeCombate.filter((aviso) => aviso.chave !== chave) })),
   destaquesDaMesa: [],
   dispensarDestaque: (chave) => set((estado) => ({ destaquesDaMesa: estado.destaquesDaMesa.filter((destaque) => destaque.chave !== chave) })),
-  lendasDaSessao: null,
-  avisosDeLenda: [],
-  dispensarAvisoDeLenda: (chave) => set((estado) => ({ avisosDeLenda: estado.avisosDeLenda.filter((aviso) => aviso.chave !== chave) })),
   turnoAtualIndex: 0,
   turnoAtualId: null,
   emCombate: false,
@@ -405,8 +377,6 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
       if (response?.sessao) {
         const participantes = mapParticipantes(response.participantes);
         const novosAvisos = avisosDeFaseNova(get().iniciativa, participantes);
-        const lendas = response.lendas ?? [];
-        const lendasNovas = avisosDeLendaNova(get().sessaoId === response.sessao.id ? get().lendasDaSessao : null, lendas);
         // Início de combate, rodada nova e fim: só a transição vista com a página aberta anuncia.
         const anterior = get();
         const mudancaDoCombate = mudancaDeCombate(
@@ -424,8 +394,6 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
         set({
           avisosDeCombate: avisoDeCombate ? [avisoDeCombate] : get().avisosDeCombate,
           avisosDeFase: novosAvisos.length ? [...get().avisosDeFase, ...novosAvisos] : get().avisosDeFase,
-          lendasDaSessao: lendas,
-          avisosDeLenda: lendasNovas.length ? [...get().avisosDeLenda, ...lendasNovas] : get().avisosDeLenda,
           sessaoId: response.sessao.id,
           sessaoStatus: response.sessao.status,
           tituloSessao: response.sessao.titulo ?? 'Sessão ao vivo',
@@ -457,8 +425,6 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
         iniciativa: [],
         avisosDeFase: [],
         avisosDeCombate: [],
-        avisosDeLenda: [],
-        lendasDaSessao: null,
         turnoAtualIndex: 0,
         turnoAtualId: null,
         emCombate: false,

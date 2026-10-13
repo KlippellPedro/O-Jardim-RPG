@@ -8,7 +8,7 @@
  *   nível 5   O Moinho da Terceira Roda     relógio, conflito social, escolha sem vilão
  *   nível 12  O Leilão da Casa Vazia        infiltração, perseguição a pé, mercadoria quente
  *   nível 30  O Redemoinho de Caribdis      viagem de navio, criatura única com fases
- *   nível 45  A Queda do Leviatã Espelhado  Livro da Verdade, manchete e selos de lenda
+ *   nível 45  A Queda do Leviatã Espelhado  lenda do Bestiário, fases de chefe e consequência da queda
  *
  * Nada aqui vira lore canônica: são casos locais, que cabem em qualquer campanha
  * com uma estrada, um porto ou uma cidade. As fichas de criatura inventadas saem
@@ -520,7 +520,7 @@ const leviata1 = () => `
     <h1>A Queda do Leviatã Espelhado</h1>
     <div class="selo">Nível 45 · uma sessão</div>
   </div>
-  <p class="linha-fina">Cinco horas · três a cinco jogadores · um cais de águas profundas · DT Padrão 37 · lenda do Bestiário: Vaelthor (VD 45) · abre uma página do Livro da Verdade</p>
+  <p class="linha-fina">Cinco horas · três a cinco jogadores · um cais de águas profundas · DT Padrão 37 · lenda do Bestiário: Vaelthor (VD 45)</p>
 
   ${leitura(
     'Cais de Vidro tem esse nome porque, de manhã cedo, o mar deita no porto como uma lâmina e devolve o céu inteiro. Hoje o céu devolvido tem estrelas, e é meio-dia. Os pescadores sentaram nas caixas de isca e olham para baixo. Uma astrônoma de casaco de couro pergunta, sem se apresentar: “Os senhores vão matá-lo? Eu gostaria de uma semana antes.”',
@@ -629,23 +629,16 @@ const leviata4 = () => `
 <section class="folha">
   <div class="topo">
     <h1>Cena 4 · O céu verdadeiro</h1>
-    <div class="selo">A queda e o Livro da Verdade</div>
+    <div class="selo">A queda</div>
   </div>
 
   ${leitura(
     'A serpente afunda devagar, e as estrelas do mar vão se apagando uma por uma, até restar só o azul. O mar do Cais de Vidro está liso, com o céu de cima dentro dele, e é a primeira vez em anos que os pescadores veem o próprio sol na água. A astrônoma chora sem barulho. Alguém, lá atrás, começa a rir.',
   )}
 
-  <h2>O que a Sessão faz sozinha</h2>
-  <p>Quando a Vida de Vaelthor chega a 0 na Sessão, o servidor registra a queda. Você não precisa fazer nada, mas vale saber o que a mesa vai ver:</p>
-  <ul>
-    <li>A mesa inteira recebe um aviso na tela: <em>Uma lenda caiu</em>, com a consequência (“o mar passou a refletir o céu verdadeiro, e as estrelas de outro universo sumiram da água”) e um link para o Livro da Verdade.</li>
-    <li>A página de Vaelthor abre no Livro, com a verdade sobre ele: a janela por onde outro universo olhava o nosso mar.</li>
-    <li>O calendário do mundo ganha um acontecimento aberto, no dia de hoje: <strong>A queda de Vaelthor</strong>.</li>
-    <li>No Discord, o Jornalista publica a manchete, com o nome de quem estava na mesa.</li>
-    <li>Quem estava na mesa recebe o selo <strong>Matador de Vaelthor</strong>, na próxima vez que abrir a ficha.</li>
-  </ul>
-  <p><small>Se foi um engano, o Mestre desfaz a queda no próprio Livro, em <em>Mundo, Livro da Verdade</em>. Se o grupo preferiu recuar, nada disso acontece.</small></p>
+  <h2>Depois da queda</h2>
+  <p>A Sessão não registra nada sozinha quando a Vida de Vaelthor chega a 0. O que muda no mundo é com você, e a consequência que a história sugere é esta: o mar passou a refletir o céu verdadeiro, e as estrelas de outro universo sumiram da água.</p>
+  <p>Se quiser marcar o momento, anote um acontecimento no calendário do mundo, no dia de hoje, com o título <strong>A queda de Vaelthor</strong>, e decida quem da mesa ouve a notícia primeiro.</p>
 
   <h2>Desfechos</h2>
   <table>

@@ -15,7 +15,6 @@ from core import calendario as regras
 from core.calendario import ErroCalendario
 from core.dependencies import AuthenticatedUser
 from routers import calendario as roteador
-from routers import livro_da_verdade as livro
 
 
 class BancoFalso:
@@ -80,54 +79,6 @@ class CalendarioPublicaNoCanalAoVivoTests(unittest.TestCase):
         _, kwargs = self.publicar.call_args
         self.assertEqual(self.publicar.call_args.args[2], 0)
         self.assertNotIn("detalhes", kwargs)
-
-
-class LivroDaVerdadePublicaTests(unittest.TestCase):
-    """A queda de uma lenda mexe no calendário (marco do dia e efeitos, como a estação forçada)."""
-
-    def setUp(self):
-        self.campanha = uuid4()
-        self.banco = BancoFalso()
-        self.banco.conexao.execute.return_value.fetchone.return_value = None
-        patches = [
-            mock.patch.object(livro, "require_campaign_master"),
-            mock.patch.object(livro, "record_audit"),
-            mock.patch.object(livro.lendas, "registrar_queda"),
-            mock.patch.object(livro.lendas, "grupo_da_campanha", return_value=[]),
-            mock.patch.object(livro.lendas, "livro", return_value={"paginas": []}),
-            mock.patch.object(livro.lendas, "desfazer_queda", return_value=1),
-            mock.patch.object(livro.lendas, "por_id", return_value={"anzhur": {"id": "anzhur", "nome": "Anzhur"}}),
-        ]
-        for patch in patches:
-            patch.start()
-            self.addCleanup(patch.stop)
-        publicar = mock.patch.object(livro.live_session, "publicar")
-        self.publicar = publicar.start()
-        self.addCleanup(publicar.stop)
-
-    def test_marcar_a_queda_avisa(self):
-        resposta = livro.marcar_queda(self.campanha, "anzhur", usuario(), self.banco)
-        self.assertEqual(resposta, {"paginas": []})
-        self.publicar.assert_called_once_with(self.campanha, "calendario", 0)
-
-    def test_desfazer_a_queda_avisa(self):
-        resposta = livro.desfazer_queda(self.campanha, "anzhur", usuario(), self.banco)
-        self.assertEqual(resposta, {"paginas": []})
-        self.publicar.assert_called_once_with(self.campanha, "calendario", 0)
-
-    def test_desfazer_o_que_nao_caiu_nao_avisa(self):
-        livro.lendas.desfazer_queda.return_value = 0
-        with self.assertRaises(HTTPException) as erro:
-            livro.desfazer_queda(self.campanha, "anzhur", usuario(), self.banco)
-        self.assertEqual(erro.exception.status_code, 404)
-        self.publicar.assert_not_called()
-
-    def test_marcar_queda_que_ja_existe_nao_avisa(self):
-        self.banco.conexao.execute.return_value.fetchone.return_value = {"um": 1}
-        with self.assertRaises(HTTPException) as erro:
-            livro.marcar_queda(self.campanha, "anzhur", usuario(), self.banco)
-        self.assertEqual(erro.exception.status_code, 409)
-        self.publicar.assert_not_called()
 
 
 if __name__ == "__main__":

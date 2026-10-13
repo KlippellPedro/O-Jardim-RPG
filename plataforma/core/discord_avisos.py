@@ -24,8 +24,7 @@ AVISOS_PADRAO: dict[str, bool] = {
     "liberacao": True,
     "critico": False,
     "mural": False,
-    "manchete": True,
-    # Destaques da mesa: o jogador subiu de nível ou ganhou um selo (nunca selo secreto).
+    # Destaques da mesa: o jogador subiu de nível ou ganhou um selo.
     "nivel": True,
     "selo": True,
 }
@@ -36,9 +35,8 @@ ROTULOS_AVISO: dict[str, str] = {
     "liberacao": "O Mestre liberou algo",
     "critico": "Crítico na mesa (20 natural)",
     "mural": "Novidades do mural",
-    "manchete": "Manchete quando uma lenda cai",
     "nivel": "Destaque: personagem subiu de nível",
-    "selo": "Destaque: personagem ganhou um selo (os secretos nunca saem)",
+    "selo": "Destaque: personagem ganhou um selo",
 }
 
 
@@ -49,8 +47,7 @@ CATEGORIA_DISCORD: dict[str, str] = {
     "critico": "sessao",
     "liberacao": "liberacao",
     "mural": "liberacao",
-    # Vai para o canal de notícias do Jornalista (/jornal canal categoria:noticia).
-    "manchete": "noticia",
+    # Vão para o canal de notícias do Jornalista (/jornal canal categoria:noticia).
     "nivel": "noticia",
     "selo": "noticia",
 }

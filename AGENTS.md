@@ -30,10 +30,6 @@ Regras essenciais:
   lê a tabela (com a chance de cada linha) pela rota
   `GET /registros-universais/{campanha}/loot/{criatura}`, por decisão do Pedro em
   2026-10-11; o que caiu de verdade numa cena continua só do Mestre.
-- `data/bestiario/lendas-v1.json` (Livro da Verdade: a verdade, a consequência e a
-  manchete de cada uma das 28 lendas) também é só do servidor: o texto de uma lenda
-  que ainda está de pé é segredo da mesa. Os selos "Matador de ..." ficam fora do
-  manifest de voz do Sábio pelo mesmo motivo.
 - `data/bestiario/deidades-v1.json` (fichas das Deidades) também é só do
   servidor e só chega a quem comanda a mesa; o campo Estado revela segredos de
   lore. O texto de referência é a seção "Fichas das Deidades" do Guia do Mestre.

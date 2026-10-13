@@ -3340,8 +3340,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Conte ações, não corpos. As ações inimigas por rodada devem ficar perto das ações relevantes do grupo, um pouco abaixo ou um pouco acima.</li>
         <li>Chefe sozinho precisa de reação, fase ou ação de cenário. Chefe que só tem Vida alta produz um combate longo e parado.</li>
         <li>Toda criatura única do Bestiário já traz as fases escritas. Na Sessão, quando a Vida do chefe cai ao limiar da fase, ela muda sozinha: você vê o que mudou, a mesa lê só a frase de cena, e a fase não volta atrás quando alguém cura o chefe. Dá para trocar a fase à mão no editor da criatura.</li>
-        <li>As 28 criaturas lendárias do Bestiário (as que trazem "Se X cair" na ficha) abrem uma página no Livro da Verdade, no Mundo, quando chegam a 0 de Vida na Sessão. Na primeira queda de cada lenda na campanha, a consequência entra no calendário como acontecimento aberto no dia de hoje, o Jornalista publica a manchete no Discord e a mesa recebe um aviso. Quem estava na cena ganha o selo "Matador de" daquela lenda, e quem encara uma Deidade pela primeira vez ganha "Cara a Cara com um Deus". Até a queda, a mesa só enxerga páginas rasuradas, e você vê todas. Se o dano foi um engano, ou se a lenda caiu fora da Sessão, o próprio Livro permite desfazer a queda ou marcá-la à mão. A manchete já publicada não volta atrás.</li>
-        <li>Cinco lendas deixam um efeito de verdade por alguns meses de calendário. Hiemark força o inverno por três meses. Ignarrak, Anzhur e Marenostra encarecem 10% uma classe de itens na Loja do site (equipamentos, artefatos e veículos, respectivamente), e Mareia barateia veículos em 10%. O efeito aparece no calendário, na página do Livro e no cartão do item na Loja, e desfazer a queda também o desfaz. O calendário só reflete a estação: o clima e o preço do Discord continuam sendo decisão sua.</li>
+        <li>As 28 criaturas lendárias do Bestiário (as que trazem "Se X cair" na ficha) não disparam nada sozinhas quando chegam a 0 de Vida: o que muda no mundo com a queda, e quem fica sabendo, é decisão sua.</li>
         <li>Terreno, cobertura e objetivo existem para mudar decisão, não para conceder mais um bônus numérico.</li>
         <li>Nunca tire o turno inteiro de um jogador por mais de uma rodada seguida. Ficar olhando não é jogar.</li>
       </ul>
@@ -3355,7 +3354,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>O Moinho da Terceira Roda</td><td>5</td><td>Uma escolha sem vilão: quem perde o quê quando ninguém quer ser o culpado.</td></tr>
           <tr><td>O Leilão da Casa Vazia</td><td>12</td><td>Infiltração, perseguição pelos telhados e mercadoria quente (o Calor do Discord).</td></tr>
           <tr><td>O Redemoinho de Caribdis</td><td>30</td><td>Viagem de navio e criatura única com fases, com a saída que o Bestiário já escreveu.</td></tr>
-          <tr><td>A Queda do Leviatã Espelhado</td><td>45</td><td>Lenda do Bestiário: a Sessão avisa as fases, abre a página no Livro da Verdade e dá o selo.</td></tr>
+          <tr><td>A Queda do Leviatã Espelhado</td><td>45</td><td>Lenda do Bestiário: a Sessão avisa as fases, e a consequência da queda fica por sua conta.</td></tr>
         </tbody>
       </table></div>
       <p>Há também o <strong>Arco da Malha</strong>, de cinco sessões, para personagens de nível 40 a 55. Ele é só do Mestre e revela o que a mesa ainda não sabe, então fica separado das aventuras e não deve ser impresso para os jogadores. A regra de Dádivas e oferendas (capítulo Frutos do Éden e Implantes) é o gancho natural da primeira sessão do arco.</p>

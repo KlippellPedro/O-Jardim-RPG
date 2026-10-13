@@ -162,14 +162,6 @@ class DestaquesBancoTests(unittest.TestCase):
         self.assertIn("primeira_rolagem", resultado["novas"])
         self.assertEqual(self._avisos(), [])
 
-    def test_selo_da_deidade_nunca_sai_porque_entrega_lore(self):
-        selo = conquistas.SELO_DA_DEIDADE
-        self.assertFalse(selo.secreta)  # não é secreto na ficha, mas o canal não pode saber
-        personagem_id = self._personagem(self.jogador_id)
-        with self.database.connection() as connection:
-            conquistas._anunciar_selos(connection, personagem_id, [selo])
-        self.assertEqual(self._avisos(), [])
-
     def test_selo_de_nivel_nao_duplica_o_destaque_de_nivel(self):
         personagem_id = self._personagem(self.jogador_id, ficha={"nivel": 10})
         with self.database.connection() as connection:
@@ -190,14 +182,6 @@ class DestaquesBancoTests(unittest.TestCase):
         self._registro(personagem_id, self.jogador_id, n=200)
         with self.database.connection() as connection:
             conquistas.avaliar(connection, personagem_id)
-        self.assertEqual(self._avisos(), [])
-
-    def test_selo_secreto_nunca_sai(self):
-        secretos = [c for c in conquistas.CATALOGO if c.secreta]
-        self.assertTrue(secretos, "o catálogo precisa ter selos secretos para este teste")
-        personagem_id = self._personagem(self.jogador_id)
-        with self.database.connection() as connection:
-            conquistas._anunciar_selos(connection, personagem_id, secretos)
         self.assertEqual(self._avisos(), [])
 
     # ── nível ───────────────────────────────────────────────────────────────

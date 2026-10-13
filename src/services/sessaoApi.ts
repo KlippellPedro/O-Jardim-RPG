@@ -195,19 +195,9 @@ export interface SessaoResponse {
     turno_de: null | { id: string | null; nome: string; indice: number };
   };
   participantes: SessaoParticipanteResponse[];
-  /** Lendas que caíram nesta sessão (Livro da Verdade). A mesa inteira recebe. */
-  lendas?: LendaCaidaResponse[];
   meu_papel: string;
   comando: boolean;
   bloqueada: boolean;
-}
-
-export interface LendaCaidaResponse {
-  id: string;
-  nome: string;
-  epiteto: string;
-  consequencia: string;
-  em: string;
 }
 
 export interface ResumoDestaque {

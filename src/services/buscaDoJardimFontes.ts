@@ -66,7 +66,6 @@ export function atalhosDaBusca(contexto: ContextoDaBusca): EntradaDaBusca[] {
     if (paginaVisivel(config.calendario_oculto, isMestre)) {
       atalhos.push(atalho('/mundo/calendario', 'Calendário do Mundo', 'Estações, Lua e acontecimentos', ['calendario', 'estacao', 'lua', 'data']));
     }
-    atalhos.push(atalho('/mundo/livro-da-verdade', 'Livro da Verdade', 'As lendas e o que muda quando caem', ['lendas', 'verdade']));
   }
   if (paginaVisivel(config.cronologia_geral_oculta, isMestre)) {
     atalhos.push(atalho('/mundo/cronologia', 'Linha do tempo do Jardim', 'A história geral', ['cronologia', 'historia', 'tempo']));

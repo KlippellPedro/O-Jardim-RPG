@@ -1,6 +1,17 @@
 {
   "itens": [
     {
+      "id": "2026-10-12-livro-da-verdade-saiu",
+      "data": "2026-10-12",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "O Livro da Verdade saiu do site",
+      "detalhes": [
+        "A página das lendas, os selos Matador de Lendas e Cara a Cara com um Deus e os avisos de queda foram retirados. As lendas continuam no Bestiário, com a frase \"Se X cair\" na ficha, e o que muda no mundo quando uma cai passa a ser decisão do Mestre.",
+        "Os acontecimentos que as quedas tinham deixado no calendário, os ajustes de preço na Loja e os selos já ganhos foram apagados junto."
+      ]
+    },
+    {
       "id": "2026-10-12-animalia-arma-natural-automatica",
       "data": "2026-10-12",
       "tipo": "novo",
@@ -242,18 +253,6 @@
         "A aba Descanso agora cuida só de recuperação, em três passos: como foi a pausa, o que aconteceu durante ela e a conferência do resultado. A prévia mostra, para cada recurso, quanto você tem e quanto vai ter antes de aplicar.",
         "Condições e aflições ganharam a aba Condições, ao lado do Descanso. Lá ficam as condições em vigor, o catálogo para aplicar, as crises de Sanidade e, em outro painel, as aflições (venenos, doenças e vícios) com o catálogo completo.",
         "Ao aplicar uma condição, ela aparece na hora em Em vigor agora, sem sair da página. Tocar de novo no cartão remove."
-      ]
-    },
-    {
-      "id": "2026-10-10-livro-da-verdade-cronista",
-      "data": "2026-10-10",
-      "tipo": "melhoria",
-      "area": "Mundo",
-      "titulo": "Livro da Verdade reescrito e mais fácil de ler",
-      "detalhes": [
-        "Cada página agora é o registro de um cronista: o que se viu depois da queda, com data, número e o detalhe estranho que ninguém explica.",
-        "Embaixo do registro vem a lista completa do que muda no mundo e na mesa, e o que muda na Loja e no calendário, com valor e duração.",
-        "O livro abre com um sumário ao lado. As páginas que ainda não abriram continuam rasuradas."
       ]
     },
     {
@@ -546,28 +545,6 @@
       "detalhes": [
         "Comprar ou contratar uma criatura do Bestiário de VD 50 em diante passou a custar Fragmentos de Estrela, na medida do que um grupo do nível ganha por sessão. Antes todas custavam o mesmo preço, do nível 50 ao 500.",
         "As tabelas de contratação do livro também ganharam degraus a partir do nível 100. Ajudante de nível muito alto deixou de custar troco."
-      ]
-    },
-    {
-      "id": "2026-10-04-livro-da-verdade",
-      "data": "2026-10-04",
-      "tipo": "novo",
-      "area": "Mundo",
-      "titulo": "Livro da Verdade: cada lenda guarda uma página",
-      "detalhes": [
-        "Quando uma lenda do Bestiário cai na Sessão, a página dela abre no Mundo, com a verdade sobre ela e o que mudou no mundo. Até lá, a página fica rasurada.",
-        "A queda também vira um acontecimento no calendário, e o Jornalista publica a manchete no Discord."
-      ]
-    },
-    {
-      "id": "2026-10-04-matador-de-lendas",
-      "data": "2026-10-04",
-      "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Selos de Matador de Lendas",
-      "detalhes": [
-        "Quem estava na mesa quando uma lenda caiu ganha o selo dela. Os nomes só aparecem depois da queda.",
-        "Também há um selo para o primeiro encontro do grupo com uma Deidade."
       ]
     },
     {
@@ -923,6 +900,31 @@
       "titulo": "Relíquias da Criação bem mais fortes",
       "detalhes": [
         "As armas das Relíquias da Criação passaram a causar 2,5 vezes o dano de antes, e os poderes com dado cresceram na mesma medida. Elas continuam precisando da autorização do Mestre, e agora fazem jus ao nome."
+      ]
+    },
+    {
+      "id": "2026-09-29-niveis-alem-do-60",
+      "data": "2026-09-29",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Níveis além do 60",
+      "detalhes": [
+        "O 60 continua sendo o padrão do jogo (duas classes comuns e uma especial), mas a ficha não trava mais: dá para passar do 60, abrir mais classes e subir uma classe até o nível 50.",
+        "Do nível 21 ao 50 de uma classe entra a Maestria: reforço de Vida, Mana e Estamina nos níveis 25, 35 e 45 e um grau de perícia extra nos 30, 40 e 50.",
+        "O XP não tem mais fim. Até o 100 é a conta de sempre, e depois cada faixa custa um valor fixo: 100 mil, 150 mil, 250 mil e 500 mil por nível.",
+        "Legado, aumento de atributo e vaga de item especial passam a vir mais espaçados depois do 50 e do 100. O limite natural 20 de atributo acabou, e os bônus de raça também não têm mais teto.",
+        "Os patamares 60, 100, 150, 250 e 500 ganharam Conquista, selo na ficha e moldura nova no retrato e no cartaz de Procurado. O aviso aparece uma vez e some sozinho.",
+        "O painel de subida de nível agora avisa Legado, aumento de atributo e vaga de item especial, e o Grande Sábio fala os níveis mais altos."
+      ]
+    },
+    {
+      "id": "2026-09-29-cartaz-molduras",
+      "data": "2026-09-29",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "As molduras do cartaz de Procurado voltaram",
+      "detalhes": [
+        "A borda colorida que acompanha o nível do personagem (de Bronze a Lendário) não estava aparecendo no cartaz. Agora aparece, junto com as molduras novas dos patamares."
       ]
     }
   ]

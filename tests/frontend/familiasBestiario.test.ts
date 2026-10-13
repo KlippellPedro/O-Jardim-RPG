@@ -177,7 +177,7 @@ test('--acrescentar só grava o que falta e nunca mexe numa ficha que já existe
 });
 
 /** Criaturas antigas que também levam a marca Angelical ou Demoníaco (para o filtro do Bestiário achar todas), mas não são
- * dos 26 espíritos escritos para as três Naturezas: duas são lendas do Livro da Verdade, uma é Invocação e uma é Aberração. */
+ * dos 26 espíritos escritos para as três Naturezas: duas são criaturas lendárias, uma é Invocação e uma é Aberração. */
 const ANTIGOS_COM_MARCA_DE_NATUREZA = ['anjo-guardiao', 'ezrakael', 'seraquiel', 'demonio-menor'];
 const espiritosDasNaturezas = () => monstros.filter((entrada) => ['Natural', 'Demoníaco', 'Angelical'].includes(entrada.conteudo.subtipo) && !ANTIGOS_COM_MARCA_DE_NATUREZA.includes(entrada.id));
 
@@ -211,6 +211,5 @@ test('a descrição dos espíritos novos segue o tom da mesa', () => {
     assert.doesNotMatch(texto, /[–—]/, `${entrada.id}: travessão`);
     assert.doesNotMatch(texto, /\beco\b/i, `${entrada.id}: "eco"`);
     assert.doesNotMatch(texto, /\bnão (é|são|foi|era)\b[^.]*,\s*(é|são|foi|era)\b/i, `${entrada.id}: antítese`);
-    assert.doesNotMatch(texto, /Se [A-ZÁÉÍÓÚ][^.]* cair/, `${entrada.id}: "Se X cair" pede uma lenda no Livro da Verdade`);
   }
 });

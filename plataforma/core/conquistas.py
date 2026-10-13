@@ -11,11 +11,8 @@ tela não guarda cópia. Ao criar uma conquista nova, rode também
 
 from __future__ import annotations
 
-import json
 import logging
 from dataclasses import asdict, dataclass
-from functools import lru_cache
-from pathlib import Path
 
 from core.discord_avisos import avisar_discord, texto_selo
 
@@ -31,8 +28,6 @@ class Conquista:
     minimo: int
     raridade: str  # comum | rara | lendaria
     icone: str
-    # Selo escondido: enquanto não sai, a tela só vê "uma lenda por derrubar", sem nome nem pista.
-    secreta: bool = False
 
 
 CATALOGO: tuple[Conquista, ...] = (
@@ -89,63 +84,7 @@ CATALOGO: tuple[Conquista, ...] = (
 )
 
 
-
-def _data_root() -> Path:
-    """Mesma resolução de plataforma/main.py. Este arquivo também é lido sozinho por
-    tools/gerar-voz-sabio.py, então não importa nenhum outro módulo do pacote."""
-    app_root = Path(__file__).resolve().parent.parent
-    local = app_root / "data"
-    return local if local.exists() else app_root.parent / "data"
-
-
-@lru_cache(maxsize=1)
-def carregar_lendas() -> tuple[dict, ...]:
-    """As lendas do Livro da Verdade (data/bestiario/lendas-v1.json, só do servidor)."""
-    try:
-        dados = json.loads((_data_root() / "bestiario" / "lendas-v1.json").read_text(encoding="utf-8")).get("lendas", [])
-    except (OSError, json.JSONDecodeError):
-        return ()
-    return tuple(item for item in dados if isinstance(item, dict) and item.get("id") and item.get("nome"))
-
-
-def chave_do_selo(monstro_id: str) -> str:
-    return f"matador_{str(monstro_id).replace('-', '_')}"
-
-
-# Um selo "Matador de ..." por lenda, mais um para o primeiro encontro com uma Deidade.
-# Quem estava na mesa quando a lenda caiu ganha o selo (core/lendas.py grava a queda).
-SELOS_DAS_LENDAS: tuple[Conquista, ...] = tuple(
-    Conquista(
-        chave_do_selo(lenda["id"]),
-        f"Matador de {lenda['nome']}",
-        f"Esteja na mesa quando {lenda['nome']}, {lenda['epiteto']}, cair.",
-        f"lenda:{lenda['id']}",
-        1,
-        "lendaria",
-        "lenda",
-        secreta=True,
-    )
-    for lenda in sorted(carregar_lendas(), key=lambda item: (item.get("vd") or 0, item["nome"]))
-)
-SELO_DA_DEIDADE = Conquista(
-    "cara_a_cara_com_um_deus",
-    "Cara a Cara com um Deus",
-    "Esteja na mesa quando o grupo encara uma Deidade pela primeira vez.",
-    "deidades_encaradas",
-    1,
-    "lendaria",
-    "olho",
-)
-
-CATALOGO = CATALOGO + (SELO_DA_DEIDADE,) + SELOS_DAS_LENDAS
-
 POR_CHAVE = {conquista.chave: conquista for conquista in CATALOGO}
-
-MASCARA_DO_SELO_SECRETO = {
-    "nome": "Lenda por derrubar",
-    "descricao": "Cada lenda do Jardim guarda um selo, e o nome dele só aparece depois que ela cai.",
-}
-
 
 def _inteiro(valor) -> int:
     if isinstance(valor, bool) or not isinstance(valor, (int, float)):
@@ -199,22 +138,7 @@ def metricas(connection, personagem_id) -> dict[str, int]:
         (personagem_id,),
     ).fetchone()
 
-    from psycopg.types.json import Jsonb  # import tardio: tools/gerar-voz-sabio.py lê este arquivo sem o psycopg
-
-    valores_das_lendas: dict[str, int] = {}
-    encaradas = 0
-    for linha in connection.execute(
-        "SELECT monstro_id, tipo FROM campanha_lendas WHERE personagens @> %s",
-        (Jsonb([{"id": str(personagem_id)}]),),
-    ).fetchall():
-        if linha["tipo"] == "queda":
-            valores_das_lendas[f"lenda:{linha['monstro_id']}"] = 1
-        else:
-            encaradas = 1
-
     return {
-        **valores_das_lendas,
-        "deidades_encaradas": encaradas,
         "rolagens": int(registros["rolagens"]),
         "criticos": int(registros["criticos"]),
         "falhas": int(registros["falhas"]),
@@ -229,15 +153,11 @@ def metricas(connection, personagem_id) -> dict[str, int]:
 
 
 def _anunciar_selos(connection, personagem_id, selos: list) -> None:
-    """Destaque da mesa no Discord: só selos públicos, de personagens de jogadores.
-    Selo secreto nunca sai (o texto de uma lenda de pé é segredo da mesa) e o selo
-    de nível não repete o aviso de subida de nível."""
-    # Fora: secretos; o de nível (já há o aviso de subida); o da Deidade (spoiler de lore de
-    # quem comanda a mesa); e os comuns, que um jogador novo ganha em enxurrada nas primeiras sessões.
-    visiveis = [
-        c for c in selos
-        if not c.secreta and c.metrica not in {"nivel", "deidades_encaradas"} and c.raridade != "comum"
-    ]
+    """Destaque da mesa no Discord, só de personagens de jogadores. O selo de nível não
+    repete o aviso de subida de nível."""
+    # Fora: o de nível (já há o aviso de subida) e os comuns, que um jogador novo ganha em
+    # enxurrada nas primeiras sessões.
+    visiveis = [c for c in selos if c.metrica != "nivel" and c.raridade != "comum"]
     if not visiveis:
         return
     try:
@@ -315,16 +235,11 @@ def avaliar(connection, personagem_id, *, gravar: bool = True) -> dict:
         _anunciar_selos(connection, personagem_id, [POR_CHAVE[chave] for chave in novas])
 
     catalogo = []
-    escondidas = 0
     for conquista in CATALOGO:
         item = asdict(conquista)
         atual = valores.get(conquista.metrica, 0)
         # Sem gravar, o que já bate a meta conta como conquistado na tela.
         item["desbloqueada"] = conquista.chave in ja or (not gravar and atual >= conquista.minimo)
-        if conquista.secreta and not item["desbloqueada"]:
-            # Nada que denuncie qual lenda é: nem nome, nem a chave, nem a métrica.
-            escondidas += 1
-            item.update(MASCARA_DO_SELO_SECRETO, chave=f"lenda-por-derrubar-{escondidas}", metrica="lenda")
         item["desbloqueada_em"] = ja.get(conquista.chave)
         item["progresso"] = {"atual": min(atual, conquista.minimo), "minimo": conquista.minimo}
         catalogo.append(item)

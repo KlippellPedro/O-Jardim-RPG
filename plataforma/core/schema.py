@@ -1922,4 +1922,47 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        54,
+        "remover_livro_da_verdade",
+        (
+            # O Livro da Verdade (migração 52) saiu do site. Tira do calendário os marcos das quedas e
+            # os efeitos de mundo (estação forçada e ajuste de preço), tira os selos "Matador de ..." e
+            # "Cara a Cara com um Deus" e apaga a tabela. O 52 continua na lista porque bancos que já
+            # o aplicaram não podem perder o número; em banco novo ele cria a tabela e este a apaga.
+            """
+            DO $$
+            BEGIN
+                IF to_regclass('campanha_lendas') IS NOT NULL THEN
+                    UPDATE campanha_calendario c
+                    SET estado = jsonb_set(
+                            estado,
+                            '{eventos}',
+                            COALESCE((
+                                SELECT jsonb_agg(e)
+                                FROM jsonb_array_elements(COALESCE(estado->'eventos', '[]'::jsonb)) AS e
+                                WHERE e->>'id' NOT IN (
+                                    SELECT l.evento_calendario_id FROM campanha_lendas l
+                                    WHERE l.campanha_id = c.campanha_id AND l.evento_calendario_id IS NOT NULL
+                                )
+                            ), '[]'::jsonb)
+                        ),
+                        atualizado_em = CURRENT_TIMESTAMP
+                    WHERE EXISTS (SELECT 1 FROM campanha_lendas l WHERE l.campanha_id = c.campanha_id);
+                END IF;
+            END
+            $$
+            """,
+            """
+            UPDATE campanha_calendario
+            SET estado = estado - 'efeitos', atualizado_em = CURRENT_TIMESTAMP
+            WHERE estado ? 'efeitos'
+            """,
+            """
+            DELETE FROM personagem_conquistas
+            WHERE starts_with(chave, 'matador_') OR chave = 'cara_a_cara_com_um_deus'
+            """,
+            "DROP TABLE IF EXISTS campanha_lendas",
+        ),
+    ),
 )

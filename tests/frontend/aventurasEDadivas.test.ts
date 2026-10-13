@@ -77,9 +77,9 @@ test('as duas aventuras de criatura única usam a ficha do Bestiário e as fases
   }
   assert.ok(leviata.includes(`Vida ${vaelthor.pv.toLocaleString('pt-BR')}`) && leviata.includes('VD 45'));
   assert.ok(redemoinho.includes('VD 33'));
-  // A queda de Vaelthor é lenda: o texto cita o que a Sessão faz sozinha.
-  assert.match(leviata, /Livro da Verdade/);
-  assert.match(leviata, /Matador de Vaelthor/);
+  // A Sessão não registra a queda sozinha: o texto diz que a consequência é do Mestre.
+  assert.match(leviata, /A queda de Vaelthor/);
+  assert.doesNotMatch(leviata, /Livro da Verdade|Matador de/);
 });
 
 test('os valores em dinheiro das aventuras cabem na verba por sessão do nível', () => {

@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import { ActiveTurnCard } from './components/ActiveTurnCard';
 import { AvisoDeFaseDeChefe } from './components/AvisoDeFaseDeChefe';
-import { AvisoDeLendaCaida } from './components/AvisoDeLendaCaida';
 import { AvisoDeCombate } from './components/AvisoDeCombate';
 import { AvisoDeDestaque } from './components/AvisoDeDestaque';
 import { InitiativeTracker } from './InitiativeTracker';
@@ -474,7 +473,6 @@ export const SessaoPage: React.FC = () => {
 
           <main className="relative min-h-0 min-w-0 overflow-hidden">
             <AvisoDeFaseDeChefe />
-            <AvisoDeLendaCaida />
             <AvisoDeCombate />
             <AvisoDeDestaque />
             <RelogiosFaixa onAbrir={() => setMesaAba('relogios')} />

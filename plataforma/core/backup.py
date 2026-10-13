@@ -87,7 +87,6 @@ TABELAS: tuple[str, ...] = (
     "infracoes_loja",
     "propostas_troca",
     "loot_campanha",
-    "campanha_lendas",
 
     # Cassino do Gambler (site) — ver plataforma/routers/casino.py.
     "cassino_gambler_rodadas",

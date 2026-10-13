@@ -15,7 +15,6 @@ export function chaveDeTransicao(pathname: string): string {
       return segundo ? 'ficha-detalhe' : 'ficha-lista';
     case 'mundo':
       if (segundo === 'calendario') return 'mundo-calendario';
-      if (segundo === 'livro-da-verdade') return 'mundo-livro-da-verdade';
       return 'mundo';
     case 'regras':
       return segundo ? 'regras-detalhe' : 'regras';

@@ -12,7 +12,6 @@ from core.audit import record_audit
 from core.character_summary import iniciativa_fixa, sabedoria_desempate
 from core.deidades import para_o_bestiario as deidades_do_bestiario
 from core.fases import fase_alcancada, fases_do_catalogo, fases_limpas
-from core import lendas as livro_da_verdade
 from core.progressao_niveis import xp_por_vd
 from core.combate_intenso import CANSACO_MAXIMO, encerrar_combate_e_cansar, iniciar_marcas, registrar_minimos
 from core.condicoes import decrementar_condicoes, normalizar_condicoes
@@ -329,8 +328,6 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             "turno_de": turno_de,
         },
         "participantes": participantes,
-        # Lendas que caíram nesta sessão (a mesa inteira vê: a queda é um fato público).
-        "lendas": livro_da_verdade.da_sessao(connection, sessao["id"]),
         "meu_papel": papel,
         "comando": manda,
         "bloqueada": False,
@@ -954,10 +951,6 @@ def adicionar_participante(
                 payload.monstro_id,
             ),
         )
-        if sessao["em_combate"] and payload.monstro_id:
-            livro_da_verdade.registrar_encontro_sem_quebrar(
-                connection, campanha_id=sessao["campanha_id"], sessao_id=sessao_id
-            )
         versao = _tocar(connection, sessao_id)
         campanha_id = sessao["campanha_id"]
     live_session.publicar(campanha_id, "participante_adicionado", versao)
@@ -1131,19 +1124,6 @@ def atualizar_participante(
             ).fetchone()
             versao_ficha = int(linha_ficha["versao"]) if linha_ficha else versao_ficha
         registrar_minimos(connection, sessao_id)
-        # Lenda do Bestiário a 0 de Vida: o Livro da Verdade abre a página dela (core/lendas.py).
-        calendario_mudou = False
-        if alterou_vida and vida_maxima > 0 and vida_atual <= 0 and livro_da_verdade.eh_lenda(atual["monstro_id"]):
-            queda = livro_da_verdade.registrar_queda_sem_quebrar(
-                connection,
-                campanha_id=sessao["campanha_id"],
-                monstro_id=atual["monstro_id"],
-                sessao_id=sessao_id,
-                participante_id=participante_id,
-                ator_id=user.id,
-            )
-            # Só a primeira queda mexe no calendário (marco do dia e efeitos no mundo).
-            calendario_mudou = bool(queda and queda.get("primeira"))
         # Estamina segue o mesmo caminho da Mana: o que o Mestre ajusta no HUD
         # tem que chegar na ficha, senão o jogador vê outro número.
         campos_estamina = {}
@@ -1172,8 +1152,6 @@ def atualizar_participante(
         versao = _tocar(connection, sessao_id)
         campanha_id = sessao["campanha_id"]
     live_session.publicar(campanha_id, "participante_atualizado", versao)
-    if calendario_mudou:
-        live_session.publicar(campanha_id, "calendario", 0)
     if versao_ficha is not None:
         # A ficha do jogador mudou por aqui: avisa a ficha aberta para buscar a
         # versão nova, senão o próximo autosave dela vira conflito.
@@ -1948,9 +1926,6 @@ def controlar_turno(
         cansados: list[dict] = []
         if payload.acao == "iniciar":
             iniciar_marcas(connection, sessao_id)
-            livro_da_verdade.registrar_encontro_sem_quebrar(
-                connection, campanha_id=sessao["campanha_id"], sessao_id=sessao_id
-            )
         elif payload.acao == "encerrar":
             cansados = encerrar_combate_e_cansar(connection, sessao_id)
         atualizada = _sessao_ativa(connection, sessao["campanha_id"])
