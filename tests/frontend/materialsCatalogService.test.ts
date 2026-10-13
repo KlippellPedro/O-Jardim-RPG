@@ -12,8 +12,8 @@ import { itemCorrespondeBusca, itemCorrespondeSubfiltro, mapearItemLoja } from '
 
 test('compêndio publica todos os materiais e receitas sem chaves duplicadas', () => {
   // 259 materiais de ofício e 208 partes de criatura (loot-*, ver data/bestiario/loot-criaturas.json).
-  assert.equal(MATERIAIS_CATALOGO.length, 493);
-  assert.equal(new Set(MATERIAIS_CATALOGO.map((item) => item.id)).size, 493);
+  assert.equal(MATERIAIS_CATALOGO.length, 503);
+  assert.equal(new Set(MATERIAIS_CATALOGO.map((item) => item.id)).size, 503);
   assert.equal(RECEITAS_CATALOGO.length, 91);
   assert.equal(new Set(RECEITAS_CATALOGO.map((item) => item.chave)).size, 91);
 });
@@ -70,7 +70,7 @@ test('catálogos de classe não dividem materiais entre si e Matéria-prima pode
   }
 
   const materiasPrimas = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('forja'));
-  assert.equal(materiasPrimas.filter((item) => item.usos.length === 1).length, 96);
+  assert.equal(materiasPrimas.filter((item) => item.usos.length === 1).length, 106);
   assert.ok(materiasPrimas.some((item) => item.usos.includes('alquimia')));
   assert.ok(materiasPrimas.some((item) => item.usos.includes('ritual')));
   assert.ok(materiasPrimas.some((item) => item.usos.includes('engenharia')));

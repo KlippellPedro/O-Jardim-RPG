@@ -1371,6 +1371,405 @@
           "Lunaris": 6000
         },
         "nivelMinimoLoja": 4
+      },
+      {
+        "id": "ilyrax",
+        "titulo": "Ilyrax, a Cria Teimosa",
+        "vd": 15,
+        "estagio": "Filhote",
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "12m (Voo)",
+        "descricao": "Um dragão do tamanho de um cavalo magro, saído do ovo há pouco e convencido de que já é adulto. Rouba moeda de bolsa alheia para enfeitar o ninho e responde a toda bronca em Valiriano, num guincho fino que só ele acha imponente.",
+        "ataques": [
+          {
+            "nome": "Faísca Cuspida",
+            "tipo": "fogo, à distância",
+            "modo": "distancia"
+          },
+          {
+            "nome": "Mordida Teimosa",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Ladrão de Brilho (1/cena, Ação de Movimento: toma um objeto pequeno e brilhante de uma criatura adjacente; Reflexos DT {dt} evita)"
+        ],
+        "loot": [
+          "Casca de Ovo de Dragão"
+        ],
+        "nivelMinimoLoja": 2,
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        }
+      },
+      {
+        "id": "gorthys",
+        "titulo": "Gorthys, o Canibal das Cavernas",
+        "vd": 26,
+        "estagio": "Jovem",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "15m (Voo)",
+        "descricao": "Um dragão magro, de um verde doente, que vive no fundo das cavernas e come outros dragões menores quando o rebanho acaba. Nunca aprendeu a falar direito: rosna Valiriano em pedaços, como quem se lembra de uma língua que a mãe usava e não chegou a ensinar.",
+        "ataques": [
+          {
+            "nome": "Cuspe Peçonhento",
+            "tipo": "veneno, em cone",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Mordida Podre",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Peçonha Faminta (1/cena: cone de 9m; Fortitude DT {dt} ou fica Envenenado até o fim da próxima cena)"
+        ],
+        "loot": [
+          "Presa Peçonhenta de Dragão"
+        ],
+        "nivelMinimoLoja": 4,
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        }
+      },
+      {
+        "id": "sorvys",
+        "titulo": "Sorvys, a Serpe do Sal",
+        "vd": 32,
+        "estagio": "Adulto",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "12m (Voo), 18m (Nado)",
+        "descricao": "Um dragão sem patas dianteiras, comprido como um navio, que mora nos recifes e cobra pedágio de quem cruza o estreito dele. Já afundou frotas por teimosia e salvou náufragos por capricho, e usa o Valiriano só para dizer o preço da passagem.",
+        "ataques": [
+          {
+            "nome": "Jato de Maré",
+            "tipo": "água, em área",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Constrição e Mordida",
+            "tipo": "impacto e o alvo fica agarrado",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Maré Cheia (1/cena: o Jato empurra 3 m criaturas médias ou menores; Fortitude DT {dt} ou fica Caído)"
+        ],
+        "loot": [
+          "Escama Salgada"
+        ],
+        "nivelMinimoLoja": 4,
+        "preco": {
+          "Solares": 670
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "vaelthrax",
+        "titulo": "Vaelthrax, o Dragão de Sela",
+        "vd": 36,
+        "estagio": "Adulto",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "21m (Voo)",
+        "descricao": "O único dragão que o povo da fronteira aprendeu a montar, embora a maioria jure que foi ele quem escolheu o cavaleiro. Aceita quem sustenta o olhar dele por uma noite inteira e voa com o dono nas costas. Se o dono cai, pousa para ver se ainda respira. Responde em Valiriano, e só a quem montou.",
+        "ataques": [
+          {
+            "nome": "Chama de Cavalgada",
+            "tipo": "fogo, em cone",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Garras Dobradas",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Cavaleiro Escolhido (aceita um cavaleiro por vez; montado, o cavaleiro tem vantagem contra Amedrontado e o dragão não perde ação por carregar alguém)"
+        ],
+        "loot": [
+          "Couro de Sela de Dragão"
+        ],
+        "nivelMinimoLoja": 4,
+        "preco": {
+          "Solares": 430
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "vhorzys",
+        "titulo": "Vhorzys, o Dragão Sem Carne",
+        "vd": 44,
+        "estagio": "Ancião",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "18m (Voo)",
+        "descricao": "Morreu num cerco, há um século, e continuou o cerco. Sobram os ossos, uma asa em farrapos e um fogo azul-pálido que queima a lembrança antes da pele. Ainda fala Valiriano e ainda dá ordens a exércitos que já se dispersaram.",
+        "ataques": [
+          {
+            "nome": "Sopro Azul-Pálido",
+            "tipo": "necrótico, em área",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Cauda de Ossos",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Fogo Sem Calor (em acerto, o alvo não recupera PV até o fim da próxima cena)",
+          "Osso que Volta (1/cena: ao cair a 0 PV, levanta-se com um quarto dos PV máximos)"
+        ],
+        "loot": [
+          "Osso de Dragão Cinzento"
+        ],
+        "nivelMinimoLoja": 4,
+        "preco": {
+          "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "meraxys",
+        "titulo": "Meraxys, a Dama da Rocha Quente",
+        "vd": 47,
+        "estagio": "Ancião",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "18m (Voo)",
+        "descricao": "Dorme dentro de um vulcão e deixa a montanha fumegar por ela. Quando acorda, a lava escorre para onde ela olha, e as vilas de baixo sabem pelo gosto de enxofre no vento. Fala Valiriano devagar, escolhendo cada palavra como quem escolhe onde pisar.",
+        "ataques": [
+          {
+            "nome": "Sopro de Magma",
+            "tipo": "magma, em área grande",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Garras de Basalto",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Pele de Basalto (reduz em 3 o dano físico de cada golpe)",
+          "Vulcão Acordado (1/cena, Ação Padrão: o chão racha num círculo de 6m ao redor dela; Reflexos DT {dt} ou fica Caído)"
+        ],
+        "loot": [
+          "Escama de Basalto"
+        ],
+        "nivelMinimoLoja": 4,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "tyrvax",
+        "titulo": "Tyrvax, o Inverno que Respira",
+        "vd": 54,
+        "estagio": "Ancião",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "21m (Voo)",
+        "descricao": "Vive acima do limite das neves e faz do próprio sopro uma estação. Onde ele passa, o rio para no meio da correnteza e o corvo cai congelado em pleno voo. Tem a paciência de quem espera o mundo esfriar, e fala Valiriano com voz de gelo trincando.",
+        "ataques": [
+          {
+            "nome": "Sopro do Inverno",
+            "tipo": "gelo, em área grande",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Garras de Geada",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Pele de Geada (reduz em 4 o dano físico e mágico de cada golpe)",
+          "Inverno que Chega (1/cena, Ação Padrão: o gelo cobre o campo e o Deslocamento dos inimigos cai pela metade até o fim da próxima rodada)"
+        ],
+        "loot": [
+          "Escama de Geada Eterna"
+        ],
+        "nivelMinimoLoja": 4,
+        "preco": {
+          "Fragmentos de Estrela": 100
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 10
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 2
+        }
+      },
+      {
+        "id": "zaldrax",
+        "titulo": "Zaldrax, a Tempestade com Asas",
+        "vd": 66,
+        "estagio": "Primordial",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "24m (Voo)",
+        "disponivelNaLoja": false,
+        "descricao": "Voa dentro da própria tormenta e pousa sempre no pico mais alto, porque gosta de ver o raio descer antes de decidir se ele vai cair em alguém. O nome vem da palavra Valiriana para dragão, e ele acha justo, já que nunca encontrou outro que merecesse a palavra inteira.",
+        "ataques": [
+          {
+            "nome": "Sopro de Tormenta",
+            "tipo": "raio, em área grande",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Trovão nas Asas",
+            "tipo": "impacto e sonoro",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Pele Antiga (reduz em 5 o dano físico e mágico de cada golpe)",
+          "Cadeia de Raios (1/cena: o Sopro salta para até dois alvos a 9m do primeiro; Reflexos DT {dt}, metade do dano em sucesso)"
+        ],
+        "loot": [
+          "Escama Carregada de Tormenta"
+        ],
+        "nivelMinimoLoja": 4,
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
+        }
+      },
+      {
+        "id": "morvhaeth",
+        "titulo": "Morvhaeth, o Dragão da Noite Longa",
+        "vd": 78,
+        "estagio": "Primordial",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "24m (Voo)",
+        "disponivelNaLoja": false,
+        "descricao": "Só aparece quando a noite passa de doze horas, e por isso metade do mundo jura que ele não existe. Tem a cor do céu sem lua, voa sem som e chega primeiro como falta de estrela. Fala Valiriano baixinho, perto do ouvido, a quem ainda está acordado.",
+        "ataques": [
+          {
+            "nome": "Sopro Sem Luz",
+            "tipo": "trevas, em área grande",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Garras do Breu",
+            "tipo": "trevas; vantagem no primeiro golpe",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Pele Antiga (reduz em 6 o dano físico e mágico de cada golpe)",
+          "Breu (ao entrar em cena, a luz comum some num raio de 18m; só luz mágica ilumina o local)"
+        ],
+        "loot": [
+          "Escama da Noite Longa"
+        ],
+        "nivelMinimoLoja": 4,
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
+        }
+      },
+      {
+        "id": "iryndax",
+        "titulo": "Iryndax, o Dourado",
+        "vd": 95,
+        "estagio": "Ancestral",
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "27m (Voo)",
+        "disponivelNaLoja": false,
+        "descricao": "Os templos dizem que é bênção, os pastores dizem que é praga, e os dois têm razão em dias diferentes. Brilha como moeda nova ao sol, nunca esquece uma promessa e cobra cada uma ao pé da letra. Em Valiriano, pergunta ao visitante o que ele deve antes de perguntar o que ele quer.",
+        "ataques": [
+          {
+            "nome": "Sopro de Aurora",
+            "tipo": "luz, em área grande",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Garras Douradas",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Pele Ancestral (reduz em 7 o dano físico e mágico de cada golpe)",
+          "Dívida de Luz (1/cena, Ação Padrão: uma criatura em alcance Médio faz Vontade DT {dt} ou fica Cega por uma rodada e não consegue mentir até o fim da cena)"
+        ],
+        "loot": [
+          "Escama Dourada Ancestral"
+        ],
+        "nivelMinimoLoja": 4,
+        "preco": {
+          "Fragmentos de Estrela": 280
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 28
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 6
+        }
       }
     ],
     "cao-e-lobo": [

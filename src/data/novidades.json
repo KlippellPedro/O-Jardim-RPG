@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-10-12-bestiario-dez-dragoes",
+      "data": "2026-10-12",
+      "tipo": "novo",
+      "area": "Mundo",
+      "titulo": "Bestiário ganhou 10 dragões, do filhote ao Dourado",
+      "detalhes": [
+        "Dez dragões novos, do VD 15 ao 95: Ilyrax, a Cria Teimosa; Gorthys, o Canibal das Cavernas; Sorvys, a Serpe do Sal; Vaelthrax, o Dragão de Sela; Vhorzys, o Dragão Sem Carne; Meraxys, a Dama da Rocha Quente; Tyrvax, o Inverno que Respira; Zaldrax, a Tempestade com Asas; Morvhaeth, o Dragão da Noite Longa e Iryndax, o Dourado.",
+        "Cada um deixa uma parte própria no saque.",
+        "Os dragões falam Valiriano, que entrou no Alfabeto como a décima sexta língua do Jardim."
+      ]
+    },
+    {
       "id": "2026-10-12-livro-da-verdade-saiu",
       "data": "2026-10-12",
       "tipo": "melhoria",
@@ -915,16 +927,6 @@
         "Legado, aumento de atributo e vaga de item especial passam a vir mais espaçados depois do 50 e do 100. O limite natural 20 de atributo acabou, e os bônus de raça também não têm mais teto.",
         "Os patamares 60, 100, 150, 250 e 500 ganharam Conquista, selo na ficha e moldura nova no retrato e no cartaz de Procurado. O aviso aparece uma vez e some sozinho.",
         "O painel de subida de nível agora avisa Legado, aumento de atributo e vaga de item especial, e o Grande Sábio fala os níveis mais altos."
-      ]
-    },
-    {
-      "id": "2026-09-29-cartaz-molduras",
-      "data": "2026-09-29",
-      "tipo": "correcao",
-      "area": "Ficha",
-      "titulo": "As molduras do cartaz de Procurado voltaram",
-      "detalhes": [
-        "A borda colorida que acompanha o nível do personagem (de Bronze a Lendário) não estava aparecendo no cartaz. Agora aparece, junto com as molduras novas dos patamares."
       ]
     }
   ]

@@ -6458,6 +6458,332 @@
           "quantidade": "1"
         }
       ]
+    },
+    "ilyrax": {
+      "moedas": {
+        "dados": "2d6",
+        "moeda": "Lunaris",
+        "chance": 70
+      },
+      "itens": [
+        {
+          "item": "loot-casca-de-ovo-de-dragao",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-escama-de-dragonete",
+          "chance": 60,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "gorthys": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-presa-peconhenta-de-dragao",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-escama-de-dragao-jovem",
+          "chance": 70,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "pocao-cura-suprema",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "sorvys": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 70
+      },
+      "itens": [
+        {
+          "item": "loot-escama-salgada",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 80,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "pocao-cura-suprema",
+          "chance": 20,
+          "quantidade": "1"
+        },
+        {
+          "item": "anel-de-protecao",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "vaelthrax": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 80
+      },
+      "itens": [
+        {
+          "item": "loot-couro-de-sela-de-dragao",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-escama-de-dragao-adulto",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "pocao-cura-suprema",
+          "chance": 25,
+          "quantidade": "1"
+        },
+        {
+          "item": "anel-de-protecao",
+          "chance": 12,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "vhorzys": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-osso-de-dragao-cinzento",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 90,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "coracao-de-fluxo",
+          "chance": 6,
+          "quantidade": "1"
+        },
+        {
+          "item": "pocao-cura-absoluta",
+          "chance": 5,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "meraxys": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-escama-de-basalto",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "artefato-grimorio-arcanis",
+          "chance": 15,
+          "quantidade": "1"
+        },
+        {
+          "item": "coracao-de-fluxo",
+          "chance": 6,
+          "quantidade": "1"
+        },
+        {
+          "item": "pocao-cura-absoluta",
+          "chance": 5,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "tyrvax": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-escama-de-geada-eterna",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "anel-do-fluxo",
+          "chance": 8,
+          "quantidade": "1"
+        },
+        {
+          "item": "coracao-de-fluxo",
+          "chance": 8,
+          "quantidade": "1"
+        },
+        {
+          "item": "pocao-cura-absoluta",
+          "chance": 8,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "zaldrax": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-escama-carregada-de-tormenta",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-escama-primordial",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "anel-do-fluxo",
+          "chance": 10,
+          "quantidade": "1"
+        },
+        {
+          "item": "artefato-anel-imortal",
+          "chance": 10,
+          "quantidade": "1"
+        },
+        {
+          "item": "coroa-do-eclipse",
+          "chance": 3,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "morvhaeth": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-escama-da-noite-longa",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-escama-primordial",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "coroa-do-eclipse",
+          "chance": 8,
+          "quantidade": "1"
+        },
+        {
+          "item": "artefato-anel-imortal",
+          "chance": 10,
+          "quantidade": "1"
+        },
+        {
+          "item": "coracao-de-fluxo",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "iryndax": {
+      "moedas": {
+        "dados": "2d100",
+        "moeda": "Solares",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-escama-dourada-ancestral",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-escama-ancestral",
+          "chance": 100,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "loot-dente-de-dragao",
+          "chance": 100,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-osso-do-primeiro-dragao",
+          "chance": 15,
+          "quantidade": "1"
+        },
+        {
+          "item": "coracao-de-fluxo",
+          "chance": 12,
+          "quantidade": "1"
+        },
+        {
+          "item": "artefato-anel-imortal",
+          "chance": 12,
+          "quantidade": "1"
+        },
+        {
+          "item": "pocao-cura-absoluta",
+          "chance": 10,
+          "quantidade": "1"
+        }
+      ]
     }
   }
 }

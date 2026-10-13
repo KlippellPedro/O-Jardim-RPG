@@ -97,9 +97,9 @@ test('local aberto ganha ficha com onde fica, responsável e domínio; local tra
   assert.equal(trancado?.titulo, 'Registro retido');
 });
 
-test('o Alfabeto traz os 15 idiomas da tabela da lore, cada um com o povo e o criador', () => {
+test('o Alfabeto traz os 16 idiomas da tabela da lore, cada um com o povo e o criador', () => {
   const idiomas = fabrica(false).filter((registro) => registro.secao === 'glossario');
-  assert.equal(idiomas.length, 15);
+  assert.equal(idiomas.length, 16);
   const por = (titulo: string) => idiomas.find((registro) => registro.titulo === titulo);
   assert.equal(por('Romeno')?.idioma?.povo, 'Vampiros');
   assert.equal(por('Romeno')?.idioma?.criador, 'Davinor');
@@ -297,7 +297,7 @@ test('Astraluna é a sede da AstraTech, e o Fruto da Comunicação leva o prata 
 
 test('o criador do idioma vem com a preposição certa, inclusive quando traz artigo', () => {
   const idiomas = fabrica(false).filter((registro) => registro.secao === 'glossario' && registro.idioma);
-  assert.equal(idiomas.length, 15);
+  assert.equal(idiomas.length, 16);
   const finlandes = idiomas.find((registro) => registro.titulo === 'Finlandês');
   assert.match(finlandes?.descricao ?? '', /Foi criado pelos Finwë\./);
   assert.match(idiomas.find((registro) => registro.titulo === 'Romeno')?.descricao ?? '', /Foi criado por Davinor\./);

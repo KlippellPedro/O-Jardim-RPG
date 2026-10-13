@@ -46853,6 +46853,879 @@
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true
       }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-casca-de-ovo-de-dragao",
+      "titulo": "Casca de Ovo de Dragão",
+      "conteudo": {
+        "descricao": "Um caco do tamanho de uma mão, ainda morno, com veios de brasa por dentro. Quem a guarda jura que ela canta baixinho em dia de frio.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Biológico",
+        "origem": "Dragões recém-nascidos.",
+        "potencia": 2,
+        "afinidade": "Fogo",
+        "propriedades": [
+          "Isolante",
+          "Inflamável"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-presa-peconhenta-de-dragao",
+      "titulo": "Presa Peçonhenta de Dragão",
+      "conteudo": {
+        "descricao": "Longa, amarelada e oca por dentro, ainda pingando um veneno que fuma sobre pedra. Alquimista experiente a manuseia com luva dupla.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Biológico",
+        "origem": "Dragões selvagens das cavernas.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Corrosivo",
+          "Afiado"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-salgada",
+      "titulo": "Escama Salgada",
+      "conteudo": {
+        "descricao": "Azul-acinzentada e rugosa de cristais de sal, sempre molhada. Marinheiro a leva no bolso para o mar pensar duas vezes.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Serpes marinhas dos recifes.",
+        "potencia": 4,
+        "afinidade": "Água",
+        "propriedades": [
+          "Resistente",
+          "Flexível",
+          "Isolante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-couro-de-sela-de-dragao",
+      "titulo": "Couro de Sela de Dragão",
+      "conteudo": {
+        "descricao": "Couro curtido do dorso, gasto no formato de um cavaleiro. Selaria nenhuma consegue imitar o ajuste.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Dragões que aceitaram um cavaleiro.",
+        "potencia": 5,
+        "afinidade": "Fogo",
+        "propriedades": [
+          "Resistente",
+          "Flexível",
+          "Vinculante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-osso-de-dragao-cinzento",
+      "titulo": "Osso de Dragão Cinzento",
+      "conteudo": {
+        "descricao": "Pálido, leve e frio ao toque, mesmo ao lado de uma fogueira. Necromante paga bem por ele e não explica para quê.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Biológico",
+        "origem": "Dragões que morreram e se recusaram a parar.",
+        "potencia": 4,
+        "afinidade": "Escuridão",
+        "propriedades": [
+          "Necrótico",
+          "Corruptor",
+          "Conservante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-de-basalto",
+      "titulo": "Escama de Basalto",
+      "conteudo": {
+        "descricao": "Preta, pesada e quente por dentro, com veios de lava já fria. Serra comum não passa por ela.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Dragões que dormem em vulcões.",
+        "potencia": 5,
+        "afinidade": "Terra",
+        "propriedades": [
+          "Resistente",
+          "Isolante",
+          "Fortificante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-de-geada-eterna",
+      "titulo": "Escama de Geada Eterna",
+      "conteudo": {
+        "descricao": "Transparente como vidro grosso, com neve presa dentro que nunca derrete. Esfria a mão que a segura sem queimar.",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Dragões do alto das neves.",
+        "potencia": 5,
+        "afinidade": "Água",
+        "propriedades": [
+          "Resistente",
+          "Isolante",
+          "Conservante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-carregada-de-tormenta",
+      "titulo": "Escama Carregada de Tormenta",
+      "conteudo": {
+        "descricao": "Azul-escura, com faíscas que correm pela borda quando alguém levanta a voz perto dela. Ferreiro nenhum quer a primeira marteladada.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Dragões que voam dentro de tormentas.",
+        "potencia": 5,
+        "afinidade": "Raio",
+        "propriedades": [
+          "Condutor",
+          "Amplificador",
+          "Volátil"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-da-noite-longa",
+      "titulo": "Escama da Noite Longa",
+      "conteudo": {
+        "descricao": "Preta de um jeito que a vista escorrega. Em cima da mesa parece um buraco do tamanho de uma palma.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Dragões da noite longa.",
+        "potencia": 5,
+        "afinidade": "Escuridão",
+        "propriedades": [
+          "Absorvente",
+          "Corruptor",
+          "Resistente"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-escama-dourada-ancestral",
+      "titulo": "Escama Dourada Ancestral",
+      "conteudo": {
+        "descricao": "Do tamanho de um escudo, dourada dos dois lados, e sempre um pouco mais quente do que a mão que a segura. Quem a possui costuma pagar suas dívidas.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "nivelMinimoLoja": 4,
+        "categoria": "Biológico",
+        "origem": "Dragões ancestrais da luz.",
+        "potencia": 5,
+        "afinidade": "Luz",
+        "propriedades": [
+          "Purificador",
+          "Resistente",
+          "Fortificante"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "ilyrax",
+      "titulo": "Ilyrax, a Cria Teimosa",
+      "conteudo": {
+        "descricao": "Um dragão do tamanho de um cavalo magro, saído do ovo há pouco e convencido de que já é adulto. Rouba moeda de bolsa alheia para enfeitar o ninho e responde a toda bronca em Valiriano, num guincho fino que só ele acha imponente.",
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "incomum",
+        "categoria": "Monstro",
+        "pv": 400,
+        "nivel": 15,
+        "vd": 15,
+        "defesa": 16,
+        "iniciativa": 20,
+        "deslocamento": "12m (Voo)",
+        "mana": 50,
+        "estamina": 30,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +18",
+          "Fortitude +18",
+          "Reflexos +18",
+          "Vontade +17",
+          "Percepção +10"
+        ],
+        "ataques": [
+          {
+            "nome": "Faísca Cuspida",
+            "detalhe": "+18, 2d8+4 fogo, à distância"
+          },
+          {
+            "nome": "Mordida Teimosa",
+            "detalhe": "+18, 2d8+4 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Ladrão de Brilho (1/cena, Ação de Movimento: toma um objeto pequeno e brilhante de uma criatura adjacente; Reflexos DT 22 evita)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Filhote"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "gorthys",
+      "titulo": "Gorthys, o Canibal das Cavernas",
+      "conteudo": {
+        "descricao": "Um dragão magro, de um verde doente, que vive no fundo das cavernas e come outros dragões menores quando o rebanho acaba. Nunca aprendeu a falar direito: rosna Valiriano em pedaços, como quem se lembra de uma língua que a mãe usava e não chegou a ensinar.",
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "raro",
+        "categoria": "Monstro",
+        "pv": 810,
+        "nivel": 26,
+        "vd": 26,
+        "defesa": 22,
+        "iniciativa": 27,
+        "deslocamento": "15m (Voo)",
+        "mana": 83,
+        "estamina": 52,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +27",
+          "Fortitude +27",
+          "Reflexos +27",
+          "Vontade +26",
+          "Percepção +19"
+        ],
+        "ataques": [
+          {
+            "nome": "Cuspe Peçonhento",
+            "detalhe": "+27, 3d10+8 veneno, em cone"
+          },
+          {
+            "nome": "Mordida Podre",
+            "detalhe": "+27, 3d10+8 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Peçonha Faminta (1/cena: cone de 9m; Fortitude DT 28 ou fica Envenenado até o fim da próxima cena)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Jovem"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "sorvys",
+      "titulo": "Sorvys, a Serpe do Sal",
+      "conteudo": {
+        "descricao": "Um dragão sem patas dianteiras, comprido como um navio, que mora nos recifes e cobra pedágio de quem cruza o estreito dele. Já afundou frotas por teimosia e salvou náufragos por capricho, e usa o Valiriano só para dizer o preço da passagem.",
+        "preco": {
+          "Solares": 670
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 810,
+        "nivel": 32,
+        "vd": 32,
+        "defesa": 26,
+        "iniciativa": 30,
+        "deslocamento": "12m (Voo), 18m (Nado)",
+        "mana": 101,
+        "estamina": 64,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +32",
+          "Fortitude +32",
+          "Reflexos +32",
+          "Vontade +31",
+          "Percepção +24"
+        ],
+        "ataques": [
+          {
+            "nome": "Jato de Maré",
+            "detalhe": "+32, 3d10+12 água, em área"
+          },
+          {
+            "nome": "Constrição e Mordida",
+            "detalhe": "+32, 3d10+12 impacto e o alvo fica agarrado"
+          }
+        ],
+        "habilidades": [
+          "Maré Cheia (1/cena: o Jato empurra 3 m criaturas médias ou menores; Fortitude DT 31 ou fica Caído)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Adulto"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "vaelthrax",
+      "titulo": "Vaelthrax, o Dragão de Sela",
+      "conteudo": {
+        "descricao": "O único dragão que o povo da fronteira aprendeu a montar, embora a maioria jure que foi ele quem escolheu o cavaleiro. Aceita quem sustenta o olhar dele por uma noite inteira e voa com o dono nas costas. Se o dono cai, pousa para ver se ainda respira. Responde em Valiriano, e só a quem montou.",
+        "preco": {
+          "Solares": 430
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 1055,
+        "nivel": 36,
+        "vd": 36,
+        "defesa": 28,
+        "iniciativa": 33,
+        "deslocamento": "21m (Voo)",
+        "mana": 113,
+        "estamina": 72,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +35",
+          "Fortitude +35",
+          "Reflexos +35",
+          "Vontade +34",
+          "Percepção +27"
+        ],
+        "ataques": [
+          {
+            "nome": "Chama de Cavalgada",
+            "detalhe": "+35, 4d10+11 fogo, em cone"
+          },
+          {
+            "nome": "Garras Dobradas",
+            "detalhe": "+35, 4d10+11 cortante"
+          }
+        ],
+        "habilidades": [
+          "Cavaleiro Escolhido (aceita um cavaleiro por vez; montado, o cavaleiro tem vantagem contra Amedrontado e o dragão não perde ação por carregar alguém)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Adulto"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "vhorzys",
+      "titulo": "Vhorzys, o Dragão Sem Carne",
+      "conteudo": {
+        "descricao": "Morreu num cerco, há um século, e continuou o cerco. Sobram os ossos, uma asa em farrapos e um fogo azul-pálido que queima a lembrança antes da pele. Ainda fala Valiriano e ainda dá ordens a exércitos que já se dispersaram.",
+        "preco": {
+          "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "epico",
+        "categoria": "Morto-Vivo",
+        "pv": 1160,
+        "nivel": 44,
+        "vd": 44,
+        "defesa": 32,
+        "iniciativa": 37,
+        "deslocamento": "18m (Voo)",
+        "mana": 137,
+        "estamina": 88,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +39",
+          "Fortitude +39",
+          "Reflexos +39",
+          "Vontade +38",
+          "Percepção +31"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro Azul-Pálido",
+            "detalhe": "+39, 4d10+17 necrótico, em área"
+          },
+          {
+            "nome": "Cauda de Ossos",
+            "detalhe": "+39, 4d10+17 impacto"
+          }
+        ],
+        "habilidades": [
+          "Fogo Sem Calor (em acerto, o alvo não recupera PV até o fim da próxima cena)",
+          "Osso que Volta (1/cena: ao cair a 0 PV, levanta-se com um quarto dos PV máximos)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Ancião"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "meraxys",
+      "titulo": "Meraxys, a Dama da Rocha Quente",
+      "conteudo": {
+        "descricao": "Dorme dentro de um vulcão e deixa a montanha fumegar por ela. Quando acorda, a lava escorre para onde ela olha, e as vilas de baixo sabem pelo gosto de enxofre no vento. Fala Valiriano devagar, escolhendo cada palavra como quem escolhe onde pisar.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1240,
+        "nivel": 47,
+        "vd": 47,
+        "defesa": 33,
+        "iniciativa": 38,
+        "deslocamento": "18m (Voo)",
+        "mana": 146,
+        "estamina": 94,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +40",
+          "Fortitude +40",
+          "Reflexos +40",
+          "Vontade +39",
+          "Percepção +32"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro de Magma",
+            "detalhe": "+40, 5d10+16 magma, em área grande"
+          },
+          {
+            "nome": "Garras de Basalto",
+            "detalhe": "+40, 5d10+16 cortante"
+          }
+        ],
+        "habilidades": [
+          "Pele de Basalto (reduz em 3 o dano físico de cada golpe)",
+          "Vulcão Acordado (1/cena, Ação Padrão: o chão racha num círculo de 6m ao redor dela; Reflexos DT 38 ou fica Caído)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Ancião",
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "tyrvax",
+      "titulo": "Tyrvax, o Inverno que Respira",
+      "conteudo": {
+        "descricao": "Vive acima do limite das neves e faz do próprio sopro uma estação. Onde ele passa, o rio para no meio da correnteza e o corvo cai congelado em pleno voo. Tem a paciência de quem espera o mundo esfriar, e fala Valiriano com voz de gelo trincando.",
+        "preco": {
+          "Fragmentos de Estrela": 100
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 10
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 2
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1425,
+        "nivel": 54,
+        "vd": 54,
+        "defesa": 37,
+        "iniciativa": 42,
+        "deslocamento": "21m (Voo)",
+        "mana": 167,
+        "estamina": 108,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +44",
+          "Fortitude +44",
+          "Reflexos +44",
+          "Vontade +43",
+          "Percepção +36"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro do Inverno",
+            "detalhe": "+44, 5d10+20 gelo, em área grande"
+          },
+          {
+            "nome": "Garras de Geada",
+            "detalhe": "+44, 5d10+20 cortante"
+          }
+        ],
+        "habilidades": [
+          "Pele de Geada (reduz em 4 o dano físico e mágico de cada golpe)",
+          "Inverno que Chega (1/cena, Ação Padrão: o gelo cobre o campo e o Deslocamento dos inimigos cai pela metade até o fim da próxima rodada)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Ancião",
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "zaldrax",
+      "titulo": "Zaldrax, a Tempestade com Asas",
+      "conteudo": {
+        "descricao": "Voa dentro da própria tormenta e pousa sempre no pico mais alto, porque gosta de ver o raio descer antes de decidir se ele vai cair em alguém. O nome vem da palavra Valiriana para dragão, e ele acha justo, já que nunca encontrou outro que merecesse a palavra inteira.",
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1755,
+        "nivel": 66,
+        "vd": 66,
+        "defesa": 43,
+        "iniciativa": 49,
+        "deslocamento": "24m (Voo)",
+        "mana": 203,
+        "estamina": 132,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 6,
+          "vigor": 6,
+          "presenca": 5,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +53",
+          "Fortitude +53",
+          "Reflexos +53",
+          "Vontade +52",
+          "Percepção +45"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro de Tormenta",
+            "detalhe": "+53, 6d10+23 raio, em área grande"
+          },
+          {
+            "nome": "Trovão nas Asas",
+            "detalhe": "+53, 6d10+23 impacto e sonoro"
+          }
+        ],
+        "habilidades": [
+          "Pele Antiga (reduz em 5 o dano físico e mágico de cada golpe)",
+          "Cadeia de Raios (1/cena: o Sopro salta para até dois alvos a 9m do primeiro; Reflexos DT 48, metade do dano em sucesso)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Primordial",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "morvhaeth",
+      "titulo": "Morvhaeth, o Dragão da Noite Longa",
+      "conteudo": {
+        "descricao": "Só aparece quando a noite passa de doze horas, e por isso metade do mundo jura que ele não existe. Tem a cor do céu sem lua, voa sem som e chega primeiro como falta de estrela. Fala Valiriano baixinho, perto do ouvido, a quem ainda está acordado.",
+        "preco": {
+          "Fragmentos de Estrela": 180
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 18
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 4
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 2075,
+        "nivel": 78,
+        "vd": 78,
+        "defesa": 49,
+        "iniciativa": 55,
+        "deslocamento": "24m (Voo)",
+        "mana": 239,
+        "estamina": 156,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 6,
+          "vigor": 6,
+          "presenca": 5,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +59",
+          "Fortitude +59",
+          "Reflexos +59",
+          "Vontade +58",
+          "Percepção +51"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro Sem Luz",
+            "detalhe": "+59, 7d10+27 trevas, em área grande"
+          },
+          {
+            "nome": "Garras do Breu",
+            "detalhe": "+59, 7d10+27 trevas; vantagem no primeiro golpe"
+          }
+        ],
+        "habilidades": [
+          "Pele Antiga (reduz em 6 o dano físico e mágico de cada golpe)",
+          "Breu (ao entrar em cena, a luz comum some num raio de 18m; só luz mágica ilumina o local)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Primordial",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "iryndax",
+      "titulo": "Iryndax, o Dourado",
+      "conteudo": {
+        "descricao": "Os templos dizem que é bênção, os pastores dizem que é praga, e os dois têm razão em dias diferentes. Brilha como moeda nova ao sol, nunca esquece uma promessa e cobra cada uma ao pé da letra. Em Valiriano, pergunta ao visitante o que ele deve antes de perguntar o que ele quer.",
+        "preco": {
+          "Fragmentos de Estrela": 280
+        },
+        "preco_contratacao": {
+          "Fragmentos de Estrela": 28
+        },
+        "contrato_mensal": {
+          "Fragmentos de Estrela": 6
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 3205,
+        "nivel": 95,
+        "vd": 95,
+        "defesa": 58,
+        "iniciativa": 64,
+        "deslocamento": "27m (Voo)",
+        "mana": 290,
+        "estamina": 190,
+        "atributos": {
+          "forca": 7,
+          "agilidade": 7,
+          "vigor": 7,
+          "presenca": 6,
+          "intelecto": 6
+        },
+        "pericias": [
+          "Luta +70",
+          "Fortitude +70",
+          "Reflexos +70",
+          "Vontade +69",
+          "Percepção +62"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro de Aurora",
+            "detalhe": "+70, 12d10+45 luz, em área grande"
+          },
+          {
+            "nome": "Garras Douradas",
+            "detalhe": "+70, 12d10+45 cortante"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 18d10+68, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Pele Ancestral (reduz em 7 o dano físico e mágico de cada golpe)",
+          "Dívida de Luz (1/cena, Ação Padrão: uma criatura em alcance Médio faz Vontade DT 62 ou fica Cega por uma rodada e não consegue mentir até o fim da cena)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Ancestral",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
     }
   ]
 }

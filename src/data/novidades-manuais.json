@@ -2,6 +2,18 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-12-bestiario-dez-dragoes",
+      "data": "2026-10-12",
+      "tipo": "novo",
+      "area": "Mundo",
+      "titulo": "Bestiário ganhou 10 dragões, do filhote ao Dourado",
+      "detalhes": [
+        "Dez dragões novos, do VD 15 ao 95: Ilyrax, a Cria Teimosa; Gorthys, o Canibal das Cavernas; Sorvys, a Serpe do Sal; Vaelthrax, o Dragão de Sela; Vhorzys, o Dragão Sem Carne; Meraxys, a Dama da Rocha Quente; Tyrvax, o Inverno que Respira; Zaldrax, a Tempestade com Asas; Morvhaeth, o Dragão da Noite Longa e Iryndax, o Dourado.",
+        "Cada um deixa uma parte própria no saque.",
+        "Os dragões falam Valiriano, que entrou no Alfabeto como a décima sexta língua do Jardim."
+      ]
+    },
+    {
       "id": "2026-10-12-livro-da-verdade-saiu",
       "data": "2026-10-12",
       "tipo": "melhoria",

@@ -656,14 +656,14 @@ test('cada Natureza do Espírito tem a sua língua, e a tabela de idiomas do Mun
   const tabela: string[] = idiomas.conteudo.tabela;
   const linhas = tabela.map(linha => linha.split('|').map(parte => parte.trim()));
 
-  assert.equal(linhas.length, 15, 'treze povos, quinze línguas');
+  assert.equal(linhas.length, 16, 'treze povos e os dragões, dezesseis línguas');
   assert.deepEqual(linhas.filter(l => l[1].startsWith('Espíritos')).map(l => [l[0], l[1]]), [
     ['Enoquiano', 'Espíritos naturais'],
     ['Aramaico', 'Espíritos demoníacos'],
     ['Hebraico', 'Espíritos angelicais'],
   ]);
-  assert.equal(new Set(linhas.map(l => l[0])).size, 15, 'idioma repetido');
-  assert.match(idiomas.conteudo.descricao, /quinze línguas/);
+  assert.equal(new Set(linhas.map(l => l[0])).size, 16, 'idioma repetido');
+  assert.match(idiomas.conteudo.descricao, /dezesseis línguas/);
 
   const espirito = racas.find(item => item.id === 'espirito')!;
   const falas = Object.fromEntries((espirito.naturezas || []).map(n => [n.id, String(n.descricao)]));
