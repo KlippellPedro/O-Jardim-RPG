@@ -36,6 +36,23 @@ router = APIRouter(prefix="/conteudo", tags=["conteudo-central"])
 _MODULE_LABELS = {"loja": "Itens", "mundo": "Mundo", "regras": "Área do mestre"}
 
 
+#: Marcas da lore que o editor do Painel não trata como texto e que a base ganhou depois de muita edição já
+#: publicada. O editor publica o `conteudo` inteiro do momento da edição, então uma versão antiga não as
+#: traz; sem elas, um Soberano caía em "Gente notável", uma sede perdia o vínculo com a facção e o Alfabeto
+#: dos Registros Universais ficava vazio (a lista de idiomas é a `tabela` da entrada `idiomas-do-jardim`).
+#: A base devolve a marca quando a edição publicada não a menciona (se ela aparece, vale o que foi publicado).
+CHAVES_ESTRUTURAIS_DA_LORE = ("soberano", "faccao", "tabela")
+
+
+def _com_marcas_da_base(item_dados: dict, resolved: dict) -> dict:
+    base = item_dados.get("conteudo")
+    atual = resolved.get("conteudo")
+    if not isinstance(base, dict) or not isinstance(atual, dict):
+        return resolved
+    faltando = {chave: base[chave] for chave in CHAVES_ESTRUTURAIS_DA_LORE if chave in base and chave not in atual}
+    return {**resolved, "conteudo": {**atual, **faltando}} if faltando else resolved
+
+
 def _library_rows(connection, module: str):
     if module == "loja":
         return connection.execute(
@@ -1842,6 +1859,8 @@ def resolved_content(
             else dict(item["dados"])
         )
         if modulo == "mundo":
+            if isinstance(override, dict):
+                resolved = _com_marcas_da_base(item["dados"], resolved)
             resolved["chave_origem"] = composite_key
         if (
             modulo == "regras"
