@@ -2,7 +2,7 @@
   "_comentario": "Gerado por tools/gerar-colecao-arvores.py a partir de data/mundo/cronicas-arvores.json. Não edite à mão.",
   "epilogo": {
     "titulo": "Crônicas do Jardim",
-    "texto": "Cada Árvore é três coisas ao mesmo tempo: o território, o princípio que ele segura e a deidade que mora ali. Ninguém nunca conseguiu separar as três. O que vem abaixo é o que restou nos registros - a natureza de cada Árvore, os lugares que cresceram nos Galhos dela e os acontecimentos que ainda deixam marca no resto do Jardim. Falta muita coisa, e o que falta é quase todo do mesmo período: depois que a Malha subiu, ninguém teve mais com quem conferir nada.",
+    "texto": "Cada Árvore é três coisas ao mesmo tempo: o território, o princípio que ele segura e a deidade que mora ali. Ninguém nunca conseguiu separar as três. O que vem abaixo é o que restou nos registros: a natureza de cada Árvore, os lugares que cresceram nos Galhos dela e os acontecimentos que ainda deixam marca no resto do Jardim. Falta muita coisa, e o que falta é quase todo do mesmo período: depois que a Malha subiu, ninguém teve mais com quem conferir nada.",
     "subtitulo": "Dez Árvores, e o que sobrou escrito sobre cada uma"
   },
   "paginas": [
@@ -14,15 +14,15 @@
       "camadas": [
         {
           "titulo": "O que se sente lá",
-          "texto": "Luz baixa e rosada, um horizonte que ainda não decidiu onde fica, e a impressão incômoda de ter chegado cedo demais em algum lugar."
+          "texto": "Luz baixa e rosada, e a impressão incômoda de ter chegado cedo demais em algum lugar."
         },
         {
           "titulo": "O que dizem os registros",
-          "texto": "Gênese não entrega destino pronto. Ela abre a primeira brecha pra que alguma coisa possa existir - e o que essa coisa faz depois não é problema dela."
+          "texto": "Gênese não entrega um destino definido. Ela cria a primeira \"brecha\" pra que alguma coisa possa existir e o que essa coisa faz depois não é problema dela."
         },
         {
           "titulo": "O que restou escrito",
-          "texto": "Aethel cuida do nascimento de tudo, e tudo é literal: gente, bicho, ideia, rota de comércio, realidade inteira. Se alguma coisa passou de não existir pra existir, passou por ela. É o mais generoso dos Fluxos e o mais lento, porque exige que quem canaliza queira de verdade que aquilo exista - e recusa quem só quer o resultado."
+          "texto": "Aethel cuida do nascimento de tudo, e tudo é literal: pessoas, bichos, ideias, rotas de comércio e realidades inteiras. Se alguma coisa passou de não existir pra existir, passou por ela. É o mais generoso dos Fluxos e o mais lento, porque exige que quem canaliza queira de verdade que aquilo exista e recusa quem só quer o resultado."
         }
       ]
     },
@@ -42,7 +42,7 @@
         },
         {
           "titulo": "O que restou escrito",
-          "texto": "Ousias não obriga ninguém a falar a verdade. Ela só faz da mentira uma camada - e camada é coisa que se tira. É metade da razão de ela quase nunca interferir: na conta dela, o tempo já trabalha do lado certo sozinho."
+          "texto": "Ousias não obriga ninguém a falar a verdade. Ela só faz da mentira uma camada, e camada é coisa que se tira. É metade da razão de ela quase nunca interferir: na conta dela, o tempo já trabalha do lado certo sozinho."
         }
       ]
     },
@@ -58,7 +58,7 @@
         },
         {
           "titulo": "O que dizem os registros",
-          "texto": "A A.X.I.S provou que um Fluxo pode ser imitado por mão mortal - e que quem controla a comunicação controla todo o resto sem precisar encostar em nada."
+          "texto": "A A.X.I.S provou que um Fluxo pode ser imitado por mão mortal, e que quem controla a comunicação controla todo o resto sem precisar encostar em nada."
         },
         {
           "titulo": "O que restou escrito",
@@ -102,7 +102,7 @@
         },
         {
           "titulo": "O que restou escrito",
-          "texto": "Ignis troca estado, forma e destino. Não promete melhora, só diferença - e é o único Fluxo que não dá pra repetir de propósito: o mesmo gesto, feito duas vezes, entrega dois resultados."
+          "texto": "Ignis troca estado, forma e destino. Não promete melhora, só diferença, e é o único Fluxo que não dá pra repetir de propósito: o mesmo gesto, feito duas vezes, entrega dois resultados."
         }
       ]
     },
@@ -142,7 +142,7 @@
         },
         {
           "titulo": "O que restou escrito",
-          "texto": "Aperion molda o espaço entre as coisas. Encurta, estica, dobra e tranca - um passo que cobre uma légua, uma sala maior por dentro do que por fora, uma fronteira que exército nenhum vence."
+          "texto": "Aperion molda o espaço entre as coisas. Encurta, estica, dobra e tranca: um passo que cobre uma légua, uma sala maior por dentro do que por fora, uma fronteira que exército nenhum vence."
         }
       ]
     },
@@ -162,7 +162,7 @@
         },
         {
           "titulo": "O que restou escrito",
-          "texto": "Chronus não oferece viagem no tempo - ele existe justamente pra impedir que passado, presente e futuro se misturem. O que o Fluxo dele concede é peso sobre a sequência: agir antes de quem era mais rápido, fazer um veneno levar uma hora em vez de um segundo, sustentar de pé uma ruína que já devia ter caído."
+          "texto": "Chronus não oferece viagem no tempo: ele existe justamente pra impedir que passado, presente e futuro se misturem. O que o Fluxo dele concede é peso sobre a sequência: agir antes de quem era mais rápido, fazer um veneno levar uma hora em vez de um segundo, sustentar de pé uma ruína que já devia ter caído."
         }
       ]
     },
@@ -182,7 +182,7 @@
         },
         {
           "titulo": "O que restou escrito",
-          "texto": "Erebus governa o Vazio, que não é a morte. O que chega em Limiar terminou, e coisa terminada dá pra lembrar. O que o Vazio apaga não deixa nem fim pra guardar - a Biblioteca de Arkarin nem chega a ter um livro pra escrever."
+          "texto": "Erebus governa o Vazio, que não é a morte. O que chega em Limiar terminou, e coisa terminada dá pra lembrar. O que o Vazio apaga não deixa nem fim pra guardar: a Biblioteca de Arkarin nem chega a ter um livro pra escrever."
         }
       ]
     },
