@@ -2,6 +2,28 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-12-animalia-arma-natural-automatica",
+      "data": "2026-10-12",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "A arma natural da Animália aparece sozinha em Ataques",
+      "detalhes": [
+        "Quem joga de Fera ou de Híbrido ganha na aba Ataques o cartão da arma natural, com o nome do animal, como Garra de Leão. A Fera começa com dano base 1d8 e o Híbrido com 1d6.",
+        "O cartão soma Força ao dano como qualquer ataque corpo a corpo e rola acerto e dano com a mesma confirmação de sempre. Se você troca de Forma ou de animal, ele muda sozinho.",
+        "Os Traços não têm arma natural, então não ganham o cartão. Fichas antigas de Animália entram como Híbrido."
+      ]
+    },
+    {
+      "id": "2026-10-12-ficha-abre-mais-leve",
+      "data": "2026-10-12",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "A ficha abre mais leve",
+      "detalhes": [
+        "As abas da ficha agora carregam quando você as abre, e logo depois da primeira tela as outras vêm em segundo plano. A página da ficha ficou cerca de dois terços menor, o que ajuda no celular e em conexão lenta."
+      ]
+    },
+    {
       "id": "2026-10-12-elementos-derivacoes-ambiente",
       "data": "2026-10-12",
       "tipo": "novo",
