@@ -213,7 +213,13 @@ const legendaDaLinha = (registro: IRegistro, retido: boolean): string => {
   if (registro.secao === 'bestiario' && registro.criatura) {
     return [registro.grupo, registro.criatura.unico ? 'Única' : degrauDoVd(registro.criatura.vd).rotulo].filter(Boolean).join(' · ');
   }
-  if (registro.artefato) return [registro.grupo, raridadeDe(registro.artefato.raridade).rotulo].filter(Boolean).join(' · ');
+  if (registro.artefato) {
+    // A raridade das Relíquias ("Relíquia da Criação") repete o grupo ("Relíquias da Criação"): mostra uma vez só.
+    const base = (texto: string) => texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().replace(/s\b/g, '');
+    const raridade = raridadeDe(registro.artefato.raridade).rotulo;
+    const partes = [registro.grupo ?? '', raridade].filter(Boolean);
+    return partes.filter((parte, indice) => partes.findIndex((outra) => base(outra) === base(parte)) === indice).join(' · ');
+  }
   return registro.grupo && registro.subtitulo ? `${registro.grupo} · ${registro.subtitulo}` : registro.grupo || registro.subtitulo || registro.etiquetas[0] || ' ';
 };
 
@@ -351,7 +357,7 @@ export const UniversalCodexPage: React.FC<IUniversalRecordsPageProps> = ({
     <main className="ru-pagina app-detail-page relative z-10 min-h-screen overflow-x-hidden pb-20" style={estiloDaSecao(secao.id) as React.CSSProperties}>
       <div className="ru-fundo" />
       <header className="relative mx-auto max-w-[90rem] px-4 pb-5 pt-4 sm:px-5 sm:pb-8 sm:pt-7 md:px-10 md:pt-10">
-        <div className="mb-6 flex items-center justify-between gap-2 sm:mb-10">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-2 pr-24 sm:mb-10">
           <button type="button" onClick={onBack} className="inline-flex min-w-0 items-center gap-2 rounded-full border border-white/10 bg-black/30 px-3 py-2 text-xs text-gray-300 transition hover:border-white/30 hover:text-white"><ArrowLeft size={16} /> Voltar ao Mundo</button>
           {onOpenGlobalTimeline ? (
             <button type="button" onClick={onOpenGlobalTimeline} className="inline-flex min-w-0 items-center gap-2 rounded-full border px-3 py-2 text-xs transition hover:bg-white/5" style={{ borderColor: 'rgba(var(--sec-rgb), 0.4)', color: 'var(--sec)' }}><History size={15} /> Linha do tempo</button>
@@ -361,7 +367,7 @@ export const UniversalCodexPage: React.FC<IUniversalRecordsPageProps> = ({
         <h1 className="mt-3 text-[clamp(2.45rem,12vw,4.5rem)] font-bold leading-[1.02] tracking-wide text-white sm:mt-4" style={{ fontFamily: 'Cinzel, serif' }}>Registros Universais</h1>
         <p className="mt-4 max-w-4xl text-sm leading-6 text-gray-400 sm:mt-5 sm:text-lg sm:leading-8">O arquivo geral do Jardim: criaturas, seres, facções, lugares, artefatos, termos e rumores. O Mestre pode ajustar qualquer registro e decidir o que os jogadores já podem ler.</p>
 
-        <nav className="mt-6 flex gap-2 overflow-x-auto pb-1 sm:mt-9" aria-label="Seções dos Registros Universais">
+        <nav className="mt-6 flex gap-2 overflow-x-auto pb-1 sm:mt-9 lg:flex-wrap lg:overflow-visible" aria-label="Seções dos Registros Universais">
           {abasVisiveis.map((item) => {
             const Icone = ICONE_SECAO[item.id];
             return (
