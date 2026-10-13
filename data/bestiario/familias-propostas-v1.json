@@ -50,7 +50,7 @@
         "classe": "Ser Lendário",
         "categoria": "Elemental",
         "deslocamento": "15m",
-        "descricao": "O fogo que o mundo usou para começar, ainda aceso porque ninguém lhe disse que podia parar. Fala em estalidos e negocia como mercador: oferece calor, luz e passagem, e cobra do outro lado uma lembrança do que queimou da última vez. Quem aceita o trato nunca esquece o que perdeu, só esquece por que valia a pena. Se Ignarrak cair, todo fogo comum do mundo demora um pouco mais para pegar, como se faltasse a faísca original.",
+        "descricao": "O fogo que o mundo usou para começar, ainda aceso porque ninguém lhe disse que podia parar. Fala em estalidos e negocia como mercador: oferece calor, luz e passagem, e cobra do outro lado uma lembrança do que queimou da última vez. Quem aceita o trato nunca esquece o que perdeu, só esquece por que valia a pena.",
         "ataques": [
           {
             "nome": "Mão de Brasa Viva",
@@ -128,7 +128,7 @@
         "classe": "Ser Lendário",
         "categoria": "Elemental",
         "deslocamento": "15m",
-        "descricao": "O frio de antes de haver calor para comparar. Espera sem pressa, e o mundo em volta vai ficando do tamanho da paciência dela. Quem fala com Hiemara descobre uma voz doce e cansada, que pergunta por que tanta gente corre se tudo acaba parando. Se Hiemara cair, o inverno do mundo perde o primeiro dia e a primeira geada de cada ano chega mais tarde.",
+        "descricao": "O frio de antes de haver calor para comparar. Espera sem pressa, e o mundo em volta vai ficando do tamanho da paciência dela. Quem fala com Hiemara descobre uma voz doce e cansada, que pergunta por que tanta gente corre se tudo acaba parando.",
         "ataques": [
           {
             "nome": "Beijo de Geada",
@@ -167,7 +167,7 @@
         "classe": "Ser Lendário",
         "categoria": "Elemental",
         "deslocamento": "30m",
-        "descricao": "O fogo que continuou depois que o mundo esfriou. Cada passo dele deixa vidro no chão e um cheiro de pedra derretida no ar, e ele nunca perdoou o mundo por ter esfriado. Quando fala, as rochas em volta racham em tom de pergunta. Se Kalderon cair, o vulcão mais antigo da região se apaga por mil anos, e o mundo agradece em silêncio.",
+        "descricao": "O fogo que continuou depois que o mundo esfriou. Cada passo dele deixa vidro no chão e um cheiro de pedra derretida no ar, e ele nunca perdoou o mundo por ter esfriado. Quando fala, as rochas em volta racham em tom de pergunta.",
         "ataques": [
           {
             "nome": "Toque de Caldeira",
@@ -208,7 +208,7 @@
         "classe": "Ser Lendário",
         "categoria": "Elemental",
         "deslocamento": "30m",
-        "descricao": "O inverno que decidiu ficar. Onde ele para, o tempo passa mais devagar, e as pegadas dele continuam congeladas por séculos depois que ele se foi. Quando fala, o ar da sala vira cristal por um instante e quem escuta lembra, com clareza, a última vez que sentiu frio de verdade. Se Hiemark cair, o inverno que ele guardava se espalha pelas estações, e o próximo ano terá três meses a mais de neve.",
+        "descricao": "O inverno que decidiu ficar. Onde ele para, o tempo passa mais devagar, e as pegadas dele continuam congeladas por séculos depois que ele se foi. Quando fala, o ar da sala vira cristal por um instante e quem escuta lembra, com clareza, a última vez que sentiu frio de verdade.",
         "ataques": [
           {
             "nome": "Toque de Séculos",
@@ -1298,7 +1298,7 @@
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "24m (Voo)",
-        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele. Fala sumeriano, em frases curtas, e pergunta primeiro o que o visitante veio pedir antes de decidir se vai ouvir. Se Anzhur cair, o fogo do mundo perde o nome mais antigo e passa uma geração inteira sem saber como se chamar.",
+        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele. Fala sumeriano, em frases curtas, e pergunta primeiro o que o visitante veio pedir antes de decidir se vai ouvir.",
         "ataques": [
           {
             "nome": "Sopro Que Nomeia",
@@ -1338,7 +1338,7 @@
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "30m (Voo)",
-        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência tem o tamanho do território. Em sumeriano arcaico, diz que ainda não terminou, e que o dia em que parar de crescer será o dia em que escolher onde morrer. Se Kurnagal cair, o continente perde o ponto mais alto, e as montanhas passam a ser a ruína da cauda dele.",
+        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência tem o tamanho do território. Em sumeriano arcaico, diz que ainda não terminou, e que o dia em que parar de crescer será o dia em que escolher onde morrer.",
         "ataques": [
           {
             "nome": "Sopro do Continente",
@@ -1543,7 +1543,7 @@
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "36m (Voo)",
-        "descricao": "Diz a lenda que espera o último dia de tudo, e que o sopro dele é a última coisa que o mundo conhece. Quem duvida da lenda nunca chegou perto das asas dele. Dorme sobre uma montanha de ouro, relógios e armas quebradas, e acorda só quando o que ele guarda deixa de fazer sentido. Se Apokalyx cair, o último dia se adia, e o mundo ganha um prazo que não pediu.",
+        "descricao": "Diz a lenda que espera o último dia de tudo, e que o sopro dele é a última coisa que o mundo conhece. Quem duvida da lenda nunca chegou perto das asas dele. Dorme sobre uma montanha de ouro, relógios e armas quebradas, e acorda só quando o que ele guarda deixa de fazer sentido.",
         "ataques": [
           {
             "nome": "Sopro do Último Dia",
@@ -1662,7 +1662,7 @@
         "classe": "Ser Lendário",
         "categoria": "Morto-Vivo",
         "deslocamento": "18m",
-        "descricao": "Chega sempre um instante depois de tudo acabar, e é isso que o torna terrível: ele decide o que a última hora significou. Os que sobreviveram a ele evitam relógios. Monta um cavalo pálido que não deixa pegada, e as armas dele são ponteiros de um relógio que ninguém sabe onde fica. Se Ser Horário cair, a hora em que perdeu passa a ser lembrada como o dia em que algo terminou de verdade.",
+        "descricao": "Chega sempre um instante depois de tudo acabar, e é isso que o torna terrível: ele decide o que a última hora significou. Os que sobreviveram a ele evitam relógios. Monta um cavalo pálido que não deixa pegada, e as armas dele são ponteiros de um relógio que ninguém sabe onde fica.",
         "ataques": [
           {
             "nome": "Lâmina de Ponteiro",
@@ -1704,7 +1704,7 @@
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "30m (Nado)",
-        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Dizem em nórdico antigo que, quando ela afrouxa o abraço, as marés respondem, e que, quando soltar de vez, o mundo não vai ter onde se apoiar. Dorme de olhos abertos e sonha com o mar de antes de haver mar. Se Jörmund cair, o abraço se desfaz e o mundo precisa descobrir de repente como ficar de pé sozinho.",
+        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Dizem em nórdico antigo que, quando ela afrouxa o abraço, as marés respondem, e que, quando soltar de vez, o mundo não vai ter onde se apoiar. Dorme de olhos abertos e sonha com o mar de antes de haver mar.",
         "ataques": [
           {
             "nome": "Constrição do Mundo",
@@ -1745,7 +1745,7 @@
         "classe": "Ser Lendário",
         "categoria": "Aberração",
         "deslocamento": "24m",
-        "descricao": "Nunca é visto duas vezes do mesmo jeito. O que ele deixou para trás são relógios parados em horas diferentes e pessoas com idade demais ou de menos. Quem ele alcança perde segundos, e quem fica sem segundos perde, devagar, a vez de agir. Se Ussurr cair, os segundos que roubou voltam, todos ao mesmo tempo, e quem os recebe vive um instante de sobra por cada um que perdeu.",
+        "descricao": "Nunca é visto duas vezes do mesmo jeito. O que ele deixou para trás são relógios parados em horas diferentes e pessoas com idade demais ou de menos. Quem ele alcança perde segundos, e quem fica sem segundos perde, devagar, a vez de agir.",
         "ataques": [
           {
             "nome": "Mordida de Segundos",
@@ -1788,7 +1788,7 @@
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "24m",
-        "descricao": "Uma figura sem pressa, com o passo de quem já sabe como cada caminho termina. Aparece onde tudo já estava terminando, e o que sobra é um silêncio educado. Ninguém o vê chegar, só percebe que ele já estava lá, de pé, esperando o fim da frase. Se Teleios cair, o que ele ia encerrar continua aberto, e alguém no Jardim precisa decidir se quer terminar sozinho.",
+        "descricao": "Uma figura sem pressa, com o passo de quem já sabe como cada caminho termina. Aparece onde tudo já estava terminando, e o que sobra é um silêncio educado. Ninguém o vê chegar, só percebe que ele já estava lá, de pé, esperando o fim da frase.",
         "ataques": [
           {
             "nome": "Toque do Encerramento",
@@ -1830,7 +1830,7 @@
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "30m",
-        "descricao": "Carrega o céu nos ombros desde antes de haver quem olhasse para cima. Quando muda de posição, as estações mudam de lugar, e o que diz em voz baixa vira lei nos vales. Está cansado, mas a palavra cansaço soa nele como um favor pedido a um vizinho. Se Atlarion cair, o céu cai com ele, ou alguém precisa de ombros que ninguém tem.",
+        "descricao": "Carrega o céu nos ombros desde antes de haver quem olhasse para cima. Quando muda de posição, as estações mudam de lugar, e o que diz em voz baixa vira lei nos vales. Está cansado, mas a palavra cansaço soa nele como um favor pedido a um vizinho.",
         "ataques": [
           {
             "nome": "Punho de Céu e Terra",
@@ -3663,7 +3663,7 @@
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "18m",
-        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e a pergunta é sempre a mesma: por que tanta gente pequena em cima do meu chão? Fala grego antigo, devagar, como quem escolhe cada pedra. Se Pelóros cair, a cordilheira onde dormia perde a forma que tinha, e a cidade que ficava à sombra dela passa a ficar à luz.",
+        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e a pergunta é sempre a mesma: por que tanta gente pequena em cima do meu chão? Fala grego antigo, devagar, como quem escolhe cada pedra.",
         "ataques": [
           {
             "nome": "Punho do Mundo",
@@ -3745,7 +3745,7 @@
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "12m",
-        "descricao": "Sete pescoços, sete opiniões, uma fome só. Cada cabeça tem voz própria, e elas passam a luta discordando em voz alta sobre quem deve ser mordido primeiro, o que costuma dar tempo ao grupo para respirar e, às vezes, para negociar com a cabeça certa. Corte uma e o pescoço volta com um irmão, então a luta não se ganha por força: ganha-se por fogo, por ácido ou por sorte. Se Lerneia cair, o pântano onde vive seca em uma noite e as cabeças restantes passam a ser lembradas como sete testemunhas.",
+        "descricao": "Sete pescoços, sete opiniões, uma fome só. Cada cabeça tem voz própria, e elas passam a luta discordando em voz alta sobre quem deve ser mordido primeiro, o que costuma dar tempo ao grupo para respirar e, às vezes, para negociar com a cabeça certa. Corte uma e o pescoço volta com um irmão, então a luta não se ganha por força: ganha-se por fogo, por ácido ou por sorte.",
         "ataques": [
           {
             "nome": "Sete Bocas",
@@ -3787,7 +3787,7 @@
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "15m",
-        "descricao": "Uma hidra tão antiga que cada cabeça já foi uma hidra inteira. Ocupa um lago sem esforço, e o lago não ousa esvaziar. As cabeças moram em corpos diferentes, e quando uma morre a outra a sepulta em silêncio com a língua. Se Hydrath cair, o lago que a abrigava devolve as sete mil pedras que ela usava para contar as cabeças.",
+        "descricao": "Uma hidra tão antiga que cada cabeça já foi uma hidra inteira. Ocupa um lago sem esforço, e o lago não ousa esvaziar. As cabeças moram em corpos diferentes, e quando uma morre a outra a sepulta em silêncio com a língua.",
         "ataques": [
           {
             "nome": "Mordidas de Muitas Cabeças",
@@ -3872,7 +3872,7 @@
         "classe": "Ser Lendário",
         "categoria": "Constructo",
         "deslocamento": "12m",
-        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra. Os golens falam por Libras, e ele aprendeu a ordem por gestos que o último arquiteto fez antes de desaparecer; quem sabe repetir esses gestos descobre que ele ainda espera a ordem de parar. Se Mutis cair, a cidade que guardava para de existir de repente, como se tivesse sido uma ordem a segurá-la de pé.",
+        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra. Os golens falam por Libras, e ele aprendeu a ordem por gestos que o último arquiteto fez antes de desaparecer; quem sabe repetir esses gestos descobre que ele ainda espera a ordem de parar.",
         "ataques": [
           {
             "nome": "Punho de Torre",
@@ -3956,7 +3956,7 @@
         "classe": "Ser Lendário",
         "categoria": "Morto-Vivo",
         "deslocamento": "12m",
-        "descricao": "Viu séculos passarem em salões que hoje são ruínas, e ainda se veste como quem vai a um baile. Educado até o último segundo, e o último segundo costuma chegar rápido. Em cada cidade que habita deixa convites com o nome do convidado escrito à mão, e quem aceita descobre que o baile é uma luta em que todos dançam e só ele escolhe a música. Se Dragomir cair, os convites que ainda circulam perdem a tinta, mas quem já aceitou continua devendo uma dança a alguém.",
+        "descricao": "Viu séculos passarem em salões que hoje são ruínas, e ainda se veste como quem vai a um baile. Educado até o último segundo, e o último segundo costuma chegar rápido. Em cada cidade que habita deixa convites com o nome do convidado escrito à mão, e quem aceita descobre que o baile é uma luta em que todos dançam e só ele escolhe a música.",
         "ataques": [
           {
             "nome": "Luvas de Seda",
@@ -4233,7 +4233,7 @@
         "classe": "Ser Lendário",
         "categoria": "Aberração",
         "deslocamento": "18m",
-        "descricao": "Devora o momento em que as coisas aconteceram. Onde ele passa, as pessoas esquecem que o lugar existiu, e as estações perdem a ordem e se repetem. O que ele morde é a memória que o presente guarda. Se Aionofagos cair, o que ele devorou não volta, mas as pessoas lembram, devagar, de que algo foi comido.",
+        "descricao": "Devora o momento em que as coisas aconteceram. Onde ele passa, as pessoas esquecem que o lugar existiu, e as estações perdem a ordem e se repetem. O que ele morde é a memória que o presente guarda.",
         "ataques": [
           {
             "nome": "Dentada do Depois",
@@ -4276,7 +4276,7 @@
         "classe": "Ser Lendário",
         "categoria": "Aberração",
         "deslocamento": "24m",
-        "descricao": "Um lugar onde deveria haver alguma coisa e não há. Cresce sobre o que consome, e o que resta parece sempre um pouco menor do que era. Quem chama por ela ouve a própria voz voltar mais fraca, e quem não chama é esquecido por ela por último. Se Lacuna cair, o que consumiu não volta, mas passa a doer, e é a primeira vez que a falta incomoda quem a sente.",
+        "descricao": "Um lugar onde deveria haver alguma coisa e não há. Cresce sobre o que consome, e o que resta parece sempre um pouco menor do que era. Quem chama por ela ouve a própria voz voltar mais fraca, e quem não chama é esquecido por ela por último.",
         "ataques": [
           {
             "nome": "Toque de Falta",
@@ -4319,7 +4319,7 @@
         "classe": "Ser Lendário",
         "categoria": "Aberração",
         "deslocamento": "30m",
-        "descricao": "O primeiro sinal é pequeno e fácil de ignorar: uma porta que bate sem fazer barulho, um copo que cai e não se ouve quebrar. Depois o silêncio se espalha, um lugar de cada vez. Some o vento, somem os passos, some a água correndo. A última coisa a sumir é a respiração de quem está perto, e quando isso acontece Selah já está no mesmo lugar que você.\n\nQuem o viu e voltou não consegue dizer que forma ele tem. Lembra só de uma sensação que não vai mais embora, a de ficar preso no instante em que a própria voz falha. Ele vem do Vazio e caça pelo som. Quem grita chama a atenção dele. Quem fica calado, às vezes, é deixado para trás.\n\nA Guilda dos Caçadores não aceita contrato contra ele. Sobre Selah existe só um aviso no Quadro, escrito à mão: se o som começar a sumir, pare de falar e saia sem correr. Se não der para sair, ache o Vão por onde ele entrou e feche.\n\nSe Selah cair, o que estava calado pode finalmente falar, e o primeiro som do mundo é a voz de quem se despede.",
+        "descricao": "O primeiro sinal é pequeno e fácil de ignorar: uma porta que bate sem fazer barulho, um copo que cai e não se ouve quebrar. Depois o silêncio se espalha, um lugar de cada vez. Some o vento, somem os passos, some a água correndo. A última coisa a sumir é a respiração de quem está perto, e quando isso acontece Selah já está no mesmo lugar que você.\n\nQuem o viu e voltou não consegue dizer que forma ele tem. Lembra só de uma sensação que não vai mais embora, a de ficar preso no instante em que a própria voz falha. Ele vem do Vazio e caça pelo som. Quem grita chama a atenção dele. Quem fica calado, às vezes, é deixado para trás.\n\nA Guilda dos Caçadores não aceita contrato contra ele. Sobre Selah existe só um aviso no Quadro, escrito à mão: se o som começar a sumir, pare de falar e saia sem correr. Se não der para sair, ache o Vão por onde ele entrou e feche.",
         "ataques": [
           {
             "nome": "Silêncio Que Corta",
@@ -4404,7 +4404,7 @@
         "classe": "Ser Lendário",
         "categoria": "Espírito",
         "deslocamento": "24m (Voo)",
-        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala hebraico, e cada palavra dele soa como uma frase de lei. Se Ezrakael cair, a ordem que carregava fica por cumprir, e algum lugar do Jardim espera uma resposta que não vem.",
+        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala hebraico, e cada palavra dele soa como uma frase de lei.",
         "ataques": [
           {
             "nome": "Espada de Mensagem",
@@ -4445,7 +4445,7 @@
         "classe": "Ser Lendário",
         "categoria": "Espírito",
         "deslocamento": "30m (Voo)",
-        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em hebraico, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas. Se Seraquiel cair, o canto continua em algum lugar, mais baixo, esperando alguém que o escute até o fim.",
+        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em hebraico, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas.",
         "ataques": [
           {
             "nome": "Lâmina do Cântico",
@@ -5534,7 +5534,7 @@
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "24m (Nado)",
-        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão a ela um nome diferente em cada porto, e ela atende por todos, em latim de sereia, sem nunca corrigir ninguém. Navios que a chamam pelo nome certo costumam atravessar; os que a chamam de monstro raramente chegam em casa. Se Marenostra cair, os portos perdem o nome que davam a ela e nenhum marinheiro lembra por que rezava de olhos fechados.",
+        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão a ela um nome diferente em cada porto, e ela atende por todos, em latim de sereia, sem nunca corrigir ninguém. Navios que a chamam pelo nome certo costumam atravessar; os que a chamam de monstro raramente chegam em casa.",
         "ataques": [
           {
             "nome": "Anel Oceânico",
@@ -5576,7 +5576,7 @@
         "classe": "Ser Lendário",
         "categoria": "Elemental",
         "deslocamento": "30m (Nado)",
-        "descricao": "Uma onda que aprendeu a ir para onde quer. Passa por cima de cais, faróis e cidades pequenas, e volta para o mar como quem termina uma tarefa. Os que sobrevivem juram ter ouvido uma risada de criança dentro da água. Se Mareia cair, o oceano esquece que podia caminhar, e as marés voltam a obedecer só à lua.",
+        "descricao": "Uma onda que aprendeu a ir para onde quer. Passa por cima de cais, faróis e cidades pequenas, e volta para o mar como quem termina uma tarefa. Os que sobrevivem juram ter ouvido uma risada de criança dentro da água.",
         "ataques": [
           {
             "nome": "Parede de Água",

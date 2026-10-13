@@ -3340,7 +3340,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Conte ações, não corpos. As ações inimigas por rodada devem ficar perto das ações relevantes do grupo, um pouco abaixo ou um pouco acima.</li>
         <li>Chefe sozinho precisa de reação, fase ou ação de cenário. Chefe que só tem Vida alta produz um combate longo e parado.</li>
         <li>Toda criatura única do Bestiário já traz as fases escritas. Na Sessão, quando a Vida do chefe cai ao limiar da fase, ela muda sozinha: você vê o que mudou, a mesa lê só a frase de cena, e a fase não volta atrás quando alguém cura o chefe. Dá para trocar a fase à mão no editor da criatura.</li>
-        <li>As 28 criaturas lendárias do Bestiário (as que trazem "Se X cair" na ficha) não disparam nada sozinhas quando chegam a 0 de Vida: o que muda no mundo com a queda, e quem fica sabendo, é decisão sua.</li>
+        <li>As criaturas lendárias do Bestiário não disparam nada sozinhas quando chegam a 0 de Vida: o que muda no mundo com a queda, e quem fica sabendo, é decisão sua.</li>
         <li>Terreno, cobertura e objetivo existem para mudar decisão, não para conceder mais um bônus numérico.</li>
         <li>Nunca tire o turno inteiro de um jogador por mais de uma rodada seguida. Ficar olhando não é jogar.</li>
       </ul>

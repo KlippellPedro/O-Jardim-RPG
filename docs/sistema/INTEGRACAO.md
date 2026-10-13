@@ -175,7 +175,8 @@ O Livro da Verdade, com a página das 28 lendas, a queda registrada na Sessão, 
 "Matador de ..." e "Cara a Cara com um Deus" e os efeitos de mundo (estação forçada e ajuste de preço), saiu do
 site em 2026-10-12 por decisão do Pedro. A migração 54 limpa o que ele deixou nos bancos que já o tinham: tira do
 calendário os marcos das quedas e a chave `efeitos`, apaga os selos já concedidos e dropa `campanha_lendas`. A frase
-"Se X cair" continua na ficha das criaturas como gancho para o Mestre, sem nada automático.
+A frase "Se X cair" também saiu da descrição das 28 criaturas (catálogo e `familias-propostas-v1.json`):
+elas voltam a ser criaturas do Bestiário como as outras, sem nada automático por trás.
 
 ### Deidades no Bestiário da Sessão
 
