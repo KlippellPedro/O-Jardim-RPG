@@ -1,4 +1,4 @@
-import React, { type CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type CSSProperties, Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -43,19 +43,6 @@ import { obterStatusFicha } from '../../services/statusService';
 import { ModalInfoFicha } from './components/ModalInfoFicha';
 import { FichaModal } from './components/FichaModal';
 import { AbaFicha } from './abas/AbaFicha';
-import { AbaPericias } from './abas/AbaPericias';
-import { AbaInventario } from './abas/AbaInventario';
-import { AbaPoderes } from './abas/AbaPoderes';
-import { AbaJardim } from './abas/AbaJardim';
-import { AbaHabilidades } from './abas/AbaHabilidades';
-import { AbaAtaques } from './abas/AbaAtaques';
-import { AbaMagias } from './abas/AbaMagias';
-import { AbaAliados } from './abas/AbaAliados';
-import { AbaNotas } from './abas/AbaNotas';
-import { AbaProgressao } from './abas/AbaProgressao';
-import { AbaDescanso } from './abas/AbaDescanso';
-import { AbaCondicoes } from './abas/AbaCondicoes';
-import { AbaBens } from './abas/AbaBens';
 import { useCampaignSSE } from '../../hooks/useCampaignSSE';
 import { useAuthStore } from '../../store/useAuthStore';
 import { FichaAtmosphere } from './components/FichaAtmosphere';
@@ -95,6 +82,37 @@ import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
 import { confirmar } from '../../components/avisos/confirmacao';
 import { guiasAutomaticosLigados } from '../../utils/guias';
 import { esquecerUltimaFicha, lembrarUltimaFicha, recordarUltimaFicha } from '../../services/ultimaFicha';
+
+// Só a aba Ficha vem no pacote da página; as outras 13 carregam na primeira vez que são abertas
+// (e são puxadas em segundo plano logo depois da primeira pintura, para o clique não esperar).
+const AbaPericias = lazy(() => import('./abas/AbaPericias').then((modulo) => ({ default: modulo.AbaPericias })));
+const AbaInventario = lazy(() => import('./abas/AbaInventario').then((modulo) => ({ default: modulo.AbaInventario })));
+const AbaPoderes = lazy(() => import('./abas/AbaPoderes').then((modulo) => ({ default: modulo.AbaPoderes })));
+const AbaJardim = lazy(() => import('./abas/AbaJardim').then((modulo) => ({ default: modulo.AbaJardim })));
+const AbaHabilidades = lazy(() => import('./abas/AbaHabilidades').then((modulo) => ({ default: modulo.AbaHabilidades })));
+const AbaAtaques = lazy(() => import('./abas/AbaAtaques').then((modulo) => ({ default: modulo.AbaAtaques })));
+const AbaMagias = lazy(() => import('./abas/AbaMagias').then((modulo) => ({ default: modulo.AbaMagias })));
+const AbaAliados = lazy(() => import('./abas/AbaAliados').then((modulo) => ({ default: modulo.AbaAliados })));
+const AbaNotas = lazy(() => import('./abas/AbaNotas').then((modulo) => ({ default: modulo.AbaNotas })));
+const AbaProgressao = lazy(() => import('./abas/AbaProgressao').then((modulo) => ({ default: modulo.AbaProgressao })));
+const AbaDescanso = lazy(() => import('./abas/AbaDescanso').then((modulo) => ({ default: modulo.AbaDescanso })));
+const AbaCondicoes = lazy(() => import('./abas/AbaCondicoes').then((modulo) => ({ default: modulo.AbaCondicoes })));
+const AbaBens = lazy(() => import('./abas/AbaBens').then((modulo) => ({ default: modulo.AbaBens })));
+const precarregarAbas = () => Promise.all([
+  import('./abas/AbaPericias'),
+  import('./abas/AbaInventario'),
+  import('./abas/AbaPoderes'),
+  import('./abas/AbaJardim'),
+  import('./abas/AbaHabilidades'),
+  import('./abas/AbaAtaques'),
+  import('./abas/AbaMagias'),
+  import('./abas/AbaAliados'),
+  import('./abas/AbaNotas'),
+  import('./abas/AbaProgressao'),
+  import('./abas/AbaDescanso'),
+  import('./abas/AbaCondicoes'),
+  import('./abas/AbaBens'),
+]);
 /** O autosave da ficha espera 900 ms (useCharacterStore); com folga para a rede. */
 const ESPERA_AUTOSAVE_CONQUISTAS_MS = 1800;
 
@@ -177,6 +195,12 @@ export const PersonagemSheet: React.FC = () => {
   const liveSyncRunningRef = useRef(false);
   const liveSyncRunTokenRef = useRef(0);
   const liveSyncRetryRef = useRef<number | null>(null);
+
+  // As abas carregam sob demanda; depois da primeira pintura vêm todas em segundo plano, e o clique não espera.
+  useEffect(() => {
+    const espera = window.setTimeout(() => { precarregarAbas().catch(() => undefined); }, 2500);
+    return () => window.clearTimeout(espera);
+  }, []);
 
   // A vinheta de Vida/Sanidade começa limpa e não vaza para outra ficha.
   useEffect(() => {
@@ -976,7 +1000,9 @@ export const PersonagemSheet: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.18, ease: 'easeOut' }}
             >
-              {renderActiveTab()}
+              <Suspense fallback={<div role="status" className="py-20 text-center text-sm text-gray-500">Abrindo a aba...</div>}>
+                {renderActiveTab()}
+              </Suspense>
             </motion.div>
           </AbaErrorBoundary>
         </fieldset>
