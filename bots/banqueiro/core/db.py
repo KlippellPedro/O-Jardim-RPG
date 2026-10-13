@@ -35,6 +35,14 @@ class DatabaseUnavailable(RuntimeError):
     """Falha de infraestrutura/configuracao ao acessar o PostgreSQL."""
 
 
+# O carimbo de um ciclo é gravado depois do trabalho do tick (alguns décimos de
+# segundo após o tick do loop de hora em hora). Sem uma folga, o tick exatamente
+# 24h depois ainda enxerga o carimbo como "recente" e o ciclo só roda 1h depois:
+# o ciclo de 24h virava 25h, o semanal 169h. A folga precisa ser bem menor que
+# o período do loop (1h) para nunca antecipar uma rodada inteira.
+CICLO_TOLERANCIA = timedelta(minutes=15)
+
+
 class CassinoIndisponivel(RuntimeError):
     pass
 
@@ -1052,7 +1060,8 @@ class Database:
             ).fetchone()
         if row is None:
             return True
-        return row["executado_em"] <= datetime.now(timezone.utc) - timedelta(hours=intervalo_horas)
+        limite = datetime.now(timezone.utc) - timedelta(hours=intervalo_horas) + CICLO_TOLERANCIA
+        return row["executado_em"] <= limite
 
     def marcar_ciclo_guild(self, guild_id: str, ciclo: str) -> None:
         with self._conn() as con:

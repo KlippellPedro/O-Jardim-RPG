@@ -247,7 +247,8 @@ def test_leilao_semanal_abre_uma_vez_por_semana_com_botao_e_embed_da_casa():
             assert emb.fields[0].name.startswith("Épico")
             botao = canal.enviados[0]["view"].children[0]
             assert botao.item.custom_id == f"leilao_lance:{leilao['id']}"
-            assert (leilao["expira_em"] - datetime.now(timezone.utc)) > timedelta(hours=23)
+            # Conta no tempo simulado do teste (SABADO_19H), não no relógio real: com o relógio real o teste vencia sozinho.
+            assert (leilao["expira_em"] - SABADO_19H) > timedelta(hours=23)
             # semana seguinte: outro leilão
             await cog.rodar_guild(guild, SABADO_19H + timedelta(days=7))
             assert len(canal.enviados) == 2
