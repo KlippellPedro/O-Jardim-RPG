@@ -12,6 +12,7 @@ import {
   normalizarCriticoBalanceado,
 } from '../../../services/criticalService';
 import { carregarCatalogo } from '../../../services/catalogoService';
+import { obterArmaNaturalRacial } from '../../../services/racaService';
 import { vantagensDoGrau } from '../../../services/progressaoNiveis';
 import { aplicarAjustesAtributosRaciais, BONUS_GRAU, modificador, obterAjustesPericiasRaciais } from '../../../services/calculoService';
 import { grausComConcedidos, obterAtributoPericia } from '../../../services/periciasFichaService';
@@ -57,10 +58,14 @@ interface IAtaque {
   somarForca?: boolean;
   /** Arma híbrida: o jogador escolhe corpo a corpo ou à distância na hora de atacar. */
   hibrida?: boolean;
+  /** Arma natural da raça (Fera e Híbrido da Animália): nasce da escolha racial, não é gravada nem editável aqui. */
+  natural?: boolean;
   subtipo?: string;
   municaoAtual?: number;
   municaoMaxima?: number;
 }
+
+const ID_ARMA_NATURAL = 'arma-natural-racial';
 
 interface IResultadoRolagem {
   ataqueId: string;
@@ -179,7 +184,22 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       },
     );
   }, [character.id, usuarioId]); // eslint-disable-line react-hooks/exhaustive-deps
-  const ataques: IAtaque[] = [...armasEquipadas, ...ataquesManuais];
+  const racaDoAtaqueNatural = catalogo?.racas.find(raca => raca.id === character.ficha?.racaId) || null;
+  const armaNatural = obterArmaNaturalRacial(racaDoAtaqueNatural, character.ficha?.escolhaRacial);
+  const ataqueNatural: IAtaque[] = armaNatural ? [{
+    id: ID_ARMA_NATURAL,
+    nome: armaNatural.nome,
+    tipo: TIPO_CORPO_A_CORPO,
+    bonusAcerto: 0,
+    dano: armaNatural.dano,
+    alcance: '1,5m',
+    margemAmeaca: 20,
+    multiplicadorCritico: 2,
+    somarForca: true,
+    natural: true,
+    favorito: Boolean(character.ficha?.armaNaturalFavorita),
+  }] : [];
+  const ataques: IAtaque[] = [...ataqueNatural, ...armasEquipadas, ...ataquesManuais];
   const ficha = character.ficha || {};
   const status = obterStatusFicha(ficha);
   const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], ficha, character.aliadosCompartilhados || []);
@@ -299,7 +319,9 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     const itemTarget = ataques.find(a => a.id === id);
     const wasFavorite = itemTarget?.favorito;
 
-    if (isInventory) {
+    if (id === ID_ARMA_NATURAL) {
+      onUpdate(['ficha', 'armaNaturalFavorita'], !wasFavorite);
+    } else if (isInventory) {
       void mutateEconomy(character.id, (current) => {
         const inventario = current.inventario.map((item) => (
           item.item_id === id
@@ -651,8 +673,9 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                       <h4 className="text-white font-bold text-lg mb-1 flex items-center gap-2">
                         {a.nome || 'Ataque Desconhecido'} 
                         {a.isInventory && <span className="px-1.5 py-0.5 rounded bg-[#c7a44c]/20 border border-[#c7a44c]/30 text-[#c7a44c] text-[8px] uppercase tracking-widest">Arma</span>}
+                        {a.natural && <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[8px] uppercase tracking-widest">Natural</span>}
                       </h4>
-                      <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {!a.natural && <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
                           onClick={() => abrirEditar(a)}
                           title="Editar"
@@ -667,7 +690,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                         >
                           <Trash2 size={14} />
                         </button>
-                      </div>
+                      </div>}
                     </div>
                     
                     <div className="flex flex-wrap gap-2 mb-3">

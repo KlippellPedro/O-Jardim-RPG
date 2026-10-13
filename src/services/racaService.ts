@@ -378,6 +378,26 @@ export function obterAnimalRacial(
   return typeof id === 'string' ? raca?.animais?.find(animal => animal.id === id) ?? null : null;
 }
 
+/** A arma natural que a Forma dá (a Fera morde com dano base 1d8, o Híbrido com 1d6, os Traços não têm). O nome
+ * vem do animal escolhido ("Garra de Leão"); sem animal do catálogo, ou com um que o jogador escreveu, fica
+ * "Arma natural". O ataque nasce da escolha racial e não é gravado na ficha: trocar de Forma já o troca. */
+export interface IArmaNaturalRacial {
+  nome: string;
+  dano: string;
+}
+
+export function obterArmaNaturalRacial(
+  raca: IRaca | null | undefined,
+  escolhaRacial: Record<string, unknown> | null | undefined,
+): IArmaNaturalRacial | null {
+  const forma = obterNaturezaRacial(raca, escolhaRacial, true);
+  const dano = forma?.arma_natural_dano;
+  if (!forma || forma.sem_arma_natural || typeof dano !== 'string' || !dano) return null;
+  const animal = obterAnimalRacial(raca, escolhaRacial);
+  const arma = typeof animal?.arma_natural === 'string' ? animal.arma_natural : '';
+  return { nome: arma && animal ? `${arma} de ${animal.titulo}` : 'Arma natural', dano };
+}
+
 /** Tamanho que a raça dá: o da Forma, quando ela fixa um (os Traços da Animália têm corpo de pessoa,
  * qualquer que seja o animal); senão o do animal escolhido (um rato é Pequeno, um rinoceronte é Grande);
  * senão o da variante, quando a raça fixa o tamanho por ela (Golem, Fada). */

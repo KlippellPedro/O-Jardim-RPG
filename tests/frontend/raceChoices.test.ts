@@ -7,6 +7,7 @@ import {
   animalServeAMorfologia,
   escolhaRacialEstaCompleta,
   obterAnimalRacial,
+  obterArmaNaturalRacial,
   obterGruposEscolhaRacial,
   obterNaturezaRacialId,
   obterEstagiosRaciais,
@@ -686,4 +687,28 @@ test('trocar a Forma da Animália mantém a Morfologia, mas trocar a Natureza do
   assert.equal(varianteServeANatureza(espirito, 'demonio-ira', 'angelical'), false);
   // Sem variante escolhida não há o que invalidar.
   assert.equal(varianteServeANatureza(espirito, undefined, 'angelical'), true);
+});
+
+test('a Animália ganha a arma natural da Forma, com o nome do animal, e os Traços não têm', () => {
+  const animalia = racas.find(item => item.id === 'animalia') as IRaca;
+  assert.ok(animalia);
+  assert.deepEqual(obterArmaNaturalRacial(animalia, { naturezaId: 'fera', varianteId: 'predadora', animalId: 'leao' }), { nome: 'Garra de Leão', dano: '1d8' });
+  assert.deepEqual(obterArmaNaturalRacial(animalia, { naturezaId: 'hibrido', varianteId: 'aquatica', animalId: 'orca' }), { nome: 'Mordida de Orca', dano: '1d6' });
+  assert.equal(obterArmaNaturalRacial(animalia, { naturezaId: 'tracos', varianteId: 'alada', animalId: 'coruja' }), null, 'os Traços não têm arma natural');
+  // Animal escrito pelo jogador ou ainda não escolhido: a arma existe, só não tem nome de bicho.
+  assert.deepEqual(obterArmaNaturalRacial(animalia, { naturezaId: 'fera', varianteId: 'agil' }), { nome: 'Arma natural', dano: '1d8' });
+  // Ficha antiga, sem Forma, vale como Híbrido.
+  assert.deepEqual(obterArmaNaturalRacial(animalia, { varianteId: 'agil', animalId: 'gato' }), { nome: 'Garra de Gato', dano: '1d6' });
+  // Outras raças não ganham arma natural por aqui.
+  assert.equal(obterArmaNaturalRacial(racas.find(item => item.id === 'humano') as IRaca, {}), null);
+  assert.equal(obterArmaNaturalRacial(null, {}), null);
+});
+
+test('toda arma natural declarada na Forma traz dano em dado e todo animal diz o nome da sua arma', () => {
+  const animalia = racas.find(item => item.id === 'animalia') as IRaca;
+  for (const forma of animalia.naturezas ?? []) {
+    if (forma.sem_arma_natural) assert.equal(forma.arma_natural_dano, undefined, `${forma.id} não pode ter dano de arma natural`);
+    else assert.match(String(forma.arma_natural_dano), /^\d+d\d+$/, `${forma.id} precisa de dano de arma natural`);
+  }
+  for (const animal of animalia.animais ?? []) assert.ok(animal.arma_natural, `${animal.id} sem nome de arma natural`);
 });

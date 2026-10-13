@@ -4410,6 +4410,7 @@
       {
         "id": "fera",
         "titulo": "Fera",
+        "arma_natural_dano": "1d8",
         "descricao": "O bicho inteiro, do jeito que a natureza fez. Um gorila que fala, um dragão que pensa, uma coruja que escolhe um lado. Tem o corpo e o tamanho do animal e a arma natural mais forte, e paga no equipamento: tudo que veste precisa ser feito para ele.",
         "vida": 2,
         "mana": -1,
@@ -4437,6 +4438,7 @@
       {
         "id": "hibrido",
         "titulo": "Híbrido",
+        "arma_natural_dano": "1d6",
         "descricao": "Metade bicho, metade gente. Anda em duas pernas, tem mãos e um pedaço do animal no corpo: garra, presa, pelo, cauda. É a Forma de equilíbrio.",
         "vida": 0,
         "mana": 0,
