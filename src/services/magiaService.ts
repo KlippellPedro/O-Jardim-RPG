@@ -546,6 +546,26 @@ export function circuloRotulo(circulo: CirculoMagia): string {
   return circulo === 'ritual' ? 'Ritual' : `${circulo}º Círculo`;
 }
 
+/** O papel de uma magia como se lê na tela e no livro: o id não tem acento nem espaço ("ataque-controle"). */
+const ROTULO_PAPEL_MAGIA: Record<string, string> = {
+  ataque: 'Ataque',
+  defesa: 'Defesa',
+  cura: 'Cura',
+  suporte: 'Suporte',
+  utilidade: 'Utilidade',
+  investigacao: 'Investigação',
+  controle: 'Controle',
+  movimento: 'Movimento',
+  'ataque-controle': 'Ataque e controle',
+  'ataque-risco': 'Ataque arriscado',
+  'suporte-movimento': 'Suporte e movimento',
+  'controle-utilidade': 'Controle e utilidade',
+};
+
+export function rotuloPapelMagia(papel: string): string {
+  return ROTULO_PAPEL_MAGIA[papel] ?? papel;
+}
+
 export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inventarioCentral: any[] = []): { permitido: boolean; motivo?: string } {
   const perfil = obterPerfilMagico(ficha, inventarioCentral);
   if (perfil.conhecidasIds.includes(magia.id)) return { permitido: false, motivo: 'Magia já conhecida.' };

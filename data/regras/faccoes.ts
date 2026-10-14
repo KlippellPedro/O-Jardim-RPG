@@ -258,7 +258,7 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
   status: 'Regra oficial',
   resumo: 'Regras de Prestígio, Fama, acesso e reação para organizações de qualquer Árvore.',
   destaques: [
-    ['Prestígio', '-3 a +3 por facção'],
+    ['Prestígio', '−3 a +3 por facção'],
     ['Fama', '0 a 5'],
     ['Bônus máximo', '±2'],
   ],
@@ -288,7 +288,7 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
 
     <h3 class="regras-subtitle">Alterar Prestígio</h3>
     <dl class="regras-kv regras-kv--boxed">
-      ${ALTERACOES_PRESTIGIO.map((alteracao) => `<dt>${alteracao.variacao > 0 ? '+' : ''}${alteracao.variacao}</dt><dd>${alteracao.causa} ${alteracao.limite}</dd>`).join('')}
+      ${ALTERACOES_PRESTIGIO.map((alteracao) => `<dt>${alteracao.variacao > 0 ? '+' : '−'}${Math.abs(alteracao.variacao)}</dt><dd>${alteracao.causa} ${alteracao.limite}</dd>`).join('')}
     </dl>
     <p>Depois de aplicar a mudança, limite o resultado entre ${comSinal(PRESTIGIO_MINIMO)} e ${comSinal(PRESTIGIO_MAXIMO)}. Um mesmo fato não gera dois ajustes.</p>
     <div class="regras-note regras-note--exemplo">
@@ -305,7 +305,7 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
 
     <h3 class="regras-subtitle">Alterar Fama</h3>
     <dl class="regras-kv regras-kv--boxed">
-      ${ALTERACOES_FAMA.map((alteracao) => `<dt>${alteracao.variacao > 0 ? '+' : ''}${alteracao.variacao}</dt><dd>${alteracao.causa} ${alteracao.limite}</dd>`).join('')}
+      ${ALTERACOES_FAMA.map((alteracao) => `<dt>${alteracao.variacao > 0 ? '+' : '−'}${Math.abs(alteracao.variacao)}</dt><dd>${alteracao.causa} ${alteracao.limite}</dd>`).join('')}
     </dl>
     <p>Depois de aplicar a mudança, limite o resultado entre ${FAMA_MINIMA} e ${FAMA_MAXIMA}.</p>
     <div class="regras-note regras-note--exemplo">

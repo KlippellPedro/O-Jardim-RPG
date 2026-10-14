@@ -93,13 +93,13 @@ test('reparo tem teto mínimo e não recria recursos consumidos', () => {
 test('alquimia e cibernéticos não contornam limites de classe ou de item', () => {
   assert.ok(REGRAS_ALQUIMIA.some((regra) => /não conta como item fabricado/i.test(regra)));
   assert.ok(REGRAS_TECNOLOGIA_E_CIBERNETICOS.some((regra) => /não ignora|não cria/i.test(regra)));
-  assert.match(REGRA_CRAFTING.corpo, /Nenhuma classe é obrigatória/);
+  assert.match(REGRA_CRAFTING.corpo, /nenhuma classe é obrigatória/i);
 });
 
 test('salvaguardas impedem duplicação de Drops e lucro automático', () => {
   const texto = SALVAGUARDAS_ECONOMIA_CRAFTING.join(' ');
   assert.match(texto, /Drop não pode ser usado, vendido e recuperado/);
   assert.match(texto, /não possui lucro ou comprador automático/);
-  assert.match(texto, /no máximo um bloco de 6 horas de crafting por dia/);
+  assert.match(texto, /no máximo um bloco de 6 horas de fabricação por dia/);
   assert.match(texto, /não produzem estoque permanente/);
 });

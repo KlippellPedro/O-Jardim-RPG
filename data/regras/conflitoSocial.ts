@@ -103,7 +103,7 @@ export const ABORDAGENS_SOCIAIS: readonly IAbordagemSocial[] = [
     id: 'oferta',
     titulo: 'Oferecer algo concreto',
     fala: 'A dívida com o Banco some amanhã, e ninguém precisa saber de onde veio o dinheiro.',
-    teste: 'Sem teste',
+    teste: 'nenhum',
     efeito: 'Tira 1 de Resistência por oferta que custe de verdade ao grupo: dinheiro, favor, segredo, Prestígio.',
     risco: 'Oferta pequena demais enche 1 de Paciência e queima a ideia.',
   },
@@ -111,7 +111,7 @@ export const ABORDAGENS_SOCIAIS: readonly IAbordagemSocial[] = [
     id: 'ceder',
     titulo: 'Ceder alguma coisa',
     fala: 'Fique com a carga. A gente só quer o nome de quem mandou.',
-    teste: 'Sem teste',
+    teste: 'nenhum',
     efeito: 'Tira 2 de Resistência quando o grupo abre mão de algo que queria nesta negociação.',
     risco: 'A concessão vale, e a outra parte vai cobrar exatamente o que foi prometido.',
   },
@@ -178,7 +178,7 @@ export const REGRA_CONFLITO_SOCIAL: RegraTopicoDe<'Combate e Mecânicas'> = {
     ['Por rodada', 'Uma abordagem por personagem'],
   ],
   corpo: `
-    <p class="regras-lead">Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo para dizer, e cada palavra errada fecha uma porta. Um pedido simples continua sendo um teste só. Esta página é para as outras conversas: arrancar a verdade de um preso, fechar preço com quem não precisa vender, convencer um conselho que já decidiu antes de vocês entrarem.</p>
+    <p class="regras-lead">Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo para dizer, e cada palavra errada fecha uma porta. Um pedido simples continua sendo um teste só. Este tópico é para as outras conversas: arrancar a verdade de um preso, fechar preço com quem não precisa vender, convencer um conselho que já decidiu antes de vocês entrarem.</p>
 
     <div class="regras-resumo">
       <ul>

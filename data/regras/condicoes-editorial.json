@@ -317,7 +317,7 @@
       "categoria": "mental",
       "duracao": "1d4 rodadas.",
       "efeitos": [
-        "Não pode usar reações e sofre -2 em testes de percepção e interação."
+        "Não pode usar reações e sofre -2 em testes de Percepção e de interação."
       ],
       "remocao": "Vontade DT 15 no fim de cada turno encerra a crise."
     },
@@ -341,7 +341,7 @@
       "efeitos": [
         "Fique Atordoado, mas receba +5 contra empurrões e agarrões."
       ],
-      "remocao": "Um aliado pode usar ação padrão e Medicina ou Persuasão DT 15."
+      "remocao": "Um aliado pode usar uma ação padrão e Cura ou Diplomacia DT 15."
     },
     {
       "tipo": "crise",

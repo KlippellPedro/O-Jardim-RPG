@@ -106,7 +106,7 @@ nele: mudou o dado, mudou o compêndio no próximo `npm run docs:livro`.
 
 | Parte | O que traz | Entrada |
 |---|---|---|
-| Compêndio A, Classes | entrega de saída, progressão do nível 1 ao 20, Maestria, magia da classe, habilidades com estágios e opções, eventos e poderes | uma classe por entrada, em ordem alfabética |
+| Compêndio A, Classes | regras próprias da classe, progressão do nível 1 ao 20, Maestria, magia da classe, habilidades com estágios e opções, eventos e poderes | uma classe por entrada, em ordem alfabética |
 | Compêndio B, Raças | ajuste inicial, fisiologia, características, estágios e as escolhas da raça (clã, forma, linhagem, animal) | uma raça por entrada |
 | Compêndio C, Legados | todos os Legados, com pré-requisito e efeito | uma entrada só, em cartões |
 | Compêndio D, Magias | magias por Fluxo e por círculo, rituais, selos, encantamentos e fusões | uma entrada por Fluxo e uma por forma |

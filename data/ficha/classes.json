@@ -13,7 +13,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo pra si e comanda um batalhão que luta melhor quando ele está por perto.",
+    "descricao": "Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo para si e comanda um batalhão que luta melhor quando ele está por perto.",
     "dt_efeitos": {
       "rotulo": "DT de Guerreiro",
       "pericia": "intimidacao",
@@ -486,7 +486,7 @@
       {
         "id": "ate-a-morte",
         "titulo": "Até a Morte",
-        "descricao": "Uma arena oferece um desafio de sobrevivência compatível com o grupo. Vitória concede reconhecimento e uma recompensa definida pelo mestre, nunca níveis ou recursos infinitos.",
+        "descricao": "Uma arena oferece um desafio de sobrevivência compatível com o grupo. Vitória concede reconhecimento e uma recompensa definida pelo Mestre, nunca níveis ou recursos infinitos.",
         "niveis": [
           4,
           7,
@@ -961,7 +961,7 @@
         },
         "escolha_opcoes": {
           "rotulo": "Modificações instaladas",
-          "descricao": "Uma modificação no nível 3, duas no 8, três no 14 e quatro no 20. São dez na lista, e repetir a mesma peça não vale: ela já está instalada. Com aval do mestre, uma peça publicada no catálogo entra no lugar de uma da lista, no mesmo tier.",
+          "descricao": "Uma modificação no nível 3, duas no 8, três no 14 e quatro no 20. São dez na lista, e repetir a mesma peça não vale: ela já está instalada. Com aval do Mestre, uma peça publicada no catálogo entra no lugar de uma da lista, no mesmo tier.",
           "por_estagio": 1,
           "repetivel": false
         },
@@ -1564,7 +1564,7 @@
             "alcance": "Pessoal",
             "duracao": "Permanente, enquanto empunhar a arma marcada",
             "defesa": "+1",
-            "descricao": "Enquanto estiver empunhando a arma marcada e sem usar escudo, receba +1 de Defesa: ela também serve pra desviar."
+            "descricao": "Enquanto estiver empunhando a arma marcada e sem usar escudo, receba +1 de Defesa: ela também serve para desviar."
           },
           {
             "id": "arma-camuflada",
@@ -1588,7 +1588,7 @@
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Permanente, enquanto usar a arma marcada",
-            "descricao": "Só numa arma corpo a corpo. O alcance de ataque da arma marcada aumenta em 1,5 m, o bastante pra manter alguém na ponta da lâmina sem deixar que a distância se feche."
+            "descricao": "Só numa arma corpo a corpo. O alcance de ataque da arma marcada aumenta em 1,5 m, o bastante para manter alguém na ponta da lâmina sem deixar que a distância se feche."
           }
         ]
       },
@@ -1767,7 +1767,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Onde os outros partem pra briga, ele sobe no palco. A fama abre portas, a presença prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.",
+    "descricao": "Onde os outros partem para briga, ele sobe no palco. A fama abre portas, a presença prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.",
     "dt_efeitos": {
       "rotulo": "DT de Palco",
       "pericia": "atuacao",
@@ -2112,7 +2112,7 @@
         },
         "escolha_opcoes": {
           "rotulo": "Contratos fechados",
-          "descricao": "Um contrato no nível 3, dois no 8, três no 14 e quatro no 20. Repetir a mesma marca não vale: ela já tem você. Com aval do mestre, uma marca da campanha entra no lugar de uma da lista, com o mesmo tamanho de benefício.",
+          "descricao": "Um contrato no nível 3, dois no 8, três no 14 e quatro no 20. Repetir a mesma marca não vale: ela já tem você. Com aval do Mestre, uma marca da campanha entra no lugar de uma da lista, com o mesmo tamanho de benefício.",
           "por_estagio": 1,
           "repetivel": false
         },
@@ -3391,7 +3391,7 @@
       {
         "id": "ringue",
         "titulo": "Ringue",
-        "descricao": "Participe de Duelo Único, Sequência Brutal ou Prova de Sangue. O mestre ajusta adversários e recompensas ao patamar da campanha.",
+        "descricao": "Participe de Duelo Único, Sequência Brutal ou Prova de Sangue. O Mestre ajusta adversários e recompensas ao patamar da campanha.",
         "niveis": [
           4,
           7,
@@ -3934,7 +3934,7 @@
       {
         "id": "tiro-ao-alvo",
         "titulo": "Tiro ao Alvo",
-        "descricao": "Um estande promove competição de tiro. Uma vitória permite escolher uma arma à distância comum ou uma melhoria compatível, aprovada pelo mestre.",
+        "descricao": "Um estande promove competição de tiro. Uma vitória permite escolher uma arma à distância comum ou uma melhoria compatível, aprovada pelo Mestre.",
         "niveis": [
           4,
           7,
@@ -4050,7 +4050,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Segura o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e manda de volta pra luta. Só não consegue desfazer o que já aconteceu.",
+    "descricao": "Segura o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e manda de volta para luta. Só não consegue desfazer o que já aconteceu.",
     "dt_efeitos": {
       "rotulo": "DT do Médico",
       "pericia": "cura",
@@ -4501,7 +4501,7 @@
       {
         "id": "milagre",
         "titulo": "Milagre",
-        "descricao": "Uma vez a cada cinco sessões, durante um descanso longo e com 12 Mana, restaure um membro perdido ou remova uma condição gravíssima. Não ressuscita mortos nem remove consequências narrativas sem aprovação do mestre.",
+        "descricao": "Uma vez a cada cinco sessões, durante um descanso longo e com 12 Mana, restaure um membro perdido ou remova uma condição gravíssima. Não ressuscita mortos nem remove consequências narrativas sem aprovação do Mestre.",
         "custo_mana": 12,
         "niveis": [
           18
@@ -4527,7 +4527,7 @@
       {
         "id": "especializacao-medica",
         "titulo": "Especialização Médica",
-        "descricao": "Médicos ou alquimistas propõem uma prova clínica. Sucesso concede acesso a contato, técnica regional ou equipamento, conforme o mestre.",
+        "descricao": "Médicos ou alquimistas propõem uma prova clínica. Sucesso concede acesso a contato, técnica regional ou equipamento, conforme o Mestre.",
         "niveis": [
           4,
           7,
@@ -4634,7 +4634,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Escolhe uma pessoa pra proteger e leva isso muito a sério. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e aguenta o que vier, até onde a reação e a cena deixarem.",
+    "descricao": "Escolhe uma pessoa para proteger e leva isso muito a sério. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e aguenta o que vier, até onde a reação e a cena deixarem.",
     "dt_efeitos": {
       "rotulo": "DT do Guardião",
       "pericia": "intimidacao",
@@ -4886,7 +4886,7 @@
           },
           {
             "nivel": 10,
-            "descricao": "Uma vez por sessão, convoque apoio de um Guardião regional para uma tarefa legítima; o mestre define tempo e disponibilidade. Aprenda mais um Juramento de Guarda.",
+            "descricao": "Uma vez por sessão, convoque apoio de um Guardião regional para uma tarefa legítima; o Mestre define tempo e disponibilidade. Aprenda mais um Juramento de Guarda.",
             "acao": "Ação Livre para convocar",
             "usos": "Uma vez por sessão"
           },
@@ -5210,7 +5210,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Estuda a presa antes de chegar perto. Cada tipo de criatura pede um jeito diferente de caçar, e o que ele aprende sobre uma serve pra toda a família dela.",
+    "descricao": "Estuda a presa antes de chegar perto. Cada tipo de criatura pede um jeito diferente de caçar, e o que ele aprende sobre uma serve para toda a família dela.",
     "dt_efeitos": {
       "rotulo": "DT do Caçador",
       "pericia": "sobrevivencia",
@@ -5517,12 +5517,12 @@
           {
             "id": "espirito",
             "titulo": "Espírito",
-            "descricao": "Sem corpo pra ferir do jeito normal; atravessa parede gastando Mana e não veste armadura comum."
+            "descricao": "Sem corpo para ferir do jeito normal; atravessa parede gastando Mana e não veste armadura comum."
           },
           {
             "id": "gigante",
             "titulo": "Gigante",
-            "descricao": "Grande demais pra passar despercebido; a força bruta preocupa mais que a velocidade."
+            "descricao": "Grande demais para passar despercebido; a força bruta preocupa mais que a velocidade."
           },
           {
             "id": "animalia",
@@ -5602,7 +5602,7 @@
           {
             "id": "divino",
             "titulo": "Divino",
-            "descricao": "Carrega sangue de um deus, grande ou esquecido; o que sobrou da divindade já basta pra ser perigoso."
+            "descricao": "Carrega sangue de um deus, grande ou esquecido; o que sobrou da divindade já basta para ser perigoso."
           }
         ]
       },
@@ -5788,7 +5788,7 @@
       {
         "id": "requisicao-de-cacada",
         "titulo": "Requisição de Caçada",
-        "descricao": "Receba localização e informações de uma presa. Recompensa depende do risco e da execução, sempre definida pelo mestre antes da missão.",
+        "descricao": "Receba localização e informações de uma presa. Recompensa depende do risco e da execução, sempre definida pelo Mestre antes da missão.",
         "niveis": [
           4,
           7,
@@ -5914,7 +5914,7 @@
         "titulo": "Ofício (Engenharia)",
         "atributo": "inteligencia",
         "grau_inicial": "aprendiz",
-        "descricao": "Projetar, montar, calibrar e consertar máquina, circuito, estrutura e munição. Todo Engenheiro entra na classe com este ofício em Aprendiz. Ele vem de graça: não ocupa uma das perícias iniciais e não gasta Grau de Treinamento."
+        "descricao": "Projetar, montar, calibrar e consertar máquina, circuito, estrutura e munição. Todo Engenheiro entra na classe com este ofício em Aprendiz. Ele vem de graça: não ocupa uma das perícias iniciais e não gasta Grau de perícia."
       }
     ],
     "dt_efeitos": {
@@ -6602,7 +6602,7 @@
       {
         "id": "concurso",
         "titulo": "Concurso",
-        "descricao": "Inventores competem para criar sob pressão com materiais aleatórios. Colocação rende reputação, projeto ou material compatível, definido pelo mestre.",
+        "descricao": "Inventores competem para criar sob pressão com materiais aleatórios. Colocação rende reputação, projeto ou material compatível, definido pelo Mestre.",
         "niveis": [
           4,
           7,
@@ -6722,14 +6722,14 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Pega o que encontra pelo caminho e transforma em elixir, bomba ou antídoto. Você prepara as doses no descanso, e o que sobrar estraga até o descanso seguinte.",
+    "descricao": "Pega o que encontra pelo caminho e transforma em elixir, bomba ou antídoto. Prepara as doses no descanso, e o que sobra estraga até o descanso seguinte.",
     "pericias_concedidas": [
       {
         "id": "oficio-alquimia",
         "titulo": "Ofício (Alquimia)",
         "atributo": "inteligencia",
         "grau_inicial": "aprendiz",
-        "descricao": "Extrair, destilar, dosar e identificar reagente, elixir, veneno e antídoto. Todo Alquimista entra na classe com este ofício em Aprendiz. Ele vem de graça: não ocupa uma das perícias iniciais e não gasta Grau de Treinamento."
+        "descricao": "Extrair, destilar, dosar e identificar reagente, elixir, veneno e antídoto. Todo Alquimista entra na classe com este ofício em Aprendiz. Ele vem de graça: não ocupa uma das perícias iniciais e não gasta Grau de perícia."
       }
     ],
     "dt_efeitos": {
@@ -7052,7 +7052,7 @@
         ],
         "escolha_opcoes": {
           "rotulo": "Fórmulas conhecidas",
-          "descricao": "Você aprende uma fórmula nova por estágio: uma no nível 3, duas no 8, três no 14 e quatro no 20. Cura Menor, Fogo Alquímico e Antídoto já vêm com a Grande Obra no nível 1, então gaste as vagas nas outras. Com aval do mestre, uma receita criada na mesa entra no lugar de uma da lista, desde que faça uma coisa só e fique no mesmo tamanho de efeito.",
+          "descricao": "Você aprende uma fórmula nova por estágio: uma no nível 3, duas no 8, três no 14 e quatro no 20. Cura Menor, Fogo Alquímico e Antídoto já vêm com a Grande Obra no nível 1, então gaste as vagas nas outras. Com aval do Mestre, uma receita criada na mesa entra no lugar de uma da lista, desde que faça uma coisa só e fique no mesmo tamanho de efeito.",
           "por_estagio": 1,
           "repetivel": false
         },
@@ -7282,7 +7282,7 @@
       {
         "id": "transmutacao-mestra",
         "titulo": "Transmutação Mestra",
-        "descricao": "Uma vez por descanso longo, gaste 8 Mana para alterar por uma cena o material de um objeto mundano de até 2 m³ que você esteja tocando. Pedra vira madeira, ferro vira vidro, corda vira corrente. A regra fecha três portas: nada de moeda, nada de artefato, nada de ser vivo, e nenhum componente raro nasce permanente.",
+        "descricao": "Uma vez por descanso longo, gaste 8 Mana para alterar por uma cena o material de um objeto mundano de até 2 m³ que você esteja tocando. Pedra vira madeira, ferro vira vidro, corda vira corrente. A regra fecha quatro portas: nada de moeda, nada de artefato, nada de ser vivo e nada de componente raro que fique permanente.",
         "custo_mana": 8,
         "niveis": [
           18
@@ -7308,7 +7308,7 @@
       {
         "id": "feira-alquimica",
         "titulo": "Feira Alquímica",
-        "descricao": "Uma guilda promove prova de fórmulas. O resultado pode conceder ingrediente raro, contato ou nova fórmula aprovada pelo mestre.",
+        "descricao": "Uma guilda promove prova de fórmulas. O resultado pode conceder ingrediente raro, contato ou nova fórmula aprovada pelo Mestre.",
         "niveis": [
           4,
           7,
@@ -7437,7 +7437,7 @@
         "titulo": "Ofício (Comércio)",
         "atributo": "carisma",
         "grau_inicial": "aprendiz",
-        "descricao": "Avaliar, precificar, pechinchar, redigir acordo e ler o humor de uma praça. Todo Comerciante entra na classe com este ofício em Aprendiz. Ele vem de graça: não ocupa uma das perícias iniciais e não gasta Grau de Treinamento. É ele que a classe chama de teste de Comércio."
+        "descricao": "Avaliar, precificar, pechinchar, redigir acordo e ler o humor de uma praça. Todo Comerciante entra na classe com este ofício em Aprendiz. Ele vem de graça: não ocupa uma das perícias iniciais e não gasta Grau de perícia. É ele que a classe chama de teste de Comércio."
       }
     ],
     "dt_efeitos": {
@@ -7747,7 +7747,7 @@
         "escolha_opcoes": {
           "rotulo": "Praças",
           "permanente": true,
-          "descricao": "Uma praça no nível 1 e outra no nível 5. Praça é o tipo de mercado em que você tem nome, e ela acompanha o personagem: o +2, o desconto e os contatos valem onde aquele comércio acontece, em qualquer cidade que você visite. Com aval do mestre, uma praça própria da campanha entra no lugar de uma da lista.",
+          "descricao": "Uma praça no nível 1 e outra no nível 5. Praça é o tipo de mercado em que você tem nome, e ela acompanha o personagem: o +2, o desconto e os contatos valem onde aquele comércio acontece, em qualquer cidade que você visite. Com aval do Mestre, uma praça própria da campanha entra no lugar de uma da lista.",
           "niveis_vaga": [
             1,
             5
@@ -7952,7 +7952,7 @@
       {
         "id": "grande-leilao",
         "titulo": "Grande Leilão",
-        "descricao": "Você é convidado para um leilão ou feira. O mestre apresenta lotes, preços e riscos antes de qualquer compra; participar não concede moeda gratuita.",
+        "descricao": "Você é convidado para um leilão ou feira. O Mestre apresenta lotes, preços e riscos antes de qualquer compra; participar não concede moeda gratuita.",
         "niveis": [
           4,
           7,
@@ -8042,7 +8042,7 @@
         "custo_mana": 6,
         "acao": "Ação Completa",
         "usos": "Uma vez por sessão",
-        "descricao": "Uma vez por sessão, localize um item de raridade Incomum ou Rara à venda em algum lugar alcançável. Compra, legalidade e disponibilidade final continuam a cargo do mestre.",
+        "descricao": "Uma vez por sessão, localize um item de raridade Incomum ou Rara à venda em algum lugar alcançável. Compra, legalidade e disponibilidade final continuam a cargo do Mestre.",
         "pre_requisitos": [
           "Nível 10 de Comerciante"
         ]
@@ -8415,7 +8415,7 @@
       {
         "id": "batalha-pelo-titulo",
         "titulo": "Batalha pelo Título",
-        "descricao": "Um desafiante disputa o título sob termos definidos pelo mestre. Derrota gera consequência narrativa ou missão de reconquista, mas nunca apaga níveis, ficha ou escolhas já obtidas.",
+        "descricao": "Um desafiante disputa o título sob termos definidos pelo Mestre. Derrota gera consequência narrativa ou missão de reconquista, mas nunca apaga níveis, ficha ou escolhas já obtidas.",
         "niveis": [
           4,
           7,
@@ -9356,7 +9356,7 @@
         }
       ]
     },
-    "descricao": "Conjura com cartas que prepara antes. O baralho define o que você tem na mão naquele dia, e o seu Fluxo nativo define o que cada carta faz.",
+    "descricao": "Conjura com cartas que prepara antes. O baralho define o que ele tem na mão naquele dia, e o Fluxo nativo dele define o que cada carta faz.",
     "dt_efeitos": {
       "rotulo": "DT do Cartista Arcano",
       "pericia": "misticismo",
@@ -10089,7 +10089,7 @@
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, abra por uma rodada uma rota de até 1 km para local conhecido na mesma dimensão; o mestre pode exigir teste em áreas seladas.",
+            "descricao": "Uma vez por sessão, abra por uma rodada uma rota de até 1 km para local conhecido na mesma dimensão; o Mestre pode exigir teste em áreas seladas.",
             "acao": "Ação Completa",
             "alcance": "1 km",
             "duracao": "Uma rodada",
@@ -10152,7 +10152,7 @@
       {
         "id": "mapa-vivo",
         "titulo": "Mapa Vivo",
-        "descricao": "Uma vez por sessão, pergunte ao mestre por uma rota segura, rápida ou discreta até um objetivo conhecido; receba uma direção verdadeira e uma complicação possível.",
+        "descricao": "Uma vez por sessão, pergunte ao Mestre por uma rota segura, rápida ou discreta até um objetivo conhecido; receba uma direção verdadeira e uma complicação possível.",
         "niveis": [
           18
         ],
@@ -10290,7 +10290,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Liga a própria alma a uma Zanpakutō e passa a vida patrulhando a fronteira entre vivos e mortos, purificando espíritos corrompidos. Quem descobre o nome da lâmina abre o Shikai, e quem domina ela por completo desperta a Bankai.",
+    "descricao": "Liga a própria alma a uma Zanpakutō e passa a vida patrulhando a fronteira entre vivos e mortos, purificando espíritos corrompidos. Quem descobre o nome da lâmina abre o Shikai, e quem a domina por completo desperta a Bankai.",
     "dt_efeitos": {
       "rotulo": "DT do Caçador das Almas",
       "pericia": "misticismo",
@@ -10674,7 +10674,7 @@
             "id": "sentidos-invertidos",
             "titulo": "Sentidos Invertidos",
             "descricao": "Shikai: uma vez por turno, ao acertar, o alvo testa Vontade contra a DT do Caçador das Almas. Em falha, seus sentidos se invertem até o início do seu próximo turno: perto parece longe e cima parece baixo, então ele recebe -2 em Percepção e, ao se mover, sempre percorre a metade da distância pretendida.",
-            "escalonamento": "Bankai: em falha, o alvo também mira mal o primeiro ataque que fizer antes do efeito terminar, acertando a criatura mais próxima dele em vez do alvo original, à escolha do mestre."
+            "escalonamento": "Bankai: em falha, o alvo também mira mal o primeiro ataque que fizer antes do efeito terminar, acertando a criatura mais próxima dele em vez do alvo original, à escolha do Mestre."
           },
           {
             "id": "corte-espectral",
@@ -10802,7 +10802,7 @@
       {
         "id": "patrulha-do-veu",
         "titulo": "Patrulha do Véu",
-        "descricao": "Uma ruptura entre vivos e mortos exige sua presença. O mestre estabelece a alma envolvida, o desequilíbrio, quem seria ferido se nada fosse feito e a consequência narrativa da missão. Recusar não remove níveis nem habilidades.",
+        "descricao": "Uma ruptura entre vivos e mortos exige sua presença. O Mestre estabelece a alma envolvida, o desequilíbrio, quem seria ferido se nada fosse feito e a consequência narrativa da missão. Recusar não remove níveis nem habilidades.",
         "niveis": [
           4,
           7,
@@ -11226,7 +11226,7 @@
           },
           {
             "nivel": 15,
-            "descricao": "Transforme um Motivo em presságio: o mestre revela uma consequência provável de uma escolha imediata.",
+            "descricao": "Transforme um Motivo em presságio: o Mestre revela uma consequência provável de uma escolha imediata.",
             "acao": "Ação Livre"
           },
           {
@@ -11263,7 +11263,7 @@
           {
             "id": "guarda-costas",
             "titulo": "Guarda-Costas",
-            "descricao": "Aparece pra ajudar numa cena de combate, sem substituir um aliado de verdade."
+            "descricao": "Aparece para ajudar numa cena de combate, sem substituir um aliado de verdade."
           },
           {
             "id": "curandeiro",
@@ -11394,7 +11394,7 @@
         "custo_mana": 8,
         "acao": "Ação Livre",
         "usos": "Uma vez por sessão",
-        "descricao": "Uma vez por sessão, faça ao mestre uma pergunta objetiva sobre a cena; ele responde com pista verdadeira, não solução completa.",
+        "descricao": "Uma vez por sessão, faça ao Mestre uma pergunta objetiva sobre a cena; ele responde com pista verdadeira, não solução completa.",
         "pre_requisitos": [
           "Nível 10 de Escritor de Contos"
         ]
@@ -11429,7 +11429,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Luta com uma criatura invocada do lado. Escolhe ela no Catálogo de Invocações e, a cada pacto, decide se chama mais uma ou se fortalece a que já tem.",
+    "descricao": "Luta com uma criatura invocada do lado. Escolhe a criatura no Catálogo de Invocações e, a cada pacto, decide se chama mais uma ou se fortalece a que já tem.",
     "dt_efeitos": {
       "rotulo": "DT do Invocador",
       "pericia": "misticismo",
@@ -11922,7 +11922,7 @@
     ],
     "tarefas_bancada": {
       "rotulo": "Catálogo de Invocações",
-      "descricao": "Fichas prontas, exclusivas da classe: nada de criatura da Loja ou improvisada. Seis linhas (Caçador de Feras ofensivo, Colosso de Ferro defensivo, Salamandra de Fogo de suporte à distância, Seiva Viva de cura, Duende Prestativo de utilidade fora de combate e Aranha Tecelã de controle), cada uma em cinco níveis. Uma invocação nova sempre entra no nível 1 da linha escolhida; aprimorar leva ela pro próximo nível da mesma linha.",
+      "descricao": "Fichas prontas, exclusivas da classe: nada de criatura da Loja ou improvisada. Seis linhas (Caçador de Feras ofensivo, Colosso de Ferro defensivo, Salamandra de Fogo de suporte à distância, Seiva Viva de cura, Duende Prestativo de utilidade fora de combate e Aranha Tecelã de controle), cada uma em cinco níveis. Uma invocação nova sempre entra no nível 1 da linha escolhida; aprimorar a leva para o próximo nível da mesma linha.",
       "colunas": [
         "Invocação",
         "Nível",
@@ -12440,7 +12440,7 @@
             "titulo": "Olho Treinado",
             "acao": "Ação Livre",
             "usos": "Uma vez por cena",
-            "descricao": "Ao examinar um objeto, construção ou rastro estranho, receba vantagem no teste de Investigação pra reconhecer de onde ele vem.",
+            "descricao": "Ao examinar um objeto, construção ou rastro estranho, receba vantagem no teste de Investigação para reconhecer de onde ele vem.",
             "alcance": "Pessoal",
             "duracao": "Até o próximo teste"
           },
@@ -12490,7 +12490,7 @@
       {
         "id": "encruzilhada",
         "titulo": "Encruzilhada",
-        "descricao": "Surge escolha entre rota segura, rápida ou misteriosa. O mestre apresenta ao menos um risco conhecido de cada opção.",
+        "descricao": "Surge escolha entre rota segura, rápida ou misteriosa. O Mestre apresenta ao menos um risco conhecido de cada opção.",
         "niveis": [
           4,
           7,
@@ -13043,7 +13043,7 @@
         ],
         "escolha_opcoes": {
           "rotulo": "Fluxo Nativo",
-          "descricao": "Escolhido uma vez, no nível 1, e vale pra sempre: a classe diz como você manipula a magia, o Fluxo nativo diz o que sai dali. São os dez Fluxos naturais publicados no capítulo de Magia; a Tecnologia fica de fora porque ela nunca é nativa, só se instala de fora.",
+          "descricao": "Escolhido uma vez, no nível 1, e vale para sempre: a classe diz como você manipula a magia, o Fluxo nativo diz o que sai dali. São os dez Fluxos naturais publicados no capítulo de Magia; a Tecnologia fica de fora porque ela nunca é nativa, só se instala de fora.",
           "total": 1,
           "permanente": true
         },
@@ -13454,7 +13454,7 @@
         }
       ]
     },
-    "descricao": "Junta o próprio Fluxo com catalisadores de fora pra conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.",
+    "descricao": "Junta o próprio Fluxo com catalisadores de fora para conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.",
     "dt_efeitos": {
       "rotulo": "DT do Sintonizador",
       "pericia": "misticismo",
@@ -14593,7 +14593,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Entra na Malha pra desmontar a magia dos outros e atrapalhar quem está conjurando. Fluxo natural mesmo, ele não usa.",
+    "descricao": "Entra na Malha para desmontar a magia dos outros e atrapalhar quem está conjurando. Fluxo natural mesmo, ele não usa.",
     "progressao": [
       {
         "nivel": 1,
@@ -14868,7 +14868,7 @@
       {
         "id": "hackear-fluxo",
         "titulo": "Hackear Fluxo",
-        "descricao": "Interceptar com sucesso sempre cancela o efeito, no mínimo. Aprenda uma técnica por estágio pra fazer mais que isso quando quiser: são seis possíveis e você aprende quatro. Cada técnica aprendida continua disponível pra sempre, escolhida na hora de cada interceptação bem-sucedida.",
+        "descricao": "Interceptar com sucesso sempre cancela o efeito, no mínimo. Aprenda uma técnica por estágio para fazer mais que isso quando quiser: são seis possíveis e você aprende quatro. Cada técnica aprendida continua disponível para sempre, escolhida na hora de cada interceptação bem-sucedida.",
         "niveis": [
           3,
           8,
@@ -14912,7 +14912,7 @@
             "acao": "Escolhida ao interceptar com sucesso",
             "alcance": "Igual ao efeito interceptado",
             "duracao": "Instantâneo",
-            "descricao": "Ao cancelar, faça o efeito parecer ter vindo de outra fonte plausível à sua escolha, pra quem estiver testemunhando."
+            "descricao": "Ao cancelar, faça o efeito parecer ter vindo de outra fonte plausível à sua escolha, para quem estiver testemunhando."
           },
           {
             "id": "eco-hostil",
@@ -15018,7 +15018,7 @@
         "id": "proxy",
         "titulo": "Proxy",
         "custo_mana": 6,
-        "descricao": "Quando você for o único alvo de uma magia natural, role Misticismo contra a DT de conjuração dela; em sucesso, escolha outro alvo válido pra receber o efeito no seu lugar.",
+        "descricao": "Quando você for o único alvo de uma magia natural, role Misticismo contra a DT de conjuração dela; em sucesso, escolha outro alvo válido para receber o efeito no seu lugar.",
         "acao": "Reação"
       },
       {
@@ -15069,7 +15069,7 @@
         "titulo": "Ofício (Cozinha)",
         "atributo": "sabedoria",
         "grau_inicial": "aprendiz",
-        "descricao": "Selecionar ingredientes, conservar alimentos, operar uma cozinha e preparar refeições em campo. Todo Chef entra na classe com este ofício em Aprendiz; ele não ocupa uma perícia inicial nem gasta Grau de Treinamento."
+        "descricao": "Selecionar ingredientes, conservar alimentos, operar uma cozinha e preparar refeições em campo. Todo Chef entra na classe com este ofício em Aprendiz; ele não ocupa uma perícia inicial nem gasta Grau de perícia."
       }
     ],
     "dt_efeitos": {
@@ -16024,7 +16024,7 @@
       {
         "id": "perfil-do-suspeito",
         "titulo": "Perfil do Suspeito",
-        "descricao": "Aprenda uma especialidade de investigação por estágio; são oito possíveis, você aprende quatro. Cada uma aprendida continua disponível pra sempre.",
+        "descricao": "Aprenda uma especialidade de investigação por estágio; são oito possíveis, você aprende quatro. Cada uma aprendida continua disponível para sempre.",
         "niveis": [
           3,
           8,
@@ -16242,7 +16242,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Nasce sem poder nenhum e pega emprestado de quem morreu. Mate, ou chegue perto de um corpo ainda quente, devore o que sobrou, e uma parte de verdade da força da vítima passa a ocupar um espaço vazio dentro de você.",
+    "descricao": "Nasce sem poder nenhum e pega emprestado de quem morreu. Mata, ou chega perto de um corpo ainda quente, devora o que sobrou, e uma parte de verdade da força da vítima passa a ocupar um espaço vazio dentro dele.",
     "dt_efeitos": {
       "rotulo": "DT do Devorador",
       "pericia": "luta",
@@ -16511,7 +16511,7 @@
           {
             "nivel": 20,
             "titulo": "Fome sem Fundo",
-            "descricao": "Mantenha cinco slots ativos ao mesmo tempo, e o teto de nível pra devorar desaparece: grave o poder ou a habilidade no nível real que a vítima tinha.",
+            "descricao": "Mantenha cinco slots ativos ao mesmo tempo, e o teto de nível para devorar desaparece: grave o poder ou a habilidade no nível real que a vítima tinha.",
             "acao": "Passivo"
           }
         ]
@@ -16519,7 +16519,7 @@
       {
         "id": "instintos-do-devorador",
         "titulo": "Instintos do Devorador",
-        "descricao": "Aprenda um instinto predatório por estágio; são oito possíveis, você aprende quatro. Cada um aprendido continua ativo pra sempre.",
+        "descricao": "Aprenda um instinto predatório por estágio; são oito possíveis, você aprende quatro. Cada um aprendido continua ativo para sempre.",
         "niveis": [
           3,
           8,
@@ -16719,7 +16719,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-09-11",
-    "descricao": "Escolhe um único elemento primordial e vai aprofundando esse laço até chegar numa derivação, usando ele pra mudar o campo de batalha. Aprender os outros elementos só dá pra quem tem a aptidão de Avatar, que é raríssima.",
+    "descricao": "Escolhe um único elemento primordial e vai aprofundando esse laço até chegar numa derivação, usando esse elemento para mudar o campo de batalha. Aprender os outros elementos só é possível para quem tem a aptidão de Avatar, que é raríssima.",
     "dt_efeitos": {
       "rotulo": "DT da Elementarista",
       "pericia": "misticismo",

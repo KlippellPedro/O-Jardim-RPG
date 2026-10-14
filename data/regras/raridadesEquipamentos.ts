@@ -108,7 +108,7 @@ export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
   },
   {
     id: 'margem-ampla', titulo: 'Margem Ampla', categoria: 'arma', nivel: 'comum', valor: 1,
-    efeito: 'Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, pra não furar a regra de margem larga com multiplicador alto.',
+    efeito: 'Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, para não furar a regra de margem larga com multiplicador alto.',
   },
   {
     id: 'coreografada', titulo: 'Coreografada', categoria: 'arma', nivel: 'comum', valor: 1,

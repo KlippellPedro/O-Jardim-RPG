@@ -456,7 +456,7 @@
     "mana": 1,
     "estamina": 2,
     "movimento": 1.5,
-    "descricao": "Pequeno, rápido e com um talento chato pra vender qualquer coisa por mais do que ela vale, de preferência algo que já era dele.",
+    "descricao": "Pequeno, rápido e com um talento chato para vender qualquer coisa por mais do que ela vale, de preferência algo que já era dele.",
     "fisiologia": [
       "Tamanho Pequeno."
     ],
@@ -1065,7 +1065,7 @@
             "titulo": "Não Se Derruba",
             "tipo": "passiva",
             "nivel_minimo": 36,
-            "descricao": "Você não pode ser derrubado, empurrado ou movido por efeito que não seja mágico, e continua agindo normalmente enquanto tiver ao menos uma parte estrutural inteira; o mestre descreve o que sobrou.",
+            "descricao": "Você não pode ser derrubado, empurrado ou movido por efeito que não seja mágico, e continua agindo normalmente enquanto tiver ao menos uma parte estrutural inteira; o Mestre descreve o que sobrou.",
             "automatizada": false
           }
         ]
@@ -1134,7 +1134,7 @@
         "titulo": "Maturação Espiritual",
         "tipo": "progressao",
         "nivel_minimo": 1,
-        "descricao": "O espírito amadurece em degraus, e quem manda neles é o nível total: Menor no começo, Mediano no nível 8, Maior no 15, Superior no 28 e o quinto degrau no 40 (Ancestral, Arquidemônio ou Arcanjo). Do Menor ao Superior, cada degrau só soma Mana e Vida e traz ajustes passivos que a ficha aplica sozinha; os poderes ativos vêm da sua marca. Do quinto degrau em diante entram também habilidades fortes. O Primordial, no nível 60, é o único que pede mais: a Provação Primordial, que só o mestre marca como cumprida.",
+        "descricao": "O espírito amadurece em degraus, e quem manda neles é o nível total: Menor no começo, Mediano no nível 8, Maior no 15, Superior no 28 e o quinto degrau no 40 (Ancestral, Arquidemônio ou Arcanjo). Do Menor ao Superior, cada degrau só soma Mana e Vida e traz ajustes passivos que a ficha aplica sozinha; os poderes ativos vêm da sua marca. Do quinto degrau em diante entram também habilidades fortes. O Primordial, no nível 60, é o único que pede mais: a Provação Primordial, que só o mMestremarca como cumprida.",
         "automatizada": false
       }
     ],
@@ -1164,7 +1164,7 @@
             "titulo": "Possessão",
             "tipo": "acao_completa",
             "nivel_minimo": 5,
-            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura Média ou menor a até 1,5 m, ou num corpo morto há menos de um dia. Criatura viva e consciente testa Vontade contra o seu Misticismo; se passar, fica livre da sua Possessão até o próximo descanso. Personagem de jogador só é possuído se o jogador aceitar. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Quem foi possuído apaga e acorda sem lembrar do que o corpo fez, e o mestre decide o que o corpo ainda sabe fazer. Sair do corpo é uma ação livre e devolve você à forma etérea. Se o corpo chegar a 0 de Vida, você é expulso e fica sem possuir ninguém até o próximo descanso.",
+            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura Média ou menor a até 1,5 m, ou num corpo morto há menos de um dia. Criatura viva e consciente testa Vontade contra o seu Misticismo; se passar, fica livre da sua Possessão até o próximo descanso. Personagem de jogador só é possuído se o jogador aceitar. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Quem foi possuído apaga e acorda sem lembrar do que o corpo fez, e o mMestredecide o que o corpo ainda sabe fazer. Sair do corpo é uma ação livre e devolve você à forma etérea. Se o corpo chegar a 0 de Vida, você é expulso e fica sem possuir ninguém até o próximo descanso.",
             "custo_mana": 4,
             "alcance_m": 1.5,
             "teste": "misticismo_vs_vontade",
@@ -1197,7 +1197,7 @@
       }
     ],
     "rotulo_variante": "Fluxo",
-    "descricao_variantes": "Escolha um Fluxo, e ele vale para a vida inteira do personagem. Os onze têm o mesmo peso: cada um desperta uma característica em cada degrau da escada. Existe um décimo segundo, o Fluxo Universal, que o jogador não escolhe. Só o mestre concede.",
+    "descricao_variantes": "Escolha um Fluxo, e ele vale para a vida inteira do personagem. Os onze têm o mesmo peso: cada um desperta uma característica em cada degrau da escada. Existe um décimo segundo, o Fluxo Universal, que o jogador não escolhe. Só o mMestreconcede.",
     "estagios": [
       {
         "id": "menor",
@@ -1314,7 +1314,7 @@
             "titulo": "Âncora do Espírito",
             "tipo": "limitacao",
             "nivel_minimo": 40,
-            "descricao": "Você tem uma Âncora, definida com o mestre: um lugar, um objeto ou um juramento que prende você a este mundo. Enquanto ela existir, você não envelhece e não morre de vez. Chegando a 0 de Vida, você se dispersa e se forma de novo junto da Âncora no fim da cena, com metade da Vida máxima e sem precisar de descanso. Destruir a Âncora exige descobrir o que ela é e alcançá-la; sem ela, você volta a morrer como qualquer um.",
+            "descricao": "Você tem uma Âncora, definida com o Mestre: um lugar, um objeto ou um juramento que prende você a este mundo. Enquanto ela existir, você não envelhece e não morre de vez. Chegando a 0 de Vida, você se dispersa e se forma de novo junto da Âncora no fim da cena, com metade da Vida máxima e sem precisar de descanso. Destruir a Âncora exige descobrir o que ela é e alcançá-la; sem ela, você volta a morrer como qualquer um.",
             "automatizada": false
           },
           {
@@ -1517,7 +1517,7 @@
             "titulo": "Raiz do Pecado",
             "tipo": "limitacao",
             "nivel_minimo": 40,
-            "descricao": "Você tem uma Raiz, definida com o mestre: a pessoa, o lugar ou o hábito que alimenta o seu Pecado. Enquanto ela existir, você não envelhece e não morre de vez. Chegando a 0 de Vida, você se dispersa e se forma de novo junto da Raiz no fim da cena, com metade da Vida máxima e sem precisar de descanso. Destruir a Raiz exige descobrir o que ela é e alcançá-la; sem ela, você volta a morrer como qualquer um.",
+            "descricao": "Você tem uma Raiz, definida com o Mestre: a pessoa, o lugar ou o hábito que alimenta o seu Pecado. Enquanto ela existir, você não envelhece e não morre de vez. Chegando a 0 de Vida, você se dispersa e se forma de novo junto da Raiz no fim da cena, com metade da Vida máxima e sem precisar de descanso. Destruir a Raiz exige descobrir o que ela é e alcançá-la; sem ela, você volta a morrer como qualquer um.",
             "automatizada": false
           },
           {
@@ -1721,7 +1721,7 @@
             "titulo": "Voto do Anjo",
             "tipo": "limitacao",
             "nivel_minimo": 40,
-            "descricao": "Você tem um Voto, definido com o mestre: uma pessoa que jurou proteger, um lugar sagrado ou uma promessa. Enquanto ele existir, você não envelhece e não morre de vez. Chegando a 0 de Vida, você se dispersa e se forma de novo junto do Voto no fim da cena, com metade da Vida máxima e sem precisar de descanso. Se o Voto for quebrado, você volta a morrer como qualquer um.",
+            "descricao": "Você tem um Voto, definido com o Mestre: uma pessoa que jurou proteger, um lugar sagrado ou uma promessa. Enquanto ele existir, você não envelhece e não morre de vez. Chegando a 0 de Vida, você se dispersa e se forma de novo junto do Voto no fim da cena, com metade da Vida máxima e sem precisar de descanso. Se o Voto for quebrado, você volta a morrer como qualquer um.",
             "automatizada": false
           },
           {
@@ -2691,7 +2691,7 @@
         "fluxo": "universal",
         "natureza": "natural",
         "somente_mestre": true,
-        "descricao": "O Fluxo que toca todos os outros sem pertencer a nenhum. Quem o carrega usa o que qualquer Fluxo oferece e paga Mana extra por escolher na hora. Só o mestre concede, e até hoje só Blanc é conhecida por tê-lo.",
+        "descricao": "O Fluxo que toca todos os outros sem pertencer a nenhum. Quem o carrega usa o que qualquer Fluxo oferece e paga Mana extra por escolher na hora. Só o mMestreconcede, e até hoje só Blanc é conhecida por tê-lo.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2763,7 +2763,7 @@
             "automatizada": false
           }
         ],
-        "provacao": "Ser reconhecido por todos os Fluxos ao mesmo tempo. Só o mestre decide quando isso aconteceu."
+        "provacao": "Ser reconhecido por todos os Fluxos ao mesmo tempo. Só o mMestredecide quando isso aconteceu."
       },
       {
         "id": "demonio-soberba",
@@ -3937,7 +3937,7 @@
       {
         "id": "provacao-primordial",
         "titulo": "Provação Primordial",
-        "descricao": "Chegar ao nível total 60 não basta para virar Primordial. O espírito precisa cumprir um feito grande ligado à própria marca, a Provação descrita na página dela. O jogador e o mestre combinam o feito, e só o mestre marca a Provação como cumprida na ficha. Até lá, o espírito fica no quinto degrau, por mais alto que seja o nível."
+        "descricao": "Chegar ao nível total 60 não basta para virar Primordial. O espírito precisa cumprir um feito grande ligado à própria marca, a Provação descrita na página dela. O jogador e o mMestrecombinam o feito, e só o mMestremarca a Provação como cumprida na ficha. Até lá, o espírito fica no quinto degrau, por mais alto que seja o nível."
       }
     ]
   },
@@ -3952,7 +3952,7 @@
     "mana": -1,
     "estamina": 3,
     "movimento": 0,
-    "descricao": "É tão grande que nada feito pros outros serve nele. Carrega o dobro, não sai do lugar quando tentam empurrar e vive batendo a cabeça em porta normal. A Linhagem define o que corre no sangue, e o porte só aumenta: Grande, Enorme e, no fim, Colossal.",
+    "descricao": "É tão grande que nada feito para os outros serve nele. Carrega o dobro, não sai do lugar quando tentam empurrar e vive batendo a cabeça em porta normal. A Linhagem define o que corre no sangue, e o porte só aumenta: Grande, Enorme e, no fim, Colossal.",
     "fisiologia": [
       "Tamanho Grande; equipamentos precisam ter tamanho compatível."
     ],
@@ -4207,7 +4207,7 @@
     "vida": 0,
     "mana": 0,
     "movimento": 0,
-    "descricao": "Gente com corpo de bicho, e todo animal do Jardim conta como Animália. Você escolhe a Forma (quanto do bicho aparece no corpo), a Morfologia (o instinto que veio mais forte) e o animal, que define o seu tamanho. Conversa coisas simples com bichos, o que não quer dizer que eles obedecem. Fala Sumeriano.",
+    "descricao": "Gente com corpo de bicho, e todo animal do Jardim conta como Animália. Você escolhe a Forma (quanto do bicho aparece no corpo), a Morfologia (o instinto que veio mais forte) e o animal, que define o seu tamanho. Conversa coisas simples com bichos, o que não quer dizer que eles obedeçam. Fala Sumeriano.",
     "rotulo_variante": "Morfologia",
     "descricao_variantes": "Escolha o instinto que veio mais forte no seu animal. As dez Morfologias têm o mesmo peso e servem a qualquer Forma: a diferença está em para que o corpo serve (correr, aguentar, farejar, caçar, voar, nadar, picar, andar em bando, resistir ou impressionar).",
     "fisiologia": [
@@ -6311,7 +6311,7 @@
             "titulo": "Assimilação Superficial",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Uma vez por descanso, gaste uma ação para tocar uma criatura voluntária, incapacitada ou recém-derrotada e ficar com um traço superficial dela: um sentido, uma resistência ou um jeito simples de se locomover, a critério do mestre. O traço vale no máximo o equivalente a um sentido especial ou a um deslocamento igual ao seu Movimento, nunca ataques, imunidades completas ou características raciais inteiras, e dura até o fim da cena.",
+            "descricao": "Uma vez por descanso, gaste uma ação para tocar uma criatura voluntária, incapacitada ou recém-derrotada e ficar com um traço superficial dela: um sentido, uma resistência ou um jeito simples de se locomover, a critério do Mestre. O traço vale no máximo o equivalente a um sentido especial ou a um deslocamento igual ao seu Movimento, nunca ataques, imunidades completas ou características raciais inteiras, e dura até o fim da cena.",
             "usos": 1,
             "recuperacao": "descanso",
             "automatizada": false
@@ -6444,7 +6444,7 @@
             "titulo": "Toque Corrosivo",
             "tipo": "passiva",
             "nivel_minimo": 1,
-            "descricao": "Quem agarra você, ou é agarrado por você, começa a derreter: enquanto o agarrão durar, essa criatura sofre 1d4 de dano ácido no início de cada turno. Equipamento não mágico exposto ao contato fica danificado a critério do mestre.",
+            "descricao": "Quem agarra você, ou é agarrado por você, começa a derreter: enquanto o agarrão durar, essa criatura sofre 1d4 de dano ácido no início de cada turno. Equipamento não mágico exposto ao contato fica danificado a critério do Mestre.",
             "automatizada": false
           },
           {
@@ -6452,7 +6452,7 @@
             "titulo": "Dissolver Amarras",
             "tipo": "acao",
             "nivel_minimo": 9,
-            "descricao": "Corda, fechadura, corrente ou arma cravada no seu corpo derrete no ácido: gaste uma ação e 2 Mana, uma vez por cena. Se o material for mágico ou reforçado, o mestre pode pedir um teste de Fortitude.",
+            "descricao": "Corda, fechadura, corrente ou arma cravada no seu corpo derrete no ácido: gaste uma ação e 2 Mana, uma vez por cena. Se o material for mágico ou reforçado, o Mestre pode pedir um teste de Fortitude.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
@@ -6797,7 +6797,7 @@
       "itens_comuns_total": 2,
       "retroativos_em_transformacao": false
     },
-    "descricao": "Não envelhece e não esquece nada. São séculos de leitura acumulados num Intelecto que passa do limite que vale pra todo mundo. Vem de Nadalon e escolhe uma das seis Linhagens, que é o que diferencia um Elfo de Sombras de um Elfo de Tempestades. A Linhagem fica mais forte quando ele vira Ancião e se abre por completo quando chega a Milenar.",
+    "descricao": "Não envelhece e não esquece nada. São séculos de leitura acumulados num Intelecto que passa do limite que vale para todo mundo. Vem de Nadalon e escolhe uma das seis Linhagens, que é o que diferencia um Elfo de Sombras de um Elfo de Tempestades. A Linhagem fica mais forte quando ele vira Ancião e se abre por completo quando chega a Milenar.",
     "fisiologia": [
       "Não envelhece e é imune a envelhecimento sobrenatural."
     ],
@@ -7314,7 +7314,7 @@
       {
         "id": "juramento-inacabado",
         "titulo": "Juramento Inacabado",
-        "motivo_retorno": "Sua vontade foi forte o bastante para arrastá-lo de volta. Defina com o mestre um juramento objetivo e possível de concluir.",
+        "motivo_retorno": "Sua vontade foi forte o bastante para arrastá-lo de volta. Defina com o Mestre um juramento objetivo e possível de concluir.",
         "dadiva": {
           "id": "forca-da-promessa",
           "titulo": "Força da Promessa",
@@ -7328,7 +7328,7 @@
           "id": "quebra-da-palavra",
           "titulo": "Quebra da Palavra",
           "tipo": "passiva",
-          "descricao": "Se abandonar ou contrariar voluntariamente seu juramento, sua Mana atual torna-se 0 e não pode ser recuperada acima da metade do máximo até realizar uma reparação aceita pelo mestre. Coerção ou impossibilidade não quebram o juramento. Ao cumprir o juramento, você pode estabelecer outro depois de um descanso completo.",
+          "descricao": "Se abandonar ou contrariar voluntariamente seu juramento, sua Mana atual torna-se 0 e não pode ser recuperada acima da metade do máximo até realizar uma reparação aceita pelo Mestre. Coerção ou impossibilidade não quebram o juramento. Ao cumprir o juramento, você pode estabelecer outro depois de um descanso completo.",
           "automatizada": false
         }
       },
@@ -7351,7 +7351,7 @@
           "id": "dependencia-da-ancora",
           "titulo": "Dependência da Âncora",
           "tipo": "passiva",
-          "descricao": "Enquanto estiver a mais de 1 km da Âncora ou em outra dimensão, você sofre desvantagem em Vontade e não pode usar as rerrolagens de Ecos de Séculos Mortos. Se a Âncora morrer, a cicatriz permanece até um novo vínculo ser estabelecido por acontecimento narrativo aprovado pelo mestre.",
+          "descricao": "Enquanto estiver a mais de 1 km da Âncora ou em outra dimensão, você sofre desvantagem em Vontade e não pode usar as rerrolagens de Ecos de Séculos Mortos. Se a Âncora morrer, a cicatriz permanece até um novo vínculo ser estabelecido por acontecimento narrativo aprovado pelo Mestre.",
           "automatizada": false
         }
       },
@@ -7480,7 +7480,7 @@
       "Grande",
       "Enorme"
     ],
-    "descricao": "Uma consciência que nasceu lá fora e escolheu um corpo pra caber aqui. Muda de forma e de tamanho quando quer, sabe demais sobre duas coisas bem específicas e quase nada sobre o que os outros sentem. A Origem Cósmica diz de onde ele veio (estrela, planeta, buraco negro), e o tempo neste mundo vai devolvendo o que ficou pra trás, de Fragmento até Íntegro.",
+    "descricao": "Uma consciência que nasceu lá fora e escolheu um corpo para caber aqui. Muda de forma e de tamanho quando quer, sabe demais sobre duas coisas bem específicas e quase nada sobre o que os outros sentem. A Origem Cósmica diz de onde ele veio (estrela, planeta, buraco negro), e o tempo neste mundo vai devolvendo o que ficou para trás, de Fragmento até Íntegro.",
     "fisiologia": [
       "Não precisa comer, beber ou dormir. Para concluir um descanso, medita pelo tempo normal e pode perceber os arredores, mas qualquer atividade além de observação simples interrompe a recuperação.",
       "É imune a doenças comuns ou sobrenaturais, mas não a venenos ou outras condições que apenas produzam sintomas semelhantes.",
@@ -7491,7 +7491,7 @@
         "id": "conhecimentos-extremos",
         "titulo": "Conhecimentos Extremos",
         "tipo": "escolha",
-        "descricao": "Escolha duas áreas de estudo aprovadas pelo mestre, cada uma mais estreita que uma Árvore ou Fluxo inteiro e mais ampla que um único indivíduo. Quando um teste de Conhecimento, Investigação, Misticismo, Ressonância, Tecnologia ou Ritos de Arkarin tratar diretamente de uma área escolhida, você recebe vantagem. Uma vez por sessão para cada área, depois de falhar em um desses testes, pode rerrolá-lo e deve manter o novo resultado. Isso não revela segredos sem pistas nem informações que nenhuma fonte acessível poderia fornecer.",
+        "descricao": "Escolha duas áreas de estudo aprovadas pelo Mestre, cada uma mais estreita que uma Árvore ou Fluxo inteiro e mais ampla que um único indivíduo. Quando um teste de Conhecimento, Investigação, Misticismo, Ressonância, Tecnologia ou Ritos de Arkarin tratar diretamente de uma área escolhida, você recebe vantagem. Uma vez por sessão para cada área, depois de falhar em um desses testes, pode rerrolá-lo e deve manter o novo resultado. Isso não revela segredos sem pistas nem informações que nenhuma fonte acessível poderia fornecer.",
         "escolhas": 2,
         "pericias_aplicaveis": [
           "conhecimento",
@@ -7809,7 +7809,7 @@
             "titulo": "Memória de Casa",
             "tipo": "escolha",
             "nivel_minimo": 18,
-            "descricao": "Uma terceira área de Conhecimento Extremo volta à sua memória. Escolha-a com o mestre, sob as mesmas regras das duas primeiras.",
+            "descricao": "Uma terceira área de Conhecimento Extremo volta à sua memória. Escolha-a com o Mestre, sob as mesmas regras das duas primeiras.",
             "automatizada": false
           }
         ]
@@ -7920,14 +7920,14 @@
         "id": "colapso-do-nucleo",
         "titulo": "Colapso do Núcleo",
         "tipo": "passiva",
-        "descricao": "Ao chegar a 0 Vida ou menos, você segue normalmente as regras de Morrendo. Seu núcleo somente é destruído quando sua morte é concluída. Substituir um núcleo destruído exige um acontecimento narrativo aprovado pelo mestre.",
+        "descricao": "Ao chegar a 0 Vida ou menos, você segue normalmente as regras de Morrendo. Seu núcleo somente é destruído quando sua morte é concluída. Substituir um núcleo destruído exige um acontecimento narrativo aprovado pelo Mestre.",
         "automatizada": false
       },
       {
         "id": "arquitetura-modular",
         "titulo": "Arquitetura Modular",
         "tipo": "escolha",
-        "descricao": "Seu limite de modificações instaladas é 1 + piso do Nível Total dividido por 2. Uma modificação ativa exige pelo menos três passivas instaladas, além dos demais pré-requisitos. Instalar uma modificação exige um dia de trabalho de alguém capaz de realizar Ofício (Engenharia); custos e obtenção de peças são resolvidos pelo mestre.",
+        "descricao": "Seu limite de modificações instaladas é 1 + piso do Nível Total dividido por 2. Uma modificação ativa exige pelo menos três passivas instaladas, além dos demais pré-requisitos. Instalar uma modificação exige um dia de trabalho de alguém capaz de realizar Ofício (Engenharia); custos e obtenção de peças são resolvidos pelo Mestre.",
         "automatizada": false
       },
       {
@@ -8196,7 +8196,7 @@
         "titulo": "Escudo",
         "categoria": "passiva",
         "nivel_minimo": 12,
-        "descricao": "Um disco de força protege sua frente. Receba +4 Defesa e reduza pela metade o dano balístico. O mestre pode negar o benefício contra ataques que ignorem ou contornem o disco.",
+        "descricao": "Um disco de força protege sua frente. Receba +4 Defesa e reduza pela metade o dano balístico. O Mestre pode negar o benefício contra ataques que ignorem ou contornem o disco.",
         "defesa": 4,
         "reducao_dano_balistico": "metade",
         "automatizada": true
@@ -8431,7 +8431,7 @@
         "id": "memorias-residuais",
         "titulo": "Memórias Residuais",
         "tipo": "informacao",
-        "descricao": "Uma vez por sessão, pergunte se possui uma lembrança relacionada ao Original. Se ele conhecia a informação no momento da clonagem, o mestre entrega uma memória curta, verdadeira e incompleta: imagem, frase, sensação, rosto ou localização aproximada. Isso não fornece senhas completas, segredos sem contexto ou conhecimentos posteriores à clonagem.",
+        "descricao": "Uma vez por sessão, pergunte se possui uma lembrança relacionada ao Original. Se ele conhecia a informação no momento da clonagem, o Mestre entrega uma memória curta, verdadeira e incompleta: imagem, frase, sensação, rosto ou localização aproximada. Isso não fornece senhas completas, segredos sem contexto ou conhecimentos posteriores à clonagem.",
         "usos": 1,
         "recuperacao": "sessao",
         "automatizada": false
@@ -8495,7 +8495,7 @@
             "id": "conhecimento-implantado",
             "titulo": "Conhecimento Implantado",
             "tipo": "treinamento",
-            "descricao": "Escolha duas perícias. Cada uma sobe um Grau de Treinamento, respeitando o grau máximo permitido pelo Nível Total. Receba duas rerrolagens por sessão, utilizáveis somente nessas perícias.",
+            "descricao": "Escolha duas perícias. Cada uma sobe um grau, respeitando o grau máximo permitido pelo nível total. Receba duas rerrolagens por sessão, utilizáveis somente nessas perícias.",
             "usos": 2,
             "recuperacao": "sessao",
             "automatizada": false
@@ -8594,7 +8594,7 @@
       "campo": "periciasMemoria",
       "titulo": "Perícia das Memórias"
     },
-    "descricao": "Um personagem de outra campanha que atravessou pra esta. Chega com o mesmo nome, rosto, memória e fama, mas perde o nível e a ficha. O que sobrou de lá volta como uma Assinatura (uma técnica marcante, com nome novo e adaptada) e um Legado extra.",
+    "descricao": "Um personagem de outra campanha que atravessou para esta. Chega com o mesmo nome, rosto, memória e fama, mas perde o nível e a ficha. O que sobrou de lá volta como uma Assinatura (uma técnica marcante, com nome novo e adaptada) e um Legado extra.",
     "caracteristicas": [
       {
         "id": "identidade-preservada",
@@ -8647,7 +8647,7 @@
       {
         "id": "ofensiva",
         "titulo": "Ofensiva",
-        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para usar o teste apropriado contra a resistência definida pelo mestre. Em falha, cause 3d6 + Mod.Atributo de dano; em sucesso, cause metade.",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para usar o teste apropriado contra a resistência definida pelo Mestre. Em falha, cause 3d6 + Mod.Atributo de dano; em sucesso, cause metade.",
         "usos": 1,
         "recuperacao": "cena",
         "custo_mana": 5,
@@ -8683,7 +8683,7 @@
       {
         "id": "controle",
         "titulo": "Controle",
-        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para usar o teste apropriado contra uma resistência definida pelo mestre. Em falha, aplique uma condição leve aprovada pelo mestre até o final do próximo turno do alvo; em sucesso, nenhuma condição é aplicada.",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para usar o teste apropriado contra uma resistência definida pelo Mestre. Em falha, aplique uma condição leve aprovada pelo Mestre até o final do próximo turno do alvo; em sucesso, nenhuma condição é aplicada.",
         "usos": 1,
         "recuperacao": "cena",
         "custo_mana": 5
@@ -8726,7 +8726,7 @@
       },
       {
         "origem": "Dinheiro e equipamentos",
-        "destino": "Ajustados pelo mestre à campanha atual"
+        "destino": "Ajustados pelo Mestre à campanha atual"
       }
     ],
     "recursos_provisorios": false
@@ -8832,7 +8832,7 @@
         "id": "assimilacao-controlada",
         "titulo": "Assimilação Controlada",
         "tipo": "progressao",
-        "descricao": "Comece conhecendo três Fragmentos. Um acontecimento narrativo autorizado pelo mestre pode desbloquear outro Fragmento da lista, até o máximo de seis conhecidos. Derrotar, tocar ou consumir uma criatura não concede automaticamente características, e poderes raciais completos nunca são copiados.",
+        "descricao": "Comece conhecendo três Fragmentos. Um acontecimento narrativo autorizado pelo Mestre pode desbloquear outro Fragmento da lista, até o máximo de seis conhecidos. Derrotar, tocar ou consumir uma criatura não concede automaticamente características, e poderes raciais completos nunca são copiados.",
         "automatizada": false
       },
       {
@@ -8991,7 +8991,7 @@
     "descricao": "Bruxa é uma natureza mágica, e qualquer pessoa pode acabar virando uma. Depois que vem, não tem volta. Enxerga maldição, pacto e possessão de longe, cria as próprias maldições e, quando a Mana acaba, paga com Vida. Ninguém entende tanto de Fluxo quanto as bruxas de Salém.",
     "fisiologia": [
       "Bruxa é uma natureza mágica adquirida, não uma profissão nem uma identidade de gênero.",
-      "Permanece um ser vivo, salvo transformação narrativa posterior declarada pelo mestre."
+      "Permanece um ser vivo, salvo transformação narrativa posterior declarada pelo Mestre."
     ],
     "caracteristicas": [
       {
@@ -9188,7 +9188,7 @@
       "fluxo": 2
     },
     "legados_adicionais": 1,
-    "descricao": "Nasceu em Sonhar, o mundo dos sonhos, e continua existindo mesmo quando todo mundo acorda. O corpo é feito da matéria de lá, então consegue dobrar pedacinhos da realidade, entrar no sonho dos outros e trazer sonho ou pesadelo pra dentro de uma luta. A Parte do Sonhar escolhida mostra qual lado desse mundo mais marcou ele.",
+    "descricao": "Nasceu em Sonhar, o mundo dos sonhos, e continua existindo mesmo quando todo mundo acorda. O corpo é feito da matéria de lá, então consegue dobrar pedacinhos da realidade, entrar no sonho dos outros e trazer sonho ou pesadelo para dentro de uma luta. A Parte do Sonhar escolhida mostra qual lado desse mundo mais marcou ele.",
     "fisiologia": [
       "Para concluir um descanso completo, precisa dormir e se ligar novamente a Sonhar. Enquanto faz isso, fica alheio aos arredores como qualquer criatura adormecida.",
       "É imune a efeitos que forcem o sono, mas continua vulnerável a nocaute e a outras formas de inconsciência."
@@ -9376,7 +9376,7 @@
             "titulo": "Laço com um Sonhador",
             "tipo": "passiva",
             "nivel_minimo": 1,
-            "descricao": "Você criou um laço com alguém do mundo desperto; defina com o mestre quem é. Enquanto essa pessoa estiver viva, você recebe vantagem em Vontade e sabe a direção aproximada dela. Se ela morrer, você perde os dois benefícios até criar um novo laço durante um descanso completo.",
+            "descricao": "Você criou um laço com alguém do mundo desperto; defina com o Mestre quem é. Enquanto essa pessoa estiver viva, você recebe vantagem em Vontade e sabe a direção aproximada dela. Se ela morrer, você perde os dois benefícios até criar um novo laço durante um descanso completo.",
             "automatizada": false
           },
           {
@@ -9639,7 +9639,7 @@
             "id": "fe-que-alimenta",
             "titulo": "Fé que Alimenta",
             "tipo": "passiva",
-            "descricao": "Fiéis sinceros aumentam seu poder conforme a tabela da página. Os bônus não se acumulam entre faixas: use apenas a faixa atual. O mestre confirma a mudança no fim da sessão ou do arco.",
+            "descricao": "Fiéis sinceros aumentam seu poder conforme a tabela da página. Os bônus não se acumulam entre faixas: use apenas a faixa atual. O Mestre confirma a mudança no fim da sessão ou do arco.",
             "automatizada": false
           }
         ]
@@ -9663,7 +9663,7 @@
       }
     ],
     "regra_fe": {
-      "descricao": "Conte apenas pessoas que acreditam de verdade que você é um deus e mantêm essa fé. Medo, mentira, pagamento e controle mental não contam. O nível da fé só muda quando o mestre confirmar, no fim de uma sessão ou de um arco. Como esses bônus dependem da campanha, registre Vida e Mana como ajustes manuais na ficha somente depois dessa confirmação.",
+      "descricao": "Conte apenas pessoas que acreditam de verdade que você é um deus e mantêm essa fé. Medo, mentira, pagamento e controle mental não contam. O nível da fé só muda quando o mMestreconfirmar, no fim de uma sessão ou de um arco. Como esses bônus dependem da campanha, registre Vida e Mana como ajustes manuais na ficha somente depois dessa confirmação.",
       "patamares": [
         {
           "id": "sem-fieis",
@@ -9917,7 +9917,7 @@
             "titulo": "Pergunta Certa",
             "tipo": "exploracao",
             "nivel_minimo": 1,
-            "descricao": "Uma vez por sessão, escolha uma pessoa, um lugar ou um objeto que você esteja vendo e faça uma pergunta direta ao mestre. Ele responde com uma informação verdadeira que seu personagem poderia descobrir. Isso não mostra o futuro nem quebra um segredo protegido por poder maior que o seu.",
+            "descricao": "Uma vez por sessão, escolha uma pessoa, um lugar ou um objeto que você esteja vendo e faça uma pergunta direta ao Mestre. Ele responde com uma informação verdadeira que seu personagem poderia descobrir. Isso não mostra o futuro nem quebra um segredo protegido por poder maior que o seu.",
             "usos": 1,
             "recuperacao": "sessao",
             "automatizada": false
@@ -9927,7 +9927,7 @@
             "titulo": "Vejo a Fraqueza",
             "tipo": "acao",
             "nivel_minimo": 18,
-            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para estudar uma criatura a até 18 m. O mestre revela a Defesa, a maior resistência e uma fraqueza dela, se houver. Até o fim da próxima rodada, você e seus aliados têm vantagem para atacar essa criatura.",
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para estudar uma criatura a até 18 m. O Mestre revela a Defesa, a maior resistência e uma fraqueza dela, se houver. Até o fim da próxima rodada, você e seus aliados têm vantagem para atacar essa criatura.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 5,
@@ -9939,7 +9939,7 @@
             "titulo": "Memória do Mundo",
             "tipo": "acao_completa",
             "nivel_minimo": 48,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 9 Mana para tocar uma pessoa, um lugar ou um objeto e fazer até três perguntas sobre o passado do alvo. O mestre responde com a verdade, mas não precisa revelar algo escondido por um Deus mais forte que você.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 9 Mana para tocar uma pessoa, um lugar ou um objeto e fazer até três perguntas sobre o passado do alvo. O Mestre responde com a verdade, mas não precisa revelar algo escondido por um Deus mais forte que você.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 9,
@@ -10178,6 +10178,6 @@
     "fisiologia": [],
     "caracteristicas": [],
     "recursos_provisorios": false,
-    "descricao": "Não achou nenhuma raça que sirva? Escolha esta e escreva o nome que quiser na ficha. Ela não dá bônus nem característica nenhuma, então o que ela representa fica por conta do mestre."
+    "descricao": "Não achou nenhuma raça que sirva? Escolha esta e escreva o nome que quiser na ficha. Ela não dá bônus nem característica nenhuma, então o que ela representa fica por conta do Mestre."
   }
 ]

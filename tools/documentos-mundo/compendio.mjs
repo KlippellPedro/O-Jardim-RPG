@@ -37,8 +37,10 @@ import {
   circuloRotulo,
   magiaEhElemental,
   magiaExigeAvatar,
+  rotuloPapelMagia,
   simbolosDoRito,
 } from '../../src/services/magiaService.ts';
+import { descreverRequisito } from '../../src/services/progressaoFichaService.ts';
 import { linhasDeMagiaDaClasse } from '../../src/services/progressaoMagiaClasse.ts';
 import { NIVEL_CONTEUDO_CLASSE, NIVEL_MAXIMO_CLASSE } from '../../src/services/progressaoNiveis.ts';
 import {
@@ -95,7 +97,13 @@ const ficha = (efeito, { sem = [] } = {}) => {
 /* Classes                                                             */
 /* ------------------------------------------------------------------ */
 
-const niveisDe = (niveis) => (Array.isArray(niveis) && niveis.length ? niveis.join(', ') : '');
+const niveisDe = (niveis) => (Array.isArray(niveis) && niveis.length ? listaHumana(niveis.map(String)) : '');
+/** "Nível 18" ou "Níveis 1, 5 e 10". */
+const rotuloDeNiveis = (niveis) => {
+  const texto = niveisDe(niveis);
+  if (!texto) return '';
+  return `${niveis.length === 1 ? 'Nível' : 'Níveis'} ${texto}`;
+};
 
 const tabelaDeProgressao = (classe) => {
   const porNivel = new Map((classe.progressao || []).map((linha) => [linha.nivel, linha.recompensas]));
@@ -120,10 +128,10 @@ const blocoDeMagiaDaClasse = (classe) => {
 const blocoDeEntregaDeSaida = (classe) => {
   const pericias = classe.pericias_concedidas || [];
   if (!pericias.length && !classe.dt_efeitos && !classe.tarefas_bancada) return '';
-  const partes = [secao('O que a classe entrega de saída')];
+  const partes = [secao('Regras próprias da classe')];
 
   pericias.forEach((pericia) => {
-    partes.push(`<h4>${esc(pericia.titulo)} <small>Perícia da classe${pericia.grau_inicial ? `, ${esc(pericia.grau_inicial)}` : ''}</small></h4>`);
+    partes.push(`<h4>${esc(pericia.titulo)} <small>Perícia da classe${pericia.grau_inicial ? `, em ${esc(capitalizar(pericia.grau_inicial))}` : ''}</small></h4>`);
     if (pericia.descricao) partes.push(`<p>${esc(pericia.descricao)}</p>`);
   });
 
@@ -153,7 +161,7 @@ const blocoDeEntregaDeSaida = (classe) => {
 const blocoDeHabilidade = (classe, habilidade) => {
   const partes = [];
   const niveis = niveisDe(habilidade.niveis);
-  partes.push(`<h4 class="hab-nome">${esc(habilidade.titulo)}${niveis ? ` <span class="hab-niveis">Níveis ${esc(niveis)}</span>` : ''}</h4>`);
+  partes.push(`<h4 class="hab-nome">${esc(habilidade.titulo)}${niveis ? ` <span class="hab-niveis">${esc(rotuloDeNiveis(habilidade.niveis))}</span>` : ''}</h4>`);
   if (habilidade.descricao) partes.push(`<p>${esc(habilidade.descricao)}${ficha(habilidade) ? ` ${ficha(habilidade)}` : ''}</p>`);
   else if (ficha(habilidade)) partes.push(`<p>${ficha(habilidade)}</p>`);
 
@@ -161,7 +169,8 @@ const blocoDeHabilidade = (classe, habilidade) => {
   if (escala) {
     const marcos = (escala.marcos || [])
       .map((marco) => `nível ${marco.nivel} ${marco.nivel_classe > 1 ? `aos ${marco.nivel_classe}` : 'de saída'}`);
-    partes.push(`<p class="escala"><strong>${esc(escala.rotulo)}.</strong> ${marcos.length ? `${esc(listaHumana(marcos))}. ` : ''}${escala.descricao ? esc(escala.descricao) : ''}</p>`);
+    const texto = escala.descricao || (marcos.length ? `${capitalizar(listaHumana(marcos))}.` : '');
+    partes.push(`<p class="escala"><strong>${esc(escala.rotulo)}.</strong> ${esc(texto)}</p>`);
   }
 
   if ((habilidade.estagios || []).length) {
@@ -194,23 +203,31 @@ const blocoDePoder = (poder) => {
   return `<li><strong>${esc(poder.titulo)}</strong> <span class="opcao-acao">${esc(custo)}</span>. ${esc(poder.descricao)}${detalhes ? ` ${detalhes}` : ''}${requisitos}${repetivel}</li>`;
 };
 
+/** O estoque de material que cada classe gasta. O catálogo dos materiais (nome e raridade de cada um) só existe no site. */
 const CLASSES_COM_CATALOGO_DE_MATERIAIS = {
-  alquimista: 'as fórmulas e os componentes químicos',
-  cozinheiro: 'as receitas e os mantimentos',
-  engenheiro: 'os projetos e a sucata',
-  ritualista: 'os rituais e os componentes ritualísticos',
+  alquimista: 'dos Componentes Químicos',
+  cozinheiro: 'dos Mantimentos',
+  engenheiro: 'da Sucata',
+  ritualista: 'dos Componentes Ritualísticos',
+};
+
+/** "Existe em qualquer Árvore" ou "Só existe na Árvore Matriz". */
+const ondeExiste = (classe) => {
+  const ids = classe.arvores?.length ? classe.arvores : (classe.arvore ? [classe.arvore] : []);
+  if (!ids.length) return 'Só existe nas Árvores que o Mestre definir';
+  if (ARVORES.every((arvore) => ids.includes(arvore.id))) return 'Existe em qualquer Árvore';
+  const nomes = ids.map(nomeDaArvore);
+  return `Só existe ${nomes.length > 1 ? 'nas Árvores' : 'na Árvore'} ${esc(listaHumana(nomes))}`;
 };
 
 /** O texto de uma classe, em blocos soltos. */
 export const corpoDaClasse = (classe) => {
   const especial = classe.categoria !== 'padrao';
-  const arvores = (classe.arvores?.length ? classe.arvores : (classe.arvore ? [classe.arvore] : []))
-    .map(nomeDaArvore);
   const partes = [];
 
   partes.push(`<p class="regras-lead">${especial
-    ? `Classe especial. Chega por conquista durante a campanha, nunca na criação: é mais forte que o patamar-base, fica presa às Árvores ${esc(arvores.length ? listaHumana(arvores) : 'que o Mestre definir')} e o Mestre precisa liberar antes.`
-    : 'Classe comum. É o patamar-base e serve a personagem de qualquer Árvore, sem depender de ninguém liberar.'} Dá para subir ${esc(classe.titulo)} sozinho até o nível ${NIVEL_MAXIMO_CLASSE}. Para abrir uma segunda classe comum, uma das suas classes precisa ter chegado ao nível ${NIVEL_CONTEUDO_CLASSE}, e depois disso os níveis podem ser intercalados como o jogador preferir.</p>`);
+    ? `Classe especial: chega por conquista durante a campanha, nunca na criação, e é mais forte que uma classe comum. ${ondeExiste(classe)}, e o Mestre precisa liberar antes de ela entrar na ficha.`
+    : 'Classe comum: serve a personagem de qualquer Árvore e não depende de liberação.'} Vai até o nível ${NIVEL_MAXIMO_CLASSE}.</p>`);
 
   const saida = blocoDeEntregaDeSaida(classe);
   if (saida) partes.push(saida);
@@ -228,18 +245,17 @@ export const corpoDaClasse = (classe) => {
 
   if ((classe.eventos || []).length) {
     partes.push(secao('Eventos da classe'));
-    partes.push(`<ul class="regras-list">${classe.eventos.map((evento) => `<li><strong>${esc(evento.titulo)}</strong> <span class="hab-niveis">Níveis ${esc(niveisDe(evento.niveis))}</span>. ${esc(evento.descricao)}</li>`).join('')}</ul>`);
+    partes.push(`<ul class="regras-list">${classe.eventos.map((evento) => `<li><strong>${esc(evento.titulo)}</strong> <span class="hab-niveis">${esc(rotuloDeNiveis(evento.niveis))}</span>. ${esc(evento.descricao)}</li>`).join('')}</ul>`);
   }
 
   if ((classe.poderes || []).length) {
     partes.push(secao('Poderes da classe'));
-    partes.push('<p>Custo 0 indica um poder passivo.</p>');
     partes.push(`<ul class="poderes">${classe.poderes.map(blocoDePoder).join('')}</ul>`);
   }
 
   const catalogo = CLASSES_COM_CATALOGO_DE_MATERIAIS[classe.id];
   if (catalogo) {
-    partes.push(`<div class="regras-note regras-note--dica"><p>Os catálogos de ${catalogo} que esta classe usa ficam no site, na página de Materiais.</p></div>`);
+    partes.push(`<div class="regras-note regras-note--dica"><p>O catálogo ${catalogo} que esta classe gasta, com o nome e a raridade de cada material, fica no site, na página de Materiais.</p></div>`);
   }
   return partes.join('\n');
 };
@@ -335,8 +351,8 @@ export const corpoDaRaca = (raca) => {
   const partes = [];
 
   partes.push(`<p class="regras-lead">${especial
-    ? `Raça especial. Tem regras e origem próprias${arvores.length && !raca.transformacao_em_qualquer_arvore ? ` e só existe nas Árvores ${esc(listaHumana(arvores))}` : ''}, e o Mestre precisa liberar antes de ela entrar na ficha.`
-    : 'Raça comum. Nasce em qualquer Árvore e fica liberada desde o começo, sem precisar pedir ao Mestre.'}</p>`);
+    ? `Raça especial: tem regras e origem próprias${arvores.length && !raca.transformacao_em_qualquer_arvore ? ` e só existe ${arvores.length > 1 ? 'nas Árvores' : 'na Árvore'} ${esc(listaHumana(arvores))}` : ''}, e o Mestre precisa liberar antes de ela entrar na ficha.`
+    : 'Raça comum: nasce em qualquer Árvore e fica liberada desde o começo, sem precisar pedir ao Mestre.'}</p>`);
 
   const fisiologia = raca.descricao ? (raca.fisiologia || []) : (raca.fisiologia || []).slice(1);
   if (fisiologia.length) {
@@ -406,12 +422,11 @@ export const racasDaEdicao = ({ comMestre }) => [...RACAS_CATALOGO]
 
 const capitalizar = (valor) => `${String(valor).charAt(0).toLocaleUpperCase('pt-BR')}${String(valor).slice(1)}`;
 
+/** Atributo e perícia saem com o nome da ficha ("Constituição 20+"), pela mesma função que a ficha usa. */
 const formatarRequisito = (requisito) => {
   if (Array.isArray(requisito.ou)) return requisito.ou.map(formatarRequisito).join(' ou ');
   if (requisito.nivel_personagem) return `Nível ${requisito.nivel_personagem}+`;
-  if (requisito.atributo) return `${capitalizar(requisito.atributo)} ${requisito.valor_minimo}+`;
-  if (requisito.pericia) return `${capitalizar(requisito.pericia)} (${requisito.nivel})`;
-  return '';
+  return descreverRequisito(requisito);
 };
 
 const requisitosDoLegado = (legado) => {
@@ -442,7 +457,7 @@ const linhaDeCampos = (campos) => {
 
 const blocoDeMagia = (magia) => {
   const partes = [];
-  partes.push(`<h4 class="hab-nome">${esc(magia.titulo)} <span class="hab-niveis">${esc(magia.papel)} · ${esc(magia.custo_mana)} Mana</span></h4>`);
+  partes.push(`<h4 class="hab-nome">${esc(magia.titulo)} <span class="hab-niveis">${esc(rotuloPapelMagia(magia.papel))} · ${esc(magia.custo_mana)} Mana</span></h4>`);
   if (magia.descricao) partes.push(`<p class="magia-descricao">${esc(magia.descricao)}</p>`);
   partes.push(`<p>${linhaDeCampos([
     ['Execução', magia.execucao],
@@ -589,7 +604,7 @@ export const partesDoCompendio = ({ comMestre }) => {
       titulo: 'Classes',
       contagem: `${classes.length} classes`,
       descricao: 'A ficha completa de cada classe, nível a nível.',
-      apresentacao: `Cada entrada traz o que a classe entrega de saída, a tabela de progressão do nível 1 ao ${NIVEL_CONTEUDO_CLASSE}, as habilidades com seus estágios e opções, os eventos e os poderes. ${comMestre ? 'Esta edição inclui as classes especiais, que o Mestre libera mesa a mesa.' : 'Entram as classes comuns, que qualquer jogador pode escolher. As classes especiais dependem de liberação do Mestre e aparecem no site quando ele as libera.'}`,
+      apresentacao: `Cada entrada traz as regras próprias da classe, a tabela de progressão do nível 1 ao ${NIVEL_CONTEUDO_CLASSE}, as habilidades com seus estágios e opções, os eventos e os poderes. Toda classe vai até o nível ${NIVEL_MAXIMO_CLASSE}; a segunda classe comum abre quando uma das suas chega ao nível ${NIVEL_CONTEUDO_CLASSE}, e daí em diante os níveis podem ser intercalados como você preferir. ${comMestre ? 'Esta edição inclui as classes especiais, que o Mestre libera mesa a mesa.' : 'Entram as classes comuns, que qualquer jogador pode escolher. As classes especiais dependem de liberação do Mestre e aparecem no site quando ele as libera.'}`,
       topicos: numerar('A', classes.map((classe) => entradaDeClasse(classe, ''))),
     });
   }

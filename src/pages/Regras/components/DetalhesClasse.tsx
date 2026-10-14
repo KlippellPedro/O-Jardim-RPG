@@ -273,8 +273,8 @@ export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasse
         </p>
         <p className="relative mt-1">
           {especial
-            ? `Não se escolhe na criação: se conquista. Mais forte que o patamar-base, presa às Árvores ${arvores || 'que o Mestre definir'}, e o Mestre precisa liberar antes.`
-            : 'É o patamar-base. Serve a personagem de qualquer Árvore, sem depender de ninguém liberar.'}
+            ? `Não se escolhe na criação: chega por conquista. É mais forte que uma classe comum, fica presa às Árvores ${arvores || 'que o Mestre definir'} e o Mestre precisa liberar antes.`
+            : 'Serve a personagem de qualquer Árvore e não depende de liberação.'}
         </p>
       </div>
 

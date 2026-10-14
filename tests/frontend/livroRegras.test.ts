@@ -199,3 +199,20 @@ test('o hash do conteúdo do livro não depende do dia em que ele é montado', a
   assert.equal(a, b);
   assert.notEqual(a, montarLivro({ comMestre: false, data: 'OUTRO DIA' }).corpo);
 });
+
+test('no PDF, remissão dentro de "(ver ...)" leva a página com vírgula, sem parêntese dentro de parêntese', async () => {
+  const { resolverRemissoes } = await import('../../tools/documentos-mundo/livro-regras.mjs') as any;
+  const ids = new Set(['combate', 'descanso']);
+  const dentro = resolverRemissoes('(ver <span class="regras-ref regras-ref--combate">Combate</span>)', ids);
+  assert.match(dentro, /data-pg-formato=", p\. \{n\}">, p\. 000<\/span><\/a>\)$/);
+  const fora = resolverRemissoes('Leia <span class="regras-ref regras-ref--descanso">Descanso</span>.', ids);
+  assert.match(fora, /data-pg-formato=" \(p\. \{n\}\)"> \(p\. 000\)<\/span><\/a>\.$/);
+});
+
+test('o acabamento do PDF troca hífen por sinal de menos e fecha aspas curvas sem mexer nas tags', async () => {
+  const { tipografiaDoLivro } = await import('../../tools/documentos-mundo/livro-regras.mjs') as any;
+  assert.equal(tipografiaDoLivro('<td>-2 em testes, 19-20/x2</td>'), '<td>\u22122 em testes, 19-20/x2</td>');
+  assert.equal(tipografiaDoLivro('<p>quer dizer "role dois dados"</p>'), '<p>quer dizer \u201crole dois dados\u201d</p>');
+  // Aspas que abrem num trecho e fecham em outro (com uma tag no meio) ficam como estão.
+  assert.equal(tipografiaDoLivro('<p class="a-1">"<strong>x</strong>"</p>'), '<p class="a-1">"<strong>x</strong>"</p>');
+});

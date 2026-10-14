@@ -73,7 +73,7 @@ export const APRESENTACAO_DOS_CAPITULOS: Record<string, string> = {
   personagem: 'Quem o seu personagem é e no que ele vira. Raças e classes dão a base, perícias e poderes dizem o que ele sabe fazer, e o resto cuida do que acontece entre uma aventura e outra: treino, descanso, experiência, aliados e escolhas permanentes.',
   combate: 'A luta, do primeiro turno à cicatriz que fica depois. Estão aqui as ações de cada turno, os tipos de dano, o que acontece quando alguém cai, como o corpo se recupera e o que pode grudar em quem apanha.',
   cenas: 'Nem toda tensão vira combate. Estes tópicos tratam das cenas em que o grupo age junto: ajudar, atacar ao mesmo tempo, correr atrás de alguém, negociar duro e jogar com a mesa ao vivo no site.',
-  magia: 'Como a magia funciona no Jardim: de onde ela vem, quanto custa conjurar, como os elementos se derivam e o que rituais, selos e marcas acrescentam. A lista completa de magias fica no site.',
+  magia: 'Como a magia funciona no Jardim: de onde ela vem, quanto custa conjurar, como os elementos se derivam e o que rituais, selos e marcas acrescentam. A lista completa de magias está no Catálogo Mágico.',
   itens: 'Tudo o que se carrega, se melhora e se fabrica: equipamentos, raridades, modificações, criação e os materiais que entram nelas.',
   veiculos: 'Quem dirige, o que acontece numa perseguição, quanto custa manter uma máquina rodando e como se paga uma viagem.',
   mundo: 'O mundo ao redor do grupo: criaturas e companheiros, dinheiro e loja, propriedades e bases, e o que a fama de cada um abre ou fecha.',

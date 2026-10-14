@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ScrollText, Search, X } from 'lucide-react';
 import { LEGADOS_CATALOGO } from '../../../services/catalogoService';
+import { descreverRequisito } from '../../../services/progressaoFichaService';
 import type { LegadoCatalogo } from '../../../hooks/useResolvedRules';
 
 interface RequisitoLegado {
@@ -12,14 +13,11 @@ interface RequisitoLegado {
   ou?: RequisitoLegado[];
 }
 
-const capitalizar = (valor: string) => valor.charAt(0).toLocaleUpperCase('pt-BR') + valor.slice(1);
-
+/** Atributo e perícia saem com o nome da ficha ("Constituição 20+"), e não com o id ("Constituicao"). */
 const formatarRequisito = (requisito: RequisitoLegado): string => {
   if (Array.isArray(requisito.ou)) return requisito.ou.map(formatarRequisito).join(' ou ');
   if (requisito.nivel_personagem) return `Nível ${requisito.nivel_personagem}+`;
-  if (requisito.atributo) return `${capitalizar(requisito.atributo)} ${requisito.valor_minimo}+`;
-  if (requisito.pericia) return `${capitalizar(requisito.pericia)} (${requisito.nivel})`;
-  return '';
+  return descreverRequisito(requisito);
 };
 
 const formatarPreRequisitos = (preRequisitos: unknown[] | undefined) => {

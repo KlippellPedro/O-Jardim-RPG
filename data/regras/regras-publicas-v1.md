@@ -246,7 +246,7 @@ Não some os ajustes duas vezes. A ficha calcula os derivados e aplica raça e e
 
 As fórmulas fundamentais, níveis e multiclasse, maestrias e o papel do atributo Fluxo.
 
-Este é o tópico de consulta: todas as contas que a ficha faz por você, reunidas num lugar só. Você não precisa decorar nenhuma delas para jogar. Dois avisos de leitura: ⌊ ⌋ quer dizer "arredonde para baixo", e "Mod." é o modificador de um atributo, que sai da primeira linha da primeira tabela.
+Este é o tópico de consulta: todas as contas que a ficha faz por você, reunidas num lugar só. Você não precisa decorar nenhuma delas para jogar. Dois avisos de leitura: ⌊ ⌋ quer dizer "arredonde para baixo", e "Mod." é o modificador de um atributo, que sai da primeira fórmula logo abaixo.
 
 **Em resumo**
 
@@ -254,7 +254,7 @@ Este é o tópico de consulta: todas as contas que a ficha faz por você, reunid
 
 - Vida, Mana e Estamina têm uma conta no nível 1 e um ganho fixo da classe a cada nível seguinte. A Estamina paga o que o corpo faz, e a Mana paga o que é místico.
 
-- Cada classe vai até o nível 50. O padrão do jogo é duas classes comuns e uma especial, o que fecha em 60 níveis totais.
+- Cada classe vai até o nível 50. O padrão do jogo é duas classes comuns e uma especial, com 20 níveis em cada, o que fecha em 60 níveis totais.
 
 - Atributo que chega a 20 por mérito próprio dá uma maestria. Item, pacto ou efeito temporário não conta.
 
@@ -432,8 +432,6 @@ Luta, Pontaria, Fortitude, Reflexos e Vontade são perícias. Fortitude, Reflexo
 
 - Luta | Força | Atacar e executar manobras em combate corpo a corpo, incluindo agarrar, derrubar e contra-atacar.
 
-- Fortitude | Constituição | Resistir a doenças, venenos, exaustão, dor e outros efeitos que ameaçam o corpo.
-
 - Acrobacia | Destreza | Manter o equilíbrio, amortecer quedas, atravessar espaços difíceis e realizar movimentos acrobáticos.
 
 - Cavalgar | Destreza | Conduzir montarias, permanecer montado sob pressão e executar manobras durante uma cavalgada.
@@ -448,6 +446,8 @@ Luta, Pontaria, Fortitude, Reflexos e Vontade são perícias. Fortitude, Reflexo
 
 - Reflexos | Destreza | Reagir rapidamente para evitar armadilhas, explosões, efeitos de área e outros perigos súbitos.
 
+- Fortitude | Constituição | Resistir a doenças, venenos, exaustão, dor e outros efeitos que ameaçam o corpo.
+
 - Conhecimento | Inteligência | Recordar informações acadêmicas sobre história, geografia, ciências, culturas e assuntos gerais.
 
 - Guerra | Inteligência | Analisar batalhas, reconhecer táticas, comandar tropas e avaliar vantagens militares.
@@ -458,6 +458,8 @@ Luta, Pontaria, Fortitude, Reflexos e Vontade são perícias. Fortitude, Reflexo
 
 - Nobreza | Inteligência | Conhecer linhagens, brasões, etiqueta, política, leis e relações entre casas de poder.
 
+- Tecnologia | Inteligência | Operar, diagnosticar, programar e reparar itens A.X.I.S, sistemas eletrônicos e maquinário avançado; Ofício cobre artesanato comum.
+
 - Cura | Sabedoria | Prestar primeiros socorros, diagnosticar males, estabilizar feridos e acompanhar tratamentos.
 
 - Intuição | Sabedoria | Perceber intenções, emoções, mentiras por comportamento e quando algo em uma situação parece errado.
@@ -466,9 +468,15 @@ Luta, Pontaria, Fortitude, Reflexos e Vontade são perícias. Fortitude, Reflexo
 
 - Religião | Sabedoria | Conhecer divindades, cultos, símbolos, dogmas, cerimônias e tradições religiosas.
 
+- Ressonância | Sabedoria | Sentir Fluxos, reconhecer sua natureza e origem, identificar interferências e resistir à influência direta de Fluxos alheios.
+
+- Sanidade | Sabedoria | Manter a lucidez diante de horrores e traumas, reconhecer crises mentais e resistir aos efeitos da perda de Sanidade.
+
 - Sobrevivência | Sabedoria | Orientar-se, rastrear, encontrar abrigo e recursos e reconhecer perigos naturais.
 
 - Vontade | Sabedoria | Resistir a medo, coerção, ilusões, encantamentos e outros efeitos que tentam dominar a mente.
+
+- Adestramento | Carisma | Acalmar, treinar, conduzir e ensinar comandos a animais ou criaturas domesticáveis.
 
 - Atuação | Carisma | Entreter ou emocionar uma plateia por música, dança, interpretação, oratória ou outra arte performática.
 
@@ -480,13 +488,7 @@ Luta, Pontaria, Fortitude, Reflexos e Vontade são perícias. Fortitude, Reflexo
 
 - Jogatina | Carisma | Entender jogos de azar, blefar durante apostas e reconhecer trapaças ou padrões de outros jogadores.
 
-- Adestramento | Carisma | Acalmar, treinar, conduzir e ensinar comandos a animais ou criaturas domesticáveis.
-
-- Ressonância | Sabedoria | Sentir Fluxos, reconhecer sua natureza e origem, identificar interferências e resistir à influência direta de Fluxos alheios.
-
-- Tecnologia | Inteligência | Operar, diagnosticar, programar e reparar itens A.X.I.S, sistemas eletrônicos e maquinário avançado; Ofício cobre artesanato comum.
-
-- Sanidade | Sabedoria | Manter a lucidez diante de horrores e traumas, reconhecer crises mentais e resistir aos efeitos da perda de Sanidade.
+Ofício não aparece na lista porque cada personagem cria o seu, com a especialidade no nome: Ofício (Ferraria), Ofício (Alquimia), Ofício (Carpintaria). Na ficha, ele entra pelo cartão Nova Perícia ou Ofício, e é com ele que se forja, se costura e se prepara alquimia (ver Criação, Forja e Alquimia).
 
 ## acoes-coletivas
 
@@ -696,7 +698,7 @@ Cada manobra traz o que o corpo faz e, embaixo, como se resolve. Diga a cena ant
 
 - Acertar de longeSó em Contato, Curta, Média | Parar meio segundo, respirar, mirar entre as cabeças da multidão e torcer para acertar a pessoa certa.Teste: Pontaria, magia ou o que alcançar. Sucesso: Resolve normalmente. Condição que tire o movimento move uma faixa a favor de quem atirou. Falha: A faixa não muda. Mirar correndo custa a rodada de qualquer jeito.
 
-- Sumir de vistaSó em Longa | Entrar numa procissão, tirar o casaco, sentar numa mesa de taverna como quem está ali há horas e pedir uma bebida com a voz calma.Teste: Furtividade oposta à Percepção. Sucesso: Sucesso encerra a cena: o fugitivo Escapou. Falha: Você foi visto entrando no esconderijo, e quem persegue move uma faixa.
+- Sumir de vistaSó em Longa | Entrar numa procissão, tirar o casaco, sentar numa mesa de taverna como quem está ali há horas e pedir uma bebida com a voz calma.Teste: Furtividade oposta à Percepção. Sucesso: Encerra a cena: o fugitivo Escapou. Falha: Você foi visto entrando no esconderijo, e quem persegue move uma faixa.
 
 - Atravessar gente no caminho | Gritar "pega ladrão", mostrar um distintivo, pedir licença com a voz certa. A rua abre para você e fecha para o outro.Teste: Diplomacia ou Intimidação contra a DT Padrão. Sucesso: A rua atrapalha o outro lado, e ele sofre desvantagem na manobra seguinte. Falha: A multidão fecha bem na sua frente, e você move uma faixa contra si.
 
@@ -742,7 +744,7 @@ Quem não resolveu o obstáculo na própria manobra testa Acrobacia, Atletismo o
 
 Interrogatório, negociação e audiência resolvidos em rodadas, com a Resistência de quem está do outro lado descendo a cada bom argumento e a Paciência dele subindo a cada palavra errada.
 
-Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo para dizer, e cada palavra errada fecha uma porta. Um pedido simples continua sendo um teste só. Esta página é para as outras conversas: arrancar a verdade de um preso, fechar preço com quem não precisa vender, convencer um conselho que já decidiu antes de vocês entrarem.
+Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo para dizer, e cada palavra errada fecha uma porta. Um pedido simples continua sendo um teste só. Este tópico é para as outras conversas: arrancar a verdade de um preso, fechar preço com quem não precisa vender, convencer um conselho que já decidiu antes de vocês entrarem.
 
 **Em resumo**
 
@@ -802,9 +804,9 @@ Cada abordagem traz uma fala de exemplo e, embaixo, como se resolve. A fala serv
 
 - Puxar posição ou nome | “Minha família serve a esta casa há três gerações. Pergunte ao seu pai.”Teste: Nobreza ou Atuação. Sucesso: Tira 1 de Resistência, e mais 1 com Prestígio positivo na facção dela. Risco: Contra quem odeia o seu nome, enche 1 de Paciência.
 
-- Oferecer algo concreto | “A dívida com o Banco some amanhã, e ninguém precisa saber de onde veio o dinheiro.”Teste: Sem teste. Sucesso: Tira 1 de Resistência por oferta que custe de verdade ao grupo: dinheiro, favor, segredo, Prestígio. Risco: Oferta pequena demais enche 1 de Paciência e queima a ideia.
+- Oferecer algo concreto | “A dívida com o Banco some amanhã, e ninguém precisa saber de onde veio o dinheiro.”Teste: nenhum. Sucesso: Tira 1 de Resistência por oferta que custe de verdade ao grupo: dinheiro, favor, segredo, Prestígio. Risco: Oferta pequena demais enche 1 de Paciência e queima a ideia.
 
-- Ceder alguma coisa | “Fique com a carga. A gente só quer o nome de quem mandou.”Teste: Sem teste. Sucesso: Tira 2 de Resistência quando o grupo abre mão de algo que queria nesta negociação. Risco: A concessão vale, e a outra parte vai cobrar exatamente o que foi prometido.
+- Ceder alguma coisa | “Fique com a carga. A gente só quer o nome de quem mandou.”Teste: nenhum. Sucesso: Tira 2 de Resistência quando o grupo abre mão de algo que queria nesta negociação. Risco: A concessão vale, e a outra parte vai cobrar exatamente o que foi prometido.
 
 ### Como termina
 
@@ -834,7 +836,7 @@ Combate começa quando a conversa acaba e alguém decide resolver no golpe. Este
 
 - No seu turno você tem uma Ação Padrão e uma Ação de Movimento, além de gestos livres. Uma reação por rodada fica guardada para o turno dos outros.
 
-- O ataque é d20 + Luta ou Pontaria contra a Defesa Natural. Empatar acerta, e um 1 natural sempre erra. A margem de ameaça da arma define o crítico.
+- O ataque é d20 + Luta ou Pontaria contra a Defesa do alvo: a Defesa Natural somada a armadura, escudo e outros ajustes. Empatar acerta, e um 1 natural sempre erra. A margem de ameaça da arma define o crítico.
 
 - Manobras (agarrar, derrubar, empurrar, desarmar, imobilizar) usam a mesma rolagem, contra 10 mais o bônus da defesa passiva do alvo.
 
@@ -866,7 +868,7 @@ Dá para trocar sua Ação Padrão por uma segunda Ação de Movimento. Correr c
 
 ### Ataques e cobertura
 
-d20 + Luta ou Pontaria contra a Defesa Natural
+d20 + Luta ou Pontaria contra a Defesa do alvo
 
 Empatar com a Defesa já acerta. Um 1 natural sempre erra, não importa o bônus. Cobertura parcial dá +2 de Defesa; cobertura superior dá +5.
 
@@ -924,7 +926,7 @@ Agarrado, Caído e Imobilizado são condições, e todas estão em Condições.
 
 **Regra:**
 
-Você tem uma reação por rodada e recupera ela no começo do seu próprio turno. Defesa Natural funciona sozinha e não gasta reação nenhuma.
+Você tem uma reação por rodada e a recupera no começo do seu próprio turno. A Defesa funciona sozinha e não gasta reação nenhuma.
 
 - Reação | Gatilho | Efeito
 
@@ -982,13 +984,13 @@ São estes sete, e não existe um oitavo. Só elemento e derivação contam como
 
 - Fogo | Chama viva e brasa que continua queimando depois do golpe. Nenhum outro elemento deixa tanto dano persistente para trás.
 
-- Ar | Vento cortante e pressão que empurra sem tocar. Joga corpo e objeto pra longe, e limpa qualquer nuvem de gás ou fumaça que esteja no caminho.
+- Ar | Vento cortante e pressão que empurra sem tocar. Joga corpo e objeto para longe, e limpa qualquer nuvem de gás ou fumaça que esteja no caminho.
 
-- Raio | Descarga que salta de um alvo pro próximo sem pedir licença, e desliga na hora qualquer coisa energizada por perto.
+- Raio | Descarga que salta de um alvo para o próximo sem pedir licença, e desliga na hora qualquer coisa energizada por perto.
 
-- Luz | Claridade que não deixa nada se esconder. Cega quem olha de perto e expõe quem contava com a escuridão pra passar despercebido.
+- Luz | Claridade que não deixa nada se esconder. Cega quem olha de perto e expõe quem contava com a escuridão para passar despercebido.
 
-- Escuridão | Sombra espessa o bastante pra engolir contorno e som. Apaga a luz mundana da área, confunde quem tenta mirar e esconde o que não quer ser visto.
+- Escuridão | Sombra espessa o bastante para engolir contorno e som. Apaga a luz mundana da área, confunde quem tenta mirar e esconde o que não quer ser visto.
 
 A relação de vantagem entre os elementos e as derivações do Elementarista estão em Elementos e Derivações.
 
@@ -998,11 +1000,11 @@ Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: q
 
 Para o Elementarista
 
-A **Polifonia Elemental** do Elementarista fixa um elemento de origem. Antes de conjurar uma magia catalogada como *Elemental*, ele declara qual elemento dominado está usando: quem possui afinidade única sempre declara o de origem; um Avatar pode declarar qualquer elemento que tenha aprendido. O elemento declarado define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração.
+A **Polifonia Elemental** fixa um único elemento de origem, libera as magias catalogadas como *Elementais* e concede uma vaga de magia no 1º nível. Antes de conjurar uma magia Elemental, o Elementarista declara qual elemento dominado está usando, e esse elemento define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração. Quem tem afinidade única sempre declara o de origem.
 
-**Elementarista:** Polifonia Elemental fixa um único elemento de origem, libera as magias Elementais e concede uma vaga de magia no 1º nível. Somente quem desperta como Avatar no Julgamento da Aptidão pode aprender outros elementos; mesmo nesse caso, a derivação e os benefícios que citam o elemento de origem continuam ligados apenas a ele.
+- Só quem desperta como Avatar no Julgamento da Aptidão aprende outros elementos, e passa a poder declarar qualquer um deles. Mesmo assim, a derivação e os benefícios que citam o elemento de origem continuam ligados só a ele.
 
-**Acesso às magias:** o Fluxo Físico também produz força, peso e matéria bruta. Canalizador e Sintonizador continuam aprendendo essas magias materiais e cinéticas, mas as magias catalogadas como *Elementais* exigem níveis de Elementarista. Magias que combinam vários elementos exigem ainda Avatar desperto.
+- O Fluxo Físico também produz força, peso e matéria bruta. Canalizador e Sintonizador continuam aprendendo essas magias materiais e cinéticas, mas as magias catalogadas como *Elementais* exigem níveis de Elementarista, e as que combinam vários elementos exigem ainda o Avatar desperto.
 
 ### Derivações também são tipos de dano
 
@@ -1118,7 +1120,7 @@ Rolar fora do site continua valendo: quem prefere dado físico anuncia o resulta
 
 As dez faixas de distância, o que acontece quando você atira longe demais e como converter tudo para o mapa.
 
-A distância no jogo é contada em dez faixas, cada uma com um limite em metros. É nelas que você mede o alcance de uma arma, de um poder ou de uma magia, e é com elas que um combate (veja Combate) responde à pergunta "dá para acertar daqui?".
+A distância no jogo é contada em dez faixas, cada uma com um limite em metros. É nelas que você mede o alcance de uma arma, de um poder ou de uma magia, e é com elas que o combate responde à pergunta "dá para acertar daqui?".
 
 **Em resumo**
 
@@ -1184,7 +1186,7 @@ Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua s
 
 - Um golpe que tira metade ou mais dos PV máximos, ou uma falha crítica em Morrendo, pede a tabela de trauma (2d6).
 
-- Mutilação só vem anunciada, e um sucesso no teste evita a perda.
+- A Mutilação sempre é anunciada antes, e um sucesso no teste evita a perda.
 
 ### Vida negativa
 
@@ -1266,7 +1268,7 @@ Davi tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de 
 
 Algumas criaturas querem levar uma parte de quem enfrentam. Quando a ficha de uma criatura tem a habilidade **Arrancar**, ela diz o que dispara e qual teste você faz. Falhou, você perde um membro na hora, e ele não volta com descanso.
 
-- A Mutilação sempre vem **anunciada** na rodada anterior, ou de um gatilho que a própria ficha descreve, como estar Agarrado, Imobilizado ou Marcado. Ninguém perde um membro por um golpe que a mesa não teve chance de ver.
+- A Mutilação sempre é **anunciada** na rodada anterior ou vem de um gatilho que a própria ficha descreve, como estar Agarrado, Imobilizado ou Marcado. Ninguém perde um membro por um golpe que a mesa não teve chance de ver.
 
 - Sucesso no teste evita a perda e deixa apenas **Sangramento**. Sucesso crítico não deixa nada.
 
@@ -1326,7 +1328,7 @@ Se a descrição não muda nada na cena, ou se é a mesma de sempre só para peg
 
 **Status:** Regra oficial
 
-Recuperação em porcentagem, que continua valendo no nível 30 igual valia no 3, e uma trilha de Cansaço de 0 a 6 sem meio-termo.
+Recuperação em porcentagem, que vale tanto no nível 3 quanto no 30, e uma trilha de Cansaço de 0 a 6 sem meio-termo.
 
 Descanso é como você recupera Vida, Mana, Estamina e Sanidade e como baixa o Cansaço. A recuperação é em porcentagem, então vale o mesmo no nível 3 e no nível 30, e é a qualidade do descanso que decide quanto volta. Este tópico traz também o descanso curto, Relaxar, e a trilha de Cansaço, de 0 a 6.
 
@@ -1408,7 +1410,7 @@ Um combate conta como intenso quando o personagem desce à metade dos PV, gasta 
 
 Grau dado pela classe sobe na hora. Grau conquistado por treino cobra tempo, nível e, mais para frente, alguém que te ensine.
 
-São dois caminhos diferentes, e vale não os confundir. Quando uma **classe** te dá um Grau de Treinamento, escolha uma perícia e suba um grau imediatamente, sem tempo, sem tabela e sem requisito. Quando você quer subir **por treino**, aí sim cumpre o tempo da linha, o Nível Total mínimo e o requisito extra, quando existir.
+São dois caminhos diferentes, e vale não os confundir. Quando uma **classe** dá a você um Grau de perícia, escolha uma perícia e suba um grau na hora, sem tempo, sem tabela e sem requisito. Quando você quer subir **por treino**, aí sim cumpre o tempo da linha, o nível total mínimo e o requisito extra, quando existir.
 
 ### Progressão
 
@@ -1444,7 +1446,7 @@ Os dias de treino saem do tempo que o grupo tem entre as aventuras (ver Tempo En
 
 - Instrutor é alguém que já tem o grau que você quer alcançar, ou um maior. Quando a linha da tabela pede instrutor, sem ele você não sobe; nas outras linhas, ter um de grau superior ao seu corta 20% do tempo, arredondando para cima.
 
-- Parar no meio não apaga o que já foi feito. Mas mais de 30 dias largado cobra um dia de revisão antes de continuar.
+- Parar no meio não apaga o que já foi feito, mas quem passa mais de 30 dias sem treinar precisa de um dia de revisão antes de continuar.
 
 - Não se rola nada para treinar. Cumpriu o tempo, o Nível Total e o requisito da linha, subiu.
 
@@ -1488,7 +1490,7 @@ Cada atividade abaixo já tem a regra completa em outro tópico. Aqui elas apare
 
 - Atividade | Como é vivida, e o que rende
 
-- Treinar uma perícia. | Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.Custa de 3 a 365 dias, conforme o grau. Rende um grau de treinamento. Regra completa em Treinamento.
+- Treinar uma perícia. | Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.Custa de 3 a 365 dias, conforme o grau. Rende um grau de perícia. Regra completa em Treinamento.
 
 - Fabricar ou reparar. | Cheiro de metal quente, farpa no dedo, uma peça que não encaixa e depois encaixa. No fim, a coisa existe porque você fez.Custa os dias do projeto. Rende o item pronto, com um teste no fim. Regra completa em Criação, Forja e Alquimia.
 
@@ -1576,7 +1578,7 @@ Nem todo dia livre precisa render número. Se você não souber o que o seu pers
 
 Uma tabela de XP sem teto de nível: a conta de sempre até o 100 e uma faixa fixa por patamar depois. As recompensas saem do nível total, nunca de cada classe separada.
 
-Todo personagem acumula XP, e o XP total decide o nível. Este tópico mostra quanto custa cada nível, o que cada nível entrega e como o Mestre costuma recompensar a mesa. As recompensas saem do nível total, nunca de cada classe separada.
+Todo personagem acumula XP, e o XP total decide o nível. Este tópico mostra quanto custa cada nível, o que cada nível entrega e como o Mestre costuma recompensar a mesa.
 
 **Em resumo**
 
@@ -1668,11 +1670,7 @@ Se a dúvida é "o que eu ganho quando passo do 20?", esta parte responde sem vo
 
 - Níveis totais 100, 150, 250 e 500 | Patamares II a V. Cada um traz Conquista, moldura nova no retrato e um grau de perícia novo: Mítico, Cósmico, Eterno e Absoluto. | Este tópico e Perícias
 
-- Nada disso trava a ficha. Ao passar do nível 60 e a cada patamar novo, o Mestre recebe um aviso e a mesa decide o que fazer com isso.
-
-- O atributo não tem teto, e a rolagem de magia soma metade do nível como qualquer teste. O Fluxo recomendado de cada círculo é aviso, e a DT do círculo decide se a magia sai.
-
-- Personagens de nível muito alto costumam ser NPCs do Mestre, como o dono de um banco ou um guardião antigo. Eles usam a mesma ficha, sem cumprir regra de criação.
+O atributo também não tem teto, e a rolagem de magia soma metade do nível como qualquer teste: o Fluxo recomendado de cada círculo é aviso, e a DT do círculo decide se a magia sai.
 
 ### Depois do nível 60
 
@@ -1684,7 +1682,7 @@ O nível 60 é onde terminam as regras padrão. O nível total não tem teto: vo
 
 - O Mestre recebe um aviso quando a sua ficha passa do nível 60 e a cada patamar novo. Ele não trava nada: serve para a mesa conversar sobre o personagem naquele ponto.
 
-- Um NPC do Mestre pode ficar num patamar alto sem cumprir nenhuma regra de criação: a ficha serve para guardar a Vida, a Defesa e os números dele.
+- Personagens de nível muito alto costumam ser NPCs do Mestre, como o dono de um banco ou um guardião antigo. Eles usam a mesma ficha sem cumprir regra de criação: ela serve para guardar a Vida, a Defesa e os números deles.
 
 ### Tabela completa
 
@@ -2014,7 +2012,7 @@ São 26 frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrel
 
 - **Técnica:** o poder ativo do dia a dia, na faixa de 3 a 4 de Mana ou de Estamina. Custa uma ação e costuma valer uma vez por rodada.
 
-- **Despertar:** transforma o vínculo inteiro: melhora a passiva, aprimora cada técnica já conhecida e libera a manifestação final, na faixa de 9 a 14 de Mana ou de Estamina e quase sempre uma vez por cena.
+- **Despertar:** transforma o vínculo inteiro. Melhora a passiva, aprimora cada técnica já conhecida e libera a manifestação final, na faixa de 9 a 14 de Mana ou de Estamina e quase sempre uma vez por cena.
 
 O recurso segue o corpo do poder. Forma, golpe e transformação gastam Estamina, como no Fruto do Dragão, do Tremor, do Colosso e da Quimera. O que mexe em elemento, espaço, tempo ou alma gasta Mana.
 
@@ -2060,7 +2058,7 @@ Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feit
 
 - Comunicação | uma carta entregue, um acordo cumprido, uma mensagem levada a quem ela devia | Palavra que Pesa. +2 em Diplomacia. Uma vez, um acordo feito em voz alta diante de duas testemunhas passa a valer: quem o quebrar sofre desvantagem em todos os testes até reparar o que quebrou.
 
-- Vitalidade | o que cresce: uma muda, um pão, o cuidado de graça com um ferido | Seiva. Vida temporária igual ao seu nível ao receber a dádiva, e +2 em Fortitude. Uma vez, durante um descanso curto, recupere de Vida o seu nível a mais.
+- Vitalidade | o que cresce: uma muda, um pão, o cuidado de graça com um ferido | Seiva. Vida temporária igual ao seu nível ao receber a dádiva, e +2 em Fortitude. Uma vez, durante um descanso curto, recupere Vida extra igual ao seu nível.
 
 - Inconstância | um dado, uma aposta perdida de propósito, algo que trocou de dono por sorteio | Dado Trocado. +2 em Jogatina e em Acrobacia. Uma vez, um 1 natural no seu d20 vale 10.
 
@@ -2212,7 +2210,7 @@ Fora do bônus automático de armas e proteções, o ganho de uma raridade mais 
 
 - **Armaduras e escudos:** o espaço extra vira mais Defesa e Resistência por modificação (ex.: Reforçada, Isolante, Bastião), somando ao bônus automático da tabela acima.
 
-- **Consumíveis:** cabem mais efeitos por dose, uma versão Rara carrega um efeito automático a mais que uma Comum, sem virar um item totalmente novo.
+- **Consumíveis:** cabem mais efeitos por dose. Uma versão Rara carrega um efeito automático a mais que uma Comum, sem virar um item totalmente novo.
 
 - **Veículos:** o espaço vira mais componentes instalados de uma vez, sem estourar a Manutenção do casco (ver Manutenção e Componentes).
 
@@ -2296,8 +2294,6 @@ Use este tópico depois de conferir o orçamento em Raridades de Equipamento. Pr
 - Consumível aplica o efeito quando é usado. Guardado, ele não dá bônus nenhum.
 - Lendário, Mítico e Relíquia da Criação passam pelo Mestre antes de entrar em jogo.
 
-Uma modificação pode conceder Vida máxima, Defesa, Ataque, atributo ou bônus em perícia. Ao guardar ou desequipar o item, a ficha remove os ajustes automaticamente.
-
 ### Como ler uma modificação
 
 - **Nível:** **Comum** entra em qualquer item. **Marcial** bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor.
@@ -2316,13 +2312,13 @@ Uma modificação pode conceder Vida máxima, Defesa, Ataque, atributo ou bônus
 
 - Valor 2 | 290 Lunaris | Raro
 
-- Valor 3 | 1200 Lunaris | Épico
+- Valor 3 | 1.200 Lunaris | Épico
 
 A Loja vende cada uma delas na categoria **Modificações**, com o preço já aplicado. Marcial só aparece a partir da Metrópole.
 
 ### Catálogo por categoria
 
-Existem 63 modificações. Cada grupo abaixo começa fechado: abra apenas Armas, Armaduras, Escudos ou a categoria que corresponde ao item.
+Existem 63 modificações, agrupadas pela categoria do equipamento: consulte só o grupo do item que você está melhorando.
 
 Armas
 21 modificações · 11 comuns · 10 marciais
@@ -2333,7 +2329,7 @@ Armas
 
 - Perfurante | Comum | 1 | 70 L | Nenhum | O dano da arma ignora metade da Resistência do tipo correspondente do alvo.
 
-- Margem Ampla | Comum | 1 | 70 L | Nenhum | Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, pra não furar a regra de margem larga com multiplicador alto.
+- Margem Ampla | Comum | 1 | 70 L | Nenhum | Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, para não furar a regra de margem larga com multiplicador alto.
 
 - Coreografada | Comum | 1 | 70 L | Nenhum | Ao falhar numa Coreografia de risco Ousado ou maior com esta arma, sofra a consequência do risco imediatamente abaixo. Não vale para Tudo ou Nada.
 
@@ -2365,9 +2361,9 @@ Armas
 
 - Assinatura de Árvore | Marcial | 2 | 290 L | Nenhum | A arma se liga a uma Árvore na criação. Contra criaturas de qualquer outra Árvore, +1 dado de dano.
 
-- Golpe de Misericórdia | Marcial | 3 | 1200 L | Nível total 10 | Contra alvo que já esteja em Morrendo, seus ataques com esta arma acertam como crítico automático.
+- Golpe de Misericórdia | Marcial | 3 | 1.200 L | Nível total 10 | Contra alvo que já esteja em Morrendo, seus ataques com esta arma acertam como crítico automático.
 
-- Implacável | Marcial | 3 | 1200 L | Nível total 10 | Uma vez por cena, transforme um acerto em crítico, sem precisar cair na Margem de Ameaça. Não combina com a Coreografia Tudo ou Nada no mesmo ataque.
+- Implacável | Marcial | 3 | 1.200 L | Nível total 10 | Uma vez por cena, transforme um acerto em crítico, sem precisar cair na Margem de Ameaça. Não combina com a Coreografia Tudo ou Nada no mesmo ataque.
 
 - Atordoante | Marcial | 2 | 290 L | Força 14 | No crítico, o alvo faz um teste de Constituição ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.
 
@@ -2398,11 +2394,11 @@ Armaduras
 
 - Âncora de Sanidade | Marcial | 2 | 290 L | Sabedoria 14 | Resistência 3 contra dano Mental e vantagem nos testes para não perder Sanidade.
 
-- Retaliadora | Marcial | 3 | 1200 L | Constituição 14 | Ao sofrer um crítico, quem veste devolve 1 dado de dano de impacto no atacante, sem gastar reação.
+- Retaliadora | Marcial | 3 | 1.200 L | Constituição 14 | Ao sofrer um crítico, quem veste devolve 1 dado de dano de impacto no atacante, sem gastar reação.
 
-- Casca do Fim | Marcial | 3 | 1200 L | Nível total 10 | Enquanto estiver em Morrendo, a DT dos seus testes de Morrendo cai 3.
+- Casca do Fim | Marcial | 3 | 1.200 L | Nível total 10 | Enquanto estiver em Morrendo, a DT dos seus testes de Morrendo cai 3.
 
-- Dissipadora | Marcial | 3 | 1200 L | Nível total 10 | Uma vez por cena, ao sofrer dano de Impacto, reduza-o pela metade.
+- Dissipadora | Marcial | 3 | 1.200 L | Nível total 10 | Uma vez por cena, ao sofrer dano de Impacto, reduza-o pela metade.
 
 - Reativa | Marcial | 2 | 290 L | Constituição 14 | Uma vez por rodada, quando um ataque corpo a corpo acertar você, o atacante sofre 1d6 de dano de Impacto.
 
@@ -2429,7 +2425,7 @@ Escudos
 
 - Guarda de Fluxo | Marcial | 2 | 290 L | Fluxo 12 | Bloqueio passa a funcionar também contra dano de Energia, incluindo o que vem de Fluxos.
 
-- Contratempo | Marcial | 3 | 1200 L | Nível total 10 | Depois de um Contra-Ataque bem-sucedido, recupere sua reação. Uma vez por rodada.
+- Contratempo | Marcial | 3 | 1.200 L | Nível total 10 | Depois de um Contra-Ataque bem-sucedido, recupere sua reação. Uma vez por rodada.
 
 - Refletor | Marcial | 2 | 290 L | Fluxo 12 | Uma vez por cena, ao bloquear um ataque de Raio ou de Luz, redirecione o efeito para uma criatura a até 6 m.
 
@@ -2464,11 +2460,11 @@ Itens gerais e mágicos
 
 - Reserva de Fluxo | Marcial | 2 | 290 L | Fluxo 12 | Guarda até 5 de Mana. Você pode gastar dessa reserva no lugar da sua, e ela enche de novo a cada descanso completo.
 
-- Selado | Marcial | 3 | 1200 L | Nível total 10 e Misticismo treinado | O item carrega um Selo inscrito, escolhido na criação. Uma vez por dia ele dispara sem gastar Mana nem exigir teste de inscrição.
+- Selado | Marcial | 3 | 1.200 L | Nível total 10 e Misticismo treinado | O item carrega um Selo inscrito, escolhido na criação. Uma vez por dia ele dispara sem gastar Mana nem exigir teste de inscrição.
 
 - Furtivo | Marcial | 2 | 290 L | Nenhum | O item passa despercebido em revistas comuns e detectores básicos. Achá-lo exige Investigação contra DT 20.
 
-- Catalisador | Marcial | 3 | 1200 L | Fluxo 14 e nível total 10 | Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.
+- Catalisador | Marcial | 3 | 1.200 L | Fluxo 14 e nível total 10 | Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.
 
 O catálogo é um ponto de partida, e modificação nova é bem-vinda. Ela precisa respeitar o valor máximo por efeito da raridade e o nível condizente com o equipamento.
 
@@ -2531,7 +2527,7 @@ Trabalho interrompido mantém o progresso e os materiais já investidos. Trocar 
 
 - Lendário | 30 | 30 dias | 90% | Projeto de campanha, instalação adequada e materiais únicos definidos antes do trabalho.
 
-- Mítico | Projeto de campanha | Projeto de campanha | Definido no projeto | Não pode ser reproduzida por crafting. Criação ou restauração ocorre como projeto de campanha.
+- Mítico | Projeto de campanha | Projeto de campanha | Definido no projeto | Não pode ser reproduzido pelas regras de fabricação. Criação ou restauração ocorre como projeto de campanha.
 
 - Relíquia da Criação | Projeto de campanha | Projeto de campanha | Definido no projeto | Não pode ser fabricada, copiada ou convertida a partir de outro item.
 
@@ -2589,23 +2585,23 @@ Materiais adicionais são calculados sobre o custo inicial do projeto. Cada nova
 
 - Tecnologia substitui Ofício apenas para item A.X.I.S, sistema eletrônico ou maquinário avançado.
 - Programação altera funções previstas pelo projeto; não cria magia, poder de classe ou bônus sem suporte do item.
-- Implante exige fabricação e instalação. A instalação dura 6 horas em sala-de-implante e exige testes simultâneos de Tecnologia e Cura contra a DT da raridade.
+- Implante exige fabricação e instalação. A instalação dura 6 horas numa Sala de Implante e exige testes simultâneos de Tecnologia e Cura contra a DT da raridade.
 - Se qualquer teste de instalação falhar, o implante não concede efeito. O paciente sofre 1d6 de dano físico, e outra tentativa exige um dia e 10% do custo inicial em materiais.
 
 ### Materiais, Drops e comércio
 
-O que cada um dos seis estoques genéricos de material serve, e quando a raridade exigida sobe, fica em Materiais e Ingredientes. Este tópico só cobre o lado econômico da fabricação.
+Para que serve cada um dos seis estoques genéricos de material, e quando a raridade exigida sobe, está em Materiais e Ingredientes. Este tópico só cobre o lado econômico da fabricação.
 
 - O custo usa o preço normal, sem promoção. Item sem preço usa o valor de um item publicado de mesma raridade e função; sem comparável, o projeto não começa.
 - Materiais específicos e Drops só substituem parte do custo quando a receita permitir. Cada material é consumido uma vez e vale no máximo seu preço registrado.
 - Um Drop não pode ser usado, vendido e recuperado no mesmo projeto. Desmontagem nunca devolve mais valor do que foi consumido.
 - Item criado para uso próprio não possui lucro ou comprador automático. Revenda depende da economia local e não gera valor acima do gasto sem contrato ou demanda definidos antes da fabricação.
 - Efeitos de classe que preparam fórmulas ou engenhocas temporárias seguem a própria classe. Eles não produzem estoque permanente nem removem custos deste tópico.
-- Cada personagem completa no máximo um bloco de 6 horas de crafting por dia, mesmo que trabalhe em projetos diferentes. Ao fim do bloco, ganha 1 Cansaço.
+- Cada personagem completa no máximo um bloco de 6 horas de fabricação por dia, mesmo que trabalhe em projetos diferentes. Ao fim do bloco, ganha 1 Cansaço.
 
 **Dica de mesa:**
 
-**Classes:** Alquimista e Engenheiro usam as habilidades descritas nas próprias progressões. Nenhuma classe é obrigatória para fabricar itens comuns, desde que o personagem cumpra os requisitos da receita.
+Alquimista e Engenheiro fabricam com as habilidades descritas nas próprias progressões, mas nenhuma classe é obrigatória para fabricar itens comuns: basta cumprir os requisitos da receita.
 
 ## materiais
 
@@ -2623,7 +2619,7 @@ O nome exato de um material conta a história; o **lote genérico** é o que ent
 
 - Componentes Químicos, Componentes Ritualísticos, Sucata e Mantimentos têm listas próprias. Somente alguns materiais marcados no catálogo também podem virar Matéria-prima.
 
-- Alquimista, Engenheiro e Chef gastam 1 lote depois de um descanso para abastecer **todos** os preparos permitidos pela classe. A raridade exigida sobe com o nível: Comum no nível 1, Incomum no 2, Raro no 3, Épico no 4 e Lendário no 5.
+- Alquimista, Engenheiro e Chef gastam 1 lote depois de um descanso para abastecer **todos** os preparos permitidos pela classe. A raridade exigida sobe com o nível da fórmula, do projeto ou da receita: Comum no 1, Incomum no 2, Raro no 3, Épico no 4 e Lendário no 5.
 
 - Rituais não têm círculo nem nível: a complexidade decide o custo. Simples gasta 1 Componente Ritualístico Incomum; Complexo, 1 Raro; Grandioso, 2 Épicos; Monumental, 2 Lendários.
 
@@ -2711,17 +2707,11 @@ Um Mantimento superior pode substituir um inferior. Mantimentos inferiores não 
 
 ### Manutenção de veículos
 
-No fim de cada mês em que um veículo foi usado, gaste **1 Componente Veicular da raridade do veículo**, mais **1 lote da mesma raridade por módulo de utilidade instalado**. Conte os módulos instalados mesmo que estejam desligados. Armas, Núcleo e Estrutura não aumentam esse custo. Um lote superior pode substituir um inferior; lotes inferiores não podem ser somados para alcançar outra raridade.
-
-**Exemplo:**
-
-Uma nave Rara com Geladeira e Área Médica instaladas gasta 3 Componentes Veiculares Raros no mês: 1 pela nave e 1 por cada módulo.
-
-Se o custo não for pago, o veículo fica **sem manutenção** e não pode se mover por conta própria nem ativar sistemas. Ele volta a funcionar assim que a manutenção for paga. O custo atrasado não acumula e o veículo não é destruído por falta de pagamento. O resto da rotina de conservação está em Manutenção e Componentes.
+Veículo usado no mês gasta Componentes Veiculares da própria raridade: **1 lote pelo veículo** e mais **1 por módulo de utilidade instalado**, mesmo que o módulo esteja desligado. Sem o pagamento, o veículo fica parado até a manutenção ser paga; o custo atrasado não acumula e o veículo não é destruído. A regra completa, com exemplo, está em Manutenção e Componentes.
 
 ### Fabricação permanente
 
-Além do teste, do tempo e do dinheiro de Criação, Forja e Alquimia, gaste Matéria-prima conforme a raridade: **1** para Comum ou Incomum, **2** para Raro, **3** para Épico, **4** para Lendário, **5** para Relíquia e **6** para Relíquia da Criação.
+Além do teste, do tempo e do dinheiro de Criação, Forja e Alquimia, gaste Matéria-prima conforme a raridade: **1** para Comum ou Incomum, **2** para Raro, **3** para Épico, **4** para Lendário, **5** para Mítico e **6** para Relíquia da Criação.
 
 ### Somente Matéria-prima pode aproveitar outro catálogo
 
@@ -2806,7 +2796,7 @@ A ficha de um veículo registra categoria, tamanho, Vida, Defesa, Resistência g
 
 ### Turno veicular
 
-- Todos rolam Iniciativa normalmente. O movimento do veículo ocorre no turno do condutor.
+- Cada ocupante age na própria Iniciativa, como sempre. O movimento do veículo acontece no turno do condutor.
 
 - Conduzir custa uma Ação de Movimento. Sem essa ação, o veículo mantém curso e velocidade; parado, permanece parado.
 
@@ -2868,19 +2858,19 @@ Um ladrão foge de moto e uma viatura o persegue, com a faixa em Média. No fim 
 
 - Manobra | Teste | Sucesso | Falha
 
-- ConduzirAção movimento | Sem teste em condições normais; Pilotagem ou Cavalgar DT 15 sob perigo, salvo DT expressa da fonte. | Mova até o deslocamento e altere a direção do veículo ou da montaria. | O veículo mantém o curso anterior e o condutor não executa outra manobra neste turno.
+- ConduzirAção de Movimento | Sem teste em condições normais; Pilotagem ou Cavalgar DT 15 sob perigo, salvo DT expressa da fonte. | Mova até o deslocamento e altere a direção do veículo ou da montaria. | O veículo mantém o curso anterior e o condutor não executa outra manobra neste turno.
 
-- AcelerarAção padrão | Pilotagem ou Cavalgar, DT 15. | Mova metade do deslocamento adicional ou receba vantagem no próximo teste de perseguição desta rodada. | Não recebe o benefício e sofre −2 de Defesa até o início do próximo turno do condutor.
+- AcelerarAção Padrão | Pilotagem ou Cavalgar, DT 15. | Mova metade do deslocamento adicional ou receba vantagem no próximo teste de perseguição desta rodada. | Não recebe o benefício e sofre −2 de Defesa até o início do próximo turno do condutor.
 
-- EvasãoAção padrão | Pilotagem ou Cavalgar, DT 15. | Receba +2 de Defesa até o início do próximo turno do condutor. | Sofra −2 de Defesa pelo mesmo período.
+- EvasãoAção Padrão | Pilotagem ou Cavalgar, DT 15. | Receba +2 de Defesa até o início do próximo turno do condutor. | Sofra −2 de Defesa pelo mesmo período.
 
-- Fechar passagemAção padrão | Teste oposto de Pilotagem ou Cavalgar. | O alvo não pode aumentar a distância na resolução desta rodada. | O alvo recebe vantagem no teste de perseguição desta rodada.
+- Fechar passagemAção Padrão | Teste oposto de Pilotagem ou Cavalgar. | O alvo não pode aumentar a distância na resolução desta rodada. | O alvo recebe vantagem no teste de perseguição desta rodada.
 
-- AbalroarAção padrão | Pilotagem ou Cavalgar contra a Defesa do veículo ou os Reflexos da criatura. | Aplique a colisão aos dois envolvidos. O condutor escolhe encerrar ou manter o Contato. | O alvo não sofre dano. O atacante sofre −2 de Defesa até o início do próximo turno do condutor.
+- AbalroarAção Padrão | Pilotagem ou Cavalgar contra a Defesa do veículo ou os Reflexos da criatura. | Aplique a colisão aos dois envolvidos. O condutor escolhe encerrar ou manter o Contato. | O alvo não sofre dano. O atacante sofre −2 de Defesa até o início do próximo turno do condutor.
 
-- Preparar abordagemAção padrão | Teste oposto de Pilotagem ou Cavalgar. | Mantenha o Contato até o início do próximo turno do condutor. A travessia usa o movimento de cada ocupante. | A distância muda para Curta.
+- Preparar abordagemAção Padrão | Teste oposto de Pilotagem ou Cavalgar. | Mantenha o Contato até o início do próximo turno do condutor. A travessia usa o movimento de cada ocupante. | A distância muda para Curta.
 
-- Recuperar controleAção movimento | Pilotagem ou Cavalgar, DT 15. | Remova a perda de controle e escolha a direção do movimento restante. | O veículo mantém direção e velocidade até o próximo turno do condutor.
+- Recuperar controleAção de Movimento | Pilotagem ou Cavalgar, DT 15. | Remova a perda de controle e escolha a direção do movimento restante. | O veículo mantém direção e velocidade até o próximo turno do condutor.
 
 ### Ataques e ocupantes
 
@@ -3056,17 +3046,9 @@ Custos e tempos dos meios de transporte de Lunaris
 
 - Aeronave de Alto Nível | 100 Lunaris 1 min | 250 Lunaris 20–30 min | 1.000 Lunaris 1 hora
 
-**Atenção:**
-
-**Rota entre dimensões:** exige um Portal Dimensional disponível. Some a taxa de acesso ao preço do meio de transporte escolhido.
-
 ### Portal Dimensional
 
-Taxa de acesso ao Portal Dimensional
-
-- Serviço | Custo | Requisito | Observação
-
-- Acesso ao Portal Dimensional | 500 Lunaris | Portal disponível | Custo adicional ao transporte
+Rota entre dimensões exige um Portal Dimensional disponível. Some a taxa de acesso ao preço do meio de transporte escolhido: **500 Lunaris**, cobrados à parte da passagem.
 
 ### Viagens excepcionais
 
@@ -3082,9 +3064,7 @@ Custos, tempos e requisitos de viagens excepcionais
 
 - Os tempos representam a duração normal da viagem, antes de qualquer imprevisto da campanha.
 
-- Viajar entre dimensões exige acesso a um Portal Dimensional e o pagamento adicional indicado na tabela.
-
-- Uma viagem excepcional pode exigir algo além de dinheiro. Para sair da Árvore, o grupo também precisa de um contato capaz de realizar a viagem.
+- Uma viagem excepcional pede algo além de dinheiro: para sair da Árvore, o grupo também precisa de um contato capaz de realizar a viagem.
 
 **Exemplo:**
 
@@ -3360,11 +3340,11 @@ A ficha aplica as Marcas sozinha, porque elas saem do seu Fluxo e do seu círcul
 
 ### Marcas por Fluxo (5º ao 9º círculo)
 
-Gênese
+Origem (Gênese)
 
 - Círculo | Marca | Ganho | Ônus
 
-- 5º | Seiva no Sangue | A cura natural durante um descanso completo rende 50% a mais. | A pele ganha textura de casca. Desvantagem em testes sociais com quem te vê pela primeira vez.
+- 5º | Seiva no Sangue | A cura natural durante um descanso completo rende 50% a mais. | A pele ganha textura de casca. Desvantagem em testes sociais com quem vê você pela primeira vez.
 
 - 6º | Primeira Vez Eterna | +2 na primeira rolagem que você faz em cada cena. | A segunda rolagem do mesmo tipo na mesma cena sai com -1.
 
@@ -3374,7 +3354,7 @@ Gênese
 
 - 9º | Fonte Viva | +10 de Vida máxima e você estabiliza sozinho ao chegar a 0. | Cura mágica vinda de outro Fluxo que não o seu rende metade.
 
-Alétheia
+Essência (Alétheia)
 
 - Círculo | Marca | Ganho | Ônus
 
@@ -3382,41 +3362,41 @@ Alétheia
 
 - 6º | Nome à Mostra | Ao tocar uma criatura, você sabe o nome verdadeiro dela. | A recíproca vale: quem toca em você sabe o seu.
 
-- 7º | Peso da Verdade | +5 em testes contra ilusão, transformação e troca de identidade. | Ilusão que você percebe e não desfaz te causa 1d6 de dano mental por cena.
+- 7º | Peso da Verdade | +5 em testes contra ilusão, transformação e troca de identidade. | Ilusão que você percebe e não desfaz causa a você 1d6 de dano mental por cena.
 
-- 8º | Transparência | Nada te possui, copia ou apaga tua memória. | Você também não pode ser disfarçado nem ocultado por magia, nem a de aliado.
+- 8º | Transparência | Nada possui você, copia você ou apaga a sua memória. | Você também não pode ser disfarçado nem ocultado por magia, nem a de aliado.
 
-- 9º | Verbo Fixo | Tua forma é inalterável: nenhuma transformação forçada pega em você. | Transformação benéfica também não pega, inclusive a que você mesmo quiser.
+- 9º | Verbo Fixo | Sua forma é inalterável: nenhuma transformação forçada pega em você. | Transformação benéfica também não pega, inclusive a que você mesmo quiser.
 
-Parley
+Comunicação (Parley)
 
 - Círculo | Marca | Ganho | Ônus
 
-- 5º | Ouvido Fino | Você escuta conversas a até 30 m, mesmo através de parede fina. | Lugar movimentado atrapalha teu sono: descanso em cidade ou acampamento cheio rende 1 Cansaço a menos de recuperação.
+- 5º | Ouvido Fino | Você escuta conversas a até 30 m, mesmo através de parede fina. | Lugar movimentado atrapalha o seu sono: descanso em cidade ou acampamento cheio rende 1 Cansaço a menos de recuperação.
 
 - 6º | Boca do Fluxo | Todo mundo entende o que você diz, em qualquer idioma. | Sob pressão, você fala o que está pensando em voz alta.
 
-- 7º | Rede Aberta | Aliados a até 25 m compartilham tua Iniciativa se ela for melhor que a deles. | Dano mental sofrido por um aliado vinculado também te atinge pela metade.
+- 7º | Rede Aberta | Aliados a até 25 m compartilham a sua Iniciativa se ela for melhor que a deles. | Dano mental sofrido por um aliado vinculado também atinge você pela metade.
 
-- 8º | Coro | Uma vez por cena, uma ordem sua vira ação livre para um aliado que te escute. | Silêncio absoluto te sufoca: cada hora nele rende 1 Cansaço.
+- 8º | Coro | Uma vez por cena, uma ordem sua vira ação livre para um aliado que escute você. | Silêncio absoluto sufoca você: cada hora nele rende 1 Cansaço.
 
 - 9º | Voz de Muitos | Você fala com qualquer pessoa que já conheceu, a qualquer distância na mesma realidade. | Você não consegue guardar segredo de quem está vinculado a você: o que você sabe, eles sentem.
 
-Anima
+Vitalidade (Anima)
 
 - Círculo | Marca | Ganho | Ônus
 
-- 5º | Excesso | +5 de Vida máxima. | Você come e bebe o dobro, e passar fome te dá Cansaço mais rápido que os outros.
+- 5º | Excesso | +5 de Vida máxima. | Você come e bebe o dobro, e passar fome dá Cansaço a você mais rápido que aos outros.
 
 - 6º | Carne Que Não Para | Abaixo da metade da Vida, você recupera 1d6 ao começar o turno. | Toda cicatriz vira crescimento estranho. Desvantagem em testes sociais com estranhos.
 
 - 7º | Imunidade Bruta | Você fica imune a doença mundana e a veneno comum. | Remédio, poção e antídoto rendem metade em você.
 
-- 8º | Metabolismo Voraz | Você aguenta três dias sem dormir sem sofrer penalidade. | Teu descanso completo exige 12 horas, não 8.
+- 8º | Metabolismo Voraz | Você aguenta três dias sem dormir sem sofrer penalidade. | Seu descanso completo exige 12 horas, e não 8.
 
-- 9º | Coração Duplo | Uma vez por dia, ao chegar a 0 de Vida, você volta com metade da Vida máxima. | Cada uso te dá 2 Cansaço na hora.
+- 9º | Coração Duplo | Uma vez por dia, ao chegar a 0 de Vida, você volta com metade da Vida máxima. | Cada uso dá 2 de Cansaço na hora.
 
-Vórtice
+Inconstância (Vórtice)
 
 - Círculo | Marca | Ganho | Ônus
 
@@ -3424,17 +3404,17 @@ Vórtice
 
 - 6º | Pele Instável | No começo de cada cena, role 1d6 para uma resistência sorteada até o fim dela. | Role de novo: você também ganha uma vulnerabilidade sorteada.
 
-- 7º | Sorte Torta | Tua margem de ameaça aumenta em 1 em tudo o que você faz. | A margem de falha crítica aumenta em 1 junto.
+- 7º | Sorte Torta | Sua margem de ameaça aumenta em 1 em tudo o que você faz. | A margem de falha crítica aumenta em 1 junto.
 
 - 8º | Forma Errante | Uma vez por dia, uma característica física sua muda para algo útil na situação. | Você não escolhe qual, e a mudança dura até o próximo descanso completo.
 
 - 9º | Roleta Viva | Uma vez por cena, você copia uma habilidade simples que tenha visto naquela cena. | Uma habilidade sua, sorteada, fica indisponível até o fim da cena.
 
-Baluarte
+Físico (Baluarte)
 
 - Círculo | Marca | Ganho | Ônus
 
-- 5º | Elemento na Pele | Resistência 3 contra o teu elemento despertado. | Vulnerabilidade 3 ao elemento oposto, definido pelo Mestre na primeira vez.
+- 5º | Elemento na Pele | Resistência 3 contra o seu elemento despertado. | Vulnerabilidade 3 ao elemento oposto, definido pelo Mestre na primeira vez.
 
 - 6º | Peso de Pedra | +2 contra empurrão, agarrão e queda. | -3 m de deslocamento.
 
@@ -3444,49 +3424,49 @@ Baluarte
 
 - 9º | Elemento Vivo | Uma vez por cena, você vira o elemento despertado por uma rodada e fica imune a dano físico. | Enquanto estiver assim, você não age, não fala e não conjura.
 
-Matriz
+Espaço (Matriz)
 
 - Círculo | Marca | Ganho | Ônus
 
-- 5º | Passo Curto | Uma vez por cena, você teleporta 4,5 m com a ação de movimento. | A chegada embrulha: -1 em testes até o fim do teu próximo turno.
+- 5º | Passo Curto | Uma vez por cena, você teleporta 4,5 m com a ação de movimento. | A chegada embrulha: -1 em testes até o fim do seu próximo turno.
 
-- 6º | Senso de Lugar | Você sempre sabe onde está e qual o caminho de volta, mesmo sem referência. | Entrar em lugar selado ou dobrado te causa 1d6 de dano mental.
+- 6º | Senso de Lugar | Você sempre sabe onde está e qual o caminho de volta, mesmo sem referência. | Entrar em lugar selado ou dobrado causa a você 1d6 de dano mental.
 
-- 7º | Distância Elástica | O alcance das tuas magias aumenta em 50%. | Magia de toque exige um teste de conjuração extra para funcionar.
+- 7º | Distância Elástica | O alcance das suas magias aumenta em 50%. | Magia de toque exige um teste de conjuração extra para funcionar.
 
-- 8º | Presença Dobrada | Para efeitos de alcance, você ocupa dois espaços à tua escolha, a até 9 m um do outro. | Efeito de área que pegue qualquer um dos dois pega você.
+- 8º | Presença Dobrada | Para efeitos de alcance, você ocupa dois espaços à sua escolha, a até 9 m um do outro. | Efeito de área que pegue qualquer um dos dois pega você.
 
-- 9º | Fora do Mapa | Nenhuma barreira mundana te prende: você sempre acha a saída. | Teleporte e portal de outra pessoa não conseguem te levar junto.
+- 9º | Fora do Mapa | Nenhuma barreira mundana prende você: você sempre acha a saída. | Teleporte e portal de outra pessoa não conseguem levar você junto.
 
-Éon
+Tempo (Éon)
 
 - Círculo | Marca | Ganho | Ônus
 
-- 5º | Descompasso | +2 em Iniciativa. | Noite mal dormida te dá 1 Cansaço a mais que aos outros.
+- 5º | Descompasso | +2 em Iniciativa. | Noite mal dormida dá a você 1 Cansaço a mais que aos outros.
 
 - 6º | Eco Curto | Uma vez por cena, você repete a ação de movimento que acabou de fazer. | Ao fim da cena em que usar, 1 Cansaço.
 
 - 7º | Anos Emprestados | +1 em todos os testes. | Você envelhece um ano a cada mês de campanha.
 
-- 8º | Pausa Interna | Uma vez por dia, você ignora um turno inteiro de um efeito contínuo sobre você. | Você perde o teu turno seguinte.
+- 8º | Pausa Interna | Uma vez por dia, você ignora um turno inteiro de um efeito contínuo sobre você. | Você perde o seu turno seguinte.
 
-- 9º | Fora da Contagem | Você age primeiro em toda rodada, antes de qualquer criatura. | Cura e regeneração em você rendem metade: para elas, teu tempo não passa.
+- 9º | Fora da Contagem | Você age primeiro em toda rodada, antes de qualquer criatura. | Cura e regeneração em você rendem metade: para elas, o seu tempo não passa.
 
-O Vazio
+Vazio (O Vazio)
 
 - Círculo | Marca | Ganho | Ônus
 
-- 5º | Ausência | +2 em Furtividade e ninguém te ouve chegar. | Cura mágica em você rende metade.
+- 5º | Ausência | +2 em Furtividade, e ninguém ouve você chegar. | Cura mágica em você rende metade.
 
 - 6º | Sumidouro | Uma vez por cena, você absorve uma magia de até 3º círculo dirigida a você. | Magia benéfica de aliado é absorvida do mesmo jeito, e você não escolhe.
 
-- 7º | Fome Interna | Ao reduzir uma criatura a 0 de Vida, você recupera 1d6 de Mana. | Descanso curto não te devolve Mana nenhuma.
+- 7º | Fome Interna | Ao reduzir uma criatura a 0 de Vida, você recupera 1d6 de Mana. | Descanso curto não devolve Mana nenhuma a você.
 
-- 8º | Silêncio Que Anda | Os sons ao teu redor somem quando você quiser, num raio de 3 m. | Você não conjura nada que dependa de voz, palavra ou comando falado.
+- 8º | Silêncio Que Anda | Os sons ao seu redor somem quando você quiser, num raio de 3 m. | Você não conjura nada que dependa de voz, palavra ou comando falado.
 
-- 9º | Quase Nada | Uma vez por dia, você deixa de existir por uma rodada: nada te atinge. | Ao voltar, ninguém se lembra de você por um minuto, aliados incluídos.
+- 9º | Quase Nada | Uma vez por dia, você deixa de existir por uma rodada: nada atinge você. | Ao voltar, ninguém se lembra de você por um minuto, aliados incluídos.
 
-Limiar
+Fim (Limiar)
 
 - Círculo | Marca | Ganho | Ônus
 
@@ -3494,13 +3474,13 @@ Limiar
 
 - 6º | Olho do Fim | Você enxerga quem está perto da morte, e quanto perto. | Os moribundos enxergam você também, e procuram você.
 
-- 7º | Ciclo Curto | Uma vez por cena, você encerra um efeito temporário ao toque. | O teu próprio efeito de concentração cai junto.
+- 7º | Ciclo Curto | Uma vez por cena, você encerra um efeito temporário ao toque. | O seu próprio efeito de concentração cai junto.
 
 - 8º | Peso do Limiar | Você fica imune a medo e a qualquer efeito que dependa de esperança. | Recuperação de Sanidade em você rende metade.
 
 - 9º | Marca do Término | Quem você reduz a 0 de Vida não estabiliza sozinho. | Você também não: sem mão alheia, você não volta.
 
-A.X.I.S
+Tecnologia (A.X.I.S)
 
 - Círculo | Marca | Ganho | Ônus
 
@@ -3508,9 +3488,9 @@ A.X.I.S
 
 - 6º | Interferência | +2 em testes contra magia de Fluxo natural. | -2 em testes contra dano e efeitos tecnológicos.
 
-- 7º | Registro | Magia que já te acertou uma vez te acerta com -2 nas próximas. | A A.X.I.S registra por onde você passa, e quem tem acesso à Malha consegue te rastrear.
+- 7º | Registro | Magia que já acertou você uma vez acerta com -2 nas próximas. | A A.X.I.S registra por onde você passa, e quem tem acesso à Malha consegue rastrear você.
 
-- 8º | Carcaça | Redução 3 contra dano de energia. | Pulso eletromagnético te derruba como derruba máquina.
+- 8º | Carcaça | Redução 3 contra dano de energia. | Pulso eletromagnético derruba você como derruba máquina.
 
 - 9º | Protocolo Vivo | Uma vez por cena, você intercepta uma magia de até 6º círculo com a reação. | Em área sem energia, você conjura com desvantagem.
 
@@ -3520,25 +3500,25 @@ A.X.I.S
 
 - Peso da Fonte | +15 de Mana máxima. | Você só recupera Mana em descanso completo. Descanso curto não devolve nada.
 
-- Olhos Abertos Demais | Você enxerga o invisível e o oculto a até 30 m, sempre. | Luz forte e súbita te cega por uma rodada.
+- Olhos Abertos Demais | Você enxerga o invisível e o oculto a até 30 m, sempre. | Luz forte e súbita cega você por uma rodada.
 
 - Corpo Emprestado | +10 de Vida máxima. | Toda cura mágica em você rende metade.
 
-- Nome Escrito | +5 em testes de resistência contra magia. | Criaturas nascidas de Fluxo te reconhecem de longe, e vêm atrás.
+- Nome Escrito | +5 em testes de resistência contra magia. | Criaturas nascidas de Fluxo reconhecem você de longe, e vêm atrás.
 
-- Voz Rachada | As tuas magias de área ficam 3 m maiores. | Você não consegue mais falar baixo. Furtividade que dependa de silêncio está fora.
+- Voz Rachada | As suas magias de área ficam 3 m maiores. | Você não consegue mais falar baixo. Furtividade que dependa de silêncio está fora.
 
-- Mão Que Não Fecha | +2 dados de dano nas tuas magias de alvo único. | Você não consegue empunhar arma marcial nem exótica.
+- Mão Que Não Fecha | +2 dados de dano nas suas magias de alvo único. | Você não consegue empunhar arma marcial nem exótica.
 
-- Passo Fora | Uma vez por cena, você teleporta 9 m com a ação de movimento. | Nenhuma magia alheia consegue te transportar junto.
+- Passo Fora | Uma vez por cena, você teleporta 9 m com a ação de movimento. | Nenhuma magia alheia consegue transportar você junto.
 
-- Sono Curto | Teu descanso completo leva 4 horas. | Você sonha com o Fluxo. O Mestre pode dar visões, e nem todas são gentis.
+- Sono Curto | Seu descanso completo leva 4 horas. | Você sonha com o Fluxo. O Mestre pode dar visões, e nem todas são gentis.
 
-- Segunda Sombra | Uma vez por dia, um duplo teu absorve um golpe inteiro. | O duplo age por conta própria, e nem sempre a teu favor.
+- Segunda Sombra | Uma vez por dia, um duplo seu absorve um golpe inteiro. | O duplo age por conta própria, e nem sempre a seu favor.
 
-- Pele de Fluxo | Redução 5 contra o tipo de dano do teu Fluxo nativo. | Vulnerabilidade 5 ao tipo oposto, definido pelo Mestre.
+- Pele de Fluxo | Redução 5 contra o tipo de dano do seu Fluxo nativo. | Vulnerabilidade 5 ao tipo oposto, definido pelo Mestre.
 
-- Marca Visível | +5 em testes de presença e intimidação. | Você não passa despercebido em lugar nenhum, nunca mais.
+- Marca Visível | +5 em Intimidação e em testes para impor presença. | Você não passa despercebido em lugar nenhum, nunca mais.
 
 - Reserva Rachada | Uma vez por cena, você conjura uma magia sem gastar Mana. | Ao fim dessa cena, 2 Cansaço.
 
@@ -3550,7 +3530,7 @@ A.X.I.S
 
 Como funcionam rituais fora de combate, fusões com um Fluxo secundário, selos consumíveis e encantamentos permanentes.
 
-Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de círculo (ver Magia e Fluxo). Consulte cada bloco pelo tipo de preparação que o personagem está tentando realizar.
+Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de círculo. Consulte cada bloco pelo tipo de preparação que o personagem está tentando realizar.
 
 ### Rituais
 
@@ -3592,7 +3572,7 @@ Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de c
 
 Consulta interativa de magias, manifestações, rituais, selos, encantamentos e assinaturas de fusão, separada das regras de conjuração.
 
-Este tópico serve para procurar uma entrada específica. As fórmulas de teste, DT, Mana e concentração ficam em Magia e Fluxo; Marcas e Cicatrizes estão em Marcas e Cicatrizes, e as preparações em Rituais, Selos e Fusão.
+Este tópico serve para procurar uma entrada específica. As fórmulas de teste, DT, Mana e concentração ficam em Magia e Fluxo; o preço dos círculos altos, em Marcas e Cicatrizes; e as preparações, em Rituais, Selos e Fusão.
 
 ### O que está no catálogo
 
@@ -3666,11 +3646,11 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 - Pânico | 1d4 rodadas. | Fique Amedrontado pela fonte e use o movimento para se afastar dela. | Vontade DT 15 no fim de cada turno encerra a crise.
 
-- Dissociação | 1d4 rodadas. | Não pode usar reações e sofre -2 em testes de percepção e interação. | Vontade DT 15 no fim de cada turno encerra a crise.
+- Dissociação | 1d4 rodadas. | Não pode usar reações e sofre -2 em testes de Percepção e de interação. | Vontade DT 15 no fim de cada turno encerra a crise.
 
 - Paranoia | Até o fim da cena. | Não recebe bônus de ajuda e testa Vontade DT 15 para aceitar cura de outra criatura. | Termina em segurança ao fim da cena.
 
-- Catatonia | 1d4 rodadas. | Fique Atordoado, mas receba +5 contra empurrões e agarrões. | Um aliado pode usar ação padrão e Medicina ou Persuasão DT 15.
+- Catatonia | 1d4 rodadas. | Fique Atordoado, mas receba +5 contra empurrões e agarrões. | Um aliado pode usar uma ação padrão e Cura ou Diplomacia DT 15.
 
 - Compulsão | Até cumprir uma ação simples ou superar a crise. | No turno, deve realizar a ação compulsiva definida pela fonte antes de outras ações. | Vontade DT 15 no começo do turno permite agir normalmente.
 
@@ -3750,31 +3730,31 @@ Condições que duram mais que uma cena já vêm escritas, para ninguém precisa
 
 - Condição | Duração | Efeito | Como sair
 
-- Braço Dominante Quebrado | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | A mão desse braço não segura nada: sem armas de duas mãos, sem escudo e sem gestos de conjuração com ela. Ataques com a outra mão sofrem -2. Desvantagem em Atletismo para escalar e nadar. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina. Cura que cite ossos encerra na hora.
+- Braço Dominante Quebrado | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | A mão desse braço não segura nada: sem armas de duas mãos, sem escudo e sem gestos de conjuração com ela. Ataques com a outra mão sofrem -2. Desvantagem em Atletismo para escalar e nadar. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados, a lesão termina. Cura que cite ossos encerra na hora.
 
-- Braço de Apoio Quebrado | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | Sem escudo e sem armas de duas mãos. Desvantagem em Atletismo para escalar. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina. Cura que cite ossos encerra na hora.
+- Braço de Apoio Quebrado | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | Sem escudo e sem armas de duas mãos. Desvantagem em Atletismo para escalar. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados, a lesão termina. Cura que cite ossos encerra na hora.
 
-- Perna Quebrada | 4 descansos completos de qualidade Boa ou melhor, com tratamento. | Deslocamento pela metade e sem correr. Desvantagem em Acrobacia e Furtividade. Em terreno difícil ou ao ser empurrado, Acrobacia DT 12 ou fique Caído. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 4 contados a lesão termina. Cura que cite ossos encerra na hora.
+- Perna Quebrada | 4 descansos completos de qualidade Boa ou melhor, com tratamento. | Deslocamento pela metade e sem correr. Desvantagem em Acrobacia e Furtividade. Em terreno difícil ou ao ser empurrado, Acrobacia DT 12 ou fique Caído. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 4 contados, a lesão termina. Cura que cite ossos encerra na hora.
 
-- Tornozelo Torcido | 1 descanso completo de qualidade Boa ou melhor, com tratamento. | Sem correr. Desvantagem em Acrobacia e em Atletismo para saltar. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 1 contados a lesão termina.
+- Tornozelo Torcido | 1 descanso completo de qualidade Boa ou melhor, com tratamento. | Sem correr. Desvantagem em Acrobacia e em Atletismo para saltar. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 1 contado, a lesão termina.
 
 - Ombro Deslocado | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Desvantagem em ataques corpo a corpo e em Atletismo que exijam esse braço. Enquanto o ombro não for recolocado, a condição não melhora. | Cura DT 15 recoloca o ombro. Depois disso, 2 descansos completos de qualidade Boa ou melhor, com tratamento, encerram a lesão.
 
-- Mão Fraturada | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Ataques com essa mão sofrem -2. Desvantagem em Ladinagem, Pontaria e testes de precisão manual. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados a lesão termina.
+- Mão Fraturada | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Ataques com essa mão sofrem -2. Desvantagem em Ladinagem, Pontaria e testes de precisão manual. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados, a lesão termina.
 
-- Costelas Fraturadas | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | Respirar fundo dói: -2 em Atletismo. Desvantagem em Fortitude contra falta de ar, fumaça e esforço prolongado. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina.
+- Costelas Fraturadas | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | Respirar fundo dói: -2 em Atletismo. Desvantagem em Fortitude contra falta de ar, fumaça e esforço prolongado. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados, a lesão termina.
 
-- Mandíbula Quebrada | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | Só fala frases curtas e arrastadas: desvantagem em Diplomacia, Atuação e Intimidação faladas. Componente verbal de magia só sai claro com Vontade DT 12. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina.
+- Mandíbula Quebrada | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | Só fala frases curtas e arrastadas: desvantagem em Diplomacia, Atuação e Intimidação faladas. Componente verbal de magia só sai claro com Vontade DT 12. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados, a lesão termina.
 
 ### Ferimentos graves
 
 - Condição | Duração | Efeito | Como sair
 
-- Concussão | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | A cabeça lateja: desvantagem em Percepção, Investigação e Conhecimento. Ao sofrer dano de impacto, Fortitude DT 12 ou fique Atordoado até o fim do próximo turno. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados a lesão termina. Nova pancada forte na cabeça antes do fim zera a contagem.
+- Concussão | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | A cabeça lateja: desvantagem em Percepção, Investigação e Conhecimento. Ao sofrer dano de impacto, Fortitude DT 12 ou fique Atordoado até o fim do próximo turno. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados, a lesão termina. Nova pancada forte na cabeça antes do fim zera a contagem.
 
-- Queimadura Grave | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | A pele repuxa sob peso e atrito: com armadura pesada, -2 em testes físicos. Desvantagem em Fortitude contra fogo e calor. Um Caldo de Osso Quente dá vantagem em Fortitude contra calor e cancela essa desvantagem por 4 horas. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados a lesão termina.
+- Queimadura Grave | 3 descansos completos de qualidade Boa ou melhor, com tratamento. | A pele repuxa sob peso e atrito: com armadura pesada, -2 em testes físicos. Desvantagem em Fortitude contra fogo e calor. Um Caldo de Osso Quente dá vantagem em Fortitude contra calor e cancela essa desvantagem por 4 horas. | Cura DT 15 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 3 contados, a lesão termina.
 
-- Congelamento | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Dedos dormentes: desvantagem em Ladinagem e Pontaria. Desvantagem em Fortitude contra frio. Um Caldo de Osso Quente dá vantagem em Fortitude contra frio e cancela essa desvantagem por 4 horas. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados a lesão termina. Passar uma cena inteira em local aquecido dá vantagem no teste de Cura.
+- Congelamento | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Dedos dormentes: desvantagem em Ladinagem e Pontaria. Desvantagem em Fortitude contra frio. Um Caldo de Osso Quente dá vantagem em Fortitude contra frio e cancela essa desvantagem por 4 horas. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados, a lesão termina. Passar uma cena inteira em local aquecido dá vantagem no teste de Cura.
 
 - Lesão Interna | Até ser operada. | No fim de cada cena de esforço intenso, sofre 1d4 de dano que nada evita. Descanso Excelente não recupera nada enquanto a lesão durar. | Cura DT 18, com ferramentas e uma hora de calma, para operar. Cura mágica de pelo menos 1 PV também encerra.
 
@@ -3812,7 +3792,7 @@ Condições que duram mais que uma cena já vêm escritas, para ninguém precisa
 
 - Pulmões Danificados | Permanente. | Desvantagem em Fortitude contra fumaça, gases e afogamento. Esforço longo, como correr ou nadar por uma cena, exige Fortitude DT 12 ou +1 Cansaço. | Só cura de Fluxo explícita, implante respiratório ou resolução na história encerra.
 
-- Sensibilidade à Luz | Permanente. | Desvantagem em Percepção sob luz forte. Lentes escuras ou capuz removem a desvantagem, mas o personagem ouve melhor do que vê nesses lugares. | Tratamento com Cura DT 18 ao longo de um arco reduz a sensibilidade a uma incomodação sem efeito mecânico.
+- Sensibilidade à Luz | Permanente. | Desvantagem em Percepção sob luz forte. Lentes escuras ou capuz removem a desvantagem, mas o personagem ouve melhor do que vê nesses lugares. | Tratamento com Cura DT 18 ao longo de um arco deixa a sensibilidade só como um incômodo, sem efeito mecânico.
 
 - Cicatriz Marcante | Permanente. | +2 em Intimidação diante de quem a vê e entende o que ela custou. -2 em Diplomacia com quem se assusta ou a julga antes de ouvir. O Mestre decide quais cenas contam. A história da marca pertence a quem joga. | Cirurgia ou magia pode escondê-la. A marca em si fica como parte do personagem.
 
@@ -3944,35 +3924,35 @@ Cada região do Jardim tem as próprias doenças e venenos. A tabela diz onde ca
 
 - Em qualquer lugar | Peçonha Hemorrágica | veneno, comum | 16 | Ferimento causado por presa, ferrão ou arma contaminada.
 
-- Em qualquer lugar | Febre dos Esporos | doenca, comum | 14 | Uma hora em área contaminada sem proteção respiratória.
+- Em qualquer lugar | Febre dos Esporos | doença, comum | 14 | Uma hora em área contaminada sem proteção respiratória.
 
-- Em qualquer lugar | Definhamento Arcano | doenca, sobrenatural | 20 | Contato direto com foco infeccioso sobrenatural.
+- Em qualquer lugar | Definhamento Arcano | doença, sobrenatural | 20 | Contato direto com foco infeccioso sobrenatural.
 
-- Em qualquer lugar | Dependência de Estimulante | vicio, comum | 15 | Uso repetido conforme o gatilho de dependência.
+- Em qualquer lugar | Dependência de Estimulante | vício, comum | 15 | Uso repetido conforme o gatilho de dependência.
 
-- Gênese | Tosse Cinzenta | doenca, comum | 14 | Uma noite num cômodo fechado com alguém doente, ou respirar a fumaça de um incêndio sem proteção.
+- Gênese | Tosse Cinzenta | doença, comum | 14 | Uma noite num cômodo fechado com alguém doente, ou respirar a fumaça de um incêndio sem proteção.
 
 - Gênese | Beladona Destilada | veneno, comum | 16 | Beber o extrato ou ser ferido por arma untada com ele.
 
-- Alétheia | Ofuscamento Âmbar | doenca, sobrenatural | 17 | Uma hora sob a luz âmbar constante de Alétheia sem proteger os olhos.
+- Alétheia | Ofuscamento Âmbar | doença, sobrenatural | 17 | Uma hora sob a luz âmbar constante de Alétheia sem proteger os olhos.
 
-- A.X.I.S | Dependência de Sincronia | vicio, comum | 16 | Uso repetido de interface neural, conforme o gatilho de dependência.
+- A.X.I.S | Dependência de Sincronia | vício, comum | 16 | Uso repetido de interface neural, conforme o gatilho de dependência.
 
-- Anima | Podridão do Viveiro | doenca, comum | 17 | Ferimento aberto em contato com a mata do Viveiro ou com uma criatura infestada.
+- Anima | Podridão do Viveiro | doença, comum | 17 | Ferimento aberto em contato com a mata do Viveiro ou com uma criatura infestada.
 
 - Anima | Néctar Sonífero | veneno, comum | 15 | Comer o fruto ou respirar o pólen de uma flor que dá sono.
 
-- Vórtice | Mal da Inconstância | doenca, sobrenatural | 18 | Uma hora numa área em que o Fluxo da Inconstância refez o terreno, sem proteção.
+- Vórtice | Mal da Inconstância | doença, sobrenatural | 18 | Uma hora numa área em que o Fluxo da Inconstância refez o terreno, sem proteção.
 
-- Baluarte | Pulmão de Pedra | doenca, comum | 15 | Uma hora respirando pó de rocha sem pano ou máscara.
+- Baluarte | Pulmão de Pedra | doença, comum | 15 | Uma hora respirando pó de rocha sem pano ou máscara.
 
-- Matriz | Mal do Interstício | doenca, sobrenatural | 18 | Atravessar entre Galhos sem guia dimensional ou âncora, ou passar uma hora no Interstício.
+- Matriz | Mal do Interstício | doença, sobrenatural | 18 | Atravessar entre Galhos sem guia dimensional ou âncora, ou passar uma hora no Interstício.
 
-- Éon | Desgaste do Tempo | doenca, sobrenatural | 19 | Uma hora numa área em que o Fluxo do Tempo foi usado em excesso.
+- Éon | Desgaste do Tempo | doença, sobrenatural | 19 | Uma hora numa área em que o Fluxo do Tempo foi usado em excesso.
 
-- Limiar | Frio do Fim | doenca, sobrenatural | 17 | Um dia inteiro num lugar onde o Fluxo do Fim é forte, como Arkarin, sem proteção nem companhia viva.
+- Limiar | Frio do Fim | doença, sobrenatural | 17 | Um dia inteiro num lugar onde o Fluxo do Fim é forte, como Arkarin, sem proteção nem companhia viva.
 
-- O Vazio | Apagamento | doenca, sobrenatural | 20 | Uma hora no Vazio, longe de qualquer Árvore, sem âncora nem companhia que lembre o nome de quem entrou.
+- O Vazio | Apagamento | doença, sobrenatural | 20 | Uma hora no Vazio, longe de qualquer Árvore, sem âncora nem companhia que lembre o nome de quem entrou.
 
 ### Catálogo de aflições
 
@@ -3987,7 +3967,7 @@ Toxina Paralisante
 - **Estágio 2:** Movimento 0. Desvantagem em testes de Força e Destreza.
 - **Estágio 3:** Fica Imobilizado. Não pode usar reações.
 
-**Tratamento:** Cura DT 15; Ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
+**Tratamento:** Cura DT 15, ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
 
 Peçonha Hemorrágica
 
@@ -4000,11 +3980,11 @@ Peçonha Hemorrágica
 - **Estágio 2:** Sofra 2d6 de dano de veneno no fim do intervalo.
 - **Estágio 3:** Sofra 3d6 de dano de veneno no fim do intervalo.
 
-**Tratamento:** Cura DT 16; Ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
+**Tratamento:** Cura DT 16, ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
 
 Febre dos Esporos
 
-**doenca** comum · Em qualquer lugar · Fortitude DT 14 · incubação 6 horas · intervalo 1 dia
+**doença** comum · Em qualquer lugar · Fortitude DT 14 · incubação 6 horas · intervalo 1 dia
 
 **Exposição:** Uma hora em área contaminada sem proteção respiratória.
 
@@ -4013,11 +3993,11 @@ Febre dos Esporos
 - **Estágio 2:** −2 em testes físicos. Ganhe 1 Cansaço.
 - **Estágio 3:** Desvantagem em testes físicos. Descanso recupera uma categoria abaixo do normal, mínimo Péssima. Ganhe 1 Cansaço.
 
-**Tratamento:** Cura DT 14; 1 hora. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 14, 1 hora. Reduza o estágio em 1. Uma tentativa por dia.
 
 Definhamento Arcano
 
-**doenca** sobrenatural · Em qualquer lugar · Fortitude DT 20 · incubação 1 dia · intervalo 1 dia
+**doença** sobrenatural · Em qualquer lugar · Fortitude DT 20 · incubação 1 dia · intervalo 1 dia
 
 **Exposição:** Contato direto com foco infeccioso sobrenatural.
 
@@ -4026,11 +4006,11 @@ Definhamento Arcano
 - **Estágio 2:** −1 em Fortitude. Drenagem temporária: −1 Constituição.
 - **Estágio 3:** Desvantagem em Fortitude. Drenagem temporária: −2 Constituição.
 
-**Tratamento:** Cura DT 20; 1 hora e um reagente mágico de 50 Lunaris, consumido na tentativa. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 20, 1 hora e um reagente mágico de 50 Lunaris, consumido na tentativa. Reduza o estágio em 1. Uma tentativa por dia.
 
 Dependência de Estimulante
 
-**vicio** comum · Em qualquer lugar · Fortitude DT 15 · incubação imediata · intervalo 1 dia
+**vício** comum · Em qualquer lugar · Fortitude DT 15 · incubação imediata · intervalo 1 dia
 
 **Exposição:** Uso repetido conforme o gatilho de dependência.
 
@@ -4039,11 +4019,11 @@ Dependência de Estimulante
 - **Estágio 2:** −2 em Iniciativa e em testes de Inteligência durante abstinência.
 - **Estágio 3:** Desvantagem em testes de Inteligência durante abstinência. Ganhe 1 Cansaço.
 
-**Tratamento:** Cura DT 15; 1 hora de acompanhamento durante um descanso. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 15, 1 hora de acompanhamento durante um descanso. Reduza o estágio em 1. Uma tentativa por dia.
 
 Tosse Cinzenta
 
-**doenca** comum · Gênese · Fortitude DT 14 · incubação 1 dia · intervalo 1 dia
+**doença** comum · Gênese · Fortitude DT 14 · incubação 1 dia · intervalo 1 dia
 
 **Exposição:** Uma noite num cômodo fechado com alguém doente, ou respirar a fumaça de um incêndio sem proteção.
 
@@ -4052,7 +4032,7 @@ Tosse Cinzenta
 - **Estágio 2:** −1 em Fortitude e −1 em Atletismo. Ganhe 1 Cansaço.
 - **Estágio 3:** Desvantagem em Fortitude contra fumaça e gases e em Atletismo para correr e nadar. Ganhe 1 Cansaço.
 
-**Tratamento:** Cura DT 14; 1 hora de repouso, com ervas e vapor. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 14, 1 hora de repouso, com ervas e vapor. Reduza o estágio em 1. Uma tentativa por dia.
 
 Beladona Destilada
 
@@ -4065,11 +4045,11 @@ Beladona Destilada
 - **Estágio 2:** −2 em Percepção e Pontaria. Boca seca: desvantagem em Diplomacia e Atuação faladas.
 - **Estágio 3:** Desvantagem em testes que dependam de visão. Movimento reduzido pela metade.
 
-**Tratamento:** Cura DT 16; Ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
+**Tratamento:** Cura DT 16, ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
 
 Ofuscamento Âmbar
 
-**doenca** sobrenatural · Alétheia · Fortitude DT 17 · incubação imediata · intervalo 1 hora
+**doença** sobrenatural · Alétheia · Fortitude DT 17 · incubação imediata · intervalo 1 hora
 
 **Exposição:** Uma hora sob a luz âmbar constante de Alétheia sem proteger os olhos.
 
@@ -4078,11 +4058,11 @@ Ofuscamento Âmbar
 - **Estágio 2:** −2 em Percepção que dependa de visão. +2 em Ressonância: você enxerga o que as coisas são de verdade, querendo ou não.
 - **Estágio 3:** Desvantagem em Percepção que dependa de visão. +2 em Ressonância. Ganhe 1 Cansaço.
 
-**Tratamento:** Cura DT 17; 1 hora na sombra, de olhos cobertos. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 17, 1 hora na sombra, de olhos cobertos. Reduza o estágio em 1. Uma tentativa por dia.
 
 Dependência de Sincronia
 
-**vicio** comum · A.X.I.S · Fortitude DT 16 · incubação imediata · intervalo 1 dia
+**vício** comum · A.X.I.S · Fortitude DT 16 · incubação imediata · intervalo 1 dia
 
 **Exposição:** Uso repetido de interface neural, conforme o gatilho de dependência.
 
@@ -4091,11 +4071,11 @@ Dependência de Sincronia
 - **Estágio 2:** −2 em Iniciativa e em Tecnologia durante abstinência.
 - **Estágio 3:** Desvantagem em Tecnologia e em testes de Inteligência durante abstinência. Ganhe 1 Cansaço.
 
-**Tratamento:** Cura DT 16; 1 hora de acompanhamento durante um descanso. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 16, 1 hora de acompanhamento durante um descanso. Reduza o estágio em 1. Uma tentativa por dia.
 
 Podridão do Viveiro
 
-**doenca** comum · Anima · Fortitude DT 17 · incubação 1 hora · intervalo 1 dia
+**doença** comum · Anima · Fortitude DT 17 · incubação 1 hora · intervalo 1 dia
 
 **Exposição:** Ferimento aberto em contato com a mata do Viveiro ou com uma criatura infestada.
 
@@ -4104,7 +4084,7 @@ Podridão do Viveiro
 - **Estágio 2:** Cura de Vida pela metade. −1 em testes físicos. Ganhe 1 Cansaço.
 - **Estágio 3:** Cura de Vida pela metade. −2 em testes físicos. Ganhe 1 Cansaço.
 
-**Tratamento:** Cura DT 17; 1 hora, limpando e cauterizando a ferida. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 17, 1 hora, limpando e cauterizando a ferida. Reduza o estágio em 1. Uma tentativa por dia.
 
 Néctar Sonífero
 
@@ -4117,11 +4097,11 @@ Néctar Sonífero
 - **Estágio 2:** −2 em Iniciativa e em Percepção. Movimento reduzido pela metade.
 - **Estágio 3:** Adormece: fica Inconsciente até sofrer dano ou até o próximo intervalo.
 
-**Tratamento:** Cura DT 15; Ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
+**Tratamento:** Cura DT 15, ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
 
 Mal da Inconstância
 
-**doenca** sobrenatural · Vórtice · Fortitude DT 18 · incubação 1 hora · intervalo 1 dia
+**doença** sobrenatural · Vórtice · Fortitude DT 18 · incubação 1 hora · intervalo 1 dia
 
 **Exposição:** Uma hora numa área em que o Fluxo da Inconstância refez o terreno, sem proteção.
 
@@ -4130,11 +4110,11 @@ Mal da Inconstância
 - **Estágio 2:** −2 em testes de precisão. No começo de cada cena, role 1d6: com 1, a primeira rolagem da cena sofre desvantagem.
 - **Estágio 3:** Desvantagem em testes de precisão. No começo de cada cena, role 1d6: com 1 ou 2, a primeira rolagem da cena sofre desvantagem.
 
-**Tratamento:** Cura DT 18; 1 hora de repouso longe do lugar contaminado. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 18, 1 hora de repouso longe do lugar contaminado. Reduza o estágio em 1. Uma tentativa por dia.
 
 Pulmão de Pedra
 
-**doenca** comum · Baluarte · Fortitude DT 15 · incubação 2 dias · intervalo 1 dia
+**doença** comum · Baluarte · Fortitude DT 15 · incubação 2 dias · intervalo 1 dia
 
 **Exposição:** Uma hora respirando pó de rocha sem pano ou máscara.
 
@@ -4143,11 +4123,11 @@ Pulmão de Pedra
 - **Estágio 2:** −2 em Fortitude contra fumaça, gases e esforço prolongado. Ganhe 1 Cansaço.
 - **Estágio 3:** Desvantagem em Fortitude contra fumaça, gases e esforço prolongado. Movimento reduzido em 3 m. Ganhe 1 Cansaço.
 
-**Tratamento:** Cura DT 15; 1 hora de vapores medicinais em ar limpo. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 15, 1 hora de vapores medicinais em ar limpo. Reduza o estágio em 1. Uma tentativa por dia.
 
 Mal do Interstício
 
-**doenca** sobrenatural · Matriz · Fortitude DT 18 · incubação 1 hora · intervalo 1 dia
+**doença** sobrenatural · Matriz · Fortitude DT 18 · incubação 1 hora · intervalo 1 dia
 
 **Exposição:** Atravessar entre Galhos sem guia dimensional ou âncora, ou passar uma hora no Interstício.
 
@@ -4156,11 +4136,11 @@ Mal do Interstício
 - **Estágio 2:** −2 em Pontaria e em Percepção. Ganhe 1 Cansaço.
 - **Estágio 3:** Desvantagem em Pontaria, Percepção e Acrobacia. Ganhe 1 Cansaço.
 
-**Tratamento:** Cura DT 18; 1 hora de descanso com os pés firmes no chão, longe do Interstício. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 18, 1 hora de descanso com os pés firmes no chão, longe do Interstício. Reduza o estágio em 1. Uma tentativa por dia.
 
 Desgaste do Tempo
 
-**doenca** sobrenatural · Éon · Fortitude DT 19 · incubação 1 dia · intervalo 1 dia
+**doença** sobrenatural · Éon · Fortitude DT 19 · incubação 1 dia · intervalo 1 dia
 
 **Exposição:** Uma hora numa área em que o Fluxo do Tempo foi usado em excesso.
 
@@ -4169,11 +4149,11 @@ Desgaste do Tempo
 - **Estágio 2:** −2 em Iniciativa. Ganhe 1 Cansaço. Drenagem temporária: −1 Destreza.
 - **Estágio 3:** −2 em Iniciativa. Desvantagem em Reflexos. Ganhe 1 Cansaço. Drenagem temporária: −2 Destreza.
 
-**Tratamento:** Cura DT 19; 1 hora e um reagente mágico de 50 Lunaris, consumido na tentativa. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 19, 1 hora e um reagente mágico de 50 Lunaris, consumido na tentativa. Reduza o estágio em 1. Uma tentativa por dia.
 
 Frio do Fim
 
-**doenca** sobrenatural · Limiar · Fortitude DT 17 · incubação 1 dia · intervalo 1 dia
+**doença** sobrenatural · Limiar · Fortitude DT 17 · incubação 1 dia · intervalo 1 dia
 
 **Exposição:** Um dia inteiro num lugar onde o Fluxo do Fim é forte, como Arkarin, sem proteção nem companhia viva.
 
@@ -4182,11 +4162,11 @@ Frio do Fim
 - **Estágio 2:** −2 em Vontade. Perca 1d4 de Sanidade.
 - **Estágio 3:** Desvantagem em Vontade. Descanso recupera metade da Sanidade. Perca 1d6 de Sanidade.
 
-**Tratamento:** Cura DT 17; 1 hora junto a uma fogueira, com alguém vivo ao lado. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 17, 1 hora junto a uma fogueira, com alguém vivo ao lado. Reduza o estágio em 1. Uma tentativa por dia.
 
 Apagamento
 
-**doenca** sobrenatural · O Vazio · Fortitude DT 20 · incubação 1 hora · intervalo 1 dia
+**doença** sobrenatural · O Vazio · Fortitude DT 20 · incubação 1 hora · intervalo 1 dia
 
 **Exposição:** Uma hora no Vazio, longe de qualquer Árvore, sem âncora nem companhia que lembre o nome de quem entrou.
 
@@ -4195,7 +4175,7 @@ Apagamento
 - **Estágio 2:** −2 em Diplomacia, Atuação e Intimidação. Drenagem temporária: −1 Carisma.
 - **Estágio 3:** Desvantagem em Diplomacia, Atuação e Intimidação. Drenagem temporária: −2 Carisma.
 
-**Tratamento:** Cura DT 20; 1 hora ao lado de alguém que conheça o nome do paciente e o diga em voz alta. Reduza o estágio em 1. Uma tentativa por dia.
+**Tratamento:** Cura DT 20, 1 hora ao lado de alguém que conheça o nome do paciente e o diga em voz alta. Reduza o estágio em 1. Uma tentativa por dia.
 
 ## classes
 
@@ -4219,35 +4199,35 @@ O catálogo mostra a progressão nível a nível, e as classes que conjuram most
 
 ### As classes
 
-- **Guerreiro** *(comum)*. Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo pra si e comanda um batalhão que luta melhor quando ele está por perto.
-- **Piloto** *(comum)*. Luta de dentro de um veículo que ele mesmo vai melhorando peça por peça. Quanto mais o personagem sobe, mais o veículo cresce junto.
-- **Ninja** *(comum)*. Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Rende muito mais quando ninguém percebeu que ele chegou.
-- **Pop Star** *(comum)*. Onde os outros partem pra briga, ele sobe no palco. A fama abre portas, a presença prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.
-- **Espadachim** *(comum)*. Passou a vida inteira com uma espada na mão. Muda de postura no meio da luta e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.
-- **Lutador** *(comum)*. Briga de mão limpa, sem arma e sem armadura. Vai marcando o inimigo golpe a golpe e costuma ganhar no cansaço, quando o outro já não aguenta mais.
+- **Alquimista** *(comum)*. Pega o que encontra pelo caminho e transforma em elixir, bomba ou antídoto. Prepara as doses no descanso, e o que sobra estraga até o descanso seguinte.
 - **Atirador** *(comum)*. Prefere lutar de longe e nunca chega sem plano. Escolhe a posição com calma, cuida da munição e sabe sempre quantos tiros ainda tem.
-- **Médico** *(comum)*. Segura o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e manda de volta pra luta. Só não consegue desfazer o que já aconteceu.
-- **Guardião** *(comum)*. Escolhe uma pessoa pra proteger e leva isso muito a sério. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e aguenta o que vier, até onde a reação e a cena deixarem.
-- **Caçador** *(comum)*. Estuda a presa antes de chegar perto. Cada tipo de criatura pede um jeito diferente de caçar, e o que ele aprende sobre uma serve pra toda a família dela.
-- **Engenheiro** *(comum)*. Chega com tudo montado. Prepara invenções de uso rápido, melhora o equipamento do grupo e, quando precisa, força a máquina além do limite sabendo muito bem o preço.
-- **Alquimista** *(comum)*. Pega o que encontra pelo caminho e transforma em elixir, bomba ou antídoto. Você prepara as doses no descanso, e o que sobrar estraga até o descanso seguinte.
-- **Comerciante** *(comum)*. Resolve a briga antes dela começar. Conhece a pessoa certa, fica sabendo das coisas na hora e tem sempre o item certo no estoque. Dinheiro do nada ele não faz, por mais que o grupo peça.
-- **Campeão Dimensional** *(especial, qualquer Árvore)*. O título fica com quem passa dos limites da própria dimensão. Os picos de poder duram pouco, são contados, e nenhum deles salva ninguém da morte.
-- **Pirata Amaldiçoado** *(especial, O Vazio)*. Luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que já morreu e continua obedecendo às suas ordens.
-- **Cartista Arcano** *(especial, qualquer Árvore)*. Conjura com cartas que prepara antes. O baralho define o que você tem na mão naquele dia, e o seu Fluxo nativo define o que cada carta faz.
-- **Guia Dimensional** *(especial, Matriz)*. Conhece as rotas, os portais e as âncoras. Quando o grupo chega num lugar sem estrada nenhuma, foi ele quem levou.
-- **Caçador das Almas** *(especial, Anima)*. Liga a própria alma a uma Zanpakutō e passa a vida patrulhando a fronteira entre vivos e mortos, purificando espíritos corrompidos. Quem descobre o nome da lâmina abre o Shikai, e quem domina ela por completo desperta a Bankai.
-- **Escritor de Contos** *(especial, Limiar)*. Conta histórias, presságios e pequenas verdades que ajudam o grupo. O incômodo é que o que ele conta costuma acontecer.
-- **Invocador** *(especial, qualquer Árvore)*. Luta com uma criatura invocada do lado. Escolhe ela no Catálogo de Invocações e, a cada pacto, decide se chama mais uma ou se fortalece a que já tem.
-- **Viajante** *(especial, Matriz, Éon, Vórtice)*. Vive pulando entre Árvores e dimensões. Cada estrada que percorre vira mais um jeito de se virar em qualquer lugar.
+- **Caçador** *(comum)*. Estuda a presa antes de chegar perto. Cada tipo de criatura pede um jeito diferente de caçar, e o que ele aprende sobre uma serve para toda a família dela.
 - **Canalizador** *(comum)*. Usa o Fluxo puro, direto da fonte. É o jeito mais simples de conjurar e também o mais difícil de dominar.
-- **Sintonizador** *(comum)*. Junta o próprio Fluxo com catalisadores de fora pra conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.
-- **Ritualista** *(comum)*. Trabalha longe do combate. Ritual não tem círculo, leva tempo e prende a Mana desde o primeiro minuto. Se alguém interromper, a Mana já era.
-- **Interceptador** *(especial, A.X.I.S)*. Entra na Malha pra desmontar a magia dos outros e atrapalhar quem está conjurando. Fluxo natural mesmo, ele não usa.
 - **Chef** *(comum)*. Pega os Mantimentos e faz comida que segura o grupo, em combate ou fora dele. Bebida faz efeito na hora, lanche vai junto na caminhada e refeição dá um benefício que dura mais.
+- **Comerciante** *(comum)*. Resolve a briga antes dela começar. Conhece a pessoa certa, fica sabendo das coisas na hora e tem sempre o item certo no estoque. Dinheiro do nada ele não faz, por mais que o grupo peça.
 - **Detetive** *(comum)*. Olha uma cena e vê antes de todo mundo: o detalhe fora do lugar, a mentira mal contada, o padrão que passou batido. E nunca fica satisfeito com a primeira explicação.
-- **Devorador** *(especial, Limiar)*. Nasce sem poder nenhum e pega emprestado de quem morreu. Mate, ou chegue perto de um corpo ainda quente, devore o que sobrou, e uma parte de verdade da força da vítima passa a ocupar um espaço vazio dentro de você.
-- **Elementarista** *(especial, Baluarte)*. Escolhe um único elemento primordial e vai aprofundando esse laço até chegar numa derivação, usando ele pra mudar o campo de batalha. Aprender os outros elementos só dá pra quem tem a aptidão de Avatar, que é raríssima.
+- **Engenheiro** *(comum)*. Chega com tudo montado. Prepara invenções de uso rápido, melhora o equipamento do grupo e, quando precisa, força a máquina além do limite sabendo muito bem o preço.
+- **Espadachim** *(comum)*. Passou a vida inteira com uma espada na mão. Muda de postura no meio da luta e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.
+- **Guardião** *(comum)*. Escolhe uma pessoa para proteger e leva isso muito a sério. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e aguenta o que vier, até onde a reação e a cena deixarem.
+- **Guerreiro** *(comum)*. Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo para si e comanda um batalhão que luta melhor quando ele está por perto.
+- **Lutador** *(comum)*. Briga de mão limpa, sem arma e sem armadura. Vai marcando o inimigo golpe a golpe e costuma ganhar no cansaço, quando o outro já não aguenta mais.
+- **Médico** *(comum)*. Segura o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e manda de volta para luta. Só não consegue desfazer o que já aconteceu.
+- **Ninja** *(comum)*. Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Rende muito mais quando ninguém percebeu que ele chegou.
+- **Piloto** *(comum)*. Luta de dentro de um veículo que ele mesmo vai melhorando peça por peça. Quanto mais o personagem sobe, mais o veículo cresce junto.
+- **Pop Star** *(comum)*. Onde os outros partem para briga, ele sobe no palco. A fama abre portas, a presença prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.
+- **Ritualista** *(comum)*. Trabalha longe do combate. Ritual não tem círculo, leva tempo e prende a Mana desde o primeiro minuto. Se alguém interromper, a Mana já era.
+- **Sintonizador** *(comum)*. Junta o próprio Fluxo com catalisadores de fora para conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.
+- **Caçador das Almas** *(especial, Anima)*. Liga a própria alma a uma Zanpakutō e passa a vida patrulhando a fronteira entre vivos e mortos, purificando espíritos corrompidos. Quem descobre o nome da lâmina abre o Shikai, e quem a domina por completo desperta a Bankai.
+- **Campeão Dimensional** *(especial, qualquer Árvore)*. O título fica com quem passa dos limites da própria dimensão. Os picos de poder duram pouco, são contados, e nenhum deles salva ninguém da morte.
+- **Cartista Arcano** *(especial, qualquer Árvore)*. Conjura com cartas que prepara antes. O baralho define o que ele tem na mão naquele dia, e o Fluxo nativo dele define o que cada carta faz.
+- **Devorador** *(especial, Limiar)*. Nasce sem poder nenhum e pega emprestado de quem morreu. Mata, ou chega perto de um corpo ainda quente, devora o que sobrou, e uma parte de verdade da força da vítima passa a ocupar um espaço vazio dentro dele.
+- **Elementarista** *(especial, Baluarte)*. Escolhe um único elemento primordial e vai aprofundando esse laço até chegar numa derivação, usando esse elemento para mudar o campo de batalha. Aprender os outros elementos só é possível para quem tem a aptidão de Avatar, que é raríssima.
+- **Escritor de Contos** *(especial, Limiar)*. Conta histórias, presságios e pequenas verdades que ajudam o grupo. O incômodo é que o que ele conta costuma acontecer.
+- **Guia Dimensional** *(especial, Matriz)*. Conhece as rotas, os portais e as âncoras. Quando o grupo chega num lugar sem estrada nenhuma, foi ele quem levou.
+- **Interceptador** *(especial, A.X.I.S)*. Entra na Malha para desmontar a magia dos outros e atrapalhar quem está conjurando. Fluxo natural mesmo, ele não usa.
+- **Invocador** *(especial, qualquer Árvore)*. Luta com uma criatura invocada do lado. Escolhe a criatura no Catálogo de Invocações e, a cada pacto, decide se chama mais uma ou se fortalece a que já tem.
+- **Pirata Amaldiçoado** *(especial, O Vazio)*. Luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que já morreu e continua obedecendo às suas ordens.
+- **Viajante** *(especial, Matriz, Éon, Vórtice)*. Vive pulando entre Árvores e dimensões. Cada estrada que percorre vira mais um jeito de se virar em qualquer lugar.
 
 ## poderes-habilidades
 
@@ -4375,29 +4355,29 @@ Estas são as raças do jogo, com o ajuste inicial que cada uma dá a Vida, Mana
 
 - Raça | Tipo | Vida | Mana | Estamina | Movimento
 
-- Humano | Comum | 0 | 0 | 0 | 0
-- Vampiro | Comum | +1 | 0 | +1 | 0
-- Goblim | Comum | −1 | +1 | +2 | +1,5 m
 - Anão | Comum | +2 | 0 | +3 | 0
-- Golem | Comum | +5 | −2 | +3 | 0
-- Espírito | Especial | −2 | +3 | 0 | 0
-- Gigante | Comum | +4 | −1 | +3 | 0
 - Animália | Comum | 0 | 0 | 0 | 0
-- Sereia / Tritão | Comum | −1 | +2 | 0 | 0
+- Feérico | Comum | −2 | +4 | 0 | 0
+- Gigante | Comum | +4 | −1 | +3 | 0
+- Goblim | Comum | −1 | +1 | +2 | +1,5 m
+- Golem | Comum | +5 | −2 | +3 | 0
+- Humano | Comum | 0 | 0 | 0 | 0
 - Mímico | Comum | −1 | +2 | 0 | 0
+- Sereia / Tritão | Comum | −1 | +2 | 0 | 0
 - Simbionte | Comum | 0 | 0 | 0 | 0
 - Slime | Comum | +3 | −2 | +1 | 0
-- Feérico | Comum | −2 | +4 | 0 | 0
-- Elfo | Especial | +2 | +4 | 0 | 0
-- Desperto | Especial | +4 | +2 | +2 | 0
+- Vampiro | Comum | +1 | 0 | +1 | 0
+- Amálgamo | Especial | +5 | +1 | +3 | 0
+- Anomalia | Especial | +3 | +3 | +2 | 0
 - Auleth | Especial | +2 | 0 | 0 | 0
 - Autômato | Especial | 0 | 0 | 0 | 0
-- Clone | Especial | +3 | +3 | +2 | 0
-- Anomalia | Especial | +3 | +3 | +2 | 0
-- Amálgamo | Especial | +5 | +1 | +3 | 0
 - Bruxa | Especial | +1 | +5 | 0 | 0
-- Onírico | Especial | +1 | +4 | 0 | 0
+- Clone | Especial | +3 | +3 | +2 | 0
+- Desperto | Especial | +4 | +2 | +2 | 0
 - Divino | Especial | +2 | +4 | +1 | 0
+- Elfo | Especial | +2 | +4 | 0 | 0
+- Espírito | Especial | −2 | +3 | 0 | 0
+- Onírico | Especial | +1 | +4 | 0 | 0
 
 ## bestiario
 
@@ -4431,7 +4411,7 @@ Uma criatura ao seu lado anda com você pelas cenas, luta quando preciso e tem f
 
 - **Invocações:** seres temporários trazidos por magia, ritual ou dispositivo. Cumprem a função e vão embora no prazo do efeito que os chamou.
 
-- **Ajudantes:** gente e criaturas conscientes que topam o trabalho por conta própria, sem vínculo mágico nenhum. Cobram, decidem e podem recusar uma missão que não gostem.
+- **Ajudantes:** gente e criaturas conscientes que topam o trabalho por conta própria, sem vínculo mágico nenhum. Cobram, decidem e podem recusar uma missão de que não gostem.
 
 - **Seres Lendários:** raros, únicos e fora da escala normal de preço. Exigem ritual complexo ou uma condição especial da história, e dependem de liberação do Mestre antes de aparecer à venda.
 
@@ -4465,7 +4445,7 @@ Servo é o único tipo que já nasce com um problema junto. Antes de comprar um,
 
 **Status:** Regra oficial
 
-Como funcionam as moedas de O Jardim, o câmbio entre elas e as regras de segurança e espaço do Cofre Bancário.
+Como funcionam as moedas do Jardim, o câmbio entre elas e as regras de segurança e espaço do Cofre Bancário.
 
 O Jardim tem quatro moedas. Cada uma circula num lugar diferente do mundo, e por isso nem todas se trocam entre si.
 
@@ -4557,7 +4537,7 @@ A conta é sempre a mesma: converta para Solares, converta para a moeda de desti
 
 **Exemplo:**
 
-Trocar 10 Fragmentos por Lunaris dá 500 Solares, ou seja 50.000 Lunaris, menos a taxa de 2%: você recebe 49.000.
+Trocar 10 Fragmentos por Lunaris dá 500 Solares, ou seja, 50.000 Lunaris, menos a taxa de 2%: você recebe 49.000.
 
 Converter resolve o troco, e só isso. Um veículo cotado em Lunaris e uma arma lendária cotada em Solares seguem economias separadas, cada uma pensada para o ritmo da própria categoria. Para um Fruto do Éden, o caminho previsto passa por Fragmentos e Créditos, que costumam vir de relíquia concedida pelo Mestre, de negócio no mercado negro ou de pagamento de quem não usa moeda comum. Ver Frutos e Implantes.
 
@@ -4593,7 +4573,7 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 **Status:** Regra oficial
 
-Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
+Os quatro lugares onde se compra no Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
 O catálogo inteiro tem 1.366 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
@@ -4619,7 +4599,7 @@ O catálogo inteiro tem 1.366 itens, e você nunca vê todos de uma vez. Cada it
 
 - Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 332
 
-- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 271
+- Banco Lunar | Lendário, Mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 271
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 
@@ -4870,8 +4850,8 @@ Prestígio registra a relação de um personagem ou grupo com uma facção espec
 
 - **+1:** Concluir compromisso aceito que produza benefício relevante para a facção. No máximo uma vez pelo mesmo compromisso.
 - **+2:** Resolver ameaça ou objetivo central da facção em um marco de campanha. Exige consequência duradoura e não se acumula com serviço relevante pelo mesmo fato.
-- **-1:** Romper compromisso aceito ou causar prejuízo relevante à facção. A mesma consequência é registrada uma vez.
-- **-2:** Atacar deliberadamente um objetivo central ou usar acesso concedido contra a facção. Não se acumula com quebra de compromisso pelo mesmo fato.
+- **−1:** Romper compromisso aceito ou causar prejuízo relevante à facção. A mesma consequência é registrada uma vez.
+- **−2:** Atacar deliberadamente um objetivo central ou usar acesso concedido contra a facção. Não se acumula com quebra de compromisso pelo mesmo fato.
 
 Depois de aplicar a mudança, limite o resultado entre −3 e +3. Um mesmo fato não gera dois ajustes.
 
@@ -4907,7 +4887,7 @@ Fama registra visibilidade pública. Ela usa uma escala única e não substitui 
 
 - **+1:** Realizar feito relevante diante de testemunhas ou registro verificável. Repetir o mesmo feito para o mesmo público não aumenta Fama.
 - **+2:** Um marco de campanha recebe circulação pública em várias regiões. Não se acumula com feito público pelo mesmo acontecimento.
-- **-1:** Um acontecimento de campanha remove registros e interrompe a associação pública com a identidade. Passagem de tempo sem exposição não reduz Fama por si só.
+- **−1:** Um acontecimento de campanha remove registros e interrompe a associação pública com a identidade. Passagem de tempo sem exposição não reduz Fama por si só.
 
 Depois de aplicar a mudança, limite o resultado entre 0 e 5.
 

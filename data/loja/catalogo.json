@@ -22132,7 +22132,7 @@
         "aplicacao": "Armas",
         "nivel_modificacao": "comum",
         "valor_efeito": 1,
-        "descricao": "Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, pra não furar a regra de margem larga com multiplicador alto.",
+        "descricao": "Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, para não furar a regra de margem larga com multiplicador alto.",
         "atributos": [
           "Aplica em: Armas",
           "Nível Comum",

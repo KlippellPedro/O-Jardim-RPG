@@ -100,7 +100,7 @@ export const MANOBRAS_A_PE: readonly IManobraAPe[] = [
     cena: 'Entrar numa procissão, tirar o casaco, sentar numa mesa de taverna como quem está ali há horas e pedir uma bebida com a voz calma.',
     teste: 'Furtividade oposta à Percepção',
     faixas: ['longa'],
-    efeito: 'Sucesso encerra a cena: o fugitivo Escapou.',
+    efeito: 'Encerra a cena: o fugitivo Escapou.',
     falha: 'Você foi visto entrando no esconderijo, e quem persegue move uma faixa.',
   },
   {

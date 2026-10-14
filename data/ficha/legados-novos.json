@@ -28,7 +28,7 @@
     {
       "id": "memoria-do-eclipse",
       "titulo": "Memória do Eclipse",
-      "descricao": "Uma vez por sessão, peça ao mestre uma pista verdadeira sobre algo que o personagem já presenciou ou role Investigação ou Conhecimento com vantagem.",
+      "descricao": "Uma vez por sessão, peça ao Mestre uma pista verdadeira sobre algo que o personagem já presenciou ou role Investigação ou Conhecimento com vantagem.",
       "pre_requisitos": [
         {
           "atributo": "inteligencia",

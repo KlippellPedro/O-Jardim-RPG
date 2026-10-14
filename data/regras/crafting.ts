@@ -120,7 +120,7 @@ export const TABELA_CRAFTING_RARIDADE: RegraRaridadeCrafting[] = [
     custoMateriaisPercentual: null,
     requerAprovacao: true,
     fabricacaoComumPermitida: false,
-    requisitoAdicional: 'Não pode ser reproduzida por crafting. Criação ou restauração ocorre como projeto de campanha.',
+    requisitoAdicional: 'Não pode ser reproduzido pelas regras de fabricação. Criação ou restauração ocorre como projeto de campanha.',
   },
   {
     id: 'reliquia da criacao',
@@ -251,7 +251,7 @@ export const SALVAGUARDAS_ECONOMIA_CRAFTING = [
   'Um Drop não pode ser usado, vendido e recuperado no mesmo projeto. Desmontagem nunca devolve mais valor do que foi consumido.',
   'Item criado para uso próprio não possui lucro ou comprador automático. Revenda depende da economia local e não gera valor acima do gasto sem contrato ou demanda definidos antes da fabricação.',
   'Efeitos de classe que preparam fórmulas ou engenhocas temporárias seguem a própria classe. Eles não produzem estoque permanente nem removem custos deste tópico.',
-  'Cada personagem completa no máximo um bloco de 6 horas de crafting por dia, mesmo que trabalhe em projetos diferentes. Ao fim do bloco, ganha 1 Cansaço.',
+  'Cada personagem completa no máximo um bloco de 6 horas de fabricação por dia, mesmo que trabalhe em projetos diferentes. Ao fim do bloco, ganha 1 Cansaço.',
 ];
 
 export const REGRAS_ALQUIMIA = [
@@ -264,7 +264,7 @@ export const REGRAS_ALQUIMIA = [
 export const REGRAS_TECNOLOGIA_E_CIBERNETICOS = [
   'Tecnologia substitui Ofício apenas para item A.X.I.S, sistema eletrônico ou maquinário avançado.',
   'Programação altera funções previstas pelo projeto; não cria magia, poder de classe ou bônus sem suporte do item.',
-  'Implante exige fabricação e instalação. A instalação dura 6 horas em sala-de-implante e exige testes simultâneos de Tecnologia e Cura contra a DT da raridade.',
+  'Implante exige fabricação e instalação. A instalação dura 6 horas numa Sala de Implante e exige testes simultâneos de Tecnologia e Cura contra a DT da raridade.',
   'Se qualquer teste de instalação falhar, o implante não concede efeito. O paciente sofre 1d6 de dano físico, e outra tentativa exige um dia e 10% do custo inicial em materiais.',
 ];
 
@@ -390,11 +390,11 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
     <ul class="regras-list">${itens(REGRAS_TECNOLOGIA_E_CIBERNETICOS)}</ul>
 
     <h3 class="regras-subtitle">Materiais, Drops e comércio</h3>
-    <p>O que cada um dos seis estoques genéricos de material serve, e quando a raridade exigida sobe, fica em <span class="regras-ref regras-ref--materiais">Materiais e Ingredientes</span>. Este tópico só cobre o lado econômico da fabricação.</p>
+    <p>Para que serve cada um dos seis estoques genéricos de material, e quando a raridade exigida sobe, está em <span class="regras-ref regras-ref--materiais">Materiais e Ingredientes</span>. Este tópico só cobre o lado econômico da fabricação.</p>
     <ul class="regras-list">${itens(SALVAGUARDAS_ECONOMIA_CRAFTING)}</ul>
 
     <div class="regras-note regras-note--dica">
-      <p><strong>Classes:</strong> Alquimista e Engenheiro usam as habilidades descritas nas próprias progressões. Nenhuma classe é obrigatória para fabricar itens comuns, desde que o personagem cumpra os requisitos da receita.</p>
+      <p>Alquimista e Engenheiro fabricam com as habilidades descritas nas próprias progressões, mas nenhuma classe é obrigatória para fabricar itens comuns: basta cumprir os requisitos da receita.</p>
     </div>
   `,
   corpoMestre: `
@@ -412,7 +412,7 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
         <tr><td><strong>Mítico e Relíquia</strong></td><td colspan="3">Projeto de campanha. Não se fabrica pelas regras normais.</td></tr>
       </tbody>
     </table></div>
-    <p class="regras-note">Repare que fabricar Lendário custa 30 dias e 90% do preço. Isso não economiza dinheiro: economiza a sorte de encontrar. É por isso que crafting não desequilibra a campanha por si só.</p>
+    <p class="regras-note">Repare que fabricar Lendário custa 30 dias e 90% do preço. O ganho de fabricar é não depender da sorte de encontrar o item, porque dinheiro quase não se poupa. Por isso fabricar não desequilibra a campanha por si só.</p>
 
     <h3 class="regras-subtitle">Conduzir um projeto</h3>
     <ul class="regras-list">

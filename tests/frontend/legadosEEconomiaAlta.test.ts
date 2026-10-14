@@ -202,7 +202,9 @@ test('as tabelas de contratação do livro ganham degraus no 100 e no 300, e o l
   assert.match(mestre, /a taxa de sempre, de 100 a 299 ela dobra/);
   assert.match(mestre, /em Fragmentos de Estrela, e acompanha a verba do VD/);
   // Cada tabela: 100 a 299 é o dobro de 51 a 99.
-  const tabelas = [...mestre.matchAll(/<td>51 a 99<\/td><td>\+(\d+) L \/ nível<\/td><td>\+(\d+) L \/ nível<\/td><\/tr>\s*<tr><td>100 a 299<\/td><td>\+(\d+) L \/ nível<\/td><td>\+(\d+) L \/ nível<\/td>/g)];
+  // Os valores podem vir com ponto de milhar ("+1.300 L").
+  const tabelas = [...mestre.matchAll(/<td>51 a 99<\/td><td>\+([\d.]+) L \/ nível<\/td><td>\+([\d.]+) L \/ nível<\/td><\/tr>\s*<tr><td>100 a 299<\/td><td>\+([\d.]+) L \/ nível<\/td><td>\+([\d.]+) L \/ nível<\/td>/g)]
+    .map((achado) => [achado[0], ...achado.slice(1).map((valor) => valor.replaceAll('.', ''))]);
   assert.equal(tabelas.length, 6);
   for (const [, a, b, dobroA, dobroB] of tabelas) {
     // O valor é arredondado de 5 em 5 Lunaris.

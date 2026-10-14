@@ -125,21 +125,9 @@ export const REGRA_TRANSPORTE: RegraTopicoDe<'Livro do Jogador'> = {
       <thead><tr><th scope="col">Transporte</th><th scope="col">Mesmo Reino</th><th scope="col">Entre Reinos</th><th scope="col">Entre Dimensões</th></tr></thead>
       <tbody>${linhasTransportes}</tbody>
     </table></div>
-    <div class="regras-note regras-note--atencao">
-      <p><strong>Rota entre dimensões:</strong> exige um Portal Dimensional disponível. Some a taxa de acesso ao preço do meio de transporte escolhido.</p>
-    </div>
 
     <h3 class="regras-subtitle">Portal Dimensional</h3>
-    <div class="regras-table-wrap"><table class="regras-table">
-      <caption class="sr-only">Taxa de acesso ao Portal Dimensional</caption>
-      <thead><tr><th scope="col">Serviço</th><th scope="col">Custo</th><th scope="col">Requisito</th><th scope="col">Observação</th></tr></thead>
-      <tbody><tr>
-        <th scope="row">${ACESSO_PORTAL_DIMENSIONAL.titulo}</th>
-        <td><strong>${formatarLunaris(ACESSO_PORTAL_DIMENSIONAL.custoLunaris)}</strong></td>
-        <td>${ACESSO_PORTAL_DIMENSIONAL.requisito}</td>
-        <td>${ACESSO_PORTAL_DIMENSIONAL.observacao}</td>
-      </tr></tbody>
-    </table></div>
+    <p>Rota entre dimensões exige um Portal Dimensional disponível. Some a taxa de acesso ao preço do meio de transporte escolhido: <strong>${formatarLunaris(ACESSO_PORTAL_DIMENSIONAL.custoLunaris)}</strong>, cobrados à parte da passagem.</p>
 
     <h3 class="regras-subtitle">Viagens excepcionais</h3>
     <div class="regras-table-wrap"><table class="regras-table">
@@ -152,8 +140,7 @@ export const REGRA_TRANSPORTE: RegraTopicoDe<'Livro do Jogador'> = {
     <ul class="regras-list">
       <li>Os preços são cobrados por personagem. Multiplique o valor da rota pelo número de viajantes que precisam de passagem.</li>
       <li>Os tempos representam a duração normal da viagem, antes de qualquer imprevisto da campanha.</li>
-      <li>Viajar entre dimensões exige acesso a um Portal Dimensional e o pagamento adicional indicado na tabela.</li>
-      <li>Uma viagem excepcional pode exigir algo além de dinheiro. Para sair da Árvore, o grupo também precisa de um contato capaz de realizar a viagem.</li>
+      <li>Uma viagem excepcional pede algo além de dinheiro: para sair da Árvore, o grupo também precisa de um contato capaz de realizar a viagem.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
       <p>Um grupo de quatro personagens quer ir de Trem de um reino a outro. A passagem entre reinos custa ${formatarLunaris(TRANSPORTES_LUNARIS[0].entreReinos.custoLunaris)} por personagem, então o grupo paga 4 × ${TRANSPORTES_LUNARIS[0].entreReinos.custoLunaris} = ${formatarLunaris(4 * TRANSPORTES_LUNARIS[0].entreReinos.custoLunaris)} e viaja por ${TRANSPORTES_LUNARIS[0].entreReinos.tempo}, se nada atrapalhar o caminho.</p>

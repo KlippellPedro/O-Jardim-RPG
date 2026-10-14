@@ -1,6 +1,17 @@
 {
   "itens": [
     {
+      "id": "2026-10-14-livro-revisado",
+      "data": "2026-10-14",
+      "tipo": "melhoria",
+      "area": "Livro",
+      "titulo": "Livro de Regras revisado",
+      "detalhes": [
+        "O texto do Livro e do PDF passou por uma revisão completa: erros de digitação, nomes trocados (como perícias que não existem no jogo) e trechos repetidos foram corrigidos, sem mudar nenhuma regra.",
+        "As listas de classes, raças e perícias seguem agora uma ordem fácil de achar, e os requisitos dos Legados e o tipo de cada magia aparecem escritos por extenso, com acento."
+      ]
+    },
+    {
       "id": "2026-10-14-livro-em-pdf",
       "data": "2026-10-14",
       "tipo": "novo",
@@ -910,17 +921,6 @@
       "detalhes": [
         "27 Únicos novos que só mexem na ficha, para quem não quer ficar lembrando de usar poder: mais Vida, Mana e Estamina, bônus em Fortitude, Reflexos e Vontade, vantagem em Percepção, mais Defesa, mais ataque, +2 em um atributo (que vale +1 no modificador) e alguns combos lendários.",
         "O efeito entra sozinho na ficha assim que você planta o Único, e some se você podar. Únicos que dão o mesmo bônus não somam: vale o maior."
-      ]
-    },
-    {
-      "id": "2026-10-01-vantagem-nos-graus-de-pericia",
-      "data": "2026-10-01",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Vantagem nos graus de perícia",
-      "detalhes": [
-        "Do grau Veterano em diante, o próprio grau já dá vantagem na perícia, além do bônus. Veterano dá 1 fonte de vantagem, Renomado 2, e assim até 7 no Absoluto.",
-        "Como vantagem e desvantagem se cancelam uma a uma, as fontes extras servem de escudo: um Renomado ainda rola com vantagem mesmo com uma desvantagem em cima. Vale também no ataque com Luta ou Pontaria e na conjuração com Misticismo."
       ]
     }
   ]

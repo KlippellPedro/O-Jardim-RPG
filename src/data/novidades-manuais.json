@@ -2,6 +2,17 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-14-livro-revisado",
+      "data": "2026-10-14",
+      "tipo": "melhoria",
+      "area": "Livro",
+      "titulo": "Livro de Regras revisado",
+      "detalhes": [
+        "O texto do Livro e do PDF passou por uma revisão completa: erros de digitação, nomes trocados (como perícias que não existem no jogo) e trechos repetidos foram corrigidos, sem mudar nenhuma regra.",
+        "As listas de classes, raças e perícias seguem agora uma ordem fácil de achar, e os requisitos dos Legados e o tipo de cada magia aparecem escritos por extenso, com acento."
+      ]
+    },
+    {
       "id": "2026-10-14-livro-em-pdf",
       "data": "2026-10-14",
       "tipo": "novo",

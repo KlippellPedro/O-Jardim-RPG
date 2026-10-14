@@ -17,6 +17,7 @@ import {
   circuloRotulo,
   magiaEhElemental,
   magiaExigeAvatar,
+  rotuloPapelMagia,
   simbolosDoRito,
   temaDoFluxo,
   type FluxoDeMagia,
@@ -88,7 +89,7 @@ const montarItensPorAba = ({
     fluxoId: item.fluxo,
     fluxoTitulo: item.fluxo === 'universal' ? 'Universal' : fluxosPorId.get(item.fluxo)?.titulo,
     categoria: circuloRotulo(item.circulo),
-    chamada: `${item.papel} · ${item.custo_mana} Mana`,
+    chamada: `${rotuloPapelMagia(item.papel)} · ${item.custo_mana} Mana`,
     descricao: item.descricao,
     efeito: item.efeito,
     campos: [

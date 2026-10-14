@@ -1,6 +1,15 @@
 import type { RegraTopicoDe } from './tipos';
 
 export type AcaoVeicular = 'livre' | 'movimento' | 'padrão' | 'reação' | 'resolução da rodada';
+
+/** Como cada ação aparece no texto, com o nome que o resto do livro usa. */
+const ROTULO_ACAO_VEICULAR: Record<AcaoVeicular, string> = {
+  livre: 'Ação Livre',
+  movimento: 'Ação de Movimento',
+  'padrão': 'Ação Padrão',
+  'reação': 'Reação',
+  'resolução da rodada': 'Na resolução da rodada',
+};
 export type PericiaConducao = 'Pilotagem' | 'Cavalgar';
 export type FaixaPerseguicaoId = 'contato' | 'curta' | 'média' | 'longa' | 'escapou';
 export type TamanhoColisao = 'pequeno' | 'médio' | 'grande' | 'enorme' | 'colossal';
@@ -320,7 +329,7 @@ const tabelaFaixas = FAIXAS_PERSEGUICAO.map(faixa => `
 `).join('');
 
 const tabelaManobras = MANOBRAS_VEICULARES.map(manobra => `
-  <tr><td><strong>${manobra.titulo}</strong><br><small>Ação ${manobra.acao}</small></td><td>${manobra.teste}</td><td>${manobra.efeito}</td><td>${manobra.falha}</td></tr>
+  <tr><td><strong>${manobra.titulo}</strong><br><small>${ROTULO_ACAO_VEICULAR[manobra.acao]}</small></td><td>${manobra.teste}</td><td>${manobra.efeito}</td><td>${manobra.falha}</td></tr>
 `).join('');
 
 const tabelaAvarias = AVARIAS_VEICULO.map(avaria => `
@@ -380,7 +389,7 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
 
     <h3 class="regras-subtitle">Turno veicular</h3>
     <ul class="regras-list">
-      <li>Todos rolam Iniciativa normalmente. O movimento do veículo ocorre no turno do condutor.</li>
+      <li>Cada ocupante age na própria Iniciativa, como sempre. O movimento do veículo acontece no turno do condutor.</li>
       <li>Conduzir custa uma Ação de Movimento. Sem essa ação, o veículo mantém curso e velocidade; parado, permanece parado.</li>
       <li>Cada arma ou sistema é usado por um tripulante. Uma mesma pessoa pode ocupar mais de um papel, mas não recebe ações adicionais.</li>
       <li>A tripulação mínima indica quantas pessoas são necessárias para preencher os postos obrigatórios. Sem condutor, o veículo não manobra; sem operador ou artilheiro, o respectivo sistema não é usado.</li>

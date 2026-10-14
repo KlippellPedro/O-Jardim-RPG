@@ -33,7 +33,7 @@ const duracaoDeLesao = (descansos: number) => (
 );
 
 const recuperacaoDeLesao = (descansos: number, dt: number, extra = '') => (
-  `Cura DT ${dt} para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com ${descansos} contados a lesão termina.${extra ? ` ${extra}` : ''}`
+  `Cura DT ${dt} para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com ${descansos} ${descansos > 1 ? 'contados' : 'contado'}, a lesão termina.${extra ? ` ${extra}` : ''}`
 );
 
 const SAIDA_DE_MEMBRO = 'Só volta com Regeneração de um Fluxo que cite membro perdido ou com um implante que cubra o que sumiu, e o implante anula a penalidade enquanto funcionar.';
@@ -82,7 +82,7 @@ export const CONDICOES_LONGO_PRAZO: ICondicaoRegra[] = [
   { id: 'tremor-nas-maos', titulo: 'Tremor nas Mãos', categoria: 'física', grupo: 'Sequelas do corpo', permanente: true, duracao: 'Permanente.', efeitos: ['Desvantagem em Ladinagem, Pontaria e ofícios de precisão.', 'Respirar fundo e apoiar o braço permite repetir um teste de precisão por cena.'], remocao: 'Tratamento com Cura DT 18 ao longo de um arco reduz o efeito a -2. Só cura de Fluxo explícita ou implante encerra.' },
   { id: 'manqueira', titulo: 'Manqueira', categoria: 'física', grupo: 'Sequelas do corpo', permanente: true, duracao: 'Permanente.', efeitos: ['Desvantagem em Acrobacia e em Atletismo para saltar.', 'Em perseguição a pé, o teste oposto sofre -2.'], remocao: 'Cirurgia de Cura DT 20 pode corrigir a perna, ao custo de 3 descansos de recuperação. Implante ou Regeneração também encerram.' },
   { id: 'pulmoes-danificados', titulo: 'Pulmões Danificados', categoria: 'física', grupo: 'Sequelas do corpo', permanente: true, duracao: 'Permanente.', efeitos: ['Desvantagem em Fortitude contra fumaça, gases e afogamento.', 'Esforço longo, como correr ou nadar por uma cena, exige Fortitude DT 12 ou +1 Cansaço.'], remocao: 'Só cura de Fluxo explícita, implante respiratório ou resolução na história encerra.' },
-  { id: 'sensibilidade-luz', titulo: 'Sensibilidade à Luz', categoria: 'física', grupo: 'Sequelas do corpo', permanente: true, duracao: 'Permanente.', efeitos: ['Desvantagem em Percepção sob luz forte.', 'Lentes escuras ou capuz removem a desvantagem, mas o personagem ouve melhor do que vê nesses lugares.'], remocao: 'Tratamento com Cura DT 18 ao longo de um arco reduz a sensibilidade a uma incomodação sem efeito mecânico.' },
+  { id: 'sensibilidade-luz', titulo: 'Sensibilidade à Luz', categoria: 'física', grupo: 'Sequelas do corpo', permanente: true, duracao: 'Permanente.', efeitos: ['Desvantagem em Percepção sob luz forte.', 'Lentes escuras ou capuz removem a desvantagem, mas o personagem ouve melhor do que vê nesses lugares.'], remocao: 'Tratamento com Cura DT 18 ao longo de um arco deixa a sensibilidade só como um incômodo, sem efeito mecânico.' },
   { id: 'cicatriz-marcante', titulo: 'Cicatriz Marcante', categoria: 'física', grupo: 'Sequelas do corpo', permanente: true, duracao: 'Permanente.', efeitos: ['+2 em Intimidação diante de quem a vê e entende o que ela custou.', '-2 em Diplomacia com quem se assusta ou a julga antes de ouvir.', 'O Mestre decide quais cenas contam. A história da marca pertence a quem joga.'], remocao: 'Cirurgia ou magia pode escondê-la. A marca em si fica como parte do personagem.' },
 
   // Transtornos e traumas: condições mentais de longa duração.

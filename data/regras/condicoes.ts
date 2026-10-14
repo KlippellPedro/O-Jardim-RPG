@@ -70,9 +70,9 @@ export const CONDICOES_OFICIAIS: ICondicaoRegra[] = [
 
 export const CRISES_SANIDADE: ICondicaoRegra[] = [
   { id: 'crise-panico', titulo: 'Pânico', categoria: 'mental', duracao: '1d4 rodadas.', efeitos: ['Fique Amedrontado pela fonte e use o movimento para se afastar dela.'], remocao: 'Vontade DT 15 no fim de cada turno encerra a crise.' },
-  { id: 'crise-dissociacao', titulo: 'Dissociação', categoria: 'mental', duracao: '1d4 rodadas.', efeitos: ['Não pode usar reações e sofre -2 em testes de percepção e interação.'], remocao: 'Vontade DT 15 no fim de cada turno encerra a crise.' },
+  { id: 'crise-dissociacao', titulo: 'Dissociação', categoria: 'mental', duracao: '1d4 rodadas.', efeitos: ['Não pode usar reações e sofre -2 em testes de Percepção e de interação.'], remocao: 'Vontade DT 15 no fim de cada turno encerra a crise.' },
   { id: 'crise-paranoia', titulo: 'Paranoia', categoria: 'mental', duracao: 'Até o fim da cena.', efeitos: ['Não recebe bônus de ajuda e testa Vontade DT 15 para aceitar cura de outra criatura.'], remocao: 'Termina em segurança ao fim da cena.' },
-  { id: 'crise-catatonia', titulo: 'Catatonia', categoria: 'mental', duracao: '1d4 rodadas.', efeitos: ['Fique Atordoado, mas receba +5 contra empurrões e agarrões.'], remocao: 'Um aliado pode usar ação padrão e Medicina ou Persuasão DT 15.' },
+  { id: 'crise-catatonia', titulo: 'Catatonia', categoria: 'mental', duracao: '1d4 rodadas.', efeitos: ['Fique Atordoado, mas receba +5 contra empurrões e agarrões.'], remocao: 'Um aliado pode usar uma ação padrão e Cura ou Diplomacia DT 15.' },
   { id: 'crise-compulsao', titulo: 'Compulsão', categoria: 'mental', duracao: 'Até cumprir uma ação simples ou superar a crise.', efeitos: ['No turno, deve realizar a ação compulsiva definida pela fonte antes de outras ações.'], remocao: 'Vontade DT 15 no começo do turno permite agir normalmente.' },
   { id: 'crise-furia', titulo: 'Fúria', categoria: 'mental', duracao: '1d4 rodadas.', efeitos: ['Receba +2 no dano corpo a corpo e -2 Defesa.', 'Deve atacar uma ameaça visível se puder.'], remocao: 'Vontade DT 15 no fim do turno encerra a crise.' },
 ];

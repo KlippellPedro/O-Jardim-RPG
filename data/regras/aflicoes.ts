@@ -1,4 +1,7 @@
 export const TIPOS_AFLICAO = ['veneno', 'doenca', 'vicio'] as const;
+
+/** O tipo como se escreve no texto (o id não tem acento). */
+export const ROTULO_TIPO_AFLICAO: Record<(typeof TIPOS_AFLICAO)[number], string> = { veneno: 'veneno', doenca: 'doença', vicio: 'vício' };
 export type TipoAflicao = typeof TIPOS_AFLICAO[number];
 
 export const VIAS_EXPOSICAO = ['contato', 'ferimento', 'ingestao', 'inalacao', 'ambiente', 'uso'] as const;
@@ -671,14 +674,14 @@ const formatarPeriodo = (periodo: IPeriodoAflicao) =>
 const catalogoPublicado = CATALOGO_AFLICOES.map((aflicao) => `
   <section>
     <h4>${aflicao.titulo}</h4>
-    <p><strong>${aflicao.tipo}</strong> ${aflicao.classificacao} · ${aflicao.regiao} · Fortitude DT ${aflicao.dtFortitude} · incubação ${formatarPeriodo(aflicao.incubacao)} · intervalo ${formatarPeriodo(aflicao.intervalo)}</p>
+    <p><strong>${ROTULO_TIPO_AFLICAO[aflicao.tipo]}</strong> ${aflicao.classificacao} · ${aflicao.regiao} · Fortitude DT ${aflicao.dtFortitude} · incubação ${formatarPeriodo(aflicao.incubacao)} · intervalo ${formatarPeriodo(aflicao.intervalo)}</p>
     <p><strong>Exposição:</strong> ${aflicao.exposicao.gatilho}</p>
     <ul class="regras-list">${aflicao.estagios.map((estagio) => `<li><strong>Estágio ${estagio.numero}:</strong> ${[
       ...estagio.efeitos,
       ...(estagio.aoEntrar ?? []),
       ...(estagio.drenagemAtributo ? [`Drenagem temporária: −${estagio.drenagemAtributo.valor} ${estagio.drenagemAtributo.atributo}.`] : []),
     ].join(' ') || 'Sem efeito.'}</li>`).join('')}</ul>
-    <p><strong>Tratamento:</strong> Cura DT ${aflicao.tratamento.dt}; ${aflicao.tratamento.tempo} ${aflicao.tratamento.efeitoSucesso} ${aflicao.tratamento.limite}</p>
+    <p><strong>Tratamento:</strong> Cura DT ${aflicao.tratamento.dt}, ${aflicao.tratamento.tempo.charAt(0).toLocaleLowerCase('pt-BR')}${aflicao.tratamento.tempo.slice(1)} ${aflicao.tratamento.efeitoSucesso} ${aflicao.tratamento.limite}</p>
   </section>
 `).join('');
 
@@ -688,7 +691,7 @@ const tabelaAflicoesPorRegiao = REGIOES_AFLICAO.flatMap((regiao) => CATALOGO_AFL
         <tr>
           <td><strong>${regiao}</strong></td>
           <td>${aflicao.titulo}</td>
-          <td>${aflicao.tipo}, ${aflicao.classificacao}</td>
+          <td>${ROTULO_TIPO_AFLICAO[aflicao.tipo]}, ${aflicao.classificacao}</td>
           <td>${aflicao.dtFortitude}</td>
           <td>${aflicao.exposicao.gatilho}</td>
         </tr>`)).join('');
@@ -760,7 +763,7 @@ export const REGRA_AFLICOES = {
 
     <h3 class="regras-subtitle">Escolher a aflição certa</h3>
     <ul class="regras-list">
-      <li>O que decide o peso não é a DT, é o intervalo. Veneno de combate cobra teste a cada rodada e resolve dentro da cena; doença cobra a cada dia e atravessa sessões.</li>
+      <li>Quem decide o peso é o intervalo, mais que a DT. Veneno de combate cobra teste a cada rodada e resolve dentro da cena; doença cobra a cada dia e atravessa sessões.</li>
       <li>O catálogo publicado anda entre DT 14 e DT 20. Fique nessa faixa: acima dela a aflição vira sentença, porque o alvo falha em quase todo intervalo.</li>
       <li>Falha crítica na exposição já entra direto no estágio 2. Isso é duro, e é o motivo para não distribuir exposição em cena banal.</li>
       <li>Use a tabela por região. A aflição de um lugar funciona melhor quando o grupo foi avisado do perigo antes: quem ouviu falar do Pulmão de Pedra em Baluarte leva pano para o rosto, e aí a escolha passa a ser dele.</li>

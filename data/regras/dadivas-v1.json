@@ -63,7 +63,7 @@
       "nome": "Seiva",
       "gosto": "o que cresce: uma muda, um pão, o cuidado de graça com um ferido",
       "bonus": "Vida temporária igual ao seu nível ao receber a dádiva, e +2 em Fortitude.",
-      "uma_vez": "Uma vez, durante um descanso curto, recupere de Vida o seu nível a mais.",
+      "uma_vez": "Uma vez, durante um descanso curto, recupere Vida extra igual ao seu nível.",
       "autorizacao_do_mestre": false
     },
     {

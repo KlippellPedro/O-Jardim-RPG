@@ -109,13 +109,19 @@ const espacoArte = (arte, { dentroDaColuna = false } = {}) => {
 /** Transforma as remissões do texto (`<span class="regras-ref regras-ref--id">`) em link com número de
  *  página. O número só existe depois da paginação: o paginador preenche `data-pg`. Até lá o espaço é
  *  reservado com um número largo ("000"), senão o texto cresceria depois de medido e estouraria a coluna.
- *  Remissão para um tópico que não está nesta edição (o Guia do Mestre, no volume dos jogadores) vira texto simples. */
-export const resolverRemissoes = (html, idsDaEdicao) => String(html ?? '').replace(
-  /<span class="regras-ref regras-ref--([a-z0-9-]+)">([\s\S]*?)<\/span>/g,
-  (_, id, texto) => (idsDaEdicao.has(id)
-    ? `<a class="ref" href="#t-${id}">${texto}<span class="ref-pg" data-pg="t-${id}" data-pg-formato=" (p. {n})"> (p. 000)</span></a>`
-    : texto),
-);
+ *  Remissão para um tópico que não está nesta edição (o Guia do Mestre, no volume dos jogadores) vira texto simples.
+ *  Dentro de um parêntese a página entra com vírgula, "(ver Combate, p. 47)", para não abrir parêntese dentro de
+ *  parêntese. */
+export const resolverRemissoes = (html, idsDaEdicao) => String(html ?? '')
+  .replace(/\([^()]*\)/g, (trecho) => trecho.replaceAll('<span class="regras-ref ', '<span data-pg-virgula="1" class="regras-ref '))
+  .replace(
+    /<span (data-pg-virgula="1" )?class="regras-ref regras-ref--([a-z0-9-]+)">([\s\S]*?)<\/span>/g,
+    (_, virgula, id, texto) => {
+      if (!idsDaEdicao.has(id)) return texto;
+      const formato = virgula ? ', p. {n}' : ' (p. {n})';
+      return `<a class="ref" href="#t-${id}">${texto}<span class="ref-pg" data-pg="t-${id}" data-pg-formato="${formato}">${formato.replace('{n}', '000')}</span></a>`;
+    },
+  );
 
 /* ------------------------------------------------------------------ */
 /* Capa, folha de rosto e contracapa                                   */
@@ -156,7 +162,7 @@ const rosto = ({ comMestre, comArtes, totalTopicos, totalCapitulos, compendio, d
     ${comArtes ? espacoArte(ARTE_ROSTO, { dentroDaColuna: true }) : `<div class="rosto-fio">${fioComLosango(acd)}</div>`}
     <dl class="rosto-ficha">
       <div class="linha"><dt>Sistema</dt><dd>d20, um dado resolve quase tudo</dd></div>
-      <div class="linha"><dt>Conteúdo</dt><dd>${totalCapitulos} capítulos, ${totalTopicos} tópicos${compendio.length ? ` e o compêndio: ${listaHumana(compendio.map((parte) => parte.contagem))}` : ''}</dd></div>
+      <div class="linha"><dt>Conteúdo</dt><dd>${totalCapitulos} capítulos, ${totalTopicos} tópicos${compendio.length ? ` e o Compêndio: ${contagemDoCompendio(compendio)}` : ''}</dd></div>
       <div class="linha"><dt>Edição</dt><dd>${esc(data)}</dd></div>
       <div class="linha"><dt>No site</dt><dd>Livro de Regras com busca, ficha interativa, loja e bestiário</dd></div>
       ${comArtes ? '<div class="linha"><dt>Arte</dt><dd>Espaços reservados, ver o Mapa das Artes</dd></div>' : ''}
@@ -167,6 +173,14 @@ const rosto = ({ comMestre, comArtes, totalTopicos, totalCapitulos, compendio, d
     </p>
   </div>
 </section>`;
+};
+
+/** "18 classes, 12 raças, 121 Legados, além de 352 magias, 35 rituais, 33 selos e 33 encantamentos": a última parte
+ *  já traz o próprio "e", então ela entra com "além de" em vez de um segundo "e". */
+const contagemDoCompendio = (compendio) => {
+  const contagens = compendio.map((parte) => parte.contagem);
+  if (contagens.length < 2) return contagens.join('');
+  return `${contagens.slice(0, -1).join(', ')}, além de ${contagens[contagens.length - 1]}`;
 };
 
 const contracapa = ({ comMestre, data }) => {
@@ -219,7 +233,7 @@ const comoUsar = ({ comMestre, comArtes, ids, compendio = [] }) => {
   <div class="regras-note regras-note--dica"><p>Um jeito de usar a regra sem travar o jogo.</p></div>
   <div class="regras-note regras-note--regra"><p>O que vale exatamente como está escrito.</p></div>
   <div class="regras-formula">d20 + bônus contra a DT</div>
-  <p>Uma fórmula numa caixa centralizada, como a de cima, é uma conta fechada e vale como está escrita. <span class="regras-ref regras-ref--combate">Combate</span> e outros tópicos que dependem de um tópico anterior trazem o nome dele sublinhado, com a página entre parênteses. No PDF, tocar no nome leva até lá.</p>
+  <p>Uma fórmula numa caixa centralizada, como a de cima, é uma conta fechada e vale como está escrita. Quando um tópico cita outro, o nome do outro aparece sublinhado e seguido da página, como em <span class="regras-ref regras-ref--combate">Combate</span>. No PDF, tocar no nome leva até lá.</p>
 
   <h3 class="regras-subtitle">Convenções</h3>
   <div class="caixa">
@@ -228,7 +242,7 @@ const comoUsar = ({ comMestre, comArtes, ids, compendio = [] }) => {
   </div>
 
   ${compendio.length ? `<h3 class="regras-subtitle">O Compêndio</h3>
-  <p>Depois dos capítulos vem o Compêndio, onde ficam as listas longas, uma entrada por página. As entradas aparecem também no índice remissivo, pelo nome.</p>
+  <p>Depois dos capítulos vem o Compêndio, onde ficam as listas longas, cada entrada começando numa página nova. As entradas aparecem também no índice remissivo, pelo nome.</p>
   <ul class="regras-list">${compendio.map((parte) => `<li><strong>${esc(parte.rotulo)}, ${esc(parte.titulo)}.</strong> ${esc(parte.contagem)}. ${esc(parte.descricao)} Começa em <span class="regras-ref regras-ref--${esc(parte.topicos[0].id)}">${esc(parte.topicos[0].titulo)}</span>.</li>`).join('')}</ul>` : ''}
 
   <h3 class="regras-subtitle">O que está fora deste volume</h3>
@@ -236,7 +250,7 @@ const comoUsar = ({ comMestre, comArtes, ids, compendio = [] }) => {
     ? `O que muda a toda hora ou depende da sua mesa fica no site, onde a busca e os filtros fazem o trabalho: o arsenal da loja, o bestiário, a ficha interativa${comMestre ? '' : ' e as classes e raças especiais que o Mestre libera para a sua mesa'}.`
     : 'Os catálogos longos ficam no site, onde a busca e os filtros fazem o trabalho: cada raça e cada classe com todos os seus poderes, a lista de magias, o arsenal da loja, o bestiário e a ficha interativa.'} O livro traz as regras que governam esses catálogos e os números que você precisa ter na mão.</p>
   ${comMestre
-    ? '<p>Esta edição traz, no fim de cada tópico, o trecho escrito para quem conduz a mesa, sobre fundo levemente tingido e sempre depois do texto do jogador. O Guia do Mestre fecha o volume.</p>'
+    ? '<p>Esta edição traz, no fim de cada tópico, o trecho escrito para quem conduz a mesa, sobre fundo levemente tingido e sempre depois do texto do jogador. O Guia do Mestre fecha a parte de regras, logo antes do Compêndio.</p>'
     : '<p>As tabelas de calibragem, o orçamento de encontro e o Guia do Mestre pertencem a quem conduz a mesa e saem numa edição própria deste mesmo livro.</p>'}
   ${comArtes
     ? '<p>As molduras tracejadas que aparecem ao longo do livro são espaços já medidos para ilustração. Cada uma traz um código, o tamanho final e o pedido do que deve estar na imagem, e o Mapa das Artes, no fim, lista todas com a página onde caíram.</p>'
@@ -334,11 +348,28 @@ const topico = (item, parte, { comMestre, comArtes, ids }) => {
     ? `<h3 class="regras-subtitle mestre-abre">Pelo lado do Mestre</h3>${regra.corpoMestre}`
     : '';
 
-  return resolverRemissoes(
+  return tipografiaDoLivro(resolverRemissoes(
     [abertura, arte ? espacoArte(arte) : '', regra.corpo, vejaTambem, mestre].filter(Boolean).join('\n'),
     ids,
-  );
+  ));
 };
+
+/** Acabamento de livro, só no PDF: sinal de menos de verdade antes de número ("−2", e não "-2") e aspas curvas
+ *  ("“assim”") quando o trecho de texto fecha as próprias aspas. Mexe só no texto entre as tags; o site segue
+ *  mostrando o texto como ele está nos dados. */
+export const tipografiaDoLivro = (html) => String(html ?? '').replace(/>([^<]+)</g, (_, texto) => {
+  let saida = texto.replaceAll('&quot;', '"').replace(/(^|[\s(/])-(?=\d)/g, '$1−');
+  const retas = (saida.match(/"/g) || []).length;
+  if (retas && retas % 2 === 0) {
+    let abrir = true;
+    saida = saida.replace(/"/g, () => {
+      const aspa = abrir ? '“' : '”';
+      abrir = !abrir;
+      return aspa;
+    });
+  }
+  return `>${saida}<`;
+});
 
 /* ------------------------------------------------------------------ */
 /* Montagem                                                            */
