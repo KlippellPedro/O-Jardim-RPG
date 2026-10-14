@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useCharacterStore } from '../../store/useCharacterStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { useSettingsPanelStore } from '../../store/useSettingsPanelStore';
-import { Search, Plus, HelpCircle, ArrowLeftRight } from 'lucide-react';
+import { Search, Plus, HelpCircle } from 'lucide-react';
 import { carregarCatalogo } from '../../services/catalogoService';
 import { ICatalogo } from '../../types/catalogo';
 import { ICharacter } from '../../types/character';
@@ -15,6 +14,7 @@ import { ModalPortal } from './components/ModalPortal';
 import { PersonagemWantedCard } from './components/PersonagemWantedCard';
 import { AjustarFotoModal } from './components/AjustarFotoModal';
 import { confirmar } from '../../components/avisos/confirmacao';
+import { SeletorDeCampanha } from '../Campanha/SeletorDeCampanha';
 
 const FichaList: React.FC = () => {
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ const FichaList: React.FC = () => {
     flushCharacterSaves,
   } = useCharacterStore();
   const { usuario, campanhaAtiva } = useAuthStore();
-  const openSettingsPanel = useSettingsPanelStore((state) => state.openPanel);
   const [searchTerm, setSearchTerm] = useState('');
   const [showHelp, setShowHelp] = useState(false);
   const [showWizard, setShowWizard] = useState(false);
@@ -40,7 +39,7 @@ const FichaList: React.FC = () => {
   useEffect(() => {
     fetchCharacters();
     // Refaz a busca quando a campanha ativa muda (ex.: botão "Trocar Campanha"
-    // trocando via CampanhasPanel sem sair desta tela).
+    // trocando pelo seletor de mesa sem sair desta tela).
   }, [fetchCharacters, campanhaAtiva?.id]);
 
   useEffect(() => {
@@ -125,14 +124,7 @@ const FichaList: React.FC = () => {
         </div>
 
         <div className="responsive-action-row flex items-center gap-3 sm:gap-4">
-          <button
-            type="button"
-            onClick={() => openSettingsPanel('campanhas')}
-            className="min-w-max flex items-center gap-2 px-5 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-gray-300 hover:text-white"
-          >
-            <ArrowLeftRight size={18} />
-            <span className="font-medium tracking-wide whitespace-nowrap">Trocar Campanha</span>
-          </button>
+          <SeletorDeCampanha variante="botao" />
 
           <button
             onClick={() => setShowWizard(true)}

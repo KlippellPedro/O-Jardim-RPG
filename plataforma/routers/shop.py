@@ -1760,8 +1760,8 @@ def purchase_batch(
                 connection.execute(
                     """
                     INSERT INTO notificacoes
-                    (id, campanha_id, usuario_id, categoria, titulo, mensagem, origem_usuario_id)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    (id, campanha_id, usuario_id, categoria, titulo, mensagem, origem_usuario_id, painel)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, 'mestre')
                     """,
                     (uuid4(), payload.campanha_id, m["usuario_id"], "campanha", titulo, mensagem, user.id)
                 )

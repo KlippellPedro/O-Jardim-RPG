@@ -555,6 +555,7 @@ def join_campaign(
             message=f"Entrou como {invite['papel']} usando um convite.",
             campaign_id=invite["campanha_id"],
             actor_user_id=user.id,
+            panel="mestre",
         )
         record_audit(
             connection,

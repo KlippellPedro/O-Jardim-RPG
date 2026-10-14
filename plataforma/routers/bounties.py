@@ -289,8 +289,8 @@ def reivindicar_recompensa(
             """
             INSERT INTO notificacoes
                 (id, usuario_id, campanha_id, origem_usuario_id,
-                 categoria, titulo, mensagem, dados)
-            VALUES (%s, %s, %s, %s, 'economia', %s, %s, %s)
+                 categoria, titulo, mensagem, dados, painel)
+            VALUES (%s, %s, %s, %s, 'economia', %s, %s, %s, 'mestre')
             """,
             (
                 claim_id,

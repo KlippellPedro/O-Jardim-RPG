@@ -361,6 +361,7 @@ def pedir_redefinicao(
                     actor_user_id=alvo["id"],
                     details={"pedido_id": str(pedido_id), "email": email},
                     include_actor=False,
+                    panel="admin",
                 )
             record_audit(
                 connection,

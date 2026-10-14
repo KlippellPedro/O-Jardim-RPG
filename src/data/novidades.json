@@ -1,6 +1,59 @@
 {
   "itens": [
     {
+      "id": "2026-10-13-menu-engrenagem-arrumado",
+      "data": "2026-10-13",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Menu da engrenagem mais arrumado",
+      "detalhes": [
+        "O menu separa o que é seu (Minha conta, Avisos, Cofre e Preferências) dos painéis de quem comanda: Painel do Mestre, Painel do Criador e Administração. Cada item mostra o próprio número de avisos novos, e o botão da engrenagem soma todos.",
+        "Trocar de mesa, entrar com código de convite e criar uma mesa nova ficam num lugar só, o seletor de mesa da página da Campanha. O item Mesas e Campanhas saiu do menu, e a mesa em que você está aparece no topo dele."
+      ]
+    },
+    {
+      "id": "2026-10-13-avisos-por-painel",
+      "data": "2026-10-13",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Cada aviso agora aparece no painel dele",
+      "detalhes": [
+        "Na engrenagem ficam os avisos que são seus: cofre, trocas, XP e sessão. Quem comanda a mesa vê no Painel do Mestre, na aba Avisos, quem entrou na campanha, as fichas fora das regras e as mudanças de classe e de nível. Os pedidos de senha ficam na Administração.",
+        "Os avisos vêm agrupados por dia, com um botão que leva direto ao lugar do assunto. Marcar tudo como lido vale só para o painel em que você está."
+      ]
+    },
+    {
+      "id": "2026-10-13-paineis-mesma-cara",
+      "data": "2026-10-13",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Painéis do Mestre, do Criador e da Administração com a mesma cara",
+      "detalhes": [
+        "Os três painéis ganharam o mesmo cabeçalho e as mesmas abas, com o número de avisos novos em cada aba. A aba aberta fica no endereço da página, então recarregar não faz perder o lugar.",
+        "No Painel do Mestre, Membros e Convites viraram uma aba só, e o seletor de mesa agora fica no topo. O Painel do Criador começa na campanha que você já tem aberta, e a aba dos convites de conta se chama Convites de cadastro."
+      ]
+    },
+    {
+      "id": "2026-10-13-cofre-numa-pagina",
+      "data": "2026-10-13",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Cofre numa página só",
+      "detalhes": [
+        "A cópia do Cofre que morava no Painel do Mestre saiu: o Cofre é da sua conta e tem a página dele. Nela, o personagem que recebe já vem escolhido quando é o único ou o ativo, os botões dizem o que enviam e o estado do Discord aparece no topo, com um atalho para vincular em Minha conta."
+      ]
+    },
+    {
+      "id": "2026-10-13-convite-codigo-como-enviado",
+      "data": "2026-10-13",
+      "tipo": "correcao",
+      "area": "Jardim",
+      "titulo": "Entrar com convite aceita o código como o Mestre mandou",
+      "detalhes": [
+        "O campo de convite do menu passava as letras para maiúsculas e o convite era recusado. Agora o código vale exatamente como foi enviado, com maiúsculas e minúsculas, e a mensagem de erro ficou mais clara."
+      ]
+    },
+    {
       "id": "2026-10-12-bestiario-dez-dragoes",
       "data": "2026-10-12",
       "tipo": "novo",
@@ -869,64 +922,6 @@
       "detalhes": [
         "Depois de Renomado entram cinco graus novos, um por patamar: Lendário (nível 60, +14), Mítico (100, +16), Cósmico (150, +18), Eterno (250, +20) e Absoluto (500, +22).",
         "Subir por treino leva de 90 a 365 dias nesses graus, e cada um pede um feito à altura do nome. A aba Perícias e o livro já mostram os doze."
-      ]
-    },
-    {
-      "id": "2026-09-30-magia-depois-do-20",
-      "data": "2026-09-30",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Magia depois do nível 20",
-      "detalhes": [
-        "As vagas de magia continuam crescendo do nível 25 ao 50 (mais 2 a cada 5 níveis), e do 25 em diante vale no máximo 4 magias do mesmo círculo.",
-        "O Fluxo mínimo do círculo virou recomendação: você aprende o que a sua classe libera, a ficha avisa quando o Fluxo está baixo, e a DT do círculo decide se a magia sai.",
-        "A rolagem de magia agora soma metade do nível, como todo teste. Na aba Magias, um bloco novo mostra quantas magias de cada círculo você já conhece e quantas ainda pode escolher."
-      ]
-    },
-    {
-      "id": "2026-09-30-bestiario-todos-os-niveis",
-      "data": "2026-09-30",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Criaturas de todos os níveis",
-      "detalhes": [
-        "O Valor de Desafio agora é o nível do grupo que a criatura enfrenta sozinha, e o XP acompanha: um quinto do custo do nível de mesmo número.",
-        "O Bestiário ganhou 44 criaturas novas e famílias com estágios, do rato de esgoto às ameaças que passam do nível 100. A aba Sob medida monta uma criatura de qualquer nível, com seis jeitos de lutar."
-      ]
-    },
-    {
-      "id": "2026-09-30-aliado-comprado",
-      "data": "2026-09-30",
-      "tipo": "melhoria",
-      "area": "Loja",
-      "titulo": "Criatura comprada luta ao seu lado, não no lugar de você",
-      "detalhes": [
-        "Uma criatura comprada ou contratada agora nasce com no máximo o dobro da Vida média de um personagem do mesmo nível. A Loja mostra a Vida como aliado e a Vida como inimigo."
-      ]
-    },
-    {
-      "id": "2026-09-30-reliquias-mais-fortes",
-      "data": "2026-09-30",
-      "tipo": "melhoria",
-      "area": "Loja",
-      "titulo": "Relíquias da Criação bem mais fortes",
-      "detalhes": [
-        "As armas das Relíquias da Criação passaram a causar 2,5 vezes o dano de antes, e os poderes com dado cresceram na mesma medida. Elas continuam precisando da autorização do Mestre, e agora fazem jus ao nome."
-      ]
-    },
-    {
-      "id": "2026-09-29-niveis-alem-do-60",
-      "data": "2026-09-29",
-      "tipo": "novo",
-      "area": "Regras",
-      "titulo": "Níveis além do 60",
-      "detalhes": [
-        "O 60 continua sendo o padrão do jogo (duas classes comuns e uma especial), mas a ficha não trava mais: dá para passar do 60, abrir mais classes e subir uma classe até o nível 50.",
-        "Do nível 21 ao 50 de uma classe entra a Maestria: reforço de Vida, Mana e Estamina nos níveis 25, 35 e 45 e um grau de perícia extra nos 30, 40 e 50.",
-        "O XP não tem mais fim. Até o 100 é a conta de sempre, e depois cada faixa custa um valor fixo: 100 mil, 150 mil, 250 mil e 500 mil por nível.",
-        "Legado, aumento de atributo e vaga de item especial passam a vir mais espaçados depois do 50 e do 100. O limite natural 20 de atributo acabou, e os bônus de raça também não têm mais teto.",
-        "Os patamares 60, 100, 150, 250 e 500 ganharam Conquista, selo na ficha e moldura nova no retrato e no cartaz de Procurado. O aviso aparece uma vez e some sozinho.",
-        "O painel de subida de nível agora avisa Legado, aumento de atributo e vaga de item especial, e o Grande Sábio fala os níveis mais altos."
       ]
     }
   ]

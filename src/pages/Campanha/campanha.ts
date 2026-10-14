@@ -48,6 +48,24 @@ export const ROTULO_PAPEL: Record<string, string> = {
   observador: 'Observador',
 };
 
+/**
+ * Quem pode abrir uma mesa nova. É a regra do servidor (`can_create_campaign`): conta de Mestre ou Criador.
+ * A Administração sozinha não cria mesa, então o botão não pode aparecer para ela.
+ */
+export function podeCriarCampanha(usuario: { papel_plataforma?: string } | null | undefined): boolean {
+  return usuario?.papel_plataforma === 'mestre' || usuario?.papel_plataforma === 'criador';
+}
+
+/** Cor do selo de papel (Mestre, Assistente...) nas listas de mesas. Classes completas para o Tailwind enxergar. */
+export function classeDoPapel(papel: string): string {
+  switch (papel.toLowerCase()) {
+    case 'mestre': return 'border-red-500/30 bg-red-500/15 text-red-300';
+    case 'assistente': return 'border-orange-500/30 bg-orange-500/15 text-orange-300';
+    case 'jogador': return 'border-yellow-500/30 bg-yellow-500/15 text-yellow-300';
+    default: return 'border-gray-500/30 bg-gray-500/15 text-gray-300';
+  }
+}
+
 /** Recorte de capa em faixa 3:1: onde cortar a imagem original (centralizado). */
 export function recorteDaCapa(largura: number, altura: number, proporcao = 3): { x: number; y: number; w: number; h: number } {
   if (largura <= 0 || altura <= 0) return { x: 0, y: 0, w: 0, h: 0 };

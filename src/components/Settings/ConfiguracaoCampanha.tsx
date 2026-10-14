@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { campanhasApi } from '../../services/campanhasApi';
-import { PenSquare, AlertTriangle, Archive, Save, Loader2 } from 'lucide-react';
+import { PenSquare, AlertTriangle, Archive, Save, Loader2, Palette } from 'lucide-react';
 
 export const ConfiguracaoCampanha: React.FC = () => {
   const navigate = useNavigate();
@@ -104,6 +104,26 @@ export const ConfiguracaoCampanha: React.FC = () => {
           </div>
         )}
       </section>
+
+      {/* APARÊNCIA: mora na página da campanha, onde dá para ver o resultado */}
+      {isMaster && (
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <Palette className="text-gray-300" size={20} />
+            <h3 className="text-lg font-bold text-white">Capa, cor e frase</h3>
+          </div>
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-gray-400">A aparência da mesa se escolhe na página da campanha, vendo como ela fica.</p>
+            <button
+              type="button"
+              onClick={() => navigate('/campanha')}
+              className="shrink-0 bg-white/10 text-white font-bold tracking-widest uppercase text-xs px-5 py-2 rounded-xl hover:bg-white/20 transition-all"
+            >
+              Abrir a campanha
+            </button>
+          </div>
+        </section>
+      )}
 
       {/* ZONA DE PERIGO */}
       {isMaster && (

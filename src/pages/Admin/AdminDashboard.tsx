@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { adminApi } from '../../services/adminApi';
-import { Shield, ArrowLeft, Users, Database, ShieldAlert, KeyRound, ScrollText, HardDriveDownload } from 'lucide-react';
+import { useAuthStore } from '../../store/useAuthStore';
+import { Bell, ShieldCheck, Users, Database, ShieldAlert, KeyRound, ScrollText, HardDriveDownload } from 'lucide-react';
 import { AdminUsuarios } from '../../components/Admin/AdminUsuarios';
 import { AdminCampanhas } from '../../components/Admin/AdminCampanhas';
 import { AdminPedidosSenha } from '../../components/Admin/AdminPedidosSenha';
 import { AdminAuditoria } from '../../components/Admin/AdminAuditoria';
 import { AdminBackup } from '../../components/Admin/AdminBackup';
+import { CaixaDeAvisos } from '../../components/caixaDeAvisos/CaixaDeAvisos';
+import { PainelCartao, PainelShell, type IAbaDoPainel } from '../../components/painel/PainelShell';
+import { useAbaNaUrl } from '../../components/painel/useAbaNaUrl';
 
-type Aba = 'usuarios' | 'campanhas' | 'pedidos' | 'auditoria' | 'backup';
+const ABAS_DA_ADMINISTRACAO = ['usuarios', 'campanhas', 'pedidos', 'avisos', 'auditoria', 'backup'] as const;
+type AbaDaAdministracao = typeof ABAS_DA_ADMINISTRACAO[number];
 
 interface IKpis {
   totalUsuarios: number | null;
@@ -19,8 +23,8 @@ interface IKpis {
 }
 
 export const AdminDashboard: React.FC = () => {
-  const navigate = useNavigate();
-  const [aba, setAba] = useState<Aba>('usuarios');
+  const [aba, trocarAba] = useAbaNaUrl<AbaDaAdministracao>(ABAS_DA_ADMINISTRACAO, 'usuarios');
+  const avisosDaAdministracao = useAuthStore((estado) => estado.avisos.admin);
   const [kpis, setKpis] = useState<IKpis>({
     totalUsuarios: null,
     campanhasAtivas: null,
@@ -49,99 +53,66 @@ export const AdminDashboard: React.FC = () => {
     };
   }, []);
 
-  const ABAS: { id: Aba; label: string; icon: React.ReactNode }[] = [
-    { id: 'usuarios', label: 'Usuários', icon: <Users size={16} /> },
-    { id: 'campanhas', label: 'Campanhas', icon: <Database size={16} /> },
-    { id: 'pedidos', label: 'Pedidos de Senha', icon: <KeyRound size={16} /> },
-    { id: 'auditoria', label: 'Auditoria', icon: <ScrollText size={16} /> },
-    { id: 'backup', label: 'Backup', icon: <HardDriveDownload size={16} /> },
-  ];
+  const abas = useMemo<IAbaDoPainel<AbaDaAdministracao>[]>(() => [
+    { id: 'usuarios', rotulo: 'Usuários', icone: Users },
+    { id: 'campanhas', rotulo: 'Campanhas', icone: Database },
+    { id: 'pedidos', rotulo: 'Pedidos de Senha', icone: KeyRound, contagem: kpis.pedidosPendentes ?? 0 },
+    { id: 'avisos', rotulo: 'Avisos', icone: Bell, contagem: avisosDaAdministracao },
+    { id: 'auditoria', rotulo: 'Auditoria', icone: ScrollText },
+    { id: 'backup', rotulo: 'Backup', icone: HardDriveDownload },
+  ], [kpis.pedidosPendentes, avisosDaAdministracao]);
+
+  const cartoes = [
+    { id: 'usuarios', titulo: 'Total de Usuários', valor: kpis.totalUsuarios, icone: Users, icone_classe: 'text-purple-400', brilho: 'bg-purple-500/20 group-hover:bg-purple-500/30' },
+    { id: 'campanhas', titulo: 'Campanhas Ativas', valor: kpis.campanhasAtivas, icone: Database, icone_classe: 'text-blue-400', brilho: 'bg-blue-500/20 group-hover:bg-blue-500/30' },
+    { id: 'pedidos', titulo: 'Pedidos de Senha', valor: kpis.pedidosPendentes, icone: KeyRound, icone_classe: 'text-yellow-400', brilho: 'bg-yellow-500/20 group-hover:bg-yellow-500/30' },
+    { id: 'auditoria', titulo: 'Eventos Recentes', valor: kpis.eventosRecentes, icone: ShieldAlert, icone_classe: 'text-red-400', brilho: 'bg-red-500/20 group-hover:bg-red-500/30' },
+  ] as const;
+
+  const resumo = (
+    <div className="mb-8 grid grid-cols-[repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-4 sm:gap-6">
+      {cartoes.map(({ id, titulo, valor, icone: Icone, icone_classe, brilho }) => (
+        // Cada número leva à aba que o explica.
+        <button
+          key={id}
+          type="button"
+          onClick={() => trocarAba(id)}
+          className="group relative overflow-hidden rounded-3xl border border-white/5 bg-[#0b0a12]/60 p-6 text-left backdrop-blur-xl transition-colors hover:border-white/15"
+        >
+          <div className={`absolute right-0 top-0 h-24 w-24 rounded-full blur-3xl transition-colors ${brilho}`} />
+          <Icone className={`${icone_classe} mb-4`} size={28} />
+          <h3 className="mb-1 text-sm font-medium text-gray-400">{titulo}</h3>
+          <p className="text-3xl font-bold text-white">{valor ?? '...'}</p>
+        </button>
+      ))}
+    </div>
+  );
 
   return (
-    <div role="main" className="app-page mx-auto max-w-[87.5rem]">
-
-      {/* HEADER */}
-      <div className="mb-8 flex items-start justify-between">
-        <div className="flex min-w-0 items-start gap-3 sm:items-center sm:gap-4">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            aria-label="Voltar"
-            className="p-3 bg-white/5 border border-white/10 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-          >
-            <ArrowLeft size={20} />
-          </button>
-          <div>
-            <h1 className="flex items-center gap-3 text-[clamp(1.75rem,6vw,2.25rem)] font-bold leading-tight text-white" style={{ fontFamily: 'Cinzel, serif' }}>
-              <Shield className="text-purple-500" size={32} />
-              Central de Administração
-            </h1>
-            <p className="text-gray-400 mt-1">Gerencie usuários, campanhas e acessos de segurança da plataforma.</p>
-          </div>
-        </div>
-      </div>
-
-      {/* CARDS DE RESUMO */}
-      <div className="mb-8 grid grid-cols-[repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-4 sm:gap-6">
-        <div className="bg-[#0b0a12]/60 backdrop-blur-xl border border-white/5 p-6 rounded-3xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/20 rounded-full blur-3xl group-hover:bg-purple-500/30 transition-colors" />
-          <Users className="text-purple-400 mb-4" size={28} />
-          <h3 className="text-gray-400 text-sm font-medium mb-1">Total de Usuários</h3>
-          <p className="text-3xl font-bold text-white">{kpis.totalUsuarios ?? '...'}</p>
-        </div>
-
-        <div className="bg-[#0b0a12]/60 backdrop-blur-xl border border-white/5 p-6 rounded-3xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/30 transition-colors" />
-          <Database className="text-blue-400 mb-4" size={28} />
-          <h3 className="text-gray-400 text-sm font-medium mb-1">Campanhas Ativas</h3>
-          <p className="text-3xl font-bold text-white">{kpis.campanhasAtivas ?? '...'}</p>
-        </div>
-
-        <div className="bg-[#0b0a12]/60 backdrop-blur-xl border border-white/5 p-6 rounded-3xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-yellow-500/20 rounded-full blur-3xl group-hover:bg-yellow-500/30 transition-colors" />
-          <KeyRound className="text-yellow-400 mb-4" size={28} />
-          <h3 className="text-gray-400 text-sm font-medium mb-1">Pedidos de Senha</h3>
-          <p className="text-3xl font-bold text-white">{kpis.pedidosPendentes ?? '...'}</p>
-        </div>
-
-        <div className="bg-[#0b0a12]/60 backdrop-blur-xl border border-white/5 p-6 rounded-3xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-red-500/20 rounded-full blur-3xl group-hover:bg-red-500/30 transition-colors" />
-          <ShieldAlert className="text-red-400 mb-4" size={28} />
-          <h3 className="text-gray-400 text-sm font-medium mb-1">Eventos Recentes</h3>
-          <p className="text-3xl font-bold text-white">{kpis.eventosRecentes ?? '...'}</p>
-        </div>
-      </div>
-
-      {/* ABAS */}
-      <div className="horizontal-scroll mb-6 flex gap-4 overflow-x-auto border-b border-white/10 pb-1 custom-scrollbar">
-        {ABAS.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => setAba(item.id)}
-            className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase text-xs transition-colors whitespace-nowrap ${
-              aba === item.id ? 'border-purple-500 text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-300'
-            }`}
-          >
-            {item.icon} {item.label}
-          </button>
-        ))}
-      </div>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={aba}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-        >
-          {aba === 'usuarios' && <AdminUsuarios />}
-          {aba === 'campanhas' && <AdminCampanhas />}
-          {aba === 'pedidos' && <AdminPedidosSenha />}
-          {aba === 'auditoria' && <AdminAuditoria />}
-          {aba === 'backup' && <AdminBackup />}
-        </motion.div>
-      </AnimatePresence>
-    </div>
+    <PainelShell
+      icone={ShieldCheck}
+      titulo="Painel de Administração"
+      subtitulo="Gerencie usuários, campanhas e acessos de segurança da plataforma."
+      tom="roxo"
+      largura="larga"
+      resumo={resumo}
+      abas={abas}
+      abaAtiva={aba}
+      aoTrocarAba={trocarAba}
+    >
+      <motion.div key={aba} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+        {aba === 'usuarios' && <AdminUsuarios />}
+        {aba === 'campanhas' && <AdminCampanhas />}
+        {aba === 'pedidos' && <AdminPedidosSenha />}
+        {aba === 'avisos' && (
+          <PainelCartao>
+            <CaixaDeAvisos painel="admin" mostrarMesa={false} textoVazio="Nenhum aviso da administração por enquanto." />
+          </PainelCartao>
+        )}
+        {aba === 'auditoria' && <AdminAuditoria />}
+        {aba === 'backup' && <AdminBackup />}
+      </motion.div>
+    </PainelShell>
   );
 };
 

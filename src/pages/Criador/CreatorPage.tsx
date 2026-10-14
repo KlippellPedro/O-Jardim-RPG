@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Crown, BookOpenText, Eye, UserCog, Loader2, Ticket } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Select } from '../../components/ui/Select';
 import { ConteudoMestrePanel } from '../../components/Settings/ConteudoMestrePanel';
 import { VisibilidadeCampanha } from '../../components/Settings/VisibilidadeCampanha';
 import { LiberacoesIndividuaisPanel } from '../../components/Settings/LiberacoesIndividuaisPanel';
 import { ConvitesPlataformaPanel } from '../../components/Settings/ConvitesPlataformaPanel';
+import { PainelCartao, PainelShell, type IAbaDoPainel } from '../../components/painel/PainelShell';
+import { useAbaNaUrl } from '../../components/painel/useAbaNaUrl';
 import { campanhasApi } from '../../services/campanhasApi';
 import { personagensApi } from '../../services/personagensApi';
+import { useAuthStore } from '../../store/useAuthStore';
 import { perguntarDescarte } from '../../hooks/useUnsavedChanges';
 
 interface CampanhaResumo {
@@ -22,15 +25,26 @@ interface CampanhaDetalhe {
   membros: Array<{ id: string; nome_exibicao: string; papel: string }>;
 }
 
-type AbaCriador = 'conteudo' | 'visibilidade' | 'liberacoes' | 'convites';
-const ABAS_CRIADOR: AbaCriador[] = ['conteudo', 'visibilidade', 'liberacoes', 'convites'];
+const ABAS_CRIADOR = ['conteudo', 'visibilidade', 'liberacoes', 'convites'] as const;
+type AbaCriador = typeof ABAS_CRIADOR[number];
+
+const ABAS: IAbaDoPainel<AbaCriador>[] = [
+  { id: 'conteudo', rotulo: 'Conteúdo', icone: BookOpenText },
+  { id: 'visibilidade', rotulo: 'Visibilidade', icone: Eye },
+  { id: 'liberacoes', rotulo: 'Liberações Individuais', icone: UserCog },
+  // O convite do Mestre põe alguém numa mesa; este cria a conta na plataforma.
+  { id: 'convites', rotulo: 'Convites de cadastro', icone: Ticket },
+];
 
 /** Painel exclusivo do criador da plataforma: edita o Mundo global e também
  * regras/loja/visibilidade/liberações de QUALQUER campanha ativa, sem depender da
  * campanha ativa do próprio criador (`useAuthStore.campanhaAtiva`) - por
- * isso tem seletor de campanha próprio, ao contrário do Painel do Mestre. */
+ * isso tem seletor de campanha próprio, ao contrário do Painel do Mestre. A
+ * campanha ativa só serve de ponto de partida do seletor. */
 export default function CreatorPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const campanhaAtivaId = useAuthStore((estado) => estado.campanhaAtiva?.id);
+  const [aba, definirAba] = useAbaNaUrl<AbaCriador>(ABAS_CRIADOR, 'conteudo');
   const [campanhas, setCampanhas] = useState<CampanhaResumo[]>([]);
   const [carregandoLista, setCarregandoLista] = useState(true);
   const [campanhaId, setCampanhaId] = useState<string>(() => searchParams.get('campanha_id') || '');
@@ -40,9 +54,6 @@ export default function CreatorPage() {
   const [erro, setErro] = useState<string | null>(null);
   const [conteudoDirty, setConteudoDirty] = useState(false);
 
-  const abaPedida = searchParams.get('aba') as AbaCriador | null;
-  const abaInicial: AbaCriador = abaPedida && ABAS_CRIADOR.includes(abaPedida) ? abaPedida : 'conteudo';
-  const [activeTab, setActiveTab] = useState<AbaCriador>(abaInicial);
   const secaoSolicitada = searchParams.get('secao');
   const itemSolicitado = searchParams.get('item') || undefined;
   const secaoConteudo = secaoSolicitada === 'cronologia' || secaoSolicitada === 'entidades' || secaoSolicitada === 'loja' || secaoSolicitada === 'regras'
@@ -52,11 +63,16 @@ export default function CreatorPage() {
   useEffect(() => {
     campanhasApi.listar()
       .then((resposta: { campanhas: CampanhaResumo[] }) => {
-        setCampanhas(resposta.campanhas || []);
-        setCampanhaId((atual) => atual || resposta.campanhas?.[0]?.id || '');
+        const lista = resposta.campanhas || [];
+        setCampanhas(lista);
+        // Sem campanha pedida na URL, começa pela que a pessoa já tem aberta no site.
+        const inicial = lista.find((campanha) => campanha.id === campanhaAtivaId)?.id ?? lista[0]?.id ?? '';
+        setCampanhaId((atual) => atual || inicial);
       })
       .catch((error: any) => setErro(error?.message || 'Não foi possível listar as campanhas.'))
       .finally(() => setCarregandoLista(false));
+    // A lista só carrega uma vez; a campanha ativa serve de ponto de partida e não deve refazer a busca.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -83,21 +99,15 @@ export default function CreatorPage() {
   };
 
   const trocarAba = async (proxima: AbaCriador) => {
-    if (proxima === activeTab) return;
-    if (activeTab === 'conteudo' && conteudoDirty
+    if (proxima === aba) return;
+    if (aba === 'conteudo' && conteudoDirty
       && !(await perguntarDescarte('Existem alterações de conteúdo não salvas. Deseja descartá-las?'))) return;
     setConteudoDirty(false);
-    setActiveTab(proxima);
-    const proximosParametros = new URLSearchParams(searchParams);
-    proximosParametros.set('aba', proxima);
-    setSearchParams(proximosParametros, { replace: true });
+    definirAba(proxima);
   };
 
-  const botaoAba = (aba: AbaCriador) => `flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-    activeTab === aba ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-  }`;
   // Convites são da plataforma inteira: a aba funciona sem campanha escolhida.
-  const precisaDeCampanha = activeTab !== 'convites';
+  const precisaDeCampanha = aba !== 'convites';
 
   const salvarVisibilidade = async (configuracoes: Record<string, any>) => {
     if (!campanhaId) return;
@@ -105,102 +115,71 @@ export default function CreatorPage() {
     setDetalhe((atual) => atual && { ...atual, campanha: atualizado.campanha });
   };
 
+  const seletorDeCampanha = (
+    <div className={`w-full md:w-80 ${precisaDeCampanha ? '' : 'invisible'}`}>
+      <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Campanha</label>
+      {carregandoLista ? (
+        <div className="flex items-center gap-2 text-sm text-gray-500"><Loader2 size={14} className="animate-spin" /> Carregando campanhas...</div>
+      ) : campanhas.length === 0 ? (
+        <p className="text-xs italic text-gray-600">Nenhuma campanha ativa na plataforma ainda.</p>
+      ) : (
+        <Select
+          value={campanhaId}
+          onChange={trocarCampanha}
+          options={campanhas.map((campanha) => ({ value: campanha.id, label: campanha.nome }))}
+          placeholder="Selecione uma campanha"
+          className="w-full"
+        />
+      )}
+    </div>
+  );
+
   return (
-    <div role="main" className="app-page mx-auto max-w-7xl">
-      <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="mb-3 flex items-center gap-3 text-[clamp(2rem,7vw,3rem)] font-bold leading-tight text-white sm:gap-4" style={{ fontFamily: 'Cinzel, serif' }}>
-            <Crown className="text-primary" size={40} />
-            Painel do Criador
-          </h1>
-          <p className="text-gray-400 text-lg">Mundo global, regras, loja e visibilidade das campanhas da plataforma.</p>
-        </div>
-        <div className={`w-full md:w-80 ${precisaDeCampanha ? '' : 'invisible'}`}>
-          <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Campanha</label>
-          {carregandoLista ? (
-            <div className="flex items-center gap-2 text-sm text-gray-500"><Loader2 size={14} className="animate-spin" /> Carregando campanhas...</div>
-          ) : campanhas.length === 0 ? (
-            <p className="text-xs italic text-gray-600">Nenhuma campanha ativa na plataforma ainda.</p>
-          ) : (
-            <Select
-              value={campanhaId}
-              onChange={trocarCampanha}
-              options={campanhas.map((campanha) => ({ value: campanha.id, label: campanha.nome }))}
-              placeholder="Selecione uma campanha"
-              className="w-full"
-            />
-          )}
-        </div>
-      </div>
+    <PainelShell
+      icone={Crown}
+      titulo="Painel do Criador"
+      subtitulo="Mundo global, regras, loja e visibilidade das campanhas da plataforma."
+      acoes={seletorDeCampanha}
+      abas={ABAS}
+      abaAtiva={aba}
+      aoTrocarAba={(proxima) => void trocarAba(proxima)}
+    >
+      {erro && <div role="alert" className="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">{erro}</div>}
 
-      {erro && <div className="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">{erro}</div>}
-
-      <div className="horizontal-scroll mb-6 flex gap-4 overflow-x-auto border-b border-white/10 pb-1 custom-scrollbar">
-        <button onClick={() => trocarAba('conteudo')} className={botaoAba('conteudo')}>
-          <BookOpenText size={16} /> Conteúdo
-        </button>
-        <button onClick={() => trocarAba('visibilidade')} className={botaoAba('visibilidade')}>
-          <Eye size={16} /> Visibilidade
-        </button>
-        <button onClick={() => trocarAba('liberacoes')} className={botaoAba('liberacoes')}>
-          <UserCog size={16} /> Liberações Individuais
-        </button>
-        <button onClick={() => trocarAba('convites')} className={botaoAba('convites')}>
-          <Ticket size={16} /> Convites
-        </button>
-      </div>
-
-      {activeTab === 'convites' ? (
-        <motion.div
-          key="convites"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] p-6 shadow-2xl md:p-8"
-        >
-          <ConvitesPlataformaPanel />
+      {aba === 'convites' ? (
+        <motion.div key="convites" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <PainelCartao>
+            <ConvitesPlataformaPanel />
+          </PainelCartao>
         </motion.div>
       ) : precisaDeCampanha && !campanhaId ? (
         <p className="py-16 text-center text-sm italic text-gray-600">Escolha uma campanha acima para começar.</p>
       ) : carregandoDetalhe || !detalhe ? (
         <div className="flex items-center justify-center gap-2 py-16 text-sm text-gray-500"><Loader2 size={16} className="animate-spin" /> Carregando campanha...</div>
       ) : (
-        <AnimatePresence mode="wait">
-          {activeTab === 'conteudo' && (
-            <motion.div key="conteudo" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-              <ConteudoMestrePanel campanhaId={campanhaId} initialAba={secaoConteudo} initialItem={itemSolicitado} onDirtyChange={setConteudoDirty} />
-            </motion.div>
+        <motion.div key={aba} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          {aba === 'conteudo' && (
+            <ConteudoMestrePanel campanhaId={campanhaId} initialAba={secaoConteudo} initialItem={itemSolicitado} onDirtyChange={setConteudoDirty} />
           )}
 
-          {activeTab === 'visibilidade' && (
-            <motion.div
-              key="visibilidade"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] p-6 shadow-2xl md:p-8"
-            >
+          {aba === 'visibilidade' && (
+            <PainelCartao>
               <VisibilidadeCampanha
                 campanhaId={campanhaId}
                 configuracoes={detalhe.campanha.configuracoes}
                 membros={detalhe.membros}
                 onSalvar={salvarVisibilidade}
               />
-            </motion.div>
+            </PainelCartao>
           )}
 
-          {activeTab === 'liberacoes' && (
-            <motion.div
-              key="liberacoes"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] p-6 shadow-2xl md:p-8"
-            >
+          {aba === 'liberacoes' && (
+            <PainelCartao>
               <LiberacoesIndividuaisPanel campanhaId={campanhaId} membros={detalhe.membros} personagens={personagens} />
-            </motion.div>
+            </PainelCartao>
           )}
-        </AnimatePresence>
+        </motion.div>
       )}
-    </div>
+    </PainelShell>
   );
 }

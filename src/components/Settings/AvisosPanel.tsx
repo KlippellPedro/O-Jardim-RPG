@@ -1,171 +1,49 @@
-import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
-import { avisosApi } from '../../services/avisosApi';
-import { Bell, Loader2, CheckCheck, CheckCheck as MarkAllIcon, Trash2 } from 'lucide-react';
-import { confirmar } from '../avisos/confirmacao';
+import { useSettingsPanelStore } from '../../store/useSettingsPanelStore';
+import { CaixaDeAvisos } from '../caixaDeAvisos/CaixaDeAvisos';
+import { atalhosComRecado } from './menuDaEngrenagem';
 
-interface IAviso {
-  id: string;
-  campanha_id: string | null;
-  campanha_nome: string | null;
-  titulo: string;
-  mensagem: string;
-  lida_em: string | null;
-  criado_em: string;
-  categoria?: string;
-}
-
+/**
+ * A caixa geral: o que é da pessoa (cofre, troca, XP, sessão). O que é de quem comanda a mesa mora no Painel do
+ * Mestre, e o da administração na Administração; quando há recado novo lá, um atalho aparece aqui em cima.
+ */
 export const AvisosPanel: React.FC = () => {
-  const [avisos, setAvisos] = useState<IAviso[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isMarking, setIsMarking] = useState(false);
-  const [isClearing, setIsClearing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const usuario = useAuthStore((estado) => estado.usuario);
+  const campanhaAtiva = useAuthStore((estado) => estado.campanhaAtiva);
+  const avisos = useAuthStore((estado) => estado.avisos);
+  const fecharPainel = useSettingsPanelStore((estado) => estado.closePanel);
 
-  // BUG-FIX: avisos são por usuário (GET /avisos), não por campanha - a rota
-  // antiga (/campanhas/{id}/avisos) nunca existiu no backend e sempre 404ava.
-  const fetchAvisos = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await avisosApi.listar();
-      setAvisos(data.avisos || []);
-    } catch (err: unknown) {
-      const e = err as { message?: string };
-      setError(e?.message || 'Falha ao carregar avisos');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchAvisos();
-  }, [fetchAvisos]);
-
-  const handleMarkAllRead = async () => {
-    setIsMarking(true);
-    try {
-      const { nao_lidos } = await avisosApi.marcarLidos();
-      setAvisos((prev) => prev.map((a) => (a.lida_em ? a : { ...a, lida_em: new Date().toISOString() })));
-      useAuthStore.setState({ avisosNaoLidos: nao_lidos });
-    } catch (err) {
-      console.error('Falha ao marcar avisos como lidos:', err);
-    } finally {
-      setIsMarking(false);
-    }
-  };
-
-  const handleLimparLidos = async () => {
-    if (!(await confirmar({ titulo: 'Apagar avisos lidos', mensagem: 'Apagar os avisos já lidos?', rotuloConfirmar: 'Apagar', tom: 'perigo' }))) return;
-    setIsClearing(true);
-    try {
-      await avisosApi.limparLidos();
-      setAvisos((prev) => prev.filter((a) => !a.lida_em));
-    } catch (err) {
-      console.error('Falha ao limpar avisos:', err);
-    } finally {
-      setIsClearing(false);
-    }
-  };
-
-  const formatDate = (iso: string) => {
-    const d = new Date(iso);
-    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
-  };
-
-  const naoLidos = avisos.filter((a) => !a.lida_em).length;
-  const lidos = avisos.length - naoLidos;
+  const atalhos = usuario ? atalhosComRecado({ usuario, campanhaAtiva, avisos }) : [];
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
-      <div className="p-6 overflow-y-auto flex-1 space-y-4">
-
-        <div className="flex items-center gap-2 mb-4">
-          <Bell className="text-primary" size={20} />
-          <h3 className="text-lg font-bold text-white">Avisos</h3>
-          {isLoading && <Loader2 size={16} className="animate-spin text-gray-500 ml-auto" />}
-          {!isLoading && (naoLidos > 0 || lidos > 0) && (
-            <div className="ml-auto flex items-center gap-2">
-              {naoLidos > 0 && (
-                <button
-                  onClick={handleMarkAllRead}
-                  disabled={isMarking}
-                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-                >
-                  {isMarking ? <Loader2 size={12} className="animate-spin" /> : <MarkAllIcon size={12} />}
-                  Marcar tudo como lido
-                </button>
-              )}
-              {lidos > 0 && (
-                <button
-                  onClick={handleLimparLidos}
-                  disabled={isClearing}
-                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                  title="Apaga apenas os avisos já lidos"
-                >
-                  {isClearing ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />}
-                  Limpar lidos
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-
-        {error && (
-          <div className="bg-red-500/10 text-red-400 p-3 rounded-lg text-sm border border-red-500/20">
-            {error}
-          </div>
+    <div className="flex h-full flex-col overflow-hidden">
+      <div className="custom-scrollbar flex-1 space-y-5 overflow-y-auto p-6">
+        {atalhos.length > 0 && (
+          <nav aria-label="Avisos em outros painéis" className="space-y-2">
+            {atalhos.map((atalho) => (
+              <button
+                key={atalho.id}
+                type="button"
+                onClick={() => { fecharPainel(); navigate(atalho.caminho); }}
+                className="flex w-full items-center gap-3 rounded-2xl border border-red-400/25 bg-red-500/[0.07] px-4 py-3 text-left transition-colors hover:bg-red-500/[0.12]"
+              >
+                <span className="min-w-6 rounded-full bg-red-600 px-1.5 py-0.5 text-center text-[11px] font-bold leading-none text-white">{atalho.quantidade}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-semibold text-white">{atalho.rotulo}</span>
+                  <span className="block text-xs text-gray-400">
+                    {atalho.quantidade === 1 ? 'aviso novo' : 'avisos novos'} {atalho.id === 'mestre' ? 'da mesa' : 'da administração'}
+                  </span>
+                </span>
+                <ChevronRight size={16} className="shrink-0 text-gray-500" />
+              </button>
+            ))}
+          </nav>
         )}
 
-        {!isLoading && !error && avisos.length === 0 && (
-          <div className="text-center py-12 bg-white/5 rounded-2xl border border-white/5">
-            <CheckCheck className="mx-auto text-green-400 mb-3" size={32} />
-            <p className="text-gray-300 font-medium">Tudo em dia!</p>
-            <p className="text-gray-500 text-sm mt-1">Você não tem avisos.</p>
-          </div>
-        )}
-
-        <AnimatePresence>
-          {avisos.map((aviso) => (
-            <motion.div
-              key={aviso.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className={`p-4 rounded-xl border transition-colors ${
-                aviso.lida_em
-                  ? 'bg-white/3 border-white/5 opacity-60'
-                  : 'bg-primary/5 border-primary/20'
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                {!aviso.lida_em && (
-                  <span className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <h4 className="font-semibold text-white text-sm truncate">{aviso.titulo}</h4>
-                    <span className="text-xs text-gray-500 shrink-0">{formatDate(aviso.criado_em)}</span>
-                  </div>
-                  <p className="text-gray-400 text-sm leading-relaxed">{aviso.mensagem}</p>
-                  <div className="mt-2 flex items-center gap-2">
-                    {aviso.campanha_nome && (
-                      <span className="inline-block text-xs px-2 py-0.5 bg-white/10 rounded-full text-gray-400">
-                        {aviso.campanha_nome}
-                      </span>
-                    )}
-                    {aviso.categoria && (
-                      <span className="inline-block text-xs px-2 py-0.5 bg-white/10 rounded-full text-gray-400 capitalize">
-                        {aviso.categoria}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
+        <CaixaDeAvisos painel="geral" aoNavegar={fecharPainel} />
       </div>
     </div>
   );

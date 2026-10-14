@@ -2,6 +2,59 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-13-menu-engrenagem-arrumado",
+      "data": "2026-10-13",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Menu da engrenagem mais arrumado",
+      "detalhes": [
+        "O menu separa o que é seu (Minha conta, Avisos, Cofre e Preferências) dos painéis de quem comanda: Painel do Mestre, Painel do Criador e Administração. Cada item mostra o próprio número de avisos novos, e o botão da engrenagem soma todos.",
+        "Trocar de mesa, entrar com código de convite e criar uma mesa nova ficam num lugar só, o seletor de mesa da página da Campanha. O item Mesas e Campanhas saiu do menu, e a mesa em que você está aparece no topo dele."
+      ]
+    },
+    {
+      "id": "2026-10-13-avisos-por-painel",
+      "data": "2026-10-13",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Cada aviso agora aparece no painel dele",
+      "detalhes": [
+        "Na engrenagem ficam os avisos que são seus: cofre, trocas, XP e sessão. Quem comanda a mesa vê no Painel do Mestre, na aba Avisos, quem entrou na campanha, as fichas fora das regras e as mudanças de classe e de nível. Os pedidos de senha ficam na Administração.",
+        "Os avisos vêm agrupados por dia, com um botão que leva direto ao lugar do assunto. Marcar tudo como lido vale só para o painel em que você está."
+      ]
+    },
+    {
+      "id": "2026-10-13-paineis-mesma-cara",
+      "data": "2026-10-13",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Painéis do Mestre, do Criador e da Administração com a mesma cara",
+      "detalhes": [
+        "Os três painéis ganharam o mesmo cabeçalho e as mesmas abas, com o número de avisos novos em cada aba. A aba aberta fica no endereço da página, então recarregar não faz perder o lugar.",
+        "No Painel do Mestre, Membros e Convites viraram uma aba só, e o seletor de mesa agora fica no topo. O Painel do Criador começa na campanha que você já tem aberta, e a aba dos convites de conta se chama Convites de cadastro."
+      ]
+    },
+    {
+      "id": "2026-10-13-cofre-numa-pagina",
+      "data": "2026-10-13",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Cofre numa página só",
+      "detalhes": [
+        "A cópia do Cofre que morava no Painel do Mestre saiu: o Cofre é da sua conta e tem a página dele. Nela, o personagem que recebe já vem escolhido quando é o único ou o ativo, os botões dizem o que enviam e o estado do Discord aparece no topo, com um atalho para vincular em Minha conta."
+      ]
+    },
+    {
+      "id": "2026-10-13-convite-codigo-como-enviado",
+      "data": "2026-10-13",
+      "tipo": "correcao",
+      "area": "Jardim",
+      "titulo": "Entrar com convite aceita o código como o Mestre mandou",
+      "detalhes": [
+        "O campo de convite do menu passava as letras para maiúsculas e o convite era recusado. Agora o código vale exatamente como foi enviado, com maiúsculas e minúsculas, e a mensagem de erro ficou mais clara."
+      ]
+    },
+    {
       "id": "2026-10-12-bestiario-dez-dragoes",
       "data": "2026-10-12",
       "tipo": "novo",

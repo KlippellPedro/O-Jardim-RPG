@@ -3,8 +3,8 @@ import { cofreApi, ICofreItem, ICofreMoeda, ICofreNivel } from '../services/cofr
 import { discordApi, IDiscordVinculo } from '../services/discordApi';
 import { personagensApi, PersonagemApiRecord } from '../services/personagensApi';
 
-/** Estado e ações do Cofre de Recompensas, compartilhado entre o painel
- * rápido (Configurações) e a página dedicada. */
+/** Estado e ações do Cofre (recompensas do Discord e Cofre bancário) da página do Cofre. O vínculo com o Discord
+ * só é lido aqui; vincular e desvincular moram em Minha Conta. */
 export function useCofre(campanhaId: string | undefined) {
   const [itens, setItens] = useState<ICofreItem[]>([]);
   const [moedas, setMoedas] = useState<ICofreMoeda[]>([]);
@@ -71,11 +71,6 @@ export function useCofre(campanhaId: string | undefined) {
     [campanhaId, fetchTudo],
   );
 
-  const desvincularDiscord = useCallback(async () => {
-    await discordApi.desvincular();
-    setVinculo(null);
-  }, []);
-
   return {
     itens,
     moedas,
@@ -88,6 +83,5 @@ export function useCofre(campanhaId: string | undefined) {
     transferirItem,
     transferirMoeda,
     sacarDoBanco,
-    desvincularDiscord,
   };
 }

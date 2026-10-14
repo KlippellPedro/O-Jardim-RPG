@@ -61,7 +61,7 @@ export function atalhosDaBusca(contexto: ContextoDaBusca): EntradaDaBusca[] {
       atalho('/quadro', 'Quadro', 'Descobertas, mural e rank', ['mural', 'rank', 'descobertas', 'agenda']),
       atalho('/campanha', 'Página da campanha', 'Capa, crônica e anteriormente', ['cronica', 'campanha']),
       atalho('/frota', 'Frota', 'Veículos da campanha', ['veiculos', 'veiculo', 'garagem']),
-      atalho('/cofre', 'Cofre do Jardim', 'A meta que a mesa enche', ['cofre', 'meta']),
+      atalho('/cofre', 'Cofre', 'Recompensas do Discord e Cofre bancário', ['cofre', 'recompensas', 'banco', 'discord']),
     );
     if (paginaVisivel(config.calendario_oculto, isMestre)) {
       atalhos.push(atalho('/mundo/calendario', 'Calendário do Mundo', 'Estações, Lua e acontecimentos', ['calendario', 'estacao', 'lua', 'data']));

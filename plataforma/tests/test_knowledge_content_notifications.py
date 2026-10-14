@@ -10,6 +10,7 @@ from uuid import UUID
 from fastapi import HTTPException
 from psycopg.errors import UniqueViolation
 
+from core.notifications import contar_avisos
 from routers import content, discord_links, knowledge, notifications
 from schemas import (
     ContentAccessInput,
@@ -966,70 +967,195 @@ class DiscordLinksTests(unittest.TestCase):
 # ===========================================================================
 
 
+def _aviso_user(user_id=MANAGER_ID, *, admin=False):
+    return SimpleNamespace(id=user_id, is_platform_admin=admin)
+
+
+def _contagem_vazia(sql, params):
+    """Resposta da consulta de contagem (`contar_avisos`) quando o teste não liga para ela."""
+    if sql.startswith("SELECT n.painel, n.campanha_id, COUNT(*) AS total"):
+        return _Result(rows=[])
+    return None
+
+
 class NotificationsTests(unittest.TestCase):
     def test_list_notifications_scopes_to_current_user(self):
         def responder(sql, params):
             if sql.startswith("SELECT n.id, n.campanha_id"):
-                self.assertEqual(params[0], MANAGER_ID)
-                self.assertEqual(params[1], True)
-                self.assertEqual(params[2], 50)
+                self.assertEqual(params, (MANAGER_ID, 50))
+                self.assertIn("n.usuario_id=%s", sql)
+                self.assertIn("n.lida_em IS NULL", sql)
                 return _Result(rows=[{"id": UUID(int=1)}])
-            if sql.startswith("SELECT COUNT(*) AS total"):
+            if sql.startswith("SELECT n.painel, n.campanha_id, COUNT(*) AS total"):
                 self.assertEqual(params, (MANAGER_ID,))
-                return {"total": 3}
+                return _Result(rows=[{"painel": "geral", "campanha_id": None, "total": 3}])
             raise AssertionError(f"consulta inesperada: {sql}")
 
         connection = _RecordingConnection(responder)
         result = notifications.list_notifications(
-            apenas_nao_lidos=True, limite=50, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+            apenas_nao_lidos=True, limite=50, user=_aviso_user(), database=_Database(connection)
         )
         self.assertEqual(result["nao_lidos"], 3)
+        self.assertEqual(result["contagens"]["geral"], 3)
         self.assertEqual(len(result["avisos"]), 1)
+
+    def test_list_without_panel_keeps_the_whole_inbox(self):
+        """Sem `painel` a lista é a caixa inteira, como o site antigo ainda pede."""
+        def responder(sql, params):
+            if sql.startswith("SELECT n.id, n.campanha_id"):
+                self.assertNotIn("n.painel=%s", sql)
+                self.assertEqual(params, (MANAGER_ID, 40))
+                return _Result(rows=[])
+            return _contagem_vazia(sql, params)
+
+        connection = _RecordingConnection(responder)
+        notifications.list_notifications(limite=40, user=_aviso_user(), database=_Database(connection))
+
+    def test_list_filters_by_panel_and_campaign(self):
+        def responder(sql, params):
+            if sql.startswith("SELECT n.id, n.campanha_id"):
+                self.assertEqual(params, (MANAGER_ID, "mestre", CAMPAIGN_ID, 40))
+                self.assertIn("n.painel=%s", sql)
+                self.assertIn("n.campanha_id=%s", sql)
+                # O aviso do Mestre só vale enquanto a pessoa ainda comanda a mesa.
+                self.assertIn("m.papel IN ('mestre', 'assistente')", sql)
+                return _Result(rows=[])
+            return _contagem_vazia(sql, params)
+
+        connection = _RecordingConnection(responder)
+        notifications.list_notifications(
+            painel="mestre", campanha_id=CAMPAIGN_ID, limite=40, user=_aviso_user(), database=_Database(connection)
+        )
+
+    def test_list_rejects_an_unknown_panel(self):
+        connection = _RecordingConnection(lambda sql, params: None)
+        with self.assertRaises(HTTPException) as erro:
+            notifications.list_notifications(
+                painel="criador", limite=40, user=_aviso_user(), database=_Database(connection)
+            )
+        self.assertEqual(erro.exception.status_code, 422)
+        self.assertEqual(connection.statements, [])
+
+    def test_admin_panel_is_empty_for_someone_who_is_not_an_admin(self):
+        def responder(sql, params):
+            if sql.startswith("SELECT n.id, n.campanha_id"):
+                self.assertIn("FALSE", sql)
+                return _Result(rows=[])
+            return _contagem_vazia(sql, params)
+
+        connection = _RecordingConnection(responder)
+        notifications.list_notifications(
+            painel="admin", limite=40, user=_aviso_user(admin=False), database=_Database(connection)
+        )
+
+    def test_counts_split_by_panel_and_ignore_what_the_person_cannot_open(self):
+        outra_campanha = UUID("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+
+        def responder(sql, params):
+            if sql.startswith("SELECT n.painel, n.campanha_id, COUNT(*) AS total"):
+                # O filtro de quem ainda comanda a mesa mora no SQL.
+                self.assertIn("m.papel IN ('mestre', 'assistente')", sql)
+                return _Result(rows=[
+                    {"painel": "geral", "campanha_id": CAMPAIGN_ID, "total": 2},
+                    {"painel": "geral", "campanha_id": None, "total": 1},
+                    {"painel": "mestre", "campanha_id": CAMPAIGN_ID, "total": 4},
+                    {"painel": "mestre", "campanha_id": outra_campanha, "total": 5},
+                    {"painel": "admin", "campanha_id": None, "total": 7},
+                ])
+            raise AssertionError(f"consulta inesperada: {sql}")
+
+        connection = _RecordingConnection(responder)
+        admin = contar_avisos(connection, MANAGER_ID, campaign_id=CAMPAIGN_ID, is_platform_admin=True)
+        self.assertEqual(admin["geral"], 3)
+        self.assertEqual(admin["mestre"], 4)
+        self.assertEqual(admin["admin"], 7)
+        self.assertEqual(admin["mestre_por_campanha"], {str(CAMPAIGN_ID): 4, str(outra_campanha): 5})
+        self.assertEqual(admin["total"], 3 + 4 + 5 + 7)
+
+        # Quem deixou de ser admin não vê mais o número da administração.
+        comum = contar_avisos(connection, MANAGER_ID, campaign_id=None, is_platform_admin=False)
+        self.assertEqual(comum["admin"], 0)
+        self.assertEqual(comum["mestre"], 0)
+        self.assertEqual(comum["total"], 3 + 4 + 5)
 
     def test_mark_as_read_with_ids_stays_scoped_to_owner(self):
         n1, n2 = UUID(int=10), UUID(int=11)
 
         def responder(sql, params):
-            if "id = ANY" in sql:
-                self.assertEqual(params[0], MANAGER_ID)
-                self.assertEqual(params[1], [n1, n2])
+            if "n.id = ANY" in sql:
+                self.assertEqual(params, (MANAGER_ID, [n1, n2]))
                 return None
-            if sql.startswith("SELECT COUNT(*) AS total"):
-                return {"total": 1}
-            raise AssertionError(f"consulta inesperada: {sql}")
+            return _contagem_vazia(sql, params)
 
         connection = _RecordingConnection(responder)
         payload = NotificationReadInput(ids=[n1, n2])
-        result = notifications.mark_as_read(
-            payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
-        )
-        self.assertEqual(result["nao_lidos"], 1)
+        result = notifications.mark_as_read(payload, user=_aviso_user(), database=_Database(connection))
+        self.assertEqual(result["nao_lidos"], 0)
 
     def test_mark_as_read_without_ids_marks_everything_for_owner(self):
         def responder(sql, params):
-            if sql.startswith("UPDATE notificacoes SET lida_em=CURRENT_TIMESTAMP WHERE usuario_id=%s AND lida_em IS NULL") and "ANY" not in sql:
+            if sql.startswith("UPDATE notificacoes n SET lida_em=CURRENT_TIMESTAMP WHERE n.usuario_id=%s AND n.lida_em IS NULL"):
                 self.assertEqual(params, (MANAGER_ID,))
+                self.assertNotIn("ANY", sql)
+                self.assertNotIn("n.painel=%s", sql)
                 return None
-            if sql.startswith("SELECT COUNT(*) AS total"):
-                return {"total": 0}
-            raise AssertionError(f"consulta inesperada: {sql}")
+            return _contagem_vazia(sql, params)
 
         connection = _RecordingConnection(responder)
         payload = NotificationReadInput(ids=[])
-        notifications.mark_as_read(payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection))
-        self.assertFalse(_has(connection.statements, "id = ANY"))
+        notifications.mark_as_read(payload, user=_aviso_user(), database=_Database(connection))
+        self.assertFalse(_has(connection.statements, "n.id = ANY"))
+
+    def test_mark_all_as_read_stays_inside_the_panel_and_campaign(self):
+        """O botão da engrenagem não pode apagar o recado do Painel do Mestre, nem o contrário."""
+        def responder(sql, params):
+            if sql.startswith("UPDATE notificacoes n SET lida_em=CURRENT_TIMESTAMP"):
+                self.assertEqual(params, (MANAGER_ID, "mestre", CAMPAIGN_ID))
+                self.assertIn("n.painel=%s", sql)
+                self.assertIn("n.campanha_id=%s", sql)
+                return None
+            return _contagem_vazia(sql, params)
+
+        connection = _RecordingConnection(responder)
+        payload = NotificationReadInput(painel="mestre", campanha_id=CAMPAIGN_ID)
+        notifications.mark_as_read(payload, user=_aviso_user(), database=_Database(connection))
+
+    def test_mark_as_read_never_closes_a_pending_bounty_claim(self):
+        """A reivindicação pendente é fila do Mestre: só a resposta na Loja tira ela de lá."""
+        def responder(sql, params):
+            if sql.startswith("UPDATE notificacoes n SET lida_em=CURRENT_TIMESTAMP"):
+                self.assertIn("claim_recompensa", sql)
+                self.assertIn("'pendente'", sql)
+                return None
+            return _contagem_vazia(sql, params)
+
+        connection = _RecordingConnection(responder)
+        notifications.mark_as_read(NotificationReadInput(), user=_aviso_user(), database=_Database(connection))
 
     def test_clear_read_only_deletes_read_notifications_for_owner(self):
         def responder(sql, params):
-            if sql.startswith("DELETE FROM notificacoes"):
+            if sql.startswith("DELETE FROM notificacoes n"):
                 self.assertEqual(params, (MANAGER_ID,))
-                self.assertIn("lida_em IS NOT NULL", sql)
+                self.assertIn("n.lida_em IS NOT NULL", sql)
+                # Reivindicação pendente lida por engano continua na fila.
+                self.assertIn("claim_recompensa", sql)
                 return None
             raise AssertionError(f"consulta inesperada: {sql}")
 
         connection = _RecordingConnection(responder)
-        result = notifications.clear_read(user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection))
+        result = notifications.clear_read(user=_aviso_user(), database=_Database(connection))
         self.assertIsNone(result)
+
+    def test_clear_read_respects_the_panel(self):
+        def responder(sql, params):
+            if sql.startswith("DELETE FROM notificacoes n"):
+                self.assertEqual(params, (MANAGER_ID, "geral"))
+                self.assertIn("n.painel=%s", sql)
+                return None
+            raise AssertionError(f"consulta inesperada: {sql}")
+
+        connection = _RecordingConnection(responder)
+        notifications.clear_read(painel="geral", user=_aviso_user(), database=_Database(connection))
 
 
 if __name__ == "__main__":

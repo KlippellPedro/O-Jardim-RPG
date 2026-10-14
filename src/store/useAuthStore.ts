@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { authApi } from '../services/authApi';
 import { campanhasApi } from '../services/campanhasApi';
+import { CONTAGEM_VAZIA, normalizarContagem, type IContagemDeAvisos } from '../services/avisosApi';
 
 export interface IUser {
   id: string;
@@ -62,7 +63,8 @@ interface AuthState {
   campanhaAtiva: ICampanha | null;
   campanhas: ICampanha[];
   membrosCampanha: IMembroCampanha[];
-  avisosNaoLidos: number;
+  /** Avisos não lidos por painel (caixa geral, Painel do Mestre da mesa ativa e Administração). */
+  avisos: IContagemDeAvisos;
   isInitialized: boolean;
   isLoading: boolean;
   error: string | null;
@@ -72,6 +74,7 @@ interface AuthState {
   logout: () => Promise<void>;
   setCampanhaAtiva: (campanhaId: string) => Promise<void>;
   recarregarCampanhaAtiva: () => Promise<void>;
+  definirAvisos: (avisos: IContagemDeAvisos) => void;
   atualizarConfiguracoes: (novasConfig: any) => Promise<void>;
   atualizarIdentidade: (dados: { nome?: string; descricao?: string }) => Promise<void>;
 }
@@ -86,7 +89,7 @@ export const useAuthStore = create<AuthState>()(
       campanhaAtiva: null,
       campanhas: [],
       membrosCampanha: [],
-      avisosNaoLidos: 0,
+      avisos: CONTAGEM_VAZIA,
       isInitialized: false,
       isLoading: false,
       error: null,
@@ -103,7 +106,7 @@ export const useAuthStore = create<AuthState>()(
             campanhas: contexto.campanhas || [],
             campanhaAtiva: contexto.campanha || null,
             membrosCampanha: contexto.detalhes?.membros || [],
-            avisosNaoLidos: contexto.avisos_nao_lidos || 0,
+            avisos: normalizarContagem(contexto.avisos, contexto.avisos_nao_lidos),
             isInitialized: true,
             isLoading: false,
           });
@@ -153,7 +156,7 @@ export const useAuthStore = create<AuthState>()(
           campanhas: [],
           campanhaAtiva: null,
           membrosCampanha: [],
-          avisosNaoLidos: 0,
+          avisos: CONTAGEM_VAZIA,
           isLoading: false,
         });
       },
@@ -167,7 +170,7 @@ export const useAuthStore = create<AuthState>()(
             campanhas: contexto.campanhas || [],
             campanhaAtiva: contexto.campanha || null,
             membrosCampanha: contexto.detalhes?.membros || [],
-            avisosNaoLidos: contexto.avisos_nao_lidos || 0,
+            avisos: normalizarContagem(contexto.avisos, contexto.avisos_nao_lidos),
             isLoading: false,
           });
         } catch (error: unknown) {
@@ -217,6 +220,9 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
+      // Os números do menu saem de qualquer tela que acabou de ler ou mexer nos avisos, sem refazer o /contexto.
+      definirAvisos: (avisos) => set({ avisos }),
+
       // Refaz a busca de /contexto pra mesma campanha sem o flash de
       // isLoading global - usado depois de ações em membros/convites que só
       // essa aba precisa refletir.
@@ -230,7 +236,7 @@ export const useAuthStore = create<AuthState>()(
             campanhas: contexto.campanhas || [],
             campanhaAtiva: contexto.campanha || null,
             membrosCampanha: contexto.detalhes?.membros || [],
-            avisosNaoLidos: contexto.avisos_nao_lidos || 0,
+            avisos: normalizarContagem(contexto.avisos, contexto.avisos_nao_lidos),
           });
         } catch (error: unknown) {
           const err = error as { message?: string };

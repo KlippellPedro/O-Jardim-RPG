@@ -44,6 +44,34 @@ def _renomear_ids(tabela: str, coluna: str, extra: str = "") -> str:
     )
 
 
+# Avisos que existiam antes de a caixa ser dividida por painel (migração 55). Ficam como constantes para a
+# migração e para o teste que confere o reaproveitamento dos avisos antigos: os títulos abaixo são os que os
+# roteadores gravavam, então um título novo de aviso do Mestre ou da administração entra aqui só se o aviso
+# já tiver existido sem `painel`. Aviso novo nasce com `notify(..., panel=...)`.
+AVISOS_ANTIGOS_DO_MESTRE_SQL = """
+    UPDATE notificacoes SET painel = 'mestre'
+    WHERE painel = 'geral'
+      AND (
+            titulo LIKE '% entrou na campanha'
+            OR titulo LIKE 'Infração na loja: %'
+            OR titulo IN (
+                'Alerta de Regras na Criação',
+                'Alerta de Regras na Ficha',
+                'Jogador alterou classe/XP na ficha',
+                'Personagem passou do nível padrão',
+                'Personagem entrou num patamar novo',
+                'Reivindicacao de Recompensa'
+            )
+            OR dados->>'tipo' = 'claim_recompensa'
+          )
+"""
+
+AVISOS_ANTIGOS_DA_ADMINISTRACAO_SQL = """
+    UPDATE notificacoes SET painel = 'admin'
+    WHERE painel = 'geral' AND titulo = 'Pedido de senha nova'
+"""
+
+
 MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
     (
         1,
@@ -1963,6 +1991,32 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             WHERE starts_with(chave, 'matador_') OR chave = 'cara_a_cara_com_um_deus'
             """,
             "DROP TABLE IF EXISTS campanha_lendas",
+        ),
+    ),
+    (
+        55,
+        "avisos_por_painel",
+        (
+            # A caixa de avisos misturava o que é da pessoa (cofre, troca, XP) com o que é de quem comanda
+            # a mesa (entrou na campanha, alerta de regras) e da administração (pedido de senha). Cada aviso
+            # passa a dizer em que painel mora: 'geral' é a caixa da engrenagem, 'mestre' o Painel do Mestre
+            # (junto da campanha do aviso) e 'admin' a Administração.
+            """
+            ALTER TABLE notificacoes
+            ADD COLUMN IF NOT EXISTS painel TEXT NOT NULL DEFAULT 'geral'
+            """,
+            "ALTER TABLE notificacoes DROP CONSTRAINT IF EXISTS notificacoes_painel_check",
+            """
+            ALTER TABLE notificacoes
+            ADD CONSTRAINT notificacoes_painel_check
+            CHECK (painel IN ('geral', 'mestre', 'admin'))
+            """,
+            AVISOS_ANTIGOS_DO_MESTRE_SQL,
+            AVISOS_ANTIGOS_DA_ADMINISTRACAO_SQL,
+            """
+            CREATE INDEX IF NOT EXISTS notificacoes_painel_idx
+            ON notificacoes (usuario_id, painel, lida_em NULLS FIRST, criado_em DESC)
+            """,
         ),
     ),
 )

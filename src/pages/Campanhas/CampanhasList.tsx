@@ -1,103 +1,29 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
-import { campanhasApi } from '../../services/campanhasApi';
-import { Plus, Users, Crown, Eye, Loader2, KeyRound } from 'lucide-react';
-import { corDaCampanha, urlDaCapa } from '../Campanha/campanha';
-import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
+import { Plus, Users, Crown, Eye, KeyRound } from 'lucide-react';
+import { corDaCampanha, podeCriarCampanha, ROTULO_PAPEL, urlDaCapa } from '../Campanha/campanha';
+import { EntrarComConviteModal } from './EntrarComConviteModal';
+import { NovaMesaModal } from './NovaMesaModal';
 
 import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
+
+/** Todas as mesas da pessoa. Também é para onde ela cai quando ainda não tem uma mesa ativa. */
 export const CampanhasList: React.FC = () => {
-  const { usuario, campanhas, setCampanhaAtiva, initContexto } = useAuthStore();
+  const usuario = useAuthStore((estado) => estado.usuario);
+  const campanhas = useAuthStore((estado) => estado.campanhas);
+  const avisos = useAuthStore((estado) => estado.avisos);
+  const setCampanhaAtiva = useAuthStore((estado) => estado.setCampanhaAtiva);
   const navigate = useNavigate();
 
-  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  
-  const [codigoConvite, setCodigoConvite] = useState('');
-  const [nomeCampanha, setNomeCampanha] = useState('');
-  const [descCampanha, setDescCampanha] = useState('');
-  
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const joinModalRef = useRef<HTMLDivElement>(null);
-  const createModalRef = useRef<HTMLDivElement>(null);
-  const joinModalBackdropRef = useRef<HTMLDivElement>(null);
-  const createModalBackdropRef = useRef<HTMLDivElement>(null);
-  const joinTriggerRef = useRef<HTMLButtonElement>(null);
-  const createTriggerRef = useRef<HTMLButtonElement>(null);
-
-  useDialogAccessibility({
-    open: isJoinModalOpen,
-    dialogRef: joinModalRef,
-    backdropRef: joinModalBackdropRef,
-    onClose: () => setIsJoinModalOpen(false),
-    returnFocusRef: joinTriggerRef,
-  });
-  useDialogAccessibility({
-    open: isCreateModalOpen,
-    dialogRef: createModalRef,
-    backdropRef: createModalBackdropRef,
-    onClose: () => setIsCreateModalOpen(false),
-    returnFocusRef: createTriggerRef,
-  });
-
-  const isMestreOrAdmin = usuario?.papel_plataforma === 'mestre' || usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador';
+  const [modal, setModal] = useState<'convite' | 'nova' | null>(null);
+  const [abrindoId, setAbrindoId] = useState<string | null>(null);
 
   const handleSelectCampanha = async (id: string) => {
-    setIsLoading(true);
+    setAbrindoId(id);
     await setCampanhaAtiva(id);
-    // isLoading será mantido true até a navegação completar -
-    // o componente vai desmontar, portanto não precisamos de setIsLoading(false)
     navigate('/campanha');
-  };
-
-  const handleJoin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!codigoConvite.trim()) return;
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      await campanhasApi.entrar(codigoConvite);
-      await initContexto(); // recarrega a lista de campanhas
-      setIsJoinModalOpen(false);
-      setCodigoConvite('');
-    } catch (err: unknown) {
-      const error = err as { message?: string };
-      setError(error?.message || 'Erro ao entrar na campanha');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleCreate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!nomeCampanha.trim()) return;
-
-    setIsLoading(true);
-    setError(null);
-    let novaId: string | null = null;
-    try {
-      const response = await campanhasApi.criar({ nome: nomeCampanha, descricao: descCampanha });
-      await initContexto(); // recarrega a lista
-      setIsCreateModalOpen(false);
-      setNomeCampanha('');
-      setDescCampanha('');
-      // Guarda o ID para seleção após o finally
-      if (response?.id) novaId = response.id;
-    } catch (err: unknown) {
-      const error = err as { message?: string };
-      setError(error?.message || 'Erro ao criar mesa');
-    } finally {
-      setIsLoading(false);
-    }
-    // BUG-09: Auto-seleção fora do try/finally para não competir com setIsLoading(false).
-    // handleSelectCampanha gerencia seu próprio isLoading independentemente.
-    if (novaId) {
-      handleSelectCampanha(novaId);
-    }
   };
 
   const getRoleIcon = (papel: string) => {
@@ -110,7 +36,7 @@ export const CampanhasList: React.FC = () => {
 
   return (
     <div role="main" className="app-page mx-auto max-w-7xl">
-      
+
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
         <div>
           <h1 className="mb-2 text-[clamp(2.25rem,8vw,3rem)] font-bold leading-tight text-white" style={{fontFamily: 'Cinzel, serif'}}>Suas Campanhas</h1>
@@ -119,18 +45,18 @@ export const CampanhasList: React.FC = () => {
 
         <div className="responsive-action-row flex gap-3 sm:gap-4">
           <button
-            ref={joinTriggerRef}
-            onClick={() => setIsJoinModalOpen(true)}
+            type="button"
+            onClick={() => setModal('convite')}
             className="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-medium transition-all shadow-lg flex items-center gap-2"
           >
             <KeyRound size={18} />
             Usar Convite
           </button>
-          
-          {isMestreOrAdmin && (
+
+          {podeCriarCampanha(usuario) && (
             <button
-              ref={createTriggerRef}
-              onClick={() => setIsCreateModalOpen(true)}
+              type="button"
+              onClick={() => setModal('nova')}
               className="px-6 py-3 rounded-full bg-primary/20 border border-primary/50 text-primary hover:bg-primary/30 font-medium transition-all shadow-[0_0_15px_rgba(var(--color-primary),0.2)] flex items-center gap-2"
             >
               <Plus size={18} />
@@ -142,48 +68,57 @@ export const CampanhasList: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence>
-          {campanhas.map((campanha, i) => (
-            <motion.button
-              type="button"
-              key={campanha.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -6 }}
-              onClick={() => handleSelectCampanha(campanha.id)}
-              className="bg-[#0b0a12]/60 backdrop-blur-xl border border-white/5 p-6 rounded-3xl cursor-pointer group hover:border-primary/50 hover:bg-white/5 transition-all shadow-xl relative overflow-hidden text-left"
-            >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all opacity-0 group-hover:opacity-100"></div>
-              
-              <div
-                className="relative z-10 -mx-6 -mt-6 mb-4 h-24 overflow-hidden rounded-t-3xl"
-                style={{ background: `radial-gradient(circle at 80% 0%, ${corDaCampanha(campanha.identidade)}55, transparent 65%), linear-gradient(160deg, #14131c, #0a0a10)` }}
-                aria-hidden="true"
+          {campanhas.map((campanha, i) => {
+            const recados = avisos.mestre_por_campanha[campanha.id] ?? 0;
+            return (
+              <motion.button
+                type="button"
+                key={campanha.id}
+                disabled={abrindoId !== null}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -6 }}
+                onClick={() => handleSelectCampanha(campanha.id)}
+                className="bg-[#0b0a12]/60 backdrop-blur-xl border border-white/5 p-6 rounded-3xl cursor-pointer group hover:border-primary/50 hover:bg-white/5 transition-all shadow-xl relative overflow-hidden text-left disabled:opacity-70"
               >
-                {urlDaCapa(campanha.id, campanha.identidade) ? (
-                  <img src={urlDaCapa(campanha.id, campanha.identidade) ?? undefined} alt="" loading="lazy" className="h-full w-full object-cover" />
-                ) : null}
-                <span className="absolute inset-x-0 bottom-0 h-1" style={{ backgroundColor: corDaCampanha(campanha.identidade) }} />
-              </div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all opacity-0 group-hover:opacity-100"></div>
 
-              <div className="flex justify-between items-start mb-4 relative z-10">
-                <h2 className="text-2xl font-bold text-white group-hover:text-primary transition-colors" style={{fontFamily: 'Cinzel, serif'}}>
-                  {campanha.nome}
-                </h2>
-              </div>
-              
-              <p className="text-gray-400 text-sm mb-6 line-clamp-2 relative z-10">
-                {campanha.identidade?.frase ? `“${campanha.identidade.frase}”` : campanha.descricao || 'Sem descrição.'}
-              </p>
-              
-              <div className="flex items-center gap-2 mt-auto relative z-10">
-                <div className="flex items-center gap-1.5 bg-black/40 px-3 py-1.5 rounded-full border border-white/5">
-                  {getRoleIcon(campanha.papel)}
-                  <span className="text-xs font-medium text-gray-300 capitalize">{campanha.papel}</span>
+                <div
+                  className="relative z-10 -mx-6 -mt-6 mb-4 h-24 overflow-hidden rounded-t-3xl"
+                  style={{ background: `radial-gradient(circle at 80% 0%, ${corDaCampanha(campanha.identidade)}55, transparent 65%), linear-gradient(160deg, #14131c, #0a0a10)` }}
+                  aria-hidden="true"
+                >
+                  {urlDaCapa(campanha.id, campanha.identidade) ? (
+                    <img src={urlDaCapa(campanha.id, campanha.identidade) ?? undefined} alt="" loading="lazy" className="h-full w-full object-cover" />
+                  ) : null}
+                  <span className="absolute inset-x-0 bottom-0 h-1" style={{ backgroundColor: corDaCampanha(campanha.identidade) }} />
                 </div>
-              </div>
-            </motion.button>
-          ))}
+
+                <div className="flex justify-between items-start mb-4 relative z-10">
+                  <h2 className="text-2xl font-bold text-white group-hover:text-primary transition-colors" style={{fontFamily: 'Cinzel, serif'}}>
+                    {campanha.nome}
+                  </h2>
+                </div>
+
+                <p className="text-gray-400 text-sm mb-6 line-clamp-2 relative z-10">
+                  {campanha.identidade?.frase ? `“${campanha.identidade.frase}”` : campanha.descricao || 'Sem descrição.'}
+                </p>
+
+                <div className="flex items-center gap-2 mt-auto relative z-10">
+                  <div className="flex items-center gap-1.5 bg-black/40 px-3 py-1.5 rounded-full border border-white/5">
+                    {getRoleIcon(campanha.papel)}
+                    <span className="text-xs font-medium text-gray-300">{ROTULO_PAPEL[campanha.papel] ?? campanha.papel}</span>
+                  </div>
+                  {recados > 0 ? (
+                    <span className="rounded-full bg-red-600 px-2 py-1 text-[11px] font-bold leading-none text-white">
+                      {recados} {recados === 1 ? 'aviso novo' : 'avisos novos'}
+                    </span>
+                  ) : null}
+                </div>
+              </motion.button>
+            );
+          })}
           {campanhas.length === 0 && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -200,113 +135,8 @@ export const CampanhasList: React.FC = () => {
         </AnimatePresence>
       </div>
 
-      {/* MODAL: JOIN */}
-      <AnimatePresence>
-        {isJoinModalOpen && (
-          <div className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center">
-            <motion.div
-              ref={joinModalBackdropRef}
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setIsJoinModalOpen(false)}
-            />
-            <motion.div
-              ref={joinModalRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="join-campaign-title"
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="modal-surface relative w-full max-w-md overflow-y-auto rounded-3xl border border-white/10 bg-[#0b0a12] p-5 shadow-2xl custom-scrollbar sm:p-8"
-            >
-              <h2 id="join-campaign-title" className="text-2xl font-bold text-white mb-2" style={{fontFamily: 'Cinzel, serif'}}>Entrar com Convite</h2>
-              <p className="text-gray-400 text-sm mb-6">Cole o código fornecido pelo Mestre da mesa.</p>
-              
-              {error && <div role="alert" className="bg-red-500/10 text-red-400 p-3 rounded-lg text-sm mb-4 border border-red-500/20">{error}</div>}
-              
-              <form onSubmit={handleJoin} className="space-y-4">
-                <label htmlFor="campaign-invite-code" className="sr-only">Código de convite</label>
-                <input 
-                  id="campaign-invite-code"
-                  type="text" 
-                  value={codigoConvite}
-                  autoFocus
-                  onChange={e => setCodigoConvite(e.target.value)}
-                  placeholder="Código de Convite..."
-                  className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 focus:bg-black/60 outline-none transition-all"
-                  required
-                />
-                <div className="flex justify-end gap-3 pt-4">
-                  <button type="button" onClick={() => setIsJoinModalOpen(false)} className="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancelar</button>
-                  <button type="submit" disabled={isLoading} className="px-6 py-2 bg-primary text-white rounded-xl font-medium hover:bg-primary/80 transition-colors flex items-center gap-2">
-                    {isLoading ? <Loader2 className="animate-spin" size={18} /> : 'Entrar'}
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* MODAL: CREATE */}
-      <AnimatePresence>
-        {isCreateModalOpen && (
-          <div className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center">
-            <motion.div
-              ref={createModalBackdropRef}
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setIsCreateModalOpen(false)}
-            />
-            <motion.div
-              ref={createModalRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="create-campaign-title"
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="modal-surface relative w-full max-w-md overflow-y-auto rounded-3xl border border-white/10 bg-[#0b0a12] p-5 shadow-2xl custom-scrollbar sm:p-8"
-            >
-              <h2 id="create-campaign-title" className="text-2xl font-bold text-white mb-2" style={{fontFamily: 'Cinzel, serif'}}>Forjar Nova Mesa</h2>
-              <p className="text-gray-400 text-sm mb-6">Dê um nome para a sua nova campanha.</p>
-              
-              {error && <div role="alert" className="bg-red-500/10 text-red-400 p-3 rounded-lg text-sm mb-4 border border-red-500/20">{error}</div>}
-              
-              <form onSubmit={handleCreate} className="space-y-4">
-                <div>
-                  <label htmlFor="campaign-name" className="text-xs text-gray-400 font-medium pl-1 mb-1 block">Nome da Campanha</label>
-                  <input 
-                    id="campaign-name"
-                    type="text" 
-                    value={nomeCampanha}
-                    autoFocus
-                    onChange={e => setNomeCampanha(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 outline-none transition-all"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="campaign-description" className="text-xs text-gray-400 font-medium pl-1 mb-1 block">Descrição (Opcional)</label>
-                  <textarea 
-                    id="campaign-description"
-                    value={descCampanha}
-                    onChange={e => setDescCampanha(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 outline-none transition-all resize-none h-24"
-                  />
-                </div>
-                <div className="flex justify-end gap-3 pt-4">
-                  <button type="button" onClick={() => setIsCreateModalOpen(false)} className="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancelar</button>
-                  <button type="submit" disabled={isLoading} className="px-6 py-2 bg-primary text-white rounded-xl font-medium hover:bg-primary/80 transition-colors flex items-center gap-2">
-                    {isLoading ? <Loader2 className="animate-spin" size={18} /> : 'Criar Mesa'}
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      <EntrarComConviteModal aberto={modal === 'convite'} onFechar={() => setModal(null)} />
+      <NovaMesaModal aberto={modal === 'nova'} onFechar={() => setModal(null)} />
 
       <div className="mt-10 flex justify-center"><SimboloOculto chave="selo_da_mesa" glifo="⚜" /></div>
     </div>

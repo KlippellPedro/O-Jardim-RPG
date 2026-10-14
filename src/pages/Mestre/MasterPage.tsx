@@ -1,28 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Shield, Users, Settings, FileClock, BarChart3, Bell, UserPlus, LayoutDashboard } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { personagensApi, PersonagemApiRecord } from '../../services/personagensApi';
 import { campanhasApi } from '../../services/campanhasApi';
-import { Shield, Users, Settings, Gem, FileClock, BarChart3 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MestrePanel } from '../../components/Settings/MestrePanel';
-import { CofrePanel } from '../../components/Settings/CofrePanel';
+import { ConfiguracaoCampanha } from '../../components/Settings/ConfiguracaoCampanha';
+import { ConvitesCampanha } from '../../components/Settings/ConvitesCampanha';
+import { MembrosCampanha } from '../../components/Settings/MembrosCampanha';
 import { ConcederItemModal } from '../../components/Settings/ConcederItemModal';
 import { LogsMestrePanel } from '../../components/Settings/LogsMestrePanel';
 import { EstatisticasCampanha } from '../../components/Settings/EstatisticasCampanha';
 import { PersonagensPainel } from '../../components/Settings/PersonagensPainel';
+import { CaixaDeAvisos } from '../../components/caixaDeAvisos/CaixaDeAvisos';
+import { PainelCartao, PainelShell, type IAbaDoPainel } from '../../components/painel/PainelShell';
+import { useAbaNaUrl } from '../../components/painel/useAbaNaUrl';
+import { SeletorDeCampanha } from '../Campanha/SeletorDeCampanha';
 
 interface MembroCampanha {
   id: string;
   nome_exibicao: string;
 }
 
+const ABAS_DO_MESTRE = ['personagens', 'mesa', 'avisos', 'estatisticas', 'logs', 'configuracoes'] as const;
+type AbaDoMestre = typeof ABAS_DO_MESTRE[number];
+
 export const MasterPage = () => {
   const { campanhaAtiva, usuario } = useAuthStore();
+  const avisosDaMesa = useAuthStore((estado) => estado.avisos.mestre);
+  const [aba, trocarAba] = useAbaNaUrl<AbaDoMestre>(ABAS_DO_MESTRE, 'personagens');
   const [personagens, setPersonagens] = useState<PersonagemApiRecord[]>([]);
   const [membros, setMembros] = useState<MembroCampanha[]>([]);
   const [loading, setLoading] = useState(true);
   const [busca, setBusca] = useState('');
-  const [activeTab, setActiveTab] = useState<'personagens' | 'estatisticas' | 'cofre' | 'logs' | 'configs'>('personagens');
   const [transferindoId, setTransferindoId] = useState<string | null>(null);
   const [erroTransferencia, setErroTransferencia] = useState<string | null>(null);
   const [concedendoParaId, setConcedendoParaId] = useState<string | null>(null);
@@ -34,29 +43,44 @@ export const MasterPage = () => {
   // exclusivo do criador da plataforma, em /criador.
   const isMestre = campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente'
     || usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador';
-
-  const trocarAbaPrincipal = (next: typeof activeTab) => {
-    if (next === activeTab) return;
-    setActiveTab(next);
-  };
+  const campanhaId = campanhaAtiva?.id;
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (campanhaAtiva?.id && isMestre) {
-      Promise.all([
-        personagensApi.listar(campanhaAtiva.id, true),
-        campanhasApi.obter(campanhaAtiva.id) as Promise<{ membros?: MembroCampanha[] }>,
-      ])
-        .then(([personagensRes, campanhaRes]) => {
-          setPersonagens(personagensRes.personagens || []);
-          setMembros(campanhaRes.membros || []);
-        })
-        .catch(err => console.error("Erro ao listar personagens", err))
-        .finally(() => setLoading(false));
-    } else {
+  }, []);
+
+  useEffect(() => {
+    if (!campanhaId || !isMestre) {
       setLoading(false);
+      return undefined;
     }
-  }, [campanhaAtiva, isMestre]);
+    // Trocou de mesa: a lista da anterior não pode aparecer enquanto a nova carrega.
+    let valido = true;
+    setLoading(true);
+    setPersonagens([]);
+    setMembros([]);
+    Promise.all([
+      personagensApi.listar(campanhaId, true),
+      campanhasApi.obter(campanhaId) as Promise<{ membros?: MembroCampanha[] }>,
+    ])
+      .then(([personagensRes, campanhaRes]) => {
+        if (!valido) return;
+        setPersonagens(personagensRes.personagens || []);
+        setMembros(campanhaRes.membros || []);
+      })
+      .catch(err => console.error("Erro ao listar personagens", err))
+      .finally(() => { if (valido) setLoading(false); });
+    return () => { valido = false; };
+  }, [campanhaId, isMestre]);
+
+  const abas = useMemo<IAbaDoPainel<AbaDoMestre>[]>(() => [
+    { id: 'personagens', rotulo: 'Personagens', icone: Users },
+    { id: 'mesa', rotulo: 'Membros e Convites', icone: UserPlus },
+    { id: 'avisos', rotulo: 'Avisos', icone: Bell, contagem: avisosDaMesa },
+    { id: 'estatisticas', rotulo: 'Estatísticas', icone: BarChart3 },
+    { id: 'logs', rotulo: 'Logs', icone: FileClock },
+    { id: 'configuracoes', rotulo: 'Configurações', icone: Settings },
+  ], [avisosDaMesa]);
 
   const handleTransferirDono = async (personagemId: string, novoDonoUsuarioId: string) => {
     if (!novoDonoUsuarioId) return;
@@ -78,152 +102,84 @@ export const MasterPage = () => {
 
   if (!isMestre) {
     return (
-      <div className="app-page flex items-center justify-center">
+      <div className="app-page flex flex-col items-center justify-center gap-6">
         <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-6 rounded-2xl flex flex-col items-center">
           <Shield size={48} className="mb-4 opacity-50" />
           <h2 className="text-xl font-bold mb-2">Acesso Negado</h2>
           <p className="text-sm">Apenas o mestre da campanha tem acesso a este painel.</p>
         </div>
+        {/* Quem chegou aqui trocando de mesa pelo seletor precisa poder voltar para uma mesa onde comanda. */}
+        <SeletorDeCampanha />
       </div>
     );
   }
 
   return (
-    <div role="main" className="app-page mx-auto max-w-7xl">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
-        <div>
-          <h1 className="mb-3 flex items-center gap-3 text-[clamp(2rem,7vw,3rem)] font-bold leading-tight text-white sm:gap-4" style={{ fontFamily: 'Cinzel, serif' }}>
-            <Shield className="text-primary" size={40} />
-            Painel do Mestre
-          </h1>
-          <p className="text-gray-400 text-lg">
-            Visão geral da campanha <span className="text-primary font-bold">{campanhaAtiva?.nome}</span>
-          </p>
-        </div>
-      </div>
-
-      <div className="horizontal-scroll mb-6 flex gap-4 overflow-x-auto border-b border-white/10 pb-1 custom-scrollbar">
-        <button
-          onClick={() => trocarAbaPrincipal('personagens')}
-          className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-            activeTab === 'personagens' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-          }`}
-        >
-          <Users size={16} /> Personagens
-        </button>
-        <button
-          onClick={() => trocarAbaPrincipal('estatisticas')}
-          className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-            activeTab === 'estatisticas' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-          }`}
-        >
-          <BarChart3 size={16} /> Estatísticas
-        </button>
-        <button
-          onClick={() => trocarAbaPrincipal('cofre')}
-          className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-            activeTab === 'cofre' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-          }`}
-        >
-          <Gem size={16} /> Cofre
-        </button>
-        <button
-          onClick={() => trocarAbaPrincipal('logs')}
-          className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-            activeTab === 'logs' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-          }`}
-        >
-          <FileClock size={16} /> Logs
-        </button>
-        <button
-          onClick={() => trocarAbaPrincipal('configs')}
-          className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-            activeTab === 'configs' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-          }`}
-        >
-          <Settings size={16} /> Configurações e Convites
-        </button>
-      </div>
-
-      <AnimatePresence mode="wait">
-        {activeTab === 'personagens' && (
-          <motion.div
-            key="personagens"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-          >
-            <PersonagensPainel
-              personagens={personagens}
-              membros={membros}
-              loading={loading}
-              busca={busca}
-              onBuscaChange={setBusca}
-              transferindoId={transferindoId}
-              erroTransferencia={erroTransferencia}
-              onTransferir={handleTransferirDono}
-              onConcederNovo={() => setConcedendoParaId('')}
-              onConcederPara={(personagemId) => setConcedendoParaId(personagemId)}
-            />
-          </motion.div>
+    <PainelShell
+      icone={LayoutDashboard}
+      titulo="Painel do Mestre"
+      subtitulo={<>Visão geral da campanha <span className="font-bold text-primary">{campanhaAtiva?.nome}</span></>}
+      acoes={<SeletorDeCampanha />}
+      abas={abas}
+      abaAtiva={aba}
+      aoTrocarAba={trocarAba}
+    >
+      <motion.div key={aba} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+        {aba === 'personagens' && (
+          <PersonagensPainel
+            personagens={personagens}
+            membros={membros}
+            loading={loading}
+            busca={busca}
+            onBuscaChange={setBusca}
+            transferindoId={transferindoId}
+            erroTransferencia={erroTransferencia}
+            onTransferir={handleTransferirDono}
+            onConcederNovo={() => setConcedendoParaId('')}
+            onConcederPara={(personagemId) => setConcedendoParaId(personagemId)}
+          />
         )}
 
-        {activeTab === 'estatisticas' && (
-          <motion.div
-            key="estatisticas"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] p-6 shadow-2xl md:p-8"
-          >
+        {aba === 'mesa' && (
+          <PainelCartao>
+            <div className="grid gap-10 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+              <MembrosCampanha />
+              <ConvitesCampanha />
+            </div>
+          </PainelCartao>
+        )}
+
+        {aba === 'avisos' && campanhaId && (
+          <PainelCartao>
+            <CaixaDeAvisos
+              painel="mestre"
+              campanhaId={campanhaId}
+              mostrarMesa={false}
+              textoVazio="Nenhum aviso da mesa por enquanto. Quem entrar, mudar de classe ou salvar uma ficha fora das regras aparece aqui."
+            />
+          </PainelCartao>
+        )}
+
+        {aba === 'estatisticas' && (
+          <PainelCartao>
             <EstatisticasCampanha personagens={personagens} loading={loading} />
-          </motion.div>
+          </PainelCartao>
         )}
 
-        {activeTab === 'cofre' && (
-          <motion.div
-            key="cofre"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] shadow-2xl"
-          >
-            <div className="flex-1 w-full h-full p-2 md:p-6">
-              <CofrePanel />
-            </div>
-          </motion.div>
+        {aba === 'logs' && campanhaId && (
+          <LogsMestrePanel
+            campanhaId={campanhaId}
+            personagens={personagens.map((personagem) => ({ id: personagem.id, nome: personagem.nome }))}
+            membros={membros.map((membro) => ({ id: membro.id, nome: membro.nome_exibicao }))}
+          />
         )}
 
-        {activeTab === 'logs' && campanhaAtiva && (
-          <motion.div
-            key="logs"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-          >
-            <LogsMestrePanel
-              campanhaId={campanhaAtiva.id}
-              personagens={personagens.map((personagem) => ({ id: personagem.id, nome: personagem.nome }))}
-              membros={membros.map((membro) => ({ id: membro.id, nome: membro.nome_exibicao }))}
-            />
-          </motion.div>
+        {aba === 'configuracoes' && (
+          <PainelCartao>
+            <ConfiguracaoCampanha />
+          </PainelCartao>
         )}
-
-        {activeTab === 'configs' && (
-          <motion.div
-            key="configs"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] shadow-2xl"
-          >
-            {/* Reusing the MestrePanel directly but rendering it natively inside the page container */}
-            <div className="flex-1 w-full h-full p-2 md:p-6">
-               <MestrePanel />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </motion.div>
 
       {campanhaAtiva && (
         <ConcederItemModal
@@ -234,7 +190,7 @@ export const MasterPage = () => {
           personagemInicialId={concedendoParaId || undefined}
         />
       )}
-    </div>
+    </PainelShell>
   );
 };
 

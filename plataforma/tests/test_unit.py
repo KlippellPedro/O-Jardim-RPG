@@ -239,6 +239,17 @@ class NotificationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             notify(self.ConexaoFalsa(), user_ids=[UUID(int=1)], category="qualquer", title="x")
 
+    def test_panel_defaults_to_general_and_travels_with_the_notice(self):
+        conexao = self.ConexaoFalsa()
+        notify(conexao, user_ids=[UUID(int=1)], category="campanha", title="pessoal")
+        notify(conexao, user_ids=[UUID(int=2)], category="campanha", title="da mesa", panel="mestre")
+        notify(conexao, user_ids=[UUID(int=3)], category="conta", title="da administracao", panel="admin")
+        self.assertEqual([params[-1] for params in conexao.inseridos], ["geral", "mestre", "admin"])
+
+    def test_invalid_panel_is_rejected(self):
+        with self.assertRaises(ValueError):
+            notify(self.ConexaoFalsa(), user_ids=[UUID(int=1)], category="campanha", title="x", panel="criador")
+
     def test_marking_all_as_read_needs_no_ids(self):
         self.assertEqual(NotificationReadInput().ids, [])
 

@@ -8,6 +8,7 @@ from core.character_summary import resumir_ficha
 from core.campaign_visibility import visible_campaign_config
 from core.database import Database
 from core.dependencies import AuthenticatedUser, campaign_access, get_current_user, get_database
+from core.notifications import contar_avisos
 
 
 router = APIRouter(prefix="/contexto", tags=["contexto"])
@@ -72,13 +73,12 @@ def bootstrap_context(
 
         detalhes = None
         personagens: list[dict] = []
-        nao_lidos = connection.execute(
-            """
-            SELECT COUNT(*) AS total FROM notificacoes
-            WHERE usuario_id=%s AND lida_em IS NULL
-            """,
-            (user.id,),
-        ).fetchone()["total"]
+        avisos = contar_avisos(
+            connection,
+            user.id,
+            campaign_id=escolhida["id"] if escolhida else None,
+            is_platform_admin=user.is_platform_admin,
+        )
 
         if escolhida:
             acesso = campaign_access(connection, escolhida["id"], user.id)
@@ -177,5 +177,7 @@ def bootstrap_context(
         "campanha": escolhida,
         "detalhes": detalhes,
         "personagens": personagens,
-        "avisos_nao_lidos": int(nao_lidos),
+        # `avisos_nao_lidos` é o total, como sempre foi; `avisos` separa por painel para o menu.
+        "avisos_nao_lidos": avisos["total"],
+        "avisos": avisos,
     }

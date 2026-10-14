@@ -25,7 +25,7 @@ permissões do mestre, vínculo Discord, economia e auditoria.
 - painel do mestre em seções: mesa e jogadores, personagens da campanha,
   publicação de conteúdo, controle de quem vê o quê e registro da mesa;
 - convites listáveis e revogáveis, remoção de membro sem perder fichas;
-- avisos automáticos para quem é afetado por uma mudança de painel;
+- avisos automáticos para quem é afetado por uma mudança de painel, cada um no painel dele (geral, Mestre ou administração);
 - `GET /api/v1/contexto` com todo o estado inicial em uma requisição;
 - sessão ao vivo com iniciativa, vida em tempo real e mesa (mapa, trilha, votação,
   relógios, bilhetes), com segredos filtrados no servidor;
@@ -34,7 +34,7 @@ permissões do mestre, vínculo Discord, economia e auditoria.
 - envio direto e troca com aceite de itens e moedas entre personagens (`/trocas`);
 - convites de plataforma para criar conta, com tela no Painel do Criador;
 - backup lógico do banco, sob demanda e automático;
-- migrações incrementais do PostgreSQL (49 até 3 de outubro de 2026).
+- migrações incrementais do PostgreSQL (55 até 13 de outubro de 2026).
 
 O site usa os adaptadores de `src/plataforma` para autenticação, campanhas,
 personagens, conteúdo liberado, Discord e cofre. A campanha selecionada é a

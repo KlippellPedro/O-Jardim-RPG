@@ -482,6 +482,35 @@ ativos ou, com `todos=true`, também os usados, vencidos e revogados dos
 sendo o convite de campanha que o Mestre gera. A tela de cadastro lê o código
 do link. Testes: [test_convites_plataforma.py](../../plataforma/tests/test_convites_plataforma.py).
 
+<a id="avisos-por-painel"></a>
+
+## Avisos por painel
+
+A tabela `notificacoes` tinha uma caixa só: o que é da pessoa (cofre, troca, XP) se misturava com o que é de quem comanda a mesa
+(quem entrou, ficha fora das regras) e com o da administração (pedido de senha). A **migração 55** (`avisos_por_painel`) acrescentou
+a coluna `painel` (`geral`, `mestre` ou `admin`, padrão `geral`, com `CHECK` e índice `notificacoes_painel_idx`) e reclassificou os
+avisos antigos pelos títulos que os roteadores gravavam (`AVISOS_ANTIGOS_DO_MESTRE_SQL` e `AVISOS_ANTIGOS_DA_ADMINISTRACAO_SQL` em
+[schema.py](../../plataforma/core/schema.py), testadas contra o banco).
+
+- **Quem grava.** `notify(..., panel="mestre"|"admin")` em [notifications.py](../../plataforma/core/notifications.py); sem `panel` o aviso
+  é geral. Hoje vão para o Mestre: entrada na campanha, alerta de regras na criação e na ficha, mudança de classe/XP, patamar de nível,
+  infração na loja e reivindicação de recompensa; para a administração: pedido de senha. Os dois `INSERT` diretos
+  (`shop.py` e `bounties.py`) gravam `'mestre'` à mão. **Aviso novo que só interessa a quem comanda a mesa precisa de `panel="mestre"`**,
+  senão cai na caixa de todo mundo.
+- **`GET /avisos`** aceita `painel` e `campanha_id` (a campanha só filtra; o Painel do Mestre manda a mesa ativa) e devolve `avisos`,
+  `nao_lidos` (o total, como sempre) e `contagens` (`geral`, `mestre`, `admin`, `mestre_por_campanha`, `total`). Painel desconhecido dá
+  422. Sem `painel` a resposta é a caixa inteira, que é o que um site antigo ainda aberto pede.
+- **`POST /avisos/lidos`** e **`DELETE /avisos`** aceitam o mesmo `painel`/`campanha_id`: "marcar tudo como lido" e "limpar lidos"
+  ficam dentro do painel de quem clicou. Os dois **nunca tocam numa reivindicação de recompensa pendente**
+  (`dados.tipo = 'claim_recompensa'` e `dados.status = 'pendente'`): ela é fila do Mestre na Loja
+  ([bounties.py](../../plataforma/routers/bounties.py)), e antes "marcar lido" a escondia da Loja e "limpar lidos" a apagava.
+- **Contagem** (`contar_avisos`, usada por `/avisos` e `/contexto`): o aviso do Mestre só conta enquanto a pessoa ainda é Mestre ou
+  assistente da mesa, e o da administração só para quem ainda é admin ou criador. Sem isso o número vermelho de um aviso que nenhuma
+  tela abre nunca sairia. `/contexto` devolve `avisos_nao_lidos` (o total) e `avisos` (a divisão acima, com `mestre` da mesa ativa).
+- **Testes:** [test_avisos_por_painel.py](../../plataforma/tests/test_avisos_por_painel.py) (banco: migração, contagem, escopo de marcar e
+  limpar, fila de recompensa) e a classe `NotificationsTests` de
+  [test_knowledge_content_notifications.py](../../plataforma/tests/test_knowledge_content_notifications.py) (SQL e permissões).
+
 <a id="evidencia-de-validacao-e-limites"></a>
 
 ## Evidência de validação e limites

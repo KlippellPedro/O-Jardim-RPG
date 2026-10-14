@@ -681,6 +681,7 @@ def create_character(
                     campaign_id=payload.campanha_id,
                     actor_user_id=user.id,
                     details={"personagem_id": str(character_id)},
+                    panel="mestre",
                 )
         owner = connection.execute(
             """
@@ -1057,6 +1058,7 @@ def update_character(
                         campaign_id=current["campanha_id"],
                         actor_user_id=user.id,
                         details={"personagem_id": str(character_id)},
+                        panel="mestre",
                     )
 
             # O jogador controla classe/nível/XP da própria ficha (decisão de
@@ -1095,6 +1097,7 @@ def update_character(
                     campaign_id=current["campanha_id"],
                     actor_user_id=user.id,
                     details={"personagem_id": str(character_id)},
+                    panel="mestre",
                 )
                 # Acima do nível 60 a ficha não trava nada e o servidor deixa de
                 # conferir a ordem das classes. Em troca, o Mestre é avisado a cada
@@ -1118,6 +1121,7 @@ def update_character(
                         campaign_id=current["campanha_id"],
                         actor_user_id=user.id,
                         details={"personagem_id": str(character_id), "patamar": patamar},
+                        panel="mestre",
                     )
         row = connection.execute(
             """

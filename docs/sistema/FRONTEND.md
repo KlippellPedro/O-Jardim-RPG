@@ -410,6 +410,68 @@ Chrome de verdade: o dado de 20 natural e de 1 natural sobre a lista de fichas, 
 320 px (conferindo 5 cartões na fileira e nenhum rótulo cortado). **Não visto:** a vibração em si (precisa de celular) e a faixa chegando
 pelo canal ao vivo vinda de uma rolagem real de outra pessoa; o evento foi testado no servidor e a faixa foi disparada pelo store.
 
+<a id="menu-avisos-e-paineis"></a>
+
+## Menu da engrenagem, avisos por painel e painéis de gestão (13 de outubro de 2026)
+
+O menu da engrenagem, as mesas, o Cofre e os três painéis de gestão (Mestre, Criador e Administração) estavam espalhados: a mesa
+tinha cinco lugares (item "Campanha" do menu lateral, painel "Mesas e Campanhas", lista de mesas, seletor da Home e da Campanha,
+aba do Painel do Mestre), o Cofre tinha duas cópias, e todo aviso caía na mesma caixa. Esta passagem juntou cada coisa no lugar dela.
+
+- **Menu da engrenagem** ([SettingsMenu.tsx](../../src/components/Settings/SettingsMenu.tsx); quem vê o quê mora em
+  [menuDaEngrenagem.ts](../../src/components/Settings/menuDaEngrenagem.ts), puro e testado): duas seções, **Conta** (Minha conta,
+  Avisos, Cofre, Preferências) e **Painéis** (Painel do Mestre, Painel do Criador, Administração, cada um só para quem tem o cargo).
+  Cada item mostra o número de avisos novos do próprio painel, e o botão da engrenagem soma tudo que espera a pessoa, inclusive os
+  avisos do Mestre em outras mesas (que ganham uma linha própria no topo do menu). O topo mostra a mesa ativa e leva à página da
+  Campanha. O Cofre some sem mesa ativa, porque a rota só devolveria a pessoa à lista de mesas. Mestre, Criador e Administração
+  não repetem mais o escudo da Ficha nem a coroa da Campanha: o Painel do Mestre usa `LayoutDashboard` e a Administração `ShieldCheck`.
+- **Mesas num lugar só.** O painel lateral "Mesas e Campanhas" (`CampanhasPanel`) foi removido. Trocar de mesa, entrar com código de
+  convite e criar mesa moram no [SeletorDeCampanha](../../src/pages/Campanha/SeletorDeCampanha.tsx) (cabeçalho da Home e da página da
+  Campanha; a Ficha o usa como botão "Trocar Campanha", com a variante `botao`, e troca de mesa sem sair da tela). Ele fecha ao
+  clicar fora e com Esc e mostra, em cada mesa, os avisos novos do Mestre. Os dois modais são compartilhados com a lista de mesas
+  ([EntrarComConviteModal](../../src/pages/Campanhas/EntrarComConviteModal.tsx) e
+  [NovaMesaModal](../../src/pages/Campanhas/NovaMesaModal.tsx), em portal no `body`). `/campanhas` continua para quem ainda não tem mesa
+  ativa e para ver todas. O botão de criar mesa segue o servidor (`podeCriarCampanha`: Mestre e Criador; a Administração sozinha
+  recebia o botão e levava um 403). O campo do convite não força mais maiúsculas: o código é sensível a caixa, e o painel antigo
+  recusava quase todo código real. Arquivar a mesa ficou só em dois lugares, cada um com uma segunda etapa de confirmação (Configurações do
+  Painel do Mestre, digitando o nome, e Epílogo da Campanha); o ícone de lixeira, que arquivava com um aviso simples, saiu junto com o painel.
+- **Avisos por painel** ([CaixaDeAvisos.tsx](../../src/components/caixaDeAvisos/CaixaDeAvisos.tsx) e as regras puras em
+  [regrasDaCaixa.ts](../../src/components/caixaDeAvisos/regrasDaCaixa.ts)): a mesma caixa serve os três painéis (`painel="geral"`,
+  `"mestre"` ou `"admin"`) e cada um lista, marca e limpa só o que mora nele. Os avisos vêm agrupados por dia, com filtro "Não lidos",
+  ícone por categoria, destaque em negrito (o servidor escreve `**assim**`; vira `<strong>`, nunca HTML) e, quando o lugar é óbvio, um
+  botão que leva até ele e já marca o aviso como lido (`destinoDoAviso`: Cofre, Sessão, Loja, e as abas do Painel do Mestre e da
+  Administração por `?aba=`). A **engrenagem** mostra só o que é da pessoa; quando há aviso novo em outro painel, um atalho aparece no
+  topo. O **Painel do Mestre** ganhou a aba **Avisos** (da mesa ativa) e a **Administração** ganhou a dela. Reivindicação de recompensa
+  pendente aparece como "Aguardando resposta" e não se marca como lida: é a fila do Mestre na Loja. Os números moram em
+  `useAuthStore.avisos` (`geral`, `mestre`, `admin`, `mestre_por_campanha`, `total`), vêm do `/contexto` e se atualizam sempre que
+  uma caixa lê ou marca avisos. Servidor mais antigo, que só manda o total, cai tudo na caixa geral (`normalizarContagem`). API e
+  migração: [Integração](INTEGRACAO.md#avisos-por-painel).
+- **Moldura dos painéis de gestão** ([PainelShell.tsx](../../src/components/painel/PainelShell.tsx),
+  [useAbaNaUrl.ts](../../src/components/painel/useAbaNaUrl.ts)): cabeçalho, abas com número, `role="tablist"`, setas, Home e End, e a
+  aba aberta em `?aba=` (os outros parâmetros ficam; `replace`, para o Voltar sair do painel e não passear pelas abas). Em tela
+  estreita a lista rola de lado e a aba aberta é trazida para a vista. O **Painel do Mestre** (`/mestre`): Personagens, **Membros e
+  Convites** (as antigas sub-abas Configurações/Convites/Membros deixaram de ser uma aba dentro de outra), **Avisos**, Estatísticas,
+  Logs e Configurações; o Cofre saiu daqui. Tem o seletor de mesa no cabeçalho e não mostra a lista da mesa anterior enquanto a nova
+  carrega. O **Painel do Criador** (`/criador`, abas `conteudo`, `visibilidade`, `liberacoes`, `convites`) começa na campanha que a
+  pessoa já tem aberta e chama a aba dos convites de conta de "Convites de cadastro". A **Administração** (`/admin`, abas
+  `usuarios`, `campanhas`, `pedidos`, `avisos`, `auditoria`, `backup`) tem os quatro números do topo clicáveis e o número de pedidos
+  de senha na aba; o botão de voltar do cabeçalho saiu, como nos outros dois painéis.
+- **Cofre** ([CofrePage.tsx](../../src/pages/Cofre/CofrePage.tsx), [CofreBancario.tsx](../../src/pages/Cofre/CofreBancario.tsx),
+  [CofreRecompensas.tsx](../../src/pages/Cofre/CofreRecompensas.tsx)): uma página só; a cópia `CofrePanel`, que morava numa aba do
+  Painel do Mestre (o Cofre é da conta de cada um, não da mesa), foi removida. O estado do Discord aparece no topo com atalho para
+  Minha conta, onde o vínculo se faz e se desfaz (o bloco "Integração Discord" duplicado saiu). O personagem de destino é um só para as
+  duas colunas e já vem escolhido quando é o único ou o ativo (`personagemInicialDoCofre`); os botões de enviar ficam visíveis,
+  desligados e com a razão no `title` até haver destino. O atalho de busca `/cofre` deixou de se chamar "Cofre do Jardim" (que é a meta
+  coletiva do Jornalista).
+
+Verificação: `npx tsc -b`, `npm run test:frontend` (1269 testes; [menuEPaineis.test.ts](../../tests/frontend/menuEPaineis.test.ts) e
+[caixaDeAvisos.test.ts](../../tests/frontend/caixaDeAvisos.test.ts) são novos), a suíte da plataforma com PostgreSQL descartável (1610
+testes, 12 deles novos em [test_avisos_por_painel.py](../../plataforma/tests/test_avisos_por_painel.py)) e navegação contra API e banco
+descartáveis: menu, Avisos da engrenagem, abas do Painel do Mestre, da Administração e do Criador, seletor de mesa e modal de
+convite, Cofre com e sem personagem escolhido e o envio, a 1280 e a 375 px, como Criador e como jogador (sem nenhum painel no menu).
+**Não visto:** Safari/iOS e aparelho real, leitor de tela, a navegação das abas por setas (coberta só pelo teste da regra), e o painel
+lateral de Avisos com a animação de entrada rodando (o painel embutido não anima; ele foi posto na tela à mão para a captura).
+
 ## Responsividade e acessibilidade
 
 O fechamento de agosto corrigiu sete problemas reproduzidos:

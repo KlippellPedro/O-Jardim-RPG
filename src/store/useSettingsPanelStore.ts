@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 
 // Painel do SettingsMenu (offcanvas de engrenagem) precisa ser aberto tanto
-// pelo próprio menu quanto por botões de outras telas (ex.: "Trocar campanha"
-// na Ficha) - por isso o estado vive num store à parte em vez de useState local.
-export type SettingsPanelType = 'conta' | 'avisos' | 'campanhas' | 'preferencias' | null;
+// pelo próprio menu quanto por botões de outras telas (ex.: "Vincular Discord"
+// no Cofre abre Minha Conta) - por isso o estado vive num store à parte em vez
+// de useState local. Mesas e campanhas não passam por aqui: moram na página da Campanha.
+export type SettingsPanelType = 'conta' | 'avisos' | 'preferencias' | null;
 
 interface SettingsPanelState {
   activePanel: SettingsPanelType;

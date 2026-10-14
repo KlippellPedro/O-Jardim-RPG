@@ -961,9 +961,15 @@ class UsageInput(BaseModel):
 
 
 class NotificationReadInput(BaseModel):
-    """Sem `ids` significa "marcar tudo como lido"."""
+    """Sem `ids` significa "marcar tudo como lido".
+
+    `painel` e `campanha_id` limitam o "tudo": o botão da caixa da engrenagem não pode
+    marcar os avisos do Painel do Mestre, e o do Painel do Mestre só vale para a mesa aberta.
+    Sem eles o servidor marca tudo, como antes da caixa ser dividida."""
 
     ids: list[UUID] = Field(default_factory=list, max_length=200)
+    painel: Literal["geral", "mestre", "admin"] | None = None
+    campanha_id: UUID | None = None
 
 
 class ContentAccessInput(BaseModel):
