@@ -16,6 +16,11 @@ interface ConteudoLorePanelProps {
    * inicial - depois disso a navegação interna do painel manda. */
   initialItem?: string;
   onDirtyChange?: (dirty: boolean) => void;
+  /** `entrada` edita um registro só (a janela de edição das páginas do Mundo): sem lista, sem criar e sem excluir.
+   * `initialItem` diz qual. O padrão é o editor completo do Painel do Criador. */
+  modo?: 'painel' | 'entrada';
+  /** Chamado depois de publicar, para as páginas que mostram o Mundo lerem o texto novo. */
+  onPublicado?: () => void;
 }
 
 const TIPOS_LORE = [
@@ -40,13 +45,23 @@ function documentoEfetivo(entry: EditorialLibraryEntry): LoreDocument {
   return entry.dados_base;
 }
 
+/** Acha a entrada pela chave "tipo:id". Quem mudou de categoria guarda a chave de origem, então o id (com o mesmo tipo) vale como segunda tentativa. */
+function encontrarEntrada(entradas: EditorialLibraryEntry[], chave: string): EditorialLibraryEntry | undefined {
+  const exata = entradas.find((entry) => entry.chave === chave);
+  if (exata) return exata;
+  const [tipo, ...resto] = chave.split(':');
+  const id = resto.join(':');
+  return entradas.find((entry) => entry.chave_recurso === id && documentoEfetivo(entry).tipo === tipo);
+}
+
 function rotuloCampo(key: string): string {
   return key
     .replace(/_/g, ' ')
     .replace(/\b\w/g, (letter) => letter.toLocaleUpperCase('pt-BR'));
 }
 
-export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePanelProps) {
+export function ConteudoLorePanel({ initialItem, onDirtyChange, modo = 'painel', onPublicado }: ConteudoLorePanelProps) {
+  const soEntrada = modo === 'entrada';
   const [entradas, setEntradas] = useState<EditorialLibraryEntry[]>([]);
   const [selecionadaChave, setSelecionadaChave] = useState<string>('');
   const [busca, setBusca] = useState('');
@@ -81,14 +96,17 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
       const resposta = await conteudoEditorialApi.listarMundoGlobal(signal);
       const loreEntries = (resposta.entradas || []).filter((entry) => entry.tipo !== 'cronologia' && entry.tipo !== 'entidade');
       setEntradas(loreEntries);
-      const alvo = preferredKey && loreEntries.find((entry) => entry.chave === preferredKey);
+      const alvo = preferredKey ? encontrarEntrada(loreEntries, preferredKey) : undefined;
       setTiposAbertos((atuais) => {
         if (alvo) return new Set([...atuais, alvo.tipo]);
         return atuais.size > 0 || !loreEntries[0] ? atuais : new Set([loreEntries[0].tipo]);
       });
       setSelecionadaChave((atual) => {
         if (alvo) return alvo.chave;
+        // Recarregar depois de publicar não traz a chave de novo: a entrada que já estava aberta continua aberta.
         if (atual && loreEntries.some((entry) => entry.chave === atual)) return atual;
+        // Na janela de uma entrada só, não achar a entrada não pode abrir outra no lugar.
+        if (soEntrada) return '';
         return loreEntries.find((entry) => !entry.excluido)?.chave || loreEntries[0]?.chave || '';
       });
     } catch (error: any) {
@@ -398,6 +416,7 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
       await conteudoEditorialApi.publicarGlobal(editorial.id, editorial.versao_editorial);
       await carregar();
       setSucesso('Conteúdo publicado globalmente para todas as campanhas.');
+      onPublicado?.();
     } catch (error: any) {
       setErro(error?.message || 'Não foi possível publicar o conteúdo.');
     } finally {
@@ -442,7 +461,8 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
   }
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#0a090e] shadow-2xl">
+    <div className={soEntrada ? '' : 'overflow-hidden rounded-3xl border border-white/10 bg-[#0a090e] shadow-2xl'}>
+      {!soEntrada && (
       <div className="border-b border-white/10 p-5 md:p-8">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex items-start gap-3">
@@ -467,10 +487,12 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
           </dl>
         </div>
       </div>
+      )}
 
-      {avisoLista && <div role="status" className="mx-4 mt-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300 md:mx-8">{avisoLista}</div>}
+      {!soEntrada && avisoLista && <div role="status" className="mx-4 mt-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300 md:mx-8">{avisoLista}</div>}
 
-      <div className="grid min-h-[620px] lg:grid-cols-[360px_minmax(0,1fr)]">
+      <div className={soEntrada ? 'grid' : 'grid min-h-[620px] lg:grid-cols-[360px_minmax(0,1fr)]'}>
+        {!soEntrada && (
         <aside className="border-b border-white/10 bg-black/10 p-4 lg:border-b-0 lg:border-r">
           <button type="button" onClick={iniciarNovaEntrada} className="mb-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm font-bold text-primary transition hover:bg-primary/20"><Plus size={16} /> Criar conteúdo</button>
           <div className="relative mb-3">
@@ -538,9 +560,10 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
             )}
           </div>
         </aside>
+        )}
 
-        <section className="min-w-0 p-5 md:p-8">
-          {!selecionada ? <p className="text-sm text-gray-500">Selecione uma entrada para editar.</p> : (
+        <section className="min-w-0 p-1 sm:p-2 md:p-4">
+          {!selecionada ? <p className="text-sm text-gray-500">{soEntrada ? 'Não encontrei este registro na biblioteca editável.' : 'Selecione uma entrada para editar.'}</p> : (
             <div className="mx-auto max-w-3xl space-y-6">
               <div className="flex flex-col gap-3 border-b border-white/10 pb-5 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0">
@@ -554,7 +577,7 @@ export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePa
                     )}
                   </div>
                 </div>
-                {novaEntrada ? (
+                {soEntrada ? null : novaEntrada ? (
                   <button type="button" onClick={cancelarNovaEntrada} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs font-bold text-gray-400 transition hover:text-white"><X size={14} /> Cancelar criação</button>
                 ) : selecionada.excluido ? (
                   <button type="button" onClick={() => void restaurarEntradaExcluida(selecionada)} disabled={restoring} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.06] px-3 py-2 text-xs font-bold text-emerald-300 transition hover:bg-emerald-500/10 disabled:opacity-40">

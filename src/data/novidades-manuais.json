@@ -2,6 +2,16 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-13-editar-e-reter-no-cartao",
+      "data": "2026-10-13",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Editar e reter direto no cartão",
+      "detalhes": [
+        "Para quem comanda a mesa: cada cartão dos Registros Universais, e o conteúdo dentro de cada Árvore, ganhou os botões Editar e Visível ou Retido. Editar abre a ficha numa janela, sem sair da página, e Visível ou Retido mostra ou retém aquilo para os jogadores na hora."
+      ]
+    },
+    {
       "id": "2026-10-13-menu-engrenagem-arrumado",
       "data": "2026-10-13",
       "tipo": "melhoria",

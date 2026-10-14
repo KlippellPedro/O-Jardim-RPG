@@ -5,6 +5,7 @@ import type { EntidadeCatalogo } from '../../data/mundo/entidades';
 import type { WorldChronicleCatalog } from '../pages/Mundo/worldChronicles';
 import { conteudoEditorialApi } from '../services/conteudoEditorialApi';
 import { useAuthStore } from '../store/useAuthStore';
+import { useConteudoEditadoStore } from '../store/useConteudoEditadoStore';
 
 export const EMPTY_CHRONICLES: WorldChronicleCatalog = {
   versao: 1, status: '', introducao: { titulo: '', subtitulo: '', descricao: '' },
@@ -19,7 +20,14 @@ export function useResolvedWorld(campaignId?: string) {
   const user = useAuthStore(state => state.usuario);
   const campaign = useAuthStore(state => state.campanhaAtiva);
   const id = campaignId ?? campaign?.id;
-  const key = JSON.stringify([user?.id, user?.papel_plataforma, id, campaign?.papel, campaign?.configuracoes]);
+  const revisao = useConteudoEditadoStore(state => state.revisao);
+  // Quem comanda enxerga tudo de qualquer jeito: mudar a visibilidade ou publicar um conteúdo atualiza os dados no lugar,
+  // sem passar pela tela de carregamento (que desmontaria a página e perderia filtros e seleção). Para o jogador, mudar a
+  // visibilidade continua apagando os dados até a leitura nova chegar.
+  const gestor = user?.papel_plataforma === 'criador' || user?.papel_plataforma === 'admin'
+    || campaign?.papel === 'mestre' || campaign?.papel === 'assistente';
+  const configuracoes = JSON.stringify(campaign?.configuracoes ?? null);
+  const key = JSON.stringify([user?.id, user?.papel_plataforma, id, campaign?.papel, gestor ? null : campaign?.configuracoes]);
   const [state, setState] = useState<{ key: string; data: typeof EMPTY; error: string | null } | null>(null);
   useEffect(() => {
     if (!user || !id) return;
@@ -40,7 +48,7 @@ export function useResolvedWorld(campaignId?: string) {
       if (!controller.signal.aborted) setState({ key, data: EMPTY, error: error?.message || 'Não foi possível carregar o Mundo.' });
     });
     return () => controller.abort();
-  }, [key, id, Boolean(user)]);
+  }, [key, id, Boolean(user), revisao, gestor ? configuracoes : null]);
   const current = user && id && state?.key === key ? state : null;
   return { ...(current?.data ?? EMPTY), loading: Boolean(user && id && !current), error: current?.error ?? null };
 }

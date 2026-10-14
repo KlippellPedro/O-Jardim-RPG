@@ -60,9 +60,6 @@ export const MundoPage: React.FC = () => {
   const campanhaAtiva = useAuthStore((state) => state.campanhaAtiva);
   const { reduceMotion } = usePerformanceProfile();
   const { podeEditarConteudo } = usePermissoes();
-  const rotaEditorMundo = (secao: 'lore' | 'cronologia', item: string) => (
-    `/criador?aba=conteudo&secao=${secao}&item=${encodeURIComponent(item)}${campanhaAtiva ? `&campanha_id=${encodeURIComponent(campanhaAtiva.id)}` : ''}`
-  );
 
   const isMestre = usuario?.papel_plataforma === 'admin'
     || usuario?.papel_plataforma === 'criador'
@@ -255,8 +252,6 @@ export const MundoPage: React.FC = () => {
               ? `/mundo/vazio/${entry.tipo}/${entry.id}`
               : `/mundo/arvores/${codexId}/${entry.tipo}/${entry.id}`,
           )}
-          onEditTree={() => navigate(rotaEditorMundo('cronologia', codexId))}
-          onEditEntry={(entry) => navigate(rotaEditorMundo('lore', `${entry.tipo}:${entry.id}`))}
         />
       </Suspense>
     );
@@ -289,9 +284,9 @@ export const MundoPage: React.FC = () => {
           isMestre={isMestre}
           loreRevelado={loreRevelado}
           loreOculto={loreOculto}
+          podeEditarConteudo={podeEditarConteudo}
           onBack={() => navigate('/mundo')}
           onOpenGlobalTimeline={cronologiaGeralVisivel ? () => navigate('/mundo/cronologia') : undefined}
-          onEditEntry={(tipo, id) => navigate(rotaEditorMundo('lore', `${tipo}:${id}`))}
         />
       </Suspense>
     );

@@ -5,6 +5,7 @@ import {
   Building2,
   ChevronRight,
   Crown,
+  Eye,
   EyeOff,
   ExternalLink,
   Gem,
@@ -12,6 +13,7 @@ import {
   Globe2,
   History,
   Landmark,
+  Lock,
   MessagesSquare,
   Pencil,
   Plus,
@@ -37,6 +39,9 @@ import {
   type SecaoUniversal,
 } from '../../../services/registrosUniversaisApi';
 import { CarimboRetido, RasuraTexto, RasuraTitulo } from '../../../components/ui/Rasura';
+import { SeletorDeVisibilidade, type IOpcaoDeVisibilidade } from '../../../components/ui/SeletorDeVisibilidade';
+import { EditorDeLoreModal } from '../../../components/conteudo/EditorEmModal';
+import { loreVisivelParaJogadores, salvarVisibilidadeDeLore } from '../visibilidadeRapida';
 import { GRUPOS_DE_SERES, registrosDeFabrica } from '../universais/dadosPadrao';
 import { EditorDeRegistro } from '../universais/EditorDeRegistro';
 import { FichaArtefato } from '../universais/FichaArtefato';
@@ -79,12 +84,22 @@ interface IUniversalRecordsPageProps {
   isMestre: boolean;
   loreRevelado: string[];
   loreOculto: string[];
+  /** Só o criador edita o texto e a visibilidade de seres e locais da lore (o conteúdo é global). */
   podeEditarConteudo?: boolean;
   onBack: () => void;
   onOpenGlobalTimeline?: () => void;
-  /** Abre o registro de lore no editor de Conteúdo (seres e locais têm fonte própria). */
-  onEditEntry?: (tipo: string, id: string) => void;
 }
+
+const OPCOES_DE_REGISTRO: IOpcaoDeVisibilidade<RevelacaoRegistro>[] = [
+  { id: 'aberto', rotulo: 'Aberto', icone: Eye, tom: 'aberto', ajuda: 'Os jogadores leem tudo.' },
+  { id: 'rasurado', rotulo: 'Rasurado', icone: Lock, tom: 'retido', ajuda: 'Os jogadores veem que existe, mas só faixas de tinta.' },
+  { id: 'oculto', rotulo: 'Oculto', icone: EyeOff, tom: 'oculto', ajuda: 'Os jogadores nem sabem que existe.' },
+];
+
+const OPCOES_DE_LORE: IOpcaoDeVisibilidade<'visivel' | 'retido'>[] = [
+  { id: 'visivel', rotulo: 'Visível', icone: Eye, tom: 'aberto', ajuda: 'Os jogadores leem este registro.' },
+  { id: 'retido', rotulo: 'Retido', icone: Lock, tom: 'retido', ajuda: 'Os jogadores veem que ele existe, mas só faixas de tinta.' },
+];
 
 const ICONE_SECAO: Record<SecaoUniversal, LucideIcon> = {
   bestiario: Skull,
@@ -129,15 +144,16 @@ const ordenar = (lista: IRegistro[], secao: SecaoUniversal, ordem: Ordem): IRegi
 });
 
 /** Marcas e botões do Mestre no topo de uma ficha. */
-const Acoes = ({ registro, gestor, onEditar, onEditarLore }: { registro: IRegistro; gestor: boolean; onEditar: () => void; onEditarLore?: () => void }) => (
+const Acoes = ({ registro, gestor, onEditar, onEditarLore, visibilidade }: { registro: IRegistro; gestor: boolean; onEditar: () => void; onEditarLore?: () => void; visibilidade?: React.ReactNode }) => (
   <>
     {registro.editado && registro.secao !== 'faccoes' ? <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-amber-200">ajustado pelo Mestre</span> : null}
-    {gestor && registro.revelacao !== 'aberto' ? <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-amber-200"><EyeOff size={11} /> {ROTULO_REVELACAO[registro.revelacao]}</span> : null}
+    {gestor && !visibilidade && registro.revelacao !== 'aberto' ? <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-amber-200"><EyeOff size={11} /> {ROTULO_REVELACAO[registro.revelacao]}</span> : null}
+    {gestor ? visibilidade : null}
     {gestor && registro.editor === 'servidor' ? (
       <button type="button" onClick={onEditar} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/40 hover:text-white"><Pencil size={12} /> Editar</button>
     ) : null}
     {gestor && registro.editor === 'lore' && onEditarLore ? (
-      <button type="button" onClick={onEditarLore} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/40 hover:text-white"><Pencil size={12} /> Editar no conteúdo</button>
+      <button type="button" onClick={onEditarLore} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/40 hover:text-white"><Pencil size={12} /> Editar</button>
     ) : null}
   </>
 );
@@ -225,7 +241,7 @@ const legendaDaLinha = (registro: IRegistro, retido: boolean): string => {
 
 export const UniversalCodexPage: React.FC<IUniversalRecordsPageProps> = ({
   catalog, factions, entities = [], entidadesRevelado = [], entidadesOculto = [], arvoresTrancadas = [],
-  secoesOcultas = [], isMestre, loreRevelado, loreOculto, onBack, onOpenGlobalTimeline, onEditEntry,
+  secoesOcultas = [], isMestre, loreRevelado, loreOculto, podeEditarConteudo = false, onBack, onOpenGlobalTimeline,
 }) => {
   const campanhaId = useAuthStore((estado) => estado.campanhaAtiva?.id);
   // A Busca do Jardim chega aqui com `?secao=...&registro=...` e o registro já abre selecionado.
@@ -244,6 +260,7 @@ export const UniversalCodexPage: React.FC<IUniversalRecordsPageProps> = ({
   const [doServidor, setDoServidor] = useState<IRegistroDoServidor[]>([]);
   const [aviso, setAviso] = useState('');
   const [editor, setEditor] = useState<{ registro: IRegistro | null; destino: ISecaoUniversal } | null>(null);
+  const [editandoLore, setEditandoLore] = useState<{ tipo: string; id: string; titulo: string } | null>(null);
   const listaRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -275,6 +292,23 @@ export const UniversalCodexPage: React.FC<IUniversalRecordsPageProps> = ({
     // Seção escondida pelo criador: o servidor já corta os registros do Mestre, aqui saem os de fábrica.
     return isMestre ? juntos : juntos.filter((registro) => !secoesOcultas.includes(registro.secao));
   }, [fabrica, doServidor, isMestre, secoesOcultas]);
+  // Para quem comanda a página mostra tudo; esta conta diz quais seres e locais da lore os jogadores não leem.
+  const configDeLore = useMemo(() => ({ lore_revelado: loreRevelado, lore_oculto: loreOculto }), [loreRevelado, loreOculto]);
+  const entradaDeLore = useCallback(
+    (registro: IRegistro) => (registro.editor === 'lore' && registro.loreRef
+      ? catalog.find((entrada) => entrada.tipo === registro.loreRef?.tipo && entrada.id === registro.loreRef?.id)
+      : undefined),
+    [catalog],
+  );
+  const retidosDeLore = useMemo(() => {
+    const retidos = new Set<string>();
+    if (!isMestre) return retidos;
+    todos.forEach((registro) => {
+      const entrada = entradaDeLore(registro);
+      if (entrada && !loreVisivelParaJogadores(entrada, configDeLore)) retidos.add(registro.chave);
+    });
+    return retidos;
+  }, [todos, isMestre, entradaDeLore, configDeLore]);
   const porSecao = useMemo(() => {
     const mapa = new Map<SecaoUniversal, IRegistro[]>();
     SECOES_UNIVERSAIS.forEach((item) => mapa.set(item.id, []));
@@ -338,6 +372,38 @@ export const UniversalCodexPage: React.FC<IUniversalRecordsPageProps> = ({
     setAviso('');
     if (resposta.id) setSelecionada(registro?.origemId ? registro.chave : `proprio:${resposta.id}`);
   }, [campanhaId]);
+
+  /** Só a visibilidade muda: o texto que o Mestre já tinha escrito segue como está. */
+  const mudarRevelacao = async (registro: IRegistro, revelacao: RevelacaoRegistro) => {
+    const dadosAtuais = doServidor.find((item) => item.id === registro.serverId)?.dados ?? {};
+    // Voltar a "aberto" num registro de fábrica sem nenhum texto ajustado desfaz o ajuste, em vez de deixar uma linha vazia
+    // que o marcaria como "ajustado pelo Mestre".
+    if (revelacao === 'aberto' && registro.origemId && registro.serverId && Object.keys(dadosAtuais).length === 0) {
+      if (!campanhaId) throw new Error('Escolha uma campanha primeiro.');
+      // Sem passar por `desfazer`: ele limpa a seleção, e a ficha aberta tem que continuar aberta.
+      setDoServidor((await registrosUniversaisApi.apagar(campanhaId, registro.serverId)).registros);
+      return;
+    }
+    const destino = SECOES_UNIVERSAIS.find((item) => item.id === registro.secao) ?? secao;
+    await salvar(registro, destino, dadosAtuais, revelacao);
+  };
+
+  /** O controle de visibilidade de uma ficha: da lore (campanha ativa) ou do registro (ajuste do Mestre). */
+  const visibilidadeDe = (registro: IRegistro): React.ReactNode => {
+    if (!isMestre) return null;
+    if (registro.editor === 'lore') {
+      const entrada = entradaDeLore(registro);
+      if (!podeEditarConteudo || !entrada) return null;
+      return (
+        <SeletorDeVisibilidade
+          opcoes={OPCOES_DE_LORE}
+          valor={loreVisivelParaJogadores(entrada, configDeLore) ? 'visivel' : 'retido'}
+          onChange={(proximo) => salvarVisibilidadeDeLore(entrada, proximo === 'visivel')}
+        />
+      );
+    }
+    return <SeletorDeVisibilidade opcoes={OPCOES_DE_REGISTRO} valor={registro.revelacao} onChange={(proximo) => mudarRevelacao(registro, proximo)} />;
+  };
 
   const desfazer = useCallback(async (registro: IRegistro) => {
     if (!campanhaId || !registro.serverId) return;
@@ -457,7 +523,7 @@ export const UniversalCodexPage: React.FC<IUniversalRecordsPageProps> = ({
                     ) : !retido && (registro.secao === 'seres' || registro.secao === 'artefatos') ? <span className="ru-ponto" aria-hidden="true" /> : null}
                     <span className="min-w-0 flex-1">
                       {retido ? <RasuraTitulo semente={registro.chave} className="text-sm" /> : <strong className={`block truncate text-sm ${ativo ? 'text-white' : 'text-gray-200'}`}>{registro.titulo}</strong>}
-                      <small className="mt-0.5 block truncate text-[10px] font-bold uppercase tracking-widest text-gray-500">{legendaDaLinha(registro, retido)}{gestorMarca(registro, isMestre)}</small>
+                      <small className="mt-0.5 block truncate text-[10px] font-bold uppercase tracking-widest text-gray-500">{legendaDaLinha(registro, retido)}{gestorMarca(registro, isMestre)}{retidosDeLore.has(registro.chave) ? ' · retido' : ''}</small>
                     </span>
                     <ChevronRight size={14} className="text-gray-700 transition group-hover:text-gray-300" />
                   </button>
@@ -472,7 +538,8 @@ export const UniversalCodexPage: React.FC<IUniversalRecordsPageProps> = ({
                     registro={atual}
                     gestor={isMestre}
                     onEditar={() => setEditor({ registro: atual, destino: SECOES_UNIVERSAIS.find((item) => item.id === atual.secao) ?? secao })}
-                    onEditarLore={atual.loreRef && onEditEntry ? () => onEditEntry(atual.loreRef!.tipo, atual.loreRef!.id) : undefined}
+                    onEditarLore={podeEditarConteudo && atual.loreRef ? () => setEditandoLore({ ...atual.loreRef!, titulo: atual.titulo }) : undefined}
+                    visibilidade={visibilidadeDe(atual)}
                   />
                 );
                 if (!retido && atual.criatura) return <FichaCriatura registro={atual} gestor={isMestre} campanhaId={campanhaId} acoes={acoes} rotuloDaSecao={secao.rotulo} />;
@@ -496,6 +563,7 @@ export const UniversalCodexPage: React.FC<IUniversalRecordsPageProps> = ({
           onFechar={() => setEditor(null)}
         />
       ) : null}
+      {editandoLore ? <EditorDeLoreModal tipo={editandoLore.tipo} id={editandoLore.id} titulo={editandoLore.titulo} onFechar={() => setEditandoLore(null)} /> : null}
     </main>
   );
 };

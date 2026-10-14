@@ -99,6 +99,9 @@ class CampaignUpdateInput(BaseModel):
 
 class CampaignVisibilityUpdateInput(BaseModel):
     configuracoes: dict[str, Any] = Field(default_factory=dict)
+    # Com `mesclar`, só as chaves enviadas mudam e o resto da configuração fica como está (o botão de visibilidade
+    # de um registro manda só a lista dele). Sem, vale o que sempre valeu: o documento enviado substitui o antigo.
+    mesclar: bool = False
 
 
 class AdminUserUpdateInput(BaseModel):

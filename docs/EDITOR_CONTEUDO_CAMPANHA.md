@@ -78,6 +78,29 @@ independentes. Eles devem ser criados, movidos, editados ou excluídos na aba
 O `id` canônico da Árvore permanece estrutural e não é editável; o campo `nome`
 da Crônica controla apenas o nome apresentado na página de conteúdo.
 
+## Editar e esconder na própria página
+
+O Criador não precisa ir ao painel para mexer num registro que está lendo. Nas páginas das Árvores e nos Registros
+Universais, a ficha de cada registro traz, no cabeçalho, o controle de visibilidade e o botão **Editar**:
+
+- **Editar** abre `EditorDeLoreModal` (ou `EditorDeArvoreModal`, na ficha da Árvore) em cima da página. A janela é o
+  mesmo editor do painel em modo de uma entrada só (`ConteudoLorePanel` e `CronologiaPanel` com `modo="entrada"`):
+  as mesmas regras de rascunho, publicação global, versão esperada e histórico, sem a lista, sem criar e sem excluir.
+  Publicar avisa as páginas abertas (`useConteudoEditadoStore`) e elas leem o texto novo no lugar, sem recarregar nem
+  perder filtros. Fechar com alterações não salvas pergunta antes de descartar.
+- **Visível / Retido** (lore): grava `lore_revelado` e `lore_oculto` da campanha ativa, as mesmas listas da aba
+  Visibilidade, por `PUT /campanhas/{id}/visibilidade` com `mesclar: true` (só as chaves enviadas mudam; o resto da
+  configuração fica como está, dentro da mesma trava de linha). Trocas seguidas esperam uma a outra
+  (`visibilidadeRapida.ts`). Reter uma entrada retém o que está pendurado nela, como no painel. Liberar avisa a mesa e o
+  Discord como sempre. Só o Criador vê esse controle, porque o endpoint é dele.
+- **Aberto / Rasurado / Oculto** (registros do servidor: Bestiário, Facções, Artefatos, Alfabeto, Rumores, pessoas
+  notáveis): grava só a revelação do registro por `registrosUniversaisApi`, sem mexer no texto já ajustado. Voltar a
+  "aberto" num registro de fábrica sem texto ajustado apaga o ajuste. Quem comanda a mesa (Mestre ou Criador) usa.
+- Para quem comanda, a lista marca o que os jogadores não leem ("retido", "rasurado", "oculto"), porque a página
+  mostra tudo a ele.
+
+A rota `/criador?aba=conteudo&secao=lore&item=...` continua funcionando (o painel completo, com lista, criar e excluir).
+
 ## Persistência e migração
 
 As tabelas globais são:
@@ -169,6 +192,9 @@ concorrente retorna HTTP 409 e nunca deve ser sobrescrito silenciosamente.
 | `src/components/Settings/ConteudoMestrePanel.tsx` | Abas e exportação conforme o escopo. |
 | `src/components/Settings/ConteudoLorePanel.tsx` | CRUD global de Lore e movimentação de categorias. |
 | `src/components/Settings/CronologiaPanel.tsx` | Editor global da ficha narrativa das Árvores e de suas cronologias. |
+| `src/components/conteudo/EditorEmModal.tsx` | Janela que abre os editores acima em modo de uma entrada só, em cima da página do Mundo. |
+| `src/pages/Mundo/visibilidadeRapida.ts` | Regra e gravação do Visível/Retido de uma entrada da lore na campanha ativa. |
+| `src/components/ui/SeletorDeVisibilidade.tsx` | O controle de visibilidade (grupo de rádio) das fichas. |
 | `src/components/Settings/ConteudoEntidadesPanel.tsx` | Entidades novas do Livro das Entidades (formulário e conto). |
 | `src/services/entidadesEditorService.ts` | Conversões do formulário de Entidade para o documento do conto. |
 | `src/components/Settings/CatalogoLojaPanel.tsx` | Editor da Loja por campanha. |

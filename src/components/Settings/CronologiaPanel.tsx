@@ -17,6 +17,10 @@ interface CronologiaPanelProps {
    * vindo de um botão "Editar" numa página de Mundo. */
   initialItem?: string;
   onDirtyChange?: (dirty: boolean) => void;
+  /** `entrada` edita só a Árvore de `initialItem` (a janela de edição da página dela): sem o seletor de escopo. */
+  modo?: 'painel' | 'entrada';
+  /** Chamado depois de publicar, para as páginas que mostram o Mundo lerem o texto novo. */
+  onPublicado?: () => void;
 }
 
 type EditorSection = 'ficha' | 'cronologia';
@@ -52,7 +56,8 @@ const inputClass = 'w-full rounded-xl border border-white/10 bg-black/40 px-4 py
 const textareaClass = 'w-full resize-y rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm leading-7 text-gray-200 outline-none focus:border-primary/50';
 const labelClass = 'mb-2 block text-[10px] font-bold uppercase tracking-widest text-gray-500';
 
-export function CronologiaPanel({ initialItem, onDirtyChange }: CronologiaPanelProps) {
+export function CronologiaPanel({ initialItem, onDirtyChange, modo = 'painel', onPublicado }: CronologiaPanelProps) {
+  const soEntrada = modo === 'entrada';
   const [entry, setEntry] = useState<EditorialLibraryEntry | null>(null);
   const [catalog, setCatalog] = useState<WorldChronicleCatalog | null>(null);
   const [scope, setScope] = useState(initialItem || 'global');
@@ -205,6 +210,7 @@ export function CronologiaPanel({ initialItem, onDirtyChange }: CronologiaPanelP
       await conteudoEditorialApi.publicarGlobal(editorial.id, editorial.versao_editorial);
       await carregar();
       setSucesso('Crônicas publicadas globalmente para todas as campanhas.');
+      onPublicado?.();
     } catch (error: any) {
       setErro(error?.message || 'Não foi possível publicar as Crônicas.');
     } finally {
@@ -380,7 +386,8 @@ export function CronologiaPanel({ initialItem, onDirtyChange }: CronologiaPanelP
   );
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#0a090e] shadow-2xl">
+    <div className={soEntrada ? '' : 'overflow-hidden rounded-3xl border border-white/10 bg-[#0a090e] shadow-2xl'}>
+      {!soEntrada && (
       <div className="flex flex-col gap-4 border-b border-white/10 p-6 md:flex-row md:items-end md:justify-between md:p-8">
         <div>
           <div className="flex items-center gap-2 text-primary"><BookOpenText size={22} /><h2 className="text-xl font-bold text-white">Árvores e Crônicas</h2></div>
@@ -391,6 +398,7 @@ export function CronologiaPanel({ initialItem, onDirtyChange }: CronologiaPanelP
           {(catalog?.arvores || []).map((tree) => <option key={tree.id} value={tree.id}>{tree.nome}</option>)}
         </select>
       </div>
+      )}
 
       {!catalog ? <div className="p-8 text-sm text-red-300">{erro || 'Crônicas indisponíveis.'}</div> : (
         <>

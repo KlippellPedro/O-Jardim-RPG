@@ -229,6 +229,10 @@ def update_campaign_visibility(
             "SELECT configuracoes FROM campanhas WHERE id=%s AND status='ativa' FOR UPDATE",
             (campaign_id,),
         ).fetchone()
+        configuracoes = payload.configuracoes
+        if payload.mesclar:
+            # A leitura acima já trava a linha: duas mudanças rápidas de visibilidade não se atropelam.
+            configuracoes = {**dict((anterior or {}).get("configuracoes") or {}), **payload.configuracoes}
         row = connection.execute(
             """
             UPDATE campanhas
@@ -236,10 +240,10 @@ def update_campaign_visibility(
             WHERE id=%s AND status='ativa'
             RETURNING id, dono_id, nome, descricao, configuracoes, status, atualizado_em
             """,
-            (Jsonb(payload.configuracoes), campaign_id),
+            (Jsonb(configuracoes), campaign_id),
         ).fetchone()
         # Avisa a mesa quando algo foi liberado. Diz quantos, nunca quais.
-        novidades = novas_liberacoes(anterior["configuracoes"] if anterior else None, payload.configuracoes)
+        novidades = novas_liberacoes(anterior["configuracoes"] if anterior else None, configuracoes)
         if novidades:
             texto = texto_das_liberacoes(novidades)
             notify(

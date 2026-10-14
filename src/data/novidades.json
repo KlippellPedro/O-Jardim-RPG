@@ -1,6 +1,16 @@
 {
   "itens": [
     {
+      "id": "2026-10-13-editar-e-reter-no-cartao",
+      "data": "2026-10-13",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Editar e reter direto no cartão",
+      "detalhes": [
+        "Para quem comanda a mesa: cada cartão dos Registros Universais, e o conteúdo dentro de cada Árvore, ganhou os botões Editar e Visível ou Retido. Editar abre a ficha numa janela, sem sair da página, e Visível ou Retido mostra ou retém aquilo para os jogadores na hora."
+      ]
+    },
+    {
       "id": "2026-10-13-menu-engrenagem-arrumado",
       "data": "2026-10-13",
       "tipo": "melhoria",
@@ -911,17 +921,6 @@
       "detalhes": [
         "Em Experiência e Níveis, uma tabela nova responde \"o que ganho depois do 20 e do 60?\" sem você precisar caçar em outros capítulos.",
         "A página de cada classe de magia agora mostra o círculo e as vagas de magia nível a nível, e o capítulo de Magia traz a mesma grade para comparar as classes. O capítulo do Bestiário explica o que é o VD e por que a criatura comprada tem menos Vida que a do inimigo."
-      ]
-    },
-    {
-      "id": "2026-09-30-doze-graus-de-pericia",
-      "data": "2026-09-30",
-      "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Doze graus de perícia",
-      "detalhes": [
-        "Depois de Renomado entram cinco graus novos, um por patamar: Lendário (nível 60, +14), Mítico (100, +16), Cósmico (150, +18), Eterno (250, +20) e Absoluto (500, +22).",
-        "Subir por treino leva de 90 a 365 dias nesses graus, e cada um pede um feito à altura do nome. A aba Perícias e o livro já mostram os doze."
       ]
     }
   ]

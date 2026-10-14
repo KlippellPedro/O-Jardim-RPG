@@ -5,6 +5,8 @@ import {
   ChevronRight,
   Compass,
   GitBranch,
+  Eye,
+  EyeOff,
   History,
   Lock,
   MapPin,
@@ -28,6 +30,9 @@ import {
 } from '../worldCodex';
 import { getTreeChronicle, type WorldChronicleCatalog } from '../worldChronicles';
 import { ChronicleTimeline } from './ChronicleTimeline';
+import { EditorDeArvoreModal, EditorDeLoreModal } from '../../../components/conteudo/EditorEmModal';
+import { SeletorDeVisibilidade, type IOpcaoDeVisibilidade } from '../../../components/ui/SeletorDeVisibilidade';
+import { loreVisivelParaJogadores, salvarVisibilidadeDeLore } from '../visibilidadeRapida';
 
 interface TreeCodexPageProps {
   treeId: string;
@@ -49,11 +54,12 @@ interface TreeCodexPageProps {
   onOpenOverview: () => void;
   onOpenGlobalTimeline?: () => void;
   onOpenEntry: (entry: LoreEntry) => void;
-  /** Abre a ficha da Árvore/Vazio (tese, atmosfera, história) no editor. */
-  onEditTree?: () => void;
-  /** Abre o registro selecionado (Deidade, Fluxo, Dimensão, Local...) no editor. */
-  onEditEntry?: (entry: LoreEntry) => void;
 }
+
+const OPCOES_DE_LORE: IOpcaoDeVisibilidade<'visivel' | 'retido'>[] = [
+  { id: 'visivel', rotulo: 'Visível', icone: Eye, tom: 'aberto', ajuda: 'Os jogadores leem este registro.' },
+  { id: 'retido', rotulo: 'Retido', icone: Lock, tom: 'retido', ajuda: 'Os jogadores veem que ele existe, mas só faixas de tinta. O que está dentro dele fica retido junto.' },
+];
 
 const TYPE_LABELS: Record<string, string> = {
   conceito: 'Conceito universal',
@@ -154,13 +160,15 @@ interface NodeListProps {
   nodes: WorldCodexNode[];
   color: string;
   locked: ReadonlyMap<string, boolean>;
+  /** Só para quem comanda: o que os jogadores não leem (a página mostra tudo ao Mestre). */
+  ocultos?: ReadonlyMap<string, boolean>;
   onSelect: (entry: LoreEntry) => void;
   selected?: LoreEntry;
   ordem: OrdemDeAbertura;
   depth?: number;
 }
 
-const CodexRow = ({ node, color, locked, onSelect, selected, ordem, depth }: NodeListProps & { node: WorldCodexNode; depth: number }) => {
+const CodexRow = ({ node, color, locked, ocultos, onSelect, selected, ordem, depth }: NodeListProps & { node: WorldCodexNode; depth: number }) => {
   const isLocked = locked.get(entryKey(node.entry)) === true;
   const campanhaId = useAuthStore((estado) => estado.campanhaAtiva?.id);
   const { recemRevelado, lido } = useRecemRevelado(campanhaId, `${node.entry.tipo}:${node.entry.id}`, isLocked);
@@ -213,16 +221,17 @@ const CodexRow = ({ node, color, locked, onSelect, selected, ordem, depth }: Nod
             </small>
           </span>
           {isLocked ? <Lock size={13} className="shrink-0 text-gray-700" /> : null}
+          {!isLocked && ocultos?.get(entryKey(node.entry)) ? <span title="Retido para os jogadores" className="shrink-0 text-amber-400/80"><EyeOff size={13} aria-label="Retido para os jogadores" /></span> : null}
         </button>
       </div>
       {hasChildren && aberto ? (
-        <NodeList nodes={node.children} color={color} locked={locked} onSelect={onSelect} selected={selected} ordem={ordem} depth={depth + 1} />
+        <NodeList nodes={node.children} color={color} locked={locked} ocultos={ocultos} onSelect={onSelect} selected={selected} ordem={ordem} depth={depth + 1} />
       ) : null}
     </div>
   );
 };
 
-const NodeList = ({ nodes, color, locked, onSelect, selected, ordem, depth = 0 }: NodeListProps) => (
+const NodeList = ({ nodes, color, locked, ocultos, onSelect, selected, ordem, depth = 0 }: NodeListProps) => (
   <div className={depth > 0 ? 'ml-3 border-l border-white/10 pl-2' : ''}>
     {nodes.map((node) => (
       <CodexRow
@@ -231,6 +240,7 @@ const NodeList = ({ nodes, color, locked, onSelect, selected, ordem, depth = 0 }
         nodes={nodes}
         color={color}
         locked={locked}
+        ocultos={ocultos}
         onSelect={onSelect}
         selected={selected}
         ordem={ordem}
@@ -250,6 +260,7 @@ const TreeMapContents = ({
   concepts,
   color,
   locked,
+  ocultos,
   onSelect,
   selected,
 }: {
@@ -257,6 +268,7 @@ const TreeMapContents = ({
   concepts: LoreEntry[];
   color: string;
   locked: ReadonlyMap<string, boolean>;
+  ocultos?: ReadonlyMap<string, boolean>;
   onSelect: (entry: LoreEntry) => void;
   selected?: LoreEntry;
 }) => {
@@ -281,7 +293,7 @@ const TreeMapContents = ({
               </button>
             </div>
           ) : null}
-          <NodeList nodes={nodes} color={color} locked={locked} onSelect={onSelect} selected={selected} ordem={ordem} />
+          <NodeList nodes={nodes} color={color} locked={locked} ocultos={ocultos} onSelect={onSelect} selected={selected} ordem={ordem} />
         </>
       ) : (
         <p className="rounded-2xl border border-dashed border-white/10 p-4 text-xs italic leading-5 text-gray-600">Nenhum Galho ou local interno foi documentado.</p>
@@ -361,8 +373,6 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
   onOpenOverview,
   onOpenGlobalTimeline,
   onOpenEntry,
-  onEditTree,
-  onEditEntry,
 }) => {
   const codex = useMemo(() => buildTreeCodex(catalog, treeId), [catalog, treeId]);
   const chronicle = getTreeChronicle(treeId, chronicles);
@@ -390,6 +400,14 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
   );
 
   const selectedLocked = selectedEntry ? lockedEntries.get(entryKey(selectedEntry)) === true : false;
+  // Quem comanda lê tudo; a marca de "retido" precisa vir da conta que os jogadores fariam.
+  const retidosParaJogadores = useMemo(
+    () => (isMestre ? mapaDeBloqueios(codex, { isMestre: false, loreRevelado, loreOculto }) : new Map<string, boolean>()),
+    [codex, isMestre, loreOculto, loreRevelado],
+  );
+  const configDeLore = useMemo(() => ({ lore_revelado: loreRevelado, lore_oculto: loreOculto }), [loreRevelado, loreOculto]);
+  const [editando, setEditando] = useState<LoreEntry | null>(null);
+  const [editandoArvore, setEditandoArvore] = useState(false);
   const counts = useMemo(() => ({
     branches: codex.entries.filter((entry) => entry.tipo === 'galho').length,
     dimensions: codex.entries.filter((entry) => entry.tipo === 'dimensao').length,
@@ -466,7 +484,7 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
               <span className="hidden text-gray-600 group-open:inline">Fechar</span>
             </summary>
             <div className="mt-3 max-h-[60vh] overflow-y-auto border-t border-white/10 pt-3 custom-scrollbar">
-              <TreeMapContents nodes={codex.roots} concepts={codex.crossTreeConcepts} color={color} locked={lockedEntries} onSelect={onOpenEntry} selected={selectedEntry} />
+              <TreeMapContents nodes={codex.roots} concepts={codex.crossTreeConcepts} color={color} locked={lockedEntries} ocultos={retidosParaJogadores} onSelect={onOpenEntry} selected={selectedEntry} />
             </div>
           </details>
           <div className="hidden lg:block">
@@ -476,7 +494,7 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
             {/* Teto de altura pra que uma Árvore com muitos Reinos role dentro
                 do próprio mapa em vez de esticar a barra lateral inteira. */}
             <div className="max-h-[calc(100vh-11rem)] overflow-y-auto custom-scrollbar">
-              <TreeMapContents nodes={codex.roots} concepts={codex.crossTreeConcepts} color={color} locked={lockedEntries} onSelect={onOpenEntry} selected={selectedEntry} />
+              <TreeMapContents nodes={codex.roots} concepts={codex.crossTreeConcepts} color={color} locked={lockedEntries} ocultos={retidosParaJogadores} onSelect={onOpenEntry} selected={selectedEntry} />
             </div>
           </div>
         </aside>
@@ -504,11 +522,20 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
                     <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color }}>
                       <MapPin size={14} /> {typeLabel(selectedEntry.tipo)} · {displayTreeName}
                     </div>
-                    {podeEditarConteudo && onEditEntry && (
-                      <button type="button" onClick={() => onEditEntry(selectedEntry)} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/40 hover:text-white">
-                        <Pencil size={12} /> Editar
-                      </button>
-                    )}
+                    {podeEditarConteudo ? (
+                      <div className="flex flex-wrap items-center gap-2">
+                        <SeletorDeVisibilidade
+                          opcoes={OPCOES_DE_LORE}
+                          valor={loreVisivelParaJogadores(selectedEntry, configDeLore) ? 'visivel' : 'retido'}
+                          onChange={(proximo) => salvarVisibilidadeDeLore(selectedEntry, proximo === 'visivel')}
+                        />
+                        <button type="button" onClick={() => setEditando(selectedEntry)} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/40 hover:text-white">
+                          <Pencil size={12} /> Editar
+                        </button>
+                      </div>
+                    ) : isMestre && retidosParaJogadores.get(entryKey(selectedEntry)) ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-amber-200"><EyeOff size={12} /> Retido para os jogadores</span>
+                    ) : null}
                   </div>
                   <h2 className="break-words text-3xl font-bold leading-tight text-white sm:text-5xl" style={{ fontFamily: 'Cinzel, serif' }}>{selectedEntry.titulo}</h2>
                   {typeof selectedEntry.conteudo.epiteto === 'string' ? <p className="mt-3 text-lg italic text-gray-400">“{selectedEntry.conteudo.epiteto}”</p> : null}
@@ -549,8 +576,8 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
                     <BookOpen size={21} />
                     <h2 className="text-2xl font-bold text-white sm:text-3xl" style={{ fontFamily: 'Cinzel, serif' }}>{ehVazio ? 'O Vazio, Deidade e Fluxo' : 'Árvore, Deidade e Fluxo'}</h2>
                   </div>
-                  {podeEditarConteudo && onEditTree && (
-                    <button type="button" onClick={onEditTree} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/40 hover:text-white">
+                  {podeEditarConteudo && (
+                    <button type="button" onClick={() => setEditandoArvore(true)} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/40 hover:text-white">
                       <Pencil size={12} /> Editar resumo, atmosfera e história
                     </button>
                   )}
@@ -623,6 +650,9 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
           )}
         </div>
       </div>
+
+      {editando ? <EditorDeLoreModal tipo={editando.tipo} id={editando.id} titulo={editando.titulo} onFechar={() => setEditando(null)} /> : null}
+      {editandoArvore ? <EditorDeArvoreModal arvoreId={treeId} nome={displayTreeName} onFechar={() => setEditandoArvore(false)} /> : null}
     </main>
   );
 };

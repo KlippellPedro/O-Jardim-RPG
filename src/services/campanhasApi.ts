@@ -58,10 +58,11 @@ export const campanhasApi = {
     });
   },
   /** Exclusivo do criador da plataforma - ver core/dependencies.py:require_creator_campaign. */
-  atualizarVisibilidade(campanhaId: string, configuracoes: Record<string, any>) {
+  /** Com `mesclar`, só as chaves enviadas mudam (o botão de visibilidade de uma entrada manda só as listas dela). */
+  atualizarVisibilidade(campanhaId: string, configuracoes: Record<string, any>, opcoes: { mesclar?: boolean } = {}) {
     return api(`/campanhas/${encodeURIComponent(campanhaId)}/visibilidade`, {
       method: 'PUT',
-      body: { configuracoes },
+      body: { configuracoes, ...(opcoes.mesclar ? { mesclar: true } : {}) },
     });
   },
   arquivar(campanhaId: string) {
