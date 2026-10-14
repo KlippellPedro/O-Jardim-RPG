@@ -2,14 +2,20 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown, Dices, List, X } from 'lucide-react';
 import { sanitizeRuleHtml } from '../../../services/sanitizeRuleHtml';
+import '../leitor.css';
 
 interface RegrasContentProps {
   htmlContent: string;
   ocultarCatalogoAflicoes?: boolean;
   ocultarCatalogoPericias?: boolean;
   /** Quem monta a própria navegação (o Guia do Mestre) desliga o sumário
-   *  "Neste capítulo", que ficaria duplicado ao lado do mapa. */
+   *  "Neste tópico", que ficaria duplicado ao lado do mapa. */
   semSumario?: boolean;
+  /** Quando existe, as remissões do texto (`<span class="regras-ref regras-ref--id">`) viram
+   *  links que abrem o tópico indicado. Sem ele (a prévia do editor) ficam só destacadas. */
+  onAbrirTopico?: (idDoTopico: string) => void;
+  /** Títulos dos tópicos, para a dica que aparece ao pousar o mouse numa remissão. */
+  titulosDosTopicos?: Record<string, string>;
 }
 
 interface TocItem {
@@ -20,7 +26,7 @@ interface TocItem {
 const slugTitulo = (titulo: string, indice: number) => {
   const slug = titulo
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[̀-ͯ]/g, '')
     .toLocaleLowerCase('pt-BR')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
@@ -29,22 +35,37 @@ const slugTitulo = (titulo: string, indice: number) => {
 
 const normalizarTitulo = (titulo: string) => titulo
   .normalize('NFD')
-  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[̀-ͯ]/g, '')
   .trim()
   .toLocaleLowerCase('pt-BR');
+
+const PREFIXO_REMISSAO = 'regras-ref--';
+
+/** O id do tópico que uma remissão aponta, lido da classe `regras-ref--<id>`. */
+export const topicoDaRemissao = (elemento: Element): string | null => {
+  const classe = Array.from(elemento.classList).find((nome) => nome.startsWith(PREFIXO_REMISSAO));
+  return classe ? classe.slice(PREFIXO_REMISSAO.length) : null;
+};
 
 export const RegrasContent = ({
   htmlContent,
   ocultarCatalogoAflicoes = false,
   ocultarCatalogoPericias = false,
   semSumario = false,
+  onAbrirTopico,
+  titulosDosTopicos,
 }: RegrasContentProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const toastTimerRef = useRef<number | null>(null);
+  const abrirTopicoRef = useRef(onAbrirTopico);
+  const titulosRef = useRef(titulosDosTopicos);
   const [toc, setToc] = useState<TocItem[]>([]);
   const [secaoAtiva, setSecaoAtiva] = useState<string>('');
   const [sumarioMovelAberto, setSumarioMovelAberto] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  abrirTopicoRef.current = onAbrirTopico;
+  titulosRef.current = titulosDosTopicos;
 
   useEffect(() => {
     const container = contentRef.current;
@@ -76,6 +97,19 @@ export const RegrasContent = ({
     setToc(novoToc);
     setSecaoAtiva(novoToc[0]?.id || '');
 
+    // Remissões: só viram link quando quem renderiza sabe abrir um tópico e o tópico existe para
+    // este leitor (o Guia do Mestre, por exemplo, não aparece para quem não conduz a mesa).
+    if (abrirTopicoRef.current && titulosRef.current) {
+      container.querySelectorAll<HTMLElement>('.regras-ref').forEach((remissao) => {
+        const destino = topicoDaRemissao(remissao);
+        const titulo = destino ? titulosRef.current?.[destino] : null;
+        if (!destino || !titulo) return;
+        remissao.setAttribute('role', 'link');
+        remissao.setAttribute('tabindex', '0');
+        remissao.setAttribute('title', `Abrir o tópico ${titulo}`);
+      });
+    }
+
     const diceRegex = /\b(\d+)d(\d+)(?:\+(\d+))?\b/g;
     const walkDOM = (node: Node) => {
       if (node.nodeType === Node.TEXT_NODE) {
@@ -93,7 +127,7 @@ export const RegrasContent = ({
           const button = document.createElement('button');
           button.type = 'button';
           button.setAttribute('aria-label', `Rolar ${expression}`);
-          button.className = 'dice-roll-btn mx-1 inline-flex items-center gap-1 rounded border border-fuchsia-500/40 bg-fuchsia-600/20 px-2 py-0.5 font-bold text-fuchsia-300 transition-colors hover:bg-fuchsia-500 hover:text-white';
+          button.className = 'dice-roll-btn';
           button.dataset.dice = expression;
           const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
           icon.setAttribute('aria-hidden', 'true');
@@ -116,8 +150,15 @@ export const RegrasContent = ({
     };
     Array.from(container.childNodes).forEach(walkDOM);
 
-    const handleDiceClick = (event: MouseEvent) => {
-      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.dice-roll-btn');
+    const handleClick = (event: MouseEvent) => {
+      const alvo = event.target as HTMLElement;
+      const remissao = alvo.closest<HTMLElement>('.regras-ref[role="link"]');
+      if (remissao) {
+        const destino = topicoDaRemissao(remissao);
+        if (destino) abrirTopicoRef.current?.(destino);
+        return;
+      }
+      const button = alvo.closest<HTMLButtonElement>('.dice-roll-btn');
       const expression = button?.dataset.dice;
       if (!expression) return;
       const match = expression.match(/(\d+)d(\d+)(?:\+(\d+))?/);
@@ -132,7 +173,16 @@ export const RegrasContent = ({
       if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
       toastTimerRef.current = window.setTimeout(() => setToastMessage(null), 4000);
     };
-    container.addEventListener('click', handleDiceClick);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      const remissao = (event.target as HTMLElement).closest<HTMLElement>('.regras-ref[role="link"]');
+      if (!remissao) return;
+      event.preventDefault();
+      const destino = topicoDaRemissao(remissao);
+      if (destino) abrirTopicoRef.current?.(destino);
+    };
+    container.addEventListener('click', handleClick);
+    container.addEventListener('keydown', handleKeyDown);
 
     const reader = document.getElementById('regra-leitor');
     const observer = typeof IntersectionObserver !== 'undefined' ? new IntersectionObserver(
@@ -145,7 +195,8 @@ export const RegrasContent = ({
     headers.forEach((header) => observer?.observe(header));
 
     return () => {
-      container.removeEventListener('click', handleDiceClick);
+      container.removeEventListener('click', handleClick);
+      container.removeEventListener('keydown', handleKeyDown);
       observer?.disconnect();
       if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
     };
@@ -166,7 +217,7 @@ export const RegrasContent = ({
             onClick={() => scrollTo(item.id)}
             aria-current={secaoAtiva === item.id ? 'location' : undefined}
             className={`w-full rounded-lg border-l-2 px-3 py-2 text-left text-xs leading-relaxed transition-colors ${secaoAtiva === item.id
-              ? 'border-[#c7a44c] bg-[#c7a44c]/10 text-[#dcc37f]'
+              ? 'border-[rgb(var(--acento))] bg-[rgb(var(--acento)/0.12)] text-[rgb(var(--acento-forte))]'
               : 'border-transparent text-gray-500 hover:bg-white/5 hover:text-gray-300'}`}
           >
             {item.text}
@@ -189,28 +240,28 @@ export const RegrasContent = ({
 
       <div className="min-w-0 flex-1">
         {toc.length && !semSumario ? (
-          <div className="sticky top-0 z-20 mb-7 rounded-xl border border-white/10 bg-[#121018]/95 p-2 shadow-xl backdrop-blur-xl xl:hidden">
+          <div className="sticky top-0 z-20 mb-7 rounded-xl border border-white/10 bg-[#121018]/95 p-2 shadow-xl backdrop-blur-xl 2xl:hidden">
             <button
               type="button"
               onClick={() => setSumarioMovelAberto((aberto) => !aberto)}
               aria-expanded={sumarioMovelAberto}
-              className="flex w-full items-center justify-between px-2 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#d8bd75]"
+              className="flex w-full items-center justify-between px-2 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[rgb(var(--acento-forte))]"
             >
-              <span className="flex items-center gap-2"><List size={15} /> Neste capítulo</span>
+              <span className="flex items-center gap-2"><List size={15} /> Neste tópico</span>
               <ChevronDown size={15} className={`transition-transform ${sumarioMovelAberto ? 'rotate-180' : ''}`} />
             </button>
             {sumarioMovelAberto ? <div className="max-h-64 overflow-y-auto px-1 pb-2 pt-1">{sumario}</div> : null}
           </div>
         ) : null}
 
-        <div ref={contentRef} className="regras-content max-w-[78ch] text-[15px] leading-7 text-gray-300 sm:text-base sm:leading-8" />
+        <div ref={contentRef} className="regras-content" />
       </div>
 
       {toc.length && !semSumario ? (
-        <aside className="sticky top-6 hidden w-56 shrink-0 xl:block" aria-label="Sumário deste capítulo">
+        <aside className="sticky top-6 hidden w-56 shrink-0 2xl:block" aria-label="Sumário deste tópico">
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <h2 className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">
-              <List size={14} /> Neste capítulo
+              <List size={14} /> Neste tópico
             </h2>
             {sumario}
           </div>

@@ -472,6 +472,50 @@ convite, Cofre com e sem personagem escolhido e o envio, a 1280 e a 375 px, como
 **Não visto:** Safari/iOS e aparelho real, leitor de tela, a navegação das abas por setas (coberta só pelo teste da regra), e o painel
 lateral de Avisos com a animação de entrada rodando (o painel embutido não anima; ele foi posto na tela à mão para a captura).
 
+<a id="livro-de-regras-2"></a>
+
+## Livro de Regras 2.0: leitor, PDF e Compêndio (13 e 14 de outubro de 2026)
+
+O Livro era uma lista de 46 tópicos com o mesmo peso, escritos em blocos pequenos, e ninguém tinha como lê-lo de ponta a ponta nem
+levá-lo para fora do site. Esta passagem reescreveu o leitor, o texto e o formato.
+
+- **Estrutura de livro** ([livro.ts](../../data/regras/livro.ts), puro e compartilhado com o PDF): 9 capítulos (os grupos da
+  navegação, numerados de 1 a 9; o 9, Guia do Mestre, só existe para quem conduz a mesa) e 46 tópicos numerados 3.4 (quarto tópico do
+  capítulo 3). Ele também guarda a cor de cada capítulo, as quatro trilhas de leitura (Nunca joguei, Já jogo, Vou conjurar, Vou
+  mestrar), o "Antes de ler" e o "Veja também" de cada tópico (`ANTES_DE_LER`, `CONTINUE_EM`) e o tempo de leitura.
+  Mudar a navegação reordena site e PDF juntos.
+- **Leitor** (`src/pages/Regras/`): [RegrasPage.tsx](../../src/pages/Regras/RegrasPage.tsx) com barra de progresso e de tamanho de letra
+  ([BarraDoLeitor](../../src/pages/Regras/components/BarraDoLeitor.tsx), [ControlesDeLeitura](../../src/pages/Regras/components/ControlesDeLeitura.tsx)),
+  cabeçalho do tópico com número, tempo de leitura, "Antes de ler" e o botão "Ler no PDF, página N"
+  ([CabecalhoDoTopico](../../src/pages/Regras/components/CabecalhoDoTopico.tsx)), rodapé com anterior, próximo e "Veja também"
+  ([RodapeDoTopico](../../src/pages/Regras/components/RodapeDoTopico.tsx)), entrada do livro com as trilhas, o cartão do PDF e o
+  "continuar de onde parou" ([LandingDoLivro](../../src/pages/Regras/components/LandingDoLivro.tsx),
+  [CartaoDoPdf](../../src/pages/Regras/components/CartaoDoPdf.tsx)) e a navegação por capítulos
+  ([NavegacaoDoLivro](../../src/pages/Regras/components/NavegacaoDoLivro.tsx)). O estilo do texto saiu do `index.css` para
+  [leitor.css](../../src/pages/Regras/leitor.css). Onde a pessoa parou e o tamanho e o tipo da letra moram no navegador, por conta
+  ([regrasLeitura.ts](../../src/pages/Regras/regrasLeitura.ts)); nada disso é dado da campanha.
+- **Texto dos tópicos**: todos os 46 foram reescritos para ler de ponta a ponta, com frase de abertura, caixa "Em resumo", exemplos
+  com a conta feita e remissões para os tópicos vizinhos, sem mudar regra nem número (um script confere números, tabelas e frases de
+  quantidade contra o texto antigo). O vocabulário novo cabe no validador do editor: `p.regras-lead`, `div.regras-resumo`,
+  `.regras-note--exemplo|atencao|dica|regra`, `div.regras-quadro` e `span.regras-ref.regras-ref--<id>` (link no site, "(p. N)" no PDF).
+  A lista completa está em [tools/documentos-mundo/README.md](../../tools/documentos-mundo/README.md). O texto do site vem do
+  servidor: depois de mexer em `regras.ts`, `npm run generate:editorial-rules` e reiniciar a API.
+- **PDF único** ([tools/documentos-mundo](../../tools/documentos-mundo/README.md)): `npm run docs:livro` monta o livro inteiro como
+  livro impresso (capa, sumário clicável, aberturas, duas colunas, remissões com página, referência rápida, índice remissivo,
+  marcadores e PDF etiquetado) e escreve `docs/livro/livro-manifesto.json`. O site oferece o download no cartão da entrada do Livro e
+  o link "Ler no PDF, página N" em cada tópico. A API é `GET /api/v1/livro` e `GET /api/v1/livro/pdf/{edicao}`
+  ([livro.py](../../plataforma/routers/livro.py)); o botão só aparece quando o arquivo existe no servidor.
+- **Compêndio**: o PDF traz as classes comuns, as raças comuns, os Legados e as magias, rituais, selos e encantamentos, lidos dos
+  mesmos dados e serviços que o site usa. A edição do Mestre inclui as classes e raças especiais. Regras de visibilidade e formato
+  no README do gerador.
+- **Capas**: sem arquivo, a capa e as aberturas usam o emblema da árvore em vetor. Uma imagem em `docs/livro/artes/` (nomes e
+  pedidos de geração na pasta) troca o emblema só daquela capa.
+
+Verificação: `npx tsc --noEmit -p .`, `npm run test:frontend` ([livroRegras.test.ts](../../tests/frontend/livroRegras.test.ts),
+[livroCompendio.test.ts](../../tests/frontend/livroCompendio.test.ts) e [regrasLeitura.test.ts](../../tests/frontend/regrasLeitura.test.ts)
+são novos), a suíte da plataforma ([test_livro_pdf.py](../../plataforma/tests/test_livro_pdf.py)) e o site contra API e banco
+descartáveis, em desktop e celular. O gerador mede cada página e para com aviso se um bloco ficar cortado.
+
 ## Responsividade e acessibilidade
 
 O fechamento de agosto corrigiu sete problemas reproduzidos:

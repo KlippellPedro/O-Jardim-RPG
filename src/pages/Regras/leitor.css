@@ -1,0 +1,829 @@
+/*
+ * Leitor do Livro de Regras.
+ *
+ * Tudo que o texto de um tópico pode conter (lead, "em resumo", seções, listas, notas de quatro
+ * tipos, fórmulas, tabelas, remissões) é desenhado aqui. O PDF (tools/documentos-mundo/estilo-livro.mjs)
+ * usa as mesmas classes com a mesma função, então um tópico escrito uma vez serve às duas telas.
+ *
+ * Duas variáveis vêm de fora, definidas no artigo do capítulo:
+ *   --acento         cor viva do capítulo (r g b), para filetes e bordas
+ *   --acento-forte   a mesma cor clareada, para texto sobre o fundo escuro
+ * e duas do leitor, mexidas pelos controles de leitura (tamanho e fonte da letra):
+ *   --leitura-tamanho, --leitura-fonte
+ */
+
+.regras-leitor {
+  --acento: 199 164 76;
+  --acento-forte: 216 189 117;
+  --leitura-tamanho: 1.0625rem;
+  --leitura-fonte: 'Literata', Georgia, 'Times New Roman', serif;
+  --nota-exemplo: 104 196 214;
+  --nota-atencao: 238 146 82;
+  --nota-dica: 124 204 152;
+}
+
+.regras-leitor[data-tamanho='1'] { --leitura-tamanho: 0.96875rem; }
+.regras-leitor[data-tamanho='2'] { --leitura-tamanho: 1.0625rem; }
+.regras-leitor[data-tamanho='3'] { --leitura-tamanho: 1.1875rem; }
+.regras-leitor[data-tamanho='4'] { --leitura-tamanho: 1.3125rem; }
+.regras-leitor[data-fonte='sem'] { --leitura-fonte: 'Inter', system-ui, sans-serif; }
+
+/* ------------------------------------------------------------------ */
+/* Corpo do texto                                                      */
+/* ------------------------------------------------------------------ */
+
+.regras-content {
+  max-width: 62rem;
+  font-family: var(--leitura-fonte);
+  font-size: var(--leitura-tamanho);
+  line-height: 1.8;
+  color: rgb(226 221 235 / 0.93);
+  font-variant-numeric: lining-nums;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  text-wrap: pretty;
+}
+
+/* O texto corrido fica numa medida de leitura; tabelas e quadros usam a largura toda. */
+.regras-content > p,
+.regras-content > ul,
+.regras-content > ol,
+.regras-content > h3,
+.regras-content > h4,
+.regras-content > .regras-note,
+.regras-content > .regras-resumo,
+.regras-content > .regras-formula,
+.regras-content > .regras-quadro {
+  max-width: 46rem;
+}
+
+.regras-content p {
+  margin: 0 0 1.15em;
+}
+
+.regras-content td p,
+.regras-content th p {
+  margin-bottom: 0.5em;
+}
+.regras-content td p:last-child,
+.regras-content th p:last-child {
+  margin-bottom: 0;
+}
+
+.regras-content strong {
+  font-weight: 600;
+  color: #f4eddb;
+}
+
+.regras-content em {
+  font-style: italic;
+  color: rgb(236 230 222 / 0.96);
+}
+
+.regras-content small {
+  font-size: 0.82em;
+  color: rgb(190 184 205 / 0.8);
+}
+
+/* Abertura do tópico: a frase que diz para que ele serve. */
+.regras-content p.regras-lead {
+  margin-bottom: 1.6em;
+  font-size: 1.13em;
+  line-height: 1.75;
+  color: rgb(242 236 224 / 0.97);
+}
+
+.regras-content > p.regras-lead:first-child::first-letter {
+  float: left;
+  padding: 0.07em 0.11em 0 0;
+  font-family: 'Cinzel', serif;
+  font-size: 3.7em;
+  font-weight: 700;
+  line-height: 0.78;
+  color: rgb(var(--acento-forte));
+}
+
+/* ------------------------------------------------------------------ */
+/* Seções                                                              */
+/* ------------------------------------------------------------------ */
+
+.regras-content h3.regras-subtitle {
+  position: relative;
+  margin: 3.4rem 0 1.15rem;
+  padding-bottom: 0.7rem;
+  scroll-margin-top: 5.5rem;
+  border-bottom: 1px solid rgb(var(--acento) / 0.3);
+  font-family: 'Cinzel', serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: rgb(var(--acento-forte));
+  text-wrap: balance;
+}
+
+.regras-content h3.regras-subtitle::before {
+  content: '';
+  display: inline-block;
+  width: 0.42rem;
+  height: 0.42rem;
+  margin: 0 0.7rem 0.28rem 0;
+  background: rgb(var(--acento));
+  transform: rotate(45deg);
+}
+
+.regras-content > h3.regras-subtitle:first-child,
+.regras-content > .regras-resumo + h3.regras-subtitle {
+  margin-top: 2.4rem;
+}
+.regras-content > h3.regras-subtitle:first-child {
+  margin-top: 0;
+}
+
+.regras-content h4,
+.regras-content .dobra-titulo {
+  margin: 1.9rem 0 0.6rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--acento-forte));
+}
+
+/* ------------------------------------------------------------------ */
+/* Em resumo                                                           */
+/* ------------------------------------------------------------------ */
+
+.regras-content .regras-resumo {
+  margin: 1.9rem 0 2.4rem;
+  padding: 1.15rem 1.4rem 1.3rem;
+  border: 1px solid rgb(var(--acento) / 0.32);
+  border-radius: 1rem;
+  background:
+    linear-gradient(135deg, rgb(var(--acento) / 0.13), rgb(var(--acento) / 0.02) 62%),
+    rgb(0 0 0 / 0.18);
+  font-size: 0.94em;
+}
+
+.regras-content .regras-resumo::before {
+  content: 'Em resumo';
+  display: block;
+  margin-bottom: 0.8rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgb(var(--acento-forte));
+}
+
+.regras-content .regras-resumo ul,
+.regras-content .regras-resumo ol {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.regras-content .regras-resumo li {
+  position: relative;
+  padding-left: 1.7rem;
+  line-height: 1.6;
+}
+
+.regras-content .regras-resumo li::before {
+  content: '';
+  position: absolute;
+  left: 0.15rem;
+  top: 0.42em;
+  width: 0.62rem;
+  height: 0.34rem;
+  border-left: 2px solid rgb(var(--acento-forte));
+  border-bottom: 2px solid rgb(var(--acento-forte));
+  transform: rotate(-45deg);
+}
+
+.regras-content .regras-resumo p {
+  margin: 0 0 0.5rem;
+}
+.regras-content .regras-resumo p:last-child {
+  margin-bottom: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Notas: genérica, exemplo, atenção, dica e regra                     */
+/* ------------------------------------------------------------------ */
+
+.regras-content .regras-note {
+  --nota: var(--acento);
+  --nota-forte: var(--acento-forte);
+  position: relative;
+  margin: 1.8rem 0;
+  padding: 1rem 1.3rem 1rem 3rem;
+  border: 1px solid rgb(var(--nota) / 0.24);
+  border-left: 3px solid rgb(var(--nota) / 0.6);
+  border-radius: 0.2rem 0.9rem 0.9rem 0.2rem;
+  background: rgb(var(--nota) / 0.06);
+  font-size: 0.93em;
+  line-height: 1.7;
+}
+
+.regras-content .regras-note::before {
+  content: '✦';
+  position: absolute;
+  left: 1.05rem;
+  top: 0.95rem;
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: rgb(var(--nota-forte));
+  opacity: 0.85;
+}
+
+.regras-content .regras-note p {
+  margin: 0 0 0.7em;
+}
+.regras-content .regras-note p:last-child {
+  margin-bottom: 0;
+}
+
+/* As quatro variações trocam o ícone por um rótulo em cima do texto. */
+.regras-content .regras-note--exemplo,
+.regras-content .regras-note--atencao,
+.regras-content .regras-note--dica,
+.regras-content .regras-note--regra {
+  padding: 2.35rem 1.35rem 1.05rem;
+}
+
+.regras-content .regras-note--exemplo::before,
+.regras-content .regras-note--atencao::before,
+.regras-content .regras-note--dica::before,
+.regras-content .regras-note--regra::before {
+  left: 1.35rem;
+  top: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+.regras-content .regras-note--exemplo {
+  --nota: var(--nota-exemplo);
+  --nota-forte: 150 218 232;
+}
+.regras-content .regras-note--exemplo::before { content: 'Exemplo'; }
+
+.regras-content .regras-note--atencao {
+  --nota: var(--nota-atencao);
+  --nota-forte: 250 178 124;
+}
+.regras-content .regras-note--atencao::before { content: 'Atenção'; }
+
+.regras-content .regras-note--dica {
+  --nota: var(--nota-dica);
+  --nota-forte: 164 226 188;
+}
+.regras-content .regras-note--dica::before { content: 'Dica de mesa'; }
+
+.regras-content .regras-note--regra {
+  background: linear-gradient(135deg, rgb(var(--acento) / 0.13), rgb(var(--acento) / 0.03));
+  border-left-width: 4px;
+  border-left-color: rgb(var(--acento));
+  font-size: 1em;
+}
+.regras-content .regras-note--regra::before { content: 'Regra'; }
+
+/* Quadro: variante opcional ou assunto que merece caixa própria. */
+.regras-content .regras-quadro {
+  margin: 2rem 0;
+  padding: 1.15rem 1.4rem 1.3rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.025);
+  font-size: 0.95em;
+}
+.regras-content .regras-quadro > h4:first-child {
+  margin-top: 0;
+}
+.regras-content .regras-quadro > p:last-child,
+.regras-content .regras-quadro > ul:last-child {
+  margin-bottom: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Fórmulas e pares nome/valor                                         */
+/* ------------------------------------------------------------------ */
+
+.regras-content .regras-formula {
+  margin: 1.7rem 0;
+  padding: 1.05rem 1.3rem;
+  border: 1px solid rgb(var(--acento) / 0.38);
+  border-radius: 0.9rem;
+  background: linear-gradient(180deg, rgb(var(--acento) / 0.11), rgb(0 0 0 / 0.26));
+  text-align: center;
+  font-family: ui-monospace, 'Cascadia Code', Consolas, 'Courier New', monospace;
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.65;
+  color: rgb(var(--acento-forte));
+  hyphens: none;
+}
+
+.regras-content dl.regras-kv {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+  margin: 1.7rem 0;
+}
+
+.regras-content dl.regras-kv dt {
+  padding: 0.7rem 0.95rem 0.15rem;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-bottom: 0;
+  border-radius: 0.8rem 0.8rem 0 0;
+  background: rgb(0 0 0 / 0.26);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(var(--acento-forte));
+}
+
+.regras-content dl.regras-kv dd {
+  margin: 0 0 0.35rem;
+  padding: 0.15rem 0.95rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-top: 0;
+  border-radius: 0 0 0.8rem 0.8rem;
+  background: rgb(15 14 21 / 0.7);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgb(214 208 226 / 0.92);
+  hyphens: none;
+}
+
+@media (min-width: 48rem) {
+  .regras-content dl.regras-kv {
+    grid-template-columns: minmax(10rem, 14rem) 1fr;
+    gap: 0;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 0.9rem;
+    overflow: hidden;
+    background: rgb(0 0 0 / 0.2);
+  }
+  .regras-content dl.regras-kv dt,
+  .regras-content dl.regras-kv dd {
+    margin: 0;
+    padding: 0.8rem 1rem;
+    border: 0;
+    border-top: 1px solid rgb(255 255 255 / 0.07);
+    border-radius: 0;
+    background: transparent;
+  }
+  .regras-content dl.regras-kv dt:first-of-type,
+  .regras-content dl.regras-kv dt:first-of-type + dd {
+    border-top: 0;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Listas                                                              */
+/* ------------------------------------------------------------------ */
+
+.regras-content ul.regras-list,
+.regras-content ol.regras-steps,
+.regras-content ul.regras-sublist {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1.2rem 0 1.7rem;
+  padding: 0;
+  list-style: none;
+}
+
+.regras-content ul.regras-list li,
+.regras-content ol.regras-steps li,
+.regras-content ul.regras-sublist li {
+  position: relative;
+  padding-left: 1.85rem;
+  line-height: 1.7;
+}
+
+.regras-content ul.regras-list li::before,
+.regras-content ul.regras-sublist li::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0.78em;
+  width: 0.36rem;
+  height: 0.36rem;
+  background: rgb(var(--acento) / 0.9);
+  transform: rotate(45deg);
+}
+
+.regras-content ol.regras-steps {
+  counter-reset: passo;
+  gap: 0.8rem;
+}
+
+.regras-content ol.regras-steps li {
+  counter-increment: passo;
+  padding-left: 2.6rem;
+}
+
+.regras-content ol.regras-steps li::before {
+  content: counter(passo);
+  position: absolute;
+  left: 0;
+  top: 0.12rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border: 1px solid rgb(var(--acento) / 0.5);
+  border-radius: 999px;
+  background: rgb(var(--acento) / 0.14);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: rgb(var(--acento-forte));
+}
+
+.regras-content ul.regras-list ul.regras-list,
+.regras-content ul.regras-list ul.regras-sublist {
+  margin: 0.6rem 0 0.2rem;
+}
+
+/* Uma lista de itens curtos lado a lado, como as maestrias de atributo. */
+.regras-content ul.regras-sublist--grid {
+  grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+  gap: 0.7rem;
+  max-width: none;
+}
+
+.regras-content ul.regras-sublist--grid li {
+  padding: 0.85rem 1rem 0.85rem 2rem;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  border-radius: 0.8rem;
+  background: rgb(255 255 255 / 0.025);
+  font-size: 0.93em;
+  line-height: 1.6;
+}
+.regras-content ul.regras-sublist--grid li::before {
+  left: 0.85rem;
+  top: 1.35em;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabelas                                                             */
+/* ------------------------------------------------------------------ */
+
+.regras-content .regras-table-wrap {
+  margin: 1.9rem 0 2.4rem;
+  overflow-x: auto;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 0.95rem;
+  background: rgb(0 0 0 / 0.2);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.18);
+}
+
+.regras-content table.regras-table {
+  width: 100%;
+  /* Sem um piso, o navegador espreme as colunas estreitas até sobrar uma letra por linha.
+     Abaixo dele a tabela rola na horizontal, que é bem mais legível. */
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-align: left;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+
+.regras-content table.regras-table caption {
+  padding: 0.7rem 1rem;
+  caption-side: top;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(190 184 205 / 0.8);
+}
+
+.regras-content table.regras-table thead {
+  background: rgb(var(--acento) / 0.16);
+  border-bottom: 1px solid rgb(var(--acento) / 0.35);
+}
+
+.regras-content table.regras-table th {
+  padding: 0.85rem 1rem;
+  vertical-align: bottom;
+  white-space: nowrap;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(var(--acento-forte));
+}
+
+.regras-content table.regras-table td {
+  min-width: 5.5rem;
+  padding: 0.8rem 1rem;
+  vertical-align: top;
+  border-top: 1px solid rgb(255 255 255 / 0.06);
+  color: rgb(226 221 235 / 0.9);
+}
+
+.regras-content table.regras-table tbody tr:first-child td {
+  border-top: 0;
+}
+
+.regras-content table.regras-table tbody tr:nth-child(even) td {
+  background: rgb(255 255 255 / 0.02);
+}
+
+.regras-content table.regras-table tbody tr:hover td {
+  background: rgb(var(--acento) / 0.07);
+}
+
+/* A primeira coluna quase sempre é o nome da coisa. */
+.regras-content table.regras-table td:first-child {
+  min-width: 9rem;
+}
+.regras-content table.regras-table td:first-child strong {
+  color: #f6efdc;
+}
+
+/* Tabela de rolagem: a primeira coluna só guarda o número do dado. */
+.regras-content table.regras-table--dado td:first-child,
+.regras-content table.regras-table--dado th:first-child {
+  width: 3.5rem;
+  min-width: 3.5rem;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgb(var(--acento-forte));
+}
+.regras-content table.regras-table--dado th:first-child {
+  font-size: 0.68rem;
+}
+
+/* Segunda camada de uma linha de tabela do Mestre: a regra de um evento ou o gancho de um boato. */
+.regras-content .regras-mecanica {
+  display: block;
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed rgb(var(--acento) / 0.3);
+  font-size: 0.92em;
+  line-height: 1.6;
+  color: rgb(var(--acento-forte));
+}
+
+/* ------------------------------------------------------------------ */
+/* Blocos recolhidos                                                   */
+/* ------------------------------------------------------------------ */
+
+.regras-content details.regras-details {
+  margin: 1rem 0;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 0.9rem;
+  background: rgb(0 0 0 / 0.2);
+}
+
+.regras-content details.regras-details > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  list-style: none;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgb(var(--acento-forte));
+  transition: background-color 0.15s;
+}
+.regras-content details.regras-details > summary:hover {
+  background: rgb(255 255 255 / 0.04);
+}
+.regras-content details.regras-details > summary::-webkit-details-marker {
+  display: none;
+}
+.regras-content details.regras-details > summary::before {
+  content: '▸';
+  font-size: 0.85rem;
+  color: rgb(var(--acento) / 0.75);
+}
+.regras-content details.regras-details[open] > summary::before {
+  content: '▾';
+}
+.regras-content details.regras-details[open] > summary {
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+}
+.regras-content details.regras-details .regras-details-contagem {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(160 154 178 / 0.9);
+}
+.regras-content details.regras-details > *:not(summary) {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+.regras-content details.regras-details .regras-table-wrap {
+  margin: 1rem 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.regras-content details.regras-details ul.regras-list {
+  padding-bottom: 0.5rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Grades de números (distâncias e experiência)                        */
+/* ------------------------------------------------------------------ */
+
+.regras-content .regras-distance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.8rem;
+  margin: 1.6rem 0;
+}
+.regras-content .regras-distance-grid span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border: 1px solid rgb(255 255 255 / 0.07);
+  border-radius: 0.85rem;
+  background: rgb(0 0 0 / 0.36);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  transition: border-color 0.15s;
+}
+.regras-content .regras-distance-grid span:hover {
+  border-color: rgb(var(--acento) / 0.4);
+}
+.regras-content .regras-distance-grid strong {
+  margin-bottom: 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgb(var(--acento-forte));
+}
+
+.regras-content .regras-xp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 2rem 0;
+  padding: 0.8rem;
+  border: 1px solid rgb(var(--acento) / 0.18);
+  border-radius: 1rem;
+  background: rgb(0 0 0 / 0.2);
+  box-shadow: inset 0 2px 8px rgb(0 0 0 / 0.3);
+}
+.regras-content .regras-xp-grid span {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 4rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  overflow: hidden;
+  padding: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 0.8rem;
+  background: linear-gradient(135deg, rgb(19 18 25 / 0.96), rgb(8 7 12 / 0.96));
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgb(214 208 226 / 0.95);
+  white-space: normal;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.regras-content .regras-xp-grid span:hover {
+  transform: translateY(-2px);
+  border-color: rgb(var(--acento) / 0.4);
+}
+.regras-content .regras-xp-grid strong {
+  display: flex;
+  height: 2.25rem;
+  min-width: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  border: 1px solid rgb(var(--acento) / 0.22);
+  border-radius: 0.55rem;
+  background: rgb(var(--acento) / 0.11);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: rgb(var(--acento-forte));
+  white-space: nowrap;
+}
+.regras-content .regras-xp-grid span:nth-child(5n) {
+  border-color: rgb(var(--acento) / 0.28);
+  background: linear-gradient(135deg, rgb(var(--acento) / 0.1), rgb(10 9 14 / 0.96) 70%);
+}
+.regras-content .regras-xp-grid span:nth-child(5n) strong {
+  border-color: rgb(var(--acento) / 0.38);
+  background: rgb(var(--acento) / 0.2);
+}
+.regras-content .regras-xp-grid span:nth-child(10n) {
+  border-color: rgb(var(--acento) / 0.45);
+  box-shadow: inset 0 0 24px rgb(var(--acento) / 0.07);
+}
+.regras-content .regras-xp-grid span:nth-child(10n) strong {
+  background: rgb(var(--acento-forte));
+  color: #171108;
+}
+
+@media (min-width: 40rem) {
+  .regras-content .regras-xp-grid {
+    grid-template-columns: repeat(auto-fit, minmax(9.75rem, 1fr));
+  }
+  .regras-content .regras-xp-grid span {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.65rem;
+    white-space: nowrap;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Remissões e dados clicáveis                                         */
+/* ------------------------------------------------------------------ */
+
+.regras-content .regras-ref {
+  color: rgb(var(--acento-forte));
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.24em;
+}
+.regras-content .regras-ref[role='link'] {
+  cursor: pointer;
+  border-radius: 0.2rem;
+}
+.regras-content .regras-ref[role='link']:hover {
+  text-decoration-style: solid;
+  color: #fff4cf;
+}
+.regras-content .regras-ref[role='link']:focus-visible {
+  outline: 2px solid rgb(var(--acento-forte));
+  outline-offset: 2px;
+}
+
+.regras-content .dice-roll-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28em;
+  margin: 0 0.05em;
+  padding: 0 0.42em;
+  border: 1px solid rgb(var(--acento) / 0.4);
+  border-radius: 0.4em;
+  background: rgb(var(--acento) / 0.1);
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: 0.86em;
+  font-weight: 700;
+  line-height: 1.55;
+  color: rgb(var(--acento-forte));
+  vertical-align: baseline;
+  transition: background-color 0.15s, color 0.15s;
+}
+.regras-content .dice-roll-btn:hover {
+  background: rgb(var(--acento-forte));
+  color: #181208;
+}
+.regras-content .dice-roll-btn svg {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .regras-content .regras-xp-grid span,
+  .regras-content .regras-distance-grid span,
+  .regras-content details.regras-details > summary,
+  .regras-content .dice-roll-btn {
+    transition: none;
+  }
+}

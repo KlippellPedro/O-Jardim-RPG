@@ -2,6 +2,28 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-14-livro-em-pdf",
+      "data": "2026-10-14",
+      "tipo": "novo",
+      "area": "Livro",
+      "titulo": "O Livro de Regras em PDF",
+      "detalhes": [
+        "Agora dá para baixar o Livro inteiro num PDF só, no formato de livro de RPG, com capa, sumário clicável, capítulos, referência rápida e índice. Depois de baixado, funciona sem internet.",
+        "No fim do PDF vem o Compêndio, com as fichas completas das classes e das raças comuns, o catálogo de Legados e todas as magias, rituais, selos e encantamentos. O botão para baixar fica na entrada do Livro, e cada tópico tem o link Ler no PDF, página N."
+      ]
+    },
+    {
+      "id": "2026-10-14-livro-mais-facil-de-ler",
+      "data": "2026-10-14",
+      "tipo": "melhoria",
+      "area": "Livro",
+      "titulo": "Livro de Regras mais fácil de ler",
+      "detalhes": [
+        "Os 46 tópicos foram reescritos para ler de ponta a ponta. Cada um abre com uma frase que diz do que ele trata e uma caixa Em resumo, traz exemplos com a conta feita e leva você direto aos tópicos que cita, sem mudar nenhuma regra.",
+        "O Livro ganhou capítulos e números (3.4 é o quarto tópico do capítulo 3) e trilhas de leitura para quem nunca jogou, já joga, vai conjurar ou vai mestrar. Ele lembra onde você parou, e dá para aumentar a letra e trocar o tipo dela."
+      ]
+    },
+    {
       "id": "2026-10-13-editar-e-reter-no-cartao",
       "data": "2026-10-13",
       "tipo": "melhoria",
