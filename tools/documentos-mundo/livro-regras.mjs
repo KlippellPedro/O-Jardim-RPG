@@ -3,45 +3,57 @@
  *
  * Fonte única: data/regras/regras.ts. Cada tópico do catálogo vira uma seção
  * do livro com o mesmo texto que a página de Regras do site mostra, sem
- * paráfrase e sem uma segunda versão para manter. A ordem e o agrupamento dos
- * capítulos saem de data/regras/navegacao.ts, e os títulos de titulos.ts, pelo
- * mesmo motivo: mudar a navegação do site reordena o livro sozinho.
+ * paráfrase e sem uma segunda versão para manter. A ordem, o agrupamento em
+ * capítulos, a numeração e as cores saem de data/regras/livro.ts (que por sua
+ * vez lê navegacao.ts e titulos.ts), os mesmos que o site usa: mudar a
+ * navegação do site reordena o livro sozinho.
  *
  * O que este arquivo acrescenta é a moldura de livro impresso: capa, folha de
- * rosto, o texto de como usar, as aberturas de capítulo e os apêndices. Os
- * espaços de arte vêm de artes.mjs, já medidos, com o pedido escrito dentro.
+ * rosto, sumário, o texto de como usar, as aberturas de capítulo, a
+ * contracapa e os apêndices. Remissões entre tópicos (`regras-ref--id`) viram
+ * link com número de página; o número é preenchido pelo paginador depois de
+ * cada tópico ter caído numa página.
+ *
+ * A edição de distribuição não leva espaços reservados para ilustração. Com
+ * `comArtes` o livro volta a trazer as molduras tracejadas e o Mapa das Artes
+ * (artes.mjs), que servem a quem está encomendando a arte.
  *
  * Quem quebra isto em páginas é o paginador que roda dentro do navegador, em
  * gerar-livro.mjs. Aqui o conteúdo sai corrido, em blocos irmãos, porque é
  * assim que o paginador consegue medir e distribuir.
  */
 import { REGRAS_OFICIAIS } from '../../data/regras/regras.ts';
-import { GRUPOS_NAVEGACAO } from '../../data/regras/navegacao.ts';
+import {
+  ANTES_DE_LER,
+  CONTINUE_EM,
+  TRILHAS_DE_LEITURA,
+  acentoDoCapitulo,
+  cssRgb,
+  numerarLivro,
+  romano,
+} from '../../data/regras/livro.ts';
 import { tituloTopico } from '../../data/regras/titulos.ts';
 import { ARTE_CAPA, ARTE_ROSTO, ARTES_CAPITULO, ARTES_TOPICO } from './artes.mjs';
+import { emblemaDourado, emblemaEmCor, fioComLosango } from './emblema.mjs';
+import { artePronta, imagemDePagina } from './artes-prontas.mjs';
+import { aplicarAjustesDoPdf, ligarAoCompendio, partesDoCompendio } from './compendio.mjs';
 
 /* ------------------------------------------------------------------ */
-/* Paleta                                                              */
+/* Cores                                                               */
 /* ------------------------------------------------------------------ */
 
-/** Uma cor por capítulo, no mesmo espírito das cores que o site usa na
- *  navegação de Regras. Cada par é (cor viva, cor rebaixada): a viva vai para
- *  filete, cabeçalho de tabela e moldura, e a rebaixada para texto sobre papel
- *  claro, onde a viva não teria contraste. */
-const CORES_CAPITULO = {
-  'primeiros-passos': ['74,140,104', '54,104,78'],
-  personagem: ['66,116,168', '46,86,128'],
-  combate: ['160,62,74', '124,44,56'],
-  cenas: ['180,104,52', '136,74,32'],
-  magia: ['118,80,164', '88,58,126'],
-  itens: ['166,120,52', '126,88,34'],
-  veiculos: ['54,130,140', '36,96,106'],
-  mundo: ['104,138,58', '74,102,38'],
-  mestre: ['166,132,58', '124,96,34'],
+/** Cor de um capítulo como o CSS do livro espera: (viva, rebaixada) em "r,g,b". */
+const COR_DAS_PARTES_DO_COMPENDIO = {
+  'compendio-classes': 'personagem',
+  'compendio-racas': 'mundo',
+  'compendio-legados': 'itens',
+  'compendio-magias': 'magia',
 };
-const COR_PADRAO = ['118,108,138', '86,78,104'];
 
-const cores = (grupoId) => CORES_CAPITULO[grupoId] || COR_PADRAO;
+const cores = (idDoCapitulo) => {
+  const acento = acentoDoCapitulo(COR_DAS_PARTES_DO_COMPENDIO[idDoCapitulo] ?? idDoCapitulo);
+  return [cssRgb(acento.vivo, ','), cssRgb(acento.escuro, ',')];
+};
 
 /* ------------------------------------------------------------------ */
 /* Utilidades                                                          */
@@ -54,7 +66,7 @@ export const esc = (valor) => String(valor ?? '')
   .replaceAll('"', '&quot;');
 
 const hoje = () => new Date().toLocaleDateString('pt-BR', {
-  day: '2-digit', month: 'long', year: 'numeric',
+  day: 'numeric', month: 'long', year: 'numeric',
 });
 
 const MEDIDAS = {
@@ -74,8 +86,17 @@ const ROTULOS_TAMANHO = {
   coluna: 'Uma coluna',
 };
 
+/** "Capítulo 3" para os capítulos de regras, "Compêndio A" para as partes do compêndio. */
+const rotuloDaParte = (parte) => parte.rotulo ?? `Capítulo ${parte.numero}`;
+
+/** "A, B e C". */
+const listaHumana = (itens) => (itens.length <= 1
+  ? itens.join('')
+  : `${itens.slice(0, -1).join(', ')} e ${itens[itens.length - 1]}`);
+
 /** Espaço reservado. O bloco já ocupa a altura final da imagem, então trocar o
- *  reservado pela arte não remexe a paginação em volta. */
+ *  reservado pela arte não remexe a paginação em volta. Só existe na edição
+ *  de planejamento de arte. */
 const espacoArte = (arte, { dentroDaColuna = false } = {}) => {
   const cheia = !dentroDaColuna && arte.tamanho !== 'coluna';
   return `<figure class="arte arte--${arte.tamanho}"${cheia ? ' data-cheia="1"' : ''} data-arte="1" data-brief="${esc(arte.brief)}" data-tamanho="${esc(ROTULOS_TAMANHO[arte.tamanho] || arte.tamanho)}">
@@ -85,51 +106,83 @@ const espacoArte = (arte, { dentroDaColuna = false } = {}) => {
   </figure>`;
 };
 
+/** Transforma as remissões do texto (`<span class="regras-ref regras-ref--id">`) em link com número de
+ *  página. O número só existe depois da paginação: o paginador preenche `data-pg`. Até lá o espaço é
+ *  reservado com um número largo ("000"), senão o texto cresceria depois de medido e estouraria a coluna.
+ *  Remissão para um tópico que não está nesta edição (o Guia do Mestre, no volume dos jogadores) vira texto simples. */
+export const resolverRemissoes = (html, idsDaEdicao) => String(html ?? '').replace(
+  /<span class="regras-ref regras-ref--([a-z0-9-]+)">([\s\S]*?)<\/span>/g,
+  (_, id, texto) => (idsDaEdicao.has(id)
+    ? `<a class="ref" href="#t-${id}">${texto}<span class="ref-pg" data-pg="t-${id}" data-pg-formato=" (p. {n})"> (p. 000)</span></a>`
+    : texto),
+);
+
 /* ------------------------------------------------------------------ */
-/* Capa e folha de rosto                                               */
+/* Capa, folha de rosto e contracapa                                   */
 /* ------------------------------------------------------------------ */
 
-const capa = ({ comMestre }) => {
+const capa = ({ comMestre, comArtes }) => {
   const [ac, acd] = cores('mestre');
+  // Arte própria em docs/livro/artes/capa.jpg: a imagem vira a página e o emblema em vetor sai.
+  const arte = artePronta('capa');
   return `
-<section class="pagina pagina--capa" style="--ac:${ac};--acd:${acd}">
+<section class="pagina pagina--capa${arte ? ' pagina--com-imagem' : ''}" style="--ac:${ac};--acd:${acd}">
+  ${arte ? `${imagemDePagina(arte)}<div class="capa-veu"></div>` : ''}
   <div class="capa-moldura"></div>
-  <div class="capa-topo">
-    <div class="capa-selo">Sistema d20 · Livro básico</div>
-    <h1>O Jardim</h1>
-    <div class="sub">Livro de Regras${comMestre ? ', edição do Mestre' : ''}</div>
+  <div class="capa-moldura capa-moldura--fina"></div>
+  <div class="capa-selo">Sistema d20 · Livro básico</div>
+  ${arte ? '' : (comArtes ? espacoArte(ARTE_CAPA) : `<div class="capa-emblema">${emblemaDourado('capa-arvore')}</div>`)}
+  <div class="capa-titulo">
+    <div class="capa-nome">O Jardim</div>
     <div class="capa-regua"></div>
+    <div class="capa-sub">Livro de Regras</div>
+    <div class="capa-edicao">${comMestre ? 'Edição do Mestre' : 'Edição do jogador'}</div>
   </div>
-  ${espacoArte(ARTE_CAPA)}
   <div class="capa-rodape">
-    <strong>Volume único</strong><br>
     Criação de personagem, combate, magia, equipamento, veículos e economia
     ${comMestre ? '<div class="capa-aviso">Contém as notas do Mestre</div>' : ''}
   </div>
 </section>`;
 };
 
-const rosto = ({ comMestre, totalTopicos, totalCapitulos }) => {
+const rosto = ({ comMestre, comArtes, totalTopicos, totalCapitulos, compendio, data }) => {
   const [ac, acd] = cores('primeiros-passos');
   return `
 <section class="pagina pagina--rosto" style="--ac:${ac};--acd:${acd}">
   <div class="rosto-corpo">
     <div class="rosto-marca">O Jardim</div>
-    <h1>Livro de Regras</h1>
+    <h1 class="rosto-titulo">Livro de Regras</h1>
     <div class="sub">${comMestre ? 'Edição do Mestre, com as notas de condução' : 'Edição do jogador'}</div>
-    ${espacoArte(ARTE_ROSTO, { dentroDaColuna: true })}
+    ${comArtes ? espacoArte(ARTE_ROSTO, { dentroDaColuna: true }) : `<div class="rosto-fio">${fioComLosango(acd)}</div>`}
     <dl class="rosto-ficha">
       <div class="linha"><dt>Sistema</dt><dd>d20, um dado resolve quase tudo</dd></div>
-      <div class="linha"><dt>Conteúdo</dt><dd>${totalCapitulos} capítulos, ${totalTopicos} assuntos</dd></div>
-      <div class="linha"><dt>Fonte</dt><dd>data/regras do repositório de O Jardim</dd></div>
-      <div class="linha"><dt>Gerado em</dt><dd>${esc(hoje())}</dd></div>
-      <div class="linha"><dt>Arte</dt><dd>Espaços reservados, ver o Mapa das Artes</dd></div>
+      <div class="linha"><dt>Conteúdo</dt><dd>${totalCapitulos} capítulos, ${totalTopicos} tópicos${compendio.length ? ` e o compêndio: ${listaHumana(compendio.map((parte) => parte.contagem))}` : ''}</dd></div>
+      <div class="linha"><dt>Edição</dt><dd>${esc(data)}</dd></div>
+      <div class="linha"><dt>No site</dt><dd>Livro de Regras com busca, ficha interativa, loja e bestiário</dd></div>
+      ${comArtes ? '<div class="linha"><dt>Arte</dt><dd>Espaços reservados, ver o Mapa das Artes</dd></div>' : ''}
     </dl>
     <p class="rosto-nota">
-      Este volume é gerado do catálogo de regras do projeto. O texto de cada assunto
-      é o mesmo que a mesa lê no site, então uma correção feita lá aparece aqui na
-      próxima geração.${comMestre ? ' Esta edição inclui os trechos de condução e não vai para a mão dos jogadores.' : ''}
+      Este volume reúne o mesmo texto que o site mostra, tópico por tópico. Se o site trouxer uma correção depois
+      desta edição, vale o que está no site.${comMestre ? ' Esta edição inclui os trechos de condução e não deve chegar às mãos dos jogadores.' : ''}
     </p>
+  </div>
+</section>`;
+};
+
+const contracapa = ({ comMestre, data }) => {
+  const [ac, acd] = cores('mestre');
+  const arte = artePronta('contracapa');
+  return `
+<section class="pagina pagina--contracapa${arte ? ' pagina--com-imagem' : ''}" style="--ac:${ac};--acd:${acd}">
+  ${arte ? `${imagemDePagina(arte)}<div class="contracapa-veu"></div>` : ''}
+  <div class="capa-moldura"></div>
+  <div class="contracapa-corpo">
+    ${arte ? '' : `<div class="capa-emblema capa-emblema--pequeno">${emblemaDourado('contracapa-arvore')}</div>`}
+    <div class="contracapa-titulo">O Jardim</div>
+    <div class="capa-regua"></div>
+    <p class="contracapa-texto">A ficha, o mundo, a loja, o bestiário e a mesa ao vivo estão no site, com busca e com tudo o que muda de uma sessão para outra. Este livro é uma fotografia das regras e dos catálogos no dia da edição.</p>
+    ${comMestre ? '<div class="capa-aviso">Edição do Mestre</div>' : ''}
+    <div class="contracapa-data">${esc(data)}</div>
   </div>
 </section>`;
 };
@@ -138,54 +191,88 @@ const rosto = ({ comMestre, totalTopicos, totalCapitulos }) => {
 /* Frente do livro                                                     */
 /* ------------------------------------------------------------------ */
 
-const comoUsar = ({ comMestre, totalCapitulos }) => `
-  <h2 class="folha-titulo">Como usar este livro</h2>
+const comoUsar = ({ comMestre, comArtes, ids, compendio = [] }) => {
+  const ref = (id) => `<span class="regras-ref regras-ref--${id}">${esc(tituloTopico(id))}</span>`;
+  const trilhas = TRILHAS_DE_LEITURA
+    .filter((trilha) => comMestre || !trilha.soMestre)
+    .map((trilha) => ({ ...trilha, passos: trilha.passos.filter((id) => ids.has(id)) }))
+    .filter((trilha) => trilha.passos.length >= 2)
+    .map((trilha) => `<li><strong>${esc(trilha.titulo)}.</strong> ${esc(trilha.para)} Leia ${listaHumana(trilha.passos.map(ref))}, nessa ordem.</li>`)
+    .join('');
+
+  return `
+  <h1 class="folha-titulo" data-quebra="1" data-cabeca="Como usar este livro">Como usar este livro</h1>
   <div class="regua-ac"></div>
   <p class="regras-lead primeira">O livro está arrumado na ordem em que uma mesa costuma precisar dele. Os primeiros capítulos ensinam a jogar e a montar um personagem, o meio resolve combate e magia, e o fim trata de equipamento, viagem, dinheiro e reputação. Nada aqui exige leitura completa antes da primeira sessão.</p>
 
-  <h3 class="regras-subtitle">A leitura mínima</h3>
-  <p>Se você vai jogar hoje e nunca abriu o sistema, leia <strong>Como Jogar</strong> e <strong>Criação de Personagem</strong>. São dois assuntos, e eles bastam para a primeira sessão inteira. O resto do volume funciona como consulta: você procura o assunto no sumário, resolve a dúvida e volta para a mesa.</p>
+  <h3 class="regras-subtitle">Por onde começar</h3>
+  <p>Se você vai jogar hoje e nunca abriu o sistema, leia ${ref('como-jogar')} e ${ref('criacao-personagem')}. Os dois bastam para a primeira sessão inteira. O resto do volume funciona como consulta: você procura o tópico no sumário, resolve a dúvida e volta para a mesa. Se preferir um caminho pronto, escolha o que combina com você:</p>
+  <ul class="regras-list">${trilhas}</ul>
 
-  <h3 class="regras-subtitle">Como cada assunto é apresentado</h3>
-  <p>Todo assunto abre em página nova, com o número do capítulo, um resumo de uma frase e três destaques com os valores que mais se consultam. Depois vem o texto da regra. Quando um número aparece numa caixa centralizada, ele é uma fórmula fechada, e vale como está escrito.</p>
+  <h3 class="regras-subtitle">Como cada tópico é apresentado</h3>
+  <p>Todo tópico abre com o número dele (3.4 é o quarto tópico do capítulo 3), o nome, uma frase que diz para que ele serve e até três destaques com os valores que mais se consultam. Logo depois vem o texto da regra, quase sempre com uma caixa <strong>Em resumo</strong> no começo, para quem só precisa do essencial.</p>
+  <div class="regras-resumo"><ul><li>Esta caixa reúne o que você precisa lembrar do tópico.</li><li>Se algo ali não bastar, a seção logo abaixo explica por inteiro.</li></ul></div>
+
+  <h3 class="regras-subtitle">As caixas do livro</h3>
+  <div class="regras-note regras-note--exemplo"><p>Uma situação resolvida passo a passo, com os números.</p></div>
+  <div class="regras-note regras-note--atencao"><p>O erro que mais aparece na mesa, antes que ele aconteça.</p></div>
+  <div class="regras-note regras-note--dica"><p>Um jeito de usar a regra sem travar o jogo.</p></div>
+  <div class="regras-note regras-note--regra"><p>O que vale exatamente como está escrito.</p></div>
+  <div class="regras-formula">d20 + bônus contra a DT</div>
+  <p>Uma fórmula numa caixa centralizada, como a de cima, é uma conta fechada e vale como está escrita. <span class="regras-ref regras-ref--combate">Combate</span> e outros tópicos que dependem de um tópico anterior trazem o nome dele sublinhado, com a página entre parênteses. No PDF, tocar no nome leva até lá.</p>
+
+  <h3 class="regras-subtitle">Convenções</h3>
   <div class="caixa">
-    <div class="rotulo">Convenções</div>
-    <p><strong>DT</strong> é a dificuldade de um teste. <strong>d20</strong> é o dado de vinte faces. <strong>Mod.</strong> é o modificador de um atributo. Uma barra entre dois valores significa escolha, e nunca soma.</p>
-    <p>Colchete de piso, no formato ⌊valor⌋, quer dizer arredondar para baixo. Ele aparece sempre que o nível entra numa conta.</p>
+    <div class="rotulo">Para ler os números</div>
+    <p><strong>DT</strong> é a dificuldade de um teste, <strong>d20</strong> é o dado de vinte faces e <strong>Mod.</strong> é o modificador de um atributo. Uma barra entre dois valores significa escolha, e nunca soma. O colchete de piso, ⌊valor⌋, quer dizer arredondar para baixo.</p>
   </div>
 
+  ${compendio.length ? `<h3 class="regras-subtitle">O Compêndio</h3>
+  <p>Depois dos capítulos vem o Compêndio, onde ficam as listas longas, uma entrada por página. As entradas aparecem também no índice remissivo, pelo nome.</p>
+  <ul class="regras-list">${compendio.map((parte) => `<li><strong>${esc(parte.rotulo)}, ${esc(parte.titulo)}.</strong> ${esc(parte.contagem)}. ${esc(parte.descricao)} Começa em <span class="regras-ref regras-ref--${esc(parte.topicos[0].id)}">${esc(parte.topicos[0].titulo)}</span>.</li>`).join('')}</ul>` : ''}
+
   <h3 class="regras-subtitle">O que está fora deste volume</h3>
-  <p>Catálogos que mudam com frequência ficam no site, onde a busca e os filtros fazem o trabalho: a lista completa de magias, o arsenal, o bestiário e a ficha interativa. O livro traz as regras que governam esses catálogos, além dos números que você precisa ter na mão sem abrir o navegador.</p>
+  <p>${compendio.length
+    ? `O que muda a toda hora ou depende da sua mesa fica no site, onde a busca e os filtros fazem o trabalho: o arsenal da loja, o bestiário, a ficha interativa${comMestre ? '' : ' e as classes e raças especiais que o Mestre libera para a sua mesa'}.`
+    : 'Os catálogos longos ficam no site, onde a busca e os filtros fazem o trabalho: cada raça e cada classe com todos os seus poderes, a lista de magias, o arsenal da loja, o bestiário e a ficha interativa.'} O livro traz as regras que governam esses catálogos e os números que você precisa ter na mão.</p>
   ${comMestre
-    ? '<p>Esta edição carrega, no fim de cada assunto, o trecho escrito para quem conduz a mesa. Ele aparece sobre fundo levemente tingido e começa sempre no mesmo lugar, depois do texto do jogador.</p>'
-    : '<p>As tabelas de calibragem, orçamento de encontro e condução da campanha pertencem ao Mestre e saem numa edição própria deste mesmo volume.</p>'}
-
-  <h3 class="regras-subtitle">Os espaços de arte</h3>
-  <p>As molduras tracejadas que aparecem ao longo do livro são espaços já medidos para ilustração. Cada uma traz um código, o tamanho final e o pedido do que deve estar na imagem. O <strong>Mapa das Artes</strong>, no fim do volume, lista todas com a página onde caíram. Enquanto a ilustração não existe, o livro pode ser impresso e usado do mesmo jeito.</p>
-  <p class="regras-note">São ${totalCapitulos} capítulos. A numeração dos assuntos segue o capítulo, então 3.4 é o quarto assunto do terceiro capítulo, e é assim que o sumário e o índice remissivo se referem a eles.</p>
+    ? '<p>Esta edição traz, no fim de cada tópico, o trecho escrito para quem conduz a mesa, sobre fundo levemente tingido e sempre depois do texto do jogador. O Guia do Mestre fecha o volume.</p>'
+    : '<p>As tabelas de calibragem, o orçamento de encontro e o Guia do Mestre pertencem a quem conduz a mesa e saem numa edição própria deste mesmo livro.</p>'}
+  ${comArtes
+    ? '<p>As molduras tracejadas que aparecem ao longo do livro são espaços já medidos para ilustração. Cada uma traz um código, o tamanho final e o pedido do que deve estar na imagem, e o Mapa das Artes, no fim, lista todas com a página onde caíram.</p>'
+    : ''}
 `;
+};
 
-const sumario = (partes) => {
-  const bloco = (parte) => `
-    <div class="sumario-parte">
-      <h3>Capítulo ${parte.numero} · ${esc(parte.titulo)}</h3>
+const sumario = (partes, { comArtes }) => {
+  const bloco = (parte) => {
+    const [ac, acd] = cores(parte.id);
+    return `
+    <div class="sumario-parte" style="--ac:${ac};--acd:${acd}">
+      <div class="sumario-cap"><span class="cap-num">${esc(rotuloDaParte(parte))}</span> ${esc(parte.titulo)}</div>
       ${parte.topicos.map((t) => `
-        <div class="sumario-item">
-          <span class="t">${esc(t.numero)} ${esc(t.titulo)}</span>
+        <a class="sumario-item" href="#t-${t.id}">
+          <span class="t"><span class="n">${esc(t.numero)}</span>${esc(t.titulo)}</span>
           <span class="fio"></span>
           <span class="pg" data-pg="t-${t.id}">00</span>
-        </div>`).join('')}
+        </a>`).join('')}
     </div>`;
+  };
+
+  const letras = comArtes ? ['A', 'B', 'C'] : ['A', 'B'];
+  const itensApendice = [
+    ['Referência rápida', 'ap-rapida'],
+    ...(comArtes ? [['Mapa das Artes', 'ap-artes']] : []),
+    ['Índice remissivo', 'ap-indice'],
+  ];
 
   return `
-  <h2 class="folha-titulo" data-quebra="1">Sumário</h2>
+  <h1 class="folha-titulo" data-quebra="1" data-cabeca="Sumário">Sumário</h1>
   <div class="regua-ac"></div>
   ${partes.map(bloco).join('')}
   <div class="sumario-parte">
-    <h3>Apêndices</h3>
-    <div class="sumario-item"><span class="t">A. Referência rápida</span><span class="fio"></span><span class="pg" data-pg="ap-rapida">00</span></div>
-    <div class="sumario-item"><span class="t">B. Mapa das Artes</span><span class="fio"></span><span class="pg" data-pg="ap-artes">00</span></div>
-    <div class="sumario-item"><span class="t">C. Índice remissivo</span><span class="fio"></span><span class="pg" data-pg="ap-indice">00</span></div>
+    <div class="sumario-cap">Apêndices</div>
+    ${itensApendice.map(([nome, id], indice) => `<a class="sumario-item" href="#${id}"><span class="t"><span class="n">${letras[indice]}</span>${nome}</span><span class="fio"></span><span class="pg" data-pg="${id}">00</span></a>`).join('')}
   </div>`;
 };
 
@@ -193,20 +280,23 @@ const sumario = (partes) => {
 /* Capítulos                                                           */
 /* ------------------------------------------------------------------ */
 
-const aberturaCapitulo = (parte) => {
+const aberturaCapitulo = (parte, { comArtes }) => {
   const [ac, acd] = cores(parte.id);
-  const arte = ARTES_CAPITULO[parte.id];
+  // Arte própria em docs/livro/artes/abertura-<id>.jpg: a imagem vira a página, com um véu escuro por baixo do texto.
+  const pronta = artePronta(`abertura-${parte.id}`);
+  const arte = comArtes && !pronta ? ARTES_CAPITULO[parte.id] : null;
   return `
-<section class="pagina pagina--abertura" style="--ac:${ac};--acd:${acd}">
-  ${arte ? `<div class="abertura-arte" data-arte="1" data-brief="${esc(arte.brief)}" data-tamanho="${esc(ROTULOS_TAMANHO.pagina)}">
+<section class="pagina pagina--abertura${pronta ? ' pagina--com-imagem' : ''}" data-capitulo="${esc(parte.id)}" style="--ac:${ac};--acd:${acd}">
+  ${pronta ? `${imagemDePagina(pronta)}<div class="abertura-veu"></div>` : (arte ? `<div class="abertura-arte" data-arte="1" data-brief="${esc(arte.brief)}" data-tamanho="${esc(ROTULOS_TAMANHO.pagina)}">
     <div class="arte-codigo" data-codigo>ART</div>
     <div class="arte-medida">${esc(MEDIDAS.pagina)}</div>
     <div class="arte-brief">${esc(arte.brief)}</div>
-  </div>` : ''}
+  </div>` : `<div class="abertura-marca">${emblemaEmCor(ac, 0.2, 'abertura-arvore')}</div>`)}
   <div class="abertura-texto">
-    <div class="abertura-num">Capítulo ${parte.numero}</div>
-    <h2>${esc(parte.titulo)}</h2>
-    <p class="abertura-resumo">${esc(parte.descricao)}</p>
+    <div class="abertura-numeral" aria-hidden="true">${esc(parte.numeral ?? romano(parte.numero))}</div>
+    <h1 class="abertura-titulo"><span class="abertura-num">${esc(rotuloDaParte(parte))}</span> <span class="abertura-nome">${esc(parte.titulo)}</span></h1>
+    <div class="abertura-regua"></div>
+    <p class="abertura-resumo">${esc(parte.apresentacao)}</p>
     <ul class="abertura-lista">
       ${parte.topicos.map((t) => `<li><span class="n">${esc(t.numero)}</span>${esc(t.titulo)}</li>`).join('')}
     </ul>
@@ -214,99 +304,96 @@ const aberturaCapitulo = (parte) => {
 </section>`;
 };
 
-const topico = (item, { comMestre }) => {
-  const regra = REGRAS_OFICIAIS[item.id];
-  const arte = ARTES_TOPICO[item.id];
+const topico = (item, parte, { comMestre, comArtes, ids }) => {
+  // As entradas do compêndio trazem a própria regra; os tópicos de regras vêm do catálogo.
+  // Alguns tópicos falam em "catálogo do site" onde o PDF tem o Compêndio: o ajuste é só do PDF.
+  const regra = item.regra ?? ligarAoCompendio(item.id, aplicarAjustesDoPdf(item.id, REGRAS_OFICIAIS[item.id]), { comMestre });
+  const arte = comArtes ? ARTES_TOPICO[item.id] : null;
+  const antes = (ANTES_DE_LER[item.id] ?? []).filter((id) => ids.has(id));
+  const veja = (CONTINUE_EM[item.id] ?? []).filter((id) => ids.has(id));
   const abertura = `
-  <header class="abre-topico" data-abre="topico" data-topico="${esc(item.titulo)}" id="t-${item.id}">
+  <header class="abre-topico" data-abre="topico" data-cabeca="${esc(item.titulo)}" data-topico-id="${esc(item.id)}" data-numero="${esc(item.numero)}" data-capitulo-id="${esc(parte.id)}"${item.quebra ? ' data-quebra="1"' : ''} id="t-${item.id}">
     <div class="abre-linha">
-      <span class="abre-num">Assunto ${esc(item.numero)}</span>
+      <span class="abre-num">${esc(rotuloDaParte(parte))} · ${esc(parte.titulo)}</span>
       <span class="abre-selo">${esc(regra.status)}</span>
     </div>
-    <h2 class="abre-titulo">${esc(item.titulo)}</h2>
+    <h2 class="abre-titulo"><span class="abre-n">${esc(item.numero)}</span> ${esc(item.titulo)}</h2>
     <div class="abre-regua"></div>
     <p class="abre-resumo">${esc(regra.resumo)}</p>
     <div class="abre-destaques">
-      ${regra.destaques.map(([rotulo, valor]) => `<span><b>${esc(rotulo)}</b>${esc(valor)}</span>`).join('')}
+      ${(regra.destaques || []).map(([rotulo, valor]) => `<span><b>${esc(rotulo)}</b>${esc(valor)}</span>`).join('')}
     </div>
+    ${antes.length ? `<p class="abre-antes"><b>Antes de ler</b> ${antes.map((id) => `<span class="regras-ref regras-ref--${id}">${esc(tituloTopico(id))}</span>`).join(', ')}</p>` : ''}
   </header>`;
+
+  const vejaTambem = veja.length
+    ? `<p class="veja-tambem"><b>Veja também</b> ${veja.map((id) => `<span class="regras-ref regras-ref--${id}">${esc(tituloTopico(id))}</span>`).join(', ')}</p>`
+    : '';
 
   const mestre = comMestre && regra.corpoMestre
     ? `<h3 class="regras-subtitle mestre-abre">Pelo lado do Mestre</h3>${regra.corpoMestre}`
     : '';
 
-  return [abertura, arte ? espacoArte(arte) : '', regra.corpo, mestre].filter(Boolean).join('\n');
+  return resolverRemissoes(
+    [abertura, arte ? espacoArte(arte) : '', regra.corpo, vejaTambem, mestre].filter(Boolean).join('\n'),
+    ids,
+  );
 };
 
 /* ------------------------------------------------------------------ */
 /* Montagem                                                            */
 /* ------------------------------------------------------------------ */
 
-/** Estrutura do livro: capítulos e assuntos já numerados, na ordem da
- *  navegação. Tópico que exista no catálogo e não esteja em nenhum grupo entra
- *  num capítulo final, para nunca sumir do livro por esquecimento. */
+/** Estrutura do livro: capítulos e tópicos já numerados, na ordem da navegação, e depois as partes do compêndio. */
 export function estrutura({ comMestre = false } = {}) {
-  const grupos = GRUPOS_NAVEGACAO.filter((grupo) => comMestre || grupo.id !== 'mestre');
-  const usados = new Set();
-  const partes = [];
-
-  grupos.forEach((grupo) => {
-    const numero = partes.length + 1;
-    const topicos = grupo.topicos
-      .filter((id) => REGRAS_OFICIAIS[id])
-      .map((id, indice) => {
-        usados.add(id);
-        return { id, titulo: tituloTopico(id), numero: `${numero}.${indice + 1}` };
-      });
-    if (!topicos.length) return;
-    partes.push({ id: grupo.id, numero, titulo: grupo.titulo, descricao: grupo.descricao, topicos });
-  });
-
-  const soltos = Object.keys(REGRAS_OFICIAIS)
-    .filter((id) => !usados.has(id) && (comMestre || id !== 'mestre'));
-  if (soltos.length) {
-    const numero = partes.length + 1;
-    partes.push({
-      id: 'avulsos',
-      numero,
-      titulo: 'Regras avulsas',
-      descricao: 'Assuntos que ainda não foram colocados em nenhum capítulo da navegação.',
-      topicos: soltos.map((id, indice) => ({ id, titulo: tituloTopico(id), numero: `${numero}.${indice + 1}` })),
-    });
-  }
-
-  return partes;
+  return [
+    ...numerarLivro(Object.keys(REGRAS_OFICIAIS), { comMestre }),
+    ...partesDoCompendio({ comMestre }),
+  ];
 }
 
-export function montarLivro({ comMestre = false } = {}) {
+/** `data` existe para o gerador calcular um hash do conteúdo que não muda de um dia para o outro. */
+export function montarLivro({ comMestre = false, comArtes = false, data = hoje() } = {}) {
   const partes = estrutura({ comMestre });
-  const totalTopicos = partes.reduce((soma, parte) => soma + parte.topicos.length, 0);
+  const capitulos = partes.filter((parte) => !parte.rotulo);
+  const compendio = partes.filter((parte) => parte.rotulo);
+  const totalTopicos = capitulos.reduce((soma, parte) => soma + parte.topicos.length, 0);
+  const ids = new Set(partes.flatMap((parte) => parte.topicos.map((t) => t.id)));
   const [acFrente, acdFrente] = cores('primeiros-passos');
+  const opcoes = { comMestre, comArtes, ids, compendio };
+
+  const frente = resolverRemissoes(
+    `${sumario(partes, { comArtes })}\n${comoUsar(opcoes)}`,
+    ids,
+  );
 
   const corpo = [
-    capa({ comMestre }),
-    rosto({ comMestre, totalTopicos, totalCapitulos: partes.length }),
-    `<section class="fluxo" data-parte="Abertura" data-ac="${acFrente}" data-acd="${acdFrente}">
-      ${comoUsar({ comMestre, totalCapitulos: partes.length })}
-      ${sumario(partes)}
+    capa({ comMestre, comArtes }),
+    rosto({ comMestre, comArtes, totalTopicos, totalCapitulos: capitulos.length, compendio, data }),
+    `<section class="fluxo" data-parte="O Jardim · Livro de Regras" data-ac="${acFrente}" data-acd="${acdFrente}">
+      ${frente}
     </section>`,
   ];
 
   partes.forEach((parte) => {
     const [ac, acd] = cores(parte.id);
-    corpo.push(aberturaCapitulo(parte));
-    corpo.push(`<section class="fluxo" data-parte="${esc(parte.titulo)}" data-ac="${ac}" data-acd="${acd}">
-      ${parte.topicos.map((item) => topico(item, { comMestre })).join('\n')}
+    corpo.push(aberturaCapitulo(parte, { comArtes }));
+    corpo.push(`<section class="fluxo" data-parte="${esc(rotuloDaParte(parte))} · ${esc(parte.titulo)}" data-ac="${ac}" data-acd="${acd}">
+      ${parte.topicos.map((item) => topico(item, parte, opcoes)).join('\n')}
     </section>`);
   });
 
   corpo.push('<div id="marca-apendices"></div>');
+  corpo.push(contracapa({ comMestre, data }));
 
+  const nome = comMestre ? 'O-Jardim-Livro-de-Regras-MESTRE' : 'O-Jardim-Livro-de-Regras';
   return {
     titulo: comMestre ? 'O Jardim · Livro de Regras (edição do Mestre)' : 'O Jardim · Livro de Regras',
-    arquivo: comMestre ? 'O-Jardim-Livro-de-Regras-MESTRE' : 'O-Jardim-Livro-de-Regras',
+    edicao: comMestre ? 'mestre' : 'jogador',
+    arquivo: nome,
     corpo: corpo.join('\n'),
     partes,
     totalTopicos,
+    comArtes,
   };
 }

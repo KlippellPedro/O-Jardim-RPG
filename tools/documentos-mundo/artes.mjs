@@ -65,6 +65,23 @@ export const ARTES_CAPITULO = {
     tamanho: 'pagina',
     brief: 'A cadeira de quem conduz a mesa, vista do lado de dentro do escudo do mestre. Anotação espalhada, um mapa marcado a lápis, iniciativa numa lista e dois dados escondidos atrás do papelão. A mesa dos jogadores aparece desfocada do outro lado, longe.',
   },
+  // Partes do Compêndio (só existem no PDF).
+  'compendio-classes': {
+    tamanho: 'pagina',
+    brief: 'Fila de silhuetas de corpo inteiro numa ponte de galho, ombro a ombro, cada uma com equipamento e postura que bastam para dizer o ofício sem legenda: quem segura a linha de frente, quem mira de longe, quem cuida dos feridos, quem prepara um frasco, quem escuta a máquina. Rostos em sombra, para qualquer jogador se colocar ali. Contra a luz de uma Árvore enorme ao fundo.',
+  },
+  'compendio-racas': {
+    tamanho: 'pagina',
+    brief: 'Os povos do Jardim reunidos ao redor de uma mesma fogueira, sob uma Árvore imensa: corpos de tamanhos e proporções muito diferentes, todos vestidos para a mesma estrada. O que os separa é o corpo, e o que os junta é o trabalho de chegar até ali. Nenhum rosto em destaque.',
+  },
+  'compendio-legados': {
+    tamanho: 'pagina',
+    brief: 'Corte transversal de um tronco antigo, com os anéis de crescimento à mostra e pequenos símbolos gravados e acesos em alguns anéis, um a cada cinco. Uma mão apoiada na madeira, no ponto onde o próximo símbolo ainda não foi escolhido.',
+  },
+  'compendio-magias': {
+    tamanho: 'pagina',
+    brief: 'Onze correntes de luz de cores diferentes saindo de um mesmo ponto e se abrindo em leque, cada uma com textura própria (água, brasa, vazio, relógio...), e uma única corrente em linha reta e azul-neon, que é a Tecnologia. Por cima, um círculo de conjuração em traço fino e geométrico, quase invisível.',
+  },
 };
 
 /** Espaços de arte dentro dos capítulos. Só os assuntos que ganham imagem

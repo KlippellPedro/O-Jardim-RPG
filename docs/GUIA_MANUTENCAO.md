@@ -175,6 +175,15 @@ descritos em [tools/documentos-mundo/README.md](../tools/documentos-mundo/README
 Os PDFs versionados são saídas para consulta/mesa, não fontes editáveis das
 regras. Preserve a distinção entre edição pública e conteúdo reservado do Mestre.
 
+O PDF do Livro de Regras (edição do jogador) também viaja no pacote da plataforma
+e é o que o botão "Baixar PDF" do Livro entrega: depois de mudar o texto das
+regras, rode `npm run docs:livro` antes de montar o ZIP (`npm run docs:livro -- --conferir`
+diz se o PDF está em dia). O pacote já passa de 90 MB e a hospedagem aceita 100 MB,
+por isso a edição do Mestre não entra. O que conta é o PDF depois do ZIP (o
+gerador mostra o tamanho do arquivo e o de dentro do ZIP, e avisa acima de 6 MB
+comprimido). O PDF inclui o Compêndio (classes, raças, Legados e magias, lidos
+dos mesmos dados do site) e usa as artes de `docs/livro/artes/` onde houver.
+
 Ao fechar uma auditoria ou decisão, atualize o documento temático existente em
 `docs/sistema/`. Guarde data, justificativa, evidência e pendências no próprio
 tema; evite outra sequência de arquivos de proposta, implementação e “final”.

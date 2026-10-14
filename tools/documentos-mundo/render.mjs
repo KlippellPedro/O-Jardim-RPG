@@ -66,8 +66,10 @@ export async function abrirChrome({ perfil, porta = 9411 } = {}) {
  * Imprime um arquivo HTML local e devolve { pdf, inspecao }.
  * `rodape` recebe um template do Chrome (com .pageNumber) ou nada.
  * `inspecionar` recebe uma expressão avaliada na página antes da impressão.
+ * `indice` liga os marcadores do PDF (o painel de índice do leitor de PDF), montados a partir dos títulos
+ * h1 a h4 do documento. O Chrome só os gera junto do PDF etiquetado, então os dois ligam juntos.
  */
-export async function imprimir(chrome, arquivoHtml, { rodape = null, espera = 1600, inspecionar = null } = {}) {
+export async function imprimir(chrome, arquivoHtml, { rodape = null, espera = 1600, inspecionar = null, indice = false } = {}) {
   const { targetId } = await chrome.enviar('Target.createTarget', { url: 'about:blank' });
   const { sessionId } = await chrome.enviar('Target.attachToTarget', { targetId, flatten: true });
   await chrome.enviar('Page.enable', {}, sessionId);
@@ -92,6 +94,8 @@ export async function imprimir(chrome, arquivoHtml, { rodape = null, espera = 16
     printBackground: true,
     preferCSSPageSize: true,
     displayHeaderFooter: Boolean(rodape),
+    generateTaggedPDF: indice,
+    generateDocumentOutline: indice,
     headerTemplate: '<div></div>',
     footerTemplate: rodape || '<div></div>',
     marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0,

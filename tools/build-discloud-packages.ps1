@@ -35,6 +35,40 @@ function Sync-PublicRules {
   }
 }
 
+function Publish-LivroPdf {
+  param([string]$PlatformData)
+  # O Livro de Regras em PDF, edicao do jogador, com o manifesto que a tela do Livro le. A edicao do Mestre fica
+  # de fora: o pacote ja passa de 90 MB e a hospedagem aceita 100 MB por envio (ver docs/GUIA_MANUTENCAO.md).
+  $pdf = Join-Path $root 'docs\livro\O-Jardim-Livro-de-Regras.pdf'
+  $manifesto = Join-Path $root 'docs\livro\livro-manifesto.json'
+  if (-not (Test-Path -LiteralPath $pdf) -or -not (Test-Path -LiteralPath $manifesto)) {
+    Write-Warning 'PDF do Livro de Regras ausente: o pacote sai sem o botao de download. Rode npm run docs:livro.'
+    return
+  }
+  # Aviso, e nao erro: quem monta o pacote decide se sobe com um PDF antigo.
+  Push-Location $root
+  try {
+    & node --import ./tests/frontend/registerTsLoader.mjs tools/documentos-mundo/gerar-livro.mjs --conferir | Out-Host
+    if ($LASTEXITCODE -ne 0) {
+      Write-Warning 'O PDF do Livro de Regras esta desatualizado em relacao ao texto das regras. Rode npm run docs:livro antes de subir o pacote.'
+    }
+  }
+  finally {
+    Pop-Location
+  }
+  $destino = Join-Path $PlatformData 'livro'
+  New-Item -ItemType Directory -Path $destino -Force | Out-Null
+  Copy-Item -LiteralPath $pdf -Destination $destino -Force
+  $dados = [System.IO.File]::ReadAllText($manifesto, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+  $enxuto = [ordered]@{
+    versao = $dados.versao
+    gerado_em = $dados.gerado_em
+    edicoes = [ordered]@{ jogador = $dados.edicoes.jogador }
+  }
+  $texto = $enxuto | ConvertTo-Json -Depth 12
+  [System.IO.File]::WriteAllText((Join-Path $destino 'livro-manifesto.json'), $texto, (New-Object System.Text.UTF8Encoding($false)))
+}
+
 function Copy-ProjectItem {
   param([string]$Source, [string]$DestinationRoot)
   $sourcePath = Join-Path $root $Source
@@ -130,6 +164,7 @@ try {
     New-Item -ItemType Directory -Path $platformData -Force | Out-Null
     @('data\ficha', 'data\jardim', 'data\mundo', 'data\regras', 'data\loja', 'data\economia', 'data\gerado', 'data\bestiario') |
       ForEach-Object { Copy-ProjectItem $_ $platformData }
+    Publish-LivroPdf -PlatformData $platformData
   }
 
   if (-not $PlatformOnly) {

@@ -26,7 +26,7 @@ recebem automaticamente publicações nem filtros de visibilidade da campanha.
 
 | Pasta | Conteúdo |
 | --- | --- |
-| [livro/](livro/) | [Livro de Regras](livro/O-Jardim-Livro-de-Regras.pdf) e [edição do Mestre](livro/O-Jardim-Livro-de-Regras-MESTRE.pdf), que inclui conteúdo reservado. |
+| [livro/](livro/) | [Livro de Regras](livro/O-Jardim-Livro-de-Regras.pdf) (o que o site oferece para baixar), [edição do Mestre](livro/O-Jardim-Livro-de-Regras-MESTRE.pdf), que inclui conteúdo reservado, e o `livro-manifesto.json` que descreve os dois. |
 | [players/](players/) | Guias de [O Jardim](players/O-Jardim.pdf), [Árvores](players/As-Dez-Arvores.pdf) e [Seres](players/Os-Seres-do-Jardim.pdf). |
 | [props/](props/) | [Cadernos de Campo](props/Dossie-Cadernos-de-Campo.pdf), [folha reservada do Mestre](props/Dossie-FOLHA-DO-MESTRE.pdf) e cinco documentos avulsos para a mesa. |
 

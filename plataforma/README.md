@@ -33,6 +33,9 @@ permissões do mestre, vínculo Discord, economia e auditoria.
   (`data/bestiario/loot-criaturas.json`, lido só pelo servidor);
 - envio direto e troca com aceite de itens e moedas entre personagens (`/trocas`);
 - convites de plataforma para criar conta, com tela no Painel do Criador;
+- o PDF do Livro de Regras: `GET /api/v1/livro` lista as edições que a conta pode baixar e
+  `GET /api/v1/livro/pdf/{edicao}` entrega o arquivo (jogador para qualquer conta, Mestre só para quem conduz a
+  campanha informada), com `ETag` e sem recomprimir;
 - backup lógico do banco, sob demanda e automático;
 - migrações incrementais do PostgreSQL (55 até 13 de outubro de 2026).
 
