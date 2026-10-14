@@ -226,53 +226,6 @@ function useProgressiveModels(performanceMode: boolean, selectedDeidadeId: strin
   return { detailedModels, onModelLoaded };
 }
 
-const EasterEggUniverses = memo(({ animate }: { animate: boolean }) => {
-  const frozenRef = useRef<THREE.Mesh>(null);
-  const bubbleRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (!animate) return;
-    if (frozenRef.current) frozenRef.current.rotation.y = state.clock.elapsedTime * 0.05;
-    if (bubbleRef.current) {
-      bubbleRef.current.rotation.y = state.clock.elapsedTime * 0.08;
-      bubbleRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-    }
-  });
-
-  return (
-    <group position={[350, -100, 400]}>
-      <mesh ref={frozenRef}>
-        <sphereGeometry args={[15, 24, 24]} />
-        <meshStandardMaterial color="#d0f4ff" emissive="#0a2a3a" roughness={0.4} metalness={0.1} />
-        <mesh>
-          <sphereGeometry args={[15.2, 24, 24]} />
-          <meshPhysicalMaterial color="#ffffff" transparent opacity={0.35} roughness={0.15} transmission={0.65} thickness={1.5} />
-        </mesh>
-        <Billboard position={[0, 22, 0]}>
-          <Text fontSize={3} color="#a0e6ff" anchorX="center" anchorY="middle" fillOpacity={0.6}>O Mundo Gélido</Text>
-        </Billboard>
-      </mesh>
-
-      <mesh ref={bubbleRef} position={[40, 20, -30]}>
-        <sphereGeometry args={[10, 24, 24]} />
-        <meshPhysicalMaterial
-          color="#ffb6ff"
-          emissive="#ff0088"
-          emissiveIntensity={0.12}
-          transparent
-          opacity={0.22}
-          roughness={0.05}
-          clearcoat={0.7}
-          side={THREE.DoubleSide}
-        />
-        <Billboard position={[0, 15, 0]}>
-          <Text fontSize={2.5} color="#ffb6ff" anchorX="center" anchorY="middle" fillOpacity={0.6}>Universo Bolha</Text>
-        </Billboard>
-      </mesh>
-    </group>
-  );
-});
-
 const MoonBankNode = memo(({
   isSelected,
   onClick,
@@ -653,7 +606,6 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({
           animate={world.animate}
           staticScene={performanceMode || prefersReducedMotion}
         />
-        {world.showDecorations && <EasterEggUniverses animate={world.animate} />}
       </Canvas>
     </div>
   );
