@@ -146,7 +146,7 @@ const rotuloTipoClasse = (classe: (typeof classesData)[number]) => {
 };
 
 const listaClassesPublicas = classesData
-  .map((classe) => `<li><strong>${classe.titulo}</strong> (${rotuloTipoClasse(classe)}) - ${classe.descricao}</li>`)
+  .map((classe) => `<li><strong>${classe.titulo}</strong> <em>(${rotuloTipoClasse(classe)})</em>. ${classe.descricao}</li>`)
   .join('');
 
 const classesComuns = classesData.filter((classe) => classe.categoria === 'padrao').length;
@@ -285,8 +285,10 @@ const racasMecanicas = racasData
   .filter((raca) => !raca.indisponivel && raca.id !== 'raca-personalizada');
 const racasComuns = racasMecanicas.filter((raca) => raca.categoria === 'padrao').length;
 const racasEspeciais = racasMecanicas.filter((raca) => raca.categoria === 'esquecida').length;
-const listaRacasPublicas = racasMecanicas
-  .map((raca) => `<li><strong>${raca.titulo}</strong> (${raca.categoria === 'esquecida' ? 'especial' : 'comum'}) - Vida ${raca.vida >= 0 ? '+' : ''}${raca.vida}, Mana ${raca.mana >= 0 ? '+' : ''}${raca.mana}${raca.estamina ? `, Estamina +${raca.estamina}` : ''}${raca.movimento ? `, Movimento +${raca.movimento} m` : ''}</li>`)
+/** Ajuste com sinal de menos de verdade ("−2"), "0" quando a raça não mexe naquele recurso. */
+const ajusteDaRaca = (valor: number) => (valor > 0 ? `+${valor}` : valor < 0 ? `\u2212${Math.abs(valor)}` : '0');
+const linhasRacasPublicas = racasMecanicas
+  .map((raca) => `<tr><td><strong>${raca.titulo}</strong></td><td>${raca.categoria === 'esquecida' ? 'Especial' : 'Comum'}</td><td>${ajusteDaRaca(raca.vida)}</td><td>${ajusteDaRaca(raca.mana)}</td><td>${ajusteDaRaca(raca.estamina ?? 0)}</td><td>${raca.movimento ? `+${String(raca.movimento).replace('.', ',')} m` : '0'}</td></tr>`)
   .join('');
 
 const totalFrutosEden = catalogoLojaData.entradas.filter((item) => item.tipo === 'fruto-eden').length;
@@ -419,25 +421,35 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     destaques: [
       ['Dado', 'Um d20 resolve quase tudo'],
       ['Conta', 'd20 + bônus contra uma DT'],
-      ['Se nunca jogou', 'Leia só esta página primeiro'],
+      ['Se nunca jogou', 'Leia só este tópico primeiro'],
     ],
     corpo: `
-      <p class="regras-lead">Esta é a primeira página do livro e a única que não pressupõe nada. Se você nunca jogou RPG, ela sozinha já basta para sentar na mesa. Se você já joga há anos, pule para o Vocabulário no fim: é lá que estão as poucas palavras que O Jardim usa de um jeito próprio.</p>
+      <p class="regras-lead">Este é o tópico de entrada do livro e o único que não pressupõe nada. Se você nunca jogou RPG, ele sozinho já basta para sentar na mesa. Se você já joga há anos, pule para o Vocabulário, no fim: é lá que estão as poucas palavras que O Jardim usa de um jeito próprio.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Um grupo conta uma história junto. Cada jogador comanda um personagem, e o Mestre descreve o mundo e interpreta todo o resto.</li>
+          <li>Quando o resultado de uma tentativa é incerto, você rola um <strong>d20</strong>, soma o seu bônus e compara com a <strong>DT</strong> que o Mestre escolheu. Igual ou maior, deu certo.</li>
+          <li>Um 20 natural no dado é sucesso crítico e um 1 natural é falha crítica, com qualquer bônus.</li>
+          <li>Em combate o tempo se divide em <strong>rodadas</strong>, e dentro de cada uma você joga o seu <strong>turno</strong>.</li>
+          <li>As palavras que o resto do livro usa sem explicar de novo estão no Vocabulário, mais abaixo.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">O que é um RPG de mesa</h3>
-      <p>Um grupo de pessoas conta uma história junta. Cada jogador controla um personagem e decide o que ele tenta fazer. Uma pessoa, o Mestre, descreve o mundo, interpreta todo o resto e diz o que acontece depois de cada escolha.</p>
+      <p>Um grupo de pessoas conta uma história junto. Cada jogador controla um personagem e decide o que ele tenta fazer. Uma pessoa, o Mestre, descreve o mundo, interpreta todo o resto e diz o que acontece depois de cada escolha.</p>
       <p>Ninguém ganha e ninguém perde. O que existe é uma história que sai melhor quando todo mundo empurra junto. As regras deste livro entram só quando o resultado de uma tentativa é incerto e ninguém quer decidir no dedo: aí o dado decide.</p>
 
       <h3 class="regras-subtitle">Quem faz o quê</h3>
       <ul class="regras-list">
         <li><strong>Jogador:</strong> descreve o que o personagem faz, rola os dados dele e cuida da própria ficha.</li>
-        <li><strong>Mestre:</strong> descreve a cena, controla os inimigos e os personagens do mundo, escolhe a dificuldade das tentativas e narra o resultado. É juiz e narrador, não adversário.</li>
+        <li><strong>Mestre:</strong> descreve a cena, controla os inimigos e os personagens do mundo, escolhe a dificuldade das tentativas e narra o resultado. Ele conduz o jogo e julga as regras, e a função dele é fazer a história funcionar para todo mundo.</li>
         <li><strong>Ficha:</strong> a página do seu personagem no site. Guarda os números, o inventário, as magias e o histórico. Ela faz as contas sozinha; você decide o que fazer com elas.</li>
         <li><strong>Dados:</strong> escritos como 2d6, que quer dizer "role dois dados de seis lados e some". O dado principal do jogo é o d20, de vinte lados.</li>
       </ul>
 
       <h3 class="regras-subtitle">Como uma jogada se resolve</h3>
-      <p>Quase tudo neste jogo passa pela mesma conta. Você rola um d20, soma seus bônus e compara com um número de dificuldade que o Mestre escolheu, chamado de DT.</p>
+      <p>Quase tudo neste jogo passa pela mesma conta. Você rola um d20, soma seus bônus e compara o total com um número de dificuldade que o Mestre escolheu, chamado de DT.</p>
       <div class="regras-formula">d20 + bônus do personagem contra a DT da situação</div>
       <ul class="regras-list">
         <li>Deu igual ou mais que a DT, deu certo. Deu menos, não deu.</li>
@@ -445,7 +457,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Um 20 no dado é sucesso crítico e um 1 é falha crítica, sem depender do bônus.</li>
         <li>Às vezes você rola dois d20 e usa o melhor (vantagem) ou o pior (desvantagem).</li>
       </ul>
-      <p class="regras-note">Exemplo: sua personagem quer arrombar uma fechadura. O Mestre diz que a DT é 15. Ela tem Destreza 16 (bônus +3), está no nível 4 (mais 2) e é Aprendiz em Ladinagem (mais 2). O bônus total é +7. Você rola o d20, tira 9, soma 7 e chega a 16. Passou de 15: a fechadura abre.</p>
+      <div class="regras-note regras-note--exemplo">
+        <p>Sua personagem quer arrombar uma fechadura. O Mestre diz que a DT é 15. Ela tem Destreza 16 (bônus +3), está no nível 4 (mais 2) e é Aprendiz em Ladinagem (mais 2). O bônus total é +7. Você rola o d20, tira 9, soma 7 e chega a 16. Passou de 15: a fechadura abre.</p>
+      </div>
+      <div class="regras-note regras-note--dica">
+        <p>Você não precisa saber de cabeça qual perícia usar. Diga o que o seu personagem quer fazer e deixe o Mestre dizer qual teste vale.</p>
+      </div>
 
       <h3 class="regras-subtitle">Como uma sessão anda</h3>
       <p>Fora de combate o jogo é conversa: o Mestre descreve, você responde, e só se rola dado quando há risco de verdade. Quando a briga começa, o tempo é fatiado para caber todo mundo.</p>
@@ -457,35 +474,36 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Vocabulário</h3>
-      <p>Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar em alguma no meio de outro capítulo, volte aqui.</p>
+      <p>Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar em alguma no meio de outro tópico, volte aqui.</p>
       <div class="regras-table-wrap">
         <table class="regras-table">
           <thead><tr><th>Termo</th><th>O que quer dizer</th></tr></thead>
           <tbody>
             <tr><td><strong>DT</strong></td><td>Dificuldade do Teste. O número que sua rolagem precisa alcançar.</td></tr>
             <tr><td><strong>Teste</strong></td><td>Qualquer rolagem de d20 contra uma DT.</td></tr>
-            <tr><td><strong>Grau</strong></td><td>O quanto você treinou uma perícia, de ${primeiroGrauPericia.rotulo} a ${ultimoGrauPericia.rotulo}. Cada degrau vale um bônus fixo.</td></tr>
+            <tr><td><strong>Grau</strong></td><td>O quanto você treinou uma perícia, de ${primeiroGrauPericia.rotulo} a ${ultimoGrauPericia.rotulo}. Cada degrau vale um bônus fixo. Os graus estão em <span class="regras-ref regras-ref--pericias">Perícias</span>.</td></tr>
             <tr><td><strong>Atributo</strong></td><td>Os sete números que descrevem o personagem: Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo.</td></tr>
             <tr><td><strong>Vida, Mana e Estamina</strong></td><td>Quanto dano você aguenta, quanto combustível mágico você tem e quanto fôlego físico você tem para golpes, posturas e esforço.</td></tr>
             <tr><td><strong>Sanidade</strong></td><td>Uma barra de 0 a 100 que cai diante de horror e trauma.</td></tr>
             <tr><td><strong>Cansaço</strong></td><td>Uma trilha de 0 a 6 que mede desgaste acumulado. Quanto mais alto, pior você joga.</td></tr>
-            <tr><td><strong>Condição</strong></td><td>Um estado que gruda no personagem por um tempo, como Caído, Cego ou Sangramento.</td></tr>
+            <tr><td><strong>Condição</strong></td><td>Um estado que gruda no personagem por um tempo, como Caído, Cego ou Sangramento. A lista inteira está em <span class="regras-ref regras-ref--condicoes">Condições</span>.</td></tr>
             <tr><td><strong>Defesa</strong></td><td>O número que um inimigo precisa alcançar para acertar você.</td></tr>
             <tr><td><strong>Fluxo</strong></td><td>A energia que atravessa tudo neste mundo, e também o atributo que mede seu controle sobre ela. Toda magia sai de um Fluxo.</td></tr>
             <tr><td><strong>Árvore</strong></td><td>A realidade de onde seu personagem vem. Cada Árvore tem sua deidade, seus povos e suas opções exclusivas.</td></tr>
-            <tr><td><strong>Legado</strong></td><td>Uma escolha permanente que você faz em certos níveis (de cinco em cinco no começo, mais espaçados depois do 50) e que muda como o personagem funciona.</td></tr>
+            <tr><td><strong>Legado</strong></td><td>Uma escolha permanente que você faz em certos níveis (de cinco em cinco no começo, mais espaçados depois do 50) e que muda como o personagem funciona. Veja <span class="regras-ref regras-ref--legados">Legados</span>.</td></tr>
             <tr><td><strong>NPC</strong></td><td>Qualquer personagem controlado pelo Mestre, de um taverneiro a um dragão.</td></tr>
-            <tr><td><strong>⌊ ⌋</strong></td><td>Arredonde para baixo e ignore a fração. ⌊Nível ÷ 2⌋ no nível 7 dá 3, não 3,5.</td></tr>
+            <tr><td><strong>⌊ ⌋</strong></td><td>Arredonde para baixo e ignore a fração: no nível 7, ⌊Nível ÷ 2⌋ dá 3.</td></tr>
           </tbody>
         </table>
       </div>
 
       <h3 class="regras-subtitle">Por onde continuar</h3>
+      <p>O livro não precisa ser lido de ponta a ponta. Escolha o caminho que combina com o que você vai fazer na mesa e deixe o resto para quando aparecer.</p>
       <ul class="regras-list">
-        <li><strong>Nunca jogou:</strong> vá para Criação de Personagem e monte um com o Mestre do lado. Depois leia Perícias e Combate, nessa ordem. O resto você consulta quando aparecer na mesa.</li>
-        <li><strong>Já joga RPG:</strong> leia Sistema Base e Perícias para pegar as fórmulas, depois Combate e Ferimentos, que é onde O Jardim mais se afasta do que você já conhece.</li>
-        <li><strong>Vai conjurar:</strong> Magia e Fluxos é a página mais longa do livro de propósito. Leia até "Teste e DT de magia" e volte ao resto quando subir de círculo.</li>
-        <li><strong>Vai mestrar:</strong> comece pelo Guia do Mestre e tenha Condições e Ferimentos abertos na primeira sessão.</li>
+        <li><strong>Nunca jogou:</strong> vá para <span class="regras-ref regras-ref--criacao-personagem">Criação de Personagem</span> e monte um com o Mestre do lado. Depois leia <span class="regras-ref regras-ref--pericias">Perícias</span> e <span class="regras-ref regras-ref--combate">Combate</span>, nessa ordem. O resto você consulta quando aparecer na mesa.</li>
+        <li><strong>Já joga RPG:</strong> leia <span class="regras-ref regras-ref--sistema-base">Sistema Base</span> e <span class="regras-ref regras-ref--pericias">Perícias</span> para pegar as fórmulas, depois <span class="regras-ref regras-ref--combate">Combate</span> e <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>, que é onde O Jardim mais se afasta do que você já conhece.</li>
+        <li><strong>Vai conjurar:</strong> <span class="regras-ref regras-ref--magia-fluxo">Magia e Fluxo</span> é longo de propósito. Leia até "Teste e DT de magia" e volte ao resto quando subir de círculo.</li>
+        <li><strong>Vai mestrar:</strong> comece pelo <span class="regras-ref regras-ref--mestre">Guia do Mestre</span> e tenha <span class="regras-ref regras-ref--condicoes">Condições</span> e <span class="regras-ref regras-ref--ferimentos">Ferimentos</span> abertos na primeira sessão.</li>
       </ul>
     `,
     corpoMestre: `
@@ -534,7 +552,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Recursos', '1 item comum + 20 Lunaris'],
     ],
     corpo: `
-      <p class="regras-lead">O assistente de criação da ficha segue estas sete etapas. Faça as escolhas na ordem apresentada: opções posteriores dependem da Árvore, da raça e da classe escolhidas antes.</p>
+      <p class="regras-lead">Criar um personagem leva sete etapas, e o assistente da ficha acompanha todas elas. Este tópico explica o que cada etapa pede e termina com a conferência dos números que a ficha pronta precisa mostrar. Faça as escolhas na ordem apresentada, porque as opções de cada etapa dependem da Árvore, da raça e da classe que você escolheu antes.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>O personagem nasce no <strong>nível 1</strong>, com uma classe comum. Raça ou classe especial só entra com liberação do Mestre.</li>
+          <li>As sete etapas, nesta ordem: nome e Árvore, raça, classe, divindade, atributos, perícias e equipamento, e a conferência da ficha.</li>
+          <li>Atributos pelo conjunto padrão (15, 14, 13, 12, 10, 8 e 8) ou por compra de pontos (24 pontos). O método de 7d20 só vale com a concordância da mesa.</li>
+          <li>Você começa com seis perícias em Aprendiz (Humano escolhe sete), um item comum e 20 Lunaris.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">Antes de começar</h3>
       <ul class="regras-list">
@@ -561,10 +588,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">4. Divindade</h3>
-      <p>Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo; não concede poderes além dos declarados por raça, classe, item ou outra regra.</p>
+      <p>Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo. Ela não concede poderes além dos declarados por raça, classe, item ou outra regra.</p>
 
       <h3 class="regras-subtitle">5. Atributos</h3>
-      <p>Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo. Depois disso, a ficha aplica os ajustes raciais.</p>
+      <p>Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo. Depois disso, a ficha aplica os ajustes raciais. Há três métodos:</p>
       <ul class="regras-list">
         <li><strong>Conjunto padrão:</strong> 15, 14, 13, 12, 10, 8 e 8. Cada número é usado uma vez.</li>
         <li><strong>Compra por pontos:</strong> todos começam em 8; distribua exatamente 24 pontos, pagando 1 ponto por cada +1. Nenhum atributo passa de 15 antes dos ajustes raciais.</li>
@@ -577,8 +604,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Escolha um item comum aprovado pelo Mestre. Ele entra no inventário como item de criação e não possui preço de revenda.</li>
         <li>Registre <strong>20 Lunaris</strong>. Nenhuma nova classe escolhida no futuro concede outro equipamento ou dinheiro inicial.</li>
       </ul>
+      <p>As perícias e o que cada grau significa estão em <span class="regras-ref regras-ref--pericias">Perícias</span>. As contas de Vida, Mana e Estamina estão em <span class="regras-ref regras-ref--sistema-base">Sistema Base</span>.</p>
 
       <h3 class="regras-subtitle">7. Conferência da ficha</h3>
+      <p>Com tudo escolhido, a ficha mostra os números abaixo. Confira cada um contra a conta:</p>
       <dl class="regras-kv regras-kv--boxed">
         <dt>Nível e XP</dt><dd>nível total 1 e 0 XP</dd>
         <dt>Vida máxima</dt><dd>máx. 1, (4 × Mod.Constituição) + Vida da classe, depois ajustes raciais</dd>
@@ -591,7 +620,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <dt>Movimento</dt><dd>9 m + (1,5 m × Mod.Destreza) + ajuste racial ou morfológico, mínimo 4,5 m</dd>
         <dt>Iniciativa</dt><dd>10 + ⌊Nível total ÷ 2⌋ + Mod.Destreza + bônus</dd>
       </dl>
-      <p class="regras-note"><strong>Não some ajustes duas vezes:</strong> a ficha calcula os derivados e aplica raça e equipamento automaticamente. Use ajustes manuais apenas para efeitos que ainda não estejam representados no sistema.</p>
+      <div class="regras-note regras-note--exemplo">
+        <p>Um personagem com Destreza 15 e sem ajuste racial nessas contas tem Mod.Destreza +2. A Defesa Natural dele é 10 + 0 + 2 = 12, porque ⌊1 ÷ 2⌋ vale 0 no nível 1. O Movimento é 9 m + (1,5 m × 2) = 12 m. A Iniciativa é 10 + 0 + 2 = 12.</p>
+      </div>
+      <div class="regras-note regras-note--atencao">
+        <p>Não some os ajustes duas vezes. A ficha calcula os derivados e aplica raça e equipamento automaticamente. Use ajustes manuais apenas para efeitos que ainda não estejam representados no sistema.</p>
+      </div>
 
       <h3 class="regras-subtitle">Checklist final</h3>
       <ul class="regras-list">
@@ -639,12 +673,25 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Classe', `até o nível ${NIVEL_MAXIMO_CLASSE}`],
     ],
     corpo: `
-      <p class="regras-lead">Esta é a página de consulta: todas as contas que a ficha faz por você, reunidas num lugar só. Você não precisa decorar nenhuma delas para jogar. Dois avisos de leitura: ⌊ ⌋ quer dizer "arredonde para baixo", e "Mod." é o modificador de um atributo, que sai da primeira linha da tabela.</p>
+      <p class="regras-lead">Este é o tópico de consulta: todas as contas que a ficha faz por você, reunidas num lugar só. Você não precisa decorar nenhuma delas para jogar. Dois avisos de leitura: ⌊ ⌋ quer dizer "arredonde para baixo", e "Mod." é o modificador de um atributo, que sai da primeira linha da primeira tabela.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>O modificador de um atributo é ⌊(Atributo − 10) ÷ 2⌋. Todo teste soma ao d20 esse modificador, metade do nível (arredondada para baixo) e o bônus do grau da perícia.</li>
+          <li>Vida, Mana e Estamina têm uma conta no nível 1 e um ganho fixo da classe a cada nível seguinte. A Estamina paga o que o corpo faz, e a Mana paga o que é místico.</li>
+          <li>Cada classe vai até o nível ${NIVEL_MAXIMO_CLASSE}. O padrão do jogo é duas classes comuns e uma especial, o que fecha em ${NIVEL_TOTAL_PADRAO} níveis totais.</li>
+          <li>Atributo que chega a 20 por mérito próprio dá uma maestria. Item, pacto ou efeito temporário não conta.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">Fórmulas fundamentais</h3>
+      <h4>Teste e modificador</h4>
       <dl class="regras-kv regras-kv--boxed">
         <dt>Modificador</dt><dd>⌊(Atributo − 10) ÷ 2⌋</dd>
         <dt>Teste</dt><dd>d20 + Mod. de Atributo + ⌊Nível ÷ 2⌋ + Grau</dd>
+      </dl>
+      <h4>Vida, Mana e Estamina</h4>
+      <dl class="regras-kv regras-kv--boxed">
         <dt>Vida no nível 1</dt><dd>máx. 1, (4 × Mod.Constituição) + Vida da classe</dd>
         <dt>Vida por nível posterior</dt><dd>ganho de Vida da classe do nível adquirido, mínimo 1</dd>
         <dt>Mana no nível 1</dt><dd>máx. 1, (3 × Mod.Sabedoria) + Mana da classe</dd>
@@ -652,12 +699,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <dt>Estamina no nível 1</dt><dd>máx. 1, (3 × o maior entre Mod.Força e Mod.Destreza) + Estamina da classe</dd>
         <dt>Estamina por nível posterior</dt><dd>ganho de Estamina da classe do nível adquirido</dd>
         <dt>Ajustes raciais</dt><dd>bônus raciais de Vida, Mana e Estamina são somados depois do cálculo correspondente</dd>
+      </dl>
+      <h4>Defesa, movimento e iniciativa</h4>
+      <dl class="regras-kv regras-kv--boxed">
         <dt>Defesa Natural</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais</dd>
         <dt>Movimento</dt><dd>9 m + (1,5 m × Mod.Destreza) + ajuste da raça ou morfologia, mínimo 4,5 m</dd>
         <dt>Iniciativa</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + bônus</dd>
       </dl>
 
       <h3 class="regras-subtitle">Mana e Estamina</h3>
+      <p>Os dois recursos pagam coisas diferentes, e saber qual paga o quê evita a maior parte das dúvidas na hora de gastar.</p>
       <ul class="regras-list">
         <li><strong>Estamina</strong> paga o que o corpo faz: golpe, postura, salto, grito de comando, trabalho de mãos. A mesma barra serve a quem luta na Força e a quem luta na Destreza, porque a base usa o maior dos dois.</li>
         <li><strong>Mana</strong> paga o que é místico: magia, ritual, maldição, ilusão e tudo que dobra a realidade. Fluxo não entra na conta da Estamina.</li>
@@ -667,17 +718,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Nível e multiclasse</h3>
+      <p>O <strong>nível total</strong> é a soma dos níveis de todas as suas classes, incluindo as especiais, e não tem teto. Cada classe, por sua vez, vai até o <strong>nível ${NIVEL_MAXIMO_CLASSE}</strong>. As recompensas escritas dela terminam no ${NIVEL_CONTEUDO_CLASSE}. Do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela soma Vida, Mana e Estamina a cada nível e ganha a Maestria de classe, um marco de 5 em 5 níveis (ver <span class="regras-ref regras-ref--poderes-habilidades">Poderes e Habilidades</span>).</p>
       <ul class="regras-list">
-        <li><strong>Nível total</strong> é a soma dos níveis de todas as suas classes, incluindo as especiais. Ele não tem teto.</li>
-        <li>Cada classe vai até o <strong>nível ${NIVEL_MAXIMO_CLASSE}</strong>. As recompensas escritas dela terminam no ${NIVEL_CONTEUDO_CLASSE}. Do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela soma Vida, Mana e Estamina a cada nível e ganha a Maestria de classe, um marco de 5 em 5 níveis (ver Poderes e Habilidades).</li>
-        <li>O padrão do jogo é <strong>duas classes comuns e uma especial</strong>, que fecha em ${NIVEL_TOTAL_PADRAO} níveis totais. Passando do ${NIVEL_TOTAL_PADRAO} a ficha aceita mais classes e mais níveis, e só marca o patamar novo (ver Experiência e Níveis).</li>
+        <li>O padrão do jogo é <strong>duas classes comuns e uma especial</strong>, que fecha em ${NIVEL_TOTAL_PADRAO} níveis totais. Passando do ${NIVEL_TOTAL_PADRAO} a ficha aceita mais classes e mais níveis, e só marca o patamar novo (ver <span class="regras-ref regras-ref--xp">Experiência e Níveis</span>).</li>
         <li>Os níveis podem ser intercalados. A segunda classe comum entra depois que uma das suas classes chega ao nível 20.</li>
         <li>Classe especial exige nível total 20, liberação do Mestre e um acontecimento na história que justifique, a não ser que a própria classe abra uma exceção explícita.</li>
         <li>Classe geral serve a qualquer Árvore. Classe exclusiva só se você pertencer à Árvore indicada.</li>
       </ul>
 
       <h3 class="regras-subtitle">Maestria de atributo</h3>
-      <p class="regras-note">Quando um atributo chega a 20 <strong>por mérito próprio</strong>, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Não confunda com a Maestria de classe, que vem dos níveis 21 a 50 de uma classe (ver Poderes e Habilidades). Atributo não tem valor máximo: passando do 20 ele segue subindo, e o modificador continua sendo a conta de sempre.</p>
+      <p>Quando um atributo chega a 20 <strong>por mérito próprio</strong>, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Atributo não tem valor máximo: passando do 20 ele segue subindo, e o modificador continua sendo a conta de sempre.</p>
       <ul class="regras-sublist regras-sublist--grid">
         <li><strong>Força:</strong> uma vez por turno, +2 no dano de um ataque corpo a corpo.</li>
         <li><strong>Destreza:</strong> +1 na Defesa Natural ou +1,5 m de movimento.</li>
@@ -686,9 +736,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Sabedoria:</strong> reduza em 2 a primeira perda de Sanidade de cada cena.</li>
         <li><strong>Carisma:</strong> uma vez por cena, repita um teste social; mantenha o novo resultado.</li>
       </ul>
+      <div class="regras-note regras-note--atencao">
+        <p>Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Não confunda com a Maestria de classe, que vem dos níveis 21 a 50 de uma classe (ver <span class="regras-ref regras-ref--poderes-habilidades">Poderes e Habilidades</span>).</p>
+      </div>
 
       <h3 class="regras-subtitle">Fluxo</h3>
-      <p class="regras-note"><strong>Fluxo</strong> é o sétimo atributo, e mede o quanto você controla aquilo que canaliza. Em magia ele entra no lugar do atributo que normalmente acompanharia Misticismo, e é ele que diz até que círculo a conjuração sai com folga (o Fluxo recomendado de cada círculo está em Magia e Fluxo). Fluxo alto sozinho não ensina magia nenhuma: alguém precisa te dar acesso, seja uma classe, uma habilidade, um item ou o Mestre.</p>
+      <p><strong>Fluxo</strong> é o sétimo atributo, e mede o quanto você controla aquilo que canaliza. Em magia ele entra no lugar do atributo que normalmente acompanharia Misticismo, e é ele que diz até que círculo a conjuração sai com folga (o Fluxo recomendado de cada círculo está em <span class="regras-ref regras-ref--magia-fluxo">Magia e Fluxo</span>). Fluxo alto sozinho não ensina magia nenhuma: alguém precisa te dar acesso, seja uma classe, uma habilidade, um item ou o Mestre.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Esta é a página que você consulta para saber com quem está lidando. As fórmulas são as mesmas para todo mundo, então dá para prever a ficha de um personagem sabendo só o nível e o tipo de classe dele.</p>
@@ -731,9 +784,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Crítico', '20 natural'],
     ],
     corpo: `
-      <h3 class="regras-subtitle">Fórmula de teste</h3>
       <p class="regras-lead">É esta conta, e é sempre esta conta. Perícia, ataque, resistência: muda o atributo e muda o grau, o resto é igual.</p>
       <div class="regras-formula">d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau</div>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Todo teste soma ao d20 o modificador do atributo, metade do nível total (arredondada para baixo) e o bônus do grau da perícia.</li>
+          <li>São ${totalGrausPericia} graus de perícia, de ${primeiroGrauPericia.rotulo} a ${ultimoGrauPericia.rotulo}, e os mais altos só abrem em níveis totais altos.</li>
+          <li>20 natural no d20 é sucesso crítico, e 1 natural é falha crítica.</li>
+          <li>Vantagem e desvantagem se cancelam uma a uma. Se sobrar saldo, vale uma vantagem ou uma desvantagem, nunca em dobro.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">Graus de perícia</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -742,11 +803,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           ${linhasGrausPericia()}
         </tbody>
       </table></div>
-      <p>${nomesDosGrausDoPatamar} só abrem quando o nível total chega a ${niveisDosGrausDoPatamar}, que são os patamares de Experiência e Níveis. É onde o personagem já passou do jogo padrão. Até o ${NIVEL_TOTAL_PADRAO}, o degrau mais alto que o nível permite é ${GRAUS_PERICIA_DADOS[GRAUS_PERICIA_DADOS.length - grausPericiaDoPatamar.length - 1].rotulo}.</p>
+      <p>${nomesDosGrausDoPatamar} só abrem quando o nível total chega a ${niveisDosGrausDoPatamar}, que são os patamares de <span class="regras-ref regras-ref--xp">Experiência e Níveis</span>. É onde o personagem já passou do jogo padrão. Até o ${NIVEL_TOTAL_PADRAO}, o degrau mais alto que o nível permite é ${GRAUS_PERICIA_DADOS[GRAUS_PERICIA_DADOS.length - grausPericiaDoPatamar.length - 1].rotulo}. Subir de grau por treino está em <span class="regras-ref regras-ref--treinar">Treinamento</span>.</p>
 
-      <p><strong>Vantagem do grau.</strong> Do ${grauPorNome('veterano')?.rotulo} em diante o próprio grau conta como fonte de vantagem em todo teste daquela perícia, e também no ataque quando a perícia é Luta ou Pontaria e na conjuração quando é Misticismo. É uma fonte no ${grauPorNome('veterano')?.rotulo} e mais uma a cada grau acima. Como as fontes de vantagem e de desvantagem se cancelam uma a uma e nunca viram vantagem dupla, as fontes extras compram segurança: um ${grauPorNome('renomado')?.rotulo} (${grauPorNome('renomado')?.vantagens} fontes) ainda rola com vantagem com uma desvantagem em cima, e só perde a vantagem quando as desvantagens passam das fontes dele.</p>
+      <h3 class="regras-subtitle">Vantagem do grau</h3>
+      <p>Do ${grauPorNome('veterano')?.rotulo} em diante o próprio grau conta como fonte de vantagem em todo teste daquela perícia, e também no ataque quando a perícia é Luta ou Pontaria e na conjuração quando é Misticismo. É uma fonte no ${grauPorNome('veterano')?.rotulo} e mais uma a cada grau acima. Como as fontes de vantagem e de desvantagem se cancelam uma a uma e nunca viram vantagem dupla, as fontes extras compram segurança: um ${grauPorNome('renomado')?.rotulo} (${grauPorNome('renomado')?.vantagens} fontes) ainda rola com vantagem com uma desvantagem em cima, e só perde a vantagem quando as desvantagens passam das fontes dele.</p>
 
-      <p class="regras-note">Duas palavras iguais: o <strong>grau Mestre</strong> é um degrau de perícia (+8), e o <strong>Mestre</strong> da mesa é quem conduz o jogo. O livro escreve os dois com M maiúsculo e o contexto diz qual é.</p>
+      <div class="regras-note regras-note--atencao">
+        <p>Duas palavras iguais: o <strong>grau Mestre</strong> é um degrau de perícia (+8), e o <strong>Mestre</strong> da mesa é quem conduz o jogo. O livro escreve os dois com M maiúsculo e o contexto diz qual é.</p>
+      </div>
 
       <h3 class="regras-subtitle">Graus de resultado</h3>
       <ul class="regras-list">
@@ -759,9 +823,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Vantagem e desvantagem</h3>
       <ul class="regras-list">
         <li>Role dois d20 e use o maior com vantagem, ou o menor com desvantagem.</li>
-        <li>Anote cada fonte de vantagem e cada fonte de desvantagem. Elas se cancelam uma a uma, não em bloco.</li>
+        <li>Anote cada fonte de vantagem e cada fonte de desvantagem. Elas se cancelam uma a uma, e não em bloco.</li>
         <li>O que sobrar decide: qualquer saldo positivo vira <em>uma</em> vantagem, qualquer saldo negativo vira <em>uma</em> desvantagem. Não existe vantagem dupla.</li>
       </ul>
+      <div class="regras-note regras-note--exemplo">
+        <p>Você tem três fontes de vantagem e uma de desvantagem. Uma vantagem cancela a desvantagem, e as duas que sobram valem uma vantagem só: você rola dois d20 e usa o maior.</p>
+      </div>
 
       <h3 class="regras-subtitle">Catálogo de perícias</h3>
       <p class="regras-lead">${periciasData.nota}</p>
@@ -821,6 +888,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     corpo: `
       <p class="regras-lead">Nem toda ação coletiva usa a mesma resolução. Se uma pessoa executa a tarefa e as outras dão suporte, use <strong>Ajudar</strong>. Se todos estão expostos ao mesmo desafio e cada integrante importa, use um <strong>Teste de Grupo</strong>.</p>
 
+      <div class="regras-resumo">
+        <ul>
+          <li><strong>Ajudar:</strong> o ajudante descreve uma contribuição concreta e testa contra DT 10. Em sucesso, o teste principal ganha +2, ou vantagem se o sucesso for crítico. No máximo dois ajudantes por teste.</li>
+          <li><strong>Teste de Grupo:</strong> todos os expostos testam contra a mesma DT, e o grupo vence se pelo menos metade dos participantes, arredondada para cima, tiver sucesso.</li>
+          <li>Ajudar e Teste de Grupo não se misturam na mesma resolução, e nenhum dos dois permite somar dano, fundir magias nem transferir efeitos.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Ajudar</h3>
       <ol class="regras-steps">
         <li>Antes da rolagem principal, o ajudante descreve uma contribuição concreta e escolhe uma perícia adequada. Ela pode ser a mesma do líder ou outra que realmente ajude naquela situação.</li>
@@ -845,7 +920,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Cada sucesso crítico conta como dois sucessos. Cada falha crítica cancela um sucesso antes da contagem.</li>
         <li>Se o grupo falhar, a consequência atinge o grupo ou apenas quem falhou, conforme a natureza do perigo. O Mestre informa qual leitura vale antes das rolagens.</li>
       </ol>
-      <p class="regras-note"><strong>Exemplo:</strong> quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conseguir dois sucessos comuns e uma falha crítica, a falha crítica cancela um deles e o grupo falha.</p>
+      <div class="regras-note regras-note--exemplo">
+        <p>Quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conseguir dois sucessos comuns e uma falha crítica, a falha crítica cancela um deles e o grupo falha.</p>
+      </div>
 
       <h3 class="regras-subtitle">Quando não usar Teste de Grupo</h3>
       <ul class="regras-list">
@@ -856,7 +933,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Ações coletivas maiores</h3>
-      <p class="regras-note">Projetos de vários dias usam as regras da atividade correspondente, como treinamento, ritual ou fabricação. Ataques sincronizados usam o capítulo <strong>Ataques Combinados</strong>. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.</p>
+      <p>Projetos de vários dias usam as regras da atividade correspondente, como <span class="regras-ref regras-ref--treinar">treinamento</span>, ritual ou <span class="regras-ref regras-ref--crafting">fabricação</span>. Ataques sincronizados usam <span class="regras-ref regras-ref--ataques-combinados">Ataques Combinados</span>. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">A pergunta que resolve quase toda dúvida aqui é uma só: uma pessoa executa e as outras apoiam, ou todo mundo está exposto ao mesmo perigo? A primeira é Ajudar, a segunda é Teste de Grupo, e misturar as duas é o erro comum.</p>
@@ -896,34 +973,52 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Ataque', 'Luta/Pontaria vs. Defesa'],
     ],
     corpo: `
+      <p class="regras-lead">Combate começa quando a conversa acaba e alguém decide resolver no golpe. Este tópico reúne o que você faz no seu turno, como acertar um ataque, como segurar ou derrubar alguém, como se defender e o que as reações permitem. Dano, ferimentos e condições têm tópicos próprios, indicados ao longo do texto.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Iniciativa é um número fixo da ficha, que você calcula uma vez e usa em todo combate. Não se rola.</li>
+          <li>No seu turno você tem uma Ação Padrão e uma Ação de Movimento, além de gestos livres. Uma reação por rodada fica guardada para o turno dos outros.</li>
+          <li>O ataque é d20 + Luta ou Pontaria contra a Defesa Natural. Empatar acerta, e um 1 natural sempre erra. A margem de ameaça da arma define o crítico.</li>
+          <li>Manobras (agarrar, derrubar, empurrar, desarmar, imobilizar) usam a mesma rolagem, contra 10 mais o bônus da defesa passiva do alvo.</li>
+          <li>As reações são Esquiva, Bloqueio, Contra-Ataque e Proteger.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Iniciativa</h3>
-      <p class="regras-lead">Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você calcula uma vez e usa em todo combate.</p>
+      <p>Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você calcula uma vez e usa em todo combate.</p>
+      <div class="regras-formula">Iniciativa = 10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + bônus</div>
       <ul class="regras-list">
-        <li>Iniciativa = 10 + metade do nível + Mod.Destreza + bônus.</li>
         <li>Empate se resolve pelo maior Mod.Sabedoria. Se persistir, personagens agem antes de NPCs.</li>
         <li>Surpreendido leva −5 na primeira rodada. Atrasar baixa sua posição de vez, pelo resto do combate.</li>
       </ul>
 
       <h3 class="regras-subtitle">Seu turno</h3>
+      <p>A cada turno você escolhe o que fazer com estes tipos de ação:</p>
       <ul class="regras-list">
         <li><strong>Ação Padrão:</strong> atacar, usar uma habilidade, ajudar alguém ou tentar uma manobra.</li>
         <li><strong>Ação de Movimento:</strong> se deslocar, levantar, sacar algo ou mexer num objeto que importe na cena.</li>
         <li><strong>Ação Completa:</strong> consome a Ação Padrão e a Ação de Movimento do turno. Não pode ser iniciada depois que uma dessas ações foi gasta.</li>
         <li><strong>Ação Livre:</strong> um gesto, uma fala curta ou soltar um objeto. Não realiza testes, ataques nem ativa habilidades, salvo quando uma regra específica permitir.</li>
-        <li>Dá para trocar sua Ação Padrão por uma segunda Ação de Movimento. Correr custa o ataque.</li>
       </ul>
+      <p>Dá para trocar sua Ação Padrão por uma segunda Ação de Movimento. Correr custa o ataque.</p>
 
       <h3 class="regras-subtitle">Ataques e cobertura</h3>
       <div class="regras-formula">d20 + Luta ou Pontaria contra a Defesa Natural</div>
+      <p>Empatar com a Defesa já acerta. Um 1 natural sempre erra, não importa o bônus. Cobertura parcial dá +2 de Defesa; cobertura superior dá +5.</p>
+
+      <h4>Críticos</h4>
       <ul class="regras-list">
-        <li>Empatar com a Defesa já acerta. Um 1 natural sempre erra, não importa o bônus.</li>
         <li>Cada arma traz sua <strong>Margem de Ameaça</strong> e seu <strong>Multiplicador Crítico</strong>, escritos como 20/x2, 19-20/x2 ou 20/x3.</li>
         <li>Se o número natural do d20 cair dentro da margem da arma, o ataque acerta e é crítico. Não existe rolagem de confirmação: caiu na margem, é crítico.</li>
         <li>O multiplicador diz quantas vezes você rola os dados da arma. Em x3, 2d6+4 vira 6d6+4.</li>
         <li>Bônus fixo e dado extra vindos de habilidade, veneno ou efeito externo entram <strong>uma vez só</strong>. Eles só multiplicam se a própria habilidade disser que multiplica.</li>
         <li>Margem larga e multiplicador alto não andam juntos: 18-20 e 19-20 sempre com x2; x3 e x4 sempre com margem 20.</li>
-        <li>Cobertura parcial dá +2 de Defesa; cobertura superior dá +5.</li>
       </ul>
+      <div class="regras-note regras-note--exemplo">
+        <p>Bia ataca com uma espada 19-20/x2 que causa 1d8+4, e o bônus total dela em Luta é +9. O bandido tem Defesa 14. Ela tira 17 no d20: 17 + 9 = 26, acima de 14, então acerta. Como o 17 está fora da margem 19-20, o dano é o normal, 1d8+4. Se tivesse tirado 19, o ataque seria crítico e o dano subiria para 2d8+4.</p>
+      </div>
+      <p>O que cada tipo de dano faz, e como a Resistência entra na conta, está em <span class="regras-ref regras-ref--tipos-de-dano">Tipos de Dano</span>.</p>
 
       <h3 class="regras-subtitle">Manobras</h3>
       <p>Nem todo ataque quer causar dano. Manobra gasta a mesma Ação Padrão de um ataque e usa a mesma rolagem, contra a defesa passiva do alvo: <strong>10 mais o bônus total</strong> da defesa indicada.</p>
@@ -943,6 +1038,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Criatura duas categorias de tamanho maior que você não é agarrada, derrubada nem empurrada sem uma regra que autorize.</li>
         <li>Manobra não causa dano por si só. Habilidade que somar dano a uma manobra diz isso no texto.</li>
       </ul>
+      <p>Agarrado, Caído e Imobilizado são condições, e todas estão em <span class="regras-ref regras-ref--condicoes">Condições</span>.</p>
 
       <h3 class="regras-subtitle">Defesas passivas</h3>
       <ul class="regras-list">
@@ -951,7 +1047,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Reações</h3>
-      <p class="regras-note">Você tem uma reação por rodada e recupera ela no começo do seu próprio turno. Defesa Natural funciona sozinha e não gasta reação nenhuma.</p>
+      <div class="regras-note regras-note--regra">
+        <p>Você tem uma reação por rodada e recupera ela no começo do seu próprio turno. Defesa Natural funciona sozinha e não gasta reação nenhuma.</p>
+      </div>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Reação</th><th>Gatilho</th><th>Efeito</th></tr></thead>
         <tbody>
@@ -961,8 +1059,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>Proteger</td><td>Aliado adjacente é atacado</td><td>Você vira o alvo e pode usar Bloqueio, se ainda tiver reação.</td></tr>
         </tbody>
       </table></div>
-
-      <p class="regras-note">As famílias de dano, os sete elementos fixos e como a Resistência entra na conta ficam no capítulo <strong>Tipos de Dano</strong>.</p>
+      <p>Depois de um combate, o corpo cobra o que ele custou: veja <span class="regras-ref regras-ref--ferimentos">Ferimentos</span> e <span class="regras-ref regras-ref--descanso">Descanso</span>.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Um encontro se monta de trás para frente: você decide quantas rodadas ele deve durar, e daí sai a Vida dos inimigos. Começar escolhendo o monstro e torcer é o caminho mais curto para um combate de dez rodadas que ninguém queria.</p>
@@ -1013,6 +1110,15 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     corpo: `
       <p class="regras-lead">Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade e qualquer efeito que "protege contra um tipo de dano" sempre apontam para uma entrada específica daqui, nunca para "dano" de forma genérica.</p>
 
+      <div class="regras-resumo">
+        <ul>
+          <li>Todo dano pertence a uma de cinco famílias: Físico, Persistente, Mágico, Tecnológico e Mental.</li>
+          <li>São sete elementos fixos, sem oitavo. Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio.</li>
+          <li>Frio e Calor são dano de ambiente. Eles vêm do lugar, e Gelo e Fogo vêm de um golpe: são tipos diferentes.</li>
+          <li>Resistência vale sempre por tipo específico, e entra por último na conta: multiplicador crítico, dados extras, vulnerabilidade e só então a Resistência, até o mínimo 0.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">As cinco famílias</h3>
       <ul class="regras-sublist regras-sublist--grid">
         <li><strong>Físicos:</strong> corte, perfuração, impacto e balístico.</li>
@@ -1023,7 +1129,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Dano elemental</h3>
-      <p class="regras-lead">São estes sete, e não existe um oitavo. Só elemento e derivação contam como dano elemental: ácido, por exemplo, não é elemento, então fica entre os persistentes. A <strong>Polifonia Elemental</strong> do Elementarista fixa um elemento de origem. Antes de conjurar uma magia catalogada como <em>Elemental</em>, ele declara qual elemento dominado está usando: quem possui afinidade única sempre declara o de origem; um Avatar pode declarar qualquer elemento que tenha aprendido. O elemento declarado define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração.</p>
+      <p>São estes sete, e não existe um oitavo. Só elemento e derivação contam como dano elemental: ácido, por exemplo, não é elemento, então fica entre os persistentes.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Elemento</th><th>Como costuma se manifestar</th></tr></thead>
         <tbody>
@@ -1036,29 +1142,37 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td><strong>Escuridão</strong></td><td>Sombra espessa o bastante pra engolir contorno e som. Apaga a luz mundana da área, confunde quem tenta mirar e esconde o que não quer ser visto.</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">A relação de vantagem entre os elementos e as derivações do Elementarista estão no capítulo <strong>Elementos e Derivações</strong>.</p>
-      <p class="regras-note">Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. O elemento de origem é permanente; aprender outro exige o Caminho do Avatar. Quando um item, modificação, encantamento ou Selo pedir "um elemento", esse elemento é escolhido ou fixado na criação conforme a própria fonte e não muda a afinidade de uma criatura.</p>
+      <p>A relação de vantagem entre os elementos e as derivações do Elementarista estão em <span class="regras-ref regras-ref--elementos">Elementos e Derivações</span>.</p>
+      <div class="regras-note regras-note--regra">
+        <p>Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. O elemento de origem é permanente; aprender outro exige o Caminho do Avatar. Quando um item, modificação, encantamento ou Selo pedir "um elemento", esse elemento é escolhido ou fixado na criação conforme a própria fonte e não muda a afinidade de uma criatura.</p>
+      </div>
+
+      <h4>Para o Elementarista</h4>
+      <p>A <strong>Polifonia Elemental</strong> do Elementarista fixa um elemento de origem. Antes de conjurar uma magia catalogada como <em>Elemental</em>, ele declara qual elemento dominado está usando: quem possui afinidade única sempre declara o de origem; um Avatar pode declarar qualquer elemento que tenha aprendido. O elemento declarado define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração.</p>
       <p class="regras-note"><strong>Elementarista:</strong> Polifonia Elemental fixa um único elemento de origem, libera as magias Elementais e concede uma vaga de magia no 1º nível. Somente quem desperta como Avatar no Julgamento da Aptidão pode aprender outros elementos; mesmo nesse caso, a derivação e os benefícios que citam o elemento de origem continuam ligados apenas a ele.</p>
       <p class="regras-note"><strong>Acesso às magias:</strong> o Fluxo Físico também produz força, peso e matéria bruta. Canalizador e Sintonizador continuam aprendendo essas magias materiais e cinéticas, mas as magias catalogadas como <em>Elementais</em> exigem níveis de Elementarista. Magias que combinam vários elementos exigem ainda Avatar desperto.</p>
 
       <h3 class="regras-subtitle">Derivações também são tipos de dano</h3>
-      <p class="regras-lead">Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio, do mesmo jeito que o elemento: existe dano de Gelo, de Magma, de Areia, de Plasma, de Sangue, e assim por diante. Gelo é derivação de Água e tem Resistência própria. A lista completa, com o que cada derivação faz, está no capítulo <strong>Elementos e Derivações</strong>.</p>
+      <p>Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio, do mesmo jeito que o elemento: existe dano de Gelo, de Magma, de Areia, de Plasma, de Sangue, e assim por diante. Gelo é derivação de Água e tem Resistência própria. A lista completa, com o que cada derivação faz, está em <span class="regras-ref regras-ref--elementos">Elementos e Derivações</span>.</p>
       <ul class="regras-list">
         <li>Resistência, vulnerabilidade e imunidade a uma derivação valem só para ela, por inteiro.</li>
         <li>Resistência ao elemento base vale pela metade contra o dano da derivação, arredondada para baixo. Imunidade ao elemento base continua valendo por inteiro.</li>
       </ul>
 
       <h3 class="regras-subtitle">Dano de ambiente: Frio e Calor</h3>
-      <p class="regras-lead">Frio e Calor vêm do lugar onde você está: um deserto sem sombra, uma noite de nevasca, uma câmara de forja. Gelo e Fogo vêm de um golpe que você levou. Por isso são tipos diferentes, e Resistência a um não vale para o outro. A Resistência contra Frio ou Calor de um Traje vale para o clima; a Resistência a Gelo de um Fruto vale para o golpe.</p>
+      <p>Frio e Calor vêm do lugar onde você está: um deserto sem sombra, uma noite de nevasca, uma câmara de forja. Gelo e Fogo vêm de um golpe que você levou. Por isso são tipos diferentes, e Resistência a um não vale para o outro. A Resistência contra Frio ou Calor de um Traje vale para o clima; a Resistência a Gelo de um Fruto vale para o golpe.</p>
 
       <h3 class="regras-subtitle">Resistência e ordem de aplicação</h3>
-      <p class="regras-lead">A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.</p>
+      <p>A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.</p>
       <ol class="regras-steps">
         <li>Role o dano e aplique o multiplicador crítico aos dados e modificadores que fazem parte do ataque.</li>
         <li>Some os dados extras declarados pelo efeito. Dado extra só multiplica se a fonte disser que multiplica.</li>
         <li>Aplique vulnerabilidade, que dobra o dano daquele tipo, ou redução percentual.</li>
         <li>Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.</li>
       </ol>
+      <div class="regras-note regras-note--exemplo">
+        <p>Um ataque de Fogo causa 10 de dano. O alvo é vulnerável a Fogo e tem Resistência 5 a Fogo. Primeiro a vulnerabilidade dobra o dano para 20, e só então a Resistência tira 5: o alvo sofre 15. Subtraindo a Resistência antes de dobrar, o resultado seria 10.</p>
+      </div>
       <p class="regras-note">Resistência física geral cobre corte, perfuração e impacto. Balístico fica de fora, de propósito. E Resistência de um tipo específico não faz nada contra os outros tipos.</p>
     `,
     corpoMestre: `
@@ -1084,6 +1198,15 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     corpo: `
       <p class="regras-lead">Dá para jogar O Jardim inteiro no papel. Mas a mesa ao vivo existe para resolver as três coisas que sempre travam um combate: quem age agora, quanta vida sobrou em quem e se aquele 19 foi mesmo um 19.</p>
 
+      <div class="regras-resumo">
+        <ul>
+          <li>A mesa ao vivo mostra, numa lista só e igual para todos, a ordem de iniciativa, a Vida de cada participante e as condições ativas.</li>
+          <li>Cada inimigo tem um grau de sigilo (Oculto, Desconhecido, Parcial ou Total), e o servidor só envia o que aquele grau permite.</li>
+          <li>O dado é rolado no servidor e registrado. Vantagem e desvantagem guardam os dois d20.</li>
+          <li>Dado físico continua valendo: quem prefere rolar na mesa anuncia o resultado e a mesa aceita.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Abrir a mesa</h3>
       <ul class="regras-list">
         <li>Quem conduz a campanha abre a sessão e escolhe quais personagens entram. Aliados e inimigos já preparados continuam de uma sessão para a outra.</li>
@@ -1100,7 +1223,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">O que cada um enxerga</h3>
-      <p>O sigilo do inimigo é decidido no servidor, não no navegador de quem olha. Isso importa: não adianta abrir o inspetor do site para descobrir a Vida do chefe, porque o número não chega a ser enviado.</p>
+      <p>O sigilo do inimigo é decidido no servidor, e o navegador de quem olha só recebe o que o grau permite ver. Isso importa: não adianta abrir o inspetor do site para descobrir a Vida do chefe, porque o número não chega a ser enviado.</p>
       <div class="regras-table-wrap">
         <table class="regras-table">
           <thead><tr><th>Grau</th><th>O que a mesa vê</th><th>Serve para</th></tr></thead>
@@ -1122,11 +1245,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Usos de poder entram no mesmo registro das rolagens, então o histórico da sessão conta a cena em ordem.</li>
         <li>Quem está assistindo a campanha como observador não rola dados.</li>
       </ul>
-      <p>Rolar fora do site continua valendo: quem prefere dado físico anuncia o resultado e a mesa aceita, como sempre foi. O registro existe para quando alguém quiser conferir, não para obrigar ninguém.</p>
+      <p>Rolar fora do site continua valendo: quem prefere dado físico anuncia o resultado e a mesa aceita, como sempre foi. O registro está ali para quando alguém quiser conferir.</p>
 
       <h3 class="regras-subtitle">Fechar a sessão</h3>
       <ul class="regras-list">
-        <li>O XP do encontro é distribuído pela própria sessão e cai nas fichas escolhidas, seguindo as regras do capítulo de Experiência.</li>
+        <li>O XP do encontro é distribuído pela própria sessão e cai nas fichas escolhidas, seguindo as regras de <span class="regras-ref regras-ref--xp">Experiência e Níveis</span>.</li>
         <li>O saque das criaturas derrotadas também sai pela sessão: o Mestre rola e escolhe quem leva cada coisa. O item cai direto no inventário e as moedas na carteira, com registro no extrato. O que cada criatura pode deixar cair, e com que chance, está na ficha dela nos Registros Universais.</li>
         <li>Encerrar a sessão guarda o estado. O que estava preparado continua preparado para a próxima.</li>
       </ul>
@@ -1201,6 +1324,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Limite', '2 faixas adicionais'],
     ],
     corpo: `
+      <p class="regras-lead">A distância no jogo é contada em dez faixas, cada uma com um limite em metros. É nelas que você mede o alcance de uma arma, de um poder ou de uma magia, e é com elas que um combate (veja <span class="regras-ref regras-ref--combate">Combate</span>) responde à pergunta "dá para acertar daqui?".</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>São dez faixas, de Adjacente (até 1,5 m) a Galáctico (até 1.000 m). No mapa, um quadrado vale 1,5 m.</li>
+          <li>Dentro do alcance da arma ou do poder, ataque normalmente.</li>
+          <li>Cada faixa além do alcance custa −5 no ataque, e passando de duas faixas o alvo não pode ser atingido.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Faixas de distância</h3>
       <div class="regras-distance-grid">
         <span><strong>Adjacente</strong>até 1,5 m</span><span><strong>Curto</strong>até 5 m</span>
@@ -1217,6 +1350,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Passou de duas faixas, o alvo simplesmente não pode ser atingido, a não ser que uma habilidade ou item diga o contrário.</li>
         <li>Em mapa tático, arredonde os deslocamentos para múltiplos de 1,5 m e siga o jogo.</li>
       </ul>
+      <div class="regras-note regras-note--exemplo">
+        <p>Uma arqueira tem um arco com alcance Médio (até 15 m) e mira um alvo em Longo (até 25 m). O alvo está uma faixa além do alcance, então ela ataca com −5. Se ele estivesse em Longo+ (até 50 m), seriam duas faixas além, e o ataque sofreria −10. Em Extremo ou mais longe, o alvo não pode ser atingido por esse arco.</p>
+      </div>
     `,
     corpoMestre: `
       <p class="regras-lead">Dez faixas parecem muitas até você perceber que quase todo combate vive em três: Adjacente, Curto e Médio. As faixas grandes existem para viagem, cerco e magia de topo, e usá-las em briga de corredor só atrasa a mesa.</p>
@@ -1247,8 +1383,19 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['DT', '12 + Gravidade × 2 + Ferido'],
     ],
     corpo: `
+      <p class="regras-lead">Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua sendo anotado abaixo de zero, e é esse número que decide se a queda foi um tropeço ou um desastre. Depois entra o relógio de Morrendo, que dá ao grupo algumas rodadas para resgatar quem caiu. Este tópico trata ainda de Ferido, de ferimento crítico e de mutilação.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Ao chegar a 0 PV você cai inconsciente. O dano que passou de 0 é o seu <strong>Déficit de Vida</strong>, e se ele chegar à sua Vida máxima você morre na hora.</li>
+          <li>Você recebe Morrendo 1 e, no fim de cada turno seu, rola Fortitude contra <strong>DT 12 + (2 × Gravidade) + Ferido</strong>. Em Morrendo 3 você morre.</li>
+          <li>Estabilizar interrompe os testes, mas só quem volta a 1 PV ou mais acorda. Quem acorda ganha Ferido 1.</li>
+          <li>Um golpe que tira metade ou mais dos PV máximos, ou uma falha crítica em Morrendo, pede a tabela de trauma (2d6).</li>
+          <li>Mutilação só vem anunciada, e um sucesso no teste evita a perda.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Vida negativa</h3>
-      <p class="regras-lead">Chegar a 0 não zera a conta. O dano continua sendo anotado abaixo de zero, e é esse número que decide se a queda foi um tropeço ou um desastre.</p>
       <ul class="regras-list">
         <li>Continue registrando o dano abaixo de 0. Esse valor é o seu <strong>Déficit de Vida</strong>.</li>
         <li>A cura preenche o Déficit primeiro. Você só acorda quando voltar a 1 PV ou mais.</li>
@@ -1274,12 +1421,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Sucesso segura onde está; sucesso crítico reduz em 1; falha aumenta em 1; falha crítica aumenta em 2.</li>
         <li>Em Morrendo 3, você morre. A maestria de Constituição empurra esse limite para Morrendo 4.</li>
       </ol>
-      <p class="regras-note">Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes de Morrendo. Mas acordar é outra coisa: só cura suficiente para chegar a 1 PV traz a pessoa de volta. Quem acorda ganha Ferido 1.</p>
+      <div class="regras-note regras-note--atencao">
+        <p>Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes de Morrendo. Mas acordar é outra coisa: só cura suficiente para chegar a 1 PV traz a pessoa de volta. Quem acorda ganha Ferido 1.</p>
+      </div>
+      <div class="regras-note regras-note--exemplo">
+        <p>Davi tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de Vida é 12, ou 30% da Vida máxima: Gravidade 2. Ele cai inconsciente com Morrendo 1. No fim do turno dele, rola Fortitude contra DT 12 + (2 × 2) + 0 = 16, porque ainda não tem Ferido. Falhou: Morrendo 2. Uma aliada o estabiliza com um teste de Cura contra a mesma DT 16, e os testes de Morrendo param. Ele só acorda quando alguém curar o bastante para levá-lo de volta a 1 PV, e então ganha Ferido 1.</p>
+      </div>
 
       <h3 class="regras-subtitle">Remover Ferido</h3>
       <ul class="regras-list">
         <li>Um descanso completo de qualidade Boa ou melhor tira 1 de Ferido, se o personagem for tratado e terminar o descanso consciente.</li>
-        <li>O mesmo descanso conta também para cada lesão de longo prazo do personagem (veja Condições). Não é preciso descansar separado para cada uma.</li>
+        <li>O mesmo descanso conta também para cada lesão de longo prazo do personagem (veja <span class="regras-ref regras-ref--condicoes">Condições</span>). Não é preciso descansar separado para cada uma.</li>
         <li>É uma redução por descanso completo, mesmo que várias pessoas curem a mesma pessoa.</li>
         <li>Poder ou tratamento que remova Ferido fora do descanso precisa dizer isso com todas as letras.</li>
       </ul>
@@ -1306,7 +1458,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </table></div>
 
       <h3 class="regras-subtitle">Mutilação</h3>
-      <p class="regras-lead">Algumas criaturas querem levar uma parte de quem enfrentam. Quando a ficha de uma criatura tem a habilidade <strong>Arrancar</strong>, ela diz o que dispara e qual teste você faz. Falhou, você perde um membro na hora, e ele não volta com descanso.</p>
+      <p>Algumas criaturas querem levar uma parte de quem enfrentam. Quando a ficha de uma criatura tem a habilidade <strong>Arrancar</strong>, ela diz o que dispara e qual teste você faz. Falhou, você perde um membro na hora, e ele não volta com descanso.</p>
       <ul class="regras-list">
         <li>A Mutilação sempre vem <strong>anunciada</strong> na rodada anterior, ou de um gatilho que a própria ficha descreve, como estar Agarrado, Imobilizado ou Marcado. Ninguém perde um membro por um golpe que a mesa não teve chance de ver.</li>
         <li>Sucesso no teste evita a perda e deixa apenas <strong>Sangramento</strong>. Sucesso crítico não deixa nada.</li>
@@ -1421,6 +1573,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Cansaço', '0–6'],
     ],
     corpo: `
+      <p class="regras-lead">Descanso é como você recupera Vida, Mana, Estamina e Sanidade e como baixa o Cansaço. A recuperação é em porcentagem, então vale o mesmo no nível 3 e no nível 30, e é a qualidade do descanso que decide quanto volta. Este tópico traz também o descanso curto, Relaxar, e a trilha de Cansaço, de 0 a 6.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Um descanso completo dura 8 horas, e a qualidade (de Péssima a Excelente) decide quanto de Vida, Mana, Estamina e Sanidade volta e quanto Cansaço sai.</li>
+          <li>Relaxar é uma hora em segurança: recupera 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina, uma vez entre dois descansos completos.</li>
+          <li>O Cansaço vai de 0 a 6, sem meio-termo. Combate intenso, seis horas de treino e uma noite em claro valem 1 cada.</li>
+          <li>Um descanso completo de qualidade Boa ou melhor também pode tirar 1 de Ferido (ver <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>).</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Descanso completo</h3>
       <ul class="regras-list">
         <li><strong>Péssima:</strong> menos de 4 horas, duas interrupções perigosas ou exposição severa.</li>
@@ -1439,6 +1602,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>Excelente</td><td>100% do máximo</td><td>35%</td><td>todo o Cansaço</td></tr>
         </tbody>
       </table></div>
+      <div class="regras-note regras-note--exemplo">
+        <p>Uma personagem com 80 de Vida máxima, 40 de Mana e 20 de Estamina dorme 8 horas numa estalagem, com cama de verdade, refeição completa e nenhuma interrupção: um descanso Maravilhoso. Ela recupera 75% de cada máximo, ou seja, 60 de Vida, 30 de Mana e 15 de Estamina, e baixa 4 de Cansaço.</p>
+      </div>
 
       <h3 class="regras-subtitle">Relaxar</h3>
       <div class="regras-formula">Recupere 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina</div>
@@ -1461,7 +1627,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>6: Colapso</td><td>Inconsciente até reduzir Cansaço.</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Um combate conta como intenso quando o personagem desce à metade dos PV, gasta metade da Mana ou da Estamina ou entra em Morrendo. A cena inteira gera <strong>1</strong> Cansaço, mesmo que os três gatilhos aconteçam. Na Sessão ao Vivo o site registra isso sozinho quando o Mestre encerra o combate; fora dela, use o botão do Descanso. Seis horas de treino e uma noite em claro também valem 1 cada. Sempre em números inteiros, porque não existe meio Cansaço.</p>
+      <p class="regras-note regras-note--regra">Um combate conta como intenso quando o personagem desce à metade dos PV, gasta metade da Mana ou da Estamina ou entra em Morrendo. A cena inteira gera <strong>1</strong> Cansaço, mesmo que os três gatilhos aconteçam. Na Sessão ao Vivo o site registra isso sozinho quando o Mestre encerra o combate; fora dela, use o botão do Descanso. Seis horas de treino e uma noite em claro também valem 1 cada. Sempre em números inteiros, porque não existe meio Cansaço.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">A escala de qualidade do descanso é o seu botão de ritmo mais preciso. Você não precisa tirar Vida de ninguém para apertar uma campanha: basta o grupo dormir mal duas noites seguidas.</p>
@@ -1502,7 +1668,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Maior grau', ultimoGrauPericia.rotulo],
     ],
     corpo: `
-      <p class="regras-lead">São dois caminhos diferentes e vale não confundir. Quando uma <strong>classe</strong> te dá um Grau de Treinamento, escolha uma perícia e suba um grau imediatamente, sem tempo, sem tabela e sem requisito. Quando você quer subir <strong>por treino</strong>, aí sim cumpre o tempo da linha, o Nível Total mínimo e o requisito extra, quando existir.</p>
+      <p class="regras-lead">São dois caminhos diferentes, e vale não os confundir. Quando uma <strong>classe</strong> te dá um Grau de Treinamento, escolha uma perícia e suba um grau imediatamente, sem tempo, sem tabela e sem requisito. Quando você quer subir <strong>por treino</strong>, aí sim cumpre o tempo da linha, o Nível Total mínimo e o requisito extra, quando existir.</p>
 
       <h3 class="regras-subtitle">Progressão</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -1513,6 +1679,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </table></div>
 
       <h3 class="regras-subtitle">Regras de treinamento</h3>
+      <p>Os dias de treino saem do tempo que o grupo tem entre as aventuras (ver <span class="regras-ref regras-ref--entre-aventuras">Tempo Entre Aventuras</span>), e a perícia treinada é a das <span class="regras-ref regras-ref--pericias">Perícias</span>.</p>
       <ul class="regras-list">
         <li>Cada dia custa seis horas e deixa 1 de Cansaço no fim. Uma noite normal de sono resolve.</li>
         <li>Instrutor é alguém que já tem o grau que você quer alcançar, ou um maior. Quando a linha da tabela pede instrutor, sem ele você não sobe; nas outras linhas, ter um de grau superior ao seu corta 20% do tempo, arredondando para cima.</li>
@@ -1558,6 +1725,15 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-lead">Terminado um arco, a vida volta a ter barulho de rua. As feridas fecham devagar, alguém finalmente dorme numa cama de verdade, e a espada vai para o ferreiro antes da próxima briga. O Mestre diz quantos dias vocês têm até o próximo chamado, e esses dias são seus.</p>
       <p>Cada personagem escolhe o que fazer com eles, em separado. É aqui que o tempo parado vira progresso concreto, e é aqui também que o personagem mostra quem é quando ninguém está atacando: para onde volta, com quem janta, o que faz com as mãos quando elas não seguram uma arma.</p>
 
+      <div class="regras-resumo">
+        <ul>
+          <li>Entre dois arcos o Mestre diz quantos dias vocês têm, e cada personagem gasta os seus como quiser, em dias inteiros.</li>
+          <li>Um dia de atividade são seis horas, e cada personagem faz uma atividade por dia. Treino e fabricação deixam 1 de Cansaço por dia, e uma noite de sono resolve.</li>
+          <li>Trabalhar rende de 5 a 65 Lunaris por dia, conforme o ofício, e a tabela de custo de vida mostra para onde esse dinheiro vai.</li>
+          <li>Se você não souber o que o seu personagem faz com o tempo, as perguntas do fim do tópico ajudam.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Como o calendário funciona</h3>
       <ul class="regras-list">
         <li><strong>Um dia de atividade são seis horas.</strong> O resto do dia é vida normal: comer, dormir, conversar, olhar a chuva pela janela.</li>
@@ -1568,20 +1744,20 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">O que dá para fazer</h3>
-      <p>Cada atividade abaixo já tem a regra completa em outra página. Aqui elas aparecem lado a lado, com um pouco de como são vividas, para você comparar o que rende mais nos dias que tem.</p>
+      <p>Cada atividade abaixo já tem a regra completa em outro tópico. Aqui elas aparecem lado a lado, com um pouco de como são vividas, para você comparar o que rende mais nos dias que tem.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Atividade</th><th>Como é vivida, e o que rende</th></tr></thead>
         <tbody>
-          <tr><td><strong>Treinar uma perícia.</strong></td><td>Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.<small class="regras-mecanica">Custa de ${diasTreinoMinimo} a ${diasTreinoMaximo} dias, conforme o grau. Rende um grau de treinamento. Regra completa em Treinar Perícias.</small></td></tr>
-          <tr><td><strong>Fabricar ou reparar.</strong></td><td>Cheiro de metal quente, farpa no dedo, uma peça que não encaixa e depois encaixa. No fim, a coisa existe porque você fez.<small class="regras-mecanica">Custa os dias do projeto. Rende o item pronto, com um teste no fim. Regra completa em Fabricação e Reparo.</small></td></tr>
-          <tr><td><strong>Preparar ritual, selo ou encantamento.</strong></td><td>Velas acesas sempre nas mesmas horas, símbolos redesenhados até saírem perfeitos, e uma paciência que ninguém de fora entende.<small class="regras-mecanica">Custa o tempo da própria obra. Rende o efeito preparado, pronto para usar. Regra completa em Rituais, Selos e Encantamentos.</small></td></tr>
-          <tr><td><strong>Trabalhar no ofício.</strong></td><td>Acordar cedo, voltar cansado com moeda no bolso e conhecer gente que nem imagina que você já enfrentou um monstro.<small class="regras-mecanica">Custa 1 dia por vez. Rende dinheiro, pela tabela Trabalhar pelo dia. Regra completa em Economia.</small></td></tr>
-          <tr><td><strong>Tratar veneno, doença ou vício.</strong></td><td>Chá amargo de hora em hora, febre de madrugada, e alguém sentado ao lado da cama contando os dias junto com você.<small class="regras-mecanica">Custa dias de cuidado contínuo. Rende a queda de estágio da aflição. Regra completa em Venenos, Doenças e Vícios.</small></td></tr>
-          <tr><td><strong>Se recuperar em segurança.</strong></td><td>Dormir até tarde sem sonhar com nada. Trocar o curativo e ver que a pele por baixo já está rosada.<small class="regras-mecanica">Custa 1 dia por vez. Rende Vida, Mana, Sanidade e a queda de Ferido. Regra completa em Descanso e Recuperação.</small></td></tr>
-          <tr><td><strong>Cuidar da base.</strong></td><td>Pregar a tábua solta, pagar quem conserta o telhado, pendurar na parede alguma coisa que veio da última aventura.<small class="regras-mecanica">Custa de 1 a vários dias. Rende instalação nova, reparo e conta mensal em dia. Regra completa em Propriedades e Bases.</small></td></tr>
-          <tr><td><strong>Fazer um favor a uma facção.</strong></td><td>Levar uma carta sem perguntar o que está escrito, ficar de guarda numa porta, aparecer no lugar certo com a roupa certa.<small class="regras-mecanica">Custa alguns dias, conforme o pedido. Rende Prestígio com ela. Regra completa em Prestígio e Fama.</small></td></tr>
-          <tr><td><strong>Circular e ouvir a cidade.</strong></td><td>Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.<small class="regras-mecanica">Custa 1 dia por vez. Rende boatos, contatos e preço melhor no balcão. Regra completa em Loja e Locais de Compra.</small></td></tr>
-          <tr><td><strong>Procurar uma pessoa específica.</strong></td><td>Mostrar o mesmo retrato mal desenhado para cinquenta desconhecidos, até alguém parar, olhar de novo e mudar de expressão.<small class="regras-mecanica">Custa 1 dia por vez. Rende um teste de Investigação ou Diplomacia por dia. Regra completa em Perícias.</small></td></tr>
+          <tr><td><strong>Treinar uma perícia.</strong></td><td>Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.<small class="regras-mecanica">Custa de ${diasTreinoMinimo} a ${diasTreinoMaximo} dias, conforme o grau. Rende um grau de treinamento. Regra completa em <span class="regras-ref regras-ref--treinar">Treinamento</span>.</small></td></tr>
+          <tr><td><strong>Fabricar ou reparar.</strong></td><td>Cheiro de metal quente, farpa no dedo, uma peça que não encaixa e depois encaixa. No fim, a coisa existe porque você fez.<small class="regras-mecanica">Custa os dias do projeto. Rende o item pronto, com um teste no fim. Regra completa em <span class="regras-ref regras-ref--crafting">Criação, Forja e Alquimia</span>.</small></td></tr>
+          <tr><td><strong>Preparar ritual, selo ou encantamento.</strong></td><td>Velas acesas sempre nas mesmas horas, símbolos redesenhados até saírem perfeitos, e uma paciência que ninguém de fora entende.<small class="regras-mecanica">Custa o tempo da própria obra. Rende o efeito preparado, pronto para usar. Regra completa em <span class="regras-ref regras-ref--rituais-selos">Rituais, Selos e Fusão</span>.</small></td></tr>
+          <tr><td><strong>Trabalhar no ofício.</strong></td><td>Acordar cedo, voltar cansado com moeda no bolso e conhecer gente que nem imagina que você já enfrentou um monstro.<small class="regras-mecanica">Custa 1 dia por vez. Rende dinheiro, pela tabela Trabalhar pelo dia. Regra completa em <span class="regras-ref regras-ref--economia">Economia</span>.</small></td></tr>
+          <tr><td><strong>Tratar veneno, doença ou vício.</strong></td><td>Chá amargo de hora em hora, febre de madrugada, e alguém sentado ao lado da cama contando os dias junto com você.<small class="regras-mecanica">Custa dias de cuidado contínuo. Rende a queda de estágio da aflição. Regra completa em <span class="regras-ref regras-ref--aflicoes">Venenos, Doenças e Vícios</span>.</small></td></tr>
+          <tr><td><strong>Se recuperar em segurança.</strong></td><td>Dormir até tarde sem sonhar com nada. Trocar o curativo e ver que a pele por baixo já está rosada.<small class="regras-mecanica">Custa 1 dia por vez. Rende Vida, Mana, Sanidade e a queda de Ferido. Regra completa em <span class="regras-ref regras-ref--descanso">Descanso</span>.</small></td></tr>
+          <tr><td><strong>Cuidar da base.</strong></td><td>Pregar a tábua solta, pagar quem conserta o telhado, pendurar na parede alguma coisa que veio da última aventura.<small class="regras-mecanica">Custa de 1 a vários dias. Rende instalação nova, reparo e conta mensal em dia. Regra completa em <span class="regras-ref regras-ref--bases">Propriedades e Bases</span>.</small></td></tr>
+          <tr><td><strong>Fazer um favor a uma facção.</strong></td><td>Levar uma carta sem perguntar o que está escrito, ficar de guarda numa porta, aparecer no lugar certo com a roupa certa.<small class="regras-mecanica">Custa alguns dias, conforme o pedido. Rende Prestígio com ela. Regra completa em <span class="regras-ref regras-ref--mundo-faccoes">Prestígio e Fama</span>.</small></td></tr>
+          <tr><td><strong>Circular e ouvir a cidade.</strong></td><td>Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.<small class="regras-mecanica">Custa 1 dia por vez. Rende boatos, contatos e preço melhor no balcão. Regra completa em <span class="regras-ref regras-ref--loja">Loja</span>.</small></td></tr>
+          <tr><td><strong>Procurar uma pessoa específica.</strong></td><td>Mostrar o mesmo retrato mal desenhado para cinquenta desconhecidos, até alguém parar, olhar de novo e mudar de expressão.<small class="regras-mecanica">Custa 1 dia por vez. Rende um teste de Investigação ou Diplomacia por dia. Regra completa em <span class="regras-ref regras-ref--pericias">Perícias</span>.</small></td></tr>
           <tr><td><strong>Cuidar de quem importa.</strong></td><td>Escrever para casa. Levar flor a um túmulo. Ensinar uma criança a segurar uma espada de pau. Pagar a bebida de um velho amigo que ainda não sabe que você voltou.<small class="regras-mecanica">Custa 1 dia. Rende uma cena com alguém que importa para o seu personagem, e o que vier dela. Essa atividade não tem regra: ela é o próprio jogo.</small></td></tr>
         </tbody>
       </table></div>
@@ -1685,55 +1861,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Atributo', '+1 a cada 4, 8 ou 16 níveis'],
     ],
     corpo: `
-      <h3 class="regras-subtitle">O que muda depois do nível ${NIVEL_CONTEUDO_CLASSE} e do nível ${NIVEL_TOTAL_PADRAO}</h3>
-      <p class="regras-lead">Se a dúvida é "o que eu ganho quando passo do ${NIVEL_CONTEUDO_CLASSE}?", esta parte responde sem você precisar caçar em outros capítulos. As regras completas continuam nas páginas indicadas.</p>
-      <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Quando você chega em</th><th>O que passa a valer</th><th>Onde ler</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Nível ${NIVEL_CONTEUDO_CLASSE} de uma classe</strong></td><td>Acabam os poderes e as habilidades escritas dessa classe. Ela segue somando Vida, Mana e Estamina a cada nível, e você já pode abrir a segunda classe comum.</td><td>Sistema Base</td></tr>
-          <tr><td><strong>Níveis ${listaComE(niveisDaMaestria('bonus_recursos'))} da classe</strong></td><td>Reforço de recursos: Vida, Mana e Estamina como se você tivesse 2 níveis a mais nela.</td><td>Poderes e Habilidades</td></tr>
-          <tr><td><strong>Níveis ${listaComE(niveisDaMaestria('grau_pericia'))} da classe</strong></td><td>Mais um grau de perícia, à sua escolha. No nível ${NIVEL_MAXIMO_CLASSE} a classe fecha, e quem quer continuar abre outra.</td><td>Poderes e Habilidades</td></tr>
-          <tr><td><strong>Nível ${marcosDoCanalizador.find((linha) => linha.tetoPorCirculo !== null)?.nivel ?? 25} da fonte de magia</strong></td><td>Quem conjura segue ganhando vagas de magia (2 a cada 5 níveis, ${vagasDeMagiaNoTeto} no nível ${NIVEL_MAXIMO_CLASSE}) e passa a ter um limite de ${marcosDoCanalizador.find((linha) => linha.tetoPorCirculo !== null)?.tetoPorCirculo ?? 4} magias do mesmo círculo.</td><td>Magia e Fluxo</td></tr>
-          <tr><td><strong>Nível total ${grauPorNome('renomado')?.nivel_minimo}</strong></td><td>O grau Renomado (+${grauPorNome('renomado')?.bonus}) fica disponível para as perícias.</td><td>Perícias e Treinar</td></tr>
-          <tr><td><strong>Nível total ${NIVEL_TOTAL_PADRAO}</strong></td><td>Termina o jogo padrão (duas classes comuns e uma especial). Você pode continuar, ganha a Conquista e o selo do Patamar I, e o grau Lendário (+${grauPorNome('lendario')?.bonus}) fica disponível.</td><td>Esta página e Perícias</td></tr>
-          <tr><td><strong>Níveis totais ${listaComE(PATAMARES_NIVEL.slice(1))}</strong></td><td>Patamares II a V. Cada um traz Conquista, moldura nova no retrato e um grau de perícia novo: Mítico, Cósmico, Eterno e Absoluto.</td><td>Esta página e Perícias</td></tr>
-        </tbody>
-      </table></div>
-      <ul class="regras-list">
-        <li>Nada disso trava a ficha. Ao passar do nível ${NIVEL_TOTAL_PADRAO} e a cada patamar novo, o Mestre recebe um aviso e a mesa decide o que fazer com isso.</li>
-        <li>O atributo não tem teto, e a rolagem de magia soma metade do nível como qualquer teste. O Fluxo recomendado de cada círculo é aviso, e a DT do círculo decide se a magia sai.</li>
-        <li>Personagens de nível muito alto costumam ser NPCs do Mestre, como o dono de um banco ou um guardião antigo. Eles usam a mesma ficha, sem cumprir regra de criação.</li>
-      </ul>
+      <p class="regras-lead">Todo personagem acumula XP, e o XP total decide o nível. Este tópico mostra quanto custa cada nível, o que cada nível entrega e como o Mestre costuma recompensar a mesa. As recompensas saem do nível total, nunca de cada classe separada.</p>
 
-      <h3 class="regras-subtitle">Progressão do nível total</h3>
-      <p class="regras-lead">Toda vez que você sobe de nível, escolhe uma das suas classes e aumenta o nível dela em 1. As recompensas da tabela olham para o <strong>nível total</strong>, então multiclasse não recebe nada em dobro.</p>
-      <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Níveis totais</th><th>Legado de Ascensão</th><th>+1 em um atributo</th><th>Vaga de item especial</th></tr></thead>
-        <tbody>
-          ${linhasRitmoDeNivel()}
-        </tbody>
-      </table></div>
-      <p class="regras-note">Isso dá ${legadosPorNivel(50)} Legados e ${aumentosAtributoPorNivel(50)} aumentos de atributo até o nível 50, ${legadosPorNivel(100)} e ${aumentosAtributoPorNivel(100)} até o 100, e ${legadosPorNivel(200)} e ${aumentosAtributoPorNivel(200)} até o 200. O ritmo desacelera para os Legados durarem e para o poder crescer devagar nos níveis muito altos.</p>
-      <p>Atributo não tem valor máximo. Passando do 20 ele segue subindo, e o modificador continua sendo ⌊(Atributo − 10) ÷ 2⌋.</p>
-
-      <h3 class="regras-subtitle">Classes e multiclasse</h3>
-      <ul class="regras-list">
-        <li>Cada classe vai até o <strong>nível ${NIVEL_MAXIMO_CLASSE}</strong>. As recompensas escritas dela (poderes, habilidades e o fecho da classe) terminam no ${NIVEL_CONTEUDO_CLASSE}. Do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela segue somando Vida, Mana e Estamina a cada nível e ganha a Maestria, um marco de 5 em 5 níveis.</li>
-        <li>O padrão do jogo é <strong>duas classes comuns e uma especial</strong>, que fecha em ${NIVEL_TOTAL_PADRAO} níveis totais. A ficha aceita mais classes e níveis acima disso, e só marca o patamar novo.</li>
-        <li>A segunda classe comum entra depois que uma das suas classes chega ao nível 20. Fora essa ordem, subir de nível é livre: escolha qualquer classe que você já tenha entre as suas.</li>
-        <li>Classe especial exige nível total 20, consome nível como qualquer outra e não ocupa uma das duas vagas de classe comum.</li>
-        <li>Classe comum serve a qualquer Árvore. Classe especial depende de liberação do Mestre e só aparece nas Árvores indicadas na página dela.</li>
-        <li>Ao entrar numa classe nova você não ganha equipamento, dinheiro ou qualquer outro benefício de criação de novo.</li>
-      </ul>
-
-      <h3 class="regras-subtitle">Depois do nível ${NIVEL_TOTAL_PADRAO}</h3>
-      <p>O nível ${NIVEL_TOTAL_PADRAO} é onde terminam as regras padrão. O nível total não tem teto: você continua subindo e abre mais classes. Cada classe, porém, para no ${NIVEL_MAXIMO_CLASSE}; para evoluir além disso, abra outra. O que muda acima do ${NIVEL_TOTAL_PADRAO} é que o personagem entra num patamar novo.</p>
-      <ul class="regras-list">
-        <li>Os patamares são os níveis totais ${PATAMARES_NIVEL.slice(0, -1).join(', ')} e ${PATAMARES_NIVEL[PATAMARES_NIVEL.length - 1]}.</li>
-        <li>Cada um traz uma Conquista, uma moldura própria no retrato e no cartaz de Procurado e um selo na ficha, de Patamar I a Patamar V. O aviso aparece uma vez e some sozinho.</li>
-        <li>O Mestre recebe um aviso quando a sua ficha passa do nível ${NIVEL_TOTAL_PADRAO} e a cada patamar novo. Ele não trava nada: serve para a mesa conversar sobre o personagem naquele ponto.</li>
-        <li>Um NPC do Mestre pode ficar num patamar alto sem cumprir nenhuma regra de criação: a ficha serve para guardar a Vida, a Defesa e os números dele.</li>
-      </ul>
+      <div class="regras-resumo">
+        <ul>
+          <li>XP total do nível N = 500 × N × (N − 1), até o nível 100. Sair do nível N para o N+1 custa N × 1.000 XP.</li>
+          <li>O nível total soma os níveis de todas as classes, e a tabela de recompensas olha para ele: multiclasse não recebe nada em dobro.</li>
+          <li>O Mestre recompensa por marco: 10% do próximo nível por descoberta ou objetivo menor, 25% por missão relevante e 50% por fim de arco.</li>
+          <li>O nível ${NIVEL_TOTAL_PADRAO} fecha o jogo padrão. Dali em diante o personagem entra em patamares, e a ficha só avisa o Mestre: nada trava.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">Fórmula de progressão</h3>
       <div class="regras-formula">XP total do nível N = 500 × N × (N − 1), até o nível 100</div>
@@ -1747,12 +1884,6 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </table></div>
       <p class="regras-note">O XP total acumulado é ${formatarXP(xpParaNivel(60))} no nível 60, ${formatarXP(xpParaNivel(100))} no 100, ${formatarXP(xpParaNivel(150))} no 150, ${formatarXP(xpParaNivel(250))} no 250 e ${formatarXP(xpParaNivel(500))} no 500.</p>
 
-      <h3 class="regras-subtitle">Tabela completa</h3>
-      <details class="regras-details regras-details--xp">
-        <summary>Abrir níveis 1 a 100</summary>
-        <div class="regras-xp-grid regras-xp-grid--revised">${tabelaXP}</div>
-      </details>
-
       <h3 class="regras-subtitle">Recompensas por marco</h3>
       <ul class="regras-list">
         <li><strong>Descoberta ou objetivo menor:</strong> 10% do próximo nível.</li>
@@ -1760,6 +1891,62 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Fim de arco:</strong> 50% do próximo nível.</li>
         <li>XP de combate se divide pelo grupo. XP de descoberta e de arco vai inteiro para cada um.</li>
       </ul>
+
+      <h3 class="regras-subtitle">Progressão do nível total</h3>
+      <p>Toda vez que você sobe de nível, escolhe uma das suas classes e aumenta o nível dela em 1. As recompensas da tabela olham para o <strong>nível total</strong>, então multiclasse não recebe nada em dobro.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Níveis totais</th><th>Legado de Ascensão</th><th>+1 em um atributo</th><th>Vaga de item especial</th></tr></thead>
+        <tbody>
+          ${linhasRitmoDeNivel()}
+        </tbody>
+      </table></div>
+      <p class="regras-note">Isso dá ${legadosPorNivel(50)} Legados e ${aumentosAtributoPorNivel(50)} aumentos de atributo até o nível 50, ${legadosPorNivel(100)} e ${aumentosAtributoPorNivel(100)} até o 100, e ${legadosPorNivel(200)} e ${aumentosAtributoPorNivel(200)} até o 200. O ritmo desacelera para os Legados durarem e para o poder crescer devagar nos níveis muito altos.</p>
+      <p>Atributo não tem valor máximo. Passando do 20 ele segue subindo, e o modificador continua sendo ⌊(Atributo − 10) ÷ 2⌋. Os Legados estão em <span class="regras-ref regras-ref--legados">Legados</span>.</p>
+
+      <h3 class="regras-subtitle">Classes e multiclasse</h3>
+      <ul class="regras-list">
+        <li>Cada classe vai até o <strong>nível ${NIVEL_MAXIMO_CLASSE}</strong>. As recompensas escritas dela (poderes, habilidades e o fecho da classe) terminam no ${NIVEL_CONTEUDO_CLASSE}. Do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela segue somando Vida, Mana e Estamina a cada nível e ganha a Maestria, um marco de 5 em 5 níveis.</li>
+        <li>O padrão do jogo é <strong>duas classes comuns e uma especial</strong>, que fecha em ${NIVEL_TOTAL_PADRAO} níveis totais. A ficha aceita mais classes e níveis acima disso, e só marca o patamar novo.</li>
+        <li>A segunda classe comum entra depois que uma das suas classes chega ao nível 20. Fora essa ordem, subir de nível é livre: escolha qualquer classe que você já tenha entre as suas.</li>
+        <li>Classe especial exige nível total 20, consome nível como qualquer outra e não ocupa uma das duas vagas de classe comum.</li>
+        <li>Classe comum serve a qualquer Árvore. Classe especial depende de liberação do Mestre e só aparece nas Árvores indicadas na página dela.</li>
+        <li>Ao entrar numa classe nova você não ganha equipamento, dinheiro ou qualquer outro benefício de criação de novo.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">O que muda depois do nível ${NIVEL_CONTEUDO_CLASSE} e do nível ${NIVEL_TOTAL_PADRAO}</h3>
+      <p>Se a dúvida é "o que eu ganho quando passo do ${NIVEL_CONTEUDO_CLASSE}?", esta parte responde sem você precisar caçar em outros tópicos. As regras completas continuam nos tópicos indicados.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Quando você chega em</th><th>O que passa a valer</th><th>Onde ler</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nível ${NIVEL_CONTEUDO_CLASSE} de uma classe</strong></td><td>Acabam os poderes e as habilidades escritas dessa classe. Ela segue somando Vida, Mana e Estamina a cada nível, e você já pode abrir a segunda classe comum.</td><td><span class="regras-ref regras-ref--sistema-base">Sistema Base</span></td></tr>
+          <tr><td><strong>Níveis ${listaComE(niveisDaMaestria('bonus_recursos'))} da classe</strong></td><td>Reforço de recursos: Vida, Mana e Estamina como se você tivesse 2 níveis a mais nela.</td><td><span class="regras-ref regras-ref--poderes-habilidades">Poderes e Habilidades</span></td></tr>
+          <tr><td><strong>Níveis ${listaComE(niveisDaMaestria('grau_pericia'))} da classe</strong></td><td>Mais um grau de perícia, à sua escolha. No nível ${NIVEL_MAXIMO_CLASSE} a classe fecha, e quem quer continuar abre outra.</td><td><span class="regras-ref regras-ref--poderes-habilidades">Poderes e Habilidades</span></td></tr>
+          <tr><td><strong>Nível ${marcosDoCanalizador.find((linha) => linha.tetoPorCirculo !== null)?.nivel ?? 25} da fonte de magia</strong></td><td>Quem conjura segue ganhando vagas de magia (2 a cada 5 níveis, ${vagasDeMagiaNoTeto} no nível ${NIVEL_MAXIMO_CLASSE}) e passa a ter um limite de ${marcosDoCanalizador.find((linha) => linha.tetoPorCirculo !== null)?.tetoPorCirculo ?? 4} magias do mesmo círculo.</td><td><span class="regras-ref regras-ref--magia-fluxo">Magia e Fluxo</span></td></tr>
+          <tr><td><strong>Nível total ${grauPorNome('renomado')?.nivel_minimo}</strong></td><td>O grau Renomado (+${grauPorNome('renomado')?.bonus}) fica disponível para as perícias.</td><td><span class="regras-ref regras-ref--pericias">Perícias</span> e <span class="regras-ref regras-ref--treinar">Treinamento</span></td></tr>
+          <tr><td><strong>Nível total ${NIVEL_TOTAL_PADRAO}</strong></td><td>Termina o jogo padrão (duas classes comuns e uma especial). Você pode continuar, ganha a Conquista e o selo do Patamar I, e o grau Lendário (+${grauPorNome('lendario')?.bonus}) fica disponível.</td><td>Este tópico e <span class="regras-ref regras-ref--pericias">Perícias</span></td></tr>
+          <tr><td><strong>Níveis totais ${listaComE(PATAMARES_NIVEL.slice(1))}</strong></td><td>Patamares II a V. Cada um traz Conquista, moldura nova no retrato e um grau de perícia novo: Mítico, Cósmico, Eterno e Absoluto.</td><td>Este tópico e <span class="regras-ref regras-ref--pericias">Perícias</span></td></tr>
+        </tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li>Nada disso trava a ficha. Ao passar do nível ${NIVEL_TOTAL_PADRAO} e a cada patamar novo, o Mestre recebe um aviso e a mesa decide o que fazer com isso.</li>
+        <li>O atributo não tem teto, e a rolagem de magia soma metade do nível como qualquer teste. O Fluxo recomendado de cada círculo é aviso, e a DT do círculo decide se a magia sai.</li>
+        <li>Personagens de nível muito alto costumam ser NPCs do Mestre, como o dono de um banco ou um guardião antigo. Eles usam a mesma ficha, sem cumprir regra de criação.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Depois do nível ${NIVEL_TOTAL_PADRAO}</h3>
+      <p>O nível ${NIVEL_TOTAL_PADRAO} é onde terminam as regras padrão. O nível total não tem teto: você continua subindo e abre mais classes. Cada classe, porém, para no ${NIVEL_MAXIMO_CLASSE}; para evoluir além disso, abra outra. O que muda acima do ${NIVEL_TOTAL_PADRAO} é que o personagem entra num patamar novo.</p>
+      <ul class="regras-list">
+        <li>Os patamares são os níveis totais ${PATAMARES_NIVEL.slice(0, -1).join(', ')} e ${PATAMARES_NIVEL[PATAMARES_NIVEL.length - 1]}.</li>
+        <li>Cada um traz uma Conquista, uma moldura própria no retrato e no cartaz de Procurado e um selo na ficha, de Patamar I a Patamar V. O aviso aparece uma vez e some sozinho.</li>
+        <li>O Mestre recebe um aviso quando a sua ficha passa do nível ${NIVEL_TOTAL_PADRAO} e a cada patamar novo. Ele não trava nada: serve para a mesa conversar sobre o personagem naquele ponto.</li>
+        <li>Um NPC do Mestre pode ficar num patamar alto sem cumprir nenhuma regra de criação: a ficha serve para guardar a Vida, a Defesa e os números dele.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Tabela completa</h3>
+      <details class="regras-details regras-details--xp">
+        <summary>Abrir níveis 1 a 100</summary>
+        <div class="regras-xp-grid regras-xp-grid--revised">${tabelaXP}</div>
+      </details>
     `,
     corpoMestre: `
       <p class="regras-lead">A tabela é fechada e a fórmula é simples: sair do nível N custa N mil de experiência até o 99. Do 1 para o 2 são mil; do 19 para o 20 são dezenove mil. A partir do 100 o custo deixa de crescer nível a nível e vira uma faixa (100 mil, 150 mil, 250 mil e 500 mil), então uma campanha longa não precisa de tabela gigante. O mesmo tesouro de XP vale cada vez menos, e é por isso que a recompensa por marco é dada em porcentagem, não em número.</p>
@@ -1799,6 +1986,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     ],
     corpo: `
       <p class="regras-lead">Nos níveis totais 5, 10, 15 e assim por diante até o 50, escolha um Legado de Ascensão cujos pré-requisitos você já cumpre. Depois do 50 o ritmo desacelera: um Legado no 60, no 70, no 80, no 90 e no 100, e daí em diante a cada 20 níveis (120, 140, 160 e por aí vai). Algumas raças dão vagas extras, e quando dão está escrito no catálogo racial.</p>
+      <p>A tabela completa do ritmo, com os aumentos de atributo e as vagas de item especial que chegam junto, está em <span class="regras-ref regras-ref--xp">Experiência e Níveis</span>.</p>
+
+      <h3 class="regras-subtitle">O que vale para todo Legado</h3>
       <ul class="regras-list">
         <li>Legado escolhido não volta atrás. O jogador não pode remover nem trocar depois.</li>
         <li>Legado não é recompensa de classe. Multiclasse não repete os marcos.</li>
@@ -1835,11 +2025,20 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Na mesa', 'Entra na iniciativa como todo mundo'],
     ],
     corpo: `
-      <p class="regras-lead">Nem todo mundo que luta ao seu lado é um personagem de jogador. Cavalo, cão de guarda, guarda-costas contratado, criatura invocada: tudo isso vira um aliado, e aliado neste sistema tem ficha própria, não é um parágrafo nas suas anotações.</p>
+      <p class="regras-lead">Nem todo mundo que luta ao seu lado é um personagem de jogador. Cavalo, cão de guarda, guarda-costas contratado, criatura invocada: tudo isso vira um aliado, e aliado neste sistema tem ficha própria, com Vida, Defesa e ataque anotados como os de qualquer personagem.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Aliado é qualquer criatura que luta ao seu lado e tem ficha própria: comprada no Bestiário, entregue pela história ou sustentada por um poder.</li>
+          <li>A ficha é editável pelo dono, e o aliado entra na ordem de iniciativa com a Iniciativa dele, como qualquer criatura.</li>
+          <li>Quem controla é o dono, a não ser que o Mestre diga o contrário. Aliado que cai a 0 de Vida segue as regras de <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>.</li>
+          <li>Um aliado ativo por personagem costuma ser o limite para o combate continuar andando.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">De onde vem um aliado</h3>
       <ul class="regras-list">
-        <li><strong>Compra:</strong> comprar uma criatura do Bestiário na Loja cria o aliado direto na sua ficha, já com Vida, Defesa, Iniciativa, deslocamento e ataque principal preenchidos. Comprou três, aparecem três, cada um com sua ficha separada. A Vida do aliado é menor que a da mesma criatura como inimigo: no Bestiário ela aguenta sozinha o grupo inteiro, e ao seu lado ela vale no máximo o dobro da Vida média de um personagem do mesmo nível. A loja mostra os dois números.</li>
+        <li><strong>Compra:</strong> comprar uma criatura do <span class="regras-ref regras-ref--bestiario">Bestiário</span> na <span class="regras-ref regras-ref--loja">Loja</span> cria o aliado direto na sua ficha, já com Vida, Defesa, Iniciativa, deslocamento e ataque principal preenchidos. Comprou três, aparecem três, cada um com sua ficha separada. A Vida do aliado é menor que a da mesma criatura como inimigo: no Bestiário ela aguenta sozinha o grupo inteiro, e ao seu lado ela vale no máximo o dobro da Vida média de um personagem do mesmo nível. A loja mostra os dois números.</li>
         <li><strong>História:</strong> o Mestre pode entregar um aliado sem venda nenhuma. É a mesma ficha, criada à mão.</li>
         <li><strong>Poder ou magia:</strong> invocações e servos que um poder seu sustenta seguem o texto do próprio poder. Eles somem quando o poder acaba, então não viram entrada permanente.</li>
       </ul>
@@ -1849,7 +2048,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Tudo ali é editável. O aliado que veio da Loja chega com os números do catálogo (com a Vida já ajustada para aliado), e você ajusta conforme a história muda: ele treina, se fere, ganha equipamento, cria mania.</li>
         <li>Marque quem está em cena. Aliado guardado no estábulo continua na lista sem ocupar espaço na mesa.</li>
-        <li>Vida do aliado é sua responsabilidade, não do Mestre. Se ele apanhou, anote.</li>
+        <li>Quem anota a Vida do aliado é você, o dono. Se ele apanhou, anote.</li>
       </ul>
 
       <h3 class="regras-subtitle">Aliado em combate</h3>
@@ -1857,15 +2056,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Ele entra na ordem de iniciativa como qualquer criatura, com a Iniciativa da ficha dele. Não age de carona no seu turno.</li>
         <li>Quem controla é o dono, salvo quando o Mestre disser que aquela criatura tem vontade própria naquele momento.</li>
         <li>Um aliado age por conta: ele tem as ações dele, e não empresta ação nem reação para você.</li>
-        <li>Ele pode Ajudar, e vale a mesma regra de todo mundo: no máximo dois ajudantes por teste.</li>
-        <li>Quando cai a 0 de Vida, aplique as mesmas regras de Ferimentos. Bicho e contratado morrem igual.</li>
+        <li>Ele pode Ajudar, e vale a mesma regra de todo mundo: no máximo dois ajudantes por teste (ver <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span>).</li>
+        <li>Quando cai a 0 de Vida, aplique as mesmas regras de <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>. Bicho e contratado morrem igual.</li>
       </ul>
-      <p class="regras-note">Um grupo com muitos aliados atrasa a mesa inteira. Combine um teto com o Mestre antes de encher a ficha: geralmente um aliado ativo por personagem já é o suficiente para o combate continuar andando.</p>
+      <div class="regras-note regras-note--dica">
+        <p>Um grupo com muitos aliados atrasa a mesa inteira. Combine um teto com o Mestre antes de encher a ficha: geralmente um aliado ativo por personagem já é o suficiente para o combate continuar andando.</p>
+      </div>
 
       <h3 class="regras-subtitle">Contratados e lealdade</h3>
       <ul class="regras-list">
-        <li>Quem foi comprado foi contratado, não escravizado. O acordo vale enquanto o combinado for cumprido, e o Mestre decide o que acontece quando não for.</li>
-        <li>Salário, manutenção e alimento são assunto de mesa. Se a campanha usa esse controle, ele entra como despesa recorrente, do mesmo jeito que a manutenção de uma base.</li>
+        <li>Quem foi comprado foi contratado: o acordo vale enquanto o combinado for cumprido, e o Mestre decide o que acontece quando não for.</li>
+        <li>Salário, manutenção e alimento são assunto de mesa. Se a campanha usa esse controle, ele entra como despesa recorrente, do mesmo jeito que a manutenção de uma base (ver <span class="regras-ref regras-ref--bases">Propriedades e Bases</span>).</li>
         <li>Aliado não é item: ele não volta para a Loja, não tem preço de revenda e não entra no Cofre.</li>
       </ul>
     `,
@@ -1899,6 +2100,15 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     corpo: `
       <p class="regras-lead">Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o caminho caro: você compra, aceita o que vem junto e não desfaz depois.</p>
 
+      <div class="regras-resumo">
+        <ul>
+          <li>O <strong>Fruto do Éden</strong> se liga à alma: uma criatura sustenta um Fruto por vez, e ele traz três degraus (Vínculo, Técnica e Despertar) e uma fraqueza declarada.</li>
+          <li>O <strong>Despertar</strong> só anda para frente. Depois dele a ficha não volta, então combine o acontecimento da história com o Mestre.</li>
+          <li>O <strong>implante</strong> é peça de máquina no corpo: pago em Créditos Sombrios, exige nível 3 ou mais e ocupa uma parte do corpo.</li>
+          <li>As <strong>oferendas</strong> aos Fluxos rendem dádivas curtas: uma por vez, até o próximo descanso longo ou o fim da sessão.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Frutos do Éden</h3>
       <p>São ${totalFrutosEden} frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrela e classificados como relíquia da criação. Comprar é a parte fácil: o preço em Fragmentos costuma significar uma campanha inteira atrás de um.</p>
       <ul class="regras-list">
@@ -1924,7 +2134,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Cada Fruto declara a fraqueza no Fluxo que tem vantagem sobre o dele. O Fruto do Fim exige a autorização do Mestre, como todo acesso ao Fim.</li>
         <li>Vale a regra de sempre: uma criatura sustenta um Fruto por vez, e escolher o de um Fluxo troca o vínculo anterior.</li>
       </ul>
-      <p class="regras-note">Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. A passiva e as técnicas são substituídas pelas versões aprimoradas, sem somar com as antigas, e a manifestação final passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.</p>
+      <div class="regras-note regras-note--atencao">
+        <p>Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. A passiva e as técnicas são substituídas pelas versões aprimoradas, sem somar com as antigas, e a manifestação final passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.</p>
+      </div>
       <p>Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos ${totalFrutosEden} está no catálogo da Loja.</p>
 
       <h3 class="regras-subtitle">Dádivas e oferendas</h3>
@@ -1950,9 +2162,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Implante não vai na mochila. Ele fica numa seção própria do inventário, porque está instalado no corpo e ocupa uma parte dele.</li>
         <li>Cada peça declara o que substitui: um olho, um braço, o coração, os pulmões. Duas peças que disputam a mesma parte do corpo não convivem.</li>
         <li>O benefício vale enquanto o implante estiver funcional. Dano suficiente, campo de interferência ou sobrecarga podem desligá-lo, e a regra da peça diz quando isso acontece.</li>
-        <li>Alguns implantes cobram o próprio uso em dano interno que ignora Resistência. Esse dano é parte do preço, não um efeito colateral opcional.</li>
+        <li>Alguns implantes cobram o próprio uso em dano interno que ignora Resistência. Esse dano faz parte do preço da peça.</li>
       </ul>
-      <p class="regras-note">Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra de rotina: é resultado de uma ida ao mercado negro, com tudo que isso costuma cobrar em história.</p>
+      <div class="regras-note regras-note--atencao">
+        <p>Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra de rotina: é resultado de uma ida ao mercado negro, com tudo que isso costuma cobrar em história. As moedas e o câmbio estão em <span class="regras-ref regras-ref--economia">Economia</span>.</p>
+      </div>
 
       <h3 class="regras-subtitle">Os dois juntos</h3>
       <ul class="regras-list">
@@ -1998,13 +2212,15 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   equipamentos: {
     categoria: 'Combate e Mecânicas',
     status: 'Regra oficial',
-    resumo: 'Quanto você carrega, o que dá para vestir junto e como a Resistência entra na conta do dano. Raridade e modificação ficam no capítulo seguinte.',
+    resumo: 'Quanto você carrega, o que dá para vestir junto e como a Resistência entra na conta do dano. Raridade e modificação ficam nos tópicos seguintes.',
     destaques: [
       ['Carga', '10 + 2 × Mod.Força positivo + metade do nível'],
       ['Armadura', '1 principal, 1 malha e 1 escudo'],
       ['Resistência', 'reduz dano após o crítico']
     ],
     corpo: `
+      <p class="regras-lead">Este tópico trata do que você carrega e veste: quanto cabe na mochila, quantas peças de armadura se somam e o que muda quando falta proficiência ou munição. O orçamento de poder dos itens fica nos tópicos seguintes.</p>
+
       <h3 class="regras-subtitle">Carga e espaços</h3>
       <div class="regras-formula">Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋, mínimo 5</div>
       <ul class="regras-list">
@@ -2012,6 +2228,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Passou da capacidade, você fica Sobrecarregado: 3 m a menos de movimento e desvantagem em testes físicos.</li>
         <li>Mochila, bolsa ou habilidade só aumentam sua capacidade quando trazem um número explícito. "Guarda bastante coisa" não conta.</li>
       </ul>
+      <div class="regras-note regras-note--exemplo">
+        <p>Um personagem de nível total 6 com Mod.Força +3 tem capacidade 10 + (2 × 3) + ⌊6 ÷ 2⌋ = 10 + 6 + 3 = 19 espaços. Com um item de 4 espaços e outro de 3, ele usa 7 e ainda tem 12 livres.</p>
+      </div>
 
       <h3 class="regras-subtitle">Armaduras e escudos</h3>
       <ul class="regras-list">
@@ -2021,7 +2240,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Armadura e escudo simples qualquer um usa. Peça marcial sem a proficiência perde 2 de Defesa, tem a penalidade dobrada e não deixa você usar habilidades que exijam proficiência.</li>
       </ul>
 
-      <p class="regras-note">Como a Resistência entra na conta do dano, em que ordem e o que cada tipo de dano cobre ficam no capítulo <strong>Tipos de Dano</strong>.</p>
+      <p>Como a Resistência entra na conta do dano, em que ordem e o que cada tipo de dano cobre ficam em <span class="regras-ref regras-ref--tipos-de-dano">Tipos de Dano</span>.</p>
 
       <h3 class="regras-subtitle">Armas, proficiência e munição</h3>
       <ul class="regras-list">
@@ -2031,7 +2250,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Trocar um carregador usa a ação de movimento. Munição avulsa e arma pesada podem cobrar ação padrão quando a arma declarar isso.</li>
       </ul>
 
-      <p class="regras-note">Orçamento de poder fica em <strong>Raridades de Equipamento</strong>; as opções prontas e seus preços ficam em <strong>Modificações de Equipamento</strong>.</p>
+      <p>Orçamento de poder fica em <span class="regras-ref regras-ref--raridades-modificacoes">Raridades de Equipamento</span>; as opções prontas e seus preços ficam em <span class="regras-ref regras-ref--modificacoes-equipamentos">Modificações de Equipamento</span>.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Equipamento é o eixo que você controla sem tocar na ficha de ninguém. Vida e Defesa vêm do nível; dano e Resistência vêm do que o grupo carrega, e é aí que você mexe.</p>
@@ -2068,8 +2287,18 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Ganho por categoria', 'mais modificações e encantamentos'],
     ],
     corpo: `
-      <h3 class="regras-subtitle">Raridades e orçamento de poder</h3>
       <p class="regras-lead">Raridade possui duas funções: melhora a ficha própria de armas e proteções e define quantas modificações e efeitos o item comporta. A melhoria automática da raridade não ocupa uma vaga de modificação.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Na Loja, armas, armaduras e escudos aparecem primeiro como Comuns. Encomendar outra raridade multiplica o preço (Incomum ×3, Raro ×8, Épico ×20, Lendário ×60) e melhora as propriedades.</li>
+          <li>Itens de perícia e artefatos dividem um mesmo limite de uso: 1 vaga no começo e mais uma a cada 4 níveis totais até o 50, a cada 8 até o 100 e a cada 16 depois.</li>
+          <li>Itens que despertam têm formas por nível do dono: vale a mais alta que ele alcançou, e ela substitui a anterior.</li>
+          <li>Peças do mesmo conjunto dão um bônus de coleção quando estão equipadas ao mesmo tempo.</li>
+        </ul>
+      </div>
+
+      <h3 class="regras-subtitle">Raridades e orçamento de poder</h3>
       <p><strong>Na Loja, armas, armaduras e escudos são anunciados primeiro como Comuns.</strong> O preço Comum vem do modelo e usa a mesma régua nos três: peça simples custa de 15 a 40 Lunaris, peça marcial custa de 50 a 80 Lunaris. Encomendar outra raridade aumenta preço e propriedades, e cada variante fica separada no inventário. Mítico e Relíquia da Criação continuam fora das encomendas normais.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Raridade</th><th>Preço</th><th>Armas</th><th>Armaduras e escudos</th></tr></thead>
@@ -2093,7 +2322,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Armas:</strong> mais modificações e encantamentos cabem na mesma peça, e isso é o que empurra o dano além do bônus automático da raridade (ex.: Afiada, Elemental, Devastadora).</li>
         <li><strong>Armaduras e escudos:</strong> o espaço extra vira mais Defesa e Resistência por modificação (ex.: Reforçada, Isolante, Bastião), somando ao bônus automático da tabela acima.</li>
         <li><strong>Consumíveis:</strong> cabem mais efeitos por dose, uma versão Rara carrega um efeito automático a mais que uma Comum, sem virar um item totalmente novo.</li>
-        <li><strong>Veículos:</strong> o espaço vira mais componentes instalados de uma vez, sem estourar a Manutenção do casco (ver Manutenção e Componentes).</li>
+        <li><strong>Veículos:</strong> o espaço vira mais componentes instalados de uma vez, sem estourar a Manutenção do casco (ver <span class="regras-ref regras-ref--veiculos-manutencao">Manutenção e Componentes</span>).</li>
         <li><strong>Itens gerais e mágicos:</strong> o mesmo espaço aceita mais modificações técnicas ou mágicas, do jeito que o Catálogo de Modificações descreve.</li>
       </ul>
 
@@ -2107,7 +2336,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </table></div>
 
       <h3 class="regras-subtitle">Itens que despertam com o dono</h3>
-      <p class="regras-lead">Alguns itens da Loja têm <strong>formas</strong>. Cada forma pede um nível total mínimo do dono. Vale sempre a mais alta que ele já alcançou, e ela <strong>substitui</strong> a anterior em vez de somar.</p>
+      <p>Alguns itens da Loja têm <strong>formas</strong>. Cada forma pede um nível total mínimo do dono. Vale sempre a mais alta que ele já alcançou, e ela <strong>substitui</strong> a anterior em vez de somar.</p>
       <ul class="regras-list">
         <li>A forma só vale com o item equipado, e esses itens são artefatos: ocupam uma das vagas da tabela acima.</li>
         <li>Se o item mudar de dono, a forma muda junto: vale a que o nível total do novo dono alcança.</li>
@@ -2116,7 +2345,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Conjuntos de equipamento</h3>
-      <p class="regras-lead">Peças do mesmo conjunto dão um <strong>bônus de coleção</strong> quando estão equipadas ao mesmo tempo. Os bônus se somam: com 3 peças valem os de 2 e os de 3. Peça repetida conta uma vez, e peça guardada na mochila não conta.</p>
+      <p>Peças do mesmo conjunto dão um <strong>bônus de coleção</strong> quando estão equipadas ao mesmo tempo. Os bônus se somam: com 3 peças valem os de 2 e os de 3. Peça repetida conta uma vez, e peça guardada na mochila não conta.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Conjunto</th><th>Peças</th><th>Bônus</th></tr></thead>
         <tbody>${tabelaConjuntosEquipamento}
@@ -2182,7 +2411,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Consulta', 'agrupada por categoria'],
     ],
     corpo: `
-      <p class="regras-lead">Use esta página depois de conferir o orçamento no capítulo <strong>Raridades de Equipamento</strong>. Primeiro identifique o nível e o valor da modificação; depois abra somente a categoria do item que você está melhorando.</p>
+      <p class="regras-lead">Use este tópico depois de conferir o orçamento em <span class="regras-ref regras-ref--raridades-modificacoes">Raridades de Equipamento</span>. Primeiro identifique o nível e o valor da modificação; depois abra somente a categoria do item que você está melhorando.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Cada modificação concede um efeito automático na ficha (Vida máxima, Defesa, Ataque, atributo ou bônus em perícia), que some quando o item é guardado ou desequipado.</li>
+          <li>O nível <strong>Comum</strong> entra em qualquer item. O <strong>Marcial</strong> bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor. A <strong>Técnica</strong> não tem efeito automático.</li>
+          <li>O pré-requisito cobra de quem usa o item. Perdeu o requisito, a modificação desliga até você cumprir de novo.</li>
+          <li>O preço de encomenda depende da faixa de valor da modificação (tabela abaixo), e o catálogo é agrupado pela categoria do equipamento.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">Modificações e efeitos na ficha</h3>
       <ul class="regras-list">${REGRAS_MODIFICACOES_EQUIPAMENTO.map((regra) => `<li>${regra}</li>`).join('')}</ul>
@@ -2193,7 +2431,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Nível:</strong> <strong>Comum</strong> entra em qualquer item. <strong>Marcial</strong> bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor.</li>
         <li><strong>Valor:</strong> o peso do efeito automático. Compare com a coluna "Valor por efeito" da tabela de raridades para saber de qual faixa o item precisa ser.</li>
         <li><strong>Técnica:</strong> não tem efeito automático. Ocupa espaço de modificação, mas não gasta o orçamento de efeito da raridade.</li>
-        <li><strong>Pré-requisito:</strong> cobra de <em>quem usa</em>, não do item. Perdeu o requisito, a modificação desliga até você cumprir de novo.</li>
+        <li><strong>Pré-requisito:</strong> cobra de <em>quem usa</em>. Perdeu o requisito, a modificação desliga até você cumprir de novo.</li>
       </ul>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Faixa</th><th>Preço de encomenda</th><th>Raridade mínima do item</th></tr></thead>
@@ -2204,7 +2442,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Catálogo por categoria</h3>
       <p>Existem ${MODIFICACOES_EQUIPAMENTO.length} modificações. Cada grupo abaixo começa fechado: abra apenas Armas, Armaduras, Escudos ou a categoria que corresponde ao item.</p>
       ${tabelaModificacoesEquipamento}
-      <p class="regras-note">O catálogo é um ponto de partida, não uma lista fechada. Modificação nova precisa respeitar o valor máximo por efeito da raridade e o nível condizente com o equipamento.</p>
+      <p class="regras-note">O catálogo é um ponto de partida, e modificação nova é bem-vinda. Ela precisa respeitar o valor máximo por efeito da raridade e o nível condizente com o equipamento.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Aprovar uma modificação exige conferir três coisas separadas: se o item tem espaço, se a raridade comporta o valor automático e se quem usa cumpre o pré-requisito. A ficha automatiza o efeito, mas não substitui essa conferência.</p>
@@ -2239,6 +2477,15 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     corpo: `
       <p class="regras-lead">A classe diz <strong>como</strong> você manipula a magia; o Fluxo nativo diz <strong>o que</strong> sai dali. São dez Fluxos naturais mais o artificial da Tecnologia: onze formas utilizáveis no total.</p>
 
+      <div class="regras-resumo">
+        <ul>
+          <li>Cada alma nasce com um Fluxo natural, e só um. Fluxo alto não ensina magia: o acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.</li>
+          <li>O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus da classe. A DT de conjuração é 7 + (3 × círculo).</li>
+          <li>A Mana sai quando você declara a conjuração e não volta se o teste falhar. O Fluxo recomendado de cada círculo é só um aviso.</li>
+          <li>Você mantém uma concentração por vez. Ao sofrer dano, role Vontade contra DT 10 ou metade do dano recebido, o que for maior.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Princípios dos Fluxos</h3>
       <ul class="regras-list">
         <li>Cada alma nasce com um Fluxo natural, e só um. Exceção precisa estar escrita na história do personagem.</li>
@@ -2271,6 +2518,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>A metade do nível entra aqui como em qualquer teste. Sem ela, um conjurador de nível alto nunca venceria o teste de resistência de uma criatura do próprio nível.</li>
         <li>A Mana sai no momento em que você declara a conjuração, e não volta se o teste falhar.</li>
       </ul>
+      <div class="regras-note regras-note--exemplo">
+        <p>Um conjurador de nível total 10 tem Mod. Fluxo +4, um grau de Misticismo que soma +4 e nenhum bônus de classe. A metade do nível vale ⌊10 ÷ 2⌋ = 5, então o bônus dele é +4 + 5 + 4 = +13. A DT de uma magia de 3º círculo é 7 + (3 × 3) = 16, e basta tirar 3 ou mais no d20 para ela se estabilizar. Se a magia for de ataque, esse mesmo total é lido contra a Defesa do alvo.</p>
+      </div>
 
       <h3 class="regras-subtitle">Círculos, Fluxo e DT</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -2334,7 +2584,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Relação', 'vantagem e desvantagem só em disputa direta'],
     ],
     corpo: `
-      <p class="regras-lead">O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos primordiais moram nele: Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Não existe um oitavo elemento. Gelo, magma, magnetismo e afins são <strong>derivações</strong>: cada uma nasce de um dos sete e é, ela mesma, um tipo de dano. É isso que esta página explica.</p>
+      <p class="regras-lead">O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos primordiais moram nele: Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Não existe um oitavo elemento. Gelo, magma, magnetismo e afins são <strong>derivações</strong>: cada uma nasce de um dos sete e é, ela mesma, um tipo de dano. É isso que este tópico explica.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Os sete elementos do Fluxo Físico são Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Gelo, magma, magnetismo e afins são derivações, e cada uma é um tipo de dano próprio.</li>
+          <li>O Elementarista escolhe um elemento de origem no 1º nível, para sempre. Só o Avatar, que depende de um 20 natural no nível 5, aprende outros.</li>
+          <li>Antes de rolar uma magia Elemental, quem conjura declara qual elemento está usando.</li>
+          <li>A relação de vantagem e desvantagem só conta em disputa direta entre manifestações e não dá dano extra.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">Quem domina um elemento</h3>
       <ul class="regras-list">
@@ -2345,10 +2604,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Declarar o elemento</h3>
-      <p class="regras-lead">Antes de rolar uma magia Elemental, quem conjura declara qual elemento dominado está usando. O elemento declarado define o tipo de dano, a aparência do efeito e a relação de vantagem ou desvantagem daquela conjuração. Quem tem afinidade única sempre declara o de origem; um Avatar declara qualquer um que tenha aprendido.</p>
+      <p>Antes de rolar uma magia Elemental, quem conjura declara qual elemento dominado está usando. O elemento declarado define o tipo de dano, a aparência do efeito e a relação de vantagem ou desvantagem daquela conjuração. Quem tem afinidade única sempre declara o de origem; um Avatar declara qualquer um que tenha aprendido.</p>
 
       <h3 class="regras-subtitle">Como os elementos se enfrentam</h3>
-      <p class="regras-lead">Cada elemento tem um que vence e um que o vence. A relação só conta quando duas manifestações elementais se enfrentam <em>diretamente</em>: atacar uma barreira, disputar o controle de uma área ou resistir a um efeito do elemento oposto. Quem está em vantagem rola o teste envolvido com vantagem, quem está em desvantagem rola com desvantagem, e as duas se anulam quando ambas se aplicam.</p>
+      <p>Cada elemento tem um que vence e um que o vence. A relação só conta quando duas manifestações elementais se enfrentam <em>diretamente</em>: atacar uma barreira, disputar o controle de uma área ou resistir a um efeito do elemento oposto. Quem está em vantagem rola o teste envolvido com vantagem, quem está em desvantagem rola com desvantagem, e as duas se anulam quando ambas se aplicam.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Elemento</th><th>Vantagem contra</th><th>Desvantagem contra</th></tr></thead>
         <tbody>
@@ -2361,11 +2620,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td><strong>Escuridão</strong></td><td>Terra</td><td>Luz</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">A relação não dá dano extra, não remove imunidade e não vale só porque o alvo conhece ou domina outro elemento. Resistência e vulnerabilidade continuam por elemento, como no capítulo <strong>Tipos de Dano</strong>.</p>
+      <p class="regras-note">A relação não dá dano extra, não remove imunidade e não vale só porque o alvo conhece ou domina outro elemento. Resistência e vulnerabilidade continuam por elemento, como em <span class="regras-ref regras-ref--tipos-de-dano">Tipos de Dano</span>.</p>
 
       <h3 class="regras-subtitle">Derivações</h3>
-      <p class="regras-lead">No 12º nível o Elementarista escolhe exatamente <strong>uma derivação</strong> do próprio elemento de origem, entre duas: a <strong>comum</strong> é o desenvolvimento esperado, e a <strong>rara</strong> exige uma Prova da Derivação e a autorização do Mestre. A escolha é permanente. Ser Avatar não dá derivação para os elementos adicionais.</p>
-      <p class="regras-lead">A partir do 13º nível (Domínio da Derivação), uma vez por rodada, ao conjurar uma magia Elemental do elemento de origem, o Elementarista pode gastar <strong>+1 de Mana</strong> para aplicar o efeito harmônico da derivação a um único alvo, ponto ou espaço válido da magia.</p>
+      <p>No 12º nível o Elementarista escolhe exatamente <strong>uma derivação</strong> do próprio elemento de origem, entre duas: a <strong>comum</strong> é o desenvolvimento esperado, e a <strong>rara</strong> exige uma Prova da Derivação e a autorização do Mestre. A escolha é permanente. Ser Avatar não dá derivação para os elementos adicionais.</p>
+      <p>A partir do 13º nível (Domínio da Derivação), uma vez por rodada, ao conjurar uma magia Elemental do elemento de origem, o Elementarista pode gastar <strong>+1 de Mana</strong> para aplicar o efeito harmônico da derivação a um único alvo, ponto ou espaço válido da magia.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Elemento</th><th>Derivação</th><th>Efeito harmônico</th></tr></thead>
         <tbody>
@@ -2407,8 +2666,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Registro', 'contam como Legado sem ocupar vaga'],
     ],
     corpo: `
-      <h3 class="regras-subtitle">O preço dos círculos altos</h3>
       <p class="regras-lead">Magia grande não sai de graça. A partir do 5º círculo, o Fluxo começa a deixar marca em quem o carrega, e no 10º ele cobra por magia aprendida. Todo preço tem os dois lados: um ganho concreto e um ônus concreto.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Do 5º ao 9º círculo você recebe a <strong>Marca</strong> do seu Fluxo, fixa por Fluxo e por círculo: dá para saber de antemão o que te espera. Perdeu o círculo, perdeu a Marca.</li>
+          <li>No 10º círculo, cada magia aprendida sorteia uma <strong>Cicatriz</strong> na tabela comum, e a mesma não sai duas vezes para o mesmo personagem.</li>
+          <li>Marca e Cicatriz contam como Legado para efeitos que citem Legados, sem ocupar vaga. Concessão do Mestre não gera Cicatriz.</li>
+        </ul>
+      </div>
+
+      <h3 class="regras-subtitle">O preço dos círculos altos</h3>
       <ul class="regras-list">
         <li><strong>Marca do Fluxo (5º ao 9º):</strong> ao alcançar cada um desses círculos, você recebe a Marca daquele círculo no seu Fluxo nativo. Ela não se escolhe e não se rola: é fixa por Fluxo, então dá para saber de antemão o que te espera. Perdeu o círculo, perdeu a Marca.</li>
         <li><strong>Cicatriz (10º):</strong> cada magia de 10º círculo aprendida sorteia uma Cicatriz na tabela comum. Ela é mais pesada dos dois lados, e a mesma não sai duas vezes para o mesmo personagem.</li>
@@ -2449,7 +2717,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Encantamentos', 'limitados pela raridade'],
     ],
     corpo: `
-      <p class="regras-lead">Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de círculo. Consulte cada bloco pelo tipo de preparação que o personagem está tentando realizar.</p>
+      <p class="regras-lead">Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de círculo (ver <span class="regras-ref regras-ref--magia-fluxo">Magia e Fluxo</span>). Consulte cada bloco pelo tipo de preparação que o personagem está tentando realizar.</p>
 
       <h3 class="regras-subtitle">Rituais</h3>
       <ul class="regras-list">
@@ -2499,7 +2767,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Consulta', 'regras e catálogo separados'],
     ],
     corpo: `
-      <p class="regras-lead">Esta página serve para procurar uma entrada específica. As fórmulas de teste, DT, Mana e concentração ficam em <strong>Magia e Fluxo</strong>; Marcas, Cicatrizes e preparações possuem capítulos próprios.</p>
+      <p class="regras-lead">Este tópico serve para procurar uma entrada específica. As fórmulas de teste, DT, Mana e concentração ficam em <span class="regras-ref regras-ref--magia-fluxo">Magia e Fluxo</span>; Marcas e Cicatrizes estão em <span class="regras-ref regras-ref--marcas-cicatrizes">Marcas e Cicatrizes</span>, e as preparações em <span class="regras-ref regras-ref--rituais-selos">Rituais, Selos e Fusão</span>.</p>
 
       <h3 class="regras-subtitle">O que está no catálogo</h3>
       <p>Os filtros abaixo reúnem magias, manifestações de cada Fluxo, rituais, selos, encantamentos e assinaturas de fusão. Escolha primeiro a forma que procura e depois reduza pelos demais campos disponíveis.</p>
@@ -2508,7 +2776,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Confirme se o personagem possui a classe, habilidade, item, Legado ou concessão que dá acesso àquela forma.</li>
         <li>Para magia de círculo, confira Fluxo recomendado, Mana final e DT de conjuração no texto da própria entrada.</li>
-        <li>Ritual não pertence a círculo e não entra em combate. Selo e encantamento dependem da preparação descrita no capítulo correspondente.</li>
+        <li>Ritual não pertence a círculo e não entra em combate. Selo e encantamento dependem da preparação descrita no tópico correspondente.</li>
         <li>Fluxo do Fim continua exigindo autorização do Mestre antes da escolha.</li>
       </ul>
     `,
@@ -2536,6 +2804,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Longo prazo', `${CONDICOES_LONGO_PRAZO.length} prontas`],
     ],
     corpo: `
+      <p class="regras-lead">Condição é o que fica grudado no personagem por um tempo: um estado com efeito fixo, uma crise de Sanidade, uma lesão que demora a sarar. Este tópico reúne a regra de Sanidade, as crises que a perda dela provoca e a lista das condições, cada uma com o que faz e como sai.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Condição é um estado com efeito fixo, que termina pela duração, por uma ação ou pelo tratamento indicado. Veneno, doença e vício são aflições, que evoluem por estágios e têm tópico próprio (<span class="regras-ref regras-ref--aflicoes">Venenos, Doenças e Vícios</span>).</li>
+          <li>A Sanidade vai de 0 a 100. Perdê-la custa 1d4, 1d6, 1d8 ou 2d6, conforme o tamanho do que você viu, e cada faixa dela tem um estado: de Estável a Quebra.</li>
+          <li>Abaixo de certos pontos a Sanidade provoca crises, e há ${CRISES_SANIDADE.length} catalogadas. As ${CONDICOES_OFICIAIS.length} condições oficiais e as ${CONDICOES_LONGO_PRAZO.length} de longo prazo estão nas tabelas deste tópico.</li>
+          <li>A ficha aplica sozinha o que dá para calcular. O que depende da cena continua com a mesa.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Condição ou aflição?</h3>
       <p><strong>Condição</strong> é um estado com efeito fixo, que termina pela duração, por uma ação ou pelo tratamento indicado. <strong>Aflição</strong> é veneno, doença ou vício: evolui por estágios, e a cada intervalo um teste de Fortitude decide se ela sobe, fica ou desce. Na dúvida, pergunte se o problema muda com o tempo e pede teste para melhorar. Se sim, é aflição.</p>
       <p class="regras-note">A ficha aplica sozinha o que dá para calcular: Enfraquecido tira 2 em testes de Força e no dano corpo a corpo, Favorecido soma 1 em Fortitude, Reflexos e Vontade, Desorientado e Cego dão desvantagem onde o cartão manda, e Lento, Apressado e as lesões de perna mudam o Movimento. As lesões e sequelas com número fixo também entram: braço ou mão dominante, ombro, olho, pernas, costelas, mandíbula, concussão, tremor e congelamento. Sangramento, Queimando, Envenenado e Revigorado ganham um botão que rola o efeito do turno e já desconta a Resistência da ficha. Inspirado aparece na hora de rolar ataque ou perícia, e sai da ficha depois do teste. O que depende da cena, como "para escalar" ou "diante do gatilho", continua com a mesa.</p>
@@ -2637,8 +2916,19 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Progressões completas', String(classesComProgressao)]
     ],
     corpo: `
-      <p class="regras-lead">Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes e eventos por nível) fica no catálogo interativo da página de Regras, que lê o mesmo arquivo.</p>
-      <p>Toda classe vai até o nível ${NIVEL_MAXIMO_CLASSE}. As recompensas escritas (habilidades, poderes e eventos) vão até o ${NIVEL_CONTEUDO_CLASSE}, e do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} entra a Maestria, igual para todas. A página de cada classe mostra tudo isso nível a nível, e as classes que conjuram mostram também o círculo e as vagas de magia. Se quiser um resumo do que muda depois do ${NIVEL_CONTEUDO_CLASSE} e do ${NIVEL_TOTAL_PADRAO}, ele está em Experiência e Níveis.</p>
+      <p class="regras-lead">Estas são as ${classesData.length} classes do jogo, com o nome, o tipo e o conceito de cada uma. A progressão completa, com habilidades, poderes e eventos por nível, está no catálogo de classes do site.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>São ${classesComuns} classes comuns, que servem a qualquer Árvore, e ${classesEspeciais} especiais, que só aparecem nas Árvores indicadas e dependem de liberação do Mestre.</li>
+          <li>Todas fecham no mesmo orçamento de poder. O que muda de uma para outra é o jeito de jogar.</li>
+          <li>Toda classe vai até o nível ${NIVEL_MAXIMO_CLASSE}: do 1 ao ${NIVEL_CONTEUDO_CLASSE} vêm habilidades, poderes e eventos, e do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} entra a Maestria, igual para todas.</li>
+        </ul>
+      </div>
+
+      <p>O catálogo mostra a progressão nível a nível, e as classes que conjuram mostram também o círculo e as vagas de magia. Se quiser um resumo do que muda depois do ${NIVEL_CONTEUDO_CLASSE} e do ${NIVEL_TOTAL_PADRAO}, ele está em <span class="regras-ref regras-ref--xp">Experiência e Níveis</span>.</p>
+
+      <h3 class="regras-subtitle">As classes</h3>
       <ul class="regras-list">${listaClassesPublicas}</ul>
     `,
     corpoMestre: `
@@ -2671,6 +2961,15 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     corpo: `
       <p class="regras-lead">Subir de nível numa classe sempre entrega alguma coisa, e essa coisa tem cinco formatos diferentes. A confusão mais comum da mesa é tratar Habilidade e Poder como sinônimos: uma vem sozinha e a outra você escolhe.</p>
 
+      <div class="regras-resumo">
+        <ul>
+          <li>Toda classe segue a mesma grade de cinco recompensas: Habilidade, Poder, Habilidade Final, Grau de perícia e Evento.</li>
+          <li><strong>Habilidade</strong> chega sozinha e cresce em estágios. <strong>Poder</strong> você escolhe, numa lista de dez a doze opções, e a grade dá oito vagas até o nível 20.</li>
+          <li>A <strong>Habilidade Final</strong> vem no nível 20. O <strong>Grau de perícia</strong> sobe um degrau na hora. O <strong>Evento</strong> é um gancho de história que o Mestre encaixa na campanha.</li>
+          <li>Do nível ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} não entra conteúdo novo: só a Maestria, a cada 5 níveis.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">A grade de uma classe</h3>
       <p>As ${classesData.length} classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.</p>
       <div class="regras-table-wrap">
@@ -2702,31 +3001,36 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Poder com custo declara também a ação que consome. Sem isso escrito, ele é uma Ação Padrão.</li>
         <li>Só dá para escolher um poder da lista da sua própria classe, e cada um uma vez só.</li>
       </ul>
+      <div class="regras-note regras-note--dica">
+        <p>Leia a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida, a mesma Mana e a mesma Estamina podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.</p>
+      </div>
 
       <h3 class="regras-subtitle">Habilidade Final</h3>
       <p>O fecho da classe, no nível 20, uma por classe. Ela chega sozinha como qualquer habilidade e costuma ser o efeito que define o que aquela classe virou no fim da estrada.</p>
 
       <h3 class="regras-subtitle">Grau de perícia</h3>
-      <p>Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito. É a exceção às regras do capítulo Treinar, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.</p>
+      <p>Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito. É a exceção às regras do tópico <span class="regras-ref regras-ref--treinar">Treinamento</span>, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.</p>
 
       <h3 class="regras-subtitle">Evento</h3>
-      <p>Evento não é poder. É um gancho que a classe entrega ao Mestre: uma arena que chama o Guerreiro, um clã que cobra o Ninja, um contato que procura o Comerciante. Ele não tem número, não gasta ação e não entra no cálculo de nada.</p>
+      <p>Evento é um gancho que a classe entrega ao Mestre: uma arena que chama o Guerreiro, um clã que cobra o Ninja, um contato que procura o Comerciante. Ele não tem número, não gasta ação e não entra no cálculo de nada.</p>
       <ul class="regras-list">
-        <li>Quando o nível do evento chega, o Mestre encaixa aquilo na campanha no momento em que fizer sentido, não obrigatoriamente na mesma sessão.</li>
+        <li>Quando o nível do evento chega, o Mestre encaixa aquilo na campanha no momento em que fizer sentido, e não obrigatoriamente na mesma sessão.</li>
         <li>O que sai dali é recompensa combinada na mesa. Evento não concede nível, dinheiro infinito nem item garantido.</li>
-        <li>Se o grupo estiver no meio de outra coisa, o evento espera. Ele é oportunidade, não interrupção.</li>
+        <li>Se o grupo estiver no meio de outra coisa, o evento espera a hora certa.</li>
       </ul>
+
       <h3 class="regras-subtitle">Depois do nível 20: a Maestria</h3>
-      <p>A grade das classes termina no nível ${NIVEL_CONTEUDO_CLASSE}. Cada classe pode ir até o ${NIVEL_MAXIMO_CLASSE}, e do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela soma Vida, Mana e Estamina a cada nível, do jeito de sempre, mais a Maestria a cada 5 níveis. A Maestria é igual para todas as classes e conta pelo nível da própria classe. Não confunda com a maestria de atributo do Sistema Base, que vem de um atributo chegar a 20 por mérito próprio.</p>
+      <p>A grade das classes termina no nível ${NIVEL_CONTEUDO_CLASSE}. Cada classe pode ir até o ${NIVEL_MAXIMO_CLASSE}, e do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela soma Vida, Mana e Estamina a cada nível, do jeito de sempre, mais a Maestria a cada 5 níveis. A Maestria é igual para todas as classes e conta pelo nível da própria classe.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível da classe</th><th>Recompensa</th><th>O que dá</th></tr></thead>
         <tbody>
           ${linhasMaestria()}
         </tbody>
       </table></div>
-      <p class="regras-note">Não há poder, habilidade nem evento novo depois do 20. Quem quer conteúdo novo abre outra classe; quem quer profundidade sobe a mesma.</p>
-
-      <p class="regras-note">Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida, a mesma Mana e a mesma Estamina podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.</p>
+      <p>Não há poder, habilidade nem evento novo depois do 20. Quem quer conteúdo novo abre outra classe, e quem quer profundidade sobe a mesma.</p>
+      <div class="regras-note regras-note--atencao">
+        <p>Não confunda com a maestria de atributo do <span class="regras-ref regras-ref--sistema-base">Sistema Base</span>, que vem de um atributo chegar a 20 por mérito próprio.</p>
+      </div>
     `,
     corpoMestre: `
       <p class="regras-lead">Os Eventos são a única parte da progressão que cai no seu colo. Os outros quatro tipos a ficha resolve sozinha; o Evento só existe se você o colocar em cena.</p>
@@ -2764,8 +3068,21 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Ajustes', 'Vida, Mana, Estamina e Mov.']
     ],
     corpo: `
-      <p class="regras-lead">Nome, tipo e ajustes iniciais de Vida, Mana, Estamina e Movimento de cada raça. Fisiologia, traços e variantes completos ficam no catálogo interativo da página de Regras, que lê o mesmo arquivo.</p>
-      <ul class="regras-list">${listaRacasPublicas}</ul>
+      <p class="regras-lead">Estas são as raças do jogo, com o ajuste inicial que cada uma dá a Vida, Mana, Estamina e Movimento. Fisiologia, traços e variantes completos estão no catálogo de raças do site.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>São ${racasMecanicas.length} raças: ${racasComuns} comuns, que nascem em qualquer Árvore, e ${racasEspeciais} especiais, que dependem de liberação do Mestre e só existem nas Árvores compatíveis.</li>
+          <li>Os números da tabela são ajustes iniciais. A raça mexe nesses quatro recursos e também traz fisiologia, traços e, em várias delas, uma escada de estágios.</li>
+          <li>Estar na lista não concede acesso: combine com o Mestre quais raças especiais estão abertas na sua mesa.</li>
+        </ul>
+      </div>
+
+      <h3 class="regras-subtitle">As raças</h3>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Raça</th><th>Tipo</th><th>Vida</th><th>Mana</th><th>Estamina</th><th>Movimento</th></tr></thead>
+        <tbody>${linhasRacasPublicas}</tbody>
+      </table></div>
     `,
     corpoMestre: `
       <p class="regras-lead">Raça mexe em números e em ficção. Os ajustes iniciais pesam mais nos níveis baixos, enquanto as raças com estágios continuam recebendo características e recursos até o nível 50.</p>
@@ -2816,11 +3133,21 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Preço', 'Por fórmula, não por lista'],
     ],
     corpo: `
-      <p class="regras-lead">Criatura neste jogo não é item de mochila: é alguém que anda com você. Existem seis formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria. A lista das criaturas do mundo, com os números de cada uma, fica no Bestiário dos Registros Universais.</p>
+      <p class="regras-lead">Uma criatura ao seu lado anda com você pelas cenas, luta quando preciso e tem ficha. Existem seis formas de ter uma, e todas terminam do mesmo jeito: como um aliado com ficha própria. A lista das criaturas do mundo, com os números de cada uma, fica no Bestiário dos Registros Universais.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>São seis formas: Criaturas, Familiares, Servos, Invocações, Ajudantes e Seres Lendários.</li>
+          <li>Comprar uma criatura na Loja cria o aliado direto na sua ficha, com Vida, Defesa, Iniciativa e ataque principal já preenchidos.</li>
+          <li>O aliado nasce com no máximo o dobro da Vida média de um personagem do mesmo nível, bem menos que a criatura tem nas mãos do Mestre.</li>
+          <li>VD (Valor de Desafio) é o nível do grupo que a criatura enfrenta sozinha. Quanto maior, mais difícil de matar e mais XP ela vale.</li>
+          <li>O que está à venda depende da campanha: o Mestre libera, e as criaturas únicas e as de VD muito alto ficam fora do balcão.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">As seis formas</h3>
       <ul class="regras-list">
-        <li><strong>Criaturas:</strong> animais, monstros e seres naturais capturados, domesticados ou criados em cativeiro. O que elas sabem fazer vem do corpo e do habitat, não de treino.</li>
+        <li><strong>Criaturas:</strong> animais, monstros e seres naturais capturados, domesticados ou criados em cativeiro. O que elas sabem fazer vem do corpo e do habitat.</li>
         <li><strong>Familiares:</strong> entidades pequenas ou criaturas inteligentes ligadas ao dono por vínculo mágico. Rendem mais fora de combate que dentro dele: percepção, apoio, recado.</li>
         <li><strong>Servos:</strong> seres criados ou treinados para cumprir tarefa, ligados à alma do dono e incapazes de traí-lo diretamente. Chegam com a sanidade abalada, em metade da barra e com dois traumas, e isso é parte do que eles são.</li>
         <li><strong>Invocações:</strong> seres temporários trazidos por magia, ritual ou dispositivo. Cumprem a função e vão embora no prazo do efeito que os chamou.</li>
@@ -2831,7 +3158,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Como uma criatura chega até você</h3>
       <ul class="regras-list">
         <li>Comprar no catálogo da Loja cria o aliado direto na sua ficha, com Vida, Defesa, Iniciativa e ataque principal preenchidos. Comprou três, aparecem três fichas. A Vida que a ficha recebe já é a de aliado, menor que a da criatura como inimigo (ver abaixo).</li>
-        <li>Daí em diante ela é sua responsabilidade: vida anotada, condições anotadas, turno próprio na iniciativa. O capítulo Aliados e Contratados explica como ela se comporta na mesa.</li>
+        <li>Daí em diante ela é sua responsabilidade: vida anotada, condições anotadas, turno próprio na iniciativa. Como ela se comporta na mesa está em <span class="regras-ref regras-ref--aliados">Aliados</span>.</li>
         <li>Invocação sustentada por um poder seu não vira entrada permanente: ela existe enquanto o poder existir.</li>
         <li>O que aparece à venda depende da campanha. Uma criatura que o Mestre não liberou não está no catálogo, e isso não é falha do sistema.</li>
       </ul>
@@ -2842,10 +3169,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Família:</strong> criaturas do mesmo corpo e tema formam uma escada de estágios, como o Dragão que vai de filhote a ancião. Quem sobe de estágio muda de nível, e o texto de cada uma diz o que ela ganhou.</li>
         <li><strong>Única:</strong> tem uma versão só, sem estágios, e não está à venda. As de VD muito alto também ficam só no Bestiário: servem ao Mestre, e não ao balcão da Loja.</li>
       </ul>
-      <p class="regras-note">Servo é o único tipo que já nasce com um problema junto. Antes de comprar um, combine com a mesa o que a sanidade abalada dele significa na sua história, porque essa parte não se resolve com número.</p>
+      <div class="regras-note regras-note--atencao">
+        <p>Servo é o único tipo que já nasce com um problema junto. Antes de comprar um, combine com a mesa o que a sanidade abalada dele significa na sua história, porque essa parte não se resolve com número.</p>
+      </div>
     `,
     corpoMestre: `
-      <p class="regras-lead">Este capítulo não publica uma lista fechada de preços: publica a fórmula. Você monta a criatura, aplica a faixa de nível e os traços, e o preço sai daí. Para vender ou contratar uma criatura específica, crie uma entrada do tipo monstro na Loja com o preço calculado por estas tabelas.</p>
+      <p class="regras-lead">Aqui está a fórmula do preço de uma criatura. Você monta a criatura, aplica a faixa de nível e os traços, e o preço sai daí. Para vender ou contratar uma criatura específica, crie uma entrada do tipo monstro na Loja com o preço calculado por estas tabelas.</p>
 
       <p class="regras-note">Acima do nível 50 a verba por sessão cresce mais depressa que o nível, então o valor por nível das tabelas abaixo sobe em degraus: de 51 a 99 vale a taxa de sempre, de 100 a 299 ela dobra, e do 300 em diante ela é 2,25 vezes a de sempre. Os extras (Arma, Perícia, Poder Ass e os outros) seguem o mesmo multiplicador. Assim contratar gente de nível alto custa a mesma fração de uma sessão de aventura que custava no nível 50, e não vira troco. As criaturas do Bestiário de VD 50 em diante não usam estas tabelas: o preço delas está no catálogo, em Fragmentos de Estrela, e acompanha a verba do VD (contratar custa metade da verba de uma sessão de um jogador do nível, e comprar custa dez contratações).</p>
 
@@ -2993,7 +3322,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Cofre', 'Proteção e limite de itens'],
     ],
     corpo: `
-      <p class="regras-lead">São quatro moedas, e elas não são degraus da mesma escada. Cada uma circula num lugar diferente do mundo, e é por isso que nem todas se trocam entre si.</p>
+      <p class="regras-lead">O Jardim tem quatro moedas. Cada uma circula num lugar diferente do mundo, e por isso nem todas se trocam entre si.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>As moedas são Lunaris (o dia a dia), Solares, Fragmentos de Estrela e Créditos Sombrios (o mercado negro).</li>
+          <li>O salário mínimo é de 300 Lunaris por mês, e cada degrau de raridade custa quatro vezes o anterior.</li>
+          <li>O Banqueiro converte Lunaris, Solares e Fragmentos, sempre passando pelo Solar e com 2% de taxa. Créditos Sombrios não têm câmbio.</li>
+          <li>O Cofre guarda dinheiro e item, cresce com o uso e pode ser roubado.</li>
+          <li>Dá para mandar item e moeda para outro personagem, e para negociar com Propor troca, que só vale depois do aceite.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">As quatro moedas</h3>
       <ul class="regras-sublist regras-sublist--grid">
@@ -3019,7 +3358,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </table></div>
 
       <h3 class="regras-subtitle">A escada dos preços</h3>
-      <p>Cada degrau de raridade custa quatro vezes o degrau anterior. Os valores abaixo valem para uma arma ou uma armadura, que servem de régua para o catálogo inteiro. Equipamento sai um pouco abaixo dessa régua, consumível bem abaixo, veículo e propriedade bem acima, sempre calculados a partir do mesmo número.</p>
+      <p>Cada degrau de raridade custa quatro vezes o degrau anterior. Os valores abaixo valem para uma arma ou uma armadura, que servem de régua para o catálogo inteiro. Equipamento sai um pouco abaixo dessa régua, consumível bem abaixo, veículo e propriedade bem acima, sempre calculados a partir do mesmo número. O catálogo inteiro, com os preços de cada item, está na <span class="regras-ref regras-ref--loja">Loja</span>.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Raridade</th><th>Preço de referência</th><th>Em salário mínimo</th></tr></thead>
         <tbody>
@@ -3047,9 +3386,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td><strong>100 Lunaris ☾</strong></td><td>1 Solar</td><td>100 Lunaris</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Créditos Sombrios ♆ são a moeda do mercado negro, das ruas que o Banco Lunar finge não ver. Não existe câmbio para eles: nenhum balcão do banco devolve Lunaris por Créditos, e nenhum vende Créditos por Lunaris. Eles chegam por negócio sujo, como vender uma mercadoria a um doleiro, e é no mercado negro que se gastam.</p>
-      <p class="regras-note">A conta é sempre a mesma: converta para Solares, converta para a moeda de destino e desconte os 2%. Trocar 10 Fragmentos por Lunaris dá 500 Solares, ou seja 50.000 Lunaris, menos a taxa: você recebe 49.000.</p>
-      <p>Converter resolve o troco, e só. Um veículo cotado em Lunaris e uma arma lendária cotada em Solares seguem economias separadas, cada uma pensada para o ritmo da própria categoria. Juntar Lunaris a vida inteira não é o caminho previsto para comprar um Fruto do Éden: Fragmentos e Créditos costumam vir de relíquia concedida pelo Mestre, de negócio no mercado negro ou de pagamento de quem não usa moeda comum.</p>
+      <div class="regras-note regras-note--atencao">
+        <p>Créditos Sombrios ♆ são a moeda do mercado negro, das ruas que o Banco Lunar finge não ver. Não existe câmbio para eles: nenhum balcão do banco devolve Lunaris por Créditos, e nenhum vende Créditos por Lunaris. Eles chegam por negócio sujo, como vender uma mercadoria a um doleiro, e é no mercado negro que se gastam.</p>
+      </div>
+      <p>A conta é sempre a mesma: converta para Solares, converta para a moeda de destino e desconte os 2%.</p>
+      <div class="regras-note regras-note--exemplo">
+        <p>Trocar 10 Fragmentos por Lunaris dá 500 Solares, ou seja 50.000 Lunaris, menos a taxa de 2%: você recebe 49.000.</p>
+      </div>
+      <p>Converter resolve o troco, e só isso. Um veículo cotado em Lunaris e uma arma lendária cotada em Solares seguem economias separadas, cada uma pensada para o ritmo da própria categoria. Para um Fruto do Éden, o caminho previsto passa por Fragmentos e Créditos, que costumam vir de relíquia concedida pelo Mestre, de negócio no mercado negro ou de pagamento de quem não usa moeda comum. Ver <span class="regras-ref regras-ref--frutos-implantes">Frutos e Implantes</span>.</p>
 
       <h3 class="regras-subtitle">O Cofre</h3>
       <p>O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.</p>
@@ -3205,7 +3549,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Compra', 'Pode virar aliado, base ou vínculo'],
     ],
     corpo: `
-      <p class="regras-lead">O catálogo inteiro tem ${totalItensLoja} itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.</p>
+      <p class="regras-lead">O catálogo inteiro tem ${totalItensLoja.toLocaleString('pt-BR')} itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Há quatro locais de compra: Feira de Vila, Metrópole, Mercado Negro e Banco Lunar. Comprar num local mostra tudo daquele nível para baixo.</li>
+          <li>O local de um item vem da raridade, da natureza do item e da moeda em que ele é cotado.</li>
+          <li>Mercado Negro e Banco Lunar começam trancados em toda campanha, e abri-los é decisão do Mestre.</li>
+          <li>Um item pode sumir do catálogo porque o local está fechado, porque a faixa de raridade foi escondida ou porque aquele item foi escondido.</li>
+          <li>Criatura, propriedade e Fruto do Éden não terminam em objeto comum: viram aliado, base e vínculo na sua ficha.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">Os quatro locais</h3>
       <div class="regras-table-wrap">
@@ -3220,7 +3574,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </table>
       </div>
       <p>Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.</p>
-      <p><strong>Armas, armaduras e escudos usam raridade por encomenda.</strong> O cartão mostra a versão Comum com o preço do próprio modelo, não um preço genérico de raridade. Dentro dos detalhes você escolhe até Lendário e vê, antes de comprar, o novo dano e crítico ou a nova Defesa e Resistências. Uma arma marcial ainda respeita seu piso de Metrópole mesmo quando Comum.</p>
+      <p><strong>Armas, armaduras e escudos usam raridade por encomenda.</strong> O cartão mostra a versão Comum com o preço do próprio modelo. Dentro dos detalhes você escolhe até Lendário e vê, antes de comprar, o novo dano e crítico ou a nova Defesa e Resistências. Uma arma marcial ainda respeita seu piso de Metrópole mesmo quando Comum.</p>
 
       <h3 class="regras-subtitle">O que decide o local de um item</h3>
       <ul class="regras-list">
@@ -3229,6 +3583,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Qualquer coisa cotada em Fragmentos de Estrela vai para o Banco Lunar, e qualquer coisa cotada em Créditos Sombrios vai para o Mercado Negro. A moeda denuncia o balcão.</li>
         <li>Implante, artefato e o que a descrição marca como ilegal, contrabando ou veneno caem no Mercado Negro por natureza.</li>
       </ul>
+      <div class="regras-note regras-note--exemplo">
+        <p>O grupo está na Metrópole e quer comprar um implante. Implante cai no Mercado Negro por natureza, então a Metrópole nem mostra a peça, e tentar comprá-la de lá é recusado na hora. Para comprar, o grupo precisa estar no Mercado Negro, e o Mestre precisa ter aberto esse local.</p>
+      </div>
 
       <h3 class="regras-subtitle">Por que um item some</h3>
       <p>Se um item que você viu antes não está mais lá, é uma destas três coisas, e nenhuma delas é falha do sistema:</p>
@@ -3241,14 +3598,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Quando a compra não é um objeto</h3>
       <p>Três categorias não terminam no inventário. Elas criam uma entrada viva na sua ficha, e a partir daí você é responsável por ela:</p>
       <ul class="regras-list">
-        <li><strong>Criatura:</strong> vira um aliado com ficha própria, editável. Ver Aliados e Contratados.</li>
-        <li><strong>Propriedade:</strong> vira uma base registrada, com espaços, instalações e conta mensal. Ver Bases e Propriedades.</li>
-        <li><strong>Fruto do Éden:</strong> entra no inventário, mas só vale quando consumido, e aí se liga à ficha para sempre. Ver Frutos do Éden e Implantes.</li>
+        <li><strong>Criatura:</strong> vira um aliado com ficha própria, editável. Ver <span class="regras-ref regras-ref--aliados">Aliados</span> e <span class="regras-ref regras-ref--bestiario">Criaturas e Companheiros</span>.</li>
+        <li><strong>Propriedade:</strong> vira uma base registrada, com espaços, instalações e conta mensal. Ver <span class="regras-ref regras-ref--bases">Propriedades e Bases</span>.</li>
+        <li><strong>Fruto do Éden:</strong> entra no inventário, mas só vale quando consumido, e aí se liga à ficha para sempre. Ver <span class="regras-ref regras-ref--frutos-implantes">Frutos e Implantes</span>.</li>
       </ul>
-      <p class="regras-note">Antes de comprar algo caro, confirme com a mesa em que local vocês estão. O mesmo item pode estar a duas prateleiras de distância, e ir até a prateleira certa costuma ser uma sessão inteira.</p>
+      <div class="regras-note regras-note--dica">
+        <p>Antes de comprar algo caro, confirme com a mesa em que local vocês estão. O mesmo item pode estar a duas prateleiras de distância, e ir até a prateleira certa costuma ser uma sessão inteira. Os preços seguem a escada de <span class="regras-ref regras-ref--economia">Economia</span>.</p>
+      </div>
     `,
     corpoMestre: `
-      <p class="regras-lead">A Loja é o seu controle de ritmo mais direto. Não é a carteira do grupo que decide o que eles alcançam: é qual balcão você abriu.</p>
+      <p class="regras-lead">A Loja é o seu controle de ritmo mais direto: o balcão que você abre decide o que o grupo alcança, seja qual for o tamanho da carteira.</p>
 
       <h3 class="regras-subtitle">Abrir os locais</h3>
       <ul class="regras-list">
@@ -3330,18 +3689,18 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </tbody>
       </table></div>
       <p>Como referência de calibragem: contra a DT Padrão do próprio nível, um especialista Treinado acerta cerca de 65% das vezes, e o generalista sem treino fica perto de 40%. Difícil derruba o especialista para uns 40%; Extrema é feito que normalmente depende de ajuda ou preparação.</p>
-      <p class="regras-note">A DT descreve a dificuldade da situação, não o resultado que você queria. Escolha antes de o jogador rolar; mudar depois de ver o dado é trapaça, mesmo quando é bem-intencionada.</p>
+      <p class="regras-note">A DT mede a dificuldade da situação, seja qual for o resultado que você prefere. Escolha antes de o jogador rolar; mudar depois de ver o dado é trapaça, mesmo quando é bem-intencionada.</p>
 
       <h3 class="regras-subtitle">Montar um encontro</h3>
       <ul class="regras-list">
         <li>Meça o dano real do grupo por rodada antes de decidir a Vida dos inimigos. Estimativa no papel erra bem mais que anotação de mesa.</li>
         <li>Um encontro padrão costuma aguentar cerca de quatro rodadas e meia de dano do grupo. Confronto curto usa três; chefe resistente, seis.</li>
         <li>Na Sessão, o botão Encontro faz essa conta por você. Escolha o nível do grupo, quantos jogadores e a dificuldade: fácil, padrão, difícil e mortal pedem 0,65, 1, 1,3 e 1,6 vezes a Vida de um encontro padrão para quatro jogadores, o que dá cerca de 3, 4,5, 6 e 7 rodadas. Ele sorteia criaturas do Bestiário, leva cada uma ao VD do grupo, ajusta a Vida delas à curva do nível e mostra o XP e as rodadas esperadas. Criatura que cura, controla ou atinge em área gasta mais orçamento: o montador tira Vida dela na mesma proporção (até 25%) e marca o cartão com Cura, Controle ou Área. Troque ou tire o que não servir antes de pôr na cena.</li>
-        <li>Conte ações, não corpos. As ações inimigas por rodada devem ficar perto das ações relevantes do grupo, um pouco abaixo ou um pouco acima.</li>
+        <li>O que pesa é o número de ações, e o de corpos importa menos. As ações inimigas por rodada devem ficar perto das ações relevantes do grupo, um pouco abaixo ou um pouco acima.</li>
         <li>Chefe sozinho precisa de reação, fase ou ação de cenário. Chefe que só tem Vida alta produz um combate longo e parado.</li>
         <li>Toda criatura única do Bestiário já traz as fases escritas. Na Sessão, quando a Vida do chefe cai ao limiar da fase, ela muda sozinha: você vê o que mudou, a mesa lê só a frase de cena, e a fase não volta atrás quando alguém cura o chefe. Dá para trocar a fase à mão no editor da criatura.</li>
         <li>As criaturas lendárias do Bestiário não disparam nada sozinhas quando chegam a 0 de Vida: o que muda no mundo com a queda, e quem fica sabendo, é decisão sua.</li>
-        <li>Terreno, cobertura e objetivo existem para mudar decisão, não para conceder mais um bônus numérico.</li>
+        <li>Terreno, cobertura e objetivo existem para mudar a decisão de quem joga. Evite usá-los só para conceder mais um bônus numérico.</li>
         <li>Nunca tire o turno inteiro de um jogador por mais de uma rodada seguida. Ficar olhando não é jogar.</li>
       </ul>
 
@@ -3368,7 +3727,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </tbody>
       </table></div>
       <ul class="regras-list">
-        <li>O dano da arma para de crescer no nível 35, nas relíquias da criação. Daí em diante o dano por acerto sobe só com o modificador de atributo, e um chefe fica maior com mais Vida, mais Defesa e mais ações, não com mais dano por golpe.</li>
+        <li>O dano da arma para de crescer no nível 35, nas relíquias da criação. Daí em diante o dano por acerto sobe só com o modificador de atributo, e um chefe fica maior com mais Vida, mais Defesa e mais ações, enquanto o dano por golpe fica onde está.</li>
         <li>A Defesa da tabela é a natural. Do nível 29 em diante quem investe na perícia de combate acerta quase sempre um inimigo do mesmo nível, e é a armadura, o escudo e os efeitos de cena que seguram a Defesa de um NPC forte.</li>
         <li>DT fixa (5 a 40) deixa de ser desafio a partir do nível 40. Acima disso use a DT padrão e a extrema da linha do nível.</li>
         <li>O bestiário escrito vai até o nível 50. A Vida dos monstros dele fica de metade a um pouco acima da coluna de inimigo padrão: criatura de bando é mais frágil que o encontro padrão, e o chefe passa dela.</li>

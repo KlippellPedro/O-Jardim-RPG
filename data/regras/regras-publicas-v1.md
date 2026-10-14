@@ -10,11 +10,23 @@
 
 O que é este jogo, quem faz o quê na mesa, como uma jogada se resolve e o significado das palavras que o resto do livro usa sem explicar de novo.
 
-Esta é a primeira página do livro e a única que não pressupõe nada. Se você nunca jogou RPG, ela sozinha já basta para sentar na mesa. Se você já joga há anos, pule para o Vocabulário no fim: é lá que estão as poucas palavras que O Jardim usa de um jeito próprio.
+Este é o tópico de entrada do livro e o único que não pressupõe nada. Se você nunca jogou RPG, ele sozinho já basta para sentar na mesa. Se você já joga há anos, pule para o Vocabulário, no fim: é lá que estão as poucas palavras que O Jardim usa de um jeito próprio.
+
+**Em resumo**
+
+- Um grupo conta uma história junto. Cada jogador comanda um personagem, e o Mestre descreve o mundo e interpreta todo o resto.
+
+- Quando o resultado de uma tentativa é incerto, você rola um **d20**, soma o seu bônus e compara com a **DT** que o Mestre escolheu. Igual ou maior, deu certo.
+
+- Um 20 natural no dado é sucesso crítico e um 1 natural é falha crítica, com qualquer bônus.
+
+- Em combate o tempo se divide em **rodadas**, e dentro de cada uma você joga o seu **turno**.
+
+- As palavras que o resto do livro usa sem explicar de novo estão no Vocabulário, mais abaixo.
 
 ### O que é um RPG de mesa
 
-Um grupo de pessoas conta uma história junta. Cada jogador controla um personagem e decide o que ele tenta fazer. Uma pessoa, o Mestre, descreve o mundo, interpreta todo o resto e diz o que acontece depois de cada escolha.
+Um grupo de pessoas conta uma história junto. Cada jogador controla um personagem e decide o que ele tenta fazer. Uma pessoa, o Mestre, descreve o mundo, interpreta todo o resto e diz o que acontece depois de cada escolha.
 
 Ninguém ganha e ninguém perde. O que existe é uma história que sai melhor quando todo mundo empurra junto. As regras deste livro entram só quando o resultado de uma tentativa é incerto e ninguém quer decidir no dedo: aí o dado decide.
 
@@ -22,7 +34,7 @@ Ninguém ganha e ninguém perde. O que existe é uma história que sai melhor qu
 
 - **Jogador:** descreve o que o personagem faz, rola os dados dele e cuida da própria ficha.
 
-- **Mestre:** descreve a cena, controla os inimigos e os personagens do mundo, escolhe a dificuldade das tentativas e narra o resultado. É juiz e narrador, não adversário.
+- **Mestre:** descreve a cena, controla os inimigos e os personagens do mundo, escolhe a dificuldade das tentativas e narra o resultado. Ele conduz o jogo e julga as regras, e a função dele é fazer a história funcionar para todo mundo.
 
 - **Ficha:** a página do seu personagem no site. Guarda os números, o inventário, as magias e o histórico. Ela faz as contas sozinha; você decide o que fazer com elas.
 
@@ -30,7 +42,7 @@ Ninguém ganha e ninguém perde. O que existe é uma história que sai melhor qu
 
 ### Como uma jogada se resolve
 
-Quase tudo neste jogo passa pela mesma conta. Você rola um d20, soma seus bônus e compara com um número de dificuldade que o Mestre escolheu, chamado de DT.
+Quase tudo neste jogo passa pela mesma conta. Você rola um d20, soma seus bônus e compara o total com um número de dificuldade que o Mestre escolheu, chamado de DT.
 
 d20 + bônus do personagem contra a DT da situação
 
@@ -42,7 +54,13 @@ d20 + bônus do personagem contra a DT da situação
 
 - Às vezes você rola dois d20 e usa o melhor (vantagem) ou o pior (desvantagem).
 
-Exemplo: sua personagem quer arrombar uma fechadura. O Mestre diz que a DT é 15. Ela tem Destreza 16 (bônus +3), está no nível 4 (mais 2) e é Aprendiz em Ladinagem (mais 2). O bônus total é +7. Você rola o d20, tira 9, soma 7 e chega a 16. Passou de 15: a fechadura abre.
+**Exemplo:**
+
+Sua personagem quer arrombar uma fechadura. O Mestre diz que a DT é 15. Ela tem Destreza 16 (bônus +3), está no nível 4 (mais 2) e é Aprendiz em Ladinagem (mais 2). O bônus total é +7. Você rola o d20, tira 9, soma 7 e chega a 16. Passou de 15: a fechadura abre.
+
+**Dica de mesa:**
+
+Você não precisa saber de cabeça qual perícia usar. Diga o que o seu personagem quer fazer e deixe o Mestre dizer qual teste vale.
 
 ### Como uma sessão anda
 
@@ -58,7 +76,7 @@ Fora de combate o jogo é conversa: o Mestre descreve, você responde, e só se 
 
 ### Vocabulário
 
-Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar em alguma no meio de outro capítulo, volte aqui.
+Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar em alguma no meio de outro tópico, volte aqui.
 
 - Termo | O que quer dizer
 
@@ -66,7 +84,7 @@ Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar
 
 - Teste | Qualquer rolagem de d20 contra uma DT.
 
-- Grau | O quanto você treinou uma perícia, de Iniciante a Absoluto. Cada degrau vale um bônus fixo.
+- Grau | O quanto você treinou uma perícia, de Iniciante a Absoluto. Cada degrau vale um bônus fixo. Os graus estão em Perícias.
 
 - Atributo | Os sete números que descrevem o personagem: Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo.
 
@@ -76,7 +94,7 @@ Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar
 
 - Cansaço | Uma trilha de 0 a 6 que mede desgaste acumulado. Quanto mais alto, pior você joga.
 
-- Condição | Um estado que gruda no personagem por um tempo, como Caído, Cego ou Sangramento.
+- Condição | Um estado que gruda no personagem por um tempo, como Caído, Cego ou Sangramento. A lista inteira está em Condições.
 
 - Defesa | O número que um inimigo precisa alcançar para acertar você.
 
@@ -84,19 +102,21 @@ Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar
 
 - Árvore | A realidade de onde seu personagem vem. Cada Árvore tem sua deidade, seus povos e suas opções exclusivas.
 
-- Legado | Uma escolha permanente que você faz em certos níveis (de cinco em cinco no começo, mais espaçados depois do 50) e que muda como o personagem funciona.
+- Legado | Uma escolha permanente que você faz em certos níveis (de cinco em cinco no começo, mais espaçados depois do 50) e que muda como o personagem funciona. Veja Legados.
 
 - NPC | Qualquer personagem controlado pelo Mestre, de um taverneiro a um dragão.
 
-- ⌊ ⌋ | Arredonde para baixo e ignore a fração. ⌊Nível ÷ 2⌋ no nível 7 dá 3, não 3,5.
+- ⌊ ⌋ | Arredonde para baixo e ignore a fração: no nível 7, ⌊Nível ÷ 2⌋ dá 3.
 
 ### Por onde continuar
+
+O livro não precisa ser lido de ponta a ponta. Escolha o caminho que combina com o que você vai fazer na mesa e deixe o resto para quando aparecer.
 
 - **Nunca jogou:** vá para Criação de Personagem e monte um com o Mestre do lado. Depois leia Perícias e Combate, nessa ordem. O resto você consulta quando aparecer na mesa.
 
 - **Já joga RPG:** leia Sistema Base e Perícias para pegar as fórmulas, depois Combate e Ferimentos, que é onde O Jardim mais se afasta do que você já conhece.
 
-- **Vai conjurar:** Magia e Fluxos é a página mais longa do livro de propósito. Leia até "Teste e DT de magia" e volte ao resto quando subir de círculo.
+- **Vai conjurar:** Magia e Fluxo é longo de propósito. Leia até "Teste e DT de magia" e volte ao resto quando subir de círculo.
 
 - **Vai mestrar:** comece pelo Guia do Mestre e tenha Condições e Ferimentos abertos na primeira sessão.
 
@@ -108,7 +128,17 @@ Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar
 
 Um roteiro completo para criar um personagem de nível 1, escolher suas opções e conferir todos os valores da ficha.
 
-O assistente de criação da ficha segue estas sete etapas. Faça as escolhas na ordem apresentada: opções posteriores dependem da Árvore, da raça e da classe escolhidas antes.
+Criar um personagem leva sete etapas, e o assistente da ficha acompanha todas elas. Este tópico explica o que cada etapa pede e termina com a conferência dos números que a ficha pronta precisa mostrar. Faça as escolhas na ordem apresentada, porque as opções de cada etapa dependem da Árvore, da raça e da classe que você escolheu antes.
+
+**Em resumo**
+
+- O personagem nasce no **nível 1**, com uma classe comum. Raça ou classe especial só entra com liberação do Mestre.
+
+- As sete etapas, nesta ordem: nome e Árvore, raça, classe, divindade, atributos, perícias e equipamento, e a conferência da ficha.
+
+- Atributos pelo conjunto padrão (15, 14, 13, 12, 10, 8 e 8) ou por compra de pontos (24 pontos). O método de 7d20 só vale com a concordância da mesa.
+
+- Você começa com seis perícias em Aprendiz (Humano escolhe sete), um item comum e 20 Lunaris.
 
 ### Antes de começar
 
@@ -140,11 +170,11 @@ Escolha o nome do personagem e a Árvore à qual ele pertence. A Árvore determi
 
 ### 4. Divindade
 
-Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo; não concede poderes além dos declarados por raça, classe, item ou outra regra.
+Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo. Ela não concede poderes além dos declarados por raça, classe, item ou outra regra.
 
 ### 5. Atributos
 
-Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo. Depois disso, a ficha aplica os ajustes raciais.
+Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo. Depois disso, a ficha aplica os ajustes raciais. Há três métodos:
 
 - **Conjunto padrão:** 15, 14, 13, 12, 10, 8 e 8. Cada número é usado uma vez.
 
@@ -160,7 +190,11 @@ Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabe
 
 - Registre **20 Lunaris**. Nenhuma nova classe escolhida no futuro concede outro equipamento ou dinheiro inicial.
 
+As perícias e o que cada grau significa estão em Perícias. As contas de Vida, Mana e Estamina estão em Sistema Base.
+
 ### 7. Conferência da ficha
+
+Com tudo escolhido, a ficha mostra os números abaixo. Confira cada um contra a conta:
 
 - **Nível e XP:** nível total 1 e 0 XP
 
@@ -182,7 +216,13 @@ Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabe
 
 - **Iniciativa:** 10 + ⌊Nível total ÷ 2⌋ + Mod.Destreza + bônus
 
-**Não some ajustes duas vezes:** a ficha calcula os derivados e aplica raça e equipamento automaticamente. Use ajustes manuais apenas para efeitos que ainda não estejam representados no sistema.
+**Exemplo:**
+
+Um personagem com Destreza 15 e sem ajuste racial nessas contas tem Mod.Destreza +2. A Defesa Natural dele é 10 + 0 + 2 = 12, porque ⌊1 ÷ 2⌋ vale 0 no nível 1. O Movimento é 9 m + (1,5 m × 2) = 12 m. A Iniciativa é 10 + 0 + 2 = 12.
+
+**Atenção:**
+
+Não some os ajustes duas vezes. A ficha calcula os derivados e aplica raça e equipamento automaticamente. Use ajustes manuais apenas para efeitos que ainda não estejam representados no sistema.
 
 ### Checklist final
 
@@ -206,13 +246,27 @@ Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabe
 
 As fórmulas fundamentais, níveis e multiclasse, maestrias e o papel do atributo Fluxo.
 
-Esta é a página de consulta: todas as contas que a ficha faz por você, reunidas num lugar só. Você não precisa decorar nenhuma delas para jogar. Dois avisos de leitura: ⌊ ⌋ quer dizer "arredonde para baixo", e "Mod." é o modificador de um atributo, que sai da primeira linha da tabela.
+Este é o tópico de consulta: todas as contas que a ficha faz por você, reunidas num lugar só. Você não precisa decorar nenhuma delas para jogar. Dois avisos de leitura: ⌊ ⌋ quer dizer "arredonde para baixo", e "Mod." é o modificador de um atributo, que sai da primeira linha da primeira tabela.
+
+**Em resumo**
+
+- O modificador de um atributo é ⌊(Atributo − 10) ÷ 2⌋. Todo teste soma ao d20 esse modificador, metade do nível (arredondada para baixo) e o bônus do grau da perícia.
+
+- Vida, Mana e Estamina têm uma conta no nível 1 e um ganho fixo da classe a cada nível seguinte. A Estamina paga o que o corpo faz, e a Mana paga o que é místico.
+
+- Cada classe vai até o nível 50. O padrão do jogo é duas classes comuns e uma especial, o que fecha em 60 níveis totais.
+
+- Atributo que chega a 20 por mérito próprio dá uma maestria. Item, pacto ou efeito temporário não conta.
 
 ### Fórmulas fundamentais
+
+Teste e modificador
 
 - **Modificador:** ⌊(Atributo − 10) ÷ 2⌋
 
 - **Teste:** d20 + Mod. de Atributo + ⌊Nível ÷ 2⌋ + Grau
+
+Vida, Mana e Estamina
 
 - **Vida no nível 1:** máx. 1, (4 × Mod.Constituição) + Vida da classe
 
@@ -228,6 +282,8 @@ Esta é a página de consulta: todas as contas que a ficha faz por você, reunid
 
 - **Ajustes raciais:** bônus raciais de Vida, Mana e Estamina são somados depois do cálculo correspondente
 
+Defesa, movimento e iniciativa
+
 - **Defesa Natural:** 10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais
 
 - **Movimento:** 9 m + (1,5 m × Mod.Destreza) + ajuste da raça ou morfologia, mínimo 4,5 m
@@ -235,6 +291,8 @@ Esta é a página de consulta: todas as contas que a ficha faz por você, reunid
 - **Iniciativa:** 10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + bônus
 
 ### Mana e Estamina
+
+Os dois recursos pagam coisas diferentes, e saber qual paga o quê evita a maior parte das dúvidas na hora de gastar.
 
 - **Estamina** paga o que o corpo faz: golpe, postura, salto, grito de comando, trabalho de mãos. A mesma barra serve a quem luta na Força e a quem luta na Destreza, porque a base usa o maior dos dois.
 
@@ -248,9 +306,7 @@ Esta é a página de consulta: todas as contas que a ficha faz por você, reunid
 
 ### Nível e multiclasse
 
-- **Nível total** é a soma dos níveis de todas as suas classes, incluindo as especiais. Ele não tem teto.
-
-- Cada classe vai até o **nível 50**. As recompensas escritas dela terminam no 20. Do 21 ao 50 ela soma Vida, Mana e Estamina a cada nível e ganha a Maestria de classe, um marco de 5 em 5 níveis (ver Poderes e Habilidades).
+O **nível total** é a soma dos níveis de todas as suas classes, incluindo as especiais, e não tem teto. Cada classe, por sua vez, vai até o **nível 50**. As recompensas escritas dela terminam no 20. Do 21 ao 50 ela soma Vida, Mana e Estamina a cada nível e ganha a Maestria de classe, um marco de 5 em 5 níveis (ver Poderes e Habilidades).
 
 - O padrão do jogo é **duas classes comuns e uma especial**, que fecha em 60 níveis totais. Passando do 60 a ficha aceita mais classes e mais níveis, e só marca o patamar novo (ver Experiência e Níveis).
 
@@ -262,7 +318,7 @@ Esta é a página de consulta: todas as contas que a ficha faz por você, reunid
 
 ### Maestria de atributo
 
-Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Não confunda com a Maestria de classe, que vem dos níveis 21 a 50 de uma classe (ver Poderes e Habilidades). Atributo não tem valor máximo: passando do 20 ele segue subindo, e o modificador continua sendo a conta de sempre.
+Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Atributo não tem valor máximo: passando do 20 ele segue subindo, e o modificador continua sendo a conta de sempre.
 
 - **Força:** uma vez por turno, +2 no dano de um ataque corpo a corpo.
 
@@ -276,6 +332,10 @@ Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeit
 
 - **Carisma:** uma vez por cena, repita um teste social; mantenha o novo resultado.
 
+**Atenção:**
+
+Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Não confunda com a Maestria de classe, que vem dos níveis 21 a 50 de uma classe (ver Poderes e Habilidades).
+
 ### Fluxo
 
 **Fluxo** é o sétimo atributo, e mede o quanto você controla aquilo que canaliza. Em magia ele entra no lugar do atributo que normalmente acompanharia Misticismo, e é ele que diz até que círculo a conjuração sai com folga (o Fluxo recomendado de cada círculo está em Magia e Fluxo). Fluxo alto sozinho não ensina magia nenhuma: alguém precisa te dar acesso, seja uma classe, uma habilidade, um item ou o Mestre.
@@ -288,11 +348,19 @@ Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeit
 
 Uma fórmula só, usada em perícia, ataque e resistência. Doze graus, e vantagem e desvantagem que se cancelam uma a uma.
 
-### Fórmula de teste
-
 É esta conta, e é sempre esta conta. Perícia, ataque, resistência: muda o atributo e muda o grau, o resto é igual.
 
 d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau
+
+**Em resumo**
+
+- Todo teste soma ao d20 o modificador do atributo, metade do nível total (arredondada para baixo) e o bônus do grau da perícia.
+
+- São 12 graus de perícia, de Iniciante a Absoluto, e os mais altos só abrem em níveis totais altos.
+
+- 20 natural no d20 é sucesso crítico, e 1 natural é falha crítica.
+
+- Vantagem e desvantagem se cancelam uma a uma. Se sobrar saldo, vale uma vantagem ou uma desvantagem, nunca em dobro.
 
 ### Graus de perícia
 
@@ -322,9 +390,13 @@ d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau
 
 - Absoluto | +22 | 7 fontes | 500
 
-Lendário, Mítico, Cósmico, Eterno e Absoluto só abrem quando o nível total chega a 60, 100, 150, 250 e 500, que são os patamares de Experiência e Níveis. É onde o personagem já passou do jogo padrão. Até o 60, o degrau mais alto que o nível permite é Renomado.
+Lendário, Mítico, Cósmico, Eterno e Absoluto só abrem quando o nível total chega a 60, 100, 150, 250 e 500, que são os patamares de Experiência e Níveis. É onde o personagem já passou do jogo padrão. Até o 60, o degrau mais alto que o nível permite é Renomado. Subir de grau por treino está em Treinamento.
 
-**Vantagem do grau.** Do Veterano em diante o próprio grau conta como fonte de vantagem em todo teste daquela perícia, e também no ataque quando a perícia é Luta ou Pontaria e na conjuração quando é Misticismo. É uma fonte no Veterano e mais uma a cada grau acima. Como as fontes de vantagem e de desvantagem se cancelam uma a uma e nunca viram vantagem dupla, as fontes extras compram segurança: um Renomado (2 fontes) ainda rola com vantagem com uma desvantagem em cima, e só perde a vantagem quando as desvantagens passam das fontes dele.
+### Vantagem do grau
+
+Do Veterano em diante o próprio grau conta como fonte de vantagem em todo teste daquela perícia, e também no ataque quando a perícia é Luta ou Pontaria e na conjuração quando é Misticismo. É uma fonte no Veterano e mais uma a cada grau acima. Como as fontes de vantagem e de desvantagem se cancelam uma a uma e nunca viram vantagem dupla, as fontes extras compram segurança: um Renomado (2 fontes) ainda rola com vantagem com uma desvantagem em cima, e só perde a vantagem quando as desvantagens passam das fontes dele.
+
+**Atenção:**
 
 Duas palavras iguais: o **grau Mestre** é um degrau de perícia (+8), e o **Mestre** da mesa é quem conduz o jogo. O livro escreve os dois com M maiúsculo e o contexto diz qual é.
 
@@ -342,9 +414,13 @@ Duas palavras iguais: o **grau Mestre** é um degrau de perícia (+8), e o **Mes
 
 - Role dois d20 e use o maior com vantagem, ou o menor com desvantagem.
 
-- Anote cada fonte de vantagem e cada fonte de desvantagem. Elas se cancelam uma a uma, não em bloco.
+- Anote cada fonte de vantagem e cada fonte de desvantagem. Elas se cancelam uma a uma, e não em bloco.
 
 - O que sobrar decide: qualquer saldo positivo vira *uma* vantagem, qualquer saldo negativo vira *uma* desvantagem. Não existe vantagem dupla.
+
+**Exemplo:**
+
+Você tem três fontes de vantagem e uma de desvantagem. Uma vantagem cancela a desvantagem, e as duas que sobram valem uma vantagem só: você rola dois d20 e usa o maior.
 
 ### Catálogo de perícias
 
@@ -422,6 +498,14 @@ Como ajudar outro personagem e como resolver situações em que o grupo inteiro 
 
 Nem toda ação coletiva usa a mesma resolução. Se uma pessoa executa a tarefa e as outras dão suporte, use **Ajudar**. Se todos estão expostos ao mesmo desafio e cada integrante importa, use um **Teste de Grupo**.
 
+**Em resumo**
+
+- **Ajudar:** o ajudante descreve uma contribuição concreta e testa contra DT 10. Em sucesso, o teste principal ganha +2, ou vantagem se o sucesso for crítico. No máximo dois ajudantes por teste.
+
+- **Teste de Grupo:** todos os expostos testam contra a mesma DT, e o grupo vence se pelo menos metade dos participantes, arredondada para cima, tiver sucesso.
+
+- Ajudar e Teste de Grupo não se misturam na mesma resolução, e nenhum dos dois permite somar dano, fundir magias nem transferir efeitos.
+
 ### Ajudar
 
 - Antes da rolagem principal, o ajudante descreve uma contribuição concreta e escolhe uma perícia adequada. Ela pode ser a mesma do líder ou outra que realmente ajude naquela situação.
@@ -456,7 +540,9 @@ Use quando todos precisam atravessar o mesmo perigo: o grupo inteiro se esgueira
 
 - Se o grupo falhar, a consequência atinge o grupo ou apenas quem falhou, conforme a natureza do perigo. O Mestre informa qual leitura vale antes das rolagens.
 
-**Exemplo:** quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conseguir dois sucessos comuns e uma falha crítica, a falha crítica cancela um deles e o grupo falha.
+**Exemplo:**
+
+Quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conseguir dois sucessos comuns e uma falha crítica, a falha crítica cancela um deles e o grupo falha.
 
 ### Quando não usar Teste de Grupo
 
@@ -470,7 +556,7 @@ Use quando todos precisam atravessar o mesmo perigo: o grupo inteiro se esgueira
 
 ### Ações coletivas maiores
 
-Projetos de vários dias usam as regras da atividade correspondente, como treinamento, ritual ou fabricação. Ataques sincronizados usam o capítulo **Ataques Combinados**. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.
+Projetos de vários dias usam as regras da atividade correspondente, como treinamento, ritual ou fabricação. Ataques sincronizados usam Ataques Combinados. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.
 
 ## ataques-combinados
 
@@ -481,6 +567,16 @@ Projetos de vários dias usam as regras da atividade correspondente, como treina
 Regras para sincronizar ataques contra um alvo sem criar ações, recursos ou efeitos adicionais.
 
 Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo tempo. Cada participante continua usando sua própria arma, magia, teste e recurso.
+
+**Em resumo**
+
+- Participam de 2 a 4 voluntários, todos contra o mesmo alvo, e cada um gasta a própria Ação Padrão e uma reação na preparação.
+
+- O ataque é resolvido no primeiro turno do líder depois que todos se prepararam. O líder só escolhe o momento e não empresta bônus a ninguém.
+
+- Cada acerto causa o dano normal da contribuição, e cada erro não causa dano nem devolve ações ou recursos. Resistência e vulnerabilidade valem por contribuição.
+
+- Quem for derrubado antes da resolução perde a contribuição, e se o líder cair outro participante preparado assume.
 
 ### Requisitos
 
@@ -528,7 +624,7 @@ Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo
 
 - Somar danos não altera tipo, alcance, área, duração ou efeito das magias.
 
-- Ataque Combinado entre personagens não é Fusão de Fluxos. Ele não cria um novo efeito.
+- Ataque Combinado entre personagens não é Fusão de Fluxos (ver Rituais, Selos e Fusão). Ele não cria um novo efeito.
 
 ## perseguicao-a-pe
 
@@ -539,6 +635,16 @@ Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo
 Alguém correu, e a cena vira uma disputa de faixas de distância, com a cidade inteira no caminho. Vale para fuga, captura e para a perseguição que atravessa metade de um bairro.
 
 Quando alguém corre e alguém vai atrás, a cena muda de ritmo. A respiração fica curta, a cidade vira obstáculo e cada esquina pode ser a última chance de alcançar, ou de sumir. A perseguição usa as mesmas faixas de distância da perseguição de veículos, e cada rodada move essas faixas conforme o que cada lado tentou.
+
+**Em resumo**
+
+- A distância usa as mesmas faixas da perseguição de veículos (ver Perseguições e Combate Veicular), de Contato a Escapou. Quem persegue quer chegar a Contato, e quem foge quer chegar a Escapou.
+
+- A cada rodada o Mestre descreve o terreno e um obstáculo, cada lado declara uma manobra e testa. Quem vence move uma faixa a favor, ou duas se vencer por 10 ou mais.
+
+- A perseguição dura 6 rodadas. A partir da rodada 4, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.
+
+- Contato leva ao combate, Escapou encerra a cena, e o relógio fechado deixa os dois lados sabendo mais um do outro.
 
 ### As faixas
 
@@ -638,6 +744,16 @@ Interrogatório, negociação e audiência resolvidos em rodadas, com a Resistê
 
 Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo para dizer, e cada palavra errada fecha uma porta. Um pedido simples continua sendo um teste só. Esta página é para as outras conversas: arrancar a verdade de um preso, fechar preço com quem não precisa vender, convencer um conselho que já decidiu antes de vocês entrarem.
 
+**Em resumo**
+
+- A conversa difícil é resolvida em rodadas, com duas contagens: a **Resistência** da pessoa desce a cada argumento que funciona, e a **Paciência** dela sobe a cada erro.
+
+- Cada personagem faz uma abordagem por rodada: diga o que fala, com a voz do personagem, e só depois role. A DT é a Padrão do nível do grupo, ou a Difícil quando a pessoa tem posição a defender.
+
+- Resistência a 0 faz a pessoa ceder, sempre dentro do **Limite**, que é o que ela não faz de jeito nenhum. Paciência cheia encerra a conversa pior do que ela começou.
+
+- A Paciência tem 4 partes. Num interrogatório, cada ponto de Resistência que cai entrega uma informação na hora.
+
 ### As duas contagens
 
 - **Resistência** é o quanto falta para a pessoa ceder. Ela desce com argumento, prova, pressão e concessão, e a mesa vê isso acontecer: a pessoa senta, serve uma bebida, baixa a voz.
@@ -710,17 +826,33 @@ Nenhuma dessas rolagens controla a mente de ninguém. Elas mudam a posição de 
 
 O que você faz no seu turno, como acertar, quando dá para reagir e de que jeito o dano entra.
 
+Combate começa quando a conversa acaba e alguém decide resolver no golpe. Este tópico reúne o que você faz no seu turno, como acertar um ataque, como segurar ou derrubar alguém, como se defender e o que as reações permitem. Dano, ferimentos e condições têm tópicos próprios, indicados ao longo do texto.
+
+**Em resumo**
+
+- Iniciativa é um número fixo da ficha, que você calcula uma vez e usa em todo combate. Não se rola.
+
+- No seu turno você tem uma Ação Padrão e uma Ação de Movimento, além de gestos livres. Uma reação por rodada fica guardada para o turno dos outros.
+
+- O ataque é d20 + Luta ou Pontaria contra a Defesa Natural. Empatar acerta, e um 1 natural sempre erra. A margem de ameaça da arma define o crítico.
+
+- Manobras (agarrar, derrubar, empurrar, desarmar, imobilizar) usam a mesma rolagem, contra 10 mais o bônus da defesa passiva do alvo.
+
+- As reações são Esquiva, Bloqueio, Contra-Ataque e Proteger.
+
 ### Iniciativa
 
 Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você calcula uma vez e usa em todo combate.
 
-- Iniciativa = 10 + metade do nível + Mod.Destreza + bônus.
+Iniciativa = 10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + bônus
 
 - Empate se resolve pelo maior Mod.Sabedoria. Se persistir, personagens agem antes de NPCs.
 
 - Surpreendido leva −5 na primeira rodada. Atrasar baixa sua posição de vez, pelo resto do combate.
 
 ### Seu turno
+
+A cada turno você escolhe o que fazer com estes tipos de ação:
 
 - **Ação Padrão:** atacar, usar uma habilidade, ajudar alguém ou tentar uma manobra.
 
@@ -730,13 +862,15 @@ Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você cal
 
 - **Ação Livre:** um gesto, uma fala curta ou soltar um objeto. Não realiza testes, ataques nem ativa habilidades, salvo quando uma regra específica permitir.
 
-- Dá para trocar sua Ação Padrão por uma segunda Ação de Movimento. Correr custa o ataque.
+Dá para trocar sua Ação Padrão por uma segunda Ação de Movimento. Correr custa o ataque.
 
 ### Ataques e cobertura
 
 d20 + Luta ou Pontaria contra a Defesa Natural
 
-- Empatar com a Defesa já acerta. Um 1 natural sempre erra, não importa o bônus.
+Empatar com a Defesa já acerta. Um 1 natural sempre erra, não importa o bônus. Cobertura parcial dá +2 de Defesa; cobertura superior dá +5.
+
+Críticos
 
 - Cada arma traz sua **Margem de Ameaça** e seu **Multiplicador Crítico**, escritos como 20/x2, 19-20/x2 ou 20/x3.
 
@@ -748,7 +882,11 @@ d20 + Luta ou Pontaria contra a Defesa Natural
 
 - Margem larga e multiplicador alto não andam juntos: 18-20 e 19-20 sempre com x2; x3 e x4 sempre com margem 20.
 
-- Cobertura parcial dá +2 de Defesa; cobertura superior dá +5.
+**Exemplo:**
+
+Bia ataca com uma espada 19-20/x2 que causa 1d8+4, e o bônus total dela em Luta é +9. O bandido tem Defesa 14. Ela tira 17 no d20: 17 + 9 = 26, acima de 14, então acerta. Como o 17 está fora da margem 19-20, o dano é o normal, 1d8+4. Se tivesse tirado 19, o ataque seria crítico e o dano subiria para 2d8+4.
+
+O que cada tipo de dano faz, e como a Resistência entra na conta, está em Tipos de Dano.
 
 ### Manobras
 
@@ -774,6 +912,8 @@ d20 + Luta contra 10 + Reflexos ou Fortitude do alvo
 
 - Manobra não causa dano por si só. Habilidade que somar dano a uma manobra diz isso no texto.
 
+Agarrado, Caído e Imobilizado são condições, e todas estão em Condições.
+
 ### Defesas passivas
 
 - Quando alguém age contra sua Fortitude, Reflexos ou Vontade sem pedir rolagem, use **10 + bônus total**. É essa conta que sustenta a coluna "Contra" da tabela de Manobras acima.
@@ -781,6 +921,8 @@ d20 + Luta contra 10 + Reflexos ou Fortitude do alvo
 - Quando você resiste ativamente a um perigo, role o d20 com esse mesmo bônus.
 
 ### Reações
+
+**Regra:**
 
 Você tem uma reação por rodada e recupera ela no começo do seu próprio turno. Defesa Natural funciona sozinha e não gasta reação nenhuma.
 
@@ -794,7 +936,7 @@ Você tem uma reação por rodada e recupera ela no começo do seu próprio turn
 
 - Proteger | Aliado adjacente é atacado | Você vira o alvo e pode usar Bloqueio, se ainda tiver reação.
 
-As famílias de dano, os sete elementos fixos e como a Resistência entra na conta ficam no capítulo **Tipos de Dano**.
+Depois de um combate, o corpo cobra o que ele custou: veja Ferimentos e Descanso.
 
 ## tipos-de-dano
 
@@ -805,6 +947,16 @@ As famílias de dano, os sete elementos fixos e como a Resistência entra na con
 Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos com as quatorze derivações, o dano de ambiente e a ordem certa para aplicar Resistência.
 
 Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade e qualquer efeito que "protege contra um tipo de dano" sempre apontam para uma entrada específica daqui, nunca para "dano" de forma genérica.
+
+**Em resumo**
+
+- Todo dano pertence a uma de cinco famílias: Físico, Persistente, Mágico, Tecnológico e Mental.
+
+- São sete elementos fixos, sem oitavo. Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio.
+
+- Frio e Calor são dano de ambiente. Eles vêm do lugar, e Gelo e Fogo vêm de um golpe: são tipos diferentes.
+
+- Resistência vale sempre por tipo específico, e entra por último na conta: multiplicador crítico, dados extras, vulnerabilidade e só então a Resistência, até o mínimo 0.
 
 ### As cinco famílias
 
@@ -820,7 +972,7 @@ Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade
 
 ### Dano elemental
 
-São estes sete, e não existe um oitavo. Só elemento e derivação contam como dano elemental: ácido, por exemplo, não é elemento, então fica entre os persistentes. A **Polifonia Elemental** do Elementarista fixa um elemento de origem. Antes de conjurar uma magia catalogada como *Elemental*, ele declara qual elemento dominado está usando: quem possui afinidade única sempre declara o de origem; um Avatar pode declarar qualquer elemento que tenha aprendido. O elemento declarado define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração.
+São estes sete, e não existe um oitavo. Só elemento e derivação contam como dano elemental: ácido, por exemplo, não é elemento, então fica entre os persistentes.
 
 - Elemento | Como costuma se manifestar
 
@@ -838,9 +990,15 @@ São estes sete, e não existe um oitavo. Só elemento e derivação contam como
 
 - Escuridão | Sombra espessa o bastante pra engolir contorno e som. Apaga a luz mundana da área, confunde quem tenta mirar e esconde o que não quer ser visto.
 
-A relação de vantagem entre os elementos e as derivações do Elementarista estão no capítulo **Elementos e Derivações**.
+A relação de vantagem entre os elementos e as derivações do Elementarista estão em Elementos e Derivações.
+
+**Regra:**
 
 Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. O elemento de origem é permanente; aprender outro exige o Caminho do Avatar. Quando um item, modificação, encantamento ou Selo pedir "um elemento", esse elemento é escolhido ou fixado na criação conforme a própria fonte e não muda a afinidade de uma criatura.
+
+Para o Elementarista
+
+A **Polifonia Elemental** do Elementarista fixa um elemento de origem. Antes de conjurar uma magia catalogada como *Elemental*, ele declara qual elemento dominado está usando: quem possui afinidade única sempre declara o de origem; um Avatar pode declarar qualquer elemento que tenha aprendido. O elemento declarado define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração.
 
 **Elementarista:** Polifonia Elemental fixa um único elemento de origem, libera as magias Elementais e concede uma vaga de magia no 1º nível. Somente quem desperta como Avatar no Julgamento da Aptidão pode aprender outros elementos; mesmo nesse caso, a derivação e os benefícios que citam o elemento de origem continuam ligados apenas a ele.
 
@@ -848,7 +1006,7 @@ Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: q
 
 ### Derivações também são tipos de dano
 
-Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio, do mesmo jeito que o elemento: existe dano de Gelo, de Magma, de Areia, de Plasma, de Sangue, e assim por diante. Gelo é derivação de Água e tem Resistência própria. A lista completa, com o que cada derivação faz, está no capítulo **Elementos e Derivações**.
+Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio, do mesmo jeito que o elemento: existe dano de Gelo, de Magma, de Areia, de Plasma, de Sangue, e assim por diante. Gelo é derivação de Água e tem Resistência própria. A lista completa, com o que cada derivação faz, está em Elementos e Derivações.
 
 - Resistência, vulnerabilidade e imunidade a uma derivação valem só para ela, por inteiro.
 
@@ -870,6 +1028,10 @@ A ordem importa: multiplicar depois de subtrair a Resistência daria um número 
 
 - Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.
 
+**Exemplo:**
+
+Um ataque de Fogo causa 10 de dano. O alvo é vulnerável a Fogo e tem Resistência 5 a Fogo. Primeiro a vulnerabilidade dobra o dano para 20, e só então a Resistência tira 5: o alvo sofre 15. Subtraindo a Resistência antes de dobrar, o resultado seria 10.
+
 Resistência física geral cobre corte, perfuração e impacto. Balístico fica de fora, de propósito. E Resistência de um tipo específico não faz nada contra os outros tipos.
 
 ## mesa-ao-vivo
@@ -881,6 +1043,16 @@ Resistência física geral cobre corte, perfuração e impacto. Balístico fica 
 Como o combate roda na tela compartilhada: ordem de iniciativa, vida em tempo real, o que cada pessoa enxerga do inimigo e por que o dado é rolado no servidor.
 
 Dá para jogar O Jardim inteiro no papel. Mas a mesa ao vivo existe para resolver as três coisas que sempre travam um combate: quem age agora, quanta vida sobrou em quem e se aquele 19 foi mesmo um 19.
+
+**Em resumo**
+
+- A mesa ao vivo mostra, numa lista só e igual para todos, a ordem de iniciativa, a Vida de cada participante e as condições ativas.
+
+- Cada inimigo tem um grau de sigilo (Oculto, Desconhecido, Parcial ou Total), e o servidor só envia o que aquele grau permite.
+
+- O dado é rolado no servidor e registrado. Vantagem e desvantagem guardam os dois d20.
+
+- Dado físico continua valendo: quem prefere rolar na mesa anuncia o resultado e a mesa aceita.
 
 ### Abrir a mesa
 
@@ -902,7 +1074,7 @@ Dá para jogar O Jardim inteiro no papel. Mas a mesa ao vivo existe para resolve
 
 ### O que cada um enxerga
 
-O sigilo do inimigo é decidido no servidor, não no navegador de quem olha. Isso importa: não adianta abrir o inspetor do site para descobrir a Vida do chefe, porque o número não chega a ser enviado.
+O sigilo do inimigo é decidido no servidor, e o navegador de quem olha só recebe o que o grau permite ver. Isso importa: não adianta abrir o inspetor do site para descobrir a Vida do chefe, porque o número não chega a ser enviado.
 
 - Grau | O que a mesa vê | Serve para
 
@@ -928,11 +1100,11 @@ Quem comanda a mesa vê tudo sempre, e o dono de um personagem vê o próprio pe
 
 - Quem está assistindo a campanha como observador não rola dados.
 
-Rolar fora do site continua valendo: quem prefere dado físico anuncia o resultado e a mesa aceita, como sempre foi. O registro existe para quando alguém quiser conferir, não para obrigar ninguém.
+Rolar fora do site continua valendo: quem prefere dado físico anuncia o resultado e a mesa aceita, como sempre foi. O registro está ali para quando alguém quiser conferir.
 
 ### Fechar a sessão
 
-- O XP do encontro é distribuído pela própria sessão e cai nas fichas escolhidas, seguindo as regras do capítulo de Experiência.
+- O XP do encontro é distribuído pela própria sessão e cai nas fichas escolhidas, seguindo as regras de Experiência e Níveis.
 
 - O saque das criaturas derrotadas também sai pela sessão: o Mestre rola e escolhe quem leva cada coisa. O item cai direto no inventário e as moedas na carteira, com registro no extrato. O que cada criatura pode deixar cair, e com que chance, está na ficha dela nos Registros Universais.
 
@@ -945,6 +1117,16 @@ Rolar fora do site continua valendo: quem prefere dado físico anuncia o resulta
 **Status:** Regra oficial
 
 As dez faixas de distância, o que acontece quando você atira longe demais e como converter tudo para o mapa.
+
+A distância no jogo é contada em dez faixas, cada uma com um limite em metros. É nelas que você mede o alcance de uma arma, de um poder ou de uma magia, e é com elas que um combate (veja Combate) responde à pergunta "dá para acertar daqui?".
+
+**Em resumo**
+
+- São dez faixas, de Adjacente (até 1,5 m) a Galáctico (até 1.000 m). No mapa, um quadrado vale 1,5 m.
+
+- Dentro do alcance da arma ou do poder, ataque normalmente.
+
+- Cada faixa além do alcance custa −5 no ataque, e passando de duas faixas o alvo não pode ser atingido.
 
 ### Faixas de distância
 
@@ -978,6 +1160,10 @@ As dez faixas de distância, o que acontece quando você atira longe demais e co
 
 - Em mapa tático, arredonde os deslocamentos para múltiplos de 1,5 m e siga o jogo.
 
+**Exemplo:**
+
+Uma arqueira tem um arco com alcance Médio (até 15 m) e mira um alvo em Longo (até 25 m). O alvo está uma faixa além do alcance, então ela ataca com −5. Se ele estivesse em Longo+ (até 50 m), seriam duas faixas além, e o ataque sofreria −10. Em Extremo ou mais longe, o alvo não pode ser atingido por esse arco.
+
 ## ferimentos
 
 **Categoria:** Combate e Mecânicas
@@ -986,9 +1172,21 @@ As dez faixas de distância, o que acontece quando você atira longe demais e co
 
 Cair a 0 não é o fim: o quanto você passou de 0 define o tamanho do buraco, e Morrendo dá ao grupo algumas rodadas para resolver.
 
-### Vida negativa
+Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua sendo anotado abaixo de zero, e é esse número que decide se a queda foi um tropeço ou um desastre. Depois entra o relógio de Morrendo, que dá ao grupo algumas rodadas para resgatar quem caiu. Este tópico trata ainda de Ferido, de ferimento crítico e de mutilação.
 
-Chegar a 0 não zera a conta. O dano continua sendo anotado abaixo de zero, e é esse número que decide se a queda foi um tropeço ou um desastre.
+**Em resumo**
+
+- Ao chegar a 0 PV você cai inconsciente. O dano que passou de 0 é o seu **Déficit de Vida**, e se ele chegar à sua Vida máxima você morre na hora.
+
+- Você recebe Morrendo 1 e, no fim de cada turno seu, rola Fortitude contra **DT 12 + (2 × Gravidade) + Ferido**. Em Morrendo 3 você morre.
+
+- Estabilizar interrompe os testes, mas só quem volta a 1 PV ou mais acorda. Quem acorda ganha Ferido 1.
+
+- Um golpe que tira metade ou mais dos PV máximos, ou uma falha crítica em Morrendo, pede a tabela de trauma (2d6).
+
+- Mutilação só vem anunciada, e um sucesso no teste evita a perda.
+
+### Vida negativa
 
 - Continue registrando o dano abaixo de 0. Esse valor é o seu **Déficit de Vida**.
 
@@ -1020,7 +1218,13 @@ Chegar a 0 não zera a conta. O dano continua sendo anotado abaixo de zero, e é
 
 - Em Morrendo 3, você morre. A maestria de Constituição empurra esse limite para Morrendo 4.
 
+**Atenção:**
+
 Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes de Morrendo. Mas acordar é outra coisa: só cura suficiente para chegar a 1 PV traz a pessoa de volta. Quem acorda ganha Ferido 1.
+
+**Exemplo:**
+
+Davi tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de Vida é 12, ou 30% da Vida máxima: Gravidade 2. Ele cai inconsciente com Morrendo 1. No fim do turno dele, rola Fortitude contra DT 12 + (2 × 2) + 0 = 16, porque ainda não tem Ferido. Falhou: Morrendo 2. Uma aliada o estabiliza com um teste de Cura contra a mesma DT 16, e os testes de Morrendo param. Ele só acorda quando alguém curar o bastante para levá-lo de volta a 1 PV, e então ganha Ferido 1.
 
 ### Remover Ferido
 
@@ -1124,6 +1328,18 @@ Se a descrição não muda nada na cena, ou se é a mesma de sempre só para peg
 
 Recuperação em porcentagem, que continua valendo no nível 30 igual valia no 3, e uma trilha de Cansaço de 0 a 6 sem meio-termo.
 
+Descanso é como você recupera Vida, Mana, Estamina e Sanidade e como baixa o Cansaço. A recuperação é em porcentagem, então vale o mesmo no nível 3 e no nível 30, e é a qualidade do descanso que decide quanto volta. Este tópico traz também o descanso curto, Relaxar, e a trilha de Cansaço, de 0 a 6.
+
+**Em resumo**
+
+- Um descanso completo dura 8 horas, e a qualidade (de Péssima a Excelente) decide quanto de Vida, Mana, Estamina e Sanidade volta e quanto Cansaço sai.
+
+- Relaxar é uma hora em segurança: recupera 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina, uma vez entre dois descansos completos.
+
+- O Cansaço vai de 0 a 6, sem meio-termo. Combate intenso, seis horas de treino e uma noite em claro valem 1 cada.
+
+- Um descanso completo de qualidade Boa ou melhor também pode tirar 1 de Ferido (ver Ferimentos).
+
 ### Descanso completo
 
 - **Péssima:** menos de 4 horas, duas interrupções perigosas ou exposição severa.
@@ -1147,6 +1363,10 @@ Recuperação em porcentagem, que continua valendo no nível 30 igual valia no 3
 - Maravilhosa | 75% do máximo | 20% | 4
 
 - Excelente | 100% do máximo | 35% | todo o Cansaço
+
+**Exemplo:**
+
+Uma personagem com 80 de Vida máxima, 40 de Mana e 20 de Estamina dorme 8 horas numa estalagem, com cama de verdade, refeição completa e nenhuma interrupção: um descanso Maravilhoso. Ela recupera 75% de cada máximo, ou seja, 60 de Vida, 30 de Mana e 15 de Estamina, e baixa 4 de Cansaço.
 
 ### Relaxar
 
@@ -1176,6 +1396,8 @@ Recupere 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina
 
 - 6: Colapso | Inconsciente até reduzir Cansaço.
 
+**Regra:**
+
 Um combate conta como intenso quando o personagem desce à metade dos PV, gasta metade da Mana ou da Estamina ou entra em Morrendo. A cena inteira gera **1** Cansaço, mesmo que os três gatilhos aconteçam. Na Sessão ao Vivo o site registra isso sozinho quando o Mestre encerra o combate; fora dela, use o botão do Descanso. Seis horas de treino e uma noite em claro também valem 1 cada. Sempre em números inteiros, porque não existe meio Cansaço.
 
 ## treinar
@@ -1186,7 +1408,7 @@ Um combate conta como intenso quando o personagem desce à metade dos PV, gasta 
 
 Grau dado pela classe sobe na hora. Grau conquistado por treino cobra tempo, nível e, mais para frente, alguém que te ensine.
 
-São dois caminhos diferentes e vale não confundir. Quando uma **classe** te dá um Grau de Treinamento, escolha uma perícia e suba um grau imediatamente, sem tempo, sem tabela e sem requisito. Quando você quer subir **por treino**, aí sim cumpre o tempo da linha, o Nível Total mínimo e o requisito extra, quando existir.
+São dois caminhos diferentes, e vale não os confundir. Quando uma **classe** te dá um Grau de Treinamento, escolha uma perícia e suba um grau imediatamente, sem tempo, sem tabela e sem requisito. Quando você quer subir **por treino**, aí sim cumpre o tempo da linha, o Nível Total mínimo e o requisito extra, quando existir.
 
 ### Progressão
 
@@ -1216,6 +1438,8 @@ São dois caminhos diferentes e vale não confundir. Quando uma **classe** te d�
 
 ### Regras de treinamento
 
+Os dias de treino saem do tempo que o grupo tem entre as aventuras (ver Tempo Entre Aventuras), e a perícia treinada é a das Perícias.
+
 - Cada dia custa seis horas e deixa 1 de Cansaço no fim. Uma noite normal de sono resolve.
 
 - Instrutor é alguém que já tem o grau que você quer alcançar, ou um maior. Quando a linha da tabela pede instrutor, sem ele você não sobe; nas outras linhas, ter um de grau superior ao seu corta 20% do tempo, arredondando para cima.
@@ -1236,6 +1460,16 @@ Terminado um arco, a vida volta a ter barulho de rua. As feridas fecham devagar,
 
 Cada personagem escolhe o que fazer com eles, em separado. É aqui que o tempo parado vira progresso concreto, e é aqui também que o personagem mostra quem é quando ninguém está atacando: para onde volta, com quem janta, o que faz com as mãos quando elas não seguram uma arma.
 
+**Em resumo**
+
+- Entre dois arcos o Mestre diz quantos dias vocês têm, e cada personagem gasta os seus como quiser, em dias inteiros.
+
+- Um dia de atividade são seis horas, e cada personagem faz uma atividade por dia. Treino e fabricação deixam 1 de Cansaço por dia, e uma noite de sono resolve.
+
+- Trabalhar rende de 5 a 65 Lunaris por dia, conforme o ofício, e a tabela de custo de vida mostra para onde esse dinheiro vai.
+
+- Se você não souber o que o seu personagem faz com o tempo, as perguntas do fim do tópico ajudam.
+
 ### Como o calendário funciona
 
 - **Um dia de atividade são seis horas.** O resto do dia é vida normal: comer, dormir, conversar, olhar a chuva pela janela.
@@ -1250,27 +1484,27 @@ Cada personagem escolhe o que fazer com eles, em separado. É aqui que o tempo p
 
 ### O que dá para fazer
 
-Cada atividade abaixo já tem a regra completa em outra página. Aqui elas aparecem lado a lado, com um pouco de como são vividas, para você comparar o que rende mais nos dias que tem.
+Cada atividade abaixo já tem a regra completa em outro tópico. Aqui elas aparecem lado a lado, com um pouco de como são vividas, para você comparar o que rende mais nos dias que tem.
 
 - Atividade | Como é vivida, e o que rende
 
-- Treinar uma perícia. | Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.Custa de 3 a 365 dias, conforme o grau. Rende um grau de treinamento. Regra completa em Treinar Perícias.
+- Treinar uma perícia. | Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.Custa de 3 a 365 dias, conforme o grau. Rende um grau de treinamento. Regra completa em Treinamento.
 
-- Fabricar ou reparar. | Cheiro de metal quente, farpa no dedo, uma peça que não encaixa e depois encaixa. No fim, a coisa existe porque você fez.Custa os dias do projeto. Rende o item pronto, com um teste no fim. Regra completa em Fabricação e Reparo.
+- Fabricar ou reparar. | Cheiro de metal quente, farpa no dedo, uma peça que não encaixa e depois encaixa. No fim, a coisa existe porque você fez.Custa os dias do projeto. Rende o item pronto, com um teste no fim. Regra completa em Criação, Forja e Alquimia.
 
-- Preparar ritual, selo ou encantamento. | Velas acesas sempre nas mesmas horas, símbolos redesenhados até saírem perfeitos, e uma paciência que ninguém de fora entende.Custa o tempo da própria obra. Rende o efeito preparado, pronto para usar. Regra completa em Rituais, Selos e Encantamentos.
+- Preparar ritual, selo ou encantamento. | Velas acesas sempre nas mesmas horas, símbolos redesenhados até saírem perfeitos, e uma paciência que ninguém de fora entende.Custa o tempo da própria obra. Rende o efeito preparado, pronto para usar. Regra completa em Rituais, Selos e Fusão.
 
 - Trabalhar no ofício. | Acordar cedo, voltar cansado com moeda no bolso e conhecer gente que nem imagina que você já enfrentou um monstro.Custa 1 dia por vez. Rende dinheiro, pela tabela Trabalhar pelo dia. Regra completa em Economia.
 
 - Tratar veneno, doença ou vício. | Chá amargo de hora em hora, febre de madrugada, e alguém sentado ao lado da cama contando os dias junto com você.Custa dias de cuidado contínuo. Rende a queda de estágio da aflição. Regra completa em Venenos, Doenças e Vícios.
 
-- Se recuperar em segurança. | Dormir até tarde sem sonhar com nada. Trocar o curativo e ver que a pele por baixo já está rosada.Custa 1 dia por vez. Rende Vida, Mana, Sanidade e a queda de Ferido. Regra completa em Descanso e Recuperação.
+- Se recuperar em segurança. | Dormir até tarde sem sonhar com nada. Trocar o curativo e ver que a pele por baixo já está rosada.Custa 1 dia por vez. Rende Vida, Mana, Sanidade e a queda de Ferido. Regra completa em Descanso.
 
 - Cuidar da base. | Pregar a tábua solta, pagar quem conserta o telhado, pendurar na parede alguma coisa que veio da última aventura.Custa de 1 a vários dias. Rende instalação nova, reparo e conta mensal em dia. Regra completa em Propriedades e Bases.
 
 - Fazer um favor a uma facção. | Levar uma carta sem perguntar o que está escrito, ficar de guarda numa porta, aparecer no lugar certo com a roupa certa.Custa alguns dias, conforme o pedido. Rende Prestígio com ela. Regra completa em Prestígio e Fama.
 
-- Circular e ouvir a cidade. | Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.Custa 1 dia por vez. Rende boatos, contatos e preço melhor no balcão. Regra completa em Loja e Locais de Compra.
+- Circular e ouvir a cidade. | Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.Custa 1 dia por vez. Rende boatos, contatos e preço melhor no balcão. Regra completa em Loja.
 
 - Procurar uma pessoa específica. | Mostrar o mesmo retrato mal desenhado para cinquenta desconhecidos, até alguém parar, olhar de novo e mudar de expressão.Custa 1 dia por vez. Rende um teste de Investigação ou Diplomacia por dia. Regra completa em Perícias.
 
@@ -1342,73 +1576,17 @@ Nem todo dia livre precisa render número. Se você não souber o que o seu pers
 
 Uma tabela de XP sem teto de nível: a conta de sempre até o 100 e uma faixa fixa por patamar depois. As recompensas saem do nível total, nunca de cada classe separada.
 
-### O que muda depois do nível 20 e do nível 60
+Todo personagem acumula XP, e o XP total decide o nível. Este tópico mostra quanto custa cada nível, o que cada nível entrega e como o Mestre costuma recompensar a mesa. As recompensas saem do nível total, nunca de cada classe separada.
 
-Se a dúvida é "o que eu ganho quando passo do 20?", esta parte responde sem você precisar caçar em outros capítulos. As regras completas continuam nas páginas indicadas.
+**Em resumo**
 
-- Quando você chega em | O que passa a valer | Onde ler
+- XP total do nível N = 500 × N × (N − 1), até o nível 100. Sair do nível N para o N+1 custa N × 1.000 XP.
 
-- Nível 20 de uma classe | Acabam os poderes e as habilidades escritas dessa classe. Ela segue somando Vida, Mana e Estamina a cada nível, e você já pode abrir a segunda classe comum. | Sistema Base
+- O nível total soma os níveis de todas as classes, e a tabela de recompensas olha para ele: multiclasse não recebe nada em dobro.
 
-- Níveis 25, 35 e 45 da classe | Reforço de recursos: Vida, Mana e Estamina como se você tivesse 2 níveis a mais nela. | Poderes e Habilidades
+- O Mestre recompensa por marco: 10% do próximo nível por descoberta ou objetivo menor, 25% por missão relevante e 50% por fim de arco.
 
-- Níveis 30, 40 e 50 da classe | Mais um grau de perícia, à sua escolha. No nível 50 a classe fecha, e quem quer continuar abre outra. | Poderes e Habilidades
-
-- Nível 25 da fonte de magia | Quem conjura segue ganhando vagas de magia (2 a cada 5 níveis, 22 no nível 50) e passa a ter um limite de 4 magias do mesmo círculo. | Magia e Fluxo
-
-- Nível total 29 | O grau Renomado (+12) fica disponível para as perícias. | Perícias e Treinar
-
-- Nível total 60 | Termina o jogo padrão (duas classes comuns e uma especial). Você pode continuar, ganha a Conquista e o selo do Patamar I, e o grau Lendário (+14) fica disponível. | Esta página e Perícias
-
-- Níveis totais 100, 150, 250 e 500 | Patamares II a V. Cada um traz Conquista, moldura nova no retrato e um grau de perícia novo: Mítico, Cósmico, Eterno e Absoluto. | Esta página e Perícias
-
-- Nada disso trava a ficha. Ao passar do nível 60 e a cada patamar novo, o Mestre recebe um aviso e a mesa decide o que fazer com isso.
-
-- O atributo não tem teto, e a rolagem de magia soma metade do nível como qualquer teste. O Fluxo recomendado de cada círculo é aviso, e a DT do círculo decide se a magia sai.
-
-- Personagens de nível muito alto costumam ser NPCs do Mestre, como o dono de um banco ou um guardião antigo. Eles usam a mesma ficha, sem cumprir regra de criação.
-
-### Progressão do nível total
-
-Toda vez que você sobe de nível, escolhe uma das suas classes e aumenta o nível dela em 1. As recompensas da tabela olham para o **nível total**, então multiclasse não recebe nada em dobro.
-
-- Níveis totais | Legado de Ascensão | +1 em um atributo | Vaga de item especial
-
-- 1 a 50 | a cada 5 níveis | a cada 4 níveis | a cada 4 níveis
-
-- 51 a 100 | a cada 10 níveis | a cada 8 níveis | a cada 8 níveis
-
-- 101 em diante | a cada 20 níveis | a cada 16 níveis | a cada 16 níveis
-
-Isso dá 10 Legados e 12 aumentos de atributo até o nível 50, 15 e 18 até o 100, e 20 e 24 até o 200. O ritmo desacelera para os Legados durarem e para o poder crescer devagar nos níveis muito altos.
-
-Atributo não tem valor máximo. Passando do 20 ele segue subindo, e o modificador continua sendo ⌊(Atributo − 10) ÷ 2⌋.
-
-### Classes e multiclasse
-
-- Cada classe vai até o **nível 50**. As recompensas escritas dela (poderes, habilidades e o fecho da classe) terminam no 20. Do 21 ao 50 ela segue somando Vida, Mana e Estamina a cada nível e ganha a Maestria, um marco de 5 em 5 níveis.
-
-- O padrão do jogo é **duas classes comuns e uma especial**, que fecha em 60 níveis totais. A ficha aceita mais classes e níveis acima disso, e só marca o patamar novo.
-
-- A segunda classe comum entra depois que uma das suas classes chega ao nível 20. Fora essa ordem, subir de nível é livre: escolha qualquer classe que você já tenha entre as suas.
-
-- Classe especial exige nível total 20, consome nível como qualquer outra e não ocupa uma das duas vagas de classe comum.
-
-- Classe comum serve a qualquer Árvore. Classe especial depende de liberação do Mestre e só aparece nas Árvores indicadas na página dela.
-
-- Ao entrar numa classe nova você não ganha equipamento, dinheiro ou qualquer outro benefício de criação de novo.
-
-### Depois do nível 60
-
-O nível 60 é onde terminam as regras padrão. O nível total não tem teto: você continua subindo e abre mais classes. Cada classe, porém, para no 50; para evoluir além disso, abra outra. O que muda acima do 60 é que o personagem entra num patamar novo.
-
-- Os patamares são os níveis totais 60, 100, 150, 250 e 500.
-
-- Cada um traz uma Conquista, uma moldura própria no retrato e no cartaz de Procurado e um selo na ficha, de Patamar I a Patamar V. O aviso aparece uma vez e some sozinho.
-
-- O Mestre recebe um aviso quando a sua ficha passa do nível 60 e a cada patamar novo. Ele não trava nada: serve para a mesa conversar sobre o personagem naquele ponto.
-
-- Um NPC do Mestre pode ficar num patamar alto sem cumprir nenhuma regra de criação: a ficha serve para guardar a Vida, a Defesa e os números dele.
+- O nível 60 fecha o jogo padrão. Dali em diante o personagem entra em patamares, e a ficha só avisa o Mestre: nada trava.
 
 ### Fórmula de progressão
 
@@ -1429,6 +1607,84 @@ Do nível 100 em diante cada nível custa um valor fixo, que só muda quando o p
 - 500 em diante | 500.000 XP por nível
 
 O XP total acumulado é 1.770.000 no nível 60, 4.950.000 no 100, 9.950.000 no 150, 24.950.000 no 250 e 87.450.000 no 500.
+
+### Recompensas por marco
+
+- **Descoberta ou objetivo menor:** 10% do próximo nível.
+
+- **Missão relevante:** 25% do próximo nível.
+
+- **Fim de arco:** 50% do próximo nível.
+
+- XP de combate se divide pelo grupo. XP de descoberta e de arco vai inteiro para cada um.
+
+### Progressão do nível total
+
+Toda vez que você sobe de nível, escolhe uma das suas classes e aumenta o nível dela em 1. As recompensas da tabela olham para o **nível total**, então multiclasse não recebe nada em dobro.
+
+- Níveis totais | Legado de Ascensão | +1 em um atributo | Vaga de item especial
+
+- 1 a 50 | a cada 5 níveis | a cada 4 níveis | a cada 4 níveis
+
+- 51 a 100 | a cada 10 níveis | a cada 8 níveis | a cada 8 níveis
+
+- 101 em diante | a cada 20 níveis | a cada 16 níveis | a cada 16 níveis
+
+Isso dá 10 Legados e 12 aumentos de atributo até o nível 50, 15 e 18 até o 100, e 20 e 24 até o 200. O ritmo desacelera para os Legados durarem e para o poder crescer devagar nos níveis muito altos.
+
+Atributo não tem valor máximo. Passando do 20 ele segue subindo, e o modificador continua sendo ⌊(Atributo − 10) ÷ 2⌋. Os Legados estão em Legados.
+
+### Classes e multiclasse
+
+- Cada classe vai até o **nível 50**. As recompensas escritas dela (poderes, habilidades e o fecho da classe) terminam no 20. Do 21 ao 50 ela segue somando Vida, Mana e Estamina a cada nível e ganha a Maestria, um marco de 5 em 5 níveis.
+
+- O padrão do jogo é **duas classes comuns e uma especial**, que fecha em 60 níveis totais. A ficha aceita mais classes e níveis acima disso, e só marca o patamar novo.
+
+- A segunda classe comum entra depois que uma das suas classes chega ao nível 20. Fora essa ordem, subir de nível é livre: escolha qualquer classe que você já tenha entre as suas.
+
+- Classe especial exige nível total 20, consome nível como qualquer outra e não ocupa uma das duas vagas de classe comum.
+
+- Classe comum serve a qualquer Árvore. Classe especial depende de liberação do Mestre e só aparece nas Árvores indicadas na página dela.
+
+- Ao entrar numa classe nova você não ganha equipamento, dinheiro ou qualquer outro benefício de criação de novo.
+
+### O que muda depois do nível 20 e do nível 60
+
+Se a dúvida é "o que eu ganho quando passo do 20?", esta parte responde sem você precisar caçar em outros tópicos. As regras completas continuam nos tópicos indicados.
+
+- Quando você chega em | O que passa a valer | Onde ler
+
+- Nível 20 de uma classe | Acabam os poderes e as habilidades escritas dessa classe. Ela segue somando Vida, Mana e Estamina a cada nível, e você já pode abrir a segunda classe comum. | Sistema Base
+
+- Níveis 25, 35 e 45 da classe | Reforço de recursos: Vida, Mana e Estamina como se você tivesse 2 níveis a mais nela. | Poderes e Habilidades
+
+- Níveis 30, 40 e 50 da classe | Mais um grau de perícia, à sua escolha. No nível 50 a classe fecha, e quem quer continuar abre outra. | Poderes e Habilidades
+
+- Nível 25 da fonte de magia | Quem conjura segue ganhando vagas de magia (2 a cada 5 níveis, 22 no nível 50) e passa a ter um limite de 4 magias do mesmo círculo. | Magia e Fluxo
+
+- Nível total 29 | O grau Renomado (+12) fica disponível para as perícias. | Perícias e Treinamento
+
+- Nível total 60 | Termina o jogo padrão (duas classes comuns e uma especial). Você pode continuar, ganha a Conquista e o selo do Patamar I, e o grau Lendário (+14) fica disponível. | Este tópico e Perícias
+
+- Níveis totais 100, 150, 250 e 500 | Patamares II a V. Cada um traz Conquista, moldura nova no retrato e um grau de perícia novo: Mítico, Cósmico, Eterno e Absoluto. | Este tópico e Perícias
+
+- Nada disso trava a ficha. Ao passar do nível 60 e a cada patamar novo, o Mestre recebe um aviso e a mesa decide o que fazer com isso.
+
+- O atributo não tem teto, e a rolagem de magia soma metade do nível como qualquer teste. O Fluxo recomendado de cada círculo é aviso, e a DT do círculo decide se a magia sai.
+
+- Personagens de nível muito alto costumam ser NPCs do Mestre, como o dono de um banco ou um guardião antigo. Eles usam a mesma ficha, sem cumprir regra de criação.
+
+### Depois do nível 60
+
+O nível 60 é onde terminam as regras padrão. O nível total não tem teto: você continua subindo e abre mais classes. Cada classe, porém, para no 50; para evoluir além disso, abra outra. O que muda acima do 60 é que o personagem entra num patamar novo.
+
+- Os patamares são os níveis totais 60, 100, 150, 250 e 500.
+
+- Cada um traz uma Conquista, uma moldura própria no retrato e no cartaz de Procurado e um selo na ficha, de Patamar I a Patamar V. O aviso aparece uma vez e some sozinho.
+
+- O Mestre recebe um aviso quando a sua ficha passa do nível 60 e a cada patamar novo. Ele não trava nada: serve para a mesa conversar sobre o personagem naquele ponto.
+
+- Um NPC do Mestre pode ficar num patamar alto sem cumprir nenhuma regra de criação: a ficha serve para guardar a Vida, a Defesa e os números dele.
 
 ### Tabela completa
 
@@ -1634,16 +1890,6 @@ Abrir níveis 1 a 100
 
 **N100**4.950.000 XP
 
-### Recompensas por marco
-
-- **Descoberta ou objetivo menor:** 10% do próximo nível.
-
-- **Missão relevante:** 25% do próximo nível.
-
-- **Fim de arco:** 50% do próximo nível.
-
-- XP de combate se divide pelo grupo. XP de descoberta e de arco vai inteiro para cada um.
-
 ## legados
 
 **Categoria:** Livro do Jogador
@@ -1653,6 +1899,10 @@ Abrir níveis 1 a 100
 Um Legado a cada cinco níveis totais no começo, a cada dez depois do 50 e a cada vinte depois do 100. É escolha permanente, e a ficha confere os pré-requisitos na hora.
 
 Nos níveis totais 5, 10, 15 e assim por diante até o 50, escolha um Legado de Ascensão cujos pré-requisitos você já cumpre. Depois do 50 o ritmo desacelera: um Legado no 60, no 70, no 80, no 90 e no 100, e daí em diante a cada 20 níveis (120, 140, 160 e por aí vai). Algumas raças dão vagas extras, e quando dão está escrito no catálogo racial.
+
+A tabela completa do ritmo, com os aumentos de atributo e as vagas de item especial que chegam junto, está em Experiência e Níveis.
+
+### O que vale para todo Legado
 
 - Legado escolhido não volta atrás. O jogador não pode remover nem trocar depois.
 
@@ -1672,7 +1922,17 @@ Nos níveis totais 5, 10, 15 e assim por diante até o 50, escolha um Legado de 
 
 Como uma criatura comprada no Bestiário vira uma ficha de aliado editável, quem manda nela e o que ela faz quando o combate começa.
 
-Nem todo mundo que luta ao seu lado é um personagem de jogador. Cavalo, cão de guarda, guarda-costas contratado, criatura invocada: tudo isso vira um aliado, e aliado neste sistema tem ficha própria, não é um parágrafo nas suas anotações.
+Nem todo mundo que luta ao seu lado é um personagem de jogador. Cavalo, cão de guarda, guarda-costas contratado, criatura invocada: tudo isso vira um aliado, e aliado neste sistema tem ficha própria, com Vida, Defesa e ataque anotados como os de qualquer personagem.
+
+**Em resumo**
+
+- Aliado é qualquer criatura que luta ao seu lado e tem ficha própria: comprada no Bestiário, entregue pela história ou sustentada por um poder.
+
+- A ficha é editável pelo dono, e o aliado entra na ordem de iniciativa com a Iniciativa dele, como qualquer criatura.
+
+- Quem controla é o dono, a não ser que o Mestre diga o contrário. Aliado que cai a 0 de Vida segue as regras de Ferimentos.
+
+- Um aliado ativo por personagem costuma ser o limite para o combate continuar andando.
 
 ### De onde vem um aliado
 
@@ -1690,7 +1950,7 @@ Cada aliado ocupa uma entrada na aba Aliados, com os mesmos campos que o Mestre 
 
 - Marque quem está em cena. Aliado guardado no estábulo continua na lista sem ocupar espaço na mesa.
 
-- Vida do aliado é sua responsabilidade, não do Mestre. Se ele apanhou, anote.
+- Quem anota a Vida do aliado é você, o dono. Se ele apanhou, anote.
 
 ### Aliado em combate
 
@@ -1700,17 +1960,19 @@ Cada aliado ocupa uma entrada na aba Aliados, com os mesmos campos que o Mestre 
 
 - Um aliado age por conta: ele tem as ações dele, e não empresta ação nem reação para você.
 
-- Ele pode Ajudar, e vale a mesma regra de todo mundo: no máximo dois ajudantes por teste.
+- Ele pode Ajudar, e vale a mesma regra de todo mundo: no máximo dois ajudantes por teste (ver Ações Coletivas).
 
 - Quando cai a 0 de Vida, aplique as mesmas regras de Ferimentos. Bicho e contratado morrem igual.
+
+**Dica de mesa:**
 
 Um grupo com muitos aliados atrasa a mesa inteira. Combine um teto com o Mestre antes de encher a ficha: geralmente um aliado ativo por personagem já é o suficiente para o combate continuar andando.
 
 ### Contratados e lealdade
 
-- Quem foi comprado foi contratado, não escravizado. O acordo vale enquanto o combinado for cumprido, e o Mestre decide o que acontece quando não for.
+- Quem foi comprado foi contratado: o acordo vale enquanto o combinado for cumprido, e o Mestre decide o que acontece quando não for.
 
-- Salário, manutenção e alimento são assunto de mesa. Se a campanha usa esse controle, ele entra como despesa recorrente, do mesmo jeito que a manutenção de uma base.
+- Salário, manutenção e alimento são assunto de mesa. Se a campanha usa esse controle, ele entra como despesa recorrente, do mesmo jeito que a manutenção de uma base (ver Propriedades e Bases).
 
 - Aliado não é item: ele não volta para a Loja, não tem preço de revenda e não entra no Cofre.
 
@@ -1723,6 +1985,16 @@ Um grupo com muitos aliados atrasa a mesa inteira. Combine um teto com o Mestre 
 Duas formas de ganhar poder sem subir de nível: comer um Fruto do Éden, que se liga à alma, ou instalar um implante, que é peça de máquina no corpo. Traz também as oferendas aos Fluxos e as dádivas que elas rendem.
 
 Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o caminho caro: você compra, aceita o que vem junto e não desfaz depois.
+
+**Em resumo**
+
+- O **Fruto do Éden** se liga à alma: uma criatura sustenta um Fruto por vez, e ele traz três degraus (Vínculo, Técnica e Despertar) e uma fraqueza declarada.
+
+- O **Despertar** só anda para frente. Depois dele a ficha não volta, então combine o acontecimento da história com o Mestre.
+
+- O **implante** é peça de máquina no corpo: pago em Créditos Sombrios, exige nível 3 ou mais e ocupa uma parte do corpo.
+
+- As **oferendas** aos Fluxos rendem dádivas curtas: uma por vez, até o próximo descanso longo ou o fim da sessão.
 
 ### Frutos do Éden
 
@@ -1757,6 +2029,8 @@ Existe um Fruto para cada um dos onze Fluxos. Ele aproxima quem come do Fluxo e 
 - Cada Fruto declara a fraqueza no Fluxo que tem vantagem sobre o dele. O Fruto do Fim exige a autorização do Mestre, como todo acesso ao Fim.
 
 - Vale a regra de sempre: uma criatura sustenta um Fruto por vez, e escolher o de um Fluxo troca o vínculo anterior.
+
+**Atenção:**
 
 Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. A passiva e as técnicas são substituídas pelas versões aprimoradas, sem somar com as antigas, e a manifestação final passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.
 
@@ -1814,9 +2088,11 @@ Enquanto o Fruto mexe na alma, o implante mexe na carne. São 35 peças vendidas
 
 - O benefício vale enquanto o implante estiver funcional. Dano suficiente, campo de interferência ou sobrecarga podem desligá-lo, e a regra da peça diz quando isso acontece.
 
-- Alguns implantes cobram o próprio uso em dano interno que ignora Resistência. Esse dano é parte do preço, não um efeito colateral opcional.
+- Alguns implantes cobram o próprio uso em dano interno que ignora Resistência. Esse dano faz parte do preço da peça.
 
-Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra de rotina: é resultado de uma ida ao mercado negro, com tudo que isso costuma cobrar em história.
+**Atenção:**
+
+Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra de rotina: é resultado de uma ida ao mercado negro, com tudo que isso costuma cobrar em história. As moedas e o câmbio estão em Economia.
 
 ### Os dois juntos
 
@@ -1832,7 +2108,9 @@ Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra 
 
 **Status:** Regra oficial
 
-Quanto você carrega, o que dá para vestir junto e como a Resistência entra na conta do dano. Raridade e modificação ficam no capítulo seguinte.
+Quanto você carrega, o que dá para vestir junto e como a Resistência entra na conta do dano. Raridade e modificação ficam nos tópicos seguintes.
+
+Este tópico trata do que você carrega e veste: quanto cabe na mochila, quantas peças de armadura se somam e o que muda quando falta proficiência ou munição. O orçamento de poder dos itens fica nos tópicos seguintes.
 
 ### Carga e espaços
 
@@ -1844,6 +2122,10 @@ Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋, mínimo 
 
 - Mochila, bolsa ou habilidade só aumentam sua capacidade quando trazem um número explícito. "Guarda bastante coisa" não conta.
 
+**Exemplo:**
+
+Um personagem de nível total 6 com Mod.Força +3 tem capacidade 10 + (2 × 3) + ⌊6 ÷ 2⌋ = 10 + 6 + 3 = 19 espaços. Com um item de 4 espaços e outro de 3, ele usa 7 e ainda tem 12 livres.
+
 ### Armaduras e escudos
 
 - No máximo uma armadura principal, uma malha compatível por baixo e um escudo.
@@ -1854,7 +2136,7 @@ Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋, mínimo 
 
 - Armadura e escudo simples qualquer um usa. Peça marcial sem a proficiência perde 2 de Defesa, tem a penalidade dobrada e não deixa você usar habilidades que exijam proficiência.
 
-Como a Resistência entra na conta do dano, em que ordem e o que cada tipo de dano cobre ficam no capítulo **Tipos de Dano**.
+Como a Resistência entra na conta do dano, em que ordem e o que cada tipo de dano cobre ficam em Tipos de Dano.
 
 ### Armas, proficiência e munição
 
@@ -1866,7 +2148,7 @@ Como a Resistência entra na conta do dano, em que ordem e o que cada tipo de da
 
 - Trocar um carregador usa a ação de movimento. Munição avulsa e arma pesada podem cobrar ação padrão quando a arma declarar isso.
 
-Orçamento de poder fica em **Raridades de Equipamento**; as opções prontas e seus preços ficam em **Modificações de Equipamento**.
+Orçamento de poder fica em Raridades de Equipamento; as opções prontas e seus preços ficam em Modificações de Equipamento.
 
 ## raridades-modificacoes
 
@@ -1876,9 +2158,19 @@ Orçamento de poder fica em **Raridades de Equipamento**; as opções prontas e 
 
 Como cada raridade aumenta preço e propriedades de armas e proteções, além dos limites de modificações e efeitos, dos itens que despertam com o dono e dos conjuntos de equipamento.
 
-### Raridades e orçamento de poder
-
 Raridade possui duas funções: melhora a ficha própria de armas e proteções e define quantas modificações e efeitos o item comporta. A melhoria automática da raridade não ocupa uma vaga de modificação.
+
+**Em resumo**
+
+- Na Loja, armas, armaduras e escudos aparecem primeiro como Comuns. Encomendar outra raridade multiplica o preço (Incomum ×3, Raro ×8, Épico ×20, Lendário ×60) e melhora as propriedades.
+
+- Itens de perícia e artefatos dividem um mesmo limite de uso: 1 vaga no começo e mais uma a cada 4 níveis totais até o 50, a cada 8 até o 100 e a cada 16 depois.
+
+- Itens que despertam têm formas por nível do dono: vale a mais alta que ele alcançou, e ela substitui a anterior.
+
+- Peças do mesmo conjunto dão um bônus de coleção quando estão equipadas ao mesmo tempo.
+
+### Raridades e orçamento de poder
 
 **Na Loja, armas, armaduras e escudos são anunciados primeiro como Comuns.** O preço Comum vem do modelo e usa a mesma régua nos três: peça simples custa de 15 a 40 Lunaris, peça marcial custa de 50 a 80 Lunaris. Encomendar outra raridade aumenta preço e propriedades, e cada variante fica separada no inventário. Mítico e Relíquia da Criação continuam fora das encomendas normais.
 
@@ -1982,7 +2274,17 @@ Cada peça de conjunto também tem um efeito próprio de valor 1, que a ficha ap
 
 Como modificações entram na ficha, quanto custa uma encomenda e o catálogo completo agrupado pela categoria do equipamento.
 
-Use esta página depois de conferir o orçamento no capítulo **Raridades de Equipamento**. Primeiro identifique o nível e o valor da modificação; depois abra somente a categoria do item que você está melhorando.
+Use este tópico depois de conferir o orçamento em Raridades de Equipamento. Primeiro identifique o nível e o valor da modificação; depois abra somente a categoria do item que você está melhorando.
+
+**Em resumo**
+
+- Cada modificação concede um efeito automático na ficha (Vida máxima, Defesa, Ataque, atributo ou bônus em perícia), que some quando o item é guardado ou desequipado.
+
+- O nível **Comum** entra em qualquer item. O **Marcial** bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor. A **Técnica** não tem efeito automático.
+
+- O pré-requisito cobra de quem usa o item. Perdeu o requisito, a modificação desliga até você cumprir de novo.
+
+- O preço de encomenda depende da faixa de valor da modificação (tabela abaixo), e o catálogo é agrupado pela categoria do equipamento.
 
 ### Modificações e efeitos na ficha
 
@@ -2004,7 +2306,7 @@ Uma modificação pode conceder Vida máxima, Defesa, Ataque, atributo ou bônus
 
 - **Técnica:** não tem efeito automático. Ocupa espaço de modificação, mas não gasta o orçamento de efeito da raridade.
 
-- **Pré-requisito:** cobra de *quem usa*, não do item. Perdeu o requisito, a modificação desliga até você cumprir de novo.
+- **Pré-requisito:** cobra de *quem usa*. Perdeu o requisito, a modificação desliga até você cumprir de novo.
 
 - Faixa | Preço de encomenda | Raridade mínima do item
 
@@ -2168,7 +2470,7 @@ Itens gerais e mágicos
 
 - Catalisador | Marcial | 3 | 1200 L | Fluxo 14 e nível total 10 | Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.
 
-O catálogo é um ponto de partida, não uma lista fechada. Modificação nova precisa respeitar o valor máximo por efeito da raridade e o nível condizente com o equipamento.
+O catálogo é um ponto de partida, e modificação nova é bem-vinda. Ela precisa respeitar o valor máximo por efeito da raridade e o nível condizente com o equipamento.
 
 ## crafting
 
@@ -2178,7 +2480,19 @@ O catálogo é um ponto de partida, não uma lista fechada. Modificação nova p
 
 Regras para fabricar, programar e reparar itens com materiais, ferramentas e tempo de trabalho.
 
-A fabricação segue uma receita ou um projeto e exige materiais, ferramenta, tempo e um teste final.
+Fabricar segue sempre o mesmo caminho: uma receita ou um projeto, materiais, a ferramenta certa, dias de trabalho e um teste no fim. A raridade do item decide a DT, o tempo e o custo.
+
+**Em resumo**
+
+- Cada dia de trabalho tem **6 horas**. Cada personagem completa um bloco por dia e ganha 1 Cansaço ao final dele.
+
+- O teste vem uma vez só, ao fim do projeto: Ofício para forja e alquimia, Tecnologia para sistemas A.X.I.S e cibernéticos, contra a DT da raridade.
+
+- Os materiais custam uma porcentagem do preço normal do item, e a porcentagem sobe com a raridade.
+
+- Falhar custa mais um dia e mais material. Sucesso crítico poupa um pouco de componente, mas não melhora o item.
+
+- Consertar é mais barato que fabricar: 10% do preço normal e uma DT menor.
 
 ### Procedimento
 
@@ -2222,6 +2536,10 @@ Trabalho interrompido mantém o progresso e os materiais já investidos. Trocar 
 - Relíquia da Criação | Projeto de campanha | Projeto de campanha | Definido no projeto | Não pode ser fabricada, copiada ou convertida a partir de outro item.
 
 O custo de materiais é uma porcentagem do preço normal do item, arredondada para cima. Promoções não reduzem esse custo.
+
+**Exemplo:**
+
+Tavi quer fabricar um item Raro de preço normal 1.000 Lunaris, e a receita indica o material específico que a raridade exige. Raro pede DT 20, 7 dias de trabalho e materiais a 70% do preço normal: 700 Lunaris. Ela tem o Kit de Ofício certo. Passados os 7 dias de 6 horas, faz o teste de Ofício contra DT 20. Se falhar, o item não sai, mas o progresso fica guardado: uma nova tentativa custa mais 1 dia e mais 10% do custo inicial de materiais, ou seja, 70 Lunaris.
 
 ### Perícias e ferramentas
 
@@ -2276,15 +2594,16 @@ Materiais adicionais são calculados sobre o custo inicial do projeto. Cada nova
 
 ### Materiais, Drops e comércio
 
-O que cada um dos seis estoques genéricos de material serve, e quando a raridade exigida sobe, fica no capítulo
-    **Materiais e Ingredientes**. Este capítulo só cobre o lado econômico do crafting.
+O que cada um dos seis estoques genéricos de material serve, e quando a raridade exigida sobe, fica em Materiais e Ingredientes. Este tópico só cobre o lado econômico da fabricação.
 
 - O custo usa o preço normal, sem promoção. Item sem preço usa o valor de um item publicado de mesma raridade e função; sem comparável, o projeto não começa.
 - Materiais específicos e Drops só substituem parte do custo quando a receita permitir. Cada material é consumido uma vez e vale no máximo seu preço registrado.
 - Um Drop não pode ser usado, vendido e recuperado no mesmo projeto. Desmontagem nunca devolve mais valor do que foi consumido.
 - Item criado para uso próprio não possui lucro ou comprador automático. Revenda depende da economia local e não gera valor acima do gasto sem contrato ou demanda definidos antes da fabricação.
-- Efeitos de classe que preparam fórmulas ou engenhocas temporárias seguem a própria classe. Eles não produzem estoque permanente nem removem custos deste capítulo.
+- Efeitos de classe que preparam fórmulas ou engenhocas temporárias seguem a própria classe. Eles não produzem estoque permanente nem removem custos deste tópico.
 - Cada personagem completa no máximo um bloco de 6 horas de crafting por dia, mesmo que trabalhe em projetos diferentes. Ao fim do bloco, ganha 1 Cansaço.
+
+**Dica de mesa:**
 
 **Classes:** Alquimista e Engenheiro usam as habilidades descritas nas próprias progressões. Nenhuma classe é obrigatória para fabricar itens comuns, desde que o personagem cumpra os requisitos da receita.
 
@@ -2298,19 +2617,13 @@ Todo material vira um de seis estoques: Componentes Químicos, Componentes Ritua
 
 O nome exato de um material conta a história; o **lote genérico** é o que entra na ficha. Ervas, venenos e sais podem virar Componentes Químicos. Fios, placas e engrenagens podem virar Sucata. Assim o grupo ainda encontra coisas interessantes sem transformar cada preparo numa lista de compras.
 
-### A regra em trinta segundos
+**Em resumo**
 
 - Ao receber um material, coloque-o no estoque indicado pelo catálogo e preserve a raridade: material Comum vira lote Comum, material Raro vira lote Raro.
 
 - Componentes Químicos, Componentes Ritualísticos, Sucata e Mantimentos têm listas próprias. Somente alguns materiais marcados no catálogo também podem virar Matéria-prima.
 
-- Alquimista, Engenheiro e Chef gastam 1 lote depois de um descanso para abastecer **todos** os preparos permitidos pela classe.
-
-- As fórmulas do Alquimista exigem Componentes Químicos da raridade do nível atual: Comum no nível 1, Incomum no 2, Raro no 3, Épico no 4 e Lendário no 5.
-
-- Os projetos do Engenheiro seguem a mesma escada com Sucata: Comum no nível 1, Incomum no 2, Rara no 3, Épica no 4 e Lendária no 5.
-
-- As receitas do Chef seguem a mesma escada com Mantimentos: Comum no nível 1, Incomum no 2, Raro no 3, Épico no 4 e Lendário no 5.
+- Alquimista, Engenheiro e Chef gastam 1 lote depois de um descanso para abastecer **todos** os preparos permitidos pela classe. A raridade exigida sobe com o nível: Comum no nível 1, Incomum no 2, Raro no 3, Épico no 4 e Lendário no 5.
 
 - Rituais não têm círculo nem nível: a complexidade decide o custo. Simples gasta 1 Componente Ritualístico Incomum; Complexo, 1 Raro; Grandioso, 2 Épicos; Monumental, 2 Lendários.
 
@@ -2398,19 +2711,23 @@ Um Mantimento superior pode substituir um inferior. Mantimentos inferiores não 
 
 ### Manutenção de veículos
 
-No fim de cada mês em que um veículo foi usado, gaste **1 Componente Veicular da raridade do veículo**, mais **1 lote da mesma raridade por módulo de utilidade instalado**. Conte os módulos instalados mesmo que estejam desligados. Armas, Núcleo e Estrutura não aumentam esse custo.
+No fim de cada mês em que um veículo foi usado, gaste **1 Componente Veicular da raridade do veículo**, mais **1 lote da mesma raridade por módulo de utilidade instalado**. Conte os módulos instalados mesmo que estejam desligados. Armas, Núcleo e Estrutura não aumentam esse custo. Um lote superior pode substituir um inferior; lotes inferiores não podem ser somados para alcançar outra raridade.
 
-Exemplo: uma nave Rara com Geladeira e Área Médica instaladas gasta 3 Componentes Veiculares Raros no mês. Um lote superior pode substituir um inferior; lotes inferiores não podem ser somados para alcançar outra raridade.
+**Exemplo:**
 
-Se o custo não for pago, o veículo fica **sem manutenção** e não pode se mover por conta própria nem ativar sistemas. Ele volta a funcionar assim que a manutenção for paga. O custo atrasado não acumula e o veículo não é destruído por falta de pagamento.
+Uma nave Rara com Geladeira e Área Médica instaladas gasta 3 Componentes Veiculares Raros no mês: 1 pela nave e 1 por cada módulo.
+
+Se o custo não for pago, o veículo fica **sem manutenção** e não pode se mover por conta própria nem ativar sistemas. Ele volta a funcionar assim que a manutenção for paga. O custo atrasado não acumula e o veículo não é destruído por falta de pagamento. O resto da rotina de conservação está em Manutenção e Componentes.
 
 ### Fabricação permanente
 
-Além do teste, tempo e dinheiro do capítulo de Criação, gaste Matéria-prima conforme a raridade: **1** para Comum ou Incomum, **2** para Raro, **3** para Épico, **4** para Lendário, **5** para Relíquia e **6** para Relíquia da Criação.
+Além do teste, do tempo e do dinheiro de Criação, Forja e Alquimia, gaste Matéria-prima conforme a raridade: **1** para Comum ou Incomum, **2** para Raro, **3** para Épico, **4** para Lendário, **5** para Relíquia e **6** para Relíquia da Criação.
 
 ### Somente Matéria-prima pode aproveitar outro catálogo
 
 Os quatro estoques de classe e os Componentes Veiculares não se misturam. Um ingrediente de cozinha não vira reagente alquímico, e Sucata de engenhoca não substitui uma peça preparada para manter um veículo. Alguns materiais resistentes ou especiais também trazem a marca de Matéria-prima porque podem entrar numa criação permanente. Mesmo nesses casos, cada unidade entra em **um único estoque e na própria raridade**. Não duplique o mesmo achado.
+
+**Dica de mesa:**
 
 **Regra de ouro:** siga o catálogo, baixe um número e continue jogando. Potência, qualidade e estado não são contas exigidas dos jogadores.
 
@@ -2422,9 +2739,41 @@ Os quatro estoques de classe e os Componentes Veiculares não se misturam. Um in
 
 Como ler uma ficha veicular, quem pode conduzir, quais perícias são usadas e como a tripulação gasta suas ações durante uma cena.
 
+Um veículo tem ficha própria, com Vida, Defesa e deslocamento, mas quem decide o que ele faz é a tripulação. Aqui está como ler essa ficha, quem pode conduzir e como cada ocupante gasta as próprias ações.
+
+**Em resumo**
+
+- O veículo não recebe ações próprias: condutor, artilheiros, operadores e passageiros gastam as ações dos próprios turnos.
+
+- Veículos usam Pilotagem e montarias usam Cavalgar. Qualquer personagem treinado pode conduzir, e a classe Piloto não é pré-requisito.
+
+- Conduzir custa uma Ação de Movimento. Sem ela, o veículo mantém curso e velocidade.
+
+- Vida e dano seguem a mesma escala de personagens e criaturas: subtraia a Resistência do dano rolado e o restante reduz a Vida.
+
+- Perseguições, manobras, colisões e avarias estão em Perseguições e Combate Veicular.
+
 ### Ficha veicular
 
-Registre categoria, tamanho, Vida, Defesa, Resistência geral, resistências por tipo, deslocamento em metros, Manobrabilidade, capacidade, cobertura, tripulação mínima, sistemas, espaços de base, armas e avarias. O chassi genérico começa com Vida 10, Defesa 10, Resistência 0, deslocamento 4,5 m, Manobrabilidade 0, cobertura nenhuma, tripulação mínima 1 e nenhum espaço de base. Valores publicados no veículo prevalecem.
+A ficha de um veículo registra categoria, tamanho, Vida, Defesa, Resistência geral, resistências por tipo, deslocamento em metros, Manobrabilidade, capacidade, cobertura, tripulação mínima, sistemas, espaços de base, armas e avarias. O chassi genérico é o ponto de partida, e valores publicados no veículo prevalecem.
+
+- Campo | Chassi genérico
+
+- Vida | 10
+
+- Defesa | 10
+
+- Resistência | 0
+
+- Deslocamento | 4,5 m
+
+- Manobrabilidade | 0
+
+- Cobertura | Nenhuma
+
+- Tripulação mínima | 1
+
+- Espaços de base | Nenhum
 
 ### Escala de Vida e dano
 
@@ -2467,6 +2816,10 @@ Registre categoria, tamanho, Vida, Defesa, Resistência geral, resistências por
 
 - Uma arma instalada só ataca mais de uma vez no turno quando sua descrição permitir.
 
+**Exemplo:**
+
+Duda conduz o jipe e Caio opera a arma instalada. No turno de Duda, ela gasta a Ação de Movimento para conduzir. No turno de Caio, ele dispara a arma e gasta a ação que o ataque pede. O jipe não age por conta própria: se Duda gastar a Ação de Movimento com outra coisa, ele mantém curso e velocidade.
+
 ## veiculos-cenas
 
 **Categoria:** Combate e Mecânicas
@@ -2474,6 +2827,20 @@ Registre categoria, tamanho, Vida, Defesa, Resistência geral, resistências por
 **Status:** Regra oficial
 
 Perseguições, manobras, ataques, colisões e avarias para resolver cenas veiculares sem misturar as ações do veículo com as da tripulação.
+
+Quando o veículo entra em cena de verdade, o jogo troca de ritmo: uma distância entre quem foge e quem persegue, manobras com risco e dano que vira avaria em vez de destruição.
+
+**Em resumo**
+
+- A perseguição tem cinco faixas: Contato, Curta, Média, Longa e Escapou. No fim de cada rodada, fugitivo e perseguidor fazem um teste oposto de Pilotagem ou Cavalgar.
+
+- Uma vitória por 10 ou mais move duas faixas, qualquer outra vitória move uma, e empate mantém a faixa. Nada move mais de duas.
+
+- Abalroar e preparar abordagem só funcionam na faixa Contato.
+
+- Passar de mais da metade da Vida para metade ou menos gera uma avaria. Chegar a 0 de Vida incapacita o veículo e gera outra. Ele não usa Morrendo.
+
+- O dano ao veículo não atinge os ocupantes, a menos que o efeito declare isso.
 
 ### Perseguições
 
@@ -2492,6 +2859,10 @@ No fim de cada rodada, o fugitivo e o perseguidor fazem um teste oposto de Pilot
 - Escapou | O alvo saiu da perseguição e não pode ser alcançado nesta cena.
 
 Terreno, clima, avarias e manobras podem conceder vantagem ou desvantagem. Se mais de um veículo persegue o mesmo alvo, cada perseguidor mantém sua própria faixa.
+
+**Exemplo:**
+
+Um ladrão foge de moto e uma viatura o persegue, com a faixa em Média. No fim da rodada, os dois rolam Pilotagem: o ladrão fecha 18 e o policial fecha 15. O ladrão venceu por 3, então a distância sobe uma faixa, para Longa. Se tivesse vencido por 10 ou mais, subiria duas faixas e ele escaparia.
 
 ### Manobras
 
@@ -2539,6 +2910,8 @@ Terreno, clima, avarias e manobras podem conceder vantagem ou desvantagem. Se ma
 
 ### Dano e avarias
 
+O dano comum não destrói um veículo. Ele quebra aos poucos, e cada quebra relevante vira uma avaria.
+
 - Ao passar de mais da metade da Vida para metade ou menos, role uma avaria.
 
 - Ao chegar a 0 de Vida, o veículo fica incapacitado e sofre outra avaria. Ele não usa Morrendo.
@@ -2561,6 +2934,10 @@ Terreno, clima, avarias e manobras podem conceder vantagem ou desvantagem. Se ma
 
 - 6 | Casco | A cobertura dos ocupantes cai um grau: total para parcial ou parcial para nenhuma. | O próximo dano recebido ignora a Resistência; depois, remova esta repetição.
 
+**Exemplo:**
+
+Um veículo de Vida 20 e Resistência 2 recebe um ataque que causa 12 de dano. A Resistência tira 2, então ele perde 10 de Vida e fica com 10, que é metade da Vida máxima. Cruzou o limite: role 1d6 na tabela de avarias e aplique o resultado.
+
 ## veiculos-manutencao
 
 **Categoria:** Combate e Mecânicas
@@ -2568,6 +2945,20 @@ Terreno, clima, avarias e manobras podem conceder vantagem ou desvantagem. Se ma
 **Status:** Regra oficial
 
 Reparo emergencial, manutenção mensal, montarias e tiers de componentes para conservar e melhorar veículos depois da cena.
+
+Depois da cena, o veículo precisa voltar a funcionar. Aqui estão o reparo das avarias, o custo mensal em Componentes Veiculares, as regras das montarias e os tiers dos componentes.
+
+**Em resumo**
+
+- O reparo emergencial suspende uma avaria até o fim da cena. A manutenção corretiva remove uma avaria e restaura 10% da Vida máxima, em seis horas e com 1 Componente Veicular.
+
+- No fim de cada mês de uso, gaste 1 Componente Veicular da raridade do veículo, mais 1 lote por módulo de utilidade instalado.
+
+- O custo atrasado não acumula, e veículo guardado e sem uso durante o mês não paga.
+
+- Montaria não recebe avarias veiculares: ela mantém a própria Vida, Defesa, Resistências e condições.
+
+- Os componentes vão de T0 a T4, e o T4 exige liberação do Mestre.
 
 ### Reparo
 
@@ -2591,13 +2982,15 @@ No fim de cada mês em que o veículo foi usado, gaste Componentes Veiculares pa
 
 - Conte todo módulo de utilidade instalado, mesmo que esteja desligado. Armas, Núcleo e Estrutura não aumentam o custo.
 
-- Uma nave Rara com duas utilidades instaladas gasta 3 Componentes Veiculares Raros no mês.
-
 - Um lote superior pode substituir um inferior. Lotes inferiores não podem ser somados para alcançar outra raridade.
 
 - Se o custo não for pago, o veículo fica sem manutenção e não pode se mover por conta própria nem ativar sistemas. Ele volta a funcionar quando o custo for pago.
 
 - O custo atrasado não acumula. Um veículo guardado e sem uso durante o mês não gasta Componentes Veiculares.
+
+**Exemplo:**
+
+Uma nave Rara com duas utilidades instaladas gasta 3 Componentes Veiculares Raros no mês: 1 pela nave e 1 por utilidade. O que cada estoque de material cobre está em Materiais e Ingredientes.
 
 ### Montarias
 
@@ -2641,6 +3034,16 @@ Custos por personagem, duração das rotas e requisitos para viajar dentro de um
 
 Escolha o meio de transporte e a extensão da rota. Cada célula mostra primeiro o **preço por personagem** e, abaixo, o tempo normal de viagem. Os valores servem como referência de compra; clima, conflitos, bloqueios de rota e acontecimentos da campanha podem alterar a duração.
 
+**Em resumo**
+
+- São três meios de transporte (Trem, Aeronave Comum e Aeronave de Alto Nível) e três tamanhos de rota: dentro de um reino, entre reinos e entre dimensões.
+
+- O preço vale por personagem, e o tempo mostrado é o da viagem sem imprevistos.
+
+- Rota entre dimensões pede um Portal Dimensional disponível e a taxa de acesso de 500 Lunaris.
+
+- Sair da Árvore custa 10.000 Lunaris e leva 12 dias, mas só quem tem um contato capaz de realizar a viagem consegue fazê-la.
+
 ### Transporte entre reinos e dimensões
 
 Custos e tempos dos meios de transporte de Lunaris
@@ -2652,6 +3055,8 @@ Custos e tempos dos meios de transporte de Lunaris
 - Aeronave Comum | 50 Lunaris 10 min | 100 Lunaris 1–2 horas | 500 Lunaris 2 dias
 
 - Aeronave de Alto Nível | 100 Lunaris 1 min | 250 Lunaris 20–30 min | 1.000 Lunaris 1 hora
+
+**Atenção:**
 
 **Rota entre dimensões:** exige um Portal Dimensional disponível. Some a taxa de acesso ao preço do meio de transporte escolhido.
 
@@ -2681,6 +3086,10 @@ Custos, tempos e requisitos de viagens excepcionais
 
 - Uma viagem excepcional pode exigir algo além de dinheiro. Para sair da Árvore, o grupo também precisa de um contato capaz de realizar a viagem.
 
+**Exemplo:**
+
+Um grupo de quatro personagens quer ir de Trem de um reino a outro. A passagem entre reinos custa 50 Lunaris por personagem, então o grupo paga 4 × 50 = 200 Lunaris e viaja por 1–2 dias, se nada atrapalhar o caminho.
+
 ## magia-fluxo
 
 **Categoria:** Livro do Jogador
@@ -2690,6 +3099,16 @@ Custos, tempos e requisitos de viagens excepcionais
 Os onze Fluxos, a fórmula de conjuração, a progressão dos círculos, os custos de Mana e as regras para manter concentração.
 
 A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai dali. São dez Fluxos naturais mais o artificial da Tecnologia: onze formas utilizáveis no total.
+
+**Em resumo**
+
+- Cada alma nasce com um Fluxo natural, e só um. Fluxo alto não ensina magia: o acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.
+
+- O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus da classe. A DT de conjuração é 7 + (3 × círculo).
+
+- A Mana sai quando você declara a conjuração e não volta se o teste falhar. O Fluxo recomendado de cada círculo é só um aviso.
+
+- Você mantém uma concentração por vez. Ao sofrer dano, role Vontade contra DT 10 ou metade do dano recebido, o que for maior.
 
 ### Princípios dos Fluxos
 
@@ -2736,6 +3155,10 @@ DT de conjuração = 7 + (3 × círculo)
 - A metade do nível entra aqui como em qualquer teste. Sem ela, um conjurador de nível alto nunca venceria o teste de resistência de uma criatura do próprio nível.
 
 - A Mana sai no momento em que você declara a conjuração, e não volta se o teste falhar.
+
+**Exemplo:**
+
+Um conjurador de nível total 10 tem Mod. Fluxo +4, um grau de Misticismo que soma +4 e nenhum bônus de classe. A metade do nível vale ⌊10 ÷ 2⌋ = 5, então o bônus dele é +4 + 5 + 4 = +13. A DT de uma magia de 3º círculo é 7 + (3 × 3) = 16, e basta tirar 3 ou mais no d20 para ela se estabilizar. Se a magia for de ataque, esse mesmo total é lido contra a Defesa do alvo.
 
 ### Círculos, Fluxo e DT
 
@@ -2819,7 +3242,17 @@ Cada marco libera um círculo mais alto e mais vagas. A vaga é o total de magia
 
 Os sete elementos do Fluxo Físico, quem os domina, como eles se enfrentam e as quatorze derivações que o Elementarista pode despertar.
 
-O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos primordiais moram nele: Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Não existe um oitavo elemento. Gelo, magma, magnetismo e afins são **derivações**: cada uma nasce de um dos sete e é, ela mesma, um tipo de dano. É isso que esta página explica.
+O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos primordiais moram nele: Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Não existe um oitavo elemento. Gelo, magma, magnetismo e afins são **derivações**: cada uma nasce de um dos sete e é, ela mesma, um tipo de dano. É isso que este tópico explica.
+
+**Em resumo**
+
+- Os sete elementos do Fluxo Físico são Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Gelo, magma, magnetismo e afins são derivações, e cada uma é um tipo de dano próprio.
+
+- O Elementarista escolhe um elemento de origem no 1º nível, para sempre. Só o Avatar, que depende de um 20 natural no nível 5, aprende outros.
+
+- Antes de rolar uma magia Elemental, quem conjura declara qual elemento está usando.
+
+- A relação de vantagem e desvantagem só conta em disputa direta entre manifestações e não dá dano extra.
 
 ### Quem domina um elemento
 
@@ -2855,7 +3288,7 @@ Cada elemento tem um que vence e um que o vence. A relação só conta quando du
 
 - Escuridão | Terra | Luz
 
-A relação não dá dano extra, não remove imunidade e não vale só porque o alvo conhece ou domina outro elemento. Resistência e vulnerabilidade continuam por elemento, como no capítulo **Tipos de Dano**.
+A relação não dá dano extra, não remove imunidade e não vale só porque o alvo conhece ou domina outro elemento. Resistência e vulnerabilidade continuam por elemento, como em Tipos de Dano.
 
 ### Derivações
 
@@ -2903,9 +3336,17 @@ A partir do 13º nível (Domínio da Derivação), uma vez por rodada, ao conjur
 
 Os ganhos e os ônus que surgem do 5º ao 10º círculo, com as Marcas fixas de cada Fluxo e a tabela comum de Cicatrizes.
 
-### O preço dos círculos altos
-
 Magia grande não sai de graça. A partir do 5º círculo, o Fluxo começa a deixar marca em quem o carrega, e no 10º ele cobra por magia aprendida. Todo preço tem os dois lados: um ganho concreto e um ônus concreto.
+
+**Em resumo**
+
+- Do 5º ao 9º círculo você recebe a **Marca** do seu Fluxo, fixa por Fluxo e por círculo: dá para saber de antemão o que te espera. Perdeu o círculo, perdeu a Marca.
+
+- No 10º círculo, cada magia aprendida sorteia uma **Cicatriz** na tabela comum, e a mesma não sai duas vezes para o mesmo personagem.
+
+- Marca e Cicatriz contam como Legado para efeitos que citem Legados, sem ocupar vaga. Concessão do Mestre não gera Cicatriz.
+
+### O preço dos círculos altos
 
 - **Marca do Fluxo (5º ao 9º):** ao alcançar cada um desses círculos, você recebe a Marca daquele círculo no seu Fluxo nativo. Ela não se escolhe e não se rola: é fixa por Fluxo, então dá para saber de antemão o que te espera. Perdeu o círculo, perdeu a Marca.
 
@@ -3109,7 +3550,7 @@ A.X.I.S
 
 Como funcionam rituais fora de combate, fusões com um Fluxo secundário, selos consumíveis e encantamentos permanentes.
 
-Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de círculo. Consulte cada bloco pelo tipo de preparação que o personagem está tentando realizar.
+Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de círculo (ver Magia e Fluxo). Consulte cada bloco pelo tipo de preparação que o personagem está tentando realizar.
 
 ### Rituais
 
@@ -3151,7 +3592,7 @@ Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de c
 
 Consulta interativa de magias, manifestações, rituais, selos, encantamentos e assinaturas de fusão, separada das regras de conjuração.
 
-Esta página serve para procurar uma entrada específica. As fórmulas de teste, DT, Mana e concentração ficam em **Magia e Fluxo**; Marcas, Cicatrizes e preparações possuem capítulos próprios.
+Este tópico serve para procurar uma entrada específica. As fórmulas de teste, DT, Mana e concentração ficam em Magia e Fluxo; Marcas e Cicatrizes estão em Marcas e Cicatrizes, e as preparações em Rituais, Selos e Fusão.
 
 ### O que está no catálogo
 
@@ -3163,7 +3604,7 @@ Os filtros abaixo reúnem magias, manifestações de cada Fluxo, rituais, selos,
 
 - Para magia de círculo, confira Fluxo recomendado, Mana final e DT de conjuração no texto da própria entrada.
 
-- Ritual não pertence a círculo e não entra em combate. Selo e encantamento dependem da preparação descrita no capítulo correspondente.
+- Ritual não pertence a círculo e não entra em combate. Selo e encantamento dependem da preparação descrita no tópico correspondente.
 
 - Fluxo do Fim continua exigindo autorização do Mestre antes da escolha.
 
@@ -3174,6 +3615,18 @@ Os filtros abaixo reúnem magias, manifestações de cada Fluxo, rituais, selos,
 **Status:** Regra oficial
 
 Sanidade, crises e as condições que ficam grudadas no personagem, cada uma com o que faz e como sai.
+
+Condição é o que fica grudado no personagem por um tempo: um estado com efeito fixo, uma crise de Sanidade, uma lesão que demora a sarar. Este tópico reúne a regra de Sanidade, as crises que a perda dela provoca e a lista das condições, cada uma com o que faz e como sai.
+
+**Em resumo**
+
+- Condição é um estado com efeito fixo, que termina pela duração, por uma ação ou pelo tratamento indicado. Veneno, doença e vício são aflições, que evoluem por estágios e têm tópico próprio (Venenos, Doenças e Vícios).
+
+- A Sanidade vai de 0 a 100. Perdê-la custa 1d4, 1d6, 1d8 ou 2d6, conforme o tamanho do que você viu, e cada faixa dela tem um estado: de Estável a Quebra.
+
+- Abaixo de certos pontos a Sanidade provoca crises, e há 6 catalogadas. As 24 condições oficiais e as 47 de longo prazo estão nas tabelas deste tópico.
+
+- A ficha aplica sozinha o que dá para calcular. O que depende da cena continua com a mesa.
 
 ### Condição ou aflição?
 
@@ -3235,7 +3688,7 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 - Sangramento | Sofra 1d6 de dano no fim do turno. Novas aplicações aumentam o dano em +1, até +5, mas não adicionam dados. | Cura DT 15 com ação padrão ou qualquer cura de pelo menos 1 PV.
 
-- Atordoado | Não pode usar ações nem reações. Defesa reduzida em 5. Veja também Inconsciente: mesmo efeito de base, mas para quando a causa for perder toda a Vida, não um efeito temporário. | Termina ao fim da duração. Uma nova aplicação apenas renova a duração.
+- Atordoado | Não pode usar ações nem reações. Defesa reduzida em 5. Veja também Inconsciente: mesmo efeito de base, mas para quando a causa for perder toda a Vida. | Termina ao fim da duração. Uma nova aplicação apenas renova a duração.
 
 - Agarrado | Movimento 0. Ataques contra alvos que não participam do agarrão sofrem -2. | Ação padrão e teste oposto de Atletismo ou Acrobacia.
 
@@ -3422,6 +3875,18 @@ Condições que duram mais que uma cena já vêm escritas, para ninguém precisa
 **Status:** Regra oficial
 
 Exposição, progressão, estágios e tratamento de venenos, doenças e vícios.
+
+Aflição é veneno, doença ou vício: um problema que evolui por estágios com o passar do tempo. Este tópico explica como ela se aplica, como progride a cada intervalo, como se trata e onde cada uma costuma ser pega, e fecha com o catálogo. Quem quiser as condições de efeito fixo encontra a lista em Condições.
+
+**Em resumo**
+
+- Ao sofrer exposição, teste Fortitude contra a DT da aflição. Falha aplica o estágio 1, e falha crítica aplica o estágio 2.
+
+- No fim de cada intervalo, novo teste: sucesso crítico reduz 1 estágio, sucesso mantém, falha aumenta 1 e falha crítica aumenta 2.
+
+- Cura reduz 1 estágio por sucesso, e o antídoto encerra um veneno ativo. No estágio 0 a aflição acaba.
+
+- Uma nova exposição à mesma aflição pode subir 1 estágio, no máximo uma vez por cena.
 
 ### Aplicação
 
@@ -3740,39 +4205,49 @@ Apagamento
 
 Classe comum serve a qualquer Árvore. Classe especial segue o mesmo orçamento de poder, mas só aparece nas Árvores indicadas e depende de liberação do Mestre.
 
-Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes e eventos por nível) fica no catálogo interativo da página de Regras, que lê o mesmo arquivo.
+Estas são as 29 classes do jogo, com o nome, o tipo e o conceito de cada uma. A progressão completa, com habilidades, poderes e eventos por nível, está no catálogo de classes do site.
 
-Toda classe vai até o nível 50. As recompensas escritas (habilidades, poderes e eventos) vão até o 20, e do 21 ao 50 entra a Maestria, igual para todas. A página de cada classe mostra tudo isso nível a nível, e as classes que conjuram mostram também o círculo e as vagas de magia. Se quiser um resumo do que muda depois do 20 e do 60, ele está em Experiência e Níveis.
+**Em resumo**
 
-- **Guerreiro** (comum) - Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo pra si e comanda um batalhão que luta melhor quando ele está por perto.
-- **Piloto** (comum) - Luta de dentro de um veículo que ele mesmo vai melhorando peça por peça. Quanto mais o personagem sobe, mais o veículo cresce junto.
-- **Ninja** (comum) - Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Rende muito mais quando ninguém percebeu que ele chegou.
-- **Pop Star** (comum) - Onde os outros partem pra briga, ele sobe no palco. A fama abre portas, a presença prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.
-- **Espadachim** (comum) - Passou a vida inteira com uma espada na mão. Muda de postura no meio da luta e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.
-- **Lutador** (comum) - Briga de mão limpa, sem arma e sem armadura. Vai marcando o inimigo golpe a golpe e costuma ganhar no cansaço, quando o outro já não aguenta mais.
-- **Atirador** (comum) - Prefere lutar de longe e nunca chega sem plano. Escolhe a posição com calma, cuida da munição e sabe sempre quantos tiros ainda tem.
-- **Médico** (comum) - Segura o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e manda de volta pra luta. Só não consegue desfazer o que já aconteceu.
-- **Guardião** (comum) - Escolhe uma pessoa pra proteger e leva isso muito a sério. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e aguenta o que vier, até onde a reação e a cena deixarem.
-- **Caçador** (comum) - Estuda a presa antes de chegar perto. Cada tipo de criatura pede um jeito diferente de caçar, e o que ele aprende sobre uma serve pra toda a família dela.
-- **Engenheiro** (comum) - Chega com tudo montado. Prepara invenções de uso rápido, melhora o equipamento do grupo e, quando precisa, força a máquina além do limite sabendo muito bem o preço.
-- **Alquimista** (comum) - Pega o que encontra pelo caminho e transforma em elixir, bomba ou antídoto. Você prepara as doses no descanso, e o que sobrar estraga até o descanso seguinte.
-- **Comerciante** (comum) - Resolve a briga antes dela começar. Conhece a pessoa certa, fica sabendo das coisas na hora e tem sempre o item certo no estoque. Dinheiro do nada ele não faz, por mais que o grupo peça.
-- **Campeão Dimensional** (especial, qualquer Árvore) - O título fica com quem passa dos limites da própria dimensão. Os picos de poder duram pouco, são contados, e nenhum deles salva ninguém da morte.
-- **Pirata Amaldiçoado** (especial, O Vazio) - Luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que já morreu e continua obedecendo às suas ordens.
-- **Cartista Arcano** (especial, qualquer Árvore) - Conjura com cartas que prepara antes. O baralho define o que você tem na mão naquele dia, e o seu Fluxo nativo define o que cada carta faz.
-- **Guia Dimensional** (especial, Matriz) - Conhece as rotas, os portais e as âncoras. Quando o grupo chega num lugar sem estrada nenhuma, foi ele quem levou.
-- **Caçador das Almas** (especial, Anima) - Liga a própria alma a uma Zanpakutō e passa a vida patrulhando a fronteira entre vivos e mortos, purificando espíritos corrompidos. Quem descobre o nome da lâmina abre o Shikai, e quem domina ela por completo desperta a Bankai.
-- **Escritor de Contos** (especial, Limiar) - Conta histórias, presságios e pequenas verdades que ajudam o grupo. O incômodo é que o que ele conta costuma acontecer.
-- **Invocador** (especial, qualquer Árvore) - Luta com uma criatura invocada do lado. Escolhe ela no Catálogo de Invocações e, a cada pacto, decide se chama mais uma ou se fortalece a que já tem.
-- **Viajante** (especial, Matriz, Éon, Vórtice) - Vive pulando entre Árvores e dimensões. Cada estrada que percorre vira mais um jeito de se virar em qualquer lugar.
-- **Canalizador** (comum) - Usa o Fluxo puro, direto da fonte. É o jeito mais simples de conjurar e também o mais difícil de dominar.
-- **Sintonizador** (comum) - Junta o próprio Fluxo com catalisadores de fora pra conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.
-- **Ritualista** (comum) - Trabalha longe do combate. Ritual não tem círculo, leva tempo e prende a Mana desde o primeiro minuto. Se alguém interromper, a Mana já era.
-- **Interceptador** (especial, A.X.I.S) - Entra na Malha pra desmontar a magia dos outros e atrapalhar quem está conjurando. Fluxo natural mesmo, ele não usa.
-- **Chef** (comum) - Pega os Mantimentos e faz comida que segura o grupo, em combate ou fora dele. Bebida faz efeito na hora, lanche vai junto na caminhada e refeição dá um benefício que dura mais.
-- **Detetive** (comum) - Olha uma cena e vê antes de todo mundo: o detalhe fora do lugar, a mentira mal contada, o padrão que passou batido. E nunca fica satisfeito com a primeira explicação.
-- **Devorador** (especial, Limiar) - Nasce sem poder nenhum e pega emprestado de quem morreu. Mate, ou chegue perto de um corpo ainda quente, devore o que sobrou, e uma parte de verdade da força da vítima passa a ocupar um espaço vazio dentro de você.
-- **Elementarista** (especial, Baluarte) - Escolhe um único elemento primordial e vai aprofundando esse laço até chegar numa derivação, usando ele pra mudar o campo de batalha. Aprender os outros elementos só dá pra quem tem a aptidão de Avatar, que é raríssima.
+- São 18 classes comuns, que servem a qualquer Árvore, e 11 especiais, que só aparecem nas Árvores indicadas e dependem de liberação do Mestre.
+
+- Todas fecham no mesmo orçamento de poder. O que muda de uma para outra é o jeito de jogar.
+
+- Toda classe vai até o nível 50: do 1 ao 20 vêm habilidades, poderes e eventos, e do 21 ao 50 entra a Maestria, igual para todas.
+
+O catálogo mostra a progressão nível a nível, e as classes que conjuram mostram também o círculo e as vagas de magia. Se quiser um resumo do que muda depois do 20 e do 60, ele está em Experiência e Níveis.
+
+### As classes
+
+- **Guerreiro** *(comum)*. Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo pra si e comanda um batalhão que luta melhor quando ele está por perto.
+- **Piloto** *(comum)*. Luta de dentro de um veículo que ele mesmo vai melhorando peça por peça. Quanto mais o personagem sobe, mais o veículo cresce junto.
+- **Ninja** *(comum)*. Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Rende muito mais quando ninguém percebeu que ele chegou.
+- **Pop Star** *(comum)*. Onde os outros partem pra briga, ele sobe no palco. A fama abre portas, a presença prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.
+- **Espadachim** *(comum)*. Passou a vida inteira com uma espada na mão. Muda de postura no meio da luta e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.
+- **Lutador** *(comum)*. Briga de mão limpa, sem arma e sem armadura. Vai marcando o inimigo golpe a golpe e costuma ganhar no cansaço, quando o outro já não aguenta mais.
+- **Atirador** *(comum)*. Prefere lutar de longe e nunca chega sem plano. Escolhe a posição com calma, cuida da munição e sabe sempre quantos tiros ainda tem.
+- **Médico** *(comum)*. Segura o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e manda de volta pra luta. Só não consegue desfazer o que já aconteceu.
+- **Guardião** *(comum)*. Escolhe uma pessoa pra proteger e leva isso muito a sério. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e aguenta o que vier, até onde a reação e a cena deixarem.
+- **Caçador** *(comum)*. Estuda a presa antes de chegar perto. Cada tipo de criatura pede um jeito diferente de caçar, e o que ele aprende sobre uma serve pra toda a família dela.
+- **Engenheiro** *(comum)*. Chega com tudo montado. Prepara invenções de uso rápido, melhora o equipamento do grupo e, quando precisa, força a máquina além do limite sabendo muito bem o preço.
+- **Alquimista** *(comum)*. Pega o que encontra pelo caminho e transforma em elixir, bomba ou antídoto. Você prepara as doses no descanso, e o que sobrar estraga até o descanso seguinte.
+- **Comerciante** *(comum)*. Resolve a briga antes dela começar. Conhece a pessoa certa, fica sabendo das coisas na hora e tem sempre o item certo no estoque. Dinheiro do nada ele não faz, por mais que o grupo peça.
+- **Campeão Dimensional** *(especial, qualquer Árvore)*. O título fica com quem passa dos limites da própria dimensão. Os picos de poder duram pouco, são contados, e nenhum deles salva ninguém da morte.
+- **Pirata Amaldiçoado** *(especial, O Vazio)*. Luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que já morreu e continua obedecendo às suas ordens.
+- **Cartista Arcano** *(especial, qualquer Árvore)*. Conjura com cartas que prepara antes. O baralho define o que você tem na mão naquele dia, e o seu Fluxo nativo define o que cada carta faz.
+- **Guia Dimensional** *(especial, Matriz)*. Conhece as rotas, os portais e as âncoras. Quando o grupo chega num lugar sem estrada nenhuma, foi ele quem levou.
+- **Caçador das Almas** *(especial, Anima)*. Liga a própria alma a uma Zanpakutō e passa a vida patrulhando a fronteira entre vivos e mortos, purificando espíritos corrompidos. Quem descobre o nome da lâmina abre o Shikai, e quem domina ela por completo desperta a Bankai.
+- **Escritor de Contos** *(especial, Limiar)*. Conta histórias, presságios e pequenas verdades que ajudam o grupo. O incômodo é que o que ele conta costuma acontecer.
+- **Invocador** *(especial, qualquer Árvore)*. Luta com uma criatura invocada do lado. Escolhe ela no Catálogo de Invocações e, a cada pacto, decide se chama mais uma ou se fortalece a que já tem.
+- **Viajante** *(especial, Matriz, Éon, Vórtice)*. Vive pulando entre Árvores e dimensões. Cada estrada que percorre vira mais um jeito de se virar em qualquer lugar.
+- **Canalizador** *(comum)*. Usa o Fluxo puro, direto da fonte. É o jeito mais simples de conjurar e também o mais difícil de dominar.
+- **Sintonizador** *(comum)*. Junta o próprio Fluxo com catalisadores de fora pra conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.
+- **Ritualista** *(comum)*. Trabalha longe do combate. Ritual não tem círculo, leva tempo e prende a Mana desde o primeiro minuto. Se alguém interromper, a Mana já era.
+- **Interceptador** *(especial, A.X.I.S)*. Entra na Malha pra desmontar a magia dos outros e atrapalhar quem está conjurando. Fluxo natural mesmo, ele não usa.
+- **Chef** *(comum)*. Pega os Mantimentos e faz comida que segura o grupo, em combate ou fora dele. Bebida faz efeito na hora, lanche vai junto na caminhada e refeição dá um benefício que dura mais.
+- **Detetive** *(comum)*. Olha uma cena e vê antes de todo mundo: o detalhe fora do lugar, a mentira mal contada, o padrão que passou batido. E nunca fica satisfeito com a primeira explicação.
+- **Devorador** *(especial, Limiar)*. Nasce sem poder nenhum e pega emprestado de quem morreu. Mate, ou chegue perto de um corpo ainda quente, devore o que sobrou, e uma parte de verdade da força da vítima passa a ocupar um espaço vazio dentro de você.
+- **Elementarista** *(especial, Baluarte)*. Escolhe um único elemento primordial e vai aprofundando esse laço até chegar numa derivação, usando ele pra mudar o campo de batalha. Aprender os outros elementos só dá pra quem tem a aptidão de Avatar, que é raríssima.
 
 ## poderes-habilidades
 
@@ -3783,6 +4258,16 @@ Toda classe vai até o nível 50. As recompensas escritas (habilidades, poderes 
 As cinco coisas que uma classe entrega conforme você sobe: Habilidade, Poder, Habilidade Final, Grau de perícia e Evento. O que é cada uma, qual você escolhe e qual vem pronta.
 
 Subir de nível numa classe sempre entrega alguma coisa, e essa coisa tem cinco formatos diferentes. A confusão mais comum da mesa é tratar Habilidade e Poder como sinônimos: uma vem sozinha e a outra você escolhe.
+
+**Em resumo**
+
+- Toda classe segue a mesma grade de cinco recompensas: Habilidade, Poder, Habilidade Final, Grau de perícia e Evento.
+
+- **Habilidade** chega sozinha e cresce em estágios. **Poder** você escolhe, numa lista de dez a doze opções, e a grade dá oito vagas até o nível 20.
+
+- A **Habilidade Final** vem no nível 20. O **Grau de perícia** sobe um degrau na hora. O **Evento** é um gancho de história que o Mestre encaixa na campanha.
+
+- Do nível 21 ao 50 não entra conteúdo novo: só a Maestria, a cada 5 níveis.
 
 ### A grade de uma classe
 
@@ -3822,27 +4307,31 @@ Aqui você escolhe. Cada classe publica uma lista de dez a doze poderes, e a gra
 
 - Só dá para escolher um poder da lista da sua própria classe, e cada um uma vez só.
 
+**Dica de mesa:**
+
+Leia a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida, a mesma Mana e a mesma Estamina podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.
+
 ### Habilidade Final
 
 O fecho da classe, no nível 20, uma por classe. Ela chega sozinha como qualquer habilidade e costuma ser o efeito que define o que aquela classe virou no fim da estrada.
 
 ### Grau de perícia
 
-Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito. É a exceção às regras do capítulo Treinar, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.
+Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito. É a exceção às regras do tópico Treinamento, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.
 
 ### Evento
 
-Evento não é poder. É um gancho que a classe entrega ao Mestre: uma arena que chama o Guerreiro, um clã que cobra o Ninja, um contato que procura o Comerciante. Ele não tem número, não gasta ação e não entra no cálculo de nada.
+Evento é um gancho que a classe entrega ao Mestre: uma arena que chama o Guerreiro, um clã que cobra o Ninja, um contato que procura o Comerciante. Ele não tem número, não gasta ação e não entra no cálculo de nada.
 
-- Quando o nível do evento chega, o Mestre encaixa aquilo na campanha no momento em que fizer sentido, não obrigatoriamente na mesma sessão.
+- Quando o nível do evento chega, o Mestre encaixa aquilo na campanha no momento em que fizer sentido, e não obrigatoriamente na mesma sessão.
 
 - O que sai dali é recompensa combinada na mesa. Evento não concede nível, dinheiro infinito nem item garantido.
 
-- Se o grupo estiver no meio de outra coisa, o evento espera. Ele é oportunidade, não interrupção.
+- Se o grupo estiver no meio de outra coisa, o evento espera a hora certa.
 
 ### Depois do nível 20: a Maestria
 
-A grade das classes termina no nível 20. Cada classe pode ir até o 50, e do 21 ao 50 ela soma Vida, Mana e Estamina a cada nível, do jeito de sempre, mais a Maestria a cada 5 níveis. A Maestria é igual para todas as classes e conta pelo nível da própria classe. Não confunda com a maestria de atributo do Sistema Base, que vem de um atributo chegar a 20 por mérito próprio.
+A grade das classes termina no nível 20. Cada classe pode ir até o 50, e do 21 ao 50 ela soma Vida, Mana e Estamina a cada nível, do jeito de sempre, mais a Maestria a cada 5 níveis. A Maestria é igual para todas as classes e conta pelo nível da própria classe.
 
 - Nível da classe | Recompensa | O que dá
 
@@ -3858,9 +4347,11 @@ A grade das classes termina no nível 20. Cada classe pode ir até o 50, e do 21
 
 - 50 | Grau de perícia | Um grau de perícia à sua escolha, igual ao das outras recompensas de classe.
 
-Não há poder, habilidade nem evento novo depois do 20. Quem quer conteúdo novo abre outra classe; quem quer profundidade sobe a mesma.
+Não há poder, habilidade nem evento novo depois do 20. Quem quer conteúdo novo abre outra classe, e quem quer profundidade sobe a mesma.
 
-Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida, a mesma Mana e a mesma Estamina podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.
+**Atenção:**
+
+Não confunda com a maestria de atributo do Sistema Base, que vem de um atributo chegar a 20 por mérito próprio.
 
 ## racas
 
@@ -3870,31 +4361,43 @@ Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes co
 
 Raça comum pode nascer em qualquer Árvore. Raça especial tem regras próprias, depende de liberação e só existe nas Árvores compatíveis.
 
-Nome, tipo e ajustes iniciais de Vida, Mana, Estamina e Movimento de cada raça. Fisiologia, traços e variantes completos ficam no catálogo interativo da página de Regras, que lê o mesmo arquivo.
+Estas são as raças do jogo, com o ajuste inicial que cada uma dá a Vida, Mana, Estamina e Movimento. Fisiologia, traços e variantes completos estão no catálogo de raças do site.
 
-- **Humano** (comum) - Vida +0, Mana +0
-- **Vampiro** (comum) - Vida +1, Mana +0, Estamina +1
-- **Goblim** (comum) - Vida -1, Mana +1, Estamina +2, Movimento +1.5 m
-- **Anão** (comum) - Vida +2, Mana +0, Estamina +3
-- **Golem** (comum) - Vida +5, Mana -2, Estamina +3
-- **Espírito** (especial) - Vida -2, Mana +3
-- **Gigante** (comum) - Vida +4, Mana -1, Estamina +3
-- **Animália** (comum) - Vida +0, Mana +0
-- **Sereia / Tritão** (comum) - Vida -1, Mana +2
-- **Mímico** (comum) - Vida -1, Mana +2
-- **Simbionte** (comum) - Vida +0, Mana +0
-- **Slime** (comum) - Vida +3, Mana -2, Estamina +1
-- **Feérico** (comum) - Vida -2, Mana +4
-- **Elfo** (especial) - Vida +2, Mana +4
-- **Desperto** (especial) - Vida +4, Mana +2, Estamina +2
-- **Auleth** (especial) - Vida +2, Mana +0
-- **Autômato** (especial) - Vida +0, Mana +0
-- **Clone** (especial) - Vida +3, Mana +3, Estamina +2
-- **Anomalia** (especial) - Vida +3, Mana +3, Estamina +2
-- **Amálgamo** (especial) - Vida +5, Mana +1, Estamina +3
-- **Bruxa** (especial) - Vida +1, Mana +5
-- **Onírico** (especial) - Vida +1, Mana +4
-- **Divino** (especial) - Vida +2, Mana +4, Estamina +1
+**Em resumo**
+
+- São 23 raças: 12 comuns, que nascem em qualquer Árvore, e 11 especiais, que dependem de liberação do Mestre e só existem nas Árvores compatíveis.
+
+- Os números da tabela são ajustes iniciais. A raça mexe nesses quatro recursos e também traz fisiologia, traços e, em várias delas, uma escada de estágios.
+
+- Estar na lista não concede acesso: combine com o Mestre quais raças especiais estão abertas na sua mesa.
+
+### As raças
+
+- Raça | Tipo | Vida | Mana | Estamina | Movimento
+
+- Humano | Comum | 0 | 0 | 0 | 0
+- Vampiro | Comum | +1 | 0 | +1 | 0
+- Goblim | Comum | −1 | +1 | +2 | +1,5 m
+- Anão | Comum | +2 | 0 | +3 | 0
+- Golem | Comum | +5 | −2 | +3 | 0
+- Espírito | Especial | −2 | +3 | 0 | 0
+- Gigante | Comum | +4 | −1 | +3 | 0
+- Animália | Comum | 0 | 0 | 0 | 0
+- Sereia / Tritão | Comum | −1 | +2 | 0 | 0
+- Mímico | Comum | −1 | +2 | 0 | 0
+- Simbionte | Comum | 0 | 0 | 0 | 0
+- Slime | Comum | +3 | −2 | +1 | 0
+- Feérico | Comum | −2 | +4 | 0 | 0
+- Elfo | Especial | +2 | +4 | 0 | 0
+- Desperto | Especial | +4 | +2 | +2 | 0
+- Auleth | Especial | +2 | 0 | 0 | 0
+- Autômato | Especial | 0 | 0 | 0 | 0
+- Clone | Especial | +3 | +3 | +2 | 0
+- Anomalia | Especial | +3 | +3 | +2 | 0
+- Amálgamo | Especial | +5 | +1 | +3 | 0
+- Bruxa | Especial | +1 | +5 | 0 | 0
+- Onírico | Especial | +1 | +4 | 0 | 0
+- Divino | Especial | +2 | +4 | +1 | 0
 
 ## bestiario
 
@@ -3904,11 +4407,23 @@ Nome, tipo e ajustes iniciais de Vida, Mana, Estamina e Movimento de cada raça.
 
 As seis formas de ter uma criatura ao seu lado, o que muda entre elas e como uma criatura comprada vira um aliado na sua ficha.
 
-Criatura neste jogo não é item de mochila: é alguém que anda com você. Existem seis formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria. A lista das criaturas do mundo, com os números de cada uma, fica no Bestiário dos Registros Universais.
+Uma criatura ao seu lado anda com você pelas cenas, luta quando preciso e tem ficha. Existem seis formas de ter uma, e todas terminam do mesmo jeito: como um aliado com ficha própria. A lista das criaturas do mundo, com os números de cada uma, fica no Bestiário dos Registros Universais.
+
+**Em resumo**
+
+- São seis formas: Criaturas, Familiares, Servos, Invocações, Ajudantes e Seres Lendários.
+
+- Comprar uma criatura na Loja cria o aliado direto na sua ficha, com Vida, Defesa, Iniciativa e ataque principal já preenchidos.
+
+- O aliado nasce com no máximo o dobro da Vida média de um personagem do mesmo nível, bem menos que a criatura tem nas mãos do Mestre.
+
+- VD (Valor de Desafio) é o nível do grupo que a criatura enfrenta sozinha. Quanto maior, mais difícil de matar e mais XP ela vale.
+
+- O que está à venda depende da campanha: o Mestre libera, e as criaturas únicas e as de VD muito alto ficam fora do balcão.
 
 ### As seis formas
 
-- **Criaturas:** animais, monstros e seres naturais capturados, domesticados ou criados em cativeiro. O que elas sabem fazer vem do corpo e do habitat, não de treino.
+- **Criaturas:** animais, monstros e seres naturais capturados, domesticados ou criados em cativeiro. O que elas sabem fazer vem do corpo e do habitat.
 
 - **Familiares:** entidades pequenas ou criaturas inteligentes ligadas ao dono por vínculo mágico. Rendem mais fora de combate que dentro dele: percepção, apoio, recado.
 
@@ -3924,7 +4439,7 @@ Criatura neste jogo não é item de mochila: é alguém que anda com você. Exis
 
 - Comprar no catálogo da Loja cria o aliado direto na sua ficha, com Vida, Defesa, Iniciativa e ataque principal preenchidos. Comprou três, aparecem três fichas. A Vida que a ficha recebe já é a de aliado, menor que a da criatura como inimigo (ver abaixo).
 
-- Daí em diante ela é sua responsabilidade: vida anotada, condições anotadas, turno próprio na iniciativa. O capítulo Aliados e Contratados explica como ela se comporta na mesa.
+- Daí em diante ela é sua responsabilidade: vida anotada, condições anotadas, turno próprio na iniciativa. Como ela se comporta na mesa está em Aliados.
 
 - Invocação sustentada por um poder seu não vira entrada permanente: ela existe enquanto o poder existir.
 
@@ -3940,6 +4455,8 @@ Criatura neste jogo não é item de mochila: é alguém que anda com você. Exis
 
 - **Única:** tem uma versão só, sem estágios, e não está à venda. As de VD muito alto também ficam só no Bestiário: servem ao Mestre, e não ao balcão da Loja.
 
+**Atenção:**
+
 Servo é o único tipo que já nasce com um problema junto. Antes de comprar um, combine com a mesa o que a sanidade abalada dele significa na sua história, porque essa parte não se resolve com número.
 
 ## economia
@@ -3950,7 +4467,19 @@ Servo é o único tipo que já nasce com um problema junto. Antes de comprar um,
 
 Como funcionam as moedas de O Jardim, o câmbio entre elas e as regras de segurança e espaço do Cofre Bancário.
 
-São quatro moedas, e elas não são degraus da mesma escada. Cada uma circula num lugar diferente do mundo, e é por isso que nem todas se trocam entre si.
+O Jardim tem quatro moedas. Cada uma circula num lugar diferente do mundo, e por isso nem todas se trocam entre si.
+
+**Em resumo**
+
+- As moedas são Lunaris (o dia a dia), Solares, Fragmentos de Estrela e Créditos Sombrios (o mercado negro).
+
+- O salário mínimo é de 300 Lunaris por mês, e cada degrau de raridade custa quatro vezes o anterior.
+
+- O Banqueiro converte Lunaris, Solares e Fragmentos, sempre passando pelo Solar e com 2% de taxa. Créditos Sombrios não têm câmbio.
+
+- O Cofre guarda dinheiro e item, cresce com o uso e pode ser roubado.
+
+- Dá para mandar item e moeda para outro personagem, e para negociar com Propor troca, que só vale depois do aceite.
 
 ### As quatro moedas
 
@@ -3984,7 +4513,7 @@ Um trabalhador comum ganha **300 Lunaris por mês**, cerca de 10 por dia. Esse �
 
 ### A escada dos preços
 
-Cada degrau de raridade custa quatro vezes o degrau anterior. Os valores abaixo valem para uma arma ou uma armadura, que servem de régua para o catálogo inteiro. Equipamento sai um pouco abaixo dessa régua, consumível bem abaixo, veículo e propriedade bem acima, sempre calculados a partir do mesmo número.
+Cada degrau de raridade custa quatro vezes o degrau anterior. Os valores abaixo valem para uma arma ou uma armadura, que servem de régua para o catálogo inteiro. Equipamento sai um pouco abaixo dessa régua, consumível bem abaixo, veículo e propriedade bem acima, sempre calculados a partir do mesmo número. O catálogo inteiro, com os preços de cada item, está na Loja.
 
 - Raridade | Preço de referência | Em salário mínimo
 
@@ -4020,11 +4549,17 @@ O Banqueiro converte Lunaris, Solares e Fragmentos de Estrela no Discord, sempre
 
 - 100 Lunaris ☾ | 1 Solar | 100 Lunaris
 
+**Atenção:**
+
 Créditos Sombrios ♆ são a moeda do mercado negro, das ruas que o Banco Lunar finge não ver. Não existe câmbio para eles: nenhum balcão do banco devolve Lunaris por Créditos, e nenhum vende Créditos por Lunaris. Eles chegam por negócio sujo, como vender uma mercadoria a um doleiro, e é no mercado negro que se gastam.
 
-A conta é sempre a mesma: converta para Solares, converta para a moeda de destino e desconte os 2%. Trocar 10 Fragmentos por Lunaris dá 500 Solares, ou seja 50.000 Lunaris, menos a taxa: você recebe 49.000.
+A conta é sempre a mesma: converta para Solares, converta para a moeda de destino e desconte os 2%.
 
-Converter resolve o troco, e só. Um veículo cotado em Lunaris e uma arma lendária cotada em Solares seguem economias separadas, cada uma pensada para o ritmo da própria categoria. Juntar Lunaris a vida inteira não é o caminho previsto para comprar um Fruto do Éden: Fragmentos e Créditos costumam vir de relíquia concedida pelo Mestre, de negócio no mercado negro ou de pagamento de quem não usa moeda comum.
+**Exemplo:**
+
+Trocar 10 Fragmentos por Lunaris dá 500 Solares, ou seja 50.000 Lunaris, menos a taxa de 2%: você recebe 49.000.
+
+Converter resolve o troco, e só isso. Um veículo cotado em Lunaris e uma arma lendária cotada em Solares seguem economias separadas, cada uma pensada para o ritmo da própria categoria. Para um Fruto do Éden, o caminho previsto passa por Fragmentos e Créditos, que costumam vir de relíquia concedida pelo Mestre, de negócio no mercado negro ou de pagamento de quem não usa moeda comum. Ver Frutos e Implantes.
 
 ### O Cofre
 
@@ -4060,7 +4595,19 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 1366 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 1.366 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+
+**Em resumo**
+
+- Há quatro locais de compra: Feira de Vila, Metrópole, Mercado Negro e Banco Lunar. Comprar num local mostra tudo daquele nível para baixo.
+
+- O local de um item vem da raridade, da natureza do item e da moeda em que ele é cotado.
+
+- Mercado Negro e Banco Lunar começam trancados em toda campanha, e abri-los é decisão do Mestre.
+
+- Um item pode sumir do catálogo porque o local está fechado, porque a faixa de raridade foi escondida ou porque aquele item foi escondido.
+
+- Criatura, propriedade e Fruto do Éden não terminam em objeto comum: viram aliado, base e vínculo na sua ficha.
 
 ### Os quatro locais
 
@@ -4076,7 +4623,7 @@ O catálogo inteiro tem 1366 itens, e você nunca vê todos de uma vez. Cada ite
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 
-**Armas, armaduras e escudos usam raridade por encomenda.** O cartão mostra a versão Comum com o preço do próprio modelo, não um preço genérico de raridade. Dentro dos detalhes você escolhe até Lendário e vê, antes de comprar, o novo dano e crítico ou a nova Defesa e Resistências. Uma arma marcial ainda respeita seu piso de Metrópole mesmo quando Comum.
+**Armas, armaduras e escudos usam raridade por encomenda.** O cartão mostra a versão Comum com o preço do próprio modelo. Dentro dos detalhes você escolhe até Lendário e vê, antes de comprar, o novo dano e crítico ou a nova Defesa e Resistências. Uma arma marcial ainda respeita seu piso de Metrópole mesmo quando Comum.
 
 ### O que decide o local de um item
 
@@ -4087,6 +4634,10 @@ Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópol
 - Qualquer coisa cotada em Fragmentos de Estrela vai para o Banco Lunar, e qualquer coisa cotada em Créditos Sombrios vai para o Mercado Negro. A moeda denuncia o balcão.
 
 - Implante, artefato e o que a descrição marca como ilegal, contrabando ou veneno caem no Mercado Negro por natureza.
+
+**Exemplo:**
+
+O grupo está na Metrópole e quer comprar um implante. Implante cai no Mercado Negro por natureza, então a Metrópole nem mostra a peça, e tentar comprá-la de lá é recusado na hora. Para comprar, o grupo precisa estar no Mercado Negro, e o Mestre precisa ter aberto esse local.
 
 ### Por que um item some
 
@@ -4102,13 +4653,15 @@ Se um item que você viu antes não está mais lá, é uma destas três coisas, 
 
 Três categorias não terminam no inventário. Elas criam uma entrada viva na sua ficha, e a partir daí você é responsável por ela:
 
-- **Criatura:** vira um aliado com ficha própria, editável. Ver Aliados e Contratados.
+- **Criatura:** vira um aliado com ficha própria, editável. Ver Aliados e Criaturas e Companheiros.
 
-- **Propriedade:** vira uma base registrada, com espaços, instalações e conta mensal. Ver Bases e Propriedades.
+- **Propriedade:** vira uma base registrada, com espaços, instalações e conta mensal. Ver Propriedades e Bases.
 
-- **Fruto do Éden:** entra no inventário, mas só vale quando consumido, e aí se liga à ficha para sempre. Ver Frutos do Éden e Implantes.
+- **Fruto do Éden:** entra no inventário, mas só vale quando consumido, e aí se liga à ficha para sempre. Ver Frutos e Implantes.
 
-Antes de comprar algo caro, confirme com a mesa em que local vocês estão. O mesmo item pode estar a duas prateleiras de distância, e ir até a prateleira certa costuma ser uma sessão inteira.
+**Dica de mesa:**
+
+Antes de comprar algo caro, confirme com a mesa em que local vocês estão. O mesmo item pode estar a duas prateleiras de distância, e ir até a prateleira certa costuma ser uma sessão inteira. Os preços seguem a escada de Economia.
 
 ## bases
 
@@ -4120,6 +4673,18 @@ Aquisição, espaços, instalações, melhorias e manutenção de propriedades i
 
 Uma base é o lugar do grupo no mundo: o esconderijo, a oficina, o navio, a casa comprada com o dinheiro da última missão. Ela custa para adquirir, custa todo mês para manter e, em troca, muda o que o grupo consegue fazer entre uma aventura e outra.
 
+**Em resumo**
+
+- Toda base tem um patamar (Posto, Sede, Complexo ou Fortaleza), que define quantos espaços e ocupantes ela comporta e até que nível as instalações chegam.
+
+- As instalações são Dormitório, Área Médica, Oficina, Laboratório, Armazém, Hangar ou Estábulo e Segurança, e cada uma ocupa os espaços do nível em que está.
+
+- Uma Unidade de Aquisição vale 1.000 Lunaris, e uma Unidade de Manutenção vale 100 Lunaris por mês.
+
+- Melhorar custa só a diferença entre o nível novo e o antigo.
+
+- Manutenção atrasada desativa instalações, mas nunca tira a propriedade do grupo.
+
 ### Registro da base
 
 - Registre nome, tipo, patamar, localização, responsáveis, espaços ocupados e instalações.
@@ -4127,6 +4692,17 @@ Uma base é o lugar do grupo no mundo: o esconderijo, a oficina, o navio, a casa
 - Uma base imóvel permanece no local registrado. Uma base móvel depende de uma plataforma ou veículo já capaz de transportá-la.
 
 - Estas regras não concedem deslocamento, Vida, Defesa, armas, tripulação nem componentes veiculares.
+
+### Patamares
+
+O patamar define quantos espaços e ocupantes a base comporta, até que nível chegam suas instalações e quanto custa tê-la.
+
+- Patamar | Espaços | Ocupantes | Nível máximo | Aquisição | Manutenção
+
+- Posto | 3 | 4 | 1 | 1 | 1
+- Sede | 6 | 12 | 2 | 3 | 2
+- Complexo | 10 | 30 | 3 | 6 | 4
+- Fortaleza | 16 | 60 | 3 | 10 | 7
 
 ### Espaços e instalações
 
@@ -4136,42 +4712,67 @@ Uma base é o lugar do grupo no mundo: o esconderijo, a oficina, o navio, a casa
 
 - Cada instalação ocupa apenas os espaços do nível atual. Uma melhoria substitui o nível anterior.
 
-- Instalações de mesmo id não acumulam. Use apenas o maior nível ativo.
+- Duas instalações do mesmo tipo não acumulam. Use apenas o maior nível ativo.
 
 - Uma instalação inativa ocupa espaços, mas não concede efeitos.
 
 - O limite de ocupantes indica quantas criaturas recebem serviços e descanso da base ao mesmo tempo. Excedentes não recebem benefícios de instalações.
 
-- Patamar | Espaços | Ocupantes | Nível máximo | Aquisição | Manutenção
+Dormitório
 
-- Posto | 3 | 4 | 1 | 1 | 1
-- Sede | 6 | 12 | 2 | 3 | 2
-- Complexo | 10 | 30 | 3 | 6 | 4
-- Fortaleza | 16 | 60 | 3 | 10 | 7
+Fornece abrigo para descanso completo até sua capacidade. A base usa apenas o Dormitório de maior nível. Benefícios de descanso não se acumulam.
 
-- Instalação | Nível | Espaços | Aquisição | Manutenção | Efeito
+- **Nível 1** (1 espaço, aquisição 1, manutenção 1). Permite descanso de qualidade Boa para até 4 ocupantes.
+- **Nível 2** (2 espaços, aquisição 2, manutenção 2). Permite descanso de qualidade Maravilhosa para até 8 ocupantes.
+- **Nível 3** (3 espaços, aquisição 4, manutenção 3). Permite descanso de qualidade Excelente para até 12 ocupantes se Área Médica 2 ou superior estiver ativa; sem ela, a qualidade é Maravilhosa.
 
-- Dormitório | 1 | 1 | 1 | 1 | Permite descanso de qualidade Boa para até 4 ocupantes.
-- Dormitório | 2 | 2 | 2 | 2 | Permite descanso de qualidade Maravilhosa para até 8 ocupantes.
-- Dormitório | 3 | 3 | 4 | 3 | Permite descanso de qualidade Excelente para até 12 ocupantes se Área Médica 2 ou superior estiver ativa; sem ela, a qualidade é Maravilhosa.
-- Área Médica | 1 | 1 | 1 | 1 | Concede +2 em Cura para tratar um paciente por vez.
-- Área Médica | 2 | 2 | 2 | 2 | Concede vantagem em Cura para tratar até 2 pacientes por vez; não aplique o +2 do nível 1.
-- Área Médica | 3 | 3 | 4 | 3 | Concede vantagem e +2 em Cura para tratar até 4 pacientes por vez.
-- Oficina | 1 | 1 | 1 | 1 | Equivale a um Kit de Ofício fixo e mantém 1 projeto mecânico em andamento.
-- Oficina | 2 | 2 | 2 | 2 | Também equivale a uma Oficina A.X.I.S e mantém até 2 projetos mecânicos em andamento.
-- Oficina | 3 | 3 | 4 | 3 | Mantém até 3 projetos mecânicos em andamento com Kit de Ofício ou Oficina A.X.I.S.
-- Laboratório | 1 | 1 | 1 | 1 | Na especialidade Alquimia, equivale a um Laboratório Alquímico e mantém 1 projeto.
-- Laboratório | 2 | 2 | 2 | 2 | Mantém até 2 projetos da especialidade em andamento.
-- Laboratório | 3 | 3 | 4 | 3 | Com Área Médica 2 ou superior, também equivale a uma Sala de Implante e mantém até 3 projetos.
-- Armazém | 1 | 1 | 1 | 1 | Armazena até 15 itens.
-- Armazém | 2 | 2 | 2 | 2 | Armazena até 30 itens.
-- Armazém | 3 | 3 | 4 | 3 | Armazena até 60 itens.
-- Hangar ou Estábulo | 1 | 1 | 1 | 1 | Abriga 1 veículo pequeno ou até 2 montarias.
-- Hangar ou Estábulo | 2 | 2 | 2 | 2 | Abriga 1 veículo médio, 2 pequenos ou até 4 montarias.
-- Hangar ou Estábulo | 3 | 3 | 4 | 3 | Abriga 2 veículos médios, 4 pequenos ou até 8 montarias.
-- Segurança | 1 | 1 | 1 | 1 | DT 12: Ladinagem para acesso físico, Tecnologia para acesso eletrônico ou Ofício adequado para sabotagem.
-- Segurança | 2 | 2 | 2 | 2 | DT 16: Ladinagem para acesso físico, Tecnologia para acesso eletrônico ou Ofício adequado para sabotagem.
-- Segurança | 3 | 3 | 4 | 3 | DT 20: Ladinagem para acesso físico, Tecnologia para acesso eletrônico ou Ofício adequado para sabotagem.
+Área Médica
+
+Fornece instrumentos, leitos e suprimentos para tratamento dentro da base. Use somente o efeito do maior nível. Bônus de outras instalações médicas não se acumulam.
+
+- **Nível 1** (1 espaço, aquisição 1, manutenção 1). Concede +2 em Cura para tratar um paciente por vez.
+- **Nível 2** (2 espaços, aquisição 2, manutenção 2). Concede vantagem em Cura para tratar até 2 pacientes por vez; não aplique o +2 do nível 1.
+- **Nível 3** (3 espaços, aquisição 4, manutenção 3). Concede vantagem e +2 em Cura para tratar até 4 pacientes por vez.
+
+Oficina
+
+Atende requisitos de bancada para construção e reparo mecânico. Não fornece materiais, não reduz custos e não concede produção automática.
+
+- **Nível 1** (1 espaço, aquisição 1, manutenção 1). Equivale a um Kit de Ofício fixo e mantém 1 projeto mecânico em andamento.
+- **Nível 2** (2 espaços, aquisição 2, manutenção 2). Também equivale a uma Oficina A.X.I.S e mantém até 2 projetos mecânicos em andamento.
+- **Nível 3** (3 espaços, aquisição 4, manutenção 3). Mantém até 3 projetos mecânicos em andamento com Kit de Ofício ou Oficina A.X.I.S.
+
+Laboratório
+
+Atende requisitos de bancada para alquimia, pesquisa, magia ou tecnologia. Escolha uma especialidade ao instalar. Não fornece materiais, não reduz custos e não concede produção automática.
+
+- **Nível 1** (1 espaço, aquisição 1, manutenção 1). Na especialidade Alquimia, equivale a um Laboratório Alquímico e mantém 1 projeto.
+- **Nível 2** (2 espaços, aquisição 2, manutenção 2). Mantém até 2 projetos da especialidade em andamento.
+- **Nível 3** (3 espaços, aquisição 4, manutenção 3). Com Área Médica 2 ou superior, também equivale a uma Sala de Implante e mantém até 3 projetos.
+
+Armazém
+
+Guarda itens e materiais registrados no inventário da base. Não aumenta a capacidade de carga de personagens e não produz suprimentos.
+
+- **Nível 1** (1 espaço, aquisição 1, manutenção 1). Armazena até 15 itens.
+- **Nível 2** (2 espaços, aquisição 2, manutenção 2). Armazena até 30 itens.
+- **Nível 3** (3 espaços, aquisição 4, manutenção 3). Armazena até 60 itens.
+
+Hangar ou Estábulo
+
+Abriga veículos ou montarias. A modalidade é escolhida na instalação. Não concede veículo, montaria, deslocamento, arma, sistema veicular ou espaço de componente.
+
+- **Nível 1** (1 espaço, aquisição 1, manutenção 1). Abriga 1 veículo pequeno ou até 2 montarias.
+- **Nível 2** (2 espaços, aquisição 2, manutenção 2). Abriga 1 veículo médio, 2 pequenos ou até 4 montarias.
+- **Nível 3** (3 espaços, aquisição 4, manutenção 3). Abriga 2 veículos médios, 4 pequenos ou até 8 montarias.
+
+Segurança
+
+Define a DT para invadir, sabotar ou abrir acesso protegido da base. Segurança não impede testes, não causa dano automático e não se acumula com outra instalação de Segurança.
+
+- **Nível 1** (1 espaço, aquisição 1, manutenção 1). DT 12: Ladinagem para acesso físico, Tecnologia para acesso eletrônico ou Ofício adequado para sabotagem.
+- **Nível 2** (2 espaços, aquisição 2, manutenção 2). DT 16: Ladinagem para acesso físico, Tecnologia para acesso eletrônico ou Ofício adequado para sabotagem.
+- **Nível 3** (3 espaços, aquisição 4, manutenção 3). DT 20: Ladinagem para acesso físico, Tecnologia para acesso eletrônico ou Ofício adequado para sabotagem.
 
 ### Aquisição e melhoria
 
@@ -4183,13 +4784,17 @@ Uma base é o lugar do grupo no mundo: o esconderijo, a oficina, o navio, a casa
 
 - Remover uma instalação libera seus espaços e não concede reembolso automático.
 
+**Exemplo:**
+
+O grupo adquire uma Sede com um Dormitório de nível 1 e uma Oficina de nível 1. A aquisição soma 3 (Sede) + 1 + 1 = 5 Unidades, ou 5.000 Lunaris. A manutenção soma 2 + 1 + 1 = 4 Unidades, ou 400 Lunaris por mês. Meses depois, melhorar o Dormitório para o nível 2 custa só a diferença dos fatores de aquisição, 2 − 1 = 1 Unidade (1.000 Lunaris), e a manutenção mensal passa a 5 Unidades (500 Lunaris).
+
 ### Descanso e produção
 
-- Dormitório define o limite de qualidade; duração, interrupções, alimento, água e demais requisitos continuam aplicáveis.
+- Dormitório define o limite de qualidade; duração, interrupções, alimento, água e demais requisitos continuam aplicáveis (ver Descanso).
 
 - Cada personagem recebe os benefícios de um único descanso. Dormitórios e efeitos equivalentes não se acumulam.
 
-- Oficina e Laboratório apenas atendem requisitos e limitam projetos simultâneos. Materiais, tempo, testes e falhas seguem as regras do projeto.
+- Oficina e Laboratório apenas atendem requisitos e limitam projetos simultâneos. Materiais, tempo, testes e falhas seguem as regras do projeto (ver Criação, Forja e Alquimia).
 
 ### Manutenção
 
@@ -4205,7 +4810,7 @@ Uma base é o lugar do grupo no mundo: o esconderijo, a oficina, o navio, a casa
 
 ### Bases móveis
 
-A ficha da plataforma precisa informar quantos espaços de base suporta; sem esse campo, ela não recebe instalações de base. Quando uma peça veicular e uma instalação forem equivalentes, use o efeito publicado da peça e não aplique o efeito-base. Movimento, perseguição, colisão, dano e reparo continuam sob as regras da plataforma.
+A ficha da plataforma precisa informar quantos espaços de base suporta; sem esse campo, ela não recebe instalações de base. Quando uma peça veicular e uma instalação forem equivalentes, use o efeito publicado da peça e não aplique o efeito-base. Movimento, perseguição, colisão, dano e reparo continuam sob as regras da plataforma, que estão em Condução e Tripulação e Perseguições e Combate Veicular.
 
 ## mundo-faccoes
 
@@ -4215,7 +4820,19 @@ A ficha da plataforma precisa informar quantos espaços de base suporta; sem ess
 
 Regras de Prestígio, Fama, acesso e reação para organizações de qualquer Árvore.
 
-Estas regras podem ser usadas com qualquer organização da campanha, independentemente da Árvore. Cada facção registra seu próprio Prestígio; Fama continua sendo uma medida geral de visibilidade.
+Duas escalas dizem como o mundo enxerga o grupo. Prestígio mede a relação com cada facção, uma a uma. Fama mede quanta gente conhece o nome do personagem, sem dizer se gostam dele. Valem para qualquer organização da campanha, independentemente da Árvore.
+
+**Em resumo**
+
+- Prestígio vai de −3 a +3, começa em 0 e é registrado separadamente para cada facção.
+
+- Fama vai de 0 a 5 e mede visibilidade pública, em uma escala única.
+
+- O ajuste de teste social e o de anonimato nunca passam de ±2, e o desconto de facção chega a 10% no máximo.
+
+- Acesso permite pedir, e nada garante que o pedido será atendido. Nenhum nível obriga alguém a obedecer.
+
+- Um mesmo fato nunca gera dois ajustes. Reputação Bancária é outro valor, e Prestígio e Fama não a alteram.
 
 ### Facções documentadas
 
@@ -4227,19 +4844,19 @@ Prestígio registra a relação de um personagem ou grupo com uma facção espec
 
 - Nível | Estado | Reação | Acesso | Teste social | Desconto
 
-- -3 | Inimigo | A facção recusa cooperação e pode agir contra o personagem quando tiver motivo e meios. | negado | -2 | 0%
+- −3 | Inimigo | A facção recusa cooperação e pode agir contra o personagem quando tiver motivo e meios. | Negado | −2 | 0%
 
-- -2 | Adversário | A facção restringe contato e exige garantias para qualquer acordo. | negado | -1 | 0%
+- −2 | Adversário | A facção restringe contato e exige garantias para qualquer acordo. | Negado | −1 | 0%
 
-- -1 | Sob desconfiança | A facção mantém distância e verifica pedidos antes de responder. | publico | -1 | 0%
+- −1 | Sob desconfiança | A facção mantém distância e verifica pedidos antes de responder. | Público | −1 | 0%
 
-- 0 | Neutro | A facção trata o personagem pelas regras comuns do local. | publico | 0 | 0%
+- 0 | Neutro | A facção trata o personagem pelas regras comuns do local. | Público | 0 | 0%
 
-- +1 | Reconhecido | A facção aceita contato e oferece serviços de rotina quando disponíveis. | rotina | +1 | 0%
+- +1 | Reconhecido | A facção aceita contato e oferece serviços de rotina quando disponíveis. | Rotina | +1 | 0%
 
-- +2 | Aliado | A facção permite solicitar recursos restritos compatíveis com a relação. | restrito | +1 | 5%
+- +2 | Aliado | A facção permite solicitar recursos restritos compatíveis com a relação. | Restrito | +1 | 5%
 
-- +3 | Confiança | A facção permite contato interno e pedidos compatíveis com seus interesses. | interno | +2 | 10%
+- +3 | Confiança | A facção permite contato interno e pedidos compatíveis com seus interesses. | Interno | +2 | 10%
 
 - Prestígio começa em 0 e é registrado separadamente para cada facção.
 - Prestígio mede relação. Ele não mede fama, cargo, riqueza nem reputação bancária.
@@ -4256,7 +4873,11 @@ Prestígio registra a relação de um personagem ou grupo com uma facção espec
 - **-1:** Romper compromisso aceito ou causar prejuízo relevante à facção. A mesma consequência é registrada uma vez.
 - **-2:** Atacar deliberadamente um objetivo central ou usar acesso concedido contra a facção. Não se acumula com quebra de compromisso pelo mesmo fato.
 
-Depois de aplicar a mudança, limite o resultado entre -3 e +3. Um mesmo fato não gera dois ajustes.
+Depois de aplicar a mudança, limite o resultado entre −3 e +3. Um mesmo fato não gera dois ajustes.
+
+**Exemplo:**
+
+Duda aceita ajudar uma guilda de ferreiros e recupera o carregamento roubado, um compromisso aceito que traz benefício relevante: o Prestígio dela com a guilda sobe de 0 para +1, Reconhecido. Meses depois, ao negociar com os ferreiros, ela soma +1 no teste social. O desconto ainda é 0%, e só aparece em +2, Aliado, com 5%.
 
 ### Fama
 
@@ -4270,11 +4891,11 @@ Fama registra visibilidade pública. Ela usa uma escala única e não substitui 
 
 - 2 | Regional | Reconhecido em uma região ou setor de atividade. | 0
 
-- 3 | Ampla | Reconhecido em diferentes regiões ligadas por comunicação. | -1
+- 3 | Ampla | Reconhecido em diferentes regiões ligadas por comunicação. | −1
 
-- 4 | Mundial | Reconhecido na maior parte da Dimensão Padrão com acesso a notícias. | -2
+- 4 | Mundial | Reconhecido na maior parte da Dimensão Padrão com acesso a notícias. | −2
 
-- 5 | Histórica | Nome e imagem permanecem registrados além da presença atual. | -2
+- 5 | Histórica | Nome e imagem permanecem registrados além da presença atual. | −2
 
 - Fama mede visibilidade pública de 0 a 5. Ela não indica aprovação.
 - Fama só produz reconhecimento onde testemunho, registro ou comunicação possam ter chegado.
@@ -4289,5 +4910,11 @@ Fama registra visibilidade pública. Ela usa uma escala única e não substitui 
 - **-1:** Um acontecimento de campanha remove registros e interrompe a associação pública com a identidade. Passagem de tempo sem exposição não reduz Fama por si só.
 
 Depois de aplicar a mudança, limite o resultado entre 0 e 5.
+
+**Exemplo:**
+
+Duda derruba o monstro que aterrorizava a vila diante de metade dos moradores. É um feito relevante com testemunhas, então a Fama dela sobe de 0, Desconhecido, para 1, Local. Repetir o mesmo feito para o mesmo público não sobe de novo.
+
+**Atenção:**
 
 **Sistemas separados:** Reputação Bancária continua sendo o valor do Banco usado para cofres, cartão e loja. Prestígio e Fama não alteram esse valor.

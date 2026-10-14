@@ -110,13 +110,24 @@ export const REGRA_TRANSPORTE: RegraTopicoDe<'Livro do Jogador'> = {
   corpo: `
     <p class="regras-lead">Escolha o meio de transporte e a extensão da rota. Cada célula mostra primeiro o <strong>preço por personagem</strong> e, abaixo, o tempo normal de viagem. Os valores servem como referência de compra; clima, conflitos, bloqueios de rota e acontecimentos da campanha podem alterar a duração.</p>
 
+    <div class="regras-resumo">
+      <ul>
+        <li>São três meios de transporte (Trem, Aeronave Comum e Aeronave de Alto Nível) e três tamanhos de rota: dentro de um reino, entre reinos e entre dimensões.</li>
+        <li>O preço vale por personagem, e o tempo mostrado é o da viagem sem imprevistos.</li>
+        <li>Rota entre dimensões pede um Portal Dimensional disponível e a taxa de acesso de ${formatarLunaris(ACESSO_PORTAL_DIMENSIONAL.custoLunaris)}.</li>
+        <li>Sair da Árvore custa ${formatarLunaris(VIAGENS_EXCEPCIONAIS[0].custoLunaris)} e leva ${VIAGENS_EXCEPCIONAIS[0].tempo}, mas só quem tem um contato capaz de realizar a viagem consegue fazê-la.</li>
+      </ul>
+    </div>
+
     <h3 class="regras-subtitle">Transporte entre reinos e dimensões</h3>
     <div class="regras-table-wrap"><table class="regras-table">
       <caption class="sr-only">Custos e tempos dos meios de transporte de Lunaris</caption>
       <thead><tr><th scope="col">Transporte</th><th scope="col">Mesmo Reino</th><th scope="col">Entre Reinos</th><th scope="col">Entre Dimensões</th></tr></thead>
       <tbody>${linhasTransportes}</tbody>
     </table></div>
-    <p class="regras-note"><strong>Rota entre dimensões:</strong> exige um Portal Dimensional disponível. Some a taxa de acesso ao preço do meio de transporte escolhido.</p>
+    <div class="regras-note regras-note--atencao">
+      <p><strong>Rota entre dimensões:</strong> exige um Portal Dimensional disponível. Some a taxa de acesso ao preço do meio de transporte escolhido.</p>
+    </div>
 
     <h3 class="regras-subtitle">Portal Dimensional</h3>
     <div class="regras-table-wrap"><table class="regras-table">
@@ -144,6 +155,9 @@ export const REGRA_TRANSPORTE: RegraTopicoDe<'Livro do Jogador'> = {
       <li>Viajar entre dimensões exige acesso a um Portal Dimensional e o pagamento adicional indicado na tabela.</li>
       <li>Uma viagem excepcional pode exigir algo além de dinheiro. Para sair da Árvore, o grupo também precisa de um contato capaz de realizar a viagem.</li>
     </ul>
+    <div class="regras-note regras-note--exemplo">
+      <p>Um grupo de quatro personagens quer ir de Trem de um reino a outro. A passagem entre reinos custa ${formatarLunaris(TRANSPORTES_LUNARIS[0].entreReinos.custoLunaris)} por personagem, então o grupo paga 4 × ${TRANSPORTES_LUNARIS[0].entreReinos.custoLunaris} = ${formatarLunaris(4 * TRANSPORTES_LUNARIS[0].entreReinos.custoLunaris)} e viaja por ${TRANSPORTES_LUNARIS[0].entreReinos.tempo}, se nada atrapalhar o caminho.</p>
+    </div>
   `,
   corpoMestre: `
     <p class="regras-lead">A tabela resolve a referência econômica; disponibilidade e complicações continuam sendo ferramentas de cena. Informe custo, requisito e duração antes de o grupo confirmar a viagem, especialmente quando cada personagem paga uma passagem.</p>

@@ -220,13 +220,24 @@ export function obterFaixaFama(valor: number): FaixaFama {
   return faixa;
 }
 
+const ROTULO_ACESSO: Record<AcessoFaccao, string> = {
+  negado: 'Negado',
+  publico: 'Público',
+  rotina: 'Rotina',
+  restrito: 'Restrito',
+  interno: 'Interno',
+};
+
+/** Número com sinal para a tabela: "+2", "0" ou "−3" (sinal de menos de verdade, não hífen). */
+const comSinal = (valor: number) => (valor > 0 ? `+${valor}` : valor < 0 ? `\u2212${Math.abs(valor)}` : '0');
+
 const linhasPrestigio = TABELA_PRESTIGIO.map((faixa) => `
   <tr>
-    <td><strong>${faixa.nivel > 0 ? `+${faixa.nivel}` : faixa.nivel}</strong></td>
+    <td><strong>${comSinal(faixa.nivel)}</strong></td>
     <td>${faixa.titulo}</td>
     <td>${faixa.reacao}</td>
-    <td>${faixa.acesso}</td>
-    <td>${faixa.ajusteTesteSocial > 0 ? `+${faixa.ajusteTesteSocial}` : faixa.ajusteTesteSocial}</td>
+    <td>${ROTULO_ACESSO[faixa.acesso]}</td>
+    <td>${comSinal(faixa.ajusteTesteSocial)}</td>
     <td>${faixa.descontoPercentual}%</td>
   </tr>
 `).join('');
@@ -236,7 +247,7 @@ const linhasFama = TABELA_FAMA.map((faixa) => `
     <td><strong>${faixa.nivel}</strong></td>
     <td>${faixa.titulo}</td>
     <td>${faixa.alcance}</td>
-    <td>${faixa.ajusteAnonimato > 0 ? `+${faixa.ajusteAnonimato}` : faixa.ajusteAnonimato}</td>
+    <td>${comSinal(faixa.ajusteAnonimato)}</td>
   </tr>
 `).join('');
 
@@ -252,7 +263,17 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
     ['Bônus máximo', '±2'],
   ],
   corpo: `
-    <p class="regras-lead">Estas regras podem ser usadas com qualquer organização da campanha, independentemente da Árvore. Cada facção registra seu próprio Prestígio; Fama continua sendo uma medida geral de visibilidade.</p>
+    <p class="regras-lead">Duas escalas dizem como o mundo enxerga o grupo. Prestígio mede a relação com cada facção, uma a uma. Fama mede quanta gente conhece o nome do personagem, sem dizer se gostam dele. Valem para qualquer organização da campanha, independentemente da Árvore.</p>
+
+    <div class="regras-resumo">
+      <ul>
+        <li>Prestígio vai de ${comSinal(PRESTIGIO_MINIMO)} a ${comSinal(PRESTIGIO_MAXIMO)}, começa em 0 e é registrado separadamente para cada facção.</li>
+        <li>Fama vai de ${FAMA_MINIMA} a ${FAMA_MAXIMA} e mede visibilidade pública, em uma escala única.</li>
+        <li>O ajuste de teste social e o de anonimato nunca passam de ±${AJUSTE_SOCIAL_MAXIMO}, e o desconto de facção chega a ${DESCONTO_FACCAO_MAXIMO_PERCENTUAL}% no máximo.</li>
+        <li>Acesso permite pedir, e nada garante que o pedido será atendido. Nenhum nível obriga alguém a obedecer.</li>
+        <li>Um mesmo fato nunca gera dois ajustes. Reputação Bancária é outro valor, e Prestígio e Fama não a alteram.</li>
+      </ul>
+    </div>
 
     <h3 class="regras-subtitle">Facções documentadas</h3>
     <p>Consulte as facções disponíveis para esta campanha nos Registros Universais do Mundo.</p>
@@ -269,7 +290,10 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
     <dl class="regras-kv regras-kv--boxed">
       ${ALTERACOES_PRESTIGIO.map((alteracao) => `<dt>${alteracao.variacao > 0 ? '+' : ''}${alteracao.variacao}</dt><dd>${alteracao.causa} ${alteracao.limite}</dd>`).join('')}
     </dl>
-    <p>Depois de aplicar a mudança, limite o resultado entre ${PRESTIGIO_MINIMO} e +${PRESTIGIO_MAXIMO}. Um mesmo fato não gera dois ajustes.</p>
+    <p>Depois de aplicar a mudança, limite o resultado entre ${comSinal(PRESTIGIO_MINIMO)} e ${comSinal(PRESTIGIO_MAXIMO)}. Um mesmo fato não gera dois ajustes.</p>
+    <div class="regras-note regras-note--exemplo">
+      <p>Duda aceita ajudar uma guilda de ferreiros e recupera o carregamento roubado, um compromisso aceito que traz benefício relevante: o Prestígio dela com a guilda sobe de 0 para +1, Reconhecido. Meses depois, ao negociar com os ferreiros, ela soma +1 no teste social. O desconto ainda é 0%, e só aparece em +2, Aliado, com 5%.</p>
+    </div>
 
     <h3 class="regras-subtitle">Fama</h3>
     <p>Fama registra visibilidade pública. Ela usa uma escala única e não substitui a relação com cada facção.</p>
@@ -284,17 +308,22 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
       ${ALTERACOES_FAMA.map((alteracao) => `<dt>${alteracao.variacao > 0 ? '+' : ''}${alteracao.variacao}</dt><dd>${alteracao.causa} ${alteracao.limite}</dd>`).join('')}
     </dl>
     <p>Depois de aplicar a mudança, limite o resultado entre ${FAMA_MINIMA} e ${FAMA_MAXIMA}.</p>
+    <div class="regras-note regras-note--exemplo">
+      <p>Duda derruba o monstro que aterrorizava a vila diante de metade dos moradores. É um feito relevante com testemunhas, então a Fama dela sobe de 0, Desconhecido, para 1, Local. Repetir o mesmo feito para o mesmo público não sobe de novo.</p>
+    </div>
 
-    <p class="regras-note"><strong>Sistemas separados:</strong> ${REPUTACAO_BANCARIA_SEPARADA}</p>
+    <div class="regras-note regras-note--atencao">
+      <p><strong>Sistemas separados:</strong> ${REPUTACAO_BANCARIA_SEPARADA}</p>
+    </div>
   `,
   corpoMestre: `
     <p class="regras-lead">Prestígio e Fama são os dois relógios lentos da campanha. Eles quase nunca mudam dentro de uma sessão, e é isso que os torna úteis: registram o que o grupo vem fazendo há meses.</p>
 
     <h3 class="regras-subtitle">Mover os números</h3>
     <ul class="regras-list">
-      <li>Prestígio anda de menos 3 a mais 3 por facção. Mova um degrau por acontecimento relevante, no fim da sessão, e diga em voz alta o que mudou e por quê.</li>
+      <li>Prestígio anda de \u22123 a +3 por facção. Mova um degrau por acontecimento relevante, no fim da sessão, e diga em voz alta o que mudou e por quê.</li>
       <li>Fama vai de 0 a 5 e é uma só, para o grupo inteiro. Ela sobe por feito público: o que ninguém viu não gera Fama.</li>
-      <li>O bônus máximo é mais ou menos 2. Como número, é pequeno de propósito. O valor real está no acesso e na reação, que são coisas de ficção.</li>
+      <li>O bônus máximo é de \u00b12. Como número, é pequeno de propósito. O valor real está no acesso e na reação, que são coisas de ficção.</li>
     </ul>
 
     <h3 class="regras-subtitle">Fazer render</h3>

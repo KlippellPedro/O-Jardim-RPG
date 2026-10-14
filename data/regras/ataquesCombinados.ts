@@ -17,6 +17,15 @@ export const REGRA_ATAQUES_COMBINADOS = {
   corpo: `
     <p class="regras-lead">Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo tempo. Cada participante continua usando sua própria arma, magia, teste e recurso.</p>
 
+    <div class="regras-resumo">
+      <ul>
+        <li>Participam de ${LIMITES_ATAQUE_COMBINADO.participantesMinimos} a ${LIMITES_ATAQUE_COMBINADO.participantesMaximos} voluntários, todos contra o mesmo alvo, e cada um gasta a própria Ação Padrão e uma reação na preparação.</li>
+        <li>O ataque é resolvido no primeiro turno do líder depois que todos se prepararam. O líder só escolhe o momento e não empresta bônus a ninguém.</li>
+        <li>Cada acerto causa o dano normal da contribuição, e cada erro não causa dano nem devolve ações ou recursos. Resistência e vulnerabilidade valem por contribuição.</li>
+        <li>Quem for derrubado antes da resolução perde a contribuição, e se o líder cair outro participante preparado assume.</li>
+      </ul>
+    </div>
+
     <h3 class="regras-subtitle">Requisitos</h3>
     <ul class="regras-list">
       <li>Participam de ${LIMITES_ATAQUE_COMBINADO.participantesMinimos} a ${LIMITES_ATAQUE_COMBINADO.participantesMaximos} criaturas voluntárias que possam perceber e atingir o mesmo alvo.</li>
@@ -53,7 +62,7 @@ export const REGRA_ATAQUES_COMBINADOS = {
     <ul class="regras-list">
       <li>Cada magia precisa alcançar a própria DT de conjuração e a defesa do alvo normalmente.</li>
       <li>Somar danos não altera tipo, alcance, área, duração ou efeito das magias.</li>
-      <li>Ataque Combinado entre personagens não é Fusão de Fluxos. Ele não cria um novo efeito.</li>
+      <li>Ataque Combinado entre personagens não é Fusão de Fluxos (ver <span class="regras-ref regras-ref--rituais-selos">Rituais, Selos e Fusão</span>). Ele não cria um novo efeito.</li>
     </ul>
   `,
   corpoMestre: `

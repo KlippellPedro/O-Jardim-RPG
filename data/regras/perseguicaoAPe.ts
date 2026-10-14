@@ -180,6 +180,15 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
   corpo: `
     <p class="regras-lead">Quando alguém corre e alguém vai atrás, a cena muda de ritmo. A respiração fica curta, a cidade vira obstáculo e cada esquina pode ser a última chance de alcançar, ou de sumir. A perseguição usa as mesmas faixas de distância da perseguição de veículos, e cada rodada move essas faixas conforme o que cada lado tentou.</p>
 
+    <div class="regras-resumo">
+      <ul>
+        <li>A distância usa as mesmas faixas da perseguição de veículos (ver <span class="regras-ref regras-ref--veiculos-cenas">Perseguições e Combate Veicular</span>), de Contato a Escapou. Quem persegue quer chegar a Contato, e quem foge quer chegar a Escapou.</li>
+        <li>A cada rodada o Mestre descreve o terreno e um obstáculo, cada lado declara uma manobra e testa. Quem vence move uma faixa a favor, ou duas se vencer por 10 ou mais.</li>
+        <li>A perseguição dura ${RODADAS_DE_PERSEGUICAO} rodadas. A partir da rodada ${RODADA_DO_FOLEGO}, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.</li>
+        <li>Contato leva ao combate, Escapou encerra a cena, e o relógio fechado deixa os dois lados sabendo mais um do outro.</li>
+      </ul>
+    </div>
+
     <h3 class="regras-subtitle">As faixas</h3>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Faixa</th><th>Como parece, e a distância</th></tr></thead>
@@ -208,7 +217,7 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
       <tbody>${tabelaManobras}</tbody>
     </table></div>
     <ul class="regras-list">
-      <li><strong>Uma manobra por personagem, por rodada.</strong> Ajudar alguém segue as regras de Ações Coletivas e conta como a sua manobra.</li>
+      <li><strong>Uma manobra por personagem, por rodada.</strong> Ajudar alguém segue as regras de <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span> e conta como a sua manobra.</li>
       <li><strong>Magia, item e habilidade de classe entram como manobra,</strong> com o teste que já usam. Um efeito que tire o movimento do outro lado move uma faixa a seu favor.</li>
       <li><strong>O fôlego acaba.</strong> A partir da rodada ${RODADA_DO_FOLEGO}, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.</li>
     </ul>

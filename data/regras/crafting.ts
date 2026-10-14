@@ -250,7 +250,7 @@ export const SALVAGUARDAS_ECONOMIA_CRAFTING = [
   'Materiais específicos e Drops só substituem parte do custo quando a receita permitir. Cada material é consumido uma vez e vale no máximo seu preço registrado.',
   'Um Drop não pode ser usado, vendido e recuperado no mesmo projeto. Desmontagem nunca devolve mais valor do que foi consumido.',
   'Item criado para uso próprio não possui lucro ou comprador automático. Revenda depende da economia local e não gera valor acima do gasto sem contrato ou demanda definidos antes da fabricação.',
-  'Efeitos de classe que preparam fórmulas ou engenhocas temporárias seguem a própria classe. Eles não produzem estoque permanente nem removem custos deste capítulo.',
+  'Efeitos de classe que preparam fórmulas ou engenhocas temporárias seguem a própria classe. Eles não produzem estoque permanente nem removem custos deste tópico.',
   'Cada personagem completa no máximo um bloco de 6 horas de crafting por dia, mesmo que trabalhe em projetos diferentes. Ao fim do bloco, ganha 1 Cansaço.',
 ];
 
@@ -324,10 +324,20 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
     ['Perícias', 'Ofício ou Tecnologia'],
   ],
   corpo: `
-    <p class="regras-lead">A fabricação segue uma receita ou um projeto e exige materiais, ferramenta, tempo e um teste final.</p>
+    <p class="regras-lead">Fabricar segue sempre o mesmo caminho: uma receita ou um projeto, materiais, a ferramenta certa, dias de trabalho e um teste no fim. A raridade do item decide a DT, o tempo e o custo.</p>
+
+    <div class="regras-resumo">
+      <ul>
+        <li>Cada dia de trabalho tem <strong>${HORAS_POR_DIA_DE_TRABALHO} horas</strong>. Cada personagem completa um bloco por dia e ganha 1 Cansaço ao final dele.</li>
+        <li>O teste vem uma vez só, ao fim do projeto: Ofício para forja e alquimia, Tecnologia para sistemas A.X.I.S e cibernéticos, contra a DT da raridade.</li>
+        <li>Os materiais custam uma porcentagem do preço normal do item, e a porcentagem sobe com a raridade.</li>
+        <li>Falhar custa mais um dia e mais material. Sucesso crítico poupa um pouco de componente, mas não melhora o item.</li>
+        <li>Consertar é mais barato que fabricar: ${REGRAS_REPARO.custoPercentual}% do preço normal e uma DT menor.</li>
+      </ul>
+    </div>
 
     <h3 class="regras-subtitle">Procedimento</h3>
-    <ol class="regras-list">
+    <ol class="regras-steps">
       <li>Escolha uma receita ou registre um projeto.</li>
       <li>Defina preço de referência, raridade, quantidade, materiais, ferramenta e perícia.</li>
       <li>Pague o custo de materiais. Componentes específicos são consumidos quando o trabalho começa.</li>
@@ -346,6 +356,9 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
       <tbody>${linhasRaridade}</tbody>
     </table></div>
     <p>O custo de materiais é uma porcentagem do preço normal do item, arredondada para cima. Promoções não reduzem esse custo.</p>
+    <div class="regras-note regras-note--exemplo">
+      <p>Tavi quer fabricar um item Raro de preço normal 1.000 Lunaris, e a receita indica o material específico que a raridade exige. Raro pede DT 20, 7 dias de trabalho e materiais a 70% do preço normal: 700 Lunaris. Ela tem o Kit de Ofício certo. Passados os 7 dias de 6 horas, faz o teste de Ofício contra DT 20. Se falhar, o item não sai, mas o progresso fica guardado: uma nova tentativa custa mais 1 dia e mais 10% do custo inicial de materiais, ou seja, 70 Lunaris.</p>
+    </div>
 
     <h3 class="regras-subtitle">Perícias e ferramentas</h3>
     <div class="regras-table-wrap"><table class="regras-table">
@@ -377,11 +390,12 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
     <ul class="regras-list">${itens(REGRAS_TECNOLOGIA_E_CIBERNETICOS)}</ul>
 
     <h3 class="regras-subtitle">Materiais, Drops e comércio</h3>
-    <p>O que cada um dos seis estoques genéricos de material serve, e quando a raridade exigida sobe, fica no capítulo
-    <strong>Materiais e Ingredientes</strong>. Este capítulo só cobre o lado econômico do crafting.</p>
+    <p>O que cada um dos seis estoques genéricos de material serve, e quando a raridade exigida sobe, fica em <span class="regras-ref regras-ref--materiais">Materiais e Ingredientes</span>. Este tópico só cobre o lado econômico da fabricação.</p>
     <ul class="regras-list">${itens(SALVAGUARDAS_ECONOMIA_CRAFTING)}</ul>
 
-    <p class="regras-note"><strong>Classes:</strong> Alquimista e Engenheiro usam as habilidades descritas nas próprias progressões. Nenhuma classe é obrigatória para fabricar itens comuns, desde que o personagem cumpra os requisitos da receita.</p>
+    <div class="regras-note regras-note--dica">
+      <p><strong>Classes:</strong> Alquimista e Engenheiro usam as habilidades descritas nas próprias progressões. Nenhuma classe é obrigatória para fabricar itens comuns, desde que o personagem cumpra os requisitos da receita.</p>
+    </div>
   `,
   corpoMestre: `
     <p class="regras-lead">Fabricar compete com aventurar: são dias de trabalho que o grupo não passa em campo. A regra se sustenta sozinha desde que você entregue tempo de intervalo e materiais.</p>

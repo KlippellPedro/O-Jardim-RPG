@@ -456,18 +456,16 @@ export const REGRA_MATERIAIS: RegraTopicoDe<'Livro do Jogador'> = {
   corpo: `
     <p class="regras-lead">O nome exato de um material conta a história; o <strong>lote genérico</strong> é o que entra na ficha. Ervas, venenos e sais podem virar Componentes Químicos. Fios, placas e engrenagens podem virar Sucata. Assim o grupo ainda encontra coisas interessantes sem transformar cada preparo numa lista de compras.</p>
 
-    <h3 class="regras-subtitle">A regra em trinta segundos</h3>
-    <ul class="regras-list">
-      <li>Ao receber um material, coloque-o no estoque indicado pelo catálogo e preserve a raridade: material Comum vira lote Comum, material Raro vira lote Raro.</li>
-      <li>Componentes Químicos, Componentes Ritualísticos, Sucata e Mantimentos têm listas próprias. Somente alguns materiais marcados no catálogo também podem virar Matéria-prima.</li>
-      <li>Alquimista, Engenheiro e Chef gastam 1 lote depois de um descanso para abastecer <strong>todos</strong> os preparos permitidos pela classe.</li>
-      <li>As fórmulas do Alquimista exigem Componentes Químicos da raridade do nível atual: Comum no nível 1, Incomum no 2, Raro no 3, Épico no 4 e Lendário no 5.</li>
-      <li>Os projetos do Engenheiro seguem a mesma escada com Sucata: Comum no nível 1, Incomum no 2, Rara no 3, Épica no 4 e Lendária no 5.</li>
-      <li>As receitas do Chef seguem a mesma escada com Mantimentos: Comum no nível 1, Incomum no 2, Raro no 3, Épico no 4 e Lendário no 5.</li>
-      <li>Rituais não têm círculo nem nível: a complexidade decide o custo. Simples gasta 1 Componente Ritualístico Incomum; Complexo, 1 Raro; Grandioso, 2 Épicos; Monumental, 2 Lendários.</li>
-      <li>Veículos usados no mês gastam Componentes Veiculares da própria raridade. O custo é 1 lote pelo veículo e mais 1 lote por módulo de utilidade instalado.</li>
-      <li>Ingredientes específicos são descrição narrativa e mercadoria. Uma receita só exige o estoque genérico indicado.</li>
-    </ul>
+    <div class="regras-resumo">
+      <ul>
+        <li>Ao receber um material, coloque-o no estoque indicado pelo catálogo e preserve a raridade: material Comum vira lote Comum, material Raro vira lote Raro.</li>
+        <li>Componentes Químicos, Componentes Ritualísticos, Sucata e Mantimentos têm listas próprias. Somente alguns materiais marcados no catálogo também podem virar Matéria-prima.</li>
+        <li>Alquimista, Engenheiro e Chef gastam 1 lote depois de um descanso para abastecer <strong>todos</strong> os preparos permitidos pela classe. A raridade exigida sobe com o nível: Comum no nível 1, Incomum no 2, Raro no 3, Épico no 4 e Lendário no 5.</li>
+        <li>Rituais não têm círculo nem nível: a complexidade decide o custo. Simples gasta 1 Componente Ritualístico Incomum; Complexo, 1 Raro; Grandioso, 2 Épicos; Monumental, 2 Lendários.</li>
+        <li>Veículos usados no mês gastam Componentes Veiculares da própria raridade. O custo é 1 lote pelo veículo e mais 1 lote por módulo de utilidade instalado.</li>
+        <li>Ingredientes específicos são descrição narrativa e mercadoria. Uma receita só exige o estoque genérico indicado.</li>
+      </ul>
+    </div>
 
     <h3 class="regras-subtitle">Os seis estoques</h3>
     <div class="regras-table-wrap"><table class="regras-table">
@@ -534,17 +532,21 @@ export const REGRA_MATERIAIS: RegraTopicoDe<'Livro do Jogador'> = {
     <p>Um Mantimento superior pode substituir um inferior. Mantimentos inferiores não se somam para criar uma raridade maior. Todas as receitas conhecidas sobem automaticamente com o nível do Chef.</p>
 
     <h3 class="regras-subtitle">Manutenção de veículos</h3>
-    <p>No fim de cada mês em que um veículo foi usado, gaste <strong>1 Componente Veicular da raridade do veículo</strong>, mais <strong>1 lote da mesma raridade por módulo de utilidade instalado</strong>. Conte os módulos instalados mesmo que estejam desligados. Armas, Núcleo e Estrutura não aumentam esse custo.</p>
-    <p>Exemplo: uma nave Rara com Geladeira e Área Médica instaladas gasta 3 Componentes Veiculares Raros no mês. Um lote superior pode substituir um inferior; lotes inferiores não podem ser somados para alcançar outra raridade.</p>
-    <p>Se o custo não for pago, o veículo fica <strong>sem manutenção</strong> e não pode se mover por conta própria nem ativar sistemas. Ele volta a funcionar assim que a manutenção for paga. O custo atrasado não acumula e o veículo não é destruído por falta de pagamento.</p>
+    <p>No fim de cada mês em que um veículo foi usado, gaste <strong>1 Componente Veicular da raridade do veículo</strong>, mais <strong>1 lote da mesma raridade por módulo de utilidade instalado</strong>. Conte os módulos instalados mesmo que estejam desligados. Armas, Núcleo e Estrutura não aumentam esse custo. Um lote superior pode substituir um inferior; lotes inferiores não podem ser somados para alcançar outra raridade.</p>
+    <div class="regras-note regras-note--exemplo">
+      <p>Uma nave Rara com Geladeira e Área Médica instaladas gasta 3 Componentes Veiculares Raros no mês: 1 pela nave e 1 por cada módulo.</p>
+    </div>
+    <p>Se o custo não for pago, o veículo fica <strong>sem manutenção</strong> e não pode se mover por conta própria nem ativar sistemas. Ele volta a funcionar assim que a manutenção for paga. O custo atrasado não acumula e o veículo não é destruído por falta de pagamento. O resto da rotina de conservação está em <span class="regras-ref regras-ref--veiculos-manutencao">Manutenção e Componentes</span>.</p>
 
     <h3 class="regras-subtitle">Fabricação permanente</h3>
-    <p>Além do teste, tempo e dinheiro do capítulo de Criação, gaste Matéria-prima conforme a raridade: <strong>1</strong> para Comum ou Incomum, <strong>2</strong> para Raro, <strong>3</strong> para Épico, <strong>4</strong> para Lendário, <strong>5</strong> para Relíquia e <strong>6</strong> para Relíquia da Criação.</p>
+    <p>Além do teste, do tempo e do dinheiro de <span class="regras-ref regras-ref--crafting">Criação, Forja e Alquimia</span>, gaste Matéria-prima conforme a raridade: <strong>1</strong> para Comum ou Incomum, <strong>2</strong> para Raro, <strong>3</strong> para Épico, <strong>4</strong> para Lendário, <strong>5</strong> para Relíquia e <strong>6</strong> para Relíquia da Criação.</p>
 
     <h3 class="regras-subtitle">Somente Matéria-prima pode aproveitar outro catálogo</h3>
     <p>Os quatro estoques de classe e os Componentes Veiculares não se misturam. Um ingrediente de cozinha não vira reagente alquímico, e Sucata de engenhoca não substitui uma peça preparada para manter um veículo. Alguns materiais resistentes ou especiais também trazem a marca de Matéria-prima porque podem entrar numa criação permanente. Mesmo nesses casos, cada unidade entra em <strong>um único estoque e na própria raridade</strong>. Não duplique o mesmo achado.</p>
 
-    <p class="regras-note"><strong>Regra de ouro:</strong> siga o catálogo, baixe um número e continue jogando. Potência, qualidade e estado não são contas exigidas dos jogadores.</p>
+    <div class="regras-note regras-note--dica">
+      <p><strong>Regra de ouro:</strong> siga o catálogo, baixe um número e continue jogando. Potência, qualidade e estado não são contas exigidas dos jogadores.</p>
+    </div>
   `,
   corpoMestre: `
     <p class="regras-lead">Conceda materiais como lotes diretamente quando o nome específico não importar. Use nomes detalhados apenas quando eles melhorarem a ficção, a negociação ou a recompensa.</p>

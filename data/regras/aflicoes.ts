@@ -703,8 +703,19 @@ export const REGRA_AFLICOES = {
   ],
   categoria: 'Combate e Mecânicas' as const,
   corpo: `
+    <p class="regras-lead">Aflição é veneno, doença ou vício: um problema que evolui por estágios com o passar do tempo. Este tópico explica como ela se aplica, como progride a cada intervalo, como se trata e onde cada uma costuma ser pega, e fecha com o catálogo. Quem quiser as condições de efeito fixo encontra a lista em <span class="regras-ref regras-ref--condicoes">Condições</span>.</p>
+
+    <div class="regras-resumo">
+      <ul>
+        <li>Ao sofrer exposição, teste Fortitude contra a DT da aflição. Falha aplica o estágio 1, e falha crítica aplica o estágio 2.</li>
+        <li>No fim de cada intervalo, novo teste: sucesso crítico reduz 1 estágio, sucesso mantém, falha aumenta 1 e falha crítica aumenta 2.</li>
+        <li>Cura reduz 1 estágio por sucesso, e o antídoto encerra um veneno ativo. No estágio 0 a aflição acaba.</li>
+        <li>Uma nova exposição à mesma aflição pode subir 1 estágio, no máximo uma vez por cena.</li>
+      </ul>
+    </div>
+
     <h3 class="regras-subtitle">Aplicação</h3>
-    <ol class="regras-list">
+    <ol class="regras-steps">
       <li>Ao sofrer exposição, teste Fortitude contra a DT da aflição. Sucesso ou sucesso crítico evita a aflição. Falha aplica o estágio 1 depois da incubação; falha crítica aplica o estágio 2.</li>
       <li>No fim de cada intervalo, faça outro teste. Sucesso crítico reduz 1 estágio; sucesso mantém; falha aumenta 1; falha crítica aumenta 2.</li>
       <li>O estágio não passa do maior valor do catálogo. Seus efeitos não se acumulam com os de estágios anteriores, salvo indicação expressa.</li>

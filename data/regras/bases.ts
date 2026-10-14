@@ -189,7 +189,10 @@ export const INSTALACOES_BASE: IInstalacaoBase[] = [
 ];
 
 const linhasPatamares = PATAMARES_BASE.map((patamar) => `<tr><td><strong>${patamar.titulo}</strong></td><td>${patamar.espacos}</td><td>${patamar.ocupantes}</td><td>${patamar.nivelInstalacaoMaximo}</td><td>${patamar.fatorAquisicao}</td><td>${patamar.fatorManutencao}</td></tr>`).join('');
-const linhasInstalacoes = INSTALACOES_BASE.flatMap((instalacao) => instalacao.niveis.map((nivel) => `<tr><td><strong>${instalacao.titulo}</strong></td><td>${nivel.nivel}</td><td>${nivel.espacos}</td><td>${nivel.fatorAquisicao}</td><td>${nivel.fatorManutencao}</td><td>${nivel.efeitos.join(' ')}</td></tr>`)).join('');
+const blocosInstalacoes = INSTALACOES_BASE.map((instalacao) => `
+    <h4>${instalacao.titulo}</h4>
+    <p>${instalacao.descricao} ${instalacao.limite}</p>
+    <ul class="regras-list">${instalacao.niveis.map((nivel) => `<li><strong>Nível ${nivel.nivel}</strong> (${nivel.espacos} ${nivel.espacos === 1 ? 'espaço' : 'espaços'}, aquisição ${nivel.fatorAquisicao}, manutenção ${nivel.fatorManutencao}). ${nivel.efeitos.join(' ')}</li>`).join('')}</ul>`).join('');
 
 export const REGRA_BASES = {
   status: 'Regra oficial',
@@ -203,23 +206,38 @@ export const REGRA_BASES = {
   corpo: `
     <p class="regras-lead">Uma base é o lugar do grupo no mundo: o esconderijo, a oficina, o navio, a casa comprada com o dinheiro da última missão. Ela custa para adquirir, custa todo mês para manter e, em troca, muda o que o grupo consegue fazer entre uma aventura e outra.</p>
 
+    <div class="regras-resumo">
+      <ul>
+        <li>Toda base tem um patamar (Posto, Sede, Complexo ou Fortaleza), que define quantos espaços e ocupantes ela comporta e até que nível as instalações chegam.</li>
+        <li>As instalações são Dormitório, Área Médica, Oficina, Laboratório, Armazém, Hangar ou Estábulo e Segurança, e cada uma ocupa os espaços do nível em que está.</li>
+        <li>Uma Unidade de Aquisição vale 1.000 Lunaris, e uma Unidade de Manutenção vale 100 Lunaris por mês.</li>
+        <li>Melhorar custa só a diferença entre o nível novo e o antigo.</li>
+        <li>Manutenção atrasada desativa instalações, mas nunca tira a propriedade do grupo.</li>
+      </ul>
+    </div>
+
     <h3 class="regras-subtitle">Registro da base</h3>
     <ul class="regras-list">
       <li>Registre nome, tipo, patamar, localização, responsáveis, espaços ocupados e instalações.</li>
       <li>Uma base imóvel permanece no local registrado. Uma base móvel depende de uma plataforma ou veículo já capaz de transportá-la.</li>
       <li>Estas regras não concedem deslocamento, Vida, Defesa, armas, tripulação nem componentes veiculares.</li>
     </ul>
+
+    <h3 class="regras-subtitle">Patamares</h3>
+    <p>O patamar define quantos espaços e ocupantes a base comporta, até que nível chegam suas instalações e quanto custa tê-la.</p>
+    <div class="regras-table-wrap"><table class="regras-table"><thead><tr><th>Patamar</th><th>Espaços</th><th>Ocupantes</th><th>Nível máximo</th><th>Aquisição</th><th>Manutenção</th></tr></thead><tbody>${linhasPatamares}</tbody></table></div>
+
     <h3 class="regras-subtitle">Espaços e instalações</h3>
     <ul class="regras-list">
       <li>A soma dos espaços ocupados não pode superar os espaços do patamar.</li>
       <li>O nível da instalação não pode superar o limite do patamar.</li>
       <li>Cada instalação ocupa apenas os espaços do nível atual. Uma melhoria substitui o nível anterior.</li>
-      <li>Instalações de mesmo id não acumulam. Use apenas o maior nível ativo.</li>
+      <li>Duas instalações do mesmo tipo não acumulam. Use apenas o maior nível ativo.</li>
       <li>Uma instalação inativa ocupa espaços, mas não concede efeitos.</li>
       <li>O limite de ocupantes indica quantas criaturas recebem serviços e descanso da base ao mesmo tempo. Excedentes não recebem benefícios de instalações.</li>
     </ul>
-    <div class="regras-table-wrap"><table class="regras-table"><thead><tr><th>Patamar</th><th>Espaços</th><th>Ocupantes</th><th>Nível máximo</th><th>Aquisição</th><th>Manutenção</th></tr></thead><tbody>${linhasPatamares}</tbody></table></div>
-    <div class="regras-table-wrap"><table class="regras-table"><thead><tr><th>Instalação</th><th>Nível</th><th>Espaços</th><th>Aquisição</th><th>Manutenção</th><th>Efeito</th></tr></thead><tbody>${linhasInstalacoes}</tbody></table></div>
+    ${blocosInstalacoes}
+
     <h3 class="regras-subtitle">Aquisição e melhoria</h3>
     <ul class="regras-list">
       <li>${REFERENCIA_CUSTOS_BASES.aquisicao} ${REFERENCIA_CUSTOS_BASES.manutencao}</li>
@@ -227,25 +245,31 @@ export const REGRA_BASES = {
       <li>Para melhorar patamar ou instalação, pague somente a diferença positiva entre os fatores antigos e novos.</li>
       <li>Remover uma instalação libera seus espaços e não concede reembolso automático.</li>
     </ul>
+    <div class="regras-note regras-note--exemplo">
+      <p>O grupo adquire uma Sede com um Dormitório de nível 1 e uma Oficina de nível 1. A aquisição soma 3 (Sede) + 1 + 1 = 5 Unidades, ou 5.000 Lunaris. A manutenção soma 2 + 1 + 1 = 4 Unidades, ou 400 Lunaris por mês. Meses depois, melhorar o Dormitório para o nível 2 custa só a diferença dos fatores de aquisição, 2 − 1 = 1 Unidade (1.000 Lunaris), e a manutenção mensal passa a 5 Unidades (500 Lunaris).</p>
+    </div>
+
     <h3 class="regras-subtitle">Descanso e produção</h3>
     <ul class="regras-list">
-      <li>Dormitório define o limite de qualidade; duração, interrupções, alimento, água e demais requisitos continuam aplicáveis.</li>
+      <li>Dormitório define o limite de qualidade; duração, interrupções, alimento, água e demais requisitos continuam aplicáveis (ver <span class="regras-ref regras-ref--descanso">Descanso</span>).</li>
       <li>Cada personagem recebe os benefícios de um único descanso. Dormitórios e efeitos equivalentes não se acumulam.</li>
-      <li>Oficina e Laboratório apenas atendem requisitos e limitam projetos simultâneos. Materiais, tempo, testes e falhas seguem as regras do projeto.</li>
+      <li>Oficina e Laboratório apenas atendem requisitos e limitam projetos simultâneos. Materiais, tempo, testes e falhas seguem as regras do projeto (ver <span class="regras-ref regras-ref--crafting">Criação, Forja e Alquimia</span>).</li>
     </ul>
+
     <h3 class="regras-subtitle">Manutenção</h3>
-    <ol class="regras-list">
+    <ol class="regras-steps">
       <li>Calcule a manutenção uma vez por mês com o fator do patamar e das instalações ativas.</li>
       <li>Com um pagamento atrasado, a base fica pendente e não pode iniciar melhorias.</li>
       <li>Com dois pagamentos atrasados, o proprietário escolhe uma instalação para ficar inativa.</li>
       <li>A cada novo atraso, o proprietário escolhe mais uma instalação ativa para ficar inativa.</li>
       <li>Quitar os atrasos reativa as instalações em 24 horas. A inadimplência não transfere nem confisca a propriedade automaticamente.</li>
     </ol>
+
     <h3 class="regras-subtitle">Bases móveis</h3>
-    <p>A ficha da plataforma precisa informar quantos espaços de base suporta; sem esse campo, ela não recebe instalações de base. Quando uma peça veicular e uma instalação forem equivalentes, use o efeito publicado da peça e não aplique o efeito-base. Movimento, perseguição, colisão, dano e reparo continuam sob as regras da plataforma.</p>
+    <p>A ficha da plataforma precisa informar quantos espaços de base suporta; sem esse campo, ela não recebe instalações de base. Quando uma peça veicular e uma instalação forem equivalentes, use o efeito publicado da peça e não aplique o efeito-base. Movimento, perseguição, colisão, dano e reparo continuam sob as regras da plataforma, que estão em <span class="regras-ref regras-ref--veiculos">Condução e Tripulação</span> e <span class="regras-ref regras-ref--veiculos-cenas">Perseguições e Combate Veicular</span>.</p>
   `,
   corpoMestre: `
-    <p class="regras-lead">Base é o botão de ritmo da campanha. Ela transforma tempo livre em capacidade, e é por isso que você decide quando o grupo pode comprar uma, não a carteira deles.</p>
+    <p class="regras-lead">Base é o botão de ritmo da campanha: ela transforma tempo livre em capacidade, e por isso é você quem decide quando o grupo pode comprar uma.</p>
 
     <h3 class="regras-subtitle">Liberar uma base</h3>
     <ul class="regras-list">
@@ -279,7 +303,7 @@ export const REGRA_BASES = {
     <ul class="regras-list">
       <li>Anuncie a ameaça antes. Base destruída sem aviso apaga uma compra cara e um punhado de sessões de investimento.</li>
       <li>Prefira consequência a destruição: instalação inativa, ocupação inimiga, penhora, funcionário comprado. Tudo isso é reversível e rende história.</li>
-      <li>Se for destruir mesmo, deixe o grupo defender. Um ataque à base é um encontro, não um comunicado.</li>
+      <li>Se for destruir mesmo, deixe o grupo defender. Um ataque à base merece um encontro inteiro, com rodadas e escolhas.</li>
     </ul>
   `,
 };

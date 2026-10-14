@@ -180,6 +180,15 @@ export const REGRA_CONFLITO_SOCIAL: RegraTopicoDe<'Combate e Mecânicas'> = {
   corpo: `
     <p class="regras-lead">Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo para dizer, e cada palavra errada fecha uma porta. Um pedido simples continua sendo um teste só. Esta página é para as outras conversas: arrancar a verdade de um preso, fechar preço com quem não precisa vender, convencer um conselho que já decidiu antes de vocês entrarem.</p>
 
+    <div class="regras-resumo">
+      <ul>
+        <li>A conversa difícil é resolvida em rodadas, com duas contagens: a <strong>Resistência</strong> da pessoa desce a cada argumento que funciona, e a <strong>Paciência</strong> dela sobe a cada erro.</li>
+        <li>Cada personagem faz uma abordagem por rodada: diga o que fala, com a voz do personagem, e só depois role. A DT é a Padrão do nível do grupo, ou a Difícil quando a pessoa tem posição a defender.</li>
+        <li>Resistência a 0 faz a pessoa ceder, sempre dentro do <strong>Limite</strong>, que é o que ela não faz de jeito nenhum. Paciência cheia encerra a conversa pior do que ela começou.</li>
+        <li>A Paciência tem ${PACIENCIA_MAXIMA} partes. Num interrogatório, cada ponto de Resistência que cai entrega uma informação na hora.</li>
+      </ul>
+    </div>
+
     <h3 class="regras-subtitle">As duas contagens</h3>
     <ul class="regras-list">
       <li><strong>Resistência</strong> é o quanto falta para a pessoa ceder. Ela desce com argumento, prova, pressão e concessão, e a mesa vê isso acontecer: a pessoa senta, serve uma bebida, baixa a voz.</li>
@@ -193,13 +202,13 @@ export const REGRA_CONFLITO_SOCIAL: RegraTopicoDe<'Combate e Mecânicas'> = {
 
     <h3 class="regras-subtitle">A rodada</h3>
     <ol class="regras-steps">
-      <li>Cada personagem faz uma abordagem por rodada, na ordem que a conversa pedir. Primeiro diz o que fala, com a voz do personagem, e só depois rola. Ajudar alguém segue as regras de Ações Coletivas.</li>
+      <li>Cada personagem faz uma abordagem por rodada, na ordem que a conversa pedir. Primeiro diz o que fala, com a voz do personagem, e só depois rola. Ajudar alguém segue as regras de <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span>.</li>
       <li>A DT é a Padrão do nível do grupo. Use a Difícil quando a pessoa tem posição pública a defender ou já foi enganada antes.</li>
       <li>Sucesso tira Resistência. Falha custa a rodada, e as abordagens agressivas ainda enchem a Paciência.</li>
       <li>Repetir a mesma abordagem sem trazer nada novo enche 1 de Paciência, mesmo quando o teste passa.</li>
       <li>A outra parte responde. Ela pergunta, pede garantia, chantageia de volta, e é nessa resposta que o grupo descobre o que ela quer.</li>
     </ol>
-    <p class="regras-note">Prestígio e Fama ajustam a rolagem em no máximo ${AJUSTE_MAXIMO_REPUTACAO}, para cima ou para baixo, pela mesma regra de Prestígio e Fama. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.</p>
+    <p class="regras-note">Prestígio e Fama ajustam a rolagem em no máximo ${AJUSTE_MAXIMO_REPUTACAO}, para cima ou para baixo, pela mesma regra de <span class="regras-ref regras-ref--mundo-faccoes">Prestígio e Fama</span>. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.</p>
 
     <h3 class="regras-subtitle">Abordagens</h3>
     <p>Cada abordagem traz uma fala de exemplo e, embaixo, como se resolve. A fala serve de faísca: diga a sua, do jeito do seu personagem.</p>

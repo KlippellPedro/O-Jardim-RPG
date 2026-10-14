@@ -342,7 +342,20 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
   ],
   corpo: `
     <h3 class="regras-subtitle">Ficha veicular</h3>
-    <p>Registre categoria, tamanho, Vida, Defesa, Resistência geral, resistências por tipo, deslocamento em metros, Manobrabilidade, capacidade, cobertura, tripulação mínima, sistemas, espaços de base, armas e avarias. O chassi genérico começa com Vida 10, Defesa 10, Resistência 0, deslocamento 4,5 m, Manobrabilidade 0, cobertura nenhuma, tripulação mínima 1 e nenhum espaço de base. Valores publicados no veículo prevalecem.</p>
+    <p>A ficha de um veículo registra categoria, tamanho, Vida, Defesa, Resistência geral, resistências por tipo, deslocamento em metros, Manobrabilidade, capacidade, cobertura, tripulação mínima, sistemas, espaços de base, armas e avarias. O chassi genérico é o ponto de partida, e valores publicados no veículo prevalecem.</p>
+    <div class="regras-table-wrap"><table class="regras-table">
+      <thead><tr><th>Campo</th><th>Chassi genérico</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Vida</strong></td><td>10</td></tr>
+        <tr><td><strong>Defesa</strong></td><td>10</td></tr>
+        <tr><td><strong>Resistência</strong></td><td>0</td></tr>
+        <tr><td><strong>Deslocamento</strong></td><td>4,5 m</td></tr>
+        <tr><td><strong>Manobrabilidade</strong></td><td>0</td></tr>
+        <tr><td><strong>Cobertura</strong></td><td>Nenhuma</td></tr>
+        <tr><td><strong>Tripulação mínima</strong></td><td>1</td></tr>
+        <tr><td><strong>Espaços de base</strong></td><td>Nenhum</td></tr>
+      </tbody>
+    </table></div>
 
     <h3 class="regras-subtitle">Escala de Vida e dano</h3>
     <ul class="regras-list">
@@ -373,6 +386,9 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
       <li>A tripulação mínima indica quantas pessoas são necessárias para preencher os postos obrigatórios. Sem condutor, o veículo não manobra; sem operador ou artilheiro, o respectivo sistema não é usado.</li>
       <li>Uma arma instalada só ataca mais de uma vez no turno quando sua descrição permitir.</li>
     </ul>
+    <div class="regras-note regras-note--exemplo">
+      <p>Duda conduz o jipe e Caio opera a arma instalada. No turno de Duda, ela gasta a Ação de Movimento para conduzir. No turno de Caio, ele dispara a arma e gasta a ação que o ataque pede. O jipe não age por conta própria: se Duda gastar a Ação de Movimento com outra coisa, ele mantém curso e velocidade.</p>
+    </div>
 
     <h3 class="regras-subtitle">Perseguições</h3>
     <p>No fim de cada rodada, o fugitivo e o perseguidor fazem um teste oposto de Pilotagem ou Cavalgar. Quem tiver o maior deslocamento recebe +2 nesse teste. O fugitivo aumenta a distância quando vence; o perseguidor reduz quando vence. Empate mantém a faixa. Uma diferença de 10 ou mais altera duas faixas; qualquer outra vitória altera uma. Nenhum resultado altera mais de duas faixas.</p>
@@ -380,6 +396,9 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
       <thead><tr><th>Faixa</th><th>Efeito</th></tr></thead><tbody>${tabelaFaixas}</tbody>
     </table></div>
     <p class="regras-note">Terreno, clima, avarias e manobras podem conceder vantagem ou desvantagem. Se mais de um veículo persegue o mesmo alvo, cada perseguidor mantém sua própria faixa.</p>
+    <div class="regras-note regras-note--exemplo">
+      <p>Um ladrão foge de moto e uma viatura o persegue, com a faixa em Média. No fim da rodada, os dois rolam Pilotagem: o ladrão fecha 18 e o policial fecha 15. O ladrão venceu por 3, então a distância sobe uma faixa, para Longa. Se tivesse vencido por 10 ou mais, subiria duas faixas e ele escaparia.</p>
+    </div>
 
     <h3 class="regras-subtitle">Manobras</h3>
     <div class="regras-table-wrap"><table class="regras-table">
@@ -406,6 +425,7 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
     </dl>
 
     <h3 class="regras-subtitle">Dano e avarias</h3>
+    <p>O dano comum não destrói um veículo. Ele quebra aos poucos, e cada quebra relevante vira uma avaria.</p>
     <ul class="regras-list">
       <li>Ao passar de mais da metade da Vida para metade ou menos, role uma avaria.</li>
       <li>Ao chegar a 0 de Vida, o veículo fica incapacitado e sofre outra avaria. Ele não usa Morrendo.</li>
@@ -415,6 +435,9 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>d6</th><th>Avaria</th><th>Efeito</th><th>Repetição</th></tr></thead><tbody>${tabelaAvarias}</tbody>
     </table></div>
+    <div class="regras-note regras-note--exemplo">
+      <p>Um veículo de Vida 20 e Resistência 2 recebe um ataque que causa 12 de dano. A Resistência tira 2, então ele perde 10 de Vida e fica com 10, que é metade da Vida máxima. Cruzou o limite: role 1d6 na tabela de avarias e aplique o resultado.</p>
+    </div>
 
     <h3 class="regras-subtitle">Reparo</h3>
     <ul class="regras-list">
@@ -435,11 +458,13 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
     </table></div>
     <ul class="regras-list">
       <li>Conte todo módulo de utilidade instalado, mesmo que esteja desligado. Armas, Núcleo e Estrutura não aumentam o custo.</li>
-      <li>Uma nave Rara com duas utilidades instaladas gasta 3 Componentes Veiculares Raros no mês.</li>
       <li>Um lote superior pode substituir um inferior. Lotes inferiores não podem ser somados para alcançar outra raridade.</li>
       <li>Se o custo não for pago, o veículo fica sem manutenção e não pode se mover por conta própria nem ativar sistemas. Ele volta a funcionar quando o custo for pago.</li>
       <li>O custo atrasado não acumula. Um veículo guardado e sem uso durante o mês não gasta Componentes Veiculares.</li>
     </ul>
+    <div class="regras-note regras-note--exemplo">
+      <p>Uma nave Rara com duas utilidades instaladas gasta 3 Componentes Veiculares Raros no mês: 1 pela nave e 1 por utilidade. O que cada estoque de material cobre está em <span class="regras-ref regras-ref--materiais">Materiais e Ingredientes</span>.</p>
+    </div>
 
     <h3 class="regras-subtitle">Montarias</h3>
     <ul class="regras-list">
@@ -499,7 +524,21 @@ export const REGRA_VEICULOS_CONDUCAO: IRegraVeiculos = {
     ['Escala', 'Vida e dano universais'],
     ['Ações', 'pertencem à tripulação'],
   ],
-  corpo: extrairIntervalo(REGRA_VEICULOS.corpo, 'Ficha veicular', 'Perseguições'),
+  corpo: `
+    <p class="regras-lead">Um veículo tem ficha própria, com Vida, Defesa e deslocamento, mas quem decide o que ele faz é a tripulação. Aqui está como ler essa ficha, quem pode conduzir e como cada ocupante gasta as próprias ações.</p>
+
+    <div class="regras-resumo">
+      <ul>
+        <li>O veículo não recebe ações próprias: condutor, artilheiros, operadores e passageiros gastam as ações dos próprios turnos.</li>
+        <li>Veículos usam Pilotagem e montarias usam Cavalgar. Qualquer personagem treinado pode conduzir, e a classe Piloto não é pré-requisito.</li>
+        <li>Conduzir custa uma Ação de Movimento. Sem ela, o veículo mantém curso e velocidade.</li>
+        <li>Vida e dano seguem a mesma escala de personagens e criaturas: subtraia a Resistência do dano rolado e o restante reduz a Vida.</li>
+        <li>Perseguições, manobras, colisões e avarias estão em <span class="regras-ref regras-ref--veiculos-cenas">Perseguições e Combate Veicular</span>.</li>
+      </ul>
+    </div>
+
+    ${extrairIntervalo(REGRA_VEICULOS.corpo, 'Ficha veicular', 'Perseguições')}
+  `,
   corpoMestre: `
     <p class="regras-lead">Antes de colocar um veículo em cena, confirme quem conduz, quantos postos precisam ser preenchidos e quais sistemas cada personagem pretende operar. Essa preparação evita descobrir no meio da rodada que uma arma ou manobra ficou sem tripulante.</p>
 
@@ -521,7 +560,21 @@ export const REGRA_VEICULOS_CENAS: IRegraVeiculos = {
     ['Manobras', 'ação e falha explícitas'],
     ['Avarias', 'até 6 tipos ativos'],
   ],
-  corpo: extrairIntervalo(REGRA_VEICULOS.corpo, 'Perseguições', 'Reparo'),
+  corpo: `
+    <p class="regras-lead">Quando o veículo entra em cena de verdade, o jogo troca de ritmo: uma distância entre quem foge e quem persegue, manobras com risco e dano que vira avaria em vez de destruição.</p>
+
+    <div class="regras-resumo">
+      <ul>
+        <li>A perseguição tem cinco faixas: Contato, Curta, Média, Longa e Escapou. No fim de cada rodada, fugitivo e perseguidor fazem um teste oposto de Pilotagem ou Cavalgar.</li>
+        <li>Uma vitória por 10 ou mais move duas faixas, qualquer outra vitória move uma, e empate mantém a faixa. Nada move mais de duas.</li>
+        <li>Abalroar e preparar abordagem só funcionam na faixa Contato.</li>
+        <li>Passar de mais da metade da Vida para metade ou menos gera uma avaria. Chegar a 0 de Vida incapacita o veículo e gera outra. Ele não usa Morrendo.</li>
+        <li>O dano ao veículo não atinge os ocupantes, a menos que o efeito declare isso.</li>
+      </ul>
+    </div>
+
+    ${extrairIntervalo(REGRA_VEICULOS.corpo, 'Perseguições', 'Reparo')}
+  `,
   corpoMestre: `
     <p class="regras-lead">Perseguição funciona melhor como objetivo de cena, não como um combate comum que ganhou rodas. Defina antes quem foge, quem persegue e o que acontece quando a distância chega a Contato ou Escapou.</p>
 
@@ -544,7 +597,21 @@ export const REGRA_VEICULOS_MANUTENCAO: IRegraVeiculos = {
     ['Manutenção', 'cobrada somente quando usado'],
     ['Componentes', 'tiers T0 a T4'],
   ],
-  corpo: extrairIntervalo(REGRA_VEICULOS.corpo, 'Reparo'),
+  corpo: `
+    <p class="regras-lead">Depois da cena, o veículo precisa voltar a funcionar. Aqui estão o reparo das avarias, o custo mensal em Componentes Veiculares, as regras das montarias e os tiers dos componentes.</p>
+
+    <div class="regras-resumo">
+      <ul>
+        <li>O reparo emergencial suspende uma avaria até o fim da cena. A manutenção corretiva remove uma avaria e restaura 10% da Vida máxima, em seis horas e com 1 Componente Veicular.</li>
+        <li>No fim de cada mês de uso, gaste 1 Componente Veicular da raridade do veículo, mais 1 lote por módulo de utilidade instalado.</li>
+        <li>O custo atrasado não acumula, e veículo guardado e sem uso durante o mês não paga.</li>
+        <li>Montaria não recebe avarias veiculares: ela mantém a própria Vida, Defesa, Resistências e condições.</li>
+        <li>Os componentes vão de T0 a T4, e o T4 exige liberação do Mestre.</li>
+      </ul>
+    </div>
+
+    ${extrairIntervalo(REGRA_VEICULOS.corpo, 'Reparo')}
+  `,
   corpoMestre: `
     <p class="regras-lead">Manutenção transforma o veículo em recurso contínuo da campanha. Mostre o custo antes da compra e registre os módulos instalados, porque eles definem quantos lotes serão cobrados no fim de um mês de uso.</p>
 

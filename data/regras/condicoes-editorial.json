@@ -60,7 +60,7 @@
       "efeitos": [
         "Não pode usar ações nem reações.",
         "Defesa reduzida em 5.",
-        "Veja também Inconsciente: mesmo efeito de base, mas para quando a causa for perder toda a Vida, não um efeito temporário."
+        "Veja também Inconsciente: mesmo efeito de base, mas para quando a causa for perder toda a Vida."
       ],
       "remocao": "Termina ao fim da duração. Uma nova aplicação apenas renova a duração."
     },

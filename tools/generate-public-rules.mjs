@@ -18,8 +18,15 @@ const decodeEntities = (value) => value
   .replaceAll('&quot;', '"')
   .replaceAll('&#39;', "'");
 
+const ROTULO_DA_NOTA = { exemplo: 'Exemplo', atencao: 'Atenção', dica: 'Dica de mesa', regra: 'Regra' };
+
 function htmlToMarkdown(html) {
   let text = String(html)
+    // Remissão a outro tópico é texto corrido: sem isto o span viraria quebra de linha no meio da frase.
+    .replace(/<span class="regras-ref[^"]*">([\s\S]*?)<\/span>/gi, '$1')
+    // O rótulo das caixas vem do CSS no site; no markdown ele precisa estar escrito.
+    .replace(/<div class="regras-resumo">/gi, '\n**Em resumo**\n')
+    .replace(/<(p|div) class="regras-note regras-note--(exemplo|atencao|dica|regra)">/gi, (marca, _tag, tipo) => `\n**${ROTULO_DA_NOTA[tipo]}:**\n${marca}`)
     .replace(/<h3[^>]*>([\s\S]*?)<\/h3>/gi, '\n### $1\n')
     .replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '\n$1\n')
     .replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '\n- $1')
