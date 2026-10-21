@@ -24,7 +24,7 @@
   "summary": {
     "classes": 29,
     "weapons": 87,
-    "spells": 352,
+    "spells": 353,
     "invalidResourceBudgets": 0,
     "unboundedWeapons": 0,
     "invalidSpells": 0
@@ -3409,7 +3409,7 @@
           "defesaNatural": 12,
           "poderes": 0,
           "grausTreinamento": 1,
-          "habilidades": 1
+          "habilidades": 2
         },
         {
           "nivel": 5,
@@ -3419,7 +3419,7 @@
           "defesaNatural": 14,
           "poderes": 1,
           "grausTreinamento": 1,
-          "habilidades": 3
+          "habilidades": 4
         },
         {
           "nivel": 10,
@@ -3429,7 +3429,7 @@
           "defesaNatural": 17,
           "poderes": 3,
           "grausTreinamento": 2,
-          "habilidades": 5
+          "habilidades": 6
         },
         {
           "nivel": 15,
@@ -3439,7 +3439,7 @@
           "defesaNatural": 19,
           "poderes": 5,
           "grausTreinamento": 3,
-          "habilidades": 7
+          "habilidades": 8
         },
         {
           "nivel": 20,
@@ -3449,7 +3449,7 @@
           "defesaNatural": 22,
           "poderes": 8,
           "grausTreinamento": 4,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 30,
@@ -3459,7 +3459,7 @@
           "defesaNatural": 27,
           "poderes": 8,
           "grausTreinamento": 5,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 40,
@@ -3469,7 +3469,7 @@
           "defesaNatural": 32,
           "poderes": 8,
           "grausTreinamento": 6,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 50,
@@ -3479,7 +3479,7 @@
           "defesaNatural": 37,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 60,
@@ -3489,7 +3489,7 @@
           "defesaNatural": 42,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 80,
@@ -3499,7 +3499,7 @@
           "defesaNatural": 52,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 100,
@@ -3509,7 +3509,7 @@
           "defesaNatural": 62,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 150,
@@ -3519,7 +3519,7 @@
           "defesaNatural": 87,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 200,
@@ -3529,7 +3529,7 @@
           "defesaNatural": 112,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         }
       ],
       "alertasTexto": []
@@ -4512,7 +4512,7 @@
       "circulo": 1,
       "perfil": "alvo",
       "custoMana": 2,
-      "dano": "1d8",
+      "dano": "1d8 + Mod. Fluxo",
       "mediaDano": 4.5,
       "problemas": []
     },
@@ -4842,7 +4842,7 @@
       "circulo": 2,
       "perfil": "alvo",
       "custoMana": 4,
-      "dano": "2d8",
+      "dano": "2d8 + Mod. Fluxo",
       "mediaDano": 9,
       "problemas": []
     },
@@ -5358,7 +5358,7 @@
     },
     {
       "id": "eco-curto",
-      "titulo": "Eco Curto",
+      "titulo": "Repetição Curta",
       "circulo": 3,
       "perfil": "alvo",
       "custoMana": 7,
@@ -5388,9 +5388,9 @@
     },
     {
       "id": "nada-pessoal",
-      "titulo": "Nada Pessoal",
+      "titulo": "Sentido Apagado",
       "circulo": 3,
-      "perfil": "defesa",
+      "perfil": "alvo",
       "custoMana": 7,
       "dano": null,
       "mediaDano": null,
@@ -5552,7 +5552,7 @@
       "circulo": 4,
       "perfil": "alvo",
       "custoMana": 10,
-      "dano": "4d8",
+      "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
     },
@@ -5740,7 +5740,7 @@
       "id": "apagar-vestigios",
       "titulo": "Apagar Vestígios",
       "circulo": 4,
-      "perfil": "controle",
+      "perfil": "area",
       "custoMana": 10,
       "dano": null,
       "mediaDano": null,
@@ -5822,8 +5822,8 @@
       "circulo": 4,
       "perfil": "alvo",
       "custoMana": 10,
-      "dano": "4d8 + Mod. Fluxo",
-      "mediaDano": 18,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
       "problemas": []
     },
     {
@@ -6252,7 +6252,7 @@
       "circulo": 6,
       "perfil": "alvo",
       "custoMana": 19,
-      "dano": "6d8",
+      "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
     },
@@ -6367,6 +6367,16 @@
       "problemas": []
     },
     {
+      "id": "poco-de-gravidade",
+      "titulo": "Poço de Gravidade",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 19,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
       "id": "corte-de-distancia",
       "titulo": "Corte de Distância",
       "circulo": 6,
@@ -6418,7 +6428,7 @@
     },
     {
       "id": "eco-de-batalha",
-      "titulo": "Eco de Batalha",
+      "titulo": "Repetição de Batalha",
       "circulo": 6,
       "perfil": "alvo",
       "custoMana": 19,
@@ -6602,7 +6612,7 @@
       "circulo": 7,
       "perfil": "alvo",
       "custoMana": 25,
-      "dano": "7d8",
+      "dano": "7d8 + Mod. Fluxo",
       "mediaDano": 31.5,
       "problemas": []
     },
@@ -6702,8 +6712,8 @@
       "circulo": 7,
       "perfil": "controle",
       "custoMana": 25,
-      "dano": null,
-      "mediaDano": null,
+      "dano": "6d6",
+      "mediaDano": 21,
       "problemas": []
     },
     {
@@ -6952,7 +6962,7 @@
       "circulo": 8,
       "perfil": "alvo",
       "custoMana": 32,
-      "dano": "8d8",
+      "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
     },
@@ -6992,8 +7002,8 @@
       "circulo": 8,
       "perfil": "area",
       "custoMana": 32,
-      "dano": null,
-      "mediaDano": null,
+      "dano": "3d6",
+      "mediaDano": 10.5,
       "problemas": []
     },
     {
@@ -7182,8 +7192,8 @@
       "circulo": 8,
       "perfil": "alvo",
       "custoMana": 32,
-      "dano": null,
-      "mediaDano": null,
+      "dano": "8d6",
+      "mediaDano": 28,
       "problemas": []
     },
     {
@@ -7498,7 +7508,7 @@
     },
     {
       "id": "silenciar-fluxo",
-      "titulo": "Silenciar Fluxo",
+      "titulo": "Esquecimento",
       "circulo": 9,
       "perfil": "area",
       "custoMana": 42,
@@ -7618,7 +7628,7 @@
     },
     {
       "id": "recomeco-absoluto",
-      "titulo": "Renascer",
+      "titulo": "Recomeço Absoluto",
       "circulo": 10,
       "perfil": "alvo",
       "custoMana": 55,
@@ -7662,7 +7672,7 @@
       "circulo": 10,
       "perfil": "alvo",
       "custoMana": 55,
-      "dano": "10d10",
+      "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
     },
@@ -7862,8 +7872,8 @@
       "circulo": 10,
       "perfil": "area",
       "custoMana": 55,
-      "dano": null,
-      "mediaDano": null,
+      "dano": "4d6",
+      "mediaDano": 14,
       "problemas": []
     },
     {

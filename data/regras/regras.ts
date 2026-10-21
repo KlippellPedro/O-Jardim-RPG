@@ -1142,9 +1142,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-sublist regras-sublist--grid">
         <li><strong>Físicos:</strong> corte, perfuração, impacto e balístico.</li>
         <li><strong>Persistentes:</strong> sangramento, fogo, veneno e ácido; batem de novo no fim do turno até alguém remover.</li>
-        <li><strong>Mágico:</strong> elemental (os sete elementos e as quatorze derivações) e os outros dez Fluxos naturais.</li>
+        <li><strong>Mágico:</strong> elemental (os sete elementos e as quatorze derivações) e os outros nove Fluxos naturais. Magia que não diz o tipo causa o dano do próprio Fluxo (dano de Vazio, dano do Fim...).</li>
         <li><strong>Tecnológico:</strong> vem do Fluxo artificial de Tecnologia (A.X.I.S). Usa a mesma Mana e a mesma regra de Resistência que qualquer Fluxo, mas não conta como dano mágico.</li>
-        <li><strong>Mental:</strong> tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura.</li>
+        <li><strong>Mental:</strong> tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura. Os ataques de Comunicação tiram Vida, com dano de Comunicação; dano mental é só o que a fonte chama assim.</li>
       </ul>
 
       <h3 class="regras-subtitle">Dano elemental</h3>
@@ -1170,7 +1170,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p>A <strong>Polifonia Elemental</strong> fixa um único elemento de origem, libera as magias catalogadas como <em>Elementais</em> e concede uma vaga de magia no 1º nível. Antes de conjurar uma magia Elemental, o Elementarista declara qual elemento dominado está usando, e esse elemento define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração. Quem tem afinidade única sempre declara o de origem.</p>
       <ul class="regras-list">
         <li>Só quem desperta como Avatar no Julgamento da Aptidão aprende outros elementos, e passa a poder declarar qualquer um deles. Mesmo assim, a derivação e os benefícios que citam o elemento de origem continuam ligados só a ele.</li>
-        <li>O Fluxo Físico também produz força, peso e matéria bruta. Canalizador e Sintonizador continuam aprendendo essas magias materiais e cinéticas, mas as magias catalogadas como <em>Elementais</em> exigem níveis de Elementarista, e as que combinam vários elementos exigem ainda o Avatar desperto.</li>
+        <li>O Fluxo Físico também produz força, peso e matéria bruta. Canalizador e Sintonizador continuam aprendendo essas magias materiais e cinéticas, mas as magias catalogadas como <em>Elementais</em> exigem níveis de Elementarista (e só até o círculo que esses níveis liberam), e as que combinam vários elementos exigem ainda o Avatar desperto.</li>
       </ul>
 
       <h3 class="regras-subtitle">Derivações também são tipos de dano</h3>
@@ -2049,7 +2049,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <li>Aliado é qualquer criatura que luta ao seu lado e tem ficha própria: comprada no Bestiário, entregue pela história ou sustentada por um poder.</li>
           <li>A ficha é editável pelo dono, e o aliado entra na ordem de iniciativa com a Iniciativa dele, como qualquer criatura.</li>
           <li>Quem controla é o dono, a não ser que o Mestre diga o contrário. Aliado que cai a 0 de Vida segue as regras de <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>.</li>
-          <li>Um aliado ativo por personagem costuma ser o limite para o combate continuar andando.</li>
+          <li>Um aliado ativo por personagem costuma ser o limite para o combate continuar andando. O Invocador é a exceção da regra: mantém até duas invocações em cena.</li>
         </ul>
       </div>
 
@@ -2057,7 +2057,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li><strong>Compra:</strong> comprar uma criatura do <span class="regras-ref regras-ref--bestiario">Bestiário</span> na <span class="regras-ref regras-ref--loja">Loja</span> cria o aliado direto na sua ficha, já com Vida, Defesa, Iniciativa, deslocamento e ataque principal preenchidos. Comprou três, aparecem três, cada um com sua ficha separada. A Vida do aliado é menor que a da mesma criatura como inimigo: no Bestiário ela aguenta sozinha o grupo inteiro, e ao seu lado ela vale no máximo o dobro da Vida média de um personagem do mesmo nível. A loja mostra os dois números.</li>
         <li><strong>História:</strong> o Mestre pode entregar um aliado sem venda nenhuma. É a mesma ficha, criada à mão.</li>
-        <li><strong>Poder ou magia:</strong> invocações e servos que um poder seu sustenta seguem o texto do próprio poder. Eles somem quando o poder acaba, então não viram entrada permanente.</li>
+        <li><strong>Poder ou magia:</strong> invocações e servos que um poder seu sustenta seguem o texto do próprio poder. Eles somem quando o poder acaba, então não viram entrada permanente. As invocações do Invocador ficam na ficha: o Pacto da classe diz quantas ficam em cena, como atacam e quando voltam depois de cair.</li>
       </ul>
 
       <h3 class="regras-subtitle">A ficha do aliado</h3>
@@ -2070,7 +2070,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Aliado em combate</h3>
       <ul class="regras-list">
-        <li>Ele entra na ordem de iniciativa como qualquer criatura, com a Iniciativa da ficha dele. Não age de carona no seu turno.</li>
+        <li>Ele entra na ordem de iniciativa como qualquer criatura, com a Iniciativa da ficha dele. Não age de carona no seu turno. A exceção são as invocações do Invocador, que agem logo depois do turno dele, cada uma com as próprias ações.</li>
         <li>Quem controla é o dono, salvo quando o Mestre disser que aquela criatura tem vontade própria naquele momento.</li>
         <li>Um aliado age por conta: ele tem as ações dele, e não empresta ação nem reação para você.</li>
         <li>Ele pode Ajudar, e vale a mesma regra de todo mundo: no máximo dois ajudantes por teste (ver <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span>).</li>
@@ -2495,7 +2495,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <div class="regras-resumo">
         <ul>
-          <li>Cada alma nasce com um Fluxo natural, e só um. Fluxo alto não ensina magia: o acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.</li>
+          <li>Cada alma nasce com um Fluxo natural, e só um: o da Árvore em que nasceu. Fluxo alto não ensina magia: o acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.</li>
           <li>O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus da classe. A DT de conjuração é 7 + (3 × círculo).</li>
           <li>A Mana sai quando você declara a conjuração e não volta se o teste falhar. O Fluxo recomendado de cada círculo é só um aviso.</li>
           <li>Você mantém uma concentração por vez. Ao sofrer dano, role Vontade contra DT 10 ou metade do dano recebido, o que for maior.</li>
@@ -2505,7 +2505,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Princípios dos Fluxos</h3>
       <ul class="regras-list">
         <li>Cada alma nasce com um Fluxo natural, e só um. Exceção precisa estar escrita na história do personagem.</li>
-        <li>Um segundo Fluxo sempre vem de fora: artefato, relíquia, núcleo tecnológico. Ele nunca passa a morar na alma.</li>
+        <li>O Fluxo nativo é o da Árvore em que a alma nasceu. Quem nasce na A.X.I.S tem Comunicação, o Fluxo da Parley que segue vivo sob a Malha. O Autômato é a exceção: ele é montado, e o núcleo dele já é a Tecnologia instalada.</li>
+        <li>Ficha sem Árvore não tem Fluxo nativo. O Canalizador sem Árvore escolhe um dos dez Fluxos naturais na Canalização Nativa.</li>
+        <li>Um segundo Fluxo sempre vem de fora: artefato, relíquia, núcleo tecnológico. Ele nunca passa a morar na alma. Na ficha, quem instala é o Mestre: o Fluxo instalado abre as magias dele e não dá Marca de círculo.</li>
         <li>Fluxo alto não ensina magia. O acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.</li>
         <li>Magia aprendida é permanente, a não ser que uma regra explícita fale em substituição.</li>
       </ul>
@@ -2516,46 +2518,91 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <thead><tr><th>Classe mágica</th><th>Técnica</th></tr></thead>
         <tbody>
           <tr><td>Canalizador</td><td>Domínio direto e puro do Fluxo nativo.</td></tr>
-          <tr><td>Sintonizador</td><td>Fusão do Fluxo nativo com catalisadores externos.</td></tr>
+          <tr><td>Sintonizador</td><td>Fusão do Fluxo nativo com catalisadores: objetos pessoais sintonizados a outro Fluxo.</td></tr>
           <tr><td>Ritualista</td><td>Pactos e preparações prolongadas fora do combate.</td></tr>
-          <tr><td>Invocador</td><td>Vínculo com seres e manifestações do Fluxo nativo.</td></tr>
-          <tr><td>Cartista Arcano</td><td>Magias limitadas e organizadas por cartas preparadas.</td></tr>
+          <tr><td>Invocador</td><td>Criaturas feitas do Fluxo nativo, com ficha própria, que atacam com o teste de conjuração. Não aprende círculos.</td></tr>
+          <tr><td>Cartista Arcano</td><td>Cada magia conhecida é uma carta, só até o 2º círculo, e as cartas comuns viram arma de arremesso.</td></tr>
           <tr><td>Interceptador</td><td>Interferência tecnológica da A.X.I.S contra Fluxos naturais.</td></tr>
           <tr><td>Elementarista</td><td>Domínio profundo de um elemento do Fluxo Físico; uma aptidão rara pode abrir o Caminho do Avatar.</td></tr>
         </tbody>
       </table></div>
       <h3 class="regras-subtitle">Teste e DT de magia</h3>
-      <div class="regras-formula">Teste = d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus específico da classe</div>
+      <div class="regras-formula">Teste = d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus de habilidades, poderes e itens</div>
       <div class="regras-formula">DT de conjuração = 7 + (3 × círculo)</div>
       <ul class="regras-list">
         <li>Toda magia de círculo precisa alcançar a DT do próprio círculo para se estabilizar.</li>
-        <li>Se houver alvo hostil, o mesmo total também é lido contra ele. Magia de ataque compara o total com a Defesa do alvo, como um golpe. Magia de efeito diz qual resistência vale (Reflexos, Fortitude ou Vontade): o alvo rola d20 + o bônus dessa resistência e resiste se igualar ou superar o seu total.</li>
+        <li>Os bônus de habilidades, poderes e itens são os que a própria habilidade, poder ou item diz para somar ao teste de conjuração, como o +2 da Sintonia Catalisada ou o do Círculo de Convocação. Nenhuma classe tem um bônus fixo além desses.</li>
+        <li>Se houver alvo hostil, o mesmo total também é lido contra ele: contra a Defesa, na magia de ataque, ou contra a resistência que o alvo rola, na magia de efeito. A seção Ataque e resistência, logo abaixo, explica os dois casos.</li>
         <li>Ou seja: a magia pode estabilizar e ainda assim ser resistida. É uma rolagem só, lida duas vezes.</li>
         <li>A metade do nível entra aqui como em qualquer teste. Sem ela, um conjurador de nível alto nunca venceria o teste de resistência de uma criatura do próprio nível.</li>
         <li>A Mana sai no momento em que você declara a conjuração, e não volta se o teste falhar.</li>
       </ul>
       <div class="regras-note regras-note--exemplo">
-        <p>Um conjurador de nível total 10 tem Mod. Fluxo +4, um grau de Misticismo que soma +4 e nenhum bônus de classe. A metade do nível vale ⌊10 ÷ 2⌋ = 5, então o bônus dele é +4 + 5 + 4 = +13. A DT de uma magia de 3º círculo é 7 + (3 × 3) = 16, e basta tirar 3 ou mais no d20 para ela se estabilizar. Se a magia for de ataque, esse mesmo total é lido contra a Defesa do alvo.</p>
+        <p>Um conjurador de nível total 10 tem Mod. Fluxo +4, um grau de Misticismo que soma +4 e nenhum bônus de habilidade ativo. A metade do nível vale ⌊10 ÷ 2⌋ = 5, então o bônus dele é +4 + 5 + 4 = +13. A DT de uma magia de 3º círculo é 7 + (3 × 3) = 16, e basta tirar 3 ou mais no d20 para ela se estabilizar. Se a magia for de ataque, esse mesmo total é lido contra a Defesa do alvo.</p>
       </div>
+
+      <h3 class="regras-subtitle">Ataque e resistência</h3>
+      <p>Toda magia que mira um alvo hostil é de um destes dois tipos, e a ficha mostra qual é.</p>
+      <ul class="regras-list">
+        <li><strong>Magia de ataque.</strong> O total da conjuração é lido contra a Defesa do alvo, como um golpe, e o 20 natural é crítico. Se acertar, o dano entra inteiro, porque resistência nunca reduz o dano de uma magia de ataque. Se errar, nada acontece, e a Mana já foi gasta.</li>
+        <li><strong>Efeito extra de um ataque.</strong> Quando a magia de ataque lista uma resistência, ela vale só para o que vem junto com o dano: a condição, o empurrão, a Mana consumida. O alvo atingido rola d20 + o bônus dessa resistência contra o mesmo total e, se igualar ou superar, evita o efeito extra, mas sofre o dano. Se a magia de ataque não lista resistência, o que ela faz além do dano acontece sempre que acerta.</li>
+        <li><strong>Magia de efeito.</strong> Não há rolagem contra a Defesa. A magia diz qual resistência vale (Reflexos, Fortitude ou Vontade), e cada alvo rola d20 + o bônus dela contra o seu total. Se a magia causa dano, quem resistir sofre metade e evita o efeito extra. Se não causa dano, quem resistir evita o efeito, salvo quando o texto disser outra coisa.</li>
+        <li><strong>Resistência "se hostil".</strong> Só é rolada quando o alvo não quer o efeito. Nas magias que encerram efeitos, quem rola é a criatura hostil que mantém o efeito; um efeito sem dono, ou de quem aceita o encerramento, termina sem teste.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Tipo de dano das magias</h3>
+      <ul class="regras-list">
+        <li>Magia que não diz o tipo causa o dano do próprio Fluxo: dano de Vazio, dano do Fim, dano de Comunicação, e assim por diante. É dano mágico, e Resistência a ele vale por Fluxo.</li>
+        <li>A Tecnologia causa dano tecnológico. A magia universal causa o dano do Fluxo que a canaliza. O Físico sem elemento causa impacto, e as Elementais causam o dano do elemento declarado.</li>
+        <li>Quando o texto da magia diz outro tipo (um elemento, um tipo sorteado, veneno que continua), vale o que está escrito.</li>
+        <li>O dano de Fogo de uma magia cai uma vez e não continua no fim do turno. O alvo só segue queimando quando o texto diz que ele fica Queimando.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Desgaste do Tempo</h3>
+      <p>O Tempo cobra de quem o usa. Toda magia de Tempo do 5º círculo em diante que dá ação ou turno extra, tira o turno de alguém por duas rodadas ou mais, ou dura a cena sem concentração custa 1 de Cansaço ao conjurador no fim da cena (2 no 9º e no 10º círculo). Quando o próprio texto da magia já cobra Cansaço, vale o que ele diz, sem somar. O Tempo também não volta ao passado: o que ele restaura ou encerra acontece agora, e nada do que já aconteceu é desfeito.</p>
+
+      <h3 class="regras-subtitle">Sorteios da Inconstância</h3>
+      <p>A Inconstância decide no dado. Quando uma magia do Fluxo manda rolar numa destas tabelas, o resultado vale só para aquela conjuração, salvo quando o texto disser outra coisa.</p>
+      <ul class="regras-list">
+        <li><strong>Tipo (1d4).</strong> 1 fogo, 2 gelo, 3 raio, 4 ácido. O tipo sorteado vale só para aquele dano e não continua no fim do turno.</li>
+        <li><strong>Direção (1d8).</strong> 1 é para longe do conjurador, e cada número seguinte gira um oitavo de volta no sentido horário.</li>
+        <li><strong>Resistência (1d6).</strong> Resistência 5 a: 1 fogo, 2 gelo, 3 raio, 4 ácido, 5 corte, perfuração e impacto, 6 dano mental.</li>
+        <li><strong>Reescrita (1d4).</strong> 1 tamanho, uma categoria acima ou abaixo; 2 elemento natural, o Mestre troca a resistência e a vulnerabilidade do alvo por um tipo da tabela de Tipo; 3 deslocamento, o modo principal (andar, voar, nadar) vira outro, à escolha do Mestre; 4 sentido principal, o Mestre troca por outro, e o alvo perde o antigo.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Termos das magias</h3>
+      <p>Algumas magias usam palavras que valem só para elas. O sentido de cada uma é este:</p>
+      <ul class="regras-list">
+        <li><strong>Revelado.</strong> É uma condição, na lista de Condições: o alvo perde disfarce, transformação e invisibilidade mágicos e não consegue se esconder.</li>
+        <li><strong>Alcançar o próprio Fim.</strong> A criatura morre, e nenhuma magia de círculo menor que o 10º a traz de volta. Fora isso, só um acontecimento da história aprovado pelo Mestre desfaz o Fim.</li>
+        <li><strong>Consolidado.</strong> Um Ferimento Crítico, ou o Fim de alguém, que já passou do fim da cena em que aconteceu. Daí em diante, as curas que falam em "consolidado" não o alcançam.</li>
+        <li><strong>Alma própria.</strong> Toda criatura que pensa por conta própria: personagens, gente com nome, Autômato com consciência. Invocação, ilusão e construto sem consciência não têm.</li>
+        <li><strong>Reconquista.</strong> O que se perde assim volta só por um acontecimento da história aprovado pelo Mestre (uma missão, um pacto, um ritual), nunca por descanso, cura ou dinheiro.</li>
+        <li><strong>Ausente.</strong> A criatura saiu da existência pelo Vazio sem morrer e sem deixar corpo, como na Saída de Erebus. Volta só se alguém a chamar de propósito.</li>
+        <li><strong>Fronteira selada.</strong> Um limite fechado por magia ou pelo próprio mundo, como a passagem entre Árvores ou um Domínio de deidade. Teleporte, portal e dobra não atravessam. Se uma magia selou a fronteira, só magia de Espaço de círculo maior que o dela passa.</li>
+        <li><strong>Lugar conhecido.</strong> Um ponto que você já visitou em pessoa, ou que marcou com o Marco de Retorno. Lugar só descrito ou visto de longe não conta.</li>
+        <li><strong>Mesma dimensão.</strong> O mundo onde você está agora. Só o Passo de Órbita leva de uma Árvore a outra.</li>
+        <li><strong>Módulo A.X.I.S.</strong> O Núcleo Tecnológico A.X.I.S da Loja, carregado com você. A magia que pede o módulo não o gasta.</li>
+      </ul>
 
       <h3 class="regras-subtitle">Círculos, Fluxo e DT</h3>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Círculo</th><th>Fluxo recomendado</th><th>DT</th><th>Mana base</th></tr></thead>
         <tbody>${tabelaCirculos}</tbody>
       </table></div>
-      <p class="regras-note">Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa.</p>
-      <p>O Fluxo recomendado não trava nada. A classe diz até que círculo você aprende; o Fluxo diz até onde a conjuração sai com folga. Quem aprende um círculo acima do próprio Fluxo pode tentar, mas a rolagem precisa alcançar a DT do círculo, e a ficha avisa quando isso acontece. As Marcas de círculo continuam seguindo o círculo que o seu Fluxo sustenta.</p>
+      <p class="regras-note">Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa. O 9º e o 10º círculo custam bem mais que os anteriores de propósito: são magias que decidem uma campanha.</p>
+      <p>O Fluxo recomendado não trava nada, e a conta é 11 mais o círculo: 12 para o 1º, 16 para o 5º, 21 para o 10º. Quem põe os aumentos de atributo em Fluxo chega ao 10º por volta do nível 20, junto com o que a classe libera. A classe diz até que círculo você aprende; o Fluxo diz até onde a conjuração sai com folga. Quem aprende um círculo acima do próprio Fluxo pode tentar, mas a rolagem precisa alcançar a DT do círculo, e a ficha avisa quando isso acontece. As Marcas de círculo continuam seguindo o círculo que o seu Fluxo sustenta.</p>
 
       <h3 class="regras-subtitle">Magia por nível da classe</h3>
-      <p>Cada marco libera um círculo mais alto e mais vagas. A vaga é o total de magias que a ficha pode conhecer, somando todas as fontes. O círculo liberado é o que a classe permite aprender, e o Fluxo recomendado é aviso. A tabela mostra círculo e vagas de magia por nível da classe (Canalizador e Sintonizador seguem a mesma coluna).</p>
+      <p>Cada marco libera um círculo mais alto e mais vagas. A vaga é o total de magias que a ficha pode conhecer, somando todas as fontes, mas a vaga de cada classe só guarda magia até o círculo que essa classe libera. Por isso o Cartista Arcano, que para no 2º, não abre vaga de 6º círculo em cima de um Canalizador. O círculo liberado é o que a classe permite aprender, e o Fluxo recomendado é aviso. A tabela mostra círculo e vagas de magia por nível da classe (Canalizador e Sintonizador seguem a mesma coluna).</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível da classe</th><th>Canalizador e Sintonizador</th><th>Elementarista</th><th>Cartista Arcano</th></tr></thead>
         <tbody>${linhasMagiaPorClasse()}</tbody>
       </table></div>
       <ul class="regras-list">
-        <li>A fonte de magia não para no 20: Canalizador, Sintonizador e Elementarista ganham mais 2 vagas a cada 5 níveis, e o Cartista Arcano mais 1, sempre até o nível 50.</li>
+        <li>A fonte de magia não para no 20: Canalizador, Sintonizador e Elementarista ganham mais 2 vagas a cada 5 níveis até o nível 50. O Cartista Arcano ganha 1 no 25 e 1 no 30 e para em 8, porque dois círculos com o limite de 4 não guardam mais que isso.</li>
         <li>Do nível 25 em diante vale um limite de 4 magias do mesmo círculo, para as vagas novas espalharem o repertório. Antes do 25 não há limite por círculo.</li>
-        <li>Selos e Encantamentos seguem o mesmo ritmo: Canalizador e Sintonizador ganham mais 1 vaga de cada a cada 5 níveis depois do 20, e Ritualista e Cartista Arcano mais 1 a cada 10.</li>
+        <li>Selos e Encantamentos: cada Fluxo tem 3 de cada, então as vagas do Canalizador e do Cartista Arcano param em 3. O Sintonizador segue ganhando 1 vaga de cada a cada 5 níveis depois do 20, porque também aprende dos Fluxos dos catalisadores. O Ritualista ganha 1 vaga de cada (e 1 de ritual) a cada 10 níveis, porque aprende de qualquer Fluxo natural.</li>
         <li>A aba Magias da ficha mostra quantas magias de cada círculo você já conhece e quantas ainda pode escolher.</li>
       </ul>
 
@@ -2573,7 +2620,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Conceder acesso</h3>
       <ul class="regras-list">
-        <li>Cada alma nasce com um Fluxo natural e só um. Segundo Fluxo sempre vem de fora, por artefato, relíquia ou núcleo tecnológico, e nunca passa a morar na alma. Quando entregar um desses itens, você está entregando um Fluxo inteiro: pese como tal.</li>
+        <li>Cada alma nasce com um Fluxo natural e só um. Segundo Fluxo sempre vem de fora, por artefato, relíquia ou núcleo tecnológico, e nunca passa a morar na alma. Quando entregar um desses itens, você está entregando um Fluxo inteiro: pese como tal. Para registrar, marque o Fluxo em Fluxo instalado, na aba Magias da ficha; só quem comanda a mesa vê esse controle.</li>
         <li>O Fluxo do Fim exige sua autorização antes da escolha. Autorizado, funciona como qualquer outro, então a decisão é de tom de campanha, não de balanceamento.</li>
         <li>Concessão de magia fora da classe não gera Cicatriz. Se você quer o poder sem o preço, é esse o caminho, e ele é legítimo.</li>
       </ul>
@@ -2583,7 +2630,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>A DT é 7 mais três vezes o círculo, e a Mana sai na declaração, mesmo se o teste falhar. Um conjurador que tenta o círculo máximo dele está apostando recurso, não gastando de graça.</li>
         <li>A mesma rolagem é lida duas vezes: contra a DT do círculo, para estabilizar, e contra o alvo, que rola a resistência dele contra o seu total (ou é comparada com a Defesa, se a magia for de ataque). Estabilizar e ainda assim ser resistido acontece, e vale explicar na primeira vez.</li>
         <li>A metade do nível entra na rolagem, como em todo teste. Ela mantém o conjurador na mesma curva do resto do grupo: sem ela, o teste de resistência de uma criatura do mesmo nível ficaria fora do alcance a partir do nível 50.</li>
-        <li>O Fluxo recomendado é aviso, e a DT é o portão de verdade. No nível 20, com Fluxo 20 e grau Veterano, a rolagem soma +25: o 10º círculo (DT 37) sai com 12 ou mais no d20, e no nível 10 ele nem alcança a DT. Se quiser mais rigor na sua mesa, peça o Fluxo recomendado como condição para aprender.</li>
+        <li>O Fluxo recomendado é aviso, e a DT é o portão de verdade. A escada (11 + círculo) foi feita para quem investe em Fluxo alcançar o 10º por volta do nível 20; quem deixa o Fluxo baixo vê o aviso e perde as Marcas dos círculos altos. No nível 20, com Fluxo 20 e grau Veterano, a rolagem soma +25: o 10º círculo (DT 37) sai com 12 ou mais no d20, e no nível 10 ele nem alcança a DT. Se quiser mais rigor na sua mesa, peça o Fluxo recomendado como condição para aprender.</li>
       </ul>
 
     `,
@@ -2615,7 +2662,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li><strong>Elementarista:</strong> escolhe um único <strong>elemento de origem</strong> no 1º nível, e a escolha é permanente. É ele quem libera as magias catalogadas como <em>Elementais</em>.</li>
         <li><strong>Avatar:</strong> no Julgamento da Aptidão (5º nível) o Mestre autoriza uma rolagem pública de 1d20, e só um 20 natural desperta o Avatar. Quem desperta aprende um elemento a mais nos níveis 5, 8, 11, 14, 17 e 20, e no 20º pode ter os sete. Quem não desperta fica com a afinidade única do elemento de origem, sem perder nada da progressão normal.</li>
-        <li><strong>Canalizador e Sintonizador:</strong> continuam usando as magias materiais e cinéticas do Fluxo Físico (força, peso, proteção), mas as magias Elementais exigem níveis de Elementarista.</li>
+        <li><strong>Canalizador e Sintonizador:</strong> continuam usando as magias materiais e cinéticas do Fluxo Físico (força, peso, proteção), mas as magias Elementais exigem níveis de Elementarista e só vão até o círculo que esses níveis liberam, mesmo que outra classe da ficha libere círculo maior.</li>
         <li><strong>Itens, encantamentos e Selos</strong> que peçam "um elemento" têm esse elemento escolhido ou fixado na criação. Isso não muda a afinidade de ninguém.</li>
       </ul>
 
@@ -2750,6 +2797,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Classe ou habilidade capaz de fundir aplica <strong>um</strong> Fluxo secundário por magia. Um.</li>
         <li>O secundário acrescenta a assinatura dele por cima. Não substitui o nativo, e não abre caminho para fusão tripla.</li>
         <li>Chegar ao Fluxo secundário exige o catalisador ou recurso que a fonte da fusão indicar.</li>
+        <li>O catalisador do Sintonizador é um objeto pessoal (uma pedra, um relógio parado, um osso) sintonizado em dez minutos a um Fluxo diferente do nativo, sem preço nem raridade. Preparado é o catalisador sintonizado; ativo é o que a fusão usa agora, um por vez; desativado é o que foi gasto numa fusão e só volta com outros dez minutos. A Tecnologia só serve de catalisador quando o Mestre a instalou na ficha.</li>
       </ul>
 
       <h3 class="regras-subtitle">Selos e encantamentos</h3>
@@ -2758,6 +2806,13 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Encantamento é padrão permanente, aplicado a um item, uma criatura ou um lugar.</li>
         <li>Quantos encantamentos cabem por raridade: Comum 1, Incomum 2, Raro 3, Épico 4 e Lendário 5.</li>
         <li>DT de inscrição, tempo de preparo e Mana também ficam na própria entrada do catálogo, tanto para selo quanto para encantamento.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">De que Fluxo se aprende</h3>
+      <ul class="regras-list">
+        <li>Ritual, selo e encantamento se aprendem do seu Fluxo nativo ou de um Fluxo instalado pelo Mestre, como as magias. Cada Fluxo tem 3 de cada.</li>
+        <li>O Ritualista aprende os três de qualquer Fluxo natural, porque rito vem de tradição, pacto ou pergaminho. O do Fim ainda pede autorização do Mestre, e a Tecnologia só entra instalada.</li>
+        <li>O Sintonizador aprende selo e encantamento também dos Fluxos dos catalisadores que tiver preparados na hora de aprender. O que aprendeu fica, mesmo se trocar de catalisador depois.</li>
       </ul>
     `,
     corpoMestre: `
@@ -2868,6 +2923,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <thead><tr><th>Condição</th><th>Efeito principal</th><th>Remoção</th></tr></thead>
         <tbody>${tabelaCondicoesGerais}</tbody>
       </table></div>
+      <ul class="regras-list">
+        <li>Quando a fonte não diz como sair de Imobilizado, a criatura gasta uma Ação Padrão e testa Atletismo ou Acrobacia contra a DT da fonte. Na magia, é a DT de conjuração dela.</li>
+        <li>Condição que vem de uma fonte instantânea e não diz quanto dura vai até o fim do próximo turno de quem a recebeu.</li>
+      </ul>
 
       <h3 class="regras-subtitle">Condições benéficas</h3>
       <p class="regras-lead">São as condições que ajudam. Vêm de uma palavra de ânimo, de uma magia de apoio ou de um escudo erguido na hora certa. Duram pouco e nenhuma soma com ela mesma.</p>
@@ -4803,7 +4862,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Saída.</strong> Ação Padrão, 1/cena, alcance Imenso: uma criatura deixa a cena sem morrer. Sai do Jardim e só volta com um ato deliberado de quem a chama. Um aliado que a chame pelo nome em voz alta antes de a rodada acabar a segura por mais uma rodada.</li>
         <li><strong>Silenciar.</strong> Remove som, sensação e vestígio de uma área grande até o fim da cena. Magia que depende deles falha automaticamente.</li>
         <li><strong>Apagar Presença.</strong> Reação: uma criatura some das percepções de todos os presentes por uma rodada, e depois ninguém lembra bem onde ela estava.</li>
-        <li><strong>Limite.</strong> Não é morte, não cria nada e não preserva aquilo que remove.</li>
+        <li><strong>Limite.</strong> Não é morte, não cria matéria nem vida e não preserva aquilo que remove. O que ele forma, como o clone ou a criatura convocada, é ausência com contorno: não come, não respira e some sem deixar resto.</li>
         <li><strong>Contrajogo.</strong> A Origem tem vantagem sobre o Fluxo dele: um começo novo atravessa a porta para dentro.</li>
         <li><strong>Dom.</strong> Fruto do Vazio.</li>
       </ul>

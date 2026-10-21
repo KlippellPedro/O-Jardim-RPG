@@ -28,6 +28,18 @@
     },
     {
       "tipo": "condicao",
+      "id": "revelado",
+      "titulo": "Revelado",
+      "categoria": "combate",
+      "duracao": "Conforme a fonte.",
+      "efeitos": [
+        "Perde disfarce, transformação e invisibilidade de origem mágica enquanto durar.",
+        "Não pode se esconder, e ataques contra ele ignoram cobertura criada por ilusão."
+      ],
+      "remocao": "Termina ao fim da duração da fonte."
+    },
+    {
+      "tipo": "condicao",
       "id": "caido",
       "titulo": "Caído",
       "categoria": "física",
@@ -98,7 +110,7 @@
         "Movimento 0.",
         "Não pode usar ações que exijam deslocamento."
       ],
-      "remocao": "Teste indicado pela fonte como ação padrão."
+      "remocao": "Ação Padrão e o teste que a fonte indicar; se ela não indicar, Atletismo ou Acrobacia contra a DT da fonte (na magia, a DT de conjuração)."
     },
     {
       "tipo": "condicao",

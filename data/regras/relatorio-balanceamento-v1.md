@@ -106,7 +106,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 
 ## Magias publicadas para playtest
 
-- 352 magias analisadas.
+- 353 magias analisadas.
 - 0 magias fora do custo, teto de dano, crítico ou acesso ritual.
 
 | Magia | Círculo | Perfil | Mana | Dano | Média | Alertas |
@@ -119,7 +119,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Âncora de Identidade | 1 | defesa | 2 | sem dano | n/a | nenhum |
 | Fio Prateado | 1 | controle | 2 | sem dano | n/a | nenhum |
 | Acordo Breve | 1 | alvo | 2 | sem dano | n/a | nenhum |
-| Ruído de Canal | 1 | alvo | 2 | 1d8 | 4.5 | nenhum |
+| Ruído de Canal | 1 | alvo | 2 | 1d8 + Mod. Fluxo | 4.5 | nenhum |
 | Pulso Regenerador | 1 | alvo | 2 | sem dano | n/a | nenhum |
 | Esporo Febril | 1 | alvo | 2 | 1d8 + Mod. Fluxo | 4.5 | nenhum |
 | Raízes Famintas | 1 | area | 2 | sem dano | n/a | nenhum |
@@ -152,7 +152,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Verdade Cortante | 2 | alvo | 4 | 2d8 + Mod. Fluxo | 9.0 | nenhum |
 | Dissipar Falsidade | 2 | controle | 4 | sem dano | n/a | nenhum |
 | Olho da Natureza | 2 | alvo | 4 | sem dano | n/a | nenhum |
-| Estática Mental | 2 | alvo | 4 | 2d8 | 9.0 | nenhum |
+| Estática Mental | 2 | alvo | 4 | 2d8 + Mod. Fluxo | 9.0 | nenhum |
 | Voz Emprestada | 2 | controle | 4 | sem dano | n/a | nenhum |
 | Rede de Sinais | 2 | area | 4 | sem dano | n/a | nenhum |
 | Praga Menor | 2 | alvo | 4 | 2d8 + Mod. Fluxo | 9.0 | nenhum |
@@ -204,10 +204,10 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Distância Roubada | 3 | area | 7 | sem dano | n/a | nenhum |
 | Campo Lento | 3 | area | 7 | 3d6 | 10.5 | nenhum |
 | Antecipar | 3 | alvo | 7 | sem dano | n/a | nenhum |
-| Eco Curto | 3 | alvo | 7 | sem dano | n/a | nenhum |
+| Repetição Curta | 3 | alvo | 7 | sem dano | n/a | nenhum |
 | Onda de Ausência | 3 | area | 7 | 3d6 | 10.5 | nenhum |
 | Consumir Energia | 3 | alvo | 7 | sem dano | n/a | nenhum |
-| Nada Pessoal | 3 | defesa | 7 | sem dano | n/a | nenhum |
+| Sentido Apagado | 3 | alvo | 7 | sem dano | n/a | nenhum |
 | Véu do Nada | 3 | defesa | 7 | sem dano | n/a | nenhum |
 | Sopro do Limiar | 3 | area | 7 | 3d6 | 10.5 | nenhum |
 | Romper Vínculo | 3 | alvo | 7 | sem dano | n/a | nenhum |
@@ -223,7 +223,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Lâmina do Que É | 4 | alvo | 10 | 4d8 + Mod. Fluxo | 18.0 | nenhum |
 | Revelação de Corrupção | 4 | area | 10 | sem dano | n/a | nenhum |
 | Âncora Maior de Identidade | 4 | area | 10 | sem dano | n/a | nenhum |
-| Sobrecarga de Canal | 4 | alvo | 10 | 4d8 | 18.0 | nenhum |
+| Sobrecarga de Canal | 4 | alvo | 10 | 4d8 + Mod. Fluxo | 18.0 | nenhum |
 | Elo de Sentidos | 4 | alvo | 10 | sem dano | n/a | nenhum |
 | Pacto Vinculante | 4 | controle | 10 | sem dano | n/a | nenhum |
 | Corrosão Sanguínea | 4 | alvo | 10 | 4d8 + Mod. Fluxo | 18.0 | nenhum |
@@ -242,7 +242,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Aceleração | 4 | alvo | 10 | sem dano | n/a | nenhum |
 | Parada de Instante | 4 | alvo | 10 | sem dano | n/a | nenhum |
 | Corte Nulo | 4 | alvo | 10 | 4d8 + Mod. Fluxo | 18.0 | nenhum |
-| Apagar Vestígios | 4 | controle | 10 | sem dano | n/a | nenhum |
+| Apagar Vestígios | 4 | area | 10 | sem dano | n/a | nenhum |
 | Bolha de Ausência | 4 | area | 10 | sem dano | n/a | nenhum |
 | Golpe Terminal | 4 | alvo | 10 | 4d8 + Mod. Fluxo | 18.0 | nenhum |
 | Fechar Ciclo | 4 | alvo | 10 | sem dano | n/a | nenhum |
@@ -250,7 +250,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Lança de Íons | 4 | alvo | 10 | 4d8 + Mod. Fluxo | 18.0 | nenhum |
 | Interceptação Ativa | 4 | defesa | 10 | sem dano | n/a | nenhum |
 | Autômato Assistente | 4 | controle | 10 | sem dano | n/a | nenhum |
-| Arma de Fluxo | 4 | alvo | 10 | 4d8 + Mod. Fluxo | 18.0 | nenhum |
+| Arma de Fluxo | 4 | alvo | 10 | 2d8 + Mod. Fluxo | 9.0 | nenhum |
 | Muralha de Fluxo | 4 | controle | 10 | sem dano | n/a | nenhum |
 | Eclosão | 5 | area | 14 | 5d6 | 17.5 | nenhum |
 | Segunda Chance | 5 | alvo | 14 | sem dano | n/a | nenhum |
@@ -293,7 +293,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Verdade Que Fere | 6 | alvo | 19 | 6d8 + Mod. Fluxo | 27.0 | nenhum |
 | Campo Verídico | 6 | area | 19 | sem dano | n/a | nenhum |
 | Leitura Profunda | 6 | alvo | 19 | sem dano | n/a | nenhum |
-| Cascata de Ruído | 6 | alvo | 19 | 6d8 | 27.0 | nenhum |
+| Cascata de Ruído | 6 | alvo | 19 | 6d8 + Mod. Fluxo | 27.0 | nenhum |
 | Espelho de Sentidos | 6 | area | 19 | sem dano | n/a | nenhum |
 | Testemunha Distante | 6 | controle | 19 | sem dano | n/a | nenhum |
 | Necrose Fulminante | 6 | alvo | 19 | 6d8 + Mod. Fluxo | 27.0 | nenhum |
@@ -305,12 +305,13 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Aríete Elemental | 6 | alvo | 19 | 6d8 + Mod. Fluxo | 27.0 | nenhum |
 | Erupção | 6 | area | 19 | 6d6 | 21.0 | nenhum |
 | Forma Elemental | 6 | defesa | 19 | sem dano | n/a | nenhum |
+| Poço de Gravidade | 6 | area | 19 | sem dano | n/a | nenhum |
 | Corte de Distância | 6 | alvo | 19 | 6d8 + Mod. Fluxo | 27.0 | nenhum |
 | Labirinto Dobrado | 6 | area | 19 | sem dano | n/a | nenhum |
 | Refúgio de Bolso | 6 | controle | 19 | sem dano | n/a | nenhum |
 | Séculos em Um Golpe | 6 | alvo | 19 | 6d8 + Mod. Fluxo | 27.0 | nenhum |
 | Zona Acelerada | 6 | area | 19 | sem dano | n/a | nenhum |
-| Eco de Batalha | 6 | alvo | 19 | sem dano | n/a | nenhum |
+| Repetição de Batalha | 6 | alvo | 19 | sem dano | n/a | nenhum |
 | Fome do Abismo | 6 | alvo | 19 | 6d8 + Mod. Fluxo | 27.0 | nenhum |
 | Silêncio Total | 6 | area | 19 | sem dano | n/a | nenhum |
 | Apagar do Mapa | 6 | alvo | 19 | sem dano | n/a | nenhum |
@@ -328,7 +329,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Corte Dissipador | 7 | alvo | 25 | 7d8 + Mod. Fluxo | 31.5 | nenhum |
 | Selo da Essência | 7 | alvo | 25 | sem dano | n/a | nenhum |
 | Verdade Compartilhada | 7 | area | 25 | sem dano | n/a | nenhum |
-| Grito Mental | 7 | alvo | 25 | 7d8 | 31.5 | nenhum |
+| Grito Mental | 7 | alvo | 25 | 7d8 + Mod. Fluxo | 31.5 | nenhum |
 | Rede de Guerra | 7 | area | 25 | sem dano | n/a | nenhum |
 | Mediação Imposta | 7 | area | 25 | sem dano | n/a | nenhum |
 | Chuva de Esporos | 7 | area | 25 | 7d6 | 24.5 | nenhum |
@@ -338,7 +339,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Reescrita Instável | 7 | alvo | 25 | sem dano | n/a | nenhum |
 | Sorte Roubada | 7 | alvo | 25 | sem dano | n/a | nenhum |
 | Cataclismo Menor | 7 | area | 25 | 7d6 | 24.5 | nenhum |
-| Controle de Massa | 7 | controle | 25 | sem dano | n/a | nenhum |
+| Controle de Massa | 7 | controle | 25 | 6d6 | 21.0 | nenhum |
 | Fortaleza Instantânea | 7 | controle | 25 | sem dano | n/a | nenhum |
 | Implosão Dimensional | 7 | area | 25 | 7d6 | 24.5 | nenhum |
 | Portal Maior | 7 | movimento | 25 | sem dano | n/a | nenhum |
@@ -363,11 +364,11 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Quebrar Defesas | 8 | alvo | 32 | 8d8 + Mod. Fluxo | 36.0 | nenhum |
 | Dissipação Verídica | 8 | area | 32 | sem dano | n/a | nenhum |
 | Ancorar o Real | 8 | area | 32 | sem dano | n/a | nenhum |
-| Ruína de Sinal | 8 | alvo | 32 | 8d8 | 36.0 | nenhum |
+| Ruína de Sinal | 8 | alvo | 32 | 8d8 + Mod. Fluxo | 36.0 | nenhum |
 | Malha de Consciências | 8 | area | 32 | sem dano | n/a | nenhum |
 | Convocação de Vozes | 8 | controle | 32 | sem dano | n/a | nenhum |
 | Praga Devoradora | 8 | alvo | 32 | 8d8 + Mod. Fluxo | 36.0 | nenhum |
-| Grande Crescimento | 8 | area | 32 | sem dano | n/a | nenhum |
+| Grande Crescimento | 8 | area | 32 | 3d6 | 10.5 | nenhum |
 | Imunidade Vital | 8 | area | 32 | sem dano | n/a | nenhum |
 | Detonação Improvável | 8 | alvo | 32 | 8d8 + Mod. Fluxo | 36.0 | nenhum |
 | Lei Suspensa | 8 | area | 32 | sem dano | n/a | nenhum |
@@ -386,7 +387,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Manto de Não-Ser | 8 | area | 32 | sem dano | n/a | nenhum |
 | Ponto de Não Retorno | 8 | alvo | 32 | 8d8 + Mod. Fluxo | 36.0 | nenhum |
 | Fim do Encantamento | 8 | area | 32 | sem dano | n/a | nenhum |
-| Conduzir ao Término | 8 | alvo | 32 | sem dano | n/a | nenhum |
+| Conduzir ao Término | 8 | alvo | 32 | 8d6 | 28.0 | nenhum |
 | Aniquilador de Padrões | 8 | alvo | 32 | 8d8 + Mod. Fluxo | 36.0 | nenhum |
 | Jaula de Interferência | 8 | area | 32 | sem dano | n/a | nenhum |
 | Fábrica de Campo | 8 | controle | 32 | sem dano | n/a | nenhum |
@@ -418,7 +419,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Congelar o Instante | 9 | area | 42 | sem dano | n/a | nenhum |
 | Restaurar o Estado | 9 | alvo | 42 | sem dano | n/a | nenhum |
 | Buraco Negro | 9 | area | 42 | 9d6 | 31.5 | nenhum |
-| Silenciar Fluxo | 9 | area | 42 | sem dano | n/a | nenhum |
+| Esquecimento | 9 | area | 42 | sem dano | n/a | nenhum |
 | Ausência Regional | 9 | area | 42 | sem dano | n/a | nenhum |
 | Ceifa | 9 | area | 42 | 9d6 | 31.5 | nenhum |
 | Término Regional | 9 | area | 42 | sem dano | n/a | nenhum |
@@ -430,11 +431,11 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Lei do Fluxo | 9 | area | 42 | sem dano | n/a | nenhum |
 | Semente Explosiva | 10 | alvo | 55 | 10d10 + Mod. Fluxo | 55.0 | nenhum |
 | Gênese | 10 | controle | 55 | sem dano | n/a | nenhum |
-| Renascer | 10 | alvo | 55 | sem dano | n/a | nenhum |
+| Recomeço Absoluto | 10 | alvo | 55 | sem dano | n/a | nenhum |
 | Verdade Nua | 10 | alvo | 55 | 10d10 + Mod. Fluxo | 55.0 | nenhum |
 | Alétheia | 10 | controle | 55 | sem dano | n/a | nenhum |
 | Âncora do Ser | 10 | controle | 55 | sem dano | n/a | nenhum |
-| Cortar Vínculos | 10 | alvo | 55 | 10d10 | 55.0 | nenhum |
+| Cortar Vínculos | 10 | alvo | 55 | 10d10 + Mod. Fluxo | 55.0 | nenhum |
 | Concílio do Mundo | 10 | controle | 55 | sem dano | n/a | nenhum |
 | Pacto Inquebrantável | 10 | controle | 55 | sem dano | n/a | nenhum |
 | Colapso Biológico | 10 | alvo | 55 | 10d10 + Mod. Fluxo | 55.0 | nenhum |
@@ -454,7 +455,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Estase | 10 | controle | 55 | sem dano | n/a | nenhum |
 | Toque do Abismo | 10 | alvo | 55 | 10d10 + Mod. Fluxo | 55.0 | nenhum |
 | Apagar do Mundo | 10 | controle | 55 | sem dano | n/a | nenhum |
-| Zona Morta | 10 | area | 55 | sem dano | n/a | nenhum |
+| Zona Morta | 10 | area | 55 | 4d6 | 14.0 | nenhum |
 | Palavra de Morte | 10 | alvo | 55 | 10d10 + Mod. Fluxo | 55.0 | nenhum |
 | Fim de Todos os Ciclos | 10 | area | 55 | sem dano | n/a | nenhum |
 | Encerramento | 10 | controle | 55 | sem dano | n/a | nenhum |

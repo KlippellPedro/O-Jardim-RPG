@@ -966,11 +966,11 @@ Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade
 
 - **Persistentes:** sangramento, fogo, veneno e ácido; batem de novo no fim do turno até alguém remover.
 
-- **Mágico:** elemental (os sete elementos e as quatorze derivações) e os outros dez Fluxos naturais.
+- **Mágico:** elemental (os sete elementos e as quatorze derivações) e os outros nove Fluxos naturais. Magia que não diz o tipo causa o dano do próprio Fluxo (dano de Vazio, dano do Fim...).
 
 - **Tecnológico:** vem do Fluxo artificial de Tecnologia (A.X.I.S). Usa a mesma Mana e a mesma regra de Resistência que qualquer Fluxo, mas não conta como dano mágico.
 
-- **Mental:** tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura.
+- **Mental:** tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura. Os ataques de Comunicação tiram Vida, com dano de Comunicação; dano mental é só o que a fonte chama assim.
 
 ### Dano elemental
 
@@ -1004,7 +1004,7 @@ A **Polifonia Elemental** fixa um único elemento de origem, libera as magias ca
 
 - Só quem desperta como Avatar no Julgamento da Aptidão aprende outros elementos, e passa a poder declarar qualquer um deles. Mesmo assim, a derivação e os benefícios que citam o elemento de origem continuam ligados só a ele.
 
-- O Fluxo Físico também produz força, peso e matéria bruta. Canalizador e Sintonizador continuam aprendendo essas magias materiais e cinéticas, mas as magias catalogadas como *Elementais* exigem níveis de Elementarista, e as que combinam vários elementos exigem ainda o Avatar desperto.
+- O Fluxo Físico também produz força, peso e matéria bruta. Canalizador e Sintonizador continuam aprendendo essas magias materiais e cinéticas, mas as magias catalogadas como *Elementais* exigem níveis de Elementarista (e só até o círculo que esses níveis liberam), e as que combinam vários elementos exigem ainda o Avatar desperto.
 
 ### Derivações também são tipos de dano
 
@@ -1930,7 +1930,7 @@ Nem todo mundo que luta ao seu lado é um personagem de jogador. Cavalo, cão de
 
 - Quem controla é o dono, a não ser que o Mestre diga o contrário. Aliado que cai a 0 de Vida segue as regras de Ferimentos.
 
-- Um aliado ativo por personagem costuma ser o limite para o combate continuar andando.
+- Um aliado ativo por personagem costuma ser o limite para o combate continuar andando. O Invocador é a exceção da regra: mantém até duas invocações em cena.
 
 ### De onde vem um aliado
 
@@ -1938,7 +1938,7 @@ Nem todo mundo que luta ao seu lado é um personagem de jogador. Cavalo, cão de
 
 - **História:** o Mestre pode entregar um aliado sem venda nenhuma. É a mesma ficha, criada à mão.
 
-- **Poder ou magia:** invocações e servos que um poder seu sustenta seguem o texto do próprio poder. Eles somem quando o poder acaba, então não viram entrada permanente.
+- **Poder ou magia:** invocações e servos que um poder seu sustenta seguem o texto do próprio poder. Eles somem quando o poder acaba, então não viram entrada permanente. As invocações do Invocador ficam na ficha: o Pacto da classe diz quantas ficam em cena, como atacam e quando voltam depois de cair.
 
 ### A ficha do aliado
 
@@ -1952,7 +1952,7 @@ Cada aliado ocupa uma entrada na aba Aliados, com os mesmos campos que o Mestre 
 
 ### Aliado em combate
 
-- Ele entra na ordem de iniciativa como qualquer criatura, com a Iniciativa da ficha dele. Não age de carona no seu turno.
+- Ele entra na ordem de iniciativa como qualquer criatura, com a Iniciativa da ficha dele. Não age de carona no seu turno. A exceção são as invocações do Invocador, que agem logo depois do turno dele, cada uma com as próprias ações.
 
 - Quem controla é o dono, salvo quando o Mestre disser que aquela criatura tem vontade própria naquele momento.
 
@@ -2464,7 +2464,7 @@ Itens gerais e mágicos
 
 - Furtivo | Marcial | 2 | 290 L | Nenhum | O item passa despercebido em revistas comuns e detectores básicos. Achá-lo exige Investigação contra DT 20.
 
-- Catalisador | Marcial | 3 | 1.200 L | Fluxo 14 e nível total 10 | Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.
+- Condensador de Mana | Marcial | 3 | 1.200 L | Fluxo 14 e nível total 10 | Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.
 
 O catálogo é um ponto de partida, e modificação nova é bem-vinda. Ela precisa respeitar o valor máximo por efeito da raridade e o nível condizente com o equipamento.
 
@@ -3082,7 +3082,7 @@ A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai d
 
 **Em resumo**
 
-- Cada alma nasce com um Fluxo natural, e só um. Fluxo alto não ensina magia: o acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.
+- Cada alma nasce com um Fluxo natural, e só um: o da Árvore em que nasceu. Fluxo alto não ensina magia: o acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.
 
 - O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus da classe. A DT de conjuração é 7 + (3 × círculo).
 
@@ -3094,7 +3094,11 @@ A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai d
 
 - Cada alma nasce com um Fluxo natural, e só um. Exceção precisa estar escrita na história do personagem.
 
-- Um segundo Fluxo sempre vem de fora: artefato, relíquia, núcleo tecnológico. Ele nunca passa a morar na alma.
+- O Fluxo nativo é o da Árvore em que a alma nasceu. Quem nasce na A.X.I.S tem Comunicação, o Fluxo da Parley que segue vivo sob a Malha. O Autômato é a exceção: ele é montado, e o núcleo dele já é a Tecnologia instalada.
+
+- Ficha sem Árvore não tem Fluxo nativo. O Canalizador sem Árvore escolhe um dos dez Fluxos naturais na Canalização Nativa.
+
+- Um segundo Fluxo sempre vem de fora: artefato, relíquia, núcleo tecnológico. Ele nunca passa a morar na alma. Na ficha, quem instala é o Mestre: o Fluxo instalado abre as magias dele e não dá Marca de círculo.
 
 - Fluxo alto não ensina magia. O acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.
 
@@ -3108,13 +3112,13 @@ A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai d
 
 - Canalizador | Domínio direto e puro do Fluxo nativo.
 
-- Sintonizador | Fusão do Fluxo nativo com catalisadores externos.
+- Sintonizador | Fusão do Fluxo nativo com catalisadores: objetos pessoais sintonizados a outro Fluxo.
 
 - Ritualista | Pactos e preparações prolongadas fora do combate.
 
-- Invocador | Vínculo com seres e manifestações do Fluxo nativo.
+- Invocador | Criaturas feitas do Fluxo nativo, com ficha própria, que atacam com o teste de conjuração. Não aprende círculos.
 
-- Cartista Arcano | Magias limitadas e organizadas por cartas preparadas.
+- Cartista Arcano | Cada magia conhecida é uma carta, só até o 2º círculo, e as cartas comuns viram arma de arremesso.
 
 - Interceptador | Interferência tecnológica da A.X.I.S contra Fluxos naturais.
 
@@ -3122,13 +3126,15 @@ A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai d
 
 ### Teste e DT de magia
 
-Teste = d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus específico da classe
+Teste = d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus de habilidades, poderes e itens
 
 DT de conjuração = 7 + (3 × círculo)
 
 - Toda magia de círculo precisa alcançar a DT do próprio círculo para se estabilizar.
 
-- Se houver alvo hostil, o mesmo total também é lido contra ele. Magia de ataque compara o total com a Defesa do alvo, como um golpe. Magia de efeito diz qual resistência vale (Reflexos, Fortitude ou Vontade): o alvo rola d20 + o bônus dessa resistência e resiste se igualar ou superar o seu total.
+- Os bônus de habilidades, poderes e itens são os que a própria habilidade, poder ou item diz para somar ao teste de conjuração, como o +2 da Sintonia Catalisada ou o do Círculo de Convocação. Nenhuma classe tem um bônus fixo além desses.
+
+- Se houver alvo hostil, o mesmo total também é lido contra ele: contra a Defesa, na magia de ataque, ou contra a resistência que o alvo rola, na magia de efeito. A seção Ataque e resistência, logo abaixo, explica os dois casos.
 
 - Ou seja: a magia pode estabilizar e ainda assim ser resistida. É uma rolagem só, lida duas vezes.
 
@@ -3138,39 +3144,101 @@ DT de conjuração = 7 + (3 × círculo)
 
 **Exemplo:**
 
-Um conjurador de nível total 10 tem Mod. Fluxo +4, um grau de Misticismo que soma +4 e nenhum bônus de classe. A metade do nível vale ⌊10 ÷ 2⌋ = 5, então o bônus dele é +4 + 5 + 4 = +13. A DT de uma magia de 3º círculo é 7 + (3 × 3) = 16, e basta tirar 3 ou mais no d20 para ela se estabilizar. Se a magia for de ataque, esse mesmo total é lido contra a Defesa do alvo.
+Um conjurador de nível total 10 tem Mod. Fluxo +4, um grau de Misticismo que soma +4 e nenhum bônus de habilidade ativo. A metade do nível vale ⌊10 ÷ 2⌋ = 5, então o bônus dele é +4 + 5 + 4 = +13. A DT de uma magia de 3º círculo é 7 + (3 × 3) = 16, e basta tirar 3 ou mais no d20 para ela se estabilizar. Se a magia for de ataque, esse mesmo total é lido contra a Defesa do alvo.
+
+### Ataque e resistência
+
+Toda magia que mira um alvo hostil é de um destes dois tipos, e a ficha mostra qual é.
+
+- **Magia de ataque.** O total da conjuração é lido contra a Defesa do alvo, como um golpe, e o 20 natural é crítico. Se acertar, o dano entra inteiro, porque resistência nunca reduz o dano de uma magia de ataque. Se errar, nada acontece, e a Mana já foi gasta.
+
+- **Efeito extra de um ataque.** Quando a magia de ataque lista uma resistência, ela vale só para o que vem junto com o dano: a condição, o empurrão, a Mana consumida. O alvo atingido rola d20 + o bônus dessa resistência contra o mesmo total e, se igualar ou superar, evita o efeito extra, mas sofre o dano. Se a magia de ataque não lista resistência, o que ela faz além do dano acontece sempre que acerta.
+
+- **Magia de efeito.** Não há rolagem contra a Defesa. A magia diz qual resistência vale (Reflexos, Fortitude ou Vontade), e cada alvo rola d20 + o bônus dela contra o seu total. Se a magia causa dano, quem resistir sofre metade e evita o efeito extra. Se não causa dano, quem resistir evita o efeito, salvo quando o texto disser outra coisa.
+
+- **Resistência "se hostil".** Só é rolada quando o alvo não quer o efeito. Nas magias que encerram efeitos, quem rola é a criatura hostil que mantém o efeito; um efeito sem dono, ou de quem aceita o encerramento, termina sem teste.
+
+### Tipo de dano das magias
+
+- Magia que não diz o tipo causa o dano do próprio Fluxo: dano de Vazio, dano do Fim, dano de Comunicação, e assim por diante. É dano mágico, e Resistência a ele vale por Fluxo.
+
+- A Tecnologia causa dano tecnológico. A magia universal causa o dano do Fluxo que a canaliza. O Físico sem elemento causa impacto, e as Elementais causam o dano do elemento declarado.
+
+- Quando o texto da magia diz outro tipo (um elemento, um tipo sorteado, veneno que continua), vale o que está escrito.
+
+- O dano de Fogo de uma magia cai uma vez e não continua no fim do turno. O alvo só segue queimando quando o texto diz que ele fica Queimando.
+
+### Desgaste do Tempo
+
+O Tempo cobra de quem o usa. Toda magia de Tempo do 5º círculo em diante que dá ação ou turno extra, tira o turno de alguém por duas rodadas ou mais, ou dura a cena sem concentração custa 1 de Cansaço ao conjurador no fim da cena (2 no 9º e no 10º círculo). Quando o próprio texto da magia já cobra Cansaço, vale o que ele diz, sem somar. O Tempo também não volta ao passado: o que ele restaura ou encerra acontece agora, e nada do que já aconteceu é desfeito.
+
+### Sorteios da Inconstância
+
+A Inconstância decide no dado. Quando uma magia do Fluxo manda rolar numa destas tabelas, o resultado vale só para aquela conjuração, salvo quando o texto disser outra coisa.
+
+- **Tipo (1d4).** 1 fogo, 2 gelo, 3 raio, 4 ácido. O tipo sorteado vale só para aquele dano e não continua no fim do turno.
+
+- **Direção (1d8).** 1 é para longe do conjurador, e cada número seguinte gira um oitavo de volta no sentido horário.
+
+- **Resistência (1d6).** Resistência 5 a: 1 fogo, 2 gelo, 3 raio, 4 ácido, 5 corte, perfuração e impacto, 6 dano mental.
+
+- **Reescrita (1d4).** 1 tamanho, uma categoria acima ou abaixo; 2 elemento natural, o Mestre troca a resistência e a vulnerabilidade do alvo por um tipo da tabela de Tipo; 3 deslocamento, o modo principal (andar, voar, nadar) vira outro, à escolha do Mestre; 4 sentido principal, o Mestre troca por outro, e o alvo perde o antigo.
+
+### Termos das magias
+
+Algumas magias usam palavras que valem só para elas. O sentido de cada uma é este:
+
+- **Revelado.** É uma condição, na lista de Condições: o alvo perde disfarce, transformação e invisibilidade mágicos e não consegue se esconder.
+
+- **Alcançar o próprio Fim.** A criatura morre, e nenhuma magia de círculo menor que o 10º a traz de volta. Fora isso, só um acontecimento da história aprovado pelo Mestre desfaz o Fim.
+
+- **Consolidado.** Um Ferimento Crítico, ou o Fim de alguém, que já passou do fim da cena em que aconteceu. Daí em diante, as curas que falam em "consolidado" não o alcançam.
+
+- **Alma própria.** Toda criatura que pensa por conta própria: personagens, gente com nome, Autômato com consciência. Invocação, ilusão e construto sem consciência não têm.
+
+- **Reconquista.** O que se perde assim volta só por um acontecimento da história aprovado pelo Mestre (uma missão, um pacto, um ritual), nunca por descanso, cura ou dinheiro.
+
+- **Ausente.** A criatura saiu da existência pelo Vazio sem morrer e sem deixar corpo, como na Saída de Erebus. Volta só se alguém a chamar de propósito.
+
+- **Fronteira selada.** Um limite fechado por magia ou pelo próprio mundo, como a passagem entre Árvores ou um Domínio de deidade. Teleporte, portal e dobra não atravessam. Se uma magia selou a fronteira, só magia de Espaço de círculo maior que o dela passa.
+
+- **Lugar conhecido.** Um ponto que você já visitou em pessoa, ou que marcou com o Marco de Retorno. Lugar só descrito ou visto de longe não conta.
+
+- **Mesma dimensão.** O mundo onde você está agora. Só o Passo de Órbita leva de uma Árvore a outra.
+
+- **Módulo A.X.I.S.** O Núcleo Tecnológico A.X.I.S da Loja, carregado com você. A magia que pede o módulo não o gasta.
 
 ### Círculos, Fluxo e DT
 
 - Círculo | Fluxo recomendado | DT | Mana base
 
-- 1º | 14 | 10 | 2
+- 1º | 12 | 10 | 2
 
-- 2º | 18 | 13 | 4
+- 2º | 13 | 13 | 4
 
-- 3º | 22 | 16 | 7
+- 3º | 14 | 16 | 7
 
-- 4º | 26 | 19 | 10
+- 4º | 15 | 19 | 10
 
-- 5º | 30 | 22 | 14
+- 5º | 16 | 22 | 14
 
-- 6º | 34 | 25 | 19
+- 6º | 17 | 25 | 19
 
-- 7º | 38 | 28 | 25
+- 7º | 18 | 28 | 25
 
-- 8º | 42 | 31 | 32
+- 8º | 19 | 31 | 32
 
-- 9º | 46 | 34 | 42
+- 9º | 20 | 34 | 42
 
-- 10º | 50 | 37 | 55
+- 10º | 21 | 37 | 55
 
-Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa.
+Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa. O 9º e o 10º círculo custam bem mais que os anteriores de propósito: são magias que decidem uma campanha.
 
-O Fluxo recomendado não trava nada. A classe diz até que círculo você aprende; o Fluxo diz até onde a conjuração sai com folga. Quem aprende um círculo acima do próprio Fluxo pode tentar, mas a rolagem precisa alcançar a DT do círculo, e a ficha avisa quando isso acontece. As Marcas de círculo continuam seguindo o círculo que o seu Fluxo sustenta.
+O Fluxo recomendado não trava nada, e a conta é 11 mais o círculo: 12 para o 1º, 16 para o 5º, 21 para o 10º. Quem põe os aumentos de atributo em Fluxo chega ao 10º por volta do nível 20, junto com o que a classe libera. A classe diz até que círculo você aprende; o Fluxo diz até onde a conjuração sai com folga. Quem aprende um círculo acima do próprio Fluxo pode tentar, mas a rolagem precisa alcançar a DT do círculo, e a ficha avisa quando isso acontece. As Marcas de círculo continuam seguindo o círculo que o seu Fluxo sustenta.
 
 ### Magia por nível da classe
 
-Cada marco libera um círculo mais alto e mais vagas. A vaga é o total de magias que a ficha pode conhecer, somando todas as fontes. O círculo liberado é o que a classe permite aprender, e o Fluxo recomendado é aviso. A tabela mostra círculo e vagas de magia por nível da classe (Canalizador e Sintonizador seguem a mesma coluna).
+Cada marco libera um círculo mais alto e mais vagas. A vaga é o total de magias que a ficha pode conhecer, somando todas as fontes, mas a vaga de cada classe só guarda magia até o círculo que essa classe libera. Por isso o Cartista Arcano, que para no 2º, não abre vaga de 6º círculo em cima de um Canalizador. O círculo liberado é o que a classe permite aprender, e o Fluxo recomendado é aviso. A tabela mostra círculo e vagas de magia por nível da classe (Canalizador e Sintonizador seguem a mesma coluna).
 
 - Nível da classe | Canalizador e Sintonizador | Elementarista | Cartista Arcano
 
@@ -3188,19 +3256,19 @@ Cada marco libera um círculo mais alto e mais vagas. A vaga é o total de magia
 
 - 30 | 10º · 14 | 10º · 14 | 2º · 8
 
-- 35 | 10º · 16 | 10º · 16 | 2º · 9
+- 35 | 10º · 16 | 10º · 16 | 2º · 8
 
-- 40 | 10º · 18 | 10º · 18 | 2º · 10
+- 40 | 10º · 18 | 10º · 18 | 2º · 8
 
-- 45 | 10º · 20 | 10º · 20 | 2º · 11
+- 45 | 10º · 20 | 10º · 20 | 2º · 8
 
-- 50 | 10º · 22 | 10º · 22 | 2º · 12
+- 50 | 10º · 22 | 10º · 22 | 2º · 8
 
-- A fonte de magia não para no 20: Canalizador, Sintonizador e Elementarista ganham mais 2 vagas a cada 5 níveis, e o Cartista Arcano mais 1, sempre até o nível 50.
+- A fonte de magia não para no 20: Canalizador, Sintonizador e Elementarista ganham mais 2 vagas a cada 5 níveis até o nível 50. O Cartista Arcano ganha 1 no 25 e 1 no 30 e para em 8, porque dois círculos com o limite de 4 não guardam mais que isso.
 
 - Do nível 25 em diante vale um limite de 4 magias do mesmo círculo, para as vagas novas espalharem o repertório. Antes do 25 não há limite por círculo.
 
-- Selos e Encantamentos seguem o mesmo ritmo: Canalizador e Sintonizador ganham mais 1 vaga de cada a cada 5 níveis depois do 20, e Ritualista e Cartista Arcano mais 1 a cada 10.
+- Selos e Encantamentos: cada Fluxo tem 3 de cada, então as vagas do Canalizador e do Cartista Arcano param em 3. O Sintonizador segue ganhando 1 vaga de cada a cada 5 níveis depois do 20, porque também aprende dos Fluxos dos catalisadores. O Ritualista ganha 1 vaga de cada (e 1 de ritual) a cada 10 níveis, porque aprende de qualquer Fluxo natural.
 
 - A aba Magias da ficha mostra quantas magias de cada círculo você já conhece e quantas ainda pode escolher.
 
@@ -3240,7 +3308,7 @@ O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos
 
 - **Avatar:** no Julgamento da Aptidão (5º nível) o Mestre autoriza uma rolagem pública de 1d20, e só um 20 natural desperta o Avatar. Quem desperta aprende um elemento a mais nos níveis 5, 8, 11, 14, 17 e 20, e no 20º pode ter os sete. Quem não desperta fica com a afinidade única do elemento de origem, sem perder nada da progressão normal.
 
-- **Canalizador e Sintonizador:** continuam usando as magias materiais e cinéticas do Fluxo Físico (força, peso, proteção), mas as magias Elementais exigem níveis de Elementarista.
+- **Canalizador e Sintonizador:** continuam usando as magias materiais e cinéticas do Fluxo Físico (força, peso, proteção), mas as magias Elementais exigem níveis de Elementarista e só vão até o círculo que esses níveis liberam, mesmo que outra classe da ficha libere círculo maior.
 
 - **Itens, encantamentos e Selos** que peçam "um elemento" têm esse elemento escolhido ou fixado na criação. Isso não muda a afinidade de ninguém.
 
@@ -3402,7 +3470,7 @@ Inconstância (Vórtice)
 
 - 5º | Nunca Igual | Uma vez por cena, você repete um teste já resolvido. | Você aceita o novo resultado, mesmo que seja pior.
 
-- 6º | Pele Instável | No começo de cada cena, role 1d6 para uma resistência sorteada até o fim dela. | Role de novo: você também ganha uma vulnerabilidade sorteada.
+- 6º | Pele Instável | No começo de cada cena, role na tabela de Resistência da Inconstância: você tem Resistência 5 a esse tipo até o fim dela. | Role de novo na mesma tabela: você também fica vulnerável a esse tipo.
 
 - 7º | Sorte Torta | Sua margem de ameaça aumenta em 1 em tudo o que você faz. | A margem de falha crítica aumenta em 1 junto.
 
@@ -3414,7 +3482,7 @@ Físico (Baluarte)
 
 - Círculo | Marca | Ganho | Ônus
 
-- 5º | Elemento na Pele | Resistência 3 contra o seu elemento despertado. | Vulnerabilidade 3 ao elemento oposto, definido pelo Mestre na primeira vez.
+- 5º | Elemento na Pele | Resistência 3 a um elemento escolhido ao receber a Marca. A Elementarista usa o de origem. | Vulnerabilidade 3 ao elemento oposto, definido pelo Mestre na primeira vez.
 
 - 6º | Peso de Pedra | +2 contra empurrão, agarrão e queda. | -3 m de deslocamento.
 
@@ -3422,7 +3490,7 @@ Físico (Baluarte)
 
 - 8º | Corpo Mineral | Redução 3 contra dano físico. | Você afunda: nadar e escalar saem com desvantagem.
 
-- 9º | Elemento Vivo | Uma vez por cena, você vira o elemento despertado por uma rodada e fica imune a dano físico. | Enquanto estiver assim, você não age, não fala e não conjura.
+- 9º | Elemento Vivo | Uma vez por cena, você vira o elemento escolhido no Elemento na Pele por uma rodada e fica imune a dano físico. | Enquanto estiver assim, você não age, não fala e não conjura.
 
 Espaço (Matriz)
 
@@ -3444,7 +3512,7 @@ Tempo (Éon)
 
 - 5º | Descompasso | +2 em Iniciativa. | Noite mal dormida dá a você 1 Cansaço a mais que aos outros.
 
-- 6º | Eco Curto | Uma vez por cena, você repete a ação de movimento que acabou de fazer. | Ao fim da cena em que usar, 1 Cansaço.
+- 6º | Passo Repetido | Uma vez por cena, você repete a ação de movimento que acabou de fazer. | Ao fim da cena em que usar, 1 Cansaço.
 
 - 7º | Anos Emprestados | +1 em todos os testes. | Você envelhece um ano a cada mês de campanha.
 
@@ -3460,7 +3528,7 @@ Vazio (O Vazio)
 
 - 6º | Sumidouro | Uma vez por cena, você absorve uma magia de até 3º círculo dirigida a você. | Magia benéfica de aliado é absorvida do mesmo jeito, e você não escolhe.
 
-- 7º | Fome Interna | Ao reduzir uma criatura a 0 de Vida, você recupera 1d6 de Mana. | Descanso curto não devolve Mana nenhuma a você.
+- 7º | Fome Interna | Ao reduzir uma criatura a 0 de Vida, o próximo efeito mágico hostil que atingir você até o fim da cena causa 1d6 a menos de dano. | Descanso curto não devolve Mana nenhuma a você.
 
 - 8º | Silêncio Que Anda | Os sons ao seu redor somem quando você quiser, num raio de 3 m. | Você não conjura nada que dependa de voz, palavra ou comando falado.
 
@@ -3554,6 +3622,8 @@ Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de c
 
 - Chegar ao Fluxo secundário exige o catalisador ou recurso que a fonte da fusão indicar.
 
+- O catalisador do Sintonizador é um objeto pessoal (uma pedra, um relógio parado, um osso) sintonizado em dez minutos a um Fluxo diferente do nativo, sem preço nem raridade. Preparado é o catalisador sintonizado; ativo é o que a fusão usa agora, um por vez; desativado é o que foi gasto numa fusão e só volta com outros dez minutos. A Tecnologia só serve de catalisador quando o Mestre a instalou na ficha.
+
 ### Selos e encantamentos
 
 - Selo é efeito escrito antes, quase sempre consumível, que qualquer um pode disparar se cumprir a condição inscrita.
@@ -3563,6 +3633,14 @@ Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de c
 - Quantos encantamentos cabem por raridade: Comum 1, Incomum 2, Raro 3, Épico 4 e Lendário 5.
 
 - DT de inscrição, tempo de preparo e Mana também ficam na própria entrada do catálogo, tanto para selo quanto para encantamento.
+
+### De que Fluxo se aprende
+
+- Ritual, selo e encantamento se aprendem do seu Fluxo nativo ou de um Fluxo instalado pelo Mestre, como as magias. Cada Fluxo tem 3 de cada.
+
+- O Ritualista aprende os três de qualquer Fluxo natural, porque rito vem de tradição, pacto ou pergaminho. O do Fim ainda pede autorização do Mestre, e a Tecnologia só entra instalada.
+
+- O Sintonizador aprende selo e encantamento também dos Fluxos dos catalisadores que tiver preparados na hora de aprender. O que aprendeu fica, mesmo se trocar de catalisador depois.
 
 ## catalogo-magico
 
@@ -3604,7 +3682,7 @@ Condição é o que fica grudado no personagem por um tempo: um estado com efeit
 
 - A Sanidade vai de 0 a 100. Perdê-la custa 1d4, 1d6, 1d8 ou 2d6, conforme o tamanho do que você viu, e cada faixa dela tem um estado: de Estável a Quebra.
 
-- Abaixo de certos pontos a Sanidade provoca crises, e há 6 catalogadas. As 24 condições oficiais e as 47 de longo prazo estão nas tabelas deste tópico.
+- Abaixo de certos pontos a Sanidade provoca crises, e há 6 catalogadas. As 25 condições oficiais e as 47 de longo prazo estão nas tabelas deste tópico.
 
 - A ficha aplica sozinha o que dá para calcular. O que depende da cena continua com a mesa.
 
@@ -3664,6 +3742,8 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 - Exposto | Defesa reduzida em 2. Exposto não acumula consigo mesmo. | Termina automaticamente no começo do próximo turno.
 
+- Revelado | Perde disfarce, transformação e invisibilidade de origem mágica enquanto durar. Não pode se esconder, e ataques contra ele ignoram cobertura criada por ilusão. | Termina ao fim da duração da fonte.
+
 - Caído | Ataques corpo a corpo contra você recebem +2. Seus ataques sofrem -2. Levantar consome a ação de movimento e provoca reações. | Gaste a ação de movimento para levantar.
 
 - Sangramento | Sofra 1d6 de dano no fim do turno. Novas aplicações aumentam o dano em +1, até +5, mas não adicionam dados. | Cura DT 15 com ação padrão ou qualquer cura de pelo menos 1 PV.
@@ -3674,7 +3754,7 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 - Cego | Desvantagem em testes que dependem de visão. Ataques contra você recebem +2 se o atacante puder vê-lo. | Remova ou supere a fonte da cegueira.
 
-- Imobilizado | Movimento 0. Não pode usar ações que exijam deslocamento. | Teste indicado pela fonte como ação padrão.
+- Imobilizado | Movimento 0. Não pode usar ações que exijam deslocamento. | Ação Padrão e o teste que a fonte indicar; se ela não indicar, Atletismo ou Acrobacia contra a DT da fonte (na magia, a DT de conjuração).
 
 - Inconsciente | Não pode agir nem reagir. Defesa reduzida em 5 e falha automaticamente em testes de Força e Destreza. Veja também Atordoado: use Atordoado para efeitos temporários que não vêm de perder toda a Vida. | Recupere-se da causa. Em Morrendo, volte a pelo menos 1 PV.
 
@@ -3695,6 +3775,10 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 - Silenciado | Não fala: sem componente verbal em magia e sem ordens faladas. Gestos e escrita continuam funcionando. | Termina ao fim da duração da fonte ou quando a fonte for superada.
 
 - Desorientado | Desvantagem em ataques e em Percepção. | No fim do turno, Fortitude ou Vontade, à escolha de quem joga, contra a DT da fonte encerra a condição.
+
+- Quando a fonte não diz como sair de Imobilizado, a criatura gasta uma Ação Padrão e testa Atletismo ou Acrobacia contra a DT da fonte. Na magia, é a DT de conjuração dela.
+
+- Condição que vem de uma fonte instantânea e não diz quanto dura vai até o fim do próximo turno de quem a recebeu.
 
 ### Condições benéficas
 
@@ -4219,13 +4303,13 @@ O catálogo mostra a progressão nível a nível, e as classes que conjuram most
 - **Sintonizador** *(comum)*. Junta o próprio Fluxo com catalisadores de fora para conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.
 - **Caçador das Almas** *(especial, Anima)*. Liga a própria alma a uma Zanpakutō e passa a vida patrulhando a fronteira entre vivos e mortos, purificando espíritos corrompidos. Quem descobre o nome da lâmina abre o Shikai, e quem a domina por completo desperta a Bankai.
 - **Campeão Dimensional** *(especial, qualquer Árvore)*. O título fica com quem passa dos limites da própria dimensão. Os picos de poder duram pouco, são contados, e nenhum deles salva ninguém da morte.
-- **Cartista Arcano** *(especial, qualquer Árvore)*. Conjura com cartas que prepara antes. O baralho define o que ele tem na mão naquele dia, e o Fluxo nativo dele define o que cada carta faz.
+- **Cartista Arcano** *(especial, qualquer Árvore)*. Conjura com cartas: cada magia que conhece é uma carta do baralho, e o Fluxo nativo dele define quais cartas existem. Também arremessa cartas comuns como arma. Só conjura até o segundo círculo, e as vagas dele só guardam magias desse limite.
 - **Devorador** *(especial, Limiar)*. Nasce sem poder nenhum e pega emprestado de quem morreu. Mata, ou chega perto de um corpo ainda quente, devora o que sobrou, e uma parte de verdade da força da vítima passa a ocupar um espaço vazio dentro dele.
 - **Elementarista** *(especial, Baluarte)*. Escolhe um único elemento primordial e vai aprofundando esse laço até chegar numa derivação, usando esse elemento para mudar o campo de batalha. Aprender os outros elementos só é possível para quem tem a aptidão de Avatar, que é raríssima.
 - **Escritor de Contos** *(especial, Limiar)*. Conta histórias, presságios e pequenas verdades que ajudam o grupo. O incômodo é que o que ele conta costuma acontecer.
 - **Guia Dimensional** *(especial, Matriz)*. Conhece as rotas, os portais e as âncoras. Quando o grupo chega num lugar sem estrada nenhuma, foi ele quem levou.
-- **Interceptador** *(especial, A.X.I.S)*. Entra na Malha para desmontar a magia dos outros e atrapalhar quem está conjurando. Fluxo natural mesmo, ele não usa.
-- **Invocador** *(especial, qualquer Árvore)*. Luta com uma criatura invocada do lado. Escolhe a criatura no Catálogo de Invocações e, a cada pacto, decide se chama mais uma ou se fortalece a que já tem.
+- **Interceptador** *(especial, A.X.I.S)*. Entra na Malha da Tecnologia para desmontar a magia natural dos outros e atrapalhar quem está conjurando. Ele mesmo não conjura.
+- **Invocador** *(especial, qualquer Árvore)*. Luta ao lado de duas criaturas invocadas, feitas do próprio Fluxo nativo. Escolhe as criaturas no Catálogo de Invocações e, a cada pacto, decide se chama mais duas ou se fortalece duas que já tem.
 - **Pirata Amaldiçoado** *(especial, O Vazio)*. Luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que já morreu e continua obedecendo às suas ordens.
 - **Viajante** *(especial, Matriz, Éon, Vórtice)*. Vive pulando entre Árvores e dimensões. Cada estrada que percorre vira mais um jeito de se virar em qualquer lugar.
 
@@ -4575,7 +4659,7 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra no Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 1.366 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 1.367 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 **Em resumo**
 
@@ -4593,7 +4677,7 @@ O catálogo inteiro tem 1.366 itens, e você nunca vê todos de uma vez. Cada it
 
 - Local | O que vende | Itens
 
-- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 420
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 421
 
 - Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 343
 
