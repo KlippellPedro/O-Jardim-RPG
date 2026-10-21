@@ -1680,10 +1680,6 @@
    "a": "ee6b121d4748.mp3",
    "i": 0
   },
-  "Cara a Cara com um Deus": {
-   "a": "6f65441ae4ac.mp3",
-   "i": 0
-  },
   "Maestria: reforço de recursos": {
    "a": "d7260ae1ecd6.mp3",
    "i": 0
@@ -2252,8 +2248,8 @@
    "a": "57611d494a93.mp3",
    "i": 0
   },
-  "Eco Curto": {
-   "a": "f209d58987dd.mp3",
+  "Repetição Curta": {
+   "a": "2012e7dc48ff.mp3",
    "i": 0
   },
   "Onda de Ausência": {
@@ -2264,8 +2260,8 @@
    "a": "bc03a10ba6f5.mp3",
    "i": 0
   },
-  "Nada Pessoal": {
-   "a": "20da5e39a8af.mp3",
+  "Sentido Apagado": {
+   "a": "dc2c4895195a.mp3",
    "i": 0
   },
   "Véu do Nada": {
@@ -2656,6 +2652,10 @@
    "a": "dae081150763.mp3",
    "i": 0
   },
+  "Poço de Gravidade": {
+   "a": "e349d051cd50.mp3",
+   "i": 0
+  },
   "Corte de Distância": {
    "a": "dbffc13a787e.mp3",
    "i": 0
@@ -2676,8 +2676,8 @@
    "a": "f20099ff5114.mp3",
    "i": 0
   },
-  "Eco de Batalha": {
-   "a": "81274498d303.mp3",
+  "Repetição de Batalha": {
+   "a": "3c648d9930f3.mp3",
    "i": 0
   },
   "Fome do Abismo": {
@@ -3108,8 +3108,8 @@
    "a": "ed688712b06a.mp3",
    "i": 0
   },
-  "Silenciar Fluxo": {
-   "a": "9bf145b3a61f.mp3",
+  "Esquecimento": {
+   "a": "a7b31db00d46.mp3",
    "i": 0
   },
   "Ausência Regional": {
@@ -3156,8 +3156,8 @@
    "a": "eff7f829ebdd.mp3",
    "i": 0
   },
-  "Renascer": {
-   "a": "9c52d09cc105.mp3",
+  "Recomeço Absoluto": {
+   "a": "cc1b98918e4e.mp3",
    "i": 0
   },
   "Verdade Nua": {
@@ -3484,8 +3484,8 @@
    "a": "703f18e50d63.mp3",
    "i": 0
   },
-  "Reviravolta Inscrita": {
-   "a": "17a02df75609.mp3",
+  "Sorte Virada": {
+   "a": "33c48e13a1f1.mp3",
    "i": 0
   },
   "Centelha Elemental": {
@@ -3664,8 +3664,8 @@
    "a": "c7d56a975eed.mp3",
    "i": 0
   },
-  "Manto do Não-Ser": {
-   "a": "a9ead53ce2db.mp3",
+  "Manto do Instante Ausente": {
+   "a": "235c1c94dab1.mp3",
    "i": 0
   },
   "Último Ato": {
@@ -6280,6 +6280,10 @@
    "a": "3419c62620da.mp3",
    "i": 0
   },
+  "Habilidade: Pacote Descartado": {
+   "a": "85ce52ed5283.mp3",
+   "i": 0
+  },
   "Poder de Interceptador": {
    "a": "025fcb82ce9e.mp3",
    "i": 0
@@ -6292,8 +6296,8 @@
    "a": "2a793d01533a.mp3",
    "i": 0
   },
-  "Habilidade: Acesso Administrador": {
-   "a": "d9982bc6c77f.mp3",
+  "Habilidade: Blindagem de Malha": {
+   "a": "7b9848821cc7.mp3",
    "i": 0
   },
   "Habilidade final: Acesso Administrador": {
