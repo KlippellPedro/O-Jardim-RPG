@@ -50,7 +50,7 @@ export const Detetive = ({ classe }: { classe: IClasse }) => {
             transition={{ duration: 1, delay: 0.6 }}
             className="text-lg text-amber-100/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Lê uma cena antes de qualquer um: pega o detalhe fora do lugar, a mentira mal contada, o padrão que ninguém mais viu. Não é sobre ter uma resposta pronta, é sobre nunca aceitar a primeira explicação.
+            Lê uma cena antes de qualquer um: pega o detalhe fora do lugar, a mentira mal contada, o padrão que ninguém mais viu. O que move o Detetive é nunca aceitar a primeira explicação.
           </motion.p>
         </motion.header>
 

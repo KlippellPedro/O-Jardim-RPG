@@ -138,7 +138,7 @@ export const Guardiao = ({ classe }: { classe: IClasse }) => {
             <Gauge size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
             <p className="text-stone-400 leading-relaxed text-sm">
-              O Guardião rola Intimidação com Constituição no lugar de Carisma: o que impõe respeito é o tanto de pancada que você mostra aguentar, não o discurso. É esse número que o alvo precisa alcançar quando Provocar manda testar Vontade.
+              O Guardião rola Intimidação com Constituição no lugar de Carisma: o que impõe respeito é o tanto de pancada que você mostra aguentar. É esse número que o alvo precisa alcançar quando Provocar manda testar Vontade.
             </p>
           </PremiumCard>
         </div>

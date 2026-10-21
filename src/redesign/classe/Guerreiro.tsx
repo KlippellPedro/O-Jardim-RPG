@@ -135,7 +135,7 @@ export const Guerreiro = ({ classe }: { classe: IClasse }) => {
             <Gauge size={36} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              O Guerreiro rola Intimidação com Força no lugar de Carisma, e é esse número que o alvo precisa alcançar quando um efeito seu manda testar Vontade para não recuar. O que assusta não é o discurso: é o tamanho do estrago que você acabou de fazer na frente de todo mundo.
+              O Guerreiro rola Intimidação com Força no lugar de Carisma, e é esse número que o alvo precisa alcançar quando um efeito seu manda testar Vontade para não recuar. O que assusta é o tamanho do estrago que você acabou de fazer na frente de todo mundo.
             </p>
           </PremiumCard>
         </div>

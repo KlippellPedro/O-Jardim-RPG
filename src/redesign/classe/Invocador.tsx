@@ -72,7 +72,7 @@ export const Invocador = ({ classe }: { classe: IClasse }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-indigo-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            A força não está no que eles podem fazer, mas no que eles trazem. Ligados por pactos absolutos de mana, os Invocadores chamam feras, guardiões e espíritos reais do mundo para lutar ao seu lado, um pacto de cada vez.
+            Os Invocadores dão corpo ao próprio Fluxo e chamam feras, guardiões e espíritos para lutar ao seu lado, um pacto de cada vez.
           </motion.p>
         </motion.header>
 
@@ -89,7 +89,7 @@ export const Invocador = ({ classe }: { classe: IClasse }) => {
             <Link2 size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Pacto de Fluxo Nativo</h3>
             <p className="text-indigo-200/60 leading-relaxed text-sm">
-              O conceito central da classe: invoque suas duas primeiras criaturas direto do Catálogo de Invocações, com ficha pronta, exclusiva da classe. A cada estágio seguinte, você escolhe: invocar mais duas criaturas ao seu lado, ou levar duas que já tem pro próximo nível do Catálogo. É a decisão que define seu Invocador, um exército pequeno ou poucos aliados imbatíveis.
+              O conceito central da classe: invoque suas duas primeiras criaturas direto do Catálogo de Invocações, com ficha pronta e feitas do seu Fluxo nativo. A cada estágio seguinte, você escolhe: invocar mais duas criaturas, ou levar duas que já tem pro próximo nível do Catálogo. Duas ficam em cena por vez, então é a decisão que define seu Invocador: uma criatura certa para cada situação ou duas quase imbatíveis.
             </p>
           </PremiumCard>
 
@@ -132,9 +132,9 @@ export const Invocador = ({ classe }: { classe: IClasse }) => {
             className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
             <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Como a invocação joga</h3>
             <p className="text-indigo-200/60 leading-relaxed text-sm">
-              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento em que aciona: o resultado vira a DT que ele precisa alcançar.
+              As invocações agem logo depois do seu turno e atacam com o seu teste de conjuração, contra a Defesa do alvo. O efeito que vem junto com o ataque é resistido contra o total dele. Os outros efeitos seus que pedem resistência rolam Misticismo na hora, e o resultado vira a DT.
             </p>
           </PremiumCard>
         </div>

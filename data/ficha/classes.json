@@ -1062,7 +1062,7 @@
       {
         "id": "zero-km",
         "titulo": "0 Km",
-        "descricao": "No nível 15, uma vez por sessão, deixe o veículo com um mecânico e o martelinho de ouro resolve: em seis horas de oficina ele volta com a Vida cheia e sem nenhuma avaria, sem custo de material. O que estava destruído continua destruído; isto conserta, não ressuscita.",
+        "descricao": "No nível 15, uma vez por sessão, deixe o veículo com um mecânico e o martelinho de ouro resolve: em seis horas de oficina ele volta com a Vida cheia e sem nenhuma avaria, sem custo de material. O que estava destruído continua destruído; isto só conserta o que ainda está de pé.",
         "niveis": [
           15
         ],
@@ -4638,7 +4638,7 @@
     "dt_efeitos": {
       "rotulo": "DT do Guardião",
       "pericia": "intimidacao",
-      "descricao": "Quando um efeito seu manda alguém testar Vontade para focar em você, role Intimidação na hora. O resultado da sua rolagem é a DT que a pessoa precisa alcançar. O Guardião rola Intimidação com Constituição no lugar de Carisma: o que impõe respeito é o tanto de pancada que você mostra aguentar, não o discurso. Troque o atributo dessa perícia na ficha, na aba Perícias, e ele fica trocado."
+      "descricao": "Quando um efeito seu manda alguém testar Vontade para focar em você, role Intimidação na hora. O resultado da sua rolagem é a DT que a pessoa precisa alcançar. O Guardião rola Intimidação com Constituição no lugar de Carisma: o que impõe respeito é o tanto de pancada que você mostra aguentar. Troque o atributo dessa perícia na ficha, na aba Perícias, e ele fica trocado."
     },
     "progressao": [
       {
@@ -5532,7 +5532,7 @@
           {
             "id": "sereia",
             "titulo": "Sereia / Tritão",
-            "descricao": "Nada melhor do que anda; a Canção escolhida é a arma de verdade, não a garra."
+            "descricao": "Nada melhor do que anda; a arma de verdade é a Canção escolhida."
           },
           {
             "id": "mimico",
@@ -5557,7 +5557,7 @@
           {
             "id": "elfo",
             "titulo": "Elfo",
-            "descricao": "Séculos de vida e de leitura; a vantagem é o conhecimento acumulado, não o corpo."
+            "descricao": "Séculos de vida e de leitura; a vantagem está no conhecimento acumulado."
           },
           {
             "id": "desperto",
@@ -5687,7 +5687,7 @@
             "duracao": "Uma missão",
             "usos": "Uma vez por sessão",
             "descricao": "Uma vez por sessão, peça o acompanhamento de um caçador novato da Guilda numa missão.",
-            "escalonamento": "Nível 2: o caçador que te acompanha já é experiente, não novato. Nível 3: você pode levar dois caçadores na mesma missão. Nível 4: a escolta vem com um companheiro animal treinado pela Guilda."
+            "escalonamento": "Nível 2: o caçador que te acompanha já chega experiente. Nível 3: você pode levar dois caçadores na mesma missão. Nível 4: a escolta vem com um companheiro animal treinado pela Guilda."
           },
           {
             "id": "prestigio-de-cacador",
@@ -9259,8 +9259,7 @@
         {
           "nivel": 20,
           "circulo": 2,
-          "vagas": 6,
-          "teto_por_circulo": 4
+          "vagas": 6
         },
         {
           "nivel": 25,
@@ -9272,30 +9271,6 @@
           "nivel": 30,
           "circulo": 2,
           "vagas": 8,
-          "teto_por_circulo": 4
-        },
-        {
-          "nivel": 35,
-          "circulo": 2,
-          "vagas": 9,
-          "teto_por_circulo": 4
-        },
-        {
-          "nivel": 40,
-          "circulo": 2,
-          "vagas": 10,
-          "teto_por_circulo": 4
-        },
-        {
-          "nivel": 45,
-          "circulo": 2,
-          "vagas": 11,
-          "teto_por_circulo": 4
-        },
-        {
-          "nivel": 50,
-          "circulo": 2,
-          "vagas": 12,
           "teto_por_circulo": 4
         }
       ]
@@ -9313,18 +9288,6 @@
         {
           "nivel": 20,
           "vagas": 3
-        },
-        {
-          "nivel": 30,
-          "vagas": 4
-        },
-        {
-          "nivel": 40,
-          "vagas": 5
-        },
-        {
-          "nivel": 50,
-          "vagas": 6
         }
       ]
     },
@@ -9341,22 +9304,10 @@
         {
           "nivel": 20,
           "vagas": 3
-        },
-        {
-          "nivel": 30,
-          "vagas": 4
-        },
-        {
-          "nivel": 40,
-          "vagas": 5
-        },
-        {
-          "nivel": 50,
-          "vagas": 6
         }
       ]
     },
-    "descricao": "Conjura com cartas que prepara antes. O baralho define o que ele tem na mão naquele dia, e o Fluxo nativo dele define o que cada carta faz.",
+    "descricao": "Conjura com cartas: cada magia que conhece é uma carta do baralho, e o Fluxo nativo dele define quais cartas existem. Também arremessa cartas comuns como arma. Só conjura até o segundo círculo, e as vagas dele só guardam magias desse limite.",
     "dt_efeitos": {
       "rotulo": "DT do Cartista Arcano",
       "pericia": "misticismo",
@@ -9599,40 +9550,38 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Receba +2 em Misticismo, Percepção e Enganação ao usar o baralho como foco. Escolha uma magia do Fluxo nativo de primeiro círculo que pode ser canalizada pelas cartas.",
+            "descricao": "Receba +2 em Misticismo, Percepção e Enganação ao usar o baralho como foco. Cada magia que você conhece é uma carta, e a sua mão é o conjunto delas: jogar uma carta é conjurar a magia, pagando a Mana dela. Escolha uma magia de primeiro círculo do Fluxo nativo como a sua primeira carta.",
             "acao": "Passivo"
           },
           {
             "nivel": 5,
-            "descricao": "Uma vez por rodada, dê +1d4 a um teste seu ou de aliado a 10 m antes da rolagem. Escolha mais duas magias do Fluxo nativo de primeiro círculo, três no total.",
+            "descricao": "Uma vez por rodada, dê +1d4 a um teste seu ou de aliado a 10 m antes da rolagem. Escolha mais duas cartas de primeiro círculo do Fluxo nativo, três no total.",
             "acao": "Ação Livre",
             "alcance": "10 m",
             "usos": "Uma vez por rodada"
           },
           {
             "nivel": 10,
-            "descricao": "Aprenda uma magia do Fluxo nativo de segundo círculo. Uma vez por combate, use duas cartas de primeiro círculo ou uma de segundo círculo com uma ação completa.",
+            "descricao": "Aprenda uma carta de segundo círculo do Fluxo nativo, quatro no total. Uma vez por combate, com uma ação completa, jogue duas cartas de primeiro círculo, ou uma de primeiro e uma de segundo.",
             "acao": "Ação Completa",
             "usos": "Uma vez por combate"
           },
           {
             "nivel": 15,
-            "descricao": "Escolha mais uma magia do Fluxo nativo de primeiro ou segundo círculo, cinco no total.",
+            "descricao": "Escolha mais uma carta de primeiro ou segundo círculo do Fluxo nativo, cinco no total.",
             "acao": "Passivo"
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, por três rodadas, jogue duas cartas por turno; a primeira custa 0 Mana e críticos continuam dependendo da rolagem.",
-            "acao": "Ação Livre",
-            "duracao": "Três rodadas",
-            "usos": "Uma vez por sessão"
+            "descricao": "Escolha mais uma carta de primeiro ou segundo círculo, seis no total. Uma vez por rodada, a primeira carta de primeiro círculo que você jogar custa 1 de Mana a menos (mínimo 1). Depois do 20, a classe dá mais uma carta no nível 25 e outra no 30, até oito, e você conhece no máximo quatro do mesmo círculo.",
+            "acao": "Passivo"
           }
         ]
       },
       {
         "id": "cartas-afiadas",
         "titulo": "Cartas Afiadas",
-        "descricao": "O dano básico das cartas evolui por estágio: 1d6, 1d8, 2d6 e 2d8 + Mod.Fluxo.",
+        "descricao": "Você arremessa cartas comuns como arma: ataque de Pontaria, alcance de 9 m, dano de Corte, crítico no 20 e nenhum custo de Mana. O dano evolui por estágio: 1d6, 1d8, 2d6 e, no último, 2d8 + Mod. Fluxo.",
         "niveis": [
           3,
           8,
@@ -9684,7 +9633,7 @@
       {
         "id": "dados-viciados",
         "titulo": "Dados Viciados",
-        "descricao": "Uma vez por sessão, depois de ver uma rolagem, substitua o d20 por 10 antes dos modificadores. Não escolhe crítico, desastre ou resultado arbitrário.",
+        "descricao": "Uma vez por sessão, depois de ver o d20 de uma rolagem sua, de um aliado ou de um inimigo a até 10 m, troque o resultado do dado por 10 antes dos modificadores. Um 20 ou 1 natural trocado deixa de ser crítico ou desastre.",
         "niveis": [
           18
         ],
@@ -9694,7 +9643,7 @@
       {
         "id": "arcano-absoluto",
         "titulo": "Arcano Absoluto",
-        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você escolhe as cartas que compra, pode jogar duas cartas em cada turno e a primeira carta jogada no turno custa 0 de Mana. Uma vez por turno, uma carta jogada retorna à sua mão em vez de ser descartada. Ataques concedidos por cartas obtêm acerto crítico com resultado natural 19 ou 20.",
+        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você joga duas cartas em cada turno, que podem ser a mesma, e a primeira carta jogada no turno custa 0 de Mana. Ataques de carta (arremessos e magias de ataque) obtêm acerto crítico com 19 ou 20 natural.",
         "niveis": [
           20
         ],
@@ -9723,7 +9672,7 @@
         "custo_mana": 4,
         "acao": "Ação Livre",
         "duracao": "Até o fim da cena",
-        "descricao": "Por uma cena, reduza em 1 o custo de magias, mínimo 1."
+        "descricao": "Por uma cena, reduza em 1 o custo das cartas que você jogar, mínimo 1. Carta que já custa 0 continua custando 0."
       },
       {
         "id": "eremita",
@@ -9739,7 +9688,7 @@
         "custo_mana": 3,
         "acao": "Ação Livre",
         "usos": "Uma vez por rodada",
-        "descricao": "Uma vez por rodada, rerrole um dado que resultou 1 e mantenha o novo resultado."
+        "descricao": "Uma vez por rodada, rerrole um d20 seu que resultou 1 e mantenha o novo resultado."
       },
       {
         "id": "imperatriz",
@@ -9755,7 +9704,7 @@
         "custo_mana": 8,
         "acao": "Ação Padrão",
         "duracao": "Duas rodadas",
-        "descricao": "Por duas rodadas, arremesse duas cartas normais com sua ação; a segunda causa metade do dano."
+        "descricao": "Por duas rodadas, cada arremesso de Cartas Afiadas lança duas cartas com a mesma ação; a segunda causa metade do dano. Ao ativar, a mesma Ação Padrão já faz o primeiro arremesso duplo."
       },
       {
         "id": "morte",
@@ -9783,7 +9732,7 @@
         "acao": "Ação Padrão",
         "alcance": "6 m",
         "duracao": "Até o fim da cena",
-        "descricao": "Por uma cena, aliados a 6 m recebem +1 em testes e inimigos sofrem −1 contra suas magias."
+        "descricao": "Por uma cena, aliados a até 6 m de você recebem +1 em testes, e inimigos a até 6 m sofrem -1 nos testes de resistência contra as suas cartas. A distância conta no momento de cada teste."
       },
       {
         "id": "enforcado",
@@ -9791,7 +9740,7 @@
         "custo_mana": 0,
         "acao": "Ação Livre",
         "usos": "Uma vez por cena",
-        "descricao": "Uma vez por cena, substitua até 3 Mana ausentes por 2 Vida cada; não pode reduzir abaixo de 1 Vida."
+        "descricao": "Uma vez por cena, ao jogar uma carta sem Mana suficiente, pague até 3 da Mana que falta com 2 de Vida cada; a Vida não pode cair abaixo de 1."
       },
       {
         "id": "o-sol",
@@ -11429,11 +11378,11 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Luta com uma criatura invocada do lado. Escolhe a criatura no Catálogo de Invocações e, a cada pacto, decide se chama mais uma ou se fortalece a que já tem.",
+    "descricao": "Luta ao lado de duas criaturas invocadas, feitas do próprio Fluxo nativo. Escolhe as criaturas no Catálogo de Invocações e, a cada pacto, decide se chama mais duas ou se fortalece duas que já tem.",
     "dt_efeitos": {
       "rotulo": "DT do Invocador",
       "pericia": "misticismo",
-      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar."
+      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar. O efeito que vem junto com o ataque de uma invocação é resistido contra o total desse ataque."
     },
     "progressao": [
       {
@@ -11674,7 +11623,7 @@
             "nivel": 1,
             "titulo": "Primeiro Vínculo",
             "acao": "Passivo",
-            "descricao": "Escolha duas criaturas do primeiro nível do Catálogo de Invocações. Cada uma já vem com ficha pronta (Vida, Defesa, Movimento e uma habilidade próprios) e age na sua Iniciativa, usando a própria Ação Padrão e o próprio Movimento - sem gastar nenhuma das suas ações."
+            "descricao": "Escolha duas criaturas do primeiro nível do Catálogo de Invocações. Elas são feitas do seu Fluxo nativo, que dá a aparência delas, e cada uma tem ficha pronta (Vida, Defesa, Movimento e uma habilidade). Até duas ficam em cena ao mesmo tempo; as outras esperam guardadas, e você troca fora de combate ou com o Chamado Rápido. Em combate, as invocações agem logo depois do seu turno, cada uma com a própria Ação Padrão e o próprio Movimento, sem gastar nenhuma das suas ações. O ataque delas usa o seu teste de conjuração (d20 + Mod. Fluxo + metade do nível total + Grau de Misticismo) contra a Defesa do alvo, e os testes de resistência delas usam os seus bônus. Manter as invocações não custa Mana. Quando uma cai a 0 de Vida, ela se desfaz e volta com a Vida cheia no seu próximo descanso longo."
           },
           {
             "nivel": 5,
@@ -11705,7 +11654,7 @@
       {
         "id": "formas-vinculadas",
         "titulo": "Formas Vinculadas",
-        "descricao": "Aprenda um treinamento por estágio: Fera, Guardião, Espírito ou Broto Curador. Toda invocação que você tiver, atual ou futura, recebe o benefício de cada treinamento que você já aprendeu, não importa qual criatura for.",
+        "descricao": "Aprenda um treinamento por estágio entre seis: Fera, Guardião, Espírito, Broto Curador, Sombra ou Núcleo Firme. Toda invocação que você tiver, atual ou futura, recebe o benefício de cada treinamento que você já aprendeu, não importa qual criatura for.",
         "niveis": [
           3,
           8,
@@ -11725,8 +11674,8 @@
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Enquanto a invocação existir",
-            "descricao": "Toda invocação sua passa a ter Movimento igual ao seu, e cruza terreno difícil natural (mato alto, neve, lama) sem gastar Movimento extra.",
-            "escalonamento": "Nível 2: recebe +3 m de Movimento, além do seu. Nível 3: ignora também terreno difícil artificial (escombros, gelo liso, teias), não só natural. Nível 4: recebe vantagem no primeiro ataque que fizer em cada combate."
+            "descricao": "O Movimento de toda invocação sua passa a ser o maior entre o dela e o seu, e ela cruza terreno difícil natural (mato alto, neve, lama) sem gastar Movimento extra.",
+            "escalonamento": "Nível 2: recebe +3 m de Movimento. Nível 3: ignora também terreno difícil artificial (escombros, gelo liso, teias), não só natural. Nível 4: recebe vantagem no primeiro ataque que fizer em cada combate."
           },
           {
             "id": "guardiao",
@@ -11744,7 +11693,7 @@
             "alcance": "Pessoal",
             "duracao": "Enquanto a invocação existir",
             "descricao": "Toda invocação sua não precisa respirar, não sofre com ambientes hostis (vácuo, veneno no ar, calor ou frio extremos) e flutua sobre líquidos e obstáculos rasos.",
-            "escalonamento": "Nível 2: recebe Resistência 5 a um tipo de dano de energia (fogo, gelo, raio ou ácido), escolhido ao invocar. Nível 3: pode atravessar uma parede fina ou porta fechada de até 30 cm, uma vez por cena. Nível 4: a Resistência do nível 2 sobe para 10, e o tipo pode ser trocado a cada cena."
+            "escalonamento": "Nível 2: recebe Resistência 5 a um destes tipos de dano, escolhido ao invocar: Fogo, Gelo, Raio ou Ácido. Nível 3: pode atravessar uma parede fina ou porta fechada de até 30 cm, uma vez por cena. Nível 4: a Resistência do nível 2 sobe para 10, e o tipo pode ser trocado a cada cena."
           },
           {
             "id": "broto-curador",
@@ -11812,7 +11761,7 @@
       {
         "id": "convergencia-primordial",
         "titulo": "Convergência Primordial",
-        "descricao": "Uma vez por sessão, use uma Ação Completa: pelas três rodadas seguintes, a habilidade própria de cada uma das suas invocações (Garras, Golpe, Fagulha, Toque Vital, Mão Extra, Presa Paralisante, Grito de Guerra, conforme a linha dela) causa ou concede +2 dados a mais do que o normal.",
+        "descricao": "Uma vez por sessão, use uma Ação Completa: pelas três rodadas seguintes, a habilidade própria de cada uma das suas invocações (Garras, Golpe, Fagulha, Toque Vital, Mão Extra ou Presa Paralisante, conforme a linha dela) causa ou concede +2 dados a mais do que o normal.",
         "niveis": [
           20
         ],
@@ -11841,7 +11790,7 @@
         "custo_mana": 3,
         "acao": "Ação Livre",
         "usos": "Uma vez por cena",
-        "descricao": "Traga uma invocação sua que não estava na cena para perto de você, uma vez por cena."
+        "descricao": "Traga uma invocação sua que estava guardada para perto de você, uma vez por cena. Se já houver duas em cena, uma delas, à sua escolha, volta a ficar guardada."
       },
       {
         "id": "elo-protetor",
@@ -11855,8 +11804,8 @@
         "titulo": "Olhos Compartilhados",
         "custo_mana": 2,
         "acao": "Ação Padrão",
-        "duracao": "Até o fim da cena, ou enquanto se concentrar",
-        "descricao": "Por uma cena, veja e ouça pela invocação; seu corpo fica Surpreendido enquanto se concentrar."
+        "duracao": "Enquanto se concentrar, até o fim da cena",
+        "descricao": "Veja e ouça por uma invocação sua enquanto se concentrar, até o fim da cena. Nesse tempo, seu próprio corpo não usa reações e tem Defesa reduzida em 2."
       },
       {
         "id": "investida-bestial",
@@ -11897,7 +11846,7 @@
         "titulo": "Essência Adaptável",
         "custo_mana": 0,
         "acao": "Passivo",
-        "descricao": "Após descanso, escolha fogo, frio, raio ou espiritual; a invocação causa esse tipo de dano até o próximo descanso."
+        "descricao": "Após um descanso longo, escolha Fogo, Gelo, Raio ou Ácido: o ataque das suas invocações causa esse tipo de dano até o próximo descanso longo."
       },
       {
         "id": "sacrificio-da-invocacao",
@@ -11905,7 +11854,7 @@
         "custo_mana": 0,
         "acao": "Passivo",
         "alcance": "3 m",
-        "descricao": "Quando a invocação cair a 0 de Vida, destrua-a para conceder 10 de Vida temporária a aliados a 3 m; ela retorna no descanso longo."
+        "descricao": "Quando uma invocação sua cair a 0 de Vida, ela se desfaz numa onda que dá 10 de Vida temporária a cada aliado a até 3 m. Ela volta no descanso longo, como as outras."
       },
       {
         "id": "avatar-da-deidade",
@@ -11922,7 +11871,7 @@
     ],
     "tarefas_bancada": {
       "rotulo": "Catálogo de Invocações",
-      "descricao": "Fichas prontas, exclusivas da classe: nada de criatura da Loja ou improvisada. Seis linhas (Caçador de Feras ofensivo, Colosso de Ferro defensivo, Salamandra de Fogo de suporte à distância, Seiva Viva de cura, Duende Prestativo de utilidade fora de combate e Aranha Tecelã de controle), cada uma em cinco níveis. Uma invocação nova sempre entra no nível 1 da linha escolhida; aprimorar a leva para o próximo nível da mesma linha.",
+      "descricao": "Fichas prontas, exclusivas da classe: nada de criatura da Loja ou improvisada. Seis linhas (Caçador de Feras ofensivo, Colosso de Ferro defensivo, Salamandra de Fogo de suporte à distância, Seiva Viva de cura, Duende Prestativo de utilidade fora de combate e Aranha Tecelã de controle), cada uma em cinco níveis. Uma invocação nova sempre entra no nível 1 da linha escolhida; aprimorar a leva para o próximo nível da mesma linha. A ficha dá o dano do ataque; para acertar, a invocação usa o seu teste de conjuração, como diz o Pacto.",
       "colunas": [
         "Invocação",
         "Nível",
@@ -12057,30 +12006,30 @@
         {
           "tarefa": "Aranha Tecelã I",
           "dt": "Nível 1",
-          "nota": "Vida 3 · Defesa 11 · Movimento 9 m (escala superfícies) · Presa Paralisante 1d6 de veneno · Alvo atingido testa Fortitude contra a DT do Invocador ou fica Imobilizado até o fim do próximo turno"
+          "nota": "Vida 3 · Defesa 11 · Movimento 9 m (escala superfícies) · Presa Paralisante 1d6 de veneno · Alvo atingido rola Fortitude contra o total do ataque e, se não alcançar, fica Imobilizado até o fim do próximo turno"
         },
         {
           "tarefa": "Aranha Tecelã II",
           "dt": "Nível 5",
-          "nota": "Vida 15 · Defesa 13 · Movimento 9 m (escala superfícies) · Presa Paralisante 1d8 de veneno · Alvo atingido testa Fortitude contra a DT do Invocador ou fica Imobilizado até o fim do próximo turno"
+          "nota": "Vida 15 · Defesa 13 · Movimento 9 m (escala superfícies) · Presa Paralisante 1d8 de veneno · Alvo atingido rola Fortitude contra o total do ataque e, se não alcançar, fica Imobilizado até o fim do próximo turno"
         },
         {
           "tarefa": "Aranha Tecelã III",
           "dt": "Nível 10",
-          "nota": "Vida 28 · Defesa 16 · Movimento 12 m (escala superfícies) · Presa Paralisante 2d6 de veneno · Alvo atingido testa Fortitude contra a DT do Invocador ou fica Imobilizado até o fim do próximo turno"
+          "nota": "Vida 28 · Defesa 16 · Movimento 12 m (escala superfícies) · Presa Paralisante 2d6 de veneno · Alvo atingido rola Fortitude contra o total do ataque e, se não alcançar, fica Imobilizado até o fim do próximo turno"
         },
         {
           "tarefa": "Aranha Tecelã IV",
           "dt": "Nível 15",
-          "nota": "Vida 41 · Defesa 18 · Movimento 12 m (escala superfícies) · Presa Paralisante 2d8 de veneno · Alvo atingido testa Fortitude contra a DT do Invocador ou fica Imobilizado até o fim do próximo turno"
+          "nota": "Vida 41 · Defesa 18 · Movimento 12 m (escala superfícies) · Presa Paralisante 2d8 de veneno · Alvo atingido rola Fortitude contra o total do ataque e, se não alcançar, fica Imobilizado até o fim do próximo turno"
         },
         {
           "tarefa": "Aranha Tecelã V",
           "dt": "Nível 20",
-          "nota": "Vida 54 · Defesa 21 · Movimento 15 m (escala superfícies) · Presa Paralisante 3d6 de veneno · Alvo atingido testa Fortitude contra a DT do Invocador ou fica Imobilizado até o fim do próximo turno"
+          "nota": "Vida 54 · Defesa 21 · Movimento 15 m (escala superfícies) · Presa Paralisante 3d6 de veneno · Alvo atingido rola Fortitude contra o total do ataque e, se não alcançar, fica Imobilizado até o fim do próximo turno"
         }
       ],
-      "resumo_no_topo": "O catálogo completo, com as 25 fichas prontas das cinco linhas de invocação, está no final desta página."
+      "resumo_no_topo": "O catálogo completo, com as 30 fichas prontas das seis linhas de invocação, está no final desta página."
     }
   },
   {
@@ -12687,38 +12636,6 @@
         {
           "nivel": 10,
           "vagas": 3
-        },
-        {
-          "nivel": 15,
-          "vagas": 4
-        },
-        {
-          "nivel": 20,
-          "vagas": 5
-        },
-        {
-          "nivel": 25,
-          "vagas": 6
-        },
-        {
-          "nivel": 30,
-          "vagas": 7
-        },
-        {
-          "nivel": 35,
-          "vagas": 8
-        },
-        {
-          "nivel": 40,
-          "vagas": 9
-        },
-        {
-          "nivel": 45,
-          "vagas": 10
-        },
-        {
-          "nivel": 50,
-          "vagas": 11
         }
       ]
     },
@@ -12735,38 +12652,6 @@
         {
           "nivel": 10,
           "vagas": 3
-        },
-        {
-          "nivel": 15,
-          "vagas": 4
-        },
-        {
-          "nivel": 20,
-          "vagas": 5
-        },
-        {
-          "nivel": 25,
-          "vagas": 6
-        },
-        {
-          "nivel": 30,
-          "vagas": 7
-        },
-        {
-          "nivel": 35,
-          "vagas": 8
-        },
-        {
-          "nivel": 40,
-          "vagas": 9
-        },
-        {
-          "nivel": 45,
-          "vagas": 10
-        },
-        {
-          "nivel": 50,
-          "vagas": 11
         }
       ]
     },
@@ -13013,7 +12898,7 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Escolha seu Fluxo Nativo e aprenda duas magias compatíveis com ele; use Misticismo para conjurá-las.",
+            "descricao": "Seu Fluxo nativo é o da Árvore em que você nasceu; se a ficha não tiver Árvore, escolha um dos dez Fluxos naturais. Aprenda duas magias compatíveis com ele; use Misticismo para conjurá-las.",
             "acao": "Passivo"
           },
           {
@@ -13043,9 +12928,10 @@
         ],
         "escolha_opcoes": {
           "rotulo": "Fluxo Nativo",
-          "descricao": "Escolhido uma vez, no nível 1, e vale para sempre: a classe diz como você manipula a magia, o Fluxo nativo diz o que sai dali. São os dez Fluxos naturais publicados no capítulo de Magia; a Tecnologia fica de fora porque ela nunca é nativa, só se instala de fora.",
+          "descricao": "Só para ficha sem Árvore: quem nasceu numa Árvore já tem o Fluxo dela. Escolhido uma vez, no nível 1, e vale para sempre. São os dez Fluxos naturais publicados no capítulo de Magia; a Tecnologia fica de fora porque ela nunca é nativa, só se instala de fora.",
           "total": 1,
-          "permanente": true
+          "permanente": true,
+          "so_sem_arvore": true
         },
         "opcoes": [
           {
@@ -13697,14 +13583,14 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Vincule-se a um catalisador após dez minutos fora de combate; ele não altera seu Fluxo nativo, só empresta acesso a um Fluxo secundário para suas fusões.",
+            "descricao": "O catalisador é um objeto seu ligado a um Fluxo diferente do seu nativo (uma pedra, um relógio parado, um osso), sem preço nem raridade. Sintonize-o com dez minutos fora de combate: ele fica preparado e empresta esse Fluxo secundário às suas fusões, e o seu Fluxo nativo continua o mesmo. Dos preparados, um é o ativo, o que a fusão usa agora. O catalisador gasto numa fusão fica desativado até você repetir os dez minutos. Perdido, quebrado ou roubado, você sintoniza outro objeto do mesmo jeito. A Tecnologia só serve de catalisador se o Mestre a tiver instalado na sua ficha. Selos e encantamentos você aprende também dos Fluxos dos catalisadores que tiver preparados na hora de aprender, e o que aprendeu fica mesmo se trocar de catalisador depois.",
             "acao": "10 minutos, fora de combate",
             "alcance": "Toque",
             "duracao": "Até trocar de catalisador"
           },
           {
             "nivel": 5,
-            "descricao": "Mantenha dois catalisadores preparados ao mesmo tempo, mesmo com só um ativo por vez.",
+            "descricao": "Mantenha dois catalisadores preparados ao mesmo tempo, com um ativo por vez. Trocar qual está ativo custa uma Ação de Movimento.",
             "acao": "Passivo"
           },
           {
@@ -13721,9 +13607,8 @@
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, sustente dois catalisadores ativos ao mesmo tempo por três rodadas.",
+            "descricao": "Uma vez por sessão, reative na hora um catalisador desativado, sem os dez minutos.",
             "acao": "Ação Livre",
-            "duracao": "Três rodadas",
             "usos": "Uma vez por sessão"
           }
         ]
@@ -13731,7 +13616,7 @@
       {
         "id": "fusao-controlada",
         "titulo": "Fusão Controlada",
-        "descricao": "Ao conjurar, aplique no máximo uma fusão aprendida cujo Fluxo secundário corresponda ao catalisador ativo. A fusão não altera a ação nem o custo da magia, salvo quando o próprio efeito disser o contrário. Depois da conjuração, o catalisador usado fica desativado. Reativá-lo exige os dez minutos fora de combate de Sintonia Catalisada; trocar para outro catalisador preparado não o recarrega. Descarga do Catalisador é mais severa e continua desativando até o próximo descanso.",
+        "descricao": "Ao conjurar, aplique no máximo uma fusão aprendida cujo Fluxo secundário corresponda ao catalisador ativo. A fusão não altera a ação nem o custo da magia, salvo quando o próprio efeito disser o contrário. A fusão do seu Fluxo nativo não tem uso, porque o catalisador precisa ser de outro Fluxo. Depois da conjuração, o catalisador usado fica desativado. Reativá-lo exige os dez minutos fora de combate de Sintonia Catalisada; trocar para outro catalisador preparado não o recarrega. Descarga do Catalisador é mais severa e continua desativando até o próximo descanso.",
         "niveis": [
           3,
           8,
@@ -13740,7 +13625,7 @@
         ],
         "escolha_opcoes": {
           "rotulo": "Fusões",
-          "descricao": "Uma fusão por estágio: uma no nível 3, duas no 8, três no 14 e quatro no 20. Cada fusão aprendida fica valendo ao mesmo tempo que as outras. São as onze fusões publicadas no capítulo de Magia, uma por Fluxo (incluindo Tecnologia, que a fusão consegue acessar mesmo sem ser Fluxo nativo de ninguém).",
+          "descricao": "Uma fusão por estágio: uma no nível 3, duas no 8, três no 14 e quatro no 20. Cada fusão aprendida fica valendo ao mesmo tempo que as outras. São as onze fusões publicadas no capítulo de Magia, uma por Fluxo. A Programação só funciona com a Tecnologia instalada na ficha, e a fusão do seu Fluxo nativo não tem uso.",
           "por_estagio": 1,
           "repetivel": false
         },
@@ -13751,7 +13636,7 @@
             "acao": "Ação Livre no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
-            "descricao": "Funde um Fluxo secundário de Origem à magia. Cria um foco nascente que ancora um efeito de duração. O foco possui Defesa 10 + círculo e Vida igual a 5 × círculo; sua destruição encerra o efeito."
+            "descricao": "Funde um Fluxo secundário de Origem à magia. Cria um foco nascente que ancora um efeito de duração: enquanto o foco existir, o efeito não exige concentração. O foco possui Defesa 10 + círculo e Vida igual a 5 × círculo, e sua destruição encerra o efeito. Só vale para magia com duração."
           },
           {
             "id": "revelacao",
@@ -13767,7 +13652,7 @@
             "acao": "Ação Livre no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
-            "descricao": "Funde um Fluxo secundário de Comunicação à magia. Uma criatura voluntária em alcance Médio pode servir como ponto de origem da magia."
+            "descricao": "Funde um Fluxo secundário de Comunicação à magia. A magia se origina numa criatura voluntária em alcance Médio, à vista do conjurador: alcance, linha de efeito e cobertura são medidos a partir dela, e o teste continua sendo do conjurador. Não vale para magia Pessoal."
           },
           {
             "id": "pulso-vivo",
@@ -13783,7 +13668,7 @@
             "acao": "Ação Livre no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
-            "descricao": "Funde um Fluxo secundário de Inconstância à magia. Role 1d4 para aumentar alcance, trocar linha e cone, mover um alvo 1,5 m ou preservar a carga do catalisador sem alteração adicional."
+            "descricao": "Funde um Fluxo secundário de Inconstância à magia. Role 1d4: 1 o alcance sobe uma faixa, até Longo; 2 se a magia tiver linha ou cone, troca pela outra forma, senão role de novo; 3 move um alvo 1,5 m numa direção da tabela de Direção; 4 o catalisador não se desativa depois desta conjuração."
           },
           {
             "id": "materializacao",
@@ -13791,7 +13676,7 @@
             "acao": "Ação Livre no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
-            "descricao": "Funde um Fluxo secundário de Físico à magia. Torna a magia tangível por um dos sete elementos, permite conversão coerente de dano e move alvo 1,5 m ou cria terreno difícil."
+            "descricao": "Funde um Fluxo secundário de Físico à magia. Escolha um dos sete elementos ao conjurar: o dano da magia passa a ser desse elemento. Escolha também entre mover o alvo 1,5 m ou tornar 1,5 m do terreno difícil até o próximo turno."
           },
           {
             "id": "dobra",
@@ -13799,11 +13684,11 @@
             "acao": "Ação Livre no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
-            "descricao": "Funde um Fluxo secundário de Espaço à magia. Aumenta alcance em uma faixa até Longo ou permite teleporte de 1,5 m antes de uma magia Pessoal ou Adjacente."
+            "descricao": "Funde um Fluxo secundário de Espaço à magia. Sobe o alcance da magia um degrau, até Longo (25 m); magia de Longo+ ou mais não muda. Ou, antes de conjurar uma magia Pessoal ou Adjacente, o conjurador teleporta até 3 m para um espaço livre e visível."
           },
           {
             "id": "eco",
-            "titulo": "Eco",
+            "titulo": "Prorrogação",
             "acao": "Ação Livre no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
@@ -13819,11 +13704,11 @@
           },
           {
             "id": "encerramento",
-            "titulo": "Encerramento",
+            "titulo": "Encerramento Rápido",
             "acao": "Ação Livre no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
-            "descricao": "Funde um Fluxo secundário de Fim à magia. Impede renovação e encerra no fim do turno um efeito temporário de círculo igual ou inferior já presente no alvo."
+            "descricao": "Funde um Fluxo secundário de Fim à magia. Impede renovação e encerra, no fim do turno do conjurador, um efeito temporário de círculo igual ou menor que o da magia fundida já presente no alvo. Exige o Fim autorizado pelo Mestre."
           },
           {
             "id": "programacao",
@@ -13831,14 +13716,14 @@
             "acao": "Ação Livre no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
-            "descricao": "Funde um Fluxo secundário de Tecnologia à magia. Armazena a magia no catalisador até o próximo turno e a libera por um gatilho observável previamente declarado."
+            "descricao": "Funde um Fluxo secundário de Tecnologia à magia. Armazena a magia no catalisador até o próximo turno e a libera por um gatilho observável declarado ao guardar. O teste é rolado quando a magia sai, e se o gatilho não acontecer até lá, a magia se perde. A Prorrogação adia a resolução sem gatilho; a Programação espera o gatilho."
           }
         ]
       },
       {
         "id": "religacao-de-emergencia",
         "titulo": "Religação de Emergência",
-        "descricao": "Uma vez por combate, use uma Reação quando seu catalisador ativo for destruído, roubado ou desativado: vincule-se instantaneamente a outro catalisador preparado, sem gastar os dez minutos normais de Sintonia Catalisada, e ele já entra ativo.",
+        "descricao": "Uma vez por combate, use uma Reação quando o seu catalisador ativo for desativado, quebrado ou roubado: reative-o na hora ou, se ele se perdeu, torne ativo outro catalisador preparado, sem os dez minutos de Sintonia Catalisada.",
         "niveis": [
           18
         ],
@@ -13863,7 +13748,7 @@
       {
         "id": "ressonancia-improvavel",
         "titulo": "Ressonância Improvável",
-        "descricao": "Um catalisador raro reage ao seu Fluxo e pode liberar uma fusão, contato ou complicação.",
+        "descricao": "Um catalisador raro reage ao seu Fluxo e pode liberar uma fusão, contato ou complicação. A fusão liberada vale só naquela cena e não entra na sua lista de fusões.",
         "niveis": [
           4,
           7,
@@ -13878,7 +13763,10 @@
         "titulo": "Troca Instantânea",
         "custo_mana": 2,
         "acao": "Ação Livre",
-        "descricao": "Troque o catalisador ativo."
+        "descricao": "Troque o catalisador ativo por outro preparado sem gastar a Ação de Movimento.",
+        "pre_requisitos": [
+          "Sintonia Catalisada 2"
+        ]
       },
       {
         "id": "aterramento",
@@ -13893,7 +13781,10 @@
         "custo_mana": 5,
         "acao": "Ação Livre",
         "duracao": "Uma rodada",
-        "descricao": "Por uma rodada, trate dois catalisadores como ativos."
+        "descricao": "Por uma rodada, trate dois catalisadores preparados como ativos: a cada conjuração, use a fusão de qualquer um dos dois.",
+        "pre_requisitos": [
+          "Sintonia Catalisada 2"
+        ]
       },
       {
         "id": "ressonancia-compartilhada",
@@ -13917,7 +13808,7 @@
         "custo_mana": 5,
         "acao": "Ação Livre no momento da conjuração",
         "duracao": "Esta conjuração",
-        "descricao": "Cause +1 dado e desative o catalisador até o descanso."
+        "descricao": "Uma magia de dano sua causa +1 dado de dano do mesmo tipo, com ou sem fusão. O catalisador ativo fica desativado até o próximo descanso, em vez dos dez minutos."
       },
       {
         "id": "sintonia-distante",
@@ -13933,7 +13824,7 @@
         "custo_mana": 4,
         "acao": "Ação Livre",
         "duracao": "Até o fim da cena",
-        "descricao": "Até o fim da cena, receba Resistência 5 contra dano causado por magias do mesmo Fluxo do catalisador ativo."
+        "descricao": "Até o fim da cena, reduza em 5 o dano de cada magia do mesmo Fluxo do catalisador ativo que atingir você."
       },
       {
         "id": "leitura-de-artefato",
@@ -14336,7 +14227,7 @@
           {
             "nivel": 1,
             "titulo": "Primeiro Traçado",
-            "descricao": "Aprenda dois ritos do catálogo. A Mana fica comprometida no minuto em que você começa, e rito nenhum acontece em combate. Terminar cansa conforme o tamanho do trabalho: 1 de Cansaço no complexo, 2 no grandioso e 3 no monumental. Rito simples não cansa.",
+            "descricao": "Aprenda dois ritos do catálogo, de qualquer Fluxo natural: rito vem de tradição, pacto ou pergaminho, e não da alma. Selos e encantamentos você também aprende de qualquer Fluxo natural. O do Fim ainda pede autorização do Mestre, e a Tecnologia só entra se estiver instalada. A Mana fica comprometida no minuto em que você começa, e rito nenhum acontece em combate. Terminar cansa conforme o tamanho do trabalho: 1 de Cansaço no complexo, 2 no grandioso e 3 no monumental. Rito simples não cansa.",
             "acao": "Fora de combate",
             "duracao": "O tempo escrito no ritual"
           },
@@ -14593,7 +14484,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Entra na Malha para desmontar a magia dos outros e atrapalhar quem está conjurando. Fluxo natural mesmo, ele não usa.",
+    "descricao": "Entra na Malha da Tecnologia para desmontar a magia natural dos outros e atrapalhar quem está conjurando. Ele mesmo não conjura.",
     "progressao": [
       {
         "nivel": 1,
@@ -14602,6 +14493,10 @@
             "tipo": "habilidade",
             "titulo": "Acesso à Malha",
             "estagio": 1
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Pacote Descartado"
           },
           {
             "tipo": "grau_pericia",
@@ -14784,7 +14679,7 @@
           },
           {
             "tipo": "habilidade",
-            "titulo": "Acesso Administrador"
+            "titulo": "Blindagem de Malha"
           }
         ]
       },
@@ -14844,7 +14739,7 @@
           },
           {
             "nivel": 10,
-            "descricao": "Receba +2 para interceptar magia, ritual, encantamento ou selo natural.",
+            "descricao": "Receba +2 para interceptar magia natural ou poder de criatura de Fluxo natural, e em Desmontar Selo.",
             "titulo": "Assinatura Reconhecida",
             "acao": "Passivo"
           },
@@ -14866,6 +14761,16 @@
         ]
       },
       {
+        "id": "pacote-descartado",
+        "titulo": "Pacote Descartado",
+        "descricao": "Quando perceber uma magia natural sendo conjurada, role Misticismo contra a DT de conjuração dela (7 + 3 × o círculo); em sucesso, você a intercepta e ela não acontece. Contra poder de criatura que venha de Fluxo natural (magia, sopro, maldição; o Mestre diz quando é o caso), a DT é a DT padrão do VD dela: 15 + metade do VD.",
+        "niveis": [
+          1
+        ],
+        "custo_mana": 4,
+        "acao": "Reação"
+      },
+      {
         "id": "hackear-fluxo",
         "titulo": "Hackear Fluxo",
         "descricao": "Interceptar com sucesso sempre cancela o efeito, no mínimo. Aprenda uma técnica por estágio para fazer mais que isso quando quiser: são seis possíveis e você aprende quatro. Cada técnica aprendida continua disponível para sempre, escolhida na hora de cada interceptação bem-sucedida.",
@@ -14877,7 +14782,7 @@
         ],
         "escolha_opcoes": {
           "rotulo": "Técnicas de Hackear Fluxo",
-          "descricao": "Uma técnica por estágio; cada técnica aprendida fica valendo ao mesmo tempo que as outras.",
+          "descricao": "Uma técnica por estágio. Todas ficam à mão, e você aplica uma delas a cada interceptação bem-sucedida.",
           "por_estagio": 1,
           "repetivel": false
         },
@@ -14916,11 +14821,11 @@
           },
           {
             "id": "eco-hostil",
-            "titulo": "Eco Hostil",
+            "titulo": "Refluxo Hostil",
             "acao": "Escolhida ao interceptar com sucesso",
             "alcance": "Igual ao efeito interceptado",
             "duracao": "Instantâneo",
-            "descricao": "Ao cancelar, a fonte sofre 2d6 de dano quando o efeito dela se desfaz."
+            "descricao": "Ao cancelar, a fonte sofre 2d6 de dano quando o efeito dela se desfaz, mais 1d6 a cada 5 níveis de Interceptador."
           },
           {
             "id": "nucleo-exposto",
@@ -14933,9 +14838,19 @@
         ]
       },
       {
+        "id": "blindagem-de-malha",
+        "titulo": "Blindagem de Malha",
+        "descricao": "A Malha passa a filtrar o que vem na sua direção: você recebe +2 na Defesa e nos testes de resistência contra magia natural e contra poder de criatura que venha de Fluxo natural.",
+        "niveis": [
+          18
+        ],
+        "acao": "Passivo",
+        "duracao": "Permanente"
+      },
+      {
         "id": "acesso-administrador",
         "titulo": "Acesso Administrador",
-        "descricao": "Uma vez por sessão, por três rodadas, você recebe +5 em interceptações e reduz o custo delas em 3 de Mana (mínimo 0), e pode realizar uma interceptação por turno sem gastar sua Reação. Numa interceptação bem-sucedida nesse período, você pode aplicar duas técnicas de Hackear Fluxo ao mesmo tempo, em vez de uma só.",
+        "descricao": "Uma vez por sessão, por três rodadas, você recebe +5 em interceptações e reduz o custo delas em 3 de Mana (mínimo 0), e pode realizar uma interceptação por rodada sem gastar sua Reação. Numa interceptação bem-sucedida nesse período, você pode aplicar duas técnicas de Hackear Fluxo ao mesmo tempo, em vez de uma só; no máximo uma delas pode ser das que trocam o cancelamento (Atrasar, Redirecionar ou Isolar).",
         "niveis": [
           20
         ],
@@ -14959,17 +14874,10 @@
     ],
     "poderes": [
       {
-        "id": "pacote-descartado",
-        "titulo": "Pacote Descartado",
-        "custo_mana": 4,
-        "descricao": "Role Misticismo contra a DT de conjuração da magia percebida; em sucesso, você a intercepta.",
-        "acao": "Reação"
-      },
-      {
         "id": "latencia",
         "titulo": "Latência",
         "custo_mana": 3,
-        "descricao": "Atrase uma magia percebida até o fim do turno do conjurador.",
+        "descricao": "Quando interceptar com Atrasar, você escolhe quando o efeito volta: no fim do turno da fonte, como de costume, ou no fim do próximo turno dela, uma rodada depois.",
         "acao": "Reação"
       },
       {
@@ -14993,7 +14901,7 @@
         "id": "quarentena-arcana",
         "titulo": "Quarentena Arcana",
         "custo_mana": 5,
-        "descricao": "Magias naturais conjuradas dentro de uma área de 3 m sofrem -2 na DT de conjuração, ficando mais fáceis de interceptar.",
+        "descricao": "Crie uma área fixa de 3 m por uma cena. Quem conjurar magia natural de dentro dela sofre -2 no teste de conjuração, e você recebe +2 para interceptar o que for conjurado dali. As criaturas que você escolher ficam de fora.",
         "acao": "Ação Padrão",
         "alcance": "3 m",
         "duracao": "Uma cena"
@@ -15015,10 +14923,18 @@
         "alcance": "9 m"
       },
       {
+        "id": "ruido-branco",
+        "titulo": "Ruído Branco",
+        "custo_mana": 4,
+        "descricao": "Você enche a Malha em volta de um conjurador que perceba. Ele testa Vontade contra a DT do Interceptador; em falha, sofre desvantagem no próximo teste de conjuração que fizer até o fim do próximo turno dele.",
+        "acao": "Ação Padrão",
+        "alcance": "18 m"
+      },
+      {
         "id": "proxy",
         "titulo": "Proxy",
         "custo_mana": 6,
-        "descricao": "Quando você for o único alvo de uma magia natural, role Misticismo contra a DT de conjuração dela; em sucesso, escolha outro alvo válido para receber o efeito no seu lugar.",
+        "descricao": "Quando você for o único alvo de uma magia natural, role Misticismo contra a DT de conjuração dela; em sucesso, escolha outro alvo válido para receber o efeito no seu lugar. O próprio conjurador pode ser esse alvo, mesmo fora do alcance original da magia, o que o Redirecionar não permite.",
         "acao": "Reação"
       },
       {
@@ -15032,7 +14948,7 @@
         "id": "apagao-local",
         "titulo": "Apagão Local",
         "custo_mana": 9,
-        "descricao": "Uma vez por sessão, crie uma zona de 12 m por uma cena: conjurar magia natural dentro dela custa o dobro de Mana.",
+        "descricao": "Uma vez por sessão, crie uma zona fixa de 12 m por uma cena: quem conjurar magia natural de dentro dela paga o dobro de Mana. Criatura sem Mana anotada sofre desvantagem no ataque mágico, e os alvos do poder dela têm vantagem para resistir. As criaturas que você escolher ficam de fora.",
         "pre_requisitos": [
           "Nível 12 de Interceptador"
         ],
@@ -15045,7 +14961,7 @@
     "dt_efeitos": {
       "rotulo": "DT do Interceptador",
       "pericia": "misticismo",
-      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Interceptar uma magia é diferente: você rola Misticismo contra a DT de conjuração que a própria magia já tem (7 + 3× o círculo dela), não contra essa DT do Interceptador."
+      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Interceptar uma magia é diferente: você rola Misticismo contra a DT de conjuração que a própria magia já tem (7 + 3× o círculo dela), não contra essa DT do Interceptador. Contra poder de criatura que venha de Fluxo natural, a DT é a DT padrão do VD dela (15 + metade do VD)."
     }
   },
   {
@@ -16994,12 +16910,12 @@
     "poderes": [
       {
         "id": "muralha-elemental",
-        "titulo": "Muralha Elemental",
+        "titulo": "Parede Elemental",
         "custo_mana": 3,
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Três rodadas",
-        "descricao": "Escolha um elemento que domina e erga uma barreira mágica coerente com ele num espaço livre, com 4,5 m de largura, 3 m de altura e 15 cm de espessura. Mesmo Ar, Raio, Luz e Escuridão formam uma superfície sólida enquanto o poder durar. Ela oferece cobertura superior, bloqueia passagem e linha de efeito e desaba ao sofrer 30 de dano. Uma nova Muralha Elemental sua encerra a anterior."
+        "descricao": "Escolha um elemento que domina e erga uma barreira mágica coerente com ele num espaço livre, com 4,5 m de largura, 3 m de altura e 15 cm de espessura. Mesmo Ar, Raio, Luz e Escuridão formam uma superfície sólida enquanto o poder durar. Ela oferece cobertura superior, bloqueia passagem e linha de efeito e desaba ao sofrer 30 de dano. Uma nova Parede Elemental sua encerra a anterior."
       },
       {
         "id": "corrente-elemental",
@@ -17121,7 +17037,7 @@
         "descricao": "Manifeste a derivação escolhida numa ruptura do seu elemento de origem. Criaturas hostis na área testam Reflexos contra a DT da Elementarista. Em falha, sofrem 5d6 do elemento derivado e ficam Caídas; em sucesso, sofrem metade e não caem. Resistência ao elemento base vale pela metade, mas imunidade continua valendo.",
         "pre_requisitos": [
           "Nível 13 de Elementarista",
-          "Derivações Harmônicas"
+          "Derivações Harmônicas 1"
         ]
       }
     ]

@@ -374,7 +374,7 @@ export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
     efeito: 'O item passa despercebido em revistas comuns e detectores básicos. Achá-lo exige Investigação contra DT 20.',
   },
   {
-    id: 'catalisador', titulo: 'Catalisador', categoria: 'item', nivel: 'marcial', valor: 3,
+    id: 'catalisador', titulo: 'Condensador de Mana', categoria: 'item', nivel: 'marcial', valor: 3,
     efeito: 'Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.',
     preRequisito: 'Fluxo 14 e nível total 10',
   },

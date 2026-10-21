@@ -2648,7 +2648,7 @@
             "titulo": "Surto",
             "tipo": "acao",
             "nivel_minimo": 28,
-            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: um dispositivo eletrônico ou construto a até 18 m testa Fortitude contra o seu Misticismo. Falhando, fica desligado por 2 rodadas.",
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: um dispositivo eletrônico ou construto a até 18 m testa Fortitude contra o seu Misticismo. Falhando, o dispositivo para de funcionar, ou o construto fica Paralisado, por 2 rodadas.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 5,

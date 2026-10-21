@@ -81,7 +81,7 @@ export const CartistaArcano = ({ classe }: { classe: IClasse }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className={`text-lg ${tema.tag} opacity-80 max-w-2xl mx-auto font-medium leading-relaxed`}
           >
-            Eles não jogam com o destino, eles o subornam. Suas magias estão presas em baralhos afiados e eles distorcem a própria probabilidade do mundo para garantir que a casa sempre ganhe.
+            Eles subornam o destino. Suas magias estão presas em baralhos afiados e eles distorcem a própria probabilidade do mundo para garantir que a casa sempre ganhe.
           </motion.p>
         </motion.header>
 
@@ -98,7 +98,7 @@ export const CartistaArcano = ({ classe }: { classe: IClasse }) => {
             <Layers size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Baralho Arcano</h3>
             <p className="text-amber-200/60 leading-relaxed text-sm">
-              O conceito central da classe: você conjura por cartas preparadas de antemão, não por magia solta. Cada estágio ensina mais uma magia do seu Fluxo nativo, e no auge você joga duas cartas por turno, a primeira sem custar Mana.
+              O conceito central da classe: cada magia que você conhece é uma carta, e jogar a carta é conjurar. O baralho chega a seis cartas no nível 20 e a oito no 30, sempre de 1º e 2º círculo do seu Fluxo nativo, e no auge você joga duas cartas por turno, a primeira sem custar Mana.
             </p>
           </PremiumCard>
 
@@ -113,7 +113,7 @@ export const CartistaArcano = ({ classe }: { classe: IClasse }) => {
             <Spade size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Cartas Afiadas</h3>
             <p className="text-amber-200/60 leading-relaxed text-sm">
-              Use as cartas de um baralho comum infundidas com Fluxo como armas de arremesso letais, e aprenda um Naipe Arcano por estágio: Espadas ignora Resistência, Copas cura de raspão, Ouros empurra e Paus queima. Todo naipe aprendido fica disponível pra escolher a cada arremesso.
+              Use as cartas de um baralho comum infundidas com Fluxo como armas de arremesso (Pontaria, 9 m, dano de Corte, sem custo de Mana), e aprenda um Naipe Arcano por estágio: Espadas ignora Resistência, Copas cura de raspão, Ouros empurra e Paus queima. Todo naipe aprendido fica disponível pra escolher a cada arremesso.
             </p>
           </PremiumCard>
 
@@ -128,7 +128,7 @@ export const CartistaArcano = ({ classe }: { classe: IClasse }) => {
             <Dices size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Dados Viciados</h3>
             <p className="text-amber-200/60 leading-relaxed text-sm">
-              O mestre do acaso. Uma vez por sessão, depois de ver uma rolagem de d20, substitua o dado por um 10 natural antes de aplicar os modificadores. Não escolhe crítico, desastre ou qualquer outro resultado arbitrário.
+              O mestre do acaso. Uma vez por sessão, depois de ver o d20 de uma rolagem sua, de um aliado ou de um inimigo a até 10 m, troque o dado por 10 antes dos modificadores. Um 20 ou 1 natural trocado deixa de ser crítico ou desastre.
             </p>
           </PremiumCard>
 

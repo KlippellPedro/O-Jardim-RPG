@@ -80,7 +80,7 @@ export const Canalizador = ({ classe }: { classe: IClasse }) => {
             <Waves size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Fluxo Nativo</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              O conceito central da classe: escolha, no nível 1, um dos dez Fluxos naturais do jogo (Origem, Essência, Comunicação, Vitalidade, Inconstância, Físico, Espaço, Tempo, Vazio ou o raríssimo Fim, que exige autorização do Mestre). A Tecnologia fica de fora porque nunca é nativa; ela só se instala de fora. Essa escolha é permanente e diz de onde vem sua magia.
+              O conceito central da classe: seu Fluxo nativo é o da Árvore em que você nasceu, e é ele que diz de onde vem sua magia. Sem Árvore, você escolhe no nível 1 um dos dez Fluxos naturais do jogo (Origem, Essência, Comunicação, Vitalidade, Inconstância, Físico, Espaço, Tempo, Vazio ou o raríssimo Fim, que exige autorização do Mestre), e a escolha é permanente. A Tecnologia fica de fora porque nunca é nativa; ela só se instala de fora.
             </p>
           </PremiumCard>
 

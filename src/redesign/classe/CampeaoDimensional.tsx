@@ -141,7 +141,7 @@ export const CampeaoDimensional = ({ classe }: { classe: IClasse }) => {
             <Gauge size={40} className={`${tema.icon} mb-4`} strokeWidth={2} />
             <h3 className={`text-xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Todo golpe seu que obriga o alvo a resistir rola Intimidação com Força no lugar de Carisma: o resultado vira a DT que ele precisa alcançar. É o tamanho do estrago que assusta, não a lábia.
+              Todo golpe seu que obriga o alvo a resistir rola Intimidação com Força no lugar de Carisma: o resultado vira a DT que ele precisa alcançar. O que assusta é o tamanho do estrago.
             </p>
           </PremiumCard>
         </div>

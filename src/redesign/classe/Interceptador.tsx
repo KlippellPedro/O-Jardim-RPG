@@ -77,7 +77,7 @@ export const Interceptador = ({ classe }: { classe: IClasse }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-red-200/60 max-w-2xl mx-auto font-mono leading-relaxed"
           >
-            A dor de cabeça de qualquer mago. Especialistas em contra-medidas que hackeiam feitiços enquanto estão sendo formados, desviando sua trajetória ou roubando os privilégios da magia inimiga.
+            A dor de cabeça de qualquer mago. Especialistas em contramedidas que desmontam feitiços enquanto ainda estão sendo formados, cancelando, atrasando ou desviando a magia inimiga.
           </motion.p>
         </motion.header>
 
@@ -94,7 +94,7 @@ export const Interceptador = ({ classe }: { classe: IClasse }) => {
             <Radar size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Acesso à Malha</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              O radar do Interceptador: detecta conjurações naturais a 12 m, depois lê círculo, Fluxo e alvo sem esforço, ganha bônus fixo pra interceptar, dobra o alcance de detecção e, no fim da carreira, arranca a DT e o efeito completo de qualquer magia que perceber antes dela nem terminar de ser lançada.
+              O radar do Interceptador: detecta conjurações naturais a 12 m e, desde o nível 1, intercepta o que perceber com o Pacote Descartado. Depois lê círculo, Fluxo e alvo sem esforço, ganha bônus fixo pra interceptar, dobra o alcance de detecção e, no fim da carreira, arranca a DT e o efeito completo de qualquer magia que perceber antes de ela terminar de ser lançada.
             </p>
           </PremiumCard>
 
@@ -109,7 +109,7 @@ export const Interceptador = ({ classe }: { classe: IClasse }) => {
             <RefreshCcw size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Hackear Fluxo</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              Interceptar com sucesso já cancela o efeito, de graça. Aprenda uma técnica por estágio pra fazer mais que isso: são seis possíveis (Atrasar, Redirecionar, Isolar, Assinatura Falsa, Eco Hostil, Núcleo Exposto) e você aprende quatro, escolhendo qual aplicar a cada interceptação bem-sucedida.
+              Interceptar com sucesso já cancela o efeito, de graça. Aprenda uma técnica por estágio pra fazer mais que isso: são seis possíveis (Atrasar, Redirecionar, Isolar, Assinatura Falsa, Refluxo Hostil, Núcleo Exposto) e você aprende quatro, escolhendo qual aplicar a cada interceptação bem-sucedida.
             </p>
           </PremiumCard>
 
@@ -124,7 +124,7 @@ export const Interceptador = ({ classe }: { classe: IClasse }) => {
             <Fingerprint size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Acesso Administrador</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              Uma vez por sessão, por três rodadas, você obtém privilégios totais sobre a Malha: +5 em interceptações, custo reduzido em 3 de Mana, uma interceptação por turno sem gastar Reação, e dá pra aplicar duas técnicas de Hackear Fluxo na mesma interceptação em vez de uma só.
+              Uma vez por sessão, por três rodadas, você obtém privilégios totais sobre a Malha: +5 em interceptações, custo reduzido em 3 de Mana, uma interceptação por rodada sem gastar Reação, e dá pra aplicar duas técnicas de Hackear Fluxo na mesma interceptação em vez de uma só (no máximo uma que troque o cancelamento).
             </p>
           </PremiumCard>
 
@@ -139,7 +139,7 @@ export const Interceptador = ({ classe }: { classe: IClasse }) => {
             <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento em que aciona: o resultado vira a DT que ele precisa alcançar. Interceptar é diferente - você rola contra a DT de conjuração que a própria magia já tem.
+              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento em que aciona: o resultado vira a DT que ele precisa alcançar. Interceptar segue outra conta: você rola contra a DT de conjuração que a própria magia já tem e, contra poder de criatura, contra a DT padrão do VD dela.
             </p>
           </PremiumCard>
         </div>

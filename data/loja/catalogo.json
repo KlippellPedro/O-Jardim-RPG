@@ -7358,6 +7358,32 @@
     },
     {
       "tipo": "drop",
+      "id": "comp-lembranca-do-morto",
+      "titulo": "Lembrança do Morto",
+      "conteudo": {
+        "descricao": "O que mais dizia respeito a quem morreu: um resto guardado, o nome verdadeiro escrito à mão ou o objeto que todos ligavam a ele. Ingrediente do Último Adeus.",
+        "preco": {
+          "Lunaris": 2
+        },
+        "raridade": "comum",
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1,
+        "categoria": "Artificial",
+        "origem": "Guardado pela família, por um amigo ou por quem cuidou do morto.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Anímico",
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto"
+      }
+    },
+    {
+      "tipo": "drop",
       "id": "comp-vestigio-material",
       "titulo": "Vestígio Material de uma Ameaça",
       "conteudo": {
@@ -21317,6 +21343,7 @@
       "id": "fruto-fim",
       "titulo": "Fruto do Fim",
       "conteudo": {
+        "requer_autorizacao_mestre": true,
         "descricao": "Tinta da Escritora: carmesim aparece sob as suas unhas e nas dobras das mãos e não sai com água, você recebe +2 em Sanidade e +1 nos testes de conjuração de magias do Fluxo do Fim. Ponto Final: uma vez por rodada, gaste uma Ação de Movimento e 4 de Mana para encerrar de imediato uma condição leve ou um efeito de magia de círculo até 3 numa criatura à vista a até 12 m. O Fim conclui o que já estava acabando e não apaga o que nunca existiu. Dom da Escritora (Recepção): uma vez por sessão, quando uma criatura a até 12 m for reduzida a 0 de Vida, gaste uma Reação e 5 de Mana: ela fica estável e inconsciente, sem testes de Morrendo, até o fim da cena. A Escritora recepciona o que acaba, e quem já morreu de fato não volta. Despertar, Comunhão com a Mulher Carmesim (Última Página): uma vez por sessão, gaste uma Ação Padrão e 14 de Mana para virar a última página de uma criatura à vista a até 18 m: todos os efeitos benéficos e de duração sobre ela terminam e ela testa Vontade contra a sua DT de efeito; em falha, sofre 6d8 de dano de Fim que ignora Resistência, e em sucesso, metade. Ao terminar, receba 2 Cansaços. O Fluxo da Vitalidade recusa o encerramento: efeitos da Vitalidade ignoram o Ponto Final e devolvem o que a Recepção estabilizou. Como todo acesso ao Fim, o consumo exige a autorização do Mestre. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 950
@@ -22021,6 +22048,7 @@
       "id": "selo-fechamento",
       "titulo": "Selo: Fechamento",
       "conteudo": {
+        "requer_autorizacao_mestre": true,
         "descricao": "Um selo raro do Fluxo do Fim, usado para interromper processos que já começaram. Encerra sangramento, fogo persistente ou um efeito temporário de grau ou círculo igual ou inferior ao dele. A compra e o uso exigem autorização do Mestre.",
         "preco": {
           "Lunaris": 85
@@ -34794,7 +34822,7 @@
     {
       "tipo": "modificacao",
       "id": "mod-catalisador",
-      "titulo": "Catalisador",
+      "titulo": "Condensador de Mana",
       "conteudo": {
         "preco": {
           "Lunaris": 1200

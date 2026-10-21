@@ -61,7 +61,7 @@ export const Sintonizador = ({ classe }: { classe: IClasse }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-100/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Mestres em alinhar o próprio Fluxo nativo a catalisadores externos, sem jamais alojar um segundo Fluxo na alma. O Sintonizador não empilha magias; ele funde uma única conjuração através do catalisador, mudando seu tipo, forma ou utilidade.
+            Mestres em alinhar o próprio Fluxo nativo a catalisadores externos, sem jamais alojar um segundo Fluxo na alma. Cada conjuração recebe uma única fusão, vinda do catalisador ativo, que muda alcance, duração ou efeito.
           </motion.p>
         </motion.header>
 
@@ -78,7 +78,7 @@ export const Sintonizador = ({ classe }: { classe: IClasse }) => {
             <Link size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sintonia Catalisada</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              O conceito central da classe: vincule-se a um catalisador externo após dez minutos fora de combate, sem que ele altere seu Fluxo nativo. Com o tempo, mantenha mais catalisadores preparados ao mesmo tempo, troque qual está ativo como Ação Livre e, no topo da carreira, sustente dois ativos ao mesmo tempo.
+              O conceito central da classe: o catalisador é um objeto seu (uma pedra, um relógio parado, um osso) sintonizado em dez minutos a um Fluxo diferente do seu nativo. Com o tempo, mantenha mais catalisadores preparados ao mesmo tempo, troque qual está ativo cada vez mais rápido e, no topo da carreira, reative um catalisador gasto na hora.
             </p>
           </PremiumCard>
 
@@ -93,7 +93,7 @@ export const Sintonizador = ({ classe }: { classe: IClasse }) => {
             <Merge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Fusão Controlada</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Aprenda uma fusão por estágio entre as onze publicadas no capítulo de Magia, uma para cada Fluxo do jogo (Tecnologia incluída). Cada conjuração aceita uma fusão compatível com o catalisador ativo; depois do uso, ele fica desativado até você refazer os dez minutos de sintonia fora do combate.
+              Aprenda uma fusão por estágio entre as onze publicadas no capítulo de Magia, uma para cada Fluxo do jogo. A Programação pede a Tecnologia instalada pelo Mestre. Cada conjuração aceita uma fusão compatível com o catalisador ativo; depois do uso, ele fica desativado até você refazer os dez minutos de sintonia fora do combate.
             </p>
           </PremiumCard>
 
@@ -108,7 +108,7 @@ export const Sintonizador = ({ classe }: { classe: IClasse }) => {
             <Zap size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Religação de Emergência</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Uma vez por combate, use uma Reação quando seu catalisador ativo for destruído, roubado ou desativado: vincule-se na hora a outro catalisador preparado, sem esperar os dez minutos normais de sintonia. O empréstimo de poder nunca fica sem reposição por muito tempo.
+              Uma vez por combate, use uma Reação quando seu catalisador ativo for desativado, quebrado ou roubado: reative-o na hora ou, se ele se perdeu, torne ativo outro preparado, sem esperar os dez minutos de sintonia.
             </p>
           </PremiumCard>
 

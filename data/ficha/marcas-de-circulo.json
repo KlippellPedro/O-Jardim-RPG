@@ -47,17 +47,17 @@
     ],
     "inconstancia": [
       { "circulo": 5, "id": "inconstancia-nunca-igual", "titulo": "Nunca Igual", "bonus": "Uma vez por cena, você repete um teste já resolvido.", "onus": "Você aceita o novo resultado, mesmo que seja pior." },
-      { "circulo": 6, "id": "inconstancia-pele-instavel", "titulo": "Pele Instável", "bonus": "No começo de cada cena, role 1d6 para uma resistência sorteada até o fim dela.", "onus": "Role de novo: você também ganha uma vulnerabilidade sorteada." },
+      { "circulo": 6, "id": "inconstancia-pele-instavel", "titulo": "Pele Instável", "bonus": "No começo de cada cena, role na tabela de Resistência da Inconstância: você tem Resistência 5 a esse tipo até o fim dela.", "onus": "Role de novo na mesma tabela: você também fica vulnerável a esse tipo." },
       { "circulo": 7, "id": "inconstancia-sorte-torta", "titulo": "Sorte Torta", "bonus": "Sua margem de ameaça aumenta em 1 em tudo o que você faz.", "onus": "A margem de falha crítica aumenta em 1 junto." },
       { "circulo": 8, "id": "inconstancia-forma-errante", "titulo": "Forma Errante", "bonus": "Uma vez por dia, uma característica física sua muda para algo útil na situação.", "onus": "Você não escolhe qual, e a mudança dura até o próximo descanso completo." },
       { "circulo": 9, "id": "inconstancia-roleta-viva", "titulo": "Roleta Viva", "bonus": "Uma vez por cena, você copia uma habilidade simples que tenha visto naquela cena.", "onus": "Uma habilidade sua, sorteada, fica indisponível até o fim da cena." }
     ],
     "fisico": [
-      { "circulo": 5, "id": "fisico-elemento-na-pele", "titulo": "Elemento na Pele", "bonus": "Resistência 3 contra o seu elemento despertado.", "onus": "Vulnerabilidade 3 ao elemento oposto, definido pelo Mestre na primeira vez." },
+      { "circulo": 5, "id": "fisico-elemento-na-pele", "titulo": "Elemento na Pele", "bonus": "Resistência 3 a um elemento escolhido ao receber a Marca. A Elementarista usa o de origem.", "onus": "Vulnerabilidade 3 ao elemento oposto, definido pelo Mestre na primeira vez." },
       { "circulo": 6, "id": "fisico-peso-de-pedra", "titulo": "Peso de Pedra", "bonus": "+2 contra empurrão, agarrão e queda.", "onus": "-3 m de deslocamento." },
       { "circulo": 7, "id": "fisico-mao-pesada", "titulo": "Mão Pesada", "bonus": "+1 dado de dano em ataques corpo a corpo.", "onus": "Trabalho delicado, de fechadura a caligrafia, sai com desvantagem." },
       { "circulo": 8, "id": "fisico-corpo-mineral", "titulo": "Corpo Mineral", "bonus": "Redução 3 contra dano físico.", "onus": "Você afunda: nadar e escalar saem com desvantagem." },
-      { "circulo": 9, "id": "fisico-elemento-vivo", "titulo": "Elemento Vivo", "bonus": "Uma vez por cena, você vira o elemento despertado por uma rodada e fica imune a dano físico.", "onus": "Enquanto estiver assim, você não age, não fala e não conjura." }
+      { "circulo": 9, "id": "fisico-elemento-vivo", "titulo": "Elemento Vivo", "bonus": "Uma vez por cena, você vira o elemento escolhido no Elemento na Pele por uma rodada e fica imune a dano físico.", "onus": "Enquanto estiver assim, você não age, não fala e não conjura." }
     ],
     "espaco": [
       { "circulo": 5, "id": "espaco-passo-curto", "titulo": "Passo Curto", "bonus": "Uma vez por cena, você teleporta 4,5 m com a ação de movimento.", "onus": "A chegada embrulha: -1 em testes até o fim do seu próximo turno." },
@@ -68,7 +68,7 @@
     ],
     "tempo": [
       { "circulo": 5, "id": "tempo-descompasso", "titulo": "Descompasso", "bonus": "+2 em Iniciativa.", "onus": "Noite mal dormida dá a você 1 Cansaço a mais que aos outros." },
-      { "circulo": 6, "id": "tempo-eco-curto", "titulo": "Eco Curto", "bonus": "Uma vez por cena, você repete a ação de movimento que acabou de fazer.", "onus": "Ao fim da cena em que usar, 1 Cansaço." },
+      { "circulo": 6, "id": "tempo-eco-curto", "titulo": "Passo Repetido", "bonus": "Uma vez por cena, você repete a ação de movimento que acabou de fazer.", "onus": "Ao fim da cena em que usar, 1 Cansaço." },
       { "circulo": 7, "id": "tempo-anos-emprestados", "titulo": "Anos Emprestados", "bonus": "+1 em todos os testes.", "onus": "Você envelhece um ano a cada mês de campanha." },
       { "circulo": 8, "id": "tempo-pausa-interna", "titulo": "Pausa Interna", "bonus": "Uma vez por dia, você ignora um turno inteiro de um efeito contínuo sobre você.", "onus": "Você perde o seu turno seguinte." },
       { "circulo": 9, "id": "tempo-fora-da-contagem", "titulo": "Fora da Contagem", "bonus": "Você age primeiro em toda rodada, antes de qualquer criatura.", "onus": "Cura e regeneração em você rendem metade: para elas, o seu tempo não passa." }
@@ -76,7 +76,7 @@
     "vazio": [
       { "circulo": 5, "id": "vazio-ausencia", "titulo": "Ausência", "bonus": "+2 em Furtividade, e ninguém ouve você chegar.", "onus": "Cura mágica em você rende metade." },
       { "circulo": 6, "id": "vazio-sumidouro", "titulo": "Sumidouro", "bonus": "Uma vez por cena, você absorve uma magia de até 3º círculo dirigida a você.", "onus": "Magia benéfica de aliado é absorvida do mesmo jeito, e você não escolhe." },
-      { "circulo": 7, "id": "vazio-fome-interna", "titulo": "Fome Interna", "bonus": "Ao reduzir uma criatura a 0 de Vida, você recupera 1d6 de Mana.", "onus": "Descanso curto não devolve Mana nenhuma a você." },
+      { "circulo": 7, "id": "vazio-fome-interna", "titulo": "Fome Interna", "bonus": "Ao reduzir uma criatura a 0 de Vida, o próximo efeito mágico hostil que atingir você até o fim da cena causa 1d6 a menos de dano.", "onus": "Descanso curto não devolve Mana nenhuma a você." },
       { "circulo": 8, "id": "vazio-silencio-que-anda", "titulo": "Silêncio Que Anda", "bonus": "Os sons ao seu redor somem quando você quiser, num raio de 3 m.", "onus": "Você não conjura nada que dependa de voz, palavra ou comando falado." },
       { "circulo": 9, "id": "vazio-quase-nada", "titulo": "Quase Nada", "bonus": "Uma vez por dia, você deixa de existir por uma rodada: nada atinge você.", "onus": "Ao voltar, ninguém se lembra de você por um minuto, aliados incluídos." }
     ],

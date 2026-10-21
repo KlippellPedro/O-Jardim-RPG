@@ -122,7 +122,7 @@ export const Piloto = ({ classe }: { classe: IClasse }) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>0 Km</h3>
               <p className="text-cyan-100/60 leading-relaxed text-sm">
-                No nível 15, uma vez por sessão, seis horas de oficina devolvem o veículo com a Vida cheia e sem nenhuma avaria, e o material sai de graça. O que foi destruído continua destruído: isto conserta, não ressuscita.
+                No nível 15, uma vez por sessão, seis horas de oficina devolvem o veículo com a Vida cheia e sem nenhuma avaria, e o material sai de graça. O que foi destruído continua destruído: isto só conserta o que ainda está de pé.
               </p>
             </div>
           </PremiumCard>
