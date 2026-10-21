@@ -38,7 +38,9 @@ import {
   magiaEhElemental,
   magiaExigeAvatar,
   rotuloPapelMagia,
+  rotulosContraOAlvo,
   simbolosDoRito,
+  tipoDeDanoDaMagia,
 } from '../../src/services/magiaService.ts';
 import { descreverRequisito } from '../../src/services/progressaoFichaService.ts';
 import { linhasDeMagiaDaClasse } from '../../src/services/progressaoMagiaClasse.ts';
@@ -142,17 +144,15 @@ const blocoDeEntregaDeSaida = (classe) => {
   const bancada = classe.tarefas_bancada;
   if (bancada) {
     partes.push(`<h4>${esc(bancada.rotulo)}</h4>`);
-    if (bancada.resumo_no_topo) {
-      partes.push(`<p>${esc(bancada.resumo_no_topo)}</p>`);
-    } else {
-      if (bancada.descricao) partes.push(`<p>${esc(bancada.descricao)}</p>`);
-      const colunas = bancada.colunas || ['Tarefa', 'DT', 'Custo'];
-      const linhas = (bancada.itens || [])
-        .map((item) => `<tr><td><strong>${esc(item.tarefa)}</strong></td><td>${esc(item.dt)}</td><td>${esc(item.nota)}</td></tr>`)
-        .join('');
-      if (linhas) {
-        partes.push(`<div class="regras-table-wrap"><table class="regras-table"><thead><tr>${colunas.map((coluna) => `<th>${esc(coluna)}</th>`).join('')}</tr></thead><tbody>${linhas}</tbody></table></div>`);
-      }
+    // `resumo_no_topo` é para a página do site, que desenha a tabela no fim.
+    // No livro a tabela vem sempre aqui (o Catálogo do Invocador sumia do PDF).
+    if (bancada.descricao) partes.push(`<p>${esc(bancada.descricao)}</p>`);
+    const colunas = bancada.colunas || ['Tarefa', 'DT', 'Custo'];
+    const linhas = (bancada.itens || [])
+      .map((item) => `<tr><td><strong>${esc(item.tarefa)}</strong></td><td>${esc(item.dt)}</td><td>${esc(item.nota)}</td></tr>`)
+      .join('');
+    if (linhas) {
+      partes.push(`<div class="regras-table-wrap"><table class="regras-table"><thead><tr>${colunas.map((coluna) => `<th>${esc(coluna)}</th>`).join('')}</tr></thead><tbody>${linhas}</tbody></table></div>`);
     }
   }
   return partes.join('\n');
@@ -465,8 +465,8 @@ const blocoDeMagia = (magia) => {
     ['Alvo', magia.alvo],
     ['Duração', magia.duracao],
     ['Concentração', magia.concentracao ? 'Sim' : 'Não'],
-    ['Defesa', magia.defesa || 'Nenhuma'],
-    ['Dano', magia.dano],
+    ['Contra', rotulosContraOAlvo(magia).join(' · ') || 'Nenhum teste'],
+    ['Dano', magia.dano ? `${magia.dano} ${tipoDeDanoDaMagia(magia, null)}` : ''],
     ['Acesso', magiaEhElemental(magia) ? 'Exclusiva de Elementarista · usa um elemento dominado' : ''],
     ['Aptidão', magiaExigeAvatar(magia) ? 'Exige Avatar desperto' : ''],
   ])}</p>`);

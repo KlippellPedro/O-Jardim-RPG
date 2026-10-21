@@ -33,7 +33,7 @@ export function RitualCatalog({ classe }: { classe: IClasse }) {
         <BookMarked className="mt-1 h-6 w-6 shrink-0 text-violet-300" />
         <div>
           <h2 className="font-serif text-3xl font-bold text-white">Catálogo de Rituais</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-7 text-gray-400">Rituais não usam círculos e não melhoram por uma escada de nível. Você aprende os ritos permitidos pelo seu Fluxo nativo e pelas vagas do Livro de Rituais; a complexidade de cada um já define a dificuldade e os componentes.</p>
+          <p className="mt-2 max-w-3xl text-sm leading-7 text-gray-400">Rituais não usam círculos e não melhoram por uma escada de nível. O Ritualista aprende os ritos das vagas do Livro de Rituais, de qualquer Fluxo natural; quem não é Ritualista recebe rito por concessão do Mestre. A complexidade de cada um já define a dificuldade e os componentes.</p>
         </div>
       </div>
 

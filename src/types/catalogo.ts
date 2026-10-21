@@ -102,6 +102,9 @@ export interface IEscolhaOpcoesClasse {
    * Engenheiro, a praca do Comerciante). Ela nao e um efeito acionavel, entao
    * nao declara acao, alcance nem duracao. */
   permanente?: boolean;
+  /** Só aparece para ficha sem Árvore. Quem nasceu numa Árvore já tem o Fluxo
+   * dela; é o caso do Fluxo Nativo do Canalizador (ver obterFluxoNativoId). */
+  so_sem_arvore?: boolean;
 }
 
 export interface IHabilidadeClasse extends IFichaTecnicaClasse, ICustoAtivacaoClasse {

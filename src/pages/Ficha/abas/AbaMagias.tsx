@@ -20,14 +20,22 @@ import {
   SELOS_CATALOGO,
   ENCANTAMENTOS_CATALOGO,
   FLUXOS_CATALOGO,
-  FUSOES_CATALOGO,
   FLUXOS_POR_ID,
+  fluxosCatalisaveisDaFicha,
+  fusoesDaFicha,
   circuloRotulo,
   dtConjuracaoPorCirculo,
+  leituraContraOAlvo,
+  rotulosContraOAlvo,
+  tipoDeDanoDaMagia,
   avisoDeFluxoDaMagia,
   magiasPorCirculo,
   magiaElegivelParaAprender,
+  interceptacaoDaFicha,
+  nivelDeInvocador,
   ritualElegivelParaAprender,
+  fluxosParaAprenderManifestacao,
+  avisoFluxoDaManifestacao,
   seloElegivelParaAprender,
   encantamentoElegivelParaAprender,
   podeRealizarRitual,
@@ -120,6 +128,9 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const [conjurandoId, setConjurandoId] = useState<string | null>(null);
   const acaoMagicaEmAndamento = useRef(false);
   const [circuloInterceptado, setCirculoInterceptado] = useState(1);
+  const [tipoInterceptado, setTipoInterceptado] = useState<'magia' | 'criatura'>('magia');
+  const [vdInterceptado, setVdInterceptado] = useState('1');
+  const [administradorAtivo, setAdministradorAtivo] = useState(false);
   const [personalizando, setPersonalizando] = useState<{ id: string; titulo: string; descricao: string } | null>(null);
 
   const campanha = useAuthStore((state) => state.campanhaAtiva);
@@ -156,15 +167,22 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const manaDisponivel = manaAtual + manaTemporaria;
   const concentracaoAtiva = status.concentracaoAtiva as { magiaId?: string; titulo?: string } | null | undefined;
   const bonusConjuracaoFinal = perfil.bonusConjuracao + penalidadeCansacoTeste(status.cansacoAtual, false);
+  const invocador = nivelDeInvocador(ficha) > 0;
   const temaFluxoNativo = perfil.fluxoNativoId ? temaDoFluxo(perfil.fluxoNativoId) : null;
+  const textoFluxosInstalados = perfil.fluxosInstaladosIds
+    .map((id) => FLUXOS_CATALOGO.find((fluxo) => fluxo.id === id)?.titulo || id).join(', ');
   const acessoSomenteInterceptacao = perfil.possuiInterceptacao && !perfil.possuiFonte;
-  const catalisadoresDisponiveis = useMemo(() => FLUXOS_CATALOGO.filter((fluxo) => (
-    fluxo.id !== 'tecnologia'
+  // O catalisador do Sintonizador precisa ser de outro Fluxo que não o nativo, e a
+  // Tecnologia só entra quando o Mestre a instalou (fluxosCatalisaveisDaFicha).
+  const catalisaveis = fluxosCatalisaveisDaFicha(ficha);
+  const catalisadoresDisponiveis = FLUXOS_CATALOGO.filter((fluxo) => (
+    catalisaveis.has(fluxo.id as FluxoMagicoId)
     && (perfil.possuiInterceptacao || fluxo.id !== perfil.fluxoNativoId)
-  )), [perfil.fluxoNativoId, perfil.possuiInterceptacao]);
-  const fusaoCatalisadorAtivo = useMemo(() => FUSOES_CATALOGO.find(
+  ));
+  const fusaoCatalisadorAtivo = fusoesDaFicha(ficha).find(
     (fusao) => fusao.fluxo_secundario === perfil.catalisadorAtivoId,
-  ) || null, [perfil.catalisadorAtivoId]);
+  ) || null;
+  const catalisadorAtivoDesativado = Boolean(perfil.catalisadorAtivoId && perfil.catalisadoresDesativadosIds.includes(perfil.catalisadorAtivoId));
 
   useEffect(() => {
     if (!mensagem) return undefined;
@@ -172,13 +190,36 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     return () => window.clearTimeout(timer);
   }, [mensagem]);
 
+  // "Meus Fluxos" no filtro: o nativo e os que o Mestre instalou. Sem nenhum
+  // definido, o filtro não restringe nada (mesmo comportamento de antes).
+  const fluxosDaFicha = useMemo(
+    () => [perfil.fluxoNativoId, ...perfil.fluxosInstaladosIds].filter((id): id is FluxoMagicoId => Boolean(id)),
+    [perfil.fluxoNativoId, perfil.fluxosInstaladosIds],
+  );
+  const rotuloFiltroNativo = perfil.fluxosInstaladosIds.length
+    ? `Meus Fluxos (${fluxosDaFicha.map((id) => FLUXOS_CATALOGO.find((fluxo) => fluxo.id === id)?.titulo || id).join(' + ')})`
+    : perfil.fluxoNativoTitulo ? `Fluxo nativo (${perfil.fluxoNativoTitulo})` : 'Fluxo nativo (não definido)';
+  const passaNosFluxosDaFicha = (fluxoId: string) => !fluxosDaFicha.length || fluxosDaFicha.includes(fluxoId as FluxoMagicoId);
+  // Ritual, selo e encantamento: os Fluxos de aprendizado dependem da classe
+  // (o Ritualista aprende de todos os naturais, o Sintonizador também dos
+  // catalisadores preparados; ver fluxosParaAprenderManifestacao).
+  const fluxosDaManifestacao = useMemo(
+    () => (tipoAtivo === 'magia' ? fluxosDaFicha : fluxosParaAprenderManifestacao(ficha, tipoAtivo, perfil)),
+    [ficha, fluxosDaFicha, perfil, tipoAtivo],
+  );
+  const rotuloFiltroManifestacao = fluxosDaManifestacao.length > 3
+    ? `Meus Fluxos (${fluxosDaManifestacao.length} Fluxos)`
+    : fluxosDaManifestacao.length > 1
+      ? `Meus Fluxos (${fluxosDaManifestacao.map((id) => FLUXOS_CATALOGO.find((fluxo) => fluxo.id === id)?.titulo || id).join(' + ')})`
+      : rotuloFiltroNativo;
+  const passaNosFluxosDaManifestacao = (fluxoId: string) => !fluxosDaManifestacao.length || fluxosDaManifestacao.includes(fluxoId as FluxoMagicoId);
+
   const catalogoVisivel = useMemo(() => {
-    const fluxoEscolhido = filtroFluxo === 'nativo' ? perfil.fluxoNativoId : filtroFluxo;
     const tetoAlcancavel = perfil.circuloDaFonte;
     return MAGIAS_CATALOGO.filter((magia) => {
       // Universal atravessa o filtro de Fluxo: ela é aprendível por todos.
-      const passaNoFluxo = !fluxoEscolhido || fluxoEscolhido === 'todos'
-        || magia.fluxo === fluxoEscolhido || magiaEhUniversal(magia);
+      const passaNoFluxo = filtroFluxo === 'todos' || magiaEhUniversal(magia)
+        || (filtroFluxo === 'nativo' ? passaNosFluxosDaFicha(magia.fluxo) : magia.fluxo === filtroFluxo);
       if (!passaNoFluxo) return false;
       if (typeof magia.circulo === 'number') {
         if (filtroCirculo === 'alcancaveis' && magia.circulo > tetoAlcancavel) return false;
@@ -189,14 +230,48 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       return [magia.titulo, magia.tradicao, magia.papel, magia.descricao, magia.efeito, circuloRotulo(magia.circulo)]
         .some((valor) => valor.toLocaleLowerCase('pt-BR').includes(termo));
     });
-  }, [busca, filtroCirculo, filtroFluxo, perfil.circuloDaFonte, perfil.fluxoNativoId]);
+  }, [busca, filtroCirculo, filtroFluxo, perfil.circuloDaFonte, fluxosDaFicha]);
 
-  const atualizarCatalisadores = (preparadosIds: FluxoMagicoId[], ativoId: FluxoMagicoId | null) => {
+  /** Só o Mestre instala ou retira um Fluxo (o servidor recusa a mudança vinda do
+   * jogador). Retirar não apaga o que a ficha já aprendeu daquele Fluxo: as
+   * entradas ficam registradas, mas a conjuração passa a ser recusada. */
+  const alternarFluxoInstalado = (fluxoId: FluxoMagicoId) => {
+    const atuais = perfil.fluxosInstaladosIds;
+    const instalado = atuais.includes(fluxoId);
+    const titulo = FLUXOS_CATALOGO.find((fluxo) => fluxo.id === fluxoId)?.titulo || fluxoId;
+    onUpdate(['ficha', 'fluxosInstaladosIds'], instalado ? atuais.filter((id) => id !== fluxoId) : [...atuais, fluxoId]);
+    setMensagem({
+      tipo: 'sucesso',
+      texto: instalado
+        ? `Fluxo ${titulo} retirado. O que a ficha já aprendeu dele continua registrado, mas não pode ser conjurado.`
+        : `Fluxo ${titulo} instalado pelo Mestre. A ficha já pode aprender magias dele.`,
+    });
+  };
+
+  const atualizarCatalisadores = (
+    preparadosIds: FluxoMagicoId[],
+    ativoId: FluxoMagicoId | null,
+    desativadosIds: FluxoMagicoId[] = perfil.catalisadoresDesativadosIds,
+  ) => {
     const preparadosValidos = [...new Set(preparadosIds)]
       .filter((id) => catalisadoresDisponiveis.some((fluxo) => fluxo.id === id))
       .slice(0, perfil.limiteCatalisadores);
     const ativoValido = ativoId && preparadosValidos.includes(ativoId) ? ativoId : (preparadosValidos[0] || null);
-    onUpdate(['ficha', 'catalisadoresFluxo'], { preparadosIds: preparadosValidos, ativoId: ativoValido });
+    onUpdate(['ficha', 'catalisadoresFluxo'], {
+      preparadosIds: preparadosValidos,
+      ativoId: ativoValido,
+      desativadosIds: desativadosIds.filter((id) => preparadosValidos.includes(id)),
+    });
+  };
+
+  // Desativado é o catalisador gasto numa fusão; volta com os dez minutos de Sintonia Catalisada.
+  const alternarCatalisadorDesativado = (fluxoId: FluxoMagicoId) => {
+    const desativados = perfil.catalisadoresDesativadosIds;
+    atualizarCatalisadores(
+      perfil.catalisadoresPreparadosIds,
+      perfil.catalisadorAtivoId,
+      desativados.includes(fluxoId) ? desativados.filter((id) => id !== fluxoId) : [...desativados, fluxoId],
+    );
   };
 
   const alternarCatalisadorPreparado = (fluxoId: FluxoMagicoId) => {
@@ -212,41 +287,62 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     atualizarCatalisadores([...preparados, fluxoId], fluxoId);
   };
 
+  // O círculo é o da magia inimiga, então o Fluxo do Interceptador não limita a escolha.
+  const interceptacao = interceptacaoDaFicha(
+    perfil.nivelInterceptador,
+    tipoInterceptado === 'magia'
+      ? { tipo: 'magia', circulo: circuloInterceptado }
+      : { tipo: 'criatura', vd: Number(vdInterceptado) || 1 },
+    { bonusBase: bonusConjuracaoFinal, administradorAtivo },
+  );
+
   const rolarInterceptacao = async () => {
     if (acaoMagicaEmAndamento.current) return;
-    const circulo = Math.max(1, Math.min(perfil.circuloDoFluxo, circuloInterceptado));
-    if (!perfil.possuiInterceptacao || perfil.circuloDoFluxo < 1) {
-      setMensagem({ tipo: 'erro', texto: 'O Fluxo atual ainda não sustenta um teste de interceptação de 1º círculo.' });
+    if (!perfil.possuiInterceptacao) return;
+    const { dt, bonus, custoMana, rotulo } = interceptacao;
+    if (manaDisponivel < custoMana) {
+      setMensagem({ tipo: 'erro', texto: `Mana insuficiente. O Pacote Descartado custa ${custoMana}.` });
       return;
     }
-    const dt = dtConjuracaoPorCirculo(circulo);
     const fluxoAlvo = perfil.catalisadorAtivoId ? FLUXOS_POR_ID.get(perfil.catalisadorAtivoId)?.titulo : null;
     acaoMagicaEmAndamento.current = true;
     setConjurandoId('interceptacao-axis');
+    if (custoMana > 0) {
+      const gasto = gastarComTemporario(status, 'manaAtual', manaAtual, custoMana);
+      onUpdate(['ficha', 'status', 'manaAtual'], gasto.atual);
+      if (manaTemporaria > 0) onUpdate(['ficha', 'status', 'manaTemporaria'], gasto.temporario);
+    }
     try {
       if (campanha?.id) {
         const resposta = await registrosApi.rolar({
           campanhaId: campanha.id,
           personagemId: character.id,
-          titulo: `Interceptação A.X.I.S.${fluxoAlvo ? ` · ${fluxoAlvo}` : ''}`,
-          bonus: bonusConjuracaoFinal,
+          titulo: `Pacote Descartado${fluxoAlvo ? ` · ${fluxoAlvo}` : ''}`,
+          bonus,
           vantagens: perfil.vantagensConjuracao,
           desvantagens: perfil.desvantagensConjuracao,
           dt,
           origem: {
             tipo: 'habilidade',
             classe_id: 'interceptador',
-            circulo_interceptado: circulo,
+            habilidade_id: 'pacote-descartado',
+            alvo_interceptado: tipoInterceptado,
+            circulo_interceptado: tipoInterceptado === 'magia' ? circuloInterceptado : null,
+            vd_interceptado: tipoInterceptado === 'criatura' ? Number(vdInterceptado) || 1 : null,
             fluxo_calibrado: perfil.catalisadorAtivoId,
-            custo_mana: 0,
+            acesso_administrador: administradorAtivo && perfil.nivelInterceptador >= 20,
+            custo_mana: custoMana,
           },
         });
+        const resultado = resposta.registro.resultado;
         setMensagem({
           tipo: 'sucesso',
-          texto: `Interceptação: resultado ${resposta.registro.resultado ?? 'registrado'} contra DT ${dt}. Aplique o custo e o efeito do poder escolhido.`,
+          texto: resultado === null || resultado === undefined
+            ? `Pacote Descartado registrado contra DT ${dt} (${rotulo}).`
+            : `Pacote Descartado: resultado ${resultado} contra DT ${dt} (${rotulo}). ${resultado >= dt ? 'Interceptou.' : 'Não interceptou.'}`,
         });
       } else {
-        setMensagem({ tipo: 'sucesso', texto: `Teste-base: d20 ${formatarBonus(bonusConjuracaoFinal)} contra DT ${dt}. O custo depende do poder de Interceptador usado.` });
+        setMensagem({ tipo: 'sucesso', texto: `Pacote Descartado: d20 ${formatarBonus(bonus)} contra DT ${dt} (${rotulo}). Custo de ${custoMana} de Mana aplicado.` });
       }
     } catch {
       setMensagem({ tipo: 'erro', texto: 'Não foi possível registrar o teste de interceptação no servidor.' });
@@ -261,15 +357,15 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const catalogoManifestacaoVisivel = useMemo(() => {
     if (tipoAtivo === 'magia') return [];
     const catalogo = tipoAtivo === 'ritual' ? RITUAIS_CATALOGO : tipoAtivo === 'selo' ? SELOS_CATALOGO : ENCANTAMENTOS_CATALOGO;
-    const fluxoEscolhido = filtroFluxo === 'nativo' ? perfil.fluxoNativoId : filtroFluxo;
     return catalogo.filter((item) => {
-      const passaNoFluxo = !fluxoEscolhido || fluxoEscolhido === 'todos' || fluxoEscolhido === 'universal' || item.fluxo === fluxoEscolhido;
+      const passaNoFluxo = filtroFluxo === 'todos' || filtroFluxo === 'universal'
+        || (filtroFluxo === 'nativo' ? passaNosFluxosDaManifestacao(item.fluxo) : item.fluxo === filtroFluxo);
       if (!passaNoFluxo) return false;
       const termo = busca.trim().toLocaleLowerCase('pt-BR');
       if (!termo) return true;
       return [item.titulo, item.descricao, item.efeito].some((valor) => valor.toLocaleLowerCase('pt-BR').includes(termo));
     });
-  }, [busca, filtroFluxo, perfil.fluxoNativoId, tipoAtivo]);
+  }, [busca, filtroFluxo, fluxosDaManifestacao, tipoAtivo]);
 
   const aprenderOuConceder = async (magia: IMagiaCatalogo) => {
     if (isMestre) {
@@ -348,7 +444,9 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     }
     const confirmado = await confirmar({
       titulo: { ritual: 'Aprender o ritual', selo: 'Aprender o selo', encantamento: 'Aprender o encantamento' }[tipo],
-      mensagem: `Aprender ${item.titulo}? A escolha só poderá ser removida pelo Mestre.`,
+      mensagem: `Aprender ${item.titulo}? A escolha só poderá ser removida pelo Mestre.${avisoFluxoDaManifestacao(ficha, item) ? `
+
+${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
       rotuloConfirmar: 'Aprender',
     });
     if (!confirmado) return;
@@ -486,7 +584,9 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
 
     try {
       if (campanha?.id) {
-        const defesaInformada = Number(defesasAlvo[magia.id]);
+        // Só a magia de ataque lê o total contra a Defesa do alvo. Na magia de
+        // efeito quem rola é o alvo (a resistência), então não há número a informar.
+        const defesaInformada = magia.ataque ? Number(defesasAlvo[magia.id]) : 0;
         const dtCirculo = dtConjuracaoPorCirculo(magia.circulo);
         const dtAlvo = Number.isFinite(defesaInformada) && defesaInformada > 0 ? defesaInformada : 0;
         const resposta = await registrosApi.rolar({
@@ -501,6 +601,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             tipo: 'magia',
             magia_id: magia.id,
             circulo: magia.circulo,
+            ataque: Boolean(magia.ataque),
             defesa: magia.defesa,
             dt_magia: dtCirculo,
             custo_mana: magia.custo_mana,
@@ -512,7 +613,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           tipo: 'sucesso',
           texto: resultado === null
             ? `${magia.titulo} conjurada.`
-            : `${magia.titulo}: resultado ${resultado}. DT do círculo ${dtCirculo}${magia.defesa ? `; compare também com ${magia.defesa}${dtAlvo > 0 ? ` ${dtAlvo}` : ''}` : ''}.`,
+            : `${magia.titulo}: resultado ${resultado}. DT do círculo ${dtCirculo}. ${leituraContraOAlvo(magia, resultado, dtAlvo)}`.trim(),
         });
       } else {
         setMensagem({ tipo: 'sucesso', texto: `${magia.titulo}: custo aplicado. Faça o teste de conjuração contra DT ${dtConjuracaoPorCirculo(magia.circulo)}.${avisoDeFluxoDaMagia(ficha, magia, inventarioCentral) ? ` ${avisoDeFluxoDaMagia(ficha, magia, inventarioCentral)}` : ''}` });
@@ -592,11 +693,19 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             </div>
             {!personalizacao && <p className="mt-3 text-sm italic leading-relaxed text-gray-500">{magia.descricao}</p>}
             <p className="mt-3 text-sm leading-relaxed text-gray-300">{efeitoExibido}</p>
-            {(magia.dano || magia.defesa) && (
+            {(magia.dano || rotulosContraOAlvo(magia).length > 0) && (
               <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold">
-                {magia.dano && <span className="rounded-lg bg-red-500/10 px-2.5 py-1 text-red-300">Dano {magia.dano}</span>}
-                {magia.defesa && <span className="rounded-lg bg-sky-500/10 px-2.5 py-1 text-sky-300">Contra {magia.defesa}</span>}
-                {magia.ataque && <span className="rounded-lg bg-amber-500/10 px-2.5 py-1 text-amber-300">Crítico no 20 natural</span>}
+                {magia.dano && <span className="rounded-lg bg-red-500/10 px-2.5 py-1 text-red-300">Dano {magia.dano} {tipoDeDanoDaMagia(magia, perfil.fluxoNativoId)}</span>}
+                {rotulosContraOAlvo(magia).map((rotulo) => (
+                  <span
+                    key={rotulo}
+                    className={rotulo === 'Crítico no 20 natural'
+                      ? 'rounded-lg bg-amber-500/10 px-2.5 py-1 text-amber-300'
+                      : 'rounded-lg bg-sky-500/10 px-2.5 py-1 text-sky-300'}
+                  >
+                    {rotulo}
+                  </span>
+                ))}
               </div>
             )}
           </div>
@@ -616,7 +725,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             </div>
           ) : (
             <div className="w-full space-y-2 md:w-48">
-              {magia.defesa && (
+              {magia.ataque && (
                 <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500">
                   Defesa do alvo, opcional
                   <input
@@ -624,7 +733,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
                     min="1"
                     value={defesasAlvo[magia.id] || ''}
                     onChange={(event) => setDefesasAlvo((atual) => ({ ...atual, [magia.id]: event.target.value }))}
-                    placeholder={magia.defesa}
+                    placeholder="Defesa"
                     className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-sky-500/40"
                   />
                 </label>
@@ -881,6 +990,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           >
             <span className="text-[10px] font-bold uppercase text-gray-500">Fluxo nativo</span>
             <strong className="mt-1 block text-sm" style={{ color: temaFluxoNativo?.texto || '#d1d5db' }}>{perfil.fluxoNativoTitulo || 'Escolha uma Árvore'}</strong>
+            {textoFluxosInstalados && <small className="mt-1 block text-[10px] text-gray-400">Instalado: {textoFluxosInstalados}</small>}
           </div>
           <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Fluxo</span><strong className="mt-1 block text-sm text-white">{perfil.fluxo} ({formatarBonus(perfil.modificadorFluxo)})</strong></div>
           <div className="rounded-xl border border-white/5 bg-black/20 p-3">
@@ -888,11 +998,19 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             <strong className="mt-1 block text-sm text-sky-300">{(acessoSomenteInterceptacao ? perfil.dtLimiteFluxo : perfil.dtMagia) || 'Indisponível'}</strong>
             {acessoSomenteInterceptacao && perfil.circuloDoFluxo > 0 && <small className="mt-1 block text-[10px] text-gray-600">efeito de {perfil.circuloDoFluxo}º círculo</small>}
           </div>
-          <div className="rounded-xl border border-white/5 bg-black/20 p-3">
-            <span className="text-[10px] font-bold uppercase text-gray-500">Círculo e vagas</span>
-            <strong className="mt-1 block text-sm text-white">{perfil.possuiFonte ? `${perfil.circuloDaFonte}º, ${perfil.conhecidasIds.length}/${perfil.vagasConhecidas}` : 'Não se aplica'}</strong>
-            {!perfil.possuiFonte && <small className="mt-1 block text-[10px] text-gray-600">sem fonte de conjuração</small>}
-          </div>
+          {!perfil.possuiFonte && invocador ? (
+            <div className="rounded-xl border border-white/5 bg-black/20 p-3">
+              <span className="text-[10px] font-bold uppercase text-gray-500">Ataque das invocações</span>
+              <strong className="mt-1 block text-sm text-white">{formatarBonus(bonusConjuracaoFinal)}</strong>
+              <small className="mt-1 block text-[10px] text-gray-600">seu teste de conjuração, contra a Defesa</small>
+            </div>
+          ) : (
+            <div className="rounded-xl border border-white/5 bg-black/20 p-3">
+              <span className="text-[10px] font-bold uppercase text-gray-500">Círculo e vagas</span>
+              <strong className="mt-1 block text-sm text-white">{perfil.possuiFonte ? `${perfil.circuloDaFonte}º, ${perfil.conhecidasIds.length}/${perfil.vagasConhecidas}` : 'Não se aplica'}</strong>
+              {!perfil.possuiFonte && <small className="mt-1 block text-[10px] text-gray-600">sem fonte de conjuração</small>}
+            </div>
+          )}
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-3 rounded-xl border border-white/5 bg-black/20 px-4 py-3 text-xs text-gray-400">
@@ -903,7 +1021,9 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             ? <span>Sua fonte libera até o {perfil.circuloDaFonte || 0}º e é ela que vale para aprender; acima do Fluxo, a rolagem precisa alcançar a DT.</span>
             : perfil.possuiInterceptacao
               ? <span>Interceptação usa essa DT como referência, mas não concede círculos nem vagas para aprender magias.</span>
-              : <span>Sem uma fonte, não há círculos nem vagas para aprender magias.</span>}
+              : invocador
+                ? <span>O Invocador não aprende círculos: o Fluxo dele vira as invocações, que atacam com o teste de conjuração.</span>
+                : <span>Sem uma fonte, não há círculos nem vagas para aprender magias.</span>}
         </div>
         {perfil.possuiFonte && perfil.circuloDaFonte > 0 && (
           <div className="mt-3 rounded-xl border border-white/5 bg-black/20 px-4 py-3" data-tour="magias-por-circulo">
@@ -946,7 +1066,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
 
         {tipoAtivo !== 'magia' && (
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-tour="magias-limites">
-            <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Fluxo nativo</span><strong className="mt-1 block text-sm" style={{ color: temaFluxoNativo?.texto || '#d1d5db' }}>{perfil.fluxoNativoTitulo || 'Escolha uma Árvore'}</strong></div>
+            <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Fluxo nativo</span><strong className="mt-1 block text-sm" style={{ color: temaFluxoNativo?.texto || '#d1d5db' }}>{perfil.fluxoNativoTitulo || 'Escolha uma Árvore'}</strong>{textoFluxosInstalados && <small className="mt-1 block text-[10px] text-gray-400">Instalado: {textoFluxosInstalados}</small>}</div>
             <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Mana</span><strong className="mt-1 block text-sm text-white">{manaAtual}/{manaMaxima}</strong></div>
             <div className="rounded-xl border border-white/5 bg-black/20 p-3">
               <span className="text-[10px] font-bold uppercase text-gray-500">Vagas de {ROTULO_TIPO[tipoAtivo].toLowerCase()}</span>
@@ -955,6 +1075,41 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
                 {tipoAtivo === 'selo' && `${perfil.selosConhecidosIds.length}/${perfil.vagasSelos}`}
                 {tipoAtivo === 'encantamento' && `${perfil.encantamentosConhecidosIds.length}/${perfil.vagasEncantamentos}`}
               </strong>
+            </div>
+          </div>
+        )}
+        {ficha.arvoreId !== 'universal' && (isMestre || perfil.fluxosInstaladosIds.length > 0) && (
+          <div className="mt-3 rounded-xl border border-white/5 bg-black/20 px-4 py-3" data-tour="magias-fluxo-instalado">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <span className="text-[10px] font-bold uppercase text-gray-500">Fluxo instalado</span>
+              <span className="text-[11px] text-gray-400">
+                {isMestre
+                  ? 'Só o Mestre instala, por núcleo, implante, artefato ou relíquia. Abre as magias do Fluxo, sem Marca de círculo.'
+                  : 'Instalado pelo Mestre. Abre as magias deste Fluxo, sem Marca de círculo.'}
+              </span>
+            </div>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {FLUXOS_CATALOGO
+                .filter((fluxo) => fluxo.id !== perfil.fluxoNativoId && (isMestre || perfil.fluxosInstaladosIds.includes(fluxo.id)))
+                .map((fluxo) => {
+                  const instalado = perfil.fluxosInstaladosIds.includes(fluxo.id);
+                  const tema = temaDoFluxo(fluxo.id);
+                  const estilo = { color: tema.texto, borderColor: instalado ? tema.borda : 'rgba(255,255,255,.1)', background: instalado ? tema.fundo : undefined };
+                  return isMestre ? (
+                    <button
+                      key={fluxo.id}
+                      type="button"
+                      aria-pressed={instalado}
+                      onClick={() => alternarFluxoInstalado(fluxo.id)}
+                      className={`rounded-lg border px-2 py-1 text-[11px] font-semibold transition-opacity ${instalado ? '' : 'opacity-60 hover:opacity-100'}`}
+                      style={estilo}
+                    >
+                      {fluxo.titulo}
+                    </button>
+                  ) : (
+                    <span key={fluxo.id} className="rounded-lg border px-2 py-1 text-[11px] font-semibold" style={estilo}>{fluxo.titulo}</span>
+                  );
+                })}
             </div>
           </div>
         )}
@@ -969,7 +1124,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
               </h3>
               <p className="mt-1 max-w-3xl text-xs leading-relaxed text-gray-400">
                 {perfil.nivelSintonizador > 0
-                  ? `Prepare até ${perfil.limiteCatalisadores} Fluxo(s) secundário(s) e escolha qual catalisador está ativo. O ativo define a Fusão disponível; não altera seu Fluxo nativo.`
+                  ? `Prepare até ${perfil.limiteCatalisadores} catalisador(es), um objeto seu sintonizado a um Fluxo diferente do nativo, e escolha qual está ativo. O ativo define a Fusão disponível.`
                   : 'Escolha o Fluxo natural para o qual a interface A.X.I.S. está calibrada. Isso registra o alvo atual da interceptação, sem transformar o Interceptador em conjurador.'}
               </p>
             </div>
@@ -1016,7 +1171,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
                           ? 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
                           : 'border-white/10 bg-black/20 text-gray-500 hover:border-white/20 hover:text-gray-300'}`}
                     >
-                      {fluxo.titulo}{ativo ? ' · ativo' : preparado ? ' · preparado' : ''}
+                      {fluxo.titulo}{ativo ? ' · ativo' : preparado ? ' · preparado' : ''}{perfil.catalisadoresDesativadosIds.includes(fluxo.id as FluxoMagicoId) ? ' · desativado' : ''}
                     </button>
                   );
                 })}
@@ -1029,34 +1184,85 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             <div className="mt-4 rounded-xl border border-cyan-500/15 bg-black/20 p-4">
               <span className="text-[10px] font-bold uppercase tracking-widest text-cyan-400">Ativo agora</span>
               <strong className="mt-1 block text-white">{FLUXOS_POR_ID.get(perfil.catalisadorAtivoId)?.titulo}</strong>
-              {perfil.nivelSintonizador > 0 && fusaoCatalisadorAtivo && <p className="mt-2 text-xs leading-relaxed text-gray-400"><strong className="text-gray-300">Fusão · {fusaoCatalisadorAtivo.titulo}:</strong> {fusaoCatalisadorAtivo.efeito}</p>}
+              {perfil.nivelSintonizador > 0 && (fusaoCatalisadorAtivo
+                ? <p className="mt-2 text-xs leading-relaxed text-gray-400"><strong className="text-gray-300">Fusão · {fusaoCatalisadorAtivo.titulo}:</strong> {fusaoCatalisadorAtivo.efeito}</p>
+                : <p className="mt-2 text-xs leading-relaxed text-gray-500">Nenhuma fusão aprendida para este Fluxo{perfil.nivelSintonizador < 3 ? ' (a primeira chega no nível 3)' : ''}.</p>)}
+              {perfil.nivelSintonizador > 0 && perfil.catalisadorAtivoId && (
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  <span className={`text-[11px] font-bold ${catalisadorAtivoDesativado ? 'text-amber-300' : 'text-emerald-300'}`}>
+                    {catalisadorAtivoDesativado ? 'Desativado: volta com os dez minutos de Sintonia Catalisada.' : 'Pronto para uma fusão.'}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => perfil.catalisadorAtivoId && alternarCatalisadorDesativado(perfil.catalisadorAtivoId)}
+                    className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-[11px] font-bold text-cyan-200 transition-colors hover:bg-cyan-500/20"
+                  >
+                    {catalisadorAtivoDesativado ? 'Reativar (dez minutos)' : 'Gastar numa fusão'}
+                  </button>
+                </div>
+              )}
               {acessoSomenteInterceptacao && <p className="mt-2 text-xs leading-relaxed text-gray-400">A Malha está preparada para identificar e organizar interceptações deste Fluxo. Custos, alcance e bônus continuam sendo os descritos nos poderes do Interceptador.</p>}
             </div>
           )}
 
           {perfil.possuiInterceptacao && (
             <div className="mt-4 grid gap-3 rounded-xl border border-white/5 bg-black/20 p-4 sm:grid-cols-[1fr_auto] sm:items-end">
-              <label className="block">
-                <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Círculo do efeito interceptado</span>
-                <Select
-                  ariaLabel="Círculo do efeito interceptado"
-                  value={String(Math.min(Math.max(1, circuloInterceptado), Math.max(1, perfil.circuloDoFluxo)))}
-                  onChange={(valor) => setCirculoInterceptado(Number(valor))}
-                  disabled={perfil.circuloDoFluxo < 1}
-                  options={CIRCULOS_DISPONIVEIS
-                    .filter((circulo) => circulo <= perfil.circuloDoFluxo)
-                    .map((circulo) => ({
-                      value: String(circulo),
-                      label: `${circulo}º círculo · DT ${dtConjuracaoPorCirculo(circulo)}`,
-                    }))}
-                  className="w-full rounded-xl border border-white/10 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-cyan-400/50 disabled:opacity-50"
-                />
-                <span className="mt-2 block text-[10px] leading-relaxed text-gray-600">Este é o teste-base de Misticismo contra a DT do círculo. O poder escolhido continua definindo Mana, reação, alcance e resultado.</span>
-              </label>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">O que você intercepta</span>
+                  <Select
+                    ariaLabel="O que você intercepta"
+                    value={tipoInterceptado}
+                    onChange={(valor) => setTipoInterceptado(valor === 'criatura' ? 'criatura' : 'magia')}
+                    options={[
+                      { value: 'magia', label: 'Magia de círculo' },
+                      { value: 'criatura', label: 'Poder de criatura (VD)' },
+                    ]}
+                    className="w-full rounded-xl border border-white/10 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-cyan-400/50"
+                  />
+                </label>
+                {tipoInterceptado === 'magia' ? (
+                  <label className="block">
+                    <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Círculo da magia</span>
+                    <Select
+                      ariaLabel="Círculo da magia interceptada"
+                      value={String(circuloInterceptado)}
+                      onChange={(valor) => setCirculoInterceptado(Number(valor))}
+                      options={CIRCULOS_DISPONIVEIS.map((circulo) => ({
+                        value: String(circulo),
+                        label: `${circulo}º círculo · DT ${dtConjuracaoPorCirculo(circulo)}`,
+                      }))}
+                      className="w-full rounded-xl border border-white/10 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-cyan-400/50"
+                    />
+                  </label>
+                ) : (
+                  <label className="block">
+                    <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">VD da criatura</span>
+                    <input
+                      type="number"
+                      min="1"
+                      value={vdInterceptado}
+                      onChange={(event) => setVdInterceptado(event.target.value)}
+                      aria-label="VD da criatura"
+                      className="w-full rounded-xl border border-white/10 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-cyan-400/50"
+                    />
+                  </label>
+                )}
+                {perfil.nivelInterceptador >= 20 && (
+                  <label className="flex items-center gap-2 text-xs text-gray-300 sm:col-span-2">
+                    <input type="checkbox" checked={administradorAtivo} onChange={(event) => setAdministradorAtivo(event.target.checked)} />
+                    Acesso Administrador ativo (+5 e 3 de Mana a menos)
+                  </label>
+                )}
+                <span className="block text-[10px] leading-relaxed text-gray-600 sm:col-span-2">
+                  Pacote Descartado: d20 {formatarBonus(interceptacao.bonus)} contra DT {interceptacao.dt} ({interceptacao.rotulo}), {interceptacao.custoMana} de Mana, usando a sua Reação.
+                  {perfil.nivelInterceptador >= 10 ? ' Já inclui o +2 da Assinatura Reconhecida.' : ''}
+                </span>
+              </div>
               <button
                 type="button"
                 onClick={() => void rolarInterceptacao()}
-                disabled={perfil.circuloDoFluxo < 1 || conjurandoId !== null}
+                disabled={conjurandoId !== null}
                 className="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-xs font-bold text-cyan-200 transition-colors hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Dices size={14} /> {conjurandoId === 'interceptacao-axis' ? 'Interceptando...' : 'Rolar interceptação'}
@@ -1186,7 +1392,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
                 value={filtroFluxo}
                 onChange={(valor) => setFiltroFluxo(valor as FluxoDeMagia | 'nativo' | 'todos')}
                 options={[
-                  { value: 'nativo', label: perfil.fluxoNativoTitulo ? `Fluxo nativo (${perfil.fluxoNativoTitulo})` : 'Fluxo nativo (não definido)' },
+                  { value: 'nativo', label: rotuloFiltroNativo },
                   { value: 'todos', label: 'Todos os Fluxos' },
                   { value: 'universal', label: 'Só as universais', labelStyle: { color: temaDoFluxo('universal').texto } },
                   ...FLUXOS_CATALOGO.map((fluxo) => ({ value: fluxo.id, label: fluxo.titulo, labelStyle: { color: temaDoFluxo(fluxo.id).texto } })),
@@ -1222,7 +1428,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
               <AlertCircle size={16} className="mt-0.5 shrink-0" />
               <span>
                 {perfil.possuiInterceptacao
-                  ? 'O Interceptador possui acesso à Malha, não uma fonte de conjuração. Troque o filtro para “Todos os círculos” para consultar o catálogo; aprender magias exige outra classe-fonte ou concessão do Mestre.'
+                  ? 'O Interceptador lê e desmonta magia pela Malha, mas não tem fonte de conjuração. Troque o filtro para “Todos os círculos” para consultar o catálogo; aprender magias exige outra classe-fonte ou concessão do Mestre.'
                   : 'A ficha ainda não possui uma fonte de conjuração. Troque o filtro para “Todos os círculos” para consultar o catálogo.'}
               </span>
             </div>
@@ -1270,7 +1476,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
                 value={filtroFluxo}
                 onChange={(valor) => setFiltroFluxo(valor as FluxoDeMagia | 'nativo' | 'todos')}
                 options={[
-                  { value: 'nativo', label: perfil.fluxoNativoTitulo ? `Fluxo nativo (${perfil.fluxoNativoTitulo})` : 'Fluxo nativo (não definido)' },
+                  { value: 'nativo', label: rotuloFiltroManifestacao },
                   { value: 'todos', label: 'Todos os Fluxos' },
                   ...FLUXOS_CATALOGO.map((fluxo) => ({ value: fluxo.id, label: fluxo.titulo, labelStyle: { color: temaDoFluxo(fluxo.id).texto } })),
                 ]}

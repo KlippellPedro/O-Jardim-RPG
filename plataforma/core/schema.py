@@ -72,6 +72,84 @@ AVISOS_ANTIGOS_DA_ADMINISTRACAO_SQL = """
 """
 
 
+# Ids de Tecnologia (magias, rituais, selos e encantamentos) no dia da migração 56. A lista fica congelada aqui
+# de propósito: a migração resolve as fichas daquele momento, e o que for criado depois já nasce na regra nova.
+IDS_DE_TECNOLOGIA_DA_MIGRACAO_56 = (
+    "varredura-de-padrao", "pulso-de-interferencia", "rotina-assistida", "descarga-de-sistema",
+    "interceptar-comando", "rotina-automatizada", "sobrecarga-em-cadeia", "firewall", "registrar-padrao",
+    "lanca-de-ions", "interceptacao-ativa", "automato-assistente", "detonacao-de-nucleo", "bloqueio-de-fluxo",
+    "rede-axis", "feixe-perfurante", "contramedida-total", "reproducao-limitada", "salva-de-precisao",
+    "dominio-de-sistemas", "blindagem-adaptativa", "aniquilador-de-padroes", "jaula-de-interferencia",
+    "fabrica-de-campo", "tempestade-de-ions", "interceptacao-regional", "nucleo-de-comando", "sentenca-do-axis",
+    "reprogramar-regiao", "reproducao-total",
+    "calibragem-de-modulo", "protocolo-de-isolamento", "montagem-de-automato",
+    "diagnostico", "selo-de-sobrecarga", "selo-sentinela",
+    "modulo-corretivo", "modulo-de-interceptacao", "nucleo-axis",
+)
+
+
+def _lista_da_ficha(campo: str) -> str:
+    """Campo de lista da ficha como jsonb, ou lista vazia se estiver ausente ou com outro tipo."""
+    return f"(CASE WHEN jsonb_typeof(ficha->'{campo}') = 'array' THEN ficha->'{campo}' ELSE '[]'::jsonb END)"
+
+
+# Migração 56. Quem nasce na A.X.I.S passou a ter Comunicação, o Fluxo natural da Parley, e a Tecnologia virou
+# Fluxo instalado, que só o Mestre concede (o Autômato é a exceção e continua com ela de nascença). Ficha da
+# A.X.I.S que já tinha aprendido algo de Tecnologia ganha a Tecnologia instalada, para nada do que ela conhece
+# deixar de funcionar. A versão sobe para que uma aba aberta com a ficha antiga não sobrescreva a mudança.
+FLUXO_INSTALADO_DA_AXIS_SQL = f"""
+    UPDATE personagens
+    SET ficha = jsonb_set(
+            ficha,
+            '{{fluxosInstaladosIds}}',
+            {_lista_da_ficha("fluxosInstaladosIds")} || '["tecnologia"]'::jsonb,
+            true
+        ),
+        versao = versao + 1,
+        atualizado_em = CURRENT_TIMESTAMP
+    WHERE ficha->>'arvoreId' = 'keryx'
+      AND COALESCE(ficha->>'racaId', '') <> 'automato'
+      AND NOT ({_lista_da_ficha("fluxosInstaladosIds")} ? 'tecnologia')
+      AND EXISTS (
+            SELECT 1
+            FROM jsonb_array_elements_text(
+                {_lista_da_ficha("magiasConhecidasIds")} || {_lista_da_ficha("rituaisConhecidosIds")}
+                || {_lista_da_ficha("selosConhecidosIds")} || {_lista_da_ficha("encantamentosConhecidosIds")}
+            ) AS conhecido(id)
+            WHERE conhecido.id IN ({", ".join(f"'{item}'" for item in IDS_DE_TECNOLOGIA_DA_MIGRACAO_56)})
+          )
+"""
+
+
+# Migração 57. O Pacote Descartado, a interceptação do Interceptador, deixou de ser poder escolhido e virou
+# habilidade do nível 1. Quem o tinha escolhido como poder perde a escolha e ganha a vaga de volta para outro
+# poder; a interceptação continua na ficha, agora pela habilidade. A ordem das outras escolhas fica igual.
+PACOTE_DESCARTADO_VIRA_HABILIDADE_SQL = f"""
+    UPDATE personagens
+    SET ficha = jsonb_set(
+            ficha,
+            '{{poderesClasseSelecionados}}',
+            COALESCE(
+                (
+                    SELECT jsonb_agg(item.valor ORDER BY item.posicao)
+                    FROM jsonb_array_elements({_lista_da_ficha("poderesClasseSelecionados")})
+                        WITH ORDINALITY AS item(valor, posicao)
+                    WHERE NOT (
+                        item.valor->>'classeId' = 'interceptador'
+                        AND item.valor->>'poderId' = 'pacote-descartado'
+                    )
+                ),
+                '[]'::jsonb
+            ),
+            true
+        ),
+        versao = versao + 1,
+        atualizado_em = CURRENT_TIMESTAMP
+    WHERE {_lista_da_ficha("poderesClasseSelecionados")}
+          @> '[{{"classeId": "interceptador", "poderId": "pacote-descartado"}}]'::jsonb
+"""
+
+
 MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
     (
         1,
@@ -2018,5 +2096,15 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             ON notificacoes (usuario_id, painel, lida_em NULLS FIRST, criado_em DESC)
             """,
         ),
+    ),
+    (
+        56,
+        "fluxo_instalado_da_axis",
+        (FLUXO_INSTALADO_DA_AXIS_SQL,),
+    ),
+    (
+        57,
+        "pacote_descartado_vira_habilidade",
+        (PACOTE_DESCARTADO_VIRA_HABILIDADE_SQL,),
     ),
 )

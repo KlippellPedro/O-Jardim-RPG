@@ -7,6 +7,7 @@ import { BONUS_GRAU, aplicarAjustesAtributosRaciais, modificador, obterAjustesPe
 import { CLASSES_CATALOGO, RACAS_CATALOGO } from './catalogoService';
 import { ajusteOrigem, chaveAjuste, totalAjustesManuais } from './ajustesFichaService';
 import { resumirEquipamentos } from './equipamentoService';
+import { dtPadraoDoVd, vdValido } from './curvaCriatura';
 
 export type CirculoMagia = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 'ritual';
 export type FluxoMagicoId = 'origem' | 'essencia' | 'comunicacao' | 'vitalidade' | 'inconstancia'
@@ -199,6 +200,8 @@ export interface IPerfilMagico {
   fontes: string[];
   fluxoNativoId: FluxoMagicoId | null;
   fluxoNativoTitulo: string | null;
+  /** Fluxos que o Mestre instalou na ficha, além do nativo (ver fluxosInstaladosDaFicha). */
+  fluxosInstaladosIds: FluxoMagicoId[];
   avisoFluxo?: string;
   nivelTotal: number;
   fluxo: number;
@@ -222,6 +225,8 @@ export interface IPerfilMagico {
   circuloDoFluxo: number;
   circuloMaximo: number;
   vagasConhecidas: number;
+  /** Vagas de cada classe-fonte com o maior círculo que ela libera: a vaga só guarda magia até esse círculo. */
+  vagasPorFonte: Array<{ circulo: number; vagas: number }>;
   /** Quantas magias do mesmo círculo a ficha pode conhecer; null quando nenhuma fonte declara teto. */
   tetoPorCirculo: number | null;
   possuiInterceptacao: boolean;
@@ -230,6 +235,8 @@ export interface IPerfilMagico {
   limiteCatalisadores: number;
   catalisadoresPreparadosIds: FluxoMagicoId[];
   catalisadorAtivoId: FluxoMagicoId | null;
+  /** Preparados já gastos numa fusão; voltam com os dez minutos de Sintonia Catalisada. */
+  catalisadoresDesativadosIds: FluxoMagicoId[];
   conhecidasIds: string[];
   concedidasIds: string[];
   vagasRituais: number;
@@ -291,10 +298,14 @@ export function variantesDaMagia(magia: IMagiaCatalogo): Array<{ fluxo: IFluxoMa
   });
 }
 
+/** "Cada alma nasce com um Fluxo natural, e só um" (Magia e Fluxo): o da Árvore
+ * em que ela nasceu. A Árvore da A.X.I.S é a Parley de Keryx por baixo, então
+ * quem nasce nela tem Comunicação; a Tecnologia nunca é nativa, só se instala
+ * (ver FLUXO_DA_RACA e fluxosInstaladosDaFicha). */
 const FLUXO_POR_ARVORE: Record<string, FluxoMagicoId> = {
   aethel: 'origem',
   ousias: 'essencia',
-  keryx: 'tecnologia',
+  keryx: 'comunicacao',
   haemus: 'vitalidade',
   ignis: 'inconstancia',
   moros: 'fisico',
@@ -346,6 +357,25 @@ export function possuiAptidaoAvatar(ficha: any): boolean {
   return idsEscolhidos(ficha, 'elementarista:julgamento-da-aptidao').includes('avatar-desperto');
 }
 
+/** Círculo que os níveis de Elementarista liberam, lido da progressão da
+ * própria classe. É o teto das magias Elementais que a ficha aprende (decisão
+ * de 2026-10-20): 1 nível de Elementarista sobre um Canalizador 20 não abre
+ * as Elementais até o 10º só porque o Canalizador chega lá. */
+/** Nível de Invocador da ficha. As invocações dele atacam com o teste de
+ * conjuração (decisão de 2026-10-20), mesmo sem fonte de magia. */
+export function nivelDeInvocador(ficha: any): number {
+  return nivelDaClasse(referenciasClasse(ficha), 'invocador');
+}
+
+export function circuloDaElementarista(ficha: any): number {
+  const nivel = nivelDaClasse(referenciasClasse(ficha), ACESSO_ELEMENTAL.classe_id);
+  if (nivel < 1) return 0;
+  const marcos = CLASSES_CATALOGO.find((item) => item.id === ACESSO_ELEMENTAL.classe_id)?.progressao_magia?.marcos || [];
+  return marcos
+    .filter((marco: any) => nivel >= Number(marco.nivel))
+    .reduce((maior: number, marco: any) => Math.max(maior, Number(marco.circulo) || 0), 0);
+}
+
 function restricaoMagiaElemental(ficha: any, magia: IMagiaCatalogo): { permitido: boolean; motivo?: string } {
   if (!magiaEhElemental(magia)) return { permitido: true };
   if (nivelDaClasse(referenciasClasse(ficha), ACESSO_ELEMENTAL.classe_id) < 1) {
@@ -365,30 +395,98 @@ const FLUXOS_CATALISAVEIS = new Set<FluxoMagicoId>([
   'fisico', 'espaco', 'tempo', 'vazio', 'fim',
 ]);
 
+/** Fluxos que a ficha pode usar como catalisador: os dez naturais e, para o
+ * Sintonizador, a Tecnologia quando o Mestre a instalou (decisão de
+ * 2026-10-20). A calibração do Interceptador segue só com os naturais. */
+export function fluxosCatalisaveisDaFicha(ficha: any): Set<FluxoMagicoId> {
+  const permitidos = new Set(FLUXOS_CATALISAVEIS);
+  if (nivelDaClasse(referenciasClasse(ficha), 'sintonizador') > 0 && fluxosInstaladosDaFicha(ficha).includes('tecnologia')) {
+    permitidos.add('tecnologia');
+  }
+  return permitidos;
+}
+
 /** Catalisadores ficam na ficha como uma escolha operacional, separada da
  * fonte de magia. Para o Sintonizador eles habilitam Fusões; para o
  * Interceptador registram para qual Fluxo natural a interface A.X.I.S. está
- * calibrada. Em nenhum dos casos a escolha cria, sozinha, uma fonte. */
+ * calibrada. Em nenhum dos casos a escolha cria, sozinha, uma fonte.
+ * Desativado é o preparado que já foi gasto numa fusão e só volta com os dez
+ * minutos de Sintonia Catalisada. */
 function obterCatalisadoresDaFicha(
   ficha: any,
   limite: number,
-): { preparadosIds: FluxoMagicoId[]; ativoId: FluxoMagicoId | null } {
+): { preparadosIds: FluxoMagicoId[]; ativoId: FluxoMagicoId | null; desativadosIds: FluxoMagicoId[] } {
   const configuracao = ficha?.catalisadoresFluxo;
+  const permitidos = fluxosCatalisaveisDaFicha(ficha);
   const preparadosIds = idsUnicos(configuracao?.preparadosIds)
-    .filter((id): id is FluxoMagicoId => FLUXOS_CATALISAVEIS.has(id as FluxoMagicoId))
+    .filter((id): id is FluxoMagicoId => permitidos.has(id as FluxoMagicoId))
     .slice(0, Math.max(0, limite));
   const ativoInformado = String(configuracao?.ativoId || '') as FluxoMagicoId;
   return {
     preparadosIds,
     ativoId: preparadosIds.includes(ativoInformado) ? ativoInformado : (preparadosIds[0] || null),
+    desativadosIds: idsUnicos(configuracao?.desativadosIds)
+      .filter((id): id is FluxoMagicoId => preparadosIds.includes(id as FluxoMagicoId)),
   };
 }
 
-export function obterFluxoNativoId(ficha: any): FluxoMagicoId | null {
-  const fluxoExplicito = String(ficha?.fluxoNativoId || '');
-  if (FLUXOS_POR_ID.has(fluxoExplicito as FluxoMagicoId)) return fluxoExplicito as FluxoMagicoId;
-  return FLUXO_POR_ARVORE[String(ficha?.arvoreId || '')] || null;
+/** Fusões que o Sintonizador pode usar agora: as que aprendeu em Fusão
+ * Controlada (a primeira vem no nível 3), menos a do próprio Fluxo nativo,
+ * porque o catalisador precisa ser de outro Fluxo. */
+export function fusoesDaFicha(ficha: any): typeof FUSOES_CATALOGO {
+  if (nivelDaClasse(referenciasClasse(ficha), 'sintonizador') < 3) return [];
+  const aprendidas = new Set(idsUnicos(ficha?.escolhasHabilidade?.['sintonizador:fusao-controlada']));
+  const nativo = obterFluxoNativoId(ficha);
+  return FUSOES_CATALOGO.filter((fusao) => aprendidas.has(fusao.id) && fusao.fluxo_secundario !== nativo);
 }
+
+/** O Autômato não nasce: é montado na A.X.I.S, e o núcleo dele já é a Tecnologia
+ * instalada. É a única raça cujo Fluxo vem do corpo, não da Árvore. */
+const FLUXO_DA_RACA: Record<string, FluxoMagicoId> = { automato: 'tecnologia' };
+
+const FLUXOS_NATURAIS_IDS = new Set(
+  FLUXOS_CATALOGO.filter((fluxo) => fluxo.natureza !== 'artificial').map((fluxo) => fluxo.id),
+);
+
+/** Ordem: Árvore Universal não tem um nativo (ela atravessa todos), depois a
+ * raça com Fluxo próprio, depois a Árvore. Ficha sem Árvore usa o Fluxo que o
+ * Canalizador escolheu na Canalização Nativa, que só vale nesse caso. */
+export function obterFluxoNativoId(ficha: any): FluxoMagicoId | null {
+  const arvoreId = String(ficha?.arvoreId || '');
+  if (arvoreId === 'universal') return null;
+  const daRaca = FLUXO_DA_RACA[String(ficha?.racaId || '')];
+  if (daRaca) return daRaca;
+  const daArvore = FLUXO_POR_ARVORE[arvoreId];
+  if (daArvore) return daArvore;
+  if (nivelDaClasse(referenciasClasse(ficha), 'canalizador') <= 0) return null;
+  const escolhido = idsEscolhidos(ficha, 'canalizador:canalizacao-nativa')[0];
+  return escolhido && FLUXOS_NATURAIS_IDS.has(escolhido as FluxoMagicoId) ? escolhido as FluxoMagicoId : null;
+}
+
+/** Segundo Fluxo "sempre vem de fora, por artefato, relíquia ou núcleo
+ * tecnológico, e nunca passa a morar na alma" (Magia e Fluxo, parte do Mestre).
+ * Só o Mestre concede (o servidor recusa a mudança vinda do jogador). Abre as
+ * magias, rituais, selos e encantamentos daquele Fluxo, mas não dá Marca de
+ * círculo: a Marca é da alma, e o Fluxo instalado não mora nela. */
+export function fluxosInstaladosDaFicha(ficha: any): FluxoMagicoId[] {
+  const nativo = obterFluxoNativoId(ficha);
+  return idsUnicos(ficha?.fluxosInstaladosIds)
+    .filter((id): id is FluxoMagicoId => FLUXOS_POR_ID.has(id as FluxoMagicoId) && id !== nativo);
+}
+
+/** O Fluxo nativo ou um Fluxo instalado: o que a ficha pode aprender e conjurar. */
+export const fluxoAcessivel = (perfil: Pick<IPerfilMagico, 'fluxoNativoId' | 'fluxosInstaladosIds'>, fluxoId: string): boolean => (
+  fluxoId === perfil.fluxoNativoId || perfil.fluxosInstaladosIds.includes(fluxoId as FluxoMagicoId)
+);
+
+const titulosDosFluxos = (ids: FluxoMagicoId[]): string => ids.map((id) => FLUXOS_POR_ID.get(id)?.titulo || id).join(', ');
+
+/** Motivo de recusa quando o Fluxo da entrada não é o nativo nem um instalado. */
+const motivoForaDosFluxos = (perfil: IPerfilMagico, rotulo: string, fluxoTitulo: string): string => {
+  if (!perfil.fluxoNativoId && !perfil.fluxosInstaladosIds.length) return 'Escolha uma Árvore para definir o Fluxo nativo da ficha.';
+  const instalados = perfil.fluxosInstaladosIds.length ? `, e o Fluxo instalado, ${titulosDosFluxos(perfil.fluxosInstaladosIds)}` : '';
+  return `${rotulo} pertence ao Fluxo ${fluxoTitulo}; seu Fluxo nativo é ${perfil.fluxoNativoTitulo || 'indefinido'}${instalados}.`;
+};
 
 export function obterFluxoNativo(ficha: any): IFluxoMagico | null {
   const id = obterFluxoNativoId(ficha);
@@ -405,6 +503,110 @@ export function circuloPermitidoPorFluxo(fluxo: unknown): number {
 export function dtConjuracaoPorCirculo(circulo: CirculoMagia | number): number {
   if (circulo === 'ritual') return 0;
   return CIRCULOS_CONFIG.find((item) => item.circulo === Number(circulo))?.dt_conjuracao || 0;
+}
+
+// Pacote Descartado, a interceptação do Interceptador (decisão de 2026-10-20):
+// habilidade do nível 1; DT da magia (7 + 3 × círculo) ou, contra poder de
+// criatura, a DT padrão do VD; +2 do nível 10 (Assinatura Reconhecida) e +5 com
+// o Acesso Administrador ativo, que também tira 3 do custo.
+export type AlvoDaInterceptacao = { tipo: 'magia'; circulo: number } | { tipo: 'criatura'; vd: number };
+
+export interface IInterceptacao {
+  dt: number;
+  bonus: number;
+  custoMana: number;
+  rotulo: string;
+}
+
+const CUSTO_DO_PACOTE_DESCARTADO = Math.max(0, Number(
+  CLASSES_CATALOGO.find((classe) => classe.id === 'interceptador')?.habilidades
+    ?.find((habilidade) => habilidade.id === 'pacote-descartado')?.custo_mana,
+) || 0);
+
+export function interceptacaoDaFicha(
+  nivelInterceptador: number,
+  alvo: AlvoDaInterceptacao,
+  opcoes: { bonusBase: number; administradorAtivo?: boolean },
+): IInterceptacao {
+  const administrador = Boolean(opcoes.administradorAtivo) && nivelInterceptador >= 20;
+  const circulo = alvo.tipo === 'magia' ? Math.min(10, Math.max(1, Math.trunc(alvo.circulo) || 1)) : 0;
+  return {
+    dt: alvo.tipo === 'magia' ? dtConjuracaoPorCirculo(circulo) : dtPadraoDoVd(alvo.vd),
+    bonus: opcoes.bonusBase + (nivelInterceptador >= 10 ? 2 : 0) + (administrador ? 5 : 0),
+    custoMana: Math.max(0, CUSTO_DO_PACOTE_DESCARTADO - (administrador ? 3 : 0)),
+    rotulo: alvo.tipo === 'magia' ? `magia de ${circulo}º círculo` : `poder de criatura de VD ${vdValido(alvo.vd)}`,
+  };
+}
+
+// Convenção de ataque e resistência (decisão de 2026-10-20, tópico Magia e
+// Fluxo): a magia de ataque lê o total contra a Defesa, e a resistência que ela
+// lista vale só para o efeito extra; na magia de efeito, o alvo rola a
+// resistência contra o total. "Se hostil" só é rolada por quem não quer o efeito.
+type MagiaContraOAlvo = Pick<IMagiaCatalogo, 'ataque' | 'defesa' | 'dano'>;
+
+// Tipo de dano das magias (decisão de 2026-10-20): a que não diz o tipo causa o
+// dano do próprio Fluxo; a Tecnologia causa dano tecnológico; a universal causa
+// o do Fluxo que a canaliza; o Físico sem elemento causa impacto.
+function danoDoFluxo(fluxoId: FluxoMagicoId): string {
+  if (fluxoId === 'tecnologia') return 'tecnológico';
+  if (fluxoId === 'fisico') return 'de impacto';
+  const titulo = FLUXOS_POR_ID.get(fluxoId)?.titulo || fluxoId;
+  return `${fluxoId === 'fim' ? 'do' : 'de'} ${titulo}`;
+}
+
+const TIPO_SORTEADO = /Role (?:1d\d+[^.]*(?:tipo|fogo)|na tabela de Tipo)/i;
+
+/** "de Vazio", "tecnológico", "do elemento declarado"...: o que vem depois de "Dano 2d8" no cartão. */
+export function tipoDeDanoDaMagia(magia: IMagiaCatalogo, fluxoNativoId: FluxoMagicoId | null): string | null {
+  if (!magia.dano) return null;
+  if (magiaEhUniversal(magia)) {
+    if (!fluxoNativoId) return 'do Fluxo que a canaliza';
+    const variacao = String(magia.efeitos_por_fluxo?.[fluxoNativoId] || '');
+    if (TIPO_SORTEADO.test(variacao)) return 'de tipo sorteado';
+    if (/corte, perfuração ou impacto/i.test(variacao)) return 'de corte, perfuração ou impacto';
+    return danoDoFluxo(fluxoNativoId);
+  }
+  if (magia.fluxo === 'fisico') return magiaEhElemental(magia) ? 'do elemento declarado' : 'de impacto';
+  if (TIPO_SORTEADO.test(magia.efeito)) return 'de tipo sorteado';
+  return danoDoFluxo(magia.fluxo as FluxoMagicoId);
+}
+
+function resistenciaDaMagia(magia: MagiaContraOAlvo): { nome: string; seHostil: boolean } | null {
+  const texto = String(magia.defesa || '').trim();
+  if (!texto) return null;
+  const seHostil = /\s+se hostil$/i.test(texto);
+  return { nome: texto.replace(/\s+se hostil$/i, ''), seHostil };
+}
+
+/** Etiquetas do cartão da magia: contra o que ela é lida e o que a resistência faz. */
+export function rotulosContraOAlvo(magia: MagiaContraOAlvo): string[] {
+  const resistencia = resistenciaDaMagia(magia);
+  if (magia.ataque) {
+    return [
+      'Contra a Defesa',
+      ...(resistencia ? [`Efeito extra: ${resistencia.nome}`] : []),
+      'Crítico no 20 natural',
+    ];
+  }
+  if (!resistencia) return [];
+  if (resistencia.seHostil) return [`Resistência: ${resistencia.nome}, se hostil`];
+  return [magia.dano ? `Resistência: ${resistencia.nome}, metade do dano` : `Resistência: ${resistencia.nome}`];
+}
+
+/** Frase que acompanha o resultado da conjuração, dizendo como ler o total contra o alvo. */
+export function leituraContraOAlvo(magia: MagiaContraOAlvo, resultado: number, defesaInformada = 0): string {
+  const resistencia = resistenciaDaMagia(magia);
+  if (magia.ataque) {
+    const extra = resistencia ? `alvo rola ${resistencia.nome} contra ${resultado} para evitar o efeito extra.` : '';
+    if (defesaInformada <= 0) return `Compare com a Defesa do alvo.${extra ? ` Se acertar, o ${extra}` : ''}`;
+    if (resultado < defesaInformada) return `Não alcança a Defesa ${defesaInformada}.`;
+    return `Acerta a Defesa ${defesaInformada}.${extra ? ` O ${extra}` : ''}`;
+  }
+  if (!resistencia) return '';
+  if (resistencia.seHostil) return `Se não quiser o efeito, o alvo rola ${resistencia.nome} contra ${resultado}.`;
+  return magia.dano
+    ? `O alvo rola ${resistencia.nome} contra ${resultado}; quem resistir sofre metade do dano e evita o efeito extra.`
+    : `O alvo rola ${resistencia.nome} contra ${resultado} para resistir.`;
 }
 
 /** Rituais, Selos e Encantamentos não têm círculo nem fonte com "vagas" no
@@ -466,6 +668,7 @@ export function obterPerfilMagico(
   let vagasConhecidas = 0;
   let tetoPorCirculo: number | null = null;
   const fontes: string[] = [];
+  const vagasPorFonte: Array<{ circulo: number; vagas: number }> = [];
   classes.forEach(({ id, nivel }) => {
     const classe = CLASSES_CATALOGO.find((item) => item.id === id);
     const fonte = classe?.progressao_magia;
@@ -475,6 +678,7 @@ export function obterPerfilMagico(
     fontes.push(String(fonte.fonte || classe?.titulo || id));
     circuloDaFonte = Math.max(circuloDaFonte, Number(marco.circulo) || 0);
     vagasConhecidas += Math.max(0, Number(marco.vagas) || 0);
+    vagasPorFonte.push({ circulo: Number(marco.circulo) || 0, vagas: Math.max(0, Number(marco.vagas) || 0) });
     if (Number(marco.teto_por_circulo) > 0) tetoPorCirculo = Math.max(tetoPorCirculo ?? 0, Number(marco.teto_por_circulo));
   });
   const circuloDoFluxo = circuloPermitidoPorFluxo(fluxo);
@@ -498,6 +702,7 @@ export function obterPerfilMagico(
     fontes,
     fluxoNativoId: fluxoNativo?.id || null,
     fluxoNativoTitulo: fluxoNativo?.titulo || (isUniversalTree ? 'Universal' : null),
+    fluxosInstaladosIds: fluxosInstaladosDaFicha(ficha),
     avisoFluxo: fluxoNativo?.id === 'fim' ? AVISO_FLUXO_FIM : fluxoNativo?.aviso_mestre,
     nivelTotal,
     fluxo,
@@ -521,6 +726,7 @@ export function obterPerfilMagico(
     circuloDoFluxo,
     circuloMaximo: Math.min(circuloDaFonte, circuloDoFluxo),
     vagasConhecidas,
+    vagasPorFonte,
     tetoPorCirculo,
     possuiInterceptacao,
     nivelInterceptador,
@@ -528,6 +734,7 @@ export function obterPerfilMagico(
     limiteCatalisadores,
     catalisadoresPreparadosIds: catalisadores.preparadosIds,
     catalisadorAtivoId: catalisadores.ativoId,
+    catalisadoresDesativadosIds: catalisadores.desativadosIds,
     conhecidasIds: idsUnicos(ficha?.magiasConhecidasIds),
     concedidasIds: idsUnicos(ficha?.magiasConcedidasIds),
     vagasRituais: contarVagasPorProgressao(classes, 'progressao_rituais'),
@@ -566,6 +773,28 @@ export function rotuloPapelMagia(papel: string): string {
   return ROTULO_PAPEL_MAGIA[papel] ?? papel;
 }
 
+/** A vaga de cada classe só guarda magia até o círculo que ela libera (decisão
+ * de 2026-10-20): o Cartista Arcano, que para no 2º, não abre vaga de 6º círculo
+ * em cima de um Canalizador. As fontes são aninhadas pelo círculo, então basta
+ * conferir, para cada círculo k até o da magia nova, que as magias de círculo k
+ * ou maior cabem nas vagas das fontes que chegam a k. Devolve o círculo da fonte
+ * que falta, ou null quando há vaga. */
+export function circuloSemVagaPara(
+  perfil: Pick<IPerfilMagico, 'vagasPorFonte' | 'conhecidasIds'>,
+  circulo: number,
+): number | null {
+  const circulosConhecidos = perfil.conhecidasIds.flatMap((id) => {
+    const valor = MAGIAS_POR_ID.get(id)?.circulo;
+    return typeof valor === 'number' ? [valor] : [];
+  });
+  for (let k = circulo; k >= 1; k -= 1) {
+    const ocupadas = circulosConhecidos.filter((valor) => valor >= k).length + 1;
+    const vagas = perfil.vagasPorFonte.filter((fonte) => fonte.circulo >= k).reduce((soma, fonte) => soma + fonte.vagas, 0);
+    if (ocupadas > vagas) return k;
+  }
+  return null;
+}
+
 export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inventarioCentral: any[] = []): { permitido: boolean; motivo?: string } {
   const perfil = obterPerfilMagico(ficha, inventarioCentral);
   if (perfil.conhecidasIds.includes(magia.id)) return { permitido: false, motivo: 'Magia já conhecida.' };
@@ -573,6 +802,9 @@ export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inv
   if (perfil.conhecidasIds.length >= perfil.vagasConhecidas) return { permitido: false, motivo: 'Todas as vagas de magia já foram preenchidas.' };
   if (magia.circulo === 'ritual' || magia.somente_mestre) return { permitido: false, motivo: 'Rituais e concessões especiais dependem do Mestre.' };
   if (magia.circulo > perfil.circuloDaFonte) return { permitido: false, motivo: 'A fonte de magia ainda não libera este círculo.' };
+  if (typeof magia.circulo === 'number' && circuloSemVagaPara(perfil, magia.circulo) !== null) {
+    return { permitido: false, motivo: 'As vagas que sobram são de uma classe que não chega a este círculo, como as do Cartista Arcano, que só guardam magias de 1º e 2º círculo.' };
+  }
   // O Fluxo mínimo do círculo é só recomendação (ver avisoDeFluxoDaMagia): quem
   // tenta conjurar um círculo acima do próprio bônus falha sozinho, porque a
   // rolagem não alcança a DT do círculo.
@@ -584,14 +816,23 @@ export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inv
   }
   const isUniversalTree = ficha?.arvoreId === 'universal';
   if (!isUniversalTree) {
-    if (!perfil.fluxoNativoId) return { permitido: false, motivo: 'Escolha uma Árvore para definir o Fluxo nativo da ficha.' };
-    // Universal é de todo mundo: o Fluxo nativo decide o efeito, não o acesso.
-    if (!magiaEhUniversal(magia) && magia.fluxo !== perfil.fluxoNativoId) {
-      return { permitido: false, motivo: `Esta magia pertence ao Fluxo ${magia.tradicao}; seu Fluxo nativo é ${perfil.fluxoNativoTitulo}.` };
+    // Universal é de todo mundo, mas o Fluxo nativo decide o efeito dela, então
+    // sem nativo ela não tem variação para aprender.
+    if (magiaEhUniversal(magia)) {
+      if (!perfil.fluxoNativoId) return { permitido: false, motivo: 'Escolha uma Árvore para definir o Fluxo nativo da ficha.' };
+    } else if (!fluxoAcessivel(perfil, magia.fluxo)) {
+      return { permitido: false, motivo: motivoForaDosFluxos(perfil, 'Esta magia', magia.tradicao) };
     }
   }
   const acessoElemental = restricaoMagiaElemental(ficha, magia);
   if (!acessoElemental.permitido) return acessoElemental;
+  // Só ao aprender: o que já foi aprendido acima desse círculo continua conjurável.
+  if (magiaEhElemental(magia) && typeof magia.circulo === 'number' && magia.circulo > circuloDaElementarista(ficha)) {
+    return {
+      permitido: false,
+      motivo: `Magia Elemental só até o ${circuloDaElementarista(ficha)}º círculo, o que seus níveis de Elementarista liberam.`,
+    };
+  }
   const fontesDaFicha = referenciasClasse(ficha).flatMap(({ id, nivel }) => {
     const fonte = CLASSES_CATALOGO.find((item) => item.id === id)?.progressao_magia;
     return fonte && Array.isArray(fonte.marcos)
@@ -656,6 +897,28 @@ export function avisoDeFluxoDaMagia(ficha: any, magia: IMagiaCatalogo, inventari
   return `Fluxo ${perfil.fluxo} abaixo do recomendado (${minimo}) para o ${magia.circulo}º círculo. Você aprende, mas para conjurar a rolagem precisa alcançar DT ${dt}; hoje ela soma ${perfil.bonusConjuracao >= 0 ? '+' : ''}${perfil.bonusConjuracao}.`;
 }
 
+export type TipoManifestacaoMagica = 'ritual' | 'selo' | 'encantamento';
+
+/** De quais Fluxos a ficha aprende rituais, selos e encantamentos (decisão de
+ * 2026-10-20). Todo mundo aprende do Fluxo nativo e dos instalados, como nas
+ * magias. O Ritualista aprende de qualquer Fluxo natural, porque rito "vem de
+ * família, pacto, pergaminho, tradição" e não da alma. O Sintonizador aprende
+ * selo e encantamento também dos Fluxos dos catalisadores preparados na hora de
+ * aprender, e o que aprendeu fica mesmo se trocar de catalisador depois. A
+ * Tecnologia, que não é natural, só entra instalada (ou nativa, no Autômato). */
+export function fluxosParaAprenderManifestacao(
+  ficha: any,
+  tipo: TipoManifestacaoMagica,
+  perfil: IPerfilMagico = obterPerfilMagico(ficha),
+): FluxoMagicoId[] {
+  const fluxos = new Set<FluxoMagicoId>(perfil.fluxoNativoId ? [perfil.fluxoNativoId] : []);
+  perfil.fluxosInstaladosIds.forEach((id) => fluxos.add(id));
+  const classes = referenciasClasse(ficha);
+  if (nivelDaClasse(classes, 'ritualista') > 0) FLUXOS_NATURAIS_IDS.forEach((id) => fluxos.add(id));
+  if (tipo !== 'ritual' && perfil.nivelSintonizador > 0) perfil.catalisadoresPreparadosIds.forEach((id) => fluxos.add(id));
+  return FLUXOS_CATALOGO.map((fluxo) => fluxo.id).filter((id) => fluxos.has(id));
+}
+
 /** Rituais, Selos e Encantamentos não têm "fontes_permitidas" nem círculo -
  * só Fluxo, então a elegibilidade é mais simples que a de Magia: vaga livre
  * e Fluxo compatível (Universal atravessa, igual a magiaElegivelParaAprender). */
@@ -665,34 +928,40 @@ function manifestacaoElegivelParaAprender(
   perfil: IPerfilMagico,
   conhecidosIds: string[],
   vagas: number,
+  tipo: TipoManifestacaoMagica,
   rotuloSingular: string,
 ): { permitido: boolean; motivo?: string } {
   if (conhecidosIds.includes(manifestacao.id)) return { permitido: false, motivo: `${rotuloSingular} já conhecido(a).` };
   if (conhecidosIds.length >= vagas) return { permitido: false, motivo: `Todas as vagas de ${rotuloSingular.toLowerCase()} já foram preenchidas.` };
   const isUniversalTree = ficha?.arvoreId === 'universal';
-  if (!isUniversalTree) {
-    if (!perfil.fluxoNativoId) return { permitido: false, motivo: 'Escolha uma Árvore para definir o Fluxo nativo da ficha.' };
-    if (manifestacao.fluxo !== perfil.fluxoNativoId) {
-      const fluxoTitulo = FLUXOS_POR_ID.get(manifestacao.fluxo)?.titulo || manifestacao.fluxo;
-      return { permitido: false, motivo: `${rotuloSingular} pertence ao Fluxo ${fluxoTitulo}; seu Fluxo nativo é ${perfil.fluxoNativoTitulo}.` };
-    }
+  if (!isUniversalTree && !fluxosParaAprenderManifestacao(ficha, tipo, perfil).includes(manifestacao.fluxo as FluxoMagicoId)) {
+    const fluxoTitulo = FLUXOS_POR_ID.get(manifestacao.fluxo as FluxoMagicoId)?.titulo || manifestacao.fluxo;
+    const catalisadores = tipo !== 'ritual' && perfil.nivelSintonizador > 0 ? ' Como Sintonizador, você também aprende dos Fluxos dos catalisadores preparados.' : '';
+    return { permitido: false, motivo: `${motivoForaDosFluxos(perfil, rotuloSingular, fluxoTitulo)}${catalisadores}` };
   }
   return { permitido: true };
 }
 
+/** O Fluxo do Fim exige autorização do Mestre (regras.acesso_fim). Quem aprende
+ * algo do Fim sem ser nativo dele (o Ritualista, por exemplo) recebe o mesmo
+ * aviso, sem bloqueio. */
+export function avisoFluxoDaManifestacao(ficha: any, manifestacao: IManifestacaoMagicaBase): string | null {
+  return manifestacao.fluxo === 'fim' && obterFluxoNativoId(ficha) !== 'fim' ? AVISO_FLUXO_FIM : null;
+}
+
 export function ritualElegivelParaAprender(ficha: any, ritual: IRitualCatalogo, inventarioCentral: any[] = []): { permitido: boolean; motivo?: string } {
   const perfil = obterPerfilMagico(ficha, inventarioCentral);
-  return manifestacaoElegivelParaAprender(ficha, ritual, perfil, perfil.rituaisConhecidosIds, perfil.vagasRituais, 'Ritual');
+  return manifestacaoElegivelParaAprender(ficha, ritual, perfil, perfil.rituaisConhecidosIds, perfil.vagasRituais, 'ritual', 'Ritual');
 }
 
 export function seloElegivelParaAprender(ficha: any, selo: ISeloCatalogo, inventarioCentral: any[] = []): { permitido: boolean; motivo?: string } {
   const perfil = obterPerfilMagico(ficha, inventarioCentral);
-  return manifestacaoElegivelParaAprender(ficha, selo, perfil, perfil.selosConhecidosIds, perfil.vagasSelos, 'Selo');
+  return manifestacaoElegivelParaAprender(ficha, selo, perfil, perfil.selosConhecidosIds, perfil.vagasSelos, 'selo', 'Selo');
 }
 
 export function encantamentoElegivelParaAprender(ficha: any, encantamento: IEncantamentoCatalogo, inventarioCentral: any[] = []): { permitido: boolean; motivo?: string } {
   const perfil = obterPerfilMagico(ficha, inventarioCentral);
-  return manifestacaoElegivelParaAprender(ficha, encantamento, perfil, perfil.encantamentosConhecidosIds, perfil.vagasEncantamentos, 'Encantamento');
+  return manifestacaoElegivelParaAprender(ficha, encantamento, perfil, perfil.encantamentosConhecidosIds, perfil.vagasEncantamentos, 'encantamento', 'Encantamento');
 }
 
 export function rituaisDaFicha(ficha: any, inventarioCentral: any[] = []): IRitualCatalogo[] {
@@ -851,8 +1120,9 @@ export function podeConjurarMagia(ficha: any, magia: IMagiaCatalogo, inventarioC
   const concedida = perfil.concedidasIds.includes(magia.id);
   if (!aprendida && !concedida) return { permitido: false, motivo: 'A magia não está registrada como conhecida.' };
   const isUniversalTree = ficha?.arvoreId === 'universal';
-  if (!concedida && !magiaEhUniversal(magia) && !isUniversalTree && perfil.fluxoNativoId && magia.fluxo !== perfil.fluxoNativoId) {
-    return { permitido: false, motivo: `A magia não pertence ao Fluxo nativo ${perfil.fluxoNativoTitulo}.` };
+  const temFluxoDefinido = Boolean(perfil.fluxoNativoId || perfil.fluxosInstaladosIds.length);
+  if (!concedida && !magiaEhUniversal(magia) && !isUniversalTree && temFluxoDefinido && !fluxoAcessivel(perfil, magia.fluxo)) {
+    return { permitido: false, motivo: `A magia não pertence ao Fluxo nativo ${perfil.fluxoNativoTitulo || 'da ficha'} nem a um Fluxo instalado.` };
   }
   if (!concedida) {
     const acessoElemental = restricaoMagiaElemental(ficha, magia);

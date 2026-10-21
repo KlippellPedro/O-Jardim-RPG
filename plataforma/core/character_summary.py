@@ -31,6 +31,10 @@ _CIRCULOS_POR_FLUXO: list[tuple[int, int]] = []
 _CICATRIZES: set[str] = set()
 # Ids validos de Simbolo, lidos de data/ficha/pecados-e-virtudes.json.
 _SIMBOLOS: set[str] = set()
+# Ids dos onze Fluxos, lidos de data/ficha/magias.json (fluxosInstaladosIds).
+_FLUXOS: set[str] = set()
+# Acesso elemental (data/ficha/magias.json, regras.acesso_elemental): quem ensina e quais magias.
+_ACESSO_ELEMENTAL: dict = {"classe_id": "elementarista", "ids": set(), "avatar": set()}
 _CATALOGO: dict[str, dict[str, dict]] = {
     "raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {},
     "ritual": {}, "selo": {}, "encantamento": {},
@@ -155,6 +159,16 @@ def carregar_catalogos(data_root: Path) -> None:
         ]
         _CIRCULOS_POR_FLUXO.clear()
         _CIRCULOS_POR_FLUXO.extend(sorted(circulos, reverse=True))
+        acesso = regras.get("acesso_elemental") if isinstance(regras.get("acesso_elemental"), dict) else {}
+        _ACESSO_ELEMENTAL["classe_id"] = str(acesso.get("classe_id") or "elementarista")
+        _ACESSO_ELEMENTAL["ids"] = {str(item) for item in acesso.get("magias_elementais_ids") or []}
+        _ACESSO_ELEMENTAL["avatar"] = {str(item) for item in acesso.get("magias_exclusivas_avatar_ids") or []}
+        _FLUXOS.clear()
+        _FLUXOS.update(
+            str(item.get("id"))
+            for item in (documento.get("fluxos", []) if isinstance(documento, dict) else [])
+            if isinstance(item, dict) and item.get("id")
+        )
     except (OSError, json.JSONDecodeError, AttributeError):
         log.exception("Falha ao ler catalogo de magias em %s", caminho_magias)
 
@@ -801,7 +815,11 @@ def _validar_manifestacao_magica(
         marco = max(marcos, key=lambda item: _inteiro(item.get("nivel")) or 0)
         vagas += max(0, _inteiro(marco.get("vagas")) or 0)
 
-    if len(conhecidos) > vagas:
+    # Quem ja tinha aprendido mais do que as vagas de hoje mantem o que aprendeu e so nao aprende
+    # mais. Em 2026-10-20 as vagas de selo e encantamento do Canalizador e do Cartista pararam em 3,
+    # e so uma ficha da Arvore Universal (que aprende de todos os Fluxos) podia ter passado disso.
+    ja_tinha = len([item for item in (anterior.get(campo_conhecidos) or []) if isinstance(item, str)]) if anterior else 0
+    if len(conhecidos) > max(vagas, ja_tinha):
         return f"a ficha possui mais {rotulo_plural} conhecidos do que as vagas liberadas"
 
     if criacao and (conhecidos or concedidos):
@@ -858,13 +876,23 @@ def _validar_catalisadores_fluxo(ficha: dict, classes: list[tuple[dict, int]]) -
         return "catalisadores preparados devem ser uma lista de ids"
     if len(preparados) != len(set(preparados)):
         return "o mesmo catalisador nao pode ser preparado duas vezes"
-    if any(item not in _FLUXOS_CATALISAVEIS for item in preparados):
-        return "a ficha contem um catalisador de Fluxo invalido"
-    if ativo is not None and (not isinstance(ativo, str) or ativo not in preparados):
-        return "o catalisador ativo deve estar entre os preparados"
-
     niveis = {str(classe.get("id")): nivel for classe, nivel in classes}
     nivel_sintonizador = niveis.get("sintonizador", 0)
+    # A Tecnologia so vira catalisador do Sintonizador quando o Mestre a instalou
+    # na ficha (decisao de 2026-10-20); a calibracao do Interceptador segue so
+    # com os dez Fluxos naturais.
+    instalados = ficha.get("fluxosInstaladosIds") if isinstance(ficha.get("fluxosInstaladosIds"), list) else []
+    catalisaveis = set(_FLUXOS_CATALISAVEIS)
+    if nivel_sintonizador > 0 and "tecnologia" in instalados:
+        catalisaveis.add("tecnologia")
+    if any(item not in catalisaveis for item in preparados):
+        return "a ficha contem um catalisador de Fluxo invalido (a Tecnologia so entra instalada)"
+    if ativo is not None and (not isinstance(ativo, str) or ativo not in preparados):
+        return "o catalisador ativo deve estar entre os preparados"
+    desativados = configuracao.get("desativadosIds") or []
+    if not isinstance(desativados, list) or any(not isinstance(item, str) or item not in preparados for item in desativados):
+        return "catalisadores desativados devem estar entre os preparados"
+
     possui_interceptador = niveis.get("interceptador", 0) > 0
     limite_base = 3 if nivel_sintonizador >= 15 else 2 if nivel_sintonizador >= 5 else 1 if nivel_sintonizador > 0 else 0
     foco_reserva = any(
@@ -878,6 +906,68 @@ def _validar_catalisadores_fluxo(ficha: dict, classes: list[tuple[dict, int]]) -
         return "a ficha nao possui classe capaz de preparar catalisadores"
     if len(preparados) > limite:
         return "os catalisadores preparados excedem o limite da classe"
+    return None
+
+
+def _excesso_por_circulo(conhecidas, vagas_por_fonte: list[tuple[int, int]]) -> dict[int, int]:
+    """Para cada circulo k, quantas magias de circulo k ou maior passam das vagas
+    das fontes que chegam a k. As fontes sao aninhadas pelo circulo, entao isto
+    basta para saber se cada magia cabe numa vaga que guarde o circulo dela."""
+    circulos = [
+        _inteiro(_CATALOGO["magia"][magia_id].get("circulo")) or 0
+        for magia_id in conhecidas if isinstance(magia_id, str) and magia_id in _CATALOGO["magia"]
+    ] if isinstance(conhecidas, list) else []
+    excesso: dict[int, int] = {}
+    for k in range(1, 11):
+        ocupadas = sum(1 for circulo in circulos if circulo >= k)
+        vagas = sum(quantidade for circulo, quantidade in vagas_por_fonte if circulo >= k)
+        excesso[k] = max(0, ocupadas - vagas)
+    return excesso
+
+
+def _erro_vagas_por_fonte(conhecidas: list, anteriores, vagas_por_fonte: list[tuple[int, int]]) -> str | None:
+    """A vaga de cada classe so guarda magia ate o circulo que ela libera (decisao
+    de 2026-10-20): o Cartista Arcano, que para no 2o, nao abre vaga de 6o circulo
+    em cima de um Canalizador. O excesso que a ficha ja tinha e tolerado; so o
+    que cresce vira alerta."""
+    atual = _excesso_por_circulo(conhecidas, vagas_por_fonte)
+    antes = _excesso_por_circulo(anteriores, vagas_por_fonte) if anteriores is not None else {}
+    if any(atual[k] > antes.get(k, 0) for k in atual):
+        return "uma magia ocupa a vaga de uma classe que nao chega ao circulo dela"
+    return None
+
+
+def _erro_acesso_elemental(ficha: dict, anterior: dict, classes: list[tuple[dict, int]]) -> str | None:
+    """Magia Elemental do Fisico pede a classe Elementarista, o elemento de origem, o Avatar desperto
+    nas tres do Avatar e, desde 2026-10-20, o circulo que os niveis de Elementarista liberam (nao o
+    da maior fonte da ficha). Espelha src/services/magiaService.ts (restricaoMagiaElemental e
+    circuloDaElementarista). So confere magia aprendida agora: o que a ficha ja tinha continua valendo."""
+    elementais = _ACESSO_ELEMENTAL["ids"]
+    antes = set(anterior.get("magiasConhecidasIds") or []) if anterior else set()
+    novas = [item for item in ficha.get("magiasConhecidasIds") or [] if item in elementais and item not in antes]
+    if not novas:
+        return None
+    classe_id = _ACESSO_ELEMENTAL["classe_id"]
+    nivel = next((nivel for classe, nivel in classes if str(classe.get("id")) == classe_id), 0)
+    if nivel < 1:
+        return "magia Elemental exige a classe Elementarista"
+    escolhas = ficha.get("escolhasHabilidade") if isinstance(ficha.get("escolhasHabilidade"), dict) else {}
+    chaves_elemento = ("afinidade-elemental", "caminho-do-avatar", "polifonia-elemental")
+    if not any(escolhas.get(f"{classe_id}:{chave}") for chave in chaves_elemento):
+        return "magia Elemental exige o elemento de origem da Elementarista"
+    avatar = "avatar-desperto" in (escolhas.get(f"{classe_id}:julgamento-da-aptidao") or [])
+    classe = next((classe for classe, _ in classes if str(classe.get("id")) == classe_id), {})
+    fonte = classe.get("progressao_magia") if isinstance(classe.get("progressao_magia"), dict) else {}
+    circulo = max(
+        (_inteiro(marco.get("circulo")) or 0 for marco in fonte.get("marcos") or []
+         if isinstance(marco, dict) and (_inteiro(marco.get("nivel")) or 99) <= nivel),
+        default=0,
+    )
+    for magia_id in novas:
+        if magia_id in _ACESSO_ELEMENTAL["avatar"] and not avatar:
+            return "magia Elemental do Avatar exige Avatar desperto"
+        if (_inteiro(_CATALOGO["magia"][magia_id].get("circulo")) or 0) > circulo:
+            return "magia Elemental acima do circulo que os niveis de Elementarista liberam"
     return None
 
 
@@ -902,6 +992,7 @@ def _validar_magias(
 
     circulo_fonte = 0
     vagas = 0
+    vagas_por_fonte: list[tuple[int, int]] = []
     teto_por_circulo: int | None = None
     tradicoes: set[str] = set()
     for classe, nivel in classes:
@@ -915,6 +1006,7 @@ def _validar_magias(
         marco = max(marcos, key=lambda item: _inteiro(item.get("nivel")) or 0)
         circulo_fonte = max(circulo_fonte, _inteiro(marco.get("circulo")) or 0)
         vagas += max(0, _inteiro(marco.get("vagas")) or 0)
+        vagas_por_fonte.append((_inteiro(marco.get("circulo")) or 0, max(0, _inteiro(marco.get("vagas")) or 0)))
         teto = _inteiro(marco.get("teto_por_circulo")) or 0
         if teto > 0:
             teto_por_circulo = max(teto_por_circulo or 0, teto)
@@ -940,6 +1032,14 @@ def _validar_magias(
         permitidas = {str(item) for item in magia.get("fontes_permitidas") or []}
         if permitidas and not (permitidas & tradicoes):
             return "a fonte da ficha nao ensina a tradicao de uma magia conhecida"
+
+    erro = _erro_vagas_por_fonte(conhecidas, (anterior or {}).get("magiasConhecidasIds"), vagas_por_fonte)
+    if erro:
+        return erro
+
+    erro = _erro_acesso_elemental(ficha, anterior, classes)
+    if erro:
+        return erro
 
     # Uma cicatriz por magia de 10o circulo aprendida, sem repetir e sem id
     # inventado. Concessao do mestre nao gera cicatriz.
@@ -978,6 +1078,23 @@ def _validar_magias(
             return "somente o mestre pode alterar magias concedidas"
         if ficha.get("magias") != anterior.get("magias"):
             return "somente o mestre pode alterar registros antigos de magia"
+    return None
+
+
+def _validar_fluxos_instalados(ficha: dict, anterior: dict, *, criacao: bool) -> str | None:
+    """Segundo Fluxo "sempre vem de fora, por artefato, reliquia ou nucleo
+    tecnologico" e quem o entrega e o Mestre (Magia e Fluxo, parte do Mestre).
+    O jogador nao cria nem altera essa lista; o Mestre salva sem passar por
+    aqui. Espelha src/services/magiaService.ts::fluxosInstaladosDaFicha."""
+    instalados = ficha.get("fluxosInstaladosIds")
+    instalados = [] if instalados is None else instalados
+    if not isinstance(instalados, list) or any(not isinstance(item, str) for item in instalados):
+        return "fluxosInstaladosIds deve ser uma lista de ids"
+    if any(item not in _FLUXOS for item in instalados):
+        return "a ficha contem um Fluxo instalado inexistente"
+    antes = [] if criacao else (anterior.get("fluxosInstaladosIds") or [])
+    if instalados != antes:
+        return "somente o mestre pode instalar ou retirar um Fluxo"
     return None
 
 
@@ -1035,6 +1152,9 @@ def validar_regras_ficha(
     for campo in ("proficiencias", "resistencias", "resistenciasTexto"):
         if not criacao and ficha.get(campo) != anterior.get(campo):
             return f"somente o mestre pode alterar {campo}"
+    erro = _validar_fluxos_instalados(ficha, anterior, criacao=criacao)
+    if erro:
+        return erro
     escolha_atual = ficha.get("escolhaRacial") if isinstance(ficha.get("escolhaRacial"), dict) else {}
     escolha_antes = anterior.get("escolhaRacial") if isinstance(anterior.get("escolhaRacial"), dict) else {}
     erro = _natureza_racial_incoerente(raca, escolha_atual, None if criacao else escolha_antes)

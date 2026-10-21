@@ -9,6 +9,7 @@ import {
 } from './racaService';
 import { ATRIBUTOS, obterFragmentosRaciaisExpressos, obterModificacoesRaciaisInstaladas, type TAtributo } from './calculoService';
 import { GRAUS_PERICIA, aumentosAtributoPorNivel, legadosPorNivel, nomeDoGrauPericia } from './progressaoNiveis';
+import { SEM_ARVORE_ID } from '../../data/mundo/arvoresCatalog';
 
 export interface IReferenciaClasseFicha {
   classeId?: string;
@@ -184,9 +185,18 @@ export function limparSelecoesHabilidadeInvalidas<T extends Record<string, any>>
   return iguais ? ficha : { ...ficha, escolhasHabilidade: limpas };
 }
 
+/** Ficha que nasceu numa Árvore (inclusive a Universal). "sem-arvore" e vazio não contam. */
+const fichaTemArvore = (ficha: any): boolean => {
+  const arvoreId = String(ficha?.arvoreId || '');
+  return Boolean(arvoreId) && arvoreId !== SEM_ARVORE_ID;
+};
+
 export function escolhasHabilidadeDisponiveis(ficha: any): IEscolhaHabilidadeClasse[] {
   const selecoes = selecoesHabilidadeValidas(ficha);
   return classesDaFicha(ficha).flatMap(({ classe, nivel }) => (classe.habilidades || []).flatMap((habilidade) => {
+    // Só esconde a escolha: o que já estava salvo continua na ficha, e o
+    // serviço de magia ignora a escolha quando a Árvore define o Fluxo.
+    if (habilidade.escolha_opcoes?.so_sem_arvore && fichaTemArvore(ficha)) return [];
     const requisito = habilidade.requer_escolha;
     if (requisito && !(selecoes[requisito.chave] || []).includes(requisito.opcao_id)) return [];
     const vagas = vagasEscolhaHabilidade(habilidade, nivel);

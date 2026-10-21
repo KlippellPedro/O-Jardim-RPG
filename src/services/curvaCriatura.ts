@@ -148,6 +148,12 @@ export function vdValido(vd: unknown): number {
   return Math.min(VD_MAXIMO, Math.max(1, Math.trunc(Number(vd) || 1)));
 }
 
+/** DT padrão do VD (15 + metade do VD), a mesma do tópico de balanceamento.
+ * O Interceptador também a usa para interceptar poder de criatura. */
+export function dtPadraoDoVd(vd: unknown): number {
+  return 15 + Math.floor(vdValido(vd) / 2);
+}
+
 /** Multiplicador de Vida acima do VD 40: VD/40, nunca abaixo de 1. */
 export function escalaDeVida(vd: number): number {
   return Math.max(1, vdValido(vd) / VD_ONDE_A_VIDA_ESCALA);
@@ -203,7 +209,7 @@ export function modeloDeCriatura(vd: unknown, papel: PapelCriatura = 'solo', arq
     detalhe: `${sinal(ataque)}, ${expressaoDeDano(danoMedio)} ${item.tipo}`,
   }));
   const habilidades: string[] = [];
-  if (jeito.habilidade) habilidades.push(jeito.habilidade.split('{dt}').join(String(15 + Math.floor(alvo / 2))));
+  if (jeito.habilidade) habilidades.push(jeito.habilidade.split('{dt}').join(String(dtPadraoDoVd(alvo))));
   if (golpeAnunciadoMedio !== null) {
     habilidades.push(
       `Golpe Anunciado (anuncie na rodada anterior; acerta ${expressaoDeDano(golpeAnunciadoMedio)}, cerca de ${Math.round((regra.fatiaDoGolpeAnunciado as number) * 100)}% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)`,

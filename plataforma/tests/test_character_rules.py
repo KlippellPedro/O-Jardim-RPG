@@ -6,6 +6,9 @@ from pathlib import Path
 from core.character_summary import (
     RACA_PERSONALIZADA_ID,
     _CATALOGO,
+    _erro_acesso_elemental,
+    _erro_vagas_por_fonte,
+    _validar_manifestacao_magica,
     _atributo_efetivo,
     _animal_racial_incoerente,
     _fluxo_efetivo,
@@ -704,11 +707,26 @@ class TestCharacterRules:
         fluxo_artificial["catalisadoresFluxo"] = {"preparadosIds": ["tecnologia"], "ativoId": "tecnologia"}
         assert "Fluxo invalido" in validar_regras_ficha(fluxo_artificial, {}, ficha_anterior=anterior)
 
+        # Com a Tecnologia instalada pelo Mestre, ela vira catalisador do Sintonizador.
+        anterior_instalado = deepcopy(anterior)
+        anterior_instalado["fluxosInstaladosIds"] = ["tecnologia"]
+        instalado = deepcopy(fluxo_artificial)
+        instalado["fluxosInstaladosIds"] = ["tecnologia"]
+        assert validar_regras_ficha(instalado, {}, ficha_anterior=anterior_instalado) is None
+
+        # Desativado é um catalisador preparado que já foi gasto numa fusão.
+        desativado = deepcopy(atual)
+        desativado["catalisadoresFluxo"]["desativadosIds"] = ["tempo"]
+        assert validar_regras_ficha(desativado, {}, ficha_anterior=anterior) is None
+        desativado["catalisadoresFluxo"]["desativadosIds"] = ["origem"]
+        assert "desativados" in validar_regras_ficha(desativado, {}, ficha_anterior=anterior)
+
     def test_circulo_liberado_acompanha_os_limiares_publicados(self):
         """O servidor precisa enxergar os dez círculos publicados, não os cinco
         do catálogo antigo: os limiares saem de data/ficha/magias.json."""
-        assert [_circulo_por_fluxo(fluxo) for fluxo in (13, 14, 17, 18, 21, 22)] == [0, 1, 1, 2, 2, 3]
-        assert [_circulo_por_fluxo(fluxo) for fluxo in (34, 38, 42, 46, 50, 99)] == [6, 7, 8, 9, 10, 10]
+        # Escada recalibrada em 2026-10-20: Fluxo recomendado = 11 + círculo.
+        assert [_circulo_por_fluxo(fluxo) for fluxo in (11, 12, 13, 14, 15, 16)] == [0, 1, 2, 3, 4, 5]
+        assert [_circulo_por_fluxo(fluxo) for fluxo in (17, 18, 19, 20, 21, 99)] == [6, 7, 8, 9, 10, 10]
 
     def test_atributo_final_pode_passar_de_20_fora_da_criacao(self):
         """O teto de 20 só rege a criação (métodos padrao/pontos nunca
@@ -946,7 +964,7 @@ class TestLiberacaoDeRacaEClasseEspecial:
 
     def test_creation_accepts_a_pure_liberated_special_class_at_level_1(self):
         ficha = _ficha_criacao()
-        ficha["classeId"] = "invocador"  # esquecida, presa a arvoreId="aethel"
+        ficha["classeId"] = "invocador"  # especial, aceita qualquer Árvore
         ficha["classes"] = [{"classeId": "invocador", "nivel": 1}]
         config = {"classes_liberadas": ["invocador"]}
         assert validar_regras_ficha(ficha, config, criacao=True) is None
@@ -1335,3 +1353,123 @@ class TestUnicosPassivosDoJardim:
         com = {**base, "jardim": {"unicosComprados": ["raiz-funda", "alerta-de-raiz"]}}
         assert resumir_ficha(com)["vida_maxima"] == resumir_ficha(base)["vida_maxima"] + 12
         assert iniciativa_fixa(com) == iniciativa_fixa(base) + 2
+
+
+class TestFluxoInstalado:
+    """Segundo Fluxo vem de fora e só o Mestre o instala (decisão de 2026-10-20). O Mestre salva sem passar
+    por validar_regras_ficha; aqui a mudança vinda do jogador vira o alerta de regras para o Mestre."""
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    def test_criacao_nao_comeca_com_fluxo_instalado(self):
+        ficha = _ficha_criacao()
+        assert validar_regras_ficha(ficha, {}, criacao=True) is None
+        ficha["fluxosInstaladosIds"] = ["tecnologia"]
+        assert "mestre" in validar_regras_ficha(ficha, {}, criacao=True)
+
+    def test_jogador_nao_instala_nem_retira(self):
+        anterior = _ficha_criacao()
+        atual = deepcopy(anterior)
+        atual["fluxosInstaladosIds"] = ["tecnologia"]
+        assert "mestre" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "mestre" in validar_regras_ficha(anterior, {}, ficha_anterior=atual)
+
+    def test_fluxo_ja_instalado_pelo_mestre_continua_valendo(self):
+        anterior = _ficha_criacao()
+        anterior["fluxosInstaladosIds"] = ["tecnologia"]
+        assert validar_regras_ficha(deepcopy(anterior), {}, ficha_anterior=anterior) is None
+
+    def test_lista_invalida_e_barrada(self):
+        anterior = _ficha_criacao()
+        for valor in ("tecnologia", ["fluxo-que-nao-existe"], [7]):
+            atual = deepcopy(anterior)
+            atual["fluxosInstaladosIds"] = valor
+            assert validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+
+class TestVagasDeSeloQueEncolheram:
+    """Em 2026-10-20 as vagas de selo e encantamento do Canalizador pararam em 3. Uma ficha da Arvore
+    Universal que ja tinha aprendido mais mantem o que tem; so nao aprende mais."""
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    def _validar(self, atuais: list[str], anteriores: list[str] | None):
+        classes = [(_CATALOGO["classe"]["canalizador"], 50)]
+        ficha = {"selosConhecidosIds": atuais, "selosConcedidosIds": []}
+        anterior = {"selosConhecidosIds": anteriores, "selosConcedidosIds": []} if anteriores is not None else {}
+        return _validar_manifestacao_magica(
+            ficha, anterior, classes,
+            chave_catalogo="selo", rotulo_plural="selos", campo_conhecidos="selosConhecidosIds",
+            campo_concedidos="selosConcedidosIds", campo_progressao="progressao_selos", criacao=False,
+        )
+
+    def test_quem_ja_tinha_quatro_mantem_os_quatro(self):
+        quatro = ["nova-tentativa", "silencio", "conservacao", "fechamento"]
+        assert self._validar(quatro, quatro) is None
+
+    def test_nao_aprende_alem_do_que_ja_tinha(self):
+        quatro = ["nova-tentativa", "silencio", "conservacao", "fechamento"]
+        assert "vagas" in self._validar([*quatro, "diagnostico"], quatro)
+        assert "vagas" in self._validar(quatro, None)
+
+
+class TestAcessoElemental:
+    """Magia Elemental so ate o circulo que os niveis de Elementarista liberam (decisao de 2026-10-20).
+    O servidor confere a magia aprendida agora; o que a ficha ja tinha continua valendo."""
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    def _classes(self, **niveis):
+        return [(_CATALOGO["classe"][classe_id.replace("_", "-")], nivel) for classe_id, nivel in niveis.items()]
+
+    def _ficha(self, magias, **extra):
+        return {"magiasConhecidasIds": magias, "escolhasHabilidade": {"elementarista:afinidade-elemental": ["fogo"]}, **extra}
+
+    def test_mergulho_de_um_nivel_so_chega_ao_segundo_circulo(self):
+        classes = self._classes(canalizador=20, elementarista=1)
+        assert _erro_acesso_elemental(self._ficha(["rajada-elemental"]), {}, classes) is None
+        assert "circulo" in _erro_acesso_elemental(self._ficha(["explosao-elemental"]), {}, classes)
+
+    def test_o_que_ja_tinha_continua_valendo(self):
+        classes = self._classes(canalizador=20, elementarista=1)
+        ficha = self._ficha(["tempestade-elemental"])
+        assert _erro_acesso_elemental(ficha, {"magiasConhecidasIds": ["tempestade-elemental"]}, classes) is None
+
+    def test_sem_classe_sem_elemento_e_sem_avatar(self):
+        assert "Elementarista" in _erro_acesso_elemental(self._ficha(["impacto-elemental"]), {}, self._classes(canalizador=20))
+        sem_elemento = {"magiasConhecidasIds": ["impacto-elemental"], "escolhasHabilidade": {}}
+        assert "elemento" in _erro_acesso_elemental(sem_elemento, {}, self._classes(elementarista=1))
+        assert "Avatar" in _erro_acesso_elemental(self._ficha(["julgamento-dos-elementos"]), {}, self._classes(elementarista=15))
+        com_avatar = self._ficha(["julgamento-dos-elementos"])
+        com_avatar["escolhasHabilidade"]["elementarista:julgamento-da-aptidao"] = ["avatar-desperto"]
+        assert _erro_acesso_elemental(com_avatar, {}, self._classes(elementarista=15)) is None
+
+
+class TestVagasPorFonte:
+    """Decisão de 2026-10-20 (decisão 8): a vaga de cada classe só guarda magia
+    até o círculo que ela libera. O Cartista Arcano para no 2º círculo, então
+    sobre um Canalizador as vagas dele não servem para magia de 6º."""
+
+    SEXTO = ["seculos-em-um-golpe", "zona-acelerada", "eco-de-batalha"]
+    PRIMEIRO = ["passo-adiantado", "atraso-de-instante", "suspensao-breve"]
+
+    def setup_method(self):
+        carregar_catalogos(DATA_ROOT)
+
+    def test_vaga_do_cartista_nao_guarda_magia_de_sexto(self):
+        # Canalizador com 2 vagas até o 6º e Cartista com 3 até o 2º.
+        fontes = [(6, 2), (2, 3)]
+        assert _erro_vagas_por_fonte(self.SEXTO[:2] + self.PRIMEIRO, None, fontes) is None
+        assert "circulo" in _erro_vagas_por_fonte(self.SEXTO, None, fontes)
+
+    def test_o_excesso_que_a_ficha_ja_tinha_e_tolerado(self):
+        fontes = [(6, 2), (2, 3)]
+        assert _erro_vagas_por_fonte(self.SEXTO, self.SEXTO, fontes) is None
+        # Crescer o excesso vira alerta.
+        assert _erro_vagas_por_fonte(self.SEXTO + ["poco-de-gravidade"], self.SEXTO, fontes) is not None

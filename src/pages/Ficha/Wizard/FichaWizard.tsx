@@ -518,6 +518,11 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                   {AVISO_FLUXO_FIM}
                 </p>
               )}
+              {arvoreId === 'keryx' && (
+                <p className="mt-4 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm leading-relaxed text-cyan-100">
+                  Quem nasce na A.X.I.S tem Comunicação como Fluxo nativo, o Fluxo da Parley que segue vivo sob a Malha. O Autômato é a exceção e já vem com a Tecnologia no núcleo; para os outros, a Tecnologia só chega instalada, pelo Mestre.
+                </p>
+              )}
               {arvoresDisponiveis.length === 0 && (
                 <p className="text-sm text-gray-500 italic">Nenhuma Árvore liberada nesta campanha ainda: você pode seguir sem Árvore, ou pedir ao mestre pra revelar uma.</p>
               )}
