@@ -2,6 +2,304 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-20-pontas-soltas-magia",
+      "data": "2026-10-20",
+      "tipo": "melhoria",
+      "area": "Classes",
+      "titulo": "Interceptador, Elementarista e rituais de viagem com ajustes finos",
+      "detalhes": [
+        "No Interceptador, a Latência deixa o Atrasar segurar a magia por uma rodada a mais, o Proxy pode devolver a magia para quem conjurou, e o Refluxo Hostil cresce 1d6 a cada 5 níveis.",
+        "O poder Muralha Elemental da Elementarista passou a se chamar Parede Elemental, para não confundir com a magia de mesmo nome.",
+        "O Marco de Retorno fixa marcos, que servem de destino para a Passagem Preparada. O Concílio da Verdade reúne até seis pessoas.",
+        "O Sábio voltou a ter voz para os nomes novos de magia."
+      ]
+    },
+    {
+      "id": "2026-10-20-magias-segunda-passada",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Arma de Fluxo, Marca de Caça e o acabamento das magias",
+      "detalhes": [
+        "A Arma de Fluxo passou a causar 2d8 + Mod. Fluxo por golpe, ainda pela cena e com concentração. A Marca de Caça soma +1d6 no primeiro ataque contra o alvo em cada rodada, e o Clone de Fluxo agora ataca.",
+        "Interceptar magia com a Tecnologia pede Misticismo contra a DT da magia, como o Interceptador faz.",
+        "O dano de Fogo das magias cai uma vez e não continua, salvo quando a magia diz que o alvo fica Queimando. O Livro também explica lugar conhecido e mesma dimensão.",
+        "Renascer passou a se chamar Recomeço Absoluto, e o selo Reviravolta Inscrita virou Sorte Virada.",
+        "O Exílio pega chefe com mais dificuldade: chefe resiste com vantagem.",
+        "Várias magias ganharam números e regras que faltavam. A Roleta de Fluxo dá a reação extra uma vez na cena, o Autômato Assistente ficou menor, a Forma Elemental pede concentração, o Refúgio de Bolso diz quando o grupo volta, e as curas das magias universais dizem que curam Vida."
+      ]
+    },
+    {
+      "id": "2026-10-20-oito-fluxos-rebalanceados",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Magias de oito Fluxos com regras mais firmes",
+      "detalhes": [
+        "Inconstância: as magias que sorteiam agora usam quatro tabelas no Livro de Regras (tipo, direção, resistência e reescrita). A Detonação Improvável pode estourar no próprio conjurador, a Reviravolta faz todo mundo rolar de novo antes de a jogada valer, e o Mundo Instável sorteia gravidade, clima, som ou cor a cada rodada.",
+        "Espaço: Bolso e Cofre Dobrado contam em espaços de carga. O Portal Maior leva criaturas Médias ou menores, uma por vez, e a Dobra de Exército leva montaria e veículo. A Ruptura Espacial dura três rodadas, e o Passo Selado só leva quem aceitar.",
+        "Vitalidade: o Sopro de Anima cura até seis aliados, o Vigor Desmedido dá menos Vida temporária e cobra Cansaço de cada alvo, e o Colapso Biológico deixa o alvo Paralisado com teste para sair. Os rituais de cuidado pedem Carne de Caça.",
+        "Essência: o Julgamento Essencial dá +2d8 contra quem está disfarçado, a Custódia da Alma e o Espelho Verídico têm teto de círculo, a Palavra Justa pede teste de Vontade e o Nome Verdadeiro revela a natureza do alvo.",
+        "Origem: o Laço de Ajuda e as formas nascentes seguem a regra de Ajudar, a Linhagem Nascente tem números próprios para o guardião Grande, o Recomeço Absoluto dá um começo novo ao corpo e a Gênese Menor germina só madeira, cipó, casca ou fibra.",
+        "Comunicação: os ataques de alvo único somam o Mod. Fluxo, como em todo Fluxo. O Acordo Breve e as redes respeitam o teto de +4 da ajuda, e o Decreto Registrado dá teste de Vontade a quem ouve.",
+        "Tecnologia: o Registrar Padrão grava magias até o 8º círculo, com tantos registros quanto o Mod. Fluxo, e as Reproduções dizem quanto custam. O Bloqueio de Fluxo passou a dar desvantagem com teste para sair, e a Rotina Automatizada vigia por oito horas.",
+        "Físico: armaduras e domos dão Resistência por tipo de dano, as magias de efeito dizem o que acontece no sucesso, e as Marcas do Fluxo deixam escolher o elemento a quem não é Elementarista."
+      ]
+    },
+    {
+      "id": "2026-10-20-tom-das-magias",
+      "data": "2026-10-20",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Magias e classes com texto mais direto",
+      "detalhes": [
+        "Umas trinta magias e algumas páginas de classe foram reescritas para dizer de uma vez o que fazem. Nenhuma regra mudou: dano, alcance, testes e duração continuam iguais."
+      ]
+    },
+    {
+      "id": "2026-10-20-vazio-rebalanceado",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Vazio: magias novas de sensação e memória, e tetos no que consome magia",
+      "detalhes": [
+        "Nada Pessoal virou Sentido Apagado: apaga a visão ou a audição de um alvo por três rodadas. Silenciar Fluxo virou Esquecimento: apaga uma lembrança ou o nome de alguém da cabeça de quem conhecia. Quem já tinha aprendido alguma das duas fica com a magia nova na mesma vaga.",
+        "Escudo do Vazio, Avatar do Vazio e a Fivela Devoradora consomem só magia hostil, com teto de círculo, e deixam cura e bênção de aliado passarem. Apagar Efeito vai até o 8º círculo, e Apagar do Mapa se desfaz quando o alvo ataca ou faz barulho.",
+        "No Buraco Negro e na Singularidade, personagem de jogador cai Morrendo como em qualquer magia, em vez de sumir. O Toque do Abismo leva a Mana atual, e ela volta no descanso.",
+        "O Manto do Não-Ser, o encantamento, passou a se chamar Manto do Instante Ausente."
+      ]
+    },
+    {
+      "id": "2026-10-20-fim-rebalanceado",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Fim: a Palavra de Morte tem limiar, e encerrar efeito tem teto",
+      "detalhes": [
+        "A Palavra de Morte só mata quem está com metade ou menos da Vida máxima e falha em Fortitude. Acima disso, o alvo sofre o dano e fica sem receber cura até o fim da cena.",
+        "Tudo que encerra efeito tem teto de círculo: o Fechar Ciclo vai até o 4º, a Lâmina do Encerramento até o 5º, e as variações do Fim nas magias universais até o próprio círculo.",
+        "Romper Vínculo agora serve contra possessão e controle em curso. Ferida Terminal e Fio do Limiar deixam Sangramento. Marca do Limiar dá +2d6. Zona de Deterioração para em -10 de Defesa.",
+        "O Fruto do Fim e o Selo de Fechamento pedem a autorização do Mestre na Loja. O Último Adeus usa o novo ingrediente Lembrança do Morto, e a fusão do Fim passou a se chamar Encerramento Rápido."
+      ]
+    },
+    {
+      "id": "2026-10-20-tempo-rebalanceado",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Tempo: ação extra na medida e desgaste de verdade",
+      "detalhes": [
+        "A Aceleração, a Forma do Tempo e o Passo Canalizado agora dão uma ação de movimento extra, e não mais uma ação padrão. Turno inteiro a mais fica com o Tempo Emprestado, a Parada do Mundo e o Avatar do Tempo, este uma vez por cena.",
+        "Roubar Turno tira um turno, e Exílio Temporal tira dois. A Parada de Instante tira só a ação padrão, e a Conservação Maior repete Vontade a cada turno contra inimigo.",
+        "O Tempo não volta ao passado: Restaurar o Estado devolve Vida até a do começo da cena e conserta um item, sem reviver ninguém, e a Relíquia Conservada repara o objeto em vez de desfazer o dano.",
+        "Desgaste do Tempo: magia de Tempo do 5º círculo em diante que dá ação ou turno extra, tira turno por duas rodadas ou dura a cena sem concentração custa 1 de Cansaço no fim da cena, ou 2 no 9º e no 10º."
+      ]
+    },
+    {
+      "id": "2026-10-20-fluxo-recomendado-recalibrado",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Fluxo recomendado ao alcance de quem investe em Fluxo",
+      "detalhes": [
+        "O Fluxo recomendado de cada círculo agora é 11 mais o círculo: 12 para o 1º, 16 para o 5º e 21 para o 10º. Antes ia de 14 a 50, e quase ninguém alcançava.",
+        "Quem põe os aumentos de atributo em Fluxo chega ao 10º círculo recomendado por volta do nível 20. As Marcas do 5º ao 9º círculo voltam a aparecer na carreira normal, e o aviso de Fluxo baixo só aparece para quem deixou o Fluxo para trás.",
+        "A fórmula do teste de magia terminava em bônus específico da classe, que nenhuma classe tinha. Agora diz bônus de habilidades, poderes e itens: os que a própria habilidade, poder ou item diz para somar."
+      ]
+    },
+    {
+      "id": "2026-10-20-tipo-de-dano-das-magias",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Toda magia diz o tipo de dano",
+      "detalhes": [
+        "Magia que não dizia o tipo causa o dano do próprio Fluxo: dano de Vazio, dano do Fim, dano de Comunicação e assim por diante. A Tecnologia causa dano tecnológico, e a magia universal causa o dano do Fluxo que a canaliza.",
+        "Na aba Magias, o cartão mostra o tipo junto do dano, como em Dano 2d8 de Vazio.",
+        "Os ataques de Comunicação tiram Vida com dano de Comunicação, e os de Vitalidade causam dano de Vitalidade. O veneno que continua batendo segue escrito onde a magia diz.",
+        "No encantamento Propriedade Mutável, o frio virou gelo."
+      ]
+    },
+    {
+      "id": "2026-10-20-termos-das-magias-e-condicoes",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Termos das magias explicados e condições com saída",
+      "detalhes": [
+        "O tópico Magia e Fluxo ganhou a lista Termos das magias: alcançar o próprio Fim, consolidado, alma própria, reconquista, ausente, fronteira selada e módulo A.X.I.S agora têm sentido escrito.",
+        "Revelado virou condição, ao lado de Exposto: o alvo perde disfarce, transformação e invisibilidade mágicos e não consegue se esconder.",
+        "Imobilizado sem saída indicada se desfaz com uma Ação Padrão e Atletismo ou Acrobacia contra a DT da fonte. Condição de fonte instantânea sem duração escrita vai até o fim do próximo turno de quem a recebeu.",
+        "A Primavera Devastadora e a Chuva de Esporos agora dizem como sair da Imobilizado."
+      ]
+    },
+    {
+      "id": "2026-10-20-controle-de-decimo-circulo-com-teste",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Magias de 10º círculo que travam o inimigo agora têm teste",
+      "detalhes": [
+        "Estase: o inimigo resiste com Vontade e repete o teste no fim de cada turno. Em aliado que aceita, objeto ou lugar, continuam os sete dias, e o conjurador ganha 1 de Cansaço.",
+        "Parada do Mundo: cada criatura na área rola Vontade no começo de cada rodada e, se passar, age normalmente. A magia vale uma vez por descanso longo.",
+        "Âncora do Ser: o inimigo resiste com Vontade e, se falhar, fica ancorado até o fim da cena. As 24 horas valem para quem aceita.",
+        "Zona Morta: Fortitude a cada rodada corta o dano pela metade e evita Cego e Silenciado naquela rodada."
+      ]
+    },
+    {
+      "id": "2026-10-20-tecnologia-contra-automato",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Tecnologia contra Autômato: sempre com teste",
+      "detalhes": [
+        "Quando uma magia de Tecnologia \"desliga\" máquinas, o dispositivo para de funcionar e o Autômato fica Paralisado. O Autômato sempre tem teste, com Reflexos ou Fortitude, e repete Fortitude no fim de cada turno para se soltar.",
+        "A Singularidade de Tecnologia não destrói mais Autômatos nem itens energizados: os itens param de funcionar até o fim da cena, e o Autômato que falhar fica Paralisado por uma rodada.",
+        "A Detonação de Núcleo deixa o Autômato Paralisado em vez de Atordoado, porque o Autômato é imune a atordoamento. A Tempestade de Íons pede Reflexos no começo de cada turno, em vez de desligar pela duração inteira."
+      ]
+    },
+    {
+      "id": "2026-10-20-vazio-nao-cria-materia-nem-vida",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Vazio: o que ele forma é ausência",
+      "detalhes": [
+        "O limite do Vazio agora é \"não cria matéria nem vida\". O clone e a criatura que o Vazio convoca são ausência com contorno: não comem, não respiram e, quando somem, não deixam corpo nem resto.",
+        "Os números das duas magias continuam os mesmos."
+      ]
+    },
+    {
+      "id": "2026-10-20-sintonizador-catalisador",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Sintonizador: o catalisador agora tem regra",
+      "detalhes": [
+        "O catalisador é um objeto seu, como uma pedra, um relógio parado ou um osso, sintonizado em dez minutos a um Fluxo diferente do seu nativo. Ele não tem preço nem raridade, e se quebrar ou sumir você sintoniza outro.",
+        "Preparado é o catalisador sintonizado, ativo é o que a fusão usa agora, e desativado é o que foi gasto numa fusão. Na aba Magias dá para marcar o catalisador como gasto e reativar depois dos dez minutos.",
+        "A Tecnologia só serve de catalisador quando o Mestre a instala na sua ficha, e assim a fusão Programação passa a funcionar. A aba Magias mostra só as fusões que você aprendeu.",
+        "Trocar o catalisador ativo custa uma Ação de Movimento até o nível 14. No nível 20, você passa a reativar um catalisador gasto na hora, uma vez por sessão. Religação, Dupla Frequência, Frequência Protetora e Descarga ganharam textos mais claros.",
+        "A modificação de Loja que recupera Mana passou a se chamar Condensador de Mana."
+      ]
+    },
+    {
+      "id": "2026-10-20-cartista-cartas-e-vagas",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Cartista Arcano: o que é carta e até onde vai o baralho",
+      "detalhes": [
+        "Cada magia que você conhece é uma carta, e jogar a carta é conjurar a magia pagando a Mana dela. A carta comum arremessada (Cartas Afiadas) é um ataque de Pontaria a até 9 m, com dano de Corte e sem custo de Mana.",
+        "As vagas do Cartista só guardam magias de 1º e 2º círculo, mesmo em cima de outra classe que conjura. A aba Magias avisa quando a vaga que sobrou é dessas.",
+        "O baralho chega a 8 cartas no nível 30, e o limite de 4 do mesmo círculo começa no 25. O estágio do nível 20 do Baralho Arcano agora dá a 6ª carta e barateia a primeira carta de 1º círculo de cada rodada.",
+        "O Arcano Absoluto, a Roda da Fortuna, os Dados Viciados, o Imperador, o Enforcado e o Mundo ganharam textos mais claros."
+      ]
+    },
+    {
+      "id": "2026-10-20-interceptador-pacote-desde-o-nivel-1",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Interceptador: a interceptação vem desde o nível 1",
+      "detalhes": [
+        "O Pacote Descartado virou habilidade do nível 1, então todo Interceptador já intercepta desde o começo. Se você tinha escolhido o Pacote como poder, essa vaga voltou e dá para escolher outro, como o novo Ruído Branco.",
+        "Contra poder de criatura que vem de Fluxo natural, a DT é a DT padrão do VD dela: 15 + metade do VD.",
+        "A Quarentena Arcana e o Apagão Local poupam quem você escolher. A Quarentena agora dá -2 no teste de conjuração de quem está dentro e +2 para você interceptar o que sair dali.",
+        "No nível 18 entrou a Blindagem de Malha: +2 na Defesa e nos testes de resistência contra magia natural.",
+        "Na aba Magias, a interceptação aceita os 10 círculos e o VD de uma criatura, soma o +2 do nível 10, desconta a Mana do Pacote e tem um interruptor para o Acesso Administrador."
+      ]
+    },
+    {
+      "id": "2026-10-20-invocador-pacto-de-fluxo",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Invocador: as invocações agora têm regra de mesa",
+      "detalhes": [
+        "As invocações são feitas do seu Fluxo nativo e atacam com o seu teste de conjuração, contra a Defesa do alvo. A aba Magias mostra esse bônus como Ataque das invocações.",
+        "Até duas ficam em cena ao mesmo tempo, e as outras esperam guardadas. Em combate, elas agem logo depois do seu turno, cada uma com as próprias ações.",
+        "Manter as invocações não custa Mana. Quando uma cai a 0 de Vida, ela se desfaz e volta com a Vida cheia no próximo descanso longo.",
+        "A Presa Paralisante da Aranha Tecelã agora é resistida com Fortitude contra o total do ataque. Também foram corrigidos a Fera, o Olhos Compartilhados, o Chamado Rápido, o Sacrifício e a Essência Adaptável.",
+        "O Livro do Mestre passou a trazer as 30 fichas do Catálogo de Invocações."
+      ]
+    },
+    {
+      "id": "2026-10-20-ataque-e-resistencia-nas-magias",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Magia de ataque e magia de efeito, cada uma com a sua rolagem",
+      "detalhes": [
+        "Magia de ataque acerta ou erra contra a Defesa do alvo, como um golpe, e o dano entra inteiro. Quando ela lista Reflexos, Fortitude ou Vontade, essa resistência serve só para o efeito que vem junto com o dano, como a condição ou o empurrão.",
+        "Magia de efeito não olha a Defesa: o alvo rola a resistência contra o seu total e, se passar, sofre metade do dano.",
+        "Na aba Magias, o cartão mostra qual é o caso, o campo de Defesa do alvo aparece só nas magias de ataque, e o resultado da conjuração diz o que o alvo precisa rolar.",
+        "As Elementais Impacto, Rajada, Lança, Aríete e Julgamento dos Elementos passaram a ser magias de efeito, porque já reduziam o dano à metade quando o alvo resistia."
+      ]
+    },
+    {
+      "id": "2026-10-20-elementais-pelo-circulo-da-elementarista",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Magias Elementais pelo círculo da Elementarista",
+      "detalhes": [
+        "As magias Elementais do Físico agora vão só até o círculo que os seus níveis de Elementarista liberam: o 2º no nível 1, o 4º no 5, o 6º no 10, o 8º no 15 e o 10º no 20. Antes, 1 nível de Elementarista somado a outra classe de magia abria todas, até o 10º.",
+        "O que você já tinha aprendido continua na ficha e pode ser conjurado normalmente."
+      ]
+    },
+    {
+      "id": "2026-10-20-fisico-sem-buracos",
+      "data": "2026-10-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Físico completo para quem não é Elementarista",
+      "detalhes": [
+        "O Canalizador e o Sintonizador do Baluarte agora têm magia do Físico em todos os círculos. Antes, o 2º, o 6º e o 9º só tinham magias Elementais, que são da Elementarista.",
+        "Armadura de Matéria, Muralha do Baluarte e Égide de Moros deixaram de ser Elementais: a armadura e a muralha passam a ser de pedra ou metal, ou do elemento de quem tem um. A Elementarista continua aprendendo as três.",
+        "Magia nova no 6º círculo: Poço de Gravidade. A gravidade dobra numa área, quem falha em Fortitude anda pela metade e mira pior, e quem voa cai. Seus aliados escolhidos passam ilesos."
+      ]
+    },
+    {
+      "id": "2026-10-20-rituais-selos-encantamentos-por-classe",
+      "data": "2026-10-20",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Rituais, selos e encantamentos de outros Fluxos",
+      "detalhes": [
+        "O Ritualista agora aprende rituais, selos e encantamentos de qualquer Fluxo natural, porque rito vem de tradição, pacto ou pergaminho. Os do Fim ainda pedem autorização do Mestre, e a Tecnologia só entra se estiver instalada.",
+        "O Sintonizador aprende selos e encantamentos também dos Fluxos dos catalisadores que tiver preparados na hora de aprender, e o que aprendeu fica mesmo se trocar de catalisador depois.",
+        "Cada Fluxo tem 3 selos e 3 encantamentos, então as vagas desses dois do Canalizador e do Cartista Arcano agora param em 3. As vagas acima disso nunca tinham o que preencher. Quem já tinha aprendido mais mantém tudo."
+      ]
+    },
+    {
+      "id": "2026-10-20-fluxo-nativo-e-instalado",
+      "data": "2026-10-20",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Fluxo nativo da Árvore e Fluxo instalado pelo Mestre",
+      "detalhes": [
+        "O Fluxo nativo agora vem sempre da Árvore em que o personagem nasceu. Quem nasce na A.X.I.S tem Comunicação, o Fluxo da Parley que segue vivo sob a Malha. O Autômato continua com a Tecnologia, que vem no núcleo dele.",
+        "Para os outros, a Tecnologia chega como Fluxo instalado: o Mestre marca na aba Magias da ficha, e a ficha passa a poder aprender as magias desse Fluxo. O Fluxo instalado não dá Marca de círculo.",
+        "Quem nasceu na A.X.I.S e já tinha aprendido algo de Tecnologia recebeu a Tecnologia como Fluxo instalado, e o que conhecia continua funcionando.",
+        "A escolha de Fluxo do Canalizador agora aparece só para ficha sem Árvore. Antes ela aparecia para todo mundo e não mudava nada."
+      ]
+    },
+    {
+      "id": "2026-10-20-ajustes-magias-e-classes",
+      "data": "2026-10-20",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Ajustes nas magias e nas classes de magia",
+      "detalhes": [
+        "A Ruptura Derivada da Elementarista agora pode ser escolhida a partir do nível 13, como o próprio poder diz. Antes a ficha recusava a escolha.",
+        "Salto Improvável, Labirinto Dobrado, Domínio da Matriz, Domínio do Ritmo e Controle de Massa agora mostram na ficha o teste que o alvo faz para resistir.",
+        "O Físico passa a ter vantagem sobre a Comunicação, e a roda de vantagens entre os Fluxos fecha.",
+        "Alguns nomes mudaram, e o efeito de cada um continua igual: a fusão do Tempo agora se chama Prorrogação, duas magias do Tempo viraram Repetição Curta e Repetição de Batalha, a Marca do 6º círculo do Tempo virou Passo Repetido e uma técnica do Hackear Fluxo virou Refluxo Hostil. Quem já tinha escolhido alguma delas mantém a escolha.",
+        "Textos corrigidos no Invocador (as seis Formas Vinculadas e o catálogo de 30 fichas), na Varredura de Padrão e na Colheita."
+      ]
+    },
+    {
       "id": "2026-10-14-livro-revisado",
       "data": "2026-10-14",
       "tipo": "melhoria",
