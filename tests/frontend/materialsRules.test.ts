@@ -118,9 +118,9 @@ test('afinidade elemental não é inferida por associação temática', () => {
   assert.equal(obterMaterial('comp-amostra-elemental').afinidade, 'Escolha na compra');
 });
 
-test('catálogo expandido entrega ficha completa para os 503 materiais', () => {
-  assert.equal(MATERIAIS_CATALOGO.length, 503);
-  assert.equal(new Set(MATERIAIS_IDS).size, 503);
+test('catálogo expandido entrega ficha completa para os 504 materiais', () => {
+  assert.equal(MATERIAIS_CATALOGO.length, 504);
+  assert.equal(new Set(MATERIAIS_IDS).size, 504);
 
   for (const id of MATERIAIS_IDS) {
     const material = obterMaterial(id);
@@ -189,7 +189,8 @@ function linhaPossuiSolucaoNoCatalogo(linha: LinhaRequisito): boolean {
 test('Fase 4 adapta todos os rituais com ingredientes e preserva os pilotos das classes', () => {
   const rituaisComIngredientes = magias.rituais.filter((ritual) => ritual.ingredientes?.length);
   assert.equal(RITUAIS.length, rituaisComIngredientes.length);
-  assert.equal(RITUAIS.length, 31);
+  // +1 em 2026-10-20: o Rito do Nada passou a pedir o Vestígio Material.
+  assert.equal(RITUAIS.length, 32);
   assert.equal(FORMULAS_MATERIAIS_ALQUIMISTA.length, 20);
   assert.equal(PROJETOS_MATERIAIS_ENGENHEIRO.length, 20);
   assert.equal(RECEITAS_MATERIAIS_COZINHEIRO.length, 20);

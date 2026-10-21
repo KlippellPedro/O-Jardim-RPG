@@ -12,10 +12,12 @@ import { itemCorrespondeBusca, itemCorrespondeSubfiltro, mapearItemLoja } from '
 
 test('compêndio publica todos os materiais e receitas sem chaves duplicadas', () => {
   // 259 materiais de ofício e 208 partes de criatura (loot-*, ver data/bestiario/loot-criaturas.json).
-  assert.equal(MATERIAIS_CATALOGO.length, 503);
-  assert.equal(new Set(MATERIAIS_CATALOGO.map((item) => item.id)).size, 503);
-  assert.equal(RECEITAS_CATALOGO.length, 91);
-  assert.equal(new Set(RECEITAS_CATALOGO.map((item) => item.chave)).size, 91);
+  // +1 em 2026-10-20: Lembrança do Morto, ingrediente do Último Adeus.
+  assert.equal(MATERIAIS_CATALOGO.length, 504);
+  assert.equal(new Set(MATERIAIS_CATALOGO.map((item) => item.id)).size, 504);
+  // +1 em 2026-10-20: o Rito do Nada virou receita (pede o Vestígio Material).
+  assert.equal(RECEITAS_CATALOGO.length, 92);
+  assert.equal(new Set(RECEITAS_CATALOGO.map((item) => item.chave)).size, 92);
 });
 
 test('Alquimista possui alternativas químicas nos patamares altos', () => {
@@ -47,7 +49,7 @@ test('Engenheiro possui Sucata própria nos cinco patamares', () => {
 
 test('Ritualista possui focos mágicos próprios nos cinco patamares', () => {
   const ritualisticos = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('ritual'));
-  assert.equal(ritualisticos.length, 144);
+  assert.equal(ritualisticos.length, 145);
   for (const raridade of ['comum', 'incomum', 'raro', 'epico', 'lendario']) {
     assert.ok(ritualisticos.filter((item) => item.raridade === raridade).length >= 6, raridade);
   }

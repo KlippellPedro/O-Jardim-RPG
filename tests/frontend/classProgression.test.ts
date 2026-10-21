@@ -2159,7 +2159,7 @@ test('Último Capítulo do Escritor de Contos ganha o gancho de criar uma Entida
 test('Formas Vinculadas do Invocador publica quatro funções reais como catálogo e a DT sai de Misticismo', () => {
   const invocador = obterClasse('invocador');
   assert.equal(invocador.dt_efeitos?.pericia, 'misticismo');
-  assert.equal(invocador.progressao_magia, undefined, 'Invocador não é conjurador de círculos, só usa Mana em poderes e nas invocações');
+  assert.equal(invocador.progressao_magia, undefined, 'Invocador não é conjurador de círculos: usa Mana só nos poderes, e manter as invocações não custa nada');
 
   const formas = invocador.habilidades?.find(item => item.id === 'formas-vinculadas');
   assert.ok(formas);

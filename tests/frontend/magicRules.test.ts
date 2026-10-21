@@ -55,8 +55,9 @@ const ficha = (classeId: string, nivel: number, fluxo: number, arvoreId = 'aethe
 
 test('Fluxo libera os dez círculos nos limiares publicados', () => {
   assert.deepEqual(
-    [13, 14, 17, 18, 21, 22, 49, 50].map(circuloPermitidoPorFluxo),
-    [0, 1, 1, 2, 2, 3, 9, 10],
+    // Escada recalibrada em 2026-10-20: Fluxo recomendado = 11 + círculo.
+    [11, 12, 13, 14, 16, 19, 20, 21].map(circuloPermitidoPorFluxo),
+    [0, 1, 2, 3, 5, 8, 9, 10],
   );
 });
 
@@ -77,14 +78,14 @@ test('os onze Fluxos usam a paleta canônica de suas Árvores', () => {
 });
 
 test('Canalizador combina limite da classe e do Fluxo, e a rolagem soma metade do nível', () => {
-  const nivel5 = obterPerfilMagico(ficha('canalizador', 5, 18));
+  const nivel5 = obterPerfilMagico(ficha('canalizador', 5, 13));
   assert.equal(nivel5.circuloDaFonte, 4);
   assert.equal(nivel5.circuloDoFluxo, 2);
   // O círculo que o Fluxo sustenta continua valendo para as Marcas; o que a classe libera vale para aprender.
   assert.equal(nivel5.circuloMaximo, 2);
   assert.equal(nivel5.vagasConhecidas, 4);
   assert.equal(nivel5.componentesConjuracao.metadeDoNivel, 2);
-  assert.equal(nivel5.bonusConjuracao, 8);
+  assert.equal(nivel5.bonusConjuracao, 5);
   assert.equal(nivel5.dtMagia, 19, 'DT do círculo mais alto que a fonte libera');
 
   const nivel20 = obterPerfilMagico(ficha('canalizador', 20, 50));
@@ -96,13 +97,13 @@ test('Canalizador combina limite da classe e do Fluxo, e a rolagem soma metade d
 test('Fluxo abaixo do recomendado vira aviso: aprende-se o círculo da fonte e a DT decide se conjura', () => {
   const magia5 = MAGIAS_CATALOGO.find((item) => item.circulo === 4 && item.fontes_permitidas.includes('Canalização') && item.fluxo === 'espaco');
   assert.ok(magia5, 'precisa de uma magia de 4º círculo do Fluxo Espaço');
-  const fichaBaixa = ficha('canalizador', 5, 14, 'aethel');
+  const fichaBaixa = ficha('canalizador', 5, 12, 'aethel');
   const perfil = obterPerfilMagico(fichaBaixa);
   assert.equal(perfil.circuloDoFluxo, 1);
   const aviso = avisoDeFluxoDaMagia(fichaBaixa, magia5);
-  assert.match(aviso ?? '', /Fluxo 14 abaixo do recomendado \(26\) para o 4º círculo/);
+  assert.match(aviso ?? '', /Fluxo 12 abaixo do recomendado \(15\) para o 4º círculo/);
   assert.match(aviso ?? '', /DT 19/);
-  assert.equal(avisoDeFluxoDaMagia(ficha('canalizador', 5, 26), magia5), null);
+  assert.equal(avisoDeFluxoDaMagia(ficha('canalizador', 5, 15), magia5), null);
   const elegivel = magiaElegivelParaAprender(fichaBaixa, magia5);
   assert.doesNotMatch(elegivel.motivo ?? '', /Fluxo insuficiente/);
 });
@@ -114,11 +115,15 @@ test('marcos de magia vão até o nível 50 e o teto por círculo só aparece do
   assert.deepEqual([25, 30, 35, 40, 45, 50].map((n) => por('canalizador', n).vagasConhecidas), [12, 14, 16, 18, 20, 22]);
   assert.deepEqual([25, 30, 50].map((n) => por('sintonizador', n).tetoPorCirculo), [4, 4, 4]);
   assert.equal(por('elementarista', 50).vagasConhecidas, 22);
-  assert.equal(por('cartista-arcano', 50).vagasConhecidas, 12);
+  assert.equal(por('cartista-arcano', 50).vagasConhecidas, 8);
   assert.equal(por('cartista-arcano', 50).circuloDaFonte, 2);
-  // Rituais, Selos e Encantamentos seguem o mesmo ritmo depois do 20.
-  assert.equal(por('canalizador', 50).vagasSelos, 11);
-  assert.equal(por('canalizador', 50).vagasEncantamentos, 11);
+  // Selos e Encantamentos: Canalizador e Cartista param em 3 (só aprendem do nativo);
+  // Sintonizador e Ritualista seguem crescendo porque aprendem de outros Fluxos.
+  assert.equal(por('canalizador', 50).vagasSelos, 3);
+  assert.equal(por('canalizador', 50).vagasEncantamentos, 3);
+  assert.equal(por('cartista-arcano', 50).vagasSelos, 3);
+  assert.equal(por('sintonizador', 50).vagasSelos, 11);
+  assert.equal(por('ritualista', 50).vagasSelos, 6);
   assert.equal(por('ritualista', 50).vagasRituais, 7);
 });
 
@@ -199,7 +204,8 @@ test('Interceptador separa capacidade de Fluxo, DT de interceptação e fonte de
   assert.equal(perfil.possuiFonte, false);
   assert.equal(perfil.possuiInterceptacao, true);
   assert.equal(perfil.nivelInterceptador, 20);
-  assert.equal(perfil.fluxoNativoId, 'tecnologia');
+  // Humano nascido na A.X.I.S: Comunicação, o Fluxo da Parley (só o Autômato nasce com Tecnologia).
+  assert.equal(perfil.fluxoNativoId, 'comunicacao');
   assert.equal(perfil.circuloDoFluxo, 10);
   assert.equal(perfil.circuloDaFonte, 0);
   assert.equal(perfil.circuloMaximo, 0);
@@ -251,7 +257,7 @@ test('item equipado altera Fluxo, Misticismo e vantagens de conjuração', () =>
   };
   const perfil = obterPerfilMagico(ficha('canalizador', 5, 14), [item]);
   assert.equal(perfil.fluxo, 18);
-  assert.equal(perfil.circuloDoFluxo, 2);
+  assert.equal(perfil.circuloDoFluxo, 7);
   assert.equal(perfil.bonusConjuracao, 11);
   assert.equal(perfil.vantagensConjuracao, 1);
 });
@@ -278,13 +284,13 @@ test('catálogo novo publica todas as manifestações planejadas', () => {
 });
 
 test('Marca aparece sozinha do 5º ao 9º e some se o círculo cair', () => {
-  // Fluxo 30 e Canalizador 10 dão 5º círculo: uma Marca, a do 5º.
-  const noQuinto = marcasDaFicha(ficha('canalizador', 10, 30, 'erebus'));
+  // Fluxo 16 e Canalizador 10 dão 5º círculo: uma Marca, a do 5º.
+  const noQuinto = marcasDaFicha(ficha('canalizador', 10, 16, 'erebus'));
   assert.equal(noQuinto.length, 1);
   assert.equal(noQuinto[0].circulo, 5);
 
-  // Fluxo 46 e Canalizador 20 dão 9º: as cinco Marcas, na ordem.
-  const noNono = marcasDaFicha(ficha('canalizador', 20, 46, 'erebus'));
+  // Fluxo 20 e Canalizador 20 dão 9º: as cinco Marcas, na ordem.
+  const noNono = marcasDaFicha(ficha('canalizador', 20, 20, 'erebus'));
   assert.deepEqual(noNono.map((marca) => marca.circulo), [5, 6, 7, 8, 9]);
   noNono.forEach((marca) => {
     assert.ok(marca.bonus.trim() && marca.onus.trim(), `${marca.id} sem os dois lados`);
@@ -294,8 +300,8 @@ test('Marca aparece sozinha do 5º ao 9º e some se o círculo cair', () => {
   assert.deepEqual(marcasDaFicha(ficha('canalizador', 5, 26, 'erebus')), []);
 
   // A Marca vem do Fluxo nativo: Árvores diferentes, Marcas diferentes.
-  const doVazio = marcasDaFicha(ficha('canalizador', 20, 46, 'erebus'));
-  const daGenese = marcasDaFicha(ficha('canalizador', 20, 46, 'aethel'));
+  const doVazio = marcasDaFicha(ficha('canalizador', 20, 20, 'erebus'));
+  const daGenese = marcasDaFicha(ficha('canalizador', 20, 20, 'aethel'));
   assert.notEqual(doVazio[0].id, daGenese[0].id);
 });
 
@@ -493,7 +499,8 @@ test('Passo de Órbita anda uma casa e o Véu do Nada quebra ao agir', () => {
   assert.ok(passo);
   assert.equal(passo.fluxo, 'espaco');
   assert.equal(passo.circulo, 9);
-  assert.match(passo.efeito, /nunca o Vazio/i);
+  // 2026-10-20: o texto passou a dizer que o Vazio não é casa da órbita.
+  assert.match(passo.efeito, /O Vazio entre as Árvores não é casa da órbita, e esta magia não chega a ele/);
 
   const veu = MAGIAS_CATALOGO.find((magia) => magia.id === 'veu-do-nada');
   assert.ok(veu);

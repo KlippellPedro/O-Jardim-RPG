@@ -414,7 +414,8 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
 
   // 1278 fichas escritas à mão (1242 de antes mais 26 partes de saque dos espíritos novos: naturais, demônios e anjos, mais 10 partes de saque dos dragões nomeados), mais os estágios de família gerados (tools/aplicar-familias-bestiario.mjs).
   const geradas = entradas.filter((item) => item.conteudo?.geradoPorFamilia).length;
-  assert.equal(entradas.length - geradas, 1278);
+  // +1 em 2026-10-20: Lembrança do Morto (ingrediente do Último Adeus).
+  assert.equal(entradas.length - geradas, 1279);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 
