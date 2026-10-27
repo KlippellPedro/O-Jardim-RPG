@@ -2,6 +2,17 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-27-passada-de-tom",
+      "data": "2026-10-27",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Textos da lore, das regras, da Loja e das raças mais diretos",
+      "detalhes": [
+        "Umas quarenta frases da lore, do Livro de Regras, da Loja, do Bestiário e das raças foram reescritas para dizer a coisa de uma vez, sem rodeio. O capítulo de Materiais ficou mais fácil de ler.",
+        "Alguns nomes mudaram: Ecos de Séculos Mortos (Desperto) agora é Lembrança dos Séculos Mortos, o legado Eco do Fluxo é Troco do Fluxo, o material Eco do Primeiro Juramento é Sino do Primeiro Juramento, a técnica Eco Reverso do Caçador das Almas é Lâmina de Retorno, e Ecos da Última Refeição do Devorador é Memória da Última Refeição. O que cada um faz continua igual."
+      ]
+    },
+    {
       "id": "2026-10-27-magias-ultima-rodada",
       "data": "2026-10-27",
       "tipo": "melhoria",
