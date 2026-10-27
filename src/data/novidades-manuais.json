@@ -2,6 +2,21 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-27-magias-ultima-rodada",
+      "data": "2026-10-27",
+      "tipo": "melhoria",
+      "area": "Classes",
+      "titulo": "Invocador, Interceptador, Cartista e Sintonizador com o que faltava",
+      "detalhes": [
+        "Na aba Aliados, o Invocador tem o botão Do Catálogo: escolhe a invocação e o nível, e ela entra com a ficha pronta. O cartão mostra o ataque dela, e todo aliado agora tem Vida temporária.",
+        "Depois do nível 20 de Invocador, as invocações continuam crescendo em Vida, Defesa e dano. O Avatar de sua Deidade passou a se chamar Invocação Ascendida e ganhou efeito próprio, e o Retorno ao Pacto vale uma vez por rodada.",
+        "O Interceptador detecta magia a 18 m (36 m no nível 15), ganha +2 contra o Fluxo calibrado, e a Visão de Código deixa o Pacote Descartado de graça e com vantagem por três rodadas.",
+        "O Cartista Arcano encontra o Baralho de Cartas na Loja, e o Cassino Lunar tem mesa e prêmio diferentes nos níveis 4, 7, 12 e 18.",
+        "O catalisador do Sintonizador já ajuda nos níveis 1 e 2, e o Aterramento cresce com o nível.",
+        "O Físico ganhou Golpe Cinético e Pancada Cinética, dois ataques de impacto sem elemento. As magias do Vazio que encerram efeitos cobram Mana de quem os mantinha, e a Marca Nunca Igual premia quem varia as magias na cena."
+      ]
+    },
+    {
       "id": "2026-10-27-idiomas-com-nome-proprio",
       "data": "2026-10-27",
       "tipo": "melhoria",

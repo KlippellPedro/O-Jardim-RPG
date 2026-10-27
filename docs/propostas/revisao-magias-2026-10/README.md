@@ -747,36 +747,37 @@ Entraram as linhas [MELHORIA] dos oito relatórios e o relatório das universais
 - **Voz do Sábio:** o `edge-tts` foi atualizado para a versão 7.3.1 e voltou a responder. Entraram 10 falas novas: Recomeço Absoluto, Sorte Virada, Sentido Apagado, Esquecimento, Manto do Instante Ausente, Repetição Curta, Repetição de Batalha e Poço de Gravidade, entre outras. Os áudios dos títulos antigos saíram.
 - **Testes:** passam 1389 testes do front e 1660 do servidor (a suíte inteira, num Postgres descartável), e a auditoria de balanceamento aprovou.
 
-## Para uma próxima rodada
+## Próxima rodada: feita em 2026-10-27
 
-Ficaram de fora de propósito: são estrutura de dados, conteúdo novo ou design que pede conversa.
+Eram os itens que tinham ficado de fora de propósito (estrutura de dados, conteúdo novo ou design que pedia conversa). O Pedro pediu "termine o que sobrou da revisão das magias", e o assistente fechou todos com as escolhas abaixo.
 
 - **Estrutura dos dados:**
-  - separar o "se hostil" do campo `defesa` (hoje é texto livre dentro do campo);
-  - trocar `["todos"]` em `vantagens_fluxos.tecnologia` por listas vazias e uma observação.
+  - o "se hostil" saiu do texto do campo `defesa` e virou `somente_hostil: true` nas 20 magias que o usavam. A ficha, o catálogo do site, o Livro e o Obsidian leem o campo novo por `textoDaDefesa` e `rotulosContraOAlvo`;
+  - a Tecnologia tem `vantagem_contra: []`, `desvantagem_contra: []`, `contra_todos: true` e uma `observacao`. Nenhuma lista guarda mais um id que não é de Fluxo.
 - **Invocador:**
-  - um botão na aba Aliados para criar a invocação direto do Catálogo;
-  - degraus do Catálogo além do nível 20;
-  - Vida temporária na ficha do aliado;
-  - o Retorno ao Pacto sem limite;
-  - o Avatar da Deidade repete a Convergência;
-  - o Chamado da Criação traz criaturas de fora do Catálogo.
+  - a aba Aliados ganhou o botão **Do Catálogo**: escolhe a linha e o nível (só os liberados pelo nível de Invocador), mostra a ficha final e cria o aliado. A terceira invocação em diante nasce guardada. O cartão mostra na hora o ataque das invocações (o teste de conjuração), em vez de gravar o número (`src/services/invocacoesService.ts`);
+  - depois do 20, a Escolha Final do Pacto faz as invocações crescerem: +3 de Vida por nível acima do 20, +1 de Defesa a cada 5 níveis e +1d6 no dano ou na cura no 30, no 40 e no 50. A Mão Extra do Duende fica fora dos dados, porque é ajuda em perícia;
+  - o aliado tem Vida temporária, que o dano gasta primeiro. O botão do Catálogo já põe a do Núcleo Firme;
+  - o Retorno ao Pacto vale uma vez por rodada, para invocação em cena a até 30 m;
+  - o Avatar de sua Deidade virou **Invocação Ascendida** (mesmo id): Ação Padrão extra, Vida temporária igual ao dobro do nível de Invocador e +2 de Defesa, e não soma com a Convergência na mesma invocação;
+  - o Chamado da Criação troca uma invocação por outra ficha do Catálogo, no mesmo nível: a criatura da cena empresta o nome e a aparência.
 - **Interceptador:**
-  - a Visão de Código (20) não acrescenta mecânica;
-  - a calibração de Fluxo da ficha ainda não tem regra;
-  - o alcance de detecção (12 m e 24 m) é curto.
+  - a detecção vai a 18 m (36 m no 15), medida até o conjurador ou até qualquer alvo ou ponto da área;
+  - a calibração tem regra: +2 contra o Fluxo calibrado, troca num descanso curto. A ficha tem a opção na rolagem;
+  - a Visão de Código é Ação Livre e, nas três rodadas, o Pacote Descartado custa 0 e rola com vantagem. A ficha tem a opção a partir do 20.
 - **Cartista Arcano:**
-  - um item Baralho na Loja;
-  - prêmios do Cassino Lunar por nível;
-  - magias com vocabulário de carta;
-  - no Físico, no máximo 6 cartas.
+  - a Loja vende o **Baralho de Cartas** (comum, 20 Lunaris), e o Baralho Arcano diz que qualquer baralho comum serve;
+  - na mão do Cartista toda magia ganha forma de carta (frase no Baralho Arcano, sem mexer nas 70 magias);
+  - o Cassino Lunar tem mesa e prêmio por nível (4, 7, 12 e 18), e o Dados Viciados vale na mesa;
+  - com as duas magias novas do Físico, o Cartista de Físico preenche as 8 vagas (4 por círculo).
 - **Sintonizador:**
-  - o Aterramento reduz dano por Fluxo de origem (8 por Reação);
-  - os níveis 1 e 2 seguem sem fusão.
-- **Físico:** o caminho livre continua sem ataque próprio do 1º ao 9º (a Pancada Cinética do relatório resolveria).
-- **Vazio:** a assinatura nos encerramentos (consumir Mana do dono do efeito).
-- **Marca Nunca Igual:** repete o Embaralhar Resultado para quem tem a Inconstância como Fluxo nativo.
-- **Cofre do Obsidian:** fica uma versão atrás até a próxima exportação. Nenhuma nota muda de nome, porque as magias ficam em notas por círculo.
+  - antes da primeira fusão, o catalisador ativo dá vantagem em Misticismo para reconhecer o Fluxo dele e reduz em 2 o dano das magias desse Fluxo;
+  - o Aterramento reduz 8 + metade do nível de Sintonizador, contra magia ou poder de criatura do Fluxo do catalisador, no dano total depois da Resistência.
+- **Físico:** entraram **Golpe Cinético** (1º, 1d10 + Mod. Fluxo, empurra 1,5 m) e **Pancada Cinética** (2º, 2d8 + Mod. Fluxo, empurra 3 m e derruba), as duas de impacto, fora da lista elemental e com Cartomancia. O catálogo foi a 355 magias, e a auditoria de balanceamento aprovou.
+- **Vazio:** Consumir Energia, Colapso do Nada e Anular Magia cobram Mana de quem mantinha o efeito encerrado, igual ao círculo dele, e nenhum teste revela depois o que estava ali. O Fim continua fechando sem custo.
+- **Marca Nunca Igual:** premia variar. Cada magia diferente na cena soma +1 no teste das seguintes, até +3, e repetir uma magia zera o bônus e dá -2.
+- **Cofre do Obsidian:** continua uma versão atrás até a próxima exportação. O exportador já entende o campo `somente_hostil` e a Tecnologia contra todos.
+- **Testes:** `tests/frontend/proximaRodadaMagias.test.ts` (novo); os testes de ataque e resistência, Tempo, Vazio, controle, Interceptador, Loja e progressão acompanham.
 
 ## O que está bom
 
