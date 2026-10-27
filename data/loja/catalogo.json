@@ -1344,6 +1344,22 @@
     },
     {
       "tipo": "equipamento",
+      "id": "baralho-de-cartas",
+      "titulo": "Baralho de Cartas",
+      "conteudo": {
+        "categoria_loja": "Itens Comuns",
+        "descricao": "Cinquenta e quatro cartas de papel encerado, num estojo de couro que fecha com fivela. Para quem joga, é só um baralho. Para o Cartista Arcano, é o foco do Baralho Arcano e a munição das Cartas Afiadas, e as cartas arremessadas voltam ao estojo no fim da cena.",
+        "preco": {
+          "Lunaris": 20
+        },
+        "raridade": "comum",
+        "material": "Papel",
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
       "id": "pomada-restauradora",
       "titulo": "Pomada Restauradora",
       "conteudo": {

@@ -189,6 +189,8 @@ export interface IMagiaCatalogo {
   concentracao: boolean;
   ataque: boolean;
   defesa: string | null;
+  /** A resistência só é rolada por quem não quer o efeito ("Vontade, se hostil"). */
+  somente_hostil?: boolean;
   dano?: string;
   efeito: string;
   somente_mestre?: boolean;
@@ -516,6 +518,8 @@ export interface IInterceptacao {
   bonus: number;
   custoMana: number;
   rotulo: string;
+  /** A Visão de Código (nível 20) rola a interceptação com vantagem. */
+  vantagem: boolean;
 }
 
 const CUSTO_DO_PACOTE_DESCARTADO = Math.max(0, Number(
@@ -523,18 +527,23 @@ const CUSTO_DO_PACOTE_DESCARTADO = Math.max(0, Number(
     ?.find((habilidade) => habilidade.id === 'pacote-descartado')?.custo_mana,
 ) || 0);
 
+/** Bônus da interceptação: +2 da Assinatura Reconhecida (10), +2 contra o Fluxo calibrado no Acesso à Malha,
+ * +5 do Acesso Administrador (20). A Visão de Código (20) zera a Mana do Pacote e dá vantagem por três rodadas. */
 export function interceptacaoDaFicha(
   nivelInterceptador: number,
   alvo: AlvoDaInterceptacao,
-  opcoes: { bonusBase: number; administradorAtivo?: boolean },
+  opcoes: { bonusBase: number; administradorAtivo?: boolean; doFluxoCalibrado?: boolean; visaoDeCodigo?: boolean },
 ): IInterceptacao {
   const administrador = Boolean(opcoes.administradorAtivo) && nivelInterceptador >= 20;
+  const visaoDeCodigo = Boolean(opcoes.visaoDeCodigo) && nivelInterceptador >= 20;
+  const calibrado = Boolean(opcoes.doFluxoCalibrado) && nivelInterceptador >= 1;
   const circulo = alvo.tipo === 'magia' ? Math.min(10, Math.max(1, Math.trunc(alvo.circulo) || 1)) : 0;
   return {
     dt: alvo.tipo === 'magia' ? dtConjuracaoPorCirculo(circulo) : dtPadraoDoVd(alvo.vd),
-    bonus: opcoes.bonusBase + (nivelInterceptador >= 10 ? 2 : 0) + (administrador ? 5 : 0),
-    custoMana: Math.max(0, CUSTO_DO_PACOTE_DESCARTADO - (administrador ? 3 : 0)),
+    bonus: opcoes.bonusBase + (nivelInterceptador >= 10 ? 2 : 0) + (calibrado ? 2 : 0) + (administrador ? 5 : 0),
+    custoMana: visaoDeCodigo ? 0 : Math.max(0, CUSTO_DO_PACOTE_DESCARTADO - (administrador ? 3 : 0)),
     rotulo: alvo.tipo === 'magia' ? `magia de ${circulo}º círculo` : `poder de criatura de VD ${vdValido(alvo.vd)}`,
+    vantagem: visaoDeCodigo,
   };
 }
 
@@ -542,7 +551,7 @@ export function interceptacaoDaFicha(
 // Fluxo): a magia de ataque lê o total contra a Defesa, e a resistência que ela
 // lista vale só para o efeito extra; na magia de efeito, o alvo rola a
 // resistência contra o total. "Se hostil" só é rolada por quem não quer o efeito.
-type MagiaContraOAlvo = Pick<IMagiaCatalogo, 'ataque' | 'defesa' | 'dano'>;
+type MagiaContraOAlvo = Pick<IMagiaCatalogo, 'ataque' | 'defesa' | 'dano' | 'somente_hostil'>;
 
 // Tipo de dano das magias (decisão de 2026-10-20): a que não diz o tipo causa o
 // dano do próprio Fluxo; a Tecnologia causa dano tecnológico; a universal causa
@@ -572,10 +581,16 @@ export function tipoDeDanoDaMagia(magia: IMagiaCatalogo, fluxoNativoId: FluxoMag
 }
 
 function resistenciaDaMagia(magia: MagiaContraOAlvo): { nome: string; seHostil: boolean } | null {
-  const texto = String(magia.defesa || '').trim();
-  if (!texto) return null;
-  const seHostil = /\s+se hostil$/i.test(texto);
-  return { nome: texto.replace(/\s+se hostil$/i, ''), seHostil };
+  const nome = String(magia.defesa || '').trim();
+  if (!nome) return null;
+  return { nome, seHostil: Boolean(magia.somente_hostil) };
+}
+
+/** O campo Defesa como se lê no catálogo e no livro: "Vontade", "Vontade, se hostil" ou vazio. */
+export function textoDaDefesa(magia: Pick<IMagiaCatalogo, 'defesa' | 'somente_hostil'>): string {
+  const resistencia = resistenciaDaMagia({ ataque: false, ...magia });
+  if (!resistencia) return '';
+  return resistencia.seHostil ? `${resistencia.nome}, se hostil` : resistencia.nome;
 }
 
 /** Etiquetas do cartão da magia: contra o que ela é lida e o que a resistência faz. */

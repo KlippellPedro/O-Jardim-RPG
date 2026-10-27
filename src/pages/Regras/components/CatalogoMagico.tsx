@@ -20,6 +20,7 @@ import {
   rotuloPapelMagia,
   simbolosDoRito,
   temaDoFluxo,
+  textoDaDefesa,
   type FluxoDeMagia,
   type IEncantamentoCatalogo,
   type IFluxoMagico,
@@ -98,7 +99,7 @@ const montarItensPorAba = ({
       { rotulo: 'Alvo', valor: item.alvo },
       { rotulo: 'Duração', valor: item.duracao },
       { rotulo: 'Concentração', valor: item.concentracao ? 'Sim' : 'Não' },
-      { rotulo: 'Defesa', valor: item.defesa || 'Nenhuma' },
+      { rotulo: 'Defesa', valor: textoDaDefesa(item) || 'Nenhuma' },
     ],
     complemento: [
       ...(item.dano ? [{ rotulo: 'Dano', valor: item.dano }] : []),

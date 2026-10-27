@@ -3468,7 +3468,7 @@ Inconstância (Vórtice)
 
 - Círculo | Marca | Ganho | Ônus
 
-- 5º | Nunca Igual | Uma vez por cena, você repete um teste já resolvido. | Você aceita o novo resultado, mesmo que seja pior.
+- 5º | Nunca Igual | Na mesma cena, cada magia diferente que você conjura depois da primeira soma +1 no teste de conjuração das seguintes, até +3. | Conjurar de novo uma magia que já usou na cena zera esse bônus e dá -2 naquele teste.
 
 - 6º | Pele Instável | No começo de cada cena, role na tabela de Resistência da Inconstância: você tem Resistência 5 a esse tipo até o fim dela. | Role de novo na mesma tabela: você também fica vulnerável a esse tipo.
 
@@ -4659,7 +4659,7 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra no Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 1.367 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 1.368 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 **Em resumo**
 
@@ -4677,7 +4677,7 @@ O catálogo inteiro tem 1.367 itens, e você nunca vê todos de uma vez. Cada it
 
 - Local | O que vende | Itens
 
-- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 421
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 422
 
 - Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 343
 

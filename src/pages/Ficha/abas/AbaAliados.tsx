@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, Search, Users, Heart, Shield, Footprints, Zap, Sword, Pencil, Trash2, AlertTriangle, Link, GripVertical, Star, ExternalLink, Droplet, Plus, X, Coins, Share2, Check } from 'lucide-react';
+import { Activity, Search, Users, Heart, Shield, Footprints, Zap, Sword, Pencil, Trash2, AlertTriangle, Link, GripVertical, Star, ExternalLink, Droplet, Plus, X, Coins, Share2, Check, Sparkles } from 'lucide-react';
 import { motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { personagensApi, type AliadoComplexoResumo } from '../../../services/personagensApi';
-import { bonusIniciativaFicha, obterStatusFicha, penalidadeCansacoIniciativa, penalidadeIniciativaCondicoes } from '../../../services/statusService';
+import { bonusIniciativaFicha, obterStatusFicha, penalidadeCansacoIniciativa, penalidadeCansacoTeste, penalidadeIniciativaCondicoes } from '../../../services/statusService';
+import { nivelDeInvocador, obterPerfilMagico } from '../../../services/magiaService';
+import { aliadoDaInvocacao, catalogoDeInvocacoes, crescimentoDaInvocacao, type IInvocacaoDoCatalogo } from '../../../services/invocacoesService';
 import { useCampaignSSE } from '../../../hooks/useCampaignSSE';
 import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 import { getCurrencySymbol, type MoedaTipo } from '../../../services/lojaCatalogService';
@@ -31,6 +33,8 @@ interface IAliado {
   nivel: number;
   vidaAtual: number;
   vidaMaxima: number;
+  /** Absorve dano antes da Vida (Núcleo Firme, Círculo de Convocação, Sacrifício da Invocação...). */
+  vidaTemporaria?: number;
   defesa: number;
   movimento: string;
   iniciativa: number;
@@ -57,6 +61,8 @@ interface IAliado {
    * personagem em AbaInventario, que tem extrato e é a carteira do jogador. */
   carteira?: Array<{ moeda: MoedaTipo; saldo: number }>;
   efeitos?: IEfeitoEquipamento[];
+  /** Ficha do Catálogo de Invocações que deu origem ao aliado ("cacador-de-feras-2"). O cartão mostra o ataque dela. */
+  invocacaoCatalogoId?: string;
   compartilhadoDe?: string;
   compartilhadoDeNome?: string;
   somenteLeitura?: boolean;
@@ -77,6 +83,7 @@ const ALIADO_VAZIO: FormAliado = {
   nivel: 1,
   vidaAtual: 10,
   vidaMaxima: 10,
+  vidaTemporaria: 0,
   defesa: 10,
   movimento: '',
   iniciativa: 0,
@@ -95,6 +102,29 @@ const MOEDAS: MoedaTipo[] = ['Lunaris', 'Solares', 'Fragmentos de Estrela', 'Cr�
 
 const sinal = (valor: number) => (valor >= 0 ? `+${valor}` : `${valor}`);
 
+/** O Pacto deixa até duas invocações em cena; a terceira em diante nasce guardada. */
+const INVOCACOES_EM_CENA = 2;
+
+const CATALOGO_DE_INVOCACOES = catalogoDeInvocacoes();
+const INVOCACAO_POR_ID = new Map(CATALOGO_DE_INVOCACOES.map((invocacao) => [invocacao.id, invocacao]));
+/** As seis linhas do Catálogo, na ordem em que ele as apresenta, cada uma com os cinco níveis. */
+const LINHAS_DO_CATALOGO = [...CATALOGO_DE_INVOCACOES.reduce((linhas, invocacao) => {
+  linhas.set(invocacao.linha, [...(linhas.get(invocacao.linha) || []), invocacao]);
+  return linhas;
+}, new Map<string, IInvocacaoDoCatalogo[]>())];
+const ROMANO = ['', 'I', 'II', 'III', 'IV', 'V'];
+
+/** "+6 de Vida", "+30 de Vida, +2 de Defesa e +1d6 no dano ou na cura": só o que já cresceu. */
+const textoDoCrescimento = (nivelInvocador: number): string => {
+  const { vida, defesa, dadosExtras } = crescimentoDaInvocacao(nivelInvocador);
+  const partes = [
+    vida ? `+${vida} de Vida` : '',
+    defesa ? `+${defesa} de Defesa` : '',
+    dadosExtras ? `+${dadosExtras}d6 no dano ou na cura` : '',
+  ].filter(Boolean);
+  return partes.length > 1 ? `${partes.slice(0, -1).join(', ')} e ${partes.slice(-1)[0]}` : partes[0] || '';
+};
+
 export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
   const navigate = useNavigate();
   const [busca, setBusca] = useState('');
@@ -104,6 +134,8 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
   const [resumosComplexos, setResumosComplexos] = useState<Record<string, AliadoComplexoResumo>>({});
   const [erroVinculos, setErroVinculos] = useState('');
   const [buscaCompartilhamento, setBuscaCompartilhamento] = useState('');
+  const [catalogoAberto, setCatalogoAberto] = useState(false);
+  const [invocacaoEscolhidaId, setInvocacaoEscolhidaId] = useState('');
 
   const personagens = useCharacterStore((s) => s.characters);
   const fetchCharacters = useCharacterStore((s) => s.fetchCharacters);
@@ -123,6 +155,26 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
     () => periciasDisponiveisParaEfeitos(character.ficha || {}, PERICIAS_CATALOGO),
     [character.ficha],
   );
+  // As invocações do Invocador acertam com o teste de conjuração dele (Pacto), e esse bônus muda com a ficha:
+  // o cartão calcula na hora em vez de gravar o número no aliado.
+  const fichaPropria = character.ficha || {};
+  const nivelInvocador = nivelDeInvocador(fichaPropria);
+  const ataqueDasInvocacoes = useMemo(() => {
+    const ficha = character.ficha || {};
+    if (nivelDeInvocador(ficha) < 1) return null;
+    const perfil = obterPerfilMagico(ficha, character.inventarioCentral || [], character.aliadosCompartilhados || []);
+    return perfil.bonusConjuracao + penalidadeCansacoTeste(obterStatusFicha(ficha).cansacoAtual, false);
+  }, [character.ficha, character.inventarioCentral, character.aliadosCompartilhados]);
+  const statusProprio = obterStatusFicha(fichaPropria);
+  const iniciativaPropria = (Number(character.derivados?.iniciativa ?? fichaPropria?.derivados?.iniciativa) || 0)
+    + bonusIniciativaFicha(fichaPropria)
+    + penalidadeCansacoIniciativa(statusProprio.cansacoAtual)
+    + penalidadeIniciativaCondicoes(fichaPropria.condicoesAtivas);
+  const invocacaoEscolhida = INVOCACAO_POR_ID.get(invocacaoEscolhidaId);
+  const previaDaInvocacao = invocacaoEscolhida
+    ? aliadoDaInvocacao(invocacaoEscolhida, { ficha: fichaPropria, nivelInvocador, iniciativa: iniciativaPropria })
+    : null;
+
   const idsComplexos = itens
     .filter((item) => item.categoria === 'complexo' && item.personagemId)
     .map((item) => String(item.personagemId));
@@ -216,6 +268,29 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
 
   const fecharModal = () => setModalAberto(false);
 
+  const abrirCatalogo = () => {
+    setInvocacaoEscolhidaId('');
+    setCatalogoAberto(true);
+  };
+
+  const criarDoCatalogo = () => {
+    if (!invocacaoEscolhida || !previaDaInvocacao || invocacaoEscolhida.nivelMinimo > nivelInvocador) return;
+    const emCena = itensLocais.filter((aliado) => aliado.invocacaoCatalogoId && aliado.emCena).length < INVOCACOES_EM_CENA;
+    const novo: IAliado = {
+      ...ALIADO_VAZIO,
+      ...previaDaInvocacao,
+      id: gerarIdAliado(),
+      categoria: 'comum',
+      emCena,
+      ordem: itensLocais.length,
+    };
+    commit([...itensLocais, novo]);
+    setCatalogoAberto(false);
+    avisar.sucesso(emCena
+      ? `${novo.nome} entrou em cena.`
+      : `${novo.nome} foi criada guardada: já há ${INVOCACOES_EM_CENA} invocações em cena.`);
+  };
+
   const handleSalvar = () => {
     if (!form.nome?.trim() && form.categoria !== 'complexo') return;
     if (form.categoria === 'complexo' && !form.personagemId) return;
@@ -226,6 +301,7 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
 
     const vidaMaxima = Math.max(1, Math.trunc(Number(form.vidaMaxima) || 1));
     const vidaAtual = Math.max(0, Math.min(vidaMaxima, Math.trunc(Number(form.vidaAtual) || 0)));
+    const vidaTemporaria = Math.max(0, Math.trunc(Number(form.vidaTemporaria) || 0));
 
     // Preserva vínculo/mensalidade/origem de catálogo do aliado original -
     // esses campos não têm campo no formulário e seriam apagados silenciosamente
@@ -248,6 +324,7 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
       nivel: Math.max(0, Math.trunc(Number(form.nivel) || 0)),
       vidaAtual,
       vidaMaxima,
+      vidaTemporaria,
       defesa: Math.trunc(Number(form.defesa) || 0),
       movimento: form.movimento?.trim() || '',
       iniciativa: Math.trunc(Number(form.iniciativa) || 0),
@@ -288,9 +365,13 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
       return;
     }
     const maxima = aliado.vidaMaxima || 1;
-    const novaVida = Math.max(0, Math.min(maxima, (aliado.vidaAtual || 0) + delta));
-    if (novaVida === aliado.vidaAtual) return;
-    commit(itensLocais.map((a) => (a.id === aliado.id ? { ...a, vidaAtual: novaVida } : a)));
+    // Dano gasta a Vida temporária primeiro; cura só devolve Vida de verdade.
+    const temporariaAntes = Math.max(0, aliado.vidaTemporaria || 0);
+    const absorvido = delta < 0 ? Math.min(temporariaAntes, -delta) : 0;
+    const vidaTemporaria = temporariaAntes - absorvido;
+    const novaVida = Math.max(0, Math.min(maxima, (aliado.vidaAtual || 0) + delta + absorvido));
+    if (novaVida === aliado.vidaAtual && vidaTemporaria === temporariaAntes) return;
+    commit(itensLocais.map((a) => (a.id === aliado.id ? { ...a, vidaAtual: novaVida, vidaTemporaria } : a)));
   };
 
   const handleToggleCena = (aliado: IAliado) => {
@@ -363,6 +444,15 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
             className="w-full bg-[#0f0e15] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:border-[#c7a44c]/50 outline-none text-sm"
           />
         </div>
+        {nivelInvocador > 0 && (
+          <button
+            onClick={abrirCatalogo}
+            className="flex items-center gap-2 px-5 py-3 rounded-xl border border-violet-400/30 text-violet-200 font-bold text-sm hover:bg-violet-400/10 transition-colors"
+            title="Criar uma invocação com a ficha pronta do Catálogo de Invocações"
+          >
+            <Sparkles size={15} /> Do Catálogo
+          </button>
+        )}
         <button
           onClick={abrirNovo}
           className="px-6 py-3 rounded-xl border border-[#c7a44c]/30 text-[#c7a44c] font-bold text-sm hover:bg-[#c7a44c]/10 transition-colors border-dashed"
@@ -524,7 +614,10 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
                     <span className="text-[10px] uppercase tracking-widest font-bold text-red-400 flex items-center gap-1">
                       <Heart size={12} /> Vida {isComplexo && '(Sincronizada)'}
                     </span>
-                    <span className="text-xs font-mono text-gray-300">{vidaAtual} / {vidaMaxima}</span>
+                    <span className="text-xs font-mono text-gray-300">
+                      {vidaAtual} / {vidaMaxima}
+                      {!isComplexo && (a.vidaTemporaria || 0) > 0 && <span className="ml-1.5 text-sky-300">+{a.vidaTemporaria} temp.</span>}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     {!isComplexo && !bloqueado && (
@@ -606,6 +699,11 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
                         <span className="truncate">{ataque}</span>
                       </div>
                     ))}
+                    {!isCompartilhado && a.invocacaoCatalogoId && INVOCACAO_POR_ID.get(a.invocacaoCatalogoId)?.ataca && ataqueDasInvocacoes !== null && (
+                      <p className="px-1 text-[11px] text-violet-200/80">
+                        Acerta com d20 {sinal(ataqueDasInvocacoes)} contra a Defesa (o seu teste de conjuração).
+                      </p>
+                    )}
                   </div>
                 )}
 
@@ -678,6 +776,75 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
         </Reorder.Group>
       </div>
 
+      {/* CATÁLOGO DE INVOCAÇÕES */}
+      <FichaModal
+        isOpen={catalogoAberto}
+        onClose={() => setCatalogoAberto(false)}
+        title="Invocação do Catálogo"
+        eyebrow="Pacto"
+        size="lg"
+      >
+        <div className="flex flex-col gap-4">
+          <p className="text-xs leading-relaxed text-gray-400">
+            Escolha a linha e o nível. A invocação entra com a ficha pronta e a Vida temporária do Núcleo Firme, se você o aprendeu.
+            {nivelInvocador > 20 ? ` No nível ${nivelInvocador} ela também cresce: ${textoDoCrescimento(nivelInvocador)}.` : ''}
+            {' '}Até {INVOCACOES_EM_CENA} invocações ficam em cena; as outras nascem guardadas.
+          </p>
+          {LINHAS_DO_CATALOGO.map(([linha, fichas]) => (
+            <div key={linha} className="rounded-xl border border-white/5 bg-black/20 p-3">
+              <div className="mb-2 flex items-baseline justify-between gap-2">
+                <strong className="text-sm text-white">{linha}</strong>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{fichas[0]?.papel}</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {fichas.map((invocacao) => {
+                  const liberada = invocacao.nivelMinimo <= nivelInvocador;
+                  const escolhida = invocacao.id === invocacaoEscolhidaId;
+                  return (
+                    <button
+                      key={invocacao.id}
+                      type="button"
+                      disabled={!liberada}
+                      aria-pressed={escolhida}
+                      onClick={() => setInvocacaoEscolhidaId(invocacao.id)}
+                      title={liberada ? invocacao.titulo : `Libera no nível ${invocacao.nivelMinimo} de Invocador`}
+                      className={`rounded-lg border px-3 py-1.5 text-xs font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-35 ${
+                        escolhida
+                          ? 'border-violet-400/60 bg-violet-400/15 text-violet-100'
+                          : 'border-white/10 bg-black/30 text-gray-300 hover:border-violet-400/30 hover:text-white'
+                      }`}
+                    >
+                      {ROMANO[invocacao.degrau]} <span className="font-normal text-gray-500">· nível {invocacao.nivelMinimo}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          {previaDaInvocacao && invocacaoEscolhida ? (
+            <div className="rounded-xl border border-violet-400/25 bg-violet-400/5 p-4">
+              <strong className="block text-white">{previaDaInvocacao.nome}</strong>
+              <p className="mt-1 text-xs text-gray-300">
+                Vida {previaDaInvocacao.vidaMaxima}{previaDaInvocacao.vidaTemporaria ? ` (+${previaDaInvocacao.vidaTemporaria} temporária)` : ''} · Defesa {previaDaInvocacao.defesa} · Movimento {previaDaInvocacao.movimento}
+              </p>
+              <p className="mt-1 text-xs text-gray-300">{previaDaInvocacao.ataquePrincipal}</p>
+              {invocacaoEscolhida.ataca && ataqueDasInvocacoes !== null && (
+                <p className="mt-1 text-[11px] text-violet-200/80">Acerta com d20 {sinal(ataqueDasInvocacoes)} contra a Defesa.</p>
+              )}
+              <button
+                type="button"
+                onClick={criarDoCatalogo}
+                className="mt-3 rounded-xl bg-violet-500/80 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-violet-500"
+              >
+                Criar invocação
+              </button>
+            </div>
+          ) : (
+            <p className="text-center text-xs text-gray-600">Escolha uma ficha para ver como ela entra.</p>
+          )}
+        </div>
+      </FichaModal>
+
       {/* MODAL DE CRIAR / EDITAR */}
       <FichaModal
         isOpen={modalAberto}
@@ -746,9 +913,10 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
                 <LabeledInput label="Nível" value={String(form.nivel ?? '')} onChange={(v: string) => setCampo('nivel', v)} />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <LabeledInput label="Vida Atual" value={String(form.vidaAtual ?? '')} onChange={(v: string) => setCampo('vidaAtual', v)} />
                 <LabeledInput label="Vida Máxima" value={String(form.vidaMaxima ?? '')} onChange={(v: string) => setCampo('vidaMaxima', v)} />
+                <LabeledInput label="Vida Temporária" value={String(form.vidaTemporaria ?? '')} onChange={(v: string) => setCampo('vidaTemporaria', v)} />
               </div>
 
               <div className="grid grid-cols-3 gap-3">

@@ -106,7 +106,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 
 ## Magias publicadas para playtest
 
-- 353 magias analisadas.
+- 355 magias analisadas.
 - 0 magias fora do custo, teto de dano, crítico ou acesso ritual.
 
 | Magia | Círculo | Perfil | Mana | Dano | Média | Alertas |
@@ -128,6 +128,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Troca Repentina | 1 | movimento | 2 | sem dano | n/a | nenhum |
 | Impacto Elemental | 1 | alvo | 2 | 1d10 + Mod. Fluxo | 5.5 | nenhum |
 | Escudo Material | 1 | defesa | 2 | sem dano | n/a | nenhum |
+| Golpe Cinético | 1 | alvo | 2 | 1d10 + Mod. Fluxo | 5.5 | nenhum |
 | Moldar Elemento | 1 | controle | 2 | sem dano | n/a | nenhum |
 | Salto Curto | 1 | movimento | 2 | sem dano | n/a | nenhum |
 | Distância Hostil | 1 | alvo | 2 | sem dano | n/a | nenhum |
@@ -164,6 +165,7 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 | Rajada Elemental | 2 | alvo | 4 | 2d8 + Mod. Fluxo | 9.0 | nenhum |
 | Muralha Menor | 2 | controle | 4 | sem dano | n/a | nenhum |
 | Armadura de Matéria | 2 | defesa | 4 | sem dano | n/a | nenhum |
+| Pancada Cinética | 2 | alvo | 4 | 2d8 + Mod. Fluxo | 9.0 | nenhum |
 | Fenda Cortante | 2 | alvo | 4 | 2d8 + Mod. Fluxo | 9.0 | nenhum |
 | Passo Longo | 2 | movimento | 4 | sem dano | n/a | nenhum |
 | Fronteira Menor | 2 | controle | 4 | sem dano | n/a | nenhum |

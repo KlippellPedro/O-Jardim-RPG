@@ -9550,7 +9550,7 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Receba +2 em Misticismo, Percepção e Enganação ao usar o baralho como foco. Cada magia que você conhece é uma carta, e a sua mão é o conjunto delas: jogar uma carta é conjurar a magia, pagando a Mana dela. Escolha uma magia de primeiro círculo do Fluxo nativo como a sua primeira carta.",
+            "descricao": "Receba +2 em Misticismo, Percepção e Enganação ao usar o baralho como foco. Qualquer baralho comum serve, e a Loja vende o Baralho de Cartas. Cada magia que você conhece é uma carta, e a sua mão é o conjunto delas: jogar uma carta é conjurar a magia, pagando a Mana dela. Na sua mão, toda magia ganha forma de carta: sai do baralho, voa até o alvo ou se abre no chão, e a figura impressa mostra o efeito. Escolha uma magia de primeiro círculo do Fluxo nativo como a sua primeira carta.",
             "acao": "Passivo"
           },
           {
@@ -9656,7 +9656,7 @@
       {
         "id": "cassino-lunar",
         "titulo": "Cassino Lunar",
-        "descricao": "Você recebe convite para uma mesa de alto risco. Prêmio e aposta são declarados antes; vencer não concede pedidos sem limite.",
+        "descricao": "Você recebe convite para uma mesa de alto risco do Cassino Lunar. Prêmio e aposta são declarados antes, e vencer nunca concede pedidos sem limite. A mesa sobe com a carreira. No 4º nível, a mesa de entrada aposta moedas, e o prêmio é dinheiro ou um favor pequeno. No 7º, a mesa reservada pode pagar com um item raro da Loja ou com uma dívida perdoada. No 12º, a mesa dos patronos aposta contatos e pode abrir um mercado fechado ou um encontro com alguém poderoso. No 18º, a mesa alta aposta o que não é dinheiro (um nome, uma lembrança, um ano de serviço) e pode pagar com um item épico ou um segredo. Dados Viciados vale na mesa como em qualquer rolagem, e o Mestre diz antes se a casa percebe.",
         "niveis": [
           4,
           7,
@@ -11647,7 +11647,7 @@
             "nivel": 20,
             "titulo": "Escolha Final",
             "acao": "Passivo",
-            "descricao": "Escolha uma última vez: duas invocações novas do primeiro nível do Catálogo, ou duas que já tem avançando um nível nele."
+            "descricao": "Escolha uma última vez: duas invocações novas do primeiro nível do Catálogo, ou duas que já tem avançando um nível nele. Depois do 20 o Catálogo para de ganhar níveis, e as invocações crescem com você: do nível 21 de Invocador em diante, cada uma ganha +3 de Vida por nível acima do 20 e +1 de Defesa a cada 5 níveis acima do 20, e o dano ou a cura da habilidade dela ganha +1d6 no nível 30, outro no 40 e outro no 50."
           }
         ]
       },
@@ -11774,7 +11774,7 @@
       {
         "id": "chamado-da-criacao",
         "titulo": "Chamado da Criação",
-        "descricao": "Uma criatura pede pacto, resgate ou nascimento. Aceitar exige termos claros e pode substituir uma invocação vinculada.",
+        "descricao": "Uma criatura pede pacto, resgate ou nascimento. Aceitar exige termos claros e pode trocar uma invocação vinculada por outra ficha do Catálogo, no mesmo nível da que saiu: a criatura da cena empresta o nome e a aparência, e os números vêm do Catálogo.",
         "niveis": [
           4,
           7,
@@ -11839,7 +11839,9 @@
         "titulo": "Retorno ao Pacto",
         "custo_mana": 3,
         "acao": "Ação Livre",
-        "descricao": "Teleporte a invocação para um espaço adjacente a você."
+        "alcance": "30 m",
+        "usos": "Uma vez por rodada",
+        "descricao": "Uma vez por rodada, teleporte uma invocação sua que esteja em cena, a até 30 m de você, para um espaço adjacente a você."
       },
       {
         "id": "essencia-adaptavel",
@@ -11858,12 +11860,12 @@
       },
       {
         "id": "avatar-da-deidade",
-        "titulo": "Avatar de sua Deidade",
+        "titulo": "Invocação Ascendida",
         "custo_mana": 9,
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
         "usos": "Uma vez por sessão",
-        "descricao": "Uma vez por sessão, por três rodadas, escolha uma invocação sua: a habilidade própria dela causa ou concede +2 dados a mais do que o normal, e ela ganha uma Ação Padrão extra em cada turno dela.",
+        "descricao": "Uma vez por sessão, por três rodadas, escolha uma invocação sua: ela ganha uma Ação Padrão extra em cada turno dela, Vida temporária igual ao dobro do seu nível de Invocador e +2 de Defesa. A mesma invocação não recebe este poder e a Convergência Primordial ao mesmo tempo.",
         "pre_requisitos": [
           "Nível 12 de Invocador"
         ]
@@ -11871,7 +11873,7 @@
     ],
     "tarefas_bancada": {
       "rotulo": "Catálogo de Invocações",
-      "descricao": "Fichas prontas, exclusivas da classe: nada de criatura da Loja ou improvisada. Seis linhas (Caçador de Feras ofensivo, Colosso de Ferro defensivo, Salamandra de Fogo de suporte à distância, Seiva Viva de cura, Duende Prestativo de utilidade fora de combate e Aranha Tecelã de controle), cada uma em cinco níveis. Uma invocação nova sempre entra no nível 1 da linha escolhida; aprimorar a leva para o próximo nível da mesma linha. A ficha dá o dano do ataque; para acertar, a invocação usa o seu teste de conjuração, como diz o Pacto.",
+      "descricao": "Fichas prontas, exclusivas da classe: nada de criatura da Loja ou improvisada. Seis linhas (Caçador de Feras ofensivo, Colosso de Ferro defensivo, Salamandra de Fogo de suporte à distância, Seiva Viva de cura, Duende Prestativo de utilidade fora de combate e Aranha Tecelã de controle), cada uma em cinco níveis. Uma invocação nova sempre entra no nível 1 da linha escolhida; aprimorar a leva para o próximo nível da mesma linha. A ficha dá o dano do ataque; para acertar, a invocação usa o seu teste de conjuração, como diz o Pacto. Do nível 21 de Invocador em diante, as fichas crescem pela regra da Escolha Final do Pacto. Na aba Aliados, o botão Do Catálogo cria a invocação já com a ficha pronta.",
       "colunas": [
         "Invocação",
         "Nível",
@@ -13583,7 +13585,7 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "O catalisador é um objeto seu ligado a um Fluxo diferente do seu nativo (uma pedra, um relógio parado, um osso), sem preço nem raridade. Sintonize-o com dez minutos fora de combate: ele fica preparado e empresta esse Fluxo secundário às suas fusões, e o seu Fluxo nativo continua o mesmo. Dos preparados, um é o ativo, o que a fusão usa agora. O catalisador gasto numa fusão fica desativado até você repetir os dez minutos. Perdido, quebrado ou roubado, você sintoniza outro objeto do mesmo jeito. A Tecnologia só serve de catalisador se o Mestre a tiver instalado na sua ficha. Selos e encantamentos você aprende também dos Fluxos dos catalisadores que tiver preparados na hora de aprender, e o que aprendeu fica mesmo se trocar de catalisador depois.",
+            "descricao": "O catalisador é um objeto seu ligado a um Fluxo diferente do seu nativo (uma pedra, um relógio parado, um osso), sem preço nem raridade. Sintonize-o com dez minutos fora de combate: ele fica preparado e empresta esse Fluxo secundário às suas fusões, e o seu Fluxo nativo continua o mesmo. Dos preparados, um é o ativo, o que a fusão usa agora. O catalisador gasto numa fusão fica desativado até você repetir os dez minutos. Perdido, quebrado ou roubado, você sintoniza outro objeto do mesmo jeito. A Tecnologia só serve de catalisador se o Mestre a tiver instalado na sua ficha. Selos e encantamentos você aprende também dos Fluxos dos catalisadores que tiver preparados na hora de aprender, e o que aprendeu fica mesmo se trocar de catalisador depois. Antes da primeira fusão, que chega no nível 3, o catalisador ativo já serve: você tem vantagem em Misticismo para reconhecer magias, criaturas e objetos do Fluxo dele, e reduz em 2 o dano das magias desse Fluxo que atingirem você.",
             "acao": "10 minutos, fora de combate",
             "alcance": "Toque",
             "duracao": "Até trocar de catalisador"
@@ -13773,7 +13775,7 @@
         "titulo": "Aterramento",
         "custo_mana": 3,
         "acao": "Reação",
-        "descricao": "Quando sofrer dano causado por uma magia do mesmo Fluxo do catalisador ativo, use uma Reação para reduzir esse dano em 8."
+        "descricao": "Quando sofrer dano de uma magia ou de um poder de criatura do mesmo Fluxo do catalisador ativo, use uma Reação para reduzir esse dano em 8 + metade do seu nível de Sintonizador. A redução vale para o dano total, depois da Resistência, seja qual for o tipo."
       },
       {
         "id": "dupla-frequencia",
@@ -14726,10 +14728,10 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Detecte conjurações naturais a até 12 m.",
+            "descricao": "Detecte conjurações naturais a até 18 m, medidos até o conjurador ou até qualquer alvo ou ponto da área do efeito. Calibre a interface para um Fluxo natural, e troque a calibração num descanso curto: você recebe +2 para interceptar magia ou poder de criatura desse Fluxo.",
             "titulo": "Primeiro Acesso",
             "acao": "Passivo",
-            "alcance": "12 m"
+            "alcance": "18 m"
           },
           {
             "nivel": 5,
@@ -14745,16 +14747,16 @@
           },
           {
             "nivel": 15,
-            "descricao": "Seu alcance de detecção aumenta para 24 m.",
+            "descricao": "Seu alcance de detecção aumenta para 36 m.",
             "titulo": "Alcance Ampliado",
             "acao": "Passivo",
-            "alcance": "24 m"
+            "alcance": "36 m"
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, por três rodadas, toda magia que você perceber revela a DT de conjuração e o efeito completo antes mesmo de terminar de ser lançada.",
+            "descricao": "Uma vez por sessão, ative sem gastar ação: por três rodadas, toda magia que você perceber revela a DT de conjuração e o efeito completo antes de terminar de ser lançada, o Pacote Descartado custa 0 de Mana e você rola com vantagem o teste de interceptar.",
             "titulo": "Visão de Código",
-            "acao": "Passivo",
+            "acao": "Ação Livre",
             "duracao": "Três rodadas",
             "usos": "Uma vez por sessão"
           }

@@ -46,7 +46,7 @@
       { "circulo": 9, "id": "vitalidade-coracao-duplo", "titulo": "Coração Duplo", "bonus": "Uma vez por dia, ao chegar a 0 de Vida, você volta com metade da Vida máxima.", "onus": "Cada uso dá 2 de Cansaço na hora." }
     ],
     "inconstancia": [
-      { "circulo": 5, "id": "inconstancia-nunca-igual", "titulo": "Nunca Igual", "bonus": "Uma vez por cena, você repete um teste já resolvido.", "onus": "Você aceita o novo resultado, mesmo que seja pior." },
+      { "circulo": 5, "id": "inconstancia-nunca-igual", "titulo": "Nunca Igual", "bonus": "Na mesma cena, cada magia diferente que você conjura depois da primeira soma +1 no teste de conjuração das seguintes, até +3.", "onus": "Conjurar de novo uma magia que já usou na cena zera esse bônus e dá -2 naquele teste." },
       { "circulo": 6, "id": "inconstancia-pele-instavel", "titulo": "Pele Instável", "bonus": "No começo de cada cena, role na tabela de Resistência da Inconstância: você tem Resistência 5 a esse tipo até o fim dela.", "onus": "Role de novo na mesma tabela: você também fica vulnerável a esse tipo." },
       { "circulo": 7, "id": "inconstancia-sorte-torta", "titulo": "Sorte Torta", "bonus": "Sua margem de ameaça aumenta em 1 em tudo o que você faz.", "onus": "A margem de falha crítica aumenta em 1 junto." },
       { "circulo": 8, "id": "inconstancia-forma-errante", "titulo": "Forma Errante", "bonus": "Uma vez por dia, uma característica física sua muda para algo útil na situação.", "onus": "Você não escolhe qual, e a mudança dura até o próximo descanso completo." },

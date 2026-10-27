@@ -303,7 +303,7 @@ function renderSpellRows(spells) {
     ['Magia', 'Fluxo', 'Mana', 'Execução', 'Alcance', 'Duração', 'Defesa', 'Dano', 'Efeito'],
     spells.map((spell) => [
       spell.titulo, spell.tradicao || spell.fluxo, spell.custo_mana, spell.execucao,
-      spell.alcance, spell.duracao, spell.defesa, spell.dano, spell.efeito,
+      spell.alcance, spell.duracao, spell.defesa ? `${spell.defesa}${spell.somente_hostil ? ', se hostil' : ''}` : '', spell.dano, spell.efeito,
     ]),
   );
 }
@@ -350,8 +350,8 @@ function renderFlows(data) {
       ['Fluxo', 'Vantagem contra', 'Desvantagem contra'],
       (data.vantagens_fluxos || []).map((item) => [
         flowLabel(item.fluxo),
-        (item.vantagem_contra || []).map(flowLabel),
-        (item.desvantagem_contra || []).map(flowLabel),
+        item.contra_todos ? 'Todos (se cancela com a desvantagem)' : (item.vantagem_contra || []).map(flowLabel),
+        item.contra_todos ? 'Todos (se cancela com a vantagem)' : (item.desvantagem_contra || []).map(flowLabel),
       ]),
     ),
     '## Fusões do Sintonizador',

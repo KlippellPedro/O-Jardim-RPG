@@ -131,6 +131,8 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const [tipoInterceptado, setTipoInterceptado] = useState<'magia' | 'criatura'>('magia');
   const [vdInterceptado, setVdInterceptado] = useState('1');
   const [administradorAtivo, setAdministradorAtivo] = useState(false);
+  const [doFluxoCalibrado, setDoFluxoCalibrado] = useState(false);
+  const [visaoDeCodigo, setVisaoDeCodigo] = useState(false);
   const [personalizando, setPersonalizando] = useState<{ id: string; titulo: string; descricao: string } | null>(null);
 
   const campanha = useAuthStore((state) => state.campanhaAtiva);
@@ -293,13 +295,13 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     tipoInterceptado === 'magia'
       ? { tipo: 'magia', circulo: circuloInterceptado }
       : { tipo: 'criatura', vd: Number(vdInterceptado) || 1 },
-    { bonusBase: bonusConjuracaoFinal, administradorAtivo },
+    { bonusBase: bonusConjuracaoFinal, administradorAtivo, doFluxoCalibrado: doFluxoCalibrado && Boolean(perfil.catalisadorAtivoId), visaoDeCodigo },
   );
 
   const rolarInterceptacao = async () => {
     if (acaoMagicaEmAndamento.current) return;
     if (!perfil.possuiInterceptacao) return;
-    const { dt, bonus, custoMana, rotulo } = interceptacao;
+    const { dt, bonus, custoMana, rotulo, vantagem } = interceptacao;
     if (manaDisponivel < custoMana) {
       setMensagem({ tipo: 'erro', texto: `Mana insuficiente. O Pacote Descartado custa ${custoMana}.` });
       return;
@@ -319,7 +321,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           personagemId: character.id,
           titulo: `Pacote Descartado${fluxoAlvo ? ` · ${fluxoAlvo}` : ''}`,
           bonus,
-          vantagens: perfil.vantagensConjuracao,
+          vantagens: perfil.vantagensConjuracao + (vantagem ? 1 : 0),
           desvantagens: perfil.desvantagensConjuracao,
           dt,
           origem: {
@@ -330,7 +332,9 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             circulo_interceptado: tipoInterceptado === 'magia' ? circuloInterceptado : null,
             vd_interceptado: tipoInterceptado === 'criatura' ? Number(vdInterceptado) || 1 : null,
             fluxo_calibrado: perfil.catalisadorAtivoId,
+            do_fluxo_calibrado: doFluxoCalibrado && Boolean(perfil.catalisadorAtivoId),
             acesso_administrador: administradorAtivo && perfil.nivelInterceptador >= 20,
+            visao_de_codigo: visaoDeCodigo && perfil.nivelInterceptador >= 20,
             custo_mana: custoMana,
           },
         });
@@ -603,6 +607,7 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
             circulo: magia.circulo,
             ataque: Boolean(magia.ataque),
             defesa: magia.defesa,
+            somente_hostil: Boolean(magia.somente_hostil),
             dt_magia: dtCirculo,
             custo_mana: magia.custo_mana,
             concentracao: magia.concentracao,
@@ -1125,7 +1130,7 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
               <p className="mt-1 max-w-3xl text-xs leading-relaxed text-gray-400">
                 {perfil.nivelSintonizador > 0
                   ? `Prepare até ${perfil.limiteCatalisadores} catalisador(es), um objeto seu sintonizado a um Fluxo diferente do nativo, e escolha qual está ativo. O ativo define a Fusão disponível.`
-                  : 'Escolha o Fluxo natural para o qual a interface A.X.I.S. está calibrada. Isso registra o alvo atual da interceptação, sem transformar o Interceptador em conjurador.'}
+                  : 'Escolha o Fluxo natural para o qual a interface A.X.I.S. está calibrada. Interceptar magia ou poder desse Fluxo ganha +2, e a calibração se troca num descanso curto. O Interceptador continua sem conjurar.'}
               </p>
             </div>
             <span className="rounded-lg border border-cyan-500/20 bg-black/20 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-cyan-300">
@@ -1201,7 +1206,7 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
                   </button>
                 </div>
               )}
-              {acessoSomenteInterceptacao && <p className="mt-2 text-xs leading-relaxed text-gray-400">A Malha está preparada para identificar e organizar interceptações deste Fluxo. Custos, alcance e bônus continuam sendo os descritos nos poderes do Interceptador.</p>}
+              {acessoSomenteInterceptacao && <p className="mt-2 text-xs leading-relaxed text-gray-400">A Malha está calibrada para este Fluxo: interceptar magia ou poder dele ganha +2. Marque a opção na rolagem quando for o caso.</p>}
             </div>
           )}
 
@@ -1248,14 +1253,26 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
                     />
                   </label>
                 )}
+                {perfil.catalisadorAtivoId && (
+                  <label className="flex items-center gap-2 text-xs text-gray-300 sm:col-span-2">
+                    <input type="checkbox" checked={doFluxoCalibrado} onChange={(event) => setDoFluxoCalibrado(event.target.checked)} />
+                    É do Fluxo calibrado ({FLUXOS_POR_ID.get(perfil.catalisadorAtivoId)?.titulo}): +2
+                  </label>
+                )}
                 {perfil.nivelInterceptador >= 20 && (
                   <label className="flex items-center gap-2 text-xs text-gray-300 sm:col-span-2">
                     <input type="checkbox" checked={administradorAtivo} onChange={(event) => setAdministradorAtivo(event.target.checked)} />
                     Acesso Administrador ativo (+5 e 3 de Mana a menos)
                   </label>
                 )}
+                {perfil.nivelInterceptador >= 20 && (
+                  <label className="flex items-center gap-2 text-xs text-gray-300 sm:col-span-2">
+                    <input type="checkbox" checked={visaoDeCodigo} onChange={(event) => setVisaoDeCodigo(event.target.checked)} />
+                    Visão de Código ativa (vantagem e 0 de Mana por três rodadas)
+                  </label>
+                )}
                 <span className="block text-[10px] leading-relaxed text-gray-600 sm:col-span-2">
-                  Pacote Descartado: d20 {formatarBonus(interceptacao.bonus)} contra DT {interceptacao.dt} ({interceptacao.rotulo}), {interceptacao.custoMana} de Mana, usando a sua Reação.
+                  Pacote Descartado: d20 {formatarBonus(interceptacao.bonus)}{interceptacao.vantagem ? ' com vantagem' : ''} contra DT {interceptacao.dt} ({interceptacao.rotulo}), {interceptacao.custoMana} de Mana, usando a sua Reação.
                   {perfil.nivelInterceptador >= 10 ? ' Já inclui o +2 da Assinatura Reconhecida.' : ''}
                 </span>
               </div>

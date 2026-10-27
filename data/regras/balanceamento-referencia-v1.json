@@ -24,7 +24,7 @@
   "summary": {
     "classes": 29,
     "weapons": 87,
-    "spells": 353,
+    "spells": 355,
     "invalidResourceBudgets": 0,
     "unboundedWeapons": 0,
     "invalidSpells": 0
@@ -4597,6 +4597,16 @@
       "problemas": []
     },
     {
+      "id": "golpe-cinetico",
+      "titulo": "Golpe Cinético",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": "1d10 + Mod. Fluxo",
+      "mediaDano": 5.5,
+      "problemas": []
+    },
+    {
       "id": "moldar-elemento",
       "titulo": "Moldar Elemento",
       "circulo": 1,
@@ -4954,6 +4964,16 @@
       "custoMana": 4,
       "dano": null,
       "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "pancada-cinetica",
+      "titulo": "Pancada Cinética",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
       "problemas": []
     },
     {
