@@ -29,7 +29,8 @@ test('o que consome magia tem teto e deixa cura passar', () => {
   assert.match(magia('avatar-do-fluxo').efeitos_por_fluxo.vazio, /hostil de até 8º círculo/);
   assert.match(magia('apagar-efeito').efeito, /de até 8º círculo/);
   assert.match(magia('apagar-do-mapa').efeito, /encerra o efeito/);
-  assert.equal(magia('apagar-do-mundo').defesa, 'Vontade se hostil');
+  assert.equal(magia('apagar-do-mundo').defesa, 'Vontade');
+  assert.equal(magia('apagar-do-mundo').somente_hostil, true);
 });
 
 test('personagem de jogador cai Morrendo, e nada pede "reconquista"', () => {

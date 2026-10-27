@@ -14,17 +14,20 @@ const magia = (id: string) => {
   return encontrada;
 };
 
-test('toda resistência do catálogo é Reflexos, Fortitude ou Vontade, com ou sem "se hostil"', () => {
+test('toda resistência do catálogo é Reflexos, Fortitude ou Vontade, e o "se hostil" mora em campo próprio', () => {
+  // Decisão de 2026-10-27 (próxima rodada da revisão): `defesa` guarda só a resistência, e quem só rola
+  // quando não quer o efeito tem `somente_hostil: true`.
   for (const item of MAGIAS_CATALOGO) {
+    if (item.somente_hostil) assert.ok(item.defesa, `${item.id}: "se hostil" sem resistência`);
     if (!item.defesa) continue;
-    const nome = item.defesa.replace(/ se hostil$/, '');
-    assert.ok(RESISTENCIAS.has(nome), `${item.id}: "${item.defesa}"`);
+    assert.ok(RESISTENCIAS.has(item.defesa), `${item.id}: "${item.defesa}"`);
   }
+  assert.equal(MAGIAS_CATALOGO.filter((item) => item.somente_hostil).length, 20);
 });
 
 test('magia de ataque é de alvo único e nunca reduz o dano pela resistência', () => {
   const ataques = MAGIAS_CATALOGO.filter((item) => item.ataque);
-  assert.equal(ataques.length, 69);
+  assert.equal(ataques.length, 71);
   for (const item of ataques) {
     assert.equal(item.perfil, 'alvo', item.id);
     assert.doesNotMatch(item.efeito, /Em sucesso[^.]*metade do dano/i, item.id);

@@ -31,7 +31,8 @@ test('as escadas de tirar turno estão na ordem do círculo', () => {
   assert.match(magia('parada-de-instante').efeito, /perde a Ação Padrão do próximo turno/);
   assert.match(magia('sentenca-do-relogio').efeito, /perde o próximo turno/);
   assert.match(magia('sentenca-dos-eons').efeito, /perde os dois próximos turnos/);
-  assert.equal(magia('conservacao-maior').defesa, 'Vontade se hostil');
+  assert.equal(magia('conservacao-maior').defesa, 'Vontade');
+  assert.equal(magia('conservacao-maior').somente_hostil, true);
 });
 
 test('nada do Tempo volta ao passado, e o desgaste está na regra', () => {

@@ -2265,9 +2265,11 @@ test('Invocador publica um Catálogo de Invocações próprio (ficha pronta, sem
   }
 });
 
-test('Avatar de sua Deidade do Invocador não fica preso à Aethel: classe é aberta a qualquer Árvore', () => {
+test('a Invocação Ascendida do Invocador (antigo Avatar de sua Deidade) não fica presa à Aethel: classe é aberta a qualquer Árvore', () => {
   const invocador = obterClasse('invocador');
-  const avatar = invocador.poderes?.find(item => item.titulo === 'Avatar de sua Deidade');
+  // O título mudou em 2026-10-27 para não repetir a Convergência nem o Avatar da Elementarista; o id ficou.
+  const avatar = invocador.poderes?.find(item => item.id === 'avatar-da-deidade');
+  assert.equal(avatar?.titulo, 'Invocação Ascendida');
   assert.ok(avatar);
   assert.notEqual(avatar.id, 'avatar-de-aethel', 'o id ainda referencia uma Árvore específica, mas a classe vale pra qualquer uma');
 });
