@@ -1298,7 +1298,7 @@
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "24m (Voo)",
-        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele. Fala sumeriano, em frases curtas, e pergunta primeiro o que o visitante veio pedir antes de decidir se vai ouvir.",
+        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele. Fala Urrân, em frases curtas, e pergunta primeiro o que o visitante veio pedir antes de decidir se vai ouvir.",
         "ataques": [
           {
             "nome": "Sopro Que Nomeia",
@@ -1338,7 +1338,7 @@
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "30m (Voo)",
-        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência tem o tamanho do território. Em sumeriano arcaico, diz que ainda não terminou, e que o dia em que parar de crescer será o dia em que escolher onde morrer.",
+        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência tem o tamanho do território. Em Urrân arcaico, diz que ainda não terminou, e que o dia em que parar de crescer será o dia em que escolher onde morrer.",
         "ataques": [
           {
             "nome": "Sopro do Continente",
@@ -2103,7 +2103,7 @@
         "classe": "Ser Lendário",
         "categoria": "Lendário",
         "deslocamento": "30m (Nado)",
-        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Dizem em nórdico antigo que, quando ela afrouxa o abraço, as marés respondem, e que, quando soltar de vez, o mundo não vai ter onde se apoiar. Dorme de olhos abertos e sonha com o mar de antes de haver mar.",
+        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. As sereias cantam em Talássio que, quando ela afrouxa o abraço, as marés respondem, e que, quando soltar de vez, o mundo não vai ter onde se apoiar. Dorme de olhos abertos e sonha com o mar de antes de haver mar.",
         "ataques": [
           {
             "nome": "Constrição do Mundo",
@@ -4062,7 +4062,7 @@
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "18m",
-        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e a pergunta é sempre a mesma: por que tanta gente pequena em cima do meu chão? Fala grego antigo, devagar, como quem escolhe cada pedra.",
+        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e a pergunta é sempre a mesma: por que tanta gente pequena em cima do meu chão? Fala Brontéu, devagar, como quem escolhe cada pedra.",
         "ataques": [
           {
             "nome": "Punho do Mundo",
@@ -4271,7 +4271,7 @@
         "classe": "Ser Lendário",
         "categoria": "Constructo",
         "deslocamento": "12m",
-        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra. Os golens falam por Libras, e ele aprendeu a ordem por gestos que o último arquiteto fez antes de desaparecer; quem sabe repetir esses gestos descobre que ele ainda espera a ordem de parar.",
+        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra. Os golens falam Mudral, e ele aprendeu a ordem por gestos que o último arquiteto fez antes de desaparecer; quem sabe repetir esses gestos descobre que ele ainda espera a ordem de parar.",
         "ataques": [
           {
             "nome": "Punho de Torre",
@@ -4803,7 +4803,7 @@
         "classe": "Ser Lendário",
         "categoria": "Espírito",
         "deslocamento": "24m (Voo)",
-        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala hebraico, e cada palavra dele soa como uma frase de lei.",
+        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala Aurelim, e cada palavra dele soa como uma frase de lei.",
         "ataques": [
           {
             "nome": "Espada de Mensagem",
@@ -4844,7 +4844,7 @@
         "classe": "Ser Lendário",
         "categoria": "Espírito",
         "deslocamento": "30m (Voo)",
-        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em hebraico, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas.",
+        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em Aurelim, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas.",
         "ataques": [
           {
             "nome": "Lâmina do Cântico",
@@ -5085,7 +5085,7 @@
         "categoria": "Espírito",
         "subtipo": "Natural",
         "deslocamento": "9m",
-        "descricao": "Mil anos de raiz e nenhuma pressa. Desperta quando machado novo entra na mata, e a mata inteira o obedece. Fala enoquiano, devagar, e cada palavra dele leva uma estação para terminar.",
+        "descricao": "Mil anos de raiz e nenhuma pressa. Desperta quando machado novo entra na mata, e a mata inteira o obedece. Fala Anemir, devagar, e cada palavra dele leva uma estação para terminar.",
         "ataques": [
           {
             "nome": "Galho Antigo",
@@ -5126,7 +5126,7 @@
         "categoria": "Espírito",
         "subtipo": "Demoníaco",
         "deslocamento": "9m (Voo)",
-        "descricao": "Demônio miúdo, sobra de um pacto que ninguém terminou de pagar. Rouba pequenas coisas e deixa em troca um favor que o dono só entende depois. Fala aramaico e xinga em qualquer idioma.",
+        "descricao": "Demônio miúdo, sobra de um pacto que ninguém terminou de pagar. Rouba pequenas coisas e deixa em troca um favor que o dono só entende depois. Fala Kharum e xinga em qualquer idioma.",
         "ataques": [
           {
             "nome": "Ferroada",
@@ -5406,7 +5406,7 @@
         "categoria": "Espírito",
         "subtipo": "Demoníaco",
         "deslocamento": "6m",
-        "descricao": "Reina sobre quartos de doente, bancos de espera e tardes de domingo. Nunca levanta a voz nem o corpo, e o mundo desacelera sozinho ao redor dele. Fala aramaico, e cada frase termina um pouco antes de acabar.",
+        "descricao": "Reina sobre quartos de doente, bancos de espera e tardes de domingo. Nunca levanta a voz nem o corpo, e o mundo desacelera sozinho ao redor dele. Fala Kharum, e cada frase termina um pouco antes de acabar.",
         "ataques": [
           {
             "nome": "Soco de Travesseiro",
@@ -5447,7 +5447,7 @@
         "categoria": "Espírito",
         "subtipo": "Demoníaco",
         "deslocamento": "12m",
-        "descricao": "Demônio de coroa torta que nunca aceitou ordem de ninguém, nem a de cair. Prefere a morte à ajuda, e já morreu uma vez só para provar o ponto. Fala aramaico, olhando por cima da cabeça de quem ouve.",
+        "descricao": "Demônio de coroa torta que nunca aceitou ordem de ninguém, nem a de cair. Prefere a morte à ajuda, e já morreu uma vez só para provar o ponto. Fala Kharum, olhando por cima da cabeça de quem ouve.",
         "ataques": [
           {
             "nome": "Cetro Quebrado",
@@ -5488,7 +5488,7 @@
         "categoria": "Espírito",
         "subtipo": "Demoníaco",
         "deslocamento": "15m (Voo)",
-        "descricao": "Arquidemônio de seis chifres e voz de forja. Comanda legiões que ninguém contou, e cada uma jurou vingança por uma coisa diferente. Fala aramaico, e cada ordem dele soa como uma martelada.",
+        "descricao": "Arquidemônio de seis chifres e voz de forja. Comanda legiões que ninguém contou, e cada uma jurou vingança por uma coisa diferente. Fala Kharum, e cada ordem dele soa como uma martelada.",
         "ataques": [
           {
             "nome": "Martelo de Fornalha",
@@ -5570,7 +5570,7 @@
         "categoria": "Espírito",
         "subtipo": "Angelical",
         "deslocamento": "9m",
-        "descricao": "Anjo de armadura clara que fica parado diante de portas que não devem ser abertas. Responde em hebraico, devagar, e só deixa passar quem diz por que quer entrar.",
+        "descricao": "Anjo de armadura clara que fica parado diante de portas que não devem ser abertas. Responde em Aurelim, devagar, e só deixa passar quem diz por que quer entrar.",
         "ataques": [
           {
             "nome": "Lança de Clarão",
@@ -5850,7 +5850,7 @@
         "categoria": "Espírito",
         "subtipo": "Angelical",
         "deslocamento": "6m",
-        "descricao": "Feito de pedra branca, espera num pátio vazio há mais tempo do que existe pátio. Só se mexe quando já não resta alternativa, e quando se mexe termina o assunto. Fala hebraico, uma sílaba por estação.",
+        "descricao": "Feito de pedra branca, espera num pátio vazio há mais tempo do que existe pátio. Só se mexe quando já não resta alternativa, e quando se mexe termina o assunto. Fala Aurelim, uma sílaba por estação.",
         "ataques": [
           {
             "nome": "Punho de Pedra Clara",
@@ -5891,7 +5891,7 @@
         "categoria": "Espírito",
         "subtipo": "Angelical",
         "deslocamento": "18m (Voo)",
-        "descricao": "Escreve em sete livros ao mesmo tempo, um para cada Virtude, e anota quem as cumpriu e quem apenas as recitou. Fala hebraico, e cada palavra dele pesa como uma pena de ouro.",
+        "descricao": "Escreve em sete livros ao mesmo tempo, um para cada Virtude, e anota quem as cumpriu e quem apenas as recitou. Fala Aurelim, e cada palavra dele pesa como uma pena de ouro.",
         "ataques": [
           {
             "nome": "Pena de Ouro",
@@ -5933,7 +5933,7 @@
         "classe": "Ser Lendário",
         "categoria": "Monstro",
         "deslocamento": "24m (Nado)",
-        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão a ela um nome diferente em cada porto, e ela atende por todos, em latim de sereia, sem nunca corrigir ninguém. Navios que a chamam pelo nome certo costumam atravessar; os que a chamam de monstro raramente chegam em casa.",
+        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão a ela um nome diferente em cada porto, e ela atende por todos, em Talássio, sem nunca corrigir ninguém. Navios que a chamam pelo nome certo costumam atravessar; os que a chamam de monstro raramente chegam em casa.",
         "ataques": [
           {
             "nome": "Anel Oceânico",

@@ -38,10 +38,10 @@ _MODULE_LABELS = {"loja": "Itens", "mundo": "Mundo", "regras": "Área do mestre"
 
 #: Marcas da lore que o editor do Painel não trata como texto e que a base ganhou depois de muita edição já
 #: publicada. O editor publica o `conteudo` inteiro do momento da edição, então uma versão antiga não as
-#: traz; sem elas, um Soberano caía em "Gente notável", uma sede perdia o vínculo com a facção e o Alfabeto
-#: dos Registros Universais ficava vazio (a lista de idiomas é a `tabela` da entrada `idiomas-do-jardim`).
+#: traz; sem elas, um Soberano caía em "Gente notável" e uma sede perdia o vínculo com a facção.
 #: A base devolve a marca quando a edição publicada não a menciona (se ela aparece, vale o que foi publicado).
-CHAVES_ESTRUTURAIS_DA_LORE = ("soberano", "faccao", "tabela")
+#: Até 2026-10-27 a `tabela` de `idiomas-do-jardim` também era marca; hoje cada idioma é uma entrada própria.
+CHAVES_ESTRUTURAIS_DA_LORE = ("soberano", "faccao")
 
 
 def _com_marcas_da_base(item_dados: dict, resolved: dict) -> dict:

@@ -190,17 +190,17 @@ test('os espíritos do Bestiário cobrem as três Naturezas, e o idioma de cada 
   assert.ok(porSubtipo('Angelical').length >= 10, 'poucos anjos');
   assert.ok(espiritos.every((entrada) => entrada.conteudo.familia === 'espirito'));
 
-  // O Enoquiano é dos espíritos naturais; demônio fala Aramaico e anjo fala Hebraico.
+  // O Anemir é dos espíritos naturais; demônio fala Kharum e anjo fala Aurelim.
   const anjos = [...porSubtipo('Angelical'), porId.get('ezrakael'), porId.get('seraquiel')].filter(Boolean);
   for (const anjo of anjos) {
-    assert.doesNotMatch(String(anjo.conteudo.descricao), /enoquiano/i, `${anjo.id}: anjo fala hebraico`);
+    assert.doesNotMatch(String(anjo.conteudo.descricao), /anemir|kharum/i, `${anjo.id}: anjo fala Aurelim`);
   }
   for (const demonio of porSubtipo('Demoníaco')) {
-    assert.doesNotMatch(String(demonio.conteudo.descricao), /enoquiano|hebraico/i, `${demonio.id}: demônio fala aramaico`);
+    assert.doesNotMatch(String(demonio.conteudo.descricao), /anemir|aurelim/i, `${demonio.id}: demônio fala Kharum`);
   }
-  assert.ok(String(porId.get('ezrakael')?.conteudo.descricao).includes('hebraico'));
-  assert.ok(String(porId.get('belzarak')?.conteudo.descricao).includes('aramaico'));
-  assert.ok(String(porId.get('miraquel')?.conteudo.descricao).includes('hebraico'));
+  assert.ok(String(porId.get('ezrakael')?.conteudo.descricao).includes('Aurelim'));
+  assert.ok(String(porId.get('belzarak')?.conteudo.descricao).includes('Kharum'));
+  assert.ok(String(porId.get('miraquel')?.conteudo.descricao).includes('Aurelim'));
 });
 
 test('a descrição dos espíritos novos segue o tom da mesa', () => {

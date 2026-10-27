@@ -650,26 +650,28 @@ test('as etiquetas de um traço resumem tipo, Mana, usos e alcance', () => {
   assert.deepEqual(etiquetasDoTraco({ id: 'z', titulo: 'Z', tipo: 'passiva', custo_mana: 0 }), ['Passiva']);
 });
 
-test('cada Natureza do Espírito tem a sua língua, e a tabela de idiomas do Mundo diz o mesmo', () => {
+test('cada Natureza do Espírito tem a sua língua, e os idiomas do Mundo dizem o mesmo', () => {
+  const lingua = JSON.parse(readFileSync(new URL('../../data/mundo/Jardim/idiomas.json', import.meta.url), 'utf8'));
+  const linhas: Array<[string, string]> = lingua.entradas.map((entrada: { titulo: string; conteudo: { povo: string } }) => [entrada.titulo, entrada.conteudo.povo]);
   const jardim = JSON.parse(readFileSync(new URL('../../data/mundo/Jardim/jardim.json', import.meta.url), 'utf8'));
-  const idiomas = jardim.entradas.find((entrada: { id: string }) => entrada.id === 'idiomas-do-jardim');
-  const tabela: string[] = idiomas.conteudo.tabela;
-  const linhas = tabela.map(linha => linha.split('|').map(parte => parte.trim()));
+  const resumo = jardim.entradas.find((entrada: { id: string }) => entrada.id === 'idiomas-do-jardim');
 
   assert.equal(linhas.length, 16, 'treze povos e os dragões, dezesseis línguas');
-  assert.deepEqual(linhas.filter(l => l[1].startsWith('Espíritos')).map(l => [l[0], l[1]]), [
-    ['Enoquiano', 'Espíritos naturais'],
-    ['Aramaico', 'Espíritos demoníacos'],
-    ['Hebraico', 'Espíritos angelicais'],
+  assert.deepEqual(linhas.filter(l => l[1].startsWith('Espíritos')), [
+    ['Anemir', 'Espíritos naturais'],
+    ['Kharum', 'Espíritos demoníacos'],
+    ['Aurelim', 'Espíritos angelicais'],
   ]);
   assert.equal(new Set(linhas.map(l => l[0])).size, 16, 'idioma repetido');
-  assert.match(idiomas.conteudo.descricao, /dezesseis línguas/);
+  assert.match(resumo.conteudo.descricao, /Dezesseis línguas/);
+  assert.match(resumo.conteudo.descricao, /Anemir entre os naturais, Kharum entre os demoníacos e Aurelim entre os angelicais/);
 
   const espirito = racas.find(item => item.id === 'espirito')!;
+  assert.match(String(espirito.descricao), /Anemir para os naturais, Kharum para os demoníacos e Aurelim para os angelicais\./);
   const falas = Object.fromEntries((espirito.naturezas || []).map(n => [n.id, String(n.descricao)]));
-  assert.match(falas.natural, /Fala Enoquiano\.$/);
-  assert.match(falas.demoniaca, /Fala Aramaico\.$/);
-  assert.match(falas.angelical, /Fala Hebraico\.$/);
+  assert.match(falas.natural, /Fala Anemir\.$/);
+  assert.match(falas.demoniaca, /Fala Kharum\.$/);
+  assert.match(falas.angelical, /Fala Aurelim\.$/);
 });
 
 test('trocar a Forma da Animália mantém a Morfologia, mas trocar a Natureza do Espírito solta a marca', () => {

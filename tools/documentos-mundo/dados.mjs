@@ -100,23 +100,45 @@ export const RACAS = lerJson('data/ficha/racas.json');
 export const RACAS_REAIS = RACAS.filter((r) => r.id !== 'raca-personalizada');
 
 /**
- * Idioma por povo, transcrito da entrada 'idiomas-do-jardim'
- * (data/mundo/Jardim/jardim.json). Só os doze povos com língua própria aparecem
- * aqui; o Universal é de todos e por isso não entra no mapa.
+ * Língua de cada povo: o id da entrada em data/mundo/Jardim/idiomas.json. O nome
+ * e o criador vêm da entrada, então renomear a língua lá basta. Só os doze povos
+ * com língua própria aparecem aqui; o Universal é de todos e por isso não entra
+ * no mapa. O Espírito tem uma língua por Natureza.
  */
-export const IDIOMAS = {
-  vampiro: { lingua: 'Romeno', criador: 'Davinor' },
-  elfo: { lingua: 'Finlandês', criador: 'os Finwë' },
-  gigante: { lingua: 'Grego', criador: null },
-  goblim: { lingua: 'Alemão', criador: null },
-  anao: { lingua: 'Nórdico Antigo', criador: null },
-  golem: { lingua: 'Libras', criador: null },
-  espirito: { lingua: 'Enoquiano (naturais), Aramaico (demoníacos) e Hebraico (angelicais)', criador: null },
-  sereia: { lingua: 'Latim', criador: null },
-  animalia: { lingua: 'Sumeriano', criador: null },
-  clone: { lingua: 'Ao Contrário', criador: null },
-  automato: { lingua: 'Inglês', criador: null },
-  bruxa: { lingua: 'Celta', criador: null },
+const LINGUAS_DO_POVO = {
+  vampiro: ['idioma-dos-vampiros'],
+  elfo: ['idioma-dos-elfos'],
+  gigante: ['idioma-dos-gigantes'],
+  goblim: ['idioma-dos-goblins'],
+  anao: ['idioma-dos-anoes'],
+  golem: ['idioma-dos-golens'],
+  espirito: ['idioma-dos-espiritos-naturais', 'idioma-dos-espiritos-demoniacos', 'idioma-dos-espiritos-angelicais'],
+  sereia: ['idioma-das-sereias'],
+  animalia: ['idioma-dos-animalias'],
+  clone: ['idioma-dos-clones'],
+  automato: ['idioma-dos-automatos'],
+  bruxa: ['idioma-das-bruxas'],
+};
+
+const juntar = (nomes) => (nomes.length > 1 ? `${nomes.slice(0, -1).join(', ')} e ${nomes.at(-1)}` : nomes[0]);
+
+/** { lingua, criador } por povo. Com mais de uma língua, cada uma leva a Natureza entre parênteses. */
+export const IDIOMAS = Object.fromEntries(Object.entries(LINGUAS_DO_POVO).map(([povo, ids]) => {
+  const entradas = ids.map((id) => {
+    const entrada = porId(id);
+    if (!entrada) throw new Error(`Idioma ${id} não existe em data/mundo/Jardim/idiomas.json`);
+    return entrada;
+  });
+  const lingua = entradas.length > 1
+    ? juntar(entradas.map((e) => `${e.titulo} (${String(e.conteudo.povo).replace(/^Espíritos /, '')})`))
+    : entradas[0].titulo;
+  return [povo, { lingua, criador: entradas.length === 1 ? entradas[0].conteudo.criador ?? null : null }];
+}));
+
+/** "pelos Finwë", "por um Auleth": quando o criador vem com artigo definido, a preposição se junta a ele. */
+export const porQuem = (criador) => {
+  const artigo = String(criador).match(/^(os|as|o|a) +(.+)$/i);
+  return artigo ? `pel${artigo[1].toLowerCase()} ${artigo[2]}` : `por ${String(criador).replace(/^Um /, 'um ')}`;
 };
 
 /* ------------------------------------------------------------------ */

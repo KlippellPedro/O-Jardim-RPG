@@ -8,7 +8,7 @@
  */
 import {
   MUNDO, CRONICAS, FACCOES, RACAS, RACAS_REAIS, IDIOMAS, PALETA, COR_NEUTRA,
-  cor, porId, daArvore, esc, paragrafos, lista, fichaDados, pilulas, sinal, emLinha,
+  cor, porId, porQuem, daArvore, esc, paragrafos, lista, fichaDados, pilulas, sinal, emLinha,
 } from './dados.mjs';
 
 /* ================================================================== */
@@ -490,7 +490,7 @@ function fichaSer(r, rgb) {
       }${arvore ? `  ·  Árvore de origem: ${esc(arvore.nome)}` : ''}</p>
       ${paragrafos(r.descricao)}
       ${fichaDados([
-        ['Idioma', idioma ? `${esc(idioma.lingua)}${idioma.criador ? `, criado por ${esc(idioma.criador)}` : ''}` : 'Só o Universal'],
+        ['Idioma', idioma ? `${esc(idioma.lingua)}${idioma.criador ? `, criado ${esc(porQuem(idioma.criador))}` : ''}` : 'Só o Universal'],
         ['Vida', sinal(r.vida)],
         ['Mana', sinal(r.mana)],
         ['Movimento', r.movimento ? `${sinal(r.movimento)} m` : '—'],

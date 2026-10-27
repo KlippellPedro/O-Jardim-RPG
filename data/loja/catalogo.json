@@ -30632,7 +30632,7 @@
           "Balístico",
           "Munição 6"
         ],
-        "lore": "Uma pistola preta de cano longo, pesada demais para a maioria das mãos vivas segurar sem apoio. As balas são de prata derretida de uma cruz de igreja, e o cano leva gravado em latim um pedido que ninguém traduz em voz alta. Quem dispara sente o coice na coluna, não no braço.",
+        "lore": "Uma pistola preta de cano longo, pesada demais para a maioria das mãos vivas segurar sem apoio. As balas são de prata derretida de uma cruz de igreja, e o cano leva gravado em Aurelim um pedido que ninguém traduz em voz alta. Quem dispara sente o coice na coluna, não no braço.",
         "descricao": "Pistola antimonstro. Contra morto-vivo, demônio e coisa sustentada por Escuridão, ela passa por qualquer couro.",
         "ressonancia": {
           "nome": "Prata Bendita",
@@ -36543,7 +36543,7 @@
       "id": "mutis",
       "titulo": "Mutis, o Guardião da Cidade Muda",
       "conteudo": {
-        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra. Os golens falam por Libras, e ele aprendeu a ordem por gestos que o último arquiteto fez antes de desaparecer; quem sabe repetir esses gestos descobre que ele ainda espera a ordem de parar.",
+        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra. Os golens falam Mudral, e ele aprendeu a ordem por gestos que o último arquiteto fez antes de desaparecer; quem sabe repetir esses gestos descobre que ele ainda espera a ordem de parar.",
         "preco": {
           "Fragmentos de Estrela": 180
         },
@@ -36590,7 +36590,7 @@
         "habilidades": [
           "Corpo de Muralha (Corpo de Cidade: imune a Amedrontado, Atordoado e a efeitos de mente; reduz em 6 o dano físico de cada golpe)",
           "Dois Gestos Pesados (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
-          "Última Ordem (enquanto a ordem não for revogada, ele ataca primeiro quem estiver tentando atravessar a cidade; um personagem que domine Libras, ou um golem aliado, pode fazer o gesto de revogação com Misticismo ou Diplomacia DT 47 e ele para por uma cena)",
+          "Última Ordem (enquanto a ordem não for revogada, ele ataca primeiro quem estiver tentando atravessar a cidade; um personagem que domine Mudral, ou um golem aliado, pode fazer o gesto de revogação com Misticismo ou Diplomacia DT 47 e ele para por uma cena)",
           "Rua Que Cai (1/cena: como Ação Padrão, derruba um pedaço de prédio em alcance Longo; criaturas na área fazem Reflexos DT 47 ou sofrem 6d10+21 de impacto e ficam Caídas)"
         ],
         "classe": "Ser Lendário",
@@ -37492,7 +37492,7 @@
       "id": "anzhur",
       "titulo": "Anzhur, o Avô do Fogo",
       "conteudo": {
-        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele. Fala sumeriano, em frases curtas, e pergunta primeiro o que o visitante veio pedir antes de decidir se vai ouvir.",
+        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele. Fala Urrân, em frases curtas, e pergunta primeiro o que o visitante veio pedir antes de decidir se vai ouvir.",
         "preco": {
           "Fragmentos de Estrela": 180
         },
@@ -37556,7 +37556,7 @@
       "id": "kurnagal",
       "titulo": "Kurnagal, o Dragão em Crescimento",
       "conteudo": {
-        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência tem o tamanho do território. Em sumeriano arcaico, diz que ainda não terminou, e que o dia em que parar de crescer será o dia em que escolher onde morrer.",
+        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência tem o tamanho do território. Em Urrân arcaico, diz que ainda não terminou, e que o dia em que parar de crescer será o dia em que escolher onde morrer.",
         "preco": {
           "Fragmentos de Estrela": 450
         },
@@ -37683,7 +37683,7 @@
       "id": "ezrakael",
       "titulo": "Ezrakael, o Portador da Ordem",
       "conteudo": {
-        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala hebraico, e cada palavra dele soa como uma frase de lei.",
+        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que traz não pede licença, e o que decide proteger fica protegido, nem que o protegido não queira. Fala Aurelim, e cada palavra dele soa como uma frase de lei.",
         "preco": {
           "Fragmentos de Estrela": 280
         },
@@ -37750,7 +37750,7 @@
       "id": "seraquiel",
       "titulo": "Seraquiel, o Cântico de Seis Asas",
       "conteudo": {
-        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em hebraico, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas.",
+        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível. Em Aurelim, o canto dele conta a história de cada criatura na cena, em ordem, sem pular as partes vergonhosas.",
         "preco": {
           "Fragmentos de Estrela": 700
         },
@@ -37937,7 +37937,7 @@
       "id": "marenostra",
       "titulo": "Marenostra, a de Mil Nomes",
       "conteudo": {
-        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão a ela um nome diferente em cada porto, e ela atende por todos, em latim de sereia, sem nunca corrigir ninguém. Navios que a chamam pelo nome certo costumam atravessar; os que a chamam de monstro raramente chegam em casa.",
+        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão a ela um nome diferente em cada porto, e ela atende por todos, em Talássio, sem nunca corrigir ninguém. Navios que a chamam pelo nome certo costumam atravessar; os que a chamam de monstro raramente chegam em casa.",
         "preco": {
           "Fragmentos de Estrela": 180
         },
@@ -38619,7 +38619,7 @@
       "id": "peloros",
       "titulo": "Pelóros, o Avô das Montanhas",
       "conteudo": {
-        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e a pergunta é sempre a mesma: por que tanta gente pequena em cima do meu chão? Fala grego antigo, devagar, como quem escolhe cada pedra.",
+        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e a pergunta é sempre a mesma: por que tanta gente pequena em cima do meu chão? Fala Brontéu, devagar, como quem escolhe cada pedra.",
         "preco": {
           "Fragmentos de Estrela": 100
         },
@@ -38666,7 +38666,7 @@
         "habilidades": [
           "Mapa Que Anda (Passo que Muda o Chão, 1/rodada, Ação de Movimento: terreno em alcance Médio vira difícil; Reflexos DT 42 ou cai)",
           "Duas Pedras por Vez (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
-          "Sono de Pedra (Reação, 1/cena: ao chegar a metade da Vida, faz uma pausa e se agacha; até o fim da próxima rodada ele reduz em 10 o dano de cada golpe recebido e ganha Defesa +5, e quem falar com ele em grego antigo ou com humildade sincera faz Diplomacia DT 42 para encerrar a cena sem mais luta)",
+          "Sono de Pedra (Reação, 1/cena: ao chegar a metade da Vida, faz uma pausa e se agacha; até o fim da próxima rodada ele reduz em 10 o dano de cada golpe recebido e ganha Defesa +5, e quem falar com ele em Brontéu ou com humildade sincera faz Diplomacia DT 42 para encerrar a cena sem mais luta)",
           "Gente Pequena (criaturas de tamanho Médio ou menor em alcance Curto têm vantagem em testes de Furtividade contra ele e desvantagem em testes de Atletismo para se manter de pé)"
         ],
         "classe": "Ser Lendário",
@@ -39163,7 +39163,7 @@
       "id": "jormund",
       "titulo": "Jörmund, a Serpente do Abraço",
       "conteudo": {
-        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Dizem em nórdico antigo que, quando ela afrouxa o abraço, as marés respondem, e que, quando soltar de vez, o mundo não vai ter onde se apoiar. Dorme de olhos abertos e sonha com o mar de antes de haver mar.",
+        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. As sereias cantam em Talássio que, quando ela afrouxa o abraço, as marés respondem, e que, quando soltar de vez, o mundo não vai ter onde se apoiar. Dorme de olhos abertos e sonha com o mar de antes de haver mar.",
         "preco": {
           "Fragmentos de Estrela": 450
         },
@@ -45587,7 +45587,7 @@
       "id": "ancestral-do-bosque",
       "titulo": "Espírito Ancestral do Bosque",
       "conteudo": {
-        "descricao": "Mil anos de raiz e nenhuma pressa. Desperta quando machado novo entra na mata, e a mata inteira o obedece. Fala enoquiano, devagar, e cada palavra dele leva uma estação para terminar.",
+        "descricao": "Mil anos de raiz e nenhuma pressa. Desperta quando machado novo entra na mata, e a mata inteira o obedece. Fala Anemir, devagar, e cada palavra dele leva uma estação para terminar.",
         "preco": {
           "Fragmentos de Estrela": 100
         },
@@ -45651,7 +45651,7 @@
       "id": "diabrete-de-cinza",
       "titulo": "Diabrete de Cinza",
       "conteudo": {
-        "descricao": "Demônio miúdo, sobra de um pacto que ninguém terminou de pagar. Rouba pequenas coisas e deixa em troca um favor que o dono só entende depois. Fala aramaico e xinga em qualquer idioma.",
+        "descricao": "Demônio miúdo, sobra de um pacto que ninguém terminou de pagar. Rouba pequenas coisas e deixa em troca um favor que o dono só entende depois. Fala Kharum e xinga em qualquer idioma.",
         "preco": {
           "Lunaris": 1200
         },
@@ -46078,7 +46078,7 @@
       "id": "principe-do-cochilo",
       "titulo": "Príncipe do Cochilo",
       "conteudo": {
-        "descricao": "Reina sobre quartos de doente, bancos de espera e tardes de domingo. Nunca levanta a voz nem o corpo, e o mundo desacelera sozinho ao redor dele. Fala aramaico, e cada frase termina um pouco antes de acabar.",
+        "descricao": "Reina sobre quartos de doente, bancos de espera e tardes de domingo. Nunca levanta a voz nem o corpo, e o mundo desacelera sozinho ao redor dele. Fala Kharum, e cada frase termina um pouco antes de acabar.",
         "preco": {
           "Solares": 3200
         },
@@ -46142,7 +46142,7 @@
       "id": "duque-altivo",
       "titulo": "Duque Altivo",
       "conteudo": {
-        "descricao": "Demônio de coroa torta que nunca aceitou ordem de ninguém, nem a de cair. Prefere a morte à ajuda, e já morreu uma vez só para provar o ponto. Fala aramaico, olhando por cima da cabeça de quem ouve.",
+        "descricao": "Demônio de coroa torta que nunca aceitou ordem de ninguém, nem a de cair. Prefere a morte à ajuda, e já morreu uma vez só para provar o ponto. Fala Kharum, olhando por cima da cabeça de quem ouve.",
         "preco": {
           "Fragmentos de Estrela": 100
         },
@@ -46206,7 +46206,7 @@
       "id": "belzarak",
       "titulo": "Belzarak, o Arquidemônio da Ira",
       "conteudo": {
-        "descricao": "Arquidemônio de seis chifres e voz de forja. Comanda legiões que ninguém contou, e cada uma jurou vingança por uma coisa diferente. Fala aramaico, e cada ordem dele soa como uma martelada.",
+        "descricao": "Arquidemônio de seis chifres e voz de forja. Comanda legiões que ninguém contou, e cada uma jurou vingança por uma coisa diferente. Fala Kharum, e cada ordem dele soa como uma martelada.",
         "preco": {
           "Fragmentos de Estrela": 280
         },
@@ -46332,7 +46332,7 @@
       "id": "sentinela-de-clarao",
       "titulo": "Sentinela de Clarão",
       "conteudo": {
-        "descricao": "Anjo de armadura clara que fica parado diante de portas que não devem ser abertas. Responde em hebraico, devagar, e só deixa passar quem diz por que quer entrar.",
+        "descricao": "Anjo de armadura clara que fica parado diante de portas que não devem ser abertas. Responde em Aurelim, devagar, e só deixa passar quem diz por que quer entrar.",
         "preco": {
           "Lunaris": 1050
         },
@@ -46759,7 +46759,7 @@
       "id": "querubim-de-pedra-clara",
       "titulo": "Querubim de Pedra Clara",
       "conteudo": {
-        "descricao": "Feito de pedra branca, espera num pátio vazio há mais tempo do que existe pátio. Só se mexe quando já não resta alternativa, e quando se mexe termina o assunto. Fala hebraico, uma sílaba por estação.",
+        "descricao": "Feito de pedra branca, espera num pátio vazio há mais tempo do que existe pátio. Só se mexe quando já não resta alternativa, e quando se mexe termina o assunto. Fala Aurelim, uma sílaba por estação.",
         "preco": {
           "Fragmentos de Estrela": 100
         },
@@ -46823,7 +46823,7 @@
       "id": "miraquel",
       "titulo": "Miraquel, o Escriba das Sete Virtudes",
       "conteudo": {
-        "descricao": "Escreve em sete livros ao mesmo tempo, um para cada Virtude, e anota quem as cumpriu e quem apenas as recitou. Fala hebraico, e cada palavra dele pesa como uma pena de ouro.",
+        "descricao": "Escreve em sete livros ao mesmo tempo, um para cada Virtude, e anota quem as cumpriu e quem apenas as recitou. Fala Aurelim, e cada palavra dele pesa como uma pena de ouro.",
         "preco": {
           "Fragmentos de Estrela": 180
         },

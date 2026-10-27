@@ -1,6 +1,20 @@
 {
   "itens": [
     {
+      "id": "2026-10-27-idiomas-com-nome-proprio",
+      "data": "2026-10-27",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "As línguas do Jardim ganharam nome próprio e ficha completa",
+      "detalhes": [
+        "Cada língua tem agora a sua ficha no Alfabeto dos Registros Universais, com o jeito que ela soa, a escrita, onde se ouve e um cumprimento para usar na mesa.",
+        "Os nomes mudaram: os Vampiros falam Noctâr, os Elfos falam Ilvaari, os Gigantes Brontéu, os Goblins Krammel, os Anões Grúndar, os Golens Mudral, as Sereias Talássio, os Animálias Urrân, os Autômatos Axial e as Bruxas Nemético.",
+        "Os Espíritos falam Anemir entre os naturais, Kharum entre os demoníacos e Aurelim entre os angelicais. Universal, Valiriano e Ao Contrário continuam com o mesmo nome.",
+        "De quase todas as línguas ninguém sabe mais quem foi o criador. Só o Universal e o Ilvaari guardam esse nome.",
+        "As raças, o Bestiário e a Loja já usam os nomes novos."
+      ]
+    },
+    {
       "id": "2026-10-20-pontas-soltas-magia",
       "data": "2026-10-20",
       "tipo": "melhoria",
@@ -951,17 +965,6 @@
       "detalhes": [
         "Comprar ou contratar uma criatura do Bestiário de VD 50 em diante passou a custar Fragmentos de Estrela, na medida do que um grupo do nível ganha por sessão. Antes todas custavam o mesmo preço, do nível 50 ao 500.",
         "As tabelas de contratação do livro também ganharam degraus a partir do nível 100. Ajudante de nível muito alto deixou de custar troco."
-      ]
-    },
-    {
-      "id": "2026-10-04-fases-de-chefe",
-      "data": "2026-10-04",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Os chefes únicos mudam de fase no meio da luta",
-      "detalhes": [
-        "Quando a Vida de um chefe único chega à metade, a Sessão avisa com uma frase de cena, tipo \"o reflexo do mar se estilhaça\". O que mudou de verdade fica com o Mestre, e a mesa descobre jogando.",
-        "Vale para as 22 criaturas únicas do Bestiário. Curar o chefe não o devolve para a fase anterior."
       ]
     }
   ]

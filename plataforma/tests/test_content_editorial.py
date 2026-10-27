@@ -560,7 +560,7 @@ def test_resolved_content_overlays_only_published_global_version():
     ]
 
 
-def test_edicao_publicada_antiga_nao_apaga_a_marca_de_soberano_nem_o_vinculo_da_sede_nem_a_tabela_de_idiomas():
+def test_edicao_publicada_antiga_nao_apaga_a_marca_de_soberano_nem_o_vinculo_da_sede():
     base_ser = {
         "tipo": "personagem", "id": "grimm", "titulo": "Grimm",
         "conteudo": {"epiteto": "Soberano dos Sonhos", "descricao": "Texto oficial", "soberano": "sim"},
@@ -573,18 +573,12 @@ def test_edicao_publicada_antiga_nao_apaga_a_marca_de_soberano_nem_o_vinculo_da_
         "tipo": "personagem", "id": "noemi", "titulo": "Noemi",
         "conteudo": {"descricao": "Texto oficial", "soberano": "sim"},
     }
-    tabela = ["Idioma | Povo | Criador", "Valiriano | Dragões |"]
-    base_idiomas = {
-        "tipo": "idioma", "id": "idiomas-do-jardim", "titulo": "Idiomas do Jardim",
-        "conteudo": {"descricao": "Texto oficial", "tabela": tabela},
-    }
     # Edições publicadas antes de as marcas existirem: o conteudo vem inteiro, sem elas. A de Noemi
     # decidiu de propósito (soberano: nao), e isso vale.
     edicoes = {
         "personagem:grimm": {**base_ser, "conteudo": {"epiteto": "Soberano dos Sonhos", "descricao": "Texto novo"}},
         "local:pharos": {**base_local, "conteudo": {"descricao": "Texto novo"}},
         "personagem:noemi": {**base_outro, "conteudo": {"descricao": "Texto novo", "soberano": "nao"}},
-        "idioma:idiomas-do-jardim": {**base_idiomas, "conteudo": {"descricao": "Texto novo"}},
     }
 
     def responder(sql, _params):
@@ -593,7 +587,7 @@ def test_edicao_publicada_antiga_nao_apaga_a_marca_de_soberano_nem_o_vinculo_da_
         if "FROM biblioteca_conteudo" in sql:
             return _Result(rows=[
                 {"tipo": base["tipo"], "chave_recurso": base["id"], "titulo": base["titulo"], "dados": base}
-                for base in (base_ser, base_local, base_outro, base_idiomas)
+                for base in (base_ser, base_local, base_outro)
             ])
         if "FROM conteudo_global_editorial" in sql:
             return _Result(rows=[{"chave_recurso": chave, "dados_completos": dados} for chave, dados in edicoes.items()])
@@ -606,7 +600,6 @@ def test_edicao_publicada_antiga_nao_apaga_a_marca_de_soberano_nem_o_vinculo_da_
     assert por_id["grimm"] == {"epiteto": "Soberano dos Sonhos", "descricao": "Texto novo", "soberano": "sim"}
     assert por_id["pharos"] == {"descricao": "Texto novo", "faccao": "guilda-dos-cacadores"}
     assert por_id["noemi"] == {"descricao": "Texto novo", "soberano": "nao"}
-    assert por_id["idiomas-do-jardim"] == {"descricao": "Texto novo", "tabela": tabela}
 
 
 def test_resolved_content_omits_entry_removed_globally():

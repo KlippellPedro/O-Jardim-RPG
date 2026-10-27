@@ -1071,6 +1071,70 @@
       "arvore_origem": "aethel"
     },
     {
+      "id": "idioma-universal",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-vampiros",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-elfos",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-gigantes",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-goblins",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-anoes",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-golens",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-espiritos-naturais",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-espiritos-demoniacos",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-espiritos-angelicais",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-das-sereias",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-animalias",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-dragoes",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-clones",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-dos-automatos",
+      "tipo": "idioma"
+    },
+    {
+      "id": "idioma-das-bruxas",
+      "tipo": "idioma"
+    },
+    {
       "id": "idiomas-do-jardim",
       "tipo": "idioma"
     },

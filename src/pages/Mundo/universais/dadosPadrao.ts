@@ -373,44 +373,44 @@ const registroDeEntidade = (entidade: EntidadeCatalogo): IRegistro => {
 
 // ---------------------------------------------------------------- Alfabeto (idiomas)
 
-const ID_DA_TABELA_DE_IDIOMAS = 'idiomas-do-jardim';
+/** O resumo de todas as línguas. Ele não vira ficha, mas a Visibilidade dele vale para o Alfabeto inteiro. */
+const ID_DO_RESUMO_DE_IDIOMAS = 'idiomas-do-jardim';
 
-const comoId = (texto: string): string => texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+/** "dos Vampiros", "das Sereias": o artigo segue o plural do nome do povo. A lore diz "os Animálias", no masculino. */
+const doPovo = (povo: string): string => `${/as$/i.test(povo) && !/^animálias$/i.test(povo) ? 'das' : 'dos'} ${povo}`;
 
-/** "por Davinor", "pelos Finwë": quando o criador vem com artigo ("Os Finwë"), a preposição se junta a ele. */
-const porQuem = (criador: string): string => {
-  const artigo = criador.match(/^(os|as|o|a)[ ]+(.+)$/i);
-  return artigo ? `pel${artigo[1].toLowerCase()} ${artigo[2]}` : `por ${criador}`;
-};
-
-/** "dos Vampiros", "das Sereias": o artigo segue o plural do nome do povo. */
-const doPovo = (povo: string): string => `${/as$/i.test(povo) ? 'das' : 'dos'} ${povo}`;
-
-/** Os idiomas do Jardim, um registro por idioma. A lista vem da tabela da lore ("Idioma | Povo | Criador"), então
- * segue a Visibilidade dela: se o Mestre esconde "Os Idiomas do Jardim", o Alfabeto fica sem eles para o jogador. */
+/** Os idiomas do Jardim, um registro por língua (data/mundo/Jardim/idiomas.json, mais as que o Criador acrescentar
+ * no Painel). Cada língua segue a própria Visibilidade, como um Local: retida, aparece rasurada. Se o Mestre esconde
+ * "Os Idiomas do Jardim", o Alfabeto fica sem nenhuma para o jogador. */
 const idiomasPadrao = (catalog: LoreEntry[], visibilidade: IVisibilidade): IRegistro[] => {
-  const tabela = catalog.find((entrada) => entrada.tipo === 'idioma' && entrada.id === ID_DA_TABELA_DE_IDIOMAS);
-  if (!tabela || loreBloqueado(tabela, visibilidade)) return [];
-  const linhas = (tabela.conteudo as Record<string, unknown>).tabela;
-  if (!Array.isArray(linhas)) return [];
-  return ordenarPorTitulo(linhas.flatMap((linha): IRegistro[] => {
-    const [idioma = '', povo = '', criador = ''] = String(linha).split('|').map((parte) => parte.trim());
-    if (!idioma || !povo) return [];
+  const resumo = catalog.find((entrada) => entrada.tipo === 'idioma' && entrada.id === ID_DO_RESUMO_DE_IDIOMAS);
+  if (resumo && loreBloqueado(resumo, visibilidade)) return [];
+  const linguas = catalog.filter((entrada) => entrada.tipo === 'idioma' && entrada.id !== ID_DO_RESUMO_DE_IDIOMAS);
+  return ordenarPorTitulo(linguas.map((entrada): IRegistro => {
+    const trancado = loreBloqueado(entrada, visibilidade);
+    const povo = conteudoTexto(entrada, 'povo');
+    const criador = conteudoTexto(entrada, 'criador');
     const universal = /^todos/i.test(povo);
-    return [{
-      ...base('glossario', comoId(idioma)),
-      titulo: idioma,
-      subtitulo: universal ? 'Idioma de todos os povos' : `Idioma ${doPovo(povo)}`,
-      descricao: [
-        universal ? `${idioma} é falado por todos os povos do Jardim.` : `${idioma} é o idioma ${doPovo(povo)}.`,
-        criador ? `Foi criado ${porQuem(criador)}.` : 'Ninguém registrou quem o criou.',
-      ].join(' '),
-      campos: camposCom([['Povo', povo], ['Criador', criador || 'Sem criador registrado']]),
+    return {
+      ...base('glossario', entrada.id),
+      editor: 'lore',
+      loreRef: { tipo: entrada.tipo, id: entrada.id },
+      revelacao: trancado ? 'rasurado' : 'aberto',
+      titulo: trancado ? 'Registro retido' : entrada.titulo,
+      subtitulo: trancado ? '' : universal ? 'Idioma de todos os povos' : povo ? `Idioma ${doPovo(povo)}` : 'Idioma',
+      descricao: trancado ? '' : conteudoTexto(entrada, 'descricao'),
+      campos: trancado ? [] : camposCom([
+        ['Como soa', conteudoTexto(entrada, 'como_soa')],
+        ['Escrita', conteudoTexto(entrada, 'escrita')],
+        ['Onde se ouve', conteudoTexto(entrada, 'onde_se_ouve')],
+        ['Cumprimento', conteudoTexto(entrada, 'cumprimento')],
+        ['Criador', criador],
+      ]),
       blocos: [],
-      etiquetas: ['Idioma', universal ? '' : povo].filter(Boolean),
-      grupo: inicialDe(idioma),
-      idioma: { povo, criador, universal },
-    }];
+      etiquetas: trancado ? [] : ['Idioma', universal ? '' : povo].filter(Boolean),
+      grupo: trancado ? undefined : inicialDe(entrada.titulo),
+      idioma: trancado ? undefined : { povo, criador, universal },
+    };
   }));
 };
 

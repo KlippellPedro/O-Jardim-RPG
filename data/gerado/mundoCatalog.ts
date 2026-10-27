@@ -693,7 +693,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Khazad",
       "conteudo": {
         "dimensao": "padrao",
-        "descricao": "O reino subterrâneo, e o mais fechado da Dimensão Padrão depois de Salém. Governado por Durin II.\n\nFica cavado nas raízes da própria Dimensão Padrão, camada sobre camada de salões e forjas que descem mais fundo do que qualquer mapa de superfície registra. Ninguém de fora sabe ao certo até onde Khazad vai, só que continua descendo.\n\nSe Emberhold fabrica em escala, Khazad forja em profundidade: cada peça sai da mão de um ferreiro, uma de cada vez, e quase nunca pra vender. Um anão vende uma peça sua uma vez na vida, no máximo duas, e o preço nunca é só em moedas: costuma vir com uma condição, um favor a ser cobrado depois, no momento que Khazad escolher. Os anões falam Nórdico Antigo entre si e raramente qualquer outra língua com estrangeiros, mesmo quando a entendem.",
+        "descricao": "O reino subterrâneo, e o mais fechado da Dimensão Padrão depois de Salém. Governado por Durin II.\n\nFica cavado nas raízes da própria Dimensão Padrão, camada sobre camada de salões e forjas que descem mais fundo do que qualquer mapa de superfície registra. Ninguém de fora sabe ao certo até onde Khazad vai, só que continua descendo.\n\nSe Emberhold fabrica em escala, Khazad forja em profundidade: cada peça sai da mão de um ferreiro, uma de cada vez, e quase nunca pra vender. Um anão vende uma peça sua uma vez na vida, no máximo duas, e o preço nunca é só em moedas: costuma vir com uma condição, um favor a ser cobrado depois, no momento que Khazad escolher. Os anões falam Grúndar entre si e raramente qualquer outra língua com estrangeiros, mesmo quando a entendem.",
         "fundacao": "Não registrada.",
         "governo": "Monárquico. Durin II, Senhor da Forja."
       },
@@ -865,7 +865,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "epiteto": "Soberana dos Espíritos",
         "soberano": "sim",
         "cor": "Branco",
-        "descricao": "Blanc é um Espírito Primordial e o único Espírito Universal que se conhece. É também o espírito natural mais forte que existe: é do Fluxo Universal e chegou mais longe do que qualquer outro.\n\nTodo espírito natural é de um Fluxo, aquele que o prendeu ao mundo: Criação, Comunicação, Fim, e assim por diante, onze ao todo. Blanc é do Fluxo Universal, o décimo segundo, que não prende ninguém a um lado só e deixa quem o carrega tocar em todos os outros. É por isso que a chamam de Espírito Universal.\n\nAo contrário da maioria dos espíritos, Blanc tem corpo, um corpo astral firme o bastante para ser visto, tocado e confundido com o de uma pessoa. Parece uma mulher de pele pálida e cabelo longo e solto, da cor da prata velha, com olhos vermelhos e um sorriso que nunca chega a ser inteiro. Veste um corpete claro de bordas douradas, um xale cor de areia caído nos ombros, luvas compridas da mesma cor e um vestido verde-escuro. Preso na gola, leva um broche com uma pedra vermelha. Costuma apoiar o queixo na mão enquanto escuta, como quem tem todo o tempo do mundo.\n\nEntre os espíritos corre uma história, e ela muda pouco de boca em boca. Antes de qualquer Fluxo ter nome existia uma coisa só, que sentia e não sabia o quê. Cada Fluxo, ao nascer, puxou um pedaço dela e deu uma cor ao pedaço, e os pedaços viraram os espíritos. Blanc seria o que sobrou depois que todos puxaram, o resto e o inteiro ao mesmo tempo. Ela nunca confirmou nem negou. Quando perguntam, responde em Enoquiano, devagar, e a resposta nunca é a mesma duas vezes.\n\nComo nenhum Fluxo manda sozinho nela, nenhum a reconhece como estrangeira, e ela toca em qualquer um deles sem pedir licença. É por isso que está entre os dez seres mais fortes do Jardim. O que faz com essa força é outra conversa. Blanc não sai atrás de poder nem de gente. Aparece perto de espíritos que estão para se apagar e fica até o fim, e quem presenciou conta que a cor do espírito, no último instante, fica branca por um segundo.\n\nNinguém sabe onde ela mora. Quem a procura costuma encontrar espíritos muito velhos que dizem tê-la visto na semana passada, e que já não sabem direito o que a semana quer dizer."
+        "descricao": "Blanc é um Espírito Primordial e o único Espírito Universal que se conhece. É também o espírito natural mais forte que existe: é do Fluxo Universal e chegou mais longe do que qualquer outro.\n\nTodo espírito natural é de um Fluxo, aquele que o prendeu ao mundo: Criação, Comunicação, Fim, e assim por diante, onze ao todo. Blanc é do Fluxo Universal, o décimo segundo, que não prende ninguém a um lado só e deixa quem o carrega tocar em todos os outros. É por isso que a chamam de Espírito Universal.\n\nAo contrário da maioria dos espíritos, Blanc tem corpo, um corpo astral firme o bastante para ser visto, tocado e confundido com o de uma pessoa. Parece uma mulher de pele pálida e cabelo longo e solto, da cor da prata velha, com olhos vermelhos e um sorriso que nunca chega a ser inteiro. Veste um corpete claro de bordas douradas, um xale cor de areia caído nos ombros, luvas compridas da mesma cor e um vestido verde-escuro. Preso na gola, leva um broche com uma pedra vermelha. Costuma apoiar o queixo na mão enquanto escuta, como quem tem todo o tempo do mundo.\n\nEntre os espíritos corre uma história, e ela muda pouco de boca em boca. Antes de qualquer Fluxo ter nome existia uma coisa só, que sentia e não sabia o quê. Cada Fluxo, ao nascer, puxou um pedaço dela e deu uma cor ao pedaço, e os pedaços viraram os espíritos. Blanc seria o que sobrou depois que todos puxaram, o resto e o inteiro ao mesmo tempo. Ela nunca confirmou nem negou. Quando perguntam, responde em Anemir, devagar, e a resposta nunca é a mesma duas vezes.\n\nComo nenhum Fluxo manda sozinho nela, nenhum a reconhece como estrangeira, e ela toca em qualquer um deles sem pedir licença. É por isso que está entre os dez seres mais fortes do Jardim. O que faz com essa força é outra conversa. Blanc não sai atrás de poder nem de gente. Aparece perto de espíritos que estão para se apagar e fica até o fim, e quem presenciou conta que a cor do espírito, no último instante, fica branca por um segundo.\n\nNinguém sabe onde ela mora. Quem a procura costuma encontrar espíritos muito velhos que dizem tê-la visto na semana passada, e que já não sabem direito o que a semana quer dizer."
       }
     },
     {
@@ -878,7 +878,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "epiteto": "Soberano dos Dragões",
         "soberano": "sim",
         "cor": "Dourado",
-        "descricao": "Os dragões crescem a vida inteira, e quase todos morrem no meio do caminho, porque o crescimento não tem fim marcado. Ushumgal é o único que chegou ao fim dele. Parou de crescer no ponto exato em que tudo o que um dragão pode ser coube numa criatura só, e é por isso que o chamam de Dragão Verdadeiro. Os outros estão a caminho de ser o que ele é.\n\nUshumgal quer dizer grande dragão em sumeriano, e é só a palavra mais próxima que os outros povos encontraram. O nome que os dragões usam entre si é uma palavra só, e os anciões a pronunciam em voz baixa, quando pronunciam.\n\nAnzhur, o Avô do Fogo, é mais velho. Kurnagal ainda cresce. Apokalyx dorme em cima do que guarda. Ushumgal é o único dos grandes que não espera nada de ninguém, nem de si mesmo, porque não falta nada a ele.\n\nNão tem território, porque território é coisa de dragão que ainda precisa defender alguma coisa. Pousa onde quer, e ninguém reclama. Quem já ficou diante dele conta que o que assusta é a calma, e que o tamanho e o fogo nem aparecem na lembrança depois."
+        "descricao": "Os dragões crescem a vida inteira, e quase todos morrem no meio do caminho, porque o crescimento não tem fim marcado. Ushumgal é o único que chegou ao fim dele. Parou de crescer no ponto exato em que tudo o que um dragão pode ser coube numa criatura só, e é por isso que o chamam de Dragão Verdadeiro. Os outros estão a caminho de ser o que ele é.\n\nUshumgal quer dizer grande dragão em Urrân, e é só a palavra mais próxima que os outros povos encontraram. O nome que os dragões usam entre si é uma palavra só, e os anciões a pronunciam em voz baixa, quando pronunciam.\n\nAnzhur, o Avô do Fogo, é mais velho. Kurnagal ainda cresce. Apokalyx dorme em cima do que guarda. Ushumgal é o único dos grandes que não espera nada de ninguém, nem de si mesmo, porque não falta nada a ele.\n\nNão tem território, porque território é coisa de dragão que ainda precisa defender alguma coisa. Pousa onde quer, e ninguém reclama. Quem já ficou diante dele conta que o que assusta é a calma, e que o tamanho e o fogo nem aparecem na lembrança depois."
       }
     },
     {
@@ -1033,29 +1033,237 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     },
     {
       "tipo": "idioma",
+      "id": "idioma-universal",
+      "titulo": "Universal",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Todos os povos",
+        "criador": "Um Auleth",
+        "descricao": "A língua que todo mundo aprende cedo ou tarde, porque é nela que se compra, se cobra e se pede caminho. Foi criada por um Auleth, uma consciência que veio de fora do Jardim, e isso explica o jeito dela: regular, sem exceção, com uma palavra exata para cada coisa que se pode medir, contar ou pesar.\n\nPara o que se sente ela tem pouco. Quem quer declarar amor, xingar com vontade ou rezar costuma trocar para a língua do próprio povo no meio da frase, e ninguém estranha.",
+        "como_soa": "Neutro e claro, sem sotaque de origem. Cada povo põe o seu por cima, e um ouvido treinado sabe de onde a pessoa vem pela segunda palavra.",
+        "escrita": "Um alfabeto de traços retos, fácil de entalhar em madeira, riscar em pedra ou cunhar em moeda. É a escrita dos contratos, das placas de estrada e dos papéis do Banco Lunar.",
+        "onde_se_ouve": "Em todo mercado, porto e estrada do Jardim. No Salão das Treze Portas, a porta do Universal é a mais gasta e a única que ninguém tranca.",
+        "cumprimento": "“Bom caminho”, dito na chegada e na despedida."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-vampiros",
+      "titulo": "Noctâr",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Vampiros",
+        "descricao": "A língua de Întuneric, falada baixo, como convém a quem vive numa noite que nunca acaba. Tem dezenas de palavras para sangue, separadas por idade, por medo e por quem bebeu primeiro, e nenhuma para manhã. Quando um vampiro precisa falar do sol, usa uma palavra emprestada e cospe depois.\n\nCada Clã tem o seu sotaque, e um vampiro velho reconhece o Clã de outro antes de ver os dentes. Os Senhores da Noite usam um registro mais antigo, cheio de formas de tratamento, e esperam ser respondidos nele. Ninguém guardou o nome de quem deu o Noctâr aos vampiros, e os próprios vampiros discutem isso há séculos.",
+        "como_soa": "Sussurrado e cheio de consoantes chiadas, com vogais fechadas que quase somem no fim das palavras. Dito em voz alta, parece sempre uma ordem.",
+        "escrita": "Letras altas e estreitas, ligadas por cima como as grades de um portão. Escreve-se com tinta escura sobre pergaminho, e os documentos importantes levam uma gota de sangue de quem assina.",
+        "onde_se_ouve": "Em Întuneric inteira: nos salões da Transilvânia, nos vagões dos Trens de Osso e nas ordens dadas nas Colônias, onde os humanos aprendem a entender e nunca recebem permissão para responder.",
+        "cumprimento": "“Vel întâr”, que a noite te esconda."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-elfos",
+      "titulo": "Ilvaari",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Elfos",
+        "criador": "Os Finwë",
+        "descricao": "A língua dos elfos, criada pela linhagem Finwë e guardada em Nadalon. Elfo não esquece nada, e a língua acompanha: uma palavra nunca muda de sentido, e um texto escrito há mil anos se lê como uma carta de ontem. Por isso o Ilvaari cresce devagar. Cada palavra nova passa anos em discussão entre os anciãos antes de ganhar o direito de existir.\n\nAs palavras são longas e montadas por pedaços, e uma só carrega o que outra língua diz numa frase. Cada uma das seis Linhagens tem um punhado de termos que só ela usa, e um Elfo de Sombras e um de Tempestades se entendem perfeitamente, com uma ou outra sobrancelha levantada.",
+        "como_soa": "Musical e lento, com vogais dobradas e consoantes macias. Um elfo falando depressa é sinal de que alguma coisa vai muito mal.",
+        "escrita": "Uma escrita de curvas que se lê de cima para baixo, em colunas. Os textos mais antigos de Alfarn foram escritos com luz na rocha branca da ilha e brilham até hoje.",
+        "onde_se_ouve": "Em Nadalon, nas ilhas que flutuam ao redor de Alfarn, e em qualquer lugar onde um elfo queira dizer algo que os outros não entendam.",
+        "cumprimento": "“Aelë iltavaa”, que a luz te ache."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-gigantes",
+      "titulo": "Brontéu",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Gigantes",
+        "descricao": "A língua dos gigantes foi feita para ser ouvida longe. As palavras são curtas, de vogais abertas, e cada sílaba sai com a força de quem chama alguém do outro lado de um vale. Sussurrar em Brontéu é quase impossível, e gigante que quer segredo escreve.\n\nTem poucas palavras para coisas pequenas. Um gigante chama de “pedrinha” qualquer coisa que caiba na mão dele, de uma moeda a um goblin, e só o contexto diz qual dos dois ele quer. Para montanha, vento e peso, o vocabulário é tão grande que nenhuma outra língua alcança.",
+        "como_soa": "Grave e retumbante, como trovão ao longe. Dentro de casa, faz a louça tremer.",
+        "escrita": "Sinais grandes, entalhados fundo na pedra, pensados para serem lidos de longe. Um recado de gigante costuma ocupar uma parede inteira.",
+        "onde_se_ouve": "Nas pedreiras, nas trilhas das terras altas e em qualquer lugar onde um gigante precise ser ouvido sem sair do lugar.",
+        "cumprimento": "“Thóra megá!”, batendo no peito: que o chão te aguente."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-goblins",
+      "titulo": "Krammel",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Goblins",
+        "descricao": "A língua dos balcões. O Krammel junta palavras como quem junta mercadoria, uma colada na outra, até uma só significar “o preço de hoje para um cliente de quem eu ainda não sei se gosto”. Tem trinta jeitos de dizer “barato”, e nenhum deles garante desconto.\n\nGoblin aprende a contar antes de aprender a falar, e o Krammel tem números para frações que nenhuma outra língua se dá ao trabalho de nomear. Quem negocia com um goblin em Universal paga mais. Quem tenta em Krammel e erra uma terminação paga o dobro, porque a terminação errada vira compromisso.",
+        "como_soa": "Rápido, anasalado e cheio de consoantes juntas. Dois goblins pechinchando soam como uma panela de pressão.",
+        "escrita": "Uma letra miúda e apertada, feita para caber na margem do recibo. Quase todo texto em Krammel tem uma cláusula escrita menor ainda, no rodapé.",
+        "onde_se_ouve": "Em feiras, mercados e atrás de qualquer balcão onde um goblin tenha alguma coisa para vender ou revender.",
+        "cumprimento": "“Krimm, kramm?”, o que você traz?"
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-anoes",
+      "titulo": "Grúndar",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Anões",
+        "descricao": "A língua de Khazad, falada nos salões e nas forjas que descem mais fundo do que qualquer mapa. Os anões a usam entre si e raramente com estrangeiros, mesmo quando entendem muito bem a língua de quem está falando com eles.\n\nTodo contrato de Khazad sai em duas vias, uma em Universal e outra em Grúndar, e só a segunda vale para um anão. É uma língua de nomes de metal, de cor de brasa e de juramento: existe um tempo verbal só para promessas, e quem promete nele e não cumpre deixa de ser chamado pelo nome.",
+        "como_soa": "Pesado e cheio de erres, com palavras que terminam secas, como martelo batendo na bigorna.",
+        "escrita": "Runas de traço reto, feitas para serem gravadas em metal e pedra com cinzel. Toda peça forjada em Khazad leva, em algum canto, a runa de quem a fez.",
+        "onde_se_ouve": "Em Khazad, do primeiro salão ao mais fundo, e em qualquer oficina onde trabalhe um anão que prefere que o cliente não entenda o que ele acha do serviço.",
+        "cumprimento": "“Eld ok hárn”, fogo e ferro: que a tua forja não apague."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-golens",
+      "titulo": "Mudral",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Golens",
+        "descricao": "Golem não respira, e a língua dele dispensa a voz. O Mudral se fala com as mãos, os braços e o corpo inteiro: cada sinal é uma pose que se segura por um instante, com o peso de quem foi feito de pedra ou metal. Uma conversa entre dois golens parece duas estátuas trocando de posição devagar.\n\nTem sinais para ordens, tamanhos e materiais, e uma gramática de distância: o mesmo sinal feito perto do peito ou com o braço esticado muda de sentido. Quem não é golem consegue aprender, e muita gente aprende, porque o Mudral funciona em silêncio absoluto e se entende do outro lado de uma praça.",
+        "como_soa": "Não tem som. O único barulho é o raspar das juntas e o estalo da pedra quando um sinal termina.",
+        "escrita": "Desenhos de mãos em posição, pintados ou entalhados em sequência, como uma tira de figuras. Muitos golens trazem uma frase dessas gravada no próprio corpo, deixada por quem os ergueu.",
+        "onde_se_ouve": "Onde houver golens trabalhando e entre quem precisa conversar sem ser ouvido. No Salão das Treze Portas, a porta do Mudral fica no centro do círculo e não tem maçaneta.",
+        "cumprimento": "As duas mãos abertas, palmas para baixo, descendo devagar até a cintura: estou parado, pode chegar."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-espiritos-naturais",
+      "titulo": "Anemir",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Espíritos naturais",
+        "descricao": "A língua dos espíritos naturais, os que morreram e ficaram presos ao mundo por um Fluxo. Ela dispensa garganta: sai como um sopro frio que chega ao ouvido de quem escuta, e por isso atravessa paredes do mesmo jeito que quem a fala.\n\nQuem tem sensibilidade ao Fluxo enxerga cada palavra do Anemir com uma cor, a do Fluxo de quem fala, e dois espíritos dizem a mesma frase em cores diferentes. É nela que se pronuncia um nome verdadeiro, e espírito nenhum diz o próprio sem confiar muito em quem ouve. Blanc, quando perguntam o que ela é, responde em Anemir, e a resposta nunca é a mesma duas vezes.",
+        "como_soa": "Um sopro baixo, perto do ouvido, como vento passando por uma fresta. Os vivos sentem um arrepio antes de entender a primeira palavra.",
+        "escrita": "Quase não existe. Os espíritos marcam o que precisam guardar com geada na janela, poeira assentada ou uma mancha de umidade que volta toda noite no mesmo lugar.",
+        "onde_se_ouve": "Em casas abandonadas, cemitérios e campos de batalha antigos, e em qualquer lugar onde alguém morreu e não foi embora.",
+        "cumprimento": "“Iá anemé”, ainda estou aqui."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-espiritos-demoniacos",
+      "titulo": "Kharum",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Espíritos demoníacos",
+        "descricao": "A língua dos espíritos que morreram agarrados a um Pecado. É áspera, cheia de sons de garganta, e foi feita para negociar: cada frase traz um preço embutido, e uma pergunta em Kharum já pressupõe o que se vai pedir em troca. Demônio nenhum diz “obrigado” na própria língua. A palavra mais próxima quer dizer “estamos quites, por enquanto”.\n\nOs pactos se fecham em Kharum, e o texto do pacto vale ao pé da letra. Por isso quem lida com demônios aprende pelo menos a ler, e mesmo assim costuma achar a cláusula que importava tarde demais.",
+        "como_soa": "Rouco e gutural, com estalos no fundo da garganta. Até um elogio em Kharum soa como ameaça feita com calma.",
+        "escrita": "Sinais angulosos, que parecem riscados com unha, escritos em pele, em pedra quente ou no ar, com cinza. Um pacto escrito queima de leve na mão de quem o assinou.",
+        "onde_se_ouve": "Onde um demônio estiver fazendo negócio: encruzilhadas, porões, ruínas de templo e, de vez em quando, a boca de alguém possuído.",
+        "cumprimento": "“Ghar sem-tah”, diga o seu nome."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-espiritos-angelicais",
+      "titulo": "Aurelim",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Espíritos angelicais",
+        "descricao": "A língua dos espíritos que morreram carregando uma Virtude. Soa como lei lida em voz alta: frases completas, sem gíria, com o verbo sempre no lugar certo. Um anjo escolhe cada palavra, e uma palavra dita por ele pesa como juramento.\n\nO Aurelim tem uma forma cantada, usada nos votos e nas bênçãos, que poucos vivos conseguem ouvir sem se emocionar sem saber por quê. Mentir nela é possível e custa caro: a frase sai desafinada, e qualquer anjo por perto percebe.",
+        "como_soa": "Claro e sustentado, com vogais longas que parecem durar mais do que o fôlego permitiria.",
+        "escrita": "Letras douradas de traço fino, escritas da direita para a esquerda. Os votos de um anjo costumam ficar gravados no lugar onde foram feitos e ainda se leem séculos depois.",
+        "onde_se_ouve": "Em santuários, diante de portas que não devem ser abertas e ao lado de quem fez um voto e está prestes a quebrá-lo.",
+        "cumprimento": "“Aurel imá”, a luz te viu."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-das-sereias",
+      "titulo": "Talássio",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Sereias",
+        "descricao": "A língua das sereias é sempre cantada. O mesmo som em tons diferentes vira palavras diferentes, e cada frase em Talássio tem melodia própria, que muda de sentido se alguém desafinar. Debaixo d'água ela alcança muito mais longe do que no ar, e duas sereias conversam de um lado a outro de uma baía sem subir à tona.\n\nMarinheiros aprendem pedaços de ouvido e quase sempre aprendem errado. Muita lenda de porto nasceu de uma canção de sereia mal traduzida, e algumas sereias se divertem deixando a tradução errada correr.",
+        "como_soa": "Uma melodia de vogais compridas e consoantes leves. Fora d'água parece canto; dentro dela vira um zumbido que se sente no peito antes de chegar ao ouvido.",
+        "escrita": "Sulcos em conchas e pedras do fundo, imitando o desenho das ondas. Muitas sereias nunca escrevem nada e guardam tudo de memória, em canções.",
+        "onde_se_ouve": "No mar, da costa ao abismo, e nas noites de porto em que alguém jura ter ouvido cantarem perto do cais.",
+        "cumprimento": "“Thalá, thalá”, cantado em duas notas: a maré te trouxe."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-animalias",
+      "titulo": "Urrân",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Animálias",
+        "descricao": "A língua mais velha que se conhece. Os Animálias a falam misturando palavra com rosnado, assobio e postura, porque bicho fala com o corpo inteiro. Por isso um Animália consegue trocar coisas simples com os animais, e por isso também quem não tem cauda nem orelha que mexa nunca fala Urrân tão bem.\n\nÉ mais antiga que o Valiriano, e os dragões primordiais ainda a usam entre si. Ushumgal, o nome que os outros povos dão ao Dragão Verdadeiro, é uma palavra de Urrân e quer dizer grande dragão. Ninguém sabe quem falou Urrân primeiro, e os Animálias acham a pergunta engraçada.",
+        "como_soa": "Grave e cheio de sons que não cabem em letra: um grunhido curto, um estalo de língua, um silêncio no meio da frase que também quer dizer alguma coisa.",
+        "escrita": "Marcas de garra, riscos em casca de árvore e pedras empilhadas em ordem. É uma das escritas mais antigas do Jardim e das mais difíceis de ler para quem não sabe onde olhar.",
+        "onde_se_ouve": "Nas matas, nos campos e em qualquer lugar onde vivam Animálias, e nas tocas dos dragões mais velhos.",
+        "cumprimento": "“Hurr”, curto, com o queixo levantado: o seu cheiro não me assusta."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-dragoes",
+      "titulo": "Valiriano",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Dragões",
+        "descricao": "A língua dos dragões. Todo dragão a entende desde o ovo, e um filhote recém-saído já responde às broncas nela, num guincho fino que só ele acha imponente. É uma língua de poucas palavras e muita entonação: o mesmo nome, dito com fumaça ou sem, pode ser cumprimento ou aviso.\n\nGente aprende a entender o Valiriano, e alguns cavaleiros chegam a falar o bastante para dar ordens no ar. Pronunciar direito já é outra história, porque várias palavras pedem uma garganta que esquenta. Os dragões primordiais são mais velhos que o Valiriano e ainda guardam entre si o Urrân.",
+        "como_soa": "Grave e arrastado, com sons que vibram no peito de quem está perto. Quando o dragão se irrita, as consoantes saem com faísca.",
+        "escrita": "Dragão quase não escreve. O que existe são marcas de garra em pedra e em metal derretido, e os nomes que os cavaleiros gravam nas selas para lembrar como se diz.",
+        "onde_se_ouve": "Nos ninhos, nas cavernas, no céu sobre os vulcões e nas costas de quem aprendeu a montar.",
+        "cumprimento": "Dragão não cumprimenta. Quando muito, diz o próprio nome e espera o seu."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-clones",
+      "titulo": "Ao Contrário",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Clones",
+        "descricao": "A língua dos clones é a fala dos outros povos dita de trás para frente. Começou como um jeito de dois clones conversarem sem que o Original entendesse, e ficou. Hoje tem gramática própria, palavras que só existem invertidas e uma regra que todo clone conhece: o próprio nome se diz sempre ao contrário, para lembrar de quem ele nasceu cópia.\n\nQuem tenta aprender por esperteza, invertendo a frase na cabeça, fica sempre um passo atrás. Os clones falam Ao Contrário tão depressa quanto qualquer um fala a própria língua, e riem quando alguém de fora ainda está desmontando a primeira palavra.",
+        "como_soa": "Estranho e familiar ao mesmo tempo, como uma gravação tocada de trás para frente. Dá a impressão de que a pessoa está quase dizendo algo que você entende.",
+        "escrita": "A escrita do Universal, de trás para frente e espelhada. Lê-se com a página contra a luz ou diante de um espelho.",
+        "onde_se_ouve": "Onde houver clones juntos, e principalmente quando há um Original por perto.",
+        "cumprimento": "“Aid mob”, bom dia."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-dos-automatos",
+      "titulo": "Axial",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Autômatos",
+        "descricao": "A língua dos autômatos. O nome vem da A.X.I.S, de onde os primeiros saíram, e é tudo o que se sabe da origem dela. É exata como uma conta, sem duplo sentido, ironia ou palavra vaga, e cada frase diz uma coisa só. Um autômato que quer ser gentil precisa avisar antes: “isto é uma gentileza”.\n\nO Axial passa de núcleo para núcleo sem som, em pulsos de luz e de sinal, e só vira voz quando há alguém de carne na conversa. Um autômato que fala Axial em voz alta está sendo educado com você.",
+        "como_soa": "Em voz alta, sílabas curtas e iguais, num ritmo de relógio. Entre autômatos, um zumbido baixo e uma luz que pisca no núcleo.",
+        "escrita": "Linhas de pontos e traços, gravadas em placas de metal ou guardadas direto no núcleo. Um autômato lê um texto desses mais rápido do que você lê esta frase.",
+        "onde_se_ouve": "Nas oficinas, nos lugares que a A.X.I.S deixou para trás e em qualquer canto onde dois autômatos se encontrem.",
+        "cumprimento": "“Axi tel, nul”: conexão feita, sem falha."
+      }
+    },
+    {
+      "tipo": "idioma",
+      "id": "idioma-das-bruxas",
+      "titulo": "Nemético",
+      "revelado": true,
+      "conteudo": {
+        "povo": "Bruxas",
+        "descricao": "A língua de Salém. As bruxas a usam para conversar, para escrever e, principalmente, para fazer feitiço, e no Nemético a fronteira entre as três coisas é fina. Uma sílaba fora do lugar muda o efeito de uma maldição inteira, e por isso bruxa jovem passa anos repetindo frases antes de ter permissão para dizê-las com intenção.\n\nComo Salém vive fechada para quem é de fora, o Nemético quase não sai de lá. As poucas palavras que chegaram aos outros reinos viraram superstição: gente que nem sabe o que elas querem dizer ainda as pendura na porta para afastar azar.",
+        "como_soa": "Sussurrado e rítmico, com sons aspirados e palavras que terminam num suspiro. Recitado em grupo, parece uma reza que fica mais rápida a cada volta.",
+        "escrita": "Riscos curtos ao longo de uma linha reta, como marcas num cabo de vassoura ou na quina de uma pedra. Cada Cadeira das Irmãs da Noite tem um sinal próprio, e um decreto de Salém só vale com os dez.",
+        "onde_se_ouve": "Em Salém, nos círculos de bruxas espalhados pelo Jardim e, baixinho, em qualquer lugar onde alguém esteja lançando uma maldição.",
+        "cumprimento": "“Mhar nem, dhú”: que nenhuma maldição te ache."
+      }
+    },
+    {
+      "tipo": "idioma",
       "id": "idiomas-do-jardim",
       "titulo": "Os Idiomas do Jardim",
       "conteudo": {
-        "descricao": "Treze povos, dezesseis línguas. O Espírito é o único povo com mais de uma: fala Enoquiano entre os Espíritos naturais, Aramaico entre os Espíritos demoníacos e Hebraico entre os Espíritos angelicais. O Universal é falado por todos e foi criado por um Auleth. O Romeno é dos Vampiros, criado por Davinor. O Finlandês é dos Elfos, criado pelos Finwë.\n\nOs demais não têm criador registrado: Grego entre os Gigantes, Alemão entre os Goblins, Nórdico Antigo entre os Anões, Libras entre os Golens, Latim entre as Sereias, Sumeriano entre os Animálias, Ao Contrário entre os Clones, Inglês entre os Autômatos e Celta entre as Bruxas, além das três línguas dos Espíritos.\n\nDragões não formam um povo, mas têm língua própria: Valiriano, que todo dragão entende desde o ovo, do filhote ao mais velho. Só os primordiais, mais antigos que o Valiriano, ainda guardam entre si o Sumeriano.",
-        "nota": "Que um idioma tenha criador conhecido diz algo sobre o povo: Vampiros e Elfos sabem quem lhes deu a língua. Os outros doze não.",
-        "tabela": [
-          "Universal | Todos os povos | Auleth",
-          "Romeno | Vampiros | Davinor",
-          "Finlandês | Elfos | Os Finwë",
-          "Grego | Gigantes |",
-          "Alemão | Goblins |",
-          "Nórdico Antigo | Anões |",
-          "Libras | Golens |",
-          "Enoquiano | Espíritos naturais |",
-          "Aramaico | Espíritos demoníacos |",
-          "Hebraico | Espíritos angelicais |",
-          "Latim | Sereias |",
-          "Sumeriano | Animálias |",
-          "Valiriano | Dragões |",
-          "Ao Contrário | Clones |",
-          "Inglês | Autômatos |",
-          "Celta | Bruxas |"
-        ]
+        "descricao": "Dezesseis línguas correm pelo Jardim. O Universal é de todos, e é nele que se compra, se viaja e se assina contrato. Cada povo guarda também a sua. Os Vampiros falam Noctâr; os Elfos, Ilvaari; os Gigantes, Brontéu; os Goblins, Krammel; os Anões, Grúndar; os Golens, Mudral; as Sereias, Talássio; os Animálias, Urrân; os Clones, Ao Contrário; os Autômatos, Axial; e as Bruxas, Nemético.\n\nO Espírito é o único povo com mais de uma língua, uma para cada Natureza: Anemir entre os naturais, Kharum entre os demoníacos e Aurelim entre os angelicais. Os dragões não formam um povo e mesmo assim têm a sua, o Valiriano, que todo dragão entende desde o ovo. Só os primordiais, mais antigos que ele, ainda guardam entre si o Urrân.\n\nCada língua tem a sua ficha no Alfabeto dos Registros Universais, com o som, a escrita, onde se ouve e um cumprimento.",
+        "nota": "Só duas línguas guardam o nome de quem as criou: o Universal, de um Auleth, e o Ilvaari, dos Finwë. Das outras, o registro se perdeu, e cada povo conta a própria versão, quando conta."
       }
     },
     {
@@ -1188,7 +1396,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
         "responsavel": "Os tradutores",
         "dominio": "Tradução, intérpretes e o registro dos idiomas do Jardim",
         "faccao": "casa-das-linguas",
-        "descricao": "Um salão redondo, em Gênese, com treze portas, uma para cada povo do Jardim. Atrás de cada porta fica uma sala de trabalho com dicionários, cartas e os tradutores daquele povo. O salão do meio serve a quem precisa de duas línguas na mesma conversa e espera a vez numa fila que anda devagar.\n\nA porta do Universal é a mais gasta e a única que ninguém tranca. A de Libras fica no centro do círculo e não tem maçaneta, porque ali se pede licença por sinal, e quem não sabe o sinal espera que alguém de dentro o ensine."
+        "descricao": "Um salão redondo, em Gênese, com treze portas, uma para cada povo do Jardim. Atrás de cada porta fica uma sala de trabalho com dicionários, cartas e os tradutores daquele povo. O salão do meio serve a quem precisa de duas línguas na mesma conversa e espera a vez numa fila que anda devagar.\n\nA porta do Universal é a mais gasta e a única que ninguém tranca. A do Mudral fica no centro do círculo e não tem maçaneta, porque ali se pede licença por sinal, e quem não sabe o sinal espera que alguém de dentro o ensine."
       }
     },
     {

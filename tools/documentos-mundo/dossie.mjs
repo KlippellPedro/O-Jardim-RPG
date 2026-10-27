@@ -18,7 +18,7 @@
  */
 import {
   CRONICAS, RACAS_REAIS, IDIOMAS, PALETA,
-  daArvore, porId, esc, paragrafos, lista, sinal,
+  daArvore, porId, porQuem, esc, paragrafos, lista, sinal,
 } from './dados.mjs';
 
 /** Um lugar só pra trocar nome, cargo e datas da personagem. */
@@ -309,7 +309,7 @@ function cadernoPovos() {
         ${paragrafos(r.descricao)}
         <dl class="formulario">
           <div class="campo"><dt>Língua</dt><dd>${
-            idioma ? `${esc(idioma.lingua)}${idioma.criador ? `, dada por ${esc(idioma.criador)}` : ', sem criador registrado'}` : 'só o Universal'
+            idioma ? `${esc(idioma.lingua)}${idioma.criador ? `, dada ${esc(porQuem(idioma.criador))}` : ''}` : 'só o Universal'
           }</dd></div>
           ${arvore ? `<div class="campo"><dt>Árvore de origem</dt><dd>${esc(arvore.nome)}</dd></div>` : ''}
           ${caminhos.length ? `<div class="campo"><dt>${esc(r.rotulo_variante || 'Ramos')}</dt><dd>${esc(caminhos.join(', '))}</dd></div>` : ''}

@@ -47,6 +47,14 @@ test('as classes não usam antítese', () => {
   assert.deepEqual(achados('classes.json', textosDe(classesData, '')), []);
 });
 
+test('os idiomas do Jardim não usam antítese', () => {
+  const idiomas = JSON.parse(readFileSync(new URL('../../data/mundo/Jardim/idiomas.json', import.meta.url), 'utf8'));
+  const resumo = JSON.parse(readFileSync(new URL('../../data/mundo/Jardim/jardim.json', import.meta.url), 'utf8'))
+    .entradas.find((entrada: { id: string }) => entrada.id === 'idiomas-do-jardim');
+  assert.deepEqual(achados('idiomas.json', textosDe(idiomas.entradas.map((entrada: { conteudo: unknown }) => entrada.conteudo), '')), []);
+  assert.deepEqual(achados('jardim.json', textosDe(resumo.conteudo, '')), []);
+});
+
 test('as páginas de classe não usam antítese', () => {
   const pasta = new URL('../../src/redesign/classe/', import.meta.url);
   const paginas = readdirSync(pasta).filter((arquivo) => arquivo.endsWith('.tsx'));

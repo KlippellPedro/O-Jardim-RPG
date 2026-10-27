@@ -2,7 +2,7 @@
   "pacote": "jardim-transversal",
 
   "_LEIA_ISSO_PRIMEIRO": {
-    "o_que_e_esse_arquivo": "Conteúdo que não pertence a nenhuma Árvore específica - a estrutura do Jardim inteiro e os idiomas dos povos. Por isso mora numa pasta própria ('Jardim') em vez de numa pasta de Árvore.",
+    "o_que_e_esse_arquivo": "Conteúdo que não pertence a nenhuma Árvore específica - a estrutura do Jardim inteiro e o resumo dos idiomas dos povos (cada língua tem a sua entrada em idiomas.json, nesta mesma pasta). Por isso mora numa pasta própria ('Jardim') em vez de numa pasta de Árvore.",
 
     "por_que_a_hierarquia_importa": "A categoria 'Cosmologia' desenha o diagrama da hierarquia a partir da entrada com id EXATO 'hierarquia-do-jardim' e do array em conteudo.ordem.",
 
@@ -58,33 +58,15 @@
     },
 
     {
-      "_secao": "IDIOMA - a tabela dos povos",
+      "_secao": "IDIOMA - o resumo das línguas (cada uma tem a sua entrada em idiomas.json)",
       "tipo": "idioma",
       "id": "idiomas-do-jardim",
       "titulo": "Os Idiomas do Jardim",
       "conteudo": {
-        "descricao": "Treze povos, dezesseis línguas. O Espírito é o único povo com mais de uma: fala Enoquiano entre os Espíritos naturais, Aramaico entre os Espíritos demoníacos e Hebraico entre os Espíritos angelicais. O Universal é falado por todos e foi criado por um Auleth. O Romeno é dos Vampiros, criado por Davinor. O Finlandês é dos Elfos, criado pelos Finwë.\n\nOs demais não têm criador registrado: Grego entre os Gigantes, Alemão entre os Goblins, Nórdico Antigo entre os Anões, Libras entre os Golens, Latim entre as Sereias, Sumeriano entre os Animálias, Ao Contrário entre os Clones, Inglês entre os Autômatos e Celta entre as Bruxas, além das três línguas dos Espíritos.\n\nDragões não formam um povo, mas têm língua própria: Valiriano, que todo dragão entende desde o ovo, do filhote ao mais velho. Só os primordiais, mais antigos que o Valiriano, ainda guardam entre si o Sumeriano.",
-        "nota": "Que um idioma tenha criador conhecido diz algo sobre o povo: Vampiros e Elfos sabem quem lhes deu a língua. Os outros doze não.",
-        "tabela": [
-          "Universal | Todos os povos | Auleth",
-          "Romeno | Vampiros | Davinor",
-          "Finlandês | Elfos | Os Finwë",
-          "Grego | Gigantes |",
-          "Alemão | Goblins |",
-          "Nórdico Antigo | Anões |",
-          "Libras | Golens |",
-                    "Enoquiano | Espíritos naturais |",
-          "Aramaico | Espíritos demoníacos |",
-          "Hebraico | Espíritos angelicais |",
-          "Latim | Sereias |",
-          "Sumeriano | Animálias |",
-          "Valiriano | Dragões |",
-          "Ao Contrário | Clones |",
-          "Inglês | Autômatos |",
-          "Celta | Bruxas |"
-        ]
+        "descricao": "Dezesseis línguas correm pelo Jardim. O Universal é de todos, e é nele que se compra, se viaja e se assina contrato. Cada povo guarda também a sua. Os Vampiros falam Noctâr; os Elfos, Ilvaari; os Gigantes, Brontéu; os Goblins, Krammel; os Anões, Grúndar; os Golens, Mudral; as Sereias, Talássio; os Animálias, Urrân; os Clones, Ao Contrário; os Autômatos, Axial; e as Bruxas, Nemético.\n\nO Espírito é o único povo com mais de uma língua, uma para cada Natureza: Anemir entre os naturais, Kharum entre os demoníacos e Aurelim entre os angelicais. Os dragões não formam um povo e mesmo assim têm a sua, o Valiriano, que todo dragão entende desde o ovo. Só os primordiais, mais antigos que ele, ainda guardam entre si o Urrân.\n\nCada língua tem a sua ficha no Alfabeto dos Registros Universais, com o som, a escrita, onde se ouve e um cumprimento.",
+        "nota": "Só duas línguas guardam o nome de quem as criou: o Universal, de um Auleth, e o Ilvaari, dos Finwë. Das outras, o registro se perdeu, e cada povo conta a própria versão, quando conta."
       },
-      "_origem": "Conteúdo REAL - transcrito da tabela em 'O Jardim/Gênese/Realidade 0/Idiomas.md'. Corrigidas apenas as grafias do cofre: 'Goblim' → Goblins, 'Anãos' → Anões, 'Espiritos' → Espíritos, 'Animalias' → Animálias. Em 2026-10-12 o Espírito passou a ter três línguas, uma por Natureza (Aramaico e Hebraico escolhidos pelo assistente; Enoquiano já era do Pedro).",
+      "_origem": "Conteúdo REAL na origem - a lista de povos e línguas veio da tabela em 'O Jardim/Gênese/Realidade 0/Idiomas.md'. Em 2026-10-12 o Espírito passou a ter três línguas, uma por Natureza. Em 2026-10-27, a pedido do autor, as línguas deixaram de usar nome de idioma real (ver idiomas.json), Davinor deixou de ser o criador da língua dos Vampiros, e a tabela 'Idioma | Povo | Criador' deu lugar a uma entrada por língua.",
       "_por_que_isso_importa": "É a ÚNICA lista de raças que existe no cofre inteiro, e as 13 conversam parcialmente com data/ficha/racas.json (Autômato e Elfo já existem lá como raças jogáveis, ligadas a keryx e aethel respectivamente). Nenhuma das 13 tem nota própria no Obsidian.",
       "_o_que_falta": "'Auleth' - o criador do idioma Universal - aparece UMA vez no cofre inteiro, aqui, e nunca mais. É graficamente parecido com 'Aethel' (a deidade da Gênese), mas não é o mesmo nome, e nada indica que sejam a mesma figura. Vale decidir: é erro de digitação de Aethel, ou é outra entidade? Note que existe uma raça chamada 'auleth' em data/ficha/racas.json, o que sugere que é mesmo alguém à parte.",
       "_pronto_para_importar": true

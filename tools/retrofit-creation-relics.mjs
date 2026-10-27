@@ -645,7 +645,7 @@ const curadoria = {
   'reliquia-jackal': {
     ...comum,
     atributos: arma('20d12+20', '20/x4', 'Balístico', 'Munição 6'),
-    lore: 'Uma pistola preta de cano longo, pesada demais para a maioria das mãos vivas segurar sem apoio. As balas são de prata derretida de uma cruz de igreja, e o cano leva gravado em latim um pedido que ninguém traduz em voz alta. Quem dispara sente o coice na coluna, não no braço.',
+    lore: 'Uma pistola preta de cano longo, pesada demais para a maioria das mãos vivas segurar sem apoio. As balas são de prata derretida de uma cruz de igreja, e o cano leva gravado em Aurelim um pedido que ninguém traduz em voz alta. Quem dispara sente o coice na coluna, não no braço.',
     descricao: 'Pistola antimonstro. Contra morto-vivo, demônio e coisa sustentada por Escuridão, ela passa por qualquer couro.',
     ressonancia: {
       nome: 'Prata Bendita',

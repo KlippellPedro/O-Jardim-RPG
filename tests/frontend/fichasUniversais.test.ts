@@ -97,31 +97,56 @@ test('local aberto ganha ficha com onde fica, responsável e domínio; local tra
   assert.equal(trancado?.titulo, 'Registro retido');
 });
 
-test('o Alfabeto traz os 16 idiomas da tabela da lore, cada um com o povo e o criador', () => {
+// Decisão do Pedro em 2026-10-27: nenhuma língua do Jardim usa nome de idioma real (o Valiriano ficou por escolha
+// dele) e Davinor deixou de ser o criador da língua dos Vampiros.
+const NOMES_DE_IDIOMA_REAL = ['Romeno', 'Finlandês', 'Grego', 'Alemão', 'Nórdico', 'Libras', 'Enoquiano', 'Aramaico', 'Hebraico', 'Latim', 'Sumeriano', 'Inglês', 'Celta'];
+
+test('o Alfabeto traz as 16 línguas da lore, cada uma com o povo, a ficha e um nome próprio', () => {
   const idiomas = fabrica(false).filter((registro) => registro.secao === 'glossario');
   assert.equal(idiomas.length, 16);
   const por = (titulo: string) => idiomas.find((registro) => registro.titulo === titulo);
-  assert.equal(por('Romeno')?.idioma?.povo, 'Vampiros');
-  assert.equal(por('Romeno')?.idioma?.criador, 'Davinor');
+  assert.equal(por('Noctâr')?.idioma?.povo, 'Vampiros');
+  assert.equal(por('Noctâr')?.idioma?.criador, '');
   assert.equal(por('Universal')?.idioma?.universal, true);
   assert.equal(por('Universal')?.subtitulo, 'Idioma de todos os povos');
-  assert.equal(por('Latim')?.subtitulo, 'Idioma das Sereias');
-  assert.equal(por('Libras')?.idioma?.criador, '');
-  // Em ordem de alfabeto, cada um na letra do nome.
+  assert.equal(por('Talássio')?.subtitulo, 'Idioma das Sereias');
+  assert.equal(por('Urrân')?.subtitulo, 'Idioma dos Animálias');
+  assert.equal(por('Ilvaari')?.idioma?.criador, 'Os Finwë');
+  // Só duas línguas guardam o nome de quem as criou.
+  assert.deepEqual(idiomas.filter((registro) => registro.idioma?.criador).map((registro) => registro.titulo).sort(), ['Ilvaari', 'Universal']);
+  for (const registro of idiomas) {
+    assert.ok(registro.descricao.length > 200, `${registro.titulo}: falta o texto da língua`);
+    assert.deepEqual(registro.campos.map(([nome]) => nome).slice(0, 4), ['Como soa', 'Escrita', 'Onde se ouve', 'Cumprimento'], registro.titulo);
+    assert.deepEqual(registro.loreRef, { tipo: 'idioma', id: registro.origemId });
+    assert.equal(registro.editor, 'lore');
+    for (const real of NOMES_DE_IDIOMA_REAL) assert.ok(!registro.titulo.includes(real), `${registro.titulo} ainda usa nome de idioma real`);
+    assert.doesNotMatch(registro.descricao, /Davinor/);
+  }
+  // Em ordem de alfabeto, cada uma na letra do nome.
   assert.deepEqual(idiomas.map((registro) => registro.titulo), [...idiomas.map((registro) => registro.titulo)].sort((a, b) => a.localeCompare(b, 'pt-BR')));
-  assert.equal(por('Enoquiano')?.grupo, 'E');
+  assert.equal(por('Anemir')?.grupo, 'A');
   assert.equal(por('Ao Contrário')?.grupo, 'A');
+  assert.equal(por('Urrân')?.grupo, 'U');
 });
 
-test('a tabela de idiomas bate com o texto da lore e some quando o Mestre a esconde', () => {
+test('o resumo da lore cita todas as línguas; esconder o resumo tira todas, esconder uma só a rasura', () => {
   const lore = MUNDO_CATALOG.find((entrada) => entrada.id === 'idiomas-do-jardim');
-  const descricao = String((lore?.conteudo as Record<string, unknown>).descricao);
+  const conteudo = lore?.conteudo as Record<string, unknown>;
+  const descricao = String(conteudo.descricao);
   for (const registro of fabrica(true).filter((item) => item.secao === 'glossario')) {
-    assert.ok(descricao.toLowerCase().includes(registro.titulo.toLowerCase()), `${registro.titulo} não está no texto da lore`);
-    if (!registro.idioma?.universal) assert.ok(descricao.includes(registro.idioma?.povo ?? '?'), `${registro.idioma?.povo} não está no texto da lore`);
+    assert.ok(descricao.includes(registro.titulo), `${registro.titulo} não está no texto da lore`);
   }
+  for (const real of [...NOMES_DE_IDIOMA_REAL, 'Davinor']) assert.ok(!`${descricao} ${conteudo.nota}`.includes(real), `o resumo ainda cita ${real}`);
   const escondido = registrosDeFabrica({ catalog: MUNDO_CATALOG, factions: [], isMestre: false, loreRevelado: [], loreOculto: ['idiomas-do-jardim'] });
   assert.equal(escondido.filter((registro) => registro.secao === 'glossario').length, 0);
+  const umaRetida = registrosDeFabrica({ catalog: MUNDO_CATALOG, factions: [], isMestre: false, loreRevelado: [], loreOculto: ['idioma-dos-vampiros'] })
+    .filter((registro) => registro.secao === 'glossario');
+  assert.equal(umaRetida.length, 16);
+  const retida = umaRetida.find((registro) => registro.chave === 'padrao:glossario:idioma-dos-vampiros');
+  assert.equal(retida?.revelacao, 'rasurado');
+  assert.equal(retida?.titulo, 'Registro retido');
+  assert.equal(retida?.idioma, undefined);
+  assert.equal(retida?.descricao, '');
 });
 
 test('toda facção oficial tem identidade própria: cor diferente das outras e forma de brasão válida', () => {
@@ -295,10 +320,12 @@ test('Astraluna é a sede da AstraTech, e o Fruto da Comunicação leva o prata 
   assert.notEqual(comunicacao?.corRgb, tecnologia?.corRgb);
 });
 
-test('o criador do idioma vem com a preposição certa, inclusive quando traz artigo', () => {
+test('o texto das línguas segue o tom do jogador: sem travessão e sem "eco"', () => {
   const idiomas = fabrica(false).filter((registro) => registro.secao === 'glossario' && registro.idioma);
   assert.equal(idiomas.length, 16);
-  const finlandes = idiomas.find((registro) => registro.titulo === 'Finlandês');
-  assert.match(finlandes?.descricao ?? '', /Foi criado pelos Finwë\./);
-  assert.match(idiomas.find((registro) => registro.titulo === 'Romeno')?.descricao ?? '', /Foi criado por Davinor\./);
+  for (const registro of idiomas) {
+    const texto = [registro.descricao, ...registro.campos.map(([, valor]) => valor)].join(' ');
+    assert.doesNotMatch(texto, /[—–]/, `${registro.titulo}: travessão`);
+    assert.doesNotMatch(texto, /(?<!\p{L})eco(?:a|am|ou|ar|s)?(?!\p{L})/iu, `${registro.titulo}: "eco"`);
+  }
 });

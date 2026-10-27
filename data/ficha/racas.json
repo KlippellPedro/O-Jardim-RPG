@@ -1102,7 +1102,7 @@
     "mana": 3,
     "movimento": 0,
     "legados_adicionais": 1,
-    "descricao": "Quem morre e não vai embora fica como espírito. O que ele vira depende do que carregava: um Fluxo que o prendeu ao mundo, um Pecado que nunca largou ou uma Virtude que ainda o sustenta. Sem corpo, atravessa parede e enxerga no escuro. Amadurece sozinho, em seis degraus, e só o último pede mais que nível: pede uma Provação. Cada Natureza tem a sua língua: Enoquiano para os naturais, Aramaico para os demoníacos e Hebraico para os angelicais.",
+    "descricao": "Quem morre e não vai embora fica como espírito. O que ele vira depende do que carregava: um Fluxo que o prendeu ao mundo, um Pecado que nunca largou ou uma Virtude que ainda o sustenta. Sem corpo, atravessa parede e enxerga no escuro. Amadurece sozinho, em seis degraus, e só o último pede mais que nível: pede uma Provação. Cada Natureza tem a sua língua: Anemir para os naturais, Kharum para os demoníacos e Aurelim para os angelicais.",
     "fisiologia": [
       "Não precisa respirar, comer ou beber enquanto está sem corpo.",
       "Enxerga normalmente em escuridão natural.",
@@ -1145,13 +1145,13 @@
       {
         "id": "natural",
         "titulo": "Espírito Natural",
-        "descricao": "Morreu e ficou, preso ao Fluxo que o segurou no mundo. É o fantasma das histórias: nunca tem corpo, atravessa paredes e, a cada degrau, atravessa mais longe e com menos esforço. Fala Enoquiano.",
+        "descricao": "Morreu e ficou, preso ao Fluxo que o segurou no mundo. É o fantasma das histórias: nunca tem corpo, atravessa paredes e, a cada degrau, atravessa mais longe e com menos esforço. Fala Anemir.",
         "rotulo_variante": "Fluxo"
       },
       {
         "id": "demoniaca",
         "titulo": "Espírito Demoníaco",
-        "descricao": "Morreu carregando um Pecado e nunca largou. O corpo ficou para trás, e o desejo ficou inteiro. No começo é só espírito; a partir do nível 5 aprende a tomar corpos alheios e usá-los como roupa. Cada degrau traz um poder do Pecado, e quase todo poder cobra um preço. Fala Aramaico.",
+        "descricao": "Morreu carregando um Pecado e nunca largou. O corpo ficou para trás, e o desejo ficou inteiro. No começo é só espírito; a partir do nível 5 aprende a tomar corpos alheios e usá-los como roupa. Cada degrau traz um poder do Pecado, e quase todo poder cobra um preço. Fala Kharum.",
         "rotulo_variante": "Pecado",
         "descricao_variantes": "Escolha um Pecado, e ele vale para a vida inteira do personagem. Os sete têm o mesmo peso: cada um desperta uma característica em cada degrau da escada, e quase todas cobram um preço.",
         "fisiologia": [
@@ -1175,7 +1175,7 @@
       {
         "id": "angelical",
         "titulo": "Espírito Angelical",
-        "descricao": "Morreu carregando uma Virtude, e ela nunca o deixou. O corpo ficou para trás, e a Virtude ficou inteira. No começo é só espírito; a partir do nível 5 aprende a encarnar, mas só com permissão: o dono empresta o corpo, ou o corpo já não tem dono. Cada degrau traz um poder da Virtude, e quase todo poder pede um voto em troca. Fala Hebraico.",
+        "descricao": "Morreu carregando uma Virtude, e ela nunca o deixou. O corpo ficou para trás, e a Virtude ficou inteira. No começo é só espírito; a partir do nível 5 aprende a encarnar, mas só com permissão: o dono empresta o corpo, ou o corpo já não tem dono. Cada degrau traz um poder da Virtude, e quase todo poder pede um voto em troca. Fala Aurelim.",
         "rotulo_variante": "Virtude",
         "descricao_variantes": "Escolha uma Virtude, e ela vale para a vida inteira do personagem. As sete têm o mesmo peso e espelham os sete Pecados: cada uma desperta uma característica em cada degrau da escada, e quase todas pedem um voto em troca.",
         "fisiologia": [
@@ -1425,7 +1425,7 @@
             "titulo": "Língua do Inferno",
             "tipo": "passiva",
             "nivel_minimo": 8,
-            "descricao": "Além do Aramaico, que já é seu, você entende e fala qualquer idioma de criatura demoníaca, infernal ou morta.",
+            "descricao": "Além do Kharum, que já é seu, você entende e fala qualquer idioma de criatura demoníaca, infernal ou morta.",
             "automatizada": false
           }
         ]
@@ -1627,7 +1627,7 @@
             "titulo": "Língua dos Céus",
             "tipo": "passiva",
             "nivel_minimo": 8,
-            "descricao": "Além do Hebraico, que já é seu, você entende e fala qualquer idioma de criatura angelical, celestial ou morta.",
+            "descricao": "Além do Aurelim, que já é seu, você entende e fala qualquer idioma de criatura angelical, celestial ou morta.",
             "automatizada": false
           }
         ]
@@ -1942,7 +1942,7 @@
             "titulo": "Nome Verdadeiro",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana para pronunciar em Enoquiano o nome verdadeiro de uma criatura a até 9 m. Ela perde disfarces, formas alternativas e ilusões sobre si, e fica com desvantagem em testes contra você até o fim da cena.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana para pronunciar em Anemir o nome verdadeiro de uma criatura a até 9 m. Ela perde disfarces, formas alternativas e ilusões sobre si, e fica com desvantagem em testes contra você até o fim da cena.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -1976,7 +1976,7 @@
         "caracteristicas": [
           {
             "id": "sussurro-enoquiano",
-            "titulo": "Sussurro Enoquiano",
+            "titulo": "Sussurro em Anemir",
             "tipo": "passiva",
             "nivel_minimo": 1,
             "descricao": "Você fala mentalmente com qualquer criatura racional a até 18 m, sem emitir som, e capta o sentido geral de um idioma que não conhece depois de ouvi-lo por uma rodada inteira. A criatura não é obrigada a responder.",
@@ -4207,7 +4207,7 @@
     "vida": 0,
     "mana": 0,
     "movimento": 0,
-    "descricao": "Gente com corpo de bicho, e todo animal do Jardim conta como Animália. Você escolhe a Forma (quanto do bicho aparece no corpo), a Morfologia (o instinto que veio mais forte) e o animal, que define o seu tamanho. Conversa coisas simples com bichos, o que não quer dizer que eles obedeçam. Fala Sumeriano.",
+    "descricao": "Gente com corpo de bicho, e todo animal do Jardim conta como Animália. Você escolhe a Forma (quanto do bicho aparece no corpo), a Morfologia (o instinto que veio mais forte) e o animal, que define o seu tamanho. Conversa coisas simples com bichos, o que não quer dizer que eles obedeçam. Fala Urrân.",
     "rotulo_variante": "Morfologia",
     "descricao_variantes": "Escolha o instinto que veio mais forte no seu animal. As dez Morfologias têm o mesmo peso e servem a qualquer Forma: a diferença está em para que o corpo serve (correr, aguentar, farejar, caçar, voar, nadar, picar, andar em bando, resistir ou impressionar).",
     "fisiologia": [

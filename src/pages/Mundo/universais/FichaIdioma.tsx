@@ -1,5 +1,5 @@
 import React from 'react';
-import { PenLine, Users } from 'lucide-react';
+import { MessageCircle, Users } from 'lucide-react';
 import { inicialDe, type IRegistro } from './registros';
 
 interface IFichaProps {
@@ -10,10 +10,13 @@ interface IFichaProps {
 
 const paragrafos = (texto: string): string[] => texto.split(/\n\s*\n/).map((item) => item.trim()).filter(Boolean);
 
-/** Ficha de Idioma: a inicial em destaque, o povo que fala e quem o criou. */
+/** Ficha de Idioma: a inicial em destaque, o povo que fala, o texto da língua, o cumprimento em destaque e a grade
+ * com o som, a escrita e onde se ouve. O criador só aparece nas poucas línguas que guardam o nome de quem as fez. */
 export const FichaIdioma = ({ registro, acoes, rotuloDaSecao }: IFichaProps) => {
   const info = registro.idioma;
   if (!info) return null;
+  const cumprimento = registro.campos.find(([nome]) => nome === 'Cumprimento')?.[1];
+  const grade = registro.campos.filter(([nome]) => nome !== 'Cumprimento');
   return (
     <article className="ru-ficha ru-ficha--idioma lg:sticky lg:top-5">
       <header className="ru-ficha__cabeca p-5 sm:p-8">
@@ -35,21 +38,22 @@ export const FichaIdioma = ({ registro, acoes, rotuloDaSecao }: IFichaProps) => 
         <div className="space-y-4 text-base leading-8 text-gray-300 sm:text-lg sm:leading-9">
           {paragrafos(registro.descricao).map((paragrafo, indice) => <p key={indice}>{paragrafo}</p>)}
         </div>
-        {registro.camposAjustados ? (
-          <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {registro.campos.map(([nome, valor]) => (
+        {cumprimento ? (
+          <div className="ru-dica ru-dica--local">
+            <span className="ru-dica__rotulo"><MessageCircle size={14} aria-hidden="true" /> Cumprimento</span>
+            <p>{cumprimento}</p>
+          </div>
+        ) : null}
+        {grade.length ? (
+          <dl className="grid gap-3 sm:grid-cols-2">
+            {grade.map(([nome, valor]) => (
               <div key={nome} className="rounded-xl border border-white/10 bg-[#0b0f14] p-4">
                 <dt className="text-[10px] font-bold uppercase tracking-widest text-gray-600">{nome}</dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-200">{valor}</dd>
               </div>
             ))}
           </dl>
-        ) : (
-          <div className="ru-dica ru-dica--local">
-            <span className="ru-dica__rotulo"><PenLine size={14} aria-hidden="true" /> Criador</span>
-            <p>{info.criador || 'Sem criador registrado. Esta língua não tem dono conhecido.'}</p>
-          </div>
-        )}
+        ) : null}
         {registro.blocos.map((bloco) => (
           <section key={bloco.titulo} className="ru-bloco">
             <h3>{bloco.titulo}</h3>
