@@ -81,7 +81,7 @@ export type UsoMaterial = 'ritual' | 'alquimia' | 'engenharia' | 'cozinha' | 've
  * material novo deveria receber, por perfil. Exceções acima de 3 exigem
  * justificativa forte registrada na própria `descricao`. */
 export const TETO_PROPRIEDADES_POR_PERFIL: Array<{ perfil: string; teto: number; nota: string }> = [
-  { perfil: 'Simples', teto: 1, nota: 'Raridade comum/incomum - a maioria dos drops de criatura mundana.' },
+  { perfil: 'Simples', teto: 1, nota: 'Raridade comum/incomum: a maioria dos drops de criatura mundana.' },
   { perfil: 'Complexo', teto: 2, nota: 'Raridade rara, ou biológico/espiritual de criatura incomum.' },
   { perfil: 'Raro/especial', teto: 3, nota: 'Raridade épica ou componente central a um rito nomeado.' },
 ];
@@ -325,34 +325,34 @@ const itens = (linhas: string[]) => linhas.map((linha) => `<li>${linha}</li>`).j
 const REGRA_MATERIAIS_LEGADA: RegraTopicoDe<'Livro do Jogador'> = {
   categoria: 'Livro do Jogador',
   status: 'Regra oficial',
-  resumo: 'Categorias, propriedades, afinidades e potência que descrevem qualquer material de fabricação - a infraestrutura que Ritualista, Alquimista, Engenheiro e Chef compartilham.',
+  resumo: 'Categorias, propriedades, afinidades e potência que descrevem qualquer material de fabricação. É o vocabulário que Ritualista, Alquimista, Engenheiro e Chef compartilham.',
   destaques: [
     ['Afinidades', '7 elementos oficiais, ou Nenhuma'],
     ['Potência', '1 a 5, soma por linha de receita'],
     ['Estado', 'Bruto, Processado, Refinado'],
   ],
   corpo: `
-    <p class="regras-lead">Todo material de fabricação - drop de criatura, componente ritualístico, minério, erva - descreve-se pelos mesmos campos, e as classes de criação Ritualista, Alquimista, Engenheiro e Chef leem esses campos de formas diferentes. Este capítulo é infraestrutura: não substitui as regras próprias de cada classe, só estabelece o vocabulário comum entre elas.</p>
+    <p class="regras-lead">Todo material de fabricação (drop de criatura, componente ritualístico, minério, erva) se descreve pelos mesmos campos, e as classes de criação Ritualista, Alquimista, Engenheiro e Chef leem esses campos cada uma do seu jeito. Este capítulo dá o vocabulário comum; as regras próprias de cada classe continuam nos capítulos delas.</p>
 
     <h3 class="regras-subtitle">Categoria, Parte, Afinidade e Propriedade nunca se misturam</h3>
-    <p>Um material tem uma <strong>Categoria</strong> (o que ele fisicamente é), pode ter uma <strong>Parte</strong> (só para material de criatura: Carne, Órgãos, Essência...), uma <strong>Afinidade</strong> elemental e uma ou mais <strong>Propriedades</strong>. São eixos independentes: Órgãos de Vampiro é Categoria Biológico, Parte Órgãos, Afinidade Nenhuma, Propriedade Regenerativo - os quatro campos descrevem coisas diferentes do mesmo item.</p>
+    <p>Um material tem uma <strong>Categoria</strong> (o que ele fisicamente é), pode ter uma <strong>Parte</strong> (só para material de criatura: Carne, Órgãos, Essência...), uma <strong>Afinidade</strong> elemental e uma ou mais <strong>Propriedades</strong>. São eixos independentes: Órgãos de Vampiro é Categoria Biológico, Parte Órgãos, Afinidade Nenhuma, Propriedade Regenerativo. Os quatro campos descrevem coisas diferentes do mesmo item.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Categoria</th><th>O que cobre</th></tr></thead>
       <tbody>
         <tr><td><strong>Biológico</strong></td><td>Partes de seres vivos ou que já foram vivos: carne, sangue, osso, órgão, glândula.</td></tr>
         <tr><td><strong>Botânico</strong></td><td>Recursos vegetais: erva, flor, raiz, semente, seiva, resina.</td></tr>
-        <tr><td><strong>Mineral</strong></td><td>Pedra, minério, metal, cristal, sal - o ambiente inanimado.</td></tr>
+        <tr><td><strong>Mineral</strong></td><td>Pedra, minério, metal, cristal, sal: o ambiente inanimado.</td></tr>
         <tr><td><strong>Espiritual</strong></td><td>Alma, essência, ectoplasma, memória, energia condensada.</td></tr>
         <tr><td><strong>Arcano</strong></td><td>Substâncias originadas diretamente de magia: mana cristalizada, núcleo arcano, catalisador.</td></tr>
         <tr><td><strong>Artificial</strong></td><td>Materiais já processados por mãos ou máquinas: liga, tecido, peça mecânica.</td></tr>
       </tbody>
     </table></div>
 
-    <h3 class="regras-subtitle">Afinidade - só quando é de verdade elemental</h3>
-    <p>Afinidade usa exatamente os sete elementos oficiais do Jardim - Terra, Água, Fogo, Ar, Raio, Luz, Escuridão - mais <strong>Nenhuma</strong>, o valor padrão para a maioria dos materiais comuns. Um material só recebe afinidade elemental quando ao menos uma destas condições é verdadeira: a origem dele é uma criatura, planta ou fenômeno já explicitamente elemental na ficção; o material já é usado, em sua própria função de jogo, como canal ou catalisador daquele elemento; ou um rito/fórmula/projeto existente já trata o material como fonte específica do elemento. Um minério de ferro não ganha Terra só por ter saído do chão.</p>
+    <h3 class="regras-subtitle">Afinidade só quando é de verdade elemental</h3>
+    <p>Afinidade usa exatamente os sete elementos oficiais do Jardim (Terra, Água, Fogo, Ar, Raio, Luz, Escuridão), mais <strong>Nenhuma</strong>, o valor padrão para a maioria dos materiais comuns. Um material só recebe afinidade elemental quando ao menos uma destas condições é verdadeira: a origem dele é uma criatura, planta ou fenômeno já explicitamente elemental na ficção; o material já é usado, em sua própria função de jogo, como canal ou catalisador daquele elemento; ou um rito/fórmula/projeto existente já trata o material como fonte específica do elemento. Um minério de ferro não ganha Terra só por ter saído do chão.</p>
 
     <h3 class="regras-subtitle">Propriedades</h3>
-    <p>A lista de propriedades é fechada - não se inventa uma nova a cada material. Propriedades nunca duplicam um sistema que já existe: veneno e doença apontam para o capítulo de Aflições, dano e resistência elemental usam Afinidade, recuperação de Vida usa Cura. Uma propriedade descreve o material; o efeito mecânico final sempre aponta para a regra correspondente já publicada.</p>
+    <p>A lista de propriedades é fechada, e nenhum material ganha uma propriedade inventada só para ele. Propriedades nunca duplicam um sistema que já existe: veneno e doença apontam para o capítulo de Aflições, dano e resistência elemental usam Afinidade, recuperação de Vida usa Cura. Uma propriedade descreve o material; o efeito mecânico final sempre aponta para a regra correspondente já publicada.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Grupo</th><th>Propriedades</th></tr></thead>
       <tbody>${linhasPropriedades}</tbody>
@@ -360,35 +360,35 @@ const REGRA_MATERIAIS_LEGADA: RegraTopicoDe<'Livro do Jogador'> = {
     <p class="regras-note">Diretriz de quantidade: materiais simples costumam ter 1 propriedade, materiais complexos 2, e materiais raros ou centrais a um rito nomeado até 3. Passar de 3 exige justificativa forte na própria descrição do material.</p>
 
     <h3 class="regras-subtitle">Potência</h3>
-    <p>Potência (1 a 5) mede a intensidade das propriedades de um material - nunca é cópia da raridade, que continua decidindo o quão específica a receita precisa ser. Uma receita que exige uma propriedade a um certo valor soma a Potência de cada material comprometido que a possua, até no máximo <strong>3 unidades por linha</strong>. Nenhum material serve duas linhas de requisito ao mesmo tempo na mesma receita.</p>
-    <p>Exemplo: uma receita pede Inflamável 5. Um material Inflamável Potência 3 mais outro Inflamável Potência 2 somam 5 e cumprem o requisito juntos; três unidades de um material Potência 1 somam só 3 e não bastam - para requisitos altos, é preciso ao menos um material mais potente, não só mais quantidade.</p>
+    <p>Potência (1 a 5) mede a intensidade das propriedades de um material. A raridade fica à parte e decide o quão específica a receita precisa ser. Uma receita que exige uma propriedade a um certo valor soma a Potência de cada material comprometido que a possua, até no máximo <strong>3 unidades por linha</strong>. Nenhum material serve duas linhas de requisito ao mesmo tempo na mesma receita.</p>
+    <p>Exemplo: uma receita pede Inflamável 5. Um material Inflamável Potência 3 mais outro Inflamável Potência 2 somam 5 e cumprem o requisito juntos; três unidades de um material Potência 1 somam só 3 e não bastam. Requisito alto pede ao menos um material mais potente, e quantidade sozinha não chega lá.</p>
 
     <h3 class="regras-subtitle">Estado: Bruto, Processado, Refinado</h3>
-    <p>Estado nunca aumenta Potência automaticamente - ele controla acesso, não intensidade. Bruto é como o material foi coletado; Processado passou por preparo básico; Refinado está purificado, estabilizado e isolado, preparado para receitas avançadas, sem ficar "mais forte" no processo. Avançar de estado é uma transformação - uma receita menor dentro do próprio capítulo de Criação, Forja e Alquimia - que consome unidades do estado anterior e produz o estado seguinte, mantendo a mesma Potência e as mesmas Propriedades, salvo exceção especial e documentada.</p>
+    <p>Estado decide a que receitas o material tem acesso e nunca aumenta a Potência sozinho. Bruto é como o material foi coletado; Processado passou por preparo básico; Refinado está purificado, estabilizado e isolado, pronto para receitas avançadas, com a mesma força de antes. Avançar de estado é uma transformação, uma receita menor dentro do próprio capítulo de Criação, Forja e Alquimia, que consome unidades do estado anterior e produz o estado seguinte, mantendo a mesma Potência e as mesmas Propriedades, salvo exceção especial e documentada.</p>
 
-    <h3 class="regras-subtitle">Qualidade não é do material, é da pilha</h3>
-    <p>Qualidade descreve a unidade que você efetivamente obteve - não o tipo de material. Duas unidades de Carne de Lobo podem ter qualidades diferentes dependendo de como foram coletadas, conservadas ou se sofreram corrupção. A tabela abaixo é a mesma régua que hoje já aparece em prosa na descrição de cada drop de criatura.</p>
+    <h3 class="regras-subtitle">Qualidade é da pilha</h3>
+    <p>Qualidade descreve a unidade que você de fato obteve, e cada pilha tem a sua. Duas unidades de Carne de Lobo podem ter qualidades diferentes dependendo de como foram coletadas, conservadas ou se sofreram corrupção. A tabela abaixo é a mesma régua que hoje já aparece em prosa na descrição de cada drop de criatura.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Qualidade</th><th>Preço</th><th>Efeito em requisitos</th></tr></thead>
       <tbody>${linhasQualidade}</tbody>
     </table></div>
 
-    <h3 class="regras-subtitle">Receitas: material específico é sobre obrigação, não permissão</h3>
+    <h3 class="regras-subtitle">Receitas: quando o material específico é obrigatório</h3>
     <ul class="regras-list">${itens([
-      'Comum e Incomum: material específico é opcional - a receita pode ter uma linha nomeada por escolha de design, mas não é obrigada.',
+      'Comum e Incomum: material específico é opcional. A receita pode ter uma linha nomeada por escolha de design, sem obrigar ninguém a usá-la.',
       'Raro: ao menos uma linha exige material específico nomeado, conforme a regra já publicada de fabricação.',
       'Épico: linhas nomeadas e/ou materiais de raridade mínima ligada ao efeito.',
-      'Lendário e superior: fortemente específico, normalmente sem substituição - decidido caso a caso pelo Mestre.',
+      'Lendário e superior: fortemente específico, normalmente sem substituição, e o Mestre decide caso a caso.',
     ])}</ul>
 
     <h3 class="regras-subtitle">Como cada classe usa</h3>
     <ul class="regras-list">${itens([
-      '<strong>Ritualista:</strong> lê propriedade como vínculo e intenção - Canalizador e Amplificador reduzem custo ou tempo de um ritual; Purificador e Corruptor decidem o desfecho; afinidade elemental é obrigatória em ritos de elemento nomeado.',
-      '<strong>Alquimista:</strong> lê propriedade como o próprio produto - extrai, combina e transmuta propriedades diretamente em poções, bombas, ácidos e tônicos.',
-      '<strong>Engenheiro:</strong> lê propriedade como componente físico ou funcional - Condutor vira energia de um dispositivo, Resistente vira integridade estrutural, Explosivo vira munição.',
-      '<strong>Chef:</strong> lê propriedade como efeito de consumo - bebidas agem rápido, lanches acompanham a marcha e refeições alteram descanso ou concedem efeitos duradouros.',
+      '<strong>Ritualista:</strong> lê propriedade como vínculo e intenção. Canalizador e Amplificador reduzem custo ou tempo de um ritual; Purificador e Corruptor decidem o desfecho; afinidade elemental é obrigatória em ritos de elemento nomeado.',
+      '<strong>Alquimista:</strong> lê propriedade como o próprio produto, e extrai, combina e transmuta propriedades diretamente em poções, bombas, ácidos e tônicos.',
+      '<strong>Engenheiro:</strong> lê propriedade como componente físico ou funcional. Condutor vira energia de um dispositivo, Resistente vira integridade estrutural, Explosivo vira munição.',
+      '<strong>Chef:</strong> lê propriedade como efeito de consumo. Bebidas agem rápido, lanches acompanham a marcha e refeições alteram descanso ou concedem efeitos duradouros.',
     ])}</ul>
-    <p class="regras-note">A mesma propriedade produz quatro resultados diferentes - nunca a mesma receita reaproveitada com nome trocado.</p>
+    <p class="regras-note">A mesma propriedade produz quatro resultados diferentes, um por classe, cada um com a sua receita.</p>
 
     <h3 class="regras-subtitle">Piloto de receitas e preparação de classe</h3>
     <p>O catálogo liga materiais estruturados a <strong>${RITUAIS.length} rituais com ingredientes</strong>, ${FORMULAS_MATERIAIS_ALQUIMISTA.length} fórmulas de Alquimista, ${PROJETOS_MATERIAIS_ENGENHEIRO.length} projetos de Engenheiro e ${RECEITAS_MATERIAIS_COZINHEIRO.length} receitas do Chef. Grande Obra, Engenhocas e Mise en Place usam os estoques simplificados das classes; os ingredientes nomeados ficam como referência narrativa.</p>
@@ -428,14 +428,14 @@ const REGRA_MATERIAIS_LEGADA: RegraTopicoDe<'Livro do Jogador'> = {
 
     <h3 class="regras-subtitle">Curando um material novo</h3>
     <ul class="regras-list">
-      <li>Escolha Categoria e, se for de criatura, Parte - nunca misture os dois papéis num campo só.</li>
-      <li>Só marque Afinidade diferente de "Nenhuma" se o material tiver ligação elemental real - não por associação temática.</li>
-      <li>Respeite o teto de propriedades por perfil (1 simples, 2 complexo, até 3 raro/especial). Passar disso é exceção, não regra.</li>
-      <li>Potência mede intensidade da propriedade, não raridade nem preço. Calibre pensando em "quanto desse material preenche uma linha de receita", não em "quão difícil é achar".</li>
+      <li>Escolha Categoria e, se for de criatura, Parte, cada uma no seu campo.</li>
+      <li>Só marque Afinidade diferente de "Nenhuma" se o material tiver ligação elemental real; associação temática não basta.</li>
+      <li>Respeite o teto de propriedades por perfil (1 simples, 2 complexo, até 3 raro/especial). Passar disso é exceção.</li>
+      <li>Potência mede a intensidade da propriedade, e raridade e preço ficam fora da conta. Calibre pensando em "quanto desse material preenche uma linha de receita".</li>
     </ul>
 
     <h3 class="regras-subtitle">Qualidade e o inventário</h3>
-    <p>Como <code>item_id</code> é validado como único por personagem, uma pilha de qualidade não-padrão usa um id sufixado (<code>idComQualidade</code>) em vez de tentar guardar qualidade solta numa linha já travada por id único. Isso não muda nada para compras normais de Loja - só passa a existir quando você concede um drop coletado em jogo com qualidade diferente de "padrao".</p>
+    <p>Como <code>item_id</code> é validado como único por personagem, uma pilha de qualidade não-padrão usa um id sufixado (<code>idComQualidade</code>) em vez de tentar guardar qualidade solta numa linha já travada por id único. Para compras normais de Loja nada muda: o id sufixado só aparece quando você concede um drop coletado em jogo com qualidade diferente de "padrao".</p>
 
     <h3 class="regras-subtitle">Sem sistema paralelo</h3>
     <p>Antes de criar uma propriedade nova para "material que causa veneno" ou "material que causa dano de fogo", verifique se Aflições ou Afinidade já resolvem isso. A propriedade certa aqui descreve o material; o efeito mecânico final sempre aponta para o capítulo que já existe.</p>

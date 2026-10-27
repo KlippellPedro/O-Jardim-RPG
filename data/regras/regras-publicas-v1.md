@@ -1172,7 +1172,7 @@ Uma arqueira tem um arco com alcance Médio (até 15 m) e mira um alvo em Longo 
 
 **Status:** Regra oficial
 
-Cair a 0 não é o fim: o quanto você passou de 0 define o tamanho do buraco, e Morrendo dá ao grupo algumas rodadas para resolver.
+Cair a 0 ainda deixa saída: o quanto você passou de 0 define o tamanho do buraco, e Morrendo dá ao grupo algumas rodadas para resolver.
 
 Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua sendo anotado abaixo de zero, e é esse número que decide se a queda foi um tropeço ou um desastre. Depois entra o relógio de Morrendo, que dá ao grupo algumas rodadas para resgatar quem caiu. Este tópico trata ainda de Ferido, de ferimento crítico e de mutilação.
 
@@ -1972,7 +1972,7 @@ Um grupo com muitos aliados atrasa a mesa inteira. Combine um teto com o Mestre 
 
 - Salário, manutenção e alimento são assunto de mesa. Se a campanha usa esse controle, ele entra como despesa recorrente, do mesmo jeito que a manutenção de uma base (ver Propriedades e Bases).
 
-- Aliado não é item: ele não volta para a Loja, não tem preço de revenda e não entra no Cofre.
+- Aliado fica fora das regras de item: não volta para a Loja, não tem preço de revenda e não entra no Cofre.
 
 ## frutos-implantes
 

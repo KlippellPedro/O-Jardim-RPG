@@ -4,7 +4,7 @@
   "novos": [
     {
       "id": "eco-do-fluxo",
-      "titulo": "Eco do Fluxo",
+      "titulo": "Troco do Fluxo",
       "descricao": "Uma vez por cena, após gastar pelo menos 5 Mana em uma única habilidade, recupere 2 Mana no fim do turno. Não ativa com habilidades de custo reduzido para menos de 3 Mana.",
       "pre_requisitos": [
         {

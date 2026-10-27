@@ -10657,7 +10657,7 @@
           },
           {
             "id": "eco-reverso",
-            "titulo": "Eco Reverso",
+            "titulo": "Lâmina de Retorno",
             "descricao": "Shikai: uma vez por rodada, quando sofrer dano corpo a corpo, use sua Reação para acertar automaticamente o atacante com a Zanpakutō, causando metade do dano normal.",
             "escalonamento": "Bankai: o contra-ataque passa a causar dano completo e ignora metade da Resistência do alvo."
           },
@@ -16356,7 +16356,7 @@
           },
           {
             "tipo": "habilidade",
-            "titulo": "Ecos da Última Refeição"
+            "titulo": "Memória da Última Refeição"
           }
         ]
       },
@@ -16404,7 +16404,7 @@
           {
             "nivel": 1,
             "titulo": "Primeira Presa",
-            "descricao": "Quando um humanoide morre perto de você - morto por você ou não - pode devorá-lo até o fim da cena atual, gastando um minuto junto ao corpo. Escolha uma habilidade ou um poder que a classe dele tinha, limitado ao que um personagem do seu próprio nível de Devorador já teria acesso naquela classe, e grave-a num slot vazio, dando a ela o nome e a aparência do que devorou. Você mantém um slot ativo por vez.",
+            "descricao": "Quando um humanoide morre perto de você, morto por você ou não, pode devorá-lo até o fim da cena atual, gastando um minuto junto ao corpo. Escolha uma habilidade ou um poder que a classe dele tinha, limitado ao que um personagem do seu próprio nível de Devorador já teria acesso naquela classe, e grave-a num slot vazio, dando a ela o nome e a aparência do que devorou. Você mantém um slot ativo por vez.",
             "acao": "Um minuto, fora de combate",
             "duracao": "Até o fim da cena da morte"
           },
@@ -16496,8 +16496,8 @@
       },
       {
         "id": "ecos-da-ultima-refeicao",
-        "titulo": "Ecos da Última Refeição",
-        "descricao": "Enquanto tiver ao menos um slot ativo, uma vez por combate, quando um dano cairia sua Vida a 0, um dos ecos absorvidos protege você: reduza esse dano até deixar sua Vida em 1, e esvazie o slot mais antigo em seguida.",
+        "titulo": "Memória da Última Refeição",
+        "descricao": "Enquanto tiver ao menos um slot ativo, uma vez por combate, quando um dano cairia sua Vida a 0, uma das memórias devoradas protege você: reduza esse dano até deixar sua Vida em 1, e esvazie o slot mais antigo em seguida.",
         "niveis": [
           18
         ],
@@ -16606,7 +16606,7 @@
         "custo_estamina": 4,
         "acao": "Ação Padrão",
         "duracao": "Uma cena",
-        "descricao": "Parte do seu corpo muda - garras, guelras, membrana - concedendo vantagem numa perícia física relacionada por uma cena."
+        "descricao": "Parte do seu corpo muda (garras, guelras, membrana) e concede vantagem numa perícia física relacionada por uma cena."
       },
       {
         "id": "ultima-refeicao",

@@ -8267,7 +8267,7 @@
       "id": "mat-nectar-da-lua-morta",
       "titulo": "Néctar da Lua Morta",
       "conteudo": {
-        "descricao": "Líquido prateado que conserva ecos de criaturas e lugares já apagados do mundo.",
+        "descricao": "Líquido prateado que guarda o que resta de criaturas e lugares já apagados do mundo.",
         "preco": {
           "Solares": 35
         },
@@ -11844,7 +11844,7 @@
     {
       "tipo": "drop",
       "id": "mat-eco-do-primeiro-juramento",
-      "titulo": "Eco do Primeiro Juramento",
+      "titulo": "Sino do Primeiro Juramento",
       "conteudo": {
         "descricao": "Uma promessa guardada dentro de um sino pequeno. A voz volta quando ele toca.",
         "preco": {
@@ -21804,7 +21804,7 @@
         "nivel_recomendado": 35,
         "requisitoNivel": 35,
         "requer_autorizacao_mestre": true,
-        "lore": "O tecido é a última sombra de um lugar que parou de existir. Por baixo dele não tem forro nem corpo, tem a lembrança de um mundo depois que a luz final se apagou. Vestir o manto é aceitar que, por alguns passos, a realidade pode esquecer de encostar em você."
+        "lore": "O tecido é a última sombra de um lugar que parou de existir. Por baixo dele fica só a lembrança de um mundo depois que a luz final se apagou: nem forro, nem corpo. Vestir o manto é aceitar que, por alguns passos, a realidade pode esquecer de encostar em você."
       }
     },
     {
@@ -24642,7 +24642,7 @@
           "Bocado Inteiro (Arrancar: anunciado, mordida inteira no lugar do ataque normal; Reflexos DT 34; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano de 12d10+16 de qualquer jeito)",
           "Cresce Comendo (cada vez que reduz uma criatura a 0 PV ou destrói uma construção grande, cresce: ganha +1 de dano por dado em todos os ataques até o fim da cena, no máximo +5)",
           "Sinais (prédios e nomes em placas sumindo por trás do grupo, um som grave que sobe pelo chão)",
-          "Como Evitar (não é um encontro para vencer no dano: a cena é de fuga, de evacuação ou de fechar o Vão por onde ele veio)"
+          "Como Evitar (a cena se vence com fuga, com evacuação ou fechando o Vão por onde ele veio, e o dano sozinho não encerra o encontro)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
@@ -29758,7 +29758,7 @@
           "Corpo do Vazio (imune a medo, veneno, doença, sono e efeitos de envelhecimento)",
           "Rastro de Estrelas Mortas (ao fim de cada rodada, uma fonte de luz mágica ou de fogo em alcance Longo se apaga; criaturas que dependem dela fazem Vontade DT 39 ou ficam Cegas até a luz voltar)",
           "Sinais (estrelas se apagando em fila, animais em silêncio total, luz das tochas ficando fraca)",
-          "Como Evitar (não é um encontro para vencer no dano: o grupo ganha ao fechar o Vão de onde ela veio, atrair o corpo para longe de algo vivo ou sobreviver até ela perder o interesse; o Mestre define qual porta a cena abre)"
+          "Como Evitar (o grupo vence ao fechar o Vão de onde ela veio, ao atrair o corpo para longe de algo vivo ou ao sobreviver até ela perder o interesse, e o dano sozinho não encerra o encontro; o Mestre define qual porta a cena abre)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,

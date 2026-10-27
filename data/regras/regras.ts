@@ -538,7 +538,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">A primeira sessão</h3>
       <ul class="regras-list">
         <li>Faça as fichas juntos, no mesmo dia. Quem monta personagem sozinho em casa chega sem entender metade dos próprios números.</li>
-        <li>Comece com o grupo já em movimento e já reunido. Explicar por que aquelas pessoas estão juntas é trabalho da criação, não da primeira cena.</li>
+        <li>Comece com o grupo já em movimento e já reunido. Explicar por que aquelas pessoas estão juntas é trabalho da criação de personagens, e a primeira cena já começa com isso resolvido.</li>
         <li>Deixe a primeira rolagem ser fácil e sem risco. A pessoa precisa ver o dado funcionar antes de ver o dado doer.</li>
         <li>Segure o combate para a segunda metade da sessão, quando todo mundo já resolveu alguma coisa conversando. Combate tem mais regras que qualquer outra cena.</li>
         <li>Uma cena de investigação, uma de conversa e uma de luta cobrem o sistema inteiro que um iniciante precisa nas primeiras horas.</li>
@@ -1397,7 +1397,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   ferimentos: {
     categoria: 'Combate e Mecânicas',
     status: 'Regra oficial',
-    resumo: 'Cair a 0 não é o fim: o quanto você passou de 0 define o tamanho do buraco, e Morrendo dá ao grupo algumas rodadas para resolver.',
+    resumo: 'Cair a 0 ainda deixa saída: o quanto você passou de 0 define o tamanho do buraco, e Morrendo dá ao grupo algumas rodadas para resolver.',
     destaques: [
       ['Queda', '0 PV ou menos'],
       ['Morte', 'Morrendo 3'],
@@ -1673,7 +1673,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Ler a trilha de Cansaço</h3>
       <ul class="regras-list">
         <li>Os gatilhos são objetivos: cena intensa, seis horas de treino, noite em claro. Cada um vale 1, e a cena inteira gera 1 mesmo que os três gatilhos apareçam juntos.</li>
-        <li>O degrau 3 é onde a trilha começa a doer de verdade, porque a penalidade passa a valer para todos os testes. Se o grupo vive no 3, o problema é de ritmo da campanha, não de escolha dos jogadores.</li>
+        <li>O degrau 3 é onde a trilha começa a doer de verdade, porque a penalidade passa a valer para todos os testes. Se o grupo vive no 3, o que precisa mudar é o ritmo da campanha.</li>
         <li>Cansaço 6 derruba a pessoa. Chegar lá deve ser resultado de uma sequência de decisões visíveis, nunca surpresa de contabilidade.</li>
       </ul>
     `,
@@ -1966,7 +1966,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </details>
     `,
     corpoMestre: `
-      <p class="regras-lead">A tabela é fechada e a fórmula é simples: sair do nível N custa N mil de experiência até o 99. Do 1 para o 2 são mil; do 19 para o 20 são dezenove mil. A partir do 100 o custo deixa de crescer nível a nível e vira uma faixa (100 mil, 150 mil, 250 mil e 500 mil), então uma campanha longa não precisa de tabela gigante. O mesmo tesouro de XP vale cada vez menos, e é por isso que a recompensa por marco é dada em porcentagem, não em número.</p>
+      <p class="regras-lead">A tabela é fechada e a fórmula é simples: sair do nível N custa N mil de experiência até o 99. Do 1 para o 2 são mil; do 19 para o 20 são dezenove mil. A partir do 100 o custo deixa de crescer nível a nível e vira uma faixa (100 mil, 150 mil, 250 mil e 500 mil), então uma campanha longa não precisa de tabela gigante. O mesmo tesouro de XP vale cada vez menos, e é por isso que a recompensa por marco vem em porcentagem do nível.</p>
 
       <h3 class="regras-subtitle">Distribuir por marco</h3>
       <ul class="regras-list">
@@ -2015,7 +2015,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
     `,
     corpoMestre: `
-      <p class="regras-lead">Legado é a escolha mais pesada que o jogador faz depois da classe, e ela é permanente. A ficha confere os pré-requisitos sozinha, então o seu trabalho aqui é de ficção, não de auditoria.</p>
+      <p class="regras-lead">Legado é a escolha mais pesada que o jogador faz depois da classe, e ela é permanente. A ficha confere os pré-requisitos sozinha, e o seu trabalho aqui fica só na ficção.</p>
 
       <h3 class="regras-subtitle">O ritmo dos marcos</h3>
       <ul class="regras-list">
@@ -2084,7 +2084,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Quem foi comprado foi contratado: o acordo vale enquanto o combinado for cumprido, e o Mestre decide o que acontece quando não for.</li>
         <li>Salário, manutenção e alimento são assunto de mesa. Se a campanha usa esse controle, ele entra como despesa recorrente, do mesmo jeito que a manutenção de uma base (ver <span class="regras-ref regras-ref--bases">Propriedades e Bases</span>).</li>
-        <li>Aliado não é item: ele não volta para a Loja, não tem preço de revenda e não entra no Cofre.</li>
+        <li>Aliado fica fora das regras de item: não volta para a Loja, não tem preço de revenda e não entra no Cofre.</li>
       </ul>
     `,
     corpoMestre: `
@@ -2621,7 +2621,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Conceder acesso</h3>
       <ul class="regras-list">
         <li>Cada alma nasce com um Fluxo natural e só um. Segundo Fluxo sempre vem de fora, por artefato, relíquia ou núcleo tecnológico, e nunca passa a morar na alma. Quando entregar um desses itens, você está entregando um Fluxo inteiro: pese como tal. Para registrar, marque o Fluxo em Fluxo instalado, na aba Magias da ficha; só quem comanda a mesa vê esse controle.</li>
-        <li>O Fluxo do Fim exige sua autorização antes da escolha. Autorizado, funciona como qualquer outro, então a decisão é de tom de campanha, não de balanceamento.</li>
+        <li>O Fluxo do Fim exige sua autorização antes da escolha. Autorizado, funciona como qualquer outro, e a decisão fica por conta do tom da campanha.</li>
         <li>Concessão de magia fora da classe não gera Cicatriz. Se você quer o poder sem o preço, é esse o caminho, e ele é legítimo.</li>
       </ul>
 
@@ -2964,7 +2964,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Condições em cena</h3>
       <ul class="regras-list">
-        <li>Toda condição precisa de uma saída conhecida. Se o jogador não sabe como sair, você não aplicou uma condição, aplicou uma sentença.</li>
+        <li>Toda condição precisa de uma saída conhecida. Se o jogador não sabe como sair, o que você aplicou foi uma sentença.</li>
         <li>Exposto não acumula consigo mesmo e Atordoado só renova duração. Segure a tentação de empilhar: duas fontes da mesma condição não valem o dobro.</li>
         <li>Iniciativa é número fixo de ficha. Surpreendido tira 5 na primeira rodada, e é assim que uma emboscada bem armada se paga, sem precisar de dano extra.</li>
       </ul>

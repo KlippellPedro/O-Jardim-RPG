@@ -1107,7 +1107,7 @@
       "Não precisa respirar, comer ou beber enquanto está sem corpo.",
       "Enxerga normalmente em escuridão natural.",
       "Sem corpo, não pode vestir armaduras comuns.",
-      "Não envelhece: o que muda com o tempo é o estágio, não o corpo."
+      "Não envelhece: com o tempo muda o estágio, e o corpo fica como está."
     ],
     "caracteristicas": [
       {
@@ -7256,7 +7256,7 @@
       },
       {
         "id": "ecos-de-seculos-mortos",
-        "titulo": "Ecos de Séculos Mortos",
+        "titulo": "Lembrança dos Séculos Mortos",
         "tipo": "rerrolagem",
         "descricao": "Para cada século completo que permaneceu morto, receba uma rerrolagem por sessão, até o máximo de cinco. Você pode usá-la em qualquer teste, mas deve manter o novo resultado. Quem permaneceu morto por menos de um século não recebe rerrolagens desta característica.",
         "rerrolagens_por_seculo": 1,
@@ -7351,7 +7351,7 @@
           "id": "dependencia-da-ancora",
           "titulo": "Dependência da Âncora",
           "tipo": "passiva",
-          "descricao": "Enquanto estiver a mais de 1 km da Âncora ou em outra dimensão, você sofre desvantagem em Vontade e não pode usar as rerrolagens de Ecos de Séculos Mortos. Se a Âncora morrer, a cicatriz permanece até um novo vínculo ser estabelecido por acontecimento narrativo aprovado pelo Mestre.",
+          "descricao": "Enquanto estiver a mais de 1 km da Âncora ou em outra dimensão, você sofre desvantagem em Vontade e não pode usar as rerrolagens de Lembrança dos Séculos Mortos. Se a Âncora morrer, a cicatriz permanece até um novo vínculo ser estabelecido por acontecimento narrativo aprovado pelo Mestre.",
           "automatizada": false
         }
       },
@@ -8990,7 +8990,7 @@
     },
     "descricao": "Bruxa é uma natureza mágica, e qualquer pessoa pode acabar virando uma. Depois que vem, não tem volta. Enxerga maldição, pacto e possessão de longe, cria as próprias maldições e, quando a Mana acaba, paga com Vida. Ninguém entende tanto de Fluxo quanto as bruxas de Salém.",
     "fisiologia": [
-      "Bruxa é uma natureza mágica adquirida, não uma profissão nem uma identidade de gênero.",
+      "Bruxa é uma natureza mágica adquirida, e qualquer pessoa pode virar uma, de qualquer gênero e de qualquer ofício.",
       "Permanece um ser vivo, salvo transformação narrativa posterior declarada pelo Mestre."
     ],
     "caracteristicas": [

@@ -30,7 +30,7 @@
         {
           "nome": "Întuneric",
           "tipo": "Dimensão",
-          "resumo": "Essa dimensão não é uma dimensão comum: todos vivem em um estado de agonia que não acaba, o céu é coberto por nuvens cor de fuligem que bloqueiam qualquer resquício de luz, e a única iluminação vem de uma lua pálida que nunca se põe."
+          "resumo": "Nessa dimensão todos vivem em um estado de agonia que não acaba, o céu é coberto por nuvens cor de fuligem que bloqueiam qualquer resquício de luz, e a única iluminação vem de uma lua pálida que nunca se põe."
         },
         {
           "nome": "Nadalon",
@@ -543,7 +543,7 @@
         "Em Sucessão cada acontecimento ocupa o lugar logo depois do anterior, e não há nada pra ver ali, só pra conferir. O Passo é o único ponto que se mexe: o instante exato onde Chronus está agora, avançando.",
         "Desde a paralisia o Passo não avança. A realidade continua funcionando, mas com erros pequenos de ordem: estrondo antes do raio, ferida antes do golpe, ruína que demora a reconhecer a própria queda. E é também por isso que a paralisia não passa: não corre tempo pra ela passar."
       ],
-      "atmosfera": "Eco que chega antes do som, poeira parada no ar, e uma linha dourada que só corre num sentido.",
+      "atmosfera": "Som que chega antes de quem o fez, poeira parada no ar, e uma linha dourada que só corre num sentido.",
       "cronologia": [
         {
           "id": "eon-primeira-sucessao",
@@ -600,7 +600,7 @@
         {
           "nome": "Bordo",
           "tipo": "Local",
-          "resumo": "A borda do Jardim: a faixa até onde a existência ainda alcança, e depois da qual não alcança mais. Não faz fronteira com lugar nenhum, faz fronteira com o fato de não haver mais nada."
+          "resumo": "A borda do Jardim: a faixa até onde a existência ainda alcança, e depois da qual não alcança mais. A única fronteira dele é o ponto onde já não há mais nada."
         },
         {
           "nome": "A Saída",
@@ -614,7 +614,7 @@
         "A paralisia não o pegou como pegou as outras. Ele continua sentado na mesma borda, de costas pro Jardim, fazendo exatamente o que sempre fez, e não dá pra dizer se chegou a reparar que as demais pararam de falar.",
         "Na mesa: quem alcançar o Fluxo do Vazio pode canalizá-lo normalmente, e é extremamente difícil alcançá-lo. Não existe regra do mundo bloqueando isso: existe o Mestre, porque o que esse Fluxo faz com uma campanha é difícil de desfazer depois."
       ],
-      "atmosfera": "Nenhum eco, contorno nenhum que a memória consiga segurar, e a impressão de estar na última borda que ainda conta como lugar.",
+      "atmosfera": "Som nenhum que volte, contorno nenhum que a memória consiga segurar, e a impressão de estar na última borda que ainda conta como lugar.",
       "cronologia": [
         {
           "id": "abismo-primeira-ausencia",
@@ -692,7 +692,7 @@
       ],
       "historia": [
         "Limiar é a chegada de todas as outras Árvores, e por isso fica no centro das órbitas. O Fluxo dela é o Fim; entre mortais, a única vertente que dá pra alcançar é o Sangue, e ninguém encosta nele por curiosidade.",
-        "Mulher Carmesim é um título, não uma pessoa eterna. Ele muda de dona de tempos em tempos, e quem assume aceita junto os cinco mandamentos e a função de receber tudo o que se encerra.",
+        "Mulher Carmesim é um título, e quem o carrega não vive para sempre. Ele muda de dona de tempos em tempos, e quem assume aceita junto os cinco mandamentos e a função de receber tudo o que se encerra.",
         "Arkarin tem o Castelo, o Tribunal e uma Biblioteca com um livro por vida concluída: tamanho, formato e capa conforme a existência que ele conta. Quem passou pelo Vazio é a exceção: não chega, não é julgado e não deixa volume nenhum.",
         "Durante o Silêncio ela continua trabalhando, junto com Aethel. O Jardim ainda nasce e ainda termina no ritmo de sempre. O que travou foi tudo o que deveria acontecer no meio."
       ],
