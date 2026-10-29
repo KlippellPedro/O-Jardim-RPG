@@ -2,6 +2,131 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-28-mundo-questionario",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Blanc, um boato entre os dragões e uma Relíquia nova",
+      "detalhes": [
+        "A história de Blanc nos Registros Universais conta agora de onde vêm os espíritos e para onde ela os leva no fim.",
+        "Entre os dragões do Bestiário corre um boato novo. Vale perguntar a um ancião.",
+        "A Loja ganhou uma Relíquia da Criação: o Colar das Nove Lascas, que abre as magias de todos os Fluxos naturais. Como toda Relíquia, pede a autorização do Mestre.",
+        "Cada mesa escolhe em que ano a sua campanha se passa. Combine com o Mestre."
+      ]
+    },
+    {
+      "id": "2026-10-28-espirito-pecados-virtudes",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Pecados e Virtudes do Espírito mais justos",
+      "detalhes": [
+        "Quem é possuído contra a vontade tenta expulsar o demônio no fim de cada turno dele. A Possessão continua forte, e agora o alvo tem chance de se soltar.",
+        "Promessa Doce, Vício Irresistível e Eternidade Parada deixam o alvo repetir o teste no fim de cada turno, e o Vício dura até 3 rodadas em vez de 1 minuto.",
+        "Pecado Absoluto e Virtude Absoluta agora fazem a mesma coisa, cada um do seu lado: custo zero, um uso a mais, alcance de 30 m e preço dobrado.",
+        "A Castidade e a Luxúria falam em controle mental e Fascinado, que são os nomes das regras. O Banquete Final e a Fome que Devora o Mundo da Gula agora dão teste, e quem passa sofre metade.",
+        "As habilidades de dano e cura mais fortes do Espírito passaram a custar o que uma magia do mesmo tamanho custa. A Chuva do Inferno foi de 12 para 56 Mana, o Coro dos Céus e a Ceifa para 70, e a Labareda Infernal para 25.",
+        "Quando um Espírito está num corpo, o dano que o corpo sofre sai da Vida do Espírito."
+      ]
+    },
+    {
+      "id": "2026-10-28-classes-polidas",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Classes com mais o que fazer na luta e um nível 20 de verdade",
+      "detalhes": [
+        "Viajante, Guia Dimensional, Pop Star, Comerciante, Detetive e Interceptador ganharam poderes de combate no próprio tema: Golpe Baixo, Corte de Coordenada, Refrão, Saque e Uso, Já Vi Esse Golpe, Choque de Malha e outros. O Rito Guardado do Ritualista chega no nível 5.",
+        "No nível 20, ninguém repete mais a habilidade final: o Atirador ganha Duas Marcas, o Pirata ganha a Âncora Maldita, o Guia planta âncora em aliado e a Invenção Suprema do Engenheiro vira ferramenta de todo dia. O Mestre da Vida do Médico impede que alguém morra por três rodadas, e a Panaceia do Alquimista limpa todas as condições.",
+        "O Guardião provoca uma vez por rodada, e quem cai na provocação só se livra passando na Vontade. As Muralhas sobem com o nível (6, 11 e 16).",
+        "O Caçador pode se especializar numa família do Bestiário, como dragões ou mortos-vivos. O Xodó do Piloto pode ser uma montaria, usando Cavalgar. O Devorador também devora criaturas do Bestiário, até o VD do seu nível.",
+        "Guerreiro, Piloto e Ritualista ganharam habilidade no nível 18: Bandeira Fincada, Piloto de Fuga e Círculo Permanente. Toda habilidade em degraus agora tem nome em cada degrau.",
+        "Vários ajustes pequenos: alcances na grade de 1,5 m, queimaduras e venenos usando as condições Queimando e Envenenado, e números que faltavam em vários poderes."
+      ]
+    },
+    {
+      "id": "2026-10-28-racas-que-crescem",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Raças que crescem, Autômato novo e a língua de cada povo",
+      "detalhes": [
+        "Humano, Goblim e Feérico ganharam escada de três degraus, com Vida, Mana, Estamina e um poder novo em cada degrau. A Sereia e o Anão ficaram mais fortes no meio e no topo da escada.",
+        "Desperto, Clone, Anomalia, Amálgamo e Bruxa ganharam um degrau no nível 20, que faz crescer o que a raça já tinha.",
+        "O Autômato foi refeito: o Corpo Maciço começa menor e cresce com o nível, as armas do núcleo causam dano tecnológico, o Raio Inferno e o Eletrificar têm usos por cena, o limite de modificações para em 8 e o chassi pequeno ganhou vantagem em Furtividade e Reflexos. Os chassis bípedes agora têm altura de gente: 1 m, 1,8 m, 3 m e 4,5 m.",
+        "O Semideus ganhou um Legado a mais, da família mortal, e uma Bênção por sessão sem gastar Mana. O Domínio da Morte do Divino causa dano do Fim.",
+        "O Espírito natural conjura o Fluxo da própria marca, em qualquer Árvore.",
+        "A página de cada raça diz a língua do povo. Quem não tem língua própria fala o Universal, como todo mundo. A Noite Eterna dos vampiros e a dos elfos são a mesma noite."
+      ]
+    },
+    {
+      "id": "2026-10-28-dt-das-racas-e-critico",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "DT das raças, crítico e dano em área mais justo",
+      "detalhes": [
+        "As raças que mandam alguém testar ganharam uma DT própria, como as classes: o Vampiro rola Intimidação, a Sereia rola Atuação, o Divino rola Religião, o Gigante e o Golem rolam Atletismo, e Elfo, Bruxa, Onírico, Espírito, Feérico e Auleth rolam Misticismo. A página de cada raça mostra qual é.",
+        "Quem alarga a margem de crítico (Golpe Certeiro do Ninja, Fio Afiado do Espadachim, Ponto Fraco do Atirador, Predador Perfeito do Caçador) só alarga em arma x2. Em arma x3 ou x4, ganha dados a mais no crítico.",
+        "Zonas e golpes em área de raças e classes passaram a dar teste com metade do dano para quem passa, e efeitos que prendiam por várias rodadas deixam repetir o teste no fim de cada turno.",
+        "Alguns poderes que rendiam mais que magia foram ajustados: o Hadō e o Kidō de Cura do Caçador das Almas, o Soco e o Impacto do Campeão Dimensional e a Investida Predatória do Devorador agora crescem com o nível ou com o custo."
+      ]
+    },
+    {
+      "id": "2026-10-28-regras-base-questionario",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Regras novas de cura, visão, tamanho e dano",
+      "detalhes": [
+        "Fora de combate, qualquer um trata um ferido: dez minutos e Cura DT 15 devolvem 1d6 de Vida. O Médico ganhou uma cura própria em combate, e o Socorro de Emergência levanta o aliado caído com 1 de Vida.",
+        "Combate ganhou o quadro Ver e ser visto (pouca luz, escuridão, camuflagem e cobertura total) e o tópico Tamanho, com as seis categorias, do Minúsculo ao Colossal. Soco, chute e cabeçada de qualquer um causam 1d4 de impacto mais a sua Força.",
+        "Três condições novas: Fascinado, Enjoado e Invisível. As condições agora têm gravidade (leve, média, grave e gravíssima), que é o que as curas usam para saber o que encerram.",
+        "O dano verdadeiro entrou nos Tipos de Dano: nenhuma Resistência reduz esse dano. O dano espiritual do Caçador das Almas passou a ser dano de Essência, e o dano psíquico virou dano mental, que tira Sanidade.",
+        "Efeitos que davam Resistência contra todo dano agora reduzem o dano de cada golpe. Voltar da morte ganhou regra em Ferimentos: é raro e cobra caro."
+      ]
+    },
+    {
+      "id": "2026-10-28-o-que-todo-povo-carrega",
+      "data": "2026-10-28",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "O que todo povo carrega",
+      "detalhes": [
+        "A página de cada raça ganhou a seção O que todo povo carrega: três ou quatro linhas sobre o que o corpo e a natureza da raça mudam na vida de qualquer povo dela, em qualquer Árvore. Todo vampiro precisa de sangue, o golem não come, o elfo não esquece.",
+        "O jeito de viver de cada lugar continua com o reino de onde o povo é, como Khazad, Salém ou Nadalon. Em outra Árvore, o mesmo povo pode viver de outro jeito, e o Mestre monta essa cultura com a mesa.",
+        "O Livro de Regras também traz essas linhas junto de cada raça."
+      ]
+    },
+    {
+      "id": "2026-10-27-revisao-classes-correcoes",
+      "data": "2026-10-27",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Classes com bônus somados e nomes certos",
+      "detalhes": [
+        "A ficha passou a somar bônus que estavam só no texto: a Pele Curtida e os Reflexos de Predador do Devorador, o Hohō do Caçador das Almas e o atributo do Além do Comum do Campeão Dimensional.",
+        "O Frasco Congelante do Alquimista causa dano de gelo, a Artilharia do Engenho Divino do Engenheiro causa dano de raio, e o Couro Grosso do Guerreiro resiste a fogo, a gelo e a frio.",
+        "O Cuscuz Nordestino do Chef agora dá +2 de Iniciativa no próximo combate, porque a Iniciativa é um número da ficha e não se rola.",
+        "A Pop Star usa a DT de Palco em todos os poderes, e a Especialização do Caçador fala em raça em todos os estágios.",
+        "Imunidades e testes contra medo e paralisia usam o nome das condições: Amedrontado e Paralisado."
+      ]
+    },
+    {
+      "id": "2026-10-27-revisao-racas-correcoes",
+      "data": "2026-10-27",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Raças com perícias, danos e condições certos",
+      "detalhes": [
+        "Algumas raças citavam perícias que não existem. Agora o Vampiro usa Diplomacia, o Golem e o Amálgamo usam Cura, e o Desperto e o Auleth usam Religião no lugar dos antigos Ritos de Arkarin.",
+        "Os raios do Gigante de Tempestade, do Elfo de Tempestades, do Auleth Pulsar e do Divino da Tempestade causam dano de raio. O gelo do Gigante de Gelo e do Sepulcro do Elfo causa dano de gelo.",
+        "Quem fica preso numa armadilha do Anão, nas raízes do Golem de Madeira ou no gelo do Slime Glacial fica Imobilizado, com a regra da condição.",
+        "A ficha passou a somar o Movimento da Pelagem Noturna do Pricolici e a Defesa do Ectoplasma Firme e do Respirar Fundo do Espírito.",
+        "O Compartimento de Carga do Autômato dá 15 espaços, e o Núcleo Autônomo lembra que a Tecnologia é o Fluxo nativo dele."
+      ]
+    },
+    {
       "id": "2026-10-27-passada-de-tom",
       "data": "2026-10-27",
       "tipo": "melhoria",

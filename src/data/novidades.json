@@ -1,6 +1,131 @@
 {
   "itens": [
     {
+      "id": "2026-10-28-mundo-questionario",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Blanc, um boato entre os dragões e uma Relíquia nova",
+      "detalhes": [
+        "A história de Blanc nos Registros Universais conta agora de onde vêm os espíritos e para onde ela os leva no fim.",
+        "Entre os dragões do Bestiário corre um boato novo. Vale perguntar a um ancião.",
+        "A Loja ganhou uma Relíquia da Criação: o Colar das Nove Lascas, que abre as magias de todos os Fluxos naturais. Como toda Relíquia, pede a autorização do Mestre.",
+        "Cada mesa escolhe em que ano a sua campanha se passa. Combine com o Mestre."
+      ]
+    },
+    {
+      "id": "2026-10-28-espirito-pecados-virtudes",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Pecados e Virtudes do Espírito mais justos",
+      "detalhes": [
+        "Quem é possuído contra a vontade tenta expulsar o demônio no fim de cada turno dele. A Possessão continua forte, e agora o alvo tem chance de se soltar.",
+        "Promessa Doce, Vício Irresistível e Eternidade Parada deixam o alvo repetir o teste no fim de cada turno, e o Vício dura até 3 rodadas em vez de 1 minuto.",
+        "Pecado Absoluto e Virtude Absoluta agora fazem a mesma coisa, cada um do seu lado: custo zero, um uso a mais, alcance de 30 m e preço dobrado.",
+        "A Castidade e a Luxúria falam em controle mental e Fascinado, que são os nomes das regras. O Banquete Final e a Fome que Devora o Mundo da Gula agora dão teste, e quem passa sofre metade.",
+        "As habilidades de dano e cura mais fortes do Espírito passaram a custar o que uma magia do mesmo tamanho custa. A Chuva do Inferno foi de 12 para 56 Mana, o Coro dos Céus e a Ceifa para 70, e a Labareda Infernal para 25.",
+        "Quando um Espírito está num corpo, o dano que o corpo sofre sai da Vida do Espírito."
+      ]
+    },
+    {
+      "id": "2026-10-28-classes-polidas",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Classes com mais o que fazer na luta e um nível 20 de verdade",
+      "detalhes": [
+        "Viajante, Guia Dimensional, Pop Star, Comerciante, Detetive e Interceptador ganharam poderes de combate no próprio tema: Golpe Baixo, Corte de Coordenada, Refrão, Saque e Uso, Já Vi Esse Golpe, Choque de Malha e outros. O Rito Guardado do Ritualista chega no nível 5.",
+        "No nível 20, ninguém repete mais a habilidade final: o Atirador ganha Duas Marcas, o Pirata ganha a Âncora Maldita, o Guia planta âncora em aliado e a Invenção Suprema do Engenheiro vira ferramenta de todo dia. O Mestre da Vida do Médico impede que alguém morra por três rodadas, e a Panaceia do Alquimista limpa todas as condições.",
+        "O Guardião provoca uma vez por rodada, e quem cai na provocação só se livra passando na Vontade. As Muralhas sobem com o nível (6, 11 e 16).",
+        "O Caçador pode se especializar numa família do Bestiário, como dragões ou mortos-vivos. O Xodó do Piloto pode ser uma montaria, usando Cavalgar. O Devorador também devora criaturas do Bestiário, até o VD do seu nível.",
+        "Guerreiro, Piloto e Ritualista ganharam habilidade no nível 18: Bandeira Fincada, Piloto de Fuga e Círculo Permanente. Toda habilidade em degraus agora tem nome em cada degrau.",
+        "Vários ajustes pequenos: alcances na grade de 1,5 m, queimaduras e venenos usando as condições Queimando e Envenenado, e números que faltavam em vários poderes."
+      ]
+    },
+    {
+      "id": "2026-10-28-racas-que-crescem",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Raças que crescem, Autômato novo e a língua de cada povo",
+      "detalhes": [
+        "Humano, Goblim e Feérico ganharam escada de três degraus, com Vida, Mana, Estamina e um poder novo em cada degrau. A Sereia e o Anão ficaram mais fortes no meio e no topo da escada.",
+        "Desperto, Clone, Anomalia, Amálgamo e Bruxa ganharam um degrau no nível 20, que faz crescer o que a raça já tinha.",
+        "O Autômato foi refeito: o Corpo Maciço começa menor e cresce com o nível, as armas do núcleo causam dano tecnológico, o Raio Inferno e o Eletrificar têm usos por cena, o limite de modificações para em 8 e o chassi pequeno ganhou vantagem em Furtividade e Reflexos. Os chassis bípedes agora têm altura de gente: 1 m, 1,8 m, 3 m e 4,5 m.",
+        "O Semideus ganhou um Legado a mais, da família mortal, e uma Bênção por sessão sem gastar Mana. O Domínio da Morte do Divino causa dano do Fim.",
+        "O Espírito natural conjura o Fluxo da própria marca, em qualquer Árvore.",
+        "A página de cada raça diz a língua do povo. Quem não tem língua própria fala o Universal, como todo mundo. A Noite Eterna dos vampiros e a dos elfos são a mesma noite."
+      ]
+    },
+    {
+      "id": "2026-10-28-dt-das-racas-e-critico",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "DT das raças, crítico e dano em área mais justo",
+      "detalhes": [
+        "As raças que mandam alguém testar ganharam uma DT própria, como as classes: o Vampiro rola Intimidação, a Sereia rola Atuação, o Divino rola Religião, o Gigante e o Golem rolam Atletismo, e Elfo, Bruxa, Onírico, Espírito, Feérico e Auleth rolam Misticismo. A página de cada raça mostra qual é.",
+        "Quem alarga a margem de crítico (Golpe Certeiro do Ninja, Fio Afiado do Espadachim, Ponto Fraco do Atirador, Predador Perfeito do Caçador) só alarga em arma x2. Em arma x3 ou x4, ganha dados a mais no crítico.",
+        "Zonas e golpes em área de raças e classes passaram a dar teste com metade do dano para quem passa, e efeitos que prendiam por várias rodadas deixam repetir o teste no fim de cada turno.",
+        "Alguns poderes que rendiam mais que magia foram ajustados: o Hadō e o Kidō de Cura do Caçador das Almas, o Soco e o Impacto do Campeão Dimensional e a Investida Predatória do Devorador agora crescem com o nível ou com o custo."
+      ]
+    },
+    {
+      "id": "2026-10-28-regras-base-questionario",
+      "data": "2026-10-28",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Regras novas de cura, visão, tamanho e dano",
+      "detalhes": [
+        "Fora de combate, qualquer um trata um ferido: dez minutos e Cura DT 15 devolvem 1d6 de Vida. O Médico ganhou uma cura própria em combate, e o Socorro de Emergência levanta o aliado caído com 1 de Vida.",
+        "Combate ganhou o quadro Ver e ser visto (pouca luz, escuridão, camuflagem e cobertura total) e o tópico Tamanho, com as seis categorias, do Minúsculo ao Colossal. Soco, chute e cabeçada de qualquer um causam 1d4 de impacto mais a sua Força.",
+        "Três condições novas: Fascinado, Enjoado e Invisível. As condições agora têm gravidade (leve, média, grave e gravíssima), que é o que as curas usam para saber o que encerram.",
+        "O dano verdadeiro entrou nos Tipos de Dano: nenhuma Resistência reduz esse dano. O dano espiritual do Caçador das Almas passou a ser dano de Essência, e o dano psíquico virou dano mental, que tira Sanidade.",
+        "Efeitos que davam Resistência contra todo dano agora reduzem o dano de cada golpe. Voltar da morte ganhou regra em Ferimentos: é raro e cobra caro."
+      ]
+    },
+    {
+      "id": "2026-10-28-o-que-todo-povo-carrega",
+      "data": "2026-10-28",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "O que todo povo carrega",
+      "detalhes": [
+        "A página de cada raça ganhou a seção O que todo povo carrega: três ou quatro linhas sobre o que o corpo e a natureza da raça mudam na vida de qualquer povo dela, em qualquer Árvore. Todo vampiro precisa de sangue, o golem não come, o elfo não esquece.",
+        "O jeito de viver de cada lugar continua com o reino de onde o povo é, como Khazad, Salém ou Nadalon. Em outra Árvore, o mesmo povo pode viver de outro jeito, e o Mestre monta essa cultura com a mesa.",
+        "O Livro de Regras também traz essas linhas junto de cada raça."
+      ]
+    },
+    {
+      "id": "2026-10-27-revisao-classes-correcoes",
+      "data": "2026-10-27",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Classes com bônus somados e nomes certos",
+      "detalhes": [
+        "A ficha passou a somar bônus que estavam só no texto: a Pele Curtida e os Reflexos de Predador do Devorador, o Hohō do Caçador das Almas e o atributo do Além do Comum do Campeão Dimensional.",
+        "O Frasco Congelante do Alquimista causa dano de gelo, a Artilharia do Engenho Divino do Engenheiro causa dano de raio, e o Couro Grosso do Guerreiro resiste a fogo, a gelo e a frio.",
+        "O Cuscuz Nordestino do Chef agora dá +2 de Iniciativa no próximo combate, porque a Iniciativa é um número da ficha e não se rola.",
+        "A Pop Star usa a DT de Palco em todos os poderes, e a Especialização do Caçador fala em raça em todos os estágios.",
+        "Imunidades e testes contra medo e paralisia usam o nome das condições: Amedrontado e Paralisado."
+      ]
+    },
+    {
+      "id": "2026-10-27-revisao-racas-correcoes",
+      "data": "2026-10-27",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Raças com perícias, danos e condições certos",
+      "detalhes": [
+        "Algumas raças citavam perícias que não existem. Agora o Vampiro usa Diplomacia, o Golem e o Amálgamo usam Cura, e o Desperto e o Auleth usam Religião no lugar dos antigos Ritos de Arkarin.",
+        "Os raios do Gigante de Tempestade, do Elfo de Tempestades, do Auleth Pulsar e do Divino da Tempestade causam dano de raio. O gelo do Gigante de Gelo e do Sepulcro do Elfo causa dano de gelo.",
+        "Quem fica preso numa armadilha do Anão, nas raízes do Golem de Madeira ou no gelo do Slime Glacial fica Imobilizado, com a regra da condição.",
+        "A ficha passou a somar o Movimento da Pelagem Noturna do Pricolici e a Defesa do Ectoplasma Firme e do Respirar Fundo do Espírito.",
+        "O Compartimento de Carga do Autômato dá 15 espaços, e o Núcleo Autônomo lembra que a Tecnologia é o Fluxo nativo dele."
+      ]
+    },
+    {
       "id": "2026-10-27-passada-de-tom",
       "data": "2026-10-27",
       "tipo": "melhoria",
@@ -868,107 +993,6 @@
         "No furo você escreve a história de verdade. Quem é alvo pode subornar ou desmentir de graça, e o Mestre pode barrar uma história antes de sair.",
         "Quando alguém sobe de nível ou ganha um selo, o jornal comenta. O Mestre decide no site se quer esses avisos.",
         "O /baus_hoje mostra os maiores caçadores de baú do mês, e a entrevista agora tem muito mais perguntas, algumas sobre a sua Árvore."
-      ]
-    },
-    {
-      "id": "2026-10-09-eventos-da-semana",
-      "data": "2026-10-09",
-      "tipo": "novo",
-      "area": "Discord",
-      "titulo": "Leilão do Jardim e Dia de Bolsa toda semana",
-      "detalhes": [
-        "Todo sábado às 18h o Banco Lunar leiloa um item bom (Raro ou melhor) por 24 horas. O lance mínimo é baixo, então vale ficar de olho. Os lances do dia aparecem no /banco.",
-        "Toda quarta ao meio-dia é Dia de Bolsa: durante 24 horas os Títulos do Jardim podem render mais, render menos, ou o câmbio fica sem taxa. O humor do dia é sorteado e aparece no /banco.",
-        "O botão de dar lance agora continua funcionando mesmo se o bot reiniciar no meio do leilão."
-      ]
-    },
-    {
-      "id": "2026-10-09-cofre-do-jardim",
-      "data": "2026-10-09",
-      "tipo": "novo",
-      "area": "Discord",
-      "titulo": "Cofre do Jardim: uma meta que a mesa inteira enche",
-      "detalhes": [
-        "O Mestre pode abrir uma meta coletiva em Lunaris, com prazo e uma recompensa para todo mundo. Você doa pelo /banco, na seção Cofre do Jardim, e acompanha o progresso e os maiores doadores no /jardim.",
-        "Bateu a meta, o aviso sai no jornal e, se o Mestre prometeu, começa um festival com baús bem mais generosos. Se o prazo acabar sem bater a meta, todo mundo recebe de volta o que doou."
-      ]
-    },
-    {
-      "id": "2026-10-09-colecao-das-dez-arvores",
-      "data": "2026-10-09",
-      "tipo": "novo",
-      "area": "Discord",
-      "titulo": "Coleção das Dez Árvores: fragmentos nos baús revelam o que restou escrito",
-      "detalhes": [
-        "Os baús agora podem trazer um fragmento de uma Árvore. Cada fragmento revela na hora um pedaço do que as Crônicas do Jardim guardam sobre ela, e com três a página se completa. Veja o seu álbum na seção Coleção do /jardim.",
-        "Quem completa a página de uma Árvore e carrega o cargo dela ganha 10% a mais de Lunaris em todo baú. Quem completa as dez páginas lê o epílogo das Crônicas e vira Cronista do Jardim."
-      ]
-    },
-    {
-      "id": "2026-10-04-chaves-do-jardim",
-      "data": "2026-10-04",
-      "tipo": "novo",
-      "area": "Discord",
-      "titulo": "Chaves do Jardim: abra o fundo falso dos baús",
-      "detalhes": [
-        "Compre Chaves no /banco, na seção Chaves. Uma Chave é gasta sozinha no próximo baú Incomum ou melhor que você pegar e dá 50% mais Lunaris e um item extra. Ela nunca é exigida: sem Chave o baú abre do mesmo jeito.",
-        "Quem vence a corrida de um baú Raro ou melhor ganha uma Chave de brinde, e nos baús para todos há uma chance de achar uma. Dá para deixar as Chaves guardadas desligando o uso automático."
-      ]
-    },
-    {
-      "id": "2026-10-04-paineis-banco-e-jardim",
-      "data": "2026-10-04",
-      "tipo": "novo",
-      "area": "Discord",
-      "titulo": "Painéis /banco e /jardim: tudo num lugar só",
-      "detalhes": [
-        "Com /banco você vê sua conta, o que pede atenção (dívida, fatura, recompensa na sua cabeça) e o que está acontecendo no servidor, e abre carteira, cofre, extrato, leilões e o resto por um menu, sem encher o canal. Há botões para guardar ou sacar do cofre e comprar bilhetes da loteria.",
-        "Com /jardim você vê a estação, o horóscopo do dia, os baús no ar e os eventos do Mestre, com atalhos para anunciar um classificado, vender um furo e entrar ou sair das entrevistas. Os comandos de sempre continuam funcionando."
-      ]
-    },
-    {
-      "id": "2026-10-04-baus-v2",
-      "data": "2026-10-04",
-      "tipo": "novo",
-      "area": "Discord",
-      "titulo": "Baús v2: mais baús, um pra cada um e sorte que acumula",
-      "detalhes": [
-        "Agora caem vários baús por dia, espalhados em horários diferentes. Os Comuns e Incomuns têm um para cada pessoa: é só clicar em \"Pegar o meu\". Do Raro para cima continua a corrida do enigma.",
-        "Quem tenta o enigma e não leva ganha uma Pista de Sorte, que vira Lunaris extra e chance de item a mais no próximo baú que você levar. Depois de uma sequência de baús fracos, o próximo vem pelo menos Raro. Veja os baús de hoje com /baus_hoje.",
-        "O Mestre pode manter um mural \"Achados de hoje\" num canal, atualizado a cada baú."
-      ]
-    },
-    {
-      "id": "2026-10-04-jornalista-furos-e-classificados",
-      "data": "2026-10-04",
-      "tipo": "correcao",
-      "area": "Discord",
-      "titulo": "Furos e classificados do Jornalista agora valem Lunaris",
-      "detalhes": [
-        "O /vender_furo paga de 10 a 40 Lunaris por história comprada (antes eram Solares, que rendiam bem mais do que qualquer baú). Quem é alvo do furo recebe um aviso privado com o prazo e o preço do suborno.",
-        "O /anunciar_classificado passa a custar a partir de 50 Lunaris."
-      ]
-    },
-    {
-      "id": "2026-10-04-jornalista-baus-e-horoscopo",
-      "data": "2026-10-04",
-      "tipo": "melhoria",
-      "area": "Discord",
-      "titulo": "Baús, horóscopo e loteria mais certinhos",
-      "detalhes": [
-        "A janela de horário que o Mestre define para os baús deixa de voltar ao padrão quando o bot reinicia. O baú Sombrio entrega os Créditos Sombrios em qualquer caso.",
-        "O horóscopo sai uma vez por dia sem pular dias, e o bônus vale só enquanto o horóscopo está em vigor. A loteria de domingo é recuperada se o bot estiver fora do ar na hora do sorteio."
-      ]
-    },
-    {
-      "id": "2026-10-04-dadivas-e-oferendas",
-      "data": "2026-10-04",
-      "tipo": "novo",
-      "area": "Regras",
-      "titulo": "Dádivas e oferendas: os Fluxos agora respondem",
-      "detalhes": [
-        "Quem faz uma oferenda do gosto de um Fluxo pode ganhar uma dádiva por uma jornada: um bônus pequeno e um efeito de uma vez. Há uma dádiva para cada um dos onze Fluxos, e o texto está no capítulo dos Frutos do Éden.",
-        "Quem carrega o Fruto do mesmo Fluxo recebe a dádiva ampliada. Algumas deidades respondem pouco, e o silêncio também é resposta."
       ]
     }
   ]

@@ -1,0 +1,13 @@
+# Revisão do Piloto
+
+Classe comum (4/4/1) que luta de dentro do veículo. Está bem amarrada ao capítulo de Veículos (manobras, faixas de perseguição, avaria em d6, tiers T1 a T4), e o Tuning tem dez peças com escada. Os problemas são de encaixe: a Mana da classe quase não tem onde ser gasta, a Resistência do Ás Impossível fura uma regra do livro e o Xodó não diz se montaria vale.
+
+## Achados (do mais grave ao menos grave)
+
+- [INCOERÊNCIA] `as-impossivel`: "Resistência 5 contra todo dano". O tópico Tipos de Dano diz que Resistência aponta sempre para um tipo específico, nunca para "dano" de forma genérica. → "Resistência 5 contra dano físico (corte, perfuração, impacto e balístico)", ou escrever a exceção com todas as letras ("a única Resistência do jogo que vale para todo tipo").
+- [INCOERÊNCIA] Mana 4 por nível sem onde gastar: só 4 dos 10 poderes custam Mana (Database 2, Link Compartilhado 6, Shield 6, Sistema Fantasma 8), e nenhuma habilidade custa. No nível 10 o Piloto tem 40 de Mana e usa uns 20 por cena no máximo. Os outros 6 poderes são passivos de custo 0. → Ou a Camuflagem Ativa e a Torre de Sensores (as peças que ligam e desligam, que pela regra do próprio Piloto cobram Mana) passam a custar 2 ou 3 de Mana por uso, ou a classe troca 1 de Mana por 1 de Estamina (4/3/2) e o Reparo Rápido fica mais acessível.
+- [INCOERÊNCIA] `meu-xodo`: o Xodó é "um veículo", mas o Ás Impossível vale "enquanto conduz um veículo ou montaria". Não fica claro se um cavaleiro pode ser Piloto. → Decidir: ou "veículo ou montaria" nas duas, com a montaria usando Cavalgar no lugar de Pilotagem, ou tirar "montaria" do Ás Impossível. Vai para o questionário.
+- [MELHORIA] nível 18: só tem o evento Corrida Maluca. É uma das três classes sem habilidade no 18. → Sugestão: "Piloto de Fuga", uma vez por combate, como Reação, o veículo sai da faixa de Contato para Curta sem teste, levando quem estiver dentro.
+- [MELHORIA] `tuning` op. `casco-reforcado` T4 ("a Vida máxima dobra") e op. `motor` T4 ("o deslocamento dobra"): as rodadas de agosto trocaram multiplicador solto por valor fixo (Marcha do Campeão, Um Só Disparo do Atirador). → T4 do Casco: "sobe três quartos"; T4 do Motor: "+18 m na primeira rodada de cada perseguição".
+- [MELHORIA] `rede-neural`: "a até 20 m" foge da grade de 1,5 m. → 18 m.
+- [MELHORIA] poderes `capacete-inteligente`, `radin` e `ia` são quase só cor: três dos dez poderes sem efeito em combate nem em teste. → Dar a cada um um uso concreto (o Capacete dá +2 em Percepção dentro do veículo; o Radin avisa a primeira emboscada de estrada da sessão; a I.A. faz a ação de Conduzir sozinha uma vez por rodada).

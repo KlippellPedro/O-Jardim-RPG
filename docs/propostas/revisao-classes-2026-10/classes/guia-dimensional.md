@@ -1,0 +1,12 @@
+# Revisão do Guia Dimensional
+
+Classe especial de conquista de Aperion (3/5/1), sem magia de círculo. A fantasia de cartógrafo de portais está clara, e os quatro tipos de Âncora dão escolha. Três pontos pesam: a conta de quantas âncoras ele mantém não fecha, o nível 20 tem dois portais quase iguais e a classe não tem nada que cause dano.
+
+## Achados (do mais grave ao menos grave)
+
+- [INCOERÊNCIA] número de âncoras: a Cartografia 1 já fala da "última âncora que marcou" (uma), a Cartografia 5 diz "Mantenha duas âncoras", e as Âncoras dão "uma âncora adicional por estágio, até quatro" nos níveis 3, 8, 14 e 20. Somando, o Guia chega a cinco ou seis, e o próprio texto diz quatro. → Uma frase única: "Você mantém uma âncora no nível 1, e cada estágio de Âncoras soma uma, até cinco no 20" (e a Cartografia 5 para de contar âncora).
+- [INCOERÊNCIA] `cartografia-da-matriz` nv 20 × `caminho-impossivel`: as duas abrem, uma vez por sessão e no mesmo nível, uma rota para um lugar conhecido na mesma dimensão (a primeira com 1 km de teto e uma rodada; a segunda sem teto, três rodadas e também para outra dimensão). A segunda cobre a primeira. → O estágio 5 da Cartografia vira outra coisa, por exemplo "Âncora Viva": uma âncora pode ser plantada num aliado e acompanha ele.
+- [INCOERÊNCIA] combate: com 5 de Mana por nível, a classe não tem nenhum efeito de dano, e só um poder (Queda Lateral) age sobre inimigo. Para uma classe de conquista, que pede liberação do Mestre, o Guia luta menos que qualquer comum. → Um ou dois poderes de dano dimensional, por exemplo "Corte de Coordenada", Ação Padrão, 4 Mana, 2d8 de dano de Espaço num alvo a 18 m (Reflexos contra a DT do Guia para metade), e "Dobra Esmagadora", 6 Mana, um alvo teleportado para 3 m acima do chão cai e fica Caído.
+- [MELHORIA] poder `selar-portal`: "Misticismo contra a DT de um portal" sem dizer qual é essa DT. → "contra a DT de conjuração de quem abriu o portal, ou DT 15 + metade do nível do portal se ele for natural".
+- [MELHORIA] poder `queda-lateral`: "é movida 6 m para um espaço seguro escolhido por você" deixa a dúvida: dá para jogar alguém no precipício? → "para um espaço que não cause dano por si só (sem queda, fogo ou abismo)".
+- [MELHORIA] `cartografia-da-matriz` nv 15: "pagando +1 Mana por aliado" numa passagem que não custa Mana (a do nível 5 é "uma vez por cena"). → "a passagem passa a custar 1 de Mana por aliado levado".
