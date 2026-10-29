@@ -385,9 +385,9 @@ test('a lore traz as respostas do questionário, e os _o_que_falta respondidos s
   assert.match(blanc.conteudo.descricao, /não serve a nenhum dos dois/);
   assert.equal(blanc._o_que_falta, 'Falta decidir se ela tem nome verdadeiro ou idade.');
   assert.equal(entrada(universais, 'ushumgal')._o_que_falta, undefined);
-  // A lore trancada também vai no código do site: o texto da Circe não repete o nome do item da Loja.
-  assert.match(entrada(universais, 'circe').conteudo.descricao, /Relíquia da Criação: o colar que usa até hoje/);
-  assert.doesNotMatch(entrada(universais, 'circe').conteudo.descricao, /Nove Lascas/);
+  // A Circe é lore trancada (o servidor não manda o texto aos jogadores), então o texto dela pode dar o nome do colar.
+  assert.equal(entrada(universais, 'circe').revelado, false);
+  assert.match(entrada(universais, 'circe').conteudo.descricao, /Colar das Nove Lascas/);
   for (const id of ['karnath', 'shinji-takamori', 'zero']) assert.match(entrada(universais, id)._o_que_falta, /de propósito/, id);
 
   // O colar existe na Loja sem entregar a dona, e o boato de Ushumgal fica na família Dragão, sem o nome.
