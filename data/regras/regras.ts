@@ -3111,7 +3111,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Classes que brilham fora da luta</h3>
-      <p>Viajante, Guia Dimensional, Pop Star, Comerciante, Detetive, Interceptador e Ritualista têm um ou dois poderes de combate, mas o forte delas está na viagem, no palco, no negócio, na investigação, na Malha e no rito. Se a mesa tem uma delas, guarde em cada sessão uma cena em que esse forte decide alguma coisa. O Interceptador luta melhor contra quem usa magia, e o Ritualista entra na luta pelo Rito Guardado, a partir do nível 5.</p>
+      <p>Viajante, Guia Dimensional, Pop Star, Comerciante, Detetive, Interceptador e Ritualista têm poucos poderes de combate, mas o forte delas está na viagem, no palco, no negócio, na investigação, na Malha e no rito. Se a mesa tem uma delas, guarde em cada sessão uma cena em que esse forte decide alguma coisa. O Interceptador luta melhor contra quem usa magia, e o Ritualista entra na luta pelo Rito Guardado, a partir do nível 5.</p>
 
       <h3 class="regras-subtitle">Liberar uma especial</h3>
       <ul class="regras-list">

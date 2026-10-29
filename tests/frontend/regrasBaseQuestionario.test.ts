@@ -277,6 +277,8 @@ test('as classes de fora da luta ganharam poder de combate, e o Rito Guardado ch
   assert.equal(rito.titulo, 'Rito Guardado');
   assert.match(rito.descricao, /inclusive no meio de uma luta/);
   assert.match(REGRAS_OFICIAIS.classes.corpoMestre || '', /Classes que brilham fora da luta/);
+  // O Viajante ganhou três poderes de combate: o Guia não conta quantos.
+  assert.match(REGRAS_OFICIAIS.classes.corpoMestre || '', /têm poucos poderes de combate/);
 });
 
 test('o nível 20 não repete a habilidade final, e Médico e Alquimista terminam diferentes do Chef', () => {
@@ -383,7 +385,9 @@ test('a lore traz as respostas do questionário, e os _o_que_falta respondidos s
   assert.match(blanc.conteudo.descricao, /não serve a nenhum dos dois/);
   assert.equal(blanc._o_que_falta, 'Falta decidir se ela tem nome verdadeiro ou idade.');
   assert.equal(entrada(universais, 'ushumgal')._o_que_falta, undefined);
-  assert.match(entrada(universais, 'circe').conteudo.descricao, /Colar das Nove Lascas/);
+  // A lore trancada também vai no código do site: o texto da Circe não repete o nome do item da Loja.
+  assert.match(entrada(universais, 'circe').conteudo.descricao, /Relíquia da Criação: o colar que usa até hoje/);
+  assert.doesNotMatch(entrada(universais, 'circe').conteudo.descricao, /Nove Lascas/);
   for (const id of ['karnath', 'shinji-takamori', 'zero']) assert.match(entrada(universais, id)._o_que_falta, /de propósito/, id);
 
   // O colar existe na Loja sem entregar a dona, e o boato de Ushumgal fica na família Dragão, sem o nome.
