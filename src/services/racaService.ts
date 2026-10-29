@@ -413,6 +413,24 @@ export function obterTamanhoRacial(
   return typeof variante?.tamanho === 'string' && variante.tamanho ? variante.tamanho : null;
 }
 
+const juntarNomes = (nomes: string[]) => (nomes.length > 1 ? `${nomes.slice(0, -1).join(', ')} e ${nomes[nomes.length - 1]}` : nomes[0]);
+
+/** A frase da língua do povo, para a página da raça e o Livro. Sem língua
+ * própria, o povo fala o Universal, que é de todos; quem veio de outro povo
+ * traz a própria frase em `linguas_nota`. Raça sem o campo não ganha frase. */
+export function fraseDaLinguaDoPovo(raca: IRaca | null | undefined): string | null {
+  if (!raca || !Array.isArray(raca.linguas)) return null;
+  const nomes = raca.linguas.map((lingua) => {
+    const natureza = raca.naturezas?.find((item) => item.id === lingua.natureza)?.titulo;
+    return natureza ? `${lingua.titulo} (${natureza})` : lingua.titulo;
+  });
+  if (nomes.length) {
+    const propria = `${nomes.length > 1 ? 'Línguas' : 'Língua'} do povo: ${juntarNomes(nomes)}. Como todo mundo, também fala o Universal.`;
+    return raca.linguas_nota ? `${propria} ${raca.linguas_nota}` : propria;
+  }
+  return raca.linguas_nota || 'Este povo não tem língua própria e fala o Universal, a língua de todos.';
+}
+
 export function descreverOpcaoRacial(opcao: IOpcaoRacial): string {
   if (opcao.descricao) return opcao.descricao;
   if (typeof opcao.motivo_retorno === 'string') return opcao.motivo_retorno;

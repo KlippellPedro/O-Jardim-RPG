@@ -139,7 +139,7 @@ export const Sereia = ({ raca }: SereiaProps) => {
             </div>
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Canto Fascinante</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Uma vez por cena, gaste uma ação e 2 Mana para fazer um teste de Carisma contra a Vontade de uma criatura a até 9 m que possa ouvir. Em sucesso, ela fica fascinada até o início do seu próximo turno. O efeito quebra se ela sofrer dano.
+              Uma vez por cena, gaste uma ação e 2 Mana: uma criatura a até 9 m que possa ouvir testa Vontade contra a sua DT de Sereia, que sai da sua Atuação. Se falhar, ela fica Fascinada até o início do seu próximo turno. O efeito quebra se ela sofrer dano.
             </p>
           </PremiumCard>
         </div>

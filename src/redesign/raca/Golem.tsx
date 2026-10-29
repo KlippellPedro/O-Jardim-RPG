@@ -102,7 +102,7 @@ export const Golem = ({ raca }: { raca: IRaca }) => {
             <Wrench size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Corpo Construído</h3>
             <p className="text-stone-400 leading-relaxed text-sm">
-              Quem cuida de um Golem usa Ofício no lugar de Medicina, com a mesma DT e o mesmo tempo. Tratamento que só funcione em biologia viva não faz efeito nenhum nele, e armadura comum só serve depois de adaptada ao corpo.
+              Quem cuida de um Golem usa Ofício no lugar de Cura, com a mesma DT e o mesmo tempo. Tratamento que só funcione em biologia viva não faz efeito nenhum nele, e armadura comum só serve depois de adaptada ao corpo.
             </p>
           </PremiumCard>
         </div>

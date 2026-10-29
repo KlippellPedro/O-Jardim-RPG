@@ -41,7 +41,7 @@ test('raça de corpo soma a Estamina do pacote racial sobre a fórmula de atribu
 });
 
 test('raça de Mana, de sonho ou sem corpo não ganha Estamina', () => {
-  for (const id of ['humano', 'elfo', 'feerico', 'espirito', 'sereia', 'bruxa', 'onirico', 'auleth', 'entidade', 'raca-personalizada']) {
+  for (const id of ['elfo', 'feerico', 'espirito', 'sereia', 'bruxa', 'onirico', 'auleth', 'entidade', 'raca-personalizada']) {
     assert.equal(comRaca(id, 60), 0, `${id} não deveria ganhar Estamina`);
   }
 });
@@ -58,6 +58,10 @@ test('os estágios raciais somam Estamina no nível certo, sem perder o degrau a
   assert.equal(comRaca('vampiro', 16), 1);
   assert.equal(comRaca('vampiro', 17), 4);
   assert.equal(comRaca('vampiro', 42), 8);
+  // Humano: sem base, Calejado (12) +2, Lenda Viva (36) +3 (questionário final, pergunta 16).
+  assert.equal(comRaca('humano', 11), 0);
+  assert.equal(comRaca('humano', 12), 2);
+  assert.equal(comRaca('humano', 36), 5);
 });
 
 test('a variante escolhida soma a própria Estamina (Animália e Simbionte)', () => {

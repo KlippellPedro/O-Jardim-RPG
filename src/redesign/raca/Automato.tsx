@@ -90,7 +90,7 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
             <ShieldAlert size={32} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Corpo Artificial</h3>
             <p className="text-cyan-200/60 leading-relaxed text-sm">
-              Imune a atordoamento, doenças, encantamentos, enjoo, fadiga, sono e venenos (salvo modificação Máquina Viva). Não respira, não come e não dorme.
+              Imune a Atordoado, Enjoado, Envenenado e Fascinado, a doenças, a Cansaço e a sono (salvo modificação Máquina Viva). Não respira, não come e não dorme.
             </p>
           </PremiumCard>
 
@@ -105,7 +105,7 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
             <Zap size={32} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Núcleo Autônomo</h3>
             <p className="text-cyan-200/60 leading-relaxed text-sm">
-              Você possui vontade própria independente de criador. Sua Mana é na verdade a Energia do Núcleo. Seu Nível Total é o nível do núcleo. Se a Vida zerar, você só morre de vez se a morte for concluída e o núcleo, destruído.
+              Você possui vontade própria independente de criador. Sua Mana é na verdade a Energia do Núcleo, e o núcleo roda o Fluxo da Tecnologia, que é o seu Fluxo nativo. Seu Nível Total é o nível do núcleo. Se a Vida zerar, você só morre de vez se a morte for concluída e o núcleo, destruído.
             </p>
           </PremiumCard>
 
@@ -135,7 +135,7 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
             <Layers size={32} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Arquitetura Modular</h3>
             <p className="text-cyan-200/60 leading-relaxed text-sm">
-              Limite de modificações é 1 + (Nível/2). Modificações ativas exigem passivas. Instalar leva um dia de trabalho e um teste de Engenharia. O corpo é peça trocável, como o de qualquer máquina.
+              Limite de modificações é 1 + (Nível/2), até 8. Modificações ativas exigem passivas. Instalar leva um dia de trabalho e um teste de Engenharia. O corpo é peça trocável, como o de qualquer máquina.
             </p>
           </PremiumCard>
         </div>

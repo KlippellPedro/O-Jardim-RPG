@@ -176,7 +176,10 @@ export function capacidadeModificacoesRaciais(raca: IRaca | null, nivel = 1) {
   if (!Array.isArray(raca?.modificacoes)) return 0;
   const base = Math.max(0, Math.trunc(Number(raca.capacidade_modificacoes?.base) || 0));
   const nivelPorSlot = Math.max(1, Math.trunc(Number(raca.capacidade_modificacoes?.nivel_por_slot) || 2));
-  return base + Math.floor(Math.max(1, Number(nivel) || 1) / nivelPorSlot);
+  const capacidade = base + Math.floor(Math.max(1, Number(nivel) || 1) / nivelPorSlot);
+  // O Autômato para em 8 vagas, para um catálogo de 17 modificações.
+  const maximo = Math.trunc(Number(raca.capacidade_modificacoes?.maximo) || 0);
+  return maximo > 0 ? Math.min(capacidade, maximo) : capacidade;
 }
 
 export function obterModificacoesRaciaisInstaladas(raca: IRaca | null, escolhaRacial: any = {}, nivel = 1) {

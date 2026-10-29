@@ -89,7 +89,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-indigo-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Nasceu em Sonhar, o mundo dos sonhos. Não é uma pessoa dormindo: tem corpo, nome e vontade próprios, e leva consigo as regras estranhas do lugar onde foi criado.
+            Nasceu em Sonhar, o mundo dos sonhos, e continua de pé quando todo mundo acorda. Tem corpo, nome e vontade próprios, e leva consigo as regras estranhas do lugar onde foi criado.
           </motion.p>
         </motion.header>
 

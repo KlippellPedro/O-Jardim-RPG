@@ -8,6 +8,7 @@ from core.character_summary import (
     _CATALOGO,
     _erro_acesso_elemental,
     _erro_vagas_por_fonte,
+    _validar_escolhas_progressao,
     _validar_manifestacao_magica,
     _atributo_efetivo,
     _animal_racial_incoerente,
@@ -1473,3 +1474,39 @@ class TestVagasPorFonte:
         assert _erro_vagas_por_fonte(self.SEXTO, self.SEXTO, fontes) is None
         # Crescer o excesso vira alerta.
         assert _erro_vagas_por_fonte(self.SEXTO + ["poco-de-gravidade"], self.SEXTO, fontes) is not None
+
+
+class TestRodadaTresDasRacas:
+    """Rodada 3 do questionário final: o Semideus ganha um Legado da família
+    mortal, e o Autômato para em 8 modificações instaladas."""
+
+    def setup_method(self):
+        carregar_catalogos(DATA_ROOT)
+
+    def test_semideus_tem_um_legado_a_mais_que_o_deus(self):
+        divino = _CATALOGO["raca"]["divino"]
+        livres = [
+            legado_id for legado_id, legado in _CATALOGO["legado"].items()
+            if not legado.get("repetivel") and not legado.get("pre_requisitos")
+        ]
+        def erro(natureza: str, quantidade: int):
+            ficha = {"escolhaRacial": {"naturezaDivinaId": natureza}, "legadosSelecionados": livres[:quantidade]}
+            return _validar_escolhas_progressao(ficha, {}, [], 1, divino)
+        # No nível 1 o Divino tem o Legado da Herança Divina; o Semideus, mais um.
+        assert erro("deus", 1) is None
+        assert "mais Legados" in erro("deus", 2)
+        assert erro("semideus", 2) is None
+        assert "mais Legados" in erro("semideus", 3)
+
+    def test_automato_para_em_oito_modificacoes(self):
+        automato = _CATALOGO["raca"]["automato"]
+        passivas = [
+            item["id"] for item in automato["modificacoes"]
+            if item.get("categoria") == "passiva" and not item.get("postura_exigida")
+        ]
+        assert len(passivas) >= 9
+        def erro(quantidade: int):
+            escolha = {"varianteId": "bipede-normal", "modificacoesIds": passivas[:quantidade]}
+            return _validar_escolhas_progressao({"escolhaRacial": escolha}, {}, [], 60, automato)
+        assert erro(8) is None
+        assert "capacidade racial" in erro(9)

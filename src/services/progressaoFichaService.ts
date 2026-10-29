@@ -944,10 +944,13 @@ export function podeSelecionarPoder(
 }
 
 /** Um Legado a cada 5 níveis até o 50, a cada 10 até o 100 e a cada 20 depois
- * (data/ficha/progressao-niveis.json), mais os que a raça dá de bônus. */
+ * (data/ficha/progressao-niveis.json), mais os que a raça e a escolha racial
+ * dão de bônus (o Semideus ganha um da família mortal). */
 export function vagasLegado(ficha: any): number {
   const raca = RACAS_CATALOGO.find((item) => item.id === ficha?.racaId);
-  return legadosPorNivel(nivelTotalFicha(ficha)) + Math.max(0, Number(raca?.legados_adicionais) || 0);
+  const daEscolha = obterOpcoesRaciaisSelecionadas(raca, ficha?.escolhaRacial)
+    .reduce((total, opcao) => total + Math.max(0, Number(opcao.legados_adicionais) || 0), 0);
+  return legadosPorNivel(nivelTotalFicha(ficha)) + Math.max(0, Number(raca?.legados_adicionais) || 0) + daEscolha;
 }
 
 export interface IAumentosAtributo {

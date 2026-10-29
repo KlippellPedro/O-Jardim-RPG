@@ -47,6 +47,7 @@ import { linhasDeMagiaDaClasse } from '../../src/services/progressaoMagiaClasse.
 import { NIVEL_CONTEUDO_CLASSE, NIVEL_MAXIMO_CLASSE } from '../../src/services/progressaoNiveis.ts';
 import {
   descreverOpcaoRacial,
+  fraseDaLinguaDoPovo,
   nivelMinimoTraco,
   obterEstagiosRaciais,
   obterGruposEscolhaRacial,
@@ -358,6 +359,19 @@ export const corpoDaRaca = (raca) => {
   if (fisiologia.length) {
     partes.push(secao('Fisiologia'));
     fisiologia.forEach((paragrafo) => partes.push(`<p>${esc(paragrafo)}</p>`));
+  }
+
+  // Só o que vem do corpo da raça; a cultura de cada lugar fica com o reino e com o Mestre.
+  if ((raca.povo || []).length) {
+    partes.push(secao('O que todo povo carrega'));
+    partes.push(`<ul>${raca.povo.map((linha) => `<li>${esc(linha)}</li>`).join('')}</ul>`);
+    const lingua = fraseDaLinguaDoPovo(raca);
+    if (lingua) partes.push(`<p>${esc(lingua)}</p>`);
+  }
+
+  if (raca.dt_efeitos) {
+    partes.push(secao(raca.dt_efeitos.rotulo));
+    partes.push(`<p>${esc(raca.dt_efeitos.descricao)}</p>`);
   }
 
   if ((raca.caracteristicas || []).length) {

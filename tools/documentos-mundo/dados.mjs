@@ -100,25 +100,15 @@ export const RACAS = lerJson('data/ficha/racas.json');
 export const RACAS_REAIS = RACAS.filter((r) => r.id !== 'raca-personalizada');
 
 /**
- * Língua de cada povo: o id da entrada em data/mundo/Jardim/idiomas.json. O nome
- * e o criador vêm da entrada, então renomear a língua lá basta. Só os doze povos
- * com língua própria aparecem aqui; o Universal é de todos e por isso não entra
- * no mapa. O Espírito tem uma língua por Natureza.
+ * Língua de cada povo: o campo `linguas` da raça (data/ficha/racas.json) guarda o
+ * id da entrada em data/mundo/Jardim/idiomas.json. O nome e o criador vêm da
+ * entrada, então renomear a língua lá basta. Só os povos com língua própria
+ * aparecem aqui; o Universal é de todos e por isso não entra no mapa. O Espírito
+ * tem uma língua por Natureza.
  */
-const LINGUAS_DO_POVO = {
-  vampiro: ['idioma-dos-vampiros'],
-  elfo: ['idioma-dos-elfos'],
-  gigante: ['idioma-dos-gigantes'],
-  goblim: ['idioma-dos-goblins'],
-  anao: ['idioma-dos-anoes'],
-  golem: ['idioma-dos-golens'],
-  espirito: ['idioma-dos-espiritos-naturais', 'idioma-dos-espiritos-demoniacos', 'idioma-dos-espiritos-angelicais'],
-  sereia: ['idioma-das-sereias'],
-  animalia: ['idioma-dos-animalias'],
-  clone: ['idioma-dos-clones'],
-  automato: ['idioma-dos-automatos'],
-  bruxa: ['idioma-das-bruxas'],
-};
+const LINGUAS_DO_POVO = Object.fromEntries(RACAS
+  .filter((raca) => (raca.linguas || []).length)
+  .map((raca) => [raca.id, raca.linguas.map((lingua) => lingua.idioma)]));
 
 const juntar = (nomes) => (nomes.length > 1 ? `${nomes.slice(0, -1).join(', ')} e ${nomes.at(-1)}` : nomes[0]);
 

@@ -538,6 +538,9 @@ def _validar_escolhas_progressao(ficha: dict, anterior: dict, classes: list[tupl
         return "modificacoes raciais devem ser uma lista sem ids repetidos"
     capacidade_config = raca.get("capacidade_modificacoes") or {}
     capacidade = max(0, _inteiro(capacidade_config.get("base")) or 0) + nivel_total // max(1, _inteiro(capacidade_config.get("nivel_por_slot")) or 2)
+    # O Autômato para em 8 vagas, para um catálogo de 17 modificações.
+    if (_inteiro(capacidade_config.get("maximo")) or 0) > 0:
+        capacidade = min(capacidade, _inteiro(capacidade_config.get("maximo")))
     if len(modificacoes) > capacidade or any(item not in modificacoes_catalogo for item in modificacoes):
         return "modificacoes instaladas excedem a capacidade racial ou contem id invalido"
     postura = escolha_racial.get("varianteId")
@@ -616,6 +619,14 @@ def _validar_escolhas_progressao(ficha: dict, anterior: dict, classes: list[tupl
     if not isinstance(selecionados, list) or any(not isinstance(item, str) for item in selecionados):
         return "legadosSelecionados deve ser uma lista de ids"
     vagas = legados_por_nivel(nivel_total) + max(0, _inteiro(raca.get("legados_adicionais")) or 0)
+    # A escolha racial também pode dar Legado (o Semideus ganha um da família mortal).
+    for colecao, campo in (("naturezas_divinas", "naturezaDivinaId"), ("variantes", "varianteId"), ("naturezas", "naturezaId")):
+        opcao = next((
+            item for item in raca.get(colecao) or []
+            if isinstance(item, dict) and str(item.get("id")) == str(escolha_racial.get(campo))
+        ), None)
+        if opcao:
+            vagas += max(0, _inteiro(opcao.get("legados_adicionais")) or 0)
     if len(selecionados) > vagas:
         return "a ficha possui mais Legados do que os marcos liberados"
     contagem_legados: dict[str, int] = {}

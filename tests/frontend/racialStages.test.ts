@@ -101,10 +101,11 @@ test('o estágio ativo vira exatamente no limiar, nunca um nível antes', () => 
 });
 
 test('raça sem escada não ganha estágio nenhum', () => {
-  const humano = porId('humano');
-  assert.equal(obterEstagiosRaciais(humano).length, 0);
-  assert.equal(obterEstagioRacialAtivo(humano, 30), null);
-  assert.deepEqual(obterEstagiosRaciaisAlcancados(humano, 30), []);
+  // O Autômato cresce pelas modificações instaladas, e não por degraus.
+  const automato = porId('automato');
+  assert.equal(obterEstagiosRaciais(automato).length, 0);
+  assert.equal(obterEstagioRacialAtivo(automato, 30), null);
+  assert.deepEqual(obterEstagiosRaciaisAlcancados(automato, 30), []);
 });
 
 test('poderes raciais complexos publicam seus limites sem brechas de interpretação', () => {

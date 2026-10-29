@@ -236,7 +236,18 @@ export interface IOpcaoRacial {
   natureza?: string;
   /** Opção que o Mestre concede e o jogador não escolhe sozinho. */
   somente_mestre?: boolean;
+  /** Legados a mais que a escolha dá, somados aos da raça (Semideus). */
+  legados_adicionais?: number;
   [key: string]: any;
+}
+
+/** Uma língua do povo: o id da entrada em data/mundo/Jardim/idiomas.json e o
+ * nome dela (um teste confere que os dois andam juntos). */
+export interface ILinguaRacial {
+  idioma: string;
+  titulo: string;
+  /** Quando cada Natureza fala uma língua (Espírito). */
+  natureza?: string;
 }
 
 export interface IRaca {
@@ -254,6 +265,17 @@ export interface IRaca {
   arvore?: string | null;
   arvores?: string[];
   fisiologia?: string[];
+  /** O que todo povo desta raça carrega em qualquer Árvore, vindo só do corpo e
+   * da natureza dela. A cultura de cada lugar fica com o reino e com o Mestre. */
+  povo?: string[];
+  /** De onde sai a DT dos traços que mandam alguém testar, no molde das classes. */
+  dt_efeitos?: IDtEfeitosClasse;
+  /** A língua própria do povo. Vazia, o povo fala só o Universal, que é de todos. */
+  linguas?: ILinguaRacial[];
+  /** Uma frase sobre a língua de quem veio de outro povo (Desperto, Anomalia, Amálgamo). */
+  linguas_nota?: string;
+  /** Legados que a raça dá além dos marcos de nível. */
+  legados_adicionais?: number;
   caracteristicas?: ICaracteristicaRacial[];
   variantes?: IOpcaoRacial[];
   /** Escada de maturação da raça, destravada por nível total (Espírito). */

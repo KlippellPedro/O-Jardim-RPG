@@ -450,13 +450,26 @@ const FLUXOS_NATURAIS_IDS = new Set(
   FLUXOS_CATALOGO.filter((fluxo) => fluxo.natureza !== 'artificial').map((fluxo) => fluxo.id),
 );
 
+/** O Espírito natural nasce de um Fluxo: o da marca é o nativo dele, em
+ * qualquer Árvore (questionário final, pergunta 19). Demônio e anjo não têm
+ * Fluxo na marca e seguem a Árvore; o Universal, que só o Mestre concede,
+ * também. */
+function fluxoDaMarcaEspiritual(ficha: any): FluxoMagicoId | null {
+  if (String(ficha?.racaId || '') !== 'espirito') return null;
+  const espirito = RACAS_CATALOGO.find((raca) => raca.id === 'espirito');
+  const marca = espirito?.variantes?.find((variante) => variante.id === ficha?.escolhaRacial?.varianteId);
+  const fluxo = String(marca?.fluxo || '') as FluxoMagicoId;
+  return marca?.natureza === 'natural' && FLUXOS_POR_ID.has(fluxo) ? fluxo : null;
+}
+
 /** Ordem: Árvore Universal não tem um nativo (ela atravessa todos), depois a
- * raça com Fluxo próprio, depois a Árvore. Ficha sem Árvore usa o Fluxo que o
- * Canalizador escolheu na Canalização Nativa, que só vale nesse caso. */
+ * raça com Fluxo próprio (o Autômato e a marca do Espírito natural), depois a
+ * Árvore. Ficha sem Árvore usa o Fluxo que o Canalizador escolheu na
+ * Canalização Nativa, que só vale nesse caso. */
 export function obterFluxoNativoId(ficha: any): FluxoMagicoId | null {
   const arvoreId = String(ficha?.arvoreId || '');
   if (arvoreId === 'universal') return null;
-  const daRaca = FLUXO_DA_RACA[String(ficha?.racaId || '')];
+  const daRaca = FLUXO_DA_RACA[String(ficha?.racaId || '')] || fluxoDaMarcaEspiritual(ficha);
   if (daRaca) return daRaca;
   const daArvore = FLUXO_POR_ARVORE[arvoreId];
   if (daArvore) return daArvore;

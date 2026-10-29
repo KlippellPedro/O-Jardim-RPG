@@ -24,6 +24,16 @@ const TETO_EM_ACERTOS = 1;
 const DURACOES_LONGAS_PERMITIDAS = new Set(['mente-na-rede']);
 const NIVEL_DO_ULTIMO_DEGRAU = 60;
 
+/** O que a magia rende pelo mesmo custo: mediana do dano médio por círculo em data/ficha/magias.json
+ * (custo base do círculo → dano). É a régua do Guia das classes estendida até o 10º círculo. */
+const MAGIA_POR_MANA = { 2: 5, 4: 9, 7: 11, 10: 18, 14: 20, 19: 27, 25: 28, 32: 36, 42: 36, 55: 55 };
+/** A tabela é uma mediana, então a régua tem folga: até uma vez e meia a magia do mesmo custo. Acima
+ * disso, o custo sobe (questionário final, rodada 5: "subir o custo"). */
+const TETO_EM_MAGIAS = 1.5;
+/** As convenções do questionário final (perguntas 8 e 20) valem para os Pecados, as Virtudes e as
+ * escadas demoníaca e angelical. As marcas naturais passaram pela revisão das raças. */
+const NATUREZAS_COM_CONVENCOES = new Set(['demoniaca', 'angelical']);
+
 const acertoPorNivel = Object.fromEntries(referencia.referenciaNpc.map((item) => [item.nivel, item.danoPorAcerto]));
 const vidaPorNivel = Object.fromEntries(referencia.classes[0].referencias.map((item) => [item.nivel, item.vida]));
 
@@ -36,6 +46,9 @@ function interpolar(tabela, nivel) {
   }
   return tabela[chaves[chaves.length - 1]];
 }
+
+/** Além do 10º círculo, a magia rende cerca de 1 de dano por Mana. */
+const magiaDeMesmoCusto = (mana) => (mana > 55 ? mana : interpolar(MAGIA_POR_MANA, mana));
 
 /** Maior média de dados do texto ("8d6", "2d6 + Mod.Sabedoria"), ou 0 se não houver dado. */
 function maiorMediaDeDados(texto) {
@@ -50,10 +63,14 @@ function maiorMediaDeDados(texto) {
 function habilidades() {
   const lista = [];
   for (const marca of espirito.variantes) {
-    for (const traco of marca.caracteristicas) lista.push({ origem: marca.titulo, traco });
+    for (const traco of marca.caracteristicas) lista.push({ origem: marca.titulo, natureza: marca.natureza, traco });
   }
   for (const degrau of espirito.estagios) {
-    for (const traco of degrau.caracteristicas) lista.push({ origem: degrau.titulo, traco });
+    for (const traco of degrau.caracteristicas) lista.push({ origem: degrau.titulo, natureza: degrau.natureza, traco });
+  }
+  // A Possessão e a Encarnação moram na própria Natureza, fora das escadas.
+  for (const natureza of espirito.naturezas) {
+    for (const traco of natureza.caracteristicas || []) lista.push({ origem: natureza.titulo, natureza: natureza.id, traco });
   }
   return lista;
 }
@@ -62,24 +79,27 @@ export function analisarEspirito() {
   const linhas = [];
   const violacoes = [];
 
-  for (const { origem, traco } of habilidades()) {
+  for (const { origem, natureza, traco } of habilidades()) {
     const nivel = traco.nivel_minimo;
     const texto = traco.descricao;
     const media = maiorMediaDeDados(texto);
     const acerto = interpolar(acertoPorNivel, nivel);
     const vida = interpolar(vidaPorNivel, nivel);
     const sessaoCurta = traco.recuperacao === 'sessao';
+    const mana = Number(traco.custo_mana) || 0;
 
     linhas.push({
       id: traco.id,
       titulo: traco.titulo,
       origem,
       nivel,
-      mana: Number(traco.custo_mana) || 0,
+      mana,
       usos: traco.usos ? `${traco.usos}/${sessaoCurta ? 'sessão' : 'cena'}` : '-',
       mediaDeDados: media,
       emAcertosDeNpc: media ? Number((media / acerto).toFixed(2)) : 0,
       emPorcentoDaVida: media ? Math.round((100 * media) / vida) : 0,
+      // Quantas magias do mesmo custo a habilidade rende (ver docs/propostas/revisao-espirito-2026-10).
+      emMagiaDeMesmoCusto: media && mana ? Number((media / magiaDeMesmoCusto(mana)).toFixed(2)) : 0,
     });
 
     const problema = (regra, detalhe) => violacoes.push({ id: traco.id, titulo: traco.titulo, origem, regra, detalhe });
@@ -108,6 +128,29 @@ export function analisarEspirito() {
     if (nivel >= NIVEL_DO_ULTIMO_DEGRAU && traco.requer_condicao !== 'provacao-primordial') {
       problema('sem-provacao', 'traço do nível 60 precisa exigir a Provação Primordial');
     }
+    // R12: dano ou cura em dados não passa de uma vez e meia a magia do mesmo custo.
+    const emMagias = linhas[linhas.length - 1].emMagiaDeMesmoCusto;
+    if (emMagias > TETO_EM_MAGIAS) {
+      problema('acima-da-regua', `${media} de média por ${mana} Mana rende ${emMagias} magias do mesmo custo; suba o custo`);
+    }
+
+    if (!NATUREZAS_COM_CONVENCOES.has(natureza)) continue;
+    // R7: dano em mais de uma criatura dá teste, e quem passa sofre metade.
+    if (/criaturas|toda criatura|até três/.test(texto) && /(sofre[m]?|perde[m]?) \d+d\d+/.test(texto) && !/ou metade|metade se pass/.test(texto)) {
+      problema('area-sem-metade', 'dano em várias criaturas precisa de teste com metade no sucesso');
+    }
+    // R8: o que tira a criatura da luta (paralisar, atordoar, possuir, mandar) pede teste repetido.
+    if ((/[Pp]aralisad|[Aa]tordoad|obedece|como aliado/.test(texto) || traco.id === 'possessao') && !/repete/.test(texto)) {
+      problema('trava-sem-teste-repetido', 'a criatura repete o teste no fim de cada turno');
+    }
+    // R9: 1 minuto cobre o encontro inteiro em qualquer degrau.
+    if (/\b1 minuto\b/.test(texto)) problema('duracao-de-1-minuto', 'use 3 rodadas');
+    // R10: nomes que as regras não conhecem (encantamento é manifestação da magia, não controle mental).
+    if (/[Ee]ncantad|encantamento|psíquic|\bespiritual\b/.test(texto)) problema('nome-fora-das-regras', 'use Fascinado, controle mental ou o tipo de dano oficial');
+    // R11: perder a ação é forte demais para repetir: ninguém perde a ação em duas rodadas seguidas.
+    if (/perde[m]? a ação(?! de movimento)/.test(texto) && !/duas rodadas seguidas/.test(texto)) {
+      problema('perde-a-acao-seguida', 'a mesma criatura não perde a ação em duas rodadas seguidas');
+    }
   }
 
   return { linhas, violacoes };
@@ -124,6 +167,9 @@ if (executadoDiretamente) {
     for (const l of comDados) {
       console.log(`  nv ${String(l.nivel).padStart(2)}  ${l.titulo.padEnd(26)} ${l.origem.padEnd(14)} ${String(l.mana).padStart(2)} Mana ${l.usos.padEnd(10)} média ${String(l.mediaDeDados).padStart(5)}  ${l.emAcertosDeNpc}x acerto  ${l.emPorcentoDaVida}% Vida`);
     }
+    const caras = linhas.filter((linha) => linha.emMagiaDeMesmoCusto > 1).sort((a, b) => b.emMagiaDeMesmoCusto - a.emMagiaDeMesmoCusto);
+    console.log(`\nRendem mais que a magia do mesmo custo (a régua aceita até ${String(TETO_EM_MAGIAS).replace('.', ',')}):`);
+    for (const l of caras) console.log(`  nv ${String(l.nivel).padStart(2)}  ${l.titulo.padEnd(26)} ${l.origem.padEnd(18)} ${String(l.mana).padStart(2)} Mana ${l.usos.padEnd(10)} ${l.emMagiaDeMesmoCusto}x a magia`);
     console.log(`\n${linhas.length} habilidades analisadas, ${violacoes.length} violações.`);
     for (const v of violacoes) console.log(`  [${v.regra}] ${v.origem} / ${v.titulo}: ${v.detalhe}`);
   }

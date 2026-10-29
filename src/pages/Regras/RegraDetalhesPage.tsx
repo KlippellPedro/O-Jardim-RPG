@@ -11,6 +11,7 @@ import {
 } from '../../services/racaService';
 import { formatarResumoClasse } from '../../services/classeService';
 import { DetalhesClasse } from './components/DetalhesClasse';
+import { PovoDaRaca } from './components/PovoDaRaca';
 import { useAuthStore } from '../../store/useAuthStore';
 import { usePermissoes } from '../../hooks/usePermissoes';
 import { PremiumCard } from '../../redesign/components/premium/PremiumCard';
@@ -143,6 +144,7 @@ export const RegraDetalhesPage = () => {
           </motion.button>
         ) : null}
         {RacaPage && raca ? <RacaPage raca={raca} /> : ClassePage && classe ? <ClassePage classe={classe} /> : null}
+        {RacaPage && raca && !emSubpagina ? <PovoDaRaca raca={raca} avulsa /> : null}
       </div>
     );
   }
@@ -315,6 +317,8 @@ export const RegraDetalhesPage = () => {
               </p>
             </PremiumCard>
           ))}
+
+          {raca && <PovoDaRaca raca={raca} />}
 
           {/* Escada de estágios (Espírito Menor, Maior e Primordial) */}
           {estagiosRaciais.length > 0 && (

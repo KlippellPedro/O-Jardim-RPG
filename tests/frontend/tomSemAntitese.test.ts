@@ -140,6 +140,28 @@ test('as páginas de classe não usam antítese', () => {
   assert.deepEqual(achados('', textos), []);
 });
 
+// Revisão das raças de 2026-10-27: as páginas de raça também têm texto escrito à mão (o Desperto ainda dizia
+// "Ecos de Séculos" depois do traço virar Lembrança dos Séculos Mortos). Aqui o arquivo é código, então a trava
+// de travessão olha só o "—", sem o " - " que também é subtração.
+test('as páginas de raça seguem o tom: sem antítese, travessão ou "eco"', () => {
+  const pasta = 'src/redesign/raca';
+  const paginas = (function listar(dir: string): string[] {
+    return readdirSync(new URL(`../../${dir}/`, import.meta.url), { withFileTypes: true }).flatMap((entrada) => {
+      if (entrada.isDirectory()) return listar(`${dir}/${entrada.name}`);
+      return /\.tsx?$/.test(entrada.name) ? [`${dir}/${entrada.name}`] : [];
+    });
+  })(pasta);
+  assert.ok(paginas.length >= 25, 'as páginas de raça sumiram da pasta');
+  const textos = paginas.map((arquivo): [string, string] => [arquivo, readFileSync(new URL(`../../${arquivo}`, import.meta.url), 'utf8')]);
+  const lista = achados('', textos);
+  for (const [arquivo, texto] of textos) {
+    if (texto.includes('—')) lista.push(`${arquivo} travessão`);
+    const eco = ECO.exec(texto);
+    if (eco) lista.push(`${arquivo} "eco": ...${texto.slice(Math.max(0, eco.index - 40), eco.index + 30)}...`);
+  }
+  assert.deepEqual(lista, []);
+});
+
 test('a trava reconhece as formas de antítese', () => {
   const pegou = (frase: string) => ANTITESES.some(([, padrao]) => padrao.test(frase));
   assert.ok(pegou('A marca não é enfeite, é peso.'));

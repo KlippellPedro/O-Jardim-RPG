@@ -152,7 +152,7 @@ export const Desperto = ({ raca }: { raca: IRaca }) => {
           >
             <Skull size={32} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
             <div>
-              <h3 className={`text-xl font-bold ${tema.text} mb-2`} style={{ fontFamily: 'Cinzel, serif' }}>Ecos de Séculos</h3>
+              <h3 className={`text-xl font-bold ${tema.text} mb-2`} style={{ fontFamily: 'Cinzel, serif' }}>Lembrança dos Séculos Mortos</h3>
               <p className="text-rose-200/60 leading-relaxed text-sm">
                 Para cada século que permaneceu morto, receba uma rerrolagem por sessão (máximo 5) aplicável a qualquer teste, devendo aceitar o novo resultado.
               </p>

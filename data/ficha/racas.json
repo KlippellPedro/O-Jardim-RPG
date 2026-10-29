@@ -3,6 +3,12 @@
     "id": "humano",
     "tipo": "raca",
     "titulo": "Humano",
+    "povo": [
+      "Vive pouco e muda rápido, então todo povo humano guarda o que importa em coisas que passam de mão em mão: nome de família, ferramenta, história contada à noite.",
+      "Come quase tudo e se acostuma a quase todo lugar, e costuma ser o primeiro a fazer casa perto de gente de outra raça.",
+      "Sem dom de nascença, cada geração aprende com a anterior, e quem ensina bem é respeitado em qualquer comunidade humana."
+    ],
+    "linguas": [],
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -31,12 +37,77 @@
       }
     ],
     "recursos_provisorios": false,
-    "legados_adicionais": 1
+    "legados_adicionais": 1,
+    "estagios": [
+      {
+        "id": "versatil",
+        "titulo": "Versátil",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "calejado",
+        "titulo": "Calejado",
+        "nivel_minimo": 12,
+        "vida": 2,
+        "mana": 0,
+        "estamina": 2,
+        "caracteristicas": [
+          {
+            "id": "um-pouco-de-tudo",
+            "titulo": "Um Pouco de Tudo",
+            "tipo": "passiva",
+            "nivel_minimo": 12,
+            "descricao": "Nos testes de perícia em que você não tem grau nenhum, some +2. Quem já fez de tudo um pouco se vira em qualquer canto.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "lenda-viva",
+        "titulo": "Lenda Viva",
+        "nivel_minimo": 36,
+        "vida": 4,
+        "mana": 3,
+        "estamina": 3,
+        "caracteristicas": [
+          {
+            "id": "teimosia-humana",
+            "titulo": "Teimosia Humana",
+            "tipo": "rerrolagem",
+            "nivel_minimo": 36,
+            "descricao": "Uma vez por sessão, depois de rolar qualquer teste de perícia, role de novo e fique com o resultado que preferir. Gente de vida curta aprende cedo a tentar outra vez.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "automatizada": false
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "vampiro",
     "tipo": "raca",
     "titulo": "Vampiro",
+    "povo": [
+      "Precisa de sangue para viver, então toda sociedade vampira tem um acordo sobre quem alimenta quem, por quanto tempo e em troca de quê.",
+      "Enxerga no escuro e sofre sem sangue, por isso a vida do povo se organiza à noite e a fome é assunto de família.",
+      "Quanto mais velho, mais o sangue rende e maior a fome, e a idade pesa em toda conversa entre vampiros.",
+      "Um vampiro faminto é perigo para quem está perto, e todo povo vampiro tem um jeito de lidar com quem passou do limite."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-dos-vampiros",
+        "titulo": "Noctâr"
+      }
+    ],
+    "dt_efeitos": {
+      "rotulo": "DT de Vampiro",
+      "pericia": "intimidacao",
+      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Intimidação na hora: o que pesa é o predador por trás da voz. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -81,7 +152,7 @@
             "titulo": "Presença de Corte",
             "tipo": "passiva",
             "nivel_minimo": 1,
-            "descricao": "Contra quem sabe o que você é, receba vantagem em testes de Persuasão e Intimidação. Servos e criaturas de vontade fraca hesitam antes de escolher você como primeiro alvo.",
+            "descricao": "Contra quem sabe o que você é, receba vantagem em testes de Diplomacia e Intimidação. Servos e criaturas de vontade fraca hesitam antes de escolher você como primeiro alvo.",
             "automatizada": false
           },
           {
@@ -89,7 +160,7 @@
             "titulo": "Ordem Sussurrada",
             "tipo": "acao",
             "nivel_minimo": 17,
-            "descricao": "Dê uma ordem curta a uma criatura racional a até 9 m que consiga ouvir você: ela testa Vontade contra o seu Carisma e, se falhar, cumpre a ordem no próximo turno. Custa uma ação e 4 Mana, uma vez por cena. Ordem abertamente suicida ela não cumpre.",
+            "descricao": "Dê uma ordem curta a uma criatura racional a até 9 m que consiga ouvir você: ela testa Vontade contra a sua DT de Vampiro e, se falhar, cumpre a ordem no próximo turno. Custa uma ação e 4 Mana, uma vez por cena. Ordem abertamente suicida ela não cumpre.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -139,7 +210,7 @@
             "titulo": "Investida Predadora",
             "tipo": "acao",
             "nivel_minimo": 42,
-            "descricao": "Salte até 12 m em cima de uma criatura: ela testa Reflexos e, se falhar, cai no chão agarrada por você e sofre 5d6 de dano de corte. Se ela estiver com metade da Vida ou menos, você ainda usa Hemofagia de graça no mesmo turno. Uma ação e 6 Mana, duas vezes por cena.",
+            "descricao": "Salte até 12 m em cima de uma criatura: ela testa Reflexos contra a sua DT de Vampiro e, se falhar, cai no chão agarrada por você e sofre 5d6 de dano de corte. Se ela estiver com metade da Vida ou menos, você ainda usa Hemofagia de graça no mesmo turno. Uma ação e 6 Mana, duas vezes por cena.",
             "usos": 2,
             "recuperacao": "cena",
             "custo_mana": 6,
@@ -197,7 +268,7 @@
             "titulo": "Presença que Apavora",
             "tipo": "passiva",
             "nivel_minimo": 1,
-            "descricao": "Passar por vivo está fora de questão, e você sofre desvantagem em Persuasão com quem enxergar seu rosto. Em compensação, recebe vantagem em Intimidação e em Furtividade no escuro.",
+            "descricao": "Passar por vivo está fora de questão, e você sofre desvantagem em Diplomacia com quem enxergar seu rosto. Em compensação, recebe vantagem em Intimidação e em Furtividade no escuro.",
             "automatizada": false
           },
           {
@@ -205,7 +276,7 @@
             "titulo": "Terror de Porão",
             "tipo": "acao",
             "nivel_minimo": 17,
-            "descricao": "Mostre-se por inteiro: criaturas a até 9 m que enxerguem você testam Vontade e, falhando, ficam Amedrontadas por duas rodadas, sem poder se aproximar de você voluntariamente. Uma ação e 4 Mana, uma vez por cena.",
+            "descricao": "Mostre-se por inteiro: criaturas a até 9 m que enxerguem você testam Vontade contra a sua DT de Vampiro e, falhando, ficam Amedrontadas por duas rodadas, sem poder se aproximar de você voluntariamente. Uma ação e 4 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -217,7 +288,7 @@
             "titulo": "Sombra que Engole",
             "tipo": "acao_completa",
             "nivel_minimo": 42,
-            "descricao": "Apague a luz numa área de 12 m por cinco rodadas. Dentro dela você enxerga normalmente e as criaturas hostis ficam cegas; cada uma que começar o turno na área testa Vontade e fica Amedrontada se falhar. Uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Apague a luz numa área de 12 m por cinco rodadas. É escuridão de Fluxo, e só você enxerga dentro dela. Cada criatura hostil que começar o turno na área testa Vontade contra a sua DT de Vampiro e, se falhar, fica Amedrontada até o começo do próximo turno dela. Uma ação completa e 8 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -238,6 +309,7 @@
             "tipo": "passiva",
             "nivel_minimo": 1,
             "descricao": "Receba +1,5 m de Movimento e vantagem em testes de Sobrevivência quando o rastreio for pelo faro. Nas noites de lua cheia, seus ataques desarmados passam a usar dano-base 1d8.",
+            "movimento": 1.5,
             "automatizada": false
           },
           {
@@ -297,7 +369,7 @@
             "titulo": "Maré Vermelha",
             "tipo": "acao_completa",
             "nivel_minimo": 42,
-            "descricao": "Todo o sangue derramado numa área de 9 m se levanta e ataca: criaturas hostis ali sofrem 7d6 de dano, metade disso se passarem em Fortitude. Você recupera Vida igual à metade do dano causado a uma delas. Custa uma ação completa, 8 Mana e 4d6 da própria Vida, duas vezes por sessão.",
+            "descricao": "Todo o sangue derramado numa área de 9 m se levanta e ataca: criaturas hostis ali sofrem 7d6 de dano de Sangue, metade disso se passarem em Fortitude contra a sua DT de Vampiro. Você recupera Vida igual à metade do dano causado a uma delas. Custa uma ação completa, 8 Mana e 4d6 da própria Vida, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -312,14 +384,14 @@
         "vida": 2,
         "mana": 2,
         "requer_autorizacao_mestre": true,
-        "descricao": "A família mais antiga de Întuneric. Dizem que já bebiam quando a lua parou no céu e nunca mais se pôs, e foi dessa noite sem fim que veio o nome. Quando um deles entra no salão, os outros seis Clãs baixam a cabeça: são a realeza dos vampiros, os únicos recebidos no castelo da Transilvânia sem precisar pedir. O sangue rende mais neles do que em qualquer outro, e a fome também. Começa com +2 de Vida e +2 de Mana além do que a raça dá, e só entra na mesa com o aval do Mestre.",
+        "descricao": "A família mais antiga de Întuneric. Dizem que já bebiam quando a lua parou no céu e nunca mais se pôs, e foi dessa noite sem fim que veio o nome. Uma Linhagem dos Elfos leva o mesmo nome porque nasceu da mesma noite, e os dois povos se reconhecem nela. Quando um deles entra no salão, os outros seis Clãs baixam a cabeça: são a realeza dos vampiros, os únicos recebidos no castelo da Transilvânia sem precisar pedir. O sangue rende mais neles do que em qualquer outro, e a fome também. Começa com +2 de Vida e +2 de Mana além do que a raça dá, e só entra na mesa com o aval do Mestre.",
         "caracteristicas": [
           {
             "id": "sangue-real",
             "titulo": "Sangue Real",
             "tipo": "passiva",
             "nivel_minimo": 1,
-            "descricao": "Todo vampiro reconhece você pelo cheiro do sangue. Com vampiros de outros Clãs, receba vantagem em Persuasão e Intimidação, e eles sofrem desvantagem no primeiro ataque contra você em cada cena. Sua Hemofagia recupera 1d6 de Vida a mais.",
+            "descricao": "Todo vampiro reconhece você pelo cheiro do sangue. Com vampiros de outros Clãs, receba vantagem em Diplomacia e Intimidação, e eles sofrem desvantagem no primeiro ataque contra você em cada cena. Sua Hemofagia recupera 1d6 de Vida a mais.",
             "automatizada": false
           },
           {
@@ -335,7 +407,7 @@
             "titulo": "Mandato da Coroa",
             "tipo": "acao",
             "nivel_minimo": 17,
-            "descricao": "Dê uma ordem curta a qualquer criatura a até 18 m que consiga ouvir você: ela testa Vontade contra o seu Carisma e, se falhar, cumpre a ordem no próximo turno. Vampiro de outro Clã faz o teste com desvantagem. Custa uma ação e 4 Mana, duas vezes por cena. Ordem abertamente suicida ela não cumpre.",
+            "descricao": "Dê uma ordem curta a qualquer criatura a até 18 m que consiga ouvir você: ela testa Vontade contra a sua DT de Vampiro e, se falhar, cumpre a ordem no próximo turno. Vampiro de outro Clã faz o teste com desvantagem. Custa uma ação e 4 Mana, duas vezes por cena. Ordem abertamente suicida ela não cumpre.",
             "usos": 2,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -358,7 +430,7 @@
             "titulo": "Lua que Não se Põe",
             "tipo": "acao_completa",
             "nivel_minimo": 42,
-            "descricao": "Chame a lua de Întuneric sobre a cena. Numa área de 18 m em volta de você, a luz do dia some e o céu vira a noite sem fim da sua família até a cena acabar. Lá dentro, você e os vampiros aliados enxergam normalmente, recuperam 2 de Vida no início de cada turno e não sentem a Fome de Sangue. Criatura hostil que começar o turno na área testa Vontade e, se falhar, fica Amedrontada por uma rodada. Uma ação completa e 10 Mana, uma vez por sessão.",
+            "descricao": "Chame a lua de Întuneric sobre a cena. Numa área de 18 m em volta de você, a luz do dia some e o céu vira a noite sem fim da sua família até a cena acabar. Lá dentro, você e os vampiros aliados enxergam normalmente, recuperam 2 de Vida no início de cada turno e não sentem a Fome de Sangue. Criatura hostil que começar o turno na área testa Vontade contra a sua DT de Vampiro e, se falhar, fica Amedrontada por uma rodada. Uma ação completa e 10 Mana, uma vez por sessão.",
             "usos": 1,
             "recuperacao": "sessao",
             "custo_mana": 10,
@@ -370,7 +442,7 @@
             "titulo": "Coroa de Sangue",
             "tipo": "passiva",
             "nivel_minimo": 42,
-            "descricao": "Você pode usar Hemofagia em qualquer criatura que esteja agarrando, mesmo que ela resista, e recebe vantagem em testes de Vontade. Vampiro que já bebeu do seu sangue precisa passar num teste de Vontade contra o seu Carisma toda vez que quiser atacar você.",
+            "descricao": "Você pode usar Hemofagia em qualquer criatura que esteja agarrando, mesmo que ela resista, e recebe vantagem em testes de Vontade. Vampiro que já bebeu do seu sangue precisa passar num teste de Vontade contra a sua DT de Vampiro toda vez que quiser atacar você.",
             "automatizada": false
           }
         ]
@@ -449,6 +521,17 @@
     "id": "goblim",
     "tipo": "raca",
     "titulo": "Goblim",
+    "povo": [
+      "Pequeno e rápido, ele vive bem onde gente grande não cabe: túnel, telhado, porão e a parte de baixo da feira.",
+      "Todo povo goblim gira em torno de troca, e saber o preço de uma coisa vale tanto quanto ter a coisa.",
+      "Um bom negócio vira história contada por anos, e quem levou a pior com um goblim costuma virar freguês dele."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-dos-goblins",
+        "titulo": "Krammel"
+      }
+    ],
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -476,12 +559,86 @@
         "automatizada": false
       }
     ],
-    "recursos_provisorios": false
+    "recursos_provisorios": false,
+    "estagios": [
+      {
+        "id": "ligeiro",
+        "titulo": "Ligeiro",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "esperto",
+        "titulo": "Esperto",
+        "nivel_minimo": 11,
+        "vida": 0,
+        "mana": 1,
+        "estamina": 2,
+        "caracteristicas": [
+          {
+            "id": "mao-leve",
+            "titulo": "Mão Leve",
+            "tipo": "rerrolagem",
+            "nivel_minimo": 11,
+            "descricao": "Uma vez por cena, depois de falhar em Furtividade ou Ladinagem, rerrole o teste e mantenha o novo resultado.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "rei-do-mercado",
+        "titulo": "Rei do Mercado",
+        "nivel_minimo": 30,
+        "vida": 4,
+        "mana": 2,
+        "estamina": 3,
+        "movimento": 1.5,
+        "caracteristicas": [
+          {
+            "id": "pe-na-estrada",
+            "titulo": "Pé na Estrada",
+            "tipo": "passiva",
+            "nivel_minimo": 30,
+            "descricao": "Receba mais 1,5 m de Movimento, somado ao de Passos Ligeiros.",
+            "automatizada": true
+          },
+          {
+            "id": "freguesia-cativa",
+            "titulo": "Freguesia Cativa",
+            "tipo": "passiva",
+            "nivel_minimo": 30,
+            "descricao": "A vantagem de Mercador Improvisador passa a valer também na compra: você pechincha o preço do que quer levar com vantagem no teste.",
+            "automatizada": false
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "anao",
     "tipo": "raca",
     "titulo": "Anão",
+    "povo": [
+      "Tem as mãos feitas para o ofício, então em todo povo anão o que alguém sabe fazer na bancada diz quem essa pessoa é.",
+      "Aprende devagar e de verdade, de Aprendiz a Mestre com os anos, e o mestre de um ofício tem voz em qualquer comunidade anã.",
+      "Pequeno e difícil de derrubar, prefere construir o que dura a mudar de lugar.",
+      "Uma peça bem feita é presente, herança e assinatura ao mesmo tempo."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-dos-anoes",
+        "titulo": "Grúndar"
+      }
+    ],
+    "dt_efeitos": {
+      "rotulo": "DT de Anão",
+      "pericia": "oficio",
+      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role o Ofício de Forja que você escolheu na hora: quem decide é a mão de quem fez a peça. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -538,9 +695,7 @@
             "titulo": "Obra de Mestre",
             "tipo": "preparacao",
             "nivel_minimo": 26,
-            "descricao": "Com uma hora de trabalho e material à mão, um item comum sobe de qualidade até o fim da sessão: +2 no dano ou +2 de Defesa, e quem avaliar o item reconhece nele uma obra-prima. Duas vezes por sessão.",
-            "usos": 2,
-            "recuperacao": "sessao",
+            "descricao": "Uma vez por arco da campanha, com um dia de trabalho e material à mão, transforme um item comum em obra-prima: +1 permanente no dano, se for arma, ou na Defesa, se for armadura ou escudo. Cada item recebe isto uma vez só, e quem avaliar o item reconhece nele uma obra-prima.",
             "automatizada": false
           }
         ]
@@ -618,7 +773,7 @@
             "titulo": "Desabamento Calculado",
             "tipo": "acao_completa",
             "nivel_minimo": 26,
-            "descricao": "Derrube uma estrutura de pedra ou um teto de caverna sobre uma área de 6 m. Quem estiver embaixo sofre 7d6 de dano, ou metade se passar em Reflexos, e o entulho deixa a área como terreno difícil. Você escolhe um espaço que fica livre. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Derrube uma estrutura de pedra ou um teto de caverna sobre uma área de 6 m. Quem estiver embaixo sofre 7d6 de dano de impacto, ou metade se passar em Reflexos contra a sua DT de Anão, e o entulho deixa a área como terreno difícil. Você escolhe um espaço que fica livre. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -647,7 +802,7 @@
             "titulo": "Armadilha Armada",
             "tipo": "acao",
             "nivel_minimo": 11,
-            "descricao": "Arme uma armadilha num espaço a até 3 m. A primeira criatura que pisar ali sofre 2d6 de dano e fica presa até se soltar com um teste de Atletismo. Custa uma ação e 3 Mana, uma vez por cena.",
+            "descricao": "Arme uma armadilha num espaço a até 3 m. A primeira criatura que pisar ali testa Reflexos contra a sua DT de Anão: em falha, sofre 2d6 de dano de perfuração e fica Imobilizada até se soltar, com uma Ação Padrão e Atletismo contra a mesma DT; em sucesso, sofre metade e não fica presa. Custa uma ação e 3 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 3,
@@ -659,7 +814,7 @@
             "titulo": "Engenho de Cerco",
             "tipo": "acao_completa",
             "nivel_minimo": 26,
-            "descricao": "Monte um engenho no lugar onde você está. Pelas cinco rodadas seguintes ele atira sozinho, no seu turno, contra um alvo a até 18 m, causando 5d6 de dano. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Monte um engenho no lugar onde você está. Pelas cinco rodadas seguintes ele atira sozinho, no seu turno, num alvo a até 18 m, que testa Reflexos contra a sua DT de Anão e sofre 5d6 de dano de perfuração, ou metade se passar. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -682,8 +837,9 @@
         "id": "especialista-forja",
         "titulo": "Especialista de Forja",
         "nivel_minimo": 11,
-        "vida": 0,
+        "vida": 2,
         "mana": 0,
+        "estamina": 1,
         "caracteristicas": [
           {
             "id": "mao-treinada",
@@ -701,7 +857,7 @@
         "id": "mestre-forja",
         "titulo": "Mestre de Forja",
         "nivel_minimo": 26,
-        "vida": 0,
+        "vida": 2,
         "mana": 4,
         "caracteristicas": [
           {
@@ -731,6 +887,22 @@
     "id": "golem",
     "tipo": "raca",
     "titulo": "Golem",
+    "povo": [
+      "Não come, não bebe e não respira, então nenhum povo golem tem culinária, mesa farta ou medo de fome.",
+      "Quando quebra, quem resolve é um artesão, e todo golem guarda o nome de quem o consertou.",
+      "Cada conserto deixa o corpo mais duro, e as marcas de reparo contam a vida dele melhor que qualquer palavra."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-dos-golens",
+        "titulo": "Mudral"
+      }
+    ],
+    "dt_efeitos": {
+      "rotulo": "DT de Golem",
+      "pericia": "atletismo",
+      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Atletismo na hora: quem decide é o peso da matéria. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -748,7 +920,7 @@
         "id": "corpo-construido",
         "titulo": "Corpo Construído",
         "tipo": "passiva",
-        "descricao": "Quem cuida de um Golem usa Ofício no lugar de Medicina, com a mesma DT e o mesmo tempo. Tratamento que só funcione em biologia viva não faz efeito nenhum nele.",
+        "descricao": "Quem cuida de um Golem usa Ofício no lugar de Cura, com a mesma DT e o mesmo tempo. Tratamento que só funcione em biologia viva não faz efeito nenhum nele.",
         "automatizada": false,
         "nivel_minimo": 1
       },
@@ -820,7 +992,7 @@
             "titulo": "Peso que Esmaga",
             "tipo": "acao",
             "nivel_minimo": 12,
-            "descricao": "Avance até 6 m em linha reta, por cima de quem estiver no caminho. Cada criatura atingida sofre 3d6 de dano de impacto e cai no chão; quem passar em Reflexos sofre metade e continua de pé. Custa uma ação e 3 Mana, uma vez por cena.",
+            "descricao": "Avance até 6 m em linha reta, por cima de quem estiver no caminho. Cada criatura atingida sofre 3d6 de dano de impacto e cai no chão; quem passar em Reflexos contra a sua DT de Golem sofre metade e continua de pé. Custa uma ação e 3 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 3,
@@ -872,7 +1044,7 @@
             "titulo": "Raiz-Âncora",
             "tipo": "acao_completa",
             "nivel_minimo": 36,
-            "descricao": "Enraíze-se no chão por cinco rodadas. Enquanto durar, ninguém consegue mover você, você recupera 2d6 de Vida no início de cada turno, e criaturas hostis a até 3 m ficam presas nas raízes até passarem em Atletismo. Custa uma ação completa e 6 Mana, duas vezes por sessão.",
+            "descricao": "Enraíze-se no chão por cinco rodadas. Enquanto durar, ninguém consegue mover você, você recupera 2d6 de Vida no início de cada turno, e criaturas hostis a até 3 m testam Reflexos contra a sua DT de Golem no começo de cada turno delas e, falhando, ficam Imobilizadas pelas raízes até o começo do turno seguinte. Custa uma ação completa e 6 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 6,
@@ -913,7 +1085,7 @@
             "titulo": "Prisma Vivo",
             "tipo": "acao",
             "nivel_minimo": 36,
-            "descricao": "Acenda o corpo inteiro por cinco rodadas. Criaturas hostis a até 9 m ficam ofuscadas e atacam você à distância com desvantagem, e seus aliados na área ganham +1 em rolagens de dano mágico. Custa uma ação e 6 Mana, duas vezes por cena.",
+            "descricao": "Acenda o corpo inteiro por cinco rodadas. Criaturas hostis a até 9 m atacam você à distância com desvantagem, cegas pelo brilho, e seus aliados na área ganham +1 em rolagens de dano mágico. Custa uma ação e 6 Mana, duas vezes por cena.",
             "usos": 2,
             "recuperacao": "cena",
             "custo_mana": 6,
@@ -993,7 +1165,7 @@
             "titulo": "Campo de Lascas",
             "tipo": "acao_completa",
             "nivel_minimo": 36,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 6 Mana para cobrir 6 m de chão com lascas por cinco rodadas: a área vira terreno difícil e criaturas que se moverem dentro sofrem 4d6 de dano de corte.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 6 Mana para cobrir 6 m de chão com lascas por cinco rodadas: a área vira terreno difícil, e a criatura que se mover dentro dela testa Reflexos contra a sua DT de Golem, uma vez por turno, e sofre 4d6 de dano de corte, ou metade se passar.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 6,
@@ -1076,6 +1248,33 @@
     "id": "espirito",
     "tipo": "raca",
     "titulo": "Espírito",
+    "povo": [
+      "Já morreu, então todo espírito carrega a lembrança de uma vida que terminou e o motivo que o fez ficar.",
+      "Não come, não respira e atravessa parede, e por isso casa e colheita importam pouco, e lugar e memória importam muito.",
+      "A Natureza diz o que o prende ao mundo (um Fluxo, um Pecado ou uma Virtude), e espíritos da mesma Natureza se reconhecem de longe."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-dos-espiritos-naturais",
+        "titulo": "Anemir",
+        "natureza": "natural"
+      },
+      {
+        "idioma": "idioma-dos-espiritos-demoniacos",
+        "titulo": "Kharum",
+        "natureza": "demoniaca"
+      },
+      {
+        "idioma": "idioma-dos-espiritos-angelicais",
+        "titulo": "Aurelim",
+        "natureza": "angelical"
+      }
+    ],
+    "dt_efeitos": {
+      "rotulo": "DT de Espírito",
+      "pericia": "misticismo",
+      "descricao": "Os traços que mandam alguém testar usam o seu Misticismo: role na hora. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -1134,7 +1333,7 @@
         "titulo": "Maturação Espiritual",
         "tipo": "progressao",
         "nivel_minimo": 1,
-        "descricao": "O espírito amadurece em degraus, e quem manda neles é o nível total: Menor no começo, Mediano no nível 8, Maior no 15, Superior no 28 e o quinto degrau no 40 (Ancestral, Arquidemônio ou Arcanjo). Do Menor ao Superior, cada degrau só soma Mana e Vida e traz ajustes passivos que a ficha aplica sozinha; os poderes ativos vêm da sua marca. Do quinto degrau em diante entram também habilidades fortes. O Primordial, no nível 60, é o único que pede mais: a Provação Primordial, que só o mMestremarca como cumprida.",
+        "descricao": "O espírito amadurece em degraus, e quem manda neles é o nível total: Menor no começo, Mediano no nível 8, Maior no 15, Superior no 28 e o quinto degrau no 40 (Ancestral, Arquidemônio ou Arcanjo). Do Menor ao Superior, cada degrau só soma Mana e Vida e traz ajustes passivos que a ficha aplica sozinha; os poderes ativos vêm da sua marca. Do quinto degrau em diante entram também habilidades fortes. O Primordial, no nível 60, é o único que pede mais: a Provação Primordial, que só o Mestre marca como cumprida.",
         "automatizada": false
       }
     ],
@@ -1145,7 +1344,7 @@
       {
         "id": "natural",
         "titulo": "Espírito Natural",
-        "descricao": "Morreu e ficou, preso ao Fluxo que o segurou no mundo. É o fantasma das histórias: nunca tem corpo, atravessa paredes e, a cada degrau, atravessa mais longe e com menos esforço. Fala Anemir.",
+        "descricao": "Morreu e ficou, preso ao Fluxo que o segurou no mundo. É o fantasma das histórias: nunca tem corpo, atravessa paredes e, a cada degrau, atravessa mais longe e com menos esforço. O Fluxo da marca é o seu Fluxo nativo, seja qual for a Árvore em que você nasceu. Fala Anemir.",
         "rotulo_variante": "Fluxo"
       },
       {
@@ -1164,7 +1363,7 @@
             "titulo": "Possessão",
             "tipo": "acao_completa",
             "nivel_minimo": 5,
-            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura Média ou menor a até 1,5 m, ou num corpo morto há menos de um dia. Criatura viva e consciente testa Vontade contra o seu Misticismo; se passar, fica livre da sua Possessão até o próximo descanso. Personagem de jogador só é possuído se o jogador aceitar. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Quem foi possuído apaga e acorda sem lembrar do que o corpo fez, e o mMestredecide o que o corpo ainda sabe fazer. Sair do corpo é uma ação livre e devolve você à forma etérea. Se o corpo chegar a 0 de Vida, você é expulso e fica sem possuir ninguém até o próximo descanso.",
+            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura de tamanho Normal ou menor a até 1,5 m, ou num corpo morto há menos de um dia. Criatura viva e consciente testa Vontade contra o seu Misticismo; se passar, fica livre da sua Possessão até o próximo descanso. Quem não aceitou repete o teste no fim de cada turno seu, e um sucesso expulsa você na hora. Personagem de jogador só é possuído se o jogador aceitar. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Quem foi possuído apaga e acorda sem lembrar do que o corpo fez, e o Mestre decide o que o corpo ainda sabe fazer. Sair do corpo é uma ação livre e devolve você à forma etérea. O dano que o corpo sofre sai da sua Vida; se ela chegar a 0, você é expulso e fica sem possuir ninguém até o próximo descanso.",
             "custo_mana": 4,
             "alcance_m": 1.5,
             "teste": "misticismo_vs_vontade",
@@ -1188,7 +1387,7 @@
             "titulo": "Encarnação",
             "tipo": "acao_completa",
             "nivel_minimo": 5,
-            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura Média ou menor a até 1,5 m que aceite, ou num corpo sem dono, morto há menos de um dia. Nunca à força: o dono continua desperto, ouve você e pode pedir que saia quando quiser, e personagem de jogador só empresta o corpo se o jogador quiser. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Sair do corpo é uma ação livre e devolve você à forma etérea, e o dono lembra de tudo o que viveu ao seu lado. Se o corpo chegar a 0 de Vida, você é expulso e fica sem encarnar até o próximo descanso.",
+            "descricao": "Até o nível 4 você é só espírito. A partir do 5, gaste uma ação completa e 4 Mana para entrar no corpo de uma criatura de tamanho Normal ou menor a até 1,5 m que aceite, ou num corpo sem dono, morto há menos de um dia. Nunca à força: o dono continua desperto, ouve você e pode pedir que saia quando quiser, e personagem de jogador só empresta o corpo se o jogador quiser. Encarnado, você usa o corpo, veste armadura, precisa respirar e comer, e perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha. Sair do corpo é uma ação livre e devolve você à forma etérea, e o dono lembra de tudo o que viveu ao seu lado. O dano que o corpo sofre sai da sua Vida; se ela chegar a 0, você é expulso e fica sem encarnar até o próximo descanso.",
             "custo_mana": 4,
             "alcance_m": 1.5,
             "automatizada": false
@@ -1197,7 +1396,7 @@
       }
     ],
     "rotulo_variante": "Fluxo",
-    "descricao_variantes": "Escolha um Fluxo, e ele vale para a vida inteira do personagem. Os onze têm o mesmo peso: cada um desperta uma característica em cada degrau da escada. Existe um décimo segundo, o Fluxo Universal, que o jogador não escolhe. Só o mMestreconcede.",
+    "descricao_variantes": "Escolha um Fluxo, e ele vale para a vida inteira do personagem. Ele também é o seu Fluxo nativo: é dele que vêm as suas magias e as suas Marcas de círculo. Os onze têm o mesmo peso: cada um desperta uma característica em cada degrau da escada. Existe um décimo segundo, o Fluxo Universal, que o jogador não escolhe. Só o Mestre concede.",
     "estagios": [
       {
         "id": "menor",
@@ -1451,7 +1650,7 @@
             "titulo": "Possessão Aprimorada",
             "tipo": "passiva",
             "nivel_minimo": 15,
-            "descricao": "Entrar num corpo passa a custar 2 Mana e vale também em criatura Grande. Um corpo possuído tem vantagem em testes de Vontade contra efeitos que tentem expulsar você.",
+            "descricao": "Entrar num corpo passa a custar 2 Mana e vale também em criatura Grande. Um corpo possuído tem vantagem em testes de Vontade contra efeitos de fora que tentem expulsar você, e o dono do corpo tem desvantagem no teste repetido.",
             "automatizada": false
           }
         ]
@@ -1495,7 +1694,7 @@
             "titulo": "Posse Plena",
             "tipo": "passiva",
             "nivel_minimo": 40,
-            "descricao": "Sua Possessão não custa Mana e vale em criatura de qualquer tamanho. Trocar direto de um corpo para outro custa só uma ação de movimento, sem passar pela forma etérea. O teste de Vontade continua valendo, e personagem de jogador continua só com consentimento.",
+            "descricao": "Sua Possessão não custa Mana e vale em criatura de qualquer tamanho. Trocar direto de um corpo para outro custa só uma ação de movimento, sem passar pela forma etérea. O teste de Vontade e o teste repetido continuam valendo, e personagem de jogador continua só com consentimento.",
             "custo_mana": 0,
             "automatizada": false
           },
@@ -1504,10 +1703,10 @@
             "titulo": "Labareda Infernal",
             "tipo": "acao",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação e 4 Mana para soltar o Inferno num cone de 9 m. Criaturas na área testam Reflexos contra o seu Misticismo e sofrem 8d6 de dano de fogo, ou metade se passarem.",
+            "descricao": "Duas vezes por sessão, gaste uma ação e 25 Mana para soltar o Inferno num cone de 9 m. Criaturas na área testam Reflexos contra o seu Misticismo e sofrem 8d6 de dano de fogo, ou metade se passarem.",
             "usos": 2,
             "recuperacao": "sessao",
-            "custo_mana": 4,
+            "custo_mana": 25,
             "alcance_m": 9,
             "teste": "misticismo_vs_reflexos",
             "automatizada": false
@@ -1554,7 +1753,7 @@
             "titulo": "Pecado Absoluto",
             "tipo": "acao_completa",
             "nivel_minimo": 60,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, todas as características do seu Pecado custam 0 Mana, e cada uma pode ser usada uma vez a mais, mesmo que já tenha gasto os usos. Em troca, todo preço que elas cobram é dobrado.",
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, todas as características do seu Pecado custam 0 Mana, ganham um uso a mais, mesmo que você já tenha gasto os usos, e alcançam criaturas a até 30 m. Em troca, todo preço que elas cobram é dobrado.",
             "requer_condicao": "provacao-primordial",
             "usos": 1,
             "recuperacao": "sessao",
@@ -1566,11 +1765,11 @@
             "titulo": "Chuva do Inferno",
             "tipo": "acao_completa",
             "nivel_minimo": 60,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 12 Mana para fazer o Inferno cair numa área de 18 m de raio. Criaturas na área testam Reflexos contra o seu Misticismo e sofrem 16d6 de dano de fogo, ou metade se passarem.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 56 Mana para fazer o Inferno cair numa área de 18 m de raio. Criaturas na área testam Reflexos contra o seu Misticismo e sofrem 16d6 de dano de fogo, ou metade se passarem.",
             "requer_condicao": "provacao-primordial",
             "usos": 2,
             "recuperacao": "sessao",
-            "custo_mana": 12,
+            "custo_mana": 56,
             "alcance_m": 18,
             "teste": "misticismo_vs_reflexos",
             "automatizada": false
@@ -1580,7 +1779,7 @@
             "titulo": "Corpo de Brasa Eterna",
             "tipo": "passiva",
             "nivel_minimo": 60,
-            "descricao": "Você é imune a dano de fogo e ignora qualquer calor ou chama, com corpo ou sem ele.",
+            "descricao": "Você é imune a dano de fogo, a Queimando e a Amedrontado, e ignora qualquer calor ou chama, com corpo ou sem ele.",
             "requer_condicao": "provacao-primordial",
             "automatizada": false
           },
@@ -1708,10 +1907,10 @@
             "titulo": "Coro Redentor",
             "tipo": "acao",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação e 4 Mana: aliados a até 9 m recuperam 4d6 de Vida e se livram de Amedrontado. Criaturas hostis na área testam Vontade contra o seu Misticismo e, falhando, perdem a próxima reação.",
+            "descricao": "Duas vezes por sessão, gaste uma ação e 9 Mana: aliados a até 9 m recuperam 4d6 de Vida e se livram de Amedrontado. Criaturas hostis na área testam Vontade contra o seu Misticismo e, falhando, perdem a próxima reação.",
             "usos": 2,
             "recuperacao": "sessao",
-            "custo_mana": 4,
+            "custo_mana": 9,
             "alcance_m": 9,
             "teste": "misticismo_vs_vontade",
             "automatizada": false
@@ -1749,7 +1948,7 @@
             "titulo": "Encarnação Absoluta",
             "tipo": "passiva",
             "nivel_minimo": 60,
-            "descricao": "Você pode manter dois corpos ao mesmo tempo, sempre com permissão, e agir por qualquer um deles no seu turno. Enquanto estiver num corpo, o dono recebe vantagem em testes de resistência e Resistência 5 contra todo dano.",
+            "descricao": "Você pode manter dois corpos ao mesmo tempo, sempre com permissão, e agir por qualquer um deles no seu turno. Enquanto estiver num corpo, o dono recebe vantagem em testes de resistência e reduz em 5 o dano de cada golpe que sofre.",
             "requer_condicao": "provacao-primordial",
             "automatizada": false
           },
@@ -1758,7 +1957,7 @@
             "titulo": "Virtude Absoluta",
             "tipo": "acao_completa",
             "nivel_minimo": 60,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, todas as características da sua Virtude custam 0 Mana, ganham um uso a mais e alcançam aliados a até 30 m.",
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana: por 3 rodadas, todas as características da sua Virtude custam 0 Mana, ganham um uso a mais, mesmo que você já tenha gasto os usos, e alcançam aliados a até 30 m. Em troca, todo preço que elas pedem é dobrado.",
             "requer_condicao": "provacao-primordial",
             "usos": 1,
             "recuperacao": "sessao",
@@ -1770,11 +1969,11 @@
             "titulo": "Coro dos Céus",
             "tipo": "acao_completa",
             "nivel_minimo": 60,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 12 Mana: aliados a até 18 m recuperam 20d6 de Vida e se livram de qualquer condição de medo, controle ou veneno. Criaturas hostis na área testam Vontade contra o seu Misticismo e, falhando, perdem a ação do próximo turno.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 70 Mana: aliados a até 18 m recuperam 20d6 de Vida e se livram de Amedrontado, Fascinado, Envenenado e de qualquer controle mental. Criaturas hostis na área testam Vontade contra o seu Misticismo e, falhando, perdem a ação do próximo turno. A mesma criatura não perde a ação em duas rodadas seguidas.",
             "requer_condicao": "provacao-primordial",
             "usos": 2,
             "recuperacao": "sessao",
-            "custo_mana": 12,
+            "custo_mana": 70,
             "alcance_m": 18,
             "teste": "misticismo_vs_vontade",
             "automatizada": false
@@ -1784,7 +1983,7 @@
             "titulo": "Corpo de Luz",
             "tipo": "passiva",
             "nivel_minimo": 60,
-            "descricao": "Você é imune a dano de raio, à cegueira e a efeitos de escuridão e de medo.",
+            "descricao": "Você é imune a dano de raio, a Cego, a Amedrontado e a efeitos de escuridão.",
             "requer_condicao": "provacao-primordial",
             "automatizada": false
           },
@@ -2233,6 +2432,7 @@
             "tipo": "passiva",
             "nivel_minimo": 8,
             "descricao": "O bônus de Defesa do Ectoplasma Denso sobe para +3, e você não pode ser derrubado nem empurrado por golpe ou por efeito que não seja mágico.",
+            "defesa": 1,
             "automatizada": false
           },
           {
@@ -2457,7 +2657,7 @@
             "titulo": "Invisível ao Vazio",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para ficar invisível até o fim do seu próximo turno. Atacar, conjurar ou mover qualquer objeto quebra a invisibilidade na hora.",
+            "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para ficar Invisível até o fim do seu próximo turno. Atacar, conjurar ou mover qualquer objeto quebra a invisibilidade na hora.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
@@ -2580,10 +2780,10 @@
             "titulo": "Presságio do Fim",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana e escolha uma criatura a até 9 m que já esteja com metade da Vida máxima ou menos: ela sofre 14d6 de dano. Se isso a levar a 0, você recupera 4d6 de Vida.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 51 Mana e escolha uma criatura a até 9 m que já esteja com metade da Vida máxima ou menos: ela sofre 14d6 de dano. Se isso a levar a 0, você recupera 4d6 de Vida.",
             "usos": 2,
             "recuperacao": "sessao",
-            "custo_mana": 8,
+            "custo_mana": 51,
             "alcance_m": 9,
             "automatizada": false
           },
@@ -2592,11 +2792,11 @@
             "titulo": "Ceifa",
             "tipo": "acao_completa",
             "nivel_minimo": 60,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: toda criatura hostil a até 9 m com metade da Vida máxima ou menos sofre 20d6 de dano, e você recupera Vida igual à metade do total causado.",
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 70 Mana: toda criatura hostil a até 9 m com metade da Vida máxima ou menos sofre 20d6 de dano, e você recupera Vida igual à metade do total causado.",
             "requer_condicao": "provacao-primordial",
             "usos": 1,
             "recuperacao": "sessao",
-            "custo_mana": 12,
+            "custo_mana": 70,
             "alcance_m": 9,
             "automatizada": false
           }
@@ -2691,7 +2891,7 @@
         "fluxo": "universal",
         "natureza": "natural",
         "somente_mestre": true,
-        "descricao": "O Fluxo que toca todos os outros sem pertencer a nenhum. Quem o carrega usa o que qualquer Fluxo oferece e paga Mana extra por escolher na hora. Só o mMestreconcede, e até hoje só Blanc é conhecida por tê-lo.",
+        "descricao": "O Fluxo que toca todos os outros sem pertencer a nenhum. Quem o carrega usa o que qualquer Fluxo oferece e paga Mana extra por escolher na hora. Só o Mestre concede, e até hoje só Blanc é conhecida por tê-lo.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2763,7 +2963,7 @@
             "automatizada": false
           }
         ],
-        "provacao": "Ser reconhecido por todos os Fluxos ao mesmo tempo. Só o mMestredecide quando isso aconteceu."
+        "provacao": "Ser reconhecido por todos os Fluxos ao mesmo tempo. Só o Mestre decide quando isso aconteceu."
       },
       {
         "id": "demonio-soberba",
@@ -2960,7 +3160,7 @@
             "titulo": "Voz de Veludo",
             "tipo": "passiva",
             "nivel_minimo": 8,
-            "descricao": "Você recebe +3 em testes de persuasão, sedução e leitura de intenção. Quem descobre o seu Pecado recebe +2 para manipular você.",
+            "descricao": "Você recebe +3 em Diplomacia e Enganação para seduzir ou convencer, e em Intuição para ler intenção. Quem descobre o seu Pecado recebe +2 para manipular você.",
             "automatizada": false
           },
           {
@@ -2968,7 +3168,7 @@
             "titulo": "Promessa Doce",
             "tipo": "acao",
             "nivel_minimo": 15,
-            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana: uma criatura que entenda você, a até 9 m, testa Vontade contra o seu Misticismo. Falhando, ela passa 3 rodadas tratando você como aliado e fazendo o que não a coloque em perigo evidente. O efeito acaba se você ou um aliado seu a ferir. Ela lembra de tudo, e você tem desvantagem em testes contra encantamento até o fim da cena.",
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana: uma criatura que entenda você, a até 9 m, testa Vontade contra o seu Misticismo. Falhando, ela passa até 3 rodadas tratando você como aliado e fazendo o que não a coloque em perigo evidente. Ela repete o teste no fim de cada turno dela, e o efeito acaba no primeiro sucesso ou se você ou um aliado seu a ferir. Ela lembra de tudo, e você tem desvantagem em testes contra controle mental até o fim da cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -2994,7 +3194,7 @@
             "titulo": "Vício Irresistível",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: uma criatura a até 18 m testa Vontade contra o seu Misticismo. Falhando, por 1 minuto ela obedece a ordens simples que não a firam e não consegue atacar você. Quando o efeito termina, ela sabe quem foi, e você sofre 1 de Cansaço.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: uma criatura a até 18 m testa Vontade contra o seu Misticismo. Falhando, por até 3 rodadas ela obedece a ordens simples que não a firam e não consegue atacar você. Ela repete o teste no fim de cada turno dela, e um sucesso encerra. Quando o efeito termina, ela sabe quem foi, e você sofre 1 de Cansaço.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -3007,7 +3207,7 @@
             "titulo": "Coro de Desejos",
             "tipo": "acao_completa",
             "nivel_minimo": 60,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: criaturas hostis a até 18 m testam Vontade contra o seu Misticismo. Falhando, ficam Encantadas por 3 rodadas: seguem você e não atacam. O efeito acaba para quem for ferido por você ou por um aliado seu. Quando termina, cada uma sofre 2 de Cansaço, e você também.",
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: criaturas hostis a até 18 m testam Vontade contra o seu Misticismo. Falhando, ficam Fascinadas por 3 rodadas: seguem você e não atacam. O efeito acaba para quem for ferido por você ou por um aliado seu. Quando termina, cada uma sofre 2 de Cansaço, e você também.",
             "requer_condicao": "provacao-primordial",
             "usos": 1,
             "recuperacao": "sessao",
@@ -3091,11 +3291,11 @@
             "titulo": "Troca de Vidas",
             "tipo": "acao_completa",
             "nivel_minimo": 60,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: uma criatura a até 9 m testa Vontade contra o seu Misticismo. Falhando, ela sofre 10d6 de dano e você recupera Vida igual ao dano causado. Depois, vocês dois trocam a Mana atual, cada um limitado ao próprio máximo.",
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 32 Mana: uma criatura a até 9 m testa Vontade contra o seu Misticismo. Falhando, ela sofre 10d6 de dano de Essência e você recupera Vida igual ao dano causado. Depois, vocês dois trocam a Mana atual, cada um limitado ao próprio máximo.",
             "requer_condicao": "provacao-primordial",
             "usos": 1,
             "recuperacao": "sessao",
-            "custo_mana": 12,
+            "custo_mana": 32,
             "alcance_m": 9,
             "teste": "misticismo_vs_vontade",
             "automatizada": false
@@ -3150,10 +3350,10 @@
             "titulo": "Mordida Funda",
             "tipo": "acao",
             "nivel_minimo": 28,
-            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: o seu próximo ataque corpo a corpo desta rodada causa +6d6 de dano e você recupera Vida igual ao dano causado.",
+            "descricao": "Uma vez por cena, gaste uma ação e 15 Mana: o seu próximo ataque corpo a corpo desta rodada causa +6d6 de dano e você recupera metade do dano causado em Vida.",
             "usos": 1,
             "recuperacao": "cena",
-            "custo_mana": 5,
+            "custo_mana": 15,
             "automatizada": false
           },
           {
@@ -3161,11 +3361,12 @@
             "titulo": "Banquete Final",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: até três criaturas a até 9 m sofrem 4d6 de dano cada uma, e você recupera Vida igual à metade do total causado. Até o fim da cena, nenhuma cura que não venha de devorar rende mais de metade em você.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: até três criaturas a até 9 m testam Fortitude contra o seu Misticismo e sofrem 4d6 de dano de Essência, ou metade se passarem, e você recupera Vida igual à metade do total causado. Até o fim da cena, nenhuma cura que não venha de devorar rende mais de metade em você.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
             "alcance_m": 9,
+            "teste": "misticismo_vs_fortitude",
             "automatizada": false
           },
           {
@@ -3173,12 +3374,13 @@
             "titulo": "Fome que Devora o Mundo",
             "tipo": "acao_completa",
             "nivel_minimo": 60,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: toda criatura hostil a até 18 m perde 6d6 de Vida e 3d6 de Mana, e você recupera metade de cada um, até o seu máximo. Até o fim da cena, nenhuma cura que não venha de devorar rende mais de metade em você.",
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: toda criatura hostil a até 18 m testa Fortitude contra o seu Misticismo e perde 6d6 de Vida e 3d6 de Mana, ou metade se passar, e você recupera metade da Vida e da Mana tiradas, até o seu máximo. Até o fim da cena, nenhuma cura que não venha de devorar rende mais de metade em você.",
             "requer_condicao": "provacao-primordial",
             "usos": 1,
             "recuperacao": "sessao",
             "custo_mana": 12,
             "alcance_m": 18,
+            "teste": "misticismo_vs_fortitude",
             "automatizada": false
           }
         ],
@@ -3325,7 +3527,7 @@
             "titulo": "Mundo em Câmera Lenta",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas, criaturas hostis a até 18 m testam Fortitude contra o seu Misticismo. Falhando, perdem a ação de movimento do turno delas e têm desvantagem em Iniciativa. Nesse tempo, seu Movimento cai pela metade.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas, criaturas hostis a até 18 m testam Fortitude contra o seu Misticismo no começo de cada turno delas. Falhando, perdem a ação de movimento daquele turno e têm desvantagem em Iniciativa. Nesse tempo, seu Movimento cai pela metade.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -3338,7 +3540,7 @@
             "titulo": "Eternidade Parada",
             "tipo": "acao_completa",
             "nivel_minimo": 60,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: criaturas hostis a até 18 m testam Fortitude contra o seu Misticismo. Falhando, ficam paralisadas por 2 rodadas; passando, ficam Lentas por 3. Nesse tempo, o seu Movimento cai a zero.",
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: criaturas hostis a até 18 m testam Fortitude contra o seu Misticismo. Falhando, ficam Paralisadas por até 2 rodadas e repetem o teste no fim de cada turno delas; no primeiro sucesso, o Paralisado vira Lento até o fim do efeito. Quem passa no primeiro teste fica Lento por 3 rodadas. Nesse tempo, o seu Movimento cai a zero.",
             "requer_condicao": "provacao-primordial",
             "usos": 1,
             "recuperacao": "sessao",
@@ -3533,7 +3735,7 @@
             "titulo": "Olhar Limpo",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Uma vez por cena, gaste 2 Mana: você e os aliados a até 9 m têm vantagem no próximo teste de Vontade contra encantamento, sedução ou persuasão, e você percebe na hora quando alguém tenta manipular um de vocês. Em troca, você tem desvantagem em Enganação até o fim da cena.",
+            "descricao": "Uma vez por cena, gaste 2 Mana: você e os aliados a até 9 m têm vantagem no próximo teste de Vontade contra controle mental, sedução ou persuasão, e você percebe na hora quando alguém tenta manipular um de vocês. Em troca, você tem desvantagem em Enganação até o fim da cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
@@ -3545,7 +3747,7 @@
             "titulo": "Olhar Firme",
             "tipo": "passiva",
             "nivel_minimo": 8,
-            "descricao": "Você recebe +3 em testes de Vontade contra encantamento, sedução e persuasão. Em troca, não consegue fingir interesse que não tem.",
+            "descricao": "Você recebe +3 em testes de Vontade contra controle mental, sedução e persuasão. Em troca, não consegue fingir interesse que não tem.",
             "automatizada": false
           },
           {
@@ -3553,7 +3755,7 @@
             "titulo": "Recusa Firme",
             "tipo": "reacao",
             "nivel_minimo": 15,
-            "descricao": "Uma vez por cena, quando você ou um aliado a até 9 m falhar num teste de resistência contra encantamento, medo ou controle, gaste uma reação e 4 Mana: o teste é refeito com vantagem. Quem tentou o efeito sabe que foi percebido, e você tem desvantagem em testes sociais com ele até o fim da cena.",
+            "descricao": "Uma vez por cena, quando você ou um aliado a até 9 m falhar num teste de resistência contra Fascinado, Amedrontado ou controle mental, gaste uma reação e 4 Mana: o teste é refeito com vantagem. Quem tentou o efeito sabe que foi percebido, e você tem desvantagem em testes sociais com ele até o fim da cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -3565,7 +3767,7 @@
             "titulo": "Escudo Limpo",
             "tipo": "acao",
             "nivel_minimo": 28,
-            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: todo aliado a até 9 m encerra na hora qualquer encantamento ou controle que esteja sobre ele. Você tem desvantagem em testes sociais até o fim da cena.",
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana: todo aliado a até 9 m encerra na hora Fascinado e qualquer controle mental que esteja sobre ele. Você tem desvantagem em testes sociais até o fim da cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 5,
@@ -3577,7 +3779,7 @@
             "titulo": "Mente Intocada",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 1 minuto, você e os aliados a até 9 m ficam imunes a encantamento e a controle mental, e quem tentar um efeito assim contra o grupo sofre 4d6 de dano mental. Quando o efeito termina, você sofre 1 de Cansaço.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana: por 3 rodadas, você e os aliados a até 9 m ficam imunes a Fascinado e a controle mental, e quem tentar um efeito assim contra o grupo sofre 2d6 de dano mental. Quando o efeito termina, você sofre 1 de Cansaço.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -3589,7 +3791,7 @@
             "titulo": "Santuário",
             "tipo": "acao_completa",
             "nivel_minimo": 60,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, numa esfera de 9 m, ninguém pode ser encantado, controlado nem ter a mente lida, e criaturas hostis que tentem ferir quem está dentro testam Vontade contra o seu Misticismo ou perdem a ação.",
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 12 Mana: por 3 rodadas, numa esfera de 9 m, ninguém pode ficar Fascinado, ser controlado nem ter a mente lida, e criaturas hostis que tentem ferir quem está dentro testam Vontade contra o seu Misticismo ou perdem a ação. A mesma criatura não perde a ação em duas rodadas seguidas.",
             "requer_condicao": "provacao-primordial",
             "usos": 1,
             "recuperacao": "sessao",
@@ -3798,6 +4000,7 @@
             "tipo": "passiva",
             "nivel_minimo": 8,
             "descricao": "Você recebe +1 de Defesa e vantagem em testes contra provocação e contra efeitos que forcem você a agir. Em troca, nunca ataca primeiro: a sua primeira ação do combate não pode ser um ataque.",
+            "defesa": 1,
             "automatizada": false
           },
           {
@@ -3937,7 +4140,7 @@
       {
         "id": "provacao-primordial",
         "titulo": "Provação Primordial",
-        "descricao": "Chegar ao nível total 60 não basta para virar Primordial. O espírito precisa cumprir um feito grande ligado à própria marca, a Provação descrita na página dela. O jogador e o mMestrecombinam o feito, e só o mMestremarca a Provação como cumprida na ficha. Até lá, o espírito fica no quinto degrau, por mais alto que seja o nível."
+        "descricao": "Chegar ao nível total 60 não basta para virar Primordial. O espírito precisa cumprir um feito grande ligado à própria marca, a Provação descrita na página dela. O jogador e o Mestre combinam o feito, e só o Mestre marca a Provação como cumprida na ficha. Até lá, o espírito fica no quinto degrau, por mais alto que seja o nível."
       }
     ]
   },
@@ -3945,6 +4148,22 @@
     "id": "gigante",
     "tipo": "raca",
     "titulo": "Gigante",
+    "povo": [
+      "Nada feito para os outros serve nele, então todo povo gigante faz a própria porta, a própria cama e a própria ferramenta.",
+      "Come e carrega como poucos, e uma comunidade de gigantes precisa de muito espaço e de muita comida para ficar de pé.",
+      "O porte só cresce com o tempo, e o tamanho de um gigante costuma dizer a idade dele antes de ele abrir a boca."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-dos-gigantes",
+        "titulo": "Brontéu"
+      }
+    ],
+    "dt_efeitos": {
+      "rotulo": "DT de Gigante",
+      "pericia": "atletismo",
+      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Atletismo na hora: quem decide é o peso do corpo. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -3990,7 +4209,7 @@
             "titulo": "Arremesso de Rocha",
             "tipo": "acao",
             "nivel_minimo": 14,
-            "descricao": "Você arranca uma pedra do tamanho de um barril e joga em um alvo a até 18 m, causando 3d6 de dano de impacto. O alvo faz um teste de Reflexos e, se passar, sofre só metade. Custa uma ação e 3 Mana, uma vez por cena.",
+            "descricao": "Você arranca uma pedra do tamanho de um barril e joga em um alvo a até 18 m, causando 3d6 de dano de impacto. O alvo faz um teste de Reflexos contra a sua DT de Gigante e, se passar, sofre só metade. Custa uma ação e 3 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 3,
@@ -4002,8 +4221,8 @@
             "titulo": "Forma de Montanha",
             "tipo": "acao",
             "nivel_minimo": 36,
-            "descricao": "Você finca os pés e vira parte do terreno. Até o fim da cena ninguém consegue te mover contra a sua vontade, e você ganha Resistência 10 contra dano físico comum. O preço é ficar lento: seu Movimento cai pela metade enquanto durar. Custa uma ação e 6 Mana, duas vezes por cena.",
-            "usos": 2,
+            "descricao": "Você finca os pés e vira parte do terreno. Até o fim da cena ninguém consegue te mover contra a sua vontade, e você ganha Resistência 10 contra dano físico comum. O preço é ficar lento: seu Movimento cai pela metade enquanto durar. Custa uma ação e 6 Mana, uma vez por cena.",
+            "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 6,
             "automatizada": false
@@ -4021,7 +4240,7 @@
             "titulo": "Sopro Invernal",
             "tipo": "passiva",
             "nivel_minimo": 1,
-            "descricao": "Você é imune ao frio ambiental. Gelo e neve não contam como terreno difícil para você, e todo dano de frio que você sofrer cai pela metade.",
+            "descricao": "Você é imune ao frio ambiental. Gelo e neve não contam como terreno difícil para você, e todo dano de gelo que você sofrer cai pela metade.",
             "automatizada": false
           },
           {
@@ -4037,7 +4256,7 @@
             "titulo": "Invérnia",
             "tipo": "acao_completa",
             "nivel_minimo": 36,
-            "descricao": "O inverno desce numa área de 9 m e fica lá por cinco rodadas. O chão vira gelo, criaturas hostis dentro da área andam com metade do Movimento e sofrem 4d6 de dano de gelo sempre que começam o turno ali dentro. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "O inverno desce numa área de 9 m e fica lá por cinco rodadas. O chão vira gelo, criaturas hostis dentro da área andam com metade do Movimento, e quem começa o turno ali testa Fortitude contra a sua DT de Gigante e sofre 4d6 de dano de gelo, ou metade se passar. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -4057,7 +4276,7 @@
             "titulo": "Voz de Trovão",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Você solta um berro de trovão. Cada criatura a até 9 m faz um teste de Fortitude, e quem falhar fica surda e sem reação até o fim do próximo turno dela. Custa uma ação e 2 Mana, uma vez por cena.",
+            "descricao": "Você solta um berro de trovão. Cada criatura a até 9 m faz um teste de Fortitude contra a sua DT de Gigante, e quem falhar fica Surda e sem reação até o fim do próximo turno dela. Custa uma ação e 2 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
@@ -4069,7 +4288,7 @@
             "titulo": "Descarga",
             "tipo": "acao",
             "nivel_minimo": 14,
-            "descricao": "Um raio sai de você numa linha reta de 18 m e causa 3d6 de dano elétrico em quem estiver no caminho. Cada atingido faz um teste de Reflexos e, passando, sofre metade. Custa uma ação e 4 Mana, uma vez por cena.",
+            "descricao": "Um raio sai de você numa linha reta de 18 m e causa 3d6 de dano de raio em quem estiver no caminho. Cada atingido faz um teste de Reflexos contra a sua DT de Gigante e, passando, sofre metade. Custa uma ação e 4 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -4081,7 +4300,7 @@
             "titulo": "Coroa de Raios",
             "tipo": "acao",
             "nivel_minimo": 36,
-            "descricao": "Raios passam a girar em volta de você por cinco rodadas. Nesse tempo, quem te atacar corpo a corpo sofre 4d6 de dano elétrico, e cada ataque seu causa 2d8 de dano elétrico a mais. Custa uma ação e 8 Mana, duas vezes por cena.",
+            "descricao": "Raios passam a girar em volta de você por cinco rodadas. Nesse tempo, quem te atacar corpo a corpo testa Reflexos contra a sua DT de Gigante e sofre 4d6 de dano de raio, ou metade se passar, e cada ataque seu causa 2d8 de dano de raio a mais. Custa uma ação e 8 Mana, duas vezes por cena.",
             "usos": 2,
             "recuperacao": "cena",
             "custo_mana": 8,
@@ -4116,7 +4335,7 @@
             "titulo": "Golpe de Forja",
             "tipo": "acao_completa",
             "nivel_minimo": 36,
-            "descricao": "Você desaba um golpe no chão e a rachadura em brasa se abre em volta. Criaturas a até 6 m sofrem 7d6 de dano de fogo e impacto e fazem um teste de Reflexos: quem passar sofre metade do dano e fica de pé, quem falhar cai no chão. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Você desaba um golpe no chão e a rachadura em brasa se abre em volta. Criaturas a até 6 m sofrem 7d6 de dano de fogo e impacto e fazem um teste de Reflexos contra a sua DT de Gigante: quem passar sofre metade do dano e fica de pé, quem falhar cai no chão. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -4178,7 +4397,7 @@
             "titulo": "Passada que Abala",
             "tipo": "acao",
             "nivel_minimo": 36,
-            "descricao": "Você pisa fundo e o chão cede. Cada criatura a até 6 m faz um teste de Reflexos e cai no chão se falhar, e toda essa área vira terreno difícil até o fim da cena. Custa uma ação e 6 Mana, duas vezes por cena.",
+            "descricao": "Você pisa fundo e o chão cede. Cada criatura a até 6 m faz um teste de Reflexos contra a sua DT de Gigante e cai no chão se falhar, e toda essa área vira terreno difícil até o fim da cena. Custa uma ação e 6 Mana, duas vezes por cena.",
             "usos": 2,
             "recuperacao": "cena",
             "custo_mana": 6,
@@ -4190,7 +4409,7 @@
             "titulo": "Peso que Não Para",
             "tipo": "passiva",
             "nivel_minimo": 36,
-            "descricao": "Seu porte torna você imune a ficar Agarrado, Derrubado ou Imobilizado. Você atravessa o espaço de criaturas menores sem gastar Movimento adicional, e seus ataques desarmados ou feitos com armas de porte grande causam 2d6 de dano a mais.",
+            "descricao": "Seu porte torna você imune a ficar Agarrado, Caído ou Imobilizado. Você atravessa o espaço de criaturas menores sem gastar Movimento adicional, e seus ataques desarmados ou feitos com armas de porte grande causam 2d6 de dano a mais.",
             "automatizada": false
           }
         ]
@@ -4201,6 +4420,17 @@
     "id": "animalia",
     "tipo": "raca",
     "titulo": "Animália",
+    "povo": [
+      "Tem corpo de bicho e cabeça de gente, então todo povo Animália divide a vida entre o costume de pessoa e o instinto do animal.",
+      "Conversa coisas simples com os bichos, e costuma viver em paz com a fauna do lugar, sem esperar que ela obedeça.",
+      "O animal define o tamanho e o jeito de cada um, e dentro do mesmo povo cabem corpos muito diferentes."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-dos-animalias",
+        "titulo": "Urrân"
+      }
+    ],
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -5636,6 +5866,22 @@
     "id": "sereia",
     "tipo": "raca",
     "titulo": "Sereia / Tritão",
+    "povo": [
+      "Respira dentro e fora d'água, então todo povo de sereias e tritões precisa da margem e do fundo por perto.",
+      "A voz é arma e laço ao mesmo tempo: a Canção de cada um diz o que ele faz com quem ouve, e cantar junto é coisa séria.",
+      "Nada tão rápido quanto anda, e a distância debaixo d'água conta tanto quanto a de terra."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-das-sereias",
+        "titulo": "Talássio"
+      }
+    ],
+    "dt_efeitos": {
+      "rotulo": "DT de Sereia",
+      "pericia": "atuacao",
+      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Atuação na hora: quem decide é a voz. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -5651,7 +5897,7 @@
         "id": "canto-fascinante",
         "titulo": "Canto Fascinante",
         "tipo": "acao",
-        "descricao": "Escolha uma criatura a até 9 m que consiga te ouvir. Você rola um teste de Carisma contra a Vontade dela: passando, ela fica fascinada até o início do seu próximo turno; falhando, nada acontece. Qualquer dano que ela sofrer encerra o fascínio na hora. Custa uma ação e 2 Mana, uma vez por cena.",
+        "descricao": "Escolha uma criatura a até 9 m que consiga te ouvir. Ela testa Vontade contra a sua DT de Sereia: falhando, fica Fascinada até o início do seu próximo turno; passando, nada acontece. Qualquer dano que ela sofrer encerra o fascínio na hora. Custa uma ação e 2 Mana, uma vez por cena.",
         "automatizada": false,
         "nivel_minimo": 1
       }
@@ -5671,7 +5917,7 @@
             "titulo": "Fascínio",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Sua Canção é o próprio Canto Fascinante da raça, do jeito que ele já funciona. Escolha uma criatura a até 9 m que consiga te ouvir e role Carisma contra a Vontade dela; passando, ela fica fascinada até o início do seu próximo turno. Custa uma ação e 2 Mana, uma vez por cena.",
+            "descricao": "Sua Canção é o próprio Canto Fascinante da raça, do jeito que ele já funciona. Escolha uma criatura a até 9 m que consiga te ouvir e ela testa Vontade contra a sua DT de Sereia; falhando, fica Fascinada até o início do seu próximo turno. Custa uma ação e 2 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
@@ -5691,7 +5937,7 @@
             "titulo": "Coro do Encanto",
             "tipo": "acao_completa",
             "nivel_minimo": 32,
-            "descricao": "Você canta para todo mundo de uma vez. Aqui quem rola é o outro lado: cada criatura a até 12 m que consiga te ouvir faz um teste de Vontade contra o seu Carisma, e quem falhar fica fascinada por quatro rodadas. O fascínio de quem sofrer dano acaba na hora. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Você canta para todo mundo de uma vez. Aqui quem rola é o outro lado: cada criatura a até 12 m que consiga te ouvir faz um teste de Vontade contra a sua DT de Sereia, e quem falhar fica Fascinada por até quatro rodadas, repetindo o teste no fim de cada turno dela. O fascínio de quem sofrer dano acaba na hora. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -5711,7 +5957,7 @@
             "titulo": "Lamento Frio",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Você canta a perda de uma criatura a até 9 m e rola Carisma contra a Vontade dela. Passando, ela ataca com desvantagem até o fim do próximo turno dela. Custa uma ação e 2 Mana, uma vez por cena.",
+            "descricao": "Você canta a perda de uma criatura a até 9 m e ela testa Vontade contra a sua DT de Sereia. Falhando, ela ataca com desvantagem até o fim do próximo turno dela. Custa uma ação e 2 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,
@@ -5723,7 +5969,7 @@
             "titulo": "Pranto que Corrói",
             "tipo": "acao",
             "nivel_minimo": 12,
-            "descricao": "Escolha uma criatura a até 9 m: ela faz um teste de Vontade e, se falhar, fica Amedrontada por duas rodadas. Enquanto estiver assim, não consegue se aproximar de você por vontade própria. Custa uma ação e 4 Mana, uma vez por cena.",
+            "descricao": "Escolha uma criatura a até 9 m: ela faz um teste de Vontade contra a sua DT de Sereia e, se falhar, fica Amedrontada por duas rodadas. Enquanto estiver assim, não consegue se aproximar de você por vontade própria. Custa uma ação e 4 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -5735,7 +5981,7 @@
             "titulo": "Reboque dos Afogados",
             "tipo": "acao_completa",
             "nivel_minimo": 32,
-            "descricao": "Cada criatura hostil a até 12 m faz um teste de Vontade. Quem falhar sofre 5d6 de dano psíquico e fica Amedrontada por quatro rodadas. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Cada criatura hostil a até 12 m faz um teste de Vontade contra a sua DT de Sereia. Quem falhar sofre 2d6 de dano mental, que tira Sanidade, e fica Amedrontada por quatro rodadas; quem passar sofre metade. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -5805,7 +6051,7 @@
             "titulo": "Pressão das Profundezas",
             "tipo": "acao",
             "nivel_minimo": 12,
-            "descricao": "A pressão do fundo despenca sobre uma criatura a até 9 m: 2d6 de dano, e o Movimento dela cai pela metade até o fim do próximo turno dela. Ela faz um teste de Fortitude e, passando, sofre metade do dano. Custa uma ação e 4 Mana, uma vez por cena.",
+            "descricao": "A pressão do fundo despenca sobre uma criatura a até 9 m: 2d6 de dano de Água, e o Movimento dela cai pela metade até o fim do próximo turno dela. Ela faz um teste de Fortitude contra a sua DT de Sereia e, passando, sofre metade do dano. Custa uma ação e 4 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -5817,7 +6063,7 @@
             "titulo": "Chamado do Fundo",
             "tipo": "acao_completa",
             "nivel_minimo": 32,
-            "descricao": "Você chama o que vive fundo demais, e por cinco rodadas a área de 9 m ao seu redor fica escura e pesada. Criaturas hostis dentro dela atacam com desvantagem e sofrem 4d6 de dano sempre que começam o turno ali. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
+            "descricao": "Você chama o que vive fundo demais, e por cinco rodadas a área de 9 m ao seu redor fica escura e pesada. Criaturas hostis dentro dela atacam com desvantagem. Quem começa o turno ali testa Fortitude contra a sua DT de Sereia e sofre 4d6 de dano de Água, ou metade se passar. Custa uma ação completa e 8 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -5840,7 +6086,7 @@
         "id": "profunda",
         "titulo": "Águas Profundas",
         "nivel_minimo": 12,
-        "vida": 0,
+        "vida": 2,
         "mana": 3,
         "caracteristicas": [
           {
@@ -5865,7 +6111,7 @@
         "id": "abissal",
         "titulo": "Águas Abissais",
         "nivel_minimo": 32,
-        "vida": 0,
+        "vida": 2,
         "mana": 6,
         "caracteristicas": [
           {
@@ -5896,6 +6142,12 @@
     "id": "mimico",
     "tipo": "raca",
     "titulo": "Mímico",
+    "povo": [
+      "Copia o rosto de quem observa, então todo povo mímico vive de olhar os outros com atenção e guardar o próprio rosto para si.",
+      "Por baixo de qualquer forma existe o mesmo bicho magro e nervoso, e mostrar a forma verdadeira é coisa que só se faz para quem se confia.",
+      "Perder a consciência desmancha a forma copiada na hora, e por isso o sono de um mímico é sempre escondido e vigiado."
+    ],
+    "linguas": [],
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -6150,6 +6402,12 @@
     "id": "simbionte",
     "tipo": "raca",
     "titulo": "Simbionte",
+    "povo": [
+      "Mais de um bicho mora no mesmo corpo, então para todo simbionte decidir é sempre conversa, e toda escolha tem mais de uma voz.",
+      "Divide comida, sono e decisões por dentro, e aguenta passar necessidade melhor que quase qualquer outro povo.",
+      "Ninguém de fora sabe onde um acaba e o outro começa, e perguntar isso costuma ser falta de educação entre eles."
+    ],
+    "linguas": [],
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -6281,7 +6539,7 @@
             "titulo": "Memória Coletiva",
             "tipo": "exploracao",
             "nivel_minimo": 11,
-            "descricao": "Depois de um minuto em contato com terra, madeira ou fungo de uma área, faça um teste de Sobrevivência para sentir, pela colônia, se passou criatura por ali nos últimos dias. Isso mostra presença e direção aproximada, nunca identidade.",
+            "descricao": "Depois de um minuto em contato com terra, madeira ou fungo de uma área, faça um teste de Sobrevivência (DT 15, ou 20 se o rastro tiver mais de um dia) para sentir, pela colônia, se passou criatura por ali nos últimos dias. Isso mostra presença e direção aproximada, nunca identidade.",
             "automatizada": false
           },
           {
@@ -6399,6 +6657,17 @@
     "id": "slime",
     "tipo": "raca",
     "titulo": "Slime",
+    "povo": [
+      "Sem osso e sem órgão em lugar fixo, um slime passa por qualquer fresta, e casa de slime raramente tem porta.",
+      "Cresce comendo, então comida é a medida de tudo, e a massa de um slime conta quanto ele já viveu.",
+      "Nada rígido serve nele sem adaptar, e todo objeto de slime é mole, dobrável ou feito sob medida."
+    ],
+    "linguas": [],
+    "dt_efeitos": {
+      "rotulo": "DT de Slime",
+      "pericia": "fortitude",
+      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Fortitude na hora: quem decide é o que você tem dentro. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -6463,7 +6732,7 @@
             "titulo": "Poça Corrosiva",
             "tipo": "acao_completa",
             "nivel_minimo": 28,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 6 Mana para se derramar numa poça de 6 m de raio, que fica no chão por cinco rodadas. Quem começar o turno dentro dela sofre 4d6 de dano ácido, e você se move normalmente dentro da própria poça.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 6 Mana para se derramar numa poça de 6 m de raio, que fica no chão por cinco rodadas. Quem começar o turno dentro dela testa Reflexos contra a sua DT de Slime e sofre 4d6 de dano ácido, ou metade se passar, e você se move normalmente dentro da própria poça.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 6,
@@ -6503,8 +6772,8 @@
             "titulo": "Casca Prismática",
             "tipo": "acao",
             "nivel_minimo": 28,
-            "descricao": "Feche todas as facetas de uma vez, gastando uma ação e 6 Mana: até o fim da cena você tem Resistência 10 contra dano físico comum e vantagem em testes de resistência contra luz e cegueira. Duas vezes por cena.",
-            "usos": 2,
+            "descricao": "Feche todas as facetas de uma vez, gastando uma ação e 6 Mana: até o fim da cena você tem Resistência 10 contra dano físico comum e vantagem em testes de resistência contra luz e cegueira. Uma vez por cena.",
+            "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 6,
             "automatizada": false
@@ -6522,7 +6791,7 @@
             "titulo": "Sangue Peçonhento",
             "tipo": "passiva",
             "nivel_minimo": 1,
-            "descricao": "Você é imune a veneno. E quem ataca você desarmado, morde ou agarra leva um gole do que você tem dentro: essa criatura faz um teste de Fortitude e, se falhar, fica enjoada até o fim do próximo turno dela.",
+            "descricao": "Você é imune a veneno. E quem ataca você desarmado, morde ou agarra leva um gole do que você tem dentro: essa criatura faz um teste de Fortitude contra a sua DT de Slime e, se falhar, fica Enjoada até o fim do próximo turno dela.",
             "automatizada": false
           },
           {
@@ -6541,7 +6810,7 @@
             "titulo": "Nuvem Virulenta",
             "tipo": "acao_completa",
             "nivel_minimo": 28,
-            "descricao": "Parte do seu corpo evapora numa nuvem de 6 m de raio, que fica no ar por cinco rodadas. Quem começar o turno lá dentro faz um teste de Fortitude; falhando, sofre 4d6 de dano de veneno e fica enjoado. Custa uma ação completa e 6 Mana, duas vezes por sessão.",
+            "descricao": "Parte do seu corpo evapora numa nuvem de 6 m de raio, que fica no ar por cinco rodadas. Quem começar o turno lá dentro faz um teste de Fortitude contra a sua DT de Slime: falhando, sofre 4d6 de dano de veneno e fica Enjoado; passando, sofre metade. Custa uma ação completa e 6 Mana, duas vezes por sessão.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 6,
@@ -6577,7 +6846,7 @@
             "titulo": "Sepultar em Gelo",
             "tipo": "acao",
             "nivel_minimo": 28,
-            "descricao": "Duas vezes por cena, gaste uma ação e 6 Mana para fechar gelo em volta de uma criatura a até 6 m. Ela faz um teste de Fortitude e, se falhar, fica presa e incapaz de se mover por quatro rodadas, podendo repetir o teste no fim de cada turno dela.",
+            "descricao": "Duas vezes por cena, gaste uma ação e 6 Mana para fechar gelo em volta de uma criatura a até 6 m. Ela faz um teste de Fortitude contra a sua DT de Slime e, se falhar, fica Imobilizada por quatro rodadas, podendo repetir o teste no fim de cada turno dela.",
             "usos": 2,
             "recuperacao": "cena",
             "custo_mana": 6,
@@ -6605,7 +6874,7 @@
             "titulo": "Respingo Incandescente",
             "tipo": "acao",
             "nivel_minimo": 9,
-            "descricao": "Arranque um pedaço de si e jogue em uma criatura a até 9 m: 2d6 de dano de fogo, ou metade se ela passar em Reflexos. Custa uma ação e 3 Mana, uma vez por cena.",
+            "descricao": "Arranque um pedaço de si e jogue em uma criatura a até 9 m: 2d6 de dano de fogo, ou metade se ela passar em Reflexos contra a sua DT de Slime. Custa uma ação e 3 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 3,
@@ -6654,8 +6923,8 @@
             "titulo": "Corpo de Aço",
             "tipo": "acao",
             "nivel_minimo": 28,
-            "descricao": "Duas vezes por cena, gaste uma ação e 6 Mana para trazer toda a liga para a superfície: +7 Defesa e Resistência 10 contra dano físico comum até o fim da cena. Enquanto o efeito durar, seu Movimento cai 1,5 m.",
-            "usos": 2,
+            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para trazer toda a liga para a superfície: +7 Defesa e Resistência 10 contra dano físico comum até o fim da cena. Enquanto o efeito durar, seu Movimento cai 1,5 m.",
+            "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 6,
             "automatizada": false
@@ -6693,7 +6962,7 @@
             "titulo": "Engolir",
             "tipo": "acao",
             "nivel_minimo": 9,
-            "descricao": "Uma vez por cena, gaste uma ação e 3 Mana para engolir uma criatura Pequena ou menor que você já esteja agarrando. Lá dentro ela não consegue fazer nada além de tentar escapar e sofre 1d6 de dano ácido por turno. Um teste de Atletismo bem-sucedido a devolve ao lado de fora.",
+            "descricao": "Uma vez por cena, gaste uma ação e 3 Mana para engolir uma criatura Pequena ou menor que você já esteja agarrando. Lá dentro ela não consegue fazer nada além de tentar escapar e sofre 1d6 de dano ácido por turno. Com uma Ação Padrão e Atletismo contra a sua DT de Slime, ela volta ao lado de fora.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 3,
@@ -6736,6 +7005,17 @@
     "id": "feerico",
     "tipo": "raca",
     "titulo": "Feérico",
+    "povo": [
+      "Tem muito mais Mana do que o tamanho faz parecer, então todo povo feérico vive cercado de cor, som e brilho que somem quando alguém toca.",
+      "Ilusão é brincadeira de criança e arma de adulto, e saber a diferença é a primeira coisa que um feérico aprende.",
+      "Como o estrago de uma ilusão vem do que a vítima acredita, palavra dada vale muito entre feéricos."
+    ],
+    "linguas": [],
+    "dt_efeitos": {
+      "rotulo": "DT de Feérico",
+      "pericia": "misticismo",
+      "descricao": "Os traços que mandam alguém testar usam o seu Misticismo: role na hora. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
@@ -6762,12 +7042,76 @@
         "automatizada": false
       }
     ],
-    "recursos_provisorios": false
+    "recursos_provisorios": false,
+    "estagios": [
+      {
+        "id": "faisca",
+        "titulo": "Faísca",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "encanto-antigo",
+        "titulo": "Encanto Antigo",
+        "nivel_minimo": 12,
+        "vida": 0,
+        "mana": 3,
+        "caracteristicas": [
+          {
+            "id": "glamour-maior",
+            "titulo": "Glamour Maior",
+            "tipo": "passiva",
+            "nivel_minimo": 12,
+            "descricao": "O Glamour passa a valer duas vezes por cena, e a ilusão pode ter até 9 m.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "corte-das-fadas",
+        "titulo": "Corte das Fadas",
+        "nivel_minimo": 34,
+        "vida": 3,
+        "mana": 6,
+        "caracteristicas": [
+          {
+            "id": "ilusao-da-corte",
+            "titulo": "Ilusão da Corte",
+            "tipo": "acao",
+            "nivel_minimo": 34,
+            "descricao": "Uma vez por sessão, gaste uma ação e 8 Mana para montar uma ilusão grande, de imagem, som e cheiro, que ocupe até 18 m, num ponto a até 36 m de você. Ela fica de pé por até 10 minutos sem pedir concentração. Toda criatura que a vir faz um teste de Percepção contra a sua DT de Feérico, e quem falha acredita nela até interagir diretamente com a ilusão.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 36,
+            "automatizada": false
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "elfo",
     "tipo": "raca",
     "titulo": "Elfo",
+    "povo": [
+      "Não envelhece e não esquece nada, então todo povo élfico guarda a própria história de memória, e um erro antigo continua vivo por séculos.",
+      "Vive tanto que muda devagar, e uma decisão élfica leva o tempo que outros povos levam para viver uma vida.",
+      "A Linhagem marca o sangue e cresce com a idade, e Anciãos e Milenares são ouvidos antes de todo mundo."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-dos-elfos",
+        "titulo": "Ilvaari"
+      }
+    ],
+    "dt_efeitos": {
+      "rotulo": "DT de Elfo",
+      "pericia": "misticismo",
+      "descricao": "Os traços que mandam alguém testar usam o seu Misticismo: role na hora. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -6891,7 +7235,7 @@
             "titulo": "Floresta Desperta",
             "tipo": "acao_completa",
             "nivel_minimo": 50,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana para acordar a vegetação de uma área de 18 m por cinco rodadas: no seu turno, ela agarra uma criatura hostil à sua escolha dentro da área e causa 5d6 de dano de impacto a quem já estiver agarrado.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana para acordar a vegetação de uma área de 18 m por cinco rodadas: no seu turno, uma criatura hostil à sua escolha dentro da área testa Reflexos contra o seu Misticismo e, se falhar, fica Agarrada pela vegetação até se soltar com uma Ação Padrão e Atletismo contra a mesma DT. Quem já estiver agarrado sofre 5d6 de dano de impacto, ou metade se passar em Fortitude contra o seu Misticismo.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 10,
@@ -6963,7 +7307,7 @@
             "id": "sepulcro-glacial",
             "titulo": "Sepulcro Glacial",
             "tipo": "acao",
-            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para escolher uma criatura a até 15 m e fazer um teste de Misticismo contra a Fortitude dela. Uma criatura voluntária pode escolher falhar. Em falha, ela fica aprisionada no gelo até o final do próximo turno dela: seu Movimento vira 0, ela não pode realizar ações ou reações e recebe Redução 5 contra danos. Em sucesso, seu Movimento fica reduzido pela metade e ela não pode realizar reações até o final do próximo turno. Outra criatura adjacente pode gastar uma ação e superar o resultado original de Misticismo com Atletismo para quebrar o gelo antecipadamente.",
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para escolher uma criatura a até 15 m e fazer um teste de Misticismo contra a Fortitude dela. Uma criatura voluntária pode escolher falhar. Em falha, ela fica aprisionada no gelo até o final do próximo turno dela: seu Movimento vira 0, ela não pode realizar ações ou reações e reduz em 5 o dano de cada golpe que sofrer. Em sucesso, seu Movimento fica reduzido pela metade e ela não pode realizar reações até o final do próximo turno. Outra criatura adjacente pode gastar uma ação e superar o resultado original de Misticismo com Atletismo para quebrar o gelo antecipadamente.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 5,
@@ -6977,7 +7321,7 @@
             "titulo": "Sepulcro Prolongado",
             "tipo": "acao",
             "nivel_minimo": 20,
-            "descricao": "O Sepulcro Glacial passa a durar cinco rodadas. Enquanto permanecer presa, a criatura sofre 1d6 de dano de frio no começo de cada turno dela.",
+            "descricao": "O Sepulcro Glacial passa a durar até cinco rodadas, e a criatura presa repete a Fortitude no fim de cada turno dela, saindo do gelo ao superar o seu Misticismo. Enquanto permanecer presa, a criatura sofre 1d6 de dano de gelo no começo de cada turno dela.",
             "automatizada": false
           },
           {
@@ -6985,7 +7329,7 @@
             "titulo": "Inverno que Não Passa",
             "tipo": "acao_completa",
             "nivel_minimo": 50,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana para aplicar o Sepulcro Glacial a todas as criaturas hostis numa área de 9 m, com um teste de Fortitude para cada uma.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana para aplicar o Sepulcro Glacial a todas as criaturas hostis numa área de 9 m, com um teste de Fortitude para cada uma, que se repete no fim de cada turno dela como no Sepulcro Prolongado.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 10,
@@ -7034,7 +7378,7 @@
             "titulo": "Chama que Não Cede",
             "tipo": "acao",
             "nivel_minimo": 50,
-            "descricao": "O Avatar das Chamas passa a durar até o fim da cena e, enquanto estiver ativo, criaturas hostis que terminarem o turno adjacentes a você sofrem 4d6 de dano de fogo.",
+            "descricao": "O Avatar das Chamas passa a durar até o fim da cena e, enquanto estiver ativo, criaturas hostis que terminarem o turno adjacentes a você testam Reflexos contra o seu Misticismo e sofrem 4d6 de dano de fogo, ou metade se passarem.",
             "automatizada": false
           }
         ]
@@ -7048,7 +7392,7 @@
             "id": "veu-sem-aurora",
             "titulo": "Véu sem Aurora",
             "tipo": "passiva",
-            "descricao": "Você enxerga normalmente através de qualquer escuridão e é imune a cegueira ou medo causados exclusivamente pela falta de luz. Enquanto não estiver sob luz intensa, recebe vantagem em Intimidação e Vontade. Uma vez por turno, como ação livre, pode extinguir uma fonte de luz não mágica a até 9 m; isso não apaga incêndios ou fontes maiores que uma fogueira.",
+            "descricao": "A noite desta Linhagem é a mesma que parou a lua de Întuneric e deu nome ao Clã mais antigo dos vampiros. Você enxerga normalmente através de qualquer escuridão e é imune a cegueira ou medo causados exclusivamente pela falta de luz. Enquanto não estiver sob luz intensa, recebe vantagem em Intimidação e Vontade. Uma vez por turno, como ação livre, pode extinguir uma fonte de luz não mágica a até 9 m; isso não apaga incêndios ou fontes maiores que uma fogueira.",
             "automatizada": false,
             "nivel_minimo": 1
           },
@@ -7098,7 +7442,7 @@
             "id": "sangue-da-tormenta",
             "titulo": "Sangue da Tormenta",
             "tipo": "passiva",
-            "descricao": "Você ignora penalidades ambientais de chuva, ventos e tempestades comuns, reduz pela metade o dano causado diretamente por eletricidade, trovão ou vento e sempre sabe como o clima natural da região deve se comportar nas próximas 24 horas. Isso não revela interferências sobrenaturais futuras.",
+            "descricao": "Você ignora penalidades ambientais de chuva, ventos e tempestades comuns, reduz pela metade o dano de raio e o dano de ar e sempre sabe como o clima natural da região deve se comportar nas próximas 24 horas. Isso não revela interferências sobrenaturais futuras.",
             "automatizada": false,
             "nivel_minimo": 1
           },
@@ -7106,7 +7450,7 @@
             "id": "olho-da-tempestade",
             "titulo": "Olho da Tempestade",
             "tipo": "acao",
-            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para envolver-se em uma tempestade de 6 m de raio durante três rodadas. A área acompanha você e você recebe deslocamento de voo igual ao seu Movimento; se ainda estiver voando quando o efeito terminar, desce em segurança até 9 m e cai normalmente pelo restante. Ao ativar e uma vez no início de cada um dos seus dois próximos turnos, escolha até Mod.Inteligência inimigos na área, com mínimo de um, e faça um único teste de Misticismo contra os Reflexos deles. Em falha, cada alvo sofre 1d6 + Mod.Inteligência de dano elétrico e é empurrado 3 m; em sucesso, sofre metade do dano e não é empurrado.",
+            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para envolver-se em uma tempestade de 6 m de raio durante três rodadas. A área acompanha você e você recebe deslocamento de voo igual ao seu Movimento; se ainda estiver voando quando o efeito terminar, desce em segurança até 9 m e cai normalmente pelo restante. Ao ativar e uma vez no início de cada um dos seus dois próximos turnos, escolha até Mod.Inteligência inimigos na área, com mínimo de um, e faça um único teste de Misticismo contra os Reflexos deles. Em falha, cada alvo sofre 1d6 + Mod.Inteligência de dano de raio e é empurrado 3 m; em sucesso, sofre metade do dano e não é empurrado.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 6,
@@ -7129,7 +7473,7 @@
             "titulo": "Tormenta sobre o Campo",
             "tipo": "acao_completa",
             "nivel_minimo": 50,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana para cobrir uma área de 24 m com tempestade por cinco rodadas: criaturas hostis dentro dela têm desvantagem em ataques à distância e sofrem 4d6 de dano elétrico ao começar o turno.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana para cobrir uma área de 24 m com tempestade por cinco rodadas: criaturas hostis dentro dela têm desvantagem em ataques à distância e, ao começar o turno ali, testam Reflexos contra o seu Misticismo e sofrem 4d6 de dano de raio, ou metade se passarem.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 10,
@@ -7193,6 +7537,13 @@
     "id": "desperto",
     "tipo": "raca",
     "titulo": "Desperto",
+    "povo": [
+      "Ninguém nasce Desperto, então todo grupo de Despertos é feito de quem voltou, e cada um traz a própria morte para contar.",
+      "O Fragmento preso na alma vibra perto de tudo que a morte tocou, e Despertos se sentem uns aos outros antes de se verem.",
+      "Todo Desperto sabe que a Mulher Carmesim deixou ele ir embora, e a pergunta de por que acompanha cada um a vida inteira."
+    ],
+    "linguas_nota": "Fala as línguas que falava em vida, e o Universal, como todo mundo.",
+    "linguas": [],
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -7243,7 +7594,7 @@
         "id": "fragmento-de-arkarin",
         "titulo": "Fragmento de Arkarin",
         "tipo": "sensorial",
-        "descricao": "O fragmento vibra quando existe, a até 15 m, um Espírito ou alma aprisionada, um cadáver alterado sobrenaturalmente ou um efeito ligado à morte ou ao Fluxo de Arkarin. Ele revela presença e direção aproximada, mas não identidade, quantidade ou distância exata.",
+        "descricao": "O fragmento vibra quando existe, a até 15 m, um Espírito ou alma aprisionada, um cadáver alterado sobrenaturalmente ou um efeito ligado à morte ou ao Fluxo do Fim. Ele revela presença e direção aproximada, mas não identidade, quantidade ou distância exata.",
         "alcance_m": 15,
         "automatizada": false
       },
@@ -7370,7 +7721,7 @@
           "id": "biologia-impossivel",
           "titulo": "Biologia Impossível",
           "tipo": "passiva",
-          "descricao": "Cura não pode ser usada para tratar seu corpo. Ofício ou Ritos de Arkarin podem substituí-la, usando a mesma DT e o mesmo tempo. Efeitos que dependam exclusivamente de uma biologia viva não funcionam em você; curas sobrenaturais que não dependam de anatomia continuam funcionando.",
+          "descricao": "Cura não pode ser usada para tratar seu corpo. Ofício ou Religião podem substituí-la, usando a mesma DT e o mesmo tempo. Efeitos que dependam exclusivamente de uma biologia viva não funcionam em você; curas sobrenaturais que não dependam de anatomia continuam funcionando.",
           "automatizada": false
         }
       },
@@ -7407,12 +7758,12 @@
           "id": "folego-roubado",
           "titulo": "Fôlego Roubado",
           "tipo": "acao",
-          "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para escolher um ser vivo a até 9 m e fazer Ritos de Arkarin contra a Fortitude dele. Se superar a defesa, cause 2d6 + Mod.Sabedoria de dano e recupere Vida igual ao dano realmente causado. Caso não supere, cause e recupere metade. Não afeta Espíritos, cadáveres, construtos ou criaturas sem essência vital.",
+          "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para escolher um ser vivo a até 9 m e fazer Religião contra a Fortitude dele. Se superar a defesa, cause 2d6 + Mod.Sabedoria de dano e recupere Vida igual ao dano realmente causado. Caso não supere, cause e recupere metade. Não afeta Espíritos, cadáveres, construtos ou criaturas sem essência vital.",
           "usos": 1,
           "recuperacao": "cena",
           "custo_mana": 4,
           "alcance_m": 9,
-          "teste": "ritos-de-arkarin_vs_fortitude",
+          "teste": "religiao_vs_fortitude",
           "automatizada": false
         },
         "cicatriz": {
@@ -7425,12 +7776,51 @@
       }
     ],
     "condicoes_pendentes": false,
-    "recursos_provisorios": false
+    "recursos_provisorios": false,
+    "estagios": [
+      {
+        "id": "retornado",
+        "titulo": "Retornado",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "velho-conhecido-da-morte",
+        "titulo": "Velho Conhecido da Morte",
+        "nivel_minimo": 20,
+        "vida": 3,
+        "mana": 2,
+        "caracteristicas": [
+          {
+            "id": "caminho-conhecido",
+            "titulo": "Caminho Conhecido",
+            "tipo": "passiva",
+            "nivel_minimo": 20,
+            "descricao": "Recusar o Fim passa a deixar você com Vida igual à metade do seu nível total, em vez de 1. A Lembrança dos Séculos Mortos dá uma rerrolagem a mais por sessão, mesmo a quem ficou morto menos de um século, e o máximo sobe para seis.",
+            "automatizada": false
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "auleth",
     "tipo": "raca",
     "titulo": "Auleth",
+    "povo": [
+      "Nasceu fora do Jardim e escolheu um corpo para caber aqui, então todo Auleth olha o mundo como quem chegou de visita.",
+      "Não come, não bebe e não dorme, e medita no lugar do sono, então o dia de um Auleth corre num relógio próprio.",
+      "Sabe muito sobre duas coisas e quase nada sobre o que os outros sentem, e conviver com um Auleth pede paciência dos dois lados."
+    ],
+    "linguas_nota": "Fala o Universal, que foi criado por um Auleth, e o povo o trata como língua da casa.",
+    "linguas": [],
+    "dt_efeitos": {
+      "rotulo": "DT de Auleth",
+      "pericia": "misticismo",
+      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo na hora: quem decide é o que veio de fora. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -7491,7 +7881,7 @@
         "id": "conhecimentos-extremos",
         "titulo": "Conhecimentos Extremos",
         "tipo": "escolha",
-        "descricao": "Escolha duas áreas de estudo aprovadas pelo Mestre, cada uma mais estreita que uma Árvore ou Fluxo inteiro e mais ampla que um único indivíduo. Quando um teste de Conhecimento, Investigação, Misticismo, Ressonância, Tecnologia ou Ritos de Arkarin tratar diretamente de uma área escolhida, você recebe vantagem. Uma vez por sessão para cada área, depois de falhar em um desses testes, pode rerrolá-lo e deve manter o novo resultado. Isso não revela segredos sem pistas nem informações que nenhuma fonte acessível poderia fornecer.",
+        "descricao": "Escolha duas áreas de estudo aprovadas pelo Mestre, cada uma mais estreita que uma Árvore ou Fluxo inteiro e mais ampla que um único indivíduo. Quando um teste de Conhecimento, Investigação, Misticismo, Religião, Ressonância ou Tecnologia tratar diretamente de uma área escolhida, você recebe vantagem. Uma vez por sessão para cada área, depois de falhar em um desses testes, pode rerrolá-lo e deve manter o novo resultado. Isso não revela segredos sem pistas nem informações que nenhuma fonte acessível poderia fornecer.",
         "escolhas": 2,
         "pericias_aplicaveis": [
           "conhecimento",
@@ -7499,7 +7889,7 @@
           "misticismo",
           "ressonancia",
           "tecnologia",
-          "ritos-de-arkarin"
+          "religiao"
         ],
         "rerrolagens_por_escolha": 1,
         "recuperacao": "sessao",
@@ -7595,7 +7985,7 @@
             "titulo": "Atração Irresistível",
             "tipo": "acao",
             "nivel_minimo": 18,
-            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para puxar uma criatura a até 12 m para um espaço adjacente ao seu: ela testa Fortitude e, se falhar, é arrastada e tem o Movimento reduzido à metade até o fim do próximo turno dela.",
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para puxar uma criatura a até 12 m para um espaço adjacente ao seu: ela testa Fortitude contra a sua DT de Auleth e, se falhar, é arrastada e tem o Movimento reduzido à metade até o fim do próximo turno dela.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -7607,7 +7997,7 @@
             "titulo": "Horizonte de Eventos",
             "tipo": "acao_completa",
             "nivel_minimo": 44,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana para abrir um poço de 6 m de raio por cinco rodadas: sair da área custa o dobro de Movimento, projéteis que entram são engolidos sem chegar ao alvo, e criaturas hostis sofrem 4d6 ao começar o turno dentro.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana para abrir um poço de 6 m de raio por cinco rodadas: sair da área custa o dobro de Movimento, projéteis que entram são engolidos sem chegar ao alvo, e criaturas hostis que começam o turno dentro testam Fortitude contra a sua DT de Auleth e sofrem 4d6 de dano de impacto, ou metade se passarem.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -7648,7 +8038,7 @@
             "titulo": "Peso de Mundo",
             "tipo": "acao_completa",
             "nivel_minimo": 44,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana contra uma criatura a até 9 m: ela testa Fortitude e, se falhar, é pregada ao chão por quatro rodadas, caída e sem conseguir se levantar, sofrendo 7d6 de dano de impacto.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana contra uma criatura a até 9 m: ela testa Fortitude contra a sua DT de Auleth. Se falhar, sofre 7d6 de dano de impacto e fica Caída e Imobilizada, pregada ao chão, repetindo o teste no fim de cada turno dela para se soltar, por até quatro rodadas. Se passar, sofre metade e fica de pé.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -7688,7 +8078,7 @@
             "titulo": "Berçário",
             "tipo": "acao_completa",
             "nivel_minimo": 44,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana para condensar a nuvem numa área de 9 m por cinco rodadas. Escolha ao ativar: ela vira cobertura sólida que bloqueia linha de visão e projéteis, ou vira poeira cortante que causa 4d6 e cega quem começar o turno dentro, com Fortitude para evitar a cegueira.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 8 Mana para condensar a nuvem numa área de 9 m por cinco rodadas. Escolha ao ativar: ela vira cobertura sólida que bloqueia linha de visão e projéteis, ou vira poeira cortante: quem começar o turno dentro testa Fortitude contra a sua DT de Auleth e, se falhar, sofre 4d6 de dano de corte e fica Cego até o começo do próximo turno; se passar, sofre metade e enxerga.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -7717,7 +8107,7 @@
             "titulo": "Pulso",
             "tipo": "acao",
             "nivel_minimo": 18,
-            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para emitir um pulso de 9 m: dispositivos não blindados param por uma rodada, e construtos ou autômatos sofrem 2d6 de dano elétrico e ficam lentos até o fim do próximo turno deles, com Fortitude para evitar a lentidão.",
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para emitir um pulso de 9 m: dispositivos não blindados param por uma rodada, e construtos ou autômatos sofrem 2d6 de dano de raio e ficam lentos até o fim do próximo turno deles, com Fortitude para evitar a lentidão.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -7848,6 +8238,17 @@
     "id": "automato",
     "tipo": "raca",
     "titulo": "Autômato",
+    "povo": [
+      "Não respira, não come e não dorme, então todo povo autômato tem tempo de sobra e nenhuma mesa de jantar.",
+      "Quando quebra, quem conserta é um engenheiro, e todo autômato sabe o nome de quem mexe no núcleo dele.",
+      "Tem vontade própria e não deve obediência a criador nenhum, e essa liberdade é o que um autômato mais defende."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-dos-automatos",
+        "titulo": "Axial"
+      }
+    ],
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -7869,7 +8270,8 @@
     "capacidade_modificacoes": {
       "base": 1,
       "nivel_por_slot": 2,
-      "formula": "1 + piso(Nível Total / 2)"
+      "formula": "1 + piso(Nível Total / 2), até 8",
+      "maximo": 8
     },
     "descricao": "Um construto consciente que saiu da A.X.I.S, com núcleo e vontade próprios, e que não deve obediência a criador nenhum. Cura não funciona nele; quando quebra, quem conserta é um engenheiro. Na criação você escolhe o chassi, bípede ou quadrúpede.",
     "rotulo_variante": "Chassi",
@@ -7884,22 +8286,22 @@
         "id": "nucleo-autonomo",
         "titulo": "Núcleo Autônomo",
         "tipo": "passiva",
-        "descricao": "Você possui vontade própria e não precisa obedecer a um criador. Seu Nível Total também é o nível do núcleo, e você pode receber níveis de classe desde o nível 1. Sua Mana representa a Energia do Núcleo e é recuperada normalmente por descanso ou Relaxar.",
+        "descricao": "Você possui vontade própria e não precisa obedecer a um criador. Seu Nível Total também é o nível do núcleo, e você pode receber níveis de classe desde o nível 1. Sua Mana representa a Energia do Núcleo e é recuperada normalmente por descanso ou Relaxar. O núcleo roda o Fluxo da Tecnologia, que é o seu Fluxo nativo.",
         "automatizada": false
       },
       {
         "id": "corpo-artificial",
         "titulo": "Corpo Artificial",
         "tipo": "passiva",
-        "descricao": "Você é imune a atordoamento, doenças, encantamentos, enjoo, fadiga, sono e venenos. Não precisa respirar, comer, beber ou dormir. Essas imunidades são perdidas enquanto Máquina Viva estiver instalada.",
+        "descricao": "Você é imune a Atordoado, Enjoado, Envenenado e Fascinado, a doenças, a Cansaço e a sono, inclusive o mágico. Não precisa respirar, comer, beber ou dormir. Essas imunidades são perdidas enquanto Máquina Viva estiver instalada.",
         "imunidades": [
-          "atordoamento",
+          "atordoado",
+          "enjoado",
+          "envenenado",
+          "fascinado",
           "doenca",
-          "encantamento",
-          "enjoo",
-          "fadiga",
-          "sono",
-          "veneno"
+          "cansaco",
+          "sono"
         ],
         "automatizada": false
       },
@@ -7927,7 +8329,7 @@
         "id": "arquitetura-modular",
         "titulo": "Arquitetura Modular",
         "tipo": "escolha",
-        "descricao": "Seu limite de modificações instaladas é 1 + piso do Nível Total dividido por 2. Uma modificação ativa exige pelo menos três passivas instaladas, além dos demais pré-requisitos. Instalar uma modificação exige um dia de trabalho de alguém capaz de realizar Ofício (Engenharia); custos e obtenção de peças são resolvidos pelo Mestre.",
+        "descricao": "Seu limite de modificações instaladas é 1 + piso do Nível Total dividido por 2, até o máximo de 8. Uma modificação ativa exige pelo menos três passivas instaladas, além dos demais pré-requisitos. Instalar uma modificação exige um dia de trabalho de alguém capaz de realizar Ofício (Engenharia); custos e obtenção de peças são resolvidos pelo Mestre.",
         "automatizada": false
       },
       {
@@ -7944,7 +8346,7 @@
         "titulo": "Chassi Bípede Pequeno",
         "postura": "bipede",
         "tamanho": "Pequeno",
-        "medida_m": 3.5,
+        "medida_m": 1,
         "vida": 3,
         "mana": 0,
         "estamina": 2,
@@ -7959,7 +8361,7 @@
             "id": "chassi-bipede-pequeno",
             "titulo": "Estrutura Bípede Pequena",
             "tipo": "passiva",
-            "descricao": "Tamanho Pequeno, aproximadamente 3,5 m, Movimento 6 m e arma natural com dano-base 1d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+            "descricao": "Tamanho Pequeno, aproximadamente 1 m, Movimento 6 m e arma natural com dano-base 1d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis. O corpo pequeno passa por frestas e some atrás de pouca coisa: receba vantagem em Furtividade e em Reflexos.",
             "automatizada": false
           }
         ]
@@ -7969,7 +8371,7 @@
         "titulo": "Chassi Bípede Normal",
         "postura": "bipede",
         "tamanho": "Normal",
-        "medida_m": 5,
+        "medida_m": 1.8,
         "vida": 5,
         "mana": 0,
         "estamina": 3,
@@ -7984,7 +8386,7 @@
             "id": "chassi-bipede-normal",
             "titulo": "Estrutura Bípede Normal",
             "tipo": "passiva",
-            "descricao": "Tamanho Normal, aproximadamente 5 m, Movimento 9 m e arma natural com dano-base 1d8. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+            "descricao": "Tamanho Normal, aproximadamente 1,8 m, Movimento 9 m e arma natural com dano-base 1d8. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
             "automatizada": false
           }
         ]
@@ -7994,7 +8396,7 @@
         "titulo": "Chassi Bípede Grande",
         "postura": "bipede",
         "tamanho": "Grande",
-        "medida_m": 6,
+        "medida_m": 3,
         "vida": 8,
         "mana": 0,
         "estamina": 4,
@@ -8009,7 +8411,7 @@
             "id": "chassi-bipede-grande",
             "titulo": "Estrutura Bípede Grande",
             "tipo": "passiva",
-            "descricao": "Tamanho Grande, aproximadamente 6 m, Movimento 12 m e arma natural com dano-base 2d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+            "descricao": "Tamanho Grande, aproximadamente 3 m, Movimento 12 m e arma natural com dano-base 2d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
             "automatizada": false
           }
         ]
@@ -8019,7 +8421,7 @@
         "titulo": "Chassi Bípede Enorme",
         "postura": "bipede",
         "tamanho": "Enorme",
-        "medida_m": 9,
+        "medida_m": 4.5,
         "vida": 10,
         "mana": 0,
         "estamina": 5,
@@ -8034,7 +8436,7 @@
             "id": "chassi-bipede-enorme",
             "titulo": "Estrutura Bípede Enorme",
             "tipo": "passiva",
-            "descricao": "Tamanho Enorme, aproximadamente 9 m, Movimento 12 m e arma natural com dano-base 3d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+            "descricao": "Tamanho Enorme, aproximadamente 4,5 m, Movimento 12 m e arma natural com dano-base 3d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
             "automatizada": false
           }
         ]
@@ -8059,7 +8461,7 @@
             "id": "chassi-quadrupede-pequeno",
             "titulo": "Estrutura Quadrúpede Pequena",
             "tipo": "limitacao",
-            "descricao": "Tamanho Pequeno, aproximadamente 0,7 m, Movimento 9 m e arma natural com dano-base 1d4. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
+            "descricao": "Tamanho Pequeno, aproximadamente 0,7 m, Movimento 9 m e arma natural com dano-base 1d4. Não possui manipuladores para empunhar armas ou ferramentas convencionais. O corpo pequeno passa por frestas e some atrás de pouca coisa: receba vantagem em Furtividade e em Reflexos.",
             "automatizada": false
           }
         ]
@@ -8178,7 +8580,7 @@
         "titulo": "Compartimento de Carga",
         "categoria": "passiva",
         "nivel_minimo": 1,
-        "descricao": "Seu chassi possui um compartimento equivalente a um mochilão, com capacidade adicional para quinze itens. Retirar um item guardado exige uma ação de movimento.",
+        "descricao": "Seu chassi possui um compartimento de carga: receba +15 espaços de carga, sem a perda de Movimento de um mochilão. Retirar um item guardado exige uma ação de movimento.",
         "itens_adicionais": 15,
         "automatizada": false
       },
@@ -8187,8 +8589,8 @@
         "titulo": "Corpo Maciço",
         "categoria": "passiva",
         "nivel_minimo": 1,
-        "descricao": "Receba Resistência 10 contra danos físicos comuns. Isso não reduz dano que declare ignorar Resistência nem efeitos internos, espirituais ou direcionados ao núcleo.",
-        "resistencia_fisica": 10,
+        "descricao": "Placas grossas cobrem o chassi inteiro. Receba Resistência 2 a corte, perfuração e impacto, mais 1 a cada 10 níveis totais (3 no nível 10, 8 no nível 60). Ela não reduz dano verdadeiro nem o que atinge o núcleo por dentro.",
+        "resistencia_fisica": 2,
         "automatizada": false
       },
       {
@@ -8215,8 +8617,8 @@
         "titulo": "Resistente",
         "categoria": "passiva",
         "nivel_minimo": 10,
-        "descricao": "Receba +2 Vida máxima por Nível Total. Este valor substitui o antigo +5 por nível, incompatível com a progressão atual.",
-        "vida_por_nivel": 2,
+        "descricao": "Receba +1 Vida máxima por Nível Total.",
+        "vida_por_nivel": 1,
         "automatizada": true
       },
       {
@@ -8245,8 +8647,8 @@
         "tipo": "acao_completa",
         "custo_mana": 8,
         "alcance_m": 30,
-        "descricao": "Gaste uma ação completa e 8 Energia do Núcleo para disparar uma linha de 30 m. Faça um teste de Tecnologia e compare com os Reflexos de cada criatura na linha. Em falha, ela sofre 8d10+8 de dano de raio; em sucesso, evita o dano. Depois do disparo, o Laser precisa de 1d4+1 rodadas para recarregar.",
-        "dano": "8d10+8",
+        "descricao": "Gaste uma ação completa e 8 Energia do Núcleo para disparar uma linha de 30 m. Faça um teste de Tecnologia e compare com os Reflexos de cada criatura na linha. Em falha, ela sofre 4d10+4 de dano tecnológico; em sucesso, sofre metade. Depois do disparo, o Laser precisa de 1d4+1 rodadas para recarregar.",
+        "dano": "4d10+4",
         "recarga_rodadas": "1d4+1",
         "automatizada": false
       },
@@ -8258,9 +8660,9 @@
         "passivas_exigidas": 3,
         "tipo": "acao",
         "custo_mana": 2,
-        "alcance_m": 20,
+        "alcance_m": 18,
         "duracao": "cena",
-        "descricao": "Gaste uma ação e 2 Energia do Núcleo para ativar sensores até o fim da cena. Você sabe quando seres se movem a até 20 m e a direção aproximada do movimento, mas não descobre identidade, quantidade, distância exata nem seres completamente imóveis.",
+        "descricao": "Gaste uma ação e 2 Energia do Núcleo para ativar sensores até o fim da cena. Você sabe quando seres se movem a até 18 m e a direção aproximada do movimento, mas não descobre identidade, quantidade, distância exata nem seres completamente imóveis.",
         "automatizada": false
       },
       {
@@ -8271,10 +8673,11 @@
         "passivas_exigidas": 3,
         "tipo": "reacao",
         "custo_mana": 5,
-        "alcance_m": 5,
-        "descricao": "Uma vez por rodada, quando sofrer um ataque corpo a corpo, gaste uma reação e 5 Energia do Núcleo para descarregar eletricidade. Faça um teste de Tecnologia contra os Reflexos de todas as outras criaturas a até 5 m. Em falha, cada uma sofre 3d8+4 de dano de raio; em sucesso, sofre metade.",
+        "alcance_m": 4.5,
+        "usos": 2,
+        "recuperacao": "cena",
+        "descricao": "Duas vezes por cena, quando sofrer um ataque corpo a corpo, gaste uma reação e 5 Energia do Núcleo para descarregar eletricidade. Faça um teste de Tecnologia contra os Reflexos de todas as outras criaturas a até 4,5 m. Em falha, cada uma sofre 3d8+4 de dano tecnológico; em sucesso, sofre metade.",
         "dano": "3d8+4",
-        "frequencia": "uma vez por rodada",
         "automatizada": false
       },
       {
@@ -8312,7 +8715,7 @@
         "alcance_m": 6,
         "usos": 1,
         "recuperacao": "cena",
-        "descricao": "Uma vez por cena, gaste uma ação e 6 Energia do Núcleo para liberar um pulso sônico. Faça Tecnologia contra a Fortitude de cada outra criatura a até 6 m. Em falha, ela fica atordoada por 1d4+1 rodadas; em sucesso, não sofre efeito.",
+        "descricao": "Uma vez por cena, gaste uma ação e 6 Energia do Núcleo para liberar um pulso sônico. Faça Tecnologia contra a Fortitude de cada outra criatura a até 6 m. Em falha, ela fica Atordoada até o fim do próximo turno dela; em sucesso, não sofre efeito.",
         "automatizada": false
       },
       {
@@ -8336,8 +8739,10 @@
         "passivas_exigidas": 3,
         "tipo": "acao",
         "custo_mana": 4,
-        "alcance_m": 20,
-        "descricao": "Gaste uma ação e 4 Energia do Núcleo para disparar um raio quente contra uma criatura a até 20 m. Faça Pontaria contra Reflexos. Em falha, ela sofre 4d6+4 de dano de fogo; em sucesso, sofre metade.",
+        "alcance_m": 18,
+        "usos": 1,
+        "recuperacao": "cena",
+        "descricao": "Uma vez por cena, gaste uma ação e 4 Energia do Núcleo para disparar um raio quente contra uma criatura a até 18 m. Faça Pontaria contra Reflexos. Em falha, ela sofre 4d6+4 de dano tecnológico; em sucesso, sofre metade.",
         "dano": "4d6+4",
         "automatizada": false
       }
@@ -8349,6 +8754,17 @@
     "id": "clone",
     "tipo": "raca",
     "titulo": "Clone",
+    "povo": [
+      "Foi feito à imagem de outra pessoa, então todo Clone convive com a existência de um Original em algum lugar.",
+      "De vez em quando lembra de coisas que nunca viveu, e separar a lembrança emprestada da própria é trabalho de uma vida.",
+      "Clones do mesmo Projeto se reconhecem como irmãos, gostem disso ou não."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-dos-clones",
+        "titulo": "Ao Contrário"
+      }
+    ],
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -8534,12 +8950,46 @@
         ]
       }
     ],
-    "recursos_provisorios": false
+    "recursos_provisorios": false,
+    "estagios": [
+      {
+        "id": "copia-recente",
+        "titulo": "Cópia Recente",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "projeto-maduro",
+        "titulo": "Projeto Maduro",
+        "nivel_minimo": 20,
+        "vida": 3,
+        "mana": 2,
+        "caracteristicas": [
+          {
+            "id": "projeto-amadurecido",
+            "titulo": "Projeto Amadurecido",
+            "tipo": "passiva",
+            "nivel_minimo": 20,
+            "descricao": "O seu Projeto de Clonagem cresce. A Réplica Perfeita ganha uma quarta rerrolagem por sessão. O Arquivo Vivo escolhe uma terceira perícia para as rerrolagens e ganha mais uma por sessão. A Série Contínua pode manter dois corpos reserva, em instalações diferentes. O Organismo Otimizado já cresce a cada nível e não ganha nada aqui.",
+            "automatizada": false
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "anomalia",
     "tipo": "raca",
     "titulo": "Anomalia",
+    "povo": [
+      "Veio de outra campanha, então toda Anomalia carrega nome, rosto e fama de um mundo que ninguém daqui conheceu.",
+      "Perdeu nível e ficha na travessia, e recomeçar do zero com a memória inteira é o que todas têm em comum.",
+      "Anomalias são raras, e quando duas se encontram costumam ter mais assunto entre si que com qualquer outro povo."
+    ],
+    "linguas_nota": "Chega falando a língua da história de onde veio, que quase ninguém daqui entende, e aprende o Universal.",
+    "linguas": [],
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -8647,7 +9097,7 @@
       {
         "id": "ofensiva",
         "titulo": "Ofensiva",
-        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para usar o teste apropriado contra a resistência definida pelo Mestre. Em falha, cause 3d6 + Mod.Atributo de dano; em sucesso, cause metade.",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana e role a perícia da sua Assinatura: o resultado é a DT da resistência que o Mestre escolher para o alvo. Em falha, ele sofre 3d6 + Mod.Atributo de dano; em sucesso, metade.",
         "usos": 1,
         "recuperacao": "cena",
         "custo_mana": 5,
@@ -8683,7 +9133,7 @@
       {
         "id": "controle",
         "titulo": "Controle",
-        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para usar o teste apropriado contra uma resistência definida pelo Mestre. Em falha, aplique uma condição leve aprovada pelo Mestre até o final do próximo turno do alvo; em sucesso, nenhuma condição é aplicada.",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana e role a perícia da sua Assinatura: o resultado é a DT da resistência que o Mestre escolher para o alvo. Em falha, ele recebe uma condição leve aprovada pelo Mestre até o fim do próximo turno dele; em sucesso, nada acontece.",
         "usos": 1,
         "recuperacao": "cena",
         "custo_mana": 5
@@ -8729,12 +9179,46 @@
         "destino": "Ajustados pelo Mestre à campanha atual"
       }
     ],
-    "recursos_provisorios": false
+    "recursos_provisorios": false,
+    "estagios": [
+      {
+        "id": "recem-chegada",
+        "titulo": "Recém-Chegada",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "raiz-nova",
+        "titulo": "Raiz Nova",
+        "nivel_minimo": 20,
+        "vida": 3,
+        "mana": 2,
+        "caracteristicas": [
+          {
+            "id": "assinatura-firmada",
+            "titulo": "Assinatura Firmada",
+            "tipo": "passiva",
+            "nivel_minimo": 20,
+            "descricao": "A sua Assinatura Remanescente passa a valer duas vezes por cena (a Transformação, duas vezes por sessão), pagando o custo a cada uso. Memórias de Outra Campanha passa a dar quatro rerrolagens por sessão.",
+            "automatizada": false
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "amalgamo",
     "tipo": "raca",
     "titulo": "Amálgamo",
+    "povo": [
+      "É feito de pedaços de mais de uma criatura, então todo Amálgamo carrega mais de uma origem no mesmo corpo.",
+      "Nenhuma das partes manda sozinha, e conviver consigo mesmo é o primeiro aprendizado de um Amálgamo.",
+      "O corpo cobra a conta quando ele força os Fragmentos, e todo Amálgamo aprende cedo até onde pode ir."
+    ],
+    "linguas_nota": "Fala as línguas dos seres que se fundiram nele, às vezes misturadas na mesma frase, e o Universal.",
+    "linguas": [],
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -8795,7 +9279,7 @@
     },
     "descricao": "Um corpo só, montado com pedaços de mais de uma criatura. Fica com uma mistura das partes, sem herdar o pacote de raça de nenhuma delas: aguenta melhor o que ataca o corpo e o que ataca a cabeça, e conhece Fragmentos que consegue usar por algumas rodadas antes do corpo cobrar a conta.",
     "fisiologia": [
-      "É um ser vivo e pode ser tratado normalmente com Medicina.",
+      "É um ser vivo e pode ser tratado normalmente com Cura.",
       "Seu corpo reúne diferentes criaturas, corpos, almas ou essências, mas não acumula os pacotes raciais das partes que o formaram."
     ],
     "caracteristicas": [
@@ -8803,7 +9287,7 @@
         "id": "anatomia-plural",
         "titulo": "Anatomia Plural",
         "tipo": "rerrolagem",
-        "descricao": "Uma vez por cena, depois de falhar em Fortitude contra doença, veneno, fadiga ou alteração corporal, rerrole o teste e mantenha o novo resultado.",
+        "descricao": "Uma vez por cena, depois de falhar em Fortitude contra doença, veneno, Cansaço ou alteração corporal, rerrole o teste e mantenha o novo resultado.",
         "usos": 1,
         "recuperacao": "cena",
         "automatizada": false
@@ -8915,12 +9399,59 @@
       }
     ],
     "recursos_provisorios": false,
-    "legados_adicionais": 1
+    "legados_adicionais": 1,
+    "estagios": [
+      {
+        "id": "fusao-instavel",
+        "titulo": "Fusão Instável",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "fusao-assentada",
+        "titulo": "Fusão Assentada",
+        "nivel_minimo": 20,
+        "vida": 3,
+        "mana": 2,
+        "caracteristicas": [
+          {
+            "id": "convergencia-assentada",
+            "titulo": "Convergência Assentada",
+            "tipo": "acao",
+            "nivel_minimo": 20,
+            "descricao": "O Surto de Convergência passa a valer duas vezes por sessão e dura cinco rodadas, no lugar de três. O ponto de Cansaço do fim continua.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "custo_mana": 6,
+            "duracao_rodadas": 5,
+            "automatizada": false
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "bruxa",
     "tipo": "raca",
     "titulo": "Bruxa",
+    "povo": [
+      "Bruxa é uma natureza que chega e fica, então todo grupo de bruxas junta gente vinda de outros povos, ofícios e famílias.",
+      "Enxerga maldição, pacto e possessão de longe, e por isso sabe de coisas que os vizinhos prefeririam esconder.",
+      "Quando a Mana acaba, paga com Vida, e toda bruxa aprende a contar o próprio preço antes de qualquer feitiço."
+    ],
+    "linguas": [
+      {
+        "idioma": "idioma-das-bruxas",
+        "titulo": "Nemético"
+      }
+    ],
+    "dt_efeitos": {
+      "rotulo": "DT de Bruxa",
+      "pericia": "misticismo",
+      "descricao": "Os traços que mandam alguém testar usam o seu Misticismo: role na hora. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -9149,12 +9680,50 @@
         ]
       }
     ],
-    "recursos_provisorios": false
+    "recursos_provisorios": false,
+    "estagios": [
+      {
+        "id": "iniciada",
+        "titulo": "Iniciada",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "bruxa-antiga",
+        "titulo": "Bruxa Antiga",
+        "nivel_minimo": 20,
+        "vida": 2,
+        "mana": 3,
+        "caracteristicas": [
+          {
+            "id": "pacto-aprofundado",
+            "titulo": "Pacto Aprofundado",
+            "tipo": "passiva",
+            "nivel_minimo": 20,
+            "descricao": "Conheça mais duas Maldições do catálogo (com o Grimório, você passa a conhecer todas), e a Maldição Tecida passa a valer duas vezes por cena. Cada criatura continua sob uma Maldição Tecida sua por vez.",
+            "automatizada": false
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "onirico",
     "tipo": "raca",
     "titulo": "Onírico",
+    "povo": [
+      "Nasceu em Sonhar e precisa voltar para lá ao dormir, então o sono de todo Onírico é viagem e reencontro.",
+      "Entra no sonho dos outros, e contar o que sonhou é sinal de confiança grande entre eles.",
+      "A Parte do Sonhar que marcou cada um aparece no jeito dele, e Oníricos marcados pela mesma parte se entendem sem precisar explicar."
+    ],
+    "linguas": [],
+    "dt_efeitos": {
+      "rotulo": "DT de Onírico",
+      "pericia": "misticismo",
+      "descricao": "Os traços que mandam alguém testar usam o seu Misticismo: role na hora. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -9313,7 +9882,7 @@
             "titulo": "Noite Sem Fim",
             "tipo": "acao_completa",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 9 Mana para virar 12 m em volta de você no pesadelo de quem estiver ali. Por cinco rodadas, cada criatura hostil dentro da área faz Vontade contra o seu Misticismo no começo do próprio turno e, falhando, sofre 5d6 de dano psíquico e perde a ação daquele turno. Ninguém perde a ação em duas rodadas seguidas por causa disso.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 9 Mana para virar 12 m em volta de você no pesadelo de quem estiver ali. Por cinco rodadas, cada criatura hostil dentro da área faz Vontade contra o seu Misticismo no começo do próprio turno e, falhando, sofre 1d8 de dano mental, que tira Sanidade, e perde a ação daquele turno. Ninguém perde a ação em duas rodadas seguidas por causa disso.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 9,
@@ -9515,6 +10084,17 @@
     "id": "divino",
     "tipo": "raca",
     "titulo": "Divino",
+    "povo": [
+      "Carrega sangue de deus, então todo Divino vive entre a família mortal e a divina, devendo alguma coisa às duas.",
+      "Não envelhece e não adoece, e vê os mortais em volta envelhecerem e partirem.",
+      "O Deus cresce com quem acredita nele, e por isso fé, nome e fama são questão de sobrevivência para todo Divino."
+    ],
+    "linguas": [],
+    "dt_efeitos": {
+      "rotulo": "DT de Divino",
+      "pericia": "religiao",
+      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Religião na hora: o que pesa é a fé no seu nome. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+    },
     "categoria": "esquecida",
     "disponibilidade": "restrita",
     "patamar": "conquista",
@@ -9608,13 +10188,28 @@
         "titulo": "Semideus",
         "vida": 0,
         "mana": 0,
-        "descricao": "Você é filho de um deus com alguém de outra raça. Escolha o Domínio do seu pai ou da sua mãe divina: ele é a sua herança e entrega os seus poderes. A outra raça muda sua aparência, sua cultura e sua história, mas não dá um segundo pacote de bônus raciais.",
+        "descricao": "Você é filho de um deus com alguém de outra raça. Escolha o Domínio do seu pai ou da sua mãe divina: ele é a sua herança e entrega os seus poderes. A outra raça muda sua aparência, sua cultura e sua história, mas não dá um segundo pacote de bônus raciais. Do lado mortal vêm um Legado a mais e uma Bênção por sessão sem custo de Mana.",
+        "legados_adicionais": 1,
         "caracteristicas": [
           {
             "id": "poder-herdado",
             "titulo": "Poder Herdado",
             "tipo": "passiva",
             "descricao": "O Domínio Divino escolhido representa o deus de quem você descende. Todos os poderes daquele Domínio também são seus quando você alcança o nível pedido.",
+            "automatizada": false
+          },
+          {
+            "id": "heranca-mortal",
+            "titulo": "Herança Mortal",
+            "tipo": "aquisicao",
+            "descricao": "Ao adquirir esta raça, receba mais um Legado, vindo da família mortal que criou você. Ele se soma ao da Herança Divina.",
+            "automatizada": true
+          },
+          {
+            "id": "bencao-de-sangue",
+            "titulo": "Bênção de Sangue",
+            "tipo": "passiva",
+            "descricao": "Uma vez por sessão, use a Bênção Concedida sem gastar Mana. Quem cresceu entre mortais sabe a hora de dar uma mão sem cobrar.",
             "automatizada": false
           }
         ]
@@ -9663,7 +10258,7 @@
       }
     ],
     "regra_fe": {
-      "descricao": "Conte apenas pessoas que acreditam de verdade que você é um deus e mantêm essa fé. Medo, mentira, pagamento e controle mental não contam. O nível da fé só muda quando o mMestreconfirmar, no fim de uma sessão ou de um arco. Como esses bônus dependem da campanha, registre Vida e Mana como ajustes manuais na ficha somente depois dessa confirmação.",
+      "descricao": "Conte apenas pessoas que acreditam de verdade que você é um deus e mantêm essa fé. Medo, mentira, pagamento e controle mental não contam. O nível da fé só muda quando o Mestre confirmar, no fim de uma sessão ou de um arco. Como esses bônus dependem da campanha, registre Vida e Mana como ajustes manuais na ficha somente depois dessa confirmação.",
       "patamares": [
         {
           "id": "sem-fieis",
@@ -9809,7 +10404,7 @@
             "titulo": "Nome de Batalha",
             "tipo": "acao",
             "nivel_minimo": 48,
-            "descricao": "Duas vezes por sessão, gaste uma ação e 9 Mana para gritar o nome do seu deus. Por cinco rodadas, você e cada aliado a até 12 m recebem +2 de Defesa, vantagem em ataque e imunidade a medo. Cada criatura hostil que ouvir faz Vontade contra o seu Carisma e, falhando, ataca com desvantagem nesse tempo.",
+            "descricao": "Duas vezes por sessão, gaste uma ação e 9 Mana para gritar o nome do seu deus. Por cinco rodadas, você e cada aliado a até 12 m recebem +2 de Defesa, vantagem em ataque e imunidade a medo. Cada criatura hostil que ouvir faz Vontade contra a sua DT de Divino e, falhando, ataca com desvantagem nesse tempo.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 9,
@@ -9852,7 +10447,7 @@
             "titulo": "Acordo Divino",
             "tipo": "acao",
             "nivel_minimo": 48,
-            "descricao": "Duas vezes por sessão, gaste uma ação e 9 Mana para oferecer um acordo a uma criatura que consiga ouvir e entender você. Ela testa Vontade contra o seu Carisma. Se falhar, aceita e cumpre o acordo por uma cena, desde que você não mande ela morrer nem trair quem mais ama.",
+            "descricao": "Duas vezes por sessão, gaste uma ação e 9 Mana para oferecer um acordo a uma criatura que consiga ouvir e entender você. Ela testa Vontade contra a sua DT de Divino. Se falhar, aceita e cumpre o acordo por uma cena, desde que você não mande ela morrer nem trair quem mais ama.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 9,
@@ -9871,7 +10466,7 @@
             "titulo": "Raízes que Prendem",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Uma vez por cena, gaste uma ação e 3 Mana para fazer raízes prenderem uma criatura a até 12 m. Ela testa Reflexos contra o seu Carisma. Se falhar, fica Imobilizada até gastar uma ação e passar no mesmo teste.",
+            "descricao": "Uma vez por cena, gaste uma ação e 3 Mana para fazer raízes prenderem uma criatura a até 12 m. Ela testa Reflexos contra a sua DT de Divino. Se falhar, fica Imobilizada até gastar uma ação e passar no mesmo teste.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 3,
@@ -9883,7 +10478,7 @@
             "titulo": "Terra Viva",
             "tipo": "acao",
             "nivel_minimo": 18,
-            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para acordar a natureza numa área de 9 m ao seu redor por três rodadas. Aliados recuperam 2d6 de Vida quando o efeito começa. Para inimigos, a área vira terreno difícil e causa 2d6 de dano no começo de cada turno.",
+            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para acordar a natureza numa área de 9 m ao seu redor por três rodadas. Aliados recuperam 2d6 de Vida quando o efeito começa. Para inimigos, a área vira terreno difícil, e quem começa o turno nela testa Reflexos contra a sua DT de Divino e sofre 2d6 de dano de Terra, ou metade se passar.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 6,
@@ -9896,7 +10491,7 @@
             "titulo": "Mundo Selvagem",
             "tipo": "acao_completa",
             "nivel_minimo": 48,
-            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana para cobrir uma área de 18 m com árvores, pedras e raízes por cinco rodadas. Quando a área aparece, os aliados nela recuperam 2d6 de Vida. Enquanto ficarem ali, recebem +2 de Defesa. Inimigos ficam Imobilizados se falharem em Reflexos contra o seu Carisma no começo do próprio turno.",
+            "descricao": "Duas vezes por sessão, gaste uma ação completa e 10 Mana para cobrir uma área de 18 m com árvores, pedras e raízes por cinco rodadas. Quando a área aparece, os aliados nela recuperam 2d6 de Vida. Enquanto ficarem ali, recebem +2 de Defesa. Inimigos ficam Imobilizados se falharem em Reflexos contra a sua DT de Divino no começo do próprio turno.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 10,
@@ -9958,12 +10553,12 @@
             "titulo": "Raio Divino",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para lançar um raio numa criatura a até 12 m. Ela sofre 3d6 de dano elétrico, ou metade se passar em Reflexos contra o seu Carisma.",
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para lançar um raio numa criatura a até 12 m. Ela sofre 3d6 de dano de raio, ou metade se passar em Reflexos contra a sua DT de Divino.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
             "alcance_m": 12,
-            "dano": "3d6 elétrico",
+            "dano": "3d6 de raio",
             "automatizada": false
           },
           {
@@ -9971,12 +10566,12 @@
             "titulo": "Céu em Fúria",
             "tipo": "acao",
             "nivel_minimo": 18,
-            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para atingir uma área de 6 m a até 18 m. Inimigos na área sofrem 5d6 de dano elétrico e são empurrados 3 m. Quem passar em Reflexos contra o seu Carisma sofre metade do dano e não é empurrado.",
+            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para atingir uma área de 6 m a até 18 m. Inimigos na área sofrem 5d6 de dano de raio e são empurrados 3 m. Quem passar em Reflexos contra a sua DT de Divino sofre metade do dano e não é empurrado.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 6,
             "alcance_m": 18,
-            "dano": "5d6 elétrico",
+            "dano": "5d6 de raio",
             "automatizada": false
           },
           {
@@ -9984,13 +10579,13 @@
             "titulo": "Senhor da Tempestade",
             "tipo": "acao",
             "nivel_minimo": 48,
-            "descricao": "Duas vezes por sessão, gaste uma ação e 10 Mana para chamar uma tempestade de 18 m por cinco rodadas. Você pode voar usando seu Movimento. Uma vez em cada um dos seus turnos, sem gastar ação, lance um raio que causa 5d6 de dano elétrico em uma criatura na área; Reflexos contra seu Carisma reduz o dano pela metade.",
+            "descricao": "Duas vezes por sessão, gaste uma ação e 10 Mana para chamar uma tempestade de 18 m por cinco rodadas. Você pode voar usando seu Movimento. Uma vez em cada um dos seus turnos, sem gastar ação, lance um raio que causa 5d6 de dano de raio em uma criatura na área; Reflexos contra a sua DT de Divino reduz o dano pela metade.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 10,
             "alcance_m": 18,
             "duracao_rodadas": 5,
-            "dano": "5d6 elétrico",
+            "dano": "5d6 de raio",
             "automatizada": false
           }
         ]
@@ -10019,7 +10614,7 @@
             "titulo": "Sol nas Mãos",
             "tipo": "acao",
             "nivel_minimo": 18,
-            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para lançar um feixe de luz numa criatura a até 18 m. Ela sofre 6d6 de dano e fica Cega até o fim do próximo turno se falhar em Reflexos contra o seu Carisma. Se passar, sofre metade do dano e não fica Cega.",
+            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para lançar um feixe de luz numa criatura a até 18 m. Ela sofre 6d6 de dano e fica Cega até o fim do próximo turno se falhar em Reflexos contra a sua DT de Divino. Se passar, sofre metade do dano e não fica Cega.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 6,
@@ -10053,7 +10648,7 @@
             "titulo": "Toque Frio",
             "tipo": "acao",
             "nivel_minimo": 1,
-            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para atingir uma criatura a até 9 m. Ela sofre 3d6 de dano e não pode recuperar Vida até o começo do seu próximo turno. Fortitude contra seu Carisma reduz o dano pela metade.",
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para atingir uma criatura a até 9 m. Ela sofre 3d6 de dano do Fim e não pode recuperar Vida até o começo do seu próximo turno. Fortitude contra a sua DT de Divino reduz o dano pela metade.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -10066,7 +10661,7 @@
             "titulo": "A Hora Chegou",
             "tipo": "reacao",
             "nivel_minimo": 18,
-            "descricao": "Uma vez por cena, quando uma criatura a até 12 m ficar com metade da Vida ou menos, gaste sua reação e 6 Mana para causar 5d6 de dano nela. Fortitude contra seu Carisma reduz o dano pela metade.",
+            "descricao": "Uma vez por cena, quando uma criatura a até 12 m ficar com metade da Vida ou menos, gaste sua reação e 6 Mana para causar 5d6 de dano do Fim nela. Fortitude contra a sua DT de Divino reduz o dano pela metade.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 6,
@@ -10079,7 +10674,7 @@
             "titulo": "Parar o Coração",
             "tipo": "acao_completa",
             "nivel_minimo": 48,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana para escolher uma criatura a até 12 m que esteja com um quarto da Vida ou menos. Ela testa Fortitude contra seu Carisma. Se falhar, cai para 0 de Vida e entra em Morrendo. Se passar, sofre 8d6 de dano. A mesma criatura só pode ser alvo uma vez por sessão.",
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana para escolher uma criatura a até 12 m que esteja com um quarto da Vida ou menos. Ela testa Fortitude contra a sua DT de Divino. Se falhar, cai para 0 de Vida e entra em Morrendo. Se passar, sofre 8d6 de dano do Fim. A mesma criatura só pode ser alvo uma vez por sessão.",
             "usos": 1,
             "recuperacao": "sessao",
             "custo_mana": 10,
