@@ -75,7 +75,7 @@ export const Medico = ({ classe }: { classe: IClasse }) => {
             <Activity size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Medicina</h3>
             <p className="text-teal-200/60 leading-relaxed text-sm">
-              Ao curar uma criatura após avaliá-la com uma Ação de Movimento, some +1d6 à cura. Com a experiência, você passa a identificar Vida, Mana e condições visíveis, sua cura remove condições leves do alvo, e aprende Tratamentos Especializados que reagem ao problema real do paciente: trauma, veneno, medo, torpor, queda.
+              Com uma Ação Padrão e um teste de Cura, você cura 1d6 + Mod. Sabedoria, e avaliar antes soma +1d6. Com a experiência, você passa a identificar Vida, Mana e condições visíveis, sua cura remove condições leves do alvo, e aprende Tratamentos Especializados que reagem ao problema real do paciente: trauma, veneno, medo, torpor, queda.
             </p>
           </PremiumCard>
 
@@ -90,7 +90,7 @@ export const Medico = ({ classe }: { classe: IClasse }) => {
             <Syringe size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Socorro de Emergência</h3>
             <p className="text-teal-200/60 leading-relaxed text-sm">
-              Até três vezes por combate, use uma Reação e gaste 5 de Mana quando um aliado a 4 m cair a 0 de Vida: ele recupera 1d6 de Vida. Você pega o jeito rápido: a 2ª ativação no mesmo combate soma +1 dado, a 3ª soma +2 dados e ainda encerra uma condição leve. O alcance cresce, a cura final vira 1d12 + Mod.Sabedoria, e cada estágio soma um Protocolo de Emergência, entre oito possíveis.
+              Até três vezes por combate, use uma Reação e gaste 5 de Mana quando um aliado a 4 m cair a 0 de Vida: ele volta com 1 de Vida e recupera 1d6. Você pega o jeito rápido: a 2ª ativação no mesmo combate soma +1 dado, a 3ª soma +2 dados e ainda encerra uma condição leve. O alcance cresce, a cura final vira 1d12 + Mod.Sabedoria, e cada estágio soma um Protocolo de Emergência, entre oito possíveis.
             </p>
           </PremiumCard>
 
@@ -105,7 +105,7 @@ export const Medico = ({ classe }: { classe: IClasse }) => {
             <Users size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Mestre da Vida</h3>
             <p className="text-teal-200/60 leading-relaxed text-sm">
-              Uma vez por sessão, você e até cinco aliados a 12 m recuperam metade da Vida, da Mana e da Estamina máximas e encerram uma condição tratável. Quem estiver a 0 de Vida volta com 1 antes de receber a cura. Não ressuscita mortos.
+              Uma vez por sessão, por três rodadas, nenhum aliado a até 12 m de você morre: quem morreria fica com 1 de Vida, e quem está no chão se levanta no próprio turno. Ao ativar, cada um recupera 4d8 + Mod. Sabedoria de Vida e encerra uma condição tratável. Não ressuscita mortos.
             </p>
           </PremiumCard>
           <PremiumCard

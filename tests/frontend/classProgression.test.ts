@@ -1757,7 +1757,7 @@ test('todo catálogo grande tem rótulo próprio no botão de recolher da págin
   }
 });
 
-test('Especialização do Caçador publica raças de verdade do jogo como categoria de presa', () => {
+test('Especialização do Caçador publica raças e famílias de verdade do jogo como presa', () => {
   const cacador = obterClasse('cacador');
 
   const especializacao = cacador.habilidades?.find(item => item.id === 'especializacao');
@@ -1770,14 +1770,20 @@ test('Especialização do Caçador publica raças de verdade do jogo como catego
   assert.equal(vagasEscolhaHabilidade(especializacao, 10), 3);
   assert.equal(vagasEscolhaHabilidade(especializacao, 20), 3);
 
-  // Cruza contra o catálogo real de raças: toda raça jogável ou esquecida
-  // (menos a personalizada e a que o próprio jogo marca como indisponível)
-  // precisa aparecer como opção, e nenhuma opção pode inventar uma raça
-  // que o catálogo não tem.
+  // Cruza contra os catálogos reais: toda raça jogável ou esquecida (menos a
+  // personalizada e a que o próprio jogo marca como indisponível) e toda família
+  // do Bestiário (questionário final, pergunta 35) precisam aparecer como opção,
+  // e nenhuma opção pode inventar presa que os catálogos não têm.
   const racas = JSON.parse(
     readFileSync(new URL('../../data/ficha/racas.json', import.meta.url), 'utf8'),
   ) as Array<{ id: string; titulo: string; indisponivel?: boolean }>;
-  const esperadas = racas.filter(raca => raca.id !== 'raca-personalizada' && !raca.indisponivel).map(raca => raca.id);
+  const familias = (JSON.parse(
+    readFileSync(new URL('../../data/bestiario/familias-v1.json', import.meta.url), 'utf8'),
+  ) as { familias: Array<{ id: string }> }).familias;
+  const esperadas = [
+    ...racas.filter(raca => raca.id !== 'raca-personalizada' && !raca.indisponivel).map(raca => raca.id),
+    ...familias.map(familia => `familia-${familia.id}`),
+  ];
   assert.deepEqual([...(especializacao.opcoes || [])].map(item => item.id).sort(), [...esperadas].sort());
   assert.ok(especializacao.opcoes!.length >= 20, 'Especialização precisa cobrir a maioria das raças do jogo');
 

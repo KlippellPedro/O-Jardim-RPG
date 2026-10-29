@@ -240,6 +240,10 @@
         "nivel": 18,
         "recompensas": [
           {
+            "tipo": "habilidade",
+            "titulo": "Bandeira Fincada"
+          },
+          {
             "tipo": "evento",
             "titulo": "Até a Morte"
           }
@@ -304,7 +308,7 @@
           {
             "nivel": 10,
             "titulo": "Couro Grosso",
-            "descricao": "A penalidade de Peito Aberto cai para −1 e o dano adicional sobe para +6. Você também recebe Resistência 5 a fogo e a frio.",
+            "descricao": "A penalidade de Peito Aberto cai para −1 e o dano adicional sobe para +6. Você também recebe Resistência 5 a fogo, a gelo e a frio.",
             "acao": "Passivo"
           },
           {
@@ -374,7 +378,7 @@
             "alcance": "12 m",
             "duracao": "Até o próximo ataque dele",
             "descricao": "O aliado recebe +2 no próximo ataque ou teste que fizer.",
-            "escalonamento": "Nível 2: o bônus sobe para +3. Nível 3: vale também para o segundo ataque do turno dele. Nível 4: o bônus sobe para +5."
+            "escalonamento": "Nível 2: o bônus sobe para +3. Nível 3: dura até o fim do turno dele. Nível 4: o bônus sobe para +5."
           },
           {
             "id": "avanca",
@@ -470,9 +474,19 @@
         "duracao": "Até você trocar a peça"
       },
       {
+        "id": "bandeira-fincada",
+        "titulo": "Bandeira Fincada",
+        "descricao": "Uma vez por combate, quando um aliado do seu Batalhão cair a 0 de Vida, use a Reação: ele fica com 1 de Vida, e você dá de graça uma ordem do Batalhão, sem gastar ação.",
+        "niveis": [
+          18
+        ],
+        "acao": "Reação",
+        "usos": "Uma vez por combate"
+      },
+      {
         "id": "senhor-da-guerra",
         "titulo": "Senhor da Guerra",
-        "descricao": "Uma vez por sessão, use uma Ação Padrão para comandar por três rodadas. Você e até quatro aliados do Batalhão em alcance de 12 metros recebem +2 em Ataque e Defesa, imunidade a medo e +1 dado de dano no primeiro acerto de cada turno.",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para comandar por três rodadas. Você e até quatro aliados do Batalhão em alcance de 12 metros recebem +2 em Ataque e Defesa, imunidade a Amedrontado e +1 dado de dano no primeiro acerto de cada turno.",
         "niveis": [
           20
         ],
@@ -843,6 +857,10 @@
         "nivel": 18,
         "recompensas": [
           {
+            "tipo": "habilidade",
+            "titulo": "Piloto de Fuga"
+          },
+          {
             "tipo": "evento",
             "titulo": "Corrida Maluca"
           }
@@ -881,7 +899,7 @@
       {
         "id": "meu-xodo",
         "titulo": "Meu Xodó",
-        "descricao": "Escolha um veículo que possua ou use regularmente como seu Xodó; você só pode manter um por vez. Para trocar, passe um descanso longo ajustando o novo veículo. As modificações do Tuning continuam instaladas no anterior, salvo efeito da Caixa Preta. Os bônus abaixo valem somente quando você conduz o Xodó, inclusive nas manobras e na perseguição.",
+        "descricao": "Escolha um veículo ou uma montaria que possua ou use regularmente como seu Xodó; você só pode manter um por vez. Para trocar, passe um descanso longo ajustando o novo veículo. As modificações do Tuning continuam instaladas no anterior, salvo efeito da Caixa Preta. Os bônus abaixo valem somente quando você conduz o Xodó, inclusive nas manobras e na perseguição. Com uma montaria, use Cavalgar no lugar de Pilotagem em tudo o que o Xodó pede, o compartimento vira um alforje escondido na sela, e o que o texto diz do veículo vale para o animal.",
         "niveis": [
           1,
           5,
@@ -982,7 +1000,7 @@
             "alcance": "O veículo",
             "duracao": "Permanente",
             "descricao": "O deslocamento do veículo sobe em um quarto, arredondando para baixo.",
-            "escalonamento": "T2: sobe metade. T3: você usa Acelerar sem gastar a Ação Padrão, uma vez por combate. T4: o deslocamento dobra na primeira rodada de cada perseguição."
+            "escalonamento": "T2: sobe metade. T3: você usa Acelerar sem gastar a Ação Padrão, uma vez por combate. T4: +18 m de deslocamento na primeira rodada de cada perseguição."
           },
           {
             "id": "suspensao",
@@ -1028,7 +1046,7 @@
             "alcance": "O veículo",
             "duracao": "Permanente",
             "descricao": "A Vida máxima do veículo sobe em um quarto, arredondando para baixo.",
-            "escalonamento": "T2: sobe metade. T3: a avaria de Casco não derruba mais a cobertura dos ocupantes. T4: a Vida máxima dobra."
+            "escalonamento": "T2: sobe metade. T3: a avaria de Casco não derruba mais a cobertura dos ocupantes. T4: sobe três quartos."
           },
           {
             "id": "cabine",
@@ -1070,9 +1088,19 @@
         "usos": "Uma vez por sessão"
       },
       {
+        "id": "piloto-de-fuga",
+        "titulo": "Piloto de Fuga",
+        "descricao": "Uma vez por combate, quando o veículo ou a montaria que você conduz estiver na faixa de Contato, use a Reação para sair para a faixa Curta sem teste, levando quem estiver dentro ou montado.",
+        "niveis": [
+          18
+        ],
+        "acao": "Reação",
+        "usos": "Uma vez por combate"
+      },
+      {
         "id": "as-impossivel",
         "titulo": "Ás Impossível",
-        "descricao": "Uma vez por sessão, enquanto conduz um veículo ou montaria, ative esta habilidade sem gastar ação. Por três rodadas, o veículo recebe +4 em Defesa, Resistência 5 contra todo dano e ignora terreno difícil. Em cada um de seus turnos, você recebe uma Ação de Movimento adicional exclusiva para manobras veiculares. Na primeira vez que o veículo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
+        "descricao": "Uma vez por sessão, enquanto conduz um veículo ou montaria, ative esta habilidade sem gastar ação. Por três rodadas, o veículo recebe +4 em Defesa, reduz em 5 o dano de cada golpe que sofre e ignora terreno difícil. Em cada um de seus turnos, você recebe uma Ação de Movimento adicional exclusiva para manobras veiculares. Na primeira vez que o veículo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
         "niveis": [
           20
         ],
@@ -1107,8 +1135,8 @@
         "titulo": "Rede Neural",
         "custo_mana": 0,
         "acao": "Passivo",
-        "alcance": "20 m",
-        "descricao": "Você conduz o veículo pela cabeça a até 20 m dele. Ele executa manobras sem ninguém no assento, usando os seus testes de Pilotagem, e para na hora que a distância passa de 20 m."
+        "alcance": "18 m",
+        "descricao": "Você conduz o veículo pela cabeça a até 18 m dele. Ele executa manobras sem ninguém no assento, usando os seus testes de Pilotagem, e para na hora que a distância passa de 18 m."
       },
       {
         "id": "ia",
@@ -1477,7 +1505,7 @@
       {
         "id": "arma-ninja",
         "titulo": "Arma Ninja",
-        "descricao": "A cada estágio, marque mais uma arma como sua Arma Ninja e aplique mais uma melhoria da lista abaixo a qualquer arma já marcada. Até o nível 20 você marca até quatro armas e aplica até quatro melhorias, do jeito que quiser distribuir. Uma melhoria pode se repetir na mesma arma somente quando concede um bônus numérico; cada repetição soma esse mesmo valor. Melhorias sem bônus numérico e efeitos que declaram não acumular só funcionam uma vez por arma.",
+        "descricao": "A cada estágio, marque mais uma arma como sua Arma Ninja e aplique mais uma melhoria da lista abaixo a qualquer arma já marcada. Até o nível 20 você marca até quatro armas e aplica até quatro melhorias, do jeito que quiser distribuir. Uma melhoria pode se repetir na mesma arma somente quando concede um bônus numérico; cada repetição soma esse mesmo valor. Golpe Certeiro e Corte Fatal são a exceção: cada um vale uma vez por arma, e os dois não entram na mesma arma. Melhorias sem bônus numérico e efeitos que declaram não acumular só funcionam uma vez por arma.",
         "niveis": [
           3,
           8,
@@ -1506,7 +1534,7 @@
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Permanente, enquanto usar a arma marcada",
-            "descricao": "A margem de ameaça da arma marcada cai em 1 (20 vira 19-20; 19-20 vira 18-20)."
+            "descricao": "Só em arma x2: a margem de ameaça da arma marcada cai em 1 (20 vira 19-20; 19-20 vira 18-20). Em arma x3 ou x4, o crítico dela causa +1 dado. Vale uma vez por arma e não entra numa arma que já tem Corte Fatal."
           },
           {
             "id": "corte-fatal",
@@ -1514,7 +1542,7 @@
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Permanente, enquanto usar a arma marcada",
-            "descricao": "O multiplicador crítico da arma marcada sobe em 1 (x2 vira x3; x3 vira x4)."
+            "descricao": "Só em arma de margem 20: o multiplicador crítico da arma marcada sobe em 1 (x2 vira x3; x3 vira x4). Vale uma vez por arma e não entra numa arma que já tem Golpe Certeiro."
           },
           {
             "id": "retorno-da-sombra",
@@ -1673,8 +1701,8 @@
         "custo_estamina": 4,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
-        "dano": "+1 dado do Mod. Inteligência (+2 com Arma Ninja)",
-        "descricao": "O seu próximo ataque nesta rodada causa dano adicional igual a +1 dado do seu Mod. Inteligência. Se for feito com uma Arma Ninja, sobe para +2 dados."
+        "dano": "+ Mod. Inteligência (o dobro com Arma Ninja)",
+        "descricao": "O seu próximo ataque nesta rodada soma o seu Mod. Inteligência ao dano. Com uma Arma Ninja, soma o dobro."
       },
       {
         "id": "ataque-oculto",
@@ -1683,7 +1711,7 @@
         "custo_estamina": 3,
         "acao": "Ação Livre antes do ataque",
         "dano": "+1d8 (até +3d8 com o poder escolhido de novo)",
-        "descricao": "Ao atacar em alcance corpo a corpo ou curto um alvo que não percebeu você, cause +1d8 de dano. Este poder pode ser escolhido novamente para adicionar +1d8, até o máximo de 3 escolhas.",
+        "descricao": "Uma vez por rodada, ao atacar em alcance corpo a corpo ou curto um alvo que não percebeu você, cause +1d8 de dano. Este poder pode ser escolhido novamente para adicionar +1d8, até o máximo de 3 escolhas.",
         "repetivel": true,
         "limite": 3
       },
@@ -1728,7 +1756,7 @@
         "duracao": "Permanente, até alguém desmentir a cópia",
         "descricao": "Crie uma cópia perfeita de um documento escrito que você tenha visto. Testes de Enganação para passar essa cópia como original recebem +10.",
         "pre_requisitos": [
-          "Inteligência 5"
+          "Inteligência 14"
         ]
       },
       {
@@ -2055,7 +2083,7 @@
           {
             "nivel": 5,
             "titulo": "Fama Regional",
-            "descricao": "Sua Fama mínima sobe para 2 e o bônus em Atuação sobe para +2. Com um teste de Atuação você acalma ou anima uma multidão pequena, até umas cinquenta pessoas, sem precisar de palco montado.",
+            "descricao": "Sua Fama mínima sobe para 2 e o bônus em Atuação sobe para +2. Com um teste de Atuação (DT 15, ou 20 se ela estiver hostil) você acalma ou anima uma multidão pequena, até umas cinquenta pessoas, sem precisar de palco montado.",
             "acao": "Ação Completa para trabalhar a multidão"
           },
           {
@@ -2179,7 +2207,7 @@
             "alcance": "Você e um acompanhante",
             "duracao": "Uma cena",
             "descricao": "Roupa de gala sob medida, entregue onde você estiver. Com ela, você não é barrado por vestimenta inadequada num lugar que exija etiqueta e tem vantagem no primeiro teste social do evento; a roupa não substitui convite, credencial nem autorização de acesso.",
-            "escalonamento": "Nível 2: veste o grupo inteiro. Nível 3: a peça é blindada por dentro e conta como armadura leve sem parecer uma. Nível 4: a roupa vira assunto, e quem chega perto quer falar com você.",
+            "escalonamento": "Nível 2: veste o grupo inteiro. Nível 3: a peça é blindada por dentro e conta como uma armadura simples de +2 sem parecer uma. Nível 4: a roupa vira assunto, e quem chega perto quer falar com você.",
             "acao": "Entregue onde você estiver"
           },
           {
@@ -2228,7 +2256,7 @@
       {
         "id": "estrela-eterna",
         "titulo": "Estrela Eterna",
-        "descricao": "Uma vez por sessão, use uma Ação Completa para iniciar uma apresentação que dura três rodadas. Todos os aliados que possam ver ou ouvir você recebem 8 de Mana temporária e 8 de Estamina temporária, vantagem no primeiro teste de cada turno e imunidade a medo enquanto durar a apresentação. Uma vez durante o efeito, quando um desses aliados cair a 0 de Vida, ele permanece com 1 de Vida. A Mana temporária desaparece ao fim da cena e não se acumula.",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para iniciar uma apresentação que dura três rodadas. Todos os aliados que possam ver ou ouvir você recebem 8 de Mana temporária e 8 de Estamina temporária, vantagem no primeiro teste de cada turno e imunidade a Amedrontado enquanto durar a apresentação. Uma vez durante o efeito, quando um desses aliados cair a 0 de Vida, ele permanece com 1 de Vida. A Mana e a Estamina temporárias desaparecem ao fim da cena e não se acumulam.",
         "niveis": [
           20
         ],
@@ -2260,7 +2288,7 @@
         "acao": "Ação de Movimento",
         "duracao": "Uma rodada",
         "defesa": "Vontade contra a DT de Palco",
-        "descricao": "Por uma rodada, receba +2 em testes sociais. A primeira criatura que tentar atacar você testa Vontade contra a sua DT de Pop Star; em falha, ela gasta o ataque em outro alvo válido ao alcance dela."
+        "descricao": "Por uma rodada, receba +2 em testes sociais. A primeira criatura que tentar atacar você testa Vontade contra a sua DT de Palco; em falha, ela gasta o ataque em outro alvo válido ao alcance dela."
       },
       {
         "id": "minha-voz-vale-ouro",
@@ -2336,7 +2364,7 @@
         "alcance": "3 m ao redor",
         "duracao": "Até o próximo turno",
         "defesa": "Reflexos contra a DT de Palco",
-        "descricao": "Um estouro de luz em 3 m ao seu redor. Criaturas hostis na área testam Reflexos contra a sua DT de Pop Star; quem falhar fica sem reação até o próximo turno dela."
+        "descricao": "Um estouro de luz em 3 m ao seu redor. Criaturas hostis na área testam Reflexos contra a sua DT de Palco; quem falhar fica sem reação até o próximo turno dela."
       },
       {
         "id": "patrocinio-premium",
@@ -2348,6 +2376,24 @@
         "pre_requisitos": [
           "Fama 3"
         ]
+      },
+      {
+        "id": "refrao",
+        "titulo": "Refrão",
+        "custo_mana": 4,
+        "acao": "Ação Padrão",
+        "alcance": "9 m",
+        "duracao": "Até usar ou até o fim da cena",
+        "descricao": "Puxe o refrão que todo mundo sabe. Até três aliados a até 9 m que ouçam você ficam Inspirados."
+      },
+      {
+        "id": "bis",
+        "titulo": "Bis",
+        "custo_mana": 3,
+        "acao": "Reação",
+        "alcance": "9 m",
+        "usos": "Uma vez por aliado por cena",
+        "descricao": "Quando um aliado a até 9 m falhar num teste, peça bis: ele rola de novo e fica com o novo resultado. Cada aliado recebe um bis por cena."
       }
     ]
   },
@@ -2365,7 +2411,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Passou a vida inteira com uma espada na mão. Muda de postura no meio da luta e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.",
+    "descricao": "Passou a vida inteira com uma espada na mão. Acumula posturas ao longo da carreira e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.",
     "dt_efeitos": {
       "rotulo": "DT do Espadachim",
       "pericia": "luta",
@@ -2604,12 +2650,14 @@
         "estagios": [
           {
             "nivel": 1,
+            "titulo": "Vínculo",
             "descricao": "Vincule-se a uma espada; com ela, receba +1 em ataques.",
             "acao": "Ação Livre para vincular, depois passivo",
             "duracao": "Permanente, até vincular outra espada"
           },
           {
             "nivel": 5,
+            "titulo": "Corte Firme",
             "descricao": "Com a espada vinculada, cause +2 de dano. Uma vez por combate, use uma Reação para reduzir em seu nível o dano de um ataque que sofreria, até o mínimo 0.",
             "acao": "Reação para a redução de dano",
             "dano": "+2 de dano com a espada vinculada",
@@ -2617,6 +2665,7 @@
           },
           {
             "nivel": 10,
+            "titulo": "Abertura",
             "descricao": "Uma vez por rodada, após um crítico com a espada vinculada, faça um ataque adicional que causa metade do dano.",
             "acao": "Passivo",
             "dano": "Metade do dano no ataque adicional",
@@ -2624,12 +2673,14 @@
           },
           {
             "nivel": 15,
-            "descricao": "O dano adicional da espada vinculada sobe para +4. Ao derrubar uma criatura relevante, recupere 2 de Estamina.",
+            "titulo": "Fio Implacável",
+            "descricao": "O dano adicional da espada vinculada sobe para +4. Ao levar uma criatura relevante a 0 de Vida, recupere 2 de Estamina.",
             "dano": "+4 de dano com a espada vinculada",
             "usos": "A recuperação de Estamina vale uma vez por rodada"
           },
           {
             "nivel": 20,
+            "titulo": "Golpe Perfeito",
             "descricao": "Uma vez por sessão, antes de atacar, declare Golpe Perfeito: se acertar, os dados de dano causam o valor máximo; se errar, o uso é gasto.",
             "acao": "Ação Livre antes de atacar",
             "dano": "Valor máximo dos dados, se acertar",
@@ -2694,7 +2745,7 @@
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Este combate",
-            "descricao": "A margem de ameaça de ataques corpo a corpo contra você sobe em 1 (fica mais difícil te acertar de crítico)."
+            "descricao": "Ataques corpo a corpo contra você precisam de um número natural 1 maior para ser crítico; um 20 natural continua sendo crítico."
           },
           {
             "id": "passo-sutil",
@@ -2710,7 +2761,7 @@
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Este combate",
-            "descricao": "A margem de ameaça dos seus ataques com espada cai em 1."
+            "descricao": "A margem de ameaça dos seus ataques com espada x2 cai em 1. Com espada x3 ou x4, o crítico causa +1 dado."
           },
           {
             "id": "postura-de-ferro",
@@ -2838,10 +2889,10 @@
         "id": "corte-a-distancia-ii",
         "titulo": "Corte à Distância II",
         "custo_mana": 0,
-        "custo_estamina": 7,
-        "acao": "Ação Livre, junto com Corte à Distância",
+        "custo_estamina": 0,
+        "acao": "Passivo",
         "alcance": "18 m",
-        "descricao": "Aumente para 18 m o alcance de Corte à Distância.",
+        "descricao": "O Corte à Distância passa a alcançar 18 m.",
         "pre_requisitos": [
           "Corte à Distância"
         ]
@@ -3180,7 +3231,7 @@
           {
             "nivel": 10,
             "titulo": "Marcas de Guerra",
-            "descricao": "Cada acerto seu deixa uma Marca de Guerra no alvo, no máximo uma por turno em cada alvo. As marcas ficam no corpo dele até o fim do combate, e o que elas fazem se soma enquanto estiverem lá. Com 2 marcas, uma vez por rodada, acertar aquele alvo rende um ataque desarmado a mais contra ele. Com 3, ele fica com −2 de Defesa. Com 4, ele não usa reações. Com 5, o seu próximo golpe nele causa +5 de dano e apaga todas as marcas dele.",
+            "descricao": "Cada acerto seu deixa uma Marca de Guerra no alvo, no máximo uma por turno em cada alvo. As marcas ficam no corpo dele até o fim do combate, e o que elas fazem se soma enquanto estiverem lá. Com 2 marcas, uma vez por rodada, acertar aquele alvo rende um ataque desarmado a mais contra ele. Com 3, ele fica com −2 de Defesa. Com 4, ele não usa reações. Com 5, o seu próximo golpe nele causa +5 de dano e apaga todas as marcas dele. O ataque a mais que dura a luta inteira é de propósito: o punho bate menos que a arma do mesmo nível, e as marcas fecham essa conta.",
             "acao": "Passivo",
             "duracao": "Até o fim do combate",
             "usos": "Uma marca por turno, por alvo"
@@ -3188,7 +3239,7 @@
           {
             "nivel": 15,
             "titulo": "Fúria",
-            "descricao": "Uma vez por combate, ao sofrer dano, segure até 10 dele: reduza o dano nessa quantidade e guarde o número. O seu próximo golpe desarmado nesta cena solta o que você guardou como dano a mais.",
+            "descricao": "Uma vez por combate, ao sofrer dano, segure até o seu nível de Lutador dele: reduza o dano nessa quantidade e guarde o número. O seu próximo golpe desarmado nesta cena solta o que você guardou como dano a mais.",
             "acao": "Reação",
             "usos": "Uma vez por combate"
           },
@@ -3350,7 +3401,7 @@
           },
           {
             "id": "guarda-alta",
-            "titulo": "Guarda Alta",
+            "titulo": "Base Firme",
             "descricao": "Vantagem: enquanto você não se mover no turno, recebe +2 de Defesa e Resistência 3 a dano físico. Limitação: no turno em que você andar mais de 1,5 m, nada disso vale."
           },
           {
@@ -3433,7 +3484,7 @@
         "titulo": "Não Levanta",
         "custo_mana": 0,
         "custo_estamina": 6,
-        "acao": "Ação Livre ao derrubar o alvo",
+        "acao": "Ação Livre ao levar o alvo a 0 de Vida",
         "descricao": "Quando um golpe seu leva uma criatura a 0 de Vida, ela sofre −4 no primeiro teste de Morrendo. Isso não mata ninguém sozinho: só empurra a conta na direção que você quer."
       },
       {
@@ -3541,7 +3592,7 @@
         },
         {
           "tarefa": "Incendiária",
-          "dt": "1d6 de dano de fogo por duas rodadas."
+          "dt": "O alvo fica Queimando."
         },
         {
           "tarefa": "Fumaça",
@@ -3788,12 +3839,14 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Uma vez por turno, receba +2 no primeiro ataque à distância contra uma criatura que ainda não acertou neste combate.",
+            "titulo": "Primeiro Tiro",
+            "descricao": "Uma vez por turno, receba +2 no primeiro ataque à distância contra uma criatura que você ainda não acertou neste combate.",
             "acao": "Passivo",
             "usos": "Uma vez por turno"
           },
           {
             "nivel": 5,
+            "titulo": "Marca",
             "descricao": "Uma vez por turno, marque uma criatura que possa ver. Você só mantém uma marca deste estágio por vez. Até acertá-la ou a cena terminar, seu próximo ataque contra ela ignora cobertura parcial e causa +1 dado de dano.",
             "acao": "Ação Livre para marcar",
             "duracao": "Até acertar ou até o fim da cena",
@@ -3802,23 +3855,25 @@
           },
           {
             "nivel": 10,
+            "titulo": "Rajada",
             "descricao": "Uma vez por combate, faça até três ataques com −1 dado de dano cada; se todos atingirem o mesmo alvo, ele testa Fortitude contra a DT do Atirador ou perde reações por uma rodada.",
             "acao": "Ação Completa",
             "usos": "Uma vez por combate"
           },
           {
             "nivel": 15,
+            "titulo": "Munição Especial",
             "descricao": "No início de cada sessão, escolha duas doses de munição especial da lista que a classe publica, iguais ou diferentes. Cada dose substitui um disparo normal e se gasta ao ser usada; o que sobrar no fim da sessão não acumula para a próxima.",
             "acao": "Passivo",
             "usos": "Duas doses por sessão"
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 8 Estamina: um disparo ignora cobertura e Resistência, causa dano máximo dos dados e, se o alvo sobreviver, impõe −2 Defesa por uma rodada.",
-            "custo_estamina": 8,
-            "acao": "Ação Completa",
-            "usos": "Uma vez por sessão",
-            "dano": "Dano máximo dos dados"
+            "titulo": "Duas Marcas",
+            "descricao": "A marca do nível 5 passa a valer em dois alvos ao mesmo tempo, e o seu primeiro acerto em cada um deles por rodada causa +1 dado de dano.",
+            "acao": "Ação Livre para marcar",
+            "dano": "+1 dado",
+            "usos": "Uma vez por rodada em cada alvo"
           }
         ]
       },
@@ -3903,7 +3958,7 @@
             "acao": "Ação Livre",
             "alcance": "Pessoal",
             "duracao": "Este ataque",
-            "descricao": "A margem de ameaça deste disparo cai em 1."
+            "descricao": "A margem de ameaça deste disparo cai em 1, se a arma for x2. Com arma x3 ou x4, o crítico deste disparo causa +1 dado."
           }
         ]
       },
@@ -3958,7 +4013,7 @@
         "custo_estamina": 2,
         "acao": "Ação Livre",
         "duracao": "Até o fim do turno",
-        "descricao": "Até o fim do turno, se estiver em terreno elevado, receba +2 no ataque e +5 m de alcance."
+        "descricao": "Até o fim do turno, se estiver em terreno elevado, receba +2 no ataque e +6 m de alcance."
       },
       {
         "id": "mira-fria",
@@ -4026,7 +4081,7 @@
         "id": "mira-fantasma",
         "titulo": "Mira Fantasma",
         "custo_mana": 0,
-        "custo_estamina": 8,
+        "custo_estamina": 4,
         "acao": "Ação Padrão para concentrar-se",
         "duracao": "O próximo disparo",
         "descricao": "Concentre-se por uma rodada; o próximo disparo ignora cobertura total oferecida por uma única barreira mundana fina.",
@@ -4289,31 +4344,37 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Ao curar uma criatura após avaliá-la com uma Ação de Movimento, some +1d6 à cura.",
-            "acao": "Ação de Movimento para avaliar, depois a cura normal",
+            "titulo": "Tratamento",
+            "descricao": "Com uma Ação Padrão e um teste de Cura DT 15, trate uma criatura viva ao toque: ela recupera 1d6 + Mod. Sabedoria de Vida. Se você a avaliou antes, com uma Ação de Movimento, some +1d6. Cada criatura recebe esta cura uma vez por cena.",
+            "acao": "Ação Padrão para curar (Ação de Movimento para avaliar antes)",
             "duracao": "Esta cura",
-            "dano": "+1d6"
+            "usos": "Uma vez por criatura, por cena",
+            "dano": "1d6 + Mod. Sabedoria (+1d6 se avaliou)"
           },
           {
             "nivel": 5,
+            "titulo": "Diagnóstico",
             "descricao": "Você identifica Vida, Mana e condições visíveis; sua cura remove uma condição leve de cada alvo.",
             "acao": "Ação Livre para identificar",
             "usos": "Uma condição leve por alvo, por cena"
           },
           {
             "nivel": 10,
+            "titulo": "Especialista",
             "descricao": "O bônus de cura sobe para +2d6 + Mod.Sabedoria e você pode remover duas condições leves de cada alvo. Seu diagnóstico já reconhece o problema de cara: aprenda o primeiro Tratamento Especializado da lista.",
             "dano": "+2d6 + Mod.Sabedoria",
             "usos": "Duas condições leves por alvo, por cena"
           },
           {
             "nivel": 15,
+            "titulo": "Mão Experiente",
             "descricao": "Receba +4 em Cura; dados de cura que resultem 1 podem ser rerrolados uma vez, e a cura também restaura 1d4 Mana. Aprenda mais um Tratamento Especializado.",
             "dano": "+1d4 Mana",
             "usos": "Uma vez por alvo, por cena, para a Mana"
           },
           {
             "nivel": 20,
+            "titulo": "Último Recurso",
             "descricao": "Uma vez por sessão, gaste 10 Mana e uma Ação Completa para fazer um aliado a 6 m recuperar metade da Vida máxima e encerrar uma condição grave que possa ser tratada.",
             "custo_mana": 10,
             "acao": "Ação Completa",
@@ -4394,22 +4455,25 @@
         "estagios": [
           {
             "nivel": 3,
-            "descricao": "Até três vezes por combate, use uma Reação e gaste 5 Mana quando um aliado a até 4 m cair a 0 de Vida: ele recupera 1d6 de Vida. Você pega o jeito rápido: a 2ª ativação neste combate soma +1 dado a essa cura, e a 3ª soma +2 dados e também encerra uma condição leve do aliado.",
+            "titulo": "Primeiro Atendimento",
+            "descricao": "Até três vezes por combate, use uma Reação e gaste 5 Mana quando um aliado a até 4,5 m cair a 0 de Vida: ele ignora o Déficit de Vida, volta com 1 de Vida e então recupera 1d6. Você pega o jeito rápido: a 2ª ativação neste combate soma +1 dado a essa cura, e a 3ª soma +2 dados e também encerra uma condição leve do aliado.",
             "custo_mana": 5,
             "acao": "Reação",
-            "alcance": "4 m",
+            "alcance": "4,5 m",
             "dano": "1d6 (+1 dado na 2ª ativação do combate, +2 dados na 3ª)",
             "usos": "Até três vezes por combate"
           },
           {
             "nivel": 8,
-            "descricao": "O alcance sobe para 8 m.",
+            "titulo": "Corrida ao Ferido",
+            "descricao": "O alcance sobe para 9 m.",
             "acao": "Reação",
-            "alcance": "8 m",
+            "alcance": "9 m",
             "usos": "Até três vezes por combate"
           },
           {
             "nivel": 14,
+            "titulo": "Plantão Cheio",
             "descricao": "O alcance sobe para 12 m.",
             "acao": "Reação",
             "alcance": "12 m",
@@ -4417,6 +4481,7 @@
           },
           {
             "nivel": 20,
+            "titulo": "Mão de Ouro",
             "descricao": "A cura vira 1d12 + Mod.Sabedoria.",
             "acao": "Reação",
             "alcance": "12 m",
@@ -4478,7 +4543,7 @@
             "acao": "Passivo",
             "alcance": "O mesmo de Socorro de Emergência",
             "duracao": "Até o início do próximo turno do aliado",
-            "descricao": "O aliado socorrido recebe Resistência 5 a todo dano até o início do seu próximo turno."
+            "descricao": "Até o início do próximo turno dele, o aliado socorrido reduz em 5 o dano de cada golpe que sofrer."
           },
           {
             "id": "reflexo-de-emergencia",
@@ -4512,15 +4577,16 @@
       {
         "id": "mestre-da-vida",
         "titulo": "Mestre da Vida",
-        "descricao": "Uma vez por sessão, use uma Ação Completa e gaste 10 de Mana. Você e até cinco aliados em alcance de 12 metros recuperam metade da Vida, da Mana e da Estamina máximas e encerram uma condição que Cura possa tratar. Um alvo a 0 de Vida primeiro retorna com 1 de Vida e então recebe a recuperação. Esta habilidade não ressuscita mortos.",
+        "descricao": "Uma vez por sessão, use uma Ação Completa e gaste 10 de Mana. Por três rodadas, nenhum aliado a até 12 m de você morre: quem morreria fica com 1 de Vida, e quem estiver a 0 de Vida se levanta com 1 de Vida no começo do próprio turno. Ao ativar, cada aliado na área recupera 4d8 + Mod. Sabedoria de Vida e encerra uma condição que Cura possa tratar. Esta habilidade não ressuscita mortos.",
         "custo_mana": 10,
         "niveis": [
           20
         ],
         "acao": "Ação Completa",
         "alcance": "12 m",
+        "duracao": "Três rodadas",
         "usos": "Uma vez por sessão",
-        "dano": "Metade da Vida, da Mana e da Estamina máximas"
+        "dano": "4d8 + Mod. Sabedoria de Vida"
       }
     ],
     "eventos": [
@@ -4553,7 +4619,7 @@
         "custo_estamina": 3,
         "acao": "Ação Livre",
         "duracao": "Até o fim do turno",
-        "descricao": "Até o fim do turno, dobre seu Movimento ao se deslocar diretamente até um aliado caído."
+        "descricao": "Até o fim do turno, receba +9 m de Movimento ao se deslocar diretamente até um aliado caído."
       },
       {
         "id": "saude-perfeita",
@@ -4567,8 +4633,8 @@
         "titulo": "Nécessaire",
         "custo_mana": 0,
         "acao": "Passivo",
-        "usos": "Três remédios narrativos por descanso",
-        "descricao": "Após um descanso, prepare três remédios narrativos para condições comuns; eles expiram no descanso seguinte."
+        "usos": "Três remédios por descanso",
+        "descricao": "Após um descanso, prepare três remédios. Cada um, com uma Ação Padrão, encerra Envenenado, Sangramento ou um degrau de Cansaço. Eles expiram no descanso seguinte."
       },
       {
         "id": "isso-e-bom",
@@ -4584,7 +4650,7 @@
         "titulo": "Plantão",
         "custo_mana": 0,
         "acao": "Passivo",
-        "descricao": "Ignore a primeira penalidade de Cansaço moderado da sessão; ela não é removida."
+        "descricao": "Ignore a penalidade do degrau Fatigado na primeira vez em que chegar a ele na sessão."
       },
       {
         "id": "sou-medico",
@@ -4873,6 +4939,7 @@
         "estagios": [
           {
             "nivel": 1,
+            "titulo": "Juramento",
             "descricao": "Sele um juramento com um aliado. Enquanto estiverem a 6 m, ambos recebem +1 em testes para resistir a efeitos. Escolha também o primeiro Juramento de Guarda da lista.",
             "acao": "Ação Padrão para selar, depois passivo",
             "alcance": "6 m",
@@ -4880,25 +4947,29 @@
           },
           {
             "nivel": 5,
+            "titulo": "Escudo Dividido",
             "descricao": "Proteja até dois aliados; uma vez por rodada, quando um deles sofrer dano, use uma Reação para dividir o dano antes das Resistências: o aliado sofre metade e você sofre a outra metade, arredondando a sua parcela para cima. Depois, cada um aplica as próprias Resistências à sua parcela. Aprenda mais um Juramento de Guarda.",
             "acao": "Reação",
             "usos": "Uma vez por rodada"
           },
           {
             "nivel": 10,
+            "titulo": "Ordem dos Guardiões",
             "descricao": "Uma vez por sessão, convoque apoio de um Guardião regional para uma tarefa legítima; o Mestre define tempo e disponibilidade. Aprenda mais um Juramento de Guarda.",
             "acao": "Ação Livre para convocar",
             "usos": "Uma vez por sessão"
           },
           {
             "nivel": 15,
-            "descricao": "Uma vez por sessão, invoque um espírito aliado por uma cena para conceder +2 Defesa ou orientar com uma informação que ele conhecia. Aprenda mais um Juramento de Guarda.",
-            "acao": "Ação Padrão para invocar",
+            "titulo": "Vigília",
+            "descricao": "Uma vez por sessão, por uma cena, você e o protegido recebem +2 de Defesa enquanto estiverem a até 1,5 m um do outro. Aprenda mais um Juramento de Guarda.",
+            "acao": "Ação Livre",
             "duracao": "Uma cena",
             "usos": "Uma vez por sessão"
           },
           {
             "nivel": 20,
+            "titulo": "Último Laço",
             "descricao": "Escolha um aliado voluntário após descanso longo. Uma vez por sessão, quando um dos dois cair a 0 Vida, o outro pode gastar 8 Estamina para deixá-lo com 1 Vida; o vínculo então termina. Aprenda o último Juramento de Guarda.",
             "acao": "Reação",
             "duracao": "Até ser usado ou até o próximo descanso longo",
@@ -5029,35 +5100,39 @@
         "estagios": [
           {
             "nivel": 3,
-            "descricao": "Uma vez por combate, gaste 4 Estamina: inimigos a até 6 m testam Vontade contra a DT do Guardião. Quem falhar sofre −2 para atacar outros alvos por uma rodada.",
+            "titulo": "Provocação",
+            "descricao": "Uma vez por rodada, gaste 4 Estamina: inimigos a até 6 m testam Vontade contra a DT do Guardião. Quem falhar fica provocado e sofre −2 para atacar outros alvos. Ele repete o teste de Vontade no fim de cada turno dele, e um sucesso encerra.",
             "custo_estamina": 4,
             "acao": "Ação Livre",
             "alcance": "6 m",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por rodada"
           },
           {
             "nivel": 8,
-            "descricao": "O custo sobe para 5 Estamina. Você também reduz em 5 o primeiro dano físico que sofrer nesta rodada.",
+            "titulo": "Couraça Firme",
+            "descricao": "O custo sobe para 5 Estamina. Você também reduz em 5 o primeiro dano físico que sofrer na rodada em que provocar.",
             "custo_estamina": 5,
             "acao": "Ação Livre",
             "alcance": "6 m",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por rodada"
           },
           {
             "nivel": 14,
-            "descricao": "O custo sobe para 6 Estamina. A redução de dano vale para os dois primeiros danos físicos que sofrer nesta rodada.",
+            "titulo": "Muralha Viva",
+            "descricao": "O custo sobe para 6 Estamina. A redução de dano vale para os dois primeiros danos físicos que sofrer na rodada em que provocar.",
             "custo_estamina": 6,
             "acao": "Ação Livre",
             "alcance": "6 m",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por rodada"
           },
           {
             "nivel": 20,
-            "descricao": "O custo sobe para 7 Estamina.",
+            "titulo": "Ninguém Passa",
+            "descricao": "O custo sobe para 7 Estamina. Quem estiver provocado sofre −5 para atacar outros alvos, no lugar de −2, e se atacar outro alvo mesmo assim você pode usar a Reação para fazer um ataque contra ele.",
             "custo_estamina": 7,
             "acao": "Ação Livre",
             "alcance": "6 m",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por rodada"
           }
         ]
       },
@@ -5077,7 +5152,7 @@
       {
         "id": "coracao-unificado",
         "titulo": "Coração Unificado",
-        "descricao": "Uma vez por sessão, use uma Ação Padrão para proteger você e até cinco aliados em alcance de 12 metros por três rodadas. Os alvos recebem Resistência 10 contra todo dano. Uma vez por rodada, você pode usar uma Reação para receber no lugar de um desses aliados todo o dano de um ataque. Na primeira vez que cada alvo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para proteger você e até cinco aliados em alcance de 12 metros por três rodadas. Os alvos reduzem em 10 o dano de cada golpe que sofrerem. Uma vez por rodada, você pode usar uma Reação para receber no lugar de um desses aliados todo o dano de um ataque. Na primeira vez que cada alvo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
         "niveis": [
           20
         ],
@@ -5107,8 +5182,8 @@
         "custo_mana": 0,
         "custo_estamina": 3,
         "acao": "Reação",
-        "alcance": "8 m",
-        "descricao": "Use reação para se tornar o alvo de um ataque contra criatura a até 8 m."
+        "alcance": "9 m",
+        "descricao": "Use reação para se tornar o alvo de um ataque contra criatura a até 9 m."
       },
       {
         "id": "corridao",
@@ -5132,7 +5207,8 @@
         "acao": "Passivo",
         "descricao": "Sua Resistência física de Muralha sobe para 5.",
         "pre_requisitos": [
-          "Muralha de Cobre"
+          "Muralha de Cobre",
+          "Nível 6 de Guardião"
         ]
       },
       {
@@ -5142,7 +5218,8 @@
         "acao": "Passivo",
         "descricao": "Sua Resistência física de Muralha sobe para 8.",
         "pre_requisitos": [
-          "Muralha de Ouro"
+          "Muralha de Ouro",
+          "Nível 11 de Guardião"
         ]
       },
       {
@@ -5152,7 +5229,8 @@
         "acao": "Passivo",
         "descricao": "Sua Resistência física de Muralha sobe para 10.",
         "pre_requisitos": [
-          "Muralha de Ferro"
+          "Muralha de Ferro",
+          "Nível 16 de Guardião"
         ]
       },
       {
@@ -5449,37 +5527,42 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Escolha uma raça do jogo da lista abaixo. Receba vantagem para rastreá-la e +1 no primeiro ataque contra ela por cena.",
+            "titulo": "Rastro Certo",
+            "descricao": "Escolha uma raça do jogo ou uma família do Bestiário da lista abaixo. Receba vantagem para rastreá-la e +1 no primeiro ataque contra ela por cena.",
             "acao": "Passivo"
           },
           {
             "nivel": 5,
-            "descricao": "Escolha mais uma categoria; contra qualquer uma das escolhidas, cause +1d4 uma vez por turno.",
+            "titulo": "Golpe Conhecido",
+            "descricao": "Escolha mais uma presa; contra qualquer uma das escolhidas, cause +1d4 uma vez por turno.",
             "acao": "Passivo",
             "dano": "+1d4",
             "usos": "Uma vez por turno"
           },
           {
             "nivel": 10,
-            "descricao": "Escolha uma terceira categoria; seus bônus de rastreamento também revelam fraquezas conhecidas da presa, sem somar dano por cima do que já está escrito nesta habilidade.",
+            "titulo": "Leitura da Presa",
+            "descricao": "Escolha uma terceira presa; seus bônus de rastreamento também revelam fraquezas conhecidas da presa, sem somar dano por cima do que já está escrito nesta habilidade.",
             "acao": "Passivo"
           },
           {
             "nivel": 15,
-            "descricao": "Contra uma presa de categoria especializada, receba +2 em ataques e resistências; no início do combate, ela testa Vontade contra a DT do Caçador ou sofre −2 no primeiro teste que fizer.",
+            "titulo": "Terror da Presa",
+            "descricao": "Contra uma presa especializada, receba +2 em ataques e resistências; no início do combate, ela testa Vontade contra a DT do Caçador ou sofre −2 no primeiro teste que fizer.",
             "acao": "Passivo",
             "usos": "No início do combate"
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, trate por uma cena uma criatura que já derrotou como se fosse de categoria especializada e converta um acerto em crítico, uma única vez.",
+            "titulo": "Caça Lendária",
+            "descricao": "Uma vez por sessão, trate por uma cena uma criatura que já derrotou como se fosse presa especializada e converta um acerto em crítico, uma única vez.",
             "acao": "Ação Livre",
             "usos": "Uma vez por sessão"
           }
         ],
         "escolha_opcoes": {
-          "rotulo": "Raças Especializadas",
-          "descricao": "Uma raça no nível 1, outra no 5 e a terceira no 10. Cada raça escolhida é permanente e define o que conta como sua presa especializada para o resto da habilidade.",
+          "rotulo": "Presas Especializadas",
+          "descricao": "Uma raça do jogo ou uma família do Bestiário no nível 1, outra no 5 e a terceira no 10. Cada escolha é permanente e define o que conta como sua presa especializada para o resto da habilidade.",
           "niveis_vaga": [
             1,
             5,
@@ -5603,6 +5686,96 @@
             "id": "divino",
             "titulo": "Divino",
             "descricao": "Carrega sangue de um deus, grande ou esquecido; o que sobrou da divindade já basta para ser perigoso."
+          },
+          {
+            "id": "familia-golem",
+            "titulo": "Golem (Bestiário)",
+            "descricao": "Corpos de material inerte animados por um propósito."
+          },
+          {
+            "id": "familia-automato",
+            "titulo": "Autômato (Bestiário)",
+            "descricao": "Máquinas de guarda e de ronda que seguem uma rota e uma ordem, sem pressa e sem cansaço."
+          },
+          {
+            "id": "familia-morto-vivo",
+            "titulo": "Morto-vivo (Bestiário)",
+            "descricao": "Quem não conseguiu ir embora por inteiro."
+          },
+          {
+            "id": "familia-vazio",
+            "titulo": "Criaturas do Vazio (Bestiário)",
+            "descricao": "Aberrações que nascem onde o mundo esqueceu de existir."
+          },
+          {
+            "id": "familia-elemental",
+            "titulo": "Elemental (Bestiário)",
+            "descricao": "Um elemento mantido de pé por magia ou por costume."
+          },
+          {
+            "id": "familia-dragao",
+            "titulo": "Dragão (Bestiário)",
+            "descricao": "A família que cresce a vida inteira."
+          },
+          {
+            "id": "familia-espirito",
+            "titulo": "Espírito (Bestiário)",
+            "descricao": "Presenças ligadas a um lugar, uma promessa ou uma perda."
+          },
+          {
+            "id": "familia-cao-e-lobo",
+            "titulo": "Cão e lobo (Bestiário)",
+            "descricao": "Matilhas e guardas de quatro patas, do cão de portão ao lobo que lidera."
+          },
+          {
+            "id": "familia-aranha",
+            "titulo": "Aranha (Bestiário)",
+            "descricao": "Tecelãs pacientes."
+          },
+          {
+            "id": "familia-mar",
+            "titulo": "Criaturas do mar (Bestiário)",
+            "descricao": "Bichos de recife, casco e maré, de quem vive de sobras a quem os marinheiros dão nome próprio."
+          },
+          {
+            "id": "familia-fenix",
+            "titulo": "Fênix (Bestiário)",
+            "descricao": "A ave que volta do próprio fim."
+          },
+          {
+            "id": "familia-roedor",
+            "titulo": "Roedor (Bestiário)",
+            "descricao": "Ratos de esgoto e de porão, que crescem onde a comida sobra."
+          },
+          {
+            "id": "familia-salteador",
+            "titulo": "Salteador (Bestiário)",
+            "descricao": "Gente de estrada, do ladrão que assalta por fome ao senhor que cobra pedágio de um trecho inteiro."
+          },
+          {
+            "id": "familia-gigante",
+            "titulo": "Gigante (Bestiário)",
+            "descricao": "Do brutamontes de beira de estrada ao que dorme sob uma montanha."
+          },
+          {
+            "id": "familia-hidra",
+            "titulo": "Hidra (Bestiário)",
+            "descricao": "Cabeças que voltam."
+          },
+          {
+            "id": "familia-behemoth",
+            "titulo": "Behemoth (Bestiário)",
+            "descricao": "Animais grandes demais para terem inimigos naturais, e velhos o bastante para terem opinião sobre isso."
+          },
+          {
+            "id": "familia-planta",
+            "titulo": "Planta (Bestiário)",
+            "descricao": "Mato que aprendeu a escolher: o espinheiro prende, a flor atrai, o carvalho vigia e a mata inteira anda."
+          },
+          {
+            "id": "familia-feerico",
+            "titulo": "Feérico (Bestiário)",
+            "descricao": "Gente do outro lado do véu."
           }
         ]
       },
@@ -5638,7 +5811,7 @@
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Permanente",
-            "descricao": "Toda peça de caça que você entrega à Guilda rende +10% no valor narrativo do troféu.",
+            "descricao": "Toda peça de caça que você entrega à Guilda rende +10% sobre o preço de venda da Loja (metade do valor do item).",
             "escalonamento": "Nível 2: o bônus sobe para +20%. Nível 3: sobe para +30%. Nível 4: sobe para +50%, e a Guilda cobre o transporte do troféu até o comprador."
           },
           {
@@ -5763,7 +5936,7 @@
       {
         "id": "marca-do-cacador",
         "titulo": "Marca do Caçador",
-        "descricao": "Uma vez por combate, marque uma presa por três rodadas: receba +3 m de Movimento ao persegui-la, Resistência 3 contra o dano dela e +2 em testes físicos contra ela.",
+        "descricao": "Uma vez por combate, marque uma presa por três rodadas: receba +3 m de Movimento ao persegui-la, reduza em 3 o dano de cada golpe dela e +2 em testes físicos contra ela.",
         "niveis": [
           18
         ],
@@ -5774,7 +5947,7 @@
       {
         "id": "predador-perfeito",
         "titulo": "Predador Perfeito",
-        "descricao": "Uma vez por sessão, use uma Ação de Movimento para marcar uma criatura que possa perceber. Por três rodadas, seus ataques contra ela recebem +2 dados de dano, obtêm acerto crítico com resultado natural 18, 19 ou 20 e ignoram até 10 pontos de Resistência. Durante o efeito, você conhece a direção e a distância do alvo enquanto ele permanecer na mesma dimensão.",
+        "descricao": "Uma vez por sessão, use uma Ação de Movimento para marcar uma criatura que possa perceber. Por três rodadas, seus ataques contra ela recebem +2 dados de dano, obtêm acerto crítico com resultado natural 18, 19 ou 20 (em arma x3 ou x4, o crítico continua no 20 e causa +2 dados) e ignoram até 10 pontos de Resistência. Durante o efeito, você conhece a direção e a distância do alvo enquanto ele permanecer na mesma dimensão.",
         "niveis": [
           20
         ],
@@ -5861,8 +6034,8 @@
         "titulo": "Companheiro",
         "custo_mana": 0,
         "acao": "Passivo",
-        "dano": "1d6 no ataque do companheiro",
-        "descricao": "Obtenha um companheiro animal (lobo, falcão, javali, ou outro à sua escolha dentro do razoável para o cenário) de tamanho igual ou menor que o seu, não superior ao seu nível de Caçador. Ele tem Defesa igual à sua, Vida igual a 5 vezes o seu nível de Caçador e o Movimento típico do tipo escolhido. Ele compartilha sua iniciativa; gastar sua Ação Padrão para atacar faz seu companheiro atacar junto, com o seu bônus de ataque e 1d6 de dano do jeito dele (garra, mordida, bico)."
+        "dano": "1d6 no ataque do companheiro (até 3d8 no nível 20)",
+        "descricao": "Obtenha um companheiro animal (lobo, falcão, javali, ou outro à sua escolha dentro do razoável para o cenário) de tamanho igual ou menor que o seu, não superior ao seu nível de Caçador. Ele tem Defesa igual à sua, Vida igual a 5 vezes o seu nível de Caçador e o Movimento típico do tipo escolhido. Ele compartilha sua iniciativa; gastar sua Ação Padrão para atacar faz seu companheiro atacar junto, com o seu bônus de ataque e dano do jeito dele (garra, mordida, bico): 1d6, 1d8 no nível 5 de Caçador, 2d6 no 10, 2d8 no 15 e 3d8 no 20."
       },
       {
         "id": "camuflagem",
@@ -5870,7 +6043,7 @@
         "custo_mana": 6,
         "acao": "Ação Livre",
         "duracao": "Até o começo do próximo turno ou até atacar",
-        "descricao": "Fique invisível até o começo do próximo turno ou até atacar.",
+        "descricao": "Fique Invisível até o começo do próximo turno ou até atacar.",
         "pre_requisitos": [
           "Nível 10 de Caçador"
         ]
@@ -6216,14 +6389,13 @@
             "nivel": 15,
             "titulo": "Ordens Simples",
             "descricao": "Suas criações entendem uma ordem falada de uma frase. Uma vez por rodada, sem gastar ação sua, uma delas resolve uma interação com o cenário no seu lugar: puxar alavanca, abrir porta destrancada, apanhar objeto solto, apagar fogo pequeno, segurar corda. Ordem que vire ataque, cura ou teste de perícia continua exigindo a ação de quem comanda.",
-            "acao": "Livre, uma vez por rodada"
+            "acao": "Ação Livre, uma vez por rodada"
           },
           {
             "nivel": 20,
             "titulo": "Invenção Suprema",
-            "descricao": "Projete com o Mestre uma Invenção Suprema, sua e permanente na ficha. Ela cumpre uma função só, e essa função respeita os tetos da moldura: até 6d10 de dano em um alvo ou 4d10 em área de 6 m, alcance de até 24 m, duração de até três rodadas, e nenhuma habilidade final de classe alguma sai duplicada nela. Exemplos de conceito, ainda sujeitos a receber uma ficha dentro desses limites: um canhão de trilho cujo tiro atravessa cobertura, um andaime que se monta sozinho e carrega o grupo por 24 m ou um pulso que desliga máquina e construto por uma rodada.",
-            "acao": "Ação Completa",
-            "usos": "Uma vez por sessão"
+            "descricao": "Projete com o Mestre uma Invenção Suprema, sua e permanente na ficha. Ela cumpre uma função de utilidade só, sem dano, e funciona sempre que você quiser, sem limite por sessão: um andaime que se monta sozinho e leva o grupo por até 24 m, um olho mecânico que vigia uma sala e avisa você, uma ponte dobrável de até 12 m, uma fechadura que só abre para quem você escolher. Ela não copia nenhuma habilidade final, e o Engenho Divino segue como o seu momento de dano.",
+            "acao": "Conforme a invenção"
           }
         ],
         "escolha_opcoes": {
@@ -6307,7 +6479,7 @@
           {
             "id": "biomedica",
             "titulo": "Biomédica",
-            "descricao": "Próteses, instrumentos clínicos, suporte vital e interfaces entre corpo e máquina. Cobre construir e reparar o equipamento; diagnosticar ou tratar a criatura continua exigindo Medicina."
+            "descricao": "Próteses, instrumentos clínicos, suporte vital e interfaces entre corpo e máquina. Cobre construir e reparar o equipamento; diagnosticar ou tratar a criatura continua exigindo Cura."
           },
           {
             "id": "ambiental",
@@ -6386,8 +6558,9 @@
             "acao": "Ação de Movimento",
             "alcance": "Toque ou 6 m de arremesso",
             "duracao": "Armada até ser acionada ou a cena acabar",
+            "defesa": "Reflexos contra a DT do Engenheiro",
             "dano": "2d6 de impacto",
-            "descricao": "Fixe a carga no seu espaço, num espaço adjacente ou em qualquer superfície a até 6 m de arremesso. A primeira criatura que entrar no espaço ou encostar nela sofre 2d6 de dano de impacto e perde 3 m de Movimento até o fim do próximo turno dela. Quem enxerga a mina consegue evitar o espaço sem teste.",
+            "descricao": "Fixe a carga no seu espaço, num espaço adjacente ou em qualquer superfície a até 6 m de arremesso. A primeira criatura que entrar no espaço ou encostar nela testa Reflexos contra a sua DT de Engenheiro: em falha, sofre 2d6 de dano de impacto e perde 3 m de Movimento até o fim do próximo turno dela; em sucesso, sofre metade e não perde Movimento. Quem enxerga a mina consegue evitar o espaço sem teste.",
             "escalonamento": "Nível 2: o dano sobe para 3d6. Nível 4: o dano sobe para 4d6 e a perda de Movimento aumenta para 6 m."
           },
           {
@@ -6519,7 +6692,7 @@
             "alcance": "12 m",
             "duracao": "Três rodadas",
             "defesa": "Percepção contra a DT do Engenheiro",
-            "descricao": "Posicione a engenhoca a até 12 m. Por três rodadas ela projeta a imagem e o som de uma criatura ou objeto Médio. Quem interagir testa Percepção contra a sua DT de Engenheiro; em falha, acredita que a projeção é real até tocá-la ou vê-la atravessar algo.",
+            "descricao": "Posicione a engenhoca a até 12 m. Por três rodadas ela projeta a imagem e o som de uma criatura ou objeto de tamanho Normal. Quem interagir testa Percepção contra a sua DT de Engenheiro; em falha, acredita que a projeção é real até tocá-la ou vê-la atravessar algo.",
             "escalonamento": "Nível 3: o alcance sobe para 18 m e a duração para cinco rodadas. Nível 4: o alcance sobe para 24 m, e a engenhoca pode manter duas projeções Médias sincronizadas."
           },
           {
@@ -6588,7 +6761,7 @@
       {
         "id": "engenho-divino",
         "titulo": "Engenho Divino",
-        "descricao": "Uma vez por sessão, use uma Ação Completa para montar um engenho num espaço livre a até 6 metros. Ele fica parado onde foi montado, dura três rodadas, tem Defesa igual à sua e Vida igual a 10 vezes seu nível. Ao criá-lo, escolha um modo: Artilharia causa 4d12 de dano de Energia a um alvo em até 24 metros no fim de cada um de seus turnos; Bastião concede +4 de Defesa e Resistência 10 a aliados em até 6 metros; Reparação recupera 3d10 de Vida de até três itens, construtos ou veículos em até 6 metros no fim de cada um de seus turnos.",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para montar um engenho num espaço livre a até 6 metros. Ele fica parado onde foi montado, dura três rodadas, tem Defesa igual à sua e Vida igual a 10 vezes seu nível. Ao criá-lo, escolha um modo: Artilharia causa 4d12 de dano de raio a um alvo em até 24 metros no fim de cada um de seus turnos; Bastião concede +4 de Defesa a aliados em até 6 metros, e eles reduzem em 10 o dano de cada golpe; Reparação recupera 3d10 de Vida de até três itens, construtos ou veículos em até 6 metros no fim de cada um de seus turnos.",
         "niveis": [
           20
         ],
@@ -6628,7 +6801,7 @@
         "acao": "Ação Padrão",
         "alcance": "18 m",
         "duracao": "Três rodadas",
-        "descricao": "Crie um drone Miúdo que voa e obedece você por três rodadas, a até 18 m. Ele tem Defesa 12 e 5 de Vida, e por turno carrega um objeto de até 5 kg, aciona um mecanismo ao alcance, filma o que enxerga ou puxa a atenção de uma criatura que ainda não entrou em combate."
+        "descricao": "Crie um drone Minúsculo que voa e obedece você por três rodadas, a até 18 m. Ele tem Defesa 12 e 5 de Vida, e por turno carrega um objeto de até 5 kg, aciona um mecanismo ao alcance, filma o que enxerga ou puxa a atenção de uma criatura que ainda não entrou em combate."
       },
       {
         "id": "catalisador-de-fluxo",
@@ -7033,7 +7206,7 @@
           {
             "nivel": 20,
             "titulo": "Dose da Pedra",
-            "descricao": "Uma vez por sessão, prepare uma dose da Pedra Filosofal. Ela restaura metade da Vida, da Mana e da Estamina de um alvo ao toque, ou transmuta um objeto mundano de até 1 m³ por uma cena. Esta dose não ocupa as vagas das outras.",
+            "descricao": "Uma vez por sessão, prepare uma dose da Pedra Filosofal. Quem a bebe encerra uma aflição inteira, em qualquer estágio, ou uma condição de longo prazo que Cura possa tratar. Esta dose não ocupa as vagas das outras.",
             "acao": "Ação Padrão",
             "alcance": "Toque",
             "usos": "Uma vez por sessão"
@@ -7076,7 +7249,7 @@
             "defesa": "Reflexos contra a DT do Alquimista",
             "dano": "2d8 de fogo",
             "descricao": "Arremesse o frasco num ponto a até 12 m. Criaturas em 3 m sofrem 2d8 de dano de fogo e testam Reflexos contra a sua DT de Alquimista para sofrer metade. O fogo pega em pano, óleo e mato seco. Você já conhece esta fórmula desde o nível 1.",
-            "escalonamento": "Nível 3: a explosão sobe para 4,5 m. Nível 5: quem falhar em Reflexos continua queimando e sofre mais 1d6 de fogo no fim do próximo turno dele."
+            "escalonamento": "Nível 3: a explosão sobe para 4,5 m. Nível 5: quem falhar em Reflexos fica Queimando."
           },
           {
             "id": "antidoto",
@@ -7154,8 +7327,8 @@
             "alcance": "12 m de arremesso",
             "duracao": "Instantânea",
             "defesa": "Fortitude contra a DT do Alquimista",
-            "dano": "2d6 de frio",
-            "descricao": "Estoura em 3 m e causa 2d6 de dano de frio. Quem falhar em Fortitude contra a sua DT de Alquimista perde 3 m de Movimento até o fim do próximo turno. Congela um palmo de água parada e trava um mecanismo simples exposto.",
+            "dano": "2d6 de gelo",
+            "descricao": "Estoura em 3 m e causa 2d6 de dano de gelo. Quem falhar em Fortitude contra a sua DT de Alquimista perde 3 m de Movimento até o fim do próximo turno. Congela um palmo de água parada e trava um mecanismo simples exposto.",
             "escalonamento": "Nível 3: a explosão sobe para 4,5 m. Nível 5: quem falhar no teste fica Imobilizado até o fim do próximo turno dele."
           },
           {
@@ -7221,7 +7394,7 @@
             "alcance": "Toque",
             "duracao": "Uma cena",
             "descricao": "Ao beber, escolha calor extremo, frio extremo, grande altitude ou ambiente tóxico. Por uma cena, a criatura ignora penalidades ambientais comuns daquela escolha, mas não ignora dano, aflições nem falta total de ar.",
-            "escalonamento": "Nível 3: a criatura também recebe Resistência 5 contra fogo, frio ou veneno quando isso corresponder ao ambiente escolhido. Nível 5: escolha duas adaptações e aplique as duas."
+            "escalonamento": "Nível 3: a criatura também recebe Resistência 5 contra calor, frio ou veneno quando isso corresponder ao ambiente escolhido. Nível 5: escolha duas adaptações e aplique as duas."
           },
           {
             "id": "tonico-de-celeridade",
@@ -7295,7 +7468,7 @@
       {
         "id": "pedra-filosofal",
         "titulo": "Pedra Filosofal",
-        "descricao": "Uma vez por sessão, use uma Ação Completa para produzir um dos efeitos: Panaceia faz até cinco criaturas em alcance de 12 metros recuperarem metade da Vida, da Mana e da Estamina máximas e encerra uma condição de cada uma; Reconstrução devolve à vida uma criatura que morreu desde o fim de seu turno anterior, com metade da Vida máxima, 0 de Mana, 0 de Estamina e 2 de Cansaço; Transmutação transforma até 3 metros cúbicos de matéria mundana em outra matéria mundana até o fim da sessão, sem criar dinheiro, seres vivos, relíquias ou materiais únicos.",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para produzir um dos efeitos: Panaceia faz até cinco criaturas em alcance de 12 metros encerrarem todas as condições que estiverem sofrendo, menos as de longo prazo, e ficarem imunes a veneno, doença e Enjoado até o fim da cena; Reconstrução devolve à vida uma criatura que morreu desde o fim de seu turno anterior, com metade da Vida máxima, 0 de Mana e 0 de Estamina, e ela paga o preço de Voltar da morte, em Ferimentos. A transmutação de matéria fica com a Transmutação Mestra, do nível 18.",
         "niveis": [
           20
         ],
@@ -7409,7 +7582,7 @@
         "acao": "Ação Padrão",
         "alcance": "12 m de você",
         "duracao": "Até o descanso seguinte",
-        "descricao": "Crie um ajudante Miúdo e não combatente que fica com você até o descanso seguinte. Ele tem Defesa 12, 5 de Vida e Movimento 9 m, manipula objetos e concede +2 em um teste de Ofício por cena. Ele não ataca e não carrega mais de 5 kg.",
+        "descricao": "Crie um ajudante Minúsculo e não combatente que fica com você até o descanso seguinte. Ele tem Defesa 12, 5 de Vida e Movimento 9 m, manipula objetos e concede +2 em um teste de Ofício por cena. Ele não ataca e não carrega mais de 5 kg.",
         "pre_requisitos": [
           "Nível 8 de Alquimista"
         ]
@@ -7728,13 +7901,15 @@
             "nivel": 10,
             "titulo": "Todo Mundo Deve Um Favor",
             "descricao": "Uma vez por sessão, localize um item de raridade Comum ou Incomum à venda na região em até uma hora de perguntas. Você descobre onde está e por quanto sai; pagar continua sendo com você.",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por sessão",
+            "acao": "Fora de combate"
           },
           {
             "nivel": 15,
             "titulo": "A Rede Trabalha por Você",
             "descricao": "Uma vez por sessão, um contato seu fornece ao grupo transporte, hospedagem ou informação comum, sem cobrar na hora. O favor entra na conta: o Mestre pode cobrar em serviço mais adiante.",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por sessão",
+            "acao": "Fora de combate"
           },
           {
             "nivel": 20,
@@ -7805,7 +7980,7 @@
         "usos": "Um item consignado por vaga, por descanso longo",
         "escalonamento": {
           "rotulo": "Nível de Estoque",
-          "descricao": "O teto de preço do consignado sobe com a classe, seguindo a escada de raridade da economia: nível 1 vai até 60 Lunaris (Comum), nível 2 até 240 (Incomum), nível 3 até 960 (Raro) e nível 4 até 2.000 (Épico de entrada). O teto vale por item, e o consignado continua sendo consumível ou ferramenta, nunca arma ou armadura de guerra.",
+          "descricao": "O teto de preço do consignado sobe com a classe, seguindo a escada de raridade da economia: nível 1 vai até 60 Lunaris (Comum), nível 2 até 240 (Incomum), nível 3 até 960 (Raro) e nível 4 até 2.000 (Épico de entrada, um teto de propósito abaixo do degrau seguinte da escada, 3.840). O teto vale por item, e o consignado continua sendo consumível ou ferramenta, nunca arma ou armadura de guerra.",
           "marcos": [
             {
               "nivel": 1,
@@ -8046,6 +8221,23 @@
         "pre_requisitos": [
           "Nível 10 de Comerciante"
         ]
+      },
+      {
+        "id": "saque-e-uso",
+        "titulo": "Saque e Uso",
+        "custo_mana": 3,
+        "acao": "Ação de Movimento",
+        "usos": "Uma vez por rodada",
+        "descricao": "Uma vez por rodada, use um consumível que esteja com você (poção, explosivo, veneno, munição especial) com uma Ação de Movimento, no lugar da Ação Padrão."
+      },
+      {
+        "id": "demonstracao",
+        "titulo": "Demonstração",
+        "custo_mana": 3,
+        "acao": "Reação",
+        "alcance": "9 m",
+        "dano": "+1 dado",
+        "descricao": "Quando um aliado a até 9 m usar um consumível que você vendeu, deu ou consignou a ele, o efeito soma +1 dado ao dano ou à cura que ele rolar."
       }
     ]
   },
@@ -8320,11 +8512,13 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Receba +2 em testes físicos, vantagem em testes contra Cansaço e contra quedas, e +2 em Diplomacia ou Intimidação diante de quem reconhece seu título.",
+            "titulo": "Corpo de Campeão",
+            "descricao": "Receba +2 em testes de perícia de Força, Destreza e Constituição (ataques não contam), vantagem em testes contra Cansaço e contra quedas, e +2 em Diplomacia ou Intimidação diante de quem reconhece seu título.",
             "acao": "Passivo"
           },
           {
             "nivel": 5,
+            "titulo": "Aprende Apanhando",
             "descricao": "Uma vez por rodada, ao sofrer um tipo de dano, receba Resistência 5 contra o próximo dano do mesmo tipo até o seu próximo turno.",
             "acao": "Passivo",
             "duracao": "Até o seu próximo turno",
@@ -8332,19 +8526,22 @@
           },
           {
             "nivel": 10,
+            "titulo": "No Chão Não",
             "descricao": "Uma vez por combate, quando você deixar um inimigo Caído, faça imediatamente um ataque adicional contra ele. Esse ataque adicional não pode ativar este efeito de novo.",
             "acao": "Passivo",
             "usos": "Uma vez por combate"
           },
           {
             "nivel": 15,
-            "descricao": "Por três rodadas, uma vez por sessão, receba +2 de Defesa, +1 dado de dano físico e imunidade a paralisia. O dado extra é fixo: não se soma a outro bônus de dado da mesma fonte.",
+            "titulo": "Melhor Forma",
+            "descricao": "Por três rodadas, uma vez por sessão, receba +2 de Defesa, +1 dado de dano físico e imunidade a Paralisado. O dado extra é fixo: não se soma a outro bônus de dado da mesma fonte.",
             "acao": "Ação Livre",
             "duracao": "Três rodadas",
             "usos": "Uma vez por sessão"
           },
           {
             "nivel": 20,
+            "titulo": "Último Round",
             "descricao": "Uma vez por sessão, ao cair a 0 de Vida, permaneça com 1 de Vida e cause 4d12 de dano verdadeiro a inimigos em 6 m; depois, receba 2 Cansaços.",
             "acao": "Passivo",
             "alcance": "6 m",
@@ -8373,17 +8570,59 @@
           {
             "id": "forca-reforcada",
             "titulo": "Força",
-            "descricao": "+1 na Força, até o teto de +2 no mesmo atributo."
+            "descricao": "+1 na Força, até o teto de +2 no mesmo atributo.",
+            "efeitos_por_nivel": [
+              {
+                "nivel": 1,
+                "efeitos": [
+                  {
+                    "id": "forca-reforcada",
+                    "categoria": "atributo",
+                    "alvo": "forca",
+                    "modo": "bonus",
+                    "valor": 1
+                  }
+                ]
+              }
+            ]
           },
           {
             "id": "destreza-reforcada",
             "titulo": "Destreza",
-            "descricao": "+1 na Destreza, até o teto de +2 no mesmo atributo."
+            "descricao": "+1 na Destreza, até o teto de +2 no mesmo atributo.",
+            "efeitos_por_nivel": [
+              {
+                "nivel": 1,
+                "efeitos": [
+                  {
+                    "id": "destreza-reforcada",
+                    "categoria": "atributo",
+                    "alvo": "destreza",
+                    "modo": "bonus",
+                    "valor": 1
+                  }
+                ]
+              }
+            ]
           },
           {
             "id": "constituicao-reforcada",
             "titulo": "Constituição",
-            "descricao": "+1 na Constituição, até o teto de +2 no mesmo atributo."
+            "descricao": "+1 na Constituição, até o teto de +2 no mesmo atributo.",
+            "efeitos_por_nivel": [
+              {
+                "nivel": 1,
+                "efeitos": [
+                  {
+                    "id": "constituicao-reforcada",
+                    "categoria": "atributo",
+                    "alvo": "constituicao",
+                    "modo": "bonus",
+                    "valor": 1
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -8402,7 +8641,7 @@
       {
         "id": "pilar-da-dimensao",
         "titulo": "Pilar da Dimensão",
-        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você recebe +4 em Ataque e Defesa, Resistência 10 contra todo dano e +2 dados de dano físico. Você não pode ser derrubado nem movido contra a vontade. Na primeira vez que chegaria a 0 de Vida durante o efeito, permanece com 1 de Vida.",
+        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você recebe +4 em Ataque e Defesa, reduz em 10 o dano de cada golpe que sofre e causa +2 dados de dano físico. Você não pode ser derrubado nem movido contra a vontade. Na primeira vez que chegaria a 0 de Vida durante o efeito, permanece com 1 de Vida.",
         "niveis": [
           20
         ],
@@ -8434,7 +8673,7 @@
         "alcance": "3 m",
         "dano": "2d10 de impacto",
         "defesa": "Fortitude",
-        "descricao": "Cause 2d10 de dano de impacto a inimigos em 3 m; quem falhar em Fortitude contra a DT do Campeão Dimensional cai."
+        "descricao": "Inimigos a até 3 m testam Fortitude contra a DT do Campeão Dimensional: em falha, sofrem 2d10 de dano de impacto e ficam Caídos; em sucesso, sofrem metade e ficam de pé."
       },
       {
         "id": "soco",
@@ -8443,8 +8682,8 @@
         "custo_estamina": 5,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
-        "dano": "+2d12",
-        "descricao": "Seu próximo ataque ignora 8 de Resistência e causa +2d12."
+        "dano": "+1d12 (+2d12 a partir do nível 8)",
+        "descricao": "Seu próximo ataque ignora 8 de Resistência e causa +1d12. A partir do nível 8, causa +2d12."
       },
       {
         "id": "avanco",
@@ -8455,7 +8694,7 @@
         "alcance": "12 m em linha",
         "dano": "1d10",
         "defesa": "Reflexos",
-        "descricao": "Avance até 12 m em linha; criaturas no caminho testam Reflexos contra a DT do Campeão Dimensional ou sofrem 1d10 e são empurradas 1 m."
+        "descricao": "Avance até 12 m em linha; criaturas no caminho testam Reflexos contra a DT do Campeão Dimensional ou sofrem 1d10 e são empurradas 1,5 m."
       },
       {
         "id": "rasgar",
@@ -8482,8 +8721,8 @@
         "custo_estamina": 6,
         "acao": "Ação Livre no momento do ataque",
         "duracao": "Este ataque",
-        "dano": "+3d10",
-        "descricao": "Cause +3d10 em um ataque e empurre o alvo até 6 m."
+        "dano": "+1d10 (+2d10 no nível 8, +3d10 no 14)",
+        "descricao": "Cause +1d10 em um ataque e empurre o alvo até 6 m. O dano a mais sobe para +2d10 no nível 8 e para +3d10 no nível 14."
       },
       {
         "id": "marcha",
@@ -8820,19 +9059,17 @@
           {
             "nivel": 15,
             "titulo": "Corpo que o Mar Não Leva",
-            "descricao": "Você recebe Resistência 10 a dano físico, não pode se afogar, fica imune a medo comum e pode andar sobre líquidos como se fossem chão firme.",
+            "descricao": "Você recebe Resistência 10 a dano físico, não pode se afogar, fica imune a Amedrontado, mesmo por efeito mágico, e pode andar sobre líquidos como se fossem chão firme.",
             "acao": "Passivo"
           },
           {
             "nivel": 20,
-            "titulo": "Sete Mares em Fúria",
-            "descricao": "Uma vez por sessão, use uma Ação Padrão para criar uma tempestade de 12 m de raio ao seu redor. Ela dura três rodadas. Quando um inimigo entra na tempestade ou começa o turno nela, sofre 3d12 de dano de Água e testa Fortitude contra a DT da Maldição. Se falhar, também fica Caído.",
-            "acao": "Ação Padrão",
+            "titulo": "Âncora Maldita",
+            "descricao": "Uma vez por cena, quando um inimigo a até 12 m se afastar de você, use a Reação para lançar a corrente da maldição: ele é puxado até um espaço ao seu lado e testa Fortitude contra a DT da Maldição. Em falha, fica Imobilizado até o fim do próximo turno dele; em sucesso, só é puxado.",
+            "acao": "Reação",
             "alcance": "12 m",
-            "duracao": "Três rodadas",
             "defesa": "Fortitude contra a DT da Maldição",
-            "dano": "3d12 de Água",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por cena"
           }
         ]
       },
@@ -8894,8 +9131,8 @@
             "id": "sangue-gelado",
             "titulo": "Sangue Gelado",
             "acao": "Passivo",
-            "descricao": "Você recebe Resistência 10 a dano de frio.",
-            "escalonamento": "Nível 2: a Resistência sobe para 15. Nível 3: frio e gelo não reduzem o seu Movimento, e você não fica Cansado por causa de ambientes gelados. Nível 4: você fica imune a dano de frio."
+            "descricao": "Você recebe Resistência 10 a dano de frio e de gelo.",
+            "escalonamento": "Nível 2: a Resistência sobe para 15. Nível 3: frio e gelo não reduzem o seu Movimento, e você não fica Cansado por causa de ambientes gelados. Nível 4: você fica imune a dano de frio e de gelo."
           },
           {
             "id": "faro-de-tempestade",
@@ -9075,7 +9312,7 @@
       {
         "id": "senhor-das-profundezas",
         "titulo": "Senhor das Profundezas",
-        "descricao": "Uma vez por sessão, use uma Ação Padrão para criar uma tempestade de 12 m de raio ao seu redor. Ela dura três rodadas. No começo do próprio turno, cada inimigo na área sofre 4d12 de dano de Água e testa Fortitude contra a DT da Maldição. Quem falhar fica Caído. Seus aliados não são afetados. Você recupera Vida igual à metade do dano causado pela tempestade, até o máximo de 20 de Vida por rodada.",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para criar uma tempestade de 12 m de raio ao seu redor. Ela dura três rodadas. No começo do próprio turno, cada inimigo na área testa Fortitude contra a DT da Maldição: em falha, sofre 4d12 de dano de Água e fica Caído; em sucesso, sofre metade e fica de pé. Seus aliados não são afetados. Você recupera Vida igual à metade do dano causado pela tempestade, até o máximo de 20 de Vida por rodada.",
         "niveis": [
           20
         ],
@@ -9139,8 +9376,8 @@
         "alcance": "6 m de área",
         "duracao": "Instantânea",
         "defesa": "Reflexos contra a DT da Maldição",
-        "dano": "2d10",
-        "descricao": "Tentáculos surgem do chão em uma área de 6 m e causam 2d10 de dano. Cada criatura atingida testa Reflexos contra a DT da Maldição. Quem falhar também fica Caído."
+        "dano": "2d10 de Água",
+        "descricao": "Tentáculos surgem do chão em uma área de 6 m. Cada criatura na área testa Reflexos contra a DT da Maldição: em falha, sofre 2d10 de dano de Água e fica Caída; em sucesso, sofre metade e fica de pé."
       },
       {
         "id": "navio-fantasma",
@@ -9159,8 +9396,8 @@
         "alcance": "Linha de 12 m",
         "duracao": "Instantânea",
         "defesa": "Fortitude contra a DT da Maldição",
-        "dano": "2d12",
-        "descricao": "Uma onda percorre uma linha de 12 m e causa 2d12 de dano de Água. Cada criatura atingida testa Fortitude contra a DT da Maldição. Quem falhar é empurrado 6 m na direção da onda."
+        "dano": "2d12 de Água",
+        "descricao": "Uma onda percorre uma linha de 12 m. Cada criatura atingida testa Fortitude contra a DT da Maldição: em falha, sofre 2d12 de dano de Água e é empurrada 6 m na direção da onda; em sucesso, sofre metade e fica no lugar."
       },
       {
         "id": "sussurros-do-fundo",
@@ -9550,29 +9787,34 @@
         "estagios": [
           {
             "nivel": 1,
+            "titulo": "Mão Inicial",
             "descricao": "Receba +2 em Misticismo, Percepção e Enganação ao usar o baralho como foco. Qualquer baralho comum serve, e a Loja vende o Baralho de Cartas. Cada magia que você conhece é uma carta, e a sua mão é o conjunto delas: jogar uma carta é conjurar a magia, pagando a Mana dela. Na sua mão, toda magia ganha forma de carta: sai do baralho, voa até o alvo ou se abre no chão, e a figura impressa mostra o efeito. Escolha uma magia de primeiro círculo do Fluxo nativo como a sua primeira carta.",
             "acao": "Passivo"
           },
           {
             "nivel": 5,
-            "descricao": "Uma vez por rodada, dê +1d4 a um teste seu ou de aliado a 10 m antes da rolagem. Escolha mais duas cartas de primeiro círculo do Fluxo nativo, três no total.",
+            "titulo": "Carta na Manga",
+            "descricao": "Uma vez por rodada, dê +1d4 a um teste seu ou de aliado a 9 m antes da rolagem. Escolha mais duas cartas de primeiro círculo do Fluxo nativo, três no total.",
             "acao": "Ação Livre",
-            "alcance": "10 m",
+            "alcance": "9 m",
             "usos": "Uma vez por rodada"
           },
           {
             "nivel": 10,
+            "titulo": "Jogada Dupla",
             "descricao": "Aprenda uma carta de segundo círculo do Fluxo nativo, quatro no total. Uma vez por combate, com uma ação completa, jogue duas cartas de primeiro círculo, ou uma de primeiro e uma de segundo.",
             "acao": "Ação Completa",
             "usos": "Uma vez por combate"
           },
           {
             "nivel": 15,
+            "titulo": "Baralho Cheio",
             "descricao": "Escolha mais uma carta de primeiro ou segundo círculo do Fluxo nativo, cinco no total.",
             "acao": "Passivo"
           },
           {
             "nivel": 20,
+            "titulo": "Mesa Posta",
             "descricao": "Escolha mais uma carta de primeiro ou segundo círculo, seis no total. Uma vez por rodada, a primeira carta de primeiro círculo que você jogar custa 1 de Mana a menos (mínimo 1). Depois do 20, a classe dá mais uma carta no nível 25 e outra no 30, até oito, e você conhece no máximo quatro do mesmo círculo.",
             "acao": "Passivo"
           }
@@ -9633,7 +9875,7 @@
       {
         "id": "dados-viciados",
         "titulo": "Dados Viciados",
-        "descricao": "Uma vez por sessão, depois de ver o d20 de uma rolagem sua, de um aliado ou de um inimigo a até 10 m, troque o resultado do dado por 10 antes dos modificadores. Um 20 ou 1 natural trocado deixa de ser crítico ou desastre.",
+        "descricao": "Uma vez por sessão, depois de ver o d20 de uma rolagem sua, de um aliado ou de um inimigo a até 9 m, troque o resultado do dado por 10 antes dos modificadores. Um 20 ou 1 natural trocado deixa de ser crítico ou desastre.",
         "niveis": [
           18
         ],
@@ -9680,7 +9922,7 @@
         "custo_mana": 6,
         "acao": "Ação Padrão",
         "duracao": "Duas rodadas, ou até atacar",
-        "descricao": "Fique invisível por até duas rodadas ou até atacar."
+        "descricao": "Fique Invisível por até duas rodadas ou até atacar."
       },
       {
         "id": "roda-da-fortuna",
@@ -9745,11 +9987,11 @@
       {
         "id": "o-sol",
         "titulo": "O Sol",
-        "custo_mana": 4,
+        "custo_mana": 5,
         "acao": "Ação Livre no momento do ataque",
-        "dano": "+1d4 de fogo por turno",
-        "duracao": "Dois turnos",
-        "descricao": "Uma carta causa +1d4 de fogo no começo dos próximos dois turnos do alvo."
+        "dano": "Queimando",
+        "duracao": "Até apagar",
+        "descricao": "Uma carta deixa o alvo Queimando. Soma com o +1d4 de fogo do naipe de Paus."
       }
     ]
   },
@@ -10015,41 +10257,43 @@
         "estagios": [
           {
             "nivel": 1,
+            "titulo": "Norte Sempre",
             "descricao": "Você sempre sabe a direção da última âncora dimensional que marcou, sempre sabe onde é o Norte e a hora do dia, e nunca se perde em ambientes naturais ou masmorras que já mapeou. Recebe +2 em Sobrevivência para navegar; ao ler uma planta baixa ou sentir os fluxos de mana do ambiente, o Mestre revela um detalhe oculto do local.",
             "acao": "Passivo"
           },
           {
             "nivel": 5,
-            "descricao": "Mantenha duas âncoras e abra passagem curta de 6 m entre pontos visíveis uma vez por cena.",
+            "titulo": "Passagem Curta",
+            "descricao": "Abra passagem curta de 6 m entre pontos visíveis uma vez por cena.",
             "acao": "Ação Padrão",
             "alcance": "6 m",
             "usos": "Uma vez por cena"
           },
           {
             "nivel": 10,
+            "titulo": "Faro de Portal",
             "descricao": "Perceba portais e distorções a 18 m e identifique a direção geral de seu destino.",
             "acao": "Passivo",
             "alcance": "18 m"
           },
           {
             "nivel": 15,
-            "descricao": "Leve até dois aliados ao usar passagens próprias, pagando +1 Mana por aliado.",
+            "titulo": "Passagem em Grupo",
+            "descricao": "Leve até dois aliados ao usar passagens próprias, e a passagem passa a custar 1 de Mana por aliado levado.",
             "acao": "Passivo"
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, abra por uma rodada uma rota de até 1 km para local conhecido na mesma dimensão; o Mestre pode exigir teste em áreas seladas.",
-            "acao": "Ação Completa",
-            "alcance": "1 km",
-            "duracao": "Uma rodada",
-            "usos": "Uma vez por sessão"
+            "titulo": "Âncora Viva",
+            "descricao": "Uma âncora sua pode ser plantada num aliado voluntário e passa a acompanhá-lo aonde ele for. Ela conta no seu limite de âncoras, e o vínculo se desfaz se o aliado recusar ou morrer.",
+            "acao": "Um minuto para plantar"
           }
         ]
       },
       {
         "id": "ancoras",
         "titulo": "Âncoras",
-        "descricao": "Mantenha uma âncora adicional por estágio, até quatro. Uma âncora exige um minuto no local e desaparece após sete dias ou quando exceder o limite.",
+        "descricao": "Você mantém uma âncora desde o nível 1, e cada estágio desta habilidade soma mais uma, até cinco no nível 20. Uma âncora exige um minuto no local e desaparece após sete dias ou quando exceder o limite.",
         "niveis": [
           3,
           8,
@@ -10187,7 +10431,7 @@
         "custo_mana": 6,
         "acao": "Ação Padrão",
         "duracao": "Três rodadas",
-        "descricao": "Faça Misticismo contra a DT de um portal; em sucesso, desative-o por três rodadas."
+        "descricao": "Faça Misticismo contra a DT de conjuração de quem abriu o portal (DT 20, se ele for natural); em sucesso, desative-o por três rodadas."
       },
       {
         "id": "bussola-do-vazio",
@@ -10203,7 +10447,7 @@
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "defesa": "Reflexos",
-        "descricao": "Uma criatura a 12 m testa Reflexos contra a DT do Guia Dimensional; em falha, é movida 6 m para um espaço seguro escolhido por você."
+        "descricao": "Uma criatura a 12 m testa Reflexos contra a DT do Guia Dimensional; em falha, é movida 6 m para um espaço escolhido por você que não cause dano por si só (sem queda, fogo ou abismo)."
       },
       {
         "id": "corredor-da-matriz",
@@ -10217,6 +10461,26 @@
         "pre_requisitos": [
           "Nível 10 de Guia Dimensional"
         ]
+      },
+      {
+        "id": "corte-de-coordenada",
+        "titulo": "Corte de Coordenada",
+        "custo_mana": 4,
+        "acao": "Ação Padrão",
+        "alcance": "18 m",
+        "defesa": "Reflexos contra a DT do Guia Dimensional",
+        "dano": "2d8 de Espaço",
+        "descricao": "Corte o espaço em volta de uma criatura a até 18 m. Ela sofre 2d8 de dano de Espaço e testa Reflexos contra a DT do Guia Dimensional para sofrer metade."
+      },
+      {
+        "id": "dobra-esmagadora",
+        "titulo": "Dobra Esmagadora",
+        "custo_mana": 6,
+        "acao": "Ação Padrão",
+        "alcance": "12 m",
+        "defesa": "Reflexos contra a DT do Guia Dimensional",
+        "dano": "2d6 de impacto",
+        "descricao": "Dobre o espaço sob uma criatura a até 12 m. Ela testa Reflexos contra a DT do Guia Dimensional. Em falha, reaparece 3 m acima de onde estava, cai, sofre 2d6 de dano de impacto e fica Caída; em sucesso, se segura e nada acontece."
       }
     ]
   },
@@ -10484,7 +10748,7 @@
           {
             "nivel": 1,
             "titulo": "Asauchi",
-            "descricao": "Após um descanso longo, vincule uma arma corpo a corpo à sua alma. Ela se torna sua Zanpakutō sem mudar o dano, o alcance ou as modificações originais. Você pode manifestá-la ou recolhê-la e escolhe, a cada acerto, se ela causa o tipo de dano original ou dano espiritual. Ela atinge criaturas incorpóreas e volta para você ao fim de um descanso longo se for perdida ou destruída.",
+            "descricao": "Após um descanso longo, vincule uma arma corpo a corpo à sua alma. Ela se torna sua Zanpakutō sem mudar o dano, o alcance ou as modificações originais. Você pode manifestá-la ou recolhê-la e escolhe, a cada acerto, se ela causa o tipo de dano original ou dano de Essência. Ela atinge criaturas incorpóreas e volta para você ao fim de um descanso longo se for perdida ou destruída.",
             "acao": "Ação Livre para manifestar ou recolher",
             "alcance": "Pessoal",
             "duracao": "Permanente, até vincular outra arma"
@@ -10538,7 +10802,7 @@
           {
             "id": "tempestade",
             "titulo": "Tempestade",
-            "descricao": "Shikai: uma vez por turno, o primeiro acerto com a Zanpakutō causa +1d8 de dano espiritual; uma segunda criatura a até 3 m do alvo sofre 1d6 do mesmo dano.",
+            "descricao": "Shikai: uma vez por turno, o primeiro acerto com a Zanpakutō causa +1d8 de dano de Essência; uma segunda criatura a até 3 m do alvo sofre 1d6 do mesmo dano.",
             "escalonamento": "Bankai: o dano adicional contra o alvo sobe para +2d8 e o dano contra a segunda criatura sobe para 2d6."
           },
           {
@@ -10574,20 +10838,20 @@
           {
             "id": "incendio",
             "titulo": "Incêndio",
-            "descricao": "Shikai: uma vez por turno, o primeiro acerto com a Zanpakutō envolve o alvo em chamas espirituais: ele sofre 1d6 de dano de fogo no início de cada um dos dois turnos seguintes, a menos que gaste uma ação para apagar o fogo.",
-            "escalonamento": "Bankai: o dano das chamas sobe para 1d10 por turno e elas se espalham para uma segunda criatura adjacente ao alvo quando ele é atingido."
+            "descricao": "Shikai: uma vez por turno, o primeiro acerto com a Zanpakutō envolve o alvo em chamas espirituais, e ele fica Queimando.",
+            "escalonamento": "Bankai: as chamas causam 1d10 por turno, no lugar de 1d6, e se espalham para uma segunda criatura adjacente ao alvo quando ele é atingido."
           },
           {
             "id": "cinzas",
             "titulo": "Cinzas",
-            "descricao": "Shikai: a lâmina se dissolve em uma nuvem de cinzas cortantes num raio de 3 m ao seu redor. Uma vez por turno, uma criatura hostil que entrar nesse raio ou terminar o turno nele sofre 1d6 de dano espiritual.",
+            "descricao": "Shikai: a lâmina se dissolve em uma nuvem de cinzas cortantes num raio de 3 m ao seu redor. Uma vez por turno, uma criatura hostil que entrar nesse raio ou terminar o turno nele testa Reflexos contra a DT do Caçador das Almas e sofre 1d6 de dano de Essência, ou metade se passar.",
             "escalonamento": "Bankai: o raio aumenta para 6 m, o dano sobe para 2d6 e você pode se mover livremente dentro da nuvem sem provocar Reações."
           },
           {
             "id": "veneno",
             "titulo": "Veneno",
-            "descricao": "Shikai: uma vez por turno, ao acertar, o alvo é envenenado: testa Fortitude contra a DT do Caçador das Almas no início de cada um dos dois turnos seguintes ou sofre 1d6 de dano; um sucesso encerra o veneno.",
-            "escalonamento": "Bankai: o veneno dura até o fim do combate ou até ser curado, e cada falha também reduz a Defesa do alvo em 2 enquanto durar."
+            "descricao": "Shikai: uma vez por turno, ao acertar, o alvo fica Envenenado. Ele testa Fortitude contra a DT do Caçador das Almas no fim de cada turno dele, e um sucesso encerra o veneno.",
+            "escalonamento": "Bankai: o veneno não encerra com o teste, só com cura ou no fim do combate, e enquanto durar o alvo tem −2 de Defesa."
           },
           {
             "id": "ressonancia",
@@ -10628,13 +10892,13 @@
           {
             "id": "corte-espectral",
             "titulo": "Corte Espectral",
-            "descricao": "Shikai: uma vez por turno, ao acertar com a Zanpakutō, você pode dispensar o contato e disparar uma lâmina de energia espiritual em linha reta de até 9 m, atingindo automaticamente a primeira criatura hostil no caminho e causando 1d10 de dano espiritual.",
+            "descricao": "Shikai: uma vez por turno, ao acertar com a Zanpakutō, você pode dispensar o contato e disparar uma lâmina de energia espiritual em linha reta de até 9 m, atingindo automaticamente a primeira criatura hostil no caminho e causando 1d10 de dano de Essência.",
             "escalonamento": "Bankai: o alcance sobe para 18 m, o dano para 2d10 e a lâmina atravessa o primeiro alvo, atingindo uma segunda criatura na mesma linha com metade do dano."
           },
           {
             "id": "barreira-escarlate",
             "titulo": "Barreira Escarlate",
-            "descricao": "Shikai: uma vez por rodada, escolha um entre dois efeitos ao usar a Zanpakutō: dispare uma rajada carmesim a até 9 m que causa 1d8 de dano espiritual, ou use sua Reação para erguer uma barreira que concede +2 de Defesa a você e a aliados adjacentes até o início do seu próximo turno.",
+            "descricao": "Shikai: uma vez por rodada, escolha um entre dois efeitos ao usar a Zanpakutō: dispare uma rajada carmesim a até 9 m que causa 1d8 de dano de Essência, ou use sua Reação para erguer uma barreira que concede +2 de Defesa a você e a aliados adjacentes até o início do seu próximo turno.",
             "escalonamento": "Bankai: a rajada passa a causar 2d8 de dano e a barreira também reduz em 1d6 o dano da primeira vez que alguém protegido por ela for atingido."
           },
           {
@@ -10664,7 +10928,7 @@
           {
             "id": "colapso",
             "titulo": "Colapso",
-            "descricao": "Shikai: uma vez por combate, como Ação Padrão, detone a pressão espiritual da lâmina num raio de 4 m: cada criatura na área testa Fortitude contra a DT do Caçador das Almas, sofrendo 3d6 de dano espiritual em falha ou metade em sucesso. Você não pode atacar com a Zanpakutō no turno em que usar este efeito.",
+            "descricao": "Shikai: uma vez por combate, como Ação Padrão, detone a pressão espiritual da lâmina num raio de 4,5 m: cada criatura na área testa Fortitude contra a DT do Caçador das Almas, sofrendo 3d6 de dano de Essência em falha ou metade em sucesso. Você não pode atacar com a Zanpakutō no turno em que usar este efeito.",
             "escalonamento": "Bankai: o raio aumenta para 6 m, o dano sobe para 4d6 e some a restrição de não atacar no mesmo turno."
           }
         ]
@@ -10701,7 +10965,21 @@
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Permanente",
-            "descricao": "Seu movimento aumenta em 3 m. O primeiro movimento de até 3 m que fizer em cada turno não provoca Reações."
+            "descricao": "Seu movimento aumenta em 3 m. O primeiro movimento de até 3 m que fizer em cada turno não provoca Reações.",
+            "efeitos_por_nivel": [
+              {
+                "nivel": 1,
+                "efeitos": [
+                  {
+                    "id": "hoho",
+                    "categoria": "combate",
+                    "alvo": "movimento",
+                    "modo": "bonus",
+                    "valor": 3
+                  }
+                ]
+              }
+            ]
           },
           {
             "id": "kido",
@@ -10717,14 +10995,14 @@
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Permanente",
-            "descricao": "Seus ataques desarmados causam 1d8 de dano físico ou espiritual, à sua escolha. Enquanto mantiver ao menos uma mão livre, receba +1 de Defesa."
+            "descricao": "Seus ataques desarmados causam 1d8 de dano físico ou de Essência, à sua escolha. Enquanto mantiver ao menos uma mão livre, receba +1 de Defesa."
           }
         ]
       },
       {
         "id": "konso-funeral-da-alma",
         "titulo": "Konsō: Funeral da Alma",
-        "descricao": "Konsō é o ritual que os Caçadores das Almas usam para guiar uma alma sofredora ao descanso, em vez de deixá-la apodrecer até virar algo pior. Uma vez por combate, gaste uma Ação Completa para tocar uma alma vulnerável: qualquer alma voluntária, viva ou não, ou um espírito hostil com metade da Vida máxima ou menos. Contra um alvo hostil, ele testa Vontade contra a DT do Caçador das Almas. Em sucesso, ele resiste ao ritual: recebe -2 na primeira rolagem de Defesa contra você até o fim do seu próximo turno, mas a tentativa é gasta mesmo assim. Em falha, ou se o alvo for voluntário, a alma é purificada e enviada além, removida da cena sem ser destruída pela força. Se ela estava possuindo um hospedeiro, a possessão termina na hora e o hospedeiro se estabiliza, mesmo que esteja com a Vida abaixo de 0. Ao concluir um Konsō com sucesso, você absorve parte da energia liberada e recupera 1d8 pontos de Vida ou Mana, à sua escolha.",
+        "descricao": "Konsō é o ritual que os Caçadores das Almas usam para guiar uma alma sofredora ao descanso, em vez de deixá-la apodrecer até virar algo pior. Uma vez por combate, gaste uma Ação Completa para tocar uma alma vulnerável: qualquer alma voluntária, viva ou não, ou um espírito hostil com metade da Vida máxima ou menos. Contra um alvo hostil, ele testa Vontade contra a DT do Caçador das Almas. Em sucesso, ele resiste ao ritual: sofre −2 de Defesa contra o seu próximo ataque, até o fim do seu próximo turno, mas a tentativa é gasta mesmo assim. Em falha, ou se o alvo for voluntário, a alma é purificada e enviada além, removida da cena sem ser destruída pela força. Se ela estava possuindo um hospedeiro, a possessão termina na hora e o hospedeiro se estabiliza, mesmo que esteja com a Vida abaixo de 0. Ao concluir um Konsō com sucesso, você absorve parte da energia liberada e recupera 1d8 pontos de Vida ou Mana, à sua escolha.",
         "niveis": [
           18
         ],
@@ -10789,8 +11067,8 @@
         "alcance": "18 m",
         "duracao": "Instantânea",
         "defesa": "Reflexos",
-        "dano": "3d8 espiritual",
-        "descricao": "Dispare um raio de energia contra uma criatura a até 18 m. Ela testa Reflexos contra a DT do Caçador das Almas, sofre 3d8 de dano espiritual em falha ou metade em sucesso."
+        "dano": "2d8 de Essência (3d8 por 7 de Mana, a partir do nível 10)",
+        "descricao": "Dispare um raio de energia contra uma criatura a até 18 m. Ela testa Reflexos contra a DT do Caçador das Almas, sofre 2d8 de dano de Essência em falha ou metade em sucesso. A partir do nível 10, você pode gastar 7 de Mana no lugar de 4 para causar 3d8."
       },
       {
         "id": "bakudo-seis-luzes",
@@ -10810,8 +11088,8 @@
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Instantânea",
-        "dano": "Dano da Zanpakutō +1 dado espiritual",
-        "descricao": "Projete a pressão da lâmina e faça um ataque com a Zanpakutō contra um alvo a até 12 m. Em acerto, cause o dano normal da arma mais 1 dado de dano espiritual."
+        "dano": "Dano da Zanpakutō +1 dado de Essência",
+        "descricao": "Projete a pressão da lâmina e faça um ataque com a Zanpakutō contra um alvo a até 12 m. Em acerto, cause o dano normal da arma mais 1 dado de dano de Essência."
       },
       {
         "id": "pele-vazia",
@@ -10835,7 +11113,7 @@
         "alcance": "Toque",
         "duracao": "Instantânea",
         "usos": "Uma vez por descanso por alvo",
-        "descricao": "Restaure 3d8 de Vida de uma criatura viva ou espiritual. Cada alvo só pode receber esta cura uma vez por descanso longo."
+        "descricao": "Restaure 2d8 de Vida de uma criatura viva ou espiritual. A partir do nível 10, você pode gastar 8 de Mana no lugar de 5 para restaurar 3d8. Cada alvo só pode receber esta cura uma vez por descanso longo."
       },
       {
         "id": "senka",
@@ -11157,29 +11435,34 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Escreva um Motivo após descanso: coragem, perda ou esperança; uma vez por cena, dê +1d4 a teste relacionado de um aliado.",
+            "titulo": "Primeira Linha",
+            "descricao": "Escreva um Motivo após descanso: coragem (ataques e Vontade contra medo), perda (Fortitude e testes de Morrendo) ou esperança (Cura, Diplomacia e testes para ajudar alguém); uma vez por cena, dê +1d4 a um teste desses de um aliado.",
             "acao": "Ação Livre",
             "usos": "Uma vez por cena"
           },
           {
             "nivel": 5,
+            "titulo": "Coro",
             "descricao": "Mantenha dois Motivos e aplique-os a aliados a 12 m.",
             "acao": "Passivo",
             "alcance": "12 m"
           },
           {
             "nivel": 10,
+            "titulo": "Revisão",
             "descricao": "Uma vez por cena, ao falhar num teste relacionado, rerrole e mantenha o novo resultado.",
             "acao": "Passivo",
             "usos": "Uma vez por cena"
           },
           {
             "nivel": 15,
+            "titulo": "Presságio",
             "descricao": "Transforme um Motivo em presságio: o Mestre revela uma consequência provável de uma escolha imediata.",
             "acao": "Ação Livre"
           },
           {
             "nivel": 20,
+            "titulo": "Desfecho",
             "descricao": "Uma vez por sessão, escreva o desfecho de uma cena em uma frase plausível; o grupo recebe vantagem para realizá-lo, mas a frase não controla NPCs nem altera fatos passados.",
             "acao": "Ação Livre",
             "usos": "Uma vez por sessão"
@@ -11212,7 +11495,7 @@
           {
             "id": "guarda-costas",
             "titulo": "Guarda-Costas",
-            "descricao": "Aparece para ajudar numa cena de combate, sem substituir um aliado de verdade."
+            "descricao": "Aparece para ajudar numa cena de combate. Usa a ficha de um humanoide do Bestiário com VD igual à metade do seu nível de Escritor (o Mestre escolhe qual), age logo depois de você e some no fim da cena ou ao chegar a 0 de Vida."
           },
           {
             "id": "curandeiro",
@@ -11270,9 +11553,9 @@
         "custo_mana": 4,
         "acao": "Ação Padrão",
         "alcance": "12 m",
-        "dano": "2d8 psíquico",
+        "dano": "1d6 mental (tira Sanidade)",
         "defesa": "Vontade",
-        "descricao": "Ataque a Vontade de um alvo a 12 m; cause 2d8 de dano psíquico e −2 no próximo teste dele em caso de acerto."
+        "descricao": "Ataque a Vontade de um alvo a 12 m; cause 1d6 de dano mental, que tira Sanidade, e −2 no próximo teste dele em caso de acerto."
       },
       {
         "id": "paragrafo-de-protecao",
@@ -11309,9 +11592,10 @@
       {
         "id": "cliffhanger",
         "titulo": "Cliffhanger",
-        "custo_mana": 5,
+        "custo_mana": 4,
         "acao": "Reação",
-        "descricao": "Quando um aliado cair a 0 de Vida, deixe-o com 1 de Vida; ele fica Imobilizado até o próximo turno dele."
+        "usos": "Uma vez por cena",
+        "descricao": "Uma vez por cena, quando um aliado cair a 0 de Vida, deixe-o com 1 de Vida; ele fica Imobilizado até o próximo turno dele."
       },
       {
         "id": "vilao-da-semana",
@@ -11702,7 +11986,7 @@
             "alcance": "3 m",
             "duracao": "Enquanto a invocação existir",
             "descricao": "Enquanto estiver a até 3 m de uma invocação sua, você e seus aliados recebem vantagem em testes de Fortitude contra doença e veneno.",
-            "escalonamento": "Nível 2: o alcance sobe para 6 m. Nível 3: a vantagem passa a valer também contra medo sobrenatural. Nível 4: uma vez por cena, quem estiver no alcance pode gastar a própria reação para repetir um teste de Fortitude falho contra doença ou veneno."
+            "escalonamento": "Nível 2: o alcance sobe para 6 m. Nível 3: a vantagem passa a valer também contra ficar Amedrontado por efeito mágico. Nível 4: uma vez por cena, quem estiver no alcance pode gastar a própria reação para repetir um teste de Fortitude falho contra doença ou veneno."
           },
           {
             "id": "sombra",
@@ -11720,7 +12004,7 @@
             "alcance": "Pessoal",
             "duracao": "Enquanto a invocação existir",
             "descricao": "Toda invocação sua entra em cena com Vida temporária igual ao seu nível de Invocador, que absorve dano antes da Vida real dela.",
-            "escalonamento": "Nível 2: a Vida temporária sobe para o dobro do seu nível de Invocador. Nível 3: ela recebe essa Vida temporária de novo sempre que entra numa cena nova, não só na primeira vez. Nível 4: quando a Vida temporária dela acabar, ganha Resistência 2 a todo dano até o fim da cena."
+            "escalonamento": "Nível 2: a Vida temporária sobe para o dobro do seu nível de Invocador. Nível 3: ela recebe essa Vida temporária de novo sempre que entra numa cena nova, não só na primeira vez. Nível 4: quando a Vida temporária dela acabar, reduz em 2 o dano de cada golpe até o fim da cena."
           }
         ],
         "escalonamento": {
@@ -11832,7 +12116,7 @@
         "acao": "Ação Livre",
         "alcance": "Adjacente à invocação",
         "duracao": "Até o seu próximo turno",
-        "descricao": "Até o seu próximo turno, aliados adjacentes à invocação recebem Resistência 5."
+        "descricao": "Até o seu próximo turno, aliados adjacentes à invocação reduzem em 5 o dano de cada golpe que sofrerem."
       },
       {
         "id": "retorno-ao-pacto",
@@ -12312,7 +12596,7 @@
           },
           {
             "nivel": 15,
-            "descricao": "Receba Resistência 5 contra dano ambiental e vantagem para identificar portais ou fronteiras dimensionais.",
+            "descricao": "Receba Resistência 5 a frio e a calor, vantagem contra ambientes tóxicos e vantagem para identificar portais ou fronteiras dimensionais.",
             "titulo": "Pele de Estrada",
             "acao": "Passivo"
           },
@@ -12455,7 +12739,7 @@
         "id": "mochila-impossivel",
         "titulo": "Mochila Impossível",
         "custo_mana": 0,
-        "descricao": "Carregue dois espaços adicionais de itens comuns; a mochila não altera peso de objetos enormes.",
+        "descricao": "Carregue cinco espaços adicionais de itens comuns; a mochila não altera peso de objetos enormes.",
         "acao": "Passivo"
       },
       {
@@ -12501,7 +12785,7 @@
         "titulo": "Carona",
         "custo_mana": 0,
         "custo_estamina": 4,
-        "descricao": "Até três aliados acompanham seu deslocamento de viagem sem sofrer a primeira penalidade de ritmo acelerado.",
+        "descricao": "Até três aliados acompanham seu deslocamento de viagem sem sofrer a primeira penalidade de ritmo acelerado (Transporte, nas Regras).",
         "acao": "Ação Padrão"
       },
       {
@@ -12534,6 +12818,32 @@
         "acao": "Ação Padrão",
         "alcance": "6 m",
         "duracao": "Uma cena"
+      },
+      {
+        "id": "golpe-baixo",
+        "titulo": "Golpe Baixo",
+        "custo_mana": 0,
+        "custo_estamina": 4,
+        "acao": "Ação Livre antes do ataque",
+        "duracao": "Este ataque",
+        "dano": "+1d6",
+        "descricao": "O seu próximo ataque corpo a corpo nesta rodada causa +1d6 de dano. Se acertar, o alvo fica Exposto. Briga de estrada não tem regra."
+      },
+      {
+        "id": "ja-sai-de-pior",
+        "titulo": "Já Saí de Pior",
+        "custo_mana": 3,
+        "acao": "Reação",
+        "descricao": "Quando um ataque mirar você, receba +4 de Defesa contra ele e, depois do ataque, desloque-se 1,5 m sem provocar reações."
+      },
+      {
+        "id": "conhece-o-terreno",
+        "titulo": "Conhece o Terreno",
+        "custo_mana": 4,
+        "acao": "Ação Padrão",
+        "alcance": "9 m",
+        "duracao": "Três rodadas",
+        "descricao": "Por três rodadas, você e um aliado a até 9 m ignoram terreno difícil e recebem +2 em ataques contra criaturas que estejam em terreno difícil."
       }
     ],
     "dt_efeitos": {
@@ -12900,29 +13210,34 @@
         "estagios": [
           {
             "nivel": 1,
+            "titulo": "Fluxo de Origem",
             "descricao": "Seu Fluxo nativo é o da Árvore em que você nasceu; se a ficha não tiver Árvore, escolha um dos dez Fluxos naturais. Aprenda duas magias compatíveis com ele; use Misticismo para conjurá-las.",
             "acao": "Passivo"
           },
           {
             "nivel": 5,
+            "titulo": "Ajuste Fino",
             "descricao": "Uma vez por cena, receba +2 num teste de conjuração depois de rolar.",
             "acao": "Ação Livre",
             "usos": "Uma vez por cena"
           },
           {
             "nivel": 10,
+            "titulo": "Conta Exata",
             "descricao": "Ao superar a DT por 5 ou mais, reduza o custo em 1 Mana, mínimo 1.",
             "acao": "Passivo",
             "usos": "Uma vez por turno"
           },
           {
             "nivel": 15,
+            "titulo": "Segunda Chance",
             "descricao": "Uma vez por cena, repita um teste de conjuração.",
             "acao": "Ação Livre",
             "usos": "Uma vez por cena"
           },
           {
             "nivel": 20,
+            "titulo": "Ápice Nativo",
             "descricao": "Uma vez por sessão, trate o d20 de uma conjuração como 15.",
             "acao": "Ação Livre",
             "usos": "Uma vez por sessão"
@@ -13148,7 +13463,7 @@
         "titulo": "Reserva Interior",
         "custo_mana": 0,
         "acao": "Passivo",
-        "descricao": "Sua Mana máxima aumenta em 2."
+        "descricao": "Sua Mana máxima aumenta em 1 por nível de Canalizador."
       },
       {
         "id": "apice-do-fluxo",
@@ -13156,7 +13471,7 @@
         "custo_mana": 8,
         "acao": "Ação Livre",
         "usos": "Uma vez por sessão",
-        "descricao": "Uma vez por sessão, considere 15 o resultado natural de uma conjuração.",
+        "descricao": "Uma vez por sessão, ao conjurar uma magia que cause dano, ela ignora a Resistência dos alvos ao tipo de dano dela.",
         "pre_requisitos": [
           "Nível 12 de Canalizador"
         ]
@@ -13585,6 +13900,7 @@
         "estagios": [
           {
             "nivel": 1,
+            "titulo": "Primeiro Catalisador",
             "descricao": "O catalisador é um objeto seu ligado a um Fluxo diferente do seu nativo (uma pedra, um relógio parado, um osso), sem preço nem raridade. Sintonize-o com dez minutos fora de combate: ele fica preparado e empresta esse Fluxo secundário às suas fusões, e o seu Fluxo nativo continua o mesmo. Dos preparados, um é o ativo, o que a fusão usa agora. O catalisador gasto numa fusão fica desativado até você repetir os dez minutos. Perdido, quebrado ou roubado, você sintoniza outro objeto do mesmo jeito. A Tecnologia só serve de catalisador se o Mestre a tiver instalado na sua ficha. Selos e encantamentos você aprende também dos Fluxos dos catalisadores que tiver preparados na hora de aprender, e o que aprendeu fica mesmo se trocar de catalisador depois. Antes da primeira fusão, que chega no nível 3, o catalisador ativo já serve: você tem vantagem em Misticismo para reconhecer magias, criaturas e objetos do Fluxo dele, e reduz em 2 o dano das magias desse Fluxo que atingirem você.",
             "acao": "10 minutos, fora de combate",
             "alcance": "Toque",
@@ -13592,23 +13908,27 @@
           },
           {
             "nivel": 5,
+            "titulo": "Dois na Mão",
             "descricao": "Mantenha dois catalisadores preparados ao mesmo tempo, com um ativo por vez. Trocar qual está ativo custa uma Ação de Movimento.",
             "acao": "Passivo"
           },
           {
             "nivel": 10,
+            "titulo": "Fusão Afinada",
             "descricao": "Uma vez por cena, uma magia fundida pelo catalisador ativo recebe +2 no teste de conjuração e ignora 2 pontos de Resistência do alvo.",
             "acao": "Ação Livre",
             "usos": "Uma vez por cena"
           },
           {
             "nivel": 15,
+            "titulo": "Troca Rápida",
             "descricao": "Mantenha três catalisadores preparados e troque qual está ativo como Ação Livre, uma vez por turno.",
             "acao": "Ação Livre",
             "usos": "Uma vez por turno"
           },
           {
             "nivel": 20,
+            "titulo": "Reacender",
             "descricao": "Uma vez por sessão, reative na hora um catalisador desativado, sem os dez minutos.",
             "acao": "Ação Livre",
             "usos": "Uma vez por sessão"
@@ -13765,7 +14085,7 @@
         "titulo": "Troca Instantânea",
         "custo_mana": 2,
         "acao": "Ação Livre",
-        "descricao": "Troque o catalisador ativo por outro preparado sem gastar a Ação de Movimento.",
+        "descricao": "Troque o catalisador ativo por outro preparado sem gastar a Ação de Movimento. A troca também reativa o catalisador que sai, se ele estava desativado só pela fusão.",
         "pre_requisitos": [
           "Sintonia Catalisada 2"
         ]
@@ -14179,6 +14499,10 @@
         "nivel": 18,
         "recompensas": [
           {
+            "tipo": "habilidade",
+            "titulo": "Círculo Permanente"
+          },
+          {
             "tipo": "evento",
             "titulo": "Pacto Antigo"
           }
@@ -14235,21 +14559,23 @@
           },
           {
             "nivel": 5,
-            "titulo": "Mão Firme",
-            "descricao": "Aprenda mais um rito. Todo rito seu leva 25% menos tempo, arredondando para baixo, e você rola com vantagem no primeiro teste de interrupção de cada trabalho."
+            "titulo": "Rito Guardado",
+            "descricao": "Aprenda mais um rito. Você também passa a segurar um rito pronto: faça o trabalho inteiro, pague o tempo, a Mana e os componentes, e prenda o efeito no lugar de soltar. Ele espera até o fim da sessão, e você solta com uma Ação Padrão de onde estiver, inclusive no meio de uma luta. O efeito acontece a partir de você e respeita o alcance escrito nele. Um rito guardado por vez, e por enquanto ele precisa ser Simples.",
+            "acao": "Ação Padrão para soltar",
+            "duracao": "Guardado até o fim da sessão",
+            "usos": "Um rito guardado por vez"
           },
           {
             "nivel": 10,
             "titulo": "Mãos Emprestadas",
-            "descricao": "Até dois participantes que fiquem no círculo do começo ao fim pagam parte da conta: cada um cobre até 5 da Mana do rito, tirada da Mana dele. Você paga o resto, no mínimo 1. Quem sai no meio devolve a parte dele para a sua conta na hora, e se você não tiver essa Mana o rito quebra."
+            "descricao": "Até dois participantes que fiquem no círculo do começo ao fim pagam parte da conta: cada um cobre até 5 da Mana do rito, tirada da Mana dele. Você paga o resto, no mínimo 1. Quem sai no meio devolve a parte dele para a sua conta na hora, e se você não tiver essa Mana o rito quebra. O rito guardado agora pode ser Complexo.",
+            "acao": "Fora de combate"
           },
           {
             "nivel": 15,
-            "titulo": "Rito Guardado",
-            "descricao": "Aprenda mais um rito. Você também passa a segurar um rito pronto: faça o trabalho inteiro, pague o tempo, a Mana e os componentes, e prenda o efeito no lugar de soltar. Ele espera até o fim da sessão, e você solta com uma Ação Padrão de onde estiver, inclusive no meio de uma luta. O efeito acontece a partir de você e respeita o alcance escrito nele. Um rito guardado por vez.",
-            "acao": "Ação Padrão para soltar",
-            "duracao": "Guardado até o fim da sessão",
-            "usos": "Um rito guardado por vez"
+            "titulo": "Mão Firme",
+            "descricao": "Aprenda mais um rito. Todo rito seu leva 25% menos tempo, arredondando para baixo, e você rola com vantagem no primeiro teste de interrupção de cada trabalho. O rito guardado agora pode ser Grandioso.",
+            "acao": "Fora de combate"
           },
           {
             "nivel": 20,
@@ -14355,6 +14681,16 @@
             "escalonamento": "Nível 3: dois alvos a mais ou o dobro da área. Nível 4: quatro alvos a mais ou o triplo da área; quem entrar depois numa área persistente também é alcançado."
           }
         ]
+      },
+      {
+        "id": "circulo-permanente",
+        "titulo": "Círculo Permanente",
+        "descricao": "Com um dia de trabalho, trace um círculo fixo num lugar escolhido, como a base do grupo. Ali, todo rito seu leva metade do tempo e não sofre interrupção por ambiente (chuva, vento, barulho, chão ruim). Um círculo por vez: traçar outro apaga o anterior.",
+        "niveis": [
+          18
+        ],
+        "acao": "Um dia, fora de combate",
+        "duracao": "Permanente"
       },
       {
         "id": "grande-oficiante",
@@ -14827,7 +15163,7 @@
             "acao": "Escolhida ao interceptar com sucesso",
             "alcance": "Igual ao efeito interceptado",
             "duracao": "Instantâneo",
-            "descricao": "Ao cancelar, a fonte sofre 2d6 de dano quando o efeito dela se desfaz, mais 1d6 a cada 5 níveis de Interceptador."
+            "descricao": "Ao cancelar, a fonte sofre 2d6 de dano tecnológico quando o efeito dela se desfaz, mais 1d6 a cada 5 níveis de Interceptador."
           },
           {
             "id": "nucleo-exposto",
@@ -14958,6 +15294,16 @@
         "alcance": "12 m",
         "duracao": "Uma cena",
         "usos": "Uma vez por sessão"
+      },
+      {
+        "id": "choque-de-malha",
+        "titulo": "Choque de Malha",
+        "custo_mana": 3,
+        "acao": "Ação Padrão",
+        "alcance": "9 m",
+        "defesa": "Fortitude contra a DT do Interceptador",
+        "dano": "2d6 tecnológico",
+        "descricao": "Mande um pulso da Malha contra uma criatura a até 9 m que carregue item mágico, de Fluxo ou da A.X.I.S, ou que tenha Mana. Ela sofre 2d6 de dano tecnológico e testa Fortitude contra a DT do Interceptador para sofrer metade."
       }
     ],
     "dt_efeitos": {
@@ -15471,17 +15817,17 @@
             "acao": "Dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "Uma cena",
-            "descricao": "Refeição. Escolha uma afinidade elemental ao servir. O alvo recebe Resistência 3 contra dano dessa afinidade por uma cena.",
-            "escalonamento": "Nível 3: a Resistência sobe para 5. Nível 4: escolha duas afinidades e aplique a Resistência às duas."
+            "descricao": "Refeição. Escolha um dos sete elementos ao servir. O alvo recebe Resistência 3 contra dano desse elemento por uma cena.",
+            "escalonamento": "Nível 3: a Resistência sobe para 5. Nível 4: escolha dois elementos e aplique a Resistência aos dois."
           },
           {
             "id": "cuscuz-nordestino",
             "titulo": "Cuscuz Nordestino",
             "acao": "Ação de Movimento",
             "alcance": "Toque",
-            "duracao": "Até a próxima iniciativa",
-            "descricao": "Lanche. O alvo recebe +2 na próxima iniciativa que rolar antes do descanso seguinte.",
-            "escalonamento": "Nível 3: o bônus sobe para +3, e o alvo também recebe +3 m de Movimento no primeiro turno. Nível 5: o bônus sobe para +4, e a iniciativa recebe vantagem."
+            "duracao": "Até o próximo combate",
+            "descricao": "Lanche. O alvo recebe +2 de Iniciativa no próximo combate antes do descanso seguinte.",
+            "escalonamento": "Nível 3: o bônus sobe para +3, e o alvo também recebe +3 m de Movimento no primeiro turno. Nível 5: o bônus sobe para +4, e o alvo não pode ficar Surpreendido nesse combate."
           },
           {
             "id": "empada-de-frango",
@@ -15509,7 +15855,7 @@
             "alcance": "Toque",
             "duracao": "Três rodadas",
             "descricao": "Lanche. O alvo recebe +2 em Vontade por três rodadas. Uma segunda porção não acumula o bônus, apenas renova a duração.",
-            "escalonamento": "Nível 3: o bônus sobe para +3 e dura cinco rodadas. Nível 5: sobe para +4, e testes contra medo também recebem vantagem."
+            "escalonamento": "Nível 3: o bônus sobe para +3 e dura cinco rodadas. Nível 5: sobe para +4, e testes contra Amedrontado também recebem vantagem."
           },
           {
             "id": "moqueca",
@@ -15660,7 +16006,6 @@
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
-    "patamar": "conquista",
     "requer_autorizacao_mestre": false,
     "vida": 4,
     "mana": 3,
@@ -15921,7 +16266,7 @@
           {
             "nivel": 10,
             "titulo": "Leitura Rápida",
-            "descricao": "Examinar uma cena, pessoa ou objeto vira uma Ação Padrão em vez de levar um minuto, e o alcance da sua atenção cresce: perceba até três detalhes discrepantes numa sala inteira de uma vez.",
+            "descricao": "Examinar uma cena, pessoa ou objeto vira uma Ação Padrão em vez de levar um minuto, e o alcance da sua atenção cresce: perceba até três detalhes discrepantes numa sala inteira de uma vez. Numa luta, examinar uma criatura assim também revela uma Resistência ou uma vulnerabilidade dela, se ela tiver.",
             "acao": "Ação Padrão"
           },
           {
@@ -16064,7 +16409,7 @@
         "custo_estamina": 3,
         "acao": "Ação Livre, após identificar o ponto fraco",
         "duracao": "Até o próximo ataque ou o fim da cena",
-        "descricao": "Depois de obter sucesso em Investigação para identificar o ponto fraco de um alvo nesta cena, gaste 3 Estamina. Seu próximo ataque contra ele, até o fim da cena, recebe +2 dados de dano."
+        "descricao": "Depois de identificar o ponto fraco de um alvo nesta cena (Ação de Movimento e Investigação contra 15 + metade do VD dele), gaste 3 Estamina. Seu próximo ataque contra ele, até o fim da cena, recebe +2 dados de dano."
       },
       {
         "id": "blefe-perfeito",
@@ -16138,6 +16483,14 @@
         "custo_estamina": 4,
         "acao": "Reação",
         "descricao": "Quando um ataque revelar uma ameaça que o deixou Surpreendido, gaste 4 Estamina para receber +4 de Defesa contra esse ataque específico. Você pode usar esta Reação mesmo antes do seu primeiro turno; esta é uma exceção à restrição de Reações de Surpreendido."
+      },
+      {
+        "id": "ja-vi-esse-golpe",
+        "titulo": "Já Vi Esse Golpe",
+        "custo_mana": 4,
+        "acao": "Reação",
+        "alcance": "9 m",
+        "descricao": "Quando uma criatura cujo ponto fraco você identificou nesta cena atacar você ou um aliado a até 9 m, imponha desvantagem nesse ataque."
       }
     ]
   },
@@ -16404,7 +16757,7 @@
           {
             "nivel": 1,
             "titulo": "Primeira Presa",
-            "descricao": "Quando um humanoide morre perto de você, morto por você ou não, pode devorá-lo até o fim da cena atual, gastando um minuto junto ao corpo. Escolha uma habilidade ou um poder que a classe dele tinha, limitado ao que um personagem do seu próprio nível de Devorador já teria acesso naquela classe, e grave-a num slot vazio, dando a ela o nome e a aparência do que devorou. Você mantém um slot ativo por vez.",
+            "descricao": "Quando um humanoide morre perto de você, morto por você ou não, pode devorá-lo até o fim da cena atual, gastando um minuto junto ao corpo. Escolha uma habilidade ou um poder que a classe dele tinha, limitado ao que um personagem do seu próprio nível de Devorador já teria acesso naquela classe, e grave-a num slot vazio, dando a ela o nome e a aparência do que devorou. Se a vítima for criatura do Bestiário, que não tem classe, escolha no lugar uma das habilidades da ficha dela, desde que o VD dela não passe do seu nível de Devorador. Você mantém um slot ativo por vez.",
             "acao": "Um minuto, fora de combate",
             "duracao": "Até o fim da cena da morte"
           },
@@ -16429,7 +16782,7 @@
           {
             "nivel": 20,
             "titulo": "Fome sem Fundo",
-            "descricao": "Mantenha cinco slots ativos ao mesmo tempo, e o teto de nível para devorar desaparece: grave o poder ou a habilidade no nível real que a vítima tinha.",
+            "descricao": "Mantenha cinco slots ativos ao mesmo tempo, e o teto de nível para devorar desaparece: grave o poder ou a habilidade no nível real que a vítima tinha, ou de criatura do Bestiário de qualquer VD.",
             "acao": "Passivo"
           }
         ]
@@ -16460,12 +16813,26 @@
           {
             "id": "mandibula-reforcada",
             "titulo": "Mandíbula Reforçada",
-            "descricao": "Seu ataque desarmado causa 1d8 em vez do dano desarmado padrão."
+            "descricao": "Seu ataque desarmado causa 1d8, no lugar do 1d4 do ataque desarmado."
           },
           {
             "id": "pele-curtida",
             "titulo": "Pele Curtida",
-            "descricao": "Receba +2 de Defesa."
+            "descricao": "Receba +2 de Defesa.",
+            "efeitos_por_nivel": [
+              {
+                "nivel": 1,
+                "efeitos": [
+                  {
+                    "id": "pele-curtida",
+                    "categoria": "combate",
+                    "alvo": "defesa",
+                    "modo": "bonus",
+                    "valor": 2
+                  }
+                ]
+              }
+            ]
           },
           {
             "id": "estomago-de-ferro",
@@ -16480,7 +16847,21 @@
           {
             "id": "reflexos-de-predador",
             "titulo": "Reflexos de Predador",
-            "descricao": "Receba +2 de Iniciativa."
+            "descricao": "Receba +2 de Iniciativa.",
+            "efeitos_por_nivel": [
+              {
+                "nivel": 1,
+                "efeitos": [
+                  {
+                    "id": "reflexos-de-predador",
+                    "categoria": "combate",
+                    "alvo": "iniciativa",
+                    "modo": "bonus",
+                    "valor": 2
+                  }
+                ]
+              }
+            ]
           },
           {
             "id": "metabolismo-acelerado",
@@ -16507,7 +16888,7 @@
       {
         "id": "banquete-final",
         "titulo": "Banquete Final",
-        "descricao": "Uma vez por sessão, ao devorar um humanoide derrotado nesta cena, grave de uma vez todos os poderes e a habilidade que ele carregava, ignorando por essa devoração o teto de slots que você mantém. Eles ficam ativos até o fim da cena atual; depois disso, os excedentes se apagam, sobrando só o que já cabia no seu limite normal. Se sobrar mais gravações do que cabe nesse limite, você escolhe quais permanecem.",
+        "descricao": "Uma vez por sessão, ao devorar um humanoide derrotado nesta cena, grave de uma vez todos os poderes e a habilidade que ele carregava (contra criatura do Bestiário, todas as habilidades da ficha dela), ignorando por essa devoração o teto de slots que você mantém. Eles ficam ativos até o fim da cena atual; depois disso, os excedentes se apagam, sobrando só o que já cabia no seu limite normal. Se sobrar mais gravações do que cabe nesse limite, você escolhe quais permanecem.",
         "niveis": [
           20
         ],
@@ -16535,7 +16916,7 @@
         "custo_mana": 0,
         "custo_estamina": 3,
         "acao": "Ação Livre",
-        "descricao": "Seu próximo ataque corpo a corpo neste turno recebe +2 dados de dano."
+        "descricao": "Seu próximo ataque corpo a corpo neste turno recebe +1 dado de dano. Gastando 6 de Estamina no lugar de 3, recebe +2 dados."
       },
       {
         "id": "presa-a-distancia",
@@ -16561,11 +16942,12 @@
         "custo_mana": 0,
         "custo_estamina": 5,
         "acao": "Ação Padrão",
-        "descricao": "Recupere 2d6 + Mod.Constituição de Vida."
+        "descricao": "Uma vez por cena, recupere 2d6 + Mod.Constituição de Vida.",
+        "usos": "Uma vez por cena"
       },
       {
         "id": "paralisia-do-medo",
-        "titulo": "Paralisia do Medo",
+        "titulo": "Olhar de Predador",
         "custo_mana": 5,
         "acao": "Ação Padrão",
         "alcance": "6 m",
@@ -16614,7 +16996,7 @@
         "custo_mana": 0,
         "acao": "Passivo",
         "usos": "Uma vez por sessão",
-        "descricao": "Uma vez por sessão, ao consumir a última porção de um slot vazio antes de dormir, recupere metade da sua Mana e da sua Estamina máximas ao acordar."
+        "descricao": "Uma vez por sessão, ao esvaziar um slot de propósito antes de dormir, recupere metade da sua Mana e da sua Estamina máximas ao acordar."
       }
     ]
   },
@@ -16763,7 +17145,7 @@
         "titulo": "Manifestação Natural",
         "niveis": [3],
         "acao": "Ação de Movimento",
-        "alcance": "5 m",
+        "alcance": "4,5 m",
         "duracao": "Até o fim do próximo turno; matéria estável permanece",
         "descricao": "Crie, mova ou modele até 0,25 m³ do seu elemento de origem para uma tarefa cotidiana. Terra e Água exigem matéria preexistente. Fogo pode criar uma chama do tamanho de uma tocha; Ar, uma rajada leve; Raio, apenas faíscas inofensivas; Luz ou Escuridão, iluminação ou penumbra numa área de 1,5 m. Uma manifestação criada se desfaz no fim do seu próximo turno; matéria preexistente modelada permanece somente se a nova forma for fisicamente estável. Isso não causa dano, não impõe condição, não reproduz uma magia e não cria material valioso."
       },
@@ -16831,7 +17213,7 @@
           { "id": "terra-cristal", "titulo": "Terra → Cristal · rara", "descricao": "Efeito harmônico: uma criatura que falhar na resistência contra a magia fica Exposta até o começo do seu próximo turno.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "terra" } },
           { "id": "agua-gelo", "titulo": "Água → Gelo · comum", "descricao": "Efeito harmônico: escolha um espaço de 1,5 m afetado pela magia; ele vira terreno difícil até o começo do seu próximo turno.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "agua" } },
           { "id": "agua-sangue", "titulo": "Água → Sangue · rara", "descricao": "Efeito harmônico: uma criatura viva que falhar na resistência contra a magia não pode recuperar Vida até o começo do seu próximo turno. Isso nunca controla ações ou movimentos do alvo.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "agua" } },
-          { "id": "fogo-magma", "titulo": "Fogo → Magma · comum", "descricao": "Efeito harmônico: um espaço de 1,5 m afetado pela magia permanece em brasa até o começo do seu próximo turno; cada criatura sofre 1d6 de Magma na primeira vez que entrar ou começar o turno ali.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "fogo" } },
+          { "id": "fogo-magma", "titulo": "Fogo → Magma · comum", "descricao": "Efeito harmônico: um espaço de 1,5 m afetado pela magia permanece em brasa até o começo do seu próximo turno; cada criatura que entrar ou começar o turno ali pela primeira vez testa Reflexos contra a DT da Elementarista e sofre 1d6 de Magma, ou metade se passar.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "fogo" } },
           { "id": "fogo-astral", "titulo": "Fogo → Fogo Astral · rara", "descricao": "Efeito harmônico: uma criatura que sofrer dano da magia fica com desvantagem no próximo teste de concentração que fizer até o começo do seu próximo turno.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "fogo" } },
           { "id": "ar-fumaca", "titulo": "Ar → Fumaça · comum", "descricao": "Efeito harmônico: crie uma área de fumaça de 3 m centrada num ponto afetado pela magia; ela concede cobertura parcial até o começo do seu próximo turno.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "ar" } },
           { "id": "ar-vacuo", "titulo": "Ar → Vácuo · rara", "descricao": "Efeito harmônico: uma criatura que falhar na resistência contra a magia perde as reações até o começo do seu próximo turno. Vácuo não produz morte instantânea nem ignora defesas.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "ar" } },
@@ -16966,8 +17348,8 @@
         "acao": "Ação Livre depois de causar dano",
         "alcance": "O alcance do efeito original",
         "duracao": "Até o dano persistente ser removido",
-        "dano": "2d6 persistente",
-        "descricao": "Uma vez por turno, depois que uma magia ou poder seu causar dano com um elemento que domina, escolha uma criatura que sofreu esse dano e marque-a com o mesmo elemento. Ela sofre também 2d6 de dano persistente desse tipo. A condição segue a regra normal de dano persistente e não acumula consigo mesma."
+        "dano": "2d6 por turno, do mesmo elemento",
+        "descricao": "Uma vez por turno, depois que uma magia ou poder seu causar dano com um elemento que domina, escolha uma criatura que sofreu esse dano e marque-a com o mesmo elemento. Ela sofre 2d6 do mesmo elemento no fim de cada turno dela, até alguém gastar uma Ação Padrão e vencer a DT da Elementarista em Misticismo ou Acrobacia. A marca não acumula consigo mesma."
       },
       {
         "id": "passo-elemental",
@@ -17031,7 +17413,7 @@
         "titulo": "Ruptura Derivada",
         "custo_mana": 8,
         "acao": "Ação Padrão",
-        "alcance": "20 m; área de 9 m",
+        "alcance": "18 m; área de 9 m",
         "duracao": "Instantânea",
         "dano": "5d6",
         "defesa": "Reflexos",

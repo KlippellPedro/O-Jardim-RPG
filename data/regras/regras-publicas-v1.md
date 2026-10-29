@@ -4291,7 +4291,7 @@ O catálogo mostra a progressão nível a nível, e as classes que conjuram most
 - **Comerciante** *(comum)*. Resolve a briga antes dela começar. Conhece a pessoa certa, fica sabendo das coisas na hora e tem sempre o item certo no estoque. Dinheiro do nada ele não faz, por mais que o grupo peça.
 - **Detetive** *(comum)*. Olha uma cena e vê antes de todo mundo: o detalhe fora do lugar, a mentira mal contada, o padrão que passou batido. E nunca fica satisfeito com a primeira explicação.
 - **Engenheiro** *(comum)*. Chega com tudo montado. Prepara invenções de uso rápido, melhora o equipamento do grupo e, quando precisa, força a máquina além do limite sabendo muito bem o preço.
-- **Espadachim** *(comum)*. Passou a vida inteira com uma espada na mão. Muda de postura no meio da luta e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.
+- **Espadachim** *(comum)*. Passou a vida inteira com uma espada na mão. Acumula posturas ao longo da carreira e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.
 - **Guardião** *(comum)*. Escolhe uma pessoa para proteger e leva isso muito a sério. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e aguenta o que vier, até onde a reação e a cena deixarem.
 - **Guerreiro** *(comum)*. Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo para si e comanda um batalhão que luta melhor quando ele está por perto.
 - **Lutador** *(comum)*. Briga de mão limpa, sem arma e sem armadura. Vai marcando o inimigo golpe a golpe e costuma ganhar no cansaço, quando o outro já não aguenta mais.

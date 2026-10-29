@@ -23,8 +23,9 @@ test('o Pacote Descartado é habilidade do nível 1 e saiu da lista de poderes',
   assert.match(pacote.descricao, /DT padrão do VD/);
   assert.equal(poder('pacote-descartado'), undefined);
   assert.ok(recompensas(1).includes('Pacote Descartado'));
-  // A lista continua com 10 poderes para as 8 vagas: o Ruído Branco entrou no lugar do Pacote.
-  assert.equal(interceptador.poderes.length, 10);
+  // 11 poderes para as 8 vagas: o Ruído Branco entrou no lugar do Pacote, e o Choque de
+  // Malha é o poder de reserva para a luta sem magia (questionário final, pergunta 22).
+  assert.equal(interceptador.poderes.length, 11);
   assert.ok(poder('ruido-branco'));
 });
 

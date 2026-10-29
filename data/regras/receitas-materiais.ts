@@ -212,7 +212,7 @@ export const FORMULAS_MATERIAIS_ALQUIMISTA: ReceitaMaterial[] = simplificarPrepa
       { id: 'carga-elemental', quantidade: 1, materialId: 'comp-amostra-elemental' },
       { id: 'frasco-isolante', quantidade: 1, propriedade: { nome: 'Isolante', valorMinimo: 1 }, estadoMinimo: 'processado' },
     ],
-    efeito: 'Estoura em 3 m e causa 2d6 de dano de frio. Quem falhar em Fortitude contra a sua DT de Alquimista perde 3 m de Movimento até o fim do próximo turno. Congela um palmo de água parada e trava um mecanismo simples exposto.',
+    efeito: 'Estoura em 3 m e causa 2d6 de dano de gelo. Quem falhar em Fortitude contra a sua DT de Alquimista perde 3 m de Movimento até o fim do próximo turno. Congela um palmo de água parada e trava um mecanismo simples exposto.',
   },
   {
     id: 'cataplasma-de-ferro',
@@ -322,7 +322,7 @@ function projetoEngenhoca(id: string, titulo: string, efeito: string): ReceitaMa
 
 /** Os vinte projetos publicados na lista de Engenhocas do Engenheiro. */
 export const PROJETOS_MATERIAIS_ENGENHEIRO: ReceitaMaterial[] = simplificarPreparoClasse([
-  projetoEngenhoca('mina-adesiva', 'Mina Adesiva', 'Fixe a carga no seu espaço, num espaço adjacente ou em qualquer superfície a até 6 m de arremesso. A primeira criatura que entrar no espaço ou encostar nela sofre 2d6 de dano de impacto e perde 3 m de Movimento até o fim do próximo turno dela. Quem enxerga a mina consegue evitar o espaço sem teste.'),
+  projetoEngenhoca('mina-adesiva', 'Mina Adesiva', 'Fixe a carga no seu espaço, num espaço adjacente ou em qualquer superfície a até 6 m de arremesso. A primeira criatura que entrar no espaço ou encostar nela testa Reflexos contra a sua DT de Engenheiro: em falha, sofre 2d6 de dano de impacto e perde 3 m de Movimento até o fim do próximo turno dela; em sucesso, sofre metade e não perde Movimento. Quem enxerga a mina consegue evitar o espaço sem teste.'),
   projetoEngenhoca('gancho-motorizado', 'Gancho Motorizado', 'Acerte uma superfície sólida a até 12 m e se puxe até lá sem teste de escalada, ou traga para a sua mão um objeto solto de até 25 kg no mesmo alcance. Puxar uma criatura exige a permissão dela.'),
   projetoEngenhoca('drone-batedor', 'Drone Batedor', 'O drone voa por três rodadas e transmite som e imagem enquanto ficar a até 18 m de você. Nesse tempo você faz testes de Percepção pelos sensores dele. Ele tem Defesa 12, Movimento 12 m de voo e cai com 5 de dano.'),
   projetoEngenhoca('holofote-de-campo', 'Holofote de Campo', 'Ilumina uma esfera de 9 m por três rodadas. Quem está dentro perde o benefício de escuridão e de camuflagem por penumbra, e ataques contra alvos iluminados recebem +1. O holofote tem Defesa 10 e apaga com 5 de dano.'),
@@ -336,7 +336,7 @@ export const PROJETOS_MATERIAIS_ENGENHEIRO: ReceitaMaterial[] = simplificarPrepa
   projetoEngenhoca('propulsor-de-salto', 'Propulsor de Salto', 'Lança você ou um aliado adjacente por 9 m em linha reta, inclusive para cima, e anula o dano de queda desta rodada. Quem é lançado escolhe a direção junto com você.'),
   projetoEngenhoca('sensor-de-analise', 'Sensor de Análise', 'Aponte para uma criatura, um mecanismo ou um material a até 12 m e descubra uma informação concreta sobre ele, sem teste: a Vida atual, uma resistência, uma vulnerabilidade ou o passo que abre o mecanismo. O Mestre responde com o dado exato, e você escolhe qual dos quatro quer antes de acionar.'),
   projetoEngenhoca('espuma-de-contencao', 'Espuma de Contenção', 'Arremesse a cápsula em uma criatura a até 9 m. Ela testa Reflexos contra a sua DT de Engenheiro; em falha, fica Imobilizada até o fim do próximo turno. Uma criatura adjacente pode gastar uma Ação Padrão para romper a espuma. Em objetos, ela veda uma abertura de até 1 m por uma cena.'),
-  projetoEngenhoca('projetor-holografico', 'Projetor Holográfico', 'Posicione a engenhoca a até 12 m. Por três rodadas ela projeta a imagem e o som de uma criatura ou objeto Médio. Quem interagir testa Percepção contra a sua DT de Engenheiro; em falha, acredita que a projeção é real até tocá-la ou vê-la atravessar algo.'),
+  projetoEngenhoca('projetor-holografico', 'Projetor Holográfico', 'Posicione a engenhoca a até 12 m. Por três rodadas ela projeta a imagem e o som de uma criatura ou objeto de tamanho Normal. Quem interagir testa Percepção contra a sua DT de Engenheiro; em falha, acredita que a projeção é real até tocá-la ou vê-la atravessar algo.'),
   projetoEngenhoca('pulso-eletromagnetico', 'Pulso Eletromagnético', 'Arremesse o emissor num ponto a até 9 m. Máquinas e construtos em uma esfera de 3 m testam Fortitude contra a sua DT de Engenheiro; em falha, perdem reações e sofrem −2 nos ataques até o fim do próximo turno. Aparelhos comuns desligam pelo mesmo período.'),
   projetoEngenhoca('aranha-de-reparo', 'Aranha de Reparo', 'Solte um pequeno autômato que dura três rodadas, tem Defesa 12, 5 de Vida e Movimento 6 m. No fim de cada turno seu, ele restaura 1d6 de Vida de um construto, veículo, item ou criação adjacente. Você escolhe o alvo sem gastar ação.'),
   projetoEngenhoca('cabo-de-tirolesa', 'Cabo de Tirolesa', 'Fixe as duas pontas entre superfícies que estejam a até 18 m uma da outra. Até o fim da cena, qualquer criatura alcança a outra ponta gastando uma Ação de Movimento, desde que tenha uma mão livre. O cabo aguenta até duas criaturas ao mesmo tempo.'),
@@ -465,7 +465,7 @@ export const RECEITAS_MATERIAIS_COZINHEIRO: ReceitaMaterial[] = simplificarPrepa
     classe: 'cozinheiro',
     raridade: 'comum',
     linhas: [{ id: 'base-isolante', quantidade: 1, propriedade: { nome: 'Isolante', valorMinimo: 1 } }],
-    efeito: 'Refeição. Escolha uma afinidade elemental ao servir. O alvo recebe Resistência 3 contra dano dessa afinidade por uma cena.',
+    efeito: 'Refeição. Escolha um dos sete elementos ao servir. O alvo recebe Resistência 3 contra dano desse elemento por uma cena.',
   },
   {
     id: 'cuscuz-nordestino',
@@ -473,7 +473,7 @@ export const RECEITAS_MATERIAIS_COZINHEIRO: ReceitaMaterial[] = simplificarPrepa
     classe: 'cozinheiro',
     raridade: 'comum',
     linhas: [{ id: 'base-estimulante', quantidade: 1, propriedade: { nome: 'Estimulante', valorMinimo: 1 } }],
-    efeito: 'Lanche. O alvo recebe +2 na próxima iniciativa que rolar antes do descanso seguinte.',
+    efeito: 'Lanche. O alvo recebe +2 de Iniciativa no próximo combate antes do descanso seguinte.',
   },
   {
     id: 'empada-de-frango',

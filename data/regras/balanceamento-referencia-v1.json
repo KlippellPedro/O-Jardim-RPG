@@ -85,7 +85,7 @@
           "defesaNatural": 22,
           "poderes": 8,
           "grausTreinamento": 4,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 30,
@@ -95,7 +95,7 @@
           "defesaNatural": 27,
           "poderes": 8,
           "grausTreinamento": 5,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 40,
@@ -105,7 +105,7 @@
           "defesaNatural": 32,
           "poderes": 8,
           "grausTreinamento": 6,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 50,
@@ -115,7 +115,7 @@
           "defesaNatural": 37,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 60,
@@ -125,7 +125,7 @@
           "defesaNatural": 42,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 80,
@@ -135,7 +135,7 @@
           "defesaNatural": 52,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 100,
@@ -145,7 +145,7 @@
           "defesaNatural": 62,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 150,
@@ -155,7 +155,7 @@
           "defesaNatural": 87,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 200,
@@ -165,7 +165,7 @@
           "defesaNatural": 112,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         }
       ],
       "alertasTexto": []
@@ -225,7 +225,7 @@
           "defesaNatural": 22,
           "poderes": 8,
           "grausTreinamento": 4,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 30,
@@ -235,7 +235,7 @@
           "defesaNatural": 27,
           "poderes": 8,
           "grausTreinamento": 5,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 40,
@@ -245,7 +245,7 @@
           "defesaNatural": 32,
           "poderes": 8,
           "grausTreinamento": 6,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 50,
@@ -255,7 +255,7 @@
           "defesaNatural": 37,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 60,
@@ -265,7 +265,7 @@
           "defesaNatural": 42,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 80,
@@ -275,7 +275,7 @@
           "defesaNatural": 52,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 100,
@@ -285,7 +285,7 @@
           "defesaNatural": 62,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 150,
@@ -295,7 +295,7 @@
           "defesaNatural": 87,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         },
         {
           "nivel": 200,
@@ -305,7 +305,7 @@
           "defesaNatural": 112,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 11
+          "habilidades": 12
         }
       ],
       "alertasTexto": []
@@ -1569,6 +1569,7 @@
         }
       ],
       "alertasTexto": [
+        "Meus Filhos",
         "Engenhocas"
       ]
     },
@@ -3309,7 +3310,7 @@
           "defesaNatural": 22,
           "poderes": 8,
           "grausTreinamento": 4,
-          "habilidades": 10
+          "habilidades": 11
         },
         {
           "nivel": 30,
@@ -3319,7 +3320,7 @@
           "defesaNatural": 27,
           "poderes": 8,
           "grausTreinamento": 5,
-          "habilidades": 10
+          "habilidades": 11
         },
         {
           "nivel": 40,
@@ -3329,7 +3330,7 @@
           "defesaNatural": 32,
           "poderes": 8,
           "grausTreinamento": 6,
-          "habilidades": 10
+          "habilidades": 11
         },
         {
           "nivel": 50,
@@ -3339,7 +3340,7 @@
           "defesaNatural": 37,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 10
+          "habilidades": 11
         },
         {
           "nivel": 60,
@@ -3349,7 +3350,7 @@
           "defesaNatural": 42,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 10
+          "habilidades": 11
         },
         {
           "nivel": 80,
@@ -3359,7 +3360,7 @@
           "defesaNatural": 52,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 10
+          "habilidades": 11
         },
         {
           "nivel": 100,
@@ -3369,7 +3370,7 @@
           "defesaNatural": 62,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 10
+          "habilidades": 11
         },
         {
           "nivel": 150,
@@ -3379,7 +3380,7 @@
           "defesaNatural": 87,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 10
+          "habilidades": 11
         },
         {
           "nivel": 200,
@@ -3389,7 +3390,7 @@
           "defesaNatural": 112,
           "poderes": 8,
           "grausTreinamento": 7,
-          "habilidades": 10
+          "habilidades": 11
         }
       ],
       "alertasTexto": []

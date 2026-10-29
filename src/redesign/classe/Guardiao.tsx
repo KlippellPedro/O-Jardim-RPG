@@ -109,7 +109,7 @@ export const Guardiao = ({ classe }: { classe: IClasse }) => {
             <ShieldAlert size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Provocar</h3>
             <p className="text-stone-400 leading-relaxed text-sm">
-              Uma vez por combate, gaste Estamina para bradar um desafio: todos os inimigos a até 6m testam Vontade contra a sua DT. Quem falhar sofre −2 para atacar qualquer alvo que não seja você por uma rodada. Com a experiência, você também reduz o dano que sofre dos primeiros golpes recebidos.
+              Uma vez por rodada, gaste Estamina para bradar um desafio: todos os inimigos a até 6 m testam Vontade contra a sua DT. Quem falhar sofre −2 para atacar qualquer alvo que não seja você, e só se livra passando na Vontade no fim de um turno. Com a experiência, você também reduz o dano dos primeiros golpes, e no nível 20 quem ignora o desafio leva o seu contra-ataque.
             </p>
           </PremiumCard>
 
@@ -124,7 +124,7 @@ export const Guardiao = ({ classe }: { classe: IClasse }) => {
             <Shield size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Coração Unificado</h3>
             <p className="text-stone-400 leading-relaxed text-sm">
-              Uma vez por sessão, você e até cinco aliados a 12 m recebem Resistência 10 contra todo dano por três rodadas. Uma vez por rodada, use uma Reação para receber no lugar de um deles todo o dano de um ataque.
+              Uma vez por sessão, você e até cinco aliados a 12 m reduzem em 10 o dano de cada golpe por três rodadas. Uma vez por rodada, use uma Reação para receber no lugar de um deles todo o dano de um ataque.
             </p>
           </PremiumCard>
           <PremiumCard

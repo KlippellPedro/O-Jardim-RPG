@@ -127,7 +127,7 @@ export const Ritualista = ({ classe }: { classe: IClasse }) => {
             <Hourglass size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Rito Guardado</h3>
             <p className="text-purple-200/60 leading-relaxed text-sm">
-              A partir do nível 15 você não precisa mais soltar o rito na hora em que ele fica pronto. Faça o trabalho na véspera, pague tudo, e prenda o efeito. Ele espera até o fim da sessão dentro de você, e sai com uma Ação Padrão no momento que importar, inclusive no meio de uma luta que o rito jamais poderia acompanhar.
+              A partir do nível 5 você não precisa mais soltar o rito na hora em que ele fica pronto. Faça o trabalho na véspera, pague tudo, e prenda o efeito. Ele espera até o fim da sessão dentro de você, e sai com uma Ação Padrão no momento que importar, inclusive no meio de uma luta que o rito jamais poderia acompanhar. No 5 cabe um rito simples, no 10 um complexo e no 15 um grandioso.
             </p>
           </PremiumCard>
         </div>
