@@ -59,7 +59,7 @@
   },
   "combate": {
     "_nota": "Valor de Desafio (VD) das criaturas: é o nível do grupo que a criatura desafia sozinha (VD 30 = criatura solo para um grupo de nível 30). 'vd_maximo' só barra digitação absurda, e criaturas únicas podem passar do 100. O XP de uma criatura solo é o custo do nível de mesmo número dividido por 'xp_divisor_por_vd', somado e repartido entre os jogadores da cena.",
-    "vd_maximo": 1000,
+    "vd_maximo": 1500,
     "xp_divisor_por_vd": 5
   },
   "patamares": {

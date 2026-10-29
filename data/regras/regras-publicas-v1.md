@@ -884,11 +884,35 @@ Críticos
 
 - Margem larga e multiplicador alto não andam juntos: 18-20 e 19-20 sempre com x2; x3 e x4 sempre com margem 20.
 
+- Efeito de classe ou de raça que alarga a margem só alarga em arma x2. Em arma x3 ou x4, cada passo que alargaria a margem vira +1 dado no dano do crítico.
+
 **Exemplo:**
 
 Bia ataca com uma espada 19-20/x2 que causa 1d8+4, e o bônus total dela em Luta é +9. O bandido tem Defesa 14. Ela tira 17 no d20: 17 + 9 = 26, acima de 14, então acerta. Como o 17 está fora da margem 19-20, o dano é o normal, 1d8+4. Se tivesse tirado 19, o ataque seria crítico e o dano subiria para 2d8+4.
 
 O que cada tipo de dano faz, e como a Resistência entra na conta, está em Tipos de Dano.
+
+Ataque desarmado
+
+Soco, chute, cotovelada e cabeçada usam Luta e causam **1d4 de impacto + Mod. Força**, com crítico 20/x2. Classe ou raça que der outro dano desarmado, como o Lutador, diz isso no próprio texto.
+
+### Ver e ser visto
+
+- Situação | O que muda
+
+- Luz plena | Nada muda.
+
+- Pouca luz | Penumbra, luar ou uma tocha distante: desvantagem em Percepção que depende da visão.
+
+- Escuridão | Quem não enxerga no escuro fica Cego para o que está nela.
+
+- Camuflagem | Fumaça, névoa, folhagem densa ou sombra: ataques contra quem está camuflado têm −2, e ele pode tentar se esconder com Furtividade.
+
+- Invisível | É uma condição: quem não consegue ver você ataca com desvantagem, e os seus ataques contra essa criatura têm vantagem. Revelado encerra.
+
+- Cobertura total | Atrás de parede ou obstáculo inteiro, você não pode ser alvo direto de ataque nem de efeito que pede alvo. Efeito em área que contorne o obstáculo ainda alcança.
+
+Quem enxerga no escuro vê normalmente na escuridão natural. Escuridão criada por magia ou Fluxo só cede para quem a fonte disser.
 
 ### Manobras
 
@@ -915,6 +939,32 @@ d20 + Luta contra 10 + Reflexos ou Fortitude do alvo
 - Manobra não causa dano por si só. Habilidade que somar dano a uma manobra diz isso no texto.
 
 Agarrado, Caído e Imobilizado são condições, e todas estão em Condições.
+
+### Tamanho
+
+São seis categorias. **Normal** é o tamanho de uma pessoa comum; onde algum texto antigo disser "médio" para tamanho, leia Normal.
+
+- Tamanho | Espaço que ocupa | Alcance corpo a corpo | Exemplos
+
+- Minúsculo | Divide 1,5 m com outros | Precisa entrar no espaço do alvo | Rato, inseto, drone de bolso
+
+- Pequeno | 1,5 m | 1,5 m | Goblim, Anão
+
+- Normal | 1,5 m | 1,5 m | Humano, Elfo
+
+- Grande | 3 m | 3 m | Golem, Gigante jovem, cavalo
+
+- Enorme | 4,5 m | 4,5 m | Golem Enorme, Gigante adulto
+
+- Colossal | 6 m ou mais | 6 m | Gigante no topo da escada, dragão ancião
+
+- **Equipamento:** arma, armadura e roupa feitas para um tamanho só servem em outro depois de ajustadas por um artesão ou feitas sob medida.
+
+- **Manobras:** agarrar, derrubar ou empurrar uma criatura um tamanho maior que você tem desvantagem. Dois tamanhos acima, a manobra não funciona sem uma regra que autorize.
+
+- **Carga:** sai da Força. Quem carrega mais por ser grande diz isso no próprio traço, como o Gigante.
+
+- **Alcance:** o da tabela vale para ataque sem arma de haste. Arma com alcance próprio soma ao do tamanho só se a arma disser.
 
 ### Defesas passivas
 
@@ -946,7 +996,7 @@ Depois de um combate, o corpo cobra o que ele custou: veja Ferimentos e Descanso
 
 **Status:** Regra oficial
 
-Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos com as quatorze derivações, o dano de ambiente e a ordem certa para aplicar Resistência.
+Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos com as quatorze derivações, o dano de ambiente, o dano verdadeiro e a ordem certa para aplicar Resistência.
 
 Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade e qualquer efeito que "protege contra um tipo de dano" sempre apontam para uma entrada específica daqui, nunca para "dano" de forma genérica.
 
@@ -960,6 +1010,8 @@ Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade
 
 - Resistência vale sempre por tipo específico, e entra por último na conta: multiplicador crítico, dados extras, vulnerabilidade e só então a Resistência, até o mínimo 0.
 
+- Dano verdadeiro fica fora das famílias. Nenhuma Resistência reduz esse dano, e por isso ele é um dos mais fortes do jogo.
+
 ### As cinco famílias
 
 - **Físicos:** corte, perfuração, impacto e balístico.
@@ -970,7 +1022,7 @@ Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade
 
 - **Tecnológico:** vem do Fluxo artificial de Tecnologia (A.X.I.S). Usa a mesma Mana e a mesma regra de Resistência que qualquer Fluxo, mas não conta como dano mágico.
 
-- **Mental:** tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura. Os ataques de Comunicação tiram Vida, com dano de Comunicação; dano mental é só o que a fonte chama assim.
+- **Mental:** tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura. Os ataques de Comunicação tiram Vida, com dano de Comunicação; dano mental é só o que a fonte chama assim. Como a Sanidade vai de 0 a 100 e volta devagar, dano mental usa dados pequenos.
 
 ### Dano elemental
 
@@ -1018,6 +1070,10 @@ Cada elemento tem duas derivações, e cada derivação é um tipo de dano próp
 
 Frio e Calor vêm do lugar onde você está: um deserto sem sombra, uma noite de nevasca, uma câmara de forja. Gelo e Fogo vêm de um golpe que você levou. Por isso são tipos diferentes, e Resistência a um não vale para o outro. A Resistência contra Frio ou Calor de um Traje vale para o clima; a Resistência a Gelo de um Fruto vale para o golpe.
 
+### Dano verdadeiro
+
+Dano verdadeiro não pertence a nenhuma das cinco famílias. Nenhuma Resistência reduz esse dano, não existe Resistência a ele, e a redução de dano também não vale contra ele. Por isso é um dos danos mais fortes do jogo, e só aparece quando a fonte escreve com todas as letras "dano verdadeiro", quase sempre numa habilidade de topo.
+
 ### Resistência e ordem de aplicação
 
 A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.
@@ -1029,6 +1085,8 @@ A ordem importa: multiplicar depois de subtrair a Resistência daria um número 
 - Aplique vulnerabilidade, que dobra o dano daquele tipo, ou redução percentual.
 
 - Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.
+
+- Por fim, aplique a redução de dano, quando um efeito manda "reduzir em X o dano de cada golpe". Ela vale para qualquer tipo, menos o dano verdadeiro, até o mínimo 0.
 
 **Exemplo:**
 
@@ -1188,6 +1246,10 @@ Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua s
 
 - A Mutilação sempre é anunciada antes, e um sucesso no teste evita a perda.
 
+- Fora de combate, qualquer um trata um ferido: 10 minutos e Cura DT 15 devolvem 1d6 de Vida.
+
+- Voltar da morte existe, mas é raro e cobra caro.
+
 ### Vida negativa
 
 - Continue registrando o dano abaixo de 0. Esse valor é o seu **Déficit de Vida**.
@@ -1227,6 +1289,10 @@ Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes 
 **Exemplo:**
 
 Davi tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de Vida é 12, ou 30% da Vida máxima: Gravidade 2. Ele cai inconsciente com Morrendo 1. No fim do turno dele, rola Fortitude contra DT 12 + (2 × 2) + 0 = 16, porque ainda não tem Ferido. Falhou: Morrendo 2. Uma aliada o estabiliza com um teste de Cura contra a mesma DT 16, e os testes de Morrendo param. Ele só acorda quando alguém curar o bastante para levá-lo de volta a 1 PV, e então ganha Ferido 1.
+
+### Tratar ferimentos
+
+Fora de combate, com dez minutos e um teste de Cura DT 15, qualquer um trata um ferido, que recupera **1d6 de Vida**. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.
 
 ### Remover Ferido
 
@@ -1295,6 +1361,18 @@ Algumas criaturas querem levar uma parte de quem enfrentam. Quando a ficha de um
 - **Implante:** Braço Hidráulico Titânico, Pernas Pneumáticas e Olho Biônico Mk-II cobrem o que sumiu e anulam a penalidade daquele membro enquanto estiverem funcionando. O Mestre decide se a Laringe Sintética Camaleão devolve a fala.
 
 - Sem uma dessas portas, a perda é permanente. O personagem continua inteiro para tudo que a tabela não cita.
+
+### Voltar da morte
+
+Quem morre vai para Arkarin, e de lá quase ninguém volta. Voltar existe, mas é raro e cobra caro.
+
+- **Só por efeito que diga:** nenhuma cura, poção ou teste de Morrendo traz alguém de volta. Só um efeito que diga com todas as letras que devolve a vida, como a Reconstrução da Pedra Filosofal do Alquimista, ou uma cena que o Mestre conduza como história.
+
+- **Pouco tempo:** o próprio efeito diz até quando ainda dá. Passado esse tempo, a alma já atravessou.
+
+- **O preço:** quem volta ganha Ferido 2 e 2 de Cansaço, e Arkarin fica com alguma coisa. O jogador e o Mestre escolhem juntos uma lembrança, um laço ou uma condição de longo prazo, que fica para sempre.
+
+- **Exceção:** o Mestre pode negar a volta de quem já voltou uma vez.
 
 ## coreografia
 
@@ -3094,7 +3172,7 @@ A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai d
 
 - Cada alma nasce com um Fluxo natural, e só um. Exceção precisa estar escrita na história do personagem.
 
-- O Fluxo nativo é o da Árvore em que a alma nasceu. Quem nasce na A.X.I.S tem Comunicação, o Fluxo da Parley que segue vivo sob a Malha. O Autômato é a exceção: ele é montado, e o núcleo dele já é a Tecnologia instalada.
+- O Fluxo nativo é o da Árvore em que a alma nasceu. Quem nasce na A.X.I.S tem Comunicação, o Fluxo da Parley que segue vivo sob a Malha. O Autômato é a exceção: ele é montado, e o núcleo dele já é a Tecnologia instalada. O Espírito natural é a outra: ele nasce de um Fluxo, e o Fluxo da marca é o nativo dele em qualquer Árvore. Os Espíritos demoníacos e angelicais seguem a Árvore.
 
 - Ficha sem Árvore não tem Fluxo nativo. O Canalizador sem Árvore escolhe um dos dez Fluxos naturais na Canalização Nativa.
 
@@ -3682,7 +3760,7 @@ Condição é o que fica grudado no personagem por um tempo: um estado com efeit
 
 - A Sanidade vai de 0 a 100. Perdê-la custa 1d4, 1d6, 1d8 ou 2d6, conforme o tamanho do que você viu, e cada faixa dela tem um estado: de Estável a Quebra.
 
-- Abaixo de certos pontos a Sanidade provoca crises, e há 6 catalogadas. As 25 condições oficiais e as 47 de longo prazo estão nas tabelas deste tópico.
+- Abaixo de certos pontos a Sanidade provoca crises, e há 6 catalogadas. As 28 condições oficiais e as 47 de longo prazo estão nas tabelas deste tópico.
 
 - A ficha aplica sozinha o que dá para calcular. O que depende da cena continua com a mesa.
 
@@ -3776,9 +3854,29 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 - Desorientado | Desvantagem em ataques e em Percepção. | No fim do turno, Fortitude ou Vontade, à escolha de quem joga, contra a DT da fonte encerra a condição.
 
+- Fascinado | Não ataca a fonte nem age contra ela. −5 em Percepção para notar qualquer outra coisa. | Termina ao fim da duração, ao sofrer dano ou quando alguém ameaça de forma clara a criatura ou a fonte. Um aliado adjacente pode gastar uma Ação Padrão para sacudir a criatura e encerrar a condição.
+
+- Enjoado | Desvantagem em ataques e em testes de Destreza. | No fim do turno, Fortitude contra a DT da fonte encerra a condição.
+
 - Quando a fonte não diz como sair de Imobilizado, a criatura gasta uma Ação Padrão e testa Atletismo ou Acrobacia contra a DT da fonte. Na magia, é a DT de conjuração dela.
 
 - Condição que vem de uma fonte instantânea e não diz quanto dura vai até o fim do próximo turno de quem a recebeu.
+
+### Gravidade
+
+Quando uma cura, uma receita ou uma habilidade encerra uma condição "leve", "média" ou "grave", é por esta escala. Quem trata um degrau trata também os de baixo: uma cura que encerra condição média encerra uma leve no lugar, se o paciente preferir.
+
+- Gravidade | Condições
+
+- Leve | Amedrontado, Exposto, Revelado, Caído, Sangramento, Agarrado, Surpreendido, Queimando, Envenenado, Lento, Enfraquecido, Silenciado, Desorientado, Fascinado, Enjoado.
+
+- Média | Atordoado, Cego, Imobilizado, Paralisado e as crises de Sanidade.
+
+- Grave | As condições de longo prazo deste tópico, Ferido e qualquer aflição no estágio 3 ou mais.
+
+- Gravíssima | Perda de membro ou de sentido (a Mutilação de Ferimentos) e maldição.
+
+Inconsciente e Concentrando ficam fora da escala: a primeira acaba quando a causa acaba, e a segunda é escolha de quem conjura. As condições benéficas também ficam de fora, porque ninguém quer se curar delas.
 
 ### Condições benéficas
 
@@ -3797,6 +3895,8 @@ São as condições que ajudam. Vêm de uma palavra de ânimo, de uma magia de a
 - Apressado | Movimento +3 m. Iniciativa +2. Não acumula consigo mesmo. | Termina ao fim da duração.
 
 - Revigorado | No começo do seu turno, recupere 1d4 de Vida. Não acumula consigo mesmo. | Termina ao fim da duração.
+
+- Invisível | Quem não consegue ver você ataca com desvantagem, e os seus ataques contra essa criatura têm vantagem. Você pode tentar se esconder mesmo sem cobertura. Não acumula consigo mesma. | Termina ao fim da duração da fonte, ao ficar Revelado ou quando a fonte disser que acaba, como ao atacar.
 
 ### Lesões, sequelas e saúde mental
 
@@ -4435,6 +4535,8 @@ Estas são as raças do jogo, com o ajuste inicial que cada uma dá a Vida, Mana
 
 - Estar na lista não concede acesso: combine com o Mestre quais raças especiais estão abertas na sua mesa.
 
+- Quando um traço manda alguém testar, a raça tem a sua DT, como as classes: você rola a perícia da raça na hora (Intimidação no Vampiro, Atuação na Sereia, Religião no Divino, Misticismo no Elfo...), e o resultado é a DT. A página de cada raça diz qual é.
+
 ### As raças
 
 - Raça | Tipo | Vida | Mana | Estamina | Movimento
@@ -4659,7 +4761,7 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra no Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 1.368 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 1.369 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 **Em resumo**
 
@@ -4683,7 +4785,7 @@ O catálogo inteiro tem 1.368 itens, e você nunca vê todos de uma vez. Cada it
 
 - Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 332
 
-- Banco Lunar | Lendário, Mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 271
+- Banco Lunar | Lendário, Mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 272
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 

@@ -22,11 +22,11 @@ test('editor de condições da sessão importa o catálogo oficial em vez de dup
   );
 });
 
-test('a seleção rápida de condições na sessão cobre as 25 condições oficiais e as 6 crises', () => {
+test('a seleção rápida de condições na sessão cobre as 28 condições oficiais e as 6 crises', () => {
   // Confere que o componente realmente itera sobre as duas listas
   // combinadas (não só uma das duas).
   assert.match(codigoEditorSessao, /CONDICOES_RAPIDAS\s*=\s*\[\.\.\.CONDICOES_OFICIAIS,\s*\.\.\.CRISES_SANIDADE\]/);
-  assert.equal(CONDICOES_OFICIAIS.length, 25);
+  assert.equal(CONDICOES_OFICIAIS.length, 28);
   assert.equal(CRISES_SANIDADE.length, 6);
 });
 

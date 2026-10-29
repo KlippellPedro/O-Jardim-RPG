@@ -202,7 +202,8 @@ test('XP por VD: um quinto do custo do nível de mesmo número', () => {
   assert.equal(xpPorVd(null), 0);
   assert.equal(xpPorVd(0), xpPorVd(1));
   assert.equal(xpPorVd(VD_MAXIMO + 500), xpPorVd(VD_MAXIMO));
-  assert.equal(VD_MAXIMO, 1000);
+  // 1000 é a deidade no Domínio; os Soberanos ficam acima dela (questionário final, perguntas 44 e 46).
+  assert.equal(VD_MAXIMO, 1500);
 });
 
 test('VD antigo (1 a 10) vira o meio da faixa de 5 níveis', () => {

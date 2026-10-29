@@ -5,7 +5,7 @@ import { CONDICOES_LONGO_PRAZO } from '../../data/regras/condicoes-longo-prazo';
 import { REGRAS_OFICIAIS } from '../../data/regras/regras';
 
 const NOVAS_NEGATIVAS = ['queimando', 'envenenado', 'lento', 'enfraquecido', 'paralisado', 'silenciado', 'desorientado'];
-const NOVAS_POSITIVAS = ['inspirado', 'favorecido', 'resguardado', 'focado', 'apressado', 'revigorado'];
+const NOVAS_POSITIVAS = ['inspirado', 'favorecido', 'resguardado', 'focado', 'apressado', 'revigorado', 'invisivel'];
 
 test('ids das condições de cena são únicos e não repetem os do longo prazo nem os das crises', () => {
   const ids = [

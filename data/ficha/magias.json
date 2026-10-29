@@ -1229,7 +1229,7 @@
       "concentracao": true,
       "ataque": false,
       "defesa": null,
-      "efeito": "O conjurador deixa de portar o Fluxo e passa a ser ele. Enquanto durar, recebe +5 em testes de conjuração, resistência 15 contra todo dano e Vida temporária igual a 10 × Mod. Fluxo.",
+      "efeito": "O conjurador deixa de portar o Fluxo e passa a ser ele. Enquanto durar, recebe +5 em testes de conjuração, reduz em 15 o dano de cada golpe e Vida temporária igual a 10 × Mod. Fluxo.",
       "efeitos_por_fluxo": {
         "origem": "Toda magia que ele conjurar cura 2d8 no aliado mais próximo, além do efeito normal.",
         "essencia": "Nenhuma magia hostil o alcança sem revelar antes quem a lançou.",

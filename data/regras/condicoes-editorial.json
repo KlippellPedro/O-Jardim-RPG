@@ -7,6 +7,7 @@
       "id": "amedrontado",
       "titulo": "Amedrontado",
       "categoria": "mental",
+      "gravidade": "leve",
       "duracao": "Até o fim da cena ou até superar a fonte.",
       "efeitos": [
         "Desvantagem em testes contra a fonte do medo.",
@@ -19,6 +20,7 @@
       "id": "exposto",
       "titulo": "Exposto",
       "categoria": "combate",
+      "gravidade": "leve",
       "duracao": "Até o começo do próximo turno.",
       "efeitos": [
         "Defesa reduzida em 2.",
@@ -31,6 +33,7 @@
       "id": "revelado",
       "titulo": "Revelado",
       "categoria": "combate",
+      "gravidade": "leve",
       "duracao": "Conforme a fonte.",
       "efeitos": [
         "Perde disfarce, transformação e invisibilidade de origem mágica enquanto durar.",
@@ -43,6 +46,7 @@
       "id": "caido",
       "titulo": "Caído",
       "categoria": "física",
+      "gravidade": "leve",
       "duracao": "Até se levantar.",
       "efeitos": [
         "Ataques corpo a corpo contra você recebem +2.",
@@ -56,6 +60,7 @@
       "id": "sangramento",
       "titulo": "Sangramento",
       "categoria": "física",
+      "gravidade": "leve",
       "duracao": "Até ser tratado.",
       "efeitos": [
         "Sofra 1d6 de dano no fim do turno.",
@@ -68,6 +73,7 @@
       "id": "atordoado",
       "titulo": "Atordoado",
       "categoria": "física",
+      "gravidade": "media",
       "duracao": "Até o fim do próximo turno, salvo indicação diferente.",
       "efeitos": [
         "Não pode usar ações nem reações.",
@@ -81,6 +87,7 @@
       "id": "agarrado",
       "titulo": "Agarrado",
       "categoria": "física",
+      "gravidade": "leve",
       "duracao": "Enquanto o agarrão for mantido.",
       "efeitos": [
         "Movimento 0.",
@@ -93,6 +100,7 @@
       "id": "cego",
       "titulo": "Cego",
       "categoria": "física",
+      "gravidade": "media",
       "duracao": "Conforme a fonte.",
       "efeitos": [
         "Desvantagem em testes que dependem de visão.",
@@ -105,6 +113,7 @@
       "id": "imobilizado",
       "titulo": "Imobilizado",
       "categoria": "física",
+      "gravidade": "media",
       "duracao": "Conforme a fonte.",
       "efeitos": [
         "Movimento 0.",
@@ -130,6 +139,7 @@
       "id": "surpreendido",
       "titulo": "Surpreendido",
       "categoria": "combate",
+      "gravidade": "leve",
       "duracao": "Primeira rodada.",
       "efeitos": [
         "Iniciativa reduzida em 5 na primeira rodada.",
@@ -154,6 +164,7 @@
       "id": "queimando",
       "titulo": "Queimando",
       "categoria": "física",
+      "gravidade": "leve",
       "duracao": "Até ser apagado.",
       "efeitos": [
         "Sofra 1d6 de dano de Fogo no fim do turno.",
@@ -166,6 +177,7 @@
       "id": "envenenado",
       "titulo": "Envenenado",
       "categoria": "física",
+      "gravidade": "leve",
       "duracao": "Até ser tratado.",
       "efeitos": [
         "Sofra 1d6 de dano de veneno no fim do turno.",
@@ -178,6 +190,7 @@
       "id": "lento",
       "titulo": "Lento",
       "categoria": "física",
+      "gravidade": "leve",
       "duracao": "Conforme a fonte.",
       "efeitos": [
         "Movimento pela metade e sem correr.",
@@ -190,6 +203,7 @@
       "id": "enfraquecido",
       "titulo": "Enfraquecido",
       "categoria": "física",
+      "gravidade": "leve",
       "duracao": "Conforme a fonte.",
       "efeitos": [
         "−2 em testes de Força e no dano de ataques corpo a corpo."
@@ -201,6 +215,7 @@
       "id": "paralisado",
       "titulo": "Paralisado",
       "categoria": "física",
+      "gravidade": "media",
       "duracao": "Conforme a fonte.",
       "efeitos": [
         "Não pode agir, reagir nem se mover, mas segue consciente e ouve tudo.",
@@ -214,6 +229,7 @@
       "id": "silenciado",
       "titulo": "Silenciado",
       "categoria": "mental",
+      "gravidade": "leve",
       "duracao": "Conforme a fonte.",
       "efeitos": [
         "Não fala: sem componente verbal em magia e sem ordens faladas.",
@@ -226,11 +242,37 @@
       "id": "desorientado",
       "titulo": "Desorientado",
       "categoria": "mental",
+      "gravidade": "leve",
       "duracao": "Até o fim da cena ou até superar a fonte.",
       "efeitos": [
         "Desvantagem em ataques e em Percepção."
       ],
       "remocao": "No fim do turno, Fortitude ou Vontade, à escolha de quem joga, contra a DT da fonte encerra a condição."
+    },
+    {
+      "tipo": "condicao",
+      "id": "fascinado",
+      "titulo": "Fascinado",
+      "categoria": "mental",
+      "gravidade": "leve",
+      "duracao": "Conforme a fonte.",
+      "efeitos": [
+        "Não ataca a fonte nem age contra ela.",
+        "−5 em Percepção para notar qualquer outra coisa."
+      ],
+      "remocao": "Termina ao fim da duração, ao sofrer dano ou quando alguém ameaça de forma clara a criatura ou a fonte. Um aliado adjacente pode gastar uma Ação Padrão para sacudir a criatura e encerrar a condição."
+    },
+    {
+      "tipo": "condicao",
+      "id": "enjoado",
+      "titulo": "Enjoado",
+      "categoria": "física",
+      "gravidade": "leve",
+      "duracao": "Até o fim da cena ou até superar a fonte.",
+      "efeitos": [
+        "Desvantagem em ataques e em testes de Destreza."
+      ],
+      "remocao": "No fim do turno, Fortitude contra a DT da fonte encerra a condição."
     },
     {
       "tipo": "condicao",
@@ -310,6 +352,20 @@
         "Não acumula consigo mesmo."
       ],
       "remocao": "Termina ao fim da duração."
+    },
+    {
+      "tipo": "condicao",
+      "id": "invisivel",
+      "titulo": "Invisível",
+      "categoria": "combate",
+      "positiva": true,
+      "duracao": "Conforme a fonte.",
+      "efeitos": [
+        "Quem não consegue ver você ataca com desvantagem, e os seus ataques contra essa criatura têm vantagem.",
+        "Você pode tentar se esconder mesmo sem cobertura.",
+        "Não acumula consigo mesma."
+      ],
+      "remocao": "Termina ao fim da duração da fonte, ao ficar Revelado ou quando a fonte disser que acaba, como ao atacar."
     },
     {
       "tipo": "crise",

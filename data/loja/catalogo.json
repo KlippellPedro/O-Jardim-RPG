@@ -2728,7 +2728,7 @@
         "espacos": 1,
         "atributos": [
           "Defesa +4",
-          "Resistência 4 contra todo dano",
+          "Reduz em 4 o dano de cada golpe",
           "Exige aprovação do Mestre"
         ],
         "nivelMinimoLoja": 4
@@ -2753,7 +2753,7 @@
         "atributos": [
           "Escudo",
           "Defesa +4",
-          "Resistência 4 contra todo dano",
+          "Reduz em 4 o dano de cada golpe",
           "Exige aprovação do Mestre"
         ],
         "nivelMinimoLoja": 4
@@ -21723,6 +21723,34 @@
     },
     {
       "tipo": "artefato",
+      "id": "reliquia-colar-nove-lascas",
+      "titulo": "Colar das Nove Lascas",
+      "conteudo": {
+        "descricao": "Enquanto você usa o colar, o Mestre marca na ficha os Fluxos naturais como instalados: você aprende e conjura magias, rituais, selos e encantamentos de qualquer um deles, e o do Fim continua pedindo a autorização dele. A Marca de círculo segue só do seu Fluxo nativo. Uma vez por cena, ao conjurar uma magia de um Fluxo que não é o seu, role o teste com vantagem. Uma vez por sessão, conjure uma magia de qualquer Fluxo natural que você ainda não aprendeu, de um círculo que você já alcança, pagando a Mana normal; ela não fica no seu grimório.",
+        "preco": {
+          "Fragmentos de Estrela": 700
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Fluxos instalados",
+          "Vantagem em conjuração"
+        ],
+        "subtipo": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4,
+        "ativacao": "Passiva enquanto usado; a vantagem é Ação Livre",
+        "frequencia": "1/cena para a vantagem, 1/sessão para a magia que você não aprendeu",
+        "natureza": "reliquia-criacao",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "requer_autorizacao_mestre": true,
+        "lore": "Nove lascas de matéria, uma de cada Árvore, presas num fio que ninguém sabe de que é feito. Cada lasca foi tirada sozinha, com anos de intervalo, por alguém que não podia sair do lugar. O colar pesa pouco e esquenta no pescoço quando alguém perto erra uma magia."
+      }
+    },
+    {
+      "tipo": "artefato",
       "id": "reliquia-ampulheta-instante",
       "titulo": "Ampulheta do Instante Recusado",
       "conteudo": {
@@ -38683,7 +38711,7 @@
           "Mapa Que Anda (Passo que Muda o Chão, 1/rodada, Ação de Movimento: terreno em alcance Médio vira difícil; Reflexos DT 42 ou cai)",
           "Duas Pedras por Vez (Sequência de Ataques, 1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)",
           "Sono de Pedra (Reação, 1/cena: ao chegar a metade da Vida, faz uma pausa e se agacha; até o fim da próxima rodada ele reduz em 10 o dano de cada golpe recebido e ganha Defesa +5, e quem falar com ele em Brontéu ou com humildade sincera faz Diplomacia DT 42 para encerrar a cena sem mais luta)",
-          "Gente Pequena (criaturas de tamanho Médio ou menor em alcance Curto têm vantagem em testes de Furtividade contra ele e desvantagem em testes de Atletismo para se manter de pé)"
+          "Gente Pequena (criaturas de tamanho Normal ou menor em alcance Curto têm vantagem em testes de Furtividade contra ele e desvantagem em testes de Atletismo para se manter de pé)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,

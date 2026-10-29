@@ -1,5 +1,5 @@
 {
-  "_nota": "Fichas das Deidades para o Bestiário da Sessão. Lido só pelo servidor (plataforma/core/deidades.py) e entregue só a quem comanda a mesa: o campo Estado revela o que a mesa só descobre pela história. A fonte do texto é o capítulo Guia do Mestre (data/regras/regras.ts, seção Fichas das Deidades); mudou um, mude o outro. Os números são o degrau VD 500 (fora do Domínio).",
+  "_nota": "Fichas das Deidades para o Bestiário da Sessão. Lido só pelo servidor (plataforma/core/deidades.py) e entregue só a quem comanda a mesa: o campo Estado revela o que a mesa só descobre pela história. A fonte do texto é o capítulo Guia do Mestre (data/regras/regras.ts, seção Fichas das Deidades); mudou um, mude o outro. Os números são o degrau VD 500 (fora do Domínio). A lista soberanos guarda as fichas dos Soberanos que já têm número (VD 1200, acima da deidade no Domínio), com o mesmo sigilo: o texto de referência é a seção Fichas dos Soberanos do Guia do Mestre.",
   "versao": 1,
   "deidades": [
     {
@@ -694,6 +694,120 @@
         "defesa": 416,
         "iniciativa": 428
       }
+    }
+  ],
+  "soberanos": [
+    {
+      "id": "soberano-ushumgal",
+      "titulo": "Ushumgal",
+      "epiteto": "Soberano dos Dragões",
+      "descricao": "Soberano dos Dragões. O único dragão que chegou ao fim do crescimento: tudo o que um dragão pode ser, numa criatura só.",
+      "vd": 1200,
+      "nivel": 1200,
+      "pv": 59040,
+      "defesa": 619,
+      "iniciativa": 634,
+      "mana": 3605,
+      "estamina": 2400,
+      "deslocamento": "Voo Imenso; pousa onde quer",
+      "atributos": {
+        "forca": 24,
+        "agilidade": 24,
+        "vigor": 24,
+        "presenca": 23,
+        "intelecto": 23
+      },
+      "pericias": [
+        "Luta +648",
+        "Fortitude +648",
+        "Reflexos +648",
+        "Vontade +647",
+        "Percepção +640"
+      ],
+      "ataques": [
+        {
+          "nome": "Golpe do Dragão Verdadeiro",
+          "detalhe": "+648, 122d10+447 de corte"
+        },
+        {
+          "nome": "Sopro Dourado",
+          "detalhe": "1/cena, Ação Padrão: cone Imenso, 1.677 de fogo, Reflexos DT 615 para metade."
+        },
+        {
+          "nome": "Calma do Ápice",
+          "detalhe": "Aura Imensa: inimigo que começa o turno nela testa Vontade DT 615; falhando, fica Amedrontado até o fim do turno."
+        },
+        {
+          "nome": "Nenhum Dragão Ergue a Voz",
+          "detalhe": "Passiva: dragão de qualquer idade não ataca Ushumgal nem age contra ele, salvo por um motivo de história."
+        }
+      ],
+      "habilidades": [
+        "Estado (Livre e sem território. Pousa onde quer e não espera nada de ninguém. A mesa só o conhece por boato.)",
+        "Ápice (Tudo o que um dragão pode ser, numa criatura só. Não cresce mais, porque não falta nada a ele.)",
+        "Perfil (Mais Vida que qualquer deidade: Vida 59.040 e Iniciativa 634. Defesa 619, ataque e testes +648, golpe comum 122d10+447 (1.118), golpe anunciado 1.677, DT 615, Mana 3.605. Cada poder de Ação Padrão custa 180 de Mana e cada Reação, 90.)",
+        "Sopro Dourado (1/cena, Ação Padrão: cone Imenso de fogo com o golpe anunciado, 1.677, e Reflexos DT 615 para metade.)",
+        "Calma do Ápice (Aura Imensa: o inimigo que começa o turno nela testa Vontade DT 615 e, falhando, fica Amedrontado até o fim do turno.)",
+        "Nenhum Dragão Ergue a Voz (Dragão de qualquer idade não ataca Ushumgal nem age contra ele, a menos que um motivo de história o liberte.)",
+        "Limite (Não usa magia de Fluxo: o poder dele é o corpo, o sopro e a calma. Não guarda tesouro nem território, então não há nada para tomar dele.)",
+        "Contrajogo (Quem passa três rodadas diante dele sem atacar nem fugir ganha uma pergunta respondida com a verdade. Contra Ushumgal, conversa vale mais que dano.)"
+      ]
+    },
+    {
+      "id": "soberano-karnath",
+      "titulo": "Karnath",
+      "epiteto": "Soberano dos Monstros",
+      "descricao": "Soberano dos Monstros. O primeiro predador: todo monstro de toda Árvore carrega uma lasca do que ele é.",
+      "vd": 1200,
+      "nivel": 1200,
+      "pv": 49200,
+      "defesa": 619,
+      "iniciativa": 684,
+      "mana": 3605,
+      "estamina": 2400,
+      "deslocamento": "Terrestre Imenso, em qualquer terreno",
+      "atributos": {
+        "forca": 24,
+        "agilidade": 24,
+        "vigor": 24,
+        "presenca": 23,
+        "intelecto": 23
+      },
+      "pericias": [
+        "Luta +648",
+        "Fortitude +648",
+        "Reflexos +648",
+        "Vontade +647",
+        "Percepção +640"
+      ],
+      "ataques": [
+        {
+          "nome": "Primeira Caçada",
+          "detalhe": "+648, 122d10+447 de corte"
+        },
+        {
+          "nome": "Bote",
+          "detalhe": "1/cena, no começo da luta e antes da Iniciativa: um ataque com o golpe anunciado, 1.677."
+        },
+        {
+          "nome": "Silêncio do Bando",
+          "detalhe": "Aura Imensa: monstros não atacam Karnath e, se ele mandar, deixam a luta. Os dragões ignoram."
+        },
+        {
+          "nome": "Faro do Primeiro",
+          "detalhe": "Passiva: sabe onde está toda criatura ferida na mesma Árvore, e quem caça quem."
+        }
+      ],
+      "habilidades": [
+        "Estado (Solto. Nunca foi caçado: a chapa em branco do Quadro da Guilda dos Caçadores é a dele.)",
+        "Ápice (Caçar. Antes de haver nome para predador, ele já caçava, e todo monstro hesita um segundo diante dele.)",
+        "Perfil (Age antes de todos: Vida 49.200 e Iniciativa 684. Defesa 619, ataque e testes +648, golpe comum 122d10+447 (1.118), golpe anunciado 1.677, DT 615, Mana 3.605. Cada poder de Ação Padrão custa 180 de Mana e cada Reação, 90.)",
+        "Bote (1/cena, no começo da luta e antes de qualquer Iniciativa: um ataque com o golpe anunciado, 1.677.)",
+        "Silêncio do Bando (Aura Imensa: monstros não atacam Karnath e, se ele mandar, deixam a luta. Os dragões respondem a Ushumgal e ignoram a aura.)",
+        "Faro do Primeiro (Sabe onde está toda criatura ferida na mesma Árvore, e quem caça quem.)",
+        "Limite (Não negocia e não guarda nada. Caça o que foge e não persegue quem fica parado de frente para ele.)",
+        "Contrajogo (Quem encara Karnath sem desviar o olhar por uma rodada inteira deixa de ser presa até o fim da cena.)"
+      ]
     }
   ]
 }

@@ -13,7 +13,7 @@ RAIZ = Path(__file__).resolve().parents[2]
 
 class DeidadesTest(unittest.TestCase):
     def test_onze_fichas_no_formato_do_bestiario(self):
-        lista = deidades.para_o_bestiario()
+        lista = [item for item in deidades.para_o_bestiario() if item["categoria"] == "Deidade"]
         self.assertEqual(len(lista), 11)
         ids = [item["id"] for item in lista]
         self.assertEqual(len(set(ids)), 11)
@@ -31,9 +31,27 @@ class DeidadesTest(unittest.TestCase):
             for rotulo in ("Estado (", "Ápice (", "Domínio, Fluxo", "Limite (", "Contrajogo (", "Dom ("):
                 self.assertIn(rotulo, textos, item["id"])
 
+    def test_soberanos_ficam_acima_da_deidade_no_dominio(self):
+        # Questionário final, perguntas 44 e 46: Ushumgal e Karnath têm ficha acima do VD 1000.
+        soberanos = [item for item in deidades.para_o_bestiario() if item["categoria"] == "Soberano"]
+        self.assertEqual({item["id"] for item in soberanos}, {"soberano-ushumgal", "soberano-karnath"})
+        for item in soberanos:
+            self.assertTrue(deidades.eh_soberano(item["id"]))
+            self.assertFalse(deidades.eh_deidade(item["id"]))
+            self.assertGreater(item["vd"], 1000)
+            self.assertFalse(item["tem_loot"])
+            self.assertEqual(len(item["ataques"]), 4)
+            for ataque in item["ataques"]:
+                self.assertLessEqual(len(ataque["nome"]), 60)
+                self.assertLessEqual(len(ataque["detalhe"]), 160)
+            textos = " ".join(item["habilidades"])
+            for rotulo in ("Estado (", "Ápice (", "Perfil (", "Limite (", "Contrajogo ("):
+                self.assertIn(rotulo, textos, item["id"])
+
     def test_cada_deidade_esta_no_guia_do_mestre(self):
         guia = (RAIZ / "data" / "regras" / "regras.ts").read_text(encoding="utf-8")
         self.assertIn("Fichas das Deidades", guia)
+        self.assertIn("Fichas dos Soberanos", guia)
         for item in deidades.para_o_bestiario():
             self.assertIn(f'{item["titulo"]}, ', guia, item["id"])
 

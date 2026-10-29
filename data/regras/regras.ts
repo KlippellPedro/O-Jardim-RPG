@@ -95,6 +95,11 @@ const linhaCondicaoGeral = (condicao: (typeof CONDICOES_OFICIAIS)[number]) => `
 `;
 const tabelaCondicoesGerais = CONDICOES_OFICIAIS.filter((condicao) => !condicao.positiva).map(linhaCondicaoGeral).join('');
 const tabelaCondicoesBeneficas = CONDICOES_OFICIAIS.filter((condicao) => condicao.positiva).map(linhaCondicaoGeral).join('');
+/** Gerada do campo `gravidade` de data/regras/condicoes.ts: a escala que as curas usam. */
+const condicoesDaGravidade = (gravidade: 'leve' | 'media') => CONDICOES_OFICIAIS
+  .filter((condicao) => condicao.gravidade === gravidade)
+  .map((condicao) => condicao.titulo)
+  .join(', ');
 
 /** Gerada de data/regras/conjuntos.ts: o livro lista os mesmos bônus que a ficha aplica. */
 const tabelaConjuntosEquipamento = CONJUNTOS_EQUIPAMENTO.map((conjunto) => `
@@ -1033,11 +1038,29 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>O multiplicador diz quantas vezes você rola os dados da arma. Em x3, 2d6+4 vira 6d6+4.</li>
         <li>Bônus fixo e dado extra vindos de habilidade, veneno ou efeito externo entram <strong>uma vez só</strong>. Eles só multiplicam se a própria habilidade disser que multiplica.</li>
         <li>Margem larga e multiplicador alto não andam juntos: 18-20 e 19-20 sempre com x2; x3 e x4 sempre com margem 20.</li>
+        <li>Efeito de classe ou de raça que alarga a margem só alarga em arma x2. Em arma x3 ou x4, cada passo que alargaria a margem vira +1 dado no dano do crítico.</li>
       </ul>
       <div class="regras-note regras-note--exemplo">
         <p>Bia ataca com uma espada 19-20/x2 que causa 1d8+4, e o bônus total dela em Luta é +9. O bandido tem Defesa 14. Ela tira 17 no d20: 17 + 9 = 26, acima de 14, então acerta. Como o 17 está fora da margem 19-20, o dano é o normal, 1d8+4. Se tivesse tirado 19, o ataque seria crítico e o dano subiria para 2d8+4.</p>
       </div>
       <p>O que cada tipo de dano faz, e como a Resistência entra na conta, está em <span class="regras-ref regras-ref--tipos-de-dano">Tipos de Dano</span>.</p>
+
+      <h4>Ataque desarmado</h4>
+      <p>Soco, chute, cotovelada e cabeçada usam Luta e causam <strong>1d4 de impacto + Mod. Força</strong>, com crítico 20/x2. Classe ou raça que der outro dano desarmado, como o Lutador, diz isso no próprio texto.</p>
+
+      <h3 class="regras-subtitle">Ver e ser visto</h3>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Situação</th><th>O que muda</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Luz plena</strong></td><td>Nada muda.</td></tr>
+          <tr><td><strong>Pouca luz</strong></td><td>Penumbra, luar ou uma tocha distante: desvantagem em Percepção que depende da visão.</td></tr>
+          <tr><td><strong>Escuridão</strong></td><td>Quem não enxerga no escuro fica Cego para o que está nela.</td></tr>
+          <tr><td><strong>Camuflagem</strong></td><td>Fumaça, névoa, folhagem densa ou sombra: ataques contra quem está camuflado têm −2, e ele pode tentar se esconder com Furtividade.</td></tr>
+          <tr><td><strong>Invisível</strong></td><td>É uma condição: quem não consegue ver você ataca com desvantagem, e os seus ataques contra essa criatura têm vantagem. Revelado encerra.</td></tr>
+          <tr><td><strong>Cobertura total</strong></td><td>Atrás de parede ou obstáculo inteiro, você não pode ser alvo direto de ataque nem de efeito que pede alvo. Efeito em área que contorne o obstáculo ainda alcança.</td></tr>
+        </tbody>
+      </table></div>
+      <p>Quem enxerga no escuro vê normalmente na escuridão natural. Escuridão criada por magia ou Fluxo só cede para quem a fonte disser.</p>
 
       <h3 class="regras-subtitle">Manobras</h3>
       <p>Nem todo ataque quer causar dano. Manobra gasta a mesma Ação Padrão de um ataque e usa a mesma rolagem, contra a defesa passiva do alvo: <strong>10 mais o bônus total</strong> da defesa indicada.</p>
@@ -1058,6 +1081,26 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Manobra não causa dano por si só. Habilidade que somar dano a uma manobra diz isso no texto.</li>
       </ul>
       <p>Agarrado, Caído e Imobilizado são condições, e todas estão em <span class="regras-ref regras-ref--condicoes">Condições</span>.</p>
+
+      <h3 class="regras-subtitle">Tamanho</h3>
+      <p>São seis categorias. <strong>Normal</strong> é o tamanho de uma pessoa comum; onde algum texto antigo disser "médio" para tamanho, leia Normal.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Tamanho</th><th>Espaço que ocupa</th><th>Alcance corpo a corpo</th><th>Exemplos</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Minúsculo</strong></td><td>Divide 1,5 m com outros</td><td>Precisa entrar no espaço do alvo</td><td>Rato, inseto, drone de bolso</td></tr>
+          <tr><td><strong>Pequeno</strong></td><td>1,5 m</td><td>1,5 m</td><td>Goblim, Anão</td></tr>
+          <tr><td><strong>Normal</strong></td><td>1,5 m</td><td>1,5 m</td><td>Humano, Elfo</td></tr>
+          <tr><td><strong>Grande</strong></td><td>3 m</td><td>3 m</td><td>Golem, Gigante jovem, cavalo</td></tr>
+          <tr><td><strong>Enorme</strong></td><td>4,5 m</td><td>4,5 m</td><td>Golem Enorme, Gigante adulto</td></tr>
+          <tr><td><strong>Colossal</strong></td><td>6 m ou mais</td><td>6 m</td><td>Gigante no topo da escada, dragão ancião</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li><strong>Equipamento:</strong> arma, armadura e roupa feitas para um tamanho só servem em outro depois de ajustadas por um artesão ou feitas sob medida.</li>
+        <li><strong>Manobras:</strong> agarrar, derrubar ou empurrar uma criatura um tamanho maior que você tem desvantagem. Dois tamanhos acima, a manobra não funciona sem uma regra que autorize.</li>
+        <li><strong>Carga:</strong> sai da Força. Quem carrega mais por ser grande diz isso no próprio traço, como o Gigante.</li>
+        <li><strong>Alcance:</strong> o da tabela vale para ataque sem arma de haste. Arma com alcance próprio soma ao do tamanho só se a arma disser.</li>
+      </ul>
 
       <h3 class="regras-subtitle">Defesas passivas</h3>
       <ul class="regras-list">
@@ -1118,13 +1161,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   'tipos-de-dano': {
     categoria: 'Combate e Mecânicas',
     status: 'Regra oficial',
-    resumo: 'Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos com as quatorze derivações, o dano de ambiente e a ordem certa para aplicar Resistência.',
+    resumo: 'Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos com as quatorze derivações, o dano de ambiente, o dano verdadeiro e a ordem certa para aplicar Resistência.',
     destaques: [
       ['Famílias', 'Físico, Persistente, Mágico, Tecnológico, Mental'],
       ['Elementos', '7 fixos, sem oitavo'],
       ['Derivações', '14 tipos próprios: Gelo, Magma, Areia...'],
       ['Ambiente', 'Frio e Calor, que não são Gelo nem Fogo'],
       ['Resistência', 'sempre por tipo específico'],
+      ['Verdadeiro', 'nenhuma Resistência reduz'],
     ],
     corpo: `
       <p class="regras-lead">Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade e qualquer efeito que "protege contra um tipo de dano" sempre apontam para uma entrada específica daqui, nunca para "dano" de forma genérica.</p>
@@ -1135,6 +1179,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <li>São sete elementos fixos, sem oitavo. Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio.</li>
           <li>Frio e Calor são dano de ambiente. Eles vêm do lugar, e Gelo e Fogo vêm de um golpe: são tipos diferentes.</li>
           <li>Resistência vale sempre por tipo específico, e entra por último na conta: multiplicador crítico, dados extras, vulnerabilidade e só então a Resistência, até o mínimo 0.</li>
+          <li>Dano verdadeiro fica fora das famílias. Nenhuma Resistência reduz esse dano, e por isso ele é um dos mais fortes do jogo.</li>
         </ul>
       </div>
 
@@ -1144,7 +1189,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Persistentes:</strong> sangramento, fogo, veneno e ácido; batem de novo no fim do turno até alguém remover.</li>
         <li><strong>Mágico:</strong> elemental (os sete elementos e as quatorze derivações) e os outros nove Fluxos naturais. Magia que não diz o tipo causa o dano do próprio Fluxo (dano de Vazio, dano do Fim...).</li>
         <li><strong>Tecnológico:</strong> vem do Fluxo artificial de Tecnologia (A.X.I.S). Usa a mesma Mana e a mesma regra de Resistência que qualquer Fluxo, mas não conta como dano mágico.</li>
-        <li><strong>Mental:</strong> tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura. Os ataques de Comunicação tiram Vida, com dano de Comunicação; dano mental é só o que a fonte chama assim.</li>
+        <li><strong>Mental:</strong> tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura. Os ataques de Comunicação tiram Vida, com dano de Comunicação; dano mental é só o que a fonte chama assim. Como a Sanidade vai de 0 a 100 e volta devagar, dano mental usa dados pequenos.</li>
       </ul>
 
       <h3 class="regras-subtitle">Dano elemental</h3>
@@ -1183,6 +1228,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Dano de ambiente: Frio e Calor</h3>
       <p>Frio e Calor vêm do lugar onde você está: um deserto sem sombra, uma noite de nevasca, uma câmara de forja. Gelo e Fogo vêm de um golpe que você levou. Por isso são tipos diferentes, e Resistência a um não vale para o outro. A Resistência contra Frio ou Calor de um Traje vale para o clima; a Resistência a Gelo de um Fruto vale para o golpe.</p>
 
+      <h3 class="regras-subtitle">Dano verdadeiro</h3>
+      <p>Dano verdadeiro não pertence a nenhuma das cinco famílias. Nenhuma Resistência reduz esse dano, não existe Resistência a ele, e a redução de dano também não vale contra ele. Por isso é um dos danos mais fortes do jogo, e só aparece quando a fonte escreve com todas as letras "dano verdadeiro", quase sempre numa habilidade de topo.</p>
+
       <h3 class="regras-subtitle">Resistência e ordem de aplicação</h3>
       <p>A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.</p>
       <ol class="regras-steps">
@@ -1190,6 +1238,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Some os dados extras declarados pelo efeito. Dado extra só multiplica se a fonte disser que multiplica.</li>
         <li>Aplique vulnerabilidade, que dobra o dano daquele tipo, ou redução percentual.</li>
         <li>Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.</li>
+        <li>Por fim, aplique a redução de dano, quando um efeito manda "reduzir em X o dano de cada golpe". Ela vale para qualquer tipo, menos o dano verdadeiro, até o mínimo 0.</li>
       </ol>
       <div class="regras-note regras-note--exemplo">
         <p>Um ataque de Fogo causa 10 de dano. O alvo é vulnerável a Fogo e tem Resistência 5 a Fogo. Primeiro a vulnerabilidade dobra o dano para 20, e só então a Resistência tira 5: o alvo sofre 15. Subtraindo a Resistência antes de dobrar, o resultado seria 10.</p>
@@ -1413,6 +1462,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <li>Estabilizar interrompe os testes, mas só quem volta a 1 PV ou mais acorda. Quem acorda ganha Ferido 1.</li>
           <li>Um golpe que tira metade ou mais dos PV máximos, ou uma falha crítica em Morrendo, pede a tabela de trauma (2d6).</li>
           <li>A Mutilação sempre é anunciada antes, e um sucesso no teste evita a perda.</li>
+          <li>Fora de combate, qualquer um trata um ferido: 10 minutos e Cura DT 15 devolvem 1d6 de Vida.</li>
+          <li>Voltar da morte existe, mas é raro e cobra caro.</li>
         </ul>
       </div>
 
@@ -1448,6 +1499,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <div class="regras-note regras-note--exemplo">
         <p>Davi tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de Vida é 12, ou 30% da Vida máxima: Gravidade 2. Ele cai inconsciente com Morrendo 1. No fim do turno dele, rola Fortitude contra DT 12 + (2 × 2) + 0 = 16, porque ainda não tem Ferido. Falhou: Morrendo 2. Uma aliada o estabiliza com um teste de Cura contra a mesma DT 16, e os testes de Morrendo param. Ele só acorda quando alguém curar o bastante para levá-lo de volta a 1 PV, e então ganha Ferido 1.</p>
       </div>
+
+      <h3 class="regras-subtitle">Tratar ferimentos</h3>
+      <p>Fora de combate, com dez minutos e um teste de Cura DT 15, qualquer um trata um ferido, que recupera <strong>1d6 de Vida</strong>. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.</p>
 
       <h3 class="regras-subtitle">Remover Ferido</h3>
       <ul class="regras-list">
@@ -1502,6 +1556,15 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Regeneração:</strong> só um efeito de Fluxo que diga, com todas as letras, que restaura um membro perdido.</li>
         <li><strong>Implante:</strong> Braço Hidráulico Titânico, Pernas Pneumáticas e Olho Biônico Mk-II cobrem o que sumiu e anulam a penalidade daquele membro enquanto estiverem funcionando. O Mestre decide se a Laringe Sintética Camaleão devolve a fala.</li>
         <li>Sem uma dessas portas, a perda é permanente. O personagem continua inteiro para tudo que a tabela não cita.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Voltar da morte</h3>
+      <p>Quem morre vai para Arkarin, e de lá quase ninguém volta. Voltar existe, mas é raro e cobra caro.</p>
+      <ul class="regras-list">
+        <li><strong>Só por efeito que diga:</strong> nenhuma cura, poção ou teste de Morrendo traz alguém de volta. Só um efeito que diga com todas as letras que devolve a vida, como a Reconstrução da Pedra Filosofal do Alquimista, ou uma cena que o Mestre conduza como história.</li>
+        <li><strong>Pouco tempo:</strong> o próprio efeito diz até quando ainda dá. Passado esse tempo, a alma já atravessou.</li>
+        <li><strong>O preço:</strong> quem volta ganha Ferido 2 e 2 de Cansaço, e Arkarin fica com alguma coisa. O jogador e o Mestre escolhem juntos uma lembrança, um laço ou uma condição de longo prazo, que fica para sempre.</li>
+        <li><strong>Exceção:</strong> o Mestre pode negar a volta de quem já voltou uma vez.</li>
       </ul>
     `,
     corpoMestre: `
@@ -2505,7 +2568,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Princípios dos Fluxos</h3>
       <ul class="regras-list">
         <li>Cada alma nasce com um Fluxo natural, e só um. Exceção precisa estar escrita na história do personagem.</li>
-        <li>O Fluxo nativo é o da Árvore em que a alma nasceu. Quem nasce na A.X.I.S tem Comunicação, o Fluxo da Parley que segue vivo sob a Malha. O Autômato é a exceção: ele é montado, e o núcleo dele já é a Tecnologia instalada.</li>
+        <li>O Fluxo nativo é o da Árvore em que a alma nasceu. Quem nasce na A.X.I.S tem Comunicação, o Fluxo da Parley que segue vivo sob a Malha. O Autômato é a exceção: ele é montado, e o núcleo dele já é a Tecnologia instalada. O Espírito natural é a outra: ele nasce de um Fluxo, e o Fluxo da marca é o nativo dele em qualquer Árvore. Os Espíritos demoníacos e angelicais seguem a Árvore.</li>
         <li>Ficha sem Árvore não tem Fluxo nativo. O Canalizador sem Árvore escolhe um dos dez Fluxos naturais na Canalização Nativa.</li>
         <li>Um segundo Fluxo sempre vem de fora: artefato, relíquia, núcleo tecnológico. Ele nunca passa a morar na alma. Na ficha, quem instala é o Mestre: o Fluxo instalado abre as magias dele e não dá Marca de círculo.</li>
         <li>Fluxo alto não ensina magia. O acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.</li>
@@ -2928,6 +2991,19 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Condição que vem de uma fonte instantânea e não diz quanto dura vai até o fim do próximo turno de quem a recebeu.</li>
       </ul>
 
+      <h3 class="regras-subtitle">Gravidade</h3>
+      <p>Quando uma cura, uma receita ou uma habilidade encerra uma condição "leve", "média" ou "grave", é por esta escala. Quem trata um degrau trata também os de baixo: uma cura que encerra condição média encerra uma leve no lugar, se o paciente preferir.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Gravidade</th><th>Condições</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Leve</strong></td><td>${condicoesDaGravidade('leve')}.</td></tr>
+          <tr><td><strong>Média</strong></td><td>${condicoesDaGravidade('media')} e as crises de Sanidade.</td></tr>
+          <tr><td><strong>Grave</strong></td><td>As condições de longo prazo deste tópico, Ferido e qualquer aflição no estágio 3 ou mais.</td></tr>
+          <tr><td><strong>Gravíssima</strong></td><td>Perda de membro ou de sentido (a Mutilação de Ferimentos) e maldição.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Inconsciente e Concentrando ficam fora da escala: a primeira acaba quando a causa acaba, e a segunda é escolha de quem conjura. As condições benéficas também ficam de fora, porque ninguém quer se curar delas.</p>
+
       <h3 class="regras-subtitle">Condições benéficas</h3>
       <p class="regras-lead">São as condições que ajudam. Vêm de uma palavra de ânimo, de uma magia de apoio ou de um escudo erguido na hora certa. Duram pouco e nenhuma soma com ela mesma.</p>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -3015,6 +3091,27 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Leia a lista de poderes das classes que entraram na sua mesa antes do nível 2. São de dez a doze opções por classe, e as escolhas dos jogadores decidem o formato dos seus encontros mais que o nível deles.</li>
         <li>Classe especial exige nível total 20, liberação sua e um acontecimento. Entre as ${classesEspeciais} especiais, Campeão Dimensional, Cartista Arcano e Invocador aceitam qualquer origem; as demais ficam presas às Árvores indicadas.</li>
       </ul>
+
+      <h3 class="regras-subtitle">Régua para poder de dano e de cura</h3>
+      <p>Ao criar ou ajustar um poder de classe ou um traço de raça que causa dano ou devolve Vida, compare com a magia de mesmo custo. O poder rende no máximo o que ela rende.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Custo em Mana</th><th>Dano ou cura média</th><th>Magia de referência</th></tr></thead>
+        <tbody>
+          <tr><td>2</td><td>5</td><td>1º círculo</td></tr>
+          <tr><td>4</td><td>9</td><td>2º círculo</td></tr>
+          <tr><td>7</td><td>11</td><td>3º círculo</td></tr>
+          <tr><td>10</td><td>18</td><td>4º círculo</td></tr>
+          <tr><td>14</td><td>18 a 22</td><td>5º círculo</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li>Pago em Estamina, o poder dá +1 dado da arma a cada 2 ou 3 de Estamina. O Golpe em Z do Espadachim, +1 dado por 3, é o molde.</li>
+        <li>Para crescer com o nível, o poder cobra mais quando rende mais, como o Hadō, que passa de 2d8 por 4 de Mana a 3d8 por 7 no nível 10.</li>
+        <li>Classe especial pode ficar no topo da faixa, nunca acima dela.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Classes que brilham fora da luta</h3>
+      <p>Viajante, Guia Dimensional, Pop Star, Comerciante, Detetive, Interceptador e Ritualista têm um ou dois poderes de combate, mas o forte delas está na viagem, no palco, no negócio, na investigação, na Malha e no rito. Se a mesa tem uma delas, guarde em cada sessão uma cena em que esse forte decide alguma coisa. O Interceptador luta melhor contra quem usa magia, e o Ritualista entra na luta pelo Rito Guardado, a partir do nível 5.</p>
 
       <h3 class="regras-subtitle">Liberar uma especial</h3>
       <ul class="regras-list">
@@ -3150,6 +3247,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <li>São ${racasMecanicas.length} raças: ${racasComuns} comuns, que nascem em qualquer Árvore, e ${racasEspeciais} especiais, que dependem de liberação do Mestre e só existem nas Árvores compatíveis.</li>
           <li>Os números da tabela são ajustes iniciais. A raça mexe nesses quatro recursos e também traz fisiologia, traços e, em várias delas, uma escada de estágios.</li>
           <li>Estar na lista não concede acesso: combine com o Mestre quais raças especiais estão abertas na sua mesa.</li>
+          <li>Quando um traço manda alguém testar, a raça tem a sua DT, como as classes: você rola a perícia da raça na hora (Intimidação no Vampiro, Atuação na Sereia, Religião no Divino, Misticismo no Elfo...), e o resultado é a DT. A página de cada raça diz qual é.</li>
         </ul>
       </div>
 
@@ -3160,7 +3258,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </table></div>
     `,
     corpoMestre: `
-      <p class="regras-lead">Raça mexe em números e em ficção. Os ajustes iniciais pesam mais nos níveis baixos, enquanto as raças com estágios continuam recebendo características e recursos até o nível 50.</p>
+      <p class="regras-lead">Raça mexe em números e em ficção. Os ajustes iniciais pesam mais nos níveis baixos, enquanto as raças com estágios continuam recebendo características e recursos até o nível 50, e o Espírito até o 60.</p>
 
       <h3 class="regras-subtitle">Comum e especial</h3>
       <ul class="regras-list">
@@ -4025,7 +4123,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <section class="regras-estante regras-estante--mundo">
       <div class="regras-estante-cabeca">
         <h4 class="regras-estante-titulo">O mundo reage</h4>
-        <p class="regras-estante-quando">Para quando o grupo viaja, pergunta, espera ou para: eventos em 2d6, NPCs na hora, boatos e relógios.</p>
+        <p class="regras-estante-quando">Para quando o grupo viaja, pergunta, espera ou para: eventos em 2d6, NPCs na hora, boatos, relógios, o ano da campanha e a cultura de um povo.</p>
       </div>
 
       <h3 class="regras-subtitle">Eventos aleatórios em 2d6</h3>
@@ -4592,6 +4690,116 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <p class="regras-note">Na Mesa ao Vivo, fale em voz alta quantas partes estão pintadas a cada mudança. O relógio só assusta enquanto todo mundo lembra exatamente em quanto ele está.</p>
 
+      <h3 class="regras-subtitle">O ano da campanha</h3>
+      <p>A contagem dos anos começa no Cataclismo do Ano Zero, e o último marco datado é Lionês, em 1.595. Cada mesa escolhe o próprio "agora": diga aos jogadores em que ano a campanha começa e use esse número em cartas, lápides e registros. Quem lançou a magia do Cataclismo, e o que ela queria, fica em segredo de propósito. Se a sua campanha for atrás disso, a resposta é sua.</p>
+
+      <h3 class="regras-subtitle">Montar a cultura de um povo</h3>
+      <p>A língua e o corpo são da raça e valem em qualquer Árvore. A cultura muda de lugar para lugar: os anões de uma Árvore vivem de um jeito, os de outra vivem de outro, e numa terceira pode nem haver anões. Por isso o jogo fixa só o que vem do corpo de cada raça, na seção "O que todo povo carrega" da página dela, e o resto fica com você.</p>
+      <ul class="regras-list">
+        <li><strong>Veja se já está escrito.</strong> Se o povo mora num lugar que a lore já descreve, como Khazad, Salém, Întuneric ou Nadalon, use a cultura de lá. As tabelas são para o povo que ainda não tem casa no livro.</li>
+        <li><strong>Comece pelo corpo.</strong> Leia as linhas fixas da raça. Elas dizem o que nenhuma cultura daquele povo consegue ignorar: o vampiro precisa de sangue, o golem não come, o elfo não esquece.</li>
+        <li><strong>Role ou escolha um resultado em cada eixo.</strong> São seis: governo, Fluxo, mortos, comida, estrangeiros e festa. Escolher vale tanto quanto rolar.</li>
+        <li><strong>Cruze o resultado com o corpo.</strong> Quando os dois brigam, a briga vira o traço mais interessante do povo. Golem com Prato da casa vira um povo que cozinha para os visitantes e nunca prova.</li>
+        <li><strong>Escreva em três frases e guarde.</strong> Anote nas Notas internas, na Biblioteca da campanha, no fim deste Guia. Se a cultura valer para todas as mesas, o Criador pode publicá-la na lore como uma entrada do tipo Cultura, presa ao reino ou à dimensão.</li>
+      </ul>
+      <details class="regras-details">
+        <summary>Governo <span class="regras-details-contagem">1d8</span></summary>
+        <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
+          <thead><tr><th>1d8</th><th>Quem decide</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Conselho dos mais velhos.</strong> Quem viveu mais fala por último, e a palavra dele fecha a conversa.<small class="regras-mecanica">Um pedido ao povo leva uma reunião inteira, e o grupo precisa convencer o mais velho da sala.</small></td></tr>
+            <tr><td>2</td><td><strong>Mestres de ofício.</strong> Manda quem faz melhor, e cada ofício cuida do seu pedaço.<small class="regras-mecanica">Para conseguir algo, ache o mestre certo; o líder de um ofício não fala pelo outro.</small></td></tr>
+            <tr><td>3</td><td><strong>Família fundadora.</strong> Uma linhagem herda o comando há gerações e conhece cada casa pelo nome.<small class="regras-mecanica">Ofender alguém da família é ofender o povo inteiro.</small></td></tr>
+            <tr><td>4</td><td><strong>Escolha por prova.</strong> Quem passa na prova do povo comanda até alguém passar melhor.<small class="regras-mecanica">Um personagem pode ser desafiado ou desafiar, e a prova vira cena.</small></td></tr>
+            <tr><td>5</td><td><strong>Assembleia.</strong> Todo adulto vota, e a decisão demora o tempo que for preciso.<small class="regras-mecanica">Ganha quem convence a maioria; um discurso bem feito na hora certa muda o voto.</small></td></tr>
+            <tr><td>6</td><td><strong>Protetor.</strong> Manda quem segura longe uma ameaça que todo mundo conhece.<small class="regras-mecanica">Enquanto a ameaça existir, o protetor tem a última palavra, e sem ela o poder dele balança.</small></td></tr>
+            <tr><td>7</td><td><strong>Pacto com um poder de fora.</strong> Uma deidade, um Soberano, uma facção ou um espírito decide através de um porta-voz.<small class="regras-mecanica">Quem fala com o povo fala também com o que está por trás dele.</small></td></tr>
+            <tr><td>8</td><td><strong>Cada família por si.</strong> Ninguém manda no povo todo, e só uma crise junta todo mundo na mesma sala.<small class="regras-mecanica">Ótimo para quem quer passar despercebido e ruim para quem precisa de uma resposta só.</small></td></tr>
+          </tbody>
+        </table></div>
+      </details>
+      <details class="regras-details">
+        <summary>Relação com o Fluxo <span class="regras-details-contagem">1d8</span></summary>
+        <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
+          <thead><tr><th>1d8</th><th>O que o povo pensa de magia</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Dom de poucos.</strong> Quem conjura é raro e trabalha para o povo inteiro.<small class="regras-mecanica">Um conjurador do grupo é recebido com respeito e com uma fila de pedidos.</small></td></tr>
+            <tr><td>2</td><td><strong>Ofício como outro qualquer.</strong> Magia se aprende, se cobra e se vende na feira.<small class="regras-mecanica">Há mercado de selos e encantamentos, com os preços da Loja.</small></td></tr>
+            <tr><td>3</td><td><strong>Coisa perigosa.</strong> Conjurar em público é crime ou pecado.<small class="regras-mecanica">Usar magia na frente de alguém daqui pede Enganação para esconder, ou arranja problema.</small></td></tr>
+            <tr><td>4</td><td><strong>Herança da Árvore.</strong> O Fluxo nativo da Árvore é parte de quem o povo é.<small class="regras-mecanica">Magia do Fluxo da Árvore abre portas, e magia de outro Fluxo marca quem conjura como estrangeiro.</small></td></tr>
+            <tr><td>5</td><td><strong>Rito coletivo.</strong> A magia grande se faz em muitos, em círculo, com o povo reunido.<small class="regras-mecanica">O povo guarda ritos que um Ritualista do grupo pode aprender, se ganhar a confiança deles.</small></td></tr>
+            <tr><td>6</td><td><strong>Máquina primeiro.</strong> O povo confia em engenho e ferramenta, e olha torto para quem conjura.<small class="regras-mecanica">Engenheiros e peças da A.X.I.S são bem-vindos, e feitiço chama atenção.</small></td></tr>
+            <tr><td>7</td><td><strong>Fé.</strong> Todo Fluxo vem da deidade, e conjurar é uma forma de rezar.<small class="regras-mecanica">Quem conjura sem pedir bênção ofende, e Religião abre conversas que Misticismo fecha.</small></td></tr>
+            <tr><td>8</td><td><strong>Magia perdida.</strong> O povo perdeu a magia há gerações e guarda só histórias e objetos.<small class="regras-mecanica">Qualquer item mágico vira relíquia aqui, e alguém do povo quer muito tê-lo.</small></td></tr>
+          </tbody>
+        </table></div>
+      </details>
+      <details class="regras-details">
+        <summary>Os mortos <span class="regras-details-contagem">1d8</span></summary>
+        <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
+          <thead><tr><th>1d8</th><th>O que o povo faz com quem se foi</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Enterrados com as ferramentas.</strong> O morto leva consigo o que usou em vida.<small class="regras-mecanica">Saquear um túmulo daqui é o pior crime que existe.</small></td></tr>
+            <tr><td>2</td><td><strong>Fogueira.</strong> O fogo leva o corpo, e a fumaça leva o nome.<small class="regras-mecanica">Falar o nome de um morto depois da fogueira é falta de respeito.</small></td></tr>
+            <tr><td>3</td><td><strong>Guardados em casa.</strong> Ossos, cinzas ou retratos ficam com a família, num canto só deles.<small class="regras-mecanica">Visita a uma casa pede um cumprimento aos mortos dela.</small></td></tr>
+            <tr><td>4</td><td><strong>Devolvidos ao mundo.</strong> O corpo vai para a água, para a mata ou para dentro da pedra.<small class="regras-mecanica">Os lugares de devolução são sagrados e costumam guardar segredos.</small></td></tr>
+            <tr><td>5</td><td><strong>Lembrados em voz alta.</strong> Uma vez por ano, o povo conta em roda a vida de cada morto.<small class="regras-mecanica">Nessa noite um personagem pode ouvir uma história que muda o que ele sabia.</small></td></tr>
+            <tr><td>6</td><td><strong>Entregues ao Limiar.</strong> Um rito garante que ninguém fique preso no mundo como espírito.<small class="regras-mecanica">Um Caçador das Almas ou um Desperto é chamado para ajudar, e ganha a confiança do povo.</small></td></tr>
+            <tr><td>7</td><td><strong>Medo dos mortos.</strong> O povo evita falar deles e esconde os túmulos longe de casa.<small class="regras-mecanica">Um espírito por perto é sinal de que algum rito foi feito errado.</small></td></tr>
+            <tr><td>8</td><td><strong>Os mortos ainda falam.</strong> Espíritos, ossos ou memórias guardadas dão conselho a quem pergunta.<small class="regras-mecanica">O conselho de um antepassado pode valer como uma pista sua.</small></td></tr>
+          </tbody>
+        </table></div>
+      </details>
+      <details class="regras-details">
+        <summary>A comida <span class="regras-details-contagem">1d8</span></summary>
+        <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
+          <thead><tr><th>1d8</th><th>O que a mesa significa</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Mesa comprida.</strong> Toda refeição é coletiva, e comer sozinho é estranho.<small class="regras-mecanica">Recusar um convite para comer ofende, e aceitar abre conversa.</small></td></tr>
+            <tr><td>2</td><td><strong>Comida como moeda.</strong> Paga-se com grão, carne seca ou sal.<small class="regras-mecanica">Um lote de Mantimentos compra aqui o que dinheiro não compra.</small></td></tr>
+            <tr><td>3</td><td><strong>Escassez.</strong> O povo come pouco e guarda muito para o tempo ruim.<small class="regras-mecanica">Um grupo que divide a própria ração ganha amigos depressa.</small></td></tr>
+            <tr><td>4</td><td><strong>Prato da casa.</strong> Uma receita define o povo, e cada família jura que a sua é a certa.<small class="regras-mecanica">Um Chef do grupo que aprender a receita ganha fama na região.</small></td></tr>
+            <tr><td>5</td><td><strong>Comida sagrada.</strong> Alguma coisa não se come, ou só se come em dia certo.<small class="regras-mecanica">Comer a coisa errada na hora errada é ofensa grave.</small></td></tr>
+            <tr><td>6</td><td><strong>Caça e partilha.</strong> Quem caça divide, e a melhor parte vai para quem mais precisa.<small class="regras-mecanica">O grupo ganha lugar à mesa trazendo carne.</small></td></tr>
+            <tr><td>7</td><td><strong>Banquete de exibição.</strong> Poder se mostra servindo muito para muita gente.<small class="regras-mecanica">Quem oferece o maior banquete ganha voz nas decisões.</small></td></tr>
+            <tr><td>8</td><td><strong>Mesa rara.</strong> Por corpo ou por escolha, o povo quase não come, e a mesa fica para acordo, luto e celebração.<small class="regras-mecanica">Ser chamado a uma mesa daqui é uma honra que pouca gente recebe.</small></td></tr>
+          </tbody>
+        </table></div>
+      </details>
+      <details class="regras-details">
+        <summary>Os estrangeiros <span class="regras-details-contagem">1d8</span></summary>
+        <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
+          <thead><tr><th>1d8</th><th>Como o povo recebe quem chega</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Hospitalidade sagrada.</strong> Quem bate na porta come e dorme, e ninguém pergunta nada até o dia seguinte.<small class="regras-mecanica">Atacar um hóspede, ou ser um hóspede que ataca, é a pior desonra.</small></td></tr>
+            <tr><td>2</td><td><strong>Desconfiança.</strong> Estrangeiro é vigiado até provar que veio em paz.<small class="regras-mecanica">A atitude começa em Sob desconfiança, na escada do Prestígio, até o grupo ganhar um aliado aqui.</small></td></tr>
+            <tr><td>3</td><td><strong>Comércio.</strong> Estrangeiro é bem-vindo enquanto compra e vende.<small class="regras-mecanica">A atitude começa em Neutro no mercado e em Sob desconfiança fora dele.</small></td></tr>
+            <tr><td>4</td><td><strong>Prova de entrada.</strong> Para ficar, é preciso passar por um teste do povo.<small class="regras-mecanica">O teste vira cena: uma tarefa, uma pergunta ou um duelo.</small></td></tr>
+            <tr><td>5</td><td><strong>Portas fechadas.</strong> Ninguém de fora entra, ou só entra pela mão de alguém de dentro.<small class="regras-mecanica">O grupo precisa de um guia daqui ou de um bom disfarce.</small></td></tr>
+            <tr><td>6</td><td><strong>Curiosidade.</strong> O povo vive isolado e quer saber tudo do mundo lá fora.<small class="regras-mecanica">História e notícia valem como pagamento, e o grupo é cercado de perguntas.</small></td></tr>
+            <tr><td>7</td><td><strong>Dívida antiga.</strong> O povo deve a um estrangeiro de outros tempos e trata todo estrangeiro como herdeiro dele.<small class="regras-mecanica">Um personagem é confundido com o herdeiro, para o bem ou para o mal.</small></td></tr>
+            <tr><td>8</td><td><strong>Mistura.</strong> O povo vive junto com outras raças, e estrangeiro é só quem chegou ontem.<small class="regras-mecanica">A atitude começa em Neutro, e uma semana de convivência já vira Reconhecido.</small></td></tr>
+          </tbody>
+        </table></div>
+      </details>
+      <details class="regras-details">
+        <summary>A festa <span class="regras-details-contagem">1d8</span></summary>
+        <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
+          <thead><tr><th>1d8</th><th>O dia em que o povo para</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Fartura.</strong> Comemora o fim de um ciclo de trabalho, como a colheita ou a última fornada do ano.<small class="regras-mecanica">Durante a festa os preços caem e as portas abrem.</small></td></tr>
+            <tr><td>2</td><td><strong>Memória de uma vitória.</strong> Conta uma batalha antiga, encenada na praça.<small class="regras-mecanica">Um personagem pode ser chamado para fazer o papel do herói, ou o do vilão.</small></td></tr>
+            <tr><td>3</td><td><strong>Noite do silêncio.</strong> Por uma noite ninguém fala, em respeito a alguma coisa que o povo não esquece.<small class="regras-mecanica">Fazer barulho nessa noite tem consequência séria.</small></td></tr>
+            <tr><td>4</td><td><strong>Torneio.</strong> Provas de força, de ofício ou de canto, com prêmio para quem vencer.<small class="regras-mecanica">Ótimo para um personagem ganhar fama e um rival.</small></td></tr>
+            <tr><td>5</td><td><strong>Troca de papéis.</strong> Por um dia, quem manda serve e quem serve manda.<small class="regras-mecanica">Boa hora para conseguir o que nenhum outro dia daria.</small></td></tr>
+            <tr><td>6</td><td><strong>Festa da Árvore.</strong> Celebra a deidade ou o Fluxo da Árvore.<small class="regras-mecanica">Magia do Fluxo da Árvore ganha plateia, e a de outro Fluxo vira assunto.</small></td></tr>
+            <tr><td>7</td><td><strong>Festa dos mortos.</strong> Os mortos são chamados para a mesa por uma noite.<small class="regras-mecanica">Combine com a tabela dos mortos: um espírito pode mesmo aparecer.</small></td></tr>
+            <tr><td>8</td><td><strong>Festa sem data.</strong> O povo comemora quando alguma coisa grande acontece.<small class="regras-mecanica">A chegada do grupo pode virar motivo de festa, se trouxer boa notícia.</small></td></tr>
+          </tbody>
+        </table></div>
+      </details>
+      <p class="regras-note"><strong>Exemplo:</strong> anões numa Árvore onde Khazad não existe. O corpo diz que o ofício define cada um e que uma peça bem feita é herança. O Mestre rola Protetor no governo, Máquina primeiro no Fluxo, Enterrados com as ferramentas nos mortos, Escassez na comida, Prova de entrada nos estrangeiros e Torneio na festa. Em três frases: um povo de forjadores que segue quem segura longe uma ameaça antiga; guarda pouco para comer e muito para a forja, e enterra cada mestre com o próprio martelo; para ficar entre eles, o estrangeiro faz uma peça na frente de todo mundo, e o torneio do ano decide quem forja para o protetor.</p>
+
       <h3 class="regras-subtitle">Escrever as tabelas da sua campanha</h3>
       <p>As tabelas deste guia servem para qualquer campanha, e é justamente por isso que elas são o começo. A melhor tabela é a que só existe na sua mesa: a que cita a facção que o grupo irritou, a taverna onde eles sempre param e o NPC que eles juraram nunca mais ver.</p>
       <ul class="regras-list">
@@ -4889,6 +5097,48 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Limite.</strong> Precisa ser instalada ou acessada, não substitui livremente os Fluxos naturais e não copia a autoridade completa de nenhuma deidade.</li>
         <li><strong>Contrajogo.</strong> Tem vantagem e desvantagem contra todos os Fluxos ao mesmo tempo, e as duas se cancelam. O Físico tem vantagem declarada sobre ela, e quebrar a malha à mão, ponto por ponto, é o contrajogo mais barato.</li>
         <li><strong>Dom.</strong> Fruto da Tecnologia.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Fichas dos Soberanos</h3>
+      <p>Os dez Soberanos são os seres mais fortes do Jardim, e alguns passam das deidades. Dois já têm ficha, no VD 1200, acima da deidade no Domínio: Ushumgal e Karnath. Como as deidades, eles não são um combate. A ficha diz onde fica o limite, e a cena decide o que é interessante. Os outros Soberanos ganham ficha quando a história pedir.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th></th><th>Ushumgal</th><th>Karnath</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Vida</strong></td><td>59.040</td><td>49.200</td></tr>
+          <tr><td><strong>Defesa</strong></td><td>619</td><td>619</td></tr>
+          <tr><td><strong>Iniciativa</strong></td><td>634</td><td>684</td></tr>
+          <tr><td><strong>Ataque e testes</strong></td><td>+648</td><td>+648</td></tr>
+          <tr><td><strong>Golpe comum</strong></td><td>122d10+447 (1.118)</td><td>122d10+447 (1.118)</td></tr>
+          <tr><td><strong>Golpe anunciado</strong></td><td>1.677</td><td>1.677</td></tr>
+          <tr><td><strong>DT</strong></td><td>615</td><td>615</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li><strong>Mana.</strong> 3.605. Cada poder de Ação Padrão custa 180 de Mana e cada Reação custa 90; Ação Livre não custa.</li>
+        <li><strong>Segredo.</strong> As fichas ficam no Bestiário da Sessão, só para quem comanda a mesa. Os jogadores conhecem Ushumgal só pelo boato que corre entre os dragões.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Ushumgal, o Soberano dos Dragões</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Livre e sem território. Pousa onde quer e não espera nada de ninguém.</li>
+        <li><strong>Perfil.</strong> Mais Vida que qualquer deidade: Vida 59.040, Defesa 619 e Iniciativa 634.</li>
+        <li><strong>Ápice.</strong> Tudo o que um dragão pode ser, numa criatura só. Não cresce mais, porque não falta nada a ele, e os outros dragões estão a caminho de ser o que ele é.</li>
+        <li><strong>Sopro Dourado.</strong> 1/cena, Ação Padrão: cone Imenso de fogo com o golpe anunciado, 1.677, e Reflexos DT 615 para metade.</li>
+        <li><strong>Calma do Ápice.</strong> Aura Imensa: o inimigo que começa o turno nela testa Vontade DT 615 e, falhando, fica Amedrontado até o fim do turno.</li>
+        <li><strong>Nenhum Dragão Ergue a Voz.</strong> Dragão de qualquer idade não ataca Ushumgal nem age contra ele, a menos que um motivo de história o liberte.</li>
+        <li><strong>Limite.</strong> Não usa magia de Fluxo: o poder dele é o corpo, o sopro e a calma. Não guarda tesouro nem território, então não há nada para tomar dele.</li>
+        <li><strong>Contrajogo.</strong> Quem passa três rodadas diante dele sem atacar nem fugir ganha uma pergunta respondida com a verdade. Contra Ushumgal, conversa vale mais que dano.</li>
+      </ul>
+      <h3 class="regras-subtitle">Karnath, o Soberano dos Monstros</h3>
+      <ul class="regras-list">
+        <li><strong>Estado.</strong> Solto. Nunca foi caçado: a chapa em branco do Quadro da Guilda dos Caçadores é a dele.</li>
+        <li><strong>Perfil.</strong> Age antes de todos: Vida 49.200, Defesa 619 e Iniciativa 684.</li>
+        <li><strong>Ápice.</strong> Caçar. Antes de haver nome para predador, ele já caçava, e todo monstro hesita um segundo diante dele.</li>
+        <li><strong>Bote.</strong> 1/cena, no começo da luta e antes de qualquer Iniciativa: um ataque com o golpe anunciado, 1.677.</li>
+        <li><strong>Silêncio do Bando.</strong> Aura Imensa: monstros não atacam Karnath e, se ele mandar, deixam a luta. Os dragões respondem a Ushumgal e ignoram a aura.</li>
+        <li><strong>Faro do Primeiro.</strong> Sabe onde está toda criatura ferida na mesma Árvore, e quem caça quem.</li>
+        <li><strong>Limite.</strong> Não negocia e não guarda nada. Caça o que foge e não persegue quem fica parado de frente para ele.</li>
+        <li><strong>Contrajogo.</strong> Quem encara Karnath sem desviar o olhar por uma rodada inteira deixa de ser presa até o fim da cena.</li>
       </ul>
 
       <h3 class="regras-subtitle">Tesouro e recompensa</h3>

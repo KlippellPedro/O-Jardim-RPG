@@ -245,6 +245,8 @@ export const REGRAS_TESTE_CONDICOES: Readonly<Record<string, { nome: string; reg
   enfraquecido: { nome: 'Enfraquecido', regras: [{ atributo: 'forca', bonus: -2 }] },
   favorecido: { nome: 'Favorecido', regras: [{ pericias: ['fortitude', 'reflexos', 'vontade'], bonus: 1 }] },
   desorientado: { nome: 'Desorientado', regras: [{ ataque: 'todos', desvantagem: true }, { pericias: ['percepcao'], desvantagem: true }] },
+  enjoado: { nome: 'Enjoado', regras: [{ ataque: 'todos', desvantagem: true }, { atributo: 'destreza', desvantagem: true }] },
+  fascinado: { nome: 'Fascinado', regras: [{ pericias: ['percepcao'], bonus: -5 }] },
   cego: { nome: 'Cego', regras: [{ pericias: ['percepcao'], desvantagem: true, grupo: 'visao' }] },
   'cegueira-permanente': { nome: 'Cegueira Permanente', regras: [{ pericias: ['percepcao'], desvantagem: true, grupo: 'visao' }] },
   'braco-dominante-quebrado': { nome: 'Braço Dominante Quebrado', regras: [{ ataque: 'todos', bonus: -2, grupo: 'mao-dominante' }] },
