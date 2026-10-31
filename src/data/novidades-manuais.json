@@ -2,6 +2,19 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-31-perigos-do-ambiente",
+      "data": "2026-10-31",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Perigos do Ambiente e inimigos que desistem",
+      "detalhes": [
+        "Página nova no capítulo de Combate: queda, fôlego, fome e sede, clima e armadilhas, cada um com uma regra curta.",
+        "Sem ar, o corpo gasta Estamina. Com ela cheia, dá para aguentar uns dez turnos debaixo d'água.",
+        "As armadilhas ganharam uma tabela por nível, três pesos (Leve, Séria e Mortal) e seis prontas para rolar no 1d6.",
+        "No Combate, o bando inimigo testa moral quando perde o líder ou metade dos seus, e pode fugir ou se render. Intimidar o bando também força o teste."
+      ]
+    },
+    {
       "id": "2026-10-28-mundo-questionario",
       "data": "2026-10-28",
       "tipo": "melhoria",

@@ -1,6 +1,19 @@
 {
   "itens": [
     {
+      "id": "2026-10-31-perigos-do-ambiente",
+      "data": "2026-10-31",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Perigos do Ambiente e inimigos que desistem",
+      "detalhes": [
+        "Página nova no capítulo de Combate: queda, fôlego, fome e sede, clima e armadilhas, cada um com uma regra curta.",
+        "Sem ar, o corpo gasta Estamina. Com ela cheia, dá para aguentar uns dez turnos debaixo d'água.",
+        "As armadilhas ganharam uma tabela por nível, três pesos (Leve, Séria e Mortal) e seis prontas para rolar no 1d6.",
+        "No Combate, o bando inimigo testa moral quando perde o líder ou metade dos seus, e pode fugir ou se render. Intimidar o bando também força o teste."
+      ]
+    },
+    {
       "id": "2026-10-28-mundo-questionario",
       "data": "2026-10-28",
       "tipo": "melhoria",
@@ -979,20 +992,6 @@
       "detalhes": [
         "Os dois bots ganharam um guia no começo do /ajuda, em linguagem simples: baús, Chaves, Coleção das Árvores, Cofre do Jardim, leilão de sábado, Dia de Bolsa, classificados, furos e entrevistas. Quem não é Mestre agora só vê os comandos que pode usar.",
         "Na entrevista da semana, a sua resposta na DM não sai direto no jornal: o Jornalista mostra como vai ficar e você toca em Publicar ou em Reescrever. Conversar com o bot não publica mais nada sem querer."
-      ]
-    },
-    {
-      "id": "2026-10-09-jornal-lunar-mais-vivo",
-      "data": "2026-10-09",
-      "tipo": "novo",
-      "area": "Discord",
-      "titulo": "O Jornal Lunar ficou mais vivo",
-      "detalhes": [
-        "Toda semana, no domingo à noite, sai uma edição do jornal com o tempo no Jardim, os caçadores de baú, os procurados, os furos, os classificados, a entrevista da semana e a Loteria.",
-        "Os classificados agora têm tipo (compro, vendo, procuro grupo, serviço), duram 7 dias e têm um botão Responder: o recado chega por DM para quem anunciou.",
-        "No furo você escreve a história de verdade. Quem é alvo pode subornar ou desmentir de graça, e o Mestre pode barrar uma história antes de sair.",
-        "Quando alguém sobe de nível ou ganha um selo, o jornal comenta. O Mestre decide no site se quer esses avisos.",
-        "O /baus_hoje mostra os maiores caçadores de baú do mês, e a entrevista agora tem muito mais perguntas, algumas sobre a sua Árvore."
       ]
     }
   ]
