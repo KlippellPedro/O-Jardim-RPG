@@ -24,8 +24,8 @@ export const GRUPOS_NAVEGACAO: readonly GrupoNavegacaoRegras[] = [
   {
     id: 'combate',
     titulo: 'Combate',
-    descricao: 'Turnos, dano, ferimentos, condições e como o corpo se recupera.',
-    topicos: ['combate', 'tipos-de-dano', 'distancias', 'ferimentos', 'coreografia', 'descanso', 'condicoes', 'aflicoes'],
+    descricao: 'Turnos, dano, ferimentos, condições, perigos do caminho e como o corpo se recupera.',
+    topicos: ['combate', 'tipos-de-dano', 'distancias', 'ferimentos', 'coreografia', 'descanso', 'condicoes', 'aflicoes', 'perigos'],
     cor: 'border-rose-300/20 from-rose-400/10',
   },
   {

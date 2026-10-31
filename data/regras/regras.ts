@@ -42,6 +42,8 @@ import { REGRA_CONFLITO_SOCIAL } from './conflitoSocial';
 import { REGRA_CRAFTING } from './crafting';
 import { REGRA_MUNDO_FACCOES } from './faccoes';
 import { REGRA_MATERIAIS } from './materiais';
+import { HTML_MORAL } from './moral';
+import { REGRA_PERIGOS } from './perigosAmbiente';
 import { REGRA_PERSEGUICAO_A_PE } from './perseguicaoAPe';
 import { REGRA_TRANSPORTE } from './transporte';
 import {
@@ -1006,6 +1008,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <li>O ataque é d20 + Luta ou Pontaria contra a Defesa do alvo: a Defesa Natural somada a armadura, escudo e outros ajustes. Empatar acerta, e um 1 natural sempre erra. A margem de ameaça da arma define o crítico.</li>
           <li>Manobras (agarrar, derrubar, empurrar, desarmar, imobilizar) usam a mesma rolagem, contra 10 mais o bônus da defesa passiva do alvo.</li>
           <li>As reações são Esquiva, Bloqueio, Contra-Ataque e Proteger.</li>
+          <li>Inimigo que perde o líder ou metade do bando testa moral em 2d6, e pode fugir ou se render.</li>
         </ul>
       </div>
 
@@ -1121,6 +1124,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>Proteger</td><td>Aliado adjacente é atacado</td><td>Você vira o alvo e pode usar Bloqueio, se ainda tiver reação.</td></tr>
         </tbody>
       </table></div>
+${HTML_MORAL}
+
       <p>Depois de um combate, o corpo cobra o que ele custou: veja <span class="regras-ref regras-ref--ferimentos">Ferimentos</span> e <span class="regras-ref regras-ref--descanso">Descanso</span>.</p>
     `,
     corpoMestre: `
@@ -1154,6 +1159,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Resistência e vulnerabilidade valem por elemento, nunca em bloco. Um inimigo que resiste a Fogo continua aberto a Raio, e isso premia o grupo que investigou antes.</li>
         <li>Todo mundo tem uma reação por rodada. Se você quer que o grupo gaste a dele, ataque com mais de um inimigo por rodada em vez de um golpe único enorme.</li>
         <li>Não tire o turno inteiro de um jogador por mais de uma rodada seguida. Ficar olhando não é jogar.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Moral sem dado</h3>
+      <ul class="regras-list">
+        <li>Role a moral só quando você não sabe a resposta. O bandido de estrada que viu o chefe cair foge sem precisar de dado, e o guardião do túmulo fica sem precisar também.</li>
+        <li>Com 2d6 puros, o bando desiste em 28% das vezes, vacila em 44% e segura a linha em 28%. Com +2 a desistência cai para 8%; com −2 sobe para 58%.</li>
+        <li>A moral encurta a luta que já está decidida. Quando o resultado é claro, mais duas rodadas de dado não acrescentam nada à mesa.</li>
+        <li>Quem desistiu é recompensa: uma informação, um refém para trocar, um rosto que volta na campanha. Pense no que ele sabe antes de rolar.</li>
       </ul>
     `,
   },
@@ -3057,6 +3070,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
   aflicoes: REGRA_AFLICOES,
 
+  perigos: REGRA_PERIGOS,
+
   classes: {
     categoria: 'Livro do Jogador',
     status: 'Catálogo oficial',
@@ -4906,7 +4921,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Confira o bloco de atributos.</strong> Criatura usa Força, Agilidade, Vigor, Presença e Intelecto, que é outro bloco, com outros nomes e outra escala. Copiar os seis atributos de uma ficha de jogador para um monstro é erro de ficha.</li>
         <li><strong>Escreva a primeira frase da aparição antes da segunda habilidade.</strong> Se você ainda não sabe como ela chega na cena, ainda não sabe quem ela é. A tabela "Uma criatura aparece", em Dar peso à cena, tem seis começos prontos.</li>
         <li><strong>Deixe uma fraqueza para o grupo descobrir em cena.</strong> Descobrir é o que transforma o combate em conversa entre jogadores, e é a melhor sensação que um combate pode dar.</li>
-        <li><strong>Decida como ela sai da luta sem morrer.</strong> Fugir, se render, ser convencida, conseguir o que queria. Combate que só termina em morte tira da mesa a escolha mais interessante.</li>
+        <li><strong>Decida como ela sai da luta sem morrer.</strong> Fugir, se render, ser convencida, conseguir o que queria. Combate que só termina em morte tira da mesa a escolha mais interessante. Quando você não souber a hora, o teste de moral do Combate decide.</li>
         <li><strong>Se faltar tempo,</strong> use a criatura do VD certo direto, da aba Sob medida ou da tabela acima: troque o nome, troque um ataque por algo que combine com a história, role uma decisão e um rosto nas tabelas acima. É uma ameaça pronta em três minutos, e com alma.</li>
       </ul>
 

@@ -842,6 +842,8 @@ Combate começa quando a conversa acaba e alguém decide resolver no golpe. Este
 
 - As reações são Esquiva, Bloqueio, Contra-Ataque e Proteger.
 
+- Inimigo que perde o líder ou metade do bando testa moral em 2d6, e pode fugir ou se render.
+
 ### Iniciativa
 
 Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você calcula uma vez e usa em todo combate.
@@ -987,6 +989,40 @@ Você tem uma reação por rodada e a recupera no começo do seu próprio turno.
 - Contra-Ataque | Inimigo adjacente erra você | Faça um ataque com −2. Ele não pode gerar crítico.
 
 - Proteger | Aliado adjacente é atacado | Você vira o alvo e pode usar Bloqueio, se ainda tiver reação.
+
+### Quando o inimigo desiste
+
+Nem toda luta acaba no último ponto de Vida. Quando o lado inimigo sofre um golpe que muda a cara da luta, o Mestre rola o teste de moral do bando: 2d6, com os ajustes abaixo. Na primeira vez que cada uma destas coisas acontece numa cena, ele rola:
+
+- O líder cai, foge ou se rende.
+
+- Metade do bando caiu.
+
+- Uma criatura que luta sozinha chega a um quarto da Vida.
+
+- Algo claramente mais forte entra na luta do lado do grupo.
+
+- 2d6 + ajustes | O que o bando faz
+
+- 5 ou menos | Desiste. Foge pela saída mais próxima, larga a arma e se rende, ou pede trégua, do jeito que combinar com quem é.
+
+- 6 a 8 | Vacila. Na próxima rodada luta na defensiva: busca cobertura, recua para perto dos outros ou tenta negociar. O próximo teste de moral desta cena tem −2.
+
+- 9 ou mais | Segura a linha. Continua lutando, e este gatilho não pede outro teste na mesma cena.
+
+- Ajuste | Quando
+
+- +2 | Defende o ninho, a casa ou a cria, é fanático ou não tem para onde fugir.
+
+- −2 | Luta por pagamento ou obrigado, ou é um bicho que só estava com fome.
+
+- −2 | Já vacilou antes nesta cena.
+
+- **Intimidar o bando:** uma Ação Padrão e Intimidação contra a DT Padrão do nível dos inimigos. O sucesso provoca um teste de moral na hora. Vale uma vez por cena para o grupo inteiro.
+
+- **Quem não testa:** criatura sem vontade própria (morto erguido, construto, invocação que obedece), chefe com fases, que já trazem o que muda, e quem a história diz que luta até o fim. Os aliados do grupo também não testam: quem decide por eles são os jogadores.
+
+- **Quem desistiu sai da luta e continua na cena:** prisioneiro, informante ou alguém que volta depois com amigos. Arrancar alguma coisa dele vira Conflito Social.
 
 Depois de um combate, o corpo cobra o que ele custou: veja Ferimentos e Descanso.
 
@@ -4360,6 +4396,229 @@ Apagamento
 - **Estágio 3:** Desvantagem em Diplomacia, Atuação e Intimidação. Drenagem temporária: −2 Carisma.
 
 **Tratamento:** Cura DT 20, 1 hora ao lado de alguém que conheça o nome do paciente e o diga em voz alta. Reduza o estágio em 1. Uma tentativa por dia.
+
+## perigos
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+O que machuca sem que ninguém ataque: a queda, o ar que acaba, a fome e a sede, o frio e o calor, e o mecanismo escondido no corredor.
+
+Nem tudo que machuca ataca. O chão some, o ar acaba, a comida não chega, o frio entra pela roupa e o corredor esconde um mecanismo esperando um pé distraído. Cada um desses perigos tem aqui uma regra curta, para a mesa resolver sem parar a cena.
+
+**Em resumo**
+
+- **Queda:** 1d6 de impacto a cada 3 m, até 20d6. Quem pulou por vontade própria pode cair de pé com Acrobacia.
+
+- **Fôlego:** sem ar, cada rodada gasta um décimo da sua Estamina máxima. Quando ela acaba, vem o teste de Fortitude, e quem falha apaga e começa a morrer.
+
+- **Fome e sede:** uma porção de comida e água por dia. Sem água, 1 de Cansaço por dia; sem comida, depois de alguns dias, também.
+
+- **Clima:** Severo e Extremo cobram Fortitude e Cansaço, e o Mortal tira Vida a cada turno. Roupa certa, Traje e abrigo baixam o grau.
+
+- **Armadilhas:** cada uma tem nível e peso (Leve, Séria ou Mortal). Percepção acha, Ladinagem, Misticismo ou Tecnologia desarmam, e a tabela dá DT, ataque e dano.
+
+### Queda
+
+Dano de queda = 1d6 de impacto a cada 3 m, até 20d6
+
+- Altura | Dano
+
+- 3 m | 1d6
+- 6 m | 2d6
+- 9 m | 3d6
+- 15 m | 5d6
+- 30 m | 10d6
+- 60 m | 20d6
+
+- **Menos de 3 m** não causa dano, mas quem cai sem querer fica Caído.
+
+- **Quem cai fica Caído.** Se você pulou por vontade própria, ou teve um instante para se preparar, teste Acrobacia contra DT 15: o sucesso tira 1d6 do dano e você cai de pé.
+
+- **Chão macio** (água funda, neve fofa, monte de feno, lona esticada) recebe a queda com metade do dano. Água rasa conta como chão.
+
+- **A queda é rápida:** até 150 m numa rodada. Voo, magia ou poder que segure alguém precisa agir antes do chão.
+
+- **Cair em cima de alguém** divide o dano ao meio entre os dois, e os dois ficam Caídos. Quem está embaixo e vê a queda vindo sai do caminho com Reflexos DT 15.
+
+- **Queda que tira metade ou mais da Vida máxima** conta como golpe para a tabela de trauma de Ferimentos.
+
+**Exemplo:**
+
+Uma personagem de nível 5, com 26 de Vida, despenca de uma ponte de 12 m: 4d6 de impacto. Ela não escolheu cair, então não testa Acrobacia. Os dados somam 15, sobram 11 de Vida, e ela termina Caída na margem.
+
+### Fôlego
+
+Debaixo d'água, num quarto tomado de fumaça ou com a mão de alguém fechando a garganta, o corpo paga o ar com o mesmo combustível do esforço: a Estamina.
+
+Sem ar, cada rodada custa ⌈Estamina máxima ÷ 10⌉ de Estamina
+
+- **Com a Estamina cheia,** isso dá dez rodadas, mais ou menos um minuto. Quem já gastou Estamina na luta tem menos ar.
+
+- **Esforço dobra o custo:** a rodada em que você atacou, correu ou nadou com pressa custa duas.
+
+- **Sem tempo de puxar o ar** (caiu na água de surpresa, a sala encheu de fumaça de uma vez), a primeira rodada custa o triplo.
+
+- **Voltar a respirar não devolve nada na hora.** A Estamina gasta segurando o fôlego volta como qualquer outra, no Descanso.
+
+- **Quem não respira,** por raça, forma ou efeito, ignora esta seção. Quem respira debaixo d'água ignora dentro da água.
+
+Quando a Estamina acaba e você continua sem ar:
+
+- No fim de cada turno, teste Fortitude contra DT 10. A DT sobe 2 a cada rodada seguinte.
+
+- Na primeira falha você apaga: fica Inconsciente, a Vida cai a 0 e você recebe Morrendo 1.
+
+- Enquanto continuar sem ar, o Morrendo sobe 1 no fim de cada turno seu, sem teste, e ninguém consegue estabilizar você.
+
+- Tirado para o ar, você segue a regra normal de Morrendo, em Ferimentos.
+
+- **Fumaça densa** conta como sem ar para quem fica nela sem cobrir o rosto.
+
+- **Gás venenoso** é uma aflição (Venenos, Doenças e Vícios). Prender o fôlego evita a exposição enquanto o ar durar.
+
+- **Pulmões Danificados** dá desvantagem nesses testes de Fortitude, como diz a condição.
+
+**Exemplo:**
+
+Um personagem com 30 de Estamina máxima gasta 3 por rodada sem ar. Depois de uma luta em que gastou 18, ele tem 12: quatro rodadas nadando com calma, ou duas nadando com pressa.
+
+### Fome e sede
+
+- **Por dia,** uma porção de comida e uns 4 litros de água. No calor Severo ou pior, o dobro de água. A Ração de viagem é uma porção, e o Kit de Aventureiro traz uma semana delas.
+
+- **Na cidade** o custo de vida (Tempo Entre Aventuras) já paga comida e água. Contar porção é coisa de estrada, deserto e cerco.
+
+- **Sem água:** no fim de cada dia sem beber, 1 de Cansaço.
+
+- **Sem comida:** você aguenta 3 + Mod.Constituição dias (mínimo 1) sem efeito. Depois disso, 1 de Cansaço no fim de cada dia sem comer. Meia porção conta como meio dia: dois dias de meia porção valem um dia sem comer.
+
+- **O Cansaço de fome e sede não sai com descanso** enquanto a causa continua. Depois de comer e beber, ele sai no descanso seguinte como qualquer outro.
+
+- **Em Colapso por fome ou sede,** quem não receber comida e água até o fim do dia seguinte morre.
+
+- **Uma noite com fome ou sede** também piora o descanso: é o fator "Sem comida ou água boa" do Descanso.
+
+**Buscar comida e água.** São seis horas de procura, como uma atividade de Tempo Entre Aventuras. Na estrada, o grupo que gasta essas horas procurando faz só metade do caminho do dia. Teste Sobrevivência contra a DT do terreno.
+
+- Terreno | DT | Onde
+
+- Farto | 10 | Mata com rio, beira de lago, campo na época da colheita.
+
+- Comum | 15 | Floresta, campo aberto, litoral, estrada de interior.
+
+- Escasso | 20 | Montanha alta, pântano, estepe seca, ruína antiga.
+
+- Árido | 25 | Deserto, gelo eterno, terra morta, subterrâneo fundo.
+
+- **Sucesso** alimenta e dá água a você por um dia, e a mais uma pessoa a cada 5 pontos acima da DT.
+
+- **O Kit de Pesca e Forrageamento** dá vantagem, e Ajudar vale como em Ações Coletivas.
+
+- **Falha crítica:** alguém come o que não devia. Fortitude DT 15 ou fica Enjoado até o próximo descanso completo.
+
+### Clima
+
+Frio e Calor são dano de ambiente (Tipos de Dano). A tabela diz com que ritmo eles cobram de quem está exposto sem proteção.
+
+- Grau | Frio | Calor | Sem proteção
+
+- Severo | Nevasca, noite de montanha, chuva gelada sem abrigo. | Deserto ao meio-dia, pântano abafado, porão de forja. | Fortitude DT 15, a cada 4 horas.Falha: 1 de Cansaço.
+
+- Extremo | Gelo eterno, tempestade no alto da serra, água gelada até a cintura. | Deserto fundo sem sombra, chuva de cinzas, encosta de vulcão. | Fortitude DT 20, a cada hora.Falha: 1 de Cansaço e dano de ambiente igual a um décimo da Vida máxima.
+
+- Mortal | Mar congelado, um frio que não pertence a este mundo. | Rio de lava a poucos passos, boca de forno, coração de incêndio. | Sem teste, no fim de cada turno.Dano de ambiente igual a um quarto da Vida máxima, sem teste.
+
+- **Roupa certa** (agasalho no frio; roupa leve, água e cobertura no calor) anula o Severo. No Extremo e no Mortal ela não basta.
+
+- **O Traje** com Resistência contra aquele clima conta como roupa certa e ainda baixa um grau: o Extremo vira Severo e o Mortal vira Extremo. A Resistência dele subtrai do dano, como sempre.
+
+- **Abrigo de verdade** (caverna seca, barraca fechada, sombra com água) suspende os testes enquanto você estiver nele.
+
+- **Resistência a Gelo ou a Fogo** não vale contra o clima. Raça ou traço que diga que não sente frio ou calor ignora o clima que o traço cobre.
+
+- **Dormir sem abrigo** no Severo ou pior conta como exposição severa: o descanso fica Péssimo.
+
+- **Falha crítica** no frio Extremo deixa Congelamento, uma condição de longo prazo. No calor Extremo, ela dá 2 de Cansaço no lugar de 1.
+
+### Armadilhas
+
+Toda armadilha tem um nível, quase sempre o do grupo ou o do lugar, e um peso. O nível escolhe a linha da tabela de baixo, e o peso escolhe a DT de cada etapa e a coluna de dano.
+
+- Peso | Achar | Desarmar | Resistir
+
+- LeveAtrasa, faz barulho e machuca pouco. | Padrão | Padrão | Padrão
+
+- SériaTira um bom pedaço da Vida e muda o plano. | Padrão | Difícil | Padrão
+
+- MortalFeita para matar quem entra sem cuidado. Sempre deixa um sinal. | Difícil | Difícil | Difícil
+
+- Nível | DT Padrão / Difícil | Ataque | Leve | Séria | Mortal
+
+- 1 | 15 / 20 | +4 | 1d4 | 1d6 | 2d6
+
+- 5 | 17 / 22 | +9 | 1d4 | 2d6 | 3d6
+
+- 10 | 20 / 25 | +14 | 1d6 | 3d6 | 6d6
+
+- 15 | 22 / 27 | +18 | 2d6 | 4d6 | 8d6
+
+- 20 | 25 / 30 | +24 | 2d6 | 6d6 | 10d6
+
+- 30 | 30 / 35 | +31 | 4d6 | 9d6 | 9d12
+
+- 40 | 35 / 40 | +37 | 5d6 | 7d12 | 12d12
+
+- 50 | 40 / 45 | +42 | 6d6 | 8d12 | 15d12
+
+- 60 | 45 / 50 | +50 | 7d6 | 9d12 | 17d12
+
+- 80 | 55 / 60 | +60 | 9d6 | 12d12 | 20d12+10
+
+- 100 | 65 / 70 | +73 | 6d12 | 15d12 | 20d12+45
+
+- 150 | 90 / 95 | +101 | 8d12 | 20d12+5 | 20d12+110
+
+- 200 | 115 / 120 | +126 | 11d12 | 20d12+45 | 20d12+180
+
+- **Achar:** quem anda atento usa 10 + bônus de Percepção contra a DT de achar. Quem para e procura rola, e procurar com calma custa tempo.
+
+- **A Mortal sempre deixa um sinal** que qualquer um percebe sem teste: ossos, manchas, um aviso riscado na parede. O sinal avisa que há perigo, e o teste mostra onde ele está e como funciona.
+
+- **Desarmar:** Ladinagem para mecanismo, Misticismo para selo ou ritual, Tecnologia para sistema A.X.I.S. Leva um minuto; em combate, uma Ação Padrão com desvantagem. O Kit de Ferramentas dá vantagem nos mecanismos. Falhar por 5 ou mais dispara a armadilha em quem estava mexendo.
+
+- **Desarmar é um caminho entre vários.** Contornar, disparar de longe com uma vara ou uma pedra, ou passar correndo e aguentar também resolvem, cada um com o seu preço.
+
+- **Resistir:** Reflexos contra lâmina, fosso e pedra; Fortitude contra dardo, agulha e gás; Vontade contra selo que mexe com a mente. O sucesso leva metade do dano e nenhum efeito extra. A falha leva o dano inteiro e o efeito.
+
+- **Armadilha que atira** (besta, dardo, lança) faz um ataque: d20 + Ataque da tabela contra a Defesa. Acerto leva o dano inteiro e o efeito; erro não leva nada.
+
+- **O tipo de dano** é o do mecanismo: corte, perfuração, impacto, o Fogo de um selo. O veneno vem como aflição, e a aflição se resolve do jeito dela.
+
+- **Dano que tira metade ou mais da Vida máxima** num golpe só pede a tabela de trauma, como em Ferimentos.
+
+- **As armadilhas vendidas na Loja,** como a Armadilha de Corda e Sino, trazem o próprio número e não usam esta tabela.
+
+**Exemplo:**
+
+Um grupo de nível 10 entra num corredor com uma lâmina de pêndulo Séria. Achar pede DT 20 de Percepção, desarmar pede DT 25 de Ladinagem e resistir pede Reflexos DT 20. Quem falha leva 3d6 de corte e fica Caído; quem passa leva metade.
+
+**Armadilhas prontas.** Para quando o Mestre precisa de uma na hora, ou para inspirar a sua. Use o peso que a cena pedir.
+
+- 1d6 | Como é, e como se resolve
+
+- 1 | Fosso coberto. Uma laje igual às outras, só que oca. O pé afunda, a pedra gira no eixo e o escuro lá embaixo cheira a terra molhada.Reflexos. Sucesso: você se agarra na borda e fica Caído. Falha: você cai e sofre o dano de queda pela altura do fosso no lugar do dano da tabela.
+
+- 2 | Dardo na parede. Um furo do tamanho de uma ervilha na altura do pescoço, e uma placa solta no chão bem embaixo dele.Ataque contra a Defesa. Acerto: dano de perfuração do peso da armadilha e exposição à Toxina Paralisante.
+
+- 3 | Lâmina de pêndulo. Um rangido de corrente no teto, e uma lâmina do tamanho de uma porta descendo em arco pelo corredor.Reflexos. Dano de corte do peso da armadilha. A falha também deixa Caído.
+
+- 4 | Selo de chamas. Letras queimadas no batente, quase apagadas, que esquentam a sola de quem pisa perto.Reflexos. Dano de Fogo do peso da armadilha. Achar pede Percepção ou Ressonância, e desarmar pede Misticismo.
+
+- 5 | Rede no teto. O fio no chão é tão fino que só aparece quando a luz bate de lado. Em cima, uma rede de corda grossa enrolada nas vigas.Reflexos. Falha: Imobilizado embaixo da rede, sem dano. Sair custa uma Ação Padrão e Atletismo ou Acrobacia contra a DT Padrão, ou uma Ação Padrão cortando com arma de corte. Quase sempre alguém ouve e vem ver.
+
+- 6 | Gás do sono. Um assobio baixo pelas frestas do chão, e um cheiro doce de flor passada que toma a sala em segundos.Todos na sala sofrem exposição ao Néctar Sonífero. Quem prende o fôlego a tempo não respira o gás enquanto o ar durar.
 
 ## classes
 

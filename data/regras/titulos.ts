@@ -33,6 +33,7 @@ export const TITULOS_TOPICOS: Record<string, string> = {
   'veiculos-manutencao': 'Manutenção e Componentes',
   transporte: 'Transporte e Viagens',
   aflicoes: 'Venenos, Doenças e Vícios',
+  perigos: 'Perigos do Ambiente',
   classes: 'Classes',
   racas: 'Raças',
   bestiario: 'Criaturas e Companheiros',

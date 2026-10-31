@@ -345,6 +345,7 @@ test('toda mecânica do sistema tem uma página', () => {
     ['descanso', 'recuperação e Cansaço'],
     ['condicoes', 'Sanidade, crises e condições'],
     ['aflicoes', 'veneno, doença e vício'],
+    ['perigos', 'queda, fôlego, fome e sede, clima e armadilhas'],
     ['acoes-coletivas', 'ajudar e teste de grupo'],
     ['ataques-combinados', 'ataque sincronizado'],
     ['perseguicao-a-pe', 'alguém correu e alguém foi atrás'],
