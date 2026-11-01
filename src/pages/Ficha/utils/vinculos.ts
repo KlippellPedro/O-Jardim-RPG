@@ -1,3 +1,5 @@
+import { FAVORES, NIVEIS_DE_CONFIANCA, RAMOS_DE_CONTATO, type IFavor } from '../../../../data/regras/contatosELacos';
+
 export type TipoVinculo =
   | 'amizade'
   | 'familia'
@@ -57,6 +59,14 @@ export interface IVinculo {
   aliadoId?: string;
   /** Miniatura em data URL. Ausente quando o vínculo usa só as iniciais. */
   foto?: string;
+  /** Ramo do contato (Contatos e Laços). Presente quando a pessoa faz favores. */
+  ramo?: string;
+  /** A Dívida que o contato guarda, numa frase. */
+  divida?: string;
+  /** Frase do laço, na voz do personagem. Presente quando o vínculo é um laço. */
+  laco?: string;
+  /** A vantagem do laço já foi usada nesta sessão. */
+  lacoUsado?: boolean;
   criadoEm: number;
   atualizadoEm: number;
   historico: IMudancaAfinidade[];
@@ -98,6 +108,7 @@ export function normalizarVinculos(bruto: unknown): IVinculo[] {
       fixado: registro.fixado === true,
       aliadoId: texto(registro.aliadoId, 80) || undefined,
       foto: fotoVinculoValida(registro.foto) && fotos < LIMITE_FOTOS_VINCULO ? (fotos++, registro.foto) : undefined,
+      ...camposDeContatoELaco(registro),
       criadoEm,
       atualizadoEm: typeof registro.atualizadoEm === 'number' ? registro.atualizadoEm : criadoEm,
       historico: Array.isArray(registro.historico)
@@ -114,6 +125,94 @@ export function normalizarVinculos(bruto: unknown): IVinculo[] {
     });
   });
   return resultado;
+}
+
+// ---------------------------------------------------------- contatos e laços
+
+const semAcentoMinusculo = (valor: string) =>
+  valor.normalize('NFD').replace(/[̀-ͯ]/g, '').toLocaleLowerCase('pt-BR');
+
+/** Ramos do livro (Informação, Passagem...) com um id estável para gravar na ficha. */
+export const RAMOS_CONTATO = RAMOS_DE_CONTATO.map((ramo) => ({
+  valor: semAcentoMinusculo(ramo.titulo),
+  rotulo: ramo.titulo,
+  exemplo: ramo.exemplo,
+}));
+const RAMOS_VALIDOS = new Set(RAMOS_CONTATO.map((ramo) => ramo.valor));
+
+/** Só grava os campos que existem: vínculo sem contato nem laço continua igual ao de antes. */
+function camposDeContatoELaco(registro: Record<string, unknown>): Pick<IVinculo, 'ramo' | 'divida' | 'laco' | 'lacoUsado'> {
+  const campos: Pick<IVinculo, 'ramo' | 'divida' | 'laco' | 'lacoUsado'> = {};
+  const ramo = texto(registro.ramo, 40);
+  if (RAMOS_VALIDOS.has(ramo)) {
+    campos.ramo = ramo;
+    const divida = texto(registro.divida, 300);
+    if (divida) campos.divida = divida;
+  }
+  const laco = texto(registro.laco, 300);
+  if (laco) {
+    campos.laco = laco;
+    if (registro.lacoUsado === true) campos.lacoUsado = true;
+  }
+  return campos;
+}
+
+export const rotuloRamo = (ramo: string | undefined) => RAMOS_CONTATO.find((item) => item.valor === ramo)?.rotulo || '';
+
+/** A Confiança do contato sai da afinidade do vínculo: 1 ou 2 é Conhecido, 3 ou 4 é Amigo, 5 é Leal.
+ *  Afinidade 0 ou menos é contato perdido, sem favores. */
+export function confiancaDoVinculo(afinidade: number): 0 | 1 | 2 | 3 {
+  const valor = limitarAfinidade(afinidade);
+  if (valor >= 5) return 3;
+  if (valor >= 3) return 2;
+  if (valor >= 1) return 1;
+  return 0;
+}
+
+export function rotuloConfianca(confianca: number): string {
+  return NIVEIS_DE_CONFIANCA.find((nivel) => nivel.nivel === confianca)?.titulo || 'Perdido';
+}
+
+/** Afinidade do degrau de Confiança de cima (cumprir uma Dívida que custou, salvar a pele dele). */
+export function afinidadeAoSubirConfianca(afinidade: number): number {
+  const valor = limitarAfinidade(afinidade);
+  if (valor >= 3) return AFINIDADE_MAX;
+  if (valor >= 1) return 3;
+  return 1;
+}
+
+/** Afinidade do degrau de baixo (recusar uma Dívida, deixar o contato se dar mal). */
+export function afinidadeAoBaixarConfianca(afinidade: number): number {
+  const valor = limitarAfinidade(afinidade);
+  if (valor >= 5) return 4;
+  if (valor >= 3) return 2;
+  if (valor >= 1) return 0;
+  return valor;
+}
+
+/** Favores que a Confiança atual aceita fazer. */
+export function favoresDoContato(afinidade: number): IFavor[] {
+  const confianca = confiancaDoVinculo(afinidade);
+  return FAVORES.filter((favor) => confianca >= favor.confiancaMinima);
+}
+
+export function cumprirDivida(vinculo: IVinculo, agora = Date.now()): IVinculo {
+  const { divida: _paga, ...resto } = aplicarAfinidade(vinculo, afinidadeAoSubirConfianca(vinculo.afinidade), 'Dívida cumprida', agora);
+  return { ...resto, atualizadoEm: agora };
+}
+
+export function recusarDivida(vinculo: IVinculo, agora = Date.now()): IVinculo {
+  const { divida: _recusada, ...resto } = aplicarAfinidade(vinculo, afinidadeAoBaixarConfianca(vinculo.afinidade), 'Dívida recusada', agora);
+  return { ...resto, atualizadoEm: agora };
+}
+
+/** Uma vez por sessão: no começo da próxima, todo laço volta a dar vantagem. */
+export function liberarLacos(vinculos: IVinculo[]): IVinculo[] {
+  return vinculos.map((vinculo) => {
+    if (!vinculo.lacoUsado) return vinculo;
+    const { lacoUsado: _usado, ...resto } = vinculo;
+    return resto;
+  });
 }
 
 export function rotuloAfinidade(afinidade: number): string {

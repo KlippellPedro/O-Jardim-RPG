@@ -8,6 +8,7 @@ import {
   Pencil,
   Search,
   ShieldAlert,
+  Thermometer,
   X,
 } from 'lucide-react';
 import {
@@ -26,6 +27,9 @@ import { AflicoesSection } from '../components/AflicoesSection';
 import { ExplicacaoCondicaoAflicao } from '../components/ExplicacaoCondicaoAflicao';
 import { EfeitoDoTurnoBotao } from '../components/EfeitoDoTurnoBotao';
 import { CatalogoAflicoes } from '../../Regras/components/CatalogoAflicoes';
+import { AmbienteSection } from '../components/AmbienteSection';
+import { LinkDaRegra } from '../../../components/ui/LinkDaRegra';
+import { normalizarAmbiente } from '../../../services/ambienteFichaService';
 
 interface AbaCondicoesProps {
   character: any;
@@ -34,7 +38,13 @@ interface AbaCondicoesProps {
   onOpenConditions?: () => void;
 }
 
-type Painel = 'condicoes' | 'aflicoes';
+type Painel = 'condicoes' | 'aflicoes' | 'ambiente';
+
+const ESTILO_PAINEL: Record<Painel, { ativo: string; icone: string }> = {
+  condicoes: { ativo: 'border-red-400/40 bg-red-400/10', icone: 'border-red-400/25 text-red-300' },
+  aflicoes: { ativo: 'border-lime-300/40 bg-lime-300/10', icone: 'border-lime-300/25 text-lime-300' },
+  ambiente: { ativo: 'border-sky-300/40 bg-sky-300/10', icone: 'border-sky-300/25 text-sky-300' },
+};
 
 const ESTILO_CATEGORIA: Record<ICondicaoRegra['categoria'], string> = {
   física: 'border-orange-400/20 bg-orange-400/10 text-orange-200',
@@ -52,6 +62,9 @@ export const AbaCondicoes = ({ character, onUpdate, onOpenConditions }: AbaCondi
 
   const condicoesAtivas: any[] = Array.isArray(ficha.condicoesAtivas) ? ficha.condicoesAtivas : [];
   const aflicoesAtivas = useMemo(() => normalizarAflicoesAtivas(ficha.aflicoesAtivas), [ficha.aflicoesAtivas]);
+  const ambiente = useMemo(() => normalizarAmbiente(ficha.ambiente), [ficha.ambiente]);
+  // Quantos perigos do lugar pesam agora: clima marcado, fome ou sede contando, sem ar.
+  const perigosAtivos = [ambiente.clima.grau, ambiente.fome.diasSemComer || ambiente.fome.diasSemBeber, ambiente.folego.semAr].filter(Boolean).length;
   const condicoesVisiveis = useMemo(
     () => listarCondicoes(filtroCondicao, buscaCondicao),
     [filtroCondicao, buscaCondicao],
@@ -153,6 +166,7 @@ export const AbaCondicoes = ({ character, onUpdate, onOpenConditions }: AbaCondi
   const abas: Array<{ id: Painel; rotulo: string; quantidade: number; Icone: typeof ShieldAlert; descricao: string }> = [
     { id: 'condicoes', rotulo: 'Condições', quantidade: condicoesAtivas.length, Icone: ShieldAlert, descricao: 'Efeitos de cena, lesões, sequelas e a mente' },
     { id: 'aflicoes', rotulo: 'Aflições', quantidade: aflicoesAtivas.length, Icone: FlaskConical, descricao: 'Venenos, doenças e vícios' },
+    { id: 'ambiente', rotulo: 'Ambiente', quantidade: perigosAtivos, Icone: Thermometer, descricao: 'Clima, fome, sede, fôlego e queda' },
   ];
 
   return (
@@ -168,6 +182,11 @@ export const AbaCondicoes = ({ character, onUpdate, onOpenConditions }: AbaCondi
             <h2 className="flex items-center gap-3 text-2xl font-bold text-white sm:text-3xl" style={{ fontFamily: 'Cinzel, serif' }}>
               <ShieldAlert className="text-red-300" />Condições e aflições
             </h2>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <LinkDaRegra topico="condicoes" rotulo="Condições" />
+              <LinkDaRegra topico="aflicoes" rotulo="Aflições" />
+              <LinkDaRegra topico="perigos" rotulo="Ambiente" />
+            </div>
             <p className="mt-3 text-sm leading-relaxed text-gray-400">
               Tudo o que está afetando o personagem agora, e o catálogo pronto para aplicar. Condições são efeitos de cena, lesões e marcas da mente. Aflições são venenos, doenças e vícios que pioram ou melhoram por estágios.
             </p>
@@ -187,7 +206,7 @@ export const AbaCondicoes = ({ character, onUpdate, onOpenConditions }: AbaCondi
           </div>
         </div>
 
-        <div className="relative mt-6 grid gap-2 sm:grid-cols-2" role="tablist" aria-label="Condições ou aflições">
+        <div className="relative mt-6 grid gap-2 sm:grid-cols-3" role="tablist" aria-label="Condições, aflições ou ambiente">
           {abas.map(({ id, rotulo, quantidade, Icone, descricao }) => {
             const ativo = painel === id;
             return (
@@ -200,13 +219,11 @@ export const AbaCondicoes = ({ character, onUpdate, onOpenConditions }: AbaCondi
                 onClick={() => setPainel(id)}
                 className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-all ${
                   ativo
-                    ? (id === 'condicoes' ? 'border-red-400/40 bg-red-400/10' : 'border-lime-300/40 bg-lime-300/10')
+                    ? ESTILO_PAINEL[id].ativo
                     : 'border-white/[0.07] bg-black/20 hover:border-white/15 hover:bg-white/[0.03]'
                 }`}
               >
-                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border bg-black/25 ${
-                  id === 'condicoes' ? 'border-red-400/25 text-red-300' : 'border-lime-300/25 text-lime-300'
-                }`}>
+                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border bg-black/25 ${ESTILO_PAINEL[id].icone}`}>
                   <Icone size={19} />
                 </span>
                 <span className="min-w-0 flex-1">
@@ -348,11 +365,13 @@ export const AbaCondicoes = ({ character, onUpdate, onOpenConditions }: AbaCondi
             </div>
           </section>
         </>
-      ) : (
+      ) : painel === 'aflicoes' ? (
         <div className="space-y-6" data-tour="condicoes-aflicoes">
           <AflicoesSection character={character} onUpdate={onUpdate} />
           <CatalogoAflicoes />
         </div>
+      ) : (
+        <AmbienteSection character={character} onUpdate={onUpdate} />
       )}
     </div>
   );

@@ -2,9 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Camera,
   ChevronDown,
+  Handshake,
   Heart,
   History,
   LayoutGrid,
+  Link2,
   List,
   Minus,
   Pencil,
@@ -42,12 +44,23 @@ import {
   posicionarTeia,
   rotuloAfinidade,
   selecionarParaTeia,
+  RAMOS_CONTATO,
+  confiancaDoVinculo,
+  cumprirDivida,
+  favoresDoContato,
+  liberarLacos,
+  recusarDivida,
+  rotuloConfianca,
+  rotuloRamo,
   type IFiltroVinculos,
   type IVinculo,
   type TipoVinculo,
 } from '../../utils/vinculos';
 import { avisar } from '../../../../components/avisos/avisos';
 import { excluirDaFichaComDesfazer } from '../../desfazerNaFicha';
+import { LinkDaRegra } from '../../../../components/ui/LinkDaRegra';
+import { modificador } from '../../../../services/calculoService';
+import { FAVORES, LACOS_MAXIMOS, NIVEIS_DE_CONFIANCA, contatosMantidos } from '../../../../../data/regras/contatosELacos';
 
 interface IFormVinculo {
   nome: string;
@@ -56,9 +69,14 @@ interface IFormVinculo {
   nota: string;
   foto?: string;
   aliadoId?: string;
+  /** Faz favores: vira contato, com ramo e Dívida. */
+  contato: boolean;
+  ramo: string;
+  divida: string;
+  laco: string;
 }
 
-const FORM_VAZIO: IFormVinculo = { nome: '', tipo: 'amizade', afinidade: 1, nota: '' };
+const FORM_VAZIO: IFormVinculo = { nome: '', tipo: 'amizade', afinidade: 1, nota: '', contato: false, ramo: RAMOS_CONTATO[0].valor, divida: '', laco: '' };
 
 const COR_TIPO: Record<TipoVinculo, string> = {
   amizade: '#6ee7b7',
@@ -184,6 +202,12 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
     ];
   }, [vinculos]);
 
+  const contatos = vinculos.filter((vinculo) => vinculo.ramo);
+  const lacos = vinculos.filter((vinculo) => vinculo.laco);
+  const lacosUsados = lacos.filter((vinculo) => vinculo.lacoUsado).length;
+  const carisma = Number((character?.ficha?.atributosFinais || character?.atributosFinais || {}).carisma) || 10;
+  const limiteContatos = contatosMantidos(modificador(carisma));
+
   // Depois de escolher alguém na teia, leva o cartão até a tela quando ele já estiver desenhado.
   useEffect(() => {
     const id = pendenteRolagem.current;
@@ -223,6 +247,10 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
       nota: vinculo.nota,
       foto: vinculo.foto,
       aliadoId: vinculo.aliadoId,
+      contato: !!vinculo.ramo,
+      ramo: vinculo.ramo || RAMOS_CONTATO[0].valor,
+      divida: vinculo.divida || '',
+      laco: vinculo.laco || '',
     });
     setModalAberto(true);
   };
@@ -231,11 +259,26 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
     const nome = form.nome.trim();
     if (!nome) return;
     const agora = Date.now();
+    const laco = form.laco.trim().slice(0, 300);
+    const mecanica = {
+      ramo: form.contato ? form.ramo : undefined,
+      divida: form.contato && form.divida.trim() ? form.divida.trim().slice(0, 300) : undefined,
+      laco: laco || undefined,
+    };
     if (editandoId) {
       commit(vinculos.map((vinculo) => {
         if (vinculo.id !== editandoId) return vinculo;
         const atualizado = aplicarAfinidade(vinculo, form.afinidade, 'Ajustado na edição', agora);
-        return { ...atualizado, nome, tipo: form.tipo, nota: form.nota.trim().slice(0, 1200), foto: form.foto, atualizadoEm: agora };
+        return {
+          ...atualizado,
+          nome,
+          tipo: form.tipo,
+          nota: form.nota.trim().slice(0, 1200),
+          foto: form.foto,
+          atualizadoEm: agora,
+          ...mecanica,
+          lacoUsado: laco ? atualizado.lacoUsado : undefined,
+        };
       }));
     } else {
       if (cheio) return;
@@ -253,6 +296,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
           criadoEm: agora,
           atualizadoEm: agora,
           historico: [],
+          ...mecanica,
         },
       ]);
     }
@@ -274,6 +318,24 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
 
   const alternarFixado = (vinculo: IVinculo) => {
     commit(vinculos.map((item) => (item.id === vinculo.id ? { ...item, fixado: !item.fixado } : item)));
+  };
+
+  const trocar = (id: string, mudar: (vinculo: IVinculo) => IVinculo) => commit(vinculos.map((item) => (item.id === id ? mudar(item) : item)));
+
+  const alternarLacoUsado = (vinculo: IVinculo) => trocar(vinculo.id, (item) => {
+    if (item.lacoUsado) {
+      const { lacoUsado: _usado, ...resto } = item;
+      return resto;
+    }
+    return { ...item, lacoUsado: true };
+  });
+
+  const romperLaco = (vinculo: IVinculo) => {
+    trocar(vinculo.id, (item) => {
+      const { laco: _laco, lacoUsado: _usado, ...resto } = item;
+      return { ...resto, atualizadoEm: Date.now() };
+    });
+    avisar.aviso(`Laço com ${vinculo.nome} rompido: teste Sanidade DT 15, com perda de 1d6. A mesa pode aplicar Luto Profundo, na aba Condições.`);
   };
 
   const iniciarAjuste = (vinculo: IVinculo, delta: number) => {
@@ -322,8 +384,20 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
                 {vinculo.fixado ? <Pin size={11} className="mr-1 inline text-[#c7a44c]" fill="currentColor" /> : null}
                 {vinculo.nome}
               </h3>
-              <span className="inline-block rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider" style={{ color: COR_TIPO[vinculo.tipo], borderColor: `${COR_TIPO[vinculo.tipo]}55` }}>
-                {rotuloTipo(vinculo.tipo)}
+              <span className="flex flex-wrap gap-1">
+                <span className="inline-block rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider" style={{ color: COR_TIPO[vinculo.tipo], borderColor: `${COR_TIPO[vinculo.tipo]}55` }}>
+                  {rotuloTipo(vinculo.tipo)}
+                </span>
+                {vinculo.ramo ? (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-[#c7a44c]/35 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#e3c46f]">
+                    <Handshake size={10} aria-hidden="true" /> {rotuloConfianca(confiancaDoVinculo(vinculo.afinidade))}{vinculo.divida ? ' · Dívida' : ''}
+                  </span>
+                ) : null}
+                {vinculo.laco ? (
+                  <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${vinculo.lacoUsado ? 'border-white/10 text-gray-500' : 'border-sky-300/35 text-sky-200'}`}>
+                    <Link2 size={10} aria-hidden="true" /> Laço
+                  </span>
+                ) : null}
               </span>
             </div>
           </div>
@@ -401,6 +475,56 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
               </div>
             ) : null}
 
+            {vinculo.ramo ? (() => {
+              const confianca = confiancaDoVinculo(vinculo.afinidade);
+              const aceitos = new Set(favoresDoContato(vinculo.afinidade).map((favor) => favor.id));
+              return (
+                <div className="space-y-2 rounded-lg border border-[#c7a44c]/15 bg-[#c7a44c]/[0.04] p-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex min-w-0 items-center gap-1.5 text-xs font-bold text-[#e3c46f]">
+                      <Handshake size={13} aria-hidden="true" /> Contato · {rotuloRamo(vinculo.ramo)} · {rotuloConfianca(confianca)}
+                    </span>
+                    <LinkDaRegra topico="contatos-lacos" secao="Favores" rotulo="Favores" />
+                  </div>
+                  <p className="text-xs leading-5 text-gray-400">
+                    {NIVEIS_DE_CONFIANCA.find((nivel) => nivel.nivel === confianca)?.postura || 'Com afinidade 0 ou menos, o contato se perdeu e não faz favores.'}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {FAVORES.map((favor) => (
+                      <span key={favor.id} className={`rounded-full border px-2 py-0.5 text-[10px] font-bold ${aceitos.has(favor.id) ? 'border-emerald-400/30 text-emerald-200' : 'border-white/10 text-gray-600 line-through'}`}>
+                        {favor.titulo}{aceitos.has(favor.id) && favor.id === 'grande' && confianca < 3 ? ' · Diplomacia' : ''}
+                      </span>
+                    ))}
+                  </div>
+                  {vinculo.divida ? (
+                    <div className="space-y-2 border-t border-white/5 pt-2">
+                      <p className="text-xs leading-5 text-amber-200/90"><strong>Dívida:</strong> {vinculo.divida}</p>
+                      <div className="flex flex-wrap gap-2">
+                        <button type="button" onClick={() => trocar(vinculo.id, (item) => cumprirDivida(item))} className="min-h-8 rounded-lg border border-emerald-400/25 bg-emerald-400/10 px-3 text-xs font-bold text-emerald-100 hover:border-emerald-400/45">Cumprir (Confiança sobe)</button>
+                        <button type="button" onClick={() => trocar(vinculo.id, (item) => recusarDivida(item))} className="min-h-8 rounded-lg border border-red-400/25 bg-red-400/10 px-3 text-xs font-bold text-red-100 hover:border-red-400/45">Recusar (Confiança cai)</button>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })() : null}
+
+            {vinculo.laco ? (
+              <div className="space-y-2 rounded-lg border border-sky-300/15 bg-sky-300/[0.04] p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-sky-200"><Link2 size={13} aria-hidden="true" /> Laço</span>
+                  <LinkDaRegra topico="contatos-lacos" secao="Laços" rotulo="Laços" />
+                </div>
+                <p className="text-sm italic leading-6 text-gray-300">"{vinculo.laco}"</p>
+                <div className="flex flex-wrap gap-2">
+                  <button type="button" aria-pressed={!!vinculo.lacoUsado} onClick={() => alternarLacoUsado(vinculo)} className={`min-h-8 rounded-lg border px-3 text-xs font-bold ${vinculo.lacoUsado ? 'border-white/10 bg-black/20 text-gray-500 hover:text-gray-300' : 'border-sky-300/30 bg-sky-300/10 text-sky-100 hover:border-sky-300/50'}`}>
+                    {vinculo.lacoUsado ? 'Vantagem usada nesta sessão' : 'Usar a vantagem (1 por sessão)'}
+                  </button>
+                  <button type="button" onClick={() => romperLaco(vinculo)} className="min-h-8 rounded-lg border border-white/10 px-3 text-xs font-bold text-gray-500 hover:border-red-400/30 hover:text-red-200">Laço rompido</button>
+                </div>
+              </div>
+            ) : null}
+
             {vinculo.nota ? <p className="whitespace-pre-wrap text-sm leading-6 text-gray-400">{vinculo.nota}</p> : null}
 
             {vinculo.historico.length > 0 ? (
@@ -468,6 +592,21 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
               <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{item.rotulo}</div>
             </div>
           ))}
+        </div>
+      ) : null}
+
+      {vinculos.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-2xl border border-white/5 bg-[#0f0e15] px-4 py-3 text-xs text-gray-400">
+          <span className="flex items-center gap-1.5"><Handshake size={14} className="text-[#c7a44c]" aria-hidden="true" /> Contatos <strong className={contatos.length > limiteContatos ? 'text-amber-300' : 'text-white'}>{contatos.length}</strong> de {limiteContatos}</span>
+          <span className="flex items-center gap-1.5"><Link2 size={14} className="text-sky-300" aria-hidden="true" /> Laços <strong className={lacos.length > LACOS_MAXIMOS ? 'text-amber-300' : 'text-white'}>{lacos.length}</strong> de {LACOS_MAXIMOS}</span>
+          {lacosUsados > 0 ? (
+            <button type="button" onClick={() => commit(liberarLacos(vinculos))} className="min-h-8 rounded-lg border border-sky-300/25 bg-sky-300/10 px-3 font-bold text-sky-100 hover:border-sky-300/45">
+              Nova sessão: liberar {lacosUsados} laço{lacosUsados === 1 ? '' : 's'}
+            </button>
+          ) : null}
+          <LinkDaRegra topico="contatos-lacos" rotulo="Contatos e Laços" className="sm:ml-auto" />
+          {contatos.length > limiteContatos ? <p className="w-full text-[11px] text-amber-200/80">Acima do limite de 2 + Mod.Carisma: um dos contatos esfria e fica sem favores até sobrar vaga.</p> : null}
+          {lacos.length > LACOS_MAXIMOS ? <p className="w-full text-[11px] text-amber-200/80">A regra pede no máximo {LACOS_MAXIMOS} laços. Escolha quais continuam.</p> : null}
         </div>
       ) : null}
 
@@ -586,6 +725,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
                         >
                           <title>{`${vinculo.nome} · ${rotuloTipo(vinculo.tipo)} · ${rotuloAfinidade(vinculo.afinidade)} (${sinal(vinculo.afinidade)})`}</title>
                           {ativo ? <circle r={raioNo + 7} fill="none" stroke={cor} strokeOpacity={0.35} strokeWidth={4} /> : null}
+                          {vinculo.laco ? <circle r={raioNo + 4} fill="none" stroke="#7dd3fc" strokeOpacity={vinculo.lacoUsado ? 0.25 : 0.7} strokeWidth={1.2} strokeDasharray="2 2" /> : null}
                           <circle r={ativo ? raioNo + 2 : raioNo} fill="#121118" stroke={cor} strokeWidth={ativo ? 3 : 2} />
                           {vinculo.foto ? (
                             <image href={vinculo.foto} x={-(raioNo - 2)} y={-(raioNo - 2)} width={(raioNo - 2) * 2} height={(raioNo - 2) * 2} preserveAspectRatio="xMidYMid slice" clipPath={`url(#teia-foto-${vinculo.id})`} />
@@ -776,7 +916,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
             <Select
               ariaLabel="Tipo de relação"
               value={form.tipo}
-              onChange={(valor) => setForm({ ...form, tipo: valor as TipoVinculo })}
+              onChange={(valor) => setForm({ ...form, tipo: valor as TipoVinculo, contato: form.contato || valor === 'contato' })}
               options={TIPOS_VINCULO.map((tipo) => ({ value: tipo.valor, label: tipo.rotulo }))}
               className="w-full rounded-xl border-white/5 bg-[#0f0e15] px-4 py-3 text-sm text-gray-300"
             />
@@ -825,6 +965,56 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
               <span>Neutro</span>
               <span>Confiança</span>
             </div>
+          </div>
+
+          <div className="space-y-3 rounded-xl border border-white/5 bg-black/20 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Na mesa</span>
+              <LinkDaRegra topico="contatos-lacos" />
+            </div>
+            <label className="flex cursor-pointer items-start gap-3 text-sm text-gray-300">
+              <input type="checkbox" checked={form.contato} onChange={(e) => setForm({ ...form, contato: e.target.checked })} className="mt-1 h-4 w-4 accent-[#c7a44c]" />
+              <span>
+                <strong className="text-white">Faz favores (contato)</strong>
+                <span className="block text-xs leading-5 text-gray-500">A Confiança sai da afinidade: 1 ou 2 é Conhecido, 3 ou 4 é Amigo, 5 é Leal. Agora: {rotuloConfianca(confiancaDoVinculo(form.afinidade))}.</span>
+              </span>
+            </label>
+            {form.contato ? (
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Ramo</span>
+                  <Select
+                    ariaLabel="Ramo do contato"
+                    value={form.ramo}
+                    onChange={(valor) => setForm({ ...form, ramo: valor })}
+                    options={RAMOS_CONTATO.map((ramo) => ({ value: ramo.valor, label: ramo.rotulo }))}
+                    className="w-full rounded-xl border-white/5 bg-[#0f0e15] px-4 py-3 text-sm text-gray-300"
+                  />
+                  <span className="mt-1 block text-[11px] leading-4 text-gray-600">{RAMOS_CONTATO.find((ramo) => ramo.valor === form.ramo)?.exemplo}</span>
+                </div>
+                <label className="block">
+                  <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Dívida que ele guarda</span>
+                  <input
+                    value={form.divida}
+                    maxLength={300}
+                    onChange={(e) => setForm({ ...form, divida: e.target.value })}
+                    placeholder="Vazio quando não há Dívida"
+                    className="w-full rounded-xl border border-white/10 bg-[#0f0e15] px-3 py-3 text-sm text-white outline-none focus:border-[#c7a44c]/50"
+                  />
+                </label>
+              </div>
+            ) : null}
+            <label className="block">
+              <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Laço (opcional)</span>
+              <input
+                value={form.laco}
+                maxLength={300}
+                onChange={(e) => setForm({ ...form, laco: e.target.value })}
+                placeholder="Devo a vida a ela, e ela nunca cobrou."
+                className="w-full rounded-xl border border-white/10 bg-[#0f0e15] px-3 py-3 text-sm text-white outline-none focus:border-[#c7a44c]/50"
+              />
+              <span className="mt-1 block text-[11px] leading-4 text-gray-600">Uma frase na voz do personagem. Uma vez por sessão, um teste feito por causa dela tem vantagem. Laços: {lacos.length} de {LACOS_MAXIMOS}.</span>
+            </label>
           </div>
 
           <label className="block">

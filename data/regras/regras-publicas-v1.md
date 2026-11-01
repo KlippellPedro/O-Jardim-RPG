@@ -924,6 +924,8 @@ A velha que responde a carta no mesmo dia, o escrivão que carimba sem ler, o am
 
 Anote na ficha o nome, o lugar onde ele está, o ramo e a Confiança. O contato é uma pessoa, com vida própria e interesses próprios, e vai continuar sendo depois do favor.
 
+Na ficha, o contato é um vínculo das Notas marcado como "faz favores", e a Confiança sai da afinidade dele: 1 ou 2 é Conhecido, 3 ou 4 é Amigo e 5 é Leal. Com afinidade 0 ou menos, o contato se perdeu. Subir ou baixar a Confiança é levar a afinidade ao degrau seguinte, e o laço também mora no vínculo.
+
 - Confiança | Estado | Como ele trata você
 
 - 1 | Conhecido | Atende e ajuda, mas cobra até o favor pequeno.

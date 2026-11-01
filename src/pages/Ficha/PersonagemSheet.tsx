@@ -1,5 +1,5 @@
 import React, { type CSSProperties, Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   useCharacterStore,
@@ -9,6 +9,7 @@ import {
 } from '../../store/useCharacterStore';
 import {
   Bell,
+  BookOpen,
   ChevronRight,
   Brain,
   Compass,
@@ -40,6 +41,7 @@ import { ICatalogo } from '../../types/catalogo';
 import { nomeExibicaoRaca } from '../../services/racaService';
 import { pendenciasProgressao } from '../../services/progressaoFichaService';
 import { obterStatusFicha } from '../../services/statusService';
+import { rotaDaRegra } from '../Regras/secaoDoLivro';
 import { ModalInfoFicha } from './components/ModalInfoFicha';
 import { FichaModal } from './components/FichaModal';
 import { AbaFicha } from './abas/AbaFicha';
@@ -132,6 +134,23 @@ const TABS = [
   { id: 'Condições', icon: ShieldAlert },
   { id: 'Notas', icon: ScrollText },
 ] as const;
+
+/** Tópico do livro que explica cada aba, para o botão "Regra da aba". O Jardim não tem página própria. */
+const REGRA_DA_ABA: Partial<Record<FichaTourTabId, string>> = {
+  Ficha: 'sistema-base',
+  Perícias: 'pericias',
+  Inventário: 'equipamentos',
+  Bens: 'bases',
+  Habilidades: 'poderes-habilidades',
+  Poderes: 'poderes-habilidades',
+  Magias: 'magia-fluxo',
+  Ataques: 'combate',
+  Aliados: 'aliados',
+  Progressão: 'xp',
+  Descanso: 'descanso',
+  Condições: 'condicoes',
+  Notas: 'contatos-lacos',
+};
 
 const TAB_IDS = TABS.map((tab) => tab.id);
 
@@ -863,6 +882,17 @@ export const PersonagemSheet: React.FC = () => {
             <Compass size={17} aria-hidden="true" />
             <span className="hidden lg:inline">Guia da aba</span>
           </button>
+          {REGRA_DA_ABA[activeTab] ? (
+            <Link
+              to={rotaDaRegra(REGRA_DA_ABA[activeTab] as string)}
+              className="flex h-10 items-center gap-2 rounded-full border border-[#c7a44c]/30 px-3.5 text-xs font-bold uppercase tracking-[0.12em] text-[#d8bd75] transition-colors hover:bg-[#c7a44c]/10 hover:text-[#f0d892]"
+              aria-label={`Abrir no livro a regra da aba ${activeTab}`}
+              title={`Regra da aba ${activeTab}`}
+            >
+              <BookOpen size={17} aria-hidden="true" />
+              <span className="hidden lg:inline">Regra da aba</span>
+            </Link>
+          ) : null}
           <button
             onClick={() => setShowAjuda(true)}
             className="w-10 h-10 rounded-full border border-yellow-600/30 flex items-center justify-center text-yellow-600 hover:bg-yellow-600/10 transition-colors"
@@ -893,10 +923,10 @@ export const PersonagemSheet: React.FC = () => {
       description="As edições são salvas em sequência e aparecem ao vivo para o dono e a equipe da campanha. O indicador do cabeçalho mostra conexão, atualização remota e conflitos sem apagar rascunhos locais."
       items={[
         { label: 'Ao vivo', value: 'Depois do autosave, alterações do jogador ou da equipe aparecem automaticamente nas outras telas abertas' },
-        { label: 'Ficha', value: 'Identidade, classe, Fama, Prestígio, atributos, status vitais e experiência' },
+        { label: 'Ficha', value: 'Identidade, classe, Fama, Prestígio, Procura, Devoção, atributos, status vitais e experiência' },
         { label: 'Progressão', value: 'Características raciais, habilidades e eventos automáticos, poderes de classe e Legados' },
         { label: 'Descanso', value: 'Recuperação de Vida, Mana, Estamina, Sanidade e Cansaço, em três passos' },
-        { label: 'Condições', value: 'Condições ativas, catálogo, crises de Sanidade e aflições (venenos, doenças e vícios)' },
+        { label: 'Condições', value: 'Condições ativas, catálogo, crises de Sanidade, aflições (venenos, doenças e vícios) e Ambiente (clima, fome, sede, fôlego e queda)' },
         { label: 'Perícias', value: 'Graus, vantagens/desvantagens e rolagens' },
         { label: 'Inventário', value: 'Itens e moedas (sincronizados com o servidor)' },
         { label: 'Bens', value: 'Propriedades e veículos' },
@@ -904,7 +934,7 @@ export const PersonagemSheet: React.FC = () => {
         { label: 'Jardim', value: 'Podar poderes por Sementes e plantar poderes de outras classes na ficha' },
         { label: 'Ataques', value: 'Criar, editar e rolar acerto/dano no servidor' },
         { label: 'Aliados', value: 'Companheiros e seguidores' },
-        { label: 'Notas', value: 'História e anotações de sessão' },
+        { label: 'Notas', value: 'História, anotações de sessão, diário e vínculos, com contatos, Dívidas e laços' },
       ]}
     />
   );

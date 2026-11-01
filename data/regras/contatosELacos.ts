@@ -151,6 +151,7 @@ export const REGRA_CONTATOS_LACOS: RegraTopicoDe<'Livro do Jogador'> = {
 
     <h3 class="regras-subtitle">Contatos</h3>
     <p>Anote na ficha o nome, o lugar onde ele está, o ramo e a Confiança. O contato é uma pessoa, com vida própria e interesses próprios, e vai continuar sendo depois do favor.</p>
+    <p class="regras-note">Na ficha, o contato é um vínculo das Notas marcado como "faz favores", e a Confiança sai da afinidade dele: 1 ou 2 é Conhecido, 3 ou 4 é Amigo e 5 é Leal. Com afinidade 0 ou menos, o contato se perdeu. Subir ou baixar a Confiança é levar a afinidade ao degrau seguinte, e o laço também mora no vínculo.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Confiança</th><th>Estado</th><th>Como ele trata você</th></tr></thead>
       <tbody>${tabelaConfianca}</tbody>

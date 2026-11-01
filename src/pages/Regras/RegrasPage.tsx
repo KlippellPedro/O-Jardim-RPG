@@ -202,6 +202,7 @@ export const RegrasPage = () => {
     const proximosParametros = new URLSearchParams(searchParams);
     proximosParametros.set('topico', topico);
     proximosParametros.delete('estante');
+    proximosParametros.delete('secao');
     if (aoAbrir) restaurarProgressoRef.current = { topico, progresso: aoAbrir.progresso };
     setSearchParams(proximosParametros);
   }, [searchParams, setSearchParams]);
@@ -212,10 +213,50 @@ export const RegrasPage = () => {
     document.getElementById('regra-leitor')?.scrollTo({ top: 0, behavior: 'auto' });
   }, [activeTopic]);
 
+  // A ficha abre o livro direto numa seção (`&secao=secao-fome-e-sede`). Numa página recém-aberta o
+  // texto ainda troca quando as regras da campanha chegam, e a troca devolve a rolagem ao topo; por isso
+  // a seção é reaplicada até ficar parada por um segundo, e a espera acaba se a pessoa rolar sozinha.
+  const secaoSolicitada = searchParams.get('secao');
+  useEffect(() => {
+    if (!activeTopic || !secaoSolicitada) return undefined;
+    const FOLGA = 96;
+    let espera = 0;
+    let tentativas = 0;
+    let parado = 0;
+    let desistiu = false;
+    const leitorInicial = document.getElementById('regra-leitor');
+    const desistir = () => { desistiu = true; };
+    leitorInicial?.addEventListener('wheel', desistir, { passive: true });
+    leitorInicial?.addEventListener('touchstart', desistir, { passive: true });
+    const levar = () => {
+      if (desistiu || tentativas++ > 80) return;
+      const leitor = document.getElementById('regra-leitor');
+      const alvo = document.getElementById(secaoSolicitada);
+      if (leitor && alvo && leitor.contains(alvo)) {
+        const distancia = alvo.getBoundingClientRect().top - leitor.getBoundingClientRect().top;
+        if (Math.abs(distancia - FOLGA) > 24) {
+          parado = 0;
+          // "instant": o leitor tem scroll-behavior suave no CSS, e "auto" herdaria a animação.
+          leitor.scrollTo({ top: Math.max(0, leitor.scrollTop + distancia - FOLGA), behavior: 'instant' as ScrollBehavior });
+        } else if (++parado >= 10) {
+          return;
+        }
+      }
+      espera = window.setTimeout(levar, 100);
+    };
+    espera = window.setTimeout(levar, 50);
+    return () => {
+      window.clearTimeout(espera);
+      leitorInicial?.removeEventListener('wheel', desistir);
+      leitorInicial?.removeEventListener('touchstart', desistir);
+    };
+  }, [activeTopic, secaoSolicitada]);
+
   const voltarAoInicio = () => {
     const proximosParametros = new URLSearchParams(searchParams);
     proximosParametros.delete('topico');
     proximosParametros.delete('estante');
+    proximosParametros.delete('secao');
     setSearchParams(proximosParametros);
   };
 
@@ -223,6 +264,7 @@ export const RegrasPage = () => {
     const proximosParametros = new URLSearchParams(searchParams);
     proximosParametros.set('topico', topico);
     proximosParametros.set('estante', subtopico);
+    proximosParametros.delete('secao');
     setSearchParams(proximosParametros);
   };
 

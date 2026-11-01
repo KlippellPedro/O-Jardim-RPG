@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown, Dices, List, X } from 'lucide-react';
 import { sanitizeRuleHtml } from '../../../services/sanitizeRuleHtml';
+import { idDaSecao } from '../secaoDoLivro';
 import '../leitor.css';
 
 interface RegrasContentProps {
@@ -23,15 +24,7 @@ interface TocItem {
   text: string;
 }
 
-const slugTitulo = (titulo: string, indice: number) => {
-  const slug = titulo
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLocaleLowerCase('pt-BR')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-  return `secao-${slug || indice}`;
-};
+const slugTitulo = idDaSecao;
 
 const normalizarTitulo = (titulo: string) => titulo
   .normalize('NFD')
