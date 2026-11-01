@@ -2,6 +2,18 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-01-documentos-do-mestre",
+      "data": "2026-11-01",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "O Painel do Mestre ganhou a aba Documentos",
+      "detalhes": [
+        "O Mestre escolhe um modelo, troca os textos e a imagem, e o papel fica pronto para a mesa: cartaz de procurado, carta com lacre, bilhete rasgado, cartão de visita, credencial com foto, edital, contrato, relatório com trechos tarjados e recorte de jornal.",
+        "Cada documento sai como imagem para colar no Discord, ou vai para a impressora no tamanho real. Os cartões saem oito por folha, prontos para recortar.",
+        "Os documentos ficam guardados na campanha, e quem joga só vê o papel quando o Mestre mostrar."
+      ]
+    },
+    {
       "id": "2026-10-31-ficha-mecanicas-de-mesa",
       "data": "2026-10-31",
       "tipo": "melhoria",

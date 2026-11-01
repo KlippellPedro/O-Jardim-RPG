@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-11-01-documentos-do-mestre",
+      "data": "2026-11-01",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "O Painel do Mestre ganhou a aba Documentos",
+      "detalhes": [
+        "O Mestre escolhe um modelo, troca os textos e a imagem, e o papel fica pronto para a mesa: cartaz de procurado, carta com lacre, bilhete rasgado, cartão de visita, credencial com foto, edital, contrato, relatório com trechos tarjados e recorte de jornal.",
+        "Cada documento sai como imagem para colar no Discord, ou vai para a impressora no tamanho real. Os cartões saem oito por folha, prontos para recortar.",
+        "Os documentos ficam guardados na campanha, e quem joga só vê o papel quando o Mestre mostrar."
+      ]
+    },
+    {
       "id": "2026-10-31-ficha-mecanicas-de-mesa",
       "data": "2026-10-31",
       "tipo": "melhoria",
@@ -987,17 +999,6 @@
         "Quando alguém leva dano ou é curado, o número sobe pela barra e a barra treme conforme o tamanho do golpe. Com a Vida baixa a barra pulsa, e quem cai fica em cinza com a etiqueta Caído.",
         "O começo do combate, cada rodada nova e o fim aparecem numa faixa para a mesa toda.",
         "Criatura com a Vida escondida continua escondida: só o texto de estado dela reage. Com movimento reduzido no aparelho ou o modo de desempenho ligado, nada disso se mexe."
-      ]
-    },
-    {
-      "id": "2026-10-10-avisos-e-desfazer",
-      "data": "2026-10-10",
-      "tipo": "novo",
-      "area": "Jardim",
-      "titulo": "Avisos com a cara do Jardim e botão Desfazer",
-      "detalhes": [
-        "As caixinhas cinzas do navegador saíram. Os avisos agora aparecem embaixo da tela e as perguntas de confirmação são janelas do próprio site.",
-        "Apagar um ataque, habilidade, poder, nota, vínculo, Prestígio ou propriedade da ficha não pergunta mais: o item some na hora e o botão Desfazer fica na tela por alguns segundos. Desequipar uma arma também tem Desfazer. O que não tem volta continua pedindo confirmação."
       ]
     }
   ]
