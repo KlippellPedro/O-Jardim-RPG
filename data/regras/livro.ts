@@ -76,7 +76,7 @@ export const APRESENTACAO_DOS_CAPITULOS: Record<string, string> = {
   magia: 'Como a magia funciona no Jardim: de onde ela vem, quanto custa conjurar, como os elementos se derivam e o que rituais, selos e marcas acrescentam. A lista completa de magias está no Catálogo Mágico.',
   itens: 'Tudo o que se carrega, se melhora e se fabrica: equipamentos, raridades, modificações, criação e os materiais que entram nelas.',
   veiculos: 'Quem dirige, o que acontece numa perseguição, quanto custa manter uma máquina rodando, como se paga uma viagem e como se atravessa a estrada por conta própria.',
-  mundo: 'O mundo ao redor do grupo: criaturas e companheiros, dinheiro e loja, propriedades e bases, e o que a fama de cada um abre ou fecha.',
+  mundo: 'O mundo ao redor do grupo: criaturas e companheiros, dinheiro e loja, propriedades e bases, o que a fama de cada um abre ou fecha, as facções que andam por conta própria e as pessoas que atendem quando vocês chamam.',
   mestre: 'Preparação, dificuldades e condução da campanha. Este capítulo só aparece para quem conduz a mesa.',
 };
 
@@ -158,6 +158,8 @@ export const ANTES_DE_LER: Record<string, readonly string[]> = {
   'poderes-habilidades': ['classes'],
   loja: ['economia'],
   bases: ['economia'],
+  'faccoes-em-movimento': ['mundo-faccoes', 'entre-aventuras'],
+  'contatos-lacos': ['mundo-faccoes'],
 };
 
 /** Para onde seguir depois de um tópico, além do próximo da fila: até três tópicos
@@ -208,7 +210,9 @@ export const CONTINUE_EM: Record<string, readonly string[]> = {
   economia: ['loja', 'transporte', 'entre-aventuras'],
   loja: ['economia', 'bestiario', 'bases'],
   bases: ['entre-aventuras', 'crafting'],
-  'mundo-faccoes': ['conflito-social', 'economia'],
+  'mundo-faccoes': ['faccoes-em-movimento', 'contatos-lacos', 'conflito-social'],
+  'faccoes-em-movimento': ['mundo-faccoes', 'investigacao', 'entre-aventuras'],
+  'contatos-lacos': ['conflito-social', 'entre-aventuras', 'frutos-implantes'],
 };
 
 /** Palavras por minuto de leitura de um texto de regras, que se lê devagar e volta atrás. */

@@ -40,8 +40,11 @@ import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from './condicoes';
 import { CONJUNTOS_EQUIPAMENTO } from './conjuntos';
 import { CONDICOES_LONGO_PRAZO, GRUPOS_LONGO_PRAZO } from './condicoes-longo-prazo';
 import { REGRA_CONFLITO_SOCIAL } from './conflitoSocial';
+import { REGRA_CONTATOS_LACOS } from './contatosELacos';
+import { HTML_DEVOCAO } from './devocao';
 import { REGRA_CRAFTING } from './crafting';
 import { REGRA_MUNDO_FACCOES } from './faccoes';
+import { REGRA_FACCOES_EM_MOVIMENTO } from './faccoesEmMovimento';
 import { REGRA_INFILTRACAO } from './infiltracao';
 import { REGRA_INVESTIGACAO } from './investigacao';
 import { REGRA_MATERIAIS } from './materiais';
@@ -617,7 +620,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">4. Divindade</h3>
-      <p>Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo. Ela não concede poderes além dos declarados por raça, classe, item ou outra regra.</p>
+      <p>Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo, e junto com ela você escreve dois preceitos com o Mestre. O que essa fé rende em jogo está em Devoção, no capítulo <span class="regras-ref regras-ref--frutos-implantes">Frutos e Implantes</span>; fora disso, ela não concede poderes além dos declarados por raça, classe, item ou outra regra.</p>
 
       <h3 class="regras-subtitle">5. Atributos</h3>
       <p>Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo. Depois disso, a ficha aplica os ajustes raciais. Há três métodos:</p>
@@ -992,6 +995,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   'perseguicao-a-pe': REGRA_PERSEGUICAO_A_PE,
 
   'conflito-social': REGRA_CONFLITO_SOCIAL,
+
+  'faccoes-em-movimento': REGRA_FACCOES_EM_MOVIMENTO,
+
+  'contatos-lacos': REGRA_CONTATOS_LACOS,
 
   infiltracao: REGRA_INFILTRACAO,
 
@@ -1864,7 +1871,7 @@ ${HTML_MORAL}
           <tr><td><strong>Tratar veneno, doença ou vício.</strong></td><td>Chá amargo de hora em hora, febre de madrugada, e alguém sentado ao lado da cama contando os dias junto com você.<small class="regras-mecanica">Custa dias de cuidado contínuo. Rende a queda de estágio da aflição. Regra completa em <span class="regras-ref regras-ref--aflicoes">Venenos, Doenças e Vícios</span>.</small></td></tr>
           <tr><td><strong>Se recuperar em segurança.</strong></td><td>Dormir até tarde sem sonhar com nada. Trocar o curativo e ver que a pele por baixo já está rosada.<small class="regras-mecanica">Custa 1 dia por vez. Rende Vida, Mana, Sanidade e a queda de Ferido. Regra completa em <span class="regras-ref regras-ref--descanso">Descanso</span>.</small></td></tr>
           <tr><td><strong>Cuidar da base.</strong></td><td>Pregar a tábua solta, pagar quem conserta o telhado, pendurar na parede alguma coisa que veio da última aventura.<small class="regras-mecanica">Custa de 1 a vários dias. Rende instalação nova, reparo e conta mensal em dia. Regra completa em <span class="regras-ref regras-ref--bases">Propriedades e Bases</span>.</small></td></tr>
-          <tr><td><strong>Fazer um favor a uma facção.</strong></td><td>Levar uma carta sem perguntar o que está escrito, ficar de guarda numa porta, aparecer no lugar certo com a roupa certa.<small class="regras-mecanica">Custa alguns dias, conforme o pedido. Rende Prestígio com ela. Regra completa em <span class="regras-ref regras-ref--mundo-faccoes">Prestígio e Fama</span>.</small></td></tr>
+          <tr><td><strong>Fazer um favor a uma facção.</strong></td><td>Levar uma carta sem perguntar o que está escrito, ficar de guarda numa porta, aparecer no lugar certo com a roupa certa.<small class="regras-mecanica">Custa alguns dias, conforme o pedido. Rende Prestígio com ela. Regra completa em <span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>.</small></td></tr>
           <tr><td><strong>Circular e ouvir a cidade.</strong></td><td>Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.<small class="regras-mecanica">Custa 1 dia por vez. Rende boatos, contatos e preço melhor no balcão. Regra completa em <span class="regras-ref regras-ref--loja">Loja</span>.</small></td></tr>
           <tr><td><strong>Procurar uma pessoa específica.</strong></td><td>Mostrar o mesmo retrato mal desenhado para cinquenta desconhecidos, até alguém parar, olhar de novo e mudar de expressão.<small class="regras-mecanica">Custa 1 dia por vez. Rende um teste de Investigação ou Diplomacia por dia. Regra completa em <span class="regras-ref regras-ref--pericias">Perícias</span>.</small></td></tr>
           <tr><td><strong>Cuidar de quem importa.</strong></td><td>Escrever para casa. Levar flor a um túmulo. Ensinar uma criança a segurar uma espada de pau. Pagar a bebida de um velho amigo que ainda não sabe que você voltou.<small class="regras-mecanica">Custa 1 dia. Rende uma cena com alguém que importa para o seu personagem, e o que vier dela. Essa atividade não tem regra: ela é o próprio jogo.</small></td></tr>
@@ -2211,6 +2218,7 @@ ${HTML_MORAL}
           <li>O <strong>Despertar</strong> só anda para frente. Depois dele a ficha não volta, então combine o acontecimento da história com o Mestre.</li>
           <li>O <strong>implante</strong> é peça de máquina no corpo: pago em Créditos Sombrios, exige nível 3 ou mais e ocupa uma parte do corpo.</li>
           <li>As <strong>oferendas</strong> aos Fluxos rendem dádivas curtas: uma por vez, até o próximo descanso longo ou o fim da sessão.</li>
+          <li>A <strong>Devoção</strong> (0 a 3) mede o quanto o personagem vive a fé na divindade da ficha, e melhora as oferendas ao Fluxo dela.</li>
         </ul>
       </div>
 
@@ -2260,6 +2268,7 @@ ${HTML_MORAL}
         </tbody>
       </table></div>
       <p class="regras-note">Quem carrega o Fruto do mesmo Fluxo recebe a dádiva ampliada: o bônus passa de +2 para +3 (de +3 m para +5 m no Passo Curto), o efeito de uma vez pode ser usado duas vezes e ela dura até o fim da sessão. A dádiva do Fim exige a autorização do Mestre, como todo acesso ao Fim. Algumas deidades respondem pouco, e o silêncio também é resposta: quem decide é o Mestre.</p>
+${HTML_DEVOCAO}
 
       <h3 class="regras-subtitle">Implantes cibernéticos</h3>
       <p>Enquanto o Fruto mexe na alma, o implante mexe na carne. São ${totalImplantes} peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.</p>
@@ -2304,6 +2313,13 @@ ${HTML_MORAL}
         <li><strong>Tecnologia:</strong> a A.X.I.S lê quem a procura. Quem faz uma oferenda a ela é registrado, e Jota Macedo passa a conhecer o nome do personagem. A dádiva funciona, e o registro é o preço.</li>
         <li><strong>Fim:</strong> só com a sua autorização. Deixe a oferenda ser uma cena de despedida de verdade, e lembre que o Fruto do Fim e esta dádiva são o mesmo acesso.</li>
         <li>Um sacrifício de história aceito é decisão sua e pesa na campanha: cobre algo que o jogador sinta falta, e nunca dinheiro.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Conduzir a Devoção</h3>
+      <ul class="regras-list">
+        <li>Os preceitos são do personagem, e a deidade pode não pedir nada disso. Use a diferença como história: o devoto que descobre que a própria fé estava errada é uma das melhores cenas que uma campanha tem.</li>
+        <li>A Devoção segue as travas que você já usa nas oferendas. Se uma deidade só entrega a dádiva comum (como a de Comunicação enquanto estiver presa), nem o Consagrado recebe a ampliada.</li>
+        <li>O teto de um degrau por arco impede a fé de virar contabilidade. Suba quando a cena custou alguma coisa ao jogador, e diga em voz alta o que mudou.</li>
       </ul>
 
       <h3 class="regras-subtitle">Implantes</h3>
@@ -5250,7 +5266,7 @@ ${HTML_MORAL}
       <h3 class="regras-subtitle">Recompensa que não é dinheiro</h3>
       <p>As melhores recompensas raramente cabem na carteira. Elas mudam como o mundo trata o grupo, e o grupo sente isso toda vez que volta a um lugar.</p>
       <ul class="regras-list">
-        <li><strong>Prestígio com uma facção.</strong> O porteiro que antes pedia documento agora abre a porta antes de vocês baterem. Vale mais que uma bolsa, porque abre preço, porta e informação por muitas sessões. Ver Prestígio e Fama.</li>
+        <li><strong>Prestígio com uma facção.</strong> O porteiro que antes pedia documento agora abre a porta antes de vocês baterem. Vale mais que uma bolsa, porque abre preço, porta e informação por muitas sessões. Ver Prestígio, Fama e Procura.</li>
         <li><strong>Um balcão que abre.</strong> O dono do Mercado Negro manda avisar, por um menino de recados, que a porta dos fundos está destrancada para vocês. É a recompensa mais barata de dar e a mais sentida na mesa.</li>
         <li><strong>Um contato que atende.</strong> Uma informante velha que responde a carta no mesmo dia, sempre com um bilhete a mais do que foi perguntado. Economiza uma sessão inteira de investigação.</li>
         <li><strong>Tempo e lugar.</strong> Uma oficina emprestada por uma semana, alguém que aceita ensinar, uma cama num lugar onde ninguém procura vocês. Transforma tempo parado em progresso concreto. Ver Tempo Entre Aventuras.</li>

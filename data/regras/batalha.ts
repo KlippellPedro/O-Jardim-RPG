@@ -165,7 +165,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
     <ul class="regras-list">
       <li><strong>O nível da batalha</strong> é o das tropas inimigas: ele escolhe a DT dos feitos e o dano que os personagens levam.</li>
       <li><strong>Tropa sem comandante</strong> faz o choque com o d20 puro, sem bônus nenhum.</li>
-      <li><strong>As tropas do grupo</strong> vêm de onde a história trouxer: uma facção que confia em vocês (<span class="regras-ref regras-ref--mundo-faccoes">Prestígio e Fama</span>), aliados e contratados, a guarnição de uma Fortaleza.</li>
+      <li><strong>As tropas do grupo</strong> vêm de onde a história trouxer: uma facção que confia em vocês (<span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>), aliados e contratados, a guarnição de uma Fortaleza.</li>
     </ul>
 
     <h3 class="regras-subtitle">A fase</h3>

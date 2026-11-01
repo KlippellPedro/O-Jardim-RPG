@@ -170,7 +170,7 @@ Escolha o nome do personagem e a Árvore à qual ele pertence. A Árvore determi
 
 ### 4. Divindade
 
-Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo. Ela não concede poderes além dos declarados por raça, classe, item ou outra regra.
+Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo, e junto com ela você escreve dois preceitos com o Mestre. O que essa fé rende em jogo está em Devoção, no capítulo Frutos e Implantes; fora disso, ela não concede poderes além dos declarados por raça, classe, item ou outra regra.
 
 ### 5. Atributos
 
@@ -784,7 +784,7 @@ Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo par
 
 - A outra parte responde. Ela pergunta, pede garantia, chantageia de volta, e é nessa resposta que o grupo descobre o que ela quer.
 
-Prestígio e Fama ajustam a rolagem em no máximo 2, para cima ou para baixo, pela mesma regra de Prestígio e Fama. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.
+Prestígio e Fama ajustam a rolagem em no máximo 2, para cima ou para baixo, pela mesma regra de Prestígio, Fama e Procura. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.
 
 ### Abordagens
 
@@ -819,6 +819,190 @@ Cada abordagem traz uma fala de exemplo e, embaixo, como se resolve. A fala serv
 - **Num interrogatório,** cada ponto de Resistência que cai entrega uma informação na hora. A verdade sai em pedaços, e o grupo decide quando já ouviu o bastante.
 
 Nenhuma dessas rolagens controla a mente de ninguém. Elas mudam a posição de uma pessoa que continua decidindo por conta própria, e é por isso que o Limite existe.
+
+## faccoes-em-movimento
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+As facções não esperam o grupo. Cada uma ativa tem um objetivo e um relógio, e no intervalo entre aventuras o mundo anda: o que o grupo faz muda o ritmo.
+
+Enquanto vocês dormem na estalagem, a guilda compra mais um armazém no cais, a ordem manda mais uma carta ao conselho e alguém, num porão, risca mais um nome da lista. As facções têm os próprios planos, e eles andam com ou sem o grupo. Esta página mostra como.
+
+**Em resumo**
+
+- Cada facção ativa tem um **objetivo** (uma frase), um **relógio** de 4, 6 ou 8 partes e um **Poder** de 0 a 3.
+
+- No fim de cada intervalo entre aventuras, o Mestre rola 2d6 + Poder para cada facção ativa. De 7 a 9 o relógio pinta 1 parte; com 10 ou mais, pinta 2.
+
+- Uma ação concreta do grupo contra o plano apaga uma parte, e a favor pinta uma.
+
+- Relógio cheio: o objetivo acontece e o mundo muda. A facção escolhe outro.
+
+- O relógio fica à vista. O objetivo pode aparecer só como rótulo até alguém descobrir o que é.
+
+### A facção ativa
+
+A campanha costuma ter de duas a quatro facções ativas ao mesmo tempo. As outras existem e reagem, mas não rolam. As facções documentadas nos Registros Universais servem de ponto de partida.
+
+- Poder | Tamanho | Exemplos
+
+- 0 | Pequena | Uma gangue de bairro, uma oficina, um culto que cabe numa sala.
+
+- +1 | Local | Uma guilda da cidade, uma família de mercadores, a guarda de um porto.
+
+- +2 | Regional | Uma casa nobre, uma ordem com sedes em vários reinos, uma companhia mercante.
+
+- +3 | Grande | Um reino, a fé de uma Árvore, o Banco Lunar, a A.X.I.S.
+
+- Objetivo | Relógio | Exemplo
+
+- Próximo | 4 partes | Tomar o controle do cais antes do festival.
+
+- De um arco | 6 partes | Pôr um aliado na cadeira do conselho da cidade.
+
+- De uma campanha | 8 partes | Erguer a ponte entre dois reinos e cobrar pedágio de quem passa.
+
+### O turno das facções
+
+- No fim do intervalo entre aventuras (Tempo Entre Aventuras), ou a cada mês do calendário num intervalo longo, o Mestre rola 2d6 + Poder para cada facção ativa.
+
+- Duas facções que querem a mesma coisa rolam uma contra a outra: a que tirar mais pinta 1 parte, e a outra apaga 1.
+
+- O Mestre conta um boato por facção que avançou: o que se diz na rua, sem entregar o plano inteiro.
+
+- 2d6 + Poder | O que acontece
+
+- 6 ou menos | Emperrou. Alguma coisa atrapalhou: um rival, um escândalo, dinheiro que não chegou. O Mestre diz o quê, e isso costuma virar gancho.
+
+- 7 a 9 | Avançou. O plano anda um passo. Pinte 1 parte.
+
+- 10 ou mais | Avançou bem. Tudo saiu como a facção queria. Pinte 2 partes.
+
+### O grupo no meio
+
+- **Contra o objetivo:** Uma ação concreta do grupo que atrapalhe o plano apaga 1 parte, e 2 se for um marco de campanha.
+
+- **A favor do objetivo:** Uma ação concreta que ajude pinta 1 parte, e 2 se for um marco.
+
+- **Descobrir o objetivo:** Até ser descoberto, o objetivo aparece só como rótulo. Descobrir é uma investigação, e entrega a frase inteira.
+
+- **Conta uma ação por facção por intervalo.** Três sabotagens seguidas no mesmo armazém valem uma.
+
+- **Prestígio anda junto:** ajudar uma facção a fechar o relógio é um marco, e atrapalhar o plano central dela pode ser traição (Prestígio, Fama e Procura).
+
+- **Relógio cheio:** o objetivo acontece. O Mestre conta o que mudou: um preço, uma lei, quem manda numa rua, uma rota fechada. A facção escolhe um objetivo novo, com o relógio vazio.
+
+**Exemplo:**
+
+Uma companhia mercante (Poder 2) quer "algo no cais", num relógio de 6, com 3 partes pintadas. No fim do intervalo, o Mestre rola 8 + 2 = 10: pinta 2, e o relógio vai a 5. O boato da semana é que estão comprando barcos velhos. O grupo descobre o plano (eles querem a doca seca do porto) e queima os barcos: o relógio volta a 4, e a companhia agora sabe quem foi.
+
+## contatos-lacos
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+As pessoas que atendem quando o grupo chama, e as pessoas por quem cada personagem faz as coisas. Contatos fazem favores e cobram Dívidas; laços dão vantagem quando você age por alguém.
+
+A velha que responde a carta no mesmo dia, o escrivão que carimba sem ler, o amigo de infância que você jurou proteger. Ninguém atravessa o Jardim sozinho. Esta página dá peso a essas pessoas: o contato é quem atende quando vocês chamam, e o laço é quem faz o personagem levantar quando seria mais fácil ficar sentado.
+
+**Em resumo**
+
+- Um **contato** tem nome, lugar, um ramo (o que ele sabe ou faz) e uma Confiança de 1 a 3.
+
+- Favor pequeno sai fácil. Favor grande pede Amigo, teste e deixa uma **Dívida**, que o contato cobra quando precisar.
+
+- Cada personagem mantém até 2 + Mod.Carisma contatos (mínimo 1).
+
+- Um **laço** é uma frase sobre alguém que importa. São até 3, e uma vez por sessão o teste feito por causa de um laço tem vantagem.
+
+- Laço rompido (morte, traição, abandono) pede teste de Sanidade.
+
+### Contatos
+
+Anote na ficha o nome, o lugar onde ele está, o ramo e a Confiança. O contato é uma pessoa, com vida própria e interesses próprios, e vai continuar sendo depois do favor.
+
+- Confiança | Estado | Como ele trata você
+
+- 1 | Conhecido | Atende e ajuda, mas cobra até o favor pequeno.
+
+- 2 | Amigo | Faz o favor pequeno de graça e topa o grande, com uma Dívida.
+
+- 3 | Leal | Arrisca o que tem por você, e dispensa o teste no favor grande.
+
+- Ramo | Exemplo
+
+- Informação | O que se diz no porto, quem dorme com quem, onde o carregamento vai parar.
+
+- Passagem | Uma audiência, um documento carimbado, a porta dos fundos do palácio.
+
+- Mercadoria | O que a Loja não tem, mais barato ou fora de hora.
+
+- Proteção | Esconder alguém, guardar um baú, jurar que vocês estavam na taverna.
+
+- Ofício | Um serviço que pede talento: falsificar, curar sem perguntas, consertar o que ninguém conserta.
+
+### Favores
+
+- Favor | Exemplo, teste e custo
+
+- PequenoConhecido ou mais | Uma informação comum, um recado, uma cama por uma noite.Teste: Nenhum. Custo: O Conhecido cobra o preço da praça ou uma troca. Amigo e Leal fazem de graça.
+
+- GrandeAmigo ou mais | Um segredo, uma porta fechada, um item raro, esconder alguém por uma semana.Teste: Diplomacia contra a DT Padrão; o Leal dispensa. Custo: O contato guarda uma Dívida.
+
+- ArriscadoLeal ou mais | Algo que pode custar a vida, o emprego ou o nome dele.Teste: Nenhum: ele faz. Custo: Uma Dívida, e o contato paga o preço do risco: Procura, ferimento, o emprego.
+
+- **Um favor por intervalo** entre aventuras sai sem desgaste. O segundo no mesmo intervalo conta um tamanho acima: o pequeno vira grande.
+
+- **O favor fica no ramo dele.** O escrivão carimba o documento; esconder alguém é outro contato.
+
+- **A Dívida é do contato.** O Mestre traz o pedido quando ele precisar: uma carta, um recado, alguém batendo na porta. Cumprir apaga a Dívida. Recusar baixa a Confiança em 1, e em 0 o contato se perde.
+
+### Ganhar e perder contatos
+
+- **Na criação,** se quiser, combine com o Mestre um contato Conhecido ligado ao seu povo ou à sua Árvore.
+
+- **Na estrada:** um Conflito Social bem resolvido, um favor feito sem pedir nada em troca, uma recompensa da história.
+
+- **No Tempo Entre Aventuras,** três dias de convivência com alguém (uma bebida, uma ajuda, uma conversa longa) e Diplomacia contra a DT Padrão fazem dele um contato Conhecido.
+
+- **A Confiança sobe 1** quando o grupo cumpre uma Dívida que custou, salva a pele do contato ou vive com ele uma cena que importa. Uma vez por arco.
+
+- **A Confiança cai** quando o contato sai prejudicado por causa do grupo: exposto, preso, ferido. Com a Procura do grupo em 4, os contatos daquele lugar ficam sob pressão.
+
+- **Passou do limite de contatos?** Um deles esfria: continua sendo alguém que você conhece, sem Confiança nem favores.
+
+- **Contato não luta pelo grupo** (isso é Aliado) e não mexe no Prestígio da facção onde trabalha: ele é a pessoa, e o Prestígio é com a organização.
+
+**Exemplo:**
+
+Duda tem um contato Amigo no cartório da cidade, do ramo Passagem. Ela pede uma certidão falsa para entrar no arquivo do conselho, um favor grande: testa Diplomacia, passa, e o escrivão guarda uma Dívida. Duas sessões depois, ele aparece pedindo que Duda tire o sobrinho dele de uma dívida de jogo. Ela cumpre, a Dívida some e o escrivão sobe para Leal.
+
+### Laços
+
+Um laço é uma frase, na voz do personagem, sobre alguém que importa: outro personagem do grupo, uma pessoa da campanha, um aliado. Ele diz por que o personagem faria alguma coisa por essa pessoa.
+
+- "Devo a vida a ela, e ela nunca cobrou."
+
+- "Ele é o único que sabe o meu nome verdadeiro."
+
+- "Prometi à mãe dela que traria a filha de volta."
+
+- "A gente cresceu na mesma rua, e eu sei o que ele fez para sair de lá."
+
+- "Eu não confio nela, e é por isso que fico perto."
+
+- **Até 3 laços** por personagem. Um laço com outro personagem do grupo ajuda a mesa a começar junta.
+
+- **Uma vez por sessão,** num teste feito por causa de um laço (para proteger, ajudar, alcançar ou vingar aquela pessoa), role com vantagem.
+
+- **Laço rompido:** quando a pessoa morre, trai ou some, o personagem testa Sanidade contra DT 15, com perda de 1d6 (Condições). A mesa pode aplicar Luto Profundo, uma condição de longo prazo.
+
+- **Laço muda:** no fim de cada arco, cada um pode reescrever ou trocar um laço. O rompido costuma virar outro: "vou achar quem fez isso".
+
+- **Laço é de quem escreve.** A outra pessoa não precisa sentir o mesmo, e a diferença costuma render as melhores cenas.
 
 ## infiltracao
 
@@ -1070,7 +1254,7 @@ Cada vantagem clara de um lado dá +2 no choque dele, até +6:
 
 - **Tropa sem comandante** faz o choque com o d20 puro, sem bônus nenhum.
 
-- **As tropas do grupo** vêm de onde a história trouxer: uma facção que confia em vocês (Prestígio e Fama), aliados e contratados, a guarnição de uma Fortaleza.
+- **As tropas do grupo** vêm de onde a história trouxer: uma facção que confia em vocês (Prestígio, Fama e Procura), aliados e contratados, a guarnição de uma Fortaleza.
 
 ### A fase
 
@@ -2078,7 +2262,7 @@ Cada atividade abaixo já tem a regra completa em outro tópico. Aqui elas apare
 
 - Cuidar da base. | Pregar a tábua solta, pagar quem conserta o telhado, pendurar na parede alguma coisa que veio da última aventura.Custa de 1 a vários dias. Rende instalação nova, reparo e conta mensal em dia. Regra completa em Propriedades e Bases.
 
-- Fazer um favor a uma facção. | Levar uma carta sem perguntar o que está escrito, ficar de guarda numa porta, aparecer no lugar certo com a roupa certa.Custa alguns dias, conforme o pedido. Rende Prestígio com ela. Regra completa em Prestígio e Fama.
+- Fazer um favor a uma facção. | Levar uma carta sem perguntar o que está escrito, ficar de guarda numa porta, aparecer no lugar certo com a roupa certa.Custa alguns dias, conforme o pedido. Rende Prestígio com ela. Regra completa em Prestígio, Fama e Procura.
 
 - Circular e ouvir a cidade. | Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.Custa 1 dia por vez. Rende boatos, contatos e preço melhor no balcão. Regra completa em Loja.
 
@@ -2568,6 +2752,8 @@ Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o cam
 
 - As **oferendas** aos Fluxos rendem dádivas curtas: uma por vez, até o próximo descanso longo ou o fim da sessão.
 
+- A **Devoção** (0 a 3) mede o quanto o personagem vive a fé na divindade da ficha, e melhora as oferendas ao Fluxo dela.
+
 ### Frutos do Éden
 
 São 26 frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrela e classificados como relíquia da criação. Comprar é a parte fácil: o preço em Fragmentos costuma significar uma campanha inteira atrás de um.
@@ -2649,6 +2835,30 @@ Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feit
 - Tecnologia | uma peça de máquina que funciona, um registro bem guardado, um código copiado | Registro. +2 em Tecnologia e em Investigação. Uma vez, como Ação Livre, leia uma criatura que você veja: o Mestre diz a Defesa dela e uma fraqueza, se houver.
 
 Quem carrega o Fruto do mesmo Fluxo recebe a dádiva ampliada: o bônus passa de +2 para +3 (de +3 m para +5 m no Passo Curto), o efeito de uma vez pode ser usado duas vezes e ela dura até o fim da sessão. A dádiva do Fim exige a autorização do Mestre, como todo acesso ao Fim. Algumas deidades respondem pouco, e o silêncio também é resposta: quem decide é o Mestre.
+
+### Devoção
+
+A divindade que você registrou na ficha pode ser só crença, ou pode pesar. A Devoção mede o quanto o personagem vive a própria fé, e as oferendas ao Fluxo da divindade dele sentem a diferença.
+
+- **Os preceitos:** quando escolher a divindade, escreva com o Mestre dois preceitos, na voz do personagem: uma coisa que a fé dele pede e uma que ela proíbe. Eles são o que o personagem acredita, e podem estar errados sobre a deidade.
+
+- **A Devoção começa em 0** e vai até 3. Cada degrau soma ao anterior.
+
+- Nível | Estado | Efeito
+
+- 0 | Sem devoção | A divindade na ficha diz em que o personagem acredita, e só.
+
+- 1 | Fiel | +2 no teste de oferenda ao Fluxo da sua divindade.
+
+- 2 | Devoto | A dádiva desse Fluxo dura até o fim da sessão, mesmo depois de um descanso longo.
+
+- 3 | Consagrado | A dádiva desse Fluxo vem ampliada, como para quem carrega o Fruto do mesmo Fluxo. As duas ampliações não se somam.
+
+- **+1:** Uma oferenda Preciosa ou um sacrifício de história feito pela fé, ou cumprir um preceito quando cumpri-lo custava caro. No máximo uma vez por arco.
+- **−1:** Quebrar um preceito por conveniência.
+- **para 0:** Renegar a fé, ou trocar de divindade.
+
+A Devoção vale para o Fluxo da divindade que o personagem cultua. As travas das oferendas continuam as mesmas: uma oferenda por pessoa por sessão, uma dádiva ativa por vez, e a dádiva do Fim só com autorização do Mestre. Ter Devoção não garante resposta: quem decide se a deidade ouve continua sendo o Mestre.
 
 ### Implantes cibernéticos
 
@@ -5705,13 +5915,15 @@ A ficha da plataforma precisa informar quantos espaços de base suporta; sem ess
 
 Regras de Prestígio, Fama, acesso e reação para organizações de qualquer Árvore.
 
-Duas escalas dizem como o mundo enxerga o grupo. Prestígio mede a relação com cada facção, uma a uma. Fama mede quanta gente conhece o nome do personagem, sem dizer se gostam dele. Valem para qualquer organização da campanha, independentemente da Árvore.
+Três escalas dizem como o mundo enxerga o grupo. Prestígio mede a relação com cada facção, uma a uma. Fama mede quanta gente conhece o nome do personagem, sem dizer se gostam dele. Procura mede quanto a lei de um lugar está atrás dele. Valem para qualquer organização da campanha, independentemente da Árvore.
 
 **Em resumo**
 
 - Prestígio vai de −3 a +3, começa em 0 e é registrado separadamente para cada facção.
 
 - Fama vai de 0 a 5 e mede visibilidade pública, em uma escala única.
+
+- Procura vai de 0 a 5, é registrada por lugar e só sobe com crime em que o personagem foi identificado.
 
 - O ajuste de teste social e o de anonimato nunca passam de ±2, e o desconto de facção chega a 10% no máximo.
 
@@ -5800,6 +6012,44 @@ Depois de aplicar a mudança, limite o resultado entre 0 e 5.
 
 Duda derruba o monstro que aterrorizava a vila diante de metade dos moradores. É um feito relevante com testemunhas, então a Fama dela sobe de 0, Desconhecido, para 1, Local. Repetir o mesmo feito para o mesmo público não sobe de novo.
 
+### Procura
+
+Procura registra quanto a lei de um lugar está atrás do personagem: a guarda da cidade, os oficiais do reino, quem quer que mande prender ali. Começa em 0 em todo lugar.
+
+- Nível | Estado | O que acontece | Com a lei
+
+- 0 | Livre | A lei do lugar não procura o personagem. | 0
+
+- 1 | Notado | Um guarda lembra do rosto. Perguntas no portão, uma revista a mais na estrada. | −1
+
+- 2 | Procurado | Cartaz com a descrição. A guarda tenta prender quando reconhece. | −2
+
+- 3 | Caçado | Há recompensa pela captura. Caçadores de recompensa entram nos eventos do lugar. | −2
+
+- 4 | Inimigo público | A lei age para prender: busca nas casas, contatos do lugar pressionados, a base do grupo vigiada. Os lugares vizinhos passam a ter pelo menos Procura 2. | −2
+
+- 5 | Morto ou vivo | A recompensa corre a Árvore. Onde a notícia chega, a Procura vale pelo menos 3. | −2
+
+- Procura vai de 0 a 5 e é registrada por lugar (uma cidade, um reino) e por personagem. Quem age junto sobe junto.
+- Só gera Procura o crime em que o personagem foi identificado: por testemunha, por rastro ou pelo rosto. O ajuste de anonimato da Fama e um bom disfarce valem para não ser identificado.
+- Em outro lugar, a Procura começa em 0, até a notícia chegar. As faixas 4 e 5 dizem até onde ela chega.
+- Procura é com a lei do lugar. Se a guarda for uma facção, o Prestígio com ela só muda por compromisso, como sempre: o mesmo fato não mexe nas duas escalas.
+- O ajuste com a lei vale em teste social com quem representa a lei daquele lugar, e nunca passa de −2.
+
+### Alterar Procura
+
+- **+1:** Crime visto ou investigado em que o personagem foi identificado: furto, briga séria, invasão que soou o alarme. Uma vez pelo mesmo crime.
+- **+2:** Crime grave identificado: morte, roubo grande, ataque à guarda, fuga da prisão. Não se acumula com crime identificado pelo mesmo fato.
+- **−1:** Um mês do calendário do mundo sem crime novo naquele lugar. Só até Procura 2. Acima disso, o tempo sozinho não apaga.
+- **−1:** Um contato dentro da lei, um suborno à altura do crime ou uma cena que limpe o nome: prova, testemunha, perdão de alguém com voz. Uma vez por caminho: o mesmo suborno não apaga duas vezes.
+- **−2:** Perdão formal, anistia ou um acordo com quem manda, quase sempre em troca de alguma coisa grande. O acordo vira compromisso, e quebrá-lo devolve a Procura inteira.
+
+Depois de aplicar a mudança, limite o resultado entre 0 e 5. A Infiltração que termina em alarme, com o grupo visto, é o jeito mais comum de subir.
+
+**Exemplo:**
+
+Duda arromba o depósito do porto e a guarda acha a luva dela no chão: crime identificado, Procura 1 no porto, Notado. Na fuga, ela derruba um guarda na frente de todo mundo, e o ataque à guarda leva a Procura a 3, Caçado. Dois meses quietos não adiantam: de 3 para cima, só um contato na lei, um suborno à altura ou um perdão apagam.
+
 **Atenção:**
 
-**Sistemas separados:** Reputação Bancária continua sendo o valor do Banco usado para cofres, cartão e loja. Prestígio e Fama não alteram esse valor.
+**Sistemas separados:** Reputação Bancária continua sendo o valor do Banco usado para cofres, cartão e loja. Prestígio e Fama não alteram esse valor. O Calor do Banqueiro, no Discord, mede roubo de cofre entre jogadores. A Procura da mesa não mexe nele, e ele não mexe nela.

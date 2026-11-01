@@ -191,6 +191,104 @@ export const REGRAS_FAMA = [
   'Quando uma habilidade de classe concede Fama mínima, use o maior valor entre a Fama atual e o valor da habilidade. Os demais efeitos permanecem na descrição da classe e não se somam a esta tabela.',
 ];
 
+// ---------------------------------------------------------------- Procura
+// A terceira escala: quanto a lei de um lugar procura o personagem. Chama-se
+// Procura, e não Calor, porque Calor já é dano de ambiente no livro e o Calor
+// do Banqueiro (Discord) mede outra coisa, o roubo de cofre entre jogadores.
+
+export type NivelProcura = 0 | 1 | 2 | 3 | 4 | 5;
+
+export interface FaixaProcura {
+  nivel: NivelProcura;
+  titulo: string;
+  efeito: string;
+  /** Ajuste em teste social com a lei daquele lugar. */
+  ajusteComALei: number;
+}
+
+export interface AlteracaoProcura {
+  id: string;
+  variacao: -2 | -1 | 1 | 2;
+  causa: string;
+  limite: string;
+}
+
+export const PROCURA_MINIMA: NivelProcura = 0;
+export const PROCURA_MAXIMA: NivelProcura = 5;
+/** Daqui para baixo o tempo apaga sozinho; daqui para cima, só ação. */
+export const PROCURA_QUE_O_TEMPO_APAGA = 2;
+
+export const TABELA_PROCURA: FaixaProcura[] = [
+  { nivel: 0, titulo: 'Livre', efeito: 'A lei do lugar não procura o personagem.', ajusteComALei: 0 },
+  { nivel: 1, titulo: 'Notado', efeito: 'Um guarda lembra do rosto. Perguntas no portão, uma revista a mais na estrada.', ajusteComALei: -1 },
+  { nivel: 2, titulo: 'Procurado', efeito: 'Cartaz com a descrição. A guarda tenta prender quando reconhece.', ajusteComALei: -2 },
+  { nivel: 3, titulo: 'Caçado', efeito: 'Há recompensa pela captura. Caçadores de recompensa entram nos eventos do lugar.', ajusteComALei: -2 },
+  { nivel: 4, titulo: 'Inimigo público', efeito: 'A lei age para prender: busca nas casas, contatos do lugar pressionados, a base do grupo vigiada. Os lugares vizinhos passam a ter pelo menos Procura 2.', ajusteComALei: -2 },
+  { nivel: 5, titulo: 'Morto ou vivo', efeito: 'A recompensa corre a Árvore. Onde a notícia chega, a Procura vale pelo menos 3.', ajusteComALei: -2 },
+];
+
+export const ALTERACOES_PROCURA: AlteracaoProcura[] = [
+  {
+    id: 'crime-identificado',
+    variacao: 1,
+    causa: 'Crime visto ou investigado em que o personagem foi identificado: furto, briga séria, invasão que soou o alarme.',
+    limite: 'Uma vez pelo mesmo crime.',
+  },
+  {
+    id: 'crime-grave',
+    variacao: 2,
+    causa: 'Crime grave identificado: morte, roubo grande, ataque à guarda, fuga da prisão.',
+    limite: 'Não se acumula com crime identificado pelo mesmo fato.',
+  },
+  {
+    id: 'tempo-quieto',
+    variacao: -1,
+    causa: 'Um mês do calendário do mundo sem crime novo naquele lugar.',
+    limite: `Só até Procura ${PROCURA_QUE_O_TEMPO_APAGA}. Acima disso, o tempo sozinho não apaga.`,
+  },
+  {
+    id: 'limpar-o-nome',
+    variacao: -1,
+    causa: 'Um contato dentro da lei, um suborno à altura do crime ou uma cena que limpe o nome: prova, testemunha, perdão de alguém com voz.',
+    limite: 'Uma vez por caminho: o mesmo suborno não apaga duas vezes.',
+  },
+  {
+    id: 'perdao-formal',
+    variacao: -2,
+    causa: 'Perdão formal, anistia ou um acordo com quem manda, quase sempre em troca de alguma coisa grande.',
+    limite: 'O acordo vira compromisso, e quebrá-lo devolve a Procura inteira.',
+  },
+];
+
+export const REGRAS_PROCURA = [
+  'Procura vai de 0 a 5 e é registrada por lugar (uma cidade, um reino) e por personagem. Quem age junto sobe junto.',
+  'Só gera Procura o crime em que o personagem foi identificado: por testemunha, por rastro ou pelo rosto. O ajuste de anonimato da Fama e um bom disfarce valem para não ser identificado.',
+  'Em outro lugar, a Procura começa em 0, até a notícia chegar. As faixas 4 e 5 dizem até onde ela chega.',
+  'Procura é com a lei do lugar. Se a guarda for uma facção, o Prestígio com ela só muda por compromisso, como sempre: o mesmo fato não mexe nas duas escalas.',
+  'O ajuste com a lei vale em teste social com quem representa a lei daquele lugar, e nunca passa de −2.',
+];
+
+export const PROCURA_DO_DISCORD_SEPARADA =
+  'O Calor do Banqueiro, no Discord, mede roubo de cofre entre jogadores. A Procura da mesa não mexe nele, e ele não mexe nela.';
+
+export function limitarProcura(valor: number): NivelProcura {
+  if (!Number.isFinite(valor)) throw new RangeError('Procura deve ser um número finito.');
+  return Math.max(PROCURA_MINIMA, Math.min(PROCURA_MAXIMA, Math.trunc(valor))) as NivelProcura;
+}
+
+export function obterFaixaProcura(valor: number): FaixaProcura {
+  const nivel = limitarProcura(valor);
+  const faixa = TABELA_PROCURA.find((item) => item.nivel === nivel);
+  if (!faixa) throw new RangeError('Faixa de Procura ausente.');
+  return faixa;
+}
+
+/** Um mês quieto no lugar: desce 1, mas nunca abaixo de 0 e nunca a partir de 3. */
+export function procuraDepoisDeUmMesQuieto(valor: number): NivelProcura {
+  const nivel = limitarProcura(valor);
+  return nivel > PROCURA_QUE_O_TEMPO_APAGA ? nivel : limitarProcura(nivel - 1);
+}
+
 export const REPUTACAO_BANCARIA_SEPARADA =
   'Reputação Bancária continua sendo o valor do Banco usado para cofres, cartão e loja. Prestígio e Fama não alteram esse valor.';
 
@@ -251,6 +349,15 @@ const linhasFama = TABELA_FAMA.map((faixa) => `
   </tr>
 `).join('');
 
+const linhasProcura = TABELA_PROCURA.map((faixa) => `
+  <tr>
+    <td><strong>${faixa.nivel}</strong></td>
+    <td>${faixa.titulo}</td>
+    <td>${faixa.efeito}</td>
+    <td>${comSinal(faixa.ajusteComALei)}</td>
+  </tr>
+`).join('');
+
 const itens = (regras: string[]) => regras.map((regra) => `<li>${regra}</li>`).join('');
 
 export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
@@ -263,12 +370,13 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
     ['Bônus máximo', '±2'],
   ],
   corpo: `
-    <p class="regras-lead">Duas escalas dizem como o mundo enxerga o grupo. Prestígio mede a relação com cada facção, uma a uma. Fama mede quanta gente conhece o nome do personagem, sem dizer se gostam dele. Valem para qualquer organização da campanha, independentemente da Árvore.</p>
+    <p class="regras-lead">Três escalas dizem como o mundo enxerga o grupo. Prestígio mede a relação com cada facção, uma a uma. Fama mede quanta gente conhece o nome do personagem, sem dizer se gostam dele. Procura mede quanto a lei de um lugar está atrás dele. Valem para qualquer organização da campanha, independentemente da Árvore.</p>
 
     <div class="regras-resumo">
       <ul>
         <li>Prestígio vai de ${comSinal(PRESTIGIO_MINIMO)} a ${comSinal(PRESTIGIO_MAXIMO)}, começa em 0 e é registrado separadamente para cada facção.</li>
         <li>Fama vai de ${FAMA_MINIMA} a ${FAMA_MAXIMA} e mede visibilidade pública, em uma escala única.</li>
+        <li>Procura vai de ${PROCURA_MINIMA} a ${PROCURA_MAXIMA}, é registrada por lugar e só sobe com crime em que o personagem foi identificado.</li>
         <li>O ajuste de teste social e o de anonimato nunca passam de ±${AJUSTE_SOCIAL_MAXIMO}, e o desconto de facção chega a ${DESCONTO_FACCAO_MAXIMO_PERCENTUAL}% no máximo.</li>
         <li>Acesso permite pedir, e nada garante que o pedido será atendido. Nenhum nível obriga alguém a obedecer.</li>
         <li>Um mesmo fato nunca gera dois ajustes. Reputação Bancária é outro valor, e Prestígio e Fama não a alteram.</li>
@@ -312,8 +420,25 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
       <p>Duda derruba o monstro que aterrorizava a vila diante de metade dos moradores. É um feito relevante com testemunhas, então a Fama dela sobe de 0, Desconhecido, para 1, Local. Repetir o mesmo feito para o mesmo público não sobe de novo.</p>
     </div>
 
+    <h3 class="regras-subtitle">Procura</h3>
+    <p>Procura registra quanto a lei de um lugar está atrás do personagem: a guarda da cidade, os oficiais do reino, quem quer que mande prender ali. Começa em 0 em todo lugar.</p>
+    <div class="regras-table-wrap"><table class="regras-table">
+      <thead><tr><th>Nível</th><th>Estado</th><th>O que acontece</th><th>Com a lei</th></tr></thead>
+      <tbody>${linhasProcura}</tbody>
+    </table></div>
+    <ul class="regras-list">${itens(REGRAS_PROCURA)}</ul>
+
+    <h3 class="regras-subtitle">Alterar Procura</h3>
+    <dl class="regras-kv regras-kv--boxed">
+      ${ALTERACOES_PROCURA.map((alteracao) => `<dt>${alteracao.variacao > 0 ? '+' : '−'}${Math.abs(alteracao.variacao)}</dt><dd>${alteracao.causa} ${alteracao.limite}</dd>`).join('')}
+    </dl>
+    <p>Depois de aplicar a mudança, limite o resultado entre ${PROCURA_MINIMA} e ${PROCURA_MAXIMA}. A <span class="regras-ref regras-ref--infiltracao">Infiltração</span> que termina em alarme, com o grupo visto, é o jeito mais comum de subir.</p>
+    <div class="regras-note regras-note--exemplo">
+      <p>Duda arromba o depósito do porto e a guarda acha a luva dela no chão: crime identificado, Procura 1 no porto, Notado. Na fuga, ela derruba um guarda na frente de todo mundo, e o ataque à guarda leva a Procura a 3, Caçado. Dois meses quietos não adiantam: de 3 para cima, só um contato na lei, um suborno à altura ou um perdão apagam.</p>
+    </div>
+
     <div class="regras-note regras-note--atencao">
-      <p><strong>Sistemas separados:</strong> ${REPUTACAO_BANCARIA_SEPARADA}</p>
+      <p><strong>Sistemas separados:</strong> ${REPUTACAO_BANCARIA_SEPARADA} ${PROCURA_DO_DISCORD_SEPARADA}</p>
     </div>
   `,
   corpoMestre: `
@@ -331,6 +456,13 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
       <li>Facção inimiga vale tanto quanto aliada. Prestígio negativo fecha portas e abre perseguições, e as duas coisas rendem sessão.</li>
       <li>Fama alta tem custo: quem é reconhecido não passa despercebido. Use isso antes de o grupo reclamar de ser famoso demais.</li>
       <li>Agradar uma facção costuma desagradar outra. Deixe essa tensão explícita no mapa de facções, para a escolha ser informada.</li>
+    </ul>
+
+    <h3 class="regras-subtitle">Procura sem castigo</h3>
+    <ul class="regras-list">
+      <li>Procura muda o jeito de o grupo andar pela cidade, e a campanha segue. Na faixa 2, o grupo usa a porta dos fundos; na 3, alguém aparece com um cartaz na mão; na 4, a cidade vira uma infiltração.</li>
+      <li>Diga quando o grupo foi identificado, na hora. Procura que sobe em segredo vira castigo, e a mesa só consegue reagir ao que sabe.</li>
+      <li>Caçador de recompensa é o melhor evento da faixa 3: troque um resultado de encontro da tabela de eventos do lugar por ele.</li>
     </ul>
   `,
 };

@@ -59,8 +59,8 @@ export const GRUPOS_NAVEGACAO: readonly GrupoNavegacaoRegras[] = [
   {
     id: 'mundo',
     titulo: 'Mundo e Recursos',
-    descricao: 'Criaturas, dinheiro, lojas, bases e reputação.',
-    topicos: ['bestiario', 'economia', 'loja', 'bases', 'mundo-faccoes'],
+    descricao: 'Criaturas, dinheiro, lojas, bases, reputação, facções que agem e as pessoas que atendem o grupo.',
+    topicos: ['bestiario', 'economia', 'loja', 'bases', 'mundo-faccoes', 'faccoes-em-movimento', 'contatos-lacos'],
     cor: 'border-lime-300/20 from-lime-400/10',
   },
   {

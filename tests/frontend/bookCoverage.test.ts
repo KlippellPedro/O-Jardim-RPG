@@ -381,7 +381,9 @@ test('toda mecânica do sistema tem uma página', () => {
     ['economia', 'moedas, câmbio e cofre'],
     ['loja', 'onde se compra e o que cada local vende'],
     ['bases', 'propriedades e instalações'],
-    ['mundo-faccoes', 'prestígio, fama e organizações'],
+    ['mundo-faccoes', 'prestígio, fama, procura e organizações'],
+    ['faccoes-em-movimento', 'objetivos e relógios das facções entre aventuras'],
+    ['contatos-lacos', 'contatos com favores e Dívidas, e laços'],
     ['mestre', 'conduzir a mesa'],
   ];
 

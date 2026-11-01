@@ -208,7 +208,7 @@ export const REGRA_CONFLITO_SOCIAL: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li>Repetir a mesma abordagem sem trazer nada novo enche 1 de Paciência, mesmo quando o teste passa.</li>
       <li>A outra parte responde. Ela pergunta, pede garantia, chantageia de volta, e é nessa resposta que o grupo descobre o que ela quer.</li>
     </ol>
-    <p class="regras-note">Prestígio e Fama ajustam a rolagem em no máximo ${AJUSTE_MAXIMO_REPUTACAO}, para cima ou para baixo, pela mesma regra de <span class="regras-ref regras-ref--mundo-faccoes">Prestígio e Fama</span>. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.</p>
+    <p class="regras-note">Prestígio e Fama ajustam a rolagem em no máximo ${AJUSTE_MAXIMO_REPUTACAO}, para cima ou para baixo, pela mesma regra de <span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.</p>
 
     <h3 class="regras-subtitle">Abordagens</h3>
     <p>Cada abordagem traz uma fala de exemplo e, embaixo, como se resolve. A fala serve de faísca: diga a sua, do jeito do seu personagem.</p>
