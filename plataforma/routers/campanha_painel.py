@@ -358,6 +358,15 @@ def duplicar(
             """,
             (nova, campanha_id),
         )
+        # Documentos do Mestre (cartazes, cartas, editais), que são material de preparo.
+        connection.execute(
+            """
+            INSERT INTO campanha_documentos (id, campanha_id, modelo, titulo, campos, criado_por)
+            SELECT gen_random_uuid(), %s, modelo, titulo, campos, %s
+            FROM campanha_documentos WHERE campanha_id=%s
+            """,
+            (nova, user.id, campanha_id),
+        )
         record_audit(
             connection, action="campanha.duplicada", actor_user_id=user.id, campaign_id=nova,
             target_type="campanha", target_id=str(nova), details={"origem": str(campanha_id)},

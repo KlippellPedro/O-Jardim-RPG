@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Users, Settings, FileClock, BarChart3, Bell, UserPlus, LayoutDashboard } from 'lucide-react';
+import { Shield, Users, Settings, FileClock, BarChart3, Bell, UserPlus, LayoutDashboard, ScrollText } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { personagensApi, PersonagemApiRecord } from '../../services/personagensApi';
 import { campanhasApi } from '../../services/campanhasApi';
@@ -16,12 +16,15 @@ import { PainelCartao, PainelShell, type IAbaDoPainel } from '../../components/p
 import { useAbaNaUrl } from '../../components/painel/useAbaNaUrl';
 import { SeletorDeCampanha } from '../Campanha/SeletorDeCampanha';
 
+// Os modelos de documento só carregam quando a aba abre.
+const DocumentosPainel = lazy(() => import('./documentos/DocumentosPainel'));
+
 interface MembroCampanha {
   id: string;
   nome_exibicao: string;
 }
 
-const ABAS_DO_MESTRE = ['personagens', 'mesa', 'avisos', 'estatisticas', 'logs', 'configuracoes'] as const;
+const ABAS_DO_MESTRE = ['personagens', 'mesa', 'documentos', 'avisos', 'estatisticas', 'logs', 'configuracoes'] as const;
 type AbaDoMestre = typeof ABAS_DO_MESTRE[number];
 
 export const MasterPage = () => {
@@ -76,6 +79,7 @@ export const MasterPage = () => {
   const abas = useMemo<IAbaDoPainel<AbaDoMestre>[]>(() => [
     { id: 'personagens', rotulo: 'Personagens', icone: Users },
     { id: 'mesa', rotulo: 'Membros e Convites', icone: UserPlus },
+    { id: 'documentos', rotulo: 'Documentos', icone: ScrollText },
     { id: 'avisos', rotulo: 'Avisos', icone: Bell, contagem: avisosDaMesa },
     { id: 'estatisticas', rotulo: 'Estatísticas', icone: BarChart3 },
     { id: 'logs', rotulo: 'Logs', icone: FileClock },
@@ -147,6 +151,12 @@ export const MasterPage = () => {
               <ConvitesCampanha />
             </div>
           </PainelCartao>
+        )}
+
+        {aba === 'documentos' && campanhaId && (
+          <Suspense fallback={<PainelCartao><p className="text-sm text-gray-500">Abrindo os documentos...</p></PainelCartao>}>
+            <DocumentosPainel campanhaId={campanhaId} />
+          </Suspense>
         )}
 
         {aba === 'avisos' && campanhaId && (

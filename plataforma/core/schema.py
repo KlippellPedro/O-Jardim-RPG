@@ -2107,4 +2107,29 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
         "pacote_descartado_vira_habilidade",
         (PACOTE_DESCARTADO_VIRA_HABILIDADE_SQL,),
     ),
+    (
+        58,
+        "documentos_do_mestre",
+        (
+            # Documentos do Mestre (core/documentos.py): cartaz de procurado, carta, edital... feitos a partir de
+            # um modelo do site. `modelo` é o id do modelo no navegador; `campos` guarda o que o Mestre preencheu,
+            # cada valor como texto (imagem chega como data URL já reduzida).
+            """
+            CREATE TABLE IF NOT EXISTS campanha_documentos (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                modelo TEXT NOT NULL,
+                titulo TEXT NOT NULL,
+                campos JSONB NOT NULL DEFAULT '{}'::jsonb,
+                criado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS campanha_documentos_campanha_idx
+            ON campanha_documentos (campanha_id, atualizado_em DESC)
+            """,
+        ),
+    ),
 )
