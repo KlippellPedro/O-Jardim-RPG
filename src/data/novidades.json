@@ -1,6 +1,19 @@
 {
   "itens": [
     {
+      "id": "2026-10-31-ficha-mecanicas-de-mesa",
+      "data": "2026-10-31",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "A ficha ganhou clima, fome, fôlego, contatos, laços, Procura e Devoção",
+      "detalhes": [
+        "Condições tem a parte Ambiente: marque o clima, conte os dias sem comer e sem beber, gaste o fôlego debaixo d'água e calcule uma queda. Quando o teste falhar, um botão aplica o Cansaço, o dano e a condição.",
+        "Nos Vínculos das Notas, uma pessoa pode fazer favores: a Confiança sai da afinidade, a Dívida fica anotada e cumpri-la sobe a Confiança. O laço mostra a frase e marca a vantagem da sessão.",
+        "Na aba Ficha, ao lado de Fama e Prestígio, ficam a Procura de cada lugar e a Devoção, com os dois preceitos da sua fé.",
+        "Cada aba tem o botão Regra da aba, e as partes novas têm um botão Regra que abre o livro direto na seção certa."
+      ]
+    },
+    {
       "id": "2026-10-31-campanha-viva",
       "data": "2026-10-31",
       "tipo": "novo",
@@ -985,17 +998,6 @@
       "detalhes": [
         "As caixinhas cinzas do navegador saíram. Os avisos agora aparecem embaixo da tela e as perguntas de confirmação são janelas do próprio site.",
         "Apagar um ataque, habilidade, poder, nota, vínculo, Prestígio ou propriedade da ficha não pergunta mais: o item some na hora e o botão Desfazer fica na tela por alguns segundos. Desequipar uma arma também tem Desfazer. O que não tem volta continua pedindo confirmação."
-      ]
-    },
-    {
-      "id": "2026-10-10-clima-do-mundo",
-      "data": "2026-10-10",
-      "tipo": "novo",
-      "area": "Mundo",
-      "titulo": "O fundo do site segue as estações do Mundo",
-      "detalhes": [
-        "O fundo acompanha a estação do calendário da sua campanha: pétalas na primavera, vagalumes no verão, folhas no outono, neve no inverno, e um clima próprio na Noite Eterna, no Eclipse e na Lua Carmesim.",
-        "Quando o Mestre avança o dia, a mudança chega para a mesa toda na hora. Se o calendário ainda não foi aberto para a mesa, o fundo fica como sempre. Dá para desligar em Configurações, Preferências, Clima do mundo."
       ]
     }
   ]

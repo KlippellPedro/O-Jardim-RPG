@@ -2,6 +2,19 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-31-ficha-mecanicas-de-mesa",
+      "data": "2026-10-31",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "A ficha ganhou clima, fome, fôlego, contatos, laços, Procura e Devoção",
+      "detalhes": [
+        "Condições tem a parte Ambiente: marque o clima, conte os dias sem comer e sem beber, gaste o fôlego debaixo d'água e calcule uma queda. Quando o teste falhar, um botão aplica o Cansaço, o dano e a condição.",
+        "Nos Vínculos das Notas, uma pessoa pode fazer favores: a Confiança sai da afinidade, a Dívida fica anotada e cumpri-la sobe a Confiança. O laço mostra a frase e marca a vantagem da sessão.",
+        "Na aba Ficha, ao lado de Fama e Prestígio, ficam a Procura de cada lugar e a Devoção, com os dois preceitos da sua fé.",
+        "Cada aba tem o botão Regra da aba, e as partes novas têm um botão Regra que abre o livro direto na seção certa."
+      ]
+    },
+    {
       "id": "2026-10-31-campanha-viva",
       "data": "2026-10-31",
       "tipo": "novo",

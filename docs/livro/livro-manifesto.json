@@ -5,10 +5,10 @@
       "arquivo": "O-Jardim-Livro-de-Regras.pdf",
       "titulo": "O Jardim · Livro de Regras",
       "paginas": 324,
-      "bytes": 10558971,
-      "sha256": "219dd126325e972a8d15a5fc8c2aebe1c3ae8efff829360a5eb322bc20af57e3",
-      "gerado_em": "2026-11-01T00:33:45.205Z",
-      "conteudo_sha256": "80d4a175fe5719c497b1cd6f8ec7baff16378cb77be0d95c7ab41bc8881e3fb2",
+      "bytes": 10559684,
+      "sha256": "f3c2236834874c017e0f95d2614e35d1c6d87abc38ac5521b1f9b60cda5b0cf8",
+      "gerado_em": "2026-11-01T01:17:26.646Z",
+      "conteudo_sha256": "d60011b136710f8c9f1de4f75b20451f90e6f90c56fb72ca4a67fb2d7b19f1fe",
       "capitulos": [
         {
           "id": "primeiros-passos",
@@ -585,10 +585,10 @@
       "arquivo": "O-Jardim-Livro-de-Regras-MESTRE.pdf",
       "titulo": "O Jardim · Livro de Regras (edição do Mestre)",
       "paginas": 480,
-      "bytes": 15206958,
-      "sha256": "f52dbbf679d301321712134148ecc46d28a4b2e43d56206aebedf0751b4e1f53",
-      "gerado_em": "2026-11-01T00:34:00.019Z",
-      "conteudo_sha256": "88467a4fa72703c8225fc1ef0ee0f14de04563e3ba8d91c9e8a9cf35b3d3b48b",
+      "bytes": 15208129,
+      "sha256": "ce37db4525b53f5bebefc6c89cffd19142fb6cef8e371f3d0683370d75d4d952",
+      "gerado_em": "2026-11-01T01:17:41.186Z",
+      "conteudo_sha256": "9f40c5ecec7b2c4ba22ef0ae9645c3dcdd487bf6746d16908599d3d868aa145c",
       "capitulos": [
         {
           "id": "primeiros-passos",
@@ -1283,5 +1283,5 @@
       ]
     }
   },
-  "gerado_em": "2026-11-01T00:34:00.019Z"
+  "gerado_em": "2026-11-01T01:17:41.186Z"
 }
