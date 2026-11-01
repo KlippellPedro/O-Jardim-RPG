@@ -1,6 +1,19 @@
 {
   "itens": [
     {
+      "id": "2026-11-01-documentos-objetos-e-astratech",
+      "data": "2026-11-01",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Documentos novos: chave, fita, celular e a versão AstraTech",
+      "detalhes": [
+        "A aba Documentos do Mestre passou de 9 para 20 modelos: chave com etiqueta, fita cassete ou VHS, fotografia, frasco de poção com rótulo, passagem de viagem, convite, comprovante do Banco Lunar e página de diário.",
+        "Para mesa com tecnologia, chegaram as telas de celular da AstraTech: post de rede social com respostas, conversa de mensagens e tela de bloqueio com notificações.",
+        "Cartaz de procurado, carta, edital, contrato, relatório e jornal agora também saem num tablet da AstraTech, com tela escura ou clara. A credencial vira crachá, e o cartão de visita, a passagem e o convite ganharam versão AstraTech.",
+        "Chave e fita também têm versão de tecnologia: cartão de acesso e pen drive."
+      ]
+    },
+    {
       "id": "2026-11-01-documentos-do-mestre",
       "data": "2026-11-01",
       "tipo": "novo",
@@ -987,18 +1000,6 @@
       "titulo": "Iniciar combate já na ordem da iniciativa",
       "detalhes": [
         "Se a fila estiver fora de ordem na hora de começar, o Mestre recebe um aviso e pode escolher Ordenar e começar, Começar assim ou Voltar. Antes, quem tinha a iniciativa menor podia acabar jogando primeiro."
-      ]
-    },
-    {
-      "id": "2026-10-10-combate-vivo",
-      "data": "2026-10-10",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "O combate ganhou vida na tela",
-      "detalhes": [
-        "Quando alguém leva dano ou é curado, o número sobe pela barra e a barra treme conforme o tamanho do golpe. Com a Vida baixa a barra pulsa, e quem cai fica em cinza com a etiqueta Caído.",
-        "O começo do combate, cada rodada nova e o fim aparecem numa faixa para a mesa toda.",
-        "Criatura com a Vida escondida continua escondida: só o texto de estado dela reage. Com movimento reduzido no aparelho ou o modo de desempenho ligado, nada disso se mexe."
       ]
     }
   ]

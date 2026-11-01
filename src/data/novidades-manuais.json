@@ -2,6 +2,19 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-01-documentos-objetos-e-astratech",
+      "data": "2026-11-01",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Documentos novos: chave, fita, celular e a versão AstraTech",
+      "detalhes": [
+        "A aba Documentos do Mestre passou de 9 para 20 modelos: chave com etiqueta, fita cassete ou VHS, fotografia, frasco de poção com rótulo, passagem de viagem, convite, comprovante do Banco Lunar e página de diário.",
+        "Para mesa com tecnologia, chegaram as telas de celular da AstraTech: post de rede social com respostas, conversa de mensagens e tela de bloqueio com notificações.",
+        "Cartaz de procurado, carta, edital, contrato, relatório e jornal agora também saem num tablet da AstraTech, com tela escura ou clara. A credencial vira crachá, e o cartão de visita, a passagem e o convite ganharam versão AstraTech.",
+        "Chave e fita também têm versão de tecnologia: cartão de acesso e pen drive."
+      ]
+    },
+    {
       "id": "2026-11-01-documentos-do-mestre",
       "data": "2026-11-01",
       "tipo": "novo",
