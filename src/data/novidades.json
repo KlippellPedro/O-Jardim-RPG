@@ -1,6 +1,19 @@
 {
   "itens": [
     {
+      "id": "2026-10-31-campanha-viva",
+      "data": "2026-10-31",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Facções que andam sozinhas, contatos, laços, Procura e Devoção",
+      "detalhes": [
+        "Facções em Movimento: cada facção ativa tem um objetivo e um relógio, e entre uma aventura e outra o mundo anda. O que vocês fazem acelera ou atrasa o plano delas.",
+        "Contatos e Laços: o contato atende quando vocês chamam e cobra os favores grandes em Dívida. O laço é a pessoa por quem o personagem faz as coisas, e rende vantagem uma vez por sessão.",
+        "Procura: a página de Prestígio e Fama ganhou uma terceira escala, de 0 a 5, que mede quanto a lei de cada lugar está atrás de vocês.",
+        "Devoção: a divindade da ficha agora pesa. Com dois preceitos escritos com o Mestre, a fé melhora as oferendas ao Fluxo dela."
+      ]
+    },
+    {
       "id": "2026-10-31-cenas-novas",
       "data": "2026-10-31",
       "tipo": "novo",
@@ -983,17 +996,6 @@
       "detalhes": [
         "O fundo acompanha a estação do calendário da sua campanha: pétalas na primavera, vagalumes no verão, folhas no outono, neve no inverno, e um clima próprio na Noite Eterna, no Eclipse e na Lua Carmesim.",
         "Quando o Mestre avança o dia, a mudança chega para a mesa toda na hora. Se o calendário ainda não foi aberto para a mesa, o fundo fica como sempre. Dá para desligar em Configurações, Preferências, Clima do mundo."
-      ]
-    },
-    {
-      "id": "2026-10-10-instalar-como-app",
-      "data": "2026-10-10",
-      "tipo": "novo",
-      "area": "Jardim",
-      "titulo": "Instale o Jardim como app",
-      "detalhes": [
-        "O site agora pode ser instalado no celular ou no computador, com ícone próprio, tela cheia e abertura mais rápida. Sem internet a tela abre, mas ficha e sessão precisam de conexão.",
-        "Em Configurações, Preferências, Instalar como app aparece o botão de instalar ou o passo a passo do seu aparelho."
       ]
     }
   ]

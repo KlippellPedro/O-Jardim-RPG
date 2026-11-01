@@ -2,6 +2,19 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-10-31-campanha-viva",
+      "data": "2026-10-31",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Facções que andam sozinhas, contatos, laços, Procura e Devoção",
+      "detalhes": [
+        "Facções em Movimento: cada facção ativa tem um objetivo e um relógio, e entre uma aventura e outra o mundo anda. O que vocês fazem acelera ou atrasa o plano delas.",
+        "Contatos e Laços: o contato atende quando vocês chamam e cobra os favores grandes em Dívida. O laço é a pessoa por quem o personagem faz as coisas, e rende vantagem uma vez por sessão.",
+        "Procura: a página de Prestígio e Fama ganhou uma terceira escala, de 0 a 5, que mede quanto a lei de cada lugar está atrás de vocês.",
+        "Devoção: a divindade da ficha agora pesa. Com dois preceitos escritos com o Mestre, a fé melhora as oferendas ao Fluxo dela."
+      ]
+    },
+    {
       "id": "2026-10-31-cenas-novas",
       "data": "2026-10-31",
       "tipo": "novo",
