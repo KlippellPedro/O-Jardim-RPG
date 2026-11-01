@@ -820,6 +820,466 @@ Cada abordagem traz uma fala de exemplo e, embaixo, como se resolve. A fala serv
 
 Nenhuma dessas rolagens controla a mente de ninguém. Elas mudam a posição de uma pessoa que continua decidindo por conta própria, e é por isso que o Limite existe.
 
+## infiltracao
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Entrar onde não se é bem-vindo, pegar o que se veio buscar e sair antes de alguém perceber. Duas contagens à vista: as Etapas até o objetivo e o Alerta do lugar.
+
+O plano parecia simples na mesa da taverna. Agora tem uma ronda que não estava no mapa, uma porta com tranca nova e um cachorro que levantou a orelha. A infiltração anda em rodadas curtas, e cada uma pergunta a mesma coisa: vocês passam por mais esse pedaço, ou alguém percebe?
+
+**Em resumo**
+
+- O lugar tem **Etapas** até o objetivo (2 num lugar pequeno, 3 num lugar médio, 4 num lugar grande) e mais 1 de saída.
+
+- O lugar tem um **Alerta** de 4, 6 ou 8 partes, conforme a vigilância. Com metade pintada os guardas desconfiam, e cheio vira alarme.
+
+- A cada rodada o grupo escolhe uma abordagem para a etapa e testa. Sucesso avança; falha sobe o Alerta.
+
+- Na falha, o grupo pode forçar a passagem: avança mesmo assim, e o Alerta sobe 1 a mais.
+
+- Saiu com o objetivo, a infiltração deu certo. Alarme vira fuga, luta ou rendição.
+
+### O lugar
+
+Antes da primeira rodada, o Mestre diz o tamanho do lugar e a vigilância dele, e o grupo pode tentar descobrir mais com uma noite de observação, um mapa comprado ou alguém de dentro.
+
+- Vigilância | Alerta | Onde
+
+- Descuidada | 8 partes | Armazém de porto, casa de campo, festa barulhenta, acampamento de bandidos.
+
+- Vigiada | 6 partes | Mansão com guardas, quartel em tempo de paz, templo à noite, sede de guilda.
+
+- Fechada | 4 partes | Cofre do Banco Lunar, palácio em alerta, prisão, laboratório da A.X.I.S.
+
+- **Etapas:** 2 num lugar pequeno, 3 num lugar médio, 4 num lugar grande. A saída é sempre mais 1, depois do objetivo.
+
+- **DT:** a Padrão do nível do lugar. A etapa do objetivo, e todas num lugar Fechado, usam a Difícil.
+
+- **Preparo vale:** uma planta do lugar, um uniforme roubado, um guarda subornado. Cada preparo bom dá vantagem numa etapa ou apaga 1 de Alerta antes de começar.
+
+### A rodada
+
+- O Mestre descreve o que há entre o grupo e a próxima etapa: um pátio aberto, um corredor com ronda, uma porta trancada, uma sala cheia de gente.
+
+- O grupo escolhe uma abordagem e quem a lidera, dizendo o que faz com o corpo e com a voz.
+
+- Resolvam o teste. Os outros podem Ajudar, como em Ações Coletivas, quando a abordagem permite.
+
+- Sucesso avança uma etapa. Sucesso por 10 ou mais avança e o Mestre entrega um presente: um atalho, uma chave, uma conversa ouvida.
+
+- Falha sobe o Alerta em 1, e a falha crítica em 2. O grupo escolhe se fica onde está ou força a passagem.
+
+### Abordagens
+
+Diga a cena antes de rolar: ela diz ao Mestre o que pode dar errado. Magia, item e habilidade de classe entram como abordagem, com o teste que já usam.
+
+- Abordagem | Como é, e como se resolve
+
+- Passar escondido | Rente à parede, na sombra do toldo, no tempo exato em que o guarda vira a cabeça.Teste: Teste de Grupo de Furtividade. Sucesso: O grupo avança uma etapa. Falha: O Alerta sobe 1.
+
+- Ser quem não é | O avental de copeiro, a bandeja na mão, o passo de quem está atrasado e não quer bronca.Teste: Enganação ou Atuação; o Kit de Disfarce dá vantagem. Sucesso: Avança uma etapa, e o disfarce vale nas próximas onde aquele papel é esperado. Falha: O Alerta sobe 1 e o disfarce fica queimado daqui para frente.
+
+- Abrir caminho | O clique da gazua, a tranca de runas que esfria sob os dedos, o painel que pede uma senha.Teste: Ladinagem (Kit de Arrombamento dá vantagem), Misticismo para selo, Tecnologia para tranca A.X.I.S. Sucesso: Avança uma etapa por uma porta que ninguém vigia. Falha: O Alerta sobe 1. Falhar por 5 ou mais dispara o que protegia a porta.
+
+- Calar alguém | Uma mão na boca, um golpe na nuca, o corpo arrastado para trás das caixas.Teste: Luta ou Atletismo contra a Defesa passiva do alvo, com vantagem se ele não viu você. Sucesso: Avança uma etapa e tira aquela pessoa do caminho. Falha: Vira combate ali mesmo, e o Alerta sobe 2.
+
+- Distrair | Uma garrafa que se quebra no outro corredor, um cavalo solto no pátio, um grito de incêndio.Teste: Atuação, Enganação ou o teste de uma magia. Sucesso: Não avança, e a próxima abordagem desta etapa ganha vantagem. Falha: O Alerta sobe 1, porque alguém foi ver e voltou desconfiado.
+
+- Estudar o caminho | Contar os passos da ronda, ler a planta pela janela, ouvir a troca de turno.Teste: Investigação ou Percepção. Sucesso: Não avança. Revela o que há na próxima etapa (guarda, armadilha, rota) e dá vantagem na abordagem seguinte. Uma vez por etapa. Falha: Só custa o tempo.
+
+- **Passar escondido é de todo mundo:** todos os expostos testam, e o grupo passa se pelo menos metade passar. Quem tem armadura com penalidade sente aqui.
+
+- **O grupo pode se separar.** Cada parte vira uma infiltração com as suas próprias Etapas, e o Alerta continua um só, porque o lugar é um só.
+
+- **Armadilhas no caminho** seguem Perigos do Ambiente. Disparar uma sobe o Alerta em 1.
+
+### O Alerta
+
+- **Calmo:** menos da metade pintada. O lugar segue a rotina.
+
+- **Desconfiança:** metade ou mais. As rondas dobram, alguém foi chamar o capitão, e todas as etapas passam a usar a DT Difícil.
+
+- **Alarme:** cheio. O lugar inteiro sabe. O grupo escolhe entre fugir (uma Perseguição a Pé que começa em Curta), lutar (com reforço chegando a cada rodada) ou se render.
+
+- **O Alerta só desce** com ação concreta: esconder o corpo, devolver a chave antes que sintam falta, convencer o guarda de que foi o gato. Cada ação dessas apaga 1, e é uma rodada inteira.
+
+- **Rastro na saída:** se o objetivo deixou marca (cofre aberto, refém levado, corpo no chão), o Alerta sobe 1 quando a saída começa.
+
+**Exemplo:**
+
+O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem, chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a copeira disfarçada distrai o mordomo, e o cofre abre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.
+
+## investigacao
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Um mistério quebrado em perguntas, três pistas para cada uma e um relógio do outro lado. A pista essencial vem de procurar no lugar certo, e o dado decide o que vem junto.
+
+Alguém morreu, alguma coisa sumiu, um nome apareceu onde não devia. O grupo tem perguntas, o mundo tem respostas espalhadas, e do outro lado alguém trabalha para que elas continuem espalhadas. Esta página diz como achar o que está escondido sem que um dado ruim encerre a história.
+
+**Em resumo**
+
+- Todo caso é uma pergunta grande quebrada em 2 a 4 perguntas menores: quem, como, por quê, onde está agora.
+
+- Cada pergunta tem pelo menos 3 pistas, em lugares diferentes. Uma basta para seguir.
+
+- Quem procura no lugar certo, do jeito certo, acha a pista essencial sem rolar. O teste vem depois e decide o que vem junto e quanto custou.
+
+- O relógio do caso é o outro lado agindo. Ele pinta com cada custo e cada dia parado, e quando fecha o culpado faz alguma coisa.
+
+- Quando o grupo travar, Ligar os pontos aponta a pergunta aberta e onde procurar.
+
+### O caso
+
+- Tamanho | Perguntas | Relógio | Exemplo
+
+- Curto | 2 | 4 partes | Quem roubou a carga do armazém, e para onde ela foi.
+
+- De uma sessão | 3 | 6 partes | Quem envenenou o cônsul, como entrou e por que agora.
+
+- De um arco | 4 | 8 partes | Quem está apagando os nomes do registro da cidade, como, por que, e quem é o próximo.
+
+O Mestre diz as perguntas em voz alta quando o caso começa, ou deixa o grupo chegar nelas. Responder todas fecha o caso; o que fazer com a resposta é outra cena.
+
+### Achar uma pista
+
+- **Diga o que procura e onde.** Abrir a gaveta, cheirar o copo, perguntar ao cocheiro quem desceu na esquina. "Procuro pistas na sala" é pouco: a sala tem dez lugares.
+
+- **Lugar certo, pista na mão.** Se ali há uma pista essencial e a ideia alcança, o personagem acha sem rolar.
+
+- **O teste decide o resto,** contra a DT Padrão do nível do caso:
+
+**Sucesso por 10 ou mais:** a pista e um extra (um segundo nome, o horário exato, vantagem no próximo teste contra o suspeito).
+
+- **Sucesso:** a pista, limpa.
+
+- **Falha:** a pista, e um custo.
+
+- **Falha crítica:** a pista, e dois custos.
+
+Os custos de falha:
+
+- Demorou: pinte 1 parte do relógio do caso.
+
+- Alguém percebeu a pergunta, e o culpado fica sabendo que vocês estão perto.
+
+- O lugar fica marcado: voltar ali depois vai ser mais difícil.
+
+- A testemunha se fecha: a próxima conversa com ela começa com 1 de Paciência.
+
+- A pista vem estragada: ela aponta a direção certa, e a confirmação exige uma segunda.
+
+Pistas que não são essenciais (o detalhe que enriquece, a conexão com outro caso) podem depender do teste. Só as essenciais nunca dependem.
+
+### Que perícia acha o quê
+
+- Perícia | O que ela acha
+
+- Investigação | O que um objeto, um arquivo ou uma cena guardam: a gaveta com fundo falso, a data rasurada no livro-caixa.
+
+- Percepção | O que está à vista para quem olha: a lama fresca na bota, a cortina que não combina com a sala.
+
+- Intuição | O que as pessoas escondem: o nervosismo de quem mente, a pergunta que alguém evita.
+
+- Cura | O que um corpo conta: a hora da morte, a ferida que não bate com a história, o veneno no lábio.
+
+- Sobrevivência | Rastro de gente e de bicho, para onde foram e quantos eram.
+
+- Conhecimento, Nobreza ou Religião | O que um símbolo, um brasão ou um rito querem dizer, e a quem pertencem.
+
+- Misticismo ou Ressonância | O rastro de uma magia ou de um Fluxo: o que foi feito, de que Fluxo, há quanto tempo.
+
+- Tecnologia | O registro de um sistema A.X.I.S, a câmera, a tranca que guarda a hora em que abriu.
+
+- Ladinagem | A fechadura forçada, o cofre aberto por quem sabia a combinação.
+
+- Diplomacia ou Intimidação | O que a testemunha sabe e não quer contar. Quem resiste de verdade vira Conflito Social.
+
+### O relógio do caso
+
+- **Pinta uma parte** por custo de falha que diga "demorou", por dia inteiro sem pista nova e por barulho do grupo (uma invasão mal feita, um suspeito acusado em público).
+
+- **Quando fecha,** o culpado age: foge da cidade, queima o arquivo, cala uma testemunha, ataca de novo. O caso continua, e a ação dele deixa pistas novas.
+
+- **O relógio zera** depois que o culpado age, e o Mestre diz o que ele fará quando fechar de novo.
+
+### Ligar os pontos
+
+- **Quando o grupo travar,** um personagem passa uma hora revendo o que tem e testa Investigação contra a DT Padrão. Sucesso: o Mestre diz qual pergunta ainda está aberta e aponta um lugar ou uma pessoa onde há pista dela. Uma vez por pergunta.
+
+- **Apontar o culpado é escolha do grupo.** O Mestre não confirma antes, e errar tem consequência na história. Quem se interroga entra em Conflito Social, onde cada ponto de Resistência que cai num interrogatório entrega uma informação.
+
+- **O Detetive vai além:** a Dedução Metódica arranca detalhes que ninguém mais vê, o Golpe de Vista aponta o que está fora do lugar e o Caso Encerrado confirma uma acusação.
+
+- **Anotem as pistas** num lugar que a mesa inteira vê. Mistério se perde mais por esquecimento que por falta de pista.
+
+**Exemplo:**
+
+O cônsul morreu na ceia. A Médica pede para ver o corpo: há uma pista essencial ali (o lábio arroxeado de Beladona Destilada), e ela acha sem rolar. Ela testa Cura e passa por 10: além do veneno, sabe que ele foi posto no vinho e não na comida. Depois, o Guerreiro pergunta aos criados quem serviu o vinho e falha: recebe o nome do copeiro, mas o mordomo ouviu a pergunta, e o relógio do caso pinta uma parte.
+
+## batalha
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Quando centenas lutam: cada lado tem uma Força, os comandantes disputam fases com Guerra e os personagens fazem feitos no meio da batalha que mudam o resultado.
+
+A neblina levanta e o outro lado está lá, mais perto do que o batedor disse. Ninguém rola ataque por soldado: cada exército vira uma contagem de Força, os comandantes medem a batalha fase a fase e os personagens estão no meio dela, onde um feito certo vale mais que cem lanças.
+
+**Em resumo**
+
+- Cada lado tem uma **Força** de 4 a 10 partes, pelo tamanho. Perdeu todas, perdeu a batalha.
+
+- A cada fase, os comandantes escolhem uma ordem em segredo e fazem um teste oposto de **Guerra**. Quem vence tira Força do outro.
+
+- Os personagens escolhem onde estão na fase e fazem um **feito**: acertou, ajuda o próprio lado; falhou, sai mais machucado.
+
+- Na metade da Força e num quarto dela, o lado testa moral, como no Combate. Quem desiste foge do campo.
+
+### Os lados
+
+- Tamanho | Gente | Força
+
+- Bando | até 50 | 4
+
+- Companhia | até 300 | 6
+
+- Legião | até 2.000 | 8
+
+- Exército | milhares | 10
+
+Cada vantagem clara de um lado dá +2 no choque dele, até +6:
+
+- Mais gente: o dobro do outro lado, ou mais.
+
+- Tropa melhor: veterana, mais bem armada ou de nível mais alto.
+
+- Posição: muralha, morro, ponte estreita, o rio nas costas do inimigo.
+
+- Surpresa: só na primeira fase.
+
+- Uma criatura enorme ou uma máquina de guerra que o outro lado não tem como enfrentar.
+
+- **O nível da batalha** é o das tropas inimigas: ele escolhe a DT dos feitos e o dano que os personagens levam.
+
+- **Tropa sem comandante** faz o choque com o d20 puro, sem bônus nenhum.
+
+- **As tropas do grupo** vêm de onde a história trouxer: uma facção que confia em vocês (Prestígio e Fama), aliados e contratados, a guarnição de uma Fortaleza.
+
+### A fase
+
+- **Ordens.** Cada comandante escolhe uma ordem em segredo, e as duas são reveladas juntas. O Mestre anota a dele antes de ouvir a do grupo.
+
+- **Feitos.** Cada personagem diz onde está nesta fase e faz o feito escolhido. O Mestre pode transformar um feito num combate curto quando a cena pedir.
+
+- **Choque.** Teste oposto de Guerra dos comandantes, com as vantagens, a ordem e o que os feitos deram.
+
+- **Perdas.** Quem vence o choque tira 1 parte da Força do outro, e 2 se vencer por 10 ou mais. Empate tira 1 dos dois. Somam-se as partes que os feitos tiraram.
+
+- **Moral.** O lado que chegou à metade da Força, ou a um quarto dela, testa moral.
+
+- **Dano.** Cada personagem que fez um feito sofre o dano da fase pela tabela de baixo.
+
+Uma fase é mais ou menos meia hora de luta. A maioria das batalhas termina entre a terceira e a sexta.
+
+### Ordens
+
+As três primeiras se vencem em roda: Avançar vence Flanquear, Flanquear vence Segurar a linha e Segurar a linha vence Avançar. Quem acertou a ordem ganha +2 no choque.
+
+- Ordem | Como é, e o que vence
+
+- Avançar | A carga vai reto, e pega no meio da curva quem tentava dar a volta.Vence Flanquear: +2 no choque.
+
+- Flanquear | Metade da tropa dá a volta pela mata e cai de lado sobre quem ficou parado.Vence Segurar a linha: +2 no choque.
+
+- Segurar a linha | Escudo colado em escudo: a carga quebra na parede e volta pela metade.Vence Avançar: +2 no choque.
+
+- Recuar | Recuo em ordem, com a retaguarda segurando para o resto sair.Não vence nenhuma. Quem recua perde no máximo 1 parte por fase e, se vencer o choque, pode sair do campo no fim dela.
+
+### Feitos
+
+- Onde | Teste, e o que o sucesso faz
+
+- Na linha de frente | Luta ou Pontaria contra a DT Difícil.O inimigo perde 1 parte de Força.
+
+- Contra o comando | Furtividade ou Luta contra a DT Difícil.O choque do inimigo nesta fase tem desvantagem. Por 10 ou mais, o comandante dele cai ou foge, e o lado dele testa moral.
+
+- Segurar a brecha | Atletismo ou Fortitude contra a DT Padrão.O seu lado recupera 1 parte que perdeu nesta fase.
+
+- Artilharia e magia de área | Pontaria, Tecnologia ou o teste da magia contra a DT Difícil.O inimigo perde 1 parte de Força.
+
+- Ao lado do comandante | Ajudar, contra DT 10.+2 no choque do seu lado, ou vantagem se o sucesso for crítico.
+
+- **Somados, os feitos tiram no máximo 2 partes do inimigo por fase.** O resto da batalha é dos exércitos.
+
+- **Quem prefere ficar atrás das linhas** não faz feito e não leva dano.
+
+- **Duelo de campeões:** quando dois heróis se encontram no meio da batalha, vira combate normal. Quem vence tira 1 parte do outro lado, e se o derrotado era o comandante ou o campeão dele, o lado dele testa moral.
+
+- **Magia, item e habilidade de classe** entram como feito, com o teste que já usam.
+
+### Dano na batalha
+
+No fim de cada fase, quem fez um feito sofre dano do tipo que fizer sentido (corte, perfuração, impacto, o Fogo da magia inimiga), pela linha do nível da batalha.
+
+- Nível | DT Padrão / Difícil | Feito com sucesso | Feito com falha
+
+- 1 | 15 / 20 | 1d4 | 1d6
+
+- 5 | 17 / 22 | 1d4 | 2d6
+
+- 10 | 20 / 25 | 1d6 | 3d6
+
+- 15 | 22 / 27 | 2d6 | 4d6
+
+- 20 | 25 / 30 | 2d6 | 6d6
+
+- 30 | 30 / 35 | 4d6 | 9d6
+
+- 40 | 35 / 40 | 5d6 | 7d12
+
+- 50 | 40 / 45 | 6d6 | 8d12
+
+- 60 | 45 / 50 | 7d6 | 9d12
+
+- 80 | 55 / 60 | 9d6 | 12d12
+
+- 100 | 65 / 70 | 6d12 | 15d12
+
+### Como termina
+
+- **Força 0:** o lado se desfaz. Quem sobrou foge, se rende ou é cercado.
+
+- **Moral:** na metade da Força e num quarto dela, o lado testa 2d6 com os ajustes do Combate. Desiste: foge do campo. Vacila: na próxima fase, o comandante dele só pode ordenar Segurar a linha ou Recuar.
+
+- **Recuo:** quem recua e vence o choque pode sair do campo no fim da fase, com a Força que ainda tem.
+
+- **Depois:** uma batalha conta como combate intenso para quem lutou (1 de Cansaço, em Descanso). Cada parte perdida é uma fatia das tropas fora de combate, entre mortos, feridos e fugidos, e o mundo fica sabendo de quem venceu.
+
+**Exemplo:**
+
+Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro leva o dano Leve da linha do nível da batalha.
+
+## viagem
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+A jornada por conta própria, dia a dia: ritmo, terreno, um papel para cada um e o que a estrada traz. E a hora a hora dentro de uma ruína, uma mata ou um subterrâneo.
+
+Entre a cidade e o lugar onde a história acontece existe a estrada, e a estrada também pode contar. Esta página transforma cada dia de viagem numa pequena cena: o grupo escolhe o ritmo, cada um assume um papel, o Mestre rola o que o caminho traz e a noite cobra o seu preço. Quando o grupo chega a um lugar perigoso, o tempo passa a correr de hora em hora.
+
+**Em resumo**
+
+- A viagem paga (trem, aeronave) está em Transporte e Viagens. Aqui está a jornada por conta própria.
+
+- Um dia de estrada rende 30 km a pé, 50 km de montaria e 25 km de carroça. O terreno e o ritmo (Cauteloso, Normal ou Forçado) mudam esse número.
+
+- Cada personagem faz um papel por dia: Guia, Batedor, Forrageiro ou Vigia. Cada papel tem o seu teste.
+
+- O Mestre rola um evento por dia de estrada e um por noite fora de lugar seguro.
+
+- Dentro de uma ruína, mata ou subterrâneo, o tempo anda em turnos de uma hora, e cada personagem faz uma coisa por turno.
+
+### O dia de estrada
+
+- **Ritmo e papéis.** O grupo escolhe o ritmo do dia e quem faz cada papel.
+
+- **O caminho.** O Guia testa contra a DT do terreno, e o resultado diz quanto do dia vira caminho.
+
+- **O que a estrada traz.** O Mestre rola o evento do dia. Se for um encontro, o resultado do Batedor diz quem vê quem primeiro.
+
+- **Comida.** O Forrageiro testa a busca, e o grupo come do que achou ou do que carrega (Perigos do Ambiente).
+
+- **A noite.** O grupo monta acampamento, o Vigia testa, o Mestre rola o evento da noite e o descanso sai com os fatores do Descanso.
+
+Cada dia de viagem passa no calendário do mundo. Uma estrada de oito dias leva oito dias, e o mundo anda junto.
+
+### Ritmo
+
+- Ritmo | Caminho do dia | Efeito
+
+- Cauteloso | metade | Guia e Batedor têm vantagem, e o Forrageiro busca sem desvantagem.
+
+- Normal | inteiro | Sem ajuste. O Forrageiro busca com desvantagem, porque procura andando.
+
+- Forçado | uma vez e meia | Sem Batedor nem Forrageiro. No fim do dia, Fortitude DT 15 ou 1 de Cansaço.
+
+### Terreno
+
+- Terreno | DT do Guia | Caminho do dia | Onde
+
+- Estrada | Sem teste | inteiro | Estrada calçada, trilho do trem, rio com margem limpa.
+
+- Trilha | 10 | inteiro | Trilha de caçador, campo aberto, litoral.
+
+- Ermo | 15 | três quartos | Mata fechada, colinas, charneca sem caminho marcado.
+
+- Difícil | 20 | metade | Montanha, pântano, deserto, neve funda.
+
+- Sem referência | 25 | metade | Névoa que não levanta, mar de dunas à noite, um lugar que muda de forma.
+
+- **Terreno e ritmo se multiplicam.** No Ermo, a pé e no ritmo Normal, o grupo anda 23 km.
+
+- **O grupo anda no passo de quem está mais devagar.** Um personagem a pé segura a caravana inteira.
+
+- **Viagem por água ou pelo ar** usa o veículo (Condução e Tripulação), e o Guia testa Pilotagem no lugar de Sobrevivência quando não há referência.
+
+### Papéis
+
+Cada personagem faz um papel por dia. Com gente de menos, um personagem pode fazer dois, com desvantagem nos dois. Um aliado também pode assumir um papel. Quem não faz papel nenhum só anda.
+
+- Papel | Teste, e o que ele decide
+
+- Guia | Sobrevivência contra a DT do terreno.Sucesso: O grupo anda o caminho do ritmo. Falha: Anda metade. Falhar por 5 ou mais perde o dia inteiro, e o grupo só percebe quando ele acaba.
+
+- Batedor | Percepção contra a DT Padrão, ou Furtividade para passar sem ser visto.Sucesso: Se o dia trouxer um encontro, o grupo vê primeiro e escolhe: evitar, esperar, emboscar ou chegar conversando. Falha: O encontro vê vocês primeiro. Falha crítica deixa o grupo Surpreendido se ele for hostil.
+
+- Forrageiro | Sobrevivência contra a DT de busca de Perigos do Ambiente.Sucesso: Comida e água para ele, e para mais uma pessoa a cada 5 pontos acima da DT. Falha: Nada para comer hoje além do que está na mochila.
+
+- Vigia | Percepção contra a DT Padrão, à noite.Sucesso: Se a noite trouxer alguma coisa, o acampamento acorda a tempo. Falha: Quem chega encontra o grupo dormindo. Falha crítica deixa o grupo Surpreendido.
+
+- **O Vigia dorme mal:** quem fica de guarda tem o fator "Ficou de guarda" no descanso, e os outros recebem "Alguém fez a guarda por você". Revezar a vigia divide o peso, e cada um que vigiou leva o fator.
+
+- **O clima do dia** vale para todo mundo, como em Perigos do Ambiente. A Barraca de Campanha conta como abrigo.
+
+- **Magia, item e habilidade de classe** podem cumprir um papel com o teste que já usam.
+
+### Exploração
+
+Dentro de uma ruína, de uma mata fechada ou de um subterrâneo, o dia vira hora. Cada turno de exploração dura uma hora, e nele cada personagem faz uma coisa.
+
+- Ação | O que faz
+
+- Avançar | O grupo passa para a próxima área. Quem avança na frente é quem dispara a armadilha.
+
+- Procurar | Percepção acha armadilha, passagem e esconderijo; Investigação lê o que aconteceu ali. Tudo numa área só.
+
+- Mapear | Sobrevivência ou Conhecimento contra a DT Padrão. Com o mapa, a volta não pede teste; sem ele, sair do lugar pede Sobrevivência contra a DT Padrão.
+
+- Cuidar | Tratar um ferido (Cura DT 15, 1d6 de Vida) ou, numa área segura, Relaxar como no Descanso.
+
+- Vigiar | Fica de olho enquanto os outros trabalham. Se o evento do turno for um encontro, o grupo não é Surpreendido.
+
+- **Uma tocha dura um turno** e ilumina 6 m. Sem luz, quem não enxerga no escuro fica Cego para o que está nela (Ver e ser visto, em Combate).
+
+- **O Mestre rola um evento por turno,** e mais um sempre que o grupo faz barulho alto: luta, porta arrombada, grito.
+
+- **Armadilhas e perigos do lugar** seguem Perigos do Ambiente. Procurar antes de avançar é o jeito de achar antes de pisar.
+
+- **Dez minutos bastam** para uma coisa pequena (abrir um baú, ler uma inscrição). O turno inteiro é para o que muda o lugar.
+
+**Exemplo:**
+
+Num subterrâneo, a Caçadora procura na sala seguinte enquanto o Guerreiro vigia e o Engenheiro mapeia. Ela acha uma placa solta no chão, o Mestre rola o evento do turno (um barulho de água ao longe) e a tocha do grupo apaga no fim da hora. Acender a segunda custa a última que eles tinham.
+
 ## combate
 
 **Categoria:** Combate e Mecânicas

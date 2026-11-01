@@ -35,17 +35,21 @@ import { ARVORES } from '../mundo/arvoresCatalog';
 import { REGRA_AFLICOES } from './aflicoes';
 import { REGRA_ATAQUES_COMBINADOS } from './ataquesCombinados';
 import { REGRA_BASES } from './bases';
+import { REGRA_BATALHA } from './batalha';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from './condicoes';
 import { CONJUNTOS_EQUIPAMENTO } from './conjuntos';
 import { CONDICOES_LONGO_PRAZO, GRUPOS_LONGO_PRAZO } from './condicoes-longo-prazo';
 import { REGRA_CONFLITO_SOCIAL } from './conflitoSocial';
 import { REGRA_CRAFTING } from './crafting';
 import { REGRA_MUNDO_FACCOES } from './faccoes';
+import { REGRA_INFILTRACAO } from './infiltracao';
+import { REGRA_INVESTIGACAO } from './investigacao';
 import { REGRA_MATERIAIS } from './materiais';
 import { HTML_MORAL } from './moral';
 import { REGRA_PERIGOS } from './perigosAmbiente';
 import { REGRA_PERSEGUICAO_A_PE } from './perseguicaoAPe';
 import { REGRA_TRANSPORTE } from './transporte';
+import { REGRA_VIAGEM } from './viagem';
 import {
   CATEGORIAS_MODIFICACAO,
   MODIFICACOES_EQUIPAMENTO,
@@ -988,6 +992,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   'perseguicao-a-pe': REGRA_PERSEGUICAO_A_PE,
 
   'conflito-social': REGRA_CONFLITO_SOCIAL,
+
+  infiltracao: REGRA_INFILTRACAO,
+
+  investigacao: REGRA_INVESTIGACAO,
+
+  batalha: REGRA_BATALHA,
+
+  viagem: REGRA_VIAGEM,
 
   combate: {
     categoria: 'Combate e Mecânicas',

@@ -31,8 +31,8 @@ export const GRUPOS_NAVEGACAO: readonly GrupoNavegacaoRegras[] = [
   {
     id: 'cenas',
     titulo: 'Cenas e Grupo',
-    descricao: 'Agir junto, correr atrás de alguém, negociar duro e jogar na mesa ao vivo.',
-    topicos: ['acoes-coletivas', 'ataques-combinados', 'perseguicao-a-pe', 'conflito-social', 'mesa-ao-vivo'],
+    descricao: 'Agir junto, correr atrás de alguém, negociar duro, entrar escondido, resolver mistérios, travar batalhas e jogar na mesa ao vivo.',
+    topicos: ['acoes-coletivas', 'ataques-combinados', 'perseguicao-a-pe', 'conflito-social', 'infiltracao', 'investigacao', 'batalha', 'mesa-ao-vivo'],
     cor: 'border-orange-300/20 from-orange-400/10',
   },
   {
@@ -52,8 +52,8 @@ export const GRUPOS_NAVEGACAO: readonly GrupoNavegacaoRegras[] = [
   {
     id: 'veiculos',
     titulo: 'Veículos e Viagens',
-    descricao: 'Condução, perseguições, manutenção e transporte pago.',
-    topicos: ['veiculos', 'veiculos-cenas', 'veiculos-manutencao', 'transporte'],
+    descricao: 'Condução, perseguições, manutenção, transporte pago e a jornada por conta própria.',
+    topicos: ['veiculos', 'veiculos-cenas', 'veiculos-manutencao', 'transporte', 'viagem'],
     cor: 'border-cyan-300/20 from-cyan-400/10',
   },
   {
