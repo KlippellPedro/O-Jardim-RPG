@@ -1,7 +1,11 @@
+import {
+  CAMPO_DE_HORA_NO_TABLET, CAMPO_DE_SUPORTE, CAMPO_DE_TEMA_NO_TABLET, avatar, botao, cabecalhoDeApp, emTablet, noPapel, pilula,
+  temaAstra,
+} from '../aparelho';
 import { quebrarEmLinhas, type ILinhaDeTexto, type IModeloDeDocumento } from '../modelo';
 import {
   PAPEIS, TINTA, TINTA_FRACA, contornoRasgado, desenharLinhas, escrever, escreverNoQuadro, espacamento, fonte,
-  imagemCobrindo, linhaQueCabe, papel, sementeDe, traco,
+  imagemCobrindo, linhaQueCabe, papel, retanguloArredondado, sementeDe, traco, type Pincel,
 } from '../pincel';
 
 const LARGURA = 1240;
@@ -20,10 +24,11 @@ export const recorteDeJornal: IModeloDeDocumento = {
   impressao: { largura: 190, altura: 251 },
   campoDoTitulo: 'manchete',
   campos: [
+    CAMPO_DE_SUPORTE,
     { id: 'jornal', rotulo: 'Nome do jornal', tipo: 'texto', padrao: 'Folha da Dimensão Padrão', maximo: 40 },
     { id: 'edicao', rotulo: 'Edição', tipo: 'texto', padrao: 'Edição de inverno', maximo: 40 },
     { id: 'secao', rotulo: 'Seção', tipo: 'texto', padrao: 'Estradas', maximo: 30 },
-    { id: 'pagina', rotulo: 'Página', tipo: 'texto', padrao: 'Página 3', maximo: 20 },
+    { id: 'pagina', rotulo: 'Página', tipo: 'texto', padrao: 'Página 3', maximo: 20, visivel: noPapel },
     { id: 'manchete', rotulo: 'Manchete', tipo: 'texto', padrao: 'Carroças do Banco Lunar somem na estrada baixa', maximo: 110 },
     {
       id: 'linhaFina', rotulo: 'Linha fina', tipo: 'paragrafo', linhas: 2, maximo: 240,
@@ -40,9 +45,17 @@ export const recorteDeJornal: IModeloDeDocumento = {
     {
       id: 'papel', rotulo: 'Papel', tipo: 'escolha', padrao: 'jornal',
       opcoes: [{ valor: 'jornal', rotulo: 'Jornal' }, { valor: 'envelhecido', rotulo: 'Amarelado' }],
+      visivel: noPapel,
     },
+    CAMPO_DE_TEMA_NO_TABLET,
+    CAMPO_DE_HORA_NO_TABLET,
   ],
-  desenhar: ({ ctx, imagem }, v) => {
+  desenhar: (pincel, v) => {
+    if (v.suporte === 'tablet') {
+      jornalNoTablet(pincel, v);
+      return;
+    }
+    const { ctx, imagem } = pincel;
     const semente = sementeDe(v.manchete);
     ctx.save();
     contornoRasgado(ctx, LARGURA, ALTURA, { topo: 14, base: 22, esquerda: 16, direita: 16 }, semente);
@@ -127,3 +140,61 @@ export const recorteDeJornal: IModeloDeDocumento = {
     ctx.restore();
   },
 };
+
+/** A matéria no portal da folha, aberta no tablet da AstraTech. */
+function jornalNoTablet(pincel: Pincel, v: Readonly<Record<string, string>>) {
+  const { ctx, imagem } = pincel;
+  const tema = temaAstra(v.tema);
+  emTablet(pincel, tema, v.hora, (area) => {
+    const margem = 50;
+    const x = area.x + margem;
+    const largura = area.largura - margem * 2;
+    cabecalhoDeApp(ctx, area, tema, { titulo: v.jornal, subtitulo: v.edicao, icone: 'documento' });
+    let y = 318;
+    if (v.secao.trim()) pilula(ctx, v.secao, x, y, { cor: tema.acento, fundo: tema.painel2, contorno: true });
+    fonte(ctx, 'sans', 22, 400);
+    escrever(ctx, `Publicado às ${v.hora || '21:47'}`, x + largura, y + 8, 'direita', tema.fraco);
+
+    y = escreverNoQuadro(ctx, v.manchete, {
+      x, topo: y + 36, largura, altura: 230, maximo: 62, minimo: 34, cor: tema.texto, entrelinha: 1.12, montar: (t) => fonte(ctx, 'sans', t, 600),
+    });
+    y = escreverNoQuadro(ctx, v.linhaFina, {
+      x, topo: y + 14, largura, altura: 120, maximo: 30, minimo: 20, cor: tema.fraco, entrelinha: 1.35, montar: (t) => fonte(ctx, 'sans', t, 400),
+    });
+    if (v.autor.trim()) {
+      avatar(ctx, x + 24, y + 44, 24, null, v.autor, tema.acento);
+      fonte(ctx, 'sans', 24, 600);
+      escrever(ctx, v.autor, x + 62, y + 53, 'esquerda', tema.texto);
+      y += 88;
+    } else {
+      y += 24;
+    }
+
+    const foto = imagem('imagem');
+    if (foto) {
+      const alturaDaFoto = 470;
+      ctx.save();
+      retanguloArredondado(ctx, x, y, largura, alturaDaFoto, 20);
+      ctx.clip();
+      ctx.fillStyle = tema.painel2;
+      ctx.fillRect(x, y, largura, alturaDaFoto);
+      imagemCobrindo(ctx, foto, x, y, largura, alturaDaFoto);
+      ctx.restore();
+      y += alturaDaFoto + 34;
+      if (v.legenda.trim()) {
+        fonte(ctx, 'sans', 21, 400, true);
+        escrever(ctx, v.legenda, x, y, 'esquerda', tema.fraco);
+        y += 20;
+      }
+      y += 16;
+    }
+    const pe = area.y + area.altura;
+    escreverNoQuadro(ctx, v.texto, {
+      x, topo: y, largura, altura: pe - 150 - y, maximo: 27, minimo: 16, cor: tema.texto, entrelinha: 1.5, entreParagrafos: 14,
+      corDaTarja: tema.fraco, montar: (t) => fonte(ctx, 'sans', t, 400),
+    });
+    const alturaDoBotao = 72;
+    botao(ctx, 'Compartilhar', { x, y: pe - alturaDoBotao - 40, largura: largura * 0.48, altura: alturaDoBotao }, tema, { cheio: true });
+    botao(ctx, 'Salvar para depois', { x: x + largura * 0.52, y: pe - alturaDoBotao - 40, largura: largura * 0.48, altura: alturaDoBotao }, tema);
+  });
+}

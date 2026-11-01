@@ -1,7 +1,11 @@
+import {
+  CAMPO_DE_HORA_NO_TABLET, CAMPO_DE_SUPORTE, CAMPO_DE_TEMA_NO_TABLET, botao, cabecalhoDeApp, codigoQr, emTablet, icone, noPapel,
+  painel, rotuloDeTela, temaAstra, verificado, type TemaAstra,
+} from '../aparelho';
 import type { IModeloDeDocumento } from '../modelo';
 import {
   CORES_DE_TINTA, OPCOES_DE_PAPEL, OPCOES_DE_TINTA, TINTA, TINTA_FRACA, assinatura, contornoRasgado, escrever,
-  escreverNoQuadro, espacamento, filete, fonte, linhaQueCabe, papel, seloRedondo, sementeDe, tomDePapel,
+  escreverNoQuadro, espacamento, filete, fonte, linhaQueCabe, papel, seloRedondo, sementeDe, tomDePapel, type Pincel,
 } from '../pincel';
 
 const LARGURA = 1240;
@@ -19,6 +23,7 @@ export const edital: IModeloDeDocumento = {
   impressao: { largura: 210, altura: 297 },
   campoDoTitulo: 'titulo',
   campos: [
+    CAMPO_DE_SUPORTE,
     { id: 'emissor', rotulo: 'Autoridade', tipo: 'texto', padrao: 'Vigília das Raízes', maximo: 50 },
     { id: 'subtitulo', rotulo: 'Posto ou repartição', tipo: 'texto', padrao: 'Posto da fronteira leste', maximo: 60 },
     { id: 'numero', rotulo: 'Número', tipo: 'texto', padrao: 'Edital nº 17', maximo: 30 },
@@ -33,9 +38,16 @@ export const edital: IModeloDeDocumento = {
     { id: 'cargo', rotulo: 'Cargo', tipo: 'texto', padrao: 'Pela Vigília das Raízes', maximo: 50 },
     { id: 'selo', rotulo: 'Texto do selo', tipo: 'texto', padrao: 'Vigília das Raízes', maximo: 40, dica: 'Deixe vazio para tirar o selo.' },
     { id: 'tinta', rotulo: 'Tinta do selo', tipo: 'escolha', padrao: 'vermelho', opcoes: OPCOES_DE_TINTA },
-    { id: 'papel', rotulo: 'Papel', tipo: 'escolha', padrao: 'claro', opcoes: OPCOES_DE_PAPEL },
+    { id: 'papel', rotulo: 'Papel', tipo: 'escolha', padrao: 'claro', opcoes: OPCOES_DE_PAPEL, visivel: noPapel },
+    CAMPO_DE_TEMA_NO_TABLET,
+    CAMPO_DE_HORA_NO_TABLET,
   ],
-  desenhar: ({ ctx }, v) => {
+  desenhar: (pincel, v) => {
+    if (v.suporte === 'tablet') {
+      editalNoTablet(pincel, v);
+      return;
+    }
+    const { ctx } = pincel;
     const semente = sementeDe(v.titulo + v.numero);
     ctx.save();
     contornoRasgado(ctx, LARGURA, ALTURA, { topo: 6, base: 8, esquerda: 5, direita: 5 }, semente);
@@ -96,3 +108,68 @@ export const edital: IModeloDeDocumento = {
     ctx.restore();
   },
 };
+
+/** A tinta do selo vira a cor do alerta na tela. */
+function corDoAlerta(tema: TemaAstra, tinta: string): string {
+  return ({ vermelho: tema.perigo, azul: tema.acento, verde: tema.ok, roxo: '#a77bff', preto: tema.fraco } as Record<string, string>)[tinta] ?? tema.perigo;
+}
+
+/** O edital como alerta oficial no tablet da AstraTech. */
+function editalNoTablet(pincel: Pincel, v: Readonly<Record<string, string>>) {
+  const { ctx } = pincel;
+  const tema = temaAstra(v.tema);
+  const cor = corDoAlerta(tema, v.tinta);
+  const semente = sementeDe(v.titulo + v.numero);
+  emTablet(pincel, tema, v.hora, (area) => {
+    const margem = 44;
+    const x = area.x + margem;
+    const largura = area.largura - margem * 2;
+    let y = cabecalhoDeApp(ctx, area, tema, { titulo: v.emissor, subtitulo: v.subtitulo, icone: 'sino', cor });
+
+    const faixa = { x, y: y + 34, largura, altura: 96 };
+    ctx.save();
+    ctx.globalAlpha = 0.16;
+    painel(ctx, faixa, tema, { raio: 20, cor, borda: cor });
+    ctx.restore();
+    painel(ctx, faixa, tema, { raio: 20, cor: 'transparent', borda: cor });
+    icone(ctx, 'alerta', faixa.x + 52, faixa.y + 48, 46, cor);
+    fonte(ctx, 'tech', 34, 700);
+    espacamento(ctx, 4);
+    escrever(ctx, 'ALERTA OFICIAL', faixa.x + 98, faixa.y + 60, 'esquerda', cor);
+    espacamento(ctx, 0);
+    fonte(ctx, 'digital', 26);
+    escrever(ctx, v.numero, faixa.x + faixa.largura - 28, faixa.y + 58, 'direita', tema.texto);
+
+    y = escreverNoQuadro(ctx, v.titulo, {
+      x, topo: faixa.y + faixa.altura + 36, largura, altura: 170, maximo: 66, minimo: 34, cor: tema.texto, entrelinha: 1.1,
+      montar: (t) => fonte(ctx, 'sans', t, 600),
+    });
+    const pe = area.y + area.altura;
+    const corpoAte = pe - 470;
+    escreverNoQuadro(ctx, v.corpo, {
+      x, topo: y + 30, largura, altura: corpoAte - y - 30, maximo: 32, minimo: 18, entrelinha: 1.45, cor: tema.texto,
+      entreParagrafos: 18, corDaTarja: tema.fraco, montar: (t) => fonte(ctx, 'sans', t, 400),
+    });
+    fonte(ctx, 'sans', 24, 400);
+    escrever(ctx, v.localData, x, corpoAte + 36, 'esquerda', tema.fraco);
+
+    const assinado = { x, y: corpoAte + 66, largura, altura: 190 };
+    painel(ctx, assinado, tema, { raio: 22 });
+    rotuloDeTela(ctx, 'Assinado digitalmente', x + 32, assinado.y + 48, tema);
+    linhaQueCabe(ctx, v.assinante, x + 32, assinado.y + 100, {
+      largura: largura - 280, maximo: 36, minimo: 22, alinhamento: 'esquerda', cor: tema.texto, montar: (t) => fonte(ctx, 'sans', t, 600),
+    });
+    fonte(ctx, 'sans', 24, 400);
+    escrever(ctx, v.cargo, x + 32, assinado.y + 138, 'esquerda', tema.fraco);
+    if (v.selo.trim()) {
+      fonte(ctx, 'digital', 20);
+      escrever(ctx, `Selo: ${v.selo.trim().toUpperCase()}`, x + 32, assinado.y + 170, 'esquerda', cor);
+    }
+    verificado(ctx, x + largura - 230, assinado.y + 50, 16, tema.ok);
+    codigoQr(ctx, x + largura - 170, assinado.y + 30, 130, semente, '#0e1b2e', '#ffffff');
+
+    const alturaDoBotao = 76;
+    botao(ctx, 'Entendi', { x, y: pe - alturaDoBotao - 40, largura: largura * 0.48, altura: alturaDoBotao }, tema, { cheio: true, cor });
+    botao(ctx, 'Compartilhar aviso', { x: x + largura * 0.52, y: pe - alturaDoBotao - 40, largura: largura * 0.48, altura: alturaDoBotao }, tema);
+  });
+}

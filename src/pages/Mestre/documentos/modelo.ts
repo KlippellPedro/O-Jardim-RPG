@@ -29,11 +29,15 @@ export interface ICampoDoModelo {
   maximo?: number;
   /** Altura da caixa de um parágrafo, em linhas. */
   linhas?: number;
+  /** Some do formulário quando não serve (ex.: a cor do papel na versão de tablet). O valor continua salvo. */
+  visivel?: (valores: Readonly<Record<string, string>>) => boolean;
 }
 
-export type CategoriaDeModelo = 'Cartazes' | 'Cartas e bilhetes' | 'Cartões' | 'Papéis oficiais' | 'Imprensa';
+export type CategoriaDeModelo = 'Cartazes' | 'Cartas e bilhetes' | 'Cartões' | 'Papéis oficiais' | 'Imprensa' | 'Objetos' | 'AstraTech';
 
-export type IconeDeModelo = 'procurado' | 'carta' | 'bilhete' | 'cartao' | 'credencial' | 'edital' | 'contrato' | 'jornal' | 'relatorio';
+export type IconeDeModelo =
+  | 'procurado' | 'carta' | 'bilhete' | 'cartao' | 'credencial' | 'edital' | 'contrato' | 'jornal' | 'relatorio'
+  | 'chave' | 'fita' | 'foto' | 'frasco' | 'passagem' | 'recibo' | 'diario' | 'convite' | 'post' | 'conversa' | 'bloqueio';
 
 export interface IModeloDeDocumento {
   id: string;

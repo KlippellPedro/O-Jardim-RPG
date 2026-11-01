@@ -1,7 +1,11 @@
+import {
+  CAMPO_DE_HORA_NO_TABLET, CAMPO_DE_SUPORTE, CAMPO_DE_TEMA_NO_TABLET, botao, cabecalhoDeApp, emTablet, icone, noPapel, painel,
+  pilula, rotuloDeTela, temaAstra, varredura, verificado,
+} from '../aparelho';
 import type { IModeloDeDocumento } from '../modelo';
 import {
   OPCOES_DE_PAPEL, TINTA, TINTA_FRACA, carimbo, contornoRasgado, escrever, escreverNoQuadro, espacamento, fonte, furo,
-  imagemCobrindo, linhaQueCabe, papel, seloRedondo, sementeDe, tomDePapel, traco, vulto,
+  imagemCobrindo, linhaQueCabe, papel, seloRedondo, sementeDe, tomDePapel, traco, vulto, type Pincel,
 } from '../pincel';
 
 const LARGURA = 1240;
@@ -26,6 +30,7 @@ export const cartazDeProcurado: IModeloDeDocumento = {
   impressao: { largura: 210, altura: 297 },
   campoDoTitulo: 'nome',
   campos: [
+    CAMPO_DE_SUPORTE,
     { id: 'emissor', rotulo: 'Quem emite', tipo: 'texto', padrao: 'Guilda dos Caçadores · quadro de procurados', maximo: 70 },
     { id: 'titulo', rotulo: 'Título', tipo: 'texto', padrao: 'Procurado', maximo: 18, dica: 'Também serve Desaparecido, Recompensa, Cuidado...' },
     { id: 'condicao', rotulo: 'Condição', tipo: 'texto', padrao: 'Vivo ou morto', maximo: 40 },
@@ -53,9 +58,16 @@ export const cartazDeProcurado: IModeloDeDocumento = {
         { valor: 'cancelado', rotulo: 'Cancelado' },
       ],
     },
-    { id: 'papel', rotulo: 'Papel', tipo: 'escolha', padrao: 'envelhecido', opcoes: OPCOES_DE_PAPEL },
+    { id: 'papel', rotulo: 'Papel', tipo: 'escolha', padrao: 'envelhecido', opcoes: OPCOES_DE_PAPEL, visivel: noPapel },
+    CAMPO_DE_TEMA_NO_TABLET,
+    CAMPO_DE_HORA_NO_TABLET,
   ],
-  desenhar: ({ ctx, imagem }, v) => {
+  desenhar: (pincel, v) => {
+    if (v.suporte === 'tablet') {
+      procuradoNoTablet(pincel, v);
+      return;
+    }
+    const { ctx, imagem } = pincel;
     const semente = sementeDe(`${v.nome}${v.titulo}`);
     ctx.save();
     contornoRasgado(ctx, LARGURA, ALTURA, { topo: 34, base: 40, esquerda: 10, direita: 10 }, semente);
@@ -168,3 +180,96 @@ export const cartazDeProcurado: IModeloDeDocumento = {
     ctx.restore();
   },
 };
+
+/** O quadro de procurados no tablet da AstraTech: a mesma ficha, em tela. */
+function procuradoNoTablet(pincel: Pincel, v: Readonly<Record<string, string>>) {
+  const { ctx, imagem } = pincel;
+  const tema = temaAstra(v.tema);
+  emTablet(pincel, tema, v.hora, (area) => {
+    const margem = 44;
+    const x = area.x + margem;
+    const largura = area.largura - margem * 2;
+    // "Guilda dos Caçadores · quadro de procurados": o nome vai no título e o resto no subtítulo.
+    const [quem, ...onde] = v.emissor.split('·').map((parte) => parte.trim());
+    cabecalhoDeApp(ctx, area, tema, { titulo: quem || v.emissor, subtitulo: onde.join(' · ') || 'Quadro de procurados', icone: 'escudo', cor: tema.perigo });
+
+    const marca = MARCAS[v.marca];
+    const larguraDoStatus = pilula(ctx, marca ? marca[0] : 'Ativo', x + largura, 330, {
+      cor: marca ? tema.perigo : tema.ok, tamanho: 22, alinhamento: 'direita',
+    });
+    linhaQueCabe(ctx, v.titulo.toUpperCase(), x, 352, {
+      largura: largura - larguraDoStatus - 30, maximo: 78, minimo: 36, alinhamento: 'esquerda', cor: tema.perigo,
+      montar: (t) => fonte(ctx, 'tech', t, 700),
+    });
+    fonte(ctx, 'sans', 26, 500);
+    escrever(ctx, v.condicao, x, 396, 'esquerda', tema.fraco);
+
+    // Retrato
+    const retrato = { x, y: 430, largura: 430, altura: 520 };
+    painel(ctx, retrato, tema, { raio: 18, cor: tema.painel2, borda: tema.perigo, brilho: true });
+    const foto = imagem('retrato');
+    const dentro = { x: retrato.x + 10, y: retrato.y + 10, largura: retrato.largura - 20, altura: retrato.altura - 20 };
+    if (foto) {
+      imagemCobrindo(ctx, foto, dentro.x, dentro.y, dentro.largura, dentro.altura, { foco: 'topo', filtro: 'saturate(0.85) contrast(1.06)' });
+      varredura(ctx, dentro, 0.1);
+    } else {
+      vulto(ctx, dentro.x, dentro.y, dentro.largura, dentro.altura, tema.linha);
+      escreverNoQuadro(ctx, v.semRetrato, {
+        x: dentro.x + 20, topo: dentro.y + 20, largura: dentro.largura - 40, altura: 90, maximo: 26, minimo: 18, meio: true,
+        alinhamento: 'centro', cor: tema.fraco, montar: (t) => fonte(ctx, 'sans', t, 500),
+      });
+    }
+    if (marca) {
+      ctx.save();
+      ctx.translate(retrato.x + retrato.largura / 2, retrato.y + retrato.altura / 2);
+      ctx.rotate(-0.42);
+      ctx.fillStyle = 'rgba(255, 77, 94, 0.88)';
+      ctx.fillRect(-340, -42, 680, 84);
+      fonte(ctx, 'tech', 46, 700);
+      espacamento(ctx, 6);
+      ctx.textBaseline = 'middle';
+      escrever(ctx, marca[0], 0, 2, 'centro', '#ffffff');
+      ctx.textBaseline = 'alphabetic';
+      espacamento(ctx, 0);
+      ctx.restore();
+    }
+
+    // Ficha ao lado do retrato
+    const cx = x + retrato.largura + 40;
+    const larguraDaFicha = largura - retrato.largura - 40;
+    rotuloDeTela(ctx, 'Nome', cx, 458, tema);
+    escreverNoQuadro(ctx, v.nome, {
+      x: cx, topo: 470, largura: larguraDaFicha, altura: 140, maximo: 54, minimo: 28, cor: tema.texto, entrelinha: 1.12,
+      montar: (t) => fonte(ctx, 'sans', t, 600),
+    });
+    rotuloDeTela(ctx, 'Acusação', cx, 650, tema);
+    escreverNoQuadro(ctx, v.acusacao, {
+      x: cx, topo: 664, largura: larguraDaFicha, altura: 286, maximo: 30, minimo: 18, cor: tema.texto, entrelinha: 1.4,
+      montar: (t) => fonte(ctx, 'sans', t, 400),
+    });
+
+    // Recompensa
+    const caixa = { x, y: 990, largura, altura: 200 };
+    painel(ctx, caixa, tema, { raio: 22, borda: tema.alerta });
+    rotuloDeTela(ctx, 'Recompensa', x + largura / 2, 1040, tema, 'centro');
+    linhaQueCabe(ctx, `${v.recompensa} ${v.moeda}`.trim(), x + largura / 2, 1140, {
+      largura: largura - 80, maximo: 88, minimo: 40, cor: tema.alerta, montar: (t) => fonte(ctx, 'tech', t, 700),
+    });
+
+    escreverNoQuadro(ctx, v.rodape, {
+      x, topo: 1220, largura, altura: 90, maximo: 26, minimo: 18, cor: tema.fraco, entrelinha: 1.35, alinhamento: 'centro',
+      montar: (t) => fonte(ctx, 'sans', t, 400),
+    });
+    if (v.selo.trim()) {
+      icone(ctx, 'escudo', x + 18, 1350, 30, tema.acento);
+      fonte(ctx, 'sans', 24, 500);
+      escrever(ctx, `Emitido por ${v.selo.trim()}`, x + 46, 1359, 'esquerda', tema.texto);
+      const largo = ctx.measureText(`Emitido por ${v.selo.trim()}`).width;
+      verificado(ctx, x + 46 + largo + 22, 1350, 13, tema.acento);
+    }
+    const alturaDoBotao = 76;
+    const pe = area.y + area.altura - alturaDoBotao - 40;
+    botao(ctx, 'Aceitar contrato', { x, y: pe, largura: largura * 0.58, altura: alturaDoBotao }, tema, { cheio: true, cor: tema.perigo });
+    botao(ctx, 'Compartilhar', { x: x + largura * 0.62, y: pe, largura: largura * 0.38, altura: alturaDoBotao }, tema);
+  });
+}

@@ -8,8 +8,8 @@ import type { Pincel } from './pincel';
 
 // ---------------------------------------------------------------- fontes
 
-const FOLHA_DE_FONTES = 'https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=IM+Fell+English:ital@0;1&family=Special+Elite&family=UnifrakturMaguntia&display=swap';
-const AMOSTRAS = ['700 40px Cinzel', '40px "IM Fell English"', 'italic 40px "IM Fell English"', '40px "Special Elite"', '600 40px Caveat', '700 40px Caveat', '40px UnifrakturMaguntia'];
+const FOLHA_DE_FONTES = 'https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=IM+Fell+English:ital@0;1&family=Special+Elite&family=UnifrakturMaguntia&family=Orbitron:wght@500;700&family=Share+Tech+Mono&display=swap';
+const AMOSTRAS = ['700 40px Cinzel', '40px "IM Fell English"', 'italic 40px "IM Fell English"', '40px "Special Elite"', '600 40px Caveat', '700 40px Caveat', '40px UnifrakturMaguntia', '700 40px Orbitron', '500 40px Orbitron', '40px "Share Tech Mono"'];
 
 let fontesProntas: Promise<void> | null = null;
 

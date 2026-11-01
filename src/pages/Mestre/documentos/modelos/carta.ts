@@ -1,7 +1,11 @@
+import {
+  CAMPO_DE_HORA_NO_TABLET, CAMPO_DE_SUPORTE, CAMPO_DE_TEMA_NO_TABLET, avatar, botao, cabecalhoDeApp, emTablet, icone, noPapel,
+  painel, pilula, temaAstra,
+} from '../aparelho';
 import type { IModeloDeDocumento } from '../modelo';
 import {
   OPCOES_DE_PAPEL, TINTA, contornoRasgado, escrever, escreverNoQuadro, fonte, lacre, linhaQueCabe, papel, sementeDe,
-  tomDePapel, vinco, type Familia,
+  tomDePapel, traco, vinco, type Familia, type Pincel,
 } from '../pincel';
 
 const LARGURA = 1240;
@@ -32,6 +36,7 @@ export const carta: IModeloDeDocumento = {
   impressao: { largura: 210, altura: 297 },
   campoDoTitulo: 'assinatura',
   campos: [
+    CAMPO_DE_SUPORTE,
     { id: 'localData', rotulo: 'Local e data', tipo: 'texto', padrao: 'Ponte Velha, terceiro dia do inverno', maximo: 70 },
     { id: 'saudacao', rotulo: 'Saudação', tipo: 'texto', padrao: 'Querida Helena,', maximo: 60 },
     {
@@ -42,7 +47,7 @@ export const carta: IModeloDeDocumento = {
     { id: 'despedida', rotulo: 'Despedida', tipo: 'texto', padrao: 'Com o carinho de sempre,', maximo: 60 },
     { id: 'assinatura', rotulo: 'Assinatura', tipo: 'texto', padrao: 'Tomás', maximo: 40 },
     { id: 'posEscrito', rotulo: 'Pós-escrito', tipo: 'paragrafo', linhas: 2, maximo: 240, padrao: 'P.S.: guarde a chave onde combinamos.' },
-    { id: 'letra', rotulo: 'Letra', tipo: 'escolha', padrao: 'mao', opcoes: OPCOES_DE_LETRA },
+    { id: 'letra', rotulo: 'Letra', tipo: 'escolha', padrao: 'mao', opcoes: OPCOES_DE_LETRA, visivel: noPapel },
     {
       id: 'lacre', rotulo: 'Lacre', tipo: 'escolha', padrao: 'vermelho',
       opcoes: [
@@ -54,10 +59,17 @@ export const carta: IModeloDeDocumento = {
         { valor: 'nenhum', rotulo: 'Sem lacre' },
       ],
     },
-    { id: 'inicial', rotulo: 'Letra do lacre', tipo: 'texto', padrao: 'T', maximo: 2 },
-    { id: 'papel', rotulo: 'Papel', tipo: 'escolha', padrao: 'envelhecido', opcoes: OPCOES_DE_PAPEL },
+    { id: 'inicial', rotulo: 'Letra do lacre', tipo: 'texto', padrao: 'T', maximo: 2, visivel: noPapel },
+    { id: 'papel', rotulo: 'Papel', tipo: 'escolha', padrao: 'envelhecido', opcoes: OPCOES_DE_PAPEL, visivel: noPapel },
+    CAMPO_DE_TEMA_NO_TABLET,
+    CAMPO_DE_HORA_NO_TABLET,
   ],
-  desenhar: ({ ctx }, v) => {
+  desenhar: (pincel, v) => {
+    if (v.suporte === 'tablet') {
+      cartaNoTablet(pincel, v);
+      return;
+    }
+    const { ctx } = pincel;
     const semente = sementeDe(`${v.assinatura}${v.saudacao}`);
     const letra = LETRAS[v.letra] ?? LETRAS.mao;
     const montar = (tamanho: number) => fonte(ctx, letra.familia, tamanho, letra.familia === 'mao' ? 500 : 400);
@@ -114,3 +126,57 @@ export const carta: IModeloDeDocumento = {
     ctx.restore();
   },
 };
+
+/** A carta como mensagem aberta no tablet da AstraTech. O lacre vira mensagem selada. */
+function cartaNoTablet(pincel: Pincel, v: Readonly<Record<string, string>>) {
+  const { ctx } = pincel;
+  const tema = temaAstra(v.tema);
+  const corDoSelo = ({ vermelho: tema.perigo, verde: tema.ok, azul: tema.acento, preto: tema.fraco, dourado: tema.alerta } as Record<string, string>)[v.lacre];
+  emTablet(pincel, tema, v.hora, (area) => {
+    const margem = 44;
+    const x = area.x + margem;
+    const largura = area.largura - margem * 2;
+    cabecalhoDeApp(ctx, area, tema, { titulo: 'Mensagens', subtitulo: 'Caixa de entrada', icone: 'mensagem' });
+
+    const cartao = { x, y: 300, largura, altura: area.y + area.altura - 300 - 150 };
+    painel(ctx, cartao, tema, { raio: 26 });
+    const dentro = x + 36;
+    const larguraDentro = largura - 72;
+    avatar(ctx, dentro + 38, cartao.y + 74, 38, null, v.assinatura, tema.acento);
+    linhaQueCabe(ctx, v.assinatura || 'Sem remetente', dentro + 96, cartao.y + 68, {
+      largura: larguraDentro - 340, maximo: 32, minimo: 20, alinhamento: 'esquerda', cor: tema.texto, montar: (t) => fonte(ctx, 'sans', t, 600),
+    });
+    linhaQueCabe(ctx, v.localData, dentro + 96, cartao.y + 104, {
+      largura: larguraDentro - 340, maximo: 22, minimo: 16, alinhamento: 'esquerda', cor: tema.fraco, montar: (t) => fonte(ctx, 'sans', t, 400),
+    });
+    if (corDoSelo) {
+      const larguraDaPilula = pilula(ctx, 'Mensagem selada', dentro + larguraDentro, cartao.y + 74, { cor: corDoSelo, alinhamento: 'direita', tamanho: 20 });
+      icone(ctx, 'cadeado', dentro + larguraDentro - larguraDaPilula - 26, cartao.y + 74, 28, corDoSelo);
+    }
+    traco(ctx, dentro, cartao.y + 140, dentro + larguraDentro, cartao.y + 140, tema.linha, 2);
+
+    fonte(ctx, 'sans', 32, 600);
+    escrever(ctx, v.saudacao, dentro, cartao.y + 200, 'esquerda', tema.texto);
+    const fimDoCartao = cartao.y + cartao.altura;
+    const temPs = v.posEscrito.trim().length > 0;
+    const pe = escreverNoQuadro(ctx, v.corpo, {
+      x: dentro, topo: cartao.y + 226, largura: larguraDentro, altura: fimDoCartao - cartao.y - 226 - (temPs ? 260 : 170),
+      maximo: 30, minimo: 17, entrelinha: 1.5, entreParagrafos: 16, cor: tema.texto, corDaTarja: tema.fraco,
+      montar: (t) => fonte(ctx, 'sans', t, 400),
+    });
+    fonte(ctx, 'sans', 28, 400);
+    escrever(ctx, v.despedida, dentro, pe + 48, 'esquerda', tema.texto);
+    fonte(ctx, 'sans', 30, 600);
+    escrever(ctx, v.assinatura, dentro, pe + 92, 'esquerda', tema.texto);
+    if (temPs) {
+      escreverNoQuadro(ctx, v.posEscrito, {
+        x: dentro, topo: fimDoCartao - 120, largura: larguraDentro, altura: 90, maximo: 24, minimo: 16, cor: tema.fraco, entrelinha: 1.35,
+        montar: (t) => fonte(ctx, 'sans', t, 400, true),
+      });
+    }
+    const alturaDoBotao = 72;
+    const fim = area.y + area.altura;
+    botao(ctx, 'Responder', { x, y: fim - alturaDoBotao - 40, largura: largura * 0.48, altura: alturaDoBotao }, tema, { cheio: true });
+    botao(ctx, 'Encaminhar', { x: x + largura * 0.52, y: fim - alturaDoBotao - 40, largura: largura * 0.48, altura: alturaDoBotao }, tema);
+  });
+}

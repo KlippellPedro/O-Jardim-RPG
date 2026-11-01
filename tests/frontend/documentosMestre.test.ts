@@ -99,3 +99,33 @@ test('o texto de exemplo segue o tom do Jardim: sem travessão e sem "eco"', () 
     }
   }
 });
+
+test('as listas escritas pelo Mestre viram respostas, mensagens, notificações e itens', async () => {
+  const { respostasDoPost, mensagensDaConversa, notificacoesDaTela } = await import('../../src/pages/Mestre/documentos/modelos/celular');
+  const { itensDoComprovante } = await import('../../src/pages/Mestre/documentos/modelos/comprovante');
+  assert.deepEqual(respostasDoPost('Tomás: eu vi\n\nsem autor'), [{ autor: 'Tomás', texto: 'eu vi' }, { autor: '', texto: 'sem autor' }]);
+  assert.deepEqual(mensagensDaConversa('Oi\n> Tô aqui\n>\n'), [{ enviada: false, texto: 'Oi' }, { enviada: true, texto: 'Tô aqui' }]);
+  assert.deepEqual(notificacoesDaTela('Mensagens | Mãe | Onde você está?\nChamadas | 3 perdidas\nsó texto'), [
+    { app: 'Mensagens', titulo: 'Mãe', texto: 'Onde você está?' },
+    { app: 'Chamadas', titulo: '', texto: '3 perdidas' },
+    { app: 'Aviso', titulo: '', texto: 'só texto' },
+  ]);
+  assert.deepEqual(itensDoComprovante('Saque ; 2.000\nTaxa | 60\nSem valor'), [['Saque', '2.000'], ['Taxa', '60'], ['Sem valor', '']]);
+});
+
+test('a versão AstraTech troca o suporte sem perder os campos e esconde o que é só do papel', () => {
+  for (const id of ['procurado', 'carta', 'edital', 'contrato', 'relatorio', 'jornal']) {
+    const modelo = modeloPorId(id)!;
+    const suporte = modelo.campos.find((campo) => campo.id === 'suporte');
+    assert.ok(suporte?.opcoes?.some((opcao) => opcao.valor === 'tablet'), `${id}: tem versão de tablet`);
+    assert.equal(modelo.campos[0].id, 'suporte', `${id}: o suporte é o primeiro campo`);
+    const papel = modelo.campos.find((campo) => campo.id === 'papel');
+    assert.equal(papel?.visivel?.({ suporte: 'tablet' }), false, `${id}: a cor do papel some no tablet`);
+    assert.equal(papel?.visivel?.({ suporte: 'papel' }), true);
+  }
+  for (const id of ['credencial', 'cartao-visita', 'passagem']) {
+    assert.ok(modeloPorId(id)!.campos.find((campo) => campo.id === 'suporte')?.opcoes?.some((opcao) => opcao.valor === 'astratech'), id);
+  }
+  // Documento salvo antes da versão de tablet abre no papel, como era.
+  assert.equal(valoresComPadrao(modeloPorId('procurado')!, { nome: 'Lia' }).suporte, 'papel');
+});

@@ -1,7 +1,11 @@
+import {
+  CAMPO_DE_HORA_NO_TABLET, CAMPO_DE_SUPORTE, CAMPO_DE_TEMA_NO_TABLET, cabecalhoDeApp, emTablet, icone, noPapel, painel, pilula,
+  rotuloDeTela, temaAstra,
+} from '../aparelho';
 import type { IModeloDeDocumento } from '../modelo';
 import {
   OPCOES_DE_PAPEL, TINTA, TINTA_APAGADA, TINTA_FRACA, carimbo, contornoRasgado, escrever, escreverNoQuadro, espacamento,
-  fonte, linhaQueCabe, papel, sementeDe, tomDePapel, traco,
+  fonte, linhaQueCabe, papel, sementeDe, tomDePapel, traco, type Pincel,
 } from '../pincel';
 
 const LARGURA = 1240;
@@ -51,6 +55,7 @@ export const relatorio: IModeloDeDocumento = {
   impressao: { largura: 210, altura: 297 },
   campoDoTitulo: 'assunto',
   campos: [
+    CAMPO_DE_SUPORTE,
     { id: 'emissor', rotulo: 'Quem registra', tipo: 'texto', padrao: 'Arquivo Prismático', maximo: 50 },
     { id: 'setor', rotulo: 'Setor ou núcleo', tipo: 'texto', padrao: 'Núcleo de registro', maximo: 50 },
     { id: 'classificacao', rotulo: 'Classificação', tipo: 'texto', padrao: 'Restrito', maximo: 20 },
@@ -74,9 +79,16 @@ export const relatorio: IModeloDeDocumento = {
         { valor: 'nenhum', rotulo: 'Nenhum' },
       ],
     },
-    { id: 'papel', rotulo: 'Papel', tipo: 'escolha', padrao: 'claro', opcoes: OPCOES_DE_PAPEL },
+    { id: 'papel', rotulo: 'Papel', tipo: 'escolha', padrao: 'claro', opcoes: OPCOES_DE_PAPEL, visivel: noPapel },
+    CAMPO_DE_TEMA_NO_TABLET,
+    CAMPO_DE_HORA_NO_TABLET,
   ],
-  desenhar: ({ ctx }, v) => {
+  desenhar: (pincel, v) => {
+    if (v.suporte === 'tablet') {
+      relatorioNoTablet(pincel, v);
+      return;
+    }
+    const { ctx } = pincel;
     const semente = sementeDe(v.protocolo + v.assunto);
     ctx.save();
     contornoRasgado(ctx, LARGURA, ALTURA, { topo: 4, base: 4, esquerda: 4, direita: 4 }, semente);
@@ -141,3 +153,61 @@ export const relatorio: IModeloDeDocumento = {
     ctx.restore();
   },
 };
+
+/** O relatório como arquivo restrito no tablet da AstraTech. */
+function relatorioNoTablet(pincel: Pincel, v: Readonly<Record<string, string>>) {
+  const { ctx } = pincel;
+  const tema = temaAstra(v.tema);
+  emTablet(pincel, tema, v.hora, (area) => {
+    const margem = 44;
+    const x = area.x + margem;
+    const largura = area.largura - margem * 2;
+    cabecalhoDeApp(ctx, area, tema, { titulo: v.emissor, subtitulo: v.setor, icone: 'cadeado', cor: tema.perigo });
+
+    let larguraDaClasse = 0;
+    if (v.classificacao.trim()) larguraDaClasse = pilula(ctx, v.classificacao, x + largura, 322, { cor: tema.perigo, alinhamento: 'direita' });
+    fonte(ctx, 'tech', 36, 700);
+    escrever(ctx, 'ARQUIVO', x, 334, 'esquerda', tema.texto);
+    fonte(ctx, 'digital', 26);
+    escrever(ctx, v.protocolo, x + largura - larguraDaClasse - 24, 331, 'direita', tema.acento);
+
+    const ficha = { x, y: 372, largura, altura: 196 };
+    painel(ctx, ficha, tema);
+    ([['Protocolo', v.protocolo], ['Assunto', v.assunto], ['Data', v.data]] as const).forEach(([rotulo, valor], indice) => {
+      const y = ficha.y + 56 + indice * 54;
+      rotuloDeTela(ctx, rotulo, x + 30, y, tema);
+      linhaQueCabe(ctx, valor, x + 220, y + 2, {
+        largura: largura - 250, maximo: 28, minimo: 16, alinhamento: 'esquerda', cor: tema.texto, montar: (t) => fonte(ctx, 'digital', t),
+      });
+    });
+
+    const pe = area.y + area.altura;
+    const temNota = v.anotacao.trim().length > 0;
+    const corpoAte = pe - (temNota ? 330 : 200);
+    escreverNoQuadro(ctx, v.corpo, {
+      x, topo: ficha.y + ficha.altura + 40, largura, altura: corpoAte - ficha.y - ficha.altura - 40, maximo: 29, minimo: 17,
+      entrelinha: 1.55, cor: tema.texto, tarja: 'barra', corDaTarja: tema.fraco, entreParagrafos: 16,
+      montar: (t) => fonte(ctx, 'digital', t),
+    });
+
+    if (temNota) {
+      const nota = { x, y: corpoAte + 20, largura, altura: 110 };
+      ctx.save();
+      ctx.globalAlpha = 0.14;
+      painel(ctx, nota, tema, { cor: tema.alerta, borda: tema.alerta });
+      ctx.restore();
+      painel(ctx, nota, tema, { cor: 'transparent', borda: tema.alerta });
+      icone(ctx, 'mensagem', x + 44, nota.y + 55, 32, tema.alerta);
+      linhaQueCabe(ctx, v.anotacao, x + 84, nota.y + 65, {
+        largura: largura - 110, maximo: 30, minimo: 18, alinhamento: 'esquerda', cor: tema.alerta, montar: (t) => fonte(ctx, 'sans', t, 500, true),
+      });
+    }
+    fonte(ctx, 'sans', 24, 400);
+    escrever(ctx, `Registrado por ${v.responsavel}`, x, pe - 70, 'esquerda', tema.fraco);
+    const marca = CARIMBOS[v.carimbo];
+    if (marca) {
+      const cor = v.carimbo === 'conferido' ? tema.ok : v.carimbo === 'arquivado' ? tema.acento : tema.perigo;
+      pilula(ctx, marca[0], x + largura, pe - 78, { cor, alinhamento: 'direita' });
+    }
+  });
+}

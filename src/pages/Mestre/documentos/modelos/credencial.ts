@@ -1,7 +1,8 @@
+import { TEMAS_ASTRA, circuito, codigoQr, marcaAstraTech, rotuloDeTela } from '../aparelho';
 import type { IModeloDeDocumento } from '../modelo';
 import {
   TINTA, TINTA_APAGADA, assinatura, chapado, escrever, escreverNoQuadro, espacamento, fonte, guilhoche, imagemCobrindo,
-  linhaQueCabe, retanguloArredondado, seloRedondo, sementeDe, vulto,
+  linhaQueCabe, retanguloArredondado, seloRedondo, sementeDe, vulto, type Pincel,
 } from '../pincel';
 
 const LARGURA = 1050;
@@ -27,6 +28,11 @@ export const credencial: IModeloDeDocumento = {
   copiasNaFolha: true,
   campoDoTitulo: 'nome',
   campos: [
+    {
+      id: 'suporte', rotulo: 'Suporte', tipo: 'escolha', padrao: 'papel',
+      opcoes: [{ valor: 'papel', rotulo: 'Cartão impresso' }, { valor: 'astratech', rotulo: 'Crachá AstraTech' }],
+      dica: 'O crachá é a versão da AstraTech: vidro escuro, chip e código de leitura.',
+    },
     { id: 'emissor', rotulo: 'Quem emite', tipo: 'texto', padrao: 'Caravana do Limiar', maximo: 40 },
     { id: 'tipo', rotulo: 'Tipo de documento', tipo: 'texto', padrao: 'Passe de viagem', maximo: 40 },
     { id: 'foto', rotulo: 'Foto', tipo: 'imagem', padrao: '' },
@@ -47,7 +53,12 @@ export const credencial: IModeloDeDocumento = {
       ],
     },
   ],
-  desenhar: ({ ctx, imagem }, v) => {
+  desenhar: (pincel, v) => {
+    if (v.suporte === 'astratech') {
+      crachaAstraTech(pincel, v);
+      return;
+    }
+    const { ctx, imagem } = pincel;
     const cor = CORES[v.cor] ?? CORES.azul;
     const semente = sementeDe(v.numero + v.nome);
     ctx.save();
@@ -117,3 +128,105 @@ export const credencial: IModeloDeDocumento = {
     ctx.restore();
   },
 };
+
+const NEON: Record<string, string> = { azul: '#38b6ff', verde: '#33d69f', vinho: '#ff4d7a', grafite: '#b8c6dc', areia: '#ffb020' };
+
+/** O crachá da AstraTech: vidro escuro, trilhas de circuito, chip e código de leitura. */
+function crachaAstraTech(pincel: Pincel, v: Readonly<Record<string, string>>) {
+  const { ctx, imagem } = pincel;
+  const tema = TEMAS_ASTRA.escuro;
+  const neon = NEON[v.cor] ?? NEON.azul;
+  const semente = sementeDe(v.numero + v.nome);
+  ctx.save();
+  retanguloArredondado(ctx, 0, 0, LARGURA, ALTURA, 38);
+  ctx.clip();
+  const fundo = ctx.createLinearGradient(0, 0, LARGURA, ALTURA);
+  fundo.addColorStop(0, '#0a1222');
+  fundo.addColorStop(1, '#14223a');
+  ctx.fillStyle = fundo;
+  ctx.fillRect(0, 0, LARGURA, ALTURA);
+  ctx.save();
+  ctx.globalAlpha = 0.16;
+  circuito(ctx, { x: 0, y: 0, largura: LARGURA, altura: ALTURA }, neon, semente, 26);
+  ctx.restore();
+  // Faixa holográfica no pé
+  const holo = ctx.createLinearGradient(0, 0, LARGURA, 0);
+  ['#38b6ff', '#a77bff', '#ff4d7a', '#ffb020', '#33d69f', '#38b6ff'].forEach((cor, indice, lista) => holo.addColorStop(indice / (lista.length - 1), cor));
+  ctx.globalAlpha = 0.85;
+  ctx.fillStyle = holo;
+  ctx.fillRect(0, ALTURA - 18, LARGURA, 18);
+  ctx.globalAlpha = 1;
+
+  linhaQueCabe(ctx, v.emissor, 44, 74, {
+    largura: LARGURA - 240, maximo: 40, minimo: 22, alinhamento: 'esquerda', cor: '#ffffff', montar: (t) => fonte(ctx, 'tech', t, 700),
+  });
+  fonte(ctx, 'sans', 22, 600);
+  espacamento(ctx, 5);
+  escrever(ctx, v.tipo.toUpperCase(), 46, 112, 'esquerda', neon);
+  espacamento(ctx, 0);
+
+  // Chip
+  const chip = { x: LARGURA - 44 - 96, y: 36, largura: 96, altura: 72 };
+  retanguloArredondado(ctx, chip.x, chip.y, chip.largura, chip.altura, 12);
+  const ouro = ctx.createLinearGradient(chip.x, chip.y, chip.x + chip.largura, chip.y + chip.altura);
+  ouro.addColorStop(0, '#f3d27a');
+  ouro.addColorStop(1, '#a8812e');
+  ctx.fillStyle = ouro;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(80, 55, 10, 0.6)';
+  ctx.lineWidth = 2;
+  for (const y of [chip.y + 24, chip.y + 48]) {
+    ctx.beginPath(); ctx.moveTo(chip.x, y); ctx.lineTo(chip.x + chip.largura, y); ctx.stroke();
+  }
+  ctx.beginPath(); ctx.moveTo(chip.x + 48, chip.y); ctx.lineTo(chip.x + 48, chip.y + chip.altura); ctx.stroke();
+
+  // Foto com moldura neon
+  const fx = 44;
+  const fy = 160;
+  const fw = 262;
+  const fh = 330;
+  ctx.save();
+  ctx.shadowColor = neon;
+  ctx.shadowBlur = 22;
+  retanguloArredondado(ctx, fx, fy, fw, fh, 18);
+  ctx.fillStyle = '#1b2a44';
+  ctx.fill();
+  ctx.restore();
+  ctx.save();
+  retanguloArredondado(ctx, fx, fy, fw, fh, 18);
+  ctx.clip();
+  const foto = imagem('foto');
+  if (foto) imagemCobrindo(ctx, foto, fx, fy, fw, fh, { foco: 'topo' });
+  else vulto(ctx, fx, fy, fw, fh, 'rgba(140, 170, 220, 0.25)');
+  ctx.restore();
+  retanguloArredondado(ctx, fx, fy, fw, fh, 18);
+  ctx.strokeStyle = neon;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  const cx = 344;
+  const larguraDoCampo = LARGURA - cx - 44;
+  const campo = (rotulo: string, valor: string, x: number, y: number, largura: number, tamanho = 36, digital = false) => {
+    rotuloDeTela(ctx, rotulo, x, y, tema);
+    linhaQueCabe(ctx, valor, x, y + 40, {
+      largura, maximo: tamanho, minimo: 18, alinhamento: 'esquerda', cor: '#ffffff',
+      montar: (t) => fonte(ctx, digital ? 'digital' : 'sans', t, digital ? 400 : 600),
+    });
+  };
+  campo('Nome', v.nome, cx, 186, larguraDoCampo, 42);
+  campo('Função', v.funcao, cx, 270, larguraDoCampo, 32);
+  campo('Rota ou permissão', v.detalhe, cx, 354, larguraDoCampo, 28);
+  campo('Número', v.numero, cx, 438, larguraDoCampo / 2 - 16, 32, true);
+  campo('Validade', v.validade, cx + larguraDoCampo / 2, 438, larguraDoCampo / 2, 28);
+
+  escreverNoQuadro(ctx, v.observacao, {
+    x: 44, topo: 516, largura: 600, altura: 100, maximo: 24, minimo: 16, cor: tema.fraco, entrelinha: 1.3,
+    montar: (t) => fonte(ctx, 'sans', t, 400, true),
+  });
+  codigoQr(ctx, LARGURA - 44 - 112, 512, 112, semente, '#0a1222', '#ffffff');
+  ctx.save();
+  ctx.globalAlpha = 0.8;
+  marcaAstraTech(ctx, 690, 600, 24, tema.fraco);
+  ctx.restore();
+  ctx.restore();
+}

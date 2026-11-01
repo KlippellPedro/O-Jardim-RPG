@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import {
-  ArrowLeft, BadgeCheck, Contact, Copy, CopyPlus, Crosshair, Download, Eraser, FileLock2, Handshake, ImagePlus, Loader2,
-  Mail, Megaphone, Newspaper, Plus, Printer, Save, StickyNote, Trash2, X, type LucideIcon,
+  ArrowLeft, BadgeCheck, BellRing, Camera, CassetteTape, Contact, Copy, CopyPlus, Cpu, Crosshair, Download, Eraser, FileLock2,
+  FlaskConical, Handshake, ImagePlus, KeyRound, Loader2, Mail, MailOpen, Megaphone, MessagesSquare, Newspaper, NotebookPen, Plus,
+  Printer, Receipt, Save, Smartphone, StickyNote, Ticket, Trash2, X, type LucideIcon,
 } from 'lucide-react';
 import { PainelCartao } from '../../../components/painel/PainelShell';
 import { avisar, avisarErro } from '../../../components/avisos/avisos';
@@ -24,7 +25,24 @@ const ICONES: Record<IconeDeModelo, LucideIcon> = {
   contrato: Handshake,
   jornal: Newspaper,
   relatorio: FileLock2,
+  chave: KeyRound,
+  fita: CassetteTape,
+  foto: Camera,
+  frasco: FlaskConical,
+  passagem: Ticket,
+  recibo: Receipt,
+  diario: NotebookPen,
+  convite: MailOpen,
+  post: Smartphone,
+  conversa: MessagesSquare,
+  bloqueio: BellRing,
 };
+
+/** A segunda versão de um modelo (tablet, crachá ou cartão da AstraTech), quando ele tem. */
+function versaoDeTecnologia(modelo: IModeloDeDocumento): { valor: string; rotulo: string } | null {
+  const suporte = modelo.campos.find((campo) => campo.id === 'suporte');
+  return suporte?.opcoes?.find((opcao) => opcao.valor !== suporte.padrao) ?? null;
+}
 
 interface IDocumentoAberto {
   /** null enquanto o documento ainda não foi salvo. */
@@ -229,8 +247,8 @@ export function DocumentosPainel({ campanhaId }: { campanhaId: string }) {
     .map((categoria) => ({ categoria, modelos: MODELOS.filter((modelo) => modelo.categoria === categoria) }))
     .filter((grupo) => grupo.modelos.length), []);
 
-  const abrirNovo = (modelo: IModeloDeDocumento) => {
-    const valores = valoresComPadrao(modelo);
+  const abrirNovo = (modelo: IModeloDeDocumento, suporte?: string) => {
+    const valores = valoresComPadrao(modelo, suporte ? { suporte } : {});
     setAberto({ id: null, modelo, valores, titulo: tituloSugerido(modelo, valores), tituloManual: false });
     setSalvo(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -451,7 +469,7 @@ export function DocumentosPainel({ campanhaId }: { campanhaId: string }) {
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
           <div className="order-2 space-y-5 lg:order-1">
-            {aberto.modelo.campos.map((campo) => (
+            {aberto.modelo.campos.filter((campo) => campo.visivel?.(aberto.valores) ?? true).map((campo) => (
               <CampoDoDocumento key={campo.id} campo={campo} valor={aberto.valores[campo.id] ?? ''} aoMudar={(valor) => mudarCampo(campo.id, valor)} />
             ))}
           </div>
@@ -538,8 +556,9 @@ export function DocumentosPainel({ campanhaId }: { campanhaId: string }) {
               <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                 {modelos.map((modelo) => {
                   const Icone = ICONES[modelo.icone];
+                  const tecnologia = versaoDeTecnologia(modelo);
                   return (
-                    <li key={modelo.id} className="min-w-0">
+                    <li key={modelo.id} className="relative min-w-0">
                       <button
                         type="button"
                         onClick={() => abrirNovo(modelo)}
@@ -558,6 +577,16 @@ export function DocumentosPainel({ campanhaId }: { campanhaId: string }) {
                           </span>
                         </span>
                       </button>
+                      {tecnologia ? (
+                        <button
+                          type="button"
+                          onClick={() => abrirNovo(modelo, tecnologia.valor)}
+                          className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-sky-400/40 bg-[#07101f]/90 px-2.5 py-1 text-[11px] font-bold text-sky-300 transition hover:border-sky-300 hover:text-sky-200"
+                          title={`Criar já na versão ${tecnologia.rotulo}`}
+                        >
+                          <Cpu size={12} aria-hidden="true" /> {tecnologia.rotulo}
+                        </button>
+                      ) : null}
                     </li>
                   );
                 })}

@@ -17,6 +17,10 @@ export const FONTES = {
   gotica: 'UnifrakturMaguntia, "Old English Text MT", Georgia, serif',
   corpo: 'Georgia, "Times New Roman", serif',
   sans: 'Inter, system-ui, sans-serif',
+  /** A marca e os títulos da AstraTech. */
+  tech: 'Orbitron, Inter, system-ui, sans-serif',
+  /** Números e códigos de tela. */
+  digital: '"Share Tech Mono", Consolas, "Courier New", monospace',
 } as const;
 
 export type Familia = keyof typeof FONTES;
@@ -114,17 +118,19 @@ export interface OpcoesDeBloco {
   cor?: string;
   /** Como sai o trecho [[tarjado]]: barra preta (papel oficial) ou rabisco de caneta (bilhete). */
   tarja?: 'barra' | 'rabisco';
+  /** Cor da barra da tarja; numa tela escura a barra preta sumiria. */
+  corDaTarja?: string;
   /** Espaço a mais depois de cada parágrafo. */
   entreParagrafos?: number;
 }
 
-function desenharTarja(ctx: CanvasRenderingContext2D, x: number, y: number, largura: number, estilo: 'barra' | 'rabisco', semente: number) {
+function desenharTarja(ctx: CanvasRenderingContext2D, x: number, y: number, largura: number, estilo: 'barra' | 'rabisco', semente: number, cor = '#141210') {
   const medida = ctx.measureText('Hg');
   const subida = medida.actualBoundingBoxAscent || 20;
   const descida = medida.actualBoundingBoxDescent || 6;
   ctx.save();
   if (estilo === 'barra') {
-    ctx.fillStyle = '#141210';
+    ctx.fillStyle = cor;
     ctx.fillRect(x - 3, y - subida - 2, largura + 6, subida + descida + 4);
   } else {
     const sorte = sorteador(semente);
@@ -167,7 +173,7 @@ export function desenharLinhas(ctx: CanvasRenderingContext2D, linhas: ILinhaDeTe
     linha.palavras.forEach((palavra, i) => {
       if (palavra.tarja) {
         const continua = linha.palavras[i + 1]?.tarja;
-        desenharTarja(ctx, x, y, larguras[i] + (continua ? vao : 0), opcoes.tarja ?? 'barra', indice * 31 + i);
+        desenharTarja(ctx, x, y, larguras[i] + (continua ? vao : 0), opcoes.tarja ?? 'barra', indice * 31 + i, opcoes.corDaTarja);
       } else {
         ctx.fillText(palavra.texto, x, y);
       }

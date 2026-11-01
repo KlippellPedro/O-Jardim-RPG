@@ -1,6 +1,8 @@
+import { circuito, codigoQr, marcaAstraTech } from '../aparelho';
 import type { IModeloDeDocumento } from '../modelo';
 import {
-  cantoneira, chapado, escreverNoQuadro, espacamento, filete, fonte, imagemCobrindo, linhaQueCabe, retanguloArredondado,
+  cantoneira, chapado, escreverNoQuadro, espacamento, filete, fonte, imagemCobrindo, linhaQueCabe, retanguloArredondado, sementeDe,
+  traco, type Pincel,
 } from '../pincel';
 
 const LARGURA = 1050;
@@ -26,6 +28,11 @@ export const cartaoDeVisita: IModeloDeDocumento = {
   copiasNaFolha: true,
   campoDoTitulo: 'nome',
   campos: [
+    {
+      id: 'suporte', rotulo: 'Suporte', tipo: 'escolha', padrao: 'papel',
+      opcoes: [{ valor: 'papel', rotulo: 'Impresso' }, { valor: 'astratech', rotulo: 'Cartão AstraTech' }],
+      dica: 'O cartão AstraTech é escuro, com trilhas de circuito e código de leitura.',
+    },
     { id: 'simbolo', rotulo: 'Símbolo (opcional)', tipo: 'imagem', padrao: '', dica: 'PNG com fundo transparente fica melhor.' },
     { id: 'nome', rotulo: 'Nome', tipo: 'texto', padrao: 'Iara Montenegro', maximo: 40 },
     { id: 'oficio', rotulo: 'Ofício', tipo: 'texto', padrao: 'Tradutora responsável', maximo: 50 },
@@ -43,7 +50,12 @@ export const cartaoDeVisita: IModeloDeDocumento = {
       ],
     },
   ],
-  desenhar: ({ ctx, imagem }, v) => {
+  desenhar: (pincel, v) => {
+    if (v.suporte === 'astratech') {
+      cartaoAstraTech(pincel, v);
+      return;
+    }
+    const { ctx, imagem } = pincel;
     const estilo = ESTILOS[v.estilo] ?? ESTILOS.claro;
     ctx.save();
     retanguloArredondado(ctx, 0, 0, LARGURA, ALTURA, 22);
@@ -98,3 +110,64 @@ export const cartaoDeVisita: IModeloDeDocumento = {
     ctx.restore();
   },
 };
+
+const NEON: Record<string, string> = { claro: '#38b6ff', escuro: '#c9a45a', rubro: '#ff4d7a', verde: '#33d69f', azul: '#5aa8ff' };
+
+/** O cartão de visita da AstraTech: fundo escuro, circuito, nome em letra de tela e código de leitura. */
+function cartaoAstraTech(pincel: Pincel, v: Readonly<Record<string, string>>) {
+  const { ctx, imagem } = pincel;
+  const neon = NEON[v.estilo] ?? NEON.claro;
+  const semente = sementeDe(v.nome + v.casa);
+  ctx.save();
+  retanguloArredondado(ctx, 0, 0, LARGURA, ALTURA, 22);
+  ctx.clip();
+  const fundo = ctx.createLinearGradient(0, 0, LARGURA, ALTURA);
+  fundo.addColorStop(0, '#070c16');
+  fundo.addColorStop(1, '#111c31');
+  ctx.fillStyle = fundo;
+  ctx.fillRect(0, 0, LARGURA, ALTURA);
+  ctx.save();
+  ctx.globalAlpha = 0.14;
+  circuito(ctx, { x: 0, y: 0, largura: LARGURA, altura: ALTURA }, neon, semente, 22);
+  ctx.restore();
+  ctx.save();
+  ctx.shadowColor = neon;
+  ctx.shadowBlur = 16;
+  traco(ctx, 0, 6, LARGURA, 6, neon, 6);
+  ctx.restore();
+
+  const x = 70;
+  const simbolo = imagem('simbolo');
+  if (simbolo) imagemCobrindo(ctx, simbolo, x, 60, 110, 110, { conter: true });
+  fonte(ctx, 'sans', 22, 600);
+  espacamento(ctx, 6);
+  linhaQueCabe(ctx, v.casa.toUpperCase(), simbolo ? x + 130 : x, simbolo ? 124 : 112, {
+    largura: 560, maximo: 22, minimo: 14, alinhamento: 'esquerda', cor: '#8ba1c4',
+    montar: (t) => { fonte(ctx, 'sans', t, 600); espacamento(ctx, t * 0.26); },
+  });
+  espacamento(ctx, 0);
+  linhaQueCabe(ctx, v.nome, x, 270, {
+    largura: 640, maximo: 62, minimo: 28, alinhamento: 'esquerda', cor: '#ffffff', montar: (t) => fonte(ctx, 'tech', t, 700),
+  });
+  linhaQueCabe(ctx, v.oficio, x, 322, {
+    largura: 640, maximo: 32, minimo: 18, alinhamento: 'esquerda', cor: neon, montar: (t) => fonte(ctx, 'sans', t, 500),
+  });
+  ctx.save();
+  ctx.shadowColor = neon;
+  ctx.shadowBlur = 10;
+  traco(ctx, x, 356, x + 260, 356, neon, 3);
+  ctx.restore();
+  const fim = escreverNoQuadro(ctx, v.endereco, {
+    x, topo: 380, largura: 640, altura: 90, maximo: 27, minimo: 17, cor: '#e8f0ff', entrelinha: 1.3, montar: (t) => fonte(ctx, 'sans', t, 400),
+  });
+  escreverNoQuadro(ctx, v.frase, {
+    x, topo: Math.max(fim + 16, 500), largura: 640, altura: 80, maximo: 23, minimo: 15, cor: '#8ba1c4', entrelinha: 1.25,
+    montar: (t) => fonte(ctx, 'sans', t, 400, true),
+  });
+  codigoQr(ctx, LARGURA - 70 - 210, 190, 210, semente, '#070c16', '#ffffff');
+  ctx.save();
+  ctx.globalAlpha = 0.75;
+  marcaAstraTech(ctx, LARGURA - 70 - 228, ALTURA - 70, 22, '#8ba1c4');
+  ctx.restore();
+  ctx.restore();
+}
