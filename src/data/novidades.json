@@ -1,6 +1,19 @@
 {
   "itens": [
     {
+      "id": "2026-10-31-cenas-novas",
+      "data": "2026-10-31",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Viagem, infiltração, mistérios e batalhas",
+      "detalhes": [
+        "Viagem e Exploração: cada dia de estrada tem ritmo, terreno e um papel para cada um (Guia, Batedor, Forrageiro e Vigia). Dentro de uma ruína, o tempo corre de hora em hora, e a tocha acaba.",
+        "Infiltração: o lugar tem Etapas até o objetivo e um Alerta que vai enchendo. Na falha, dá para forçar a passagem e pagar com mais Alerta.",
+        "Investigações: quem procura no lugar certo acha a pista sem rolar. O dado decide o que vem junto e quanto custou, e do outro lado corre o relógio do caso.",
+        "Batalha em Massa: cada exército tem uma Força, os comandantes escolhem ordens em segredo e testam Guerra, e vocês fazem feitos no meio da luta."
+      ]
+    },
+    {
       "id": "2026-10-31-perigos-do-ambiente",
       "data": "2026-10-31",
       "tipo": "novo",
@@ -981,17 +994,6 @@
       "detalhes": [
         "O site agora pode ser instalado no celular ou no computador, com ícone próprio, tela cheia e abertura mais rápida. Sem internet a tela abre, mas ficha e sessão precisam de conexão.",
         "Em Configurações, Preferências, Instalar como app aparece o botão de instalar ou o passo a passo do seu aparelho."
-      ]
-    },
-    {
-      "id": "2026-10-09-ajuda-e-entrevista",
-      "data": "2026-10-09",
-      "tipo": "melhoria",
-      "area": "Discord",
-      "titulo": "A /ajuda explica tudo, e a entrevista ficou mais segura",
-      "detalhes": [
-        "Os dois bots ganharam um guia no começo do /ajuda, em linguagem simples: baús, Chaves, Coleção das Árvores, Cofre do Jardim, leilão de sábado, Dia de Bolsa, classificados, furos e entrevistas. Quem não é Mestre agora só vê os comandos que pode usar.",
-        "Na entrevista da semana, a sua resposta na DM não sai direto no jornal: o Jornalista mostra como vai ficar e você toca em Publicar ou em Reescrever. Conversar com o bot não publica mais nada sem querer."
       ]
     }
   ]
