@@ -1,6 +1,20 @@
 {
   "itens": [
     {
+      "id": "2026-11-02-molduras-e-oficina",
+      "data": "2026-11-02",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: molduras para o seu token e a Oficina do Mestre",
+      "detalhes": [
+        "Clique no token do seu personagem para escolher a moldura: a do seu nível, Ferro, Ouro, Madeira, Osso, Runa, Cristal, Raiz, Sombra ou uma de cada Fluxo.",
+        "No mesmo lugar dá para ajustar a foto dentro do círculo, com zoom e posição. A escolha vale em todas as cenas.",
+        "O Mestre pode pôr uma moldura única para a mesa inteira, e aí todo mundo usa a mesma.",
+        "Os tokens mostram as condições em bolinhas com as iniciais, ao lado do retrato.",
+        "Para o Mestre chegou a Oficina: remove o fundo de uma imagem, melhora a qualidade de mapas e retratos e transforma tudo em token, que já pode entrar no mapa e na iniciativa."
+      ]
+    },
+    {
       "id": "2026-11-02-mapa-ao-vivo",
       "data": "2026-11-02",
       "tipo": "novo",
@@ -994,18 +1008,6 @@
       "detalhes": [
         "As telas agora entram com uma transição curta, e enquanto a página chega aparece o desenho dela no lugar do círculo girando.",
         "Cada guia ganhou o botão Pular todos os guias. Ele desliga a abertura automática em todas as páginas; o botão de guia de cada página continua lá, e dá para religar em Configurações, Preferências, Guias automáticos."
-      ]
-    },
-    {
-      "id": "2026-10-10-nascimento-do-personagem",
-      "data": "2026-10-10",
-      "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "O nascimento do personagem",
-      "detalhes": [
-        "Os cartões de Árvore, raça e classe do assistente de criação ganharam emblemas coloridos.",
-        "Rolar 7d20 agora joga sete dados 3D na tela, e os valores entram nos atributos quando os dados pousam.",
-        "Depois de Finalizar Criação o personagem nasce numa cerimônia: a constelação da classe acende a primeira estrela, na cor dela, e você escolhe entre abrir a ficha ou voltar à lista."
       ]
     }
   ]
