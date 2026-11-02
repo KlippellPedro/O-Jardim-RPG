@@ -278,6 +278,34 @@ Segue o molde da mesa ao vivo (`plataforma/core/mesa.py`):
    iniciativa com a moldura escolhida, moldura e zoom do jogador gravados,
    moldura da mesa valendo para todos.
 3. **Névoa de guerra e clima:** névoa com ladrilhos e os efeitos de atmosfera.
+
+   **Feita em 2026-11-02.** Migração 61 (`mapa_cenas.nevoa`, `nevoa_ladrilhos`,
+   `clima`). A névoa é uma lista de formas em ordem (retângulo, polígono, pincel;
+   cada uma revela ou esconde) e a conta mora em `plataforma/core/nevoa.py`: um
+   ponto está à vista quando a última forma que o contém revela. A cada mudança
+   da névoa ou do mapa, o servidor refaz a lista de ladrilhos que o jogador pode
+   baixar (grade de até 256 células por lado, generosa para o lado da imagem: a
+   célula tocada por uma forma que revela conta inteira); o acervo confere a chave
+   pedida contra essa lista. A versão em 1/4 de um pedaço só sai quando todos os
+   ladrilhos cheios dele saem, e a miniatura nunca sai com a névoa ligada.
+   Monstro, NPC e objeto com o centro coberto não vão para o jogador, nem pelo GET
+   nem pelo arrasto em tempo real; saindo da névoa no meio do arrasto, a posição
+   vai para o banco e a mesa recarrega; entrando, os jogadores recebem `sumiu`.
+   Personagem de jogador segue sempre à vista. O que o jogador baixou antes de a
+   névoa ligar fica no aparelho dele (o pedaço tem cache longo); a barra da névoa
+   avisa o Mestre disso numa cena que já está na mesa.
+   Na tela, a névoa é pintada numa textura do tamanho do mapa (opaca para o
+   jogador, translúcida para o Mestre) e o clima (`src/pages/Mapa/motor/clima.ts`)
+   é escrito por nós com o `ParticleContainer`: chuva, tempestade com clarão
+   (desligado para quem pede menos movimento), neve, neblina, tempestade de areia,
+   cinzas e brasas, folhas, escuridão com luz em volta de jogadores e aliados, véu
+   do Vazio e partículas na cor de um Fluxo; até 4 juntos, cada um no mapa inteiro
+   ou numa área de borda suave, com vento da cena. Cada aparelho pode desligar os
+   efeitos só para si. Conferido com duas pessoas no Chrome com placa de vídeo: a
+   jogadora que abriu o mapa com a névoa ligada pediu só o ladrilho revelado, e
+   pedir os outros direto (sem cache) deu 404, inclusive a versão reduzida e a
+   miniatura; o dragão apareceu para ela ao sair da névoa no arrasto do Mestre e
+   sumiu ao voltar; 60 quadros por segundo com chuva e neblina.
 4. **Extras:** cenas preparadas e troca rápida, desenho livre, áreas de magia (cone,
    linha, círculo, com o tamanho tirado da magia), luz e visão com paredes,
    cursores, dado 3D caindo no mapa.

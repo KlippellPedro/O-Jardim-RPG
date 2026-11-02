@@ -65,12 +65,65 @@ export interface IResumoCena {
   versao: number;
 }
 
+export type OperacaoNevoa = 'revelar' | 'esconder';
+
+/** Uma forma da névoa, como o servidor guarda (plataforma/core/nevoa.py). */
+export type IFormaNevoa =
+  | { op: OperacaoNevoa; tipo: 'retangulo'; x: number; y: number; w: number; h: number }
+  | { op: OperacaoNevoa; tipo: 'poligono'; pontos: number[][] }
+  | { op: OperacaoNevoa; tipo: 'pincel'; raio: number; pontos: number[][] };
+
+export interface INevoa {
+  ligada: boolean;
+  /** Em ordem: a última forma que contém um ponto decide se ele está à vista. */
+  formas: IFormaNevoa[];
+  /** Só para o jogador com a névoa ligada: os pedaços do mapa que ele pode baixar. */
+  ladrilhos: string[] | null;
+}
+
+export type TipoEfeitoClima = 'chuva' | 'tempestade' | 'neve' | 'neblina' | 'areia' | 'cinzas' | 'folhas' | 'escuridao' | 'vazio' | 'fluxo';
+
+export interface IAreaClima {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export interface IEfeitoClima {
+  tipo: TipoEfeitoClima;
+  /** De 0,05 a 1. */
+  intensidade: number;
+  /** null: o mapa inteiro. */
+  area: IAreaClima | null;
+  /** Só no efeito "fluxo": a cor das partículas. */
+  fluxo?: string;
+  /** Só na escuridão: raio da luz em volta dos personagens, em casas. */
+  luz?: number;
+}
+
+export interface IClima {
+  efeitos: IEfeitoClima[];
+  /** direcao em graus na tela (0 para a direita, 90 para baixo); forca de 0 a 1. */
+  vento: { direcao: number; forca: number };
+}
+
 export interface ICena extends IResumoCena {
   largura: number;
   altura: number;
   grade: IGrade;
   livre: boolean;
   mapa: IMapaDaCena | null;
+  nevoa: INevoa;
+  clima: IClima;
+}
+
+export interface INevoaPayload {
+  ligada?: boolean;
+  forma?: IFormaNevoa;
+  desfazer?: boolean;
+  cobrir_tudo?: boolean;
+  revelar_tudo?: boolean;
 }
 
 export interface IEstadoMapa {
@@ -150,6 +203,10 @@ export const mapaApi = {
   /** Moldura e enquadramento do personagem: valem em todas as cenas. */
   editarTokenDoPersonagem: (campanhaId: string, personagemId: string, dados: { moldura?: string; sem_moldura?: boolean; enquadramento?: Partial<{ zoom: number; x: number; y: number }> }) =>
     api<{ moldura: string | null; enquadramento: { zoom: number; x: number; y: number } }>(`${base(campanhaId)}/personagens/${personagemId}/token`, { method: 'PUT', body: dados }),
+  mudarNevoa: (campanhaId: string, cenaId: string, dados: INevoaPayload) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/nevoa`, { method: 'POST', body: dados }),
+  mudarClima: (campanhaId: string, cenaId: string, clima: IClima) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/clima`, { method: 'PUT', body: clima }),
   configurar: (campanhaId: string, dados: { moldura_mesa: string | null }) =>
     api<{ moldura_mesa: string | null }>(`${base(campanhaId)}/config`, { method: 'PUT', body: dados }),
 };

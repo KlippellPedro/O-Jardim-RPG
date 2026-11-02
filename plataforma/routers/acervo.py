@@ -115,11 +115,13 @@ def _resumo_item(linha) -> dict:
     }
 
 
-def pode_ler_item(connection, item_id: UUID, user: AuthenticatedUser) -> bool:
+def pode_ler_item(connection, item_id: UUID, user: AuthenticatedUser, chave: str) -> bool:
     """Dono sempre; os outros, se a imagem está numa cena ou token de campanha em que jogam.
 
     Quem comanda a campanha vê também as cenas em preparo; jogador só a cena
-    ativa, e só com a sessão ao vivo.
+    ativa, e só com a sessão ao vivo. Com a névoa ligada, o jogador recebe só os
+    ladrilhos do mapa que tocam área revelada (`mapa_cenas.nevoa_ladrilhos`,
+    calculado em `core/nevoa.py`); a miniatura não está nessa lista.
     """
     linha = connection.execute(
         """
@@ -133,13 +135,19 @@ def pode_ler_item(connection, item_id: UUID, user: AuthenticatedUser) -> bool:
             WHERE (c.mapa_id = %(item)s OR t.id IS NOT NULL)
               AND (
                 m.papel IN ('mestre', 'assistente')
-                OR (c.ativa AND EXISTS (
-                  SELECT 1 FROM sessoes_mesa s WHERE s.campanha_id = c.campanha_id AND s.status = 'aberta'
-                ))
+                OR (c.ativa
+                    AND EXISTS (
+                      SELECT 1 FROM sessoes_mesa s WHERE s.campanha_id = c.campanha_id AND s.status = 'aberta'
+                    )
+                    AND (
+                      t.id IS NOT NULL
+                      OR NOT COALESCE((c.nevoa->>'ligada')::boolean, FALSE)
+                      OR %(chave)s = ANY(c.nevoa_ladrilhos)
+                    ))
               )
           ) AS na_mesa
         """,
-        {"item": item_id, "usuario": user.id},
+        {"item": item_id, "usuario": user.id, "chave": chave},
     ).fetchone()
     if linha["dono"] or linha["na_mesa"]:
         return True
@@ -448,7 +456,7 @@ def ler_pedaco(
     if not acervo.CHAVE.match(chave):
         raise HTTPException(status_code=404, detail="pedaco nao encontrado")
     with database.connection() as connection:
-        if not pode_ler_item(connection, item_id, user):
+        if not pode_ler_item(connection, item_id, user, chave):
             raise HTTPException(status_code=404, detail="pedaco nao encontrado")
         achado = acervo.ler(connection, item_id, chave)
     if not achado:

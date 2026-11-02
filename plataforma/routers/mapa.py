@@ -26,7 +26,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
-from core import mapa, tempo_real
+from core import mapa, nevoa, tempo_real
 from core.acervo import ler as ler_pedaco
 from core.condicoes import normalizar_condicoes
 from core.database import Database
@@ -44,6 +44,10 @@ router = APIRouter(prefix="/mapa", tags=["mapa-ao-vivo"])
 
 MAX_CENAS = 200
 MAX_TOKENS_POR_CENA = 400
+COLUNAS_CENA = (
+    "id, campanha_id, nome, mapa_id, largura, altura, grade, ativa, livre, ordem, versao, "
+    "nevoa, nevoa_ladrilhos, clima"
+)
 
 
 class CenaInput(BaseModel):
@@ -101,6 +105,17 @@ class ConfigMapaInput(BaseModel):
     moldura_mesa: str | None = Field(default=None, max_length=40)
 
 
+class NevoaInput(BaseModel):
+    """Uma mudança por vez na névoa da cena; o Mestre desenha e cada forma solta vira um pedido."""
+
+    ligada: bool | None = None
+    forma: dict | None = None
+    desfazer: bool = False
+    #: Cobre o mapa inteiro de novo (apaga as formas).
+    cobrir_tudo: bool = False
+    revelar_tudo: bool = False
+
+
 class PontoInput(BaseModel):
     x: float
     y: float
@@ -133,7 +148,7 @@ def _espectador(connection, campanha_id: UUID, acesso, user_id) -> Espectador:
 def _cena(connection, campanha_id: UUID, cena_id: UUID, *, travar: bool = False):
     cena = connection.execute(
         f"""
-        SELECT id, campanha_id, nome, mapa_id, largura, altura, grade, ativa, livre, ordem, versao
+        SELECT {COLUNAS_CENA}
         FROM mapa_cenas WHERE id=%s AND campanha_id=%s{' FOR UPDATE' if travar else ''}
         """,
         (cena_id, campanha_id),
@@ -145,10 +160,7 @@ def _cena(connection, campanha_id: UUID, cena_id: UUID, *, travar: bool = False)
 
 def _cena_ativa(connection, campanha_id: UUID):
     return connection.execute(
-        """
-        SELECT id, campanha_id, nome, mapa_id, largura, altura, grade, ativa, livre, ordem, versao
-        FROM mapa_cenas WHERE campanha_id=%s AND ativa
-        """,
+        f"SELECT {COLUNAS_CENA} FROM mapa_cenas WHERE campanha_id=%s AND ativa",
         (campanha_id,),
     ).fetchone()
 
@@ -267,6 +279,8 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador) -> list
     fichas = _fichas(connection, campanha_id, personagens)
     tokens_de_personagem = _tokens_de_personagem(connection, personagens)
     moldura_mesa = _moldura_mesa(connection, campanha_id)
+    estado_nevoa = nevoa.ler(cena["nevoa"])
+    cobertura = nevoa.Nevoa(estado_nevoa["formas"]) if estado_nevoa["ligada"] and not quem.gestor else None
     saida = []
     for token in tokens:
         participante = ligacoes[str(token["id"])]
@@ -294,6 +308,7 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador) -> list
             moldura=mapa.moldura_efetiva(token, personagem, do_personagem.get("moldura"), moldura_mesa),
             # O enquadramento é da foto da ficha; imagem do acervo já vem recortada.
             enquadramento=do_personagem.get("enquadramento") if not token["imagem_id"] else None,
+            na_nevoa=cobertura is not None and not cobertura.revelado(float(token["x"]), float(token["y"])),
         )
         if item is None:
             continue
@@ -323,7 +338,7 @@ def _mapa_da_cena(connection, cena) -> dict | None:
     }
 
 
-def _resumo_cena(connection, cena, *, completa: bool) -> dict:
+def _resumo_cena(connection, cena, *, completa: bool, gestor: bool = False) -> dict:
     resumo = {
         "id": str(cena["id"]),
         "nome": cena["nome"],
@@ -331,12 +346,19 @@ def _resumo_cena(connection, cena, *, completa: bool) -> dict:
         "versao": int(cena["versao"]),
     }
     if completa:
+        estado_nevoa = nevoa.ler(cena["nevoa"])
         resumo.update({
             "largura": cena["largura"],
             "altura": cena["altura"],
             "grade": mapa.normalizar_grade({}, cena["grade"] if isinstance(cena["grade"], dict) else {}),
             "livre": bool(cena["livre"]),
             "mapa": _mapa_da_cena(connection, cena),
+            "nevoa": {
+                **estado_nevoa,
+                # Só o jogador precisa da lista: o Mestre baixa o mapa inteiro.
+                "ladrilhos": list(cena["nevoa_ladrilhos"] or []) if estado_nevoa["ligada"] and not gestor else None,
+            },
+            "clima": mapa.ler_clima(cena["clima"], int(cena["largura"]), int(cena["altura"])),
         })
     return resumo
 
@@ -360,11 +382,9 @@ def _montar(connection, campanha_id: UUID, acesso, user: AuthenticatedUser, cena
         return resposta
     resposta["moldura_mesa"] = _moldura_mesa(connection, campanha_id)
     if gestor:
+        # A lista leva só o resumo; a névoa e o clima vêm apenas da cena aberta.
         cenas = connection.execute(
-            """
-            SELECT id, campanha_id, nome, mapa_id, largura, altura, grade, ativa, livre, ordem, versao
-            FROM mapa_cenas WHERE campanha_id=%s ORDER BY ordem, criado_em
-            """,
+            "SELECT id, nome, ativa, versao FROM mapa_cenas WHERE campanha_id=%s ORDER BY ordem, criado_em",
             (campanha_id,),
         ).fetchall()
         resposta["cenas"] = [_resumo_cena(connection, c, completa=False) for c in cenas]
@@ -374,11 +394,13 @@ def _montar(connection, campanha_id: UUID, acesso, user: AuthenticatedUser, cena
             if escolhida is None:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="cena nao encontrada")
         escolhida = escolhida or next((c for c in cenas if c["ativa"]), None) or (cenas[0] if cenas else None)
+        if escolhida is not None:
+            escolhida = _cena(connection, campanha_id, escolhida["id"])
     else:
         escolhida = _cena_ativa(connection, campanha_id)
     if escolhida is None:
         return resposta
-    resposta["cena"] = _resumo_cena(connection, escolhida, completa=True)
+    resposta["cena"] = _resumo_cena(connection, escolhida, completa=True, gestor=gestor)
     resposta["tokens"] = _visao_tokens(connection, campanha_id, escolhida, quem)
     return resposta
 
@@ -484,6 +506,82 @@ def editar_cena(
             mudancas["ordem"] = payload.ordem
         for coluna, valor in mudancas.items():
             connection.execute(f"UPDATE mapa_cenas SET {coluna}=%s WHERE id=%s", (valor, cena_id))
+        if {"mapa_id", "largura", "altura"} & mudancas.keys():
+            # Outro mapa tem outros ladrilhos: a lista do que o jogador baixa é refeita.
+            _recalcular_nevoa(connection, _cena(connection, campanha_id, cena_id))
+        versao = _tocar(connection, cena_id)
+        resposta = _montar(connection, campanha_id, acesso, user, cena_id)
+    _avisar(campanha_id, versao)
+    return resposta
+
+
+def _recalcular_nevoa(connection, cena, estado: dict | None = None) -> None:
+    estado = estado or nevoa.ler(cena["nevoa"])
+    mapa_da_cena = _mapa_da_cena(connection, cena)
+    ladrilhos = (
+        nevoa.ladrilhos_liberados(estado["formas"], int(cena["largura"]), int(cena["altura"]), mapa_da_cena["chaves"])
+        if mapa_da_cena else []
+    )
+    connection.execute(
+        "UPDATE mapa_cenas SET nevoa=%s, nevoa_ladrilhos=%s WHERE id=%s",
+        (Jsonb(estado), ladrilhos, cena["id"]),
+    )
+
+
+@router.post("/{campanha_id}/cenas/{cena_id}/nevoa")
+def mudar_nevoa(
+    campanha_id: UUID,
+    cena_id: UUID,
+    payload: NevoaInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Liga ou desliga a névoa, acrescenta uma forma, desfaz a última, cobre ou revela tudo."""
+    with database.connection() as connection:
+        acesso = require_campaign_manager(connection, campanha_id, user.id)
+        cena = _cena(connection, campanha_id, cena_id, travar=True)
+        estado = nevoa.ler(cena["nevoa"])
+        largura, altura = int(cena["largura"]), int(cena["altura"])
+        try:
+            if payload.ligada is not None:
+                estado["ligada"] = payload.ligada
+            if payload.cobrir_tudo:
+                estado["formas"] = []
+            if payload.revelar_tudo:
+                estado["formas"] = [nevoa.normalizar_forma(
+                    {"op": "revelar", "tipo": "retangulo", "x": 0, "y": 0, "w": largura, "h": altura}, largura, altura,
+                )]
+            if payload.desfazer and estado["formas"]:
+                estado["formas"].pop()
+            if payload.forma is not None:
+                estado["formas"].append(nevoa.normalizar_forma(payload.forma, largura, altura))
+                nevoa.caber(estado["formas"])
+        except ErroMapa as erro:
+            raise _erro_mapa(erro) from None
+        _recalcular_nevoa(connection, cena, estado)
+        versao = _tocar(connection, cena_id)
+        resposta = _montar(connection, campanha_id, acesso, user, cena_id)
+    _avisar(campanha_id, versao)
+    return resposta
+
+
+@router.put("/{campanha_id}/cenas/{cena_id}/clima")
+def mudar_clima(
+    campanha_id: UUID,
+    cena_id: UUID,
+    payload: dict,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """O clima inteiro da cena de uma vez: efeitos e vento. Todos na mesa veem o mesmo."""
+    with database.connection() as connection:
+        acesso = require_campaign_manager(connection, campanha_id, user.id)
+        cena = _cena(connection, campanha_id, cena_id, travar=True)
+        try:
+            clima = mapa.normalizar_clima(payload, int(cena["largura"]), int(cena["altura"]))
+        except ErroMapa as erro:
+            raise _erro_mapa(erro) from None
+        connection.execute("UPDATE mapa_cenas SET clima=%s WHERE id=%s", (Jsonb(clima), cena_id))
         versao = _tocar(connection, cena_id)
         resposta = _montar(connection, campanha_id, acesso, user, cena_id)
     _avisar(campanha_id, versao)
@@ -896,6 +994,8 @@ def _regras_sync(database: Database, campanha_id: UUID) -> tempo_real.Regras:
                     (list(personagens),),
                 ).fetchall()
             }
+    estado_nevoa = nevoa.ler(cena["nevoa"])
+    cobertura = nevoa.Nevoa(estado_nevoa["formas"]) if estado_nevoa["ligada"] else None
     regras = {}
     for token in tokens:
         participante = ligacoes[str(token["id"])]
@@ -905,11 +1005,13 @@ def _regras_sync(database: Database, campanha_id: UUID) -> tempo_real.Regras:
             quem_ve=mapa.quem_ve(token, participante),
             donos=frozenset({dono} if dono else ()),
             movivel_livre=not token["oculto"] and visivel in ("parcial", "total"),
+            some_na_nevoa=mapa.some_na_nevoa(token, participante),
+            revelado=cobertura is None or cobertura.revelado(float(token["x"]), float(token["y"])),
         )
     return tempo_real.Regras(
         cena_id=str(cena["id"]), livre=bool(cena["livre"]),
         largura=int(cena["largura"]), altura=int(cena["altura"]), tokens=regras,
-        carregadas_em=time.monotonic(),
+        carregadas_em=time.monotonic(), nevoa=cobertura,
     )
 
 

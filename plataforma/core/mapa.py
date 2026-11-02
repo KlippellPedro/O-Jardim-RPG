@@ -7,6 +7,8 @@ o recorte daquele papel. A regra de segredo mora aqui num lugar só:
 - token oculto pelo Mestre não sai para jogador;
 - token ligado a um participante da sessão segue os quatro degraus de
   visibilidade da Sessão (oculto, desconhecido, parcial, total);
+- com a névoa ligada, monstro, NPC ou objeto com o centro coberto não sai para
+  jogador (a conta da névoa mora em `core/nevoa.py`);
 - as barras de cada token obedecem à escolha do dono (todos, só eu e o Mestre,
   ninguém), e nunca mostram número que o degrau do participante esconde.
 """
@@ -62,6 +64,13 @@ NOME_GENERICO = {
     "aliado": "Aliado Desconhecido",
     "jogador": "Alguém Desconhecido",
 }
+
+#: Efeitos de clima que o site desenha (src/pages/Mapa/motor/clima.ts).
+EFEITOS_CLIMA = ("chuva", "tempestade", "neve", "neblina", "areia", "cinzas", "folhas", "escuridao", "vazio", "fluxo")
+MAX_EFEITOS_CLIMA = 4
+#: Direção para onde o vento sopra, em graus na tela: 0 vai para a direita, 90 para baixo.
+VENTO_PADRAO = {"direcao": 100.0, "forca": 0.3}
+LUZ_PADRAO = 4.0
 
 
 class ErroMapa(Exception):
@@ -175,6 +184,65 @@ def normalizar_enquadramento(dados, atual: dict | None = None) -> dict:
     return enquadramento
 
 
+def _area_do_clima(dados, largura: int, altura: int) -> dict | None:
+    if dados is None:
+        return None
+    if not isinstance(dados, dict):
+        raise ErroMapa("area do clima invalida")
+    x = _numero(dados.get("x"), "x da area", -1e6, 1e6)
+    y = _numero(dados.get("y"), "y da area", -1e6, 1e6)
+    w = _numero(dados.get("w"), "largura da area", -1e6, 1e6)
+    h = _numero(dados.get("h"), "altura da area", -1e6, 1e6)
+    x0, x1 = sorted((max(0.0, min(largura, x)), max(0.0, min(largura, x + w))))
+    y0, y1 = sorted((max(0.0, min(altura, y)), max(0.0, min(altura, y + h))))
+    if x1 - x0 < 20 or y1 - y0 < 20:
+        raise ErroMapa("a area do clima ficou pequena demais ou fora do mapa")
+    return {"x": round(x0, 1), "y": round(y0, 1), "w": round(x1 - x0, 1), "h": round(y1 - y0, 1)}
+
+
+def normalizar_clima(dados, largura: int, altura: int) -> dict:
+    """Até quatro efeitos (cada um no mapa inteiro ou numa área) e um vento para a cena."""
+    if not isinstance(dados, dict):
+        raise ErroMapa("clima invalido")
+    brutos = dados.get("efeitos", [])
+    if not isinstance(brutos, list) or len(brutos) > MAX_EFEITOS_CLIMA:
+        raise ErroMapa(f"a cena junta ate {MAX_EFEITOS_CLIMA} efeitos de clima")
+    efeitos = []
+    for bruto in brutos:
+        if not isinstance(bruto, dict) or bruto.get("tipo") not in EFEITOS_CLIMA:
+            raise ErroMapa("efeito de clima desconhecido")
+        efeito = {
+            "tipo": bruto["tipo"],
+            "intensidade": round(_numero(bruto.get("intensidade", 0.5), "intensidade", 0.05, 1), 2),
+            "area": _area_do_clima(bruto.get("area"), largura, altura),
+        }
+        if efeito["tipo"] == "fluxo":
+            if bruto.get("fluxo") not in FLUXOS:
+                raise ErroMapa("escolha o Fluxo das particulas")
+            efeito["fluxo"] = bruto["fluxo"]
+        if efeito["tipo"] == "escuridao":
+            efeito["luz"] = round(_numero(bruto.get("luz", LUZ_PADRAO), "luz em volta dos tokens", 0, 30), 1)
+        efeitos.append(efeito)
+    vento = dados.get("vento", VENTO_PADRAO)
+    if not isinstance(vento, dict):
+        raise ErroMapa("vento invalido")
+    return {
+        "efeitos": efeitos,
+        "vento": {
+            "direcao": round(_numero(vento.get("direcao", VENTO_PADRAO["direcao"]), "direcao do vento", -360, 720) % 360, 1),
+            "forca": round(_numero(vento.get("forca", VENTO_PADRAO["forca"]), "forca do vento", 0, 1), 2),
+        },
+    }
+
+
+def ler_clima(dados, largura: int, altura: int) -> dict:
+    """O clima guardado; um registro antigo ou quebrado vira céu limpo em vez de erro."""
+    try:
+        return normalizar_clima(dados if isinstance(dados, dict) else {}, largura, altura)
+    except ErroMapa:
+        return normalizar_clima({}, largura, altura)
+
+
 def moldura_efetiva(token: dict, personagem: str | None, moldura_personagem: str | None, moldura_mesa: str | None) -> str:
     """A da mesa (o Mestre travou) vale acima de tudo; depois a do token; depois a do personagem;
     sem escolha, personagem usa a escada do nível e o resto, o aro do lado."""
@@ -214,6 +282,11 @@ def pode_mover(token: dict, participante: dict | None, quem: Espectador, livre: 
     if not livre:
         return False
     return degrau_de(token, participante, quem) in ("parcial", "total")
+
+
+def some_na_nevoa(token: dict, participante: dict | None) -> bool:
+    """Monstro, NPC ou objeto some para o jogador na névoa; personagem de jogador segue à vista da mesa."""
+    return personagem_do_token(token, participante) is None
 
 
 def degrau_de(token: dict, participante: dict | None, quem: Espectador) -> str | None:
@@ -321,10 +394,16 @@ def visao_token(
     condicoes: list | None = None,
     moldura: str = "lado",
     enquadramento: dict | None = None,
+    na_nevoa: bool = False,
 ) -> dict | None:
-    """O token como este espectador o recebe, ou None quando não deve nem saber que existe."""
+    """O token como este espectador o recebe, ou None quando não deve nem saber que existe.
+
+    `na_nevoa`: a névoa da cena está ligada e cobre o centro do token.
+    """
     degrau = degrau_de(token, participante, quem)
     if degrau is None:
+        return None
+    if na_nevoa and not quem.gestor and not e_dono(token, participante, quem) and some_na_nevoa(token, participante):
         return None
     identidade = degrau in ("parcial", "total")
     nome = token.get("nome") or (participante or {}).get("nome") or "Token"

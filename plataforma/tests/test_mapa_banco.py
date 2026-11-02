@@ -327,6 +327,100 @@ class MapaBancoTests(unittest.TestCase):
         self.assertEqual(visto["cena"]["mapa"]["largura"], 800)
         self.assertEqual(visto["cena"]["largura"], 800)
 
+    # ---------------------------------------------------------- névoa e clima
+
+    def nevoa(self, cena_id, usuario=None, **dados):
+        return mapa.mudar_nevoa(self.campanha_id, uuid.UUID(cena_id), mapa.NevoaInput(**dados),
+                                user=usuario or self.mestre, database=self.database)
+
+    def pedaco(self, usuario, item_id, chave):
+        try:
+            return acervo.ler_pedaco(item_id, chave, user=usuario, database=self.database).status_code
+        except HTTPException as erro:
+            return erro.status_code
+
+    def test_nevoa_entrega_ao_jogador_so_os_ladrilhos_revelados(self):
+        item_id, criado = self._item(largura=3000, altura=2000, nome="Masmorra")
+        acervo.concluir_item(item_id, user=self.mestre, database=self.database)
+        self._sessao("aberta")
+        cena_id = self.criar_cena("Masmorra", mapa_id=item_id)["cena"]["id"]
+        # Sem névoa, tudo como antes.
+        self.assertEqual(self.pedaco(self.ana, item_id, "n0/2/1"), 200)
+        coberta = self.nevoa(cena_id, ligada=True)
+        self.assertEqual(coberta["cena"]["nevoa"]["ladrilhos"], None)  # o Mestre baixa tudo
+        self.assertEqual(self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"], [])
+        for chave in ("n0/0/0", "n2/0/0", "mini"):
+            self.assertEqual(self.pedaco(self.ana, item_id, chave), 404, chave)
+            self.assertEqual(self.pedaco(self.mestre, item_id, chave), 200, chave)
+        self.nevoa(cena_id, forma={"op": "revelar", "tipo": "retangulo", "x": 1100, "y": 100, "w": 200, "h": 200})
+        visto = self.ver(self.ana)["cena"]["nevoa"]
+        self.assertEqual(visto["ladrilhos"], ["n0/1/0"])
+        self.assertEqual(len(visto["formas"]), 1)
+        self.assertEqual(self.pedaco(self.ana, item_id, "n0/1/0"), 200)
+        self.assertEqual(self.pedaco(self.ana, item_id, "n0/0/0"), 404)
+        self.nevoa(cena_id, desfazer=True)
+        self.assertEqual(self.pedaco(self.ana, item_id, "n0/1/0"), 404)
+        self.nevoa(cena_id, revelar_tudo=True)
+        self.assertEqual(self.pedaco(self.ana, item_id, "n2/0/0"), 200)
+        self.assertEqual(self.pedaco(self.ana, item_id, "mini"), 404)
+        self.nevoa(cena_id, cobrir_tudo=True)
+        self.assertEqual(self.pedaco(self.ana, item_id, "n0/2/1"), 404)
+        self.nevoa(cena_id, ligada=False)
+        self.assertEqual(self.pedaco(self.ana, item_id, "n0/2/1"), 200)
+
+    def test_trocar_o_mapa_refaz_a_lista_da_nevoa(self):
+        pequeno, _ = self._item(largura=800, altura=600, nome="Sala")
+        grande, _ = self._item(largura=3000, altura=2000, nome="Salao")
+        for item_id in (pequeno, grande):
+            acervo.concluir_item(item_id, user=self.mestre, database=self.database)
+        self._sessao("aberta")
+        cena_id = self.criar_cena("Sala", mapa_id=pequeno)["cena"]["id"]
+        self.nevoa(cena_id, ligada=True, forma={"op": "revelar", "tipo": "retangulo", "x": 0, "y": 0, "w": 3000, "h": 2000})
+        self.assertEqual(self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"], ["n0/0/0"])
+        mapa.editar_cena(self.campanha_id, uuid.UUID(cena_id), mapa.CenaEdicao(mapa_id=grande), user=self.mestre, database=self.database)
+        self.assertIn("n0/2/1", self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"])
+        self.assertEqual(self.pedaco(self.ana, grande, "n0/2/1"), 200)
+        self.assertEqual(self.pedaco(self.ana, pequeno, "n0/0/0"), 404)  # saiu da cena
+
+    def test_monstro_na_nevoa_nao_chega_ao_jogador_e_personagem_sim(self):
+        self._sessao("aberta")
+        cena_id = self.criar_cena()["cena"]["id"]
+        lobo = self._participante("Lobo")
+        for dados in ({"participante_id": lobo, "x": 150, "y": 150}, {"personagem_id": self.mira, "x": 250, "y": 150},
+                      {"nome": "Bau", "x": 1500, "y": 150}):
+            mapa.criar_token(self.campanha_id, uuid.UUID(cena_id), mapa.TokenInput(**dados), user=self.mestre, database=self.database)
+        self.nevoa(cena_id, ligada=True, forma={"op": "revelar", "tipo": "retangulo", "x": 1000, "y": 0, "w": 1000, "h": 1000})
+        self.assertEqual(sorted(t["nome"] for t in self.ver(self.bruno)["tokens"]), ["Bau", "Mira"])
+        self.assertEqual(len(self.ver(self.mestre)["tokens"]), 3)
+        regras = mapa._regras_sync(self.database, self.campanha_id)
+        self.assertIsNotNone(regras.nevoa)
+        por_nome = {t["nome"]: t["id"] for t in self.ver(self.mestre)["tokens"]}
+        self.assertTrue(regras.tokens[por_nome["Lobo"]].some_na_nevoa)
+        self.assertFalse(regras.tokens[por_nome["Lobo"]].revelado)
+        self.assertFalse(regras.tokens[por_nome["Mira"]].some_na_nevoa)
+        self.assertTrue(regras.tokens[por_nome["Bau"]].revelado)
+
+    def test_so_o_mestre_mexe_na_nevoa_e_no_clima_e_o_clima_chega_a_todos(self):
+        self._sessao("aberta")
+        cena_id = uuid.UUID(self.criar_cena()["cena"]["id"])
+        with self.assertRaises(HTTPException) as erro:
+            self.nevoa(str(cena_id), usuario=self.ana, ligada=True)
+        self.assertEqual(erro.exception.status_code, 403)
+        with self.assertRaises(HTTPException) as erro:
+            mapa.mudar_clima(self.campanha_id, cena_id, {"efeitos": [{"tipo": "chuva"}]}, user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        with self.assertRaises(HTTPException) as erro:
+            mapa.mudar_clima(self.campanha_id, cena_id, {"efeitos": [{"tipo": "granizo"}]}, user=self.mestre, database=self.database)
+        self.assertEqual(erro.exception.status_code, 422)
+        mapa.mudar_clima(self.campanha_id, cena_id, {"efeitos": [{"tipo": "neve", "intensidade": 0.4}], "vento": {"direcao": 45, "forca": 0.8}},
+                         user=self.mestre, database=self.database)
+        clima = self.ver(self.ana)["cena"]["clima"]
+        self.assertEqual(clima["efeitos"], [{"tipo": "neve", "intensidade": 0.4, "area": None}])
+        self.assertEqual(clima["vento"], {"direcao": 45.0, "forca": 0.8})
+        with self.assertRaises(HTTPException) as erro:
+            self.nevoa(str(cena_id), forma={"op": "revelar", "tipo": "pincel", "raio": 0.1, "pontos": [[1, 1]]})
+        self.assertEqual(erro.exception.status_code, 422)
+
     def test_mestre_nao_usa_imagem_de_outro_mestre(self):
         outro = self._usuario("outro@example.com", "Outro", "assistente", plataforma="mestre")
         criado = acervo.criar_item(acervo.ItemInput(nome="Dele", largura=10, altura=10), user=outro, database=self.database)

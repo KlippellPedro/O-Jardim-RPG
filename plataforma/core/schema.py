@@ -2256,4 +2256,17 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        61,
+        "nevoa_e_clima_do_mapa",
+        (
+            # Névoa de guerra da cena: {"ligada": bool, "formas": [...]} (core/nevoa.py).
+            "ALTER TABLE mapa_cenas ADD COLUMN IF NOT EXISTS nevoa JSONB NOT NULL DEFAULT '{}'::jsonb",
+            # Ladrilhos do mapa que o jogador pode baixar com a névoa ligada. Calculado a cada
+            # mudança da névoa ou do mapa; o acervo confere a chave pedida contra esta lista.
+            "ALTER TABLE mapa_cenas ADD COLUMN IF NOT EXISTS nevoa_ladrilhos TEXT[] NOT NULL DEFAULT '{}'",
+            # Clima da cena: efeitos (chuva, neve, neblina...), cada um no mapa inteiro ou numa área, e o vento.
+            "ALTER TABLE mapa_cenas ADD COLUMN IF NOT EXISTS clima JSONB NOT NULL DEFAULT '{}'::jsonb",
+        ),
+    ),
 )

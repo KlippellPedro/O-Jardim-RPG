@@ -79,3 +79,41 @@ test('sigla das condições no token', async () => {
   assert.equal(siglaDaCondicao('caído'), 'Ca');
   assert.equal(siglaDaCondicao(' '), '?');
 });
+
+test('névoa: pincel guarda um ponto a cada pedaço do raio e retângulo vale de qualquer canto', async () => {
+  const { acrescentarAoTraco, formaDoRetangulo, formaDoTraco, fechaPoligono } = await import('../../src/pages/Mapa/motor/nevoaGeometria');
+  const traco = [{ x: 0, y: 0 }];
+  assert.equal(acrescentarAoTraco(traco, { x: 10, y: 0 }, 100), false);
+  assert.equal(acrescentarAoTraco(traco, { x: 40, y: 0 }, 100), true);
+  assert.deepEqual(formaDoTraco('revelar', traco, 1), { op: 'revelar', tipo: 'pincel', raio: 4, pontos: [[0, 0], [40, 0]] });
+  assert.deepEqual(formaDoRetangulo('esconder', { x: 300, y: 200 }, { x: 100.04, y: 50 }), { op: 'esconder', tipo: 'retangulo', x: 100, y: 50, w: 200, h: 150 });
+  assert.equal(formaDoRetangulo('revelar', { x: 0, y: 0 }, { x: 2, y: 90 }), null);
+  const pontos = [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 100, y: 100 }];
+  assert.equal(fechaPoligono(pontos, { x: 6, y: 6 }, 1), true);
+  assert.equal(fechaPoligono(pontos, { x: 6, y: 6 }, 0.5), true);
+  assert.equal(fechaPoligono(pontos, { x: 30, y: 30 }, 1), false);
+  assert.equal(fechaPoligono(pontos.slice(0, 2), { x: 0, y: 0 }, 1), false);
+});
+
+test('névoa: o jogador pede só os ladrilhos liberados e busca de perto o que a versão reduzida não cobre', async () => {
+  const { chavesDoFundo, detalheSempre } = await import('../../src/pages/Mapa/motor/nevoaGeometria');
+  const chaves = chavesEsperadas(8000, 6000);
+  assert.deepEqual(chavesDoFundo(chaves, null), { chaves: ['n2/0/0', 'n2/0/1', 'n2/1/0', 'n2/1/1'], escala: 4 });
+  const liberados = new Set(['n2/0/0', 'n0/0/0', 'n0/4/0']);
+  assert.deepEqual(chavesDoFundo(chaves, liberados).chaves, ['n2/0/0']);
+  assert.equal(detalheSempre('n0/0/0', liberados), false);
+  assert.equal(detalheSempre('n0/4/0', liberados), true);
+  assert.equal(detalheSempre('n0/5/0', liberados), false);
+  assert.equal(detalheSempre('n0/4/0', null), false);
+  const pequeno = chavesEsperadas(800, 600);
+  assert.deepEqual(chavesDoFundo(pequeno, new Set()), { chaves: [], escala: 1 });
+});
+
+test('clima: os efeitos do painel são os mesmos do servidor', async () => {
+  const { EFEITOS_CLIMA: EFEITOS, MAX_EFEITOS_CLIMA: MAX_EFEITOS } = await import('../../src/pages/Mapa/motor/climaCatalogo');
+  const { readFileSync } = await import('node:fs');
+  const servidor = readFileSync(new URL('../../plataforma/core/mapa.py', import.meta.url), 'utf-8');
+  const tipos = servidor.match(/EFEITOS_CLIMA = \(([^)]*)\)/)![1].match(/"([a-z]+)"/g)!.map((m) => m.slice(1, -1));
+  assert.deepEqual(EFEITOS.map((e) => e.id), tipos);
+  assert.equal(MAX_EFEITOS, Number(servidor.match(/MAX_EFEITOS_CLIMA = (\d+)/)![1]));
+});

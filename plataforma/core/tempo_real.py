@@ -4,6 +4,11 @@ Enquanto alguém arrasta um token, o navegador manda a posição umas 20 vezes p
 segundo. O servidor só confere e repassa, sem gravar; quando o token é solto, a
 posição final vai para o banco. Ping e régua também só passam por aqui.
 
+Com a névoa ligada, o arrasto de um monstro coberto não chega ao jogador. Se ele
+sai da névoa no meio do caminho, a posição vai para o banco e os jogadores
+recarregam a cena (só então sabem que ele existe); se entra, eles recebem
+`sumiu`.
+
 Uma instância só de uvicorn atende o site, então tudo mora em memória, como em
 `core/live_session.py`. As regras de cada campanha (que token existe, quem vê,
 quem move) ficam num retrato carregado do banco pela rota e jogado fora a cada
@@ -24,6 +29,8 @@ import time
 from collections import deque
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable
+
+from core.nevoa import Nevoa
 
 log = logging.getLogger("jardim-plataforma")
 
@@ -83,6 +90,10 @@ class RegraToken:
     donos: frozenset[str]
     #: Na cena livre, quem não é dono pode mover este token (ele aparece por inteiro).
     movivel_livre: bool
+    #: Monstro, NPC ou objeto: com a névoa ligada, some para o jogador enquanto está coberto.
+    some_na_nevoa: bool = False
+    #: À vista na posição gravada, para saber se o primeiro arrasto o tira ou o põe na névoa.
+    revelado: bool = True
 
 
 @dataclass
@@ -93,6 +104,8 @@ class Regras:
     altura: int
     tokens: dict[str, RegraToken]
     carregadas_em: float = field(default_factory=time.monotonic)
+    #: As formas da névoa da cena ativa, ou None com a névoa desligada.
+    nevoa: Nevoa | None = None
 
     def vencidas(self) -> bool:
         return time.monotonic() - self.carregadas_em > VALIDADE_REGRAS_S
@@ -102,6 +115,8 @@ class Regras:
 class Sala:
     conexoes: set = field(default_factory=set)
     regras: Regras | None = None
+    #: O que a mesa sabe de cada token sujeito à névoa (à vista ou não), para avisar só quando muda.
+    na_nevoa: dict[str, bool] = field(default_factory=dict)
 
 
 _salas: dict[str, Sala] = {}
@@ -164,6 +179,7 @@ def _invalidar(campanha_id: str, versao: int | None) -> None:
     if not sala:
         return
     sala.regras = None
+    sala.na_nevoa.clear()
     if versao is not None:
         mensagem = json.dumps({"t": "mudou", "versao": versao})
         for conexao in list(sala.conexoes):
@@ -180,9 +196,12 @@ def esquecer_regras(campanha_id) -> None:
     _no_loop(_invalidar, str(campanha_id), None)
 
 
-def _pode_ver(conexao: Conexao, regra: RegraToken) -> bool:
-    if conexao.gestor or regra.quem_ve == "todos":
+def _pode_ver(conexao: Conexao, regra: RegraToken, a_vista: bool = True) -> bool:
+    """`a_vista`: o token não está coberto pela névoa (ou não some nela)."""
+    if conexao.gestor:
         return True
+    if regra.quem_ve == "todos":
+        return a_vista or conexao.usuario_id in regra.donos
     if regra.quem_ve == "donos":
         return conexao.usuario_id in regra.donos
     return False
@@ -200,14 +219,22 @@ def _numero(valor) -> float | None:
     return float(valor)
 
 
-def _repassar(sala: Sala, origem: Conexao, mensagem: dict, regra: RegraToken | None = None) -> None:
+def _repassar(sala: Sala, origem: Conexao, mensagem: dict, regra: RegraToken | None = None, a_vista: bool = True) -> None:
     texto = json.dumps(mensagem, ensure_ascii=False)
     for conexao in list(sala.conexoes):
         if conexao is origem:
             continue
-        if regra is not None and not _pode_ver(conexao, regra):
+        if regra is not None and not _pode_ver(conexao, regra, a_vista):
             continue
         conexao.entregar(texto)
+
+
+def _avisar_quem_nao_via(sala: Sala, regra: RegraToken, mensagem: dict) -> None:
+    """Para quem a névoa decide se o token aparece: jogadores que não são donos dele."""
+    texto = json.dumps(mensagem, ensure_ascii=False)
+    for conexao in list(sala.conexoes):
+        if not conexao.gestor and conexao.usuario_id not in regra.donos:
+            conexao.entregar(texto)
 
 
 CarregarRegras = Callable[[], Awaitable[Regras]]
@@ -245,7 +272,15 @@ async def processar(
             return {"t": "erro", "motivo": "voce nao move este token", "token": token_id}
         x = max(0.0, min(float(regras.largura), x))
         y = max(0.0, min(float(regras.altura), y))
-        if tipo == "soltar":
+        a_vista, antes = True, True
+        if regras.nevoa is not None and regra.some_na_nevoa and regra.quem_ve == "todos":
+            a_vista = regras.nevoa.revelado(x, y)
+            antes = sala.na_nevoa.get(token_id, regra.revelado)
+            sala.na_nevoa[token_id] = a_vista
+        saiu_da_nevoa = a_vista and not antes
+        if tipo == "soltar" or saiu_da_nevoa:
+            # Saindo da névoa no meio do arrasto, a posição já vai para o banco: os
+            # jogadores ainda não conhecem o token e o GET deles precisa trazê-lo aqui.
             if not await gravar_posicao(token_id, x, y):
                 return {"t": "erro", "motivo": "o token saiu da cena", "token": token_id}
         _repassar(sala, conexao, {
@@ -255,7 +290,11 @@ async def processar(
             "y": round(y, 2),
             "ts": agora_ms(),
             "por": conexao.usuario_id,
-        }, regra)
+        }, regra, a_vista)
+        if saiu_da_nevoa:
+            _avisar_quem_nao_via(sala, regra, {"t": "mudou", "versao": int(agora_ms())})
+        elif antes and not a_vista:
+            _avisar_quem_nao_via(sala, regra, {"t": "sumiu", "token": token_id})
         return None
 
     if tipo == "ping":
