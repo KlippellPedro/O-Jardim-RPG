@@ -2,6 +2,22 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-02-mapa-ao-vivo",
+      "data": "2026-11-02",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa ao vivo: tokens que andam na tela de todo mundo",
+      "detalhes": [
+        "Na Sessão há um botão novo, Mapa. Ele abre o mapa da cena em tela cheia, feito para jogar no PC.",
+        "Arraste o token do seu personagem e a mesa inteira vê ele andando na hora. Ao soltar, ele encaixa na casa da grade.",
+        "O token usa a foto da sua ficha, com a moldura do seu nível. Em cima dele ficam as barras de Vida, Mana, Estamina e Sanidade.",
+        "Clique no seu token para escolher quais barras aparecem e quem vê: todo mundo, só você e o Mestre, ou ninguém.",
+        "Régua em casas e metros, e ping para apontar um lugar: segure Alt e clique, ou use a ferramenta de ping.",
+        "Do lado do mapa ficam a iniciativa, as rolagens da mesa e a sua ficha inteira, sem precisar trocar de página.",
+        "O mapa abre para os jogadores quando a sessão estiver ao vivo."
+      ]
+    },
+    {
       "id": "2026-11-01-documentos-objetos-e-astratech",
       "data": "2026-11-01",
       "tipo": "novo",

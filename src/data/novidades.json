@@ -1,6 +1,22 @@
 {
   "itens": [
     {
+      "id": "2026-11-02-mapa-ao-vivo",
+      "data": "2026-11-02",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa ao vivo: tokens que andam na tela de todo mundo",
+      "detalhes": [
+        "Na Sessão há um botão novo, Mapa. Ele abre o mapa da cena em tela cheia, feito para jogar no PC.",
+        "Arraste o token do seu personagem e a mesa inteira vê ele andando na hora. Ao soltar, ele encaixa na casa da grade.",
+        "O token usa a foto da sua ficha, com a moldura do seu nível. Em cima dele ficam as barras de Vida, Mana, Estamina e Sanidade.",
+        "Clique no seu token para escolher quais barras aparecem e quem vê: todo mundo, só você e o Mestre, ou ninguém.",
+        "Régua em casas e metros, e ping para apontar um lugar: segure Alt e clique, ou use a ferramenta de ping.",
+        "Do lado do mapa ficam a iniciativa, as rolagens da mesa e a sua ficha inteira, sem precisar trocar de página.",
+        "O mapa abre para os jogadores quando a sessão estiver ao vivo."
+      ]
+    },
+    {
       "id": "2026-11-01-documentos-objetos-e-astratech",
       "data": "2026-11-01",
       "tipo": "novo",
@@ -990,16 +1006,6 @@
         "Os cartões de Árvore, raça e classe do assistente de criação ganharam emblemas coloridos.",
         "Rolar 7d20 agora joga sete dados 3D na tela, e os valores entram nos atributos quando os dados pousam.",
         "Depois de Finalizar Criação o personagem nasce numa cerimônia: a constelação da classe acende a primeira estrela, na cor dela, e você escolhe entre abrir a ficha ou voltar à lista."
-      ]
-    },
-    {
-      "id": "2026-10-10-iniciativa-em-ordem",
-      "data": "2026-10-10",
-      "tipo": "melhoria",
-      "area": "Sessão",
-      "titulo": "Iniciar combate já na ordem da iniciativa",
-      "detalhes": [
-        "Se a fila estiver fora de ordem na hora de começar, o Mestre recebe um aviso e pode escolher Ordenar e começar, Começar assim ou Voltar. Antes, quem tinha a iniciativa menor podia acabar jogando primeiro."
       ]
     }
   ]
