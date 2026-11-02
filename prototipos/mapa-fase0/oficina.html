@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fase 0: oficina</title>
+    <style>
+      :root { color-scheme: dark; --fundo: #0b0b10; --texto: #e8e6f0; --linha: #2a2a36; --destaque: #c9a227; }
+      body { margin: 0; padding: 12px 16px; background: var(--fundo); color: var(--texto); font: 14px system-ui, sans-serif; }
+      h1 { font-size: 18px; margin: 0 0 8px; }
+      h2 { font-size: 15px; margin: 16px 0 6px; }
+      button { background: #1d1d28; color: var(--texto); border: 1px solid var(--destaque); border-radius: 6px; padding: 4px 10px; cursor: pointer; margin: 0 6px 6px 0; }
+      button:disabled { opacity: 0.5; cursor: progress; }
+      .lado { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .caixa { border: 1px solid var(--linha); border-radius: 6px; min-height: 120px; overflow: hidden;
+        background: repeating-conic-gradient(#222 0% 25%, #2c2c2c 0% 50%) 0 0 / 20px 20px; }
+      .caixa canvas { display: block; max-width: 100%; height: auto; }
+      ol { color: #cfcbe0; }
+    </style>
+  </head>
+  <body>
+    <h1>Fase 0: oficina de imagem</h1>
+    <p>
+      <label>Usar uma imagem sua: <input type="file" id="arquivo" accept="image/*" /></label>
+      (sem imagem, os testes usam a Dama Solitária num cenário e a ilustração do Anão)
+    </p>
+    <h2>Remover fundo</h2>
+    <button type="button" data-acao="fundo:modnet:wasm">MODNet (o escolhido)</button>
+    <button type="button" data-acao="fundo:ormbg:wasm">ormbg</button>
+    <button type="button" data-acao="fundo:modnet:webgpu">MODNet na placa de vídeo (sai errado hoje)</button>
+    <div class="lado">
+      <div class="caixa" id="fundo-antes"></div>
+      <div class="caixa" id="fundo-depois"></div>
+    </div>
+    <h2>Melhorar qualidade (4x)</h2>
+    <button type="button" data-acao="melhorar:geral:webgpu">Real-ESRGAN geral (WebGPU)</button>
+    <button type="button" data-acao="melhorar:desenho:webgpu">Real-ESRGAN desenho (WebGPU)</button>
+    <p>À esquerda, ampliação comum do navegador. À direita, Real-ESRGAN.</p>
+    <div class="caixa" id="melhorar-comparacao"></div>
+    <h2>Registro</h2>
+    <ol id="registro"></ol>
+    <script type="module" src="./oficina.ts"></script>
+  </body>
+</html>

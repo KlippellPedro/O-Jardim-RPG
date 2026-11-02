@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fase 0: mapa ao vivo</title>
+    <style>
+      :root { color-scheme: dark; --fundo: #0b0b10; --texto: #e8e6f0; --linha: #2a2a36; --destaque: #c9a227; }
+      * { box-sizing: border-box; }
+      html, body, #raiz { margin: 0; height: 100%; background: var(--fundo); color: var(--texto); font: 14px system-ui, sans-serif; }
+      .pagina { display: grid; grid-template-rows: auto auto 1fr auto; height: 100%; }
+      header { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--linha); }
+      header label { display: flex; gap: 6px; align-items: center; }
+      header button { background: #1d1d28; color: var(--texto); border: 1px solid var(--destaque); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+      .estado { margin: 0; padding: 4px 12px; color: #a9a6b8; }
+      main { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 8px; min-height: 0; }
+      section { display: grid; grid-template-rows: auto 1fr; min-height: 0; }
+      h2 { margin: 4px 0; font-size: 14px; display: flex; justify-content: space-between; }
+      h2 span { color: var(--destaque); font-variant-numeric: tabular-nums; }
+      .palco { position: relative; min-height: 0; border: 1px solid var(--linha); border-radius: 6px; overflow: hidden; }
+      .palco canvas { position: absolute; inset: 0; }
+      .resultados { margin: 0; padding: 6px 12px 8px 32px; max-height: 22vh; overflow: auto; color: #cfcbe0; }
+    </style>
+  </head>
+  <body>
+    <div id="raiz"></div>
+    <script type="module" src="./mapa.tsx"></script>
+  </body>
+</html>
