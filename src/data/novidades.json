@@ -1,6 +1,21 @@
 {
   "itens": [
     {
+      "id": "2026-11-02-nevoa-e-clima",
+      "data": "2026-11-02",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: névoa de guerra e clima na cena",
+      "detalhes": [
+        "O Mestre pode cobrir o mapa com névoa e ir revelando o que o grupo descobre, com pincel, retângulo ou polígono.",
+        "O que ainda está na névoa nem chega ao seu aparelho: não adianta procurar, o pedaço escondido do mapa fica com o Mestre.",
+        "Monstros e figuras dentro da névoa somem da sua tela e aparecem quando saem dela. Os personagens do grupo continuam sempre à vista.",
+        "Chegou o clima: chuva, tempestade com relâmpagos, neve, neblina, tempestade de areia, cinzas e brasas, folhas ao vento, escuridão com luz em volta dos personagens, o véu do Vazio e partículas na cor de um Fluxo.",
+        "O clima acompanha o vento que o Mestre escolher e pode cobrir o mapa inteiro ou só um pedaço dele.",
+        "Se o seu aparelho sofrer com os efeitos, o botão da nuvem na barra da esquerda desliga o clima só para você."
+      ]
+    },
+    {
       "id": "2026-11-02-molduras-e-oficina",
       "data": "2026-11-02",
       "tipo": "novo",
@@ -997,17 +1012,6 @@
       "detalhes": [
         "Quando há mesa ao vivo, o ícone da Sessão no menu ganha uma luz verde e a Home mostra um cartão Ao vivo agora com o botão para entrar. O Mestre vê uma luz âmbar enquanto a sessão está só em preparação.",
         "Se você estiver em outra tela quando o Mestre abrir a mesa, aparece um aviso com o botão Entrar na sessão. A Home também leva de volta à última ficha que você abriu."
-      ]
-    },
-    {
-      "id": "2026-10-10-telas-e-guias",
-      "data": "2026-10-10",
-      "tipo": "melhoria",
-      "area": "Jardim",
-      "titulo": "Telas que entram suavemente e guias que dá para pular",
-      "detalhes": [
-        "As telas agora entram com uma transição curta, e enquanto a página chega aparece o desenho dela no lugar do círculo girando.",
-        "Cada guia ganhou o botão Pular todos os guias. Ele desliga a abertura automática em todas as páginas; o botão de guia de cada página continua lá, e dá para religar em Configurações, Preferências, Guias automáticos."
       ]
     }
   ]

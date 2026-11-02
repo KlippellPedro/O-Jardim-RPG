@@ -2,6 +2,21 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-02-nevoa-e-clima",
+      "data": "2026-11-02",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: névoa de guerra e clima na cena",
+      "detalhes": [
+        "O Mestre pode cobrir o mapa com névoa e ir revelando o que o grupo descobre, com pincel, retângulo ou polígono.",
+        "O que ainda está na névoa nem chega ao seu aparelho: não adianta procurar, o pedaço escondido do mapa fica com o Mestre.",
+        "Monstros e figuras dentro da névoa somem da sua tela e aparecem quando saem dela. Os personagens do grupo continuam sempre à vista.",
+        "Chegou o clima: chuva, tempestade com relâmpagos, neve, neblina, tempestade de areia, cinzas e brasas, folhas ao vento, escuridão com luz em volta dos personagens, o véu do Vazio e partículas na cor de um Fluxo.",
+        "O clima acompanha o vento que o Mestre escolher e pode cobrir o mapa inteiro ou só um pedaço dele.",
+        "Se o seu aparelho sofrer com os efeitos, o botão da nuvem na barra da esquerda desliga o clima só para você."
+      ]
+    },
+    {
       "id": "2026-11-02-molduras-e-oficina",
       "data": "2026-11-02",
       "tipo": "novo",
