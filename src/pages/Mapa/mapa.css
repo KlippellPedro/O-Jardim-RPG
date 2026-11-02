@@ -765,6 +765,195 @@
   }
 }
 
+/* Oficina do Mestre: palco quadrado à esquerda, controles à direita. */
+.mapa-oficina {
+  position: absolute;
+  inset: 12px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 14px;
+  background: var(--mapa-painel);
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
+  z-index: 3;
+}
+
+.mapa-oficina > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--mapa-linha);
+}
+
+.mapa-oficina > header strong {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 15px;
+}
+
+.mapa-oficina-corpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  padding: 12px;
+}
+
+.mapa-oficina-palco {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+.mapa-oficina-palco canvas {
+  width: min(100%, 72vh);
+  aspect-ratio: 1;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 12px;
+  touch-action: none;
+}
+
+.mapa-oficina-vazio {
+  position: absolute;
+  color: var(--mapa-apagado);
+  pointer-events: none;
+}
+
+.mapa-oficina-progresso {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(420px, 90%);
+  padding: 8px 12px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+  background: rgba(10, 9, 14, 0.92);
+}
+
+.mapa-oficina-progresso span {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.mapa-oficina-progresso i {
+  display: block;
+  height: 4px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--mapa-ouro);
+}
+
+.mapa-oficina-controles {
+  min-height: 0;
+  overflow: auto;
+}
+
+.mapa-oficina-controles fieldset {
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+}
+
+.mapa-oficina-controles fieldset:disabled {
+  opacity: 0.5;
+}
+
+.mapa-oficina-controles legend {
+  padding: 0 4px;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mapa-oficina-controles select,
+.mapa-oficina-controles input[type='number'] {
+  padding: 5px 8px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--mapa-texto);
+}
+
+.mapa-ferramentas-oficina {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.mapa-ferramentas-oficina button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.mapa-ferramentas-oficina button.ativo {
+  border-color: var(--mapa-ouro);
+  color: var(--mapa-ouro);
+}
+
+.mapa-ferramentas-oficina label {
+  display: flex;
+  flex: 1;
+  gap: 6px;
+  align-items: center;
+  color: var(--mapa-apagado);
+}
+
+.mapa-molduras {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+  gap: 6px;
+  margin: 6px 0;
+}
+
+.mapa-molduras button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 2px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.mapa-molduras button.ativo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.1);
+  color: var(--mapa-texto);
+}
+
+.mapa-molduras canvas {
+  width: 46px;
+  height: 46px;
+}
+
+.mapa-molduras small {
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.mapa-menu-token .mapa-molduras {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 /* No celular o mapa abre e funciona; o painel vira gaveta por cima. */
 @media (max-width: 760px) {
   .mapa-pagina,
@@ -793,5 +982,10 @@
 
   .mapa-acervo-pastas {
     display: none;
+  }
+
+  .mapa-oficina-corpo {
+    grid-template-columns: 1fr;
+    overflow: auto;
   }
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Plus, Radio, Settings2, Trash2, X } from 'lucide-react';
 import type { ICena, ICenaPayload, IResumoCena } from '../../../services/mapaApi';
 import type { IGrade, TipoGrade } from '../motor/geometria';
+import { MOLDURAS } from '../motor/molduras';
 
 interface FaixaProps {
   cenas: IResumoCena[];
@@ -32,6 +33,8 @@ export const FaixaCenas = ({ cenas, vendo, onVer, onAtivar, onNova, onConfigurar
 
 interface ConfigProps {
   cena: ICena;
+  molduraMesa: string | null;
+  onMolduraMesa: (id: string | null) => void;
   onSalvar: (dados: ICenaPayload) => void;
   onApagar: () => void;
   onFechar: () => void;
@@ -44,7 +47,7 @@ const TIPOS_GRADE: Array<{ id: TipoGrade; rotulo: string }> = [
 ];
 
 /** Ajustes da cena. A grade se calibra mexendo nos números até casar com a do desenho. */
-export const ConfigCena = ({ cena, onSalvar, onApagar, onFechar }: ConfigProps) => {
+export const ConfigCena = ({ cena, molduraMesa, onMolduraMesa, onSalvar, onApagar, onFechar }: ConfigProps) => {
   const [nome, setNome] = useState(cena.nome);
   const [grade, setGrade] = useState<IGrade>(cena.grade);
   const espera = useRef<number | null>(null);
@@ -115,6 +118,13 @@ export const ConfigCena = ({ cena, onSalvar, onApagar, onFechar }: ConfigProps) 
         <span>
           <input type="checkbox" checked={cena.livre} onChange={(e) => onSalvar({ livre: e.target.checked })} /> Jogadores movem qualquer token que veem
         </span>
+      </label>
+      <label className="mapa-menu-linha">
+        Moldura da mesa (vale para todas as cenas)
+        <select value={molduraMesa ?? ''} onChange={(e) => onMolduraMesa(e.target.value || null)}>
+          <option value="">Cada um escolhe a sua</option>
+          {MOLDURAS.map((m) => <option key={m.id} value={m.id}>{m.rotulo}</option>)}
+        </select>
       </label>
       <div className="mapa-menu-botoes">
         {cena.mapa && <button type="button" className="mapa-botao" onClick={() => onSalvar({ sem_mapa: true })}>Tirar a imagem do mapa</button>}

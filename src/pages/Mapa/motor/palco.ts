@@ -8,7 +8,8 @@ import { Viewport } from 'pixi-viewport';
 import type { ICena, ITokenMapa } from '../../../services/mapaApi';
 import { urlImagemDoToken, urlPedaco } from '../../../services/mapaApi';
 import { encaixar, medir, raioHex, LADO_LADRILHO, type IGrade, type IPonto } from './geometria';
-import { TokenVisual } from './token';
+import { TokenVisual, esquecerTexturasDeMoldura } from './token';
+import { desenharRetrato, type Enquadramento } from './molduras';
 
 export type Ferramenta = 'mover' | 'regua' | 'ping';
 
@@ -34,21 +35,14 @@ async function texturaDe(url: string): Promise<Texture> {
   return Texture.from(imagem);
 }
 
-/** Retrato quadrado vira redondo antes de virar textura: o motor não precisa de máscara. */
-async function retratoRedondo(url: string): Promise<Texture> {
+/** Retrato quadrado vira redondo (com o enquadramento escolhido) antes de virar textura: o motor não precisa de máscara. */
+async function retratoRedondo(url: string, enquadramento: Enquadramento): Promise<Texture> {
   const resposta = await fetch(url, { credentials: 'same-origin' });
   if (!resposta.ok) throw new Error(`retrato ${resposta.status}`);
   const imagem = await createImageBitmap(await resposta.blob());
   const lado = 256;
   const tela = new OffscreenCanvas(lado, lado);
-  const ctx = tela.getContext('2d')!;
-  ctx.beginPath();
-  ctx.arc(lado / 2, lado / 2, lado / 2, 0, Math.PI * 2);
-  ctx.clip();
-  const escala = lado / Math.min(imagem.width, imagem.height);
-  const w = imagem.width * escala;
-  const h = imagem.height * escala;
-  ctx.drawImage(imagem, (lado - w) / 2, (lado - h) / 2, w, h);
+  desenharRetrato(tela.getContext('2d')!, lado, imagem, enquadramento);
   imagem.close();
   return Texture.from(tela.transferToImageBitmap());
 }
@@ -382,9 +376,11 @@ export class PalcoMapa {
       return;
     }
     const url = urlImagemDoToken(this.campanhaId, id, imagem);
-    if (!this.retratos.has(url)) this.retratos.set(url, retratoRedondo(url).catch(() => null));
-    const textura = await this.retratos.get(url)!;
-    if (this.tokens.get(id) === token && token.dados.imagem === imagem) token.definirRetrato(textura);
+    const { enquadramento } = token.dados;
+    const chave = `${url}|${enquadramento.zoom}|${enquadramento.x}|${enquadramento.y}`;
+    if (!this.retratos.has(chave)) this.retratos.set(chave, retratoRedondo(url, enquadramento).catch(() => null));
+    const textura = await this.retratos.get(chave)!;
+    if (this.tokens.get(id) === token && token.dados.imagem === imagem && token.dados.enquadramento === enquadramento) token.definirRetrato(textura);
   }
 
   private ligarToken(token: TokenVisual) {
@@ -515,6 +511,7 @@ export class PalcoMapa {
 
   destruir() {
     if (this.carregarVisiveis !== null) window.clearTimeout(this.carregarVisiveis);
+    esquecerTexturasDeMoldura();
     this.app.destroy({ removeView: true }, { children: true, texture: true, textureSource: true });
   }
 }

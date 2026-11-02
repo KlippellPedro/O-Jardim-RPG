@@ -2226,4 +2226,34 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "CREATE INDEX IF NOT EXISTS mapa_tokens_participante_idx ON mapa_tokens (participante_id)",
         ),
     ),
+    (
+        60,
+        "molduras_dos_tokens",
+        (
+            # Moldura escolhida para um token (vale para monstros e tokens soltos do Mestre).
+            """
+            ALTER TABLE mapa_tokens
+            ADD COLUMN IF NOT EXISTS moldura TEXT CHECK (moldura IS NULL OR length(moldura) <= 40)
+            """,
+            # O token do personagem é escolha do jogador e vale em todas as cenas: moldura e
+            # enquadramento da foto (zoom e deslocamento) moram aqui, fora da ficha.
+            """
+            CREATE TABLE IF NOT EXISTS personagem_token (
+                personagem_id UUID PRIMARY KEY REFERENCES personagens(id) ON DELETE CASCADE,
+                moldura TEXT CHECK (moldura IS NULL OR length(moldura) <= 40),
+                enquadramento JSONB NOT NULL DEFAULT '{}'::jsonb,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            # Ajustes do mapa que valem para a campanha inteira. `moldura_mesa`: quando o Mestre
+            # trava uma moldura, todos os tokens usam ela.
+            """
+            CREATE TABLE IF NOT EXISTS mapa_campanha (
+                campanha_id UUID PRIMARY KEY REFERENCES campanhas(id) ON DELETE CASCADE,
+                moldura_mesa TEXT CHECK (moldura_mesa IS NULL OR length(moldura_mesa) <= 40),
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+        ),
+    ),
 )

@@ -5,6 +5,12 @@ import { browserContentBoundary } from './tools/browser-content-boundary'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [browserContentBoundary(), react()],
+  resolve: {
+    // A Oficina do mapa usa o ONNX Runtime com o .wasm vindo do CDN (oficina/modelos.ts).
+    // Sem esta condição o Vite copia um .wasm de 28 MB para o site, e o ZIP da
+    // Discloud passa de 100 MB.
+    conditions: ['onnxruntime-web-use-extern-wasm'],
+  },
   build: {
     // O frontend 3D é carregado sob demanda. Separar suas bibliotecas evita
     // que Three.js e React Three Fiber voltem a engrossar o bundle inicial.

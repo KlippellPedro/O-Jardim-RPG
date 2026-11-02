@@ -76,6 +76,7 @@ class TokenInput(BaseModel):
     porte: int = 1
     lado: str | None = None
     oculto: bool = False
+    moldura: str | None = Field(default=None, max_length=40)
 
 
 class TokenEdicao(BaseModel):
@@ -86,6 +87,18 @@ class TokenEdicao(BaseModel):
     imagem_id: UUID | None = None
     sem_imagem: bool = False
     barras: dict | None = None
+    moldura: str | None = Field(default=None, max_length=40)
+    sem_moldura: bool = False
+
+
+class TokenDoPersonagemInput(BaseModel):
+    moldura: str | None = Field(default=None, max_length=40)
+    sem_moldura: bool = False
+    enquadramento: dict | None = None
+
+
+class ConfigMapaInput(BaseModel):
+    moldura_mesa: str | None = Field(default=None, max_length=40)
 
 
 class PontoInput(BaseModel):
@@ -172,7 +185,7 @@ def _tokens(connection, cena_id: UUID) -> list[dict]:
         for linha in connection.execute(
             """
             SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome,
-                   t.x, t.y, t.porte, t.lado, t.oculto, t.barras,
+                   t.x, t.y, t.porte, t.lado, t.oculto, t.barras, t.moldura,
                    COALESCE(t.personagem_id, sp.personagem_id) AS personagem_efetivo
             FROM mapa_tokens t
             LEFT JOIN sessao_participantes sp ON sp.id = t.participante_id
@@ -224,17 +237,42 @@ def _ligacoes(tokens: list[dict], participantes: list[dict]) -> dict[str, dict |
     return saida
 
 
+def _tokens_de_personagem(connection, personagens: set[str]) -> dict[str, dict]:
+    if not personagens:
+        return {}
+    return {
+        str(linha["personagem_id"]): {
+            "moldura": linha["moldura"],
+            "enquadramento": linha["enquadramento"] if isinstance(linha["enquadramento"], dict) else {},
+        }
+        for linha in connection.execute(
+            "SELECT personagem_id, moldura, enquadramento FROM personagem_token WHERE personagem_id = ANY(%s::uuid[])",
+            (list(personagens),),
+        ).fetchall()
+    }
+
+
+def _moldura_mesa(connection, campanha_id: UUID) -> str | None:
+    linha = connection.execute("SELECT moldura_mesa FROM mapa_campanha WHERE campanha_id=%s", (campanha_id,)).fetchone()
+    return linha["moldura_mesa"] if linha else None
+
+
 def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador) -> list[dict]:
     from routers.characters import _session_resources  # import tardio: o router de fichas é pesado
 
     tokens = _tokens(connection, cena["id"])
     participantes = _participantes(connection, campanha_id)
     ligacoes = _ligacoes(tokens, participantes)
-    fichas = _fichas(connection, campanha_id, {str(t["personagem_efetivo"]) for t in tokens if t["personagem_efetivo"]})
+    personagens = {str(t["personagem_efetivo"]) for t in tokens if t["personagem_efetivo"]}
+    fichas = _fichas(connection, campanha_id, personagens)
+    tokens_de_personagem = _tokens_de_personagem(connection, personagens)
+    moldura_mesa = _moldura_mesa(connection, campanha_id)
     saida = []
     for token in tokens:
         participante = ligacoes[str(token["id"])]
-        ficha_linha = fichas.get(str(token["personagem_efetivo"])) if token["personagem_efetivo"] else None
+        personagem = str(token["personagem_efetivo"]) if token["personagem_efetivo"] else None
+        do_personagem = tokens_de_personagem.get(personagem) or {}
+        ficha_linha = fichas.get(personagem) if personagem else None
         ficha = ficha_linha["ficha"] if ficha_linha and isinstance(ficha_linha["ficha"], dict) else {}
         if token["imagem_id"]:
             versao_imagem = f"a{str(token['imagem_id'])[:8]}"
@@ -253,6 +291,9 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador) -> list
             nivel=_nivel(ficha) if ficha_linha else None,
             tem_retrato=versao_imagem is not None,
             condicoes=condicoes,
+            moldura=mapa.moldura_efetiva(token, personagem, do_personagem.get("moldura"), moldura_mesa),
+            # O enquadramento é da foto da ficha; imagem do acervo já vem recortada.
+            enquadramento=do_personagem.get("enquadramento") if not token["imagem_id"] else None,
         )
         if item is None:
             continue
@@ -313,9 +354,11 @@ def _montar(connection, campanha_id: UUID, acesso, user: AuthenticatedUser, cena
         "cenas": [],
         "cena": None,
         "tokens": [],
+        "moldura_mesa": None,
     }
     if resposta["bloqueado"]:
         return resposta
+    resposta["moldura_mesa"] = _moldura_mesa(connection, campanha_id)
     if gestor:
         cenas = connection.execute(
             """
@@ -487,7 +530,7 @@ def _token(connection, campanha_id: UUID, token_id: UUID, *, travar: bool = Fals
     token = connection.execute(
         f"""
         SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome, t.x, t.y,
-               t.porte, t.lado, t.oculto, t.barras,
+               t.porte, t.lado, t.oculto, t.barras, t.moldura,
                c.largura, c.altura, c.livre, c.ativa
         FROM mapa_tokens t JOIN mapa_cenas c ON c.id = t.cena_id
         WHERE t.id=%s AND c.campanha_id=%s{' FOR UPDATE OF t' if travar else ''}
@@ -548,15 +591,16 @@ def criar_token(
         try:
             porte = mapa.porte_valido(payload.porte)
             x, y = mapa.limitar_posicao(payload.x, payload.y, cena["largura"], cena["altura"])
+            moldura = mapa.normalizar_moldura(payload.moldura)
         except ErroMapa as erro:
             raise _erro_mapa(erro) from None
         connection.execute(
             """
-            INSERT INTO mapa_tokens (id, cena_id, personagem_id, participante_id, imagem_id, nome, x, y, porte, lado, oculto, barras)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO mapa_tokens (id, cena_id, personagem_id, participante_id, imagem_id, nome, x, y, porte, lado, oculto, barras, moldura)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (uuid4(), cena_id, payload.personagem_id, payload.participante_id, payload.imagem_id,
-             (payload.nome or "").strip() or None, x, y, porte, lado, payload.oculto, Jsonb(mapa.barras_padrao(lado))),
+             (payload.nome or "").strip() or None, x, y, porte, lado, payload.oculto, Jsonb(mapa.barras_padrao(lado)), moldura),
         )
         versao = _tocar(connection, cena_id)
         resposta = _montar(connection, campanha_id, acesso, user, cena_id)
@@ -626,8 +670,8 @@ def editar_token(
         quem = _espectador(connection, campanha_id, acesso, user.id)
         participante = _participante_do_token(connection, campanha_id, token)
         dono = mapa.e_dono(token, participante, quem)
-        estruturais = (payload.nome, payload.porte, payload.lado, payload.oculto, payload.imagem_id)
-        if not quem.gestor and (any(v is not None for v in estruturais) or payload.sem_imagem):
+        estruturais = (payload.nome, payload.porte, payload.lado, payload.oculto, payload.imagem_id, payload.moldura)
+        if not quem.gestor and (any(v is not None for v in estruturais) or payload.sem_imagem or payload.sem_moldura):
             raise HTTPException(status_code=403, detail="so o mestre muda isso")
         if not quem.gestor and not dono:
             raise HTTPException(status_code=403, detail="este token nao e seu")
@@ -645,6 +689,10 @@ def editar_token(
                 mudancas["oculto"] = payload.oculto
             if payload.barras is not None:
                 mudancas["barras"] = Jsonb(mapa.normalizar_barras(payload.barras, token["barras"] or {}, mudancas.get("lado", token["lado"])))
+            if payload.sem_moldura:
+                mudancas["moldura"] = None
+            elif payload.moldura is not None:
+                mudancas["moldura"] = mapa.normalizar_moldura(payload.moldura)
         except ErroMapa as erro:
             raise _erro_mapa(erro) from None
         if payload.sem_imagem:
@@ -658,6 +706,77 @@ def editar_token(
         resposta = _montar(connection, campanha_id, acesso, user, token["cena_id"] if quem.gestor else None)
     _avisar(campanha_id, versao)
     return resposta
+
+
+@router.put("/{campanha_id}/personagens/{personagem_id}/token")
+def editar_token_do_personagem(
+    campanha_id: UUID,
+    personagem_id: UUID,
+    payload: TokenDoPersonagemInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Moldura e enquadramento da foto do personagem: valem em todas as cenas. Dono ou Mestre."""
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        personagem = connection.execute(
+            "SELECT dono_usuario_id FROM personagens WHERE id=%s AND campanha_id=%s AND status='ativo'",
+            (personagem_id, campanha_id),
+        ).fetchone()
+        if not personagem:
+            raise HTTPException(status_code=404, detail="personagem nao encontrado")
+        if not acesso.manages_content and personagem["dono_usuario_id"] != user.id:
+            raise HTTPException(status_code=403, detail="este personagem nao e seu")
+        atual = connection.execute(
+            "SELECT moldura, enquadramento FROM personagem_token WHERE personagem_id=%s FOR UPDATE",
+            (personagem_id,),
+        ).fetchone()
+        moldura = atual["moldura"] if atual else None
+        enquadramento = atual["enquadramento"] if atual and isinstance(atual["enquadramento"], dict) else {}
+        try:
+            if payload.sem_moldura:
+                moldura = None
+            elif payload.moldura is not None:
+                moldura = mapa.normalizar_moldura(payload.moldura)
+            if payload.enquadramento is not None:
+                enquadramento = mapa.normalizar_enquadramento(payload.enquadramento, enquadramento)
+        except ErroMapa as erro:
+            raise _erro_mapa(erro) from None
+        connection.execute(
+            """
+            INSERT INTO personagem_token (personagem_id, moldura, enquadramento) VALUES (%s, %s, %s)
+            ON CONFLICT (personagem_id) DO UPDATE
+            SET moldura = EXCLUDED.moldura, enquadramento = EXCLUDED.enquadramento, atualizado_em = CURRENT_TIMESTAMP
+            """,
+            (personagem_id, moldura, Jsonb(enquadramento)),
+        )
+    _avisar(campanha_id, int(time.time()))
+    return {"moldura": moldura, "enquadramento": mapa.normalizar_enquadramento({}, enquadramento)}
+
+
+@router.put("/{campanha_id}/config")
+def configurar_mapa(
+    campanha_id: UUID,
+    payload: ConfigMapaInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Moldura da mesa: com ela, todos os tokens da campanha usam a mesma. None devolve a escolha a cada um."""
+    try:
+        moldura = mapa.normalizar_moldura(payload.moldura_mesa)
+    except ErroMapa as erro:
+        raise _erro_mapa(erro) from None
+    with database.connection() as connection:
+        require_campaign_manager(connection, campanha_id, user.id)
+        connection.execute(
+            """
+            INSERT INTO mapa_campanha (campanha_id, moldura_mesa) VALUES (%s, %s)
+            ON CONFLICT (campanha_id) DO UPDATE SET moldura_mesa = EXCLUDED.moldura_mesa, atualizado_em = CURRENT_TIMESTAMP
+            """,
+            (campanha_id, moldura),
+        )
+    _avisar(campanha_id, int(time.time()))
+    return {"moldura_mesa": moldura}
 
 
 @router.post("/{campanha_id}/tokens/{token_id}/mover")

@@ -268,3 +268,37 @@ def test_limite_de_mensagens_por_segundo():
     conexao = _conexao("ana")
     aceitas = sum(1 for _ in range(100) if conexao.dentro_do_limite())
     assert aceitas == tempo_real.LIMITE_POR_SEGUNDO
+
+
+# ---------------------------------------------------------------- molduras
+
+def test_moldura_da_mesa_vale_acima_de_tudo_e_depois_token_personagem_padrao():
+    assert mapa.moldura_efetiva(token(moldura="osso"), "p-ana", "ouro", "runa") == "runa"
+    assert mapa.moldura_efetiva(token(moldura="osso"), "p-ana", "ouro", None) == "osso"
+    assert mapa.moldura_efetiva(token(), "p-ana", "ouro", None) == "ouro"
+    assert mapa.moldura_efetiva(token(), "p-ana", None, None) == "nivel"
+    assert mapa.moldura_efetiva(token(), None, None, None) == "lado"
+
+
+def test_moldura_desconhecida_e_recusada_e_vazio_volta_ao_padrao():
+    assert mapa.normalizar_moldura("fluxo-tempo") == "fluxo-tempo"
+    assert mapa.normalizar_moldura("") is None
+    with pytest.raises(ErroMapa):
+        mapa.normalizar_moldura("diamante-rosa")
+    assert len([m for m in mapa.MOLDURAS if m.startswith("fluxo-")]) == 11
+
+
+def test_enquadramento_tem_limites():
+    assert mapa.normalizar_enquadramento({"zoom": 2, "x": -0.5}) == {"zoom": 2.0, "x": -0.5, "y": 0.0}
+    for ruim in ({"zoom": 0.5}, {"zoom": 9}, {"x": 2}, {"y": "meio"}):
+        with pytest.raises(ErroMapa):
+            mapa.normalizar_enquadramento(ruim)
+
+
+def test_desconhecido_nao_entrega_a_moldura_do_personagem():
+    visto = mapa.visao_token(token(participante_id="pa1"), participante(visibilidade="desconhecido"), ANA,
+                             livre=False, moldura="ouro", enquadramento={"zoom": 3})
+    assert visto["moldura"] == "lado"
+    assert visto["enquadramento"] == mapa.ENQUADRAMENTO_PADRAO
+    visivel = mapa.visao_token(token(participante_id="pa1"), participante(), ANA, livre=False, moldura="ouro", enquadramento={"zoom": 3})
+    assert visivel["moldura"] == "ouro" and visivel["enquadramento"]["zoom"] == 3.0

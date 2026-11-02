@@ -3,3 +3,5 @@
 *.html text eol=lf
 *.css  text eol=lf
 *.js   text eol=lf
+# Modelos da Oficina do mapa (ver modelos/LEIAME.md): nunca converter quebra de linha.
+*.onnx binary

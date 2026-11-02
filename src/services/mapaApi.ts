@@ -32,6 +32,10 @@ export interface ITokenMapa {
   nivel: number | null;
   barras: IBarraToken[];
   condicoes: string[];
+  /** Moldura já resolvida (mesa, token, personagem ou padrão); ver motor/molduras.ts. */
+  moldura: string;
+  /** Zoom e deslocamento da foto da ficha dentro do círculo. */
+  enquadramento: { zoom: number; x: number; y: number };
   e_meu: boolean;
   pode_mover: boolean;
   desconhecido: boolean;
@@ -79,6 +83,8 @@ export interface IEstadoMapa {
   cenas: IResumoCena[];
   cena: ICena | null;
   tokens: ITokenMapa[];
+  /** Quando o Mestre trava uma moldura, todos os tokens usam ela. */
+  moldura_mesa: string | null;
   trazidos?: number;
 }
 
@@ -103,6 +109,7 @@ export interface ITokenPayload {
   porte?: number;
   lado?: LadoToken;
   oculto?: boolean;
+  moldura?: string;
 }
 
 export interface ITokenEdicao {
@@ -113,6 +120,8 @@ export interface ITokenEdicao {
   imagem_id?: string;
   sem_imagem?: boolean;
   barras?: Partial<IConfigBarras>;
+  moldura?: string;
+  sem_moldura?: boolean;
 }
 
 const base = (campanhaId: string) => `/mapa/${campanhaId}`;
@@ -138,6 +147,11 @@ export const mapaApi = {
     api<{ x: number; y: number; versao: number }>(`${base(campanhaId)}/tokens/${tokenId}/mover`, { method: 'POST', body: ponto }),
   apagarToken: (campanhaId: string, tokenId: string) =>
     api<null>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'DELETE' }),
+  /** Moldura e enquadramento do personagem: valem em todas as cenas. */
+  editarTokenDoPersonagem: (campanhaId: string, personagemId: string, dados: { moldura?: string; sem_moldura?: boolean; enquadramento?: Partial<{ zoom: number; x: number; y: number }> }) =>
+    api<{ moldura: string | null; enquadramento: { zoom: number; x: number; y: number } }>(`${base(campanhaId)}/personagens/${personagemId}/token`, { method: 'PUT', body: dados }),
+  configurar: (campanhaId: string, dados: { moldura_mesa: string | null }) =>
+    api<{ moldura_mesa: string | null }>(`${base(campanhaId)}/config`, { method: 'PUT', body: dados }),
 };
 
 export function urlImagemDoToken(campanhaId: string, tokenId: string, versao: string): string {

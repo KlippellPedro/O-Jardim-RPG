@@ -96,3 +96,9 @@ export function iniciais(nome: string): string {
   if (partes.length === 1) return partes[0].slice(0, 2).toUpperCase();
   return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
 }
+
+/** Uma ou duas letras por condição (Caído vira "Ca"), nas bolinhas ao lado do token. */
+export function siglaDaCondicao(nome: string): string {
+  const limpo = nome.trim();
+  return limpo ? limpo[0].toUpperCase() + (limpo[1] ?? '').toLowerCase() : '?';
+}

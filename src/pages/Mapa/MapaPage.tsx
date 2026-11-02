@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Crosshair, Expand, FolderOpen, Hand, Loader2, MapPin, Maximize2, Minimize2, PanelRightClose, PanelRightOpen, Ruler, Users, Wifi, WifiOff,
+  ArrowLeft, Crosshair, Expand, FolderOpen, Hand, Loader2, MapPin, Maximize2, Minimize2, PanelRightClose, PanelRightOpen, Ruler, Users, Wand2, Wifi, WifiOff,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSessaoStore } from '../../store/useSessaoStore';
@@ -20,6 +20,8 @@ import { PainelLateral, tokenDaEntidade, type AbaLateral } from './componentes/P
 import { MenuToken } from './componentes/MenuToken';
 import { ConfigCena, FaixaCenas } from './componentes/CenasDoMestre';
 import { AcervoGaveta } from './acervo/AcervoGaveta';
+import { OficinaGaveta } from './oficina/OficinaGaveta';
+import type { Enquadramento } from './motor/molduras';
 import './mapa.css';
 
 interface Pessoa {
@@ -41,7 +43,7 @@ export const MapaPage = () => {
   const navigate = useNavigate();
   const campanhaAtiva = useAuthStore((s) => s.campanhaAtiva);
   const campanhaId = campanhaAtiva?.id ?? null;
-  const { conectarSSE, desconectarSSE, iniciativa, turnoAtualId, emCombate } = useSessaoStore();
+  const { conectarSSE, desconectarSSE, iniciativa, turnoAtualId, emCombate, sessaoId } = useSessaoStore();
 
   const [estado, setEstado] = useState<IEstadoMapa | null>(null);
   const [erro, setErro] = useState('');
@@ -53,6 +55,7 @@ export const MapaPage = () => {
   const [lateralAberta, setLateralAberta] = useState(true);
   const [aba, setAba] = useState<AbaLateral>('iniciativa');
   const [acervoAberto, setAcervoAberto] = useState(false);
+  const [oficinaAberta, setOficinaAberta] = useState(false);
   const [configAberta, setConfigAberta] = useState(false);
   const [telaCheia, setTelaCheia] = useState(false);
   const [palcoPronto, setPalcoPronto] = useState(false);
@@ -318,6 +321,26 @@ export const MapaPage = () => {
     if (resposta) setEstado(resposta);
   };
 
+  /** Moldura do token: a do personagem vale em todas as cenas; a de token solto, só nele. */
+  const escolherMoldura = async (id: string | null) => {
+    const token = tokens.find((t) => t.id === selecionado);
+    if (!campanhaId || !token) return;
+    if (token.personagem_id) {
+      await comErro(() => mapaApi.editarTokenDoPersonagem(campanhaId, token.personagem_id!, id ? { moldura: id } : { sem_moldura: true }));
+      void recarregar();
+      return;
+    }
+    const resposta = await comErro(() => mapaApi.editarToken(campanhaId, token.id, id ? { moldura: id } : { sem_moldura: true }));
+    if (resposta) setEstado(resposta);
+  };
+
+  const mudarEnquadramento = async (enquadramento: Enquadramento) => {
+    const token = tokens.find((t) => t.id === selecionado);
+    if (!campanhaId || !token?.personagem_id) return;
+    await comErro(() => mapaApi.editarTokenDoPersonagem(campanhaId, token.personagem_id!, { enquadramento }));
+    void recarregar();
+  };
+
   const removerToken = async () => {
     if (!campanhaId || !selecionado) return;
     if (!(await confirmar({ mensagem: 'Tirar este token do mapa?', rotuloConfirmar: 'Tirar', tom: 'perigo' }))) return;
@@ -426,6 +449,7 @@ export const MapaPage = () => {
           <>
             <span className="mapa-separador" />
             <button type="button" className={acervoAberto ? 'ativo' : ''} onClick={() => setAcervoAberto((v) => !v)} title="Acervo"><FolderOpen size={18} /></button>
+            <button type="button" className={oficinaAberta ? 'ativo' : ''} onClick={() => setOficinaAberta((v) => !v)} title="Oficina: token novo, remover fundo, melhorar imagem"><Wand2 size={18} /></button>
             <button type="button" disabled={!cena} onClick={() => void trazerParticipantes()} title="Trazer os participantes da Sessão"><Users size={18} /></button>
           </>
         )}
@@ -443,7 +467,10 @@ export const MapaPage = () => {
           <MenuToken
             token={tokenSelecionado}
             gestor={gestor}
+            molduraMesa={estado?.moldura_mesa ?? null}
             onEditar={(dados) => void editarToken(dados)}
+            onMoldura={(id) => void escolherMoldura(id)}
+            onEnquadramento={(e) => void mudarEnquadramento(e)}
             onRemover={() => void removerToken()}
             onFechar={() => setSelecionado(null)}
           />
@@ -451,6 +478,8 @@ export const MapaPage = () => {
         {configAberta && cena && gestor && (
           <ConfigCena
             cena={cena}
+            molduraMesa={estado?.moldura_mesa ?? null}
+            onMolduraMesa={(id) => void comErro(() => mapaApi.configurar(campanhaId!, { moldura_mesa: id })).then(() => recarregar())}
             onSalvar={(dados) => void comErro(() => mapaApi.editarCena(campanhaId!, cena.id, dados)).then((r) => r && setEstado(r))}
             onApagar={() => void apagarCena()}
             onFechar={() => setConfigAberta(false)}
@@ -464,6 +493,17 @@ export const MapaPage = () => {
           onNovaCena={(item) => void novaCena(item)}
           onPorNaCena={(item) => void porNaCena(item)}
         />
+        {gestor && campanhaId && (
+          <OficinaGaveta
+            aberto={oficinaAberta}
+            onFechar={() => setOficinaAberta(false)}
+            campanhaId={campanhaId}
+            cenaId={cena?.id ?? null}
+            sessaoId={sessaoId}
+            centro={centroNaGrade}
+            onCena={setEstado}
+          />
+        )}
       </main>
 
       {lateralAberta && (

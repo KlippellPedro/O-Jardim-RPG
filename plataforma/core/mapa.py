@@ -24,6 +24,18 @@ PARA_QUEM = ("todos", "dono", "ninguem")
 PORTE_MAXIMO = 6
 COR = re.compile(r"^#[0-9a-fA-F]{6}$")
 
+FLUXOS = (
+    "origem", "essencia", "comunicacao", "vitalidade", "inconstancia", "fisico",
+    "espaco", "tempo", "vazio", "fim", "tecnologia",
+)
+#: Molduras que o site sabe desenhar (src/pages/Mapa/motor/molduras.ts). "nivel" é a
+#: escada do retrato da ficha; "lado" é o aro simples na cor do lado do token.
+MOLDURAS = (
+    "nivel", "lado", "ferro", "ouro", "madeira", "osso", "runa", "cristal", "raiz", "sombra",
+    *(f"fluxo-{fluxo}" for fluxo in FLUXOS),
+)
+ENQUADRAMENTO_PADRAO = {"zoom": 1.0, "x": 0.0, "y": 0.0}
+
 GRADE_PADRAO = {
     "tipo": "quadrada",
     "tamanho": 100,
@@ -138,6 +150,41 @@ def porte_valido(valor) -> int:
     if isinstance(valor, bool) or not isinstance(valor, int) or not 1 <= valor <= PORTE_MAXIMO:
         raise ErroMapa(f"o porte vai de 1 a {PORTE_MAXIMO} quadrados")
     return valor
+
+
+def normalizar_moldura(valor) -> str | None:
+    """None (ou vazio) volta ao padrão; um nome que o site não desenha é recusado."""
+    if valor is None or valor == "":
+        return None
+    if valor not in MOLDURAS:
+        raise ErroMapa("moldura desconhecida")
+    return valor
+
+
+def normalizar_enquadramento(dados, atual: dict | None = None) -> dict:
+    """Zoom de 1 a 4 e deslocamento de -1 a 1 (fração do raio) da foto dentro do círculo."""
+    enquadramento = dict(ENQUADRAMENTO_PADRAO)
+    enquadramento.update(atual or {})
+    if not isinstance(dados, dict):
+        raise ErroMapa("enquadramento invalido")
+    if "zoom" in dados:
+        enquadramento["zoom"] = _numero(dados["zoom"], "zoom", 1, 4)
+    for eixo in ("x", "y"):
+        if eixo in dados:
+            enquadramento[eixo] = _numero(dados[eixo], f"deslocamento {eixo}", -1, 1)
+    return enquadramento
+
+
+def moldura_efetiva(token: dict, personagem: str | None, moldura_personagem: str | None, moldura_mesa: str | None) -> str:
+    """A da mesa (o Mestre travou) vale acima de tudo; depois a do token; depois a do personagem;
+    sem escolha, personagem usa a escada do nível e o resto, o aro do lado."""
+    if moldura_mesa:
+        return moldura_mesa
+    if token.get("moldura"):
+        return token["moldura"]
+    if personagem:
+        return moldura_personagem or "nivel"
+    return "lado"
 
 
 # ------------------------------------------------------------ quem é dono
@@ -272,6 +319,8 @@ def visao_token(
     nivel: int | None = None,
     tem_retrato: bool = False,
     condicoes: list | None = None,
+    moldura: str = "lado",
+    enquadramento: dict | None = None,
 ) -> dict | None:
     """O token como este espectador o recebe, ou None quando não deve nem saber que existe."""
     degrau = degrau_de(token, participante, quem)
@@ -296,6 +345,9 @@ def visao_token(
         "e_meu": e_dono(token, participante, quem),
         "pode_mover": pode_mover(token, participante, quem, livre),
         "desconhecido": degrau == "desconhecido",
+        # Moldura de personagem entregaria quem é: o desconhecido usa o aro simples.
+        "moldura": moldura if identidade else "lado",
+        "enquadramento": normalizar_enquadramento({}, enquadramento or {}) if identidade else dict(ENQUADRAMENTO_PADRAO),
     }
     if quem.gestor or saida["e_meu"]:
         saida["config_barras"] = normalizar_barras({}, token.get("barras") or {}, saida["lado"])

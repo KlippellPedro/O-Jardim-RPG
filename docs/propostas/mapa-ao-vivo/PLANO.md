@@ -253,13 +253,30 @@ Segue o molde da mesa ao vivo (`plataforma/core/mesa.py`):
    da jogadora andando antes de ela soltar, o token encaixa na grade, o oculto e
    o desconhecido seguem os degraus da Sessão, esconder um token tira ele da tela
    do jogador na hora, ping e régua chegam ao outro lado, a ficha abre embutida
-   no painel. Ficou de fora ou falta conferir:
-   - WebSocket pelo proxy da Discloud (precisa subir uma versão);
+   no painel. Em produção (2026-11-02), o WebSocket abriu pelo Cloudflare e pelo
+   proxy da Discloud em 0,4 s, com ida e volta de uns 173 ms do PC do Pedro, e o
+   Mapa mostrou "Tempo real ligado". Ficou de fora ou falta conferir:
    - uso no celular (o layout existe, não foi testado);
    - backup próprio do acervo (os ladrilhos estão fora do JSONL, ver `core/backup.py`).
 2. **Oficina de tokens:** transformar em token, catálogo de molduras, moldura da
    mesa, remover fundo, melhorar qualidade, inimigo na hora, porte, condições no
    token.
+
+   **Feita em 2026-11-02.** Migração 60 (`mapa_tokens.moldura`, `personagem_token`
+   com moldura e enquadramento da foto, `mapa_campanha.moldura_mesa`); molduras
+   desenhadas por nós em `src/pages/Mapa/motor/molduras.ts` (do nível, Simples,
+   8 de material e uma por Fluxo, com as cores travadas por teste contra
+   `FLUXO_TEMAS`); ordem de prioridade: mesa, token, personagem, padrão; o
+   desconhecido sempre recebe o aro simples. A Oficina
+   (`src/pages/Mapa/oficina/`) roda no PC do Mestre com ONNX Runtime Web: MODNet
+   sem a placa de vídeo para remover fundo (o modelo vem do Hugging Face) e
+   Real-ESRGAN na placa para melhorar 2x ou 4x (o modelo é o nosso, em
+   `modelos/`, servido pelo jsDelivr; o `.wasm` do ONNX Runtime também vem do
+   CDN, pela condição `onnxruntime-web-use-extern-wasm` no `vite.config.ts`,
+   para o ZIP não passar de 100 MB). Conferido com duas pessoas: recorte com 70%
+   de transparência na imagem de teste, 2x em 1,6 s, token novo na cena e na
+   iniciativa com a moldura escolhida, moldura e zoom do jogador gravados,
+   moldura da mesa valendo para todos.
 3. **Névoa de guerra e clima:** névoa com ladrilhos e os efeitos de atmosfera.
 4. **Extras:** cenas preparadas e troca rápida, desenho livre, áreas de magia (cone,
    linha, círculo, com o tamanho tirado da magia), luz e visão com paredes,

@@ -53,3 +53,29 @@ test('interpolador desenha no passado, liga as amostras e não volta no tempo', 
   interpolador.esquecer('t1');
   assert.equal(interpolador.posicao('t1', 5000), null);
 });
+
+test('molduras: as cores de Fluxo batem com FLUXO_TEMAS e os nomes batem com o servidor', async () => {
+  const { CORES_FLUXO, MOLDURAS } = await import('../../src/pages/Mapa/motor/molduras');
+  const { FLUXO_TEMAS } = await import('../../src/services/magiaService');
+  for (const [fluxo, cor] of Object.entries(CORES_FLUXO)) {
+    assert.equal(cor, FLUXO_TEMAS[fluxo as keyof typeof FLUXO_TEMAS].destaque, fluxo);
+  }
+  assert.equal(Object.keys(CORES_FLUXO).length, Object.keys(FLUXO_TEMAS).length);
+  const { readFileSync } = await import('node:fs');
+  const servidor = readFileSync(new URL('../../plataforma/core/mapa.py', import.meta.url), 'utf-8');
+  const base = servidor.match(/MOLDURAS = \(\s*([\s\S]*?)\*\(/)![1].match(/"([a-z-]+)"/g)!.map((m) => m.slice(1, -1));
+  const fluxos = servidor.match(/FLUXOS = \(([\s\S]*?)\)/)![1].match(/"([a-z]+)"/g)!.map((m) => `fluxo-${m.slice(1, -1)}`);
+  assert.deepEqual(MOLDURAS.map((m) => m.id).sort(), [...base, ...fluxos].sort());
+});
+
+test('MODNet recebe lado menor 512 e lados múltiplos de 32', async () => {
+  const { tamanhoParaModnet } = await import('../../src/pages/Mapa/oficina/processar');
+  assert.deepEqual(tamanhoParaModnet(1000, 869), { largura: 576, altura: 512 });
+  assert.deepEqual(tamanhoParaModnet(300, 2000), { largura: 512, altura: 3424 });
+});
+
+test('sigla das condições no token', async () => {
+  const { siglaDaCondicao } = await import('../../src/pages/Mapa/motor/geometria');
+  assert.equal(siglaDaCondicao('caído'), 'Ca');
+  assert.equal(siglaDaCondicao(' '), '?');
+});

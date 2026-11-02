@@ -1,19 +1,13 @@
-// Desenho de um token: retrato redondo (ou iniciais), moldura, barras, nome e
-// marcas de seleção e de vez. A moldura de personagem é a mesma escada do
-// retrato da ficha (muda a cada 5 níveis até o 500); os outros tokens ganham
-// um aro na cor do lado (jogador, aliado, inimigo, neutro).
+// Desenho de um token: retrato redondo (ou iniciais), moldura, barras, nome,
+// condições e marcas de seleção e de vez. A moldura vem de molduras.ts (o mesmo
+// desenho da prévia da Oficina), virada em textura e guardada para reuso.
 
 import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
-import { molduraDoRetrato, type FormaJoia } from '../../Ficha/utils/retrato';
 import type { IBarraToken, ITokenMapa, LadoToken } from '../../../services/mapaApi';
-import { iniciais } from './geometria';
+import { iniciais, siglaDaCondicao } from './geometria';
+import { CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, desenharMoldura } from './molduras';
 
-export const CORES_LADO: Record<LadoToken, string> = {
-  jogador: '#4fd1c5',
-  aliado: '#34d399',
-  inimigo: '#ef4444',
-  neutro: '#a0a0b8',
-};
+export { CORES_LADO };
 
 const CORES_BARRA: Record<IBarraToken['tipo'], string> = {
   vida: '#e5484d',
@@ -22,62 +16,24 @@ const CORES_BARRA: Record<IBarraToken['tipo'], string> = {
   sanidade: '#8e4ec6',
 };
 
-// Posição de cada joia, na mesma ordem do retrato da ficha.
-const ANGULOS_JOIAS = [-135, -45, 135, 45, -90, 90, 180, 0].map((g) => (g * Math.PI) / 180);
+const LADO_TEXTURA = 256;
+const texturasDeMoldura = new Map<string, Texture>();
 
-function joia(g: Graphics, forma: FormaJoia, x: number, y: number, r: number, cor: string) {
-  switch (forma) {
-    case 'circulo':
-      g.circle(x, y, r * 0.8);
-      break;
-    case 'estrela': {
-      const pontos: number[] = [];
-      for (let i = 0; i < 10; i++) {
-        const raio = i % 2 === 0 ? r * 1.15 : r * 0.5;
-        const a = -Math.PI / 2 + (i * Math.PI) / 5;
-        pontos.push(x + Math.cos(a) * raio, y + Math.sin(a) * raio);
-      }
-      g.poly(pontos);
-      break;
-    }
-    case 'hexagono': {
-      const pontos: number[] = [];
-      for (let i = 0; i < 6; i++) {
-        const a = Math.PI / 6 + (i * Math.PI) / 3;
-        pontos.push(x + Math.cos(a) * r, y + Math.sin(a) * r);
-      }
-      g.poly(pontos);
-      break;
-    }
-    case 'cruz':
-      g.rect(x - r * 0.3, y - r, r * 0.6, r * 2).rect(x - r, y - r * 0.3, r * 2, r * 0.6);
-      break;
-    default:
-      g.poly([x, y - r, x + r * 0.75, y, x, y + r, x - r * 0.75, y]);
+function texturaDaMoldura(id: string, nivel: number | null, lado: LadoToken): Texture {
+  const chave = `${id}|${id === 'nivel' ? nivel : ''}|${lado}`;
+  let textura = texturasDeMoldura.get(chave);
+  if (!textura) {
+    const tela = new OffscreenCanvas(LADO_TEXTURA, LADO_TEXTURA);
+    desenharMoldura(tela.getContext('2d')!, LADO_TEXTURA, { id, nivel, lado });
+    textura = Texture.from(tela.transferToImageBitmap());
+    texturasDeMoldura.set(chave, textura);
   }
-  g.fill(cor).stroke({ width: Math.max(1, r * 0.25), color: '#120e18' });
+  return textura;
 }
 
-function desenharMoldura(g: Graphics, raio: number, nivel: number | null, lado: LadoToken) {
-  const espessura = Math.max(3, raio * 0.12);
-  if (nivel === null) {
-    g.circle(0, 0, raio + espessura / 2).stroke({ width: espessura, color: CORES_LADO[lado] });
-    g.circle(0, 0, raio + espessura).stroke({ width: Math.max(1, espessura * 0.25), color: '#0b0b10', alpha: 0.8 });
-    return;
-  }
-  const estilo = molduraDoRetrato(nivel);
-  g.circle(0, 0, raio + espessura * 1.6).stroke({ width: espessura * 1.2, color: estilo.brilho });
-  g.circle(0, 0, raio + espessura / 2).stroke({ width: espessura, color: estilo.fio });
-  g.circle(0, 0, raio + espessura * 0.1).stroke({ width: Math.max(1, espessura * 0.35), color: estilo.fio2 });
-  if (estilo.aro) g.circle(0, 0, raio + espessura * 1.35).stroke({ width: Math.max(1, espessura * 0.3), color: estilo.fio2 });
-  for (let i = 0; i < estilo.aroExtra; i++) {
-    g.circle(0, 0, raio + espessura * (1.9 + i * 0.5)).stroke({ width: Math.max(1, espessura * 0.25), color: estilo.fio, alpha: 0.85 });
-  }
-  // O lado aparece num fio fino por dentro, para distinguir aliado de inimigo de longe.
-  g.circle(0, 0, raio - espessura * 0.25).stroke({ width: Math.max(1, espessura * 0.3), color: CORES_LADO[lado], alpha: 0.9 });
-  ANGULOS_JOIAS.slice(0, estilo.joias).forEach((angulo) => {
-    joia(g, estilo.forma, Math.cos(angulo) * (raio + espessura / 2), Math.sin(angulo) * (raio + espessura / 2), espessura * 0.9, estilo.fio2);
-  });
+/** As texturas morrem com o palco; a próxima abertura do mapa desenha de novo. */
+export function esquecerTexturasDeMoldura() {
+  texturasDeMoldura.clear();
 }
 
 function desenharBarras(g: Graphics, barras: IBarraToken[], largura: number, topo: number) {
@@ -93,12 +49,12 @@ function desenharBarras(g: Graphics, barras: IBarraToken[], largura: number, top
 export class TokenVisual {
   readonly raiz = new Container();
   private retrato = new Container();
-  private moldura = new Graphics();
+  private moldura = new Sprite();
   private barras = new Graphics();
   private marcas = new Graphics();
   private vez = new Graphics();
+  private condicoes = new Container();
   private nome: Text;
-  private condicoes: Text;
   dados: ITokenMapa;
   private lado = 100;
   private texturaAtual: Texture | null = null;
@@ -109,40 +65,65 @@ export class TokenVisual {
     this.dados = dados;
     this.nome = new Text({ text: '', style: { fontFamily: 'system-ui, sans-serif', fontWeight: '600', fill: '#ffffff', stroke: { color: '#000000', width: 4 } } });
     this.nome.anchor.set(0.5, 0);
-    this.condicoes = new Text({ text: '', style: { fontFamily: 'system-ui, sans-serif', fontWeight: '700', fill: '#fde68a', stroke: { color: '#000000', width: 3 } } });
-    this.condicoes.anchor.set(0, 1);
-    this.raiz.addChild(this.vez, this.retrato, this.moldura, this.marcas, this.barras, this.nome, this.condicoes);
+    this.moldura.anchor.set(0.5);
+    this.raiz.addChild(this.vez, this.retrato, this.moldura, this.marcas, this.barras, this.condicoes, this.nome);
     this.raiz.eventMode = 'static';
     this.raiz.label = dados.id;
     this.atualizar(dados, tamanhoQuadrado);
+  }
+
+  private get raioRetrato() {
+    return this.lado * ESCALA_QUADRO * RAIO_RETRATO;
   }
 
   /** Redesenha tudo a partir dos dados; a posição só muda se `posicionar`. */
   atualizar(dados: ITokenMapa, tamanhoQuadrado: number, posicionar = true) {
     this.dados = dados;
     this.lado = Math.max(20, dados.porte * tamanhoQuadrado);
-    const raio = this.lado / 2 - Math.max(3, this.lado * 0.06);
     if (posicionar) this.raiz.position.set(dados.x, dados.y);
     this.raiz.alpha = dados.oculto ? 0.45 : 1;
     this.raiz.cursor = dados.pode_mover ? 'grab' : 'pointer';
 
-    this.desenharRetrato(raio);
-    this.moldura.clear();
-    desenharMoldura(this.moldura, raio, dados.nivel, dados.lado);
+    this.desenharRetrato();
+    this.moldura.texture = texturaDaMoldura(dados.moldura ?? 'lado', dados.nivel, dados.lado);
+    this.moldura.width = this.lado * ESCALA_QUADRO;
+    this.moldura.height = this.lado * ESCALA_QUADRO;
     this.barras.clear();
-    desenharBarras(this.barras, dados.barras, this.lado * 0.9, -this.lado / 2 - 4);
+    desenharBarras(this.barras, dados.barras, this.lado * 0.9, -this.lado * 0.52);
 
     this.nome.text = dados.nome;
     this.nome.style.fontSize = Math.max(11, this.lado * 0.16);
-    this.nome.y = this.lado / 2 + 2;
-    this.condicoes.text = dados.condicoes.length ? `✦${dados.condicoes.length}` : '';
-    this.condicoes.style.fontSize = Math.max(10, this.lado * 0.15);
-    this.condicoes.position.set(this.lado * 0.32, -this.lado * 0.3);
+    this.nome.y = this.lado * 0.56;
+    this.desenharCondicoes();
     this.desenharMarcas();
   }
 
-  private desenharRetrato(raio: number) {
+  private desenharCondicoes() {
+    this.condicoes.removeChildren().forEach((filho) => filho.destroy());
+    const raio = Math.max(7, this.lado * 0.11);
+    const lista = this.dados.condicoes.slice(0, 4);
+    lista.forEach((nome, i) => {
+      const bolinha = new Container();
+      bolinha.addChild(new Graphics().circle(0, 0, raio).fill('#2b2236').stroke({ width: Math.max(1, raio * 0.18), color: '#fcd34d' }));
+      const sigla = new Text({ text: siglaDaCondicao(nome), style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: raio * 1.05, fill: '#fde68a' } });
+      sigla.anchor.set(0.5);
+      bolinha.addChild(sigla);
+      // Em arco, do alto à direita para baixo.
+      const angulo = -Math.PI / 4 + i * (Math.PI / 6);
+      bolinha.position.set(Math.cos(angulo) * this.lado * 0.6, Math.sin(angulo) * this.lado * 0.6);
+      this.condicoes.addChild(bolinha);
+    });
+    if (this.dados.condicoes.length > lista.length) {
+      const mais = new Text({ text: `+${this.dados.condicoes.length - lista.length}`, style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: raio * 1.1, fill: '#fde68a', stroke: { color: '#000000', width: 3 } } });
+      mais.anchor.set(0, 0.5);
+      mais.position.set(this.lado * 0.62, this.lado * 0.4);
+      this.condicoes.addChild(mais);
+    }
+  }
+
+  private desenharRetrato() {
     this.retrato.removeChildren().forEach((filho) => filho.destroy());
+    const raio = this.raioRetrato;
     const fundo = new Graphics().circle(0, 0, raio).fill('#1b1b24');
     this.retrato.addChild(fundo);
     if (this.texturaAtual) {
@@ -167,7 +148,7 @@ export class TokenVisual {
   definirRetrato(textura: Texture | null) {
     if (this.texturaAtual === textura) return;
     this.texturaAtual = textura;
-    this.desenharRetrato(this.lado / 2 - Math.max(3, this.lado * 0.06));
+    this.desenharRetrato();
   }
 
   definirSelecionado(sim: boolean) {
@@ -185,14 +166,14 @@ export class TokenVisual {
   pulsar(tempo: number) {
     if (!this.naVez) return;
     this.vez.clear();
-    const alcance = this.lado / 2 + this.lado * (0.12 + 0.05 * Math.sin(tempo / 220));
+    const alcance = this.lado * 0.62 + this.lado * 0.05 * Math.sin(tempo / 220);
     this.vez.circle(0, 0, alcance).stroke({ width: Math.max(3, this.lado * 0.05), color: '#fcd34d', alpha: 0.75 });
   }
 
   private desenharMarcas() {
     this.marcas.clear();
     if (this.selecionado) {
-      this.marcas.circle(0, 0, this.lado / 2 + this.lado * 0.08).stroke({ width: Math.max(2, this.lado * 0.03), color: '#ffffff', alpha: 0.9 });
+      this.marcas.circle(0, 0, this.lado * 0.6).stroke({ width: Math.max(2, this.lado * 0.03), color: '#ffffff', alpha: 0.9 });
     }
   }
 
