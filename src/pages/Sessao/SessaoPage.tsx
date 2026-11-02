@@ -8,6 +8,7 @@ import {
   Eye,
   Hourglass,
   LockKeyhole,
+  Map as MapIcon,
   PanelLeft,
   PanelLeftClose,
   PanelRight,
@@ -395,6 +396,16 @@ export const SessaoPage: React.FC = () => {
               >
                 <Car size={18} />
                 <span className="hidden text-xs font-semibold xl:inline">Frota</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/mapa')}
+                className="flex items-center gap-1.5 rounded-lg border border-white/10 p-2 text-white/70 hover:border-amber-400/40 hover:text-white xl:px-3"
+                aria-label="Abrir o mapa da sessão em tela cheia"
+                title="Mapa: tokens, régua e ping ao vivo"
+              >
+                <MapIcon size={18} />
+                <span className="hidden text-xs font-semibold xl:inline">Mapa</span>
               </button>
               {comando ? (
                 <button

@@ -2132,4 +2132,98 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        59,
+        "mapa_ao_vivo_e_acervo",
+        (
+            # Acervo: a biblioteca de imagens de cada Mestre (mapas, tokens, objetos), reaproveitada entre
+            # campanhas. O navegador corta cada imagem em ladrilhos WebP antes de subir; `acervo_arquivos`
+            # guarda cada pedaço (ver core/acervo.py). Sem limite de quantidade, por decisão do Pedro.
+            """
+            CREATE TABLE IF NOT EXISTS acervo_pastas (
+                id UUID PRIMARY KEY,
+                dono_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                pai_id UUID REFERENCES acervo_pastas(id) ON DELETE CASCADE,
+                nome TEXT NOT NULL CHECK (length(nome) BETWEEN 1 AND 80),
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE UNIQUE INDEX IF NOT EXISTS acervo_pastas_nome_idx
+            ON acervo_pastas (dono_id, COALESCE(pai_id, '00000000-0000-0000-0000-000000000000'::uuid), lower(nome))
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS acervo_itens (
+                id UUID PRIMARY KEY,
+                dono_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                pasta_id UUID REFERENCES acervo_pastas(id) ON DELETE SET NULL,
+                nome TEXT NOT NULL CHECK (length(nome) BETWEEN 1 AND 120),
+                tipo TEXT NOT NULL CHECK (tipo IN ('mapa', 'token', 'objeto')),
+                largura INTEGER NOT NULL CHECK (largura BETWEEN 1 AND 32768),
+                altura INTEGER NOT NULL CHECK (altura BETWEEN 1 AND 32768),
+                ladrilho INTEGER NOT NULL DEFAULT 1024,
+                chaves TEXT[] NOT NULL DEFAULT '{}',
+                etiquetas TEXT[] NOT NULL DEFAULT '{}',
+                estado TEXT NOT NULL DEFAULT 'enviando' CHECK (estado IN ('enviando', 'pronto')),
+                bytes BIGINT NOT NULL DEFAULT 0,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS acervo_itens_dono_idx ON acervo_itens (dono_id, pasta_id, lower(nome))",
+            """
+            CREATE TABLE IF NOT EXISTS acervo_arquivos (
+                item_id UUID NOT NULL REFERENCES acervo_itens(id) ON DELETE CASCADE,
+                chave TEXT NOT NULL,
+                mime TEXT NOT NULL,
+                tamanho INTEGER NOT NULL CHECK (tamanho > 0),
+                dados BYTEA NOT NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (item_id, chave)
+            )
+            """,
+            # Mapa ao vivo: cenas da campanha e os tokens de cada uma. Só uma cena fica ativa por campanha (a
+            # que os jogadores veem). A posição de um token arrastado chega pelo WebSocket (core/tempo_real.py);
+            # o banco guarda onde ele foi solto.
+            """
+            CREATE TABLE IF NOT EXISTS mapa_cenas (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                nome TEXT NOT NULL CHECK (length(nome) BETWEEN 1 AND 80),
+                mapa_id UUID REFERENCES acervo_itens(id) ON DELETE SET NULL,
+                largura INTEGER NOT NULL DEFAULT 3000 CHECK (largura BETWEEN 100 AND 32768),
+                altura INTEGER NOT NULL DEFAULT 2000 CHECK (altura BETWEEN 100 AND 32768),
+                grade JSONB NOT NULL DEFAULT '{}'::jsonb,
+                ativa BOOLEAN NOT NULL DEFAULT FALSE,
+                livre BOOLEAN NOT NULL DEFAULT FALSE,
+                ordem INTEGER NOT NULL DEFAULT 0,
+                versao INTEGER NOT NULL DEFAULT 1 CHECK (versao > 0),
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            "CREATE UNIQUE INDEX IF NOT EXISTS mapa_cenas_ativa_idx ON mapa_cenas (campanha_id) WHERE ativa",
+            "CREATE INDEX IF NOT EXISTS mapa_cenas_campanha_idx ON mapa_cenas (campanha_id, ordem, criado_em)",
+            """
+            CREATE TABLE IF NOT EXISTS mapa_tokens (
+                id UUID PRIMARY KEY,
+                cena_id UUID NOT NULL REFERENCES mapa_cenas(id) ON DELETE CASCADE,
+                personagem_id UUID REFERENCES personagens(id) ON DELETE CASCADE,
+                participante_id UUID REFERENCES sessao_participantes(id) ON DELETE CASCADE,
+                imagem_id UUID REFERENCES acervo_itens(id) ON DELETE SET NULL,
+                nome TEXT CHECK (nome IS NULL OR length(nome) <= 60),
+                x DOUBLE PRECISION NOT NULL,
+                y DOUBLE PRECISION NOT NULL,
+                porte SMALLINT NOT NULL DEFAULT 1 CHECK (porte BETWEEN 1 AND 6),
+                lado TEXT NOT NULL DEFAULT 'neutro' CHECK (lado IN ('jogador', 'aliado', 'inimigo', 'neutro')),
+                oculto BOOLEAN NOT NULL DEFAULT FALSE,
+                barras JSONB NOT NULL DEFAULT '{}'::jsonb,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS mapa_tokens_cena_idx ON mapa_tokens (cena_id)",
+            "CREATE INDEX IF NOT EXISTS mapa_tokens_participante_idx ON mapa_tokens (participante_id)",
+        ),
+    ),
 )

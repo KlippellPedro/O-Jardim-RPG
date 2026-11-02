@@ -4,7 +4,10 @@
 import { avisar } from '../components/avisos/avisos';
 import { usePerformanceStore } from '../store/usePerformanceStore';
 
-export const guiasAutomaticosLigados = (): boolean => usePerformanceStore.getState().guiasAutomaticos !== false;
+/** A ficha embutida no painel do mapa (`?embutida=1`) nunca abre guia sozinha: o espaço é pequeno e a mesa está jogando. */
+const paginaEmbutida = (): boolean => typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('embutida');
+
+export const guiasAutomaticosLigados = (): boolean => !paginaEmbutida() && usePerformanceStore.getState().guiasAutomaticos !== false;
 
 export function pularTodosOsGuias(): void {
   usePerformanceStore.getState().setEfeito('guiasAutomaticos', false);

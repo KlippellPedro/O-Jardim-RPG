@@ -17,6 +17,8 @@ import json
 import logging
 from uuid import UUID
 
+from core import tempo_real
+
 
 log = logging.getLogger("jardim-plataforma")
 
@@ -58,6 +60,8 @@ def _entregar(campanha_id: UUID, mensagem: str) -> None:
 
 def publicar(campanha_id: UUID, tipo: str, versao: int, detalhes: dict | None = None) -> None:
     """Chamado de dentro de uma rota síncrona, depois de gravar no banco."""
+    # Participante novo ou visibilidade trocada mudam quem vê cada token do mapa.
+    tempo_real.esquecer_regras(campanha_id)
     if not _assinantes.get(campanha_id):
         return
     corpo = {"tipo": tipo, "versao": versao}

@@ -37,7 +37,7 @@ function extrairMensagem(detalhe: any, status: number): string {
   return `Falha ${status} na plataforma.`;
 }
 
-function lerCookie(nome: string): string | null {
+export function lerCookie(nome: string): string | null {
   const prefixo = `${encodeURIComponent(nome)}=`;
   const item = document.cookie
     .split(';')

@@ -504,6 +504,10 @@ class BackupTests(unittest.TestCase):
             ("sessao_participantes", "sessoes_mesa"),
             ("sessao_participantes", "personagens"),
             ("registros_mesa", "sessoes_mesa"),
+            ("acervo_itens", "acervo_pastas"),
+            ("mapa_cenas", "acervo_itens"),
+            ("mapa_tokens", "mapa_cenas"),
+            ("mapa_tokens", "sessao_participantes"),
         ):
             self.assertLess(posicao[pai], posicao[filho], f"{filho} antes de {pai}")
 

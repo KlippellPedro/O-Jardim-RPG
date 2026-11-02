@@ -88,6 +88,12 @@ TABELAS: tuple[str, ...] = (
     "infracoes_loja",
     "propostas_troca",
     "loot_campanha",
+    # Mapa ao vivo e acervo do Mestre (migração 59). Os ladrilhos das imagens
+    # (`acervo_arquivos`) ficam de fora: ver TABELAS_IGNORADAS.
+    "acervo_pastas",
+    "acervo_itens",
+    "mapa_cenas",
+    "mapa_tokens",
 
     # Cassino do Gambler (site) — ver plataforma/routers/casino.py.
     "cassino_gambler_rodadas",
@@ -165,10 +171,16 @@ TABELAS: tuple[str, ...] = (
 # Ficam de fora de propósito: são estado efêmero e material sensível que não
 # faz sentido guardar nem restaurar. Sessões antigas devem morrer no incidente
 # que motivou a restauração.
+# `acervo_arquivos` é outro caso: são os ladrilhos WebP das imagens do acervo.
+# Dentro do JSONL viram texto em hexadecimal, dobram de tamanho e não comprimem,
+# e um acervo sem limite de quantidade engoliria o backup diário. Quem cobre os
+# ladrilhos é o backup do banco gerenciado da Discloud; restaurar só o JSONL
+# deixa os itens do acervo sem imagem.
 TABELAS_IGNORADAS: frozenset[str] = frozenset({
     "sessoes_auth",
     "limites_acesso",
     "codigos_vinculo_discord",
+    "acervo_arquivos",
 })
 
 

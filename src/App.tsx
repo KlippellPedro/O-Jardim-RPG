@@ -1,5 +1,5 @@
-import { lazy, Suspense, useEffect, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense, useEffect, useRef, type ReactNode } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { useGlobalSfx } from './hooks/useGlobalSfx';
@@ -34,6 +34,7 @@ const CalendarioMundoPage = lazy(() => import('./pages/Mundo/CalendarioMundoPage
 const CampanhaPage = lazy(() => import('./pages/Campanha/CampanhaPage'));
 const FrotaPage = lazy(() => import('./pages/Frota/FrotaPage'));
 const SessaoPage = lazy(() => import('./pages/Sessao/SessaoPage').then((module) => ({ default: module.SessaoPage })));
+const MapaPage = lazy(() => import('./pages/Mapa/MapaPage'));
 const MundoPage = lazy(() => import('./pages/Mundo/MundoPage').then((module) => ({ default: module.MundoPage })));
 const LojaPage = lazy(() => import('./pages/Loja/LojaPage').then((module) => ({ default: module.LojaPage })));
 const MateriaisPage = lazy(() => import('./pages/Materiais/MateriaisPage').then((module) => ({ default: module.MateriaisPage })));
@@ -44,6 +45,20 @@ const EntidadesPage = lazy(() => import('./pages/Entidades/EntidadesPage').then(
 const EntidadesSobrePage = lazy(() => import('./pages/Entidades/EntidadesSobrePage').then((module) => ({ default: module.EntidadesSobrePage })));
 const EntidadeContoPage = lazy(() => import('./pages/Entidades/EntidadeContoPage').then((module) => ({ default: module.EntidadeContoPage })));
 const GamblerCasinoPage = lazy(() => import('./pages/Entidades/GamblerCasinoPage').then((module) => ({ default: module.GamblerCasinoPage })));
+
+/** O mapa ocupa a tela inteira, e a ficha embutida nele (`?embutida=1`) vem sem o menu do site. */
+const ForaDoMapa = ({ children }: { children: ReactNode }) => {
+  const { pathname, search } = useLocation();
+  if (pathname.startsWith('/mapa') || new URLSearchParams(search).has('embutida')) return null;
+  return <>{children}</>;
+};
+
+/** Avisos de rolagem, conquista, loot e vez já aparecem na página do mapa; dentro da ficha embutida sairiam em dobro. */
+const ForaDaFichaEmbutida = ({ children }: { children: ReactNode }) => {
+  const { search } = useLocation();
+  if (new URLSearchParams(search).has('embutida')) return null;
+  return <>{children}</>;
+};
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ProtectedRoute - guarda de rota unificada
@@ -175,57 +190,73 @@ function App() {
       <Router>
         <div className="relative min-h-[100dvh] w-full min-w-0 bg-background font-sans text-white selection:bg-primary/30">
 
-          <AtmosphericBackground />
+          <ForaDoMapa>
+            <AtmosphericBackground />
+          </ForaDoMapa>
 
           <AvisosHost />
 
-          {usuario && <ClimaDoMundoHost />}
+          <ForaDoMapa>
+            {usuario && <ClimaDoMundoHost />}
 
-          {usuario && <SituacaoDaMesaHost />}
+            {usuario && <SituacaoDaMesaHost />}
 
-          {usuario && <BuscaDoJardimHost />}
+            {usuario && <BuscaDoJardimHost />}
+          </ForaDoMapa>
 
-          {usuario && (
-            <Suspense fallback={null}>
-              <RolagemHost />
-            </Suspense>
-          )}
+          <ForaDaFichaEmbutida>
+            {usuario && (
+              <Suspense fallback={null}>
+                <RolagemHost />
+              </Suspense>
+            )}
+          </ForaDaFichaEmbutida>
 
-          {usuario && (
-            <Suspense fallback={null}>
-              <ConquistaHost />
-            </Suspense>
-          )}
+          <ForaDaFichaEmbutida>
+            {usuario && (
+              <Suspense fallback={null}>
+                <ConquistaHost />
+              </Suspense>
+            )}
+          </ForaDaFichaEmbutida>
 
-          {usuario && (
-            <Suspense fallback={null}>
-              <DescobertasHost />
-            </Suspense>
-          )}
+          <ForaDaFichaEmbutida>
+            {usuario && (
+              <Suspense fallback={null}>
+                <DescobertasHost />
+              </Suspense>
+            )}
+          </ForaDaFichaEmbutida>
 
-          {usuario && (
-            <Suspense fallback={null}>
-              <LootHost />
-            </Suspense>
-          )}
+          <ForaDaFichaEmbutida>
+            {usuario && (
+              <Suspense fallback={null}>
+                <LootHost />
+              </Suspense>
+            )}
+          </ForaDaFichaEmbutida>
 
-          {usuario && (
-            <Suspense fallback={null}>
-              <SuaVezHost />
-            </Suspense>
-          )}
+          <ForaDaFichaEmbutida>
+            {usuario && (
+              <Suspense fallback={null}>
+                <SuaVezHost />
+              </Suspense>
+            )}
+          </ForaDaFichaEmbutida>
 
-          {usuario && (
-            <Suspense fallback={null}>
-              <GlassMenu />
-            </Suspense>
-          )}
+          <ForaDoMapa>
+            {usuario && (
+              <Suspense fallback={null}>
+                <GlassMenu />
+              </Suspense>
+            )}
 
-          {usuario && (
-            <Suspense fallback={null}>
-              <SettingsMenu />
-            </Suspense>
-          )}
+            {usuario && (
+              <Suspense fallback={null}>
+                <SettingsMenu />
+              </Suspense>
+            )}
+          </ForaDoMapa>
 
           <Suspense fallback={<EsqueletoDePagina />}>
             <TransicaoDeRota>
@@ -436,6 +467,15 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <SessaoPage />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/mapa"
+                  element={
+                    <ProtectedRoute requireCampaign>
+                      <MapaPage />
                     </ProtectedRoute>
                   }
                 />

@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from core import live_session
+from core import live_session, tempo_real
 from core.automatic_backup import AutomaticBackup
 from core.character_summary import carregar_catalogos
 from core.config import load_settings
@@ -20,6 +20,7 @@ from core.content_seed import seed_world_library, sync_shop_catalog
 from core import lembretes
 from core.database import Database
 from routers import (
+    acervo,
     admin,
     auth,
     calendario,
@@ -36,6 +37,7 @@ from routers import (
     internal,
     knowledge,
     livro,
+    mapa,
     registros_universais,
     mesa,
     notifications,
@@ -106,6 +108,7 @@ async def lifespan(app: FastAPI):
     # As rotas são síncronas e rodam em threadpool; o canal de eventos precisa
     # do loop para entregar mensagens aos clientes conectados.
     live_session.registrar_loop(asyncio.get_running_loop())
+    tempo_real.registrar_loop(asyncio.get_running_loop())
     app.state.database = database
     app.state.settings = settings
     backup_manager = None
@@ -170,7 +173,9 @@ app.add_middleware(GZipMiddleware, minimum_size=500, compresslevel=5)
 async def security_headers(request: Request, call_next):
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-Frame-Options"] = "DENY"
+    # SAMEORIGIN, e não DENY: o mapa ao vivo mostra a ficha do jogador num iframe
+    # do próprio site. Outro site continua sem poder embutir páginas daqui.
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
     if settings.production:
@@ -191,6 +196,7 @@ def health(request: Request):
 
 
 for api_router in (
+    acervo.router,
     admin.router,
     auth.router,
     calendario.router,
@@ -207,6 +213,7 @@ for api_router in (
     internal.router,
     knowledge.router,
     livro.router,
+    mapa.router,
     registros_universais.router,
     mesa.router,
     notifications.router,

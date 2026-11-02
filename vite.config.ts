@@ -38,6 +38,8 @@ export default defineConfig({
         // em produção (plataforma/discloud.config).
         target: 'http://localhost:8080',
         changeOrigin: true,
+        // O mapa ao vivo conversa por WebSocket (/api/v1/mapa/{campanha}/ws).
+        ws: true,
       }
     }
   }

@@ -37,6 +37,18 @@
       "port": 8080
     },
     {
+      "name": "Plataforma API (banco de teste)",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "tools/api-banco-teste.ps1"
+      ],
+      "port": 8080
+    },
+    {
       "name": "Frontend React (Vite)",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
