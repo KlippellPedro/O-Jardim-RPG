@@ -27,6 +27,9 @@ LIMIAR_NIVEL_REDUZIDO = 2048
 MAIOR_LADO = 32768
 TAMANHO_MAXIMO_PEDACO = 6 * 1024 * 1024
 TIPOS = ("mapa", "token", "objeto")
+#: Com que licença a imagem pode ser usada: própria, CC0, CC BY, CC BY-SA, uso pessoal (sem
+#: redistribuir), comprada (licença do vendedor) ou desconhecida.
+LICENCAS = ("propria", "cc0", "cc-by", "cc-by-sa", "uso-pessoal", "comprada", "desconhecida")
 MIMES = {"image/webp", "image/png", "image/jpeg"}
 CHAVE = re.compile(r"^(mini|n0/\d{1,3}/\d{1,3}|n2/\d{1,3}/\d{1,3})$")
 #: Assinaturas dos formatos aceitos: o tipo declarado precisa bater com os bytes.

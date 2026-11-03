@@ -92,6 +92,18 @@ QUEM_USA_PORTAL = ("todos", "jogadores", "mestre")
 #: Raio da boca do portal, em casas.
 RAIO_PORTAL_PADRAO = 0.6
 ID_PORTAL = re.compile(r"^[A-Za-z0-9_-]{1,40}$")
+CAMADAS_MAPA = ("mapa", "props", "montarias", "personagens", "anotacoes")
+CAMADAS_TOKEN = ("props", "montarias", "personagens")
+ACOES_MESA = ("mover_tokens", "usar_ping", "usar_regua", "usar_magia")
+FONTES_ANOTACAO = {
+    "sans": "system-ui, sans-serif",
+    "serif": "Georgia, serif",
+    "fantasia": "Cinzel, serif",
+    "mono": "monospace",
+}
+MAX_ANOTACOES = 200
+TEXTO_ANOTACAO_MAX = 320
+ID_ANOTACAO = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$", re.I)
 
 
 class ErroMapa(Exception):
@@ -109,6 +121,55 @@ class Espectador:
     gestor: bool
     #: Personagens ativos de quem olha, nesta campanha.
     personagens: frozenset[str] = field(default_factory=frozenset)
+    #: Capacidades por pessoa, carregadas do membro da campanha; não vêm do cliente.
+    permissoes_mesa: dict = field(default_factory=dict)
+
+
+def normalizar_permissoes_mesa(dados, papel: str, atual: dict | None = None) -> dict:
+    """Capacidades pessoais da mesa. Assistente e Mestre são gestores; observador é leitura."""
+    padrao_acao = papel not in ("observador",)
+    permissoes = {
+        acao: padrao_acao
+        for acao in ACOES_MESA
+    }
+    permissoes["camadas"] = {camada: True for camada in CAMADAS_MAPA}
+    if isinstance(atual, dict):
+        for acao in ACOES_MESA:
+            if isinstance(atual.get(acao), bool):
+                permissoes[acao] = atual[acao]
+        camadas_atuais = atual.get("camadas")
+        if isinstance(camadas_atuais, dict):
+            for camada in CAMADAS_MAPA:
+                if isinstance(camadas_atuais.get(camada), bool):
+                    permissoes["camadas"][camada] = camadas_atuais[camada]
+    if not isinstance(dados, dict):
+        raise ErroMapa("permissoes da mesa invalidas")
+    for chave, valor in dados.items():
+        if chave in ACOES_MESA:
+            if not isinstance(valor, bool):
+                raise ErroMapa("permissao da mesa invalida")
+            permissoes[chave] = valor
+        elif chave == "camadas":
+            if not isinstance(valor, dict):
+                raise ErroMapa("permissoes de camada invalidas")
+            for camada, visivel in valor.items():
+                if camada not in CAMADAS_MAPA or not isinstance(visivel, bool):
+                    raise ErroMapa("camada ou permissao invalida")
+                permissoes["camadas"][camada] = visivel
+        else:
+            raise ErroMapa("permissao da mesa desconhecida")
+    return permissoes
+
+
+def ler_permissoes_mesa(dados, papel: str) -> dict:
+    """Lê permissões legadas; configuração inválida não libera ações nem camadas."""
+    try:
+        return normalizar_permissoes_mesa(dados if isinstance(dados, dict) else {}, papel)
+    except ErroMapa:
+        return {
+            **{acao: False for acao in ACOES_MESA},
+            "camadas": {camada: False for camada in CAMADAS_MAPA},
+        }
 
 
 def _numero(valor, campo: str, minimo: float, maximo: float) -> float:
@@ -293,6 +354,86 @@ def normalizar_luz(dados) -> dict | None:
     return {"raio": round(raio, 1), "cor": cor.lower(), "tremula": bool(dados.get("tremula", False))}
 
 
+def normalizar_camadas_jogadores(dados, atual: dict | None = None) -> dict[str, bool]:
+    """Define quais camadas da cena o servidor envia a jogadores. Mestre sempre vê todas."""
+    if not isinstance(dados, dict):
+        raise ErroMapa("visibilidade das camadas invalida")
+    valores = {camada: True for camada in CAMADAS_MAPA}
+    if isinstance(atual, dict):
+        for camada in CAMADAS_MAPA:
+            if isinstance(atual.get(camada), bool):
+                valores[camada] = atual[camada]
+    for camada, visivel in dados.items():
+        if camada not in CAMADAS_MAPA or not isinstance(visivel, bool):
+            raise ErroMapa("camada ou visibilidade invalida")
+        valores[camada] = visivel
+    return valores
+
+
+def camadas_jogadores(estrutura) -> dict[str, bool]:
+    """Lê a configuração salva. Estado antigo deixa todas visíveis; dado inválido falha fechado."""
+    if not isinstance(estrutura, dict) or "camadas_jogadores" not in estrutura:
+        return {camada: True for camada in CAMADAS_MAPA}
+    try:
+        return normalizar_camadas_jogadores(estrutura["camadas_jogadores"])
+    except ErroMapa:
+        return {camada: False for camada in CAMADAS_MAPA}
+
+
+def normalizar_anotacoes(dados, largura: int, altura: int) -> list[dict]:
+    """Confere textos colocados no mapa e limita fonte, tamanho, cor e coordenadas."""
+    if not isinstance(dados, list) or len(dados) > MAX_ANOTACOES:
+        raise ErroMapa(f"a cena pode ter ate {MAX_ANOTACOES} anotacoes")
+    saida = []
+    ids = set()
+    for bruto in dados:
+        if not isinstance(bruto, dict):
+            raise ErroMapa("anotacao invalida")
+        id_anotacao = str(bruto.get("id") or "").lower()
+        if not ID_ANOTACAO.fullmatch(id_anotacao) or id_anotacao in ids:
+            raise ErroMapa("id de anotacao invalido ou repetido")
+        texto = str(bruto.get("texto") or "").replace("\r\n", "\n").strip()
+        if not texto or len(texto) > TEXTO_ANOTACAO_MAX:
+            raise ErroMapa(f"o texto da anotacao vai de 1 a {TEXTO_ANOTACAO_MAX} caracteres")
+        fonte = bruto.get("fonte", "sans")
+        if fonte not in FONTES_ANOTACAO:
+            raise ErroMapa("fonte de anotacao desconhecida")
+        cor = bruto.get("cor", "#ffffff")
+        fundo = bruto.get("fundo", "#241d2b")
+        if not isinstance(cor, str) or not COR.match(cor):
+            raise ErroMapa("cor de anotacao invalida")
+        if not isinstance(fundo, str) or not COR.match(fundo):
+            raise ErroMapa("fundo de anotacao invalido")
+        placa = bruto.get("placa", True)
+        if not isinstance(placa, bool):
+            raise ErroMapa("estilo da anotacao invalido")
+        tamanho = _numero(bruto.get("tamanho", 32), "tamanho da anotacao", 12, 96)
+        x, y = limitar_posicao(bruto.get("x"), bruto.get("y"), largura, altura)
+        ids.add(id_anotacao)
+        saida.append({
+            "id": id_anotacao,
+            "texto": texto,
+            "x": round(x, 1),
+            "y": round(y, 1),
+            "fonte": fonte,
+            "tamanho": round(tamanho, 1),
+            "cor": cor.lower(),
+            "fundo": fundo.lower(),
+            "placa": placa,
+        })
+    return saida
+
+
+def ler_anotacoes(estrutura, largura: int, altura: int) -> list[dict]:
+    """Anotações legadas ou malformadas não viram dados visíveis a jogadores."""
+    if not isinstance(estrutura, dict) or not isinstance(estrutura.get("anotacoes"), list):
+        return []
+    try:
+        return normalizar_anotacoes(estrutura["anotacoes"], largura, altura)
+    except ErroMapa:
+        return []
+
+
 def _ponta_do_portal(dados, campo: str, largura: int, altura: int) -> dict:
     if not isinstance(dados, dict):
         raise ErroMapa(f"{campo} do portal invalido")
@@ -300,8 +441,18 @@ def _ponta_do_portal(dados, campo: str, largura: int, altura: int) -> dict:
     return {"x": round(x, 1), "y": round(y, 1)}
 
 
-def normalizar_portais(dados, largura: int, altura: int) -> list[dict]:
-    """A lista inteira de portais da cena. Portal sem id (ou com id repetido) ganha um novo."""
+#: Id de cena de destino de um portal entre cenas.
+ID_CENA = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", re.I)
+#: Sem a lista das cenas (lendo o que já foi gravado), a saída noutra cena só é conferida por cima.
+_LADO_MAXIMO_PX = 10**6
+
+
+def normalizar_portais(dados, largura: int, altura: int, destinos: dict | None = None) -> list[dict]:
+    """A lista inteira de portais da cena. Portal sem id (ou com id repetido) ganha um novo.
+
+    Portal entre cenas: `cena` é a cena da saída e `b` fica nela. Ele é só de ida (a volta é
+    outro portal, na outra cena). `destinos` traz {id: (largura, altura, nome)} das outras
+    cenas da campanha; sem ele (registro gravado), a cena e o nome ficam como estavam."""
     if not isinstance(dados, list) or len(dados) > MAX_PORTAIS:
         raise ErroMapa(f"a cena tem ate {MAX_PORTAIS} portais")
     portais: list[dict] = []
@@ -322,11 +473,25 @@ def normalizar_portais(dados, largura: int, altura: int) -> list[dict]:
         fluxo = bruto.get("fluxo", "espaco")
         if fluxo not in FLUXOS:
             raise ErroMapa("escolha o Fluxo do portal")
-        portais.append({
+        cena_destino = bruto.get("cena") or None
+        largura_b, altura_b, cena_nome = largura, altura, None
+        if cena_destino is not None:
+            cena_destino = str(cena_destino).lower()
+            if destinos is not None:
+                if cena_destino not in destinos:
+                    raise ErroMapa("a cena de destino do portal nao existe")
+                largura_b, altura_b, cena_nome = destinos[cena_destino]
+            elif ID_CENA.fullmatch(cena_destino):
+                largura_b, altura_b = _LADO_MAXIMO_PX, _LADO_MAXIMO_PX
+                cena_nome = str(bruto.get("cena_nome") or "")[:80] or None
+            else:
+                raise ErroMapa("a cena de destino do portal nao existe")
+            mao = "unica"
+        portal = {
             "id": portal_id,
             "nome": " ".join(str(bruto.get("nome") or "").split())[:40] or "Portal",
             "a": _ponta_do_portal(bruto.get("a"), "a entrada", largura, altura),
-            "b": _ponta_do_portal(bruto.get("b"), "a saida", largura, altura),
+            "b": _ponta_do_portal(bruto.get("b"), "a saida", largura_b, altura_b),
             "raio": round(_numero(bruto.get("raio", RAIO_PORTAL_PADRAO), "tamanho do portal", 0.3, 5), 2),
             "mao": mao,
             "usa": usa,
@@ -334,7 +499,11 @@ def normalizar_portais(dados, largura: int, altura: int) -> list[dict]:
             "visivel": bool(bruto.get("visivel", True)),
             "confirmar": bool(bruto.get("confirmar", False)),
             "ligado": bool(bruto.get("ligado", True)),
-        })
+        }
+        if cena_destino is not None:
+            portal["cena"] = cena_destino
+            portal["cena_nome"] = cena_nome
+        portais.append(portal)
     return portais
 
 
@@ -383,7 +552,8 @@ def portais_de(portais: list[dict], *, gestor: bool, revelado) -> list[dict]:
         if not (portal["ligado"] and portal["visivel"]):
             continue
         a = portal["a"] if revelado(portal["a"]["x"], portal["a"]["y"]) else None
-        b = portal["b"] if revelado(portal["b"]["x"], portal["b"]["y"]) else None
+        # A saída de um portal entre cenas fica noutra cena: o jogador não sabe onde dá.
+        b = portal["b"] if not portal.get("cena") and revelado(portal["b"]["x"], portal["b"]["y"]) else None
         if a is None and b is None:
             continue
         saida.append({
@@ -444,6 +614,8 @@ def pode_mover(token: dict, participante: dict | None, quem: Espectador, livre: 
     se o Mestre deixou a cena livre."""
     if quem.gestor:
         return True
+    if not quem.permissoes_mesa.get("mover_tokens", True):
+        return False
     if token.get("oculto"):
         return False
     if e_dono(token, participante, quem):
@@ -587,6 +759,9 @@ def visao_token(
         "y": float(token["y"]),
         "porte": int(token.get("porte") or 1),
         "lado": token.get("lado") or "neutro",
+        "camada": token.get("camada") if token.get("camada") in CAMADAS_TOKEN else "personagens",
+        "flip_x": bool(token.get("flip_x", False)),
+        "flip_y": bool(token.get("flip_y", False)),
         "nome": nome,
         "imagem": identidade and (bool(token.get("imagem_id")) or tem_retrato),
         "nivel": nivel if identidade else None,

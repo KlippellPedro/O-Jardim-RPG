@@ -2313,4 +2313,36 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "CREATE INDEX IF NOT EXISTS mapa_projetos_campanha_idx ON mapa_projetos (campanha_id, atualizado_em DESC)",
         ),
     ),
+    (
+        65,
+        "autoria_no_acervo_e_pecas_prontas",
+        (
+            # De onde veio cada imagem do Acervo e com que licença o Mestre pode usá-la
+            # (core/acervo.py, LICENCAS). Vazio: ainda não anotado.
+            "ALTER TABLE acervo_itens ADD COLUMN IF NOT EXISTS autoria TEXT CHECK (autoria IS NULL OR length(autoria) <= 120)",
+            "ALTER TABLE acervo_itens ADD COLUMN IF NOT EXISTS origem TEXT CHECK (origem IS NULL OR length(origem) <= 300)",
+            "ALTER TABLE acervo_itens ADD COLUMN IF NOT EXISTS licenca TEXT CHECK (licenca IS NULL OR length(licenca) <= 30)",
+            # Peças prontas do construtor (grupos de peças salvos pelo Mestre), uma lista por campanha.
+            "ALTER TABLE mapa_campanha ADD COLUMN IF NOT EXISTS prontas JSONB NOT NULL DEFAULT '[]'::jsonb",
+        ),
+    ),
+    (
+        66,
+        "camadas_anotacoes_e_espelhamento_de_tokens",
+        (
+            # Os tokens de Acervo podem ficar em Props, Montarias ou Personagens.
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS camada TEXT NOT NULL DEFAULT 'personagens' CHECK (camada IN ('props', 'montarias', 'personagens'))",
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS flip_x BOOLEAN NOT NULL DEFAULT FALSE",
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS flip_y BOOLEAN NOT NULL DEFAULT FALSE",
+        ),
+    ),
+    (
+        67,
+        "permissoes_e_identidade_dos_jogadores_na_mesa",
+        (
+            "ALTER TABLE membros_campanha ADD COLUMN IF NOT EXISTS nome_mesa TEXT CHECK (nome_mesa IS NULL OR length(nome_mesa) BETWEEN 1 AND 32)",
+            "ALTER TABLE membros_campanha ADD COLUMN IF NOT EXISTS cor_mesa TEXT CHECK (cor_mesa IS NULL OR cor_mesa ~ '^#[0-9A-Fa-f]{6}$')",
+            "ALTER TABLE membros_campanha ADD COLUMN IF NOT EXISTS permissoes_mesa JSONB NOT NULL DEFAULT '{}'::jsonb",
+        ),
+    ),
 )

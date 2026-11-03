@@ -40,6 +40,10 @@ class ProjetoEdicao(BaseModel):
     conteudo: dict | None = None
 
 
+class ProntasInput(BaseModel):
+    prontas: list[dict] = Field(default_factory=list, max_length=construtor.MAX_PRONTAS)
+
+
 class PublicarInput(BaseModel):
     #: A imagem que o navegador do Mestre desenhou e subiu ao acervo.
     mapa_id: UUID
@@ -68,7 +72,9 @@ def _validar_pecas(connection, conteudo: dict, user_id: UUID, ids_ja_usados: set
     Referências já presentes no projeto podem ser mantidas por outro Mestre da
     campanha, que recebe acesso ao arquivo pela regra de leitura do Acervo.
     """
-    ids = {UUID(peca["imagem_id"]) for peca in conteudo.get("pecas", [])}
+    # A mobília do Jardim é do site, não do Acervo de ninguém: não há o que conferir.
+    do_acervo = [peca for peca in conteudo.get("pecas", []) if not peca.get("pacote")]
+    ids = {UUID(peca["imagem_id"]) for peca in do_acervo}
     if not ids:
         return
     linhas = connection.execute(
@@ -84,7 +90,7 @@ def _validar_pecas(connection, conteudo: dict, user_id: UUID, ids_ja_usados: set
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="as pecas precisam ser imagens prontas do tipo objeto")
         if item["dono_id"] != user_id and str(item_id) not in ids_ja_usados:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="use como peca uma imagem objeto do seu Acervo")
-    for peca in conteudo.get("pecas", []):
+    for peca in do_acervo:
         item = itens[peca["imagem_id"]]
         peca["rotulo"] = item["nome"]
         peca["imagem_largura"] = int(item["largura"])
@@ -105,6 +111,53 @@ def _visao(linha, *, completa: bool = True) -> dict:
     if completa:
         visao["conteudo"] = construtor.ler_conteudo(linha["conteudo"], visao["largura"], visao["altura"])
     return visao
+
+
+def _prontas_gravadas(connection, campanha_id: UUID) -> list[dict]:
+    linha = connection.execute("SELECT prontas FROM mapa_campanha WHERE campanha_id=%s", (campanha_id,)).fetchone()
+    try:
+        return construtor.normalizar_prontas(linha["prontas"] if linha else [])
+    except ErroConstrutor:
+        return []
+
+
+@router.get("/{campanha_id}/prontas")
+def listar_prontas(
+    campanha_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """As peças prontas da campanha (grupos de peças que o Mestre salvou para reaproveitar)."""
+    with database.connection() as connection:
+        require_campaign_manager(connection, campanha_id, user.id)
+        return {"prontas": _prontas_gravadas(connection, campanha_id)}
+
+
+@router.put("/{campanha_id}/prontas")
+def salvar_prontas(
+    campanha_id: UUID,
+    payload: ProntasInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    with database.connection() as connection:
+        require_campaign_manager(connection, campanha_id, user.id)
+        try:
+            prontas = construtor.normalizar_prontas(payload.prontas)
+        except ErroConstrutor as erro:
+            raise _erro(erro) from None
+        # Imagem do Acervo dentro de uma peça pronta segue a regra das peças de um mapa.
+        ja_usadas = {peca["imagem_id"] for pronta in _prontas_gravadas(connection, campanha_id) for peca in pronta["pecas"]}
+        for pronta in prontas:
+            _validar_pecas(connection, pronta, user.id, ja_usadas)
+        connection.execute(
+            """
+            INSERT INTO mapa_campanha (campanha_id, prontas) VALUES (%s, %s)
+            ON CONFLICT (campanha_id) DO UPDATE SET prontas = EXCLUDED.prontas, atualizado_em = CURRENT_TIMESTAMP
+            """,
+            (campanha_id, Jsonb(prontas)),
+        )
+    return {"prontas": prontas}
 
 
 @router.get("/{campanha_id}/projetos")

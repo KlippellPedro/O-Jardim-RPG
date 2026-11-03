@@ -50,6 +50,10 @@ class ItemInput(BaseModel):
 
 class ItemEdicao(BaseModel):
     nome: str | None = Field(default=None, min_length=1, max_length=120)
+    #: Autoria, origem (endereço ou descrição) e licença; texto vazio apaga o que estava anotado.
+    autoria: str | None = Field(default=None, max_length=120)
+    origem: str | None = Field(default=None, max_length=300)
+    licenca: str | None = Field(default=None, max_length=30)
     tipo: str | None = None
     pasta_id: UUID | None = None
     mover_para_raiz: bool = False
@@ -112,6 +116,9 @@ def _resumo_item(linha) -> dict:
         "bytes": int(linha["bytes"]),
         "chaves": list(linha["chaves"] or []),
         "criado_em": linha["criado_em"].isoformat(),
+        "autoria": linha.get("autoria"),
+        "origem": linha.get("origem"),
+        "licenca": linha.get("licenca"),
     }
 
 
@@ -132,7 +139,22 @@ def pode_ler_item(connection, item_id: UUID, user: AuthenticatedUser, chave: str
             FROM mapa_cenas c
             LEFT JOIN mapa_tokens t ON t.cena_id = c.id AND t.imagem_id = %(item)s AND NOT t.oculto
             JOIN membros_campanha m ON m.campanha_id = c.campanha_id AND m.usuario_id = %(usuario)s AND m.status = 'ativo'
-            WHERE (c.mapa_id = %(item)s OR t.id IS NOT NULL)
+            WHERE (
+              (c.mapa_id = %(item)s AND (
+                m.papel IN ('mestre', 'assistente')
+                OR (
+                  COALESCE(c.estrutura->'camadas_jogadores'->>'mapa', 'true') = 'true'
+                  AND COALESCE(m.permissoes_mesa->'camadas'->>'mapa', 'true') = 'true'
+                )
+              ))
+              OR (t.id IS NOT NULL AND (
+                m.papel IN ('mestre', 'assistente')
+                OR (
+                  COALESCE(c.estrutura->'camadas_jogadores'->>t.camada, 'true') = 'true'
+                  AND COALESCE(m.permissoes_mesa->'camadas'->>t.camada, 'true') = 'true'
+                )
+              ))
+            )
               AND (
                 m.papel IN ('mestre', 'assistente')
                 OR (c.ativa
@@ -196,7 +218,7 @@ def listar(
         ).fetchall()
         itens = connection.execute(
             """
-            SELECT id, nome, tipo, largura, altura, pasta_id, etiquetas, estado, bytes, chaves, criado_em
+            SELECT id, nome, tipo, largura, altura, pasta_id, etiquetas, estado, bytes, chaves, criado_em, autoria, origem, licenca
             FROM acervo_itens WHERE dono_id=%s ORDER BY lower(nome)
             """,
             (user.id,),
@@ -400,7 +422,7 @@ def concluir_item(
             """
             UPDATE acervo_itens SET estado='pronto', bytes=%s, atualizado_em=CURRENT_TIMESTAMP
             WHERE id=%s
-            RETURNING id, nome, tipo, largura, altura, pasta_id, etiquetas, estado, bytes, chaves, criado_em
+            RETURNING id, nome, tipo, largura, altura, pasta_id, etiquetas, estado, bytes, chaves, criado_em, autoria, origem, licenca
             """,
             (sum(salvas.values()), item_id),
         ).fetchone()
@@ -422,8 +444,16 @@ def editar_item(
                 mudancas["nome"] = acervo.nome_limpo(payload.nome, 120, "nome")
             if payload.etiquetas is not None:
                 mudancas["etiquetas"] = acervo.etiquetas_limpas(payload.etiquetas)
+            for campo, limite in (("autoria", 120), ("origem", 300)):
+                valor = getattr(payload, campo)
+                if valor is not None:
+                    mudancas[campo] = " ".join(valor.split())[:limite] or None
         except ErroAcervo as erro:
             raise _erro(erro) from None
+        if payload.licenca is not None:
+            if payload.licenca and payload.licenca not in acervo.LICENCAS:
+                raise HTTPException(status_code=422, detail="licenca desconhecida")
+            mudancas["licenca"] = payload.licenca or None
         if payload.tipo is not None:
             if payload.tipo not in acervo.TIPOS:
                 raise HTTPException(status_code=422, detail="o tipo e mapa, token ou objeto")
@@ -442,7 +472,7 @@ def editar_item(
             )
         linha = connection.execute(
             """
-            SELECT id, nome, tipo, largura, altura, pasta_id, etiquetas, estado, bytes, chaves, criado_em
+            SELECT id, nome, tipo, largura, altura, pasta_id, etiquetas, estado, bytes, chaves, criado_em, autoria, origem, licenca
             FROM acervo_itens WHERE id=%s
             """,
             (item_id,),

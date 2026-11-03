@@ -44,6 +44,7 @@ from dataclasses import dataclass, field
 from typing import Awaitable, Callable
 
 from core.mapa import ErroMapa, normalizar_magia, portal_atingido
+from core.paredes import caminho
 from core.nevoa import Nevoa
 
 log = logging.getLogger("jardim-plataforma")
@@ -82,7 +83,11 @@ class Conexao:
     usuario_id: str
     nome: str
     gestor: bool
+    papel: str = "jogador"
     personagens: frozenset[str] = field(default_factory=frozenset)
+    permissoes_mesa: dict = field(default_factory=dict)
+    cor_personalizada: str | None = None
+    bloqueada: bool = False
     fila: asyncio.Queue = field(default_factory=lambda: asyncio.Queue(maxsize=LIMITE_FILA))
     enviadas: deque = field(default_factory=deque)
     #: Mensagens que se substituem enquanto esperam a saída (a posição de um token, a régua
@@ -98,7 +103,7 @@ class Conexao:
 
     @property
     def cor(self) -> str:
-        return cor_de(self.usuario_id)
+        return self.cor_personalizada or cor_de(self.usuario_id)
 
     def entregar(self, mensagem: str, chave: str | None = None) -> None:
         if chave is not None and chave in self.juntas:
@@ -174,6 +179,12 @@ class RegraToken:
     some_na_nevoa: bool = False
     #: À vista na posição gravada, para saber se o primeiro arrasto o tira ou o põe na névoa.
     revelado: bool = True
+    #: Camada liberada para jogadores; a camada oculta não pode ser vista nem movida pelo WebSocket.
+    camada_visivel_jogadores: bool = True
+    camada: str = "personagens"
+    #: A última posição gravada (px): de onde sai o caminho que as paredes conferem.
+    x: float = 0.0
+    y: float = 0.0
 
 
 @dataclass
@@ -189,6 +200,9 @@ class Regras:
     #: Os portais da cena ativa (core/mapa.py, normalizar_portais) e o tamanho da casa, em px.
     portais: list = field(default_factory=list)
     casa: float = 100.0
+    #: Paredes vivas (core/paredes.py, barreiras): trechos que barram o jogador e vãos abertos, em px.
+    barram: list = field(default_factory=list)
+    vaos: list = field(default_factory=list)
 
     def vencidas(self) -> bool:
         return time.monotonic() - self.carregadas_em > VALIDADE_REGRAS_S
@@ -259,10 +273,54 @@ def conectados(campanha_id) -> int:
 def _avisar_presenca(sala: Sala) -> None:
     pessoas = {}
     for conexao in sala.conexoes:
-        pessoas[conexao.usuario_id] = {"usuario_id": conexao.usuario_id, "nome": conexao.nome, "cor": conexao.cor, "gestor": conexao.gestor}
+        pessoas[conexao.usuario_id] = {
+            "usuario_id": conexao.usuario_id, "nome": conexao.nome, "cor": conexao.cor,
+            "gestor": conexao.gestor, "papel": conexao.papel,
+        }
     mensagem = json.dumps({"t": "presenca", "pessoas": sorted(pessoas.values(), key=lambda p: p["nome"])}, ensure_ascii=False)
     for conexao in list(sala.conexoes):
         conexao.entregar(mensagem)
+
+
+def _atualizar_membro(campanha_id: str, usuario_id: str, nome: str, cor: str | None, gestor: bool, papel: str, permissoes_mesa: dict, versao: int) -> None:
+    sala = _salas.get(campanha_id)
+    if sala:
+        for conexao in sala.conexoes:
+            if conexao.usuario_id != usuario_id:
+                continue
+            conexao.nome = nome
+            conexao.cor_personalizada = cor
+            conexao.gestor = gestor
+            conexao.papel = papel
+            conexao.permissoes_mesa = dict(permissoes_mesa)
+        _avisar_presenca(sala)
+    _invalidar(campanha_id, versao)
+
+
+def atualizar_membro(campanha_id: str, usuario_id: str, *, nome: str, cor: str | None, gestor: bool, papel: str, permissoes_mesa: dict, versao: int) -> None:
+    """Aplica alterações de papel, identidade e ferramentas nas conexões abertas."""
+    _no_loop(_atualizar_membro, campanha_id, usuario_id, nome, cor, gestor, papel, permissoes_mesa, versao)
+
+
+def _revogar_membro(campanha_id: str, usuario_id: str, versao: int) -> None:
+    sala = _salas.get(campanha_id)
+    if not sala:
+        return
+    for conexao in list(sala.conexoes):
+        if conexao.usuario_id == usuario_id:
+            conexao.entregar(json.dumps({"t": "aviso", "texto": "Seu acesso a esta campanha foi removido."}, ensure_ascii=False))
+            conexao.bloqueada = True
+            sala.conexoes.discard(conexao)
+    if sala.conexoes:
+        _avisar_presenca(sala)
+    else:
+        _salas.pop(campanha_id, None)
+    _invalidar(campanha_id, versao)
+
+
+def revogar_membro(campanha_id: str, usuario_id: str, versao: int) -> None:
+    """Corta ações e presença de conexões abertas depois da remoção de um membro."""
+    _no_loop(_revogar_membro, campanha_id, usuario_id, versao)
 
 
 def _no_loop(funcao: Callable, *args) -> None:
@@ -421,6 +479,8 @@ def _pode_ver(conexao: Conexao, regra: RegraToken, a_vista: bool = True) -> bool
     """`a_vista`: o token não está coberto pela névoa (ou não some nela)."""
     if conexao.gestor:
         return True
+    if not _pode_ver_camada(conexao, regra):
+        return False
     if regra.quem_ve == "todos":
         return a_vista or conexao.usuario_id in regra.donos
     if regra.quem_ve == "donos":
@@ -428,8 +488,23 @@ def _pode_ver(conexao: Conexao, regra: RegraToken, a_vista: bool = True) -> bool
     return False
 
 
+def _pode_ver_camada(conexao: Conexao, regra: RegraToken) -> bool:
+    if conexao.gestor:
+        return True
+    camadas = conexao.permissoes_mesa.get("camadas", {})
+    return regra.camada_visivel_jogadores and camadas.get(regra.camada, True)
+
+
 def _pode_mover(conexao: Conexao, regra: RegraToken, regras: Regras) -> bool:
-    if conexao.gestor or conexao.usuario_id in regra.donos:
+    if conexao.gestor:
+        return True
+    permissoes = conexao.permissoes_mesa
+    camadas = permissoes.get("camadas", {})
+    if not permissoes.get("mover_tokens", True):
+        return False
+    if not regra.camada_visivel_jogadores or not camadas.get(regra.camada, True):
+        return False
+    if conexao.usuario_id in regra.donos:
         return True
     return regras.livre and regra.movivel_livre and regra.quem_ve == "todos"
 
@@ -438,6 +513,10 @@ def _numero(valor) -> float | None:
     if isinstance(valor, bool) or not isinstance(valor, (int, float)) or not math.isfinite(valor):
         return None
     return float(valor)
+
+
+def _pode_usar(conexao: Conexao, acao: str) -> bool:
+    return conexao.gestor or conexao.permissoes_mesa.get(acao, True)
 
 
 def _repassar(
@@ -453,15 +532,17 @@ def _repassar(
 
 
 def _avisar_quem_nao_via(sala: Sala, regra: RegraToken, mensagem: dict) -> None:
-    """Para quem a névoa decide se o token aparece: jogadores que não são donos dele."""
+    """Avisa quem pode ver a camada, mas ainda não recebeu o token por causa da névoa."""
     texto = json.dumps(mensagem, ensure_ascii=False)
     for conexao in list(sala.conexoes):
-        if not conexao.gestor and conexao.usuario_id not in regra.donos:
+        if not conexao.gestor and conexao.usuario_id not in regra.donos and _pode_ver_camada(conexao, regra):
             conexao.entregar(texto)
 
 
 CarregarRegras = Callable[[], Awaitable[Regras]]
-GravarPosicao = Callable[[str, float, float], Awaitable[bool]]
+#: Grava a posição; com `cena=`, leva o token a outra cena (portal entre cenas) e devolve
+#: {"nome", "cena_nome"} ou None.
+GravarPosicao = Callable[..., Awaitable]
 
 
 async def _recarregar(sala: Sala, carregar_regras: CarregarRegras, geracao: int) -> None:
@@ -506,6 +587,8 @@ async def processar(
     """Trata uma mensagem de quem está conectado. Devolve uma resposta só para ele, quando há."""
     if not isinstance(mensagem, dict):
         return {"t": "erro", "motivo": "mensagem invalida"}
+    if conexao.bloqueada:
+        return {"t": "erro", "motivo": "acesso removido da campanha"}
     tipo = mensagem.get("t")
     if tipo == "oi":
         # `c` volta como veio: com ele e `ts`, o navegador mede a ida e volta e acerta o relógio com o servidor.
@@ -537,12 +620,18 @@ async def processar(
             return {"t": "erro", "motivo": "voce nao move este token", "token": token_id}
         x = max(0.0, min(float(regras.largura), x))
         y = max(0.0, min(float(regras.altura), y))
+        barrado = False
+        if not conexao.gestor and regras.barram:
+            # Parede, janela e porta fechada seguram o jogador; o Mestre atravessa.
+            x, y, barrado = caminho(regra.x, regra.y, x, y, regras.barram, regras.vaos, regras.casa)
         travessia = None
         if tipo == "soltar" and regras.portais:
             aceito = mensagem.get("atravessar")
             achado = portal_atingido(
                 regras.portais, x, y, regras.casa, gestor=conexao.gestor, aceito=aceito if isinstance(aceito, str) else None,
             )
+            if achado and achado[0].get("cena"):
+                return await _atravessar_para_outra_cena(sala, conexao, campanha_id, token_id, achado, gravar_posicao)
             if achado:
                 portal, (px, py) = achado
                 de_vista = regras.nevoa is None or not regra.some_na_nevoa or regras.nevoa.revelado(x, y)
@@ -578,6 +667,8 @@ async def processar(
                 # A posição repassada não valeu (o token saiu da cena): todos recarregam.
                 _invalidar(str(campanha_id), int(agora_ms()))
                 return {"t": "erro", "motivo": "o token saiu da cena", "token": token_id}
+            if tipo == "soltar":
+                regra.x, regra.y = x, y
         if saiu_da_nevoa:
             # Os jogadores ainda não conhecem o token: recebem o recorte novo (ou recarregam).
             if _empurrador is not None:
@@ -586,9 +677,16 @@ async def processar(
                 _avisar_quem_nao_via(sala, regra, {"t": "mudou", "versao": int(agora_ms())})
         elif antes and not a_vista:
             _avisar_quem_nao_via(sala, regra, {"t": "sumiu", "token": token_id})
-        return repasse if travessia is not None else None
+        if travessia is not None:
+            return repasse
+        if barrado and tipo == "soltar":
+            # Quem soltou vê o token voltar para antes da parede.
+            return {**repasse, "barrado": True}
+        return None
 
     if tipo == "ping":
+        if not _pode_usar(conexao, "usar_ping"):
+            return {"t": "erro", "motivo": "ping bloqueado pelo mestre"}
         x = _numero(mensagem.get("x"))
         y = _numero(mensagem.get("y"))
         if x is None or y is None:
@@ -600,6 +698,8 @@ async def processar(
         return None
 
     if tipo == "regua":
+        if not _pode_usar(conexao, "usar_regua"):
+            return {"t": "erro", "motivo": "regua bloqueada pelo mestre"}
         pontos = mensagem.get("pontos")
         limpos = None
         if pontos is not None:
@@ -621,6 +721,8 @@ async def processar(
 
     if tipo == "magia":
         # Efeito de magia jogado no mapa: só passa por aqui, a mesa inteira vê e nada é gravado.
+        if not _pode_usar(conexao, "usar_magia"):
+            return {"t": "erro", "motivo": "efeito de magia bloqueado pelo mestre"}
         if not conexao.magia_liberada():
             return None
         try:
@@ -646,6 +748,27 @@ async def processar(
         return None
 
     return {"t": "erro", "motivo": "tipo de mensagem desconhecido"}
+
+
+async def _atravessar_para_outra_cena(sala: Sala, conexao: Conexao, campanha_id, token_id: str, achado, gravar_posicao) -> dict:
+    """Portal entre cenas: o token vai gravado para a outra cena, a mesa recarrega (ele some da
+    cena ativa) e quem comanda recebe um aviso dizendo para onde ele foi."""
+    portal, (px, py) = achado
+    levado = await gravar_posicao(token_id, float(px), float(py), cena=portal["cena"])
+    _invalidar(str(campanha_id), int(agora_ms()))
+    if not levado:
+        return {"t": "erro", "motivo": "a cena do portal nao existe mais", "token": token_id}
+    aviso = json.dumps({
+        "t": "aviso",
+        "texto": f"{levado['nome']} atravessou o portal {portal['nome']} e foi para a cena {levado['cena_nome']}.",
+    }, ensure_ascii=False)
+    for outra in list(sala.conexoes):
+        if outra.gestor and outra is not conexao:
+            outra.entregar(aviso)
+    resposta = {"t": "portal_cena", "token": token_id, "fluxo": portal["fluxo"]}
+    if conexao.gestor:
+        resposta.update({"cena": portal["cena"], "cena_nome": levado["cena_nome"]})
+    return resposta
 
 
 def _limpar_para_testes() -> None:

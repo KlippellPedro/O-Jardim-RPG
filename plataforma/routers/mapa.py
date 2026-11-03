@@ -27,7 +27,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
-from core import calendario, construtor, mapa, nevoa, tempo_real
+from core import calendario, construtor, mapa, nevoa, paredes, tempo_real
 from core.acervo import ler as ler_pedaco
 from core.condicoes import normalizar_condicoes
 from core.database import Database
@@ -80,6 +80,7 @@ class TokenInput(BaseModel):
     y: float
     porte: int = 1
     lado: str | None = None
+    camada: str = "personagens"
     oculto: bool = False
     moldura: str | None = Field(default=None, max_length=40)
 
@@ -89,6 +90,9 @@ class TokenEdicao(BaseModel):
     porte: int | None = None
     lado: str | None = None
     oculto: bool | None = None
+    camada: str | None = None
+    flip_x: bool | None = None
+    flip_y: bool | None = None
     imagem_id: UUID | None = None
     sem_imagem: bool = False
     barras: dict | None = None
@@ -131,6 +135,23 @@ class PortaisInput(BaseModel):
     portais: list[dict] = Field(default_factory=list, max_length=mapa.MAX_PORTAIS)
 
 
+class PortaInput(BaseModel):
+    """Mexer numa porta do mapa montado: `id` é a aresta ("h,3,4"). O jogador só abre e fecha."""
+
+    id: str = Field(min_length=5, max_length=16)
+    estado: str | None = None
+    #: Só o Mestre: True revela a porta secreta (vira porta comum), False a esconde de novo.
+    revelar: bool | None = None
+
+
+class CamadasInput(BaseModel):
+    jogadores: dict[str, bool]
+
+
+class AnotacoesInput(BaseModel):
+    anotacoes: list[dict] = Field(default_factory=list, max_length=mapa.MAX_ANOTACOES)
+
+
 class MensagensInput(BaseModel):
     mensagens: list[dict] = Field(default_factory=list, max_length=60)
 
@@ -152,7 +173,18 @@ def _espectador(connection, campanha_id: UUID, acesso, user_id) -> Espectador:
             (campanha_id, user_id),
         ).fetchall()
     )
-    return Espectador(usuario_id=str(user_id), gestor=acesso.manages_content, personagens=personagens)
+    if acesso.manages_content:
+        permissoes_mesa = mapa.normalizar_permissoes_mesa({}, acesso.role)
+    else:
+        membro = connection.execute(
+            "SELECT papel, permissoes_mesa FROM membros_campanha WHERE campanha_id=%s AND usuario_id=%s AND status='ativo'",
+            (campanha_id, user_id),
+        ).fetchone()
+        permissoes_mesa = mapa.ler_permissoes_mesa(membro["permissoes_mesa"] if membro else None, membro["papel"] if membro else acesso.role)
+    return Espectador(
+        usuario_id=str(user_id), gestor=acesso.manages_content, personagens=personagens,
+        permissoes_mesa=permissoes_mesa,
+    )
 
 
 def _cena(connection, campanha_id: UUID, cena_id: UUID, *, travar: bool = False):
@@ -208,6 +240,7 @@ def _tokens(connection, cena_id: UUID) -> list[dict]:
             """
             SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome,
                    t.x, t.y, t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz,
+                   t.camada, t.flip_x, t.flip_y,
                    COALESCE(t.personagem_id, sp.personagem_id) AS personagem_efetivo
             FROM mapa_tokens t
             LEFT JOIN sessao_participantes sp ON sp.id = t.participante_id
@@ -291,8 +324,11 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador) -> list
     moldura_mesa = _moldura_mesa(connection, campanha_id)
     estado_nevoa = nevoa.ler(cena["nevoa"])
     cobertura = nevoa.Nevoa(estado_nevoa["formas"]) if estado_nevoa["ligada"] and not quem.gestor else None
+    camadas_visiveis = _camadas_visiveis(cena["estrutura"], quem.gestor, quem.permissoes_mesa)
     saida = []
     for token in tokens:
+        if not quem.gestor and not camadas_visiveis.get(token.get("camada") or "personagens", False):
+            continue
         participante = ligacoes[str(token["id"])]
         personagem = str(token["personagem_efetivo"]) if token["personagem_efetivo"] else None
         do_personagem = tokens_de_personagem.get(personagem) or {}
@@ -352,6 +388,14 @@ def _portais(cena) -> list[dict]:
     return mapa.ler_estrutura(cena["estrutura"], int(cena["largura"]), int(cena["altura"]))["portais"]
 
 
+def _camadas_visiveis(estrutura, gestor: bool, permissoes_mesa: dict | None = None) -> dict[str, bool]:
+    if gestor:
+        return {camada: True for camada in mapa.CAMADAS_MAPA}
+    liberadas = mapa.camadas_jogadores(estrutura)
+    pessoais = permissoes_mesa.get("camadas", {}) if isinstance(permissoes_mesa, dict) else {}
+    return {camada: liberadas.get(camada, False) and pessoais.get(camada, True) for camada in mapa.CAMADAS_MAPA}
+
+
 def _tempo_da_campanha(connection, campanha_id: UUID, gestor: bool) -> dict:
     """Hora, estação e lua para a luz do dia; a data só para quem pode ver o calendário."""
     linha = connection.execute("SELECT estado FROM campanha_calendario WHERE campanha_id=%s", (campanha_id,)).fetchone()
@@ -365,7 +409,7 @@ def _tempo_da_campanha(connection, campanha_id: UUID, gestor: bool) -> dict:
     return tempo
 
 
-def _resumo_cena(connection, cena, *, completa: bool, gestor: bool = False) -> dict:
+def _resumo_cena(connection, cena, *, completa: bool, gestor: bool = False, permissoes_mesa: dict | None = None) -> dict:
     resumo = {
         "id": str(cena["id"]),
         "nome": cena["nome"],
@@ -375,28 +419,43 @@ def _resumo_cena(connection, cena, *, completa: bool, gestor: bool = False) -> d
     if completa:
         estado_nevoa = nevoa.ler(cena["nevoa"])
         cobertura = nevoa.Nevoa(estado_nevoa["formas"]) if estado_nevoa["ligada"] else None
+        camadas_visiveis = _camadas_visiveis(cena["estrutura"], gestor, permissoes_mesa)
+        anotacoes = mapa.ler_anotacoes(cena["estrutura"], int(cena["largura"]), int(cena["altura"]))
+        if not gestor:
+            anotacoes = [a for a in anotacoes if camadas_visiveis["anotacoes"] and (cobertura is None or cobertura.revelado(a["x"], a["y"]))]
         resumo.update({
             "largura": cena["largura"],
             "altura": cena["altura"],
             "grade": mapa.normalizar_grade({}, cena["grade"] if isinstance(cena["grade"], dict) else {}),
             "livre": bool(cena["livre"]),
-            "mapa": _mapa_da_cena(connection, cena),
+            "mapa": _mapa_da_cena(connection, cena) if camadas_visiveis["mapa"] else None,
+            "camadas_jogadores": mapa.camadas_jogadores(cena["estrutura"]) if gestor else None,
+            "camadas_visiveis": [chave for chave, visivel in camadas_visiveis.items() if visivel],
+            "anotacoes": anotacoes,
             "nevoa": {
                 **estado_nevoa,
+                "ligada": estado_nevoa["ligada"] if camadas_visiveis["mapa"] else False,
+                "formas": estado_nevoa["formas"] if camadas_visiveis["mapa"] else [],
                 # Só o jogador precisa da lista: o Mestre baixa o mapa inteiro.
-                "ladrilhos": list(cena["nevoa_ladrilhos"] or []) if estado_nevoa["ligada"] and not gestor else None,
+                "ladrilhos": list(cena["nevoa_ladrilhos"] or []) if estado_nevoa["ligada"] and not gestor and camadas_visiveis["mapa"] else None,
             },
             "clima": mapa.ler_clima(cena["clima"], int(cena["largura"]), int(cena["altura"])),
             # Portal escondido, desligado ou com as duas bocas na névoa não chega ao jogador.
             "portais": mapa.portais_de(
-                _portais(cena), gestor=gestor,
+                _portais(cena) if camadas_visiveis["mapa"] else [], gestor=gestor,
                 revelado=cobertura.revelado if cobertura is not None else (lambda _x, _y: True),
             ),
             # Portas e janelas do mapa montado no construtor; a porta secreta é só do Mestre.
             "aberturas": construtor.aberturas_de(
-                construtor.ler_aberturas(cena["estrutura"]), gestor=gestor,
+                construtor.ler_aberturas(cena["estrutura"]) if camadas_visiveis["mapa"] else [], gestor=gestor,
                 revelado=cobertura.revelado if cobertura is not None else (lambda _x, _y: True),
             ),
+            # Luzes fixas (só as que a névoa mostra) e as casas de água e lava, que ganham movimento.
+            "luzes": construtor.luzes_de(
+                construtor.ler_luzes(cena["estrutura"]) if camadas_visiveis["mapa"] else [], gestor=gestor,
+                revelado=cobertura.revelado if cobertura is not None else (lambda _x, _y: True),
+            ),
+            "liquidos": construtor.ler_liquidos(cena["estrutura"]) if camadas_visiveis["mapa"] else {"agua": [], "lava": []},
         })
     return resumo
 
@@ -409,6 +468,7 @@ def _montar(connection, campanha_id: UUID, acesso, user: AuthenticatedUser, cena
     resposta = {
         "gestor": gestor,
         "usuario_id": str(user.id),
+        "permissoes_mesa": quem.permissoes_mesa,
         "ao_vivo": ao_vivo,
         "bloqueado": not gestor and not ao_vivo,
         "cenas": [],
@@ -440,7 +500,9 @@ def _montar(connection, campanha_id: UUID, acesso, user: AuthenticatedUser, cena
         escolhida = _cena_ativa(connection, campanha_id)
     if escolhida is None:
         return resposta
-    resposta["cena"] = _resumo_cena(connection, escolhida, completa=True, gestor=gestor)
+    resposta["cena"] = _resumo_cena(
+        connection, escolhida, completa=True, gestor=gestor, permissoes_mesa=quem.permissoes_mesa
+    )
     resposta["tokens"] = _visao_tokens(connection, campanha_id, escolhida, quem)
     return resposta
 
@@ -640,12 +702,70 @@ def mudar_portais(
     with database.connection() as connection:
         acesso = require_campaign_manager(connection, campanha_id, user.id)
         cena = _cena(connection, campanha_id, cena_id, travar=True)
+        # Portal entre cenas: as outras cenas da campanha são os destinos possíveis.
+        destinos = {
+            str(linha["id"]): (int(linha["largura"]), int(linha["altura"]), linha["nome"])
+            for linha in connection.execute(
+                "SELECT id, nome, largura, altura FROM mapa_cenas WHERE campanha_id=%s AND id<>%s",
+                (campanha_id, cena_id),
+            ).fetchall()
+        }
         try:
-            portais = mapa.normalizar_portais(payload.portais, int(cena["largura"]), int(cena["altura"]))
+            portais = mapa.normalizar_portais(payload.portais, int(cena["largura"]), int(cena["altura"]), destinos)
         except ErroMapa as erro:
             raise _erro_mapa(erro) from None
         estrutura = dict(cena["estrutura"]) if isinstance(cena["estrutura"], dict) else {}
         estrutura["portais"] = portais
+        connection.execute("UPDATE mapa_cenas SET estrutura=%s WHERE id=%s", (Jsonb(estrutura), cena_id))
+        versao = _tocar(connection, cena_id)
+        resposta = _montar(connection, campanha_id, acesso, user, cena_id)
+    _avisar(campanha_id, versao)
+    return resposta
+
+
+@router.put("/{campanha_id}/cenas/{cena_id}/camadas")
+def mudar_camadas(
+    campanha_id: UUID,
+    cena_id: UUID,
+    payload: CamadasInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Salva quais camadas o servidor pode entregar aos jogadores. O Mestre sempre vê todas."""
+    with database.connection() as connection:
+        acesso = require_campaign_manager(connection, campanha_id, user.id)
+        cena = _cena(connection, campanha_id, cena_id, travar=True)
+        estrutura = dict(cena["estrutura"]) if isinstance(cena["estrutura"], dict) else {}
+        try:
+            atual = mapa.camadas_jogadores(estrutura)
+            estrutura["camadas_jogadores"] = mapa.normalizar_camadas_jogadores(payload.jogadores, atual)
+        except ErroMapa as erro:
+            raise _erro_mapa(erro) from None
+        connection.execute("UPDATE mapa_cenas SET estrutura=%s WHERE id=%s", (Jsonb(estrutura), cena_id))
+        versao = _tocar(connection, cena_id)
+        resposta = _montar(connection, campanha_id, acesso, user, cena_id)
+    _avisar(campanha_id, versao)
+    return resposta
+
+
+@router.put("/{campanha_id}/cenas/{cena_id}/anotacoes")
+def mudar_anotacoes(
+    campanha_id: UUID,
+    cena_id: UUID,
+    payload: AnotacoesInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Cria, edita ou remove os textos persistentes da cena."""
+    with database.connection() as connection:
+        acesso = require_campaign_manager(connection, campanha_id, user.id)
+        cena = _cena(connection, campanha_id, cena_id, travar=True)
+        try:
+            anotacoes = mapa.normalizar_anotacoes(payload.anotacoes, int(cena["largura"]), int(cena["altura"]))
+        except ErroMapa as erro:
+            raise _erro_mapa(erro) from None
+        estrutura = dict(cena["estrutura"]) if isinstance(cena["estrutura"], dict) else {}
+        estrutura["anotacoes"] = anotacoes
         connection.execute("UPDATE mapa_cenas SET estrutura=%s WHERE id=%s", (Jsonb(estrutura), cena_id))
         versao = _tocar(connection, cena_id)
         resposta = _montar(connection, campanha_id, acesso, user, cena_id)
@@ -693,8 +813,8 @@ def _token(connection, campanha_id: UUID, token_id: UUID, *, travar: bool = Fals
     token = connection.execute(
         f"""
         SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome, t.x, t.y,
-               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz,
-               c.largura, c.altura, c.livre, c.ativa
+               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.camada, t.flip_x, t.flip_y,
+               c.largura, c.altura, c.livre, c.ativa, c.estrutura
         FROM mapa_tokens t JOIN mapa_cenas c ON c.id = t.cena_id
         WHERE t.id=%s AND c.campanha_id=%s{' FOR UPDATE OF t' if travar else ''}
         """,
@@ -751,6 +871,8 @@ def criar_token(
             _item_do_mestre(connection, payload.imagem_id, user)
         if lado not in mapa.LADOS:
             raise HTTPException(status_code=422, detail="lado invalido")
+        if payload.camada not in mapa.CAMADAS_TOKEN:
+            raise HTTPException(status_code=422, detail="camada do token invalida")
         try:
             porte = mapa.porte_valido(payload.porte)
             x, y = mapa.limitar_posicao(payload.x, payload.y, cena["largura"], cena["altura"])
@@ -759,11 +881,11 @@ def criar_token(
             raise _erro_mapa(erro) from None
         connection.execute(
             """
-            INSERT INTO mapa_tokens (id, cena_id, personagem_id, participante_id, imagem_id, nome, x, y, porte, lado, oculto, barras, moldura)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO mapa_tokens (id, cena_id, personagem_id, participante_id, imagem_id, nome, x, y, porte, lado, oculto, barras, moldura, camada)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (uuid4(), cena_id, payload.personagem_id, payload.participante_id, payload.imagem_id,
-             (payload.nome or "").strip() or None, x, y, porte, lado, payload.oculto, Jsonb(mapa.barras_padrao(lado)), moldura),
+             (payload.nome or "").strip() or None, x, y, porte, lado, payload.oculto, Jsonb(mapa.barras_padrao(lado)), moldura, payload.camada),
         )
         versao = _tocar(connection, cena_id)
         resposta = _montar(connection, campanha_id, acesso, user, cena_id)
@@ -833,7 +955,9 @@ def editar_token(
         quem = _espectador(connection, campanha_id, acesso, user.id)
         participante = _participante_do_token(connection, campanha_id, token)
         dono = mapa.e_dono(token, participante, quem)
-        estruturais = (payload.nome, payload.porte, payload.lado, payload.oculto, payload.imagem_id, payload.moldura)
+        if not quem.gestor and not _camadas_visiveis(token["estrutura"], False, quem.permissoes_mesa).get(token["camada"], False):
+            raise HTTPException(status_code=404, detail="token nao encontrado")
+        estruturais = (payload.nome, payload.porte, payload.lado, payload.oculto, payload.imagem_id, payload.moldura, payload.camada)
         if not quem.gestor and (any(v is not None for v in estruturais) or payload.sem_imagem or payload.sem_moldura):
             raise HTTPException(status_code=403, detail="so o mestre muda isso")
         if not quem.gestor and not dono:
@@ -850,6 +974,14 @@ def editar_token(
                 mudancas["lado"] = payload.lado
             if payload.oculto is not None:
                 mudancas["oculto"] = payload.oculto
+            if payload.camada is not None:
+                if payload.camada not in mapa.CAMADAS_TOKEN:
+                    raise ErroMapa("camada do token invalida")
+                mudancas["camada"] = payload.camada
+            if payload.flip_x is not None:
+                mudancas["flip_x"] = payload.flip_x
+            if payload.flip_y is not None:
+                mudancas["flip_y"] = payload.flip_y
             if payload.barras is not None:
                 mudancas["barras"] = Jsonb(mapa.normalizar_barras(payload.barras, token["barras"] or {}, mudancas.get("lado", token["lado"])))
             if payload.sem_moldura:
@@ -963,6 +1095,8 @@ def mover_token(
             sessao = _sessao_do_momento(connection, campanha_id)
             if not token["ativa"] or not (sessao and sessao["status"] == "aberta"):
                 raise HTTPException(status_code=403, detail="o mapa so abre com a sessao ao vivo")
+            if not _camadas_visiveis(token["estrutura"], False, quem.permissoes_mesa).get(token["camada"], False):
+                raise HTTPException(status_code=404, detail="token nao encontrado")
         participante = _participante_do_token(connection, campanha_id, token)
         if not mapa.pode_mover(token, participante, quem, bool(token["livre"])):
             raise HTTPException(status_code=403, detail="voce nao move este token")
@@ -973,14 +1107,127 @@ def mover_token(
         travessia = None
         cena = _cena(connection, campanha_id, token["cena_id"])
         casa = mapa.normalizar_grade({}, cena["grade"] if isinstance(cena["grade"], dict) else {})["tamanho"]
+        barrado = False
+        if not quem.gestor:
+            # Parede, janela e porta fechada seguram o jogador; o Mestre atravessa.
+            barram, vaos = paredes.barreiras(cena["estrutura"])
+            x, y, barrado = paredes.caminho(float(token["x"]), float(token["y"]), x, y, barram, vaos, float(casa))
         achado = mapa.portal_atingido(_portais(cena), x, y, casa, gestor=quem.gestor, aceito=payload.atravessar)
-        if achado:
+        resposta = None
+        if achado and achado[0].get("cena"):
+            # Portal entre cenas: o token vai gravado para a outra cena.
+            portal, (bx, by) = achado
+            levado = _levar_para_cena(connection, campanha_id, token_id, UUID(portal["cena"]), float(bx), float(by))
+            if not levado:
+                raise HTTPException(status_code=409, detail="a cena do portal nao existe mais")
+            travessia = {"portal": portal["id"], "fluxo": portal["fluxo"], "de": [payload.x, payload.y], "cena": portal["cena"]}
+            if quem.gestor:
+                travessia["cena_nome"] = levado["cena_nome"]
+            resposta = {"x": float(bx), "y": float(by), "versao": levado["versao"], "travessia": travessia, "barrado": barrado}
+        elif achado:
             portal, (x, y) = achado
             travessia = {"portal": portal["id"], "fluxo": portal["fluxo"], "de": [payload.x, payload.y]}
-        connection.execute("UPDATE mapa_tokens SET x=%s, y=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s", (x, y, token_id))
-        versao = _tocar(connection, token["cena_id"])
+        if resposta is None:
+            connection.execute("UPDATE mapa_tokens SET x=%s, y=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s", (x, y, token_id))
+            versao = _tocar(connection, token["cena_id"])
+            resposta = {"x": x, "y": y, "versao": versao, "travessia": travessia, "barrado": barrado}
+    _avisar(campanha_id, resposta["versao"])
+    return resposta
+
+
+def _levar_para_cena(connection, campanha_id: UUID, token_id: UUID, cena_destino: UUID, x: float, y: float) -> dict | None:
+    """Portal entre cenas: o token passa para a outra cena, na saída do portal. Se o mesmo
+    personagem (ou participante) já tem token lá, aquele vai para a saída e este some: o
+    personagem nunca fica duas vezes na mesma cena. None se a cena não existe mais."""
+    destino = connection.execute(
+        "SELECT id, nome, largura, altura FROM mapa_cenas WHERE id=%s AND campanha_id=%s FOR UPDATE",
+        (cena_destino, campanha_id),
+    ).fetchone()
+    token = connection.execute(
+        """
+        SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, COALESCE(t.nome, p.nome) AS nome
+        FROM mapa_tokens t JOIN mapa_cenas c ON c.id = t.cena_id
+        LEFT JOIN personagens p ON p.id = t.personagem_id
+        WHERE t.id=%s AND c.campanha_id=%s FOR UPDATE OF t
+        """,
+        (token_id, campanha_id),
+    ).fetchone()
+    if not destino or not token or token["cena_id"] == destino["id"]:
+        return None
+    x, y = mapa.limitar_posicao(x, y, int(destino["largura"]), int(destino["altura"]))
+    gemeo = connection.execute(
+        """
+        SELECT id FROM mapa_tokens
+        WHERE cena_id=%s AND id<>%s
+          AND ((personagem_id IS NOT NULL AND personagem_id=%s) OR (participante_id IS NOT NULL AND participante_id=%s))
+        LIMIT 1
+        """,
+        (destino["id"], token["id"], token["personagem_id"], token["participante_id"]),
+    ).fetchone()
+    if gemeo:
+        connection.execute("UPDATE mapa_tokens SET x=%s, y=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s", (x, y, gemeo["id"]))
+        connection.execute("DELETE FROM mapa_tokens WHERE id=%s", (token["id"],))
+    else:
+        connection.execute(
+            "UPDATE mapa_tokens SET cena_id=%s, x=%s, y=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s",
+            (destino["id"], x, y, token["id"]),
+        )
+    _tocar(connection, token["cena_id"])
+    versao = _tocar(connection, destino["id"])
+    return {"nome": token["nome"] or "Um token", "cena_nome": destino["nome"], "versao": versao}
+
+
+@router.put("/{campanha_id}/cenas/{cena_id}/portas")
+def mudar_porta(
+    campanha_id: UUID,
+    cena_id: UUID,
+    payload: PortaInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Abrir, fechar, trancar ou revelar uma porta do mapa montado. O jogador abre e fecha a
+    porta destrancada ao lado de um token dele, na cena ao vivo; o Mestre mexe em qualquer uma."""
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        quem = _espectador(connection, campanha_id, acesso, user.id)
+        cena = _cena(connection, campanha_id, cena_id, travar=True)
+        aberturas = construtor.ler_aberturas(cena["estrutura"])
+        perto, a_vista = False, True
+        if not quem.gestor:
+            sessao = _sessao_do_momento(connection, campanha_id)
+            if not cena["ativa"] or not (sessao and sessao["status"] == "aberta"):
+                raise HTTPException(status_code=403, detail="o mapa so abre com a sessao ao vivo")
+            achada = next((a for a in aberturas if a.get("id") == payload.id), None)
+            if achada is not None:
+                estado_nevoa = nevoa.ler(cena["nevoa"])
+                if estado_nevoa["ligada"]:
+                    meio_x = (achada["x1"] + achada["x2"]) / 2
+                    meio_y = (achada["y1"] + achada["y2"]) / 2
+                    a_vista = nevoa.Nevoa(estado_nevoa["formas"]).revelado(meio_x, meio_y)
+                casa = mapa.normalizar_grade({}, cena["grade"] if isinstance(cena["grade"], dict) else {})["tamanho"]
+                tokens = _tokens(connection, cena_id)
+                ligacoes = _ligacoes(tokens, _participantes(connection, campanha_id))
+                alcance = paredes.ALCANCE_PORTA_CASAS * float(casa)
+                perto = any(
+                    mapa.e_dono(token, ligacoes[str(token["id"])], quem)
+                    and paredes.distancia_da_porta(achada, float(token["x"]), float(token["y"])) <= alcance
+                    for token in tokens
+                )
+        try:
+            novas = paredes.mudar_porta(
+                aberturas, payload.id, estado=payload.estado, revelar=payload.revelar,
+                gestor=quem.gestor, perto=perto, a_vista=a_vista,
+            )
+        except paredes.ErroPorta as erro:
+            raise HTTPException(status_code=erro.codigo, detail=erro.mensagem) from None
+        estrutura = dict(cena["estrutura"]) if isinstance(cena["estrutura"], dict) else {}
+        estrutura["aberturas"] = novas
+        connection.execute("UPDATE mapa_cenas SET estrutura=%s WHERE id=%s", (Jsonb(estrutura), cena_id))
+        versao = _tocar(connection, cena_id)
+        resposta = _montar(connection, campanha_id, acesso, user, cena_id if quem.gestor else None)
+    # A porta muda o que barra o caminho: o hub recarrega as paredes junto com a mesa.
     _avisar(campanha_id, versao)
-    return {"x": x, "y": y, "versao": versao, "travessia": travessia}
+    return resposta
 
 
 @router.delete("/{campanha_id}/tokens/{token_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -1030,6 +1277,8 @@ def imagem_do_token(
             sessao = _sessao_do_momento(connection, campanha_id)
             if not token["ativa"] or not (sessao and sessao["status"] == "aberta"):
                 raise HTTPException(status_code=404, detail="imagem nao encontrada")
+            if not _camadas_visiveis(token["estrutura"], False, quem.permissoes_mesa).get(token["camada"], False):
+                raise HTTPException(status_code=404, detail="imagem nao encontrada")
         participante = _participante_do_token(connection, campanha_id, token)
         if mapa.degrau_de(token, participante, quem) not in ("parcial", "total"):
             raise HTTPException(status_code=404, detail="imagem nao encontrada")
@@ -1058,6 +1307,7 @@ def _regras_sync(database: Database, campanha_id: UUID) -> tempo_real.Regras:
         if not cena:
             return tempo_real.Regras(cena_id=None, livre=False, largura=0, altura=0, tokens={})
         portais = _portais(cena)
+        camadas_visiveis = mapa.camadas_jogadores(cena["estrutura"])
         casa = mapa.normalizar_grade({}, cena["grade"] if isinstance(cena["grade"], dict) else {})["tamanho"]
         tokens = _tokens(connection, cena["id"])
         participantes = _participantes(connection, campanha_id)
@@ -1085,19 +1335,33 @@ def _regras_sync(database: Database, campanha_id: UUID) -> tempo_real.Regras:
             movivel_livre=not token["oculto"] and visivel in ("parcial", "total"),
             some_na_nevoa=mapa.some_na_nevoa(token, participante),
             revelado=cobertura is None or cobertura.revelado(float(token["x"]), float(token["y"])),
+            camada_visivel_jogadores=camadas_visiveis.get(token.get("camada") or "personagens", False),
+            camada=token.get("camada") or "personagens",
+            x=float(token["x"]),
+            y=float(token["y"]),
         )
+    barram, vaos = paredes.barreiras(cena["estrutura"])
     return tempo_real.Regras(
         cena_id=str(cena["id"]), livre=bool(cena["livre"]),
         largura=int(cena["largura"]), altura=int(cena["altura"]), tokens=regras,
         carregadas_em=time.monotonic(), nevoa=cobertura, portais=portais, casa=float(casa),
+        barram=barram, vaos=vaos,
     )
 
 
-def _gravar_posicao_sync(database: Database, campanha_id: UUID, token_id: str, x: float, y: float) -> bool:
+def _gravar_posicao_sync(database: Database, campanha_id: UUID, token_id: str, x: float, y: float, cena: str | None = None):
     try:
         token_uuid = UUID(token_id)
     except ValueError:
-        return False
+        return False if cena is None else None
+    if cena is not None:
+        # Portal entre cenas: o token sai da cena ativa e vai para a saída na outra.
+        try:
+            cena_uuid = UUID(cena)
+        except ValueError:
+            return None
+        with database.connection() as connection:
+            return _levar_para_cena(connection, campanha_id, token_uuid, cena_uuid, x, y)
     with database.connection() as connection:
         linha = connection.execute(
             """
@@ -1124,7 +1388,7 @@ def _origem_permitida(cabecalhos, settings) -> bool:
 
 
 def _entrada_sync(database: Database, conexao_http, campanha_id: UUID):
-    """Quem está entrando e se pode: (usuário, gestor, personagens) ou um motivo de recusa."""
+    """Quem está entrando, seu recorte, identidade e permissões pessoais."""
     usuario = get_current_user(conexao_http, database)
     with database.connection() as connection:
         acesso = campaign_access(connection, campanha_id, usuario.id)
@@ -1133,7 +1397,17 @@ def _entrada_sync(database: Database, conexao_http, campanha_id: UUID):
             if not (sessao and sessao["status"] == "aberta"):
                 raise HTTPException(status_code=403, detail="o mapa so abre com a sessao ao vivo")
         quem = _espectador(connection, campanha_id, acesso, usuario.id)
-    return usuario, quem
+        identidade = connection.execute(
+            """
+            SELECT nome_mesa, cor_mesa
+            FROM membros_campanha
+            WHERE campanha_id=%s AND usuario_id=%s AND status='ativo'
+            """,
+            (campanha_id, usuario.id),
+        ).fetchone()
+    nome = (identidade["nome_mesa"] if identidade else None) or usuario.nome_exibicao
+    cor = identidade["cor_mesa"] if identidade else None
+    return usuario, quem, nome, cor, acesso.role
 
 
 def _estados_sync(database: Database, campanha_id: UUID, pedidos: list[tuple[str, str | None]]) -> list[dict | None]:
@@ -1176,8 +1450,8 @@ def _funcoes_do_hub(database: Database, campanha_id: UUID):
     async def carregar():
         return await run_in_threadpool(_regras_sync, database, campanha_id)
 
-    async def gravar(token_id: str, x: float, y: float) -> bool:
-        return await run_in_threadpool(_gravar_posicao_sync, database, campanha_id, token_id, x, y)
+    async def gravar(token_id: str, x: float, y: float, cena: str | None = None):
+        return await run_in_threadpool(_gravar_posicao_sync, database, campanha_id, token_id, x, y, cena)
 
     return carregar, gravar
 
@@ -1189,13 +1463,14 @@ async def ao_vivo_ws(websocket: WebSocket, campanha_id: UUID):
         await websocket.close(code=4403)
         return
     try:
-        usuario, quem = await run_in_threadpool(_entrada_sync, database, websocket, campanha_id)
+        usuario, quem, nome, cor, papel = await run_in_threadpool(_entrada_sync, database, websocket, campanha_id)
     except HTTPException as erro:
         await websocket.close(code=4000 + min(erro.status_code, 999))
         return
     await websocket.accept()
     conexao = tempo_real.Conexao(
-        usuario_id=str(usuario.id), nome=usuario.nome_exibicao, gestor=quem.gestor, personagens=quem.personagens,
+        usuario_id=str(usuario.id), nome=nome, gestor=quem.gestor, personagens=quem.personagens,
+        permissoes_mesa=quem.permissoes_mesa, cor_personalizada=cor, papel=papel,
     )
     carregar, gravar = _funcoes_do_hub(database, campanha_id)
     tempo_real.registrar_empurrador(_empurrador_de(database))
@@ -1233,9 +1508,10 @@ _conexoes_sse: dict[str, tuple[str, str, tempo_real.Conexao]] = {}
 @router.get("/{campanha_id}/ao-vivo")
 async def ao_vivo_sse(campanha_id: UUID, request: Request):
     database: Database = request.app.state.database
-    usuario, quem = await run_in_threadpool(_entrada_sync, database, request, campanha_id)
+    usuario, quem, nome, cor, papel = await run_in_threadpool(_entrada_sync, database, request, campanha_id)
     conexao = tempo_real.Conexao(
-        usuario_id=str(usuario.id), nome=usuario.nome_exibicao, gestor=quem.gestor, personagens=quem.personagens,
+        usuario_id=str(usuario.id), nome=nome, gestor=quem.gestor, personagens=quem.personagens,
+        permissoes_mesa=quem.permissoes_mesa, cor_personalizada=cor, papel=papel,
     )
     conexao_id = uuid4().hex
 

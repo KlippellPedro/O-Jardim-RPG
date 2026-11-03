@@ -39,6 +39,16 @@ ARESTA = re.compile(r"^([hv]),(\d{1,3}),(\d{1,3})$")
 ID_PECA = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$", re.I)
 LINHA_DE_CHAO = re.compile(rf"^[{re.escape(VAZIO)}{MATERIAIS_CHAO}]*$")
 MAX_PECAS = 256
+#: Peça da mobília do Jardim (public/assets/construtor/mobilia/<id>.webp), em vez de uma imagem do Acervo.
+ID_MOBILIA = re.compile(r"^[a-z0-9-]{1,40}$")
+#: Chão (tapete, alçapão), objetos (embaixo das paredes) ou alto (copa de árvore, tocha de parede).
+CAMADAS_PECA = ("chao", "objetos", "alto")
+#: Luzes fixas do mapa (tocha na parede, braseiro): raio em casas, cor e se a chama tremula.
+MAX_LUZES = 64
+LUZ_MAXIMA_CASAS = 30
+COR = re.compile(r"^#[0-9a-fA-F]{6}$")
+#: Chão que ganha movimento na mesa: W é água, V é lava (MATERIAIS_CHAO).
+LIQUIDOS = {"W": "agua", "V": "lava"}
 MAX_LADO_IMAGEM_PECA = 32768
 
 
@@ -83,7 +93,7 @@ def tamanho(largura, altura, casa) -> tuple[int, int, int]:
 
 
 def conteudo_vazio(largura: int, altura: int) -> dict:
-    return {"versao": VERSAO, "chao": [VAZIO * largura for _ in range(altura)], "paredes": {}, "aberturas": {}, "pecas": []}
+    return {"versao": VERSAO, "chao": [VAZIO * largura for _ in range(altura)], "paredes": {}, "aberturas": {}, "pecas": [], "luzes": []}
 
 
 def aresta_valida(chave: str, largura: int, altura: int) -> tuple[str, int, int] | None:
@@ -146,11 +156,17 @@ def normalizar_conteudo(dados, largura: int, altura: int) -> dict:
         if not isinstance(peca, dict):
             raise ErroConstrutor("peca invalida")
         id_peca = str(peca.get("id") or "").lower()
-        imagem_id = str(peca.get("imagem_id") or "").lower()
+        pacote = peca.get("pacote") or None
+        imagem_id = "" if pacote else str(peca.get("imagem_id") or "").lower()
         if not ID_PECA.fullmatch(id_peca) or id_peca in ids_vistos:
             raise ErroConstrutor("id de peca invalido ou repetido")
-        if not ID_PECA.fullmatch(imagem_id):
+        if pacote is not None and (not isinstance(pacote, str) or not ID_MOBILIA.fullmatch(pacote)):
+            raise ErroConstrutor("peca de mobilia desconhecida")
+        if pacote is None and not ID_PECA.fullmatch(imagem_id):
             raise ErroConstrutor("imagem da peca invalida")
+        camada = peca.get("camada", "objetos")
+        if camada not in CAMADAS_PECA:
+            raise ErroConstrutor("a peca fica no chao, com os objetos ou no alto")
         ids_vistos.add(id_peca)
         rotulo = " ".join(str(peca.get("rotulo") or "Objeto").split())[:80] or "Objeto"
         imagem_largura = _inteiro(peca.get("imagem_largura"), "largura da imagem da peca", 1, MAX_LADO_IMAGEM_PECA)
@@ -163,11 +179,63 @@ def normalizar_conteudo(dados, largura: int, altura: int) -> dict:
         if not isinstance(espelhada, bool):
             raise ErroConstrutor("espelhamento da peca invalido")
         pecas.append({
-            "id": id_peca, "imagem_id": imagem_id, "rotulo": rotulo,
+            "id": id_peca, "imagem_id": imagem_id, "pacote": pacote, "camada": camada, "rotulo": rotulo,
             "imagem_largura": imagem_largura, "imagem_altura": imagem_altura,
             "x": x, "y": y, "escala": escala, "rotacao": rotacao, "espelhada": espelhada,
         })
-    return {"versao": VERSAO, "chao": chao, "paredes": paredes, "aberturas": aberturas, "pecas": pecas}
+    luzes_brutas = dados.get("luzes", [])
+    if not isinstance(luzes_brutas, list) or len(luzes_brutas) > MAX_LUZES:
+        raise ErroConstrutor(f"o mapa pode ter ate {MAX_LUZES} luzes fixas")
+    luzes = []
+    ids_luzes = set()
+    for luz in luzes_brutas:
+        if not isinstance(luz, dict):
+            raise ErroConstrutor("luz invalida")
+        id_luz = str(luz.get("id") or "").lower()
+        if not ID_PECA.fullmatch(id_luz) or id_luz in ids_luzes:
+            raise ErroConstrutor("id de luz invalido ou repetido")
+        ids_luzes.add(id_luz)
+        cor = luz.get("cor", "#ffb35c")
+        if not isinstance(cor, str) or not COR.fullmatch(cor):
+            raise ErroConstrutor("cor da luz invalida")
+        tremula = luz.get("tremula", False)
+        if not isinstance(tremula, bool):
+            raise ErroConstrutor("tremor da luz invalido")
+        luzes.append({
+            "id": id_luz,
+            "x": _numero(luz.get("x"), "posicao X da luz", 0, largura),
+            "y": _numero(luz.get("y"), "posicao Y da luz", 0, altura),
+            "raio": round(_numero(luz.get("raio", 4), "alcance da luz", 0.5, LUZ_MAXIMA_CASAS), 2),
+            "cor": cor.lower(),
+            "tremula": tremula,
+        })
+    return {"versao": VERSAO, "chao": chao, "paredes": paredes, "aberturas": aberturas, "pecas": pecas, "luzes": luzes}
+
+
+MAX_PRONTAS = 40
+MAX_PECAS_POR_PRONTA = 32
+
+
+def normalizar_prontas(dados) -> list[dict]:
+    """As peças prontas da campanha: grupos de peças com posição relativa ao centro do grupo."""
+    if not isinstance(dados, list) or len(dados) > MAX_PRONTAS:
+        raise ErroConstrutor(f"a campanha guarda ate {MAX_PRONTAS} pecas prontas")
+    saida = []
+    ids = set()
+    for pronta in dados:
+        if not isinstance(pronta, dict):
+            raise ErroConstrutor("peca pronta invalida")
+        pronta_id = str(pronta.get("id") or "").lower()
+        if not ID_PECA.fullmatch(pronta_id) or pronta_id in ids:
+            raise ErroConstrutor("id de peca pronta invalido ou repetido")
+        ids.add(pronta_id)
+        pecas = pronta.get("pecas")
+        if not isinstance(pecas, list) or not 1 <= len(pecas) <= MAX_PECAS_POR_PRONTA:
+            raise ErroConstrutor(f"a peca pronta junta de 1 a {MAX_PECAS_POR_PRONTA} pecas")
+        # As posições são relativas ao centro: a conferência é a mesma das peças de um mapa grande.
+        conferidas = normalizar_conteudo({"pecas": pecas}, CASAS_MAX, CASAS_MAX)["pecas"]
+        saida.append({"id": pronta_id, "nome": " ".join(str(pronta.get("nome") or "").split())[:60] or "Peça pronta", "pecas": conferidas})
+    return saida
 
 
 def ler_conteudo(dados, largura: int, altura: int) -> dict:
@@ -228,7 +296,55 @@ def estrutura_publicada(conteudo: dict, casa: int) -> dict:
             "material": conteudo["paredes"].get(chave, "pedra"),
             "x1": x * casa, "y1": y * casa, "x2": x2 * casa, "y2": y2 * casa,
         })
-    return {"paredes": paredes, "aberturas": aberturas}
+    luzes = [
+        {"id": luz["id"], "x": round(luz["x"] * casa, 1), "y": round(luz["y"] * casa, 1), "raio": luz["raio"], "cor": luz["cor"], "tremula": luz["tremula"]}
+        for luz in conteudo.get("luzes", [])
+    ]
+    return {"paredes": paredes, "aberturas": aberturas, "luzes": luzes, "liquidos": liquidos_do_chao(conteudo["chao"], casa)}
+
+
+def liquidos_do_chao(chao: list[str], casa: int) -> dict:
+    """As casas de água e de lava em retângulos [x, y, w, h] (px), juntando as vizinhas da fileira."""
+    saida: dict[str, list[list[int]]] = {nome: [] for nome in LIQUIDOS.values()}
+    for y, linha in enumerate(chao):
+        x = 0
+        while x < len(linha):
+            letra = linha[x]
+            if letra not in LIQUIDOS:
+                x += 1
+                continue
+            inicio = x
+            while x < len(linha) and linha[x] == letra:
+                x += 1
+            saida[LIQUIDOS[letra]].append([inicio * casa, y * casa, (x - inicio) * casa, casa])
+    return saida
+
+
+def luzes_de(luzes: list[dict], *, gestor: bool, revelado) -> list[dict]:
+    """O Mestre vê todas as luzes fixas; o jogador, só as que a névoa deixa à vista (o brilho fica
+    por cima da névoa e entregaria um lugar ainda escondido)."""
+    return [dict(luz) for luz in luzes if gestor or revelado(luz["x"], luz["y"])]
+
+
+def ler_luzes(estrutura) -> list[dict]:
+    if not isinstance(estrutura, dict) or not isinstance(estrutura.get("luzes"), list):
+        return []
+    return [
+        luz for luz in estrutura["luzes"]
+        if isinstance(luz, dict) and all(isinstance(luz.get(c), (int, float)) for c in ("x", "y", "raio"))
+        and isinstance(luz.get("cor"), str) and COR.fullmatch(luz["cor"])
+    ]
+
+
+def ler_liquidos(estrutura) -> dict:
+    vazio = {nome: [] for nome in LIQUIDOS.values()}
+    if not isinstance(estrutura, dict) or not isinstance(estrutura.get("liquidos"), dict):
+        return vazio
+    for nome in vazio:
+        lista = estrutura["liquidos"].get(nome)
+        if isinstance(lista, list):
+            vazio[nome] = [r for r in lista if isinstance(r, list) and len(r) == 4 and all(isinstance(v, (int, float)) for v in r)]
+    return vazio
 
 
 def aberturas_de(aberturas: list[dict], *, gestor: bool, revelado) -> list[dict]:
@@ -243,7 +359,8 @@ def aberturas_de(aberturas: list[dict], *, gestor: bool, revelado) -> list[dict]
         meio_x = (abertura["x1"] + abertura["x2"]) / 2
         meio_y = (abertura["y1"] + abertura["y2"]) / 2
         if revelado(meio_x, meio_y):
-            saida.append(dict(abertura))
+            # Que a porta já foi secreta é coisa do Mestre (ele pode escondê-la de novo).
+            saida.append({chave: valor for chave, valor in abertura.items() if chave != "era_secreta"})
     return saida
 
 

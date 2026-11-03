@@ -78,6 +78,37 @@ def test_tamanho_e_nome_conferidos():
         construtor.nome_limpo("   ")
 
 
+def test_peca_da_mobilia_do_jardim_e_a_camada():
+    base = {"id": str(uuid.uuid4()), "rotulo": "Mesa", "imagem_largura": 445, "imagem_altura": 253, "x": 2, "y": 2, "escala": 2.3}
+    conteudo = construtor.normalizar_conteudo({"pecas": [{**base, "pacote": "mesa", "imagem_id": "qualquer"}]}, 6, 4)
+    peca = conteudo["pecas"][0]
+    assert (peca["pacote"], peca["imagem_id"], peca["camada"]) == ("mesa", "", "objetos")
+    alto = construtor.normalizar_conteudo({"pecas": [{**base, "pacote": "arvore", "camada": "alto"}]}, 6, 4)
+    assert alto["pecas"][0]["camada"] == "alto"
+    do_acervo = construtor.normalizar_conteudo({"pecas": [{**base, "imagem_id": str(uuid.uuid4())}]}, 6, 4)
+    assert do_acervo["pecas"][0]["pacote"] is None
+    for ruim in ({**base, "pacote": "Mesa Grande!"}, {**base, "pacote": "mesa", "camada": "teto"}, {**base}):
+        with pytest.raises(ErroConstrutor):
+            construtor.normalizar_conteudo({"pecas": [ruim]}, 6, 4)
+
+
+def test_luzes_fixas_conferidas_e_publicadas_com_a_agua_e_a_lava():
+    luz = {"id": str(uuid.uuid4()), "x": 2.5, "y": 1.5, "raio": 4, "cor": "#FFB35C", "tremula": True}
+    conteudo = construtor.normalizar_conteudo({"chao": ["WWV...", "..VV.W"], "luzes": [luz]}, 6, 2)
+    assert conteudo["luzes"][0]["cor"] == "#ffb35c"
+    for ruim in ({**luz, "x": 9}, {**luz, "raio": 0}, {**luz, "cor": "laranja"}, {**luz, "tremula": "sim"}, {**luz, "id": "x"}):
+        with pytest.raises(ErroConstrutor):
+            construtor.normalizar_conteudo({"luzes": [ruim]}, 6, 2)
+    viva = construtor.estrutura_publicada(conteudo, 100)
+    assert viva["luzes"][0] == {"id": luz["id"], "x": 250.0, "y": 150.0, "raio": 4.0, "cor": "#ffb35c", "tremula": True}
+    assert viva["liquidos"] == {"agua": [[0, 0, 200, 100], [500, 100, 100, 100]], "lava": [[200, 0, 100, 100], [200, 100, 200, 100]]}
+    assert construtor.ler_liquidos(viva) == viva["liquidos"]
+    assert construtor.ler_luzes({"luzes": [{"x": 1}, *viva["luzes"]]}) == viva["luzes"]
+    # O jogador só recebe a luz que a névoa deixa à vista.
+    assert construtor.luzes_de(viva["luzes"], gestor=False, revelado=lambda x, y: False) == []
+    assert len(construtor.luzes_de(viva["luzes"], gestor=True, revelado=lambda x, y: False)) == 1
+
+
 # ------------------------------------------------------------ publicação
 
 def test_paredes_viram_trechos_compridos_e_a_porta_abre_um_vao():
@@ -301,3 +332,37 @@ class ConstrutorBancoTests(unittest.TestCase):
         # Sem a peça no projeto, a imagem pode ser apagada.
         rotas.salvar_projeto(self.campanha_id, projeto_id, rotas.ProjetoEdicao(conteudo=_sala()), user=self.mestre, database=self.database)
         rotas_acervo.apagar_item(mesa, user=self.mestre, database=self.database)
+
+    def test_pecas_prontas_da_campanha_e_licenca_no_acervo(self):
+        from fastapi import HTTPException
+        from routers import acervo as rotas_acervo
+        from routers import construtor as rotas
+
+        mesa = {"id": str(uuid.uuid4()), "pacote": "mesa", "rotulo": "Mesa", "imagem_largura": 445, "imagem_altura": 253, "x": 0, "y": 0, "escala": 2.3}
+        cadeira = {**mesa, "id": str(uuid.uuid4()), "pacote": "cadeira", "x": 0, "y": 0.9, "escala": 0.9}
+        pronta = {"id": str(uuid.uuid4()), "nome": "  Mesa com cadeira ", "pecas": [mesa, cadeira]}
+        self.assertEqual(rotas.listar_prontas(self.campanha_id, user=self.mestre, database=self.database), {"prontas": []})
+        salvas = rotas.salvar_prontas(self.campanha_id, rotas.ProntasInput(prontas=[pronta]), user=self.mestre, database=self.database)
+        self.assertEqual(salvas["prontas"][0]["nome"], "Mesa com cadeira")
+        self.assertEqual(len(rotas.listar_prontas(self.campanha_id, user=self.mestre, database=self.database)["prontas"][0]["pecas"]), 2)
+        with self.assertRaises(HTTPException):
+            rotas.listar_prontas(self.campanha_id, user=self.ana, database=self.database)
+        # Imagem do Acervo de outra pessoa não entra numa peça pronta.
+        alheia = self._imagem(64, 64, tipo="objeto", dono=self.ana)
+        com_alheia = {**pronta, "pecas": [{**mesa, "pacote": None, "imagem_id": str(alheia)}]}
+        with self.assertRaises(HTTPException) as recusa:
+            rotas.salvar_prontas(self.campanha_id, rotas.ProntasInput(prontas=[com_alheia]), user=self.mestre, database=self.database)
+        self.assertEqual(recusa.exception.status_code, 403)
+        with self.assertRaises(HTTPException):
+            rotas.salvar_prontas(self.campanha_id, rotas.ProntasInput(prontas=[{**pronta, "pecas": []}]), user=self.mestre, database=self.database)
+
+        # Origem e licença anotadas na imagem; texto vazio apaga.
+        objeto = self._imagem(64, 64, tipo="objeto")
+        anotado = rotas_acervo.editar_item(objeto, rotas_acervo.ItemEdicao(autoria="  Ana  B. ", origem="site.exemplo/arte", licenca="cc-by"), user=self.mestre, database=self.database)
+        self.assertEqual((anotado["autoria"], anotado["origem"], anotado["licenca"]), ("Ana B.", "site.exemplo/arte", "cc-by"))
+        limpo = rotas_acervo.editar_item(objeto, rotas_acervo.ItemEdicao(autoria="", licenca=""), user=self.mestre, database=self.database)
+        self.assertEqual((limpo["autoria"], limpo["origem"], limpo["licenca"]), (None, "site.exemplo/arte", None))
+        with self.assertRaises(HTTPException) as ruim:
+            rotas_acervo.editar_item(objeto, rotas_acervo.ItemEdicao(licenca="roubada"), user=self.mestre, database=self.database)
+        self.assertEqual(ruim.exception.status_code, 422)
+
