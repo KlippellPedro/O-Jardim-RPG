@@ -60,8 +60,9 @@ def _entregar(campanha_id: UUID, mensagem: str) -> None:
 
 def publicar(campanha_id: UUID, tipo: str, versao: int, detalhes: dict | None = None) -> None:
     """Chamado de dentro de uma rota síncrona, depois de gravar no banco."""
-    # Participante novo ou visibilidade trocada mudam quem vê cada token do mapa.
-    tempo_real.esquecer_regras(campanha_id)
+    # Participante novo ou visibilidade trocada mudam quem vê cada token do mapa; vida e
+    # condições mudam o que ele mostra. O mapa recebe o recorte novo pelo tempo real.
+    tempo_real.mudanca_da_sessao(campanha_id, tipo)
     if not _assinantes.get(campanha_id):
         return
     corpo = {"tipo": tipo, "versao": versao}

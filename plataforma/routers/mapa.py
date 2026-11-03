@@ -17,6 +17,7 @@ import base64
 import binascii
 import json
 import time
+from types import SimpleNamespace
 from urllib.parse import urlparse
 from uuid import UUID, uuid4
 
@@ -93,6 +94,9 @@ class TokenEdicao(BaseModel):
     barras: dict | None = None
     moldura: str | None = Field(default=None, max_length=40)
     sem_moldura: bool = False
+    #: Tocha, lanterna, luz mágica: o Mestre e o dono do token mudam.
+    luz: dict | None = None
+    sem_luz: bool = False
 
 
 class TokenDoPersonagemInput(BaseModel):
@@ -197,7 +201,7 @@ def _tokens(connection, cena_id: UUID) -> list[dict]:
         for linha in connection.execute(
             """
             SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome,
-                   t.x, t.y, t.porte, t.lado, t.oculto, t.barras, t.moldura,
+                   t.x, t.y, t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz,
                    COALESCE(t.personagem_id, sp.personagem_id) AS personagem_efetivo
             FROM mapa_tokens t
             LEFT JOIN sessao_participantes sp ON sp.id = t.participante_id
@@ -628,7 +632,7 @@ def _token(connection, campanha_id: UUID, token_id: UUID, *, travar: bool = Fals
     token = connection.execute(
         f"""
         SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome, t.x, t.y,
-               t.porte, t.lado, t.oculto, t.barras, t.moldura,
+               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz,
                c.largura, c.altura, c.livre, c.ativa
         FROM mapa_tokens t JOIN mapa_cenas c ON c.id = t.cena_id
         WHERE t.id=%s AND c.campanha_id=%s{' FOR UPDATE OF t' if travar else ''}
@@ -761,7 +765,7 @@ def editar_token(
     user: AuthenticatedUser = Depends(require_csrf),
     database: Database = Depends(get_database),
 ):
-    """O Mestre mexe em tudo; o dono do personagem mexe só nas barras do próprio token."""
+    """O Mestre mexe em tudo; o dono do personagem mexe só nas barras e na luz do próprio token."""
     with database.connection() as connection:
         acesso = campaign_access(connection, campanha_id, user.id)
         token = _token(connection, campanha_id, token_id, travar=True)
@@ -791,6 +795,10 @@ def editar_token(
                 mudancas["moldura"] = None
             elif payload.moldura is not None:
                 mudancas["moldura"] = mapa.normalizar_moldura(payload.moldura)
+            if payload.sem_luz:
+                mudancas["luz"] = None
+            elif payload.luz is not None:
+                mudancas["luz"] = Jsonb(mapa.normalizar_luz(payload.luz))
         except ErroMapa as erro:
             raise _erro_mapa(erro) from None
         if payload.sem_imagem:
@@ -1058,6 +1066,42 @@ def _entrada_sync(database: Database, conexao_http, campanha_id: UUID):
     return usuario, quem
 
 
+def _estados_sync(database: Database, campanha_id: UUID, pedidos: list[tuple[str, str | None]]) -> list[dict | None]:
+    """O estado do mapa de cada conexão, pela mesma `_montar` do GET: o recorte de cada papel
+    (token oculto, desconhecido, na névoa) sai daqui do mesmo jeito. None: perdeu o acesso."""
+    calculados: dict[tuple[str, str | None], dict | None] = {}
+    with database.connection() as connection:
+        for pedido in pedidos:
+            if pedido in calculados:
+                continue
+            usuario_id, vendo = pedido
+            try:
+                usuario = SimpleNamespace(id=UUID(usuario_id))
+                acesso = campaign_access(connection, campanha_id, usuario.id)
+                cena_id = None
+                if acesso.manages_content and vendo:
+                    try:
+                        cena_id = UUID(vendo)
+                    except ValueError:
+                        cena_id = None
+                try:
+                    calculados[pedido] = _montar(connection, campanha_id, acesso, usuario, cena_id)
+                except HTTPException:
+                    # A cena que o Mestre olhava foi apagada: vale a ativa.
+                    calculados[pedido] = _montar(connection, campanha_id, acesso, usuario, None)
+            except (HTTPException, ValueError):
+                calculados[pedido] = None
+    return [calculados[pedido] for pedido in pedidos]
+
+
+def _empurrador_de(database: Database):
+    async def empurrar(campanha_id: str, conexoes: list) -> list:
+        pedidos = [(conexao.usuario_id, conexao.vendo if conexao.gestor else None) for conexao in conexoes]
+        return await run_in_threadpool(_estados_sync, database, UUID(campanha_id), pedidos)
+
+    return empurrar
+
+
 def _funcoes_do_hub(database: Database, campanha_id: UUID):
     async def carregar():
         return await run_in_threadpool(_regras_sync, database, campanha_id)
@@ -1084,11 +1128,12 @@ async def ao_vivo_ws(websocket: WebSocket, campanha_id: UUID):
         usuario_id=str(usuario.id), nome=usuario.nome_exibicao, gestor=quem.gestor, personagens=quem.personagens,
     )
     carregar, gravar = _funcoes_do_hub(database, campanha_id)
+    tempo_real.registrar_empurrador(_empurrador_de(database))
     tempo_real.entrar(campanha_id, conexao)
 
     async def enviar():
         while True:
-            await websocket.send_text(await conexao.fila.get())
+            await websocket.send_text(await conexao.proxima())
 
     enviador = asyncio.create_task(enviar())
     try:
@@ -1126,6 +1171,7 @@ async def ao_vivo_sse(campanha_id: UUID, request: Request):
 
     async def eventos():
         _conexoes_sse[conexao_id] = (str(campanha_id), str(usuario.id), conexao)
+        tempo_real.registrar_empurrador(_empurrador_de(database))
         tempo_real.entrar(campanha_id, conexao)
         try:
             inicio = {"t": "oi", "ts": tempo_real.agora_ms(), "eu": conexao.usuario_id, "cor": conexao.cor, "conexao": conexao_id}
@@ -1134,7 +1180,7 @@ async def ao_vivo_sse(campanha_id: UUID, request: Request):
                 if await request.is_disconnected():
                     break
                 try:
-                    mensagem = await asyncio.wait_for(conexao.fila.get(), timeout=20)
+                    mensagem = await asyncio.wait_for(conexao.proxima(), timeout=20)
                 except asyncio.TimeoutError:
                     yield b": ping\n\n"
                     continue

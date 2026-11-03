@@ -6,6 +6,7 @@ from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
+from starlette.concurrency import run_in_threadpool
 from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
@@ -2071,8 +2072,14 @@ async def acompanhar(
     database: Database = Depends(get_database),
 ):
     """Fluxo SSE: avisa que algo mudou; o cliente refaz o GET da sessão."""
-    with database.connection() as connection:
-        campaign_access(connection, campanha_id, user.id)
+
+    def conferir_acesso():
+        with database.connection() as connection:
+            campaign_access(connection, campanha_id, user.id)
+
+    # A rota é assíncrona: esperar o banco aqui pararia o servidor inteiro, inclusive
+    # o tempo real do mapa, enquanto o pool de conexões estivesse ocupado.
+    await run_in_threadpool(conferir_acesso)
 
     async def eventos():
         fila = live_session.assinar(campanha_id)

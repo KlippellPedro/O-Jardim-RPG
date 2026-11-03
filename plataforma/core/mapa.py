@@ -66,8 +66,16 @@ NOME_GENERICO = {
 }
 
 #: Efeitos de clima que o site desenha (src/pages/Mapa/motor/clima.ts).
-EFEITOS_CLIMA = ("chuva", "tempestade", "neve", "neblina", "areia", "cinzas", "folhas", "escuridao", "vazio", "fluxo")
+EFEITOS_CLIMA = (
+    "chuva", "tempestade", "nuvens", "neve", "neblina", "areia", "cinzas", "calor", "folhas", "escuridao", "vazio", "fluxo",
+)
 MAX_EFEITOS_CLIMA = 4
+#: Luz de um token: raio em casas, cor e se tremula como chama.
+LUZ_MAXIMA_CASAS = 30
+#: Efeitos de magia que a mesa inteira vê no mapa (src/pages/Mapa/motor/magia.ts).
+FORMAS_MAGIA = ("circulo", "cone", "linha", "impacto")
+#: Uma magia pode começar ou terminar um pouco fora do mapa, mas não longe dele.
+FOLGA_MAGIA = 2000.0
 #: Direção para onde o vento sopra, em graus na tela: 0 vai para a direita, 90 para baixo.
 VENTO_PADRAO = {"direcao": 100.0, "forca": 0.3}
 LUZ_PADRAO = 4.0
@@ -241,6 +249,37 @@ def ler_clima(dados, largura: int, altura: int) -> dict:
         return normalizar_clima(dados if isinstance(dados, dict) else {}, largura, altura)
     except ErroMapa:
         return normalizar_clima({}, largura, altura)
+
+
+def normalizar_luz(dados) -> dict | None:
+    """None tira a luz; senão raio (casas), cor e se tremula, conferidos."""
+    if dados is None:
+        return None
+    if not isinstance(dados, dict):
+        raise ErroMapa("luz invalida")
+    raio = _numero(dados.get("raio", 4), "raio da luz", 0.5, LUZ_MAXIMA_CASAS)
+    cor = dados.get("cor", "#ffb35c")
+    if not isinstance(cor, str) or not COR.match(cor):
+        raise ErroMapa("cor da luz invalida")
+    return {"raio": round(raio, 1), "cor": cor.lower(), "tremula": bool(dados.get("tremula", False))}
+
+
+def normalizar_magia(dados, largura: int, altura: int) -> dict:
+    """Efeito de magia jogado no mapa: forma, origem, alvo e o Fluxo que dá a cor. Só passa pelo
+    tempo real (não fica gravado), então aqui só se confere o que chega antes de repassar."""
+    if not isinstance(dados, dict):
+        raise ErroMapa("magia invalida")
+    forma = dados.get("forma")
+    if forma not in FORMAS_MAGIA:
+        raise ErroMapa("a magia e circulo, cone, linha ou impacto")
+    fluxo = dados.get("fluxo")
+    if fluxo not in FLUXOS:
+        raise ErroMapa("escolha o Fluxo da magia")
+    pontos = []
+    for campo, limite in (("x", largura), ("y", altura), ("ax", largura), ("ay", altura)):
+        pontos.append(round(_numero(dados.get(campo), campo, -FOLGA_MAGIA, limite + FOLGA_MAGIA), 1))
+    x, y, ax, ay = pontos
+    return {"forma": forma, "fluxo": fluxo, "x": x, "y": y, "ax": ax, "ay": ay}
 
 
 def moldura_efetiva(token: dict, personagem: str | None, moldura_personagem: str | None, moldura_mesa: str | None) -> str:
@@ -427,6 +466,8 @@ def visao_token(
         # Moldura de personagem entregaria quem é: o desconhecido usa o aro simples.
         "moldura": moldura if identidade else "lado",
         "enquadramento": normalizar_enquadramento({}, enquadramento or {}) if identidade else dict(ENQUADRAMENTO_PADRAO),
+        # A luz se vê de longe: quem enxerga o token enxerga a tocha dele, conhecendo ou não quem é.
+        "luz": token.get("luz") if isinstance(token.get("luz"), dict) else None,
     }
     if quem.gestor or saida["e_meu"]:
         saida["config_barras"] = normalizar_barras({}, token.get("barras") or {}, saida["lado"])

@@ -12,7 +12,20 @@ recarregam a cena (só então sabem que ele existe); se entra, eles recebem
 Uma instância só de uvicorn atende o site, então tudo mora em memória, como em
 `core/live_session.py`. As regras de cada campanha (que token existe, quem vê,
 quem move) ficam num retrato carregado do banco pela rota e jogado fora a cada
-mudança de estrutura (`invalidar`), para o próximo pedido recarregar.
+mudança de estrutura (`invalidar`), para o próximo pedido recarregar. Quando só
+vencem pelo tempo, a recarga acontece em segundo plano: o arrasto nunca espera o
+banco.
+
+A fila de saída de cada conexão junta as posições de um mesmo token (só a mais
+nova sai) e, se encher mesmo assim, troca tudo o que esperava por um pedido de
+recarga: a posição final nunca se perde em silêncio.
+
+Mudanças de estrutura (token criado, editado, removido; névoa, clima, cena; e, da
+Sessão, vida, condições, participantes, visibilidade) não pedem mais que cada tela
+recarregue o mapa. O servidor calcula o recorte de cada pessoa conectada (com a
+mesma função do GET, então o segredo continua no servidor), compara com o último
+que mandou para ela e manda só a diferença (`delta`), ou o estado inteiro na
+primeira vez (`estado`). Mudanças seguidas se juntam num envio só.
 
 A conexão pode ser um WebSocket ou, no plano B, um fluxo SSE com POST para
 subir; para o hub as duas são uma `Conexao` com uma fila.
@@ -30,17 +43,28 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable
 
+from core.mapa import ErroMapa, normalizar_magia
 from core.nevoa import Nevoa
 
 log = logging.getLogger("jardim-plataforma")
 
 LIMITE_FILA = 256
-#: Mensagens por segundo que uma conexão pode mandar; o resto é descartado.
-LIMITE_POR_SEGUNDO = 60
+#: Mensagens por segundo que uma conexão pode mandar; o resto é descartado. Folga para o
+#: arrasto (30 por segundo), a régua (30) e o batimento ao mesmo tempo.
+LIMITE_POR_SEGUNDO = 90
 MAX_PONTOS_REGUA = 24
+#: Efeitos de magia por pessoa: no máximo 3 a cada 2 segundos (o resto não chega à mesa).
+MAGIAS_POR_JANELA = 3
+JANELA_MAGIA_S = 2.0
 #: As regras (quem vê, quem move) valem por alguns segundos e são recarregadas:
 #: mudar a visibilidade de um participante na Sessão chega aqui no máximo nesse tempo.
 VALIDADE_REGRAS_S = 5.0
+#: Mudanças que chegam juntas (um traço de névoa e o clique logo depois) viram um envio só.
+JUNTAR_MUDANCAS_S = 0.03
+#: Eventos da Sessão que não mexem em nada que o mapa mostra.
+EVENTOS_SEM_EFEITO_NO_MAPA = frozenset({"registro", "mesa", "destaque_mesa", "calendario", "loot_rolado", "loot_entregue", "iniciativa"})
+#: Partes do estado do mapa que vão inteiras quando mudam (tokens vão um a um).
+CAMPOS_DO_ESTADO = ("gestor", "usuario_id", "ao_vivo", "bloqueado", "cenas", "moldura_mesa")
 CORES = ("#4fd1c5", "#f6ad55", "#f687b3", "#90cdf4", "#9ae6b4", "#fbd38d", "#b794f4", "#feb2b2")
 
 
@@ -60,18 +84,63 @@ class Conexao:
     personagens: frozenset[str] = field(default_factory=frozenset)
     fila: asyncio.Queue = field(default_factory=lambda: asyncio.Queue(maxsize=LIMITE_FILA))
     enviadas: deque = field(default_factory=deque)
+    #: Mensagens que se substituem enquanto esperam a saída (a posição de um token, a régua
+    #: de alguém). Na fila fica só a marca; o texto mais novo mora aqui.
+    juntas: dict = field(default_factory=dict)
+    #: A cena que o Mestre está olhando (pode ser uma em preparo); jogador vê sempre a ativa.
+    vendo: str | None = None
+    #: Resumo do último estado mandado a esta tela, para mandar só a diferença.
+    ultimo: dict | None = None
+    seq: int = 0
+    #: Horários dos últimos efeitos de magia que esta conexão mandou.
+    magias: deque = field(default_factory=deque)
 
     @property
     def cor(self) -> str:
         return cor_de(self.usuario_id)
 
-    def entregar(self, mensagem: str) -> None:
+    def entregar(self, mensagem: str, chave: str | None = None) -> None:
+        if chave is not None and chave in self.juntas:
+            self.juntas[chave] = mensagem
+            return
         try:
-            self.fila.put_nowait(mensagem)
+            self.fila.put_nowait(("junta", chave) if chave is not None else mensagem)
         except asyncio.QueueFull:
-            # Quem não está lendo perde posições intermediárias; a final chega
-            # de novo no próximo GET da cena.
-            log.debug("Fila do mapa cheia para %s", self.usuario_id)
+            self._ressincronizar()
+            return
+        if chave is not None:
+            self.juntas[chave] = mensagem
+
+    def _ressincronizar(self) -> None:
+        """Fila cheia (aparelho lento, rede travando): o que esperava sai e a tela recarrega a cena."""
+        log.debug("Fila do mapa cheia para %s; pedindo recarga", self.usuario_id)
+        while not self.fila.empty():
+            self.fila.get_nowait()
+        self.juntas.clear()
+        # A tela vai baixar o mapa inteiro: a próxima diferença parte do zero.
+        self.ultimo = None
+        self.fila.put_nowait(json.dumps({"t": "mudou", "versao": int(agora_ms()), "motivo": "fila"}))
+
+    def _abrir(self, item) -> str | None:
+        if isinstance(item, tuple):
+            return self.juntas.pop(item[1], None)
+        return item
+
+    async def proxima(self) -> str:
+        """A próxima mensagem para mandar a esta conexão."""
+        while True:
+            texto = self._abrir(await self.fila.get())
+            if texto is not None:
+                return texto
+
+    def tirar_agora(self) -> list[str]:
+        """Tudo o que está esperando, na ordem, sem esperar (testes)."""
+        saida = []
+        while not self.fila.empty():
+            texto = self._abrir(self.fila.get_nowait())
+            if texto is not None:
+                saida.append(texto)
+        return saida
 
     def dentro_do_limite(self) -> bool:
         agora = time.monotonic()
@@ -80,6 +149,16 @@ class Conexao:
         if len(self.enviadas) >= LIMITE_POR_SEGUNDO:
             return False
         self.enviadas.append(agora)
+        return True
+
+    def magia_liberada(self) -> bool:
+        """Efeito de magia é para a mesa ver: no máximo MAGIAS_POR_JANELA a cada JANELA_MAGIA_S segundos."""
+        agora = time.monotonic()
+        while self.magias and agora - self.magias[0] > JANELA_MAGIA_S:
+            self.magias.popleft()
+        if len(self.magias) >= MAGIAS_POR_JANELA:
+            return False
+        self.magias.append(agora)
         return True
 
 
@@ -117,10 +196,29 @@ class Sala:
     regras: Regras | None = None
     #: O que a mesa sabe de cada token sujeito à névoa (à vista ou não), para avisar só quando muda.
     na_nevoa: dict[str, bool] = field(default_factory=dict)
+    #: Sobe a cada mudança de estrutura: uma recarga que começou antes dela não vale mais.
+    geracao: int = 0
+    recarregando: bool = False
+    empurrao_agendado: bool = False
+    empurrando: bool = False
+    #: Chegou mudança enquanto um envio era calculado: outro sai logo depois.
+    de_novo: bool = False
 
+
+#: Calcula o estado do mapa de cada conexão (None para quem perdeu o acesso). Registrado pela
+#: rota do mapa, que tem o banco; sem ele, o hub volta ao "mudou" e cada tela recarrega.
+Empurrador = Callable[[str, list], Awaitable[list]]
 
 _salas: dict[str, Sala] = {}
 _loop: asyncio.AbstractEventLoop | None = None
+#: Recargas e envios em segundo plano (o laço só guarda referência fraca às tarefas).
+_tarefas: set = set()
+_empurrador: Empurrador | None = None
+
+
+def registrar_empurrador(funcao: Empurrador | None) -> None:
+    global _empurrador
+    _empurrador = funcao
 
 
 def registrar_loop(loop: asyncio.AbstractEventLoop) -> None:
@@ -174,26 +272,145 @@ def _no_loop(funcao: Callable, *args) -> None:
         log.debug("Loop indisponivel para o tempo real do mapa")
 
 
+def _todos(sala: Sala, mensagem: dict) -> None:
+    texto = json.dumps(mensagem)
+    for conexao in list(sala.conexoes):
+        conexao.entregar(texto)
+
+
 def _invalidar(campanha_id: str, versao: int | None) -> None:
     sala = _salas.get(campanha_id)
     if not sala:
         return
     sala.regras = None
+    sala.geracao += 1
     sala.na_nevoa.clear()
     if versao is not None:
-        mensagem = json.dumps({"t": "mudou", "versao": versao})
-        for conexao in list(sala.conexoes):
-            conexao.entregar(mensagem)
+        _agendar_empurrao(campanha_id, versao)
 
 
 def mudou(campanha_id, versao: int | None = None) -> None:
-    """A estrutura mudou (cena, token criado, escondido, removido): recarrega as regras e avisa a mesa."""
+    """A estrutura mudou (cena, token criado, escondido, removido): recarrega as regras e manda a mesa ao dia."""
     _no_loop(_invalidar, str(campanha_id), versao)
 
 
 def esquecer_regras(campanha_id) -> None:
-    """A Sessão mudou (visibilidade, participante): só recarrega as regras, sem avisar ninguém."""
+    """Só recarrega as regras, sem mandar nada a ninguém."""
     _no_loop(_invalidar, str(campanha_id), None)
+
+
+def mudanca_da_sessao(campanha_id, tipo: str) -> None:
+    """Um evento da Sessão: as regras recarregam (participante novo, visibilidade) e, se ele
+    mexe no que o mapa mostra (vida, condições, participantes), a mesa recebe o recorte novo."""
+    if tipo in EVENTOS_SEM_EFEITO_NO_MAPA or tipo.startswith(("veiculo_", "propriedade_")):
+        esquecer_regras(campanha_id)
+        return
+    _no_loop(_invalidar, str(campanha_id), int(agora_ms()))
+
+
+# ------------------------------------------------- diferenças do estado
+
+def _texto(valor) -> str:
+    return json.dumps(valor, sort_keys=True, ensure_ascii=False, default=str)
+
+
+def diferenca(ultimo: dict | None, estado: dict) -> tuple[dict | None, dict]:
+    """O que mandar a uma tela que recebeu `ultimo` (resumo) para ela ficar com `estado`.
+
+    Devolve (mensagem ou None se nada mudou, resumo novo). Primeira vez ou outra cena:
+    o estado inteiro. Depois, só os campos e os tokens que mudaram.
+    """
+    cena = estado.get("cena")
+    tokens = estado.get("tokens") or []
+    resumo = {
+        "campos": {campo: _texto(estado.get(campo)) for campo in CAMPOS_DO_ESTADO},
+        "cena_id": cena["id"] if cena else None,
+        "cena": _texto(cena),
+        "tokens": {token["id"]: _texto(token) for token in tokens},
+        "ordem": [token["id"] for token in tokens],
+    }
+    if ultimo is None or ultimo["cena_id"] != resumo["cena_id"]:
+        return {"t": "estado", "estado": estado}, resumo
+    mensagem: dict = {"t": "delta", "cena_id": resumo["cena_id"]}
+    for campo in CAMPOS_DO_ESTADO:
+        if ultimo["campos"].get(campo) != resumo["campos"][campo]:
+            mensagem[campo] = estado.get(campo)
+    if ultimo["cena"] != resumo["cena"]:
+        mensagem["cena"] = cena
+    mudar = [token for token in tokens if ultimo["tokens"].get(token["id"]) != resumo["tokens"][token["id"]]]
+    tirar = [token_id for token_id in ultimo["tokens"] if token_id not in resumo["tokens"]]
+    if mudar:
+        mensagem["mudar"] = mudar
+    if tirar:
+        mensagem["tirar"] = tirar
+    if ultimo["ordem"] != resumo["ordem"]:
+        mensagem["ordem"] = resumo["ordem"]
+    return (mensagem if len(mensagem) > 2 else None), resumo
+
+
+def _agendar_empurrao(campanha_id: str, versao: int | None = None) -> None:
+    sala = _salas.get(campanha_id)
+    if not sala:
+        return
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+    if _empurrador is None or loop is None:
+        # Ninguém para calcular o recorte de cada um: cada tela recarrega o mapa.
+        _todos(sala, {"t": "mudou", "versao": versao if versao is not None else int(agora_ms())})
+        return
+    if sala.empurrando:
+        sala.de_novo = True
+        return
+    if sala.empurrao_agendado:
+        return
+    sala.empurrao_agendado = True
+    loop.call_later(JUNTAR_MUDANCAS_S, _comecar_empurrao, campanha_id)
+
+
+def _comecar_empurrao(campanha_id: str) -> None:
+    sala = _salas.get(campanha_id)
+    if not sala:
+        return
+    sala.empurrao_agendado = False
+    sala.empurrando = True
+    tarefa = asyncio.get_running_loop().create_task(_empurrar(campanha_id, sala))
+    _tarefas.add(tarefa)
+    tarefa.add_done_callback(_tarefas.discard)
+
+
+async def _empurrar(campanha_id: str, sala: Sala) -> None:
+    try:
+        conexoes = list(sala.conexoes)
+        if not conexoes or _empurrador is None:
+            return
+        try:
+            estados = await _empurrador(campanha_id, conexoes)
+        except Exception:  # noqa: BLE001 - sem o recorte, a mesa recarrega do jeito antigo
+            log.exception("Falha ao calcular o estado do mapa para a mesa")
+            _todos(sala, {"t": "mudou", "versao": int(agora_ms())})
+            return
+        ts = agora_ms()
+        for conexao, estado in zip(conexoes, estados):
+            if conexao not in sala.conexoes:
+                continue
+            if estado is None:
+                conexao.ultimo = None
+                conexao.entregar(json.dumps({"t": "mudou", "versao": int(ts)}))
+                continue
+            mensagem, conexao.ultimo = diferenca(conexao.ultimo, estado)
+            if mensagem is None:
+                continue
+            conexao.seq += 1
+            mensagem["seq"] = conexao.seq
+            mensagem["ts"] = ts
+            conexao.entregar(json.dumps(mensagem, ensure_ascii=False, default=str))
+    finally:
+        sala.empurrando = False
+        if sala.de_novo:
+            sala.de_novo = False
+            _agendar_empurrao(campanha_id)
 
 
 def _pode_ver(conexao: Conexao, regra: RegraToken, a_vista: bool = True) -> bool:
@@ -219,14 +436,16 @@ def _numero(valor) -> float | None:
     return float(valor)
 
 
-def _repassar(sala: Sala, origem: Conexao, mensagem: dict, regra: RegraToken | None = None, a_vista: bool = True) -> None:
+def _repassar(
+    sala: Sala, origem: Conexao, mensagem: dict, regra: RegraToken | None = None, a_vista: bool = True, chave: str | None = None,
+) -> None:
     texto = json.dumps(mensagem, ensure_ascii=False)
     for conexao in list(sala.conexoes):
         if conexao is origem:
             continue
         if regra is not None and not _pode_ver(conexao, regra, a_vista):
             continue
-        conexao.entregar(texto)
+        conexao.entregar(texto, chave)
 
 
 def _avisar_quem_nao_via(sala: Sala, regra: RegraToken, mensagem: dict) -> None:
@@ -241,6 +460,38 @@ CarregarRegras = Callable[[], Awaitable[Regras]]
 GravarPosicao = Callable[[str, float, float], Awaitable[bool]]
 
 
+async def _recarregar(sala: Sala, carregar_regras: CarregarRegras, geracao: int) -> None:
+    """`geracao` é a da hora em que a recarga foi pedida: uma mudança de estrutura no meio a anula."""
+    try:
+        novas = await carregar_regras()
+        if sala.geracao == geracao:
+            sala.regras = novas
+    except Exception:  # noqa: BLE001 - as regras antigas seguem valendo até a próxima tentativa
+        log.exception("Falha ao recarregar as regras do mapa")
+        if sala.regras is not None:
+            sala.regras.carregadas_em = time.monotonic()
+    finally:
+        sala.recarregando = False
+
+
+async def _regras_da_sala(sala: Sala, carregar_regras: CarregarRegras) -> Regras:
+    """Sem regras (sala nova ou estrutura mudou), espera o banco. Vencidas só pelo tempo,
+    segue com as de agora e recarrega em segundo plano: o arrasto não espera o banco."""
+    regras = sala.regras
+    if regras is None:
+        geracao = sala.geracao
+        regras = await carregar_regras()
+        if sala.geracao == geracao:
+            sala.regras = regras
+        return regras
+    if regras.vencidas() and not sala.recarregando:
+        sala.recarregando = True
+        tarefa = asyncio.get_running_loop().create_task(_recarregar(sala, carregar_regras, sala.geracao))
+        _tarefas.add(tarefa)
+        tarefa.add_done_callback(_tarefas.discard)
+    return regras
+
+
 async def processar(
     campanha_id,
     conexao: Conexao,
@@ -253,13 +504,23 @@ async def processar(
         return {"t": "erro", "motivo": "mensagem invalida"}
     tipo = mensagem.get("t")
     if tipo == "oi":
-        return {"t": "oi", "ts": agora_ms()}
+        # `c` volta como veio: com ele e `ts`, o navegador mede a ida e volta e acerta o relógio com o servidor.
+        resposta = {"t": "oi", "ts": agora_ms()}
+        c = _numero(mensagem.get("c"))
+        if c is not None:
+            resposta["c"] = c
+        return resposta
+    if tipo == "vendo":
+        # O Mestre trocou a cena que olha: as próximas mudanças vêm dela, e a primeira vem inteira.
+        if conexao.gestor:
+            cena = mensagem.get("cena")
+            conexao.vendo = cena if isinstance(cena, str) and 0 < len(cena) <= 64 else None
+            conexao.ultimo = None
+        return None
     if not conexao.dentro_do_limite():
         return None
     sala = _sala(campanha_id)
-    if sala.regras is None or sala.regras.vencidas():
-        sala.regras = await carregar_regras()
-    regras = sala.regras
+    regras = await _regras_da_sala(sala, carregar_regras)
 
     if tipo in ("arrastar", "soltar"):
         token_id = str(mensagem.get("token") or "")
@@ -278,21 +539,33 @@ async def processar(
             antes = sala.na_nevoa.get(token_id, regra.revelado)
             sala.na_nevoa[token_id] = a_vista
         saiu_da_nevoa = a_vista and not antes
-        if tipo == "soltar" or saiu_da_nevoa:
-            # Saindo da névoa no meio do arrasto, a posição já vai para o banco: os
-            # jogadores ainda não conhecem o token e o GET deles precisa trazê-lo aqui.
-            if not await gravar_posicao(token_id, x, y):
-                return {"t": "erro", "motivo": "o token saiu da cena", "token": token_id}
-        _repassar(sala, conexao, {
+        repasse = {
             "t": "arrastando" if tipo == "arrastar" else "token",
             "token": token_id,
             "x": round(x, 2),
             "y": round(y, 2),
             "ts": agora_ms(),
             "por": conexao.usuario_id,
-        }, regra, a_vista)
+        }
+        # `tm`: a hora do gesto, no relógio do servidor estimado por quem arrasta. Só serve ao medidor.
+        tm = _numero(mensagem.get("tm"))
+        if tm is not None:
+            repasse["tm"] = round(tm)
+        # A mesa recebe a posição antes do banco gravar: soltar não espera o banco.
+        _repassar(sala, conexao, repasse, regra, a_vista, chave=f"t:{token_id}")
+        if tipo == "soltar" or saiu_da_nevoa:
+            # Saindo da névoa no meio do arrasto, a posição também vai para o banco: os
+            # jogadores ainda não conhecem o token e o GET deles precisa trazê-lo aqui.
+            if not await gravar_posicao(token_id, x, y):
+                # A posição repassada não valeu (o token saiu da cena): todos recarregam.
+                _invalidar(str(campanha_id), int(agora_ms()))
+                return {"t": "erro", "motivo": "o token saiu da cena", "token": token_id}
         if saiu_da_nevoa:
-            _avisar_quem_nao_via(sala, regra, {"t": "mudou", "versao": int(agora_ms())})
+            # Os jogadores ainda não conhecem o token: recebem o recorte novo (ou recarregam).
+            if _empurrador is not None:
+                _agendar_empurrao(str(campanha_id))
+            else:
+                _avisar_quem_nao_via(sala, regra, {"t": "mudou", "versao": int(agora_ms())})
         elif antes and not a_vista:
             _avisar_quem_nao_via(sala, regra, {"t": "sumiu", "token": token_id})
         return None
@@ -325,7 +598,33 @@ async def processar(
         _repassar(sala, conexao, {
             "t": "regua", "pontos": limpos, "por": conexao.usuario_id,
             "nome": conexao.nome, "cor": conexao.cor,
-        })
+        }, chave=f"r:{conexao.usuario_id}")
+        return None
+
+    if tipo == "magia":
+        # Efeito de magia jogado no mapa: só passa por aqui, a mesa inteira vê e nada é gravado.
+        if not conexao.magia_liberada():
+            return None
+        try:
+            magia = normalizar_magia(mensagem, regras.largura, regras.altura)
+        except ErroMapa as erro:
+            return {"t": "erro", "motivo": erro.mensagem}
+        repasse = {
+            "t": "magia", **magia, "ts": agora_ms(),
+            "por": conexao.usuario_id, "nome": conexao.nome, "cor": conexao.cor,
+        }
+        # Magia do Mestre toda dentro da névoa (um teste, uma armadilha preparada) fica entre quem comanda.
+        escondida = (
+            conexao.gestor and regras.nevoa is not None
+            and not regras.nevoa.revelado(magia["x"], magia["y"]) and not regras.nevoa.revelado(magia["ax"], magia["ay"])
+        )
+        if escondida:
+            texto = json.dumps(repasse, ensure_ascii=False)
+            for outra in list(sala.conexoes):
+                if outra is not conexao and outra.gestor:
+                    outra.entregar(texto)
+        else:
+            _repassar(sala, conexao, repasse)
         return None
 
     return {"t": "erro", "motivo": "tipo de mensagem desconhecido"}
@@ -333,3 +632,4 @@ async def processar(
 
 def _limpar_para_testes() -> None:
     _salas.clear()
+    registrar_empurrador(None)

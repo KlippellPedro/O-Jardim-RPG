@@ -2269,4 +2269,13 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "ALTER TABLE mapa_cenas ADD COLUMN IF NOT EXISTS clima JSONB NOT NULL DEFAULT '{}'::jsonb",
         ),
     ),
+    (
+        62,
+        "luz_dos_tokens",
+        (
+            # Luz que o token carrega (tocha, lanterna, magia): {"raio": casas, "cor": "#rrggbb",
+            # "tremula": bool}. NULL: sem luz própria (core/mapa.py, normalizar_luz).
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS luz JSONB",
+        ),
+    ),
 )

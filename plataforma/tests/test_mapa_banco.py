@@ -421,6 +421,34 @@ class MapaBancoTests(unittest.TestCase):
             self.nevoa(str(cena_id), forma={"op": "revelar", "tipo": "pincel", "raio": 0.1, "pontos": [[1, 1]]})
         self.assertEqual(erro.exception.status_code, 422)
 
+    def test_recorte_empurrado_pelo_tempo_real_guarda_os_mesmos_segredos_do_get(self):
+        self._sessao("aberta")
+        ativa = self.criar_cena("Ruínas")["cena"]["id"]
+        preparo = self.criar_cena("Torre")["cena"]["id"]
+        oculto = self._participante("Sombra", visibilidade="oculto")
+        for dados in ({"participante_id": oculto, "x": 150, "y": 150}, {"personagem_id": self.mira, "x": 250, "y": 150}):
+            mapa.criar_token(self.campanha_id, uuid.UUID(ativa), mapa.TokenInput(**dados), user=self.mestre, database=self.database)
+        estranho = self._usuario("estranho@example.com", "Estranho", "jogador")
+        with self.database.connection() as connection:
+            connection.execute("DELETE FROM membros_campanha WHERE usuario_id=%s", (estranho.id,))
+        pedidos = [
+            (str(self.ana.id), None),
+            (str(self.mestre.id), preparo),
+            (str(self.mestre.id), None),
+            (str(estranho.id), None),
+            (str(self.mestre.id), str(uuid.uuid4())),
+        ]
+        ana, mestre_preparo, mestre_ativa, de_fora, cena_apagada = mapa._estados_sync(self.database, self.campanha_id, pedidos)
+        # A Ana recebe exatamente o que o GET dela traz: sem a Sombra.
+        self.assertEqual(ana, self.ver(self.ana))
+        self.assertEqual([t["nome"] for t in ana["tokens"]], ["Mira"])
+        self.assertNotIn("oculto", ana["tokens"][0])
+        self.assertEqual(mestre_preparo["cena"]["id"], preparo)
+        self.assertEqual(mestre_ativa["cena"]["id"], ativa)
+        self.assertEqual(len(mestre_ativa["tokens"]), 2)
+        self.assertIsNone(de_fora)
+        self.assertEqual(cena_apagada["cena"]["id"], ativa)
+
     def test_mestre_nao_usa_imagem_de_outro_mestre(self):
         outro = self._usuario("outro@example.com", "Outro", "assistente", plataforma="mestre")
         criado = acervo.criar_item(acervo.ItemInput(nome="Dele", largura=10, altura=10), user=outro, database=self.database)

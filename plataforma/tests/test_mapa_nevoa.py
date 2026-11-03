@@ -194,9 +194,7 @@ def _conexao(usuario, gestor=False):
 
 
 def _mensagens(conexao):
-    saida = []
-    while not conexao.fila.empty():
-        saida.append(json.loads(conexao.fila.get_nowait()))
+    saida = [json.loads(texto) for texto in conexao.tirar_agora()]
     return [m for m in saida if m["t"] != "presenca"]
 
 
