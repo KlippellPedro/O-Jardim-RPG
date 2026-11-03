@@ -1,5 +1,34 @@
 import { api } from './apiClient';
 
+export type PapelCampanha = 'mestre' | 'assistente' | 'jogador' | 'observador';
+
+export interface IMembroCampanha {
+  id: string;
+  nome_exibicao: string;
+  papel: PapelCampanha;
+  status: 'ativo' | 'removido';
+  nome_mesa: string | null;
+  cor_mesa: string | null;
+  permissoes_mesa: Record<string, unknown>;
+}
+
+export interface IDetalheCampanha {
+  campanha: { id: string; nome: string; dono_id: string; [chave: string]: unknown };
+  meu_papel: PapelCampanha;
+  membros: IMembroCampanha[];
+}
+
+export interface IConviteCampanha {
+  id: string;
+  papel: Exclude<PapelCampanha, 'mestre'>;
+  max_usos: number;
+  usos: number;
+  expira_em: string;
+  criado_em: string;
+  criado_por_nome: string | null;
+  revogado_em: string | null;
+}
+
 export interface AuditoriaFiltros {
   limite?: number;
   pagina?: number;
@@ -46,7 +75,7 @@ export const campanhasApi = {
     return api('/campanhas');
   },
   obter(campanhaId: string) {
-    return api(`/campanhas/${encodeURIComponent(campanhaId)}`);
+    return api<IDetalheCampanha>(`/campanhas/${encodeURIComponent(campanhaId)}`);
   },
   criar(dados: { nome: string; descricao?: string }) {
     return api('/campanhas', { method: 'POST', body: dados });
@@ -72,7 +101,7 @@ export const campanhasApi = {
     return api('/campanhas/entrar', { method: 'POST', body: { codigo } });
   },
   criarConvite(campanhaId: string, dados: { papel?: string; expira_em_dias?: number; max_usos?: number } = {}) {
-    return api(`/campanhas/${encodeURIComponent(campanhaId)}/convites`, {
+    return api<{ id: string; codigo: string; expira_em: string; papel: string }>(`/campanhas/${encodeURIComponent(campanhaId)}/convites`, {
       method: 'POST',
       body: {
         papel: dados.papel || 'jogador',
@@ -82,7 +111,7 @@ export const campanhasApi = {
     });
   },
   listarConvites(campanhaId: string) {
-    return api(`/campanhas/${encodeURIComponent(campanhaId)}/convites`);
+    return api<{ convites: IConviteCampanha[] }>(`/campanhas/${encodeURIComponent(campanhaId)}/convites`);
   },
   revogarConvite(campanhaId: string, conviteId: string) {
     return api(`/campanhas/${encodeURIComponent(campanhaId)}/convites/${encodeURIComponent(conviteId)}`, {
@@ -99,6 +128,18 @@ export const campanhasApi = {
       method: 'PUT',
       body: { papel },
     });
+  },
+  atualizarIdentidadeMesa(campanhaId: string, membroId: string, identidade: { nome_mesa: string | null; cor_mesa: string | null }) {
+    return api<{ nome_mesa: string | null; cor_mesa: string | null }>(
+      `/campanhas/${encodeURIComponent(campanhaId)}/membros/${encodeURIComponent(membroId)}/identidade-mesa`,
+      { method: 'PUT', body: identidade },
+    );
+  },
+  atualizarPermissoesMesa(campanhaId: string, membroId: string, permissoes: Record<string, unknown>) {
+    return api<{ permissoes_mesa: Record<string, unknown> }>(
+      `/campanhas/${encodeURIComponent(campanhaId)}/membros/${encodeURIComponent(membroId)}/permissoes-mesa`,
+      { method: 'PUT', body: permissoes },
+    );
   },
   transferirPropriedade(campanhaId: string, novoDonoId: string) {
     return api(`/campanhas/${encodeURIComponent(campanhaId)}/dono`, {

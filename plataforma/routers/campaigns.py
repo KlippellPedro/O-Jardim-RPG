@@ -7,6 +7,7 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, Depends, HTTPException, status
 from psycopg.types.json import Jsonb
 
+from core import mapa, tempo_real
 from core.audit import record_audit
 from core.campaign_visibility import novas_liberacoes, texto_das_liberacoes, visible_campaign_config
 from core.database import Database
@@ -30,11 +31,28 @@ from schemas import (
     CampaignUpdateInput,
     CampaignVisibilityUpdateInput,
     JoinCampaignInput,
+    MemberTableIdentityInput,
+    MemberTablePermissionsInput,
     MemberRoleInput,
 )
 
 
 router = APIRouter(prefix="/campanhas", tags=["campanhas"])
+
+
+def _atualizar_membro_conectado(campanha_id: UUID, membro, papel: str) -> None:
+    """Atualiza nome, cor e permissões também nas conexões abertas do mapa."""
+    membro = dict(membro)
+    tempo_real.atualizar_membro(
+        str(campanha_id),
+        str(membro["usuario_id"]),
+        nome=membro.get("nome_mesa") or membro["nome_exibicao"],
+        cor=membro.get("cor_mesa"),
+        gestor=papel in ("mestre", "assistente"),
+        papel=papel,
+        permissoes_mesa=mapa.ler_permissoes_mesa(membro.get("permissoes_mesa"), papel),
+        versao=int(tempo_real.agora_ms()),
+    )
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)
@@ -147,7 +165,8 @@ def get_campaign(
                 """
                 SELECT u.id, u.nome_exibicao, u.email, u.papel_plataforma,
                        u.ativo, m.papel, m.status, m.entrou_em,
-                       m.personagem_ativo_id
+                       m.personagem_ativo_id, m.nome_mesa, m.cor_mesa,
+                       m.permissoes_mesa
                 FROM membros_campanha m
                 JOIN usuarios u ON u.id=m.usuario_id
                 WHERE m.campanha_id=%s AND m.status='ativo'
@@ -499,6 +518,7 @@ def remove_member(
             target_type="usuario",
             target_id=str(member_id),
         )
+    tempo_real.revogar_membro(str(campaign_id), str(member_id), int(tempo_real.agora_ms()))
     return None
 
 
@@ -597,6 +617,14 @@ def update_member_role(
         ).fetchone()
         if not row:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="membro nao encontrado")
+        membro = connection.execute(
+            """
+            SELECT m.usuario_id, m.nome_mesa, m.cor_mesa, m.permissoes_mesa, u.nome_exibicao
+            FROM membros_campanha m JOIN usuarios u ON u.id=m.usuario_id
+            WHERE m.campanha_id=%s AND m.usuario_id=%s AND m.status='ativo'
+            """,
+            (campaign_id, member_id),
+        ).fetchone()
         campaign = connection.execute(
             "SELECT nome FROM campanhas WHERE id=%s",
             (campaign_id,),
@@ -620,7 +648,109 @@ def update_member_role(
             target_id=str(member_id),
             details={"papel": payload.papel},
         )
+    _atualizar_membro_conectado(campaign_id, membro, payload.papel)
     return dict(row)
+
+
+@router.put("/{campaign_id}/membros/{member_id}/identidade-mesa")
+def update_member_table_identity(
+    campaign_id: UUID,
+    member_id: UUID,
+    payload: MemberTableIdentityInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Muda o nome e a cor que identificam esta pessoa nesta mesa."""
+    with database.connection() as connection:
+        access = campaign_access(connection, campaign_id, user.id)
+        if not access.manages_content and member_id != user.id:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="so o mestre muda a identidade de outra pessoa")
+        membro = connection.execute(
+            """
+            SELECT m.usuario_id, m.papel, m.nome_mesa, m.cor_mesa, m.permissoes_mesa, u.nome_exibicao
+            FROM membros_campanha m JOIN usuarios u ON u.id=m.usuario_id
+            WHERE m.campanha_id=%s AND m.usuario_id=%s AND m.status='ativo'
+            FOR UPDATE OF m
+            """,
+            (campaign_id, member_id),
+        ).fetchone()
+        if not membro:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="membro nao encontrado")
+        nome_mesa = payload.nome_mesa if "nome_mesa" in payload.model_fields_set else membro["nome_mesa"]
+        cor_mesa = payload.cor_mesa if "cor_mesa" in payload.model_fields_set else membro["cor_mesa"]
+        connection.execute(
+            """
+            UPDATE membros_campanha
+            SET nome_mesa=%s, cor_mesa=%s, atualizado_em=CURRENT_TIMESTAMP
+            WHERE campanha_id=%s AND usuario_id=%s
+            """,
+            (nome_mesa, cor_mesa, campaign_id, member_id),
+        )
+        atualizado = {**dict(membro), "nome_mesa": nome_mesa, "cor_mesa": cor_mesa}
+        record_audit(
+            connection,
+            action="campanha.identidade_mesa_alterada",
+            actor_user_id=user.id,
+            campaign_id=campaign_id,
+            target_type="usuario",
+            target_id=str(member_id),
+            details={"nome_mesa": nome_mesa, "cor_mesa": cor_mesa},
+        )
+    _atualizar_membro_conectado(campaign_id, atualizado, membro["papel"])
+    return {"nome_mesa": nome_mesa, "cor_mesa": cor_mesa}
+
+
+@router.put("/{campaign_id}/membros/{member_id}/permissoes-mesa")
+def update_member_table_permissions(
+    campaign_id: UUID,
+    member_id: UUID,
+    payload: MemberTablePermissionsInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Define as ferramentas e camadas que um jogador ou observador pode usar/ver."""
+    with database.connection() as connection:
+        access = require_campaign_manager(connection, campaign_id, user.id)
+        membro = connection.execute(
+            """
+            SELECT m.usuario_id, m.papel, m.nome_mesa, m.cor_mesa, m.permissoes_mesa, u.nome_exibicao
+            FROM membros_campanha m JOIN usuarios u ON u.id=m.usuario_id
+            WHERE m.campanha_id=%s AND m.usuario_id=%s AND m.status='ativo'
+            FOR UPDATE OF m
+            """,
+            (campaign_id, member_id),
+        ).fetchone()
+        if not membro:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="membro nao encontrado")
+        if membro["papel"] in ("mestre", "assistente"):
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="gestores usam todas as ferramentas da mesa")
+        atual = mapa.ler_permissoes_mesa(membro["permissoes_mesa"], membro["papel"])
+        try:
+            permissoes = mapa.normalizar_permissoes_mesa(
+                payload.model_dump(exclude_unset=True, exclude_none=True), membro["papel"], atual
+            )
+        except mapa.ErroMapa as erro:
+            raise HTTPException(status_code=422, detail=erro.mensagem) from None
+        connection.execute(
+            """
+            UPDATE membros_campanha
+            SET permissoes_mesa=%s, atualizado_em=CURRENT_TIMESTAMP
+            WHERE campanha_id=%s AND usuario_id=%s
+            """,
+            (Jsonb(permissoes), campaign_id, member_id),
+        )
+        atualizado = {**dict(membro), "permissoes_mesa": permissoes}
+        record_audit(
+            connection,
+            action="campanha.permissoes_mesa_alteradas",
+            actor_user_id=user.id,
+            campaign_id=campaign_id,
+            target_type="usuario",
+            target_id=str(member_id),
+            details={"permissoes": permissoes},
+        )
+    _atualizar_membro_conectado(campaign_id, atualizado, membro["papel"])
+    return {"permissoes_mesa": permissoes}
 
 
 @router.put("/{campaign_id}/dono")

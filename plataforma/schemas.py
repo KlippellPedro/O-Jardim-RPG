@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from datetime import datetime
 from typing import Any, Literal
 from uuid import UUID
@@ -145,6 +146,44 @@ class JoinCampaignInput(BaseModel):
 
 class MemberRoleInput(BaseModel):
     papel: CampaignRole
+
+
+class MemberTablePermissionsInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    mover_tokens: StrictBool | None = None
+    usar_ping: StrictBool | None = None
+    usar_regua: StrictBool | None = None
+    usar_magia: StrictBool | None = None
+    camadas: dict[str, StrictBool] | None = None
+
+
+class MemberTableIdentityInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    nome_mesa: str | None = Field(default=None, max_length=32)
+    cor_mesa: str | None = None
+
+    @field_validator("nome_mesa")
+    @classmethod
+    def clean_table_name(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        cleaned = " ".join(value.strip().split())
+        if not cleaned:
+            return None
+        if len(cleaned) > 32:
+            raise ValueError("o nome na mesa pode ter ate 32 caracteres")
+        return cleaned
+
+    @field_validator("cor_mesa")
+    @classmethod
+    def validate_table_color(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        if not re.fullmatch(r"#[0-9a-fA-F]{6}", value):
+            raise ValueError("a cor deve usar o formato #RRGGBB")
+        return value.lower()
 
 
 class CampaignOwnerInput(BaseModel):
