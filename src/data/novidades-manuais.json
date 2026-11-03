@@ -2,6 +2,77 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-03-mapa-arrumado",
+      "data": "2026-11-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: ferramentas em grupos, fichas em cartões e a rodada no topo",
+      "detalhes": [
+        "As ferramentas da esquerda agora ficam em grupos: Mesa (mover, régua, ping e magia), Vista e, para o Mestre, as dele. Passe o mouse num botão para ver o nome e a tecla de atalho.",
+        "Em Vista há um botão que leva a tela direto até o seu personagem.",
+        "Durante o combate, o alto do mapa mostra a rodada e de quem é a vez.",
+        "A aba Iniciativa ficou mais limpa, só com o número e o nome. Clique num nome e o mapa vai até aquele token.",
+        "A aba Fichas mostra um cartão para cada personagem no mapa, com retrato, nível, barras e condições. Clique no seu para abrir a ficha inteira ali mesmo, sem sair do mapa. O Mestre abre a de qualquer um.",
+        "Nomes compridos ficam abreviados embaixo do token, para não cobrir os vizinhos. Com o mouse em cima, o nome aparece inteiro.",
+        "Os avisos do mapa e as caixas para dar nome a uma cena ou pasta agora têm a cara do resto do site."
+      ]
+    },
+    {
+      "id": "2026-11-02-medidor-tempo-real",
+      "data": "2026-11-02",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: mudanças na hora, tempo real mais firme e um medidor de atraso",
+      "detalhes": [
+        "Token novo, vida, condições, névoa e clima chegam na tela de todos quase na hora, sem o mapa recarregar inteiro.",
+        "O token que outra pessoa arrasta anda mais colado na mão dela e mais liso, mesmo numa internet que oscila.",
+        "Quando o site é atualizado, a conexão do mapa pode cair no modo reserva. Agora ela volta sozinha ao modo rápido em até meio minuto, sem recarregar a página.",
+        "Um aparelho mais lento não fica mais com um token parado no lugar errado: se ele ficar para trás, o mapa se acerta sozinho.",
+        "Clique no ícone de conexão no alto do mapa, ou aperte Ctrl+Shift+D, para abrir o medidor. Ele mostra quanto o seu aparelho demora para falar com o servidor e quanto um movimento dos outros leva até a sua tela.",
+        "Se algo parecer lento, o botão de copiar do medidor guarda esses números para você mandar ao Mestre."
+      ]
+    },
+    {
+      "id": "2026-11-03-luz-magia-tokens",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: tochas, efeitos de magia e tokens com mais vida",
+      "detalhes": [
+        "Clique no token do seu personagem e acenda uma luz: vela, tocha, lanterna ou luz mágica. Dá para mudar o alcance e a cor, e a chama da tocha tremula.",
+        "Quando o Mestre deixa a cena escura, a sua luz abre caminho em volta do seu personagem, do tamanho que você escolheu.",
+        "Na barra da esquerda há a ferramenta de magia (tecla M): escolha círculo, cone, linha ou impacto e a cor do Fluxo, arraste no mapa e a mesa inteira vê o efeito, com o seu nome.",
+        "Enquanto você mira, o mapa mostra o tamanho da área em casas e em metros.",
+        "Os tokens entram crescendo e saem encolhendo. Quando a Vida cai, o token pisca em vermelho e treme; quando sobe, um anel verde se abre.",
+        "Na vez de alguém, o token ganha um brilho dourado com arcos girando, e o token arrastado sobe um pouco e deixa a sombra no chão, na tela de todo mundo."
+      ]
+    },
+    {
+      "id": "2026-11-02-nevoa-viva",
+      "data": "2026-11-02",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: a névoa de guerra ganhou vida",
+      "detalhes": [
+        "A névoa agora parece fumaça: se move devagar, tem tons diferentes e a borda treme e se desfaz em fiapos.",
+        "Quando o Mestre revela um pedaço do mapa, a névoa se dissolve aos poucos, e ao esconder de novo ela volta do mesmo jeito.",
+        "Ligar e desligar a névoa também acontece com calma, sem piscar a tela."
+      ]
+    },
+    {
+      "id": "2026-11-02-clima-vivo",
+      "data": "2026-11-02",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: clima com mais profundidade e dois efeitos novos",
+      "detalhes": [
+        "A chuva cai em camadas, umas mais perto e outras mais longe, e de perto dá para ver os respingos no chão.",
+        "Na tempestade, sombras de nuvens passam pelo mapa e o relâmpago clareia o chão, mais forte onde as nuvens abrem.",
+        "A neblina ficou macia e ondula devagar, a areia corre em faixas com o vento e o véu do Vazio pulsa.",
+        "Efeitos novos para o Mestre: Sombras de nuvens, que passam sobre o mapa sem chuva, e Calor, que faz o chão tremer como ar quente perto do fogo ou no deserto."
+      ]
+    },
+    {
       "id": "2026-11-02-nevoa-e-clima",
       "data": "2026-11-02",
       "tipo": "novo",
