@@ -199,6 +199,12 @@
   pointer-events: none;
 }
 
+.mapa-aviso-erro {
+  flex-direction: column;
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #fecaca;
+}
+
 .mapa-erro-flutuante {
   position: absolute;
   top: 12px;

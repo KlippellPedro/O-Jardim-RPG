@@ -179,23 +179,28 @@ export interface ITokenEdicao {
 
 const base = (campanhaId: string) => `/mapa/${campanhaId}`;
 
+/** O estado do mapa sempre vem em JSON. Enquanto a Discloud troca de versão, o proxy responde
+ * com uma página HTML e status 200: sem esta exigência ela viraria `null` e a página travaria em
+ * "Abrindo o mapa...". Com ela, vira erro e a página tenta de novo. */
+const ESTADO = { exigirCorpo: true } as const;
+
 export const mapaApi = {
   obter: (campanhaId: string, cenaId?: string | null) =>
-    api<IEstadoMapa>(`${base(campanhaId)}${cenaId ? `?cena_id=${encodeURIComponent(cenaId)}` : ''}`),
+    api<IEstadoMapa>(`${base(campanhaId)}${cenaId ? `?cena_id=${encodeURIComponent(cenaId)}` : ''}`, ESTADO),
   criarCena: (campanhaId: string, dados: ICenaPayload & { nome: string }) =>
-    api<IEstadoMapa>(`${base(campanhaId)}/cenas`, { method: 'POST', body: dados }),
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas`, { method: 'POST', body: dados, ...ESTADO }),
   editarCena: (campanhaId: string, cenaId: string, dados: ICenaPayload) =>
-    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}`, { method: 'PUT', body: dados }),
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}`, { method: 'PUT', body: dados, ...ESTADO }),
   ativarCena: (campanhaId: string, cenaId: string) =>
-    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/ativar`, { method: 'POST' }),
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/ativar`, { method: 'POST', ...ESTADO }),
   apagarCena: (campanhaId: string, cenaId: string) =>
     api<null>(`${base(campanhaId)}/cenas/${cenaId}`, { method: 'DELETE' }),
   criarToken: (campanhaId: string, cenaId: string, dados: ITokenPayload) =>
-    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/tokens`, { method: 'POST', body: dados }),
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/tokens`, { method: 'POST', body: dados, ...ESTADO }),
   trazerParticipantes: (campanhaId: string, cenaId: string, ponto: { x: number; y: number }) =>
-    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/trazer`, { method: 'POST', body: ponto }),
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/trazer`, { method: 'POST', body: ponto, ...ESTADO }),
   editarToken: (campanhaId: string, tokenId: string, dados: ITokenEdicao) =>
-    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'PUT', body: dados }),
+    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'PUT', body: dados, ...ESTADO }),
   moverToken: (campanhaId: string, tokenId: string, ponto: { x: number; y: number }) =>
     api<{ x: number; y: number; versao: number }>(`${base(campanhaId)}/tokens/${tokenId}/mover`, { method: 'POST', body: ponto }),
   apagarToken: (campanhaId: string, tokenId: string) =>
@@ -204,9 +209,9 @@ export const mapaApi = {
   editarTokenDoPersonagem: (campanhaId: string, personagemId: string, dados: { moldura?: string; sem_moldura?: boolean; enquadramento?: Partial<{ zoom: number; x: number; y: number }> }) =>
     api<{ moldura: string | null; enquadramento: { zoom: number; x: number; y: number } }>(`${base(campanhaId)}/personagens/${personagemId}/token`, { method: 'PUT', body: dados }),
   mudarNevoa: (campanhaId: string, cenaId: string, dados: INevoaPayload) =>
-    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/nevoa`, { method: 'POST', body: dados }),
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/nevoa`, { method: 'POST', body: dados, ...ESTADO }),
   mudarClima: (campanhaId: string, cenaId: string, clima: IClima) =>
-    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/clima`, { method: 'PUT', body: clima }),
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/clima`, { method: 'PUT', body: clima, ...ESTADO }),
   configurar: (campanhaId: string, dados: { moldura_mesa: string | null }) =>
     api<{ moldura_mesa: string | null }>(`${base(campanhaId)}/config`, { method: 'PUT', body: dados }),
 };

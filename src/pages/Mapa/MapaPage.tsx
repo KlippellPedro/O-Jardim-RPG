@@ -90,16 +90,33 @@ export const MapaPage = () => {
   cenaVistaRef.current = cenaVista;
   const recargaAgendada = useRef<number | null>(null);
 
+  const tentativas = useRef(0);
+  const novaTentativa = useRef<number | null>(null);
+
   const recarregar = useCallback(async () => {
     if (!campanhaId) return;
     try {
       const novo = await mapaApi.obter(campanhaId, cenaVistaRef.current);
+      tentativas.current = 0;
       setEstado(novo);
       setErro('');
     } catch (falha) {
       setErro(falha instanceof Error ? falha.message : 'Não deu para abrir o mapa.');
+      // Nada na tela ainda (o servidor trocando de versão, a rede caindo): tenta de novo sozinho, cada vez mais espaçado.
+      if (!estadoRef.current && novaTentativa.current === null) {
+        const espera = Math.min(15_000, 2_000 * 2 ** tentativas.current);
+        tentativas.current += 1;
+        novaTentativa.current = window.setTimeout(() => {
+          novaTentativa.current = null;
+          void recarregar();
+        }, espera);
+      }
     }
   }, [campanhaId]);
+
+  useEffect(() => () => {
+    if (novaTentativa.current !== null) window.clearTimeout(novaTentativa.current);
+  }, []);
 
   const agendarRecarga = useCallback(() => {
     if (recargaAgendada.current !== null) return;
@@ -577,8 +594,14 @@ export const MapaPage = () => {
       <main className="mapa-area">
         <div ref={alvoRef} className="mapa-palco" />
         {!estado && !erro && <div className="mapa-aviso"><Loader2 className="girando" size={20} /> Abrindo o mapa...</div>}
+        {!estado && erro && (
+          <div className="mapa-aviso mapa-aviso-erro">
+            <span>Não deu para abrir o mapa agora: {erro} Tentando de novo sozinho.</span>
+            <button type="button" className="mapa-botao" onClick={() => void recarregar()}>Tentar agora</button>
+          </div>
+        )}
         {aviso && <div className="mapa-aviso">{aviso}</div>}
-        {erro && <button type="button" className="mapa-erro-flutuante" onClick={() => setErro('')}>{erro}</button>}
+        {erro && estado && <button type="button" className="mapa-erro-flutuante" onClick={() => setErro('')}>{erro}</button>}
         {gestor && cena && ferramenta === 'nevoa' && (
           <BarraNevoa
             ligada={cena.nevoa.ligada}

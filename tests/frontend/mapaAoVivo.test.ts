@@ -117,3 +117,16 @@ test('clima: os efeitos do painel são os mesmos do servidor', async () => {
   assert.deepEqual(EFEITOS.map((e) => e.id), tipos);
   assert.equal(MAX_EFEITOS, Number(servidor.match(/MAX_EFEITOS_CLIMA = (\d+)/)![1]));
 });
+
+test('mapa: a página HTML do proxy no lugar do estado vira erro, para a página tentar de novo', async () => {
+  const { mapaApi } = await import('../../src/services/mapaApi');
+  const { ApiError, MENSAGEM_RESPOSTA_INCOMPLETA } = await import('../../src/services/apiClient');
+  const fetchOriginal = globalThis.fetch;
+  // Enquanto a Discloud troca de versão, o proxy responde 200 com uma página de "iniciando".
+  globalThis.fetch = async () => new Response('<html>iniciando</html>', { status: 200, headers: { 'content-type': 'text/html' } });
+  try {
+    await assert.rejects(mapaApi.obter('campanha-teste'), (erro: unknown) => erro instanceof ApiError && erro.message === MENSAGEM_RESPOSTA_INCOMPLETA);
+  } finally {
+    globalThis.fetch = fetchOriginal;
+  }
+});
