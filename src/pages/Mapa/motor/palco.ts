@@ -6,7 +6,7 @@
 
 import { Application, Container, Graphics, Text, Texture, Sprite } from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
-import type { FormaMagia, IAreaClima, ICena, IClima, IFormaNevoa, IMagiaMapa, ITokenMapa, OperacaoNevoa } from '../../../services/mapaApi';
+import type { CamadaMapaId, CamadaTokenId, FormaMagia, IAberturaCena, IAnotacaoMapa, IAreaClima, ICena, IClima, IFormaNevoa, IMagiaMapa, ITokenMapa, OperacaoNevoa } from '../../../services/mapaApi';
 import { urlImagemDoToken, urlPedaco } from '../../../services/mapaApi';
 import { encaixar, medir, raioHex, LADO_LADRILHO, type IGrade, type IPonto } from './geometria';
 import { TokenVisual, esquecerTexturasDeMoldura } from './token';
@@ -19,7 +19,11 @@ import { CamadaCeu } from './ceu';
 import type { ILuzDoCeu } from './ceuConta';
 import { CamadaPortais } from './portais';
 import { CamadaAberturas } from './aberturas';
+import { CamadaLiquidos } from './liquidos';
+import { CamadaAnotacoes } from './anotacoes';
+import { corDaLuz, faseDe, tremor } from './luzesConta';
 import { bocaEm, type LadoPortal } from './portaisConta';
+import { portaEm } from './portasConta';
 import { type IPreferenciasBarrasMapa, PREFERENCIAS_BARRAS_PADRAO } from './barrasToken';
 import {
   acrescentarAoTraco, chavesDoFundo, detalheSempre, fechaPoligono, formaDoPoligono, formaDoRetangulo, formaDoTraco, MAX_PONTOS_TRACO,
@@ -28,7 +32,7 @@ import {
 /** `nevoa`: o Mestre desenha a névoa; `area`: o Mestre marca a área de um efeito de clima;
  * `magia`: qualquer um mira e solta um efeito de magia que a mesa inteira vê;
  * `portal`: o Mestre cria portais (dois cliques) e arrasta as bocas. */
-export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia' | 'portal';
+export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia' | 'portal' | 'texto';
 
 export interface OpcoesMagia {
   forma: FormaMagia;
@@ -56,6 +60,11 @@ export interface EventosPalco {
   aoPortalNovo: (a: IPonto, b: IPonto) => void;
   aoSelecionarPortal: (id: string | null) => void;
   aoMoverPortal: (id: string, lado: LadoPortal, ponto: IPonto) => void;
+  aoCriarAnotacao: (ponto: IPonto) => void;
+  aoSelecionarAnotacao: (id: string) => void;
+  aoMoverAnotacao: (id: string, x: number, y: number) => void;
+  /** Clique numa porta do mapa montado (o jogador abre e fecha; o Mestre recebe o menu da porta). */
+  aoPorta?: (porta: IAberturaCena) => void;
 }
 
 const COR_REVELAR = '#5eead4';
@@ -96,6 +105,10 @@ export class PalcoMapa {
   /** Mapa e grade juntos: é a camada que treme com o calor do clima (os tokens ficam firmes). */
   private camadaFundo = new Container();
   private camadaTokens = new Container();
+  private camadaProps = new Container();
+  private camadaMontarias = new Container();
+  private camadaPersonagens = new Container();
+  private anotacoes = new CamadaAnotacoes();
   /** Brilho das luzes dos tokens, entre a névoa e os tokens. */
   private luzes = new CamadaLuzes();
   private camadaReguas = new Container();
@@ -108,6 +121,8 @@ export class PalcoMapa {
   private portais = new CamadaPortais();
   /** Portas do mapa montado no construtor, por cima da imagem (que só tem o vão). */
   private aberturas = new CamadaAberturas();
+  /** Água e lava do mapa montado, com movimento (embaixo da névoa). */
+  private liquidos = new CamadaLiquidos();
   /** Ferramenta de portal: a primeira boca de um portal novo, ou a boca que está sendo arrastada. */
   private bocaPendente: IPonto | null = null;
   private arrastoPortal: { id: string; lado: LadoPortal; ponto: IPonto; moveu: boolean } | null = null;
@@ -137,12 +152,14 @@ export class PalcoMapa {
   private campanhaId = '';
   private ferramenta: Ferramenta = 'mover';
   private selecionado: string | null = null;
+  private anotacaoSelecionada: string | null = null;
   private vez: string | null = null;
   private reguasRemotas = new Map<string, Regua>();
   private pings = new Map<Container, { nascimento: number; cor: string }>();
   private reguaLocal: Regua | null = null;
   private pontosRegua: IPonto[] | null = null;
   private arrasto: { id: string; dx: number; dy: number; inicio: IPonto; moveu: boolean } | null = null;
+  private arrastoAnotacao: { id: string; dx: number; dy: number; moveu: boolean } | null = null;
   private quadroCallbacks: Array<() => void> = [];
   private carregarVisiveis: number | null = null;
 
@@ -180,12 +197,13 @@ export class PalcoMapa {
     this.nevoa = new CamadaNevoa(app.renderer);
     this.clima = new CamadaClima(app.renderer, this.camadaFundo);
     this.ceu = new CamadaCeu(app.renderer);
+    this.camadaTokens.addChild(this.camadaProps, this.camadaMontarias, this.camadaPersonagens);
     this.camadaMapa.addChild(this.camadaReduzida, this.camadaDetalhe);
     // A névoa cobre o mapa e fica por baixo dos tokens: o servidor já tira do jogador o que ela esconde.
-    this.camadaFundo.addChild(this.camadaMapa, this.aberturas.raiz, this.grade);
+    this.camadaFundo.addChild(this.camadaMapa, this.liquidos.raiz, this.aberturas.raiz, this.grade);
     // Os portais ficam no chão (embaixo dos tokens); a luz do dia e o clima, por cima de tudo que está no mapa.
     viewport.addChild(
-      this.camadaFundo, this.nevoa.raiz, this.portais.raiz, this.luzes.raiz, this.camadaTokens, this.ceu.raiz, this.clima.raiz,
+      this.camadaFundo, this.anotacoes.raiz, this.nevoa.raiz, this.portais.raiz, this.luzes.raiz, this.camadaTokens, this.ceu.raiz, this.clima.raiz,
       this.magias.raiz, this.camadaReguas, this.previa, this.camadaPings,
     );
     app.stage.eventMode = 'static';
@@ -213,11 +231,27 @@ export class PalcoMapa {
         if (evento.button === 0) this.cliquePortal({ x: ponto.x, y: ponto.y });
         return;
       }
+      if (this.ferramenta === 'texto') {
+        if (evento.button === 0 && this.gestor) this.eventos.aoCriarAnotacao({ x: ponto.x, y: ponto.y });
+        return;
+      }
+      if (evento.button === 0 && this.cena?.aberturas?.length && this.eventos.aoPorta) {
+        const porta = portaEm(this.cena.aberturas, ponto, this.cena.grade.tamanho, viewport.scale.x);
+        if (porta) {
+          this.eventos.aoPorta(porta);
+          return;
+        }
+      }
       this.eventos.aoSelecionar(null);
     });
 
     app.stage.on('globalpointermove', (evento) => {
       const ponto = viewport.toWorld(evento.global);
+      if (this.arrastoAnotacao) {
+        this.arrastoAnotacao.moveu = true;
+        this.anotacoes.moverTemporariamente(this.arrastoAnotacao.id, ponto.x - this.arrastoAnotacao.dx, ponto.y - this.arrastoAnotacao.dy);
+        return;
+      }
       if (this.ferramenta === 'nevoa' || this.ferramenta === 'area' || this.ferramenta === 'magia') {
         this.continuarDesenho({ x: ponto.x, y: ponto.y });
         return;
@@ -260,8 +294,16 @@ export class PalcoMapa {
         else this.portais.definirArrastada(null);
         return;
       }
+      if (this.arrastoAnotacao) {
+        const { id, moveu } = this.arrastoAnotacao;
+        this.arrastoAnotacao = null;
+        viewport.plugins.resume('drag');
+        const ponto = this.anotacoes.posicao(id);
+        if (moveu && ponto) this.eventos.aoMoverAnotacao(id, ponto.x, ponto.y);
+        return;
+      }
       if (this.arrasto) {
-        const { id, moveu } = this.arrasto;
+        const { id, moveu, inicio } = this.arrasto;
         this.arrasto = null;
         viewport.plugins.resume('drag');
         viewport.plugins.resume('decelerate');
@@ -270,7 +312,13 @@ export class PalcoMapa {
         token.raiz.cursor = 'grab';
         token.levantar(false);
         if (!moveu) {
-          this.eventos.aoSelecionar(id);
+          // O token ao lado da porta cobre o batente: um clique em cima da linha da porta abre
+          // a porta (a margem é curta, para o clique no token continuar escolhendo o token).
+          const porta = this.cena?.aberturas?.length && this.eventos.aoPorta
+            ? portaEm(this.cena.aberturas, inicio, this.cena.grade.tamanho * 0.4, viewport.scale.x * 2)
+            : null;
+          if (porta) this.eventos.aoPorta?.(porta);
+          else this.eventos.aoSelecionar(id);
           return;
         }
         const final = this.cena ? encaixar({ x: token.raiz.x, y: token.raiz.y }, this.cena.grade, token.dados.porte) : { x: token.raiz.x, y: token.raiz.y };
@@ -309,6 +357,7 @@ export class PalcoMapa {
       this.magias.quadro(agora);
       this.nevoa.quadro(agora);
       this.portais.quadro(agora, viewport.scale.x);
+      this.liquidos.quadro(agora);
       if (this.cena) {
         const fontes = this.fontesDeLuz(agora);
         this.luzes.quadro(fontes);
@@ -332,6 +381,12 @@ export class PalcoMapa {
     for (const token of this.tokens.values()) {
       const fonte = fonteDoToken(token.dados, token.raiz.x, token.raiz.y, casa, agora);
       if (fonte) saida.push(fonte);
+    }
+    // Luzes fixas do mapa montado (tocha na parede, braseiro): brilham e abrem o escuro como a de um token.
+    for (const luz of this.cena?.luzes ?? []) {
+      const id = `cena:${luz.id}`;
+      const forca = luz.tremula ? tremor(agora, faseDe(id)) : 1;
+      saida.push({ id, x: luz.x, y: luz.y, raio: luz.raio * casa * forca, cor: corDaLuz(luz.cor), forca });
     }
     return saida;
   }
@@ -372,6 +427,7 @@ export class PalcoMapa {
       this.reduzidosPedidos.clear();
       this.desenharFundo();
       if (anterior?.id !== cena.id) {
+        this.anotacaoSelecionada = null;
         this.cancelarDesenho();
         this.enquadrar();
         this.cenaTrocada = true;
@@ -384,7 +440,35 @@ export class PalcoMapa {
     this.clima.definir(cena.clima ?? null, cena.largura, cena.altura, gestor);
     this.portais.definir(cena.portais ?? [], cena.grade.tamanho, gestor);
     this.aberturas.definir(cena.aberturas ?? [], cena.grade.tamanho, gestor);
+    this.liquidos.definir(cena.liquidos, cena.largura, cena.altura, cena.grade.tamanho);
+    this.anotacoes.definir(cena.anotacoes ?? [], this.anotacaoSelecionada, (id, global) => this.selecionarAnotacao(id, global));
     this.agendarLadrilhos();
+  }
+
+  definirAnotacoes(anotacoes: IAnotacaoMapa[]) {
+    if (!this.cena) return;
+    this.anotacoes.definir(anotacoes, this.anotacaoSelecionada, (id, global) => this.selecionarAnotacao(id, global));
+  }
+
+  definirCamadasVisiveis(camadas: CamadaMapaId[]) {
+    const visiveis = new Set(camadas);
+    this.camadaFundo.visible = visiveis.has('mapa');
+    this.camadaProps.visible = visiveis.has('props');
+    this.camadaMontarias.visible = visiveis.has('montarias');
+    this.camadaPersonagens.visible = visiveis.has('personagens');
+    this.anotacoes.raiz.visible = visiveis.has('anotacoes');
+  }
+
+  private selecionarAnotacao(id: string, global: IPonto) {
+    this.anotacaoSelecionada = id;
+    this.anotacoes.definir(this.cena?.anotacoes ?? [], id, (nota, ponto) => this.selecionarAnotacao(nota, ponto));
+    this.eventos.aoSelecionarAnotacao(id);
+    if (!this.gestor || this.ferramenta !== 'mover') return;
+    const atual = this.anotacoes.posicao(id);
+    if (!atual) return;
+    const ponto = this.viewport.toWorld(global);
+    this.arrastoAnotacao = { id, dx: ponto.x - atual.x, dy: ponto.y - atual.y, moveu: false };
+    this.viewport.plugins.pause('drag');
   }
 
   /** A luz do dia que vale agora na cena (null: a luz dela não muda com a hora). `imediato` pula a troca lenta. */
@@ -777,10 +861,12 @@ export class PalcoMapa {
       if (!token) {
         token = new TokenVisual(dados, tamanho, this.preferenciasBarras);
         this.tokens.set(dados.id, token);
-        this.camadaTokens.addChild(token.raiz);
+        this.containerDaCamada(dados.camada).addChild(token.raiz);
         this.ligarToken(token);
       } else {
         token.atualizar(dados, tamanho, !arrastando);
+        const container = this.containerDaCamada(dados.camada);
+        if (token.raiz.parent !== container) container.addChild(token.raiz);
       }
       token.definirSelecionado(dados.id === this.selecionado);
       token.definirVez(dados.id === this.vez);
@@ -798,6 +884,12 @@ export class PalcoMapa {
       }
     }
     this.cenaTrocada = false;
+  }
+
+  private containerDaCamada(camada: CamadaTokenId | undefined) {
+    if (camada === 'props') return this.camadaProps;
+    if (camada === 'montarias') return this.camadaMontarias;
+    return this.camadaPersonagens;
   }
 
   definirPreferenciasBarras(preferencias: IPreferenciasBarrasMapa) {
@@ -831,7 +923,7 @@ export class PalcoMapa {
       this.arrasto = { id: token.dados.id, dx: ponto.x - token.raiz.x, dy: ponto.y - token.raiz.y, inicio: { x: ponto.x, y: ponto.y }, moveu: false };
       this.viewport.plugins.pause('drag');
       this.viewport.plugins.pause('decelerate');
-      this.camadaTokens.addChild(token.raiz);
+      token.raiz.parent?.addChild(token.raiz);
       token.raiz.cursor = 'grabbing';
     });
   }

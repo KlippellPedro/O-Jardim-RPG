@@ -3,7 +3,10 @@
 // 1024 px do acervo), então o que o Mestre vê é o que a mesa recebe. As portas não entram
 // aqui: elas são a parte viva da cena (motor/aberturas.ts), desenhadas por cima.
 
-import { espessuraDaParede, lerAresta, trechosDeParede, VAZIO, type IConteudoProjeto, type MaterialChao, type MaterialParede } from './projeto';
+import {
+  camadaDe, chaveDaImagem, espessuraDaParede, lerAresta, pecasEmOrdem, trechosDeParede, VAZIO,
+  type IConteudoProjeto, type IPecaProjeto, type MaterialChao, type MaterialParede,
+} from './projeto';
 import { LADO_TEXTURA, texturaDaParede, texturaDoChao } from './materiais';
 
 type Contexto = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
@@ -79,9 +82,40 @@ export function desenharTrecho(
     ctx.fill();
   }
 
-  // Objetos do Acervo ficam entre o chão e as paredes, como mobília apoiada no piso.
-  for (const peca of conteudo.pecas) {
-    const imagem = imagensPecas.get(peca.imagem_id);
+  // As peças do chão e dos objetos ficam embaixo das paredes; as do alto, por cima de tudo.
+  desenharPecas(ctx, pecasEmOrdem(conteudo).filter((peca) => camadaDe(peca) !== 'alto'), casa, regiao, imagensPecas);
+
+  const margem = casa;
+  const visiveis = trechosDeParede(conteudo).filter(({ trecho: [x1, y1, x2, y2] }) => (
+    Math.max(x1, x2) * casa >= regiao.x - margem && Math.min(x1, x2) * casa <= regiao.x + regiao.w + margem
+    && Math.max(y1, y2) * casa >= regiao.y - margem && Math.min(y1, y2) * casa <= regiao.y + regiao.h + margem
+  ));
+
+  // Sombra das paredes no chão (a sombra do canvas é em pixels da tela, por isso vezes a escala).
+  ctx.save();
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
+  ctx.shadowBlur = casa * 0.22 * escala;
+  ctx.shadowOffsetX = casa * 0.04 * escala;
+  ctx.shadowOffsetY = casa * 0.07 * escala;
+  for (const { trecho, material } of visiveis) {
+    if (material === 'cerca') continue;
+    tracarParede(ctx, trecho, material, casa);
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.9)';
+    ctx.lineWidth = espessuraDaParede(material) * casa;
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  for (const { trecho, material } of visiveis) desenharParede(ctx, trecho, material, casa, escalaTextura);
+  desenharJanelas(ctx, conteudo, casa, regiao, margem);
+  desenharSoleiras(ctx, conteudo, casa);
+  desenharPecas(ctx, pecasEmOrdem(conteudo).filter((peca) => camadaDe(peca) === 'alto'), casa, regiao, imagensPecas);
+  ctx.restore();
+}
+
+function desenharPecas(ctx: Contexto, pecas: IPecaProjeto[], casa: number, regiao: IRegiao, imagensPecas: Map<string, CanvasImageSource>) {
+  for (const peca of pecas) {
+    const imagem = imagensPecas.get(chaveDaImagem(peca));
     const proporcao = peca.imagem_altura / peca.imagem_largura;
     const largura = peca.escala * casa;
     const altura = largura * proporcao;
@@ -110,32 +144,6 @@ export function desenharTrecho(
     }
     ctx.restore();
   }
-
-  const margem = casa;
-  const visiveis = trechosDeParede(conteudo).filter(({ trecho: [x1, y1, x2, y2] }) => (
-    Math.max(x1, x2) * casa >= regiao.x - margem && Math.min(x1, x2) * casa <= regiao.x + regiao.w + margem
-    && Math.max(y1, y2) * casa >= regiao.y - margem && Math.min(y1, y2) * casa <= regiao.y + regiao.h + margem
-  ));
-
-  // Sombra das paredes no chão (a sombra do canvas é em pixels da tela, por isso vezes a escala).
-  ctx.save();
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
-  ctx.shadowBlur = casa * 0.22 * escala;
-  ctx.shadowOffsetX = casa * 0.04 * escala;
-  ctx.shadowOffsetY = casa * 0.07 * escala;
-  for (const { trecho, material } of visiveis) {
-    if (material === 'cerca') continue;
-    tracarParede(ctx, trecho, material, casa);
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.9)';
-    ctx.lineWidth = espessuraDaParede(material) * casa;
-    ctx.stroke();
-  }
-  ctx.restore();
-
-  for (const { trecho, material } of visiveis) desenharParede(ctx, trecho, material, casa, escalaTextura);
-  desenharJanelas(ctx, conteudo, casa, regiao, margem);
-  desenharSoleiras(ctx, conteudo, casa);
-  ctx.restore();
 }
 
 /** O caminho da parede: reto para pedra, tijolo e madeira; com a borda irregular na rocha. */

@@ -76,6 +76,10 @@ export async function publicarProjeto(
     };
     await Promise.all(Array.from({ length: Math.min(ENVIOS_SIMULTANEOS, lista.length) }, trabalhador));
     await acervoApi.concluirItem(id);
+    // Sem imagem do Acervo dentro, o mapa é todo feito aqui: fica anotado como próprio.
+    if (projeto.conteudo.pecas.every((peca) => peca.pacote)) {
+      await acervoApi.editarItem(id, { autoria: 'Construtor de mapas do Jardim', licenca: 'propria' }).catch(() => undefined);
+    }
     return await construtorApi.publicar(campanhaId, projeto.id, { mapa_id: id, cena_id: destino.cenaId, nome: destino.nome });
   } finally {
     for (const imagem of imagensPecas.values()) imagem.close();

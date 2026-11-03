@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Crosshair, Trash2, X } from 'lucide-react';
-import type { IPortal } from '../../../services/mapaApi';
+import { mapaApi, type IPortal, type IResumoCena } from '../../../services/mapaApi';
+import { chegadaAtual, chegadasDaCena, type ChegadaPortal } from '../motor/portasConta';
 import { CORES_FLUXO, type FluxoId } from '../motor/molduras';
 import { ComDica } from './BotaoFerramenta';
 
 interface Props {
+  campanhaId: string;
+  /** As outras cenas da campanha: um portal pode levar a uma delas. */
+  outrasCenas: IResumoCena[];
   portal: IPortal;
   onMudar: (portal: IPortal) => void;
   onApagar: () => void;
@@ -18,9 +22,39 @@ const NOMES_FLUXO: Record<FluxoId, string> = {
 };
 
 /** O portal escolhido com a ferramenta de portal: nome, cor, de que jeito leva e quem usa. */
-export const PainelPortal = ({ portal, onMudar, onApagar, onIrPara, onFechar }: Props) => {
+export const PainelPortal = ({ campanhaId, outrasCenas, portal, onMudar, onApagar, onIrPara, onFechar }: Props) => {
   const [nome, setNome] = useState(portal.nome);
   useEffect(() => setNome(portal.nome), [portal.id, portal.nome]);
+  const [chegadas, setChegadas] = useState<ChegadaPortal[] | null>(null);
+  const destino = portal.cena ?? null;
+
+  // Portal para outra cena: os lugares de chegada saem da própria cena de lá.
+  useEffect(() => {
+    setChegadas(null);
+    if (!destino) return undefined;
+    let ativo = true;
+    void mapaApi.obter(campanhaId, destino).then((estado) => {
+      if (ativo && estado?.cena) setChegadas(chegadasDaCena(estado.cena));
+    }).catch(() => {
+      if (ativo) setChegadas([]);
+    });
+    return () => { ativo = false; };
+  }, [campanhaId, destino]);
+
+  const levarPara = async (cenaId: string) => {
+    if (!cenaId) {
+      const a = portal.a ?? { x: 0, y: 0 };
+      onMudar({ ...portal, cena: null, cena_nome: null, b: { x: a.x + 200, y: a.y } });
+      return;
+    }
+    try {
+      const estado = await mapaApi.obter(campanhaId, cenaId);
+      const lugares = estado?.cena ? chegadasDaCena(estado.cena) : [];
+      onMudar({ ...portal, cena: cenaId, mao: 'unica', b: lugares[0]?.ponto ?? { x: 0, y: 0 } });
+    } catch {
+      onMudar({ ...portal, cena: cenaId, mao: 'unica', b: { x: 0, y: 0 } });
+    }
+  };
 
   const mudar = (parcial: Partial<IPortal>) => onMudar({ ...portal, ...parcial });
   const salvarNome = () => {
@@ -61,10 +95,38 @@ export const PainelPortal = ({ portal, onMudar, onApagar, onIrPara, onFechar }: 
           </ComDica>
         ))}
       </div>
-      <div className="mapa-segmentos" role="group" aria-label="Sentido">
-        <button type="button" className={portal.mao === 'dupla' ? 'ativo' : ''} onClick={() => mudar({ mao: 'dupla' })}>Ida e volta</button>
-        <button type="button" className={portal.mao === 'unica' ? 'ativo' : ''} onClick={() => mudar({ mao: 'unica' })}>Só de ida</button>
-      </div>
+      <label className="mapa-menu-linha">
+        Leva para
+        <select value={destino ?? ''} onChange={(e) => void levarPara(e.target.value)}>
+          <option value="">Esta mesma cena</option>
+          {outrasCenas.map((outra) => <option key={outra.id} value={outra.id}>Cena {outra.nome}</option>)}
+        </select>
+      </label>
+      {destino ? (
+        <>
+          <label className="mapa-menu-linha">
+            Chegada
+            <select
+              value={chegadas ? chegadaAtual(chegadas, portal.b) ?? '' : ''}
+              disabled={!chegadas?.length}
+              onChange={(e) => {
+                const escolhida = chegadas?.find((c) => c.id === e.target.value);
+                if (escolhida) mudar({ b: escolhida.ponto });
+              }}
+            >
+              {!chegadas && <option value="">Carregando a cena...</option>}
+              {chegadas && !chegadaAtual(chegadas, portal.b) && <option value="">Outro lugar</option>}
+              {chegadas?.map((c) => <option key={c.id} value={c.id}>{c.rotulo}</option>)}
+            </select>
+          </label>
+          <p className="mapa-dica">Só de ida: para voltar, ponha um portal na outra cena. A chegada pode ser a boca dele.</p>
+        </>
+      ) : (
+        <div className="mapa-segmentos" role="group" aria-label="Sentido">
+          <button type="button" className={portal.mao === 'dupla' ? 'ativo' : ''} onClick={() => mudar({ mao: 'dupla' })}>Ida e volta</button>
+          <button type="button" className={portal.mao === 'unica' ? 'ativo' : ''} onClick={() => mudar({ mao: 'unica' })}>Só de ida</button>
+        </div>
+      )}
       <label className="mapa-menu-linha">
         Quem atravessa
         <select value={portal.usa} onChange={(e) => mudar({ usa: e.target.value as IPortal['usa'] })}>
@@ -84,12 +146,12 @@ export const PainelPortal = ({ portal, onMudar, onApagar, onIrPara, onFechar }: 
       </div>
       <p className="mapa-dica">
         {portal.visivel
-          ? 'Soltar um token numa boca leva à outra.'
+          ? destino ? `Soltar um token na entrada leva à cena ${portal.cena_nome ?? 'escolhida'}, e você recebe um aviso.` : 'Soltar um token numa boca leva à outra.'
           : 'Escondido: os jogadores não veem e não são avisados antes de cair nele, como uma armadilha.'}
       </p>
       <div className="mapa-menu-botoes">
         <button type="button" className="mapa-botao-leve" onClick={() => onIrPara('a')}><Crosshair size={13} /> Entrada</button>
-        <button type="button" className="mapa-botao-leve" onClick={() => onIrPara('b')}><Crosshair size={13} /> Saída</button>
+        {!destino && <button type="button" className="mapa-botao-leve" onClick={() => onIrPara('b')}><Crosshair size={13} /> Saída</button>}
         <button type="button" className="mapa-botao perigo" onClick={onApagar}><Trash2 size={13} /> Apagar</button>
       </div>
     </section>

@@ -71,7 +71,8 @@ export class CamadaPortais {
       const forca = !portal.ligado ? 0.3 : !portal.visivel ? 0.55 : 1;
       const raio = portal.raio * this.casa;
       const a = this.boca(portal, 'a');
-      const b = this.boca(portal, 'b');
+      // A saída do portal entre cenas fica na outra cena: aqui só a entrada aparece.
+      const b = portal.cena ? null : this.boca(portal, 'b');
       const escolhido = portal.id === this.selecionado;
       if (this.gestor && a && b) {
         // Só o Mestre vê a ligação entre as bocas.

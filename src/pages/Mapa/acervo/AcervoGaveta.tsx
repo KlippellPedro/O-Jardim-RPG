@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Folder, FolderPlus, FolderUp, ImagePlus, Loader2, Map as MapaIcone, Search, Trash2, User, X } from 'lucide-react';
-import { acervoApi, type IAcervo, type IItemAcervo, type TipoItemAcervo } from '../../../services/acervoApi';
+import { Folder, FolderPlus, FolderUp, ImagePlus, Info, Loader2, Map as MapaIcone, Search, Trash2, User, X } from 'lucide-react';
+import { acervoApi, LICENCAS_ACERVO, type IAcervo, type IItemAcervo, type LicencaAcervo, type TipoItemAcervo } from '../../../services/acervoApi';
 import { urlPedaco } from '../../../services/mapaApi';
 import { confirmar, pedirTexto } from '../../../components/avisos/confirmacao';
 import { imagensDaSelecao, pastaDoArquivo, subirParaOAcervo, type ProgressoEnvio } from './subirImagem';
@@ -26,6 +26,47 @@ function tamanhoLegivel(bytes: number): string {
   return `${Math.max(1, Math.round(bytes / 1024 ** 2)).toLocaleString('pt-BR')} MB`;
 }
 
+/** Autoria, origem e licença de uma imagem: o Mestre anota para saber se pode usar e a quem dar crédito. */
+const InfoDaImagem = ({ item, onSalvo, onFechar }: { item: IItemAcervo; onSalvo: (item: IItemAcervo) => void; onFechar: () => void }) => {
+  const [autoria, setAutoria] = useState(item.autoria ?? '');
+  const [origem, setOrigem] = useState(item.origem ?? '');
+  const [licenca, setLicenca] = useState<LicencaAcervo | ''>(item.licenca ?? '');
+  const [salvando, setSalvando] = useState(false);
+  const [falha, setFalha] = useState('');
+  const dica = LICENCAS_ACERVO.find((l) => l.id === licenca)?.dica;
+  const salvar = async () => {
+    setSalvando(true);
+    setFalha('');
+    try {
+      onSalvo(await acervoApi.editarItem(item.id, { autoria, origem, licenca }));
+    } catch (erro) {
+      setFalha(erro instanceof Error ? erro.message : 'Não deu para salvar.');
+    } finally {
+      setSalvando(false);
+    }
+  };
+  return (
+    <section className="mapa-acervo-info" aria-label={`Origem de ${item.nome}`}>
+      <header>
+        <strong>{item.nome}</strong>
+        <button type="button" className="mapa-icone" aria-label="Fechar" onClick={onFechar}><X size={15} /></button>
+      </header>
+      <label className="mapa-menu-linha">Autoria <input value={autoria} maxLength={120} placeholder="Quem fez a imagem" onChange={(e) => setAutoria(e.target.value)} /></label>
+      <label className="mapa-menu-linha">Origem <input value={origem} maxLength={300} placeholder="Endereço ou de onde veio" onChange={(e) => setOrigem(e.target.value)} /></label>
+      <label className="mapa-menu-linha">
+        Licença
+        <select value={licenca} onChange={(e) => setLicenca(e.target.value as LicencaAcervo | '')}>
+          <option value="">Não anotada</option>
+          {LICENCAS_ACERVO.map((l) => <option key={l.id} value={l.id}>{l.nome}</option>)}
+        </select>
+      </label>
+      {dica && <p className="mapa-dica">{dica}</p>}
+      {falha && <p className="mapa-erro">{falha}</p>}
+      <button type="button" className="mapa-botao" disabled={salvando} onClick={() => void salvar()}>Salvar</button>
+    </section>
+  );
+};
+
 export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNovaCena, onPorNaCena }: Props) => {
   const [acervo, setAcervo] = useState<IAcervo | null>(null);
   const [erro, setErro] = useState('');
@@ -33,6 +74,7 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNova
   const [tipo, setTipo] = useState<TipoItemAcervo>('mapa');
   const [busca, setBusca] = useState('');
   const [envios, setEnvios] = useState<ProgressoEnvio[]>([]);
+  const [infoDe, setInfoDe] = useState<IItemAcervo | null>(null);
   const [enviando, setEnviando] = useState(false);
   const arquivosRef = useRef<HTMLInputElement>(null);
   const pastaRef = useRef<HTMLInputElement>(null);
@@ -196,8 +238,11 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNova
             {itens.map((item) => (
               <figure key={item.id} className="mapa-acervo-item">
                 <img src={urlPedaco(item.id, 'mini')} alt="" loading="lazy" />
-                <figcaption title={item.nome}>{item.nome}</figcaption>
-                <small>{item.largura} x {item.altura}</small>
+                <figcaption>{item.nome}</figcaption>
+                <small>
+                  {item.largura} x {item.altura}
+                  {(!item.licenca || item.licenca === 'desconhecida') && <span className="mapa-acervo-sem-licenca">sem licença</span>}
+                </small>
                 <div className="mapa-acervo-acoes">
                   {item.tipo === 'mapa' ? (
                     <>
@@ -207,6 +252,7 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNova
                   ) : (
                     temCena && <button type="button" onClick={() => onPorNaCena(item)}><User size={13} /> Pôr na cena</button>
                   )}
+                  <button type="button" aria-label={`Origem e licença de ${item.nome}`} onClick={() => setInfoDe(item)}><Info size={13} /></button>
                   <button type="button" aria-label={`Apagar ${item.nome}`} onClick={() => void apagarItem(item)}><Trash2 size={13} /></button>
                 </div>
               </figure>
@@ -219,6 +265,17 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNova
           </div>
         </section>
       </div>
+      {infoDe && (
+        <InfoDaImagem
+          key={infoDe.id}
+          item={infoDe}
+          onSalvo={(salvo) => {
+            setAcervo((atual) => atual && { ...atual, itens: atual.itens.map((i) => (i.id === salvo.id ? salvo : i)) });
+            setInfoDe(null);
+          }}
+          onFechar={() => setInfoDe(null)}
+        />
+      )}
     </aside>
   );
 };

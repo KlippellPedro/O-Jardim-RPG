@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  abrir, adicionarPeca, apagar, apagarPeca, areaMudada, editarPeca, arestaPerto, arestasDaLinha, casasDoPincel, contagem, conteudoVazio, fimDaLinha, pintar, poremParedes,
+  abrir, adicionarLuz, apagarLuz, editarLuz, luzPerto, adicionarPeca, apagar, apagarPeca, areaMudada, camadaDe, chaveDaImagem, duplicarPeca, editarPeca, grupoDasPecas, moverNaOrdem, porPronta, pecasEmOrdem, arestaPerto, arestasDaLinha, casasDoPincel, contagem, conteudoVazio, fimDaLinha, pintar, poremParedes,
   redimensionar, sala, tirarParedes, trechosDeParede,
 } from '../../src/pages/Mapa/construtor/projeto';
 
@@ -134,4 +134,58 @@ test('peças entram, mudam, saem e sobrevivem a mudar o tamanho do mapa', () => 
   assert.deepEqual(redimensionar(comPeca, 4, 4).pecas, comPeca.pecas);
   assert.equal(apagarPeca(comPeca, PECA.id).pecas.length, 0);
   assert.equal(contagem(comPeca).pecas, 1);
+});
+
+test('camadas, ordem e duplicar peças; a mobília do Jardim tem chave própria', () => {
+  const tapete = { ...PECA, id: 'a', pacote: 'tapete', imagem_id: '', camada: 'chao' as const };
+  const mesa = { ...PECA, id: 'b' };
+  const arvore = { ...PECA, id: 'c', camada: 'alto' as const };
+  const cadeira = { ...PECA, id: 'd' };
+  let c = conteudoVazio(8, 8);
+  for (const peca of [arvore, mesa, tapete, cadeira]) c = adicionarPeca(c, peca);
+  // Desenho: chão, objetos (na ordem da lista) e alto.
+  assert.deepEqual(pecasEmOrdem(c).map((p) => p.id), ['a', 'b', 'd', 'c']);
+  assert.equal(camadaDe(mesa), 'objetos');
+  // A mesa vai para a frente da cadeira (a outra da camada), e não passa a árvore.
+  const frente = moverNaOrdem(c, 'b', 'frente');
+  assert.deepEqual(pecasEmOrdem(frente).map((p) => p.id), ['a', 'd', 'b', 'c']);
+  assert.equal(moverNaOrdem(frente, 'b', 'frente'), frente, 'já está na frente da camada');
+  const copia = duplicarPeca(c, 'b', 'e');
+  const nova = copia.pecas.find((p) => p.id === 'e')!;
+  assert.deepEqual([nova.x, nova.y, nova.imagem_id], [mesa.x + 0.5, mesa.y + 0.5, mesa.imagem_id]);
+  assert.equal(chaveDaImagem(tapete), 'mobilia:tapete');
+  assert.equal(chaveDaImagem(mesa), mesa.imagem_id);
+  assert.equal(editarPeca(c, 'a', { pacote: 'outro' }).pecas.find((p) => p.id === 'a')!.pacote, 'tapete', 'a origem não troca pela edição');
+});
+
+test('luzes fixas entram, mudam, são achadas pelo clique e vão para a borda ao encolher o mapa', () => {
+  const luz = { id: 'l1', x: 5.5, y: 3.5, raio: 4, cor: '#ffb35c', tremula: true };
+  const c = adicionarLuz(conteudoVazio(8, 6), luz);
+  assert.equal(adicionarLuz(c, luz), c, 'mesmo id não entra de novo');
+  assert.equal(luzPerto(c, { x: 5.7, y: 3.4 })?.id, 'l1');
+  assert.equal(luzPerto(c, { x: 7, y: 3.5 }), null);
+  assert.equal(editarLuz(c, 'l1', { raio: 2 }).luzes[0].raio, 2);
+  assert.equal(apagarLuz(c, 'l1').luzes.length, 0);
+  const menor = redimensionar(c, 4, 3);
+  assert.deepEqual([menor.luzes[0].x, menor.luzes[0].y], [4, 3]);
+  // Luz não mexe no desenho do mapa (ela é viva na mesa): o editor não redesenha pedaços.
+  assert.equal(areaMudada(conteudoVazio(8, 6), c), null);
+});
+
+test('peça pronta guarda o grupo pelo centro e volta ao mapa com ids novos no ponto do clique', () => {
+  const base = { imagem_id: '', pacote: 'mesa', rotulo: 'Mesa', imagem_largura: 100, imagem_altura: 60, escala: 2, rotacao: 0, espelhada: false };
+  const mesa = { ...base, id: 'm', x: 4, y: 4 };
+  const cadeira = { ...base, id: 'c', pacote: 'cadeira', rotulo: 'Cadeira', x: 4, y: 5, escala: 0.8 };
+  const grupo = grupoDasPecas([mesa, cadeira]);
+  assert.deepEqual(grupo.map((p) => [p.x, p.y]), [[0, -0.5], [0, 0.5]]);
+  assert.deepEqual(grupoDasPecas([]), []);
+  let n = 0;
+  const posto = porPronta(conteudoVazio(10, 10), { id: 'p', nome: 'Mesa posta', pecas: grupo }, { x: 7, y: 2 }, () => `novo${++n}`);
+  assert.deepEqual(posto.ids, ['novo1', 'novo2']);
+  assert.deepEqual(posto.conteudo.pecas.map((p) => [p.id, p.x, p.y, p.pacote]), [['novo1', 7, 1.5, 'mesa'], ['novo2', 7, 2.5, 'cadeira']]);
+  // Mapa cheio (256 peças): nada entra e o conteúdo fica o mesmo.
+  const cheio = { ...conteudoVazio(10, 10), pecas: Array.from({ length: 256 }, (_, i) => ({ ...mesa, id: `x${i}` })) };
+  const nada = porPronta(cheio, { id: 'p', nome: 'Mesa posta', pecas: grupo }, { x: 1, y: 1 }, () => 'z');
+  assert.equal(nada.conteudo, cheio);
+  assert.deepEqual(nada.ids, []);
 });

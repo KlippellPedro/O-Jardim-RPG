@@ -130,6 +130,10 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
       {podeVisual && (
         <fieldset>
           <legend>Visual</legend>
+          <div className="mapa-menu-botoes">
+            <button type="button" className={`mapa-botao${token.flip_x ? ' ativo' : ''}`} aria-pressed={token.flip_x} onClick={() => onEditar({ flip_x: !token.flip_x })}>Espelhar na horizontal</button>
+            <button type="button" className={`mapa-botao${token.flip_y ? ' ativo' : ''}`} aria-pressed={token.flip_y} onClick={() => onEditar({ flip_y: !token.flip_y })}>Espelhar na vertical</button>
+          </div>
           {molduraMesa ? (
             <p className="mapa-dica">O Mestre escolheu uma moldura única para a mesa. A sua escolha volta quando ele liberar.</p>
           ) : (
@@ -185,6 +189,14 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
       {gestor && (
         <fieldset>
           <legend>Mestre</legend>
+          <label className="mapa-menu-linha">
+            Camada
+            <select value={token.camada ?? 'personagens'} onChange={(e) => onEditar({ camada: e.target.value as ITokenEdicao['camada'] })}>
+              <option value="personagens">Personagens e tokens</option>
+              <option value="props">Itens e props</option>
+              <option value="montarias">Montarias</option>
+            </select>
+          </label>
           <label className="mapa-menu-linha">
             Tamanho
             <select value={token.porte} onChange={(e) => onEditar({ porte: Number(e.target.value) })}>

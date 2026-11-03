@@ -3,7 +3,7 @@
 
 import { api } from './apiClient';
 import type { IEstadoMapa } from './mapaApi';
-import type { IConteudoProjeto } from '../pages/Mapa/construtor/projeto';
+import type { IConteudoProjeto, IPecaPronta } from '../pages/Mapa/construtor/projeto';
 
 export interface IResumoProjeto {
   id: string;
@@ -37,4 +37,9 @@ export const construtorApi = {
   apagar: (campanhaId: string, projetoId: string) => api<null>(`${base(campanhaId)}/${projetoId}`, { method: 'DELETE' }),
   publicar: (campanhaId: string, projetoId: string, dados: { mapa_id: string; cena_id: string | null; nome?: string }) =>
     api<IEstadoMapa>(`${base(campanhaId)}/${projetoId}/publicar`, { method: 'POST', body: dados, ...ESTADO }),
+  /** Peças prontas da campanha: grupos de peças salvos pelo Mestre para reaproveitar em outros mapas. */
+  listarProntas: (campanhaId: string) => api<{ prontas: IPecaPronta[] }>(`/mapa/${campanhaId}/prontas`, ESTADO),
+  /** Grava a lista inteira (até 40 peças prontas, cada uma com até 32 peças). */
+  salvarProntas: (campanhaId: string, prontas: IPecaPronta[]) =>
+    api<{ prontas: IPecaPronta[] }>(`/mapa/${campanhaId}/prontas`, { method: 'PUT', body: { prontas }, ...ESTADO }),
 };

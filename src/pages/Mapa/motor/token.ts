@@ -296,16 +296,17 @@ export class TokenVisual {
       foto.width = raio * 2;
       foto.height = raio * 2;
       this.retrato.addChild(foto);
-      return;
+    } else {
+      const cor = this.dados.desconhecido ? '#2a2333' : CORES_LADO[this.dados.lado];
+      fundo.clear().circle(0, 0, raio).fill({ color: cor, alpha: 0.35 }).circle(0, 0, raio * 0.92).fill('#16131d');
+      const texto = new Text({
+        text: this.dados.desconhecido ? '?' : iniciais(this.dados.nome),
+        style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: Math.max(10, raio * 0.75), fill: cor },
+      });
+      texto.anchor.set(0.5);
+      this.retrato.addChild(texto);
     }
-    const cor = this.dados.desconhecido ? '#2a2333' : CORES_LADO[this.dados.lado];
-    fundo.clear().circle(0, 0, raio).fill({ color: cor, alpha: 0.35 }).circle(0, 0, raio * 0.92).fill('#16131d');
-    const texto = new Text({
-      text: this.dados.desconhecido ? '?' : iniciais(this.dados.nome),
-      style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: Math.max(10, raio * 0.75), fill: cor },
-    });
-    texto.anchor.set(0.5);
-    this.retrato.addChild(texto);
+    this.retrato.scale.set(this.dados.flip_x ? -1 : 1, this.dados.flip_y ? -1 : 1);
   }
 
   /** O retrato chega depois (carregado à parte); null volta para as iniciais. */

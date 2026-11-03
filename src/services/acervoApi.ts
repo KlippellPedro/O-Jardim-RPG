@@ -20,7 +20,23 @@ export interface IItemAcervo {
   bytes: number;
   chaves: string[];
   criado_em: string;
+  /** Quem fez a imagem, de onde veio e com que licença ela pode ser usada (anotado pelo Mestre). */
+  autoria?: string | null;
+  origem?: string | null;
+  licenca?: LicencaAcervo | null;
 }
+
+export type LicencaAcervo = 'propria' | 'cc0' | 'cc-by' | 'cc-by-sa' | 'uso-pessoal' | 'comprada' | 'desconhecida';
+
+export const LICENCAS_ACERVO: Array<{ id: LicencaAcervo; nome: string; dica: string }> = [
+  { id: 'propria', nome: 'Feita por mim', dica: 'Você fez a imagem (ou ela veio do construtor).' },
+  { id: 'cc0', nome: 'CC0 (domínio público)', dica: 'Pode usar e mudar sem dar crédito.' },
+  { id: 'cc-by', nome: 'CC BY', dica: 'Pode usar e mudar dando crédito a quem fez.' },
+  { id: 'cc-by-sa', nome: 'CC BY-SA', dica: 'Crédito a quem fez, e o que sair dela fica com a mesma licença.' },
+  { id: 'uso-pessoal', nome: 'Uso pessoal', dica: 'Só para a sua mesa; não espalhe nem publique.' },
+  { id: 'comprada', nome: 'Comprada', dica: 'Vale a licença de quem vendeu.' },
+  { id: 'desconhecida', nome: 'Não sei', dica: 'Sem licença conhecida: o autor pode não ter autorizado o uso.' },
+];
 
 export interface IAcervo {
   pastas: IPastaAcervo[];
@@ -42,7 +58,7 @@ export const acervoApi = {
   criarItem: (dados: { nome: string; tipo: TipoItemAcervo; largura: number; altura: number; pasta_id: string | null }) =>
     api<{ id: string; chaves: string[]; ladrilho: number }>('/acervo/itens', { method: 'POST', body: dados }),
   concluirItem: (itemId: string) => api<IItemAcervo>(`/acervo/itens/${itemId}/concluir`, { method: 'POST' }),
-  editarItem: (itemId: string, dados: { nome?: string; tipo?: TipoItemAcervo; pasta_id?: string; mover_para_raiz?: boolean }) =>
+  editarItem: (itemId: string, dados: { nome?: string; tipo?: TipoItemAcervo; pasta_id?: string; mover_para_raiz?: boolean; autoria?: string; origem?: string; licenca?: LicencaAcervo | '' }) =>
     api<IItemAcervo>(`/acervo/itens/${itemId}`, { method: 'PUT', body: dados }),
   apagarItem: (itemId: string) => api<null>(`/acervo/itens/${itemId}`, { method: 'DELETE' }),
 

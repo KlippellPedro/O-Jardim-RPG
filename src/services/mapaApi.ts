@@ -4,6 +4,29 @@ import type { IGrade } from '../pages/Mapa/motor/geometria';
 export type LadoToken = 'jogador' | 'aliado' | 'inimigo' | 'neutro';
 export type TipoBarra = 'vida' | 'mana' | 'estamina' | 'sanidade';
 export type ParaQuem = 'todos' | 'dono' | 'ninguem';
+export type CamadaMapaId = 'mapa' | 'props' | 'montarias' | 'personagens' | 'anotacoes';
+export type CamadaTokenId = Exclude<CamadaMapaId, 'mapa' | 'anotacoes'>;
+export type FonteAnotacao = 'sans' | 'serif' | 'fantasia' | 'mono';
+
+export interface IAnotacaoMapa {
+  id: string;
+  texto: string;
+  x: number;
+  y: number;
+  fonte: FonteAnotacao;
+  tamanho: number;
+  cor: string;
+  fundo: string;
+  placa: boolean;
+}
+
+export interface IPermissoesMesa {
+  mover_tokens: boolean;
+  usar_ping: boolean;
+  usar_regua: boolean;
+  usar_magia: boolean;
+  camadas: Record<CamadaMapaId, boolean>;
+}
 
 /** Barra com número (degrau total) ou só o estado da Vida (degrau parcial da Sessão). */
 export interface IBarraToken {
@@ -46,6 +69,9 @@ export interface ITokenMapa {
   y: number;
   porte: number;
   lado: LadoToken;
+  camada?: CamadaTokenId;
+  flip_x?: boolean;
+  flip_y?: boolean;
   nome: string;
   /** Versão do retrato (entra no endereço da imagem) ou null quando não há retrato para quem olha. */
   imagem: string | null;
@@ -160,6 +186,9 @@ export interface IPortal {
   visivel: boolean;
   confirmar: boolean;
   ligado: boolean;
+  /** Portal entre cenas (só o Mestre recebe): a saída `b` fica nesta outra cena, e ele é só de ida. */
+  cena?: string | null;
+  cena_nome?: string | null;
 }
 
 /** Porta, janela ou porta secreta do mapa montado no construtor, em px do mapa. O jogador não recebe a secreta. */
@@ -172,6 +201,8 @@ export interface IAberturaCena {
   y1: number;
   x2: number;
   y2: number;
+  /** Só o Mestre: a porta era secreta e foi revelada (pode voltar a ser secreta). */
+  era_secreta?: boolean;
 }
 
 /** A hora do mundo para a luz do dia e o topo do mapa. `data` vem null quando o calendário está escondido do jogador. */
@@ -198,6 +229,15 @@ export interface ICena extends IResumoCena {
   portais: IPortal[];
   /** Só nas cenas publicadas pelo construtor de mapas. */
   aberturas?: IAberturaCena[];
+  /** Luzes fixas do mapa montado (px; raio em casas). O jogador recebe só as que a névoa mostra. */
+  luzes?: Array<{ id: string; x: number; y: number; raio: number; cor: string; tremula: boolean }>;
+  /** Casas de água e lava do mapa montado, em retângulos [x, y, w, h] (px), que ganham movimento. */
+  liquidos?: { agua: number[][]; lava: number[][] };
+  /** Visibilidade para jogadores, só retornada ao Mestre. */
+  camadas_jogadores?: Partial<Record<CamadaMapaId, boolean>> | null;
+  /** Camadas que este espectador pode receber do servidor. */
+  camadas_visiveis?: CamadaMapaId[];
+  anotacoes?: IAnotacaoMapa[];
 }
 
 export interface INevoaPayload {
@@ -211,6 +251,7 @@ export interface INevoaPayload {
 export interface IEstadoMapa {
   gestor: boolean;
   usuario_id: string;
+  permissoes_mesa?: IPermissoesMesa;
   ao_vivo: boolean;
   /** Jogador antes da sessão ficar ao vivo. */
   bloqueado: boolean;
@@ -230,6 +271,9 @@ export interface ITravessia {
   portal: string;
   fluxo: string;
   de: [number, number] | null;
+  /** Portal entre cenas: o token foi para esta cena (o nome só chega ao Mestre). */
+  cena?: string;
+  cena_nome?: string;
 }
 
 export interface ICenaPayload {
@@ -252,6 +296,7 @@ export interface ITokenPayload {
   y: number;
   porte?: number;
   lado?: LadoToken;
+  camada?: CamadaTokenId;
   oculto?: boolean;
   moldura?: string;
 }
@@ -261,6 +306,9 @@ export interface ITokenEdicao {
   porte?: number;
   lado?: LadoToken;
   oculto?: boolean;
+  camada?: CamadaTokenId;
+  flip_x?: boolean;
+  flip_y?: boolean;
   imagem_id?: string;
   sem_imagem?: boolean;
   barras?: Partial<IConfigBarras>;
@@ -295,7 +343,10 @@ export const mapaApi = {
   editarToken: (campanhaId: string, tokenId: string, dados: ITokenEdicao) =>
     api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'PUT', body: dados, ...ESTADO }),
   moverToken: (campanhaId: string, tokenId: string, ponto: { x: number; y: number; atravessar?: string }) =>
-    api<{ x: number; y: number; versao: number; travessia: ITravessia | null }>(`${base(campanhaId)}/tokens/${tokenId}/mover`, { method: 'POST', body: ponto }),
+    api<{ x: number; y: number; versao: number; travessia: ITravessia | null; barrado?: boolean }>(`${base(campanhaId)}/tokens/${tokenId}/mover`, { method: 'POST', body: ponto }),
+  /** Abrir, fechar, trancar ou revelar uma porta do mapa montado (o jogador só abre e fecha a que está ao lado). */
+  mudarPorta: (campanhaId: string, cenaId: string, dados: { id: string; estado?: IAberturaCena['estado']; revelar?: boolean }) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/portas`, { method: 'PUT', body: dados, ...ESTADO }),
   apagarToken: (campanhaId: string, tokenId: string) =>
     api<null>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'DELETE' }),
   /** Moldura e enquadramento do personagem: valem em todas as cenas. */
@@ -307,6 +358,10 @@ export const mapaApi = {
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/clima`, { method: 'PUT', body: clima, ...ESTADO }),
   mudarPortais: (campanhaId: string, cenaId: string, portais: IPortal[]) =>
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/portais`, { method: 'PUT', body: { portais }, ...ESTADO }),
+  mudarCamadas: (campanhaId: string, cenaId: string, jogadores: Partial<Record<CamadaMapaId, boolean>>) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/camadas`, { method: 'PUT', body: { jogadores }, ...ESTADO }),
+  mudarAnotacoes: (campanhaId: string, cenaId: string, anotacoes: IAnotacaoMapa[]) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/anotacoes`, { method: 'PUT', body: { anotacoes }, ...ESTADO }),
   configurar: (campanhaId: string, dados: { moldura_mesa: string | null }) =>
     api<{ moldura_mesa: string | null }>(`${base(campanhaId)}/config`, { method: 'PUT', body: dados }),
 };

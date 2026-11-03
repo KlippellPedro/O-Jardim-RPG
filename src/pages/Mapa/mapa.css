@@ -839,6 +839,133 @@
   margin-bottom: 6px;
 }
 
+.mapa-camadas {
+  width: min(360px, calc(100% - 24px));
+  z-index: 3;
+}
+
+.mapa-camadas header > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mapa-camadas-lista {
+  display: grid;
+  gap: 6px;
+}
+
+.mapa-camada {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px auto;
+  align-items: center;
+  gap: 7px;
+  padding: 7px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.mapa-camada.ativa {
+  border-color: rgba(252, 211, 77, 0.6);
+  background: rgba(252, 211, 77, 0.07);
+}
+
+.mapa-camada.indisponivel {
+  opacity: 0.55;
+}
+
+.mapa-camada-ativar {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 2px;
+  border: 0;
+  background: transparent;
+  color: var(--mapa-texto);
+  text-align: left;
+}
+
+.mapa-camada-ativar:not(:disabled) {
+  cursor: pointer;
+}
+
+.mapa-camada-ativar:disabled {
+  cursor: default;
+}
+
+.mapa-camada-nome {
+  font-weight: 700;
+}
+
+.mapa-camada small {
+  color: var(--mapa-apagado);
+  font-size: 10px;
+}
+
+.mapa-camada > label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--mapa-apagado);
+  font-size: 10px;
+}
+
+.mapa-camada-jogadores {
+  min-width: 70px;
+}
+
+.mapa-editor-anotacao {
+  right: 12px;
+  left: auto;
+  width: min(340px, calc(100% - 24px));
+  z-index: 4;
+}
+
+.mapa-editor-anotacao textarea {
+  resize: vertical;
+  min-height: 80px;
+  padding: 8px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--mapa-texto);
+  font: inherit;
+}
+
+.mapa-editor-anotacao-opcoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 8px;
+}
+
+.mapa-editor-anotacao .mapa-menu-linha input[type='color'] {
+  width: 100%;
+  height: 30px;
+  padding: 2px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: transparent;
+}
+
+.mapa-editor-anotacao-placa {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  align-self: end;
+  min-height: 32px;
+  color: var(--mapa-apagado);
+}
+
+.mapa-editor-anotacao-acoes {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .mapa-menu-linha {
   display: flex;
   flex-direction: column;
@@ -1715,3 +1842,283 @@ button.mapa-tempo.ativo {
   margin: 6px 0;
 }
 
+
+/* Acervo: origem e licença de uma imagem. */
+.mapa-acervo-info {
+  position: absolute;
+  top: 56px;
+  right: 16px;
+  z-index: 3;
+  display: grid;
+  gap: 8px;
+  width: 300px;
+  padding: 12px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 12px;
+  background: var(--mapa-painel);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+
+.mapa-acervo-info header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mapa-acervo-info header strong {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mapa-acervo-sem-licenca {
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(251, 191, 36, 0.14);
+  color: #fcd34d;
+  font-size: 10px;
+}
+
+/* Menu da porta (leva 4): no mesmo canto do painel do portal. */
+.mapa-config.mapa-porta-painel {
+  left: auto;
+  right: 12px;
+  width: 270px;
+}
+
+.mapa-porta-painel .mapa-menu-botoes {
+  flex-wrap: wrap;
+}
+
+/* Jogadores da mesa, papéis, permissões e convites. */
+.mapa-config.mapa-jogadores {
+  width: min(390px, calc(100% - 24px));
+  z-index: 6;
+}
+
+.mapa-jogadores-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mapa-jogadores-lista {
+  display: grid;
+  gap: 8px;
+}
+
+.mapa-jogador {
+  padding: 9px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.mapa-jogador-topo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mapa-jogador-icone {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mapa-jogador-titulo {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 2px;
+}
+
+.mapa-jogador-titulo strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-jogador-titulo small,
+.mapa-jogador-dono {
+  color: var(--mapa-apagado);
+  font-size: 10px;
+}
+
+.mapa-jogador-topo select,
+.mapa-jogadores-convite-novo select {
+  max-width: 125px;
+  padding: 5px 7px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.32);
+  color: var(--mapa-texto);
+  font-size: 11px;
+}
+
+.mapa-jogador-identidade {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.mapa-jogador-identidade label {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 3px;
+  color: var(--mapa-apagado);
+  font-size: 10px;
+}
+
+.mapa-jogador-identidade input:not([type='color']) {
+  min-width: 0;
+  padding: 6px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.32);
+  color: var(--mapa-texto);
+  font-size: 12px;
+}
+
+.mapa-jogador-identidade .mapa-jogador-cor {
+  flex: 0 0 42px;
+}
+
+.mapa-jogador-cor input {
+  width: 34px;
+  height: 29px;
+  padding: 2px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: transparent;
+}
+
+.mapa-jogador-identidade .mapa-botao,
+.mapa-jogador-identidade .mapa-botao-leve {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 29px;
+  padding: 4px 7px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.mapa-jogador-permissoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 8px;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid var(--mapa-linha);
+  font-size: 11px;
+}
+
+.mapa-jogador-permissoes summary {
+  grid-column: 1 / -1;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.mapa-jogador-permissoes[open] summary {
+  margin-bottom: 3px;
+}
+
+.mapa-jogador-permissoes label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mapa-jogador-permissoes input {
+  margin: 0;
+  accent-color: var(--mapa-ouro);
+}
+
+.mapa-jogador-permissoes-rotulo {
+  grid-column: 1 / -1;
+  margin-top: 2px;
+  color: var(--mapa-apagado);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.mapa-jogador-remover {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding: 4px 0 0;
+  border: 0;
+  background: transparent;
+  color: #fca5a5;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.mapa-jogador-remover:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.mapa-jogadores-convites {
+  display: grid;
+  gap: 7px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--mapa-linha);
+}
+
+.mapa-jogadores-convites > strong {
+  font-size: 12px;
+}
+
+.mapa-jogadores-convite-novo,
+.mapa-jogadores-convite,
+.mapa-jogadores-codigo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.mapa-jogadores-convite-novo .mapa-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mapa-jogadores-codigo {
+  padding: 5px 7px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.mapa-jogadores-codigo input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--mapa-texto);
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.mapa-jogadores-convite {
+  color: var(--mapa-apagado);
+  font-size: 11px;
+}

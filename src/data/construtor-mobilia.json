@@ -1,0 +1,356 @@
+{
+  "pecas": [
+    {
+      "id": "mesa",
+      "nome": "Mesa",
+      "categoria": "Móveis",
+      "imagem_largura": 445,
+      "imagem_altura": 253,
+      "escala": 2.32
+    },
+    {
+      "id": "mesa-redonda",
+      "nome": "Mesa redonda",
+      "categoria": "Móveis",
+      "imagem_largura": 349,
+      "imagem_altura": 349,
+      "escala": 1.82
+    },
+    {
+      "id": "cadeira",
+      "nome": "Cadeira",
+      "categoria": "Móveis",
+      "imagem_largura": 177,
+      "imagem_altura": 177,
+      "escala": 0.92
+    },
+    {
+      "id": "banco",
+      "nome": "Banco",
+      "categoria": "Móveis",
+      "imagem_largura": 445,
+      "imagem_altura": 157,
+      "escala": 2.32
+    },
+    {
+      "id": "cama",
+      "nome": "Cama",
+      "categoria": "Móveis",
+      "imagem_largura": 253,
+      "imagem_altura": 445,
+      "escala": 1.32
+    },
+    {
+      "id": "cama-de-palha",
+      "nome": "Cama de palha",
+      "categoria": "Móveis",
+      "imagem_largura": 253,
+      "imagem_altura": 445,
+      "escala": 1.32
+    },
+    {
+      "id": "bau",
+      "nome": "Baú",
+      "categoria": "Móveis",
+      "imagem_largura": 253,
+      "imagem_altura": 196,
+      "escala": 1.32
+    },
+    {
+      "id": "estante",
+      "nome": "Estante",
+      "categoria": "Móveis",
+      "imagem_largura": 445,
+      "imagem_altura": 157,
+      "escala": 2.32
+    },
+    {
+      "id": "armario",
+      "nome": "Armário",
+      "categoria": "Móveis",
+      "imagem_largura": 292,
+      "imagem_altura": 177,
+      "escala": 1.52
+    },
+    {
+      "id": "barril",
+      "nome": "Barril",
+      "categoria": "Depósito",
+      "imagem_largura": 215,
+      "imagem_altura": 215,
+      "escala": 1.12
+    },
+    {
+      "id": "barris",
+      "nome": "Barris",
+      "categoria": "Depósito",
+      "imagem_largura": 369,
+      "imagem_altura": 349,
+      "escala": 1.92
+    },
+    {
+      "id": "caixote",
+      "nome": "Caixote",
+      "categoria": "Depósito",
+      "imagem_largura": 215,
+      "imagem_altura": 215,
+      "escala": 1.12
+    },
+    {
+      "id": "caixotes",
+      "nome": "Caixotes",
+      "categoria": "Depósito",
+      "imagem_largura": 349,
+      "imagem_altura": 311,
+      "escala": 1.82
+    },
+    {
+      "id": "saco",
+      "nome": "Saco",
+      "categoria": "Depósito",
+      "imagem_largura": 177,
+      "imagem_altura": 177,
+      "escala": 0.92
+    },
+    {
+      "id": "vaso",
+      "nome": "Vaso",
+      "categoria": "Depósito",
+      "imagem_largura": 157,
+      "imagem_altura": 157,
+      "escala": 0.82
+    },
+    {
+      "id": "tapete",
+      "nome": "Tapete",
+      "categoria": "Casa e taverna",
+      "imagem_largura": 445,
+      "imagem_altura": 330,
+      "escala": 2.32
+    },
+    {
+      "id": "tapete-redondo",
+      "nome": "Tapete redondo",
+      "categoria": "Casa e taverna",
+      "imagem_largura": 369,
+      "imagem_altura": 369,
+      "escala": 1.92
+    },
+    {
+      "id": "lareira",
+      "nome": "Lareira",
+      "categoria": "Casa e taverna",
+      "imagem_largura": 445,
+      "imagem_altura": 215,
+      "escala": 2.32
+    },
+    {
+      "id": "caldeirao",
+      "nome": "Caldeirão",
+      "categoria": "Casa e taverna",
+      "imagem_largura": 253,
+      "imagem_altura": 253,
+      "escala": 1.32
+    },
+    {
+      "id": "balcao",
+      "nome": "Balcão",
+      "categoria": "Casa e taverna",
+      "imagem_largura": 637,
+      "imagem_altura": 215,
+      "escala": 3.32
+    },
+    {
+      "id": "mesa-de-trabalho",
+      "nome": "Mesa de trabalho",
+      "categoria": "Ofícios",
+      "imagem_largura": 445,
+      "imagem_altura": 253,
+      "escala": 2.32
+    },
+    {
+      "id": "bigorna",
+      "nome": "Bigorna",
+      "categoria": "Ofícios",
+      "imagem_largura": 253,
+      "imagem_altura": 157,
+      "escala": 1.32
+    },
+    {
+      "id": "carroca",
+      "nome": "Carroça",
+      "categoria": "Ofícios",
+      "imagem_largura": 637,
+      "imagem_altura": 330,
+      "escala": 3.32
+    },
+    {
+      "id": "altar",
+      "nome": "Altar",
+      "categoria": "Templo e salão",
+      "imagem_largura": 445,
+      "imagem_altura": 253,
+      "escala": 2.32
+    },
+    {
+      "id": "estatua",
+      "nome": "Estátua",
+      "categoria": "Templo e salão",
+      "imagem_largura": 253,
+      "imagem_altura": 253,
+      "escala": 1.32
+    },
+    {
+      "id": "coluna",
+      "nome": "Coluna",
+      "categoria": "Templo e salão",
+      "imagem_largura": 253,
+      "imagem_altura": 253,
+      "escala": 1.32
+    },
+    {
+      "id": "coluna-quebrada",
+      "nome": "Coluna quebrada",
+      "categoria": "Templo e salão",
+      "imagem_largura": 349,
+      "imagem_altura": 253,
+      "escala": 1.82
+    },
+    {
+      "id": "trono",
+      "nome": "Trono",
+      "categoria": "Templo e salão",
+      "imagem_largura": 292,
+      "imagem_altura": 273,
+      "escala": 1.52
+    },
+    {
+      "id": "candelabro",
+      "nome": "Candelabro",
+      "categoria": "Luz",
+      "imagem_largura": 177,
+      "imagem_altura": 177,
+      "escala": 0.92
+    },
+    {
+      "id": "braseiro",
+      "nome": "Braseiro",
+      "categoria": "Luz",
+      "imagem_largura": 234,
+      "imagem_altura": 234,
+      "escala": 1.22
+    },
+    {
+      "id": "tocha-de-parede",
+      "nome": "Tocha de parede",
+      "categoria": "Luz",
+      "imagem_largura": 157,
+      "imagem_altura": 138,
+      "escala": 0.82
+    },
+    {
+      "id": "escada",
+      "nome": "Escada",
+      "categoria": "Passagem",
+      "imagem_largura": 253,
+      "imagem_altura": 445,
+      "escala": 1.32
+    },
+    {
+      "id": "alcapao",
+      "nome": "Alçapão",
+      "categoria": "Passagem",
+      "imagem_largura": 253,
+      "imagem_altura": 253,
+      "escala": 1.32
+    },
+    {
+      "id": "poco",
+      "nome": "Poço",
+      "categoria": "Passagem",
+      "imagem_largura": 330,
+      "imagem_altura": 330,
+      "escala": 1.72
+    },
+    {
+      "id": "arvore",
+      "nome": "Árvore",
+      "categoria": "Natureza",
+      "imagem_largura": 522,
+      "imagem_altura": 522,
+      "escala": 2.72
+    },
+    {
+      "id": "pinheiro",
+      "nome": "Pinheiro",
+      "categoria": "Natureza",
+      "imagem_largura": 445,
+      "imagem_altura": 445,
+      "escala": 2.32
+    },
+    {
+      "id": "arbusto",
+      "nome": "Arbusto",
+      "categoria": "Natureza",
+      "imagem_largura": 253,
+      "imagem_altura": 253,
+      "escala": 1.32
+    },
+    {
+      "id": "pedra",
+      "nome": "Pedra",
+      "categoria": "Natureza",
+      "imagem_largura": 253,
+      "imagem_altura": 253,
+      "escala": 1.32
+    },
+    {
+      "id": "pedras",
+      "nome": "Pedras",
+      "categoria": "Natureza",
+      "imagem_largura": 330,
+      "imagem_altura": 311,
+      "escala": 1.72
+    },
+    {
+      "id": "tronco",
+      "nome": "Tronco caído",
+      "categoria": "Natureza",
+      "imagem_largura": 445,
+      "imagem_altura": 177,
+      "escala": 2.32
+    },
+    {
+      "id": "toco",
+      "nome": "Toco",
+      "categoria": "Natureza",
+      "imagem_largura": 196,
+      "imagem_altura": 196,
+      "escala": 1.02
+    },
+    {
+      "id": "cogumelos",
+      "nome": "Cogumelos",
+      "categoria": "Natureza",
+      "imagem_largura": 196,
+      "imagem_altura": 196,
+      "escala": 1.02
+    },
+    {
+      "id": "entulho",
+      "nome": "Entulho",
+      "categoria": "Ruínas",
+      "imagem_largura": 330,
+      "imagem_altura": 330,
+      "escala": 1.72
+    },
+    {
+      "id": "ossos",
+      "nome": "Ossos",
+      "categoria": "Ruínas",
+      "imagem_largura": 253,
+      "imagem_altura": 253,
+      "escala": 1.32
+    }
+  ]
+}

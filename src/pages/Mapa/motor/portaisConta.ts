@@ -37,7 +37,7 @@ export function bocaEm(portais: IPortal[], ponto: IPontoMapa, casa: number): { p
   for (const portal of portais) {
     for (const lado of ['a', 'b'] as const) {
       const boca = portal[lado];
-      if (!boca) continue;
+      if (!boca || (lado === 'b' && portal.cena)) continue;
       const distancia = Math.hypot(ponto.x - boca.x, ponto.y - boca.y);
       if (distancia <= Math.max(portal.raio, 0.45) * casa && (!melhor || distancia < melhor.distancia)) melhor = { portal, lado, distancia };
     }

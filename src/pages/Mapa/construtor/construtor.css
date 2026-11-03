@@ -401,3 +401,128 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Mobília do Jardim e a lista das peças por camada. */
+.construtor-mobilia-grupo {
+  margin: 0 0 8px;
+}
+
+.construtor-mobilia-grupo > small {
+  display: block;
+  margin: 0 0 4px;
+  color: var(--mapa-apagado);
+  font-size: 10.5px;
+}
+
+.construtor-camadas {
+  margin-top: 6px;
+}
+
+.construtor-camada > small {
+  display: block;
+  margin: 6px 0 2px;
+  color: var(--mapa-apagado);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.construtor-camada ul {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.construtor-camada button {
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--mapa-texto);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.construtor-camada button:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.construtor-camada button.ativo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.1);
+}
+
+.construtor-luzes {
+  flex-wrap: wrap;
+}
+
+.construtor-luz-cor {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.construtor-prontas {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.construtor-prontas li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--mapa-borda, rgba(255, 255, 255, 0.1));
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.construtor-prontas li.ativo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.1);
+}
+
+.construtor-prontas li > button:first-child {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 36px 1fr;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 8px;
+  min-width: 0;
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--mapa-texto);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.construtor-prontas img {
+  grid-row: 1 / 3;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.construtor-prontas span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.construtor-prontas small {
+  color: var(--mapa-apagado);
+  font-size: 10.5px;
+}

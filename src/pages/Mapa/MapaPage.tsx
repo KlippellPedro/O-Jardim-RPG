@@ -5,12 +5,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Hand, Loader2, MapPin, Maximize2, Minimize2, Moon, Orbit, PanelRightClose, PanelRightOpen, Ruler, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, UserRound, Users, Wand2, Wifi, WifiOff,
+  ArrowLeft, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Hand, Layers, Loader2, MapPin, Maximize2, Minimize2, Moon, Orbit, PanelRightClose, PanelRightOpen, Ruler, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserRound, Users, Wand2, Wifi, WifiOff,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSessaoStore } from '../../store/useSessaoStore';
 import { assinarEventosDaCampanha } from '../../services/campanhaEventos';
-import { mapaApi, type IAreaClima, type ICeu, type IClima, type IEstadoMapa, type IFormaNevoa, type IMagiaMapa, type INevoaPayload, type IPortal, type ITokenEdicao, type ITokenMapa } from '../../services/mapaApi';
+import { mapaApi, type CamadaMapaId, type CamadaTokenId, type IAnotacaoMapa, type IAreaClima, type ICeu, type IClima, type IEstadoMapa, type IFormaNevoa, type IMagiaMapa, type INevoaPayload, type IPortal, type ITokenEdicao, type ITokenMapa } from '../../services/mapaApi';
 import { calendarioMundoApi } from '../../services/calendarioMundoApi';
 import type { IItemAcervo } from '../../services/acervoApi';
 import { confirmar, pedirTexto } from '../../components/avisos/confirmacao';
@@ -29,6 +29,10 @@ import { BarraMagia } from './componentes/BarraMagia';
 import { PainelClima } from './componentes/PainelClima';
 import { PainelTempo } from './componentes/PainelTempo';
 import { PainelPortal } from './componentes/PainelPortal';
+import { MenuPorta } from './componentes/MenuPorta';
+import { cliqueDoJogador } from './motor/portasConta';
+import { ApiError } from '../../services/apiClient';
+import type { IAberturaCena } from '../../services/mapaApi';
 import { PreferenciasBarras } from './componentes/PreferenciasBarras';
 import { ConstrutorMapa } from './construtor/ConstrutorMapa';
 import { luzDaCena, nomeDaLua, periodoDaHora, type ChavePeriodo } from './motor/ceuConta';
@@ -36,6 +40,9 @@ import { portalNovo, portalQuePergunta, type LadoPortal } from './motor/portaisC
 import { MedidorPainel } from './componentes/Medidor';
 import { Medidor } from './medidor';
 import { aplicarDelta, type DeltaMapa } from './delta';
+import { PainelCamadas } from './componentes/PainelCamadas';
+import { EditorAnotacao } from './componentes/EditorAnotacao';
+import { PainelJogadores } from './componentes/PainelJogadores';
 import type { Enquadramento } from './motor/molduras';
 import { lerPreferenciasBarras, normalizarPreferenciasBarras, salvarPreferenciasBarras, type IPreferenciasBarrasMapa } from './motor/barrasToken';
 import './mapa.css';
@@ -45,6 +52,7 @@ interface Pessoa {
   nome: string;
   cor: string;
   gestor: boolean;
+  papel?: 'mestre' | 'assistente' | 'jogador' | 'observador';
 }
 
 /** Arrasto e régua saem 30 vezes por segundo, junto com o quadro da tela (a cada dois quadros a 60 Hz). */
@@ -53,6 +61,21 @@ const ENVIO_ARRASTO_MS = 1000 / 30;
 const TOLERANCIA_QUADRO_MS = 4;
 /** Escolha de cada aparelho: desligar os efeitos de clima (desempenho ou conforto). */
 const CHAVE_CLIMA_LOCAL = 'jardim.mapa.clima';
+const IDS_CAMADAS: CamadaMapaId[] = ['mapa', 'props', 'montarias', 'personagens', 'anotacoes'];
+const TODAS_CAMADAS_VISIVEIS: Record<CamadaMapaId, boolean> = {
+  mapa: true,
+  props: true,
+  montarias: true,
+  personagens: true,
+  anotacoes: true,
+};
+
+function anotacaoVazia(ponto: IPonto): IAnotacaoMapa {
+  return {
+    id: crypto.randomUUID(), texto: '', x: ponto.x, y: ponto.y,
+    fonte: 'sans', tamanho: 32, cor: '#ffffff', fundo: '#241d2b', placa: true,
+  };
+}
 
 function lerClimaLocal(): boolean {
   try {
@@ -111,8 +134,24 @@ export const MapaPage = () => {
   const [tempoAberto, setTempoAberto] = useState(false);
   const [tempoOcupado, setTempoOcupado] = useState(false);
   const [portalEscolhido, setPortalEscolhido] = useState<string | null>(null);
+  /** A porta que o Mestre clicou (menu da porta). */
+  const [portaEscolhida, setPortaEscolhida] = useState<string | null>(null);
+  const [portaOcupada, setPortaOcupada] = useState(false);
+  const ultimoAvisoParede = useRef(0);
+  /** O servidor segurou o token numa parede: um aviso só, mesmo arrastando várias vezes. */
+  const avisarParede = useCallback(() => {
+    const agora = Date.now();
+    if (agora - ultimoAvisoParede.current < 4000) return;
+    ultimoAvisoParede.current = agora;
+    avisar.info('Uma parede segura o caminho. Procure uma porta aberta.');
+  }, []);
   const [construtorAberto, setConstrutorAberto] = useState(false);
   const [barrasAberto, setBarrasAberto] = useState(false);
+  const [camadasAberto, setCamadasAberto] = useState(false);
+  const [jogadoresAberto, setJogadoresAberto] = useState(false);
+  const [camadasLocais, setCamadasLocais] = useState<Record<CamadaMapaId, boolean>>({ ...TODAS_CAMADAS_VISIVEIS });
+  const [camadaAtiva, setCamadaAtiva] = useState<CamadaMapaId>('personagens');
+  const [editorAnotacao, setEditorAnotacao] = useState<{ anotacao: IAnotacaoMapa; existente: boolean; cenaId: string } | null>(null);
   const [preferenciasBarras, setPreferenciasBarras] = useState<IPreferenciasBarrasMapa>(() => lerPreferenciasBarras(usuarioId));
   const [climaLocal, setClimaLocal] = useState(lerClimaLocal);
   const [opcoesNevoa, setOpcoesNevoa] = useState<OpcoesNevoa>({ op: 'revelar', forma: 'pincel', raio: 100 });
@@ -254,8 +293,20 @@ export const MapaPage = () => {
         ultimaAmostra.set(id, agoraServidor());
         medidor.registrarMovimento(agoraServidor(), Number(mensagem.ts), typeof mensagem.tm === 'number' ? mensagem.tm : null);
         if (mensagem.t === 'token') atualizarPosicao(id, Number(mensagem.x), Number(mensagem.y));
+        if (mensagem.barrado) avisarParede();
         break;
       }
+      case 'portal_cena':
+        // O meu token atravessou um portal para outra cena: some daqui.
+        agendarRecarga();
+        avisar.info(estadoRef.current?.gestor
+          ? `O token atravessou o portal e foi para a cena ${String(mensagem.cena_nome ?? 'escolhida')}.`
+          : 'Seu personagem atravessou o portal e foi para outro lugar.');
+        break;
+      case 'aviso':
+        // Recado do servidor para quem comanda (alguém atravessou para outra cena).
+        if (typeof mensagem.texto === 'string') avisar.info(mensagem.texto);
+        break;
       case 'portal': {
         // Alguém atravessou um portal (ou eu: a resposta ao meu soltar vem igual).
         const de = Array.isArray(mensagem.de) ? (mensagem.de as number[]) : null;
@@ -296,7 +347,7 @@ export const MapaPage = () => {
       default:
         break;
     }
-  }, [agendarRecarga, atualizarPosicao, interpolador, ultimaAmostra, medidor, atravessou]);
+  }, [agendarRecarga, atualizarPosicao, interpolador, ultimaAmostra, medidor, atravessou, avisarParede]);
 
   /** A cada quadro: tokens que outra pessoa arrasta deslizam pelas posições interpoladas. */
   const aplicarRemotos = useCallback(() => {
@@ -357,16 +408,32 @@ export const MapaPage = () => {
     }
     // Cena em preparo (só o Mestre vê) ou sem tempo real: grava pela rota.
     mapaApi.moverToken(campanhaId, id, { x, y, ...(atravessar ? { atravessar } : {}) }).then((resposta) => {
-      if (resposta?.travessia) atravessou(id, resposta.x, resposta.y, resposta.travessia.de, resposta.travessia.fluxo, true);
+      if (resposta?.travessia?.cena) {
+        agendarRecarga();
+        avisar.info(estadoRef.current?.gestor
+          ? `O token atravessou o portal e foi para a cena ${resposta.travessia.cena_nome ?? 'escolhida'}.`
+          : 'Seu personagem atravessou o portal e foi para outro lugar.');
+      } else if (resposta?.travessia) {
+        atravessou(id, resposta.x, resposta.y, resposta.travessia.de, resposta.travessia.fluxo, true);
+      } else if (resposta?.barrado) {
+        atualizarPosicao(id, resposta.x, resposta.y);
+        palcoRef.current?.moverToken(id, resposta.x, resposta.y);
+        avisarParede();
+      }
     }).catch((falha) => {
       setErro(falha instanceof Error ? falha.message : 'O token não foi salvo.');
       agendarRecarga();
     });
-  }, [agendarRecarga, atravessou, campanhaId, horaDoGesto]);
+  }, [agendarRecarga, atravessou, atualizarPosicao, avisarParede, campanhaId, horaDoGesto]);
 
   const soltar = useCallback((id: string, x: number, y: number) => {
     const atual = estadoRef.current;
     if (!atual?.cena || !campanhaId) return;
+    if (!atual.gestor && atual.permissoes_mesa?.mover_tokens === false) {
+      const token = atual.tokens.find((item) => item.id === id);
+      if (token) atualizarPosicao(id, token.x, token.y);
+      return;
+    }
     pendentesArrasto.delete(id);
     ultimaEnviada.delete(id);
     ultimoEnvio.delete(id);
@@ -384,12 +451,15 @@ export const MapaPage = () => {
   const arrastar = useCallback((id: string, x: number, y: number) => {
     const atual = estadoRef.current;
     if (!atual?.cena?.ativa) return;
+    if (!atual.gestor && atual.permissoes_mesa?.mover_tokens === false) return;
     pendentesArrasto.set(id, { x, y });
     enviarArrastos(performance.now());
   }, [pendentesArrasto, enviarArrastos]);
 
   const ultimaRegua = useRef(0);
   const regua = useCallback((pontos: IPonto[] | null) => {
+    const atual = estadoRef.current;
+    if (pontos && atual && !atual.gestor && atual.permissoes_mesa?.usar_regua === false) return;
     const agora = performance.now();
     if (pontos && agora - ultimaRegua.current < ENVIO_ARRASTO_MS - TOLERANCIA_QUADRO_MS) return;
     ultimaRegua.current = agora;
@@ -423,7 +493,8 @@ export const MapaPage = () => {
 
   /** A minha magia: o palco já desenhou; com a cena na mesa, a mesa inteira recebe. */
   const lancarMagia = useCallback((magia: IMagiaMapa) => {
-    if (!estadoRef.current?.cena?.ativa) return;
+    const atual = estadoRef.current;
+    if (!atual?.cena?.ativa || (!atual.gestor && atual.permissoes_mesa?.usar_magia === false)) return;
     conexaoRef.current?.enviar({ t: 'magia', ...magia });
   }, []);
 
@@ -453,9 +524,74 @@ export const MapaPage = () => {
     void salvarPortais(portais.map((portal) => (portal.id === id ? { ...portal, [lado]: ponto } : portal)));
   }, [salvarPortais]);
 
+  const criarAnotacao = useCallback((ponto: IPonto) => {
+    const cenaAtual = estadoRef.current?.cena;
+    if (!cenaAtual) return;
+    setSelecionado(null);
+    setEditorAnotacao({ anotacao: anotacaoVazia(ponto), existente: false, cenaId: cenaAtual.id });
+  }, []);
+
+  const selecionarAnotacao = useCallback((id: string) => {
+    const atual = estadoRef.current;
+    if (!atual?.gestor || !atual.cena) return;
+    const anotacao = atual.cena.anotacoes?.find((item) => item.id === id);
+    if (anotacao) {
+      setSelecionado(null);
+      setEditorAnotacao({ anotacao, existente: true, cenaId: atual.cena.id });
+    }
+  }, []);
+
+  const moverAnotacao = useCallback(async (id: string, x: number, y: number) => {
+    const atual = estadoRef.current;
+    if (!campanhaId || !atual?.gestor || !atual.cena) return;
+    const anotacoes = (atual.cena.anotacoes ?? []).map((item) => item.id === id ? { ...item, x, y } : item);
+    try {
+      const resposta = await mapaApi.mudarAnotacoes(campanhaId, atual.cena.id, anotacoes);
+      setEstado(resposta);
+      setEditorAnotacao((aberto) => aberto?.anotacao.id === id ? { ...aberto, anotacao: { ...aberto.anotacao, x, y } } : aberto);
+    } catch (falha) {
+      setErro(falha instanceof Error ? falha.message : 'A anotação não foi salva.');
+      agendarRecarga();
+    }
+  }, [agendarRecarga, campanhaId]);
+
+  /** Abrir, fechar, trancar ou revelar uma porta. O servidor confere quem pode. */
+  const mudarPorta = useCallback(async (porta: IAberturaCena, dados: { estado?: IAberturaCena['estado']; revelar?: boolean }) => {
+    const atual = estadoRef.current;
+    if (!atual?.cena || !campanhaId) return;
+    setPortaOcupada(true);
+    try {
+      const novo = await mapaApi.mudarPorta(campanhaId, atual.cena.id, { id: porta.id, ...dados });
+      if (novo) setEstado(novo);
+    } catch (falha) {
+      const status = falha instanceof ApiError ? falha.status : 0;
+      if (status === 403 && falha instanceof Error && falha.message.includes('sessao')) avisar.info('As portas abrem com a sessão ao vivo.');
+      else if (status === 403) avisar.info('Chegue com seu personagem ao lado da porta para mexer nela.');
+      else if (status === 409) avisar.info('A porta está trancada.');
+      else if (status === 404) agendarRecarga();
+      else avisar.erro('A porta não mudou. Tente de novo.');
+    } finally {
+      setPortaOcupada(false);
+    }
+  }, [agendarRecarga, campanhaId]);
+
+  /** Clique numa porta: o Mestre abre o menu dela; o jogador abre a fechada e fecha a aberta. */
+  const clicarPorta = (porta: IAberturaCena) => {
+    if (estadoRef.current?.gestor) {
+      setPortaEscolhida(porta.id);
+      return;
+    }
+    const pedido = cliqueDoJogador(porta);
+    if (!pedido) {
+      avisar.info('A porta está trancada.');
+      return;
+    }
+    void mudarPorta(porta, { estado: pedido });
+  };
+
   // O palco nasce uma vez; os gestos chegam sempre na versão mais nova das funções.
-  const gestos = useRef({ arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia, criarPortal, moverBoca });
-  gestos.current = { arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia, criarPortal, moverBoca };
+  const gestos = useRef({ arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia, criarPortal, moverBoca, criarAnotacao, selecionarAnotacao, moverAnotacao, clicarPorta });
+  gestos.current = { arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia, criarPortal, moverBoca, criarAnotacao, selecionarAnotacao, moverAnotacao, clicarPorta };
 
   useEffect(() => {
     if (!alvoRef.current) return undefined;
@@ -465,7 +601,11 @@ export const MapaPage = () => {
       aoArrastar: (id, x, y) => gestos.current.arrastar(id, x, y),
       aoSoltar: (id, x, y) => gestos.current.soltar(id, x, y),
       aoSelecionar: setSelecionado,
-      aoPing: (x, y) => conexaoRef.current?.enviar({ t: 'ping', x, y }),
+      aoPing: (x, y) => {
+        const atual = estadoRef.current;
+        if (!atual || (!atual.gestor && atual.permissoes_mesa?.usar_ping === false)) return;
+        conexaoRef.current?.enviar({ t: 'ping', x, y });
+      },
       aoRegua: (pontos) => gestos.current.regua(pontos),
       aoNevoa: (forma) => gestos.current.desenharNevoa(forma),
       aoArea: (area) => gestos.current.marcarArea(area),
@@ -473,6 +613,10 @@ export const MapaPage = () => {
       aoPortalNovo: (a, b) => gestos.current.criarPortal(a, b),
       aoSelecionarPortal: setPortalEscolhido,
       aoMoverPortal: (id, lado, ponto) => gestos.current.moverBoca(id, lado, ponto),
+      aoCriarAnotacao: (ponto) => gestos.current.criarAnotacao(ponto),
+      aoSelecionarAnotacao: (id) => gestos.current.selecionarAnotacao(id),
+      aoMoverAnotacao: (id, x, y) => gestos.current.moverAnotacao(id, x, y),
+      aoPorta: (porta) => gestos.current.clicarPorta(porta),
     }).then((criado) => {
       if (!vivo) {
         criado.destruir();
@@ -538,6 +682,24 @@ export const MapaPage = () => {
     if (estado?.cena) palco.definirCena(estado.cena, campanhaId, estado.gestor);
     palco.definirTokens(estado?.cena ? estado.tokens : []);
   }, [estado, palcoPronto, campanhaId]);
+
+  useEffect(() => {
+    if (!campanhaId) return;
+    setCamadasLocais({ ...TODAS_CAMADAS_VISIVEIS });
+    setCamadaAtiva('personagens');
+    setCamadasAberto(false);
+    setJogadoresAberto(false);
+    setEditorAnotacao(null);
+  }, [campanhaId]);
+
+  useEffect(() => {
+    setEditorAnotacao(null);
+  }, [estado?.cena?.id]);
+
+  useEffect(() => {
+    const disponiveis = new Set(estado?.cena?.camadas_visiveis ?? IDS_CAMADAS);
+    palcoRef.current?.definirCamadasVisiveis(IDS_CAMADAS.filter((id) => disponiveis.has(id) && camadasLocais[id]));
+  }, [estado?.cena?.camadas_visiveis, camadasLocais, palcoPronto]);
 
   // Luz do dia: a hora do mundo (ou a fixa da cena). Ao trocar de cena ela vale na hora; depois muda devagar.
   const cenaDaLuz = useRef<string | null>(null);
@@ -615,6 +777,17 @@ export const MapaPage = () => {
   }, [tokenDaVez, palcoPronto, estado]);
 
   const gestorAgora = estado?.gestor ?? false;
+  const permissoes = estado?.permissoes_mesa;
+  const podeRegua = gestorAgora || permissoes?.usar_regua !== false;
+  const podePing = gestorAgora || permissoes?.usar_ping !== false;
+  const podeMagia = gestorAgora || permissoes?.usar_magia !== false;
+
+  useEffect(() => {
+    if ((ferramenta === 'regua' && !podeRegua) || (ferramenta === 'ping' && !podePing) || (ferramenta === 'magia' && !podeMagia)) {
+      setFerramenta('mover');
+    }
+  }, [ferramenta, podeRegua, podePing, podeMagia]);
+
   useEffect(() => {
     const aoTeclar = (evento: KeyboardEvent) => {
       const alvo = evento.target as HTMLElement | null;
@@ -636,16 +809,17 @@ export const MapaPage = () => {
       }
       if (evento.ctrlKey || evento.metaKey || evento.altKey) return;
       if (evento.key === 'v' || evento.key === 'V') setFerramenta('mover');
-      if (evento.key === 'r' || evento.key === 'R') setFerramenta('regua');
-      if (evento.key === 'p' || evento.key === 'P') setFerramenta('ping');
-      if (evento.key === 'm' || evento.key === 'M') setFerramenta('magia');
+      if ((evento.key === 'r' || evento.key === 'R') && podeRegua) setFerramenta('regua');
+      if ((evento.key === 'p' || evento.key === 'P') && podePing) setFerramenta('ping');
+      if ((evento.key === 'm' || evento.key === 'M') && podeMagia) setFerramenta('magia');
       if ((evento.key === 'n' || evento.key === 'N') && gestorAgora) setFerramenta('nevoa');
       if ((evento.key === 'o' || evento.key === 'O') && gestorAgora) setFerramenta('portal');
+      if ((evento.key === 't' || evento.key === 'T') && gestorAgora) setFerramenta('texto');
       if (evento.key === 'Enter' && ferramenta === 'nevoa') palco?.fecharPoligono();
       if (evento.key === 'Escape') {
         if (palco?.desenhando) palco.cancelarDesenho();
         else if (ferramenta === 'portal' && portalEscolhido) setPortalEscolhido(null);
-        else if (ferramenta === 'area' || ferramenta === 'nevoa' || ferramenta === 'portal') setFerramenta('mover');
+        else if (ferramenta === 'area' || ferramenta === 'nevoa' || ferramenta === 'portal' || ferramenta === 'texto') setFerramenta('mover');
         else setSelecionado(null);
       }
     };
@@ -661,7 +835,7 @@ export const MapaPage = () => {
       document.removeEventListener('fullscreenchange', aoTelaCheia);
       document.removeEventListener('visibilitychange', aoMudarAba);
     };
-  }, [ferramenta, gestorAgora, enviarNevoa, medidor, portalEscolhido, construtorAberto]);
+  }, [ferramenta, gestorAgora, podeRegua, podePing, podeMagia, enviarNevoa, medidor, portalEscolhido, construtorAberto]);
 
   useEffect(() => {
     palcoRef.current?.pausar(construtorAberto);
@@ -680,6 +854,37 @@ export const MapaPage = () => {
 
   const cena = estado?.cena ?? null;
   const gestor = estado?.gestor ?? false;
+
+  const alternarVisibilidadeJogadores = async (id: CamadaMapaId, visivel: boolean) => {
+    if (!campanhaId || !cena || !gestor) return;
+    const atual = { ...TODAS_CAMADAS_VISIVEIS, ...(cena.camadas_jogadores ?? {}) };
+    atual[id] = visivel;
+    const resposta = await comErro(() => mapaApi.mudarCamadas(campanhaId, cena.id, atual));
+    if (resposta) setEstado(resposta);
+  };
+
+  const salvarAnotacao = async () => {
+    if (!campanhaId || !cena || !editorAnotacao || editorAnotacao.cenaId !== cena.id) return;
+    const anotacoes = cena.anotacoes ?? [];
+    const proxima = editorAnotacao.existente
+      ? anotacoes.map((item) => item.id === editorAnotacao.anotacao.id ? editorAnotacao.anotacao : item)
+      : [...anotacoes, editorAnotacao.anotacao];
+    const resposta = await comErro(() => mapaApi.mudarAnotacoes(campanhaId, cena.id, proxima));
+    if (resposta) {
+      setEstado(resposta);
+      setEditorAnotacao(null);
+    }
+  };
+
+  const apagarAnotacao = async () => {
+    if (!campanhaId || !cena || !editorAnotacao?.existente || editorAnotacao.cenaId !== cena.id) return;
+    const proxima = (cena.anotacoes ?? []).filter((item) => item.id !== editorAnotacao.anotacao.id);
+    const resposta = await comErro(() => mapaApi.mudarAnotacoes(campanhaId, cena.id, proxima));
+    if (resposta) {
+      setEstado(resposta);
+      setEditorAnotacao(null);
+    }
+  };
 
   const novaCena = async (item?: IItemAcervo) => {
     if (!campanhaId) return;
@@ -744,7 +949,10 @@ export const MapaPage = () => {
     const centro = centroNaGrade();
     if (!campanhaId || !cena || !centro) return;
     const { x, y } = centro;
-    const resposta = await comErro(() => mapaApi.criarToken(campanhaId, cena.id, { imagem_id: item.id, nome: item.nome, x, y }));
+    const camada = (['props', 'montarias', 'personagens'] as CamadaTokenId[]).includes(camadaAtiva as CamadaTokenId)
+      ? camadaAtiva as CamadaTokenId
+      : 'props';
+    const resposta = await comErro(() => mapaApi.criarToken(campanhaId, cena.id, { imagem_id: item.id, nome: item.nome, x, y, camada }));
     if (resposta) setEstado(resposta);
   };
 
@@ -821,6 +1029,7 @@ export const MapaPage = () => {
   const periodoAgora = tempo ? periodoDaHora(tempo.minuto) : null;
   const IconeTempo = periodoAgora ? ICONE_DO_PERIODO[periodoAgora.chave] : Clock3;
   const portalDoPainel = gestor && ferramenta === 'portal' ? cena?.portais.find((p) => p.id === portalEscolhido) ?? null : null;
+  const portaDoMenu = gestor && portaEscolhida ? cena?.aberturas?.find((a) => a.id === portaEscolhida) ?? null : null;
 
   // ------------------------------------------------------------------ tela
 
@@ -902,9 +1111,9 @@ export const MapaPage = () => {
       <nav className="mapa-ferramentas" aria-label="Ferramentas">
         <span className="mapa-grupo-rotulo">Mesa</span>
         <BotaoFerramenta icone={Hand} rotulo="Mover tokens e o mapa" atalho="V" ativo={ferramenta === 'mover'} onClick={() => setFerramenta('mover')} />
-        <BotaoFerramenta icone={Ruler} rotulo="Régua" atalho="R" ativo={ferramenta === 'regua'} onClick={() => setFerramenta('regua')} />
-        <BotaoFerramenta icone={MapPin} rotulo="Ping (ou Alt + clique)" atalho="P" ativo={ferramenta === 'ping'} onClick={() => setFerramenta('ping')} />
-        <BotaoFerramenta icone={Sparkles} rotulo="Efeito de magia" atalho="M" disabled={!cena} ativo={ferramenta === 'magia'} onClick={() => setFerramenta((f) => (f === 'magia' ? 'mover' : 'magia'))} />
+        <BotaoFerramenta icone={Ruler} rotulo="Régua" atalho="R" disabled={!podeRegua} ativo={ferramenta === 'regua'} onClick={() => setFerramenta('regua')} />
+        <BotaoFerramenta icone={MapPin} rotulo="Ping (ou Alt + clique)" atalho="P" disabled={!podePing} ativo={ferramenta === 'ping'} onClick={() => setFerramenta('ping')} />
+        <BotaoFerramenta icone={Sparkles} rotulo="Efeito de magia" atalho="M" disabled={!cena || !podeMagia} ativo={ferramenta === 'magia'} onClick={() => setFerramenta((f) => (f === 'magia' ? 'mover' : 'magia'))} />
         <span className="mapa-separador" />
         <span className="mapa-grupo-rotulo">Vista</span>
         <BotaoFerramenta icone={Expand} rotulo="Ver o mapa inteiro" disabled={!cena} onClick={() => palcoRef.current?.enquadrar()} />
@@ -913,6 +1122,27 @@ export const MapaPage = () => {
           rotulo="Aparência das barras neste aparelho"
           ativo={barrasAberto}
           onClick={() => setBarrasAberto((aberto) => !aberto)}
+        />
+        <BotaoFerramenta
+          icone={Layers}
+          rotulo="Camadas do mapa"
+          ativo={camadasAberto}
+          disabled={!cena}
+          onClick={() => {
+            setJogadoresAberto(false);
+            setCamadasAberto((aberto) => !aberto);
+          }}
+        />
+        <BotaoFerramenta
+          icone={Users}
+          rotulo="Jogadores e permissões"
+          ativo={jogadoresAberto}
+          disabled={!campanhaId}
+          onClick={() => {
+            setCamadasAberto(false);
+            setEditorAnotacao(null);
+            setJogadoresAberto((aberto) => !aberto);
+          }}
         />
         {meuToken && !gestor && (
           <BotaoFerramenta icone={UserRound} rotulo="Ir até o meu personagem" onClick={() => centralizar(meuToken)} />
@@ -931,6 +1161,7 @@ export const MapaPage = () => {
           <>
             <span className="mapa-separador" />
             <span className="mapa-grupo-rotulo">Mestre</span>
+            <BotaoFerramenta icone={Type} rotulo="Escrever no mapa" atalho="T" disabled={!cena} ativo={ferramenta === 'texto'} onClick={() => setFerramenta((f) => (f === 'texto' ? 'mover' : 'texto'))} />
             <BotaoFerramenta icone={Eye} rotulo="Névoa de guerra" atalho="N" disabled={!cena} ativo={ferramenta === 'nevoa'} onClick={() => setFerramenta((f) => (f === 'nevoa' ? 'mover' : 'nevoa'))} />
             <BotaoFerramenta
               icone={CloudRain}
@@ -990,7 +1221,7 @@ export const MapaPage = () => {
           />
         )}
         {medidorAberto && <MedidorPainel medidor={medidor} interpolador={interpolador} onFechar={() => setMedidorAberto(false)} />}
-        {cena && ferramenta === 'magia' && (
+        {cena && podeMagia && ferramenta === 'magia' && (
           <BarraMagia opcoes={opcoesMagia} naMesa={cena.ativa && Boolean(estado?.ao_vivo)} onOpcoes={setOpcoesMagia} />
         )}
         {gestor && cena && ferramenta === 'area' && (
@@ -999,8 +1230,42 @@ export const MapaPage = () => {
         {gestor && cena && ferramenta === 'portal' && !portalDoPainel && (
           <div className="mapa-aviso-topo">Clique onde fica a entrada e depois a saída. Arraste uma boca para mudar de lugar. Esc sai.</div>
         )}
+        {gestor && cena && ferramenta === 'texto' && (
+          <div className="mapa-aviso-topo">Clique no mapa para colocar uma anotação. Arraste uma anotação para movê-la.</div>
+        )}
+        <PainelCamadas
+          aberto={camadasAberto}
+          gestor={gestor}
+          cena={cena}
+          locais={camadasLocais}
+          ativa={camadaAtiva}
+          onAlternarLocal={(id) => setCamadasLocais((atual) => ({ ...atual, [id]: !atual[id] }))}
+          onAlternarJogadores={(id, visivel) => void alternarVisibilidadeJogadores(id, visivel)}
+          onAtivar={(id) => setCamadaAtiva(id)}
+          onFechar={() => setCamadasAberto(false)}
+        />
+        <PainelJogadores
+          aberto={jogadoresAberto}
+          campanhaId={campanhaId ?? ''}
+          usuarioId={usuarioId}
+          gestor={gestor}
+          online={pessoas}
+          onFechar={() => setJogadoresAberto(false)}
+        />
+        {editorAnotacao && (
+          <EditorAnotacao
+            anotacao={editorAnotacao.anotacao}
+            existente={editorAnotacao.existente}
+            onMudar={(anotacao) => setEditorAnotacao((atual) => atual ? { ...atual, anotacao } : atual)}
+            onSalvar={() => void salvarAnotacao()}
+            onApagar={() => void apagarAnotacao()}
+            onFechar={() => setEditorAnotacao(null)}
+          />
+        )}
         {portalDoPainel && (
           <PainelPortal
+            campanhaId={campanhaId ?? ''}
+            outrasCenas={(estado?.cenas ?? []).filter((outra) => outra.id !== cena?.id)}
             portal={portalDoPainel}
             onMudar={(novo) => void salvarPortais((cena?.portais ?? []).map((p) => (p.id === novo.id ? novo : p)))}
             onApagar={async () => {
@@ -1013,6 +1278,14 @@ export const MapaPage = () => {
               if (boca) palcoRef.current?.centralizar(boca.x, boca.y);
             }}
             onFechar={() => setPortalEscolhido(null)}
+          />
+        )}
+        {portaDoMenu && (
+          <MenuPorta
+            porta={portaDoMenu}
+            ocupado={portaOcupada}
+            onMudar={(dados) => void mudarPorta(portaDoMenu, dados)}
+            onFechar={() => setPortaEscolhida(null)}
           />
         )}
         {tempoAberto && gestor && tempo && (

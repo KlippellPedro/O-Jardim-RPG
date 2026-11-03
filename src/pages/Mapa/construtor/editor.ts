@@ -9,12 +9,13 @@ import { desenharAbertura } from '../motor/aberturas';
 import { desenharTrecho } from './desenho';
 import type { ModeloPeca } from './pecas';
 import {
-  abrir, apagar, apagarPeca, adicionarPeca, areaEntre, areaMudada, arestaPerto, arestasDaLinha, casasDoPincel, editarPeca, fimDaLinha, pintar, pontasDaAresta, poremParedes,
+  abrir, adicionarLuz, apagar, apagarLuz, apagarPeca, adicionarPeca, areaEntre, areaMudada, arestaPerto, arestasDaLinha, casasDoPincel, duplicarPeca, editarPeca, fimDaLinha,
+  editarLuz, grupoDasPecas, LUZES_PRONTAS, luzPerto, moverNaOrdem, pecasEmOrdem, pintar, pontasDaAresta, porPronta, poremParedes,
   redimensionar, sala,
-  type IAreaCasas, type ICasa, type IConteudoProjeto, type IPecaProjeto, type MaterialChao, type MaterialParede,
+  type IAreaCasas, type ICasa, type IConteudoProjeto, type ILuzProjeto, type IPecaPronta, type IPecaProjeto, type MaterialChao, type MaterialParede,
 } from './projeto';
 
-export type FerramentaConstrutor = 'mao' | 'sala' | 'chao' | 'parede' | 'porta' | 'janela' | 'secreta' | 'borracha' | 'peca';
+export type FerramentaConstrutor = 'mao' | 'sala' | 'chao' | 'parede' | 'porta' | 'janela' | 'secreta' | 'borracha' | 'peca' | 'luz';
 
 export interface OpcoesConstrutor {
   chao: MaterialChao;
@@ -26,12 +27,19 @@ export interface OpcoesConstrutor {
   escalaPeca: number;
   rotacaoPeca: number;
   espelhadaPeca: boolean;
+  /** O atalho de luz (LUZES_PRONTAS) que a ferramenta de luz põe no mapa. */
+  luz: string;
+  /** Peça pronta escolhida: um clique no mapa põe o grupo inteiro. */
+  pronta: IPecaPronta | null;
 }
 
 export interface EventosEditor {
   aoMudar: (conteudo: IConteudoProjeto) => void;
   aoHistorico: (podeDesfazer: boolean, podeRefazer: boolean) => void;
   aoSelecionarPeca: (id: string | null) => void;
+  aoSelecionarLuz: (id: string | null) => void;
+  /** As peças escolhidas (Shift + clique junta mais de uma). */
+  aoSelecaoPecas: (ids: string[]) => void;
 }
 
 const LADO_PEDACO = 1024;
@@ -53,13 +61,16 @@ interface Pedaco {
 type Gesto =
   | { tipo: 'sala'; antes: IConteudoProjeto; inicio: ICasa; fim: ICasa }
   | { tipo: 'parede'; antes: IConteudoProjeto; inicio: ICasa; fim: ICasa }
-  | { tipo: 'peca'; antes: IConteudoProjeto; inicio: { x: number; y: number }; origem: { x: number; y: number }; id: string }
-  | { tipo: 'pintura'; antes: IConteudoProjeto };
+  | { tipo: 'peca'; antes: IConteudoProjeto; inicio: { x: number; y: number }; origens: Map<string, { x: number; y: number }> }
+  | { tipo: 'luz'; antes: IConteudoProjeto; inicio: { x: number; y: number }; origem: { x: number; y: number }; id: string }
+  | { tipo: 'pintura'; antes: IConteudoProjeto; ultimo: { x: number; y: number } | null };
 
 export class EditorConstrutor {
   private camadaPedacos = new Container();
   private grade = new Graphics();
   private portas = new Graphics();
+  /** Luzes fixas: um halo no alcance de cada uma (na mesa, elas abrem a escuridão). */
+  private luzes = new Graphics();
   private previa = new Graphics();
   private pedacos = new Map<string, Pedaco>();
   private pendentes = new Set<string>();
@@ -73,8 +84,10 @@ export class EditorConstrutor {
   private refeitos: IConteudoProjeto[] = [];
   private gesto: Gesto | null = null;
   private ferramenta: FerramentaConstrutor = 'sala';
-  private opcoes: OpcoesConstrutor = { chao: 'L', parede: 'pedra', pincel: 1, borracha: 'chao', peca: null, escalaPeca: 1, rotacaoPeca: 0, espelhadaPeca: false };
+  private opcoes: OpcoesConstrutor = { chao: 'L', parede: 'pedra', pincel: 1, borracha: 'chao', peca: null, escalaPeca: 1, rotacaoPeca: 0, espelhadaPeca: false, luz: 'tocha', pronta: null };
   private pecaSelecionada: string | null = null;
+  private selecao = new Set<string>();
+  private luzSelecionada: string | null = null;
   private cursor: { x: number; y: number } | null = null;
 
   private constructor(
@@ -109,15 +122,16 @@ export class EditorConstrutor {
 
   private montar() {
     const { app, viewport } = this;
-    viewport.addChild(this.camadaPedacos, this.grade, this.portas, this.previa);
+    viewport.addChild(this.camadaPedacos, this.grade, this.portas, this.luzes, this.previa);
     this.criarPedacos();
     this.desenharGrade();
     this.desenharPortas();
+    this.desenharLuzes();
     this.enquadrar();
 
     viewport.on('pointerdown', (evento) => {
       if (evento.button !== 0 || this.ferramenta === 'mao') return;
-      this.comecar(this.emCasas(viewport.toWorld(evento.global)));
+      this.comecar(this.emCasas(viewport.toWorld(evento.global)), evento.shiftKey);
     });
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
@@ -223,6 +237,22 @@ export class EditorConstrutor {
     }
   }
 
+  private desenharLuzes() {
+    const g = this.luzes;
+    g.clear();
+    const fino = Math.max(1.5, 2 / this.viewport.scale.x);
+    for (const luz of this.conteudo.luzes) {
+      const cor = Number.parseInt(luz.cor.slice(1), 16);
+      const x = luz.x * this.casa;
+      const y = luz.y * this.casa;
+      const raio = luz.raio * this.casa;
+      for (const [fracao, alfa] of [[1, 0.06], [0.7, 0.08], [0.4, 0.12]]) g.circle(x, y, raio * fracao).fill({ color: cor, alpha: alfa });
+      g.circle(x, y, raio).stroke({ width: fino, color: cor, alpha: 0.55 });
+      g.circle(x, y, this.casa * 0.12).fill({ color: cor, alpha: 1 }).stroke({ width: fino, color: 0x1a120a, alpha: 0.9 });
+      if (luz.id === this.luzSelecionada) g.circle(x, y, this.casa * 0.22).stroke({ width: fino * 1.6, color: 0xffffff, alpha: 0.95 });
+    }
+  }
+
   private desenharPrevia() {
     const g = this.previa;
     g.clear();
@@ -241,8 +271,7 @@ export class EditorConstrutor {
       g.moveTo(gesto.inicio.x * casa, gesto.inicio.y * casa).lineTo(fim.x * casa, fim.y * casa).stroke({ width: casa * 0.12, color: 0xc7a44c, alpha: 0.8, cap: 'round' });
       return;
     }
-    const selecionada = this.conteudo.pecas.find((peca) => peca.id === this.pecaSelecionada);
-    if (selecionada) {
+    for (const selecionada of this.conteudo.pecas.filter((peca) => this.selecao.has(peca.id))) {
       const w = selecionada.escala / 2;
       const h = (selecionada.escala * selecionada.imagem_altura / selecionada.imagem_largura) / 2;
       const angulo = (selecionada.rotacao * Math.PI) / 180;
@@ -266,6 +295,13 @@ export class EditorConstrutor {
       g.rect(Math.floor(cursor.x) * casa, Math.floor(cursor.y) * casa, casa, casa).stroke({ width: fino, color: 0xc7a44c, alpha: 0.7 });
     } else if (this.ferramenta === 'parede') {
       g.circle(Math.round(cursor.x) * casa, Math.round(cursor.y) * casa, casa * 0.09).fill({ color: 0xc7a44c, alpha: 0.9 });
+    } else if (this.ferramenta === 'peca' && this.opcoes.pronta) {
+      for (const peca of this.opcoes.pronta.pecas) {
+        const largura = peca.escala;
+        const altura = largura * (peca.imagem_altura / peca.imagem_largura);
+        g.rect((cursor.x + peca.x - largura / 2) * casa, (cursor.y + peca.y - altura / 2) * casa, largura * casa, altura * casa)
+          .fill({ color: 0xc7a44c, alpha: 0.1 }).stroke({ width: fino, color: 0xc7a44c, alpha: 0.8 });
+      }
     } else if (this.ferramenta === 'peca' && this.opcoes.peca) {
       const largura = this.opcoes.escalaPeca;
       const altura = largura * (this.opcoes.peca.imagem_altura / this.opcoes.peca.imagem_largura);
@@ -283,7 +319,7 @@ export class EditorConstrutor {
 
   // --------------------------------------------------------------- gestos
 
-  private comecar(ponto: { x: number; y: number }) {
+  private comecar(ponto: { x: number; y: number }, juntar = false) {
     const antes = this.conteudo;
     switch (this.ferramenta) {
       case 'sala': {
@@ -298,7 +334,7 @@ export class EditorConstrutor {
       }
       case 'chao':
       case 'borracha':
-        this.gesto = { tipo: 'pintura', antes };
+        this.gesto = { tipo: 'pintura', antes, ultimo: null };
         this.continuar(ponto);
         break;
       case 'porta':
@@ -308,21 +344,55 @@ export class EditorConstrutor {
         if (chave) this.registrar(antes, abrir(this.conteudo, chave, this.ferramenta));
         break;
       }
+      case 'luz': {
+        const existente = luzPerto(this.conteudo, ponto, 0.4);
+        if (existente) {
+          this.selecionarLuz(existente.id);
+          this.gesto = { tipo: 'luz', antes, inicio: ponto, origem: { x: existente.x, y: existente.y }, id: existente.id };
+        } else {
+          const pronta = LUZES_PRONTAS.find((l) => l.id === this.opcoes.luz) ?? LUZES_PRONTAS[1];
+          const luz: ILuzProjeto = {
+            id: crypto.randomUUID(), raio: pronta.raio, cor: pronta.cor, tremula: pronta.tremula,
+            x: Math.max(0, Math.min(this.largura, ponto.x)), y: Math.max(0, Math.min(this.altura, ponto.y)),
+          };
+          const novo = adicionarLuz(this.conteudo, luz);
+          if (novo !== this.conteudo) {
+            this.trocar(novo);
+            this.selecionarLuz(luz.id);
+            this.gesto = { tipo: 'luz', antes, inicio: ponto, origem: { x: luz.x, y: luz.y }, id: luz.id };
+          }
+        }
+        break;
+      }
       case 'peca': {
         const existente = this.pecaNoPonto(ponto);
+        if (existente && juntar) {
+          // Shift + clique junta (ou tira) a peça do grupo escolhido.
+          const ids = new Set(this.selecao);
+          if (ids.has(existente.id)) ids.delete(existente.id);
+          else ids.add(existente.id);
+          this.definirSelecao([...ids]);
+          break;
+        }
+        let ids: string[] = [];
         if (existente) {
-          this.pecaSelecionada = existente.id;
-          this.eventos.aoSelecionarPeca(existente.id);
-          this.gesto = { tipo: 'peca', antes, inicio: ponto, origem: { x: existente.x, y: existente.y }, id: existente.id };
+          ids = this.selecao.has(existente.id) && this.selecao.size > 1 ? [...this.selecao] : [existente.id];
+        } else if (this.opcoes.pronta) {
+          const posto = porPronta(this.conteudo, this.opcoes.pronta, ponto, () => crypto.randomUUID());
+          this.trocar(posto.conteudo);
+          ids = posto.ids;
         } else if (this.opcoes.peca && this.conteudo.pecas.length < 256) {
           const peca: IPecaProjeto = {
             id: crypto.randomUUID(), ...this.opcoes.peca, x: ponto.x, y: ponto.y,
             escala: this.opcoes.escalaPeca, rotacao: this.opcoes.rotacaoPeca, espelhada: this.opcoes.espelhadaPeca,
           };
           this.trocar(adicionarPeca(this.conteudo, peca));
-          this.pecaSelecionada = peca.id;
-          this.eventos.aoSelecionarPeca(peca.id);
-          this.gesto = { tipo: 'peca', antes, inicio: ponto, origem: { x: peca.x, y: peca.y }, id: peca.id };
+          ids = [peca.id];
+        }
+        this.definirSelecao(ids);
+        if (ids.length) {
+          const origens = new Map(this.conteudo.pecas.filter((p) => ids.includes(p.id)).map((p) => [p.id, { x: p.x, y: p.y }]));
+          this.gesto = { tipo: 'peca', antes, inicio: ponto, origens };
         }
         break;
       }
@@ -340,14 +410,30 @@ export class EditorConstrutor {
       gesto.fim = { x: Math.max(0, Math.min(this.largura - 1, Math.floor(ponto.x))), y: Math.max(0, Math.min(this.altura - 1, Math.floor(ponto.y))) };
     } else if (gesto.tipo === 'parede') {
       gesto.fim = { x: Math.max(0, Math.min(this.largura, Math.round(ponto.x))), y: Math.max(0, Math.min(this.altura, Math.round(ponto.y))) };
+    } else if (gesto.tipo === 'luz') {
+      const x = Math.max(0, Math.min(this.largura, gesto.origem.x + ponto.x - gesto.inicio.x));
+      const y = Math.max(0, Math.min(this.altura, gesto.origem.y + ponto.y - gesto.inicio.y));
+      this.trocar(editarLuz(this.conteudo, gesto.id, { x, y }));
     } else if (gesto.tipo === 'peca') {
       const dx = ponto.x - gesto.inicio.x;
       const dy = ponto.y - gesto.inicio.y;
-      this.trocar(editarPeca(this.conteudo, gesto.id, { x: gesto.origem.x + dx, y: gesto.origem.y + dy }));
-    } else if (this.ferramenta === 'chao') {
-      this.trocar(pintar(this.conteudo, casasDoPincel(ponto, this.opcoes.pincel), this.opcoes.chao));
-    } else if (this.ferramenta === 'borracha') {
-      this.trocar(apagar(this.conteudo, ponto, this.opcoes.borracha, this.opcoes.pincel));
+      let novo = this.conteudo;
+      for (const [id, origem] of gesto.origens) novo = editarPeca(novo, id, { x: origem.x + dx, y: origem.y + dy });
+      this.trocar(novo);
+    } else if (gesto.tipo === 'pintura') {
+      // O mouse rápido pula casas entre um evento e outro: o pincel passa pela linha toda.
+      const de = gesto.ultimo ?? ponto;
+      const passos = Math.max(1, Math.ceil(Math.hypot(ponto.x - de.x, ponto.y - de.y) / 0.5));
+      let novo = this.conteudo;
+      const casas = new Map<string, ICasa>();
+      for (let i = 1; i <= passos; i++) {
+        const meio = { x: de.x + ((ponto.x - de.x) * i) / passos, y: de.y + ((ponto.y - de.y) * i) / passos };
+        if (this.ferramenta === 'chao') for (const casa of casasDoPincel(meio, this.opcoes.pincel)) casas.set(`${casa.x},${casa.y}`, casa);
+        else if (this.ferramenta === 'borracha') novo = apagar(novo, meio, this.opcoes.borracha, this.opcoes.pincel);
+      }
+      if (this.ferramenta === 'chao') novo = pintar(novo, [...casas.values()], this.opcoes.chao);
+      gesto.ultimo = ponto;
+      this.trocar(novo);
     }
   }
 
@@ -361,7 +447,7 @@ export class EditorConstrutor {
     } else if (gesto.tipo === 'parede') {
       const fim = fimDaLinha(gesto.inicio, gesto.fim);
       this.registrar(gesto.antes, poremParedes(this.conteudo, arestasDaLinha(gesto.inicio, fim), this.opcoes.parede));
-    } else if (gesto.tipo === 'peca') {
+    } else if (gesto.tipo === 'peca' || gesto.tipo === 'luz') {
       if (this.conteudo !== gesto.antes) {
         this.empilhar(gesto.antes);
         this.eventos.aoMudar(this.conteudo);
@@ -379,9 +465,11 @@ export class EditorConstrutor {
     if (novo === this.conteudo) return;
     const area = areaMudada(this.conteudo, novo);
     const portasMudaram = novo.aberturas !== this.conteudo.aberturas;
+    const luzesMudaram = novo.luzes !== this.conteudo.luzes;
     this.conteudo = novo;
     this.marcar(area);
     if (portasMudaram) this.desenharPortas();
+    if (luzesMudaram) this.desenharLuzes();
   }
 
   private empilhar(antes: IConteudoProjeto) {
@@ -402,10 +490,8 @@ export class EditorConstrutor {
 
   definirFerramenta(ferramenta: FerramentaConstrutor) {
     this.ferramenta = ferramenta;
-    if (ferramenta !== 'peca' && this.pecaSelecionada) {
-      this.pecaSelecionada = null;
-      this.eventos.aoSelecionarPeca(null);
-    }
+    if (ferramenta !== 'peca' && this.selecao.size) this.definirSelecao([]);
+    if (ferramenta !== 'luz' && this.luzSelecionada) this.selecionarLuz(null);
     this.viewport.drag({ mouseButtons: ferramenta === 'mao' ? 'all' : 'middle-right' });
     this.desenharPrevia();
   }
@@ -420,9 +506,11 @@ export class EditorConstrutor {
     this.desenharPrevia();
   }
 
+  /** A peça de cima no ponto: a ordem de desenho ao contrário (alto, objetos, chão). */
   private pecaNoPonto(ponto: { x: number; y: number }): IPecaProjeto | null {
-    for (let indice = this.conteudo.pecas.length - 1; indice >= 0; indice--) {
-      const peca = this.conteudo.pecas[indice];
+    const ordem = pecasEmOrdem(this.conteudo);
+    for (let indice = ordem.length - 1; indice >= 0; indice--) {
+      const peca = ordem[indice];
       const angulo = (-peca.rotacao * Math.PI) / 180;
       const dx = ponto.x - peca.x;
       const dy = ponto.y - peca.y;
@@ -440,12 +528,61 @@ export class EditorConstrutor {
     this.desenharPrevia();
   }
 
+  selecionarLuz(id: string | null) {
+    this.luzSelecionada = id;
+    this.eventos.aoSelecionarLuz(id);
+    this.desenharLuzes();
+  }
+
+  editarLuz(id: string, mudanca: Partial<ILuzProjeto>) {
+    this.registrar(this.conteudo, editarLuz(this.conteudo, id, mudanca));
+  }
+
+  removerLuz(id: string) {
+    this.registrar(this.conteudo, apagarLuz(this.conteudo, id));
+    if (this.luzSelecionada === id) this.selecionarLuz(null);
+  }
+
+  /** Escolhe a peça pela lista do painel (sem precisar achá-la no mapa). */
+  selecionarPeca(id: string | null) {
+    this.definirSelecao(id ? [id] : []);
+  }
+
+  private definirSelecao(ids: string[]) {
+    this.selecao = new Set(ids);
+    this.pecaSelecionada = ids.length === 1 ? ids[0] : null;
+    this.eventos.aoSelecionarPeca(this.pecaSelecionada);
+    this.eventos.aoSelecaoPecas(ids);
+    this.desenharPrevia();
+  }
+
+  /** As peças escolhidas, com a posição relativa ao centro do grupo (para salvar como peça pronta). */
+  grupoEscolhido(): IPecaProjeto[] {
+    return grupoDasPecas(pecasEmOrdem(this.conteudo).filter((peca) => this.selecao.has(peca.id)));
+  }
+
+  removerPecas(ids: string[]) {
+    let novo = this.conteudo;
+    for (const id of ids) novo = apagarPeca(novo, id);
+    this.registrar(this.conteudo, novo);
+    this.definirSelecao([]);
+  }
+
+  moverPeca(id: string, sentido: 'frente' | 'tras') {
+    this.registrar(this.conteudo, moverNaOrdem(this.conteudo, id, sentido));
+  }
+
+  duplicarPeca(id: string) {
+    const novoId = crypto.randomUUID();
+    const novo = duplicarPeca(this.conteudo, id, novoId);
+    if (novo === this.conteudo) return;
+    this.registrar(this.conteudo, novo);
+    this.selecionarPeca(novoId);
+  }
+
   removerPeca(id: string) {
     this.registrar(this.conteudo, apagarPeca(this.conteudo, id));
-    if (this.pecaSelecionada === id) {
-      this.pecaSelecionada = null;
-      this.eventos.aoSelecionarPeca(null);
-    }
+    if (this.selecao.has(id)) this.definirSelecao([...this.selecao].filter((outro) => outro !== id));
     this.desenharPrevia();
   }
 
@@ -481,6 +618,7 @@ export class EditorConstrutor {
     this.criarPedacos();
     this.desenharGrade();
     this.desenharPortas();
+    this.desenharLuzes();
   }
 
   /** Muda o tamanho do mapa (em casas). Entra no histórico como qualquer mudança. */

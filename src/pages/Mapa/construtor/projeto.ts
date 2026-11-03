@@ -18,9 +18,22 @@ export interface IAberturaProjeto {
   estado: EstadoPorta;
 }
 
+/** Onde a peça fica: no chão (tapete, alçapão), com os objetos (embaixo da parede) ou no alto (copa, tocha). */
+export type CamadaPeca = 'chao' | 'objetos' | 'alto';
+
+export const CAMADAS_PECA: Array<{ id: CamadaPeca; nome: string }> = [
+  { id: 'chao', nome: 'Chão' },
+  { id: 'objetos', nome: 'Objetos' },
+  { id: 'alto', nome: 'Alto' },
+];
+
 export interface IPecaProjeto {
   id: string;
+  /** A imagem do Acervo; vazio quando a peça é da mobília do Jardim (`pacote`). */
   imagem_id: string;
+  /** Peça da mobília do Jardim (src/data/construtor-mobilia.json), em vez de uma imagem do Acervo. */
+  pacote?: string | null;
+  camada?: CamadaPeca;
   rotulo: string;
   imagem_largura: number;
   imagem_altura: number;
@@ -33,12 +46,55 @@ export interface IPecaProjeto {
   espelhada: boolean;
 }
 
+/** Peça pronta: um grupo de peças salvo pelo Mestre, com a posição de cada uma relativa ao centro do grupo. */
+export interface IPecaPronta {
+  id: string;
+  nome: string;
+  pecas: IPecaProjeto[];
+}
+
+/** O grupo das peças escolhidas, com as posições relativas ao centro dele (para virar peça pronta). */
+export function grupoDasPecas(pecas: IPecaProjeto[]): IPecaProjeto[] {
+  if (!pecas.length) return [];
+  const cx = (Math.min(...pecas.map((p) => p.x)) + Math.max(...pecas.map((p) => p.x))) / 2;
+  const cy = (Math.min(...pecas.map((p) => p.y)) + Math.max(...pecas.map((p) => p.y))) / 2;
+  return pecas.map((peca) => ({ ...peca, x: Number((peca.x - cx).toFixed(3)), y: Number((peca.y - cy).toFixed(3)) }));
+}
+
+/** A peça pronta posta no mapa com o centro no ponto; cada peça ganha um id novo (de `novoId`). */
+export function porPronta(conteudo: IConteudoProjeto, pronta: IPecaPronta, ponto: { x: number; y: number }, novoId: () => string): { conteudo: IConteudoProjeto; ids: string[] } {
+  const cabem = Math.max(0, 256 - conteudo.pecas.length);
+  const novas = pronta.pecas.slice(0, cabem).map((peca) => ({ ...peca, id: novoId(), x: ponto.x + peca.x, y: ponto.y + peca.y }));
+  if (!novas.length) return { conteudo, ids: [] };
+  return { conteudo: { ...conteudo, pecas: [...conteudo.pecas, ...novas] }, ids: novas.map((peca) => peca.id) };
+}
+
+/** Luz fixa do mapa: centro em casas, alcance em casas, cor e se a chama tremula. */
+export interface ILuzProjeto {
+  id: string;
+  x: number;
+  y: number;
+  raio: number;
+  cor: string;
+  tremula: boolean;
+}
+
+/** Os atalhos de luz do construtor, os mesmos nomes do menu do token. */
+export const LUZES_PRONTAS: Array<{ id: string; nome: string; raio: number; cor: string; tremula: boolean }> = [
+  { id: 'vela', nome: 'Vela', raio: 2, cor: '#ffd28a', tremula: true },
+  { id: 'tocha', nome: 'Tocha', raio: 4, cor: '#ffb35c', tremula: true },
+  { id: 'braseiro', nome: 'Braseiro', raio: 5, cor: '#ff8a3c', tremula: true },
+  { id: 'lanterna', nome: 'Lanterna', raio: 6, cor: '#fff1c9', tremula: false },
+  { id: 'magica', nome: 'Luz mágica', raio: 5, cor: '#9ad7ff', tremula: false },
+];
+
 export interface IConteudoProjeto {
   versao: number;
   chao: string[];
   paredes: Record<string, MaterialParede>;
   aberturas: Record<string, IAberturaProjeto>;
   pecas: IPecaProjeto[];
+  luzes: ILuzProjeto[];
 }
 
 export interface ICasa {
@@ -83,7 +139,32 @@ export function espessuraDaParede(material: MaterialParede): number {
 }
 
 export function conteudoVazio(largura: number, altura: number): IConteudoProjeto {
-  return { versao: 1, chao: Array.from({ length: altura }, () => VAZIO.repeat(largura)), paredes: {}, aberturas: {}, pecas: [] };
+  return { versao: 1, chao: Array.from({ length: altura }, () => VAZIO.repeat(largura)), paredes: {}, aberturas: {}, pecas: [], luzes: [] };
+}
+
+export function adicionarLuz(conteudo: IConteudoProjeto, luz: ILuzProjeto): IConteudoProjeto {
+  if (conteudo.luzes.length >= 64 || conteudo.luzes.some((atual) => atual.id === luz.id)) return conteudo;
+  return { ...conteudo, luzes: [...conteudo.luzes, luz] };
+}
+
+export function editarLuz(conteudo: IConteudoProjeto, id: string, mudanca: Partial<ILuzProjeto>): IConteudoProjeto {
+  if (!conteudo.luzes.some((luz) => luz.id === id)) return conteudo;
+  return { ...conteudo, luzes: conteudo.luzes.map((luz) => (luz.id === id ? { ...luz, ...mudanca, id } : luz)) };
+}
+
+export function apagarLuz(conteudo: IConteudoProjeto, id: string): IConteudoProjeto {
+  const luzes = conteudo.luzes.filter((luz) => luz.id !== id);
+  return luzes.length === conteudo.luzes.length ? conteudo : { ...conteudo, luzes };
+}
+
+/** A luz mais perto do ponto (em casas), a até `limite` casas do centro. */
+export function luzPerto(conteudo: IConteudoProjeto, ponto: { x: number; y: number }, limite = 0.4): ILuzProjeto | null {
+  let melhor: { luz: ILuzProjeto; distancia: number } | null = null;
+  for (const luz of conteudo.luzes) {
+    const distancia = Math.hypot(ponto.x - luz.x, ponto.y - luz.y);
+    if (distancia <= limite && (!melhor || distancia < melhor.distancia)) melhor = { luz, distancia };
+  }
+  return melhor?.luz ?? null;
 }
 
 export function adicionarPeca(conteudo: IConteudoProjeto, peca: IPecaProjeto): IConteudoProjeto {
@@ -96,9 +177,51 @@ export function editarPeca(conteudo: IConteudoProjeto, id: string, mudanca: Part
   const pecas = conteudo.pecas.map((peca) => {
     if (peca.id !== id) return peca;
     mudou = true;
-    return { ...peca, ...mudanca, id: peca.id, imagem_id: peca.imagem_id };
+    return { ...peca, ...mudanca, id: peca.id, imagem_id: peca.imagem_id, pacote: peca.pacote };
   });
   return mudou ? { ...conteudo, pecas } : conteudo;
+}
+
+export function camadaDe(peca: Pick<IPecaProjeto, 'camada'>): CamadaPeca {
+  return peca.camada ?? 'objetos';
+}
+
+/** A chave da imagem da peça: a do Acervo ou a da mobília do Jardim. */
+export function chaveDaImagem(peca: Pick<IPecaProjeto, 'imagem_id' | 'pacote'>): string {
+  return peca.pacote ? `mobilia:${peca.pacote}` : peca.imagem_id;
+}
+
+/** As peças na ordem de desenho: chão, objetos e alto; dentro da camada, a ordem da lista. */
+export function pecasEmOrdem(conteudo: IConteudoProjeto): IPecaProjeto[] {
+  const ordem: Record<CamadaPeca, number> = { chao: 0, objetos: 1, alto: 2 };
+  return conteudo.pecas.map((peca, indice) => ({ peca, indice }))
+    .sort((a, b) => ordem[camadaDe(a.peca)] - ordem[camadaDe(b.peca)] || a.indice - b.indice)
+    .map(({ peca }) => peca);
+}
+
+/** Passa a peça para a frente (ou para trás) da vizinha da mesma camada. */
+export function moverNaOrdem(conteudo: IConteudoProjeto, id: string, sentido: 'frente' | 'tras'): IConteudoProjeto {
+  const indice = conteudo.pecas.findIndex((peca) => peca.id === id);
+  if (indice < 0) return conteudo;
+  const camada = camadaDe(conteudo.pecas[indice]);
+  const passo = sentido === 'frente' ? 1 : -1;
+  for (let outro = indice + passo; outro >= 0 && outro < conteudo.pecas.length; outro += passo) {
+    if (camadaDe(conteudo.pecas[outro]) !== camada) continue;
+    const pecas = conteudo.pecas.slice();
+    [pecas[indice], pecas[outro]] = [pecas[outro], pecas[indice]];
+    return { ...conteudo, pecas };
+  }
+  return conteudo;
+}
+
+/** Uma cópia da peça, meia casa para o lado e para baixo, logo à frente dela. */
+export function duplicarPeca(conteudo: IConteudoProjeto, id: string, novoId: string): IConteudoProjeto {
+  const indice = conteudo.pecas.findIndex((peca) => peca.id === id);
+  if (indice < 0 || conteudo.pecas.length >= 256) return conteudo;
+  const original = conteudo.pecas[indice];
+  const pecas = conteudo.pecas.slice();
+  pecas.splice(indice + 1, 0, { ...original, id: novoId, x: original.x + 0.5, y: original.y + 0.5 });
+  return { ...conteudo, pecas };
 }
 
 export function apagarPeca(conteudo: IConteudoProjeto, id: string): IConteudoProjeto {
@@ -312,7 +435,9 @@ export function redimensionar(conteudo: IConteudoProjeto, largura: number, altur
   const aberturas: Record<string, IAberturaProjeto> = {};
   for (const [chave, abertura] of Object.entries(conteudo.aberturas)) if (chave in paredes) aberturas[chave] = abertura;
   // As peças ficam onde estão: o servidor aceita peça um pouco fora do mapa, e encolher e voltar não as perde.
-  return { versao: conteudo.versao, chao, paredes, aberturas, pecas: conteudo.pecas };
+  // Luz fora do mapa novo vai para a borda (o servidor só aceita luz dentro do mapa).
+  const luzes = conteudo.luzes.map((luz) => ({ ...luz, x: Math.min(luz.x, largura), y: Math.min(luz.y, altura) }));
+  return { versao: conteudo.versao, chao, paredes, aberturas, pecas: conteudo.pecas, luzes };
 }
 
 /** A área (em casas) em que dois conteúdos diferem, com uma casa de folga (a parede e a sombra

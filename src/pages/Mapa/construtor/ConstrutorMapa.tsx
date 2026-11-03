@@ -4,19 +4,21 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AppWindow, ArrowLeft, BrickWall, CloudUpload, DoorClosed, Eraser, Expand, Ghost, Hand, ImagePlus, Loader2, Paintbrush, Plus, Redo2, Square, Trash2, Undo2,
+  AppWindow, ArrowLeft, BrickWall, CloudUpload, DoorClosed, Eraser, Expand, Flame, Ghost, Hand, ImagePlus, Loader2, Paintbrush, Plus, Redo2, Square, Trash2, Undo2,
 } from 'lucide-react';
 import { acervoApi, type IItemAcervo } from '../../../services/acervoApi';
 import { construtorApi, type IProjeto, type IResumoProjeto } from '../../../services/construtorApi';
 import { urlPedaco, type IEstadoMapa } from '../../../services/mapaApi';
 import { avisar, avisarErro } from '../../../components/avisos/avisos';
-import { confirmar } from '../../../components/avisos/confirmacao';
+import { confirmar, pedirTexto } from '../../../components/avisos/confirmacao';
 import { BotaoFerramenta } from '../componentes/BotaoFerramenta';
 import { EditorConstrutor, type FerramentaConstrutor, type OpcoesConstrutor } from './editor';
-import { contagem, MATERIAIS_CHAO, MATERIAIS_PAREDE, type IConteudoProjeto } from './projeto';
+import {
+  CAMADAS_PECA, camadaDe, chaveDaImagem, contagem, LUZES_PRONTAS, MATERIAIS_CHAO, MATERIAIS_PAREDE, pecasEmOrdem, type IConteudoProjeto, type IPecaPronta,
+} from './projeto';
 import { texturaDaParede, texturaDoChao } from './materiais';
 import { publicarProjeto, type ProgressoPublicacao } from './publicar';
-import { carregarImagemPeca, pecaDoAcervo, type ModeloPeca } from './pecas';
+import { carregarImagemPeca, MOBILIA, pecaDaMobilia, pecaDoAcervo, urlDaMobilia, type ModeloPeca } from './pecas';
 import './construtor.css';
 
 interface Props {
@@ -35,7 +37,8 @@ const FERRAMENTAS: Array<{ id: FerramentaConstrutor; rotulo: string; atalho: str
   { id: 'porta', rotulo: 'Porta', atalho: 'D', icone: DoorClosed, dica: 'Clique numa parede: a porta entra fechada. Clique de novo para aberta, trancada e para tirar.' },
   { id: 'janela', rotulo: 'Janela', atalho: 'J', icone: AppWindow, dica: 'Clique numa parede para pôr ou tirar uma janela.' },
   { id: 'secreta', rotulo: 'Porta secreta', atalho: 'X', icone: Ghost, dica: 'Clique numa parede: no mapa ela continua parede, e só você vê a porta.' },
-  { id: 'peca', rotulo: 'Peças do Acervo', atalho: 'I', icone: ImagePlus, dica: 'Escolha um objeto do Acervo. Clique para colocar; arraste uma peça existente para movê-la.' },
+  { id: 'peca', rotulo: 'Peças e mobília', atalho: 'I', icone: ImagePlus, dica: 'Escolha uma peça da mobília do Jardim ou um objeto do Acervo. Clique para colocar; arraste uma peça para mover. Shift + clique junta várias peças, que andam juntas e podem virar uma peça pronta.' },
+  { id: 'luz', rotulo: 'Luz fixa', atalho: 'L', icone: Flame, dica: 'Clique para pôr uma luz (tocha, vela, braseiro). Na mesa, ela brilha e abre caminho no escuro. Arraste uma luz para mover.' },
   { id: 'borracha', rotulo: 'Borracha', atalho: 'E', icone: Eraser, dica: 'Apague o chão, ou, no modo Paredes, a parede mais perto do cursor.' },
 ];
 
@@ -169,10 +172,13 @@ const EditorDoProjeto = ({
   const [projeto, setProjeto] = useState(inicial);
   const [conteudo, setConteudo] = useState(inicial.conteudo);
   const [ferramenta, setFerramenta] = useState<FerramentaConstrutor>('sala');
-  const [opcoes, setOpcoes] = useState<OpcoesConstrutor>({ chao: 'L', parede: 'pedra', pincel: 1, borracha: 'chao', peca: null, escalaPeca: 1, rotacaoPeca: 0, espelhadaPeca: false });
+  const [opcoes, setOpcoes] = useState<OpcoesConstrutor>({ chao: 'L', parede: 'pedra', pincel: 1, borracha: 'chao', peca: null, escalaPeca: 1, rotacaoPeca: 0, espelhadaPeca: false, luz: 'tocha', pronta: null });
   const [historico, setHistorico] = useState({ desfazer: false, refazer: false });
   const [objetos, setObjetos] = useState<IItemAcervo[]>([]);
   const [pecaSelecionadaId, setPecaSelecionadaId] = useState<string | null>(null);
+  const [luzSelecionadaId, setLuzSelecionadaId] = useState<string | null>(null);
+  const [selecaoIds, setSelecaoIds] = useState<string[]>([]);
+  const [prontas, setProntas] = useState<IPecaPronta[]>([]);
   const imagensPecasRef = useRef(new Map<string, ImageBitmap>());
   const [falhaPeca, setFalhaPeca] = useState('');
   const [salvo, setSalvo] = useState<EstadoSalvo>('salvo');
@@ -231,6 +237,8 @@ const EditorDoProjeto = ({
       },
       aoHistorico: (desfazer, refazer) => setHistorico({ desfazer, refazer }),
       aoSelecionarPeca: setPecaSelecionadaId,
+      aoSelecionarLuz: setLuzSelecionadaId,
+      aoSelecaoPecas: setSelecaoIds,
     }).then((pronto) => {
       if (!vivo) {
         pronto.destruir();
@@ -258,19 +266,62 @@ const EditorDoProjeto = ({
     return () => { ativo = false; };
   }, [campanhaId]);
 
+  useEffect(() => {
+    let ativo = true;
+    void construtorApi.listarProntas(campanhaId).then(({ prontas: lista }) => {
+      if (ativo) setProntas(lista);
+    }).catch(() => undefined);
+    return () => { ativo = false; };
+  }, [campanhaId]);
+
+  const gravarProntas = async (lista: IPecaPronta[], aviso: string) => {
+    try {
+      setProntas((await construtorApi.salvarProntas(campanhaId, lista)).prontas);
+      avisar.sucesso(aviso);
+    } catch (falha) {
+      avisarErro(falha, 'As peças prontas não foram salvas. Tente de novo.');
+    }
+  };
+
+  const salvarComoPronta = async () => {
+    const pecas = editor.current?.grupoEscolhido() ?? [];
+    if (!pecas.length) return;
+    if (pecas.length > 32) {
+      avisar.erro('Uma peça pronta junta até 32 peças. Escolha menos peças.');
+      return;
+    }
+    if (prontas.length >= 40) {
+      avisar.erro('A campanha já guarda 40 peças prontas. Apague uma antes de salvar outra.');
+      return;
+    }
+    const nomePronta = await pedirTexto({
+      titulo: 'Salvar como peça pronta',
+      mensagem: `${pecas.length === 1 ? 'A peça escolhida fica guardada' : `As ${pecas.length} peças escolhidas viram um grupo`} para você pôr em qualquer mapa desta campanha com um clique.`,
+      campo: { rotulo: 'Nome da peça pronta', maximo: 60, placeholder: 'Mesa de taverna com cadeiras' },
+      rotuloConfirmar: 'Salvar',
+    });
+    if (!nomePronta) return;
+    await gravarProntas([...prontas, { id: crypto.randomUUID(), nome: nomePronta, pecas }], `"${nomePronta}" está nas peças prontas.`);
+  };
+
+  const apagarPronta = async (pronta: IPecaPronta) => {
+    if (!(await confirmar({ mensagem: `Apagar a peça pronta "${pronta.nome}"? Os mapas que já usam essas peças continuam como estão.`, rotuloConfirmar: 'Apagar' }))) return;
+    if (opcoes.pronta?.id === pronta.id) setOpcoes({ ...opcoes, pronta: null });
+    await gravarProntas(prontas.filter((outra) => outra.id !== pronta.id), `"${pronta.nome}" saiu das peças prontas.`);
+  };
+
   const pecasParaCarregar = new Map<string, ModeloPeca>();
-  conteudo.pecas.forEach((peca) => pecasParaCarregar.set(peca.imagem_id, peca));
-  if (opcoes.peca) pecasParaCarregar.set(opcoes.peca.imagem_id, opcoes.peca);
-  const chavePecas = [...pecasParaCarregar.values()]
-    .sort((a, b) => a.imagem_id.localeCompare(b.imagem_id))
-    .map((peca) => `${peca.imagem_id}:${peca.imagem_largura}x${peca.imagem_altura}`)
+  conteudo.pecas.forEach((peca) => pecasParaCarregar.set(chaveDaImagem(peca), peca));
+  if (opcoes.peca) pecasParaCarregar.set(chaveDaImagem(opcoes.peca), opcoes.peca);
+  const chavePecas = [...pecasParaCarregar.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([chave, peca]) => `${chave}:${peca.imagem_largura}x${peca.imagem_altura}`)
     .join('|');
   useEffect(() => {
     let ativo = true;
     setFalhaPeca('');
     void (async () => {
-      for (const peca of pecasParaCarregar.values()) {
-        const id = peca.imagem_id;
+      for (const [id, peca] of pecasParaCarregar) {
         if (imagensPecasRef.current.has(id)) continue;
         try {
           const imagem = await carregarImagemPeca(peca, pecasParaCarregar.size);
@@ -369,6 +420,8 @@ const EditorDoProjeto = ({
   const ferramentaAtual = FERRAMENTAS.find((f) => f.id === ferramenta)!;
   const numeros = contagem(conteudo);
   const pecaSelecionada = conteudo.pecas.find((peca) => peca.id === pecaSelecionadaId) ?? null;
+  const categoriasMobilia = [...new Set(MOBILIA.map((item) => item.categoria))];
+  const luzSelecionada = conteudo.luzes.find((luz) => luz.id === luzSelecionadaId) ?? null;
   const { largura, altura } = tamanhoDoConteudo(conteudo);
   const cenaDoProjeto = projeto.cena_id ? { id: projeto.cena_id, nome: projeto.cena_nome ?? 'a cena publicada' } : null;
   const destinos = [cenaDoProjeto, cenaAtual && cenaAtual.id !== cenaDoProjeto?.id ? cenaAtual : null].filter(Boolean) as Array<{ id: string; nome: string }>;
@@ -437,13 +490,70 @@ const EditorDoProjeto = ({
           <p className="mapa-dica construtor-dica">{ferramentaAtual.dica}</p>
           {ferramenta === 'peca' && (
             <>
+              <h3>Peças prontas</h3>
+              {prontas.length ? (
+                <ul className="construtor-prontas" aria-label="Peças prontas da campanha">
+                  {prontas.map((pronta) => {
+                    const ativo = opcoes.pronta?.id === pronta.id;
+                    const primeira = pronta.pecas[0];
+                    return (
+                      <li key={pronta.id} className={ativo ? 'ativo' : ''}>
+                        <button
+                          type="button"
+                          aria-pressed={ativo}
+                          onClick={() => {
+                            setOpcoes({ ...opcoes, pronta: ativo ? null : pronta, peca: null });
+                            editor.current?.selecionarPeca(null);
+                          }}
+                        >
+                          {primeira && <img src={primeira.pacote ? urlDaMobilia(primeira.pacote) : urlPedaco(primeira.imagem_id, 'mini')} alt="" loading="lazy" />}
+                          <span>{pronta.nome}</span>
+                          <small>{pronta.pecas.length} {pronta.pecas.length === 1 ? 'peça' : 'peças'}</small>
+                        </button>
+                        <button type="button" className="mapa-icone" aria-label={`Apagar a peça pronta ${pronta.nome}`} onClick={() => void apagarPronta(pronta)}><Trash2 size={13} /></button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p className="mapa-dica">Junte peças com Shift + clique e salve o grupo como peça pronta para usar em outros mapas desta campanha.</p>
+              )}
+              {opcoes.pronta && <p className="mapa-dica">Clique no mapa para pôr "{opcoes.pronta.nome}". Clique de novo na peça pronta para parar.</p>}
+              <h3>Mobília do Jardim</h3>
+              {categoriasMobilia.map((categoria) => (
+                <div key={categoria} className="construtor-mobilia-grupo">
+                  <small>{categoria}</small>
+                  <div className="construtor-pecas" role="radiogroup" aria-label={`Mobília: ${categoria}`}>
+                    {MOBILIA.filter((item) => item.categoria === categoria).map((item) => {
+                      const ativo = opcoes.peca?.pacote === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          role="radio"
+                          aria-checked={ativo}
+                          aria-label={item.nome}
+                          className={`construtor-peca${ativo ? ' ativo' : ''}`}
+                          onClick={() => {
+                            setOpcoes({ ...opcoes, peca: pecaDaMobilia(item), escalaPeca: item.escala, pronta: null });
+                            setPecaSelecionadaId(null);
+                          }}
+                        >
+                          <img src={urlDaMobilia(item.id)} alt="" loading="lazy" />
+                          <small>{item.nome}</small>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
               <h3>Objetos do Acervo</h3>
               <p className="mapa-dica">Para usar uma imagem da internet, salve um arquivo com licença de uso e envie ao Acervo como Objeto. O VTT não busca imagens diretamente por URL.</p>
               {falhaPeca && <p className="mapa-erro">{falhaPeca}</p>}
               {objetos.length ? (
                 <div className="construtor-pecas" role="radiogroup" aria-label="Objeto para colocar no mapa">
                   {objetos.map((item) => {
-                    const ativo = opcoes.peca?.imagem_id === item.id;
+                    const ativo = !opcoes.peca?.pacote && opcoes.peca?.imagem_id === item.id;
                     return (
                       <button
                         key={item.id}
@@ -453,7 +563,7 @@ const EditorDoProjeto = ({
                         aria-label={`${item.nome} (${item.largura} x ${item.altura} px)`}
                         className={`construtor-peca${ativo ? ' ativo' : ''}`}
                         onClick={() => {
-                          setOpcoes({ ...opcoes, peca: pecaDoAcervo(item) });
+                          setOpcoes({ ...opcoes, peca: pecaDoAcervo(item), pronta: null });
                           setPecaSelecionadaId(null);
                         }}
                       >
@@ -484,6 +594,14 @@ const EditorDoProjeto = ({
               )}
             </>
           )}
+          {selecaoIds.length > 1 && (
+            <section className="construtor-ajuste-peca" aria-label="Peças escolhidas">
+              <h3>{selecaoIds.length} peças escolhidas</h3>
+              <p className="mapa-dica">Arraste uma delas para mover o grupo. Shift + clique tira ou junta mais uma.</p>
+              <button type="button" className="mapa-botao" onClick={() => void salvarComoPronta()}>Salvar como peça pronta</button>
+              <button type="button" className="mapa-botao perigo" onClick={() => editor.current?.removerPecas(selecaoIds)}>Remover as {selecaoIds.length} peças</button>
+            </section>
+          )}
           {pecaSelecionada && (
             <section className="construtor-ajuste-peca" aria-label="Ajustar peça selecionada">
               <h3>Peça selecionada</h3>
@@ -501,7 +619,85 @@ const EditorDoProjeto = ({
               <button type="button" className="mapa-botao-leve" onClick={() => editor.current?.editarPeca(pecaSelecionada.id, { espelhada: !pecaSelecionada.espelhada })}>
                 {pecaSelecionada.espelhada ? 'Remover espelhamento' : 'Espelhar'}
               </button>
+              <div className="mapa-segmentos" role="group" aria-label="Camada da peça">
+                {CAMADAS_PECA.map((camada) => (
+                  <button
+                    key={camada.id}
+                    type="button"
+                    className={camadaDe(pecaSelecionada) === camada.id ? 'ativo' : ''}
+                    onClick={() => editor.current?.editarPeca(pecaSelecionada.id, { camada: camada.id })}
+                  >
+                    {camada.nome}
+                  </button>
+                ))}
+              </div>
+              <div className="mapa-segmentos" role="group" aria-label="Ordem da peça na camada">
+                <button type="button" onClick={() => editor.current?.moverPeca(pecaSelecionada.id, 'tras')}>Para trás</button>
+                <button type="button" onClick={() => editor.current?.moverPeca(pecaSelecionada.id, 'frente')}>Para a frente</button>
+                <button type="button" onClick={() => editor.current?.duplicarPeca(pecaSelecionada.id)}>Duplicar</button>
+              </div>
+              <button type="button" className="mapa-botao-leve" onClick={() => void salvarComoPronta()}>Salvar como peça pronta</button>
               <button type="button" className="mapa-botao perigo" onClick={() => editor.current?.removerPeca(pecaSelecionada.id)}>Remover peça</button>
+            </section>
+          )}
+          {ferramenta === 'luz' && (
+            <>
+              <h3>Luz nova</h3>
+              <div className="mapa-segmentos construtor-luzes" role="radiogroup" aria-label="Tipo da luz nova">
+                {LUZES_PRONTAS.map((luz) => (
+                  <button key={luz.id} type="button" role="radio" aria-checked={opcoes.luz === luz.id} className={opcoes.luz === luz.id ? 'ativo' : ''} onClick={() => setOpcoes({ ...opcoes, luz: luz.id })}>
+                    <span className="construtor-luz-cor" style={{ background: luz.cor }} /> {luz.nome}
+                  </button>
+                ))}
+              </div>
+              <p className="construtor-numeros">{conteudo.luzes.length} de 64 luzes no mapa</p>
+            </>
+          )}
+          {luzSelecionada && (
+            <section className="construtor-ajuste-peca" aria-label="Ajustar a luz escolhida">
+              <h3>Luz escolhida</h3>
+              <label className="mapa-menu-linha">
+                Alcance <span>{luzSelecionada.raio.toLocaleString('pt-BR')} casas</span>
+                <input type="range" min={0.5} max={15} step={0.5} value={luzSelecionada.raio} onChange={(e) => editor.current?.editarLuz(luzSelecionada.id, { raio: Number(e.target.value) })} />
+              </label>
+              <div className="mapa-segmentos construtor-luzes" role="group" aria-label="Cor da luz">
+                {LUZES_PRONTAS.map((luz) => (
+                  <button key={luz.id} type="button" className={luzSelecionada.cor === luz.cor ? 'ativo' : ''} onClick={() => editor.current?.editarLuz(luzSelecionada.id, { cor: luz.cor, tremula: luz.tremula })}>
+                    <span className="construtor-luz-cor" style={{ background: luz.cor }} /> {luz.nome}
+                  </button>
+                ))}
+              </div>
+              <label className="mapa-menu-opcoes">
+                <input type="checkbox" checked={luzSelecionada.tremula} onChange={(e) => editor.current?.editarLuz(luzSelecionada.id, { tremula: e.target.checked })} /> A chama tremula
+              </label>
+              <button type="button" className="mapa-botao perigo" onClick={() => editor.current?.removerLuz(luzSelecionada.id)}>Tirar a luz</button>
+            </section>
+          )}
+          {ferramenta === 'peca' && conteudo.pecas.length > 0 && (
+            <section className="construtor-camadas" aria-label="Peças no mapa">
+              <h3>Peças no mapa</h3>
+              {[...CAMADAS_PECA].reverse().map((camada) => {
+                const daCamada = pecasEmOrdem(conteudo).filter((peca) => camadaDe(peca) === camada.id).reverse();
+                if (!daCamada.length) return null;
+                return (
+                  <div key={camada.id} className="construtor-camada">
+                    <small>{camada.nome}</small>
+                    <ul>
+                      {daCamada.map((peca) => (
+                        <li key={peca.id}>
+                          <button
+                            type="button"
+                            className={peca.id === pecaSelecionadaId ? 'ativo' : ''}
+                            onClick={() => editor.current?.selecionarPeca(peca.id)}
+                          >
+                            {peca.rotulo}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
             </section>
           )}
           <h3>Chão</h3>
