@@ -197,7 +197,7 @@ function obterBorda(): Texture {
   return borda;
 }
 
-function obterLuz(): Texture {
+export function obterLuz(): Texture {
   if (luz) return luz;
   const [canvas, ctx] = tela(256, 256);
   const gradiente = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);

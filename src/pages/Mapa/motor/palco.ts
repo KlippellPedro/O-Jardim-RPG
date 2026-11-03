@@ -15,13 +15,20 @@ import { CamadaNevoa } from './nevoa';
 import { CamadaClima, esquecerTexturasDoClima } from './clima';
 import { CamadaLuzes, fonteDoToken, type FonteDeLuz } from './luzes';
 import { EfeitosDeMagia, corDoFluxo, desenharMira } from './magia';
+import { CamadaCeu } from './ceu';
+import type { ILuzDoCeu } from './ceuConta';
+import { CamadaPortais } from './portais';
+import { CamadaAberturas } from './aberturas';
+import { bocaEm, type LadoPortal } from './portaisConta';
+import { type IPreferenciasBarrasMapa, PREFERENCIAS_BARRAS_PADRAO } from './barrasToken';
 import {
   acrescentarAoTraco, chavesDoFundo, detalheSempre, fechaPoligono, formaDoPoligono, formaDoRetangulo, formaDoTraco, MAX_PONTOS_TRACO,
 } from './nevoaGeometria';
 
 /** `nevoa`: o Mestre desenha a névoa; `area`: o Mestre marca a área de um efeito de clima;
- * `magia`: qualquer um mira e solta um efeito de magia que a mesa inteira vê. */
-export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia';
+ * `magia`: qualquer um mira e solta um efeito de magia que a mesa inteira vê;
+ * `portal`: o Mestre cria portais (dois cliques) e arrasta as bocas. */
+export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia' | 'portal';
 
 export interface OpcoesMagia {
   forma: FormaMagia;
@@ -45,6 +52,10 @@ export interface EventosPalco {
   aoNevoa: (forma: IFormaNevoa) => void;
   aoArea: (area: IAreaClima) => void;
   aoMagia: (magia: IMagiaMapa) => void;
+  /** Ferramenta de portal: as duas bocas de um portal novo, um portal escolhido e uma boca movida. */
+  aoPortalNovo: (a: IPonto, b: IPonto) => void;
+  aoSelecionarPortal: (id: string | null) => void;
+  aoMoverPortal: (id: string, lado: LadoPortal, ponto: IPonto) => void;
 }
 
 const COR_REVELAR = '#5eead4';
@@ -92,6 +103,14 @@ export class PalcoMapa {
   private previa = new Graphics();
   private nevoa!: CamadaNevoa;
   private clima!: CamadaClima;
+  /** Luz do dia: a escuridão e a tinta da hora, por cima dos tokens. */
+  private ceu!: CamadaCeu;
+  private portais = new CamadaPortais();
+  /** Portas do mapa montado no construtor, por cima da imagem (que só tem o vão). */
+  private aberturas = new CamadaAberturas();
+  /** Ferramenta de portal: a primeira boca de um portal novo, ou a boca que está sendo arrastada. */
+  private bocaPendente: IPonto | null = null;
+  private arrastoPortal: { id: string; lado: LadoPortal; ponto: IPonto; moveu: boolean } | null = null;
   /** Com a névoa, os pedaços do mapa que o servidor libera para este jogador; null baixa tudo. */
   private liberados: Set<string> | null = null;
   private reduzidosPedidos = new Set<string>();
@@ -107,6 +126,7 @@ export class PalcoMapa {
   private mira: { inicio: IPonto; fim: IPonto } | null = null;
   private rotuloMira: Text | null = null;
   private tokens = new Map<string, TokenVisual>();
+  private preferenciasBarras = PREFERENCIAS_BARRAS_PADRAO;
   /** Tokens que saíram e ainda estão encolhendo na tela. */
   private saindo = new Set<TokenVisual>();
   /** Cena nova: os tokens da anterior somem na hora, sem animação. */
@@ -159,10 +179,15 @@ export class PalcoMapa {
     const { app, viewport } = this;
     this.nevoa = new CamadaNevoa(app.renderer);
     this.clima = new CamadaClima(app.renderer, this.camadaFundo);
+    this.ceu = new CamadaCeu(app.renderer);
     this.camadaMapa.addChild(this.camadaReduzida, this.camadaDetalhe);
     // A névoa cobre o mapa e fica por baixo dos tokens: o servidor já tira do jogador o que ela esconde.
-    this.camadaFundo.addChild(this.camadaMapa, this.grade);
-    viewport.addChild(this.camadaFundo, this.nevoa.raiz, this.luzes.raiz, this.camadaTokens, this.clima.raiz, this.magias.raiz, this.camadaReguas, this.previa, this.camadaPings);
+    this.camadaFundo.addChild(this.camadaMapa, this.aberturas.raiz, this.grade);
+    // Os portais ficam no chão (embaixo dos tokens); a luz do dia e o clima, por cima de tudo que está no mapa.
+    viewport.addChild(
+      this.camadaFundo, this.nevoa.raiz, this.portais.raiz, this.luzes.raiz, this.camadaTokens, this.ceu.raiz, this.clima.raiz,
+      this.magias.raiz, this.camadaReguas, this.previa, this.camadaPings,
+    );
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
 
@@ -184,6 +209,10 @@ export class PalcoMapa {
         if (evento.button === 0) this.comecarDesenho({ x: ponto.x, y: ponto.y });
         return;
       }
+      if (this.ferramenta === 'portal') {
+        if (evento.button === 0) this.cliquePortal({ x: ponto.x, y: ponto.y });
+        return;
+      }
       this.eventos.aoSelecionar(null);
     });
 
@@ -191,6 +220,12 @@ export class PalcoMapa {
       const ponto = viewport.toWorld(evento.global);
       if (this.ferramenta === 'nevoa' || this.ferramenta === 'area' || this.ferramenta === 'magia') {
         this.continuarDesenho({ x: ponto.x, y: ponto.y });
+        return;
+      }
+      if (this.arrastoPortal) {
+        this.arrastoPortal.ponto = this.encaixarPonto(ponto);
+        this.arrastoPortal.moveu = true;
+        this.portais.definirArrastada(this.arrastoPortal);
         return;
       }
       if (this.arrasto) {
@@ -215,6 +250,14 @@ export class PalcoMapa {
     const soltar = () => {
       if (this.traco || this.retangulo || this.mira) {
         this.terminarDesenho();
+        return;
+      }
+      if (this.arrastoPortal) {
+        const { id, lado, ponto, moveu } = this.arrastoPortal;
+        this.arrastoPortal = null;
+        this.viewport.plugins.resume('drag');
+        if (moveu) this.eventos.aoMoverPortal(id, lado, ponto);
+        else this.portais.definirArrastada(null);
         return;
       }
       if (this.arrasto) {
@@ -265,9 +308,11 @@ export class PalcoMapa {
       this.animarPings(agora);
       this.magias.quadro(agora);
       this.nevoa.quadro(agora);
+      this.portais.quadro(agora, viewport.scale.x);
       if (this.cena) {
         const fontes = this.fontesDeLuz(agora);
         this.luzes.quadro(fontes);
+        this.ceu.quadro(Math.min(0.1, ticker.deltaMS / 1000), fontes, this.cena.grade.tamanho);
         this.clima.quadro({
           dt: Math.min(0.1, ticker.deltaMS / 1000),
           agora,
@@ -293,6 +338,12 @@ export class PalcoMapa {
 
   aoQuadro(callback: () => void) {
     this.quadroCallbacks.push(callback);
+  }
+
+  /** Com o construtor de mapas aberto por cima, o mapa da mesa para de desenhar (e volta depois). */
+  pausar(sim: boolean) {
+    if (sim) this.app.ticker.stop();
+    else this.app.ticker.start();
   }
 
   get tokenArrastadoLocal(): string | null {
@@ -331,7 +382,63 @@ export class PalcoMapa {
     this.desenharGrade(cena.grade);
     this.nevoa.definir(cena.nevoa ?? null, cena.largura, cena.altura, gestor, cena.grade.tamanho);
     this.clima.definir(cena.clima ?? null, cena.largura, cena.altura, gestor);
+    this.portais.definir(cena.portais ?? [], cena.grade.tamanho, gestor);
+    this.aberturas.definir(cena.aberturas ?? [], cena.grade.tamanho, gestor);
     this.agendarLadrilhos();
+  }
+
+  /** A luz do dia que vale agora na cena (null: a luz dela não muda com a hora). `imediato` pula a troca lenta. */
+  definirCeu(luz: ILuzDoCeu | null, imediato = false) {
+    if (!this.cena) return;
+    this.ceu.definir(luz, this.cena.largura, this.cena.altura, this.gestor, imediato);
+  }
+
+  // ------------------------------------------------------------ portais
+
+  private cliquePortal(ponto: IPonto) {
+    const casa = this.cena?.grade.tamanho ?? 100;
+    const achada = bocaEm(this.cena?.portais ?? [], ponto, casa);
+    if (achada) {
+      // Pegou uma boca: escolhe o portal e, se arrastar, move a boca.
+      this.bocaPendente = null;
+      this.portais.definirPendente(null);
+      this.eventos.aoSelecionarPortal(achada.portal.id);
+      this.arrastoPortal = { id: achada.portal.id, lado: achada.lado, ponto: achada.portal[achada.lado] ?? ponto, moveu: false };
+      this.viewport.plugins.pause('drag');
+      return;
+    }
+    const boca = this.encaixarPonto(ponto);
+    if (!this.bocaPendente) {
+      this.bocaPendente = boca;
+      this.portais.definirPendente(boca);
+      this.eventos.aoSelecionarPortal(null);
+      return;
+    }
+    const primeira = this.bocaPendente;
+    this.bocaPendente = null;
+    this.portais.definirPendente(null);
+    if (Math.hypot(boca.x - primeira.x, boca.y - primeira.y) < casa * 0.5) return;
+    this.eventos.aoPortalNovo(primeira, boca);
+  }
+
+  selecionarPortal(id: string | null) {
+    this.portais.selecionar(id);
+  }
+
+  /** O servidor gravou: a boca arrastada volta a ser a do estado. */
+  esquecerBocaArrastada() {
+    this.portais.definirArrastada(null);
+  }
+
+  /** Um token atravessou: some de um lado e surge do outro, com as bocas piscando na cor do Fluxo. */
+  teletransportar(id: string, de: IPonto | null, para: IPonto, fluxo: string) {
+    const agora = performance.now();
+    this.portais.clarear([de, para], fluxo, agora);
+    const token = this.tokens.get(id);
+    if (!token || this.arrasto?.id === id) return;
+    token.raiz.position.set(para.x, para.y);
+    token.dados = { ...token.dados, x: para.x, y: para.y };
+    token.surgir(agora);
   }
 
   private desenharFundo() {
@@ -482,7 +589,7 @@ export class PalcoMapa {
   }
 
   get desenhando(): boolean {
-    return Boolean(this.traco || this.retangulo || this.poligono || this.mira);
+    return Boolean(this.traco || this.retangulo || this.poligono || this.mira || this.bocaPendente);
   }
 
   cancelarDesenho() {
@@ -490,6 +597,8 @@ export class PalcoMapa {
     this.retangulo = null;
     this.poligono = null;
     this.mira = null;
+    this.bocaPendente = null;
+    this.portais.definirPendente(null);
     this.viewport.plugins.resume('drag');
     this.desenharPrevia();
   }
@@ -666,7 +775,7 @@ export class PalcoMapa {
       let token = this.tokens.get(dados.id);
       const arrastando = this.arrasto?.id === dados.id;
       if (!token) {
-        token = new TokenVisual(dados, tamanho);
+        token = new TokenVisual(dados, tamanho, this.preferenciasBarras);
         this.tokens.set(dados.id, token);
         this.camadaTokens.addChild(token.raiz);
         this.ligarToken(token);
@@ -689,6 +798,11 @@ export class PalcoMapa {
       }
     }
     this.cenaTrocada = false;
+  }
+
+  definirPreferenciasBarras(preferencias: IPreferenciasBarrasMapa) {
+    this.preferenciasBarras = preferencias;
+    for (const token of this.tokens.values()) token.definirPreferenciasBarras(preferencias);
   }
 
   private async carregarRetrato(token: TokenVisual) {

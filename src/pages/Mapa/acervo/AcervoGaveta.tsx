@@ -115,8 +115,12 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNova
 
   const apagarItem = async (item: IItemAcervo) => {
     if (!(await confirmar({ titulo: `Apagar "${item.nome}"?`, mensagem: 'Cena que usa este mapa fica sem imagem.', rotuloConfirmar: 'Apagar', tom: 'perigo' }))) return;
-    await acervoApi.apagarItem(item.id);
-    await carregar();
+    try {
+      await acervoApi.apagarItem(item.id);
+      await carregar();
+    } catch (falha) {
+      setErro(falha instanceof Error ? falha.message : 'Não deu para apagar a imagem.');
+    }
   };
 
   if (!aberto) return null;

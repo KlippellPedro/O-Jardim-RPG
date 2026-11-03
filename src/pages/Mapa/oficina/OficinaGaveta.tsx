@@ -412,6 +412,7 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
               <button type="button" className="mapa-botao" onClick={() => void fazerMelhorar(2)}>Melhorar 2x</button>
               <button type="button" className="mapa-botao" onClick={() => void fazerMelhorar(4)}>Melhorar 4x</button>
             </div>
+            <small className="mapa-dica">A ampliação por IA recria detalhes plausíveis e pode alterar texturas. Confira o resultado antes de salvar; detalhes ausentes na imagem original não podem ser recuperados.</small>
             <div className="mapa-ferramentas-oficina" role="radiogroup" aria-label="Ferramenta">
               <ComDica lado="cima" dica="Arrastar a foto dentro do círculo">
                 <button type="button" className={ferramenta === 'mover' ? 'ativo' : ''} aria-label="Arrastar a foto" onClick={() => setFerramenta('mover')}><Move size={15} /></button>

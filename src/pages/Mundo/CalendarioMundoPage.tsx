@@ -13,6 +13,7 @@ import { CarimboRetido, RasuraTitulo } from '../../components/ui/Rasura';
 import { COR_DA_ESTACAO, ESTACOES_DO_ANO, faseDaLua, rotuloDoEvento, somarMes, textoEmDias } from './calendarioMundo';
 import { PainelCalendarioMestre, type IPreenchimento } from './PainelCalendarioMestre';
 import { LuaFase } from './LuaFase';
+import { periodoDaHora } from '../Mapa/motor/ceuConta';
 
 const botao = 'inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 text-xs font-bold text-gray-200 transition hover:bg-white/10 hover:text-white disabled:opacity-40';
 
@@ -134,6 +135,9 @@ export default function CalendarioMundoPage() {
               <div className="rounded-2xl border border-white/10 bg-black/35 px-5 py-4 text-right">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Hoje no mundo</p>
                 <p className="mt-1 text-xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>{dados.hoje_extenso}</p>
+                {dados.hora_extenso && (
+                  <p className="mt-1 text-sm text-gray-300">{dados.hora_extenso} · {periodoDaHora(dados.minuto ?? 0).rotulo}</p>
+                )}
                 <p className="mt-2 flex items-center justify-end gap-2 text-xs text-gray-400">
                   <LuaFase dia={dados.hoje.dia} carmesim={dados.hoje_lua_carmesim} tamanho={18} decorativa /> {faseDaLua(dados.hoje.dia, dados.hoje_lua_carmesim).nome}
                 </p>

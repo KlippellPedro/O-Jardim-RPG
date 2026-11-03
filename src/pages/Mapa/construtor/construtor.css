@@ -1,0 +1,403 @@
+/* Construtor de mapas: tela cheia por cima do mapa da mesa (que fica parado por baixo). */
+
+.construtor {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: grid;
+  grid-template-rows: 50px 1fr;
+  background: var(--mapa-fundo, #09090d);
+  color: var(--mapa-texto, #ece9f5);
+  font-size: 13px;
+}
+
+.construtor-topo {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--mapa-linha);
+  background: var(--mapa-painel);
+}
+
+.construtor-topo > strong {
+  font-size: 15px;
+}
+
+.construtor-nome {
+  width: 240px;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mapa-texto);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.construtor-nome:hover,
+.construtor-nome:focus {
+  border-color: var(--mapa-linha);
+  background: rgba(0, 0, 0, 0.3);
+  outline: none;
+}
+
+.construtor-espaco {
+  flex: 1;
+}
+
+.construtor-salvo {
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.construtor-salvo--salvo {
+  color: #6ee7b7;
+}
+
+.construtor-salvo--erro {
+  color: #fca5a5;
+}
+
+.construtor-topo .mapa-ferramenta {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.construtor-topo .mapa-ferramenta:hover:not(:disabled) {
+  color: var(--mapa-texto);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.construtor-topo .mapa-ferramenta:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* No topo, a dica desce em vez de ir para o lado. */
+.construtor-topo .mapa-ferramenta .mapa-dica-flutuante {
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translate(-50%, -4px);
+}
+
+.construtor-topo .mapa-ferramenta:hover .mapa-dica-flutuante {
+  transform: translate(-50%, 0);
+}
+
+.construtor-tamanho,
+.construtor-publicar {
+  position: relative;
+}
+
+.construtor-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 5;
+  display: grid;
+  gap: 8px;
+  width: 240px;
+  padding: 12px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 12px;
+  background: var(--mapa-painel);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.construtor-popover--direita {
+  left: auto;
+  right: 0;
+  width: 280px;
+}
+
+.construtor-popover label,
+.construtor-novo label {
+  display: grid;
+  gap: 4px;
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.construtor-popover input,
+.construtor-novo input {
+  padding: 6px 8px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--mapa-texto);
+  font: inherit;
+}
+
+.construtor-corpo {
+  display: grid;
+  grid-template-columns: 52px 1fr 270px;
+  min-height: 0;
+}
+
+/* A barra reaproveita o visual da do mapa, mas não a posição na grade dele. */
+.construtor .construtor-ferramentas {
+  grid-area: auto;
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.construtor-palco {
+  grid-row: 1;
+  grid-column: 2;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.construtor-palco canvas {
+  display: block;
+}
+
+.construtor-lateral {
+  grid-row: 1;
+  grid-column: 3;
+  overflow: auto;
+  padding: 12px;
+  border-left: 1px solid var(--mapa-linha);
+  background: var(--mapa-painel);
+}
+
+.construtor-lateral h3 {
+  margin: 14px 0 6px;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.construtor-dica {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  line-height: 1.45;
+}
+
+.construtor-amostras {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.construtor-amostra {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: 4px 2px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.construtor-amostra canvas {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.construtor-amostra small {
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.construtor-amostra:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.construtor-amostra.ativo {
+  border-color: var(--mapa-ouro);
+  color: var(--mapa-texto);
+  background: rgba(199, 164, 76, 0.1);
+}
+
+.construtor-pecas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  max-height: 250px;
+  overflow: auto;
+  padding: 2px;
+}
+
+.construtor-peca {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  min-width: 0;
+  padding: 5px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.construtor-peca:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.construtor-peca.ativo {
+  border-color: var(--mapa-ouro);
+  color: var(--mapa-texto);
+  background: rgba(199, 164, 76, 0.12);
+}
+
+.construtor-peca img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 5px;
+  background-color: #17151c;
+  background-image: linear-gradient(45deg, #22202a 25%, transparent 25%),
+    linear-gradient(-45deg, #22202a 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #22202a 75%),
+    linear-gradient(-45deg, transparent 75%, #22202a 75%);
+  background-size: 12px 12px;
+  background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+}
+
+.construtor-peca small {
+  overflow: hidden;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.construtor-ajuste-peca {
+  display: grid;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 9px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.construtor-ajuste-peca > strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.construtor-numeros {
+  margin: 16px 0 0;
+  color: var(--mapa-apagado);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+/* Lista dos mapas montados. */
+.construtor-lista {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  align-content: start;
+  overflow: auto;
+  padding: 24px;
+}
+
+.construtor-lista h2 {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+
+.construtor-novo {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 14px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 12px;
+  background: var(--mapa-painel);
+}
+
+.construtor-novo-tamanho {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+}
+
+.construtor-novo-tamanho input {
+  width: 80px;
+}
+
+.construtor-novo-tamanho span {
+  padding-bottom: 7px;
+  color: var(--mapa-apagado);
+}
+
+.construtor-cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.construtor-cartao {
+  display: flex;
+  align-items: start;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 12px;
+  background: var(--mapa-painel);
+}
+
+.construtor-cartao-corpo {
+  display: grid;
+  gap: 4px;
+  flex: 1;
+  justify-items: start;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.construtor-cartao-corpo:hover strong {
+  color: var(--mapa-ouro);
+}
+
+.construtor-cartao-corpo small {
+  color: var(--mapa-apagado);
+}
+
+@media (max-width: 900px) {
+  .construtor-corpo {
+    grid-template-columns: 52px 1fr;
+  }
+
+  .construtor-lateral {
+    display: none;
+  }
+
+  .construtor-lista {
+    grid-template-columns: 1fr;
+  }
+}

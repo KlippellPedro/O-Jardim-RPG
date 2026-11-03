@@ -109,7 +109,8 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
 
       {config && (
         <fieldset>
-          <legend>Barras no mapa</legend>
+          <legend>Barras compartilhadas</legend>
+          <p className="mapa-dica">Escolha quais recursos podem aparecer para quem tem permissão de ver este token.</p>
           <div className="mapa-menu-opcoes">
             {BARRAS.map((barra) => (
               <label key={barra.id}>

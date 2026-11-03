@@ -94,6 +94,9 @@ export interface IEventoDoAnoDoMestre {
 export interface ICalendarioMundo {
   hoje: { ano: number; mes: number; dia: number };
   hoje_extenso: string;
+  /** A hora do mundo, em minutos desde a meia-noite (o painel Tempo do mapa anda com ela). */
+  minuto?: number;
+  hora_extenso?: string;
   estacao: IEstacao;
   estacao_especial: ChaveEstacao | null;
   /** A estação do mês de hoje, sem contar a especial. */
@@ -182,6 +185,9 @@ export const calendarioMundoApi = {
     mudar(`${base(campanhaId)}/hoje`, 'PUT', dados),
   avancar: (campanhaId: string, dias: number) =>
     mudar(`${base(campanhaId)}/avancar`, 'POST', { dias }),
+  /** A hora do mundo anda (ou volta); passar da meia-noite muda o dia. */
+  avancarTempo: (campanhaId: string, minutos: number) =>
+    mudar(`${base(campanhaId)}/avancar-tempo`, 'POST', { minutos }),
   estacaoEspecial: (campanhaId: string, estacao: ChaveEstacao | null) =>
     mudar(`${base(campanhaId)}/estacao-especial`, 'PUT', { estacao }),
   config: (campanhaId: string, dados: { meses?: string[]; sincronizar_discord?: boolean; eventos_desligados?: string[] }) =>

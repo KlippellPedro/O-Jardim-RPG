@@ -125,10 +125,66 @@ export interface IEfeitoClima {
   luz?: number;
 }
 
+/** Como a luz da cena acompanha a hora: não muda (padrão), segue o calendário do mundo ou fica numa hora fixa. */
+export type ModoCeu = 'nenhum' | 'mundo' | 'fixo';
+
+export interface ICeu {
+  modo: ModoCeu;
+  /** Só no modo fixo: minutos desde a meia-noite. */
+  minuto: number;
+}
+
 export interface IClima {
   efeitos: IEfeitoClima[];
   /** direcao em graus na tela (0 para a direita, 90 para baixo); forca de 0 a 1. */
   vento: { direcao: number; forca: number };
+  ceu: ICeu;
+}
+
+export interface IPontoMapa {
+  x: number;
+  y: number;
+}
+
+/** Portal da cena: soltar um token numa boca leva à outra. O jogador recebe só os visíveis, e a boca na névoa vem null. */
+export interface IPortal {
+  id: string;
+  nome: string;
+  a: IPontoMapa | null;
+  b: IPontoMapa | null;
+  /** Raio da boca, em casas. */
+  raio: number;
+  mao: 'dupla' | 'unica';
+  usa: 'todos' | 'jogadores' | 'mestre';
+  fluxo: string;
+  visivel: boolean;
+  confirmar: boolean;
+  ligado: boolean;
+}
+
+/** Porta, janela ou porta secreta do mapa montado no construtor, em px do mapa. O jogador não recebe a secreta. */
+export interface IAberturaCena {
+  id: string;
+  tipo: 'porta' | 'janela' | 'secreta';
+  estado: 'fechada' | 'aberta' | 'trancada';
+  material?: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+/** A hora do mundo para a luz do dia e o topo do mapa. `data` vem null quando o calendário está escondido do jogador. */
+export interface ITempoMapa {
+  minuto: number;
+  hora_extenso: string;
+  estacao: string;
+  /** Posição na lunação: 0 é Lua Nova, 0,5 é Cheia. */
+  lua: number;
+  lua_carmesim: boolean;
+  /** O Mestre já mexeu no calendário desta campanha. */
+  em_uso: boolean;
+  data: { ano: number; mes: number; dia: number; mes_nome: string; extenso: string } | null;
 }
 
 export interface ICena extends IResumoCena {
@@ -139,6 +195,9 @@ export interface ICena extends IResumoCena {
   mapa: IMapaDaCena | null;
   nevoa: INevoa;
   clima: IClima;
+  portais: IPortal[];
+  /** Só nas cenas publicadas pelo construtor de mapas. */
+  aberturas?: IAberturaCena[];
 }
 
 export interface INevoaPayload {
@@ -161,7 +220,16 @@ export interface IEstadoMapa {
   tokens: ITokenMapa[];
   /** Quando o Mestre trava uma moldura, todos os tokens usam ela. */
   moldura_mesa: string | null;
+  /** null antes da sessão abrir para o jogador. */
+  tempo: ITempoMapa | null;
   trazidos?: number;
+}
+
+/** Travessia de um portal: de onde o token saiu (null se estava na névoa para quem vê) e a cor. */
+export interface ITravessia {
+  portal: string;
+  fluxo: string;
+  de: [number, number] | null;
 }
 
 export interface ICenaPayload {
@@ -226,8 +294,8 @@ export const mapaApi = {
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/trazer`, { method: 'POST', body: ponto, ...ESTADO }),
   editarToken: (campanhaId: string, tokenId: string, dados: ITokenEdicao) =>
     api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'PUT', body: dados, ...ESTADO }),
-  moverToken: (campanhaId: string, tokenId: string, ponto: { x: number; y: number }) =>
-    api<{ x: number; y: number; versao: number }>(`${base(campanhaId)}/tokens/${tokenId}/mover`, { method: 'POST', body: ponto }),
+  moverToken: (campanhaId: string, tokenId: string, ponto: { x: number; y: number; atravessar?: string }) =>
+    api<{ x: number; y: number; versao: number; travessia: ITravessia | null }>(`${base(campanhaId)}/tokens/${tokenId}/mover`, { method: 'POST', body: ponto }),
   apagarToken: (campanhaId: string, tokenId: string) =>
     api<null>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'DELETE' }),
   /** Moldura e enquadramento do personagem: valem em todas as cenas. */
@@ -237,6 +305,8 @@ export const mapaApi = {
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/nevoa`, { method: 'POST', body: dados, ...ESTADO }),
   mudarClima: (campanhaId: string, cenaId: string, clima: IClima) =>
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/clima`, { method: 'PUT', body: clima, ...ESTADO }),
+  mudarPortais: (campanhaId: string, cenaId: string, portais: IPortal[]) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/portais`, { method: 'PUT', body: { portais }, ...ESTADO }),
   configurar: (campanhaId: string, dados: { moldura_mesa: string | null }) =>
     api<{ moldura_mesa: string | null }>(`${base(campanhaId)}/config`, { method: 'PUT', body: dados }),
 };

@@ -5,12 +5,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Cloud, CloudOff, CloudRain, Crosshair, Expand, Eye, FolderOpen, Hand, Loader2, MapPin, Maximize2, Minimize2, PanelRightClose, PanelRightOpen, Ruler, Sparkles, Swords, UserRound, Users, Wand2, Wifi, WifiOff,
+  ArrowLeft, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Hand, Loader2, MapPin, Maximize2, Minimize2, Moon, Orbit, PanelRightClose, PanelRightOpen, Ruler, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, UserRound, Users, Wand2, Wifi, WifiOff,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSessaoStore } from '../../store/useSessaoStore';
 import { assinarEventosDaCampanha } from '../../services/campanhaEventos';
-import { mapaApi, type IAreaClima, type IClima, type IEstadoMapa, type IFormaNevoa, type IMagiaMapa, type INevoaPayload, type ITokenEdicao, type ITokenMapa } from '../../services/mapaApi';
+import { mapaApi, type IAreaClima, type ICeu, type IClima, type IEstadoMapa, type IFormaNevoa, type IMagiaMapa, type INevoaPayload, type IPortal, type ITokenEdicao, type ITokenMapa } from '../../services/mapaApi';
+import { calendarioMundoApi } from '../../services/calendarioMundoApi';
 import type { IItemAcervo } from '../../services/acervoApi';
 import { confirmar, pedirTexto } from '../../components/avisos/confirmacao';
 import { avisar } from '../../components/avisos/avisos';
@@ -26,10 +27,17 @@ import { OficinaGaveta } from './oficina/OficinaGaveta';
 import { BarraNevoa } from './componentes/BarraNevoa';
 import { BarraMagia } from './componentes/BarraMagia';
 import { PainelClima } from './componentes/PainelClima';
+import { PainelTempo } from './componentes/PainelTempo';
+import { PainelPortal } from './componentes/PainelPortal';
+import { PreferenciasBarras } from './componentes/PreferenciasBarras';
+import { ConstrutorMapa } from './construtor/ConstrutorMapa';
+import { luzDaCena, nomeDaLua, periodoDaHora, type ChavePeriodo } from './motor/ceuConta';
+import { portalNovo, portalQuePergunta, type LadoPortal } from './motor/portaisConta';
 import { MedidorPainel } from './componentes/Medidor';
 import { Medidor } from './medidor';
 import { aplicarDelta, type DeltaMapa } from './delta';
 import type { Enquadramento } from './motor/molduras';
+import { lerPreferenciasBarras, normalizarPreferenciasBarras, salvarPreferenciasBarras, type IPreferenciasBarrasMapa } from './motor/barrasToken';
 import './mapa.css';
 
 interface Pessoa {
@@ -66,8 +74,12 @@ function lerMagiaLocal(): OpcoesMagia {
   return { forma: 'circulo', fluxo: 'essencia' };
 }
 
-// Eventos da campanha que não mexem no mapa (rolagem, destaque, calendário, mesa).
-const EVENTOS_SEM_EFEITO = new Set(['registro', 'destaque_mesa', 'calendario', 'mesa']);
+// Eventos da campanha que não mexem no mapa (rolagem, destaque, mesa). O calendário mexe: a hora muda a luz.
+const EVENTOS_SEM_EFEITO = new Set(['registro', 'destaque_mesa', 'mesa']);
+
+const ICONE_DO_PERIODO: Record<ChavePeriodo, typeof Sun> = {
+  madrugada: Moon, amanhecer: Sunrise, manha: Sun, tarde: Sun, entardecer: Sunset, noite: Moon,
+};
 
 function agoraServidor() {
   return performance.now() + performance.timeOrigin;
@@ -76,6 +88,8 @@ function agoraServidor() {
 export const MapaPage = () => {
   const navigate = useNavigate();
   const campanhaAtiva = useAuthStore((s) => s.campanhaAtiva);
+  const usuario = useAuthStore((s) => s.usuario);
+  const usuarioId = usuario?.id ?? null;
   const campanhaId = campanhaAtiva?.id ?? null;
   const { conectarSSE, desconectarSSE, iniciativa, turnoAtualId, emCombate, rodada, sessaoId } = useSessaoStore();
 
@@ -94,6 +108,12 @@ export const MapaPage = () => {
   const [telaCheia, setTelaCheia] = useState(false);
   const [palcoPronto, setPalcoPronto] = useState(false);
   const [climaAberto, setClimaAberto] = useState(false);
+  const [tempoAberto, setTempoAberto] = useState(false);
+  const [tempoOcupado, setTempoOcupado] = useState(false);
+  const [portalEscolhido, setPortalEscolhido] = useState<string | null>(null);
+  const [construtorAberto, setConstrutorAberto] = useState(false);
+  const [barrasAberto, setBarrasAberto] = useState(false);
+  const [preferenciasBarras, setPreferenciasBarras] = useState<IPreferenciasBarrasMapa>(() => lerPreferenciasBarras(usuarioId));
   const [climaLocal, setClimaLocal] = useState(lerClimaLocal);
   const [opcoesNevoa, setOpcoesNevoa] = useState<OpcoesNevoa>({ op: 'revelar', forma: 'pincel', raio: 100 });
   const [marcandoArea, setMarcandoArea] = useState(false);
@@ -113,6 +133,7 @@ export const MapaPage = () => {
   const ultimoEnvio = useRef(new Map<string, number>()).current;
   const estadoRef = useRef(estado);
   estadoRef.current = estado;
+  const usuarioBarrasRef = useRef(usuarioId);
   const cenaVistaRef = useRef(cenaVista);
   cenaVistaRef.current = cenaVista;
   const recargaAgendada = useRef<number | null>(null);
@@ -143,6 +164,18 @@ export const MapaPage = () => {
     }
   }, [campanhaId, medidor]);
 
+  useEffect(() => {
+    if (usuarioBarrasRef.current === usuarioId) return;
+    usuarioBarrasRef.current = usuarioId;
+    setPreferenciasBarras(lerPreferenciasBarras(usuarioId));
+  }, [usuarioId]);
+
+  const mudarPreferenciasBarras = useCallback((novas: IPreferenciasBarrasMapa) => {
+    const limpas = normalizarPreferenciasBarras(novas);
+    setPreferenciasBarras(limpas);
+    salvarPreferenciasBarras(usuarioId, limpas);
+  }, [usuarioId]);
+
   useEffect(() => () => {
     if (novaTentativa.current !== null) window.clearTimeout(novaTentativa.current);
   }, []);
@@ -158,6 +191,15 @@ export const MapaPage = () => {
   const atualizarPosicao = useCallback((id: string, x: number, y: number) => {
     setEstado((atual) => atual && { ...atual, tokens: atual.tokens.map((t) => (t.id === id ? { ...t, x, y } : t)) });
   }, []);
+
+  /** O token atravessou um portal: some de um lado e surge do outro. Quem soltou vê a tela ir junto. */
+  const atravessou = useCallback((id: string, x: number, y: number, de: number[] | null, fluxo: string, meu: boolean) => {
+    interpolador.esquecer(id);
+    ultimaAmostra.delete(id);
+    atualizarPosicao(id, x, y);
+    palcoRef.current?.teletransportar(id, de ? { x: de[0], y: de[1] } : null, { x, y }, fluxo);
+    if (meu) palcoRef.current?.centralizar(x, y);
+  }, [atualizarPosicao, interpolador, ultimaAmostra]);
 
   // ---------------------------------------------------------- tempo real
 
@@ -214,6 +256,12 @@ export const MapaPage = () => {
         if (mensagem.t === 'token') atualizarPosicao(id, Number(mensagem.x), Number(mensagem.y));
         break;
       }
+      case 'portal': {
+        // Alguém atravessou um portal (ou eu: a resposta ao meu soltar vem igual).
+        const de = Array.isArray(mensagem.de) ? (mensagem.de as number[]) : null;
+        atravessou(String(mensagem.token), Number(mensagem.x), Number(mensagem.y), de, String(mensagem.fluxo), mensagem.por === estadoRef.current?.usuario_id);
+        break;
+      }
       case 'mudou':
         agendarRecarga();
         break;
@@ -248,7 +296,7 @@ export const MapaPage = () => {
       default:
         break;
     }
-  }, [agendarRecarga, atualizarPosicao, interpolador, ultimaAmostra, medidor]);
+  }, [agendarRecarga, atualizarPosicao, interpolador, ultimaAmostra, medidor, atravessou]);
 
   /** A cada quadro: tokens que outra pessoa arrasta deslizam pelas posições interpoladas. */
   const aplicarRemotos = useCallback(() => {
@@ -299,6 +347,23 @@ export const MapaPage = () => {
     }
   }, [pendentesArrasto, ultimaEnviada, ultimoEnvio, horaDoGesto]);
 
+  /** Soltar de verdade: pelo tempo real ou, na cena em preparo, pela rota. `atravessar`: aceitou o portal que pergunta. */
+  const enviarSoltar = useCallback((id: string, x: number, y: number, atravessar?: string) => {
+    const atual = estadoRef.current;
+    if (!atual?.cena || !campanhaId) return;
+    if (atual.cena.ativa && conexaoRef.current?.aberta) {
+      conexaoRef.current.enviar({ t: 'soltar', token: id, x, y, ...(atravessar ? { atravessar } : {}), ...horaDoGesto() });
+      return;
+    }
+    // Cena em preparo (só o Mestre vê) ou sem tempo real: grava pela rota.
+    mapaApi.moverToken(campanhaId, id, { x, y, ...(atravessar ? { atravessar } : {}) }).then((resposta) => {
+      if (resposta?.travessia) atravessou(id, resposta.x, resposta.y, resposta.travessia.de, resposta.travessia.fluxo, true);
+    }).catch((falha) => {
+      setErro(falha instanceof Error ? falha.message : 'O token não foi salvo.');
+      agendarRecarga();
+    });
+  }, [agendarRecarga, atravessou, campanhaId, horaDoGesto]);
+
   const soltar = useCallback((id: string, x: number, y: number) => {
     const atual = estadoRef.current;
     if (!atual?.cena || !campanhaId) return;
@@ -306,16 +371,14 @@ export const MapaPage = () => {
     ultimaEnviada.delete(id);
     ultimoEnvio.delete(id);
     atualizarPosicao(id, x, y);
-    if (atual.cena.ativa && conexaoRef.current?.aberta) {
-      conexaoRef.current.enviar({ t: 'soltar', token: id, x, y, ...horaDoGesto() });
-      return;
+    enviarSoltar(id, x, y);
+    // Portal que pede licença: o token fica na boca até a pessoa dizer que atravessa.
+    const portal = portalQuePergunta(atual.cena.portais ?? [], x, y, atual.cena.grade.tamanho, atual.gestor);
+    if (portal) {
+      void confirmar({ titulo: `Atravessar ${portal.nome}?`, mensagem: 'O token vai para o outro lado do portal.', rotuloConfirmar: 'Atravessar' })
+        .then((sim) => sim && enviarSoltar(id, x, y, portal.id));
     }
-    // Cena em preparo (só o Mestre vê) ou sem tempo real: grava pela rota.
-    mapaApi.moverToken(campanhaId, id, { x, y }).catch((falha) => {
-      setErro(falha instanceof Error ? falha.message : 'O token não foi salvo.');
-      agendarRecarga();
-    });
-  }, [agendarRecarga, atualizarPosicao, campanhaId, ultimoEnvio, horaDoGesto, pendentesArrasto, ultimaEnviada]);
+  }, [atualizarPosicao, campanhaId, enviarSoltar, ultimoEnvio, pendentesArrasto, ultimaEnviada]);
 
   /** A posição fica guardada e sai no ritmo do quadro: mesmo com a mão parada, a última chega aos outros. */
   const arrastar = useCallback((id: string, x: number, y: number) => {
@@ -364,9 +427,35 @@ export const MapaPage = () => {
     conexaoRef.current?.enviar({ t: 'magia', ...magia });
   }, []);
 
+  /** A lista inteira de portais da cena vai para o servidor; `escolherNovo` marca o último (o que acabou de nascer). */
+  const salvarPortais = useCallback(async (lista: IPortal[], escolherNovo = false) => {
+    const cenaAtual = estadoRef.current?.cena;
+    if (!campanhaId || !cenaAtual) return;
+    try {
+      const resposta = await mapaApi.mudarPortais(campanhaId, cenaAtual.id, lista);
+      setEstado(resposta);
+      const gravados = resposta.cena?.portais ?? [];
+      if (escolherNovo) setPortalEscolhido(gravados[gravados.length - 1]?.id ?? null);
+    } catch (falha) {
+      setErro(falha instanceof Error ? falha.message : 'O portal não foi salvo.');
+    } finally {
+      palcoRef.current?.esquecerBocaArrastada();
+    }
+  }, [campanhaId]);
+
+  const criarPortal = useCallback((a: IPonto, b: IPonto) => {
+    const portais = estadoRef.current?.cena?.portais ?? [];
+    void salvarPortais([...portais, portalNovo(a, b, portais.length + 1)], true);
+  }, [salvarPortais]);
+
+  const moverBoca = useCallback((id: string, lado: LadoPortal, ponto: IPonto) => {
+    const portais = estadoRef.current?.cena?.portais ?? [];
+    void salvarPortais(portais.map((portal) => (portal.id === id ? { ...portal, [lado]: ponto } : portal)));
+  }, [salvarPortais]);
+
   // O palco nasce uma vez; os gestos chegam sempre na versão mais nova das funções.
-  const gestos = useRef({ arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia });
-  gestos.current = { arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia };
+  const gestos = useRef({ arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia, criarPortal, moverBoca });
+  gestos.current = { arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia, criarPortal, moverBoca };
 
   useEffect(() => {
     if (!alvoRef.current) return undefined;
@@ -381,6 +470,9 @@ export const MapaPage = () => {
       aoNevoa: (forma) => gestos.current.desenharNevoa(forma),
       aoArea: (area) => gestos.current.marcarArea(area),
       aoMagia: (magia) => gestos.current.lancarMagia(magia),
+      aoPortalNovo: (a, b) => gestos.current.criarPortal(a, b),
+      aoSelecionarPortal: setPortalEscolhido,
+      aoMoverPortal: (id, lado, ponto) => gestos.current.moverBoca(id, lado, ponto),
     }).then((criado) => {
       if (!vivo) {
         criado.destruir();
@@ -447,10 +539,32 @@ export const MapaPage = () => {
     palco.definirTokens(estado?.cena ? estado.tokens : []);
   }, [estado, palcoPronto, campanhaId]);
 
+  // Luz do dia: a hora do mundo (ou a fixa da cena). Ao trocar de cena ela vale na hora; depois muda devagar.
+  const cenaDaLuz = useRef<string | null>(null);
+  useEffect(() => {
+    const palco = palcoRef.current;
+    if (!palco || !palcoPronto) return;
+    const cenaAtual = estado?.cena ?? null;
+    const trocou = (cenaAtual?.id ?? null) !== cenaDaLuz.current;
+    cenaDaLuz.current = cenaAtual?.id ?? null;
+    palco.definirCeu(cenaAtual ? luzDaCena(cenaAtual.clima.ceu, estado?.tempo ?? null) : null, trocou);
+  }, [estado, palcoPronto]);
+
+  useEffect(() => {
+    palcoRef.current?.selecionarPortal(portalEscolhido);
+  }, [portalEscolhido, palcoPronto]);
+
   useEffect(() => {
     palcoRef.current?.definirFerramenta(ferramenta);
     if (ferramenta !== 'area') setMarcandoArea(false);
+    // Com a ferramenta de portal, o menu do token sai da frente; fora dela, o painel do portal fecha.
+    if (ferramenta === 'portal') setSelecionado(null);
+    else setPortalEscolhido(null);
   }, [ferramenta, palcoPronto]);
+
+  useEffect(() => {
+    palcoRef.current?.definirPreferenciasBarras(preferenciasBarras);
+  }, [preferenciasBarras, palcoPronto]);
 
   useEffect(() => {
     palcoRef.current?.definirOpcoesNevoa(opcoesNevoa);
@@ -505,6 +619,8 @@ export const MapaPage = () => {
     const aoTeclar = (evento: KeyboardEvent) => {
       const alvo = evento.target as HTMLElement | null;
       if (alvo && ['INPUT', 'SELECT', 'TEXTAREA'].includes(alvo.tagName)) return;
+      // O construtor de mapas tem os atalhos dele.
+      if (construtorAberto) return;
       const palco = palcoRef.current;
       if ((evento.ctrlKey || evento.metaKey) && evento.shiftKey && (evento.key === 'd' || evento.key === 'D')) {
         evento.preventDefault();
@@ -524,10 +640,12 @@ export const MapaPage = () => {
       if (evento.key === 'p' || evento.key === 'P') setFerramenta('ping');
       if (evento.key === 'm' || evento.key === 'M') setFerramenta('magia');
       if ((evento.key === 'n' || evento.key === 'N') && gestorAgora) setFerramenta('nevoa');
+      if ((evento.key === 'o' || evento.key === 'O') && gestorAgora) setFerramenta('portal');
       if (evento.key === 'Enter' && ferramenta === 'nevoa') palco?.fecharPoligono();
       if (evento.key === 'Escape') {
         if (palco?.desenhando) palco.cancelarDesenho();
-        else if (ferramenta === 'area' || ferramenta === 'nevoa') setFerramenta('mover');
+        else if (ferramenta === 'portal' && portalEscolhido) setPortalEscolhido(null);
+        else if (ferramenta === 'area' || ferramenta === 'nevoa' || ferramenta === 'portal') setFerramenta('mover');
         else setSelecionado(null);
       }
     };
@@ -543,7 +661,11 @@ export const MapaPage = () => {
       document.removeEventListener('fullscreenchange', aoTelaCheia);
       document.removeEventListener('visibilitychange', aoMudarAba);
     };
-  }, [ferramenta, gestorAgora, enviarNevoa, medidor]);
+  }, [ferramenta, gestorAgora, enviarNevoa, medidor, portalEscolhido, construtorAberto]);
+
+  useEffect(() => {
+    palcoRef.current?.pausar(construtorAberto);
+  }, [construtorAberto, palcoPronto]);
 
   // ------------------------------------------------------- ações do Mestre
 
@@ -646,6 +768,25 @@ export const MapaPage = () => {
     void comErro(() => mapaApi.mudarClima(campanhaId, cena.id, clima)).then((r) => r && setEstado(r));
   };
 
+  /** O calendário da campanha mudou pelo painel Tempo; o mapa recebe a hora nova pelo tempo real. */
+  const mexerNoTempo = async (acao: (id: string) => Promise<unknown>) => {
+    if (!campanhaId) return;
+    setTempoOcupado(true);
+    try {
+      await acao(campanhaId);
+      if (!conexaoRef.current?.aberta) void recarregar();
+    } catch (falha) {
+      setErro(falha instanceof Error ? falha.message : 'A hora não mudou.');
+    } finally {
+      setTempoOcupado(false);
+    }
+  };
+
+  const salvarCeu = (ceu: ICeu) => {
+    if (!campanhaId || !cena) return;
+    void comErro(() => mapaApi.mudarClima(campanhaId, cena.id, { ...cena.clima, ceu })).then((r) => r && setEstado(r));
+  };
+
   const pedirArea = (aplicar: (area: IAreaClima) => void) => {
     aplicarArea.current = aplicar;
     setMarcandoArea(true);
@@ -674,6 +815,12 @@ export const MapaPage = () => {
 
   const nomeDaVez = emCombate ? iniciativa.find((e) => e.id === turnoAtualId)?.nome ?? null : null;
   const meuToken = tokens.find((t) => t.e_meu) ?? null;
+  const tempo = estado?.tempo ?? null;
+  // O relógio aparece para o Mestre e, para o jogador, quando a campanha usa o calendário ou a cena segue a hora.
+  const mostrarTempo = Boolean(tempo && (gestor || tempo.em_uso || (cena?.clima.ceu?.modo ?? 'nenhum') !== 'nenhum'));
+  const periodoAgora = tempo ? periodoDaHora(tempo.minuto) : null;
+  const IconeTempo = periodoAgora ? ICONE_DO_PERIODO[periodoAgora.chave] : Clock3;
+  const portalDoPainel = gestor && ferramenta === 'portal' ? cena?.portais.find((p) => p.id === portalEscolhido) ?? null : null;
 
   // ------------------------------------------------------------------ tela
 
@@ -694,6 +841,28 @@ export const MapaPage = () => {
           {cena && gestor && <span className={cena.ativa ? 'selo ativo' : 'selo'}>{cena.ativa ? 'Na mesa' : 'Só você vê'}</span>}
           {estado && !estado.ao_vivo && gestor && <span className="selo">Sessão em preparo</span>}
         </div>
+        {mostrarTempo && tempo && periodoAgora && (
+          <ComDica dica={`${tempo.data?.extenso ?? 'Hora do mundo'} · ${nomeDaLua(tempo.lua, tempo.lua_carmesim)}${gestor ? '. Clique para mudar a hora.' : ''}`}>
+            {gestor ? (
+              <button
+                type="button"
+                className={`mapa-tempo periodo-${periodoAgora.chave}${tempoAberto ? ' ativo' : ''}`}
+                aria-label="Tempo do mundo"
+                onClick={() => {
+                  setTempoAberto((v) => !v);
+                  setClimaAberto(false);
+                  setConfigAberta(false);
+                }}
+              >
+                <IconeTempo size={14} /> <strong>{tempo.hora_extenso}</strong> <span>{periodoAgora.rotulo}</span>
+              </button>
+            ) : (
+              <span className={`mapa-tempo periodo-${periodoAgora.chave}`}>
+                <IconeTempo size={14} /> <strong>{tempo.hora_extenso}</strong> <span>{periodoAgora.rotulo}</span>
+              </span>
+            )}
+          </ComDica>
+        )}
         {emCombate && (
           <div className="mapa-combate" aria-live="polite">
             <Swords size={14} />
@@ -739,6 +908,12 @@ export const MapaPage = () => {
         <span className="mapa-separador" />
         <span className="mapa-grupo-rotulo">Vista</span>
         <BotaoFerramenta icone={Expand} rotulo="Ver o mapa inteiro" disabled={!cena} onClick={() => palcoRef.current?.enquadrar()} />
+        <BotaoFerramenta
+          icone={SlidersHorizontal}
+          rotulo="Aparência das barras neste aparelho"
+          ativo={barrasAberto}
+          onClick={() => setBarrasAberto((aberto) => !aberto)}
+        />
         {meuToken && !gestor && (
           <BotaoFerramenta icone={UserRound} rotulo="Ir até o meu personagem" onClick={() => centralizar(meuToken)} />
         )}
@@ -765,10 +940,24 @@ export const MapaPage = () => {
               onClick={() => {
                 setClimaAberto((v) => !v);
                 setConfigAberta(false);
+                setTempoAberto(false);
+              }}
+            />
+            <BotaoFerramenta icone={Orbit} rotulo="Portais" atalho="O" disabled={!cena} ativo={ferramenta === 'portal'} onClick={() => setFerramenta((f) => (f === 'portal' ? 'mover' : 'portal'))} />
+            <BotaoFerramenta
+              icone={Clock3}
+              rotulo="Tempo do mundo e luz da cena"
+              ativo={tempoAberto}
+              disabled={!tempo}
+              onClick={() => {
+                setTempoAberto((v) => !v);
+                setClimaAberto(false);
+                setConfigAberta(false);
               }}
             />
             <BotaoFerramenta icone={Users} rotulo="Trazer os participantes da Sessão" disabled={!cena} onClick={() => void trazerParticipantes()} />
             <BotaoFerramenta icone={FolderOpen} rotulo="Acervo de mapas e tokens" ativo={acervoAberto} onClick={() => setAcervoAberto((v) => !v)} />
+            <BotaoFerramenta icone={DraftingCompass} rotulo="Construtor de mapas" ativo={construtorAberto} onClick={() => setConstrutorAberto(true)} />
             <BotaoFerramenta icone={Wand2} rotulo="Oficina: token novo, fundo e qualidade" ativo={oficinaAberta} onClick={() => setOficinaAberta((v) => !v)} />
           </>
         )}
@@ -807,6 +996,37 @@ export const MapaPage = () => {
         {gestor && cena && ferramenta === 'area' && (
           <div className="mapa-aviso-topo">Arraste no mapa a área do efeito. Esc cancela.</div>
         )}
+        {gestor && cena && ferramenta === 'portal' && !portalDoPainel && (
+          <div className="mapa-aviso-topo">Clique onde fica a entrada e depois a saída. Arraste uma boca para mudar de lugar. Esc sai.</div>
+        )}
+        {portalDoPainel && (
+          <PainelPortal
+            portal={portalDoPainel}
+            onMudar={(novo) => void salvarPortais((cena?.portais ?? []).map((p) => (p.id === novo.id ? novo : p)))}
+            onApagar={async () => {
+              if (!(await confirmar({ mensagem: `Apagar o portal "${portalDoPainel.nome}"?`, rotuloConfirmar: 'Apagar', tom: 'perigo' }))) return;
+              setPortalEscolhido(null);
+              void salvarPortais((cena?.portais ?? []).filter((p) => p.id !== portalDoPainel.id));
+            }}
+            onIrPara={(lado) => {
+              const boca = portalDoPainel[lado];
+              if (boca) palcoRef.current?.centralizar(boca.x, boca.y);
+            }}
+            onFechar={() => setPortalEscolhido(null)}
+          />
+        )}
+        {tempoAberto && gestor && tempo && (
+          <PainelTempo
+            tempo={tempo}
+            ceu={cena?.clima.ceu ?? null}
+            ocupado={tempoOcupado}
+            onAvancar={(minutos) => void mexerNoTempo((id) => calendarioMundoApi.avancarTempo(id, minutos))}
+            onDesfazer={() => void mexerNoTempo((id) => calendarioMundoApi.desfazer(id))}
+            onCeu={salvarCeu}
+            onPreviaCeu={(ceu) => palcoRef.current?.definirCeu(luzDaCena(ceu, tempo))}
+            onFechar={() => setTempoAberto(false)}
+          />
+        )}
         {tokenSelecionado && (
           <MenuToken
             token={tokenSelecionado}
@@ -819,6 +1039,12 @@ export const MapaPage = () => {
             onFechar={() => setSelecionado(null)}
           />
         )}
+        <PreferenciasBarras
+          aberto={barrasAberto}
+          preferencias={preferenciasBarras}
+          onMudar={mudarPreferenciasBarras}
+          onFechar={() => setBarrasAberto(false)}
+        />
         {climaAberto && cena && gestor && (
           <PainelClima
             clima={cena.clima}
@@ -849,6 +1075,18 @@ export const MapaPage = () => {
           onNovaCena={(item) => void novaCena(item)}
           onPorNaCena={(item) => void porNaCena(item)}
         />
+        {gestor && campanhaId && construtorAberto && (
+          <ConstrutorMapa
+            campanhaId={campanhaId}
+            cenaAtual={cena ? { id: cena.id, nome: cena.nome } : null}
+            onPublicado={(novo) => {
+              setConstrutorAberto(false);
+              setEstado(novo);
+              if (novo.cena) setCenaVista(novo.cena.id);
+            }}
+            onFechar={() => setConstrutorAberto(false)}
+          />
+        )}
         {gestor && campanhaId && (
           <OficinaGaveta
             aberto={oficinaAberta}

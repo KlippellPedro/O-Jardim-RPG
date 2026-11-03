@@ -141,7 +141,7 @@ export const PainelCalendarioMestre = ({ campanhaId, dados, ocupado, agir, preen
       <div className={cartao}>
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h3 className={tituloDoCartao}>Mexer no tempo</h3>
-          <p className="text-xs text-gray-500">Hoje: {dados.hoje_extenso}</p>
+          <p className="text-xs text-gray-500">Hoje: {dados.hoje_extenso}{dados.hora_extenso ? `, ${dados.hora_extenso}` : ''}</p>
         </div>
 
         <div>

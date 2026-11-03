@@ -716,6 +716,71 @@
   left: 12px;
 }
 
+.mapa-config-barras {
+  width: min(340px, calc(100% - 24px));
+}
+
+.mapa-config-barras > .mapa-dica {
+  margin-top: 0;
+}
+
+.mapa-preferencias-barras-lista {
+  display: grid;
+  gap: 6px;
+}
+
+.mapa-preferencia-barra {
+  display: grid;
+  grid-template-columns: minmax(66px, 1fr) minmax(96px, 1.4fr) auto;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 4px 6px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.mapa-preferencia-barra strong {
+  font-size: 12px;
+}
+
+.mapa-preferencia-barra select {
+  min-width: 0;
+  padding: 4px 5px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--mapa-texto);
+}
+
+.mapa-preferencia-cor {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--mapa-apagado);
+  font-size: 10px;
+}
+
+.mapa-preferencia-cor input {
+  width: 25px;
+  height: 25px;
+  padding: 1px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: transparent;
+}
+
+.mapa-preferencia-cor input:disabled {
+  opacity: 0.4;
+}
+
+.mapa-barras-restaurar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
 .mapa-menu-token header,
 .mapa-config header {
   display: flex;
@@ -1534,3 +1599,119 @@
   justify-content: flex-end;
   gap: 6px;
 }
+
+/* Relógio do mundo no topo: a cor acompanha o período do dia. */
+.mapa-tempo {
+  --cor-periodo: #fcd34d;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid color-mix(in srgb, var(--cor-periodo) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cor-periodo) 10%, transparent);
+  color: color-mix(in srgb, var(--cor-periodo) 80%, #ffffff);
+  font: inherit;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+button.mapa-tempo {
+  cursor: pointer;
+}
+
+button.mapa-tempo:hover,
+button.mapa-tempo.ativo {
+  background: color-mix(in srgb, var(--cor-periodo) 20%, transparent);
+}
+
+.mapa-tempo strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.mapa-tempo.periodo-amanhecer { --cor-periodo: #fb923c; }
+.mapa-tempo.periodo-manha,
+.mapa-tempo.periodo-tarde { --cor-periodo: #fcd34d; }
+.mapa-tempo.periodo-entardecer { --cor-periodo: #f472b6; }
+.mapa-tempo.periodo-noite,
+.mapa-tempo.periodo-madrugada { --cor-periodo: #93c5fd; }
+
+/* Painel Tempo do Mestre. */
+.mapa-tempo-painel {
+  width: 300px;
+}
+
+.mapa-tempo-painel fieldset,
+.mapa-portal-painel fieldset {
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+}
+
+.mapa-tempo-painel legend {
+  padding: 0 4px;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+}
+
+.mapa-tempo-agora {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.mapa-tempo-agora strong {
+  font-size: 28px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.mapa-tempo-agora span {
+  color: var(--mapa-ouro);
+}
+
+.mapa-tempo-data {
+  margin: 2px 0 10px;
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.mapa-tempo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mapa-tempo-rodape {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 10px;
+}
+
+.mapa-tempo-rodape a {
+  text-decoration: none;
+}
+
+.mapa-tempo-painel .mapa-segmentos {
+  margin-bottom: 8px;
+}
+
+/* Painel do portal: à direita, onde fica o menu do token (que fecha com a ferramenta de portal). */
+.mapa-config.mapa-portal-painel {
+  left: auto;
+  right: 12px;
+  width: 290px;
+}
+
+.mapa-portal-painel .mapa-fluxos,
+.mapa-portal-painel .mapa-segmentos {
+  margin: 4px 0 10px;
+}
+
+.mapa-portal-painel .mapa-menu-opcoes {
+  display: grid;
+  gap: 6px;
+  margin: 6px 0;
+}
+

@@ -12,6 +12,13 @@ import type { IBarraToken, ITokenMapa, LadoToken } from '../../../services/mapaA
 import { abreviarNome, iniciais, siglaDaCondicao } from './geometria';
 import { CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, desenharMoldura } from './molduras';
 import { texturaDeBrilho } from './luzes';
+import {
+  barrasParaDesenhar,
+  fracaoDaBarra,
+  porcentagemDaBarra,
+  type IPreferenciasBarrasMapa,
+  PREFERENCIAS_BARRAS_PADRAO,
+} from './barrasToken';
 
 const ENTRADA_MS = 340;
 const SAIDA_MS = 240;
@@ -24,13 +31,6 @@ const suaveSaida = (t: number) => 1 - (1 - t) ** 3;
 const comQuique = (t: number) => 1 + 2.2 * (t - 1) ** 3 + 1.2 * (t - 1) ** 2;
 
 export { CORES_LADO };
-
-const CORES_BARRA: Record<IBarraToken['tipo'], string> = {
-  vida: '#e5484d',
-  mana: '#3e63dd',
-  estamina: '#30a46c',
-  sanidade: '#8e4ec6',
-};
 
 const LADO_TEXTURA = 256;
 const texturasDeMoldura = new Map<string, Texture>();
@@ -52,13 +52,107 @@ export function esquecerTexturasDeMoldura() {
   texturasDeMoldura.clear();
 }
 
-function desenharBarras(g: Graphics, barras: IBarraToken[], largura: number, topo: number) {
-  const altura = Math.max(4, largura * 0.07);
-  barras.forEach((barra, i) => {
-    const y = topo - (i + 1) * (altura + 2);
-    const fracao = barra.fracao ?? (barra.maximo ? Math.max(0, Math.min(1, (barra.atual ?? 0) / barra.maximo)) : 0);
-    g.roundRect(-largura / 2, y, largura, altura, altura / 2).fill({ color: '#000000', alpha: 0.65 });
-    if (fracao > 0) g.roundRect(-largura / 2, y, Math.max(altura, largura * fracao), altura, altura / 2).fill(CORES_BARRA[barra.tipo]);
+const ROTULOS_BARRA: Record<IBarraToken['tipo'], string> = {
+  vida: 'Vida', mana: 'Mana', estamina: 'Estamina', sanidade: 'Sanidade',
+};
+
+function valorCurto(barra: IBarraToken): string {
+  if (barra.atual !== undefined && barra.maximo !== undefined) return `${barra.atual}/${barra.maximo}`;
+  if (barra.rotulo) return barra.rotulo;
+  return `${porcentagemDaBarra(barra)}%`;
+}
+
+function textoPequeno(conteudo: string, tamanho: number, cor = '#fff') {
+  const texto = new Text({
+    text: conteudo,
+    style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: tamanho, fill: cor, stroke: { color: '#09080d', width: Math.max(2, tamanho * 0.35) } },
+  });
+  texto.anchor.set(0.5);
+  return texto;
+}
+
+function desenharBarra(g: Graphics, barra: IBarraToken, cor: string, x: number, y: number, largura: number, altura: number) {
+  const fracao = fracaoDaBarra(barra);
+  g.roundRect(x, y, largura, altura, altura / 2)
+    .fill({ color: '#0d0b12', alpha: 0.9 })
+    .stroke({ width: Math.max(0.5, altura * 0.12), color: '#ffffff', alpha: 0.16 });
+  const preenchida = largura * fracao;
+  if (preenchida > 0) {
+    g.roundRect(x, y, preenchida, altura, Math.min(altura / 2, preenchida / 2)).fill(cor);
+    if (altura >= 4 && preenchida > 2) {
+      g.roundRect(x + altura * 0.28, y + altura * 0.12, Math.max(0, preenchida - altura * 0.56), altura * 0.24, altura * 0.12)
+        .fill({ color: '#ffffff', alpha: 0.24 });
+    }
+  }
+}
+
+/** Barras e anéis ficam sob o token; valores completos aparecem ao selecionar ou passar o mouse. */
+function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, ativa: boolean, preferencias: IPreferenciasBarrasMapa) {
+  raiz.removeChildren().forEach((filho) => filho.destroy());
+  const visiveis = barrasParaDesenhar(barras, preferencias);
+  if (!visiveis.length) return;
+
+  const largura = Math.max(16, Math.min(lado * 0.9, 180));
+  const alturaBarra = Math.max(2, Math.min(8, lado * 0.075));
+  const raioAnel = Math.max(3, Math.min(8, lado * 0.09));
+  const fonte = Math.max(6, Math.min(9, lado * 0.09));
+  const espacamento = Math.max(1, lado * 0.018);
+  const alturas = visiveis.map((barra) => {
+    const modo = preferencias.porTipo[barra.tipo].modo;
+    if (modo === 'anel') return raioAnel * 2;
+    if (modo === 'numero') return fonte + 5;
+    return alturaBarra;
+  });
+  const total = alturas.reduce((soma, altura) => soma + altura, 0) + espacamento * Math.max(0, visiveis.length - 1);
+  let topo = lado * 0.69;
+  // Em tokens pequenos, aproxima as linhas sem deixá-las entrarem na moldura.
+  if (total > lado * 0.5) topo = lado * 0.66;
+
+  visiveis.forEach((barra, indice) => {
+    const visual = preferencias.porTipo[barra.tipo];
+    const altura = alturas[indice];
+    const centroY = topo + altura / 2;
+    const g = new Graphics();
+    raiz.addChild(g);
+
+    if (visual.modo === 'anel') {
+      const anel = Math.max(1.2, raioAnel * 0.22);
+      const raioCentro = raioAnel - anel / 2;
+      const fracao = fracaoDaBarra(barra);
+      // Mantém o alerta de Sanidade baixa do desenho anterior.
+      const corAnel = barra.tipo === 'sanidade' && fracao <= 0.25 ? '#e5484d' : visual.cor;
+      g.circle(0, centroY, raioAnel).fill({ color: '#0d0b12', alpha: 0.92 });
+      g.circle(0, centroY, raioCentro).stroke({ width: anel, color: corAnel, alpha: 0.3 });
+      if (fracao > 0) {
+        const inicio = -Math.PI / 2;
+        const fim = inicio + Math.PI * 2 * fracao;
+        g.moveTo(Math.cos(inicio) * raioCentro, centroY + Math.sin(inicio) * raioCentro);
+        g.arc(0, centroY, raioCentro, inicio, fim).stroke({ width: anel, color: corAnel, cap: 'round' });
+      }
+      if (ativa) {
+        const texto = textoPequeno(`${porcentagemDaBarra(barra)}%`, Math.min(fonte, raioAnel * 0.9));
+        texto.position.set(0, centroY);
+        raiz.addChild(texto);
+      }
+    } else if (visual.modo === 'numero') {
+      const conteudo = `${barra.tipo === 'sanidade' ? 'SAN' : barra.tipo.slice(0, 3).toUpperCase()} ${valorCurto(barra)}`;
+      const larguraPilha = Math.min(largura, Math.max(fonte * 3.2, conteudo.length * fonte * 0.58 + 12));
+      const x = -larguraPilha / 2;
+      g.roundRect(x, topo, larguraPilha, altura, altura / 2)
+        .fill({ color: '#0d0b12', alpha: 0.9 })
+        .stroke({ width: 1, color: visual.cor, alpha: 0.72 });
+      const texto = textoPequeno(conteudo, fonte, '#f7f4fa');
+      texto.position.set(0, centroY);
+      raiz.addChild(texto);
+    } else {
+      desenharBarra(g, barra, visual.cor, -largura / 2, centroY - alturaBarra / 2, largura, alturaBarra);
+      if (ativa) {
+        const texto = textoPequeno(`${ROTULOS_BARRA[barra.tipo]} ${porcentagemDaBarra(barra)}%`, fonte);
+        texto.position.set(0, centroY);
+        raiz.addChild(texto);
+      }
+    }
+    topo += altura + espacamento;
   });
 }
 
@@ -69,7 +163,7 @@ export class TokenVisual {
   private retrato = new Container();
   private clarao = new Graphics();
   private moldura = new Sprite();
-  private barras = new Graphics();
+  private barras = new Container();
   private marcas = new Graphics();
   private vez = new Graphics();
   private brilhoVez: Sprite;
@@ -93,9 +187,11 @@ export class TokenVisual {
   private clarCura = false;
   private clarAceso = false;
   private sobOMouse = false;
+  private preferenciasBarras: IPreferenciasBarrasMapa;
 
-  constructor(dados: ITokenMapa, tamanhoQuadrado: number) {
+  constructor(dados: ITokenMapa, tamanhoQuadrado: number, preferenciasBarras = PREFERENCIAS_BARRAS_PADRAO) {
     this.dados = dados;
+    this.preferenciasBarras = preferenciasBarras;
     this.nome = new Text({ text: '', style: { fontFamily: 'system-ui, sans-serif', fontWeight: '600', fill: '#ffffff', stroke: { color: '#000000', width: 4 } } });
     this.nome.anchor.set(0.5, 0);
     this.moldura.anchor.set(0.5);
@@ -114,10 +210,12 @@ export class TokenVisual {
     this.raiz.on('pointerover', () => {
       this.sobOMouse = true;
       this.escreverNome();
+      this.desenharBarras();
     });
     this.raiz.on('pointerout', () => {
       this.sobOMouse = false;
       this.escreverNome();
+      this.desenharBarras();
     });
     this.atualizar(dados, tamanhoQuadrado);
   }
@@ -140,12 +238,12 @@ export class TokenVisual {
     this.moldura.texture = texturaDaMoldura(dados.moldura ?? 'lado', dados.nivel, dados.lado);
     this.moldura.width = this.lado * ESCALA_QUADRO;
     this.moldura.height = this.lado * ESCALA_QUADRO;
-    this.barras.clear();
-    desenharBarras(this.barras, dados.barras, this.lado * 0.9, -this.lado * 0.52);
+    this.desenharBarras();
 
     this.escreverNome();
-    this.nome.style.fontSize = Math.max(11, this.lado * 0.16);
-    this.nome.y = this.lado * 0.56;
+    const tamanhoNome = Math.max(8, Math.min(16, this.lado * 0.16));
+    this.nome.style.fontSize = tamanhoNome;
+    this.nome.y = -this.lado * 0.72 - tamanhoNome * 1.1;
     this.desenharCondicoes();
     this.desenharMarcas();
   }
@@ -153,6 +251,15 @@ export class TokenVisual {
   private escreverNome() {
     const texto = this.sobOMouse || this.selecionado ? this.dados.nome : abreviarNome(this.dados.nome);
     if (this.nome.text !== texto) this.nome.text = texto;
+  }
+
+  private desenharBarras() {
+    desenharBarras(this.barras, this.dados.barras, this.lado, this.selecionado || this.sobOMouse, this.preferenciasBarras);
+  }
+
+  definirPreferenciasBarras(preferencias: IPreferenciasBarrasMapa) {
+    this.preferenciasBarras = preferencias;
+    this.desenharBarras();
   }
 
   private desenharCondicoes() {
@@ -212,6 +319,7 @@ export class TokenVisual {
     if (this.selecionado === sim) return;
     this.selecionado = sim;
     this.escreverNome();
+    this.desenharBarras();
     this.desenharMarcas();
   }
 
@@ -241,6 +349,11 @@ export class TokenVisual {
   /** Posição nova vinda de outra pessoa: fica "no ar" enquanto as posições chegam. */
   marcarMovimento(tempo: number) {
     this.ultimoMovimento = tempo;
+  }
+
+  /** Surge de novo, crescendo como na entrada (saiu de um portal). */
+  surgir(tempo: number) {
+    this.nascimento = tempo;
   }
 
   /** Começa a sair: encolhe e some. `pulsar` devolve true quando acabou. */
