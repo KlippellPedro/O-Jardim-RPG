@@ -2,6 +2,59 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-03-portas-paredes-e-portais-entre-cenas",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: portas que abrem, paredes que seguram e portais para outra cena",
+      "detalhes": [
+        "Nos mapas montados pelo Mestre, as paredes seguram o seu token: para passar, use uma porta.",
+        "Com o personagem ao lado de uma porta, clique nela para abrir ou fechar. Porta trancada só o Mestre abre.",
+        "Algumas paredes escondem portas secretas. Quando o Mestre revela uma, ela aparece no mapa como porta comum.",
+        "Um portal pode levar o seu personagem para outro lugar da aventura, numa outra cena. O Mestre fica sabendo na hora."
+      ]
+    },
+    {
+      "id": "2026-11-03-camadas-anotacoes-e-flip-no-mapa",
+      "data": "2026-11-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: camadas, plaquinhas e tokens espelhados",
+      "detalhes": [
+        "Separe itens do Acervo, montarias e personagens em camadas e escolha o que cada jogador pode ver.",
+        "Escreva plaquinhas no mapa, escolha a letra, o tamanho e as cores, e arraste para mudar de lugar.",
+        "Espelhe um token na horizontal ou na vertical pelo menu Visual."
+      ]
+    },
+    {
+      "id": "2026-11-03-jogadores-papeis-e-permissoes-na-mesa",
+      "data": "2026-11-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: convide jogadores e ajuste as permissões da mesa",
+      "detalhes": [
+        "No painel Jogadores, o Mestre vê quem está conectado, muda papéis, remove acessos e cria convites para a campanha.",
+        "As permissões podem ser ajustadas por pessoa: mover tokens, usar ping e régua, lançar efeitos de magia e ver cada camada do mapa.",
+        "Cada pessoa pode personalizar o nome e a cor que aparecem nesta mesa sem alterar o perfil da conta."
+      ]
+    },
+    {
+      "id": "2026-11-03-mobilia-luzes-e-liquidos",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: mobília do Jardim, luzes fixas e água que corre",
+      "detalhes": [
+        "O construtor de mapas ganhou 44 peças de mobília feitas para o Jardim: mesas, camas, barris, baús, lareira, altar, trono, árvores, pedras e muito mais.",
+        "Cada peça fica numa camada (chão, objetos ou alto), e o Mestre muda a ordem, duplica e vê a lista de tudo que está no mapa.",
+        "Com Shift e clique o Mestre junta várias peças, move o grupo de uma vez e pode guardar como peça pronta para usar em outros mapas da campanha.",
+        "Tochas, velas, braseiros e lanternas ficam presos no mapa: na mesa, eles brilham e abrem caminho no escuro.",
+        "A água e a lava dos mapas montados agora se mexem na mesa.",
+        "No Acervo dá para anotar quem fez cada imagem, de onde ela veio e com que licença pode ser usada. Imagens sem licença anotada ganham um aviso.",
+        "O pincel de chão e a borracha não pulam mais casas quando o mouse corre rápido."
+      ]
+    },
+    {
       "id": "2026-11-03-pecas-do-acervo-no-construtor",
       "data": "2026-11-03",
       "tipo": "melhoria",

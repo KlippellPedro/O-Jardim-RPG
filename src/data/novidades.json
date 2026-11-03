@@ -1,6 +1,47 @@
 {
   "itens": [
     {
+      "id": "2026-11-03-portas-paredes-e-portais-entre-cenas",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: portas que abrem, paredes que seguram e portais para outra cena",
+      "detalhes": [
+        "Nos mapas montados pelo Mestre, as paredes seguram o seu token: para passar, use uma porta.",
+        "Com o personagem ao lado de uma porta, clique nela para abrir ou fechar. Porta trancada só o Mestre abre.",
+        "Algumas paredes escondem portas secretas. Quando o Mestre revela uma, ela aparece no mapa como porta comum.",
+        "Um portal pode levar o seu personagem para outro lugar da aventura, numa outra cena. O Mestre fica sabendo na hora."
+      ]
+    },
+    {
+      "id": "2026-11-03-camadas-anotacoes-e-flip-no-mapa",
+      "data": "2026-11-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: camadas, plaquinhas e tokens espelhados",
+      "detalhes": [
+        "Separe itens do Acervo, montarias e personagens em camadas e escolha o que cada jogador pode ver.",
+        "Escreva plaquinhas no mapa, escolha a letra, o tamanho e as cores, e arraste para mudar de lugar.",
+        "Espelhe um token na horizontal ou na vertical pelo menu Visual."
+      ]
+    },
+    {
+      "id": "2026-11-03-mobilia-luzes-e-liquidos",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: mobília do Jardim, luzes fixas e água que corre",
+      "detalhes": [
+        "O construtor de mapas ganhou 44 peças de mobília feitas para o Jardim: mesas, camas, barris, baús, lareira, altar, trono, árvores, pedras e muito mais.",
+        "Cada peça fica numa camada (chão, objetos ou alto), e o Mestre muda a ordem, duplica e vê a lista de tudo que está no mapa.",
+        "Com Shift e clique o Mestre junta várias peças, move o grupo de uma vez e pode guardar como peça pronta para usar em outros mapas da campanha.",
+        "Tochas, velas, braseiros e lanternas ficam presos no mapa: na mesa, eles brilham e abrem caminho no escuro.",
+        "A água e a lava dos mapas montados agora se mexem na mesa.",
+        "No Acervo dá para anotar quem fez cada imagem, de onde ela veio e com que licença pode ser usada. Imagens sem licença anotada ganham um aviso.",
+        "O pincel de chão e a borracha não pulam mais casas quando o mouse corre rápido."
+      ]
+    },
+    {
       "id": "2026-11-03-pecas-do-acervo-no-construtor",
       "data": "2026-11-03",
       "tipo": "melhoria",
@@ -992,45 +1033,6 @@
       "detalhes": [
         "Se o servidor falhar na hora de abrir o calendário, a tela tenta de novo sozinha. Se ainda assim não abrir, ela mostra o que o navegador recebeu e um botão Tentar de novo.",
         "O app instalável parou de travar páginas quando o navegador não consegue guardar arquivos para uso sem internet. Nesse caso ele só deixa de guardar e abre o site normalmente."
-      ]
-    },
-    {
-      "id": "2026-10-10-atributos-aflicoes-vulnerabilidade",
-      "data": "2026-10-10",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Testes de atributo, aflições e vulnerabilidade fazendo as contas",
-      "detalhes": [
-        "O teste de atributo (na ficha e no Modo Mesa) agora conta as condições, como o Enfraquecido tirando 2 dos testes de Força.",
-        "Aflições que drenam atributo já tiram o valor da ficha enquanto duram, e ele volta sozinho quando a aflição passa. A perda de Sanidade de um estágio é rolada e descontada na hora, com Desfazer.",
-        "Vulnerabilidade agora dobra o dano daquele tipo, antes da Resistência. O dano do turno das condições já usa isso.",
-        "Quem tem ataques corpo a corpo antigos criados à mão recebe um aviso, uma vez só, para escolher se eles passam a somar o atributo no dano."
-      ]
-    },
-    {
-      "id": "2026-10-10-dano-do-turno-lesoes-inspirado-guias",
-      "data": "2026-10-10",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Dano do turno, lesões que contam, Inspirado e guias novos",
-      "detalhes": [
-        "Sangramento, Queimando, Envenenado e Revigorado ganharam um botão que rola o efeito do turno e já mexe na sua Vida. A Resistência da ficha entra sozinha, e o aviso traz Desfazer.",
-        "Lesões e sequelas com número fixo agora contam nos testes e ataques: braço ou mão dominante, ombro, olho, pernas, costelas, mandíbula, concussão, tremor e congelamento. Perna quebrada corta o Movimento pela metade.",
-        "Inspirado aparece na hora de rolar: marque para somar +2 num teste de perícia ou num ataque, e a condição sai da ficha depois.",
-        "A página inicial ganhou o Guia do Início, que explica o menu, a busca, as configurações e cada parte da página. Os guias da Ficha e da Loja foram atualizados com as novidades e vão abrir de novo uma vez."
-      ]
-    },
-    {
-      "id": "2026-10-10-condicoes-calculam-e-compra-equipa",
-      "data": "2026-10-10",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Condições que calculam, compra que já equipa e campos prontos",
-      "detalhes": [
-        "Condições agora mexem nos números da ficha: Enfraquecido tira 2 em testes de Força e no dano corpo a corpo, Favorecido soma 1 em Fortitude, Reflexos e Vontade, Desorientado e Cego dão desvantagem onde o cartão manda, e Lento e Apressado mudam o Movimento. O cálculo de cada perícia mostra a linha das condições.",
-        "Na aba Condições há uma explicação curta da diferença entre condição e aflição, para tirar a dúvida sem chamar o Mestre.",
-        "Arma, armadura ou escudo comprado que cabe numa vaga livre já sai equipado, com um aviso e o botão Desfazer. Peça marcial sem a proficiência fica na mochila.",
-        "Tamanho e Divindade viraram listas prontas (as Deidades do jogo, e Pequeno, Normal, Grande e Enorme), com a opção de escrever o seu próprio valor."
       ]
     }
   ]
