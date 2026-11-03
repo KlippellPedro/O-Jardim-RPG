@@ -1,6 +1,57 @@
 {
   "itens": [
     {
+      "id": "2026-11-03-pecas-do-acervo-no-construtor",
+      "data": "2026-11-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: coloque objetos do Acervo no construtor",
+      "detalhes": [
+        "O Mestre pode colocar imagens do Acervo nos mapas, mover as peças, mudar o tamanho, girar e espelhar.",
+        "As peças aparecem no mapa publicado. Para usar imagens da internet, envie arquivos com licença de uso ao Acervo como Objetos."
+      ]
+    },
+    {
+      "id": "2026-11-03-barras-do-token",
+      "data": "2026-11-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: aparência das barras ao seu gosto",
+      "detalhes": [
+        "As barras ficam abaixo do token, com o nome acima. Você pode escolher barra, anel, número ou ocultar cada recurso no seu aparelho.",
+        "Ajuste as cores de Vida, Mana, Estamina e Sanidade. Mana e Estamina podem aparecer juntas quando estiverem liberadas para o token.",
+        "No menu do token, o Mestre ou o dono escolhe quais recursos podem ser compartilhados e quem pode vê-los."
+      ]
+    },
+    {
+      "id": "2026-11-03-construtor-de-mapas",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: o Mestre monta mapas com salas, paredes e portas",
+      "detalhes": [
+        "O Mestre ganhou um construtor de mapas dentro do próprio mapa da mesa: desenha salas, pinta o chão, levanta paredes e põe portas e janelas.",
+        "São onze tipos de chão, de laje e tábua a grama, água e lava, e seis de parede, de pedra e tijolo a cerca e sebe.",
+        "Quando o mapa fica pronto, ele vira a cena da mesa com a grade certa. As portas aparecem por cima do mapa: fechadas, abertas ou trancadas.",
+        "Algumas paredes guardam portas que só o Mestre conhece."
+      ]
+    },
+    {
+      "id": "2026-11-03-dia-noite-e-portais",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: dia e noite com o calendário do mundo, e portais",
+      "detalhes": [
+        "No alto do mapa aparece a hora do mundo e o período do dia. Passe o mouse para ver a data e a fase da lua.",
+        "Quando o Mestre faz a cena seguir a hora, o mapa escurece à noite e ganha as cores do amanhecer e do entardecer. A luz muda devagar na tela de todos.",
+        "À noite, a tocha e o seu personagem abrem caminho no escuro. A lua cheia clareia um pouco a noite, e na Lua Carmesim ela fica vermelha.",
+        "O Mestre anda com o tempo pelo próprio mapa: dez minutos, uma hora, um descanso de oito horas ou direto para o próximo amanhecer. Passar da meia-noite muda o dia no calendário.",
+        "Portais: solte o seu token numa boca de portal e ele aparece do outro lado, com um clarão na cor do Fluxo. Alguns portais perguntam antes de você atravessar.",
+        "Nem todo portal está à vista. Cuidado onde pisa."
+      ]
+    },
+    {
       "id": "2026-11-03-mapa-arrumado",
       "data": "2026-11-03",
       "tipo": "melhoria",
@@ -980,54 +1031,6 @@
         "Na aba Condições há uma explicação curta da diferença entre condição e aflição, para tirar a dúvida sem chamar o Mestre.",
         "Arma, armadura ou escudo comprado que cabe numa vaga livre já sai equipado, com um aviso e o botão Desfazer. Peça marcial sem a proficiência fica na mochila.",
         "Tamanho e Divindade viraram listas prontas (as Deidades do jogo, e Pequeno, Normal, Grande e Enorme), com a opção de escrever o seu próprio valor."
-      ]
-    },
-    {
-      "id": "2026-10-10-ataques-confirmacao-e-dano",
-      "data": "2026-10-10",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Ataques com confirmação, dado extra e dano certo",
-      "detalhes": [
-        "Ao clicar em Atacar ou Rolar Dano, abre uma telinha com a conta da ficha. Dá para somar vantagem ou desvantagem do momento, um bônus extra, um dado extra (1d4, 2d6+1, -1d4) e a Defesa do alvo. Segure Shift ao clicar para rolar direto, sem confirmar.",
-        "O dano das armas corpo a corpo agora soma o modificador de atributo (Força por padrão, e segue o atributo da perícia Luta se um poder trocar). Armas à distância vêm sem atributo, mas dá para ligar. Em Atributo somado ao dano você escolhe o atributo para a ficha toda, e na confirmação do dano pode trocar só para aquela rolagem. No dano há uma caixa de crítico: só os dados da arma são multiplicados.",
-        "Arcos e outras armas à distância compradas na Loja passavam a atacar como corpo a corpo, com Luta e Força. Agora usam Pontaria e Destreza. Armas híbridas deixam você escolher como usar na hora.",
-        "O bônus de ataque passou a considerar o grau de perícia concedido pela classe e as vantagens que valem para todos os testes."
-      ]
-    },
-    {
-      "id": "2026-10-10-ficha-resistencias-proficiencias",
-      "data": "2026-10-10",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Resistências e Proficiências em lista, com catálogo",
-      "detalhes": [
-        "Resistências e Proficiências deixaram de ser caixas de texto. Agora cada uma é uma lista que cresce sem bagunçar a ficha, e o Mestre escolhe no catálogo (tipos de dano, elementos, venenos, doenças, condições, armas, armaduras, escudos e ferramentas) ou cria uma própria.",
-        "Cada resistência tem tipo (Resistência, Vulnerabilidade ou Imunidade), valor e uma anotação curta.",
-        "Armadura ou escudo marcial usado sem a proficiência perde 2 de Defesa e dobra a penalidade da peça. A ficha avisa qual peça está nessa situação."
-      ]
-    },
-    {
-      "id": "2026-10-10-ficha-aba-condicoes",
-      "data": "2026-10-10",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Descanso mais claro e uma aba só para Condições e Aflições",
-      "detalhes": [
-        "A aba Descanso agora cuida só de recuperação, em três passos: como foi a pausa, o que aconteceu durante ela e a conferência do resultado. A prévia mostra, para cada recurso, quanto você tem e quanto vai ter antes de aplicar.",
-        "Condições e aflições ganharam a aba Condições, ao lado do Descanso. Lá ficam as condições em vigor, o catálogo para aplicar, as crises de Sanidade e, em outro painel, as aflições (venenos, doenças e vícios) com o catálogo completo.",
-        "Ao aplicar uma condição, ela aparece na hora em Em vigor agora, sem sair da página. Tocar de novo no cartão remove."
-      ]
-    },
-    {
-      "id": "2026-10-10-loja-filtros-notebook",
-      "data": "2026-10-10",
-      "tipo": "correcao",
-      "area": "Loja",
-      "titulo": "Filtros da Loja cabem em telas de notebook",
-      "detalhes": [
-        "Em telas de 1280 pixels a linha de filtros do balcão passava da borda e a página ganhava uma barra de rolagem para o lado. Agora ela se ajusta e tudo fica à vista.",
-        "Quem arquiva uma ficha também deixa de ver o atalho Continuar apontando para ela na Home, e a lista de resultados da Busca do Jardim não rola mais sozinha quando o mouse para na borda."
       ]
     }
   ]

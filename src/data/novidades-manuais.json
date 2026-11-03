@@ -2,6 +2,57 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-03-pecas-do-acervo-no-construtor",
+      "data": "2026-11-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: coloque objetos do Acervo no construtor",
+      "detalhes": [
+        "O Mestre pode colocar imagens do Acervo nos mapas, mover as peças, mudar o tamanho, girar e espelhar.",
+        "As peças aparecem no mapa publicado. Para usar imagens da internet, envie arquivos com licença de uso ao Acervo como Objetos."
+      ]
+    },
+    {
+      "id": "2026-11-03-barras-do-token",
+      "data": "2026-11-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: aparência das barras ao seu gosto",
+      "detalhes": [
+        "As barras ficam abaixo do token, com o nome acima. Você pode escolher barra, anel, número ou ocultar cada recurso no seu aparelho.",
+        "Ajuste as cores de Vida, Mana, Estamina e Sanidade. Mana e Estamina podem aparecer juntas quando estiverem liberadas para o token.",
+        "No menu do token, o Mestre ou o dono escolhe quais recursos podem ser compartilhados e quem pode vê-los."
+      ]
+    },
+    {
+      "id": "2026-11-03-construtor-de-mapas",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: o Mestre monta mapas com salas, paredes e portas",
+      "detalhes": [
+        "O Mestre ganhou um construtor de mapas dentro do próprio mapa da mesa: desenha salas, pinta o chão, levanta paredes e põe portas e janelas.",
+        "São onze tipos de chão, de laje e tábua a grama, água e lava, e seis de parede, de pedra e tijolo a cerca e sebe.",
+        "Quando o mapa fica pronto, ele vira a cena da mesa com a grade certa. As portas aparecem por cima do mapa: fechadas, abertas ou trancadas.",
+        "Algumas paredes guardam portas que só o Mestre conhece."
+      ]
+    },
+    {
+      "id": "2026-11-03-dia-noite-e-portais",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: dia e noite com o calendário do mundo, e portais",
+      "detalhes": [
+        "No alto do mapa aparece a hora do mundo e o período do dia. Passe o mouse para ver a data e a fase da lua.",
+        "Quando o Mestre faz a cena seguir a hora, o mapa escurece à noite e ganha as cores do amanhecer e do entardecer. A luz muda devagar na tela de todos.",
+        "À noite, a tocha e o seu personagem abrem caminho no escuro. A lua cheia clareia um pouco a noite, e na Lua Carmesim ela fica vermelha.",
+        "O Mestre anda com o tempo pelo próprio mapa: dez minutos, uma hora, um descanso de oito horas ou direto para o próximo amanhecer. Passar da meia-noite muda o dia no calendário.",
+        "Portais: solte o seu token numa boca de portal e ele aparece do outro lado, com um clarão na cor do Fluxo. Alguns portais perguntam antes de você atravessar.",
+        "Nem todo portal está à vista. Cuidado onde pisa."
+      ]
+    },
+    {
       "id": "2026-11-03-mapa-arrumado",
       "data": "2026-11-03",
       "tipo": "melhoria",
