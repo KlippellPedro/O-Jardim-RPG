@@ -306,6 +306,79 @@ Segue o molde da mesa ao vivo (`plataforma/core/mesa.py`):
    pedir os outros direto (sem cache) deu 404, inclusive a versão reduzida e a
    miniatura; o dragão apareceu para ela ao sair da névoa no arrasto do Mestre e
    sumiu ao voltar; 60 quadros por segundo com chuva e neblina.
+3.5. **Dar vida aos efeitos** (pedido do Pedro em 2026-11-02, depois de comparar
+   com o Owlbear). As extensões dele (Weather, Dynamic Fog) servem só de
+   referência visual: são GPL-3.0 e rodam no motor do próprio Owlbear. Os efeitos
+   são escritos do zero, em shaders nossos (GLSL para WebGL e WGSL para WebGPU),
+   sem traduzir código de lá. Ordem:
+   1. **Névoa viva. Feita em 2026-11-02.** Um shader desenha a névoa por cima da
+      mesma máscara de antes (`src/pages/Mapa/motor/nevoa.ts`): fumaça que anda
+      devagar, borda que treme e esfiapa (com grão fino para o zoom de perto),
+      dissolve de 0,75 s ao revelar, esconder, ligar e desligar (duas máscaras
+      que se revezam), parada para quem pede menos movimento. O ruído é uma
+      textura que emenda, e não conta feita por pixel: 8 leituras de textura
+      por pixel. Medido no Chrome com placa de vídeo: 60 quadros em 1600x900 e
+      2560x1440, em WebGPU e em WebGL (`?motor=webgl` força o WebGL). Sem placa
+      (desenho no processador, pior caso), 32 quadros sem a névoa e 23 com ela.
+   2. **Clima em shader. Feito em 2026-11-02.** `src/pages/Mapa/motor/climaShader.ts`
+      tem a "atmosfera" (um retângulo sobre o pedaço do mapa na tela) com três
+      partes que cada efeito liga: chuva em três camadas de profundidade com
+      respingos no chão (só de perto), sombras de nuvens que andam com o vento e
+      o clarão do relâmpago passando mais forte onde as nuvens abrem, e um véu
+      de ruído com forma ajustável (neblina macia, poeira de areia esticada no
+      vento, Véu do Vazio que pulsa, brilho de Fluxo que soma luz). O calor é
+      um filtro na camada do mapa e da grade (os tokens ficam firmes). Neve,
+      folhas, cinzas, brasas e grãos de areia seguem em partículas. Dois
+      efeitos novos no servidor e no painel: `nuvens` (Sombras de nuvens) e
+      `calor`. A textura de ruído é uma só para a névoa e o clima
+      (`motor/ruido.ts`) e vive enquanto a aba estiver aberta. Medido: 60
+      quadros com tempestade, neblina, nuvens e calor juntos, em 1600x900 e
+      2560x1440, em WebGPU e WebGL. Os shaders são travados por teste
+      (`tests/frontend/climaShader.test.ts`).
+   3. **Luz que vive. Feita em 2026-11-03.** Migração 62 (`mapa_tokens.luz`:
+      raio em casas, cor, se tremula; `normalizar_luz` em `core/mapa.py`); o
+      Mestre e o dono do token mudam pelo menu do token (atalhos vela, tocha,
+      lanterna e luz mágica). Cada luz soma um brilho na cor dela embaixo do
+      token (`motor/luzes.ts`) e abre a escuridão do clima no próprio alcance,
+      com o mesmo tremor de chama (`motor/luzesConta.ts`); personagem de
+      jogador e aliado sem luz própria segue abrindo a escuridão no alcance
+      padrão do efeito.
+   4. **Efeitos de magia. Feitos em 2026-11-03.** Ferramenta de magia (tecla M)
+      para todos: círculo, cone de 60 graus, linha de uma casa e impacto (com
+      projétil quando há distância), na cor de um dos 11 Fluxos, desenhados por
+      nós (`motor/magia.ts`, sem JB2A). A mira mostra o tamanho em casas e
+      metros. O efeito passa pelo tempo real (mensagem `magia`, conferida por
+      `normalizar_magia`; no máximo 3 a cada 2 segundos por pessoa) com o nome
+      de quem lançou, e nada é gravado. Fora da cena na mesa, só quem lança vê.
+   5. **Vida nos tokens. Feita em 2026-11-03.** `motor/token.ts`: entrada com
+      quique, saída encolhendo (tirado, escondido, entrou na névoa), clarão
+      vermelho com tremor quando a Vida que a pessoa vê cai e anel verde quando
+      sobe, brilho dourado com arcos girando na vez, e o token "no ar" com
+      sombra no arrasto, também na tela de quem só assiste. A textura de brilho
+      é de todos os palcos e não é destruída ao fechar o mapa (sem isso, voltar
+      ao mapa deixava a tela preta).
+   Conferido em 2026-11-03 com Mestre e jogadora (Vite e API paralelos, banco
+   descartável): tocha da jogadora chega ao Mestre e tremula, magias nos dois
+   sentidos com o nome de quem lançou, clarão de dano pela rota da Sessão,
+   token no ar nas duas telas, saída e entrada animadas, 61 quadros por
+   segundo e nenhum aviso no console.
+3.6. **Página arrumada. Feita em 2026-11-03** (pedido do Pedro). Barra da esquerda
+   em grupos rotulados (Mesa: mover, régua, ping, magia; Vista: ver o mapa inteiro,
+   ir até o meu personagem, centralizar no escolhido, clima neste aparelho;
+   Mestre: névoa, clima, trazer participantes, acervo, oficina), cada botão com a
+   dica do site (nome e atalho, `componentes/BotaoFerramenta.tsx`) no lugar do
+   `title` do navegador. O topo mostra a rodada e de quem é a vez (o nome só sai
+   quando a entidade da vez está na iniciativa de quem olha, então o jogador não
+   descobre quem está escondido). Painel lateral: Iniciativa só com número e nome
+   (clicar centraliza o token); Fichas com um cartão por personagem de jogador no
+   mapa (retrato, nível, barras e condições que o token já mostra), e o clique
+   abre a ficha embutida (`/ficha/{id}?embutida=1`) para o dono e o Mestre, os
+   únicos que recebem o `personagem_id`. Nenhum `window.prompt` sobrou no mapa:
+   nova cena e nova pasta usam `pedirTexto` (caixa do site com campo), o medidor
+   mostra o resumo num campo quando o navegador não deixa copiar, e os erros com
+   o mapa aberto saem nos avisos do site. Nome comprido no token fica abreviado
+   numa palavra inteira (`abreviarNome`, 18 letras) e aparece inteiro com o
+   mouse em cima ou com o token escolhido.
 4. **Extras:** cenas preparadas e troca rápida, desenho livre, áreas de magia (cone,
    linha, círculo, com o tamanho tirado da magia), luz e visão com paredes,
    cursores, dado 3D caindo no mapa.
