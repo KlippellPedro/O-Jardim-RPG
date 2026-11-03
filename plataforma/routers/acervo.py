@@ -116,7 +116,7 @@ def _resumo_item(linha) -> dict:
 
 
 def pode_ler_item(connection, item_id: UUID, user: AuthenticatedUser, chave: str) -> bool:
-    """Dono sempre; os outros, se a imagem está numa cena ou token de campanha em que jogam.
+    """Dono sempre; outros, se a imagem está numa cena, token ou projeto autorizado.
 
     Quem comanda a campanha vê também as cenas em preparo; jogador só a cena
     ativa, e só com a sessão ao vivo. Com a névoa ligada, o jogador recebe só os
@@ -145,22 +145,39 @@ def pode_ler_item(connection, item_id: UUID, user: AuthenticatedUser, chave: str
                       OR %(chave)s = ANY(c.nevoa_ladrilhos)
                     ))
               )
-          ) AS na_mesa
+          ) AS na_mesa,
+          EXISTS (
+            SELECT 1
+            FROM mapa_projetos p
+            JOIN membros_campanha m ON m.campanha_id=p.campanha_id AND m.usuario_id=%(usuario)s
+              AND m.status='ativo' AND m.papel IN ('mestre', 'assistente')
+            WHERE p.conteudo->'pecas' @> jsonb_build_array(jsonb_build_object('imagem_id', %(item_texto)s::text))
+          ) AS no_projeto
         """,
-        {"item": item_id, "usuario": user.id, "chave": chave},
+        {"item": item_id, "item_texto": str(item_id), "usuario": user.id, "chave": chave},
     ).fetchone()
-    if linha["dono"] or linha["na_mesa"]:
+    if linha["dono"] or linha["na_mesa"] or linha["no_projeto"]:
         return True
     if user.is_creator:
         # O criador da plataforma conta como Mestre de qualquer campanha ativa.
-        return bool(connection.execute(
+        na_cena = connection.execute(
             """
             SELECT 1 FROM mapa_cenas c LEFT JOIN mapa_tokens t ON t.cena_id = c.id AND t.imagem_id=%s
             JOIN campanhas k ON k.id = c.campanha_id AND k.status = 'ativa'
             WHERE c.mapa_id=%s OR t.id IS NOT NULL LIMIT 1
             """,
             (item_id, item_id),
-        ).fetchone())
+        ).fetchone()
+        no_projeto = connection.execute(
+            """
+            SELECT 1 FROM mapa_projetos p
+            JOIN campanhas k ON k.id=p.campanha_id AND k.status='ativa'
+            WHERE p.conteudo->'pecas' @> jsonb_build_array(jsonb_build_object('imagem_id', %s::text))
+            LIMIT 1
+            """,
+            (str(item_id),),
+        ).fetchone()
+        return bool(na_cena or no_projeto)
     return False
 
 
@@ -410,6 +427,8 @@ def editar_item(
         if payload.tipo is not None:
             if payload.tipo not in acervo.TIPOS:
                 raise HTTPException(status_code=422, detail="o tipo e mapa, token ou objeto")
+            if payload.tipo != "objeto" and _usado_em_projeto(connection, item_id):
+                raise HTTPException(status_code=409, detail="a imagem esta sendo usada como peca em um mapa editavel")
             mudancas["tipo"] = payload.tipo
         if payload.mover_para_raiz:
             mudancas["pasta_id"] = None
@@ -440,9 +459,22 @@ def apagar_item(
     """Apaga a imagem. Cena que a usava fica sem mapa; token fica com o retrato padrão."""
     with database.connection() as connection:
         _item_do_dono(connection, item_id, user.id, travar=True)
+        if _usado_em_projeto(connection, item_id):
+            raise HTTPException(status_code=409, detail="a imagem esta sendo usada como peca em um mapa editavel")
         acervo.apagar_item(connection, item_id)
         connection.execute("DELETE FROM acervo_itens WHERE id=%s", (item_id,))
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+def _usado_em_projeto(connection, item_id: UUID) -> bool:
+    return bool(connection.execute(
+        """
+        SELECT 1 FROM mapa_projetos
+        WHERE conteudo->'pecas' @> jsonb_build_array(jsonb_build_object('imagem_id', %s::text))
+        LIMIT 1
+        """,
+        (str(item_id),),
+    ).fetchone())
 
 
 @router.get("/itens/{item_id}/arquivos/{chave:path}")

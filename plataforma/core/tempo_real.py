@@ -43,7 +43,7 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable
 
-from core.mapa import ErroMapa, normalizar_magia
+from core.mapa import ErroMapa, normalizar_magia, portal_atingido
 from core.nevoa import Nevoa
 
 log = logging.getLogger("jardim-plataforma")
@@ -62,9 +62,10 @@ VALIDADE_REGRAS_S = 5.0
 #: Mudanças que chegam juntas (um traço de névoa e o clique logo depois) viram um envio só.
 JUNTAR_MUDANCAS_S = 0.03
 #: Eventos da Sessão que não mexem em nada que o mapa mostra.
-EVENTOS_SEM_EFEITO_NO_MAPA = frozenset({"registro", "mesa", "destaque_mesa", "calendario", "loot_rolado", "loot_entregue", "iniciativa"})
+#: O calendário muda o mapa (a hora e a luz do dia), então não está aqui.
+EVENTOS_SEM_EFEITO_NO_MAPA = frozenset({"registro", "mesa", "destaque_mesa", "loot_rolado", "loot_entregue", "iniciativa"})
 #: Partes do estado do mapa que vão inteiras quando mudam (tokens vão um a um).
-CAMPOS_DO_ESTADO = ("gestor", "usuario_id", "ao_vivo", "bloqueado", "cenas", "moldura_mesa")
+CAMPOS_DO_ESTADO = ("gestor", "usuario_id", "ao_vivo", "bloqueado", "cenas", "moldura_mesa", "tempo")
 CORES = ("#4fd1c5", "#f6ad55", "#f687b3", "#90cdf4", "#9ae6b4", "#fbd38d", "#b794f4", "#feb2b2")
 
 
@@ -185,6 +186,9 @@ class Regras:
     carregadas_em: float = field(default_factory=time.monotonic)
     #: As formas da névoa da cena ativa, ou None com a névoa desligada.
     nevoa: Nevoa | None = None
+    #: Os portais da cena ativa (core/mapa.py, normalizar_portais) e o tamanho da casa, em px.
+    portais: list = field(default_factory=list)
+    casa: float = 100.0
 
     def vencidas(self) -> bool:
         return time.monotonic() - self.carregadas_em > VALIDADE_REGRAS_S
@@ -533,6 +537,17 @@ async def processar(
             return {"t": "erro", "motivo": "voce nao move este token", "token": token_id}
         x = max(0.0, min(float(regras.largura), x))
         y = max(0.0, min(float(regras.altura), y))
+        travessia = None
+        if tipo == "soltar" and regras.portais:
+            aceito = mensagem.get("atravessar")
+            achado = portal_atingido(
+                regras.portais, x, y, regras.casa, gestor=conexao.gestor, aceito=aceito if isinstance(aceito, str) else None,
+            )
+            if achado:
+                portal, (px, py) = achado
+                de_vista = regras.nevoa is None or not regra.some_na_nevoa or regras.nevoa.revelado(x, y)
+                travessia = {"portal": portal["id"], "fluxo": portal["fluxo"], "de": [round(x, 2), round(y, 2)] if de_vista else None}
+                x, y = float(px), float(py)
         a_vista, antes = True, True
         if regras.nevoa is not None and regra.some_na_nevoa and regra.quem_ve == "todos":
             a_vista = regras.nevoa.revelado(x, y)
@@ -551,6 +566,9 @@ async def processar(
         tm = _numero(mensagem.get("tm"))
         if tm is not None:
             repasse["tm"] = round(tm)
+        if travessia is not None:
+            # Atravessou um portal: todos (e quem soltou) veem o token sumir de um lado e surgir no outro.
+            repasse.update({"t": "portal", **travessia})
         # A mesa recebe a posição antes do banco gravar: soltar não espera o banco.
         _repassar(sala, conexao, repasse, regra, a_vista, chave=f"t:{token_id}")
         if tipo == "soltar" or saiu_da_nevoa:
@@ -568,7 +586,7 @@ async def processar(
                 _avisar_quem_nao_via(sala, regra, {"t": "mudou", "versao": int(agora_ms())})
         elif antes and not a_vista:
             _avisar_quem_nao_via(sala, regra, {"t": "sumiu", "token": token_id})
-        return None
+        return repasse if travessia is not None else None
 
     if tipo == "ping":
         x = _numero(mensagem.get("x"))

@@ -27,7 +27,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
-from core import mapa, nevoa, tempo_real
+from core import calendario, construtor, mapa, nevoa, tempo_real
 from core.acervo import ler as ler_pedaco
 from core.condicoes import normalizar_condicoes
 from core.database import Database
@@ -47,7 +47,7 @@ MAX_CENAS = 200
 MAX_TOKENS_POR_CENA = 400
 COLUNAS_CENA = (
     "id, campanha_id, nome, mapa_id, largura, altura, grade, ativa, livre, ordem, versao, "
-    "nevoa, nevoa_ladrilhos, clima"
+    "nevoa, nevoa_ladrilhos, clima, estrutura"
 )
 
 
@@ -123,6 +123,12 @@ class NevoaInput(BaseModel):
 class PontoInput(BaseModel):
     x: float
     y: float
+    #: Id do portal que pede confirmação e a pessoa aceitou atravessar.
+    atravessar: str | None = Field(default=None, max_length=40)
+
+
+class PortaisInput(BaseModel):
+    portais: list[dict] = Field(default_factory=list, max_length=mapa.MAX_PORTAIS)
 
 
 class MensagensInput(BaseModel):
@@ -342,6 +348,23 @@ def _mapa_da_cena(connection, cena) -> dict | None:
     }
 
 
+def _portais(cena) -> list[dict]:
+    return mapa.ler_estrutura(cena["estrutura"], int(cena["largura"]), int(cena["altura"]))["portais"]
+
+
+def _tempo_da_campanha(connection, campanha_id: UUID, gestor: bool) -> dict:
+    """Hora, estação e lua para a luz do dia; a data só para quem pode ver o calendário."""
+    linha = connection.execute("SELECT estado FROM campanha_calendario WHERE campanha_id=%s", (campanha_id,)).fetchone()
+    tempo = calendario.resumo_do_tempo(linha["estado"] if linha else None)
+    tempo["em_uso"] = linha is not None
+    if not gestor:
+        campanha = connection.execute("SELECT configuracoes FROM campanhas WHERE id=%s", (campanha_id,)).fetchone()
+        configuracoes = campanha["configuracoes"] if campanha and isinstance(campanha["configuracoes"], dict) else {}
+        if configuracoes.get("calendario_oculto") is True:
+            tempo["data"] = None
+    return tempo
+
+
 def _resumo_cena(connection, cena, *, completa: bool, gestor: bool = False) -> dict:
     resumo = {
         "id": str(cena["id"]),
@@ -351,6 +374,7 @@ def _resumo_cena(connection, cena, *, completa: bool, gestor: bool = False) -> d
     }
     if completa:
         estado_nevoa = nevoa.ler(cena["nevoa"])
+        cobertura = nevoa.Nevoa(estado_nevoa["formas"]) if estado_nevoa["ligada"] else None
         resumo.update({
             "largura": cena["largura"],
             "altura": cena["altura"],
@@ -363,6 +387,16 @@ def _resumo_cena(connection, cena, *, completa: bool, gestor: bool = False) -> d
                 "ladrilhos": list(cena["nevoa_ladrilhos"] or []) if estado_nevoa["ligada"] and not gestor else None,
             },
             "clima": mapa.ler_clima(cena["clima"], int(cena["largura"]), int(cena["altura"])),
+            # Portal escondido, desligado ou com as duas bocas na névoa não chega ao jogador.
+            "portais": mapa.portais_de(
+                _portais(cena), gestor=gestor,
+                revelado=cobertura.revelado if cobertura is not None else (lambda _x, _y: True),
+            ),
+            # Portas e janelas do mapa montado no construtor; a porta secreta é só do Mestre.
+            "aberturas": construtor.aberturas_de(
+                construtor.ler_aberturas(cena["estrutura"]), gestor=gestor,
+                revelado=cobertura.revelado if cobertura is not None else (lambda _x, _y: True),
+            ),
         })
     return resumo
 
@@ -381,10 +415,12 @@ def _montar(connection, campanha_id: UUID, acesso, user: AuthenticatedUser, cena
         "cena": None,
         "tokens": [],
         "moldura_mesa": None,
+        "tempo": None,
     }
     if resposta["bloqueado"]:
         return resposta
     resposta["moldura_mesa"] = _moldura_mesa(connection, campanha_id)
+    resposta["tempo"] = _tempo_da_campanha(connection, campanha_id, gestor)
     if gestor:
         # A lista leva só o resumo; a névoa e o clima vêm apenas da cena aberta.
         cenas = connection.execute(
@@ -586,6 +622,31 @@ def mudar_clima(
         except ErroMapa as erro:
             raise _erro_mapa(erro) from None
         connection.execute("UPDATE mapa_cenas SET clima=%s WHERE id=%s", (Jsonb(clima), cena_id))
+        versao = _tocar(connection, cena_id)
+        resposta = _montar(connection, campanha_id, acesso, user, cena_id)
+    _avisar(campanha_id, versao)
+    return resposta
+
+
+@router.put("/{campanha_id}/cenas/{cena_id}/portais")
+def mudar_portais(
+    campanha_id: UUID,
+    cena_id: UUID,
+    payload: PortaisInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """A lista inteira de portais da cena (o Mestre cria, move, liga, esconde e apaga)."""
+    with database.connection() as connection:
+        acesso = require_campaign_manager(connection, campanha_id, user.id)
+        cena = _cena(connection, campanha_id, cena_id, travar=True)
+        try:
+            portais = mapa.normalizar_portais(payload.portais, int(cena["largura"]), int(cena["altura"]))
+        except ErroMapa as erro:
+            raise _erro_mapa(erro) from None
+        estrutura = dict(cena["estrutura"]) if isinstance(cena["estrutura"], dict) else {}
+        estrutura["portais"] = portais
+        connection.execute("UPDATE mapa_cenas SET estrutura=%s WHERE id=%s", (Jsonb(estrutura), cena_id))
         versao = _tocar(connection, cena_id)
         resposta = _montar(connection, campanha_id, acesso, user, cena_id)
     _avisar(campanha_id, versao)
@@ -909,10 +970,17 @@ def mover_token(
             x, y = mapa.limitar_posicao(payload.x, payload.y, token["largura"], token["altura"])
         except ErroMapa as erro:
             raise _erro_mapa(erro) from None
+        travessia = None
+        cena = _cena(connection, campanha_id, token["cena_id"])
+        casa = mapa.normalizar_grade({}, cena["grade"] if isinstance(cena["grade"], dict) else {})["tamanho"]
+        achado = mapa.portal_atingido(_portais(cena), x, y, casa, gestor=quem.gestor, aceito=payload.atravessar)
+        if achado:
+            portal, (x, y) = achado
+            travessia = {"portal": portal["id"], "fluxo": portal["fluxo"], "de": [payload.x, payload.y]}
         connection.execute("UPDATE mapa_tokens SET x=%s, y=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s", (x, y, token_id))
         versao = _tocar(connection, token["cena_id"])
     _avisar(campanha_id, versao)
-    return {"x": x, "y": y, "versao": versao}
+    return {"x": x, "y": y, "versao": versao, "travessia": travessia}
 
 
 @router.delete("/{campanha_id}/tokens/{token_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -989,6 +1057,8 @@ def _regras_sync(database: Database, campanha_id: UUID) -> tempo_real.Regras:
         cena = _cena_ativa(connection, campanha_id)
         if not cena:
             return tempo_real.Regras(cena_id=None, livre=False, largura=0, altura=0, tokens={})
+        portais = _portais(cena)
+        casa = mapa.normalizar_grade({}, cena["grade"] if isinstance(cena["grade"], dict) else {})["tamanho"]
         tokens = _tokens(connection, cena["id"])
         participantes = _participantes(connection, campanha_id)
         ligacoes = _ligacoes(tokens, participantes)
@@ -1019,7 +1089,7 @@ def _regras_sync(database: Database, campanha_id: UUID) -> tempo_real.Regras:
     return tempo_real.Regras(
         cena_id=str(cena["id"]), livre=bool(cena["livre"]),
         largura=int(cena["largura"]), altura=int(cena["altura"]), tokens=regras,
-        carregadas_em=time.monotonic(), nevoa=cobertura,
+        carregadas_em=time.monotonic(), nevoa=cobertura, portais=portais, casa=float(casa),
     )
 
 

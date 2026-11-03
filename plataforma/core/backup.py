@@ -96,6 +96,8 @@ TABELAS: tuple[str, ...] = (
     "mapa_tokens",
     "personagem_token",
     "mapa_campanha",
+    # Construtor de mapas (migração 64).
+    "mapa_projetos",
 
     # Cassino do Gambler (site) — ver plataforma/routers/casino.py.
     "cassino_gambler_rodadas",

@@ -18,6 +18,7 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import dataclass, field
+from uuid import uuid4
 
 TIPOS_GRADE = ("quadrada", "hex", "nenhuma")
 LADOS = ("jogador", "aliado", "inimigo", "neutro")
@@ -79,6 +80,18 @@ FOLGA_MAGIA = 2000.0
 #: Direção para onde o vento sopra, em graus na tela: 0 vai para a direita, 90 para baixo.
 VENTO_PADRAO = {"direcao": 100.0, "forca": 0.3}
 LUZ_PADRAO = 4.0
+#: A luz da cena: não muda com a hora (como era antes), segue a hora do calendário ou fica numa hora fixa.
+MODOS_CEU = ("nenhum", "mundo", "fixo")
+CEU_PADRAO = {"modo": "nenhum", "minuto": 12 * 60}
+MINUTOS_DO_DIA = 24 * 60
+#: Portais da cena: soltar um token num lado leva ao outro (src/pages/Mapa/motor/portais.ts).
+MAX_PORTAIS = 30
+MAOS_PORTAL = ("dupla", "unica")
+#: Quem atravessa: qualquer um, só quando um jogador solta o token, ou só quando o Mestre solta.
+QUEM_USA_PORTAL = ("todos", "jogadores", "mestre")
+#: Raio da boca do portal, em casas.
+RAIO_PORTAL_PADRAO = 0.6
+ID_PORTAL = re.compile(r"^[A-Za-z0-9_-]{1,40}$")
 
 
 class ErroMapa(Exception):
@@ -240,7 +253,23 @@ def normalizar_clima(dados, largura: int, altura: int) -> dict:
             "direcao": round(_numero(vento.get("direcao", VENTO_PADRAO["direcao"]), "direcao do vento", -360, 720) % 360, 1),
             "forca": round(_numero(vento.get("forca", VENTO_PADRAO["forca"]), "forca do vento", 0, 1), 2),
         },
+        "ceu": normalizar_ceu(dados.get("ceu")),
     }
+
+
+def normalizar_ceu(dados) -> dict:
+    """Como a luz da cena acompanha a hora. `minuto` só vale no modo fixo (minutos desde a meia-noite)."""
+    if dados is None:
+        return dict(CEU_PADRAO)
+    if not isinstance(dados, dict):
+        raise ErroMapa("luz do dia invalida")
+    modo = dados.get("modo", CEU_PADRAO["modo"])
+    if modo not in MODOS_CEU:
+        raise ErroMapa("a luz da cena segue o mundo, fica numa hora fixa ou nao muda")
+    minuto = dados.get("minuto", CEU_PADRAO["minuto"])
+    if isinstance(minuto, bool) or not isinstance(minuto, int) or not 0 <= minuto < MINUTOS_DO_DIA:
+        raise ErroMapa("hora fixa invalida")
+    return {"modo": modo, "minuto": minuto}
 
 
 def ler_clima(dados, largura: int, altura: int) -> dict:
@@ -262,6 +291,107 @@ def normalizar_luz(dados) -> dict | None:
     if not isinstance(cor, str) or not COR.match(cor):
         raise ErroMapa("cor da luz invalida")
     return {"raio": round(raio, 1), "cor": cor.lower(), "tremula": bool(dados.get("tremula", False))}
+
+
+def _ponta_do_portal(dados, campo: str, largura: int, altura: int) -> dict:
+    if not isinstance(dados, dict):
+        raise ErroMapa(f"{campo} do portal invalido")
+    x, y = limitar_posicao(dados.get("x"), dados.get("y"), largura, altura)
+    return {"x": round(x, 1), "y": round(y, 1)}
+
+
+def normalizar_portais(dados, largura: int, altura: int) -> list[dict]:
+    """A lista inteira de portais da cena. Portal sem id (ou com id repetido) ganha um novo."""
+    if not isinstance(dados, list) or len(dados) > MAX_PORTAIS:
+        raise ErroMapa(f"a cena tem ate {MAX_PORTAIS} portais")
+    portais: list[dict] = []
+    ids: set[str] = set()
+    for bruto in dados:
+        if not isinstance(bruto, dict):
+            raise ErroMapa("portal invalido")
+        portal_id = bruto.get("id")
+        if not isinstance(portal_id, str) or not ID_PORTAL.match(portal_id) or portal_id in ids:
+            portal_id = f"p{uuid4().hex[:12]}"
+        ids.add(portal_id)
+        mao = bruto.get("mao", "dupla")
+        if mao not in MAOS_PORTAL:
+            raise ErroMapa("o portal e de ida e volta ou so de ida")
+        usa = bruto.get("usa", "todos")
+        if usa not in QUEM_USA_PORTAL:
+            raise ErroMapa("o portal leva todos, so os jogadores ou so o Mestre")
+        fluxo = bruto.get("fluxo", "espaco")
+        if fluxo not in FLUXOS:
+            raise ErroMapa("escolha o Fluxo do portal")
+        portais.append({
+            "id": portal_id,
+            "nome": " ".join(str(bruto.get("nome") or "").split())[:40] or "Portal",
+            "a": _ponta_do_portal(bruto.get("a"), "a entrada", largura, altura),
+            "b": _ponta_do_portal(bruto.get("b"), "a saida", largura, altura),
+            "raio": round(_numero(bruto.get("raio", RAIO_PORTAL_PADRAO), "tamanho do portal", 0.3, 5), 2),
+            "mao": mao,
+            "usa": usa,
+            "fluxo": fluxo,
+            "visivel": bool(bruto.get("visivel", True)),
+            "confirmar": bool(bruto.get("confirmar", False)),
+            "ligado": bool(bruto.get("ligado", True)),
+        })
+    return portais
+
+
+def ler_estrutura(dados, largura: int, altura: int) -> dict:
+    """O que mora em `mapa_cenas.estrutura` (hoje, os portais); registro quebrado vira vazio."""
+    if not isinstance(dados, dict):
+        return {"portais": []}
+    try:
+        portais = normalizar_portais(dados.get("portais", []), largura, altura)
+    except ErroMapa:
+        portais = []
+    return {"portais": portais}
+
+
+def portal_atingido(portais: list[dict], x: float, y: float, casa: float, *, gestor: bool, aceito: str | None = None):
+    """O portal em que o token foi solto e para onde ele vai: (portal, (x, y)) ou None.
+
+    Na mão dupla, a saída também leva de volta à entrada. Portal que pede confirmação só leva
+    quando a pessoa aceitou (`aceito` é o id dele); um portal que o jogador não vê não pergunta
+    nada, como uma armadilha.
+    """
+    for portal in portais:
+        if not portal["ligado"]:
+            continue
+        if (portal["usa"] == "jogadores" and gestor) or (portal["usa"] == "mestre" and not gestor):
+            continue
+        lados = [("a", "b"), ("b", "a")] if portal["mao"] == "dupla" else [("a", "b")]
+        for de, para in lados:
+            boca = portal[de]
+            if math.hypot(x - boca["x"], y - boca["y"]) > portal["raio"] * casa:
+                continue
+            pergunta = portal["confirmar"] and (gestor or portal["visivel"])
+            if pergunta and aceito != portal["id"]:
+                return None
+            return portal, (portal[para]["x"], portal[para]["y"])
+    return None
+
+
+def portais_de(portais: list[dict], *, gestor: bool, revelado) -> list[dict]:
+    """O que cada um vê dos portais. O Mestre vê todos; o jogador só os ligados e visíveis, e só
+    a boca que a névoa deixa à vista (a outra chega como None)."""
+    if gestor:
+        return [dict(portal) for portal in portais]
+    saida = []
+    for portal in portais:
+        if not (portal["ligado"] and portal["visivel"]):
+            continue
+        a = portal["a"] if revelado(portal["a"]["x"], portal["a"]["y"]) else None
+        b = portal["b"] if revelado(portal["b"]["x"], portal["b"]["y"]) else None
+        if a is None and b is None:
+            continue
+        saida.append({
+            "id": portal["id"], "nome": portal["nome"], "a": a, "b": b, "raio": portal["raio"],
+            "mao": portal["mao"], "usa": portal["usa"], "fluxo": portal["fluxo"],
+            "visivel": True, "confirmar": portal["confirmar"], "ligado": True,
+        })
+    return saida
 
 
 def normalizar_magia(dados, largura: int, altura: int) -> dict:
@@ -415,6 +545,8 @@ def barras_visiveis(token: dict, participante: dict | None, recursos: dict, quem
         barra = _barra(tipo, *recursos[tipo])
         if barra:
             saida.append(barra)
+    # A lista é filtrada antes de sair do servidor. O aparelho de cada jogador
+    # escolhe a composição visual entre os recursos que este espectador recebeu.
     return saida
 
 

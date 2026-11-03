@@ -154,6 +154,11 @@ _INICIO_DOS_MESES = tuple(sum(DIAS_DOS_MESES[:indice]) for indice in range(MESES
 MESES_SEM_DIA_EXTRA = tuple(mes for mes in range(MESES_POR_ANO) if DIAS_DOS_MESES[mes] == DIAS_BASE)
 REPETICOES = ("unico", "mensal", "anual")
 MAX_DURACAO = DIAS_BASE
+#: A hora do mundo, em minutos desde a meia-noite. Quem nunca mexeu começa às 8h.
+MINUTOS_DO_DIA = 24 * 60
+MINUTO_PADRAO = 8 * 60
+#: Até dez anos de calendário para a frente ou para trás num pulo só.
+MAX_MINUTOS_PULO = 3650 * MINUTOS_DO_DIA
 
 
 def dias_do_mes(mes: int, dias: tuple[int, ...] = DIAS_DOS_MESES) -> int:
@@ -172,6 +177,7 @@ def estado_inicial() -> dict:
         "versao": VERSAO_DO_ESTADO,
         "config": {"meses": list(MESES_PADRAO), "sincronizar_discord": True, "dias_extras": []},
         "hoje": {"ano": 1, "mes": 0, "dia": 1},
+        "minuto": MINUTO_PADRAO,
         "estacao_especial": None,
         "eventos": [],
         "historico": [],
@@ -214,6 +220,9 @@ def completar(estado: dict | None) -> dict:
         base["config"]["dias_extras"] = []
     if not isinstance(base.get("historico"), list):
         base["historico"] = []
+    minuto = base.get("minuto")
+    if isinstance(minuto, bool) or not isinstance(minuto, int) or not 0 <= minuto < MINUTOS_DO_DIA:
+        base["minuto"] = MINUTO_PADRAO
     base.pop("efeitos", None)  # estado antigo: os efeitos de mundo deixaram de existir (migração 54)
     return base
 
@@ -368,6 +377,7 @@ def _registrar(estado: dict, texto: str) -> None:
         "quando": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "texto": texto,
         "hoje": deepcopy(estado["hoje"]),
+        "minuto": estado.get("minuto", MINUTO_PADRAO),
         "estacao_especial": estado.get("estacao_especial"),
     })
     del historico[:-MAX_HISTORICO]
@@ -377,11 +387,38 @@ def _nome_da_data(estado: dict, data: dict) -> str:
     return f"dia {data['dia']} · {estado['config']['meses'][data['mes']]}, ano {data['ano']}"
 
 
+def hora_extenso(minuto: int) -> str:
+    return f"{minuto // 60:02d}:{minuto % 60:02d}"
+
+
+def duracao_extenso(minutos: int) -> str:
+    """Uma duração para o histórico: 10 min, 1 h e 30 min, 2 dias e 3 h."""
+    minutos = abs(minutos)
+    dias, resto = divmod(minutos, MINUTOS_DO_DIA)
+    horas, mins = divmod(resto, 60)
+    partes = []
+    if dias:
+        partes.append(f"{dias} {'dia' if dias == 1 else 'dias'}")
+    if horas:
+        partes.append(f"{horas} h")
+    if mins or not partes:
+        partes.append(f"{mins} min")
+    if len(partes) == 1:
+        return partes[0]
+    return ", ".join(partes[:-1]) + " e " + partes[-1]
+
+
 def definir_hoje(estado: dict, dados: dict) -> dict:
     ano, mes, dia = _validar_data(estado, dados.get("ano"), dados.get("mes"), dados.get("dia"))
+    minuto = dados.get("minuto")
+    if minuto is not None:
+        minuto = _inteiro(minuto, "minuto", 0, MINUTOS_DO_DIA - 1)
     novo = {"ano": ano, "mes": mes, "dia": dia}
-    _registrar(estado, f"Definiu a data: {_nome_da_data(estado, novo)}")
+    texto = _nome_da_data(estado, novo) + (f", {hora_extenso(minuto)}" if minuto is not None else "")
+    _registrar(estado, f"Definiu a data: {texto}")
     estado["hoje"] = novo
+    if minuto is not None:
+        estado["minuto"] = minuto
     # Mudar o dia à mão para outra estação encerra o evento especial que estava valendo.
     estado["estacao_especial"] = None
     return estado
@@ -400,6 +437,22 @@ def avancar(estado: dict, dias) -> dict:
     return estado
 
 
+def avancar_tempo(estado: dict, minutos) -> dict:
+    """Anda (ou volta) a hora do mundo. Passar da meia-noite muda o dia, como em `avancar`."""
+    minutos = _inteiro(minutos, "minutos", -MAX_MINUTOS_PULO, MAX_MINUTOS_PULO)
+    tabela = _dias_do_estado(estado)
+    antes = estacao_do_mes(estado["hoje"]["mes"])
+    _registrar(estado, f"{'Avançou' if minutos >= 0 else 'Voltou'} {duracao_extenso(minutos)}")
+    dias, minuto = divmod(estado["minuto"] + minutos, MINUTOS_DO_DIA)
+    estado["minuto"] = minuto
+    if dias:
+        hoje = estado["hoje"]
+        estado["hoje"] = de_dia_absoluto(para_dia_absoluto(hoje["ano"], hoje["mes"], hoje["dia"], tabela) + dias, tabela)
+        if estacao_do_mes(estado["hoje"]["mes"]) != antes:
+            estado["estacao_especial"] = None
+    return estado
+
+
 def definir_estacao_especial(estado: dict, chave) -> dict:
     if chave is not None and chave not in ESTACOES_ESPECIAIS:
         raise ErroCalendario("estacao especial invalida")
@@ -415,6 +468,7 @@ def desfazer(estado: dict) -> dict:
         raise ErroCalendario("nao ha nada para desfazer", 409)
     ultimo = historico.pop()
     estado["hoje"] = ultimo["hoje"]
+    estado["minuto"] = ultimo.get("minuto", estado.get("minuto", MINUTO_PADRAO))
     _encaixar_data(estado["hoje"], _dias_do_estado(estado))
     estado["estacao_especial"] = ultimo.get("estacao_especial")
     return estado
@@ -660,6 +714,38 @@ def _todos_os_eventos(estado: dict) -> list[dict]:
     return lista
 
 
+def _lua_carmesim_hoje(estado: dict) -> bool:
+    hoje = estado["hoje"]
+    return any(
+        evento["id"] == "lua-carmesim" and evento["mes"] == hoje["mes"] and hoje["dia"] == DIA_EXTRA
+        for evento in _eventos_do_ano_ativos(estado)
+    )
+
+
+def resumo_do_tempo(estado: dict) -> dict:
+    """O que o mapa precisa para a luz do dia (hora, estação, lua) e, à parte, a data por extenso.
+
+    `lua` é a posição na lunação, de 0 (Nova) a 1; a Lua Carmesim conta como cheia.
+    """
+    estado = completar(estado)
+    hoje = estado["hoje"]
+    carmesim = _lua_carmesim_hoje(estado)
+    lua = 0.5 if carmesim else ((hoje["dia"] - 1) % DIAS_DA_LUNACAO) / DIAS_DA_LUNACAO
+    meses = estado["config"]["meses"]
+    return {
+        "minuto": estado["minuto"],
+        "hora_extenso": hora_extenso(estado["minuto"]),
+        "estacao": estacao_atual(estado),
+        "lua": round(lua, 4),
+        "lua_carmesim": carmesim,
+        "data": {
+            **hoje,
+            "mes_nome": meses[hoje["mes"]],
+            "extenso": f"Dia {hoje['dia']} · {meses[hoje['mes']]}, ano {hoje['ano']}",
+        },
+    }
+
+
 def visao(estado: dict, *, gestor: bool, ano: int | None = None, mes: int | None = None, proximos: int = 6) -> dict:
     """O calendário de um mês (o de hoje, se nada for pedido) e os próximos eventos."""
     estado = completar(estado)
@@ -750,13 +836,12 @@ def visao(estado: dict, *, gestor: bool, ano: int | None = None, mes: int | None
         **extras,
         "hoje": hoje,
         "hoje_extenso": f"Dia {hoje['dia']} · {meses[hoje['mes']]}, ano {hoje['ano']}",
+        "minuto": estado["minuto"],
+        "hora_extenso": hora_extenso(estado["minuto"]),
         "estacao": info_da_estacao(chave),
         "estacao_especial": estado["estacao_especial"],
         "estacao_normal": estacao_do_mes(hoje["mes"]),
-        "hoje_lua_carmesim": any(
-            evento["id"] == "lua-carmesim" and evento["mes"] == hoje["mes"] and hoje["dia"] == DIA_EXTRA
-            for evento in ativos
-        ),
+        "hoje_lua_carmesim": _lua_carmesim_hoje(estado),
         "config": _config_publica(estado, meses, gestor),
         "mes": {
             "ano": ano, "mes": mes, "nome": meses[mes],

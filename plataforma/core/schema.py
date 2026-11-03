@@ -2278,4 +2278,39 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS luz JSONB",
         ),
     ),
+    (
+        63,
+        "estrutura_da_cena",
+        (
+            # O que a cena tem além do mapa e dos tokens: por enquanto os portais
+            # {"portais": [...]} (core/mapa.py, normalizar_portais). As paredes e as portas
+            # do construtor de mapas vão morar aqui também.
+            "ALTER TABLE mapa_cenas ADD COLUMN IF NOT EXISTS estrutura JSONB NOT NULL DEFAULT '{}'::jsonb",
+        ),
+    ),
+    (
+        64,
+        "construtor_de_mapas",
+        (
+            # Mapas montados no construtor do Mestre: chão, paredes e aberturas numa grade de
+            # casas (core/construtor.py). Só quem conduz a campanha lê; publicar desenha o mapa
+            # numa imagem do acervo e grava a parte viva em mapa_cenas.estrutura.
+            """
+            CREATE TABLE IF NOT EXISTS mapa_projetos (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                nome TEXT NOT NULL CHECK (length(nome) BETWEEN 1 AND 80),
+                largura INTEGER NOT NULL CHECK (largura BETWEEN 4 AND 120),
+                altura INTEGER NOT NULL CHECK (altura BETWEEN 4 AND 120),
+                casa INTEGER NOT NULL DEFAULT 100 CHECK (casa BETWEEN 50 AND 200),
+                conteudo JSONB NOT NULL DEFAULT '{}'::jsonb,
+                cena_id UUID REFERENCES mapa_cenas(id) ON DELETE SET NULL,
+                versao INTEGER NOT NULL DEFAULT 1,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS mapa_projetos_campanha_idx ON mapa_projetos (campanha_id, atualizado_em DESC)",
+        ),
+    ),
 )

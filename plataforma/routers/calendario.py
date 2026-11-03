@@ -37,10 +37,15 @@ class HojeInput(BaseModel):
     ano: int
     mes: int
     dia: int
+    minuto: int | None = Field(default=None, ge=0, lt=regras.MINUTOS_DO_DIA)
 
 
 class AvancarInput(BaseModel):
     dias: int = Field(ge=-3650, le=3650)
+
+
+class AvancarTempoInput(BaseModel):
+    minutos: int = Field(ge=-regras.MAX_MINUTOS_PULO, le=regras.MAX_MINUTOS_PULO)
 
 
 class EstacaoEspecialInput(BaseModel):
@@ -218,6 +223,12 @@ def definir_hoje(campanha_id: UUID, payload: HojeInput, user: AuthenticatedUser 
 @router.post("/{campanha_id}/avancar")
 def avancar(campanha_id: UUID, payload: AvancarInput, user: AuthenticatedUser = Depends(require_csrf), database: Database = Depends(get_database)):
     return _alterar(campanha_id, user, database, lambda estado: regras.avancar(estado, payload.dias))
+
+
+@router.post("/{campanha_id}/avancar-tempo")
+def avancar_tempo(campanha_id: UUID, payload: AvancarTempoInput, user: AuthenticatedUser = Depends(require_csrf), database: Database = Depends(get_database)):
+    """Anda a hora do mundo (o painel Tempo do mapa); passar da meia-noite muda o dia."""
+    return _alterar(campanha_id, user, database, lambda estado: regras.avancar_tempo(estado, payload.minutos))
 
 
 @router.post("/{campanha_id}/dias-extras")

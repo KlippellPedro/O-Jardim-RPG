@@ -72,6 +72,18 @@ def test_degrau_total_mostra_numeros_conforme_a_escolha_do_dono():
     ]
 
 
+def test_servidor_manda_os_recursos_liberados_e_o_aparelho_escolhe_qual_desenhar():
+    # O servidor só filtra pela permissão do token; Mana, Estamina ou as duas é escolha de cada
+    # aparelho (src/pages/Mapa/motor/barrasToken.ts, tests/frontend/barrasDoToken.test.ts).
+    tudo = token(participante_id="pa1", barras={"para": "todos", "mostrar": ["vida", "mana", "estamina", "sanidade"]})
+    com_mana = participante(mana_atual=3, mana_maxima=6)
+    assert [b["tipo"] for b in mapa.visao_token(tudo, com_mana, ANA, livre=False)["barras"]] == ["vida", "mana", "estamina"]
+    # Sem Mana na ficha, não há barra de Mana para mandar.
+    assert [b["tipo"] for b in mapa.visao_token(tudo, participante(), ANA, livre=False)["barras"]] == ["vida", "estamina"]
+    so_estamina = token(participante_id="pa1", barras={"para": "todos", "mostrar": ["vida", "estamina"]})
+    assert [b["tipo"] for b in mapa.visao_token(so_estamina, com_mana, ANA, livre=False)["barras"]] == ["vida", "estamina"]
+
+
 def test_inimigo_comeca_com_barras_so_para_o_mestre():
     inimigo = token(participante_id="pa1")
     assert mapa.visao_token(inimigo, participante(), ANA, livre=False)["barras"] == []
