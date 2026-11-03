@@ -5,9 +5,11 @@ portas, mobília) e trazer para o nosso mapa as extensões boas do Owlbear,
 começando por calendário, dia e noite (nascer e pôr do sol) e portais que levam
 um token ou objeto de um lado para o outro.
 
-As levas 1 (tempo e portais), 2 (construtor, parte 1) e o primeiro recorte da
-parte 3 (peças do Acervo) foram feitas em 2026-11-03; o pacote de mobília e as
-outras extensões continuam como proposta e ordem de trabalho.
+As levas 1 (tempo e portais), 2 (construtor, parte 1) e 3 (construtor, parte 2:
+peças do Acervo, mobília, camadas, peças prontas, luzes fixas, água e lava, e a
+licença no Acervo) e 4 (paredes vivas: portas na mesa, bloqueio e portal entre
+cenas) foram feitas em 2026-11-03; as levas 5 e 6 continuam como proposta e
+ordem de trabalho.
 
 ## O que já existe e vai ser aproveitado
 
@@ -279,11 +281,76 @@ Cada leva fecha com testes, mural e commit só com pedido.
      ficou limpo.
 3. **Construtor, parte 2**:
    - **Primeiro recorte feito em 2026-11-03:** imagens do tipo Objeto no Acervo podem ser colocadas no construtor, movidas, redimensionadas, giradas e espelhadas. O projeto guarda a referência da imagem, e a publicação incorpora a peça no mapa final. O editor usa ladrilhos em resolução maior que a miniatura e reduz a fonte conforme a quantidade de imagens únicas para limitar o uso de memória. O Acervo protege imagens que ainda estão sendo usadas por projetos editáveis; só Mestres com acesso ao projeto leem essas referências.
-   - **Próximo:** pacote de mobília feito no Blender, atribuição de autoria/licença no Acervo e organização de peças em várias camadas;
-   - peças prontas, luzes fixas, água e lava animadas;
-   - lista de camadas.
+   - **Resto da leva feito em 2026-11-03:**
+     - **Mobília do Jardim**: 44 peças feitas no Blender por
+       `tools/blender/gerar_mobilia.py` (Cycles, vista de cima, sombra em
+       catcher) e convertidas por `tools/mobilia_construtor.py` para
+       `public/assets/construtor/mobilia/<id>.webp` (192 px por casa) e
+       `src/data/construtor-mobilia.json`. `tools/blender/gerar_mobilia.ps1`
+       refaz tudo. A peça guarda `pacote` em vez de `imagem_id` e não passa
+       pelo Acervo.
+     - **Camadas**: cada peça tem `camada` (chão, objetos, alto). Chão e
+       objetos são desenhados antes das paredes; alto, depois das janelas.
+       Dentro da camada vale a ordem da lista (Para trás, Para a frente,
+       Duplicar), e o painel mostra a lista por camada.
+     - **Peças prontas**: Shift + clique junta peças, e o grupo anda junto.
+       "Salvar como peça pronta" guarda o grupo com posições relativas ao
+       centro em `mapa_campanha.prontas` (migração 65; até 40 por campanha,
+       32 peças cada). As rotas são `GET` e `PUT /mapa/{campanha}/prontas`,
+       e o clique no mapa põe o grupo com ids novos.
+     - **Luzes fixas**: ferramenta Luz (vela, tocha, braseiro, lanterna, luz
+       mágica), com alcance, cor e chama trêmula. Vão para
+       `estrutura.luzes` na publicação. Na mesa entram nas fontes de luz do
+       escuro, e o servidor só manda ao jogador a luz que está em lugar
+       revelado.
+     - **Água e lava**: as casas `W` e `V` viram retângulos em
+       `estrutura.liquidos`. `motor/liquidos.ts` corre uma textura de brilho
+       por cima, debaixo da névoa, e fica parada com
+       `prefers-reduced-motion`.
+     - **Licença no Acervo**: `acervo_itens` ganhou autoria, origem e licença
+       (migração 65; lista em `core/acervo.py`, `LICENCAS`), anotadas no botão
+       de informação da gaveta. Imagem sem licença mostra um aviso. O mapa
+       publicado só com mobília do Jardim sai anotado como próprio.
+     - **Correção**: o pincel de chão e a borracha passam pela linha inteira
+       entre dois eventos do mouse e não pulam casas.
+   - **Conferido**: o Mestre montou uma sala de tábua com rio de água e poça
+     de lava e pôs mesa e cadeira da mobília. Juntou as duas com Shift, moveu
+     o grupo, salvou como peça pronta e a pôs de novo noutro canto. Pôs uma
+     tocha e um braseiro e publicou: a cena chegou com 2 luzes, 10 faixas de
+     água e 1 de lava, e a imagem ficou anotada como própria. O painel de
+     licença abriu no Acervo e o console ficou limpo.
 4. **Paredes vivas**: portas na mesa, bloqueio do arrasto e portais entre
    cenas.
+   - **Feito em 2026-11-03**, sem migração (tudo em `mapa_cenas.estrutura`):
+     - **Bloqueio** (`plataforma/core/paredes.py`): parede, janela, porta
+       secreta e porta fechada ou trancada seguram o token do jogador; a
+       porta aberta é um vão. O hub confere o caminho desde a última posição
+       gravada no arrastar e no soltar (`RegraToken.x/y`, `Regras.barram` e
+       `vaos`), e a rota `mover` faz o mesmo. O token para 0,3 casa antes da
+       parede, e quem soltou recebe a posição certa com `barrado`. O Mestre
+       atravessa tudo. As paredes não vão ao jogador, porque entregariam o
+       que a névoa cobre.
+     - **Portas na mesa**: `PUT /mapa/{campanha}/cenas/{cena}/portas`
+       `{id, estado?, revelar?}`. O jogador abre e fecha a porta destrancada
+       com um token dele a até 1,6 casa do batente, na cena ao vivo. Porta
+       secreta ou coberta pela névoa não existe para ele (404). O Mestre abre,
+       fecha, tranca e revela a secreta, que vira porta com `era_secreta` (o
+       jogador não recebe esse campo) e pode ser escondida de novo. Na mesa,
+       o clique na linha da porta (`motor/portasConta.ts`) abre e fecha para
+       o jogador, mesmo em cima do token dele; para o Mestre, abre o menu
+       (`componentes/MenuPorta.tsx`).
+     - **Portal entre cenas**: o portal ganha `cena` (e `cena_nome`), e `b`
+       fica na outra cena. Ele é só de ida; a volta é outro portal na outra
+       cena. Soltar na entrada grava o token lá (`_levar_para_cena`). Se o
+       personagem já tem token na outra cena, aquele vai para a saída e este
+       some. A mesa recarrega, quem atravessou recebe `portal_cena`, e quem
+       comanda recebe um `aviso` com o nome. O jogador vê só a entrada. No
+       painel do portal, "Leva para" escolhe a cena, e "Chegada" escolhe o
+       meio dela ou a boca de um portal de lá.
+   - **Conferido no navegador**: a parede segurou a Ana (com aviso), o clique
+     no batente abriu a porta e ela saiu da sala. A secreta não aparecia para
+     ela até o Mestre revelar pelo menu. O portal levou a Mira para a cena
+     Medida, com aviso para os dois, e o painel mostrou o destino.
 5. **Visão pelas paredes**, com segredo no servidor e memória do explorado.
 6. **Extras**: auras, notas, falas, pausa, relógios, trilha, distâncias e
    documentos na mesa.
@@ -296,6 +363,6 @@ Cada leva fecha com testes, mural e commit só com pedido.
 2. **As peças**: pacote nosso no Blender mais as imagens do acervo, com
    licença anotada. Nenhum pacote de terceiros no repositório.
 3. **As portas**: o jogador abre porta destrancada ao lado do token?
-   Recomendação: sim.
+   Recomendação: sim. Feito assim na leva 4.
 4. **Portal entre cenas**: leva o token mesmo quando a mesa está noutra cena?
-   Recomendação: sim, e o Mestre recebe um aviso.
+   Recomendação: sim, e o Mestre recebe um aviso. Feito assim na leva 4.
