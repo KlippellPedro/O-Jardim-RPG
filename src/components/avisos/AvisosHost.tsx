@@ -2,7 +2,7 @@ import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore }
 import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { AlertTriangle, CheckCircle2, Info, OctagonAlert, X } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Info, OctagonAlert, PencilLine, X } from 'lucide-react';
 import { sfx } from '../../utils/audioSynth';
 import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 import { dispensarAviso, inscreverAvisos, lerAvisos, type Aviso, type TipoDeAviso } from './avisos';
@@ -120,15 +120,24 @@ const PilhaDeAvisos = ({ avisos }: { avisos: readonly Aviso[] }) => (
   </div>
 );
 
-/** O diálogo que substitui o `window.confirm`: foco preso, Esc cancela, clique fora cancela. */
+/** O diálogo que substitui o `window.confirm` (e, com campo, o `window.prompt`): foco preso, Esc cancela, clique fora cancela. */
 const DialogoDeConfirmacao = ({ pedido }: { pedido: PedidoDeConfirmacao }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const cancelarRef = useRef<HTMLButtonElement>(null);
   const confirmarRef = useRef<HTMLButtonElement>(null);
+  const campoRef = useRef<HTMLInputElement>(null);
   const tituloId = useId();
   const textoId = useId();
+  const campoId = useId();
   const perigo = pedido.tom === 'perigo';
-  const responder = useCallback((resposta: RespostaDeConfirmacao) => responderConfirmacao(pedido.id, resposta), [pedido.id]);
+  const [texto, setTexto] = useState(pedido.campo?.valor ?? '');
+  const textoRef = useRef(texto);
+  textoRef.current = texto;
+  const responder = useCallback(
+    (resposta: RespostaDeConfirmacao) => responderConfirmacao(pedido.id, resposta, textoRef.current),
+    [pedido.id],
+  );
+  const semTexto = Boolean(pedido.campo) && !texto.trim();
 
   // O Esc é tratado na fase de captura: outros diálogos por baixo (a ficha, um painel) também
   // escutam o Esc no documento, e sem isto fechariam junto com a pergunta.
@@ -136,8 +145,12 @@ const DialogoDeConfirmacao = ({ pedido }: { pedido: PedidoDeConfirmacao }) => {
     open: true,
     dialogRef,
     closeOnEscape: false,
-    initialFocusRef: perigo ? cancelarRef : confirmarRef,
+    initialFocusRef: pedido.campo ? campoRef : perigo ? cancelarRef : confirmarRef,
   });
+  useEffect(() => {
+    // O texto que já vem pronto fica selecionado: digitar troca tudo de uma vez.
+    if (pedido.campo) campoRef.current?.select();
+  }, [pedido.campo]);
   useEffect(() => {
     sfx.play('open');
     const aoTeclar = (evento: KeyboardEvent) => {
@@ -162,14 +175,34 @@ const DialogoDeConfirmacao = ({ pedido }: { pedido: PedidoDeConfirmacao }) => {
         role="alertdialog"
         aria-modal="true"
         aria-labelledby={tituloId}
-        aria-describedby={textoId}
+        aria-describedby={pedido.mensagem ? textoId : undefined}
         className={`confirmacao${perigo ? ' confirmacao--perigo' : ''}`}
       >
         <div className="confirmacao__cabeca">
-          <span className="confirmacao__icone" aria-hidden="true"><AlertTriangle size={18} /></span>
+          <span className="confirmacao__icone" aria-hidden="true">{pedido.campo ? <PencilLine size={18} /> : <AlertTriangle size={18} />}</span>
           <h2 id={tituloId} className="confirmacao__titulo">{pedido.titulo}</h2>
         </div>
-        <p id={textoId} className="confirmacao__texto">{pedido.mensagem}</p>
+        {pedido.mensagem ? <p id={textoId} className="confirmacao__texto">{pedido.mensagem}</p> : null}
+        {pedido.campo ? (
+          <form
+            className="confirmacao__campo"
+            onSubmit={(evento) => {
+              evento.preventDefault();
+              if (!semTexto) responder('confirmar');
+            }}
+          >
+            <label htmlFor={campoId}>{pedido.campo.rotulo}</label>
+            <input
+              ref={campoRef}
+              id={campoId}
+              value={texto}
+              maxLength={pedido.campo.maximo}
+              placeholder={pedido.campo.placeholder}
+              autoComplete="off"
+              onChange={(evento) => setTexto(evento.target.value)}
+            />
+          </form>
+        ) : null}
         <div className="confirmacao__botoes">
           <button ref={cancelarRef} type="button" className="confirmacao__botao" data-sfx="cancel" onClick={() => responder('cancelar')}>
             {pedido.rotuloCancelar}
@@ -179,7 +212,7 @@ const DialogoDeConfirmacao = ({ pedido }: { pedido: PedidoDeConfirmacao }) => {
               {pedido.alternativa.rotulo}
             </button>
           ) : null}
-          <button ref={confirmarRef} type="button" className="confirmacao__botao confirmacao__botao--principal" data-sfx="confirm" onClick={() => responder('confirmar')}>
+          <button ref={confirmarRef} type="button" className="confirmacao__botao confirmacao__botao--principal" data-sfx="confirm" disabled={semTexto} onClick={() => responder('confirmar')}>
             {pedido.rotuloConfirmar}
           </button>
         </div>

@@ -20,6 +20,7 @@ import {
   inscreverConfirmacoes,
   normalizarPedido,
   pedidoAtual,
+  pedirTexto,
   responderConfirmacao,
 } from '../../src/components/avisos/confirmacao';
 
@@ -184,4 +185,27 @@ test('os textos padrão de uma confirmação', () => {
   assert.equal(pedido.tom, 'padrao');
   assert.equal(pedido.alternativa, undefined);
   assert.equal(normalizarPedido({ mensagem: 'x', titulo: '  ' }).titulo, 'Confirmar');
+});
+
+test('pedirTexto mostra o campo e devolve o texto aparado; cancelar ou deixar vazio devolve null', async () => {
+  cancelarConfirmacoes();
+  const promessa = pedirTexto({ titulo: 'Nova cena', campo: { rotulo: 'Nome da cena', valor: 'Cena 2', maximo: 80 }, rotuloConfirmar: 'Criar cena' });
+  const pedido = pedidoAtual()!;
+  assert.equal(pedido.titulo, 'Nova cena');
+  assert.equal(pedido.mensagem, '');
+  assert.deepEqual(pedido.campo, { rotulo: 'Nome da cena', valor: 'Cena 2', maximo: 80 });
+  responderConfirmacao(pedido.id, 'confirmar', '  Porto de Salém  ');
+  assert.equal(await promessa, 'Porto de Salém');
+
+  const cancelada = pedirTexto({ campo: { rotulo: 'Nome da pasta' } });
+  responderConfirmacao(pedidoAtual()!.id, 'cancelar', 'Mapas');
+  assert.equal(await cancelada, null);
+
+  const vazia = pedirTexto({ campo: { rotulo: 'Nome da pasta' } });
+  responderConfirmacao(pedidoAtual()!.id, 'confirmar', '   ');
+  assert.equal(await vazia, null);
+
+  const trocouDeTela = pedirTexto({ campo: { rotulo: 'Nome da pasta' } });
+  cancelarConfirmacoes();
+  assert.equal(await trocouDeTela, null);
 });

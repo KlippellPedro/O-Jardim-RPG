@@ -262,3 +262,36 @@
 
 html[data-performance-mode='reduced'] .aviso__tempo { display: none; }
 html[data-performance-mode='reduced'] .confirmacao-fundo { backdrop-filter: none; }
+
+/* Campo do pedirTexto (nome de cena, de pasta): o window.prompt com a cara do site. */
+.confirmacao__campo {
+  display: grid;
+  gap: 6px;
+  margin: 4px 0 14px;
+}
+
+.confirmacao__campo label {
+  color: rgb(255 255 255 / 0.62);
+  font-size: 12px;
+}
+
+.confirmacao__campo input {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 10px;
+  background: rgb(0 0 0 / 0.35);
+  color: #fff;
+  font: inherit;
+}
+
+.confirmacao__campo input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--confirmacao-cor) 70%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--confirmacao-cor) 22%, transparent);
+}
+
+.confirmacao__botao:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

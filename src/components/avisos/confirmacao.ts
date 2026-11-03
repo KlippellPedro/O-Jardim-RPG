@@ -1,8 +1,9 @@
-/** Confirmação com a cara do site, no lugar do `window.confirm`.
+/** Confirmação com a cara do site, no lugar do `window.confirm` e do `window.prompt`.
  *
  * `await confirmar('Apagar?')` devolve true só se a pessoa confirmou; `escolher` aceita uma
- * terceira saída (ex.: "Começar assim") e devolve qual botão foi usado. O diálogo em si é
- * desenhado pelo `AvisosHost`. Pedidos que chegam juntos esperam na fila, um de cada vez. */
+ * terceira saída (ex.: "Começar assim") e devolve qual botão foi usado; `pedirTexto` mostra um
+ * campo e devolve o que foi escrito (ou null). O diálogo em si é desenhado pelo `AvisosHost`.
+ * Pedidos que chegam juntos esperam na fila, um de cada vez. */
 
 export type TomDeConfirmacao = 'padrao' | 'perigo';
 export type RespostaDeConfirmacao = 'confirmar' | 'alternativa' | 'cancelar';
@@ -18,6 +19,14 @@ export interface OpcoesDeConfirmacao {
   alternativa?: { rotulo: string };
 }
 
+/** Campo de texto do `pedirTexto`. */
+export interface CampoDeTexto {
+  rotulo: string;
+  valor?: string;
+  maximo?: number;
+  placeholder?: string;
+}
+
 export interface PedidoDeConfirmacao {
   id: number;
   titulo: string;
@@ -26,7 +35,8 @@ export interface PedidoDeConfirmacao {
   rotuloCancelar: string;
   tom: TomDeConfirmacao;
   alternativa?: { rotulo: string };
-  resolver: (resposta: RespostaDeConfirmacao) => void;
+  campo?: CampoDeTexto;
+  resolver: (resposta: RespostaDeConfirmacao, texto?: string) => void;
 }
 
 /** Os textos padrão de um pedido; só `mensagem` é obrigatória. */
@@ -69,13 +79,29 @@ export async function confirmar(opcoes: OpcoesDeConfirmacao | string): Promise<b
   return (await escolher(opcoes)) === 'confirmar';
 }
 
+/** Pede um texto (o nome de uma cena, de uma pasta). Devolve o texto aparado, ou null se a pessoa cancelou ou deixou vazio. */
+export function pedirTexto(
+  opcoes: Omit<OpcoesDeConfirmacao, 'mensagem' | 'alternativa'> & { mensagem?: string; campo: CampoDeTexto },
+): Promise<string | null> {
+  return new Promise<string | null>((resolver) => {
+    const pedido = normalizarPedido({ ...opcoes, mensagem: opcoes.mensagem ?? '' });
+    fila = [...fila, {
+      ...pedido,
+      campo: opcoes.campo,
+      id: proximoId++,
+      resolver: (resposta, texto) => resolver(resposta === 'confirmar' && texto?.trim() ? texto.trim() : null),
+    }];
+    emitir();
+  });
+}
+
 /** Chamado pelo diálogo: resolve o pedido e passa para o próximo da fila. */
-export function responderConfirmacao(id: number, resposta: RespostaDeConfirmacao): void {
+export function responderConfirmacao(id: number, resposta: RespostaDeConfirmacao, texto?: string): void {
   const pedido = fila.find((item) => item.id === id);
   if (!pedido) return;
   fila = fila.filter((item) => item.id !== id);
   emitir();
-  pedido.resolver(resposta);
+  pedido.resolver(resposta, texto);
 }
 
 /** Troca de tela com pedido aberto: ninguém ficou para responder, então tudo vira Cancelar. */
