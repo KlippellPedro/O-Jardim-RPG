@@ -5,24 +5,30 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Cloud, CloudOff, CloudRain, Crosshair, Expand, Eye, FolderOpen, Hand, Loader2, MapPin, Maximize2, Minimize2, PanelRightClose, PanelRightOpen, Ruler, Users, Wand2, Wifi, WifiOff,
+  ArrowLeft, Cloud, CloudOff, CloudRain, Crosshair, Expand, Eye, FolderOpen, Hand, Loader2, MapPin, Maximize2, Minimize2, PanelRightClose, PanelRightOpen, Ruler, Sparkles, Swords, UserRound, Users, Wand2, Wifi, WifiOff,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSessaoStore } from '../../store/useSessaoStore';
 import { assinarEventosDaCampanha } from '../../services/campanhaEventos';
-import { mapaApi, type IAreaClima, type IClima, type IEstadoMapa, type IFormaNevoa, type INevoaPayload, type ITokenEdicao, type ITokenMapa } from '../../services/mapaApi';
+import { mapaApi, type IAreaClima, type IClima, type IEstadoMapa, type IFormaNevoa, type IMagiaMapa, type INevoaPayload, type ITokenEdicao, type ITokenMapa } from '../../services/mapaApi';
 import type { IItemAcervo } from '../../services/acervoApi';
-import { confirmar } from '../../components/avisos/confirmacao';
-import { PalcoMapa, type Ferramenta, type OpcoesNevoa } from './motor/palco';
+import { confirmar, pedirTexto } from '../../components/avisos/confirmacao';
+import { avisar } from '../../components/avisos/avisos';
+import { PalcoMapa, type Ferramenta, type OpcoesMagia, type OpcoesNevoa } from './motor/palco';
 import { encaixar, type IPonto } from './motor/geometria';
 import { ConexaoMapa, Interpolador, type EstadoConexao, type MensagemMapa } from './tempoReal';
 import { PainelLateral, tokenDaEntidade, type AbaLateral } from './componentes/PainelLateral';
+import { BotaoFerramenta, ComDica } from './componentes/BotaoFerramenta';
 import { MenuToken } from './componentes/MenuToken';
 import { ConfigCena, FaixaCenas } from './componentes/CenasDoMestre';
 import { AcervoGaveta } from './acervo/AcervoGaveta';
 import { OficinaGaveta } from './oficina/OficinaGaveta';
 import { BarraNevoa } from './componentes/BarraNevoa';
+import { BarraMagia } from './componentes/BarraMagia';
 import { PainelClima } from './componentes/PainelClima';
+import { MedidorPainel } from './componentes/Medidor';
+import { Medidor } from './medidor';
+import { aplicarDelta, type DeltaMapa } from './delta';
 import type { Enquadramento } from './motor/molduras';
 import './mapa.css';
 
@@ -33,7 +39,10 @@ interface Pessoa {
   gestor: boolean;
 }
 
-const ENVIO_ARRASTO_MS = 50;
+/** Arrasto e régua saem 30 vezes por segundo, junto com o quadro da tela (a cada dois quadros a 60 Hz). */
+const ENVIO_ARRASTO_MS = 1000 / 30;
+/** Folga para o envio casar com o quadro: um quadro chega a 33,3 ms, nunca exatos 33,33. */
+const TOLERANCIA_QUADRO_MS = 4;
 /** Escolha de cada aparelho: desligar os efeitos de clima (desempenho ou conforto). */
 const CHAVE_CLIMA_LOCAL = 'jardim.mapa.clima';
 
@@ -44,6 +53,19 @@ function lerClimaLocal(): boolean {
     return true;
   }
 }
+/** A última forma e o Fluxo de magia escolhidos neste aparelho. */
+const CHAVE_MAGIA_LOCAL = 'jardim.mapa.magia';
+
+function lerMagiaLocal(): OpcoesMagia {
+  try {
+    const salvo = JSON.parse(window.localStorage.getItem(CHAVE_MAGIA_LOCAL) ?? 'null');
+    if (salvo && typeof salvo.forma === 'string' && typeof salvo.fluxo === 'string') return salvo;
+  } catch {
+    // Sem armazenamento ou valor estragado: volta ao padrão.
+  }
+  return { forma: 'circulo', fluxo: 'essencia' };
+}
+
 // Eventos da campanha que não mexem no mapa (rolagem, destaque, calendário, mesa).
 const EVENTOS_SEM_EFEITO = new Set(['registro', 'destaque_mesa', 'calendario', 'mesa']);
 
@@ -55,7 +77,7 @@ export const MapaPage = () => {
   const navigate = useNavigate();
   const campanhaAtiva = useAuthStore((s) => s.campanhaAtiva);
   const campanhaId = campanhaAtiva?.id ?? null;
-  const { conectarSSE, desconectarSSE, iniciativa, turnoAtualId, emCombate, sessaoId } = useSessaoStore();
+  const { conectarSSE, desconectarSSE, iniciativa, turnoAtualId, emCombate, rodada, sessaoId } = useSessaoStore();
 
   const [estado, setEstado] = useState<IEstadoMapa | null>(null);
   const [erro, setErro] = useState('');
@@ -75,8 +97,13 @@ export const MapaPage = () => {
   const [climaLocal, setClimaLocal] = useState(lerClimaLocal);
   const [opcoesNevoa, setOpcoesNevoa] = useState<OpcoesNevoa>({ op: 'revelar', forma: 'pincel', raio: 100 });
   const [marcandoArea, setMarcandoArea] = useState(false);
+  const [opcoesMagia, setOpcoesMagia] = useState<OpcoesMagia>(lerMagiaLocal);
   const aplicarArea = useRef<((area: IAreaClima) => void) | null>(null);
   const pedidoNevoa = useRef(0);
+  const [medidorAberto, setMedidorAberto] = useState(false);
+  const medidor = useRef(new Medidor()).current;
+  /** Número da última mudança empurrada pelo servidor nesta conexão. */
+  const ultimoSeq = useRef<number | null>(null);
 
   const alvoRef = useRef<HTMLDivElement>(null);
   const palcoRef = useRef<PalcoMapa | null>(null);
@@ -96,7 +123,9 @@ export const MapaPage = () => {
   const recarregar = useCallback(async () => {
     if (!campanhaId) return;
     try {
+      const inicio = agoraServidor();
       const novo = await mapaApi.obter(campanhaId, cenaVistaRef.current);
+      medidor.registrarRecarga(agoraServidor(), agoraServidor() - inicio);
       tentativas.current = 0;
       setEstado(novo);
       setErro('');
@@ -112,7 +141,7 @@ export const MapaPage = () => {
         }, espera);
       }
     }
-  }, [campanhaId]);
+  }, [campanhaId, medidor]);
 
   useEffect(() => () => {
     if (novaTentativa.current !== null) window.clearTimeout(novaTentativa.current);
@@ -135,11 +164,53 @@ export const MapaPage = () => {
   const aoMensagem = useCallback((mensagem: MensagemMapa) => {
     const palco = palcoRef.current;
     switch (mensagem.t) {
+      case 'oi':
+        // Conexão nova: a numeração das mudanças recomeça.
+        if (mensagem.eu) ultimoSeq.current = null;
+        // Resposta do batimento: ida e volta e relógio do servidor, para o medidor.
+        if (typeof mensagem.c === 'number' && typeof mensagem.ts === 'number') medidor.registrarOi(mensagem.c, agoraServidor(), mensagem.ts);
+        break;
+      case 'estado':
+      case 'delta': {
+        // Mudança pronta do servidor, já no recorte desta pessoa: nada de esperar e baixar o mapa inteiro.
+        const seq = Number(mensagem.seq);
+        const anterior = ultimoSeq.current;
+        ultimoSeq.current = seq;
+        medidor.registrarMudanca(agoraServidor(), Number(mensagem.ts));
+        if (anterior !== null && seq !== anterior + 1) {
+          // Pulou um número: alguma mudança se perdeu no caminho, e o mapa inteiro vem pelo GET.
+          agendarRecarga();
+          break;
+        }
+        if (mensagem.t === 'estado') {
+          const novo = mensagem.estado as IEstadoMapa;
+          // O Mestre pode ter trocado de cena enquanto o servidor calculava a outra.
+          const vista = cenaVistaRef.current;
+          if (vista && novo.cena?.id !== vista) {
+            agendarRecarga();
+            break;
+          }
+          setEstado(novo);
+          setErro('');
+          break;
+        }
+        const delta = mensagem as unknown as DeltaMapa;
+        if ((estadoRef.current?.cena?.id ?? null) !== delta.cena_id) {
+          agendarRecarga();
+          break;
+        }
+        setEstado((atual) => (atual ? aplicarDelta(atual, delta) : atual));
+        break;
+      }
       case 'arrastando':
       case 'token': {
         const id = String(mensagem.token);
-        interpolador.receber(id, { t: Number(mensagem.ts), x: Number(mensagem.x), y: Number(mensagem.y) });
+        // A hora do gesto (`tm`) tem o espaçamento de quem arrasta; a de chegada ao servidor (`ts`)
+        // traz a variação da subida, e o token andaria aos solavancos.
+        const hora = typeof mensagem.tm === 'number' ? mensagem.tm : Number(mensagem.ts);
+        interpolador.receber(id, { t: hora, x: Number(mensagem.x), y: Number(mensagem.y), final: mensagem.t === 'token' });
         ultimaAmostra.set(id, agoraServidor());
+        medidor.registrarMovimento(agoraServidor(), Number(mensagem.ts), typeof mensagem.tm === 'number' ? mensagem.tm : null);
         if (mensagem.t === 'token') atualizarPosicao(id, Number(mensagem.x), Number(mensagem.y));
         break;
       }
@@ -148,6 +219,13 @@ export const MapaPage = () => {
         break;
       case 'ping':
         palco?.ping(Number(mensagem.x), Number(mensagem.y), String(mensagem.cor), String(mensagem.nome));
+        break;
+      case 'magia':
+        // Efeito de magia de outra pessoa: a mesa inteira vê o mesmo desenho, com o nome de quem lançou.
+        palco?.magia({
+          forma: mensagem.forma as IMagiaMapa['forma'], fluxo: String(mensagem.fluxo),
+          x: Number(mensagem.x), y: Number(mensagem.y), ax: Number(mensagem.ax), ay: Number(mensagem.ay),
+        }, String(mensagem.nome));
         break;
       case 'regua':
         palco?.reguaRemota(String(mensagem.por), (mensagem.pontos as number[][] | null)?.map(([x, y]) => ({ x, y })) ?? null, String(mensagem.cor), String(mensagem.nome));
@@ -170,7 +248,7 @@ export const MapaPage = () => {
       default:
         break;
     }
-  }, [agendarRecarga, atualizarPosicao, interpolador, ultimaAmostra]);
+  }, [agendarRecarga, atualizarPosicao, interpolador, ultimaAmostra, medidor]);
 
   /** A cada quadro: tokens que outra pessoa arrasta deslizam pelas posições interpoladas. */
   const aplicarRemotos = useCallback(() => {
@@ -188,13 +266,48 @@ export const MapaPage = () => {
     }
   }, [interpolador, ultimaAmostra]);
 
+  /** A hora do gesto no relógio do servidor vai junto: o medidor de quem recebe calcula o atraso inteiro. */
+  const horaDoGesto = useCallback((): { tm?: number } => {
+    const tm = medidor.horaDoServidor(agoraServidor());
+    return tm === null ? {} : { tm };
+  }, [medidor]);
+
+  /** A última posição de cada token arrastado que ainda não saiu. */
+  const pendentesArrasto = useRef(new Map<string, IPonto>()).current;
+  /** A última que saiu, para repetir uma vez quando a mão para (quem recebe não segue em frente). */
+  const ultimaEnviada = useRef(new Map<string, IPonto & { repetida: boolean }>()).current;
+
+  const enviarArrastos = useCallback((agora: number) => {
+    for (const [id, ponto] of pendentesArrasto) {
+      if (agora - (ultimoEnvio.get(id) ?? -Infinity) < ENVIO_ARRASTO_MS - TOLERANCIA_QUADRO_MS) continue;
+      ultimoEnvio.set(id, agora);
+      pendentesArrasto.delete(id);
+      ultimaEnviada.set(id, { ...ponto, repetida: false });
+      conexaoRef.current?.enviar({ t: 'arrastar', token: id, x: ponto.x, y: ponto.y, ...horaDoGesto() });
+    }
+    for (const [id, ponto] of ultimaEnviada) {
+      if (ponto.repetida || pendentesArrasto.has(id)) continue;
+      if (palcoRef.current?.tokenArrastadoLocal !== id) {
+        ultimaEnviada.delete(id);
+        continue;
+      }
+      // A mão parou: no próximo envio sai a mesma posição de novo, e quem recebe vê o token parar ali.
+      if (agora - (ultimoEnvio.get(id) ?? agora) < ENVIO_ARRASTO_MS - TOLERANCIA_QUADRO_MS) continue;
+      ultimoEnvio.set(id, agora);
+      ponto.repetida = true;
+      conexaoRef.current?.enviar({ t: 'arrastar', token: id, x: ponto.x, y: ponto.y, ...horaDoGesto() });
+    }
+  }, [pendentesArrasto, ultimaEnviada, ultimoEnvio, horaDoGesto]);
+
   const soltar = useCallback((id: string, x: number, y: number) => {
     const atual = estadoRef.current;
     if (!atual?.cena || !campanhaId) return;
+    pendentesArrasto.delete(id);
+    ultimaEnviada.delete(id);
     ultimoEnvio.delete(id);
     atualizarPosicao(id, x, y);
     if (atual.cena.ativa && conexaoRef.current?.aberta) {
-      conexaoRef.current.enviar({ t: 'soltar', token: id, x, y });
+      conexaoRef.current.enviar({ t: 'soltar', token: id, x, y, ...horaDoGesto() });
       return;
     }
     // Cena em preparo (só o Mestre vê) ou sem tempo real: grava pela rota.
@@ -202,21 +315,20 @@ export const MapaPage = () => {
       setErro(falha instanceof Error ? falha.message : 'O token não foi salvo.');
       agendarRecarga();
     });
-  }, [agendarRecarga, atualizarPosicao, campanhaId, ultimoEnvio]);
+  }, [agendarRecarga, atualizarPosicao, campanhaId, ultimoEnvio, horaDoGesto, pendentesArrasto, ultimaEnviada]);
 
+  /** A posição fica guardada e sai no ritmo do quadro: mesmo com a mão parada, a última chega aos outros. */
   const arrastar = useCallback((id: string, x: number, y: number) => {
     const atual = estadoRef.current;
     if (!atual?.cena?.ativa) return;
-    const agora = performance.now();
-    if (agora - (ultimoEnvio.get(id) ?? 0) < ENVIO_ARRASTO_MS) return;
-    ultimoEnvio.set(id, agora);
-    conexaoRef.current?.enviar({ t: 'arrastar', token: id, x, y });
-  }, [ultimoEnvio]);
+    pendentesArrasto.set(id, { x, y });
+    enviarArrastos(performance.now());
+  }, [pendentesArrasto, enviarArrastos]);
 
   const ultimaRegua = useRef(0);
   const regua = useCallback((pontos: IPonto[] | null) => {
     const agora = performance.now();
-    if (pontos && agora - ultimaRegua.current < ENVIO_ARRASTO_MS) return;
+    if (pontos && agora - ultimaRegua.current < ENVIO_ARRASTO_MS - TOLERANCIA_QUADRO_MS) return;
     ultimaRegua.current = agora;
     conexaoRef.current?.enviar({ t: 'regua', pontos: pontos?.map((p) => [p.x, p.y]) ?? null });
   }, []);
@@ -246,9 +358,15 @@ export const MapaPage = () => {
     setFerramenta('mover');
   }, []);
 
+  /** A minha magia: o palco já desenhou; com a cena na mesa, a mesa inteira recebe. */
+  const lancarMagia = useCallback((magia: IMagiaMapa) => {
+    if (!estadoRef.current?.cena?.ativa) return;
+    conexaoRef.current?.enviar({ t: 'magia', ...magia });
+  }, []);
+
   // O palco nasce uma vez; os gestos chegam sempre na versão mais nova das funções.
-  const gestos = useRef({ arrastar, soltar, regua, desenharNevoa, marcarArea });
-  gestos.current = { arrastar, soltar, regua, desenharNevoa, marcarArea };
+  const gestos = useRef({ arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia });
+  gestos.current = { arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia };
 
   useEffect(() => {
     if (!alvoRef.current) return undefined;
@@ -262,6 +380,7 @@ export const MapaPage = () => {
       aoRegua: (pontos) => gestos.current.regua(pontos),
       aoNevoa: (forma) => gestos.current.desenharNevoa(forma),
       aoArea: (area) => gestos.current.marcarArea(area),
+      aoMagia: (magia) => gestos.current.lancarMagia(magia),
     }).then((criado) => {
       if (!vivo) {
         criado.destruir();
@@ -270,6 +389,7 @@ export const MapaPage = () => {
       palco = criado;
       palcoRef.current = criado;
       criado.aoQuadro(aplicarRemotos);
+      criado.aoQuadro(() => gestos.current.enviarArrastos(performance.now()));
       // Só em desenvolvimento: os testes de navegador acham os tokens na tela por aqui.
       if (import.meta.env.DEV) (window as unknown as { __palcoMapa?: PalcoMapa }).__palcoMapa = criado;
       setPalcoPronto(true);
@@ -292,6 +412,8 @@ export const MapaPage = () => {
     conectarSSE(campanhaId);
     const sair = assinarEventosDaCampanha(campanhaId, {
       aoEvento: (tipo) => {
+        // Com o tempo real ligado, o servidor já manda a mudança pronta; o evento só vale sem ele.
+        if (conexaoRef.current?.aberta) return;
         if (!EVENTOS_SEM_EFEITO.has(tipo)) agendarRecarga();
       },
       aoConectar: agendarRecarga,
@@ -305,14 +427,18 @@ export const MapaPage = () => {
   const bloqueado = estado?.bloqueado ?? true;
   useEffect(() => {
     if (!campanhaId || bloqueado) return undefined;
-    const nova = new ConexaoMapa(campanhaId, { aoMensagem, aoEstado: setConexao, aoReconectar: agendarRecarga });
+    const aoEstado = (novoEstado: EstadoConexao) => {
+      medidor.conexao = novoEstado;
+      setConexao(novoEstado);
+    };
+    const nova = new ConexaoMapa(campanhaId, { aoMensagem, aoEstado, aoReconectar: agendarRecarga });
     conexaoRef.current = nova;
     nova.conectar();
     return () => {
       nova.fechar();
       if (conexaoRef.current === nova) conexaoRef.current = null;
     };
-  }, [campanhaId, bloqueado, aoMensagem, agendarRecarga]);
+  }, [campanhaId, bloqueado, aoMensagem, agendarRecarga, medidor]);
 
   useEffect(() => {
     const palco = palcoRef.current;
@@ -329,6 +455,20 @@ export const MapaPage = () => {
   useEffect(() => {
     palcoRef.current?.definirOpcoesNevoa(opcoesNevoa);
   }, [opcoesNevoa, palcoPronto]);
+
+  useEffect(() => {
+    palcoRef.current?.definirOpcoesMagia(opcoesMagia);
+    try {
+      window.localStorage.setItem(CHAVE_MAGIA_LOCAL, JSON.stringify(opcoesMagia));
+    } catch {
+      // Sem armazenamento do navegador, a escolha vale só até fechar a aba.
+    }
+  }, [opcoesMagia, palcoPronto]);
+
+  // O servidor manda ao Mestre as mudanças da cena que ele está olhando (pode ser uma em preparo).
+  useEffect(() => {
+    if (conexao === 'ws' || conexao === 'sse') conexaoRef.current?.enviar({ t: 'vendo', cena: cenaVista });
+  }, [cenaVista, conexao]);
 
   useEffect(() => {
     palcoRef.current?.definirClimaLigado(climaLocal);
@@ -366,6 +506,11 @@ export const MapaPage = () => {
       const alvo = evento.target as HTMLElement | null;
       if (alvo && ['INPUT', 'SELECT', 'TEXTAREA'].includes(alvo.tagName)) return;
       const palco = palcoRef.current;
+      if ((evento.ctrlKey || evento.metaKey) && evento.shiftKey && (evento.key === 'd' || evento.key === 'D')) {
+        evento.preventDefault();
+        setMedidorAberto((aberto) => !aberto);
+        return;
+      }
       if ((evento.ctrlKey || evento.metaKey) && (evento.key === 'z' || evento.key === 'Z')) {
         if (ferramenta === 'nevoa') {
           evento.preventDefault();
@@ -377,6 +522,7 @@ export const MapaPage = () => {
       if (evento.key === 'v' || evento.key === 'V') setFerramenta('mover');
       if (evento.key === 'r' || evento.key === 'R') setFerramenta('regua');
       if (evento.key === 'p' || evento.key === 'P') setFerramenta('ping');
+      if (evento.key === 'm' || evento.key === 'M') setFerramenta('magia');
       if ((evento.key === 'n' || evento.key === 'N') && gestorAgora) setFerramenta('nevoa');
       if (evento.key === 'Enter' && ferramenta === 'nevoa') palco?.fecharPoligono();
       if (evento.key === 'Escape') {
@@ -386,13 +532,18 @@ export const MapaPage = () => {
       }
     };
     const aoTelaCheia = () => setTelaCheia(Boolean(document.fullscreenElement));
+    const aoMudarAba = () => {
+      if (document.visibilityState === 'hidden') medidor.registrarAbaEscondida(agoraServidor());
+    };
     window.addEventListener('keydown', aoTeclar);
     document.addEventListener('fullscreenchange', aoTelaCheia);
+    document.addEventListener('visibilitychange', aoMudarAba);
     return () => {
       window.removeEventListener('keydown', aoTeclar);
       document.removeEventListener('fullscreenchange', aoTelaCheia);
+      document.removeEventListener('visibilitychange', aoMudarAba);
     };
-  }, [ferramenta, gestorAgora, enviarNevoa]);
+  }, [ferramenta, gestorAgora, enviarNevoa, medidor]);
 
   // ------------------------------------------------------- ações do Mestre
 
@@ -410,7 +561,11 @@ export const MapaPage = () => {
 
   const novaCena = async (item?: IItemAcervo) => {
     if (!campanhaId) return;
-    const nome = item?.nome ?? window.prompt('Nome da cena', `Cena ${(estado?.cenas.length ?? 0) + 1}`);
+    const nome = item?.nome ?? await pedirTexto({
+      titulo: 'Nova cena',
+      campo: { rotulo: 'Nome da cena', valor: `Cena ${(estado?.cenas.length ?? 0) + 1}`, maximo: 80 },
+      rotuloConfirmar: 'Criar cena',
+    });
     if (!nome?.trim()) return;
     const resposta = await comErro(() => mapaApi.criarCena(campanhaId, { nome: nome.trim(), mapa_id: item?.id }));
     if (resposta?.cena) {
@@ -503,19 +658,22 @@ export const MapaPage = () => {
   };
 
   const tokenSelecionado = tokens.find((t) => t.id === selecionado) ?? null;
-  const fichas = useMemo(() => {
-    const vistas = new Map<string, string>();
-    for (const token of tokens) {
-      if (token.personagem_id && (gestor || token.e_meu)) vistas.set(token.personagem_id, token.nome);
-    }
-    return [...vistas].map(([id, nome]) => ({ id, nome }));
-  }, [tokens, gestor]);
 
   const centralizar = (token: ITokenMapa) => {
     const posicao = palcoRef.current?.posicaoDe(token.id) ?? token;
     palcoRef.current?.centralizar(posicao.x, posicao.y);
     setSelecionado(token.id);
   };
+
+  // Com o mapa na tela, um erro vira aviso do site (o painel de "não deu para abrir" fica para antes disso).
+  useEffect(() => {
+    if (!erro || !estado) return;
+    avisar.erro(erro);
+    setErro('');
+  }, [erro, estado]);
+
+  const nomeDaVez = emCombate ? iniciativa.find((e) => e.id === turnoAtualId)?.nome ?? null : null;
+  const meuToken = tokens.find((t) => t.e_meu) ?? null;
 
   // ------------------------------------------------------------------ tela
 
@@ -536,58 +694,83 @@ export const MapaPage = () => {
           {cena && gestor && <span className={cena.ativa ? 'selo ativo' : 'selo'}>{cena.ativa ? 'Na mesa' : 'Só você vê'}</span>}
           {estado && !estado.ao_vivo && gestor && <span className="selo">Sessão em preparo</span>}
         </div>
+        {emCombate && (
+          <div className="mapa-combate" aria-live="polite">
+            <Swords size={14} />
+            <span>Rodada <strong>{rodada}</strong></span>
+            {nomeDaVez && <span className="mapa-combate-vez">Vez de <strong>{nomeDaVez}</strong></span>}
+          </div>
+        )}
         <div className="mapa-pessoas" aria-label="Quem está no mapa">
           {pessoas.map((p) => (
-            <span key={p.usuario_id} title={`${p.nome}${p.gestor ? ' (Mestre)' : ''}`} style={{ borderColor: p.cor, color: p.cor }}>
-              {p.nome.slice(0, 1).toUpperCase()}
-            </span>
+            <ComDica key={p.usuario_id} dica={`${p.nome}${p.gestor ? ' (Mestre)' : ''}`}>
+              <span className="mapa-pessoa" style={{ borderColor: p.cor, color: p.cor }}>{p.nome.slice(0, 1).toUpperCase()}</span>
+            </ComDica>
           ))}
         </div>
-        <span className={`mapa-conexao ${conexao}`} title={conexao === 'ws' ? 'Tempo real ligado' : conexao === 'sse' ? 'Tempo real pelo plano B' : 'Reconectando'}>
-          {conexao === 'ws' || conexao === 'sse' ? <Wifi size={16} /> : <WifiOff size={16} />}
-        </span>
-        <button type="button" className="mapa-icone" aria-label={telaCheia ? 'Sair da tela cheia' : 'Tela cheia'} onClick={alternarTelaCheia}>
-          {telaCheia ? <Minimize2 size={17} /> : <Maximize2 size={17} />}
-        </button>
-        <button type="button" className="mapa-icone" aria-label={lateralAberta ? 'Recolher o painel' : 'Abrir o painel'} onClick={() => setLateralAberta((v) => !v)}>
-          {lateralAberta ? <PanelRightClose size={17} /> : <PanelRightOpen size={17} />}
-        </button>
+        <ComDica dica={`${conexao === 'ws' ? 'Tempo real ligado' : conexao === 'sse' ? 'Tempo real pelo plano B' : 'Reconectando'}. Clique para o medidor.`}>
+          <button
+            type="button"
+            className={`mapa-conexao ${conexao}`}
+            aria-label="Medidor do tempo real"
+            onClick={() => setMedidorAberto((aberto) => !aberto)}
+          >
+            {conexao === 'ws' || conexao === 'sse' ? <Wifi size={16} /> : <WifiOff size={16} />}
+          </button>
+        </ComDica>
+        <ComDica dica={telaCheia ? 'Sair da tela cheia' : 'Tela cheia'}>
+          <button type="button" className="mapa-icone" aria-label={telaCheia ? 'Sair da tela cheia' : 'Tela cheia'} onClick={alternarTelaCheia}>
+            {telaCheia ? <Minimize2 size={17} /> : <Maximize2 size={17} />}
+          </button>
+        </ComDica>
+        <ComDica dica={lateralAberta ? 'Recolher o painel' : 'Abrir o painel'}>
+          <button type="button" className="mapa-icone" aria-label={lateralAberta ? 'Recolher o painel' : 'Abrir o painel'} onClick={() => setLateralAberta((v) => !v)}>
+            {lateralAberta ? <PanelRightClose size={17} /> : <PanelRightOpen size={17} />}
+          </button>
+        </ComDica>
       </header>
 
       <nav className="mapa-ferramentas" aria-label="Ferramentas">
-        <button type="button" className={ferramenta === 'mover' ? 'ativo' : ''} onClick={() => setFerramenta('mover')} title="Mover tokens e o mapa (V)"><Hand size={18} /></button>
-        <button type="button" className={ferramenta === 'regua' ? 'ativo' : ''} onClick={() => setFerramenta('regua')} title="Régua (R)"><Ruler size={18} /></button>
-        <button type="button" className={ferramenta === 'ping' ? 'ativo' : ''} onClick={() => setFerramenta('ping')} title="Ping, ou Alt + clique (P)"><MapPin size={18} /></button>
+        <span className="mapa-grupo-rotulo">Mesa</span>
+        <BotaoFerramenta icone={Hand} rotulo="Mover tokens e o mapa" atalho="V" ativo={ferramenta === 'mover'} onClick={() => setFerramenta('mover')} />
+        <BotaoFerramenta icone={Ruler} rotulo="Régua" atalho="R" ativo={ferramenta === 'regua'} onClick={() => setFerramenta('regua')} />
+        <BotaoFerramenta icone={MapPin} rotulo="Ping (ou Alt + clique)" atalho="P" ativo={ferramenta === 'ping'} onClick={() => setFerramenta('ping')} />
+        <BotaoFerramenta icone={Sparkles} rotulo="Efeito de magia" atalho="M" disabled={!cena} ativo={ferramenta === 'magia'} onClick={() => setFerramenta((f) => (f === 'magia' ? 'mover' : 'magia'))} />
         <span className="mapa-separador" />
-        <button type="button" onClick={() => palcoRef.current?.enquadrar()} title="Ver o mapa inteiro"><Expand size={18} /></button>
+        <span className="mapa-grupo-rotulo">Vista</span>
+        <BotaoFerramenta icone={Expand} rotulo="Ver o mapa inteiro" disabled={!cena} onClick={() => palcoRef.current?.enquadrar()} />
+        {meuToken && !gestor && (
+          <BotaoFerramenta icone={UserRound} rotulo="Ir até o meu personagem" onClick={() => centralizar(meuToken)} />
+        )}
+        {selecionado && tokenSelecionado && (
+          <BotaoFerramenta icone={Crosshair} rotulo="Centralizar no token escolhido" onClick={() => centralizar(tokenSelecionado)} />
+        )}
         {!gestor && Boolean(cena?.clima.efeitos.length) && (
-          <button type="button" onClick={() => setClimaLocal((v) => !v)} title={climaLocal ? 'Desligar os efeitos de clima neste aparelho' : 'Ligar os efeitos de clima neste aparelho'}>
-            {climaLocal ? <Cloud size={18} /> : <CloudOff size={18} />}
-          </button>
+          <BotaoFerramenta
+            icone={climaLocal ? Cloud : CloudOff}
+            rotulo={climaLocal ? 'Desligar o clima neste aparelho' : 'Ligar o clima neste aparelho'}
+            onClick={() => setClimaLocal((v) => !v)}
+          />
         )}
         {gestor && (
           <>
             <span className="mapa-separador" />
-            <button type="button" disabled={!cena} className={ferramenta === 'nevoa' ? 'ativo' : ''} onClick={() => setFerramenta((f) => (f === 'nevoa' ? 'mover' : 'nevoa'))} title="Névoa de guerra: revelar e esconder (N)"><Eye size={18} /></button>
-            <button
-              type="button"
+            <span className="mapa-grupo-rotulo">Mestre</span>
+            <BotaoFerramenta icone={Eye} rotulo="Névoa de guerra" atalho="N" disabled={!cena} ativo={ferramenta === 'nevoa'} onClick={() => setFerramenta((f) => (f === 'nevoa' ? 'mover' : 'nevoa'))} />
+            <BotaoFerramenta
+              icone={CloudRain}
+              rotulo="Clima da cena"
               disabled={!cena}
-              className={climaAberto ? 'ativo' : ''}
+              ativo={climaAberto}
               onClick={() => {
                 setClimaAberto((v) => !v);
                 setConfigAberta(false);
               }}
-              title="Clima da cena"
-            >
-              <CloudRain size={18} />
-            </button>
-            <button type="button" className={acervoAberto ? 'ativo' : ''} onClick={() => setAcervoAberto((v) => !v)} title="Acervo"><FolderOpen size={18} /></button>
-            <button type="button" className={oficinaAberta ? 'ativo' : ''} onClick={() => setOficinaAberta((v) => !v)} title="Oficina: token novo, remover fundo, melhorar imagem"><Wand2 size={18} /></button>
-            <button type="button" disabled={!cena} onClick={() => void trazerParticipantes()} title="Trazer os participantes da Sessão"><Users size={18} /></button>
+            />
+            <BotaoFerramenta icone={Users} rotulo="Trazer os participantes da Sessão" disabled={!cena} onClick={() => void trazerParticipantes()} />
+            <BotaoFerramenta icone={FolderOpen} rotulo="Acervo de mapas e tokens" ativo={acervoAberto} onClick={() => setAcervoAberto((v) => !v)} />
+            <BotaoFerramenta icone={Wand2} rotulo="Oficina: token novo, fundo e qualidade" ativo={oficinaAberta} onClick={() => setOficinaAberta((v) => !v)} />
           </>
-        )}
-        {selecionado && tokenSelecionado && (
-          <button type="button" onClick={() => centralizar(tokenSelecionado)} title="Centralizar no token"><Crosshair size={18} /></button>
         )}
       </nav>
 
@@ -601,7 +784,6 @@ export const MapaPage = () => {
           </div>
         )}
         {aviso && <div className="mapa-aviso">{aviso}</div>}
-        {erro && estado && <button type="button" className="mapa-erro-flutuante" onClick={() => setErro('')}>{erro}</button>}
         {gestor && cena && ferramenta === 'nevoa' && (
           <BarraNevoa
             ligada={cena.nevoa.ligada}
@@ -617,6 +799,10 @@ export const MapaPage = () => {
               if (await confirmar({ mensagem: 'Cobrir o mapa inteiro de novo? As áreas reveladas voltam a ficar escondidas.', rotuloConfirmar: 'Cobrir' })) void enviarNevoa({ cobrir_tudo: true });
             }}
           />
+        )}
+        {medidorAberto && <MedidorPainel medidor={medidor} interpolador={interpolador} onFechar={() => setMedidorAberto(false)} />}
+        {cena && ferramenta === 'magia' && (
+          <BarraMagia opcoes={opcoesMagia} naMesa={cena.ativa && Boolean(estado?.ao_vivo)} onOpcoes={setOpcoesMagia} />
         )}
         {gestor && cena && ferramenta === 'area' && (
           <div className="mapa-aviso-topo">Arraste no mapa a área do efeito. Esc cancela.</div>
@@ -678,7 +864,7 @@ export const MapaPage = () => {
 
       {lateralAberta && (
         <aside className="mapa-lateral">
-          <PainelLateral aba={aba} onAba={setAba} tokens={tokens} fichas={fichas} onCentralizar={centralizar} />
+          <PainelLateral aba={aba} onAba={setAba} campanhaId={campanhaId ?? ''} tokens={tokens} onCentralizar={centralizar} />
         </aside>
       )}
 

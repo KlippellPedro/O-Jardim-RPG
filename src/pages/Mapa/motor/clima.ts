@@ -1,21 +1,24 @@
-// Clima na tela: chuva, tempestade com relâmpago, neve, neblina, areia, cinzas e
-// brasas, folhas, escuridão com luz em volta dos personagens, véu do Vazio e
-// partículas na cor de um Fluxo. Escrito por nós com o ParticleContainer e as
-// texturas do Pixi 8: o emissor de partículas pronto não roda no Pixi 8, e as
-// extensões de clima do Owlbear são GPL-3.0.
+// Clima na tela: chuva, tempestade com relâmpago, sombras de nuvens, neve,
+// neblina, areia, cinzas e brasas, folhas, calor, escuridão com luz em volta dos
+// personagens, véu do Vazio e partículas na cor de um Fluxo. Tudo escrito por
+// nós: o emissor de partículas pronto não roda no Pixi 8, e as extensões de
+// clima do Owlbear são GPL-3.0 (servem só de referência visual).
 //
-// As partículas moram no mundo do mapa, só no pedaço que está na tela (ou na
-// área marcada pelo Mestre): acompanham o zoom e o arrasto, e a quantidade
-// depende do tamanho da tela, nunca do tamanho do mapa. Cada aparelho sorteia as
-// próprias gotas; o que a mesa compartilha é só a receita (efeito, intensidade,
-// área e vento), que vem do servidor.
+// Chuva, nuvens, relâmpago e os véus (neblina, poeira, Vazio, Fluxo) são shaders
+// (motor/climaShader.ts); neve, folhas, cinzas, brasas e os grãos de areia são
+// partículas do ParticleContainer; o calor é um filtro na camada do mapa. Tudo
+// mora no mundo do mapa, só no pedaço que está na tela (ou na área marcada pelo
+// Mestre): acompanha o zoom e o arrasto, e o custo depende do tamanho da tela,
+// nunca do tamanho do mapa. Cada aparelho sorteia as próprias gotas; o que a
+// mesa compartilha é só a receita (efeito, intensidade, área e vento).
 
 import {
-  Container, Graphics, Particle, ParticleContainer, Rectangle, RenderTexture, Sprite, Texture, TilingSprite, type Renderer,
+  Container, Graphics, Particle, ParticleContainer, Rectangle, RenderTexture, Sprite, Texture, type Filter, type Renderer,
 } from 'pixi.js';
 import type { IAreaClima, IClima, IEfeitoClima } from '../../../services/mapaApi';
 import { CORES_FLUXO, type FluxoId } from './molduras';
-import type { IPonto } from './geometria';
+import { Atmosfera, FiltroCalor, type ReceitaAtmosfera } from './climaShader';
+import type { FonteDeLuz } from './luzes';
 
 export interface QuadroClima {
   /** Segundos desde o quadro anterior (limitado, para uma aba que volta do fundo não dar um salto). */
@@ -24,8 +27,8 @@ export interface QuadroClima {
   /** Pedaço do mapa que está na tela. */
   vista: Rectangle;
   escala: number;
-  /** Personagens de jogador e aliados: a escuridão abre luz em volta deles. */
-  luzes: IPonto[];
+  /** Tokens com luz própria e personagens de jogador e aliados: a escuridão abre luz em volta deles. */
+  luzes: FonteDeLuz[];
   tamanhoCasa: number;
 }
 
@@ -39,6 +42,8 @@ interface Efeito {
   readonly raiz: Container;
   readonly tipo: IEfeitoClima['tipo'];
   ajustar(efeito: IEfeitoClima): void;
+  /** Filtro que o efeito põe na camada do mapa (o calor). */
+  readonly filtro?: Filter;
   /** O Mestre mudou o vento: as partículas que já estão na tela passam a seguir o novo. */
   ventoMudou?(vento: Vento): void;
   atualizar(quadro: QuadroClima, vento: Vento): void;
@@ -74,7 +79,6 @@ interface Atlas {
 }
 
 let atlas: Atlas | null = null;
-let ruido: Texture | null = null;
 let luz: Texture | null = null;
 let borda: Texture | null = null;
 /** Texturas da escuridão que saiu de cena, para a próxima reaproveitar: destruir uma textura que
@@ -170,45 +174,6 @@ function obterAtlas(): Atlas {
   return atlas;
 }
 
-/** Ruído que emenda nas bordas, para a neblina correr sem costura. */
-function obterRuido(): Texture {
-  if (ruido) return ruido;
-  const lado = 256;
-  const [canvas, ctx] = tela(lado, lado);
-  const imagem = ctx.createImageData(lado, lado);
-  const oitavas = [{ celulas: 4, peso: 0.55 }, { celulas: 8, peso: 0.27 }, { celulas: 16, peso: 0.13 }, { celulas: 32, peso: 0.05 }];
-  const grades = oitavas.map(({ celulas }) => Array.from({ length: celulas * celulas }, () => Math.random()));
-  const suave = (t: number) => t * t * (3 - 2 * t);
-  for (let y = 0; y < lado; y++) {
-    for (let x = 0; x < lado; x++) {
-      let valor = 0;
-      oitavas.forEach(({ celulas, peso }, indice) => {
-        const grade = grades[indice];
-        const gx = (x / lado) * celulas;
-        const gy = (y / lado) * celulas;
-        const x0 = Math.floor(gx) % celulas;
-        const y0 = Math.floor(gy) % celulas;
-        const x1 = (x0 + 1) % celulas;
-        const y1 = (y0 + 1) % celulas;
-        const tx = suave(gx - Math.floor(gx));
-        const ty = suave(gy - Math.floor(gy));
-        const cima = grade[y0 * celulas + x0] * (1 - tx) + grade[y0 * celulas + x1] * tx;
-        const baixo = grade[y1 * celulas + x0] * (1 - tx) + grade[y1 * celulas + x1] * tx;
-        valor += (cima * (1 - ty) + baixo * ty) * peso;
-      });
-      const i = (y * lado + x) * 4;
-      imagem.data[i] = 255;
-      imagem.data[i + 1] = 255;
-      imagem.data[i + 2] = 255;
-      imagem.data[i + 3] = Math.round(Math.max(0, Math.min(1, (valor - 0.28) * 1.9)) * 255);
-    }
-  }
-  ctx.putImageData(imagem, 0, 0);
-  ruido = Texture.from(canvas);
-  ruido.source.addressMode = 'repeat';
-  return ruido;
-}
-
 /** Máscara da área marcada: branco no meio e borda que some aos poucos, para o efeito não terminar num risco reto. */
 function obterBorda(): Texture {
   if (borda) return borda;
@@ -247,7 +212,7 @@ function obterLuz(): Texture {
 
 /** Chamado depois de desmontar o renderizador. */
 export function esquecerTexturasDoClima() {
-  for (const textura of [atlas?.floco, ruido, luz, borda, ...texturasGuardadas.splice(0)]) {
+  for (const textura of [atlas?.floco, luz, borda, ...texturasGuardadas.splice(0)]) {
     try {
       textura?.destroy(true);
     } catch {
@@ -255,7 +220,6 @@ export function esquecerTexturasDoClima() {
     }
   }
   atlas = null;
-  ruido = null;
   luz = null;
   borda = null;
 }
@@ -389,26 +353,6 @@ class Particulas {
 }
 
 const RECEITAS = {
-  chuva: {
-    densidade: 900, maximo: 2200, textura: (a) => a.gota, orientar: true,
-    nascer: (g, v) => {
-      g.vy = aleatorio(950, 1250) + v.y * 250;
-      g.vx = v.x * 650 * (0.4 + v.forca);
-      g.tamanho = aleatorio(22, 40);
-      g.alfa = aleatorio(0.35, 0.7);
-      g.p.tint = 0xb8cde0;
-    },
-  },
-  tempestade: {
-    densidade: 1500, maximo: 3200, textura: (a) => a.gota, orientar: true,
-    nascer: (g, v) => {
-      g.vy = aleatorio(1300, 1700) + v.y * 300;
-      g.vx = v.x * 950 * (0.5 + v.forca);
-      g.tamanho = aleatorio(30, 54);
-      g.alfa = aleatorio(0.4, 0.8);
-      g.p.tint = 0xa9bdd2;
-    },
-  },
   neve: {
     densidade: 260, maximo: 900, textura: (a) => a.floco,
     nascer: (g, v) => {
@@ -465,7 +409,7 @@ const RECEITAS = {
     },
   },
   areia: {
-    densidade: 700, maximo: 1800, textura: (a) => a.grao, orientar: true,
+    densidade: 240, maximo: 700, textura: (a) => a.grao, orientar: true,
     nascer: (g, v) => {
       // Sem vento, a areia corre para a direita mesmo assim.
       const forca = Math.max(0.35, v.forca);
@@ -506,52 +450,39 @@ const RECEITAS = {
   },
 } satisfies Record<string, Receita>;
 
-// -------------------------------------------------------------- véus
+// ------------------------------------------------------------ shaders
 
-/** Duas camadas de ruído que correm com o vento: neblina, poeira da tempestade de areia, véu do Vazio. */
-class Veu {
-  readonly raiz = new Container();
-  private camadas: Array<{ sprite: TilingSprite; periodo: number; velocidade: number; deriva: IPonto }>;
+function corDoFluxo(fluxo: string | undefined): [number, number, number] {
+  const valor = Number.parseInt((CORES_FLUXO[fluxo as FluxoId] ?? '#ffffff').slice(1), 16);
+  return [((valor >> 16) & 255) / 255, ((valor >> 8) & 255) / 255, (valor & 255) / 255];
+}
 
-  constructor(cor: number, alfas: [number, number], periodos: [number, number], velocidades: [number, number]) {
-    const textura = obterRuido();
-    this.camadas = [0, 1].map((i) => {
-      const sprite = new TilingSprite({ texture: textura, width: 1, height: 1 });
-      sprite.tint = cor;
-      sprite.alpha = alfas[i];
-      this.raiz.addChild(sprite);
-      return { sprite, periodo: periodos[i], velocidade: velocidades[i], deriva: { x: Math.random() * 5000, y: Math.random() * 5000 } };
-    });
-  }
-
-  alfa(fator: number, base: [number, number]) {
-    this.camadas.forEach((c, i) => { c.sprite.alpha = base[i] * fator; });
-  }
-
-  definirCor(cor: number) {
-    for (const c of this.camadas) c.sprite.tint = cor;
-  }
-
-  atualizar(vista: Rectangle, dt: number, vento: Vento, tamanhoCasa: number) {
-    const direcao = vento.forca > 0.02 ? { x: vento.x / vento.forca, y: vento.y / vento.forca } : { x: 1, y: 0.15 };
-    this.camadas.forEach((c, i) => {
-      const passo = c.velocidade * (0.35 + vento.forca) * dt * (i === 0 ? 1 : 0.7);
-      // A segunda camada vai um pouco de lado: as duas se cruzam e a neblina parece viva.
-      c.deriva.x += (direcao.x - direcao.y * 0.3 * i) * passo;
-      c.deriva.y += (direcao.y + direcao.x * 0.3 * i) * passo;
-      // `periodo` em casas: a neblina se repete a cada tantas casas do mapa.
-      const escala = (c.periodo * tamanhoCasa) / 256;
-      c.sprite.position.set(vista.x, vista.y);
-      c.sprite.width = vista.width;
-      c.sprite.height = vista.height;
-      c.sprite.tileScale.set(escala);
-      // O desenho fica preso ao mapa: arrastar a tela não arrasta a neblina.
-      c.sprite.tilePosition.set(c.deriva.x - vista.x, c.deriva.y - vista.y);
-    });
-  }
-
-  destruir() {
-    this.raiz.destroy({ children: true });
+/** O que cada efeito pede ao shader da atmosfera, já com a intensidade escolhida pelo Mestre. */
+function receitaAtmosfera(efeito: IEfeitoClima): ReceitaAtmosfera | null {
+  const i = efeito.intensidade;
+  switch (efeito.tipo) {
+    case 'chuva':
+      return {
+        chuva: { densidade: 0.18 + 0.3 * i, velocidade: 950, comprimento: 1, respingos: 0.05 + 0.1 * i, cor: [0.74, 0.82, 0.9] },
+        nuvem: { cobertura: 0.15 + 0.25 * i, sombra: 0.16, escala: 30, escurecer: 0.04 + 0.06 * i },
+      };
+    case 'tempestade':
+      return {
+        chuva: { densidade: 0.3 + 0.35 * i, velocidade: 1350, comprimento: 1.3, respingos: 0.1 + 0.14 * i, cor: [0.7, 0.78, 0.88] },
+        nuvem: { cobertura: 0.35 + 0.4 * i, sombra: 0.32, escala: 26, escurecer: 0.12 + 0.16 * i },
+      };
+    case 'nuvens':
+      return { nuvem: { cobertura: 0.25 + 0.65 * i, sombra: 0.18 + 0.32 * i, escala: 34, escurecer: 0 } };
+    case 'neblina':
+      return { veu: { alfa: 0.25 + 0.5 * i, escala: 18, velocidade: 0.02, listras: 0, cor: [0.88, 0.9, 0.93], modo: 0, borda: [0.1, 0.95], torcao: 0.45, fundo: 0.3 } };
+    case 'areia':
+      return { veu: { alfa: 0.22 + 0.45 * i, escala: 9, velocidade: 0.35, listras: 1, cor: [0.79, 0.64, 0.42], modo: 0, borda: [0.3, 0.82], torcao: 0.8, fundo: 0.15 } };
+    case 'vazio':
+      return { veu: { alfa: 0.35 + 0.5 * i, escala: 14, velocidade: 0.015, listras: 0, cor: [0.1, 0.045, 0.19], modo: 2, borda: [0.15, 0.92], torcao: 0.6, fundo: 0.25 } };
+    case 'fluxo':
+      return { veu: { alfa: 0.1 + 0.2 * i, escala: 18, velocidade: 0.015, listras: 0, cor: corDoFluxo(efeito.fluxo), modo: 1, borda: [0.3, 0.85], torcao: 0.8, fundo: 0 } };
+    default:
+      return null;
   }
 }
 
@@ -563,10 +494,10 @@ class EfeitoComposto implements Efeito {
   private area: IAreaClima | null = null;
   private intensidade = 0.5;
   private particulas: Particulas[] = [];
-  private veu: Veu | null = null;
-  private alfasVeu: [number, number] = [0, 0];
-  private escurecer: Graphics | null = null;
-  private clarao: Graphics | null = null;
+  private atmosfera: Atmosfera | null = null;
+  private relampeja = false;
+  /** Relógio próprio dos shaders: anda mais devagar para quem pede menos movimento. */
+  private relogio = Math.random() * 100;
   private proximoRaio = 0;
   private inicioRaio = -1e9;
   private mascara: Sprite | null = null;
@@ -583,30 +514,16 @@ class EfeitoComposto implements Efeito {
       this.particulas.push(p);
       this.raiz.addChild(p.raiz);
     };
-    const veu = (cor: number, alfas: [number, number], periodos: [number, number], velocidades: [number, number]) => {
-      this.veu = new Veu(cor, alfas, periodos, velocidades);
-      this.alfasVeu = alfas;
-      this.raiz.addChild(this.veu.raiz);
-    };
+    if (receitaAtmosfera(efeito)) {
+      this.atmosfera = new Atmosfera();
+      this.raiz.addChild(this.atmosfera.malha);
+    }
+    this.relampeja = efeito.tipo === 'tempestade';
     switch (efeito.tipo) {
-      case 'chuva':
-        somar(RECEITAS.chuva);
-        break;
-      case 'tempestade':
-        this.escurecer = new Graphics();
-        this.raiz.addChild(this.escurecer);
-        somar(RECEITAS.tempestade);
-        this.clarao = new Graphics();
-        this.raiz.addChild(this.clarao);
-        break;
       case 'neve':
         somar(RECEITAS.neve);
         break;
-      case 'neblina':
-        veu(0xdfe4ea, [0.42, 0.3], [16, 27], [16, 11]);
-        break;
       case 'areia':
-        veu(0xc9a46c, [0.34, 0.24], [12, 20], [140, 95]);
         somar(RECEITAS.areia);
         break;
       case 'cinzas':
@@ -617,11 +534,9 @@ class EfeitoComposto implements Efeito {
         somar(RECEITAS.folhas);
         break;
       case 'vazio':
-        veu(0x1d0d33, [0.5, 0.38], [14, 23], [7, 5]);
         somar(RECEITAS.vazio);
         break;
       case 'fluxo':
-        veu(0xffffff, [0.1, 0.07], [18, 30], [6, 4]);
         somar(RECEITAS.fluxo);
         break;
       default:
@@ -649,11 +564,11 @@ class EfeitoComposto implements Efeito {
       this.mascara = null;
     }
     for (const p of this.particulas) p.intensidade = efeito.intensidade;
-    this.veu?.alfa(0.35 + efeito.intensidade * 0.9, this.alfasVeu);
+    const receita = receitaAtmosfera(efeito);
+    if (receita) this.atmosfera?.definir(receita);
     if (efeito.tipo === 'fluxo') {
       const cor = Number.parseInt((CORES_FLUXO[efeito.fluxo as FluxoId] ?? '#ffffff').slice(1), 16);
       for (const p of this.particulas) p.definirCor(cor);
-      this.veu?.definirCor(cor);
     }
   }
 
@@ -666,38 +581,67 @@ class EfeitoComposto implements Efeito {
     this.raiz.visible = vista !== null;
     if (!vista) return;
     for (const p of this.particulas) p.atualizar(vista, quadro.escala, quadro.dt, quadro.agora, vento, this.reducao);
-    this.veu?.atualizar(vista, quadro.dt, vento, quadro.tamanhoCasa);
-    if (this.escurecer) {
-      this.escurecer.clear().rect(vista.x, vista.y, vista.width, vista.height).fill({ color: 0x050812, alpha: 0.12 + this.intensidade * 0.2 });
-    }
-    if (this.clarao) this.relampejar(vista, quadro.agora);
+    this.relogio += quadro.dt * (this.reducao < 1 ? 0.4 : 1);
+    const clarao = this.relampeja ? this.relampejar(quadro.agora) : 0;
+    this.atmosfera?.atualizar(vista, this.relogio, quadro.escala, quadro.tamanhoCasa, vento, clarao);
   }
 
-  /** Clarão suave de relâmpago, com um segundo piscar logo depois. Desligado para quem pede menos movimento. */
-  private relampejar(vista: Rectangle, agora: number) {
-    const clarao = this.clarao!;
-    clarao.clear();
-    if (this.semClarao) return;
+  /** Luz do relâmpago (mais forte onde as nuvens abrem), com um segundo piscar logo depois.
+   * Desligado para quem pede menos movimento. */
+  private relampejar(agora: number): number {
+    if (this.semClarao) return 0;
     if (!this.proximoRaio) this.proximoRaio = agora + aleatorio(2500, 7000);
     if (agora >= this.proximoRaio) {
       this.inicioRaio = agora;
       this.proximoRaio = agora + aleatorio(4000, 13000) / (0.4 + this.intensidade);
     }
     const t = agora - this.inicioRaio;
-    if (t > 600) return;
+    if (t > 600) return 0;
     const pico = (centro: number, largura: number) => Math.max(0, 1 - Math.abs(t - centro) / largura);
-    const alfa = Math.max(pico(40, 90), pico(220, 120) * 0.7) * (0.18 + this.intensidade * 0.17);
-    if (alfa > 0.005) clarao.rect(vista.x, vista.y, vista.width, vista.height).fill({ color: 0xe8f0ff, alpha: alfa });
+    return Math.max(pico(40, 90), pico(220, 120) * 0.7) * (0.3 + this.intensidade * 0.3);
   }
 
   destruir() {
     for (const p of this.particulas) p.destruir();
-    this.veu?.destruir();
+    this.atmosfera?.destruir();
     this.raiz.destroy({ children: true });
   }
 }
 
-/** Escuridão: cobre o mapa (ou a área) e abre luz em volta de cada personagem de jogador e aliado. */
+/** Calor: o mapa treme como ar quente subindo. Os tokens ficam firmes (o filtro vai só no mapa e na grade). */
+class EfeitoCalor implements Efeito {
+  readonly raiz = new Container();
+  readonly tipo = 'calor' as const;
+  private calor = new FiltroCalor();
+  private efeito: IEfeitoClima;
+  private relogio = Math.random() * 100;
+  private reducao = movimentoReduzido() ? 0.4 : 1;
+
+  constructor(efeito: IEfeitoClima) {
+    this.efeito = efeito;
+  }
+
+  get filtro(): Filter {
+    return this.calor.filtro;
+  }
+
+  ajustar(efeito: IEfeitoClima) {
+    this.efeito = efeito;
+  }
+
+  atualizar(quadro: QuadroClima) {
+    this.relogio += quadro.dt * this.reducao;
+    this.calor.atualizar(this.relogio, this.efeito.intensidade * this.reducao, quadro.tamanhoCasa, quadro.vista, quadro.escala, this.efeito.area);
+  }
+
+  destruir() {
+    this.calor.destruir();
+    this.raiz.destroy({ children: true });
+  }
+}
+
+/** Escuridão: cobre o mapa (ou a área) e abre luz em volta de cada token com luz própria (no alcance dela,
+ * tremendo junto com a chama) e de cada personagem de jogador e aliado (no alcance padrão do efeito). */
 class EfeitoEscuridao implements Efeito {
   readonly raiz = new Container();
   readonly tipo = 'escuridao' as const;
@@ -725,9 +669,10 @@ class EfeitoEscuridao implements Efeito {
   }
 
   atualizar(quadro: QuadroClima) {
-    const raio = (this.efeito.luz ?? 4) * quadro.tamanhoCasa;
-    // Repinta só quando alguém com luz andou (ou o Mestre mexeu no efeito).
-    const chave = `${this.efeito.intensidade}|${raio}|${JSON.stringify(this.efeito.area)}|${quadro.luzes.map((l) => `${Math.round(l.x / 4)},${Math.round(l.y / 4)}`).join(';')}`;
+    const padrao = (this.efeito.luz ?? 4) * quadro.tamanhoCasa;
+    const raioDe = (fonte: FonteDeLuz) => fonte.raio ?? padrao;
+    // Repinta só quando uma luz andou, tremeu ou mudou (ou o Mestre mexeu no efeito).
+    const chave = `${this.efeito.intensidade}|${padrao}|${JSON.stringify(this.efeito.area)}|${quadro.luzes.map((l) => `${Math.round(l.x / 4)},${Math.round(l.y / 4)},${Math.round(raioDe(l) / 3)}`).join(';')}`;
     if (chave === this.chave) return;
     this.chave = chave;
     const escala = Math.min(1, 1024 / Math.max(this.largura, this.altura));
@@ -739,15 +684,15 @@ class EfeitoEscuridao implements Efeito {
     desenho.scale.set(escala);
     const area = this.efeito.area ?? { x: 0, y: 0, w: this.largura, h: this.altura };
     desenho.addChild(new Graphics().rect(area.x, area.y, area.w, area.h).fill({ color: 0x000000, alpha: 0.5 + this.efeito.intensidade * 0.45 }));
-    if (raio > 0) {
-      for (const ponto of quadro.luzes) {
-        const brilho = new Sprite({ texture: obterLuz(), anchor: 0.5 });
-        brilho.position.set(ponto.x, ponto.y);
-        brilho.width = raio * 2;
-        brilho.height = raio * 2;
-        brilho.blendMode = 'erase';
-        desenho.addChild(brilho);
-      }
+    for (const fonte of quadro.luzes) {
+      const raio = raioDe(fonte);
+      if (raio <= 0) continue;
+      const brilho = new Sprite({ texture: obterLuz(), anchor: 0.5 });
+      brilho.position.set(fonte.x, fonte.y);
+      brilho.width = raio * 2;
+      brilho.height = raio * 2;
+      brilho.blendMode = 'erase';
+      desenho.addChild(brilho);
     }
     this.renderer.render({ container: desenho, target: this.textura, clear: true });
     desenho.destroy({ children: true });
@@ -770,6 +715,8 @@ class EfeitoEscuridao implements Efeito {
 export class CamadaClima {
   readonly raiz = new Container();
   private renderer: Renderer;
+  /** Camada do mapa e da grade: é ela que treme com o calor. */
+  private alvoDoCalor: Container;
   private efeitos: Efeito[] = [];
   private vento: Vento = { x: 0, y: 0, forca: 0 };
   private origem: IClima | null = null;
@@ -778,8 +725,9 @@ export class CamadaClima {
   private gestor = false;
   private ligado = true;
 
-  constructor(renderer: Renderer) {
+  constructor(renderer: Renderer, alvoDoCalor: Container) {
     this.renderer = renderer;
+    this.alvoDoCalor = alvoDoCalor;
     this.raiz.eventMode = 'none';
   }
 
@@ -787,6 +735,12 @@ export class CamadaClima {
   definirLigado(ligado: boolean) {
     this.ligado = ligado;
     this.raiz.visible = ligado && this.efeitos.length > 0;
+    this.aplicarFiltros();
+  }
+
+  private aplicarFiltros() {
+    const filtros = this.ligado ? this.efeitos.flatMap((efeito) => (efeito.filtro ? [efeito.filtro] : [])) : [];
+    this.alvoDoCalor.filters = filtros.length ? filtros : null;
   }
 
   definir(clima: IClima | null, largura: number, altura: number, gestor: boolean) {
@@ -810,12 +764,15 @@ export class CamadaClima {
         if (ventoMudou) atual.ventoMudou?.(this.vento);
         return atual;
       }
-      return efeito.tipo === 'escuridao'
-        ? new EfeitoEscuridao(efeito, this.renderer, largura, altura, gestor)
-        : new EfeitoComposto(efeito);
+      if (efeito.tipo === 'escuridao') return new EfeitoEscuridao(efeito, this.renderer, largura, altura, gestor);
+      if (efeito.tipo === 'calor') return new EfeitoCalor(efeito);
+      return new EfeitoComposto(efeito);
     });
-    for (const antigo of this.efeitos) if (!novos.includes(antigo)) antigo.destruir();
+    const saindo = this.efeitos.filter((antigo) => !novos.includes(antigo));
     this.efeitos = novos;
+    // Tira os filtros que saem antes de destruí-los.
+    this.aplicarFiltros();
+    for (const antigo of saindo) antigo.destruir();
     this.raiz.removeChildren();
     for (const efeito of novos) this.raiz.addChild(efeito.raiz);
     this.raiz.visible = this.ligado && novos.length > 0;
@@ -827,6 +784,7 @@ export class CamadaClima {
   }
 
   destruir() {
+    this.alvoDoCalor.filters = null;
     for (const efeito of this.efeitos) efeito.destruir();
     this.efeitos = [];
   }

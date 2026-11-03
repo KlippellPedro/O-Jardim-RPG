@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Folder, FolderPlus, FolderUp, ImagePlus, Loader2, Map as MapaIcone, Search, Trash2, User, X } from 'lucide-react';
 import { acervoApi, type IAcervo, type IItemAcervo, type TipoItemAcervo } from '../../../services/acervoApi';
 import { urlPedaco } from '../../../services/mapaApi';
-import { confirmar } from '../../../components/avisos/confirmacao';
+import { confirmar, pedirTexto } from '../../../components/avisos/confirmacao';
 import { imagensDaSelecao, pastaDoArquivo, subirParaOAcervo, type ProgressoEnvio } from './subirImagem';
 
 interface Props {
@@ -95,10 +95,10 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNova
   };
 
   const novaPasta = async () => {
-    const nome = window.prompt('Nome da pasta');
-    if (!nome?.trim()) return;
+    const nome = await pedirTexto({ titulo: 'Nova pasta', campo: { rotulo: 'Nome da pasta', maximo: 80 }, rotuloConfirmar: 'Criar pasta' });
+    if (!nome) return;
     try {
-      const { id } = await acervoApi.criarPasta(nome.trim(), pasta === 'todas' ? null : pasta);
+      const { id } = await acervoApi.criarPasta(nome, pasta === 'todas' ? null : pasta);
       await carregar();
       setPasta(id);
     } catch (falha) {

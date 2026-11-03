@@ -97,6 +97,21 @@ export function iniciais(nome: string): string {
   return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
 }
 
+/** Nome que cabe embaixo do token: corta numa palavra inteira e põe reticências.
+ *  O tamanho da letra acompanha o token, então o limite é o mesmo em qualquer porte. */
+export const LIMITE_NOME_TOKEN = 18;
+
+export function abreviarNome(nome: string, limite = LIMITE_NOME_TOKEN): string {
+  const limpo = nome.trim().replace(/\s+/g, ' ');
+  if (limpo.length <= limite) return limpo;
+  const corte = limpo.slice(0, limite - 1);
+  // A palavra acabou bem no corte: fica inteira.
+  if (limpo[limite - 1] === ' ') return `${corte}…`;
+  const espaco = corte.lastIndexOf(' ');
+  // Sem espaço que aproveite (uma palavra só, comprida), corta no meio dela.
+  return `${(espaco >= limite / 2 ? corte.slice(0, espaco) : corte).trimEnd()}…`;
+}
+
 /** Uma ou duas letras por condição (Caído vira "Ca"), nas bolinhas ao lado do token. */
 export function siglaDaCondicao(nome: string): string {
   const limpo = nome.trim();

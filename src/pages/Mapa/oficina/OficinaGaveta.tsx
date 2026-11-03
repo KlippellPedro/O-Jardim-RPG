@@ -11,6 +11,7 @@ import { LADO_LADRILHO, type IPonto } from '../motor/geometria';
 import { desenharMoldura, desenharRetrato, ENQUADRAMENTO_PADRAO, MOLDURAS, RAIO_RETRATO, type Enquadramento } from '../motor/molduras';
 import { subirParaOAcervo } from '../acervo/subirImagem';
 import { melhorarQualidade, removerFundo } from './processar';
+import { ComDica } from '../componentes/BotaoFerramenta';
 
 interface Props {
   aberto: boolean;
@@ -412,9 +413,15 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
               <button type="button" className="mapa-botao" onClick={() => void fazerMelhorar(4)}>Melhorar 4x</button>
             </div>
             <div className="mapa-ferramentas-oficina" role="radiogroup" aria-label="Ferramenta">
-              <button type="button" className={ferramenta === 'mover' ? 'ativo' : ''} onClick={() => setFerramenta('mover')} title="Arrastar a foto dentro do círculo"><Move size={15} /></button>
-              <button type="button" className={ferramenta === 'apagar' ? 'ativo' : ''} onClick={() => setFerramenta('apagar')} title="Pincel que apaga"><Eraser size={15} /></button>
-              <button type="button" className={ferramenta === 'restaurar' ? 'ativo' : ''} onClick={() => setFerramenta('restaurar')} title="Pincel que restaura"><Brush size={15} /></button>
+              <ComDica lado="cima" dica="Arrastar a foto dentro do círculo">
+                <button type="button" className={ferramenta === 'mover' ? 'ativo' : ''} aria-label="Arrastar a foto" onClick={() => setFerramenta('mover')}><Move size={15} /></button>
+              </ComDica>
+              <ComDica lado="cima" dica="Pincel que apaga">
+                <button type="button" className={ferramenta === 'apagar' ? 'ativo' : ''} aria-label="Pincel que apaga" onClick={() => setFerramenta('apagar')}><Eraser size={15} /></button>
+              </ComDica>
+              <ComDica lado="cima" dica="Pincel que restaura">
+                <button type="button" className={ferramenta === 'restaurar' ? 'ativo' : ''} aria-label="Pincel que restaura" onClick={() => setFerramenta('restaurar')}><Brush size={15} /></button>
+              </ComDica>
               <label>Pincel <input type="range" min={2} max={200} value={pincel} onChange={(e) => setPincel(Number(e.target.value))} /></label>
             </div>
             {alfa && <button type="button" className="mapa-botao-leve" onClick={() => setAlfa(null)}>Desfazer o recorte</button>}
@@ -489,7 +496,7 @@ export const SeletorDeMoldura = ({ valor, lado, nivel = null, onEscolher, inclui
 }) => (
   <div className="mapa-molduras" role="radiogroup" aria-label="Moldura">
     {MOLDURAS.filter((m) => incluirNivel || m.id !== 'nivel').map((m) => (
-      <button key={m.id} type="button" role="radio" aria-checked={valor === m.id} className={valor === m.id ? 'ativo' : ''} title={m.rotulo} onClick={() => onEscolher(m.id)}>
+      <button key={m.id} type="button" role="radio" aria-checked={valor === m.id} className={valor === m.id ? 'ativo' : ''} onClick={() => onEscolher(m.id)}>
         <PreviaMoldura id={m.id} lado={lado} nivel={nivel} />
         <small>{m.rotulo}</small>
       </button>

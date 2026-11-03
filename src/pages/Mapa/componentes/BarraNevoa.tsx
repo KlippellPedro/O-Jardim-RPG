@@ -1,5 +1,6 @@
 import { Eye, EyeOff, Paintbrush, Pentagon, Square, Undo2 } from 'lucide-react';
 import type { FormaDeDesenho, OpcoesNevoa } from '../motor/palco';
+import { ComDica } from './BotaoFerramenta';
 
 interface Props {
   ligada: boolean;
@@ -35,9 +36,11 @@ export const BarraNevoa = ({ ligada, naMesa, opcoes, tamanhoCasa, temFormas, onL
       </div>
       <div className="mapa-segmentos" role="group" aria-label="Forma">
         {FORMAS.map(({ id, rotulo, Icone }) => (
-          <button key={id} type="button" disabled={!ligada} className={opcoes.forma === id ? 'ativo' : ''} title={rotulo} aria-label={rotulo} onClick={() => onOpcoes({ ...opcoes, forma: id })}>
-            <Icone size={15} />
-          </button>
+          <ComDica key={id} dica={rotulo}>
+            <button type="button" disabled={!ligada} className={opcoes.forma === id ? 'ativo' : ''} aria-label={rotulo} onClick={() => onOpcoes({ ...opcoes, forma: id })}>
+              <Icone size={15} />
+            </button>
+          </ComDica>
         ))}
       </div>
       {opcoes.forma === 'pincel' && (
@@ -50,7 +53,9 @@ export const BarraNevoa = ({ ligada, naMesa, opcoes, tamanhoCasa, temFormas, onL
         </label>
       )}
       <span className="mapa-separador-vertical" />
-      <button type="button" className="mapa-botao-leve" disabled={!ligada || !temFormas} onClick={onDesfazer} title="Desfazer a última forma (Ctrl+Z)"><Undo2 size={14} /> Desfazer</button>
+      <ComDica dica="Desfazer a última forma (Ctrl+Z)">
+        <button type="button" className="mapa-botao-leve" disabled={!ligada || !temFormas} onClick={onDesfazer}><Undo2 size={14} /> Desfazer</button>
+      </ComDica>
       <button type="button" className="mapa-botao-leve" disabled={!ligada} onClick={onRevelarTudo}>Revelar tudo</button>
       <button type="button" className="mapa-botao-leve" disabled={!ligada} onClick={onCobrirTudo}>Cobrir tudo</button>
       <p className="mapa-dica">

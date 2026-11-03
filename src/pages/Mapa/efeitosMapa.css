@@ -1,0 +1,80 @@
+/* Barra da magia e a luz dos tokens (mapa ao vivo). Usa as cores de mapa.css (.mapa-pagina). */
+
+.mapa-barra-magia {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  max-width: 760px;
+  padding: 8px 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 12px;
+  background: var(--mapa-painel);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+}
+
+.mapa-barra-magia .mapa-dica {
+  flex-basis: 100%;
+  margin: 0;
+}
+
+.mapa-fluxos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mapa-fluxo-botao {
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(0, 0, 0, 0.45);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.mapa-fluxo-botao:hover {
+  transform: scale(1.12);
+}
+
+.mapa-fluxo-botao.ativo {
+  outline: 2px solid var(--mapa-texto);
+  outline-offset: 2px;
+}
+
+.mapa-luz-atalhos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0 6px;
+}
+
+.mapa-luz-atalhos button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--mapa-texto);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.mapa-luz-atalhos button.ativo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.16);
+}
+
+.mapa-luz-ponto {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}

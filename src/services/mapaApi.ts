@@ -14,6 +14,27 @@ export interface IBarraToken {
   fracao?: number;
 }
 
+/** Luz que o token carrega: raio em casas, cor e se tremula como chama. */
+export interface ILuzToken {
+  raio: number;
+  cor: string;
+  tremula: boolean;
+}
+
+export type FormaMagia = 'circulo' | 'cone' | 'linha' | 'impacto';
+
+/** Efeito de magia jogado no mapa: passa pelo tempo real e some sozinho. */
+export interface IMagiaMapa {
+  forma: FormaMagia;
+  fluxo: string;
+  /** Origem (de onde sai, ou o centro do círculo). */
+  x: number;
+  y: number;
+  /** Alvo (até onde vai, ou a borda do círculo). */
+  ax: number;
+  ay: number;
+}
+
 export interface IConfigBarras {
   mostrar: TipoBarra[];
   para: ParaQuem;
@@ -36,6 +57,8 @@ export interface ITokenMapa {
   moldura: string;
   /** Zoom e deslocamento da foto da ficha dentro do círculo. */
   enquadramento: { zoom: number; x: number; y: number };
+  /** Tocha, lanterna ou luz mágica; null sem luz própria. */
+  luz: ILuzToken | null;
   e_meu: boolean;
   pode_mover: boolean;
   desconhecido: boolean;
@@ -81,7 +104,7 @@ export interface INevoa {
   ladrilhos: string[] | null;
 }
 
-export type TipoEfeitoClima = 'chuva' | 'tempestade' | 'neve' | 'neblina' | 'areia' | 'cinzas' | 'folhas' | 'escuridao' | 'vazio' | 'fluxo';
+export type TipoEfeitoClima = 'chuva' | 'tempestade' | 'nuvens' | 'neve' | 'neblina' | 'areia' | 'cinzas' | 'calor' | 'folhas' | 'escuridao' | 'vazio' | 'fluxo';
 
 export interface IAreaClima {
   x: number;
@@ -175,6 +198,8 @@ export interface ITokenEdicao {
   barras?: Partial<IConfigBarras>;
   moldura?: string;
   sem_moldura?: boolean;
+  luz?: ILuzToken;
+  sem_luz?: boolean;
 }
 
 const base = (campanhaId: string) => `/mapa/${campanhaId}`;

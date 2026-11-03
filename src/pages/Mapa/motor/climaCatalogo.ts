@@ -8,10 +8,12 @@ export const MAX_EFEITOS_CLIMA = 4;
 export const EFEITOS_CLIMA: Array<{ id: TipoEfeitoClima; rotulo: string }> = [
   { id: 'chuva', rotulo: 'Chuva' },
   { id: 'tempestade', rotulo: 'Tempestade' },
+  { id: 'nuvens', rotulo: 'Sombras de nuvens' },
   { id: 'neve', rotulo: 'Neve' },
   { id: 'neblina', rotulo: 'Neblina' },
   { id: 'areia', rotulo: 'Tempestade de areia' },
   { id: 'cinzas', rotulo: 'Cinzas e brasas' },
+  { id: 'calor', rotulo: 'Calor' },
   { id: 'folhas', rotulo: 'Folhas' },
   { id: 'escuridao', rotulo: 'Escuridão' },
   { id: 'vazio', rotulo: 'Véu do Vazio' },

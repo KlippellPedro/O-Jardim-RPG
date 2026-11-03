@@ -6,19 +6,27 @@
 
 import { Application, Container, Graphics, Text, Texture, Sprite } from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
-import type { IAreaClima, ICena, IClima, IFormaNevoa, ITokenMapa, OperacaoNevoa } from '../../../services/mapaApi';
+import type { FormaMagia, IAreaClima, ICena, IClima, IFormaNevoa, IMagiaMapa, ITokenMapa, OperacaoNevoa } from '../../../services/mapaApi';
 import { urlImagemDoToken, urlPedaco } from '../../../services/mapaApi';
 import { encaixar, medir, raioHex, LADO_LADRILHO, type IGrade, type IPonto } from './geometria';
 import { TokenVisual, esquecerTexturasDeMoldura } from './token';
 import { desenharRetrato, type Enquadramento } from './molduras';
 import { CamadaNevoa } from './nevoa';
 import { CamadaClima, esquecerTexturasDoClima } from './clima';
+import { CamadaLuzes, fonteDoToken, type FonteDeLuz } from './luzes';
+import { EfeitosDeMagia, corDoFluxo, desenharMira } from './magia';
 import {
   acrescentarAoTraco, chavesDoFundo, detalheSempre, fechaPoligono, formaDoPoligono, formaDoRetangulo, formaDoTraco, MAX_PONTOS_TRACO,
 } from './nevoaGeometria';
 
-/** `nevoa`: o Mestre desenha a névoa; `area`: o Mestre marca a área de um efeito de clima. */
-export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area';
+/** `nevoa`: o Mestre desenha a névoa; `area`: o Mestre marca a área de um efeito de clima;
+ * `magia`: qualquer um mira e solta um efeito de magia que a mesa inteira vê. */
+export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia';
+
+export interface OpcoesMagia {
+  forma: FormaMagia;
+  fluxo: string;
+}
 export type FormaDeDesenho = 'pincel' | 'retangulo' | 'poligono';
 
 export interface OpcoesNevoa {
@@ -36,6 +44,7 @@ export interface EventosPalco {
   aoRegua: (pontos: IPonto[] | null) => void;
   aoNevoa: (forma: IFormaNevoa) => void;
   aoArea: (area: IAreaClima) => void;
+  aoMagia: (magia: IMagiaMapa) => void;
 }
 
 const COR_REVELAR = '#5eead4';
@@ -73,7 +82,11 @@ export class PalcoMapa {
   private camadaReduzida = new Container();
   private camadaDetalhe = new Container();
   private grade = new Graphics();
+  /** Mapa e grade juntos: é a camada que treme com o calor do clima (os tokens ficam firmes). */
+  private camadaFundo = new Container();
   private camadaTokens = new Container();
+  /** Brilho das luzes dos tokens, entre a névoa e os tokens. */
+  private luzes = new CamadaLuzes();
   private camadaReguas = new Container();
   private camadaPings = new Container();
   private previa = new Graphics();
@@ -88,7 +101,16 @@ export class PalcoMapa {
   private retangulo: { inicio: IPonto; fim: IPonto } | null = null;
   private poligono: IPonto[] | null = null;
   private cursor: IPonto | null = null;
+  private magias = new EfeitosDeMagia();
+  private opcoesMagia: OpcoesMagia = { forma: 'circulo', fluxo: 'essencia' };
+  /** A mira da magia: da origem (já no meio da casa) até onde a mão está. */
+  private mira: { inicio: IPonto; fim: IPonto } | null = null;
+  private rotuloMira: Text | null = null;
   private tokens = new Map<string, TokenVisual>();
+  /** Tokens que saíram e ainda estão encolhendo na tela. */
+  private saindo = new Set<TokenVisual>();
+  /** Cena nova: os tokens da anterior somem na hora, sem animação. */
+  private cenaTrocada = false;
   private retratos = new Map<string, Promise<Texture | null>>();
   private ladrilhosPedidos = new Set<string>();
   private cena: ICena | null = null;
@@ -110,7 +132,9 @@ export class PalcoMapa {
     const app = new Application();
     await app.init({
       resizeTo: alvo,
-      preference: 'webgpu',
+      // `?motor=webgl` força o WebGL: serve para testar os dois caminhos dos shaders e de saída
+      // para uma placa de vídeo que se dê mal com o WebGPU.
+      preference: new URLSearchParams(window.location.search).get('motor') === 'webgl' ? 'webgl' : 'webgpu',
       antialias: true,
       background: '#09090d',
       autoDensity: true,
@@ -134,10 +158,11 @@ export class PalcoMapa {
   private montar() {
     const { app, viewport } = this;
     this.nevoa = new CamadaNevoa(app.renderer);
-    this.clima = new CamadaClima(app.renderer);
+    this.clima = new CamadaClima(app.renderer, this.camadaFundo);
     this.camadaMapa.addChild(this.camadaReduzida, this.camadaDetalhe);
     // A névoa cobre o mapa e fica por baixo dos tokens: o servidor já tira do jogador o que ela esconde.
-    viewport.addChild(this.camadaMapa, this.grade, this.nevoa.raiz, this.camadaTokens, this.clima.raiz, this.camadaReguas, this.previa, this.camadaPings);
+    this.camadaFundo.addChild(this.camadaMapa, this.grade);
+    viewport.addChild(this.camadaFundo, this.nevoa.raiz, this.luzes.raiz, this.camadaTokens, this.clima.raiz, this.magias.raiz, this.camadaReguas, this.previa, this.camadaPings);
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
 
@@ -154,7 +179,7 @@ export class PalcoMapa {
         this.desenharReguaLocal();
         return;
       }
-      if (this.ferramenta === 'nevoa' || this.ferramenta === 'area') {
+      if (this.ferramenta === 'nevoa' || this.ferramenta === 'area' || this.ferramenta === 'magia') {
         // Botão do meio e o direito continuam arrastando o mapa.
         if (evento.button === 0) this.comecarDesenho({ x: ponto.x, y: ponto.y });
         return;
@@ -164,7 +189,7 @@ export class PalcoMapa {
 
     app.stage.on('globalpointermove', (evento) => {
       const ponto = viewport.toWorld(evento.global);
-      if (this.ferramenta === 'nevoa' || this.ferramenta === 'area') {
+      if (this.ferramenta === 'nevoa' || this.ferramenta === 'area' || this.ferramenta === 'magia') {
         this.continuarDesenho({ x: ponto.x, y: ponto.y });
         return;
       }
@@ -172,6 +197,7 @@ export class PalcoMapa {
         const token = this.tokens.get(this.arrasto.id);
         if (!token) return;
         if (!this.arrasto.moveu && Math.hypot(ponto.x - this.arrasto.inicio.x, ponto.y - this.arrasto.inicio.y) * viewport.scale.x < 4) return;
+        if (!this.arrasto.moveu) token.levantar(true);
         this.arrasto.moveu = true;
         const x = ponto.x - this.arrasto.dx;
         const y = ponto.y - this.arrasto.dy;
@@ -187,7 +213,7 @@ export class PalcoMapa {
     });
 
     const soltar = () => {
-      if (this.traco || this.retangulo) {
+      if (this.traco || this.retangulo || this.mira) {
         this.terminarDesenho();
         return;
       }
@@ -199,6 +225,7 @@ export class PalcoMapa {
         const token = this.tokens.get(id);
         if (!token) return;
         token.raiz.cursor = 'grab';
+        token.levantar(false);
         if (!moveu) {
           this.eventos.aoSelecionar(id);
           return;
@@ -229,26 +256,37 @@ export class PalcoMapa {
     app.ticker.add((ticker) => {
       const agora = performance.now();
       for (const token of this.tokens.values()) token.pulsar(agora);
+      for (const token of this.saindo) {
+        if (!token.pulsar(agora)) continue;
+        this.saindo.delete(token);
+        token.destruir();
+      }
       for (const callback of this.quadroCallbacks) callback();
       this.animarPings(agora);
+      this.magias.quadro(agora);
+      this.nevoa.quadro(agora);
       if (this.cena) {
+        const fontes = this.fontesDeLuz(agora);
+        this.luzes.quadro(fontes);
         this.clima.quadro({
           dt: Math.min(0.1, ticker.deltaMS / 1000),
           agora,
           vista: viewport.getVisibleBounds(),
           escala: viewport.scale.x,
-          luzes: this.luzes(),
+          luzes: fontes,
           tamanhoCasa: this.cena.grade.tamanho,
         });
       }
     });
   }
 
-  /** Personagens de jogador e aliados: a escuridão do clima abre luz em volta deles. */
-  private luzes(): IPonto[] {
-    const saida: IPonto[] = [];
+  /** As luzes de agora (a chama treme a cada quadro), na posição em que cada token está na tela. */
+  private fontesDeLuz(agora: number): FonteDeLuz[] {
+    const saida: FonteDeLuz[] = [];
+    const casa = this.cena?.grade.tamanho ?? 100;
     for (const token of this.tokens.values()) {
-      if (token.dados.lado === 'jogador' || token.dados.lado === 'aliado') saida.push({ x: token.raiz.x, y: token.raiz.y });
+      const fonte = fonteDoToken(token.dados, token.raiz.x, token.raiz.y, casa, agora);
+      if (fonte) saida.push(fonte);
     }
     return saida;
   }
@@ -285,12 +323,13 @@ export class PalcoMapa {
       if (anterior?.id !== cena.id) {
         this.cancelarDesenho();
         this.enquadrar();
+        this.cenaTrocada = true;
       }
     }
     // Com a névoa, o Mestre revelar mais libera pedaços novos: busca só os que faltam.
     void this.carregarReduzido();
     this.desenharGrade(cena.grade);
-    this.nevoa.definir(cena.nevoa ?? null, cena.largura, cena.altura, gestor);
+    this.nevoa.definir(cena.nevoa ?? null, cena.largura, cena.altura, gestor, cena.grade.tamanho);
     this.clima.definir(cena.clima ?? null, cena.largura, cena.altura, gestor);
     this.agendarLadrilhos();
   }
@@ -443,15 +482,26 @@ export class PalcoMapa {
   }
 
   get desenhando(): boolean {
-    return Boolean(this.traco || this.retangulo || this.poligono);
+    return Boolean(this.traco || this.retangulo || this.poligono || this.mira);
   }
 
   cancelarDesenho() {
     this.traco = null;
     this.retangulo = null;
     this.poligono = null;
+    this.mira = null;
     this.viewport.plugins.resume('drag');
     this.desenharPrevia();
+  }
+
+  definirOpcoesMagia(opcoes: OpcoesMagia) {
+    this.opcoesMagia = opcoes;
+    this.desenharPrevia();
+  }
+
+  /** Um efeito de magia acontece no mapa: o meu (na hora) ou o de outra pessoa (pelo tempo real). */
+  magia(magia: IMagiaMapa, nome?: string) {
+    this.magias.lancar(magia, this.cena?.grade.tamanho ?? 100, nome);
   }
 
   /** Enter ou clique no primeiro ponto: o polígono vira forma. */
@@ -466,7 +516,11 @@ export class PalcoMapa {
     this.cursor = ponto;
     // Névoa desligada: a barra pede para ligar antes de desenhar.
     if (this.ferramenta === 'nevoa' && !this.nevoa.ligada) return;
-    if (this.ferramenta === 'area') {
+    if (this.ferramenta === 'magia') {
+      // A magia sai do meio de uma casa, como o alcance das regras é contado.
+      this.mira = { inicio: this.encaixarPonto(ponto), fim: ponto };
+      this.viewport.plugins.pause('drag');
+    } else if (this.ferramenta === 'area') {
       this.retangulo = { inicio: ponto, fim: ponto };
       this.viewport.plugins.pause('drag');
     } else if (this.opcoesNevoa.forma === 'pincel') {
@@ -499,11 +553,25 @@ export class PalcoMapa {
       }
     }
     if (this.retangulo) this.retangulo.fim = ponto;
+    if (this.mira) this.mira.fim = ponto;
     this.desenharPrevia();
   }
 
   private terminarDesenho() {
     this.viewport.plugins.resume('drag');
+    if (this.mira) {
+      const { inicio, fim } = this.mira;
+      this.mira = null;
+      const casa = this.cena?.grade.tamanho ?? 100;
+      const distancia = Math.hypot(fim.x - inicio.x, fim.y - inicio.y);
+      // Clique sem arrastar só vale para o impacto (estoura no próprio ponto).
+      if (this.opcoesMagia.forma === 'impacto' || distancia >= casa * 0.4) {
+        const alvo = this.opcoesMagia.forma === 'impacto' && distancia < casa * 0.4 ? inicio : fim;
+        const magia: IMagiaMapa = { ...this.opcoesMagia, x: inicio.x, y: inicio.y, ax: alvo.x, ay: alvo.y };
+        this.magia(magia);
+        this.eventos.aoMagia(magia);
+      }
+    }
     if (this.traco) {
       const forma = formaDoTraco(this.opcoesNevoa.op, this.traco, this.opcoesNevoa.raio);
       this.traco = null;
@@ -529,10 +597,31 @@ export class PalcoMapa {
     this.eventos.aoNevoa(forma);
   }
 
+  /** Contorno da área da magia e o tamanho em casas e metros, enquanto a pessoa mira. */
+  private desenharMira() {
+    if (!this.mira || !this.cena) return;
+    const { inicio, fim } = this.mira;
+    const escala = 1 / this.viewport.scale.x;
+    const casa = this.cena.grade.tamanho;
+    desenharMira(this.previa, this.opcoesMagia.forma, inicio, fim, corDoFluxo(this.opcoesMagia.fluxo), 2 * escala, casa);
+    const { quadrados, metros } = medir([inicio, fim], this.cena.grade);
+    const nome = { circulo: 'Raio', cone: 'Cone', linha: 'Linha', impacto: 'Alcance' }[this.opcoesMagia.forma];
+    this.rotuloMira ??= this.criarRegua('#c084fc').rotulo;
+    this.rotuloMira.visible = true;
+    this.rotuloMira.text = `${nome}: ${quadrados.toLocaleString('pt-BR')} q · ${metros.toLocaleString('pt-BR')} m`;
+    this.rotuloMira.scale.set(escala);
+    this.rotuloMira.position.set(fim.x, fim.y - 14 * escala);
+  }
+
   /** Contorno do que está sendo desenhado, e o pincel embaixo do cursor. */
   private desenharPrevia() {
     const g = this.previa;
     g.clear();
+    if (this.rotuloMira) this.rotuloMira.visible = false;
+    if (this.ferramenta === 'magia') {
+      this.desenharMira();
+      return;
+    }
     if (this.ferramenta !== 'nevoa' && this.ferramenta !== 'area') return;
     const largura = 2 / this.viewport.scale.x;
     const cor = this.ferramenta === 'area' ? COR_AREA : this.opcoesNevoa.op === 'revelar' ? COR_REVELAR : COR_ESCONDER;
@@ -590,9 +679,16 @@ export class PalcoMapa {
     }
     for (const [id, token] of this.tokens) {
       if (vistos.has(id)) continue;
-      token.destruir();
       this.tokens.delete(id);
+      if (this.cenaTrocada) {
+        token.destruir();
+      } else {
+        // Saiu da cena (tirado, escondido, entrou na névoa): encolhe e some.
+        token.sair(performance.now());
+        this.saindo.add(token);
+      }
     }
+    this.cenaTrocada = false;
   }
 
   private async carregarRetrato(token: TokenVisual) {
@@ -631,6 +727,7 @@ export class PalcoMapa {
     if (this.arrasto?.id === id) return;
     const token = this.tokens.get(id);
     if (!token) return;
+    if (token.raiz.x !== x || token.raiz.y !== y) token.marcarMovimento(performance.now());
     token.raiz.position.set(x, y);
     token.dados = { ...token.dados, x, y };
   }
@@ -738,6 +835,8 @@ export class PalcoMapa {
   destruir() {
     if (this.carregarVisiveis !== null) window.clearTimeout(this.carregarVisiveis);
     this.clima.destruir();
+    this.luzes.destruir();
+    this.magias.destruir();
     esquecerTexturasDeMoldura();
     this.app.destroy({ removeView: true }, { children: true, texture: true, textureSource: true });
     // O que sobrou da névoa e do clima vai depois do renderizador, que já não desenha nada com elas.

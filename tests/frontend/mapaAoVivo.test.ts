@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { chavesEsperadas, encaixar, iniciais, medir, type IGrade } from '../../src/pages/Mapa/motor/geometria';
+import { abreviarNome, chavesEsperadas, encaixar, iniciais, medir, type IGrade } from '../../src/pages/Mapa/motor/geometria';
 import { Interpolador } from '../../src/pages/Mapa/tempoReal';
 
 const QUADRADA: IGrade = { tipo: 'quadrada', tamanho: 100, x: 0, y: 0, cor: '#ffffff', opacidade: 0.2, metros: 1.5 };
@@ -48,10 +48,50 @@ test('interpolador desenha no passado, liga as amostras e não volta no tempo', 
   assert.equal(interpolador.atraso, 80 + 50);
   const meio = interpolador.posicao('t1', 1000 + 125 + 130);
   assert.ok(meio && Math.abs(meio.x - 25) < 1e-6 && !meio.terminou);
+  // Sem a posição seguinte, o token segue um intervalo e meio na mesma direção e espera ali.
   const fim = interpolador.posicao('t1', 5000);
-  assert.ok(fim && fim.x === 100 && fim.terminou);
+  assert.ok(fim && Math.abs(fim.x - 115) < 1e-6 && fim.terminou);
+  // A posição de soltar encerra o arrasto: o token para nela.
+  interpolador.receber('t1', { t: 1600, x: 104, y: 0, final: true }, 1680);
+  const solto = interpolador.posicao('t1', 9000);
+  assert.ok(solto && solto.x === 104 && solto.terminou);
   interpolador.esquecer('t1');
   assert.equal(interpolador.posicao('t1', 5000), null);
+});
+
+test('interpolador: um pico isolado não segura o desenho e o token nunca recua', () => {
+  const interpolador = new Interpolador(0);
+  // 30 envios por segundo chegando 80 ms depois; um deles chega 400 ms depois.
+  for (let i = 0; i < 60; i++) {
+    const t = 1000 + i * 33;
+    interpolador.receber('t1', { t, x: i * 10, y: 0 }, t + (i === 30 ? 400 : 80));
+  }
+  assert.ok(interpolador.atraso < 80 + 33 + 20, `colchão ${interpolador.atraso} ficou preso no pico`);
+  // A rede piora de repente (chegadas 300 ms depois): o desenho freia, mas nunca volta.
+  const desenhado: number[] = [];
+  let agora = 1000 + 59 * 33 + 120;
+  for (let quadro = 0; quadro < 90; quadro++, agora += 1000 / 60) {
+    const i = 60 + Math.floor(quadro / 2);
+    if (quadro % 2 === 0) interpolador.receber('t1', { t: 1000 + i * 33, x: i * 10, y: 0 }, agora + 300);
+    const pos = interpolador.posicao('t1', agora);
+    if (pos) desenhado.push(pos.x);
+  }
+  for (let k = 1; k < desenhado.length; k++) assert.ok(desenhado[k] >= desenhado[k - 1] - 1e-9, `recuou no quadro ${k}`);
+});
+
+test('interpolador: o relógio do desenho alcança um colchão menor aos poucos, sem salto', () => {
+  const interpolador = new Interpolador(0);
+  for (let i = 0; i < 30; i++) interpolador.receber('t1', { t: 1000 + i * 33, x: i * 10, y: 0 }, 1000 + i * 33 + 300);
+  let agora = 1000 + 29 * 33 + 340;
+  let anterior = interpolador.posicao('t1', agora)!.x;
+  // A rede melhora: as próximas chegam 60 ms depois. Nenhum quadro pula mais que 10% além do normal.
+  for (let i = 30; i < 120; i++) {
+    interpolador.receber('t1', { t: 1000 + i * 33, x: i * 10, y: 0 }, 1000 + i * 33 + 60);
+    agora += 1000 / 60;
+    const x = interpolador.posicao('t1', agora)!.x;
+    assert.ok(x - anterior <= (10 / 33) * (1000 / 60) * 1.1 + 1e-6, `pulou ${x - anterior} px num quadro`);
+    anterior = x;
+  }
 });
 
 test('molduras: as cores de Fluxo batem com FLUXO_TEMAS e os nomes batem com o servidor', async () => {
@@ -129,4 +169,82 @@ test('mapa: a página HTML do proxy no lugar do estado vira erro, para a página
   } finally {
     globalThis.fetch = fetchOriginal;
   }
+});
+
+test('névoa viva: o shader do WebGL e o do WebGPU usam os mesmos uniformes e texturas', async () => {
+  const { readFileSync } = await import('node:fs');
+  const fonte = readFileSync(new URL('../../src/pages/Mapa/motor/nevoa.ts', import.meta.url), 'utf-8');
+  const gl = fonte.slice(fonte.indexOf('const FRAGMENTO_GL'), fonte.indexOf('const SHADER_WGSL'));
+  const wgsl = fonte.slice(fonte.indexOf('const SHADER_WGSL'), fonte.indexOf('let ruido'));
+  const nomes = ['uMascara', 'uMascaraAnterior', 'uRuido', 'uParametros', 'uTamanho', 'uCor', 'uCorFiapo'];
+  for (const nome of nomes) {
+    assert.ok(new RegExp(`\\b${nome}\\b`).test(gl), `${nome} no GLSL`);
+    assert.ok(new RegExp(`\\b${nome}\\b`).test(wgsl), `${nome} no WGSL`);
+  }
+  // As mesmas amostras de ruído nos dois: um shader não pode ficar com um efeito que o outro não tem.
+  const contar = (texto: string, padrao: RegExp) => (texto.match(padrao) ?? []).length;
+  assert.equal(contar(gl, /texture\(uRuido/g), contar(wgsl, /textureSample\(uRuido/g));
+  assert.equal(contar(gl, /texture\(uMascara/g), contar(wgsl, /textureSample\(uMascara/g));
+});
+
+test('medidor: acerta o relógio pela ida e volta mais rápida e separa rede, quem arrasta e suavização', async () => {
+  const { Medidor } = await import('../../src/pages/Mapa/medidor');
+  const medidor = new Medidor();
+  // Este aparelho está 2 s atrasado: o servidor marca 12 000 quando aqui é 10 000.
+  medidor.registrarOi(10_000, 10_300, 12_150); // ida e volta lenta (300 ms): estimativa pior
+  medidor.registrarOi(11_000, 11_140, 13_070); // 140 ms: esta vale
+  assert.equal(medidor.relogio, 2_000);
+  assert.equal(medidor.horaDoServidor(20_000), 22_000);
+  // O servidor repassou às 22 000 um gesto feito às 21 930 (70 ms até o servidor); chegou aqui às 20 070 (70 ms).
+  medidor.registrarMovimento(20_070, 22_000, 21_930);
+  // O interpolador desenha 150 ms atrás do relógio local mais a diferença (-2 000 + 70 + 80).
+  const resumo = medidor.resumo(20_100, -1_850, 60, true);
+  assert.equal(resumo.redeAteVoce, 70);
+  assert.equal(resumo.quemMexeAteServidor, 70);
+  assert.equal(resumo.suavizacao, 80);
+  assert.equal(resumo.atrasoTotal, 220);
+  assert.equal(resumo.idaEVolta, 300);
+  assert.equal(resumo.movimentosPorSegundo, 1);
+  // Sem arrasto chegando há mais de 10 s, a suavização não diz nada.
+  assert.equal(medidor.resumo(31_000, -1_850, 60, true).suavizacao, null);
+});
+
+test('medidor: recargas e aba escondida contam só o último minuto', async () => {
+  const { Medidor } = await import('../../src/pages/Mapa/medidor');
+  const medidor = new Medidor();
+  medidor.registrarRecarga(1_000, 180);
+  medidor.registrarRecarga(2_000, 210);
+  medidor.registrarAbaEscondida(3_000);
+  let resumo = medidor.resumo(4_000, null, null, false);
+  assert.equal(resumo.ultimaRecarga, 210);
+  assert.equal(resumo.recargasPorMinuto, 2);
+  assert.equal(resumo.abaEscondidaNoMinuto, 1);
+  assert.equal(resumo.idaEVolta, null);
+  resumo = medidor.resumo(70_000, null, null, true);
+  assert.equal(resumo.recargasPorMinuto, 0);
+  assert.equal(resumo.abaEscondidaNoMinuto, 0);
+});
+
+test('mapa: diferença empurrada troca e tira tokens, segue a ordem e ignora outra cena', async () => {
+  const { aplicarDelta } = await import('../../src/pages/Mapa/delta');
+  const token = (id: string, x = 0) => ({ id, x, y: 0, porte: 1, lado: 'neutro', nome: id, imagem: null, nivel: null, barras: [], condicoes: [], moldura: 'lado', enquadramento: { zoom: 1, x: 0, y: 0 }, e_meu: false, pode_mover: false, desconhecido: false }) as never;
+  const atual = { gestor: false, usuario_id: 'ana', ao_vivo: true, bloqueado: false, cenas: [], cena: { id: 'c1' } as never, tokens: [token('a'), token('b'), token('c')], moldura_mesa: null };
+  const novo = aplicarDelta(atual, { cena_id: 'c1', mudar: [token('b', 50), token('d')], tirar: ['a'] });
+  assert.deepEqual(novo.tokens.map((t) => `${t.id}${t.x}`), ['b50', 'c0', 'd0']);
+  assert.equal(atual.tokens.length, 3, 'o estado de antes não muda');
+  const ordenado = aplicarDelta(novo, { cena_id: 'c1', ordem: ['d', 'c', 'b'] });
+  assert.deepEqual(ordenado.tokens.map((t) => t.id), ['d', 'c', 'b']);
+  const campos = aplicarDelta(novo, { cena_id: 'c1', ao_vivo: false, bloqueado: true });
+  assert.equal(campos.ao_vivo, false);
+  assert.equal(campos.bloqueado, true);
+  assert.equal(campos.tokens, novo.tokens);
+  assert.equal(aplicarDelta(novo, { cena_id: 'outra', tirar: ['b'] }), novo);
+});
+
+test('nome comprido embaixo do token corta numa palavra inteira; o curto fica como está', () => {
+  assert.equal(abreviarNome('Mira'), 'Mira');
+  assert.equal(abreviarNome('  Goblin   Batedor '), 'Goblin Batedor');
+  assert.equal(abreviarNome('Guardião da Ponte de Khazad'), 'Guardião da Ponte…');
+  assert.equal(abreviarNome('Anciãcorrompidadovazio'), 'Anciãcorrompidado…');
+  assert.ok(abreviarNome('Senhora das Marés Que Não Dormem').length <= 18);
 });

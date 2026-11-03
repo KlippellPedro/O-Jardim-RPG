@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Eye, EyeOff, Trash2, X } from 'lucide-react';
-import type { ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
+import type { ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
 import { SeletorDeMoldura } from '../oficina/OficinaGaveta';
 import type { Enquadramento } from '../motor/molduras';
+import '../efeitosMapa.css';
 
 interface Props {
   token: ITokenMapa;
@@ -29,6 +30,14 @@ const PARA: Array<{ id: ParaQuem; rotulo: string }> = [
   { id: 'ninguem', rotulo: 'Ninguém' },
 ];
 
+/** Atalhos de luz: o Mestre ou o jogador ajusta depois o alcance e a cor. */
+const LUZES: Array<{ rotulo: string; luz: ILuzToken }> = [
+  { rotulo: 'Vela', luz: { raio: 1.5, cor: '#ffc46b', tremula: true } },
+  { rotulo: 'Tocha', luz: { raio: 4, cor: '#ff9a3c', tremula: true } },
+  { rotulo: 'Lanterna', luz: { raio: 6, cor: '#ffe2a8', tremula: false } },
+  { rotulo: 'Luz mágica', luz: { raio: 3, cor: '#9ecbff', tremula: false } },
+];
+
 const LADOS: Array<{ id: LadoToken; rotulo: string }> = [
   { id: 'jogador', rotulo: 'Jogador' },
   { id: 'aliado', rotulo: 'Aliado' },
@@ -43,10 +52,28 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
   const temFotoDaFicha = Boolean(token.personagem_id && token.imagem?.startsWith('f'));
   const [enquadramento, setEnquadramento] = useState<Enquadramento>(token.enquadramento);
   const espera = useRef<number | null>(null);
+  const [luz, setLuz] = useState<ILuzToken | null>(token.luz);
+  const esperaLuz = useRef<number | null>(null);
 
   useEffect(() => {
     setEnquadramento(token.enquadramento);
   }, [token.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // A luz que vem do servidor vale, menos enquanto um controle ainda vai mandar a sua.
+  useEffect(() => {
+    if (esperaLuz.current === null) setLuz(token.luz);
+  }, [token.id, token.luz]);
+
+  const mudarLuz = (parcial: Partial<ILuzToken>) => {
+    if (!luz) return;
+    const nova = { ...luz, ...parcial };
+    setLuz(nova);
+    if (esperaLuz.current !== null) window.clearTimeout(esperaLuz.current);
+    esperaLuz.current = window.setTimeout(() => {
+      esperaLuz.current = null;
+      onEditar({ luz: nova });
+    }, 300);
+  };
 
   const mudarEnquadramento = (parcial: Partial<Enquadramento>) => {
     const novo = { ...enquadramento, ...parcial };
@@ -117,6 +144,40 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
               <label className="mapa-menu-linha">Foto para cima ou baixo <input type="range" min={-1} max={1} step={0.01} value={enquadramento.y} onChange={(e) => mudarEnquadramento({ y: Number(e.target.value) })} /></label>
             </>
           )}
+        </fieldset>
+      )}
+
+      {podeVisual && (
+        <fieldset>
+          <legend>Luz</legend>
+          <div className="mapa-luz-atalhos">
+            <button type="button" className={!luz ? 'ativo' : ''} onClick={() => { setLuz(null); onEditar({ sem_luz: true }); }}>Sem luz</button>
+            {LUZES.map((atalho) => (
+              <button
+                key={atalho.rotulo}
+                type="button"
+                className={luz && luz.cor === atalho.luz.cor && luz.raio === atalho.luz.raio ? 'ativo' : ''}
+                onClick={() => { setLuz(atalho.luz); onEditar({ luz: atalho.luz }); }}
+              >
+                <span className="mapa-luz-ponto" style={{ background: atalho.luz.cor }} /> {atalho.rotulo}
+              </button>
+            ))}
+          </div>
+          {luz && (
+            <>
+              <label className="mapa-menu-linha">
+                Alcance <span>{luz.raio.toLocaleString('pt-BR')} {luz.raio === 1 ? 'casa' : 'casas'}</span>
+                <input type="range" min={0.5} max={15} step={0.5} value={luz.raio} onChange={(e) => mudarLuz({ raio: Number(e.target.value) })} />
+              </label>
+              <label className="mapa-menu-linha">
+                Cor <input type="color" value={luz.cor} onChange={(e) => mudarLuz({ cor: e.target.value })} />
+              </label>
+              <label className="mapa-menu-linha">
+                <span><input type="checkbox" checked={luz.tremula} onChange={(e) => mudarLuz({ tremula: e.target.checked })} /> Tremula como chama</span>
+              </label>
+            </>
+          )}
+          <p className="mapa-dica">A luz aparece para todos e abre caminho quando o Mestre deixa a cena escura.</p>
         </fieldset>
       )}
 

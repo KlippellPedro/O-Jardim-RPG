@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowRight, Cloud, CloudFog, CloudLightning, CloudOff, CloudRain, Flame, Leaf, Moon, Orbit, Snowflake, Sparkles, Wind, X,
+  ArrowRight, Cloud, CloudFog, CloudLightning, CloudOff, CloudRain, Cloudy, Flame, Haze, Leaf, Moon, Orbit, Snowflake, Sparkles, Wind, X,
 } from 'lucide-react';
 import type { IAreaClima, IClima, IEfeitoClima, TipoEfeitoClima } from '../../../services/mapaApi';
 import { MOLDURAS } from '../motor/molduras';
@@ -9,10 +9,12 @@ import { EFEITOS_CLIMA, MAX_EFEITOS_CLIMA } from '../motor/climaCatalogo';
 const ICONES: Record<TipoEfeitoClima, typeof Cloud> = {
   chuva: CloudRain,
   tempestade: CloudLightning,
+  nuvens: Cloudy,
   neve: Snowflake,
   neblina: CloudFog,
   areia: Wind,
   cinzas: Flame,
+  calor: Haze,
   folhas: Leaf,
   escuridao: Moon,
   vazio: Orbit,

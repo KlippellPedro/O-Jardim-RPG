@@ -1,11 +1,27 @@
 // Desenho de um token: retrato redondo (ou iniciais), moldura, barras, nome,
 // condições e marcas de seleção e de vez. A moldura vem de molduras.ts (o mesmo
 // desenho da prévia da Oficina), virada em textura e guardada para reuso.
+//
+// E a vida do token, animada a cada quadro (`pulsar`): entra crescendo com um
+// quique e sai encolhendo; leva um clarão vermelho e treme quando a Vida cai, e
+// um anel verde abre quando ela sobe; na vez dele, um brilho dourado com arcos
+// girando; arrastado (por quem for), sobe um pouco e deixa a sombra no chão.
 
 import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import type { IBarraToken, ITokenMapa, LadoToken } from '../../../services/mapaApi';
-import { iniciais, siglaDaCondicao } from './geometria';
+import { abreviarNome, iniciais, siglaDaCondicao } from './geometria';
 import { CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, desenharMoldura } from './molduras';
+import { texturaDeBrilho } from './luzes';
+
+const ENTRADA_MS = 340;
+const SAIDA_MS = 240;
+const CLARAO_MS = 600;
+/** Arrastado por outra pessoa: continua "no ar" por este tempo depois da última posição. */
+const NO_AR_MS = 180;
+
+const suaveSaida = (t: number) => 1 - (1 - t) ** 3;
+/** Passa um pouco do fim e volta: o quique da entrada. */
+const comQuique = (t: number) => 1 + 2.2 * (t - 1) ** 3 + 1.2 * (t - 1) ** 2;
 
 export { CORES_LADO };
 
@@ -48,11 +64,16 @@ function desenharBarras(g: Graphics, barras: IBarraToken[], largura: number, top
 
 export class TokenVisual {
   readonly raiz = new Container();
+  /** Retrato, clarão, moldura e marcas: a parte que sobe no arrasto e treme no dano. */
+  private corpo = new Container();
   private retrato = new Container();
+  private clarao = new Graphics();
   private moldura = new Sprite();
   private barras = new Graphics();
   private marcas = new Graphics();
   private vez = new Graphics();
+  private brilhoVez: Sprite;
+  private sombra: Sprite;
   private condicoes = new Container();
   private nome: Text;
   dados: ITokenMapa;
@@ -60,15 +81,44 @@ export class TokenVisual {
   private texturaAtual: Texture | null = null;
   private selecionado = false;
   private naVez = false;
+  private alfaBase = 1;
+  private nascimento = performance.now();
+  private saindoDesde: number | null = null;
+  private levantadoAqui = false;
+  private ultimoMovimento = -1e9;
+  /** De 0 (no chão) a 1 (no ar), andando aos poucos. */
+  private levante = 0;
+  private vidaAnterior: number | null = null;
+  private clarDesde = -1e9;
+  private clarCura = false;
+  private clarAceso = false;
+  private sobOMouse = false;
 
   constructor(dados: ITokenMapa, tamanhoQuadrado: number) {
     this.dados = dados;
     this.nome = new Text({ text: '', style: { fontFamily: 'system-ui, sans-serif', fontWeight: '600', fill: '#ffffff', stroke: { color: '#000000', width: 4 } } });
     this.nome.anchor.set(0.5, 0);
     this.moldura.anchor.set(0.5);
-    this.raiz.addChild(this.vez, this.retrato, this.moldura, this.marcas, this.barras, this.condicoes, this.nome);
+    this.sombra = new Sprite({ texture: texturaDeBrilho(), anchor: 0.5 });
+    this.sombra.tint = 0x000000;
+    this.sombra.visible = false;
+    this.brilhoVez = new Sprite({ texture: texturaDeBrilho(), anchor: 0.5 });
+    this.brilhoVez.tint = 0xfcd34d;
+    this.brilhoVez.blendMode = 'add';
+    this.brilhoVez.visible = false;
+    this.corpo.addChild(this.retrato, this.clarao, this.moldura, this.marcas);
+    this.raiz.addChild(this.sombra, this.brilhoVez, this.vez, this.corpo, this.barras, this.condicoes, this.nome);
     this.raiz.eventMode = 'static';
     this.raiz.label = dados.id;
+    // O nome inteiro aparece com o mouse em cima; fora disso fica abreviado para não cobrir os vizinhos.
+    this.raiz.on('pointerover', () => {
+      this.sobOMouse = true;
+      this.escreverNome();
+    });
+    this.raiz.on('pointerout', () => {
+      this.sobOMouse = false;
+      this.escreverNome();
+    });
     this.atualizar(dados, tamanhoQuadrado);
   }
 
@@ -81,8 +131,10 @@ export class TokenVisual {
     this.dados = dados;
     this.lado = Math.max(20, dados.porte * tamanhoQuadrado);
     if (posicionar) this.raiz.position.set(dados.x, dados.y);
-    this.raiz.alpha = dados.oculto ? 0.45 : 1;
+    this.alfaBase = dados.oculto ? 0.45 : 1;
+    this.raiz.alpha = this.alfaBase;
     this.raiz.cursor = dados.pode_mover ? 'grab' : 'pointer';
+    this.notarVida(dados.barras);
 
     this.desenharRetrato();
     this.moldura.texture = texturaDaMoldura(dados.moldura ?? 'lado', dados.nivel, dados.lado);
@@ -91,11 +143,16 @@ export class TokenVisual {
     this.barras.clear();
     desenharBarras(this.barras, dados.barras, this.lado * 0.9, -this.lado * 0.52);
 
-    this.nome.text = dados.nome;
+    this.escreverNome();
     this.nome.style.fontSize = Math.max(11, this.lado * 0.16);
     this.nome.y = this.lado * 0.56;
     this.desenharCondicoes();
     this.desenharMarcas();
+  }
+
+  private escreverNome() {
+    const texto = this.sobOMouse || this.selecionado ? this.dados.nome : abreviarNome(this.dados.nome);
+    if (this.nome.text !== texto) this.nome.text = texto;
   }
 
   private desenharCondicoes() {
@@ -154,20 +211,115 @@ export class TokenVisual {
   definirSelecionado(sim: boolean) {
     if (this.selecionado === sim) return;
     this.selecionado = sim;
+    this.escreverNome();
     this.desenharMarcas();
   }
 
   definirVez(sim: boolean) {
     this.naVez = sim;
     this.vez.visible = sim;
+    this.brilhoVez.visible = sim;
+    if (!sim) this.vez.clear();
   }
 
-  /** Pulso do anel de "é a vez dele", chamado a cada quadro. */
-  pulsar(tempo: number) {
-    if (!this.naVez) return;
-    this.vez.clear();
-    const alcance = this.lado * 0.62 + this.lado * 0.05 * Math.sin(tempo / 220);
-    this.vez.circle(0, 0, alcance).stroke({ width: Math.max(3, this.lado * 0.05), color: '#fcd34d', alpha: 0.75 });
+  /** A Vida que este espectador vê caiu ou subiu: clarão. Só compara o que já chegou (sem barra, sem clarão). */
+  private notarVida(barras: IBarraToken[]) {
+    const vida = barras.find((b) => b.tipo === 'vida');
+    const fracao = vida ? vida.fracao ?? (vida.maximo ? (vida.atual ?? 0) / vida.maximo : null) : null;
+    if (fracao !== null && this.vidaAnterior !== null && Math.abs(fracao - this.vidaAnterior) > 0.001) {
+      this.clarDesde = performance.now();
+      this.clarCura = fracao > this.vidaAnterior;
+    }
+    this.vidaAnterior = fracao;
+  }
+
+  /** Arrastado aqui: sobe enquanto a mão segura. */
+  levantar(sim: boolean) {
+    this.levantadoAqui = sim;
+  }
+
+  /** Posição nova vinda de outra pessoa: fica "no ar" enquanto as posições chegam. */
+  marcarMovimento(tempo: number) {
+    this.ultimoMovimento = tempo;
+  }
+
+  /** Começa a sair: encolhe e some. `pulsar` devolve true quando acabou. */
+  sair(tempo: number) {
+    this.saindoDesde = tempo;
+    this.raiz.eventMode = 'none';
+  }
+
+  /** Chamado a cada quadro: entrada, saída, sombra do arrasto, clarão de Vida e o brilho da vez.
+   * Devolve true quando a saída terminou e o token pode ser destruído. */
+  pulsar(tempo: number): boolean {
+    let escala = 1;
+    let alfa = this.alfaBase;
+    const entrada = (tempo - this.nascimento) / ENTRADA_MS;
+    if (entrada < 1) {
+      const t = Math.max(0, entrada);
+      escala = 0.6 + 0.4 * comQuique(t);
+      alfa *= Math.min(1, t * 1.8);
+    }
+    if (this.saindoDesde !== null) {
+      const t = Math.min(1, (tempo - this.saindoDesde) / SAIDA_MS);
+      escala *= 1 - 0.35 * suaveSaida(t);
+      alfa *= 1 - t;
+      if (t >= 1) return true;
+    }
+    this.raiz.scale.set(escala);
+    this.raiz.alpha = alfa;
+
+    // No ar: segurado aqui, ou com posições chegando de outra pessoa.
+    const noAr = this.levantadoAqui || tempo - this.ultimoMovimento < NO_AR_MS;
+    this.levante += ((noAr ? 1 : 0) - this.levante) * 0.25;
+    if (this.levante < 0.01) this.levante = 0;
+    this.corpo.scale.set(1 + 0.08 * this.levante);
+    this.sombra.visible = this.levante > 0;
+    if (this.sombra.visible) {
+      this.sombra.position.set(this.lado * 0.1 * this.levante, this.lado * 0.16 * this.levante);
+      this.sombra.width = this.lado * 1.25;
+      this.sombra.height = this.lado * 1.1;
+      this.sombra.alpha = 0.75 * this.levante;
+    }
+
+    const clarao = (tempo - this.clarDesde) / CLARAO_MS;
+    // Só apaga o clarão quando houve um: refazer um desenho vazio em todo quadro pesa com muitos tokens.
+    if (this.clarAceso) {
+      this.clarao.clear();
+      this.corpo.x = 0;
+      this.clarAceso = false;
+    }
+    if (clarao < 1) {
+      this.clarAceso = true;
+      const raio = this.raioRetrato;
+      if (this.clarCura) {
+        this.clarao.circle(0, 0, raio * (1 + 0.5 * clarao)).stroke({ width: Math.max(2, raio * 0.18), color: '#4ade80', alpha: 1 - clarao });
+        this.clarao.circle(0, 0, raio).fill({ color: '#4ade80', alpha: 0.25 * (1 - clarao) });
+      } else {
+        this.clarao.circle(0, 0, raio).fill({ color: '#ff3b3b', alpha: 0.6 * (1 - clarao) });
+        this.corpo.x = Math.sin(clarao * 42) * this.lado * 0.045 * (1 - clarao);
+      }
+    }
+
+    if (this.naVez) {
+      const onda = Math.sin(tempo / 260);
+      this.brilhoVez.width = this.lado * (1.9 + 0.12 * onda);
+      this.brilhoVez.height = this.brilhoVez.width;
+      this.brilhoVez.alpha = 0.32 + 0.12 * onda;
+      this.vez.clear();
+      const alcance = this.lado * 0.64 + this.lado * 0.04 * onda;
+      const largura = Math.max(3, this.lado * 0.05);
+      this.vez.circle(0, 0, alcance).stroke({ width: largura * 0.6, color: '#fcd34d', alpha: 0.55 });
+      // Três arcos girando por fora do anel.
+      const giro = tempo / 900;
+      for (let i = 0; i < 3; i++) {
+        const comeco = giro + (i * Math.PI * 2) / 3;
+        this.vez.moveTo(Math.cos(comeco) * alcance * 1.12, Math.sin(comeco) * alcance * 1.12);
+        this.vez.arc(0, 0, alcance * 1.12, comeco, comeco + Math.PI / 3);
+        this.vez.stroke({ width: largura, color: '#fde68a', alpha: 0.9, cap: 'round' });
+      }
+    }
+    return false;
   }
 
   private desenharMarcas() {

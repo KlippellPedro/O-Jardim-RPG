@@ -3,6 +3,7 @@ import { Plus, Radio, Settings2, Trash2, X } from 'lucide-react';
 import type { ICena, ICenaPayload, IResumoCena } from '../../../services/mapaApi';
 import type { IGrade, TipoGrade } from '../motor/geometria';
 import { MOLDURAS } from '../motor/molduras';
+import { ComDica } from './BotaoFerramenta';
 
 interface FaixaProps {
   cenas: IResumoCena[];
@@ -18,9 +19,11 @@ export const FaixaCenas = ({ cenas, vendo, onVer, onAtivar, onNova, onConfigurar
   <nav className="mapa-faixa" aria-label="Cenas">
     {cenas.map((cena) => (
       <div key={cena.id} className={`mapa-faixa-cena${cena.id === vendo ? ' vendo' : ''}${cena.ativa ? ' ativa' : ''}`}>
-        <button type="button" onClick={() => onVer(cena.id)} title={cena.ativa ? 'Os jogadores estão vendo esta cena' : 'Só você está vendo'}>
-          {cena.ativa && <Radio size={12} />} {cena.nome}
-        </button>
+        <ComDica lado="cima" dica={cena.ativa ? 'Os jogadores estão vendo esta cena' : 'Só você está vendo'}>
+          <button type="button" onClick={() => onVer(cena.id)}>
+            {cena.ativa && <Radio size={12} />} {cena.nome}
+          </button>
+        </ComDica>
         {cena.id === vendo && !cena.ativa && (
           <button type="button" className="mapa-faixa-ativar" onClick={() => onAtivar(cena.id)}>Pôr na mesa</button>
         )}
