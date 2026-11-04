@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Eye, EyeOff, Trash2, X } from 'lucide-react';
-import type { ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
+import { Eye, EyeOff, MessageSquareQuote, Trash2, X } from 'lucide-react';
+import type { IAuraToken, ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
 import { SeletorDeMoldura } from '../oficina/OficinaGaveta';
 import type { Enquadramento } from '../motor/molduras';
 import '../efeitosMapa.css';
@@ -15,7 +15,17 @@ interface Props {
   onEnquadramento: (enquadramento: Enquadramento) => void;
   onRemover: () => void;
   onFechar: () => void;
+  /** Só o Mestre: falar como este token (a mesa vê a fala com o retrato). */
+  onFalar?: () => void;
 }
+
+/** Atalhos de aura, em casas; a cor muda depois. */
+const AURAS: Array<{ rotulo: string; aura: IAuraToken }> = [
+  { rotulo: '1 casa', aura: { raio: 1, cor: '#facc15', visivel: true } },
+  { rotulo: '2 casas', aura: { raio: 2, cor: '#7dd3fc', visivel: true } },
+  { rotulo: '3 casas', aura: { raio: 3, cor: '#a78bfa', visivel: true } },
+  { rotulo: '6 casas', aura: { raio: 6, cor: '#f87171', visivel: true } },
+];
 
 const BARRAS: Array<{ id: TipoBarra; rotulo: string }> = [
   { id: 'vida', rotulo: 'Vida' },
@@ -45,7 +55,7 @@ const LADOS: Array<{ id: LadoToken; rotulo: string }> = [
   { id: 'neutro', rotulo: 'Neutro' },
 ];
 
-export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onEnquadramento, onRemover, onFechar }: Props) => {
+export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onEnquadramento, onRemover, onFechar, onFalar }: Props) => {
   const config = token.config_barras;
   const podeVisual = gestor || token.e_meu;
   // Enquadramento só para a foto da ficha (imagem do Acervo já vem recortada pela Oficina).
@@ -54,6 +64,8 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
   const espera = useRef<number | null>(null);
   const [luz, setLuz] = useState<ILuzToken | null>(token.luz);
   const esperaLuz = useRef<number | null>(null);
+  const [aura, setAura] = useState<IAuraToken | null>(token.aura ?? null);
+  const esperaAura = useRef<number | null>(null);
 
   useEffect(() => {
     setEnquadramento(token.enquadramento);
@@ -63,6 +75,21 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
   useEffect(() => {
     if (esperaLuz.current === null) setLuz(token.luz);
   }, [token.id, token.luz]);
+
+  useEffect(() => {
+    if (esperaAura.current === null) setAura(token.aura ?? null);
+  }, [token.id, token.aura]);
+
+  const mudarAura = (parcial: Partial<IAuraToken>) => {
+    if (!aura) return;
+    const nova = { ...aura, ...parcial };
+    setAura(nova);
+    if (esperaAura.current !== null) window.clearTimeout(esperaAura.current);
+    esperaAura.current = window.setTimeout(() => {
+      esperaAura.current = null;
+      onEditar({ aura: nova });
+    }, 300);
+  };
 
   const mudarLuz = (parcial: Partial<ILuzToken>) => {
     if (!luz) return;
@@ -184,6 +211,52 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
           )}
           <p className="mapa-dica">A luz aparece para todos e abre caminho quando o Mestre deixa a cena escura.</p>
         </fieldset>
+      )}
+
+      {podeVisual && (
+        <fieldset>
+          <legend>Aura</legend>
+          <div className="mapa-luz-atalhos">
+            <button type="button" className={!aura ? 'ativo' : ''} onClick={() => { setAura(null); onEditar({ sem_aura: true }); }}>Sem aura</button>
+            {AURAS.map((atalho) => (
+              <button
+                key={atalho.rotulo}
+                type="button"
+                className={aura && aura.raio === atalho.aura.raio ? 'ativo' : ''}
+                onClick={() => {
+                  const nova = { ...atalho.aura, cor: aura?.cor ?? atalho.aura.cor, visivel: aura?.visivel ?? true };
+                  setAura(nova);
+                  onEditar({ aura: nova });
+                }}
+              >
+                <span className="mapa-luz-ponto" style={{ background: aura?.cor ?? atalho.aura.cor }} /> {atalho.rotulo}
+              </button>
+            ))}
+          </div>
+          {aura && (
+            <>
+              <label className="mapa-menu-linha">
+                Raio <span>{aura.raio.toLocaleString('pt-BR')} {aura.raio === 1 ? 'casa' : 'casas'}</span>
+                <input type="range" min={0.5} max={12} step={0.5} value={aura.raio} onChange={(e) => mudarAura({ raio: Number(e.target.value) })} />
+              </label>
+              <label className="mapa-menu-linha">
+                Cor <input type="color" value={aura.cor} onChange={(e) => mudarAura({ cor: e.target.value })} />
+              </label>
+              {gestor && (
+                <label className="mapa-menu-linha">
+                  <span><input type="checkbox" checked={aura.visivel} onChange={(e) => mudarAura({ visivel: e.target.checked })} /> Os jogadores veem</span>
+                </label>
+              )}
+            </>
+          )}
+          <p className="mapa-dica">A aura anda com o token: aura de proteção, alcance de uma magia, área de controle.</p>
+        </fieldset>
+      )}
+
+      {gestor && onFalar && (
+        <button type="button" className="mapa-botao-leve mapa-falar" onClick={onFalar}>
+          <MessageSquareQuote size={14} /> Falar como {token.nome || 'este token'}
+        </button>
       )}
 
       {gestor && (

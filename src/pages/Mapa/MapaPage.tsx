@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Hand, Layers, Loader2, MapPin, Maximize2, Minimize2, Moon, Orbit, PanelRightClose, PanelRightOpen, Ruler, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserRound, Users, Wand2, Wifi, WifiOff,
+  ArrowLeft, BookOpenCheck, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Hand, Layers, Loader2, MapPin, Maximize2, Minimize2, Moon, Music2, Orbit, PanelRightClose, PanelRightOpen, Ruler, Search, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserRound, Users, Wand2, Wifi, WifiOff, X,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSessaoStore } from '../../store/useSessaoStore';
@@ -30,6 +30,9 @@ import { PainelClima } from './componentes/PainelClima';
 import { PainelTempo } from './componentes/PainelTempo';
 import { PainelPortal } from './componentes/PainelPortal';
 import { MenuPorta } from './componentes/MenuPorta';
+import { FalaNaMesa, PainelMesa, PausaDaMesa, RelogiosDaMesa, type FalaRecebida } from './componentes/MesaExtras';
+import { Hourglass } from 'lucide-react';
+import { urlImagemDoToken, type IMesaExtras } from '../../services/mapaApi';
 import { cliqueDoJogador } from './motor/portasConta';
 import { ApiError } from '../../services/apiClient';
 import type { IAberturaCena } from '../../services/mapaApi';
@@ -45,6 +48,10 @@ import { EditorAnotacao } from './componentes/EditorAnotacao';
 import { PainelJogadores } from './componentes/PainelJogadores';
 import type { Enquadramento } from './motor/molduras';
 import { lerPreferenciasBarras, normalizarPreferenciasBarras, salvarPreferenciasBarras, type IPreferenciasBarrasMapa } from './motor/barrasToken';
+import { mapaRecursosApi, type ITrilhaMesa } from '../../services/mapaRecursosApi';
+import { PainelDocumentosMesa } from './componentes/PainelDocumentosMesa';
+import { DocumentoDaMesa, type IDocumentoCompartilhado } from './componentes/DocumentoDaMesa';
+import { PainelTrilha } from './componentes/PainelTrilha';
 import './mapa.css';
 
 interface Pessoa {
@@ -137,6 +144,10 @@ export const MapaPage = () => {
   /** A porta que o Mestre clicou (menu da porta). */
   const [portaEscolhida, setPortaEscolhida] = useState<string | null>(null);
   const [portaOcupada, setPortaOcupada] = useState(false);
+  /** Leva 6: o painel da mesa do Mestre e a fala de NPC na tela. */
+  const [mesaAberta, setMesaAberta] = useState(false);
+  const [fala, setFala] = useState<FalaRecebida | null>(null);
+  const contadorFala = useRef(0);
   const ultimoAvisoParede = useRef(0);
   /** O servidor segurou o token numa parede: um aviso só, mesmo arrastando várias vezes. */
   const avisarParede = useCallback(() => {
@@ -149,6 +160,12 @@ export const MapaPage = () => {
   const [barrasAberto, setBarrasAberto] = useState(false);
   const [camadasAberto, setCamadasAberto] = useState(false);
   const [jogadoresAberto, setJogadoresAberto] = useState(false);
+  const [painelRecurso, setPainelRecurso] = useState<'documentos' | 'trilha' | 'busca' | null>(null);
+  const [buscaMapa, setBuscaMapa] = useState('');
+  const [documentoMesa, setDocumentoMesa] = useState<IDocumentoCompartilhado | null>(null);
+  const [trilhaMesa, setTrilhaMesa] = useState<ITrilhaMesa | null>(null);
+  const [audioPrecisaAtivar, setAudioPrecisaAtivar] = useState(false);
+  const audioMesaRef = useRef<HTMLAudioElement>(null);
   const [camadasLocais, setCamadasLocais] = useState<Record<CamadaMapaId, boolean>>({ ...TODAS_CAMADAS_VISIVEIS });
   const [camadaAtiva, setCamadaAtiva] = useState<CamadaMapaId>('personagens');
   const [editorAnotacao, setEditorAnotacao] = useState<{ anotacao: IAnotacaoMapa; existente: boolean; cenaId: string } | null>(null);
@@ -172,6 +189,16 @@ export const MapaPage = () => {
   const ultimoEnvio = useRef(new Map<string, number>()).current;
   const estadoRef = useRef(estado);
   estadoRef.current = estado;
+  const personagemDaVez = iniciativa.find((entidade) => entidade.id === turnoAtualId)?.personagemId ?? null;
+  const turnoAtualRef = useRef({ sessaoId, turnoAtualId, rodada, emCombate, personagemId: personagemDaVez });
+  turnoAtualRef.current = { sessaoId, turnoAtualId, rodada, emCombate, personagemId: personagemDaVez };
+  const movimentoAtualRef = useRef<{
+    chave: string;
+    porToken: Record<string, number>;
+    posicoes: Record<string, IPonto>;
+    trechos: Record<string, { origem: IPonto; destino: IPonto }>;
+  }>({ chave: '', porToken: {}, posicoes: {}, trechos: {} });
+  const [movimentoAtual, setMovimentoAtual] = useState<{ chave: string; porToken: Record<string, number> }>({ chave: '', porToken: {} });
   const usuarioBarrasRef = useRef(usuarioId);
   const cenaVistaRef = useRef(cenaVista);
   cenaVistaRef.current = cenaVista;
@@ -202,6 +229,131 @@ export const MapaPage = () => {
       }
     }
   }, [campanhaId, medidor]);
+
+  useEffect(() => {
+    if (!campanhaId) {
+      setTrilhaMesa(null);
+      return undefined;
+    }
+    let vivo = true;
+    void mapaRecursosApi.listarTrilhas(campanhaId)
+      .then((resposta) => { if (vivo) setTrilhaMesa(resposta.estado); })
+      .catch(() => { /* O mapa continua utilizável quando a trilha não está disponível. */ });
+    return () => { vivo = false; };
+  }, [campanhaId]);
+
+  useEffect(() => {
+    const audio = audioMesaRef.current;
+    const estadoTrilha = trilhaMesa;
+    if (!audio || !estadoTrilha?.faixa_id) {
+      audio?.pause();
+      setAudioPrecisaAtivar(false);
+      return undefined;
+    }
+    const sincronizar = () => {
+      const relogioServidor = medidor.horaDoServidor(agoraServidor()) ?? Date.now();
+      const posicaoMs = estadoTrilha.posicao_ms + (estadoTrilha.reproduzindo ? Math.max(0, relogioServidor - estadoTrilha.servidor_ms) : 0);
+      const alvo = Math.max(0, posicaoMs / 1000);
+      // A faixa já acabou (o Mestre saiu antes de ela terminar, ou quem chegou agora
+      // entrou depois do fim): fica parada, sem pedir para ativar o áudio.
+      if (Number.isFinite(audio.duration) && audio.duration > 0 && alvo >= audio.duration - 0.05) {
+        audio.pause();
+        setAudioPrecisaAtivar(false);
+        return;
+      }
+      if (Number.isFinite(alvo) && Math.abs(audio.currentTime - alvo) > 1.2) audio.currentTime = alvo;
+      if (estadoTrilha.reproduzindo) {
+        void audio.play().then(() => setAudioPrecisaAtivar(false)).catch(() => setAudioPrecisaAtivar(true));
+      } else {
+        audio.pause();
+      }
+    };
+    if (audio.readyState >= 1) sincronizar();
+    else audio.addEventListener('loadedmetadata', sincronizar, { once: true });
+    return () => audio.removeEventListener('loadedmetadata', sincronizar);
+  }, [trilhaMesa?.faixa_id, trilhaMesa?.reproduzindo, trilhaMesa?.posicao_ms, trilhaMesa?.servidor_ms, medidor]);
+
+  const registrarMovimentoDoTurno = useCallback((tokenId: string, x: number, y: number) => {
+    const turno = turnoAtualRef.current;
+    const mapa = estadoRef.current;
+    if (!turno.emCombate || !turno.sessaoId || !turno.turnoAtualId || !mapa?.cena) return;
+    const chave = `${turno.sessaoId}:${turno.rodada}:${turno.turnoAtualId}`;
+    const token = mapa.tokens.find((item) => item.id === tokenId);
+    if (!token || (token.participante_id !== turno.turnoAtualId
+      && !(token.participante_id == null && turno.personagemId && token.personagem_id === turno.personagemId))) return;
+    const tamanho = Math.max(1, mapa.cena.grade.tamanho);
+    const metrosPorCasa = Math.max(0, mapa.cena.grade.metros);
+    const mesmaChave = movimentoAtualRef.current.chave === chave;
+    const origem = mesmaChave ? movimentoAtualRef.current.posicoes[tokenId] ?? token : token;
+    const metros = Math.hypot(x - origem.x, y - origem.y) / tamanho * metrosPorCasa;
+    const posicoes = { ...(mesmaChave ? movimentoAtualRef.current.posicoes : {}), [tokenId]: { x, y } };
+    const trechos = {
+      ...(mesmaChave ? movimentoAtualRef.current.trechos : {}),
+      [tokenId]: { origem: { x: origem.x, y: origem.y }, destino: { x, y } },
+    };
+    if (!Number.isFinite(metros)) return;
+    const anterior = movimentoAtualRef.current.chave === chave ? movimentoAtualRef.current.porToken : {};
+    const porToken = { ...anterior, [tokenId]: (anterior[tokenId] ?? 0) + metros };
+    movimentoAtualRef.current = { chave, porToken, posicoes, trechos };
+    setMovimentoAtual({ chave, porToken });
+  }, []);
+
+  const corrigirMovimentoBarrado = useCallback((tokenId: string, x: number, y: number) => {
+    const turno = turnoAtualRef.current;
+    const mapa = estadoRef.current;
+    if (!turno.emCombate || !turno.sessaoId || !turno.turnoAtualId || !mapa?.cena) return;
+    const chave = `${turno.sessaoId}:${turno.rodada}:${turno.turnoAtualId}`;
+    const atual = movimentoAtualRef.current;
+    const trecho = atual.chave === chave ? atual.trechos[tokenId] : null;
+    if (!trecho) return;
+    const token = mapa.tokens.find((item) => item.id === tokenId);
+    if (!token || (token.participante_id !== turno.turnoAtualId
+      && !(token.participante_id == null && turno.personagemId && token.personagem_id === turno.personagemId))) return;
+    const tamanho = Math.max(1, mapa.cena.grade.tamanho);
+    const metrosPorCasa = Math.max(0, mapa.cena.grade.metros);
+    const trechoContado = Math.hypot(trecho.destino.x - trecho.origem.x, trecho.destino.y - trecho.origem.y) / tamanho * metrosPorCasa;
+    const trechoCorrigido = Math.hypot(x - trecho.origem.x, y - trecho.origem.y) / tamanho * metrosPorCasa;
+    if (!Number.isFinite(trechoContado) || !Number.isFinite(trechoCorrigido)) return;
+    const porToken = {
+      ...atual.porToken,
+      [tokenId]: Math.max(0, (atual.porToken[tokenId] ?? 0) - trechoContado + trechoCorrigido),
+    };
+    const destino = { x, y };
+    movimentoAtualRef.current = {
+      ...atual,
+      porToken,
+      posicoes: { ...atual.posicoes, [tokenId]: destino },
+      trechos: { ...atual.trechos, [tokenId]: { origem: trecho.origem, destino } },
+    };
+    setMovimentoAtual({ chave, porToken });
+  }, []);
+
+  const controlarTrilha = useCallback(async (reproduzir: boolean, estadoAtual: ITrilhaMesa, posicaoForcada?: number) => {
+    if (!campanhaId || !estadoAtual.faixa_id) return;
+    const audio = audioMesaRef.current;
+    let posicao = estadoAtual.posicao_ms;
+    if (reproduzir) {
+      const tentativa = audio?.play();
+      if (tentativa) void tentativa.then(() => setAudioPrecisaAtivar(false)).catch(() => setAudioPrecisaAtivar(true));
+    } else {
+      if (audio && Number.isFinite(audio.currentTime)) posicao = Math.floor(audio.currentTime * 1000);
+      audio?.pause();
+    }
+    if (posicaoForcada !== undefined) posicao = posicaoForcada;
+    try {
+      setTrilhaMesa(await mapaRecursosApi.definirTrilha(campanhaId, {
+        faixa_id: estadoAtual.faixa_id, reproduzindo: reproduzir, posicao_ms: Math.max(0, posicao),
+      }));
+    } catch (falha) {
+      avisar.erro(falha instanceof Error ? falha.message : 'Não foi possível atualizar a trilha.');
+    }
+  }, [campanhaId]);
+
+  const ativarAudioDaMesa = () => {
+    const audio = audioMesaRef.current;
+    if (!audio) return;
+    void audio.play().then(() => setAudioPrecisaAtivar(false)).catch(() => setAudioPrecisaAtivar(true));
+  };
 
   useEffect(() => {
     if (usuarioBarrasRef.current === usuarioId) return;
@@ -286,13 +438,26 @@ export const MapaPage = () => {
       case 'arrastando':
       case 'token': {
         const id = String(mensagem.token);
+        // Soltar por uma parede pode voltar ao remetente com a posição corrigida. A
+        // soltura local já contou esse movimento; contar a resposta de novo duplica a distância.
+        if (mensagem.t === 'token') {
+          const x = Number(mensagem.x);
+          const y = Number(mensagem.y);
+          if (String(mensagem.por ?? '') === String(usuarioId ?? '')) {
+            if (mensagem.barrado) corrigirMovimentoBarrado(id, x, y);
+          } else {
+            registrarMovimentoDoTurno(id, x, y);
+          }
+        }
         // A hora do gesto (`tm`) tem o espaçamento de quem arrasta; a de chegada ao servidor (`ts`)
         // traz a variação da subida, e o token andaria aos solavancos.
         const hora = typeof mensagem.tm === 'number' ? mensagem.tm : Number(mensagem.ts);
         interpolador.receber(id, { t: hora, x: Number(mensagem.x), y: Number(mensagem.y), final: mensagem.t === 'token' });
         ultimaAmostra.set(id, agoraServidor());
         medidor.registrarMovimento(agoraServidor(), Number(mensagem.ts), typeof mensagem.tm === 'number' ? mensagem.tm : null);
-        if (mensagem.t === 'token') atualizarPosicao(id, Number(mensagem.x), Number(mensagem.y));
+        if (mensagem.t === 'token') {
+          atualizarPosicao(id, Number(mensagem.x), Number(mensagem.y));
+        }
         if (mensagem.barrado) avisarParede();
         break;
       }
@@ -306,6 +471,18 @@ export const MapaPage = () => {
       case 'aviso':
         // Recado do servidor para quem comanda (alguém atravessou para outra cena).
         if (typeof mensagem.texto === 'string') avisar.info(mensagem.texto);
+        break;
+      case 'fala':
+        // O Mestre falou por um NPC: a mesa inteira vê.
+        if (typeof mensagem.texto === 'string') {
+          contadorFala.current += 1;
+          setFala({
+            id: contadorFala.current,
+            nome: String(mensagem.nome ?? 'Mestre'),
+            texto: mensagem.texto,
+            token: typeof mensagem.token === 'string' ? mensagem.token : null,
+          });
+        }
         break;
       case 'portal': {
         // Alguém atravessou um portal (ou eu: a resposta ao meu soltar vem igual).
@@ -326,6 +503,23 @@ export const MapaPage = () => {
           x: Number(mensagem.x), y: Number(mensagem.y), ax: Number(mensagem.ax), ay: Number(mensagem.ay),
         }, String(mensagem.nome));
         break;
+      case 'documento': {
+        const bruto = mensagem.documento as Partial<IDocumentoCompartilhado> | null;
+        if (bruto && typeof bruto.id === 'string' && typeof bruto.modelo === 'string'
+          && typeof bruto.titulo === 'string' && bruto.campos && typeof bruto.campos === 'object') {
+          setDocumentoMesa({ id: bruto.id, modelo: bruto.modelo, titulo: bruto.titulo, campos: bruto.campos });
+        }
+        break;
+      }
+      case 'trilha': {
+        const bruto = mensagem.estado as Partial<ITrilhaMesa> | null;
+        if (bruto && (bruto.faixa_id === null || typeof bruto.faixa_id === 'string')
+          && typeof bruto.reproduzindo === 'boolean' && typeof bruto.posicao_ms === 'number'
+          && typeof bruto.servidor_ms === 'number') {
+          setTrilhaMesa(bruto as ITrilhaMesa);
+        }
+        break;
+      }
       case 'regua':
         palco?.reguaRemota(String(mensagem.por), (mensagem.pontos as number[][] | null)?.map(([x, y]) => ({ x, y })) ?? null, String(mensagem.cor), String(mensagem.nome));
         break;
@@ -347,7 +541,7 @@ export const MapaPage = () => {
       default:
         break;
     }
-  }, [agendarRecarga, atualizarPosicao, interpolador, ultimaAmostra, medidor, atravessou, avisarParede]);
+  }, [agendarRecarga, atualizarPosicao, interpolador, ultimaAmostra, medidor, atravessou, avisarParede, registrarMovimentoDoTurno, corrigirMovimentoBarrado, usuarioId]);
 
   /** A cada quadro: tokens que outra pessoa arrasta deslizam pelas posições interpoladas. */
   const aplicarRemotos = useCallback(() => {
@@ -437,6 +631,7 @@ export const MapaPage = () => {
     pendentesArrasto.delete(id);
     ultimaEnviada.delete(id);
     ultimoEnvio.delete(id);
+    registrarMovimentoDoTurno(id, x, y);
     atualizarPosicao(id, x, y);
     enviarSoltar(id, x, y);
     // Portal que pede licença: o token fica na boca até a pessoa dizer que atravessa.
@@ -445,7 +640,7 @@ export const MapaPage = () => {
       void confirmar({ titulo: `Atravessar ${portal.nome}?`, mensagem: 'O token vai para o outro lado do portal.', rotuloConfirmar: 'Atravessar' })
         .then((sim) => sim && enviarSoltar(id, x, y, portal.id));
     }
-  }, [atualizarPosicao, campanhaId, enviarSoltar, ultimoEnvio, pendentesArrasto, ultimaEnviada]);
+  }, [atualizarPosicao, campanhaId, enviarSoltar, ultimoEnvio, pendentesArrasto, ultimaEnviada, registrarMovimentoDoTurno]);
 
   /** A posição fica guardada e sai no ritmo do quadro: mesmo com a mão parada, a última chega aos outros. */
   const arrastar = useCallback((id: string, x: number, y: number) => {
@@ -574,6 +769,51 @@ export const MapaPage = () => {
       setPortaOcupada(false);
     }
   }, [agendarRecarga, campanhaId]);
+
+  /** O relógio do servidor (para o cronômetro andar igual em todas as telas). */
+  const relogioDaMesa = useCallback(() => medidor.horaDoServidor(agoraServidor()) ?? Date.now(), [medidor]);
+
+  /** Pausa, relógios e cronômetro: só o que vier muda. */
+  const mudarMesa = useCallback(async (dados: Partial<IMesaExtras>) => {
+    if (!campanhaId) return;
+    try {
+      const mesa = await mapaApi.mudarMesa(campanhaId, dados);
+      if (mesa) setEstado((atual) => (atual ? { ...atual, mesa } : atual));
+    } catch (falha) {
+      avisar.erro(falha instanceof Error ? falha.message : 'A mesa não mudou. Tente de novo.');
+    }
+  }, [campanhaId]);
+
+  /** A vista da tela do Mestre vira a vista inicial da cena (null: o mapa inteiro). */
+  const guardarVista = useCallback(async (tirar = false) => {
+    const atual = estadoRef.current;
+    const vista = palcoRef.current?.vistaAtual();
+    if (!campanhaId || !atual?.cena || (!tirar && !vista)) return;
+    try {
+      const novo = await mapaApi.guardarVista(campanhaId, atual.cena.id, tirar ? null : vista ?? null);
+      if (novo) setEstado(novo);
+      avisar.sucesso(tirar ? 'A cena volta a abrir com o mapa inteiro.' : 'Vista inicial guardada: quem abrir a cena começa por aqui.');
+    } catch (falha) {
+      avisar.erro(falha instanceof Error ? falha.message : 'A vista não foi guardada.');
+    }
+  }, [campanhaId]);
+
+  /** O Mestre fala como um token: a mesa conectada vê a fala com o retrato dele. */
+  const falarComo = useCallback(async (token: { id: string; nome: string | null }) => {
+    if (!campanhaId) return;
+    const nome = token.nome || 'NPC';
+    const texto = await pedirTexto({
+      titulo: `Falar como ${nome}`,
+      campo: { rotulo: 'O que ele diz', maximo: 400, placeholder: 'Quem ousa entrar na cripta?' },
+      rotuloConfirmar: 'Falar',
+    });
+    if (!texto) return;
+    try {
+      await mapaApi.falar(campanhaId, { nome, texto, token: token.id });
+    } catch (falha) {
+      avisar.erro(falha instanceof Error ? falha.message : 'A fala não chegou à mesa.');
+    }
+  }, [campanhaId]);
 
   /** Clique numa porta: o Mestre abre o menu dela; o jogador abre a fechada e fecha a aberta. */
   const clicarPorta = (porta: IAberturaCena) => {
@@ -1023,6 +1263,20 @@ export const MapaPage = () => {
 
   const nomeDaVez = emCombate ? iniciativa.find((e) => e.id === turnoAtualId)?.nome ?? null : null;
   const meuToken = tokens.find((t) => t.e_meu) ?? null;
+  const chaveMovimentoTurno = emCombate && sessaoId && turnoAtualId ? `${sessaoId}:${rodada}:${turnoAtualId}` : '';
+  const metrosAndados = movimentoAtual.chave === chaveMovimentoTurno
+    ? Object.values(movimentoAtual.porToken).reduce((total, metros) => total + metros, 0)
+    : 0;
+  const tokenOrigemDistancia = tokenSelecionado
+    ?? tokens.find((token) => token.participante_id === turnoAtualId)
+    ?? meuToken;
+  const distanciaEmMetros = (primeiro: ITokenMapa, segundo: ITokenMapa) => {
+    const grade = estado?.cena?.grade;
+    if (!grade) return null;
+    return Math.hypot(segundo.x - primeiro.x, segundo.y - primeiro.y) / Math.max(1, grade.tamanho) * grade.metros;
+  };
+  const tokenVisivelDaVez = Boolean(gestor || tokens.some((token) => token.participante_id === turnoAtualId
+    || (personagemDaVez && token.personagem_id === personagemDaVez)));
   const tempo = estado?.tempo ?? null;
   // O relógio aparece para o Mestre e, para o jogador, quando a campanha usa o calendário ou a cena segue a hora.
   const mostrarTempo = Boolean(tempo && (gestor || tempo.em_uso || (cena?.clima.ceu?.modo ?? 'nenhum') !== 'nenhum'));
@@ -1077,6 +1331,7 @@ export const MapaPage = () => {
             <Swords size={14} />
             <span>Rodada <strong>{rodada}</strong></span>
             {nomeDaVez && <span className="mapa-combate-vez">Vez de <strong>{nomeDaVez}</strong></span>}
+            {nomeDaVez && tokenVisivelDaVez && <span className="mapa-movimento-turno">Movimento <strong>{metrosAndados.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} m</strong></span>}
           </div>
         )}
         <div className="mapa-pessoas" aria-label="Quem está no mapa">
@@ -1086,6 +1341,15 @@ export const MapaPage = () => {
             </ComDica>
           ))}
         </div>
+        <ComDica dica="Buscar tokens, personagens e objetos visíveis neste mapa">
+          <button type="button" className={`mapa-icone${painelRecurso === 'busca' ? ' ativo' : ''}`} aria-label="Buscar no mapa" onClick={() => setPainelRecurso((atual) => atual === 'busca' ? null : 'busca')}><Search size={17} /></button>
+        </ComDica>
+        <ComDica dica="Trilha de áudio sincronizada">
+          <button type="button" className={`mapa-icone${painelRecurso === 'trilha' ? ' ativo' : ''}`} aria-label="Trilha da cena" onClick={() => setPainelRecurso((atual) => atual === 'trilha' ? null : 'trilha')}><Music2 size={17} /></button>
+        </ComDica>
+        {gestor && <ComDica dica="Mostrar documentos do Mestre na mesa">
+          <button type="button" className={`mapa-icone${painelRecurso === 'documentos' ? ' ativo' : ''}`} aria-label="Mostrar documento na mesa" onClick={() => setPainelRecurso((atual) => atual === 'documentos' ? null : 'documentos')}><BookOpenCheck size={17} /></button>
+        </ComDica>}
         <ComDica dica={`${conexao === 'ws' ? 'Tempo real ligado' : conexao === 'sse' ? 'Tempo real pelo plano B' : 'Reconectando'}. Clique para o medidor.`}>
           <button
             type="button"
@@ -1175,6 +1439,7 @@ export const MapaPage = () => {
               }}
             />
             <BotaoFerramenta icone={Orbit} rotulo="Portais" atalho="O" disabled={!cena} ativo={ferramenta === 'portal'} onClick={() => setFerramenta((f) => (f === 'portal' ? 'mover' : 'portal'))} />
+            <BotaoFerramenta icone={Hourglass} rotulo="Mesa: pausa, relógios, cronômetro e vista inicial" ativo={mesaAberta} disabled={!estado?.mesa} onClick={() => setMesaAberta((v) => !v)} />
             <BotaoFerramenta
               icone={Clock3}
               rotulo="Tempo do mundo e luz da cena"
@@ -1196,6 +1461,78 @@ export const MapaPage = () => {
 
       <main className="mapa-area">
         <div ref={alvoRef} className="mapa-palco" />
+        {estado?.mesa && (
+          <RelogiosDaMesa
+            mesa={estado.mesa}
+            gestor={gestor}
+            relogio={relogioDaMesa}
+            onRelogio={(id, cheias) => void mudarMesa({ relogios: estado.mesa!.relogios.map((r) => (r.id === id ? { ...r, cheias } : r)) })}
+          />
+        )}
+        {estado?.mesa && <PausaDaMesa mesa={estado.mesa} gestor={gestor} onRetomar={() => void mudarMesa({ pausa: { ...estado.mesa!.pausa, ligada: false } })} />}
+        {fala && (() => {
+          const quem = tokens.find((t) => t.id === fala.token);
+          const retrato = quem?.imagem && campanhaId ? urlImagemDoToken(campanhaId, quem.id, quem.imagem) : null;
+          return <FalaNaMesa fala={fala} retrato={retrato} onFechar={() => setFala(null)} />;
+        })()}
+        {gestor && mesaAberta && estado?.mesa && (
+          <PainelMesa
+            mesa={estado.mesa}
+            relogio={relogioDaMesa}
+            temVista={Boolean(cena?.vista)}
+            onMudar={(dados) => void mudarMesa(dados)}
+            onGuardarVista={() => void guardarVista()}
+            onTirarVista={() => void guardarVista(true)}
+            onFechar={() => setMesaAberta(false)}
+          />
+        )}
+        <audio
+          ref={audioMesaRef}
+          src={campanhaId && trilhaMesa?.faixa_id ? mapaRecursosApi.audioUrl(campanhaId, trilhaMesa.faixa_id) : undefined}
+          preload="auto"
+          aria-label="Trilha sincronizada da mesa"
+          onError={() => setAudioPrecisaAtivar(true)}
+          onEnded={() => {
+            // Acabou: a faixa volta ao começo e para. O Mestre grava isso para a mesa; o
+            // jogador para na própria tela (o recado do Mestre chega logo depois).
+            if (!trilhaMesa) return;
+            if (gestor) void controlarTrilha(false, trilhaMesa, 0);
+            else setTrilhaMesa({ ...trilhaMesa, reproduzindo: false, posicao_ms: 0 });
+          }}
+        />
+        {audioPrecisaAtivar && trilhaMesa?.reproduzindo && (
+          <button type="button" className="mapa-audio-ativar" onClick={ativarAudioDaMesa}><Music2 size={15} /> Ativar áudio da mesa</button>
+        )}
+        {painelRecurso === 'busca' && (
+          <section className="mapa-recurso-painel mapa-busca-painel" aria-label="Buscar no mapa">
+            <header><strong>Buscar no mapa</strong><button type="button" className="mapa-icone" aria-label="Fechar busca" onClick={() => setPainelRecurso(null)}><X size={16} /></button></header>
+            <input autoFocus value={buscaMapa} maxLength={80} placeholder="Nome de personagem ou objeto" onChange={(evento) => setBuscaMapa(evento.target.value)} />
+            <ul className="mapa-busca-resultados">
+              {tokens.filter((token) => token.nome.toLocaleLowerCase('pt-BR').includes(buscaMapa.trim().toLocaleLowerCase('pt-BR')))
+                .slice(0, 40)
+                .map((token) => <li key={token.id}><button type="button" onClick={() => { centralizar(token); setPainelRecurso(null); }}>
+                  <span>{token.nome}</span><small>{token.camada === 'props' ? 'Item ou prop' : token.camada === 'montarias' ? 'Montaria' : 'Personagem ou token'}{tokenOrigemDistancia && token.id !== tokenOrigemDistancia.id ? ` · ${distanciaEmMetros(tokenOrigemDistancia, token)?.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) ?? '—'} m` : ''}</small>
+                </button></li>)}
+            </ul>
+            {!tokens.some((token) => token.nome.toLocaleLowerCase('pt-BR').includes(buscaMapa.trim().toLocaleLowerCase('pt-BR'))) && <p className="mapa-dica">Nenhum resultado entre os itens que você pode ver.</p>}
+          </section>
+        )}
+        {gestor && campanhaId && <PainelDocumentosMesa
+          aberto={painelRecurso === 'documentos'}
+          campanhaId={campanhaId}
+          jogadores={iniciativa.filter((entidade) => entidade.tipo === 'jogador' && entidade.personagemId).map((entidade) => ({ personagemId: entidade.personagemId!, nome: entidade.nome }))}
+          onFechar={() => setPainelRecurso(null)}
+        />}
+        {campanhaId && <PainelTrilha
+          aberto={painelRecurso === 'trilha'}
+          campanhaId={campanhaId}
+          gestor={gestor}
+          estado={trilhaMesa}
+          onEstado={setTrilhaMesa}
+          onTocar={controlarTrilha}
+          onFechar={() => setPainelRecurso(null)}
+        />}
+        {documentoMesa && <DocumentoDaMesa documento={documentoMesa} onFechar={() => setDocumentoMesa(null)} />}
         {!estado && !erro && <div className="mapa-aviso"><Loader2 className="girando" size={20} /> Abrindo o mapa...</div>}
         {!estado && erro && (
           <div className="mapa-aviso mapa-aviso-erro">
@@ -1207,11 +1544,13 @@ export const MapaPage = () => {
         {gestor && cena && ferramenta === 'nevoa' && (
           <BarraNevoa
             ligada={cena.nevoa.ligada}
+            visaoPelasParedes={Boolean(cena.nevoa.visao_pelas_paredes)}
             naMesa={cena.ativa && Boolean(estado?.ao_vivo)}
             opcoes={opcoesNevoa}
             tamanhoCasa={tamanhoCasa}
             temFormas={cena.nevoa.formas.length > 0}
             onLigar={(ligada) => void enviarNevoa({ ligada })}
+            onVisaoPelasParedes={(visao_pelas_paredes) => void enviarNevoa({ visao_pelas_paredes })}
             onOpcoes={setOpcoesNevoa}
             onDesfazer={() => void enviarNevoa({ desfazer: true })}
             onRevelarTudo={() => void enviarNevoa({ revelar_tudo: true })}
@@ -1310,6 +1649,7 @@ export const MapaPage = () => {
             onEnquadramento={(e) => void mudarEnquadramento(e)}
             onRemover={() => void removerToken()}
             onFechar={() => setSelecionado(null)}
+            onFalar={() => void falarComo(tokenSelecionado)}
           />
         )}
         <PreferenciasBarras

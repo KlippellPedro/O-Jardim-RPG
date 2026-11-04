@@ -20,6 +20,7 @@ import type { ILuzDoCeu } from './ceuConta';
 import { CamadaPortais } from './portais';
 import { CamadaAberturas } from './aberturas';
 import { CamadaLiquidos } from './liquidos';
+import { CamadaAuras, type AuraNoMapa } from './auras';
 import { CamadaAnotacoes } from './anotacoes';
 import { corDaLuz, faseDe, tremor } from './luzesConta';
 import { bocaEm, type LadoPortal } from './portaisConta';
@@ -115,12 +116,17 @@ export class PalcoMapa {
   private camadaPings = new Container();
   private previa = new Graphics();
   private nevoa!: CamadaNevoa;
+  /** Escurece o que ainda não foi explorado; a névoa principal deixa a memória visível. */
+  private nevoaMemoria!: CamadaNevoa;
   private clima!: CamadaClima;
   /** Luz do dia: a escuridão e a tinta da hora, por cima dos tokens. */
   private ceu!: CamadaCeu;
   private portais = new CamadaPortais();
   /** Portas do mapa montado no construtor, por cima da imagem (que só tem o vão). */
   private aberturas = new CamadaAberturas();
+  private auras = new CamadaAuras();
+  /** A régua que acompanha o token arrastado: quantas casas ele já andou. */
+  private medidaArrasto: Regua | null = null;
   /** Água e lava do mapa montado, com movimento (embaixo da névoa). */
   private liquidos = new CamadaLiquidos();
   /** Ferramenta de portal: a primeira boca de um portal novo, ou a boca que está sendo arrastada. */
@@ -195,6 +201,7 @@ export class PalcoMapa {
   private montar() {
     const { app, viewport } = this;
     this.nevoa = new CamadaNevoa(app.renderer);
+    this.nevoaMemoria = new CamadaNevoa(app.renderer, true);
     this.clima = new CamadaClima(app.renderer, this.camadaFundo);
     this.ceu = new CamadaCeu(app.renderer);
     this.camadaTokens.addChild(this.camadaProps, this.camadaMontarias, this.camadaPersonagens);
@@ -203,7 +210,8 @@ export class PalcoMapa {
     this.camadaFundo.addChild(this.camadaMapa, this.liquidos.raiz, this.aberturas.raiz, this.grade);
     // Os portais ficam no chão (embaixo dos tokens); a luz do dia e o clima, por cima de tudo que está no mapa.
     viewport.addChild(
-      this.camadaFundo, this.anotacoes.raiz, this.nevoa.raiz, this.portais.raiz, this.luzes.raiz, this.camadaTokens, this.ceu.raiz, this.clima.raiz,
+      this.camadaFundo, this.anotacoes.raiz, this.nevoaMemoria.raiz, this.nevoa.raiz,
+      this.portais.raiz, this.luzes.raiz, this.auras.raiz, this.camadaTokens, this.ceu.raiz, this.clima.raiz,
       this.magias.raiz, this.camadaReguas, this.previa, this.camadaPings,
     );
     app.stage.eventMode = 'static';
@@ -272,6 +280,7 @@ export class PalcoMapa {
         const y = ponto.y - this.arrasto.dy;
         token.raiz.position.set(x, y);
         this.eventos.aoArrastar(this.arrasto.id, x, y);
+        this.desenharMedidaArrasto({ x: this.arrasto.inicio.x - this.arrasto.dx, y: this.arrasto.inicio.y - this.arrasto.dy }, { x, y });
         return;
       }
       if (this.pontosRegua) {
@@ -303,6 +312,7 @@ export class PalcoMapa {
         return;
       }
       if (this.arrasto) {
+        this.limparMedidaArrasto();
         const { id, moveu, inicio } = this.arrasto;
         this.arrasto = null;
         viewport.plugins.resume('drag');
@@ -356,8 +366,10 @@ export class PalcoMapa {
       this.animarPings(agora);
       this.magias.quadro(agora);
       this.nevoa.quadro(agora);
+      this.nevoaMemoria.quadro(agora);
       this.portais.quadro(agora, viewport.scale.x);
       this.liquidos.quadro(agora);
+      if (this.cena) this.auras.quadro(this.aurasNoMapa(), this.cena.grade.tamanho, agora, viewport.scale.x);
       if (this.cena) {
         const fontes = this.fontesDeLuz(agora);
         this.luzes.quadro(fontes);
@@ -429,7 +441,7 @@ export class PalcoMapa {
       if (anterior?.id !== cena.id) {
         this.anotacaoSelecionada = null;
         this.cancelarDesenho();
-        this.enquadrar();
+        this.abrirNaVista();
         this.cenaTrocada = true;
       }
     }
@@ -437,6 +449,7 @@ export class PalcoMapa {
     void this.carregarReduzido();
     this.desenharGrade(cena.grade);
     this.nevoa.definir(cena.nevoa ?? null, cena.largura, cena.altura, gestor, cena.grade.tamanho);
+    this.nevoaMemoria.definir(cena.nevoa ?? null, cena.largura, cena.altura, gestor, cena.grade.tamanho);
     this.clima.definir(cena.clima ?? null, cena.largura, cena.altura, gestor);
     this.portais.definir(cena.portais ?? [], cena.grade.tamanho, gestor);
     this.aberturas.definir(cena.aberturas ?? [], cena.grade.tamanho, gestor);
@@ -637,6 +650,40 @@ export class PalcoMapa {
     this.viewport.fit(true, this.cena.largura * 1.05, this.cena.altura * 1.05);
     this.viewport.moveCenter(this.cena.largura / 2, this.cena.altura / 2);
     this.agendarLadrilhos();
+  }
+
+  /** Abre a cena onde o Mestre guardou a vista inicial; sem ela, o mapa inteiro. */
+  abrirNaVista() {
+    const vista = this.cena?.vista;
+    if (!vista) {
+      this.enquadrar();
+      return;
+    }
+    this.viewport.setZoom(vista.zoom, true);
+    this.viewport.moveCenter(vista.x, vista.y);
+    this.agendarLadrilhos();
+  }
+
+  /** O centro e o zoom da tela agora, para o Mestre guardar como a vista inicial da cena. */
+  vistaAtual(): { x: number; y: number; zoom: number } {
+    return { x: Math.round(this.viewport.center.x), y: Math.round(this.viewport.center.y), zoom: Number(this.viewport.scale.x.toFixed(3)) };
+  }
+
+  private *aurasNoMapa(): Iterable<AuraNoMapa> {
+    for (const token of this.tokens.values()) {
+      if (token.dados.aura) yield { x: token.raiz.x, y: token.raiz.y, aura: token.dados.aura };
+    }
+  }
+
+  private desenharMedidaArrasto(de: IPonto, ate: IPonto) {
+    this.medidaArrasto ??= this.criarRegua('#67e8f9');
+    this.desenharRegua(this.medidaArrasto, [de, ate], '#67e8f9');
+  }
+
+  private limparMedidaArrasto() {
+    this.medidaArrasto?.linha.destroy();
+    this.medidaArrasto?.rotulo.destroy();
+    this.medidaArrasto = null;
   }
 
   centralizar(x: number, y: number) {
@@ -1047,6 +1094,7 @@ export class PalcoMapa {
     this.app.destroy({ removeView: true }, { children: true, texture: true, textureSource: true });
     // O que sobrou da névoa e do clima vai depois do renderizador, que já não desenha nada com elas.
     this.nevoa.destruir();
+    this.nevoaMemoria.destruir();
     esquecerTexturasDoClima();
   }
 }

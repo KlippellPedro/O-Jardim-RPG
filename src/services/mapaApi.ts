@@ -18,6 +18,8 @@ export interface IAnotacaoMapa {
   cor: string;
   fundo: string;
   placa: boolean;
+  /** Nota secreta: só o Mestre recebe. */
+  secreta?: boolean;
 }
 
 export interface IPermissoesMesa {
@@ -38,6 +40,44 @@ export interface IBarraToken {
 }
 
 /** Luz que o token carrega: raio em casas, cor e se tremula como chama. */
+/** Aura presa ao token, em casas. A escondida (`visivel: false`) só chega a quem comanda e ao dono. */
+export interface IAuraToken {
+  raio: number;
+  cor: string;
+  visivel: boolean;
+}
+
+export interface IRelogioMesa {
+  id: string;
+  nome: string;
+  partes: number;
+  cheias: number;
+  visivel: boolean;
+}
+
+export interface ICronometroMesa {
+  nome: string;
+  /** Hora do fim (ms, relógio do servidor) quando está correndo. */
+  fim: number | null;
+  /** Tempo que falta (ms) quando está parado. */
+  restante: number | null;
+  visivel: boolean;
+}
+
+/** Pausa, relógios e cronômetro da campanha (plataforma/core/mesa_extras.py). */
+export interface IMesaExtras {
+  pausa: { ligada: boolean; texto: string };
+  relogios: IRelogioMesa[];
+  cronometro: ICronometroMesa | null;
+}
+
+/** Onde a tela abre a cena: centro e zoom. */
+export interface IVistaCena {
+  x: number;
+  y: number;
+  zoom: number;
+}
+
 export interface ILuzToken {
   raio: number;
   cor: string;
@@ -85,6 +125,7 @@ export interface ITokenMapa {
   enquadramento: { zoom: number; x: number; y: number };
   /** Tocha, lanterna ou luz mágica; null sem luz própria. */
   luz: ILuzToken | null;
+  aura?: IAuraToken | null;
   e_meu: boolean;
   pode_mover: boolean;
   desconhecido: boolean;
@@ -124,8 +165,14 @@ export type IFormaNevoa =
 
 export interface INevoa {
   ligada: boolean;
+  /** O servidor calcula linha de visão e memória por jogador. */
+  visao_pelas_paredes?: boolean;
+  /** As células exploradas permanecem escuras enquanto não estão à vista agora. */
+  personalizada?: boolean;
   /** Em ordem: a última forma que contém um ponto decide se ele está à vista. */
   formas: IFormaNevoa[];
+  /** Máscara de memória individual; ausente no modo normal de névoa. */
+  exploradas?: IFormaNevoa[];
   /** Só para o jogador com a névoa ligada: os pedaços do mapa que ele pode baixar. */
   ladrilhos: string[] | null;
 }
@@ -221,6 +268,7 @@ export interface ITempoMapa {
 export interface ICena extends IResumoCena {
   largura: number;
   altura: number;
+  vista?: IVistaCena | null;
   grade: IGrade;
   livre: boolean;
   mapa: IMapaDaCena | null;
@@ -242,6 +290,7 @@ export interface ICena extends IResumoCena {
 
 export interface INevoaPayload {
   ligada?: boolean;
+  visao_pelas_paredes?: boolean;
   forma?: IFormaNevoa;
   desfazer?: boolean;
   cobrir_tudo?: boolean;
@@ -263,6 +312,8 @@ export interface IEstadoMapa {
   moldura_mesa: string | null;
   /** null antes da sessão abrir para o jogador. */
   tempo: ITempoMapa | null;
+  /** Pausa, relógios e cronômetro; null antes da sessão abrir para o jogador. */
+  mesa?: IMesaExtras | null;
   trazidos?: number;
 }
 
@@ -316,6 +367,8 @@ export interface ITokenEdicao {
   sem_moldura?: boolean;
   luz?: ILuzToken;
   sem_luz?: boolean;
+  aura?: Partial<IAuraToken>;
+  sem_aura?: boolean;
 }
 
 const base = (campanhaId: string) => `/mapa/${campanhaId}`;
@@ -362,6 +415,14 @@ export const mapaApi = {
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/camadas`, { method: 'PUT', body: { jogadores }, ...ESTADO }),
   mudarAnotacoes: (campanhaId: string, cenaId: string, anotacoes: IAnotacaoMapa[]) =>
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/anotacoes`, { method: 'PUT', body: { anotacoes }, ...ESTADO }),
+  /** Só o que vier no pedido muda (pausa, relógios, cronômetro). */
+  mudarMesa: (campanhaId: string, dados: Partial<IMesaExtras>) =>
+    api<IMesaExtras>(`${base(campanhaId)}/mesa`, { method: 'PUT', body: dados }),
+  /** O Mestre fala por um NPC: a mesa conectada vê a fala. */
+  falar: (campanhaId: string, fala: { nome: string; texto: string; token?: string | null }) =>
+    api<{ ok: boolean; conectados: number }>(`${base(campanhaId)}/fala`, { method: 'POST', body: fala }),
+  guardarVista: (campanhaId: string, cenaId: string, vista: IVistaCena | null) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/vista`, { method: 'PUT', body: { vista }, ...ESTADO }),
   configurar: (campanhaId: string, dados: { moldura_mesa: string | null }) =>
     api<{ moldura_mesa: string | null }>(`${base(campanhaId)}/config`, { method: 'PUT', body: dados }),
 };

@@ -4,7 +4,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AppWindow, ArrowLeft, BrickWall, CloudUpload, DoorClosed, Eraser, Expand, Flame, Ghost, Hand, ImagePlus, Loader2, Paintbrush, Plus, Redo2, Square, Trash2, Undo2,
+  AppWindow, ArrowLeft, BrickWall, CloudUpload, CopyPlus, DoorClosed, Eraser, Expand, Flame, Ghost, Hand, ImagePlus, Loader2, Paintbrush, Plus, Redo2, Search, Square, Trash2, Undo2,
 } from 'lucide-react';
 import { acervoApi, type IItemAcervo } from '../../../services/acervoApi';
 import { construtorApi, type IProjeto, type IResumoProjeto } from '../../../services/construtorApi';
@@ -64,6 +64,7 @@ export const ConstrutorMapa = ({ campanhaId, cenaAtual, onPublicado, onFechar }:
   const [projetos, setProjetos] = useState<IResumoProjeto[] | null>(null);
   const [projeto, setProjeto] = useState<IProjeto | null>(null);
   const [novo, setNovo] = useState({ nome: '', largura: 30, altura: 20 });
+  const [buscaProjeto, setBuscaProjeto] = useState('');
 
   const carregarLista = useCallback(async () => {
     try {
@@ -96,6 +97,14 @@ export const ConstrutorMapa = ({ campanhaId, cenaAtual, onPublicado, onFechar }:
     }
   };
 
+  const duplicarProjeto = async (resumo: IResumoProjeto) => {
+    try {
+      setProjeto(await construtorApi.duplicar(campanhaId, resumo.id));
+    } catch (falha) {
+      avisarErro(falha, 'Não foi possível criar uma cópia deste mapa.');
+    }
+  };
+
   const apagarProjeto = async (resumo: IResumoProjeto) => {
     if (!(await confirmar({
       titulo: `Apagar "${resumo.nome}"?`,
@@ -125,6 +134,8 @@ export const ConstrutorMapa = ({ campanhaId, cenaAtual, onPublicado, onFechar }:
     );
   }
 
+  const projetosFiltrados = projetos?.filter((resumo) => resumo.nome.toLocaleLowerCase('pt-BR').includes(buscaProjeto.trim().toLocaleLowerCase('pt-BR'))) ?? [];
+
   return (
     <div className="construtor" role="dialog" aria-label="Construtor de mapas">
       <header className="construtor-topo">
@@ -144,16 +155,19 @@ export const ConstrutorMapa = ({ campanhaId, cenaAtual, onPublicado, onFechar }:
         </section>
         <section aria-label="Mapas montados">
           <h2>Mapas montados</h2>
+          <label className="construtor-busca"><Search size={14} aria-hidden="true" /><input value={buscaProjeto} maxLength={80} placeholder="Buscar mapa pelo nome" aria-label="Buscar mapa pelo nome" onChange={(evento) => setBuscaProjeto(evento.target.value)} /></label>
           {projetos === null && <p className="mapa-dica"><Loader2 size={14} className="girando" /> Abrindo...</p>}
           {projetos?.length === 0 && <p className="mapa-dica">Nenhum mapa ainda. Crie um ao lado e monte salas, paredes e portas.</p>}
+          {Boolean(projetos?.length) && !projetosFiltrados.length && <p className="mapa-dica">Nenhum mapa tem esse nome.</p>}
           <div className="construtor-cartoes">
-            {projetos?.map((resumo) => (
+            {projetosFiltrados.map((resumo) => (
               <article key={resumo.id} className="construtor-cartao">
                 <button type="button" className="construtor-cartao-corpo" onClick={() => void abrirProjeto(resumo.id)}>
                   <strong>{resumo.nome}</strong>
                   <small>{resumo.largura} x {resumo.altura} casas</small>
                   {resumo.cena_nome && <span className="selo ativo">Na cena {resumo.cena_nome}</span>}
                 </button>
+                <button type="button" className="mapa-icone" aria-label={`Criar cópia de ${resumo.nome}`} title="Usar como modelo e criar uma cópia" onClick={() => void duplicarProjeto(resumo)}><CopyPlus size={15} /></button>
                 <button type="button" className="mapa-icone" aria-label={`Apagar ${resumo.nome}`} onClick={() => void apagarProjeto(resumo)}><Trash2 size={15} /></button>
               </article>
             ))}
@@ -598,6 +612,14 @@ const EditorDoProjeto = ({
             <section className="construtor-ajuste-peca" aria-label="Peças escolhidas">
               <h3>{selecaoIds.length} peças escolhidas</h3>
               <p className="mapa-dica">Arraste uma delas para mover o grupo. Shift + clique tira ou junta mais uma.</p>
+              <div className="mapa-segmentos" role="group" aria-label="Alinhar grupo">
+                <button type="button" onClick={() => editor.current?.alinharPecas(selecaoIds, 'x')}>Alinhar na vertical</button>
+                <button type="button" onClick={() => editor.current?.alinharPecas(selecaoIds, 'y')}>Alinhar na horizontal</button>
+              </div>
+              <button type="button" className="mapa-botao-leve" onClick={() => {
+                const copias = editor.current?.duplicarPecas(selecaoIds) ?? 0;
+                if (copias < selecaoIds.length) avisar.info(`O mapa recebeu ${copias} cópias. O limite é de 256 peças.`);
+              }}><CopyPlus size={14} /> Duplicar grupo</button>
               <button type="button" className="mapa-botao" onClick={() => void salvarComoPronta()}>Salvar como peça pronta</button>
               <button type="button" className="mapa-botao perigo" onClick={() => editor.current?.removerPecas(selecaoIds)}>Remover as {selecaoIds.length} peças</button>
             </section>

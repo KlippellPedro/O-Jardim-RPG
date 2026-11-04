@@ -580,6 +580,36 @@ export class EditorConstrutor {
     this.selecionarPeca(novoId);
   }
 
+  /** Alinha os centros das peças escolhidas pelo eixo informado, preservando o outro eixo. */
+  alinharPecas(ids: string[], eixo: 'x' | 'y') {
+    const escolhidas = this.conteudo.pecas.filter((peca) => ids.includes(peca.id));
+    if (escolhidas.length < 2) return;
+    const centro = escolhidas.reduce((total, peca) => total + peca[eixo], 0) / escolhidas.length;
+    const posicaoAlinhada = Number(centro.toFixed(3));
+    if (escolhidas.every((peca) => peca[eixo] === posicaoAlinhada)) return;
+    const escolhidasIds = new Set(escolhidas.map((peca) => peca.id));
+    const novo = {
+      ...this.conteudo,
+      pecas: this.conteudo.pecas.map((peca) => escolhidasIds.has(peca.id)
+        ? { ...peca, x: eixo === 'x' ? posicaoAlinhada : peca.x, y: eixo === 'y' ? posicaoAlinhada : peca.y }
+        : peca),
+    };
+    this.registrar(this.conteudo, novo);
+  }
+
+  /** Duplica o grupo escolhido uma casa abaixo e à direita; o limite de 256 peças é respeitado. */
+  duplicarPecas(ids: string[]): number {
+    const escolhidas = this.conteudo.pecas.filter((peca) => ids.includes(peca.id));
+    const quantidade = Math.min(escolhidas.length, 256 - this.conteudo.pecas.length);
+    if (quantidade <= 0) return 0;
+    const copias = escolhidas.slice(0, quantidade).map((peca) => ({
+      ...peca, id: crypto.randomUUID(), x: peca.x + 1, y: peca.y + 1,
+    }));
+    this.registrar(this.conteudo, { ...this.conteudo, pecas: [...this.conteudo.pecas, ...copias] });
+    this.definirSelecao(copias.map((peca) => peca.id));
+    return quantidade;
+  }
+
   removerPeca(id: string) {
     this.registrar(this.conteudo, apagarPeca(this.conteudo, id));
     if (this.selecao.has(id)) this.definirSelecao([...this.selecao].filter((outro) => outro !== id));

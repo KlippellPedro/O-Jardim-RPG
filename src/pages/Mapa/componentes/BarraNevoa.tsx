@@ -4,12 +4,14 @@ import { ComDica } from './BotaoFerramenta';
 
 interface Props {
   ligada: boolean;
+  visaoPelasParedes: boolean;
   /** A cena já está na mesa: o que os jogadores baixaram sem névoa fica no aparelho deles. */
   naMesa: boolean;
   opcoes: OpcoesNevoa;
   tamanhoCasa: number;
   temFormas: boolean;
   onLigar: (ligada: boolean) => void;
+  onVisaoPelasParedes: (ligada: boolean) => void;
   onOpcoes: (opcoes: OpcoesNevoa) => void;
   onDesfazer: () => void;
   onRevelarTudo: () => void;
@@ -23,12 +25,21 @@ const FORMAS: Array<{ id: FormaDeDesenho; rotulo: string; Icone: typeof Square }
 ];
 
 /** Barra da névoa de guerra, aberta pela ferramenta do olho. Cada forma solta já vale para a mesa. */
-export const BarraNevoa = ({ ligada, naMesa, opcoes, tamanhoCasa, temFormas, onLigar, onOpcoes, onDesfazer, onRevelarTudo, onCobrirTudo }: Props) => {
+export const BarraNevoa = ({ ligada, visaoPelasParedes, naMesa, opcoes, tamanhoCasa, temFormas, onLigar, onVisaoPelasParedes, onOpcoes, onDesfazer, onRevelarTudo, onCobrirTudo }: Props) => {
   const casas = Math.round(((opcoes.raio * 2) / tamanhoCasa) * 2) / 2;
   return (
     <section className="mapa-barra-nevoa" aria-label="Névoa de guerra">
       <button type="button" className={`mapa-botao${ligada ? '' : ' destaque'}`} onClick={() => onLigar(!ligada)}>
         {ligada ? <EyeOff size={14} /> : <Eye size={14} />} {ligada ? 'Desligar a névoa' : 'Ligar a névoa'}
+      </button>
+      <button
+        type="button"
+        className={`mapa-botao${visaoPelasParedes ? ' ativo' : ''}`}
+        aria-pressed={visaoPelasParedes}
+        title="Os jogadores enxergam a partir dos próprios tokens; paredes e portas fechadas bloqueiam a visão. Luzes limitam o alcance."
+        onClick={() => onVisaoPelasParedes(!visaoPelasParedes)}
+      >
+        <Eye size={14} /> {visaoPelasParedes ? 'Visão por paredes ligada' : 'Visão por paredes'}
       </button>
       <div className="mapa-segmentos" role="group" aria-label="Revelar ou esconder">
         <button type="button" disabled={!ligada} className={opcoes.op === 'revelar' ? 'ativo' : ''} onClick={() => onOpcoes({ ...opcoes, op: 'revelar' })}>Revelar</button>
@@ -63,9 +74,13 @@ export const BarraNevoa = ({ ligada, naMesa, opcoes, tamanhoCasa, temFormas, onL
           ? opcoes.forma === 'poligono'
             ? 'Clique ponto a ponto e feche no primeiro ponto ou com Enter. Esc cancela. O botão direito arrasta o mapa.'
             : 'Arraste no mapa. O botão direito arrasta o mapa. Os jogadores só recebem os pedaços do mapa que você revelar.'
-          : naMesa
-            ? 'Com a névoa ligada, o mapa fica coberto para os jogadores e você revela o que eles enxergam. Esta cena já está na mesa: o que eles já viram continua guardado no aparelho deles. Para um segredo completo, ligue a névoa antes de pôr a cena na mesa.'
-            : 'Com a névoa ligada, o mapa começa coberto para os jogadores e você revela o que eles enxergam.'}
+          : visaoPelasParedes && naMesa
+            ? 'Esta cena já está na mesa e a névoa manual está desligada. Ladrilhos que os jogadores baixaram antes permanecem no navegador. Para guardar segredos desde o início, ative a visão antes de abrir a cena.'
+            : visaoPelasParedes
+              ? 'A visão usa os tokens próprios de cada jogador. Paredes e portas fechadas bloqueiam; áreas exploradas ficam mais claras na memória. A névoa manual continua limitando o que pode ser visto.'
+            : naMesa
+              ? 'Com a névoa ligada, o mapa fica coberto para os jogadores e você revela o que eles enxergam. Esta cena já está na mesa: o que eles já viram continua guardado no aparelho deles. Para um segredo completo, ligue a névoa antes de pôr a cena na mesa.'
+              : 'Com a névoa ligada, o mapa começa coberto para os jogadores e você revela o que eles enxergam.'}
       </p>
     </section>
   );

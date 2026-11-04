@@ -21,6 +21,8 @@ export class CamadaAnotacoes {
       raiz.eventMode = 'static';
       raiz.cursor = 'pointer';
       raiz.label = `anotacao:${anotacao.id}`;
+      // Nota secreta (só o Mestre recebe) fica mais apagada para ele lembrar que ninguém mais vê.
+      if (anotacao.secreta) raiz.alpha = 0.6;
 
       const texto = new Text({
         text: anotacao.texto,

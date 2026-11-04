@@ -1,0 +1,269 @@
+/* Extras da mesa (leva 6): relógios, cronômetro, pausa e fala. */
+
+.mesa-relogios {
+  position: absolute;
+  top: 56px;
+  left: 64px;
+  z-index: 6;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: min(520px, calc(100% - 88px));
+  pointer-events: none;
+}
+
+.mesa-relogio,
+.mesa-cronometro {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 64px;
+  padding: 6px 8px;
+  border: 1px solid var(--mapa-linha, rgba(255, 255, 255, 0.12));
+  border-radius: 10px;
+  background: rgba(20, 16, 26, 0.86);
+  color: var(--mapa-texto, #f4efe6);
+  font: inherit;
+  font-size: 11px;
+  pointer-events: auto;
+}
+
+.mesa-relogio {
+  cursor: pointer;
+}
+
+.mesa-relogio.so-ver {
+  cursor: default;
+}
+
+.mesa-relogio:disabled {
+  opacity: 1;
+}
+
+.mesa-relogio span {
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mesa-relogio small,
+.mesa-cronometro small {
+  color: var(--mapa-apagado, #a59fb0);
+}
+
+.mesa-cronometro strong {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mesa-cronometro.acabou strong {
+  color: #f87171;
+}
+
+.mesa-roda path {
+  fill: rgba(255, 255, 255, 0.08);
+  stroke: rgba(255, 255, 255, 0.45);
+  stroke-width: 1;
+}
+
+.mesa-roda path.cheia {
+  fill: var(--mapa-ouro, #c7a44c);
+}
+
+.mesa-pausa {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 24px;
+  background: rgba(12, 9, 16, 0.86);
+  color: var(--mapa-texto, #f4efe6);
+  text-align: center;
+  backdrop-filter: blur(3px);
+}
+
+.mesa-pausa h2 {
+  margin: 0;
+}
+
+.mesa-pausa p {
+  max-width: 420px;
+  margin: 0;
+  color: var(--mapa-apagado, #a59fb0);
+}
+
+.mesa-pausa-faixa {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border: 1px solid var(--mapa-ouro, #c7a44c);
+  border-radius: 999px;
+  background: rgba(20, 16, 26, 0.92);
+  color: var(--mapa-texto, #f4efe6);
+  font-size: 13px;
+  transform: translateX(-50%);
+}
+
+.mesa-fala {
+  position: absolute;
+  bottom: 72px;
+  left: 50%;
+  z-index: 12;
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: start;
+  gap: 12px;
+  width: min(560px, calc(100% - 32px));
+  padding: 12px 14px;
+  border: 1px solid var(--mapa-ouro, #c7a44c);
+  border-radius: 14px;
+  background: rgba(20, 16, 26, 0.95);
+  color: var(--mapa-texto, #f4efe6);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  transform: translateX(-50%);
+  animation: mesa-fala-entra 0.25s ease-out;
+}
+
+.mesa-fala img,
+.mesa-fala-inicial {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.mesa-fala-inicial {
+  display: grid;
+  place-items: center;
+  background: var(--mapa-ouro, #c7a44c);
+  color: #1b1420;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.mesa-fala strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--mapa-ouro, #c7a44c);
+}
+
+.mesa-fala p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+@keyframes mesa-fala-entra {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesa-fala {
+    animation: none;
+  }
+}
+
+.mapa-config.mesa-painel {
+  left: auto;
+  right: 12px;
+  width: 290px;
+}
+
+.mesa-painel-lista {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mesa-painel fieldset {
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--mapa-linha, rgba(255, 255, 255, 0.12));
+  border-radius: 10px;
+}
+
+.mesa-painel-lista li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mesa-painel-lista li span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mesa-painel-novo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.mesa-painel-novo input {
+  min-width: 0;
+  flex: 1;
+}
+
+.mesa-painel-novo input[type='number'] {
+  max-width: 70px;
+}
+
+.mesa-painel-tempo {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mapa-falar {
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* O painel não rola para o lado: a linha do relógio novo quebra e os campos seguem o tema escuro. */
+.mapa-config.mesa-painel {
+  overflow-x: hidden;
+}
+
+.mesa-painel-novo {
+  flex-wrap: wrap;
+}
+
+.mesa-painel-novo input,
+.mesa-painel-novo select,
+.mesa-painel .mapa-menu-linha input {
+  padding: 5px 8px;
+  border: 1px solid var(--mapa-linha, rgba(255, 255, 255, 0.12));
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--mapa-texto, #f4efe6);
+  font: inherit;
+  font-size: 12px;
+}
+
+.mesa-painel-novo select option {
+  background: #1b1622;
+}
+
+.mesa-painel-lista li {
+  min-width: 0;
+}
+
+.mesa-painel-lista .mapa-icone {
+  flex: none;
+}

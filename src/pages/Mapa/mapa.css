@@ -1641,6 +1641,232 @@
   object-fit: cover;
 }
 
+.mapa-movimento-turno {
+  padding-left: 8px;
+  border-left: 1px solid rgba(252, 211, 77, 0.3);
+}
+
+.mapa-topo > .mapa-com-dica > .mapa-icone.ativo,
+.mapa-topo > .mapa-icone.ativo {
+  color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.12);
+}
+
+.mapa-recurso-painel {
+  position: absolute;
+  z-index: 8;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  gap: 10px;
+  width: min(340px, calc(100% - 24px));
+  max-height: calc(100% - 24px);
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 14px;
+  background: var(--mapa-painel);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+}
+
+.mapa-recurso-painel > header,
+.mapa-documento > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mapa-recurso-painel > header strong,
+.mapa-trilha-painel > header strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.mapa-recurso-painel input:not([type='file']),
+.mapa-recurso-painel select {
+  min-width: 0;
+  width: 100%;
+  padding: 8px 9px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--mapa-texto);
+  font: inherit;
+}
+
+.mapa-recurso-painel select option {
+  background: #17141d;
+  color: var(--mapa-texto);
+}
+
+.mapa-recurso-painel .mapa-menu-linha {
+  display: grid;
+  gap: 5px;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+}
+
+.mapa-busca-resultados,
+.mapa-trilhas-lista {
+  display: grid;
+  gap: 3px;
+  max-height: min(42vh, 360px);
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mapa-busca-resultados button,
+.mapa-trilha-selecionar {
+  display: grid;
+  gap: 3px;
+  width: 100%;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mapa-texto);
+  text-align: left;
+  cursor: pointer;
+}
+
+.mapa-busca-resultados button:hover,
+.mapa-trilhas-lista li.ativa,
+.mapa-trilhas-lista li:hover {
+  border-color: rgba(199, 164, 76, 0.35);
+  background: rgba(199, 164, 76, 0.08);
+}
+
+.mapa-busca-resultados span,
+.mapa-trilha-selecionar span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-busca-resultados small,
+.mapa-trilha-selecionar small {
+  color: var(--mapa-apagado);
+  font-size: 10px;
+}
+
+.mapa-trilhas-lista li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  border: 1px solid transparent;
+  border-radius: 8px;
+}
+
+.mapa-trilha-selecionar {
+  flex: 1;
+}
+
+.mapa-trilha-atual {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid rgba(199, 164, 76, 0.35);
+  border-radius: 9px;
+  background: rgba(199, 164, 76, 0.07);
+}
+
+.mapa-trilha-atual > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-audio-ativar {
+  position: absolute;
+  z-index: 7;
+  bottom: 18px;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transform: translateX(-50%);
+  padding: 9px 14px;
+  border: 1px solid rgba(199, 164, 76, 0.65);
+  border-radius: 999px;
+  background: var(--mapa-painel);
+  color: var(--mapa-texto);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.mapa-documento-fundo {
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(5, 4, 8, 0.82);
+  backdrop-filter: blur(5px);
+}
+
+.mapa-documento {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
+  width: min(900px, 96vw);
+  max-height: 94vh;
+  padding: 12px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 14px;
+  background: var(--mapa-painel);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.65);
+}
+
+.mapa-documento > header strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-documento-corpo {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  overflow: auto;
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.mapa-documento-corpo canvas {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: calc(94vh - 90px);
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 760px) {
+  .mapa-movimento-turno {
+    display: none;
+  }
+
+  .mapa-recurso-painel {
+    top: 8px;
+    right: 8px;
+    width: min(320px, calc(100% - 16px));
+  }
+
+  .mapa-documento-fundo {
+    padding: 8px;
+  }
+}
+
 .mapa-cartao-titulo {
   display: grid;
   gap: 2px;

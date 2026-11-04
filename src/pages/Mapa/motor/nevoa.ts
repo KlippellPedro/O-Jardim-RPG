@@ -5,9 +5,9 @@
 // Quem desenha a névoa é um shader nosso (WebGPU e WebGL), a cada quadro: a
 // fumaça se move devagar, a borda treme e esfiapa, e revelar ou esconder
 // dissolve a névoa em vez de trocar de uma vez (duas máscaras, a anterior e a
-// nova). O jogador vê a névoa opaca por dentro; o Mestre, translúcida, para
-// enxergar o que está escondido. O segredo não depende desta camada: o
-// servidor nem manda ao jogador os ladrilhos cobertos (plataforma/core/nevoa.py).
+// nova). A memória explorada fica escura, e a área fora dela recebe cobertura
+// opaca. O segredo não depende desta camada: o servidor só libera os ladrilhos
+// autorizados para aquela pessoa (plataforma/core/nevoa.py e routers/acervo.py).
 
 import {
   BlurFilter, Container, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Texture, UniformGroup, type Renderer,
@@ -183,6 +183,7 @@ export class CamadaNevoa {
   private altura = 1;
   private gestor = false;
   private origem: INevoa | null = null;
+  private alfaVisao = 1;
   private desfoque = new BlurFilter({ strength: 4, quality: 3 });
   private inicioTransicao = -1e9;
   private apagando = false;
@@ -192,7 +193,7 @@ export class CamadaNevoa {
   /** O que o servidor diz: a névoa está ligada nesta cena. */
   ligada = false;
 
-  constructor(renderer: Renderer) {
+  constructor(renderer: Renderer, private readonly memoria = false) {
     this.renderer = renderer;
     const textoRuido = obterRuido();
     this.uniformes = new UniformGroup({
@@ -236,14 +237,15 @@ export class CamadaNevoa {
     }
     const primeiraVez = this.origem === null;
     this.origem = nevoa;
-    const ligada = Boolean(nevoa?.ligada);
-    const formas = nevoa?.formas ?? [];
+    const ligada = this.memoria ? Boolean(nevoa?.personalizada) : Boolean(nevoa?.ligada);
+    const formas = this.memoria ? (nevoa?.exploradas ?? []) : (nevoa?.formas ?? []);
     const chave = JSON.stringify(formas);
     const mesmoMapa = largura === this.largura && altura === this.altura;
     const mudouPapel = gestor !== this.gestor;
     this.largura = Math.max(1, largura);
     this.altura = Math.max(1, altura);
     this.gestor = gestor;
+    this.alfaVisao = !gestor && !this.memoria && nevoa?.personalizada ? 0.48 : 1;
     this.uniformes.uniforms.uParametros[3] = Math.max(10, tamanhoCasa);
     this.aplicarPapel();
     const estavaLigada = this.ligada;
@@ -306,7 +308,7 @@ export class CamadaNevoa {
     const cores = this.gestor ? CORES.mestre : CORES.jogador;
     this.uniformes.uniforms.uCor.set([...cores.fundo, 1]);
     this.uniformes.uniforms.uCorFiapo.set([...cores.fiapo, 1]);
-    this.uniformes.uniforms.uParametros[2] = this.gestor ? ALFA_MESTRE : 1;
+    this.uniformes.uniforms.uParametros[2] = this.gestor ? ALFA_MESTRE : this.alfaVisao;
     this.uniformes.uniforms.uTamanho.set([this.largura, this.altura, 0, 0]);
     this.malha.scale.set(this.largura, this.altura);
   }
@@ -327,12 +329,25 @@ export class CamadaNevoa {
       conteudo.scale.set(escala);
       desenho.addChild(conteudo);
       conteudo.addChild(new Graphics().rect(-SOBRA, -SOBRA, this.largura + SOBRA * 2, this.altura + SOBRA * 2).fill(0xffffff));
-      for (const forma of formas) {
+      const retangulosRevelados = formas.length > 0 && formas.every(
+        (forma) => forma.op === 'revelar' && forma.tipo === 'retangulo',
+      );
+      if (retangulosRevelados) {
+        // A visão individual gera retângulos por linhas da grade. Um único
+        // Graphics evita milhares de objetos Pixi em mapas cheios de paredes.
         const g = new Graphics();
-        desenharForma(g, forma, 0xffffff);
-        // Revelar apaga a cobertura; esconder pinta por cima de novo.
-        if (forma.op === 'revelar') g.blendMode = 'erase';
+        for (const forma of formas) if (forma.tipo === 'retangulo') g.rect(forma.x, forma.y, forma.w, forma.h);
+        g.fill(0xffffff);
+        g.blendMode = 'erase';
         conteudo.addChild(g);
+      } else {
+        for (const forma of formas) {
+          const g = new Graphics();
+          desenharForma(g, forma, 0xffffff);
+          // Revelar apaga a cobertura; esconder pinta por cima de novo.
+          if (forma.op === 'revelar') g.blendMode = 'erase';
+          conteudo.addChild(g);
+        }
       }
       conteudo.filters = [this.desfoque];
     }

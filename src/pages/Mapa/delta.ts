@@ -2,7 +2,7 @@
 // `diferenca`): o servidor manda o estado inteiro na primeira vez e depois só o que
 // mudou para esta tela. Aqui a diferença é aplicada no estado que a página já tem.
 
-import type { ICena, IEstadoMapa, IResumoCena, ITempoMapa, ITokenMapa } from '../../services/mapaApi';
+import type { ICena, IEstadoMapa, IMesaExtras, IResumoCena, ITempoMapa, ITokenMapa } from '../../services/mapaApi';
 
 export interface DeltaMapa {
   /** A cena a que a diferença se refere: se a tela mostra outra, ela não vale. */
@@ -14,6 +14,8 @@ export interface DeltaMapa {
   cenas?: IResumoCena[];
   moldura_mesa?: string | null;
   tempo?: ITempoMapa | null;
+  /** Pausa, relógios e cronômetro da campanha. */
+  mesa?: IMesaExtras | null;
   cena?: ICena | null;
   /** Tokens novos ou mudados, inteiros. */
   mudar?: ITokenMapa[];
@@ -23,7 +25,7 @@ export interface DeltaMapa {
   ordem?: string[];
 }
 
-const CAMPOS = ['gestor', 'usuario_id', 'ao_vivo', 'bloqueado', 'cenas', 'moldura_mesa', 'tempo', 'cena'] as const;
+const CAMPOS = ['gestor', 'usuario_id', 'ao_vivo', 'bloqueado', 'cenas', 'moldura_mesa', 'tempo', 'mesa', 'cena'] as const;
 
 /** O estado com a diferença aplicada; o mesmo objeto quando ela é de outra cena. */
 export function aplicarDelta(atual: IEstadoMapa, delta: DeltaMapa): IEstadoMapa {

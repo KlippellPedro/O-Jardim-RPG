@@ -51,6 +51,7 @@ const DEFAULT_TIMEOUT_MS = 15_000;
 interface ApiOptions {
   method?: string;
   body?: any;
+  headers?: Record<string, string>;
   signal?: AbortSignal;
   keepalive?: boolean;
   /** Quem precisa de um corpo JSON de verdade (como o calendário) pede aqui: resposta "ok" que chega
@@ -74,11 +75,14 @@ const inFlightGets = new Map<string, Promise<unknown>>();
 
 async function executeRequest<T>(
   caminho: string,
-  { method = 'GET', body, signal, keepalive, exigirCorpo = false }: ApiOptions = {},
+  { method = 'GET', body, headers: cabecalhosExtras, signal, keepalive, exigirCorpo = false }: ApiOptions = {},
 ): Promise<T> {
-  const headers: Record<string, string> = { Accept: 'application/json' };
+  const headers: Record<string, string> = { Accept: 'application/json', ...cabecalhosExtras };
+  const corpoBruto = typeof Blob !== 'undefined' && body instanceof Blob
+    || typeof FormData !== 'undefined' && body instanceof FormData
+    || typeof ArrayBuffer !== 'undefined' && body instanceof ArrayBuffer;
 
-  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (body !== undefined && !corpoBruto) headers['Content-Type'] = 'application/json';
   if (!['GET', 'HEAD'].includes(method.toUpperCase())) {
     const csrf = lerCookie('oj_csrf');
     if (csrf) headers['X-CSRF-Token'] = csrf;
@@ -96,7 +100,7 @@ async function executeRequest<T>(
       method,
       credentials: 'same-origin',
       headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body: body === undefined ? undefined : corpoBruto ? body : JSON.stringify(body),
       signal: effectiveSignal,
       ...(keepalive ? { keepalive: true } : {}),
     });

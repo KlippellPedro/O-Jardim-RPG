@@ -41,6 +41,9 @@ export const EditorAnotacao = ({ anotacao, existente, onMudar, onSalvar, onApaga
       <label className="mapa-editor-anotacao-placa">
         <input type="checkbox" checked={anotacao.placa} onChange={(evento) => onMudar({ ...anotacao, placa: evento.target.checked })} /> Usar fundo de plaquinha
       </label>
+      <label className="mapa-editor-anotacao-placa">
+        <input type="checkbox" checked={Boolean(anotacao.secreta)} onChange={(evento) => onMudar({ ...anotacao, secreta: evento.target.checked })} /> Nota secreta (só você vê)
+      </label>
       {anotacao.placa && (
         <label className="mapa-menu-linha">
           Cor da placa

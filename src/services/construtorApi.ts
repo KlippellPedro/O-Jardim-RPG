@@ -32,6 +32,8 @@ export const construtorApi = {
   criar: (campanhaId: string, dados: { nome: string; largura: number; altura: number; casa?: number }) =>
     api<IProjeto>(base(campanhaId), { method: 'POST', body: dados, ...ESTADO }),
   obter: (campanhaId: string, projetoId: string) => api<IProjeto>(`${base(campanhaId)}/${projetoId}`, ESTADO),
+  duplicar: (campanhaId: string, projetoId: string, nome?: string) =>
+    api<IProjeto>(`${base(campanhaId)}/${projetoId}/duplicar`, { method: 'POST', body: nome ? { nome } : {}, ...ESTADO }),
   salvar: (campanhaId: string, projetoId: string, dados: Partial<Pick<IProjeto, 'nome' | 'largura' | 'altura' | 'casa' | 'conteudo'>>) =>
     api<IProjeto>(`${base(campanhaId)}/${projetoId}`, { method: 'PUT', body: dados, ...ESTADO }),
   apagar: (campanhaId: string, projetoId: string) => api<null>(`${base(campanhaId)}/${projetoId}`, { method: 'DELETE' }),

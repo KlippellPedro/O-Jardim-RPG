@@ -366,6 +366,28 @@
   background: var(--mapa-painel);
 }
 
+.construtor-busca {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 8px 0 12px;
+  padding: 7px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  color: #a19cb3;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.construtor-busca input {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #ece9f5;
+  background: transparent;
+  font: inherit;
+}
+
 .construtor-cartao-corpo {
   display: grid;
   gap: 4px;
