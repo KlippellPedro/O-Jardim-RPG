@@ -13,6 +13,10 @@ from dataclasses import dataclass
 from core import nevoa, paredes
 
 MAX_CANDIDATOS_POR_RAIO = 4096
+#: O índice de paredes usa baldes maiores que a célula da névoa: o raio anda menos casas.
+FATOR_BALDE = 4
+MIN_RAIOS = 360
+MAX_RAIOS = 6144
 
 
 @dataclass
@@ -79,6 +83,8 @@ class IndiceParedes:
     """Índice espacial: cada raio confere só paredes perto do seu percurso."""
 
     def __init__(self, largura: int, altura: int, celula: int, barram, vaos):
+        # `celula` é a da névoa; o índice usa baldes maiores, que fazem o raio andar menos casas.
+        celula = max(1, int(celula)) * FATOR_BALDE
         self.celula = celula
         self.colunas = max(1, math.ceil(largura / celula))
         self.linhas = max(1, math.ceil(altura / celula))
@@ -125,6 +131,76 @@ class IndiceParedes:
             return True
         return False
 
+    def _no_vao(self, px: float, py: float) -> bool:
+        if not self.vaos:
+            return False
+        id_vaos: set[int] = set()
+        for celula in _celulas_do_segmento(px, py, px, py, self.celula, self.colunas, self.linhas):
+            id_vaos.update(self.vaos_por_celula.get(celula, ()))
+        return any(paredes._no_trecho(px, py, self.vaos[id_vao]) for id_vao in id_vaos)
+
+    def alcance(self, x0: float, y0: float, ux: float, uy: float, limite: float) -> float:
+        """Distância, em px, até a primeira parede que bloqueia no raio que sai de (x0, y0) na direção
+        unitária (ux, uy); `math.inf` se nada bloqueia dentro do `limite`. Anda pelo índice célula a
+        célula, da mais perto para a mais longe, e para assim que acha uma parede mais perto que o
+        resto do caminho: o custo segue a distância até a primeira parede, não o tamanho do mapa."""
+        if not self.barram or limite <= 0:
+            return math.inf
+        celula = self.celula
+        coluna = min(self.colunas - 1, max(0, int(x0 // celula)))
+        linha = min(self.linhas - 1, max(0, int(y0 // celula)))
+        passo_x = 1 if ux > 0 else -1
+        passo_y = 1 if uy > 0 else -1
+        t_max_x = ((coluna + (passo_x > 0)) * celula - x0) / ux if ux else math.inf
+        t_max_y = ((linha + (passo_y > 0)) * celula - y0) / uy if uy else math.inf
+        t_delta_x = abs(celula / ux) if ux else math.inf
+        t_delta_y = abs(celula / uy) if uy else math.inf
+        vetor_x, vetor_y = ux * limite, uy * limite
+        melhor = math.inf
+        vistas: set[int] = set()
+        while True:
+            for id_parede in self.paredes_por_celula.get(linha * self.colunas + coluna, ()):
+                if id_parede in vistas:
+                    continue
+                vistas.add(id_parede)
+                fracao = paredes._cruzamento(x0, y0, vetor_x, vetor_y, self.barram[id_parede])
+                if fracao is None:
+                    continue
+                distancia = fracao * limite
+                if distancia >= melhor:
+                    continue
+                if self._no_vao(x0 + vetor_x * fracao, y0 + vetor_y * fracao):
+                    continue
+                melhor = distancia
+            saida = min(t_max_x, t_max_y)
+            if melhor <= saida or saida > limite:
+                return melhor
+            if t_max_x < t_max_y:
+                coluna += passo_x
+                t_max_x += t_delta_x
+            elif t_max_y < t_max_x:
+                linha += passo_y
+                t_max_y += t_delta_y
+            else:
+                coluna += passo_x
+                linha += passo_y
+                t_max_x += t_delta_x
+                t_max_y += t_delta_y
+            if not (0 <= coluna < self.colunas and 0 <= linha < self.linhas):
+                return melhor
+
+
+def _raios_do_leque(celula: int, alcance_maximo: float) -> int:
+    """Quantos raios o leque precisa para que, no alcance máximo, dois raios vizinhos fiquem a no
+    máximo meia célula um do outro: nenhuma parede maior que isso passa entre eles."""
+    quantos = math.ceil(2 * math.pi * max(alcance_maximo, 1.0) / (celula / 2))
+    return max(MIN_RAIOS, min(MAX_RAIOS, quantos))
+
+
+def _leque(indice: IndiceParedes, sx: float, sy: float, limite: float, raios: int) -> list[float]:
+    passo = 2 * math.pi / raios
+    return [indice.alcance(sx, sy, math.cos(i * passo), math.sin(i * passo), limite) for i in range(raios)]
+
 
 def calcular_celulas_visiveis(
     largura: int,
@@ -158,17 +234,38 @@ def calcular_celulas_visiveis(
         ultima_coluna = min(colunas - 1, math.floor((sx + raio) / celula))
         primeira_linha = max(0, math.floor((sy - raio) / celula))
         ultima_linha = min(linhas - 1, math.floor((sy + raio) / celula))
+        # Um leque de raios por fonte: cada raio diz até onde dá para ver naquele ângulo, e cada
+        # célula só confere o alcance do seu ângulo. Um raio por célula levava dezenas de segundos
+        # num mapa comum; o leque custa uma fração disso e segue a mesma regra de paredes e vãos.
+        leque: list[float] | None = None
+        passo = 0.0
+        raios = 0
+        if indice_paredes.barram and raio > 0:
+            mais_longe = min(raio, math.hypot(max(sx, largura - sx), max(sy, altura - sy)))
+            raios = _raios_do_leque(celula, mais_longe)
+            leque = _leque(indice_paredes, sx, sy, raio, raios)
+            passo = 2 * math.pi / raios
         for linha in range(primeira_linha, ultima_linha + 1):
             cy = min(altura, (linha + 0.5) * celula)
-            dy2 = (cy - sy) ** 2
+            dy = cy - sy
+            dy2 = dy * dy
             for coluna in range(primeira_coluna, ultima_coluna + 1):
                 cx = min(largura, (coluna + 0.5) * celula)
-                if (cx - sx) ** 2 + dy2 > raio2:
+                dx = cx - sx
+                distancia2 = dx * dx + dy2
+                if distancia2 > raio2:
                     continue
                 if cobertura is not None and not cobertura.revelado(cx, cy):
                     continue
-                if indice_paredes.bloqueada(sx, sy, cx, cy):
-                    continue
+                if leque is not None and distancia2 > 0:
+                    angulo = math.atan2(dy, dx)
+                    if angulo < 0:
+                        angulo += 2 * math.pi
+                    anterior = min(int(angulo / passo), raios - 1)
+                    seguinte = anterior + 1 if anterior + 1 < raios else 0
+                    # Entre dois raios vale o mais curto: na dúvida a parede segura a visão.
+                    if math.sqrt(distancia2) >= min(leque[anterior], leque[seguinte]):
+                        continue
                 visiveis.add(linha * colunas + coluna)
     return celula, colunas, linhas, visiveis
 

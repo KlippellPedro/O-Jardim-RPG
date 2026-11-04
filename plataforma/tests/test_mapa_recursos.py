@@ -197,3 +197,61 @@ class RecursosDaMesaBancoTests(unittest.TestCase):
             rotas.listar_trilhas(self.campanha_id, user=self.ana, database=self.database)
         self.assertEqual(erro.exception.status_code, 403)
         self.assertTrue(rotas.listar_trilhas(self.campanha_id, user=self.mestre, database=self.database)["gestor"])
+
+    def test_audio_sai_do_banco_so_no_trecho_pedido(self):
+        from fastapi import HTTPException
+        from routers import mapa_recursos as rotas
+
+        corpo = b"OggS" + bytes(range(60))
+        faixa = self._enviar(self.mestre, corpo=corpo)
+        rotas.definir_trilha(
+            self.campanha_id, rotas.EstadoTrilhaInput(faixa_id=faixa["id"], reproduzindo=False), user=self.mestre, database=self.database,
+        )
+
+        def pedir(intervalo=None, quem=None):
+            pedido = _PedidoFalso(b"", "")
+            pedido.headers = {"range": intervalo} if intervalo else {}
+            return rotas.obter_audio(self.campanha_id, uuid.UUID(faixa["id"]), pedido, user=quem or self.ana, database=self.database)
+
+        inteiro = pedir()
+        self.assertEqual((inteiro.status_code, inteiro.body), (200, corpo))
+        self.assertEqual(inteiro.headers["content-length"], str(len(corpo)))
+        meio = pedir("bytes=10-19")
+        self.assertEqual((meio.status_code, meio.body), (206, corpo[10:20]))
+        self.assertEqual(meio.headers["content-range"], f"bytes 10-19/{len(corpo)}")
+        self.assertEqual(pedir("bytes=40-").body, corpo[40:])
+        self.assertEqual(pedir("bytes=-8").body, corpo[-8:])
+        # Pedir além do fim encolhe para o que existe, e o cabeçalho conta o que saiu de verdade.
+        fim = pedir(f"bytes={len(corpo) - 4}-{len(corpo) + 500}")
+        self.assertEqual((fim.body, fim.headers["content-length"]), (corpo[-4:], "4"))
+        for invalido in (f"bytes={len(corpo)}-", "bytes=9-3", "bytes=a-b", "bytes=0-1,5-6", "chars=0-1"):
+            self.assertEqual(pedir(invalido).status_code, 416, invalido)
+        with self.assertRaises(HTTPException):
+            rotas.obter_audio(
+                self.campanha_id, uuid.uuid4(), _PedidoFalso(b"", ""), user=self.mestre, database=self.database,
+            )
+
+    def test_a_mesa_guarda_um_numero_limitado_de_trilhas(self):
+        from fastapi import HTTPException
+        from routers import mapa_recursos as rotas
+
+        anterior = rotas.MAX_TRILHAS
+        rotas.MAX_TRILHAS = 2
+        try:
+            self._enviar(self.mestre)
+            self._enviar(self.mestre)
+            with self.assertRaises(HTTPException) as erro:
+                self._enviar(self.mestre)
+            self.assertEqual(erro.exception.status_code, 409)
+            self.assertIn("apague", erro.exception.detail)
+        finally:
+            rotas.MAX_TRILHAS = anterior
+
+
+def test_trilhas_ficam_fora_do_backup_em_jsonl():
+    """O áudio de até 20 MB por faixa não cabe no backup montado em memória (ver core/backup.py)."""
+    from core.backup import TABELAS, TABELAS_IGNORADAS
+
+    for tabela in ("mapa_trilhas", "mapa_trilha_estado"):
+        assert tabela in TABELAS_IGNORADAS
+        assert tabela not in TABELAS

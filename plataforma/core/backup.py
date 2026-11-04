@@ -18,6 +18,7 @@ import gzip
 import io
 import json
 import logging
+import zipfile
 from datetime import datetime, timezone
 
 from psycopg import sql
@@ -97,8 +98,6 @@ TABELAS: tuple[str, ...] = (
     "mapa_tokens",
     "personagem_token",
     "mapa_campanha",
-    "mapa_trilhas",
-    "mapa_trilha_estado",
     # Construtor de mapas (migração 64).
     "mapa_projetos",
 
@@ -183,11 +182,18 @@ TABELAS: tuple[str, ...] = (
 # e um acervo sem limite de quantidade engoliria o backup diário. Quem cobre os
 # ladrilhos é o backup do banco gerenciado da Discloud; restaurar só o JSONL
 # deixa os itens do acervo sem imagem.
+# `mapa_trilhas` é o mesmo caso: cada faixa de áudio (até 20 MB) é um arquivo que o Mestre
+# enviou do computador dele, não comprime e viraria hexadecimal no JSONL; o backup inteiro
+# é montado em memória, e 30 faixas dele estourariam a RAM da hospedagem. O estado da trilha
+# (`mapa_trilha_estado`) aponta para a faixa por chave estrangeira, então sai junto: sem as
+# faixas, restaurar só ele daria erro. Depois de um desastre o Mestre reenvia o áudio.
 TABELAS_IGNORADAS: frozenset[str] = frozenset({
     "sessoes_auth",
     "limites_acesso",
     "codigos_vinculo_discord",
     "acervo_arquivos",
+    "mapa_trilhas",
+    "mapa_trilha_estado",
 })
 
 
@@ -324,3 +330,118 @@ def restaurar_backup(database, conteudo: bytes, *, limpar: bool = False) -> dict
 def nome_do_arquivo(momento: datetime | None = None) -> str:
     agora = momento or datetime.now(timezone.utc)
     return f"jardim-backup-{agora:%Y%m%d-%H%M}.jsonl.gz"
+
+
+# ---------------------------------------------------------------- acervo (imagens)
+#
+# Os ladrilhos do acervo (`acervo_arquivos`) ficam fora do JSONL (ver TABELAS_IGNORADAS) e têm
+# backup próprio, em ZIP e por partes: cada chamada devolve até LIMITE_ACERVO_BYTES e um cursor
+# para a próxima. Quem baixa (tools/backup-acervo.py) guarda o cursor e, da vez seguinte, só
+# recebe o que entrou depois, então um acervo grande nunca precisa caber de uma vez na memória.
+
+FORMATO_ACERVO = "jardim-acervo"
+LIMITE_ACERVO_BYTES = 64 * 1024 * 1024
+_LOTE_ACERVO = 16
+
+
+def _cursor_acervo(criado_em, item_id, chave: str) -> str:
+    return f"{criado_em.isoformat()}|{item_id}|{chave}"
+
+
+def _ler_cursor_acervo(cursor: str | None):
+    if not cursor:
+        return None
+    partes = cursor.split("|", 2)
+    if len(partes) != 3:
+        raise ValueError("cursor do acervo invalido")
+    try:
+        return datetime.fromisoformat(partes[0]), partes[1], partes[2]
+    except ValueError:
+        raise ValueError("cursor do acervo invalido") from None
+
+
+def gerar_backup_acervo(database, apos: str | None = None, limite_bytes: int = LIMITE_ACERVO_BYTES) -> tuple[bytes, dict]:
+    """ZIP com os ladrilhos de `acervo_arquivos` que vêm depois do cursor `apos`.
+
+    Devolve (zip, resumo). O resumo traz `cursor` (onde esta parte terminou) e `mais` (há partes
+    seguintes). O ZIP leva `manifesto.json` com a chave de cada arquivo e `dados/N.bin` com os
+    bytes, sem nome de arquivo vindo do banco no caminho.
+    """
+    ponto = _ler_cursor_acervo(apos)
+    buffer = io.BytesIO()
+    manifesto: list[dict] = []
+    total = 0
+    ultimo = ponto
+    mais = False
+    with database.connection() as connection, zipfile.ZipFile(buffer, "w", zipfile.ZIP_STORED) as pacote:
+        while True:
+            if ultimo is None:
+                linhas = connection.execute(
+                    """
+                    SELECT item_id, chave, mime, tamanho, dados, criado_em FROM acervo_arquivos
+                    ORDER BY criado_em, item_id, chave LIMIT %s
+                    """,
+                    (_LOTE_ACERVO,),
+                ).fetchall()
+            else:
+                linhas = connection.execute(
+                    """
+                    SELECT item_id, chave, mime, tamanho, dados, criado_em FROM acervo_arquivos
+                    WHERE (criado_em, item_id, chave) > (%s, %s::uuid, %s)
+                    ORDER BY criado_em, item_id, chave LIMIT %s
+                    """,
+                    (ultimo[0], ultimo[1], ultimo[2], _LOTE_ACERVO),
+                ).fetchall()
+            if not linhas:
+                break
+            for linha in linhas:
+                dados = bytes(linha["dados"])
+                if manifesto and total + len(dados) > limite_bytes:
+                    mais = True
+                    break
+                nome = f"dados/{len(manifesto)}.bin"
+                pacote.writestr(nome, dados)
+                manifesto.append({
+                    "arquivo": nome, "item_id": str(linha["item_id"]), "chave": linha["chave"],
+                    "mime": linha["mime"], "tamanho": int(linha["tamanho"]),
+                    "criado_em": linha["criado_em"].isoformat(),
+                })
+                total += len(dados)
+                ultimo = (linha["criado_em"], str(linha["item_id"]), linha["chave"])
+            if mais:
+                break
+        pacote.writestr("manifesto.json", json.dumps({
+            "formato": FORMATO_ACERVO, "versao": 1,
+            "gerado_em": datetime.now(timezone.utc).isoformat(), "arquivos": manifesto,
+        }, ensure_ascii=False))
+    cursor = _cursor_acervo(*ultimo) if ultimo is not None and manifesto else apos
+    return buffer.getvalue(), {"arquivos": len(manifesto), "bytes": total, "cursor": cursor, "mais": mais}
+
+
+def restaurar_backup_acervo(database, conteudo: bytes) -> dict:
+    """Devolve os ladrilhos de um ZIP do acervo ao banco. Só entra ladrilho cujo item existe
+    (os itens vêm do backup em JSONL) e o que já está lá fica como está."""
+    inseridos = pulados = 0
+    with zipfile.ZipFile(io.BytesIO(conteudo)) as pacote:
+        manifesto = json.loads(pacote.read("manifesto.json"))
+        if manifesto.get("formato") != FORMATO_ACERVO:
+            raise ValueError("arquivo nao e um backup do acervo do Jardim")
+        with database.connection() as connection:
+            for entrada in manifesto.get("arquivos", []):
+                dados = pacote.read(entrada["arquivo"])
+                if len(dados) != int(entrada["tamanho"]):
+                    raise ValueError(f"arquivo corrompido no backup: {entrada['arquivo']}")
+                existe = connection.execute("SELECT 1 FROM acervo_itens WHERE id=%s::uuid", (entrada["item_id"],)).fetchone()
+                if not existe:
+                    pulados += 1
+                    continue
+                resultado = connection.execute(
+                    """
+                    INSERT INTO acervo_arquivos (item_id, chave, mime, tamanho, dados, criado_em)
+                    VALUES (%s::uuid, %s, %s, %s, %s, %s)
+                    ON CONFLICT DO NOTHING
+                    """,
+                    (entrada["item_id"], entrada["chave"], entrada["mime"], int(entrada["tamanho"]), dados, entrada["criado_em"]),
+                )
+                inseridos += resultado.rowcount
+    return {"inseridos": inseridos, "pulados_sem_item": pulados}

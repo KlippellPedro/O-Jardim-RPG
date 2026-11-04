@@ -8,7 +8,7 @@ from psycopg.errors import UniqueViolation
 from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
-from core.backup import gerar_backup, nome_do_arquivo
+from core.backup import gerar_backup, gerar_backup_acervo, nome_do_arquivo
 from core.cofre_tiers import COFRE_TIER_INICIAL, capacidade_de_itens
 from core.notifications import notify
 from core.database import Database
@@ -1397,5 +1397,30 @@ def service_backup(
         headers={
             "Content-Disposition": f'attachment; filename="{nome_do_arquivo()}"',
             "X-Backup-Linhas": str(resumo["linhas"]),
+        },
+    )
+
+
+@router.get("/backup-acervo")
+def service_backup_acervo(
+    apos: str | None = None,
+    service: str = Depends(require_service_key),
+    database: Database = Depends(get_database),
+):
+    """Imagens do acervo (ladrilhos), que o backup em JSONL não leva. Cada chamada devolve uma
+    parte em ZIP (até 64 MB) e o cursor da próxima nos cabeçalhos `X-Acervo-Cursor` e
+    `X-Acervo-Mais`; o tools/backup-acervo.py repete até acabar e guarda o cursor."""
+    try:
+        conteudo, resumo = gerar_backup_acervo(database, apos)
+    except ValueError as erro:
+        raise HTTPException(status_code=422, detail=str(erro)) from None
+    return Response(
+        content=conteudo,
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": 'attachment; filename="jardim-acervo.zip"',
+            "X-Acervo-Arquivos": str(resumo["arquivos"]),
+            "X-Acervo-Cursor": resumo["cursor"] or "",
+            "X-Acervo-Mais": "1" if resumo["mais"] else "0",
         },
     )

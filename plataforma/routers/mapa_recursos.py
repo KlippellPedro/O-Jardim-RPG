@@ -17,6 +17,8 @@ from core.dependencies import AuthenticatedUser, campaign_access, get_current_us
 router = APIRouter(prefix="/mapa", tags=["mapa-ao-vivo"])
 
 MAX_AUDIO_BYTES = 20 * 1024 * 1024
+#: Cada trilha fica no banco (até 20 MB): o teto de quantidade protege o disco do plano.
+MAX_TRILHAS = 30
 MAX_AUDIO_MS = 4 * 60 * 60 * 1000
 
 
@@ -153,6 +155,14 @@ async def enviar_trilha(
         acesso = campaign_access(connection, campanha_id, user.id)
         if not acesso.manages_content:
             raise HTTPException(status_code=403, detail="permissao de mestre necessaria")
+        guardadas = connection.execute(
+            "SELECT COUNT(*) AS n FROM mapa_trilhas WHERE campanha_id=%s", (campanha_id,),
+        ).fetchone()
+        if int(guardadas["n"]) >= MAX_TRILHAS:
+            raise HTTPException(
+                status_code=409,
+                detail=f"a mesa guarda no maximo {MAX_TRILHAS} trilhas; apague alguma para enviar outra",
+            )
     mime = (request.headers.get("content-type") or "").split(";", 1)[0].strip().lower()
     mime = {"audio/x-wav": "audio/wav", "audio/mp3": "audio/mpeg"}.get(mime, mime)
     assinaturas = {
@@ -269,36 +279,45 @@ def obter_audio(
             if not estado or estado["faixa_id"] != faixa_id:
                 raise HTTPException(status_code=404, detail="trilha nao encontrada")
         faixa = connection.execute(
-            "SELECT mime, bytes, conteudo FROM mapa_trilhas WHERE id=%s AND campanha_id=%s",
+            "SELECT mime, bytes FROM mapa_trilhas WHERE id=%s AND campanha_id=%s",
             (faixa_id, campanha_id),
         ).fetchone()
-    if not faixa:
+        if not faixa:
+            raise HTTPException(status_code=404, detail="trilha nao encontrada")
+        total = int(faixa["bytes"])
+        inicio, fim, status_http = 0, total - 1, 200
+        intervalo = request.headers.get("range")
+        if intervalo:
+            if not intervalo.startswith("bytes=") or "," in intervalo:
+                return Response(status_code=416, headers={"Content-Range": f"bytes */{total}"})
+            partes = intervalo[6:].split("-", 1)
+            try:
+                if not partes[0]:
+                    sufixo = int(partes[1])
+                    inicio = max(0, total - sufixo)
+                    fim = total - 1
+                else:
+                    inicio = int(partes[0])
+                    fim = min(total - 1, int(partes[1])) if partes[1] else total - 1
+            except ValueError:
+                return Response(status_code=416, headers={"Content-Range": f"bytes */{total}"})
+            if inicio < 0 or inicio > fim or inicio >= total:
+                return Response(status_code=416, headers={"Content-Range": f"bytes */{total}"})
+            status_http = 206
+        # Só o trecho pedido sai do banco: o navegador pede o áudio aos pedaços ao pular de ponto,
+        # e carregar o arquivo inteiro (até 20 MB) a cada pedido pesaria na memória da hospedagem.
+        trecho = connection.execute(
+            "SELECT substring(conteudo FROM %s FOR %s) AS parte FROM mapa_trilhas WHERE id=%s AND campanha_id=%s",
+            (inicio + 1, fim - inicio + 1, faixa_id, campanha_id),
+        ).fetchone()
+    if not trecho or trecho["parte"] is None:
         raise HTTPException(status_code=404, detail="trilha nao encontrada")
-    dados = bytes(faixa["conteudo"])
-    inicio, fim, status_http = 0, len(dados) - 1, 200
-    intervalo = request.headers.get("range")
-    if intervalo:
-        if not intervalo.startswith("bytes=") or "," in intervalo:
-            return Response(status_code=416, headers={"Content-Range": f"bytes */{len(dados)}"})
-        partes = intervalo[6:].split("-", 1)
-        try:
-            if not partes[0]:
-                sufixo = int(partes[1])
-                inicio = max(0, len(dados) - sufixo)
-                fim = len(dados) - 1
-            else:
-                inicio = int(partes[0])
-                fim = min(len(dados) - 1, int(partes[1])) if partes[1] else len(dados) - 1
-        except ValueError:
-            return Response(status_code=416, headers={"Content-Range": f"bytes */{len(dados)}"})
-        if inicio < 0 or inicio > fim or inicio >= len(dados):
-            return Response(status_code=416, headers={"Content-Range": f"bytes */{len(dados)}"})
-        status_http = 206
+    dados = bytes(trecho["parte"])
     cabecalhos = {
         "Accept-Ranges": "bytes", "Cache-Control": "private, no-store",
         "X-Content-Type-Options": "nosniff",
     }
     if status_http == 206:
-        cabecalhos["Content-Range"] = f"bytes {inicio}-{fim}/{len(dados)}"
-    cabecalhos["Content-Length"] = str(fim - inicio + 1)
-    return Response(content=dados[inicio:fim + 1], status_code=status_http, media_type=faixa["mime"], headers=cabecalhos)
+        cabecalhos["Content-Range"] = f"bytes {inicio}-{fim}/{total}"
+    cabecalhos["Content-Length"] = str(len(dados))
+    return Response(content=dados, status_code=status_http, media_type=faixa["mime"], headers=cabecalhos)
