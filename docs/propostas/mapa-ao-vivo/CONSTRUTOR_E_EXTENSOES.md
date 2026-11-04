@@ -8,8 +8,10 @@ um token ou objeto de um lado para o outro.
 As levas 1 (tempo e portais), 2 (construtor, parte 1) e 3 (construtor, parte 2:
 peças do Acervo, mobília, camadas, peças prontas, luzes fixas, água e lava, e a
 licença no Acervo) e 4 (paredes vivas: portas na mesa, bloqueio e portal entre
-cenas) foram feitas em 2026-11-03; as levas 5 e 6 continuam como proposta e
-ordem de trabalho.
+cenas) foram feitas em 2026-11-03. Da leva 6, auras, notas secretas, falas,
+pausa, relógios, cronômetro, medida no arrasto e vista inicial também ficaram
+prontos no mesmo dia; trilha, documentos na mesa e busca de token vieram em
+paralelo, no trabalho do Pedro. A leva 5 (visão pelas paredes) está em andamento.
 
 ## O que já existe e vai ser aproveitado
 
@@ -352,8 +354,77 @@ Cada leva fecha com testes, mural e commit só com pedido.
      ela até o Mestre revelar pelo menu. O portal levou a Mira para a cena
      Medida, com aviso para os dois, e o painel mostrou o destino.
 5. **Visão pelas paredes**, com segredo no servidor e memória do explorado.
+   - **Implementado em 2026-11-03**:
+     - A ferramenta Névoa ganhou a opção **Visão por paredes**. Cada jogador
+       enxerga a partir dos tokens próprios; paredes e portas fechadas bloqueiam
+       a linha de visão, janelas deixam ver e portas abertas deixam passar.
+     - Uma luz presa ao token limita o alcance daquela fonte. Luzes fixas só
+       passam a revelar a área depois que o jogador já consegue ver a luz.
+     - O Mestre ainda pode usar a névoa manual como limite adicional. O servidor
+       calcula a visão atual, filtra tokens, portas, portais, anotações, luzes e
+       efeitos de água e lava, e não manda as paredes ao jogador.
+     - A memória é individual por pessoa e cena (`mapa_exploracao`, migração
+       68). O acervo confere os ladrilhos e as imagens de token liberados para
+       cada pessoa; o tempo real só atualiza os outros jogadores depois que o
+       token para, usando o recorte individual do servidor.
+   - **Conferência no navegador pendente**.
 6. **Extras**: auras, notas, falas, pausa, relógios, trilha, distâncias e
    documentos na mesa.
+   - **Feito em 2026-11-03** (`plataforma/core/mesa_extras.py`,
+     `plataforma/routers/mapa_extras.py`, migração 69):
+     - **Aura**: `mapa_tokens.aura` {raio em casas, cor, visivel}. O Mestre e o
+       dono mudam pelo menu do token. A escondida só chega a quem comanda e ao
+       dono. Na mesa, `motor/auras.ts` desenha embaixo dos tokens e acompanha
+       o arrasto.
+     - **Nota secreta**: a anotação ganhou `secreta` e não vai ao jogador.
+       Para o Mestre, ela aparece mais apagada.
+     - **Mesa da campanha** (`mapa_campanha.mesa`, `PUT /mapa/{c}/mesa`):
+       - pausa com recado (o jogador vê a tela de espera; o Mestre, uma faixa);
+       - até 12 relógios de progresso (2 a 12 partes; o Mestre enche com
+         clique e esvazia com o botão direito);
+       - um cronômetro contado pelo relógio do servidor.
+       O que o Mestre esconde não vai ao jogador. A mesa entra no estado do
+       mapa e na diferença do tempo real (`CAMPOS_DO_ESTADO` e `delta.ts`).
+     - **Fala de NPC**: `POST /mapa/{c}/fala` passa pelo tempo real
+       (`tempo_real.anunciar`) e não fica gravada. "Falar como" fica no menu
+       do token, e a fala aparece com o retrato para quem enxerga o token.
+     - **Medida no arrasto**: uma régua do ponto de partida até o token
+       arrastado, com casas e metros.
+     - **Vista inicial**: `estrutura.vista` {x, y, zoom}
+       (`PUT /mapa/{c}/cenas/{cena}/vista`). A cena abre ali para todos; sem
+       ela, abre com o mapa inteiro.
+   - **Em paralelo** (`routers/mapa_recursos.py`, migração 70):
+     - **Documentos na mesa**: o Mestre escolhe um documento salvo no Painel e
+       manda para todos ou para um personagem da sessão aberta
+       (`POST /mapa/{c}/documentos/{doc}/mostrar`). Vai pelo tempo real
+       (`tempo_real.anunciar_para`), não fica gravado e chega só a quem
+       comanda e aos donos dos personagens escolhidos.
+     - **Trilha sincronizada**: o Mestre envia MP3, Ogg, WAV ou WebM (até
+       20 MB, assinatura conferida) para `mapa_trilhas`; `mapa_trilha_estado`
+       guarda faixa, tocando e posição com a hora do servidor, e quem entra
+       depois acerta o ponto. O jogador só baixa a faixa que está na cena, e
+       só com a sessão aberta. Ao acabar, a faixa volta ao começo e para.
+     - **Busca no mapa**: procura pelo nome entre os tokens que a pessoa já
+       vê, mostra a distância em metros até cada um e centraliza.
+     - **Movimento no turno**: em combate, a faixa da rodada mostra quantos
+       metros o token da vez andou; a resposta de parede corrige o trecho em
+       vez de somar de novo.
+     - **Construtor**: busca de mapa pelo nome, cópia de um mapa como modelo
+       (`POST /mapa/{c}/projetos/{p}/duplicar`), alinhar e duplicar o
+       grupo escolhido (o alinhamento que não muda nada não vira passo no
+       desfazer).
+     - Testes: `tests/test_mapa_recursos.py` e a cópia em
+       `tests/test_mapa_construtor.py`. **Conferência no navegador pendente.**
+   - **Conferido no navegador** com Mestre e Ana:
+     - o relógio (2/4) e o cronômetro chegaram à Ana, e ela não consegue
+       clicar no relógio;
+     - a pausa apareceu e sumiu na tela dela;
+     - a aura que ela pôs na Mira chegou ao Mestre;
+     - a fala apareceu com o retrato, e a nota secreta não chegou a ela;
+     - a cena reabriu na vista guardada (300, 300, zoom 1,4), e o arrasto
+       mostrou "3 q · 4,5 m".
+     - Achado e corrigido: a diferença do tempo real do navegador não
+       aplicava o campo `mesa`.
 
 ## Decisões para o Pedro
 
