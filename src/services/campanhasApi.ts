@@ -10,6 +10,10 @@ export interface IMembroCampanha {
   nome_mesa: string | null;
   cor_mesa: string | null;
   permissoes_mesa: Record<string, unknown>;
+  /** 'criador' para a conta Criador da plataforma. */
+  papel_plataforma?: string;
+  /** Quem aparece na lista sem ser membro da campanha (o Criador, ou alguém só conectado agora). */
+  externo?: boolean;
 }
 
 export interface IDetalheCampanha {

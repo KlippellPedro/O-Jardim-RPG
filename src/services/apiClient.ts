@@ -58,6 +58,9 @@ interface ApiOptions {
    * vazia, com outro tipo ou cortada no meio vira `ApiError` (status 0) com o que o navegador recebeu em
    * `details`, em vez de um `null` que a tela só descobre ao ler um campo. Sem isso, o `null` segue como antes. */
   exigirCorpo?: boolean;
+  /** Modo de cache do navegador para este pedido. O estado do mapa pede `no-store`: uma página de
+   * "servidor trocando de versão" guardada pelo navegador não pode ser servida de novo no lugar da resposta. */
+  cache?: RequestCache;
 }
 
 /** O que o navegador recebeu de uma resposta "ok" sem corpo utilizável (vai em `ApiError.details`). */
@@ -75,7 +78,7 @@ const inFlightGets = new Map<string, Promise<unknown>>();
 
 async function executeRequest<T>(
   caminho: string,
-  { method = 'GET', body, headers: cabecalhosExtras, signal, keepalive, exigirCorpo = false }: ApiOptions = {},
+  { method = 'GET', body, headers: cabecalhosExtras, signal, keepalive, exigirCorpo = false, cache }: ApiOptions = {},
 ): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json', ...cabecalhosExtras };
   const corpoBruto = typeof Blob !== 'undefined' && body instanceof Blob
@@ -102,6 +105,7 @@ async function executeRequest<T>(
       headers,
       body: body === undefined ? undefined : corpoBruto ? body : JSON.stringify(body),
       signal: effectiveSignal,
+      ...(cache ? { cache } : {}),
       ...(keepalive ? { keepalive: true } : {}),
     });
   } catch (erro) {

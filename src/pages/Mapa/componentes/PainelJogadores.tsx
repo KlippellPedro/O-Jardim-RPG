@@ -87,6 +87,7 @@ function membroDaPresenca(pessoa: PessoaOnline): IMembroCampanha {
     nome_mesa: null,
     cor_mesa: pessoa.cor,
     permissoes_mesa: {},
+    externo: true,
   };
 }
 
@@ -111,7 +112,8 @@ const LinhaJogador = ({
   const [nome, setNome] = useState(membro.nome_mesa ?? membro.nome_exibicao);
   const [cor, setCor] = useState(membro.cor_mesa ?? online?.cor ?? '#8b5cf6');
   const permissoes = permissoesDo(membro);
-  const podeEditarIdentidade = gestor || propria;
+  const podeEditarIdentidade = (gestor && !membro.externo) || propria;
+  const criador = membro.papel_plataforma === 'criador';
   const podeGerenciar = gestor && !['mestre', 'assistente'].includes(membro.papel);
 
   useEffect(() => {
@@ -138,13 +140,13 @@ const LinhaJogador = ({
     <article className="mapa-jogador">
       <div className="mapa-jogador-topo">
         <span className="mapa-jogador-icone" style={{ backgroundColor: `${membro.cor_mesa ?? online?.cor ?? '#8b5cf6'}30`, borderColor: membro.cor_mesa ?? online?.cor ?? '#8b5cf6', color: membro.cor_mesa ?? online?.cor ?? '#8b5cf6' }}>
-          {membro.papel === 'mestre' ? <Crown size={17} /> : membro.papel === 'assistente' ? <Shield size={16} /> : (membro.nome_mesa ?? membro.nome_exibicao).slice(0, 1).toUpperCase()}
+          {membro.papel === 'mestre' || criador ? <Crown size={17} /> : membro.papel === 'assistente' ? <Shield size={16} /> : (membro.nome_mesa ?? membro.nome_exibicao).slice(0, 1).toUpperCase()}
         </span>
         <span className="mapa-jogador-titulo">
           <strong>{membro.nome_mesa ?? membro.nome_exibicao}</strong>
-          <small>{ROTULO_PAPEL[membro.papel]} · {online ? 'Na mesa agora' : 'Desconectado'}</small>
+          <small>{criador ? 'Criador' : ROTULO_PAPEL[membro.papel]} · {online ? 'Na mesa agora' : 'Desconectado'}</small>
         </span>
-        {mestre && !propria && membro.id !== donoId && (
+        {mestre && !propria && !membro.externo && membro.id !== donoId && (
           <select aria-label={`Papel de ${membro.nome_exibicao}`} value={membro.papel} disabled={ocupado} onChange={(evento) => onAlterarPapel(membro, evento.target.value as PapelCampanha)}>
             <option value="mestre">Mestre</option>
             <option value="assistente">Assistente</option>
@@ -186,7 +188,7 @@ const LinhaJogador = ({
         </details>
       )}
 
-      {mestre && !propria && membro.id !== donoId && (
+      {mestre && !propria && !membro.externo && membro.id !== donoId && (
         <button type="button" className="mapa-jogador-remover" disabled={ocupado} onClick={() => onRemover(membro)}>
           <Trash2 size={13} /> Remover da campanha
         </button>
@@ -225,8 +227,13 @@ export const PainelJogadores = ({ aberto, campanhaId, usuarioId, gestor, online,
 
   if (!aberto) return null;
 
+  // O Mestre e o Criador também aparecem aqui: quem está conectado e não é membro entra pela presença.
+  const membrosDaCampanha = detalhe?.membros ?? [];
   const membros = gestor
-    ? (detalhe?.membros ?? [])
+    ? [
+      ...membrosDaCampanha,
+      ...online.filter((pessoa) => !membrosDaCampanha.some((membro) => membro.id === pessoa.usuario_id)).map(membroDaPresenca),
+    ]
     : online.map(membroDaPresenca);
   const mestre = detalhe?.meu_papel === 'mestre';
 

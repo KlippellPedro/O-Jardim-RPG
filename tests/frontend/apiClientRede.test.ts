@@ -162,3 +162,21 @@ test('sem exigirCorpo nada muda: HTML ou 204 seguem devolvendo null, e JSON bom 
     restaurar();
   }
 });
+
+test('cache: o estado do mapa pede no-store ao navegador, e sem o pedido o fetch segue como antes', async () => {
+  const fetchOriginal = globalThis.fetch;
+  (globalThis as { document?: unknown }).document = { cookie: '' };
+  const recebidos: Array<RequestInit | undefined> = [];
+  globalThis.fetch = (async (_url: unknown, opcoes?: RequestInit) => {
+    recebidos.push(opcoes);
+    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+  try {
+    await api('/mapa/x', { exigirCorpo: true, cache: 'no-store' });
+    await api('/contexto');
+    assert.equal(recebidos[0]?.cache, 'no-store', 'uma página de "trocando de versão" guardada não pode voltar no lugar do mapa');
+    assert.equal(recebidos[1] ? 'cache' in recebidos[1] : true, false, 'quem não pede cache não ganha a chave');
+  } finally {
+    globalThis.fetch = fetchOriginal;
+  }
+});

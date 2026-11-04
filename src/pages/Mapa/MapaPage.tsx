@@ -125,6 +125,8 @@ export const MapaPage = () => {
 
   const [estado, setEstado] = useState<IEstadoMapa | null>(null);
   const [erro, setErro] = useState('');
+  // O que o navegador recebeu quando a resposta do mapa veio vazia (status, tipo): ajuda a achar a causa.
+  const [erroDetalhe, setErroDetalhe] = useState('');
   const [cenaVista, setCenaVista] = useState<string | null>(null);
   const [ferramenta, setFerramenta] = useState<Ferramenta>('mover');
   const [selecionado, setSelecionado] = useState<string | null>(null);
@@ -217,8 +219,11 @@ export const MapaPage = () => {
       tentativas.current = 0;
       setEstado(novo);
       setErro('');
+      setErroDetalhe('');
     } catch (falha) {
       setErro(falha instanceof Error ? falha.message : 'Não deu para abrir o mapa.');
+      const detalhe = (falha as { details?: { http?: number; tipo?: string; motivo?: string } | null })?.details;
+      setErroDetalhe(detalhe && typeof detalhe === 'object' && detalhe.http ? `Recebido: HTTP ${detalhe.http}, ${detalhe.tipo ?? 'sem tipo'}, ${detalhe.motivo ?? 'sem motivo'}.` : '');
       // Nada na tela ainda (o servidor trocando de versão, a rede caindo): tenta de novo sozinho, cada vez mais espaçado.
       if (!estadoRef.current && novaTentativa.current === null) {
         const espera = Math.min(15_000, 2_000 * 2 ** tentativas.current);
@@ -1539,6 +1544,7 @@ export const MapaPage = () => {
         {!estado && erro && (
           <div className="mapa-aviso mapa-aviso-erro">
             <span>Não deu para abrir o mapa agora: {erro} Tentando de novo sozinho.</span>
+            {erroDetalhe && <small>{erroDetalhe}</small>}
             <button type="button" className="mapa-botao" onClick={() => void recarregar()}>Tentar agora</button>
           </div>
         )}

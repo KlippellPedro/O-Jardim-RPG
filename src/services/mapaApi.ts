@@ -376,7 +376,7 @@ const base = (campanhaId: string) => `/mapa/${campanhaId}`;
 /** O estado do mapa sempre vem em JSON. Enquanto a Discloud troca de versão, o proxy responde
  * com uma página HTML e status 200: sem esta exigência ela viraria `null` e a página travaria em
  * "Abrindo o mapa...". Com ela, vira erro e a página tenta de novo. */
-const ESTADO = { exigirCorpo: true } as const;
+const ESTADO = { exigirCorpo: true, cache: 'no-store' } as const;
 
 export const mapaApi = {
   obter: (campanhaId: string, cenaId?: string | null) =>
