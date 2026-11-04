@@ -367,7 +367,20 @@ Cada leva fecha com testes, mural e commit só com pedido.
        68). O acervo confere os ladrilhos e as imagens de token liberados para
        cada pessoa; o tempo real só atualiza os outros jogadores depois que o
        token para, usando o recorte individual do servidor.
-   - **Conferência no navegador pendente**.
+   - **Revisado e conferido em 2026-11-04**:
+     - O cálculo era um raio por célula e levava de 18 a 90 segundos num mapa de
+       tamanho comum (0,9 s numa cena pequena de 1600x1200, a cada `GET` da jogadora),
+       o que prenderia o servidor da mesa. Agora é um leque de raios por fonte
+       (`visao.IndiceParedes.alcance`) e cada célula consulta o alcance do seu
+       ângulo: 4 fontes num mapa de 2800x2100 levam 0,09 s, 6 fontes em 4000x3000 levam
+       0,23 s, e o `GET` da jogadora caiu de 910 ms para 50 ms. Entre dois raios vale o
+       mais curto, então o erro é para o lado seguro (0,003% de células a mais e 0,4% a
+       menos que o raio por célula, só em quinas de sombra).
+     - Testes em `plataforma/tests/test_mapa_visao.py` (regra, comparação com o gabarito
+       de um raio por célula e trava de tempo).
+     - No navegador, com Mestre e Ana: porta fechada tira o lobo da tela em 246 ms e a
+       aberta o devolve em 315 ms; o arrasto passa pela porta; o token da sala vizinha,
+       as paredes e a porta secreta não chegam à jogadora por nenhum caminho; console limpo.
 6. **Extras**: auras, notas, falas, pausa, relógios, trilha, distâncias e
    documentos na mesa.
    - **Feito em 2026-11-03** (`plataforma/core/mesa_extras.py`,
@@ -414,7 +427,9 @@ Cada leva fecha com testes, mural e commit só com pedido.
        grupo escolhido (o alinhamento que não muda nada não vira passo no
        desfazer).
      - Testes: `tests/test_mapa_recursos.py` e a cópia em
-       `tests/test_mapa_construtor.py`. **Conferência no navegador pendente.**
+       `tests/test_mapa_construtor.py`. Revisado em 2026-11-04: a trilha passou a ler só o trecho
+       de áudio pedido (antes carregava o arquivo inteiro do banco a cada pedido), ganhou teto de 30
+       trilhas por campanha e saiu do backup em JSONL (ver `docs/GUIA_MANUTENCAO.md`).
    - **Conferido no navegador** com Mestre e Ana:
      - o relógio (2/4) e o cronômetro chegaram à Ana, e ela não consegue
        clicar no relógio;

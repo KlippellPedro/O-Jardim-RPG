@@ -165,6 +165,25 @@ pode ligar o backup automático, que rodaria a rotação dos backups reais.
 Tabela nova no schema precisa entrar em `TABELAS` de `plataforma/core/backup.py`;
 um teste confere que o backup cobre todas as tabelas.
 
+### Backup das imagens do acervo
+
+As imagens do acervo (mapas, tokens, objetos e o que o Construtor publica) ficam em
+`acervo_arquivos`, que **não** entra no backup em JSONL: são arquivos grandes que não
+comprimem. Elas têm backup próprio, em ZIP e por partes de até 64 MB, só com o que entrou
+desde a última vez:
+
+    python tools/backup-acervo.py                    # baixa o que é novo (precisa de SERVICE_API_KEY)
+    python tools/backup-acervo.py verificar ARQUIVO  # confere um ZIP
+    python tools/backup-acervo.py restaurar ARQUIVO  # devolve ao banco, depois do JSONL
+
+O ponto onde parou fica em `backups/acervo/estado.json`. Restaurar: primeiro o JSONL
+(`tools/backup-jardim.py restaurar`), que traz os itens, depois os ZIPs na ordem em que
+foram baixados; ladrilho sem item correspondente é pulado.
+
+As trilhas de áudio do Mapa (`mapa_trilhas`, até 20 MB cada, no máximo 30 por campanha) também
+ficam fora do JSONL, pelo mesmo motivo, e não têm backup: o Mestre reenvia o áudio, que já
+está no computador dele.
+
 Mudanças apenas em documentação exigem revisão de referências, links e
 coerência de status; não precisam de rebuild da aplicação.
 

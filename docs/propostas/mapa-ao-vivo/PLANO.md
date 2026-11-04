@@ -257,7 +257,8 @@ Segue o molde da mesa ao vivo (`plataforma/core/mesa.py`):
    proxy da Discloud em 0,4 s, com ida e volta de uns 173 ms do PC do Pedro, e o
    Mapa mostrou "Tempo real ligado". Ficou de fora ou falta conferir:
    - uso no celular (o layout existe, não foi testado);
-   - backup próprio do acervo (os ladrilhos estão fora do JSONL, ver `core/backup.py`).
+   - ~~backup próprio do acervo~~ **feito em 2026-11-04**: `tools/backup-acervo.py` e a rota interna
+     `/interno/backup-acervo` (ZIP por partes, só o que entrou depois do último; ver `docs/GUIA_MANUTENCAO.md`).
 2. **Oficina de tokens:** transformar em token, catálogo de molduras, moldura da
    mesa, remover fundo, melhorar qualidade, inimigo na hora, porte, condições no
    token.
