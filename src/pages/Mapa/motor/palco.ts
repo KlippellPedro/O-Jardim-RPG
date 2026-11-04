@@ -8,7 +8,7 @@ import { Application, Container, Graphics, Text, Texture, Sprite } from 'pixi.js
 import { Viewport } from 'pixi-viewport';
 import type { CamadaMapaId, CamadaTokenId, FormaMagia, IAberturaCena, IAnotacaoMapa, IAreaClima, ICena, IClima, IFormaNevoa, IMagiaMapa, ITokenMapa, OperacaoNevoa } from '../../../services/mapaApi';
 import { urlImagemDoToken, urlPedaco } from '../../../services/mapaApi';
-import { encaixar, medir, raioHex, LADO_LADRILHO, type IGrade, type IPonto } from './geometria';
+import { encaixar, medir, segmentosDaGrade, tracejar, LADO_LADRILHO, PADRAO_GRADE, rotuloUnidade, type IGrade, type IPonto } from './geometria';
 import { TokenVisual, esquecerTexturasDeMoldura } from './token';
 import { desenharRetrato, type Enquadramento } from './molduras';
 import { CamadaNevoa } from './nevoa';
@@ -103,6 +103,14 @@ export class PalcoMapa {
   private camadaReduzida = new Container();
   private camadaDetalhe = new Container();
   private grade = new Graphics();
+  /** A grade cobre só o que a tela mostra; ao andar ou dar zoom ela é refeita (no máximo uma vez por quadro). */
+  private gradeSuja = false;
+  /** Posição e zoom da tela quando a grade foi desenhada. */
+  private gradeEm: [number, number, number] = [NaN, NaN, NaN];
+  /** A grade que o Mestre está ajustando e ainda não foi salva. */
+  private gradePrevia: IGrade | null = null;
+  /** Preferência do aparelho: o token e a régua grudam na grade? */
+  private encaixe = true;
   /** Mapa e grade juntos: é a camada que treme com o calor do clima (os tokens ficam firmes). */
   private camadaFundo = new Container();
   private camadaTokens = new Container();
@@ -331,7 +339,7 @@ export class PalcoMapa {
           else this.eventos.aoSelecionar(id);
           return;
         }
-        const final = this.cena ? encaixar({ x: token.raiz.x, y: token.raiz.y }, this.cena.grade, token.dados.porte) : { x: token.raiz.x, y: token.raiz.y };
+        const final = this.cena && this.encaixe ? encaixar({ x: token.raiz.x, y: token.raiz.y }, this.cena.grade, token.dados.porte) : { x: token.raiz.x, y: token.raiz.y };
         const x = Math.max(0, Math.min(this.cena?.largura ?? final.x, final.x));
         const y = Math.max(0, Math.min(this.cena?.altura ?? final.y, final.y));
         token.raiz.position.set(x, y);
@@ -351,11 +359,15 @@ export class PalcoMapa {
     app.stage.on('pointerup', soltar);
     app.stage.on('pointerupoutside', soltar);
 
-    viewport.on('moved', () => this.agendarLadrilhos());
-    viewport.on('zoomed', () => this.agendarLadrilhos());
+    viewport.on('moved', () => { this.gradeSuja = true; this.agendarLadrilhos(); });
+    viewport.on('zoomed', () => { this.gradeSuja = true; this.agendarLadrilhos(); });
 
     app.ticker.add((ticker) => {
       const agora = performance.now();
+      // Também confere a posição da tela: uma animação de câmera nem sempre avisa que andou.
+      if (this.cena && (this.gradeSuja || viewport.x !== this.gradeEm[0] || viewport.y !== this.gradeEm[1] || viewport.scale.x !== this.gradeEm[2])) {
+        this.desenharGrade(this.gradePrevia ?? this.cena.grade);
+      }
       for (const token of this.tokens.values()) token.pulsar(agora);
       for (const token of this.saindo) {
         if (!token.pulsar(agora)) continue;
@@ -418,7 +430,7 @@ export class PalcoMapa {
   }
 
   private encaixarPonto(ponto: IPonto): IPonto {
-    if (!this.cena || this.cena.grade.tipo === 'nenhuma') return { x: ponto.x, y: ponto.y };
+    if (!this.cena || !this.encaixe || this.cena.grade.tipo === 'nenhuma') return { x: ponto.x, y: ponto.y };
     // A régua mede de centro a centro de casa.
     return encaixar(ponto, this.cena.grade, 1);
   }
@@ -447,6 +459,7 @@ export class PalcoMapa {
     }
     // Com a névoa, o Mestre revelar mais libera pedaços novos: busca só os que faltam.
     void this.carregarReduzido();
+    this.gradePrevia = null;
     this.desenharGrade(cena.grade);
     this.nevoa.definir(cena.nevoa ?? null, cena.largura, cena.altura, gestor, cena.grade.tamanho);
     this.nevoaMemoria.definir(cena.nevoa ?? null, cena.largura, cena.altura, gestor, cena.grade.tamanho);
@@ -611,38 +624,59 @@ export class PalcoMapa {
     }));
   }
 
+  /** A grade cobre tudo o que a tela mostra, também além da borda do mapa. Espessura e traço em pixels de tela. */
   private desenharGrade(grade: IGrade) {
+    this.gradeSuja = false;
+    this.gradeEm = [this.viewport.x, this.viewport.y, this.viewport.scale.x];
     const g = this.grade;
     g.clear();
-    if (!this.cena || grade.tipo === 'nenhuma') return;
-    const { largura, altura } = this.cena;
-    if (grade.tipo === 'quadrada') {
-      const passo = grade.tamanho;
-      const inicioX = ((grade.x % passo) + passo) % passo;
-      const inicioY = ((grade.y % passo) + passo) % passo;
-      for (let x = inicioX; x <= largura; x += passo) g.moveTo(x, 0).lineTo(x, altura);
-      for (let y = inicioY; y <= altura; y += passo) g.moveTo(0, y).lineTo(largura, y);
+    if (!this.cena || grade.tipo === 'nenhuma' || grade.opacidade <= 0) return;
+    const escala = this.viewport.scale.x;
+    const visivel = this.viewport.getVisibleBounds();
+    let segmentos = segmentosDaGrade(grade, { x: visivel.x, y: visivel.y, largura: visivel.width, altura: visivel.height }, escala);
+    if (!segmentos.length) return;
+    const espessura = Math.max(0.5, grade.espessura ?? PADRAO_GRADE.espessura);
+    const linha = grade.linha ?? PADRAO_GRADE.linha;
+    if (linha === 'tracejada') segmentos = tracejar(segmentos, (espessura * 5 + 4) / escala, (espessura * 3 + 3) / escala);
+    else if (linha === 'pontilhada') segmentos = tracejar(segmentos, Math.max(1.5, espessura) / escala, (espessura * 2 + 4) / escala);
+    for (const [x1, y1, x2, y2] of segmentos) g.moveTo(x1, y1).lineTo(x2, y2);
+    g.stroke({ width: espessura / escala, color: grade.cor, alpha: grade.opacidade });
+  }
+
+  /** Mostra uma grade ainda não salva (o Mestre mexendo nos controles); a cena segue com a salva. */
+  previaGrade(grade: IGrade) {
+    this.gradePrevia = grade;
+    this.desenharGrade(grade);
+  }
+
+  /** Liga ou desliga o encaixe do token e da régua na grade (preferência de quem olha, não da cena). */
+  definirEncaixe(ligado: boolean) {
+    this.encaixe = ligado;
+  }
+
+  /** O que a tela mostra agora: centro, zoom e o tamanho da área em px de mapa (para outra tela enquadrar igual). */
+  areaVisivel(): { x: number; y: number; zoom: number; vw: number; vh: number } {
+    const visivel = this.viewport.getVisibleBounds();
+    return { ...this.vistaAtual(), vw: Math.round(visivel.width), vh: Math.round(visivel.height) };
+  }
+
+  /**
+   * Leva a tela para um centro e zoom (a vista de outra pessoa, ou números digitados no painel da grade).
+   * Com `vw` e `vh`, o zoom é o que faz essa área caber nesta tela, seja ela maior ou menor que a de quem pediu.
+   */
+  irParaVista(vista: { x: number; y: number; zoom: number; vw?: number; vh?: number }, animar = true) {
+    const doTamanho = vista.vw && vista.vh && this.viewport.screenWidth > 0 && this.viewport.screenHeight > 0
+      ? Math.min(this.viewport.screenWidth / vista.vw, this.viewport.screenHeight / vista.vh)
+      : vista.zoom;
+    const zoom = Math.max(0.04, Math.min(4, doTamanho));
+    if (animar) {
+      this.viewport.animate({ position: { x: vista.x, y: vista.y }, scale: zoom, time: 600, ease: 'easeInOutSine' });
     } else {
-      const r = raioHex(grade.tamanho);
-      const w = grade.tamanho;
-      const passoY = r * 1.5;
-      const linhas = Math.ceil(altura / passoY) + 2;
-      const colunas = Math.ceil(largura / w) + 2;
-      for (let linha = -1; linha < linhas; linha++) {
-        for (let coluna = -1; coluna < colunas; coluna++) {
-          const cx = grade.x + coluna * w + (linha % 2 !== 0 ? w / 2 : 0);
-          const cy = grade.y + linha * passoY;
-          // Hexágono "pontudo em cima", o mesmo de `encaixar`.
-          const pontos: number[] = [];
-          for (let i = 0; i < 6; i++) {
-            const a = -Math.PI / 2 + (i * Math.PI) / 3;
-            pontos.push(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
-          }
-          g.poly(pontos, true);
-        }
-      }
+      this.viewport.setZoom(zoom, true);
+      this.viewport.moveCenter(vista.x, vista.y);
     }
-    g.stroke({ width: 1, color: grade.cor, alpha: grade.opacidade, pixelLine: true });
+    this.gradeSuja = true;
+    this.agendarLadrilhos();
   }
 
   enquadrar() {
@@ -848,7 +882,7 @@ export class PalcoMapa {
     const nome = { circulo: 'Raio', cone: 'Cone', linha: 'Linha', impacto: 'Alcance' }[this.opcoesMagia.forma];
     this.rotuloMira ??= this.criarRegua('#c084fc').rotulo;
     this.rotuloMira.visible = true;
-    this.rotuloMira.text = `${nome}: ${quadrados.toLocaleString('pt-BR')} q · ${metros.toLocaleString('pt-BR')} m`;
+    this.rotuloMira.text = `${nome}: ${quadrados.toLocaleString('pt-BR')} q · ${metros.toLocaleString('pt-BR')} ${rotuloUnidade(this.cena.grade.unidade)}`;
     this.rotuloMira.scale.set(escala);
     this.rotuloMira.position.set(fim.x, fim.y - 14 * escala);
   }
@@ -1020,7 +1054,7 @@ export class PalcoMapa {
     for (const ponto of pontos) regua.linha.circle(ponto.x, ponto.y, 5 * escala).fill(cor);
     const { quadrados, metros } = medir(pontos, this.cena.grade);
     const fim = pontos[pontos.length - 1];
-    regua.rotulo.text = `${nome ? `${nome}: ` : ''}${quadrados.toLocaleString('pt-BR')} q · ${metros.toLocaleString('pt-BR')} m`;
+    regua.rotulo.text = `${nome ? `${nome}: ` : ''}${quadrados.toLocaleString('pt-BR')} q · ${metros.toLocaleString('pt-BR')} ${rotuloUnidade(this.cena.grade.unidade)}`;
     regua.rotulo.scale.set(escala);
     regua.rotulo.position.set(fim.x, fim.y - 10 * escala);
   }

@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, BookOpenCheck, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Hand, Layers, Loader2, MapPin, Maximize2, Minimize2, Moon, Music2, Orbit, PanelRightClose, PanelRightOpen, Ruler, Search, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserRound, Users, Wand2, Wifi, WifiOff, X,
+  ArrowLeft, BookOpenCheck, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Grid3x3, Hand, Layers, Loader2, MapPin, Maximize2, Minimize2, Moon, Music2, Orbit, PanelRightClose, PanelRightOpen, Ruler, Search, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserRound, Users, Wand2, Wifi, WifiOff, X,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSessaoStore } from '../../store/useSessaoStore';
@@ -16,7 +16,7 @@ import type { IItemAcervo } from '../../services/acervoApi';
 import { confirmar, pedirTexto } from '../../components/avisos/confirmacao';
 import { avisar } from '../../components/avisos/avisos';
 import { PalcoMapa, type Ferramenta, type OpcoesMagia, type OpcoesNevoa } from './motor/palco';
-import { encaixar, type IPonto } from './motor/geometria';
+import { casasDoTrecho, encaixar, rotuloUnidade, type IPonto } from './motor/geometria';
 import { ConexaoMapa, Interpolador, type EstadoConexao, type MensagemMapa } from './tempoReal';
 import { PainelLateral, tokenDaEntidade, type AbaLateral } from './componentes/PainelLateral';
 import { BotaoFerramenta, ComDica } from './componentes/BotaoFerramenta';
@@ -44,6 +44,7 @@ import { MedidorPainel } from './componentes/Medidor';
 import { Medidor } from './medidor';
 import { aplicarDelta, type DeltaMapa } from './delta';
 import { PainelCamadas } from './componentes/PainelCamadas';
+import { PainelGrade } from './componentes/PainelGrade';
 import { EditorAnotacao } from './componentes/EditorAnotacao';
 import { PainelJogadores } from './componentes/PainelJogadores';
 import type { Enquadramento } from './motor/molduras';
@@ -91,6 +92,26 @@ function lerClimaLocal(): boolean {
     return true;
   }
 }
+/** Escolhas de cada aparelho: encaixar na grade e aceitar quando alguém traz a mesa para a vista dele. */
+const CHAVE_ENCAIXE_LOCAL = 'jardim.mapa.encaixe';
+const CHAVE_SEGUIR_VISTA_LOCAL = 'jardim.mapa.seguirVista';
+
+function lerOpcaoLocal(chave: string): boolean {
+  try {
+    return window.localStorage.getItem(chave) !== 'desligado';
+  } catch {
+    return true;
+  }
+}
+
+function guardarOpcaoLocal(chave: string, ligada: boolean) {
+  try {
+    window.localStorage.setItem(chave, ligada ? 'ligado' : 'desligado');
+  } catch {
+    // Sem armazenamento do navegador, a escolha vale só até fechar a aba.
+  }
+}
+
 /** A última forma e o Fluxo de magia escolhidos neste aparelho. */
 const CHAVE_MAGIA_LOCAL = 'jardim.mapa.magia';
 
@@ -174,6 +195,11 @@ export const MapaPage = () => {
   const [editorAnotacao, setEditorAnotacao] = useState<{ anotacao: IAnotacaoMapa; existente: boolean; cenaId: string } | null>(null);
   const [preferenciasBarras, setPreferenciasBarras] = useState<IPreferenciasBarrasMapa>(() => lerPreferenciasBarras(usuarioId));
   const [climaLocal, setClimaLocal] = useState(lerClimaLocal);
+  const [gradeAberta, setGradeAberta] = useState(false);
+  const [encaixe, setEncaixe] = useState(() => lerOpcaoLocal(CHAVE_ENCAIXE_LOCAL));
+  const [seguirVista, setSeguirVista] = useState(() => lerOpcaoLocal(CHAVE_SEGUIR_VISTA_LOCAL));
+  const seguirVistaRef = useRef(seguirVista);
+  seguirVistaRef.current = seguirVista;
   const [opcoesNevoa, setOpcoesNevoa] = useState<OpcoesNevoa>({ op: 'revelar', forma: 'pincel', raio: 100 });
   const [marcandoArea, setMarcandoArea] = useState(false);
   const [opcoesMagia, setOpcoesMagia] = useState<OpcoesMagia>(lerMagiaLocal);
@@ -287,11 +313,10 @@ export const MapaPage = () => {
     const token = mapa.tokens.find((item) => item.id === tokenId);
     if (!token || (token.participante_id !== turno.turnoAtualId
       && !(token.participante_id == null && turno.personagemId && token.personagem_id === turno.personagemId))) return;
-    const tamanho = Math.max(1, mapa.cena.grade.tamanho);
     const metrosPorCasa = Math.max(0, mapa.cena.grade.metros);
     const mesmaChave = movimentoAtualRef.current.chave === chave;
     const origem = mesmaChave ? movimentoAtualRef.current.posicoes[tokenId] ?? token : token;
-    const metros = Math.hypot(x - origem.x, y - origem.y) / tamanho * metrosPorCasa;
+    const metros = casasDoTrecho(origem, { x, y }, mapa.cena.grade) * metrosPorCasa;
     const posicoes = { ...(mesmaChave ? movimentoAtualRef.current.posicoes : {}), [tokenId]: { x, y } };
     const trechos = {
       ...(mesmaChave ? movimentoAtualRef.current.trechos : {}),
@@ -315,10 +340,9 @@ export const MapaPage = () => {
     const token = mapa.tokens.find((item) => item.id === tokenId);
     if (!token || (token.participante_id !== turno.turnoAtualId
       && !(token.participante_id == null && turno.personagemId && token.personagem_id === turno.personagemId))) return;
-    const tamanho = Math.max(1, mapa.cena.grade.tamanho);
     const metrosPorCasa = Math.max(0, mapa.cena.grade.metros);
-    const trechoContado = Math.hypot(trecho.destino.x - trecho.origem.x, trecho.destino.y - trecho.origem.y) / tamanho * metrosPorCasa;
-    const trechoCorrigido = Math.hypot(x - trecho.origem.x, y - trecho.origem.y) / tamanho * metrosPorCasa;
+    const trechoContado = casasDoTrecho(trecho.origem, trecho.destino, mapa.cena.grade) * metrosPorCasa;
+    const trechoCorrigido = casasDoTrecho(trecho.origem, { x, y }, mapa.cena.grade) * metrosPorCasa;
     if (!Number.isFinite(trechoContado) || !Number.isFinite(trechoCorrigido)) return;
     const porToken = {
       ...atual.porToken,
@@ -509,6 +533,20 @@ export const MapaPage = () => {
           x: Number(mensagem.x), y: Number(mensagem.y), ax: Number(mensagem.ax), ay: Number(mensagem.ay),
         }, String(mensagem.nome));
         break;
+      case 'vista': {
+        // Alguém trouxe a mesa para a vista dele. Só vale na mesma cena, e só para quem aceita (preferência do aparelho).
+        if (!seguirVistaRef.current) break;
+        if (typeof mensagem.cena === 'string' && estadoRef.current?.cena?.id !== mensagem.cena) break;
+        const x = Number(mensagem.x);
+        const y = Number(mensagem.y);
+        const zoom = Number(mensagem.zoom);
+        if (![x, y, zoom].every(Number.isFinite)) break;
+        const vw = Number(mensagem.vw);
+        const vh = Number(mensagem.vh);
+        palco?.irParaVista({ x, y, zoom, ...(vw > 0 && vh > 0 ? { vw, vh } : {}) });
+        avisar.info(`${String(mensagem.nome ?? 'Alguém')} trouxe todos para a vista dele.`);
+        break;
+      }
       case 'documento': {
         const bruto = mensagem.documento as Partial<IDocumentoCompartilhado> | null;
         if (bruto && typeof bruto.id === 'string' && typeof bruto.modelo === 'string'
@@ -993,6 +1031,15 @@ export const MapaPage = () => {
   }, [cenaVista, conexao]);
 
   useEffect(() => {
+    palcoRef.current?.definirEncaixe(encaixe);
+    guardarOpcaoLocal(CHAVE_ENCAIXE_LOCAL, encaixe);
+  }, [encaixe, palcoPronto]);
+
+  useEffect(() => {
+    guardarOpcaoLocal(CHAVE_SEGUIR_VISTA_LOCAL, seguirVista);
+  }, [seguirVista]);
+
+  useEffect(() => {
     palcoRef.current?.definirClimaLigado(climaLocal);
     try {
       window.localStorage.setItem(CHAVE_CLIMA_LOCAL, climaLocal ? 'ligado' : 'desligado');
@@ -1182,6 +1229,17 @@ export const MapaPage = () => {
   };
 
   /** Meio da tela, encaixado no meio de uma casa: token novo já nasce no lugar certo. */
+  /** O painel da grade lê a vista da tela por aqui; mantida estável para não reiniciar o relógio dele. */
+  const lerVistaDaTela = useCallback(() => palcoRef.current?.vistaAtual() ?? null, []);
+
+  /** "Trazer todos para a minha vista": a mesa conectada anima até onde esta tela está olhando. */
+  const sincronizarVista = () => {
+    const vista = palcoRef.current?.areaVisivel();
+    if (!vista) return;
+    conexaoRef.current?.enviar({ t: 'vista', ...vista });
+    avisar.info('Todos foram levados para a sua vista.');
+  };
+
   const centroNaGrade = () => (cena && palcoRef.current ? encaixar(palcoRef.current.centro(), cena.grade, 1) : null);
 
   const trazerParticipantes = async () => {
@@ -1280,7 +1338,7 @@ export const MapaPage = () => {
   const distanciaEmMetros = (primeiro: ITokenMapa, segundo: ITokenMapa) => {
     const grade = estado?.cena?.grade;
     if (!grade) return null;
-    return Math.hypot(segundo.x - primeiro.x, segundo.y - primeiro.y) / Math.max(1, grade.tamanho) * grade.metros;
+    return casasDoTrecho(primeiro, segundo, grade) * grade.metros;
   };
   const tokenVisivelDaVez = Boolean(gestor || tokens.some((token) => token.participante_id === turnoAtualId
     || (personagemDaVez && token.personagem_id === personagemDaVez)));
@@ -1338,7 +1396,7 @@ export const MapaPage = () => {
             <Swords size={14} />
             <span>Rodada <strong>{rodada}</strong></span>
             {nomeDaVez && <span className="mapa-combate-vez">Vez de <strong>{nomeDaVez}</strong></span>}
-            {nomeDaVez && tokenVisivelDaVez && <span className="mapa-movimento-turno">Movimento <strong>{metrosAndados.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} m</strong></span>}
+            {nomeDaVez && tokenVisivelDaVez && <span className="mapa-movimento-turno">Movimento <strong>{metrosAndados.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} {rotuloUnidade(cena?.grade.unidade)}</strong></span>}
           </div>
         )}
         <div className="mapa-pessoas" aria-label="Quem está no mapa">
@@ -1401,7 +1459,22 @@ export const MapaPage = () => {
           disabled={!cena}
           onClick={() => {
             setJogadoresAberto(false);
+            setGradeAberta(false);
             setCamadasAberto((aberto) => !aberto);
+          }}
+        />
+        <BotaoFerramenta
+          icone={Grid3x3}
+          rotulo="Grade, medidas e vista"
+          ativo={gradeAberta}
+          disabled={!cena}
+          onClick={() => {
+            setCamadasAberto(false);
+            setJogadoresAberto(false);
+            setConfigAberta(false);
+            setClimaAberto(false);
+            setTempoAberto(false);
+            setGradeAberta((aberta) => !aberta);
           }}
         />
         <BotaoFerramenta
@@ -1410,6 +1483,7 @@ export const MapaPage = () => {
           ativo={jogadoresAberto}
           disabled={!campanhaId}
           onClick={() => {
+            setGradeAberta(false);
             setCamadasAberto(false);
             setEditorAnotacao(null);
             setJogadoresAberto((aberto) => !aberto);
@@ -1518,7 +1592,7 @@ export const MapaPage = () => {
               {tokens.filter((token) => token.nome.toLocaleLowerCase('pt-BR').includes(buscaMapa.trim().toLocaleLowerCase('pt-BR')))
                 .slice(0, 40)
                 .map((token) => <li key={token.id}><button type="button" onClick={() => { centralizar(token); setPainelRecurso(null); }}>
-                  <span>{token.nome}</span><small>{token.camada === 'props' ? 'Item ou prop' : token.camada === 'montarias' ? 'Montaria' : 'Personagem ou token'}{tokenOrigemDistancia && token.id !== tokenOrigemDistancia.id ? ` · ${distanciaEmMetros(tokenOrigemDistancia, token)?.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) ?? '—'} m` : ''}</small>
+                  <span>{token.nome}</span><small>{token.camada === 'props' ? 'Item ou prop' : token.camada === 'montarias' ? 'Montaria' : 'Personagem ou token'}{tokenOrigemDistancia && token.id !== tokenOrigemDistancia.id ? ` · ${distanciaEmMetros(tokenOrigemDistancia, token)?.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) ?? '—'} ${rotuloUnidade(cena?.grade.unidade)}` : ''}</small>
                 </button></li>)}
             </ul>
             {!tokens.some((token) => token.nome.toLocaleLowerCase('pt-BR').includes(buscaMapa.trim().toLocaleLowerCase('pt-BR'))) && <p className="mapa-dica">Nenhum resultado entre os itens que você pode ver.</p>}
@@ -1590,6 +1664,23 @@ export const MapaPage = () => {
           onAlternarJogadores={(id, visivel) => void alternarVisibilidadeJogadores(id, visivel)}
           onAtivar={(id) => setCamadaAtiva(id)}
           onFechar={() => setCamadasAberto(false)}
+        />
+        <PainelGrade
+          aberto={gradeAberta}
+          gestor={gestor}
+          cena={cena}
+          encaixe={encaixe}
+          onEncaixe={setEncaixe}
+          seguirVista={seguirVista}
+          onSeguirVista={setSeguirVista}
+          lerVista={lerVistaDaTela}
+          onIrParaVista={(vista) => palcoRef.current?.irParaVista(vista, false)}
+          onReiniciarVista={() => palcoRef.current?.abrirNaVista()}
+          podeSincronizar={conexao === 'ws' || conexao === 'sse'}
+          onSincronizar={sincronizarVista}
+          onPrever={(grade) => palcoRef.current?.previaGrade(grade)}
+          onSalvarGrade={(grade) => cena && campanhaId && void comErro(() => mapaApi.editarCena(campanhaId, cena.id, { grade })).then((r) => r && setEstado(r))}
+          onFechar={() => setGradeAberta(false)}
         />
         <PainelJogadores
           aberto={jogadoresAberto}
@@ -1738,6 +1829,7 @@ export const MapaPage = () => {
             onConfigurar={() => {
               setConfigAberta((v) => !v);
               setClimaAberto(false);
+              setGradeAberta(false);
             }}
           />
         </footer>

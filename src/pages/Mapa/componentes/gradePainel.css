@@ -1,0 +1,212 @@
+/* Painel da grade: formato, linha, medida e a vista da tela. Usa as variáveis do mapa.css. */
+
+.mapa-config.mapa-grade-painel {
+  width: min(320px, calc(100% - 24px));
+}
+
+.mapa-grade-painel header > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mapa-grade-painel .grade-grupo {
+  margin: 12px 0 0;
+  padding: 10px 0 0;
+  border: 0;
+  border-top: 1px solid var(--mapa-linha);
+  min-width: 0;
+}
+
+.mapa-grade-painel .grade-grupo legend {
+  padding: 0 6px 0 0;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mapa-grade-painel .grade-grupo:disabled {
+  opacity: 0.75;
+}
+
+.grade-rotulo {
+  display: block;
+  margin: 10px 0 4px;
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.grade-rotulo em,
+.grade-campo em {
+  color: var(--mapa-texto);
+  font-style: normal;
+}
+
+.grade-linha-dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: end;
+}
+
+.grade-campo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.grade-campo input,
+.grade-campo select {
+  width: 100%;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--mapa-texto);
+  font: inherit;
+}
+
+.grade-campo em {
+  position: absolute;
+  right: 8px;
+  bottom: 7px;
+  font-size: 11px;
+  color: var(--mapa-apagado);
+  pointer-events: none;
+}
+
+.grade-cores {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.grade-cor {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 2px solid var(--mapa-linha);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.grade-cor.ativa {
+  border-color: var(--mapa-ouro);
+  box-shadow: 0 0 0 2px rgba(199, 164, 76, 0.35);
+}
+
+.grade-cor-livre {
+  overflow: hidden;
+  background: conic-gradient(#f43f5e, #f59e0b, #84cc16, #06b6d4, #6366f1, #d946ef, #f43f5e);
+}
+
+.grade-cor-livre input {
+  position: absolute;
+  inset: -6px;
+  width: 36px;
+  height: 36px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.grade-opacidade input {
+  width: 100%;
+}
+
+.grade-segmentos {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.grade-segmentos button {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.grade-segmentos button:hover {
+  color: var(--mapa-texto);
+}
+
+.grade-segmentos button.ativo {
+  background: rgba(199, 164, 76, 0.22);
+  color: var(--mapa-texto);
+}
+
+.grade-interruptor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0 0;
+  color: var(--mapa-texto);
+  cursor: pointer;
+}
+
+.grade-interruptor span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+
+.grade-interruptor small {
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.grade-interruptor input {
+  flex: none;
+  width: 36px;
+  height: 20px;
+  accent-color: var(--mapa-ouro);
+}
+
+.grade-calibrar {
+  margin-top: 10px;
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.grade-calibrar summary {
+  cursor: pointer;
+}
+
+.grade-vista {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.8fr;
+  gap: 8px;
+}
+
+.grade-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.grade-botoes .mapa-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
