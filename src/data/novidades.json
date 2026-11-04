@@ -1,6 +1,47 @@
 {
   "itens": [
     {
+      "id": "2026-11-03-auras-pausa-relogios-e-falas",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: auras, pausa da mesa, relógios e falas dos personagens do Mestre",
+      "detalhes": [
+        "Seu token pode ter uma aura que anda com ele: proteção de paladino, alcance de uma magia, área de controle. Escolha o tamanho e a cor no menu do token.",
+        "O Mestre pode pausar a mesa enquanto arruma a próxima cena. Você vê uma tela de espera com o recado dele.",
+        "Relógios de progresso e um cronômetro aparecem no canto do mapa quando o Mestre usa: um ritual que avança, um alarme que soa, o tempo até o teto cair.",
+        "Quando um personagem do Mestre fala, a fala aparece no mapa com o retrato dele.",
+        "Ao arrastar o seu token, o mapa mostra quantas casas ele já andou."
+      ]
+    },
+    {
+      "id": "2026-11-03-recursos-compartilhados-do-vtt",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: documentos, trilha, busca e mapas modelo",
+      "detalhes": [
+        "O Mestre pode mostrar um documento salvo no Painel para todos os jogadores ou para um personagem escolhido.",
+        "O Mestre envia uma trilha de áudio para a cena; a reprodução acompanha quem está na sessão. Se o navegador bloquear o som, use Ativar áudio da mesa.",
+        "Busque pelo nome de personagens, criaturas e objetos visíveis, veja a distância até cada resultado e centralize o mapa neles.",
+        "No construtor, procure mapas pelo nome e crie uma cópia para usar como modelo. Também dá para alinhar peças e duplicar um grupo.",
+        "Durante o combate, o mapa mostra a distância percorrida pelo personagem da vez neste turno."
+      ]
+    },
+    {
+      "id": "2026-11-03-visao-pelas-paredes-e-memoria-de-exploracao",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: visão pelas paredes e memória de exploração",
+      "detalhes": [
+        "O Mestre pode ativar a visão por paredes na ferramenta Névoa. Paredes e portas fechadas bloqueiam o que seu personagem enxerga.",
+        "A névoa manual continua limitando o mapa. Áreas que você já explorou ficam visíveis em tom escuro quando seu personagem se afasta.",
+        "Tochas e lanternas nos tokens limitam o alcance. Luzes fixas ajudam quando já estão à vista.",
+        "Cada jogador tem sua própria exploração, e os tokens fora da sua visão não aparecem na mesa."
+      ]
+    },
+    {
       "id": "2026-11-03-portas-paredes-e-portais-entre-cenas",
       "data": "2026-11-03",
       "tipo": "novo",
@@ -23,6 +64,18 @@
         "Separe itens do Acervo, montarias e personagens em camadas e escolha o que cada jogador pode ver.",
         "Escreva plaquinhas no mapa, escolha a letra, o tamanho e as cores, e arraste para mudar de lugar.",
         "Espelhe um token na horizontal ou na vertical pelo menu Visual."
+      ]
+    },
+    {
+      "id": "2026-11-03-jogadores-papeis-e-permissoes-na-mesa",
+      "data": "2026-11-03",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: convide jogadores e ajuste as permissões da mesa",
+      "detalhes": [
+        "No painel Jogadores, o Mestre vê quem está conectado, muda papéis, remove acessos e cria convites para a campanha.",
+        "As permissões podem ser ajustadas por pessoa: mover tokens, usar ping e régua, lançar efeitos de magia e ver cada camada do mapa.",
+        "Cada pessoa pode personalizar o nome e a cor que aparecem nesta mesa sem alterar o perfil da conta."
       ]
     },
     {
@@ -980,59 +1033,6 @@
         "Depois vem o animal. São mais de cem na lista, de gato e rato a leão, rinoceronte, coruja e dragão, separados pelas Morfologias que combinam com eles. É o animal que define o seu tamanho, e quem quiser um que não está na lista pode escrever o nome na ficha.",
         "A página da raça virou uma porta de entrada com as três Formas. Cada Forma tem um montador, com busca e filtro por tamanho, que mostra na hora o que a sua combinação soma.",
         "A Animália também amadurece sozinha, em três degraus: Jovem no nível 1, Adulta no 13 e Alfa no 36. Quem já joga com uma Animália não perde nada: a ficha continua abrindo normalmente e vale como Híbrido."
-      ]
-    },
-    {
-      "id": "2026-10-12-seres-textos-reescritos",
-      "data": "2026-10-12",
-      "tipo": "melhoria",
-      "area": "Mundo",
-      "titulo": "Deidades e governantes de Gênese com texto novo",
-      "detalhes": [
-        "As dez Deidades ganharam descrição e domínio reescritos, com frases inteiras no lugar dos pedaços soltos que sobravam.",
-        "Grimm, Amadheus, Jota Macedo e Keryx também foram revisados, junto com os governantes de Gênese: Kaiser, Noemi, Bergelmir, Davinor, Durin II, Augustos e as Irmãs da Noite.",
-        "Selah, o Último Silêncio, ganhou texto novo no Bestiário e em Seres: como o silêncio chega, o que fazer quando ele chega e o aviso que a Guilda deixa no Quadro.",
-        "Alguns textos das Árvores, como a Transilvânia, as Colônias de Întuneric e os mandamentos de Arkarin, perderam os travessões que ainda tinham."
-      ]
-    },
-    {
-      "id": "2026-10-11-mundo-textos-do-criador",
-      "data": "2026-10-11",
-      "tipo": "melhoria",
-      "area": "Mundo",
-      "titulo": "Textos do Mundo revisados: Fluxos, Galhos, reinos e as crônicas das Árvores",
-      "detalhes": [
-        "Os textos que o Criador reescreveu no Painel passaram a valer para todo mundo: Fluxos, Galhos, Dimensões, reinos, locais e as crônicas da Árvore de Gênese e de Parley.",
-        "Amadheus e o Banco Lunar ganharam mais história. Ele e Jota ainda são sócios, mas cada um tocou o seu negócio, e a neutralidade do Banco tem preço.",
-        "Sonhar passou a dizer quem abre a passagem entre as camadas de cada Árvore."
-      ]
-    },
-    {
-      "id": "2026-10-11-registros-universais-bestiario",
-      "data": "2026-10-11",
-      "tipo": "melhoria",
-      "area": "Mundo",
-      "titulo": "Registros Universais mais completos: Bestiário com loot, habilidades separadas e Seres reunidos",
-      "detalhes": [
-        "Cada criatura do Bestiário agora mostra o que costuma deixar para trás, com a chance de cada item. As habilidades vêm uma a uma, com selos como Medo, Mutilação e Reação, e os Sinais e o Como Evitar ficam numa caixa à parte, para quem vai enfrentar.",
-        "A ficha cresce com o peso da criatura: uma criatura comum é discreta, e uma Lenda ganha moldura, selo grande e brilho. Dá para filtrar por categoria e por peso, e ordenar pelas mais fortes.",
-        "Seres virou o lugar de quem é quem: Deidades, Entidades, Soberanos, Espíritos e gente notável, cada um com a sua cor. As pessoas notáveis que o Mestre cria moram aqui também.",
-        "São 12 facções oficiais, cada uma com a sua cor e o seu brasão, e a descrição de todas ficou um pouco mais completa.",
-        "Os Locais ganharam as sedes das facções, como Pharos, da Guilda dos Caçadores, a Casa do Primeiro Lume, da Ordem do Lume, e Astraluna, a capital da Árvore A.X.I.S e sede da AstraTech. O Banco Lunar e Sonhar entre as Árvores também ganharam texto bem maior. Da facção dá para pular para a sede, e da sede para a facção. Cada local tem a sua cor, o seu ícone e o seu desenho no cabeçalho, e a sede usa a cor da facção a que pertence.",
-        "Em Seres, os Soberanos agora são os dez seres mais fortes do Jardim inteiro, de qualquer Árvore, sem contar as Deidades. Os que já foram revelados aparecem em Seres, e os outros ainda vão aparecer.",
-        "O Glossário virou Alfabeto: os 15 idiomas do Jardim em ordem de alfabeto, cada um com o povo que o fala e quem o criou, e um filtro por letra.",
-        "Cada seção dos Registros ganhou uma cor própria, no lugar do azul de antes. Facções, Locais e Artefatos e Frutos também ganharam ficha própria: brasão para as facções, rosa dos ventos e \"onde fica\" para os locais, e para os artefatos a raridade manda na moldura, com os poderes do Fruto do Éden lado a lado, antes e depois do despertar."
-      ]
-    },
-    {
-      "id": "2026-10-11-calendario-e-app-mais-firmes",
-      "data": "2026-10-11",
-      "tipo": "correcao",
-      "area": "Mundo",
-      "titulo": "Calendário do mundo e app instalável mais firmes",
-      "detalhes": [
-        "Se o servidor falhar na hora de abrir o calendário, a tela tenta de novo sozinha. Se ainda assim não abrir, ela mostra o que o navegador recebeu e um botão Tentar de novo.",
-        "O app instalável parou de travar páginas quando o navegador não consegue guardar arquivos para uso sem internet. Nesse caso ele só deixa de guardar e abre o site normalmente."
       ]
     }
   ]

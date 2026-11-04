@@ -2,6 +2,47 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-03-auras-pausa-relogios-e-falas",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: auras, pausa da mesa, relógios e falas dos personagens do Mestre",
+      "detalhes": [
+        "Seu token pode ter uma aura que anda com ele: proteção de paladino, alcance de uma magia, área de controle. Escolha o tamanho e a cor no menu do token.",
+        "O Mestre pode pausar a mesa enquanto arruma a próxima cena. Você vê uma tela de espera com o recado dele.",
+        "Relógios de progresso e um cronômetro aparecem no canto do mapa quando o Mestre usa: um ritual que avança, um alarme que soa, o tempo até o teto cair.",
+        "Quando um personagem do Mestre fala, a fala aparece no mapa com o retrato dele.",
+        "Ao arrastar o seu token, o mapa mostra quantas casas ele já andou."
+      ]
+    },
+    {
+      "id": "2026-11-03-recursos-compartilhados-do-vtt",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: documentos, trilha, busca e mapas modelo",
+      "detalhes": [
+        "O Mestre pode mostrar um documento salvo no Painel para todos os jogadores ou para um personagem escolhido.",
+        "O Mestre envia uma trilha de áudio para a cena; a reprodução acompanha quem está na sessão. Se o navegador bloquear o som, use Ativar áudio da mesa.",
+        "Busque pelo nome de personagens, criaturas e objetos visíveis, veja a distância até cada resultado e centralize o mapa neles.",
+        "No construtor, procure mapas pelo nome e crie uma cópia para usar como modelo. Também dá para alinhar peças e duplicar um grupo.",
+        "Durante o combate, o mapa mostra a distância percorrida pelo personagem da vez neste turno."
+      ]
+    },
+    {
+      "id": "2026-11-03-visao-pelas-paredes-e-memoria-de-exploracao",
+      "data": "2026-11-03",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: visão pelas paredes e memória de exploração",
+      "detalhes": [
+        "O Mestre pode ativar a visão por paredes na ferramenta Névoa. Paredes e portas fechadas bloqueiam o que seu personagem enxerga.",
+        "A névoa manual continua limitando o mapa. Áreas que você já explorou ficam visíveis em tom escuro quando seu personagem se afasta.",
+        "Tochas e lanternas nos tokens limitam o alcance. Luzes fixas ajudam quando já estão à vista.",
+        "Cada jogador tem sua própria exploração, e os tokens fora da sua visão não aparecem na mesa."
+      ]
+    },
+    {
       "id": "2026-11-03-portas-paredes-e-portais-entre-cenas",
       "data": "2026-11-03",
       "tipo": "novo",
