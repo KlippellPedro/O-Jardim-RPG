@@ -2,6 +2,17 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-04-criador-na-lista-de-jogadores",
+      "data": "2026-11-04",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: o Criador aparece na lista de jogadores",
+      "detalhes": [
+        "O Criador da plataforma agora aparece em Jogadores e permissões mesmo sem ser membro da campanha, e escolhe o próprio nome e a própria cor na mesa.",
+        "Quem está conectado no mapa e ainda não é membro também aparece na lista do Mestre."
+      ]
+    },
+    {
       "id": "2026-11-04-mapa-no-celular-e-visao-rapida",
       "data": "2026-11-04",
       "tipo": "melhoria",

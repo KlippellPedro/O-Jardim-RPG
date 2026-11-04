@@ -1,6 +1,17 @@
 {
   "itens": [
     {
+      "id": "2026-11-04-criador-na-lista-de-jogadores",
+      "data": "2026-11-04",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: o Criador aparece na lista de jogadores",
+      "detalhes": [
+        "O Criador da plataforma agora aparece em Jogadores e permissões mesmo sem ser membro da campanha, e escolhe o próprio nome e a própria cor na mesa.",
+        "Quem está conectado no mapa e ainda não é membro também aparece na lista do Mestre."
+      ]
+    },
+    {
       "id": "2026-11-04-mapa-no-celular-e-visao-rapida",
       "data": "2026-11-04",
       "tipo": "melhoria",
@@ -1018,19 +1029,6 @@
         "Para virar Primordial, no nível 60, não basta o nível: o espírito precisa cumprir uma Provação ligada à própria marca, e só o Mestre confirma. Em troca, o Primordial é o degrau mais forte do jogo.",
         "Existe também um Fluxo Universal, que ninguém escolhe sozinho. Só o Mestre concede, e até hoje só a Blanc é conhecida por tê-lo.",
         "Cada Natureza tem a sua língua: Enoquiano para os naturais, Aramaico para os demoníacos e Hebraico para os angelicais. A tabela de idiomas do Mundo já mostra as três."
-      ]
-    },
-    {
-      "id": "2026-10-12-bestiario-espiritos-novos",
-      "data": "2026-10-12",
-      "tipo": "novo",
-      "area": "Mundo",
-      "titulo": "Bestiário ganhou 26 espíritos: demônios, anjos e espíritos naturais",
-      "detalhes": [
-        "Dez demônios, dos Diabretes de Cinza que roubam coisa pequena até Belzarak, o Arquidemônio da Ira. Entre eles estão o Cobrador do Pacto, a Dama de Veludo, o Verdugo Rubro e o Devorador de Banquetes.",
-        "Dez anjos, da Centelha de Prece até Miraquel, o Escriba das Sete Virtudes. Há também o Árbitro de Balança, a Guardiã do Cálice e o Querubim de Pedra Clara.",
-        "Seis espíritos naturais, como o Sussurro da Chaminé, a Dama da Bruma e o Espírito Ancestral do Bosque.",
-        "Cada um solta uma parte própria no saque, e os mais fortes deixam equipamento. Ezrakael e Seraquiel agora falam hebraico, a língua dos anjos."
       ]
     }
   ]
