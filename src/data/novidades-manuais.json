@@ -2,6 +2,18 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-04-mapa-no-celular-e-visao-rapida",
+      "data": "2026-11-04",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: melhor no celular e a visão por paredes ficou rápida",
+      "detalhes": [
+        "No celular o mapa abre com o painel fechado, o topo cabe na tela e a barra de ferramentas rola. O botão do painel (iniciativa, fichas e rolagens) fica logo depois da seta de voltar.",
+        "Quando o Mestre liga a visão por paredes, o que você enxerga atualiza em um instante, mesmo em mapas grandes.",
+        "O Mestre pode guardar até 30 trilhas de áudio por mesa."
+      ]
+    },
+    {
       "id": "2026-11-03-auras-pausa-relogios-e-falas",
       "data": "2026-11-03",
       "tipo": "novo",

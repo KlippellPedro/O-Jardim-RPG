@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-11-04-mapa-no-celular-e-visao-rapida",
+      "data": "2026-11-04",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: melhor no celular e a visão por paredes ficou rápida",
+      "detalhes": [
+        "No celular o mapa abre com o painel fechado, o topo cabe na tela e a barra de ferramentas rola. O botão do painel (iniciativa, fichas e rolagens) fica logo depois da seta de voltar.",
+        "Quando o Mestre liga a visão por paredes, o que você enxerga atualiza em um instante, mesmo em mapas grandes.",
+        "O Mestre pode guardar até 30 trilhas de áudio por mesa."
+      ]
+    },
+    {
       "id": "2026-11-03-auras-pausa-relogios-e-falas",
       "data": "2026-11-03",
       "tipo": "novo",
@@ -1019,20 +1031,6 @@
         "Dez anjos, da Centelha de Prece até Miraquel, o Escriba das Sete Virtudes. Há também o Árbitro de Balança, a Guardiã do Cálice e o Querubim de Pedra Clara.",
         "Seis espíritos naturais, como o Sussurro da Chaminé, a Dama da Bruma e o Espírito Ancestral do Bosque.",
         "Cada um solta uma parte própria no saque, e os mais fortes deixam equipamento. Ezrakael e Seraquiel agora falam hebraico, a língua dos anjos."
-      ]
-    },
-    {
-      "id": "2026-10-12-animalia-forma-morfologia-animal",
-      "data": "2026-10-12",
-      "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Animália: escolha a Forma, a Morfologia e o animal",
-      "detalhes": [
-        "A Animália agora tem três Formas: Fera (o bicho inteiro), Híbrido (metade bicho, metade gente) e Traços (gente com sinais de bicho). A Fera ganha mais corpo e a arma natural mais forte, mas armadura e arreio custam o dobro e são peças especiais. Os Traços usam qualquer equipamento e têm tamanho de pessoa.",
-        "A Morfologia passou de três para dez: Ágil, Robusta, Mística, Predadora, Alada, Aquática, Peçonhenta, Gregária, Blindada e Mítica. Vale para qualquer Forma.",
-        "Depois vem o animal. São mais de cem na lista, de gato e rato a leão, rinoceronte, coruja e dragão, separados pelas Morfologias que combinam com eles. É o animal que define o seu tamanho, e quem quiser um que não está na lista pode escrever o nome na ficha.",
-        "A página da raça virou uma porta de entrada com as três Formas. Cada Forma tem um montador, com busca e filtro por tamanho, que mostra na hora o que a sua combinação soma.",
-        "A Animália também amadurece sozinha, em três degraus: Jovem no nível 1, Adulta no 13 e Alfa no 36. Quem já joga com uma Animália não perde nada: a ficha continua abrindo normalmente e vale como Híbrido."
       ]
     }
   ]
