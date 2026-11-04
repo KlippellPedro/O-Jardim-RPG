@@ -2,6 +2,20 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-04-grade-do-mapa-e-sincronizar-vista",
+      "data": "2026-11-04",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: grade que cobre a tela toda, medidas à sua escolha e vista sincronizada",
+      "detalhes": [
+        "A grade agora cobre tudo o que a tela mostra, também fora do desenho do mapa, e acompanha o zoom.",
+        "Novo botão Grade na barra de ferramentas. O Mestre escolhe a cor, a opacidade (em zero a grade some), a espessura, o formato (quadrada, hexágono com ponta em cima, hexágono de lado reto ou sem grade) e o tipo de linha (contínua, tracejada ou pontilhada).",
+        "A régua mede como a mesa preferir: reta, diagonal valendo uma casa, diagonal alternada, só pelos eixos ou por hexágonos. A distância por casa pode ser em metros ou em pés.",
+        "Cada pessoa liga ou desliga o encaixe na grade no próprio aparelho. Desligado, o token e a régua ficam onde você soltar.",
+        "Sincronizar vista: qualquer pessoa pode trazer a mesa inteira para o que está vendo, e cada um escolhe se aceita ser levado. Também dá para digitar a posição e o zoom da sua tela."
+      ]
+    },
+    {
       "id": "2026-11-04-criador-na-lista-de-jogadores",
       "data": "2026-11-04",
       "tipo": "melhoria",

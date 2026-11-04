@@ -1,6 +1,20 @@
 {
   "itens": [
     {
+      "id": "2026-11-04-grade-do-mapa-e-sincronizar-vista",
+      "data": "2026-11-04",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: grade que cobre a tela toda, medidas à sua escolha e vista sincronizada",
+      "detalhes": [
+        "A grade agora cobre tudo o que a tela mostra, também fora do desenho do mapa, e acompanha o zoom.",
+        "Novo botão Grade na barra de ferramentas. O Mestre escolhe a cor, a opacidade (em zero a grade some), a espessura, o formato (quadrada, hexágono com ponta em cima, hexágono de lado reto ou sem grade) e o tipo de linha (contínua, tracejada ou pontilhada).",
+        "A régua mede como a mesa preferir: reta, diagonal valendo uma casa, diagonal alternada, só pelos eixos ou por hexágonos. A distância por casa pode ser em metros ou em pés.",
+        "Cada pessoa liga ou desliga o encaixe na grade no próprio aparelho. Desligado, o token e a régua ficam onde você soltar.",
+        "Sincronizar vista: qualquer pessoa pode trazer a mesa inteira para o que está vendo, e cada um escolhe se aceita ser levado. Também dá para digitar a posição e o zoom da sua tela."
+      ]
+    },
+    {
       "id": "2026-11-04-criador-na-lista-de-jogadores",
       "data": "2026-11-04",
       "tipo": "melhoria",
@@ -1013,22 +1027,6 @@
         "O Espírito cresceu demais para ficar entre as raças comuns: tem seis degraus de escada e três Naturezas. Agora ele fica ao lado do Divino, do Desperto e das outras raças especiais.",
         "Para criar um Espírito ou transformar o personagem em um, o Mestre precisa liberar a raça, para a mesa toda ou só para você. Ele pode surgir em qualquer Árvore.",
         "Quem já joga com um Espírito não perde nada: a ficha continua abrindo e salvando normalmente, e a raça ganhou o Legado extra das raças especiais."
-      ]
-    },
-    {
-      "id": "2026-10-12-espirito-tres-naturezas",
-      "data": "2026-10-12",
-      "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Espírito ganhou três Naturezas: natural, demoníaca e angelical",
-      "detalhes": [
-        "Quem cria um Espírito agora escolhe primeiro a Natureza. O natural continua como era, preso a um Fluxo. O demoníaco carrega um dos sete Pecados, e o angelical uma das sete Virtudes.",
-        "As Cores viraram Fluxos. Em vez de Espírito Vermelho Vinho, agora é Espírito do Fim, e cada marca tem o nome do Fluxo, do Pecado ou da Virtude. O Fluxo que era Rosa agora se chama Origem, como no resto do jogo.",
-        "Demônios e anjos começam sem corpo e, a partir do nível 5, aprendem a entrar num corpo: o demônio possui, e o anjo encarna com a permissão de quem empresta.",
-        "Cada Pecado tem uma Virtude oposta, com poderes que se espelham. Todos evoluem em seis degraus, nos níveis 1, 8, 15, 28, 40 e 60, e quase todo poder cobra um preço. Do degrau Menor ao Superior o espírito só ganha ajustes passivos que a ficha soma sozinha: Mana, Vida, Movimento e resistências. As habilidades fortes começam no quinto degrau.",
-        "Para virar Primordial, no nível 60, não basta o nível: o espírito precisa cumprir uma Provação ligada à própria marca, e só o Mestre confirma. Em troca, o Primordial é o degrau mais forte do jogo.",
-        "Existe também um Fluxo Universal, que ninguém escolhe sozinho. Só o Mestre concede, e até hoje só a Blanc é conhecida por tê-lo.",
-        "Cada Natureza tem a sua língua: Enoquiano para os naturais, Aramaico para os demoníacos e Hebraico para os angelicais. A tabela de idiomas do Mundo já mostra as três."
       ]
     }
   ]
