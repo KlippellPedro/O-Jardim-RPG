@@ -43,7 +43,7 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable
 
-from core.mapa import ErroMapa, normalizar_magia, portal_atingido
+from core.mapa import ErroMapa, normalizar_magia, normalizar_vista_mesa, portal_atingido
 from core.paredes import caminho
 from core.nevoa import Nevoa
 
@@ -57,6 +57,9 @@ MAX_PONTOS_REGUA = 24
 #: Efeitos de magia por pessoa: no máximo 3 a cada 2 segundos (o resto não chega à mesa).
 MAGIAS_POR_JANELA = 3
 JANELA_MAGIA_S = 2.0
+#: "Todo mundo na minha vista": 2 a cada 5 segundos por pessoa.
+VISTAS_POR_JANELA = 2
+JANELA_VISTA_S = 5.0
 #: As regras (quem vê, quem move) valem por alguns segundos e são recarregadas:
 #: mudar a visibilidade de um participante na Sessão chega aqui no máximo nesse tempo.
 VALIDADE_REGRAS_S = 5.0
@@ -100,6 +103,8 @@ class Conexao:
     seq: int = 0
     #: Horários dos últimos efeitos de magia que esta conexão mandou.
     magias: deque = field(default_factory=deque)
+    #: Horários dos últimos pedidos de "todo mundo para a minha vista".
+    vistas: deque = field(default_factory=deque)
 
     @property
     def cor(self) -> str:
@@ -165,6 +170,16 @@ class Conexao:
         if len(self.magias) >= MAGIAS_POR_JANELA:
             return False
         self.magias.append(agora)
+        return True
+
+    def vista_liberada(self) -> bool:
+        """Puxar a mesa para a própria vista tira a câmera dos outros: no máximo VISTAS_POR_JANELA a cada JANELA_VISTA_S."""
+        agora = time.monotonic()
+        while self.vistas and agora - self.vistas[0] > JANELA_VISTA_S:
+            self.vistas.popleft()
+        if len(self.vistas) >= VISTAS_POR_JANELA:
+            return False
+        self.vistas.append(agora)
         return True
 
 
@@ -790,6 +805,23 @@ async def processar(
                     outra.entregar(texto)
         else:
             _repassar(sala, conexao, repasse)
+        return None
+
+    if tipo == "vista":
+        # "Todo mundo na minha vista": centro e zoom de quem pediu, repassados à mesa (nada fica gravado).
+        # Quem pediu não recebe de volta. Cada tela decide se aceita (preferência do aparelho).
+        if not conexao.vista_liberada():
+            return {"t": "erro", "motivo": "vista pedida muitas vezes seguidas"}
+        try:
+            vista = normalizar_vista_mesa(mensagem, regras.largura, regras.altura)
+        except ErroMapa as erro:
+            return {"t": "erro", "motivo": erro.mensagem}
+        _repassar(sala, conexao, {
+            "t": "vista", **vista, "ts": agora_ms(),
+            "por": conexao.usuario_id, "nome": conexao.nome, "cor": conexao.cor,
+            # A cena em que a vista vale: quem recebe em outra cena ignora.
+            "cena": (conexao.vendo if conexao.gestor and conexao.vendo else regras.cena_id),
+        })
         return None
 
     return {"t": "erro", "motivo": "tipo de mensagem desconhecido"}

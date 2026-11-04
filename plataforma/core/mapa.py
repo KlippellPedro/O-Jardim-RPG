@@ -22,7 +22,12 @@ from uuid import uuid4
 
 from core import mesa_extras
 
-TIPOS_GRADE = ("quadrada", "hex", "nenhuma")
+#: "hex" é o hexágono pontudo em cima; "hex-plano" é o de lado reto em cima.
+TIPOS_GRADE = ("quadrada", "hex", "hex-plano", "nenhuma")
+LINHAS_GRADE = ("solida", "tracejada", "pontilhada")
+UNIDADES_GRADE = ("m", "ft")
+#: Como a régua soma a diagonal: reta, igual a um passo (Chebyshev), 5-10-5, só pelos eixos, ou por hexágonos.
+MEDICOES_GRADE = ("euclidiana", "chebyshev", "alternada", "manhattan", "hex")
 LADOS = ("jogador", "aliado", "inimigo", "neutro")
 BARRAS = ("vida", "mana", "estamina", "sanidade")
 PARA_QUEM = ("todos", "dono", "ninguem")
@@ -48,7 +53,12 @@ GRADE_PADRAO = {
     "y": 0.0,
     "cor": "#ffffff",
     "opacidade": 0.18,
+    #: Quanto vale uma casa, na unidade escolhida (o nome ficou de quando só havia metros).
     "metros": 1.5,
+    "unidade": "m",
+    "espessura": 1.0,
+    "linha": "solida",
+    "medicao": "euclidiana",
 }
 
 # Rótulos da Sessão (routers/sessions.py) e a fração que a barra desenha para
@@ -190,7 +200,7 @@ def normalizar_grade(dados, atual: dict | None = None) -> dict:
         raise ErroMapa("grade invalida")
     if "tipo" in dados:
         if dados["tipo"] not in TIPOS_GRADE:
-            raise ErroMapa("a grade e quadrada, hex ou nenhuma")
+            raise ErroMapa("a grade e quadrada, hexagonal ou nenhuma")
         grade["tipo"] = dados["tipo"]
     if "tamanho" in dados:
         grade["tamanho"] = _numero(dados["tamanho"], "tamanho do quadrado", 10, 1000)
@@ -204,8 +214,40 @@ def normalizar_grade(dados, atual: dict | None = None) -> dict:
     if "opacidade" in dados:
         grade["opacidade"] = _numero(dados["opacidade"], "opacidade", 0, 1)
     if "metros" in dados:
-        grade["metros"] = _numero(dados["metros"], "metros por quadrado", 0.1, 100)
+        grade["metros"] = _numero(dados["metros"], "distancia por quadrado", 0.1, 1000)
+    if "espessura" in dados:
+        grade["espessura"] = _numero(dados["espessura"], "espessura da linha", 0.5, 8)
+    for campo, validos, texto in (
+        ("unidade", UNIDADES_GRADE, "a unidade e metros ou pes"),
+        ("linha", LINHAS_GRADE, "a linha e continua, tracejada ou pontilhada"),
+        ("medicao", MEDICOES_GRADE, "medida da regua invalida"),
+    ):
+        if campo in dados:
+            if dados[campo] not in validos:
+                raise ErroMapa(texto)
+            grade[campo] = dados[campo]
     return grade
+
+
+#: A vista de uma pessoa que "traz todo mundo": centro (com folga além das bordas) e zoom.
+FOLGA_VISTA = 50000.0
+
+
+def normalizar_vista_mesa(dados, largura: int, altura: int) -> dict:
+    """Centro e zoom que alguém manda para a mesa inteira ver. Só passa pelo tempo real."""
+    if not isinstance(dados, dict):
+        raise ErroMapa("vista invalida")
+    zoom_min, zoom_max = mesa_extras.ZOOM_VISTA
+    vista = {
+        "x": round(_numero(dados.get("x"), "centro da vista", -FOLGA_VISTA, largura + FOLGA_VISTA), 1),
+        "y": round(_numero(dados.get("y"), "centro da vista", -FOLGA_VISTA, altura + FOLGA_VISTA), 1),
+        "zoom": round(_numero(dados.get("zoom"), "zoom da vista", zoom_min / 2, zoom_max * 2), 3),
+    }
+    # Quanto do mapa cabia na tela de quem pediu: telas de tamanhos diferentes enquadram a mesma área.
+    for campo in ("vw", "vh"):
+        if dados.get(campo) is not None:
+            vista[campo] = round(_numero(dados[campo], "area da vista", 1, 400000), 1)
+    return vista
 
 
 def barras_padrao(lado: str) -> dict:
