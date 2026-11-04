@@ -1548,6 +1548,61 @@
 }
 
 @media (max-width: 760px) {
+  /* Topo do celular: o que não cabe rola de lado em vez de sair da tela, o selo e o período da
+     hora cedem lugar e a tela cheia (que o celular não usa) some. */
+  .mapa-topo {
+    gap: 4px;
+    padding: 0 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .mapa-topo::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mapa-topo > * {
+    flex-shrink: 0;
+  }
+
+  .mapa-topo .mapa-topo-titulo {
+    flex: 1 0 auto;
+    max-width: 38vw;
+  }
+
+  .mapa-topo-titulo strong {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .mapa-topo-titulo .selo,
+  .mapa-tempo span,
+  .mapa-topo [aria-label*='ela cheia'] {
+    display: none;
+  }
+
+  /* O botão do painel (iniciativa, fichas, rolagens) vem logo depois do voltar: no celular ele
+     começa fechado e é a porta para essa parte da tela. */
+  .mapa-topo > button:first-child {
+    order: -2;
+  }
+
+  .mapa-topo > .mapa-com-dica:has([aria-label$='o painel']) {
+    order: -1;
+  }
+
+  /* Com muitas ferramentas (o Mestre tem 15), a barra rola em vez de ficar atrás da gaveta. */
+  .mapa-ferramentas {
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .mapa-ferramentas::-webkit-scrollbar {
+    display: none;
+  }
+
   .mapa-pagina,
   .mapa-pagina.com-lateral {
     grid-template-columns: 46px 1fr;

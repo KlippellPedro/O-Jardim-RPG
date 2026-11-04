@@ -130,7 +130,8 @@ export const MapaPage = () => {
   const [selecionado, setSelecionado] = useState<string | null>(null);
   const [conexao, setConexao] = useState<EstadoConexao>('conectando');
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
-  const [lateralAberta, setLateralAberta] = useState(true);
+  // No celular a gaveta de baixo cobriria metade do mapa e as ferramentas: começa fechada.
+  const [lateralAberta, setLateralAberta] = useState(() => typeof window === 'undefined' || window.innerWidth > 760);
   const [aba, setAba] = useState<AbaLateral>('iniciativa');
   const [acervoAberto, setAcervoAberto] = useState(false);
   const [oficinaAberta, setOficinaAberta] = useState(false);
@@ -1242,8 +1243,9 @@ export const MapaPage = () => {
   };
 
   const alternarTelaCheia = () => {
-    if (document.fullscreenElement) void document.exitFullscreen();
-    else void document.documentElement.requestFullscreen?.();
+    // O navegador pode recusar (iframe sem permissão, Safari do celular): sem erro solto na página.
+    if (document.fullscreenElement) void document.exitFullscreen().catch(() => undefined);
+    else void document.documentElement.requestFullscreen?.()?.catch(() => undefined);
   };
 
   const tokenSelecionado = tokens.find((t) => t.id === selecionado) ?? null;
