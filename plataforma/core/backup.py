@@ -100,6 +100,8 @@ TABELAS: tuple[str, ...] = (
     "mapa_campanha",
     # Construtor de mapas (migração 64).
     "mapa_projetos",
+    # Nome e cor do Criador na mesa, quando ele não é membro da campanha (migração 71).
+    "mesa_identidade_criador",
 
     # Cassino do Gambler (site) — ver plataforma/routers/casino.py.
     "cassino_gambler_rodadas",

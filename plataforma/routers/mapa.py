@@ -1671,6 +1671,12 @@ def _entrada_sync(database: Database, conexao_http, campanha_id: UUID):
             """,
             (campanha_id, usuario.id),
         ).fetchone()
+        if identidade is None:
+            # O Criador entra sem ser membro: o nome e a cor que ele escolheu ficam numa tabela à parte.
+            identidade = connection.execute(
+                "SELECT nome_mesa, cor_mesa FROM mesa_identidade_criador WHERE campanha_id=%s AND usuario_id=%s",
+                (campanha_id, usuario.id),
+            ).fetchone()
     nome = (identidade["nome_mesa"] if identidade else None) or usuario.nome_exibicao
     cor = identidade["cor_mesa"] if identidade else None
     return usuario, quem, nome, cor, acesso.role

@@ -2410,4 +2410,22 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        71,
+        "identidade_do_criador_na_mesa",
+        (
+            # O Criador da plataforma entra em qualquer campanha sem ser membro dela (campaign_access).
+            # Nome e cor que ele escolhe na mesa não têm onde morar em membros_campanha: moram aqui.
+            """
+            CREATE TABLE IF NOT EXISTS mesa_identidade_criador (
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                nome_mesa TEXT CHECK (nome_mesa IS NULL OR length(nome_mesa) BETWEEN 1 AND 32),
+                cor_mesa TEXT CHECK (cor_mesa IS NULL OR cor_mesa ~ '^#[0-9a-fA-F]{6}$'),
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (campanha_id, usuario_id)
+            )
+            """,
+        ),
+    ),
 )

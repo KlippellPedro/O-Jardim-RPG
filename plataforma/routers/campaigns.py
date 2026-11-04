@@ -174,6 +174,21 @@ def get_campaign(
                 """,
                 (campaign_id,),
             ).fetchall()
+            if user.is_creator and not any(str(membro["id"]) == str(user.id) for membro in members):
+                # O Criador entra em qualquer campanha sem ser membro dela. Ele aparece na lista
+                # para poder escolher o próprio nome e a própria cor na mesa.
+                externo = connection.execute(
+                    "SELECT nome_mesa, cor_mesa FROM mesa_identidade_criador WHERE campanha_id=%s AND usuario_id=%s",
+                    (campaign_id, user.id),
+                ).fetchone()
+                members = [dict(membro) for membro in members] + [{
+                    "id": user.id, "nome_exibicao": user.nome_exibicao, "email": user.email,
+                    "papel_plataforma": "criador", "ativo": True, "papel": "mestre", "status": "ativo",
+                    "entrou_em": None, "personagem_ativo_id": None,
+                    "nome_mesa": externo["nome_mesa"] if externo else None,
+                    "cor_mesa": externo["cor_mesa"] if externo else None,
+                    "permissoes_mesa": {}, "externo": True,
+                }]
     campaign_data = dict(campaign)
     campaign_data["configuracoes"] = visible_campaign_config(
         campaign_data.get("configuracoes"),
@@ -674,18 +689,40 @@ def update_member_table_identity(
             """,
             (campaign_id, member_id),
         ).fetchone()
-        if not membro:
+        if not membro and user.is_creator and member_id == user.id:
+            # Criador de fora da campanha: nome e cor ficam na tabela própria dele.
+            atual = connection.execute(
+                "SELECT nome_mesa, cor_mesa FROM mesa_identidade_criador WHERE campanha_id=%s AND usuario_id=%s FOR UPDATE",
+                (campaign_id, user.id),
+            ).fetchone()
+            nome_mesa = payload.nome_mesa if "nome_mesa" in payload.model_fields_set else (atual["nome_mesa"] if atual else None)
+            cor_mesa = payload.cor_mesa if "cor_mesa" in payload.model_fields_set else (atual["cor_mesa"] if atual else None)
+            connection.execute(
+                """
+                INSERT INTO mesa_identidade_criador (campanha_id, usuario_id, nome_mesa, cor_mesa)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (campanha_id, usuario_id) DO UPDATE
+                SET nome_mesa=EXCLUDED.nome_mesa, cor_mesa=EXCLUDED.cor_mesa, atualizado_em=CURRENT_TIMESTAMP
+                """,
+                (campaign_id, user.id, nome_mesa, cor_mesa),
+            )
+            membro = {
+                "usuario_id": user.id, "papel": "mestre", "nome_mesa": nome_mesa, "cor_mesa": cor_mesa,
+                "permissoes_mesa": {}, "nome_exibicao": user.nome_exibicao,
+            }
+        elif not membro:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="membro nao encontrado")
-        nome_mesa = payload.nome_mesa if "nome_mesa" in payload.model_fields_set else membro["nome_mesa"]
-        cor_mesa = payload.cor_mesa if "cor_mesa" in payload.model_fields_set else membro["cor_mesa"]
-        connection.execute(
-            """
-            UPDATE membros_campanha
-            SET nome_mesa=%s, cor_mesa=%s, atualizado_em=CURRENT_TIMESTAMP
-            WHERE campanha_id=%s AND usuario_id=%s
-            """,
-            (nome_mesa, cor_mesa, campaign_id, member_id),
-        )
+        else:
+            nome_mesa = payload.nome_mesa if "nome_mesa" in payload.model_fields_set else membro["nome_mesa"]
+            cor_mesa = payload.cor_mesa if "cor_mesa" in payload.model_fields_set else membro["cor_mesa"]
+            connection.execute(
+                """
+                UPDATE membros_campanha
+                SET nome_mesa=%s, cor_mesa=%s, atualizado_em=CURRENT_TIMESTAMP
+                WHERE campanha_id=%s AND usuario_id=%s
+                """,
+                (nome_mesa, cor_mesa, campaign_id, member_id),
+            )
         atualizado = {**dict(membro), "nome_mesa": nome_mesa, "cor_mesa": cor_mesa}
         record_audit(
             connection,

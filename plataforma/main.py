@@ -181,6 +181,14 @@ async def security_headers(request: Request, call_next):
     response.headers["X-Frame-Options"] = "SAMEORIGIN"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    # JSON da API é sempre do momento e de quem pediu: nenhum navegador ou intermediário guarda.
+    # (Imagens, áudio e arquivos da API definem o próprio Cache-Control e ficam como estão.)
+    if (
+        request.url.path.startswith("/api/")
+        and "cache-control" not in response.headers
+        and response.headers.get("content-type", "").startswith("application/json")
+    ):
+        response.headers["Cache-Control"] = "no-store"
     if settings.production:
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
