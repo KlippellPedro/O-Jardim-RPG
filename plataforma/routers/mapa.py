@@ -16,6 +16,7 @@ import asyncio
 import base64
 import binascii
 import json
+import math
 import time
 from types import SimpleNamespace
 from urllib.parse import urlparse
@@ -27,7 +28,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
-from core import calendario, construtor, mapa, nevoa, paredes, tempo_real
+from core import calendario, construtor, mapa, mesa_extras, nevoa, paredes, tempo_real, visao
 from core.acervo import ler as ler_pedaco
 from core.condicoes import normalizar_condicoes
 from core.database import Database
@@ -101,6 +102,9 @@ class TokenEdicao(BaseModel):
     #: Tocha, lanterna, luz mágica: o Mestre e o dono do token mudam.
     luz: dict | None = None
     sem_luz: bool = False
+    #: Aura presa ao token: o Mestre e o dono do token mudam, como a luz.
+    aura: dict | None = None
+    sem_aura: bool = False
 
 
 class TokenDoPersonagemInput(BaseModel):
@@ -117,6 +121,7 @@ class NevoaInput(BaseModel):
     """Uma mudança por vez na névoa da cena; o Mestre desenha e cada forma solta vira um pedido."""
 
     ligada: bool | None = None
+    visao_pelas_paredes: bool | None = None
     forma: dict | None = None
     desfazer: bool = False
     #: Cobre o mapa inteiro de novo (apaga as formas).
@@ -239,7 +244,7 @@ def _tokens(connection, cena_id: UUID) -> list[dict]:
         for linha in connection.execute(
             """
             SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome,
-                   t.x, t.y, t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz,
+                   t.x, t.y, t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura,
                    t.camada, t.flip_x, t.flip_y,
                    COALESCE(t.personagem_id, sp.personagem_id) AS personagem_efetivo
             FROM mapa_tokens t
@@ -307,12 +312,18 @@ def _tokens_de_personagem(connection, personagens: set[str]) -> dict[str, dict]:
     }
 
 
+def _mesa_da_campanha(connection, campanha_id: UUID) -> dict:
+    """Pausa, relógios e cronômetro da campanha (core/mesa_extras.py)."""
+    linha = connection.execute("SELECT mesa FROM mapa_campanha WHERE campanha_id=%s", (campanha_id,)).fetchone()
+    return mesa_extras.ler_mesa(linha["mesa"] if linha else None)
+
+
 def _moldura_mesa(connection, campanha_id: UUID) -> str | None:
     linha = connection.execute("SELECT moldura_mesa FROM mapa_campanha WHERE campanha_id=%s", (campanha_id,)).fetchone()
     return linha["moldura_mesa"] if linha else None
 
 
-def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador) -> list[dict]:
+def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador, visao_jogador=None) -> list[dict]:
     from routers.characters import _session_resources  # import tardio: o router de fichas é pesado
 
     tokens = _tokens(connection, cena["id"])
@@ -329,8 +340,13 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador) -> list
     for token in tokens:
         if not quem.gestor and not camadas_visiveis.get(token.get("camada") or "personagens", False):
             continue
-        participante = ligacoes[str(token["id"])]
         personagem = str(token["personagem_efetivo"]) if token["personagem_efetivo"] else None
+        proprio = personagem in quem.personagens if personagem else False
+        if visao_jogador is not None and not proprio and not visao_jogador["grade"].contem(
+            visao_jogador["grade"].visiveis, float(token["x"]), float(token["y"]),
+        ):
+            continue
+        participante = ligacoes[str(token["id"])]
         do_personagem = tokens_de_personagem.get(personagem) or {}
         ficha_linha = fichas.get(personagem) if personagem else None
         ficha = ficha_linha["ficha"] if ficha_linha and isinstance(ficha_linha["ficha"], dict) else {}
@@ -354,7 +370,10 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador) -> list
             moldura=mapa.moldura_efetiva(token, personagem, do_personagem.get("moldura"), moldura_mesa),
             # O enquadramento é da foto da ficha; imagem do acervo já vem recortada.
             enquadramento=do_personagem.get("enquadramento") if not token["imagem_id"] else None,
-            na_nevoa=cobertura is not None and not cobertura.revelado(float(token["x"]), float(token["y"])),
+            na_nevoa=(
+                False if proprio and visao_jogador is not None
+                else cobertura is not None and not cobertura.revelado(float(token["x"]), float(token["y"]))
+            ),
         )
         if item is None:
             continue
@@ -409,7 +428,179 @@ def _tempo_da_campanha(connection, campanha_id: UUID, gestor: bool) -> dict:
     return tempo
 
 
-def _resumo_cena(connection, cena, *, completa: bool, gestor: bool = False, permissoes_mesa: dict | None = None) -> dict:
+def _visao_jogador(connection, campanha_id: UUID, cena, quem: Espectador) -> dict | None:
+    """Calcula e grava a memória de quem pergunta. Nenhuma geometria de parede sai daqui."""
+    estado = nevoa.ler(cena["nevoa"])
+    if quem.gestor or not estado["visao_pelas_paredes"]:
+        return None
+
+    largura, altura = int(cena["largura"]), int(cena["altura"])
+    grade_cena = mapa.normalizar_grade({}, cena["grade"] if isinstance(cena["grade"], dict) else {})
+    casa = float(grade_cena["tamanho"])
+    camadas_visiveis = _camadas_visiveis(cena["estrutura"], False, quem.permissoes_mesa)
+    tokens = _tokens(connection, cena["id"])
+    participantes = _participantes(connection, campanha_id)
+    ligacoes = _ligacoes(tokens, participantes)
+    proprios = {
+        str(token["id"])
+        for token in tokens
+        if token["personagem_efetivo"]
+        and str(token["personagem_efetivo"]) in quem.personagens
+        and not token["oculto"]
+        and camadas_visiveis.get(token.get("camada") or "personagens", False)
+    }
+    fontes = []
+    for token in tokens:
+        personagem = str(token["personagem_efetivo"]) if token["personagem_efetivo"] else None
+        if personagem not in quem.personagens or token["oculto"]:
+            continue
+        if not camadas_visiveis.get(token.get("camada") or "personagens", False):
+            continue
+        luz = token.get("luz")
+        raio = None
+        if isinstance(luz, dict) and isinstance(luz.get("raio"), (int, float)) and not isinstance(luz.get("raio"), bool):
+            raio = max(0.0, float(luz["raio"]) * casa)
+        fontes.append((float(token["x"]), float(token["y"]), raio))
+
+    barram, vaos = paredes.barreiras(cena["estrutura"])
+    # Janelas continuam barrando movimento, mas deixam a linha de visão passar.
+    for abertura in construtor.ler_aberturas(cena["estrutura"]):
+        if abertura.get("tipo") == "janela":
+            vaos.append([float(abertura[c]) for c in ("x1", "y1", "x2", "y2")])
+    cobertura = nevoa.Nevoa(estado["formas"]) if estado["ligada"] else None
+    indice_paredes = (
+        visao.IndiceParedes(largura, altura, nevoa.tamanho_da_celula(largura, altura), barram, vaos)
+        if fontes else None
+    )
+    celula, colunas, linhas, visiveis = visao.calcular_celulas_visiveis(
+        largura, altura, fontes, barram, vaos, cobertura, indice_paredes,
+    )
+    total_fontes_tokens = len(fontes)
+    # Uma luz fixa só participa depois que o jogador já consegue ver a própria
+    # fonte. Isso impede que uma tocha numa sala secreta revele aquela sala.
+    grade_inicial = visao.GradeVisao(largura, altura, celula, colunas, linhas, visiveis, set())
+    for luz in construtor.ler_luzes(cena["estrutura"]):
+        if grade_inicial.contem(visiveis, float(luz["x"]), float(luz["y"])):
+            fontes.append((float(luz["x"]), float(luz["y"]), max(0.0, float(luz["raio"]) * casa)))
+    if len(fontes) > total_fontes_tokens:
+        celula, colunas, linhas, visiveis = visao.calcular_celulas_visiveis(
+            largura, altura, fontes, barram, vaos, cobertura, indice_paredes,
+        )
+    anterior = connection.execute(
+        """
+        SELECT mapa_id, largura, altura, celula, celulas_exploradas
+        FROM mapa_exploracao WHERE cena_id=%s AND usuario_id=%s
+        """,
+        (cena["id"], UUID(quem.usuario_id)),
+    ).fetchone()
+    exploradas_antes = []
+    if anterior and anterior["mapa_id"] == cena["mapa_id"] and (
+        int(anterior["largura"]), int(anterior["altura"]), int(anterior["celula"])
+    ) == (largura, altura, celula):
+        exploradas_antes = anterior["celulas_exploradas"] or []
+    grade = visao.combinar(largura, altura, celula, colunas, linhas, visiveis, exploradas_antes)
+
+    # O dono continua vendo seu próprio token, mesmo que o Mestre o tenha posto
+    # numa parte coberta. A célula só é liberada para esse recorte da pessoa.
+    for token in tokens:
+        if str(token["id"]) in proprios:
+            indice = visao.indice_da_posicao(grade, float(token["x"]), float(token["y"]))
+            if indice is not None:
+                grade.visiveis.add(indice)
+                grade.exploradas.add(indice)
+
+    tokens_visiveis = []
+    for token in tokens:
+        if token["oculto"] or not camadas_visiveis.get(token.get("camada") or "personagens", False):
+            continue
+        participante = ligacoes[str(token["id"])]
+        visibilidade = mapa.quem_ve(token, participante)
+        if visibilidade == "gestores" or (visibilidade == "donos" and not mapa.e_dono(token, participante, quem)):
+            continue
+        if str(token["id"]) in proprios or grade.contem(grade.visiveis, float(token["x"]), float(token["y"])):
+            tokens_visiveis.append(UUID(str(token["id"])))
+
+    formas_visiveis = visao.formas(grade, grade.visiveis)
+    formas_exploradas = visao.formas(grade, grade.exploradas)
+    mapa_da_cena = _mapa_da_cena(connection, cena) if camadas_visiveis["mapa"] else None
+    ladrilhos = nevoa.ladrilhos_liberados(
+        formas_exploradas, largura, altura, mapa_da_cena["chaves"] if mapa_da_cena else [],
+    ) if camadas_visiveis["mapa"] else []
+    connection.execute(
+        """
+        INSERT INTO mapa_exploracao (
+            cena_id, usuario_id, mapa_id, largura, altura, celula, celulas_exploradas,
+            celulas_visiveis, ladrilhos, tokens_visiveis
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (cena_id, usuario_id) DO UPDATE SET
+            mapa_id=EXCLUDED.mapa_id,
+            largura=EXCLUDED.largura,
+            altura=EXCLUDED.altura,
+            celula=EXCLUDED.celula,
+            celulas_exploradas=CASE
+                WHEN mapa_exploracao.mapa_id IS NOT DISTINCT FROM EXCLUDED.mapa_id
+                  AND mapa_exploracao.largura=EXCLUDED.largura
+                  AND mapa_exploracao.altura=EXCLUDED.altura
+                  AND mapa_exploracao.celula=EXCLUDED.celula
+                THEN ARRAY(
+                    SELECT DISTINCT indice FROM unnest(mapa_exploracao.celulas_exploradas || EXCLUDED.celulas_exploradas) AS u(indice)
+                    ORDER BY indice
+                )
+                ELSE EXCLUDED.celulas_exploradas
+            END,
+            celulas_visiveis=EXCLUDED.celulas_visiveis,
+            ladrilhos=CASE
+                WHEN mapa_exploracao.mapa_id IS NOT DISTINCT FROM EXCLUDED.mapa_id
+                  AND mapa_exploracao.largura=EXCLUDED.largura
+                  AND mapa_exploracao.altura=EXCLUDED.altura
+                  AND mapa_exploracao.celula=EXCLUDED.celula
+                THEN ARRAY(
+                    SELECT DISTINCT chave FROM unnest(mapa_exploracao.ladrilhos || EXCLUDED.ladrilhos) AS u(chave)
+                    ORDER BY chave
+                )
+                ELSE EXCLUDED.ladrilhos
+            END,
+            tokens_visiveis=EXCLUDED.tokens_visiveis,
+            atualizado_em=CURRENT_TIMESTAMP
+        """,
+        (
+            cena["id"], UUID(quem.usuario_id), cena["mapa_id"], largura, altura, celula,
+            sorted(grade.exploradas), sorted(grade.visiveis), ladrilhos, tokens_visiveis,
+        ),
+    )
+    return {
+        "grade": grade,
+        "formas": formas_visiveis,
+        "formas_exploradas": formas_exploradas,
+        "ladrilhos": ladrilhos,
+        "tokens_visiveis": {str(token_id) for token_id in tokens_visiveis},
+    }
+
+
+def _abertura_a_vista(abertura: dict, visao_jogador: dict) -> bool:
+    """Uma porta fechada é visível do lado acessível, mesmo que seu meio fique na parede."""
+    grade = visao_jogador["grade"]
+    pontos = [float(abertura[c]) for c in ("x1", "y1", "x2", "y2")]
+    x1, y1, x2, y2 = pontos
+    meio_x, meio_y = (x1 + x2) / 2, (y1 + y2) / 2
+    if grade.contem(grade.visiveis, meio_x, meio_y):
+        return True
+    dx, dy = x2 - x1, y2 - y1
+    comprimento = math.hypot(dx, dy)
+    if comprimento <= 1e-6:
+        return False
+    afastamento = grade.celula * 0.75
+    normal_x, normal_y = -dy / comprimento, dx / comprimento
+    return any(
+        grade.contem(grade.visiveis, meio_x + lado * normal_x * afastamento, meio_y + lado * normal_y * afastamento)
+        for lado in (-1, 1)
+    )
+
+
+def _resumo_cena(
+    connection, cena, *, completa: bool, gestor: bool = False,
+    permissoes_mesa: dict | None = None, visao_jogador: dict | None = None,
+) -> dict:
     resumo = {
         "id": str(cena["id"]),
         "nome": cena["nome"],
@@ -420,42 +611,84 @@ def _resumo_cena(connection, cena, *, completa: bool, gestor: bool = False, perm
         estado_nevoa = nevoa.ler(cena["nevoa"])
         cobertura = nevoa.Nevoa(estado_nevoa["formas"]) if estado_nevoa["ligada"] else None
         camadas_visiveis = _camadas_visiveis(cena["estrutura"], gestor, permissoes_mesa)
+        if visao_jogador is not None:
+            revelado = lambda x, y: visao_jogador["grade"].contem(visao_jogador["grade"].visiveis, x, y)
+        else:
+            revelado = cobertura.revelado if cobertura is not None else (lambda _x, _y: True)
         anotacoes = mapa.ler_anotacoes(cena["estrutura"], int(cena["largura"]), int(cena["altura"]))
         if not gestor:
-            anotacoes = [a for a in anotacoes if camadas_visiveis["anotacoes"] and (cobertura is None or cobertura.revelado(a["x"], a["y"]))]
+            anotacoes = [a for a in anotacoes if camadas_visiveis["anotacoes"] and not a.get("secreta") and revelado(a["x"], a["y"])]
+        clima = mapa.ler_clima(cena["clima"], int(cena["largura"]), int(cena["altura"]))
+        if visao_jogador is not None:
+            clima["efeitos"] = [
+                efeito for efeito in clima["efeitos"]
+                if efeito["area"] is None or visao.retangulo_totalmente_visivel(
+                    visao_jogador["grade"], visao_jogador["grade"].visiveis,
+                    [efeito["area"]["x"], efeito["area"]["y"], efeito["area"]["w"], efeito["area"]["h"]],
+                )
+            ]
+        nevoa_resposta = {
+            **estado_nevoa,
+            "ligada": (True if visao_jogador is not None else estado_nevoa["ligada"]) if camadas_visiveis["mapa"] else False,
+            "formas": visao_jogador["formas"] if visao_jogador is not None else estado_nevoa["formas"],
+            "exploradas": visao_jogador["formas_exploradas"] if visao_jogador is not None else [],
+            "personalizada": visao_jogador is not None,
+            "ladrilhos": (
+                visao_jogador["ladrilhos"] if visao_jogador is not None
+                else list(cena["nevoa_ladrilhos"] or []) if estado_nevoa["ligada"] and not gestor and camadas_visiveis["mapa"]
+                else None
+            ),
+        }
         resumo.update({
             "largura": cena["largura"],
             "altura": cena["altura"],
             "grade": mapa.normalizar_grade({}, cena["grade"] if isinstance(cena["grade"], dict) else {}),
             "livre": bool(cena["livre"]),
+            # Onde a tela abre a cena (core/mesa_extras.py); None é o mapa inteiro.
+            "vista": mesa_extras.ler_vista(cena["estrutura"]),
             "mapa": _mapa_da_cena(connection, cena) if camadas_visiveis["mapa"] else None,
             "camadas_jogadores": mapa.camadas_jogadores(cena["estrutura"]) if gestor else None,
             "camadas_visiveis": [chave for chave, visivel in camadas_visiveis.items() if visivel],
             "anotacoes": anotacoes,
-            "nevoa": {
-                **estado_nevoa,
-                "ligada": estado_nevoa["ligada"] if camadas_visiveis["mapa"] else False,
-                "formas": estado_nevoa["formas"] if camadas_visiveis["mapa"] else [],
-                # Só o jogador precisa da lista: o Mestre baixa o mapa inteiro.
-                "ladrilhos": list(cena["nevoa_ladrilhos"] or []) if estado_nevoa["ligada"] and not gestor and camadas_visiveis["mapa"] else None,
+            "nevoa": nevoa_resposta if camadas_visiveis["mapa"] else {
+                **nevoa_resposta, "ligada": False, "formas": [], "exploradas": [],
+                "personalizada": False, "ladrilhos": None,
             },
-            "clima": mapa.ler_clima(cena["clima"], int(cena["largura"]), int(cena["altura"])),
+            "clima": clima,
             # Portal escondido, desligado ou com as duas bocas na névoa não chega ao jogador.
             "portais": mapa.portais_de(
                 _portais(cena) if camadas_visiveis["mapa"] else [], gestor=gestor,
-                revelado=cobertura.revelado if cobertura is not None else (lambda _x, _y: True),
+                revelado=revelado,
             ),
             # Portas e janelas do mapa montado no construtor; a porta secreta é só do Mestre.
-            "aberturas": construtor.aberturas_de(
-                construtor.ler_aberturas(cena["estrutura"]) if camadas_visiveis["mapa"] else [], gestor=gestor,
-                revelado=cobertura.revelado if cobertura is not None else (lambda _x, _y: True),
+            "aberturas": (
+                construtor.aberturas_de(
+                    [a for a in construtor.ler_aberturas(cena["estrutura"]) if _abertura_a_vista(a, visao_jogador)],
+                    gestor=False, revelado=lambda _x, _y: True,
+                )
+                if visao_jogador is not None and camadas_visiveis["mapa"]
+                else construtor.aberturas_de(
+                    construtor.ler_aberturas(cena["estrutura"]) if camadas_visiveis["mapa"] else [],
+                    gestor=gestor, revelado=revelado,
+                )
             ),
             # Luzes fixas (só as que a névoa mostra) e as casas de água e lava, que ganham movimento.
             "luzes": construtor.luzes_de(
                 construtor.ler_luzes(cena["estrutura"]) if camadas_visiveis["mapa"] else [], gestor=gestor,
-                revelado=cobertura.revelado if cobertura is not None else (lambda _x, _y: True),
+                revelado=revelado,
             ),
-            "liquidos": construtor.ler_liquidos(cena["estrutura"]) if camadas_visiveis["mapa"] else {"agua": [], "lava": []},
+            "liquidos": (
+                {
+                    tipo: [
+                        retangulo for retangulo in retangulos
+                        if visao.retangulo_totalmente_visivel(visao_jogador["grade"], visao_jogador["grade"].visiveis, retangulo)
+                    ]
+                    for tipo, retangulos in construtor.ler_liquidos(cena["estrutura"]).items()
+                }
+                if visao_jogador is not None and camadas_visiveis["mapa"]
+                else construtor.ler_liquidos(cena["estrutura"]) if camadas_visiveis["mapa"]
+                else {"agua": [], "lava": []}
+            ),
         })
     return resumo
 
@@ -476,11 +709,13 @@ def _montar(connection, campanha_id: UUID, acesso, user: AuthenticatedUser, cena
         "tokens": [],
         "moldura_mesa": None,
         "tempo": None,
+        "mesa": None,
     }
     if resposta["bloqueado"]:
         return resposta
     resposta["moldura_mesa"] = _moldura_mesa(connection, campanha_id)
     resposta["tempo"] = _tempo_da_campanha(connection, campanha_id, gestor)
+    resposta["mesa"] = mesa_extras.mesa_de(_mesa_da_campanha(connection, campanha_id), gestor=gestor)
     if gestor:
         # A lista leva só o resumo; a névoa e o clima vêm apenas da cena aberta.
         cenas = connection.execute(
@@ -500,10 +735,12 @@ def _montar(connection, campanha_id: UUID, acesso, user: AuthenticatedUser, cena
         escolhida = _cena_ativa(connection, campanha_id)
     if escolhida is None:
         return resposta
+    visao_jogador = _visao_jogador(connection, campanha_id, escolhida, quem)
     resposta["cena"] = _resumo_cena(
-        connection, escolhida, completa=True, gestor=gestor, permissoes_mesa=quem.permissoes_mesa
+        connection, escolhida, completa=True, gestor=gestor, permissoes_mesa=quem.permissoes_mesa,
+        visao_jogador=visao_jogador,
     )
-    resposta["tokens"] = _visao_tokens(connection, campanha_id, escolhida, quem)
+    resposta["tokens"] = _visao_tokens(connection, campanha_id, escolhida, quem, visao_jogador)
     return resposta
 
 
@@ -647,6 +884,8 @@ def mudar_nevoa(
         try:
             if payload.ligada is not None:
                 estado["ligada"] = payload.ligada
+            if payload.visao_pelas_paredes is not None:
+                estado["visao_pelas_paredes"] = payload.visao_pelas_paredes
             if payload.cobrir_tudo:
                 estado["formas"] = []
             if payload.revelar_tudo:
@@ -813,7 +1052,7 @@ def _token(connection, campanha_id: UUID, token_id: UUID, *, travar: bool = Fals
     token = connection.execute(
         f"""
         SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome, t.x, t.y,
-               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.camada, t.flip_x, t.flip_y,
+               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura, t.camada, t.flip_x, t.flip_y,
                c.largura, c.altura, c.livre, c.ativa, c.estrutura
         FROM mapa_tokens t JOIN mapa_cenas c ON c.id = t.cena_id
         WHERE t.id=%s AND c.campanha_id=%s{' FOR UPDATE OF t' if travar else ''}
@@ -992,6 +1231,13 @@ def editar_token(
                 mudancas["luz"] = None
             elif payload.luz is not None:
                 mudancas["luz"] = Jsonb(mapa.normalizar_luz(payload.luz))
+            if payload.sem_aura:
+                mudancas["aura"] = None
+            elif payload.aura is not None:
+                try:
+                    mudancas["aura"] = Jsonb(mesa_extras.normalizar_aura(payload.aura))
+                except mesa_extras.ErroMesa as erro:
+                    raise HTTPException(status_code=erro.codigo, detail=erro.mensagem) from None
         except ErroMapa as erro:
             raise _erro_mapa(erro) from None
         if payload.sem_imagem:
@@ -1200,7 +1446,10 @@ def mudar_porta(
             achada = next((a for a in aberturas if a.get("id") == payload.id), None)
             if achada is not None:
                 estado_nevoa = nevoa.ler(cena["nevoa"])
-                if estado_nevoa["ligada"]:
+                if estado_nevoa["visao_pelas_paredes"]:
+                    visao_atual = _visao_jogador(connection, campanha_id, cena, quem)
+                    a_vista = bool(visao_atual and _abertura_a_vista(achada, visao_atual))
+                elif estado_nevoa["ligada"]:
                     meio_x = (achada["x1"] + achada["x2"]) / 2
                     meio_y = (achada["y1"] + achada["y2"]) / 2
                     a_vista = nevoa.Nevoa(estado_nevoa["formas"]).revelado(meio_x, meio_y)
@@ -1322,7 +1571,22 @@ def _regras_sync(database: Database, campanha_id: UUID) -> tempo_real.Regras:
                     (list(personagens),),
                 ).fetchall()
             }
-    estado_nevoa = nevoa.ler(cena["nevoa"])
+        estado_nevoa = nevoa.ler(cena["nevoa"])
+        visiveis_por_usuario: dict[str, frozenset[str]] = {}
+        if estado_nevoa["visao_pelas_paredes"]:
+            membros = connection.execute(
+                "SELECT usuario_id, papel FROM membros_campanha WHERE campanha_id=%s AND status='ativo' AND papel NOT IN ('mestre', 'assistente')",
+                (campanha_id,),
+            ).fetchall()
+            for membro in membros:
+                user_id = UUID(str(membro["usuario_id"]))
+                acesso_pessoal = SimpleNamespace(manages_content=False, role=membro["papel"])
+                quem = _espectador(connection, campanha_id, acesso_pessoal, user_id)
+                recorte = _visao_jogador(connection, campanha_id, cena, quem)
+                visiveis_por_usuario[str(user_id)] = frozenset(
+                    recorte["tokens_visiveis"] if recorte is not None
+                    else (token["id"] for token in _visao_tokens(connection, campanha_id, cena, quem))
+                )
     cobertura = nevoa.Nevoa(estado_nevoa["formas"]) if estado_nevoa["ligada"] else None
     regras = {}
     for token in tokens:
@@ -1346,6 +1610,8 @@ def _regras_sync(database: Database, campanha_id: UUID) -> tempo_real.Regras:
         largura=int(cena["largura"]), altura=int(cena["altura"]), tokens=regras,
         carregadas_em=time.monotonic(), nevoa=cobertura, portais=portais, casa=float(casa),
         barram=barram, vaos=vaos,
+        visao_pelas_paredes=estado_nevoa["visao_pelas_paredes"],
+        visiveis_por_usuario=visiveis_por_usuario,
     )
 
 

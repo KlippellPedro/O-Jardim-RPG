@@ -226,6 +226,22 @@ class ConstrutorBancoTests(unittest.TestCase):
         rotas.apagar_projeto(self.campanha_id, projeto_id, user=self.mestre, database=self.database)
         self.assertEqual(rotas.listar_projetos(self.campanha_id, user=self.mestre, database=self.database)["projetos"], [])
 
+    def test_copia_de_um_mapa_vira_modelo_sem_ligar_a_cena(self):
+        from routers import construtor as rotas
+
+        criado = rotas.criar_projeto(self.campanha_id, rotas.ProjetoInput(nome="Cripta", largura=6, altura=4), user=self.mestre, database=self.database)
+        projeto_id = uuid.UUID(criado["id"])
+        rotas.salvar_projeto(self.campanha_id, projeto_id, rotas.ProjetoEdicao(conteudo=_sala()), user=self.mestre, database=self.database)
+        copia = rotas.duplicar_projeto(self.campanha_id, projeto_id, rotas.ProjetoDuplicacao(), user=self.mestre, database=self.database)
+        self.assertNotEqual(copia["id"], criado["id"])
+        self.assertEqual((copia["nome"], copia["largura"], copia["altura"]), ("Cripta (cópia)", 6, 4))
+        self.assertEqual(copia["conteudo"]["chao"][0], "LLL...")
+        nomeada = rotas.duplicar_projeto(self.campanha_id, projeto_id, rotas.ProjetoDuplicacao(nome="Cripta norte"), user=self.mestre, database=self.database)
+        self.assertEqual(nomeada["nome"], "Cripta norte")
+        self.assertEqual(len(rotas.listar_projetos(self.campanha_id, user=self.mestre, database=self.database)["projetos"]), 3)
+        with self.assertRaises(Exception):
+            rotas.duplicar_projeto(self.campanha_id, projeto_id, rotas.ProjetoDuplicacao(), user=self.ana, database=self.database)
+
     def test_publicar_numa_cena_nova_e_depois_na_mesma_guardando_os_portais(self):
         from routers import construtor as rotas
         from routers import mapa as rotas_mapa

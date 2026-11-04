@@ -2345,4 +2345,69 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "ALTER TABLE membros_campanha ADD COLUMN IF NOT EXISTS permissoes_mesa JSONB NOT NULL DEFAULT '{}'::jsonb",
         ),
     ),
+    (
+        68,
+        "visao_pelas_paredes_e_memoria_do_jogador",
+        (
+            # A exploração pertence à pessoa e à cena. Posições visíveis ficam
+            # separadas da memória para que o acervo não libere imagens ocultas.
+            """
+            CREATE TABLE IF NOT EXISTS mapa_exploracao (
+                cena_id UUID NOT NULL REFERENCES mapa_cenas(id) ON DELETE CASCADE,
+                usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                mapa_id UUID REFERENCES acervo_itens(id) ON DELETE SET NULL,
+                largura INTEGER NOT NULL CHECK (largura > 0),
+                altura INTEGER NOT NULL CHECK (altura > 0),
+                celula INTEGER NOT NULL CHECK (celula > 0),
+                celulas_exploradas INTEGER[] NOT NULL DEFAULT '{}',
+                celulas_visiveis INTEGER[] NOT NULL DEFAULT '{}',
+                ladrilhos TEXT[] NOT NULL DEFAULT '{}',
+                tokens_visiveis UUID[] NOT NULL DEFAULT '{}',
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (cena_id, usuario_id)
+            )
+            """,
+        ),
+    ),
+    (
+        69,
+        "aura_do_token_e_mesa_da_campanha",
+        (
+            # Aura presa ao token (raio em casas, cor e se os jogadores veem): core/mesa_extras.py.
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS aura JSONB",
+            # Pausa, relógios de progresso e cronômetro da campanha, que toda a mesa vê.
+            "ALTER TABLE mapa_campanha ADD COLUMN IF NOT EXISTS mesa JSONB NOT NULL DEFAULT '{}'::jsonb",
+        ),
+    ),
+    (
+        70,
+        "documentos_na_mesa_e_trilhas_sincronizadas",
+        (
+            # Arquivos de áudio enviados pelo Mestre para a trilha sincronizada da sessão.
+            """
+            CREATE TABLE IF NOT EXISTS mapa_trilhas (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                nome TEXT NOT NULL CHECK (length(nome) BETWEEN 1 AND 80),
+                mime TEXT NOT NULL CHECK (mime IN ('audio/mpeg', 'audio/ogg', 'audio/wav', 'audio/webm')),
+                bytes INTEGER NOT NULL CHECK (bytes BETWEEN 4 AND 20971520),
+                conteudo BYTEA NOT NULL,
+                criado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE (campanha_id, id)
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS mapa_trilhas_campanha_idx ON mapa_trilhas (campanha_id, criado_em DESC)",
+            # Um estado por campanha: posição + horário do servidor permitem acertar o playhead após reconectar.
+            """
+            CREATE TABLE IF NOT EXISTS mapa_trilha_estado (
+                campanha_id UUID PRIMARY KEY REFERENCES campanhas(id) ON DELETE CASCADE,
+                faixa_id UUID REFERENCES mapa_trilhas(id) ON DELETE SET NULL,
+                reproduzindo BOOLEAN NOT NULL DEFAULT FALSE,
+                posicao_ms BIGINT NOT NULL DEFAULT 0 CHECK (posicao_ms >= 0),
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+        ),
+    ),
 )

@@ -93,9 +93,12 @@ TABELAS: tuple[str, ...] = (
     "acervo_pastas",
     "acervo_itens",
     "mapa_cenas",
+    "mapa_exploracao",
     "mapa_tokens",
     "personagem_token",
     "mapa_campanha",
+    "mapa_trilhas",
+    "mapa_trilha_estado",
     # Construtor de mapas (migração 64).
     "mapa_projetos",
 

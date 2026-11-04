@@ -20,6 +20,8 @@ import re
 from dataclasses import dataclass, field
 from uuid import uuid4
 
+from core import mesa_extras
+
 TIPOS_GRADE = ("quadrada", "hex", "nenhuma")
 LADOS = ("jogador", "aliado", "inimigo", "neutro")
 BARRAS = ("vida", "mana", "estamina", "sanidade")
@@ -407,6 +409,10 @@ def normalizar_anotacoes(dados, largura: int, altura: int) -> list[dict]:
         placa = bruto.get("placa", True)
         if not isinstance(placa, bool):
             raise ErroMapa("estilo da anotacao invalido")
+        # Nota secreta: só o Mestre vê (lembrete de armadilha, nome verdadeiro do lugar).
+        secreta = bruto.get("secreta", False)
+        if not isinstance(secreta, bool):
+            raise ErroMapa("nota secreta invalida")
         tamanho = _numero(bruto.get("tamanho", 32), "tamanho da anotacao", 12, 96)
         x, y = limitar_posicao(bruto.get("x"), bruto.get("y"), largura, altura)
         ids.add(id_anotacao)
@@ -420,6 +426,7 @@ def normalizar_anotacoes(dados, largura: int, altura: int) -> list[dict]:
             "cor": cor.lower(),
             "fundo": fundo.lower(),
             "placa": placa,
+            "secreta": secreta,
         })
     return saida
 
@@ -776,6 +783,8 @@ def visao_token(
         # A luz se vê de longe: quem enxerga o token enxerga a tocha dele, conhecendo ou não quem é.
         "luz": token.get("luz") if isinstance(token.get("luz"), dict) else None,
     }
+    # A aura escondida (o Mestre marcando uma área) é só de quem comanda e do dono do token.
+    saida["aura"] = mesa_extras.aura_vista(token.get("aura"), gestor=quem.gestor, dono=saida["e_meu"])
     if quem.gestor or saida["e_meu"]:
         saida["config_barras"] = normalizar_barras({}, token.get("barras") or {}, saida["lado"])
         # Abre a ficha no painel lateral; só para quem já pode abrir aquela ficha.

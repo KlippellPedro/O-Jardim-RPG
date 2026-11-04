@@ -126,9 +126,9 @@ def pode_ler_item(connection, item_id: UUID, user: AuthenticatedUser, chave: str
     """Dono sempre; outros, se a imagem está numa cena, token ou projeto autorizado.
 
     Quem comanda a campanha vê também as cenas em preparo; jogador só a cena
-    ativa, e só com a sessão ao vivo. Com a névoa ligada, o jogador recebe só os
-    ladrilhos do mapa que tocam área revelada (`mapa_cenas.nevoa_ladrilhos`,
-    calculado em `core/nevoa.py`); a miniatura não está nessa lista.
+    ativa, e só com a sessão ao vivo. Névoa manual e visão individual liberam
+    apenas os ladrilhos autorizados para aquele jogador; a miniatura não entra
+    nessas listas.
     """
     linha = connection.execute(
         """
@@ -140,33 +140,70 @@ def pode_ler_item(connection, item_id: UUID, user: AuthenticatedUser, chave: str
             LEFT JOIN mapa_tokens t ON t.cena_id = c.id AND t.imagem_id = %(item)s AND NOT t.oculto
             JOIN membros_campanha m ON m.campanha_id = c.campanha_id AND m.usuario_id = %(usuario)s AND m.status = 'ativo'
             WHERE (
-              (c.mapa_id = %(item)s AND (
-                m.papel IN ('mestre', 'assistente')
-                OR (
-                  COALESCE(c.estrutura->'camadas_jogadores'->>'mapa', 'true') = 'true'
-                  AND COALESCE(m.permissoes_mesa->'camadas'->>'mapa', 'true') = 'true'
+              (
+                c.mapa_id = %(item)s
+                AND (
+                  m.papel IN ('mestre', 'assistente')
+                  OR (
+                    COALESCE(c.estrutura->'camadas_jogadores'->>'mapa', 'true') = 'true'
+                    AND COALESCE(m.permissoes_mesa->'camadas'->>'mapa', 'true') = 'true'
+                  )
                 )
-              ))
-              OR (t.id IS NOT NULL AND (
-                m.papel IN ('mestre', 'assistente')
-                OR (
-                  COALESCE(c.estrutura->'camadas_jogadores'->>t.camada, 'true') = 'true'
-                  AND COALESCE(m.permissoes_mesa->'camadas'->>t.camada, 'true') = 'true'
-                )
-              ))
-            )
-              AND (
-                m.papel IN ('mestre', 'assistente')
-                OR (c.ativa
+                AND (
+                  m.papel IN ('mestre', 'assistente')
+                  OR (
+                    c.ativa
                     AND EXISTS (
                       SELECT 1 FROM sessoes_mesa s WHERE s.campanha_id = c.campanha_id AND s.status = 'aberta'
                     )
                     AND (
-                      t.id IS NOT NULL
-                      OR NOT COALESCE((c.nevoa->>'ligada')::boolean, FALSE)
-                      OR %(chave)s = ANY(c.nevoa_ladrilhos)
-                    ))
+                      (
+                        COALESCE((c.nevoa->>'visao_pelas_paredes')::boolean, FALSE)
+                        AND EXISTS (
+                          SELECT 1 FROM mapa_exploracao e
+                          WHERE e.cena_id = c.id AND e.usuario_id = m.usuario_id
+                            AND %(chave)s = ANY(e.ladrilhos)
+                        )
+                      )
+                      OR (
+                        NOT COALESCE((c.nevoa->>'visao_pelas_paredes')::boolean, FALSE)
+                        AND (
+                          NOT COALESCE((c.nevoa->>'ligada')::boolean, FALSE)
+                          OR %(chave)s = ANY(c.nevoa_ladrilhos)
+                        )
+                      )
+                    )
+                  )
+                )
               )
+              OR (
+                t.id IS NOT NULL
+                AND (
+                  m.papel IN ('mestre', 'assistente')
+                  OR (
+                    COALESCE(c.estrutura->'camadas_jogadores'->>t.camada, 'true') = 'true'
+                    AND COALESCE(m.permissoes_mesa->'camadas'->>t.camada, 'true') = 'true'
+                  )
+                )
+                AND (
+                  m.papel IN ('mestre', 'assistente')
+                  OR (
+                    c.ativa
+                    AND EXISTS (
+                      SELECT 1 FROM sessoes_mesa s WHERE s.campanha_id = c.campanha_id AND s.status = 'aberta'
+                    )
+                    AND (
+                      NOT COALESCE((c.nevoa->>'visao_pelas_paredes')::boolean, FALSE)
+                      OR EXISTS (
+                        SELECT 1 FROM mapa_exploracao e
+                        WHERE e.cena_id = c.id AND e.usuario_id = m.usuario_id
+                          AND t.id = ANY(e.tokens_visiveis)
+                      )
+                    )
+                  )
+                )
+              )
+            )
           ) AS na_mesa,
           EXISTS (
             SELECT 1

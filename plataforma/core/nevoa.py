@@ -99,10 +99,14 @@ def caber(formas: list[dict]) -> None:
 
 
 def ler(dados) -> dict:
-    """A névoa guardada na cena, sempre com os dois campos."""
+    """A névoa guardada na cena e o modo opcional de visão pelos tokens."""
     dados = dados if isinstance(dados, dict) else {}
     formas = dados.get("formas")
-    return {"ligada": bool(dados.get("ligada")), "formas": formas if isinstance(formas, list) else []}
+    return {
+        "ligada": bool(dados.get("ligada")),
+        "formas": formas if isinstance(formas, list) else [],
+        "visao_pelas_paredes": bool(dados.get("visao_pelas_paredes")),
+    }
 
 
 # --------------------------------------------------------------- geometria

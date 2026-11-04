@@ -40,6 +40,10 @@ class ProjetoEdicao(BaseModel):
     conteudo: dict | None = None
 
 
+class ProjetoDuplicacao(BaseModel):
+    nome: str | None = Field(default=None, max_length=80)
+
+
 class ProntasInput(BaseModel):
     prontas: list[dict] = Field(default_factory=list, max_length=construtor.MAX_PRONTAS)
 
@@ -207,6 +211,42 @@ def criar_projeto(
             VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING {COLUNAS}
             """,
             (uuid4(), campanha_id, nome, largura, altura, casa, Jsonb(construtor.conteudo_vazio(largura, altura))),
+        ).fetchone()
+    return _visao(linha)
+
+
+@router.post("/{campanha_id}/projetos/{projeto_id}/duplicar", status_code=status.HTTP_201_CREATED)
+def duplicar_projeto(
+    campanha_id: UUID,
+    projeto_id: UUID,
+    payload: ProjetoDuplicacao,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Cria um novo projeto a partir de um mapa existente da mesma campanha."""
+    with database.connection() as connection:
+        require_campaign_manager(connection, campanha_id, user.id)
+        original = _projeto(connection, campanha_id, projeto_id)
+        total = connection.execute(
+            "SELECT COUNT(*) AS n FROM mapa_projetos WHERE campanha_id=%s", (campanha_id,),
+        ).fetchone()
+        if int(total["n"]) >= construtor.MAX_PROJETOS:
+            raise HTTPException(status_code=409, detail=f"limite de {construtor.MAX_PROJETOS} mapas no construtor")
+        largura, altura, casa = int(original["largura"]), int(original["altura"]), int(original["casa"])
+        nome_bruto = payload.nome if payload.nome is not None else f"{original['nome'][:72]} (cópia)"
+        try:
+            nome = construtor.nome_limpo(nome_bruto)
+            conteudo = construtor.normalizar_conteudo(original["conteudo"], largura, altura)
+        except ErroConstrutor as erro:
+            raise _erro(erro) from None
+        ids_ja_usados = {peca["imagem_id"] for peca in conteudo["pecas"] if peca.get("imagem_id")}
+        _validar_pecas(connection, conteudo, user.id, ids_ja_usados)
+        linha = connection.execute(
+            f"""
+            INSERT INTO mapa_projetos (id, campanha_id, nome, largura, altura, casa, conteudo)
+            VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING {COLUNAS}
+            """,
+            (uuid4(), campanha_id, nome, largura, altura, casa, Jsonb(conteudo)),
         ).fetchone()
     return _visao(linha)
 

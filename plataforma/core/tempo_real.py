@@ -66,7 +66,7 @@ JUNTAR_MUDANCAS_S = 0.03
 #: O calendário muda o mapa (a hora e a luz do dia), então não está aqui.
 EVENTOS_SEM_EFEITO_NO_MAPA = frozenset({"registro", "mesa", "destaque_mesa", "loot_rolado", "loot_entregue", "iniciativa"})
 #: Partes do estado do mapa que vão inteiras quando mudam (tokens vão um a um).
-CAMPOS_DO_ESTADO = ("gestor", "usuario_id", "ao_vivo", "bloqueado", "cenas", "moldura_mesa", "tempo")
+CAMPOS_DO_ESTADO = ("gestor", "usuario_id", "ao_vivo", "bloqueado", "cenas", "moldura_mesa", "tempo", "mesa")
 CORES = ("#4fd1c5", "#f6ad55", "#f687b3", "#90cdf4", "#9ae6b4", "#fbd38d", "#b794f4", "#feb2b2")
 
 
@@ -203,6 +203,10 @@ class Regras:
     #: Paredes vivas (core/paredes.py, barreiras): trechos que barram o jogador e vãos abertos, em px.
     barram: list = field(default_factory=list)
     vaos: list = field(default_factory=list)
+    #: Com visão individual, posições só são reenviadas após o estado personalizado do jogador.
+    visao_pelas_paredes: bool = False
+    #: Tokens à vista agora para cada conexão, usados também para impedir interação às cegas.
+    visiveis_por_usuario: dict[str, frozenset[str]] = field(default_factory=dict)
 
     def vencidas(self) -> bool:
         return time.monotonic() - self.carregadas_em > VALIDADE_REGRAS_S
@@ -263,6 +267,39 @@ def sair(campanha_id, conexao: Conexao) -> None:
         _salas.pop(str(campanha_id), None)
         return
     _avisar_presenca(sala)
+
+
+def anunciar(campanha_id, mensagem: dict) -> None:
+    """Recado para toda a mesa conectada (a fala de um NPC). Nada fica gravado."""
+    _no_loop(_anunciar, str(campanha_id), mensagem)
+
+
+def _anunciar(campanha_id: str, mensagem: dict) -> None:
+    sala = _salas.get(campanha_id)
+    if sala:
+        texto = json.dumps({**mensagem, "ts": agora_ms()}, ensure_ascii=False)
+        for conexao in list(sala.conexoes):
+            conexao.entregar(texto)
+
+
+def anunciar_para(campanha_id, mensagem: dict, personagens: list | None) -> None:
+    """Envia um documento aos gestores e aos jogadores donos dos personagens indicados.
+
+    `None` significa todos os jogadores. O conteúdo só é montado pela rota depois de
+    verificar que quem pediu é Mestre ou assistente.
+    """
+    alvos = None if personagens is None else frozenset(str(personagem) for personagem in personagens)
+    _no_loop(_anunciar_para, str(campanha_id), mensagem, alvos)
+
+
+def _anunciar_para(campanha_id: str, mensagem: dict, personagens: frozenset[str] | None) -> None:
+    sala = _salas.get(campanha_id)
+    if not sala:
+        return
+    texto = json.dumps({**mensagem, "ts": agora_ms()}, ensure_ascii=False)
+    for conexao in list(sala.conexoes):
+        if conexao.gestor or personagens is None or (conexao.personagens & personagens):
+            conexao.entregar(texto)
 
 
 def conectados(campanha_id) -> int:
@@ -495,9 +532,11 @@ def _pode_ver_camada(conexao: Conexao, regra: RegraToken) -> bool:
     return regra.camada_visivel_jogadores and camadas.get(regra.camada, True)
 
 
-def _pode_mover(conexao: Conexao, regra: RegraToken, regras: Regras) -> bool:
+def _pode_mover(conexao: Conexao, regra: RegraToken, regras: Regras, token_id: str) -> bool:
     if conexao.gestor:
         return True
+    if regras.visao_pelas_paredes and token_id not in regras.visiveis_por_usuario.get(conexao.usuario_id, frozenset()):
+        return False
     permissoes = conexao.permissoes_mesa
     camadas = permissoes.get("camadas", {})
     if not permissoes.get("mover_tokens", True):
@@ -616,7 +655,7 @@ async def processar(
         y = _numero(mensagem.get("y"))
         if regra is None or x is None or y is None:
             return {"t": "erro", "motivo": "token desconhecido"}
-        if not _pode_mover(conexao, regra, regras):
+        if not _pode_mover(conexao, regra, regras, token_id):
             return {"t": "erro", "motivo": "voce nao move este token", "token": token_id}
         x = max(0.0, min(float(regras.largura), x))
         y = max(0.0, min(float(regras.altura), y))
@@ -659,7 +698,11 @@ async def processar(
             # Atravessou um portal: todos (e quem soltou) veem o token sumir de um lado e surgir no outro.
             repasse.update({"t": "portal", **travessia})
         # A mesa recebe a posição antes do banco gravar: soltar não espera o banco.
-        _repassar(sala, conexao, repasse, regra, a_vista, chave=f"t:{token_id}")
+        # A posição intermediária poderia mostrar um token atravessando uma
+        # parede. Com visão por jogador, cada pessoa recebe o recorte do servidor
+        # depois do soltar; quem arrasta continua vendo o movimento local.
+        if not regras.visao_pelas_paredes:
+            _repassar(sala, conexao, repasse, regra, a_vista, chave=f"t:{token_id}")
         if tipo == "soltar" or saiu_da_nevoa:
             # Saindo da névoa no meio do arrasto, a posição também vai para o banco: os
             # jogadores ainda não conhecem o token e o GET deles precisa trazê-lo aqui.
@@ -669,6 +712,8 @@ async def processar(
                 return {"t": "erro", "motivo": "o token saiu da cena", "token": token_id}
             if tipo == "soltar":
                 regra.x, regra.y = x, y
+                if regras.visao_pelas_paredes:
+                    _invalidar(str(campanha_id), int(agora_ms()))
         if saiu_da_nevoa:
             # Os jogadores ainda não conhecem o token: recebem o recorte novo (ou recarregam).
             if _empurrador is not None:
