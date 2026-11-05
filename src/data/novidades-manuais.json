@@ -2,6 +2,19 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-05-mapa-so-o-mapa-e-arrastar-direto",
+      "data": "2026-11-05",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: arrastar os mapas direto, e esconder as ferramentas e o painel",
+      "detalhes": [
+        "O Mestre arrasta um mapa colocado direto com a ferramenta de mover: clique no mapa e leve para onde quiser. Ele anda livre, sem grudar na grade. Com Shift apertado, o canto encaixa na grade. Um mapa trancado deixa a mão andar pela tela.",
+        "O primeiro mapa de uma cena entra com folga em volta, para dar para arrastar para qualquer lado. Ver o mapa inteiro enquadra os mapas, sem a folga.",
+        "No topo há botões para esconder a barra de ferramentas da esquerda e o painel de iniciativa e fichas da direita. Ao esconder, aparece um botão redondo na borda para trazer de volta. O aparelho lembra a escolha.",
+        "O botão Só o mapa (ou a tecla H) esconde tudo e deixa só o mapa na tela. Um botão no canto, ou H de novo, traz a interface de volta."
+      ]
+    },
+    {
       "id": "2026-11-05-mapas-como-objetos-na-cena",
       "data": "2026-11-05",
       "tipo": "novo",

@@ -1,6 +1,19 @@
 {
   "itens": [
     {
+      "id": "2026-11-05-mapa-so-o-mapa-e-arrastar-direto",
+      "data": "2026-11-05",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: arrastar os mapas direto, e esconder as ferramentas e o painel",
+      "detalhes": [
+        "O Mestre arrasta um mapa colocado direto com a ferramenta de mover: clique no mapa e leve para onde quiser. Ele anda livre, sem grudar na grade. Com Shift apertado, o canto encaixa na grade. Um mapa trancado deixa a mão andar pela tela.",
+        "O primeiro mapa de uma cena entra com folga em volta, para dar para arrastar para qualquer lado. Ver o mapa inteiro enquadra os mapas, sem a folga.",
+        "No topo há botões para esconder a barra de ferramentas da esquerda e o painel de iniciativa e fichas da direita. Ao esconder, aparece um botão redondo na borda para trazer de volta. O aparelho lembra a escolha.",
+        "O botão Só o mapa (ou a tecla H) esconde tudo e deixa só o mapa na tela. Um botão no canto, ou H de novo, traz a interface de volta."
+      ]
+    },
+    {
       "id": "2026-11-05-mapas-como-objetos-na-cena",
       "data": "2026-11-05",
       "tipo": "novo",
@@ -1015,18 +1028,6 @@
         "Cada derivação é um tipo de dano próprio. Resistência a uma derivação vale só para ela, e Resistência ao elemento de base vale pela metade contra a derivação.",
         "Frio e Calor passaram a ser dano de ambiente, o de um deserto sem sombra ou de uma noite de nevasca. Quem ataca causa Gelo ou Fogo, nunca Frio ou Calor.",
         "O Ácido entrou entre os danos persistentes, ao lado de sangramento, fogo e veneno."
-      ]
-    },
-    {
-      "id": "2026-10-12-revisao-pharos-banco-sonhar",
-      "data": "2026-10-12",
-      "tipo": "melhoria",
-      "area": "Mundo",
-      "titulo": "Pharos, Banco Lunar e Sonhar com texto revisado",
-      "detalhes": [
-        "Pharos e a Guilda dos Caçadores contam a mesma história: como funciona a Ronda, quanto o Quadro paga e por que a cidade só fica no escuro na Última Luz.",
-        "O Banco Lunar deixa claro que tem agência em todas as Árvores e a matriz no Vazio, e que a neutralidade dele só cai quando alguém paga muito.",
-        "Sonhar entre as Árvores ficou mais curto e sem repetição, e Grimm aparece com o título de Soberano dos Sonhos e Pesadelos."
       ]
     }
   ]
