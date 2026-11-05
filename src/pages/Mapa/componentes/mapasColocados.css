@@ -1,0 +1,212 @@
+/* A barra do mapa escolhido e a lista dos mapas da cena. Usa as variáveis do mapa.css. */
+
+.mapa-barra-mapa {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 24px);
+}
+
+.mapa-barra-mapa-linha {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 8px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 999px;
+  background: var(--mapa-painel);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.mapa-barra-mapa-nome {
+  max-width: 160px;
+  margin: 0 8px 0 6px;
+  overflow: hidden;
+  color: var(--mapa-texto);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-barra-mapa-linha button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.mapa-barra-mapa-linha button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mapa-texto);
+}
+
+.mapa-barra-mapa-linha button.ativo {
+  background: rgba(199, 164, 76, 0.24);
+  color: var(--mapa-ouro);
+}
+
+.mapa-barra-mapa-linha button.perigo:hover {
+  color: var(--mapa-perigo);
+}
+
+.mapa-barra-mapa-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 220px;
+  padding: 6px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 12px;
+  background: var(--mapa-painel);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.mapa-barra-mapa-menu > button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mapa-texto);
+  cursor: pointer;
+  font-size: 13px;
+  text-align: left;
+}
+
+.mapa-barra-mapa-menu > button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mapa-barra-mapa-menu > button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.mapa-barra-mapa-numeros {
+  padding: 10px 12px;
+  gap: 8px;
+}
+
+.mapa-barra-mapa-numeros label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.mapa-barra-mapa-numeros input {
+  width: 92px;
+  padding: 5px 8px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--mapa-texto);
+  font: inherit;
+  text-align: right;
+}
+
+.mapa-barra-mapa-numeros .mapa-dica {
+  max-width: 260px;
+}
+
+/* A lista dos mapas da cena */
+
+.mapa-config.mapa-painel-mapas {
+  width: min(300px, calc(100% - 24px));
+}
+
+.mapa-painel-mapas-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mapa-painel-mapas .mapa-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 8px;
+}
+
+.mapa-painel-mapas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mapa-painel-mapas-lista li {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 4px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+}
+
+.mapa-painel-mapas-lista li.escolhido {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.12);
+}
+
+.mapa-painel-mapas-lista button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.mapa-painel-mapas-lista button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mapa-texto);
+}
+
+.mapa-painel-mapas-lista button.ativo {
+  color: var(--mapa-ouro);
+}
+
+.mapa-painel-mapas-lista .mapa-painel-mapas-nome {
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  padding: 0 6px;
+  overflow: hidden;
+  color: var(--mapa-texto);
+  font-size: 13px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-painel-mapas-nome small {
+  color: var(--mapa-apagado);
+  font-size: 10px;
+}

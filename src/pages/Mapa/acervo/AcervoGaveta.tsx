@@ -11,6 +11,8 @@ interface Props {
   /** Há uma cena aberta para receber o mapa ou o token. */
   temCena: boolean;
   onUsarComoMapa: (item: IItemAcervo) => void;
+  /** Põe o mapa na cena como um objeto (vários mapas na mesma cena). */
+  onColocarMapa: (item: IItemAcervo) => void;
   onNovaCena: (item: IItemAcervo) => void;
   onPorNaCena: (item: IItemAcervo) => void;
 }
@@ -67,7 +69,7 @@ const InfoDaImagem = ({ item, onSalvo, onFechar }: { item: IItemAcervo; onSalvo:
   );
 };
 
-export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNovaCena, onPorNaCena }: Props) => {
+export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColocarMapa, onNovaCena, onPorNaCena }: Props) => {
   const [acervo, setAcervo] = useState<IAcervo | null>(null);
   const [erro, setErro] = useState('');
   const [pasta, setPasta] = useState<string | null | 'todas'>('todas');
@@ -223,7 +225,7 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNova
             <input ref={pastaRef} type="file" multiple hidden onChange={(e) => void subir(e.target.files, true)} />
           </div>
 
-          {tipo === 'mapa' && <p className="mapa-dica">"Nesta cena" troca o mapa da cena. Para juntar vários mapas numa cena só, abra o Construtor de mapas e escolha os mapas em "Mapas do Acervo".</p>}
+          {tipo === 'mapa' && <p className="mapa-dica">"Colocar" põe o mapa na cena como um objeto: vários mapas ficam lado a lado, e cada um anda, muda de tamanho, tranca e se esconde dos jogadores. "Trocar fundo" troca o mapa de fundo da cena.</p>}
           {erro && <p className="mapa-erro">{erro}</p>}
           {envios.length > 0 && (
             <ul className="mapa-envios">
@@ -247,7 +249,8 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNova
                 <div className="mapa-acervo-acoes">
                   {item.tipo === 'mapa' ? (
                     <>
-                      {temCena && <button type="button" onClick={() => onUsarComoMapa(item)}><MapaIcone size={13} /> Nesta cena</button>}
+                      {temCena && <button type="button" title="Põe o mapa na cena como um objeto: dá para arrastar, mudar o tamanho, trancar e esconder dos jogadores" onClick={() => onColocarMapa(item)}><MapaIcone size={13} /> Colocar</button>}
+                      {temCena && <button type="button" title="Troca o mapa de fundo da cena por este" onClick={() => onUsarComoMapa(item)}>Trocar fundo</button>}
                       <button type="button" onClick={() => onNovaCena(item)}>Nova cena</button>
                     </>
                   ) : (

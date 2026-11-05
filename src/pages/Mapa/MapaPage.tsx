@@ -5,12 +5,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, BookOpenCheck, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Grid3x3, Hand, Layers, Loader2, MapPin, Maximize2, Minimize2, Moon, Music2, Orbit, PanelRightClose, PanelRightOpen, Ruler, Search, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserRound, Users, Wand2, Wifi, WifiOff, X,
+  ArrowLeft, BookOpenCheck, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Grid3x3, Hand, Images, Layers, Loader2, MapPin, Maximize2, Minimize2, Moon, Music2, Orbit, PanelRightClose, PanelRightOpen, Ruler, Search, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserRound, Users, Wand2, Wifi, WifiOff, X,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSessaoStore } from '../../store/useSessaoStore';
 import { assinarEventosDaCampanha } from '../../services/campanhaEventos';
-import { mapaApi, type CamadaMapaId, type CamadaTokenId, type IAnotacaoMapa, type IAreaClima, type ICeu, type IClima, type IEstadoMapa, type IFormaNevoa, type IMagiaMapa, type INevoaPayload, type IPortal, type ITokenEdicao, type ITokenMapa } from '../../services/mapaApi';
+import { mapaApi, type AcaoOrdemMapa, type CamadaMapaId, type CamadaTokenId, type IAnotacaoMapa, type IAreaClima, type ICeu, type IClima, type IEstadoMapa, type IFormaNevoa, type IMagiaMapa, type IMapaColocadoEdicao, type INevoaPayload, type IPortal, type ITokenEdicao, type ITokenMapa } from '../../services/mapaApi';
 import { calendarioMundoApi } from '../../services/calendarioMundoApi';
 import type { IItemAcervo } from '../../services/acervoApi';
 import { confirmar, pedirTexto } from '../../components/avisos/confirmacao';
@@ -45,6 +45,8 @@ import { Medidor } from './medidor';
 import { aplicarDelta, type DeltaMapa } from './delta';
 import { PainelCamadas } from './componentes/PainelCamadas';
 import { PainelGrade } from './componentes/PainelGrade';
+import { BarraMapaColocado } from './componentes/BarraMapaColocado';
+import { PainelMapasDaCena } from './componentes/PainelMapasDaCena';
 import { EditorAnotacao } from './componentes/EditorAnotacao';
 import { PainelJogadores } from './componentes/PainelJogadores';
 import type { Enquadramento } from './motor/molduras';
@@ -196,6 +198,8 @@ export const MapaPage = () => {
   const [preferenciasBarras, setPreferenciasBarras] = useState<IPreferenciasBarrasMapa>(() => lerPreferenciasBarras(usuarioId));
   const [climaLocal, setClimaLocal] = useState(lerClimaLocal);
   const [gradeAberta, setGradeAberta] = useState(false);
+  /** O mapa colocado que o Mestre escolheu com a ferramenta de mapas. */
+  const [mapaSelecionadoId, setMapaSelecionadoId] = useState<string | null>(null);
   const [encaixe, setEncaixe] = useState(() => lerOpcaoLocal(CHAVE_ENCAIXE_LOCAL));
   const [seguirVista, setSeguirVista] = useState(() => lerOpcaoLocal(CHAVE_SEGUIR_VISTA_LOCAL));
   const seguirVistaRef = useRef(seguirVista);
@@ -874,8 +878,8 @@ export const MapaPage = () => {
   };
 
   // O palco nasce uma vez; os gestos chegam sempre na versão mais nova das funções.
-  const gestos = useRef({ arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia, criarPortal, moverBoca, criarAnotacao, selecionarAnotacao, moverAnotacao, clicarPorta });
-  gestos.current = { arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia, criarPortal, moverBoca, criarAnotacao, selecionarAnotacao, moverAnotacao, clicarPorta };
+  const gestos = useRef({ arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia, criarPortal, moverBoca, criarAnotacao, selecionarAnotacao, moverAnotacao, clicarPorta, moverMapaColocado });
+  gestos.current = { arrastar, soltar, regua, desenharNevoa, marcarArea, enviarArrastos, lancarMagia, criarPortal, moverBoca, criarAnotacao, selecionarAnotacao, moverAnotacao, clicarPorta, moverMapaColocado };
 
   useEffect(() => {
     if (!alvoRef.current) return undefined;
@@ -901,6 +905,8 @@ export const MapaPage = () => {
       aoSelecionarAnotacao: (id) => gestos.current.selecionarAnotacao(id),
       aoMoverAnotacao: (id, x, y) => gestos.current.moverAnotacao(id, x, y),
       aoPorta: (porta) => gestos.current.clicarPorta(porta),
+      aoSelecionarMapa: setMapaSelecionadoId,
+      aoMoverMapa: (id, mudancas) => gestos.current.moverMapaColocado(id, mudancas),
     }).then((criado) => {
       if (!vivo) {
         criado.destruir();
@@ -1030,6 +1036,28 @@ export const MapaPage = () => {
     if (conexao === 'ws' || conexao === 'sse') conexaoRef.current?.enviar({ t: 'vendo', cena: cenaVista });
   }, [cenaVista, conexao]);
 
+  // Os painéis do canto de cima à esquerda não convivem com a lista dos mapas da cena: um abre, o outro sai.
+  useEffect(() => {
+    if (ferramenta !== 'mapas') return;
+    setGradeAberta(false);
+    setCamadasAberto(false);
+    setJogadoresAberto(false);
+    setConfigAberta(false);
+    setClimaAberto(false);
+    setTempoAberto(false);
+  }, [ferramenta]);
+
+  useEffect(() => {
+    if (gradeAberta || camadasAberto || jogadoresAberto || configAberta || climaAberto || tempoAberto) {
+      setFerramenta((atual) => (atual === 'mapas' ? 'mover' : atual));
+    }
+  }, [gradeAberta, camadasAberto, jogadoresAberto, configAberta, climaAberto, tempoAberto]);
+
+  // A seleção do React (lista, mapa recém-posto) vale também no palco, depois de ele receber a cena nova.
+  useEffect(() => {
+    palcoRef.current?.selecionarMapaColocado(mapaSelecionadoId);
+  }, [mapaSelecionadoId, estado, palcoPronto]);
+
   useEffect(() => {
     palcoRef.current?.definirEncaixe(encaixe);
     guardarOpcaoLocal(CHAVE_ENCAIXE_LOCAL, encaixe);
@@ -1108,11 +1136,14 @@ export const MapaPage = () => {
       if ((evento.key === 'n' || evento.key === 'N') && gestorAgora) setFerramenta('nevoa');
       if ((evento.key === 'o' || evento.key === 'O') && gestorAgora) setFerramenta('portal');
       if ((evento.key === 't' || evento.key === 'T') && gestorAgora) setFerramenta('texto');
+      if ((evento.key === 'k' || evento.key === 'K') && gestorAgora) setFerramenta((f) => (f === 'mapas' ? 'mover' : 'mapas'));
+      if (evento.key === 'Delete' && ferramenta === 'mapas' && mapaSelecionadoId && gestorAgora) apagarMapaColocadoRef.current();
       if (evento.key === 'Enter' && ferramenta === 'nevoa') palco?.fecharPoligono();
       if (evento.key === 'Escape') {
         if (palco?.desenhando) palco.cancelarDesenho();
         else if (ferramenta === 'portal' && portalEscolhido) setPortalEscolhido(null);
-        else if (ferramenta === 'area' || ferramenta === 'nevoa' || ferramenta === 'portal' || ferramenta === 'texto') setFerramenta('mover');
+        else if (ferramenta === 'mapas' && mapaSelecionadoId) setMapaSelecionadoId(null);
+        else if (ferramenta === 'area' || ferramenta === 'nevoa' || ferramenta === 'portal' || ferramenta === 'texto' || ferramenta === 'mapas') setFerramenta('mover');
         else setSelecionado(null);
       }
     };
@@ -1128,7 +1159,7 @@ export const MapaPage = () => {
       document.removeEventListener('fullscreenchange', aoTelaCheia);
       document.removeEventListener('visibilitychange', aoMudarAba);
     };
-  }, [ferramenta, gestorAgora, podeRegua, podePing, podeMagia, enviarNevoa, medidor, portalEscolhido, construtorAberto]);
+  }, [ferramenta, gestorAgora, podeRegua, podePing, podeMagia, enviarNevoa, medidor, portalEscolhido, construtorAberto, mapaSelecionadoId]);
 
   useEffect(() => {
     palcoRef.current?.pausar(construtorAberto);
@@ -1259,6 +1290,70 @@ export const MapaPage = () => {
     const resposta = await comErro(() => mapaApi.criarToken(campanhaId, cena.id, { imagem_id: item.id, nome: item.nome, x, y, camada }));
     if (resposta) setEstado(resposta);
   };
+
+  /** Põe um mapa do Acervo na cena como um objeto, no meio da tela (o canto de cima à esquerda cai numa linha da grade). */
+  const colocarMapa = async (item: IItemAcervo) => {
+    if (!campanhaId || !cena) return;
+    const centro = palcoRef.current?.centro() ?? { x: 0, y: 0 };
+    const x = Math.max(0, Math.round(centro.x - item.largura / 2));
+    const y = Math.max(0, Math.round(centro.y - item.altura / 2));
+    const resposta = await comErro(() => mapaApi.colocarMapa(campanhaId, cena.id, {
+      imagem_id: item.id, nome: item.nome, ...(cena.mapas_colocados?.length || cena.mapa ? { x, y } : {}),
+    }));
+    if (!resposta) return;
+    setEstado(resposta);
+    setFerramenta('mapas');
+    setMapaSelecionadoId(resposta.mapa_colocado_id);
+    setAcervoAberto(false);
+  };
+
+  /** Lugar ou tamanho novo depois de arrastar um mapa: vale na hora na tela e vai para o servidor. */
+  async function moverMapaColocado(id: string, mudancas: Pick<IMapaColocadoEdicao, 'x' | 'y' | 'escala'>) {
+    await editarMapaColocado(id, mudancas);
+  }
+
+  async function editarMapaColocado(id: string, edicao: IMapaColocadoEdicao) {
+    const atual = estadoRef.current?.cena;
+    if (!campanhaId || !atual) return;
+    const resposta = await comErro(() => mapaApi.editarMapaColocado(campanhaId, atual.id, id, edicao));
+    if (resposta) setEstado(resposta);
+    // Falhou (trancado, longe demais): a tela volta ao que o servidor tem.
+    else void recarregar();
+  }
+
+  const ordenarMapaColocado = async (id: string, acao: AcaoOrdemMapa) => {
+    if (!campanhaId || !cena) return;
+    const resposta = await comErro(() => mapaApi.ordenarMapaColocado(campanhaId, cena.id, id, acao));
+    if (resposta) setEstado(resposta);
+  };
+
+  const duplicarMapaColocado = async (id: string) => {
+    if (!campanhaId || !cena) return;
+    const resposta = await comErro(() => mapaApi.duplicarMapaColocado(campanhaId, cena.id, id));
+    if (!resposta) return;
+    setEstado(resposta);
+    setMapaSelecionadoId(resposta.mapa_colocado_id);
+  };
+
+  const renomearMapaColocado = async (id: string, nomeAtual: string) => {
+    const nome = await pedirTexto({ titulo: 'Nome do mapa', campo: { rotulo: 'Nome', valor: nomeAtual, maximo: 80 }, rotuloConfirmar: 'Salvar' });
+    if (nome?.trim() && nome.trim() !== nomeAtual) await editarMapaColocado(id, { nome: nome.trim() });
+  };
+
+  const apagarMapaColocado = async (id: string) => {
+    if (!campanhaId || !cena) return;
+    const mapa = cena.mapas_colocados?.find((m) => m.id === id);
+    if (!(await confirmar({ titulo: `Tirar "${mapa?.nome ?? 'o mapa'}" da cena?`, mensagem: 'A imagem continua no Acervo.', rotuloConfirmar: 'Tirar', tom: 'perigo' }))) return;
+    const resposta = await comErro(() => mapaApi.tirarMapaColocado(campanhaId, cena.id, id));
+    if (!resposta) return;
+    setEstado(resposta);
+    setMapaSelecionadoId(null);
+    palcoRef.current?.selecionarMapaColocado(null);
+  };
+
+  const mapaEscolhido = cena?.mapas_colocados?.find((m) => m.id === mapaSelecionadoId) ?? null;
+  const apagarMapaColocadoRef = useRef<() => void>(() => undefined);
+  apagarMapaColocadoRef.current = () => { if (mapaSelecionadoId) void apagarMapaColocado(mapaSelecionadoId); };
 
   const usarComoMapa = async (item: IItemAcervo) => {
     if (!campanhaId || !cena) return;
@@ -1507,6 +1602,7 @@ export const MapaPage = () => {
             <span className="mapa-separador" />
             <span className="mapa-grupo-rotulo">Mestre</span>
             <BotaoFerramenta icone={Type} rotulo="Escrever no mapa" atalho="T" disabled={!cena} ativo={ferramenta === 'texto'} onClick={() => setFerramenta((f) => (f === 'texto' ? 'mover' : 'texto'))} />
+            <BotaoFerramenta icone={Images} rotulo="Mapas da cena: pôr, arrastar, trancar e esconder" atalho="K" disabled={!cena} ativo={ferramenta === 'mapas'} onClick={() => setFerramenta((f) => (f === 'mapas' ? 'mover' : 'mapas'))} />
             <BotaoFerramenta icone={Eye} rotulo="Névoa de guerra" atalho="N" disabled={!cena} ativo={ferramenta === 'nevoa'} onClick={() => setFerramenta((f) => (f === 'nevoa' ? 'mover' : 'nevoa'))} />
             <BotaoFerramenta
               icone={CloudRain}
@@ -1651,6 +1747,9 @@ export const MapaPage = () => {
         {gestor && cena && ferramenta === 'portal' && !portalDoPainel && (
           <div className="mapa-aviso-topo">Clique onde fica a entrada e depois a saída. Arraste uma boca para mudar de lugar. Esc sai.</div>
         )}
+        {gestor && cena && ferramenta === 'mapas' && !mapaEscolhido && (cena.mapas_colocados?.length ?? 0) > 0 && (
+          <div className="mapa-aviso-topo">Clique num mapa para escolher. Arraste para mover e puxe um canto para mudar o tamanho. Esc sai.</div>
+        )}
         {gestor && cena && ferramenta === 'texto' && (
           <div className="mapa-aviso-topo">Clique no mapa para colocar uma anotação. Arraste uma anotação para movê-la.</div>
         )}
@@ -1665,6 +1764,28 @@ export const MapaPage = () => {
           onAtivar={(id) => setCamadaAtiva(id)}
           onFechar={() => setCamadasAberto(false)}
         />
+        {gestor && cena && ferramenta === 'mapas' && (
+          <PainelMapasDaCena
+            mapas={cena.mapas_colocados ?? []}
+            selecionadoId={mapaSelecionadoId}
+            onSelecionar={(id) => { setMapaSelecionadoId(id); palcoRef.current?.selecionarMapaColocado(id); }}
+            onAlternarVisivel={(mapa) => void editarMapaColocado(mapa.id, { visivel: mapa.visivel === false })}
+            onAlternarTrava={(mapa) => void editarMapaColocado(mapa.id, { trancado: mapa.trancado !== true })}
+            onAdicionar={() => setAcervoAberto(true)}
+            onFechar={() => setFerramenta('mover')}
+          />
+        )}
+        {gestor && cena && ferramenta === 'mapas' && mapaEscolhido && (
+          <BarraMapaColocado
+            mapa={mapaEscolhido}
+            tamanhoCasa={cena.grade.tamanho}
+            onMudar={(edicao) => void editarMapaColocado(mapaEscolhido.id, edicao)}
+            onOrdem={(acao) => void ordenarMapaColocado(mapaEscolhido.id, acao)}
+            onDuplicar={() => void duplicarMapaColocado(mapaEscolhido.id)}
+            onRenomear={() => void renomearMapaColocado(mapaEscolhido.id, mapaEscolhido.nome ?? 'Mapa')}
+            onApagar={() => void apagarMapaColocado(mapaEscolhido.id)}
+          />
+        )}
         <PainelGrade
           aberto={gradeAberta}
           gestor={gestor}
@@ -1784,6 +1905,7 @@ export const MapaPage = () => {
           onFechar={() => setAcervoAberto(false)}
           temCena={Boolean(cena)}
           onUsarComoMapa={(item) => void usarComoMapa(item)}
+          onColocarMapa={(item) => void colocarMapa(item)}
           onNovaCena={(item) => void novaCena(item)}
           onPorNaCena={(item) => void porNaCena(item)}
         />

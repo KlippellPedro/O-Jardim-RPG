@@ -6,7 +6,7 @@
 
 import { Application, Container, Graphics, Text, Texture, Sprite } from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
-import type { CamadaMapaId, CamadaTokenId, FormaMagia, IAberturaCena, IAnotacaoMapa, IAreaClima, ICena, IClima, IFormaNevoa, IMagiaMapa, ITokenMapa, OperacaoNevoa } from '../../../services/mapaApi';
+import type { CamadaMapaId, CamadaTokenId, FormaMagia, IAberturaCena, IAnotacaoMapa, IAreaClima, ICena, IClima, IFormaNevoa, IMagiaMapa, IMapaColocado, ITokenMapa, OperacaoNevoa } from '../../../services/mapaApi';
 import { urlImagemDoToken, urlPedaco } from '../../../services/mapaApi';
 import { encaixar, medir, segmentosDaGrade, tracejar, LADO_LADRILHO, PADRAO_GRADE, rotuloUnidade, type IGrade, type IPonto } from './geometria';
 import { TokenVisual, esquecerTexturasDeMoldura } from './token';
@@ -22,6 +22,8 @@ import { CamadaAberturas } from './aberturas';
 import { CamadaLiquidos } from './liquidos';
 import { CamadaAuras, type AuraNoMapa } from './auras';
 import { CamadaAnotacoes } from './anotacoes';
+import { CamadaMapasColocados } from './mapasColocados';
+import { acharCanto, acharMapaEm, moverMapa, redimensionarMapa, type Canto } from './mapasColocadosConta';
 import { corDaLuz, faseDe, tremor } from './luzesConta';
 import { bocaEm, type LadoPortal } from './portaisConta';
 import { portaEm } from './portasConta';
@@ -32,8 +34,9 @@ import {
 
 /** `nevoa`: o Mestre desenha a névoa; `area`: o Mestre marca a área de um efeito de clima;
  * `magia`: qualquer um mira e solta um efeito de magia que a mesa inteira vê;
- * `portal`: o Mestre cria portais (dois cliques) e arrasta as bocas. */
-export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia' | 'portal' | 'texto';
+ * `portal`: o Mestre cria portais (dois cliques) e arrasta as bocas;
+ * `mapas`: o Mestre escolhe, arrasta e muda o tamanho dos mapas colocados na cena. */
+export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia' | 'portal' | 'texto' | 'mapas';
 
 export interface OpcoesMagia {
   forma: FormaMagia;
@@ -66,6 +69,9 @@ export interface EventosPalco {
   aoMoverAnotacao: (id: string, x: number, y: number) => void;
   /** Clique numa porta do mapa montado (o jogador abre e fecha; o Mestre recebe o menu da porta). */
   aoPorta?: (porta: IAberturaCena) => void;
+  /** Ferramenta de mapas: o mapa colocado escolhido (ou nenhum) e o lugar e tamanho novos depois do arrasto. */
+  aoSelecionarMapa?: (id: string | null) => void;
+  aoMoverMapa?: (id: string, mudancas: Pick<IMapaColocado, 'x' | 'y' | 'escala'>) => void;
 }
 
 const COR_REVELAR = '#5eead4';
@@ -103,6 +109,9 @@ export class PalcoMapa {
   private camadaReduzida = new Container();
   private camadaDetalhe = new Container();
   private grade = new Graphics();
+  /** Mapas do Acervo postos na cena, entre o mapa base e as portas. */
+  private mapasColocados = new CamadaMapasColocados();
+  private arrastoMapa: { id: string; modo: 'mover' | Canto; dx: number; dy: number; inicio: IPonto; moveu: boolean } | null = null;
   /** A grade cobre só o que a tela mostra; ao andar ou dar zoom ela é refeita (no máximo uma vez por quadro). */
   private gradeSuja = false;
   /** Posição e zoom da tela quando a grade foi desenhada. */
@@ -215,12 +224,12 @@ export class PalcoMapa {
     this.camadaTokens.addChild(this.camadaProps, this.camadaMontarias, this.camadaPersonagens);
     this.camadaMapa.addChild(this.camadaReduzida, this.camadaDetalhe);
     // A névoa cobre o mapa e fica por baixo dos tokens: o servidor já tira do jogador o que ela esconde.
-    this.camadaFundo.addChild(this.camadaMapa, this.liquidos.raiz, this.aberturas.raiz, this.grade);
+    this.camadaFundo.addChild(this.camadaMapa, this.mapasColocados.raiz, this.liquidos.raiz, this.aberturas.raiz, this.grade);
     // Os portais ficam no chão (embaixo dos tokens); a luz do dia e o clima, por cima de tudo que está no mapa.
     viewport.addChild(
       this.camadaFundo, this.anotacoes.raiz, this.nevoaMemoria.raiz, this.nevoa.raiz,
       this.portais.raiz, this.luzes.raiz, this.auras.raiz, this.camadaTokens, this.ceu.raiz, this.clima.raiz,
-      this.magias.raiz, this.camadaReguas, this.previa, this.camadaPings,
+      this.magias.raiz, this.camadaReguas, this.mapasColocados.sobreposicao, this.previa, this.camadaPings,
     );
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
@@ -251,6 +260,10 @@ export class PalcoMapa {
         if (evento.button === 0 && this.gestor) this.eventos.aoCriarAnotacao({ x: ponto.x, y: ponto.y });
         return;
       }
+      if (this.ferramenta === 'mapas') {
+        if (evento.button === 0 && this.gestor) this.cliqueEmMapas({ x: ponto.x, y: ponto.y });
+        return;
+      }
       if (evento.button === 0 && this.cena?.aberturas?.length && this.eventos.aoPorta) {
         const porta = portaEm(this.cena.aberturas, ponto, this.cena.grade.tamanho, viewport.scale.x);
         if (porta) {
@@ -263,6 +276,10 @@ export class PalcoMapa {
 
     app.stage.on('globalpointermove', (evento) => {
       const ponto = viewport.toWorld(evento.global);
+      if (this.arrastoMapa) {
+        this.arrastarMapa(ponto);
+        return;
+      }
       if (this.arrastoAnotacao) {
         this.arrastoAnotacao.moveu = true;
         this.anotacoes.moverTemporariamente(this.arrastoAnotacao.id, ponto.x - this.arrastoAnotacao.dx, ponto.y - this.arrastoAnotacao.dy);
@@ -299,6 +316,10 @@ export class PalcoMapa {
     });
 
     const soltar = () => {
+      if (this.arrastoMapa) {
+        this.soltarMapa();
+        return;
+      }
       if (this.traco || this.retangulo || this.mira) {
         this.terminarDesenho();
         return;
@@ -374,6 +395,7 @@ export class PalcoMapa {
         this.saindo.delete(token);
         token.destruir();
       }
+      this.mapasColocados.quadro(viewport.scale.x);
       for (const callback of this.quadroCallbacks) callback();
       this.animarPings(agora);
       this.magias.quadro(agora);
@@ -452,6 +474,7 @@ export class PalcoMapa {
       this.desenharFundo();
       if (anterior?.id !== cena.id) {
         this.anotacaoSelecionada = null;
+        this.mapasColocados.selecionar(null);
         this.cancelarDesenho();
         this.abrirNaVista();
         this.cenaTrocada = true;
@@ -461,6 +484,8 @@ export class PalcoMapa {
     void this.carregarReduzido();
     this.gradePrevia = null;
     this.desenharGrade(cena.grade);
+    // Se o Mestre está arrastando um mapa, a lista nova espera: a mão dele manda até soltar.
+    if (!this.arrastoMapa) this.mapasColocados.definir(cena.mapas_colocados ?? [], cena.nevoa?.ladrilhos, gestor);
     this.nevoa.definir(cena.nevoa ?? null, cena.largura, cena.altura, gestor, cena.grade.tamanho);
     this.nevoaMemoria.definir(cena.nevoa ?? null, cena.largura, cena.altura, gestor, cena.grade.tamanho);
     this.clima.definir(cena.clima ?? null, cena.largura, cena.altura, gestor);
@@ -593,6 +618,7 @@ export class PalcoMapa {
   /** Ladrilhos no tamanho cheio só do pedaço que está na tela e só com o zoom de perto.
    * Com a névoa, onde a versão reduzida não veio, o cheio vem mesmo de longe. */
   private async carregarLadrilhosVisiveis() {
+    if (this.mapasColocados.tem) void this.mapasColocados.atualizar(this.viewport.getVisibleBounds(), this.viewport.scale.x);
     const mapa = this.cena?.mapa;
     if (!mapa || !mapa.chaves.some((c) => c.startsWith('n2/'))) return;
     const perto = this.viewport.scale.x >= ZOOM_DETALHE;
@@ -728,8 +754,70 @@ export class PalcoMapa {
     return { x: this.viewport.center.x, y: this.viewport.center.y };
   }
 
+  // ------------------------------------------------------- mapas colocados
+
+  /** Clique da ferramenta de mapas: agarra um canto do mapa escolhido, ou escolhe (e começa a arrastar) o de cima. */
+  private cliqueEmMapas(ponto: IPonto) {
+    const camada = this.mapasColocados;
+    const atual = camada.idSelecionado ? camada.mapa(camada.idSelecionado) : null;
+    if (atual && !atual.trancado) {
+      const canto = acharCanto(atual, ponto, this.viewport.scale.x);
+      if (canto) {
+        this.arrastoMapa = { id: atual.id, modo: canto, dx: 0, dy: 0, inicio: ponto, moveu: false };
+        this.viewport.plugins.pause('drag');
+        return;
+      }
+    }
+    const id = acharMapaEm(camada.lista(), ponto);
+    camada.selecionar(id);
+    this.eventos.aoSelecionarMapa?.(id);
+    const mapa = id ? camada.mapa(id) : null;
+    if (id && mapa && !mapa.trancado) {
+      this.arrastoMapa = { id, modo: 'mover', dx: ponto.x - mapa.x, dy: ponto.y - mapa.y, inicio: ponto, moveu: false };
+      this.viewport.plugins.pause('drag');
+    }
+  }
+
+  private arrastarMapa(ponto: IPonto) {
+    const arrasto = this.arrastoMapa;
+    if (!arrasto) return;
+    const mapa = this.mapasColocados.mapa(arrasto.id);
+    if (!mapa) return;
+    // Um clique não é arrasto: só passa de 4 px de tela para o mapa sair do lugar.
+    if (!arrasto.moveu && Math.hypot(ponto.x - arrasto.inicio.x, ponto.y - arrasto.inicio.y) * this.viewport.scale.x < 4) return;
+    arrasto.moveu = true;
+    if (arrasto.modo === 'mover') {
+      const grade = this.encaixe && this.cena ? this.cena.grade : null;
+      this.mapasColocados.previa(arrasto.id, moverMapa(mapa, ponto.x - arrasto.dx, ponto.y - arrasto.dy, grade));
+    } else {
+      this.mapasColocados.previa(arrasto.id, redimensionarMapa(mapa, arrasto.modo, ponto));
+    }
+  }
+
+  private soltarMapa() {
+    const arrasto = this.arrastoMapa;
+    this.arrastoMapa = null;
+    this.viewport.plugins.resume('drag');
+    if (!arrasto?.moveu) return;
+    const mapa = this.mapasColocados.mapa(arrasto.id);
+    if (mapa) this.eventos.aoMoverMapa?.(arrasto.id, { x: mapa.x, y: mapa.y, escala: mapa.escala });
+  }
+
+  /** Escolhe um mapa colocado pela lista ou pela barra (sem clicar no mapa). */
+  selecionarMapaColocado(id: string | null) {
+    this.mapasColocados.selecionar(id);
+  }
+
+  mapaColocado(id: string): IMapaColocado | null {
+    return this.mapasColocados.mapa(id);
+  }
+
   definirFerramenta(ferramenta: Ferramenta) {
     if (ferramenta !== this.ferramenta) this.cancelarDesenho();
+    if (ferramenta !== 'mapas') {
+      this.mapasColocados.selecionar(null);
+      this.eventos.aoSelecionarMapa?.(null);
+    }
     this.ferramenta = ferramenta;
     // Fora do mover, o botão esquerdo é da ferramenta; o mapa anda com o do meio ou o direito.
     this.viewport.drag({ mouseButtons: ferramenta === 'mover' ? 'all' : 'middle-right' });

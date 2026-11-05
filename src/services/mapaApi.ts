@@ -265,6 +265,39 @@ export interface ITempoMapa {
   data: { ano: number; mes: number; dia: number; mes_nome: string; extenso: string } | null;
 }
 
+/** Um mapa do Acervo posto na cena (Owlbear: cada mapa é um objeto com lugar, tamanho, trava e visibilidade). */
+export interface IMapaColocado {
+  id: string;
+  /** O item do Acervo (os pedaços saem de `urlPedaco(imagem_id, chave)`). */
+  imagem_id: string;
+  /** Canto de cima à esquerda, em px da cena. */
+  x: number;
+  y: number;
+  /** 1 é o tamanho da imagem; 0,5 é metade. */
+  escala: number;
+  /** Tamanho da imagem original, em px. */
+  largura: number;
+  altura: number;
+  ladrilho: number;
+  chaves: string[];
+  /** Só o Mestre recebe estes: nome, escondido dos jogadores e trancado. */
+  nome?: string;
+  visivel?: boolean;
+  trancado?: boolean;
+}
+
+/** O que o Mestre pode mudar num mapa colocado. */
+export interface IMapaColocadoEdicao {
+  x?: number;
+  y?: number;
+  escala?: number;
+  nome?: string;
+  visivel?: boolean;
+  trancado?: boolean;
+}
+
+export type AcaoOrdemMapa = 'frente' | 'tras' | 'acima' | 'abaixo';
+
 export interface ICena extends IResumoCena {
   largura: number;
   altura: number;
@@ -286,6 +319,8 @@ export interface ICena extends IResumoCena {
   /** Camadas que este espectador pode receber do servidor. */
   camadas_visiveis?: CamadaMapaId[];
   anotacoes?: IAnotacaoMapa[];
+  /** Mapas colocados na cena, de baixo para cima. O jogador só recebe os visíveis. */
+  mapas_colocados?: IMapaColocado[];
 }
 
 export interface INevoaPayload {
@@ -421,6 +456,16 @@ export const mapaApi = {
   /** O Mestre fala por um NPC: a mesa conectada vê a fala. */
   falar: (campanhaId: string, fala: { nome: string; texto: string; token?: string | null }) =>
     api<{ ok: boolean; conectados: number }>(`${base(campanhaId)}/fala`, { method: 'POST', body: fala }),
+  colocarMapa: (campanhaId: string, cenaId: string, dados: { imagem_id: string; nome?: string; x?: number; y?: number; escala?: number }) =>
+    api<IEstadoMapa & { mapa_colocado_id: string }>(`${base(campanhaId)}/cenas/${cenaId}/mapas`, { method: 'POST', body: dados, ...ESTADO }),
+  editarMapaColocado: (campanhaId: string, cenaId: string, mapaId: string, dados: IMapaColocadoEdicao) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/mapas/${mapaId}`, { method: 'PUT', body: dados, ...ESTADO }),
+  duplicarMapaColocado: (campanhaId: string, cenaId: string, mapaId: string) =>
+    api<IEstadoMapa & { mapa_colocado_id: string }>(`${base(campanhaId)}/cenas/${cenaId}/mapas/${mapaId}/duplicar`, { method: 'POST', ...ESTADO }),
+  ordenarMapaColocado: (campanhaId: string, cenaId: string, mapaId: string, acao: AcaoOrdemMapa) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/mapas/${mapaId}/ordem`, { method: 'PUT', body: { acao }, ...ESTADO }),
+  tirarMapaColocado: (campanhaId: string, cenaId: string, mapaId: string) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/mapas/${mapaId}`, { method: 'DELETE', ...ESTADO }),
   guardarVista: (campanhaId: string, cenaId: string, vista: IVistaCena | null) =>
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/vista`, { method: 'PUT', body: { vista }, ...ESTADO }),
   configurar: (campanhaId: string, dados: { moldura_mesa: string | null }) =>
