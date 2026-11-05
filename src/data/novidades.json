@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-11-05-varios-mapas-numa-cena",
+      "data": "2026-11-05",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: vários mapas do Acervo juntos numa cena",
+      "detalhes": [
+        "No Construtor de mapas, a seção Mapas do Acervo deixa o Mestre escolher vários mapas, clicar onde cada um fica e arrastar até encostarem. A largura de cada mapa é em casas e dá para digitar o número, até 120.",
+        "Ao publicar, os mapas viram um mapa só na cena, com névoa de guerra, paredes, portas e luzes funcionando como nos outros.",
+        "Se mudar de ideia, abra o mesmo projeto, mova ou troque um mapa e publique de novo."
+      ]
+    },
+    {
       "id": "2026-11-04-grade-do-mapa-e-sincronizar-vista",
       "data": "2026-11-04",
       "tipo": "novo",
@@ -1015,18 +1027,6 @@
         "A Casa do Primeiro Lume agora fica em Anima, o Salão das Treze Portas em Gênese e o Campanário no Limiar, num recanto que a Mulher Carmesim deixa para a Sociedade do Sino escrever sobre as Entidades.",
         "Ficam no Vazio o Banco Lunar, Pharos, o Pátio das Rotas, a Agulha e o Acervo Prismático.",
         "O Basalto passou a se chamar Pharos, e a Atalaia das Raízes virou A Agulha."
-      ]
-    },
-    {
-      "id": "2026-10-12-espirito-raca-especial",
-      "data": "2026-10-12",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Espírito agora é uma raça especial",
-      "detalhes": [
-        "O Espírito cresceu demais para ficar entre as raças comuns: tem seis degraus de escada e três Naturezas. Agora ele fica ao lado do Divino, do Desperto e das outras raças especiais.",
-        "Para criar um Espírito ou transformar o personagem em um, o Mestre precisa liberar a raça, para a mesa toda ou só para você. Ele pode surgir em qualquer Árvore.",
-        "Quem já joga com um Espírito não perde nada: a ficha continua abrindo e salvando normalmente, e a raça ganhou o Legado extra das raças especiais."
       ]
     }
   ]

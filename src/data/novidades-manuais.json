@@ -2,6 +2,18 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-05-varios-mapas-numa-cena",
+      "data": "2026-11-05",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: vários mapas do Acervo juntos numa cena",
+      "detalhes": [
+        "No Construtor de mapas, a seção Mapas do Acervo deixa o Mestre escolher vários mapas, clicar onde cada um fica e arrastar até encostarem. A largura de cada mapa é em casas e dá para digitar o número, até 120.",
+        "Ao publicar, os mapas viram um mapa só na cena, com névoa de guerra, paredes, portas e luzes funcionando como nos outros.",
+        "Se mudar de ideia, abra o mesmo projeto, mova ou troque um mapa e publique de novo."
+      ]
+    },
+    {
       "id": "2026-11-04-grade-do-mapa-e-sincronizar-vista",
       "data": "2026-11-04",
       "tipo": "novo",
