@@ -1,0 +1,78 @@
+/* Esconder e mostrar a interface do mapa: a barra da esquerda, o painel da direita e o modo "só o mapa".
+   Fica depois do mapa.css para ganhar dos ajustes de celular dele. */
+
+.mapa-pagina.sem-ferramentas,
+.mapa-pagina.sem-ferramentas.com-lateral {
+  grid-template-columns: 0 1fr 0;
+}
+
+.mapa-pagina.sem-ferramentas.com-lateral {
+  grid-template-columns: 0 1fr minmax(300px, 26vw);
+}
+
+.mapa-pagina.sem-ferramentas .mapa-ferramentas {
+  display: none;
+}
+
+/* Só o mapa: nada além do palco e de um botão para voltar. */
+.mapa-pagina.so-mapa,
+.mapa-pagina.so-mapa.com-lateral,
+.mapa-pagina.so-mapa.sem-ferramentas {
+  grid-template-columns: 0 1fr 0;
+  grid-template-rows: 0 1fr 0;
+}
+
+.mapa-pagina.so-mapa .mapa-topo,
+.mapa-pagina.so-mapa .mapa-ferramentas,
+.mapa-pagina.so-mapa .mapa-lateral,
+.mapa-pagina.so-mapa .mapa-rodape {
+  display: none;
+}
+
+/* Os botões redondos que trazem de volta o que foi escondido. */
+.mapa-alca {
+  position: absolute;
+  top: 10px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 50%;
+  background: var(--mapa-painel);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  color: var(--mapa-texto);
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.mapa-alca:hover {
+  border-color: var(--mapa-ouro);
+  color: var(--mapa-ouro);
+  opacity: 1;
+}
+
+.mapa-alca-esquerda {
+  left: 10px;
+}
+
+.mapa-alca-direita {
+  right: 10px;
+}
+
+@media (max-width: 760px) {
+  .mapa-pagina.sem-ferramentas,
+  .mapa-pagina.sem-ferramentas.com-lateral {
+    grid-template-columns: 0 1fr;
+  }
+
+  .mapa-pagina.so-mapa,
+  .mapa-pagina.so-mapa.com-lateral,
+  .mapa-pagina.so-mapa.sem-ferramentas {
+    grid-template-columns: 0 1fr;
+    grid-template-rows: 0 1fr 0;
+  }
+}

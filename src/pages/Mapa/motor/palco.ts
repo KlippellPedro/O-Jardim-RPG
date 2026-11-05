@@ -23,7 +23,7 @@ import { CamadaLiquidos } from './liquidos';
 import { CamadaAuras, type AuraNoMapa } from './auras';
 import { CamadaAnotacoes } from './anotacoes';
 import { CamadaMapasColocados } from './mapasColocados';
-import { acharCanto, acharMapaEm, moverMapa, redimensionarMapa, type Canto } from './mapasColocadosConta';
+import { acharCanto, acharMapaEm, moverMapa, redimensionarMapa, retanguloDoMapa, type Canto } from './mapasColocadosConta';
 import { corDaLuz, faseDe, tremor } from './luzesConta';
 import { bocaEm, type LadoPortal } from './portaisConta';
 import { portaEm } from './portasConta';
@@ -186,6 +186,9 @@ export class PalcoMapa {
   private quadroCallbacks: Array<() => void> = [];
   private carregarVisiveis: number | null = null;
 
+  /** Acompanha o tamanho da área do mapa (painéis que abrem e fecham). */
+  private observador: ResizeObserver | null = null;
+
   private constructor(private app: Application, readonly viewport: Viewport, private eventos: EventosPalco) {}
 
   static async criar(alvo: HTMLElement, eventos: EventosPalco): Promise<PalcoMapa> {
@@ -201,6 +204,9 @@ export class PalcoMapa {
       resolution: window.devicePixelRatio || 1,
     });
     alvo.appendChild(app.canvas);
+    // Esconder ou mostrar painéis muda o tamanho da área do mapa sem mudar a janela: o palco acompanha.
+    const observador = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => app.resize());
+    observador?.observe(alvo);
     const viewport = new Viewport({
       screenWidth: alvo.clientWidth,
       screenHeight: alvo.clientHeight,
@@ -211,6 +217,7 @@ export class PalcoMapa {
     app.stage.addChild(viewport);
     app.renderer.on('resize', (w: number, h: number) => viewport.resize(w, h));
     const palco = new PalcoMapa(app, viewport, eventos);
+    palco.observador = observador;
     palco.montar();
     return palco;
   }
@@ -264,6 +271,11 @@ export class PalcoMapa {
         if (evento.button === 0 && this.gestor) this.cliqueEmMapas({ x: ponto.x, y: ponto.y });
         return;
       }
+      // Com a ferramenta de mover, o Mestre clica num mapa solto e arrasta: o mapa vai junto. Mapa trancado
+      // e área sem mapa deixam a mão andar pela tela, como sempre.
+      if (evento.button === 0 && this.gestor && this.ferramenta === 'mover' && !this.arrastoAnotacao && !this.arrastoPortal) {
+        if (this.cliqueEmMapas({ x: ponto.x, y: ponto.y })) return;
+      }
       if (evento.button === 0 && this.cena?.aberturas?.length && this.eventos.aoPorta) {
         const porta = portaEm(this.cena.aberturas, ponto, this.cena.grade.tamanho, viewport.scale.x);
         if (porta) {
@@ -277,7 +289,7 @@ export class PalcoMapa {
     app.stage.on('globalpointermove', (evento) => {
       const ponto = viewport.toWorld(evento.global);
       if (this.arrastoMapa) {
-        this.arrastarMapa(ponto);
+        this.arrastarMapa(ponto, Boolean((evento as { shiftKey?: boolean }).shiftKey));
         return;
       }
       if (this.arrastoAnotacao) {
@@ -705,10 +717,30 @@ export class PalcoMapa {
     this.agendarLadrilhos();
   }
 
+  /** O que a tela deve mostrar ao enquadrar: os mapas colocados (a cena tem folga em volta) ou a cena toda. */
+  private limitesParaEnquadrar(): { x: number; y: number; w: number; h: number } | null {
+    if (!this.cena) return null;
+    const mapas = this.mapasColocados.lista();
+    if (!mapas.length) return { x: 0, y: 0, w: this.cena.largura, h: this.cena.altura };
+    let x0 = this.cena.mapa ? 0 : Infinity;
+    let y0 = this.cena.mapa ? 0 : Infinity;
+    let x1 = this.cena.mapa ? this.cena.mapa.largura : 0;
+    let y1 = this.cena.mapa ? this.cena.mapa.altura : 0;
+    for (const mapa of mapas) {
+      const r = retanguloDoMapa(mapa);
+      x0 = Math.min(x0, r.x);
+      y0 = Math.min(y0, r.y);
+      x1 = Math.max(x1, r.x + r.w);
+      y1 = Math.max(y1, r.y + r.h);
+    }
+    return { x: x0, y: y0, w: Math.max(1, x1 - x0), h: Math.max(1, y1 - y0) };
+  }
+
   enquadrar() {
-    if (!this.cena) return;
-    this.viewport.fit(true, this.cena.largura * 1.05, this.cena.altura * 1.05);
-    this.viewport.moveCenter(this.cena.largura / 2, this.cena.altura / 2);
+    const limites = this.limitesParaEnquadrar();
+    if (!limites) return;
+    this.viewport.fit(true, limites.w * 1.05, limites.h * 1.05);
+    this.viewport.moveCenter(limites.x + limites.w / 2, limites.y + limites.h / 2);
     this.agendarLadrilhos();
   }
 
@@ -757,7 +789,7 @@ export class PalcoMapa {
   // ------------------------------------------------------- mapas colocados
 
   /** Clique da ferramenta de mapas: agarra um canto do mapa escolhido, ou escolhe (e começa a arrastar) o de cima. */
-  private cliqueEmMapas(ponto: IPonto) {
+  private cliqueEmMapas(ponto: IPonto): boolean {
     const camada = this.mapasColocados;
     const atual = camada.idSelecionado ? camada.mapa(camada.idSelecionado) : null;
     if (atual && !atual.trancado) {
@@ -765,20 +797,24 @@ export class PalcoMapa {
       if (canto) {
         this.arrastoMapa = { id: atual.id, modo: canto, dx: 0, dy: 0, inicio: ponto, moveu: false };
         this.viewport.plugins.pause('drag');
-        return;
+        return true;
       }
     }
     const id = acharMapaEm(camada.lista(), ponto);
-    camada.selecionar(id);
-    this.eventos.aoSelecionarMapa?.(id);
+    if (id !== camada.idSelecionado) {
+      camada.selecionar(id);
+      this.eventos.aoSelecionarMapa?.(id);
+    }
     const mapa = id ? camada.mapa(id) : null;
     if (id && mapa && !mapa.trancado) {
       this.arrastoMapa = { id, modo: 'mover', dx: ponto.x - mapa.x, dy: ponto.y - mapa.y, inicio: ponto, moveu: false };
       this.viewport.plugins.pause('drag');
+      return true;
     }
+    return false;
   }
 
-  private arrastarMapa(ponto: IPonto) {
+  private arrastarMapa(ponto: IPonto, encaixar: boolean) {
     const arrasto = this.arrastoMapa;
     if (!arrasto) return;
     const mapa = this.mapasColocados.mapa(arrasto.id);
@@ -787,8 +823,8 @@ export class PalcoMapa {
     if (!arrasto.moveu && Math.hypot(ponto.x - arrasto.inicio.x, ponto.y - arrasto.inicio.y) * this.viewport.scale.x < 4) return;
     arrasto.moveu = true;
     if (arrasto.modo === 'mover') {
-      const grade = this.encaixe && this.cena ? this.cena.grade : null;
-      this.mapasColocados.previa(arrasto.id, moverMapa(mapa, ponto.x - arrasto.dx, ponto.y - arrasto.dy, grade));
+      // O mapa anda livre, sem grudar; com Shift apertado o canto dele encaixa na grade.
+      this.mapasColocados.previa(arrasto.id, moverMapa(mapa, ponto.x - arrasto.dx, ponto.y - arrasto.dy, encaixar && this.cena ? this.cena.grade : null));
     } else {
       this.mapasColocados.previa(arrasto.id, redimensionarMapa(mapa, arrasto.modo, ponto));
     }
@@ -1208,6 +1244,7 @@ export class PalcoMapa {
   }
 
   destruir() {
+    this.observador?.disconnect();
     if (this.carregarVisiveis !== null) window.clearTimeout(this.carregarVisiveis);
     this.clima.destruir();
     this.luzes.destruir();

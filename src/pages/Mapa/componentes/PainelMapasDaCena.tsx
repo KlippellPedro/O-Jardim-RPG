@@ -47,7 +47,7 @@ export const PainelMapasDaCena = ({ mapas, selecionadoId, onSelecionar, onAltern
       ) : (
         <p className="mapa-dica">Nenhum mapa colocado ainda. Escolha mapas no Acervo: cada um entra como um objeto que você arrasta, muda de tamanho, tranca ou esconde dos jogadores.</p>
       )}
-      <p className="mapa-dica">Clique num mapa para escolher e arraste para mover. Puxe um canto para mudar o tamanho. O que está mais acima na lista fica por cima. Botão direito ou do meio anda pelo mapa.</p>
+      <p className="mapa-dica">Clique num mapa e arraste para levar para onde quiser; ele anda livre, e com Shift apertado o canto encaixa na grade. Puxe um canto para mudar o tamanho. O que está mais acima na lista fica por cima. Um mapa trancado deixa a mão andar pela tela.</p>
     </section>
   );
 };

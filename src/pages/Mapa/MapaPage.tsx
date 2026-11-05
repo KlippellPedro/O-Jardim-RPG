@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, BookOpenCheck, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Grid3x3, Hand, Images, Layers, Loader2, MapPin, Maximize2, Minimize2, Moon, Music2, Orbit, PanelRightClose, PanelRightOpen, Ruler, Search, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserRound, Users, Wand2, Wifi, WifiOff, X,
+  ArrowLeft, BookOpenCheck, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, FolderOpen, Focus, Grid3x3, Hand, Images, Layers, Loader2, MapPin, Maximize2, Minimize2, Moon, Music2, Orbit, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Ruler, Search, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserRound, Users, Wand2, Wifi, WifiOff, X,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSessaoStore } from '../../store/useSessaoStore';
@@ -56,6 +56,7 @@ import { PainelDocumentosMesa } from './componentes/PainelDocumentosMesa';
 import { DocumentoDaMesa, type IDocumentoCompartilhado } from './componentes/DocumentoDaMesa';
 import { PainelTrilha } from './componentes/PainelTrilha';
 import './mapa.css';
+import './painelDobravel.css';
 
 interface Pessoa {
   usuario_id: string;
@@ -97,6 +98,9 @@ function lerClimaLocal(): boolean {
 /** Escolhas de cada aparelho: encaixar na grade e aceitar quando alguém traz a mesa para a vista dele. */
 const CHAVE_ENCAIXE_LOCAL = 'jardim.mapa.encaixe';
 const CHAVE_SEGUIR_VISTA_LOCAL = 'jardim.mapa.seguirVista';
+/** Painéis que o aparelho esconde: a barra de ferramentas da esquerda e o painel de iniciativa e fichas. */
+const CHAVE_FERRAMENTAS_LOCAL = 'jardim.mapa.ferramentas';
+const CHAVE_LATERAL_LOCAL = 'jardim.mapa.lateral';
 
 function lerOpcaoLocal(chave: string): boolean {
   try {
@@ -156,7 +160,19 @@ export const MapaPage = () => {
   const [conexao, setConexao] = useState<EstadoConexao>('conectando');
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
   // No celular a gaveta de baixo cobriria metade do mapa e as ferramentas: começa fechada.
-  const [lateralAberta, setLateralAberta] = useState(() => typeof window === 'undefined' || window.innerWidth > 760);
+  // O painel da direita lembra o que cada aparelho escolheu; sem escolha, abre só em tela larga.
+  const [lateralAberta, setLateralAberta] = useState(() => {
+    try {
+      const salvo = window.localStorage.getItem(CHAVE_LATERAL_LOCAL);
+      if (salvo) return salvo === 'ligado';
+    } catch {
+      // Sem armazenamento do navegador: vale a largura da tela.
+    }
+    return typeof window === 'undefined' || window.innerWidth > 760;
+  });
+  const [ferramentasAbertas, setFerramentasAbertas] = useState(() => lerOpcaoLocal(CHAVE_FERRAMENTAS_LOCAL));
+  /** Só o mapa: some a interface toda (topo, ferramentas, painel e cenas); um botão e a tecla H trazem de volta. */
+  const [soMapa, setSoMapa] = useState(false);
   const [aba, setAba] = useState<AbaLateral>('iniciativa');
   const [acervoAberto, setAcervoAberto] = useState(false);
   const [oficinaAberta, setOficinaAberta] = useState(false);
@@ -1068,6 +1084,14 @@ export const MapaPage = () => {
   }, [seguirVista]);
 
   useEffect(() => {
+    guardarOpcaoLocal(CHAVE_FERRAMENTAS_LOCAL, ferramentasAbertas);
+  }, [ferramentasAbertas]);
+
+  useEffect(() => {
+    guardarOpcaoLocal(CHAVE_LATERAL_LOCAL, lateralAberta);
+  }, [lateralAberta]);
+
+  useEffect(() => {
     palcoRef.current?.definirClimaLigado(climaLocal);
     try {
       window.localStorage.setItem(CHAVE_CLIMA_LOCAL, climaLocal ? 'ligado' : 'desligado');
@@ -1136,6 +1160,7 @@ export const MapaPage = () => {
       if ((evento.key === 'n' || evento.key === 'N') && gestorAgora) setFerramenta('nevoa');
       if ((evento.key === 'o' || evento.key === 'O') && gestorAgora) setFerramenta('portal');
       if ((evento.key === 't' || evento.key === 'T') && gestorAgora) setFerramenta('texto');
+      if (evento.key === 'h' || evento.key === 'H') setSoMapa((v) => !v);
       if ((evento.key === 'k' || evento.key === 'K') && gestorAgora) setFerramenta((f) => (f === 'mapas' ? 'mover' : 'mapas'));
       if (evento.key === 'Delete' && ferramenta === 'mapas' && mapaSelecionadoId && gestorAgora) apagarMapaColocadoRef.current();
       if (evento.key === 'Enter' && ferramenta === 'nevoa') palco?.fecharPoligono();
@@ -1456,9 +1481,14 @@ export const MapaPage = () => {
         : null;
 
   return (
-    <div className={`mapa-pagina${lateralAberta ? ' com-lateral' : ''}${gestor ? ' do-mestre' : ''}`}>
+    <div className={`mapa-pagina${lateralAberta ? ' com-lateral' : ''}${ferramentasAbertas ? '' : ' sem-ferramentas'}${soMapa ? ' so-mapa' : ''}${gestor ? ' do-mestre' : ''}`}>
       <header className="mapa-topo">
         <button type="button" className="mapa-icone" aria-label="Voltar para a Sessão" onClick={() => navigate('/sessao')}><ArrowLeft size={18} /></button>
+        <ComDica dica={ferramentasAbertas ? 'Esconder as ferramentas' : 'Mostrar as ferramentas'}>
+          <button type="button" className="mapa-icone" aria-label={ferramentasAbertas ? 'Esconder as ferramentas' : 'Mostrar as ferramentas'} aria-pressed={!ferramentasAbertas} onClick={() => setFerramentasAbertas((v) => !v)}>
+            {ferramentasAbertas ? <PanelLeftClose size={17} /> : <PanelLeftOpen size={17} />}
+          </button>
+        </ComDica>
         <div className="mapa-topo-titulo">
           <strong>{cena?.nome ?? 'Mapa'}</strong>
           {cena && gestor && <span className={cena.ativa ? 'selo ativo' : 'selo'}>{cena.ativa ? 'Na mesa' : 'Só você vê'}</span>}
@@ -1523,6 +1553,11 @@ export const MapaPage = () => {
         <ComDica dica={telaCheia ? 'Sair da tela cheia' : 'Tela cheia'}>
           <button type="button" className="mapa-icone" aria-label={telaCheia ? 'Sair da tela cheia' : 'Tela cheia'} onClick={alternarTelaCheia}>
             {telaCheia ? <Minimize2 size={17} /> : <Maximize2 size={17} />}
+          </button>
+        </ComDica>
+        <ComDica dica="Só o mapa: esconde tudo (tecla H)">
+          <button type="button" className="mapa-icone" aria-label="Só o mapa" onClick={() => setSoMapa(true)}>
+            <Focus size={17} />
           </button>
         </ComDica>
         <ComDica dica={lateralAberta ? 'Recolher o painel' : 'Abrir o painel'}>
@@ -1638,6 +1673,22 @@ export const MapaPage = () => {
 
       <main className="mapa-area">
         <div ref={alvoRef} className="mapa-palco" />
+        {(soMapa || !ferramentasAbertas) && (
+          <button
+            type="button"
+            className="mapa-alca mapa-alca-esquerda"
+            aria-label={soMapa ? 'Mostrar a interface (tecla H)' : 'Mostrar as ferramentas'}
+            title={soMapa ? 'Mostrar a interface (tecla H)' : 'Mostrar as ferramentas'}
+            onClick={() => (soMapa ? setSoMapa(false) : setFerramentasAbertas(true))}
+          >
+            {soMapa ? <Focus size={18} /> : <PanelLeftOpen size={18} />}
+          </button>
+        )}
+        {!soMapa && !lateralAberta && (
+          <button type="button" className="mapa-alca mapa-alca-direita" aria-label="Abrir o painel de iniciativa e fichas" title="Abrir o painel de iniciativa e fichas" onClick={() => setLateralAberta(true)}>
+            <PanelRightOpen size={18} />
+          </button>
+        )}
         {estado?.mesa && (
           <RelogiosDaMesa
             mesa={estado.mesa}
@@ -1748,7 +1799,7 @@ export const MapaPage = () => {
           <div className="mapa-aviso-topo">Clique onde fica a entrada e depois a saída. Arraste uma boca para mudar de lugar. Esc sai.</div>
         )}
         {gestor && cena && ferramenta === 'mapas' && !mapaEscolhido && (cena.mapas_colocados?.length ?? 0) > 0 && (
-          <div className="mapa-aviso-topo">Clique num mapa para escolher. Arraste para mover e puxe um canto para mudar o tamanho. Esc sai.</div>
+          <div className="mapa-aviso-topo">Clique num mapa para escolher. Arraste para mover (Shift encaixa na grade) e puxe um canto para mudar o tamanho. Esc sai.</div>
         )}
         {gestor && cena && ferramenta === 'texto' && (
           <div className="mapa-aviso-topo">Clique no mapa para colocar uma anotação. Arraste uma anotação para movê-la.</div>
@@ -1934,7 +1985,7 @@ export const MapaPage = () => {
         )}
       </main>
 
-      {lateralAberta && (
+      {lateralAberta && !soMapa && (
         <aside className="mapa-lateral">
           <PainelLateral aba={aba} onAba={setAba} campanhaId={campanhaId ?? ''} tokens={tokens} onCentralizar={centralizar} />
         </aside>
