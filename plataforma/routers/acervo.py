@@ -11,6 +11,7 @@ from __future__ import annotations
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
@@ -177,6 +178,39 @@ def pode_ler_item(connection, item_id: UUID, user: AuthenticatedUser, chave: str
                 )
               )
               OR (
+                -- Mapa colocado na cena: o jogador só lê os visíveis, e com a névoa ou a visão por paredes só os
+                -- ladrilhos liberados (as chaves dele levam o id do mapa na frente).
+                c.estrutura->'mapas' @> jsonb_build_array(jsonb_build_object('imagem_id', %(item_texto)s::text, 'visivel', true))
+                AND (
+                  m.papel IN ('mestre', 'assistente')
+                  OR (
+                    COALESCE(c.estrutura->'camadas_jogadores'->>'mapa', 'true') = 'true'
+                    AND COALESCE(m.permissoes_mesa->'camadas'->>'mapa', 'true') = 'true'
+                    AND c.ativa
+                    AND EXISTS (
+                      SELECT 1 FROM sessoes_mesa s WHERE s.campanha_id = c.campanha_id AND s.status = 'aberta'
+                    )
+                    AND (
+                      (
+                        COALESCE((c.nevoa->>'visao_pelas_paredes')::boolean, FALSE)
+                        AND EXISTS (
+                          SELECT 1 FROM mapa_exploracao e
+                          WHERE e.cena_id = c.id AND e.usuario_id = m.usuario_id
+                            AND (%(item_texto)s::text || ':' || %(chave)s) = ANY(e.ladrilhos)
+                        )
+                      )
+                      OR (
+                        NOT COALESCE((c.nevoa->>'visao_pelas_paredes')::boolean, FALSE)
+                        AND (
+                          NOT COALESCE((c.nevoa->>'ligada')::boolean, FALSE)
+                          OR (%(item_texto)s::text || ':' || %(chave)s) = ANY(c.nevoa_ladrilhos)
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+              OR (
                 t.id IS NOT NULL
                 AND (
                   m.papel IN ('mestre', 'assistente')
@@ -223,9 +257,11 @@ def pode_ler_item(connection, item_id: UUID, user: AuthenticatedUser, chave: str
             """
             SELECT 1 FROM mapa_cenas c LEFT JOIN mapa_tokens t ON t.cena_id = c.id AND t.imagem_id=%s
             JOIN campanhas k ON k.id = c.campanha_id AND k.status = 'ativa'
-            WHERE c.mapa_id=%s OR t.id IS NOT NULL LIMIT 1
+            WHERE c.mapa_id=%s OR t.id IS NOT NULL
+               OR c.estrutura->'mapas' @> jsonb_build_array(jsonb_build_object('imagem_id', %s::text))
+            LIMIT 1
             """,
-            (item_id, item_id),
+            (item_id, item_id, str(item_id)),
         ).fetchone()
         no_projeto = connection.execute(
             """
@@ -530,8 +566,32 @@ def apagar_item(
         if _usado_em_projeto(connection, item_id):
             raise HTTPException(status_code=409, detail="a imagem esta sendo usada como peca em um mapa editavel")
         acervo.apagar_item(connection, item_id)
+        _tirar_das_cenas(connection, item_id)
         connection.execute("DELETE FROM acervo_itens WHERE id=%s", (item_id,))
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+def _tirar_das_cenas(connection, item_id: UUID) -> None:
+    """Tira o mapa apagado da lista de mapas colocados de qualquer cena, e a cena registra a mudança."""
+    cenas = connection.execute(
+        """
+        SELECT id, estrutura FROM mapa_cenas
+        WHERE estrutura->'mapas' @> jsonb_build_array(jsonb_build_object('imagem_id', %s::text))
+        FOR UPDATE
+        """,
+        (str(item_id),),
+    ).fetchall()
+    for cena in cenas:
+        estrutura = dict(cena["estrutura"])
+        restantes = [mapa for mapa in estrutura.get("mapas", []) if str(mapa.get("imagem_id")) != str(item_id)]
+        if restantes:
+            estrutura["mapas"] = restantes
+        else:
+            estrutura.pop("mapas", None)
+        connection.execute(
+            "UPDATE mapa_cenas SET estrutura=%s, versao=versao+1, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s",
+            (Jsonb(estrutura), cena["id"]),
+        )
 
 
 def _usado_em_projeto(connection, item_id: UUID) -> bool:

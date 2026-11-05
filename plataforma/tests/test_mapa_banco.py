@@ -457,5 +457,158 @@ class MapaBancoTests(unittest.TestCase):
         self.assertEqual(erro.exception.status_code, 404)
 
 
+    # ------------------------------------------------- mapas colocados na cena
+
+    def _mapa_pronto(self, largura, altura, nome):
+        item_id, _ = self._item(largura=largura, altura=altura, nome=nome)
+        acervo.concluir_item(item_id, user=self.mestre, database=self.database)
+        return item_id
+
+    def _colocar(self, cena_id, item_id, usuario=None, **extra):
+        from routers import mapa_colocados as rotas
+
+        return rotas.colocar_mapa(
+            self.campanha_id, uuid.UUID(cena_id), rotas.MapaColocadoInput(imagem_id=item_id, **extra),
+            user=usuario or self.mestre, database=self.database,
+        )
+
+    def _mudar(self, cena_id, mapa_id, **dados):
+        from routers import mapa_colocados as rotas
+
+        return rotas.mudar_mapa(self.campanha_id, uuid.UUID(cena_id), mapa_id, dados, user=self.mestre, database=self.database)
+
+    def test_varios_mapas_na_cena_cada_um_com_lugar_e_a_cena_cresce_para_caber(self):
+        praca, porto = self._mapa_pronto(3000, 2000, "Praca"), self._mapa_pronto(2400, 1800, "Porto")
+        self._sessao("aberta")
+        cena_id = self.criar_cena("Cidade")["cena"]["id"]
+        primeiro = self._colocar(cena_id, praca)
+        segundo = self._colocar(cena_id, porto)
+        mapas = segundo["cena"]["mapas_colocados"]
+        # O segundo entra à direita do primeiro, e a cena passou a medir o conjunto.
+        self.assertEqual([(m["nome"], m["x"], m["y"], m["escala"]) for m in mapas], [("Praca", 0.0, 0.0, 1.0), ("Porto", 3000.0, 0.0, 1.0)])
+        self.assertEqual((segundo["cena"]["largura"], segundo["cena"]["altura"]), (5400, 2000))
+        self.assertTrue(all(m["visivel"] and not m["trancado"] for m in mapas))
+        self.assertEqual(primeiro["mapa_colocado_id"], mapas[0]["id"])
+        # A jogadora recebe os dois, sem nome, trava nem visibilidade (isso é do Mestre).
+        da_ana = self.ver(self.ana)["cena"]["mapas_colocados"]
+        self.assertEqual([m["id"] for m in da_ana], [m["id"] for m in mapas])
+        self.assertTrue(all("nome" not in m and "trancado" not in m and "visivel" not in m for m in da_ana))
+        # Mudar lugar e tamanho.
+        movido = self._mudar(cena_id, mapas[1]["id"], x=2500, y=100, escala=0.5)["cena"]["mapas_colocados"][1]
+        self.assertEqual((movido["x"], movido["y"], movido["escala"]), (2500.0, 100.0, 0.5))
+        with self.assertRaises(HTTPException) as longe:
+            self._mudar(cena_id, mapas[1]["id"], x=40000)
+        self.assertEqual(longe.exception.status_code, 422)
+
+    def test_so_o_mestre_mexe_e_so_imagem_do_tipo_mapa_entra(self):
+        praca = self._mapa_pronto(1200, 800, "Praca")
+        self._sessao("aberta")
+        cena_id = self.criar_cena("Cidade")["cena"]["id"]
+        with self.assertRaises(HTTPException) as da_ana:
+            self._colocar(cena_id, praca, usuario=self.ana)
+        self.assertEqual(da_ana.exception.status_code, 403)
+        token = acervo.criar_item(acervo.ItemInput(nome="Lobo", largura=64, altura=64, tipo="token"), user=self.mestre, database=self.database)
+        with self.database.connection() as connection:
+            for chave in token["chaves"]:
+                acervo_core.salvar(connection, uuid.UUID(token["id"]), chave, "image/webp", WEBP)
+        acervo.concluir_item(uuid.UUID(token["id"]), user=self.mestre, database=self.database)
+        with self.assertRaises(HTTPException) as nao_e_mapa:
+            self._colocar(cena_id, uuid.UUID(token["id"]))
+        self.assertEqual(nao_e_mapa.exception.status_code, 422)
+
+    def test_escondido_nao_sai_do_servidor_e_trancado_nao_se_move(self):
+        from routers import mapa_colocados as rotas
+
+        a, b = self._mapa_pronto(3000, 2000, "A"), self._mapa_pronto(2400, 1800, "B")
+        self._sessao("aberta")
+        cena_id = self.criar_cena("Cidade")["cena"]["id"]
+        self._colocar(cena_id, a)
+        mapas = self._colocar(cena_id, b)["cena"]["mapas_colocados"]
+        id_a, id_b = mapas[0]["id"], mapas[1]["id"]
+        self.assertEqual((self.pedaco(self.ana, a, "n0/0/0"), self.pedaco(self.ana, b, "n0/0/0")), (200, 200))
+        # Escondido: nem aparece para a jogadora, nem entrega pedaço; o Mestre continua vendo.
+        escondido = self._mudar(cena_id, id_b, visivel=False)
+        self.assertEqual([m["id"] for m in self.ver(self.ana)["cena"]["mapas_colocados"]], [id_a])
+        self.assertEqual(len(escondido["cena"]["mapas_colocados"]), 2)
+        self.assertEqual((self.pedaco(self.ana, b, "n0/0/0"), self.pedaco(self.mestre, b, "n0/0/0"), self.pedaco(self.ana, a, "n0/0/0")), (404, 200, 200))
+        self._mudar(cena_id, id_b, visivel=True)
+        self.assertEqual(self.pedaco(self.ana, b, "n0/0/0"), 200)
+        # Trancado: não anda, não muda de tamanho e não sai; destrancar e mexer de uma vez vale.
+        self._mudar(cena_id, id_a, trancado=True)
+        for dados in ({"x": 10}, {"escala": 2}):
+            with self.assertRaises(HTTPException) as preso:
+                self._mudar(cena_id, id_a, **dados)
+            self.assertEqual(preso.exception.status_code, 409)
+        with self.assertRaises(HTTPException) as nao_tira:
+            rotas.tirar_mapa(self.campanha_id, uuid.UUID(cena_id), id_a, user=self.mestre, database=self.database)
+        self.assertEqual(nao_tira.exception.status_code, 409)
+        livre = self._mudar(cena_id, id_a, trancado=False, x=10)["cena"]["mapas_colocados"][0]
+        self.assertEqual((livre["x"], livre["trancado"]), (10.0, False))
+
+    def test_duplicar_reordenar_e_tirar(self):
+        from routers import mapa_colocados as rotas
+
+        a, b = self._mapa_pronto(1200, 800, "A"), self._mapa_pronto(1200, 800, "B")
+        self._sessao("aberta")
+        cena_id = self.criar_cena("Cidade")["cena"]["id"]
+        self._colocar(cena_id, a)
+        mapas = self._colocar(cena_id, b)["cena"]["mapas_colocados"]
+        id_a, id_b = mapas[0]["id"], mapas[1]["id"]
+        copiado = rotas.duplicar_mapa(self.campanha_id, uuid.UUID(cena_id), id_a, user=self.mestre, database=self.database)
+        nomes = [m["nome"] for m in copiado["cena"]["mapas_colocados"]]
+        self.assertEqual(nomes, ["A", "A (cópia)", "B"])  # a cópia fica logo acima do original
+        id_copia = copiado["mapa_colocado_id"]
+        for acao, esperado in (("frente", ["A", "B", "A (cópia)"]), ("tras", ["A (cópia)", "A", "B"]), ("acima", ["A", "A (cópia)", "B"]), ("abaixo", ["A (cópia)", "A", "B"])):
+            r = rotas.ordenar_mapa(self.campanha_id, uuid.UUID(cena_id), id_copia, rotas.OrdemInput(acao=acao), user=self.mestre, database=self.database)
+            self.assertEqual([m["nome"] for m in r["cena"]["mapas_colocados"]], esperado, acao)
+        with self.assertRaises(HTTPException):
+            rotas.ordenar_mapa(self.campanha_id, uuid.UUID(cena_id), id_copia, rotas.OrdemInput(acao="meio"), user=self.mestre, database=self.database)
+        tirado = rotas.tirar_mapa(self.campanha_id, uuid.UUID(cena_id), id_copia, user=self.mestre, database=self.database)
+        self.assertEqual([m["id"] for m in tirado["cena"]["mapas_colocados"]], [id_a, id_b])
+
+    def test_nevoa_libera_por_mapa_colocado_com_a_chave_prefixada(self):
+        a, b = self._mapa_pronto(3000, 2000, "A"), self._mapa_pronto(2400, 1800, "B")
+        self._sessao("aberta")
+        cena_id = self.criar_cena("Cidade")["cena"]["id"]
+        self._colocar(cena_id, a)
+        self._colocar(cena_id, b)  # em x = 3000
+        self.nevoa(cena_id, ligada=True)
+        self.assertEqual(self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"], [])
+        self.assertEqual((self.pedaco(self.ana, a, "n0/0/0"), self.pedaco(self.ana, b, "n0/0/0")), (404, 404))
+        # Revelar um quadrado dentro do segundo mapa: só o ladrilho dele sai, com o id do mapa na frente.
+        self.nevoa(cena_id, forma={"op": "revelar", "tipo": "retangulo", "x": 3100, "y": 100, "w": 200, "h": 200})
+        visto = self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"]
+        self.assertEqual(visto, [f"{b}:n0/0/0"])
+        self.assertEqual((self.pedaco(self.ana, b, "n0/0/0"), self.pedaco(self.ana, b, "n0/1/0"), self.pedaco(self.ana, a, "n0/0/0")), (200, 404, 404))
+        # Mover o mapa refaz a lista: o quadrado agora cai em outro ladrilho dele.
+        mapas = self.ver(self.mestre)["cena"]["mapas_colocados"]
+        self._mudar(cena_id, mapas[1]["id"], x=2000)
+        refeito = self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"]
+        self.assertEqual(refeito, [f"{b}:n0/1/0"])
+        self.assertEqual((self.pedaco(self.ana, b, "n0/1/0"), self.pedaco(self.ana, b, "n0/0/0")), (200, 404))
+
+    def test_apagar_o_mapa_do_acervo_tira_da_cena(self):
+        a, b = self._mapa_pronto(1200, 800, "A"), self._mapa_pronto(1200, 800, "B")
+        self._sessao("aberta")
+        cena_id = self.criar_cena("Cidade")["cena"]["id"]
+        self._colocar(cena_id, a)
+        self._colocar(cena_id, b)
+        acervo.apagar_item(a, user=self.mestre, database=self.database)
+        restantes = self.ver(self.mestre)["cena"]["mapas_colocados"]
+        self.assertEqual([m["nome"] for m in restantes], ["B"])
+
+
+    def test_trocar_o_fundo_nao_deixa_os_mapas_colocados_fora_da_cena(self):
+        a, pequeno = self._mapa_pronto(3000, 2000, "A"), self._mapa_pronto(800, 600, "Sala")
+        self._sessao("aberta")
+        cena_id = self.criar_cena("Cidade")["cena"]["id"]
+        self._colocar(cena_id, a, x=2000, y=500)  # ocupa até 5000 x 2500
+        mapa.editar_cena(self.campanha_id, uuid.UUID(cena_id), mapa.CenaEdicao(mapa_id=pequeno), user=self.mestre, database=self.database)
+        cena = self.ver(self.mestre)["cena"]
+        self.assertGreaterEqual(cena["largura"], 5000)
+        self.assertGreaterEqual(cena["altura"], 2500)
+        self.assertEqual(len(cena["mapas_colocados"]), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

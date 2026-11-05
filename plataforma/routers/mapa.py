@@ -28,7 +28,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
-from core import calendario, construtor, mapa, mesa_extras, nevoa, paredes, tempo_real, visao
+from core import calendario, construtor, mapa, mapas_colocados, mesa_extras, nevoa, paredes, tempo_real, visao
 from core.acervo import ler as ler_pedaco
 from core.condicoes import normalizar_condicoes
 from core.database import Database
@@ -403,6 +403,27 @@ def _mapa_da_cena(connection, cena) -> dict | None:
     }
 
 
+def _mapas_colocados_da_cena(connection, cena, gestor: bool) -> list[dict]:
+    """Os mapas colocados na cena, de baixo para cima. O jogador só recebe os visíveis, sem nome nem trava."""
+    mapas = mapas_colocados.ler(cena["estrutura"])
+    if not gestor:
+        mapas = mapas_colocados.visiveis_para_jogador(mapas)
+    itens = _itens_dos_mapas(connection, mapas)
+    saida = []
+    for mapa in mapas:
+        item = itens.get(mapa["imagem_id"])
+        if item is None:
+            continue
+        linha = {
+            "id": mapa["id"], "imagem_id": mapa["imagem_id"], "x": mapa["x"], "y": mapa["y"], "escala": mapa["escala"],
+            "largura": item["largura"], "altura": item["altura"], "ladrilho": item["ladrilho"], "chaves": item["chaves"],
+        }
+        if gestor:
+            linha.update(nome=mapa["nome"], visivel=mapa["visivel"], trancado=mapa["trancado"])
+        saida.append(linha)
+    return saida
+
+
 def _portais(cena) -> list[dict]:
     return mapa.ler_estrutura(cena["estrutura"], int(cena["largura"]), int(cena["altura"]))["portais"]
 
@@ -526,6 +547,11 @@ def _visao_jogador(connection, campanha_id: UUID, cena, quem: Espectador) -> dic
     ladrilhos = nevoa.ladrilhos_liberados(
         formas_exploradas, largura, altura, mapa_da_cena["chaves"] if mapa_da_cena else [],
     ) if camadas_visiveis["mapa"] else []
+    colocados = mapas_colocados.visiveis_para_jogador(mapas_colocados.ler(cena["estrutura"])) if camadas_visiveis["mapa"] else []
+    if colocados and formas_exploradas:
+        ladrilhos = sorted({*ladrilhos, *mapas_colocados.ladrilhos_liberados(
+            formas_exploradas, colocados, _itens_dos_mapas(connection, colocados),
+        )})
     connection.execute(
         """
         INSERT INTO mapa_exploracao (
@@ -647,6 +673,7 @@ def _resumo_cena(
             # Onde a tela abre a cena (core/mesa_extras.py); None é o mapa inteiro.
             "vista": mesa_extras.ler_vista(cena["estrutura"]),
             "mapa": _mapa_da_cena(connection, cena) if camadas_visiveis["mapa"] else None,
+            "mapas_colocados": _mapas_colocados_da_cena(connection, cena, gestor) if camadas_visiveis["mapa"] else [],
             "camadas_jogadores": mapa.camadas_jogadores(cena["estrutura"]) if gestor else None,
             "camadas_visiveis": [chave for chave, visivel in camadas_visiveis.items() if visivel],
             "anotacoes": anotacoes,
@@ -834,6 +861,14 @@ def editar_cena(
             mudancas["largura"] = payload.largura
         if payload.altura is not None and "altura" not in mudancas:
             mudancas["altura"] = payload.altura
+        # Trocar o mapa de fundo (ou o tamanho) não pode deixar os mapas colocados fora da cena.
+        colocados = mapas_colocados.ler(cena["estrutura"])
+        if colocados and {"largura", "altura"} & mudancas.keys():
+            direita, baixo = mapas_colocados.extensao(colocados, _itens_dos_mapas(connection, colocados))
+            if "largura" in mudancas:
+                mudancas["largura"] = max(int(mudancas["largura"]), direita)
+            if "altura" in mudancas:
+                mudancas["altura"] = max(int(mudancas["altura"]), baixo)
         if payload.grade is not None:
             try:
                 mudancas["grade"] = Jsonb(mapa.normalizar_grade(payload.grade, cena["grade"] if isinstance(cena["grade"], dict) else {}))
@@ -854,6 +889,24 @@ def editar_cena(
     return resposta
 
 
+def _itens_dos_mapas(connection, mapas: list[dict]) -> dict[str, dict]:
+    """Os itens do Acervo que os mapas colocados usam, por id (só os prontos e do tipo mapa)."""
+    ids = {UUID(mapa["imagem_id"]) for mapa in mapas}
+    if not ids:
+        return {}
+    linhas = connection.execute(
+        "SELECT id, nome, largura, altura, ladrilho, chaves FROM acervo_itens WHERE id = ANY(%s) AND estado='pronto' AND tipo='mapa'",
+        (list(ids),),
+    ).fetchall()
+    return {
+        str(linha["id"]): {
+            "nome": linha["nome"], "largura": int(linha["largura"]), "altura": int(linha["altura"]),
+            "ladrilho": linha["ladrilho"], "chaves": list(linha["chaves"] or []),
+        }
+        for linha in linhas
+    }
+
+
 def _recalcular_nevoa(connection, cena, estado: dict | None = None) -> None:
     estado = estado or nevoa.ler(cena["nevoa"])
     mapa_da_cena = _mapa_da_cena(connection, cena)
@@ -861,6 +914,12 @@ def _recalcular_nevoa(connection, cena, estado: dict | None = None) -> None:
         nevoa.ladrilhos_liberados(estado["formas"], int(cena["largura"]), int(cena["altura"]), mapa_da_cena["chaves"])
         if mapa_da_cena else []
     )
+    # Cada mapa colocado e visível entra na mesma lista, com o id dele na frente da chave.
+    colocados = mapas_colocados.ler(cena["estrutura"])
+    if colocados and estado["formas"]:
+        ladrilhos = sorted({*ladrilhos, *mapas_colocados.ladrilhos_liberados(
+            estado["formas"], colocados, _itens_dos_mapas(connection, colocados),
+        )})
     connection.execute(
         "UPDATE mapa_cenas SET nevoa=%s, nevoa_ladrilhos=%s WHERE id=%s",
         (Jsonb(estado), ladrilhos, cena["id"]),
