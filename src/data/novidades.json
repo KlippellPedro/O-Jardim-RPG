@@ -1,6 +1,19 @@
 {
   "itens": [
     {
+      "id": "2026-11-05-mapas-como-objetos-na-cena",
+      "data": "2026-11-05",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: pôr vários mapas na cena, como no Owlbear",
+      "detalhes": [
+        "No Acervo, o botão Colocar põe um mapa na cena como um objeto. Dá para pôr quantos mapas quiser, lado a lado, para montar o lugar inteiro onde a aventura acontece.",
+        "Com a ferramenta Mapas da cena (tecla K), o Mestre clica num mapa, arrasta para mudar de lugar e puxa um canto para mudar o tamanho. A barra do mapa deixa esconder dos jogadores, trancar no lugar, mudar a ordem, duplicar, renomear e tirar da cena.",
+        "Um mapa escondido não chega aos jogadores até o Mestre mostrar. Com a névoa de guerra ligada, cada mapa só entrega a parte que foi revelada.",
+        "A cena cresce sozinha para caber todos os mapas. Em Largura em casas dá para dizer quantas casas o desenho tem, até a grade dele casar com a da cena."
+      ]
+    },
+    {
       "id": "2026-11-05-varios-mapas-numa-cena",
       "data": "2026-11-05",
       "tipo": "novo",
@@ -1014,19 +1027,6 @@
         "Pharos e a Guilda dos Caçadores contam a mesma história: como funciona a Ronda, quanto o Quadro paga e por que a cidade só fica no escuro na Última Luz.",
         "O Banco Lunar deixa claro que tem agência em todas as Árvores e a matriz no Vazio, e que a neutralidade dele só cai quando alguém paga muito.",
         "Sonhar entre as Árvores ficou mais curto e sem repetição, e Grimm aparece com o título de Soberano dos Sonhos e Pesadelos."
-      ]
-    },
-    {
-      "id": "2026-10-12-sedes-fora-do-vazio",
-      "data": "2026-10-12",
-      "tipo": "melhoria",
-      "area": "Mundo",
-      "titulo": "Nem toda sede fica no Vazio",
-      "detalhes": [
-        "Astraluna entrou em Locais como a capital da Árvore A.X.I.S e sede da AstraTech.",
-        "A Casa do Primeiro Lume agora fica em Anima, o Salão das Treze Portas em Gênese e o Campanário no Limiar, num recanto que a Mulher Carmesim deixa para a Sociedade do Sino escrever sobre as Entidades.",
-        "Ficam no Vazio o Banco Lunar, Pharos, o Pátio das Rotas, a Agulha e o Acervo Prismático.",
-        "O Basalto passou a se chamar Pharos, e a Atalaia das Raízes virou A Agulha."
       ]
     }
   ]

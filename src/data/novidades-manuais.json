@@ -2,6 +2,19 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-05-mapas-como-objetos-na-cena",
+      "data": "2026-11-05",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: pôr vários mapas na cena, como no Owlbear",
+      "detalhes": [
+        "No Acervo, o botão Colocar põe um mapa na cena como um objeto. Dá para pôr quantos mapas quiser, lado a lado, para montar o lugar inteiro onde a aventura acontece.",
+        "Com a ferramenta Mapas da cena (tecla K), o Mestre clica num mapa, arrasta para mudar de lugar e puxa um canto para mudar o tamanho. A barra do mapa deixa esconder dos jogadores, trancar no lugar, mudar a ordem, duplicar, renomear e tirar da cena.",
+        "Um mapa escondido não chega aos jogadores até o Mestre mostrar. Com a névoa de guerra ligada, cada mapa só entrega a parte que foi revelada.",
+        "A cena cresce sozinha para caber todos os mapas. Em Largura em casas dá para dizer quantas casas o desenho tem, até a grade dele casar com a da cena."
+      ]
+    },
+    {
       "id": "2026-11-05-varios-mapas-numa-cena",
       "data": "2026-11-05",
       "tipo": "novo",
