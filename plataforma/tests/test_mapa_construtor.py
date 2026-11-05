@@ -323,15 +323,15 @@ class ConstrutorBancoTests(unittest.TestCase):
         with self.database.connection() as connection:
             self.assertTrue(rotas_acervo.pode_ler_item(connection, mesa, self.mestre, "n0/0/0"))
             self.assertFalse(rotas_acervo.pode_ler_item(connection, mesa, self.ana, "n0/0/0"))
-        # A imagem em uso não sai do Acervo nem deixa de ser objeto.
+        # A imagem em uso não sai do Acervo nem vira token (objeto e mapa servem de peça).
         with self.assertRaises(HTTPException) as apagar:
             rotas_acervo.apagar_item(mesa, user=self.mestre, database=self.database)
         self.assertEqual(apagar.exception.status_code, 409)
-        with self.assertRaises(HTTPException) as virar_mapa:
-            rotas_acervo.editar_item(mesa, rotas_acervo.ItemEdicao(tipo="mapa"), user=self.mestre, database=self.database)
-        self.assertEqual(virar_mapa.exception.status_code, 409)
-        # Imagem que não é objeto, ou que é de outra pessoa, não vira peça.
-        mapa_grande = self._imagem(600, 400)
+        with self.assertRaises(HTTPException) as virar_token:
+            rotas_acervo.editar_item(mesa, rotas_acervo.ItemEdicao(tipo="token"), user=self.mestre, database=self.database)
+        self.assertEqual(virar_token.exception.status_code, 409)
+        # Imagem que não é objeto nem mapa (um token), ou que é de outra pessoa, não vira peça.
+        mapa_grande = self._imagem(600, 400, tipo="token")
         with self.assertRaises(HTTPException) as nao_objeto:
             rotas.salvar_projeto(
                 self.campanha_id, projeto_id, rotas.ProjetoEdicao(conteudo={**_sala(), "pecas": [{**peca, "imagem_id": str(mapa_grande)}]}),
@@ -348,6 +348,41 @@ class ConstrutorBancoTests(unittest.TestCase):
         # Sem a peça no projeto, a imagem pode ser apagada.
         rotas.salvar_projeto(self.campanha_id, projeto_id, rotas.ProjetoEdicao(conteudo=_sala()), user=self.mestre, database=self.database)
         rotas_acervo.apagar_item(mesa, user=self.mestre, database=self.database)
+
+    def test_varios_mapas_do_acervo_viram_pecas_grandes_de_um_mapa_so(self):
+        from fastapi import HTTPException
+        from routers import acervo as rotas_acervo
+        from routers import construtor as rotas
+
+        criado = rotas.criar_projeto(self.campanha_id, rotas.ProjetoInput(nome="Cidade", largura=60, altura=40), user=self.mestre, database=self.database)
+        projeto_id = uuid.UUID(criado["id"])
+        praca, porto = self._imagem(3000, 2000), self._imagem(2400, 1800)
+        base = {"rotulo": "x", "imagem_largura": 1, "imagem_altura": 1, "rotacao": 0, "espelhada": False, "camada": "chao"}
+        pecas = [
+            {**base, "id": str(uuid.uuid4()), "imagem_id": str(praca), "x": 15, "y": 10, "escala": 30},
+            {**base, "id": str(uuid.uuid4()), "imagem_id": str(porto), "x": 45, "y": 10, "escala": 24},
+        ]
+        salvo = rotas.salvar_projeto(
+            self.campanha_id, projeto_id, rotas.ProjetoEdicao(conteudo={**_sala(), "pecas": pecas}), user=self.mestre, database=self.database,
+        )
+        # Peça de mapa pode passar de 10 casas; o tamanho da imagem vem do Acervo.
+        assert [(p["escala"], p["imagem_largura"], p["camada"]) for p in salvo["conteudo"]["pecas"]] == [(30.0, 3000, "chao"), (24.0, 2400, "chao")]
+        with self.database.connection() as connection:
+            self.assertTrue(rotas_acervo.pode_ler_item(connection, praca, self.mestre, "n0/0/0"))
+            self.assertFalse(rotas_acervo.pode_ler_item(connection, praca, self.ana, "n0/0/0"))
+        # Em uso como peça, o mapa não sai do Acervo nem vira token.
+        with self.assertRaises(HTTPException) as apagar:
+            rotas_acervo.apagar_item(praca, user=self.mestre, database=self.database)
+        self.assertEqual(apagar.exception.status_code, 409)
+        with self.assertRaises(HTTPException) as virar_token:
+            rotas_acervo.editar_item(praca, rotas_acervo.ItemEdicao(tipo="token"), user=self.mestre, database=self.database)
+        self.assertEqual(virar_token.exception.status_code, 409)
+        # Mais larga que o limite não passa.
+        with self.assertRaises(Exception):
+            rotas.salvar_projeto(
+                self.campanha_id, projeto_id, rotas.ProjetoEdicao(conteudo={**_sala(), "pecas": [{**pecas[0], "escala": 121}]}),
+                user=self.mestre, database=self.database,
+            )
 
     def test_pecas_prontas_da_campanha_e_licenca_no_acervo(self):
         from fastapi import HTTPException

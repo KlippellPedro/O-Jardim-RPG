@@ -494,7 +494,8 @@ def editar_item(
         if payload.tipo is not None:
             if payload.tipo not in acervo.TIPOS:
                 raise HTTPException(status_code=422, detail="o tipo e mapa, token ou objeto")
-            if payload.tipo != "objeto" and _usado_em_projeto(connection, item_id):
+            # Objeto e mapa servem de peça; token não serve, então não sai de um para o outro em uso.
+            if payload.tipo not in ("objeto", "mapa") and _usado_em_projeto(connection, item_id):
                 raise HTTPException(status_code=409, detail="a imagem esta sendo usada como peca em um mapa editavel")
             mudancas["tipo"] = payload.tipo
         if payload.mover_para_raiz:

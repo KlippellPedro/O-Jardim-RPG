@@ -39,6 +39,8 @@ ARESTA = re.compile(r"^([hv]),(\d{1,3}),(\d{1,3})$")
 ID_PECA = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$", re.I)
 LINHA_DE_CHAO = re.compile(rf"^[{re.escape(VAZIO)}{MATERIAIS_CHAO}]*$")
 MAX_PECAS = 256
+#: Largura máxima de uma peça, em casas. Um mapa do Acervo posto como peça ocupa dezenas de casas.
+ESCALA_PECA_MAX = 120
 #: Peça da mobília do Jardim (public/assets/construtor/mobilia/<id>.webp), em vez de uma imagem do Acervo.
 ID_MOBILIA = re.compile(r"^[a-z0-9-]{1,40}$")
 #: Chão (tapete, alçapão), objetos (embaixo das paredes) ou alto (copa de árvore, tocha de parede).
@@ -173,7 +175,7 @@ def normalizar_conteudo(dados, largura: int, altura: int) -> dict:
         imagem_altura = _inteiro(peca.get("imagem_altura"), "altura da imagem da peca", 1, MAX_LADO_IMAGEM_PECA)
         x = _numero(peca.get("x"), "posicao X da peca", -CASAS_MAX, largura + CASAS_MAX)
         y = _numero(peca.get("y"), "posicao Y da peca", -CASAS_MAX, altura + CASAS_MAX)
-        escala = _numero(peca.get("escala"), "escala da peca", 0.1, 10)
+        escala = _numero(peca.get("escala"), "escala da peca", 0.1, ESCALA_PECA_MAX)
         rotacao = _numero(peca.get("rotacao", 0), "rotacao da peca", -3600, 3600) % 360
         espelhada = peca.get("espelhada", False)
         if not isinstance(espelhada, bool):

@@ -90,10 +90,11 @@ def _validar_pecas(connection, conteudo: dict, user_id: UUID, ids_ja_usados: set
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="uma imagem usada como peca nao esta mais no Acervo")
     for item_id in ids:
         item = itens[str(item_id)]
-        if item["tipo"] != "objeto" or item["estado"] != "pronto":
-            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="as pecas precisam ser imagens prontas do tipo objeto")
+        # Objeto é a peça de sempre; mapa entra para juntar vários mapas num só (peça grande no chão).
+        if item["tipo"] not in ("objeto", "mapa") or item["estado"] != "pronto":
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="as pecas precisam ser imagens prontas do tipo objeto ou mapa")
         if item["dono_id"] != user_id and str(item_id) not in ids_ja_usados:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="use como peca uma imagem objeto do seu Acervo")
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="use como peca uma imagem do seu Acervo")
     for peca in do_acervo:
         item = itens[peca["imagem_id"]]
         peca["rotulo"] = item["nome"]
