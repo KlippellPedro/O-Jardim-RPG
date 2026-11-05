@@ -7,6 +7,8 @@
 // Toda operação devolve um conteúdo novo (o antigo fica para o Desfazer).
 
 export const VAZIO = '.';
+/** Largura máxima de uma peça, em casas (o servidor confere o mesmo número). Mapas do Acervo passam de 10. */
+export const ESCALA_PECA_MAX = 120;
 
 export type MaterialChao = 'L' | 'P' | 'T' | 'R' | 'G' | 'A' | 'M' | 'C' | 'N' | 'W' | 'V';
 export type MaterialParede = 'pedra' | 'tijolo' | 'madeira' | 'caverna' | 'cerca' | 'sebe';

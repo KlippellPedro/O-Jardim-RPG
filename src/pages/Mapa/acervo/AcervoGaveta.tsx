@@ -223,6 +223,7 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onNova
             <input ref={pastaRef} type="file" multiple hidden onChange={(e) => void subir(e.target.files, true)} />
           </div>
 
+          {tipo === 'mapa' && <p className="mapa-dica">"Nesta cena" troca o mapa da cena. Para juntar vários mapas numa cena só, abra o Construtor de mapas e escolha os mapas em "Mapas do Acervo".</p>}
           {erro && <p className="mapa-erro">{erro}</p>}
           {envios.length > 0 && (
             <ul className="mapa-envios">

@@ -1,6 +1,6 @@
 import { urlPedaco } from '../../../services/mapaApi';
 import catalogoMobilia from '../../../data/construtor-mobilia.json';
-import { chaveDaImagem, type CamadaPeca, type IPecaProjeto } from './projeto';
+import { chaveDaImagem, ESCALA_PECA_MAX, type CamadaPeca, type IPecaProjeto } from './projeto';
 
 export type ModeloPeca = Pick<IPecaProjeto, 'imagem_id' | 'pacote' | 'camada' | 'rotulo' | 'imagem_largura' | 'imagem_altura'>;
 type DimensoesPeca = Pick<IPecaProjeto, 'imagem_id' | 'pacote' | 'imagem_largura' | 'imagem_altura'>;
@@ -39,12 +39,16 @@ export function pecaDaMobilia(item: IMobilia): ModeloPeca {
 }
 
 const LADO_LADRILHO = 1024;
-const LADO_MAXIMO = 2048;
+const LADO_MAXIMO = 4096;
 const LADO_MINIMO = 256;
 
-/** Divide um orçamento aproximado de 16 milhões de pixels entre as imagens únicas do mapa. */
+/**
+ * Divide um orçamento de uns 67 milhões de pixels entre as imagens únicas do mapa (cada uma
+ * com no máximo 4096 px de lado). Quatro mapas do Acervo juntos ainda saem na resolução cheia
+ * até esse tamanho; com mais imagens o lado cai, para a memória do navegador aguentar.
+ */
 function ladoParaImagem(quantidade: number): number {
-  return Math.max(LADO_MINIMO, Math.min(LADO_MAXIMO, Math.floor(4096 / Math.sqrt(Math.max(1, quantidade)))));
+  return Math.max(LADO_MINIMO, Math.min(LADO_MAXIMO, Math.floor(8192 / Math.sqrt(Math.max(1, quantidade)))));
 }
 
 /**
@@ -142,6 +146,19 @@ export function pecaDoAcervo(item: { id: string; nome: string; largura: number; 
     imagem_largura: item.largura,
     imagem_altura: item.altura,
   };
+}
+
+/**
+ * Um mapa do Acervo como peça: vai para o chão e entra no tamanho original, se a casa do projeto
+ * for a do desenho. `escala` é a largura em casas; o Mestre acerta depois até as grades casarem.
+ */
+export function pecaDoMapa(item: { id: string; nome: string; largura: number; altura: number }): ModeloPeca {
+  return { ...pecaDoAcervo(item), camada: 'chao' };
+}
+
+/** Largura, em casas, que um mapa de `larguraPx` ocupa se cada casa do projeto tem `casa` px. */
+export function casasDoMapa(larguraPx: number, casa: number): number {
+  return Math.min(ESCALA_PECA_MAX, Math.max(0.1, Number((larguraPx / Math.max(1, casa)).toFixed(2))));
 }
 
 export function proporcaoPeca(peca: Pick<IPecaProjeto, 'imagem_largura' | 'imagem_altura'>): number {

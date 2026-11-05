@@ -548,3 +548,28 @@
   color: var(--mapa-apagado);
   font-size: 10.5px;
 }
+
+/* Largura da peça em casas: botões + campo para digitar (mapas do Acervo passam de dezenas de casas). */
+.construtor-largura {
+  align-items: stretch;
+}
+
+.construtor-largura label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.construtor-largura input {
+  width: 62px;
+  padding: 3px 6px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--mapa-texto);
+  font: inherit;
+  text-align: right;
+}

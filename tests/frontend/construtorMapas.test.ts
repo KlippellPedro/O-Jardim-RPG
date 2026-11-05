@@ -189,3 +189,21 @@ test('peça pronta guarda o grupo pelo centro e volta ao mapa com ids novos no p
   assert.equal(nada.conteudo, cheio);
   assert.deepEqual(nada.ids, []);
 });
+
+test('mapa do Acervo vira peça grande do chão, em casas pela casa do projeto', async () => {
+  const { casasDoMapa, pecaDoMapa } = await import('../../src/pages/Mapa/construtor/pecas');
+  const { ESCALA_PECA_MAX } = await import('../../src/pages/Mapa/construtor/projeto');
+  const praca = { id: 'a'.repeat(32), nome: 'Praça', largura: 3000, altura: 2000 };
+  const peca = pecaDoMapa(praca);
+  assert.equal(peca.camada, 'chao');
+  assert.deepEqual([peca.imagem_id, peca.pacote, peca.imagem_largura, peca.imagem_altura], [praca.id, null, 3000, 2000]);
+  // 3000 px com casa de 100 px: 30 casas; casa de 70 px: 42,86 casas; nunca passa do limite do servidor.
+  assert.equal(casasDoMapa(3000, 100), 30);
+  assert.equal(casasDoMapa(3000, 70), 42.86);
+  assert.equal(casasDoMapa(30000, 50), ESCALA_PECA_MAX);
+  assert.equal(ESCALA_PECA_MAX, 120);
+  // Dois mapas lado a lado entram como duas peças, na ordem escolhida, e cabem no limite de peças.
+  const juntos = adicionarPeca(adicionarPeca(conteudoVazio(60, 40), { ...peca, id: 'p1', x: 15, y: 10, escala: 30, rotacao: 0, espelhada: false } as never), { ...peca, id: 'p2', imagem_id: 'b'.repeat(32), x: 45, y: 10, escala: 30, rotacao: 0, espelhada: false } as never);
+  assert.deepEqual(pecasEmOrdem(juntos).map((p) => p.id), ['p1', 'p2']);
+  assert.notEqual(chaveDaImagem(juntos.pecas[0]), chaveDaImagem(juntos.pecas[1]));
+});

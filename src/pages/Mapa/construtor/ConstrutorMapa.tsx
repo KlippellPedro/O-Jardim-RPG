@@ -14,11 +14,11 @@ import { confirmar, pedirTexto } from '../../../components/avisos/confirmacao';
 import { BotaoFerramenta } from '../componentes/BotaoFerramenta';
 import { EditorConstrutor, type FerramentaConstrutor, type OpcoesConstrutor } from './editor';
 import {
-  CAMADAS_PECA, camadaDe, chaveDaImagem, contagem, LUZES_PRONTAS, MATERIAIS_CHAO, MATERIAIS_PAREDE, pecasEmOrdem, type IConteudoProjeto, type IPecaPronta,
+  CAMADAS_PECA, camadaDe, chaveDaImagem, contagem, ESCALA_PECA_MAX, LUZES_PRONTAS, MATERIAIS_CHAO, MATERIAIS_PAREDE, pecasEmOrdem, type IConteudoProjeto, type IPecaPronta,
 } from './projeto';
 import { texturaDaParede, texturaDoChao } from './materiais';
 import { publicarProjeto, type ProgressoPublicacao } from './publicar';
-import { carregarImagemPeca, MOBILIA, pecaDaMobilia, pecaDoAcervo, urlDaMobilia, type ModeloPeca } from './pecas';
+import { carregarImagemPeca, casasDoMapa, MOBILIA, pecaDaMobilia, pecaDoAcervo, pecaDoMapa, urlDaMobilia, type ModeloPeca } from './pecas';
 import './construtor.css';
 
 interface Props {
@@ -178,6 +178,36 @@ export const ConstrutorMapa = ({ campanhaId, cenaAtual, onPublicado, onFechar }:
   );
 };
 
+/** Passo do botão de tamanho: de grão fino nas peças pequenas, de uma casa inteira nos mapas grandes. */
+const passoDaEscala = (valor: number) => (valor > 10 ? 1 : 0.25);
+const limparEscala = (valor: number) => Math.min(ESCALA_PECA_MAX, Math.max(0.1, Number(valor.toFixed(2))));
+
+/** Largura da peça em casas: botões para ajustar de pouco em pouco e campo para digitar o número. */
+const AjusteDeLargura = ({ valor, rotulo, onMudar }: { valor: number; rotulo: string; onMudar: (valor: number) => void }) => (
+  <div className="mapa-segmentos construtor-largura" role="group" aria-label={rotulo}>
+    <button type="button" aria-label="Diminuir peça" onClick={() => onMudar(limparEscala(valor - passoDaEscala(valor)))}>−</button>
+    <label>
+      <input
+        key={valor}
+        type="number"
+        min={0.1}
+        max={ESCALA_PECA_MAX}
+        step={0.5}
+        defaultValue={valor}
+        aria-label="Largura em casas"
+        onBlur={(e) => {
+          const digitado = Number(e.target.value.replace(',', '.'));
+          if (Number.isFinite(digitado) && digitado > 0) onMudar(limparEscala(digitado));
+          else e.target.value = String(valor);
+        }}
+        onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
+      />
+      casas
+    </label>
+    <button type="button" aria-label="Aumentar peça" onClick={() => onMudar(limparEscala(valor + passoDaEscala(valor)))}>+</button>
+  </div>
+);
+
 const EditorDoProjeto = ({
   campanhaId, projeto: inicial, cenaAtual, onPublicado, onVoltar,
 }: { campanhaId: string; projeto: IProjeto; cenaAtual: { id: string; nome: string } | null; onPublicado: (estado: IEstadoMapa) => void; onVoltar: () => void }) => {
@@ -189,6 +219,8 @@ const EditorDoProjeto = ({
   const [opcoes, setOpcoes] = useState<OpcoesConstrutor>({ chao: 'L', parede: 'pedra', pincel: 1, borracha: 'chao', peca: null, escalaPeca: 1, rotacaoPeca: 0, espelhadaPeca: false, luz: 'tocha', pronta: null });
   const [historico, setHistorico] = useState({ desfazer: false, refazer: false });
   const [objetos, setObjetos] = useState<IItemAcervo[]>([]);
+  /** Mapas do Acervo, para juntar vários num só (peças grandes no chão). */
+  const [mapasAcervo, setMapasAcervo] = useState<IItemAcervo[]>([]);
   const [pecaSelecionadaId, setPecaSelecionadaId] = useState<string | null>(null);
   const [luzSelecionadaId, setLuzSelecionadaId] = useState<string | null>(null);
   const [selecaoIds, setSelecaoIds] = useState<string[]>([]);
@@ -273,9 +305,13 @@ const EditorDoProjeto = ({
   useEffect(() => {
     let ativo = true;
     void acervoApi.listar().then(({ itens }) => {
-      if (ativo) setObjetos(itens.filter((item) => item.tipo === 'objeto' && item.estado === 'pronto'));
+      if (!ativo) return;
+      setObjetos(itens.filter((item) => item.tipo === 'objeto' && item.estado === 'pronto'));
+      setMapasAcervo(itens.filter((item) => item.tipo === 'mapa' && item.estado === 'pronto'));
     }).catch(() => {
-      if (ativo) setObjetos([]);
+      if (!ativo) return;
+      setObjetos([]);
+      setMapasAcervo([]);
     });
     return () => { ativo = false; };
   }, [campanhaId]);
@@ -561,6 +597,34 @@ const EditorDoProjeto = ({
                   </div>
                 </div>
               ))}
+              <h3>Mapas do Acervo</h3>
+              <p className="mapa-dica">Para juntar vários mapas numa cena, escolha um mapa, clique onde ele deve ficar e repita com os outros. Arraste para encostar um no outro; ajuste a largura em casas até as grades casarem. Ao publicar, tudo vira um mapa só, com névoa, paredes e luzes como nos outros.</p>
+              {mapasAcervo.length ? (
+                <div className="construtor-pecas" role="radiogroup" aria-label="Mapa para colocar no mapa montado">
+                  {mapasAcervo.map((item) => {
+                    const ativo = !opcoes.peca?.pacote && opcoes.peca?.imagem_id === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={ativo}
+                        aria-label={`${item.nome} (${item.largura} x ${item.altura} px)`}
+                        className={`construtor-peca${ativo ? ' ativo' : ''}`}
+                        onClick={() => {
+                          setOpcoes({ ...opcoes, peca: pecaDoMapa(item), escalaPeca: casasDoMapa(item.largura, projeto.casa), pronta: null });
+                          setPecaSelecionadaId(null);
+                        }}
+                      >
+                        <img src={urlPedaco(item.id, 'mini')} alt="" loading="lazy" />
+                        <small>{item.nome}</small>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="mapa-dica">Não há mapas prontos no Acervo. Envie imagens como Mapa pela gaveta Acervo e volte para cá.</p>
+              )}
               <h3>Objetos do Acervo</h3>
               <p className="mapa-dica">Para usar uma imagem da internet, salve um arquivo com licença de uso e envie ao Acervo como Objeto. O VTT não busca imagens diretamente por URL.</p>
               {falhaPeca && <p className="mapa-erro">{falhaPeca}</p>}
@@ -593,11 +657,7 @@ const EditorDoProjeto = ({
               {opcoes.peca && (
                 <div className="construtor-ajuste-peca">
                   <strong>Nova peça: {opcoes.peca.rotulo}</strong>
-                  <div className="mapa-segmentos" role="group" aria-label="Tamanho da nova peça">
-                    <button type="button" aria-label="Diminuir peça" onClick={() => setOpcoes({ ...opcoes, escalaPeca: Math.max(0.1, Number((opcoes.escalaPeca - 0.25).toFixed(2))) })}>−</button>
-                    <span>{opcoes.escalaPeca.toLocaleString('pt-BR', { maximumFractionDigits: 2 })} casas</span>
-                    <button type="button" aria-label="Aumentar peça" onClick={() => setOpcoes({ ...opcoes, escalaPeca: Math.min(10, Number((opcoes.escalaPeca + 0.25).toFixed(2))) })}>+</button>
-                  </div>
+                  <AjusteDeLargura valor={opcoes.escalaPeca} rotulo="Tamanho da nova peça" onMudar={(escalaPeca) => setOpcoes({ ...opcoes, escalaPeca })} />
                   <div className="mapa-segmentos" role="group" aria-label="Rotação da nova peça">
                     <button type="button" aria-label="Girar peça para a esquerda" onClick={() => setOpcoes({ ...opcoes, rotacaoPeca: (opcoes.rotacaoPeca + 315) % 360 })}>−45°</button>
                     <span>{opcoes.rotacaoPeca}°</span>
@@ -628,11 +688,7 @@ const EditorDoProjeto = ({
             <section className="construtor-ajuste-peca" aria-label="Ajustar peça selecionada">
               <h3>Peça selecionada</h3>
               <strong>{pecaSelecionada.rotulo}</strong>
-              <div className="mapa-segmentos" role="group" aria-label="Tamanho da peça selecionada">
-                <button type="button" aria-label="Diminuir peça" onClick={() => editor.current?.editarPeca(pecaSelecionada.id, { escala: Math.max(0.1, Number((pecaSelecionada.escala - 0.25).toFixed(2))) })}>−</button>
-                <span>{pecaSelecionada.escala.toLocaleString('pt-BR', { maximumFractionDigits: 2 })} casas</span>
-                <button type="button" aria-label="Aumentar peça" onClick={() => editor.current?.editarPeca(pecaSelecionada.id, { escala: Math.min(10, Number((pecaSelecionada.escala + 0.25).toFixed(2))) })}>+</button>
-              </div>
+              <AjusteDeLargura valor={pecaSelecionada.escala} rotulo="Tamanho da peça selecionada" onMudar={(escala) => editor.current?.editarPeca(pecaSelecionada.id, { escala })} />
               <div className="mapa-segmentos" role="group" aria-label="Rotação da peça selecionada">
                 <button type="button" onClick={() => editor.current?.editarPeca(pecaSelecionada.id, { rotacao: (pecaSelecionada.rotacao + 315) % 360 })}>−45°</button>
                 <span>{pecaSelecionada.rotacao}°</span>
