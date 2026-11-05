@@ -26,6 +26,10 @@ ESCALA_MAX = 20.0
 #: Maior lado de uma cena (o mesmo teto de routers/mapa.py).
 LADO_MAXIMO_CENA = 32768
 LADO_MINIMO_CENA = 100
+#: Folga em volta dos mapas: o primeiro mapa de uma cena entra a esta distância do canto, e a cena
+#: mede os mapas mais esta folga à direita e embaixo. Assim o Mestre arrasta um mapa para o lado
+#: que quiser (a cena não tem coordenadas negativas) e ainda sobra espaço para os tokens.
+MARGEM_DA_CENA = 4000
 ID = re.compile(r"^[0-9a-f-]{36}$")
 
 
@@ -164,10 +168,13 @@ def extensao(mapas: list[dict], itens: dict[str, dict]) -> tuple[int, int]:
 
 
 def caber_na_cena(mapas: list[dict], itens: dict[str, dict]) -> tuple[int, int]:
+    """O tamanho que a cena precisa para os mapas (com a folga em volta, até o teto de uma cena)."""
     largura, altura = extensao(mapas, itens)
     if largura > LADO_MAXIMO_CENA or altura > LADO_MAXIMO_CENA:
         raise ErroMapa(f"os mapas juntos passam de {LADO_MAXIMO_CENA} px: diminua ou aproxime", 422)
-    return largura, altura
+    if not mapas:
+        return largura, altura
+    return min(LADO_MAXIMO_CENA, largura + MARGEM_DA_CENA), min(LADO_MAXIMO_CENA, altura + MARGEM_DA_CENA)
 
 
 # ------------------------------------------------------------------ névoa

@@ -484,9 +484,10 @@ class MapaBancoTests(unittest.TestCase):
         primeiro = self._colocar(cena_id, praca)
         segundo = self._colocar(cena_id, porto)
         mapas = segundo["cena"]["mapas_colocados"]
-        # O segundo entra à direita do primeiro, e a cena passou a medir o conjunto.
-        self.assertEqual([(m["nome"], m["x"], m["y"], m["escala"]) for m in mapas], [("Praca", 0.0, 0.0, 1.0), ("Porto", 3000.0, 0.0, 1.0)])
-        self.assertEqual((segundo["cena"]["largura"], segundo["cena"]["altura"]), (5400, 2000))
+        # O primeiro entra com folga do canto; o segundo, à direita dele, alinhado em cima. A cena mede
+        # o conjunto mais a folga (4000 px) à direita e embaixo.
+        self.assertEqual([(m["nome"], m["x"], m["y"], m["escala"]) for m in mapas], [("Praca", 4000.0, 4000.0, 1.0), ("Porto", 7000.0, 4000.0, 1.0)])
+        self.assertEqual((segundo["cena"]["largura"], segundo["cena"]["altura"]), (13400, 10000))
         self.assertTrue(all(m["visivel"] and not m["trancado"] for m in mapas))
         self.assertEqual(primeiro["mapa_colocado_id"], mapas[0]["id"])
         # A jogadora recebe os dois, sem nome, trava nem visibilidade (isso é do Mestre).
@@ -571,18 +572,18 @@ class MapaBancoTests(unittest.TestCase):
         self._sessao("aberta")
         cena_id = self.criar_cena("Cidade")["cena"]["id"]
         self._colocar(cena_id, a)
-        self._colocar(cena_id, b)  # em x = 3000
+        self._colocar(cena_id, b)  # em x = 7000, y = 4000
         self.nevoa(cena_id, ligada=True)
         self.assertEqual(self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"], [])
         self.assertEqual((self.pedaco(self.ana, a, "n0/0/0"), self.pedaco(self.ana, b, "n0/0/0")), (404, 404))
         # Revelar um quadrado dentro do segundo mapa: só o ladrilho dele sai, com o id do mapa na frente.
-        self.nevoa(cena_id, forma={"op": "revelar", "tipo": "retangulo", "x": 3100, "y": 100, "w": 200, "h": 200})
+        self.nevoa(cena_id, forma={"op": "revelar", "tipo": "retangulo", "x": 7100, "y": 4100, "w": 200, "h": 200})
         visto = self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"]
         self.assertEqual(visto, [f"{b}:n0/0/0"])
         self.assertEqual((self.pedaco(self.ana, b, "n0/0/0"), self.pedaco(self.ana, b, "n0/1/0"), self.pedaco(self.ana, a, "n0/0/0")), (200, 404, 404))
         # Mover o mapa refaz a lista: o quadrado agora cai em outro ladrilho dele.
         mapas = self.ver(self.mestre)["cena"]["mapas_colocados"]
-        self._mudar(cena_id, mapas[1]["id"], x=2000)
+        self._mudar(cena_id, mapas[1]["id"], x=6000)
         refeito = self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"]
         self.assertEqual(refeito, [f"{b}:n0/1/0"])
         self.assertEqual((self.pedaco(self.ana, b, "n0/1/0"), self.pedaco(self.ana, b, "n0/0/0")), (200, 404))

@@ -90,11 +90,17 @@ def colocar_mapa(
             raise HTTPException(status_code=409, detail=f"a cena aceita ate {mapas_colocados.MAX_MAPAS} mapas")
         x, y = payload.x, payload.y
         if x is None or y is None:
-            # À direita de tudo o que já está na cena (o mapa base ocupa a cena desde a origem).
-            itens = rotas_mapa._itens_dos_mapas(connection, atuais)
-            direita, _ = mapas_colocados.extensao(atuais, itens)
-            base = int(cena["largura"]) if cena["mapa_id"] else 0
-            x, y = float(max(direita, base)), 0.0
+            if not atuais and not cena["mapa_id"]:
+                # O primeiro mapa de uma cena vazia entra com folga em volta, para dar para arrastar para qualquer lado.
+                x = y = float(mapas_colocados.MARGEM_DA_CENA)
+            else:
+                # À direita de tudo o que já está na cena, alinhado com o de cima (o mapa base ocupa a cena desde a origem).
+                itens = rotas_mapa._itens_dos_mapas(connection, atuais)
+                direita, _ = mapas_colocados.extensao(atuais, itens)
+                mapa_base = rotas_mapa._mapa_da_cena(connection, cena)
+                base = int(mapa_base["largura"]) if mapa_base else 0
+                x = float(max(direita, base))
+                y = float(min((m["y"] for m in atuais), default=0.0))
         try:
             novo = mapas_colocados.novo(payload.imagem_id, payload.nome or tipo["nome"], x, y, payload.escala or 1.0)
         except ErroMapa as erro:
