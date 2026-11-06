@@ -2,6 +2,17 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-06-mapa-arena-inteira-com-nevoa",
+      "data": "2026-11-06",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: a névoa cobre a cena toda e os mapas andam para qualquer lado",
+      "detalhes": [
+        "Uma cena montada só com mapas colocados agora tem o tamanho máximo: a névoa cobre tudo, e dá para soltar e arrastar os mapas em qualquer direção, sem ficar preso a um quadrado.",
+        "O primeiro mapa entra no meio da cena, em vez de no canto. As cenas que já tinham mapas colocados cresceram para o tamanho máximo sem nada sair do lugar."
+      ]
+    },
+    {
       "id": "2026-11-05-mapa-so-o-mapa-e-arrastar-direto",
       "data": "2026-11-05",
       "tipo": "melhoria",
