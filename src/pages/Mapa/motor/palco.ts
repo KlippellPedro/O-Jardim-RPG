@@ -824,7 +824,14 @@ export class PalcoMapa {
     arrasto.moveu = true;
     if (arrasto.modo === 'mover') {
       // O mapa anda livre, sem grudar; com Shift apertado o canto dele encaixa na grade.
-      this.mapasColocados.previa(arrasto.id, moverMapa(mapa, ponto.x - arrasto.dx, ponto.y - arrasto.dy, encaixar && this.cena ? this.cena.grade : null));
+      const destino = moverMapa(mapa, ponto.x - arrasto.dx, ponto.y - arrasto.dy, encaixar && this.cena ? this.cena.grade : null);
+      // Nem o canto de baixo nem o da direita passam da borda da cena (o servidor recusaria ao soltar).
+      if (this.cena) {
+        const { w, h } = retanguloDoMapa(mapa);
+        destino.x = Math.max(0, Math.min(destino.x, this.cena.largura - w));
+        destino.y = Math.max(0, Math.min(destino.y, this.cena.altura - h));
+      }
+      this.mapasColocados.previa(arrasto.id, destino);
     } else {
       this.mapasColocados.previa(arrasto.id, redimensionarMapa(mapa, arrasto.modo, ponto));
     }

@@ -2428,4 +2428,20 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        72,
+        "arena_das_cenas_so_com_mapas_colocados",
+        (
+            # Cena montada só com mapas colocados (sem mapa de fundo) passa a ser a arena do tamanho
+            # máximo: a névoa cobre tudo e os mapas andam para qualquer lado. Nada sai do lugar.
+            """
+            UPDATE mapa_cenas
+            SET largura = 32768, altura = 32768
+            WHERE mapa_id IS NULL
+              AND jsonb_typeof(estrutura -> 'mapas') = 'array'
+              AND jsonb_array_length(estrutura -> 'mapas') > 0
+              AND (largura < 32768 OR altura < 32768)
+            """,
+        ),
+    ),
 )

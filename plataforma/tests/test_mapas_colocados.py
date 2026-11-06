@@ -55,6 +55,16 @@ def test_a_cena_cresce_ate_cobrir_os_mapas_e_tem_teto():
         mc.caber_na_cena(com_escala, itens)
 
 
+def test_cena_so_com_mapas_e_a_arena_inteira_e_com_fundo_cresce_com_folga():
+    itens = {A: {"largura": 3000, "altura": 2000}}
+    mapas = [_mapa("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", A)]
+    assert mc.caber_na_cena(mapas, itens) == (mc.LADO_MAXIMO_CENA, mc.LADO_MAXIMO_CENA)
+    assert mc.caber_na_cena(mapas, itens, com_base=True) == (3000 + mc.MARGEM_DA_CENA, 2000 + mc.MARGEM_DA_CENA)
+    assert mc.caber_na_cena([], itens) == (0, 0)
+    assert mc.centro_da_arena(3000, 2000) == (14884.0, 15384.0)
+    assert mc.centro_da_arena(40000, 40000) == (0.0, 0.0)
+
+
 def test_forma_da_nevoa_vai_para_o_desenho_do_mapa_e_so_conta_se_tocar_nele():
     mapa = _mapa("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb", B, x=3000, y=100, escala=2.0)
     retangulo = {"op": "revelar", "tipo": "retangulo", "x": 3200, "y": 300, "w": 400, "h": 200}

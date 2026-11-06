@@ -42,7 +42,7 @@ def _gravar(connection, campanha_id: UUID, cena, mapas: list[dict]) -> int:
     """Grava a lista na cena: a cena cresce até caber todos (nunca encolhe), a névoa é refeita e a versão sobe."""
     itens = rotas_mapa._itens_dos_mapas(connection, mapas)
     try:
-        largura, altura = mapas_colocados.caber_na_cena(mapas, itens)
+        largura, altura = mapas_colocados.caber_na_cena(mapas, itens, com_base=bool(cena["mapa_id"]))
     except ErroMapa as erro:
         raise _erro(erro) from None
     estrutura = dict(cena["estrutura"]) if isinstance(cena["estrutura"], dict) else {}
@@ -91,8 +91,13 @@ def colocar_mapa(
         x, y = payload.x, payload.y
         if x is None or y is None:
             if not atuais and not cena["mapa_id"]:
-                # O primeiro mapa de uma cena vazia entra com folga em volta, para dar para arrastar para qualquer lado.
-                x = y = float(mapas_colocados.MARGEM_DA_CENA)
+                # O primeiro mapa de uma cena vazia entra no meio da arena, para dar para arrastar para qualquer lado.
+                itens = rotas_mapa._itens_dos_mapas(connection, [{"imagem_id": str(payload.imagem_id)}])
+                item = itens.get(str(payload.imagem_id))
+                escala = payload.escala or 1.0
+                x, y = mapas_colocados.centro_da_arena(
+                    item["largura"] * escala if item else 0.0, item["altura"] * escala if item else 0.0,
+                )
             else:
                 # À direita de tudo o que já está na cena, alinhado com o de cima (o mapa base ocupa a cena desde a origem).
                 itens = rotas_mapa._itens_dos_mapas(connection, atuais)
