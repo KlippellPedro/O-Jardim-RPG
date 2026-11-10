@@ -2,6 +2,18 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-10-documentos-universais",
+      "data": "2026-11-10",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Documentos universais: papéis prontos que explicam o Jardim",
+      "detalhes": [
+        "A aba Documentos do Mestre ganhou a parte Documentos universais, ao lado da Oficina: 17 papéis prontos sobre Fluxos, Deidades, Árvores, acontecimentos e povos.",
+        "Cada papel traz uma nota só para o Mestre, com o que ele revela e a hora boa de entregar. Dá para baixar, copiar para o Discord ou imprimir.",
+        "Para mudar um texto, use Editar uma cópia na Oficina: a cópia fica só na sua campanha, e o original continua igual."
+      ]
+    },
+    {
       "id": "2026-11-09-mapa-acervo-na-barra-gaveta-e-atalhos",
       "data": "2026-11-09",
       "tipo": "melhoria",
