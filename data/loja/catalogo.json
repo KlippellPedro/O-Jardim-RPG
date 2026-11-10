@@ -47297,6 +47297,196 @@
       }
     },
     {
+      "tipo": "drop",
+      "id": "loot-moringa-de-batida",
+      "titulo": "Moringa de Batida",
+      "conteudo": {
+        "descricao": "A moringa de barro em que Vó Benta guardou o coração por cem anos, rachada no gargalo e ainda morna. Encostada no ouvido, deixa ouvir uma batida lenta, que fica mais fraca a cada dia.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Mineral",
+        "origem": "Vó Benta, a Benzedeira do Ribeirão, uma vez só.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vital",
+          "Regenerativo"
+        ],
+        "usos": [
+          "alquimia"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-lasca-do-sino-rachado",
+      "titulo": "Lasca do Sino Rachado",
+      "conteudo": {
+        "descricao": "Um pedaço da borda de um sino de bronze, ainda com metade de uma inscrição. Batida com a unha, dá uma nota limpa, a que o sino inteiro nunca conseguiu dar.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Mineral",
+        "origem": "Mestre Anselmo, o Fundidor do Sino Rachado, uma vez só.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Resistente",
+          "Amplificador"
+        ],
+        "usos": [
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-moeda-que-cai-para-cima",
+      "titulo": "Moeda que Cai para Cima",
+      "conteudo": {
+        "descricao": "Uma moeda de cobre gasta, com um furo no meio. Solta da mão, ela sobe devagar até o teto e fica lá até alguém ir buscar.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Arcano",
+        "origem": "Zeferino, o Equilibrista do Avesso, uma vez só.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Volátil",
+          "Arcano"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-cracha-do-operador",
+      "titulo": "Crachá do Operador",
+      "conteudo": {
+        "descricao": "Um crachá de metal com a foto apagada de um operador que ninguém na vila lembra. Encostado num painel antigo, ainda abre uma porta, e depois a luzinha dele não acende mais.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Artificial",
+        "origem": "O Zelador da Represa Velha, uma vez só.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Condutor",
+          "Estável"
+        ],
+        "usos": [
+          "engenharia"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-elo-da-corrente-de-medir",
+      "titulo": "Elo da Corrente de Medir",
+      "conteudo": {
+        "descricao": "Um elo de ferro da corrente do Agrimensor, liso de tanto passar pela mão. Duas pontas de corda presas nele medem sempre uma braça exata, mesmo quando o chão não ajuda.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Artificial",
+        "origem": "O Agrimensor do Vale Dobrado, uma vez só.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante",
+          "Estável"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-conta-do-terco-mudo",
+      "titulo": "Conta do Terço Mudo",
+      "conteudo": {
+        "descricao": "Uma conta de madeira escura de um terço sem cordão. Apertada na mão, faz esquecer por um instante aquilo que dava medo de lembrar.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Espiritual",
+        "origem": "O Monge que Esqueceu de Existir, uma vez só.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Anímico",
+          "Isolante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-lacre-partido",
+      "titulo": "Lacre Partido",
+      "conteudo": {
+        "descricao": "O lacre vermelho da carta que o Mensageiro nunca entregou, partido ao meio. Esquentado na mão, demora um instante a mais do que devia para amolecer.",
+        "preco": {
+          "Solares": 5
+        },
+        "raridade": "epico",
+        "nivelMinimoLoja": 3,
+        "categoria": "Artificial",
+        "origem": "O Mensageiro que Chegou Tarde, uma vez só.",
+        "potencia": 4,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Arcano",
+          "Conservante",
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
       "tipo": "monstro",
       "id": "ilyrax",
       "titulo": "Ilyrax, a Cria Teimosa",
@@ -48250,6 +48440,622 @@
               "Quem olhar para ela pela primeira vez nesta fase faz Vontade DT 20 ou perde 1d8 de Sanidade.",
               "A Guarda de Luto quebra de vez: ela perde a Lâmina que Protege e fica com Defesa 3 menor, mas no fim do turno de dois jogadores por rodada, à sua escolha, faz um ataque com −5.",
               "Se o grupo disser em voz alta o nome de quem cada um viu no rosto dela, ela abaixa a lâmina e pede para ir embora. Deixar que vá encerra a cena."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "vo-benta-benzedeira",
+      "titulo": "Vó Benta, a Benzedeira do Ribeirão",
+      "conteudo": {
+        "descricao": "Benze no Ribeirão há mais tempo do que alguém consegue contar. Tira quebranto, cura cobreiro e faz a febre baixar com três raminhos de arruda, sem cobrar nada. As mães levam as crianças até ela, e as crianças voltam boas, só um pouco mais pálidas. Vó Benta não envelhece desde que a avó das mães de hoje era menina, e agora quer levar para morar com ela o menino que benzeu ao nascer, que ela chama de afilhado.",
+        "preco": {
+          "Lunaris": 560
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "raridade": "comum",
+        "categoria": "Humanoide",
+        "pv": 170,
+        "nivel": 5,
+        "vd": 5,
+        "defesa": 11,
+        "iniciativa": 15,
+        "deslocamento": "6m",
+        "mana": 20,
+        "estamina": 10,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +11",
+          "Fortitude +11",
+          "Reflexos +11",
+          "Vontade +10",
+          "Percepção +3"
+        ],
+        "ataques": [
+          {
+            "nome": "Ramo de Arruda",
+            "detalhe": "+11, 1d8+4 impacto"
+          },
+          {
+            "nome": "Reza Torta",
+            "detalhe": "+11, 1d8+4 Vitalidade"
+          }
+        ],
+        "habilidades": [
+          "Quebranto (Golpe Anunciado: anuncie na rodada anterior; acerta 2d8+3, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Benzer de Graça (no começo de cada rodada, ela oferece benzer um personagem ferido que esteja à vista. O jogador decide: quem aceita recupera 1d8+2 de Vida na hora, e o próximo golpe dele que a acertar cura nela o dano que causaria, em vez de feri-la)",
+          "Feridas que Fecham (Passivo: no começo do turno dela, recupera 3 de Vida. Quem prestar atenção, com Percepção DT 17, nota que a pele dela fecha no ritmo de uma batida que vem de outro canto da casa)",
+          "Sinais (crianças do Ribeirão pálidas, que dormem demais e acordam com um raminho de arruda na mão, e uma casa onde se ouve, de madrugada, alguma coisa bater devagar dentro das paredes)",
+          "Como Evitar (ela tem medo de morrer sozinha: alguém que prometa ficar com ela até o fim, e cumpra, dormindo na casa dela, faz a Benzedeira soltar o afilhado e devolver o coração ao lugar por conta própria)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "O Coração Guardado",
+            "anuncio": "Ela põe a mão no peito, onde não bate nada, e sorri. De algum canto da casa vem uma batida mais forte.",
+            "mudancas": [
+              "O segredo dela: o coração mora fora do corpo. Enquanto ele bater, a Vida dela não desce abaixo de 1, e Feridas que Fecham passa a curar 5.",
+              "Antes da sessão, escolha onde está o coração: numa moringa enterrada no chão da cozinha, escondida na névoa do mapa; num baú trancado no quarto dela (Ladinagem DT 17, Ação Padrão); ou no peito do afilhado, batendo ao lado do coração do menino. O terceiro deixa a escolha feia, e é o melhor.",
+              "Achado, o coração tem Defesa 11 e 17 de Vida. Parado o coração, ela volta a cair como qualquer um.",
+              "No peito do afilhado, o coração só sai inteiro com Cura DT 17, como Ação Padrão ao lado do menino, que tem 12 de Vida. São três sucessos, Ajudar vale, e cada falha tira 1d6 da Vida dele. Fora do peito, o coração cabe na mão.",
+              "Ela sabe onde o coração está e passa a gastar o Deslocamento para ficar entre o grupo e ele."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Cem Anos de Uma Vez",
+            "anuncio": "A pele dela enruga e desenruga num piscar, como se o corpo não soubesse mais que idade tem.",
+            "mudancas": [
+              "Se o coração ainda bate, ela larga a luta e vai até ele para fugir pela porta dos fundos. Se escapar com ele, some do Ribeirão e aparece noutra vila no ano seguinte, com outro nome.",
+              "Com o coração na mão de alguém, a escolha é de quem segura. Esmagar acaba com ela na hora: vira pó dentro da roupa, e as crianças que ela benzeu continuam pálidas até alguém tratar uma por uma.",
+              "Devolver o coração ao peito dela (Ação Padrão, ao lado dela) faz ela envelhecer de uma vez todos os anos que devia. Ela senta, agradece e morre em paz, e no dia seguinte as crianças do Ribeirão acordam coradas."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "fundidor-do-sino-rachado",
+      "titulo": "Mestre Anselmo, o Fundidor do Sino Rachado",
+      "conteudo": {
+        "descricao": "Fundiu o sino grande da catedral, e o sino rachou na primeira badalada. Na mesma noite, Mestre Anselmo entrou no forno da própria fundição, e o que saiu de lá anda até hoje: bronze ainda mole por baixo de uma escória escura, que chia quando pega chuva. Toda noite ele leva das casas uma panela, uma dobradiça, uma sineta de porta, para tentar de novo.",
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "raridade": "comum",
+        "categoria": "Elemental",
+        "pv": 330,
+        "nivel": 11,
+        "vd": 11,
+        "defesa": 14,
+        "iniciativa": 18,
+        "deslocamento": "6m",
+        "mana": 38,
+        "estamina": 22,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +16",
+          "Fortitude +16",
+          "Reflexos +16",
+          "Vontade +15",
+          "Percepção +8"
+        ],
+        "ataques": [
+          {
+            "nome": "Badalo de Ferro",
+            "detalhe": "+16, 2d8+5 impacto"
+          },
+          {
+            "nome": "Respingo de Bronze",
+            "detalhe": "+16, 2d8+5 fogo"
+          }
+        ],
+        "habilidades": [
+          "Badalada (Golpe Anunciado: anuncie na rodada anterior; acerta 2d10+11, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Bronze Derretido (Reação, 1/rodada: quando uma arma de metal o acerta corpo a corpo, o bronze agarra a lâmina. Quem atacou escolhe: soltar a arma, que fica presa nele até o fim da luta ou até alguém arrancá-la (Ação Padrão, ao lado dele, Atletismo DT 20), ou segurar firme, sofrer 1d10 de Fogo e ficar com ela)",
+          "Tanque de Têmpera (a fundição tem um tanque de água com seis baldes. Encher e jogar um balde custa uma Ação Padrão de quem está ao lado do tanque e é um ataque de Pontaria contra a Defesa dele, a até 9 m. O balde não fere, mas a escória chia, e ele perde a reação até o começo do próximo turno dele)",
+          "Sinais (panelas, dobradiças e sinetas sumindo das casas, pegadas queimadas no calçamento, e a fundição velha quente de madrugada com a chaminé fria)",
+          "Como Evitar (ele só quer o sino certo: levar até a fundição o sino rachado da catedral e deixar que ele o refunda a noite inteira, sem ninguém entrar, termina a busca dele sem luta)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "A Escória Fecha",
+            "anuncio": "O bronze que escorria dele endurece de uma vez, numa crosta escura que estala como pão saindo do forno.",
+            "mudancas": [
+              "O segredo dele: a escória fecha o corpo inteiro numa casca. Enquanto a casca estiver de pé, ele sofre só metade do dano, e Fogo não o fere.",
+              "A casca conta como barreira, e Água vence Fogo em Como os elementos se enfrentam. Um acerto de Água quebra a casca até o fim da rodada seguinte, e depois ela fecha de novo. Vale magia, arma com Água e o balde do Tanque de Têmpera, que agora conta como acerto de Água.",
+              "Anuncie a regra quando ela entrar, com a pista à vista: o balde que antes só fazia a escória chiar agora abre rachaduras fundas nela.",
+              "Com a casca quebrada, o Bronze Derretido para de agarrar armas, porque o bronze por baixo esfria.",
+              "Se o tanque secar, a cisterna do pátio, a 12 m da fundição, enche mais dois baldes a cada Ação Padrão de quem estiver lá."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "O Sino Inteiro",
+            "anuncio": "Ele larga o badalo, se arrasta até o fosso do molde e começa a se derramar lá dentro, devagar.",
+            "mudancas": [
+              "Ele para de atacar e passa a se derramar no molde do sino, no fosso do meio da fundição. No fim do segundo turno dele dentro do fosso, o sino está fundido, e ele acaba ali.",
+              "Deixar que termine encerra a luta. O sino sai perfeito, e na primeira badalada a cidade ouve a nota certa. Panelas e dobradiças que tinham sumido aparecem de volta nas portas das casas.",
+              "Atacar enquanto ele se derrama continua valendo, com casca e tudo. Derrubado antes de terminar, ele vira bronze frio no fundo do fosso, e o sino da catedral fica rachado para sempre."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "zeferino-do-avesso",
+      "titulo": "Zeferino, o Equilibrista do Avesso",
+      "conteudo": {
+        "descricao": "Equilibrista de um circo pequeno que rodava as vilas da serra. Numa noite de casa cheia, escorregou da corda bamba e caiu para cima. Nunca mais desceu: anda no ar a um palmo do chão, com a corda de segurança ainda amarrada no tornozelo, e o circo, que todo mundo dava por desfeito, voltou a armar a lona em volta dele.",
+        "preco": {
+          "Solares": 40
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "incomum",
+        "categoria": "Feérico",
+        "pv": 350,
+        "nivel": 13,
+        "vd": 13,
+        "defesa": 15,
+        "iniciativa": 19,
+        "deslocamento": "9m",
+        "mana": 44,
+        "estamina": 26,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +19",
+          "Fortitude +19",
+          "Reflexos +19",
+          "Vontade +18",
+          "Percepção +11"
+        ],
+        "ataques": [
+          {
+            "nome": "Vara de Equilíbrio",
+            "detalhe": "+19, 2d10+6 impacto"
+          },
+          {
+            "nome": "Clavas de Malabares",
+            "detalhe": "+19, 2d10+6 impacto"
+          }
+        ],
+        "habilidades": [
+          "Salto Mortal (Golpe Anunciado: anuncie na rodada anterior; acerta 3d10+9, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Dobro ou Nada (Reação, 1/rodada: quando um ataque o acerta, ele joga uma moeda para o alto e oferece a aposta. Quem atacou escolhe: aceitar e rolar 1d6, e no par o golpe causa o dobro, no ímpar não causa nada; ou recusar, e o golpe causa o de sempre)",
+          "Queda para Cima (Reação, 1/rodada: quando fica Caído ou é empurrado, ele cai para cima e fica no ar, a 3 m do chão, até o começo do próximo turno dele. Nesse tempo, só o alcança corpo a corpo quem usa arma longa, está em cima de alguma coisa ou pula até ele com Atletismo DT 21)",
+          "Sinais (moedas, gotas e cinza do braseiro que caem para cima perto da lona, e uma lona listrada armada num pasto vazio que some de manhã)",
+          "Como Evitar (ele só quer plateia: assistir ao espetáculo inteiro, sem sair no meio, e aplaudir de pé no fim deixa Zeferino contente até a próxima vila)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "O Picadeiro Vira",
+            "anuncio": "A lona estala, o picadeiro começa a girar devagar, e a serragem do chão sobe em fios até o teto.",
+            "mudancas": [
+              "O segredo dele: daqui até o fim da luta, as regras mudam a cada rodada. No começo de cada rodada, role 1d6 na tabela A lei da rodada, no Guia do Mestre, à vista da mesa, e anuncie a lei antes do primeiro turno. A lei vale para todos, ele incluído, e acaba quando a rodada vira.",
+              "Na primeira vez, conte de onde vem: ele vive assim desde a noite em que caiu para cima. A mesa vê o dado, e ninguém se sente enganado, porque o segredo era só ele ter essa regra.",
+              "Dobro ou Nada continua. Na rodada de Ninguém Erra, ele oferece a aposta a cada acerto, sem o limite de uma vez por rodada."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "rodada": 8,
+            "nome": "O Último Número",
+            "anuncio": "Ele faz uma reverência para uma plateia que ninguém mais vê, e a lona inteira começa a subir.",
+            "mudancas": [
+              "O espetáculo tem hora para acabar: esta fase chega aos 20% da Vida ou na rodada 8, o que vier primeiro. Ele para de atacar e anuncia o último número.",
+              "No fim do segundo turno dele a partir de agora, o picadeiro cai para cima. Quem ainda estiver debaixo da lona faz Reflexos DT 21; na falha, sofre 3d10+9 de impacto contra o teto e fica Caído lá em cima, de cabeça para baixo, até o fim da cena. Depois do número, ele sobe com a lona e some até a próxima vila.",
+              "Puxar a corda de segurança do tornozelo dele (Ação Padrão, ao lado, Atletismo DT 21) faz o número falhar: ele despenca no chão, fica Caído e Exposto até o fim da rodada seguinte, e a lei da rodada para de mudar.",
+              "Se o grupo inteiro parar para assistir, sem atacar nem conjurar até o número acabar, e aplaudir no fim, ele agradece, sobe com a lona e não volta mais. Ninguém se fere no número."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "zelador-da-represa",
+      "titulo": "O Zelador da Represa Velha",
+      "conteudo": {
+        "descricao": "Um autômato de manutenção, alto e magro, de macacão de lona por cima do metal e com um olho só, de luz azul. Cuida sozinho da represa velha desde antes de a vila lá embaixo esquecer que ela existe: abre e fecha as comportas na hora certa, troca as lâmpadas, varre a casa de máquinas. Para quem chega sem crachá, repete sempre a mesma frase: área restrita, retire-se.",
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "incomum",
+        "categoria": "Constructo",
+        "pv": 500,
+        "nivel": 18,
+        "vd": 18,
+        "defesa": 18,
+        "iniciativa": 22,
+        "deslocamento": "9m",
+        "mana": 59,
+        "estamina": 36,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +22",
+          "Fortitude +22",
+          "Reflexos +22",
+          "Vontade +21",
+          "Percepção +14"
+        ],
+        "ataques": [
+          {
+            "nome": "Chave de Manivela",
+            "detalhe": "+22, 2d10+11 impacto"
+          },
+          {
+            "nome": "Canhão de Pressão",
+            "detalhe": "+22, 2d10+11 impacto"
+          }
+        ],
+        "habilidades": [
+          "Descarga da Turbina (Golpe Anunciado: anuncie na rodada anterior; acerta 4d10+11, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Módulos (Passivo: três luzes no peito dele mostram três módulos ligados. Escudo de Contenção: todo dano que ele sofre cai 6. Canhão de Pressão: o ataque à distância dele empurra o alvo 3 m. Reparo: no começo do turno dele, recupera 15 de Vida)",
+          "Alvo Prioritário (Passivo: no começo de cada rodada, ele anuncia em voz alta o alvo prioritário, quem mais o feriu na rodada anterior. Todos os ataques dele nessa rodada vão nesse alvo, com +2. O alvo pode se render, largando a arma ou baixando as mãos como Ação de Movimento, e ele passa para o segundo da lista)",
+          "Sinais (a represa que todo mundo jura abandonada solta água na hora certa todo dia, há lâmpadas novas na casa de máquinas, e um painel na parede pisca com a mesma luz azul do olho dele)",
+          "Como Evitar (ele só cumpre a última ordem que recebeu: um papel com o selo da vila mandando desligar a represa, entregue na mão dele, faz o Zelador abrir as portas, guardar as ferramentas e se desligar sozinho)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Protocolo de Contenção",
+            "anuncio": "Uma sirene grave enche a casa de máquinas, as portas de aço descem, e o painel da parede acende na mesma cor do olho dele.",
+            "mudancas": [
+              "O segredo dele: o painel da parede é o terminal que controla os módulos. Quem estiver ao lado dele pode invadir: são três Etapas contra um Alerta de 6, como em Infiltração, com Tecnologia ou Ladinagem DT 24, uma tentativa por Ação Padrão.",
+              "Cada Etapa vencida desliga um módulo, na ordem que quem invade escolher: o Escudo de Contenção, o Canhão de Pressão (ele fica só com a Chave de Manivela) ou o Reparo.",
+              "Quem está no terminal tem 30 segundos de verdade para declarar a ação, no cronômetro do painel Mesa. Passado o tempo, a ação conta como falha. Falha sobe o Alerta em 1, a falha crítica em 2, e com o Alerta cheio o terminal tranca até o fim da luta.",
+              "Ele sabe do terminal: enquanto houver alguém no painel, o Alvo Prioritário é sempre essa pessoa.",
+              "As portas de aço ficam fechadas até ele cair ou até as três Etapas serem vencidas."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "rodada": 7,
+            "nome": "Comporta Aberta",
+            "anuncio": "Ele se arrasta até a alavanca grande da parede e a puxa até o fim, e a represa inteira geme.",
+            "mudancas": [
+              "O protocolo tem prazo: esta fase chega aos 20% da Vida ou na rodada 7, o que vier primeiro. Ele abre a comporta principal.",
+              "No fim do terceiro turno dele a partir de agora, a água desce pelo vale e leva a vila lá de baixo, a não ser que ele caia antes ou que alguém feche a comporta.",
+              "Fechar a comporta pede duas Ações Padrão na manivela do outro lado da sala, com Atletismo DT 24 em cada uma. Duas pessoas podem dividir o serviço na mesma rodada.",
+              "Com as três Etapas do terminal vencidas, uma Ação Padrão no painel fecha a comporta sem teste.",
+              "O Reparo, se ainda estiver ligado, para de curar: ele gasta tudo o que tem para manter a comporta aberta."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "agrimensor-do-vale-dobrado",
+      "titulo": "O Agrimensor do Vale Dobrado",
+      "conteudo": {
+        "descricao": "Mediu o vale para a partilha de três famílias e errou a conta por uma braça. Voltou para medir de novo, e de novo, por trezentos anos, até o vale ceder e dobrar sobre si mesmo. Anda de chapéu de aba larga, com a corrente de medir enrolada no ombro e um caderno cheio de números que não batem.",
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "raro",
+        "categoria": "Espírito",
+        "pv": 510,
+        "nivel": 21,
+        "vd": 21,
+        "defesa": 19,
+        "iniciativa": 24,
+        "deslocamento": "9m",
+        "mana": 68,
+        "estamina": 42,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +26",
+          "Fortitude +26",
+          "Reflexos +26",
+          "Vontade +25",
+          "Percepção +18"
+        ],
+        "ataques": [
+          {
+            "nome": "Corrente de Medir",
+            "detalhe": "+26, 3d10+9 impacto"
+          },
+          {
+            "nome": "Braça Errada",
+            "detalhe": "+26, 3d10+9 Espaço"
+          }
+        ],
+        "habilidades": [
+          "Medida Certa (Golpe Anunciado: anuncie na rodada anterior; acerta 4d10+16, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Marcos de Pedra (Passivo: o campo tem pares de marcos de pedra numerados. Quem entra no espaço de um marco sai no espaço do outro marco do mesmo par, sem gastar Deslocamento. Ele usa os marcos à vontade; qualquer outro, ao atravessar, faz Fortitude DT 25 ou fica Desorientado até o fim do próximo turno)",
+          "Corrente Esticada (Reação, 1/rodada: quando uma criatura a até 9 m dele se move, ele estica a corrente de medir na frente dela; Reflexos DT 25 ou ela para ali e perde o resto do Deslocamento)",
+          "Sinais (estradas que voltam ao começo, viajantes que chegam antes de partir, e marcos de pedra novos no meio da plantação, com números que não batem)",
+          "Como Evitar (ele só quer fechar a conta: segurar a outra ponta da corrente, do primeiro marco até o rio, sem soltar, deixa o Agrimensor terminar a medição, e o vale desdobra sozinho)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "O Vale Dobra",
+            "anuncio": "O horizonte se curva para cima até encostar no céu, e do outro lado do campo aparece outro campo igual, com ele no meio.",
+            "mudancas": [
+              "O segredo dele: o campo agora são dois, iguais, ligados pelos pares de marcos, e há um dele em cada metade. Um é o corpo verdadeiro, o outro é o reflexo. Anuncie a regra inteira, menos qual é qual.",
+              "Só quem está na mesma metade do corpo verdadeiro causa dano nele. O golpe no reflexo atravessa sem resistência e sem som nenhum, e é assim que a mesa descobre onde ele está.",
+              "O reflexo tem os mesmos números e ataca igual, mas os dois dividem um turno só: em cada ataque, você escolhe se quem bate é o corpo ou o reflexo.",
+              "Ligue as duas metades com os portais do mapa ao vivo, um portal para cada par de marcos. Sem mapa, desenhe dois campos lado a lado e risque os marcos.",
+              "Os Marcos de Pedra continuam valendo, e cada travessia ainda pede Fortitude DT 25."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "A Última Medida",
+            "anuncio": "Ele estica a corrente de medir de uma metade à outra, e o vale inteiro range como couro esticado demais.",
+            "mudancas": [
+              "O corpo verdadeiro troca de metade com o reflexo, como manda a regra da sala dobrada.",
+              "A corrente segura a dobra. Ela aparece nas duas metades, tem Defesa 19 e 50 de Vida, e qualquer ponta serve. Cortada, o vale desdobra: as metades viram um campo só, o reflexo some, e ele fica Exposto e sem reação até o fim da rodada seguinte.",
+              "Enquanto a corrente estiver inteira, a Medida Certa pode sair de uma metade e acertar alguém na outra."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "monge-que-esqueceu-de-existir",
+      "titulo": "O Monge que Esqueceu de Existir",
+      "conteudo": {
+        "descricao": "Os monges do Mosteiro Mudo fazem voto de esvaziar a cabeça de tudo o que não serve. Um deles esvaziou demais: esqueceu o nome, depois o rosto, depois o próprio corpo, e o Vazio ocupou o lugar. Hoje ele anda pelos corredores do mosteiro sem fazer barulho, e os irmãos que sobraram não sabem dizer quantos eram.",
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "raro",
+        "categoria": "Aberração",
+        "pv": 1010,
+        "nivel": 28,
+        "vd": 28,
+        "defesa": 23,
+        "iniciativa": 28,
+        "deslocamento": "9m",
+        "mana": 89,
+        "estamina": 56,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +30",
+          "Fortitude +30",
+          "Reflexos +30",
+          "Vontade +29",
+          "Percepção +22"
+        ],
+        "ataques": [
+          {
+            "nome": "Mão que Apaga",
+            "detalhe": "+30, 4d10+14 Vazio"
+          },
+          {
+            "nome": "Silêncio que Pesa",
+            "detalhe": "+30, 4d10+14 Vazio"
+          }
+        ],
+        "habilidades": [
+          "Esquecimento (Golpe Anunciado: anuncie na rodada anterior; acerta 6d10+21, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Toque que Apaga (Passivo: quem a Mão que Apaga acerta perde também 1d6 de Sanidade. O jogador pode trocar a perda por uma lembrança: risca da ficha um Laço, um contato ou um idioma, que volta quando ele cair ou no fim da sessão)",
+          "Voto de Silêncio (Passivo: dentro do mosteiro, cada personagem que falar em voz alta durante a luta perde 1d4 de Sanidade no fim do turno em que falou. Gesto, escrita e magia sem voz não custam nada)",
+          "Sinais (monges que não lembram o próprio nome, livros do mosteiro com páginas em branco no meio, e quem está mais abalado no grupo ouvindo uma respiração lenta que os outros não ouvem)",
+          "Como Evitar (ele só percebe quem faz barulho: atravessar o mosteiro inteiro em silêncio, sem uma palavra e sem acender luz, passa por ele sem que ele saiba que alguém veio)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Fora da Vista",
+            "anuncio": "Ele some no meio de um passo, como uma palavra esquecida no meio da frase, e na sala fica só uma respiração lenta.",
+            "mudancas": [
+              "O segredo dele: ele fica invisível para todos, menos para o personagem com a menor Sanidade da mesa. No começo de cada rodada, mande a posição dele por bilhete a esse jogador, e o jogador decide se conta, quanto conta e como conta. Contar em voz alta cai no Voto de Silêncio.",
+              "Se outro personagem passar a ter a menor Sanidade, o bilhete passa para ele na rodada seguinte. Empate fica com quem perdeu Sanidade por último.",
+              "Para quem não o vê, ele está Invisível: o ataque precisa mirar uma casa; casa errada erra sem rolar, e na casa certa o ataque sai com desvantagem. Os ataques dele contra quem não o vê têm vantagem. Efeito em área acerta normal.",
+              "Combine antes da sessão: este segredo põe a Sanidade baixa no centro da luta. Se a mesa não quer esse tema, use a menor Vida no lugar da menor Sanidade."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "O Que Ele Apagou",
+            "anuncio": "A respiração para. Por um instante, ninguém na sala lembra por que está segurando uma arma.",
+            "mudancas": [
+              "Quem disser em voz alta, no próprio turno, uma lembrança que perdeu para o Toque que Apaga faz ele aparecer para todos até o fim do próximo turno de quem falou. O Voto de Silêncio não cobra essa fala.",
+              "Ele passa a mirar quem recebe o bilhete: todos os ataques dele vão nesse personagem, se puder alcançá-lo.",
+              "Caído, ele se desfaz em poeira de livro velho. As lembranças riscadas voltam na hora, e metade da Sanidade perdida nesta luta volta no fim da cena."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "mensageiro-que-chegou-tarde",
+      "titulo": "O Mensageiro que Chegou Tarde",
+      "conteudo": {
+        "descricao": "Cavalgou três dias e três noites para avisar a cidade do vale da cheia que vinha, e chegou um dia depois da água. Desde então corre a estrada velha nas noites de chuva, de capa encharcada e com a carta lacrada no peito, e tudo chega até ele com atraso: a chuva, os recados, as feridas. Quem cruza com ele jura que a sombra do cavalo passa um instante depois do cavalo.",
+        "preco": {
+          "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "epico",
+        "categoria": "Morto-Vivo",
+        "pv": 1010,
+        "nivel": 32,
+        "vd": 32,
+        "defesa": 26,
+        "iniciativa": 30,
+        "deslocamento": "18m",
+        "mana": 101,
+        "estamina": 64,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +34",
+          "Fortitude +34",
+          "Reflexos +34",
+          "Vontade +33",
+          "Percepção +26"
+        ],
+        "ataques": [
+          {
+            "nome": "Chicote de Posta",
+            "detalhe": "+34, 4d10+19 cortante"
+          },
+          {
+            "nome": "Tiro que Chega Depois",
+            "detalhe": "+34, 4d10+19 Tempo"
+          }
+        ],
+        "habilidades": [
+          "Galope de Ontem (Golpe Anunciado: anuncie na rodada anterior; acerta 7d10+23, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Recado Atrasado (Reação, 1/rodada: quando ele acerta alguém, o jogador escolhe sofrer o dano agora ou adiar para o começo da rodada seguinte. Adiado, o dano chega uma vez e meia maior)",
+          "Cavalo de Posta (Passivo: luta montado. Anda 18 m e, uma vez por rodada, pode se afastar de alguém sem provocar reação)",
+          "Sinais (a sombra dele chega um instante depois do corpo, postos de muda com a lamparina acesa e ninguém dentro, e cartas antigas aparecendo nas caixas do correio, todas com o mesmo carimbo)",
+          "Como Evitar (ele só quer entregar a carta: abrir caminho até as ruínas da cidade e deixar que ele a leia em voz alta para quem morreu lá encerra a viagem dele sem luta)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Tudo Chega Tarde",
+            "anuncio": "A sombra dele se solta do chão e fica para trás, e cada ferida no corpo dele se fecha antes de sangrar.",
+            "mudancas": [
+              "O segredo dele: todo dano que ele sofre a partir de agora só entra duas rodadas depois. Anote na anotação da criatura, na Sessão, quanto ele sofreu em cada rodada, e aplique tudo de uma vez no começo da rodada certa: o dano da rodada 4 entra no começo da rodada 6.",
+              "A Vida dele fica parada, e a mesa vai achar que ele ficou imune. Mostre na sombra: cada golpe aparece primeiro como um corte nela, e a sombra vai se enchendo de feridas. Quando o dano chega, a sombra alcança o corpo por um instante.",
+              "Nada volta ao passado: o golpe só chega tarde. Condição e efeito que não tiram Vida entram na hora. A fase seguinte também atrasa, porque a Sessão lê a Vida atual."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "A Carta na Mão",
+            "anuncio": "Ele tira do peito a carta lacrada, olha para ela como se fosse a primeira vez e esporeia o cavalo para a estrada.",
+            "mudancas": [
+              "Ele para de lutar e foge para entregar a carta, com todo o Deslocamento, sempre na direção da saída. O dano atrasado continua chegando na rodada certa.",
+              "Tomar a carta pede Ladinagem ou Atletismo DT 31, como Ação Padrão ao lado dele. Quem a ler em voz alta, como Ação de Movimento, entrega a mensagem: ele para, escuta até o fim e se desfaz na hora, junto com o cavalo. O que a carta diz fica com você: o aviso que teria salvado a cidade, se tivesse chegado a tempo.",
+              "Se ele chegar à saída, some na estrada e volta na próxima noite de chuva, com a Vida cheia e na primeira fase. O dano que estava na fila vai embora com ele."
             ]
           }
         ]

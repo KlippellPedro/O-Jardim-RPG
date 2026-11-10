@@ -3862,6 +3862,322 @@
           "Lunaris": 1600
         },
         "nivelMinimoLoja": 4
+      },
+      {
+        "id": "vo-benta-benzedeira",
+        "titulo": "Vó Benta, a Benzedeira do Ribeirão",
+        "vd": 5,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Humanoide",
+        "deslocamento": "6m",
+        "descricao": "Benze no Ribeirão há mais tempo do que alguém consegue contar. Tira quebranto, cura cobreiro e faz a febre baixar com três raminhos de arruda, sem cobrar nada. As mães levam as crianças até ela, e as crianças voltam boas, só um pouco mais pálidas. Vó Benta não envelhece desde que a avó das mães de hoje era menina, e agora quer levar para morar com ela o menino que benzeu ao nascer, que ela chama de afilhado.",
+        "ataques": [
+          {
+            "nome": "Ramo de Arruda",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Reza Torta",
+            "tipo": "Vitalidade",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Benzer de Graça (no começo de cada rodada, ela oferece benzer um personagem ferido que esteja à vista. O jogador decide: quem aceita recupera 1d8+2 de Vida na hora, e o próximo golpe dele que a acertar cura nela o dano que causaria, em vez de feri-la)",
+          "Feridas que Fecham (Passivo: no começo do turno dela, recupera 3 de Vida. Quem prestar atenção, com Percepção DT {dt}, nota que a pele dela fecha no ritmo de uma batida que vem de outro canto da casa)",
+          "Sinais (crianças do Ribeirão pálidas, que dormem demais e acordam com um raminho de arruda na mão, e uma casa onde se ouve, de madrugada, alguma coisa bater devagar dentro das paredes)",
+          "Como Evitar (ela tem medo de morrer sozinha: alguém que prometa ficar com ela até o fim, e cumpra, dormindo na casa dela, faz a Benzedeira soltar o afilhado e devolver o coração ao lugar por conta própria)"
+        ],
+        "loot": [
+          "Moringa de Batida",
+          "Ervas Comuns",
+          "Flor Medicinal"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 560
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "fundidor-do-sino-rachado",
+        "titulo": "Mestre Anselmo, o Fundidor do Sino Rachado",
+        "vd": 11,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Elemental",
+        "deslocamento": "6m",
+        "descricao": "Fundiu o sino grande da catedral, e o sino rachou na primeira badalada. Na mesma noite, Mestre Anselmo entrou no forno da própria fundição, e o que saiu de lá anda até hoje: bronze ainda mole por baixo de uma escória escura, que chia quando pega chuva. Toda noite ele leva das casas uma panela, uma dobradiça, uma sineta de porta, para tentar de novo.",
+        "ataques": [
+          {
+            "nome": "Badalo de Ferro",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Respingo de Bronze",
+            "tipo": "fogo",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Bronze Derretido (Reação, 1/rodada: quando uma arma de metal o acerta corpo a corpo, o bronze agarra a lâmina. Quem atacou escolhe: soltar a arma, que fica presa nele até o fim da luta ou até alguém arrancá-la (Ação Padrão, ao lado dele, Atletismo DT {dt}), ou segurar firme, sofrer 1d10 de Fogo e ficar com ela)",
+          "Tanque de Têmpera (a fundição tem um tanque de água com seis baldes. Encher e jogar um balde custa uma Ação Padrão de quem está ao lado do tanque e é um ataque de Pontaria contra a Defesa dele, a até 9 m. O balde não fere, mas a escória chia, e ele perde a reação até o começo do próximo turno dele)",
+          "Sinais (panelas, dobradiças e sinetas sumindo das casas, pegadas queimadas no calçamento, e a fundição velha quente de madrugada com a chaminé fria)",
+          "Como Evitar (ele só quer o sino certo: levar até a fundição o sino rachado da catedral e deixar que ele o refunda a noite inteira, sem ninguém entrar, termina a busca dele sem luta)"
+        ],
+        "loot": [
+          "Lasca do Sino Rachado",
+          "Cobre Nativo",
+          "Carvão Mineral"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "zeferino-do-avesso",
+        "titulo": "Zeferino, o Equilibrista do Avesso",
+        "vd": 13,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Feérico",
+        "deslocamento": "9m",
+        "descricao": "Equilibrista de um circo pequeno que rodava as vilas da serra. Numa noite de casa cheia, escorregou da corda bamba e caiu para cima. Nunca mais desceu: anda no ar a um palmo do chão, com a corda de segurança ainda amarrada no tornozelo, e o circo, que todo mundo dava por desfeito, voltou a armar a lona em volta dele.",
+        "ataques": [
+          {
+            "nome": "Vara de Equilíbrio",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Clavas de Malabares",
+            "tipo": "impacto",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Dobro ou Nada (Reação, 1/rodada: quando um ataque o acerta, ele joga uma moeda para o alto e oferece a aposta. Quem atacou escolhe: aceitar e rolar 1d6, e no par o golpe causa o dobro, no ímpar não causa nada; ou recusar, e o golpe causa o de sempre)",
+          "Queda para Cima (Reação, 1/rodada: quando fica Caído ou é empurrado, ele cai para cima e fica no ar, a 3 m do chão, até o começo do próximo turno dele. Nesse tempo, só o alcança corpo a corpo quem usa arma longa, está em cima de alguma coisa ou pula até ele com Atletismo DT {dt})",
+          "Sinais (moedas, gotas e cinza do braseiro que caem para cima perto da lona, e uma lona listrada armada num pasto vazio que some de manhã)",
+          "Como Evitar (ele só quer plateia: assistir ao espetáculo inteiro, sem sair no meio, e aplaudir de pé no fim deixa Zeferino contente até a próxima vila)"
+        ],
+        "loot": [
+          "Moeda que Cai para Cima",
+          "Tecido Industrial",
+          "Fibra Vegetal"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 40
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "zelador-da-represa",
+        "titulo": "O Zelador da Represa Velha",
+        "vd": 18,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Constructo",
+        "deslocamento": "9m",
+        "descricao": "Um autômato de manutenção, alto e magro, de macacão de lona por cima do metal e com um olho só, de luz azul. Cuida sozinho da represa velha desde antes de a vila lá embaixo esquecer que ela existe: abre e fecha as comportas na hora certa, troca as lâmpadas, varre a casa de máquinas. Para quem chega sem crachá, repete sempre a mesma frase: área restrita, retire-se.",
+        "ataques": [
+          {
+            "nome": "Chave de Manivela",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Canhão de Pressão",
+            "tipo": "impacto",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Módulos (Passivo: três luzes no peito dele mostram três módulos ligados. Escudo de Contenção: todo dano que ele sofre cai 6. Canhão de Pressão: o ataque à distância dele empurra o alvo 3 m. Reparo: no começo do turno dele, recupera 15 de Vida)",
+          "Alvo Prioritário (Passivo: no começo de cada rodada, ele anuncia em voz alta o alvo prioritário, quem mais o feriu na rodada anterior. Todos os ataques dele nessa rodada vão nesse alvo, com +2. O alvo pode se render, largando a arma ou baixando as mãos como Ação de Movimento, e ele passa para o segundo da lista)",
+          "Sinais (a represa que todo mundo jura abandonada solta água na hora certa todo dia, há lâmpadas novas na casa de máquinas, e um painel na parede pisca com a mesma luz azul do olho dele)",
+          "Como Evitar (ele só cumpre a última ordem que recebeu: um papel com o selo da vila mandando desligar a represa, entregue na mão dele, faz o Zelador abrir as portas, guardar as ferramentas e se desligar sozinho)"
+        ],
+        "loot": [
+          "Crachá do Operador",
+          "Engrenagens de Ferro",
+          "Válvulas",
+          "Sensor Óptico"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "agrimensor-do-vale-dobrado",
+        "titulo": "O Agrimensor do Vale Dobrado",
+        "vd": 21,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Espírito",
+        "deslocamento": "9m",
+        "descricao": "Mediu o vale para a partilha de três famílias e errou a conta por uma braça. Voltou para medir de novo, e de novo, por trezentos anos, até o vale ceder e dobrar sobre si mesmo. Anda de chapéu de aba larga, com a corrente de medir enrolada no ombro e um caderno cheio de números que não batem.",
+        "ataques": [
+          {
+            "nome": "Corrente de Medir",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Braça Errada",
+            "tipo": "Espaço",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Marcos de Pedra (Passivo: o campo tem pares de marcos de pedra numerados. Quem entra no espaço de um marco sai no espaço do outro marco do mesmo par, sem gastar Deslocamento. Ele usa os marcos à vontade; qualquer outro, ao atravessar, faz Fortitude DT {dt} ou fica Desorientado até o fim do próximo turno)",
+          "Corrente Esticada (Reação, 1/rodada: quando uma criatura a até 9 m dele se move, ele estica a corrente de medir na frente dela; Reflexos DT {dt} ou ela para ali e perde o resto do Deslocamento)",
+          "Sinais (estradas que voltam ao começo, viajantes que chegam antes de partir, e marcos de pedra novos no meio da plantação, com números que não batem)",
+          "Como Evitar (ele só quer fechar a conta: segurar a outra ponta da corrente, do primeiro marco até o rio, sem soltar, deixa o Agrimensor terminar a medição, e o vale desdobra sozinho)"
+        ],
+        "loot": [
+          "Elo da Corrente de Medir",
+          "Marco de Pedra",
+          "Papel e Tinta Ritualística"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "monge-que-esqueceu-de-existir",
+        "titulo": "O Monge que Esqueceu de Existir",
+        "vd": 28,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Aberração",
+        "deslocamento": "9m",
+        "descricao": "Os monges do Mosteiro Mudo fazem voto de esvaziar a cabeça de tudo o que não serve. Um deles esvaziou demais: esqueceu o nome, depois o rosto, depois o próprio corpo, e o Vazio ocupou o lugar. Hoje ele anda pelos corredores do mosteiro sem fazer barulho, e os irmãos que sobraram não sabem dizer quantos eram.",
+        "ataques": [
+          {
+            "nome": "Mão que Apaga",
+            "tipo": "Vazio",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Silêncio que Pesa",
+            "tipo": "Vazio",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Toque que Apaga (Passivo: quem a Mão que Apaga acerta perde também 1d6 de Sanidade. O jogador pode trocar a perda por uma lembrança: risca da ficha um Laço, um contato ou um idioma, que volta quando ele cair ou no fim da sessão)",
+          "Voto de Silêncio (Passivo: dentro do mosteiro, cada personagem que falar em voz alta durante a luta perde 1d4 de Sanidade no fim do turno em que falou. Gesto, escrita e magia sem voz não custam nada)",
+          "Sinais (monges que não lembram o próprio nome, livros do mosteiro com páginas em branco no meio, e quem está mais abalado no grupo ouvindo uma respiração lenta que os outros não ouvem)",
+          "Como Evitar (ele só percebe quem faz barulho: atravessar o mosteiro inteiro em silêncio, sem uma palavra e sem acender luz, passa por ele sem que ele saiba que alguém veio)"
+        ],
+        "loot": [
+          "Conta do Terço Mudo",
+          "Cera Lunar",
+          "Incenso de Mirra Espectral"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "mensageiro-que-chegou-tarde",
+        "titulo": "O Mensageiro que Chegou Tarde",
+        "vd": 32,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "18m",
+        "descricao": "Cavalgou três dias e três noites para avisar a cidade do vale da cheia que vinha, e chegou um dia depois da água. Desde então corre a estrada velha nas noites de chuva, de capa encharcada e com a carta lacrada no peito, e tudo chega até ele com atraso: a chuva, os recados, as feridas. Quem cruza com ele jura que a sombra do cavalo passa um instante depois do cavalo.",
+        "ataques": [
+          {
+            "nome": "Chicote de Posta",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Tiro que Chega Depois",
+            "tipo": "Tempo",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Recado Atrasado (Reação, 1/rodada: quando ele acerta alguém, o jogador escolhe sofrer o dano agora ou adiar para o começo da rodada seguinte. Adiado, o dano chega uma vez e meia maior)",
+          "Cavalo de Posta (Passivo: luta montado. Anda 18 m e, uma vez por rodada, pode se afastar de alguém sem provocar reação)",
+          "Sinais (a sombra dele chega um instante depois do corpo, postos de muda com a lamparina acesa e ninguém dentro, e cartas antigas aparecendo nas caixas do correio, todas com o mesmo carimbo)",
+          "Como Evitar (ele só quer entregar a carta: abrir caminho até as ruínas da cidade e deixar que ele a leia em voz alta para quem morreu lá encerra a viagem dele sem luta)"
+        ],
+        "loot": [
+          "Lacre Partido",
+          "Papel e Tinta Ritualística",
+          "Ampulheta Graduada"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "roedor": [

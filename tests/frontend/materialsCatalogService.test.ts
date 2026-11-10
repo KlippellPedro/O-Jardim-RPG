@@ -14,8 +14,9 @@ test('compêndio publica todos os materiais e receitas sem chaves duplicadas', (
   // 259 materiais de ofício e 208 partes de criatura (loot-*, ver data/bestiario/loot-criaturas.json).
   // +1 em 2026-10-20: Lembrança do Morto, ingrediente do Último Adeus.
   // +4 em 2026-11-10: partes de saque dos quatro chefes únicos de VD baixo.
-  assert.equal(MATERIAIS_CATALOGO.length, 508);
-  assert.equal(new Set(MATERIAIS_CATALOGO.map((item) => item.id)).size, 508);
+  // +7 em 2026-11-10: partes de saque dos sete chefes dos segredos de Fluxo.
+  assert.equal(MATERIAIS_CATALOGO.length, 515);
+  assert.equal(new Set(MATERIAIS_CATALOGO.map((item) => item.id)).size, 515);
   // +1 em 2026-10-20: o Rito do Nada virou receita (pede o Vestígio Material).
   assert.equal(RECEITAS_CATALOGO.length, 92);
   assert.equal(new Set(RECEITAS_CATALOGO.map((item) => item.chave)).size, 92);
@@ -23,7 +24,8 @@ test('compêndio publica todos os materiais e receitas sem chaves duplicadas', (
 
 test('Alquimista possui alternativas químicas nos patamares altos', () => {
   const quimicos = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('alquimia'));
-  assert.equal(quimicos.length, 100);
+  // +1 em 2026-11-10: Moringa de Batida, da Vó Benta.
+  assert.equal(quimicos.length, 101);
   assert.ok(quimicos.every((item) => item.usos.every((uso) => uso === 'alquimia' || uso === 'forja')));
   assert.ok(quimicos.filter((item) => item.raridade === 'raro').length >= 10);
   assert.ok(quimicos.filter((item) => item.raridade === 'epico').length >= 6);
@@ -41,7 +43,8 @@ test('Chef possui Mantimentos próprios em todas as raridades', () => {
 
 test('Engenheiro possui Sucata própria nos cinco patamares', () => {
   const sucatas = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('engenharia'));
-  assert.equal(sucatas.length, 74);
+  // +1 em 2026-11-10: Crachá do Operador, do Zelador da Represa Velha.
+  assert.equal(sucatas.length, 75);
   for (const raridade of ['comum', 'incomum', 'raro', 'epico', 'lendario']) {
     assert.ok(sucatas.some((item) => item.raridade === raridade), raridade);
   }
@@ -51,7 +54,8 @@ test('Engenheiro possui Sucata própria nos cinco patamares', () => {
 test('Ritualista possui focos mágicos próprios nos cinco patamares', () => {
   const ritualisticos = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('ritual'));
   // +4 em 2026-11-10: as partes de saque dos chefes únicos de VD baixo servem a ritual.
-  assert.equal(ritualisticos.length, 149);
+  // +4 em 2026-11-10: Zeferino, Agrimensor, Monge e Mensageiro deixam partes de ritual.
+  assert.equal(ritualisticos.length, 153);
   for (const raridade of ['comum', 'incomum', 'raro', 'epico', 'lendario']) {
     assert.ok(ritualisticos.filter((item) => item.raridade === raridade).length >= 6, raridade);
   }
@@ -74,7 +78,8 @@ test('catálogos de classe não dividem materiais entre si e Matéria-prima pode
   }
 
   const materiasPrimas = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('forja'));
-  assert.equal(materiasPrimas.filter((item) => item.usos.length === 1).length, 106);
+  // +1 em 2026-11-10: Lasca do Sino Rachado, do Fundidor.
+  assert.equal(materiasPrimas.filter((item) => item.usos.length === 1).length, 107);
   assert.ok(materiasPrimas.some((item) => item.usos.includes('alquimia')));
   assert.ok(materiasPrimas.some((item) => item.usos.includes('ritual')));
   assert.ok(materiasPrimas.some((item) => item.usos.includes('engenharia')));

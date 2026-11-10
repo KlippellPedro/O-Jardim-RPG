@@ -6893,6 +6893,194 @@
           "quantidade": "1"
         }
       ]
+    },
+    "vo-benta-benzedeira": {
+      "moedas": {
+        "dados": "4d10",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-moringa-de-batida",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-ervas-comuns",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "mat-flor-medicinal",
+          "chance": 50,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "comp-material-medicinal",
+          "chance": 40,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "fundidor-do-sino-rachado": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-lasca-do-sino-rachado",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-cobre-nativo",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "mat-carvao-mineral",
+          "chance": 60,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "comp-metal-para-forja",
+          "chance": 40,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "zeferino-do-avesso": {
+      "moedas": {
+        "dados": "5d10",
+        "moeda": "Lunaris",
+        "chance": 70
+      },
+      "itens": [
+        {
+          "item": "loot-moeda-que-cai-para-cima",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-tecido-industrial",
+          "chance": 60,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-fibra-vegetal",
+          "chance": 50,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "comp-simbolo-pessoal",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "zelador-da-represa": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-cracha-do-operador",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-engrenagens-ferro",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "mat-valvulas",
+          "chance": 60,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "mat-sensor-optico",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-bateria-fluxo",
+          "chance": 25,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "agrimensor-do-vale-dobrado": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-elo-da-corrente-de-medir",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-correntes-curtas",
+          "chance": 60,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "comp-papel-e-tinta",
+          "chance": 60,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "comp-marco-de-pedra",
+          "chance": 30,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "monge-que-esqueceu-de-existir": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-conta-do-terco-mudo",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-cera-lunar",
+          "chance": 50,
+          "quantidade": "1d2"
+        },
+        {
+          "item": "mat-incenso-de-mirra-espectral",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-vazio-condensado",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "mensageiro-que-chegou-tarde": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-lacre-partido",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-papel-e-tinta",
+          "chance": 60,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "comp-ampulheta-graduada",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-engrenagem-temporal",
+          "chance": 15,
+          "quantidade": "1"
+        }
+      ]
     }
   }
 }
