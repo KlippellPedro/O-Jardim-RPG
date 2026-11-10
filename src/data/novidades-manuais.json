@@ -2,6 +2,18 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-10-documentos-universais-quadro-aventuras-e-boatos",
+      "data": "2026-11-10",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Documentos universais: quadro da Guilda, papéis das aventuras e boatos",
+      "detalhes": [
+        "O Quadro de contratos da Guilda em Pharos chegou com seis papéis: dois cartazes de procurado, dois contratos, um bilhete sem assinatura e uma chapa em branco que ninguém tira do Quadro.",
+        "As quatro aventuras prontas ganharam papéis para entregar: o caderno da prefeita no Moinho, o convite e o contrato do Leilão, o relatório da Companhia e o bilhete da Mica em Caribdis, e o contrato dos pescadores e as anotações da astrônoma no Leviatã.",
+        "Para soltar na mesa, uma coluna de jornal com seis boatos e a lousa de uma estalagem com mais três. A nota do Mestre diz quais são verdade."
+      ]
+    },
+    {
       "id": "2026-11-10-documentos-universais-missoes-e-edicao",
       "data": "2026-11-10",
       "tipo": "novo",

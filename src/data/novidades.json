@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-11-10-documentos-universais-quadro-aventuras-e-boatos",
+      "data": "2026-11-10",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Documentos universais: quadro da Guilda, papéis das aventuras e boatos",
+      "detalhes": [
+        "O Quadro de contratos da Guilda em Pharos chegou com seis papéis: dois cartazes de procurado, dois contratos, um bilhete sem assinatura e uma chapa em branco que ninguém tira do Quadro.",
+        "As quatro aventuras prontas ganharam papéis para entregar: o caderno da prefeita no Moinho, o convite e o contrato do Leilão, o relatório da Companhia e o bilhete da Mica em Caribdis, e o contrato dos pescadores e as anotações da astrônoma no Leviatã.",
+        "Para soltar na mesa, uma coluna de jornal com seis boatos e a lousa de uma estalagem com mais três. A nota do Mestre diz quais são verdade."
+      ]
+    },
+    {
       "id": "2026-11-10-documentos-universais-missoes-e-edicao",
       "data": "2026-11-10",
       "tipo": "novo",
@@ -1026,17 +1038,6 @@
       "detalhes": [
         "Na engrenagem ficam os avisos que são seus: cofre, trocas, XP e sessão. Quem comanda a mesa vê no Painel do Mestre, na aba Avisos, quem entrou na campanha, as fichas fora das regras e as mudanças de classe e de nível. Os pedidos de senha ficam na Administração.",
         "Os avisos vêm agrupados por dia, com um botão que leva direto ao lugar do assunto. Marcar tudo como lido vale só para o painel em que você está."
-      ]
-    },
-    {
-      "id": "2026-10-13-paineis-mesma-cara",
-      "data": "2026-10-13",
-      "tipo": "melhoria",
-      "area": "Jardim",
-      "titulo": "Painéis do Mestre, do Criador e da Administração com a mesma cara",
-      "detalhes": [
-        "Os três painéis ganharam o mesmo cabeçalho e as mesmas abas, com o número de avisos novos em cada aba. A aba aberta fica no endereço da página, então recarregar não faz perder o lugar.",
-        "No Painel do Mestre, Membros e Convites viraram uma aba só, e o seletor de mesa agora fica no topo. O Painel do Criador começa na campanha que você já tem aberta, e a aba dos convites de conta se chama Convites de cadastro."
       ]
     }
   ]
