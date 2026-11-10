@@ -47185,6 +47185,115 @@
       }
     },
     {
+      "tipo": "drop",
+      "id": "loot-casca-dos-fundadores",
+      "titulo": "Casca dos Fundadores",
+      "conteudo": {
+        "descricao": "Um pedaço de casca de figueira com metade de um nome talhado. Ainda cheira a fruta madura quando alguém fala alto perto dela.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Botânico",
+        "origem": "A Figueira que Saiu da Praça, uma vez só.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante",
+          "Regenerativo"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-recibo-em-branco",
+      "titulo": "Recibo em Branco",
+      "conteudo": {
+        "descricao": "Um recibo assinado por Valdo, sem valor escrito. No cais velho, quem o mostra é recebido como sócio uma vez, e depois disso o papel some do bolso.",
+        "preco": {
+          "Lunaris": 5
+        },
+        "raridade": "comum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Artificial",
+        "origem": "Valdo Três-Palavras, uma vez só.",
+        "potencia": 1,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Vinculante",
+          "Anímico"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-retrato-sem-rosto",
+      "titulo": "Retrato sem Rosto",
+      "conteudo": {
+        "descricao": "Uma tela pequena numa moldura de casa rica, com o rosto raspado até a madeira. Quem olha por tempo demais jura que reconhece alguém.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "incomum",
+        "nivelMinimoLoja": 1,
+        "categoria": "Espiritual",
+        "origem": "O Inquilino dos Retratos, uma vez só.",
+        "potencia": 2,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Anímico",
+          "Absorvente"
+        ],
+        "usos": [
+          "ritual"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "loot-alfinete-de-luto",
+      "titulo": "Alfinete de Luto",
+      "conteudo": {
+        "descricao": "O alfinete de prata escura que prendia o véu da Recolhedora. Fica frio na mão de quem está de luto e morno na de quem nunca perdeu ninguém.",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2,
+        "categoria": "Espiritual",
+        "origem": "A Recolhedora, Dama dos Caídos, uma vez só.",
+        "potencia": 3,
+        "afinidade": "Nenhuma",
+        "propriedades": [
+          "Necrótico",
+          "Vinculante"
+        ],
+        "usos": [
+          "ritual",
+          "forja"
+        ],
+        "estadoBase": "bruto",
+        "exclusivo": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
       "tipo": "monstro",
       "id": "ilyrax",
       "titulo": "Ilyrax, a Cria Teimosa",
@@ -47797,6 +47906,350 @@
         "estagio": "Ancestral",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "figueira-da-praca",
+      "titulo": "A Figueira que Saiu da Praça",
+      "conteudo": {
+        "descricao": "A figueira plantada no dia em que a vila foi fundada, com o nome de cada fundador talhado na casca. Numa noite de inverno alguém raspou os nomes para fazer lenha, e de manhã ela tinha arrancado as raízes do chão e saído andando pela rua principal. Os mais velhos dizem que o primeiro figo que ela deu nunca caiu e continua guardado lá dentro.",
+        "preco": {
+          "Lunaris": 540
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "raridade": "comum",
+        "categoria": "Planta",
+        "pv": 110,
+        "nivel": 3,
+        "vd": 3,
+        "defesa": 10,
+        "iniciativa": 13,
+        "deslocamento": "6m",
+        "mana": 14,
+        "estamina": 6,
+        "atributos": {
+          "forca": 2,
+          "agilidade": 2,
+          "vigor": 2,
+          "presenca": 1,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +9",
+          "Fortitude +9",
+          "Reflexos +9",
+          "Vontade +8",
+          "Percepção +1"
+        ],
+        "ataques": [
+          {
+            "nome": "Galho Velho",
+            "detalhe": "+9, 1d6+3 impacto"
+          },
+          {
+            "nome": "Chuva de Figos Duros",
+            "detalhe": "+9, 1d6+3 impacto"
+          }
+        ],
+        "habilidades": [
+          "Raiz que Sobe (Golpe Anunciado: anuncie na rodada anterior; acerta 1d8+5, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Madeira Seca (vulnerável a Fogo. Cada golpe de Fogo que a acerta também põe fogo na construção mais próxima dela. Apagar um incêndio custa uma Ação Padrão de alguém ao lado, e cada casa que ainda estiver queimando no fim da cena fica perdida para a vila)",
+          "Galhos que Seguram (Reação, 1/rodada: quando uma criatura adjacente se afasta dela, o galho varre o chão; Reflexos DT 16 ou a criatura fica Caída no lugar de onde saiu)",
+          "Sinais (folhas de figueira em ruas onde não existe figueira, e um sulco de raiz arrastada saindo da praça)",
+          "Como Evitar (ela quer os nomes de volta: talhar de novo na casca os nomes dos fundadores, que o livro da capela ou a pessoa mais velha da vila guarda, faz a figueira parar e voltar sozinha para a praça)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Raízes na Rua",
+            "anuncio": "Ela crava as raízes na terra batida da rua, e as pedras do calçamento começam a se levantar em volta.",
+            "mudancas": [
+              "Para de andar e se enraíza onde está. O Galho Velho passa a alcançar 6 m, e no fim do turno dela uma criatura à escolha dela, a até 6 m, faz Reflexos DT 16 ou fica Caída.",
+              "Enraizada em terra que não queimou, recupera 5 de Vida no começo de cada turno dela. Fogo no chão em volta do tronco, ou sal grosso jogado nas raízes (Ação Padrão, adjacente), corta essa cura até o fim da cena."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "O Primeiro Figo",
+            "anuncio": "A casca do tronco se abre como uma boca cansada, e lá dentro alguma coisa verde pulsa devagar.",
+            "mudancas": [
+              "O segredo dela: ao chegar a 0 de Vida, a madeira desaba, mas o primeiro figo rola até 3 m do tronco. O figo não sofre dano e só sai de cena se alguém o pegar (Ação de Movimento, adjacente).",
+              "Se ninguém pegar o figo até o fim da rodada seguinte, ele se enterra, e no começo da outra rodada uma figueira nova brota ali, com 55 de Vida e de volta à primeira fase. Na Sessão, ajuste a Vida e troque a fase à mão no editor da criatura.",
+              "Quem segura o figo sente a vila inteira dentro dele. Plantar o figo de volta na praça encerra tudo em paz e devolve a sombra à vila; queimar o figo encerra a figueira para sempre, e a vila passa a sentir falta de alguma coisa que ninguém sabe nomear."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "valdo-tres-palavras",
+      "titulo": "Valdo Três-Palavras, o Duelista do Cais",
+      "conteudo": {
+        "descricao": "Dono do cais velho e de metade das dívidas da cidade baixa. Luta como quem se apresenta num teatro: anuncia o golpe antes de dar, faz reverência para quem o acerta e não para de sorrir. O apelido vem do jeito de fechar negócio. Ele diz três palavras, \"temos um trato\", e quem ouviu já está devendo.",
+        "preco": {
+          "Lunaris": 640
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "raridade": "comum",
+        "categoria": "Humanoide",
+        "pv": 190,
+        "nivel": 8,
+        "vd": 8,
+        "defesa": 13,
+        "iniciativa": 17,
+        "deslocamento": "9m",
+        "mana": 29,
+        "estamina": 16,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +15",
+          "Fortitude +15",
+          "Reflexos +15",
+          "Vontade +14",
+          "Percepção +7"
+        ],
+        "ataques": [
+          {
+            "nome": "Florete de Pedágio",
+            "detalhe": "+15, 1d8+7 perfurante"
+          },
+          {
+            "nome": "Pistola de Cortesia",
+            "detalhe": "+15, 1d8+7 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Estocada de Encerramento (Golpe Anunciado: anuncie na rodada anterior; acerta 2d10+6, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Teatro do Duelo (Passivo: antes de cada ataque, ele diz em voz alta o risco da Coreografia que vai usar, de Seguro a Perigoso, e recebe o ganho ou o castigo da tabela como qualquer personagem. Uma vez por cena pode anunciar Tudo ou Nada)",
+          "Reverência (Reação, 1/rodada: quando um ataque corpo a corpo o erra, ele agradece com uma mesura e faz um Contra-Ataque sem o redutor de sempre)",
+          "Sinais (cartazes de dívida colados pelo cais com o nome de gente que ninguém viu mais, e estivadores que param de cantar quando alguém pergunta por ele)",
+          "Como Evitar (ele só quer a carga: entregar o que ele veio buscar, ou mostrar um papel assinado que prove que a carga já é dele, encerra a cena sem luta)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "A Mão Estendida",
+            "anuncio": "Ele recua um passo, guarda o florete na bainha e estende a mão aberta para o grupo, ainda sorrindo.",
+            "mudancas": [
+              "O segredo dele: para de lutar e oferece um trato. Leva o que veio buscar e ninguém mais se machuca hoje. Se alguém atacar enquanto ele fala, a proposta acaba como recusada.",
+              "Abra uma votação anônima na mesa, com as opções Aceitar e Recusar, e deixe votar todos os jogadores, inclusive quem está caído. A mesa vê só a contagem; quem votou o quê fica só com você.",
+              "Maioria aceita: a luta acaba e ele sai com o que veio buscar. Cada personagem que votou Aceitar fica com uma Dívida com ele, a mesma de Contatos e Laços, cobrada quando a história pedir e de cada um em separado.",
+              "Empate ou maioria recusa: ele faz uma reverência demorada e passa na hora para a fase Sem Plateia (troque a fase à mão no editor da criatura)."
+            ]
+          },
+          {
+            "quando": null,
+            "nome": "Sem Plateia",
+            "anuncio": "O sorriso some. Ele joga o chapéu longe e, pela primeira vez, avança sem dizer nada.",
+            "mudancas": [
+              "Para de anunciar o risco: escolhe a Coreografia em segredo, anota, e só revela depois do dado. O ganho e o castigo da tabela continuam valendo.",
+              "Ganha uma Ação de Movimento a mais por turno, e a Reverência passa a valer duas vezes por rodada.",
+              "Quando chegar a um quarto da Vida, foge pela água na primeira chance. Se escapar, volta mais tarde com gente e com rancor."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "inquilino-dos-retratos",
+      "titulo": "O Inquilino dos Retratos",
+      "conteudo": {
+        "descricao": "Mora há gerações no quarto do fundo de uma casa rica, sempre com o rosto de alguém dos retratos do corredor. A família jura que ele é um tio distante e não sabe dizer de que lado. Ele assina as cartas com um nome diferente a cada mês, e os retratos mais antigos da casa estão com o rosto raspado.",
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "incomum",
+        "categoria": "Aberração",
+        "pv": 500,
+        "nivel": 15,
+        "vd": 15,
+        "defesa": 16,
+        "iniciativa": 20,
+        "deslocamento": "9m",
+        "mana": 50,
+        "estamina": 30,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +20",
+          "Fortitude +20",
+          "Reflexos +20",
+          "Vontade +19",
+          "Percepção +12"
+        ],
+        "ataques": [
+          {
+            "nome": "Mão de Moldura",
+            "detalhe": "+20, 2d10+8 impacto"
+          },
+          {
+            "nome": "Olhar de Retrato",
+            "detalhe": "+20, 2d10+8 Essência"
+          }
+        ],
+        "habilidades": [
+          "Moldura que Fecha (Golpe Anunciado: anuncie na rodada anterior; acerta 3d10+12, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Três Retratos (Passivo: três retratos da família ficam pendurados na sala da luta, e cada um empresta um dom a ele. A Avó cura 10 de Vida no começo do turno dele. O Soldado dá a ele uma reação a mais por rodada. A Menina faz uma criatura à escolha dele testar Vontade DT 22 no começo de cada rodada ou ficar Fascinada por ele até o fim do próprio turno. Cada retrato tem Defesa 14 e 30 de Vida: quebrado, desliga o dom e tira 30 da Vida dele. Virar um retrato para a parede custa uma Ação Padrão de quem está ao lado e desliga o dom até ele gastar uma Ação de Movimento para desvirar)",
+          "Sinais (retratos antigos com o rosto raspado, cartas assinadas com um nome diferente a cada mês, e gente da casa que não lembra o próprio nome do meio)",
+          "Como Evitar (ele só quer continuar morando: oferecer um lugar de onde ninguém vá expulsá-lo, e um retrato novo, só dele, tira o Inquilino da casa sem luta)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Rosto de Cera",
+            "anuncio": "Os rostos dele escorrem como cera quente, e por baixo não sobra rosto nenhum.",
+            "mudancas": [
+              "O segredo dele: sem rosto, sofre só metade do dano de qualquer fonte, menos o dano verdadeiro, até que alguém diga em voz alta o nome verdadeiro dele.",
+              "O nome responde à pergunta quem ele era antes da casa, resolvida como Investigação antes da luta, com três pistas: a certidão costurada no forro de um sofá, o retrato sem moldura no porão e o que a vizinha mais velha lembra. Você escolhe o nome para a sua mesa.",
+              "Se o grupo chegou sem o nome, a terceira pista está na sala da luta: Investigação ou Percepção DT 22, como Ação Padrão, acha o retrato sem moldura escondido atrás de outro.",
+              "Dito o nome, a metade de dano acaba, e ele fica Exposto e sem reação até o fim da rodada seguinte."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "O Que Sobrou Dele",
+            "anuncio": "Ele cobre com as duas mãos o lugar onde deveria haver um rosto e começa a chorar sem som.",
+            "mudancas": [
+              "Se o nome já foi dito, ele para de lutar e pede para sair da casa. Deixá-lo ir encerra a cena: a família volta a lembrar os nomes do meio, e ele some pela porta da frente.",
+              "Se o nome ainda não foi dito, tenta tomar o rosto de quem estiver mais ferido: Vontade DT 22, e na falha a criatura fica Fascinada por ele até o fim da cena, e ele recupera 30 de Vida. Um aliado ao lado pode sacudir a criatura, como manda a regra de Fascinado."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "recolhedora-dos-caidos",
+      "titulo": "A Recolhedora, Dama dos Caídos",
+      "conteudo": {
+        "descricao": "Aparece depois das batalhas, quando o campo ainda fumega: uma armadura negra de luto, com um véu por cima do elmo. Anda entre os caídos, toca um ou outro no ombro, e os tocados se levantam e vão atrás dela por um tempo. Os soldados mais velhos não deixam ninguém morrer sozinho perto de um campo de batalha, e é por causa dela.",
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "raro",
+        "categoria": "Morto-Vivo",
+        "pv": 1010,
+        "nivel": 25,
+        "vd": 25,
+        "defesa": 21,
+        "iniciativa": 26,
+        "deslocamento": "12m",
+        "mana": 80,
+        "estamina": 50,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +28",
+          "Fortitude +28",
+          "Reflexos +28",
+          "Vontade +27",
+          "Percepção +20"
+        ],
+        "ataques": [
+          {
+            "nome": "Lâmina de Luto",
+            "detalhe": "+28, 4d10+11 cortante"
+          },
+          {
+            "nome": "Toque do Véu",
+            "detalhe": "+28, 4d10+11 Fim"
+          }
+        ],
+        "habilidades": [
+          "Última Saudação (Golpe Anunciado: anuncie na rodada anterior; acerta 5d10+23, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Guarda de Luto (Passivo: a armadura dela tem uma Guarda de 6 partes, num relógio à vista na mesa. Enche uma parte a cada crítico contra ela, a cada ataque combinado que a acerta e a cada acerto de quem usou Coreografia Ousada ou acima. Cheia, a Guarda quebra: ela fica Exposta, perde a reação, o próximo ataque contra ela tem vantagem, e a Guarda volta a zero)",
+          "Lâmina que Protege (Reação, 1/rodada: quando um ataque a acertaria, ela apara com a lâmina e soma 4 à Defesa contra esse ataque; se ainda assim for acertada, a Guarda enche uma parte)",
+          "Sinais (corvos que não tocam nos caídos, e soldados mortos encontrados de olhos fechados, com as mãos cruzadas no peito)",
+          "Como Evitar (ela só recolhe quem cai sozinho: num campo em que ninguém fica sem alguém ao lado, e onde os mortos são enterrados com o nome dito em voz alta, ela passa sem parar)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "fases": [
+          {
+            "quando": 0.5,
+            "nome": "Os Caídos Levantam",
+            "anuncio": "Ela ergue o véu até a altura do queixo, e o ar do campo fica parado como o de um quarto fechado.",
+            "mudancas": [
+              "O segredo dela: a partir de agora, o primeiro personagem do grupo que cair a 0 de Vida não entra em Morrendo, a não ser que o golpe o tenha matado na hora. Ele se levanta ao lado dela com metade da Vida máxima e luta por ela por duas rodadas.",
+              "O jogador continua jogando o próprio personagem. Mande por bilhete um objetivo secreto (impedir que alguém chegue até ela, derrubar quem estiver mais longe, proteger o corpo dela até o próximo turno) e deixe que ele escolha como cumprir. Se a mesa não gosta de jogador contra jogador, use só objetivos de proteger ou de bloquear passagem.",
+              "O efeito acaba antes se um aliado gastar uma Ação Padrão dizendo em voz alta um Laço desse personagem. No fim, ele cai de novo a 0 e entra em Morrendo, com a Gravidade do golpe que o derrubou da primeira vez.",
+              "Vale para um personagem só por luta, e ninguém perde o turno: o jogador continua jogando, do outro lado."
+            ]
+          },
+          {
+            "quando": 0.2,
+            "nome": "Véu no Chão",
+            "anuncio": "O véu cai no chão, e cada um vê embaixo dele o rosto de alguém que já perdeu.",
+            "mudancas": [
+              "Quem olhar para ela pela primeira vez nesta fase faz Vontade DT 20 ou perde 1d8 de Sanidade.",
+              "A Guarda de Luto quebra de vez: ela perde a Lâmina que Protege e fica com Defesa 3 menor, mas no fim do turno de dois jogadores por rodada, à sua escolha, faz um ataque com −5.",
+              "Se o grupo disser em voz alta o nome de quem cada um viu no rosto dela, ela abaixa a lâmina e pede para ir embora. Deixar que vá encerra a cena."
+            ]
+          }
+        ]
       }
     }
   ]

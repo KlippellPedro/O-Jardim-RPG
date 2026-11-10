@@ -6784,6 +6784,115 @@
           "quantidade": "1"
         }
       ]
+    },
+    "figueira-da-praca": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-casca-dos-fundadores",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-frutas-da-estacao",
+          "chance": 100,
+          "quantidade": "1d4"
+        },
+        {
+          "item": "mat-resina-vegetal",
+          "chance": 50,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "comp-sementes-viaveis",
+          "chance": 40,
+          "quantidade": "1d2"
+        }
+      ]
+    },
+    "valdo-tres-palavras": {
+      "moedas": {
+        "dados": "6d10",
+        "moeda": "Lunaris",
+        "chance": 100
+      },
+      "itens": [
+        {
+          "item": "loot-recibo-em-branco",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "rapieira",
+          "chance": 30,
+          "quantidade": "1"
+        },
+        {
+          "item": "pistola",
+          "chance": 20,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-papel-e-tinta",
+          "chance": 60,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "inquilino-dos-retratos": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-retrato-sem-rosto",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-espelho-enevoado",
+          "chance": 40,
+          "quantidade": "1"
+        },
+        {
+          "item": "comp-objeto-valor-pessoal",
+          "chance": 50,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "artefato-mascara-do-sabio-cego",
+          "chance": 12,
+          "quantidade": "1"
+        }
+      ]
+    },
+    "recolhedora-dos-caidos": {
+      "moedas": null,
+      "itens": [
+        {
+          "item": "loot-alfinete-de-luto",
+          "chance": 100,
+          "quantidade": "1"
+        },
+        {
+          "item": "loot-aco-amaldicoado",
+          "chance": 60,
+          "quantidade": "1"
+        },
+        {
+          "item": "mat-osso-gravado",
+          "chance": 50,
+          "quantidade": "1d3"
+        },
+        {
+          "item": "armadura-de-placas",
+          "chance": 15,
+          "quantidade": "1"
+        },
+        {
+          "item": "artefato-colar-de-vida-emprestada",
+          "chance": 5,
+          "quantidade": "1"
+        }
+      ]
     }
   }
 }
