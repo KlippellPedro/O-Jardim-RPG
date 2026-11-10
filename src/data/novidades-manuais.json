@@ -2,6 +2,17 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-10-documentos-universais-missoes-e-edicao",
+      "data": "2026-11-10",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Documentos universais: missões secundárias e edição pelo site",
+      "detalhes": [
+        "Chegaram as Missões: duas missões secundárias prontas, A Linha no Pasto e Aid Mob, cada uma com o resumo do Mestre (o que está acontecendo, as perguntas, o relógio e onde estão as pistas) e os papéis para entregar aos jogadores.",
+        "O Criador agora edita qualquer documento universal ali mesmo, com a prévia mudando enquanto escreve. A mudança vale para todas as campanhas, aparece com o selo Editado e pode ser desfeita em Voltar ao original."
+      ]
+    },
+    {
       "id": "2026-11-10-documentos-universais",
       "data": "2026-11-10",
       "tipo": "novo",

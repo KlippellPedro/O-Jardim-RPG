@@ -1,6 +1,17 @@
 {
   "itens": [
     {
+      "id": "2026-11-10-documentos-universais-missoes-e-edicao",
+      "data": "2026-11-10",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Documentos universais: missões secundárias e edição pelo site",
+      "detalhes": [
+        "Chegaram as Missões: duas missões secundárias prontas, A Linha no Pasto e Aid Mob, cada uma com o resumo do Mestre (o que está acontecendo, as perguntas, o relógio e onde estão as pistas) e os papéis para entregar aos jogadores.",
+        "O Criador agora edita qualquer documento universal ali mesmo, com a prévia mudando enquanto escreve. A mudança vale para todas as campanhas, aparece com o selo Editado e pode ser desfeita em Voltar ao original."
+      ]
+    },
+    {
       "id": "2026-11-10-documentos-universais",
       "data": "2026-11-10",
       "tipo": "novo",
@@ -1026,16 +1037,6 @@
       "detalhes": [
         "Os três painéis ganharam o mesmo cabeçalho e as mesmas abas, com o número de avisos novos em cada aba. A aba aberta fica no endereço da página, então recarregar não faz perder o lugar.",
         "No Painel do Mestre, Membros e Convites viraram uma aba só, e o seletor de mesa agora fica no topo. O Painel do Criador começa na campanha que você já tem aberta, e a aba dos convites de conta se chama Convites de cadastro."
-      ]
-    },
-    {
-      "id": "2026-10-13-cofre-numa-pagina",
-      "data": "2026-10-13",
-      "tipo": "melhoria",
-      "area": "Jardim",
-      "titulo": "Cofre numa página só",
-      "detalhes": [
-        "A cópia do Cofre que morava no Painel do Mestre saiu: o Cofre é da sua conta e tem a página dele. Nela, o personagem que recebe já vem escolhido quando é o único ou o ativo, os botões dizem o que enviam e o estado do Discord aparece no topo, com um atalho para vincular em Minha conta."
       ]
     }
   ]
