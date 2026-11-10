@@ -738,6 +738,443 @@
         "observacao": "Não atende pelo nome. Atende pelo número.",
         "cor": "grafite"
       }
+    },
+    {
+      "id": "quadro-procurado-dentes-de-vidro",
+      "tema": "Quadro da Guilda",
+      "titulo": "Procurado: Dentes-de-Vidro",
+      "ensina": "Gancho de caça a gente: um vendedor de passagens falsas para rota selada. Mostra que a Caravana não atravessa rota selada e que a Guilda paga por procurado.",
+      "entregar": "Pregado no Quadro, em Pharos, ou em qualquer posto da Guilda.",
+      "fontes": [
+        "faccao: guilda-dos-cacadores",
+        "registro: pharos",
+        "registro: patio-das-rotas (lista das rotas seladas)"
+      ],
+      "inventado": [
+        "Dentes-de-Vidro e o golpe das passagens.",
+        "2.000 Lunaris de recompensa."
+      ],
+      "modelo": "procurado",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Guilda dos Caçadores · quadro de Pharos",
+        "titulo": "Procurado",
+        "condicao": "Vivo",
+        "retrato": "",
+        "semRetrato": "Sorri com dentes de vidro. Quase nunca abre a boca.",
+        "nome": "Dentes-de-Vidro",
+        "acusacao": "Vendeu no Pátio das Rotas passagens para uma rota que a Caravana tinha selado. Onze passageiros atravessaram e não chegaram a lugar nenhum.",
+        "recompensa": "2.000",
+        "moeda": "Lunaris",
+        "rodape": "Entregue na Lanterna, em Pharos. A Guilda paga depois de conferir. Não compre passagem de ninguém fora do balcão da Caravana.",
+        "selo": "Guilda dos Caçadores",
+        "marca": "urgente",
+        "papel": "envelhecido"
+      }
+    },
+    {
+      "id": "quadro-abate-a-que-apaga-lampioes",
+      "tema": "Quadro da Guilda",
+      "titulo": "Recompensa: a que apaga lampiões",
+      "ensina": "Gancho de caça a criatura do Vazio. Mostra a Porta Baixa, o Farol que dá a volta a cada hora e que as criaturas do Vazio evitam a luz dele.",
+      "entregar": "Pregado no Quadro, logo depois de uma noite ruim em Pharos.",
+      "fontes": [
+        "registro: pharos (Porta Baixa, Farol, turnos)",
+        "faccao: guilda-dos-cacadores"
+      ],
+      "inventado": [
+        "A criatura e o valor de 3.500 Lunaris."
+      ],
+      "modelo": "procurado",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Guilda dos Caçadores · quadro de Pharos",
+        "titulo": "Recompensa",
+        "condicao": "Abatida",
+        "retrato": "",
+        "semRetrato": "Ninguém viu. Só o escuro onde ela passou.",
+        "nome": "A que apaga lampiões",
+        "acusacao": "Atravessou a Porta Baixa enquanto o feixe do Farol estava do outro lado. Apaga toda luz que não seja a do Farol e segue quem anda sozinho entre um turno e outro.",
+        "recompensa": "3.500",
+        "moeda": "Lunaris",
+        "rodape": "Ande em dupla e leve fogo de reserva. Traga prova do abate à escada da Lanterna.",
+        "selo": "Guilda dos Caçadores",
+        "marca": "nenhum",
+        "papel": "envelhecido"
+      }
+    },
+    {
+      "id": "quadro-contrato-sino-da-escola",
+      "tema": "Quadro da Guilda",
+      "titulo": "Contrato: o sino que toca de madrugada",
+      "ensina": "Gancho de espírito natural, que a Guilda também atende. Traz o cumprimento dos espíritos em Anemir como pista: quem conhece a língua sabe que alguém ainda está ali.",
+      "entregar": "No Quadro, entre os contratos pequenos. Bom para grupo de nível baixo.",
+      "fontes": [
+        "faccao: guilda-dos-cacadores (cuidar de espírito)",
+        "idioma: Anemir (“Iá anemé”, ainda estou aqui)"
+      ],
+      "inventado": [
+        "A Escola de Ofícios, a diretora Joana Mattos e o sino."
+      ],
+      "modelo": "contrato",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Guilda dos Caçadores",
+        "subtitulo": "Quadro de contratos",
+        "numero": "Contrato 0738",
+        "servico": "Fazer parar o sino da Escola de Ofícios, que toca sozinho toda madrugada",
+        "contratante": "Joana Mattos, diretora da escola",
+        "contratado": "Em aberto",
+        "pagamento": "35 Lunaris por cabeça",
+        "prazo": "Antes do começo das aulas",
+        "clausulas": "Não quebrar o sino. Ele é da escola desde a fundação.\nNinguém se machucou até agora. Que continue assim.\nSe for espírito, a diretora quer saber quem é antes de qualquer coisa.",
+        "observacao": "O sino toca três vezes. Um aluno jura que depois ouviu alguém sussurrar “iá anemé”.",
+        "estado": "aberto",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "quadro-contrato-escolta-tradutor",
+      "tema": "Quadro da Guilda",
+      "titulo": "Contrato: escolta de um tradutor até a feira goblin",
+      "ensina": "Gancho social: proteger um tradutor da Casa das Línguas numa negociação com goblins. Mostra que a Casa cobra por palavra e que goblin escreve cláusula miúda no rodapé.",
+      "entregar": "No Quadro, ou oferecido por um tradutor do Salão das Treze Portas.",
+      "fontes": [
+        "faccao: casa-das-linguas",
+        "idioma: Krammel (“Krimm, kramm?”, a cláusula no rodapé)"
+      ],
+      "inventado": [
+        "O tradutor Bartolomeu Pires, a feira e o motivo da negociação."
+      ],
+      "modelo": "contrato",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Guilda dos Caçadores",
+        "subtitulo": "Quadro de contratos",
+        "numero": "Contrato 0741",
+        "servico": "Escoltar um tradutor da Casa das Línguas até a feira goblin e trazê-lo de volta",
+        "contratante": "Bartolomeu Pires, tradutor do Krammel",
+        "contratado": "Em aberto",
+        "pagamento": "60 Lunaris por cabeça e as refeições",
+        "prazo": "Três dias, ida e volta",
+        "clausulas": "O tradutor fala. A escolta não fala, nem para cumprimentar.\nNinguém assina nada na feira sem o tradutor ler o rodapé.\nQualquer coisa que um goblin der de presente se devolve. Presente goblin é contrato.",
+        "observacao": "Se alguém disser “krimm, kramm?”, a resposta é o que vocês trazem. Deixem o tradutor responder.",
+        "estado": "aberto",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "quadro-bilhete-sem-perguntas",
+      "tema": "Quadro da Guilda",
+      "titulo": "Bilhete sem assinatura pregado no Quadro",
+      "ensina": "Gancho que não é da Guilda: alguém quer achar os que caminharam ilesos na Chuva Roxa. Liga com o jornal da Chuva Roxa.",
+      "entregar": "Pregado por cima de um contrato antigo. A Guilda arranca bilhetes assim toda manhã, então dura pouco.",
+      "fontes": [
+        "evento:chuva-roxa (os escolhidos de olhos violeta)"
+      ],
+      "inventado": [
+        "Quem escreveu fica com você. Pode ser os Colhedores do Éden, um culto ou alguém de Salém."
+      ],
+      "modelo": "bilhete",
+      "campos": {
+        "texto": "Pago bem a quem me trouxer uma pessoa que andou na Chuva Roxa e voltou inteira. Olhos violeta, sombra que se mexe sozinha.\n\nViva. Sem machucar. Sem perguntas.\n\nDeixe recado com o cego da escada do Farol.",
+        "assinatura": "",
+        "papel": "liso",
+        "tinta": "vermelha",
+        "mancha": "nao"
+      }
+    },
+    {
+      "id": "quadro-a-chapa-em-branco",
+      "tema": "Quadro da Guilda",
+      "titulo": "A chapa em branco",
+      "ensina": "O cartaz que fica no Quadro há mais tempo: sem nome, sem valor e sem prazo. É a chapa de Karnath, o Soberano dos Monstros, que a Guilda limpa toda manhã. O cartaz não diz nada disso, e é aí que mora a graça.",
+      "entregar": "Quando o grupo olhar o Quadro de Pharos pela primeira vez. Se perguntarem, o funcionário só diz que é o serviço que nunca atrasa.",
+      "fontes": [
+        "registro: karnath (a chapa em branco no Quadro)"
+      ],
+      "inventado": [
+        "Nada. É a chapa descrita no registro de Karnath, que ainda é segredo da mesa."
+      ],
+      "modelo": "procurado",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Guilda dos Caçadores · quadro de Pharos",
+        "titulo": "Procurado",
+        "condicao": "",
+        "retrato": "",
+        "semRetrato": "",
+        "nome": "",
+        "acusacao": "",
+        "recompensa": "",
+        "moeda": "",
+        "rodape": "Esta chapa não se tira do Quadro.",
+        "selo": "Guilda dos Caçadores",
+        "marca": "nenhum",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "moinho-caderno-da-prefeita",
+      "tema": "Aventuras prontas",
+      "titulo": "O Moinho da Terceira Roda: caderno da prefeita",
+      "ensina": "O caderno de Lúcia Torres com a mesma terça-feira anotada várias vezes. Faz o grupo perceber o problema antes de qualquer teste, como a aventura pede.",
+      "entregar": "Cena 1: Lúcia mostra o caderno quando contrata o grupo.",
+      "fontes": [
+        "tools/documentos-mundo/aventuras-do-jardim.mjs (O Moinho da Terceira Roda)"
+      ],
+      "inventado": [
+        "O conteúdo das anotações."
+      ],
+      "modelo": "diario",
+      "campos": {
+        "data": "Terça-feira",
+        "texto": "Terça. Choveu de manhã. Comprei broa do moinho. A Teodora não desceu de novo.\n\nTerça. Choveu de manhã. Comprei broa do moinho. Anotei que choveu, mas a rua está seca.\n\nTerça. A Dona Cida perguntou duas vezes se eu já tinha almoçado. Comprei broa.\n\nTerça. Escrevi para não esquecer: NÃO COMER A BROA. A letra é minha. Não lembro de ter escrito.\n\nTerça. Contar as rodas do moinho. O velho Zé diz que são três. Eu só lembro de duas.\n\nTerça.",
+        "assinatura": "L. Torres",
+        "pauta": "pautado",
+        "espiral": "nao",
+        "mancha": "cafe",
+        "tinta": "azul",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "moinho-etiqueta-do-saco",
+      "tema": "Aventuras prontas",
+      "titulo": "O Moinho da Terceira Roda: etiqueta de um saco de farinha",
+      "ensina": "A pista de que a roda mói os dias das pessoas: cada saco leva o nome de quem perdeu aquele dia.",
+      "entregar": "Cena 2 ou 3: num saco no porão do moinho. Teodora sabe de quem são os nomes.",
+      "fontes": [
+        "tools/documentos-mundo/aventuras-do-jardim.mjs (os nomes nos sacos)"
+      ],
+      "inventado": [
+        "O texto da etiqueta."
+      ],
+      "modelo": "bilhete",
+      "campos": {
+        "texto": "FARINHA DA TERCEIRA RODA\n\nSaco 31.\nTerça-feira de Lúcia Torres.\nMoída antes do galo.\n\nNão misturar com a farinha das outras rodas.",
+        "assinatura": "",
+        "papel": "pardo",
+        "tinta": "preta",
+        "mancha": "sim"
+      }
+    },
+    {
+      "id": "leilao-convite-casa-alvarenga",
+      "tema": "Aventuras prontas",
+      "titulo": "O Leilão da Casa Vazia: convite do leilão",
+      "ensina": "As regras de entrada da Cena 1: lances só em Lunaris, depósito por paleta e identidade verificada na porta. Os doze lotes, e nenhum décimo terceiro.",
+      "entregar": "Cena 1, ou antes, para o grupo planejar como entrar.",
+      "fontes": [
+        "tools/documentos-mundo/aventuras-do-jardim.mjs (O Leilão da Casa Vazia)"
+      ],
+      "inventado": [
+        "A frase do traje."
+      ],
+      "modelo": "convite",
+      "campos": {
+        "estilo": "preto",
+        "simbolo": "",
+        "anfitriao": "Orfeu Nacar, leiloeiro",
+        "chamada": "tem a honra de convidar",
+        "convidado": "Vossa Senhoria",
+        "evento": "para o leilão da casa de Hélio Alvarenga, em doze lotes",
+        "data": "nesta noite, ao badalar das nove",
+        "local": "A casa vazia de Hélio Alvarenga",
+        "traje": "Lances só em Lunaris. Depósito de 60 Lunaris por paleta.",
+        "rsvp": "Identidade verificada na porta."
+      }
+    },
+    {
+      "id": "leilao-contrato-da-guilda",
+      "tema": "Aventuras prontas",
+      "titulo": "O Leilão da Casa Vazia: contrato da Guilda",
+      "ensina": "O que o grupo foi fazer: trazer a caixa fechada, com pagamento em dobro se o Códice chegar intacto.",
+      "entregar": "Antes da aventura, quando a Guilda contrata o grupo.",
+      "fontes": [
+        "tools/documentos-mundo/aventuras-do-jardim.mjs (contrato da Guilda)"
+      ],
+      "inventado": [
+        "O número do contrato e o valor de base, que a aventura não diz."
+      ],
+      "modelo": "contrato",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Guilda dos Caçadores",
+        "subtitulo": "Contratos sigilosos",
+        "numero": "Contrato 0913",
+        "servico": "Trazer da casa de Hélio Alvarenga a caixa de ferro que não consta no catálogo",
+        "contratante": "Não identificado, por pedido",
+        "contratado": "Em aberto",
+        "pagamento": "800 Lunaris. O dobro com o conteúdo intacto",
+        "prazo": "Esta noite",
+        "clausulas": "A caixa chega fechada. Quem abrir perde o pagamento.\nA Guilda não quer saber como a caixa saiu da casa.\nNenhum nome da Guilda aparece em papel nenhum do leilão.",
+        "observacao": "A caixa entra na casa de madrugada. Ninguém declara ser dono dela.",
+        "estado": "aberto",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "caribdis-relatorio-de-perdas",
+      "tema": "Aventuras prontas",
+      "titulo": "O Redemoinho de Caribdis: relatório de perdas da Companhia",
+      "ensina": "Os dois navios puxados e o detalhe que a Companhia não percebeu: os dois faziam barulho. É a pista de que o silêncio é a saída.",
+      "entregar": "Cena 1: a capitã entrega, ou o grupo acha na sala da Companhia.",
+      "fontes": [
+        "tools/documentos-mundo/aventuras-do-jardim.mjs (O Redemoinho de Caribdis)"
+      ],
+      "inventado": [
+        "Os nomes dos dois navios e as datas."
+      ],
+      "modelo": "relatorio",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Companhia do Estreito",
+        "setor": "Capitania do porto",
+        "classificacao": "Interno",
+        "protocolo": "CE-0612",
+        "assunto": "Navios perdidos fora da corrente central",
+        "data": "Seis semanas de calma",
+        "corpo": "Primeira perda: a Estrela de Sal, carga leve, longe da corrente central. A tripulação comemorava o aniversário do contramestre. Testemunhas no cais ouviram música até o navio parar de se mexer.\n\nSegunda perda: o Boi Manso, carga de gado, também longe da corrente. Os bichos estavam inquietos desde a saída e mugiam sem parar.\n\nNos dois casos, o mar ficou liso como vidro num trecho só, os destroços giraram devagar no mesmo lugar e não havia gaivota por perto.\n\nConclusão da capitania: Caribdis passou a puxar navios fora da corrente. Rota fechada até segunda ordem.",
+        "responsavel": "Capitã Ívia Saldanha",
+        "anotacao": "e se não for a distância?",
+        "carimbo": "naoConferido",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "caribdis-desenho-da-mica",
+      "tema": "Aventuras prontas",
+      "titulo": "O Redemoinho de Caribdis: o bilhete da Mica",
+      "ensina": "Mica, a grumete, viu o navio ser puxado. Ela fala pouco: este é o recado que ela deixa para o grupo.",
+      "entregar": "Cena 2, quando alguém der atenção à grumete.",
+      "fontes": [
+        "tools/documentos-mundo/aventuras-do-jardim.mjs (Mica e a Roda dos Náufragos)"
+      ],
+      "inventado": [
+        "O texto do recado. A aventura diz que ela desenha muito: se quiser, ponha um desenho seu no lugar."
+      ],
+      "modelo": "bilhete",
+      "campos": {
+        "texto": "eu vi.\n\no mar ficou parado e o navio girou devagar, que nem folha no ralo.\n\nfazia barulho. eles cantavam.\n\nainda tem gente lá. na roda de tábua. eu vi braço mexendo.",
+        "assinatura": "Mica",
+        "papel": "pautado",
+        "tinta": "azul",
+        "mancha": "nao"
+      }
+    },
+    {
+      "id": "leviata-contrato-dos-pescadores",
+      "tema": "Aventuras prontas",
+      "titulo": "A Queda do Leviatã Espelhado: contrato dos pescadores",
+      "ensina": "O contrato do conselho dos pescadores e o aviso de como se navega hoje em Cais de Vidro.",
+      "entregar": "Cena 1, no cais.",
+      "fontes": [
+        "tools/documentos-mundo/aventuras-do-jardim.mjs (A Queda do Leviatã Espelhado)"
+      ],
+      "inventado": [
+        "O número do contrato e as cláusulas."
+      ],
+      "modelo": "contrato",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Conselho dos Pescadores",
+        "subtitulo": "Cais de Vidro",
+        "numero": "Contrato do mar",
+        "servico": "Fazer o mar de Cais de Vidro voltar a ser mar",
+        "contratante": "O conselho dos pescadores",
+        "contratado": "Em aberto",
+        "pagamento": "1.200 Solares por cabeça e as redes de seda",
+        "prazo": "Antes da próxima temporada de pesca",
+        "clausulas": "Ninguém sai com barco barulhento enquanto o contrato correr.\nSangue e fogo ficam em terra.\nO conselho não paga por barco perdido.",
+        "observacao": "Ontem três barcos fizeram barulho e não voltaram.",
+        "estado": "aberto",
+        "papel": "envelhecido"
+      }
+    },
+    {
+      "id": "leviata-anotacoes-da-astronoma",
+      "tema": "Aventuras prontas",
+      "titulo": "A Queda do Leviatã Espelhado: anotações da astrônoma",
+      "ensina": "As observações da Doutora Marta Saldanha: as estrelas no mar são de outro céu, e derrubar Vaelthor fecha a janela. Dá ao Mestre a pergunta moral da aventura em papel.",
+      "entregar": "Cena 1, se o grupo conversar com a astrônoma. O mapa do céu errado ela só entrega em troca da semana de observação.",
+      "fontes": [
+        "tools/documentos-mundo/aventuras-do-jardim.mjs (a astrônoma e o céu errado)"
+      ],
+      "inventado": [
+        "Os registros e a frase final."
+      ],
+      "modelo": "diario",
+      "campos": {
+        "data": "Dia 731 de observação",
+        "texto": "Meio-dia. O mar reflete estrelas outra vez. Nenhuma delas está no nosso céu.\n\nComparei com as cartas de todas as Árvores que consegui. Nenhuma bate. Pensei que fosse o nosso céu visto de outro ângulo. Nenhum ângulo explica. É outro céu inteiro.\n\nAs ondas correm contra o vento sempre no mesmo ponto. Ali ele respira.\n\nOs pescadores querem que ele morra. Eu entendo. Mas se ele cair, a única janela que conheço para outro universo fecha junto, e ninguém vai acreditar no que eu vi.\n\nPreciso de uma semana.",
+        "assinatura": "M. Saldanha",
+        "pauta": "quadriculado",
+        "espiral": "sim",
+        "mancha": "agua",
+        "tinta": "preta",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "boatos-ouvido-no-patio",
+      "tema": "Boatos",
+      "titulo": "Coluna de boatos: Ouvido no Pátio",
+      "ensina": "Seis boatos para soltar na mesa. Uns são verdade, outros não. A resposta de cada um está no campo \"Criado para este documento\".",
+      "entregar": "A qualquer momento, como jornal largado numa mesa de estalagem.",
+      "fontes": [
+        "registro: patio-das-rotas",
+        "dimensao:os-vaos",
+        "reino:reino-dos-anoes",
+        "conceito:sonhar-entre-as-arvores",
+        "missões A Linha no Pasto e Aid Mob"
+      ],
+      "inventado": [
+        "Verdade: a linha no pasto (missão A Linha no Pasto).",
+        "Verdade: a costureira vista em dois lugares (missão Aid Mob).",
+        "Verdade: quem dorme ao lado de alguém de outra Árvore sonha sozinho.",
+        "Mentira: anão vendendo a terceira peça (anão vende uma ou duas na vida).",
+        "Mentira: o dia a mais de Éon (quem some na memória é o Dia em Branco, do Abismo).",
+        "Você decide: o Banco Lunar em Întuneric."
+      ],
+      "modelo": "jornal",
+      "campos": {
+        "suporte": "papel",
+        "jornal": "Folha da Dimensão Padrão",
+        "edicao": "Edição de Matriz",
+        "secao": "Ouvido no Pátio",
+        "pagina": "Página 11",
+        "manchete": "O que se conta nas filas da Caravana",
+        "linhaFina": "A Folha anota, a Folha não confirma. Leitor esperto desconfia de pelo menos metade.",
+        "imagem": "",
+        "legenda": "",
+        "texto": "Um vaqueiro de Lionês jura que tem uma linha no pasto do patrão, e que de madrugada passa carroça vindo do lado de lá. O patrão diz que é invenção de peão.\n\nUma costureira da Dimensão Padrão foi vista no mercado e em casa na mesma manhã. As vizinhas brigam até hoje sobre qual das duas era ela.\n\nUm ferreiro de Khazad teria vendido a terceira peça da vida dele a um cavaleiro do Império, e pelo preço de uma só.\n\nQuem nasceu em Árvores diferentes e divide a cama sonha sozinho, cada um na sua camada. A senhora que vende pastel no Pátio diz que descobriu isso no dia do casamento.\n\nO dia a mais do mês de Éon teria acontecido duas vezes no ano passado, e só os relojoeiros perceberam.\n\nO Banco Lunar estaria procurando sala para uma agência em Întuneric. O Banco não respondeu.",
+        "autor": "Coluna da redação",
+        "papel": "jornal"
+      }
+    },
+    {
+      "id": "boatos-lousa-da-estalagem",
+      "tema": "Boatos",
+      "titulo": "Lousa de boatos da Estalagem do Vau",
+      "ensina": "Três boatos que a taverneira vende por moeda. Servem para apontar o grupo para uma das missões ou para o Quadro da Guilda.",
+      "entregar": "Na Estalagem do Vau, perto de Vau Fundo, ou em qualquer estalagem de estrada.",
+      "fontes": [
+        "missão A Linha no Pasto",
+        "quadro: A que apaga lampiões",
+        "evento:chuva-roxa"
+      ],
+      "inventado": [
+        "A estalagem e a taverneira. Os três boatos são verdade."
+      ],
+      "modelo": "bilhete",
+      "campos": {
+        "texto": "BOATO É 5 LUNARIS. VERDADE É 20.\n\nSeu Bento do pasto de baixo anda com dinheiro novo e bezerro velho.\n\nEm Pharos tem coisa apagando lampião. A Guilda paga quem trouxer prova.\n\nUma moça andou na Chuva Roxa e saiu inteira. Tem gente procurando ela, e não é a família.",
+        "assinatura": "A casa",
+        "papel": "pardo",
+        "tinta": "preta",
+        "mancha": "sim"
+      }
     }
   ]
 }
