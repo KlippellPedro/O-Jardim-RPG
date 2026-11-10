@@ -63,7 +63,7 @@ export interface EntidadeIniciativa {
   /** Fase de chefe: 1 é o começo. Só criatura do Bestiário com fases tem os campos abaixo. */
   fase?: number;
   fasesTotal?: number;
-  fasesResumo?: Array<{ nome: string; quando: number | null }>;
+  fasesResumo?: Array<{ nome: string; quando: number | null; rodada?: number | null }>;
   faseNome?: string;
   faseMudancas?: string[];
   faseAnuncio?: string;

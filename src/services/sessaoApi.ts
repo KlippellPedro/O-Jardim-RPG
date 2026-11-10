@@ -44,6 +44,8 @@ export interface ParticipantePayload {
 /** Uma fase de chefe: o que a mesa ouve (`anuncio`) e o que muda de regra (`mudancas`, só do Mestre). */
 export interface FaseDeChefe {
   quando: number | null;
+  /** Rodada do combate em que a fase começa mesmo sem dano (vale o gatilho que chegar primeiro). */
+  rodada?: number | null;
   nome: string;
   anuncio: string;
   mudancas: string[];
@@ -133,7 +135,7 @@ export interface SessaoParticipanteResponse {
   fase?: number;
   fase_anuncio?: string;
   fases_total?: number;
-  fases_resumo?: Array<{ nome: string; quando: number | null }>;
+  fases_resumo?: Array<{ nome: string; quando: number | null; rodada?: number | null }>;
   fase_nome?: string;
   fase_mudancas?: string[];
 }

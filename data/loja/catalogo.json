@@ -39184,15 +39184,18 @@
         "fases": [
           {
             "quando": 0.5,
+            "rodada": 6,
             "nome": "Meia-Noite",
             "anuncio": "Ao longe, um relógio bate doze vezes.",
             "mudancas": [
+              "A meia-noite chega na rodada 6 mesmo que ninguém o tenha ferido: a Sessão troca a fase sozinha. O relógio dele não espera o grupo.",
               "Última Badalada passa a soar a cada rodada ímpar, não só uma vez.",
               "O Cavalo Pálido ganha uma investida extra por rodada."
             ]
           },
           {
             "quando": 0.2,
+            "rodada": 10,
             "nome": "Hora Zero",
             "anuncio": "Todos os relógios da cena marcam a mesma hora, e ela é a deles.",
             "mudancas": [

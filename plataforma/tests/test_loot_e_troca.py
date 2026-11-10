@@ -37,6 +37,7 @@ from routers.sessions import (
     abrir_sessao,
     adicionar_participante,
     atualizar_participante,
+    controlar_turno,
     listar_bestiario,
     ajustar_tabela_de_loot,
     mexer_na_aflicao,
@@ -57,6 +58,7 @@ from schemas import (
     ParticipantLootDeliveryLine,
     ParticipantLootRollInput,
     SessionOpenInput,
+    SessionTurnInput,
 )
 
 TEST_DSN = (os.getenv("TEST_DATABASE_URL") or "").strip()
@@ -268,6 +270,52 @@ class LootETrocaTests(unittest.TestCase):
         with self.assertRaises(HTTPException) as erro:
             self._bater(sessao_id, pid, fase=4)
         self.assertEqual(erro.exception.status_code, 422)
+
+    def test_fase_de_chefe_tambem_sobe_pela_rodada_do_combate(self):
+        with self.database.connection() as connection:
+            connection.execute(
+                """
+                INSERT INTO catalogo_itens (id, tipo, titulo, conteudo) VALUES ('chefe-relogio', 'monstro', 'Chefe Relógio', %s)
+                ON CONFLICT (id) DO UPDATE SET conteudo=EXCLUDED.conteudo
+                """,
+                (Jsonb({"vd": 20, "pv": 100, "fases": [
+                    {"quando": 0.5, "rodada": 4, "nome": "Meia-Noite", "anuncio": "Um sino bate.", "mudancas": ["Ganha uma ação extra."]},
+                    {"quando": None, "rodada": 6, "nome": "Hora Zero", "anuncio": "Os relógios param.", "mudancas": ["Perde a Defesa."]},
+                ]}),),
+            )
+        sessao_id = abrir_sessao(
+            SessionOpenInput(campanha_id=self.campanha_id, titulo="Relógio", incluir_personagens=False),
+            user=self.mestre, database=self.database,
+        )["sessao"]["id"]
+        pid = adicionar_participante(
+            sessao_id, ParticipantCreateInput(nome="Relógio", vida_maxima=100, monstro_id="chefe-relogio"),
+            user=self.mestre, database=self.database,
+        )["id"]
+
+        def turno(acao):
+            controlar_turno(sessao_id, SessionTurnInput(acao=acao), user=self.mestre, database=self.database)
+
+        def no_mestre():
+            return next(p for p in self._estado("mestre", self.mestre_id)["participantes"] if p["id"] == pid)
+
+        self.assertEqual(
+            [(f["nome"], f["rodada"]) for f in no_mestre()["fases_resumo"]],
+            [("Começo", None), ("Meia-Noite", 4), ("Hora Zero", 6)],
+        )
+        turno("iniciar")
+        for _ in range(2):
+            turno("proximo")  # um participante só: cada "próximo" é uma rodada nova
+        self.assertEqual(no_mestre()["fase"], 1, "rodada 3 ainda não chegou na marca")
+        turno("proximo")
+        self.assertEqual((no_mestre()["fase"], no_mestre()["fase_nome"]), (2, "Meia-Noite"))
+        turno("anterior")
+        self.assertEqual(no_mestre()["fase"], 2, "voltar a rodada não devolve a fase")
+        for _ in range(3):
+            turno("proximo")
+        self.assertEqual(no_mestre()["fase"], 3)
+        jogador = next(p for p in self._estado("jogador", self.ana_id)["participantes"] if p["id"] == pid)
+        self.assertEqual(jogador["fase_anuncio"], "Os relógios param.")
+        self.assertNotIn("fases_resumo", jogador)
 
     def test_criatura_sem_fases_nao_aceita_fase(self):
         sessao_id, pid = self._cena_com_bandido()

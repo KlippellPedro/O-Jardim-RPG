@@ -8,6 +8,7 @@ import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { PAPEIS_CRIATURA, type PapelCriatura } from '../../../services/curvaCriatura';
 import { EditorLootCampanha } from './EditorLootCampanha';
 import { confirmar } from '../../../components/avisos/confirmacao';
+import { gatilhoDaFase } from '../../../utils/fasesDeChefe';
 
 interface CriaturaDetalheProps {
   /** Para buscar a tabela de loot, que só o Mestre recebe. */
@@ -303,7 +304,7 @@ export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ campanhaId, mo
               <ol className="space-y-2">
                 {monstro.fases.map((fase, indice) => (
                   <li key={fase.nome} className="rounded-lg border border-[#e0645f]/20 bg-[#e0645f]/[0.04] px-3 py-2.5 text-sm leading-6 text-white/70">
-                    <strong className="block text-white">Fase {indice + 2}: {fase.nome}{fase.quando ? <span className="ml-2 text-[11px] font-semibold text-[#f19a96]">a partir de {Math.round(fase.quando * 100)}% da Vida</span> : <span className="ml-2 text-[11px] font-semibold text-white/40">só pelo Mestre</span>}</strong>
+                    <strong className="block text-white">Fase {indice + 2}: {fase.nome}<span className={`ml-2 text-[11px] font-semibold ${fase.quando || fase.rodada ? 'text-[#f19a96]' : 'text-white/40'}`}>{gatilhoDaFase(fase)}</span></strong>
                     {fase.anuncio ? <span className="mt-0.5 block italic text-white/80">{fase.anuncio}</span> : null}
                     <ul className="mt-1.5 list-disc space-y-1 pl-5 text-white/65">
                       {fase.mudancas.map((mudanca) => <li key={mudanca}>{mudanca}</li>)}

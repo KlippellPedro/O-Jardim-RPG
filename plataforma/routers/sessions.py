@@ -287,7 +287,9 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             # O que muda de regra e o resumo das fases são do Mestre.
             publico["fase"] = fase_atual
             publico["fases_total"] = len(fases) + 1
-            publico["fases_resumo"] = [{"nome": "Começo", "quando": None}] + [{"nome": f["nome"], "quando": f["quando"]} for f in fases]
+            publico["fases_resumo"] = [{"nome": "Começo", "quando": None, "rodada": None}] + [
+                {"nome": f["nome"], "quando": f["quando"], "rodada": f.get("rodada")} for f in fases
+            ]
             if fase_atual > 1:
                 atual_da_fase = fases[min(fase_atual, len(fases) + 1) - 2]
                 publico["fase_nome"] = atual_da_fase["nome"]
@@ -1003,8 +1005,9 @@ def atualizar_participante(
         # deixamos ultrapassar o máximo por cura.
         vida_atual = max(-999, min(vida_atual, vida_maxima if vida_maxima else vida_atual))
 
-        # Fase de chefe: a Vida avança sozinha, o Mestre pode ajustar à mão, e a fase
-        # nunca desce por cura. Só criatura do catálogo com `fases` tem fase.
+        # Fase de chefe: a Vida (e a rodada do combate) avançam sozinhas, o Mestre pode
+        # ajustar à mão, e a fase nunca desce por cura. Só criatura do catálogo com
+        # `fases` tem fase.
         fase = int(atual["fase"] or 1)
         fases_da_criatura = fases_do_catalogo(connection, [atual["monstro_id"]]).get(atual["monstro_id"]) or []
         if payload.fase is not None:
@@ -1012,7 +1015,7 @@ def atualizar_participante(
                 raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="essa criatura nao tem essa fase")
             fase = payload.fase
         elif fases_da_criatura:
-            fase = fase_alcancada(fases_da_criatura, vida_atual, vida_maxima, fase)
+            fase = fase_alcancada(fases_da_criatura, vida_atual, vida_maxima, fase, _rodada_do_combate(sessao))
 
         row = connection.execute(
             """
@@ -1855,6 +1858,40 @@ def _passar_rodada_condicoes(connection, sessao_id) -> None:
             )
 
 
+def _rodada_do_combate(sessao) -> int | None:
+    """A rodada que conta para a fase de chefe: só existe com combate em andamento."""
+    return int(sessao["rodada"]) if sessao.get("em_combate") else None
+
+
+def _avancar_fases_pela_rodada(connection, sessao_id, rodada: int) -> None:
+    """Rodada nova: a criatura com fase marcada para esta rodada entra nela.
+
+    A Vida continua valendo junto (vale o gatilho que chegar primeiro), e a fase
+    nunca desce. Grava só quem mudou; o aviso de fase nova sai no navegador do
+    Mestre quando a Sessão recarrega, como no gatilho pela Vida.
+    """
+    linhas = connection.execute(
+        """
+        SELECT id, monstro_id, vida_atual, vida_maxima, fase
+        FROM sessao_participantes
+        WHERE sessao_id=%s AND monstro_id IS NOT NULL
+        """,
+        (sessao_id,),
+    ).fetchall()
+    fases_por_criatura = fases_do_catalogo(connection, (linha["monstro_id"] for linha in linhas))
+    for linha in linhas:
+        fases = fases_por_criatura.get(linha["monstro_id"]) or []
+        if not any(fase.get("rodada") for fase in fases):
+            continue
+        atual = int(linha["fase"] or 1)
+        nova = fase_alcancada(fases, int(linha["vida_atual"]), int(linha["vida_maxima"]), atual, rodada)
+        if nova != atual:
+            connection.execute(
+                "UPDATE sessao_participantes SET fase=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s",
+                (nova, linha["id"]),
+            )
+
+
 @router.post("/{sessao_id}/turno")
 def controlar_turno(
     sessao_id: UUID,
@@ -1924,6 +1961,8 @@ def controlar_turno(
         )
         if nova_rodada:
             _passar_rodada_condicoes(connection, sessao_id)
+            if em_combate:
+                _avancar_fases_pela_rodada(connection, sessao_id, rodada)
         cansados: list[dict] = []
         if payload.acao == "iniciar":
             iniciar_marcas(connection, sessao_id)

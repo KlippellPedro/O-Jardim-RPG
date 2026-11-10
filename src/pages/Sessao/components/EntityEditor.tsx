@@ -15,6 +15,7 @@ import { CONDICOES_LONGO_PRAZO, GRUPOS_LONGO_PRAZO } from '../../../../data/regr
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { VD_MAXIMO } from '../../../services/progressaoNiveis';
 import { escalarCriatura } from '../../../services/curvaCriatura';
+import { gatilhoCurto } from '../../../utils/fasesDeChefe';
 
 const CONDICOES_RAPIDAS = [...CONDICOES_OFICIAIS, ...CRISES_SANIDADE];
 
@@ -352,7 +353,7 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
         {entity.fasesResumo?.length ? (
           <div className="mt-4 rounded-lg border border-[#e0645f]/25 bg-[#e0645f]/[0.04] p-3">
             <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#f19a96]"><Flame size={12} /> Fase do chefe</span>
-            <p className="mt-1 text-[11px] leading-5 text-white/45">A Vida avança a fase sozinha e curar não a desfaz. Use isto quando a história pedir outra fase, ou para voltar uma que subiu por engano.</p>
+            <p className="mt-1 text-[11px] leading-5 text-white/45">A Vida e a rodada do combate avançam a fase sozinhas, e curar não a desfaz. Use isto quando a história pedir outra fase, ou para voltar uma que subiu por engano.</p>
             <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Fase do chefe">
               {entity.fasesResumo.map((item, indice) => (
                 <button
@@ -362,7 +363,7 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
                   onClick={() => setFase(indice + 1)}
                   className={`rounded-full border px-3 py-1 text-[11px] font-semibold ${fase === indice + 1 ? 'border-[#e0645f] bg-[#e0645f]/20 text-[#f6aaa6]' : 'border-white/10 text-white/55 hover:border-white/30 hover:text-white'}`}
                 >
-                  {indice + 1}. {item.nome}{item.quando ? ` · ${Math.round(item.quando * 100)}%` : ''}
+                  {indice + 1}. {item.nome}{gatilhoCurto(item) ? ` · ${gatilhoCurto(item)}` : ''}
                 </button>
               ))}
             </div>

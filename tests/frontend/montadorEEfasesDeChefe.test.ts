@@ -20,6 +20,7 @@ import {
 } from '../../src/services/montadorEncontro';
 import type { BestiarioMonstro } from '../../src/services/sessaoApi';
 import { avisosDeFaseNova, type EntidadeIniciativa } from '../../src/store/useSessaoStore';
+import { gatilhoCurto, gatilhoDaFase } from '../../src/utils/fasesDeChefe';
 
 type Entrada = { id: string; titulo: string; tipo: string; conteudo: Record<string, any> };
 const entradas = (catalogo as { entradas: Entrada[] }).entradas;
@@ -208,7 +209,7 @@ test('o texto do montador segue o tom do livro', () => {
 
 // ---------------------------------------------------------------- fases de chefe
 
-type Fase = { quando: number | null; nome: string; anuncio: string; mudancas: string[] };
+type Fase = { quando: number | null; rodada?: number | null; nome: string; anuncio: string; mudancas: string[] };
 const comFases = criaturas.filter((entrada) => entrada.conteudo.fases);
 
 test('toda criatura única tem fases, e só ela', () => {
@@ -222,17 +223,38 @@ test('as fases descem de 100% a 0%, têm nome, mudança e frase de cena', () => 
     const fases = entrada.conteudo.fases as Fase[];
     assert.ok(fases.length >= 1 && fases.length <= 8, `${entrada.id}: ${fases.length} fases`);
     let anterior = 1;
+    let rodadaAnterior = 1;
     for (const fase of fases) {
       if (fase.quando !== null) {
         assert.ok(fase.quando > 0 && fase.quando < 1, `${entrada.id}: limiar ${fase.quando} fora de (0, 1)`);
         assert.ok(fase.quando < anterior, `${entrada.id}: limiares precisam descer`);
         anterior = fase.quando;
       }
+      if (fase.rodada != null) {
+        // Mesma faixa que plataforma/core/fases.py aceita; fora dela o servidor ignora o gatilho.
+        assert.ok(Number.isInteger(fase.rodada) && fase.rodada >= 2 && fase.rodada <= 99, `${entrada.id}: rodada ${fase.rodada} fora de 2 a 99`);
+        assert.ok(fase.rodada > rodadaAnterior, `${entrada.id}: as rodadas precisam subir`);
+        rodadaAnterior = fase.rodada;
+      }
       assert.ok(fase.nome.length >= 3, `${entrada.id}: fase sem nome`);
       assert.ok(fase.mudancas.length >= 1 && fase.mudancas.every((mudanca) => mudanca.length >= 15), `${entrada.id}/${fase.nome}: mudança curta`);
-      if (fase.quando !== null) assert.ok(fase.anuncio.length >= 15, `${entrada.id}/${fase.nome}: falta a frase de cena`);
+      if (fase.quando !== null || fase.rodada != null) assert.ok(fase.anuncio.length >= 15, `${entrada.id}/${fase.nome}: falta a frase de cena`);
     }
   }
+});
+
+test('o gatilho da fase sai escrito do mesmo jeito em todas as telas', () => {
+  assert.equal(gatilhoDaFase({ quando: 0.5 }), 'a partir de 50% da Vida');
+  assert.equal(gatilhoDaFase({ quando: null, rodada: 6 }), 'na rodada 6');
+  assert.equal(gatilhoDaFase({ quando: 0.2, rodada: 10 }), 'a partir de 20% da Vida ou na rodada 10');
+  assert.equal(gatilhoDaFase({ quando: null, rodada: null }), 'só pelo Mestre');
+  assert.equal(gatilhoCurto({ quando: 0.5, rodada: 6 }), '50% ou rodada 6');
+  assert.equal(gatilhoCurto({ quando: null }), '');
+});
+
+test('o Ser Horário chega à meia-noite pela rodada mesmo sem dano', () => {
+  const fases = criaturas.find((entrada) => entrada.id === 'ser-horario')?.conteudo.fases as Fase[];
+  assert.deepEqual(fases.map((fase) => [fase.nome, fase.quando, fase.rodada]), [['Meia-Noite', 0.5, 6], ['Hora Zero', 0.2, 10]]);
 });
 
 test('a frase de cena não entrega número nem regra para a mesa', () => {
