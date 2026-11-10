@@ -588,6 +588,34 @@ class MapaBancoTests(unittest.TestCase):
         self.assertEqual(refeito, [f"{b}:n0/1/0"])
         self.assertEqual((self.pedaco(self.ana, b, "n0/1/0"), self.pedaco(self.ana, b, "n0/0/0")), (200, 404))
 
+    def test_mapa_girado_guarda_o_giro_entrega_ao_jogador_e_a_nevoa_segue_o_desenho(self):
+        a, b = self._mapa_pronto(3000, 2000, "A"), self._mapa_pronto(2400, 1800, "B")
+        self._sessao("aberta")
+        cena_id = self.criar_cena("Cidade")["cena"]["id"]
+        self._colocar(cena_id, a)
+        self._colocar(cena_id, b)  # em x = 17884, y = 15384: o centro é (19084, 16284)
+        mapas = self.ver(self.mestre)["cena"]["mapas_colocados"]
+        self.assertEqual(mapas[1]["rotacao"], 0.0)
+        girado = self._mudar(cena_id, mapas[1]["id"], rotacao=180)["cena"]["mapas_colocados"][1]
+        self.assertEqual((girado["rotacao"], girado["x"], girado["y"]), (180.0, 17884.0, 15384.0))
+        # O jogador precisa do giro para desenhar o mapa; o resto continua só do Mestre.
+        da_ana = self.ver(self.ana)["cena"]["mapas_colocados"][1]
+        self.assertEqual(da_ana["rotacao"], 180.0)
+        self.assertNotIn("trancado", da_ana)
+        # Um quadrado no canto de baixo à direita da cena é o canto de cima à esquerda do desenho girado.
+        self.nevoa(cena_id, ligada=True)
+        self.nevoa(cena_id, forma={"op": "revelar", "tipo": "retangulo", "x": 20084, "y": 16984, "w": 200, "h": 200})
+        self.assertEqual(self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"], [f"{b}:n0/0/0"])
+        self.assertEqual((self.pedaco(self.ana, b, "n0/0/0"), self.pedaco(self.ana, b, "n0/2/1")), (200, 404))
+        # Desvirado, o mesmo quadrado cai no canto de baixo do desenho: a lista da névoa é refeita.
+        self._mudar(cena_id, mapas[1]["id"], rotacao=0)
+        self.assertEqual(self.ver(self.ana)["cena"]["nevoa"]["ladrilhos"], [f"{b}:n0/2/1"])
+        # O mapa girado não pode passar da borda de cima: o servidor recusa e o giro não é gravado.
+        with self.assertRaises(HTTPException) as borda:
+            self._mudar(cena_id, mapas[0]["id"], x=0, y=0, rotacao=90)
+        self.assertEqual(borda.exception.status_code, 422)
+        self.assertEqual(self.ver(self.mestre)["cena"]["mapas_colocados"][0]["rotacao"], 0.0)
+
     def test_apagar_o_mapa_do_acervo_tira_da_cena(self):
         a, b = self._mapa_pronto(1200, 800, "A"), self._mapa_pronto(1200, 800, "B")
         self._sessao("aberta")

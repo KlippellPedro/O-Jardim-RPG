@@ -416,7 +416,7 @@ def _mapas_colocados_da_cena(connection, cena, gestor: bool) -> list[dict]:
             continue
         linha = {
             "id": mapa["id"], "imagem_id": mapa["imagem_id"], "x": mapa["x"], "y": mapa["y"], "escala": mapa["escala"],
-            "largura": item["largura"], "altura": item["altura"], "ladrilho": item["ladrilho"], "chaves": item["chaves"],
+            "rotacao": mapa["rotacao"], "largura": item["largura"], "altura": item["altura"], "ladrilho": item["ladrilho"], "chaves": item["chaves"],
         }
         if gestor:
             linha.update(nome=mapa["nome"], visivel=mapa["visivel"], trancado=mapa["trancado"])

@@ -125,7 +125,7 @@ def mudar_mapa(
     user: AuthenticatedUser = Depends(require_csrf),
     database: Database = Depends(get_database),
 ):
-    """Muda lugar, tamanho (escala), nome, visibilidade ou trava. Mapa trancado só aceita trava, nome e visibilidade."""
+    """Muda lugar, tamanho (escala), giro (rotacao, em graus), nome, visibilidade ou trava. Mapa trancado só aceita trava, nome e visibilidade."""
     with database.connection() as connection:
         acesso = require_campaign_manager(connection, campanha_id, user.id)
         cena = rotas_mapa._cena(connection, campanha_id, cena_id, travar=True)

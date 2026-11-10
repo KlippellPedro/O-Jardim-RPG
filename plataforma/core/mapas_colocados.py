@@ -7,6 +7,10 @@ Segredo: um mapa escondido dos jogadores não sai do servidor (a leitura dos ped
 névoa libera; os ladrilhos dele entram na mesma lista do mapa base, com o id do mapa na frente
 ("<imagem_id>:n0/1/2"), calculados com as formas da névoa trazidas para o desenho do mapa.
 
+Giro: o mapa gira em graus (sentido horário na tela) em torno do centro dele. `x` e `y` continuam
+sendo o canto de cima e da esquerda do desenho sem girar, então girar não muda o centro. A cena,
+a névoa e o limite da borda usam a caixa do mapa já girado.
+
 Como `core/mapa.py`, este módulo não conhece banco nem HTTP: as rotas leem o Acervo e passam
 os itens para cá.
 """
@@ -46,6 +50,23 @@ def _nome(valor, padrao: str = "Mapa") -> str:
     return texto or padrao
 
 
+#: Até onde um pedido pode ir em graus antes de ser recusado (o valor guardado sempre cai em 0 a 360).
+GIRO_MAXIMO = 3600.0
+#: Quanto o mapa girado pode passar da borda de cima e da esquerda por causa do arredondamento.
+FOLGA_DA_BORDA = 1.0
+
+
+def _graus(valor) -> float:
+    """Giro em graus, levado para 0 (inclusive) a 360 (exclusive), com uma casa."""
+    giro = round(_numero(valor, "rotacao", -GIRO_MAXIMO, GIRO_MAXIMO) % 360.0, 1)
+    return 0.0 if giro >= 360.0 else giro
+
+
+def _menor_posicao(rotacao: float) -> float:
+    """O menor `x` ou `y` que se guarda: zero sem giro; girado, o desenho pode ter o canto atrás da borda."""
+    return -LADO_MAXIMO_CENA if rotacao else 0.0
+
+
 def ler(estrutura) -> list[dict]:
     """Os mapas guardados na cena. Registro quebrado é ignorado, não derruba a cena."""
     brutos = estrutura.get("mapas") if isinstance(estrutura, dict) else None
@@ -61,13 +82,16 @@ def ler(estrutura) -> list[dict]:
             imagem_id = str(bruto.get("imagem_id") or "").lower()
             if not ID.match(id_mapa) or not ID.match(imagem_id) or id_mapa in vistos:
                 continue
+            rotacao = _graus(bruto.get("rotacao", 0))
+            minimo = _menor_posicao(rotacao)
             saida.append({
                 "id": id_mapa,
                 "imagem_id": imagem_id,
                 "nome": _nome(bruto.get("nome")),
-                "x": _numero(bruto.get("x", 0), "x", 0, LADO_MAXIMO_CENA),
-                "y": _numero(bruto.get("y", 0), "y", 0, LADO_MAXIMO_CENA),
+                "x": _numero(bruto.get("x", 0), "x", minimo, LADO_MAXIMO_CENA),
+                "y": _numero(bruto.get("y", 0), "y", minimo, LADO_MAXIMO_CENA),
                 "escala": _numero(bruto.get("escala", 1), "escala", ESCALA_MIN, ESCALA_MAX),
+                "rotacao": rotacao,
                 "visivel": bool(bruto.get("visivel", True)),
                 "trancado": bool(bruto.get("trancado", False)),
             })
@@ -86,13 +110,14 @@ def novo(imagem_id, nome, x: float, y: float, escala: float = 1.0) -> dict:
         "x": round(_numero(x, "x", 0, LADO_MAXIMO_CENA), 1),
         "y": round(_numero(y, "y", 0, LADO_MAXIMO_CENA), 1),
         "escala": round(_numero(escala, "escala", ESCALA_MIN, ESCALA_MAX), 4),
+        "rotacao": 0.0,
         "visivel": True,
         "trancado": False,
     }
 
 
 #: O que cada pedido pode mudar. Trancado só deixa mudar a trava, o nome, a visibilidade e a ordem.
-CAMPOS_DE_POSICAO = ("x", "y", "escala")
+CAMPOS_DE_POSICAO = ("x", "y", "escala", "rotacao")
 CAMPOS_LIVRES = ("nome", "visivel", "trancado")
 
 
@@ -108,7 +133,12 @@ def atualizar(mapa: dict, dados) -> dict:
             if not isinstance(dados[campo], bool):
                 raise ErroMapa(f"{campo} e verdadeiro ou falso")
             mudancas[campo] = dados[campo]
-    for campo, minimo, maximo in (("x", 0, LADO_MAXIMO_CENA), ("y", 0, LADO_MAXIMO_CENA), ("escala", ESCALA_MIN, ESCALA_MAX)):
+    if "rotacao" in dados:
+        mudancas["rotacao"] = _graus(dados["rotacao"])
+    # Sem giro, o canto do desenho é o canto da caixa e não sai da cena. Girado, o canto do desenho sem girar
+    # pode ficar atrás da borda enquanto a caixa girada ainda cabe (a conferência final é `caber_na_cena`).
+    menor = _menor_posicao(mudancas.get("rotacao", mapa.get("rotacao", 0.0)))
+    for campo, minimo, maximo in (("x", menor, LADO_MAXIMO_CENA), ("y", menor, LADO_MAXIMO_CENA), ("escala", ESCALA_MIN, ESCALA_MAX)):
         if campo in dados:
             mudancas[campo] = round(_numero(dados[campo], campo, minimo, maximo), 4 if campo == "escala" else 1)
     # Se o pedido também destranca, a mudança de lugar vale (destrancar e mexer de uma vez).
@@ -154,6 +184,42 @@ def tamanho_na_cena(mapa: dict, item: dict) -> tuple[float, float]:
     return item["largura"] * mapa["escala"], item["altura"] * mapa["escala"]
 
 
+def centro_do_mapa(mapa: dict, item: dict) -> tuple[float, float]:
+    """O centro do mapa na cena: o ponto em torno do qual ele gira."""
+    w, h = tamanho_na_cena(mapa, item)
+    return mapa["x"] + w / 2, mapa["y"] + h / 2
+
+
+def _girar(dx: float, dy: float, graus: float) -> tuple[float, float]:
+    """Gira um vetor no sentido horário da tela (o eixo y cresce para baixo)."""
+    radianos = math.radians(graus)
+    seno, cosseno = math.sin(radianos), math.cos(radianos)
+    return dx * cosseno - dy * seno, dx * seno + dy * cosseno
+
+
+def cantos_na_cena(mapa: dict, item: dict) -> list[tuple[float, float]]:
+    """Os quatro cantos do mapa já girado (cima-esquerda, cima-direita, baixo-direita, baixo-esquerda), em px da cena."""
+    w, h = tamanho_na_cena(mapa, item)
+    cx, cy = centro_do_mapa(mapa, item)
+    giro = mapa.get("rotacao", 0.0)
+    pontos = []
+    for dx, dy in ((-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2)):
+        gx, gy = _girar(dx, dy, giro)
+        pontos.append((cx + gx, cy + gy))
+    return pontos
+
+
+def caixa_na_cena(mapa: dict, item: dict) -> tuple[float, float, float, float]:
+    """O menor retângulo (x0, y0, x1, y1) que cobre o mapa já girado."""
+    if not mapa.get("rotacao"):
+        w, h = tamanho_na_cena(mapa, item)
+        return mapa["x"], mapa["y"], mapa["x"] + w, mapa["y"] + h
+    cantos = cantos_na_cena(mapa, item)
+    xs = [x for x, _ in cantos]
+    ys = [y for _, y in cantos]
+    return min(xs), min(ys), max(xs), max(ys)
+
+
 def extensao(mapas: list[dict], itens: dict[str, dict]) -> tuple[int, int]:
     """O menor canto direito/baixo que cobre todos os mapas (a cena cresce até aqui, nunca encolhe)."""
     largura = altura = 0.0
@@ -161,9 +227,9 @@ def extensao(mapas: list[dict], itens: dict[str, dict]) -> tuple[int, int]:
         item = itens.get(mapa["imagem_id"])
         if item is None:
             continue
-        w, h = tamanho_na_cena(mapa, item)
-        largura = max(largura, mapa["x"] + w)
-        altura = max(altura, mapa["y"] + h)
+        _, _, x1, y1 = caixa_na_cena(mapa, item)
+        largura = max(largura, x1)
+        altura = max(altura, y1)
     return math.ceil(largura), math.ceil(altura)
 
 
@@ -172,8 +238,16 @@ def caber_na_cena(mapas: list[dict], itens: dict[str, dict], com_base: bool = Fa
 
     Uma cena montada só com mapas colocados (sem mapa de fundo) é sempre uma arena do tamanho máximo:
     a névoa cobre tudo e o Mestre arrasta os mapas para qualquer lado. Com mapa de fundo, a cena cresce
-    só o que os mapas pedem, com a folga em volta.
+    só o que os mapas pedem, com a folga em volta. Um mapa girado não pode passar da borda de cima nem
+    da esquerda (a cena só cresce para a direita e para baixo).
     """
+    for mapa in mapas:
+        item = itens.get(mapa["imagem_id"])
+        if item is None:
+            continue
+        x0, y0, _, _ = caixa_na_cena(mapa, item)
+        if x0 < -FOLGA_DA_BORDA or y0 < -FOLGA_DA_BORDA:
+            raise ErroMapa("o mapa girado passaria da borda da cena: afaste-o do canto de cima ou da esquerda", 422)
     largura, altura = extensao(mapas, itens)
     if largura > LADO_MAXIMO_CENA or altura > LADO_MAXIMO_CENA:
         raise ErroMapa(f"os mapas juntos passam de {LADO_MAXIMO_CENA} px: diminua ou aproxime", 422)
@@ -194,12 +268,32 @@ def centro_da_arena(largura: float, altura: float) -> tuple[float, float]:
 
 # ------------------------------------------------------------------ névoa
 
-def forma_no_mapa(forma: dict, mapa: dict) -> dict:
-    """A forma da névoa (em px da cena) trazida para o desenho do mapa: sem o deslocamento, na escala dele."""
+def forma_no_mapa(forma: dict, mapa: dict, largura: float = 0.0, altura: float = 0.0) -> dict:
+    """A forma da névoa (em px da cena) trazida para o desenho do mapa: sem o deslocamento, na escala dele.
+
+    Com o mapa girado (`largura` e `altura` são as da imagem, sem escala), os pontos voltam o giro em torno do
+    centro e o retângulo vira polígono de quatro pontos, porque deixa de ser alinhado com os eixos do desenho.
+    """
     ox, oy, e = mapa["x"], mapa["y"], mapa["escala"]
+    if not mapa.get("rotacao"):
+        if forma["tipo"] == "retangulo":
+            return {**forma, "x": (forma["x"] - ox) / e, "y": (forma["y"] - oy) / e, "w": forma["w"] / e, "h": forma["h"] / e}
+        traduzida = {**forma, "pontos": [[(px - ox) / e, (py - oy) / e] for px, py in forma["pontos"]]}
+        if "raio" in forma:
+            traduzida["raio"] = forma["raio"] / e
+        return traduzida
+
+    cx, cy = ox + largura * e / 2, oy + altura * e / 2
+
+    def para_o_desenho(px: float, py: float) -> list[float]:
+        gx, gy = _girar(px - cx, py - cy, -mapa["rotacao"])
+        return [gx / e + largura / 2, gy / e + altura / 2]
+
     if forma["tipo"] == "retangulo":
-        return {**forma, "x": (forma["x"] - ox) / e, "y": (forma["y"] - oy) / e, "w": forma["w"] / e, "h": forma["h"] / e}
-    traduzida = {**forma, "pontos": [[(px - ox) / e, (py - oy) / e] for px, py in forma["pontos"]]}
+        x, y, w, h = forma["x"], forma["y"], forma["w"], forma["h"]
+        base = {chave: valor for chave, valor in forma.items() if chave not in ("x", "y", "w", "h")}
+        return {**base, "tipo": "poligono", "pontos": [para_o_desenho(px, py) for px, py in ((x, y), (x + w, y), (x + w, y + h), (x, y + h))]}
+    traduzida = {**forma, "pontos": [para_o_desenho(px, py) for px, py in forma["pontos"]]}
     if "raio" in forma:
         traduzida["raio"] = forma["raio"] / e
     return traduzida
@@ -224,12 +318,12 @@ def ladrilhos_liberados(formas: list[dict], mapas: list[dict], itens: dict[str, 
         item = itens.get(mapa["imagem_id"])
         if item is None or not mapa["visivel"]:
             continue
-        w, h = tamanho_na_cena(mapa, item)
+        x0, y0, x1, y1 = caixa_na_cena(mapa, item)
         # Só as formas que tocam o mapa contam: a ordem das outras não muda o que ele libera.
-        tocam = [forma for forma in formas if _toca(forma, mapa["x"], mapa["y"], mapa["x"] + w, mapa["y"] + h)]
+        tocam = [forma for forma in formas if _toca(forma, x0, y0, x1, y1)]
         if not tocam:
             continue
-        locais = [forma_no_mapa(forma, mapa) for forma in tocam]
+        locais = [forma_no_mapa(forma, mapa, float(item["largura"]), float(item["altura"])) for forma in tocam]
         for chave in nevoa.ladrilhos_liberados(locais, int(item["largura"]), int(item["altura"]), list(item["chaves"])):
             liberados.add(chave_prefixada(mapa["imagem_id"], chave))
     return sorted(liberados)
