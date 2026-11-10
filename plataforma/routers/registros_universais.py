@@ -22,6 +22,7 @@ from core.dependencies import (
     require_campaign_manager,
     require_csrf,
 )
+from core.fases import fases_do_catalogo
 from core.registros_universais import ErroRegistro
 from routers.sessions import resumo_do_loot
 
@@ -109,6 +110,25 @@ def loot_da_criatura(
     if resumo is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="essa criatura nao tem tabela de loot")
     return {**resumo, "ajustada": ajustada}
+
+
+@router.get("/{campanha_id}/fases/{monstro_id}")
+def fases_da_criatura(
+    campanha_id: UUID,
+    monstro_id: str,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """As fases de chefe de uma criatura única, para a ficha do Bestiário. Elas
+    guardam o segredo da criatura (quando ela muda e o que muda), então só quem
+    comanda a mesa recebe; o catálogo que vai para o navegador chega sem elas
+    (tools/browser-content-boundary.ts). Para o jogador, a rota nem existe."""
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        if not acesso.manages_content:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="criatura sem fases")
+        fases = fases_do_catalogo(connection, [monstro_id]).get(monstro_id) or []
+    return {"fases": fases}
 
 
 @router.put("/{campanha_id}")

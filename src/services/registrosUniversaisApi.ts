@@ -1,5 +1,5 @@
 import { api } from './apiClient';
-import type { TabelaDeLoot } from './sessaoApi';
+import type { FaseDeChefe, TabelaDeLoot } from './sessaoApi';
 
 export type SecaoUniversal = 'bestiario' | 'seres' | 'faccoes' | 'locais' | 'artefatos' | 'personagens' | 'glossario' | 'rumores';
 export type RevelacaoRegistro = 'oculto' | 'rasurado' | 'aberto';
@@ -48,4 +48,7 @@ export const registrosUniversaisApi = {
   /** A tabela de loot que vale na campanha, para a ficha da criatura. Qualquer membro lê. */
   loot: (campanhaId: string, monstroId: string) =>
     api<TabelaDeLoot>(`${base(campanhaId)}/loot/${encodeURIComponent(monstroId)}`),
+  /** Fases de chefe da criatura. Só quem comanda recebe: o catálogo do navegador chega sem elas. */
+  fases: (campanhaId: string, monstroId: string) =>
+    api<{ fases: FaseDeChefe[] }>(`${base(campanhaId)}/fases/${encodeURIComponent(monstroId)}`),
 };

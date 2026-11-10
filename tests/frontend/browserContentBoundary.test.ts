@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
-import { browserContentBoundary, browserContentSource } from '../../tools/browser-content-boundary.ts';
+import { browserContentBoundary, browserContentSource, catalogoParaNavegador } from '../../tools/browser-content-boundary.ts';
 import { REGRAS_OFICIAIS } from '../../data/regras/regras.ts';
 import { ENTIDADES } from '../../data/mundo/entidades.ts';
 import { MUNDO_CATALOG } from '../../data/gerado/mundoCatalog.ts';
@@ -22,6 +22,18 @@ test('catálogos completos não entram na projeção do navegador', () => {
     assert.ok(result.length < original.length / 2);
     assert.equal(fs.readFileSync(filename, 'utf8'), original);
   }
+});
+
+test('o catálogo chega ao navegador sem as fases de chefe', () => {
+  const original = fs.readFileSync('data/loja/catalogo.json', 'utf8');
+  const completo = JSON.parse(original) as { entradas: Array<{ id: string; conteudo: Record<string, unknown> }> };
+  const projetado = JSON.parse(catalogoParaNavegador(original)) as typeof completo;
+  assert.ok(completo.entradas.some(entrada => Array.isArray(entrada.conteudo.fases)), 'o catálogo perdeu as fases');
+  assert.equal(projetado.entradas.length, completo.entradas.length);
+  assert.ok(projetado.entradas.every(entrada => !('fases' in entrada.conteudo)));
+  const load = browserContentBoundary().load as (id: string) => unknown;
+  assert.doesNotMatch(load(path.resolve('data/loja/catalogo.json')) as string, /"fases"/);
+  assert.throws(() => load('/repo/data/loja/catalogo.json?raw'));
 });
 
 test('importações brutas e snapshots privados são recusados', () => {
@@ -47,8 +59,11 @@ test('build de produção não contém trechos privados de regras e contos', () 
   // Documentos universais: só a rota do Mestre entrega (data/documentos/universais.json).
   const universais = (JSON.parse(fs.readFileSync('data/documentos/universais.json', 'utf8')).documentos as Array<{ campos: Record<string, string> }>)
     .flatMap(doc => Object.values(doc.campos));
+  // Fases de chefe: o segredo de cada criatura única (data/loja/catalogo.json).
+  const fases = (JSON.parse(fs.readFileSync('data/loja/catalogo.json', 'utf8')).entradas as Array<{ conteudo: { fases?: Array<{ mudancas: string[] }> } }>)
+    .flatMap(entrada => (entrada.conteudo.fases ?? []).flatMap(fase => fase.mudancas));
   let checked = 0;
-  for (const source of [...privateRules, ...stories, ...lore, ...universais]) {
+  for (const source of [...privateRules, ...stories, ...lore, ...universais, ...fases]) {
     for (const fragment of source.match(/[^<>\n"\\]{100,180}/g) || []) {
       if (publicRules.includes(fragment)) continue;
       assert.ok(!bundle.includes(fragment), 'Trecho reservado presente no bundle: ' + fragment.slice(0, 60));

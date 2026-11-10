@@ -51,7 +51,6 @@ export interface ICriatura {
   ataques: Array<{ nome: string; detalhe: string }>;
   pericias: string[];
   habilidades: string[];
-  fases: Array<{ quando: number | null; nome: string; anuncio: string; mudancas: string[] }>;
   raridade: string;
   categoria: string;
   familia: string;

@@ -43,6 +43,17 @@ export function browserContentSource(source: string, filename: string): string {
   return edits.sort((a, b) => b.start - a.start).reduce((text, edit) => text.slice(0, edit.start) + edit.text + text.slice(edit.end), source);
 }
 
+/** O catálogo da Loja vai inteiro para o navegador (preço, ficha, habilidades), menos
+ * as fases de chefe: elas trazem o segredo de cada criatura única e só chegam a quem
+ * comanda a mesa, pela Sessão e pela rota de fases dos Registros Universais. */
+export function catalogoParaNavegador(source: string): string {
+  const catalogo = JSON.parse(source) as { entradas?: Array<{ conteudo?: Record<string, unknown> }> };
+  for (const entrada of catalogo.entradas ?? []) {
+    if (entrada.conteudo && 'fases' in entrada.conteudo) delete entrada.conteudo.fases;
+  }
+  return JSON.stringify(catalogo);
+}
+
 export function browserContentBoundary(): Plugin {
   return {
     name: 'jardim-browser-content-boundary',
@@ -60,6 +71,10 @@ export function browserContentBoundary(): Plugin {
         return JSON.stringify({versao:1,status:'',introducao:{titulo:'',subtitulo:'',descricao:''},linha_tempo_geral:[],arvores:[]});
       }
       if (filename.endsWith('/data/mundo/faccoes.json') && !id.includes('?')) return JSON.stringify({ faccoes: [] });
+      if (filename.endsWith('/data/loja/catalogo.json')) {
+        if (id.includes('?')) throw new Error('O catálogo bruto traz as fases de chefe, reservadas ao servidor.');
+        return catalogoParaNavegador(fs.readFileSync(filename, 'utf8'));
+      }
       if (/\/data\/mundo\/.*\.json$/.test(filename)) throw new Error('Lore completa só pode ser carregada pela API.');
       if (restricted) {
         if (id.includes('?')) throw new Error('Importação bruta de conteúdo reservado não permitida.');

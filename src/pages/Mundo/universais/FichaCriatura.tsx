@@ -3,6 +3,9 @@ import { Activity, DoorOpen, Eye, Flame, Footprints, Heart, Shield, Sparkles, Sw
 import { SecaoLoot } from '../../Sessao/components/CriaturaDetalhe';
 import { agruparHabilidades, degrauDoVd, numeroDaPericia, rgbDoDegrau } from './bestiario';
 import type { IRegistro } from './registros';
+import { gatilhoDaFase } from '../../../utils/fasesDeChefe';
+import { registrosUniversaisApi } from '../../../services/registrosUniversaisApi';
+import type { FaseDeChefe } from '../../../services/sessaoApi';
 
 interface IFichaProps {
   registro: IRegistro;
@@ -53,9 +56,26 @@ const Titulo = ({ icone, children }: { icone?: React.ReactNode; children: React.
   <h3 className="mb-2.5 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">{icone}{children}</h3>
 );
 
+/** As fases de chefe vêm da API, só para quem comanda: o catálogo do navegador chega sem elas,
+ * porque guardam o segredo de cada criatura única. */
+const useFasesDoChefe = (campanhaId: string | undefined, monstroId: string | null | undefined, ativo: boolean) => {
+  const [fases, setFases] = React.useState<FaseDeChefe[]>([]);
+  React.useEffect(() => {
+    setFases([]);
+    if (!ativo || !campanhaId || !monstroId) return undefined;
+    let cancelado = false;
+    registrosUniversaisApi.fases(campanhaId, monstroId)
+      .then((resposta) => { if (!cancelado) setFases(Array.isArray(resposta.fases) ? resposta.fases : []); })
+      .catch(() => undefined);
+    return () => { cancelado = true; };
+  }, [campanhaId, monstroId, ativo]);
+  return fases;
+};
+
 /** A ficha de uma criatura de fábrica do Bestiário: peso, números, habilidades separadas, sinais e loot. */
 export const FichaCriatura = ({ registro, gestor, campanhaId, acoes, rotuloDaSecao }: IFichaProps) => {
   const criatura = registro.criatura;
+  const fases = useFasesDoChefe(campanhaId, registro.origemId, gestor && !!criatura?.unico);
   if (!criatura) return null;
   const degrau = degrauDoVd(criatura.vd);
   const habilidades = agruparHabilidades(criatura.habilidades);
@@ -235,15 +255,15 @@ export const FichaCriatura = ({ registro, gestor, campanhaId, acoes, rotuloDaSec
           </section>
         ) : null}
 
-        {gestor && criatura.fases.length > 0 ? (
+        {gestor && fases.length > 0 ? (
           <section>
             <Titulo icone={<Flame size={13} />}>Fases do chefe (só o Mestre vê)</Titulo>
             <ol className="space-y-2.5">
-              {criatura.fases.map((fase, indice) => (
+              {fases.map((fase, indice) => (
                 <li key={fase.nome} className="rounded-xl border border-red-400/20 bg-red-400/[0.045] px-4 py-3.5 text-sm leading-6 text-gray-300">
                   <strong className="block text-base text-white">
                     Fase {indice + 2}: {fase.nome}
-                    {fase.quando != null ? <span className="ml-2 text-[11px] font-semibold text-red-300">a partir de {Math.round(fase.quando * 100)}% da Vida</span> : <span className="ml-2 text-[11px] font-semibold text-gray-500">só pelo Mestre</span>}
+                    <span className={`ml-2 text-[11px] font-semibold ${fase.quando != null || fase.rodada != null ? 'text-red-300' : 'text-gray-500'}`}>{gatilhoDaFase(fase)}</span>
                   </strong>
                   {fase.anuncio ? <span className="mt-1 block italic text-gray-200">{fase.anuncio}</span> : null}
                   {fase.mudancas.length ? <ul className="mt-2 list-disc space-y-1 pl-5 text-gray-400">{fase.mudancas.map((mudanca) => <li key={mudanca}>{mudanca}</li>)}</ul> : null}

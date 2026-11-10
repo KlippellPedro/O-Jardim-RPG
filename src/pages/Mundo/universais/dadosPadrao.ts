@@ -76,12 +76,8 @@ const criaturaDe = (c: Conteudo): ICriatura => ({
   )).filter((ataque) => ataque.nome),
   pericias: ((c.pericias ?? []) as unknown[]).map(linhaDe).filter(Boolean),
   habilidades: ((c.habilidades ?? []) as unknown[]).map(linhaDe).filter(Boolean),
-  fases: ((c.fases ?? []) as Conteudo[]).map((fase) => ({
-    quando: numero(fase.quando),
-    nome: texto(fase.nome),
-    anuncio: texto(fase.anuncio),
-    mudancas: ((fase.mudancas ?? []) as unknown[]).map(texto).filter(Boolean),
-  })),
+  // Sem `fases`: o catálogo do navegador chega sem elas (segredo do chefe), e a ficha
+  // busca na rota de fases dos Registros Universais, só para quem comanda.
   raridade: texto(c.raridade),
   categoria: texto(c.categoria),
   familia: TITULO_DA_FAMILIA[texto(c.familia)] ?? '',

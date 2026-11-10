@@ -10,12 +10,13 @@ import psycopg
 from fastapi import HTTPException
 from psycopg import sql
 from psycopg.conninfo import make_conninfo
+from psycopg.types.json import Jsonb
 
 from core import registros_universais as regras
 from core.database import Database
 from core.dependencies import AuthenticatedUser
 from core.registros_universais import ErroRegistro
-from routers.registros_universais import RegistroInput, apagar, editar, obter, salvar
+from routers.registros_universais import RegistroInput, apagar, editar, fases_da_criatura, obter, salvar
 
 
 class RegrasTests(unittest.TestCase):
@@ -100,6 +101,21 @@ class BancoTests(unittest.TestCase):
 
     def _salvar(self, usuario, **dados):
         return salvar(self.campanha_id, RegistroInput(**dados), user=usuario, database=self.database)
+
+    def test_fases_de_chefe_so_chegam_a_quem_comanda(self):
+        with self.database.connection() as connection:
+            connection.execute(
+                "INSERT INTO catalogo_itens (id, tipo, titulo, conteudo) VALUES ('chefe-ru', 'monstro', 'Chefe', %s)",
+                (Jsonb({"vd": 3, "unico": True, "fases": [
+                    {"quando": 0.5, "rodada": 6, "nome": "Metade", "anuncio": "A cena muda.", "mudancas": ["O segredo dela."]},
+                ]}),),
+            )
+        visto = fases_da_criatura(self.campanha_id, "chefe-ru", user=self.mestre, database=self.database)
+        self.assertEqual([(f["nome"], f["quando"], f["rodada"]) for f in visto["fases"]], [("Metade", 0.5, 6)])
+        self.assertEqual(fases_da_criatura(self.campanha_id, "sem-fases", user=self.mestre, database=self.database), {"fases": []})
+        with self.assertRaises(HTTPException) as erro:
+            fases_da_criatura(self.campanha_id, "chefe-ru", user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 404)
 
     def test_jogador_le_o_recorte_mas_nao_escreve(self):
         self._salvar(self.mestre, secao="rumores", revelacao="aberto", dados={"titulo": "A ponte caiu", "descricao": "Dizem que sim."})
