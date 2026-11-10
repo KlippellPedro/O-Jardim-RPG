@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  ArrowLeft, Copy, CopyPlus, Cpu, Download, Eraser, FileLock2, ImagePlus, Loader2, Plus, Printer, Save, Trash2, X,
+  ArrowLeft, Copy, CopyPlus, Cpu, Download, Eraser, FileLock2, Loader2, Plus, Printer, Save, Trash2,
 } from 'lucide-react';
 import { PainelCartao } from '../../../components/painel/PainelShell';
 import { avisar, avisarErro } from '../../../components/avisos/avisos';
@@ -8,12 +8,11 @@ import { confirmar } from '../../../components/avisos/confirmacao';
 import { documentosApi, type IDocumentoUniversal, type IResumoDocumento } from '../../../services/documentosApi';
 import {
   camposParaSalvar, limparTextos, tituloSugerido, valoresComPadrao,
-  type ICampoDoModelo, type IModeloDeDocumento, type ValoresDoDocumento,
+  type IModeloDeDocumento, type ValoresDoDocumento,
 } from './modelo';
 import { MODELOS, ORDEM_DAS_CATEGORIAS, modeloPorId } from './modelos';
-import { reduzirImagem } from './render';
 import { DocumentosUniversais } from './DocumentosUniversais';
-import { BOTAO, ICONES, Miniatura, Previa, exportarDocumento, type Exportacao } from './telasDoDocumento';
+import { BOTAO, CampoDoDocumento, ICONES, Miniatura, Previa, exportarDocumento, type Exportacao } from './telasDoDocumento';
 
 /** A segunda versão de um modelo (tablet, crachá ou cartão da AstraTech), quando ele tem. */
 function versaoDeTecnologia(modelo: IModeloDeDocumento): { valor: string; rotulo: string } | null {
@@ -37,96 +36,8 @@ const retrato = (aberto: IDocumentoAberto) => JSON.stringify({ titulo: aberto.ti
 
 const dataCurta = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '');
 
-const ENTRADA = 'w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white outline-none focus:border-primary/50';
 
 // ---------------------------------------------------------------- campos
-
-function CampoDeImagem({ campo, valor, aoMudar }: { campo: ICampoDoModelo; valor: string; aoMudar: (valor: string) => void }) {
-  const arquivo = useRef<HTMLInputElement>(null);
-  const [preparando, setPreparando] = useState(false);
-  const escolher = async (evento: ChangeEvent<HTMLInputElement>) => {
-    const escolhido = evento.target.files?.[0];
-    evento.target.value = '';
-    if (!escolhido) return;
-    setPreparando(true);
-    try {
-      aoMudar(await reduzirImagem(escolhido));
-    } catch (erro) {
-      avisarErro(erro, 'Não foi possível usar essa imagem.');
-    } finally {
-      setPreparando(false);
-    }
-  };
-  return (
-    <div className="flex items-center gap-3">
-      <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/40">
-        {valor ? <img src={valor} alt="" className="h-full w-full object-cover" /> : <ImagePlus size={20} className="text-gray-600" aria-hidden="true" />}
-      </div>
-      <div className="flex flex-wrap gap-2">
-        <input ref={arquivo} type="file" accept="image/png,image/jpeg,image/webp" className="sr-only" aria-label={`Escolher imagem: ${campo.rotulo}`} onChange={(evento) => void escolher(evento)} />
-        <button type="button" className={BOTAO} disabled={preparando} onClick={() => arquivo.current?.click()}>
-          {preparando ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
-          {valor ? 'Trocar imagem' : 'Escolher imagem'}
-        </button>
-        {valor ? (
-          <button type="button" className={BOTAO} onClick={() => aoMudar('')}>
-            <X size={14} /> Tirar
-          </button>
-        ) : null}
-      </div>
-    </div>
-  );
-}
-
-function CampoDoDocumento({ campo, valor, aoMudar }: { campo: ICampoDoModelo; valor: string; aoMudar: (valor: string) => void }) {
-  const id = `documento-campo-${campo.id}`;
-  return (
-    <div className="space-y-1.5">
-      <div className="flex items-baseline justify-between gap-3">
-        {campo.tipo === 'escolha' || campo.tipo === 'imagem'
-          ? <span id={id} className="text-xs font-bold uppercase tracking-widest text-gray-400">{campo.rotulo}</span>
-          : <label htmlFor={id} className="text-xs font-bold uppercase tracking-widest text-gray-400">{campo.rotulo}</label>}
-        {campo.tipo === 'paragrafo' && campo.maximo ? (
-          <span className={`text-[11px] tabular-nums ${valor.length > campo.maximo * 0.9 ? 'text-amber-400' : 'text-gray-600'}`}>{valor.length}/{campo.maximo}</span>
-        ) : null}
-      </div>
-      {campo.tipo === 'texto' && (
-        <input id={id} type="text" value={valor} maxLength={campo.maximo} onChange={(evento) => aoMudar(evento.target.value)} className={ENTRADA} />
-      )}
-      {campo.tipo === 'paragrafo' && (
-        <textarea
-          id={id}
-          value={valor}
-          maxLength={campo.maximo}
-          rows={campo.linhas ?? 4}
-          onChange={(evento) => aoMudar(evento.target.value)}
-          className={`${ENTRADA} resize-y leading-6`}
-        />
-      )}
-      {campo.tipo === 'escolha' && (
-        <div role="radiogroup" aria-labelledby={id} className="flex flex-wrap gap-1.5">
-          {(campo.opcoes ?? []).map((opcao) => {
-            const ativa = opcao.valor === valor;
-            return (
-              <button
-                key={opcao.valor}
-                type="button"
-                role="radio"
-                aria-checked={ativa}
-                onClick={() => aoMudar(opcao.valor)}
-                className={`rounded-lg border px-3 py-1.5 text-xs font-bold transition ${ativa ? 'border-primary bg-primary/15 text-primary' : 'border-white/10 bg-black/30 text-gray-400 hover:text-gray-200'}`}
-              >
-                {opcao.rotulo}
-              </button>
-            );
-          })}
-        </div>
-      )}
-      {campo.tipo === 'imagem' && <CampoDeImagem campo={campo} valor={valor} aoMudar={aoMudar} />}
-      {campo.dica ? <p className="text-xs text-gray-500">{campo.dica}</p> : null}
-    </div>
-  );
-}
 
 // ---------------------------------------------------------------- painel
 
@@ -426,7 +337,7 @@ export function DocumentosPainel({ campanhaId }: { campanhaId: string }) {
         <p className="mt-2 text-sm leading-6 text-gray-400">
           {aba === 'oficina'
             ? 'Escolha um modelo, troque os textos e a imagem, e o papel fica pronto para a mesa: baixe a imagem, copie para colar no Discord ou imprima. Os documentos ficam guardados nesta campanha e só quem comanda a mesa vê esta aba.'
-            : 'Documentos prontos que ajudam a explicar o Jardim: Fluxos, Deidades, Árvores, acontecimentos e povos. Baixe, copie ou imprima e mande aos jogadores. Cada um traz uma nota sobre o que revela e quando entregar.'}
+            : 'Documentos prontos que ajudam a explicar o Jardim (Fluxos, Deidades, Árvores, acontecimentos e povos) e papéis de missões secundárias. Baixe, copie ou imprima e mande aos jogadores. Cada um traz uma nota sobre o que revela e quando entregar.'}
         </p>
       </header>
 

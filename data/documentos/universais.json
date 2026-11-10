@@ -4,9 +4,52 @@
   "_LEIA_ISSO_PRIMEIRO": {
     "o_que_e": "Documentos prontos para ajudar a explicar a lore e os conceitos do Jardim (Fluxos, Deidades, Árvores, acontecimentos, povos). Aparecem na aba Documentos universais, dentro de Documentos do Painel do Mestre, ao lado da Oficina. O Mestre baixa, copia ou imprime e manda aos jogadores por fora do site.",
     "sigilo": "Arquivo só do servidor: o navegador não importa (tools/browser-content-boundary.ts) e a rota GET /documentos/{campanha}/universais só responde a quem comanda a mesa. Alguns documentos trazem pistas de segredos (Keryx, A.X.I.S).",
-    "formato_de_cada_documento": "id (único, não muda depois de publicado), tema, titulo, ensina e entregar (notas para o Mestre), fontes (de onde vem na lore), inventado (o que foi criado para o documento), modelo (id de um modelo de src/pages/Mestre/documentos/modelos) e campos (os valores dos campos daquele modelo, só texto).",
-    "como_acrescentar": "Mostre a prévia ao Pedro antes de pôr aqui. Texto sem travessão, sem 'eco' e sem a antítese 'não é X, é Y' (tests/frontend/tomSemAntitese.test.ts). O teste tests/frontend/documentosUniversais.test.ts confere modelo, campos, opções e tamanho máximo de cada campo."
+    "formato_de_cada_documento": "id (único, não muda depois de publicado), tema, titulo, ensina e entregar (notas para o Mestre), fontes (de onde vem na lore), inventado (o que foi criado para o documento), modelo (id de um modelo de src/pages/Mestre/documentos/modelos) e campos (os valores dos campos daquele modelo, só texto). Opcionais: missao e papel_na_missao.",
+    "como_acrescentar": "Mostre a prévia ao Pedro antes de pôr aqui. Texto sem travessão, sem 'eco' e sem a antítese 'não é X, é Y' (tests/frontend/tomSemAntitese.test.ts). O teste tests/frontend/documentosUniversais.test.ts confere modelo, campos, opções e tamanho máximo de cada campo.",
+    "missoes": "Kits de missão secundária: cada missão (lista 'missoes') traz o resumo só do Mestre, as perguntas, o relógio, onde estão as pistas e o desfecho, no formato de caso curto da regra de Investigação. Os papéis da missão são documentos com tema 'Missões', o campo 'missao' com o id dela e 'papel_na_missao' (gancho ou pista).",
+    "edicao_pelo_site": "O site não escreve neste arquivo. O que o Criador edita na aba (título, notas e campos) fica na tabela documentos_universais_editados e vale para todas as campanhas; 'Voltar ao original' apaga a edição. Mudar um texto aqui não alcança documento que já foi editado pelo site."
   },
+  "missoes": [
+    {
+      "id": "a-linha-no-pasto",
+      "titulo": "A Linha no Pasto",
+      "tamanho": "Caso curto: 2 perguntas, relógio de 4 partes",
+      "resumo": "Três semanas atrás, um Erro abriu no pasto de baixo da fazenda de Bento Arruda, em Vau Fundo, nas lavouras de Lionês. Do outro lado da linha fica uma faixa de Întuneric. A Vigília das Raízes marcou a linha com estacas brancas e seguiu viagem. Quem veio depois foi A Ordem: achou ali uma passagem que a Caravana não cobra, pagou Bento adiantado para manter o pasto vazio e passa barris de sangue da Transilvânia de madrugada, para o Mercado Negro. Joca Prado, peão da fazenda, viu a carroça e foi pego. Está amarrado no galpão de feno da fazenda vizinha, abandonada, esperando a última viagem.",
+      "perguntas": [
+        "Onde está Joca?",
+        "Quem usa a linha, e o que passa por ela?"
+      ],
+      "relogio": "Pinte uma parte a cada madrugada que passa sem o grupo vigiar o pasto. Ao fechar, a última carroça atravessa para Întuneric e leva Joca junto, como manda a resposta da caixa.",
+      "pistas": [
+        "Onde está Joca: o bilhete dele, debaixo do colchão no alojamento dos peões (Investigação); o rastro de botas arrastadas do pasto até a fazenda vizinha (Sobrevivência); o cachorro de Joca, que late para o galpão de feno e não sai de lá (Percepção).",
+        "Quem usa a linha: o comprovante do Banco Lunar na gaveta de Bento, com os bezerros todos no curral (Investigação); o pedido na caixa de coleta, no terceiro mourão da cerca do vau (Investigação); marcas de barril e cheiro de ferro na lama do lado de cá da linha (Percepção ou Cura)."
+      ],
+      "desfecho": "Bento confessa sob pressão (Conflito Social). A Ordem não manda gente para brigar por uma entrega: quem estiver no pasto de madrugada encontra dois carroceiros e o que vier farejando o sangue do outro lado. A Vigília paga o contrato e agradece o aviso sobre a linha. A Ordem fica sabendo quem estragou a entrega.",
+      "tom": "Mexe com Întuneric e com sangue. Se a mesa preferir algo mais leve, troque os barris por mercadoria sem selo e mantenha o resto."
+    },
+    {
+      "id": "aid-mob",
+      "titulo": "Aid Mob",
+      "tamanho": "Caso curto: 2 perguntas, relógio de 4 partes",
+      "resumo": "Lívia Sá é costureira na Dimensão Padrão e nunca soube que tem uma clone. Um Projeto fez uma Réplica Perfeita dela, com a mesma digital e a mesma retina, para abrir o cofre que a avó deixou para Lívia no Banco Lunar. A réplica, que passou a se chamar Aivíl, lembra da infância de Lívia e não quis roubar. Foi ao Banco, errou a assinatura de propósito, fugiu e escreveu para a Original em Ao Contrário, a língua dos clones, para avisar. Lívia recebeu a carta, não entendeu nada e procura o grupo com ela e com o aviso do Banco na mão.",
+      "perguntas": [
+        "Quem escreveu a carta?",
+        "O que querem de Lívia?"
+      ],
+      "relogio": "Pinte uma parte por dia. Ao fechar, o Projeto acha Aivíl antes do grupo, e no dia seguinte alguém com o rosto de Lívia volta ao Banco, desta vez com a assinatura treinada.",
+      "pistas": [
+        "Quem escreveu: a própria carta, em Ao Contrário (lida de trás para frente, ou pela Casa das Línguas, que cobra por palavra); as lembranças da carta que só a família conhece, o poço e o cachorro Tição (Lívia confirma); a vizinha que jura ter visto Lívia no mercado na hora em que ela costurava em casa (Intuição ou Diplomacia).",
+        "O que querem: o registro de acesso ao cofre, com retina e digital conferindo (o Banco entregou a cópia a Lívia); o crachá da Instalação Quatro, caído no beco atrás do Banco (Percepção); o testamento da avó, que deixa o cofre fechado para Lívia e para mais ninguém (Nobreza ou Investigação)."
+      ],
+      "desfecho": "Aivíl está escondida perto do Salão das Treze Portas, onde alguém fala a língua dela. Se o grupo chega antes do relógio, ela conta o que sabe da Instalação Quatro e pede uma coisa só: não voltar para lá. O que Lívia faz com a irmã que nunca teve fica com a mesa.",
+      "texto_da_carta_em_universal": [
+        "Eu lembro do poço da casa da sua avó e do cachorro que se chamava Tição. Eu nunca estive lá.",
+        "Me fizeram com a sua digital e a sua retina para abrir o cofre que ela te deixou no Banco Lunar. Errei a assinatura de propósito.",
+        "Não vá ao Banco até eu te achar. Eles vão mandar outra."
+      ],
+      "tom": "Leve. O peso fica na conversa entre as duas, se o grupo juntar Lívia e Aivíl."
+    }
+  ],
   "documentos": [
     {
       "id": "licao-o-que-tem-dentro-do-jardim",
@@ -495,6 +538,205 @@
         "selo": "Dez Cadeiras",
         "tinta": "roxo",
         "papel": "escuro"
+      }
+    },
+    {
+      "id": "missao-pasto-contrato-da-vigilia",
+      "missao": "a-linha-no-pasto",
+      "papel_na_missao": "Gancho",
+      "tema": "Missões",
+      "titulo": "A Linha no Pasto: contrato da Vigília",
+      "ensina": "Abre a missão: quem sumiu, onde fica a linha e o que a Vigília paga.",
+      "entregar": "Quando o grupo passar por Vau Fundo ou por uma casa da Vigília. Combina com o edital Linhas no chão.",
+      "fontes": [
+        "faccao: vigilia-das-raizes",
+        "dimensao:os-vaos (Os Erros)"
+      ],
+      "inventado": [
+        "Vau Fundo, Celina e Joca Prado, Bento Arruda.",
+        "O valor de 40 Lunaris por cabeça (a aventura do Moinho, de nível 5, paga 30)."
+      ],
+      "modelo": "contrato",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Vigília das Raízes",
+        "subtitulo": "Casa de Vau Fundo",
+        "numero": "Contrato 0451",
+        "servico": "Achar Joca Prado, peão de 19 anos, sumido perto do Erro do pasto de baixo",
+        "contratante": "Celina Prado, mãe do rapaz",
+        "contratado": "Em aberto",
+        "pagamento": "40 Lunaris por cabeça, pagos na volta",
+        "prazo": "Antes da próxima Lua Nova",
+        "clausulas": "Não atravessar a linha. A Vigília não paga resgate do outro lado.\nAvisar esta casa se a linha mudar de lugar ou de tamanho.\nO contrato se cumpre com o rapaz achado, vivo ou não.\nO que tiver vindo do outro lado se entrega à Vigília.",
+        "observacao": "Linha marcada com estacas brancas. O dono do pasto diz que não viu nada.",
+        "estado": "aberto",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "missao-pasto-bilhete-do-joca",
+      "missao": "a-linha-no-pasto",
+      "papel_na_missao": "Pista: onde está Joca",
+      "tema": "Missões",
+      "titulo": "A Linha no Pasto: bilhete do Joca",
+      "ensina": "Que o recado de tirar as vacas não veio da Vigília, que a carroça vem do outro lado da linha e que Joca foi ver sozinho.",
+      "entregar": "Achado debaixo do colchão de Joca, no alojamento dos peões.",
+      "fontes": [
+        "faccao: a-ordem (o capuz e o pagamento adiantado)",
+        "registro: galpoes-do-meio"
+      ],
+      "inventado": [
+        "Tudo, é pista da missão."
+      ],
+      "modelo": "bilhete",
+      "campos": {
+        "texto": "Mãe, o Seu Bento mandou tirar as vacas do pasto de baixo e disse que é ordem da Vigília. Mas quem trouxe o recado foi um homem de capuz, e a Vigília anda de farda.\n\nOntem de madrugada ouvi roda de carroça vindo do lado da linha. De lá pra cá, mãe. Do lado de lá não tem estrada.\n\nHoje eu vou ver com os meus olhos. Não conta pro Seu Bento.",
+        "assinatura": "Joca",
+        "papel": "pautado",
+        "tinta": "azul",
+        "mancha": "nao"
+      }
+    },
+    {
+      "id": "missao-pasto-deposito-do-bento",
+      "missao": "a-linha-no-pasto",
+      "papel_na_missao": "Pista: quem usa a linha",
+      "tema": "Missões",
+      "titulo": "A Linha no Pasto: depósito de Bento no Banco Lunar",
+      "ensina": "Que Bento recebeu 400 Lunaris em espécie dizendo que vendeu bezerros. Os bezerros continuam no curral.",
+      "entregar": "Na gaveta da escrivaninha de Bento.",
+      "fontes": [
+        "registro: banco-lunar"
+      ],
+      "inventado": [
+        "Tudo, é pista da missão."
+      ],
+      "modelo": "comprovante",
+      "campos": {
+        "emissor": "Banco Lunar",
+        "unidade": "Agência de Lionês",
+        "tipo": "Comprovante de depósito",
+        "itens": "Depósito em espécie ; 400\nOrigem declarada: venda de bezerros ;",
+        "total": "400 Lunaris",
+        "data": "12 de Anima",
+        "hora": "06:12",
+        "conta": "Conta 04-1187, Bento Arruda",
+        "autenticacao": "BL-LIO-0612",
+        "mensagem": "Guarde este comprovante.",
+        "desbotado": "nova"
+      }
+    },
+    {
+      "id": "missao-pasto-pedido-da-caixa",
+      "missao": "a-linha-no-pasto",
+      "papel_na_missao": "Pista: quem usa a linha e onde está Joca",
+      "tema": "Missões",
+      "titulo": "A Linha no Pasto: o pedido na caixa de coleta",
+      "ensina": "Que A Ordem passa barris da Transilvânia pela linha, quantas madrugadas faltam e onde Joca está preso.",
+      "entregar": "No oco do terceiro mourão da cerca do vau. É a pista mais forte: deixe para quem procurar com cuidado.",
+      "fontes": [
+        "faccao: a-ordem (pedido numa caixa, resposta com preço e prazo)",
+        "reino:transilvania (barris das colônias)"
+      ],
+      "inventado": [
+        "Tudo, é pista da missão."
+      ],
+      "modelo": "bilhete",
+      "campos": {
+        "texto": "PONTO DE COLETA: CERCA DO VAU, TERCEIRO MOURÃO.\n\nPedido: doze barris da Transilvânia, sem selo, pela linha do pasto de baixo. Pagamento adiantado, feito. Prazo: quatro madrugadas.\n\nProblema: um peão viu a carroça.\n\nResposta: segura o rapaz no galpão de feno da fazenda vazia. Leva junto na última madrugada.",
+        "assinatura": "",
+        "papel": "pardo",
+        "tinta": "preta",
+        "mancha": "sim"
+      }
+    },
+    {
+      "id": "missao-aid-mob-carta",
+      "missao": "aid-mob",
+      "papel_na_missao": "Gancho e pista: quem escreveu",
+      "tema": "Missões",
+      "titulo": "Aid Mob: a carta em Ao Contrário",
+      "ensina": "É o enigma da missão: a escrita do Universal espelhada, como os clones escrevem. Cada linha se lê da direita para a esquerda, de cima para baixo (ou na frente de um espelho). O texto lido está nas notas da missão.",
+      "entregar": "Lívia traz a carta quando procura o grupo.",
+      "fontes": [
+        "idioma: Ao Contrário (“Aid mob”, escrita espelhada)",
+        "raca: clone, variante Réplica Perfeita"
+      ],
+      "inventado": [
+        "Lívia Sá, Aivíl, o poço e o cachorro Tição."
+      ],
+      "modelo": "carta",
+      "campos": {
+        "suporte": "papel",
+        "localData": "",
+        "saudacao": ",aivíL",
+        "corpo": "aus ad asac ad oçop od orbmel uE\navamahc es euq orrohcac od e óva\n.ál evitse acnun uE .oãçiT\n\na e latigid aus a moc marezif eM\neuq erfoc o rirba arap aniter aus\n.ranuL ocnaB on uoxied et ale\n.otisóporp ed arutanissa a ierrE\n\n.rahca et ue éta ocnaB oa áv oãN\n.artuo radnam oãv selE",
+        "despedida": "Aid mob,",
+        "assinatura": "Aivíl",
+        "posEscrito": "",
+        "letra": "mao",
+        "lacre": "nenhum",
+        "inicial": "",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "missao-aid-mob-acesso-ao-cofre",
+      "missao": "aid-mob",
+      "papel_na_missao": "Pista: o que querem de Lívia",
+      "tema": "Missões",
+      "titulo": "Aid Mob: registro de acesso ao cofre",
+      "ensina": "Alguém com a retina e a digital de Lívia tentou abrir o cofre dela. Só a assinatura falhou.",
+      "entregar": "Lívia traz junto com a carta: o Banco mandou a cópia para a titular.",
+      "fontes": [
+        "registro: banco-lunar",
+        "raca: clone (mesma digital e retina do Original)"
+      ],
+      "inventado": [
+        "Tudo, é pista da missão."
+      ],
+      "modelo": "comprovante",
+      "campos": {
+        "emissor": "Banco Lunar",
+        "unidade": "Agência da Dimensão Padrão",
+        "tipo": "Registro de acesso a cofre",
+        "itens": "Retina ; confere\nDigital ; confere\nAssinatura ; não confere\nTentativas ; 1",
+        "total": "Acesso negado",
+        "data": "9 de Matriz",
+        "hora": "10:41",
+        "conta": "Cofre 07-3381, Lívia Sá",
+        "autenticacao": "BL-PAD-1041",
+        "mensagem": "Cópia enviada à titular, por segurança.",
+        "desbotado": "nova"
+      }
+    },
+    {
+      "id": "missao-aid-mob-cracha",
+      "missao": "aid-mob",
+      "papel_na_missao": "Pista: quem escreveu e o que querem",
+      "tema": "Missões",
+      "titulo": "Aid Mob: crachá da Instalação Quatro",
+      "ensina": "Que existe uma Lívia de série, feita por uma instalação, e que ela não devia sair sozinha.",
+      "entregar": "Caído no beco atrás do Banco Lunar.",
+      "fontes": [
+        "raca: clone, variante Réplica Perfeita"
+      ],
+      "inventado": [
+        "A Instalação Quatro e o número R4-0002."
+      ],
+      "modelo": "credencial",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Instalação Quatro",
+        "tipo": "Crachá de série",
+        "foto": "",
+        "nome": "Lívia Sá, série 2",
+        "funcao": "Réplica Perfeita",
+        "detalhe": "Saída só com escolta",
+        "numero": "R4-0002",
+        "validade": "Até a entrega",
+        "observacao": "Não atende pelo nome. Atende pelo número.",
+        "cor": "grafite"
       }
     }
   ]

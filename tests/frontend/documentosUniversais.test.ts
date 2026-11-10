@@ -8,8 +8,9 @@ import { agruparPorTema, problemasDoDocumentoUniversal } from '../../src/pages/M
 // O arquivo é do servidor; o teste lê direto do disco, como o servidor.
 const arquivo = JSON.parse(readFileSync(new URL('../../data/documentos/universais.json', import.meta.url), 'utf8')) as {
   formato: string;
+  missoes: Array<Record<string, string | string[]> & { id: string }>;
   documentos: Array<{
-    id: string; tema: string; titulo: string; ensina: string; entregar: string;
+    id: string; tema: string; titulo: string; ensina: string; entregar: string; missao?: string; papel_na_missao?: string;
     fontes: string[]; inventado: string[]; modelo: string; campos: Record<string, string>;
   }>;
 };
@@ -17,12 +18,26 @@ const documentos = arquivo.documentos;
 
 test('o arquivo tem o formato que o servidor lê e ids únicos', () => {
   assert.equal(arquivo.formato, 'o-jardim-documentos-universais');
-  assert.ok(documentos.length >= 17);
+  assert.ok(documentos.length >= 24);
   const ids = documentos.map((doc) => doc.id);
   assert.equal(new Set(ids).size, ids.length, 'id repetido');
   for (const doc of documentos) {
     assert.match(doc.id, /^[a-z0-9][a-z0-9-]{0,47}$/, doc.id);
     for (const chave of ['tema', 'titulo', 'ensina', 'entregar'] as const) assert.ok(doc[chave].trim(), `${doc.id}: ${chave} vazio`);
+  }
+});
+
+test('cada missão tem resumo completo e papéis, e todo papel aponta para uma missão que existe', () => {
+  const ids = new Set(arquivo.missoes.map((missao) => missao.id));
+  assert.equal(ids.size, arquivo.missoes.length, 'missão repetida');
+  for (const missao of arquivo.missoes) {
+    for (const chave of ['titulo', 'tamanho', 'resumo', 'relogio', 'desfecho', 'tom']) assert.ok(String(missao[chave] ?? '').trim(), `${missao.id}: ${chave} vazio`);
+    assert.equal((missao.perguntas as string[]).length, (missao.pistas as string[]).length, `${missao.id}: uma linha de pistas por pergunta`);
+    assert.ok(documentos.some((doc) => doc.missao === missao.id), `${missao.id}: sem papel`);
+  }
+  for (const doc of documentos.filter((item) => item.missao)) {
+    assert.ok(ids.has(doc.missao as string), `${doc.id}: missão desconhecida`);
+    assert.ok(doc.papel_na_missao?.trim(), `${doc.id}: sem papel_na_missao`);
   }
 });
 
@@ -59,6 +74,12 @@ const ANTITESE = /(?<!\p{L})não é [^.;:!?]{1,80}?[,:;] (?:e sim |mas )?(?:ele 
 
 test('o texto que vai para o jogador segue o tom do Jardim', () => {
   const fora: string[] = [];
+  const textosDasMissoes = arquivo.missoes.flatMap((missao) => Object.entries(missao).flatMap(([chave, valor]) => (Array.isArray(valor) ? valor : [valor]).map((texto) => [`${missao.id}.${chave}`, texto] as const)));
+  for (const [rota, valor] of textosDasMissoes) {
+    for (const [nome, padrao] of [['travessão', TRAVESSAO], ['"eco"', ECO], ['antítese', ANTITESE]] as const) {
+      if (padrao.test(valor)) fora.push(`${rota} ${nome}`);
+    }
+  }
   for (const doc of documentos) {
     for (const [campo, valor] of Object.entries(doc.campos)) {
       for (const [nome, padrao] of [['travessão', TRAVESSAO], ['"eco"', ECO], ['antítese', ANTITESE]] as const) {

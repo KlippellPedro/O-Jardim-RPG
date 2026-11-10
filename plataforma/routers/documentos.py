@@ -83,16 +83,98 @@ def listar(
     return {"documentos": [_resumo(linha) for linha in linhas]}
 
 
+class EdicaoUniversalInput(BaseModel):
+    titulo: str = Field(max_length=400)
+    ensina: str = Field(default="", max_length=4000)
+    entregar: str = Field(default="", max_length=4000)
+    campos: dict = Field(default_factory=dict)
+
+
+def _edicoes(connection) -> dict[str, dict]:
+    linhas = connection.execute(
+        "SELECT documento_id, titulo, ensina, entregar, campos, atualizado_em FROM documentos_universais_editados"
+    ).fetchall()
+    return {linha["documento_id"]: {**linha, "campos": linha["campos"] or {}} for linha in linhas}
+
+
+def _exigir_criador(user: AuthenticatedUser) -> None:
+    # Documento universal vale para todas as campanhas, como a lore: só o Criador muda.
+    if not user.is_creator:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="somente o criador edita documentos universais")
+
+
+def _documento_universal(documento_id: str) -> dict:
+    oficial = universais.documento_oficial(documento_id)
+    if not oficial:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="documento universal nao encontrado")
+    return oficial
+
+
+def _um_universal(connection, documento_id: str) -> dict:
+    return next(doc for doc in universais.listar(_edicoes(connection))["documentos"] if doc["id"] == documento_id)
+
+
 @router.get("/{campanha_id}/universais")
 def listar_universais(
     campanha_id: UUID,
     user: AuthenticatedUser = Depends(get_current_user),
     database: Database = Depends(get_database),
 ):
-    """Os documentos prontos da lore (core/documentos_universais.py). Declarada antes da rota do id."""
+    """Os documentos prontos da lore e das missões (core/documentos_universais.py). Declarada antes da rota do id."""
     with database.connection() as connection:
         require_campaign_manager(connection, campanha_id, user.id)
-    return {"documentos": universais.listar()}
+        resultado = universais.listar(_edicoes(connection))
+    return {**resultado, "pode_editar": user.is_creator}
+
+
+@router.put("/universais/{documento_id}")
+def editar_universal(
+    documento_id: str,
+    payload: EdicaoUniversalInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Grava a versão do Criador por cima do arquivo, para todas as campanhas. O modelo continua o do arquivo."""
+    _exigir_criador(user)
+    _documento_universal(documento_id)
+    try:
+        edicao = universais.normalizar_edicao(payload.titulo, payload.ensina, payload.entregar, payload.campos)
+    except ErroDocumento as erro:
+        raise _erro(erro) from erro
+    with database.connection() as connection:
+        connection.execute(
+            """
+            INSERT INTO documentos_universais_editados (documento_id, titulo, ensina, entregar, campos, editado_por)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON CONFLICT (documento_id) DO UPDATE SET
+                titulo=EXCLUDED.titulo, ensina=EXCLUDED.ensina, entregar=EXCLUDED.entregar,
+                campos=EXCLUDED.campos, editado_por=EXCLUDED.editado_por, atualizado_em=CURRENT_TIMESTAMP
+            """,
+            (documento_id, edicao["titulo"], edicao["ensina"], edicao["entregar"], Jsonb(edicao["campos"]), user.id),
+        )
+        record_audit(
+            connection, action="documento_universal.editado", actor_user_id=user.id, campaign_id=None,
+            target_type="documento_universal", target_id=documento_id, details={"titulo": edicao["titulo"]},
+        )
+        return _um_universal(connection, documento_id)
+
+
+@router.delete("/universais/{documento_id}")
+def restaurar_universal(
+    documento_id: str,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Apaga a edição do Criador: o documento volta ao texto do arquivo."""
+    _exigir_criador(user)
+    _documento_universal(documento_id)
+    with database.connection() as connection:
+        connection.execute("DELETE FROM documentos_universais_editados WHERE documento_id=%s", (documento_id,))
+        record_audit(
+            connection, action="documento_universal.restaurado", actor_user_id=user.id, campaign_id=None,
+            target_type="documento_universal", target_id=documento_id, details={},
+        )
+        return _um_universal(connection, documento_id)
 
 
 @router.get("/{campanha_id}/{documento_id}")

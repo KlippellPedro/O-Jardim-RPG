@@ -2444,4 +2444,24 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        73,
+        "documentos_universais_editados",
+        (
+            # Documentos universais (core/documentos_universais.py): a base é data/documentos/universais.json,
+            # que o site não altera. O que o Criador muda pelo site fica aqui, uma linha por documento, e
+            # vale para todas as campanhas. Apagar a linha devolve o original. O modelo vem sempre do arquivo.
+            """
+            CREATE TABLE IF NOT EXISTS documentos_universais_editados (
+                documento_id TEXT PRIMARY KEY CHECK (documento_id ~ '^[a-z0-9][a-z0-9-]{0,47}$'),
+                titulo TEXT NOT NULL CHECK (length(titulo) BETWEEN 1 AND 120),
+                ensina TEXT NOT NULL DEFAULT '',
+                entregar TEXT NOT NULL DEFAULT '',
+                campos JSONB NOT NULL DEFAULT '{}'::jsonb,
+                editado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+        ),
+    ),
 )

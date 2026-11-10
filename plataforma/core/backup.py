@@ -74,6 +74,7 @@ TABELAS: tuple[str, ...] = (
     "campanha_calendario",
     "campanha_registros_universais",
     "campanha_documentos",
+    "documentos_universais_editados",
     "personagem_conquistas",
     "personagem_nivel_anunciado",
     "cronica_campanha",
