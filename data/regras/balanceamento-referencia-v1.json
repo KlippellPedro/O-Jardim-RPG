@@ -4391,21 +4391,21 @@
     "faixas": [
       {
         "faixa": "1 a 10",
-        "monstros": 63,
+        "monstros": 65,
         "vidaMediana": 135,
         "vidaDeInimigoPadraoNoNivel": 330,
         "vidaSoloDaCurva": 265
       },
       {
         "faixa": "11 a 20",
-        "monstros": 68,
-        "vidaMediana": 333,
+        "monstros": 69,
+        "vidaMediana": 335,
         "vidaDeInimigoPadraoNoNivel": 510,
         "vidaSoloDaCurva": 410
       },
       {
         "faixa": "21 a 30",
-        "monstros": 57,
+        "monstros": 58,
         "vidaMediana": 670,
         "vidaDeInimigoPadraoNoNivel": 1010,
         "vidaSoloDaCurva": 810

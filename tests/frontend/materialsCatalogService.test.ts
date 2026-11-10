@@ -13,8 +13,9 @@ import { itemCorrespondeBusca, itemCorrespondeSubfiltro, mapearItemLoja } from '
 test('compêndio publica todos os materiais e receitas sem chaves duplicadas', () => {
   // 259 materiais de ofício e 208 partes de criatura (loot-*, ver data/bestiario/loot-criaturas.json).
   // +1 em 2026-10-20: Lembrança do Morto, ingrediente do Último Adeus.
-  assert.equal(MATERIAIS_CATALOGO.length, 504);
-  assert.equal(new Set(MATERIAIS_CATALOGO.map((item) => item.id)).size, 504);
+  // +4 em 2026-11-10: partes de saque dos quatro chefes únicos de VD baixo.
+  assert.equal(MATERIAIS_CATALOGO.length, 508);
+  assert.equal(new Set(MATERIAIS_CATALOGO.map((item) => item.id)).size, 508);
   // +1 em 2026-10-20: o Rito do Nada virou receita (pede o Vestígio Material).
   assert.equal(RECEITAS_CATALOGO.length, 92);
   assert.equal(new Set(RECEITAS_CATALOGO.map((item) => item.chave)).size, 92);
@@ -49,7 +50,8 @@ test('Engenheiro possui Sucata própria nos cinco patamares', () => {
 
 test('Ritualista possui focos mágicos próprios nos cinco patamares', () => {
   const ritualisticos = MATERIAIS_CATALOGO.filter((item) => item.usos.includes('ritual'));
-  assert.equal(ritualisticos.length, 145);
+  // +4 em 2026-11-10: as partes de saque dos chefes únicos de VD baixo servem a ritual.
+  assert.equal(ritualisticos.length, 149);
   for (const raridade of ['comum', 'incomum', 'raro', 'epico', 'lendario']) {
     assert.ok(ritualisticos.filter((item) => item.raridade === raridade).length >= 6, raridade);
   }

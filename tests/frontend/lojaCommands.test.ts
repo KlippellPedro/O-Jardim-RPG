@@ -416,7 +416,8 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
   const geradas = entradas.filter((item) => item.conteudo?.geradoPorFamilia).length;
   // +1 em 2026-10-20: Lembrança do Morto (ingrediente do Último Adeus). +1 em 2026-10-27: Baralho de Cartas (foco do Cartista).
   // +1 em 2026-10-28: Colar das Nove Lascas (Relíquia da Criação).
-  assert.equal(entradas.length - geradas, 1281);
+  // +4 em 2026-11-10: as partes de saque dos quatro chefes únicos de VD baixo (Figueira, Valdo, Inquilino e Recolhedora).
+  assert.equal(entradas.length - geradas, 1285);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 

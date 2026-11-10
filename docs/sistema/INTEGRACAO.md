@@ -150,7 +150,7 @@ carteira e o resto da ficha continuam fechados.
 
 ### Fases de chefe
 
-As 22 criaturas únicas do catálogo (`data/loja/catalogo.json`, entradas `tipo: monstro` com
+As 26 criaturas únicas do catálogo (`data/loja/catalogo.json`, entradas `tipo: monstro` com
 `conteudo.unico`) têm `conteudo.fases`: uma lista de `{quando, nome, anuncio, mudancas[]}`. O item
 `i` da lista é a fase `i + 2`; `quando` é a fração da Vida em que ela começa (0,5 é a metade) e os
 limiares descem. `quando: null` marca fase só do Mestre, sem gatilho pela Vida.

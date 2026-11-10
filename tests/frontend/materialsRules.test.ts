@@ -118,9 +118,9 @@ test('afinidade elemental não é inferida por associação temática', () => {
   assert.equal(obterMaterial('comp-amostra-elemental').afinidade, 'Escolha na compra');
 });
 
-test('catálogo expandido entrega ficha completa para os 504 materiais', () => {
-  assert.equal(MATERIAIS_CATALOGO.length, 504);
-  assert.equal(new Set(MATERIAIS_IDS).size, 504);
+test('catálogo expandido entrega ficha completa para os 508 materiais', () => {
+  assert.equal(MATERIAIS_CATALOGO.length, 508);
+  assert.equal(new Set(MATERIAIS_IDS).size, 508);
 
   for (const id of MATERIAIS_IDS) {
     const material = obterMaterial(id);

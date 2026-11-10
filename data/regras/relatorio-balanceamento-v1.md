@@ -78,9 +78,9 @@ Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimi
 
 | Faixa de nível | Monstros | Vida mediana | Vida de inimigo padrão | Vida solo da curva |
 |---|---:|---:|---:|---:|
-| 1 a 10 | 63 | 135 | 330 | 265 |
-| 11 a 20 | 68 | 333 | 510 | 410 |
-| 21 a 30 | 57 | 670 | 1010 | 810 |
+| 1 a 10 | 65 | 135 | 330 | 265 |
+| 11 a 20 | 69 | 335 | 510 | 410 |
+| 21 a 30 | 58 | 670 | 1010 | 810 |
 | 31 a 40 | 38 | 900 | 1320 | 1055 |
 | 41 a 50 | 22 | 1293 | 1320 | 1320 |
 

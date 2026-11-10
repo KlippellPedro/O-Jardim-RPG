@@ -3684,6 +3684,184 @@
           "Fragmentos de Estrela": 2
         },
         "nivelMinimoLoja": 4
+      },
+      {
+        "id": "figueira-da-praca",
+        "titulo": "A Figueira que Saiu da Praça",
+        "vd": 3,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Planta",
+        "deslocamento": "6m",
+        "descricao": "A figueira plantada no dia em que a vila foi fundada, com o nome de cada fundador talhado na casca. Numa noite de inverno alguém raspou os nomes para fazer lenha, e de manhã ela tinha arrancado as raízes do chão e saído andando pela rua principal. Os mais velhos dizem que o primeiro figo que ela deu nunca caiu e continua guardado lá dentro.",
+        "ataques": [
+          {
+            "nome": "Galho Velho",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Chuva de Figos Duros",
+            "tipo": "impacto",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Madeira Seca (vulnerável a Fogo. Cada golpe de Fogo que a acerta também põe fogo na construção mais próxima dela. Apagar um incêndio custa uma Ação Padrão de alguém ao lado, e cada casa que ainda estiver queimando no fim da cena fica perdida para a vila)",
+          "Galhos que Seguram (Reação, 1/rodada: quando uma criatura adjacente se afasta dela, o galho varre o chão; Reflexos DT {dt} ou a criatura fica Caída no lugar de onde saiu)",
+          "Sinais (folhas de figueira em ruas onde não existe figueira, e um sulco de raiz arrastada saindo da praça)",
+          "Como Evitar (ela quer os nomes de volta: talhar de novo na casca os nomes dos fundadores, que o livro da capela ou a pessoa mais velha da vila guarda, faz a figueira parar e voltar sozinha para a praça)"
+        ],
+        "loot": [
+          "Casca dos Fundadores",
+          "Frutas da Estação"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 540
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "valdo-tres-palavras",
+        "titulo": "Valdo Três-Palavras, o Duelista do Cais",
+        "vd": 8,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Humanoide",
+        "deslocamento": "9m",
+        "descricao": "Dono do cais velho e de metade das dívidas da cidade baixa. Luta como quem se apresenta num teatro: anuncia o golpe antes de dar, faz reverência para quem o acerta e não para de sorrir. O apelido vem do jeito de fechar negócio. Ele diz três palavras, \"temos um trato\", e quem ouviu já está devendo.",
+        "ataques": [
+          {
+            "nome": "Florete de Pedágio",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pistola de Cortesia",
+            "tipo": "perfurante",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Teatro do Duelo (Passivo: antes de cada ataque, ele diz em voz alta o risco da Coreografia que vai usar, de Seguro a Perigoso, e recebe o ganho ou o castigo da tabela como qualquer personagem. Uma vez por cena pode anunciar Tudo ou Nada)",
+          "Reverência (Reação, 1/rodada: quando um ataque corpo a corpo o erra, ele agradece com uma mesura e faz um Contra-Ataque sem o redutor de sempre)",
+          "Sinais (cartazes de dívida colados pelo cais com o nome de gente que ninguém viu mais, e estivadores que param de cantar quando alguém pergunta por ele)",
+          "Como Evitar (ele só quer a carga: entregar o que ele veio buscar, ou mostrar um papel assinado que prove que a carga já é dele, encerra a cena sem luta)"
+        ],
+        "loot": [
+          "Recibo em Branco",
+          "Rapieira",
+          "Papel e Tinta Ritualística"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 640
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "inquilino-dos-retratos",
+        "titulo": "O Inquilino dos Retratos",
+        "vd": 15,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Aberração",
+        "deslocamento": "9m",
+        "descricao": "Mora há gerações no quarto do fundo de uma casa rica, sempre com o rosto de alguém dos retratos do corredor. A família jura que ele é um tio distante e não sabe dizer de que lado. Ele assina as cartas com um nome diferente a cada mês, e os retratos mais antigos da casa estão com o rosto raspado.",
+        "ataques": [
+          {
+            "nome": "Mão de Moldura",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Olhar de Retrato",
+            "tipo": "Essência",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Três Retratos (Passivo: três retratos da família ficam pendurados na sala da luta, e cada um empresta um dom a ele. A Avó cura 10 de Vida no começo do turno dele. O Soldado dá a ele uma reação a mais por rodada. A Menina faz uma criatura à escolha dele testar Vontade DT {dt} no começo de cada rodada ou ficar Fascinada por ele até o fim do próprio turno. Cada retrato tem Defesa 14 e 30 de Vida: quebrado, desliga o dom e tira 30 da Vida dele. Virar um retrato para a parede custa uma Ação Padrão de quem está ao lado e desliga o dom até ele gastar uma Ação de Movimento para desvirar)",
+          "Sinais (retratos antigos com o rosto raspado, cartas assinadas com um nome diferente a cada mês, e gente da casa que não lembra o próprio nome do meio)",
+          "Como Evitar (ele só quer continuar morando: oferecer um lugar de onde ninguém vá expulsá-lo, e um retrato novo, só dele, tira o Inquilino da casa sem luta)"
+        ],
+        "loot": [
+          "Retrato sem Rosto",
+          "Espelho Enevoado",
+          "Máscara do Sábio Cego"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "nivelMinimoLoja": 4
+      },
+      {
+        "id": "recolhedora-dos-caidos",
+        "titulo": "A Recolhedora, Dama dos Caídos",
+        "vd": 25,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "12m",
+        "descricao": "Aparece depois das batalhas, quando o campo ainda fumega: uma armadura negra de luto, com um véu por cima do elmo. Anda entre os caídos, toca um ou outro no ombro, e os tocados se levantam e vão atrás dela por um tempo. Os soldados mais velhos não deixam ninguém morrer sozinho perto de um campo de batalha, e é por causa dela.",
+        "ataques": [
+          {
+            "nome": "Lâmina de Luto",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Toque do Véu",
+            "tipo": "Fim",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Guarda de Luto (Passivo: a armadura dela tem uma Guarda de 6 partes, num relógio à vista na mesa. Enche uma parte a cada crítico contra ela, a cada ataque combinado que a acerta e a cada acerto de quem usou Coreografia Ousada ou acima. Cheia, a Guarda quebra: ela fica Exposta, perde a reação, o próximo ataque contra ela tem vantagem, e a Guarda volta a zero)",
+          "Lâmina que Protege (Reação, 1/rodada: quando um ataque a acertaria, ela apara com a lâmina e soma 4 à Defesa contra esse ataque; se ainda assim for acertada, a Guarda enche uma parte)",
+          "Sinais (corvos que não tocam nos caídos, e soldados mortos encontrados de olhos fechados, com as mãos cruzadas no peito)",
+          "Como Evitar (ela só recolhe quem cai sozinho: num campo em que ninguém fica sem alguém ao lado, e onde os mortos são enterrados com o nome dito em voz alta, ela passa sem parar)"
+        ],
+        "loot": [
+          "Alfinete de Luto",
+          "Aço Amaldiçoado",
+          "Colar de Vida Emprestada"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "roedor": [
