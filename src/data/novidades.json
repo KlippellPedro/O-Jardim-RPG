@@ -1,6 +1,59 @@
 {
   "itens": [
     {
+      "id": "2026-11-09-mapa-acervo-na-barra-gaveta-e-atalhos",
+      "data": "2026-11-09",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: Recentes, Favoritas e envio de imagens na barra de baixo, gaveta no celular e atalhos",
+      "detalhes": [
+        "A barra de baixo ganhou Recentes (o que você pôs na cena por último) e Favoritas (marque a estrela em qualquer imagem). As duas listas ficam guardadas no seu aparelho.",
+        "Dá para subir imagens do computador sem sair do mapa: o botão Subir da janela envia para a pasta que está aberta, e arquivos soltos na janela também sobem.",
+        "Arraste uma imagem do computador direto para o mapa: o programa pergunta se é um mapa ou um token, guarda no Acervo e já põe na cena, no lugar onde você soltou.",
+        "No celular, o painel de iniciativa, fichas e rolagens agora é uma gaveta que entra pela direita, com o fundo escurecido, em vez de cobrir metade do mapa. Toque no fundo para fechar.",
+        "A tecla ? abre a folha de atalhos do mapa, que também está no menu Exibição."
+      ]
+    },
+    {
+      "id": "2026-11-09-mapa-barras-coladas-e-menus-claros",
+      "data": "2026-11-09",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: barras coladas no mapa e no token, e menus mais claros",
+      "detalhes": [
+        "A barra do mapa escolhido agora fica colada nele e anda junto quando você arrasta ou dá zoom, como no Owlbear. O menu de três pontos abre sem mexer na barra e tem botões de verdade.",
+        "O token escolhido também ganha uma barra colada: esconder dos jogadores, falar como ele, abrir as opções e tirar do mapa. As opções ficaram em abas (Geral, Barras, Visual e Luz e aura) e só abrem quando você pede.",
+        "A barra da névoa mostra só o que serve: com a névoa desligada aparecem os botões para ligar, e as ferramentas de desenho surgem depois. A explicação longa ficou no botão de ajuda.",
+        "Os painéis da esquerda abrem um por vez e têm a mesma largura. A vista da tela (posição, zoom e sincronizar) ganhou painel próprio, no menu Mais. No topo, Tela cheia e Só o mapa foram para o menu Exibição, e Mostrar documento na mesa foi para o menu Mais."
+      ]
+    },
+    {
+      "id": "2026-11-09-mapa-ferramentas-organizadas",
+      "data": "2026-11-09",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: ferramentas organizadas, cenas no topo e tudo cabendo em tela baixa",
+      "detalhes": [
+        "A barra da esquerda ficou só com o que se usa o tempo todo. Camadas, Grade, Jogadores, Barras, Clima, Tempo, Mesa, Construtor e Oficina estão no botão Mais, num menu com o nome de cada um.",
+        "As cenas passaram para o topo: clique no nome da cena para trocar de cena, criar uma nova, pôr na mesa ou configurar. A faixa de baixo saiu, e o mapa ganhou essa altura.",
+        "O mapa agora cabe em janelas baixas, como a de um notebook: a barra de baixo com as pastas e a barra do mapa escolhido não ficam mais para fora da tela.",
+        "O nome dos tokens cresce quando você afasta o zoom, para dar para ler. O painel da direita ficou mais estreito e deixa mais espaço para o mapa."
+      ]
+    },
+    {
+      "id": "2026-11-09-mapa-girar-e-barra-do-acervo",
+      "data": "2026-11-09",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: girar os mapas e uma barra de baixo com as pastas do Acervo",
+      "detalhes": [
+        "Clicar num mapa da cena já basta para escolher: aparece a barra do mapa e, no próprio mapa, quadradinhos nos cantos para mudar o tamanho e uma bolinha em cima para girar. O botão Mapas da cena (tecla K) saiu, não precisa mais dele.",
+        "Para girar, arraste a bolinha de cima do mapa. Ele cola nos ângulos retos (0, 90, 180 e 270 graus) e, com Shift apertado, gira de 15 em 15 graus. No menu de três pontos da barra dá para digitar os graus, girar 90 graus de uma vez ou desfazer o giro.",
+        "A névoa de guerra segue o mapa girado, e os jogadores veem o mapa virado do mesmo jeito. Um mapa girado não passa da borda de cima nem da esquerda da cena.",
+        "Embaixo do mapa há uma barra com Buscar, Mapas, Tokens, Objetos e as suas pastas do Acervo. Clique num botão para abrir a janela com o que está salvo ali, entre nas subpastas e clique numa imagem para pô-la na cena. Também dá para arrastar a imagem até o lugar certo no mapa."
+      ]
+    },
+    {
       "id": "2026-11-06-mapa-arena-inteira-com-nevoa",
       "data": "2026-11-06",
       "tipo": "melhoria",
@@ -32,7 +85,7 @@
       "titulo": "Mapa: pôr vários mapas na cena, como no Owlbear",
       "detalhes": [
         "No Acervo, o botão Colocar põe um mapa na cena como um objeto. Dá para pôr quantos mapas quiser, lado a lado, para montar o lugar inteiro onde a aventura acontece.",
-        "Com a ferramenta Mapas da cena (tecla K), o Mestre clica num mapa, arrasta para mudar de lugar e puxa um canto para mudar o tamanho. A barra do mapa deixa esconder dos jogadores, trancar no lugar, mudar a ordem, duplicar, renomear e tirar da cena.",
+        "O Mestre clica num mapa, arrasta para mudar de lugar e puxa um canto para mudar o tamanho. A barra do mapa deixa esconder dos jogadores, trancar no lugar, mudar a ordem, duplicar, renomear e tirar da cena.",
         "Um mapa escondido não chega aos jogadores até o Mestre mostrar. Com a névoa de guerra ligada, cada mapa só entrega a parte que foi revelada.",
         "A cena cresce sozinha para caber todos os mapas. Em Largura em casas dá para dizer quantas casas o desenho tem, até a grade dele casar com a da cena."
       ]
@@ -981,51 +1034,6 @@
       "titulo": "Entrar com convite aceita o código como o Mestre mandou",
       "detalhes": [
         "O campo de convite do menu passava as letras para maiúsculas e o convite era recusado. Agora o código vale exatamente como foi enviado, com maiúsculas e minúsculas, e a mensagem de erro ficou mais clara."
-      ]
-    },
-    {
-      "id": "2026-10-12-bestiario-dez-dragoes",
-      "data": "2026-10-12",
-      "tipo": "novo",
-      "area": "Mundo",
-      "titulo": "Bestiário ganhou 10 dragões, do filhote ao Dourado",
-      "detalhes": [
-        "Dez dragões novos, do VD 15 ao 95: Ilyrax, a Cria Teimosa; Gorthys, o Canibal das Cavernas; Sorvys, a Serpe do Sal; Vaelthrax, o Dragão de Sela; Vhorzys, o Dragão Sem Carne; Meraxys, a Dama da Rocha Quente; Tyrvax, o Inverno que Respira; Zaldrax, a Tempestade com Asas; Morvhaeth, o Dragão da Noite Longa e Iryndax, o Dourado.",
-        "Cada um deixa uma parte própria no saque.",
-        "Os dragões falam Valiriano, que entrou no Alfabeto como a décima sexta língua do Jardim."
-      ]
-    },
-    {
-      "id": "2026-10-12-livro-da-verdade-saiu",
-      "data": "2026-10-12",
-      "tipo": "melhoria",
-      "area": "Mundo",
-      "titulo": "O Livro da Verdade saiu do site",
-      "detalhes": [
-        "A página das lendas, os selos Matador de Lendas e Cara a Cara com um Deus e os avisos de queda foram retirados. As lendas continuam no Bestiário como as outras criaturas, sem a frase \"Se X cair\" na ficha, e o que muda no mundo quando uma cai passa a ser decisão do Mestre.",
-        "Os acontecimentos que as quedas tinham deixado no calendário, os ajustes de preço na Loja e os selos já ganhos foram apagados junto."
-      ]
-    },
-    {
-      "id": "2026-10-12-animalia-arma-natural-automatica",
-      "data": "2026-10-12",
-      "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "A arma natural da Animália aparece sozinha em Ataques",
-      "detalhes": [
-        "Quem joga de Fera ou de Híbrido ganha na aba Ataques o cartão da arma natural, com o nome do animal, como Garra de Leão. A Fera começa com dano base 1d8 e o Híbrido com 1d6.",
-        "O cartão soma Força ao dano como qualquer ataque corpo a corpo e rola acerto e dano com a mesma confirmação de sempre. Se você troca de Forma ou de animal, ele muda sozinho.",
-        "Os Traços não têm arma natural, então não ganham o cartão. Fichas antigas de Animália entram como Híbrido."
-      ]
-    },
-    {
-      "id": "2026-10-12-ficha-abre-mais-leve",
-      "data": "2026-10-12",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "A ficha abre mais leve",
-      "detalhes": [
-        "As abas da ficha agora carregam quando você as abre, e logo depois da primeira tela as outras vêm em segundo plano. A página da ficha ficou cerca de dois terços menor, o que ajuda no celular e em conexão lenta."
       ]
     }
   ]
