@@ -4871,7 +4871,7 @@ ${HTML_DEVOCAO}
         <li><strong>Meça o dano do grupo por rodada.</strong> Some o dano real que eles causaram nas últimas três rodadas de combate e divida por três. Anotação de mesa erra bem menos que estimativa feita em casa.</li>
         <li><strong>Feche a Vida do encontro inteiro.</strong> Encontro padrão aguenta o dano do grupo vezes 4,5. Use 3 para confronto curto e 6 para chefe resistente. Divida esse total entre os corpos que vão entrar.</li>
         <li><strong>Ajuste ataque e dano pelo papel</strong>, com a tabela abaixo. O dano vem escrito como fatia da Vida do alvo, porque é assim que ele continua valendo do nível 1 ao 40.</li>
-        <li><strong>Conte as ações.</strong> As ações inimigas por rodada ficam entre 80% e 110% das ações relevantes do grupo. Quatro jogadores pedem de três a quatro ações do outro lado, venham elas de um corpo ou de cinco.</li>
+        <li><strong>Conte as ações.</strong> As ações inimigas por rodada ficam entre 80% e 110% das ações relevantes do grupo. Quatro jogadores pedem de três a quatro ações do outro lado, venham elas de um corpo ou de cinco. O chefe que luta sozinho chega lá com o Ímpeto, em O chefe contra o grupo inteiro.</li>
         <li><strong>Dê a ela uma decisão e um rosto.</strong> Uma reação, uma fase ou uma ação de cenário, e um detalhe físico que a mesa vá lembrar. Criatura que só tem Vida alta produz combate longo e parado, e criatura sem rosto vira um saco de Vida com nome esquisito. As duas tabelas logo abaixo ajudam nas duas coisas.</li>
       </ol>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -4951,6 +4951,170 @@ ${HTML_DEVOCAO}
         <li><strong>Deixe uma fraqueza para o grupo descobrir em cena.</strong> Descobrir é o que transforma o combate em conversa entre jogadores, e é a melhor sensação que um combate pode dar.</li>
         <li><strong>Decida como ela sai da luta sem morrer.</strong> Fugir, se render, ser convencida, conseguir o que queria. Combate que só termina em morte tira da mesa a escolha mais interessante. Quando você não souber a hora, o teste de moral do Combate decide.</li>
         <li><strong>Se faltar tempo,</strong> use a criatura do VD certo direto, da aba Sob medida ou da tabela acima: troque o nome, troque um ataque por algo que combine com a história, role uma decisão e um rosto nas tabelas acima. É uma ameaça pronta em três minutos, e com alma.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">O chefe contra o grupo inteiro</h3>
+      <p>Um chefe sozinho tem um turno por rodada, e o grupo tem quatro. Sem ajuda, ele perde a luta na conta das ações antes de perder na Vida, e o grupo logo descobre que dá para travar o chefe com uma condição atrás da outra. As duas regras abaixo fecham esses buracos. Use as duas em todo chefe que luta sozinho, ou com menos companhia do que o grupo tem gente.</p>
+      <p><strong>Ímpeto.</strong> O lado do chefe recebe pontos de Ímpeto iguais ao número de jogadores menos o número de inimigos em cena, contando o próprio chefe. Os pontos voltam todos no começo do turno dele.</p>
+      <ul class="regras-list">
+        <li>No fim do turno de um jogador, o chefe pode gastar 1 ponto numa ação curta: andar até metade do Deslocamento, fazer um ataque com −5 ou ganhar uma reação extra até o próximo turno dele.</li>
+        <li>No máximo um ponto por turno de jogador. Golpe anunciado, efeito em área e magia nunca saem por Ímpeto.</li>
+        <li>Com quatro jogadores, um chefe sozinho tem 3 pontos e faz quatro coisas por rodada, dentro da faixa de 80% a 110% do passo sete. Com um capanga ao lado, fica com 2. Dois chefes juntos dividem os mesmos 2.</li>
+        <li>Mostre o Ímpeto num relógio do painel Mesa, com uma parte por ponto. Pinte uma parte a cada gasto e limpe o relógio no turno dele. Ver quanto ele ainda pode fazer vira decisão para o grupo: provocar agora, ou esperar que ele gaste.</li>
+      </ul>
+      <p><strong>Determinação.</strong> O chefe recebe 1 ponto de Determinação no começo da luta e outro a cada fase nova. O ponto que sobra não passa para a fase seguinte.</p>
+      <ul class="regras-list">
+        <li>Quando ele falharia num teste contra uma condição de gravidade média (Atordoado, Paralisado, Imobilizado, Cego e as outras que tiram ação, turno ou sentido), pode gastar o ponto e passar.</li>
+        <li>Passar assim custa caro: ele fica Exposto até o começo do próximo turno dele, e a Guarda enche uma parte, se ele tiver Guarda. Quem tentou travar o chefe ainda ganha alguma coisa.</li>
+        <li>Descreva o gasto. Ele sacode a cabeça, arranca a corrente do chão, morde o próprio braço para acordar. A mesa precisa ver que custou.</li>
+        <li>A regra que protege o jogador vale para o chefe também: depois de perder um turno inteiro para uma condição, ele passa sem gastar nada na próxima tentativa de tirar o turno dele, até o fim do turno seguinte.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Guarda e partes que quebram</h3>
+      <p>As duas regras premiam o grupo que joga bem sem mexer na Vida do chefe. A Guarda recompensa o risco, e as partes recompensam a mira.</p>
+      <p><strong>Guarda.</strong> Um relógio de 4 a 6 partes, à vista no painel Mesa. Quatro partes para luta curta ou VD baixo, seis para chefe resistente.</p>
+      <ul class="regras-list">
+        <li>Enche uma parte a cada crítico contra ele, a cada acerto de quem declarou Coreografia Ousada ou acima, a cada ataque combinado que o acerta, a cada vez que alguém explora a fraqueza dele e a cada ponto de Determinação que ele gasta.</li>
+        <li>Cheia, a Guarda quebra. Ele fica Exposto, perde a reação até o próximo turno dele, o próximo ataque contra ele tem vantagem, e o relógio volta a zero.</li>
+        <li>Diga em voz alta o que encheu a parte. É assim que a mesa aprende o que funciona contra ele.</li>
+        <li>A Recolhedora, Dama dos Caídos (VD 25), usa a Guarda. A ficha dela traz a regra escrita numa habilidade, pronta para copiar.</li>
+      </ul>
+      <p><strong>Partes que quebram.</strong> Criatura grande ganha de duas a três partes que dá para mirar: a cauda, uma asa, o olho de cima, o braço que segura a corrente. Cada parte desliga uma habilidade quando quebra.</p>
+      <ul class="regras-list">
+        <li>Cada parte tem Vida própria, de 10% a 15% da Vida do chefe. O dano na parte também sai da Vida dele, então mirar nunca desperdiça golpe.</li>
+        <li>Mirar numa parte custa −2 no ataque. Parte que só se alcança de cima, de longe ou por trás pede o movimento certo antes do ataque.</li>
+        <li>Quebrar uma parte desliga a habilidade ligada a ela até o fim da luta. Asa quebrada não voa, cauda quebrada não varre, olho quebrado não enxerga no escuro.</li>
+        <li>Anote a Vida das partes na anotação da criatura, na Sessão. A cauda de Jörmund, no Bestiário, é o exemplo pronto.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">O covil do chefe</h3>
+      <p>Um chefe que mora num lugar luta com o lugar a favor. O covil age uma vez por rodada, sempre no mesmo ponto da fila: depois do último participante, antes de a rodada virar. Ele tem de dois a três efeitos próprios, e cada um é anunciado na rodada anterior, com uma mudança que a mesa vê. Assim o grupo sempre tem uma rodada para sair da frente.</p>
+      <ul class="regras-list">
+        <li>Use um efeito por rodada, e nunca o mesmo em duas rodadas seguidas.</li>
+        <li>O covil vale meia ação na conta do passo sete. Chefe com covil tem 1 ponto de Ímpeto a menos.</li>
+        <li>O efeito nunca atinge o dono do covil. Atinge os capangas dele, e um grupo esperto usa isso.</li>
+        <li>Dê ao grupo um jeito de calar o covil: destruir o altar, abrir a comporta, apagar o braseiro. Calar o covil vira objetivo de cena, e o jogador que corre para lá enquanto os outros seguram o chefe tem a melhor rodada da noite.</li>
+      </ul>
+      <details class="regras-details">
+        <summary>Efeitos de covil <span class="regras-details-contagem">1d8</span></summary>
+        <p>Escolha dois ou três para o lugar, ou role um por luta. A primeira frase é o anúncio, dito na rodada anterior. A mecânica vem embaixo e vale na rodada seguinte.</p>
+        <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
+          <thead><tr><th>1d8</th><th>O efeito</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>A água sobe.</strong> A água entra pelas frestas do chão e já cobre os tornozelos. Ninguém viu de onde ela vem.<small class="regras-mecanica">A parte baixa do covil vira terreno difícil até o fim da luta. Quem fica Caído na água começa a perder o fôlego, como em Perigos do Ambiente, até se levantar.</small></td></tr>
+            <tr><td>2</td><td><strong>A parede respira.</strong> As pedras de uma parede incham e encolhem, devagar, como um peito.<small class="regras-mecanica">Quem está encostado nessa parede é empurrado 3 metros e faz Reflexos na DT Padrão ou fica Caído.</small></td></tr>
+            <tr><td>3</td><td><strong>As vozes do lugar.</strong> Começa um sussurro sem boca, e cada um ouve o próprio nome, dito por alguém que já morreu.<small class="regras-mecanica">Todos fazem Vontade na DT Padrão ou ficam Desorientados, até passar no teste do fim do turno.</small></td></tr>
+            <tr><td>4</td><td><strong>Raízes e correntes.</strong> O chão estala, e alguma coisa se mexe embaixo da terra, na direção de quem está parado.<small class="regras-mecanica">Quem não se moveu no último turno faz Reflexos na DT Padrão ou fica Imobilizado. Soltar-se segue a regra de Imobilizado.</small></td></tr>
+            <tr><td>5</td><td><strong>O vento arrasta.</strong> As chamas se deitam todas para o mesmo lado, e a capa de cada um estala na direção do buraco.<small class="regras-mecanica">Todos são empurrados 3 metros na direção do vento, menos quem passar em Atletismo na DT Padrão. Quem passa da beira sofre o dano da queda.</small></td></tr>
+            <tr><td>6</td><td><strong>O chão esquenta.</strong> Fumaça sobe entre as lajes, e a sola das botas começa a grudar.<small class="regras-mecanica">Até o fim da luta, quem termina o turno no mesmo lugar onde começou sofre dano de Calor igual ao de uma armadilha Leve do nível, em Perigos do Ambiente. Abrir a saída do vapor encerra o efeito.</small></td></tr>
+            <tr><td>7</td><td><strong>Os ninhos acordam.</strong> Ouve-se raspar dentro das paredes, cada vez mais perto.<small class="regras-mecanica">Entram dois lacaios do VD do grupo, pelo lado que ninguém vigia. Eles entram fora da conta do encontro: tire do chefe a Vida deles, cerca de 10% da Vida do encontro por lacaio.</small></td></tr>
+            <tr><td>8</td><td><strong>O coração do lugar.</strong> Um ponto da sala pulsa em vermelho, no ritmo de alguma coisa muito grande.<small class="regras-mecanica">Enquanto o coração estiver de pé, o chefe recupera 5% da Vida máxima no fim de cada rodada. O coração tem a Defesa do chefe e 10% da Vida dele.</small></td></tr>
+          </tbody>
+        </table></div>
+      </details>
+
+      <h3 class="regras-subtitle">Dois chefes ao mesmo tempo</h3>
+      <p>Dois chefes juntos são uma dupla, e a graça está no que um faz pelo outro. A luta fica marcada pela ordem em que eles caem, então escreva os dois finais antes da sessão.</p>
+      <ul class="regras-list">
+        <li>Divida a Vida de chefe do encontro entre os dois, e dê fases aos dois. O Ímpeto é um bolso só, gasto por qualquer um deles.</li>
+        <li>Dê a eles uma ligação pública: um protege o outro, um cura o outro, ou um só ataca quem o outro marcou. O grupo precisa enxergar a ligação para tentar cortá-la.</li>
+        <li>Quando um cai, o outro sobe uma fase na hora (troque à mão no editor da criatura) e herda uma habilidade do parceiro, a que mais combina com o luto ou com a raiva.</li>
+        <li>A queda muda a cena. Se o irmão mais velho cai primeiro, o mais novo foge chorando. Se o mais novo cai primeiro, o mais velho para de se defender. A mesa que entende isso escolhe quem derrubar, e essa escolha é a cena.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Fase por rodada e por acontecimento</h3>
+      <p>Toda criatura única do Bestiário muda de fase quando a Vida cai a um ponto marcado, e a Sessão troca a fase sozinha. Há mais dois gatilhos, para a luta que não depende só de dano.</p>
+      <ul class="regras-list">
+        <li><strong>Pela rodada.</strong> A fase pode trazer também uma rodada, e vale o gatilho que chegar primeiro. A Sessão troca a fase quando o combate chega nessa rodada, mesmo com o chefe sem um arranhão. Conta a rodada do combate desde o começo da luta, mesmo para quem entrou depois. Serve para prazo: o ritual termina, a maré sobe, o sino bate. O Ser Horário, da Última Hora, chega à Meia-Noite na rodada 6 e à Hora Zero na 10.</li>
+        <li><strong>Pelo acontecimento.</strong> Fase sem Vida nem rodada é sua. Troque no editor da criatura, na Sessão, quando a história pedir: o refém foi solto, a última vela apagou, a votação acabou. Valdo Três-Palavras (VD 8) entra em Sem Plateia assim.</li>
+        <li>A fase só sobe. Curar o chefe ou voltar uma rodada na fila não a desfaz, e uma fase pode pular a anterior quando a rodada chega antes da Vida.</li>
+        <li>Criatura sua, fora do Bestiário, não tem fase na Sessão. Use um relógio no painel Mesa com o nome da fase e leia o anúncio em voz alta quando ele encher.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Mecânicas secretas</h3>
+      <p>Informação necessária para usar uma mecânica nunca é segredo. Por isso, numa mecânica secreta, o segredo é a regra existir e o que a dispara. Até o gatilho, a mesa só tem os sinais. Quando a regra entra, você a anuncia inteira, como o anúncio de uma fase, com uma pista de como reagir. Daí em diante ela é tão pública quanto o golpe anunciado.</p>
+      <ul class="regras-list">
+        <li>Uma secreta por chefe, sempre ao lado de uma pública. Duas secretas no mesmo chefe parecem trapaça.</li>
+        <li>Dê um sinal antes: um detalhe na descrição, um Sinal na ficha, uma frase de fase. Quem prestou atenção precisa poder dizer depois que sabia.</li>
+        <li>O golpe que tira metade da Vida continua anunciado na rodada anterior. Nenhum segredo passa por cima dessa regra.</li>
+        <li>Ninguém perde o turno por causa de um segredo. Se a regra põe o personagem do outro lado, o jogador continua jogando.</li>
+        <li>Guarde o segredo para depois de a mesa entender o básico do chefe. Segredo no primeiro minuto é só confusão.</li>
+        <li>Os quatro chefes de VD baixo do Bestiário mostram o formato inteiro: A Figueira que Saiu da Praça (VD 3), Valdo Três-Palavras (VD 8), O Inquilino dos Retratos (VD 15) e A Recolhedora, Dama dos Caídos (VD 25). O segredo de cada um mora na fase da metade da Vida.</li>
+      </ul>
+      <details class="regras-details">
+        <summary>Um segredo por Fluxo <span class="regras-details-contagem">11 Fluxos</span></summary>
+        <p>Um para cada Fluxo, para o chefe que pertence a ele. Cada linha traz o segredo, o sinal que a mesa recebe antes e, embaixo, a mecânica.</p>
+        <div class="regras-table-wrap"><table class="regras-table">
+          <thead><tr><th>Fluxo</th><th>O segredo e o sinal</th></tr></thead>
+          <tbody>
+            <tr><td>Origem</td><td><strong>A semente.</strong> Quando o chefe cai, sobra no chão uma semente que pulsa. <em>Sinal: brotos verdes nascem onde o sangue dele cai.</em><small class="regras-mecanica">Se ninguém pegar a semente até o fim da segunda rodada, ele brota de novo, na fase 1 e com metade da Vida. Pegar custa uma Ação de Movimento ao lado dela. Quem pega escolhe: esmagar, e o chefe acaba, ou plantar no lugar de onde ele tirou alguma coisa, e o lugar recebe de volta o que perdeu. A Figueira que Saiu da Praça usa este segredo.</small></td></tr>
+            <tr><td>Essência</td><td><strong>O nome verdadeiro.</strong> O chefe atende por um nome que não é o dele. <em>Sinal: ele corrige, com raiva, quem o chama pelo nome que todo mundo usa.</em><small class="regras-mecanica">Ele sofre só metade do dano até alguém dizer em voz alta o nome verdadeiro dele, no próprio turno. O nome é uma pergunta de Investigações feita antes da luta, com três pistas espalhadas pela aventura. Nome errado não faz nada, e cada personagem tenta uma vez por rodada. O Inquilino dos Retratos usa este segredo.</small></td></tr>
+            <tr><td>Comunicação</td><td><strong>A proposta.</strong> No meio da luta, ele para e oferece um trato. <em>Sinal: antes da luta, ele cumprimenta cada um pelo nome e pergunta o que cada um quer.</em><small class="regras-mecanica">Abra uma votação anônima no painel Mesa. Maioria aceita: a luta acaba, e cada personagem que votou sim fica com uma Dívida com ele, como em Contatos e Laços. A mesa vê só a contagem, e quem votou o quê fica com você. Valdo Três-Palavras usa este segredo.</small></td></tr>
+            <tr><td>Vitalidade</td><td><strong>O coração fora do corpo.</strong> O corpo luta, mas a vida dele está guardada em outro lugar. <em>Sinal: as feridas dele fecham no ritmo de uma batida que se ouve de outro canto da sala.</em><small class="regras-mecanica">A Vida dele não desce abaixo de 1 enquanto o coração bater. O coração fica escondido na névoa do mapa, num baú da sala ou dentro do NPC que o grupo está escoltando, e aí a escolha fica feia. Achado, o coração tem a Defesa do chefe e 10% da Vida dele.</small></td></tr>
+            <tr><td>Inconstância</td><td><strong>A lei da rodada.</strong> Perto dele, as regras mudam a cada rodada. <em>Sinal: coisas pequenas caem para cima perto dele: moedas, gotas, cinza.</em><small class="regras-mecanica">No começo de cada rodada, role 1d6 na tabela A lei da rodada, logo abaixo, e anuncie a lei que vale nela. A mesa vê o dado, então ninguém se sente enganado: o segredo é só ele ter essa regra.</small></td></tr>
+            <tr><td>Físico</td><td><strong>A casca.</strong> O corpo dele é coberto por uma crosta do próprio elemento. <em>Sinal: o golpe do elemento certo faz a casca chiar e rachar, mesmo sem tirar Vida.</em><small class="regras-mecanica">Enquanto a casca está de pé, ele sofre só metade do dano, e o elemento dele não o fere. A casca conta como barreira, o caso em que o livro deixa dois elementos se enfrentarem: um acerto do elemento que vence o dele, em Como os elementos se enfrentam, quebra a casca até o fim da rodada seguinte. Depois ela fecha.</small></td></tr>
+            <tr><td>Espaço</td><td><strong>A sala dobrada.</strong> A arena são duas, ligadas por portais do mapa. <em>Sinal: o golpe que acerta o reflexo não faz barulho nenhum.</em><small class="regras-mecanica">O corpo verdadeiro dele está numa metade e o reflexo na outra. Só quem está na mesma metade que o corpo verdadeiro causa dano. O reflexo ataca igual, e o golpe nele atravessa sem resistência. O corpo verdadeiro troca de metade quando a fase muda.</small></td></tr>
+            <tr><td>Tempo</td><td><strong>O dano atrasado.</strong> Os golpes acertam, e nada acontece. <em>Sinal: a sombra dele chega um instante depois do corpo.</em><small class="regras-mecanica">Todo dano que ele sofre só entra duas rodadas depois. Anote o dano de cada rodada na anotação da criatura e aplique no começo da rodada certa. A Vida fica parada, e a mesa acha que ele é imune. Nada volta ao passado: o golpe só chega tarde. A fase também atrasa, porque a Sessão lê a Vida atual.</small></td></tr>
+            <tr><td>Vazio</td><td><strong>Só quem está quebrado vê.</strong> Ele some para todo mundo, menos para quem está pior. <em>Sinal: quem está com a Sanidade mais baixa ouve uma respiração que os outros não ouvem.</em><small class="regras-mecanica">Ele fica invisível para todos, menos para o personagem com a menor Sanidade na mesa. Mande a posição dele por bilhete a esse jogador a cada rodada, e o jogador decide se conta e como conta. Se outro personagem passar a ter a menor Sanidade, o bilhete passa para ele.</small></td></tr>
+            <tr><td>Fim</td><td><strong>A morte emprestada.</strong> O primeiro que cai não fica no chão. <em>Sinal: os mortos do lugar estão de olhos fechados e mãos cruzadas, como se alguém os tivesse arrumado.</em><small class="regras-mecanica">O primeiro personagem que cai a 0 de Vida levanta ao lado do chefe por duas rodadas, com metade da Vida e um objetivo secreto por bilhete. O jogador continua jogando. O efeito acaba antes se um aliado gastar uma Ação Padrão dizendo em voz alta um Laço desse personagem. A Recolhedora usa este segredo.</small></td></tr>
+            <tr><td>Tecnologia</td><td><strong>Protocolo de contenção.</strong> Um terminal na arena controla os módulos dele. <em>Sinal: um painel na parede pisca com a mesma luz do olho dele.</em><small class="regras-mecanica">O terminal tem três Etapas de invasão contra um Alerta de 6, como em Infiltração. Cada Etapa vencida desliga um módulo do chefe: o escudo, a arma de longe, o reparo. Quem está no terminal tem 30 segundos de verdade, no cronômetro do painel Mesa, para declarar a ação, e passado o tempo a ação conta como falha. Alerta cheio tranca o terminal até o fim da luta.</small></td></tr>
+          </tbody>
+        </table></div>
+      </details>
+      <details class="regras-details">
+        <summary>A lei da rodada <span class="regras-details-contagem">1d6</span></summary>
+        <p>Para o segredo da Inconstância. Role no começo de cada rodada e anuncie antes do primeiro turno. A lei vale para todos, o chefe incluído, e acaba quando a rodada vira.</p>
+        <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
+          <thead><tr><th>1d6</th><th>A lei</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Vantagem do avesso.</strong> O chão pende para o lado errado por um segundo, e cada um erra o passo que acertaria.<small class="regras-mecanica">Quem teria vantagem rola com desvantagem, e quem teria desvantagem rola com vantagem.</small></td></tr>
+            <tr><td>2</td><td><strong>Cura que fere.</strong> As feridas abertas brilham, e a luz dói.<small class="regras-mecanica">Toda cura nesta rodada causa dano igual em quem a recebe. Vida temporária continua valendo.</small></td></tr>
+            <tr><td>3</td><td><strong>A fila ao contrário.</strong> O último a se mexer sente que já se mexeu.<small class="regras-mecanica">Nesta rodada, a fila anda do último para o primeiro.</small></td></tr>
+            <tr><td>4</td><td><strong>Magia de graça.</strong> O ar fica tão carregado que basta pensar para o Fluxo responder.<small class="regras-mecanica">Magias não custam Mana nesta rodada, e cada uma faz quem conjurou rolar na tabela Fluxo instável.</small></td></tr>
+            <tr><td>5</td><td><strong>Ninguém erra.</strong> Todo golpe encontra o caminho, como se o alvo andasse até ele.<small class="regras-mecanica">Todos os ataques desta rodada acertam, e nenhum é crítico. O golpe anunciado continua evitável por quem sai da frente.</small></td></tr>
+            <tr><td>6</td><td><strong>Peso dobrado.</strong> As armas pesam o dobro, e os ossos também.<small class="regras-mecanica">Andar custa o dobro do Deslocamento, e quem é empurrado vai o dobro da distância.</small></td></tr>
+          </tbody>
+        </table></div>
+      </details>
+      <details class="regras-details">
+        <summary>Segredos para qualquer chefe <span class="regras-details-contagem">1d4</span></summary>
+        <p>Estes servem a chefe de qualquer Fluxo. Escolha ou role, mas guarde o quarto para fim de arco.</p>
+        <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
+          <thead><tr><th>1d4</th><th>O segredo e o sinal</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>O chefe aprende.</strong> Cada fase nova traz a lição da anterior. <em>Sinal: depois de cada golpe forte, ele passa os dedos na ferida, como quem estuda.</em><small class="regras-mecanica">A cada fase nova, ele passa a sofrer só três quartos do dano do tipo que mais o feriu na fase anterior. Anuncie com o corpo: a pele escurece onde o fogo bateu, o escudo vira para o lado das flechas.</small></td></tr>
+            <tr><td>2</td><td><strong>O reflexo.</strong> O chefe é a cópia de um personagem do grupo. <em>Sinal: o jeito de segurar a arma, o tique antes de atacar: alguém da mesa já viu isso no espelho.</em><small class="regras-mecanica">Use a ficha desse personagem com a Vida de chefe do VD. Por bilhete, o próprio jogador escolhe uma ação da cópia por rodada, e você joga o resto. Combine antes, em particular, com o jogador cuja ficha vai virar chefe.</small></td></tr>
+            <tr><td>3</td><td><strong>O chefe dança.</strong> Ele joga com as regras dos jogadores. <em>Sinal: ele aplaude a Coreografia bem feita do grupo, sinceramente.</em><small class="regras-mecanica">Antes de cada ataque, ele escolhe um risco da Coreografia e ganha ou sofre o mesmo da tabela. No começo ele anuncia o risco. Na fase secreta, anota em segredo e só revela depois do dado. Valdo Três-Palavras é o exemplo inteiro.</small></td></tr>
+            <tr><td>4</td><td><strong>O preço.</strong> Na última fase, a força não basta. <em>Sinal: ele pergunta, mais de uma vez, o que cada um ama.</em><small class="regras-mecanica">Ele só cai se alguém entregar uma coisa permanente: um Laço, um Legado, um ponto de Devoção. Sem o preço, ele não morre, mas pode ser preso, expulso ou posto para dormir até a próxima vez. Diga o que está à venda quando a fase começar.</small></td></tr>
+          </tbody>
+        </table></div>
+      </details>
+
+      <h3 class="regras-subtitle">Três cenas para o clímax</h3>
+      <p>Nem toda luta grande se vence no dano. As três cenas abaixo usam regras que o livro já tem, numa forma pronta para o fim de um arco.</p>
+      <p><strong>Ritual sob fogo.</strong> Ritual não entra em combate, então quem conduz não ataca, não conjura e não reage enquanto conduz. A luta acontece em volta dele: o grupo segura a porta enquanto o ritual anda, ou corre para impedir o ritual do inimigo.</p>
+      <ul class="regras-list">
+        <li>O ritual tem Etapas: 3 no simples, 4 no complexo, 5 no grandioso e 6 no monumental.</li>
+        <li>No turno dele, quem conduz testa contra a DT do ritual. Sucesso avança uma Etapa. Falha não avança e enche 1 de Ruptura, e a falha crítica enche 2.</li>
+        <li>Cada vez que quem conduz sofre dano, faz o teste de quem está Concentrando: Vontade DT 10 ou metade do dano, o que for maior. Falha enche 1 de Ruptura.</li>
+        <li>A Ruptura enche em 4. Cheia, o ritual se rompe: a Mana comprometida se perde, como sempre, e quem conduzia rola na tabela Fluxo instável.</li>
+        <li>Um aliado ao lado pode gastar a Ação Padrão para Ajudar no teste do ritual.</li>
+        <li>Do outro lado a conta é a mesma. O ritual do inimigo anda uma Etapa por rodada, e cada vez que quem conduz sofre dano, a Etapa daquela rodada não anda. Junte com a fase por rodada: a última Etapa do inimigo é a rodada em que a fase final começa.</li>
+      </ul>
+      <p><strong>Julgamento.</strong> Um conflito social em que a decisão é de três pessoas, cada uma com a própria Resistência e o próprio Limite. Serve para júri, conselho de anciãos, banca de guilda e tribunal de deidade.</p>
+      <ul class="regras-list">
+        <li>Monte três jurados com Resistência de 3, 5 e 8, a régua do Conflito Social, e escreva o que move cada um: prova, sentimento, lei ou interesse.</li>
+        <li>A Paciência é uma só, a do tribunal, com 4 partes. Em cada rodada, cada personagem faz um argumento, sempre dirigido a um jurado. A abordagem certa tira Resistência dele, e tocar no Limite dele enche a Paciência.</li>
+        <li>Do outro lado há um acusador. No fim de cada rodada, ele devolve 1 de Resistência a um jurado, à escolha dele, ou enche 1 de Paciência.</li>
+        <li>O grupo ganha quando zera a Resistência de dois jurados. Se a Paciência encher antes, o tribunal decide com os votos como estão, e jurado que ainda tem Resistência vota contra.</li>
+        <li>Diga a Resistência de cada jurado em voz alta e deixe a mesa descobrir o Limite. Ver a conversa andando é o que dá tensão a esta cena.</li>
+      </ul>
+      <p><strong>Interlúdio.</strong> Uma pausa no meio da luta grande, quando o chefe muda de fase ou quando a mesa está perto de cair.</p>
+      <ul class="regras-list">
+        <li>Pare o combate e diga que é um interlúdio. Ninguém age, ninguém sofre dano, e a fila não anda.</li>
+        <li>Cada jogador conta, em duas ou três frases, uma lembrança do personagem que tem a ver com o que está em jogo.</li>
+        <li>Quem liga a lembrança a um Laço fica Inspirado. Isso não gasta a vantagem do Laço na sessão.</li>
+        <li>Um interlúdio por luta, no máximo, e só nas lutas que fecham um arco. Ele funciona porque é raro.</li>
       </ul>
 
       <h3 class="regras-subtitle">Criatura que ninguém quer enfrentar</h3>
