@@ -55,7 +55,7 @@ export const acervoApi = {
   renomearPasta: (pastaId: string, nome: string) =>
     api(`/acervo/pastas/${pastaId}`, { method: 'PUT', body: { nome } }),
   apagarPasta: (pastaId: string) => api<null>(`/acervo/pastas/${pastaId}`, { method: 'DELETE' }),
-  criarItem: (dados: { nome: string; tipo: TipoItemAcervo; largura: number; altura: number; pasta_id: string | null }) =>
+  criarItem: (dados: { nome: string; tipo: TipoItemAcervo; largura: number; altura: number; pasta_id: string | null; etiquetas?: string[] }) =>
     api<{ id: string; chaves: string[]; ladrilho: number }>('/acervo/itens', { method: 'POST', body: dados }),
   concluirItem: (itemId: string) => api<IItemAcervo>(`/acervo/itens/${itemId}/concluir`, { method: 'POST' }),
   editarItem: (itemId: string, dados: { nome?: string; tipo?: TipoItemAcervo; pasta_id?: string; mover_para_raiz?: boolean; autoria?: string; origem?: string; licenca?: LicencaAcervo | '' }) =>

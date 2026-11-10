@@ -26,6 +26,7 @@ import { BarraAncorada } from './componentes/BarraAncorada';
 import { ConfigCena, SeletorDeCenas } from './componentes/CenasDoMestre';
 import { MenuMais, type GrupoDoMenu } from './componentes/MenuMais';
 import { FolhaDeAtalhos } from './componentes/FolhaDeAtalhos';
+import { FatiadorFolha } from './fatiador/FatiadorFolha';
 import { AcervoGaveta } from './acervo/AcervoGaveta';
 import { OficinaGaveta } from './oficina/OficinaGaveta';
 import { BarraNevoa } from './componentes/BarraNevoa';
@@ -35,7 +36,7 @@ import { PainelTempo } from './componentes/PainelTempo';
 import { PainelPortal } from './componentes/PainelPortal';
 import { MenuPorta } from './componentes/MenuPorta';
 import { FalaNaMesa, PainelMesa, PausaDaMesa, RelogiosDaMesa, type FalaRecebida } from './componentes/MesaExtras';
-import { Hourglass, Keyboard, LocateFixed } from 'lucide-react';
+import { Hourglass, Keyboard, LocateFixed, Scissors } from 'lucide-react';
 import { urlImagemDoToken, type IMesaExtras } from '../../services/mapaApi';
 import { cliqueDoJogador } from './motor/portasConta';
 import { ApiError } from '../../services/apiClient';
@@ -226,6 +227,8 @@ export const MapaPage = () => {
   const [versaoAcervo, setVersaoAcervo] = useState(0);
   /** A folha de atalhos (tecla ? ou menu Exibição). */
   const [atalhosAbertos, setAtalhosAbertos] = useState(false);
+  /** O fatiador de folhas de assets (abre pela barra de baixo e pelo menu Mais; o Construtor tem o seu). */
+  const [fatiando, setFatiando] = useState(false);
   /** O mapa colocado que o Mestre escolheu com a ferramenta de mapas. */
   const [mapaSelecionadoId, setMapaSelecionadoId] = useState<string | null>(null);
   /** O painel de opções do token (abas) só abre quando se pede, pela barra colada no token. */
@@ -1606,6 +1609,7 @@ export const MapaPage = () => {
           { icone: UserPlus, rotulo: 'Trazer os participantes da Sessão', disabled: !cena, onClick: () => void trazerParticipantes() },
           { icone: DraftingCompass, rotulo: 'Construtor de mapas', ativo: construtorAberto, onClick: () => setConstrutorAberto(true) },
           { icone: Wand2, rotulo: 'Oficina de tokens e fundos', ativo: oficinaAberta, onClick: () => setOficinaAberta((v) => !v) },
+          { icone: Scissors, rotulo: 'Fatiar folha de assets', ativo: fatiando, onClick: () => setFatiando(true) },
         ],
       },
     ] : []),
@@ -1905,6 +1909,7 @@ export const MapaPage = () => {
             onColocarMapa={(item) => void colocarMapa(item)}
             onPorNaCena={(item) => void porNaCena(item)}
             onAbrirAcervo={() => setAcervoAberto((v) => !v)}
+            onFatiar={() => setFatiando(true)}
           />
         )}
         <PainelGrade
@@ -2080,6 +2085,7 @@ export const MapaPage = () => {
         </aside>
       )}
       {atalhosAbertos && <FolhaDeAtalhos gestor={gestor} onFechar={() => setAtalhosAbertos(false)} />}
+      {fatiando && gestor && <FatiadorFolha onFechar={() => setFatiando(false)} onSalvo={() => setVersaoAcervo((v) => v + 1)} />}
     </div>
   );
 };

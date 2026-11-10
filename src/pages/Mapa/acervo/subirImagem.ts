@@ -61,34 +61,48 @@ export function nomeSemExtensao(nome: string): string {
   return nome.replace(/\.[a-z0-9]{2,5}$/i, '').replace(/[_-]+/g, ' ').trim() || 'Imagem';
 }
 
-export async function subirParaOAcervo(
-  arquivo: File,
-  opcoes: { tipo: TipoItemAcervo; pastaId: string | null; aoProgresso?: (p: ProgressoEnvio) => void },
-): Promise<IItemAcervo> {
+export interface OpcoesDeEnvio {
+  tipo: TipoItemAcervo;
+  pastaId: string | null;
+  etiquetas?: string[];
+  aoProgresso?: (p: ProgressoEnvio) => void;
+}
+
+/** Sobe uma imagem já decodificada (quem chama fecha o bitmap). Serve para peças recortadas no navegador. */
+export async function subirImagemPronta(imagem: ImageBitmap, nome: string, opcoes: OpcoesDeEnvio): Promise<IItemAcervo> {
+  const { id, chaves } = await acervoApi.criarItem({
+    nome,
+    tipo: opcoes.tipo,
+    largura: imagem.width,
+    altura: imagem.height,
+    pasta_id: opcoes.pastaId,
+    ...(opcoes.etiquetas?.length ? { etiquetas: opcoes.etiquetas } : {}),
+  });
+  // Mesmo cálculo dos dois lados; se divergir, vale o que o servidor pediu.
+  const lista = chaves.length ? chaves : chavesEsperadas(imagem.width, imagem.height);
+  const fabricar = fabricaDePedacos(imagem);
+  let feitos = 0;
+  let proximo = 0;
+  const trabalhador = async () => {
+    while (proximo < lista.length) {
+      const chave = lista[proximo++];
+      await acervoApi.subirPedaco(id, chave, await fabricar(chave));
+      feitos++;
+      opcoes.aoProgresso?.({ arquivo: nome, feitos, total: lista.length });
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(ENVIOS_SIMULTANEOS, lista.length) }, trabalhador));
+  return acervoApi.concluirItem(id);
+}
+
+export async function subirParaOAcervo(arquivo: File, opcoes: OpcoesDeEnvio): Promise<IItemAcervo> {
   const imagem = await createImageBitmap(arquivo);
   try {
-    const { id, chaves } = await acervoApi.criarItem({
-      nome: nomeSemExtensao(arquivo.name),
-      tipo: opcoes.tipo,
-      largura: imagem.width,
-      altura: imagem.height,
-      pasta_id: opcoes.pastaId,
+    const item = await subirImagemPronta(imagem, nomeSemExtensao(arquivo.name), {
+      ...opcoes,
+      aoProgresso: opcoes.aoProgresso && ((p) => opcoes.aoProgresso?.({ ...p, arquivo: arquivo.name })),
     });
-    // Mesmo cálculo dos dois lados; se divergir, vale o que o servidor pediu.
-    const lista = chaves.length ? chaves : chavesEsperadas(imagem.width, imagem.height);
-    const fabricar = fabricaDePedacos(imagem);
-    let feitos = 0;
-    let proximo = 0;
-    const trabalhador = async () => {
-      while (proximo < lista.length) {
-        const chave = lista[proximo++];
-        await acervoApi.subirPedaco(id, chave, await fabricar(chave));
-        feitos++;
-        opcoes.aoProgresso?.({ arquivo: arquivo.name, feitos, total: lista.length });
-      }
-    };
-    await Promise.all(Array.from({ length: Math.min(ENVIOS_SIMULTANEOS, lista.length) }, trabalhador));
-    return await acervoApi.concluirItem(id);
+    return item;
   } finally {
     imagem.close();
   }

@@ -31,9 +31,12 @@ export const CAMADAS_PECA: Array<{ id: CamadaPeca; nome: string }> = [
 
 export interface IPecaProjeto {
   id: string;
-  /** A imagem do Acervo; vazio quando a peça é da mobília do Jardim (`pacote`). */
+  /** A imagem do Acervo; vazio quando a peça é da antiga mobília do Jardim (`pacote`). */
   imagem_id: string;
-  /** Peça da mobília do Jardim (src/data/construtor-mobilia.json), em vez de uma imagem do Acervo. */
+  /**
+   * Peça da antiga mobília do Jardim (public/assets/construtor/mobilia/<pacote>.webp), em vez de uma imagem do
+   * Acervo. Ela saiu do catálogo do Construtor; só projetos e peças prontas já salvos ainda a trazem.
+   */
   pacote?: string | null;
   camada?: CamadaPeca;
   rotulo: string;

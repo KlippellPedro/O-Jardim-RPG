@@ -4,7 +4,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AppWindow, ArrowLeft, BrickWall, CloudUpload, CopyPlus, DoorClosed, Eraser, Expand, Flame, Ghost, Hand, ImagePlus, Loader2, Paintbrush, Plus, Redo2, Search, Square, Trash2, Undo2,
+  AppWindow, ArrowLeft, BrickWall, CloudUpload, CopyPlus, DoorClosed, Eraser, Expand, Flame, Ghost, Hand, ImagePlus, Loader2, Paintbrush, Plus, Redo2, Scissors, Search, Square, Trash2, Undo2,
 } from 'lucide-react';
 import { acervoApi, type IItemAcervo } from '../../../services/acervoApi';
 import { construtorApi, type IProjeto, type IResumoProjeto } from '../../../services/construtorApi';
@@ -18,7 +18,9 @@ import {
 } from './projeto';
 import { texturaDaParede, texturaDoChao } from './materiais';
 import { publicarProjeto, type ProgressoPublicacao } from './publicar';
-import { carregarImagemPeca, casasDoMapa, MOBILIA, pecaDaMobilia, pecaDoAcervo, pecaDoMapa, urlDaMobilia, type ModeloPeca } from './pecas';
+import { casasDaEtiqueta } from '../fatiador/escala';
+import { FatiadorFolha } from '../fatiador/FatiadorFolha';
+import { carregarImagemPeca, casasDoMapa, pecaDoAcervo, pecaDoMapa, urlDaMobilia, type ModeloPeca } from './pecas';
 import './construtor.css';
 
 interface Props {
@@ -37,7 +39,7 @@ const FERRAMENTAS: Array<{ id: FerramentaConstrutor; rotulo: string; atalho: str
   { id: 'porta', rotulo: 'Porta', atalho: 'D', icone: DoorClosed, dica: 'Clique numa parede: a porta entra fechada. Clique de novo para aberta, trancada e para tirar.' },
   { id: 'janela', rotulo: 'Janela', atalho: 'J', icone: AppWindow, dica: 'Clique numa parede para pôr ou tirar uma janela.' },
   { id: 'secreta', rotulo: 'Porta secreta', atalho: 'X', icone: Ghost, dica: 'Clique numa parede: no mapa ela continua parede, e só você vê a porta.' },
-  { id: 'peca', rotulo: 'Peças e mobília', atalho: 'I', icone: ImagePlus, dica: 'Escolha uma peça da mobília do Jardim ou um objeto do Acervo. Clique para colocar; arraste uma peça para mover. Shift + clique junta várias peças, que andam juntas e podem virar uma peça pronta.' },
+  { id: 'peca', rotulo: 'Peças', atalho: 'I', icone: ImagePlus, dica: 'Escolha um mapa ou um objeto do Acervo. Clique para colocar; arraste uma peça para mover. Shift + clique junta várias peças, que andam juntas e podem virar uma peça pronta.' },
   { id: 'luz', rotulo: 'Luz fixa', atalho: 'L', icone: Flame, dica: 'Clique para pôr uma luz (tocha, vela, braseiro). Na mesa, ela brilha e abre caminho no escuro. Arraste uma luz para mover.' },
   { id: 'borracha', rotulo: 'Borracha', atalho: 'E', icone: Eraser, dica: 'Apague o chão, ou, no modo Paredes, a parede mais perto do cursor.' },
 ];
@@ -219,6 +221,9 @@ const EditorDoProjeto = ({
   const [opcoes, setOpcoes] = useState<OpcoesConstrutor>({ chao: 'L', parede: 'pedra', pincel: 1, borracha: 'chao', peca: null, escalaPeca: 1, rotacaoPeca: 0, espelhadaPeca: false, luz: 'tocha', pronta: null });
   const [historico, setHistorico] = useState({ desfazer: false, refazer: false });
   const [objetos, setObjetos] = useState<IItemAcervo[]>([]);
+  /** O fatiador de folhas está aberto; ao guardar peças, `versaoAcervo` sobe e a lista de objetos é pedida de novo. */
+  const [fatiando, setFatiando] = useState(false);
+  const [versaoAcervo, setVersaoAcervo] = useState(0);
   /** Mapas do Acervo, para juntar vários num só (peças grandes no chão). */
   const [mapasAcervo, setMapasAcervo] = useState<IItemAcervo[]>([]);
   const [pecaSelecionadaId, setPecaSelecionadaId] = useState<string | null>(null);
@@ -314,7 +319,7 @@ const EditorDoProjeto = ({
       setMapasAcervo([]);
     });
     return () => { ativo = false; };
-  }, [campanhaId]);
+  }, [campanhaId, versaoAcervo]);
 
   useEffect(() => {
     let ativo = true;
@@ -470,7 +475,6 @@ const EditorDoProjeto = ({
   const ferramentaAtual = FERRAMENTAS.find((f) => f.id === ferramenta)!;
   const numeros = contagem(conteudo);
   const pecaSelecionada = conteudo.pecas.find((peca) => peca.id === pecaSelecionadaId) ?? null;
-  const categoriasMobilia = [...new Set(MOBILIA.map((item) => item.categoria))];
   const luzSelecionada = conteudo.luzes.find((luz) => luz.id === luzSelecionadaId) ?? null;
   const { largura, altura } = tamanhoDoConteudo(conteudo);
   const cenaDoProjeto = projeto.cena_id ? { id: projeto.cena_id, nome: projeto.cena_nome ?? 'a cena publicada' } : null;
@@ -569,34 +573,6 @@ const EditorDoProjeto = ({
                 <p className="mapa-dica">Junte peças com Shift + clique e salve o grupo como peça pronta para usar em outros mapas desta campanha.</p>
               )}
               {opcoes.pronta && <p className="mapa-dica">Clique no mapa para pôr "{opcoes.pronta.nome}". Clique de novo na peça pronta para parar.</p>}
-              <h3>Mobília do Jardim</h3>
-              {categoriasMobilia.map((categoria) => (
-                <div key={categoria} className="construtor-mobilia-grupo">
-                  <small>{categoria}</small>
-                  <div className="construtor-pecas" role="radiogroup" aria-label={`Mobília: ${categoria}`}>
-                    {MOBILIA.filter((item) => item.categoria === categoria).map((item) => {
-                      const ativo = opcoes.peca?.pacote === item.id;
-                      return (
-                        <button
-                          key={item.id}
-                          type="button"
-                          role="radio"
-                          aria-checked={ativo}
-                          aria-label={item.nome}
-                          className={`construtor-peca${ativo ? ' ativo' : ''}`}
-                          onClick={() => {
-                            setOpcoes({ ...opcoes, peca: pecaDaMobilia(item), escalaPeca: item.escala, pronta: null });
-                            setPecaSelecionadaId(null);
-                          }}
-                        >
-                          <img src={urlDaMobilia(item.id)} alt="" loading="lazy" />
-                          <small>{item.nome}</small>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
               <h3>Mapas do Acervo</h3>
               <p className="mapa-dica">Para juntar vários mapas numa cena, escolha um mapa, clique onde ele deve ficar e repita com os outros. Arraste para encostar um no outro; ajuste a largura em casas até as grades casarem. Ao publicar, tudo vira um mapa só, com névoa, paredes e luzes como nos outros.</p>
               {mapasAcervo.length ? (
@@ -626,6 +602,10 @@ const EditorDoProjeto = ({
                 <p className="mapa-dica">Não há mapas prontos no Acervo. Envie imagens como Mapa pela gaveta Acervo e volte para cá.</p>
               )}
               <h3>Objetos do Acervo</h3>
+              <div className="construtor-fatiar">
+                <button type="button" className="mapa-botao" onClick={() => setFatiando(true)}><Scissors size={15} /> Fatiar folha de assets</button>
+                <p className="mapa-dica">Tem uma imagem com vários objetos (uma folha de assets)? O fatiador separa cada objeto com fundo transparente, melhora a qualidade (2x ou 4x) e guarda aqui como Objeto, já com o tamanho em casas.</p>
+              </div>
               <p className="mapa-dica">Para usar uma imagem da internet, salve um arquivo com licença de uso e envie ao Acervo como Objeto. O VTT não busca imagens diretamente por URL.</p>
               {falhaPeca && <p className="mapa-erro">{falhaPeca}</p>}
               {objetos.length ? (
@@ -641,7 +621,8 @@ const EditorDoProjeto = ({
                         aria-label={`${item.nome} (${item.largura} x ${item.altura} px)`}
                         className={`construtor-peca${ativo ? ' ativo' : ''}`}
                         onClick={() => {
-                          setOpcoes({ ...opcoes, peca: pecaDoAcervo(item), pronta: null });
+                          // Peça fatiada de uma folha leva o tamanho em casas numa etiqueta; as outras ficam no último tamanho.
+                          setOpcoes({ ...opcoes, peca: pecaDoAcervo(item), escalaPeca: casasDaEtiqueta(item.etiquetas) ?? opcoes.escalaPeca, pronta: null });
                           setPecaSelecionadaId(null);
                         }}
                       >
@@ -836,6 +817,7 @@ const EditorDoProjeto = ({
           </p>
         </aside>
       </div>
+      {fatiando && <FatiadorFolha onFechar={() => setFatiando(false)} onSalvo={() => setVersaoAcervo((v) => v + 1)} />}
     </div>
   );
 };

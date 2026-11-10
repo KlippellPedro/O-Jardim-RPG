@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronRight, Clock3, Folder, FolderOpen, ImagePlus, Loader2, Map as MapaIcone, Package, Search, Star, UserRound, X } from 'lucide-react';
+import { ChevronRight, Clock3, Folder, FolderOpen, ImagePlus, Loader2, Map as MapaIcone, Package, Scissors, Search, Star, UserRound, X } from 'lucide-react';
 import { acervoApi, type IAcervo, type IItemAcervo, type TipoItemAcervo } from '../../../services/acervoApi';
 import { urlPedaco } from '../../../services/mapaApi';
 import { ComDica } from './BotaoFerramenta';
@@ -22,6 +22,8 @@ interface Props {
   /** Clique num token ou objeto: põe no meio da tela. O arrasto até o mapa é tratado pela página. */
   onPorNaCena: (item: ItemParaCena) => void;
   onAbrirAcervo: () => void;
+  /** Abre o fatiador de folhas de assets (corta uma imagem com vários objetos em peças soltas e melhora a qualidade). */
+  onFatiar: () => void;
 }
 
 const CHAVE_RECENTES = 'jardim.mapa.acervo.recentes';
@@ -57,7 +59,7 @@ function guardarLista(chave: string, lista: readonly string[]) {
  * põe na cena, e arrastar leva até o lugar do mapa onde ela deve cair. A janela também sobe imagens do computador
  * (pelo botão Subir ou soltando arquivos nela).
  */
-export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCena, onAbrirAcervo }: Props) => {
+export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCena, onAbrirAcervo, onFatiar }: Props) => {
   const [acervo, setAcervo] = useState<IAcervo | null>(null);
   const [erro, setErro] = useState('');
   const [vista, setVista] = useState<VistaDoDock | null>(null);
@@ -267,6 +269,11 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
                 </div>
               )}
             </div>
+            <ComDica dica="Corta uma folha com vários objetos em peças soltas, com fundo transparente e qualidade melhorada">
+              <button type="button" className="mapa-dock-subir-botao" disabled={enviando} onClick={onFatiar}>
+                <Scissors size={15} /> Fatiar
+              </button>
+            </ComDica>
             <button type="button" className="mapa-icone" aria-label="Fechar a janela" onClick={() => setVista(null)}><X size={17} /></button>
           </header>
 

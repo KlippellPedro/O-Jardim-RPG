@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Folder, FolderPlus, FolderUp, ImagePlus, Info, Loader2, Map as MapaIcone, Search, Trash2, User, X } from 'lucide-react';
+import { Folder, FolderPlus, FolderUp, ImagePlus, Info, Loader2, Map as MapaIcone, Scissors, Search, Trash2, User, X } from 'lucide-react';
 import { acervoApi, LICENCAS_ACERVO, type IAcervo, type IItemAcervo, type LicencaAcervo, type TipoItemAcervo } from '../../../services/acervoApi';
 import { urlPedaco } from '../../../services/mapaApi';
 import { confirmar, pedirTexto } from '../../../components/avisos/confirmacao';
 import { imagensDaSelecao, pastaDoArquivo, subirParaOAcervo, type ProgressoEnvio } from './subirImagem';
+import { FatiadorFolha } from '../fatiador/FatiadorFolha';
+import { casasDaEtiqueta } from '../fatiador/escala';
 
 interface Props {
   aberto: boolean;
@@ -78,6 +80,7 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
   const [envios, setEnvios] = useState<ProgressoEnvio[]>([]);
   const [infoDe, setInfoDe] = useState<IItemAcervo | null>(null);
   const [enviando, setEnviando] = useState(false);
+  const [fatiando, setFatiando] = useState(false);
   const arquivosRef = useRef<HTMLInputElement>(null);
   const pastaRef = useRef<HTMLInputElement>(null);
 
@@ -221,6 +224,9 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
             <button type="button" className="mapa-botao" disabled={enviando} onClick={() => pastaRef.current?.click()}>
               <FolderUp size={15} /> Subir pasta
             </button>
+            <button type="button" className="mapa-botao" disabled={enviando} title="Corta uma folha com vários objetos em peças soltas, com fundo transparente" onClick={() => setFatiando(true)}>
+              <Scissors size={15} /> Fatiar folha
+            </button>
             <input ref={arquivosRef} type="file" accept="image/*" multiple hidden onChange={(e) => void subir(e.target.files, false)} />
             <input ref={pastaRef} type="file" multiple hidden onChange={(e) => void subir(e.target.files, true)} />
           </div>
@@ -240,10 +246,11 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
           <div className="mapa-acervo-grade">
             {itens.map((item) => (
               <figure key={item.id} className="mapa-acervo-item">
-                <img src={urlPedaco(item.id, 'mini')} alt="" loading="lazy" />
+                <img src={urlPedaco(item.id, 'mini')} alt="" loading="lazy" data-tipo={item.tipo} />
                 <figcaption>{item.nome}</figcaption>
                 <small>
                   {item.largura} x {item.altura}
+                  {casasDaEtiqueta(item.etiquetas) !== null && ` · ${casasDaEtiqueta(item.etiquetas)} casas`}
                   {(!item.licenca || item.licenca === 'desconhecida') && <span className="mapa-acervo-sem-licenca">sem licença</span>}
                 </small>
                 <div className="mapa-acervo-acoes">
@@ -269,6 +276,16 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
           </div>
         </section>
       </div>
+      {fatiando && (
+        <FatiadorFolha
+          onFechar={() => setFatiando(false)}
+          onSalvo={() => {
+            setTipo('objeto');
+            setPasta('todas');
+            void carregar();
+          }}
+        />
+      )}
       {infoDe && (
         <InfoDaImagem
           key={infoDe.id}

@@ -1,41 +1,15 @@
 import { urlPedaco } from '../../../services/mapaApi';
-import catalogoMobilia from '../../../data/construtor-mobilia.json';
-import { chaveDaImagem, ESCALA_PECA_MAX, type CamadaPeca, type IPecaProjeto } from './projeto';
+import { chaveDaImagem, ESCALA_PECA_MAX, type IPecaProjeto } from './projeto';
 
 export type ModeloPeca = Pick<IPecaProjeto, 'imagem_id' | 'pacote' | 'camada' | 'rotulo' | 'imagem_largura' | 'imagem_altura'>;
 type DimensoesPeca = Pick<IPecaProjeto, 'imagem_id' | 'pacote' | 'imagem_largura' | 'imagem_altura'>;
 
-/** Uma peça da mobília do Jardim (tools/blender/gerar_mobilia.py). `escala` é a largura da imagem em casas. */
-export interface IMobilia {
-  id: string;
-  nome: string;
-  categoria: string;
-  imagem_largura: number;
-  imagem_altura: number;
-  escala: number;
-}
-
-export const MOBILIA: IMobilia[] = catalogoMobilia.pecas;
-
-/** Tapete e alçapão ficam no chão (embaixo de tudo); copa de árvore e tocha de parede, no alto. */
-const CAMADA_DA_MOBILIA: Record<string, CamadaPeca> = {
-  tapete: 'chao', 'tapete-redondo': 'chao', alcapao: 'chao',
-  arvore: 'alto', pinheiro: 'alto', 'tocha-de-parede': 'alto',
-};
-
+/**
+ * A antiga mobília do Jardim (peças 3D de Blender) saiu do catálogo do Construtor. As imagens continuam em
+ * public/assets/construtor/mobilia só para projetos e peças prontas que já as usam seguirem abrindo (`pacote`).
+ */
 export function urlDaMobilia(id: string): string {
   return `/assets/construtor/mobilia/${id}.webp`;
-}
-
-export function pecaDaMobilia(item: IMobilia): ModeloPeca {
-  return {
-    imagem_id: '',
-    pacote: item.id,
-    camada: CAMADA_DA_MOBILIA[item.id] ?? 'objetos',
-    rotulo: item.nome,
-    imagem_largura: item.imagem_largura,
-    imagem_altura: item.imagem_altura,
-  };
 }
 
 const LADO_LADRILHO = 1024;
@@ -60,7 +34,7 @@ export async function carregarImagemPeca(
   quantidadeImagens = 1,
 ): Promise<ImageBitmap> {
   if (peca.pacote) {
-    // Mobília do Jardim: um arquivo só, pequeno, servido junto com o site.
+    // Peça da antiga mobília do Jardim (projeto ou peça pronta já salvos): um arquivo só, servido junto com o site.
     const resposta = await fetch(urlDaMobilia(peca.pacote));
     if (!resposta.ok) throw new Error(`Não deu para carregar a peça "${peca.pacote}".`);
     return createImageBitmap(await resposta.blob());

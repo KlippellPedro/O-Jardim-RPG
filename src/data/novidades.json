@@ -36,6 +36,30 @@
       ]
     },
     {
+      "id": "2026-11-09-construtor-sem-mobilia-3d",
+      "data": "2026-11-09",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Construtor de mapas: a mobília 3D saiu da lista de peças",
+      "detalhes": [
+        "As 44 peças 3D da Mobília do Jardim (mesas, barris, tochas, árvores e outras) não aparecem mais na lista de peças do Construtor. Para montar o lugar, use mapas e objetos do Acervo.",
+        "Mapas e peças prontas que já usavam essas peças continuam abrindo e publicando normalmente."
+      ]
+    },
+    {
+      "id": "2026-11-09-acervo-fatiar-folha",
+      "data": "2026-11-09",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Acervo: fatiar uma folha de objetos em peças soltas",
+      "detalhes": [
+        "O Acervo ganhou o botão Fatiar folha, que também está na janela da barra de baixo, no menu Mais e no Construtor de mapas (na seção Objetos do Acervo). Escolha a imagem de uma folha com vários objetos num fundo liso (ou transparente) e cada objeto vira uma peça solta, com o fundo recortado. O corte roda no seu computador.",
+        "Dá para juntar peças que ficaram separadas, separar as que ficaram coladas, desenhar uma área para virar uma peça só e tirar da lista o que não interessa. Diga quantas casas uma peça conhecida mede (uma cama de 1 por 2 casas, por exemplo) e todas as outras ganham o tamanho certo na grade.",
+        "Folha pequena deixa as peças borradas, então o fatiador também melhora a qualidade: cada peça é ampliada até 4x por uma inteligência artificial que roda no seu computador, e a transparência da borda é refeita junto. O modo automático escolhe a ampliação pelo tamanho da casa, e o botão Ver a melhoria mostra a peça antes e depois, antes de guardar.",
+        "As peças vão para a pasta que você escolher, na aba Objetos, com autoria, origem e licença anotadas. No construtor de mapas, cada uma já entra com o tamanho em casas."
+      ]
+    },
+    {
       "id": "2026-11-09-mapa-acervo-na-barra-gaveta-e-atalhos",
       "data": "2026-11-09",
       "tipo": "melhoria",
@@ -1016,28 +1040,6 @@
       "titulo": "Editar e reter direto no cartão",
       "detalhes": [
         "Para quem comanda a mesa: cada cartão dos Registros Universais, e o conteúdo dentro de cada Árvore, ganhou os botões Editar e Visível ou Retido. Editar abre a ficha numa janela, sem sair da página, e Visível ou Retido mostra ou retém aquilo para os jogadores na hora."
-      ]
-    },
-    {
-      "id": "2026-10-13-menu-engrenagem-arrumado",
-      "data": "2026-10-13",
-      "tipo": "melhoria",
-      "area": "Jardim",
-      "titulo": "Menu da engrenagem mais arrumado",
-      "detalhes": [
-        "O menu separa o que é seu (Minha conta, Avisos, Cofre e Preferências) dos painéis de quem comanda: Painel do Mestre, Painel do Criador e Administração. Cada item mostra o próprio número de avisos novos, e o botão da engrenagem soma todos.",
-        "Trocar de mesa, entrar com código de convite e criar uma mesa nova ficam num lugar só, o seletor de mesa da página da Campanha. O item Mesas e Campanhas saiu do menu, e a mesa em que você está aparece no topo dele."
-      ]
-    },
-    {
-      "id": "2026-10-13-avisos-por-painel",
-      "data": "2026-10-13",
-      "tipo": "melhoria",
-      "area": "Jardim",
-      "titulo": "Cada aviso agora aparece no painel dele",
-      "detalhes": [
-        "Na engrenagem ficam os avisos que são seus: cofre, trocas, XP e sessão. Quem comanda a mesa vê no Painel do Mestre, na aba Avisos, quem entrou na campanha, as fichas fora das regras e as mudanças de classe e de nível. Os pedidos de senha ficam na Administração.",
-        "Os avisos vêm agrupados por dia, com um botão que leva direto ao lugar do assunto. Marcar tudo como lido vale só para o painel em que você está."
       ]
     }
   ]

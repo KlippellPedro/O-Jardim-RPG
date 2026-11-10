@@ -1,0 +1,332 @@
+/* Fatiador de folhas: ocupa a tela do mapa, palco à esquerda e painel de controles à direita. */
+.mapa-fatiador {
+  position: absolute;
+  inset: 12px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 14px;
+  background: #110f17;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
+  color: var(--mapa-texto);
+  outline: none;
+}
+
+.mapa-fatiador > header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--mapa-linha);
+}
+
+.mapa-fatiador > header strong {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 15px;
+}
+
+.mapa-fatiador-arquivo {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--mapa-apagado);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-fatiador-vazio {
+  display: grid;
+  flex: 1;
+  gap: 12px;
+  place-content: center;
+  justify-items: center;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px;
+  color: var(--mapa-apagado);
+  text-align: center;
+}
+
+.mapa-fatiador-vazio p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.mapa-fatiador-corpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 350px;
+  flex: 1;
+  min-height: 0;
+}
+
+.mapa-fatiador-palco {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background: #17151d;
+}
+
+.mapa-fatiador-palco canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: default;
+  touch-action: none;
+}
+
+.mapa-fatiador-palco canvas.ferramenta-area,
+.mapa-fatiador-palco canvas.ferramenta-fundo {
+  cursor: crosshair;
+}
+
+.mapa-fatiador-barra {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+  background: var(--mapa-painel);
+}
+
+.mapa-fatiador-barra button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.mapa-fatiador-barra button:hover {
+  color: var(--mapa-texto);
+}
+
+.mapa-fatiador-barra button.ativo {
+  border-color: var(--mapa-ouro);
+  color: var(--mapa-ouro);
+}
+
+.mapa-fatiador-barra span {
+  width: 1px;
+  height: 20px;
+  margin: 0 2px;
+  background: var(--mapa-linha);
+}
+
+.mapa-fatiador-cortando {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  background: var(--mapa-painel);
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.mapa-fatiador-painel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  padding: 10px;
+  overflow: auto;
+  border-left: 1px solid var(--mapa-linha);
+}
+
+.mapa-fatiador-painel fieldset {
+  margin: 0;
+  padding: 8px 10px 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+}
+
+.mapa-fatiador-painel legend {
+  padding: 0 4px;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mapa-fatiador-linha {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 8px;
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.mapa-fatiador-linha b {
+  color: var(--mapa-texto);
+}
+
+.mapa-fatiador-linha input:not([type='checkbox']):not([type='range']):not([type='color']),
+.mapa-fatiador-linha select,
+.mapa-fatiador-calibrar input,
+.mapa-fatiador-lista input:not([type='checkbox']) {
+  width: 100%;
+  min-width: 0;
+  padding: 5px 8px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--mapa-texto);
+}
+
+.mapa-fatiador-marcar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.mapa-fatiador-cor {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.mapa-fatiador-cor input[type='color'] {
+  width: 38px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 6px;
+  background: transparent;
+}
+
+.mapa-fatiador-cor label {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.mapa-fatiador-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mapa-fatiador-acoes .mapa-botao-leve {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.mapa-fatiador-lista {
+  display: grid;
+  gap: 4px;
+  max-height: 280px;
+  margin: 8px 0 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.mapa-fatiador-lista li {
+  display: grid;
+  grid-template-columns: auto 44px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.mapa-fatiador-lista li.escolhida {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.1);
+}
+
+.mapa-fatiador-lista li.tirada {
+  opacity: 0.45;
+}
+
+.mapa-fatiador-lista canvas,
+.mapa-fatiador-sem-mini {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  background: #1d1a25;
+}
+
+.mapa-fatiador-lista small {
+  display: block;
+  margin-top: 2px;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+}
+
+.mapa-fatiador-calibrar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+}
+
+.mapa-fatiador-painel .mapa-botao.destaque {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.mapa-fatiador-antes-depois {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.mapa-fatiador-antes-depois figure {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  justify-items: center;
+}
+
+.mapa-fatiador-antes-depois canvas {
+  border-radius: 6px;
+  background: #1d1a25;
+}
+
+.mapa-fatiador-antes-depois figcaption {
+  color: var(--mapa-apagado);
+  font-size: 11px;
+}
+
+/* Peça solta no Acervo: aparece inteira, sem o corte do quadro de mapa. */
+.mapa-acervo-item img[data-tipo='objeto'] {
+  object-fit: contain;
+  padding: 4px;
+}
+
+@media (max-width: 900px) {
+  .mapa-fatiador-corpo {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(220px, 45%) minmax(0, 1fr);
+  }
+
+  .mapa-fatiador-painel {
+    border-top: 1px solid var(--mapa-linha);
+    border-left: 0;
+  }
+}

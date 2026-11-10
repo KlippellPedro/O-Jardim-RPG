@@ -424,17 +424,7 @@
   }
 }
 
-/* Mobília do Jardim e a lista das peças por camada. */
-.construtor-mobilia-grupo {
-  margin: 0 0 8px;
-}
-
-.construtor-mobilia-grupo > small {
-  display: block;
-  margin: 0 0 4px;
-  color: var(--mapa-apagado);
-  font-size: 10.5px;
-}
+/* A lista das peças por camada. */
 
 .construtor-camadas {
   margin-top: 6px;
@@ -572,4 +562,27 @@
   color: var(--mapa-texto);
   font: inherit;
   text-align: right;
+}
+
+/* O botão que abre o fatiador de folhas, na seção dos objetos do Acervo. */
+.construtor-fatiar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+  background: rgba(199, 164, 76, 0.07);
+}
+
+.construtor-fatiar .mapa-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.construtor-fatiar .mapa-dica {
+  margin: 0;
 }
