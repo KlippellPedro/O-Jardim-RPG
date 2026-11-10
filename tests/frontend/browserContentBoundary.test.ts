@@ -28,6 +28,7 @@ test('importações brutas e snapshots privados são recusados', () => {
   const load = browserContentBoundary().load as (id: string) => unknown;
   for (const file of ['data/editorial/global.json', 'data/gerado/conteudo-servidor.json',
     'data/regras/regras-editorial.json', 'data/regras/mestre-v1.json', 'data/bestiario/loot-criaturas.json', 'data/bestiario/deidades-v1.json',
+    'data/documentos/universais.json',
     'data/gerado/mundoCatalog.ts?raw', 'data/mundo/entidades.ts?raw',
     'data/mundo/cronicas-arvores.json?raw', 'data/mundo/faccoes.json?raw']) {
     assert.throws(() => load('/repo/' + file), undefined, file);
@@ -43,8 +44,11 @@ test('build de produção não contém trechos privados de regras e contos', () 
   const privateRules = Object.entries(REGRAS_OFICIAIS).flatMap(([id, rule]) => [rule.corpoMestre || '', id === 'mestre' ? rule.corpo : '']);
   const stories = ENTIDADES.flatMap(entity => entity.conto.flatMap(section => section.paragrafos));
   const lore = MUNDO_CATALOG.filter(entry => entry.revelado === false).map(entry => JSON.stringify(entry.conteudo));
+  // Documentos universais: só a rota do Mestre entrega (data/documentos/universais.json).
+  const universais = (JSON.parse(fs.readFileSync('data/documentos/universais.json', 'utf8')).documentos as Array<{ campos: Record<string, string> }>)
+    .flatMap(doc => Object.values(doc.campos));
   let checked = 0;
-  for (const source of [...privateRules, ...stories, ...lore]) {
+  for (const source of [...privateRules, ...stories, ...lore, ...universais]) {
     for (const fragment of source.match(/[^<>\n"\\]{100,180}/g) || []) {
       if (publicRules.includes(fragment)) continue;
       assert.ok(!bundle.includes(fragment), 'Trecho reservado presente no bundle: ' + fragment.slice(0, 60));

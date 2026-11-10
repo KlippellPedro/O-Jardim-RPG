@@ -1,42 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import {
-  ArrowLeft, BadgeCheck, BellRing, Camera, CassetteTape, Contact, Copy, CopyPlus, Cpu, Crosshair, Download, Eraser, FileLock2,
-  FlaskConical, Handshake, ImagePlus, KeyRound, Loader2, Mail, MailOpen, Megaphone, MessagesSquare, Newspaper, NotebookPen, Plus,
-  Printer, Receipt, Save, Smartphone, StickyNote, Ticket, Trash2, X, type LucideIcon,
+  ArrowLeft, Copy, CopyPlus, Cpu, Download, Eraser, FileLock2, ImagePlus, Loader2, Plus, Printer, Save, Trash2, X,
 } from 'lucide-react';
 import { PainelCartao } from '../../../components/painel/PainelShell';
 import { avisar, avisarErro } from '../../../components/avisos/avisos';
 import { confirmar } from '../../../components/avisos/confirmacao';
-import { documentosApi, type IResumoDocumento } from '../../../services/documentosApi';
+import { documentosApi, type IDocumentoUniversal, type IResumoDocumento } from '../../../services/documentosApi';
 import {
   camposParaSalvar, limparTextos, tituloSugerido, valoresComPadrao,
-  type ICampoDoModelo, type IconeDeModelo, type IModeloDeDocumento, type ValoresDoDocumento,
+  type ICampoDoModelo, type IModeloDeDocumento, type ValoresDoDocumento,
 } from './modelo';
 import { MODELOS, ORDEM_DAS_CATEGORIAS, modeloPorId } from './modelos';
-import { baixarPng, carregarImagens, copiarPng, garantirFontes, imprimir, reduzirImagem, renderizar } from './render';
-
-const ICONES: Record<IconeDeModelo, LucideIcon> = {
-  procurado: Crosshair,
-  carta: Mail,
-  bilhete: StickyNote,
-  cartao: Contact,
-  credencial: BadgeCheck,
-  edital: Megaphone,
-  contrato: Handshake,
-  jornal: Newspaper,
-  relatorio: FileLock2,
-  chave: KeyRound,
-  fita: CassetteTape,
-  foto: Camera,
-  frasco: FlaskConical,
-  passagem: Ticket,
-  recibo: Receipt,
-  diario: NotebookPen,
-  convite: MailOpen,
-  post: Smartphone,
-  conversa: MessagesSquare,
-  bloqueio: BellRing,
-};
+import { reduzirImagem } from './render';
+import { DocumentosUniversais } from './DocumentosUniversais';
+import { BOTAO, ICONES, Miniatura, Previa, exportarDocumento, type Exportacao } from './telasDoDocumento';
 
 /** A segunda versão de um modelo (tablet, crachá ou cartão da AstraTech), quando ele tem. */
 function versaoDeTecnologia(modelo: IModeloDeDocumento): { valor: string; rotulo: string } | null {
@@ -54,72 +31,13 @@ interface IDocumentoAberto {
   valores: ValoresDoDocumento;
 }
 
-type Exportacao = 'baixar' | 'copiar' | 'imprimir';
+type Aba = 'oficina' | 'universais';
 
 const retrato = (aberto: IDocumentoAberto) => JSON.stringify({ titulo: aberto.titulo, valores: camposParaSalvar(aberto.modelo, aberto.valores) });
 
 const dataCurta = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '');
 
 const ENTRADA = 'w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white outline-none focus:border-primary/50';
-const BOTAO = 'inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3.5 py-2 text-xs font-bold text-gray-200 transition hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40';
-
-// ---------------------------------------------------------------- desenho na tela
-
-/** Miniatura de um modelo com os textos de exemplo, para a galeria. */
-function Miniatura({ modelo, largura }: { modelo: IModeloDeDocumento; largura: number }) {
-  const canvas = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
-    let vivo = true;
-    const valores = valoresComPadrao(modelo);
-    const desenhar = () => {
-      if (vivo && canvas.current) renderizar(canvas.current, modelo, valores, {}, (largura * 2) / modelo.largura);
-    };
-    desenhar();
-    void garantirFontes().then(desenhar);
-    return () => { vivo = false; };
-  }, [modelo, largura]);
-  return (
-    <canvas
-      ref={canvas}
-      aria-hidden="true"
-      className="mx-auto block h-auto max-h-full w-auto max-w-full drop-shadow-[0_8px_14px_rgba(0,0,0,0.55)]"
-      style={{ width: largura }}
-    />
-  );
-}
-
-/** A prévia do documento aberto, redesenhada a cada mudança (no máximo uma vez por quadro). */
-function Previa({ modelo, valores, titulo }: { modelo: IModeloDeDocumento; valores: ValoresDoDocumento; titulo: string }) {
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const [fontesProntas, setFontesProntas] = useState(false);
-  useEffect(() => {
-    let vivo = true;
-    void garantirFontes().then(() => { if (vivo) setFontesProntas(true); });
-    return () => { vivo = false; };
-  }, []);
-  useEffect(() => {
-    let vivo = true;
-    let quadro = 0;
-    void carregarImagens(modelo, valores).then((imagens) => {
-      if (!vivo) return;
-      quadro = window.requestAnimationFrame(() => {
-        if (vivo && canvas.current) renderizar(canvas.current, modelo, valores, imagens);
-      });
-    });
-    return () => {
-      vivo = false;
-      window.cancelAnimationFrame(quadro);
-    };
-  }, [modelo, valores, fontesProntas]);
-  return (
-    <canvas
-      ref={canvas}
-      role="img"
-      aria-label={`Prévia: ${titulo}`}
-      className="mx-auto block h-auto max-h-[78vh] w-auto max-w-full drop-shadow-[0_16px_28px_rgba(0,0,0,0.6)]"
-    />
-  );
-}
 
 // ---------------------------------------------------------------- campos
 
@@ -220,6 +138,7 @@ export function DocumentosPainel({ campanhaId }: { campanhaId: string }) {
   const [abrindoId, setAbrindoId] = useState<string | null>(null);
   const [salvando, setSalvando] = useState(false);
   const [exportando, setExportando] = useState<Exportacao | null>(null);
+  const [aba, setAba] = useState<Aba>('oficina');
 
   const alterado = aberto ? retrato(aberto) !== salvo : false;
 
@@ -387,22 +306,33 @@ export function DocumentosPainel({ campanhaId }: { campanhaId: string }) {
     if (!aberto || exportando) return;
     setExportando(tipo);
     try {
-      const titulo = aberto.titulo.trim() || aberto.modelo.nome;
-      if (tipo === 'baixar') {
-        await baixarPng(aberto.modelo, aberto.valores, titulo);
-      } else if (tipo === 'copiar') {
-        if (await copiarPng(aberto.modelo, aberto.valores)) avisar.sucesso('Imagem copiada. É só colar no Discord.');
-        else {
-          await baixarPng(aberto.modelo, aberto.valores, titulo);
-          avisar.info('Este navegador não deixou copiar, então a imagem foi baixada.');
-        }
-      } else {
-        await imprimir(aberto.modelo, aberto.valores, titulo);
-      }
-    } catch (erro) {
-      avisarErro(erro, 'Não foi possível gerar o documento.');
+      await exportarDocumento(tipo, aberto.modelo, aberto.valores, aberto.titulo.trim() || aberto.modelo.nome);
     } finally {
       setExportando(null);
+    }
+  };
+
+  /** Um documento universal vira documento da campanha, aberto na Oficina para editar. */
+  const levarParaOficina = async (universal: IDocumentoUniversal) => {
+    const modelo = modeloPorId(universal.modelo);
+    if (!modelo || salvando) return;
+    setSalvando(true);
+    try {
+      const valores = valoresComPadrao(modelo, universal.campos);
+      const documento = await documentosApi.criar(campanhaId, {
+        modelo: modelo.id, titulo: universal.titulo.slice(0, 120), campos: camposParaSalvar(modelo, valores),
+      });
+      const novo: IDocumentoAberto = { id: documento.id, modelo, valores, titulo: documento.titulo, tituloManual: true };
+      guardarNaLista(documento);
+      setAba('oficina');
+      setAberto(novo);
+      setSalvo(retrato(novo));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      avisar.sucesso('Cópia criada na Oficina. O documento universal continua igual.');
+    } catch (erro) {
+      avisarErro(erro, 'Não foi possível copiar para a Oficina.');
+    } finally {
+      setSalvando(false);
     }
   };
 
@@ -491,14 +421,38 @@ export function DocumentosPainel({ campanhaId }: { campanhaId: string }) {
 
   return (
     <PainelCartao>
-      <header className="mb-8 max-w-3xl">
+      <header className="mb-6 max-w-3xl">
         <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>Documentos</h2>
         <p className="mt-2 text-sm leading-6 text-gray-400">
-          Escolha um modelo, troque os textos e a imagem, e o papel fica pronto para a mesa: baixe a imagem, copie para colar no
-          Discord ou imprima. Os documentos ficam guardados nesta campanha e só quem comanda a mesa vê esta aba.
+          {aba === 'oficina'
+            ? 'Escolha um modelo, troque os textos e a imagem, e o papel fica pronto para a mesa: baixe a imagem, copie para colar no Discord ou imprima. Os documentos ficam guardados nesta campanha e só quem comanda a mesa vê esta aba.'
+            : 'Documentos prontos que ajudam a explicar o Jardim: Fluxos, Deidades, Árvores, acontecimentos e povos. Baixe, copie ou imprima e mande aos jogadores. Cada um traz uma nota sobre o que revela e quando entregar.'}
         </p>
       </header>
 
+      <div className="mb-8 flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Partes de Documentos">
+        {([['oficina', 'Oficina'], ['universais', 'Documentos universais']] as const).map(([id, rotulo]) => (
+          <button
+            key={id}
+            type="button"
+            role="tab"
+            id={`documentos-aba-${id}`}
+            aria-selected={aba === id}
+            aria-controls={`documentos-painel-${id}`}
+            onClick={() => setAba(id)}
+            className={`shrink-0 rounded-xl border px-4 py-2 text-xs font-bold transition ${aba === id ? 'border-primary bg-primary/15 text-primary' : 'border-white/10 text-gray-400 hover:text-white'}`}
+          >
+            {rotulo}
+          </button>
+        ))}
+      </div>
+
+      {aba === 'universais' ? (
+        <div role="tabpanel" id="documentos-painel-universais" aria-labelledby="documentos-aba-universais">
+          <DocumentosUniversais campanhaId={campanhaId} copiando={salvando} aoLevarParaOficina={(doc) => void levarParaOficina(doc)} />
+        </div>
+      ) : (
+      <div role="tabpanel" id="documentos-painel-oficina" aria-labelledby="documentos-aba-oficina">
       <section aria-labelledby="documentos-salvos" className="mb-10">
         <h3 id="documentos-salvos" className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">Seus documentos</h3>
         {carregando ? (
@@ -595,6 +549,8 @@ export function DocumentosPainel({ campanhaId }: { campanhaId: string }) {
           ))}
         </div>
       </section>
+      </div>
+      )}
     </PainelCartao>
   );
 }

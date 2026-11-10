@@ -33,6 +33,9 @@ Regras essenciais:
 - `data/bestiario/deidades-v1.json` (fichas das Deidades) também é só do
   servidor e só chega a quem comanda a mesa; o campo Estado revela segredos de
   lore. O texto de referência é a seção "Fichas das Deidades" do Guia do Mestre.
+- `data/documentos/universais.json` (Documentos universais) também é só do
+  servidor e só chega a quem comanda a mesa: alguns trazem pistas de segredos.
+  Peça aprovação do Pedro com a prévia em imagem antes de acrescentar documentos.
 - Mudar o id de uma criatura do catálogo exige migração que leve as chaves
   (`sessao_participantes.monstro_id`, `loot_campanha`, inventário, cofre,
   publicações do catálogo). Foi o que a migração 50 fez em 2026-10-03.

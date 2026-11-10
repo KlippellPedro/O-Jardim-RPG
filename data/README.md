@@ -13,6 +13,9 @@ podem ser espelhadas em `editorial/campanhas/`; veja
 - `economia/`: escala de preços (`escala-precos-v1.json`) e tiers do Cofre.
 - `bestiario/`: famílias e únicos do Bestiário e as tabelas de saque das criaturas.
 - `gerado/`: saídas mecânicas consumidas pelo código. Não edite à mão.
+- `documentos/`: os Documentos universais (`universais.json`), papéis prontos que explicam a lore
+  para o Mestre mandar aos jogadores. Só o servidor lê e só quem comanda a mesa recebe
+  (a fronteira de conteúdo barra o navegador); o ZIP da plataforma leva a pasta.
 - `editorial/`: snapshots das publicações por campanha para revisão no Git; não
   são consumidos automaticamente pelo site.
 

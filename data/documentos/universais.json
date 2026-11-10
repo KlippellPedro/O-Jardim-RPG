@@ -1,0 +1,501 @@
+{
+  "formato": "o-jardim-documentos-universais",
+  "versao_formato": 1,
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e": "Documentos prontos para ajudar a explicar a lore e os conceitos do Jardim (Fluxos, Deidades, Árvores, acontecimentos, povos). Aparecem na aba Documentos universais, dentro de Documentos do Painel do Mestre, ao lado da Oficina. O Mestre baixa, copia ou imprime e manda aos jogadores por fora do site.",
+    "sigilo": "Arquivo só do servidor: o navegador não importa (tools/browser-content-boundary.ts) e a rota GET /documentos/{campanha}/universais só responde a quem comanda a mesa. Alguns documentos trazem pistas de segredos (Keryx, A.X.I.S).",
+    "formato_de_cada_documento": "id (único, não muda depois de publicado), tema, titulo, ensina e entregar (notas para o Mestre), fontes (de onde vem na lore), inventado (o que foi criado para o documento), modelo (id de um modelo de src/pages/Mestre/documentos/modelos) e campos (os valores dos campos daquele modelo, só texto).",
+    "como_acrescentar": "Mostre a prévia ao Pedro antes de pôr aqui. Texto sem travessão, sem 'eco' e sem a antítese 'não é X, é Y' (tests/frontend/tomSemAntitese.test.ts). O teste tests/frontend/documentosUniversais.test.ts confere modelo, campos, opções e tamanho máximo de cada campo."
+  },
+  "documentos": [
+    {
+      "id": "licao-o-que-tem-dentro-do-jardim",
+      "tema": "Cosmologia",
+      "titulo": "Lição de casa: o que tem dentro do Jardim",
+      "ensina": "A ordem Jardim, Árvore, Galho, Dimensão, Reino; que Galho e Realidade são sinônimos; que Árvore, Deidade e Fluxo são a mesma coisa; que o Abismo fica fora da conta das nove; Limiar com um Galho só; que descobrir uma Árvore não revela os Galhos dela.",
+      "entregar": "Cedo. Serve como primeiro documento de qualquer mesa.",
+      "fontes": [
+        "cosmologia:hierarquia-do-jardim",
+        "galho:realidade-0",
+        "registro: banco-lunar"
+      ],
+      "inventado": [
+        "O menino Tito, a professora e o pai dele.",
+        "Tito mora em Lionês."
+      ],
+      "modelo": "diario",
+      "campos": {
+        "data": "3 de Alétheia, lição de casa",
+        "texto": "LIÇÃO: O QUE TEM DENTRO DO JARDIM\n\nO Jardim é tudo o que existe.\nDentro dele crescem nove Árvores.\nDe cada Árvore saem Galhos. A professora disse que Galho e Realidade são a mesma coisa com dois nomes.\nDentro de cada Galho abrem Dimensões.\nDentro de cada Dimensão ficam os Reinos e outros lugares.\n\nFica assim: Jardim, Árvore, Galho, Dimensão, Reino.\n\nEu moro em Lionês. Lionês fica na Dimensão Padrão, que fica na Realidade 0, que é um Galho da Árvore de Gênese.\n\nCada Árvore tem uma Deidade e um Fluxo. A professora falou que a Árvore, a Deidade e o Fluxo são uma coisa só olhada de três lados. Eu não entendi essa parte.\n\nO Abismo fica fora da conta das nove. Ele é o vazio entre as Árvores. O Banco Lunar fica lá, e por isso o dinheiro vale igual em todo canto.\n\nLimiar só tem um Galho. Tudo o que acaba, em qualquer Árvore, vai parar lá.\n\nPergunta: quem descobre uma Árvore já sabe quais são os Galhos dela?\nResposta: não. Tem que descobrir um por um. Meu pai disse que é por isso que os Guias Dimensionais cobram tão caro.",
+        "assinatura": "Tito, turma da manhã",
+        "pauta": "pautado",
+        "espiral": "sim",
+        "mancha": "nenhuma",
+        "tinta": "lapis",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "almanaque-dez-meses",
+      "tema": "Cosmologia",
+      "titulo": "Almanaque: dez meses, nove Árvores e um vazio",
+      "ensina": "A ordem das Árvores pelos meses, as estações, a lua de 28 dias, os quatro dias a mais (Pactos, Fora do Tempo, Lua Carmesim, Em Branco) e os bailes.",
+      "entregar": "Cedo. Fecha bem com a Lição de casa.",
+      "fontes": [
+        "plataforma/core/calendario.py (MESES_DO_ANO e EVENTOS_DO_ANO)",
+        "evento:baile-das-estacoes"
+      ],
+      "inventado": [
+        "A pergunta final sobre Keryx é um gancho: o jornal não sabe o que é Keryx. Se você já renomeou os meses na campanha, o texto fica diferente do calendário dela."
+      ],
+      "modelo": "jornal",
+      "campos": {
+        "suporte": "papel",
+        "jornal": "Folha da Dimensão Padrão",
+        "edicao": "Edição de Gênese",
+        "secao": "Almanaque",
+        "pagina": "Página 8",
+        "manchete": "Dez meses, nove Árvores e um vazio: entenda o seu calendário",
+        "linhaFina": "Cada mês leva o nome de uma Árvore, e quatro deles ganham um dia que não existe no resto do ano.",
+        "imagem": "",
+        "legenda": "",
+        "texto": "Todo ano a Folha recebe a mesma carta: por que o ano tem dez meses se o Jardim tem nove Árvores? A resposta está no último deles.\n\nOs meses seguem a ordem das Árvores: Gênese, Alétheia, Keryx, Anima, Vórtice, Baluarte, Matriz, Éon e Limiar. O décimo leva o nome do Abismo, o vazio que fica entre as Árvores. Ele entra no calendário sem entrar na conta delas.\n\nCada mês tem 28 dias e acompanha uma lua inteira. A Lua Nova vem no dia 1 e a Cheia no dia 15. As estações não dividem o ano por igual: a primavera ocupa três meses, o verão dois, o outono três e o inverno dois.\n\nQuatro meses têm um dia a mais, o 29, que só existe neles. Em Alétheia é o Dia dos Pactos, e quem quer um acordo que valha de verdade costuma escolher esse dia para selar. Em Éon é o Dia Fora do Tempo: ninguém sabe onde ele se encaixa, e há quem jure que já aconteceu. Em Limiar é o Dia da Lua Carmesim, quando o céu pode ficar vermelho. No Abismo é o Dia em Branco. Quem o viveu conta pouca coisa, e o pouco que conta não bate com o que os outros lembram.\n\nOs quatro bailes começam sempre no dia 15 e duram uma semana: o da Primavera em Gênese, o do Verão em Anima, o do Outono em Baluarte e o do Inverno em Limiar.\n\nFica a curiosidade que os leitores mais atentos sempre mandam: o terceiro mês é o único que não leva o nome de uma Árvore conhecida. Ninguém nesta redação soube dizer o que é Keryx.",
+        "autor": "Da redação",
+        "papel": "jornal"
+      }
+    },
+    {
+      "id": "carta-a-borda-reta",
+      "tema": "Cosmologia",
+      "titulo": "Carta: a borda reta (Sonhar entre as Árvores)",
+      "ensina": "Sonhos e Pesadelos, as camadas de Sonhar separadas por Árvore, o que é preciso para atravessar, a borda reta, o cansaço de quem atravessa.",
+      "entregar": "Quando alguém da mesa sonhar de um jeito estranho, ou antes de uma aventura em Sonhar. O P.S. cita Grimm, que já aparece na entrada da dimensão Sonhar.",
+      "fontes": [
+        "conceito:sonhar-entre-as-arvores",
+        "dimensao:sonhar"
+      ],
+      "inventado": [
+        "Clara e Benta."
+      ],
+      "modelo": "carta",
+      "campos": {
+        "suporte": "papel",
+        "localData": "Escrito assim que acordei",
+        "saudacao": "Benta,",
+        "corpo": "Você vai achar que é febre. Leia mesmo assim.\n\nEsta noite eu sonhei fora da minha camada. Cada Árvore tem a sua camada de Sonhar, separada das outras, com os seus Sonhos e os seus Pesadelos. Duas pessoas de Árvores diferentes podem dividir a mesma cama a vida inteira e nunca se cruzar lá dentro.\n\nEu atravessei. Querer não basta, e dormir mais fundo também não ajuda: alguém abriu uma passagem, e eu caí por ela. O ar do outro lado pesa diferente, e as pessoas falam num ritmo que eu não conhecia. Quando olhei para trás, a minha camada terminava numa borda reta, como uma folha cortada a tesoura.\n\nUns me receberam com festa. Outros me olhavam com vontade de guardar. Acordei cansada como quem carregou pedra. Se eu falar daquela borda dormindo, me acorde, mesmo que eu esteja sorrindo.",
+        "despedida": "Da sua irmã,",
+        "assinatura": "Clara",
+        "posEscrito": "P.S.: Se alguém oferecer a ajuda de Grimm para atravessar, recuse por mim.",
+        "letra": "mao",
+        "lacre": "azul",
+        "inicial": "C",
+        "papel": "envelhecido"
+      }
+    },
+    {
+      "id": "panfleto-ainda-ha-quem-responda",
+      "tema": "Deidades",
+      "titulo": "Panfleto: ainda há quem responda",
+      "ensina": "Os epítetos das deidades e o Fluxo de cada uma; que quase todas se calaram; que a da Origem ainda responde e por isso coisas novas nascem; uma pista sobre quem guardava a comunicação entre as Árvores.",
+      "entregar": "Quando a mesa começar a estranhar que as deidades não respondem. É boato de pregador: revela a paralisia, sem nomes (fora Aethel) e sem a causa.",
+      "fontes": [
+        "deidade:* (epítetos e status)",
+        "fluxo:fluxo-da-origem",
+        "dimensao:sala-dos-nomes"
+      ],
+      "inventado": [
+        "A Casa de Aethel e a capela da estrada de Lionês.",
+        "Irmã Celeste Amarante."
+      ],
+      "modelo": "edital",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Casa de Aethel",
+        "subtitulo": "Capela da estrada de Lionês",
+        "numero": "Folha avulsa",
+        "titulo": "Ainda há quem responda",
+        "corpo": "A quem reza e não ouve nada de volta: a culpa não é sua. Quase todas as deidades do Jardim se calaram, e ninguém sabe dizer desde quando.\n\nNão respondem mais Aquela que flui na Essência, Aquela que flui na Vitalidade, Aquele que flui na Inconstância, Aquele que flui no Físico, Aquela que flui no Espaço e Aquele que flui no Tempo.\n\nAquela que flui no Fim segue recebendo tudo o que acaba. Do Vazio ninguém espera resposta. De quem guardava os pactos entre as Árvores, nem o nome se ouve mais.\n\nAquela que flui na Origem nunca se calou, e por isso ainda nasce coisa nova no Jardim. Venha acender uma vela conosco. Traga uma semente.",
+        "localData": "Distribuído na saída do Baile da Primavera",
+        "assinante": "Irmã Celeste Amarante",
+        "cargo": "Pela Casa de Aethel",
+        "selo": "Casa de Aethel",
+        "tinta": "verde",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "prontuario-fluxo-do-tempo",
+      "tema": "Fluxos",
+      "titulo": "Prontuário: envelhecimento fora de ordem (Fluxo do Tempo)",
+      "ensina": "O que o Fluxo do Tempo faz (agir antes, atrasar um veneno), o que ele não faz (voltar no tempo, mostrar o futuro), o custo no corpo do portador e a marca corporal.",
+      "entregar": "A qualquer momento. Não cita Chronus.",
+      "fontes": [
+        "fluxo:fluxo-do-tempo",
+        "registro: casa-do-primeiro-lume"
+      ],
+      "inventado": [
+        "O paciente, a curandeira Ilma Vasconcelos e o protocolo OL-0932."
+      ],
+      "modelo": "relatorio",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Ordem do Lume",
+        "setor": "Casa do Primeiro Lume, ala dos crônicos",
+        "classificacao": "Prontuário",
+        "protocolo": "OL-0932",
+        "assunto": "Envelhecimento fora de ordem em portador de Éon",
+        "data": "Atendido em 9 de Éon",
+        "corpo": "Paciente de 24 anos, canaliza o Fluxo do Tempo desde os 15. Trabalha como escolta de caravana. Procurou a Casa por dor nas juntas da mão esquerda.\n\nExame: a mão esquerda tem pele, unhas e articulações de alguém com mais de 70 anos. O resto do corpo corresponde à idade declarada. A passagem de uma idade para a outra fica no meio do antebraço e é nítida como a borda de uma luva.\n\nO paciente descreve o uso do Fluxo com clareza. Age antes de quem atacaria primeiro. Uma vez fez um veneno levar uma hora para agir em vez de um instante, e foi o que lhe deu tempo de chegar até nós. Diz que o Fluxo nunca o levou de volta no tempo nem lhe mostrou o futuro, e que já tentou as duas coisas. Nas palavras dele: “ele só muda a ordem da fila”.\n\nConclusão: o tempo que o paciente poupou foi cobrado do próprio corpo, e a cobrança caiu sobre a mão com que ele canaliza. Os registros da Ordem mostram o mesmo padrão em outros portadores de Éon, sempre numa parte só do corpo: uma mecha branca, uma mão de velho num rosto jovem. Quem canaliza por muitos anos parece ter vivido o dobro deles.\n\nNão há tratamento conhecido. Recomendamos suspender a canalização. O paciente recusou e pediu uma luva.",
+        "responsavel": "Curandeira Ilma Vasconcelos",
+        "anotacao": "perguntou se dá pra devolver o tempo. não dá.",
+        "carimbo": "arquivado",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "aviso-antes-de-fechar-limpe",
+      "tema": "Fluxos",
+      "titulo": "Aviso da Ordem do Lume: limpe primeiro (Fluxo da Vitalidade)",
+      "ensina": "A Vitalidade acelera o que já acontece no corpo, cura e apodrece do mesmo jeito, é fácil de despertar e difícil de controlar; a marca corporal.",
+      "entregar": "A qualquer momento, sobretudo quando alguém da mesa curar com Anima. Não cita Haemus.",
+      "fontes": [
+        "fluxo:fluxo-da-vitalidade",
+        "registro: casa-do-primeiro-lume"
+      ],
+      "inventado": [
+        "O aviso nº 4 e a regra da casa. A frase do coração parado é um aceno a Limiar."
+      ],
+      "modelo": "edital",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Ordem do Lume",
+        "subtitulo": "Casa do Primeiro Lume",
+        "numero": "Aviso nº 4",
+        "titulo": "Limpe primeiro",
+        "corpo": "Aos curandeiros que canalizam a Vitalidade, de Anima.\n\nA Vitalidade acelera o que já está acontecendo no corpo. Numa ferida limpa, fecha a carne em minutos. Numa ferida suja, apodrece a carne no mesmo tempo. O Fluxo trata cura e infestação do mesmo jeito, porque as duas são vida se espalhando.\n\nPor isso, nesta Casa:\nLave a ferida antes de canalizar.\nTire a ponta da flecha, a farpa e a terra. O que ficar dentro cresce junto com a carne.\nNão canalize sobre ferida com febre. Chame quem estiver de turno.\nUm coração parado pode voltar a bater. Pergunte antes se deveria.\n\nAos novos: a Vitalidade é o Fluxo mais fácil de despertar e o mais difícil de controlar. Quem a canaliza parece mais novo do que é, e o cabelo e as unhas crescem depressa. Cortem as unhas antes do turno.",
+        "localData": "Pregado na porta da ala de feridos",
+        "assinante": "Mestra das Alas",
+        "cargo": "Pela Ordem do Lume",
+        "selo": "Ordem do Lume",
+        "tinta": "vermelho",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "edital-linhas-no-chao",
+      "tema": "Fluxos",
+      "titulo": "Edital da Vigília: linhas no chão (Os Erros e o Fluxo do Espaço)",
+      "ensina": "Por que criaturas e lugares aparecem fora do lugar (os Erros); que as fronteiras estão cedendo; que só o Fluxo do Espaço atravessa Galhos sem matar; a marca corporal dos Guias Dimensionais.",
+      "entregar": "Logo depois do primeiro encontro fora de contexto (um bicho de Întuneric num campo, por exemplo). Não cita Aperion nem a paralisia.",
+      "fontes": [
+        "dimensao:os-vaos (Os Erros)",
+        "fluxo:fluxo-do-espaco",
+        "registro: agulha",
+        "faccao: vigilia-das-raizes"
+      ],
+      "inventado": [
+        "Edital nº 31 e o Vigia-mor Basílio Taveira.",
+        "As três instruções práticas."
+      ],
+      "modelo": "edital",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Vigília das Raízes",
+        "subtitulo": "A Agulha, sala dos mapas",
+        "numero": "Edital nº 31",
+        "titulo": "Linhas no chão",
+        "corpo": "Por ordem da Vigília das Raízes, a quem atravessa estradas, campos e cidades de qualquer Árvore.\n\nAs fronteiras que antes se mantinham sozinhas estão cedendo. Em alguns pontos, um lugar encosta num lugar de outra Dimensão, e o encontro aparece como uma linha no chão que ninguém viu surgir. De um lado fica o lugar que você conhece. Do outro, qualquer coisa. Chamamos esses pontos de Erros.\n\nUm Erro não tem porta, não abre e não fecha. Ele aparece sem aviso, e para atravessar basta um passo. É por causa dos Erros que criaturas de Întuneric já foram vistas em campos de Lionês, e que vilas da Dimensão Padrão amanheceram com um céu que não era o delas.\n\nSe encontrar uma linha que ontem não estava ali:\nNão pise nela e não deixe crianças nem animais por perto.\nNão persiga nada que tenha vindo do outro lado.\nAnote o lugar e a hora e mande aviso à casa da Vigília mais próxima.\n\nSó quem canaliza o Fluxo do Espaço atravessa de um Galho a outro sem morrer no caminho. Um Guia Dimensional se reconhece pela sombra, que nunca cai no ângulo certo. Não atravesse sem um.",
+        "localData": "A Agulha, no Vazio",
+        "assinante": "Vigia-mor Basílio Taveira",
+        "cargo": "Pela Vigília das Raízes",
+        "selo": "Vigília das Raízes",
+        "tinta": "azul",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "carta-a-aprendiz-da-essencia",
+      "tema": "Fluxos",
+      "titulo": "Carta a uma aprendiz (Fluxo da Essência)",
+      "ensina": "O que a Essência faz e o que não faz; que o primeiro uso é reconhecer o Fluxo de alguém (Ressonância); o peso de ver a verdade; a marca corporal.",
+      "entregar": "A qualquer momento. Cita a dona do Fluxo sem dizer o nome de Ousias.",
+      "fontes": [
+        "fluxo:fluxo-da-essencia",
+        "registro: acervo-prismatico"
+      ],
+      "inventado": [
+        "Odália, Inês e o irmão de Odália."
+      ],
+      "modelo": "carta",
+      "campos": {
+        "suporte": "papel",
+        "localData": "Acervo Prismático, fim de Alétheia",
+        "saudacao": "Querida Inês,",
+        "corpo": "Você me perguntou por que eu parei de ler as pessoas. Vou responder do jeito que me ensinaram, devagar.\n\nA Essência lê o que uma coisa é por baixo do que ela parece ser. Ela não mostra o futuro e não entra no pensamento de ninguém. Mostra a natureza. O primeiro uso que você vai acertar, e logo, é reconhecer o Fluxo que alguém carrega. Treine nisso. É o uso mais seguro, e os caçadores pagam bem a quem faz direito.\n\nO resto vem depois e vem caro. Um dia você vai olhar para alguém que ama e ver o que ele é. A verdade raramente ajuda e nunca consola. Eu vi o que meu irmão era numa tarde de feira e passei três anos sem saber o que dizer a ele. Os que insistem acabam calados, como a própria dona deste Fluxo.\n\nSeus olhos já começaram a mudar? Os meus perderam a cor em dois verões e ficaram cor de âmbar. Não se assuste no espelho.",
+        "despedida": "Com paciência,",
+        "assinatura": "Odália",
+        "posEscrito": "P.S.: Não leia ninguém sem pedir licença. Nem a mim.",
+        "letra": "mao",
+        "lacre": "dourado",
+        "inicial": "O",
+        "papel": "envelhecido"
+      }
+    },
+    {
+      "id": "diario-o-nome-que-sumiu",
+      "tema": "Fluxos",
+      "titulo": "Diário: o nome que sumiu (Fluxo do Vazio)",
+      "ensina": "O Vazio apaga sem deixar destruição: ninguém lembra, ninguém sente falta, sobram só objetos sem dono; a marca corporal.",
+      "entregar": "Como gancho de aventura ou quando o Vazio entrar em cena. Não cita Erebus.",
+      "fontes": [
+        "fluxo:fluxo-do-vazio"
+      ],
+      "inventado": [
+        "A família, a irmã esquecida e o vizinho da Guilda.",
+        "O texto termina no meio da frase de propósito."
+      ],
+      "modelo": "diario",
+      "campos": {
+        "data": "Dia 6, de manhã cedo",
+        "texto": "A mesa do café tinha uma cadeira a mais hoje. Mãe pôs quatro pratos, olhou para o corredor e guardou um de volta sem dizer nada.\n\nNo quarto do fundo tem uma cama arrumada. Ninguém dorme nela. No varal tem um vestido que não serve em ninguém desta casa.\n\nPerguntei ao pai de quem era o quarto. Ele disse que sempre foi o quarto de costura.\n\nAchei no caderno a minha própria letra, de semana passada: “fui com a ________ até o mercado”. O espaço está em branco. O papel não foi raspado, e o resto da frase continua lá.\n\nNinguém sente falta dela, e é isso que me dá medo. Eu também não sinto. Só sei que devia sentir.\n\nO vizinho, que é da Guilda, disse que isso é coisa do Vazio. Que o Vazio apaga, e não sobra destruição nenhuma para provar que alguém existiu. Disse que viu uma vez um homem com estrelas no pulso, quase transparentes.\n\nVou escrever tudo o que ainda sei dela antes que suma também. Gostava de figo. Cantava errado de propósito. Tinha",
+        "assinatura": "",
+        "pauta": "pautado",
+        "espiral": "sim",
+        "mancha": "agua",
+        "tinta": "preta",
+        "papel": "envelhecido"
+      }
+    },
+    {
+      "id": "relatorio-pares-do-fisico",
+      "tema": "Fluxos",
+      "titulo": "Relatório do Arquivo Prismático: os sete pares do Físico",
+      "ensina": "Os sete pares elemento e derivação, que nem todo portador deriva, a regra da resistência pela metade contra a derivação, a raridade de itens elementais e a marca corporal.",
+      "entregar": "Cedo, é o Fluxo que a mesa costuma encostar primeiro. A anotação na margem aponta para os Sete Salões.",
+      "fontes": [
+        "fluxo:fluxo-do-fisico",
+        "dimensao:sete-saloes",
+        "registro: acervo-prismatico"
+      ],
+      "inventado": [
+        "O protocolo AP-2210 e o arquivista R. Montenegro."
+      ],
+      "modelo": "relatorio",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Arquivo Prismático",
+        "setor": "Acervo Prismático, prateleira de Baluarte",
+        "classificacao": "Consulta paga",
+        "protocolo": "AP-2210",
+        "assunto": "Os sete pares do Fluxo do Físico",
+        "data": "Copiado em 20 de Baluarte",
+        "corpo": "Resumo verificado em dois núcleos, a pedido de cliente.\n\nO Fluxo do Físico, de Baluarte, é o mais comum dos Fluxos e o primeiro que a maioria das pessoas desperta. Trabalha com a matéria bruta e com a energia que se pode tocar. O portador ganha aptidão com uma força da matéria e, com o tempo, pode alcançar a derivação dela. Nem todo portador chega lá.\n\nPares registrados, do elemento para a derivação:\nTerra, Areia\nÁgua, Gelo\nFogo, Magma\nAr, Fumaça\nRaio, Plasma\nLuz, Pureza\nEscuridão, Trevas\n\nObservação de combate, confirmada nos dois núcleos: a resistência a um elemento vale só metade contra a derivação dele. No relato original, um guarda com 10 de resistência a Luz recebeu um golpe de Pureza e absorveu apenas 5.\n\nA essência do Fluxo pode ser imbuída em armas e armaduras. Itens assim são raríssimos, e o preço de mercado acompanha.\n\nMarca no corpo: minerais aparecem sobre a pele, na cor do elemento despertado.",
+        "responsavel": "Arquivista R. Montenegro",
+        "anotacao": "pedir a prateleira de faixa preta sobre os Sete Salões",
+        "carimbo": "conferido",
+        "papel": "claro"
+      }
+    },
+    {
+      "id": "bilhete-nao-me-peca-para-repetir",
+      "tema": "Fluxos",
+      "titulo": "Bilhete: não me peça para repetir (Fluxo da Inconstância)",
+      "ensina": "A Inconstância não se repete de propósito, quem a usa aposta em vez de planejar, e a marca laranja muda de lugar.",
+      "entregar": "A qualquer momento. Não cita Ignis.",
+      "fontes": [
+        "fluxo:fluxo-da-inconstancia",
+        "registro: patio-das-rotas"
+      ],
+      "inventado": [
+        "Zuza e o episódio da ponte."
+      ],
+      "modelo": "bilhete",
+      "campos": {
+        "texto": "Não me peça para repetir o que eu fiz na ponte. Ninguém que canaliza Vórtice repete nada de propósito: o mesmo gesto, feito duas vezes, dá duas coisas diferentes. A gente aprende a apostar em vez de planejar.\n\nSe quer alguém que faça igual todo dia, contrate um Elementarista. Se quer alguém que faça o impossível uma vez, me procure no Pátio das Rotas.\n\nE pare de encarar o meu braço. A marca laranja já mudou de lugar duas vezes desde que você chegou.",
+        "assinatura": "Zuza",
+        "papel": "pardo",
+        "tinta": "preta",
+        "mancha": "sim"
+      }
+    },
+    {
+      "id": "recibo-casa-krimm-kramm",
+      "tema": "Fluxos",
+      "titulo": "Recibo da Casa Krimm-Kramm (Inconstância e Krammel)",
+      "ensina": "Mostra a Inconstância na prática (o mesmo lance dando resultados absurdos) e traz o cumprimento goblin em Krammel.",
+      "entregar": "Junto do bilhete de Zuza ou numa cena de jogo de azar.",
+      "fontes": [
+        "fluxo:fluxo-da-inconstancia",
+        "idioma: Krammel (cumprimento “Krimm, kramm?”)"
+      ],
+      "inventado": [
+        "A Casa Krimm-Kramm, a mesa de dados no Pátio das Rotas e os resultados dos lances."
+      ],
+      "modelo": "comprovante",
+      "campos": {
+        "emissor": "Casa Krimm-Kramm",
+        "unidade": "Mesa dos dados, Pátio das Rotas",
+        "tipo": "Comprovante de aposta",
+        "itens": "Aposta, rodada 1 ; 50\nResultado: o dado virou fumaça ; 0\nAposta, rodada 2 ; 50\nResultado: o dado parou de pé ; 0\nDevolução por regra da casa ; -100",
+        "total": "100 Lunaris devolvidos",
+        "data": "11 de Vórtice",
+        "hora": "23:47",
+        "conta": "Cliente da marca laranja",
+        "autenticacao": "KRM-0666-KRM",
+        "mensagem": "Krimm, kramm? Vórtice não aposta nesta casa.",
+        "desbotado": "nova"
+      }
+    },
+    {
+      "id": "jornal-chuva-roxa",
+      "tema": "Acontecimentos",
+      "titulo": "Jornal: Chuva Roxa cai sobre as lavouras de Lionês",
+      "ensina": "Os sinais da Chuva Roxa, o efeito, quem escapa, os que caminham ilesos e as teorias sobre a origem.",
+      "entregar": "Quando a Chuva Roxa cair no calendário da campanha, ou antes, como aviso.",
+      "fontes": [
+        "evento:chuva-roxa",
+        "reino:liones"
+      ],
+      "inventado": [
+        "A chuva cair em Lionês e os três moradores ilesos na praça."
+      ],
+      "modelo": "jornal",
+      "campos": {
+        "suporte": "papel",
+        "jornal": "Folha da Dimensão Padrão",
+        "edicao": "Edição extra",
+        "secao": "Clima",
+        "pagina": "Página 1",
+        "manchete": "Chuva Roxa cai sobre as lavouras de Lionês",
+        "linhaFina": "Sobreviventes contam que o céu respirou antes das primeiras gotas. Três moradores atravessaram a praça ilesos, e nenhum quis falar.",
+        "imagem": "",
+        "legenda": "",
+        "texto": "A Chuva Roxa voltou na tarde de ontem, sem aviso, e durou menos de uma hora. Foi o bastante. Em Lionês, onde a chuva costuma chegar na hora certa, ninguém lembra de ter visto o céu daquele jeito.\n\nQuem estava sob telhado conta a mesma sequência. Primeiro o ar ficou pesado, úmido e frio. Depois as nuvens começaram a girar contra o vento, em espirais lentas, e o céu pareceu respirar. Então caíram as gotas, violeta e com brilho de metal.\n\nQuem foi tocado por uma única gota sentiu a vida escorrer para algum lugar. O corpo enrijece, perde a cor e, com as horas, vira pó. Capa e armadura não protegeram ninguém: a chuva atravessa o pano e o metal como se procurasse a vida embaixo. Só escaparam os que estavam em lugar todo fechado ou sob proteção mágica.\n\nTrês moradores atravessaram a praça durante a chuva e chegaram do outro lado sem um arranhão. Testemunhas dizem que as gotas escorriam em volta deles. Os três tinham os olhos brilhando em violeta quando entraram em casa, e um vizinho jura que a sombra de um deles se mexeu sozinha. Nenhum quis falar com esta Folha.\n\nNinguém sabe de onde a chuva vem. Na feira, há quem culpe Salém e as bruxas. Há quem diga que é obra de alguma Entidade preparando a terra para algo maior. E há os que dizem que é o arrependimento da própria Dimensão.\n\nA Ordem do Lume pede que, ao primeiro sinal de nuvens girando contra o vento, todos procurem abrigo fechado e não saiam para socorrer ninguém até a última gota.",
+        "autor": "Da redação",
+        "papel": "jornal"
+      }
+    },
+    {
+      "id": "jornal-noite-rubra",
+      "tema": "Acontecimentos",
+      "titulo": "Jornal: o que as guildas sabem da Noite Rubra (Fluxo do Fim)",
+      "ensina": "A Lua Carmesim, as fendas e as amálgamas de Arkarin, a frase do sacrifício, os grupos de seis, as provas e o pedido à Mulher Carmesim; o dia 29 de Limiar.",
+      "entregar": "Antes do mês de Limiar ou quando a mesa ouvir falar da Noite Rubra.",
+      "fontes": [
+        "evento:noite-rubra",
+        "fluxo:fluxo-do-sangue",
+        "reino:emberhold",
+        "plataforma/core/calendario.py (lua-carmesim)"
+      ],
+      "inventado": [
+        "A Gazeta das Guildas e a recomendação do conselho das guildas."
+      ],
+      "modelo": "jornal",
+      "campos": {
+        "suporte": "papel",
+        "jornal": "Gazeta das Guildas",
+        "edicao": "Edição de Limiar",
+        "secao": "Avisos",
+        "pagina": "Página 2",
+        "manchete": "Lua Carmesim à vista? O que as guildas sabem da Noite Rubra",
+        "linhaFina": "Fendas, amálgamas e um convite que ninguém quer receber. A Gazeta reuniu o que se conta nas cinco guildas de Emberhold.",
+        "imagem": "",
+        "legenda": "",
+        "texto": "Quem já viu uma Noite Rubra não esquece a cor do céu. A Lua Carmesim rasga a noite e tinge tudo de vermelho, e os mais velhos dizem que é o próprio Fluxo do Fim, inquieto, querendo sair de Arkarin.\n\nEnquanto ela está no céu, abrem-se portais, fendas e rachaduras pelo mundo. Por elas escapam amálgamas agressivas e corrompidas, vindas de Arkarin. Quando a lua se põe, tudo volta ao normal, menos as vidas que foram tiradas. E todos concordam que uma Noite Rubra anuncia coisa pior pela frente.\n\nHá também a parte que se conta em voz baixa, e que vem sempre com a mesma frase: “Somente os que sacrificam algo à altura podem continuar.” Grupos de seis que fazem um sacrifício grandioso naquela noite são chamados a Arkarin, onde as regras do mundo não valem. Lá não há descanso. Há provas que testam a mente, a força, o medo e aquilo que cada um tenta esconder. Ao final, só um grupo caminha até a Mulher Carmesim, e ela ouve um pedido dos vencedores.\n\nO conselho das cinco guildas recomenda portas trancadas, armas à mão e nenhum contrato fora dos muros naquela noite. A quem pensa no pedido, a Gazeta lembra: saiba o preço antes de pagar.\n\nO calendário guarda a Lua Carmesim para o dia 29 de Limiar, um dia que só existe nesse mês. Mesmo assim, ninguém garante que ela venha.",
+        "autor": "Da redação",
+        "papel": "envelhecido"
+      }
+    },
+    {
+      "id": "jornal-grande-silencio",
+      "tema": "Acontecimentos",
+      "titulo": "Jornal: um dia inteiro sem uma única mensagem (Grande Silêncio)",
+      "ensina": "O Grande Silêncio do mês de Keryx e a nota evasiva da AstraTech. É pista, não explicação: aponta para a A.X.I.S sem dizer o que ela faz.",
+      "entregar": "No mês de Keryx, quando o Grande Silêncio cair, ou quando a mesa começar a investigar a AstraTech.",
+      "fontes": [
+        "plataforma/core/calendario.py (silencio-da-malha)",
+        "registro: salao-das-treze-portas",
+        "idioma: Mudral"
+      ],
+      "inventado": [
+        "Os pombos, o tradutor anônimo e a nota da AstraTech."
+      ],
+      "modelo": "jornal",
+      "campos": {
+        "suporte": "papel",
+        "jornal": "Folha da Dimensão Padrão",
+        "edicao": "Edição de Keryx",
+        "secao": "Cidade",
+        "pagina": "Página 1",
+        "manchete": "Um dia inteiro sem uma única mensagem",
+        "linhaFina": "Cartas, mensageiros, aparelhos e rituais de contato falharam ao mesmo tempo, em toda parte. A AstraTech diz que seus sistemas funcionaram normalmente.",
+        "imagem": "",
+        "legenda": "",
+        "texto": "Nenhuma mensagem chegou a lugar nenhum durante o dia de ontem. Os pombos voltaram ao pombal com o bilhete ainda preso na perna. Os aparelhos da AstraTech acendiam a tela e não respondiam. Os rituais de contato não encontraram do outro lado quem procuravam. Cada um passou o dia sozinho com o que tinha para dizer.\n\nÀ meia-noite tudo voltou a funcionar, como se nada tivesse acontecido.\n\nO calendário chama esse dia de Grande Silêncio. Ele cai em algum dia do mês de Keryx, nunca no mesmo, e até hoje ninguém conseguiu prever qual.\n\nProcurada por esta Folha, a AstraTech respondeu por nota: “Os sistemas da A.X.I.S operaram normalmente durante todo o período. A AstraTech não comenta fenômenos naturais.”\n\nUm tradutor do Salão das Treze Portas, que pediu para não ser identificado, contou que naquele dia nenhuma das treze salas conseguiu traduzir uma linha, nem a do Universal. “Até o Mudral falhou”, disse. “E o Mudral nem tem som.”",
+        "autor": "Da redação",
+        "papel": "jornal"
+      }
+    },
+    {
+      "id": "contrato-forja-de-khazad",
+      "tema": "Povos",
+      "titulo": "Contrato da Forja de Khazad (anões e Grúndar)",
+      "ensina": "Como os anões vendem: peça de uma mão só, uma ou duas vendas na vida, preço com favor cobrado quando Khazad quiser; a runa de quem forjou; o cumprimento em Grúndar.",
+      "entregar": "Quando a mesa quiser comprar algo de um anão, ou como item achado.",
+      "fontes": [
+        "reino:reino-dos-anoes (Khazad)",
+        "idioma: Grúndar (“Eld ok hárn”)"
+      ],
+      "inventado": [
+        "O ferreiro Hárgrim, filho de Orn, e o machado.",
+        "O preço de 800 Lunaris (confira com a Loja).",
+        "Deixei o comprador em branco e o contrato em aberto, para o jogador assinar."
+      ],
+      "modelo": "contrato",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "Forja de Khazad",
+        "subtitulo": "Venda de peça de mão",
+        "numero": "Segunda e última venda",
+        "servico": "Um machado de mão, forjado e gravado por Hárgrim, filho de Orn",
+        "contratante": "",
+        "contratado": "Hárgrim, ferreiro de Khazad",
+        "pagamento": "800 Lunaris e um favor",
+        "prazo": "O favor vence quando Khazad cobrar",
+        "clausulas": "A peça saiu de uma mão só e leva no cabo a runa de quem a fez.\nO comprador fica devendo a Khazad um favor. Khazad escolhe o dia, a hora e o tamanho.\nQuem recusa o favor devolve a peça e não compra em Khazad nunca mais.\nA cópia em Grúndar é a que vale.",
+        "observacao": "“Eld ok hárn.” Fogo e ferro: que a tua forja não apague.",
+        "estado": "aberto",
+        "papel": "envelhecido"
+      }
+    },
+    {
+      "id": "decreto-das-dez-cadeiras",
+      "tema": "Povos",
+      "titulo": "Decreto das Dez Cadeiras (Salém e Nemético)",
+      "ensina": "Salém: território só de mulheres, as Irmãs da Noite, como se entra, como o reino se defende, e que decreto só vale com os sinais das dez; o cumprimento em Nemético.",
+      "entregar": "Na fronteira de Salém ou quando alguém da mesa tiver ligação com bruxas.",
+      "fontes": [
+        "reino:salem",
+        "idioma: Nemético (“Mhar nem, dhú”)"
+      ],
+      "inventado": [
+        "O marco de pedra na fronteira e a frase sobre papel falso."
+      ],
+      "modelo": "edital",
+      "campos": {
+        "suporte": "papel",
+        "emissor": "As Irmãs da Noite",
+        "subtitulo": "Salém",
+        "numero": "Decreto das Dez Cadeiras",
+        "titulo": "Daqui em diante, Salém",
+        "corpo": "Mhar nem, dhú. Que nenhuma maldição te ache, se você ler até o fim e obedecer.\n\nA partir desta pedra começa Salém. Homem nenhum atravessa este marco, a não ser como prisioneiro ou como oferenda.\n\nA mulher que deseja viver em Salém prova a sua aptidão com o Fluxo, ou jura servir a uma causa do reino. A que não tem magia pode ser acolhida, se jurar lealdade ao coven, e aceitará o lugar que lhe derem.\n\nSalém não marcha. Quem provocar a ira das Dez será amaldiçoado, envenenado, ou encontrará à porta algo que foi invocado para isso.\n\nEste decreto vale porque traz o sinal de cada uma das dez Cadeiras. Papel de Salém com menos de dez sinais é falso, e quem o carrega responde por ele.",
+        "localData": "Marco de pedra na fronteira de Salém",
+        "assinante": "As Dez",
+        "cargo": "Irmãs da Noite, rainhas de Salém",
+        "selo": "Dez Cadeiras",
+        "tinta": "roxo",
+        "papel": "escuro"
+      }
+    }
+  ]
+}

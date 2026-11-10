@@ -13,6 +13,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 
 from core import documentos as regras
+from core import documentos_universais as universais
 from core.audit import record_audit
 from core.database import Database
 from core.dependencies import (
@@ -80,6 +81,18 @@ def listar(
             (campanha_id,),
         ).fetchall()
     return {"documentos": [_resumo(linha) for linha in linhas]}
+
+
+@router.get("/{campanha_id}/universais")
+def listar_universais(
+    campanha_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Os documentos prontos da lore (core/documentos_universais.py). Declarada antes da rota do id."""
+    with database.connection() as connection:
+        require_campaign_manager(connection, campanha_id, user.id)
+    return {"documentos": universais.listar()}
 
 
 @router.get("/{campanha_id}/{documento_id}")

@@ -19,10 +19,24 @@ export interface IDocumentoParaSalvar {
   campos: Record<string, string>;
 }
 
+/** Documento pronto da lore (data/documentos/universais.json), só de leitura. As notas são para o Mestre. */
+export interface IDocumentoUniversal {
+  id: string;
+  tema: string;
+  titulo: string;
+  ensina: string;
+  entregar: string;
+  fontes: string[];
+  inventado: string[];
+  modelo: string;
+  campos: Record<string, string>;
+}
+
 const base = (campanhaId: string) => `/documentos/${encodeURIComponent(campanhaId)}`;
 
-// Só Mestre e assistente: o servidor recusa jogador nas quatro rotas.
+// Só Mestre e assistente: o servidor recusa jogador em todas as rotas.
 export const documentosApi = {
+  universais: (campanhaId: string) => api<{ documentos: IDocumentoUniversal[] }>(`${base(campanhaId)}/universais`),
   listar: (campanhaId: string) => api<{ documentos: IResumoDocumento[] }>(base(campanhaId)),
   obter: (campanhaId: string, id: string) => api<IDocumentoDoServidor>(`${base(campanhaId)}/${encodeURIComponent(id)}`),
   criar: (campanhaId: string, documento: IDocumentoParaSalvar) =>

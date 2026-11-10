@@ -162,7 +162,7 @@ try {
 
     $platformData = Join-Path $platformStage 'data'
     New-Item -ItemType Directory -Path $platformData -Force | Out-Null
-    @('data\ficha', 'data\jardim', 'data\mundo', 'data\regras', 'data\loja', 'data\economia', 'data\gerado', 'data\bestiario') |
+    @('data\ficha', 'data\jardim', 'data\mundo', 'data\regras', 'data\loja', 'data\economia', 'data\gerado', 'data\bestiario', 'data\documentos') |
       ForEach-Object { Copy-ProjectItem $_ $platformData }
     Publish-LivroPdf -PlatformData $platformData
   }
