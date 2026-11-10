@@ -1,7 +1,7 @@
 /* Painel da grade: formato, linha, medida e a vista da tela. Usa as variáveis do mapa.css. */
 
 .mapa-config.mapa-grade-painel {
-  width: min(320px, calc(100% - 24px));
+  width: min(340px, calc(100% - 24px));
 }
 
 .mapa-grade-painel header > div {

@@ -1,37 +1,87 @@
-import { useEffect, useState } from 'react';
-import { Plus, Radio, Settings2, Trash2, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ChevronDown, Plus, Radio, Settings2, Trash2, X } from 'lucide-react';
 import type { ICena, ICenaPayload, IResumoCena } from '../../../services/mapaApi';
 import { MOLDURAS } from '../motor/molduras';
-import { ComDica } from './BotaoFerramenta';
 
-interface FaixaProps {
+interface SeletorProps {
   cenas: IResumoCena[];
   vendo: string | null;
+  /** O nome da cena que o Mestre está vendo (ou "Mapa" quando não há cena). */
+  titulo: string;
   onVer: (id: string) => void;
   onAtivar: (id: string) => void;
   onNova: () => void;
   onConfigurar: () => void;
 }
 
-/** Faixa de baixo: as cenas da campanha. Um clique mostra para o Mestre; "Pôr na mesa" troca a dos jogadores. */
-export const FaixaCenas = ({ cenas, vendo, onVer, onAtivar, onNova, onConfigurar }: FaixaProps) => (
-  <nav className="mapa-faixa" aria-label="Cenas">
-    {cenas.map((cena) => (
-      <div key={cena.id} className={`mapa-faixa-cena${cena.id === vendo ? ' vendo' : ''}${cena.ativa ? ' ativa' : ''}`}>
-        <ComDica lado="cima" dica={cena.ativa ? 'Os jogadores estão vendo esta cena' : 'Só você está vendo'}>
-          <button type="button" onClick={() => onVer(cena.id)}>
-            {cena.ativa && <Radio size={12} />} {cena.nome}
-          </button>
-        </ComDica>
-        {cena.id === vendo && !cena.ativa && (
-          <button type="button" className="mapa-faixa-ativar" onClick={() => onAtivar(cena.id)}>Pôr na mesa</button>
-        )}
-      </div>
-    ))}
-    <button type="button" className="mapa-faixa-nova" onClick={onNova}><Plus size={14} /> Cena</button>
-    {vendo && <button type="button" className="mapa-icone" aria-label="Configurar a cena" onClick={onConfigurar}><Settings2 size={16} /></button>}
-  </nav>
-);
+/**
+ * As cenas da campanha, no topo: o nome da cena aberta é um botão que abre a lista. Um clique numa cena mostra
+ * para o Mestre; "Pôr na mesa" troca a cena dos jogadores. Antes era uma faixa embaixo, que tomava altura da tela.
+ * A lista é `fixed` para não ser cortada pelo topo do celular, que rola de lado.
+ */
+export const SeletorDeCenas = ({ cenas, vendo, titulo, onVer, onAtivar, onNova, onConfigurar }: SeletorProps) => {
+  const [aberto, setAberto] = useState(false);
+  const [posicao, setPosicao] = useState({ top: 54, left: 12 });
+  const raiz = useRef<HTMLDivElement>(null);
+  const botao = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!aberto) return undefined;
+    const fora = (evento: PointerEvent) => {
+      if (raiz.current && !raiz.current.contains(evento.target as Node)) setAberto(false);
+    };
+    const tecla = (evento: KeyboardEvent) => {
+      if (evento.key !== 'Escape') return;
+      evento.stopPropagation();
+      setAberto(false);
+    };
+    document.addEventListener('pointerdown', fora, true);
+    document.addEventListener('keydown', tecla, true);
+    return () => {
+      document.removeEventListener('pointerdown', fora, true);
+      document.removeEventListener('keydown', tecla, true);
+    };
+  }, [aberto]);
+
+  const alternar = () => {
+    if (!aberto && botao.current) {
+      const caixa = botao.current.getBoundingClientRect();
+      setPosicao({ top: caixa.bottom + 8, left: Math.max(12, Math.min(caixa.left, window.innerWidth - 332)) });
+    }
+    setAberto((v) => !v);
+  };
+  const e = (acao: () => void) => () => {
+    setAberto(false);
+    acao();
+  };
+
+  return (
+    <div className="mapa-cenas" ref={raiz}>
+      <button ref={botao} type="button" className="mapa-cenas-botao" aria-haspopup="menu" aria-expanded={aberto} aria-label={`Cenas: ${titulo}. Trocar, criar ou configurar`} onClick={alternar}>
+        <strong>{titulo}</strong>
+        <ChevronDown size={15} />
+      </button>
+      {aberto && (
+        <div className="mapa-cenas-menu" role="menu" aria-label="Cenas" style={{ top: posicao.top, left: posicao.left }}>
+          {cenas.map((cena) => (
+            <div key={cena.id} className={`mapa-cenas-linha${cena.id === vendo ? ' vendo' : ''}${cena.ativa ? ' ativa' : ''}`}>
+              <button type="button" role="menuitem" title={cena.ativa ? 'Os jogadores estão vendo esta cena' : 'Só você vê quando abrir'} onClick={e(() => onVer(cena.id))}>
+                {cena.ativa ? <Radio size={13} /> : <span style={{ width: 13 }} />}
+                <span>{cena.nome}</span>
+              </button>
+              {cena.ativa ? <span className="selo ativo">Na mesa</span> : (
+                <button type="button" className="mapa-cenas-ativar" title="Os jogadores passam a ver esta cena" onClick={e(() => onAtivar(cena.id))}>Pôr na mesa</button>
+              )}
+            </div>
+          ))}
+          <hr />
+          <button type="button" role="menuitem" className="mapa-cenas-acao" onClick={e(onNova)}><Plus size={15} /> Nova cena</button>
+          {vendo && <button type="button" role="menuitem" className="mapa-cenas-acao" onClick={e(onConfigurar)}><Settings2 size={15} /> Configurar esta cena</button>}
+        </div>
+      )}
+    </div>
+  );
+};
 
 interface ConfigProps {
   cena: ICena;

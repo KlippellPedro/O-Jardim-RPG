@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Eye, EyeOff, MessageSquareQuote, Trash2, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import type { IAuraToken, ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
 import { SeletorDeMoldura } from '../oficina/OficinaGaveta';
 import type { Enquadramento } from '../motor/molduras';
@@ -13,11 +13,10 @@ interface Props {
   onEditar: (dados: ITokenEdicao) => void;
   onMoldura: (id: string | null) => void;
   onEnquadramento: (enquadramento: Enquadramento) => void;
-  onRemover: () => void;
   onFechar: () => void;
-  /** Só o Mestre: falar como este token (a mesa vê a fala com o retrato). */
-  onFalar?: () => void;
 }
+
+type Aba = 'geral' | 'barras' | 'visual' | 'luz';
 
 /** Atalhos de aura, em casas; a cor muda depois. */
 const AURAS: Array<{ rotulo: string; aura: IAuraToken }> = [
@@ -55,11 +54,20 @@ const LADOS: Array<{ id: LadoToken; rotulo: string }> = [
   { id: 'neutro', rotulo: 'Neutro' },
 ];
 
-export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onEnquadramento, onRemover, onFechar, onFalar }: Props) => {
+const ROTULO_DA_ABA: Record<Aba, string> = { geral: 'Geral', barras: 'Barras', visual: 'Visual', luz: 'Luz e aura' };
+
+/**
+ * As opções do token, em abas (antes era uma coluna só, com quase 1000 px de altura). O que se faz a toda hora
+ * (esconder, falar como, tirar do mapa) está na barra colada no token (BarraToken); aqui ficam os ajustes.
+ */
+export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onEnquadramento, onFechar }: Props) => {
   const config = token.config_barras;
   const podeVisual = gestor || token.e_meu;
   // Enquadramento só para a foto da ficha (imagem do Acervo já vem recortada pela Oficina).
   const temFotoDaFicha = Boolean(token.personagem_id && token.imagem?.startsWith('f'));
+  const abas: Aba[] = ['geral', ...(config ? ['barras' as const] : []), ...(podeVisual ? ['visual' as const, 'luz' as const] : [])];
+  const [aba, setAba] = useState<Aba>('geral');
+  const abaAtual = abas.includes(aba) ? aba : 'geral';
   const [enquadramento, setEnquadramento] = useState<Enquadramento>(token.enquadramento);
   const espera = useRef<number | null>(null);
   const [luz, setLuz] = useState<ILuzToken | null>(token.luz);
@@ -69,6 +77,7 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
 
   useEffect(() => {
     setEnquadramento(token.enquadramento);
+    setAba('geral');
   }, [token.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // A luz que vem do servidor vale, menos enquanto um controle ainda vai mandar a sua.
@@ -116,27 +125,66 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
   };
 
   return (
-    <section className="mapa-menu-token" aria-label={`Token ${token.nome}`}>
+    <section className="mapa-menu-token" aria-label={`Opções do token ${token.nome}`}>
       <header>
         <strong>{token.nome}</strong>
-        <button type="button" className="mapa-icone" aria-label="Fechar" onClick={onFechar}><X size={16} /></button>
+        <button type="button" className="mapa-icone" aria-label="Fechar as opções" onClick={onFechar}><X size={16} /></button>
       </header>
 
-      {token.barras.length > 0 && (
-        <ul className="mapa-menu-numeros">
-          {token.barras.map((barra) => (
-            <li key={barra.tipo} className={`barra-${barra.tipo}`}>
-              <span>{BARRAS.find((b) => b.id === barra.tipo)?.rotulo}</span>
-              <strong>{barra.maximo ? `${barra.atual} / ${barra.maximo}` : barra.rotulo}</strong>
-            </li>
+      {abas.length > 1 && (
+        <div className="mapa-menu-token-abas" role="tablist" aria-label="Opções do token">
+          {abas.map((id) => (
+            <button key={id} type="button" role="tab" aria-selected={abaAtual === id} className={abaAtual === id ? 'ativo' : ''} onClick={() => setAba(id)}>{ROTULO_DA_ABA[id]}</button>
           ))}
-        </ul>
+        </div>
       )}
-      {token.condicoes.length > 0 && <p className="mapa-menu-condicoes">{token.condicoes.join(' · ')}</p>}
 
-      {config && (
-        <fieldset>
-          <legend>Barras compartilhadas</legend>
+      {abaAtual === 'geral' && (
+        <div className="mapa-menu-token-aba" role="tabpanel">
+          {token.barras.length > 0 && (
+            <ul className="mapa-menu-numeros">
+              {token.barras.map((barra) => (
+                <li key={barra.tipo} className={`barra-${barra.tipo}`}>
+                  <span>{BARRAS.find((b) => b.id === barra.tipo)?.rotulo}</span>
+                  <strong>{barra.maximo ? `${barra.atual} / ${barra.maximo}` : barra.rotulo}</strong>
+                </li>
+              ))}
+            </ul>
+          )}
+          {token.condicoes.length > 0 && <p className="mapa-menu-condicoes">{token.condicoes.join(' · ')}</p>}
+          {!token.barras.length && !token.condicoes.length && !gestor && <p className="mapa-dica">Este token não mostra números para você.</p>}
+          {gestor && (
+            <>
+              <label className="mapa-menu-linha">
+                Camada
+                <select value={token.camada ?? 'personagens'} onChange={(e) => onEditar({ camada: e.target.value as ITokenEdicao['camada'] })}>
+                  <option value="personagens">Personagens e tokens</option>
+                  <option value="props">Itens e props</option>
+                  <option value="montarias">Montarias</option>
+                </select>
+              </label>
+              <label className="mapa-menu-linha">
+                Tamanho
+                <select value={token.porte} onChange={(e) => onEditar({ porte: Number(e.target.value) })}>
+                  {[1, 2, 3, 4, 5, 6].map((n) => <option key={n} value={n}>{n} x {n} quadrados</option>)}
+                </select>
+              </label>
+              <label className="mapa-menu-linha">
+                Lado
+                <select value={token.lado} onChange={(e) => onEditar({ lado: e.target.value as LadoToken })}>
+                  {LADOS.map((l) => <option key={l.id} value={l.id}>{l.rotulo}</option>)}
+                </select>
+              </label>
+              {token.visibilidade && token.visibilidade !== 'total' && (
+                <p className="mapa-dica">Na Sessão este participante está como "{token.visibilidade}": os jogadores veem só o que esse degrau deixa.</p>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+      {abaAtual === 'barras' && config && (
+        <div className="mapa-menu-token-aba" role="tabpanel">
           <p className="mapa-dica">Escolha quais recursos podem aparecer para quem tem permissão de ver este token.</p>
           <div className="mapa-menu-opcoes">
             {BARRAS.map((barra) => (
@@ -151,12 +199,11 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
               {PARA.map((p) => <option key={p.id} value={p.id}>{p.rotulo}</option>)}
             </select>
           </label>
-        </fieldset>
+        </div>
       )}
 
-      {podeVisual && (
-        <fieldset>
-          <legend>Visual</legend>
+      {abaAtual === 'visual' && podeVisual && (
+        <div className="mapa-menu-token-aba" role="tabpanel">
           <div className="mapa-menu-botoes">
             <button type="button" className={`mapa-botao${token.flip_x ? ' ativo' : ''}`} aria-pressed={token.flip_x} onClick={() => onEditar({ flip_x: !token.flip_x })}>Espelhar na horizontal</button>
             <button type="button" className={`mapa-botao${token.flip_y ? ' ativo' : ''}`} aria-pressed={token.flip_y} onClick={() => onEditar({ flip_y: !token.flip_y })}>Espelhar na vertical</button>
@@ -176,122 +223,81 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
               <label className="mapa-menu-linha">Foto para cima ou baixo <input type="range" min={-1} max={1} step={0.01} value={enquadramento.y} onChange={(e) => mudarEnquadramento({ y: Number(e.target.value) })} /></label>
             </>
           )}
-        </fieldset>
+        </div>
       )}
 
-      {podeVisual && (
-        <fieldset>
-          <legend>Luz</legend>
-          <div className="mapa-luz-atalhos">
-            <button type="button" className={!luz ? 'ativo' : ''} onClick={() => { setLuz(null); onEditar({ sem_luz: true }); }}>Sem luz</button>
-            {LUZES.map((atalho) => (
-              <button
-                key={atalho.rotulo}
-                type="button"
-                className={luz && luz.cor === atalho.luz.cor && luz.raio === atalho.luz.raio ? 'ativo' : ''}
-                onClick={() => { setLuz(atalho.luz); onEditar({ luz: atalho.luz }); }}
-              >
-                <span className="mapa-luz-ponto" style={{ background: atalho.luz.cor }} /> {atalho.rotulo}
-              </button>
-            ))}
-          </div>
-          {luz && (
-            <>
-              <label className="mapa-menu-linha">
-                Alcance <span>{luz.raio.toLocaleString('pt-BR')} {luz.raio === 1 ? 'casa' : 'casas'}</span>
-                <input type="range" min={0.5} max={15} step={0.5} value={luz.raio} onChange={(e) => mudarLuz({ raio: Number(e.target.value) })} />
-              </label>
-              <label className="mapa-menu-linha">
-                Cor <input type="color" value={luz.cor} onChange={(e) => mudarLuz({ cor: e.target.value })} />
-              </label>
-              <label className="mapa-menu-linha">
-                <span><input type="checkbox" checked={luz.tremula} onChange={(e) => mudarLuz({ tremula: e.target.checked })} /> Tremula como chama</span>
-              </label>
-            </>
-          )}
-          <p className="mapa-dica">A luz aparece para todos e abre caminho quando o Mestre deixa a cena escura.</p>
-        </fieldset>
-      )}
-
-      {podeVisual && (
-        <fieldset>
-          <legend>Aura</legend>
-          <div className="mapa-luz-atalhos">
-            <button type="button" className={!aura ? 'ativo' : ''} onClick={() => { setAura(null); onEditar({ sem_aura: true }); }}>Sem aura</button>
-            {AURAS.map((atalho) => (
-              <button
-                key={atalho.rotulo}
-                type="button"
-                className={aura && aura.raio === atalho.aura.raio ? 'ativo' : ''}
-                onClick={() => {
-                  const nova = { ...atalho.aura, cor: aura?.cor ?? atalho.aura.cor, visivel: aura?.visivel ?? true };
-                  setAura(nova);
-                  onEditar({ aura: nova });
-                }}
-              >
-                <span className="mapa-luz-ponto" style={{ background: aura?.cor ?? atalho.aura.cor }} /> {atalho.rotulo}
-              </button>
-            ))}
-          </div>
-          {aura && (
-            <>
-              <label className="mapa-menu-linha">
-                Raio <span>{aura.raio.toLocaleString('pt-BR')} {aura.raio === 1 ? 'casa' : 'casas'}</span>
-                <input type="range" min={0.5} max={12} step={0.5} value={aura.raio} onChange={(e) => mudarAura({ raio: Number(e.target.value) })} />
-              </label>
-              <label className="mapa-menu-linha">
-                Cor <input type="color" value={aura.cor} onChange={(e) => mudarAura({ cor: e.target.value })} />
-              </label>
-              {gestor && (
+      {abaAtual === 'luz' && podeVisual && (
+        <div className="mapa-menu-token-aba" role="tabpanel">
+          <fieldset>
+            <legend>Luz</legend>
+            <div className="mapa-luz-atalhos">
+              <button type="button" className={!luz ? 'ativo' : ''} onClick={() => { setLuz(null); onEditar({ sem_luz: true }); }}>Sem luz</button>
+              {LUZES.map((atalho) => (
+                <button
+                  key={atalho.rotulo}
+                  type="button"
+                  className={luz && luz.cor === atalho.luz.cor && luz.raio === atalho.luz.raio ? 'ativo' : ''}
+                  onClick={() => { setLuz(atalho.luz); onEditar({ luz: atalho.luz }); }}
+                >
+                  <span className="mapa-luz-ponto" style={{ background: atalho.luz.cor }} /> {atalho.rotulo}
+                </button>
+              ))}
+            </div>
+            {luz && (
+              <>
                 <label className="mapa-menu-linha">
-                  <span><input type="checkbox" checked={aura.visivel} onChange={(e) => mudarAura({ visivel: e.target.checked })} /> Os jogadores veem</span>
+                  Alcance <span>{luz.raio.toLocaleString('pt-BR')} {luz.raio === 1 ? 'casa' : 'casas'}</span>
+                  <input type="range" min={0.5} max={15} step={0.5} value={luz.raio} onChange={(e) => mudarLuz({ raio: Number(e.target.value) })} />
                 </label>
-              )}
-            </>
-          )}
-          <p className="mapa-dica">A aura anda com o token: aura de proteção, alcance de uma magia, área de controle.</p>
-        </fieldset>
-      )}
+                <label className="mapa-menu-linha">
+                  Cor <input type="color" value={luz.cor} onChange={(e) => mudarLuz({ cor: e.target.value })} />
+                </label>
+                <label className="mapa-menu-linha">
+                  <span><input type="checkbox" checked={luz.tremula} onChange={(e) => mudarLuz({ tremula: e.target.checked })} /> Tremula como chama</span>
+                </label>
+              </>
+            )}
+            <p className="mapa-dica">A luz aparece para todos e abre caminho quando o Mestre deixa a cena escura.</p>
+          </fieldset>
 
-      {gestor && onFalar && (
-        <button type="button" className="mapa-botao-leve mapa-falar" onClick={onFalar}>
-          <MessageSquareQuote size={14} /> Falar como {token.nome || 'este token'}
-        </button>
-      )}
-
-      {gestor && (
-        <fieldset>
-          <legend>Mestre</legend>
-          <label className="mapa-menu-linha">
-            Camada
-            <select value={token.camada ?? 'personagens'} onChange={(e) => onEditar({ camada: e.target.value as ITokenEdicao['camada'] })}>
-              <option value="personagens">Personagens e tokens</option>
-              <option value="props">Itens e props</option>
-              <option value="montarias">Montarias</option>
-            </select>
-          </label>
-          <label className="mapa-menu-linha">
-            Tamanho
-            <select value={token.porte} onChange={(e) => onEditar({ porte: Number(e.target.value) })}>
-              {[1, 2, 3, 4, 5, 6].map((n) => <option key={n} value={n}>{n} x {n} quadrados</option>)}
-            </select>
-          </label>
-          <label className="mapa-menu-linha">
-            Lado
-            <select value={token.lado} onChange={(e) => onEditar({ lado: e.target.value as LadoToken })}>
-              {LADOS.map((l) => <option key={l.id} value={l.id}>{l.rotulo}</option>)}
-            </select>
-          </label>
-          <div className="mapa-menu-botoes">
-            <button type="button" className="mapa-botao" onClick={() => onEditar({ oculto: !token.oculto })}>
-              {token.oculto ? <><Eye size={14} /> Mostrar aos jogadores</> : <><EyeOff size={14} /> Esconder dos jogadores</>}
-            </button>
-            <button type="button" className="mapa-botao perigo" onClick={onRemover}><Trash2 size={14} /> Tirar do mapa</button>
-          </div>
-          {token.visibilidade && token.visibilidade !== 'total' && (
-            <p className="mapa-dica">Na Sessão este participante está como "{token.visibilidade}": os jogadores veem só o que esse degrau deixa.</p>
-          )}
-        </fieldset>
+          <fieldset>
+            <legend>Aura</legend>
+            <div className="mapa-luz-atalhos">
+              <button type="button" className={!aura ? 'ativo' : ''} onClick={() => { setAura(null); onEditar({ sem_aura: true }); }}>Sem aura</button>
+              {AURAS.map((atalho) => (
+                <button
+                  key={atalho.rotulo}
+                  type="button"
+                  className={aura && aura.raio === atalho.aura.raio ? 'ativo' : ''}
+                  onClick={() => {
+                    const nova = { ...atalho.aura, cor: aura?.cor ?? atalho.aura.cor, visivel: aura?.visivel ?? true };
+                    setAura(nova);
+                    onEditar({ aura: nova });
+                  }}
+                >
+                  <span className="mapa-luz-ponto" style={{ background: aura?.cor ?? atalho.aura.cor }} /> {atalho.rotulo}
+                </button>
+              ))}
+            </div>
+            {aura && (
+              <>
+                <label className="mapa-menu-linha">
+                  Raio <span>{aura.raio.toLocaleString('pt-BR')} {aura.raio === 1 ? 'casa' : 'casas'}</span>
+                  <input type="range" min={0.5} max={12} step={0.5} value={aura.raio} onChange={(e) => mudarAura({ raio: Number(e.target.value) })} />
+                </label>
+                <label className="mapa-menu-linha">
+                  Cor <input type="color" value={aura.cor} onChange={(e) => mudarAura({ cor: e.target.value })} />
+                </label>
+                {gestor && (
+                  <label className="mapa-menu-linha">
+                    <span><input type="checkbox" checked={aura.visivel} onChange={(e) => mudarAura({ visivel: e.target.checked })} /> Os jogadores veem</span>
+                  </label>
+                )}
+              </>
+            )}
+            <p className="mapa-dica">A aura anda com o token: aura de proteção, alcance de uma magia, área de controle.</p>
+          </fieldset>
+        </div>
       )}
     </section>
   );

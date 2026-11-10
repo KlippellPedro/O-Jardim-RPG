@@ -1,20 +1,21 @@
 // Os mapas colocados na cena: cada um é um objeto com lugar, tamanho e ordem, desenhado em
 // ladrilhos como o mapa base (versão em 1/4 de longe, ladrilho cheio de perto). Com a névoa, cada
-// mapa baixa só os ladrilhos que o servidor liberou para ele. O Mestre seleciona, arrasta e puxa
-// os cantos; o desenho da seleção mora numa camada própria, por cima dos tokens.
+// mapa baixa só os ladrilhos que o servidor liberou para ele. O Mestre seleciona, arrasta, puxa os
+// cantos e gira pela alça de cima; o desenho da seleção mora numa camada própria, por cima dos tokens.
 
 import { Container, Graphics, Rectangle, Sprite, Texture } from 'pixi.js';
 import type { IMapaColocado } from '../../../services/mapaApi';
 import { urlPedaco } from '../../../services/mapaApi';
 import { LADO_LADRILHO } from './geometria';
 import { chavesDoFundo, detalheSempre } from './nevoaGeometria';
-import { liberadosDoMapa, retanguloDoMapa } from './mapasColocadosConta';
+import { cantosDoMapa, liberadosDoMapa, paraODesenho, pontoDaAlcaDeGiro } from './mapasColocadosConta';
 
 /** Com a tela mais perto que isso (escala da tela vezes a do mapa), vêm os ladrilhos cheios. */
 const ZOOM_DETALHE = 0.3;
 const COR_SELECAO = 0xc7a44c;
 const COR_TRANCADO = 0x8b8799;
 const LADO_AGARRE_PX = 11;
+const RAIO_ALCA_PX = 12;
 
 async function texturaDe(url: string): Promise<Texture> {
   const resposta = await fetch(url, { credentials: 'same-origin' });
@@ -52,10 +53,17 @@ class MapaVisual {
       this.pedidosBase.clear();
       this.pedidosDetalhe.clear();
     }
-    this.raiz.position.set(dados.x, dados.y);
-    this.raiz.scale.set(dados.escala);
+    this.posicionar(dados);
     this.raiz.alpha = dados.visivel === false ? 0.4 : 1;
     this.placa.clear().rect(0, 0, dados.largura, dados.altura).fill({ color: 0x15131c });
+  }
+
+  /** Lugar, escala e giro: o mapa gira em torno do centro, então o pivô é o meio do desenho e a posição é o centro na cena. */
+  posicionar(dados: Pick<IMapaColocado, 'x' | 'y' | 'escala' | 'largura' | 'altura' | 'rotacao'>) {
+    this.raiz.pivot.set(dados.largura / 2, dados.altura / 2);
+    this.raiz.position.set(dados.x + (dados.largura * dados.escala) / 2, dados.y + (dados.altura * dados.escala) / 2);
+    this.raiz.scale.set(dados.escala);
+    this.raiz.rotation = ((dados.rotacao ?? 0) * Math.PI) / 180;
   }
 
   async carregarBase() {
@@ -86,11 +94,15 @@ class MapaVisual {
     if (!chaves.some((chave) => chave.startsWith('n2/'))) return;
     const perto = zoomDaTela * escala >= ZOOM_DETALHE;
     if (!perto && !this.liberados) return;
-    // A tela, nas coordenadas do desenho do mapa.
-    const esquerda = (visivel.left - this.dados.x) / escala;
-    const direita = (visivel.right - this.dados.x) / escala;
-    const cima = (visivel.top - this.dados.y) / escala;
-    const baixo = (visivel.bottom - this.dados.y) / escala;
+    // A tela, nas coordenadas do desenho do mapa (com o mapa girado, a caixa dos quatro cantos da tela).
+    const cantosDaTela = [
+      { x: visivel.left, y: visivel.top }, { x: visivel.right, y: visivel.top },
+      { x: visivel.left, y: visivel.bottom }, { x: visivel.right, y: visivel.bottom },
+    ].map((ponto) => paraODesenho(this.dados, ponto));
+    const esquerda = Math.min(...cantosDaTela.map((p) => p.x));
+    const direita = Math.max(...cantosDaTela.map((p) => p.x));
+    const cima = Math.min(...cantosDaTela.map((p) => p.y));
+    const baixo = Math.max(...cantosDaTela.map((p) => p.y));
     const pedidos: string[] = [];
     for (const chave of chaves) {
       if (!chave.startsWith('n0/') || this.pedidosDetalhe.has(chave)) continue;
@@ -191,18 +203,19 @@ export class CamadaMapasColocados {
     return this.selecionado;
   }
 
-  /** Durante o arrasto o mapa anda na tela antes de o servidor responder. */
-  previa(id: string, mudancas: Partial<Pick<IMapaColocado, 'x' | 'y' | 'escala'>>) {
+  /** Durante o arrasto o mapa anda, muda de tamanho ou gira na tela antes de o servidor responder. */
+  previa(id: string, mudancas: Partial<Pick<IMapaColocado, 'x' | 'y' | 'escala' | 'rotacao'>>) {
     const visual = this.visuais.get(id);
     const indice = this.mapas.findIndex((mapa) => mapa.id === id);
     if (!visual || indice < 0) return;
     this.mapas[indice] = { ...this.mapas[indice], ...mudancas };
-    visual.raiz.position.set(this.mapas[indice].x, this.mapas[indice].y);
-    visual.raiz.scale.set(this.mapas[indice].escala);
+    // Os ladrilhos de perto seguem o lugar novo, senão o detalhe é pedido para onde o mapa estava.
+    visual.dados = { ...visual.dados, ...mudancas };
+    visual.posicionar(this.mapas[indice]);
     this.zoomDesenhado = NaN;
   }
 
-  /** Redesenha o contorno quando a tela dá zoom (os cantos têm tamanho fixo na tela). */
+  /** Redesenha o contorno quando a tela dá zoom (os cantos e a alça têm tamanho fixo na tela). */
   quadro(zoomDaTela: number) {
     if (zoomDaTela === this.zoomDesenhado) return;
     this.zoomDesenhado = zoomDaTela;
@@ -210,14 +223,38 @@ export class CamadaMapasColocados {
     g.clear();
     const mapa = this.selecionado ? this.mapas.find((m) => m.id === this.selecionado) : null;
     if (!mapa || !this.gestor) return;
-    const r = retanguloDoMapa(mapa);
+    const cantos = cantosDoMapa(mapa);
     const cor = mapa.trancado ? COR_TRANCADO : COR_SELECAO;
     const fino = 2 / zoomDaTela;
-    g.rect(r.x, r.y, r.w, r.h).stroke({ width: fino, color: cor, alpha: 0.95 });
+    g.poly([cantos.no.x, cantos.no.y, cantos.ne.x, cantos.ne.y, cantos.se.x, cantos.se.y, cantos.so.x, cantos.so.y]).stroke({ width: fino, color: cor, alpha: 0.95 });
     if (mapa.trancado) return;
+
+    // A alça de giro: um pino acima do meio da borda de cima, no sentido em que o mapa está virado.
+    const topo = { x: (cantos.no.x + cantos.ne.x) / 2, y: (cantos.no.y + cantos.ne.y) / 2 };
+    const alca = pontoDaAlcaDeGiro(mapa, zoomDaTela);
+    g.moveTo(topo.x, topo.y).lineTo(alca.x, alca.y).stroke({ width: fino, color: cor, alpha: 0.9 });
+    const raio = RAIO_ALCA_PX / zoomDaTela;
+    g.circle(alca.x, alca.y, raio).fill({ color: 0x15131c }).stroke({ width: fino, color: cor });
+    // O ícone: uma seta que dá a volta.
+    const arco = (raio * 0.5);
+    const inicio = -Math.PI * 0.35;
+    const fim = Math.PI * 1.3;
+    g.moveTo(alca.x + arco * Math.cos(inicio), alca.y + arco * Math.sin(inicio));
+    g.arc(alca.x, alca.y, arco, inicio, fim).stroke({ width: 1.6 / zoomDaTela, color: 0xffffff });
+    const ponta = { x: alca.x + arco * Math.cos(fim), y: alca.y + arco * Math.sin(fim) };
+    const tangente = { x: -Math.sin(fim), y: Math.cos(fim) };
+    const radial = { x: Math.cos(fim), y: Math.sin(fim) };
+    const aresta = 3.2 / zoomDaTela;
+    g.poly([
+      ponta.x + tangente.x * aresta * 1.4, ponta.y + tangente.y * aresta * 1.4,
+      ponta.x + radial.x * aresta, ponta.y + radial.y * aresta,
+      ponta.x - radial.x * aresta, ponta.y - radial.y * aresta,
+    ]).fill({ color: 0xffffff });
+
+    // Os quatro cantos para mudar o tamanho.
     const lado = LADO_AGARRE_PX / zoomDaTela;
-    for (const [cx, cy] of [[r.x, r.y], [r.x + r.w, r.y], [r.x, r.y + r.h], [r.x + r.w, r.y + r.h]]) {
-      g.rect(cx - lado / 2, cy - lado / 2, lado, lado).fill({ color: 0xffffff }).stroke({ width: fino, color: cor });
+    for (const canto of Object.values(cantos)) {
+      g.rect(canto.x - lado / 2, canto.y - lado / 2, lado, lado).fill({ color: 0xffffff }).stroke({ width: fino, color: cor });
     }
   }
 

@@ -7,7 +7,7 @@
 }
 
 .mapa-pagina.sem-ferramentas.com-lateral {
-  grid-template-columns: 0 1fr minmax(300px, 26vw);
+  grid-template-columns: 0 1fr clamp(300px, 26vw, 380px);
 }
 
 .mapa-pagina.sem-ferramentas .mapa-ferramentas {
@@ -19,13 +19,12 @@
 .mapa-pagina.so-mapa.com-lateral,
 .mapa-pagina.so-mapa.sem-ferramentas {
   grid-template-columns: 0 1fr 0;
-  grid-template-rows: 0 1fr 0;
+  grid-template-rows: 0 minmax(0, 1fr);
 }
 
 .mapa-pagina.so-mapa .mapa-topo,
 .mapa-pagina.so-mapa .mapa-ferramentas,
-.mapa-pagina.so-mapa .mapa-lateral,
-.mapa-pagina.so-mapa .mapa-rodape {
+.mapa-pagina.so-mapa .mapa-lateral {
   display: none;
 }
 
@@ -73,6 +72,6 @@
   .mapa-pagina.so-mapa.com-lateral,
   .mapa-pagina.so-mapa.sem-ferramentas {
     grid-template-columns: 0 1fr;
-    grid-template-rows: 0 1fr 0;
+    grid-template-rows: 0 minmax(0, 1fr);
   }
 }

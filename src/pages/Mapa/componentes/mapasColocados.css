@@ -1,16 +1,10 @@
-/* A barra do mapa escolhido e a lista dos mapas da cena. Usa as variáveis do mapa.css. */
+/* A barra do mapa escolhido, logo acima da barra de baixo (dockAcervo.css). Usa as variáveis do mapa.css. */
 
 .mapa-barra-mapa {
-  position: absolute;
-  left: 50%;
-  bottom: 18px;
-  z-index: 5;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  transform: translateX(-50%);
-  max-width: calc(100% - 24px);
 }
 
 .mapa-barra-mapa-linha {
@@ -63,15 +57,25 @@
 }
 
 .mapa-barra-mapa-menu {
+  position: absolute;
+  z-index: 2;
+  bottom: calc(100% + 8px);
+  left: 50%;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  min-width: 220px;
+  min-width: 230px;
   padding: 6px;
+  transform: translateX(-50%);
   border: 1px solid var(--mapa-linha);
   border-radius: 12px;
   background: var(--mapa-painel);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.mapa-barra-mapa-menu.abaixo {
+  top: calc(100% + 8px);
+  bottom: auto;
 }
 
 .mapa-barra-mapa-menu > button {
@@ -92,12 +96,8 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
-.mapa-barra-mapa-menu > button:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
 .mapa-barra-mapa-numeros {
+  width: 280px;
   padding: 10px 12px;
   gap: 8px;
 }
@@ -111,8 +111,21 @@
   font-size: 12px;
 }
 
+.mapa-barra-mapa-campo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mapa-barra-mapa-campo em {
+  width: 38px;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  font-style: normal;
+}
+
 .mapa-barra-mapa-numeros input {
-  width: 92px;
+  width: 84px;
   padding: 5px 8px;
   border: 1px solid var(--mapa-linha);
   border-radius: 6px;
@@ -122,91 +135,65 @@
   text-align: right;
 }
 
-.mapa-barra-mapa-numeros .mapa-dica {
-  max-width: 260px;
-}
-
-/* A lista dos mapas da cena */
-
-.mapa-config.mapa-painel-mapas {
-  width: min(300px, calc(100% - 24px));
-}
-
-.mapa-painel-mapas-titulo {
+.mapa-barra-mapa-acoes {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
-.mapa-painel-mapas .mapa-botao {
+/* Botões de verdade: borda e fundo, para não parecerem texto solto. */
+.mapa-barra-mapa-acao {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin: 4px 0 8px;
-}
-
-.mapa-painel-mapas-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.mapa-painel-mapas-lista li {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 3px 4px;
-  border: 1px solid transparent;
+  padding: 6px 10px;
+  border: 1px solid var(--mapa-linha);
   border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--mapa-texto);
+  cursor: pointer;
+  font-size: 12px;
 }
 
-.mapa-painel-mapas-lista li.escolhido {
+.mapa-barra-mapa-acao:hover:not(:disabled) {
   border-color: var(--mapa-ouro);
   background: rgba(199, 164, 76, 0.12);
 }
 
-.mapa-painel-mapas-lista button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 30px;
-  height: 30px;
-  padding: 0;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
+.mapa-barra-mapa-acao:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.mapa-barra-mapa-numeros details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--mapa-linha);
   color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.mapa-barra-mapa-numeros summary {
   cursor: pointer;
 }
 
-.mapa-painel-mapas-lista button:hover {
-  background: rgba(255, 255, 255, 0.08);
+.mapa-barra-mapa-numeros details[open] summary {
+  margin-bottom: 4px;
   color: var(--mapa-texto);
 }
 
-.mapa-painel-mapas-lista button.ativo {
-  color: var(--mapa-ouro);
+.mapa-barra-mapa-numeros .mapa-dica {
+  margin: 0;
 }
 
-.mapa-painel-mapas-lista .mapa-painel-mapas-nome {
-  flex: 1;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  min-width: 0;
-  padding: 0 6px;
-  overflow: hidden;
-  color: var(--mapa-texto);
-  font-size: 13px;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.mapa-painel-mapas-nome small {
-  color: var(--mapa-apagado);
-  font-size: 10px;
+/* Barras coladas ao mapa ou ao token escolhido (a posição vem do script, a cada quadro). */
+.mapa-ancorada {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  max-width: calc(100% - 16px);
+  will-change: transform;
 }

@@ -23,7 +23,7 @@ import { CamadaLiquidos } from './liquidos';
 import { CamadaAuras, type AuraNoMapa } from './auras';
 import { CamadaAnotacoes } from './anotacoes';
 import { CamadaMapasColocados } from './mapasColocados';
-import { acharCanto, acharMapaEm, moverMapa, redimensionarMapa, retanguloDoMapa, type Canto } from './mapasColocadosConta';
+import { acharAlcaDeGiro, acharCanto, acharMapaEm, caixaDoMapa, girarMapa, manterDentroDaCena, moverMapa, redimensionarMapa, type Canto } from './mapasColocadosConta';
 import { corDaLuz, faseDe, tremor } from './luzesConta';
 import { bocaEm, type LadoPortal } from './portaisConta';
 import { portaEm } from './portasConta';
@@ -35,8 +35,9 @@ import {
 /** `nevoa`: o Mestre desenha a névoa; `area`: o Mestre marca a área de um efeito de clima;
  * `magia`: qualquer um mira e solta um efeito de magia que a mesa inteira vê;
  * `portal`: o Mestre cria portais (dois cliques) e arrasta as bocas;
- * `mapas`: o Mestre escolhe, arrasta e muda o tamanho dos mapas colocados na cena. */
-export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia' | 'portal' | 'texto' | 'mapas';
+ * Com `mover`, o Mestre também clica num mapa colocado na cena para escolher, arrasta para mudar de lugar,
+ * puxa um canto para mudar o tamanho e gira pela alça de cima. */
+export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia' | 'portal' | 'texto';
 
 export interface OpcoesMagia {
   forma: FormaMagia;
@@ -69,9 +70,9 @@ export interface EventosPalco {
   aoMoverAnotacao: (id: string, x: number, y: number) => void;
   /** Clique numa porta do mapa montado (o jogador abre e fecha; o Mestre recebe o menu da porta). */
   aoPorta?: (porta: IAberturaCena) => void;
-  /** Ferramenta de mapas: o mapa colocado escolhido (ou nenhum) e o lugar e tamanho novos depois do arrasto. */
+  /** O mapa colocado escolhido (ou nenhum) e o lugar, o tamanho e o giro novos depois do arrasto. */
   aoSelecionarMapa?: (id: string | null) => void;
-  aoMoverMapa?: (id: string, mudancas: Pick<IMapaColocado, 'x' | 'y' | 'escala'>) => void;
+  aoMoverMapa?: (id: string, mudancas: Pick<IMapaColocado, 'x' | 'y' | 'escala'> & { rotacao: number }) => void;
 }
 
 const COR_REVELAR = '#5eead4';
@@ -111,7 +112,9 @@ export class PalcoMapa {
   private grade = new Graphics();
   /** Mapas do Acervo postos na cena, entre o mapa base e as portas. */
   private mapasColocados = new CamadaMapasColocados();
-  private arrastoMapa: { id: string; modo: 'mover' | Canto; dx: number; dy: number; inicio: IPonto; moveu: boolean } | null = null;
+  /** O cursor que o palco pôs no canvas (alça de giro, canto), para só mexer no estilo quando muda. */
+  private cursorAtual = '';
+  private arrastoMapa: { id: string; modo: 'mover' | 'giro' | Canto; dx: number; dy: number; inicio: IPonto; moveu: boolean } | null = null;
   /** A grade cobre só o que a tela mostra; ao andar ou dar zoom ela é refeita (no máximo uma vez por quadro). */
   private gradeSuja = false;
   /** Posição e zoom da tela quando a grade foi desenhada. */
@@ -267,10 +270,6 @@ export class PalcoMapa {
         if (evento.button === 0 && this.gestor) this.eventos.aoCriarAnotacao({ x: ponto.x, y: ponto.y });
         return;
       }
-      if (this.ferramenta === 'mapas') {
-        if (evento.button === 0 && this.gestor) this.cliqueEmMapas({ x: ponto.x, y: ponto.y });
-        return;
-      }
       // Com a ferramenta de mover, o Mestre clica num mapa solto e arrasta: o mapa vai junto. Mapa trancado
       // e área sem mapa deixam a mão andar pela tela, como sempre.
       if (evento.button === 0 && this.gestor && this.ferramenta === 'mover' && !this.arrastoAnotacao && !this.arrastoPortal) {
@@ -292,6 +291,7 @@ export class PalcoMapa {
         this.arrastarMapa(ponto, Boolean((evento as { shiftKey?: boolean }).shiftKey));
         return;
       }
+      this.cursorDoMapa({ x: ponto.x, y: ponto.y });
       if (this.arrastoAnotacao) {
         this.arrastoAnotacao.moveu = true;
         this.anotacoes.moverTemporariamente(this.arrastoAnotacao.id, ponto.x - this.arrastoAnotacao.dx, ponto.y - this.arrastoAnotacao.dy);
@@ -401,7 +401,11 @@ export class PalcoMapa {
       if (this.cena && (this.gradeSuja || viewport.x !== this.gradeEm[0] || viewport.y !== this.gradeEm[1] || viewport.scale.x !== this.gradeEm[2])) {
         this.desenharGrade(this.gradePrevia ?? this.cena.grade);
       }
-      for (const token of this.tokens.values()) token.pulsar(agora);
+      const zoomAgora = viewport.scale.x;
+      for (const token of this.tokens.values()) {
+        token.ajustarAoZoom(zoomAgora);
+        token.pulsar(agora);
+      }
       for (const token of this.saindo) {
         if (!token.pulsar(agora)) continue;
         this.saindo.delete(token);
@@ -727,7 +731,7 @@ export class PalcoMapa {
     let x1 = this.cena.mapa ? this.cena.mapa.largura : 0;
     let y1 = this.cena.mapa ? this.cena.mapa.altura : 0;
     for (const mapa of mapas) {
-      const r = retanguloDoMapa(mapa);
+      const r = caixaDoMapa(mapa);
       x0 = Math.min(x0, r.x);
       y0 = Math.min(y0, r.y);
       x1 = Math.max(x1, r.x + r.w);
@@ -778,6 +782,24 @@ export class PalcoMapa {
     this.medidaArrasto = null;
   }
 
+  /**
+   * Onde um mapa colocado ou um token está na tela, em px do palco (para uma barra seguir o objeto escolhido).
+   * Nulo se o objeto não está na cena.
+   */
+  retanguloNaTela(alvo: { tipo: 'mapa' | 'token'; id: string }): { x: number; y: number; w: number; h: number } | null {
+    let caixa: { x: number; y: number; w: number; h: number } | null = null;
+    if (alvo.tipo === 'mapa') {
+      const mapa = this.mapasColocados.mapa(alvo.id);
+      caixa = mapa ? caixaDoMapa(mapa) : null;
+    } else {
+      caixa = this.tokens.get(alvo.id)?.caixa ?? null;
+    }
+    if (!caixa) return null;
+    const canto = this.viewport.toScreen(caixa.x, caixa.y);
+    const escala = this.viewport.scale.x;
+    return { x: canto.x, y: canto.y, w: caixa.w * escala, h: caixa.h * escala };
+  }
+
   centralizar(x: number, y: number) {
     this.viewport.animate({ position: { x, y }, time: 350, ease: 'easeInOutSine' });
   }
@@ -788,14 +810,18 @@ export class PalcoMapa {
 
   // ------------------------------------------------------- mapas colocados
 
-  /** Clique da ferramenta de mapas: agarra um canto do mapa escolhido, ou escolhe (e começa a arrastar) o de cima. */
+  /**
+   * Clique do Mestre com a ferramenta de mover: agarra a alça de giro ou um canto do mapa escolhido, ou escolhe
+   * (e começa a arrastar) o mapa que está sob o clique. Devolve se pegou alguma coisa (então a tela não anda).
+   */
   private cliqueEmMapas(ponto: IPonto): boolean {
     const camada = this.mapasColocados;
     const atual = camada.idSelecionado ? camada.mapa(camada.idSelecionado) : null;
     if (atual && !atual.trancado) {
-      const canto = acharCanto(atual, ponto, this.viewport.scale.x);
-      if (canto) {
-        this.arrastoMapa = { id: atual.id, modo: canto, dx: 0, dy: 0, inicio: ponto, moveu: false };
+      const zoom = this.viewport.scale.x;
+      const modo = acharAlcaDeGiro(atual, ponto, zoom) ? 'giro' : acharCanto(atual, ponto, zoom);
+      if (modo) {
+        this.arrastoMapa = { id: atual.id, modo, dx: 0, dy: 0, inicio: ponto, moveu: false };
         this.viewport.plugins.pause('drag');
         return true;
       }
@@ -814,7 +840,27 @@ export class PalcoMapa {
     return false;
   }
 
-  private arrastarMapa(ponto: IPonto, encaixar: boolean) {
+  /** O cursor acompanha o que está sob o mouse: alça de giro ou canto do mapa escolhido. */
+  private cursorDoMapa(ponto: IPonto) {
+    if (this.ferramenta !== 'mover' || !this.gestor || this.arrasto || !this.mapasColocados.tem) return;
+    const camada = this.mapasColocados;
+    const atual = camada.idSelecionado ? camada.mapa(camada.idSelecionado) : null;
+    let cursor = '';
+    if (atual && !atual.trancado) {
+      const zoom = this.viewport.scale.x;
+      if (acharAlcaDeGiro(atual, ponto, zoom)) cursor = 'grab';
+      else {
+        const canto = acharCanto(atual, ponto, zoom);
+        if (canto) cursor = canto === 'no' || canto === 'se' ? 'nwse-resize' : 'nesw-resize';
+      }
+    }
+    if (this.cursorAtual !== cursor) {
+      this.cursorAtual = cursor;
+      this.app.canvas.style.cursor = cursor;
+    }
+  }
+
+  private arrastarMapa(ponto: IPonto, passo: boolean) {
     const arrasto = this.arrastoMapa;
     if (!arrasto) return;
     const mapa = this.mapasColocados.mapa(arrasto.id);
@@ -823,15 +869,14 @@ export class PalcoMapa {
     if (!arrasto.moveu && Math.hypot(ponto.x - arrasto.inicio.x, ponto.y - arrasto.inicio.y) * this.viewport.scale.x < 4) return;
     arrasto.moveu = true;
     if (arrasto.modo === 'mover') {
-      // O mapa anda livre, sem grudar; com Shift apertado o canto dele encaixa na grade.
-      const destino = moverMapa(mapa, ponto.x - arrasto.dx, ponto.y - arrasto.dy, encaixar && this.cena ? this.cena.grade : null);
+      // O mapa anda livre, sem grudar; com Shift apertado o canto dele encaixa na grade (se não estiver girado).
       // Nem o canto de baixo nem o da direita passam da borda da cena (o servidor recusaria ao soltar).
-      if (this.cena) {
-        const { w, h } = retanguloDoMapa(mapa);
-        destino.x = Math.max(0, Math.min(destino.x, this.cena.largura - w));
-        destino.y = Math.max(0, Math.min(destino.y, this.cena.altura - h));
-      }
-      this.mapasColocados.previa(arrasto.id, destino);
+      const limites = this.cena ? { largura: this.cena.largura, altura: this.cena.altura } : null;
+      this.mapasColocados.previa(arrasto.id, moverMapa(mapa, ponto.x - arrasto.dx, ponto.y - arrasto.dy, passo && this.cena ? this.cena.grade : null, limites));
+    } else if (arrasto.modo === 'giro') {
+      // O mapa gira em torno do centro; se a ponta passar da borda de cima ou da esquerda, ele é empurrado para dentro.
+      const girado = { ...mapa, rotacao: girarMapa(mapa, ponto, passo) };
+      this.mapasColocados.previa(arrasto.id, { rotacao: girado.rotacao, ...manterDentroDaCena(girado) });
     } else {
       this.mapasColocados.previa(arrasto.id, redimensionarMapa(mapa, arrasto.modo, ponto));
     }
@@ -843,7 +888,15 @@ export class PalcoMapa {
     this.viewport.plugins.resume('drag');
     if (!arrasto?.moveu) return;
     const mapa = this.mapasColocados.mapa(arrasto.id);
-    if (mapa) this.eventos.aoMoverMapa?.(arrasto.id, { x: mapa.x, y: mapa.y, escala: mapa.escala });
+    if (mapa) this.eventos.aoMoverMapa?.(arrasto.id, { x: mapa.x, y: mapa.y, escala: mapa.escala, rotacao: mapa.rotacao ?? 0 });
+  }
+
+  /** Um ponto da tela (clientX, clientY, como num soltar de arquivo) em coordenadas do mapa; nulo se cai fora do palco. */
+  pontoDaTela(clientX: number, clientY: number): IPonto | null {
+    const caixa = this.app.canvas.getBoundingClientRect();
+    if (clientX < caixa.left || clientX > caixa.right || clientY < caixa.top || clientY > caixa.bottom) return null;
+    const ponto = this.viewport.toWorld(clientX - caixa.left, clientY - caixa.top);
+    return { x: ponto.x, y: ponto.y };
   }
 
   /** Escolhe um mapa colocado pela lista ou pela barra (sem clicar no mapa). */
@@ -857,9 +910,11 @@ export class PalcoMapa {
 
   definirFerramenta(ferramenta: Ferramenta) {
     if (ferramenta !== this.ferramenta) this.cancelarDesenho();
-    if (ferramenta !== 'mapas') {
+    if (ferramenta !== 'mover') {
       this.mapasColocados.selecionar(null);
       this.eventos.aoSelecionarMapa?.(null);
+      this.cursorAtual = '';
+      this.app.canvas.style.cursor = '';
     }
     this.ferramenta = ferramenta;
     // Fora do mover, o botão esquerdo é da ferramenta; o mapa anda com o do meio ou o direito.

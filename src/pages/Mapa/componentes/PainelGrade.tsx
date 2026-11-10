@@ -1,17 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Ban, Grid3x3, Hexagon, Maximize, RefreshCw, X } from 'lucide-react';
+import { Ban, Grid3x3, Hexagon, X } from 'lucide-react';
 import type { ICena } from '../../../services/mapaApi';
 import {
   ehHex, medicaoEfetiva, PADRAO_GRADE,
   type IGrade, type LinhaGrade, type MedicaoGrade, type TipoGrade, type UnidadeGrade,
 } from '../motor/geometria';
 import './gradePainel.css';
-
-export interface VistaDaTela {
-  x: number;
-  y: number;
-  zoom: number;
-}
 
 interface Props {
   aberto: boolean;
@@ -20,16 +14,6 @@ interface Props {
   /** Preferência do aparelho: o token e a régua grudam na grade. */
   encaixe: boolean;
   onEncaixe: (ligado: boolean) => void;
-  /** Preferência do aparelho: aceitar quando alguém traz a mesa para a vista dele. */
-  seguirVista: boolean;
-  onSeguirVista: (ligado: boolean) => void;
-  /** Lê a vista da tela agora (o painel pergunta de tempos em tempos enquanto está aberto). */
-  lerVista: () => VistaDaTela | null;
-  onIrParaVista: (vista: VistaDaTela) => void;
-  onReiniciarVista: () => void;
-  /** "Trazer todos para a minha vista". Falso quando a conexão em tempo real não está de pé. */
-  podeSincronizar: boolean;
-  onSincronizar: () => void;
   /** A grade ainda não salva, para a tela mostrar na hora enquanto o Mestre ajusta. */
   onPrever: (grade: IGrade) => void;
   onSalvarGrade: (mudancas: Partial<IGrade>) => void;
@@ -68,14 +52,9 @@ const arredondar = (valor: number, casas = 0) => {
   return Math.round(valor * fator) / fator;
 };
 
-/** Grade e vista num painel só: o que muda a cena é do Mestre; encaixe e vista valem para cada aparelho. */
-export const PainelGrade = ({
-  aberto, gestor, cena, encaixe, onEncaixe, seguirVista, onSeguirVista, lerVista, onIrParaVista, onReiniciarVista,
-  podeSincronizar, onSincronizar, onPrever, onSalvarGrade, onFechar,
-}: Props) => {
+/** A grade da cena: o que muda a cena é do Mestre; o encaixe vale para cada aparelho. A vista da tela tem painel próprio. */
+export const PainelGrade = ({ aberto, gestor, cena, encaixe, onEncaixe, onPrever, onSalvarGrade, onFechar }: Props) => {
   const [grade, setGrade] = useState<IGrade | null>(cena?.grade ?? null);
-  const [vista, setVista] = useState<VistaDaTela | null>(null);
-  const [rascunhoVista, setRascunhoVista] = useState<{ x: string; y: string; zoom: string; mexeu: boolean } | null>(null);
   const espera = useRef<number | null>(null);
   const pendente = useRef<Partial<IGrade>>({});
   const salvar = useRef(onSalvarGrade);
@@ -85,15 +64,6 @@ export const PainelGrade = ({
   useEffect(() => {
     setGrade(cena?.grade ?? null);
   }, [cena?.id]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // A tela anda enquanto o painel está aberto: os números acompanham (menos o campo em que se digita).
-  useEffect(() => {
-    if (!aberto) return undefined;
-    const ler = () => setVista(lerVista());
-    ler();
-    const intervalo = window.setInterval(ler, 250);
-    return () => window.clearInterval(intervalo);
-  }, [aberto, lerVista]);
 
   // Fechar o painel com uma mudança esperando salva na hora, em vez de perder.
   useEffect(() => {
@@ -133,44 +103,8 @@ export const PainelGrade = ({
   const comGrade = efetiva.tipo !== 'nenhuma';
   const corPersonalizada = !CORES_RAPIDAS.includes(efetiva.cor.toLowerCase());
 
-  const confirmarVista = () => {
-    // Só entrar e sair do campo não mexe na tela (o zoom mostrado é arredondado).
-    if (!rascunhoVista?.mexeu || !vista) {
-      setRascunhoVista(null);
-      return;
-    }
-    const numero = (texto: string, padrao: number) => {
-      const valor = Number(texto.replace(',', '.'));
-      return Number.isFinite(valor) ? valor : padrao;
-    };
-    onIrParaVista({
-      x: numero(rascunhoVista.x, vista.x),
-      y: numero(rascunhoVista.y, vista.y),
-      zoom: numero(rascunhoVista.zoom, vista.zoom * 100) / 100,
-    });
-    setRascunhoVista(null);
-  };
-
-  const campoVista = (campo: 'x' | 'y' | 'zoom', rotulo: string, atual: number, sufixo?: string) => (
-    <label className="grade-campo">
-      <span>{rotulo}</span>
-      <input
-        inputMode="decimal"
-        value={rascunhoVista ? rascunhoVista[campo] : String(atual)}
-        onFocus={() => vista && setRascunhoVista((atual) => atual ?? ({ x: String(vista.x), y: String(vista.y), zoom: String(arredondar(vista.zoom * 100, 1)), mexeu: false }))}
-        onChange={(e) => {
-          const base = rascunhoVista ?? (vista ? { x: String(vista.x), y: String(vista.y), zoom: String(arredondar(vista.zoom * 100, 1)), mexeu: false } : null);
-          if (base) setRascunhoVista({ ...base, [campo]: e.target.value, mexeu: true });
-        }}
-        onBlur={confirmarVista}
-        onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
-      />
-      {sufixo && <em>{sufixo}</em>}
-    </label>
-  );
-
   return (
-    <section className="mapa-config mapa-grade-painel" aria-label="Grade e vista">
+    <section className="mapa-config mapa-grade-painel" aria-label="Grade">
       <header>
         <div><Grid3x3 size={17} /><strong>Grade</strong></div>
         <button type="button" className="mapa-icone" aria-label="Fechar a grade" onClick={onFechar}><X size={16} /></button>
@@ -301,31 +235,6 @@ export const PainelGrade = ({
             </details>
           </>
         )}
-      </fieldset>
-
-      <fieldset className="grade-grupo">
-        <legend>Vista</legend>
-        <div className="grade-vista">
-          {campoVista('x', 'Posição X', vista?.x ?? 0)}
-          {campoVista('y', 'Posição Y', vista?.y ?? 0)}
-          {campoVista('zoom', 'Zoom', arredondar((vista?.zoom ?? 1) * 100, 1), '%')}
-        </div>
-        <div className="grade-botoes">
-          <button type="button" className="mapa-botao" onClick={onReiniciarVista}><Maximize size={14} /> Reiniciar vista</button>
-          <button
-            type="button"
-            className="mapa-botao"
-            disabled={!podeSincronizar}
-            title="Todo mundo na mesa passa a ver o que você está vendo"
-            onClick={onSincronizar}
-          >
-            <RefreshCw size={14} /> Sincronizar vista
-          </button>
-        </div>
-        <label className="grade-interruptor">
-          <span>Seguir quando alguém sincronizar<small>Só neste aparelho. Desligado, a sua tela não é puxada.</small></span>
-          <input type="checkbox" role="switch" checked={seguirVista} onChange={(e) => onSeguirVista(e.target.checked)} />
-        </label>
       </fieldset>
     </section>
   );

@@ -284,6 +284,27 @@ export function abreviarNome(nome: string, limite = LIMITE_NOME_TOKEN): string {
   return `${(espaco >= limite / 2 ? corte.slice(0, espaco) : corte).trimEnd()}…`;
 }
 
+/** O nome do token deve ter pelo menos isto de altura na tela, qualquer que seja o zoom (px de tela). */
+export const NOME_MINIMO_NA_TELA_PX = 11;
+/** De tão longe que o nome cresceria mais que isto, ele deixa de acompanhar o zoom (e some, se o token mal se vê). */
+export const ESCALA_MAXIMA_DO_NOME = 6;
+/** Abaixo disto de diâmetro na tela (px) o token é uma pinta: o nome só aparece com o mouse em cima ou com o token escolhido. */
+export const TOKEN_MINIMO_PARA_NOME_PX = 14;
+
+/**
+ * O nome tem tamanho fixo no mundo, então de longe (zoom 0,3) uma letra de 12 px vira 3,6 px e ninguém lê.
+ * Devolve quanto aumentar o texto para ele ter ao menos 11 px na tela; de perto fica em 1 (tamanho normal).
+ */
+export function escalaDoNome(tamanhoNoMundo: number, zoom: number): number {
+  if (!(tamanhoNoMundo > 0) || !(zoom > 0)) return 1;
+  return Math.min(ESCALA_MAXIMA_DO_NOME, Math.max(1, NOME_MINIMO_NA_TELA_PX / (tamanhoNoMundo * zoom)));
+}
+
+/** O nome aparece quando o token tem tamanho para isso na tela, ou quando o mouse está nele ou ele está escolhido. */
+export function nomeVisivel(ladoNoMundo: number, zoom: number, destacado: boolean): boolean {
+  return destacado || ladoNoMundo * zoom >= TOKEN_MINIMO_PARA_NOME_PX;
+}
+
 /** Uma ou duas letras por condição (Caído vira "Ca"), nas bolinhas ao lado do token. */
 export function siglaDaCondicao(nome: string): string {
   const limpo = nome.trim();

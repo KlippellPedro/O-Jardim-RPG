@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { abreviarNome, chavesEsperadas, encaixar, iniciais, medir, type IGrade } from '../../src/pages/Mapa/motor/geometria';
+import { abreviarNome, chavesEsperadas, encaixar, escalaDoNome, iniciais, medir, nomeVisivel, type IGrade } from '../../src/pages/Mapa/motor/geometria';
 import { Interpolador } from '../../src/pages/Mapa/tempoReal';
 
 const QUADRADA: IGrade = { tipo: 'quadrada', tamanho: 100, x: 0, y: 0, cor: '#ffffff', opacidade: 0.2, metros: 1.5 };
@@ -247,4 +247,22 @@ test('nome comprido embaixo do token corta numa palavra inteira; o curto fica co
   assert.equal(abreviarNome('Guardião da Ponte de Khazad'), 'Guardião da Ponte…');
   assert.equal(abreviarNome('Anciãcorrompidadovazio'), 'Anciãcorrompidado…');
   assert.ok(abreviarNome('Senhora das Marés Que Não Dormem').length <= 18);
+});
+
+test('o nome do token cresce de longe para ter 11 px na tela e some só quando o token mal se vê', () => {
+  // De perto (zoom 1) a letra de 12 px já passa de 11 px: tamanho normal.
+  assert.equal(escalaDoNome(12, 1), 1);
+  assert.equal(escalaDoNome(12, 2), 1);
+  // Zoom 0,3: 12 px viram 3,6 px de tela; a escala leva a 11 px.
+  assert.ok(Math.abs(escalaDoNome(12, 0.3) - 11 / 3.6) < 1e-9);
+  // Muito longe não cresce sem fim.
+  assert.equal(escalaDoNome(8, 0.04), 6);
+  // Entrada torta não quebra a conta.
+  assert.equal(escalaDoNome(0, 1), 1);
+  assert.equal(escalaDoNome(12, 0), 1);
+  assert.equal(escalaDoNome(12, Number.NaN), 1);
+  // Token de 100 px: com zoom 0,3 tem 30 px na tela, o nome aparece; com 0,1 tem 10 px, só com o mouse em cima ou escolhido.
+  assert.equal(nomeVisivel(100, 0.3, false), true);
+  assert.equal(nomeVisivel(100, 0.1, false), false);
+  assert.equal(nomeVisivel(100, 0.1, true), true);
 });

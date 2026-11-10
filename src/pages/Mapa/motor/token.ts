@@ -9,7 +9,7 @@
 
 import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import type { IBarraToken, ITokenMapa, LadoToken } from '../../../services/mapaApi';
-import { abreviarNome, iniciais, siglaDaCondicao } from './geometria';
+import { abreviarNome, escalaDoNome, iniciais, nomeVisivel, siglaDaCondicao } from './geometria';
 import { CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, desenharMoldura } from './molduras';
 import { texturaDeBrilho } from './luzes';
 import {
@@ -170,6 +170,9 @@ export class TokenVisual {
   private sombra: Sprite;
   private condicoes = new Container();
   private nome: Text;
+  /** Tamanho da letra do nome no mundo (antes de crescer com o zoom) e o zoom da tela em que o nome foi posto. */
+  private tamanhoNome = 12;
+  private zoomDoNome = 1;
   dados: ITokenMapa;
   private lado = 100;
   private texturaAtual: Texture | null = null;
@@ -220,6 +223,11 @@ export class TokenVisual {
     this.atualizar(dados, tamanhoQuadrado);
   }
 
+  /** O quadrado que o token ocupa no mundo (o centro é a posição dele). */
+  get caixa(): { x: number; y: number; w: number; h: number } {
+    return { x: this.raiz.position.x - this.lado / 2, y: this.raiz.position.y - this.lado / 2, w: this.lado, h: this.lado };
+  }
+
   private get raioRetrato() {
     return this.lado * ESCALA_QUADRO * RAIO_RETRATO;
   }
@@ -240,10 +248,9 @@ export class TokenVisual {
     this.moldura.height = this.lado * ESCALA_QUADRO;
     this.desenharBarras();
 
+    this.tamanhoNome = Math.max(8, Math.min(16, this.lado * 0.16));
+    this.nome.style.fontSize = this.tamanhoNome;
     this.escreverNome();
-    const tamanhoNome = Math.max(8, Math.min(16, this.lado * 0.16));
-    this.nome.style.fontSize = tamanhoNome;
-    this.nome.y = -this.lado * 0.72 - tamanhoNome * 1.1;
     this.desenharCondicoes();
     this.desenharMarcas();
   }
@@ -251,6 +258,21 @@ export class TokenVisual {
   private escreverNome() {
     const texto = this.sobOMouse || this.selecionado ? this.dados.nome : abreviarNome(this.dados.nome);
     if (this.nome.text !== texto) this.nome.text = texto;
+    this.posicionarNome();
+  }
+
+  /** De longe o nome cresce com o zoom para ficar legível (e some quando o token mal se vê); de perto, tamanho normal. */
+  ajustarAoZoom(zoom: number) {
+    if (zoom === this.zoomDoNome) return;
+    this.zoomDoNome = zoom;
+    this.posicionarNome();
+  }
+
+  private posicionarNome() {
+    const escala = escalaDoNome(this.tamanhoNome, this.zoomDoNome);
+    this.nome.scale.set(escala);
+    this.nome.y = -this.lado * 0.72 - this.tamanhoNome * 1.1 * escala;
+    this.nome.visible = nomeVisivel(this.lado, this.zoomDoNome, this.sobOMouse || this.selecionado);
   }
 
   private desenharBarras() {

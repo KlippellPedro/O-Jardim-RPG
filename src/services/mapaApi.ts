@@ -270,11 +270,13 @@ export interface IMapaColocado {
   id: string;
   /** O item do Acervo (os pedaços saem de `urlPedaco(imagem_id, chave)`). */
   imagem_id: string;
-  /** Canto de cima à esquerda, em px da cena. */
+  /** Canto de cima à esquerda do desenho sem girar, em px da cena (girado, pode ficar atrás da borda). */
   x: number;
   y: number;
   /** 1 é o tamanho da imagem; 0,5 é metade. */
   escala: number;
+  /** Giro em graus (0 a 360, sentido horário) em torno do centro do mapa. Mapa antigo não traz. */
+  rotacao?: number;
   /** Tamanho da imagem original, em px. */
   largura: number;
   altura: number;
@@ -291,6 +293,7 @@ export interface IMapaColocadoEdicao {
   x?: number;
   y?: number;
   escala?: number;
+  rotacao?: number;
   nome?: string;
   visivel?: boolean;
   trancado?: boolean;

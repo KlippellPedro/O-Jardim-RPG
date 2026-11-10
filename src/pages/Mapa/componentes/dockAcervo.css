@@ -1,0 +1,404 @@
+/* A barra de baixo do mapa (pastas do Acervo) e a janela com o que está salvo. Usa as variáveis do mapa.css. */
+
+.mapa-dock {
+  position: absolute;
+  z-index: 5;
+  bottom: 14px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  max-width: calc(100% - 24px);
+  padding: 5px 8px;
+  transform: translateX(-50%);
+  border: 1px solid var(--mapa-linha);
+  border-radius: 999px;
+  background: var(--mapa-painel);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.mapa-dock button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.mapa-dock button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mapa-texto);
+}
+
+.mapa-dock button.ativo {
+  background: rgba(199, 164, 76, 0.24);
+  color: var(--mapa-ouro);
+}
+
+.mapa-dock button.mapa-dock-icone {
+  width: 36px;
+  padding: 0;
+  justify-content: center;
+}
+
+.mapa-dock-separador {
+  flex: none;
+  width: 1px;
+  height: 22px;
+  margin: 0 4px;
+  background: var(--mapa-linha);
+}
+
+/* As pastas rolam de lado quando são muitas; os botões fixos ficam nas pontas. */
+.mapa-dock-pastas {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.mapa-dock-pastas button span {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mapa-dock .mapa-com-dica {
+  flex: none;
+}
+
+/* A janela com o que está salvo na pasta ou no tipo escolhido */
+
+.mapa-dock-janela {
+  position: absolute;
+  z-index: 6;
+  bottom: 70px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: min(700px, calc(100% - 24px));
+  max-height: min(62%, 480px);
+  transform: translateX(-50%);
+  border: 1px solid var(--mapa-linha);
+  border-radius: 14px;
+  background: var(--mapa-painel);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+}
+
+.mapa-dock-janela > header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 8px 14px;
+  border-bottom: 1px solid var(--mapa-linha);
+}
+
+.mapa-dock-janela > header > strong {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-dock-caminho {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  color: var(--mapa-apagado);
+}
+
+.mapa-dock-caminho span {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.mapa-dock-caminho button {
+  padding: 3px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.mapa-dock-caminho button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mapa-texto);
+}
+
+.mapa-dock-caminho button.atual {
+  color: var(--mapa-texto);
+  font-weight: 600;
+}
+
+.mapa-dock-busca {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  width: 190px;
+  padding: 4px 8px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--mapa-apagado);
+}
+
+.mapa-dock-busca input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--mapa-texto);
+  font: inherit;
+}
+
+.mapa-dock-subir {
+  position: relative;
+  flex: none;
+}
+
+.mapa-dock-subir-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--mapa-texto);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.mapa-dock-subir-botao:hover:not(:disabled),
+.mapa-dock-subir-botao[aria-expanded='true'] {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.12);
+}
+
+.mapa-dock-subir-botao:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.mapa-dock-subir-menu {
+  position: absolute;
+  z-index: 3;
+  top: calc(100% + 6px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 150px;
+  padding: 6px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+  background: #16121e;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.mapa-dock-subir-menu > span {
+  padding: 2px 8px 4px;
+  color: var(--mapa-apagado);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mapa-dock-subir-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--mapa-texto);
+  cursor: pointer;
+  font-size: 13px;
+  text-align: left;
+}
+
+.mapa-dock-subir-menu button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Arquivo do computador sobre a janela: a borda acende, avisando que dá para soltar. */
+.mapa-dock-janela.soltando {
+  border-color: var(--mapa-ouro);
+  box-shadow: 0 0 0 2px rgba(199, 164, 76, 0.45), 0 16px 48px rgba(0, 0, 0, 0.55);
+}
+
+.mapa-dock-corpo {
+  min-height: 90px;
+  overflow: auto;
+  padding: 12px;
+}
+
+.mapa-dock-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 10px;
+}
+
+.mapa-dock-caixa {
+  position: relative;
+  min-width: 0;
+}
+
+.mapa-dock-caixa > .mapa-dock-item {
+  height: 100%;
+}
+
+.mapa-dock-estrela {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(10, 9, 14, 0.7);
+  color: var(--mapa-apagado);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.mapa-dock-caixa:hover .mapa-dock-estrela,
+.mapa-dock-estrela:focus-visible,
+.mapa-dock-estrela.marcada {
+  opacity: 1;
+}
+
+.mapa-dock-estrela:hover {
+  color: var(--mapa-ouro);
+}
+
+.mapa-dock-estrela.marcada {
+  color: var(--mapa-ouro);
+}
+
+.mapa-dock-estrela.marcada svg {
+  fill: currentColor;
+}
+
+@media (hover: none) {
+  /* Sem mouse não há "passar por cima": a estrela fica sempre à vista. */
+  .mapa-dock-estrela {
+    opacity: 1;
+  }
+}
+
+.mapa-dock-item,
+.mapa-dock-pasta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 6px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--mapa-texto);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.mapa-dock-item:hover,
+.mapa-dock-item:focus-visible,
+.mapa-dock-pasta:hover {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.1);
+  outline: none;
+}
+
+.mapa-dock-item {
+  cursor: grab;
+}
+
+.mapa-dock-item img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #15131c;
+}
+
+.mapa-dock-item span,
+.mapa-dock-pasta span {
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-dock-item small {
+  color: var(--mapa-apagado);
+  font-size: 10px;
+}
+
+.mapa-dock-pasta {
+  align-items: center;
+  justify-content: center;
+  min-height: 112px;
+  color: var(--mapa-ouro);
+}
+
+.mapa-dock-vazio {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 14px 6px;
+  color: var(--mapa-apagado);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.mapa-dock-janela > footer {
+  padding: 7px 14px;
+  border-top: 1px solid var(--mapa-linha);
+  color: var(--mapa-apagado);
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .mapa-dock button {
+    padding: 0 9px;
+  }
+
+  /* No celular, Buscar, Mapas, Tokens e Objetos ficam só com o ícone; as pastas rolam de lado. */
+  .mapa-dock > button span {
+    display: none;
+  }
+
+  .mapa-dock-busca {
+    width: 120px;
+  }
+
+  .mapa-dock-janela {
+    max-height: 58%;
+  }
+}
