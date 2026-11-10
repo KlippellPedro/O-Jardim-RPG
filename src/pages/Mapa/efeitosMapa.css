@@ -2,7 +2,7 @@
 
 .mapa-barra-magia {
   position: absolute;
-  top: 12px;
+  top: var(--mapa-topo-esq, 12px);
   left: 12px;
   right: 12px;
   display: flex;

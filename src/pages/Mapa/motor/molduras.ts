@@ -45,6 +45,7 @@ export interface IMolduraCatalogo {
 export const MOLDURAS: IMolduraCatalogo[] = [
   { id: 'nivel', rotulo: 'Do nível', grupo: 'padrao' },
   { id: 'lado', rotulo: 'Simples', grupo: 'padrao' },
+  { id: 'nenhuma', rotulo: 'Sem borda', grupo: 'padrao' },
   { id: 'ferro', rotulo: 'Ferro', grupo: 'material' },
   { id: 'ouro', rotulo: 'Ouro', grupo: 'material' },
   { id: 'madeira', rotulo: 'Madeira', grupo: 'material' },
@@ -140,6 +141,9 @@ export function desenharMoldura(ctx: Contexto, s: number, { id, nivel, lado }: O
   const corLado = CORES_LADO[lado];
   const meio = r + e / 2;
   const fioDoLado = () => anel(ctx, c, r - e * 0.15, Math.max(1, e * 0.22), corLado);
+
+  // Sem borda: o quadro fica vazio e só o retrato aparece.
+  if (id === 'nenhuma') return;
 
   if (id === 'lado' || (id === 'nivel' && nivel === null)) {
     anel(ctx, c, meio, e, corLado);

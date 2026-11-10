@@ -298,6 +298,12 @@ def test_moldura_desconhecida_e_recusada_e_vazio_volta_ao_padrao():
     assert len([m for m in mapa.MOLDURAS if m.startswith("fluxo-")]) == 11
 
 
+def test_sem_borda_e_uma_moldura_valida_que_vale_para_token_e_mesa():
+    assert mapa.normalizar_moldura("nenhuma") == "nenhuma"
+    assert mapa.moldura_efetiva(token(moldura="nenhuma"), "p-ana", "ouro", None) == "nenhuma"
+    assert mapa.moldura_efetiva(token(moldura="osso"), None, None, "nenhuma") == "nenhuma"
+
+
 def test_enquadramento_tem_limites():
     assert mapa.normalizar_enquadramento({"zoom": 2, "x": -0.5}) == {"zoom": 2.0, "x": -0.5, "y": 0.0}
     for ruim in ({"zoom": 0.5}, {"zoom": 9}, {"x": 2}, {"y": "meio"}):

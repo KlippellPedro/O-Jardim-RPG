@@ -123,6 +123,8 @@ export class PalcoMapa {
   private gradePrevia: IGrade | null = null;
   /** Preferência do aparelho: o token e a régua grudam na grade? */
   private encaixe = true;
+  /** Preferência do aparelho: mostrar a linha e a distância enquanto um token é arrastado (desligado, o token anda livre). */
+  private medirAoMover = false;
   /** Mapa e grade juntos: é a camada que treme com o calor do clima (os tokens ficam firmes). */
   private camadaFundo = new Container();
   private camadaTokens = new Container();
@@ -317,7 +319,7 @@ export class PalcoMapa {
         const y = ponto.y - this.arrasto.dy;
         token.raiz.position.set(x, y);
         this.eventos.aoArrastar(this.arrasto.id, x, y);
-        this.desenharMedidaArrasto({ x: this.arrasto.inicio.x - this.arrasto.dx, y: this.arrasto.inicio.y - this.arrasto.dy }, { x, y });
+        if (this.medirAoMover) this.desenharMedidaArrasto({ x: this.arrasto.inicio.x - this.arrasto.dx, y: this.arrasto.inicio.y - this.arrasto.dy }, { x, y });
         return;
       }
       if (this.pontosRegua) {
@@ -696,6 +698,12 @@ export class PalcoMapa {
     this.encaixe = ligado;
   }
 
+  /** Liga ou desliga a régua que acompanha o token arrastado (preferência de quem olha, não da cena). */
+  definirMedirAoMover(ligado: boolean) {
+    this.medirAoMover = ligado;
+    if (!ligado) this.limparMedidaArrasto();
+  }
+
   /** O que a tela mostra agora: centro, zoom e o tamanho da área em px de mapa (para outra tela enquadrar igual). */
   areaVisivel(): { x: number; y: number; zoom: number; vw: number; vh: number } {
     const visivel = this.viewport.getVisibleBounds();
@@ -1064,11 +1072,11 @@ export class PalcoMapa {
     const escala = 1 / this.viewport.scale.x;
     const casa = this.cena.grade.tamanho;
     desenharMira(this.previa, this.opcoesMagia.forma, inicio, fim, corDoFluxo(this.opcoesMagia.fluxo), 2 * escala, casa);
-    const { quadrados, metros } = medir([inicio, fim], this.cena.grade);
+    const { metros } = medir([inicio, fim], this.cena.grade);
     const nome = { circulo: 'Raio', cone: 'Cone', linha: 'Linha', impacto: 'Alcance' }[this.opcoesMagia.forma];
     this.rotuloMira ??= this.criarRegua('#c084fc').rotulo;
     this.rotuloMira.visible = true;
-    this.rotuloMira.text = `${nome}: ${quadrados.toLocaleString('pt-BR')} q · ${metros.toLocaleString('pt-BR')} ${rotuloUnidade(this.cena.grade.unidade)}`;
+    this.rotuloMira.text = `${nome}: ${metros.toLocaleString('pt-BR')} ${rotuloUnidade(this.cena.grade.unidade)}`;
     this.rotuloMira.scale.set(escala);
     this.rotuloMira.position.set(fim.x, fim.y - 14 * escala);
   }
@@ -1238,9 +1246,9 @@ export class PalcoMapa {
     for (const ponto of pontos.slice(1)) regua.linha.lineTo(ponto.x, ponto.y);
     regua.linha.stroke({ width: 4 * escala, color: cor, alpha: 0.95 });
     for (const ponto of pontos) regua.linha.circle(ponto.x, ponto.y, 5 * escala).fill(cor);
-    const { quadrados, metros } = medir(pontos, this.cena.grade);
+    const { metros } = medir(pontos, this.cena.grade);
     const fim = pontos[pontos.length - 1];
-    regua.rotulo.text = `${nome ? `${nome}: ` : ''}${quadrados.toLocaleString('pt-BR')} q · ${metros.toLocaleString('pt-BR')} ${rotuloUnidade(this.cena.grade.unidade)}`;
+    regua.rotulo.text = `${nome ? `${nome}: ` : ''}${metros.toLocaleString('pt-BR')} ${rotuloUnidade(this.cena.grade.unidade)}`;
     regua.rotulo.scale.set(escala);
     regua.rotulo.position.set(fim.x, fim.y - 10 * escala);
   }

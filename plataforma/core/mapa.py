@@ -39,9 +39,10 @@ FLUXOS = (
     "espaco", "tempo", "vazio", "fim", "tecnologia",
 )
 #: Molduras que o site sabe desenhar (src/pages/Mapa/motor/molduras.ts). "nivel" é a
-#: escada do retrato da ficha; "lado" é o aro simples na cor do lado do token.
+#: escada do retrato da ficha; "lado" é o aro simples na cor do lado do token; "nenhuma"
+#: tira a borda (o retrato fica solto no mapa).
 MOLDURAS = (
-    "nivel", "lado", "ferro", "ouro", "madeira", "osso", "runa", "cristal", "raiz", "sombra",
+    "nivel", "lado", "nenhuma", "ferro", "ouro", "madeira", "osso", "runa", "cristal", "raiz", "sombra",
     *(f"fluxo-{fluxo}" for fluxo in FLUXOS),
 )
 ENQUADRAMENTO_PADRAO = {"zoom": 1.0, "x": 0.0, "y": 0.0}

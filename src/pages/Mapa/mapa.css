@@ -26,6 +26,25 @@
   grid-template-columns: 52px 1fr clamp(300px, 26vw, 380px);
 }
 
+/*
+ * Os botões redondos que trazem de volta o que foi escondido (.mapa-alca) moram nos cantos de cima da área do mapa.
+ * Os painéis presos a esses cantos descem o tamanho do botão quando ele está lá, para não ficarem um em cima do outro
+ * (o botão cobria o "X" de fechar do painel do token).
+ */
+.mapa-pagina {
+  --mapa-topo-esq: 12px;
+  --mapa-topo-dir: 12px;
+}
+
+.mapa-pagina:not(.so-mapa):not(.com-lateral) {
+  --mapa-topo-dir: 58px;
+}
+
+.mapa-pagina.so-mapa,
+.mapa-pagina.sem-ferramentas {
+  --mapa-topo-esq: 58px;
+}
+
 .mapa-topo {
   grid-area: topo;
   position: relative;
@@ -656,9 +675,20 @@
 
 /* Os painéis da esquerda têm todos a mesma largura. */
 .mapa-config {
+  top: var(--mapa-topo-esq);
   right: auto;
   left: 12px;
   width: min(340px, calc(100% - 24px));
+  max-height: calc(100% - var(--mapa-topo-esq) - 12px);
+}
+
+/* Os da direita ficam abaixo do botão que reabre o painel lateral, quando ele aparece. */
+.mapa-menu-token,
+.mapa-config.mapa-portal-painel,
+.mapa-config.mapa-porta-painel,
+.mapa-config.mapa-editor-anotacao {
+  top: var(--mapa-topo-dir);
+  max-height: calc(100% - var(--mapa-topo-dir) - 12px);
 }
 
 .mapa-config-barras {
@@ -1323,7 +1353,7 @@
 
 .mapa-barra-nevoa {
   position: absolute;
-  top: 12px;
+  top: var(--mapa-topo-esq);
   left: 12px;
   display: flex;
   flex-direction: column;
@@ -1688,12 +1718,12 @@
 .mapa-recurso-painel {
   position: absolute;
   z-index: 8;
-  top: 12px;
+  top: var(--mapa-topo-dir);
   right: 12px;
   display: grid;
   gap: 10px;
   width: min(340px, calc(100% - 24px));
-  max-height: calc(100% - 24px);
+  max-height: calc(100% - var(--mapa-topo-dir) - 12px);
   overflow: auto;
   padding: 12px;
   border: 1px solid var(--mapa-linha);
@@ -1890,7 +1920,7 @@
   }
 
   .mapa-recurso-painel {
-    top: 8px;
+    top: var(--mapa-topo-dir);
     right: 8px;
     width: min(320px, calc(100% - 16px));
   }

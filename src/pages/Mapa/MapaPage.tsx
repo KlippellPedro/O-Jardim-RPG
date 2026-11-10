@@ -106,15 +106,19 @@ function lerClimaLocal(): boolean {
 /** Escolhas de cada aparelho: encaixar na grade e aceitar quando alguém traz a mesa para a vista dele. */
 const CHAVE_ENCAIXE_LOCAL = 'jardim.mapa.encaixe';
 const CHAVE_SEGUIR_VISTA_LOCAL = 'jardim.mapa.seguirVista';
+/** Começa desligada: o token anda livre, sem a linha de medida atrás dele. */
+const CHAVE_MEDIR_AO_MOVER_LOCAL = 'jardim.mapa.medirAoMover';
 /** Painéis que o aparelho esconde: a barra de ferramentas da esquerda e o painel de iniciativa e fichas. */
 const CHAVE_FERRAMENTAS_LOCAL = 'jardim.mapa.ferramentas';
 const CHAVE_LATERAL_LOCAL = 'jardim.mapa.lateral';
 
-function lerOpcaoLocal(chave: string): boolean {
+function lerOpcaoLocal(chave: string, padrao = true): boolean {
   try {
-    return window.localStorage.getItem(chave) !== 'desligado';
+    const guardada = window.localStorage.getItem(chave);
+    if (guardada === null) return padrao;
+    return guardada !== 'desligado';
   } catch {
-    return true;
+    return padrao;
   }
 }
 
@@ -234,6 +238,7 @@ export const MapaPage = () => {
   /** O painel de opções do token (abas) só abre quando se pede, pela barra colada no token. */
   const [menuTokenAberto, setMenuTokenAberto] = useState(false);
   const [encaixe, setEncaixe] = useState(() => lerOpcaoLocal(CHAVE_ENCAIXE_LOCAL));
+  const [medirAoMover, setMedirAoMover] = useState(() => lerOpcaoLocal(CHAVE_MEDIR_AO_MOVER_LOCAL, false));
   const [seguirVista, setSeguirVista] = useState(() => lerOpcaoLocal(CHAVE_SEGUIR_VISTA_LOCAL));
   const seguirVistaRef = useRef(seguirVista);
   seguirVistaRef.current = seguirVista;
@@ -1090,6 +1095,11 @@ export const MapaPage = () => {
   }, [encaixe, palcoPronto]);
 
   useEffect(() => {
+    palcoRef.current?.definirMedirAoMover(medirAoMover);
+    guardarOpcaoLocal(CHAVE_MEDIR_AO_MOVER_LOCAL, medirAoMover);
+  }, [medirAoMover, palcoPronto]);
+
+  useEffect(() => {
     guardarOpcaoLocal(CHAVE_SEGUIR_VISTA_LOCAL, seguirVista);
   }, [seguirVista]);
 
@@ -1918,6 +1928,8 @@ export const MapaPage = () => {
           cena={cena}
           encaixe={encaixe}
           onEncaixe={setEncaixe}
+          medirAoMover={medirAoMover}
+          onMedirAoMover={setMedirAoMover}
           onPrever={(grade) => palcoRef.current?.previaGrade(grade)}
           onSalvarGrade={(grade) => cena && campanhaId && void comErro(() => mapaApi.editarCena(campanhaId, cena.id, { grade })).then((r) => r && setEstado(r))}
           onFechar={() => setGradeAberta(false)}

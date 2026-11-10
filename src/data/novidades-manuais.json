@@ -2,6 +2,19 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-10-mapa-token-sem-borda-e-movimento-livre",
+      "data": "2026-11-10",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: token sem borda, movimento livre e medidas mais limpas",
+      "detalhes": [
+        "Nas opções do token, na aba Visual, há uma moldura nova chamada Sem borda: o retrato fica solto no mapa, sem aro nenhum. O Mestre também pode usá-la como moldura única da mesa.",
+        "Arrastar um token deixou de desenhar a linha de distância atrás dele. Quem gosta de medir liga Medir ao mover o token no painel da Grade (a escolha vale só no seu aparelho).",
+        "A régua e a mira das magias agora mostram só a distância na unidade da cena, sem a contagem de quadrados.",
+        "O botão que reabre o painel lateral não fica mais por cima do X de fechar das opções do token e de outros painéis: eles descem um pouco para dar espaço."
+      ]
+    },
+    {
       "id": "2026-11-10-documentos-universais-quadro-aventuras-e-boatos",
       "data": "2026-11-10",
       "tipo": "novo",

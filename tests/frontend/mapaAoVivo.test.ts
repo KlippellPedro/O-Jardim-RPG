@@ -108,6 +108,22 @@ test('molduras: as cores de Fluxo batem com FLUXO_TEMAS e os nomes batem com o s
   assert.deepEqual(MOLDURAS.map((m) => m.id).sort(), [...base, ...fluxos].sort());
 });
 
+test('molduras: "Sem borda" não desenha nada e as outras desenham', async () => {
+  const { desenharMoldura } = await import('../../src/pages/Mapa/motor/molduras');
+  const tracos = (id: string) => {
+    let chamadas = 0;
+    const ctx = new Proxy({}, {
+      get: (_alvo, nome) => (nome === 'createLinearGradient' ? () => ({ addColorStop: () => {} }) : () => { chamadas += 1; }),
+      set: () => true,
+    }) as unknown as CanvasRenderingContext2D;
+    desenharMoldura(ctx, 256, { id, nivel: null, lado: 'jogador' });
+    return chamadas;
+  };
+  assert.equal(tracos('nenhuma'), 0);
+  assert.ok(tracos('lado') > 0);
+  assert.ok(tracos('ouro') > 0);
+});
+
 test('MODNet recebe lado menor 512 e lados múltiplos de 32', async () => {
   const { tamanhoParaModnet } = await import('../../src/pages/Mapa/oficina/processar');
   assert.deepEqual(tamanhoParaModnet(1000, 869), { largura: 576, altura: 512 });

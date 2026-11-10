@@ -14,6 +14,9 @@ interface Props {
   /** Preferência do aparelho: o token e a régua grudam na grade. */
   encaixe: boolean;
   onEncaixe: (ligado: boolean) => void;
+  /** Preferência do aparelho: mostrar a distância andada enquanto o token é arrastado. */
+  medirAoMover: boolean;
+  onMedirAoMover: (ligado: boolean) => void;
   /** A grade ainda não salva, para a tela mostrar na hora enquanto o Mestre ajusta. */
   onPrever: (grade: IGrade) => void;
   onSalvarGrade: (mudancas: Partial<IGrade>) => void;
@@ -53,7 +56,7 @@ const arredondar = (valor: number, casas = 0) => {
 };
 
 /** A grade da cena: o que muda a cena é do Mestre; o encaixe vale para cada aparelho. A vista da tela tem painel próprio. */
-export const PainelGrade = ({ aberto, gestor, cena, encaixe, onEncaixe, onPrever, onSalvarGrade, onFechar }: Props) => {
+export const PainelGrade = ({ aberto, gestor, cena, encaixe, onEncaixe, medirAoMover, onMedirAoMover, onPrever, onSalvarGrade, onFechar }: Props) => {
   const [grade, setGrade] = useState<IGrade | null>(cena?.grade ?? null);
   const espera = useRef<number | null>(null);
   const pendente = useRef<Partial<IGrade>>({});
@@ -113,6 +116,11 @@ export const PainelGrade = ({ aberto, gestor, cena, encaixe, onEncaixe, onPrever
       <label className="grade-interruptor">
         <span>Encaixar na grade<small>Só neste aparelho. Desligado, o token e a régua ficam onde você soltar.</small></span>
         <input type="checkbox" role="switch" checked={encaixe} onChange={(e) => onEncaixe(e.target.checked)} />
+      </label>
+
+      <label className="grade-interruptor">
+        <span>Medir ao mover o token<small>Só neste aparelho. Desligado, o token anda livre, sem linha de distância atrás dele.</small></span>
+        <input type="checkbox" role="switch" checked={medirAoMover} onChange={(e) => onMedirAoMover(e.target.checked)} />
       </label>
 
       <fieldset className="grade-grupo" disabled={!gestor}>
