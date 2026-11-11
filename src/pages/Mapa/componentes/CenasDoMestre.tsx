@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, Plus, Radio, Settings2, Trash2, X } from 'lucide-react';
 import type { ICena, ICenaPayload, IResumoCena } from '../../../services/mapaApi';
 import { MOLDURAS } from '../motor/molduras';
+import { NotaDoMestre } from './NotaDoMestre';
 
 interface SeletorProps {
   cenas: IResumoCena[];
@@ -110,6 +111,7 @@ export const ConfigCena = ({ cena, molduraMesa, onMolduraMesa, onSalvar, onApaga
         Nome
         <input value={nome} maxLength={80} onChange={(e) => setNome(e.target.value)} onBlur={() => nome.trim() && nome !== cena.nome && onSalvar({ nome: nome.trim() })} />
       </label>
+      <NotaDoMestre key={cena.id} rotulo="Nota do Mestre sobre este mapa" valor={cena.nota_mestre ?? ''} onSalvar={(texto) => onSalvar({ nota_mestre: texto })} />
       <p className="mapa-dica">O formato da grade, a linha e a medida da régua estão no botão Grade da barra de ferramentas.</p>
       <label className="mapa-menu-linha">
         <span>

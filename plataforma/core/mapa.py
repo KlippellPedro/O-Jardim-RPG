@@ -288,6 +288,22 @@ def porte_valido(valor) -> int:
     return valor
 
 
+#: Nota só do Mestre num token, numa cena ou num mapa colocado: texto livre, com quebras de linha.
+NOTA_MAXIMA = 4000
+
+
+def normalizar_nota(valor) -> str:
+    """O texto da nota sem espaço sobrando nas pontas e com as quebras de linha normalizadas; vazio apaga a nota."""
+    if valor is None:
+        return ""
+    if not isinstance(valor, str):
+        raise ErroMapa("a nota precisa ser um texto")
+    texto = valor.replace("\r\n", "\n").replace("\r", "\n").strip()
+    if len(texto) > NOTA_MAXIMA:
+        raise ErroMapa(f"a nota passa de {NOTA_MAXIMA} caracteres")
+    return texto
+
+
 def normalizar_moldura(valor) -> str | None:
     """None (ou vazio) volta ao padrão; um nome que o site não desenha é recusado."""
     if valor is None or valor == "":
@@ -838,6 +854,8 @@ def visao_token(
         saida["personagem_id"] = personagem_do_token(token, participante)
         saida["imagem_id"] = str(token["imagem_id"]) if token.get("imagem_id") else None
         saida["visibilidade"] = (participante or {}).get("visibilidade")
+        # A nota do Mestre não sai daqui para ninguém que não comande a mesa.
+        saida["nota_mestre"] = token.get("nota_mestre") or ""
     return saida
 
 

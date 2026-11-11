@@ -35,6 +35,24 @@ def test_atualizar_confere_campos_e_respeita_a_trava():
     assert mc.atualizar(preso, {"trancado": False, "x": 5})["x"] == 5.0
 
 
+def test_nota_do_mestre_no_mapa_colocado_e_lida_gravada_e_copiada_mesmo_trancado():
+    base = _mapa("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", A)
+    # Registro antigo, sem a chave: lê como nota vazia.
+    assert mc.ler({"mapas": [base]})[0]["nota"] == ""
+    assert mc.novo(A, "Sala", 0, 0)["nota"] == ""
+    lido = mc.ler({"mapas": [{**base, "nota": "  Passagem secreta atrás da estátua  "}]})[0]
+    assert lido["nota"] == "Passagem secreta atrás da estátua"
+    assert mc.ler({"mapas": [{**base, "nota": 42}]})[0]["nota"] == ""
+    # Trancado deixa mudar a nota (não é posição).
+    preso = {**lido, "trancado": True}
+    assert mc.atualizar(preso, {"nota": "Outra\r\nlinha"})["nota"] == "Outra\nlinha"
+    assert mc.atualizar(preso, {"nota": ""})["nota"] == ""
+    for ruim in ({"nota": "x" * 4001}, {"nota": 7}):
+        with pytest.raises(ErroMapa):
+            mc.atualizar(lido, ruim)
+    assert mc.duplicar(lido, 100)["nota"] == lido["nota"]
+
+
 def test_pilha_frente_tras_e_degraus():
     mapas = [_mapa(f"{i}" * 8 + "-0000-0000-0000-000000000000", A) for i in "abc"]
     ids = [m["id"] for m in mapas]

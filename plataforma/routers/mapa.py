@@ -48,7 +48,7 @@ MAX_CENAS = 200
 MAX_TOKENS_POR_CENA = 400
 COLUNAS_CENA = (
     "id, campanha_id, nome, mapa_id, largura, altura, grade, ativa, livre, ordem, versao, "
-    "nevoa, nevoa_ladrilhos, clima, estrutura"
+    "nevoa, nevoa_ladrilhos, clima, estrutura, nota_mestre"
 )
 
 
@@ -70,6 +70,8 @@ class CenaEdicao(BaseModel):
     grade: dict | None = None
     livre: bool | None = None
     ordem: int | None = Field(default=None, ge=0, le=10000)
+    #: Nota só do Mestre sobre a cena (vazio apaga).
+    nota_mestre: str | None = Field(default=None, max_length=mapa.NOTA_MAXIMA)
 
 
 class TokenInput(BaseModel):
@@ -105,6 +107,8 @@ class TokenEdicao(BaseModel):
     #: Aura presa ao token: o Mestre e o dono do token mudam, como a luz.
     aura: dict | None = None
     sem_aura: bool = False
+    #: Nota só do Mestre sobre este token (vazio apaga). O dono do personagem não mexe nela.
+    nota_mestre: str | None = Field(default=None, max_length=mapa.NOTA_MAXIMA)
 
 
 class TokenDoPersonagemInput(BaseModel):
@@ -245,7 +249,7 @@ def _tokens(connection, cena_id: UUID) -> list[dict]:
             """
             SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome,
                    t.x, t.y, t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura,
-                   t.camada, t.flip_x, t.flip_y,
+                   t.camada, t.flip_x, t.flip_y, t.nota_mestre,
                    COALESCE(t.personagem_id, sp.personagem_id) AS personagem_efetivo
             FROM mapa_tokens t
             LEFT JOIN sessao_participantes sp ON sp.id = t.participante_id
@@ -419,7 +423,7 @@ def _mapas_colocados_da_cena(connection, cena, gestor: bool) -> list[dict]:
             "rotacao": mapa["rotacao"], "largura": item["largura"], "altura": item["altura"], "ladrilho": item["ladrilho"], "chaves": item["chaves"],
         }
         if gestor:
-            linha.update(nome=mapa["nome"], visivel=mapa["visivel"], trancado=mapa["trancado"])
+            linha.update(nome=mapa["nome"], visivel=mapa["visivel"], trancado=mapa["trancado"], nota=mapa["nota"])
         saida.append(linha)
     return saida
 
@@ -670,6 +674,8 @@ def _resumo_cena(
             "altura": cena["altura"],
             "grade": mapa.normalizar_grade({}, cena["grade"] if isinstance(cena["grade"], dict) else {}),
             "livre": bool(cena["livre"]),
+            # A nota da cena é só de quem comanda a mesa: jogador nem recebe a chave.
+            **({"nota_mestre": cena["nota_mestre"] or ""} if gestor else {}),
             # Onde a tela abre a cena (core/mesa_extras.py); None é o mapa inteiro.
             "vista": mesa_extras.ler_vista(cena["estrutura"]),
             "mapa": _mapa_da_cena(connection, cena) if camadas_visiveis["mapa"] else None,
@@ -878,6 +884,11 @@ def editar_cena(
             mudancas["livre"] = payload.livre
         if payload.ordem is not None:
             mudancas["ordem"] = payload.ordem
+        if payload.nota_mestre is not None:
+            try:
+                mudancas["nota_mestre"] = mapa.normalizar_nota(payload.nota_mestre)
+            except ErroMapa as erro:
+                raise _erro_mapa(erro) from None
         for coluna, valor in mudancas.items():
             connection.execute(f"UPDATE mapa_cenas SET {coluna}=%s WHERE id=%s", (valor, cena_id))
         if {"mapa_id", "largura", "altura"} & mudancas.keys():
@@ -1255,7 +1266,7 @@ def editar_token(
         dono = mapa.e_dono(token, participante, quem)
         if not quem.gestor and not _camadas_visiveis(token["estrutura"], False, quem.permissoes_mesa).get(token["camada"], False):
             raise HTTPException(status_code=404, detail="token nao encontrado")
-        estruturais = (payload.nome, payload.porte, payload.lado, payload.oculto, payload.imagem_id, payload.moldura, payload.camada)
+        estruturais = (payload.nome, payload.porte, payload.lado, payload.oculto, payload.imagem_id, payload.moldura, payload.camada, payload.nota_mestre)
         if not quem.gestor and (any(v is not None for v in estruturais) or payload.sem_imagem or payload.sem_moldura):
             raise HTTPException(status_code=403, detail="so o mestre muda isso")
         if not quem.gestor and not dono:
@@ -1276,6 +1287,8 @@ def editar_token(
                 if payload.camada not in mapa.CAMADAS_TOKEN:
                     raise ErroMapa("camada do token invalida")
                 mudancas["camada"] = payload.camada
+            if payload.nota_mestre is not None:
+                mudancas["nota_mestre"] = mapa.normalizar_nota(payload.nota_mestre)
             if payload.flip_x is not None:
                 mudancas["flip_x"] = payload.flip_x
             if payload.flip_y is not None:

@@ -2475,4 +2475,15 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "ALTER TABLE sessao_participantes ADD COLUMN IF NOT EXISTS fases JSONB",
         ),
     ),
+    (
+        75,
+        "notas_do_mestre_no_mapa",
+        (
+            # Nota só do Mestre num token e numa cena (o texto nunca sai do servidor para o jogador:
+            # core/mapa.py só a põe na visão de quem comanda a mesa). A nota de um mapa colocado mora
+            # no registro dele, em mapa_cenas.estrutura["mapas"].
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS nota_mestre TEXT NOT NULL DEFAULT '' CHECK (length(nota_mestre) <= 4000)",
+            "ALTER TABLE mapa_cenas ADD COLUMN IF NOT EXISTS nota_mestre TEXT NOT NULL DEFAULT '' CHECK (length(nota_mestre) <= 4000)",
+        ),
+    ),
 )

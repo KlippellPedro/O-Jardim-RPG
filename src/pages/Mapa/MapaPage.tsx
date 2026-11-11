@@ -1282,6 +1282,16 @@ export const MapaPage = () => {
     if (resposta) setEstado(resposta);
   };
 
+  /**
+   * A nota do Mestre de um token. Leva o id do token (e não o `selecionado` do momento): a nota também é guardada
+   * quando o menu fecha por a pessoa ter escolhido outro token, e tem de ir para o token em que foi escrita.
+   */
+  const salvarNotaDoToken = async (tokenId: string, texto: string) => {
+    if (!campanhaId) return;
+    const resposta = await comErro(() => mapaApi.editarToken(campanhaId, tokenId, { nota_mestre: texto }));
+    if (resposta) setEstado(resposta);
+  };
+
   /** Moldura do token: a do personagem vale em todas as cenas; a de token solto, só nele. */
   const escolherMoldura = async (id: string | null) => {
     const token = tokens.find((t) => t.id === selecionado);
@@ -2020,6 +2030,11 @@ export const MapaPage = () => {
                 }
                 setMenuTokenAberto((v) => !v);
               }}
+              onNota={gestor ? () => {
+                setPainelRecurso(null);
+                setPortaEscolhida(null);
+                setMenuTokenAberto(true);
+              } : undefined}
               onOculto={ocultarToken}
               onRemover={() => void removerToken()}
               onFalar={gestor ? () => void falarComo(tokenSelecionado) : undefined}
@@ -2032,6 +2047,7 @@ export const MapaPage = () => {
             gestor={gestor}
             molduraMesa={estado?.moldura_mesa ?? null}
             onEditar={(dados) => void editarToken(dados)}
+            onNota={(texto) => void salvarNotaDoToken(tokenSelecionado.id, texto)}
             onMoldura={(id) => void escolherMoldura(id)}
             onEnquadramento={(e) => void mudarEnquadramento(e)}
             onFechar={() => setMenuTokenAberto(false)}

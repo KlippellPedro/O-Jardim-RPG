@@ -2,6 +2,19 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-10-mapa-notas-so-do-mestre",
+      "data": "2026-11-10",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: notas que só o Mestre vê",
+      "detalhes": [
+        "O Mestre pode escrever uma nota em cada token, em cada cena e em cada mapa posto na cena, para guardar descrição, lembretes e segredos. Nenhum jogador recebe esse texto.",
+        "No token, a nota fica nas opções, na aba Geral. Quando existe, um bilhete aparece na barra do token e mostra o começo da nota ao passar o mouse.",
+        "Na cena, a nota fica em Configurar esta cena. No mapa posto na cena, ela fica no botão de bilhete da barra do mapa.",
+        "As notas guardam sozinhas, pouco depois de você parar de digitar."
+      ]
+    },
+    {
       "id": "2026-11-10-mapa-menos-atrapalho-na-mesa",
       "data": "2026-11-10",
       "tipo": "melhoria",

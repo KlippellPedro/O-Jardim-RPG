@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import type { IAuraToken, ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
 import { SeletorDeMoldura } from '../oficina/OficinaGaveta';
 import type { Enquadramento } from '../motor/molduras';
+import { NotaDoMestre } from './NotaDoMestre';
 import '../efeitosMapa.css';
 
 interface Props {
@@ -11,6 +12,8 @@ interface Props {
   /** O Mestre travou uma moldura para todos: a escolha de cada um fica guardada, mas não aparece. */
   molduraMesa: string | null;
   onEditar: (dados: ITokenEdicao) => void;
+  /** Guarda a nota do Mestre deste token (a função já leva o id do token, porque ela também roda ao fechar o menu). */
+  onNota: (texto: string) => void;
   onMoldura: (id: string | null) => void;
   onEnquadramento: (enquadramento: Enquadramento) => void;
   onFechar: () => void;
@@ -60,7 +63,7 @@ const ROTULO_DA_ABA: Record<Aba, string> = { geral: 'Geral', barras: 'Barras', v
  * As opções do token, em abas (antes era uma coluna só, com quase 1000 px de altura). O que se faz a toda hora
  * (esconder, falar como, tirar do mapa) está na barra colada no token (BarraToken); aqui ficam os ajustes.
  */
-export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onEnquadramento, onFechar }: Props) => {
+export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMoldura, onEnquadramento, onFechar }: Props) => {
   const config = token.config_barras;
   const podeVisual = gestor || token.e_meu;
   // Enquadramento só para a foto da ficha (imagem do Acervo já vem recortada pela Oficina).
@@ -178,6 +181,7 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onMoldura, onE
               {token.visibilidade && token.visibilidade !== 'total' && (
                 <p className="mapa-dica">Na Sessão este participante está como "{token.visibilidade}": os jogadores veem só o que esse degrau deixa.</p>
               )}
+              <NotaDoMestre key={token.id} valor={token.nota_mestre ?? ''} onSalvar={onNota} />
             </>
           )}
         </div>

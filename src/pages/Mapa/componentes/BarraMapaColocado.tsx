@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDownToLine, ArrowUp, ArrowUpToLine, ArrowDown, CopyPlus, Eye, EyeOff, Layers, Lock, LockOpen, MoreVertical, RotateCw, Trash2, Type } from 'lucide-react';
+import { ArrowDownToLine, ArrowUp, ArrowUpToLine, ArrowDown, CopyPlus, Eye, EyeOff, Layers, Lock, LockOpen, MoreVertical, RotateCw, StickyNote, Trash2, Type } from 'lucide-react';
 import type { AcaoOrdemMapa, IMapaColocado, IMapaColocadoEdicao } from '../../../services/mapaApi';
 import { casasNaLargura, escalaParaCasas, manterDentroDaCena, moverMapa } from '../motor/mapasColocadosConta';
+import { resumoDaNota, temNota } from '../motor/notasDoMestre';
 import { ComDica } from './BotaoFerramenta';
+import { NotaDoMestre } from './NotaDoMestre';
 import './mapasColocados.css';
 
 interface Props {
@@ -15,7 +17,7 @@ interface Props {
   onApagar: () => void;
 }
 
-type Menu = 'ordem' | 'mais';
+type Menu = 'ordem' | 'mais' | 'nota';
 
 const ORDENS: Array<{ id: AcaoOrdemMapa; rotulo: string; Icone: typeof ArrowUp }> = [
   { id: 'frente', rotulo: 'Para a frente de todos', Icone: ArrowUpToLine },
@@ -55,7 +57,7 @@ export const BarraMapaColocado = ({ mapa, tamanhoCasa, onMudar, onOrdem, onDupli
     const barra = raiz.current?.getBoundingClientRect();
     const area = raiz.current?.closest('.mapa-area')?.getBoundingClientRect();
     // O menu de números tem uns 330 px de altura: sem esse espaço em cima, abre embaixo da barra.
-    setAbaixo(Boolean(barra && area && barra.top - area.top < (qual === 'mais' ? 380 : 190)));
+    setAbaixo(Boolean(barra && area && barra.top - area.top < (qual === 'mais' ? 380 : qual === 'nota' ? 260 : 190)));
     setMenu(qual);
   };
 
@@ -96,6 +98,11 @@ export const BarraMapaColocado = ({ mapa, tamanhoCasa, onMudar, onOrdem, onDupli
         <ComDica lado="cima" dica="Mudar o nome">
           <button type="button" aria-label="Mudar o nome do mapa" onClick={onRenomear}><Type size={18} /></button>
         </ComDica>
+        <ComDica lado="cima" dica={temNota(mapa.nota) ? `Nota do Mestre: ${resumoDaNota(mapa.nota)}` : 'Nota do Mestre sobre este mapa (os jogadores não veem)'}>
+          <button type="button" className={temNota(mapa.nota) || menu === 'nota' ? 'ativo' : ''} aria-label="Nota do Mestre sobre este mapa" aria-expanded={menu === 'nota'} onClick={() => abrir('nota')}>
+            <StickyNote size={18} />
+          </button>
+        </ComDica>
         <ComDica lado="cima" dica={trancado ? 'Destranque para tirar da cena' : 'Tirar da cena (a imagem fica no Acervo)'}>
           <button type="button" className="perigo" aria-label="Tirar o mapa da cena" onClick={onApagar}><Trash2 size={18} /></button>
         </ComDica>
@@ -111,6 +118,12 @@ export const BarraMapaColocado = ({ mapa, tamanhoCasa, onMudar, onOrdem, onDupli
           {ORDENS.map(({ id, rotulo, Icone }) => (
             <button key={id} type="button" role="menuitem" onClick={() => { onOrdem(id); setMenu(null); }}><Icone size={15} /> {rotulo}</button>
           ))}
+        </div>
+      )}
+
+      {menu === 'nota' && (
+        <div className={`mapa-barra-mapa-menu${abaixo ? ' abaixo' : ''}`} role="group" aria-label="Nota do Mestre sobre o mapa">
+          <NotaDoMestre key={mapa.id} rotulo="Nota do Mestre sobre este mapa" valor={mapa.nota ?? ''} onSalvar={(texto) => onMudar({ nota: texto })} />
         </div>
       )}
 

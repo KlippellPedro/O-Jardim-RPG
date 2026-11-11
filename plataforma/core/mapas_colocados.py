@@ -22,7 +22,7 @@ import re
 from uuid import UUID, uuid4
 
 from core import nevoa
-from core.mapa import ErroMapa
+from core.mapa import NOTA_MAXIMA, ErroMapa, normalizar_nota
 
 MAX_MAPAS = 40
 ESCALA_MIN = 0.05
@@ -94,6 +94,8 @@ def ler(estrutura) -> list[dict]:
                 "rotacao": rotacao,
                 "visivel": bool(bruto.get("visivel", True)),
                 "trancado": bool(bruto.get("trancado", False)),
+                # Só do Mestre: descrição e lembretes sobre este mapa.
+                "nota": bruto["nota"].strip()[:NOTA_MAXIMA] if isinstance(bruto.get("nota"), str) else "",
             })
             vistos.add(id_mapa)
         except ErroMapa:
@@ -113,12 +115,13 @@ def novo(imagem_id, nome, x: float, y: float, escala: float = 1.0) -> dict:
         "rotacao": 0.0,
         "visivel": True,
         "trancado": False,
+        "nota": "",
     }
 
 
-#: O que cada pedido pode mudar. Trancado só deixa mudar a trava, o nome, a visibilidade e a ordem.
+#: O que cada pedido pode mudar. Trancado só deixa mudar a trava, o nome, a visibilidade, a nota e a ordem.
 CAMPOS_DE_POSICAO = ("x", "y", "escala", "rotacao")
-CAMPOS_LIVRES = ("nome", "visivel", "trancado")
+CAMPOS_LIVRES = ("nome", "visivel", "trancado", "nota")
 
 
 def atualizar(mapa: dict, dados) -> dict:
@@ -128,6 +131,8 @@ def atualizar(mapa: dict, dados) -> dict:
     mudancas = {}
     if "nome" in dados:
         mudancas["nome"] = _nome(dados["nome"], mapa["nome"])
+    if "nota" in dados:
+        mudancas["nota"] = normalizar_nota(dados["nota"])
     for campo in ("visivel", "trancado"):
         if campo in dados:
             if not isinstance(dados[campo], bool):

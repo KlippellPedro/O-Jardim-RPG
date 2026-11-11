@@ -137,6 +137,8 @@ export interface ITokenMapa {
   personagem_id?: string | null;
   imagem_id?: string | null;
   visibilidade?: string | null;
+  /** Só o Mestre recebe: descrição e lembretes que os jogadores nunca veem. */
+  nota_mestre?: string;
 }
 
 export interface IMapaDaCena {
@@ -282,10 +284,11 @@ export interface IMapaColocado {
   altura: number;
   ladrilho: number;
   chaves: string[];
-  /** Só o Mestre recebe estes: nome, escondido dos jogadores e trancado. */
+  /** Só o Mestre recebe estes: nome, escondido dos jogadores, trancado e a nota. */
   nome?: string;
   visivel?: boolean;
   trancado?: boolean;
+  nota?: string;
 }
 
 /** O que o Mestre pode mudar num mapa colocado. */
@@ -297,6 +300,8 @@ export interface IMapaColocadoEdicao {
   nome?: string;
   visivel?: boolean;
   trancado?: boolean;
+  /** Vazio apaga a nota. */
+  nota?: string;
 }
 
 export type AcaoOrdemMapa = 'frente' | 'tras' | 'acima' | 'abaixo';
@@ -307,6 +312,8 @@ export interface ICena extends IResumoCena {
   vista?: IVistaCena | null;
   grade: IGrade;
   livre: boolean;
+  /** Só o Mestre recebe: descrição e lembretes sobre este mapa. */
+  nota_mestre?: string;
   mapa: IMapaDaCena | null;
   nevoa: INevoa;
   clima: IClima;
@@ -374,6 +381,8 @@ export interface ICenaPayload {
   grade?: Partial<IGrade>;
   livre?: boolean;
   ordem?: number;
+  /** Vazio apaga a nota da cena. */
+  nota_mestre?: string;
 }
 
 export interface ITokenPayload {
@@ -407,9 +416,11 @@ export interface ITokenEdicao {
   sem_luz?: boolean;
   aura?: Partial<IAuraToken>;
   sem_aura?: boolean;
+  /** Só o Mestre muda; vazio apaga a nota. */
+  nota_mestre?: string;
 }
 
-const base = (campanhaId: string) => `/mapa/${campanhaId}`;
+const base =(campanhaId: string) => `/mapa/${campanhaId}`;
 
 /** O estado do mapa sempre vem em JSON. Enquanto a Discloud troca de versão, o proxy responde
  * com uma página HTML e status 200: sem esta exigência ela viraria `null` e a página travaria em

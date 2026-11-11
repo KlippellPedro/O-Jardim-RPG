@@ -304,6 +304,33 @@ def test_sem_borda_e_uma_moldura_valida_que_vale_para_token_e_mesa():
     assert mapa.moldura_efetiva(token(moldura="osso"), None, None, "nenhuma") == "nenhuma"
 
 
+# ----------------------------------------------------- nota só do Mestre
+
+def test_nota_do_mestre_so_aparece_na_visao_de_quem_comanda_a_mesa():
+    com_nota = token(nota_mestre="Tem a chave da cripta", personagem_id="p-ana")
+    assert mapa.visao_token(com_nota, None, MESTRE, livre=False)["nota_mestre"] == "Tem a chave da cripta"
+    # Nem o dono do próprio token recebe a chave "nota_mestre".
+    for quem in (ANA, BRUNO):
+        visto = mapa.visao_token(com_nota, None, quem, livre=False)
+        assert "nota_mestre" not in visto
+        assert "Tem a chave" not in json.dumps(visto)
+    # Token sem nota (linha antiga ou teste) vem com texto vazio para o Mestre.
+    assert mapa.visao_token(token(), None, MESTRE, livre=False)["nota_mestre"] == ""
+    # O desconhecido também não entrega a nota.
+    desconhecido = mapa.visao_token(token(participante_id="pa1", nota_mestre="segredo"), participante(visibilidade="desconhecido"), ANA, livre=False)
+    assert "segredo" not in json.dumps(desconhecido)
+
+
+def test_nota_do_mestre_limpa_as_pontas_normaliza_quebras_e_tem_teto():
+    assert mapa.normalizar_nota("  linha 1\r\nlinha 2\r  ") == "linha 1\nlinha 2"
+    assert mapa.normalizar_nota("   ") == ""
+    assert mapa.normalizar_nota(None) == ""
+    assert len(mapa.normalizar_nota("a" * mapa.NOTA_MAXIMA)) == mapa.NOTA_MAXIMA
+    for ruim in ("a" * (mapa.NOTA_MAXIMA + 1), 12, ["x"]):
+        with pytest.raises(ErroMapa):
+            mapa.normalizar_nota(ruim)
+
+
 def test_enquadramento_tem_limites():
     assert mapa.normalizar_enquadramento({"zoom": 2, "x": -0.5}) == {"zoom": 2.0, "x": -0.5, "y": 0.0}
     for ruim in ({"zoom": 0.5}, {"zoom": 9}, {"x": 2}, {"y": "meio"}):

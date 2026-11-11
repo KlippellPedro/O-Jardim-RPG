@@ -567,6 +567,65 @@ class MapaBancoTests(unittest.TestCase):
         tirado = rotas.tirar_mapa(self.campanha_id, uuid.UUID(cena_id), id_copia, user=self.mestre, database=self.database)
         self.assertEqual([m["id"] for m in tirado["cena"]["mapas_colocados"]], [id_a, id_b])
 
+    # ------------------------------------------------------ nota só do Mestre
+
+    def test_nota_do_mestre_em_token_cena_e_mapa_colocado_nao_chega_a_nenhum_jogador(self):
+        import json
+
+        praca = self._mapa_pronto(1200, 800, "Praca")
+        self._sessao("aberta")
+        self._participante("Mira", tipo="jogador", personagem_id=self.mira)
+        cena_id = self.criar_cena("Cripta")["cena"]["id"]
+        cena = uuid.UUID(cena_id)
+        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(personagem_id=self.mira, x=150, y=150), user=self.mestre, database=self.database)
+        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(nome="Lich", x=300, y=300, lado="inimigo"), user=self.mestre, database=self.database)
+        lich = next(t for t in self.ver(self.mestre)["tokens"] if t["nome"] == "Lich")
+        mira = next(t for t in self.ver(self.mestre)["tokens"] if t["nome"] == "Mira")
+        self.assertEqual((lich["nota_mestre"], mira["nota_mestre"]), ("", ""))
+
+        mapa.editar_token(self.campanha_id, uuid.UUID(lich["id"]), mapa.TokenEdicao(nota_mestre="  Fraco ao fogo.\r\nGuarda a chave da cripta  "),
+                          user=self.mestre, database=self.database)
+        mapa.editar_cena(self.campanha_id, cena, mapa.CenaEdicao(nota_mestre="A cripta cheira a enxofre."), user=self.mestre, database=self.database)
+        colocado = self._colocar(cena_id, praca)["cena"]["mapas_colocados"][0]
+        self._mudar(cena_id, colocado["id"], nota="Passagem secreta atrás da estátua")
+
+        do_mestre = self.ver(self.mestre)
+        self.assertEqual(next(t for t in do_mestre["tokens"] if t["nome"] == "Lich")["nota_mestre"], "Fraco ao fogo.\nGuarda a chave da cripta")
+        self.assertEqual(do_mestre["cena"]["nota_mestre"], "A cripta cheira a enxofre.")
+        self.assertEqual(do_mestre["cena"]["mapas_colocados"][0]["nota"], "Passagem secreta atrás da estátua")
+
+        # Ninguém que não comande a mesa recebe a nota: nem pelo GET nem pelo estado que o tempo real empurra.
+        segredos = ("Fraco ao fogo", "chave da cripta", "enxofre", "Passagem secreta")
+        for visto in (
+            self.ver(self.ana), self.ver(self.bruno),
+            *mapa._estados_sync(self.database, self.campanha_id, [(str(self.ana.id), None), (str(self.bruno.id), None)]),
+        ):
+            texto = json.dumps(visto, ensure_ascii=False, default=str)
+            for segredo in segredos:
+                self.assertNotIn(segredo, texto)
+            self.assertTrue(all("nota_mestre" not in t for t in visto["tokens"]))
+            self.assertNotIn("nota_mestre", visto["cena"])
+            self.assertTrue(all("nota" not in m for m in visto["cena"]["mapas_colocados"]))
+        self.assertTrue(self.ver(self.ana)["cena"]["mapas_colocados"])
+
+        # Nem o dono do personagem mexe na nota do próprio token, nem na de outro.
+        for usuario, alvo in ((self.ana, mira), (self.ana, lich), (self.bruno, lich)):
+            with self.assertRaises(HTTPException) as erro:
+                mapa.editar_token(self.campanha_id, uuid.UUID(alvo["id"]), mapa.TokenEdicao(nota_mestre="oi"), user=usuario, database=self.database)
+            self.assertIn(erro.exception.status_code, (403, 404))
+        with self.assertRaises(HTTPException) as da_cena:
+            mapa.editar_cena(self.campanha_id, cena, mapa.CenaEdicao(nota_mestre="oi"), user=self.ana, database=self.database)
+        self.assertEqual(da_cena.exception.status_code, 403)
+
+        # Vazio apaga; passar do teto é recusado já no pedido.
+        mapa.editar_token(self.campanha_id, uuid.UUID(lich["id"]), mapa.TokenEdicao(nota_mestre="   "), user=self.mestre, database=self.database)
+        self.assertEqual(next(t for t in self.ver(self.mestre)["tokens"] if t["nome"] == "Lich")["nota_mestre"], "")
+        with self.assertRaises(ValueError):
+            mapa.TokenEdicao(nota_mestre="x" * 4001)
+        with self.assertRaises(HTTPException) as longa:
+            self._mudar(cena_id, colocado["id"], nota="x" * 4001)
+        self.assertEqual(longa.exception.status_code, 422)
+
     def test_nevoa_libera_por_mapa_colocado_com_a_chave_prefixada(self):
         a, b = self._mapa_pronto(3000, 2000, "A"), self._mapa_pronto(2400, 1800, "B")
         self._sessao("aberta")

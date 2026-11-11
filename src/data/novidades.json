@@ -1,6 +1,19 @@
 {
   "itens": [
     {
+      "id": "2026-11-10-mapa-notas-so-do-mestre",
+      "data": "2026-11-10",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: notas que só o Mestre vê",
+      "detalhes": [
+        "O Mestre pode escrever uma nota em cada token, em cada cena e em cada mapa posto na cena, para guardar descrição, lembretes e segredos. Nenhum jogador recebe esse texto.",
+        "No token, a nota fica nas opções, na aba Geral. Quando existe, um bilhete aparece na barra do token e mostra o começo da nota ao passar o mouse.",
+        "Na cena, a nota fica em Configurar esta cena. No mapa posto na cena, ela fica no botão de bilhete da barra do mapa.",
+        "As notas guardam sozinhas, pouco depois de você parar de digitar."
+      ]
+    },
+    {
       "id": "2026-11-10-mapa-menos-atrapalho-na-mesa",
       "data": "2026-11-10",
       "tipo": "melhoria",
@@ -1033,17 +1046,6 @@
       "detalhes": [
         "O texto do Livro e do PDF passou por uma revisão completa: erros de digitação, nomes trocados (como perícias que não existem no jogo) e trechos repetidos foram corrigidos, sem mudar nenhuma regra.",
         "As listas de classes, raças e perícias seguem agora uma ordem fácil de achar, e os requisitos dos Legados e o tipo de cada magia aparecem escritos por extenso, com acento."
-      ]
-    },
-    {
-      "id": "2026-10-14-livro-em-pdf",
-      "data": "2026-10-14",
-      "tipo": "novo",
-      "area": "Livro",
-      "titulo": "O Livro de Regras em PDF",
-      "detalhes": [
-        "Agora dá para baixar o Livro inteiro num PDF só, no formato de livro de RPG, com capa, sumário clicável, capítulos, referência rápida e índice. Depois de baixado, funciona sem internet.",
-        "No fim do PDF vem o Compêndio, com as fichas completas das classes e das raças comuns, o catálogo de Legados e todas as magias, rituais, selos e encantamentos. O botão para baixar fica na entrada do Livro, e cada tópico tem o link Ler no PDF, página N."
       ]
     }
   ]
