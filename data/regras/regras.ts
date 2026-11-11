@@ -4960,7 +4960,7 @@ ${HTML_DEVOCAO}
         <li>No fim do turno de um jogador, o chefe pode gastar 1 ponto numa ação curta: andar até metade do Deslocamento, fazer um ataque com −5 ou ganhar uma reação extra até o próximo turno dele.</li>
         <li>No máximo um ponto por turno de jogador. Golpe anunciado, efeito em área e magia nunca saem por Ímpeto.</li>
         <li>Com quatro jogadores, um chefe sozinho tem 3 pontos e faz quatro coisas por rodada, dentro da faixa de 80% a 110% do passo sete. Com um capanga ao lado, fica com 2. Dois chefes juntos dividem os mesmos 2.</li>
-        <li>Mostre o Ímpeto num relógio do painel Mesa, com uma parte por ponto. Pinte uma parte a cada gasto e limpe o relógio no turno dele. Ver quanto ele ainda pode fazer vira decisão para o grupo: provocar agora, ou esperar que ele gaste.</li>
+        <li>Na Sessão, ligue Regras de chefe no editor da criatura. O chefe do Bestiário já entra com elas ligadas. O cartão dele mostra o Ímpeto para a mesa inteira, conta o máximo pela cena e devolve os pontos no turno dele. Você só aperta Gastar 1. Ver quanto ele ainda pode fazer vira decisão para o grupo: provocar agora, ou esperar que ele gaste.</li>
       </ul>
       <p><strong>Determinação.</strong> O chefe recebe 1 ponto de Determinação no começo da luta e outro a cada fase nova. O ponto que sobra não passa para a fase seguinte.</p>
       <ul class="regras-list">
@@ -4968,15 +4968,16 @@ ${HTML_DEVOCAO}
         <li>Passar assim custa caro: ele fica Exposto até o começo do próximo turno dele, e a Guarda enche uma parte, se ele tiver Guarda. Quem tentou travar o chefe ainda ganha alguma coisa.</li>
         <li>Descreva o gasto. Ele sacode a cabeça, arranca a corrente do chão, morde o próprio braço para acordar. A mesa precisa ver que custou.</li>
         <li>A regra que protege o jogador vale para o chefe também: depois de perder um turno inteiro para uma condição, ele passa sem gastar nada na próxima tentativa de tirar o turno dele, até o fim do turno seguinte.</li>
+        <li>Na Sessão, o cartão do chefe guarda a Determinação para você e devolve o ponto a cada fase nova. O botão Gastar e passar já deixa o chefe Exposto e enche a Guarda. A mesa não vê a Determinação, só o que ela custou.</li>
       </ul>
 
       <h3 class="regras-subtitle">Guarda e partes que quebram</h3>
       <p>As duas regras premiam o grupo que joga bem sem mexer na Vida do chefe. A Guarda recompensa o risco, e as partes recompensam a mira.</p>
-      <p><strong>Guarda.</strong> Um relógio de 4 a 6 partes, à vista no painel Mesa. Quatro partes para luta curta ou VD baixo, seis para chefe resistente.</p>
+      <p><strong>Guarda.</strong> Um relógio de 4 a 6 partes, à vista da mesa no cartão do chefe, na Sessão. Escolha as partes no editor da criatura: quatro para luta curta ou VD baixo, seis para chefe resistente.</p>
       <ul class="regras-list">
         <li>Enche uma parte a cada crítico contra ele, a cada acerto de quem declarou Coreografia Ousada ou acima, a cada ataque combinado que o acerta, a cada vez que alguém explora a fraqueza dele e a cada ponto de Determinação que ele gasta.</li>
         <li>Cheia, a Guarda quebra. Ele fica Exposto, perde a reação até o próximo turno dele, o próximo ataque contra ele tem vantagem, e o relógio volta a zero.</li>
-        <li>Diga em voz alta o que encheu a parte. É assim que a mesa aprende o que funciona contra ele.</li>
+        <li>Diga em voz alta o que encheu a parte. É assim que a mesa aprende o que funciona contra ele. Os botões do cartão (Crítico, Ousado, Combinado, Fraqueza) escrevem o motivo no registro da mesa, e a quebra põe Exposto e Guarda quebrada no chefe sozinha.</li>
         <li>A Recolhedora, Dama dos Caídos (VD 25), usa a Guarda. A ficha dela traz a regra escrita numa habilidade, pronta para copiar.</li>
       </ul>
       <p><strong>Partes que quebram.</strong> Criatura grande ganha de duas a três partes que dá para mirar: a cauda, uma asa, o olho de cima, o braço que segura a corrente. Cada parte desliga uma habilidade quando quebra.</p>
@@ -5028,7 +5029,7 @@ ${HTML_DEVOCAO}
         <li><strong>Pela rodada.</strong> A fase pode trazer também uma rodada, e vale o gatilho que chegar primeiro. A Sessão troca a fase quando o combate chega nessa rodada, mesmo com o chefe sem um arranhão. Conta a rodada do combate desde o começo da luta, mesmo para quem entrou depois. Serve para prazo: o ritual termina, a maré sobe, o sino bate. O Ser Horário, da Última Hora, chega à Meia-Noite na rodada 6 e à Hora Zero na 10.</li>
         <li><strong>Pelo acontecimento.</strong> Fase sem Vida nem rodada é sua. Troque no editor da criatura, na Sessão, quando a história pedir: o refém foi solto, a última vela apagou, a votação acabou. Valdo Três-Palavras (VD 8) entra em Sem Plateia assim.</li>
         <li>A fase só sobe. Curar o chefe ou voltar uma rodada na fila não a desfaz, e uma fase pode pular a anterior quando a rodada chega antes da Vida.</li>
-        <li>Criatura sua, fora do Bestiário, não tem fase na Sessão. Use um relógio no painel Mesa com o nome da fase e leia o anúncio em voz alta quando ele encher.</li>
+        <li>Criatura sua também tem fase. No editor da criatura, na Sessão, abra Fases desta criatura e escreva cada uma: o nome, a Vida em porcentagem ou a rodada, a frase que a mesa ouve e o que muda de regra. O mesmo lugar troca as fases de uma criatura do Bestiário só naquela sessão, com um botão para voltar às originais.</li>
       </ul>
 
       <h3 class="regras-subtitle">Mecânicas secretas</h3>
