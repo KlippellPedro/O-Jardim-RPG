@@ -12,7 +12,8 @@ from psycopg.types.json import Jsonb
 from core.audit import record_audit
 from core.character_summary import iniciativa_fixa, sabedoria_desempate
 from core.deidades import para_o_bestiario as deidades_do_bestiario
-from core.fases import fase_alcancada, fases_do_catalogo, fases_limpas
+from core import chefe as regras_de_chefe
+from core.fases import fase_alcancada, fases_do_catalogo, fases_do_participante, fases_limpas
 from core.progressao_niveis import xp_por_vd
 from core.combate_intenso import CANSACO_MAXIMO, encerrar_combate_e_cansar, iniciar_marcas, registrar_minimos
 from core.condicoes import decrementar_condicoes, normalizar_condicoes
@@ -47,6 +48,7 @@ from routers.shop import (
 from schemas import (
     DistributeXpInput,
     GrantXpInput,
+    ChefeAcaoInput,
     ParticipantCreateInput,
     LootTableInput,
     ParticipantAfflictionInput,
@@ -169,7 +171,7 @@ def _participantes(connection, sessao_id: UUID):
                mana_atual, mana_maxima, ataques, vd, pericias,
                vida_temporaria, mana_temporaria,
                estamina_atual, estamina_maxima, estamina_temporaria,
-               monstro_id, loot, fase,
+               monstro_id, loot, fase, chefe, fases,
                (SELECT p.ficha->'aflicoesAtivas' FROM personagens p
                 WHERE p.id=sessao_participantes.personagem_id) AS aflicoes
         FROM sessao_participantes
@@ -228,6 +230,7 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
 
     ajustes_loot = ajustes_da_campanha(connection, sessao["campanha_id"]) if manda else {}
     fases_por_criatura = fases_do_catalogo(connection, (linha["monstro_id"] for linha in linhas))
+    bolso_de_impeto = regras_de_chefe.impeto_da_cena(dict(linha) for linha in linhas)
     participantes = []
     for indice, linha in enumerate(linhas):
         item = dict(linha)
@@ -277,7 +280,7 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             publico["vd"] = item["vd"]
         if mostra_identidade:
             publico["estado_vida"] = _estado_da_vida(item["vida_atual"], item["vida_maxima"])
-        fases = fases_por_criatura.get(item["monstro_id"]) or []
+        fases = fases_do_participante(item["fases"], item["monstro_id"], fases_por_criatura)
         fase_atual = int(item["fase"] or 1)
         if fases and mostra_identidade and fase_atual > 1:
             # A mesa ouve só a frase de cena da fase em que a criatura está.
@@ -294,6 +297,34 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
                 atual_da_fase = fases[min(fase_atual, len(fases) + 1) - 2]
                 publico["fase_nome"] = atual_da_fase["nome"]
                 publico["fase_mudancas"] = atual_da_fase["mudancas"]
+        if manda and not item["personagem_id"]:
+            # O editor de fases da criatura: a lista inteira, e se ela é do Mestre ou do Bestiário.
+            publico["fases_editaveis"] = fases
+            publico["fases_proprias"] = item["fases"] is not None
+            publico["fases_no_bestiario"] = bool(fases_por_criatura.get(item["monstro_id"]))
+        chefe = regras_de_chefe.chefe_limpo(item["chefe"])
+        if chefe and mostra_identidade:
+            # Ímpeto e Guarda ficam à vista da mesa (Guia: "ver quanto ele ainda pode fazer
+            # vira decisão para o grupo"). A Determinação e o covil são do Mestre.
+            visivel = {}
+            if chefe["impeto"]:
+                visivel["impeto_maximo"] = bolso_de_impeto["maximo"]
+                visivel["impeto_restante"] = bolso_de_impeto["restante"]
+            if chefe["guarda_partes"]:
+                visivel["guarda_partes"] = chefe["guarda_partes"]
+                visivel["guarda"] = chefe["guarda"]
+            if manda:
+                visivel.update(
+                    impeto=chefe["impeto"],
+                    covil=chefe["covil"],
+                    determinacao=chefe["determinacao"],
+                    impeto_neste_turno=bool(
+                        sessao["em_combate"] and linhas
+                        and regras_de_chefe.chave_do_turno(sessao["rodada"], sessao["turno_indice"] % len(linhas))
+                        in bolso_de_impeto["turnos_usados"]
+                    ),
+                )
+            publico["chefe"] = visivel
         # O id da ficha abre o atalho "Abrir ficha": vai para quem comanda e
         # para o dono do personagem, nunca para quem não pode ver aquela ficha.
         if revela_tudo:
@@ -925,13 +956,22 @@ def adicionar_participante(
             (sessao_id,),
         ).fetchone()["proxima"]
         vida = max(0, payload.vida_maxima)
+        # Chefe do Bestiário (papel chefe, criatura única ou com fases) já entra com
+        # Ímpeto e Determinação ligados. O Mestre desliga no editor se não quiser.
+        chefe = None
+        if payload.monstro_id and payload.tipo == "inimigo":
+            do_catalogo = connection.execute(
+                "SELECT conteudo FROM catalogo_itens WHERE id=%s AND tipo='monstro'",
+                (payload.monstro_id,),
+            ).fetchone()
+            chefe = regras_de_chefe.chefe_novo_para(do_catalogo["conteudo"] if do_catalogo else None)
         connection.execute(
             """
             INSERT INTO sessao_participantes
                 (id, sessao_id, nome, tipo, iniciativa, vida_atual, vida_maxima,
                  visibilidade, ordem, defesa, mana_atual, mana_maxima, ataques, vd,
-                 pericias, estamina_atual, estamina_maxima, monstro_id)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                 pericias, estamina_atual, estamina_maxima, monstro_id, chefe)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 participante_id,
@@ -952,6 +992,7 @@ def adicionar_participante(
                 payload.estamina_maxima,
                 payload.estamina_maxima,
                 payload.monstro_id,
+                Jsonb(chefe) if chefe else None,
             ),
         )
         versao = _tocar(connection, sessao_id)
@@ -975,7 +1016,7 @@ def atualizar_participante(
             """
             SELECT id, nome, vida_atual, vida_maxima, personagem_id,
                    vida_temporaria, mana_temporaria, estamina_temporaria,
-                   monstro_id, fase
+                   monstro_id, fase, chefe, fases
             FROM sessao_participantes
             WHERE id=%s AND sessao_id=%s FOR UPDATE
             """,
@@ -1006,21 +1047,44 @@ def atualizar_participante(
         vida_atual = max(-999, min(vida_atual, vida_maxima if vida_maxima else vida_atual))
 
         # Fase de chefe: a Vida (e a rodada do combate) avançam sozinhas, o Mestre pode
-        # ajustar à mão, e a fase nunca desce por cura. Só criatura do catálogo com
-        # `fases` tem fase.
-        fase = int(atual["fase"] or 1)
-        fases_da_criatura = fases_do_catalogo(connection, [atual["monstro_id"]]).get(atual["monstro_id"]) or []
+        # ajustar à mão, e a fase nunca desce por cura. Valem as fases que o Mestre
+        # escreveu para esta criatura ou, sem elas, as do Bestiário.
+        if atual["personagem_id"] and (payload.fases_proprias is not None or payload.regras_chefe is not None):
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="fases e regras de chefe sao so para criaturas")
+        fase_antes = int(atual["fase"] or 1)
+        fase = fase_antes
+        fases_proprias = atual["fases"]
+        if payload.restaurar_fases:
+            fases_proprias = None
+        elif payload.fases_proprias is not None:
+            fases_proprias = fases_limpas([item.model_dump() for item in payload.fases_proprias])
+        fases_da_criatura = fases_do_participante(
+            fases_proprias, atual["monstro_id"], fases_do_catalogo(connection, [atual["monstro_id"]]),
+        )
         if payload.fase is not None:
             if not fases_da_criatura or payload.fase > len(fases_da_criatura) + 1:
                 raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="essa criatura nao tem essa fase")
             fase = payload.fase
         elif fases_da_criatura:
             fase = fase_alcancada(fases_da_criatura, vida_atual, vida_maxima, fase, _rodada_do_combate(sessao))
+        # Lista de fases que encolheu leva a criatura para a última que sobrou.
+        fase = max(1, min(fase, len(fases_da_criatura) + 1))
+
+        chefe = regras_de_chefe.chefe_limpo(atual["chefe"])
+        if payload.regras_chefe is not None:
+            regras = payload.regras_chefe
+            chefe = regras_de_chefe.configurar(
+                chefe, impeto=regras.impeto, covil=regras.covil, guarda_partes=regras.guarda_partes,
+            ) if regras.ativo else None
+        if chefe and fase > fase_antes:
+            chefe = regras_de_chefe.ao_subir_fase(chefe)
 
         row = connection.execute(
             """
             UPDATE sessao_participantes SET
                 fase=%s,
+                chefe=%s,
+                fases=%s,
                 nome=COALESCE(%s, nome),
                 iniciativa=COALESCE(%s, iniciativa),
                 vida_atual=%s,
@@ -1045,6 +1109,8 @@ def atualizar_participante(
             """,
             (
                 fase,
+                Jsonb(chefe) if chefe else None,
+                Jsonb(fases_proprias) if fases_proprias is not None else None,
                 payload.nome,
                 payload.iniciativa,
                 vida_atual,
@@ -1163,6 +1229,100 @@ def atualizar_participante(
             campanha_id, [{"personagem_id": atual["personagem_id"], "versao": versao_ficha}],
         )
     return {"participante": dict(row), "versao": versao}
+
+
+@router.post("/{sessao_id}/participantes/{participante_id}/chefe")
+def acao_de_chefe(
+    sessao_id: UUID,
+    participante_id: UUID,
+    payload: ChefeAcaoInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Ímpeto, Determinação e Guarda de um chefe em cena (core/chefe.py). Só quem comanda."""
+    with database.connection() as connection:
+        sessao = _sessao_sob_comando(connection, sessao_id, user.id)
+        linhas = [
+            dict(linha)
+            for linha in connection.execute(
+                """
+                SELECT id, nome, tipo, vida_atual, vida_maxima, visibilidade, condicoes, chefe
+                FROM sessao_participantes
+                WHERE sessao_id=%s
+                ORDER BY ordem, iniciativa DESC, nome
+                FOR UPDATE
+                """,
+                (sessao_id,),
+            ).fetchall()
+        ]
+        alvo = next((linha for linha in linhas if linha["id"] == participante_id), None)
+        if not alvo:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="participante nao encontrado")
+        chefe = regras_de_chefe.chefe_limpo(alvo["chefe"])
+        if not chefe:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="ligue as regras de chefe no editor da criatura",
+            )
+        escondida = alvo["visibilidade"] in ("oculto", "desconhecido")
+        quem = "uma criatura desconhecida" if escondida else alvo["nome"]
+        condicoes = normalizar_condicoes(alvo["condicoes"])
+        quebrou = False
+        avisos: list[str] = []
+        try:
+            if payload.acao == "gastar_impeto":
+                if not sessao["em_combate"] or not linhas:
+                    raise ValueError("o Impeto so se gasta em combate")
+                indice = int(sessao["turno_indice"]) % len(linhas)
+                if linhas[indice]["tipo"] != "jogador":
+                    raise ValueError("o Impeto se gasta no fim do turno de um jogador")
+                bolso = regras_de_chefe.impeto_da_cena(linhas)
+                chefe = regras_de_chefe.gastar_impeto(
+                    chefe, bolso, regras_de_chefe.chave_do_turno(sessao["rodada"], indice),
+                )
+                avisos.append(f"{quem} usou o Ímpeto: sobram {bolso['restante'] - 1} de {bolso['maximo']}.")
+            elif payload.acao == "devolver_impeto":
+                chefe = regras_de_chefe.devolver_impeto(chefe)
+            elif payload.acao == "gastar_determinacao":
+                chefe, quebrou = regras_de_chefe.gastar_determinacao(chefe)
+                condicoes = regras_de_chefe.com_condicoes(condicoes, regras_de_chefe.EXPOSTO)
+                avisos.append(f"{quem} se livrou da condição na marra e ficou Exposto.")
+            elif payload.acao == "encher_guarda":
+                if not chefe["guarda_partes"]:
+                    raise ValueError("essa criatura nao tem Guarda")
+                chefe, quebrou = regras_de_chefe.encher_guarda(chefe)
+                motivo = regras_de_chefe.MOTIVOS_DA_GUARDA.get(payload.motivo or "")
+                if not quebrou:
+                    avisos.append(
+                        f"A Guarda de {quem} cedeu{f' com {motivo}' if motivo else ''}: "
+                        f"{chefe['guarda']} de {chefe['guarda_partes']}."
+                    )
+            else:
+                chefe = regras_de_chefe.esvaziar_guarda(chefe)
+        except ValueError as erro:
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(erro)) from erro
+        if quebrou:
+            condicoes = regras_de_chefe.com_condicoes(
+                condicoes, regras_de_chefe.EXPOSTO, regras_de_chefe.GUARDA_QUEBRADA,
+            )
+            avisos.append(
+                f"A Guarda de {quem} quebrou! Fica Exposto e sem reação até o próximo turno, "
+                "e o próximo ataque contra ele tem vantagem."
+            )
+        connection.execute(
+            """
+            UPDATE sessao_participantes
+            SET chefe=%s, condicoes=%s, atualizado_em=CURRENT_TIMESTAMP
+            WHERE id=%s
+            """,
+            (Jsonb(chefe), Jsonb(condicoes), participante_id),
+        )
+        campanha_id = sessao["campanha_id"]
+        for texto in avisos:
+            registrar_evento(connection, campanha_id, sessao_id, "combate", texto)
+        versao = _tocar(connection, sessao_id)
+    live_session.publicar(campanha_id, "participante_atualizado", versao)
+    return {"chefe": chefe, "quebrou": quebrou, "versao": versao}
 
 
 @router.delete("/{sessao_id}/participantes/{participante_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -1872,24 +2032,55 @@ def _avancar_fases_pela_rodada(connection, sessao_id, rodada: int) -> None:
     """
     linhas = connection.execute(
         """
-        SELECT id, monstro_id, vida_atual, vida_maxima, fase
+        SELECT id, monstro_id, vida_atual, vida_maxima, fase, chefe, fases
         FROM sessao_participantes
-        WHERE sessao_id=%s AND monstro_id IS NOT NULL
+        WHERE sessao_id=%s AND (monstro_id IS NOT NULL OR fases IS NOT NULL)
         """,
         (sessao_id,),
     ).fetchall()
     fases_por_criatura = fases_do_catalogo(connection, (linha["monstro_id"] for linha in linhas))
     for linha in linhas:
-        fases = fases_por_criatura.get(linha["monstro_id"]) or []
+        fases = fases_do_participante(linha["fases"], linha["monstro_id"], fases_por_criatura)
         if not any(fase.get("rodada") for fase in fases):
             continue
         atual = int(linha["fase"] or 1)
         nova = fase_alcancada(fases, int(linha["vida_atual"]), int(linha["vida_maxima"]), atual, rodada)
         if nova != atual:
+            chefe = regras_de_chefe.chefe_limpo(linha["chefe"])
+            if chefe and nova > atual:
+                chefe = regras_de_chefe.ao_subir_fase(chefe)
             connection.execute(
-                "UPDATE sessao_participantes SET fase=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s",
-                (nova, linha["id"]),
+                "UPDATE sessao_participantes SET fase=%s, chefe=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s",
+                (nova, Jsonb(chefe) if chefe else None, linha["id"]),
             )
+
+
+def _chefes_na_virada_de_turno(connection, sessao_id, acao: str, indice: int) -> None:
+    """Começo da luta: Determinação 1 e Guarda vazia. Turno de um chefe: o Ímpeto volta inteiro."""
+    linhas = connection.execute(
+        """
+        SELECT id, chefe FROM sessao_participantes
+        WHERE sessao_id=%s
+        ORDER BY ordem, iniciativa DESC, nome
+        """,
+        (sessao_id,),
+    ).fetchall()
+    chefes = {linha["id"]: regras_de_chefe.chefe_limpo(linha["chefe"]) for linha in linhas}
+    chefes = {chave: valor for chave, valor in chefes.items() if valor}
+    if not chefes:
+        return
+    da_vez = chefes.get(linhas[indice % len(linhas)]["id"]) if linhas else None
+    novos = {}
+    for chave, chefe in chefes.items():
+        novo = chefe
+        if acao == "iniciar":
+            novo = regras_de_chefe.ao_comecar_luta(novo)
+        elif da_vez and da_vez["impeto"] and novo["impeto"]:
+            novo = regras_de_chefe.encher_impeto(novo)
+        if novo != chefe:
+            novos[chave] = novo
+    for chave, chefe in novos.items():
+        connection.execute("UPDATE sessao_participantes SET chefe=%s WHERE id=%s", (Jsonb(chefe), chave))
 
 
 @router.post("/{sessao_id}/turno")
@@ -1963,6 +2154,8 @@ def controlar_turno(
             _passar_rodada_condicoes(connection, sessao_id)
             if em_combate:
                 _avancar_fases_pela_rodada(connection, sessao_id, rodada)
+        if em_combate and payload.acao in ("iniciar", "proximo", "anterior"):
+            _chefes_na_virada_de_turno(connection, sessao_id, payload.acao, indice)
         cansados: list[dict] = []
         if payload.acao == "iniciar":
             iniciar_marcas(connection, sessao_id)

@@ -873,6 +873,46 @@ class ParticipantAfflictionInput(BaseModel):
     cansaco: int = Field(default=0, ge=0, le=6)
 
 
+class FaseDeChefeInput(BaseModel):
+    """Uma fase escrita pelo Mestre na Sessão (a fase 1 é o começo e não entra aqui)."""
+
+    nome: str = Field(min_length=1, max_length=80)
+    # Fração da Vida máxima em que a fase começa (0,5 = metade). Nulo = não vem pela Vida.
+    quando: float | None = Field(default=None, gt=0, lt=1)
+    # Rodada do combate em que a fase começa mesmo sem dano. Nulo = não vem pela rodada.
+    rodada: int | None = Field(default=None, ge=2, le=99)
+    anuncio: str = Field(default="", max_length=240)
+    mudancas: list[str] = Field(default_factory=list, max_length=6)
+
+    @field_validator("nome", "anuncio")
+    @classmethod
+    def sem_espaco_sobrando(cls, value: str) -> str:
+        return value.strip()
+
+    @field_validator("mudancas")
+    @classmethod
+    def mudancas_limpas(cls, value: list[str]) -> list[str]:
+        return [item.strip()[:400] for item in value if item and item.strip()]
+
+
+class RegrasDeChefeInput(BaseModel):
+    """Liga ou desliga Ímpeto, Determinação e Guarda numa criatura da Sessão."""
+
+    ativo: bool
+    impeto: bool = True
+    covil: bool = False
+    # 0 = sem Guarda; 4 a 6 partes no relógio.
+    guarda_partes: Literal[0, 4, 5, 6] = 0
+
+
+class ChefeAcaoInput(BaseModel):
+    """Um clique do Mestre no cartão do chefe."""
+
+    acao: Literal["gastar_impeto", "devolver_impeto", "gastar_determinacao", "encher_guarda", "esvaziar_guarda"]
+    # Só para encher a Guarda: o que encheu a parte, dito em voz alta para a mesa aprender.
+    motivo: Literal["critico", "ousada", "combinado", "fraqueza", "outro"] | None = None
+
+
 class ParticipantUpdateInput(BaseModel):
     """Tudo opcional: a tela manda só o que mudou naquele clique."""
 
@@ -899,6 +939,11 @@ class ParticipantUpdateInput(BaseModel):
     pericias: list[Any] | None = Field(default=None, max_length=8)
     # Fase de chefe (1 é o começo). O Mestre pode mudar à mão; a Vida avança sozinha.
     fase: int | None = Field(default=None, ge=1, le=9)
+    # Fases próprias desta criatura (substituem as do Bestiário; lista vazia = sem fases).
+    fases_proprias: list[FaseDeChefeInput] | None = Field(default=None, max_length=6)
+    # Apaga as fases próprias e volta às do Bestiário.
+    restaurar_fases: bool = False
+    regras_chefe: RegrasDeChefeInput | None = None
 
     @field_validator("condicoes")
     @classmethod

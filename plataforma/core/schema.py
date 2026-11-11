@@ -2464,4 +2464,15 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        74,
+        "regras_de_chefe_e_fases_proprias_na_sessao",
+        (
+            # Ímpeto, Determinação e Guarda de um chefe em cena (core/chefe.py). Nulo = sem as regras.
+            "ALTER TABLE sessao_participantes ADD COLUMN IF NOT EXISTS chefe JSONB",
+            # Fases escritas pelo Mestre para esta criatura. Nulo = as do Bestiário (se houver);
+            # lista vazia = nenhuma fase, mesmo que o Bestiário tenha.
+            "ALTER TABLE sessao_participantes ADD COLUMN IF NOT EXISTS fases JSONB",
+        ),
+    ),
 )

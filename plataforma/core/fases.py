@@ -69,6 +69,17 @@ def fases_do_catalogo(connection, monstro_ids) -> dict[str, list[dict]]:
     return resultado
 
 
+def fases_do_participante(fases_proprias: Any, monstro_id: str | None, fases_por_criatura: dict[str, list[dict]]) -> list[dict]:
+    """As fases que valem para quem está na Sessão.
+
+    As escritas pelo Mestre para esta criatura (coluna `fases`) mandam; lista vazia
+    quer dizer "sem fases". Sem elas (nulo), valem as do Bestiário.
+    """
+    if fases_proprias is not None:
+        return fases_limpas(fases_proprias)
+    return fases_por_criatura.get(monstro_id) or [] if monstro_id else []
+
+
 def fase_alcancada(
     fases: list[dict],
     vida_atual: int,

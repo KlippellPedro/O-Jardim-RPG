@@ -6,6 +6,7 @@ import { useSessaoStore, type EntidadeIniciativa } from '../../../store/useSessa
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { sessaoApi, type BestiarioMonstro } from '../../../services/sessaoApi';
 import { CriaturaDetalhe } from './CriaturaDetalhe';
+import { PainelDoChefe } from './PainelDoChefe';
 import { corDoVd } from './BestiarioPicker';
 import { ReacaoDeVida } from './ReacaoDeVida';
 import { situacaoDaVida } from '../combateVivo';
@@ -396,6 +397,8 @@ export const ActiveTurnCard: React.FC = () => {
                 ) : null}
               </div>
             ) : null}
+
+            {selectedEntity.chefe ? <PainelDoChefe entidade={selectedEntity} comando={comando} /> : null}
 
             {selectedEntity.condicoes.length || selectedEntity.ataques?.length || selectedEntity.pericias?.length ? (
               <div className="session-focus-card__details">

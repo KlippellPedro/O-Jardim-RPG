@@ -39,7 +39,37 @@ export interface ParticipantePayload {
   monstro_id?: string | null;
   /** Fase de chefe (1 é o começo). A Vida avança a fase sozinha; o Mestre pode ajustar à mão. */
   fase?: number;
+  /** Fases escritas pelo Mestre para esta criatura (substituem as do Bestiário; vazia = sem fases). */
+  fases_proprias?: FaseDeChefe[];
+  /** Apaga as fases próprias e volta às do Bestiário. */
+  restaurar_fases?: boolean;
+  /** Liga, desliga ou configura Ímpeto, Determinação e Guarda. */
+  regras_chefe?: RegrasDeChefePayload;
 }
+
+export interface RegrasDeChefePayload {
+  ativo: boolean;
+  impeto: boolean;
+  covil: boolean;
+  /** 0 = sem Guarda; 4 a 6 partes no relógio. */
+  guarda_partes: 0 | 4 | 5 | 6;
+}
+
+/** Ímpeto e Guarda chegam para a mesa; Determinação, covil e o resto, só para quem comanda. */
+export interface ChefeNaSessao {
+  impeto_maximo?: number;
+  impeto_restante?: number;
+  guarda_partes?: number;
+  guarda?: number;
+  impeto?: boolean;
+  covil?: boolean;
+  determinacao?: number;
+  /** Já saiu um ponto de Ímpeto no turno em andamento. */
+  impeto_neste_turno?: boolean;
+}
+
+export type AcaoDeChefe = 'gastar_impeto' | 'devolver_impeto' | 'gastar_determinacao' | 'encher_guarda' | 'esvaziar_guarda';
+export type MotivoDaGuarda = 'critico' | 'ousada' | 'combinado' | 'fraqueza' | 'outro';
 
 /** Uma fase de chefe: o que a mesa ouve (`anuncio`) e o que muda de regra (`mudancas`, só do Mestre). */
 export interface FaseDeChefe {
@@ -138,6 +168,12 @@ export interface SessaoParticipanteResponse {
   fases_resumo?: Array<{ nome: string; quando: number | null; rodada?: number | null }>;
   fase_nome?: string;
   fase_mudancas?: string[];
+  /** Só para quem comanda: a lista inteira, para o editor de fases da criatura. */
+  fases_editaveis?: FaseDeChefe[];
+  fases_proprias?: boolean;
+  fases_no_bestiario?: boolean;
+  /** Regras de chefe ligadas nesta criatura. */
+  chefe?: ChefeNaSessao;
 }
 
 export interface BestiarioMonstro {
@@ -299,6 +335,14 @@ export const sessaoApi = {
     return api(`/sessao/${sessaoId}/participantes/${participanteId}`, {
       method: 'PUT',
       body: payload,
+    });
+  },
+
+  /** Um clique no cartão do chefe: gastar Ímpeto ou Determinação, encher a Guarda. */
+  acaoDeChefe(sessaoId: string, participanteId: string, acao: AcaoDeChefe, motivo?: MotivoDaGuarda) {
+    return api<{ quebrou: boolean; versao: number }>(`/sessao/${sessaoId}/participantes/${participanteId}/chefe`, {
+      method: 'POST',
+      body: motivo ? { acao, motivo } : { acao },
     });
   },
 

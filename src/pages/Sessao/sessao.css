@@ -468,3 +468,25 @@
 .session-focus-card__phase-anuncio { margin-top: 8px; color: rgba(255, 255, 255, 0.82); font-size: 14px; font-style: italic; line-height: 1.6; }
 .session-focus-card__phase ul { display: grid; gap: 6px; margin-top: 10px; padding: 0; list-style: none; }
 .session-focus-card__phase li { color: rgba(255, 255, 255, 0.7); font-size: 13px; line-height: 1.55; }
+
+/* Regras de chefe (PainelDoChefe): Ímpeto e Guarda à vista, Determinação só do Mestre. */
+.painel-chefe { margin-top: 18px; padding: 14px 16px; border: 1px solid rgba(227, 195, 99, 0.26); border-radius: 12px; background: rgba(227, 195, 99, 0.05); }
+.painel-chefe__titulo { display: flex; align-items: center; gap: 6px; color: #e3c363; font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
+.painel-chefe__grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-top: 10px; }
+.painel-chefe__regra { display: grid; gap: 8px; align-content: start; padding: 10px 12px; border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; background: rgba(0, 0, 0, 0.18); }
+.painel-chefe__linha { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.painel-chefe__linha strong { display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.88); font-size: 13px; }
+.painel-chefe__linha em { color: rgba(255, 255, 255, 0.6); font-size: 12px; font-style: normal; font-variant-numeric: tabular-nums; }
+.painel-chefe__pontos { display: flex; flex-wrap: wrap; gap: 5px; }
+.painel-chefe__pontos i { width: 14px; height: 14px; border-radius: 999px; border: 2px solid currentColor; opacity: 0.35; transition: opacity 0.2s ease, background-color 0.2s ease; }
+.painel-chefe__pontos i[data-cheio='sim'] { background: currentColor; opacity: 1; }
+.painel-chefe__pontos--impeto { color: #f0b45a; }
+.painel-chefe__pontos--guarda { color: #8fb8ff; }
+.painel-chefe__pontos--guarda i { border-radius: 3px; width: 22px; height: 10px; }
+.painel-chefe__nota { color: rgba(255, 255, 255, 0.5); font-size: 11px; line-height: 1.5; }
+.painel-chefe__botoes { display: flex; flex-wrap: wrap; gap: 5px; }
+.painel-chefe__botoes button { min-height: 30px; padding: 4px 10px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; background: rgba(255, 255, 255, 0.04); color: rgba(255, 255, 255, 0.75); font-size: 11px; font-weight: 600; }
+.painel-chefe__botoes button:hover:not(:disabled) { border-color: rgba(227, 195, 99, 0.55); color: #f0d685; }
+.painel-chefe__botoes button:disabled { cursor: not-allowed; opacity: 0.4; }
+.painel-chefe__botoes .painel-chefe__desfazer { display: inline-flex; align-items: center; padding: 4px 8px; color: rgba(255, 255, 255, 0.45); }
+@media (prefers-reduced-motion: reduce) { .painel-chefe__pontos i { transition: none; } }

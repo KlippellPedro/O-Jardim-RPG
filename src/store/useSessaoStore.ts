@@ -2,8 +2,12 @@ import { create } from 'zustand';
 import { useMesaStore } from './useMesaStore';
 import {
   sessaoApi,
+  type AcaoDeChefe,
+  type ChefeNaSessao,
   type DistribuirXpResponse,
+  type FaseDeChefe,
   type LootRolado,
+  type MotivoDaGuarda,
   type NivelVisibilidade,
   type ParticipantePayload,
   type SessaoParticipanteResponse,
@@ -67,6 +71,12 @@ export interface EntidadeIniciativa {
   faseNome?: string;
   faseMudancas?: string[];
   faseAnuncio?: string;
+  /** Só para quem comanda: as fases inteiras, para o editor, e de onde elas vêm. */
+  fasesEditaveis?: FaseDeChefe[];
+  fasesProprias?: boolean;
+  fasesNoBestiario?: boolean;
+  /** Regras de chefe ligadas (Ímpeto e Guarda à vista; Determinação só do Mestre). */
+  chefe?: ChefeNaSessao;
 }
 
 /** Aviso de que um chefe entrou numa fase nova. O Mestre vê as mudanças; a mesa, só a frase de cena. */
@@ -164,6 +174,10 @@ function mapParticipantes(participantes: SessaoParticipanteResponse[] | undefine
       faseNome: typeof participante.fase_nome === 'string' ? participante.fase_nome : undefined,
       faseMudancas: Array.isArray(participante.fase_mudancas) ? participante.fase_mudancas.filter((item): item is string => typeof item === 'string') : undefined,
       faseAnuncio: typeof participante.fase_anuncio === 'string' ? participante.fase_anuncio : undefined,
+      fasesEditaveis: Array.isArray(participante.fases_editaveis) ? participante.fases_editaveis : undefined,
+      fasesProprias: typeof participante.fases_proprias === 'boolean' ? participante.fases_proprias : undefined,
+      fasesNoBestiario: typeof participante.fases_no_bestiario === 'boolean' ? participante.fases_no_bestiario : undefined,
+      chefe: participante.chefe && typeof participante.chefe === 'object' ? participante.chefe : undefined,
     };
   });
 }
@@ -246,6 +260,8 @@ interface SessaoState {
   distribuirXp: (participanteIds: string[]) => Promise<DistribuirXpResponse>;
   darXp: (participanteIds: string[], xp: number) => Promise<void>;
   rolarLoot: (participanteId: string, refazer?: boolean) => Promise<void>;
+  /** Ímpeto, Determinação e Guarda. Devolve se a Guarda quebrou neste clique. */
+  acaoDeChefe: (participanteId: string, acao: AcaoDeChefe, motivo?: MotivoDaGuarda) => Promise<boolean>;
   mexerNaAflicao: (
     participanteId: string,
     payload: { acao: 'aplicar' | 'estagio' | 'remover'; aflicao_id: string; estagio?: number; incubando?: boolean; cansaco?: number },
@@ -621,6 +637,14 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     const resposta = await sessaoApi.mexerNaAflicao(sessaoId, participanteId, payload);
     await get().fetchEstadoSessao();
     return resposta.cansaco_atual;
+  },
+
+  acaoDeChefe: async (participanteId, acao, motivo) => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    const resposta = await sessaoApi.acaoDeChefe(sessaoId, participanteId, acao, motivo);
+    await get().fetchEstadoSessao();
+    return !!resposta?.quebrou;
   },
 
   rolarLoot: async (participanteId, refazer = false) => {

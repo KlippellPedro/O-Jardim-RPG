@@ -2,13 +2,13 @@ import React, { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ExternalLink, Flame, GraduationCap, Plus, RefreshCw, Save, Scaling, Swords, X } from 'lucide-react';
+import { Crown, ExternalLink, Flame, GraduationCap, Plus, RefreshCw, Save, Scaling, Swords, X } from 'lucide-react';
 import type {
   EntidadeIniciativa,
   SessionAttack,
   SessionCondition,
 } from '../../../store/useSessaoStore';
-import type { NivelVisibilidade, ParticipantePayload } from '../../../services/sessaoApi';
+import type { NivelVisibilidade, ParticipantePayload, RegrasDeChefePayload } from '../../../services/sessaoApi';
 import { OPCOES_VISIBILIDADE } from '../sessionUtils';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/condicoes';
 import { CONDICOES_LONGO_PRAZO, GRUPOS_LONGO_PRAZO } from '../../../../data/regras/condicoes-longo-prazo';
@@ -16,6 +16,9 @@ import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { VD_MAXIMO } from '../../../services/progressaoNiveis';
 import { escalarCriatura } from '../../../services/curvaCriatura';
 import { gatilhoCurto } from '../../../utils/fasesDeChefe';
+import { EditorDeFases, paraFormulario, paraServidor } from './EditorDeFases';
+
+const PARTES_DA_GUARDA: Array<RegrasDeChefePayload['guarda_partes']> = [0, 4, 5, 6];
 
 const CONDICOES_RAPIDAS = [...CONDICOES_OFICIAIS, ...CRISES_SANIDADE];
 
@@ -54,6 +57,24 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
   const [vdAlvo, setVdAlvo] = useState('');
   const faseInicial = entity.fase ?? 1;
   const [fase, setFase] = useState(faseInicial);
+  // Regras de chefe e fases próprias: só para criatura (personagem de jogador não tem).
+  const ehCriatura = !entity.personagemId;
+  const chefeInicial = entity.chefe;
+  const [regrasAtivas, setRegrasAtivas] = useState(!!chefeInicial);
+  const [usaImpeto, setUsaImpeto] = useState(chefeInicial?.impeto ?? true);
+  const [covil, setCovil] = useState(!!chefeInicial?.covil);
+  const partesIniciais = (PARTES_DA_GUARDA.includes(chefeInicial?.guarda_partes as RegrasDeChefePayload['guarda_partes'])
+    ? chefeInicial?.guarda_partes : 0) as RegrasDeChefePayload['guarda_partes'];
+  const [guardaPartes, setGuardaPartes] = useState<RegrasDeChefePayload['guarda_partes']>(partesIniciais);
+  const [fasesForm, setFasesForm] = useState(() => paraFormulario(entity.fasesEditaveis));
+  const [mexeuNasFases, setMexeuNasFases] = useState(false);
+  const [restaurarFases, setRestaurarFases] = useState(false);
+  const regrasMudaram = regrasAtivas !== !!chefeInicial || (regrasAtivas && (
+    usaImpeto !== (chefeInicial?.impeto ?? true) || covil !== !!chefeInicial?.covil || guardaPartes !== partesIniciais
+  ));
+  const origemDasFases = restaurarFases ? 'bestiario' : mexeuNasFases || entity.fasesProprias ? 'mestre'
+    : entity.fasesNoBestiario ? 'bestiario' : 'nenhuma';
+  const fasesPendentes = mexeuNasFases || restaurarFases;
   const [resumoDaEscala, setResumoDaEscala] = useState<string | null>(null);
   useDialogAccessibility({ open: true, dialogRef, initialFocusRef: closeButtonRef, onClose: onCancel });
 
@@ -350,7 +371,7 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
           </div>
         ) : null}
 
-        {entity.fasesResumo?.length ? (
+        {entity.fasesResumo?.length && !fasesPendentes ? (
           <div className="mt-4 rounded-lg border border-[#e0645f]/25 bg-[#e0645f]/[0.04] p-3">
             <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#f19a96]"><Flame size={12} /> Fase do chefe</span>
             <p className="mt-1 text-[11px] leading-5 text-white/45">A Vida e a rodada do combate avançam a fase sozinhas, e curar não a desfaz. Use isto quando a história pedir outra fase, ou para voltar uma que subiu por engano.</p>
@@ -368,6 +389,68 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               ))}
             </div>
           </div>
+        ) : null}
+
+        {ehCriatura ? (
+          <div className="mt-4 rounded-lg border border-[#e3c363]/20 bg-[#e3c363]/[0.035] p-3">
+            <label className="flex items-start gap-2 text-xs text-white/80">
+              <input type="checkbox" checked={regrasAtivas} onChange={(evento) => setRegrasAtivas(evento.target.checked)} className="mt-0.5 accent-[#c7a44c]" />
+              <span>
+                <span className="flex items-center gap-1.5 font-semibold text-[#f0d685]"><Crown size={13} /> Regras de chefe</span>
+                <span className="mt-0.5 block text-[11px] leading-5 text-white/45">Ímpeto, Determinação e Guarda, como no Guia do Mestre. A Sessão conta o Ímpeto pela cena, devolve no turno dele e dá a Determinação a cada fase.</span>
+              </span>
+            </label>
+            {regrasAtivas ? (
+              <div className="mt-3 space-y-2 pl-6">
+                <label className="flex items-center gap-2 text-[11px] text-white/70">
+                  <input type="checkbox" checked={usaImpeto} onChange={(evento) => setUsaImpeto(evento.target.checked)} className="accent-[#c7a44c]" />
+                  Ímpeto (jogadores menos inimigos em cena)
+                </label>
+                <label className="flex items-center gap-2 text-[11px] text-white/70">
+                  <input type="checkbox" checked={covil} onChange={(evento) => setCovil(evento.target.checked)} className="accent-[#c7a44c]" />
+                  Luta no covil (1 ponto de Ímpeto a menos)
+                </label>
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-white/40">Guarda</span>
+                  <div className="mt-1 flex flex-wrap gap-1.5" role="group" aria-label="Partes da Guarda">
+                    {PARTES_DA_GUARDA.map((partes) => (
+                      <button
+                        key={partes}
+                        type="button"
+                        aria-pressed={guardaPartes === partes}
+                        onClick={() => setGuardaPartes(partes)}
+                        className={`rounded-full border px-3 py-1 text-[11px] font-semibold ${guardaPartes === partes ? 'border-[#c7a44c] bg-[#c7a44c]/20 text-[#f0d685]' : 'border-white/10 text-white/55 hover:border-white/30 hover:text-white'}`}
+                      >
+                        {partes ? `${partes} partes` : 'Sem Guarda'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+
+        {ehCriatura ? (
+          <details className="mt-4 rounded-lg border border-[#e0645f]/20 bg-[#e0645f]/[0.03] px-3 py-2" open={!entity.fasesResumo?.length && regrasAtivas}>
+            <summary className="flex cursor-pointer select-none items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#f19a96]">
+              <Flame size={12} /> Fases desta criatura{restaurarFases ? ' · voltam as do Bestiário' : fasesForm.length ? ` · ${fasesForm.length}` : ''}
+            </summary>
+            {restaurarFases ? (
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-white/55">
+                Ao salvar, valem de novo as fases do Bestiário.
+                <button type="button" onClick={() => setRestaurarFases(false)} className="rounded-md border border-white/10 px-2 py-1 text-white/60 hover:text-white">Desfazer</button>
+              </div>
+            ) : (
+              <EditorDeFases
+                fases={fasesForm}
+                onChange={(novas) => { setFasesForm(novas); setMexeuNasFases(true); }}
+                origem={origemDasFases}
+                podeVoltar={!!entity.fasesNoBestiario && (!!entity.fasesProprias || mexeuNasFases)}
+                onVoltar={() => { setRestaurarFases(true); setMexeuNasFases(false); }}
+              />
+            )}
+          </details>
         ) : null}
 
         <div className="mt-4">
@@ -575,7 +658,12 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               visibilidade,
               defesa: parseOptionalInt(defense, 0, 999),
               vd: parseOptionalInt(vd, 1, VD_MAXIMO),
-              ...(entity.fasesResumo?.length && fase !== faseInicial ? { fase } : {}),
+              ...(entity.fasesResumo?.length && fase !== faseInicial && !fasesPendentes ? { fase } : {}),
+              ...(ehCriatura && regrasMudaram
+                ? { regras_chefe: { ativo: regrasAtivas, impeto: usaImpeto, covil, guarda_partes: guardaPartes } }
+                : {}),
+              ...(ehCriatura && restaurarFases ? { restaurar_fases: true } : {}),
+              ...(ehCriatura && mexeuNasFases && !restaurarFases ? { fases_proprias: paraServidor(fasesForm) } : {}),
             })}
             disabled={busy}
             className="flex items-center gap-1.5 rounded-md bg-[#c7a44c] px-3 py-1.5 text-xs font-bold text-black disabled:opacity-50"
