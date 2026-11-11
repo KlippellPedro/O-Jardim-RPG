@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-11-10-mapa-menos-atrapalho-na-mesa",
+      "data": "2026-11-10",
+      "tipo": "melhoria",
+      "area": "Sessão",
+      "titulo": "Mapa: menos coisas no caminho durante o jogo",
+      "detalhes": [
+        "Arrastar o mapa com o botão direito não abre mais o menu do navegador quando você solta o botão.",
+        "Abrir a busca, a trilha, os documentos ou o menu de uma porta fecha as opções do token, para um painel não ficar em cima do outro.",
+        "Arrastar um token ou o mapa não seleciona mais o texto dos painéis que estão por perto."
+      ]
+    },
+    {
       "id": "2026-11-10-mapa-token-sem-borda-e-movimento-livre",
       "data": "2026-11-10",
       "tipo": "melhoria",
@@ -1032,17 +1044,6 @@
       "detalhes": [
         "Agora dá para baixar o Livro inteiro num PDF só, no formato de livro de RPG, com capa, sumário clicável, capítulos, referência rápida e índice. Depois de baixado, funciona sem internet.",
         "No fim do PDF vem o Compêndio, com as fichas completas das classes e das raças comuns, o catálogo de Legados e todas as magias, rituais, selos e encantamentos. O botão para baixar fica na entrada do Livro, e cada tópico tem o link Ler no PDF, página N."
-      ]
-    },
-    {
-      "id": "2026-10-14-livro-mais-facil-de-ler",
-      "data": "2026-10-14",
-      "tipo": "melhoria",
-      "area": "Livro",
-      "titulo": "Livro de Regras mais fácil de ler",
-      "detalhes": [
-        "Os 46 tópicos foram reescritos para ler de ponta a ponta. Cada um abre com uma frase que diz do que ele trata e uma caixa Em resumo, traz exemplos com a conta feita e leva você direto aos tópicos que cita, sem mudar nenhuma regra.",
-        "O Livro ganhou capítulos e números (3.4 é o quarto tópico do capítulo 3) e trilhas de leitura para quem nunca jogou, já joga, vai conjurar ou vai mestrar. Ele lembra onde você parou, e dá para aumentar a letra e trocar o tipo dela."
       ]
     }
   ]

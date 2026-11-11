@@ -339,6 +339,9 @@
 
 .mapa-palco canvas {
   display: block;
+  /* Arrastar token ou mapa não pode selecionar o texto dos painéis que ficam por perto. */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .mapa-aviso {

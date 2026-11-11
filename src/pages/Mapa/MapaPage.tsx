@@ -1089,6 +1089,12 @@ export const MapaPage = () => {
     if (mapaSelecionadoId) setSelecionado(null);
   }, [mapaSelecionadoId]);
 
+  // Busca, trilha, documentos, menu da porta e editor de anotação ocupam o mesmo canto do menu do token:
+  // quando um deles abre, o menu do token fecha (antes ficavam um em cima do outro).
+  useEffect(() => {
+    if (painelRecurso || portaEscolhida || editorAnotacao) setMenuTokenAberto(false);
+  }, [painelRecurso, portaEscolhida, editorAnotacao]);
+
   useEffect(() => {
     palcoRef.current?.definirEncaixe(encaixe);
     guardarOpcaoLocal(CHAVE_ENCAIXE_LOCAL, encaixe);
@@ -2007,7 +2013,13 @@ export const MapaPage = () => {
               token={tokenSelecionado}
               gestor={gestor}
               opcoesAbertas={menuTokenAberto}
-              onOpcoes={() => setMenuTokenAberto((v) => !v)}
+              onOpcoes={() => {
+                if (!menuTokenAberto) {
+                  setPainelRecurso(null);
+                  setPortaEscolhida(null);
+                }
+                setMenuTokenAberto((v) => !v);
+              }}
               onOculto={ocultarToken}
               onRemover={() => void removerToken()}
               onFalar={gestor ? () => void falarComo(tokenSelecionado) : undefined}

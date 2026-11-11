@@ -217,6 +217,8 @@ export class PalcoMapa {
       screenHeight: alvo.clientHeight,
       events: app.renderer.events,
       passiveWheel: false,
+      // O botão direito arrasta o mapa: sem isto o menu do navegador abre toda vez que se solta o botão.
+      disableOnContextMenu: true,
     });
     viewport.drag({ mouseButtons: 'all' }).pinch().wheel({ smooth: 4 }).decelerate({ friction: 0.92 }).clampZoom({ minScale: 0.04, maxScale: 4 });
     app.stage.addChild(viewport);
