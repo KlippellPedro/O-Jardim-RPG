@@ -27,6 +27,8 @@ export interface LojaItem {
   propriedades?: string;
   requisitoNivel?: number;
   requisitoClasse?: string[];
+  /** Atributo mínimo, ex.: { forca: 18 }. Como nível e classe, só avisa. */
+  requisitoAtributo?: Record<string, number>;
   dadosBrutos?: any;
   quantidadeDisponivel?: number;
   precoAnterior?: number;
@@ -417,16 +419,59 @@ export const normalizarCategoriaInventarioLoja = (dados: Record<string, unknown>
   return null;
 };
 
+const lerRequisitoAtributo = (valor: unknown): Record<string, number> | undefined => {
+  if (!valor || typeof valor !== 'object' || Array.isArray(valor)) return undefined;
+  const lido = Object.fromEntries(Object.entries(valor as Record<string, unknown>)
+    .filter(([, minimo]) => Number.isSafeInteger(minimo) && Number(minimo) > 0)
+    .map(([atributo, minimo]) => [atributo, Number(minimo)]));
+  return Object.keys(lido).length ? lido : undefined;
+};
+
 export const obterBonusDefesaCatalogo = (dados: Record<string, unknown>): unknown => (
   dados.bonus ?? dados.defesa
 );
 
+const NOMES_ATRIBUTO_LOJA: Record<string, string> = {
+  forca: 'Força',
+  destreza: 'Destreza',
+  constituicao: 'Constituição',
+  inteligencia: 'Inteligência',
+  sabedoria: 'Sabedoria',
+  carisma: 'Carisma',
+  fluxo: 'Fluxo',
+};
+
+type PersonagemRequisitosLoja = {
+  nivel?: number;
+  classes?: Array<{ id?: string; classeId?: string }>;
+  classeId?: string;
+  ficha?: { atributosFinais?: Record<string, number>; atributos?: Record<string, number> } | null;
+};
+
+/** Atributos mínimos que o personagem ainda não tem, já com o nome para a tela. */
+export const atributosQueFaltamLoja = (
+  item: Pick<LojaItem, 'requisitoAtributo'>,
+  personagem?: PersonagemRequisitosLoja,
+): Array<{ atributo: string; nome: string; exigido: number; atual: number }> => {
+  const exigidos = item.requisitoAtributo || {};
+  const atributos = personagem?.ficha?.atributosFinais || personagem?.ficha?.atributos || {};
+  return Object.entries(exigidos)
+    .map(([atributo, exigido]) => ({
+      atributo,
+      nome: NOMES_ATRIBUTO_LOJA[atributo] || atributo,
+      exigido,
+      atual: Number(atributos[atributo] ?? 0) || 0,
+    }))
+    .filter((linha) => linha.atual < linha.exigido);
+};
+
 export const personagemAtendeRequisitosLoja = (
-  item: Pick<LojaItem, 'requisitoNivel' | 'requisitoClasse'>,
-  personagem?: { nivel?: number; classes?: Array<{ id?: string; classeId?: string }>; classeId?: string },
+  item: Pick<LojaItem, 'requisitoNivel' | 'requisitoClasse' | 'requisitoAtributo'>,
+  personagem?: PersonagemRequisitosLoja,
 ): boolean => {
   if (!personagem) return false;
   if (item.requisitoNivel && Number(personagem.nivel ?? 0) < item.requisitoNivel) return false;
+  if (atributosQueFaltamLoja(item, personagem).length) return false;
   if (!item.requisitoClasse?.length) return true;
   const classes = new Set([
     personagem.classeId,
@@ -436,7 +481,7 @@ export const personagemAtendeRequisitosLoja = (
 };
 
 export const personagemPodeAdquirirItemLoja = (
-  item: Pick<LojaItem, 'requisitoNivel' | 'requisitoClasse' | 'dadosBrutos'>,
+  item: Pick<LojaItem, 'requisitoNivel' | 'requisitoClasse' | 'requisitoAtributo' | 'dadosBrutos'>,
   personagem: Parameters<typeof personagemAtendeRequisitosLoja>[1],
   podeGerenciarConteudo: boolean,
 ): boolean => personagemAtendeRequisitosLoja(item, personagem)
@@ -695,6 +740,7 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
       : typeof c.requisitoClasse === 'string'
         ? [c.requisitoClasse]
         : undefined,
+    requisitoAtributo: lerRequisitoAtributo(c.requisitoAtributo),
     dadosBrutos: c,
     precoAnterior: promocaoValida ? precoAnteriorLido.valorOriginal : undefined,
     contratacao: categoria === 'Mercenários' ? lerPrecoNativoLoja(c.preco_contratacao) ?? undefined : undefined,

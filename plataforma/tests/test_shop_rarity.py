@@ -37,6 +37,15 @@ class EquipmentRarityPriceTests(unittest.TestCase):
         self.assertEqual(equipment_variant_price(leather, "armadura", "comum"), CatalogPrice("Lunaris", 50))
         self.assertEqual(equipment_variant_price(shield, "armadura", "comum"), CatalogPrice("Lunaris", 15))
 
+    def test_protection_model_rarity_multiplies_common_price(self):
+        plate = {"bonus": "+8", "penalidade": "-6", "subtipo": "marcial", "raridade": "comum"}
+        base = equipment_variant_price(plate, "armadura", "comum").valor
+        for model_rarity, factor in (("incomum", 2), ("raro", 4), ("epico", 8), ("lendario", 16)):
+            model = {**plate, "raridade": model_rarity}
+            self.assertEqual(equipment_variant_price(model, "armadura", "comum"), CatalogPrice("Lunaris", base * factor))
+        listed = {**plate, "raridade": "comum", "raridade_catalogo_original": "lendario"}
+        self.assertEqual(equipment_variant_price(listed, "armadura", "comum"), CatalogPrice("Lunaris", base * 16))
+
     def test_weapon_rarity_improves_damage_margin_and_multiplier(self):
         awp = {
             "dano": "3d12",

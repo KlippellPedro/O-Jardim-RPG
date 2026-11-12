@@ -2,7 +2,7 @@ import React, { Suspense, lazy, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Select } from '../../../components/ui/Select';
-import { aplicarRaridadeCompra, classeTextoRaridade, getCurrencySymbol, itemEhVeiculoCompleto, itemPermiteEscolherRaridade, LojaItem, nivelLojaParaRaridadeCompra, NOMES_LOCAIS_LOJA, obterBonusDefesaCatalogo, personagemAtendeRequisitosLoja, rotuloCategoriaItem, rotuloSubtipoItem, RARIDADES_COMPRA_EQUIPAMENTO, RaridadeCompraEquipamento } from '../../../services/lojaCatalogService';
+import { aplicarRaridadeCompra, classeTextoRaridade, getCurrencySymbol, itemEhVeiculoCompleto, itemPermiteEscolherRaridade, LojaItem, nivelLojaParaRaridadeCompra, NOMES_LOCAIS_LOJA, atributosQueFaltamLoja, obterBonusDefesaCatalogo, personagemAtendeRequisitosLoja, rotuloCategoriaItem, rotuloSubtipoItem, RARIDADES_COMPRA_EQUIPAMENTO, RaridadeCompraEquipamento } from '../../../services/lojaCatalogService';
 import { X, ShoppingCart, Info, Swords, Activity, Skull, Sparkles, AlertTriangle, Wrench, CircleGauge, BookOpen, ChevronRight } from 'lucide-react';
 import { ICharacter } from '../../../types/character';
 import { useModalSfx } from '../../../hooks/useSfx';
@@ -115,7 +115,11 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
     compradorAtivo,
   );
   
-  const hasWarning = (!meetsNivel || !meetsClasse) && modoLoja === 'Comprar';
+  // Sem comprador, todos os atributos exigidos aparecem como faltando.
+  const atributosFaltando = atributosQueFaltamLoja(item, compradorAtivo);
+  const meetsAtributo = !item.requisitoAtributo || (Boolean(compradorAtivo) && atributosFaltando.length === 0);
+
+  const hasWarning = (!meetsNivel || !meetsClasse || !meetsAtributo) && modoLoja === 'Comprar';
 
 
   // Renderização específica baseada na Categoria
@@ -566,6 +570,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                   Seu personagem atual não atende aos requisitos para equipar/usar este item perfeitamente. 
                   {!meetsNivel && ` Exige Nível ${item.requisitoNivel}.`}
                   {!meetsClasse && ` Exige Classe: ${item.requisitoClasse?.join(', ')}.`}
+                  {!meetsAtributo && ` Exige ${atributosFaltando.map((linha) => `${linha.nome} ${linha.exigido}`).join(' e ')}.`}
                   <br/><span className="italic text-xs opacity-75 font-bold">Se você prosseguir com a compra, uma notificação de infração será enviada ao Mestre da campanha.</span>
                 </p>
               </div>

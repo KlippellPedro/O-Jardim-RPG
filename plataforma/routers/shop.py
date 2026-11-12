@@ -467,14 +467,45 @@ def _character_level_and_classes(character: dict[str, Any]) -> tuple[int, set[st
     return max(0, level), class_ids
 
 
+_ATTRIBUTE_LABELS = {
+    "forca": "Força",
+    "destreza": "Destreza",
+    "constituicao": "Constituição",
+    "inteligencia": "Inteligência",
+    "sabedoria": "Sabedoria",
+    "carisma": "Carisma",
+    "fluxo": "Fluxo",
+}
+
+
 def _require_catalog_character_requirements(item: dict[str, Any], character: dict[str, Any]) -> list[dict[str, Any]]:
     content = item.get("conteudo") if isinstance(item.get("conteudo"), dict) else {}
     required_level = content.get("requisitoNivel")
     required_classes = content.get("requisitoClasse")
-    if required_level is None and required_classes is None:
+    required_attributes = content.get("requisitoAtributo")
+    if required_level is None and required_classes is None and required_attributes is None:
         return []
     level, class_ids = _character_level_and_classes(character)
     infracoes = []
+    if isinstance(required_attributes, dict):
+        sheet = character.get("ficha") if isinstance(character.get("ficha"), dict) else {}
+        attributes = sheet.get("atributosFinais") or sheet.get("atributos") or {}
+        attributes = attributes if isinstance(attributes, dict) else {}
+        for attribute, minimum in required_attributes.items():
+            if not isinstance(minimum, int) or isinstance(minimum, bool):
+                continue
+            current = attributes.get(attribute)
+            current = current if isinstance(current, (int, float)) and not isinstance(current, bool) else 0
+            if current < minimum:
+                label = _ATTRIBUTE_LABELS.get(attribute, attribute)
+                infracoes.append({
+                    "item_id": item["id"],
+                    "tipo_infracao": "atributo_insuficiente",
+                    "requisito": label,
+                    "valor_exigido": str(minimum),
+                    "valor_personagem": str(int(current)),
+                    "mensagem": f"{item['titulo']} exige {label} {minimum}",
+                })
     if isinstance(required_level, int) and not isinstance(required_level, bool) and level < required_level:
         infracoes.append({
             "item_id": item["id"],

@@ -1,6 +1,32 @@
 {
   "itens": [
     {
+      "id": "2026-11-11-escala-de-armaduras",
+      "data": "2026-11-11",
+      "tipo": "melhoria",
+      "area": "Loja",
+      "titulo": "Armaduras e escudos com requisitos e preço novo",
+      "detalhes": [
+        "Os modelos mais fortes pedem nível: Incomum a partir do 5, Raro do 10, Épico do 15 e Lendário do 25. Os modelos Comuns continuam livres.",
+        "Do Épico em diante a peça também pede atributo: Força 15 no Épico e 18 no Lendário. Armadura simples pede Constituição. Se faltar algum requisito, a Loja avisa e o Mestre fica sabendo da compra.",
+        "Armaduras Épicas dão de +10 a +15 de Defesa, e as Lendárias de +16 a +22. A raridade escolhida na compra continua somando por cima.",
+        "O modelo de raridade alta custa mais já na versão Comum, de duas a dezesseis vezes o preço de antes. Antes um modelo de +25 saía no primeiro balcão para personagem de nível 1.",
+        "A Armadura de Assalto Juggernaut passou a somar a Defesa dela na ficha."
+      ]
+    },
+    {
+      "id": "2026-11-11-criaturas-acertam-mais",
+      "data": "2026-11-11",
+      "tipo": "melhoria",
+      "area": "Bestiário",
+      "titulo": "Criaturas do nível 15 em diante acertam mais",
+      "detalhes": [
+        "Para acompanhar as armaduras novas, o golpe das criaturas de VD 15 ou mais ficou mais forte. Quem veste a armadura da sua faixa é acertado mais ou menos metade das vezes.",
+        "Os testes de resistência das criaturas não mudaram, então magia e efeito que pedem teste continuam funcionando como antes.",
+        "Lutar sem armadura nesses níveis ficou mais arriscado."
+      ]
+    },
+    {
       "id": "2026-11-10-mapa-notas-so-do-mestre",
       "data": "2026-11-10",
       "tipo": "novo",
@@ -1021,31 +1047,6 @@
         "Para os outros, a Tecnologia chega como Fluxo instalado: o Mestre marca na aba Magias da ficha, e a ficha passa a poder aprender as magias desse Fluxo. O Fluxo instalado não dá Marca de círculo.",
         "Quem nasceu na A.X.I.S e já tinha aprendido algo de Tecnologia recebeu a Tecnologia como Fluxo instalado, e o que conhecia continua funcionando.",
         "A escolha de Fluxo do Canalizador agora aparece só para ficha sem Árvore. Antes ela aparecia para todo mundo e não mudava nada."
-      ]
-    },
-    {
-      "id": "2026-10-20-ajustes-magias-e-classes",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Ficha",
-      "titulo": "Ajustes nas magias e nas classes de magia",
-      "detalhes": [
-        "A Ruptura Derivada da Elementarista agora pode ser escolhida a partir do nível 13, como o próprio poder diz. Antes a ficha recusava a escolha.",
-        "Salto Improvável, Labirinto Dobrado, Domínio da Matriz, Domínio do Ritmo e Controle de Massa agora mostram na ficha o teste que o alvo faz para resistir.",
-        "O Físico passa a ter vantagem sobre a Comunicação, e a roda de vantagens entre os Fluxos fecha.",
-        "Alguns nomes mudaram, e o efeito de cada um continua igual: a fusão do Tempo agora se chama Prorrogação, duas magias do Tempo viraram Repetição Curta e Repetição de Batalha, a Marca do 6º círculo do Tempo virou Passo Repetido e uma técnica do Hackear Fluxo virou Refluxo Hostil. Quem já tinha escolhido alguma delas mantém a escolha.",
-        "Textos corrigidos no Invocador (as seis Formas Vinculadas e o catálogo de 30 fichas), na Varredura de Padrão e na Colheita."
-      ]
-    },
-    {
-      "id": "2026-10-14-livro-revisado",
-      "data": "2026-10-14",
-      "tipo": "melhoria",
-      "area": "Livro",
-      "titulo": "Livro de Regras revisado",
-      "detalhes": [
-        "O texto do Livro e do PDF passou por uma revisão completa: erros de digitação, nomes trocados (como perícias que não existem no jogo) e trechos repetidos foram corrigidos, sem mudar nenhuma regra.",
-        "As listas de classes, raças e perícias seguem agora uma ordem fácil de achar, e os requisitos dos Legados e o tipo de cada magia aparecem escritos por extenso, com acento."
       ]
     }
   ]

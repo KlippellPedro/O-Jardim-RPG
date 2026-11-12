@@ -217,7 +217,7 @@ const VDS_DA_TABELA_DE_CRIATURA = [3, 10, 20, 30, 40, 60, 100, 150, 200, 500];
 const linhasCriaturaPorVd = () => VDS_DA_TABELA_DE_CRIATURA.map((vd) => {
   const solo = modeloDeCriatura(vd, 'solo');
   const [lacaio, padrao, elite, chefe] = (['lacaio', 'padrao', 'elite', 'chefe'] as const).map((papel) => modeloDeCriatura(vd, papel));
-  return `<tr><td><strong>${vd}</strong></td><td>+${solo.pericias[0].replace('Luta +', '')}</td><td>${solo.defesa}</td><td>${solo.danoMedio}</td><td>${chefe.golpeAnunciadoMedio}</td><td>${formatarXP(lacaio.pv)}</td><td>${formatarXP(padrao.pv)}</td><td>${formatarXP(elite.pv)}</td><td>${formatarXP(chefe.pv)}</td><td>${formatarXP(solo.pv)}</td><td>${formatarXP(solo.xp)}</td></tr>`;
+  return `<tr><td><strong>${vd}</strong></td><td>+${solo.pericias[0].replace('Luta +', '')}</td><td>+${solo.pericias[1].replace('Fortitude +', '')}</td><td>${solo.defesa}</td><td>${solo.danoMedio}</td><td>${chefe.golpeAnunciadoMedio}</td><td>${formatarXP(lacaio.pv)}</td><td>${formatarXP(padrao.pv)}</td><td>${formatarXP(elite.pv)}</td><td>${formatarXP(chefe.pv)}</td><td>${formatarXP(solo.pv)}</td><td>${formatarXP(solo.xp)}</td></tr>`;
 }).join('\n');
 /** Círculo e vagas de magia por nível da classe, lidos dos marcos de classes.json. */
 const NIVEIS_DA_TABELA_DE_MAGIA = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
@@ -4887,9 +4887,9 @@ ${HTML_DEVOCAO}
       <p class="regras-note">A Vida do alvo apropriado é a da linha de frente para golpe físico, e a de quem fica atrás para a ameaça que pune posicionamento. Um golpe anunciado de chefe pode tirar metade da Vida de um personagem, e é justamente por isso que ele precisa ser anunciado na rodada anterior.</p>
 
       <h3 class="regras-subtitle">Criatura de qualquer VD</h3>
-      <p>A conta é a mesma em todo VD: ataque e testes iguais ao ataque de um personagem do nível, Defesa três pontos abaixo da natural (criatura não veste armadura) e dano por acerto como fatia da Vida de um personagem, como na tabela de papéis. A Vida de cada papel é uma fatia da Vida de inimigo padrão do VD. A solo é a criatura que basta sozinha, como as do Bestiário, e vale 80% do encontro. Lacaio subtrai 4 do ataque, padrão subtrai 2 e chefe soma 2.</p>
+      <p>A conta é a mesma em todo VD: testes iguais ao ataque de um personagem do nível, Defesa três pontos abaixo da natural (criatura não veste armadura) e dano por acerto como fatia da Vida de um personagem, como na tabela de papéis. O golpe é o ataque de um personagem do nível e, do VD 15 em diante, soma o que a armadura típica dos personagens daquele nível tira dele: assim o inimigo padrão acerta perto de metade das vezes quem veste a armadura da sua faixa, e quem luta sem armadura sente o golpe inteiro. A Vida de cada papel é uma fatia da Vida de inimigo padrão do VD. A solo é a criatura que basta sozinha, como as do Bestiário, e vale 80% do encontro. Lacaio subtrai 4 do ataque, padrão subtrai 2 e chefe soma 2.</p>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>VD</th><th>Ataque e testes (solo)</th><th>Defesa</th><th>Dano por acerto</th><th>Golpe anunciado (chefe)</th><th>Vida de lacaio</th><th>Vida de padrão</th><th>Vida de elite</th><th>Vida de chefe</th><th>Vida solo</th><th>XP solo</th></tr></thead>
+        <thead><tr><th>VD</th><th>Golpe (solo)</th><th>Testes (solo)</th><th>Defesa</th><th>Dano por acerto</th><th>Golpe anunciado (chefe)</th><th>Vida de lacaio</th><th>Vida de padrão</th><th>Vida de elite</th><th>Vida de chefe</th><th>Vida solo</th><th>XP solo</th></tr></thead>
         <tbody>
           ${linhasCriaturaPorVd()}
         </tbody>

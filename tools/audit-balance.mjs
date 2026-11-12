@@ -116,13 +116,39 @@ const npcReference = levels.map((level) => referenciaDoNivel(level, commonClasse
 // Curva de criaturas: uma linha por VD (o VD é o nível do grupo que a criatura
 // desafia sozinha), tirada da mesma referência de NPCs. src/services/curvaCriatura.ts
 // lê este arquivo e aplica os papéis (lacaio, padrão, elite, chefe) por cima.
-const curvaColunas = ['vd', 'ataque', 'defesaNatural', 'vidaDoPersonagem', 'vidaDeInimigoPadrao', 'modificadorPrincipal'];
+//
+// Ajuste de armadura (2026-11-11): do nível em que a armadura Épica entra, o
+// golpe da criatura soma o que falta para o inimigo padrão acertar perto de 50%
+// um personagem com a armadura típica do nível (a mediana dos modelos da faixa
+// mais alta que o nível já libera, mais a raridade que o nível costuma pagar).
+// Só o golpe e a Luta usam o ajuste; os testes de resistência ficam no ataque de
+// referência. Ver tools/normalize-armor-balance.mjs e docs/sistema/BALANCEAMENTO.md.
+const NIVEL_DO_AJUSTE_DE_ARMADURA = 15;
+const RARIDADE_DE_COMPRA_POR_NIVEL = [1, 5, 10, 15, 25]; // Comum, Incomum, Raro, Épico, Lendário
+const ALVO_DO_PADRAO_CONTRA_ARMADURA = 9; // golpe-base = Defesa com armadura - 9 (o padrão, com -2, acerta 50%)
+const numeroDoBonus = (valor) => Number(String(valor ?? '').match(/[+-]?\d+/)?.[0] ?? NaN);
+const modelosDeArmadura = catalog
+  .filter((item) => item.tipo === 'armadura' && item.conteudo?.categoria_protecao === 'armadura')
+  .filter((item) => !String(item.conteudo?.raridade ?? '').startsWith('reliquia'))
+  .map((item) => ({ nivel: Number(item.conteudo?.requisitoNivel) || 1, bonus: numeroDoBonus(item.conteudo?.bonus) }))
+  .filter((item) => item.bonus > 0);
+function armaduraTipica(nivel) {
+  const faixa = Math.max(...modelosDeArmadura.filter((item) => item.nivel <= nivel).map((item) => item.nivel));
+  const bonus = modelosDeArmadura.filter((item) => item.nivel === faixa).map((item) => item.bonus).sort((a, b) => a - b);
+  const raridade = RARIDADE_DE_COMPRA_POR_NIVEL.filter((minimo) => minimo <= nivel).length - 1;
+  return bonus[Math.floor(bonus.length / 2)] + raridade;
+}
+function ajusteDeArmadura(ref) {
+  if (ref.nivel < NIVEL_DO_AJUSTE_DE_ARMADURA) return 0;
+  return Math.max(0, ref.defesaNatural + armaduraTipica(ref.nivel) - ALVO_DO_PADRAO_CONTRA_ARMADURA - ref.bonusDeAtaque);
+}
+const curvaColunas = ['vd', 'ataque', 'defesaNatural', 'vidaDoPersonagem', 'vidaDeInimigoPadrao', 'modificadorPrincipal', 'ajusteDeArmadura'];
 const curvaLinhas = Array.from({ length: VD_MAXIMO }, (_, indice) => {
   const ref = referenciaDoNivel(indice + 1, commonClasses, weapons);
-  return [ref.nivel, ref.bonusDeAtaque, ref.defesaNatural, ref.vida.media, ref.vidaDeInimigoPadrao, ref.modificadorPrincipal];
+  return [ref.nivel, ref.bonusDeAtaque, ref.defesaNatural, ref.vida.media, ref.vidaDeInimigoPadrao, ref.modificadorPrincipal, ajusteDeArmadura(ref)];
 });
 const curvaCorpo = curvaLinhas.map((linha) => `    ${JSON.stringify(linha)}`).join(',\n');
-const curvaNota = `Gerado por npm run audit:balance a partir da referência de NPCs (${curvaLinhas.length} linhas, VD 1 a ${VD_MAXIMO}). Não edite: mude a fórmula da ficha ou os dados e gere de novo. Colunas: vd, ataque de referência, Defesa natural, Vida média de um personagem, Vida de inimigo padrão (a que aguenta 4,5 rodadas de um grupo de quatro) e modificador do atributo principal.`;
+const curvaNota = `Gerado por npm run audit:balance a partir da referência de NPCs (${curvaLinhas.length} linhas, VD 1 a ${VD_MAXIMO}). Não edite: mude a fórmula da ficha ou os dados e gere de novo. Colunas: vd, ataque de referência, Defesa natural, Vida média de um personagem, Vida de inimigo padrão (a que aguenta 4,5 rodadas de um grupo de quatro), modificador do atributo principal e ajuste de armadura (somado só ao golpe e à Luta da criatura, do VD 15 em diante).`;
 const curvaOutput = `{
   "_nota": ${JSON.stringify(curvaNota)},
   "colunas": ${JSON.stringify(curvaColunas)},

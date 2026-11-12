@@ -5,7 +5,9 @@ import { VD_MAXIMO, xpPorVd } from './progressaoNiveis';
  * Gerador de criaturas por Valor de Desafio. O VD é o nível do grupo que a
  * criatura desafia sozinha, e os números saem da referência de NPCs
  * (data/regras/curva-criatura-v1.json, gerado por `npm run audit:balance`):
- * ataque e testes iguais ao ataque de referência, Defesa 3 abaixo da natural,
+ * testes iguais ao ataque de referência, golpe igual ao ataque de referência mais o
+ * ajuste de armadura (do VD 15 em diante, para acompanhar a armadura típica do
+ * nível), Defesa 3 abaixo da natural,
  * dano como fatia da Vida de um personagem e Vida como fatia da "Vida de
  * inimigo padrão" (a que aguenta 4,5 rodadas de um grupo de quatro).
  *
@@ -94,6 +96,8 @@ interface ILinhaDaCurva {
   vidaDoPersonagem: number;
   vidaDeInimigoPadrao: number;
   modificadorPrincipal: number;
+  /** Somado só ao golpe e à Luta (0 antes do VD 15 e em curvas antigas sem a coluna). */
+  ajusteDeArmadura?: number;
 }
 
 const COLUNAS = curvaData.colunas;
@@ -142,6 +146,11 @@ export function vidaDeAliado(vd: unknown, pvDoCatalogo: number): number {
   const linha = vd === null || vd === undefined || !Number.isFinite(numero) ? undefined : LINHAS.get(vdValido(numero));
   if (!linha || !Number.isFinite(pvDoCatalogo)) return Math.max(1, Math.trunc(pvDoCatalogo) || 1);
   return Math.max(1, Math.min(Math.trunc(pvDoCatalogo), FATOR_DE_VIDA_DE_ALIADO * linha.vidaDoPersonagem));
+}
+
+/** Quanto o golpe da criatura do VD soma por causa da armadura típica dos personagens. */
+export function ajusteDeArmaduraDoVd(vd: unknown): number {
+  return Number((LINHAS.get(vdValido(vd)) as ILinhaDaCurva).ajusteDeArmadura ?? 0) || 0;
 }
 
 export function vdValido(vd: unknown): number {
@@ -197,7 +206,10 @@ export function modeloDeCriatura(vd: unknown, papel: PapelCriatura = 'solo', arq
   const linha = LINHAS.get(alvo) as ILinhaDaCurva;
   const regra = PAPEIS_CRIATURA[papel];
   const jeito = ARQUETIPOS_CRIATURA[arquetipo];
-  const ataque = linha.ataque + regra.ajusteDeAtaque + jeito.ajusteDeAtaque;
+  // Testes de resistência e Percepção seguem o ataque de referência; o golpe e a
+  // Luta somam o ajuste de armadura.
+  const teste = linha.ataque + regra.ajusteDeAtaque + jeito.ajusteDeAtaque;
+  const ataque = teste + ajusteDeArmaduraDoVd(alvo);
   const defesa = Math.max(8, linha.defesaNatural - DEFESA_ABAIXO_DA_NATURAL + jeito.ajusteDeDefesa);
   const modificador = Math.max(1, linha.modificadorPrincipal);
   const danoMedio = Math.max(2, Math.round(regra.fatiaDeDano * jeito.fatorDeDano * linha.vidaDoPersonagem));
@@ -236,10 +248,10 @@ export function modeloDeCriatura(vd: unknown, papel: PapelCriatura = 'solo', arq
     },
     pericias: [
       `Luta ${sinal(ataque)}`,
-      `Fortitude ${sinal(ataque)}`,
-      `Reflexos ${sinal(ataque)}`,
-      `Vontade ${sinal(ataque - 1)}`,
-      `Percepção ${sinal(ataque - PERCEPCAO_ABAIXO_DO_ATAQUE)}`,
+      `Fortitude ${sinal(teste)}`,
+      `Reflexos ${sinal(teste)}`,
+      `Vontade ${sinal(teste - 1)}`,
+      `Percepção ${sinal(teste - PERCEPCAO_ABAIXO_DO_ATAQUE)}`,
     ],
     ataques,
     habilidades,
@@ -267,9 +279,14 @@ export interface ICriaturaEscalavel {
 export interface ICriaturaEscalada extends Omit<ICriaturaEscalavel, 'vd'> {
   vd: number;
   de: number;
-  /** Quantos pontos o bônus de ataque e de perícia andaram. */
+  /** Quantos pontos o golpe e a Luta andaram (inclui o ajuste de armadura). */
   deltaDeAtaque: number;
+  /** Quantos pontos as outras perícias andaram. */
+  deltaDeTeste: number;
 }
+
+/** Perícias que valem como golpe e levam o ajuste de armadura. */
+export const PERICIAS_DE_GOLPE = /^(Luta|Pontaria)$/i;
 
 const DADO_NO_TEXTO = /(\d+)d(\d+)(?:\s*\+\s*(\d+))?/;
 const BONUS_NO_FIM = /^(.*?)([+-]\d+)\s*$/;
@@ -316,7 +333,8 @@ export function escalarCriatura(
   const depois = modeloDeCriatura(para);
   const papelDe = PAPEIS_CRIATURA[opcoes.papelDe ?? 'solo'];
   const papelPara = PAPEIS_CRIATURA[opcoes.papelPara ?? opcoes.papelDe ?? 'solo'];
-  const deltaDeAtaque = (LINHAS.get(para) as ILinhaDaCurva).ataque - (LINHAS.get(de) as ILinhaDaCurva).ataque + papelPara.ajusteDeAtaque - papelDe.ajusteDeAtaque;
+  const deltaDeTeste = (LINHAS.get(para) as ILinhaDaCurva).ataque - (LINHAS.get(de) as ILinhaDaCurva).ataque + papelPara.ajusteDeAtaque - papelDe.ajusteDeAtaque;
+  const deltaDeAtaque = deltaDeTeste + ajusteDeArmaduraDoVd(para) - ajusteDeArmaduraDoVd(de);
   const deltaDeDt = Math.floor(para / 2) - Math.floor(de / 2);
   const razaoDeDano = (antes.danoMedio > 0 ? depois.danoMedio / antes.danoMedio : 1) * (papelPara.fatiaDeDano / papelDe.fatiaDeDano);
   const fatorDeVida = papelPara.fatiaDeVida / papelDe.fatiaDeVida;
@@ -338,6 +356,7 @@ export function escalarCriatura(
     vd: para,
     de,
     deltaDeAtaque,
+    deltaDeTeste,
     pv,
     pvAtual,
     defesa: criatura.defesa == null ? criatura.defesa : Math.max(0, criatura.defesa + depois.defesa - antes.defesa),
@@ -352,7 +371,9 @@ export function escalarCriatura(
     })),
     pericias: criatura.pericias.map((pericia) => {
       const partes = pericia.match(BONUS_NO_FIM);
-      return partes ? `${partes[1]}${sinal(Number(partes[2]) + deltaDeAtaque)}` : pericia;
+      if (!partes) return pericia;
+      const delta = PERICIAS_DE_GOLPE.test(partes[1].trim()) ? deltaDeAtaque : deltaDeTeste;
+      return `${partes[1]}${sinal(Number(partes[2]) + delta)}`;
     }),
   };
 }

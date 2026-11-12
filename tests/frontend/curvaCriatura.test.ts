@@ -6,6 +6,7 @@ import {
   ORDEM_DOS_ARQUETIPOS,
   ORDEM_DOS_PAPEIS,
   PAPEIS_CRIATURA,
+  ajusteDeArmaduraDoVd,
   escalaDeVida,
   escalarCriatura,
   expressaoDeDano,
@@ -41,18 +42,22 @@ test('valores fora da faixa viram o VD mais próximo', () => {
 
 test('curva aprovada: ataque, Defesa, dano e Vida solo em VDs de referência', () => {
   // Valores da tabela de docs/plano-vd-e-magia-medicoes-2026-09.md (a Vida arredonda de 5 em 5).
-  const esperado: Array<[number, { ataque: string; defesa: number; dano: number; pv: number }]> = [
-    [20, { ataque: '+24', defesa: 19, dano: 17, pv: 410 }],
-    [30, { ataque: '+31', defesa: 24, dano: 27, pv: 810 }],
-    [40, { ataque: '+37', defesa: 30, dano: 36, pv: 1055 }],
-    [50, { ataque: '+42', defesa: 35, dano: 45, pv: 1320 }],
-    [100, { ataque: '+73', defesa: 61, dano: 81, pv: 2700 }],
-    [200, { ataque: '+126', defesa: 112, dano: 145, pv: 5480 }],
-    [500, { ataque: '+285', defesa: 264, dano: 336, pv: 14500 }],
+  // O golpe soma o ajuste de armadura de 2026-11-11 (escala de armaduras); os testes não.
+  const esperado: Array<[number, { ataque: string; teste: string; defesa: number; dano: number; pv: number }]> = [
+    [10, { ataque: '+14', teste: '+14', defesa: 14, dano: 9, pv: 265 }],
+    [20, { ataque: '+28', teste: '+24', defesa: 19, dano: 17, pv: 410 }],
+    [30, { ataque: '+42', teste: '+31', defesa: 24, dano: 27, pv: 810 }],
+    [40, { ataque: '+48', teste: '+37', defesa: 30, dano: 36, pv: 1055 }],
+    [50, { ataque: '+53', teste: '+42', defesa: 35, dano: 45, pv: 1320 }],
+    [100, { ataque: '+79', teste: '+73', defesa: 61, dano: 81, pv: 2700 }],
+    [200, { ataque: '+130', teste: '+126', defesa: 112, dano: 145, pv: 5480 }],
+    [500, { ataque: '+285', teste: '+285', defesa: 264, dano: 336, pv: 14500 }],
   ];
   for (const [vd, valores] of esperado) {
     const modelo = modeloDeCriatura(vd, 'solo');
     assert.equal(modelo.pericias[0], `Luta ${valores.ataque}`, `VD ${vd}`);
+    assert.equal(modelo.pericias[1], `Fortitude ${valores.teste}`, `VD ${vd}`);
+    assert.equal(modelo.ataques[0].detalhe.split(',')[0], valores.ataque, `VD ${vd}`);
     assert.equal(modelo.defesa, valores.defesa, `VD ${vd}`);
     assert.equal(modelo.danoMedio, valores.dano, `VD ${vd}`);
     assert.equal(modelo.pv, valores.pv, `VD ${vd}`);
@@ -221,7 +226,9 @@ test('escalar mantém a proporção de Vida e a Vida atual, e deixa nome de ataq
   assert.match(ferida.ataques[0].detalhe, /^\+\d+, \d+d\d+(\+\d+)? perfurante, causa Veneno$/);
   assert.equal(ferida.ataques[1].detalhe, 'DT 28 de Vontade');
   assert.equal(ferida.pericias[1], 'Ficar de tocaia');
-  assert.equal(ferida.pericias[0], `Furtividade +${10 + ferida.deltaDeAtaque}`);
+  assert.equal(ferida.pericias[0], `Furtividade +${10 + ferida.deltaDeTeste}`);
+  assert.equal(ferida.ataques[0].detalhe.split(',')[0], `+${9 + ferida.deltaDeAtaque}`);
+  assert.equal(ferida.deltaDeAtaque - ferida.deltaDeTeste, ajusteDeArmaduraDoVd(30));
   assert.ok(mediaDaExpressao(ferida.ataques[0].detalhe.match(/\d+d\d+(?:\+\d+)?/)?.[0] ?? '') > mediaDaExpressao('2d8+4'));
 });
 

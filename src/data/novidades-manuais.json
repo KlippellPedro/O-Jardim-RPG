@@ -2,6 +2,32 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-11-escala-de-armaduras",
+      "data": "2026-11-11",
+      "tipo": "melhoria",
+      "area": "Loja",
+      "titulo": "Armaduras e escudos com requisitos e preço novo",
+      "detalhes": [
+        "Os modelos mais fortes pedem nível: Incomum a partir do 5, Raro do 10, Épico do 15 e Lendário do 25. Os modelos Comuns continuam livres.",
+        "Do Épico em diante a peça também pede atributo: Força 15 no Épico e 18 no Lendário. Armadura simples pede Constituição. Se faltar algum requisito, a Loja avisa e o Mestre fica sabendo da compra.",
+        "Armaduras Épicas dão de +10 a +15 de Defesa, e as Lendárias de +16 a +22. A raridade escolhida na compra continua somando por cima.",
+        "O modelo de raridade alta custa mais já na versão Comum, de duas a dezesseis vezes o preço de antes. Antes um modelo de +25 saía no primeiro balcão para personagem de nível 1.",
+        "A Armadura de Assalto Juggernaut passou a somar a Defesa dela na ficha."
+      ]
+    },
+    {
+      "id": "2026-11-11-criaturas-acertam-mais",
+      "data": "2026-11-11",
+      "tipo": "melhoria",
+      "area": "Bestiário",
+      "titulo": "Criaturas do nível 15 em diante acertam mais",
+      "detalhes": [
+        "Para acompanhar as armaduras novas, o golpe das criaturas de VD 15 ou mais ficou mais forte. Quem veste a armadura da sua faixa é acertado mais ou menos metade das vezes.",
+        "Os testes de resistência das criaturas não mudaram, então magia e efeito que pedem teste continuam funcionando como antes.",
+        "Lutar sem armadura nesses níveis ficou mais arriscado."
+      ]
+    },
+    {
       "id": "2026-11-10-mapa-notas-so-do-mestre",
       "data": "2026-11-10",
       "tipo": "novo",

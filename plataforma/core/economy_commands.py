@@ -95,6 +95,16 @@ _EQUIPMENT_RARITY_PRICE_MULTIPLIERS = {
     "lendario": 60,
 }
 
+# Multiplica o preço da versão Comum de uma armadura ou escudo pela raridade
+# original do modelo. A raridade escolhida na compra multiplica por cima.
+_MODEL_RARITY_PRICE_FACTOR = {
+    "comum": 1,
+    "incomum": 2,
+    "raro": 4,
+    "epico": 8,
+    "lendario": 16,
+}
+
 _WEAPON_RARITY_DAMAGE_DIE = {
     "incomum": "1d4",
     "raro": "1d6",
@@ -177,7 +187,13 @@ def _protection_common_price(content: Mapping[str, Any]) -> int:
     score = defense + resistance
     lower_reference, upper_reference = (1.0, 12.0) if shield else (2.0, 14.0)
     position = min(1.0, max(0.0, (score - lower_reference) / (upper_reference - lower_reference)))
-    return min(maximum, max(minimum, _round_to_five(minimum + (maximum - minimum) * position)))
+    band_price = min(maximum, max(minimum, _round_to_five(minimum + (maximum - minimum) * position)))
+    # O modelo de raridade original alta custa mais já na versão Comum
+    # (escala de armaduras de 2026-11, tools/normalize-armor-balance.mjs).
+    model_rarity = normalize_catalog_filter(
+        content.get("raridade_catalogo_original") or content.get("raridade")
+    )
+    return band_price * _MODEL_RARITY_PRICE_FACTOR.get(model_rarity, 1)
 
 
 def equipment_common_price(content: Mapping[str, Any], catalog_type: object) -> CatalogPrice | None:

@@ -8,13 +8,14 @@ import unittest
 from routers.shop import _require_catalog_character_requirements
 
 
-def _personagem(nivel, classes_ids):
-    return {
-        "ficha": {
-            "nivel": nivel,
-            "classes": [{"id": classe_id, "nivel": nivel} for classe_id in classes_ids],
-        }
+def _personagem(nivel, classes_ids, atributos=None):
+    ficha = {
+        "nivel": nivel,
+        "classes": [{"id": classe_id, "nivel": nivel} for classe_id in classes_ids],
     }
+    if atributos is not None:
+        ficha["atributosFinais"] = atributos
+    return {"ficha": ficha}
 
 
 def _item(**conteudo):
@@ -57,6 +58,21 @@ class RequisitosLojaTests(unittest.TestCase):
         infracoes = _require_catalog_character_requirements(item, _personagem(1, ["ninja"]))
         tipos = {inf["tipo_infracao"] for inf in infracoes}
         self.assertEqual(tipos, {"nivel_insuficiente", "classe_incompativel"})
+
+    def test_atributo_insuficiente_gera_infracao(self):
+        item = _item(requisitoAtributo={"forca": 18})
+        infracoes = _require_catalog_character_requirements(item, _personagem(25, ["guerreiro"], {"forca": 16}))
+        self.assertEqual(len(infracoes), 1)
+        self.assertEqual(infracoes[0]["tipo_infracao"], "atributo_insuficiente")
+        self.assertEqual(infracoes[0]["mensagem"], "Item de Teste exige Força 18")
+
+    def test_atributo_suficiente_nao_gera_infracao(self):
+        item = _item(requisitoNivel=25, requisitoAtributo={"forca": 18})
+        self.assertEqual(_require_catalog_character_requirements(item, _personagem(25, ["guerreiro"], {"forca": 18})), [])
+
+    def test_ficha_sem_atributos_conta_como_zero(self):
+        item = _item(requisitoAtributo={"constituicao": 15})
+        self.assertEqual(len(_require_catalog_character_requirements(item, _personagem(15, ["guerreiro"]))), 1)
 
 
 if __name__ == "__main__":

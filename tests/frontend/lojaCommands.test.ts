@@ -16,6 +16,7 @@ const {
   normalizarRaridadeChave,
   obterBonusDefesaCatalogo,
   personagemAtendeRequisitosLoja,
+  atributosQueFaltamLoja,
   personagemPodeAdquirirItemLoja,
   rotuloRaridadeChave,
   somarPrecosNativos,
@@ -240,6 +241,16 @@ test('requisitos explícitos consideram nível e todas as classes do comprador',
   assert.equal(personagemAtendeRequisitosLoja(item, { nivel: 5, classes: [{ id: 'piloto' }] }), true);
   assert.equal(personagemAtendeRequisitosLoja(item, { nivel: 4, classes: [{ id: 'piloto' }] }), false);
   assert.equal(personagemAtendeRequisitosLoja(item, { nivel: 8, classes: [{ id: 'guerreiro' }] }), false);
+});
+
+test('atributo mínimo entra nos requisitos e diz o que falta', () => {
+  const item = { requisitoNivel: 25, requisitoAtributo: { forca: 18 } };
+  const forte = { nivel: 25, ficha: { atributosFinais: { forca: 18 } } };
+  const fraco = { nivel: 25, ficha: { atributosFinais: { forca: 16 } } };
+  assert.equal(personagemAtendeRequisitosLoja(item, forte), true);
+  assert.equal(personagemAtendeRequisitosLoja(item, fraco), false);
+  assert.deepEqual(atributosQueFaltamLoja(item, fraco), [{ atributo: 'forca', nome: 'Força', exigido: 18, atual: 16 }]);
+  assert.equal(atributosQueFaltamLoja(item, undefined)[0].nome, 'Força');
 });
 
 test('itens com autorização do Mestre só entram no carrinho para gestores', () => {

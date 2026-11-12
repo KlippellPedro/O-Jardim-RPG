@@ -226,9 +226,87 @@ Leituras que a tabela deixa claras, sem mudança de regra:
   inimigo padrão fica perto de 1.350 dos níveis 40 a 200, enquanto a Vida dos
   personagens continua subindo.
 - Do nível 29, quem investe na perícia de combate acerta uns 95% contra um
-  inimigo do mesmo nível. A Defesa da tabela é natural, sem armadura.
+  inimigo do mesmo nível (o teste de builds de 2026-11 mediu: já do nível 5). A
+  Defesa da tabela é natural, sem armadura; o golpe da criatura soma o ajuste de
+  armadura do VD 15 em diante (ver Escala de armaduras e escudos).
 - O bestiário vai até o nível 50 e acompanha a curva: mediana de 1.490 de Vida na
   faixa 41–50, contra 1.320 da referência.
+
+## Escala de armaduras e escudos (2026-11-11)
+
+Pedida pelo Pedro depois do teste de builds
+(`docs/propostas/teste-de-builds-2026-11/RELATORIO.md`). A Loja vende cada
+modelo de armadura em qualquer raridade, e a raridade comprada soma +0 a +4 de
+Defesa. O bônus do catálogo é, portanto, o da peça Comum, e havia modelos de
++25 (escudo de +16) saindo no primeiro balcão, para personagem de nível 1, por
+até 80 Lunaris.
+
+Decisão: o bônus cresce com a raridade original do modelo e fica alto do Épico
+em diante, para acompanhar os outros números do personagem de nível alto; quem
+segura a peça forte são os pré-requisitos e o preço, como a armadura marcial já
+é segurada pela proficiência.
+
+| Raridade original do modelo | Armadura | Escudo | Nível mínimo | Atributo mínimo | Preço da versão Comum |
+| --- | --- | --- | --- | --- | --- |
+| Comum | +1 a +3 | +1 | livre | livre | faixa base |
+| Incomum | +2 a +6 | +2 a +3 | 5 | livre | ×2 |
+| Raro | +4 a +8 | +2 a +4 | 10 | livre | ×4 |
+| Épico | +10 a +15 | +5 a +7 | 15 | 15 | ×8 |
+| Lendário | +16 a +22 | +8 a +11 | 25 | 18 | ×16 |
+| Relíquia da Criação | +22 a +30 | +10 a +14 | 35 (Mestre) | 20 | sem encomenda |
+
+O atributo é Força para armadura marcial e escudo, e Constituição para armadura
+simples. Como nível e classe, os requisitos da Loja não bloqueiam: avisam quem
+compra e registram a infração para o Mestre (`requisitoAtributo`, conferido em
+`_require_catalog_character_requirements` e em `atributosQueFaltamLoja`). A
+faixa base de preço é a de antes (simples 15 a 40, marcial 50 a 80 Lunaris), e a
+raridade escolhida na compra multiplica por cima (×3, ×8, ×20, ×60). Penalidades
+não mudaram. Espiritual, Couraça e Égide Primordiais e Juggernaut mantêm o bônus;
+a Juggernaut somava 0 de Defesa porque o campo `defesa` guardava o teste de
+Reflexos, e passou a somar +4.
+
+Tabela por id em `tools/normalize-armor-balance.mjs` (`npm run
+normalize:armaduras`, com `:check`); o multiplicador do preço é
+`_MODEL_RARITY_PRICE_FACTOR` em `plataforma/core/economy_commands.py`.
+
+**Ataque das criaturas (aplicado no mesmo dia).** A curva calculava o golpe da
+criatura contra a Defesa Natural, sem armadura, e com esta escala o inimigo do
+nível 25 em diante só acertava no 20 natural quem usava armadura. A curva ganhou
+a coluna `ajusteDeArmadura` (gerada por `npm run audit:balance` a partir do
+catálogo): do VD 15 em diante, o golpe e a Luta da criatura somam o que falta
+para o inimigo padrão acertar 50% um personagem com a armadura típica do nível
+(mediana dos modelos da faixa liberada, mais a raridade que o nível costuma
+pagar). Fica +7 no VD 15, +4 do 20 ao 24, +13 no 25, +11 do 30 ao 50, e cai
+devagar depois (+8 no 60, +6 no 100, 0 do 300 em diante). Testes de
+resistência, Percepção, Defesa, dano e DTs não mudam. O gerador de criaturas e o
+"Escalar para outro VD" usam o ajuste; as 194 fichas do Bestiário com VD 15 ou
+mais receberam o ajuste por `tools/ajustar-ataque-bestiario.mjs` (`npm run
+bestiario:ajuste-armadura`, com `check:ajuste-armadura`), que guarda em cada
+ficha `ajusteDeAtaqueArmadura` e só aplica a diferença se a curva mudar.
+Deidades e Soberanos (VD 500 e 1200) ficam com ajuste 0.
+
+Chance do inimigo padrão do mesmo nível acertar
+(`scripts/acerto-escala.mjs` do relatório):
+
+| Nível | Sem armadura | Armadura típica | Melhor armadura + escudo, sem raridade | Melhor armadura + escudo, com raridade |
+| ---: | ---: | ---: | ---: | ---: |
+| 1 | 55% | 45% | 35% | 35% |
+| 5 | 70% | 45% | 25% | 15% |
+| 10 | 80% | 40% | 20% | 5% |
+| 15 | 95% | 50% | 15% | 5% |
+| 20 | 95% | 50% | 15% | 5% |
+| 25 | 95% | 50% | 5% | 5% |
+| 40 | 95% | 50% | 5% | 5% |
+| 60 | 95% | 50% | 5% | 5% |
+
+A armadura típica fica em 50% do nível 15 em diante. Quem não usa armadura é
+acertado 95%, e a melhor armadura com o melhor escudo continua perto do 20
+natural: esse teto é segurado pelo nível, pelo atributo e pelo preço. Se ele
+aparecer demais na mesa, o próximo ajuste é diminuir os escudos Épicos e
+Lendários.
+
+Itens já comprados guardam uma cópia do bônus no inventário; a escala nova vale
+para compras novas até uma migração atualizar os antigos.
 
 ## Pendências para a próxima revisão de design
 
