@@ -1,6 +1,74 @@
 {
   "itens": [
     {
+      "id": "2026-11-12-modificacoes-por-tipo",
+      "data": "2026-11-12",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "52 modificações novas, e modificação para implante",
+      "detalhes": [
+        "Armas ganharam 15: Rajada e Calibrada para quem atira, Trespassante e Ceifadora para quem corta, Fantasma, que atravessa armadura uma vez por cena, e outras.",
+        "Armaduras ganharam 11, como Sentinela, que impede você de ficar Surpreendido, Pluma, que soma Movimento, e Fortaleza Viva, que zera o dano de um ataque por cena.",
+        "Escudos ganharam 8, como Escudo de Parede, Muralha, que protege os aliados ao lado, e Égide, que leva você até um aliado atacado.",
+        "Itens gerais e mágicos ganharam 10, como Amuleto da Sorte, Canalizador para conjuradores e Ampulheta, que deixa refazer uma rolagem por descanso.",
+        "Implantes agora aceitam modificações: Pele Sintética esconde o metal, Redundância mantém a peça ligada e Amortecedor Neural baixa em 3 o custo de Sanidade do implante.",
+        "Ao comprar uma modificação, a Loja só oferece os itens que aceitam aquela modificação, e a aba Modificações tem o filtro Implantes."
+      ]
+    },
+    {
+      "id": "2026-11-12-implantes-custam-sanidade",
+      "data": "2026-11-12",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Implantes cobram Sanidade máxima, e chegaram 17 novos",
+      "detalhes": [
+        "Cada implante instalado tira um pedaço da sua Sanidade máxima enquanto estiver no corpo: 2 num Comum, 4 num Incomum, 7 num Raro, 12 num Épico, 18 num Lendário e 25 numa Relíquia. Peça que mexe no cérebro ou nos nervos cobra 3 a mais.",
+        "Com a Sanidade máxima mais baixa, o melhor estado da sua Sanidade também cai: 75 ou menos deixa você Abalado no melhor dos dias, 50 ou menos Enlouquecendo. Remover a peça devolve o teto, e a Sanidade perdida volta com descanso.",
+        "A ficha faz a conta: cada implante mostra quanto custa, a seção mostra o total, e ao instalar um aviso diz como a Sanidade máxima ficou. O Autômato paga metade.",
+        "17 implantes novos, de Comum a Lendário: Lâminas de Antebraço, Filtro de Dor, Coração Reserva, Mira Sináptica, Projetor de Silhueta, Córtex Paralelo, Exoesqueleto de Guerra e outros. A Âncora de Identidade alivia o custo de todos os outros.",
+        "Toda peça agora diz o sistema que ocupa: Neural, Sentidos, Membros, Órgãos ou Pele e esqueleto."
+      ]
+    },
+    {
+      "id": "2026-11-12-termos-que-levam-ao-livro",
+      "data": "2026-11-12",
+      "tipo": "novo",
+      "area": "Livro",
+      "titulo": "Condições e regras citadas no texto viram link",
+      "detalhes": [
+        "Quando uma habilidade, magia, item ou criatura cita uma condição (Caído, Amedrontado, Enfraquecido...), uma aflição ou uma regra (vantagem, Morrendo, Cansaço, Reação, Ação Padrão...), o nome aparece sublinhado de leve.",
+        "Clicar abre o Livro numa guia nova, já no lugar que explica o efeito, e o cartão brilha um instante para você achar. A página em que você estava fica onde estava.",
+        "Pousando o mouse no nome, aparece um resumo do que ele faz, sem precisar abrir nada.",
+        "Funciona na ficha (Progressão, Poderes, Habilidades, Magias, Inventário e Modo mesa), nas páginas de classe e raça, no catálogo de magias, nos Legados, na Loja, nas fichas de criatura e no próprio texto do Livro."
+      ]
+    },
+    {
+      "id": "2026-11-12-acoes-e-livro-mais-claros",
+      "data": "2026-11-12",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Ações, limites de uso e Livro mais fáceis de ler",
+      "detalhes": [
+        "Toda habilidade e todo poder dizem a ação que pedem num de sete tipos: Passivo, Ação Livre, Ação de Movimento, Ação Padrão, Ação Completa, Reação ou Fora de combate. Quando o momento importa, ele vem junto, como em \"Ação Livre · antes do ataque\".",
+        "Os limites de uso ficaram em cinco: por rodada, por turno, por cena, por descanso e por sessão. O que antes dizia \"por combate\" agora diz \"por cena\", e \"descanso longo\" virou só \"descanso\". No Modo mesa, cada um tem o nome certo e os botões Nova cena, Descansei e Nova sessão zeram os contadores.",
+        "No Livro de Regras, cada tópico mostra se é do Núcleo, o que todo jogador usa desde a primeira sessão, ou um Módulo, que entra quando a mesa quiser. Os 18 tópicos do Núcleo trazem uma etiqueta na lista de tópicos.",
+        "O Mestre ganhou uma folha de regras de mesa em PDF, com duas páginas para imprimir: teste, turno, ataque, reações, magia, queda, descanso, Cansaço e as condições que mais aparecem."
+      ]
+    },
+    {
+      "id": "2026-11-12-revisao-de-balanceamento",
+      "data": "2026-11-12",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Lutador sem armadura, escudos, invocações e DTs",
+      "detalhes": [
+        "Lutador: a Guarda Aberta soma Defesa quando você luta sem armadura, sem malha e sem escudo, no mesmo tanto que uma armadura da sua faixa daria. A ficha calcula sozinha.",
+        "Escudos dão menos Defesa (de +1 a +3, e +3 a +5 nas Relíquias), e a raridade escolhida na compra soma só metade no escudo. Armadura e escudo juntos ainda protegem bem, mas o inimigo volta a ter chance.",
+        "Invocações do Invocador acompanham o seu nível na Defesa, como quem veste armadura. Use o botão Do Catálogo para criar a invocação com a conta nova.",
+        "Do nível 15 em diante, as DTs das criaturas e as DTs de cena acompanham o grau de perícia que o nível costuma ter. Quem treinou a resistência passa umas três vezes em quatro; quem nunca treinou vai precisar de ajuda."
+      ]
+    },
+    {
       "id": "2026-11-11-escala-de-armaduras",
       "data": "2026-11-11",
       "tipo": "melhoria",
@@ -984,74 +1052,6 @@
       "detalhes": [
         "O limite do Vazio agora é \"não cria matéria nem vida\". O clone e a criatura que o Vazio convoca são ausência com contorno: não comem, não respiram e, quando somem, não deixam corpo nem resto.",
         "Os números das duas magias continuam os mesmos."
-      ]
-    },
-    {
-      "id": "2026-10-20-sintonizador-catalisador",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Sintonizador: o catalisador agora tem regra",
-      "detalhes": [
-        "O catalisador é um objeto seu, como uma pedra, um relógio parado ou um osso, sintonizado em dez minutos a um Fluxo diferente do seu nativo. Ele não tem preço nem raridade, e se quebrar ou sumir você sintoniza outro.",
-        "Preparado é o catalisador sintonizado, ativo é o que a fusão usa agora, e desativado é o que foi gasto numa fusão. Na aba Magias dá para marcar o catalisador como gasto e reativar depois dos dez minutos.",
-        "A Tecnologia só serve de catalisador quando o Mestre a instala na sua ficha, e assim a fusão Programação passa a funcionar. A aba Magias mostra só as fusões que você aprendeu.",
-        "Trocar o catalisador ativo custa uma Ação de Movimento até o nível 14. No nível 20, você passa a reativar um catalisador gasto na hora, uma vez por sessão. Religação, Dupla Frequência, Frequência Protetora e Descarga ganharam textos mais claros.",
-        "A modificação de Loja que recupera Mana passou a se chamar Condensador de Mana."
-      ]
-    },
-    {
-      "id": "2026-10-20-cartista-cartas-e-vagas",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Cartista Arcano: o que é carta e até onde vai o baralho",
-      "detalhes": [
-        "Cada magia que você conhece é uma carta, e jogar a carta é conjurar a magia pagando a Mana dela. A carta comum arremessada (Cartas Afiadas) é um ataque de Pontaria a até 9 m, com dano de Corte e sem custo de Mana.",
-        "As vagas do Cartista só guardam magias de 1º e 2º círculo, mesmo em cima de outra classe que conjura. A aba Magias avisa quando a vaga que sobrou é dessas.",
-        "O baralho chega a 8 cartas no nível 30, e o limite de 4 do mesmo círculo começa no 25. O estágio do nível 20 do Baralho Arcano agora dá a 6ª carta e barateia a primeira carta de 1º círculo de cada rodada.",
-        "O Arcano Absoluto, a Roda da Fortuna, os Dados Viciados, o Imperador, o Enforcado e o Mundo ganharam textos mais claros."
-      ]
-    },
-    {
-      "id": "2026-10-20-interceptador-pacote-desde-o-nivel-1",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Interceptador: a interceptação vem desde o nível 1",
-      "detalhes": [
-        "O Pacote Descartado virou habilidade do nível 1, então todo Interceptador já intercepta desde o começo. Se você tinha escolhido o Pacote como poder, essa vaga voltou e dá para escolher outro, como o novo Ruído Branco.",
-        "Contra poder de criatura que vem de Fluxo natural, a DT é a DT padrão do VD dela: 15 + metade do VD.",
-        "A Quarentena Arcana e o Apagão Local poupam quem você escolher. A Quarentena agora dá -2 no teste de conjuração de quem está dentro e +2 para você interceptar o que sair dali.",
-        "No nível 18 entrou a Blindagem de Malha: +2 na Defesa e nos testes de resistência contra magia natural.",
-        "Na aba Magias, a interceptação aceita os 10 círculos e o VD de uma criatura, soma o +2 do nível 10, desconta a Mana do Pacote e tem um interruptor para o Acesso Administrador."
-      ]
-    },
-    {
-      "id": "2026-10-20-invocador-pacto-de-fluxo",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Invocador: as invocações agora têm regra de mesa",
-      "detalhes": [
-        "As invocações são feitas do seu Fluxo nativo e atacam com o seu teste de conjuração, contra a Defesa do alvo. A aba Magias mostra esse bônus como Ataque das invocações.",
-        "Até duas ficam em cena ao mesmo tempo, e as outras esperam guardadas. Em combate, elas agem logo depois do seu turno, cada uma com as próprias ações.",
-        "Manter as invocações não custa Mana. Quando uma cai a 0 de Vida, ela se desfaz e volta com a Vida cheia no próximo descanso longo.",
-        "A Presa Paralisante da Aranha Tecelã agora é resistida com Fortitude contra o total do ataque. Também foram corrigidos a Fera, o Olhos Compartilhados, o Chamado Rápido, o Sacrifício e a Essência Adaptável.",
-        "O Livro do Mestre passou a trazer as 30 fichas do Catálogo de Invocações."
-      ]
-    },
-    {
-      "id": "2026-10-20-ataque-e-resistencia-nas-magias",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Ficha",
-      "titulo": "Magia de ataque e magia de efeito, cada uma com a sua rolagem",
-      "detalhes": [
-        "Magia de ataque acerta ou erra contra a Defesa do alvo, como um golpe, e o dano entra inteiro. Quando ela lista Reflexos, Fortitude ou Vontade, essa resistência serve só para o efeito que vem junto com o dano, como a condição ou o empurrão.",
-        "Magia de efeito não olha a Defesa: o alvo rola a resistência contra o seu total e, se passar, sofre metade do dano.",
-        "Na aba Magias, o cartão mostra qual é o caso, o campo de Defesa do alvo aparece só nas magias de ataque, e o resultado da conjuração diz o que o alvo precisa rolar.",
-        "As Elementais Impacto, Rajada, Lança, Aríete e Julgamento dos Elementos passaram a ser magias de efeito, porque já reduziam o dano à metade quando o alvo resistia."
       ]
     }
   ]

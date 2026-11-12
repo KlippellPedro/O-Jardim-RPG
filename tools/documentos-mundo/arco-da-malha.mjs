@@ -77,7 +77,7 @@ const pagina2 = () => `
       <tr><td>A oferenda sem resposta</td><td>Uma oferenda ao Fluxo da Comunicação passa no teste, mas só a dádiva comum chega, nunca a ampliada. Um sucesso por 5 ou mais traz um sinal de verdade: uma palavra entrecortada, “… pacto … não …”.</td><td>A deidade responde pelo único fio que a Malha ainda não cortou, e é um fio fraco.</td></tr>
       <tr><td>Os bilhetes de Tomé Quintal</td><td>Um vilarejo que parou de falar em voz alta. Cada pessoa tem uma pedra de escrever no pescoço.</td><td>As palavras chegam pela metade porque a Comunicação é filtrada.</td></tr>
       <tr><td>As deidades que se calaram</td><td>Em três cidades, o clero das deidades vizinhas relata o mesmo silêncio, a mesma semana.</td><td>Não foi um castigo: foi um desligamento.</td></tr>
-      <tr><td>A treliça azul</td><td>Quem tem Ressonância na DT 40 sente por baixo do chão uma malha de pontos de luz, geométrica demais para ser natural.</td><td>É a Malha, e cada ponto de luz é um Nó.</td></tr>
+      <tr><td>A treliça azul</td><td>Quem tem Ressonância na DT 48 sente por baixo do chão uma malha de pontos de luz, geométrica demais para ser natural.</td><td>É a Malha, e cada ponto de luz é um Nó.</td></tr>
     </tbody>
   </table>
 
@@ -118,13 +118,13 @@ const pagina3 = () => `
   <p>O primeiro ponto da Malha fica numa antena de cobre no meio de uma praça pública, disfarçada de fonte. Ela lê, em alcance Imenso, qualquer padrão de Fluxo natural. Para quebrá-la sem acionar o alarme é preciso silenciar a praça, e o jeito mais barato é não usar Fluxo nenhum.</p>
   <ul>
     <li><strong>A leitura:</strong> toda vez que um personagem usa um poder de Fluxo natural a menos de 30 m da antena, pinte uma parte do relógio da Malha.</li>
-    <li><strong>A quebra:</strong> Atletismo, Força ou ataque físico na DT 45 contra o núcleo da fonte, uma Ação Padrão, sem poderes de Fluxo. O Físico tem vantagem sobre a A.X.I.S: use isso.</li>
+    <li><strong>A quebra:</strong> Atletismo, Força ou ataque físico na DT 53 contra o núcleo da fonte, uma Ação Padrão, sem poderes de Fluxo. O Físico tem vantagem sobre a A.X.I.S: use isso.</li>
     <li><strong>O guarda:</strong> dois Soldados-Máscara vigiam a praça. Eles não atacam por suspeita: perguntam o nome, e quem mente em voz alta é registrado.</li>
   </ul>
 
   ${ficha('Soldado-Máscara da AstraTech', { vd: 48, papel: 'padrao', arquetipo: 'comum', golpes: [['Punho de cristal', 'impacto']], rotulo: 'inimigo padrão', extras: [
     '<strong>A máscara:</strong> brilha como veias azuis. Um Soldado-Máscara que veja um personagem usar um poder de Fluxo natural o registra: o personagem perde uma vantagem à escolha do Mestre até o fim da cena, e o relógio da Malha ganha uma parte.',
-    '<strong>Sem identidade:</strong> a máscara reescreve quem a usa. Se o Soldado-Máscara cair, a máscara continua tocando a mesma frase que o dono dizia, e quem escutar tem 1d6 de Sanidade perdida (Vontade na DT 40 evita).',
+    '<strong>Sem identidade:</strong> a máscara reescreve quem a usa. Se o Soldado-Máscara cair, a máscara continua tocando a mesma frase que o dono dizia, e quem escutar tem 1d6 de Sanidade perdida (Vontade na DT 48 evita).',
     '<strong>Fraqueza:</strong> ataques sem Fluxo natural ignoram o registro dele.',
   ] })}
 
@@ -152,8 +152,8 @@ const pagina4 = () => `
   <table>
     <thead><tr><th>Nó</th><th>O que é</th><th>Como se quebra</th><th>O que o grupo ganha</th></tr></thead>
     <tbody>
-      <tr><td>2 · O Nó das Cartas</td><td>Um ponto onde toda palavra escrita desaparece da página.</td><td>Escrever de próprio punho uma verdade e entregá-la em voz alta a um aliado (Diplomacia na DT 45).</td><td>O grupo volta a conseguir ler cartas no Galho.</td></tr>
-      <tr><td>3 · O Nó dos Nomes</td><td>Um ponto que apaga o nome de quem passa.</td><td>Cada personagem diz o próprio nome para outra pessoa que o guarde (Vontade na DT 45, em grupo).</td><td>A Malha perde o nome de um personagem à escolha: o relógio recua uma parte.</td></tr>
+      <tr><td>2 · O Nó das Cartas</td><td>Um ponto onde toda palavra escrita desaparece da página.</td><td>Escrever de próprio punho uma verdade e entregá-la em voz alta a um aliado (Diplomacia na DT 53).</td><td>O grupo volta a conseguir ler cartas no Galho.</td></tr>
+      <tr><td>3 · O Nó dos Nomes</td><td>Um ponto que apaga o nome de quem passa.</td><td>Cada personagem diz o próprio nome para outra pessoa que o guarde (Vontade na DT 53, em grupo).</td><td>A Malha perde o nome de um personagem à escolha: o relógio recua uma parte.</td></tr>
       <tr><td>4 · O Nó dos Pactos</td><td>Um ponto onde acordos feitos se desfazem.</td><td>Selar de novo um pacto antigo, em voz alta e diante de testemunhas (a dádiva Palavra que Pesa serve, ou um acordo cumprido do grupo).</td><td>Keryx consegue enviar uma frase inteira ao grupo, uma vez.</td></tr>
     </tbody>
   </table>
@@ -227,7 +227,7 @@ const pagina6 = () => `
     <tbody>
       <tr><td>Começo</td><td>Os seis Nós de pé: a máscara funciona inteira.</td><td>Nada. É a luta mais difícil do arco.</td></tr>
       <tr><td>Fase 2 · quatro Nós quebrados</td><td>A Malha falha em duas das seis cidades do salão, e os painéis piscam.</td><td>Reprogramar Padrão deixa de funcionar.</td></tr>
-      <tr><td>Fase 3 · o Nó 6, a máscara</td><td>Quebrar a máscara exige um ataque físico, sem Fluxo natural, ao centro dela (DT 50, Ação Padrão).</td><td>O estoque se abre: Keryx se solta do círculo e aparece, inteira, entre Jota e o grupo.</td></tr>
+      <tr><td>Fase 3 · o Nó 6, a máscara</td><td>Quebrar a máscara exige um ataque físico, sem Fluxo natural, ao centro dela (DT 58, Ação Padrão).</td><td>O estoque se abre: Keryx se solta do círculo e aparece, inteira, entre Jota e o grupo.</td></tr>
     </tbody>
   </table>
 

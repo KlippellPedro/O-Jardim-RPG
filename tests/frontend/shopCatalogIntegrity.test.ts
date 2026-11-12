@@ -421,7 +421,8 @@ test('Frutos do Éden têm escala de Relíquia, contrajogo e três níveis de po
 // mesmo que plataforma/core/content_seed.py exige pra sincronizar o catálogo)
 // e `pre_requisitos`, quando presente, usa a mesma estrutura tipada de Legados
 // — nunca um texto solto que nenhum código consegue validar.
-const APLICACOES_VALIDAS = new Set(['armas', 'armaduras', 'escudos', 'itens gerais e magicos']);
+// 'implantes' entrou em 2026-11-12, com o grupo de modificações de implante.
+const APLICACOES_VALIDAS = new Set(['armas', 'armaduras', 'escudos', 'itens gerais e magicos', 'implantes']);
 
 const preRequisitoValido = (item: unknown): boolean => {
   if (!item || typeof item !== 'object' || Array.isArray(item)) return false;
@@ -453,8 +454,9 @@ test('modificações declaram aplicacao dentro do enum e pre_requisitos tipados 
       comPreRequisitoTipado += 1;
     }
   }
-  // As 15 modificações "marciais" com pré-requisito identificadas na auditoria, mais 5 da expansão 2026-09.
-  assert.equal(comPreRequisitoTipado, 20);
+  // As 15 modificações "marciais" com pré-requisito identificadas na auditoria, mais 5 da expansão 2026-09,
+  // mais as 23 marciais da leva de 2026-11-12 (todas com pré-requisito).
+  assert.equal(comPreRequisitoTipado, 43);
 });
 
 // Elementos e derivações são tipos de dano de golpe (Gelo, Fogo, Raio, Magma...).

@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react';
+import { ID_DO_TERMO, ancoraDoTermo } from '../../../services/termosDoJogo';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 import {
   Activity,
   Brain,
@@ -111,7 +113,7 @@ function EstagiosAflicao({ aflicao }: { aflicao: IAflicao }) {
                 </div>
               </div>
               <ul className="mt-3 space-y-1.5 text-xs leading-5 text-gray-400">
-                {efeitos.map((efeito) => <li key={efeito}>{efeito}</li>)}
+                {efeitos.map((efeito) => <li key={efeito}><TextoComTermos texto={efeito} /></li>)}
                 {estagio.drenagemAtributo ? (
                   <li className="font-semibold text-orange-200/80">Drenagem temporária: −{estagio.drenagemAtributo.valor} {estagio.drenagemAtributo.atributo}.</li>
                 ) : null}
@@ -135,7 +137,7 @@ function CardAflicao({ aflicao }: { aflicao: IAflicao }) {
   const { Icone } = config;
 
   return (
-    <article className={`relative overflow-hidden rounded-3xl border bg-[#0b0a0f]/80 shadow-[0_18px_45px_rgba(0,0,0,0.22)] ${config.borda}`}>
+    <article id={ancoraDoTermo(ID_DO_TERMO.aflicao(aflicao.id))} className={`relative overflow-hidden rounded-3xl border bg-[#0b0a0f]/80 shadow-[0_18px_45px_rgba(0,0,0,0.22)] ${config.borda}`}>
       <div aria-hidden="true" className={`pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b ${config.fundo}`} />
       <div className="relative p-5 sm:p-6">
         <header>

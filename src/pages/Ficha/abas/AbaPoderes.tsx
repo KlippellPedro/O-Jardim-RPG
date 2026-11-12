@@ -40,6 +40,8 @@ import { OcultarItemAutomaticoModal } from '../components/OcultarItemAutomaticoM
 import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 import { confirmar } from '../../../components/avisos/confirmacao';
 import { excluirDaFichaComDesfazer } from '../desfazerNaFicha';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
+import { sanidadeMaximaDaFicha } from '../../../services/sanidadeDaFichaService';
 
 interface ICustoPoder {
   recurso: TRecursoCusto;
@@ -399,7 +401,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
           mana: { campo: 'manaAtual', max: (f.derivados?.mana || character.derivados?.mana || 10) + bonusRecursoDoFruto(f, 'manaMaxima') },
           estamina: { campo: 'estaminaAtual', max: (f.derivados?.estamina || character.derivados?.estamina || 1) + bonusRecursoDoFruto(f, 'estaminaMaxima') },
           vida: { campo: 'vidaAtual', max: (f.derivados?.vida || character.derivados?.vida || 10) + bonusRecursoDoFruto(f, 'vidaMaxima') },
-          sanidade: { campo: 'sanidadeAtual', max: Number(status.sanidadeMaxima) || 100 },
+          sanidade: { campo: 'sanidadeAtual', max: sanidadeMaximaDaFicha(character) },
         };
         const regra = mapaCampo[recurso];
         if (regra) {
@@ -560,7 +562,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                           {poder.nivelAdquirido && <span className="text-[10px] text-gray-600">Nível {poder.nivelAdquirido}</span>}
                           {personalizacao && <span className="text-[9px] font-black uppercase tracking-wider text-[#c7a44c]/70">Editado por você</span>}
                         </div>
-                        <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
+                        <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400"><TextoComTermos texto={descricaoExibida} /></p>
                         {poder.tipo !== 'Passiva' && <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId !== null} className="mt-3 flex items-center gap-2 rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-2 text-xs font-bold text-[#c7a44c] disabled:cursor-wait disabled:opacity-50"><Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar poder'}</button>}
                         {ultimoUsoMsg?.id === poder.id && <p className={`mt-2 text-xs ${ultimoUsoMsg.erro ? 'text-red-400' : 'text-green-400'}`}>{ultimoUsoMsg.texto}</p>}
                       </motion.article>
@@ -651,7 +653,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                       </button>
                     </div>
                   </div>
-                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
+                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400"><TextoComTermos texto={descricaoExibida} /></p>
                   {poder.acao && <p className="mt-2 text-[11px] text-gray-500"><span className="font-bold uppercase text-gray-600">Ação:</span> {poder.acao}</p>}
                   <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId !== null} className={`mt-3 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold disabled:cursor-wait disabled:opacity-50 ${poder.estagioFruto === 'normal' ? 'border-[#c7a44c]/30 bg-[#c7a44c]/10 text-[#c7a44c]' : 'border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-200'}`}>
                     <Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar poder'}

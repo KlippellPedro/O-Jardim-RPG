@@ -448,7 +448,7 @@ const redemoinho3 = () => `
       <thead><tr><th>1d6</th><th>O que acontece</th></tr></thead>
       <tbody>
         <tr><td>1</td><td>Um tripulante tropeça numa corda e deixa cair um balde. Pinte uma parte do relógio.</td></tr>
-        <tr><td>2</td><td>Do navio que gira sobe uma voz que chama o nome de um personagem. Vontade na DT 30 ou responder em voz alta.</td></tr>
+        <tr><td>2</td><td>Do navio que gira sobe uma voz que chama o nome de um personagem. Vontade na DT 37 ou responder em voz alta.</td></tr>
         <tr><td>3</td><td>Uma gaivota pousa no mastro. Ela é a primeira em seis semanas, e ninguém sabe o que isso quer dizer.</td></tr>
         <tr><td>4</td><td>Mica puxa a manga de alguém e aponta: há gente viva nos destroços da Roda.</td></tr>
         <tr><td>5</td><td>O vento muda. Para quem estiver com vela alta, é preciso baixar sem barulho.</td></tr>
@@ -600,7 +600,7 @@ const leviata3 = () => `
   )}
 
   <h2>A ficha</h2>
-  <p>Use a ficha de <strong>Vaelthor, o Leviatã Espelhado</strong> do Bestiário: VD 45, Vida 1.185, Defesa 44. Acrescente à Sessão com a visibilidade <em>Parcial</em>, para a mesa ver só o estado da Vida. Os números do golpe, a DT 30 do Maremoto e a DT 37 do Reflexo Adiantado estão na ficha.</p>
+  <p>Use a ficha de <strong>Vaelthor, o Leviatã Espelhado</strong> do Bestiário: VD 45, Vida 1.185, Defesa 44. Acrescente à Sessão com a visibilidade <em>Parcial</em>, para a mesa ver só o estado da Vida. Os números do golpe, a DT 38 do Maremoto e a DT 45 do Reflexo Adiantado estão na ficha.</p>
 
   ${caixa('As duas fases', `
     <table>
@@ -615,7 +615,7 @@ const leviata3 = () => `
   <ul>
     <li><strong>Primeira rodada:</strong> o grupo, com a astrônoma, escolhe um primeiro golpe. Quem acerta a primeira rodada define o tom: tiros de longe contra o reflexo, ou uma abordagem corpo a corpo no lombo.</li>
     <li><strong>Fase 1:</strong> luta de movimento. Vaelthor evita o barulho, não o sangue: um ferido aberto faz ele se virar.</li>
-    <li><strong>Fase 2:</strong> a água vira vidro. Quem estiver no barco enxerga o próprio reflexo se mexer antes: use isso como fonte de pistas. Quem falhar na Vontade DT 37 ataca o próprio reflexo e perde a ação.</li>
+    <li><strong>Fase 2:</strong> a água vira vidro. Quem estiver no barco enxerga o próprio reflexo se mexer antes: use isso como fonte de pistas. Quem falhar na Vontade DT 45 ataca o próprio reflexo e perde a ação.</li>
     <li><strong>Fase 3:</strong> o mar volta a ser água. Os lacaios (reflexos de pescadores mortos) tentam puxar os feridos para baixo, e é a hora do último golpe.</li>
   </ul>
 

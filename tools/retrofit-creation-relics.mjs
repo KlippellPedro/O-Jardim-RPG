@@ -179,7 +179,7 @@ const novas = {
     titulo: 'Escudo de Svalinn',
     base: {
       preco: { 'Fragmentos de Estrela': 400 }, raridade: 'reliquia da criacao', subtipo: 'marcial',
-      categoria_protecao: 'escudo', bonus: '+14', penalidade: '-6', material: 'Placa do Escudo Solar', espacos: 1,
+      categoria_protecao: 'escudo', bonus: '+5', penalidade: '-6', material: 'Placa do Escudo Solar', espacos: 1,
     },
   },
   'reliquia-ilha-avalon': {
@@ -253,7 +253,7 @@ const novas = {
     titulo: 'Escudo de Ajax',
     base: {
       preco: { 'Fragmentos de Estrela': 420 }, raridade: 'reliquia da criacao', subtipo: 'marcial',
-      categoria_protecao: 'escudo', bonus: '+13', penalidade: '-5', material: 'Sete camadas de couro de boi', espacos: 1,
+      categoria_protecao: 'escudo', bonus: '+5', penalidade: '-5', material: 'Sete camadas de couro de boi', espacos: 1,
     },
   },
   'reliquia-escudo-solar-ra': {
@@ -261,7 +261,7 @@ const novas = {
     titulo: 'Escudo Solar de Rá',
     base: {
       preco: { 'Fragmentos de Estrela': 480 }, raridade: 'reliquia da criacao', subtipo: 'marcial',
-      categoria_protecao: 'escudo', bonus: '+12', penalidade: '-4', material: 'Disco de ouro polido', espacos: 1,
+      categoria_protecao: 'escudo', bonus: '+4', penalidade: '-4', material: 'Disco de ouro polido', espacos: 1,
     },
   },
   'reliquia-broquel-bagda': {
@@ -269,7 +269,7 @@ const novas = {
     titulo: 'Broquel do Ladrão de Bagdá',
     base: {
       preco: { 'Fragmentos de Estrela': 360 }, raridade: 'reliquia da criacao', subtipo: 'simples',
-      categoria_protecao: 'escudo', bonus: '+10', penalidade: '0', material: 'Latão gravado', espacos: 1,
+      categoria_protecao: 'escudo', bonus: '+3', penalidade: '0', material: 'Latão gravado', espacos: 1,
     },
   },
   'reliquia-aspis-heracles': {
@@ -277,7 +277,7 @@ const novas = {
     titulo: 'Aspis de Héracles',
     base: {
       preco: { 'Fragmentos de Estrela': 440 }, raridade: 'reliquia da criacao', subtipo: 'marcial',
-      categoria_protecao: 'escudo', bonus: '+13', penalidade: '-4', material: 'Bronze cravejado', espacos: 1,
+      categoria_protecao: 'escudo', bonus: '+5', penalidade: '-4', material: 'Bronze cravejado', espacos: 1,
     },
   },
   'reliquia-escudo-iris': {
@@ -285,7 +285,7 @@ const novas = {
     titulo: 'Escudo de Íris',
     base: {
       preco: { 'Fragmentos de Estrela': 460 }, raridade: 'reliquia da criacao', subtipo: 'marcial',
-      categoria_protecao: 'escudo', bonus: '+12', penalidade: '-2', material: 'Vidro em sete cores', espacos: 1,
+      categoria_protecao: 'escudo', bonus: '+4', penalidade: '-2', material: 'Vidro em sete cores', espacos: 1,
     },
   },
   'reliquia-pernas-talos': {

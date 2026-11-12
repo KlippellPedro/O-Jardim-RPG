@@ -23,7 +23,7 @@ export const BONUS_DE_OFERENDA_DO_FIEL = 2;
 export const TABELA_DEVOCAO: FaixaDevocao[] = [
   { nivel: 0, titulo: 'Sem devoção', efeito: 'A divindade na ficha diz em que o personagem acredita, e só.' },
   { nivel: 1, titulo: 'Fiel', efeito: `+${BONUS_DE_OFERENDA_DO_FIEL} no teste de oferenda ao Fluxo da sua divindade.` },
-  { nivel: 2, titulo: 'Devoto', efeito: 'A dádiva desse Fluxo dura até o fim da sessão, mesmo depois de um descanso longo.' },
+  { nivel: 2, titulo: 'Devoto', efeito: 'A dádiva desse Fluxo dura até o fim da sessão, mesmo depois de um descanso completo.' },
   { nivel: 3, titulo: 'Consagrado', efeito: 'A dádiva desse Fluxo vem ampliada, como para quem carrega o Fruto do mesmo Fluxo. As duas ampliações não se somam.' },
 ];
 

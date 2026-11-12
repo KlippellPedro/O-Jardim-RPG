@@ -56,6 +56,10 @@ import { VeiculoModal } from '../components/bens/VeiculoModal';
 import { sfx } from '../../../utils/audioSynth';
 import '../components/equiparItem.css';
 import { confirmar } from '../../../components/avisos/confirmacao';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
+import { custoProprioDoImplante, ehImplante, faixaDaSanidade, resumirSanidadeDosImplantes } from '../../../services/implantesService';
+import { sanidadeMaximaDaFicha } from '../../../services/sanidadeDaFichaService';
+import { avisar } from '../../../components/avisos/avisos';
 
 interface IInventoryItem {
   id: string;
@@ -457,6 +461,14 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
 
   // Implantes vivem instalados no corpo, não numa mochila: seção própria em
   // vez de entrar na lista agrupada por local de armazenamento.
+  const sanidadeDosImplantes = useMemo(
+    () => resumirSanidadeDosImplantes(character.inventarioCentral || [], character.ficha || {}),
+    [character.inventarioCentral, character.ficha],
+  );
+  /** O que a peça cobra nesta ficha: instalada, o valor de fato; guardada, o da tabela. */
+  const custoNaFicha = (item: IInventoryItem) => (
+    sanidadeDosImplantes.implantes.find((implante) => implante.itemId === String(item.id))?.cobrado ?? custoProprioDoImplante(item)
+  );
   const implantes = useMemo(
     () => inventario.filter((item) => item.categoria === 'implante'),
     [inventario],
@@ -602,6 +614,39 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
 
   const [equipadoAgora, setEquipadoAgora] = useState<{ id: string; chave: number } | null>(null);
 
+  const sanidadeComImplante = (id: string, instalado: boolean) => sanidadeMaximaDaFicha({
+    ...character,
+    inventarioCentral: (character.inventarioCentral || []).map((bruto: any) => (
+      String(bruto?.item_id) === String(id) ? { ...bruto, dados: { ...(bruto?.dados || {}), equipado: instalado } } : bruto
+    )),
+  });
+
+  const avisarSanidadeDoImplante = (alvo: IInventoryItem) => {
+    const instalando = !alvo.equipado;
+    const antes = sanidadeComImplante(alvo.id, Boolean(alvo.equipado));
+    const depois = sanidadeComImplante(alvo.id, instalando);
+    if (antes === depois) return;
+    if (instalando) {
+      const faixaAntes = faixaDaSanidade(antes);
+      const faixaDepois = faixaDaSanidade(depois);
+      const atual = Number(character.ficha?.status?.sanidadeAtual ?? antes);
+      if (onUpdate && atual > depois) onUpdate(['ficha', 'status', 'sanidadeAtual'], depois);
+      const faixa = faixaDepois !== faixaAntes
+        ? ` Com esse teto, o melhor estado da sua Sanidade passa a ser ${faixaDepois}.`
+        : '';
+      const limite = depois <= 1 ? ' O corpo passou do limite que a mente aguenta: avise o Mestre.' : '';
+      avisar.info(`${alvo.nome} instalado. Sanidade máxima ${antes} → ${depois}.${faixa}${limite}`, {
+        titulo: 'Implante instalado',
+        chave: `implante-sanidade:${alvo.id}`,
+      });
+      return;
+    }
+    avisar.info(`${alvo.nome} removido. Sanidade máxima ${antes} → ${depois}. A Sanidade perdida volta com descanso.`, {
+      titulo: 'Implante removido',
+      chave: `implante-sanidade:${alvo.id}`,
+    });
+  };
+
   const toggleEquipar = (id: string) => {
     const alvo = inventario.find((item) => item.id === id);
     if (!alvo) return;
@@ -610,6 +655,8 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       return;
     }
     setFeedbackEquipamento(null);
+    // Implante cobra Sanidade máxima enquanto está instalado: a ficha conta antes e depois e avisa.
+    if (ehImplante(alvo)) avisarSanidadeDoImplante(alvo);
     // Equipar encaixa com um clangor e um clarão no cartão; guardar é mais suave.
     if (alvo.equipado) {
       sfx.play('close');
@@ -1078,6 +1125,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                 </h3>
                 <p className="font-mono text-xs text-cyan-100/50">
                   // {implantes.filter((item) => item.equipado).length} de {implantes.length} instalado(s)
+                  {sanidadeDosImplantes.total > 0 ? ` · Sanidade máxima −${sanidadeDosImplantes.total}` : ''}
                 </p>
               </div>
             </div>
@@ -1113,7 +1161,10 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                       </button>
                     </div>
                   </div>
-                  {item.descricao && <p className="mt-1 text-xs leading-relaxed text-gray-400">{item.descricao}</p>}
+                  {item.descricao && <p className="mt-1 text-xs leading-relaxed text-gray-400"><TextoComTermos texto={item.descricao} /></p>}
+                  <p className="mt-2 font-mono text-[10px] font-bold uppercase tracking-wide text-fuchsia-300/90" title="Enquanto estiver instalado, o implante tira esse tanto da Sanidade máxima.">
+                    Sanidade máxima −{custoNaFicha(item)}{item.equipado ? '' : ' ao instalar'}
+                  </p>
                   {atributos.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {atributos.map((atributo) => (

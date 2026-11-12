@@ -33,7 +33,7 @@ export const REGRAS_TOUR_STEPS: GuidedTourStep[] = [
   {
     id: 'legenda',
     titulo: 'Nem todo tópico é igual',
-    descricao: '"Comece por aqui" marca o ponto de partida, "Regra oficial" explica um sistema do jogo, "Catálogo oficial" reúne listas grandes para consultar, e "Somente Mestre" só aparece para quem conduz a mesa. As caixas coloridas dentro do texto (Exemplo, Atenção, Dica de mesa e Regra) também estão explicadas aqui.',
+    descricao: '"Comece por aqui" marca o ponto de partida, "Núcleo" é o que todo jogador usa desde a primeira sessão, "Módulo" é regra que a mesa liga quando a cena pede, "Catálogo oficial" reúne listas grandes para consultar, e "Somente Mestre" só aparece para quem conduz a mesa. As caixas coloridas dentro do texto (Exemplo, Atenção, Dica de mesa e Regra) também estão explicadas aqui.',
     alvos: ['[data-tour="regras-legenda"]'],
   },
   {

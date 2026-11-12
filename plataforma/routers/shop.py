@@ -9,7 +9,7 @@ from psycopg.types.json import Jsonb
 
 from core import live_session
 from core.audit import record_audit
-from core.character_summary import _atende_requisito_legado
+from core.character_summary import _atende_requisito_legado, _atributo_efetivo
 from core.curva_criatura import vida_de_aliado
 from core.database import Database
 from core.notifications import campaign_member_ids, character_owner_ids, notify
@@ -489,13 +489,13 @@ def _require_catalog_character_requirements(item: dict[str, Any], character: dic
     infracoes = []
     if isinstance(required_attributes, dict):
         sheet = character.get("ficha") if isinstance(character.get("ficha"), dict) else {}
-        attributes = sheet.get("atributosFinais") or sheet.get("atributos") or {}
-        attributes = attributes if isinstance(attributes, dict) else {}
+        finals = sheet.get("atributosFinais") if isinstance(sheet.get("atributosFinais"), dict) else {}
         for attribute, minimum in required_attributes.items():
             if not isinstance(minimum, int) or isinstance(minimum, bool):
                 continue
-            current = attributes.get(attribute)
-            current = current if isinstance(current, (int, float)) and not isinstance(current, bool) else 0
+            # O mesmo valor que a ficha usa: atributo final mais o ajuste da raça
+            # (com o teto racial). Sem o atributo na ficha, conta como 0.
+            current = _atributo_efetivo(sheet, attribute) if attribute in finals else 0
             if current < minimum:
                 label = _ATTRIBUTE_LABELS.get(attribute, attribute)
                 infracoes.append({
@@ -1525,6 +1525,8 @@ def purchase_batch(
                     "armas": {"arma"},
                     "armaduras": {"armadura"},
                     "escudos": {"armadura"},
+                    # 2026-11-12: modificações de implante só entram em implante.
+                    "implantes": {"implante"},
                 }
                 if (
                     aplicacao_mod in _ALVOS_POR_APLICACAO

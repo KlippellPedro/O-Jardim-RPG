@@ -24,7 +24,8 @@ _SHOP_RARITIES = {
 # tipo de item base). Validado aqui pelo mesmo motivo de _SHOP_TYPES/_SHOP_RARITIES:
 # sem isso, um valor digitado errado nunca dá erro, só faz a modificação nunca
 # casar com nenhum item no filtro da loja (ver achado 11 da auditoria de 2026-08).
-_MODIFICATION_APPLICATIONS = {"armas", "armaduras", "escudos", "itens gerais e magicos"}
+# "implantes" entrou em 2026-11-12, com o grupo de modificações de implante.
+_MODIFICATION_APPLICATIONS = {"armas", "armaduras", "escudos", "itens gerais e magicos", "implantes"}
 
 
 def _normalize_catalog_value(value: object) -> str:

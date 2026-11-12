@@ -38,11 +38,14 @@ export interface IConteudoAutomatico {
   acao?: string;
   /** Limite de uso como o catálogo escreve ("Uma vez por cena"...). */
   usos?: string;
+  /** Detalhe da ação ("antes do ataque"). */
+  momento?: string;
 }
 
 /** Campos de uso (ação e limite) só quando existem, para não criar chaves vazias. */
-const camposDeUso = (fonte: { acao?: unknown; usos?: unknown } | null | undefined): { acao?: string; usos?: string } => ({
+const camposDeUso = (fonte: { acao?: unknown; usos?: unknown; momento?: unknown } | null | undefined): { acao?: string; usos?: string; momento?: string } => ({
   ...(typeof fonte?.acao === 'string' && fonte.acao.trim() ? { acao: fonte.acao.trim() } : {}),
+  ...(typeof fonte?.momento === 'string' && fonte.momento.trim() ? { momento: fonte.momento.trim() } : {}),
   ...(typeof fonte?.usos === 'string' && fonte.usos.trim() ? { usos: fonte.usos.trim() } : {}),
 });
 
@@ -51,12 +54,12 @@ const PASSIVA = /^passiv/i;
 /** Ação e limite vigentes de uma habilidade no nível: o último estágio alcançado
  * que pede ação (os estágios se somam, e o que vale na mesa é o mais recente que
  * se usa), ou a própria habilidade. */
-export function usoHabilidadeNoNivel(habilidade: IHabilidadeClasse, nivel: number): { acao?: string; usos?: string } {
+export function usoHabilidadeNoNivel(habilidade: IHabilidadeClasse, nivel: number): { acao?: string; usos?: string; momento?: string } {
   const estagios = [...(habilidade.estagios || [])]
     .filter((estagio) => estagio.nivel <= nivel)
     .sort((a, b) => b.nivel - a.nivel);
   const ativo = estagios.find((estagio) => estagio.acao && !PASSIVA.test(estagio.acao));
-  if (ativo) return camposDeUso({ acao: ativo.acao, usos: ativo.usos || habilidade.usos });
+  if (ativo) return camposDeUso({ acao: ativo.acao, momento: ativo.momento, usos: ativo.usos || habilidade.usos });
   if (habilidade.acao) return camposDeUso(habilidade);
   return camposDeUso(estagios[0] || habilidade);
 }
@@ -268,9 +271,16 @@ const CAMPOS_FICHA_TECNICA: Array<keyof IFichaTecnicaClasse> = ['acao', 'alcance
 
 /** Ação, alcance, duração e companhia numa linha só, para a ficha mostrar junto
  * do texto do efeito. Vazio quando o efeito não declara nenhum deles. */
+/** "Ação Livre · antes do ataque": o tipo de ação com o momento, quando há. */
+export function rotuloDaAcao(efeito: { acao?: unknown; momento?: unknown } | null | undefined): string {
+  const acao = typeof efeito?.acao === 'string' ? efeito.acao.trim() : '';
+  const momento = typeof efeito?.momento === 'string' ? efeito.momento.trim() : '';
+  return acao && momento ? `${acao} · ${momento}` : acao || momento;
+}
+
 export function resumoFichaTecnica(efeito: IFichaTecnicaClasse | undefined): string {
   if (!efeito) return '';
-  return CAMPOS_FICHA_TECNICA.map((campo) => efeito[campo]).filter(Boolean).join(' · ');
+  return CAMPOS_FICHA_TECNICA.map((campo) => (campo === 'acao' ? rotuloDaAcao(efeito) : efeito[campo])).filter(Boolean).join(' · ');
 }
 
 function comFichaTecnica(texto: string, efeito: IFichaTecnicaClasse): string {

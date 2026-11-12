@@ -205,7 +205,8 @@ class ConcessaoMestreTests(unittest.TestCase):
         self.assertEqual(aliado["nome"], "Fantasma de Naufrágio")
         self.assertEqual(aliado["nivel"], 33)
         self.assertEqual(aliado["movimento"], "18m (Voo)")
-        self.assertEqual(aliado["defesa"], 27)
+        # 27 até o ajuste de acerto contra criaturas (Defesa da curva, ajusteDeDefesaAcerto +12).
+        self.assertEqual(aliado["defesa"], 39)
         self.assertIn("Ar", aliado["ataquePrincipal"])
         self.assertTrue(aliado["emCena"], "aliado de combate entra em cena, nao lotado na base")
 

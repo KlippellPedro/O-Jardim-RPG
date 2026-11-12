@@ -9,6 +9,7 @@ import { PAPEIS_CRIATURA, type PapelCriatura } from '../../../services/curvaCria
 import { EditorLootCampanha } from './EditorLootCampanha';
 import { confirmar } from '../../../components/avisos/confirmacao';
 import { gatilhoDaFase } from '../../../utils/fasesDeChefe';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 
 interface CriaturaDetalheProps {
   /** Para buscar a tabela de loot, que só o Mestre recebe. */
@@ -291,7 +292,7 @@ export const CriaturaDetalhe: React.FC<CriaturaDetalheProps> = ({ campanhaId, mo
                 {habilidades.map((habilidade, indice) => (
                   <li key={indice} className="rounded-lg border border-white/[0.07] bg-black/25 px-3 py-2.5 text-sm leading-6 text-white/70">
                     {habilidade.nome ? <strong className="block text-white">{habilidade.nome}</strong> : null}
-                    {habilidade.regra}
+                    <TextoComTermos texto={habilidade.regra} />
                   </li>
                 ))}
               </ul>

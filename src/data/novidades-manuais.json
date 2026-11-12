@@ -16,6 +16,74 @@
       ]
     },
     {
+      "id": "2026-11-12-modificacoes-por-tipo",
+      "data": "2026-11-12",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "52 modificações novas, e modificação para implante",
+      "detalhes": [
+        "Armas ganharam 15: Rajada e Calibrada para quem atira, Trespassante e Ceifadora para quem corta, Fantasma, que atravessa armadura uma vez por cena, e outras.",
+        "Armaduras ganharam 11, como Sentinela, que impede você de ficar Surpreendido, Pluma, que soma Movimento, e Fortaleza Viva, que zera o dano de um ataque por cena.",
+        "Escudos ganharam 8, como Escudo de Parede, Muralha, que protege os aliados ao lado, e Égide, que leva você até um aliado atacado.",
+        "Itens gerais e mágicos ganharam 10, como Amuleto da Sorte, Canalizador para conjuradores e Ampulheta, que deixa refazer uma rolagem por descanso.",
+        "Implantes agora aceitam modificações: Pele Sintética esconde o metal, Redundância mantém a peça ligada e Amortecedor Neural baixa em 3 o custo de Sanidade do implante.",
+        "Ao comprar uma modificação, a Loja só oferece os itens que aceitam aquela modificação, e a aba Modificações tem o filtro Implantes."
+      ]
+    },
+    {
+      "id": "2026-11-12-implantes-custam-sanidade",
+      "data": "2026-11-12",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Implantes cobram Sanidade máxima, e chegaram 17 novos",
+      "detalhes": [
+        "Cada implante instalado tira um pedaço da sua Sanidade máxima enquanto estiver no corpo: 2 num Comum, 4 num Incomum, 7 num Raro, 12 num Épico, 18 num Lendário e 25 numa Relíquia. Peça que mexe no cérebro ou nos nervos cobra 3 a mais.",
+        "Com a Sanidade máxima mais baixa, o melhor estado da sua Sanidade também cai: 75 ou menos deixa você Abalado no melhor dos dias, 50 ou menos Enlouquecendo. Remover a peça devolve o teto, e a Sanidade perdida volta com descanso.",
+        "A ficha faz a conta: cada implante mostra quanto custa, a seção mostra o total, e ao instalar um aviso diz como a Sanidade máxima ficou. O Autômato paga metade.",
+        "17 implantes novos, de Comum a Lendário: Lâminas de Antebraço, Filtro de Dor, Coração Reserva, Mira Sináptica, Projetor de Silhueta, Córtex Paralelo, Exoesqueleto de Guerra e outros. A Âncora de Identidade alivia o custo de todos os outros.",
+        "Toda peça agora diz o sistema que ocupa: Neural, Sentidos, Membros, Órgãos ou Pele e esqueleto."
+      ]
+    },
+    {
+      "id": "2026-11-12-termos-que-levam-ao-livro",
+      "data": "2026-11-12",
+      "tipo": "novo",
+      "area": "Livro",
+      "titulo": "Condições e regras citadas no texto viram link",
+      "detalhes": [
+        "Quando uma habilidade, magia, item ou criatura cita uma condição (Caído, Amedrontado, Enfraquecido...), uma aflição ou uma regra (vantagem, Morrendo, Cansaço, Reação, Ação Padrão...), o nome aparece sublinhado de leve.",
+        "Clicar abre o Livro numa guia nova, já no lugar que explica o efeito, e o cartão brilha um instante para você achar. A página em que você estava fica onde estava.",
+        "Pousando o mouse no nome, aparece um resumo do que ele faz, sem precisar abrir nada.",
+        "Funciona na ficha (Progressão, Poderes, Habilidades, Magias, Inventário e Modo mesa), nas páginas de classe e raça, no catálogo de magias, nos Legados, na Loja, nas fichas de criatura e no próprio texto do Livro."
+      ]
+    },
+    {
+      "id": "2026-11-12-acoes-e-livro-mais-claros",
+      "data": "2026-11-12",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Ações, limites de uso e Livro mais fáceis de ler",
+      "detalhes": [
+        "Toda habilidade e todo poder dizem a ação que pedem num de sete tipos: Passivo, Ação Livre, Ação de Movimento, Ação Padrão, Ação Completa, Reação ou Fora de combate. Quando o momento importa, ele vem junto, como em \"Ação Livre · antes do ataque\".",
+        "Os limites de uso ficaram em cinco: por rodada, por turno, por cena, por descanso e por sessão. O que antes dizia \"por combate\" agora diz \"por cena\", e \"descanso longo\" virou só \"descanso\". No Modo mesa, cada um tem o nome certo e os botões Nova cena, Descansei e Nova sessão zeram os contadores.",
+        "No Livro de Regras, cada tópico mostra se é do Núcleo, o que todo jogador usa desde a primeira sessão, ou um Módulo, que entra quando a mesa quiser. Os 18 tópicos do Núcleo trazem uma etiqueta na lista de tópicos.",
+        "O Mestre ganhou uma folha de regras de mesa em PDF, com duas páginas para imprimir: teste, turno, ataque, reações, magia, queda, descanso, Cansaço e as condições que mais aparecem."
+      ]
+    },
+    {
+      "id": "2026-11-12-revisao-de-balanceamento",
+      "data": "2026-11-12",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Lutador sem armadura, escudos, invocações e DTs",
+      "detalhes": [
+        "Lutador: a Guarda Aberta soma Defesa quando você luta sem armadura, sem malha e sem escudo, no mesmo tanto que uma armadura da sua faixa daria. A ficha calcula sozinha.",
+        "Escudos dão menos Defesa (de +1 a +3, e +3 a +5 nas Relíquias), e a raridade escolhida na compra soma só metade no escudo. Armadura e escudo juntos ainda protegem bem, mas o inimigo volta a ter chance.",
+        "Invocações do Invocador acompanham o seu nível na Defesa, como quem veste armadura. Use o botão Do Catálogo para criar a invocação com a conta nova.",
+        "Do nível 15 em diante, as DTs das criaturas e as DTs de cena acompanham o grau de perícia que o nível costuma ter. Quem treinou a resistência passa umas três vezes em quatro; quem nunca treinou vai precisar de ajuda."
+      ]
+    },
+    {
       "id": "2026-11-11-modo-mesa-no-seu-turno",
       "data": "2026-11-11",
       "tipo": "novo",

@@ -766,3 +766,39 @@ input[type="checkbox"]:not(.sr-only):disabled {
   cursor: not-allowed;
   opacity: 0.45;
 }
+
+/* Termos do jogo no texto (condições, aflições, mecânicas): link discreto que
+   abre o Livro numa guia nova. Sublinhado pontilhado para não pesar a leitura. */
+.termo-do-jogo {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(199, 164, 76, 0.7);
+  text-underline-offset: 0.22em;
+  border-radius: 0.2rem;
+  cursor: pointer;
+}
+.termo-do-jogo:hover {
+  color: #f3dc8f;
+  text-decoration-style: solid;
+}
+.termo-do-jogo:focus-visible {
+  outline: 2px solid #c7a44c;
+  outline-offset: 2px;
+}
+
+/* O lugar do Livro que um link de termo abriu: brilha um instante para o olho achar. */
+@keyframes alvo-do-termo {
+  0%, 35% { box-shadow: 0 0 0 2px rgba(227, 196, 111, 0.85), 0 0 24px rgba(227, 196, 111, 0.35); background-color: rgba(199, 164, 76, 0.12); }
+  100% { box-shadow: 0 0 0 2px rgba(227, 196, 111, 0), 0 0 0 rgba(227, 196, 111, 0); background-color: transparent; }
+}
+.alvo-do-termo {
+  animation: alvo-do-termo 2.6s ease-out 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .alvo-do-termo {
+    animation: none;
+    box-shadow: 0 0 0 2px rgba(227, 196, 111, 0.85);
+  }
+}

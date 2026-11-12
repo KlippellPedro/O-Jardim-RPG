@@ -21,7 +21,7 @@ import {
   FILTROS_CATALOGO,
   listarCondicoes,
 } from '../utils/catalogoCondicoes';
-import { adicionarCondicaoOficial, condicaoAtiva, obterStatusFicha } from '../../../services/statusService';
+import { adicionarCondicaoOficial, condicaoAtiva } from '../../../services/statusService';
 import { normalizarAflicoesAtivas } from '../../../services/aflicoesFichaService';
 import { AflicoesSection } from '../components/AflicoesSection';
 import { ExplicacaoCondicaoAflicao } from '../components/ExplicacaoCondicaoAflicao';
@@ -30,6 +30,7 @@ import { CatalogoAflicoes } from '../../Regras/components/CatalogoAflicoes';
 import { AmbienteSection } from '../components/AmbienteSection';
 import { LinkDaRegra } from '../../../components/ui/LinkDaRegra';
 import { normalizarAmbiente } from '../../../services/ambienteFichaService';
+import { sanidadeAtualDaFicha, sanidadeMaximaDaFicha } from '../../../services/sanidadeDaFichaService';
 
 interface AbaCondicoesProps {
   character: any;
@@ -54,7 +55,6 @@ const ESTILO_CATEGORIA: Record<ICondicaoRegra['categoria'], string> = {
 
 export const AbaCondicoes = ({ character, onUpdate, onOpenConditions }: AbaCondicoesProps) => {
   const ficha = character.ficha || {};
-  const status = obterStatusFicha(ficha);
   const [painel, setPainel] = useState<Painel>('condicoes');
   const [filtroCondicao, setFiltroCondicao] = useState<FiltroCondicao>('cena');
   const [buscaCondicao, setBuscaCondicao] = useState('');
@@ -73,8 +73,8 @@ export const AbaCondicoes = ({ character, onUpdate, onOpenConditions }: AbaCondi
   const mostraAvisoMental = buscaCondicao.trim()
     ? condicoesVisiveis.some((item) => item.categoria === 'mental')
     : filtroCondicao === 'mente';
-  const sanidadeMaxima = Math.max(1, Number(status.sanidadeMaxima) || 100);
-  const sanidadeAtual = Number(status.sanidadeAtual ?? sanidadeMaxima);
+  const sanidadeMaxima = sanidadeMaximaDaFicha(character);
+  const sanidadeAtual = sanidadeAtualDaFicha(character, sanidadeMaxima);
 
   const aplicarCondicao = (regra: ICondicaoRegra) => {
     const resultado = adicionarCondicaoOficial(condicoesAtivas, regra);

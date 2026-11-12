@@ -28,6 +28,7 @@ import {
   type IRitualCatalogo,
   type ISeloCatalogo,
 } from '../../../services/magiaService';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 
 type AbaCatalogo = 'magias' | 'rituais' | 'selos' | 'encantamentos' | 'fusoes';
 
@@ -267,7 +268,7 @@ const GrimorioDetail = ({ item, compacto = false }: { item: GrimorioItem; compac
 
       <section className="mt-6">
         <h4 className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: tema.destaque }}>Efeito</h4>
-        <p className="text-sm leading-7 text-gray-300 sm:text-[15px]">{item.efeito}</p>
+        <p className="text-sm leading-7 text-gray-300 sm:text-[15px]"><TextoComTermos texto={item.efeito} /></p>
       </section>
 
       {item.complemento?.map((campo) => (

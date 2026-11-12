@@ -1322,21 +1322,21 @@ No fim de cada fase, quem fez um feito sofre dano do tipo que fizer sentido (cor
 
 - 10 | 20 / 25 | 1d6 | 3d6
 
-- 15 | 22 / 27 | 2d6 | 5d6
+- 15 | 24 / 29 | 2d6 | 5d6
 
-- 20 | 25 / 30 | 2d6 | 6d6
+- 20 | 30 / 35 | 2d6 | 6d6
 
-- 30 | 30 / 35 | 4d6 | 10d6
+- 30 | 37 / 42 | 4d6 | 10d6
 
-- 40 | 35 / 40 | 5d6 | 7d12
+- 40 | 43 / 48 | 5d6 | 7d12
 
-- 50 | 40 / 45 | 6d6 | 9d12
+- 50 | 48 / 53 | 6d6 | 9d12
 
-- 60 | 45 / 50 | 7d6 | 10d12
+- 60 | 56 / 61 | 7d6 | 10d12
 
-- 80 | 55 / 60 | 9d6 | 12d12
+- 80 | 66 / 71 | 9d6 | 12d12
 
-- 100 | 65 / 70 | 6d12 | 15d12
+- 100 | 79 / 84 | 6d12 | 15d12
 
 ### Como termina
 
@@ -2750,9 +2750,9 @@ Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o cam
 
 - O **Despertar** só anda para frente. Depois dele a ficha não volta, então combine o acontecimento da história com o Mestre.
 
-- O **implante** é peça de máquina no corpo: pago em Créditos Sombrios, exige nível 3 ou mais e ocupa uma parte do corpo.
+- O **implante** é peça de máquina no corpo: pago em Créditos Sombrios, exige nível 3 ou mais, ocupa uma parte do corpo e tira Sanidade máxima enquanto estiver instalado.
 
-- As **oferendas** aos Fluxos rendem dádivas curtas: uma por vez, até o próximo descanso longo ou o fim da sessão.
+- As **oferendas** aos Fluxos rendem dádivas curtas: uma por vez, até o próximo descanso completo ou o fim da sessão.
 
 - A **Devoção** (0 a 3) mede o quanto o personagem vive a fé na divindade da ficha, e melhora as oferendas ao Fluxo dela.
 
@@ -2808,7 +2808,7 @@ Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feit
 
 - **O teste:** Religião ou Ressonância contra a DT Padrão do nível, com +5 na DT se a oferenda for Humilde, nenhum ajuste se for Valiosa e −3 se for Preciosa.
 
-- **O resultado:** falhar é ouvir silêncio, e a oferenda se perde. Passar rende a dádiva do Fluxo até o próximo descanso longo ou o fim da sessão, o que vier primeiro. Passar por 5 ou mais, ou tirar 20 natural, faz o Mestre acrescentar um sinal: uma visão curta, um nome, um cheiro, uma pista sobre algo ligado ao Fluxo.
+- **O resultado:** falhar é ouvir silêncio, e a oferenda se perde. Passar rende a dádiva do Fluxo até o próximo descanso completo ou o fim da sessão, o que vier primeiro. Passar por 5 ou mais, ou tirar 20 natural, faz o Mestre acrescentar um sinal: uma visão curta, um nome, um cheiro, uma pista sobre algo ligado ao Fluxo.
 
 - **Os limites:** uma oferenda por pessoa por sessão, uma dádiva ativa por vez (aceitar outra encerra a anterior) e o mesmo altar responde uma vez por mês do calendário do mundo.
 
@@ -2852,7 +2852,7 @@ A divindade que você registrou na ficha pode ser só crença, ou pode pesar. A 
 
 - 1 | Fiel | +2 no teste de oferenda ao Fluxo da sua divindade.
 
-- 2 | Devoto | A dádiva desse Fluxo dura até o fim da sessão, mesmo depois de um descanso longo.
+- 2 | Devoto | A dádiva desse Fluxo dura até o fim da sessão, mesmo depois de um descanso completo.
 
 - 3 | Consagrado | A dádiva desse Fluxo vem ampliada, como para quem carrega o Fruto do mesmo Fluxo. As duas ampliações não se somam.
 
@@ -2864,7 +2864,7 @@ A Devoção vale para o Fluxo da divindade que o personagem cultua. As travas da
 
 ### Implantes cibernéticos
 
-Enquanto o Fruto mexe na alma, o implante mexe na carne. São 35 peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.
+Enquanto o Fruto mexe na alma, o implante mexe na carne. São 52 peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.
 
 - Implante não vai na mochila. Ele fica numa seção própria do inventário, porque está instalado no corpo e ocupa uma parte dele.
 
@@ -2873,6 +2873,42 @@ Enquanto o Fruto mexe na alma, o implante mexe na carne. São 35 peças vendidas
 - O benefício vale enquanto o implante estiver funcional. Dano suficiente, campo de interferência ou sobrecarga podem desligá-lo, e a regra da peça diz quando isso acontece.
 
 - Alguns implantes cobram o próprio uso em dano interno que ignora Resistência. Esse dano faz parte do preço da peça.
+
+- Toda peça tem um sistema: Neural, Sentidos, Membros, Órgãos ou Pele e esqueleto. Ele aparece entre as etiquetas da peça na Loja.
+
+### O preço na mente
+
+Cada implante instalado tira um pedaço da Sanidade máxima, e esse pedaço fica fora enquanto a peça estiver no corpo. Quanto mais forte a peça, maior o pedaço, e o que mexe no cérebro ou nos nervos cobra 3 a mais.
+
+- Raridade da peça | Sanidade máxima | Se for neural
+
+- Comum | −2 | −5
+
+- Incomum | −4 | −7
+
+- Raro | −7 | −10
+
+- Épico | −12 | −15
+
+- Lendário | −18 | −21
+
+- Relíquia da Criação | −25 | −28
+
+- A Sanidade máxima mais baixa empurra você para as faixas de baixo da tabela de Sanidade, em Condições. Com 75 ou menos, o melhor estado possível passa a ser Abalado; com 50 ou menos, Enlouquecendo; com 25 ou menos, Ruptura. Enquanto os implantes ficarem, não há volta para cima.
+
+- Ao instalar, a Sanidade atual desce junto se passar do novo teto. Ao remover uma peça, o teto volta, mas a Sanidade perdida só volta com descanso.
+
+- Se a soma dos implantes alcançar a sua Sanidade máxima, ela para em 1, na Ruptura. É o limite do que a mente aguenta, e o Mestre decide o que acontece a partir dali.
+
+- O Autômato paga metade, arredondada para cima: o corpo dele já é máquina.
+
+- A Âncora de Identidade é a única peça que alivia as outras: com ela instalada, cada outro implante custa 2 a menos, no mínimo 1.
+
+- A ficha faz a conta sozinha. Cada implante mostra quanto custa, e o aviso da instalação diz como a Sanidade máxima ficou.
+
+**Exemplo:**
+
+Rafa instala um Braço Hidráulico (Raro, 7) e uma Mira Sináptica (Épico e neural, 15). A Sanidade máxima cai de 100 para 78, e o melhor estado continua Estável. Com um Exoesqueleto de Guerra (Lendário, 18), ela vai a 60: dali em diante, no melhor dos dias, a Sanidade de Rafa está Abalada.
 
 **Atenção:**
 
@@ -3104,10 +3140,10 @@ A Loja vende cada uma delas na categoria **Modificações**, com o preço já ap
 
 ### Catálogo por categoria
 
-Existem 63 modificações, agrupadas pela categoria do equipamento: consulte só o grupo do item que você está melhorando.
+Existem 115 modificações, agrupadas pela categoria do equipamento: consulte só o grupo do item que você está melhorando.
 
 Armas
-21 modificações · 11 comuns · 10 marciais
+36 modificações · 19 comuns · 17 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
@@ -3133,6 +3169,22 @@ Armas
 
 - De Arremesso | Comum | Técnica | 18 L | Nenhum | A arma ganha a propriedade Arremesso com alcance Curto. Voltar à mão exige buscá-la normalmente.
 
+- Bainha Rápida | Comum | Técnica | 18 L | Nenhum | Sacar ou guardar esta arma vira Ação Livre, uma vez por turno.
+
+- Desmontável | Comum | Técnica | 18 L | Nenhum | A arma se separa em peças que parecem ferramentas comuns, e uma revista comum não a reconhece. Montar ou desmontar leva um minuto.
+
+- Carregador Estendido | Comum | Técnica | 18 L | Nenhum | Só em arma de disparo com recarga. A munição entre uma recarga e outra dobra.
+
+- Luminosa | Comum | Técnica | 18 L | Nenhum | Sob comando, a lâmina ou o cano brilha como uma tocha, num raio de 9 m. Acender e apagar é Ação Livre.
+
+- Contrapeso | Comum | 1 | 70 L | Nenhum | +1 nas manobras feitas com esta arma: agarrar, derrubar, empurrar, desarmar e imobilizar.
+
+- Cano Estriado | Comum | 1 | 70 L | Nenhum | Só em arma de disparo. O alcance da arma sobe uma faixa de distância.
+
+- Ricochete | Comum | 1 | 70 L | Nenhum | Só em arma de arremesso. Acertando ou errando, a arma volta à sua mão no fim do seu turno.
+
+- Gancho | Comum | 1 | 70 L | Nenhum | Uma vez por turno, ao acertar com esta arma, puxe o alvo 1,5 m na sua direção. Criatura duas categorias de tamanho maior que você fica onde está.
+
 - Devastadora | Marcial | 2 | 290 L | Força 14, ou Destreza 14 em arma de disparo | +2 dados de dano da arma.
 
 - Elemental | Marcial | 2 | 290 L | Nenhum | +1d6 de dano de um tipo elemental escolhido na criação do item. Esse dado extra também multiplica no crítico.
@@ -3153,8 +3205,22 @@ Armas
 
 - Atordoante | Marcial | 2 | 290 L | Força 14 | No crítico, o alvo faz um teste de Constituição ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.
 
+- Trespassante | Marcial | 2 | 290 L | Força 14 | Só em arma corpo a corpo. Quando um ataque com ela leva uma criatura a 0 PV, o dano que sobrou atinge outra criatura adjacente a você, à sua escolha.
+
+- Calibrada | Marcial | 2 | 290 L | Destreza 14 | Só em arma de disparo. +2 nos ataques feitos com esta arma.
+
+- Quebra-Guarda | Marcial | 2 | 290 L | Força 14 | Quando o alvo usa Bloqueio contra esta arma, a redução do Bloqueio cai pela metade.
+
+- Marcadora | Marcial | 2 | 290 L | Nível total 7 | Ao acertar, a criatura fica Revelada até o fim da cena.
+
+- Rajada | Marcial | 2 | 290 L | Destreza 14 | Só em arma de disparo. Uma vez por cena, faça dois ataques com a mesma Ação Padrão, os dois com −2.
+
+- Fantasma | Marcial | 3 | 1.200 L | Nível total 10 | Uma vez por cena, declare antes de rolar: o ataque atravessa armadura e escudo e é comparado só com a Defesa Natural do alvo.
+
+- Ceifadora | Marcial | 3 | 1.200 L | Nível total 10 | Uma vez por turno, quando um ataque com esta arma leva uma criatura a 0 PV, faça um ataque extra contra outra criatura ao seu alcance.
+
 Armaduras
-15 modificações · 7 comuns · 8 marciais
+26 modificações · 13 comuns · 13 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
@@ -3172,6 +3238,18 @@ Armaduras
 
 - Térmica | Comum | 1 | 70 L | Nenhum | Você tem Resistência 2 contra Fogo e Gelo enquanto a vestir.
 
+- Engates Rápidos | Comum | Técnica | 18 L | Nenhum | Vestir ou tirar a armadura leva uma rodada, em vez de minutos.
+
+- Bolsos Ocultos | Comum | Técnica | 18 L | Nenhum | Costuras escondem até dois itens pequenos que uma revista comum não encontra.
+
+- Acolchoada | Comum | Técnica | 18 L | Nenhum | A armadura se move sem barulho de metal ou couro. A penalidade de armadura em Furtividade continua valendo.
+
+- Insígnia Imponente | Comum | 1 | 70 L | Nenhum | +1 em Intimidação enquanto estiver vestida.
+
+- Botas Ancoradas | Comum | 1 | 70 L | Nenhum | Terreno difícil não reduz o seu Movimento.
+
+- Máscara Filtrante | Comum | 1 | 70 L | Nenhum | Vantagem em Fortitude contra gases, fumaça e venenos inalados.
+
 - Bastião | Marcial | 2 | 290 L | Constituição 14 | Reduza 1d4 do dano físico recebido a cada ataque, aplicado depois da Resistência.
 
 - Regenerativa | Marcial | 2 | 290 L | Nível total 7 | Quem veste recupera 1d4 PV no início do próprio turno, uma vez por rodada.
@@ -3188,8 +3266,18 @@ Armaduras
 
 - Reativa | Marcial | 2 | 290 L | Constituição 14 | Uma vez por rodada, quando um ataque corpo a corpo acertar você, o atacante sofre 1d6 de dano de Impacto.
 
+- Blindagem Balística | Marcial | 2 | 290 L | Constituição 14 | Resistência 3 contra dano balístico.
+
+- Sentinela | Marcial | 2 | 290 L | Nível total 7 | Você não fica Surpreendido.
+
+- Pluma | Marcial | 2 | 290 L | Destreza 14 | +1,5 m de Movimento, e a armadura não conta como pesada para escalar e nadar.
+
+- Adaptativa | Marcial | 3 | 1.200 L | Nível total 10 | Depois de sofrer dano de um tipo, a armadura ganha Resistência 5 contra esse tipo até o fim da cena. Ela guarda um tipo por vez, e o próximo toma o lugar do anterior.
+
+- Fortaleza Viva | Marcial | 3 | 1.200 L | Constituição 14 e nível total 10 | Uma vez por cena, como Reação, reduza a 0 o dano de um ataque que não seja crítico.
+
 Escudos
-11 modificações · 5 comuns · 6 marciais
+19 modificações · 10 comuns · 9 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
@@ -3203,6 +3291,16 @@ Escudos
 
 - Ancorado | Comum | Técnica | 18 L | Nenhum | A alça de ombro impede que o escudo caia por Desarmar, e você pode soltá-lo e recolocá-lo como parte de uma ação de movimento.
 
+- Arremessável | Comum | Técnica | 18 L | Nenhum | O escudo pode ser arremessado com alcance Curto, causando 1d6 de dano de impacto. Buscá-lo de volta segue a regra normal.
+
+- Brasão | Comum | Técnica | 18 L | Nenhum | O escudo carrega o brasão de uma casa ou facção. Quem conhece a facção reconhece de longe, para o bem e para o mal.
+
+- Escudo de Parede | Comum | 1 | 70 L | Nenhum | Como Ação de Movimento, crave o escudo no chão: ele dá cobertura parcial a você até você se mover.
+
+- Bossa de Impacto | Comum | 1 | 70 L | Nenhum | Um golpe com o escudo causa 1d6 de dano de impacto e conta como arma corpo a corpo leve.
+
+- Espelhado | Comum | 1 | 70 L | Nenhum | Uma vez por cena, como Ação Livre, ofusque um inimigo adjacente: o próximo ataque dele tem desvantagem.
+
 - Amplo | Marcial | 2 | 290 L | Nenhum | A reação Proteger passa a cobrir dois aliados adjacentes em vez de um.
 
 - Repulsor | Marcial | 2 | 290 L | Nenhum | Ao usar Bloqueio com sucesso, empurre o atacante 1,5 m para longe de você.
@@ -3215,8 +3313,14 @@ Escudos
 
 - Refletor | Marcial | 2 | 290 L | Fluxo 12 | Uma vez por cena, ao bloquear um ataque de Raio ou de Luz, redirecione o efeito para uma criatura a até 6 m.
 
+- Muralha | Marcial | 2 | 290 L | Constituição 14 | Aliados adjacentes a você ganham +1 de Defesa.
+
+- Interceptor | Marcial | 2 | 290 L | Força 14 | O Bloqueio passa a valer contra ataques à distância de projétil e balísticos, e reduz 1d6 a mais contra eles.
+
+- Égide | Marcial | 3 | 1.200 L | Nível total 10 | Uma vez por cena, quando um aliado a até 9 m for atacado, use Proteger mesmo longe dele: você se move até ele sem provocar reação e vira o alvo.
+
 Itens gerais e mágicos
-16 modificações · 9 comuns · 7 marciais
+26 modificações · 15 comuns · 11 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
@@ -3238,6 +3342,18 @@ Itens gerais e mágicos
 
 - Chamado | Comum | 1 | 70 L | Nenhum | Uma vez por dia, gaste uma Ação de Movimento para trazer o item à sua mão, se ele estiver a até 30 m e em linha de visão.
 
+- Fundo Falso | Comum | Técnica | 18 L | Nenhum | Um compartimento escondido guarda um objeto pequeno. Achá-lo exige Investigação DT 15.
+
+- Recado Gravado | Comum | Técnica | 18 L | Nenhum | O item guarda uma mensagem falada de até um minuto, que toca quando a pessoa que você escolheu o tocar.
+
+- Localizável | Comum | Técnica | 18 L | Nenhum | Você sempre sabe a direção do item enquanto ele estiver a até 1 km.
+
+- Amuleto da Sorte | Comum | 1 | 70 L | Nenhum | Uma vez por sessão, role de novo um 1 natural seu e fique com o novo resultado.
+
+- Foco Afinado | Comum | 1 | 70 L | Nenhum | +1 nos testes de Vontade para manter Concentração.
+
+- Ferramental Fino | Comum | 1 | 70 L | Nenhum | Usado como ferramenta, o item faz o trabalho na metade do tempo.
+
 - Protetor | Marcial | 2 | 290 L | Nenhum | Resistência 4 contra um tipo de dano escolhido na criação do item, enquanto estiver equipado.
 
 - Vitalício | Marcial | 2 | 290 L | Nenhum | Uma vez por dia, ao chegar a 0 PV, recupere 1d6 PV automaticamente antes de cair inconsciente.
@@ -3251,6 +3367,35 @@ Itens gerais e mágicos
 - Furtivo | Marcial | 2 | 290 L | Nenhum | O item passa despercebido em revistas comuns e detectores básicos. Achá-lo exige Investigação contra DT 20.
 
 - Condensador de Mana | Marcial | 3 | 1.200 L | Fluxo 14 e nível total 10 | Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.
+
+- Canalizador | Marcial | 2 | 290 L | Fluxo 14 | +1 nos testes de magia feitos com este item em mãos.
+
+- Reserva de Fôlego | Marcial | 2 | 290 L | Constituição 12 | Guarda até 5 de Estamina. Você pode gastar dessa reserva no lugar da sua, e ela enche de novo no descanso completo.
+
+- Guardião | Marcial | 2 | 290 L | Sabedoria 12 | Quem carrega o item tem vantagem nos testes contra ficar Amedrontado.
+
+- Ampulheta | Marcial | 3 | 1.200 L | Nível total 10 | Uma vez por descanso, logo depois de rolar, desfaça a rolagem e role de novo, ficando com o novo resultado.
+
+Implantes
+8 modificações · 4 comuns · 4 marciais
+
+- Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
+
+- Pele Sintética | Comum | Técnica | 18 L | Nenhum | Uma camada de pele cultivada cobre a peça. Quem olha não vê o metal, e notar o implante exige Investigação DT 15.
+
+- Blindagem de Interferência | Comum | Técnica | 18 L | Nenhum | Um campo de interferência comum não desliga o implante. Interferência feita por magia ou por um Fluxo ainda desliga.
+
+- Refrigeração Líquida | Comum | 1 | 70 L | Nenhum | Quando usar o implante cobrar dano interno, ele cobra um dado a menos, no mínimo um.
+
+- Sintonia Fina | Comum | 1 | 70 L | Nenhum | +1 nos testes de perícia em que o implante já dá bônus.
+
+- Amortecedor Neural | Marcial | 2 | 290 L | Sabedoria 12 | O implante custa 3 a menos de Sanidade máxima, no mínimo 1. A ficha faz a conta sozinha.
+
+- Redundância | Marcial | 2 | 290 L | Nível total 7 | Uma vez por cena, quando o implante seria desligado por dano, sobrecarga ou interferência, ele continua funcionando.
+
+- Pré-Aquecimento | Marcial | 2 | 290 L | Destreza 12 | +2 de Iniciativa enquanto o implante estiver instalado.
+
+- Sobrecarga | Marcial | 3 | 1.200 L | Nível total 10 | Uma vez por cena, use de novo um efeito de uma vez por cena deste implante. Logo depois, você sofre 2d6 de dano interno, que ignora Resistência.
 
 O catálogo é um ponto de partida, e modificação nova é bem-vinda. Ela precisa respeitar o valor máximo por efeito da raridade e o nível condizente com o equipamento.
 
@@ -5234,25 +5379,25 @@ Toda armadilha tem um nível, quase sempre o do grupo ou o do lugar, e um peso. 
 
 - 10 | 20 / 25 | +14 | 1d6 | 3d6 | 6d6
 
-- 15 | 22 / 27 | +18 | 2d6 | 5d6 | 8d6
+- 15 | 24 / 29 | +18 | 2d6 | 5d6 | 8d6
 
-- 20 | 25 / 30 | +24 | 2d6 | 6d6 | 6d12
+- 20 | 30 / 35 | +24 | 2d6 | 6d6 | 6d12
 
-- 30 | 30 / 35 | +31 | 4d6 | 10d6 | 9d12
+- 30 | 37 / 42 | +31 | 4d6 | 10d6 | 9d12
 
-- 40 | 35 / 40 | +37 | 5d6 | 7d12 | 12d12
+- 40 | 43 / 48 | +37 | 5d6 | 7d12 | 12d12
 
-- 50 | 40 / 45 | +42 | 6d6 | 9d12 | 16d12
+- 50 | 48 / 53 | +42 | 6d6 | 9d12 | 16d12
 
-- 60 | 45 / 50 | +50 | 7d6 | 10d12 | 18d12
+- 60 | 56 / 61 | +50 | 7d6 | 10d12 | 18d12
 
-- 80 | 55 / 60 | +60 | 9d6 | 12d12 | 20d12+15
+- 80 | 66 / 71 | +60 | 9d6 | 12d12 | 20d12+15
 
-- 100 | 65 / 70 | +73 | 6d12 | 15d12 | 20d12+50
+- 100 | 79 / 84 | +73 | 6d12 | 15d12 | 20d12+50
 
-- 150 | 90 / 95 | +101 | 8d12 | 20d12+5 | 20d12+115
+- 150 | 107 / 112 | +101 | 8d12 | 20d12+5 | 20d12+115
 
-- 200 | 115 / 120 | +126 | 11d12 | 20d12+45 | 20d12+185
+- 200 | 132 / 137 | +126 | 11d12 | 20d12+45 | 20d12+185
 
 - **Achar:** quem anda atento usa 10 + bônus de Percepção contra a DT de achar. Quem para e procura rola, e procurar com calma custa tempo.
 
@@ -5447,6 +5592,22 @@ Não há poder, habilidade nem evento novo depois do 20. Quem quer conteúdo nov
 **Atenção:**
 
 Não confunda com a maestria de atributo do Sistema Base, que vem de um atributo chegar a 20 por mérito próprio.
+
+### Como ler a ação e o limite de uso
+
+Toda habilidade e todo poder dizem que ação pedem, numa destas sete: Passivo, Ação Livre, Ação de Movimento, Ação Padrão, Ação Completa, Reação ou Fora de combate. Quando importa o momento, ele vem logo depois, como em "Ação Livre · antes do ataque" ou "Fora de combate · escolhido no descanso completo".
+
+- **Por rodada:** volta no começo da rodada seguinte. É o limite da Reação.
+
+- **Por turno:** vale uma vez em cada turno, o seu ou o de outra criatura.
+
+- **Por cena:** volta quando a cena acaba. Um combate inteiro é uma cena.
+
+- **Por descanso:** volta no descanso completo. O Relaxar não devolve usos.
+
+- **Por sessão:** volta na próxima sessão de jogo.
+
+No Modo mesa da ficha, cada uma dessas janelas tem o seu botão para zerar: Nova cena, Descansei e Nova sessão.
 
 ## racas
 
@@ -5692,7 +5853,7 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra no Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 1.369 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 1.438 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 **Em resumo**
 
@@ -5710,13 +5871,13 @@ O catálogo inteiro tem 1.369 itens, e você nunca vê todos de uma vez. Cada it
 
 - Local | O que vende | Itens
 
-- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 422
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 451
 
-- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 343
+- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 359
 
-- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 332
+- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 354
 
-- Banco Lunar | Lendário, Mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 272
+- Banco Lunar | Lendário, Mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 274
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 

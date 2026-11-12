@@ -31,6 +31,9 @@ import {
   cssRgb,
   numerarLivro,
   romano,
+  rotuloDoSelo,
+  SELOS_DO_LIVRO,
+  TOPICOS_DO_NUCLEO,
 } from '../../data/regras/livro.ts';
 import { tituloTopico } from '../../data/regras/titulos.ts';
 import { ARTE_CAPA, ARTE_ROSTO, ARTES_CAPITULO, ARTES_TOPICO } from './artes.mjs';
@@ -227,6 +230,9 @@ const comoUsar = ({ comMestre, comArtes, ids, compendio = [] }) => {
   <p>Todo tópico abre com o número dele (3.4 é o quarto tópico do capítulo 3), o nome, uma frase que diz para que ele serve e até três destaques com os valores que mais se consultam. Logo depois vem o texto da regra, quase sempre com uma caixa <strong>Em resumo</strong> no começo, para quem só precisa do essencial.</p>
   <div class="regras-resumo"><ul><li>Esta caixa reúne o que você precisa lembrar do tópico.</li><li>Se algo ali não bastar, a seção logo abaixo explica por inteiro.</li></ul></div>
 
+  <h3 class="regras-subtitle">Núcleo e módulos</h3>
+  <p>O selo no alto de cada tópico diz se ele é do <strong>${esc(SELOS_DO_LIVRO.nucleo.rotulo)}</strong> ou um <strong>${esc(SELOS_DO_LIVRO.modulo.rotulo)}</strong>. O núcleo é o que todo jogador usa desde a primeira sessão: ${listaHumana(TOPICOS_DO_NUCLEO.filter((id) => ids.has(id)).map(ref))}. Todo o resto é módulo: perseguições, infiltração, batalha em massa, venenos, facções, veículos e o que mais a campanha trouxer. Um módulo entra quando a mesa quiser, no dia em que a cena pedir, e dá para jogar muito tempo sem abrir nenhum. Quando entra, vale por inteiro.</p>
+
   <h3 class="regras-subtitle">As caixas do livro</h3>
   <div class="regras-note regras-note--exemplo"><p>Uma situação resolvida passo a passo, com os números.</p></div>
   <div class="regras-note regras-note--atencao"><p>O erro que mais aparece na mesa, antes que ele aconteça.</p></div>
@@ -329,7 +335,7 @@ const topico = (item, parte, { comMestre, comArtes, ids }) => {
   <header class="abre-topico" data-abre="topico" data-cabeca="${esc(item.titulo)}" data-topico-id="${esc(item.id)}" data-numero="${esc(item.numero)}" data-capitulo-id="${esc(parte.id)}"${item.quebra ? ' data-quebra="1"' : ''} id="t-${item.id}">
     <div class="abre-linha">
       <span class="abre-num">${esc(rotuloDaParte(parte))} · ${esc(parte.titulo)}</span>
-      <span class="abre-selo">${esc(regra.status)}</span>
+      <span class="abre-selo">${esc(rotuloDoSelo(item.id, regra.status))}</span>
     </div>
     <h2 class="abre-titulo"><span class="abre-n">${esc(item.numero)}</span> ${esc(item.titulo)}</h2>
     <div class="abre-regua"></div>

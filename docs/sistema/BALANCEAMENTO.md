@@ -194,7 +194,7 @@ Os dois lados têm testes com os mesmos valores de referência.
 | Classe | Vai até o nível 50, e esse é o único teto duro: a ficha e o servidor não deixam uma classe passar dele (ficha antiga que já estava acima continua abrindo, mas não sobe). Não há limite de número de classes. As recompensas escritas terminam no 20. |
 | Maestria (21 a 50 da classe) | Igual para as 29 classes, em [maestria-classe.json](../../data/ficha/maestria-classe.json): reforço de Vida, Mana e Estamina nos níveis 25, 35 e 45 (vale 2 níveis do perfil da própria classe) e +1 grau de perícia nos 30, 40 e 50. O orçamento de Graus de Treinamento no servidor inclui esses graus. |
 | Graus de perícia | Doze graus, cada um +2 sobre o anterior: os sete de sempre (Iniciante +0 a Renomado +12) e cinco novos, um por patamar: Lendário +14 (nível 60), Mítico +16 (100), Cósmico +18 (150), Eterno +20 (250) e Absoluto +22 (500). Treino de 90, 120, 180, 270 e 365 dias, com feito, instrutor e item especial como ganchos de história (o servidor só confere o nível mínimo, e só avisa). Do Veterano em diante o grau também dá fontes de vantagem em todo teste da perícia (Veterano 1, Renomado 2, ... Absoluto 7; ficam em `vantagens` no mesmo JSON): como as fontes se cancelam uma a uma e não existe vantagem dupla, o que sobra é resistência a desvantagem. A referência de ataque acima do 60 já usa o grau novo (+2 sobre a tabela antiga nos níveis 60 e 80, +4 no 100 e +6 no 150 e no 200). |
-| Valor de Desafio (VD) | O VD de uma criatura é o nível do grupo que ela desafia sozinha (VD 30 = criatura solo para um grupo de nível 30), de 1 a 1.000 (criaturas únicas podem passar do 100). As fichas do catálogo (hoje 165) migraram com VD = nível; o campo `nivel` continua gravado junto de `vd`, e os dois coincidem. O XP de uma criatura solo é um quinto do custo do nível de mesmo número (200 no VD 1, 2.000 no 10, 12.000 no 60, 20.000 no 100), somado e repartido entre os jogadores da cena. Cenas antigas foram convertidas pela migração 46 (VD antigo 1 a 10 vira 3, 8, 13, ..., 48). Criaturas de qualquer VD saem do gerador (`src/services/curvaCriatura.ts`, aba "Sob medida" do Bestiário da Sessão): ataque e testes iguais ao ataque de referência, Defesa 3 abaixo da natural, dano de 21% da Vida de um personagem, Vida como fatia da Vida de inimigo padrão por papel (solo 80%, lacaio 10%, padrão 25%, elite 50%, chefe 100%) e, acima do VD 40, multiplicada por VD/40. Os 10 "Modelo de Criatura" gravados foram removidos e o gerador ganhou seis arquétipos (Bruto, Ágil, Atirador, Conjurador, Defensor, Assassino) para variar as universais. Famílias, estágios e únicos moram em `data/bestiario/familias-v1.json` (as 121 fichas escritas à mão ficam "solo" e nunca são sobrescritas). Detalhes e medições em [plano-vd-e-magia-medicoes-2026-09.md](../plano-vd-e-magia-medicoes-2026-09.md). |
+| Valor de Desafio (VD) | O VD de uma criatura é o nível do grupo que ela desafia sozinha (VD 30 = criatura solo para um grupo de nível 30), de 1 a 1.000 (criaturas únicas podem passar do 100). As fichas do catálogo (hoje 165) migraram com VD = nível; o campo `nivel` continua gravado junto de `vd`, e os dois coincidem. O XP de uma criatura solo é um quinto do custo do nível de mesmo número (200 no VD 1, 2.000 no 10, 12.000 no 60, 20.000 no 100), somado e repartido entre os jogadores da cena. Cenas antigas foram convertidas pela migração 46 (VD antigo 1 a 10 vira 3, 8, 13, ..., 48). Criaturas de qualquer VD saem do gerador (`src/services/curvaCriatura.ts`, aba "Sob medida" do Bestiário da Sessão): testes iguais ao ataque de referência, golpe com o ajuste de armadura do VD 15 em diante e Defesa igual ao ataque de referência + 6 (desde 2026-11-11; antes, Defesa 3 abaixo da natural), dano de 21% da Vida de um personagem, Vida como fatia da Vida de inimigo padrão por papel (solo 80%, lacaio 10%, padrão 25%, elite 50%, chefe 100%) e, acima do VD 40, multiplicada por VD/40. Os 10 "Modelo de Criatura" gravados foram removidos e o gerador ganhou seis arquétipos (Bruto, Ágil, Atirador, Conjurador, Defensor, Assassino) para variar as universais. Famílias, estágios e únicos moram em `data/bestiario/familias-v1.json` (as 121 fichas escritas à mão ficam "solo" e nunca são sobrescritas). Detalhes e medições em [plano-vd-e-magia-medicoes-2026-09.md](../plano-vd-e-magia-medicoes-2026-09.md). |
 | Magia acima do 20 | Decidido em 2026-09-30 (medições em [plano-vd-e-magia-medicoes-2026-09.md](../plano-vd-e-magia-medicoes-2026-09.md)). **Vagas:** Canalizador, Sintonizador e Elementarista ganham +2 vagas de magia a cada 5 níveis do 25 ao 50 (22 no 50); Cartista Arcano +1 a cada 5 (12 no 50, círculo segue 2); Selos e Encantamentos +1 a cada 5 (Canalizador e Sintonizador) ou a cada 10 (Ritualista, Cartista). **Teto por círculo:** do nível 25 em diante, no máximo 4 magias do mesmo círculo (`teto_por_circulo` nos marcos de `classes.json`; abaixo do 25 não há teto). **Fluxo mínimo virou recomendação:** aprende-se qualquer círculo que a classe libera, a ficha avisa (`avisoDeFluxoDaMagia`) e o servidor não gera mais alerta; o portão real é a DT do círculo (7 + ⌊2,5 × círculo⌋ desde 2026-11-11; antes 7 + 3 × círculo). As Marcas de círculo seguem o círculo que o Fluxo sustenta. **Rolagem:** soma ⌊nível total ÷ 2⌋ como todo teste, senão o conjurador nunca vencia o teste de resistência de uma criatura do mesmo nível a partir do 50. |
 | Criatura comprada ou contratada | Decidido em 2026-09-30. No Bestiário a Vida de uma criatura é a de um inimigo solo (aguenta o grupo inteiro); como aliado ela luta ao lado do grupo, então nasce com no máximo **2× a Vida média de um personagem do VD** (`vida_de_aliado`, `core/curva_criatura.py`, espelhado em `vidaDeAliado`). Um aliado de VD 20 passa de 410 para 160 de Vida, um de VD 50 de 1.320 para 428. O catálogo continua com a Vida de inimigo (é o que o Mestre usa) e a Loja mostra os dois números. O preço segue a escala de raridade e não mudou. |
 | Relíquias da Criação | Decidido em 2026-09-30. As 17 armas ficaram 2,5× mais fortes (de 8d12+20 para 20d12+50, média 180 no topo; a mais fraca, 150), com crítico ×4 mantido, e os dados dos poderes numéricos (ressonâncias, Braço de Nuada, Coração de Ouroboros, Taça de Dioniso, Carruagem de Hélios) foram multiplicados na mesma proporção. São quebradas de propósito: a referência de balanceamento e a Vida das criaturas continuam contando a Relíquia no degrau antigo (72 por acerto, `DANO_DE_RELIQUIA_NA_REFERENCIA`). A fonte do texto é `tools/retrofit-creation-relics.mjs`. |
@@ -249,19 +249,21 @@ segura a peça forte são os pré-requisitos e o preço, como a armadura marcial
 | Raridade original do modelo | Armadura | Escudo | Nível mínimo | Atributo mínimo | Preço da versão Comum |
 | --- | --- | --- | --- | --- | --- |
 | Comum | +1 a +3 | +1 | livre | livre | faixa base |
-| Incomum | +2 a +6 | +2 a +3 | 5 | livre | ×2 |
-| Raro | +4 a +8 | +2 a +4 | 10 | livre | ×4 |
-| Épico | +10 a +15 | +5 a +7 | 15 | 15 | ×8 |
-| Lendário | +16 a +22 | +8 a +11 | 25 | 18 | ×16 |
-| Relíquia da Criação | +22 a +30 | +10 a +14 | 35 (Mestre) | 20 | sem encomenda |
+| Incomum | +2 a +6 | +1 a +2 | 5 | livre | ×2 |
+| Raro | +4 a +8 | +1 a +2 | 10 | livre | ×4 |
+| Épico | +10 a +15 | +2 a +3 | 15 | 15 | ×8 |
+| Lendário | +16 a +22 | +2 a +3 | 25 | 18 | ×16 |
+| Relíquia da Criação | +22 a +30 | +3 a +5 | 35 (Mestre) | 20 | sem encomenda |
 
 O atributo é Força para armadura marcial e escudo, e Constituição para armadura
 simples. Como nível e classe, os requisitos da Loja não bloqueiam: avisam quem
 compra e registram a infração para o Mestre (`requisitoAtributo`, conferido em
 `_require_catalog_character_requirements` e em `atributosQueFaltamLoja`). A
 faixa base de preço é a de antes (simples 15 a 40, marcial 50 a 80 Lunaris), e a
-raridade escolhida na compra multiplica por cima (×3, ×8, ×20, ×60). Penalidades
-não mudaram. Espiritual, Couraça e Égide Primordiais e Juggernaut mantêm o bônus;
+raridade escolhida na compra multiplica por cima (×3, ×8, ×20, ×60). Na Defesa,
+a raridade soma +0 a +4 na armadura e metade disso no escudo (revisão de
+2026-11-12). Penalidades não mudaram. Espiritual, Couraça Primordial e
+Juggernaut mantêm o bônus, e a Égide Primordial fica em +3;
 a Juggernaut somava 0 de Defesa porque o campo `defesa` guardava o teste de
 Reflexos, e passou a somar +4.
 
@@ -299,11 +301,9 @@ Chance do inimigo padrão do mesmo nível acertar
 | 40 | 95% | 50% | 5% | 5% |
 | 60 | 95% | 50% | 5% | 5% |
 
-A armadura típica fica em 50% do nível 15 em diante. Quem não usa armadura é
-acertado 95%, e a melhor armadura com o melhor escudo continua perto do 20
-natural: esse teto é segurado pelo nível, pelo atributo e pelo preço. Se ele
-aparecer demais na mesa, o próximo ajuste é diminuir os escudos Épicos e
-Lendários.
+A armadura típica fica em 50% do nível 15 em diante. Na revisão geral de
+2026-11-12 o escudo encolheu (a tabela acima já mostra) e o Lutador ganhou a
+Guarda Aberta; ver "Revisão geral: Lutador, resistência, invocações e escudos".
 
 Itens já comprados guardam uma cópia do bônus no inventário; a escala nova vale
 para compras novas até uma migração atualizar os antigos.
@@ -384,6 +384,71 @@ relatório do teste de builds.
 A magia de ataque passa pela DT e pela Defesa na mesma rolagem; no círculo
 máximo vale a DT. O conjurador rende mais que a arma por conjuração e a Mana
 segura o ritmo: no nível 20 cabem um 10º círculo e um 8º, ou três 8º.
+
+## Revisão geral: Lutador, resistência, invocações e escudos (2026-11-12)
+
+Pedido do Pedro depois da revisão geral
+(`docs/propostas/revisao-geral-2026-11/RELATORIO.md`). Números de
+`scripts/medir-propostas.mjs` do mesmo relatório.
+
+- **Guarda Aberta (Lutador).** Sem armadura, sem malha e sem escudo, o Lutador
+  soma à Defesa a armadura típica do nível total: +2, +5 no 5, +8 no 10, +15 no
+  15 e +24 do 25 em diante (`src/services/defesaSemArmadura.ts`). A ficha soma
+  sozinha (`resumirEquipamentos`); vestiu qualquer peça, vale só a peça.
+- **DT de efeito e escada de DT.** A DT padrão do nível passou a ser a maior
+  entre 15 + metade do nível e o bônus de quem investe + 6 (`dtPadraoDoNivel`).
+  Até o nível 10 é a conta antiga; dali em diante quem investe passa três vezes
+  em quatro. Vale para a DT de efeito das criaturas (coluna `dtDeEfeito` da
+  curva, `dtPadraoDoVd`), a interceptação de poder de criatura, o "Escalar para
+  outro VD" e a escada de cena do Guia (rotineira −5, difícil +5, extrema +10),
+  que virou tabela gerada por nível. As DTs escritas nas fichas do Bestiário
+  andaram a diferença (216 criaturas, marca `ajusteDeDtEfeito`), assim como as
+  das Deidades, dos Soberanos e das aventuras do kit do Mestre (+7 no nível 30,
+  +8 do 40 ao 55). A primeira ideia (somar metade do grau) endurecia o começo do
+  jogo e voltava a 95% no 60; foi trocada.
+- **Invocações.** A Defesa de cada invocação é a Defesa natural da curva no nível
+  total de quem invoca, mais a armadura típica e o ajuste do papel (o Colosso +1,
+  o Caçador −1 em relação à natural do degrau), em `defesaDaInvocacao`. O "+1 de
+  Defesa a cada 5 níveis depois do 20" saiu.
+- **Escudos.** A raridade comprada soma metade da Defesa no escudo, e a escala de
+  escudo encolheu (Comum +1, Incomum e Raro +1 a +2, Épico e Lendário +2 a +3,
+  Relíquia +3 a +5). Só a metade da raridade tirava um ou dois pontos e o tanque
+  seguia no 20 natural.
+
+Inimigo padrão do mesmo nível acertando:
+
+| Nível | Sem armadura | Lutador (Guarda Aberta) | Armadura típica | Melhor armadura + escudo, raridade alta | Chefe contra essa defesa |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 55% | 45% | 45% | 35% | 55% |
+| 5 | 70% | 45% | 45% | 25% | 45% |
+| 10 | 80% | 40% | 40% | 15% | 35% |
+| 15 | 95% | 50% | 50% | 15% | 35% |
+| 25 | 95% | 50% | 50% | 15% | 35% |
+| 60 | 95% | 50% | 50% | 15% | 35% |
+
+Resistir à DT de efeito da criatura do mesmo nível:
+
+| Nível | DT (antes → agora) | Investido | Treinado (2 graus abaixo) | Sem treino |
+| ---: | ---: | ---: | ---: | ---: |
+| 1 | 15 → 15 | 50% | 40% | 35% |
+| 10 | 20 → 20 | 75% | 50% | 35% |
+| 15 | 22 → 24 | 75% | 50% | 25% |
+| 20 | 25 → 30 | 75% | 45% | 10% |
+| 40 | 35 → 43 | 80% | 40% | 5% |
+| 60 | 45 → 56 | 80% | 35% | 5% |
+
+Quem nunca treinou a resistência cai para 5% do nível 40 em diante: a diferença
+entre os graus (até +22) é grande de propósito, e o caminho é treinar a
+resistência ou buscar vantagem e ajuda.
+
+Inimigo padrão acertando a invocação:
+
+| Nível total | Caçador de Feras (antes → agora) | Colosso de Ferro (antes → agora) |
+| ---: | ---: | ---: |
+| 1 | 60% → 50% | 50% → 40% |
+| 10 | 85% → 45% | 75% → 35% |
+| 15 | 95% → 55% | 95% → 45% |
+| 40 | 95% → 55% | 95% → 45% |
 
 ## Pendências para a próxima revisão de design
 

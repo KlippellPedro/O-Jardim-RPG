@@ -220,7 +220,8 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   const vAtual = Number(status.vidaAtual ?? maxVida);
   const mAtual = Number(status.manaAtual ?? maxMana);
   const eAtual = Number(status.estaminaAtual ?? maxEstamina);
-  const sAtual = Number(status.sanidadeAtual ?? maxSanidade);
+  // Um implante recém-instalado baixa o teto: a Sanidade atual nunca passa da máxima.
+  const sAtual = Math.min(maxSanidade, Number(status.sanidadeAtual ?? maxSanidade));
   const cAtual = Number(status.cansacoAtual ?? 0);
   const efeitosCansaco = [
     cAtual >= 1 ? 'Testes físicos: penalidade ativa' : null,

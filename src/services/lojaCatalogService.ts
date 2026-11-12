@@ -1,5 +1,7 @@
 import type { LojaCatalogEntry } from './lojaApi';
 import { ehReliquiaCriacao } from './reliquiasCriacaoService';
+import { aplicarAjustesAtributosRaciais } from './calculoService';
+import { RACAS_CATALOGO } from './catalogoService';
 
 export type ItemCategoria = 'Relíquias da Criação' | 'Armas' | 'Armaduras' | 'Escudos' | 'Modificações' | 'Consumíveis' | 'Bens' | 'Mercenários' | 'Componentes' | 'Frutos do Éden' | 'Implantes Cibernéticos' | 'Artefatos Mágicos' | 'Itens Comuns' | 'Outros';
 export type ItemRaridade = 'Comum' | 'Incomum' | 'Raro' | 'Épico' | 'Lendário' | 'Mítico' | 'Relíquia da Criação' | 'Desconhecida';
@@ -445,7 +447,7 @@ type PersonagemRequisitosLoja = {
   nivel?: number;
   classes?: Array<{ id?: string; classeId?: string }>;
   classeId?: string;
-  ficha?: { atributosFinais?: Record<string, number>; atributos?: Record<string, number> } | null;
+  ficha?: { atributosFinais?: Record<string, number>; atributos?: Record<string, number>; racaId?: string; escolhaRacial?: any } | null;
 };
 
 /** Atributos mínimos que o personagem ainda não tem, já com o nome para a tela. */
@@ -454,7 +456,10 @@ export const atributosQueFaltamLoja = (
   personagem?: PersonagemRequisitosLoja,
 ): Array<{ atributo: string; nome: string; exigido: number; atual: number }> => {
   const exigidos = item.requisitoAtributo || {};
-  const atributos = personagem?.ficha?.atributosFinais || personagem?.ficha?.atributos || {};
+  const finais = personagem?.ficha?.atributosFinais || personagem?.ficha?.atributos || {};
+  // O mesmo valor que a ficha mostra: o atributo final mais o ajuste da raça.
+  const raca = RACAS_CATALOGO.find((entrada) => entrada.id === personagem?.ficha?.racaId);
+  const atributos: Record<string, number> = raca ? aplicarAjustesAtributosRaciais(finais, raca, personagem?.ficha?.escolhaRacial) : finais;
   return Object.entries(exigidos)
     .map(([atributo, exigido]) => ({
       atributo,

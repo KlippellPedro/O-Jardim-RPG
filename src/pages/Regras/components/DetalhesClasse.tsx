@@ -2,6 +2,7 @@ import { ChevronDown } from 'lucide-react';
 import type { IClasse, IFichaTecnicaClasse, IOpcaoHabilidadeClasse } from '../../../types/catalogo';
 import { classeTemProgressaoPublicada, formatarRecompensaClasse } from '../../../services/classeService';
 import { rotuloCustoDePoder } from '../../../services/statusService';
+import { rotuloDaAcao } from '../../../services/progressaoFichaService';
 import { MARCOS_MAESTRIA, descreverMarcoMaestria } from '../../../services/maestriaClasse';
 import { NIVEL_CONTEUDO_CLASSE, NIVEL_MAXIMO_CLASSE } from '../../../services/progressaoNiveis';
 import { linhasDeMagiaDaClasse } from '../../../services/progressaoMagiaClasse';
@@ -16,6 +17,7 @@ import { EngineeringProjectMaterials } from '../../../components/materials/Engin
 import { EngineeringMaterialsCatalog } from '../../../components/materials/EngineeringMaterialsCatalog';
 import { RitualCatalog } from '../../../components/materials/RitualCatalog';
 import { RitualMaterialsCatalog } from '../../../components/materials/RitualMaterialsCatalog';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 
 interface DetalhesClasseProps {
   classe: IClasse;
@@ -179,7 +181,7 @@ const FichaTecnica = ({ efeito }: { efeito: IFichaTecnicaClasse }) => {
     <div className="mt-3 flex flex-wrap gap-2">
       {campos.map(([chave, rotulo]) => (
         <span key={chave} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-gray-300">
-          <span className="font-bold uppercase tracking-wider text-gray-500">{rotulo}</span> {efeito[chave]}
+          <span className="font-bold uppercase tracking-wider text-gray-500">{rotulo}</span> {chave === 'acao' ? rotuloDaAcao(efeito) : efeito[chave]}
         </span>
       ))}
     </div>
@@ -200,9 +202,9 @@ const GradeOpcoes = ({
       <div key={opcao.id} className="rounded-xl border border-white/5 bg-black/30 p-4">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <strong className="text-sm text-white">{opcao.titulo}</strong>
-          {opcao.acao && <span className="text-[11px] font-bold uppercase tracking-wider text-sky-300/80">{opcao.acao}</span>}
+          {opcao.acao && <span className="text-[11px] font-bold uppercase tracking-wider text-sky-300/80">{rotuloDaAcao(opcao)}</span>}
         </div>
-        <p className="mt-2 text-sm leading-relaxed text-gray-400">{opcao.descricao}</p>
+        <p className="mt-2 text-sm leading-relaxed text-gray-400"><TextoComTermos texto={opcao.descricao} /></p>
         {classeId === 'alquimista' && habilidadeId === 'formulas' && <FormulaIngredients formulaId={opcao.id} />}
         {classeId === 'cozinheiro' && habilidadeId === 'cardapio' && <CookingIngredients recipeId={opcao.id} />}
         {classeId === 'engenheiro' && habilidadeId === 'engenhocas' && <EngineeringProjectMaterials projectId={opcao.id} />}
@@ -439,7 +441,7 @@ export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasse
                   <h3 className="text-xl font-bold text-yellow-500" style={{ fontFamily: 'Cinzel, serif' }}>{habilidade.titulo}</h3>
                   <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Níveis {formatarNiveis(habilidade.niveis)}</span>
                 </div>
-                {habilidade.descricao && <p className="leading-relaxed text-gray-300">{habilidade.descricao}</p>}
+                {habilidade.descricao && <p className="leading-relaxed text-gray-300"><TextoComTermos texto={habilidade.descricao} /></p>}
                 <FichaTecnica efeito={habilidade} />
                 {habilidade.escalonamento && (
                   <div className="mt-4 rounded-xl border border-sky-500/20 bg-sky-500/5 p-4">
@@ -454,7 +456,7 @@ export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasse
                       </div>
                     </div>
                     {habilidade.escalonamento.descricao && (
-                      <p className="mt-2 text-sm leading-relaxed text-gray-400">{habilidade.escalonamento.descricao}</p>
+                      <p className="mt-2 text-sm leading-relaxed text-gray-400"><TextoComTermos texto={habilidade.escalonamento.descricao} /></p>
                     )}
                   </div>
                 )}
@@ -465,7 +467,7 @@ export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasse
                         <h4 className="mb-1 text-sm font-bold text-gray-200">
                           Nível {estagio.nivel}{estagio.titulo ? `: ${estagio.titulo}` : ''}
                         </h4>
-                        <p className="text-sm leading-relaxed text-gray-400">{estagio.descricao}</p>
+                        <p className="text-sm leading-relaxed text-gray-400"><TextoComTermos texto={estagio.descricao} /></p>
                         <FichaTecnica efeito={estagio} />
                       </div>
                     ))}
@@ -499,7 +501,7 @@ export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasse
             {classe.eventos?.map(evento => (
               <article key={evento.id} className="rounded-2xl border border-sky-500/20 bg-sky-500/5 p-6">
                 <h3 className="mb-2 text-xl font-bold text-sky-300">{evento.titulo}</h3>
-                <p className="mb-4 text-sm leading-relaxed text-gray-300">{evento.descricao}</p>
+                <p className="mb-4 text-sm leading-relaxed text-gray-300"><TextoComTermos texto={evento.descricao} /></p>
                 <span className="text-xs font-bold uppercase tracking-widest text-sky-400/70">Níveis {formatarNiveis(evento.niveis)}</span>
               </article>
             ))}
@@ -520,7 +522,7 @@ export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasse
                     {rotuloCustoDePoder({ custoMana: poder.custo_mana, custoEstamina: poder.custo_estamina }) || '0 Custo'}
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed text-gray-300">{poder.descricao}</p>
+                <p className="text-sm leading-relaxed text-gray-300"><TextoComTermos texto={poder.descricao} /></p>
                 <FichaTecnica efeito={poder} />
                 {poder.pre_requisitos && poder.pre_requisitos.length > 0 && (
                   <p className="mt-4 text-xs font-bold uppercase tracking-wider text-amber-400">Requisito: {poder.pre_requisitos.join(', ')}</p>

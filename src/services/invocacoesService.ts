@@ -1,5 +1,7 @@
 import { CLASSES_CATALOGO } from './catalogoService';
-import { selecoesHabilidadeValidas } from './progressaoFichaService';
+import { defesaNaturalDoVd } from './curvaCriatura';
+import { defesaSemArmadura } from './defesaSemArmadura';
+import { nivelTotalFicha, selecoesHabilidadeValidas } from './progressaoFichaService';
 
 /** Uma ficha do Catálogo de Invocações (tarefas_bancada do Invocador), já separada em números. */
 export interface IInvocacaoDoCatalogo {
@@ -66,14 +68,24 @@ export function catalogoDeInvocacoes(): IInvocacaoDoCatalogo[] {
 }
 
 /** Depois do 20 o Catálogo para de ganhar níveis e as invocações crescem com o Invocador (Escolha Final do Pacto):
- * +3 de Vida por nível acima do 20, +1 de Defesa a cada 5 níveis acima do 20 e +1d6 no dano ou na cura no 30, 40 e 50. */
-export function crescimentoDaInvocacao(nivelInvocador: number): { vida: number; defesa: number; dadosExtras: number } {
+ * +3 de Vida por nível acima do 20 e +1d6 no dano ou na cura no 30, 40 e 50. A Defesa não entra aqui: ela
+ * acompanha o nível total (ver `defesaDaInvocacao`). */
+export function crescimentoDaInvocacao(nivelInvocador: number): { vida: number; dadosExtras: number } {
   const acima = Math.max(0, Math.trunc(nivelInvocador) - 20);
   return {
     vida: 3 * acima,
-    defesa: Math.floor(acima / 5),
     dadosExtras: [30, 40, 50].filter((nivel) => nivelInvocador >= nivel).length,
   };
+}
+
+/** Defesa da invocação (2026-11-12): a Defesa natural da curva no nível total de quem invoca, mais a
+ * armadura típica do nível (a escada da Guarda Aberta) e o ajuste do papel. O ajuste é o quanto a ficha do
+ * Catálogo fica acima ou abaixo da Defesa natural do nível do degrau (o Colosso +1, o Caçador −1). Antes a
+ * Defesa era fixa e a invocação era acertada quase sempre do meio do jogo em diante. */
+export function defesaDaInvocacao(invocacao: Pick<IInvocacaoDoCatalogo, 'defesa' | 'nivelMinimo'>, nivelTotal: number): number {
+  const nivel = Math.max(1, Math.trunc(nivelTotal) || 1);
+  const ajusteDoPapel = invocacao.defesa - defesaNaturalDoVd(invocacao.nivelMinimo);
+  return defesaNaturalDoVd(nivel) + ajusteDoPapel + defesaSemArmadura(nivel);
 }
 
 /** Nível das Formas Vinculadas: 1 no 3, 2 no 8, 3 no 14 e 4 no 20. */
@@ -126,7 +138,7 @@ export function aliadoDaInvocacao(
     vidaAtual: vidaMaxima,
     vidaMaxima,
     vidaTemporaria,
-    defesa: invocacao.defesa + crescimento.defesa,
+    defesa: defesaDaInvocacao(invocacao, Math.max(nivelInvocador, nivelTotalFicha(ficha))),
     movimento: invocacao.movimento,
     iniciativa,
     ataquePrincipal: habilidade,

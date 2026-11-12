@@ -15,6 +15,8 @@ import { FrutoEdenDetalhes } from './FrutoEdenDetalhes';
 import { FormasEConjunto } from './FormasEConjunto';
 import { nivelTotalFicha } from '../../../services/progressaoFichaService';
 import { vidaDeAliado } from '../../../services/curvaCriatura';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
+import { aceitaModificacao } from '../../../services/alvosDeModificacao';
 
 const FrutoEdenViewer = lazy(() => import('../../../components/FrutoEdenViewer'));
 
@@ -98,15 +100,17 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
     () => resumirLimiteItensEspeciais(compradorAtivo?.inventarioCentral || [], compradorAtivo?.ficha || {}),
     [compradorAtivo?.inventarioCentral, compradorAtivo?.ficha],
   );
+  // Só os itens que aceitam esta modificação, pela aplicação dela (a mesma regra do servidor).
+  const aplicacaoDaModificacao = item?.dadosBrutos?.aplicacao;
   const alvosModificacao = useMemo(() => (compradorAtivo?.inventarioCentral || [])
-    .filter((invItem) => ['arma', 'armadura', 'veiculo', 'geral'].includes(invItem.dados?.categoria))
+    .filter((invItem) => aceitaModificacao(aplicacaoDaModificacao, invItem))
     .map((invItem) => {
       const modificacoes = Array.isArray(invItem.dados?.modificacoes) ? invItem.dados.modificacoes.length : 0;
       const limiteRaridade = obterRegraRaridade(String(invItem.dados?.raridade || 'comum')).modificacoesMaximas;
       const limiteDeclarado = Number(invItem.dados?.limite_modificacoes);
       const limite = Number.isFinite(limiteDeclarado) && limiteDeclarado >= 0 ? Math.min(limiteRaridade, limiteDeclarado) : limiteRaridade;
       return { value: invItem.item_id, label: `${invItem.titulo} · ${modificacoes}/${limite} mods`, disabled: modificacoes >= limite };
-    }), [compradorAtivo?.inventarioCentral]);
+    }), [compradorAtivo?.inventarioCentral, aplicacaoDaModificacao]);
   
   // Validação de Requisitos
   const meetsNivel = !item.requisitoNivel || Boolean(compradorAtivo && compradorAtivo.nivel >= item.requisitoNivel);
@@ -147,7 +151,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
           <div className="rounded-2xl border border-amber-300/20 bg-amber-300/[0.05] p-5">
             <div className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">Ressonância empunhada</div>
             <h4 className="mt-2 font-serif text-lg font-bold text-amber-50">{ressonanciaReliquia.nome}</h4>
-            <p className="mt-2 text-sm leading-6 text-gray-300">{ressonanciaReliquia.efeito}</p>
+            <p className="mt-2 text-sm leading-6 text-gray-300"><TextoComTermos texto={ressonanciaReliquia.efeito} /></p>
           </div>
         </div>
       );
@@ -649,7 +653,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
               <span className="text-[10px] text-fuchsia-400 uppercase tracking-widest font-bold mb-2 flex items-center gap-2">
                 <Sparkles size={14} /> {dadosBrutos.subtipo === 'selo' ? 'Efeito do selo' : 'Poder Primordial'}
               </span>
-              <p className="text-fuchsia-100/90 text-sm leading-relaxed">{dadosBrutos.efeito}</p>
+              <p className="text-fuchsia-100/90 text-sm leading-relaxed"><TextoComTermos texto={dadosBrutos.efeito} /></p>
             </div>
           </div>
         )}

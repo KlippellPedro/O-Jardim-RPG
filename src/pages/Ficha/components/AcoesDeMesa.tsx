@@ -7,12 +7,14 @@ import {
   desmarcarUso,
   filtrarAcoesMesa,
   marcarUso,
+  temContadorDeUso,
   usosRestantes,
   zerarUsos,
   type IAcaoMesa,
   type TipoAcaoMesa,
   type UsosMarcados,
 } from '../../../services/acoesDeMesa';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 
 interface IAcoesDeMesaProps {
   personagemId: string;
@@ -45,12 +47,9 @@ function gravarUsos(personagemId: string, usos: UsosMarcados) {
   }
 }
 
-/** O texto da ação além do rótulo do grupo ("antes do ataque", "no momento da conjuração"). */
+/** O detalhe da ação além do rótulo do grupo ("antes do ataque", "no momento da conjuração"). */
 function detalheDaAcao(item: IAcaoMesa): string {
-  const resto = item.acao
-    .replace(/^(a[cç][aã]o (livre|padr[aã]o|completa|de movimento)|rea[cç][aã]o|passivo)\b[,.]?\s*/i, '')
-    .trim();
-  return resto && item.tipo !== 'fora' ? resto : item.tipo === 'fora' ? item.acao : '';
+  return item.momento;
 }
 
 const custoRotulo = (item: IAcaoMesa) => [
@@ -93,7 +92,7 @@ const ItemDeMesa = ({ item, usos, onMarcar, onDesmarcar, onUsar }: IItemProps) =
           </span>
           <ChevronDown size={14} className={`shrink-0 text-gray-500 transition-transform ${aberto ? 'rotate-180' : ''}`} aria-hidden="true" />
         </button>
-        {item.limite && item.limite.janela !== 'rodada' ? (
+        {item.limite && temContadorDeUso(item.limite) ? (
           <span className="flex shrink-0 items-center gap-1" role="group" aria-label={`Usos de ${item.titulo}: ${restantes} de ${item.limite.vezes} ${item.limite.rotulo.replace(/^\d+× /, '')}`}>
             {Array.from({ length: item.limite.vezes }, (_, indice) => {
               const usado = indice < (usos[item.id] || 0);
@@ -125,7 +124,7 @@ const ItemDeMesa = ({ item, usos, onMarcar, onDesmarcar, onUsar }: IItemProps) =
           </button>
         ) : null}
       </div>
-      {aberto ? <p className="mt-1.5 whitespace-pre-line text-sm leading-6 text-gray-300">{item.descricao}</p> : null}
+      {aberto ? <p className="mt-1.5 whitespace-pre-line text-sm leading-6 text-gray-300"><TextoComTermos texto={item.descricao} /></p> : null}
     </li>
   );
 };
@@ -156,7 +155,7 @@ export const AcoesDeMesa = ({ personagemId, acoes, onGastar }: IAcoesDeMesaProps
     else lista.push({ origem: item.origem, itens: [item] });
     return lista;
   }, []);
-  const temContador = acoes.some((item) => item.limite && item.limite.janela !== 'rodada');
+  const temContador = acoes.some((item) => temContadorDeUso(item.limite));
   const marcados = Object.values(usos).reduce((total, vezes) => total + vezes, 0);
 
   const usar = (item: IAcaoMesa) => {

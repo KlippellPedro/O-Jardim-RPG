@@ -294,13 +294,17 @@ def equipment_variant_overrides(
         }
     if kind == "armadura":
         base_defense = _numeric_stat(content.get("defesa", content.get("bonus")), 0)
-        defense = base_defense + tier
+        # Escudo soma metade da raridade (2026-11-12): com armadura e escudo os dois
+        # no Lendário, o inimigo só acertava no 20 natural do nível 10 em diante.
+        shield = normalize_catalog_filter(content.get("categoria_protecao")) == "escudo"
+        rarity_defense = tier // 2 if shield else tier
+        defense = base_defense + rarity_defense
         base_penalty = min(0, _numeric_stat(content.get("penalidade"), 0))
         penalty = min(0, base_penalty + (tier // 2))
         resistances = dict(_ARMOR_RARITY_RESISTANCES.get(target, {}))
         improvements = ["Ficha básica do modelo, sem bônus de raridade."]
         if tier:
-            improvements = [f"+{tier} de Defesa pela raridade."]
+            improvements = [f"+{rarity_defense} de Defesa pela raridade."] if rarity_defense else []
             if resistances:
                 types = ", ".join(resistances)
                 improvements.append(f"Resistência {max(resistances.values())} contra {types}.")

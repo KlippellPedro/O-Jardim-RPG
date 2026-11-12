@@ -85,7 +85,7 @@ const RARIDADES_CORES = {
 
 const SUBFILTROS_POR_CATEGORIA: Partial<Record<ItemCategoria, readonly string[]>> = {
   'Armas': ['Todos', 'Corpo a Corpo', 'À Distância', 'Mágicas'],
-  'Modificações': ['Todos', 'Comuns', 'Marciais', 'Armas', 'Armaduras', 'Escudos', 'Itens gerais e mágicos'],
+  'Modificações': ['Todos', 'Comuns', 'Marciais', 'Armas', 'Armaduras', 'Escudos', 'Itens gerais e mágicos', 'Implantes'],
   'Bens': ['Todos', 'Propriedades', 'Veículos Completos', 'Peças e Módulos'],
   'Consumíveis': ['Todos', 'Poções', 'Comidas e Bebidas', 'Selos', 'Rituais', 'Ferramentas'],
   'Mercenários': ['Todos', 'Guardas de local', 'Escoltas', 'Tripulação', 'Ofícios', 'Feras e Monstros', 'Marítimas', 'Espíritos', 'Golens', 'Vazio'],

@@ -677,7 +677,7 @@ test('ficha técnica do efeito vira uma linha só na ficha do jogador', () => {
   const ficha = { classes: [{ classeId: 'engenheiro', nivel: 10 }] };
   const meusFilhos = habilidadesAutomaticas(ficha).find(item => item.titulo === 'Meus Filhos');
   assert.ok(meusFilhos);
-  assert.match(meusFilhos.descricao, /Ação Livre · Toque · Até o fim do combate · Uma vez por combate/);
+  assert.match(meusFilhos.descricao, /Ação Livre · Toque · Até o fim do combate · Uma vez por cena/);
 
   const engenheiro = obterClasse('engenheiro');
   const torreta = engenheiro.poderes?.find(item => item.id === 'torreta-compacta');
@@ -1353,7 +1353,7 @@ test('Substituição chega no nível 18 do Ninja com ficha completa', () => {
   assert.deepEqual(substituicao.niveis, [18]);
   assert.equal(substituicao.acao, 'Reação');
   assert.ok(substituicao.duracao, 'Sem duração declarada');
-  assert.equal(substituicao.usos, 'Uma vez por combate');
+  assert.equal(substituicao.usos, 'Uma vez por cena');
 });
 
 test('Clone das Sombras e os poderes de combate do Ninja têm ficha completa', () => {
@@ -1368,10 +1368,10 @@ test('Clone das Sombras e os poderes de combate do Ninja têm ficha completa', (
   assert.deepEqual(clone.pre_requisitos, ['Nível 5 de Ninja']);
 
   // Extra attack sem teto de uso é o padrão de erro que Guerreiro e Lutador já
-  // corrigiram: sempre uma vez por combate/sessão, nunca por turno a um custo fixo.
+  // corrigiram: sempre uma vez por cena/sessão, nunca por turno a um custo fixo.
   const ataque = ninja.poderes?.find(item => item.id === 'ataque-em-movimento');
   assert.ok(ataque);
-  assert.equal(ataque.usos, 'Uma vez por combate');
+  assert.equal(ataque.usos, 'Uma vez por cena');
   assert.doesNotMatch(ataque.descricao, /uma vez por turno/i);
 
   // Evasão e Esquiva Sobrenatural são traços passivos, não ações que se pagam
@@ -1442,7 +1442,7 @@ test('Disparo Calculado chega no nível 18 do Atirador e Um Só Disparo tem fich
   const calculado = atirador.habilidades?.find(item => item.id === 'disparo-calculado');
   assert.ok(calculado);
   assert.deepEqual(calculado.niveis, [18]);
-  assert.equal(calculado.usos, 'Uma vez por combate');
+  assert.equal(calculado.usos, 'Uma vez por cena');
 
   const ultimo = atirador.habilidades?.find(item => item.id === 'um-so-disparo');
   assert.ok(ultimo);
@@ -1612,13 +1612,14 @@ test('a redução de dano da Arte da Espada e o Combo do Espadachim têm ficha c
   const arte = espadachim.habilidades?.find(item => item.id === 'arte-da-espada');
 
   const n5 = arte?.estagios?.find(item => item.nivel === 5);
-  assert.equal(n5?.acao, 'Reação para a redução de dano');
-  assert.equal(n5?.usos, 'Uma vez por combate para a redução de dano');
+  assert.equal(n5?.acao, 'Reação');
+  assert.equal(n5?.momento, 'para a redução de dano');
+  assert.equal(n5?.usos, 'Uma vez por cena para a redução de dano');
 
   const combo = espadachim.habilidades?.find(item => item.id === 'combo');
   assert.ok(combo);
   assert.deepEqual(combo.niveis, [18]);
-  assert.equal(combo.usos, 'Uma vez por combate');
+  assert.equal(combo.usos, 'Uma vez por cena');
 });
 
 test('Guardião publica os Juramentos de Guarda como catálogo e a DT de Provocar sai de Intimidação', () => {
@@ -1892,7 +1893,7 @@ test('Forma do Fluxo do Canalizador publica as quatro formas com ficha completa,
   const semFiltro = canalizador.habilidades?.find(item => item.id === 'fluxo-sem-filtro');
   assert.ok(semFiltro);
   assert.deepEqual(semFiltro.niveis, [18]);
-  assert.equal(semFiltro.usos, 'Uma vez por combate');
+  assert.equal(semFiltro.usos, 'Uma vez por cena');
 
   const vozDaDeidade = canalizador.habilidades?.filter(item => item.titulo === 'Voz da Deidade');
   assert.equal(vozDaDeidade?.length, 1, 'Voz da Deidade não pode existir em duas habilidades');
@@ -1938,7 +1939,7 @@ test('Religação de Emergência chega no nível 18 do Sintonizador, e Convergê
   assert.ok(religacao);
   assert.deepEqual(religacao.niveis, [18]);
   assert.equal(religacao.acao, 'Reação');
-  assert.equal(religacao.usos, 'Uma vez por combate');
+  assert.equal(religacao.usos, 'Uma vez por cena');
 
   const convergencia = sintonizador.habilidades?.filter(item => item.titulo === 'Convergência Segura');
   assert.equal(convergencia?.length, 1, 'Convergência Segura não pode existir em duas habilidades');

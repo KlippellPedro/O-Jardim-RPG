@@ -118,6 +118,57 @@ export const TRILHAS_DE_LEITURA: readonly TrilhaDeLeitura[] = [
   },
 ];
 
+/** Núcleo: o que todo jogador usa desde a primeira sessão (criar a ficha, rolar um teste,
+ * lutar, conjurar, descansar, sofrer uma condição). O resto do livro é módulo: regra que a
+ * mesa liga quando a cena pede. Muda só a apresentação; tudo continua valendo. */
+export const TOPICOS_DO_NUCLEO: readonly string[] = [
+  'como-jogar',
+  'criacao-personagem',
+  'sistema-base',
+  'racas',
+  'classes',
+  'poderes-habilidades',
+  'pericias',
+  'xp',
+  'legados',
+  'combate',
+  'tipos-de-dano',
+  'distancias',
+  'ferimentos',
+  'descanso',
+  'condicoes',
+  'equipamentos',
+  'magia-fluxo',
+  'loja',
+];
+
+export type SeloDoTopico = 'nucleo' | 'modulo';
+
+export const SELOS_DO_LIVRO: Record<SeloDoTopico, { rotulo: string; explicacao: string }> = {
+  nucleo: {
+    rotulo: 'Núcleo',
+    explicacao: 'Todo jogador usa desde a primeira sessão: criar a ficha, rolar um teste, lutar, conjurar, descansar.',
+  },
+  modulo: {
+    rotulo: 'Módulo',
+    explicacao: 'Entra quando a mesa quiser, no dia em que a cena pedir. Dá para jogar muito tempo sem abrir.',
+  },
+};
+
+/** Núcleo ou módulo; o Guia do Mestre fica de fora dos dois. */
+export const seloDoTopico = (idDoTopico: string): SeloDoTopico | null => {
+  if (idDoTopico === 'mestre') return null;
+  return TOPICOS_DO_NUCLEO.includes(idDoTopico) ? 'nucleo' : 'modulo';
+};
+
+/** O texto do selo no cabeçalho do tópico. "Comece por aqui", "Catálogo oficial" e
+ * "Somente Mestre" ficam como estão; "Regra oficial" diz se é do núcleo ou um módulo. */
+export const rotuloDoSelo = (idDoTopico: string, status: string): string => {
+  const selo = seloDoTopico(idDoTopico);
+  if (!selo || status !== 'Regra oficial') return status;
+  return SELOS_DO_LIVRO[selo].rotulo;
+};
+
 /** Tópicos que convém ter lido antes de um tópico. Aparece no cabeçalho dele, como atalho.
  * Só entram os pré-requisitos de verdade (o tópico usa um termo ou uma conta que o outro
  * ensina), no máximo dois por tópico. Nenhum alvo é de uso exclusivo do Mestre. */

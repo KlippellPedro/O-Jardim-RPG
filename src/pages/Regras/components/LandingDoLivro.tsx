@@ -1,8 +1,8 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, ChevronRight, Clock, LayoutGrid, LockKeyhole, Pencil, Search, Sparkles } from 'lucide-react';
+import { BookOpen, ChevronRight, Clock, LayoutGrid, LockKeyhole, Pencil, Puzzle, Search, Sparkles } from 'lucide-react';
 import type { RegrasCatalog } from '../../../../data/regras/tipos';
-import { numerarLivro, romano, tempoDeLeituraEmMinutos, TRILHAS_DE_LEITURA } from '../../../../data/regras/livro';
+import { numerarLivro, romano, SELOS_DO_LIVRO, tempoDeLeituraEmMinutos, TOPICOS_DO_NUCLEO, TRILHAS_DE_LEITURA } from '../../../../data/regras/livro';
 import { estiloDoAcento } from '../acento';
 import { casaComBusca, normalizar } from '../regrasBusca';
 
@@ -161,7 +161,7 @@ export const LandingDoLivro = ({
 
       <section data-tour="regras-legenda" className="mt-8 rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
         <h2 className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-500">Como ler este livro</h2>
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className={`mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 ${isMestre ? 'xl:grid-cols-5' : ''}`}>
           <div className="flex items-start gap-3">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-emerald-300/25 bg-emerald-400/10 text-emerald-200"><BookOpen size={15} /></span>
             <div>
@@ -172,8 +172,15 @@ export const LandingDoLivro = ({
           <div className="flex items-start gap-3">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#c7a44c]/25 bg-[#c7a44c]/10 text-[#d8bd75]"><Sparkles size={15} /></span>
             <div>
-              <strong className="block text-sm text-gray-200">Regra oficial</strong>
-              <p className="mt-0.5 text-xs leading-5 text-gray-500">Explica como um sistema do jogo funciona, valendo para qualquer mesa.</p>
+              <strong className="block text-sm text-gray-200">{SELOS_DO_LIVRO.nucleo.rotulo}</strong>
+              <p className="mt-0.5 text-xs leading-5 text-gray-500">{SELOS_DO_LIVRO.nucleo.explicacao} São {TOPICOS_DO_NUCLEO.length} tópicos.</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-gray-300"><Puzzle size={15} /></span>
+            <div>
+              <strong className="block text-sm text-gray-200">{SELOS_DO_LIVRO.modulo.rotulo}</strong>
+              <p className="mt-0.5 text-xs leading-5 text-gray-500">{SELOS_DO_LIVRO.modulo.explicacao}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">

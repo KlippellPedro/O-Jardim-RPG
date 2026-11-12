@@ -251,6 +251,10 @@ test('atributo mínimo entra nos requisitos e diz o que falta', () => {
   assert.equal(personagemAtendeRequisitosLoja(item, fraco), false);
   assert.deepEqual(atributosQueFaltamLoja(item, fraco), [{ atributo: 'forca', nome: 'Força', exigido: 18, atual: 16 }]);
   assert.equal(atributosQueFaltamLoja(item, undefined)[0].nome, 'Força');
+  // O ajuste da raça conta, como na ficha: Amálgamo tem +2 de Constituição.
+  const pesada = { requisitoAtributo: { constituicao: 18 } };
+  assert.equal(personagemAtendeRequisitosLoja(pesada, { nivel: 25, ficha: { racaId: 'amalgamo', atributosFinais: { constituicao: 16 } } }), true);
+  assert.equal(personagemAtendeRequisitosLoja(pesada, { nivel: 25, ficha: { racaId: 'humano', atributosFinais: { constituicao: 16 } } }), false);
 });
 
 test('itens com autorização do Mestre só entram no carrinho para gestores', () => {
@@ -342,7 +346,7 @@ test('modificações viram categoria própria, com nível de loja pelo tipo da m
     .map((entrada: any) => ({ ...entrada, preco: resolverPrecoComoBackend(entrada.conteudo.preco) }));
   const modificacoes = mapearCatalogoLoja(entradas);
 
-  assert.equal(modificacoes.length, 63);
+  assert.equal(modificacoes.length, 115);
   assert.ok(modificacoes.every((item) => item.categoria === 'Modificações'));
   assert.ok(modificacoes.every((item) => item.valorOriginal > 0 && item.moedaPreco === 'Lunaris'));
 
@@ -429,7 +433,9 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
   // +1 em 2026-10-28: Colar das Nove Lascas (Relíquia da Criação).
   // +4 em 2026-11-10: as partes de saque dos quatro chefes únicos de VD baixo (Figueira, Valdo, Inquilino e Recolhedora).
   // +7 em 2026-11-10: as partes de saque dos sete chefes dos segredos de Fluxo (Vó Benta ao Mensageiro).
-  assert.equal(entradas.length - geradas, 1292);
+  // +17 em 2026-11-12: implantes novos, de Comum a Lendário (Relógio Subcutâneo ao Exoesqueleto de Guerra).
+  // +52 em 2026-11-12: modificações novas para cada tipo de item, com o grupo de Implantes.
+  assert.equal(entradas.length - geradas, 1361);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 

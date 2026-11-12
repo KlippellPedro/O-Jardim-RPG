@@ -26,7 +26,7 @@ const familiasPath = process.env.BESTIARIO_FAMILIAS ?? path.join(root, 'data', '
 const propostasPath = process.env.BESTIARIO_PROPOSTAS ?? path.join(root, 'data', 'bestiario', 'familias-propostas-v1.json');
 const args = new Set(process.argv.slice(2));
 
-const { modeloDeCriatura, expressaoDeDano } = await import('../src/services/curvaCriatura.ts');
+const { modeloDeCriatura, expressaoDeDano, dtPadraoDoVd } = await import('../src/services/curvaCriatura.ts');
 
 const catalogoBruto = fs.readFileSync(catalogoPath, 'utf8');
 const catalogo = JSON.parse(catalogoBruto);
@@ -73,7 +73,7 @@ const arredondar10 = (valor) => Math.max(10, Math.round(valor / 10) * 10);
 function montarEntrada(familia, novo) {
   const modelo = modeloDeCriatura(novo.vd, novo.papel ?? 'solo');
   const bonus = modelo.pericias[0].replace('Luta ', '');
-  const dt = 15 + Math.floor(novo.vd / 2);
+  const dt = dtPadraoDoVd(novo.vd);
   const dano = expressaoDeDano(modelo.danoMedio);
   const raridade = raridadeDoVd(novo.vd);
   // Preço provisório: o da ficha escrita à mão de VD mais próximo. A escala oficial

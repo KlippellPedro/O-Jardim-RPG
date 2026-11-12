@@ -21,7 +21,7 @@
     },
     "tarefas_bancada": {
       "rotulo": "Arsenal Especial",
-      "descricao": "As oito peças que levam o seu nome, escolhidas no nível 15 entre o que a Loja publica, de raridade Rara ou inferior. Trocar uma peça leva um descanso longo. Aliado do Batalhão compra qualquer uma delas com 20% de desconto, que não soma com nenhum outro, e recebe +1 nos testes para usá-la.",
+      "descricao": "As oito peças que levam o seu nome, escolhidas no nível 15 entre o que a Loja publica, de raridade Rara ou inferior. Trocar uma peça leva um descanso completo. Aliado do Batalhão compra qualquer uma delas com 20% de desconto, que não soma com nenhum outro, e recebe +1 nos testes para usá-la.",
       "colunas": [
         "Peça",
         "Quantas",
@@ -50,7 +50,7 @@
         },
         {
           "tarefa": "Trocar uma peça",
-          "dt": "Um descanso longo",
+          "dt": "Um descanso completo",
           "nota": "A peça antiga sai do arsenal na hora que a nova entra."
         }
       ]
@@ -295,7 +295,8 @@
             "nivel": 1,
             "titulo": "Peito Aberto",
             "descricao": "Uma vez por turno, antes de rolar um ataque corpo a corpo, aceite −2 de Defesa até o seu próximo turno para causar +4 de dano se acertar. Você declara antes da rolagem, e a penalidade vale mesmo se errar.",
-            "acao": "Ação Livre antes do ataque",
+            "acao": "Ação Livre",
+            "momento": "antes do ataque",
             "duracao": "Até o seu próximo turno",
             "usos": "Uma vez por turno"
           },
@@ -321,25 +322,27 @@
           {
             "nivel": 20,
             "titulo": "Sai da Frente",
-            "descricao": "Uma vez por combate, depois de acertar, gaste 8 de Estamina: o alvo testa Vontade contra a sua DT de Guerreiro; em falha ele fica Amedrontado por uma rodada, e você ataca de novo na hora.",
+            "descricao": "Uma vez por cena, depois de acertar, gaste 8 de Estamina: o alvo testa Vontade contra a sua DT de Guerreiro; em falha ele fica Amedrontado por uma rodada, e você ataca de novo na hora.",
             "custo_estamina": 8,
-            "acao": "Ação Livre depois do acerto",
+            "acao": "Ação Livre",
+            "momento": "depois de acertar",
             "defesa": "Vontade contra a DT de Guerreiro",
-            "usos": "Uma vez por combate, 8 Estamina"
+            "usos": "Uma vez por cena, 8 Estamina"
           }
         ]
       },
       {
         "id": "batalhao",
         "titulo": "Batalhão",
-        "descricao": "Quem luta melhor perto de você. A cada estágio, escolha mais um aliado para o seu Batalhão e anote com o Mestre; podem ser outros jogadores ou gente da campanha. Trocar quem está na lista leva um descanso longo. Uma vez por rodada, gaste uma Ação de Movimento para gritar uma das ordens que você conhece a um aliado do Batalhão que possa ouvir você a até 12 m. Levanta! no nível 4 é a única exceção: pode alcançar um aliado inconsciente a 0 de Vida. Poder e habilidade não se emprestam: a ordem faz o que está escrita nela.",
+        "descricao": "Quem luta melhor perto de você. A cada estágio, escolha mais um aliado para o seu Batalhão e anote com o Mestre; podem ser outros jogadores ou gente da campanha. Trocar quem está na lista leva um descanso completo. Uma vez por rodada, gaste uma Ação de Movimento para gritar uma das ordens que você conhece a um aliado do Batalhão que possa ouvir você a até 12 m. Levanta! no nível 4 é a única exceção: pode alcançar um aliado inconsciente a 0 de Vida. Poder e habilidade não se emprestam: a ordem faz o que está escrita nela.",
         "niveis": [
           3,
           8,
           14,
           20
         ],
-        "acao": "Ação de Movimento para comandar",
+        "acao": "Ação de Movimento",
+        "momento": "para comandar",
         "alcance": "12 m, e o aliado precisa ouvir",
         "usos": "Uma ordem por rodada",
         "escalonamento": {
@@ -466,7 +469,7 @@
       {
         "id": "arsenal-especial",
         "titulo": "Arsenal Especial",
-        "descricao": "No nível 15, escolha quatro armas, duas armaduras e dois escudos publicados na Loja, de raridade Rara ou inferior, e ponha o seu nome neles. Aliados do Batalhão compram qualquer uma dessas peças com 20% de desconto, que não soma com outro desconto, e recebem +1 nos testes para usá-las. Trocar uma peça do arsenal leva um descanso longo.",
+        "descricao": "No nível 15, escolha quatro armas, duas armaduras e dois escudos publicados na Loja, de raridade Rara ou inferior, e ponha o seu nome neles. Aliados do Batalhão compram qualquer uma dessas peças com 20% de desconto, que não soma com outro desconto, e recebem +1 nos testes para usá-las. Trocar uma peça do arsenal leva um descanso completo.",
         "niveis": [
           15
         ],
@@ -476,12 +479,12 @@
       {
         "id": "bandeira-fincada",
         "titulo": "Bandeira Fincada",
-        "descricao": "Uma vez por combate, quando um aliado do seu Batalhão cair a 0 de Vida, use a Reação: ele fica com 1 de Vida, e você dá de graça uma ordem do Batalhão, sem gastar ação.",
+        "descricao": "Uma vez por cena, quando um aliado do seu Batalhão cair a 0 de Vida, use a Reação: ele fica com 1 de Vida, e você dá de graça uma ordem do Batalhão, sem gastar ação.",
         "niveis": [
           18
         ],
         "acao": "Reação",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "senhor-da-guerra",
@@ -899,7 +902,7 @@
       {
         "id": "meu-xodo",
         "titulo": "Meu Xodó",
-        "descricao": "Escolha um veículo ou uma montaria que possua ou use regularmente como seu Xodó; você só pode manter um por vez. Para trocar, passe um descanso longo ajustando o novo veículo. As modificações do Tuning continuam instaladas no anterior, salvo efeito da Caixa Preta. Os bônus abaixo valem somente quando você conduz o Xodó, inclusive nas manobras e na perseguição. Com uma montaria, use Cavalgar no lugar de Pilotagem em tudo o que o Xodó pede, o compartimento vira um alforje escondido na sela, e o que o texto diz do veículo vale para o animal.",
+        "descricao": "Escolha um veículo ou uma montaria que possua ou use regularmente como seu Xodó; você só pode manter um por vez. Para trocar, passe um descanso completo ajustando o novo veículo. As modificações do Tuning continuam instaladas no anterior, salvo efeito da Caixa Preta. Os bônus abaixo valem somente quando você conduz o Xodó, inclusive nas manobras e na perseguição. Com uma montaria, use Cavalgar no lugar de Pilotagem em tudo o que o Xodó pede, o compartimento vira um alforje escondido na sela, e o que o texto diz do veículo vale para o animal.",
         "niveis": [
           1,
           5,
@@ -953,7 +956,8 @@
           14,
           20
         ],
-        "acao": "Instalada na oficina",
+        "acao": "Fora de combate",
+        "momento": "instalada na oficina",
         "duracao": "Enquanto o veículo existir",
         "escalonamento": {
           "rotulo": "Tier da peça",
@@ -987,7 +991,8 @@
           {
             "id": "blindagem",
             "titulo": "Blindagem",
-            "acao": "Instalada na oficina",
+            "acao": "Fora de combate",
+            "momento": "instalada na oficina",
             "alcance": "O veículo",
             "duracao": "Permanente",
             "descricao": "Chapa extra no casco. O veículo recebe Resistência 3 contra dano físico.",
@@ -996,16 +1001,18 @@
           {
             "id": "motor",
             "titulo": "Motor Envenenado",
-            "acao": "Instalada na oficina",
+            "acao": "Fora de combate",
+            "momento": "instalada na oficina",
             "alcance": "O veículo",
             "duracao": "Permanente",
             "descricao": "O deslocamento do veículo sobe em um quarto, arredondando para baixo.",
-            "escalonamento": "T2: sobe metade. T3: você usa Acelerar sem gastar a Ação Padrão, uma vez por combate. T4: +18 m de deslocamento na primeira rodada de cada perseguição."
+            "escalonamento": "T2: sobe metade. T3: você usa Acelerar sem gastar a Ação Padrão, uma vez por cena. T4: +18 m de deslocamento na primeira rodada de cada perseguição."
           },
           {
             "id": "suspensao",
             "titulo": "Suspensão de Combate",
-            "acao": "Instalada na oficina",
+            "acao": "Fora de combate",
+            "momento": "instalada na oficina",
             "alcance": "O veículo",
             "duracao": "Permanente",
             "descricao": "O veículo ignora a penalidade do primeiro terreno ruim de cada cena e recebe +2 para Recuperar controle.",
@@ -1014,7 +1021,8 @@
           {
             "id": "armamento",
             "titulo": "Armamento Fixo",
-            "acao": "Ação Padrão para atirar",
+            "acao": "Ação Padrão",
+            "momento": "para atirar",
             "alcance": "24 m",
             "duracao": "Permanente",
             "dano": "2d8",
@@ -1024,7 +1032,8 @@
           {
             "id": "estabilizador",
             "titulo": "Estabilizador",
-            "acao": "Instalada na oficina",
+            "acao": "Fora de combate",
+            "momento": "instalada na oficina",
             "alcance": "O veículo",
             "duracao": "Permanente",
             "descricao": "Sistema redundante de comando. Role duas vezes na tabela de avaria e escolha qual das duas acontece.",
@@ -1033,7 +1042,8 @@
           {
             "id": "camuflagem",
             "titulo": "Camuflagem Ativa",
-            "acao": "Ação de Movimento para ligar",
+            "acao": "Ação de Movimento",
+            "momento": "para ligar",
             "alcance": "O veículo",
             "duracao": "Três rodadas",
             "descricao": "Ligue por três rodadas: quem procurar o veículo tem desvantagem, e ele não aparece em sensor comum.",
@@ -1042,7 +1052,8 @@
           {
             "id": "casco-reforcado",
             "titulo": "Casco Reforçado",
-            "acao": "Instalada na oficina",
+            "acao": "Fora de combate",
+            "momento": "instalada na oficina",
             "alcance": "O veículo",
             "duracao": "Permanente",
             "descricao": "A Vida máxima do veículo sobe em um quarto, arredondando para baixo.",
@@ -1051,7 +1062,8 @@
           {
             "id": "cabine",
             "titulo": "Cabine Selada",
-            "acao": "Instalada na oficina",
+            "acao": "Fora de combate",
+            "momento": "instalada na oficina",
             "alcance": "Os ocupantes",
             "duracao": "Permanente",
             "descricao": "Ar filtrado e vedação. Os ocupantes recebem cobertura total contra tiro de fora e ignoram gás, fumaça e ar viciado.",
@@ -1060,7 +1072,8 @@
           {
             "id": "sensores",
             "titulo": "Torre de Sensores",
-            "acao": "Ação de Movimento para varrer",
+            "acao": "Ação de Movimento",
+            "momento": "para varrer",
             "alcance": "100 m",
             "duracao": "Instantânea",
             "descricao": "Uma varredura mostra o que se move a até 100 m, mesmo através de fumaça, chuva ou noite fechada.",
@@ -1084,18 +1097,19 @@
         "niveis": [
           15
         ],
-        "acao": "Seis horas de oficina",
+        "acao": "Fora de combate",
+        "momento": "seis horas de oficina",
         "usos": "Uma vez por sessão"
       },
       {
         "id": "piloto-de-fuga",
         "titulo": "Piloto de Fuga",
-        "descricao": "Uma vez por combate, quando o veículo ou a montaria que você conduz estiver na faixa de Contato, use a Reação para sair para a faixa Curta sem teste, levando quem estiver dentro ou montado.",
+        "descricao": "Uma vez por cena, quando o veículo ou a montaria que você conduz estiver na faixa de Contato, use a Reação para sair para a faixa Curta sem teste, levando quem estiver dentro ou montado.",
         "niveis": [
           18
         ],
         "acao": "Reação",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "as-impossivel",
@@ -1497,7 +1511,8 @@
             "nivel": 20,
             "titulo": "Kage",
             "descricao": "Você é o líder da vila: a mais alta autoridade do clã, dona da palavra final sobre toda operação, aliança ou disputa que envolva o seu povo, como o chefe de uma vila ninja de verdade. O bônus em Furtividade sobe para +5. Você autoriza, nega ou reescreve qualquer missão que o clã ofereça a alguém, inclusive a você mesmo, e fala pela vila em tratados e disputas territoriais. Uma vez por sessão, requisite apoio de até quatro ninjas disponíveis para uma missão, e o clã cobre um gasto razoável em nome dela (suprimentos, transporte, subornos) sem sair do seu bolso. A requisição não obriga ações suicidas.",
-            "acao": "Ação Completa para requisitar apoio; a autoridade sobre missões e diplomacia é passiva",
+            "acao": "Ação Completa",
+            "momento": "para requisitar apoio; a autoridade sobre missões e diplomacia é passiva",
             "usos": "Uma vez por sessão para o apoio de ninjas e o gasto coberto pelo clã"
           }
         ]
@@ -1630,7 +1645,7 @@
         "acao": "Reação",
         "alcance": "Pessoal",
         "duracao": "Instantâneo",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "sombra-suprema",
@@ -1670,7 +1685,8 @@
         "id": "clone-das-sombras",
         "titulo": "Clone das Sombras",
         "custo_mana": 4,
-        "acao": "Ação de Movimento para comandar",
+        "acao": "Ação de Movimento",
+        "momento": "para comandar",
         "duracao": "Até o fim da cena, até ser atingido ou até você dispensar",
         "descricao": "Crie um clone idêntico a você, com a sua Defesa, 1 de Vida e o seu Movimento. Ele não ataca nem usa poderes; ao gastar sua Ação de Movimento, ele se move e interage com o cenário (puxar alavanca, abrir porta, distrair). Um ataque que o atinja, de qualquer tipo, o desfaz.",
         "pre_requisitos": [
@@ -1691,15 +1707,16 @@
         "custo_mana": 0,
         "custo_estamina": 3,
         "acao": "Ação Livre",
-        "usos": "Uma vez por combate",
-        "descricao": "Uma vez por combate, enquanto se move em combate, realize um ataque adicional com uma shuriken ou kunai que possua."
+        "usos": "Uma vez por cena",
+        "descricao": "Uma vez por cena, enquanto se move em combate, realize um ataque adicional com uma shuriken ou kunai que possua."
       },
       {
         "id": "aplicacao-inteligente",
         "titulo": "Aplicação Inteligente",
         "custo_mana": 0,
         "custo_estamina": 4,
-        "acao": "Ação Livre antes do ataque",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "duracao": "Este ataque",
         "dano": "+ Mod. Inteligência (o dobro com Arma Ninja)",
         "descricao": "O seu próximo ataque nesta rodada soma o seu Mod. Inteligência ao dano. Com uma Arma Ninja, soma o dobro."
@@ -1709,7 +1726,8 @@
         "titulo": "Ataque Oculto",
         "custo_mana": 0,
         "custo_estamina": 3,
-        "acao": "Ação Livre antes do ataque",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "dano": "+1d8 (até +3d8 com o poder escolhido de novo)",
         "descricao": "Uma vez por rodada, ao atacar em alcance corpo a corpo ou curto um alvo que não percebeu você, cause +1d8 de dano. Este poder pode ser escolhido novamente para adicionar +1d8, até o máximo de 3 escolhas.",
         "repetivel": true,
@@ -2084,7 +2102,8 @@
             "nivel": 5,
             "titulo": "Fama Regional",
             "descricao": "Sua Fama mínima sobe para 2 e o bônus em Atuação sobe para +2. Com um teste de Atuação (DT 15, ou 20 se ela estiver hostil) você acalma ou anima uma multidão pequena, até umas cinquenta pessoas, sem precisar de palco montado.",
-            "acao": "Ação Completa para trabalhar a multidão"
+            "acao": "Ação Completa",
+            "momento": "para trabalhar a multidão"
           },
           {
             "nivel": 10,
@@ -2148,7 +2167,8 @@
           {
             "id": "energetico",
             "titulo": "Energético Fluxo Vivo",
-            "acao": "Ação de Movimento para beber",
+            "acao": "Ação de Movimento",
+            "momento": "para beber",
             "alcance": "Você ou um aliado ao toque",
             "duracao": "Instantânea",
             "usos": "Uma lata por sessão",
@@ -2158,7 +2178,8 @@
           {
             "id": "cosmeticos",
             "titulo": "Linha de Cosméticos",
-            "acao": "Dez minutos de preparo",
+            "acao": "Fora de combate",
+            "momento": "dez minutos de preparo",
             "duracao": "Uma cena",
             "descricao": "Maquiagem, perfume e cabelo da marca. Quando você entra produzido numa cena, recebe +2 em testes sociais nela.",
             "escalonamento": "Nível 2: o bônus sobe para +3. Nível 3: o preparo cai para uma rodada. Nível 4: o bônus sobe para +4 e alcança um aliado que você tenha produzido junto.",
@@ -2169,9 +2190,10 @@
             "titulo": "Armaria de Grife",
             "alcance": "Uma peça por vez",
             "duracao": "Enquanto o contrato durar",
-            "descricao": "Uma arma ou armadura comum com o seu nome gravado, emprestada pela marca. Trocar de peça leva um descanso longo, e ela precisa aparecer em público de vez em quando.",
+            "descricao": "Uma arma ou armadura comum com o seu nome gravado, emprestada pela marca. Trocar de peça leva um descanso completo, e ela precisa aparecer em público de vez em quando.",
             "escalonamento": "Nível 2: a peça pode ser Incomum. Nível 3: Rara, e a marca conserta o estrago de graça. Nível 4: duas peças ao mesmo tempo.",
-            "acao": "Entregue no descanso longo"
+            "acao": "Fora de combate",
+            "momento": "entregue no descanso completo"
           },
           {
             "id": "rede-de-estalagens",
@@ -2180,7 +2202,8 @@
             "duracao": "Enquanto o contrato durar",
             "descricao": "Quarto bom para você e para o grupo, de graça, em qualquer cidade onde a rede tenha casa. O descanso ali conta como Bom.",
             "escalonamento": "Nível 2: a casa também guarda carga e bagagem sem cobrar. Nível 3: o descanso conta como Ótimo. Nível 4: a rede reserva a casa inteira quando você avisa antes.",
-            "acao": "Basta chegar e dizer o nome"
+            "acao": "Fora de combate",
+            "momento": "basta chegar e dizer o nome"
           },
           {
             "id": "transportadora",
@@ -2189,7 +2212,8 @@
             "duracao": "Enquanto o contrato durar",
             "descricao": "Uma vez por sessão, o grupo pega carona numa rota comercial estabelecida, sem pagar passagem, no horário da empresa.",
             "escalonamento": "Nível 2: a empresa sai do horário e leva quando você pedir. Nível 3: entra transporte rápido, cortando metade do tempo de viagem. Nível 4: a rota chega a qualquer lugar ligado por comércio, inclusive fora da região.",
-            "acao": "Combinado com a empresa",
+            "acao": "Fora de combate",
+            "momento": "combinado com a empresa",
             "alcance": "As rotas da empresa"
           },
           {
@@ -2199,7 +2223,8 @@
             "duracao": "Enquanto o contrato durar",
             "descricao": "Um dispositivo comum da A.X.I.S. emprestado e um passe de visitante que abre porta de recepção e área pública.",
             "escalonamento": "Nível 2: o dispositivo pode ser Incomum. Nível 3: o passe abre uma área restrita coberta pela autorização da marca, sem interrogatório; setores secretos ou de segurança continuam fora dele. Nível 4: dispositivo Raro, e um técnico da marca atende você por chamado.",
-            "acao": "Retirado num balcão da marca"
+            "acao": "Fora de combate",
+            "momento": "retirado num balcão da marca"
           },
           {
             "id": "casa-de-moda",
@@ -2208,7 +2233,8 @@
             "duracao": "Uma cena",
             "descricao": "Roupa de gala sob medida, entregue onde você estiver. Com ela, você não é barrado por vestimenta inadequada num lugar que exija etiqueta e tem vantagem no primeiro teste social do evento; a roupa não substitui convite, credencial nem autorização de acesso.",
             "escalonamento": "Nível 2: veste o grupo inteiro. Nível 3: a peça é blindada por dentro e conta como uma armadura simples de +2 sem parecer uma. Nível 4: a roupa vira assunto, e quem chega perto quer falar com você.",
-            "acao": "Entregue onde você estiver"
+            "acao": "Fora de combate",
+            "momento": "entregue onde você estiver"
           },
           {
             "id": "destilaria",
@@ -2217,13 +2243,15 @@
             "duracao": "Enquanto o contrato durar",
             "descricao": "Sua cara está no rótulo. Uma rodada por conta da casa em qualquer taverna que venda a marca, e o dono sempre tem cinco minutos para você.",
             "escalonamento": "Nível 2: o dono conta o que anda ouvindo, e isso vale um teste de Investigação de graça. Nível 3: a taverna guarda recado e encomenda para você. Nível 4: cada casa da marca vira ponto de apoio, com quarto e porta dos fundos.",
-            "acao": "Basta pedir no balcão",
+            "acao": "Fora de combate",
+            "momento": "basta pedir no balcão",
             "alcance": "Qualquer casa que venda a marca"
           },
           {
             "id": "farmaceutica",
             "titulo": "Farmacêutica",
-            "acao": "Ação de Movimento para usar",
+            "acao": "Ação de Movimento",
+            "momento": "para usar",
             "usos": "Uma dose por sessão",
             "duracao": "Enquanto o contrato durar",
             "descricao": "Amostra grátis toda sessão: uma poção ou remédio de raridade Comum, escolhido quando você precisa dele.",
@@ -2237,7 +2265,8 @@
             "duracao": "Enquanto o contrato durar",
             "descricao": "Uma vez por sessão, você coloca uma notícia para circular na região. Ela precisa ser plausível, e o Mestre decide o que o público faz com ela.",
             "escalonamento": "Nível 2: a notícia atravessa a região vizinha. Nível 3: você também consegue segurar uma notícia por uma sessão. Nível 4: a notícia sai em toda parte ligada por comunicação, no mesmo dia.",
-            "acao": "Um recado para a editora",
+            "acao": "Fora de combate",
+            "momento": "um recado para a editora",
             "alcance": "A região"
           }
         ]
@@ -2249,7 +2278,8 @@
         "niveis": [
           18
         ],
-        "acao": "Um recado para a equipe",
+        "acao": "Fora de combate",
+        "momento": "um recado para a equipe",
         "duracao": "Uma hora de trabalho",
         "usos": "Uma vez por sessão"
       },
@@ -2652,16 +2682,18 @@
             "nivel": 1,
             "titulo": "Vínculo",
             "descricao": "Vincule-se a uma espada; com ela, receba +1 em ataques.",
-            "acao": "Ação Livre para vincular, depois passivo",
+            "acao": "Ação Livre",
+            "momento": "para vincular, depois passivo",
             "duracao": "Permanente, até vincular outra espada"
           },
           {
             "nivel": 5,
             "titulo": "Corte Firme",
-            "descricao": "Com a espada vinculada, cause +2 de dano. Uma vez por combate, use uma Reação para reduzir em seu nível o dano de um ataque que sofreria, até o mínimo 0.",
-            "acao": "Reação para a redução de dano",
+            "descricao": "Com a espada vinculada, cause +2 de dano. Uma vez por cena, use uma Reação para reduzir em seu nível o dano de um ataque que sofreria, até o mínimo 0.",
+            "acao": "Reação",
+            "momento": "para a redução de dano",
             "dano": "+2 de dano com a espada vinculada",
-            "usos": "Uma vez por combate para a redução de dano"
+            "usos": "Uma vez por cena para a redução de dano"
           },
           {
             "nivel": 10,
@@ -2682,7 +2714,8 @@
             "nivel": 20,
             "titulo": "Golpe Perfeito",
             "descricao": "Uma vez por sessão, antes de atacar, declare Golpe Perfeito: se acertar, os dados de dano causam o valor máximo; se errar, o uso é gasto.",
-            "acao": "Ação Livre antes de atacar",
+            "acao": "Ação Livre",
+            "momento": "antes do ataque",
             "dano": "Valor máximo dos dados, se acertar",
             "usos": "Uma vez por sessão"
           }
@@ -2776,13 +2809,14 @@
       {
         "id": "combo",
         "titulo": "Combo",
-        "descricao": "Uma vez por combate, após acertar, faça um segundo ataque. Se ele acertar, faça um terceiro com metade do dano; o alvo então sofre −2 Defesa até o fim da rodada seguinte.",
+        "descricao": "Uma vez por cena, após acertar, faça um segundo ataque. Se ele acertar, faça um terceiro com metade do dano; o alvo então sofre −2 Defesa até o fim da rodada seguinte.",
         "niveis": [
           18
         ],
-        "acao": "Ação Livre após acertar",
+        "acao": "Ação Livre",
+        "momento": "depois de acertar",
         "dano": "Ataque 2: normal; ataque 3: metade",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "espirito-da-espada",
@@ -2816,7 +2850,8 @@
         "titulo": "Golpe em Z",
         "custo_mana": 0,
         "custo_estamina": 3,
-        "acao": "Ação Livre antes do ataque",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "duracao": "Este ataque",
         "dano": "+1 dado (+2 dados no nível 10)",
         "descricao": "Seu próximo ataque com espada causa +1 dado de dano. Do nível 10 de Espadachim em diante, você pode gastar 6 de Estamina no lugar de 3 para causar +2 dados."
@@ -2835,7 +2870,8 @@
         "titulo": "Corte Cirúrgico",
         "custo_mana": 0,
         "custo_estamina": 2,
-        "acao": "Ação Livre antes do ataque",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "duracao": "Este ataque",
         "descricao": "Receba +2 no próximo ataque com espada. Do nível 10 de Espadachim em diante, você pode gastar 4 de Estamina no lugar de 2 para receber +5."
       },
@@ -2853,7 +2889,8 @@
         "titulo": "Penetrar Armadura",
         "custo_mana": 0,
         "custo_estamina": 4,
-        "acao": "Ação Livre antes do ataque",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "duracao": "Este ataque",
         "dano": "Ignora 5 de Resistência (10 no nível 10)",
         "descricao": "O próximo ataque com espada ignora 5 de Resistência. Do nível 10 de Espadachim em diante, você pode gastar 6 de Estamina no lugar de 4 para ignorar 10."
@@ -3191,6 +3228,16 @@
     ],
     "habilidades": [
       {
+        "id": "guarda-aberta",
+        "titulo": "Guarda Aberta",
+        "descricao": "Você luta leve e lê o golpe antes de ele chegar. Sem armadura, sem malha e sem escudo, some à Defesa o bônus da escada abaixo, pelo seu nível total. Ela acompanha o que uma armadura da sua faixa daria; vestiu qualquer peça, vale só a peça. Escada: +2 no nível total 1, +5 no 5, +8 no 10, +15 no 15 e +24 do 25 em diante. A ficha soma sozinha quando nada está equipado no corpo.",
+        "niveis": [
+          1
+        ],
+        "acao": "Passivo",
+        "defesa": "+2 a +24 sem armadura"
+      },
+      {
         "id": "instinto-de-combate",
         "titulo": "Instinto de Combate",
         "descricao": "O corpo aprende antes da cabeça. Você lê a briga pelo peso, pelo apoio e pela guarda de quem está na sua frente.",
@@ -3225,16 +3272,17 @@
           {
             "nivel": 15,
             "titulo": "Fúria",
-            "descricao": "Uma vez por combate, ao sofrer dano, segure até o seu nível de Lutador dele: reduza o dano nessa quantidade e guarde o número. O seu próximo golpe desarmado nesta cena solta o que você guardou como dano a mais.",
+            "descricao": "Uma vez por cena, ao sofrer dano, segure até o seu nível de Lutador dele: reduza o dano nessa quantidade e guarde o número. O seu próximo golpe desarmado nesta cena solta o que você guardou como dano a mais.",
             "acao": "Reação",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por cena"
           },
           {
             "nivel": 20,
             "titulo": "Aquele Golpe",
             "descricao": "Uma vez por sessão, ao tirar crítico num ataque desarmado, gaste 8 de Estamina para rolar os dados de dano duas vezes e ignorar metade da Resistência do alvo. Pelas duas rodadas seguintes você recebe +2 em ataques e em Defesa.",
             "custo_estamina": 8,
-            "acao": "Ação Livre no crítico",
+            "acao": "Ação Livre",
+            "momento": "no crítico",
             "usos": "Uma vez por sessão, 8 Estamina"
           }
         ]
@@ -3322,8 +3370,8 @@
             "acao": "Reação",
             "alcance": "Pessoal",
             "duracao": "Instantâneo",
-            "usos": "Uma vez por combate",
-            "descricao": "Uma vez por combate, quando alguém te agarrar, use uma Reação para atacá-lo sem penalidade."
+            "usos": "Uma vez por cena",
+            "descricao": "Uma vez por cena, quando alguém te agarrar, use uma Reação para atacá-lo sem penalidade."
           },
           {
             "id": "chute-circular",
@@ -3419,7 +3467,8 @@
         "niveis": [
           20
         ],
-        "acao": "Ação Livre depois de acertar",
+        "acao": "Ação Livre",
+        "momento": "depois de acertar",
         "duracao": "Três rodadas",
         "usos": "Uma vez por sessão"
       }
@@ -3443,7 +3492,8 @@
         "titulo": "Apertão de Aço",
         "custo_mana": 0,
         "custo_estamina": 3,
-        "acao": "Ação Livre no seu turno",
+        "acao": "Ação Livre",
+        "momento": "no seu turno",
         "duracao": "Enquanto o agarrão durar",
         "dano": "1d6 de impacto por turno",
         "descricao": "Enquanto você mantém alguém Agarrado, aperte para causar 1d6 de impacto uma vez por turno. Você também arrasta o alvo com você usando metade do seu Movimento."
@@ -3453,7 +3503,8 @@
         "titulo": "Impacto Brutal",
         "custo_mana": 0,
         "custo_estamina": 5,
-        "acao": "Ação Livre antes de rolar o ataque",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "duracao": "Até o seu próximo turno",
         "dano": "+1d10",
         "descricao": "Cause +1d10 num ataque desarmado e fique com −2 de Defesa até o seu próximo turno."
@@ -3470,7 +3521,8 @@
         "titulo": "Não Levanta",
         "custo_mana": 0,
         "custo_estamina": 6,
-        "acao": "Ação Livre ao levar o alvo a 0 de Vida",
+        "acao": "Ação Livre",
+        "momento": "ao levar o alvo a 0 de Vida",
         "descricao": "Quando um golpe seu leva uma criatura a 0 de Vida, ela sofre −4 no primeiro teste de Morrendo. Isso não mata ninguém sozinho: só empurra a conta na direção que você quer."
       },
       {
@@ -3494,7 +3546,8 @@
         "id": "uma-vida-por-outra",
         "titulo": "Uma Vida por Outra",
         "custo_mana": 0,
-        "acao": "Ação Livre antes de atacar",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "dano": "+2 de dano a cada 3 de Vida gasta",
         "descricao": "Antes de atacar, gaste até 9 de Vida, que sai direto e ignora Resistência. A cada 3 de Vida gasta, o ataque causa +2 de dano se acertar. Errou, a Vida foi embora do mesmo jeito."
       },
@@ -3833,7 +3886,8 @@
             "nivel": 5,
             "titulo": "Marca",
             "descricao": "Uma vez por turno, marque uma criatura que possa ver. Você só mantém uma marca deste estágio por vez. Até acertá-la ou a cena terminar, seu próximo ataque contra ela ignora cobertura parcial e causa +1 dado de dano.",
-            "acao": "Ação Livre para marcar",
+            "acao": "Ação Livre",
+            "momento": "para marcar",
             "duracao": "Até acertar ou até o fim da cena",
             "dano": "+1 dado",
             "usos": "Uma vez por turno"
@@ -3841,9 +3895,9 @@
           {
             "nivel": 10,
             "titulo": "Rajada",
-            "descricao": "Uma vez por combate, faça até três ataques com −1 dado de dano cada; se todos atingirem o mesmo alvo, ele testa Fortitude contra a DT do Atirador ou perde reações por uma rodada.",
+            "descricao": "Uma vez por cena, faça até três ataques com −1 dado de dano cada; se todos atingirem o mesmo alvo, ele testa Fortitude contra a DT do Atirador ou perde reações por uma rodada.",
             "acao": "Ação Completa",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por cena"
           },
           {
             "nivel": 15,
@@ -3856,7 +3910,8 @@
             "nivel": 20,
             "titulo": "Duas Marcas",
             "descricao": "A marca do nível 5 passa a valer em dois alvos ao mesmo tempo, e o seu primeiro acerto em cada um deles por rodada causa +1 dado de dano.",
-            "acao": "Ação Livre para marcar",
+            "acao": "Ação Livre",
+            "momento": "para marcar",
             "dano": "+1 dado",
             "usos": "Uma vez por rodada em cada alvo"
           }
@@ -3950,13 +4005,13 @@
       {
         "id": "disparo-calculado",
         "titulo": "Disparo Calculado",
-        "descricao": "Uma vez por combate, gaste uma Ação Completa para estudar o alvo: vento, distância, movimento. Seu próximo ataque à distância contra ele, feito até o fim do seu próximo turno, recebe vantagem e ignora os bônus de cobertura parcial ou superior, mas não atravessa cobertura total.",
+        "descricao": "Uma vez por cena, gaste uma Ação Completa para estudar o alvo: vento, distância, movimento. Seu próximo ataque à distância contra ele, feito até o fim do seu próximo turno, recebe vantagem e ignora os bônus de cobertura parcial ou superior, mas não atravessa cobertura total.",
         "niveis": [
           18
         ],
         "acao": "Ação Completa",
         "duracao": "Até o fim do seu próximo turno",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "um-so-disparo",
@@ -4021,7 +4076,8 @@
         "titulo": "Zigue-Zague",
         "custo_mana": 0,
         "custo_estamina": 2,
-        "acao": "Ação Livre antes do ataque",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "duracao": "Este ataque",
         "descricao": "O alvo sofre −2 Defesa contra seu próximo disparo neste turno."
       },
@@ -4065,7 +4121,8 @@
         "titulo": "Mira Fantasma",
         "custo_mana": 0,
         "custo_estamina": 4,
-        "acao": "Ação Padrão para concentrar-se",
+        "acao": "Ação Padrão",
+        "momento": "para concentrar-se",
         "duracao": "O próximo disparo",
         "descricao": "Concentre-se por uma rodada; o próximo disparo ignora cobertura total oferecida por uma única barreira mundana fina.",
         "pre_requisitos": [
@@ -4329,7 +4386,8 @@
             "nivel": 1,
             "titulo": "Tratamento",
             "descricao": "Com uma Ação Padrão e um teste de Cura DT 15, trate uma criatura viva ao toque: ela recupera 1d6 + Mod. Sabedoria de Vida. Se você a avaliou antes, com uma Ação de Movimento, some +1d6. Cada criatura recebe esta cura uma vez por cena.",
-            "acao": "Ação Padrão para curar (Ação de Movimento para avaliar antes)",
+            "acao": "Ação Padrão",
+            "momento": "para curar (Ação de Movimento para avaliar antes)",
             "duracao": "Esta cura",
             "usos": "Uma vez por criatura, por cena",
             "dano": "1d6 + Mod. Sabedoria (+1d6 se avaliou)"
@@ -4338,7 +4396,8 @@
             "nivel": 5,
             "titulo": "Diagnóstico",
             "descricao": "Você identifica Vida, Mana e condições visíveis; sua cura remove uma condição leve de cada alvo.",
-            "acao": "Ação Livre para identificar",
+            "acao": "Ação Livre",
+            "momento": "para identificar",
             "usos": "Uma condição leve por alvo, por cena"
           },
           {
@@ -4439,12 +4498,12 @@
           {
             "nivel": 3,
             "titulo": "Primeiro Atendimento",
-            "descricao": "Até três vezes por combate, use uma Reação e gaste 5 Mana quando um aliado a até 4,5 m cair a 0 de Vida: ele ignora o Déficit de Vida, volta com 1 de Vida e então recupera 1d6. Você pega o jeito rápido: a 2ª ativação neste combate soma +1 dado a essa cura, e a 3ª soma +2 dados e também encerra uma condição leve do aliado.",
+            "descricao": "Até três vezes por cena, use uma Reação e gaste 5 Mana quando um aliado a até 4,5 m cair a 0 de Vida: ele ignora o Déficit de Vida, volta com 1 de Vida e então recupera 1d6. Você pega o jeito rápido: a 2ª ativação neste combate soma +1 dado a essa cura, e a 3ª soma +2 dados e também encerra uma condição leve do aliado.",
             "custo_mana": 5,
             "acao": "Reação",
             "alcance": "4,5 m",
             "dano": "1d6 (+1 dado na 2ª ativação do combate, +2 dados na 3ª)",
-            "usos": "Até três vezes por combate"
+            "usos": "Até três vezes por cena"
           },
           {
             "nivel": 8,
@@ -4452,7 +4511,7 @@
             "descricao": "O alcance sobe para 9 m.",
             "acao": "Reação",
             "alcance": "9 m",
-            "usos": "Até três vezes por combate"
+            "usos": "Até três vezes por cena"
           },
           {
             "nivel": 14,
@@ -4460,7 +4519,7 @@
             "descricao": "O alcance sobe para 12 m.",
             "acao": "Reação",
             "alcance": "12 m",
-            "usos": "Até três vezes por combate"
+            "usos": "Até três vezes por cena"
           },
           {
             "nivel": 20,
@@ -4469,7 +4528,7 @@
             "acao": "Reação",
             "alcance": "12 m",
             "dano": "1d12 + Mod.Sabedoria (+1 dado na 2ª ativação do combate, +2 dados na 3ª)",
-            "usos": "Até três vezes por combate"
+            "usos": "Até três vezes por cena"
           }
         ],
         "escolha_opcoes": {
@@ -4549,12 +4608,13 @@
       {
         "id": "milagre",
         "titulo": "Milagre",
-        "descricao": "Uma vez a cada cinco sessões, durante um descanso longo e com 12 Mana, restaure um membro perdido ou remova uma condição gravíssima. Não ressuscita mortos nem remove consequências narrativas sem aprovação do Mestre.",
+        "descricao": "Uma vez a cada cinco sessões, durante um descanso completo e com 12 Mana, restaure um membro perdido ou remova uma condição gravíssima. Não ressuscita mortos nem remove consequências narrativas sem aprovação do Mestre.",
         "custo_mana": 12,
         "niveis": [
           18
         ],
-        "acao": "Ação Completa durante um descanso longo",
+        "acao": "Fora de combate",
+        "momento": "Ação Completa durante um descanso completo",
         "usos": "Uma vez a cada cinco sessões"
       },
       {
@@ -4654,8 +4714,9 @@
         "titulo": "Cirurgia",
         "custo_mana": 0,
         "custo_estamina": 8,
-        "acao": "Ação Completa durante um descanso longo",
-        "descricao": "Durante um descanso longo, trate um aliado que entrou em Morrendo desde o último descanso; ele recupera toda a Vida, mas mantém condições não tratadas.",
+        "acao": "Fora de combate",
+        "momento": "Ação Completa durante um descanso completo",
+        "descricao": "Durante um descanso completo, trate um aliado que entrou em Morrendo desde o último descanso; ele recupera toda a Vida, mas mantém condições não tratadas.",
         "pre_requisitos": [
           "Nível 12 de Médico"
         ]
@@ -4924,7 +4985,8 @@
             "nivel": 1,
             "titulo": "Juramento",
             "descricao": "Sele um juramento com um aliado. Enquanto estiverem a 6 m, ambos recebem +1 em testes para resistir a efeitos. Escolha também o primeiro Juramento de Guarda da lista.",
-            "acao": "Ação Padrão para selar, depois passivo",
+            "acao": "Ação Padrão",
+            "momento": "para selar, depois passivo",
             "alcance": "6 m",
             "duracao": "Permanente, até selar outro juramento"
           },
@@ -4939,7 +5001,8 @@
             "nivel": 10,
             "titulo": "Ordem dos Guardiões",
             "descricao": "Uma vez por sessão, convoque apoio de um Guardião regional para uma tarefa legítima; o Mestre define tempo e disponibilidade. Aprenda mais um Juramento de Guarda.",
-            "acao": "Ação Livre para convocar",
+            "acao": "Ação Livre",
+            "momento": "para convocar",
             "usos": "Uma vez por sessão"
           },
           {
@@ -4953,9 +5016,9 @@
           {
             "nivel": 20,
             "titulo": "Último Laço",
-            "descricao": "Escolha um aliado voluntário após descanso longo. Uma vez por sessão, quando um dos dois cair a 0 Vida, o outro pode gastar 8 Estamina para deixá-lo com 1 Vida; o vínculo então termina. Aprenda o último Juramento de Guarda.",
+            "descricao": "Escolha um aliado voluntário após descanso completo. Uma vez por sessão, quando um dos dois cair a 0 Vida, o outro pode gastar 8 Estamina para deixá-lo com 1 Vida; o vínculo então termina. Aprenda o último Juramento de Guarda.",
             "acao": "Reação",
-            "duracao": "Até ser usado ou até o próximo descanso longo",
+            "duracao": "Até ser usado ou até o próximo descanso completo",
             "usos": "Uma vez por sessão"
           }
         ],
@@ -5000,9 +5063,9 @@
             "acao": "Reação",
             "alcance": "O mesmo do seu ataque corpo a corpo",
             "duracao": "Instantâneo",
-            "usos": "Uma vez por combate",
-            "descricao": "Uma vez por combate, quando o protegido for atingido por um ataque corpo a corpo, use uma Reação para atacar quem o atingiu.",
-            "escalonamento": "Nível 3: o ataque de reação causa +1d6. Nível 5: passa a valer duas vezes por combate."
+            "usos": "Uma vez por cena",
+            "descricao": "Uma vez por cena, quando o protegido for atingido por um ataque corpo a corpo, use uma Reação para atacar quem o atingiu.",
+            "escalonamento": "Nível 3: o ataque de reação causa +1d6. Nível 5: passa a valer duas vezes por cena."
           },
           {
             "id": "juramento-de-pedra",
@@ -5122,7 +5185,7 @@
       {
         "id": "castelo",
         "titulo": "Castelo",
-        "descricao": "Uma vez por descanso longo, gaste 8 Estamina e permaneça imóvel por três rodadas. Aliados a 6 m recebem +2 Defesa. Uma vez por rodada, use sua Reação para se tornar o alvo de um ataque feito contra um desses aliados.",
+        "descricao": "Uma vez por descanso, gaste 8 Estamina e permaneça imóvel por três rodadas. Aliados a 6 m recebem +2 Defesa. Uma vez por rodada, use sua Reação para se tornar o alvo de um ataque feito contra um desses aliados.",
         "custo_estamina": 8,
         "niveis": [
           18
@@ -5130,7 +5193,7 @@
         "acao": "Ação Padrão",
         "alcance": "6 m",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por descanso longo"
+        "usos": "Uma vez por descanso"
       },
       {
         "id": "coracao-unificado",
@@ -5918,13 +5981,13 @@
       {
         "id": "marca-do-cacador",
         "titulo": "Marca do Caçador",
-        "descricao": "Uma vez por combate, marque uma presa por três rodadas: receba +3 m de Movimento ao persegui-la, reduza em 3 o dano de cada golpe dela e +2 em testes físicos contra ela.",
+        "descricao": "Uma vez por cena, marque uma presa por três rodadas: receba +3 m de Movimento ao persegui-la, reduza em 3 o dano de cada golpe dela e +2 em testes físicos contra ela.",
         "niveis": [
           18
         ],
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "predador-perfeito",
@@ -5978,7 +6041,8 @@
         "titulo": "Armadilha",
         "custo_mana": 0,
         "custo_estamina": 4,
-        "acao": "Ação Padrão para instalar",
+        "acao": "Ação Padrão",
+        "momento": "para instalar",
         "alcance": "Adjacente",
         "duracao": "Até ser acionada",
         "dano": "2d8",
@@ -5996,9 +6060,10 @@
         "titulo": "Abate",
         "custo_mana": 0,
         "custo_estamina": 8,
-        "acao": "Ação Livre no ataque",
-        "usos": "Uma vez por combate",
-        "descricao": "Uma vez por combate, contra alvo abaixo de 10% da Vida, um acerto causa dano máximo dos dados; não é execução automática.",
+        "acao": "Ação Livre",
+        "momento": "no momento do ataque",
+        "usos": "Uma vez por cena",
+        "descricao": "Uma vez por cena, contra alvo abaixo de 10% da Vida, um acerto causa dano máximo dos dados; não é execução automática.",
         "pre_requisitos": [
           "Nível 11 de Caçador"
         ]
@@ -6353,17 +6418,18 @@
           {
             "nivel": 5,
             "titulo": "Ajuste de Campo",
-            "descricao": "Uma vez por combate, force uma arma, uma armadura ou uma engenhoca que você alcance com a mão até o fim do combate. Arma ou criação ofensiva recebe +2 de dano; armadura ou criação defensiva recebe +2 de Defesa. Funciona em item de aliado, e cada item aceita um ajuste por combate.",
+            "descricao": "Uma vez por cena, force uma arma, uma armadura ou uma engenhoca que você alcance com a mão até o fim do combate. Arma ou criação ofensiva recebe +2 de dano; armadura ou criação defensiva recebe +2 de Defesa. Funciona em item de aliado, e cada item aceita um ajuste por cena.",
             "acao": "Ação Livre",
             "alcance": "Toque",
             "duracao": "Até o fim do combate",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por cena"
           },
           {
             "nivel": 10,
             "titulo": "WALL-E",
-            "descricao": "Construa WALL-E, um construto Pequeno que anda com você. Ele tem Vida igual a duas vezes o seu nível de Engenheiro, Defesa igual à sua, Movimento 9 m e um ataque de raio de 2d8 a até 12 m, rolado com o seu bônus de Ofício (Engenharia) no lugar de Pontaria. Ele age quando você gasta uma ação de movimento para comandar. Conserto de construto e o Injetor de Reparo recuperam a Vida dele. A 0 de Vida ele desmonta e vira um fardo de sucata que dá para carregar; remontar custa um descanso longo.",
-            "acao": "Ação de Movimento para comandar",
+            "descricao": "Construa WALL-E, um construto Pequeno que anda com você. Ele tem Vida igual a duas vezes o seu nível de Engenheiro, Defesa igual à sua, Movimento 9 m e um ataque de raio de 2d8 a até 12 m, rolado com o seu bônus de Ofício (Engenharia) no lugar de Pontaria. Ele age quando você gasta uma ação de movimento para comandar. Conserto de construto e o Injetor de Reparo recuperam a Vida dele. A 0 de Vida ele desmonta e vira um fardo de sucata que dá para carregar; remontar custa um descanso completo.",
+            "acao": "Ação de Movimento",
+            "momento": "para comandar",
             "alcance": "Ataque de 12 m",
             "dano": "2d8 de raio"
           },
@@ -6371,13 +6437,15 @@
             "nivel": 15,
             "titulo": "Ordens Simples",
             "descricao": "Suas criações entendem uma ordem falada de uma frase. Uma vez por rodada, sem gastar ação sua, uma delas resolve uma interação com o cenário no seu lugar: puxar alavanca, abrir porta destrancada, apanhar objeto solto, apagar fogo pequeno, segurar corda. Ordem que vire ataque, cura ou teste de perícia continua exigindo a ação de quem comanda.",
-            "acao": "Ação Livre, uma vez por rodada"
+            "acao": "Ação Livre",
+            "momento": "uma vez por rodada"
           },
           {
             "nivel": 20,
             "titulo": "Invenção Suprema",
             "descricao": "Projete com o Mestre uma Invenção Suprema, sua e permanente na ficha. Ela cumpre uma função de utilidade só, sem dano, e funciona sempre que você quiser, sem limite por sessão: um andaime que se monta sozinho e leva o grupo por até 24 m, um olho mecânico que vigia uma sala e avisa você, uma ponte dobrável de até 12 m, uma fechadura que só abre para quem você escolher. Ela não copia nenhuma habilidade final, e o Engenho Divino segue como o seu momento de dano.",
-            "acao": "Conforme a invenção"
+            "acao": "Fora de combate",
+            "momento": "projetada com o Mestre; o uso segue a invenção"
           }
         ],
         "escolha_opcoes": {
@@ -6730,7 +6798,7 @@
       {
         "id": "arquitetura-tech",
         "titulo": "Arquitetura de Campo",
-        "descricao": "Uma vez por descanso longo, gaste uma Ação Completa e 8 de Estamina para erguer uma estrutura em uma área de 6 m que você enxergue a até 12 m. Ela dura cinco rodadas. Escolha o tipo quando montar. Cobertura: placas e teto dão cobertura superior e +5 de Defesa a quem estiver dentro. A estrutura aguenta 30 de dano antes de ceder. Mobilidade: rampas, cabos e passarelas ligam a área a um ponto a até 12 m. Quem passar por elas não precisa fazer teste, e o terreno difícil dentro da área deixa de contar. Suporte: uma bancada de campo dá +2 em testes de perícia com ferramentas aos aliados na área. Você também monta imediatamente uma engenhoca extra da sua lista, que expira junto com a estrutura.",
+        "descricao": "Uma vez por descanso, gaste uma Ação Completa e 8 de Estamina para erguer uma estrutura em uma área de 6 m que você enxergue a até 12 m. Ela dura cinco rodadas. Escolha o tipo quando montar. Cobertura: placas e teto dão cobertura superior e +5 de Defesa a quem estiver dentro. A estrutura aguenta 30 de dano antes de ceder. Mobilidade: rampas, cabos e passarelas ligam a área a um ponto a até 12 m. Quem passar por elas não precisa fazer teste, e o terreno difícil dentro da área deixa de contar. Suporte: uma bancada de campo dá +2 em testes de perícia com ferramentas aos aliados na área. Você também monta imediatamente uma engenhoca extra da sua lista, que expira junto com a estrutura.",
         "custo_estamina": 8,
         "niveis": [
           18
@@ -6738,7 +6806,7 @@
         "acao": "Ação Completa",
         "alcance": "12 m",
         "duracao": "Cinco rodadas",
-        "usos": "Uma vez por descanso longo"
+        "usos": "Uma vez por descanso"
       },
       {
         "id": "engenho-divino",
@@ -6914,7 +6982,7 @@
         {
           "tarefa": "Reproduzir uma fórmula alheia a partir do frasco vazio",
           "dt": "Difícil do seu nível",
-          "nota": "Um descanso longo. Sucesso conta como fórmula conhecida até o Mestre dizer o contrário."
+          "nota": "Um descanso completo. Sucesso conta como fórmula conhecida até o Mestre dizer o contrário."
         },
         {
           "tarefa": "Esticar uma dose preparada em duas de meio efeito",
@@ -7163,14 +7231,16 @@
             "nivel": 1,
             "titulo": "Bancada Portátil",
             "descricao": "Depois de cada descanso, gaste 1 lote de Componentes Químicos da raridade exigida pelo nível atual das suas fórmulas e prepare três doses. Um único lote abastece todas as doses do descanso: não é 1 por fórmula ou por frasco. Fórmula nível 1 exige Comum; nível 2, Incomum; nível 3, Raro; nível 4, Épico; nível 5, Lendário. Um componente superior substitui um inferior, mas componentes inferiores nunca se somam para criar uma raridade maior. Duas doses podem ser da mesma fórmula. A dose se gasta ao ser usada e a que sobrou expira no descanso seguinte. Usar não custa Mana. Você já entra conhecendo Cura Menor, Fogo Alquímico e Antídoto.",
-            "acao": "Ação Padrão para usar uma dose",
+            "acao": "Ação Padrão",
+            "momento": "para usar uma dose",
             "usos": "Três doses por descanso"
           },
           {
             "nivel": 5,
             "titulo": "Mão Rápida",
             "descricao": "Prepare quatro doses por descanso. Aplicar uma dose em você mesmo ou numa criatura adjacente passa a custar uma Ação de Movimento; arremessar continua sendo Ação Padrão.",
-            "acao": "Ação de Movimento no toque",
+            "acao": "Ação de Movimento",
+            "momento": "no toque",
             "usos": "Quatro doses por descanso"
           },
           {
@@ -7437,7 +7507,7 @@
       {
         "id": "transmutacao-mestra",
         "titulo": "Transmutação Mestra",
-        "descricao": "Uma vez por descanso longo, gaste 8 Mana para alterar por uma cena o material de um objeto mundano de até 2 m³ que você esteja tocando. Pedra vira madeira, ferro vira vidro, corda vira corrente. A regra fecha quatro portas: nada de moeda, nada de artefato, nada de ser vivo e nada de componente raro que fique permanente.",
+        "descricao": "Uma vez por descanso, gaste 8 Mana para alterar por uma cena o material de um objeto mundano de até 2 m³ que você esteja tocando. Pedra vira madeira, ferro vira vidro, corda vira corrente. A regra fecha quatro portas: nada de moeda, nada de artefato, nada de ser vivo e nada de componente raro que fique permanente.",
         "custo_mana": 8,
         "niveis": [
           18
@@ -7445,7 +7515,7 @@
         "acao": "Ação Completa",
         "alcance": "Toque",
         "duracao": "Uma cena",
-        "usos": "Uma vez por descanso longo"
+        "usos": "Uma vez por descanso"
       },
       {
         "id": "pedra-filosofal",
@@ -7897,7 +7967,8 @@
             "nivel": 20,
             "titulo": "Operação Comercial",
             "descricao": "Uma vez por sessão, declare uma operação plausível e monte a cena com o Mestre. Durante ela, o grupo recebe acesso a equipamento comum ou incomum necessário para o serviço, com teto de 2.000 Lunaris no total. O que não for consumido volta ao dono no fim da cena, e o que sumir vira dívida sua.",
-            "acao": "Ação Completa para abrir a operação",
+            "acao": "Ação Completa",
+            "momento": "para abrir a operação",
             "usos": "Uma vez por sessão"
           }
         ],
@@ -7952,14 +8023,14 @@
       {
         "id": "estoque",
         "titulo": "Estoque",
-        "descricao": "O que você carrega para vender, e que dá para usar quando a hora aperta. Depois de cada descanso longo, escolha um item consignado por vaga: ele sai de uma das linhas que você trabalha, respeita o teto de preço do seu nível de Estoque e fica com você até o próximo descanso longo. O que for usado, você paga ou repõe antes do descanso seguinte; enquanto a conta estiver aberta, aquela vaga não recarrega.",
+        "descricao": "O que você carrega para vender, e que dá para usar quando a hora aperta. Depois de cada descanso completo, escolha um item consignado por vaga: ele sai de uma das linhas que você trabalha, respeita o teto de preço do seu nível de Estoque e fica com você até o próximo descanso completo. O que for usado, você paga ou repõe antes do descanso seguinte; enquanto a conta estiver aberta, aquela vaga não recarrega.",
         "niveis": [
           3,
           8,
           14,
           20
         ],
-        "usos": "Um item consignado por vaga, por descanso longo",
+        "usos": "Um item consignado por vaga, por descanso",
         "escalonamento": {
           "rotulo": "Nível de Estoque",
           "descricao": "O teto de preço do consignado sobe com a classe, seguindo a escada de raridade da economia: nível 1 vai até 60 Lunaris (Comum), nível 2 até 240 (Incomum), nível 3 até 960 (Raro) e nível 4 até 2.000 (Épico de entrada, um teto de propósito abaixo do degrau seguinte da escada, 3.840). O teto vale por item, e o consignado continua sendo consumível ou ferramenta, nunca arma ou armadura de guerra.",
@@ -7984,7 +8055,7 @@
         },
         "escolha_opcoes": {
           "rotulo": "Linhas de estoque",
-          "descricao": "Uma linha por estágio: uma no nível 3, duas no 8, três no 14 e quatro no 20. A linha diz de que prateleira você tira o consignado; o item exato você escolhe a cada descanso longo, dentro do teto do seu nível de Estoque. Repetir a mesma linha em duas vagas dobra quantos itens dela você carrega.",
+          "descricao": "Uma linha por estágio: uma no nível 3, duas no 8, três no 14 e quatro no 20. A linha diz de que prateleira você tira o consignado; o item exato você escolhe a cada descanso completo, dentro do teto do seu nível de Estoque. Repetir a mesma linha em duas vagas dobra quantos itens dela você carrega.",
           "por_estagio": 1,
           "repetivel": true
         },
@@ -7992,90 +8063,100 @@
           {
             "id": "pocoes-e-curativos",
             "titulo": "Poções e Curativos",
-            "acao": "Escolhido no descanso longo",
+            "acao": "Fora de combate",
+            "momento": "escolhido no descanso completo",
             "alcance": "Um item por vaga",
-            "duracao": "Até o próximo descanso longo",
+            "duracao": "Até o próximo descanso completo",
             "descricao": "Poção, elixir, unguento, atadura e kit de primeiros socorros. A linha que mais some rápido e a que o grupo mais cobra de você.",
             "escalonamento": "Nível 2: entra poção incomum. Nível 3: entra poção rara e antídoto específico. Nível 4: entra frasco de raridade épica de entrada."
           },
           {
             "id": "municao-e-projeteis",
             "titulo": "Munição e Projéteis",
-            "acao": "Escolhido no descanso longo",
+            "acao": "Fora de combate",
+            "momento": "escolhido no descanso completo",
             "alcance": "Um item por vaga",
-            "duracao": "Até o próximo descanso longo",
+            "duracao": "Até o próximo descanso completo",
             "descricao": "Flecha, virote, bala, dardo e projétil especial. Uma vaga cobre a carga de uma cena inteira de tiro, não uma unidade.",
             "escalonamento": "Nível 2: munição tratada, +1 de dano contra um tipo de alvo. Nível 3: munição de raridade Rara. Nível 4: dois lotes diferentes na mesma vaga."
           },
           {
             "id": "explosivos-e-cargas",
             "titulo": "Explosivos e Cargas",
-            "acao": "Escolhido no descanso longo",
+            "acao": "Fora de combate",
+            "momento": "escolhido no descanso completo",
             "alcance": "Um item por vaga",
-            "duracao": "Até o próximo descanso longo",
+            "duracao": "Até o próximo descanso completo",
             "descricao": "Bomba, carga de demolição, fumígeno e sinalizador. Mercadoria que a fiscalização olha torto e que resolve porta trancada.",
             "escalonamento": "Nível 2: carga incomum. Nível 3: carga rara ou de efeito dirigido. Nível 4: carga épica de entrada, com detonação por tempo."
           },
           {
             "id": "kits-e-ferramentas",
             "titulo": "Kits e Ferramentas",
-            "acao": "Escolhido no descanso longo",
+            "acao": "Fora de combate",
+            "momento": "escolhido no descanso completo",
             "alcance": "Um item por vaga",
-            "duracao": "Até o próximo descanso longo",
+            "duracao": "Até o próximo descanso completo",
             "descricao": "Kit de ofício, gazua, instrumento de medida, lupa e bancada portátil. Não faz dano, e abre metade das cenas que dano nenhum abriria.",
             "escalonamento": "Nível 2: kit de qualidade, +1 no teste que ele acompanha. Nível 3: ferramenta rara ou instrumento da A.X.I.S. Nível 4: o bônus da linha sobe para +2."
           },
           {
             "id": "provisoes-e-acampamento",
             "titulo": "Provisões e Acampamento",
-            "acao": "Escolhido no descanso longo",
+            "acao": "Fora de combate",
+            "momento": "escolhido no descanso completo",
             "alcance": "Um item por vaga",
-            "duracao": "Até o próximo descanso longo",
+            "duracao": "Até o próximo descanso completo",
             "descricao": "Ração, água limpa, tenda, corda, lampião e agasalho. A linha que decide se o descanso do grupo é bom ou péssimo.",
             "escalonamento": "Nível 2: o material sobe a qualidade do descanso em uma categoria. Nível 3: equipamento para clima extremo. Nível 4: acampamento completo para o grupo inteiro."
           },
           {
             "id": "venenos-e-reagentes",
             "titulo": "Venenos e Reagentes",
-            "acao": "Escolhido no descanso longo",
+            "acao": "Fora de combate",
+            "momento": "escolhido no descanso completo",
             "alcance": "Um item por vaga",
-            "duracao": "Até o próximo descanso longo",
+            "duracao": "Até o próximo descanso completo",
             "descricao": "Veneno de lâmina, ácido, reagente alquímico e componente de fórmula. Mercadoria cara, ilegal em metade das praças e sempre com comprador.",
             "escalonamento": "Nível 2: veneno incomum. Nível 3: aflição publicada de DT Fortitude 15. Nível 4: aflição rara, com o estágio inicial mais alto."
           },
           {
             "id": "pecas-e-sobressalentes",
             "titulo": "Peças e Sobressalentes",
-            "acao": "Escolhido no descanso longo",
+            "acao": "Fora de combate",
+            "momento": "escolhido no descanso completo",
             "alcance": "Um item por vaga",
-            "duracao": "Até o próximo descanso longo",
+            "duracao": "Até o próximo descanso completo",
             "descricao": "Engrenagem, célula, cabo, chapa e peça de reposição de veículo ou construto. O que faz o conserto de campo acontecer em vez de virar promessa.",
             "escalonamento": "Nível 2: peça que dispensa o teste de improviso. Nível 3: componente raro de veículo ou construto. Nível 4: módulo pronto, instalado numa hora."
           },
           {
             "id": "documentos-e-selos",
             "titulo": "Documentos e Selos",
-            "acao": "Escolhido no descanso longo",
+            "acao": "Fora de combate",
+            "momento": "escolhido no descanso completo",
             "alcance": "Um item por vaga",
-            "duracao": "Até o próximo descanso longo",
+            "duracao": "Até o próximo descanso completo",
             "descricao": "Licença, passe, carta de crédito, selo de guilda e papelada em branco pronta para ser preenchida. A linha que resolve porta que dinheiro sozinho não abre.",
             "escalonamento": "Nível 2: o documento aguenta uma conferência atenta. Nível 3: passe de facção ou salvo-conduto regional. Nível 4: autorização que atravessa fronteira de Árvore."
           },
           {
             "id": "curiosidades-e-presentes",
             "titulo": "Curiosidades e Presentes",
-            "acao": "Escolhido no descanso longo",
+            "acao": "Fora de combate",
+            "momento": "escolhido no descanso completo",
             "alcance": "Um item por vaga",
-            "duracao": "Até o próximo descanso longo",
+            "duracao": "Até o próximo descanso completo",
             "descricao": "Bugiganga, perfume, bebida boa, joia pequena e lembrança de terra distante. Mercadoria que vale pelo que significa para quem recebe.",
             "escalonamento": "Nível 2: +2 no primeiro teste social com quem recebe. Nível 3: o presente certo abre uma audiência que estava fechada. Nível 4: peça de coleção, e o bônus social sobe para +4 com o colecionador certo."
           },
           {
             "id": "contrabando",
             "titulo": "Contrabando",
-            "acao": "Escolhido no descanso longo",
+            "acao": "Fora de combate",
+            "momento": "escolhido no descanso completo",
             "alcance": "Um item por vaga",
-            "duracao": "Até o próximo descanso longo",
+            "duracao": "Até o próximo descanso completo",
             "descricao": "Mercadoria proibida na praça onde você está: arma restrita, item de facção rival, relíquia sem procedência. Exige a praça Mercado Negro para entrar no seu estoque.",
             "escalonamento": "Nível 2: a carga passa por fiscalização comum sem teste. Nível 3: entra item de raridade Rara restrita. Nível 4: entra item épico de entrada, e o fornecedor cobra um favor junto."
           }
@@ -8088,7 +8169,8 @@
         "niveis": [
           18
         ],
-        "acao": "Ação Completa para redigir",
+        "acao": "Ação Completa",
+        "momento": "para redigir",
         "duracao": "Até o objetivo, o prazo ou o fim da sessão",
         "usos": "Uma vez por sessão"
       },
@@ -8163,7 +8245,8 @@
         "id": "seguro",
         "titulo": "Seguro",
         "custo_mana": 5,
-        "acao": "Ação Completa no fim do descanso",
+        "acao": "Fora de combate",
+        "momento": "Ação Completa no fim do descanso",
         "duracao": "Uma sessão",
         "descricao": "Escolha um item ao fim do descanso e registre a apólice. Se ele for destruído nesta sessão, você recebe metade do valor dele em Lunaris depois de uma cena resolvendo a cobertura com o Mestre. Um item por apólice, uma apólice por vez."
       },
@@ -8509,9 +8592,9 @@
           {
             "nivel": 10,
             "titulo": "No Chão Não",
-            "descricao": "Uma vez por combate, quando você deixar um inimigo Caído, faça imediatamente um ataque adicional contra ele. Esse ataque adicional não pode ativar este efeito de novo.",
+            "descricao": "Uma vez por cena, quando você deixar um inimigo Caído, faça imediatamente um ataque adicional contra ele. Esse ataque adicional não pode ativar este efeito de novo.",
             "acao": "Passivo",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por cena"
           },
           {
             "nivel": 15,
@@ -8662,7 +8745,8 @@
         "titulo": "Soco",
         "custo_mana": 0,
         "custo_estamina": 5,
-        "acao": "Ação Livre antes do ataque",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "duracao": "Este ataque",
         "dano": "+1d12 (+2d12 a partir do nível 8)",
         "descricao": "Seu próximo ataque ignora 8 de Resistência e causa +1d12. A partir do nível 8, causa +2d12."
@@ -8701,7 +8785,8 @@
         "titulo": "Impacto",
         "custo_mana": 0,
         "custo_estamina": 6,
-        "acao": "Ação Livre no momento do ataque",
+        "acao": "Ação Livre",
+        "momento": "no momento do ataque",
         "duracao": "Este ataque",
         "dano": "+1d10 (+2d10 no nível 8, +3d10 no 14)",
         "descricao": "Cause +1d10 em um ataque e empurre o alvo até 6 m. O dano a mais sobe para +2d10 no nível 8 e para +3d10 no nível 14."
@@ -8742,11 +8827,12 @@
         "titulo": "Punho",
         "custo_mana": 0,
         "custo_estamina": 9,
-        "acao": "Ação Livre no momento do ataque",
+        "acao": "Ação Livre",
+        "momento": "no momento do ataque",
         "dano": "+4d12",
         "defesa": "Fortitude",
-        "usos": "Uma vez por combate",
-        "descricao": "Uma vez por combate, cause +4d12; o alvo testa Fortitude contra a DT do Campeão Dimensional ou sofre Fratura (−2 em testes físicos até tratamento e descanso completo).",
+        "usos": "Uma vez por cena",
+        "descricao": "Uma vez por cena, cause +4d12; o alvo testa Fortitude contra a DT do Campeão Dimensional ou sofre Fratura (−2 em testes físicos até tratamento e descanso completo).",
         "pre_requisitos": [
           "Nível 12 de Campeão Dimensional"
         ]
@@ -9032,11 +9118,11 @@
           {
             "nivel": 10,
             "titulo": "Fúria da Maré",
-            "descricao": "Uma vez por combate, use uma Ação Livre para entrar em fúria por três rodadas. No primeiro turno da fúria, você pode atacar uma vez a mais. Durante as três rodadas, recebe +2 de Defesa, e inimigos a até 3 m sofrem −2 nos ataques contra você.",
+            "descricao": "Uma vez por cena, use uma Ação Livre para entrar em fúria por três rodadas. No primeiro turno da fúria, você pode atacar uma vez a mais. Durante as três rodadas, recebe +2 de Defesa, e inimigos a até 3 m sofrem −2 nos ataques contra você.",
             "acao": "Ação Livre",
             "alcance": "3 m",
             "duracao": "Três rodadas",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por cena"
           },
           {
             "nivel": 15,
@@ -9281,7 +9367,7 @@
       {
         "id": "tripulacao-dos-condenados",
         "titulo": "Tripulação dos Condenados",
-        "descricao": "Uma vez por combate, invoque três espectros afogados em pontos a até 6 m de você. Cada um tem Defesa igual à sua, 1 de Vida e Movimento igual ao de um humano. Eles não atacam. Quando você ou um aliado a até 1,5 m de um espectro for atingido, o espectro pode receber o golpe e desaparecer no lugar do alvo. Sempre que um espectro desaparece, ele causa 1d6 de dano de Água a uma criatura adjacente escolhida por você. Os espectros que sobrarem desaparecem depois de três rodadas.",
+        "descricao": "Uma vez por cena, invoque três espectros afogados em pontos a até 6 m de você. Cada um tem Defesa igual à sua, 1 de Vida e Movimento igual ao de um humano. Eles não atacam. Quando você ou um aliado a até 1,5 m de um espectro for atingido, o espectro pode receber o golpe e desaparecer no lugar do alvo. Sempre que um espectro desaparece, ele causa 1d6 de dano de Água a uma criatura adjacente escolhida por você. Os espectros que sobrarem desaparecem depois de três rodadas.",
         "niveis": [
           18
         ],
@@ -9289,7 +9375,7 @@
         "alcance": "6 m",
         "duracao": "Três rodadas",
         "dano": "1d6 de Água ao desaparecer",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "senhor-das-profundezas",
@@ -9344,7 +9430,8 @@
         "titulo": "Garras do Abismo",
         "custo_mana": 0,
         "custo_estamina": 4,
-        "acao": "Ação Livre antes do ataque",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "duracao": "Uma rodada",
         "defesa": "Fortitude contra a DT da Maldição",
         "dano": "+1d10",
@@ -9782,9 +9869,9 @@
           {
             "nivel": 10,
             "titulo": "Jogada Dupla",
-            "descricao": "Aprenda uma carta de segundo círculo do Fluxo nativo, quatro no total. Uma vez por combate, com uma ação completa, jogue duas cartas de primeiro círculo, ou uma de primeiro e uma de segundo.",
+            "descricao": "Aprenda uma carta de segundo círculo do Fluxo nativo, quatro no total. Uma vez por cena, com uma ação completa, jogue duas cartas de primeiro círculo, ou uma de primeiro e uma de segundo.",
             "acao": "Ação Completa",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por cena"
           },
           {
             "nivel": 15,
@@ -9932,7 +10019,8 @@
         "id": "morte",
         "titulo": "Morte",
         "custo_mana": 8,
-        "acao": "Ação Livre no momento do ataque",
+        "acao": "Ação Livre",
+        "momento": "no momento do ataque",
         "dano": "Dano máximo",
         "descricao": "Contra um alvo abaixo de 10% da Vida, uma carta causa dano máximo. A queda do alvo continua seguindo as regras normais de Vida 0 e Morrendo.",
         "pre_requisitos": [
@@ -9943,7 +10031,8 @@
         "id": "a-lua",
         "titulo": "A Lua",
         "custo_mana": 2,
-        "acao": "Ação Livre após acerto crítico com carta",
+        "acao": "Ação Livre",
+        "momento": "após acerto crítico com carta",
         "defesa": "Fortitude",
         "descricao": "Após obter um acerto crítico com uma carta, gaste 2 Mana. O alvo testa Fortitude contra a DT do Cartista Arcano; em falha, fica Caído."
       },
@@ -9968,7 +10057,8 @@
         "id": "o-sol",
         "titulo": "O Sol",
         "custo_mana": 5,
-        "acao": "Ação Livre no momento do ataque",
+        "acao": "Ação Livre",
+        "momento": "no momento do ataque",
         "dano": "Queimando",
         "duracao": "Até apagar",
         "descricao": "Uma carta deixa o alvo Queimando. Soma com o +1d4 de fogo do naipe de Paus."
@@ -10266,7 +10356,8 @@
             "nivel": 20,
             "titulo": "Âncora Viva",
             "descricao": "Uma âncora sua pode ser plantada num aliado voluntário e passa a acompanhá-lo aonde ele for. Ela conta no seu limite de âncoras, e o vínculo se desfaz se o aliado recusar ou morrer.",
-            "acao": "Um minuto para plantar"
+            "acao": "Fora de combate",
+            "momento": "um minuto para plantar"
           }
         ]
       },
@@ -10436,8 +10527,8 @@
         "acao": "Ação Padrão",
         "alcance": "18 m",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por combate",
-        "descricao": "Uma vez por combate, crie por três rodadas dois portais visíveis a até 18 m; atravessá-los custa 3 m de Movimento.",
+        "usos": "Uma vez por cena",
+        "descricao": "Uma vez por cena, crie por três rodadas dois portais visíveis a até 18 m; atravessá-los custa 3 m de Movimento.",
         "pre_requisitos": [
           "Nível 10 de Guia Dimensional"
         ]
@@ -10728,8 +10819,9 @@
           {
             "nivel": 1,
             "titulo": "Asauchi",
-            "descricao": "Após um descanso longo, vincule uma arma corpo a corpo à sua alma. Ela se torna sua Zanpakutō sem mudar o dano, o alcance ou as modificações originais. Você pode manifestá-la ou recolhê-la e escolhe, a cada acerto, se ela causa o tipo de dano original ou dano de Essência. Ela atinge criaturas incorpóreas e volta para você ao fim de um descanso longo se for perdida ou destruída.",
-            "acao": "Ação Livre para manifestar ou recolher",
+            "descricao": "Após um descanso completo, vincule uma arma corpo a corpo à sua alma. Ela se torna sua Zanpakutō sem mudar o dano, o alcance ou as modificações originais. Você pode manifestá-la ou recolhê-la e escolhe, a cada acerto, se ela causa o tipo de dano original ou dano de Essência. Ela atinge criaturas incorpóreas e volta para você ao fim de um descanso completo se for perdida ou destruída.",
+            "acao": "Ação Livre",
+            "momento": "para manifestar ou recolher",
             "alcance": "Pessoal",
             "duracao": "Permanente, até vincular outra arma"
           },
@@ -10744,12 +10836,12 @@
           {
             "nivel": 10,
             "titulo": "Shikai",
-            "descricao": "Escolha um Aspecto da Zanpakutō. Uma vez por combate, gaste 5 de Mana e profira a frase de liberação seguida do nome da lâmina para ativar o Shikai. Durante três rodadas, aplique o efeito de Shikai do aspecto escolhido.",
+            "descricao": "Escolha um Aspecto da Zanpakutō. Uma vez por cena, gaste 5 de Mana e profira a frase de liberação seguida do nome da lâmina para ativar o Shikai. Durante três rodadas, aplique o efeito de Shikai do aspecto escolhido.",
             "custo_mana": 5,
             "acao": "Ação Livre",
             "alcance": "Pessoal",
             "duracao": "Três rodadas",
-            "usos": "Uma vez por combate"
+            "usos": "Uma vez por cena"
           },
           {
             "nivel": 15,
@@ -10890,7 +10982,7 @@
           {
             "id": "cinzas-do-fim",
             "titulo": "Cinzas do Fim",
-            "descricao": "Shikai: uma vez por combate, concentre todo o calor da lâmina em um único corte: faça um ataque com a Zanpakutō que, se acertar, causa 3d8 de dano de fogo em vez do dano normal e ignora Resistência a fogo do alvo.",
+            "descricao": "Shikai: uma vez por cena, concentre todo o calor da lâmina em um único corte: faça um ataque com a Zanpakutō que, se acertar, causa 3d8 de dano de fogo em vez do dano normal e ignora Resistência a fogo do alvo.",
             "escalonamento": "Bankai: quando uma criatura hostil é reduzida a 0 de Vida por essa lâmina em chamas, as cinzas dela se erguem como um espectro que luta ao seu lado até o fim do combate, atacando por você uma vez por rodada e causando 1d8 de dano físico."
           },
           {
@@ -10908,7 +11000,7 @@
           {
             "id": "colapso",
             "titulo": "Colapso",
-            "descricao": "Shikai: uma vez por combate, como Ação Padrão, detone a pressão espiritual da lâmina num raio de 4,5 m: cada criatura na área testa Fortitude contra a DT do Caçador das Almas, sofrendo 3d6 de dano de Essência em falha ou metade em sucesso. Você não pode atacar com a Zanpakutō no turno em que usar este efeito.",
+            "descricao": "Shikai: uma vez por cena, como Ação Padrão, detone a pressão espiritual da lâmina num raio de 4,5 m: cada criatura na área testa Fortitude contra a DT do Caçador das Almas, sofrendo 3d6 de dano de Essência em falha ou metade em sucesso. Você não pode atacar com a Zanpakutō no turno em que usar este efeito.",
             "escalonamento": "Bankai: o raio aumenta para 6 m, o dano sobe para 4d6 e some a restrição de não atacar no mesmo turno."
           }
         ]
@@ -10982,14 +11074,14 @@
       {
         "id": "konso-funeral-da-alma",
         "titulo": "Konsō: Funeral da Alma",
-        "descricao": "Konsō é o ritual que os Caçadores das Almas usam para guiar uma alma sofredora ao descanso, em vez de deixá-la apodrecer até virar algo pior. Uma vez por combate, gaste uma Ação Completa para tocar uma alma vulnerável: qualquer alma voluntária, viva ou não, ou um espírito hostil com metade da Vida máxima ou menos. Contra um alvo hostil, ele testa Vontade contra a DT do Caçador das Almas. Em sucesso, ele resiste ao ritual: sofre −2 de Defesa contra o seu próximo ataque, até o fim do seu próximo turno, mas a tentativa é gasta mesmo assim. Em falha, ou se o alvo for voluntário, a alma é purificada e enviada além, removida da cena sem ser destruída pela força. Se ela estava possuindo um hospedeiro, a possessão termina na hora e o hospedeiro se estabiliza, mesmo que esteja com a Vida abaixo de 0. Ao concluir um Konsō com sucesso, você absorve parte da energia liberada e recupera 1d8 pontos de Vida ou Mana, à sua escolha.",
+        "descricao": "Konsō é o ritual que os Caçadores das Almas usam para guiar uma alma sofredora ao descanso, em vez de deixá-la apodrecer até virar algo pior. Uma vez por cena, gaste uma Ação Completa para tocar uma alma vulnerável: qualquer alma voluntária, viva ou não, ou um espírito hostil com metade da Vida máxima ou menos. Contra um alvo hostil, ele testa Vontade contra a DT do Caçador das Almas. Em sucesso, ele resiste ao ritual: sofre −2 de Defesa contra o seu próximo ataque, até o fim do seu próximo turno, mas a tentativa é gasta mesmo assim. Em falha, ou se o alvo for voluntário, a alma é purificada e enviada além, removida da cena sem ser destruída pela força. Se ela estava possuindo um hospedeiro, a possessão termina na hora e o hospedeiro se estabiliza, mesmo que esteja com a Vida abaixo de 0. Ao concluir um Konsō com sucesso, você absorve parte da energia liberada e recupera 1d8 pontos de Vida ou Mana, à sua escolha.",
         "niveis": [
           18
         ],
         "acao": "Ação Completa",
         "alcance": "Toque",
         "defesa": "Vontade",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "bankai",
@@ -11079,7 +11171,7 @@
         "acao": "Reação",
         "alcance": "Pessoal",
         "duracao": "Instantânea",
-        "usos": "Uma vez por combate",
+        "usos": "Uma vez por cena",
         "descricao": "Quando for atingido, deixe uma pós-imagem no lugar, reduza o dano do ataque à metade e mova-se até 3 m sem provocar Reações.",
         "pre_requisitos": [
           "Nível 8 de Caçador das Almas"
@@ -11093,14 +11185,15 @@
         "alcance": "Toque",
         "duracao": "Instantânea",
         "usos": "Uma vez por descanso por alvo",
-        "descricao": "Restaure 2d8 de Vida de uma criatura viva ou espiritual. A partir do nível 10, você pode gastar 8 de Mana no lugar de 5 para restaurar 3d8. Cada alvo só pode receber esta cura uma vez por descanso longo."
+        "descricao": "Restaure 2d8 de Vida de uma criatura viva ou espiritual. A partir do nível 10, você pode gastar 8 de Mana no lugar de 5 para restaurar 3d8. Cada alvo só pode receber esta cura uma vez por descanso."
       },
       {
         "id": "senka",
         "titulo": "Flor do Passo (Senka)",
         "custo_mana": 0,
         "custo_estamina": 5,
-        "acao": "Ação Livre após Passo Relâmpago",
+        "acao": "Ação Livre",
+        "momento": "após Passo Relâmpago",
         "alcance": "Pessoal",
         "duracao": "Até o fim do turno",
         "dano": "+1 dado no próximo ataque",
@@ -11130,8 +11223,8 @@
         "custo_mana": 2,
         "acao": "Ação Padrão",
         "alcance": "Toque",
-        "duracao": "Até seu próximo descanso longo",
-        "descricao": "Leia o vínculo de uma alma tocada. Até seu próximo descanso longo, saiba a direção aproximada dela enquanto estiver na mesma dimensão e receba vantagem para rastrear sua presença espiritual."
+        "duracao": "Até seu próximo descanso completo",
+        "descricao": "Leia o vínculo de uma alma tocada. Até seu próximo descanso completo, saiba a direção aproximada dela enquanto estiver na mesma dimensão e receba vantagem para rastrear sua presença espiritual."
       },
       {
         "id": "separacao-da-alma",
@@ -11887,7 +11980,7 @@
             "nivel": 1,
             "titulo": "Primeiro Vínculo",
             "acao": "Passivo",
-            "descricao": "Escolha duas criaturas do primeiro nível do Catálogo de Invocações. Elas são feitas do seu Fluxo nativo, que dá a aparência delas, e cada uma tem ficha pronta (Vida, Defesa, Movimento e uma habilidade). Até duas ficam em cena ao mesmo tempo; as outras esperam guardadas, e você troca fora de combate ou com o Chamado Rápido. Em combate, as invocações agem logo depois do seu turno, cada uma com a própria Ação Padrão e o próprio Movimento, sem gastar nenhuma das suas ações. O ataque delas usa o seu teste de conjuração (d20 + Mod. Fluxo + metade do nível total + Grau de Misticismo) contra a Defesa do alvo, e os testes de resistência delas usam os seus bônus. Manter as invocações não custa Mana. Quando uma cai a 0 de Vida, ela se desfaz e volta com a Vida cheia no seu próximo descanso longo."
+            "descricao": "Escolha duas criaturas do primeiro nível do Catálogo de Invocações. Elas são feitas do seu Fluxo nativo, que dá a aparência delas, e cada uma tem ficha pronta (Vida, Defesa, Movimento e uma habilidade). Até duas ficam em cena ao mesmo tempo; as outras esperam guardadas, e você troca fora de combate ou com o Chamado Rápido. Em combate, as invocações agem logo depois do seu turno, cada uma com a própria Ação Padrão e o próprio Movimento, sem gastar nenhuma das suas ações. O ataque delas usa o seu teste de conjuração (d20 + Mod. Fluxo + metade do nível total + Grau de Misticismo) contra a Defesa do alvo, e os testes de resistência delas usam os seus bônus. Manter as invocações não custa Mana. Quando uma cai a 0 de Vida, ela se desfaz e volta com a Vida cheia no seu próximo descanso completo."
           },
           {
             "nivel": 5,
@@ -11911,7 +12004,7 @@
             "nivel": 20,
             "titulo": "Escolha Final",
             "acao": "Passivo",
-            "descricao": "Escolha uma última vez: duas invocações novas do primeiro nível do Catálogo, ou duas que já tem avançando um nível nele. Depois do 20 o Catálogo para de ganhar níveis, e as invocações crescem com você: do nível 21 de Invocador em diante, cada uma ganha +3 de Vida por nível acima do 20 e +1 de Defesa a cada 5 níveis acima do 20, e o dano ou a cura da habilidade dela ganha +1d6 no nível 30, outro no 40 e outro no 50."
+            "descricao": "Escolha uma última vez: duas invocações novas do primeiro nível do Catálogo, ou duas que já tem avançando um nível nele. Depois do 20 o Catálogo para de ganhar níveis, e as invocações crescem com você: do nível 21 de Invocador em diante, cada uma ganha +3 de Vida por nível acima do 20, e o dano ou a cura da habilidade dela ganha +1d6 no nível 30, outro no 40 e outro no 50."
           }
         ]
       },
@@ -12112,7 +12205,7 @@
         "titulo": "Essência Adaptável",
         "custo_mana": 0,
         "acao": "Passivo",
-        "descricao": "Após um descanso longo, escolha Fogo, Gelo, Raio ou Ácido: o ataque das suas invocações causa esse tipo de dano até o próximo descanso longo."
+        "descricao": "Após um descanso completo, escolha Fogo, Gelo, Raio ou Ácido: o ataque das suas invocações causa esse tipo de dano até o próximo descanso completo."
       },
       {
         "id": "sacrificio-da-invocacao",
@@ -12120,7 +12213,7 @@
         "custo_mana": 0,
         "acao": "Passivo",
         "alcance": "3 m",
-        "descricao": "Quando uma invocação sua cair a 0 de Vida, ela se desfaz numa onda que dá 10 de Vida temporária a cada aliado a até 3 m. Ela volta no descanso longo, como as outras."
+        "descricao": "Quando uma invocação sua cair a 0 de Vida, ela se desfaz numa onda que dá 10 de Vida temporária a cada aliado a até 3 m. Ela volta no descanso completo, como as outras."
       },
       {
         "id": "avatar-da-deidade",
@@ -12137,7 +12230,7 @@
     ],
     "tarefas_bancada": {
       "rotulo": "Catálogo de Invocações",
-      "descricao": "Fichas prontas, exclusivas da classe: nada de criatura da Loja ou improvisada. Seis linhas (Caçador de Feras ofensivo, Colosso de Ferro defensivo, Salamandra de Fogo de suporte à distância, Seiva Viva de cura, Duende Prestativo de utilidade fora de combate e Aranha Tecelã de controle), cada uma em cinco níveis. Uma invocação nova sempre entra no nível 1 da linha escolhida; aprimorar a leva para o próximo nível da mesma linha. A ficha dá o dano do ataque; para acertar, a invocação usa o seu teste de conjuração, como diz o Pacto. Do nível 21 de Invocador em diante, as fichas crescem pela regra da Escolha Final do Pacto. Na aba Aliados, o botão Do Catálogo cria a invocação já com a ficha pronta.",
+      "descricao": "Fichas prontas, exclusivas da classe: nada de criatura da Loja ou improvisada. Seis linhas (Caçador de Feras ofensivo, Colosso de Ferro defensivo, Salamandra de Fogo de suporte à distância, Seiva Viva de cura, Duende Prestativo de utilidade fora de combate e Aranha Tecelã de controle), cada uma em cinco níveis. Uma invocação nova sempre entra no nível 1 da linha escolhida; aprimorar a leva para o próximo nível da mesma linha. A ficha dá o dano do ataque; para acertar, a invocação usa o seu teste de conjuração, como diz o Pacto. Do nível 21 de Invocador em diante, as fichas crescem pela regra da Escolha Final do Pacto. Na aba Aliados, o botão Do Catálogo cria a invocação já com a ficha pronta. A Defesa escrita aqui é a do nível de cada degrau; na mesa, ela acompanha o seu nível total como a de quem veste armadura (Defesa natural do nível, mais a armadura típica dele, mais o ajuste do papel), e o botão já faz essa conta.",
       "colunas": [
         "Invocação",
         "Nível",
@@ -12744,7 +12837,8 @@
         "titulo": "Mapa Rabiscado",
         "custo_mana": 2,
         "descricao": "Depois de dez minutos, produza um mapa confiável da área já percorrida e marque uma rota de retorno.",
-        "acao": "10 minutos, fora de combate"
+        "acao": "Fora de combate",
+        "momento": "dez minutos"
       },
       {
         "id": "historia-de-taverna",
@@ -12803,7 +12897,8 @@
         "titulo": "Golpe Baixo",
         "custo_mana": 0,
         "custo_estamina": 4,
-        "acao": "Ação Livre antes do ataque",
+        "acao": "Ação Livre",
+        "momento": "antes do ataque",
         "duracao": "Este ataque",
         "dano": "+1d6",
         "descricao": "O seu próximo ataque corpo a corpo nesta rodada causa +1d6 de dano. Se acertar, o alvo fica Exposto. Briga de estrada não tem regra."
@@ -13340,13 +13435,14 @@
       {
         "id": "fluxo-sem-filtro",
         "titulo": "Fluxo Sem Filtro",
-        "descricao": "Uma vez por combate, ao conjurar uma magia do seu Fluxo que exija Concentração, ela não pode ser quebrada por dano durante três rodadas. Ainda quebra se você for nocauteado ou perder a consciência.",
+        "descricao": "Uma vez por cena, ao conjurar uma magia do seu Fluxo que exija Concentração, ela não pode ser quebrada por dano durante três rodadas. Ainda quebra se você for nocauteado ou perder a consciência.",
         "niveis": [
           18
         ],
-        "acao": "Ação Livre no momento da conjuração",
+        "acao": "Ação Livre",
+        "momento": "no momento da conjuração",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "voz-da-deidade",
@@ -13879,7 +13975,8 @@
             "nivel": 1,
             "titulo": "Primeiro Catalisador",
             "descricao": "O catalisador é um objeto seu ligado a um Fluxo diferente do seu nativo (uma pedra, um relógio parado, um osso), sem preço nem raridade. Sintonize-o com dez minutos fora de combate: ele fica preparado e empresta esse Fluxo secundário às suas fusões, e o seu Fluxo nativo continua o mesmo. Dos preparados, um é o ativo, o que a fusão usa agora. O catalisador gasto numa fusão fica desativado até você repetir os dez minutos. Perdido, quebrado ou roubado, você sintoniza outro objeto do mesmo jeito. A Tecnologia só serve de catalisador se o Mestre a tiver instalado na sua ficha. Selos e encantamentos você aprende também dos Fluxos dos catalisadores que tiver preparados na hora de aprender, e o que aprendeu fica mesmo se trocar de catalisador depois. Antes da primeira fusão, que chega no nível 3, o catalisador ativo já serve: você tem vantagem em Misticismo para reconhecer magias, criaturas e objetos do Fluxo dele, e reduz em 2 o dano das magias desse Fluxo que atingirem você.",
-            "acao": "10 minutos, fora de combate",
+            "acao": "Fora de combate",
+            "momento": "dez minutos",
             "alcance": "Toque",
             "duracao": "Até trocar de catalisador"
           },
@@ -13932,7 +14029,8 @@
           {
             "id": "germinacao",
             "titulo": "Germinação",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Origem à magia. Cria um foco nascente que ancora um efeito de duração: enquanto o foco existir, o efeito não exige concentração. O foco possui Defesa 10 + círculo e Vida igual a 5 × círculo, e sua destruição encerra o efeito. Só vale para magia com duração."
@@ -13940,7 +14038,8 @@
           {
             "id": "revelacao",
             "titulo": "Revelação",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Essência à magia. Revela Fluxo, natureza geral e presença sobrenatural. Se a magia superar Vontade, o alvo hostil fica Revelado até o próximo turno do Sintonizador."
@@ -13948,7 +14047,8 @@
           {
             "id": "rede",
             "titulo": "Rede",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Comunicação à magia. A magia se origina numa criatura voluntária em alcance Médio, à vista do conjurador: alcance, linha de efeito e cobertura são medidos a partir dela, e o teste continua sendo do conjurador. Não vale para magia Pessoal."
@@ -13956,7 +14056,8 @@
           {
             "id": "pulso-vivo",
             "titulo": "Pulso Vivo",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Vitalidade à magia. Efeito benéfico concede Vida temporária igual a 2 × círculo; efeito hostil que superar Fortitude impede cura até o próximo turno."
@@ -13964,7 +14065,8 @@
           {
             "id": "mutacao",
             "titulo": "Mutação",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Inconstância à magia. Role 1d4: 1 o alcance sobe uma faixa, até Longo; 2 se a magia tiver linha ou cone, troca pela outra forma, senão role de novo; 3 move um alvo 1,5 m numa direção da tabela de Direção; 4 o catalisador não se desativa depois desta conjuração."
@@ -13972,7 +14074,8 @@
           {
             "id": "materializacao",
             "titulo": "Materialização",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Físico à magia. Escolha um dos sete elementos ao conjurar: o dano da magia passa a ser desse elemento. Escolha também entre mover o alvo 1,5 m ou tornar 1,5 m do terreno difícil até o próximo turno."
@@ -13980,7 +14083,8 @@
           {
             "id": "dobra",
             "titulo": "Dobra",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Espaço à magia. Sobe o alcance da magia um degrau, até Longo (25 m); magia de Longo+ ou mais não muda. Ou, antes de conjurar uma magia Pessoal ou Adjacente, o conjurador teleporta até 3 m para um espaço livre e visível."
@@ -13988,7 +14092,8 @@
           {
             "id": "eco",
             "titulo": "Prorrogação",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Tempo à magia. Atrasa a resolução até o próximo turno ou aumenta em uma rodada uma duração medida em rodadas."
@@ -13996,7 +14101,8 @@
           {
             "id": "ausencia",
             "titulo": "Ausência",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Vazio à magia. Remove som, luz, cheiro e vestígio mundano da manifestação e ignora cobertura parcial."
@@ -14004,7 +14110,8 @@
           {
             "id": "encerramento",
             "titulo": "Encerramento Rápido",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Fim à magia. Impede renovação e encerra, no fim do turno do conjurador, um efeito temporário de círculo igual ou menor que o da magia fundida já presente no alvo. Exige o Fim autorizado pelo Mestre."
@@ -14012,7 +14119,8 @@
           {
             "id": "programacao",
             "titulo": "Programação",
-            "acao": "Ação Livre no momento da conjuração",
+            "acao": "Ação Livre",
+            "momento": "no momento da conjuração",
             "alcance": "Pessoal",
             "duracao": "Esta conjuração",
             "descricao": "Funde um Fluxo secundário de Tecnologia à magia. Armazena a magia no catalisador até o próximo turno e a libera por um gatilho observável declarado ao guardar. O teste é rolado quando a magia sai, e se o gatilho não acontecer até lá, a magia se perde. A Prorrogação adia a resolução sem gatilho; a Programação espera o gatilho."
@@ -14022,14 +14130,14 @@
       {
         "id": "religacao-de-emergencia",
         "titulo": "Religação de Emergência",
-        "descricao": "Uma vez por combate, use uma Reação quando o seu catalisador ativo for desativado, quebrado ou roubado: reative-o na hora ou, se ele se perdeu, torne ativo outro catalisador preparado, sem os dez minutos de Sintonia Catalisada.",
+        "descricao": "Uma vez por cena, use uma Reação quando o seu catalisador ativo for desativado, quebrado ou roubado: reative-o na hora ou, se ele se perdeu, torne ativo outro catalisador preparado, sem os dez minutos de Sintonia Catalisada.",
         "niveis": [
           18
         ],
         "acao": "Reação",
         "alcance": "Toque",
         "duracao": "Instantâneo",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "convergencia-segura",
@@ -14104,7 +14212,8 @@
         "id": "descarga-do-catalisador",
         "titulo": "Descarga do Catalisador",
         "custo_mana": 5,
-        "acao": "Ação Livre no momento da conjuração",
+        "acao": "Ação Livre",
+        "momento": "no momento da conjuração",
         "duracao": "Esta conjuração",
         "descricao": "Uma magia de dano sua causa +1 dado de dano do mesmo tipo, com ou sem fusão. O catalisador ativo fica desativado até o próximo descanso, em vez dos dez minutos."
       },
@@ -14136,7 +14245,8 @@
         "id": "fusao-perfeita",
         "titulo": "Fusão Perfeita",
         "custo_mana": 8,
-        "acao": "Ação Livre no momento da conjuração",
+        "acao": "Ação Livre",
+        "momento": "no momento da conjuração",
         "usos": "Uma vez por sessão",
         "descricao": "Use uma fusão sem desativar o catalisador.",
         "pre_requisitos": [
@@ -14537,7 +14647,8 @@
             "nivel": 5,
             "titulo": "Rito Guardado",
             "descricao": "Aprenda mais um rito. Você também passa a segurar um rito pronto: faça o trabalho inteiro, pague o tempo, a Mana e os componentes, e prenda o efeito no lugar de soltar. Ele espera até o fim da sessão, e você solta com uma Ação Padrão de onde estiver, inclusive no meio de uma luta. O efeito acontece a partir de você e respeita o alcance escrito nele. Um rito guardado por vez, e por enquanto ele precisa ser Simples.",
-            "acao": "Ação Padrão para soltar",
+            "acao": "Ação Padrão",
+            "momento": "para soltar",
             "duracao": "Guardado até o fim da sessão",
             "usos": "Um rito guardado por vez"
           },
@@ -14571,7 +14682,8 @@
           14,
           20
         ],
-        "acao": "Declarado antes de o rito começar",
+        "acao": "Fora de combate",
+        "momento": "declarado ao iniciar o rito",
         "duracao": "O rito inteiro",
         "escalonamento": {
           "rotulo": "Nível do círculo",
@@ -14605,7 +14717,8 @@
           {
             "id": "protecao",
             "titulo": "Proteção",
-            "acao": "Declarado antes do rito",
+            "acao": "Fora de combate",
+            "momento": "declarado ao iniciar o rito",
             "alcance": "O círculo, até 6 m",
             "duracao": "O rito inteiro",
             "descricao": "Enquanto o rito corre, quem está dentro do círculo recebe +2 de Defesa e vantagem para resistir a efeito vindo de fora. O traçado aguenta 20 de dano antes de borrar; borrou, o preparo acaba e o rito segue sem ele.",
@@ -14614,7 +14727,8 @@
           {
             "id": "precisao",
             "titulo": "Precisão",
-            "acao": "Declarado antes do rito",
+            "acao": "Fora de combate",
+            "momento": "declarado ao iniciar o rito",
             "alcance": "Você",
             "duracao": "O rito inteiro",
             "descricao": "Receba +2 no teste do rito e em cada teste de interrupção dele.",
@@ -14623,7 +14737,8 @@
           {
             "id": "duracao",
             "titulo": "Duração",
-            "acao": "Declarado antes do rito",
+            "acao": "Fora de combate",
+            "momento": "declarado ao iniciar o rito",
             "alcance": "O efeito do rito",
             "duracao": "Depois que o rito termina",
             "descricao": "Quando o rito produz um efeito que dura, essa duração aumenta em metade. Rito de efeito instantâneo não aproveita este preparo.",
@@ -14632,7 +14747,8 @@
           {
             "id": "ocultacao",
             "titulo": "Ocultação",
-            "acao": "Declarado antes do rito",
+            "acao": "Fora de combate",
+            "momento": "declarado ao iniciar o rito",
             "alcance": "O círculo, até 6 m",
             "duracao": "O rito inteiro",
             "descricao": "O traçado, a luz e o som ficam contidos. Quem procurar o círculo testa Percepção ou Investigação contra a DT do rito com −4, e de fora de 6 m ninguém ouve nada.",
@@ -14641,7 +14757,8 @@
           {
             "id": "economia",
             "titulo": "Economia",
-            "acao": "Declarado antes do rito",
+            "acao": "Fora de combate",
+            "momento": "declarado ao iniciar o rito",
             "alcance": "Você",
             "duracao": "O rito inteiro",
             "descricao": "Antes de começar o rito, escolha um benefício: comprometa 2 de Mana a menos, até o mínimo de 1, ou reduza o tempo total em 25%. Este preparo nunca reduz os Componentes Ritualísticos exigidos.",
@@ -14650,7 +14767,8 @@
           {
             "id": "amplitude",
             "titulo": "Amplitude",
-            "acao": "Declarado antes do rito",
+            "acao": "Fora de combate",
+            "momento": "declarado ao iniciar o rito",
             "alcance": "O efeito do rito",
             "duracao": "O rito inteiro",
             "descricao": "Quando o rito atende alvos ou cobre área, ele passa a atender um alvo a mais ou a cobrir metade a mais de área. Rito de alvo único e efeito indivisível não aproveita este preparo.",
@@ -14665,7 +14783,8 @@
         "niveis": [
           18
         ],
-        "acao": "Um dia, fora de combate",
+        "acao": "Fora de combate",
+        "momento": "um dia",
         "duracao": "Permanente"
       },
       {
@@ -14675,7 +14794,8 @@
         "niveis": [
           20
         ],
-        "acao": "Declarado ao iniciar o rito",
+        "acao": "Fora de combate",
+        "momento": "declarado ao iniciar o rito",
         "duracao": "Três rodadas",
         "usos": "Uma vez por sessão"
       }
@@ -14706,7 +14826,8 @@
         "titulo": "Vigília",
         "custo_mana": 0,
         "custo_estamina": 3,
-        "acao": "Declarado ao iniciar o rito",
+        "acao": "Fora de combate",
+        "momento": "declarado ao iniciar o rito",
         "duracao": "O rito inteiro",
         "descricao": "Ignore 1 de Cansaço cobrado pela complexidade do rito ao terminá-lo. Um uso por rito."
       },
@@ -14714,7 +14835,8 @@
         "id": "circulo-de-protecao",
         "titulo": "Círculo de Proteção",
         "custo_mana": 4,
-        "acao": "Declarado ao iniciar o rito",
+        "acao": "Fora de combate",
+        "momento": "declarado ao iniciar o rito",
         "alcance": "O círculo, até 6 m",
         "duracao": "O rito inteiro",
         "descricao": "Participantes recebem +2 de Defesa contra ameaça vinda de fora do círculo. Se o preparo Proteção também estiver ativo, use apenas o maior bônus de Defesa; os outros benefícios do preparo continuam valendo."
@@ -14738,7 +14860,8 @@
         "id": "preparacao-discreta",
         "titulo": "Preparação Discreta",
         "custo_mana": 3,
-        "acao": "Declarado ao iniciar o rito",
+        "acao": "Fora de combate",
+        "momento": "declarado ao iniciar o rito",
         "duracao": "O rito inteiro",
         "descricao": "Quem procurar o seu círculo sofre −4 no teste de Percepção ou Investigação contra a DT do rito. Se o preparo Ocultação também estiver ativo, use apenas a maior penalidade; os outros benefícios do preparo continuam valendo."
       },
@@ -15104,7 +15227,8 @@
           {
             "id": "atrasar",
             "titulo": "Atrasar",
-            "acao": "Escolhida ao interceptar com sucesso",
+            "acao": "Ação Livre",
+            "momento": "ao interceptar com sucesso",
             "alcance": "Igual ao efeito interceptado",
             "duracao": "Instantâneo",
             "descricao": "Em vez de cancelar, atrase o efeito interceptado até o fim do turno da fonte."
@@ -15112,7 +15236,8 @@
           {
             "id": "redirecionar",
             "titulo": "Redirecionar",
-            "acao": "Escolhida ao interceptar com sucesso",
+            "acao": "Ação Livre",
+            "momento": "ao interceptar com sucesso",
             "alcance": "Igual ao efeito interceptado",
             "duracao": "Instantâneo",
             "descricao": "Em vez de cancelar, redirecione o efeito interceptado para outro alvo válido dentro do alcance original dele."
@@ -15120,7 +15245,8 @@
           {
             "id": "isolar",
             "titulo": "Isolar",
-            "acao": "Escolhida ao interceptar com sucesso",
+            "acao": "Ação Livre",
+            "momento": "ao interceptar com sucesso",
             "alcance": "Igual ao efeito interceptado",
             "duracao": "Instantâneo",
             "descricao": "Em vez de cancelar, deixe o efeito interceptado acontecer, mas contido numa área de até 3 m ao redor da fonte, sem afetar ninguém fora dela."
@@ -15128,7 +15254,8 @@
           {
             "id": "assinatura-falsa",
             "titulo": "Assinatura Falsa",
-            "acao": "Escolhida ao interceptar com sucesso",
+            "acao": "Ação Livre",
+            "momento": "ao interceptar com sucesso",
             "alcance": "Igual ao efeito interceptado",
             "duracao": "Instantâneo",
             "descricao": "Ao cancelar, faça o efeito parecer ter vindo de outra fonte plausível à sua escolha, para quem estiver testemunhando."
@@ -15136,7 +15263,8 @@
           {
             "id": "eco-hostil",
             "titulo": "Refluxo Hostil",
-            "acao": "Escolhida ao interceptar com sucesso",
+            "acao": "Ação Livre",
+            "momento": "ao interceptar com sucesso",
             "alcance": "Igual ao efeito interceptado",
             "duracao": "Instantâneo",
             "descricao": "Ao cancelar, a fonte sofre 2d6 de dano tecnológico quando o efeito dela se desfaz, mais 1d6 a cada 5 níveis de Interceptador."
@@ -15144,7 +15272,8 @@
           {
             "id": "nucleo-exposto",
             "titulo": "Núcleo Exposto",
-            "acao": "Escolhida ao interceptar com sucesso",
+            "acao": "Ação Livre",
+            "momento": "ao interceptar com sucesso",
             "alcance": "Igual ao efeito interceptado",
             "duracao": "Até o fim do próximo turno da fonte",
             "descricao": "Ao cancelar, a fonte fica com a Defesa reduzida em 2 até o fim do próximo turno dela."
@@ -15679,7 +15808,8 @@
           {
             "id": "caldo-regenerativo",
             "titulo": "Canja de Galinha",
-            "acao": "Dez minutos ou durante um descanso",
+            "acao": "Fora de combate",
+            "momento": "dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "No descanso em que for consumido",
             "descricao": "Refeição. A recuperação de Vida do descanso melhora em uma categoria, no máximo Boa. Receita inicial.",
@@ -15706,7 +15836,8 @@
           {
             "id": "ensopado-fortificante",
             "titulo": "Cozido de Carne",
-            "acao": "Dez minutos ou durante um descanso",
+            "acao": "Fora de combate",
+            "momento": "dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "Até o descanso seguinte",
             "descricao": "Refeição. O alvo recebe +2 em Fortitude até o descanso seguinte. A mesma criatura mantém o benefício de apenas uma refeição por vez.",
@@ -15724,7 +15855,8 @@
           {
             "id": "sopa-purificadora",
             "titulo": "Sopa de Legumes",
-            "acao": "Dez minutos ou durante um descanso",
+            "acao": "Fora de combate",
+            "momento": "dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "Instantânea",
             "descricao": "Refeição. Uma criatura afetada por veneno ou doença faz imediatamente um novo teste contra a aflição com +2. A sopa não reduz o estágio por conta própria.",
@@ -15733,7 +15865,8 @@
           {
             "id": "torta-revigorante",
             "titulo": "Torta de Maçã",
-            "acao": "Dez minutos ou durante um descanso",
+            "acao": "Fora de combate",
+            "momento": "dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "Instantânea",
             "dano": "Restaura 1d4 de Estamina",
@@ -15772,7 +15905,8 @@
           {
             "id": "feijoada",
             "titulo": "Feijoada",
-            "acao": "Dez minutos ou durante um descanso",
+            "acao": "Fora de combate",
+            "momento": "dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "Até o descanso seguinte",
             "descricao": "Refeição. O alvo recebe Resistência 2 contra dano físico até o descanso seguinte. A mesma criatura mantém o benefício de apenas uma refeição por vez.",
@@ -15781,7 +15915,8 @@
           {
             "id": "risoto-de-cogumelos",
             "titulo": "Risoto de Cogumelos",
-            "acao": "Dez minutos ou durante um descanso",
+            "acao": "Fora de combate",
+            "momento": "dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "Até o descanso seguinte",
             "descricao": "Refeição. O alvo recebe +2 nos próximos dois testes de Percepção ou Vontade que fizer até o descanso seguinte.",
@@ -15790,7 +15925,8 @@
           {
             "id": "curry-de-legumes",
             "titulo": "Curry de Legumes",
-            "acao": "Dez minutos ou durante um descanso",
+            "acao": "Fora de combate",
+            "momento": "dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "Uma cena",
             "descricao": "Refeição. Escolha um dos sete elementos ao servir. O alvo recebe Resistência 3 contra dano desse elemento por uma cena.",
@@ -15817,7 +15953,8 @@
           {
             "id": "ramen",
             "titulo": "Ramen",
-            "acao": "Dez minutos ou durante um descanso",
+            "acao": "Fora de combate",
+            "momento": "dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "Instantânea",
             "dano": "Restaura 2d6 de Vida",
@@ -15836,7 +15973,8 @@
           {
             "id": "moqueca",
             "titulo": "Moqueca",
-            "acao": "Dez minutos ou durante um descanso",
+            "acao": "Fora de combate",
+            "momento": "dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "Três rodadas",
             "descricao": "Refeição. Por três rodadas, reduza em 2 o primeiro dano que o alvo sofrer em cada rodada.",
@@ -15851,7 +15989,8 @@
         "niveis": [
           18
         ],
-        "acao": "Parte da ação de servir",
+        "acao": "Ação Livre",
+        "momento": "como parte da ação de servir",
         "alcance": "6 m",
         "usos": "Uma vez por descanso"
       },
@@ -15862,7 +16001,8 @@
         "niveis": [
           20
         ],
-        "acao": "Dez minutos",
+        "acao": "Fora de combate",
+        "momento": "dez minutos",
         "alcance": "6 m",
         "usos": "Uma vez por sessão"
       }
@@ -15966,7 +16106,8 @@
         "id": "cozinha-impossivel",
         "titulo": "Cozinha Impossível",
         "custo_mana": 6,
-        "acao": "Um minuto",
+        "acao": "Fora de combate",
+        "momento": "um minuto",
         "usos": "Uma vez por descanso",
         "descricao": "Prepare em um minuto uma porção de qualquer receita conhecida, usando o lote de Mantimentos já gasto. Ela ocupa uma vaga; se não houver vaga livre, descarte outra porção preparada.",
         "pre_requisitos": [
@@ -16231,7 +16372,8 @@
             "nivel": 1,
             "titulo": "Primeira Leitura",
             "descricao": "Ao examinar uma cena, pessoa ou objeto por um minuto, role Investigação contra a DT definida pela dificuldade da pista. Em sucesso, o Mestre revela um detalhe relevante sustentado pelo que foi examinado. Mesmo numa falha, revela um detalhe real secundário, nunca a pista central.",
-            "acao": "Um minuto, fora de combate"
+            "acao": "Fora de combate",
+            "momento": "um minuto"
           },
           {
             "nivel": 5,
@@ -16383,7 +16525,8 @@
         "titulo": "Golpe Certeiro de Lógica",
         "custo_mana": 0,
         "custo_estamina": 3,
-        "acao": "Ação Livre, após identificar o ponto fraco",
+        "acao": "Ação Livre",
+        "momento": "após identificar o ponto fraco",
         "duracao": "Até o próximo ataque ou o fim da cena",
         "descricao": "Depois de identificar o ponto fraco de um alvo nesta cena (Ação de Movimento e Investigação contra 15 + metade do VD dele), gaste 3 Estamina. Seu próximo ataque contra ele, até o fim da cena, recebe +2 dados de dano."
       },
@@ -16406,7 +16549,8 @@
         "titulo": "Sexto Sentido",
         "custo_mana": 0,
         "custo_estamina": 3,
-        "acao": "Reação, ao fazer o teste",
+        "acao": "Reação",
+        "momento": "ao fazer o teste",
         "descricao": "Quando fizer um teste para perceber uma armadilha, emboscada ou ameaça escondida, gaste 3 Estamina e use uma Reação para receber vantagem nesse teste."
       },
       {
@@ -16734,7 +16878,8 @@
             "nivel": 1,
             "titulo": "Primeira Presa",
             "descricao": "Quando um humanoide morre perto de você, morto por você ou não, pode devorá-lo até o fim da cena atual, gastando um minuto junto ao corpo. Escolha uma habilidade ou um poder que a classe dele tinha, limitado ao que um personagem do seu próprio nível de Devorador já teria acesso naquela classe, e grave-a num slot vazio, dando a ela o nome e a aparência do que devorou. Se a vítima for criatura do Bestiário, que não tem classe, escolha no lugar uma das habilidades da ficha dela, desde que o VD dela não passe do seu nível de Devorador. Você mantém um slot ativo por vez.",
-            "acao": "Um minuto, fora de combate",
+            "acao": "Fora de combate",
+            "momento": "um minuto",
             "duracao": "Até o fim da cena da morte"
           },
           {
@@ -16854,12 +16999,12 @@
       {
         "id": "ecos-da-ultima-refeicao",
         "titulo": "Memória da Última Refeição",
-        "descricao": "Enquanto tiver ao menos um slot ativo, uma vez por combate, quando um dano cairia sua Vida a 0, uma das memórias devoradas protege você: reduza esse dano até deixar sua Vida em 1, e esvazie o slot mais antigo em seguida.",
+        "descricao": "Enquanto tiver ao menos um slot ativo, uma vez por cena, quando um dano cairia sua Vida a 0, uma das memórias devoradas protege você: reduza esse dano até deixar sua Vida em 1, e esvazie o slot mais antigo em seguida.",
         "niveis": [
           18
         ],
         "acao": "Reação",
-        "usos": "Uma vez por combate"
+        "usos": "Uma vez por cena"
       },
       {
         "id": "banquete-final",
@@ -16868,7 +17013,8 @@
         "niveis": [
           20
         ],
-        "acao": "Um minuto, fora de combate",
+        "acao": "Fora de combate",
+        "momento": "um minuto",
         "usos": "Uma vez por sessão"
       }
     ],
@@ -17292,7 +17438,8 @@
         "id": "revestimento-elemental",
         "titulo": "Revestimento Elemental",
         "custo_mana": 4,
-        "acao": "Reação ao ser atingido ou falhar numa resistência contra dano",
+        "acao": "Reação",
+        "momento": "ao ser atingido ou falhar numa resistência contra dano",
         "alcance": "Pessoal",
         "duracao": "Até o começo do seu próximo turno",
         "descricao": "Escolha um elemento que domina e revista o corpo com ele. Receba Resistência 8 contra esse elemento e Resistência 4 contra dano físico até o começo do seu próximo turno. Declare o elemento antes de calcular o dano que ativou a reação."
@@ -17311,7 +17458,8 @@
         "id": "contrafluxo-elemental",
         "titulo": "Contrafluxo Elemental",
         "custo_mana": 5,
-        "acao": "Reação quando uma criatura se move",
+        "acao": "Reação",
+        "momento": "quando uma criatura se move",
         "alcance": "9 m",
         "duracao": "Instantânea",
         "defesa": "Reflexos",
@@ -17321,7 +17469,8 @@
         "id": "marca-elemental",
         "titulo": "Marca Elemental",
         "custo_mana": 5,
-        "acao": "Ação Livre depois de causar dano",
+        "acao": "Ação Livre",
+        "momento": "depois de causar dano",
         "alcance": "O alcance do efeito original",
         "duracao": "Até o dano persistente ser removido",
         "dano": "2d6 por turno, do mesmo elemento",
@@ -17379,7 +17528,8 @@
         "id": "vetor-elemental",
         "titulo": "Vetor Elemental",
         "custo_mana": 4,
-        "acao": "Ação Livre antes de uma magia",
+        "acao": "Ação Livre",
+        "momento": "antes de uma magia",
         "alcance": "O alcance da magia",
         "duracao": "Esta magia",
         "descricao": "Antes de conjurar uma magia Elemental de um elemento que domina, escolha um benefício compatível: se ela mover uma criatura, aumente o deslocamento forçado em 3 m; se possuir área, aumente uma dimensão dela em 3 m. O poder não cria movimento ou área numa magia que não possua esse componente e não recebe os dois benefícios no mesmo uso. Pode acumular com Maestria Elemental."
@@ -17393,7 +17543,7 @@
         "duracao": "Instantânea",
         "dano": "5d6",
         "defesa": "Reflexos",
-        "usos": "Uma vez por combate",
+        "usos": "Uma vez por cena",
         "descricao": "Manifeste a derivação escolhida numa ruptura do seu elemento de origem. Criaturas hostis na área testam Reflexos contra a DT da Elementarista. Em falha, sofrem 5d6 do elemento derivado e ficam Caídas; em sucesso, sofrem metade e não caem. Resistência ao elemento base vale pela metade, mas imunidade continua valendo.",
         "pre_requisitos": [
           "Nível 13 de Elementarista",

@@ -72,6 +72,17 @@ class EquipmentRarityPriceTests(unittest.TestCase):
             {"Corte": 5, "Perfuração": 5, "Impacto": 5, "Balístico": 5},
         )
 
+    def test_shield_rarity_adds_half_defense(self):
+        shield = {"bonus": "+7", "penalidade": "-2", "categoria_protecao": "escudo", "subtipo": "marcial"}
+        self.assertEqual(
+            [equipment_variant_content(shield, "armadura", rarity)["defesa"] for rarity in ("comum", "incomum", "raro", "epico", "lendario")],
+            [7, 7, 8, 8, 9],
+        )
+        armor = {"bonus": "+7", "penalidade": "-4", "categoria_protecao": "armadura"}
+        self.assertEqual(equipment_variant_content(armor, "armadura", "lendario")["defesa"], 11)
+        rare = equipment_variant_content(shield, "armadura", "incomum")
+        self.assertNotIn("de Defesa pela raridade", " ".join(rare["melhorias_raridade"]))
+
     def test_unavailable_target_or_non_equipment_is_rejected(self):
         self.assertIsNone(equipment_variant_price({}, "arma", "mitico"))
         self.assertIsNone(equipment_variant_price({}, "consumivel", "raro"))

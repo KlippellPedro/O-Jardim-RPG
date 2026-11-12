@@ -25,6 +25,7 @@ import {
   classesDaFicha,
   descreverPreRequisitos,
   escolhasHabilidadeDisponiveis,
+  rotuloDaAcao,
   eventosDesbloqueados,
   habilidadesAutomaticas,
   legadosSelecionados,
@@ -42,6 +43,7 @@ import { ConquistasGaleria } from '../components/ConquistasGaleria';
 import { SimuladorNivel } from '../components/SimuladorNivel';
 import { ModalConfirmacao } from '../components/ModalConfirmacao';
 import { rotuloCustoDePoder } from '../../../services/statusService';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 
 type SecaoProgressaoId = 'raca' | 'habilidades' | 'escolhas' | 'poderes' | 'eventos' | 'legados';
 type FiltroDisponibilidade = 'todos' | 'disponiveis' | 'selecionados';
@@ -68,7 +70,7 @@ const Card = ({ titulo, origem, descricao, detalhe, acao }: { titulo: string; or
         <ChevronDown size={15} className="text-gray-600 transition-transform group-open:rotate-180" />
       </span>
     </summary>
-    <p className="border-t border-white/[0.05] px-4 pb-4 pt-3 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricao}</p>
+    <p className="border-t border-white/[0.05] px-4 pb-4 pt-3 whitespace-pre-line text-sm leading-relaxed text-gray-400"><TextoComTermos texto={descricao} /></p>
   </details>
 );
 
@@ -254,7 +256,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
       if (correspondeBusca(termoBusca, item.titulo, item.descricao, item.origem)) resultados.push({ id: `habilidade-${item.id}`, titulo: item.titulo, grupo: 'Habilidade', secao: 'habilidades' });
     });
     escolhasHabilidade.forEach((escolha) => escolha.opcoes.forEach((opcao) => {
-      if (correspondeBusca(termoBusca, opcao.titulo, opcao.descricao, opcao.acao)) resultados.push({ id: `escolha-${escolha.chave}-${opcao.id}`, titulo: opcao.titulo, grupo: escolha.rotulo, secao: 'escolhas' });
+      if (correspondeBusca(termoBusca, opcao.titulo, opcao.descricao, rotuloDaAcao(opcao))) resultados.push({ id: `escolha-${escolha.chave}-${opcao.id}`, titulo: opcao.titulo, grupo: escolha.rotulo, secao: 'escolhas' });
     }));
     classes.forEach(({ classe }) => (classe.poderes || []).forEach((poder) => {
       if (correspondeBusca(termoBusca, poder.titulo, poder.descricao, poder.pre_requisitos?.join(' '))) resultados.push({ id: `poder-${classe.id}-${poder.id}`, titulo: poder.titulo, grupo: classe.titulo, secao: 'poderes' });
@@ -429,7 +431,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
               {raca.fragmentos.filter((item: any) => correspondeBusca(termoBusca, item.titulo, item.descricao)).map((item: any) => {
                 const conhecido = (escolhaRacial.fragmentosConhecidosIds || []).includes(item.id);
                 const expresso = (escolhaRacial.fragmentosExpressosIds || []).includes(item.id);
-                return <div key={item.id} className="rounded-lg border border-white/5 bg-black/20 p-3"><strong className="text-sm text-white">{item.titulo}</strong><p className="mt-1 text-xs text-gray-400">{item.descricao}</p><div className="mt-2 flex gap-2"><button type="button" onClick={() => alternarFragmentoConhecido(item.id)} className={`rounded border px-2 py-1 text-xs font-bold ${conhecido ? 'border-emerald-500/40 text-emerald-300' : 'border-white/10 text-gray-400'}`}>{conhecido ? 'Conhecido' : 'Conhecer'}</button><button type="button" disabled={!conhecido} onClick={() => alternarFragmentoExpresso(item.id)} className={`rounded border px-2 py-1 text-xs font-bold disabled:opacity-30 ${expresso ? 'border-[#c7a44c]/40 text-[#c7a44c]' : 'border-white/10 text-gray-400'}`}>{expresso ? 'Expresso' : 'Expressar'}</button></div></div>;
+                return <div key={item.id} className="rounded-lg border border-white/5 bg-black/20 p-3"><strong className="text-sm text-white">{item.titulo}</strong><p className="mt-1 text-xs text-gray-400"><TextoComTermos texto={item.descricao} /></p><div className="mt-2 flex gap-2"><button type="button" onClick={() => alternarFragmentoConhecido(item.id)} className={`rounded border px-2 py-1 text-xs font-bold ${conhecido ? 'border-emerald-500/40 text-emerald-300' : 'border-white/10 text-gray-400'}`}>{conhecido ? 'Conhecido' : 'Conhecer'}</button><button type="button" disabled={!conhecido} onClick={() => alternarFragmentoExpresso(item.id)} className={`rounded border px-2 py-1 text-xs font-bold disabled:opacity-30 ${expresso ? 'border-[#c7a44c]/40 text-[#c7a44c]' : 'border-white/10 text-gray-400'}`}>{expresso ? 'Expresso' : 'Expressar'}</button></div></div>;
               })}
             </div>
           </div>
@@ -439,7 +441,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
             <h4 className="font-bold text-white">Modificações do Autômato</h4>
             <p className="mt-1 text-xs text-gray-500">Instaladas: {(escolhaRacial.modificacoesIds || []).length}/{capacidadeModificacoesRaciais(raca, Number(ficha.nivel) || 1)}. Modificações ativas só funcionam com as passivas e pré-requisitos descritos.</p>
             <div className="mt-3 grid gap-2 md:grid-cols-2">
-              {raca.modificacoes.filter((item: any) => correspondeBusca(termoBusca, item.titulo, item.descricao)).map((item: any) => { const instalada = (escolhaRacial.modificacoesIds || []).includes(item.id); return <div key={item.id} className="rounded-lg border border-white/5 bg-black/20 p-3"><div className="flex items-start justify-between gap-2"><strong className="text-sm text-white">{item.titulo}</strong><button type="button" onClick={() => alternarModificacao(item.id)} className={`rounded border px-2 py-1 text-xs font-bold ${instalada ? 'border-red-500/30 text-red-300' : 'border-sky-500/30 text-sky-300'}`}>{instalada ? 'Remover' : 'Instalar'}</button></div><p className="mt-1 text-xs text-gray-400">{item.descricao}</p></div>; })}
+              {raca.modificacoes.filter((item: any) => correspondeBusca(termoBusca, item.titulo, item.descricao)).map((item: any) => { const instalada = (escolhaRacial.modificacoesIds || []).includes(item.id); return <div key={item.id} className="rounded-lg border border-white/5 bg-black/20 p-3"><div className="flex items-start justify-between gap-2"><strong className="text-sm text-white">{item.titulo}</strong><button type="button" onClick={() => alternarModificacao(item.id)} className={`rounded border px-2 py-1 text-xs font-bold ${instalada ? 'border-red-500/30 text-red-300' : 'border-sky-500/30 text-sky-300'}`}>{instalada ? 'Remover' : 'Instalar'}</button></div><p className="mt-1 text-xs text-gray-400"><TextoComTermos texto={item.descricao} /></p></div>; })}
             </div>
           </div>
         )}
@@ -473,7 +475,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
           <div className="space-y-4">
             {escolhasHabilidade.map((escolha) => {
               const grupoCorresponde = correspondeBusca(termoBusca, escolha.rotulo, escolha.descricao, escolha.classeTitulo);
-              const opcoesVisiveis = escolha.opcoes.filter((opcao) => grupoCorresponde || correspondeBusca(termoBusca, opcao.titulo, opcao.descricao, opcao.acao));
+              const opcoesVisiveis = escolha.opcoes.filter((opcao) => grupoCorresponde || correspondeBusca(termoBusca, opcao.titulo, opcao.descricao, rotuloDaAcao(opcao)));
               if (!opcoesVisiveis.length) return null;
               return (
               <div key={escolha.chave} className="rounded-2xl border border-white/[0.08] bg-black/20 p-4">
@@ -486,7 +488,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
                     {escolha.escalonamento.rotulo}: {escolha.escalonamento.nivel} de {escolha.escalonamento.teto}
                   </div>
                 ) : null}
-                {escolha.descricao && <p className="mb-3 text-xs leading-relaxed text-gray-500">{escolha.descricao}</p>}
+                {escolha.descricao && <p className="mb-3 text-xs leading-relaxed text-gray-500"><TextoComTermos texto={escolha.descricao} /></p>}
                 <div className="grid gap-2 md:grid-cols-2">
                   {opcoesVisiveis.map((opcao) => {
                     const quantidade = escolha.selecionadas.filter((item) => item.id === opcao.id).length;
@@ -496,7 +498,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <strong className="text-sm text-white">{opcao.titulo}</strong>
-                            {opcao.acao && <p className="mt-1 text-xs text-gray-500">{opcao.acao}</p>}
+                            {opcao.acao && <p className="mt-1 text-xs text-gray-500">{rotuloDaAcao(opcao)}</p>}
                           </div>
                           <div className="flex gap-1">
                             {quantidade > 0 && <button type="button" onClick={() => removerOpcaoHabilidade(escolha.chave, opcao.id)} className="rounded-lg border border-red-500/30 px-2 py-1 text-xs font-bold text-red-300">Tirar</button>}
@@ -508,7 +510,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
                             Ver descrição e efeitos <ChevronDown size={13} className="transition-transform group-open/detalhe:rotate-180" />
                           </summary>
                           <div className="border-t border-white/[0.05] p-3">
-                            <p className="text-xs leading-relaxed text-gray-400">{opcao.descricao}</p>
+                            <p className="text-xs leading-relaxed text-gray-400"><TextoComTermos texto={opcao.descricao} /></p>
                             {escolha.classeId === 'alquimista' && escolha.habilidadeId === 'formulas' && (
                               <FormulaIngredients formulaId={opcao.id} compact nivelFormula={escolha.escalonamento?.nivel} />
                             )}
@@ -594,7 +596,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
                         <details className="group/detalhe mt-3 rounded-lg border border-white/[0.06] bg-black/20">
                           <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-500 marker:content-none hover:text-white">Ver descrição e efeitos <ChevronDown size={13} className="transition-transform group-open/detalhe:rotate-180" /></summary>
                           <div className="border-t border-white/[0.05] p-3">
-                            <p className="text-xs leading-relaxed text-gray-400">{poder.descricao}</p>
+                            <p className="text-xs leading-relaxed text-gray-400"><TextoComTermos texto={poder.descricao} /></p>
                             {resumoFichaTecnica(poder) && <p className="mt-2 text-[11px] font-bold uppercase tracking-wider text-gray-500">{resumoFichaTecnica(poder)}</p>}
                           </div>
                         </details>
@@ -689,7 +691,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
                 <details className="group/detalhe mt-3 rounded-lg border border-white/[0.06] bg-black/20">
                   <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-500 marker:content-none hover:text-white">Ver descrição e requisitos <ChevronDown size={13} className="transition-transform group-open/detalhe:rotate-180" /></summary>
                   <div className="border-t border-white/[0.05] p-3">
-                    <p className="text-xs leading-relaxed text-gray-400">{legado.descricao}</p>
+                    <p className="text-xs leading-relaxed text-gray-400"><TextoComTermos texto={legado.descricao} /></p>
                     {!!preRequisitos.length && <p className="mt-2 text-[11px] text-gray-500"><span className="font-bold uppercase tracking-wider">Pré-requisitos:</span> {preRequisitos.join(', ')}</p>}
                   </div>
                 </details>

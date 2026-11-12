@@ -6,6 +6,7 @@ import type { IRegistro } from './registros';
 import { gatilhoDaFase } from '../../../utils/fasesDeChefe';
 import { registrosUniversaisApi } from '../../../services/registrosUniversaisApi';
 import type { FaseDeChefe } from '../../../services/sessaoApi';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 
 interface IFichaProps {
   registro: IRegistro;
@@ -212,7 +213,7 @@ export const FichaCriatura = ({ registro, gestor, campanhaId, acoes, rotuloDaSec
                           <span key={selo} className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${COR_DO_SELO[selo] ?? SELO_NEUTRO}`}>{selo}</span>
                         ))}
                       </div>
-                      <p className="mt-1.5 text-sm leading-7 text-gray-300 sm:text-base">{habilidade.regra}</p>
+                      <p className="mt-1.5 text-sm leading-7 text-gray-300 sm:text-base"><TextoComTermos texto={habilidade.regra} /></p>
                     </li>
                   ))}
                 </ul>
@@ -226,7 +227,7 @@ export const FichaCriatura = ({ registro, gestor, campanhaId, acoes, rotuloDaSec
                   {habilidades.passivas.map((habilidade, indice) => (
                     <li key={`${habilidade.nome}-${indice}`} className="rounded-xl border border-white/8 bg-white/[0.025] px-4 py-3 text-sm leading-6 text-gray-400">
                       {habilidade.nome ? <strong className="block text-gray-200">{habilidade.nome}</strong> : null}
-                      {habilidade.regra}
+                      <TextoComTermos texto={habilidade.regra} />
                     </li>
                   ))}
                 </ul>

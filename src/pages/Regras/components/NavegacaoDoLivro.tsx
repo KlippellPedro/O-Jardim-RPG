@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ChevronDown, ChevronRight, Compass, FileDown, Library, Search, X } from 'lucide-react';
-import type { CapituloNumerado } from '../../../../data/regras/livro';
+import { SELOS_DO_LIVRO, seloDoTopico, type CapituloNumerado } from '../../../../data/regras/livro';
 import { estiloDoAcento } from '../acento';
 import type { SubtopicoNavegacao } from './LandingDoLivro';
 
@@ -143,10 +143,18 @@ export const NavegacaoDoLivro = ({
                           ? 'bg-[rgb(var(--acento)/0.14)] text-[rgb(var(--acento-forte))]'
                           : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
                       >
-                        <span className="flex min-w-0 items-baseline gap-2.5">
+                        <span className="flex min-w-0 flex-1 items-baseline gap-2.5">
                           <span className="w-6 shrink-0 font-mono text-[10px] text-gray-600">{topico.numero}</span>
                           <span className="truncate">{topico.titulo}</span>
                         </span>
+                        {seloDoTopico(topico.id) === 'nucleo' ? (
+                          <span
+                            title={SELOS_DO_LIVRO.nucleo.explicacao}
+                            className="shrink-0 rounded-full border border-[rgb(var(--acento)/0.35)] px-1.5 py-px text-[9px] font-bold uppercase tracking-[0.14em] text-[rgb(var(--acento-forte))] opacity-80"
+                          >
+                            {SELOS_DO_LIVRO.nucleo.rotulo}
+                          </span>
+                        ) : null}
                         {topicoAtivo === topico.id ? <ChevronRight size={15} className="shrink-0 text-[rgb(var(--acento))]" /> : null}
                       </button>
                       {subtopicos[topico.id]?.length ? (

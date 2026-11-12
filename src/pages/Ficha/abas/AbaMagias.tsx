@@ -74,6 +74,7 @@ import { Select } from '../../../components/ui/Select';
 import { dispararCirculoMagico } from '../components/circuloMagico';
 import { dispararAprendizado } from '../components/aprendizado';
 import { confirmar } from '../../../components/avisos/confirmacao';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 
 interface IMagiaAntiga {
   id?: string;
@@ -697,7 +698,7 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
               <span><strong className="text-gray-400">Duração:</strong> {magia.duracao}</span>
             </div>
             {!personalizacao && <p className="mt-3 text-sm italic leading-relaxed text-gray-500">{magia.descricao}</p>}
-            <p className="mt-3 text-sm leading-relaxed text-gray-300">{efeitoExibido}</p>
+            <p className="mt-3 text-sm leading-relaxed text-gray-300"><TextoComTermos texto={efeitoExibido} /></p>
             {(magia.dano || rotulosContraOAlvo(magia).length > 0) && (
               <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold">
                 {magia.dano && <span className="rounded-lg bg-red-500/10 px-2.5 py-1 text-red-300">Dano {magia.dano} {tipoDeDanoDaMagia(magia, perfil.fluxoNativoId)}</span>}
@@ -812,7 +813,7 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
               <span><strong className="text-gray-400">DT:</strong> {ritual.dt}</span>
             </div>
             {!personalizacao && <p className="mt-3 text-sm italic leading-relaxed text-gray-500">{ritual.descricao}</p>}
-            <p className="mt-3 text-sm leading-relaxed text-gray-300">{efeitoExibido}</p>
+            <p className="mt-3 text-sm leading-relaxed text-gray-300"><TextoComTermos texto={efeitoExibido} /></p>
             <p className="mt-2 text-xs leading-relaxed text-gray-500"><strong className="text-gray-400">Requisito:</strong> {ritual.requisito}</p>
             <p className="mt-1 text-xs leading-relaxed text-red-300/80"><strong className="text-red-300">Em falha:</strong> {ritual.falha}</p>
             <RitualComponents complexidade={ritual.complexidade} compact />
@@ -912,7 +913,7 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
               <span><strong className="text-gray-400">{rotuloUso}:</strong> {aplicacaoOuAtivacao}</span>
             </div>
             {!personalizacao && <p className="mt-3 text-sm italic leading-relaxed text-gray-500">{item.descricao}</p>}
-            <p className="mt-3 text-sm leading-relaxed text-gray-300">{efeitoExibido}</p>
+            <p className="mt-3 text-sm leading-relaxed text-gray-300"><TextoComTermos texto={efeitoExibido} /></p>
             {!modoCatalogo && conhecido && (
               <p className="mt-2 text-[11px] leading-relaxed text-gray-600">Técnica conhecida. A aplicação num item, criatura ou lugar acontece na mesa, com o Mestre.</p>
             )}

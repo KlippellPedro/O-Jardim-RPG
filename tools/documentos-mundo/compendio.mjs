@@ -78,6 +78,9 @@ const secao = (titulo) => `<h3 class="comp-secao">${esc(titulo)}</h3>`;
 /* Ficha técnica (execução, alcance, duração...)                       */
 /* ------------------------------------------------------------------ */
 
+/** "Ação Livre · antes do ataque" (o momento fica à parte desde 2026-11-12). */
+const rotuloDaAcao = (efeito) => [efeito?.acao, efeito?.momento].filter((parte) => typeof parte === 'string' && parte.trim()).join(' · ');
+
 const CAMPOS_DA_FICHA = [
   ['custo_mana', 'Mana'],
   ['custo_estamina', 'Estamina'],
@@ -93,7 +96,7 @@ const CAMPOS_DA_FICHA = [
 const ficha = (efeito, { sem = [] } = {}) => {
   const campos = CAMPOS_DA_FICHA.filter(([chave]) => efeito[chave] && !sem.includes(chave));
   if (!campos.length) return '';
-  return `<span class="ficha">${campos.map(([chave, rotulo]) => `<span><b>${rotulo}</b> ${esc(efeito[chave])}</span>`).join('')}</span>`;
+  return `<span class="ficha">${campos.map(([chave, rotulo]) => `<span><b>${rotulo}</b> ${esc(chave === 'acao' ? rotuloDaAcao(efeito) : efeito[chave])}</span>`).join('')}</span>`;
 };
 
 /* ------------------------------------------------------------------ */
@@ -185,7 +188,7 @@ const blocoDeHabilidade = (classe, habilidade) => {
     partes.push(`<ul class="opcoes">${opcoes.map((opcao) => {
       const detalhes = ficha(opcao, { sem: ['acao'] });
       const escalonamento = typeof opcao.escalonamento === 'string' ? ` <span class="opcao-escala">${esc(opcao.escalonamento)}</span>` : '';
-      return `<li><strong>${esc(opcao.titulo)}</strong>${opcao.acao ? ` <span class="opcao-acao">${esc(opcao.acao)}</span>` : ''}. ${esc(opcao.descricao)}${detalhes ? ` ${detalhes}` : ''}${escalonamento}</li>`;
+      return `<li><strong>${esc(opcao.titulo)}</strong>${opcao.acao ? ` <span class="opcao-acao">${esc(rotuloDaAcao(opcao))}</span>` : ''}. ${esc(opcao.descricao)}${detalhes ? ` ${detalhes}` : ''}${escalonamento}</li>`;
     }).join('')}</ul>`);
   }
   return partes.join('\n');

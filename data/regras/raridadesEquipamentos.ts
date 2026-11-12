@@ -80,7 +80,7 @@ export function obterRegraRaridade(raridade: string): IRegraRaridadeEquipamento 
   return RARIDADES_EQUIPAMENTO.find((item) => item.id === idNormalizado) || RARIDADES_EQUIPAMENTO[0];
 }
 
-export type CategoriaModificacaoId = 'arma' | 'armadura' | 'escudo' | 'item';
+export type CategoriaModificacaoId = 'arma' | 'armadura' | 'escudo' | 'item' | 'implante';
 export type NivelModificacaoId = 'comum' | 'marcial';
 
 export interface IModificacaoEquipamento {
@@ -94,6 +94,8 @@ export interface IModificacaoEquipamento {
   efeito: string;
   /** Trava extra além do orçamento de raridade. Ausente = qualquer um instala. */
   preRequisito?: string;
+  /** Efeito automático na ficha, quando a modificação é um número simples. Vai para o catálogo da Loja. */
+  efeitos?: Array<{ categoria: 'atributo' | 'recurso' | 'combate' | 'pericia'; alvo: string; valor: number }>;
 }
 
 export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
@@ -378,6 +380,246 @@ export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
     efeito: 'Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.',
     preRequisito: 'Fluxo 14 e nível total 10',
   },
+  // Leva de 2026-11-12: mais modificações por tipo de item, e o grupo novo de Implantes.
+  // Armas
+  {
+    id: 'bainha-rapida', titulo: 'Bainha Rápida', categoria: 'arma', nivel: 'comum', valor: 0,
+    efeito: 'Sacar ou guardar esta arma vira Ação Livre, uma vez por turno.',
+  },
+  {
+    id: 'desmontavel', titulo: 'Desmontável', categoria: 'arma', nivel: 'comum', valor: 0,
+    efeito: 'A arma se separa em peças que parecem ferramentas comuns, e uma revista comum não a reconhece. Montar ou desmontar leva um minuto.',
+  },
+  {
+    id: 'carregador-estendido', titulo: 'Carregador Estendido', categoria: 'arma', nivel: 'comum', valor: 0,
+    efeito: 'Só em arma de disparo com recarga. A munição entre uma recarga e outra dobra.',
+  },
+  {
+    id: 'luminosa', titulo: 'Luminosa', categoria: 'arma', nivel: 'comum', valor: 0,
+    efeito: 'Sob comando, a lâmina ou o cano brilha como uma tocha, num raio de 9 m. Acender e apagar é Ação Livre.',
+  },
+  {
+    id: 'contrapeso', titulo: 'Contrapeso', categoria: 'arma', nivel: 'comum', valor: 1,
+    efeito: '+1 nas manobras feitas com esta arma: agarrar, derrubar, empurrar, desarmar e imobilizar.',
+  },
+  {
+    id: 'cano-estriado', titulo: 'Cano Estriado', categoria: 'arma', nivel: 'comum', valor: 1,
+    efeito: 'Só em arma de disparo. O alcance da arma sobe uma faixa de distância.',
+  },
+  {
+    id: 'ricochete', titulo: 'Ricochete', categoria: 'arma', nivel: 'comum', valor: 1,
+    efeito: 'Só em arma de arremesso. Acertando ou errando, a arma volta à sua mão no fim do seu turno.',
+  },
+  {
+    id: 'gancho', titulo: 'Gancho', categoria: 'arma', nivel: 'comum', valor: 1,
+    efeito: 'Uma vez por turno, ao acertar com esta arma, puxe o alvo 1,5 m na sua direção. Criatura duas categorias de tamanho maior que você fica onde está.',
+  },
+  {
+    id: 'trespassante', titulo: 'Trespassante', categoria: 'arma', nivel: 'marcial', valor: 2,
+    efeito: 'Só em arma corpo a corpo. Quando um ataque com ela leva uma criatura a 0 PV, o dano que sobrou atinge outra criatura adjacente a você, à sua escolha.',
+    preRequisito: 'Força 14',
+  },
+  {
+    id: 'calibrada', titulo: 'Calibrada', categoria: 'arma', nivel: 'marcial', valor: 2,
+    efeito: 'Só em arma de disparo. +2 nos ataques feitos com esta arma.',
+    preRequisito: 'Destreza 14',
+  },
+  {
+    id: 'quebra-guarda', titulo: 'Quebra-Guarda', categoria: 'arma', nivel: 'marcial', valor: 2,
+    efeito: 'Quando o alvo usa Bloqueio contra esta arma, a redução do Bloqueio cai pela metade.',
+    preRequisito: 'Força 14',
+  },
+  {
+    id: 'marcadora', titulo: 'Marcadora', categoria: 'arma', nivel: 'marcial', valor: 2,
+    efeito: 'Ao acertar, a criatura fica Revelada até o fim da cena.',
+    preRequisito: 'Nível total 7',
+  },
+  {
+    id: 'rajada', titulo: 'Rajada', categoria: 'arma', nivel: 'marcial', valor: 2,
+    efeito: 'Só em arma de disparo. Uma vez por cena, faça dois ataques com a mesma Ação Padrão, os dois com −2.',
+    preRequisito: 'Destreza 14',
+  },
+  {
+    id: 'fantasma', titulo: 'Fantasma', categoria: 'arma', nivel: 'marcial', valor: 3,
+    efeito: 'Uma vez por cena, declare antes de rolar: o ataque atravessa armadura e escudo e é comparado só com a Defesa Natural do alvo.',
+    preRequisito: 'Nível total 10',
+  },
+  {
+    id: 'ceifadora', titulo: 'Ceifadora', categoria: 'arma', nivel: 'marcial', valor: 3,
+    efeito: 'Uma vez por turno, quando um ataque com esta arma leva uma criatura a 0 PV, faça um ataque extra contra outra criatura ao seu alcance.',
+    preRequisito: 'Nível total 10',
+  },
+  // Armaduras
+  {
+    id: 'engates-rapidos', titulo: 'Engates Rápidos', categoria: 'armadura', nivel: 'comum', valor: 0,
+    efeito: 'Vestir ou tirar a armadura leva uma rodada, em vez de minutos.',
+  },
+  {
+    id: 'bolsos-ocultos', titulo: 'Bolsos Ocultos', categoria: 'armadura', nivel: 'comum', valor: 0,
+    efeito: 'Costuras escondem até dois itens pequenos que uma revista comum não encontra.',
+  },
+  {
+    id: 'acolchoada', titulo: 'Acolchoada', categoria: 'armadura', nivel: 'comum', valor: 0,
+    efeito: 'A armadura se move sem barulho de metal ou couro. A penalidade de armadura em Furtividade continua valendo.',
+  },
+  {
+    id: 'insignia-imponente', titulo: 'Insígnia Imponente', categoria: 'armadura', nivel: 'comum', valor: 1,
+    efeito: '+1 em Intimidação enquanto estiver vestida.',
+    efeitos: [{ categoria: 'pericia', alvo: 'intimidacao', valor: 1 }],
+  },
+  {
+    id: 'botas-ancoradas', titulo: 'Botas Ancoradas', categoria: 'armadura', nivel: 'comum', valor: 1,
+    efeito: 'Terreno difícil não reduz o seu Movimento.',
+  },
+  {
+    id: 'mascara-filtrante', titulo: 'Máscara Filtrante', categoria: 'armadura', nivel: 'comum', valor: 1,
+    efeito: 'Vantagem em Fortitude contra gases, fumaça e venenos inalados.',
+  },
+  {
+    id: 'blindagem-balistica', titulo: 'Blindagem Balística', categoria: 'armadura', nivel: 'marcial', valor: 2,
+    efeito: 'Resistência 3 contra dano balístico.',
+    preRequisito: 'Constituição 14',
+  },
+  {
+    id: 'sentinela', titulo: 'Sentinela', categoria: 'armadura', nivel: 'marcial', valor: 2,
+    efeito: 'Você não fica Surpreendido.',
+    preRequisito: 'Nível total 7',
+  },
+  {
+    id: 'pluma', titulo: 'Pluma', categoria: 'armadura', nivel: 'marcial', valor: 2,
+    efeito: '+1,5 m de Movimento, e a armadura não conta como pesada para escalar e nadar.',
+    preRequisito: 'Destreza 14',
+    efeitos: [{ categoria: 'combate', alvo: 'movimento', valor: 1.5 }],
+  },
+  {
+    id: 'adaptativa', titulo: 'Adaptativa', categoria: 'armadura', nivel: 'marcial', valor: 3,
+    efeito: 'Depois de sofrer dano de um tipo, a armadura ganha Resistência 5 contra esse tipo até o fim da cena. Ela guarda um tipo por vez, e o próximo toma o lugar do anterior.',
+    preRequisito: 'Nível total 10',
+  },
+  {
+    id: 'fortaleza-viva', titulo: 'Fortaleza Viva', categoria: 'armadura', nivel: 'marcial', valor: 3,
+    efeito: 'Uma vez por cena, como Reação, reduza a 0 o dano de um ataque que não seja crítico.',
+    preRequisito: 'Constituição 14 e nível total 10',
+  },
+  // Escudos
+  {
+    id: 'arremessavel', titulo: 'Arremessável', categoria: 'escudo', nivel: 'comum', valor: 0,
+    efeito: 'O escudo pode ser arremessado com alcance Curto, causando 1d6 de dano de impacto. Buscá-lo de volta segue a regra normal.',
+  },
+  {
+    id: 'brasao', titulo: 'Brasão', categoria: 'escudo', nivel: 'comum', valor: 0,
+    efeito: 'O escudo carrega o brasão de uma casa ou facção. Quem conhece a facção reconhece de longe, para o bem e para o mal.',
+  },
+  {
+    id: 'escudo-de-parede', titulo: 'Escudo de Parede', categoria: 'escudo', nivel: 'comum', valor: 1,
+    efeito: 'Como Ação de Movimento, crave o escudo no chão: ele dá cobertura parcial a você até você se mover.',
+  },
+  {
+    id: 'bossa-de-impacto', titulo: 'Bossa de Impacto', categoria: 'escudo', nivel: 'comum', valor: 1,
+    efeito: 'Um golpe com o escudo causa 1d6 de dano de impacto e conta como arma corpo a corpo leve.',
+  },
+  {
+    id: 'espelhado', titulo: 'Espelhado', categoria: 'escudo', nivel: 'comum', valor: 1,
+    efeito: 'Uma vez por cena, como Ação Livre, ofusque um inimigo adjacente: o próximo ataque dele tem desvantagem.',
+  },
+  {
+    id: 'muralha', titulo: 'Muralha', categoria: 'escudo', nivel: 'marcial', valor: 2,
+    efeito: 'Aliados adjacentes a você ganham +1 de Defesa.',
+    preRequisito: 'Constituição 14',
+  },
+  {
+    id: 'interceptor', titulo: 'Interceptor', categoria: 'escudo', nivel: 'marcial', valor: 2,
+    efeito: 'O Bloqueio passa a valer contra ataques à distância de projétil e balísticos, e reduz 1d6 a mais contra eles.',
+    preRequisito: 'Força 14',
+  },
+  {
+    id: 'egide', titulo: 'Égide', categoria: 'escudo', nivel: 'marcial', valor: 3,
+    efeito: 'Uma vez por cena, quando um aliado a até 9 m for atacado, use Proteger mesmo longe dele: você se move até ele sem provocar reação e vira o alvo.',
+    preRequisito: 'Nível total 10',
+  },
+  // Itens gerais e mágicos
+  {
+    id: 'fundo-falso', titulo: 'Fundo Falso', categoria: 'item', nivel: 'comum', valor: 0,
+    efeito: 'Um compartimento escondido guarda um objeto pequeno. Achá-lo exige Investigação DT 15.',
+  },
+  {
+    id: 'recado-gravado', titulo: 'Recado Gravado', categoria: 'item', nivel: 'comum', valor: 0,
+    efeito: 'O item guarda uma mensagem falada de até um minuto, que toca quando a pessoa que você escolheu o tocar.',
+  },
+  {
+    id: 'localizavel', titulo: 'Localizável', categoria: 'item', nivel: 'comum', valor: 0,
+    efeito: 'Você sempre sabe a direção do item enquanto ele estiver a até 1 km.',
+  },
+  {
+    id: 'amuleto-da-sorte', titulo: 'Amuleto da Sorte', categoria: 'item', nivel: 'comum', valor: 1,
+    efeito: 'Uma vez por sessão, role de novo um 1 natural seu e fique com o novo resultado.',
+  },
+  {
+    id: 'foco-afinado', titulo: 'Foco Afinado', categoria: 'item', nivel: 'comum', valor: 1,
+    efeito: '+1 nos testes de Vontade para manter Concentração.',
+  },
+  {
+    id: 'ferramental-fino', titulo: 'Ferramental Fino', categoria: 'item', nivel: 'comum', valor: 1,
+    efeito: 'Usado como ferramenta, o item faz o trabalho na metade do tempo.',
+  },
+  {
+    id: 'canalizador', titulo: 'Canalizador', categoria: 'item', nivel: 'marcial', valor: 2,
+    efeito: '+1 nos testes de magia feitos com este item em mãos.',
+    preRequisito: 'Fluxo 14',
+  },
+  {
+    id: 'reserva-de-folego', titulo: 'Reserva de Fôlego', categoria: 'item', nivel: 'marcial', valor: 2,
+    efeito: 'Guarda até 5 de Estamina. Você pode gastar dessa reserva no lugar da sua, e ela enche de novo no descanso completo.',
+    preRequisito: 'Constituição 12',
+  },
+  {
+    id: 'guardiao', titulo: 'Guardião', categoria: 'item', nivel: 'marcial', valor: 2,
+    efeito: 'Quem carrega o item tem vantagem nos testes contra ficar Amedrontado.',
+    preRequisito: 'Sabedoria 12',
+  },
+  {
+    id: 'ampulheta', titulo: 'Ampulheta', categoria: 'item', nivel: 'marcial', valor: 3,
+    efeito: 'Uma vez por descanso, logo depois de rolar, desfaça a rolagem e role de novo, ficando com o novo resultado.',
+    preRequisito: 'Nível total 10',
+  },
+  // Implantes
+  {
+    id: 'pele-sintetica', titulo: 'Pele Sintética', categoria: 'implante', nivel: 'comum', valor: 0,
+    efeito: 'Uma camada de pele cultivada cobre a peça. Quem olha não vê o metal, e notar o implante exige Investigação DT 15.',
+  },
+  {
+    id: 'blindagem-de-interferencia', titulo: 'Blindagem de Interferência', categoria: 'implante', nivel: 'comum', valor: 0,
+    efeito: 'Um campo de interferência comum não desliga o implante. Interferência feita por magia ou por um Fluxo ainda desliga.',
+  },
+  {
+    id: 'refrigeracao-liquida', titulo: 'Refrigeração Líquida', categoria: 'implante', nivel: 'comum', valor: 1,
+    efeito: 'Quando usar o implante cobrar dano interno, ele cobra um dado a menos, no mínimo um.',
+  },
+  {
+    id: 'sintonia-fina', titulo: 'Sintonia Fina', categoria: 'implante', nivel: 'comum', valor: 1,
+    efeito: '+1 nos testes de perícia em que o implante já dá bônus.',
+  },
+  {
+    id: 'amortecedor-neural', titulo: 'Amortecedor Neural', categoria: 'implante', nivel: 'marcial', valor: 2,
+    efeito: 'O implante custa 3 a menos de Sanidade máxima, no mínimo 1. A ficha faz a conta sozinha.',
+    preRequisito: 'Sabedoria 12',
+  },
+  {
+    id: 'redundancia', titulo: 'Redundância', categoria: 'implante', nivel: 'marcial', valor: 2,
+    efeito: 'Uma vez por cena, quando o implante seria desligado por dano, sobrecarga ou interferência, ele continua funcionando.',
+    preRequisito: 'Nível total 7',
+  },
+  {
+    id: 'pre-aquecimento', titulo: 'Pré-Aquecimento', categoria: 'implante', nivel: 'marcial', valor: 2,
+    efeito: '+2 de Iniciativa enquanto o implante estiver instalado.',
+    preRequisito: 'Destreza 12',
+    efeitos: [{ categoria: 'combate', alvo: 'iniciativa', valor: 2 }],
+  },
+  {
+    id: 'sobrecarga', titulo: 'Sobrecarga', categoria: 'implante', nivel: 'marcial', valor: 3,
+    efeito: 'Uma vez por cena, use de novo um efeito de uma vez por cena deste implante. Logo depois, você sofre 2d6 de dano interno, que ignora Resistência.',
+    preRequisito: 'Nível total 10',
+  },
 ];
 
 export const CATEGORIAS_MODIFICACAO: Array<{ id: CategoriaModificacaoId; titulo: string }> = [
@@ -385,6 +627,7 @@ export const CATEGORIAS_MODIFICACAO: Array<{ id: CategoriaModificacaoId; titulo:
   { id: 'armadura', titulo: 'Armaduras' },
   { id: 'escudo', titulo: 'Escudos' },
   { id: 'item', titulo: 'Itens gerais e mágicos' },
+  { id: 'implante', titulo: 'Implantes' },
 ];
 
 /** Preço de encomenda de uma modificação, em Lunaris, pelo peso do efeito.

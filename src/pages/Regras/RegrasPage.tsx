@@ -233,6 +233,8 @@ export const RegrasPage = () => {
       const leitor = document.getElementById('regra-leitor');
       const alvo = document.getElementById(secaoSolicitada);
       if (leitor && alvo && leitor.contains(alvo)) {
+        // O link de um termo (uma condição, uma aflição) brilha o alvo uma vez, para o olho achar.
+        if (secaoSolicitada.startsWith('termo-') && !alvo.classList.contains('alvo-do-termo')) alvo.classList.add('alvo-do-termo');
         const distancia = alvo.getBoundingClientRect().top - leitor.getBoundingClientRect().top;
         if (Math.abs(distancia - FOLGA) > 24) {
           parado = 0;
@@ -460,6 +462,7 @@ export const RegrasPage = () => {
       htmlContent={html}
       onAbrirTopico={(topico) => abrirTopico(topico)}
       titulosDosTopicos={titulosDosTopicos}
+      topicoAtual={activeTopic ?? undefined}
       {...extras}
     />
   );
@@ -501,6 +504,7 @@ export const RegrasPage = () => {
                 className={`regra-book-page regras-leitor mx-auto min-h-full px-5 py-8 sm:px-8 lg:px-12 lg:py-12 ${conteudoAmplo ? 'max-w-[82.5rem]' : 'max-w-[70rem]'}`}
               >
                 <CabecalhoDoTopico
+                  idDoTopico={activeTopic}
                   titulo={tituloTopico(activeTopic, titulos)}
                   numero={localizacao.topico.numero}
                   capitulo={localizacao.capitulo}

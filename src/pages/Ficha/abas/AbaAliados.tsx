@@ -114,12 +114,12 @@ const LINHAS_DO_CATALOGO = [...CATALOGO_DE_INVOCACOES.reduce((linhas, invocacao)
 }, new Map<string, IInvocacaoDoCatalogo[]>())];
 const ROMANO = ['', 'I', 'II', 'III', 'IV', 'V'];
 
-/** "+6 de Vida", "+30 de Vida, +2 de Defesa e +1d6 no dano ou na cura": só o que já cresceu. */
+/** "+6 de Vida", "+30 de Vida e +1d6 no dano ou na cura": só o que já cresceu. A Defesa
+ * acompanha o nível total e já vem calculada na ficha da invocação. */
 const textoDoCrescimento = (nivelInvocador: number): string => {
-  const { vida, defesa, dadosExtras } = crescimentoDaInvocacao(nivelInvocador);
+  const { vida, dadosExtras } = crescimentoDaInvocacao(nivelInvocador);
   const partes = [
     vida ? `+${vida} de Vida` : '',
-    defesa ? `+${defesa} de Defesa` : '',
     dadosExtras ? `+${dadosExtras}d6 no dano ou na cura` : '',
   ].filter(Boolean);
   return partes.length > 1 ? `${partes.slice(0, -1).join(', ')} e ${partes.slice(-1)[0]}` : partes[0] || '';

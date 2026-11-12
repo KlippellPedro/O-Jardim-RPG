@@ -162,7 +162,7 @@
     {
       "id": "tatico-de-mesa",
       "titulo": "Tático de Mesa",
-      "descricao": "Uma vez por combate, depois de definida a ordem de iniciativa, troque seu lugar na ordem com o de um aliado que concorde.",
+      "descricao": "Uma vez por cena, depois de definida a ordem de iniciativa, troque seu lugar na ordem com o de um aliado que concorde.",
       "pre_requisitos": [
         {
           "nivel_personagem": 25

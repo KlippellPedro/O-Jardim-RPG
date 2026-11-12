@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { BookOpen, Clock, LockKeyhole, Pencil, Sparkles } from 'lucide-react';
+import { BookOpen, Clock, LockKeyhole, Pencil, Puzzle, Sparkles } from 'lucide-react';
 import type { RegraTopic } from '../../../../data/regras/tipos';
-import { tempoDeLeituraEmMinutos } from '../../../../data/regras/livro';
+import { SELOS_DO_LIVRO, rotuloDoSelo, seloDoTopico, tempoDeLeituraEmMinutos } from '../../../../data/regras/livro';
 
 export interface TopicoDeAtalho {
   id: string;
@@ -9,6 +9,8 @@ export interface TopicoDeAtalho {
 }
 
 interface CabecalhoDoTopicoProps {
+  /** Id do tópico, para o selo de Núcleo ou Módulo. */
+  idDoTopico: string;
   titulo: string;
   /** "3.4" */
   numero: string;
@@ -24,6 +26,7 @@ interface CabecalhoDoTopicoProps {
 }
 
 export const CabecalhoDoTopico = ({
+  idDoTopico,
   titulo,
   numero,
   capitulo,
@@ -35,6 +38,9 @@ export const CabecalhoDoTopico = ({
 }: CabecalhoDoTopicoProps) => {
   const minutos = tempoDeLeituraEmMinutos(topico.corpo);
   const soMestre = topico.categoria === 'Guia do Mestre';
+  const rotulo = rotuloDoSelo(idDoTopico, topico.status);
+  const selo = seloDoTopico(idDoTopico);
+  const eModulo = rotulo === SELOS_DO_LIVRO.modulo.rotulo;
 
   return (
     <header className="mb-10 border-b border-[rgb(var(--acento)/0.28)] pb-8">
@@ -51,8 +57,13 @@ export const CabecalhoDoTopico = ({
               <Pencil size={11} /> Editar
             </Link>
           ) : null}
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgb(var(--acento)/0.3)] bg-[rgb(var(--acento)/0.12)] px-3 py-1 text-[rgb(var(--acento-forte))]">
-            {soMestre ? <LockKeyhole size={11} /> : <Sparkles size={11} />} {topico.status}
+          <span
+            title={selo && rotulo === SELOS_DO_LIVRO[selo].rotulo ? SELOS_DO_LIVRO[selo].explicacao : undefined}
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 ${eModulo
+              ? 'border-white/15 bg-white/[0.04] text-gray-300'
+              : 'border-[rgb(var(--acento)/0.3)] bg-[rgb(var(--acento)/0.12)] text-[rgb(var(--acento-forte))]'}`}
+          >
+            {soMestre ? <LockKeyhole size={11} /> : eModulo ? <Puzzle size={11} /> : <Sparkles size={11} />} {rotulo}
           </span>
         </span>
       </div>

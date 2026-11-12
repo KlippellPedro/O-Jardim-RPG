@@ -4184,10 +4184,10 @@
       "bonusDeAtaque": 18,
       "danoPorAcerto": 29,
       "dt": {
-        "rotineira": 17,
-        "padrao": 22,
-        "dificil": 27,
-        "extrema": 32
+        "rotineira": 19,
+        "padrao": 24,
+        "dificil": 29,
+        "extrema": 34
       },
       "vidaDeInimigoPadrao": 390
     },
@@ -4207,10 +4207,10 @@
       "bonusDeAtaque": 24,
       "danoPorAcerto": 30,
       "dt": {
-        "rotineira": 20,
-        "padrao": 25,
-        "dificil": 30,
-        "extrema": 35
+        "rotineira": 25,
+        "padrao": 30,
+        "dificil": 35,
+        "extrema": 40
       },
       "vidaDeInimigoPadrao": 410
     },
@@ -4230,10 +4230,10 @@
       "bonusDeAtaque": 31,
       "danoPorAcerto": 59,
       "dt": {
-        "rotineira": 25,
-        "padrao": 30,
-        "dificil": 35,
-        "extrema": 40
+        "rotineira": 32,
+        "padrao": 37,
+        "dificil": 42,
+        "extrema": 47
       },
       "vidaDeInimigoPadrao": 800
     },
@@ -4253,10 +4253,10 @@
       "bonusDeAtaque": 37,
       "danoPorAcerto": 77,
       "dt": {
-        "rotineira": 30,
-        "padrao": 35,
-        "dificil": 40,
-        "extrema": 45
+        "rotineira": 38,
+        "padrao": 43,
+        "dificil": 48,
+        "extrema": 53
       },
       "vidaDeInimigoPadrao": 1040
     },
@@ -4276,10 +4276,10 @@
       "bonusDeAtaque": 42,
       "danoPorAcerto": 77,
       "dt": {
-        "rotineira": 35,
-        "padrao": 40,
-        "dificil": 45,
-        "extrema": 50
+        "rotineira": 43,
+        "padrao": 48,
+        "dificil": 53,
+        "extrema": 58
       },
       "vidaDeInimigoPadrao": 1040
     },
@@ -4299,10 +4299,10 @@
       "bonusDeAtaque": 50,
       "danoPorAcerto": 78,
       "dt": {
-        "rotineira": 40,
-        "padrao": 45,
-        "dificil": 50,
-        "extrema": 55
+        "rotineira": 51,
+        "padrao": 56,
+        "dificil": 61,
+        "extrema": 66
       },
       "vidaDeInimigoPadrao": 1050
     },
@@ -4322,10 +4322,10 @@
       "bonusDeAtaque": 60,
       "danoPorAcerto": 78,
       "dt": {
-        "rotineira": 50,
-        "padrao": 55,
-        "dificil": 60,
-        "extrema": 65
+        "rotineira": 61,
+        "padrao": 66,
+        "dificil": 71,
+        "extrema": 76
       },
       "vidaDeInimigoPadrao": 1050
     },
@@ -4345,10 +4345,10 @@
       "bonusDeAtaque": 73,
       "danoPorAcerto": 79,
       "dt": {
-        "rotineira": 60,
-        "padrao": 65,
-        "dificil": 70,
-        "extrema": 75
+        "rotineira": 74,
+        "padrao": 79,
+        "dificil": 84,
+        "extrema": 89
       },
       "vidaDeInimigoPadrao": 1070
     },
@@ -4368,10 +4368,10 @@
       "bonusDeAtaque": 101,
       "danoPorAcerto": 80,
       "dt": {
-        "rotineira": 85,
-        "padrao": 90,
-        "dificil": 95,
-        "extrema": 100
+        "rotineira": 102,
+        "padrao": 107,
+        "dificil": 112,
+        "extrema": 117
       },
       "vidaDeInimigoPadrao": 1080
     },
@@ -4391,10 +4391,10 @@
       "bonusDeAtaque": 126,
       "danoPorAcerto": 80,
       "dt": {
-        "rotineira": 110,
-        "padrao": 115,
-        "dificil": 120,
-        "extrema": 125
+        "rotineira": 127,
+        "padrao": 132,
+        "dificil": 137,
+        "extrema": 142
       },
       "vidaDeInimigoPadrao": 1080
     }

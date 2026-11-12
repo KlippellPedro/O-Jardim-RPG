@@ -8,6 +8,7 @@ import {
   obterTracosOpcaoRacial,
 } from '../../../services/racaService';
 import { PremiumCard } from '../../../redesign/components/premium/PremiumCard';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 
 interface DetalhesRacaProps {
   raca: IRaca;
@@ -59,7 +60,7 @@ export const DetalhesRaca = ({ raca, hideBaseTraits }: DetalhesRacaProps) => {
           <h3 className={`text-xl font-bold mb-3 ${accentText}`} style={{ fontFamily: 'Cinzel, serif' }}>
             {traco.titulo}
           </h3>
-          <p className="text-gray-300 leading-relaxed font-light text-lg">{traco.descricao}</p>
+          <p className="text-gray-300 leading-relaxed font-light text-lg"><TextoComTermos texto={traco.descricao} /></p>
         </PremiumCard>
       ))}
 
@@ -101,13 +102,13 @@ export const DetalhesRaca = ({ raca, hideBaseTraits }: DetalhesRacaProps) => {
                     {Number(estagio.vida) ? ` · Vida ${Number(estagio.vida) > 0 ? '+' : ''}${estagio.vida}` : ''}
                   </span>
                 </div>
-                {estagio.descricao && <p className="text-gray-400 leading-relaxed">{estagio.descricao}</p>}
+                {estagio.descricao && <p className="text-gray-400 leading-relaxed"><TextoComTermos texto={estagio.descricao} /></p>}
                 {(estagio.caracteristicas?.length || 0) > 0 && (
                   <div className="mt-5 space-y-4 border-t border-white/5 pt-5">
                     {estagio.caracteristicas?.map(traco => (
                       <div key={traco.id}>
                         <h4 className="text-sm font-bold text-gray-200 mb-1">{traco.titulo}</h4>
-                        {traco.descricao && <p className="text-sm text-gray-400 leading-relaxed">{traco.descricao}</p>}
+                        {traco.descricao && <p className="text-sm text-gray-400 leading-relaxed"><TextoComTermos texto={traco.descricao} /></p>}
                       </div>
                     ))}
                   </div>
@@ -161,7 +162,7 @@ export const DetalhesRaca = ({ raca, hideBaseTraits }: DetalhesRacaProps) => {
                               </span>
                             )}
                           </h4>
-                          {traco.descricao && <p className="text-sm text-gray-400 leading-relaxed">{traco.descricao}</p>}
+                          {traco.descricao && <p className="text-sm text-gray-400 leading-relaxed"><TextoComTermos texto={traco.descricao} /></p>}
                         </div>
                       ))}
                     </div>

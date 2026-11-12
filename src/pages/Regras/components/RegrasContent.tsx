@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { ChevronDown, Dices, List, X } from 'lucide-react';
 import { sanitizeRuleHtml } from '../../../services/sanitizeRuleHtml';
 import { idDaSecao } from '../secaoDoLivro';
+import { ancoraDoTermo, dicaDoTermo, dividirEmTermos, termoPeloNome } from '../../../services/termosDoJogo';
 import '../leitor.css';
 
 interface RegrasContentProps {
@@ -17,7 +18,66 @@ interface RegrasContentProps {
   onAbrirTopico?: (idDoTopico: string) => void;
   /** Títulos dos tópicos, para a dica que aparece ao pousar o mouse numa remissão. */
   titulosDosTopicos?: Record<string, string>;
+  /** Tópico aberto: os termos que ele mesmo explica não viram link. */
+  topicoAtual?: string;
 }
+
+/** Onde um termo do texto não vira link: títulos, botões, remissões, fórmulas. */
+const SEM_LINK_DE_TERMO = 'a, button, h1, h2, h3, h4, th, .regras-ref, .regras-formula';
+/** Bloco de texto em que cada termo liga só na primeira vez: a tabela inteira, a lista
+ * inteira ou o parágrafo. Sem isso, uma tabela de 40 linhas ligava "desvantagem" 40 vezes. */
+const blocoDoTermo = (elemento: Element, container: HTMLElement): Element => (
+  elemento.closest('table')
+  ?? elemento.closest('ul, ol')
+  ?? elemento.closest('p, dd, blockquote, div')
+  ?? container
+);
+
+/** Troca os termos do jogo dos nós de texto por links que abrem o Livro numa guia nova. */
+const ligarTermosNoTexto = (container: HTMLElement, topicoAtual?: string) => {
+  const ligadosPorBloco = new Map<Element, Set<string>>();
+  const caminhante = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+  const nos: Text[] = [];
+  while (caminhante.nextNode()) nos.push(caminhante.currentNode as Text);
+  nos.forEach((no) => {
+    const pai = no.parentElement;
+    if (!pai || pai.closest(SEM_LINK_DE_TERMO)) return;
+    const bloco = blocoDoTermo(pai, container);
+    if (!ligadosPorBloco.has(bloco)) ligadosPorBloco.set(bloco, new Set());
+    const trechos = dividirEmTermos(no.nodeValue || '', { topicoAtual, jaLigados: ligadosPorBloco.get(bloco) });
+    if (!trechos.some((trecho) => typeof trecho !== 'string')) return;
+    const fragmento = document.createDocumentFragment();
+    trechos.forEach((trecho) => {
+      if (typeof trecho === 'string') {
+        fragmento.appendChild(document.createTextNode(trecho));
+        return;
+      }
+      const link = document.createElement('a');
+      link.href = trecho.termo.rota;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.title = dicaDoTermo(trecho.termo);
+      link.className = 'termo-do-jogo';
+      link.dataset.termo = trecho.termo.id;
+      link.textContent = trecho.texto;
+      fragmento.appendChild(link);
+    });
+    no.replaceWith(fragmento);
+  });
+};
+
+/** As tabelas do Livro (condições de longo prazo, crises) ganham a âncora do termo na
+ * linha, pelo nome da primeira célula, para o link de um termo cair na linha certa. */
+const marcarLinhasDosTermos = (container: HTMLElement) => {
+  container.querySelectorAll<HTMLTableRowElement>('tr').forEach((linha) => {
+    const nome = linha.querySelector('td:first-child')?.textContent || '';
+    const termo = nome ? termoPeloNome(nome) : undefined;
+    if (!termo) return;
+    const ancora = ancoraDoTermo(termo.id);
+    // O cartão do catálogo, quando existe, já leva a âncora e é o melhor destino.
+    if (!document.getElementById(ancora)) linha.id = ancora;
+  });
+};
 
 interface TocItem {
   id: string;
@@ -47,6 +107,7 @@ export const RegrasContent = ({
   semSumario = false,
   onAbrirTopico,
   titulosDosTopicos,
+  topicoAtual,
 }: RegrasContentProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const toastTimerRef = useRef<number | null>(null);
@@ -102,6 +163,10 @@ export const RegrasContent = ({
         remissao.setAttribute('title', `Abrir o tópico ${titulo}`);
       });
     }
+
+    marcarLinhasDosTermos(container);
+    // No leitor (quem sabe abrir tópico), condições e mecânicas do texto viram link.
+    if (abrirTopicoRef.current) ligarTermosNoTexto(container, topicoAtual);
 
     const diceRegex = /\b(\d+)d(\d+)(?:\+(\d+))?\b/g;
     const walkDOM = (node: Node) => {
@@ -193,7 +258,7 @@ export const RegrasContent = ({
       observer?.disconnect();
       if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
     };
-  }, [htmlContent, ocultarCatalogoAflicoes, ocultarCatalogoPericias]);
+  }, [htmlContent, ocultarCatalogoAflicoes, ocultarCatalogoPericias, topicoAtual]);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });

@@ -5,7 +5,7 @@ import catalogoLoja from '../../data/loja/catalogo.json';
 import marcasData from '../../data/ficha/marcas-de-circulo.json';
 import magiasData from '../../data/ficha/magias.json';
 import { CLASSES_CATALOGO } from '../../src/services/catalogoService.ts';
-import { aliadoDaInvocacao, catalogoDeInvocacoes, crescimentoDaInvocacao, nivelDasFormas } from '../../src/services/invocacoesService.ts';
+import { aliadoDaInvocacao, catalogoDeInvocacoes, crescimentoDaInvocacao, defesaDaInvocacao, nivelDasFormas } from '../../src/services/invocacoesService.ts';
 import {
   MAGIAS_CATALOGO,
   interceptacaoDaFicha,
@@ -110,8 +110,8 @@ test('o Catálogo de Invocações vira ficha pronta, e cresce depois do 20', () 
   assert.equal(catalogo.length, 30);
   assert.ok(catalogo.every((item) => item.vida > 0 && item.defesa > 0 && item.movimento && item.habilidade));
   assert.equal(new Set(catalogo.map((item) => item.linha)).size, 6);
-  assert.deepEqual(crescimentoDaInvocacao(20), { vida: 0, defesa: 0, dadosExtras: 0 });
-  assert.deepEqual(crescimentoDaInvocacao(50), { vida: 90, defesa: 6, dadosExtras: 3 });
+  assert.deepEqual(crescimentoDaInvocacao(20), { vida: 0, dadosExtras: 0 });
+  assert.deepEqual(crescimentoDaInvocacao(50), { vida: 90, dadosExtras: 3 });
   assert.equal(nivelDasFormas(8), 2);
 
   const cacador = catalogo.find((item) => item.id === 'cacador-de-feras-5')!;
@@ -119,7 +119,12 @@ test('o Catálogo de Invocações vira ficha pronta, e cresce depois do 20', () 
   const ficha = { escolhasHabilidade: { 'invocador:formas-vinculadas': ['nucleo-firme'] }, classes: [{ id: 'invocador', nivel: 50 }] };
   const aliado = aliadoDaInvocacao(cacador, { ficha, nivelInvocador: 50, iniciativa: 4 });
   assert.equal(aliado.vidaMaxima, 170);
-  assert.equal(aliado.defesa, 27);
+  // Defesa pela curva (2026-11-12): natural do nível 50 (38), o ajuste do Caçador
+  // (21 no Catálogo contra 22 da natural do nível 20, então −1) e a armadura típica (+24).
+  assert.equal(aliado.defesa, 61);
+  assert.equal(defesaDaInvocacao(cacador, 20), 22 - 1 + 15);
+  const colosso = catalogo.find((item) => item.id === 'colosso-de-ferro-1')!;
+  assert.equal(defesaDaInvocacao(colosso, 1), 12 + 1 + 2, 'o Colosso fica um ponto acima da natural, como no Catálogo');
   assert.equal(aliado.ataquePrincipal, 'Garras 3d8 + 3d6 cortante');
   assert.equal(aliado.invocacaoCatalogoId, 'cacador-de-feras-5');
   // Núcleo Firme no nível 2 da forma: o dobro do nível de Invocador.

@@ -7,6 +7,7 @@ import {
   ORDEM_DOS_PAPEIS,
   PAPEIS_CRIATURA,
   ajusteDeArmaduraDoVd,
+  dtPadraoDoVd,
   escalaDeVida,
   escalarCriatura,
   expressaoDeDano,
@@ -184,7 +185,9 @@ test('arquétipos dão variedade sem tirar o modelo neutro: comum é idêntico a
     }
   }
   assert.equal(modeloDeCriatura(30, 'solo', 'assassino').habilidades[0].startsWith('Golpe Furtivo'), true);
-  assert.match(modeloDeCriatura(30, 'solo', 'bruto').habilidades[0], /DT 30/);
+  // DT de efeito do VD 30 (2026-11-12): a maior entre 15 + 15 e o bônus de quem investe + 6.
+  assert.match(modeloDeCriatura(30, 'solo', 'bruto').habilidades[0], new RegExp(`DT ${dtPadraoDoVd(30)}`));
+  assert.equal(dtPadraoDoVd(30), 37);
 });
 
 test('escalar uma criatura do modelo para outro VD dá o modelo daquele VD', () => {
@@ -229,7 +232,7 @@ test('escalar mantém a proporção de Vida e a Vida atual, e deixa nome de ataq
   assert.equal(ferida.mana, undefined);
   assert.equal(ferida.ataques[0].nome, 'Mordida venenosa');
   assert.match(ferida.ataques[0].detalhe, /^\+\d+, \d+d\d+(\+\d+)? perfurante, causa Veneno$/);
-  assert.equal(ferida.ataques[1].detalhe, 'DT 28 de Vontade');
+  assert.equal(ferida.ataques[1].detalhe, `DT ${18 + dtPadraoDoVd(30) - dtPadraoDoVd(10)} de Vontade`);
   assert.equal(ferida.pericias[1], 'Ficar de tocaia');
   assert.equal(ferida.pericias[0], `Furtividade +${10 + ferida.deltaDeTeste}`);
   assert.equal(ferida.ataques[0].detalhe.split(',')[0], `+${9 + ferida.deltaDeAtaque}`);
@@ -258,7 +261,7 @@ test('escalar leva junto a DT escrita no texto do ataque, a mesma distância que
     ataques: [{ nome: 'Picada', detalhe: '+21, 2d8+4 perfurante; expõe à Toxina, Fortitude DT 15' }],
     pericias: [],
   }, 40);
-  assert.match(feita.ataques[0].detalhe, /Fortitude DT 26$/);
+  assert.match(feita.ataques[0].detalhe, new RegExp(`Fortitude DT ${15 + dtPadraoDoVd(40) - dtPadraoDoVd(18)}$`));
   const mesmo = escalarCriatura({ vd: 18, pv: 380, iniciativa: 26, ataques: [{ nome: 'Picada', detalhe: 'DT 15' }], pericias: [] }, 19);
-  assert.equal(mesmo.ataques[0].detalhe, 'DT 15');
+  assert.equal(mesmo.ataques[0].detalhe, `DT ${15 + dtPadraoDoVd(19) - dtPadraoDoVd(18)}`);
 });

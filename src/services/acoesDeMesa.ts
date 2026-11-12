@@ -16,7 +16,7 @@ import {
  */
 
 export type TipoAcaoMesa = 'padrao' | 'completa' | 'movimento' | 'reacao' | 'livre' | 'passivo' | 'fora';
-export type JanelaDeUso = 'rodada' | 'cena' | 'descanso' | 'sessao' | 'dia';
+export type JanelaDeUso = 'rodada' | 'turno' | 'cena' | 'descanso' | 'sessao' | 'dia';
 export type FonteAcaoMesa = 'habilidade' | 'escolha' | 'poder' | 'raca' | 'legado' | 'jardim';
 
 export interface IAcaoMesa {
@@ -25,8 +25,10 @@ export interface IAcaoMesa {
   origem: string;
   fonte: FonteAcaoMesa;
   tipo: TipoAcaoMesa;
-  /** O texto da ação como o catálogo escreve, para mostrar a nuance ("antes do ataque"). */
+  /** O tipo de ação do catálogo ("Ação Livre"). */
   acao: string;
+  /** O detalhe da ação, quando importa ("antes do ataque"). */
+  momento: string;
   descricao: string;
   custoMana: number;
   custoEstamina: number;
@@ -72,12 +74,13 @@ export function classificarAcaoMesa(acao: string | undefined, temLimite = false)
 }
 
 const NUMEROS: Record<string, number> = { uma: 1, um: 1, duas: 2, dois: 2, tres: 3, 'três': 3, quatro: 4, cinco: 5 };
-const LIMITE_POR_EXTENSO = /\b(uma|um|duas|dois|tr[eê]s|quatro|cinco|\d+)\s+vez(?:es)?\s+por\s+(turno|rodada|cena|combate|descanso(?:\s+longo|\s+curto)?|sess[aã]o|dia|rito)\b/i;
+const LIMITE_POR_EXTENSO = /\b(uma|um|duas|dois|tr[eê]s|quatro|cinco|\d+)\s+vez(?:es)?\s+por\s+(turno|rodada|cena|combate|descanso(?:\s+completo|\s+longo|\s+curto)?|sess[aã]o|dia|rito)\b/i;
 const LIMITE_CURTO = /\b(\d+)\s*\/\s*(turno|rodada|cena|combate|descanso|sess[aã]o|dia)\b/i;
 
 function janelaDoTexto(texto: string): JanelaDeUso | null {
   const t = texto.toLowerCase();
-  if (t.startsWith('turno') || t.startsWith('rodada')) return 'rodada';
+  if (t.startsWith('turno')) return 'turno';
+  if (t.startsWith('rodada')) return 'rodada';
   if (t.startsWith('cena') || t.startsWith('combate') || t.startsWith('rito')) return 'cena';
   if (t.startsWith('descanso')) return 'descanso';
   if (t.startsWith('sess')) return 'sessao';
@@ -87,11 +90,18 @@ function janelaDoTexto(texto: string): JanelaDeUso | null {
 
 const ROTULO_JANELA: Record<JanelaDeUso, string> = {
   rodada: 'por rodada',
+  turno: 'por turno',
   cena: 'por cena',
   descanso: 'por descanso',
   sessao: 'por sessão',
   dia: 'por dia',
 };
+
+/** Rodada e turno não têm contador: voltam sozinhos antes de alguém precisar
+ * zerar, então ficam só como lembrete no rótulo. */
+export function temContadorDeUso(limite: IAcaoMesa['limite']): boolean {
+  return Boolean(limite) && limite!.janela !== 'rodada' && limite!.janela !== 'turno';
+}
 
 /** Limite de uso ("Uma vez por cena", "2/descanso") no campo de usos ou, se
  * faltar, no começo da descrição. */
@@ -126,6 +136,7 @@ function deConteudo(item: IConteudoAutomatico, fonte: FonteAcaoMesa): IAcaoMesa 
     fonte,
     tipo: classificarAcaoMesa(item.acao, Boolean(limite)),
     acao: item.acao || '',
+    momento: item.momento || '',
     descricao: item.descricao,
     custoMana: Math.max(0, Number(item.custoMana) || 0),
     custoEstamina: Math.max(0, Number(item.custoEstamina) || 0),
@@ -171,7 +182,7 @@ export function agruparAcoesMesa(lista: IAcaoMesa[]): { grupos: IGrupoAcoesMesa[
 export type UsosMarcados = Record<string, number>;
 
 /** Zera os contadores de uma janela e das menores (descansar zera a cena; nova
- * sessão zera tudo). Rodada não tem contador: é só lembrete. */
+ * sessão zera tudo). Rodada e turno não têm contador: são só lembrete. */
 export function zerarUsos(usos: UsosMarcados, lista: IAcaoMesa[], ate: 'cena' | 'descanso' | 'sessao'): UsosMarcados {
   const janelas: Record<typeof ate, JanelaDeUso[]> = {
     cena: ['cena'],
@@ -184,7 +195,7 @@ export function zerarUsos(usos: UsosMarcados, lista: IAcaoMesa[], ate: 'cena' | 
 
 /** Marca um uso, sem passar do limite. Devolve o mesmo objeto se não couber. */
 export function marcarUso(usos: UsosMarcados, item: IAcaoMesa): UsosMarcados {
-  if (!item.limite || item.limite.janela === 'rodada') return usos;
+  if (!item.limite || !temContadorDeUso(item.limite)) return usos;
   const atual = usos[item.id] || 0;
   if (atual >= item.limite.vezes) return usos;
   return { ...usos, [item.id]: atual + 1 };
@@ -200,7 +211,7 @@ export function desmarcarUso(usos: UsosMarcados, item: IAcaoMesa): UsosMarcados 
 }
 
 export function usosRestantes(usos: UsosMarcados, item: IAcaoMesa): number | null {
-  if (!item.limite || item.limite.janela === 'rodada') return null;
+  if (!item.limite || !temContadorDeUso(item.limite)) return null;
   return Math.max(0, item.limite.vezes - (usos[item.id] || 0));
 }
 

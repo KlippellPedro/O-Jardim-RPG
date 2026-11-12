@@ -6,6 +6,8 @@ import {
   ANTES_DE_LER,
   APRESENTACAO_DOS_CAPITULOS,
   CONTINUE_EM,
+  SELOS_DO_LIVRO,
+  TOPICOS_DO_NUCLEO,
   TRILHAS_DE_LEITURA,
   acentoDoCapitulo,
   contarPalavras,
@@ -13,6 +15,8 @@ import {
   localizarTopico,
   numerarLivro,
   romano,
+  rotuloDoSelo,
+  seloDoTopico,
   tempoDeLeituraEmMinutos,
 } from '../../data/regras/livro';
 
@@ -88,6 +92,34 @@ test('as trilhas de leitura só citam tópicos que existem', () => {
       trilha.passos.some((id) => REGRAS_OFICIAIS[id].categoria === 'Guia do Mestre'),
       `${trilha.id}: soMestre diverge dos passos`,
     );
+  });
+});
+
+test('o núcleo é curto, só cita tópicos do jogador e cobre a primeira sessão', () => {
+  TOPICOS_DO_NUCLEO.forEach((id) => {
+    assert.ok(REGRAS_OFICIAIS[id], `núcleo: "${id}" não existe`);
+    assert.notEqual(REGRAS_OFICIAIS[id].categoria, 'Guia do Mestre', `núcleo: "${id}" é do Mestre`);
+  });
+  // Núcleo do tamanho do livro inteiro deixa de separar alguma coisa.
+  assert.ok(TOPICOS_DO_NUCLEO.length <= TOPICOS.length / 2, 'núcleo grande demais');
+  // A trilha de quem nunca jogou só passa pelo núcleo.
+  TRILHAS_DE_LEITURA.find((trilha) => trilha.id === 'nunca-joguei')!.passos
+    .forEach((id) => assert.equal(seloDoTopico(id), 'nucleo', `${id} está na trilha inicial e não é núcleo`));
+  ['como-jogar', 'criacao-personagem', 'combate', 'magia-fluxo', 'condicoes', 'descanso']
+    .forEach((id) => assert.equal(seloDoTopico(id), 'nucleo', id));
+});
+
+test('o selo troca só "Regra oficial" e deixa o resto como está', () => {
+  assert.equal(seloDoTopico('mestre'), null);
+  assert.equal(seloDoTopico('batalha'), 'modulo');
+  assert.equal(rotuloDoSelo('combate', 'Regra oficial'), SELOS_DO_LIVRO.nucleo.rotulo);
+  assert.equal(rotuloDoSelo('batalha', 'Regra oficial'), SELOS_DO_LIVRO.modulo.rotulo);
+  assert.equal(rotuloDoSelo('classes', 'Catálogo oficial'), 'Catálogo oficial');
+  assert.equal(rotuloDoSelo('como-jogar', 'Comece por aqui'), 'Comece por aqui');
+  assert.equal(rotuloDoSelo('mestre', 'Somente Mestre'), 'Somente Mestre');
+  // Todo tópico do jogador com "Regra oficial" sai com um dos dois selos.
+  TOPICOS.filter((id) => REGRAS_OFICIAIS[id].status === 'Regra oficial').forEach((id) => {
+    assert.ok([SELOS_DO_LIVRO.nucleo.rotulo, SELOS_DO_LIVRO.modulo.rotulo].includes(rotuloDoSelo(id, 'Regra oficial')), id);
   });
 });
 

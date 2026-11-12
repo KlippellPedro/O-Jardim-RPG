@@ -57,7 +57,8 @@ test('a ficha calcula a interceptação de magia e de poder de criatura', () => 
   assert.equal(nivel10.bonus, 14);
 
   const criatura = interceptacaoDaFicha(12, { tipo: 'criatura', vd: 20 }, { bonusBase: 13 });
-  assert.equal(criatura.dt, 25);
+  // DT de efeito do VD 20 (2026-11-12): 30, a mesma das criaturas.
+  assert.equal(criatura.dt, 30);
   assert.equal(criatura.rotulo, 'poder de criatura de VD 20');
 
   // Acesso Administrador: +5 e 3 de Mana a menos, só no nível 20.

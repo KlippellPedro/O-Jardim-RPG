@@ -22,6 +22,7 @@ import { obterStatusFicha, obterTemporario } from '../../../services/statusServi
 import { dispararDescanso } from '../components/descansoCena';
 import { LotesDoDescanso } from '../components/LotesDoDescanso';
 import { classesDaFicha } from '../../../services/progressaoFichaService';
+import { sanidadeMaximaDaFicha } from '../../../services/sanidadeDaFichaService';
 
 interface AbaDescansoProps {
   character: any;
@@ -92,7 +93,7 @@ export const AbaDescanso = ({ character, onUpdate, onAbrirAba }: AbaDescansoProp
     vida: Math.max(1, Number(derivados.vida) || 10),
     mana: Math.max(0, Number(derivados.mana) || 10),
     estamina: Math.max(1, Number(derivados.estamina) || 1),
-    sanidade: Math.max(1, Number(status.sanidadeMaxima) || 100),
+    sanidade: sanidadeMaximaDaFicha(character),
   };
   const condicoesAtivas = Array.isArray(ficha.condicoesAtivas) ? ficha.condicoesAtivas.length : 0;
   const aflicoesAtivas = Array.isArray(ficha.aflicoesAtivas) ? ficha.aflicoesAtivas.length : 0;

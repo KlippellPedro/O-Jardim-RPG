@@ -4,8 +4,12 @@ quem comprou) mas não bloqueia a compra. Ver docs/sistema/INTEGRACAO.md,
 achado 6."""
 
 import unittest
+from pathlib import Path
 
+from core.character_summary import carregar_catalogos
 from routers.shop import _require_catalog_character_requirements
+
+DATA_ROOT = Path(__file__).resolve().parents[2] / "data"
 
 
 def _personagem(nivel, classes_ids, atributos=None):
@@ -69,6 +73,14 @@ class RequisitosLojaTests(unittest.TestCase):
     def test_atributo_suficiente_nao_gera_infracao(self):
         item = _item(requisitoNivel=25, requisitoAtributo={"forca": 18})
         self.assertEqual(_require_catalog_character_requirements(item, _personagem(25, ["guerreiro"], {"forca": 18})), [])
+
+    def test_atributo_conta_o_ajuste_da_raca(self):
+        carregar_catalogos(DATA_ROOT)
+        # Amálgamo tem +2 de Constituição: 16 na ficha vira 18 com a raça.
+        item = _item(requisitoAtributo={"constituicao": 18})
+        personagem = _personagem(25, ["guerreiro"], {"forca": 10, "destreza": 10, "constituicao": 16, "inteligencia": 10, "sabedoria": 10, "carisma": 10, "fluxo": 10})
+        personagem["ficha"]["racaId"] = "amalgamo"
+        self.assertEqual(_require_catalog_character_requirements(item, personagem), [])
 
     def test_ficha_sem_atributos_conta_como_zero(self):
         item = _item(requisitoAtributo={"constituicao": 15})

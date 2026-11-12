@@ -11,6 +11,7 @@ import unittest
 from collections import Counter
 from pathlib import Path
 
+from core.content_seed import _MODIFICATION_APPLICATIONS, _SHOP_RARITIES, _SHOP_TYPES, _normalize_catalog_value
 from routers.shop import normalize_catalog_filter
 
 _CATALOGO = json.loads(
@@ -26,14 +27,16 @@ _ALVOS_POR_APLICACAO = {
     "armas": {"arma"},
     "armaduras": {"armadura"},
     "escudos": {"armadura"},
+    "implantes": {"implante"},
 }
 _APLICACOES_SEM_RESTRICAO = {"itens gerais e magicos"}
 _APLICACOES_CONHECIDAS = set(_ALVOS_POR_APLICACAO) | _APLICACOES_SEM_RESTRICAO
 
 
 class CompatibilidadeCatalogoTests(unittest.TestCase):
-    def test_catalogo_tem_63_modificacoes(self):
-        self.assertEqual(len(_MODIFICACOES), 63)
+    def test_catalogo_tem_115_modificacoes(self):
+        # 63 até 2026-11-12; a leva nova trouxe 52 (incluindo o grupo de Implantes).
+        self.assertEqual(len(_MODIFICACOES), 115)
 
     def test_toda_modificacao_tem_aplicacao_reconhecida(self):
         desconhecidas = []
@@ -60,6 +63,29 @@ class CompatibilidadeCatalogoTests(unittest.TestCase):
         categorias_possiveis_no_inventario = {"arma", "armadura", "consumivel", "veiculo", "modulo-veicular", "implante", "propriedade", "geral"}
         for alvos in _ALVOS_POR_APLICACAO.values():
             self.assertTrue(alvos <= categorias_possiveis_no_inventario)
+
+
+class CatalogoPassaNoSeedTests(unittest.TestCase):
+    """O seed (core/content_seed.py) recusa o catálogo inteiro e a API não sobe
+    se uma entrada tiver tipo, raridade ou aplicação que ele não conhece. Em
+    2026-11-12 a aplicação "Implantes" entrou no catálogo antes de entrar no seed
+    e só apareceu ao subir a API; este teste pega isso sem banco."""
+
+    def test_todo_tipo_raridade_e_aplicacao_do_catalogo_e_aceito_pelo_seed(self):
+        problemas = []
+        for entrada in _CATALOGO["entradas"]:
+            conteudo = entrada.get("conteudo") or {}
+            if entrada["tipo"] not in _SHOP_TYPES:
+                problemas.append((entrada["id"], "tipo", entrada["tipo"]))
+            raridade = conteudo.get("raridade")
+            if raridade is not None and _normalize_catalog_value(raridade) not in _SHOP_RARITIES:
+                problemas.append((entrada["id"], "raridade", raridade))
+            if entrada["tipo"] == "modificacao" and _normalize_catalog_value(conteudo.get("aplicacao")) not in _MODIFICATION_APPLICATIONS:
+                problemas.append((entrada["id"], "aplicacao", conteudo.get("aplicacao")))
+        self.assertEqual(problemas, [])
+
+    def test_aplicacoes_do_seed_e_da_loja_sao_as_mesmas(self):
+        self.assertEqual(_MODIFICATION_APPLICATIONS, _APLICACOES_CONHECIDAS)
 
 
 if __name__ == "__main__":

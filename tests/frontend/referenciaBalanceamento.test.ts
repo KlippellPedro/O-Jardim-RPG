@@ -105,12 +105,10 @@ test('média de dados', () => {
 test('a referência de NPCs e inimigos cresce com o nível e as DTs seguem o Guia do Mestre', () => {
   const tabela = NIVEIS_DE_REFERENCIA.map((nivel) => referenciaDoNivel(nivel, comuns, armas));
   for (const linha of tabela) {
-    assert.deepEqual(linha.dt, {
-      rotineira: 10 + Math.floor(linha.nivel / 2),
-      padrao: 15 + Math.floor(linha.nivel / 2),
-      dificil: 20 + Math.floor(linha.nivel / 2),
-      extrema: 25 + Math.floor(linha.nivel / 2),
-    });
+    // DT padrão (2026-11-12): a maior entre 15 + metade do nível e o bônus de quem investe + 6.
+    const padrao = Math.max(15 + Math.floor(linha.nivel / 2), linha.bonusDeAtaque + 6);
+    assert.deepEqual(linha.dt, { rotineira: padrao - 5, padrao, dificil: padrao + 5, extrema: padrao + 10 });
+    if (linha.nivel <= 10) assert.equal(padrao, 15 + Math.floor(linha.nivel / 2), 'até o nível 10 é a conta antiga');
     assert.ok(linha.vida.minima <= linha.vida.media && linha.vida.media <= linha.vida.maxima);
     assert.ok(linha.vidaDeInimigoPadrao > 0);
   }

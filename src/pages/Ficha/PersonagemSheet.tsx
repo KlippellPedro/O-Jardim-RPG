@@ -84,6 +84,7 @@ import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
 import { confirmar } from '../../components/avisos/confirmacao';
 import { guiasAutomaticosLigados } from '../../utils/guias';
 import { esquecerUltimaFicha, lembrarUltimaFicha, recordarUltimaFicha } from '../../services/ultimaFicha';
+import { sanidadeAtualDaFicha, sanidadeMaximaDaFicha } from '../../services/sanidadeDaFichaService';
 
 // Só a aba Ficha vem no pacote da página; as outras 13 carregam na primeira vez que são abertas
 // (e são puxadas em segundo plano logo depois da primeira pintura, para o clique não esperar).
@@ -1085,7 +1086,7 @@ export const PersonagemSheet: React.FC = () => {
             return {
               vida: pct(status.vidaAtual ?? derivados.vida, derivados.vida),
               mana: pct(status.manaAtual ?? derivados.mana, derivados.mana),
-              sanidade: pct(status.sanidadeAtual ?? (status as any).sanidadeMaxima ?? 100, (status as any).sanidadeMaxima ?? 100),
+              sanidade: pct(sanidadeAtualDaFicha(character), sanidadeMaximaDaFicha(character)),
             };
           })()}
           onAbrirAba={(aba) => handleTabChange(aba as FichaTourTabId)}

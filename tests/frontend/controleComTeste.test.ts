@@ -18,7 +18,7 @@ test('as quatro magias de 10º círculo têm resistência no campo e no texto', 
   assert.equal(magia('conservacao-absoluta').somente_hostil, true);
   assert.match(magia('conservacao-absoluta').efeito, /repete o teste no fim de cada turno/);
   assert.equal(magia('parada-do-mundo').defesa, 'Vontade');
-  assert.match(magia('parada-do-mundo').efeito, /Uma vez por descanso longo/);
+  assert.match(magia('parada-do-mundo').efeito, /Uma vez por descanso\b/);
   assert.equal(magia('ancora-do-ser').defesa, 'Vontade');
   assert.equal(magia('ancora-do-ser').somente_hostil, true);
   assert.match(magia('ancora-do-ser').efeito, /até o fim da cena/);

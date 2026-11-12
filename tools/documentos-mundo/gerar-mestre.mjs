@@ -16,6 +16,7 @@ import { CSS_MESTRE } from './estilo-mestre.mjs';
 import { RAIZ } from './dados.mjs';
 import { abrirChrome, imprimir } from './render.mjs';
 import { folhaDePreparacao } from './folha-preparacao.mjs';
+import { folhaDeRegrasDeMesa } from './folha-regras-mesa.mjs';
 import { aventuraInicial } from './aventura-inicial.mjs';
 import { AVENTURAS_DO_JARDIM } from './aventuras-do-jardim.mjs';
 import { arcoDaMalha } from './arco-da-malha.mjs';
@@ -50,7 +51,7 @@ const montarHtml = (titulo, paginas) => `<!doctype html>
 ${paginas.join('\n')}
 </body></html>`;
 
-const documentos = [folhaDePreparacao(), aventuraInicial(), ...AVENTURAS_DO_JARDIM(), arcoDaMalha()];
+const documentos = [folhaDePreparacao(), folhaDeRegrasDeMesa(), aventuraInicial(), ...AVENTURAS_DO_JARDIM(), arcoDaMalha()];
 // Com --folga, o gerador também diz quanto espaço sobra em cada folha. Serve
 // para reescrever um texto sabendo de antemão quanto ele pode crescer.
 const mostrarFolga = process.argv.includes('--folga');

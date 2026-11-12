@@ -324,6 +324,41 @@ class ModificacoesLojaTests(unittest.TestCase):
             )
         self.assertEqual(ctx.exception.status_code, 422)
 
+    def test_mod_de_implante_real_instala_em_implante(self):
+        # 2026-11-12: grupo novo de modificações, só para implante.
+        _, campanha_id, personagem_id, actor = self._personagem(email="mod-implante-em-implante@example.com")
+        self._dar_saldo(campanha_id, personagem_id, "Lunaris", 1000)
+        conteudo = self._catalogo_item_real("mod-pele-sintetica")
+        self.assertEqual(conteudo["aplicacao"], "Implantes")
+        self._inventario_direto(campanha_id, personagem_id, "olho-teste", categoria="implante")
+
+        resultado = self._comprar_modificacao(
+            campanha_id=campanha_id,
+            personagem_id=personagem_id,
+            actor=actor,
+            mod_item_id="mod-pele-sintetica",
+            alvo_item_id="olho-teste",
+            idempotencia="teste-mod-implante-em-implante",
+        )
+        self.assertEqual(resultado["repetida"], False)
+
+    def test_mod_de_implante_real_bloqueia_em_arma(self):
+        _, campanha_id, personagem_id, actor = self._personagem(email="mod-implante-em-arma@example.com")
+        self._dar_saldo(campanha_id, personagem_id, "Lunaris", 1000)
+        self._catalogo_item_real("mod-pele-sintetica")
+        self._inventario_direto(campanha_id, personagem_id, "espada-teste", categoria="arma")
+
+        with self.assertRaises(HTTPException) as ctx:
+            self._comprar_modificacao(
+                campanha_id=campanha_id,
+                personagem_id=personagem_id,
+                actor=actor,
+                mod_item_id="mod-pele-sintetica",
+                alvo_item_id="espada-teste",
+                idempotencia="teste-mod-implante-em-arma",
+            )
+        self.assertEqual(ctx.exception.status_code, 422)
+
     def test_mod_geral_real_instala_em_qualquer_categoria_sem_restricao(self):
         # "Itens gerais e mágicos" não tem alvo restrito (ver comentário em
         # shop.py) — testa em arma E em armadura, as duas devem passar.

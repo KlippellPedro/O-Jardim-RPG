@@ -142,13 +142,13 @@ function ajusteDeArmadura(ref) {
   if (ref.nivel < NIVEL_DO_AJUSTE_DE_ARMADURA) return 0;
   return Math.max(0, ref.defesaNatural + armaduraTipica(ref.nivel) - ALVO_DO_PADRAO_CONTRA_ARMADURA - ref.bonusDeAtaque);
 }
-const curvaColunas = ['vd', 'ataque', 'defesaNatural', 'vidaDoPersonagem', 'vidaDeInimigoPadrao', 'modificadorPrincipal', 'ajusteDeArmadura', 'defesaDeCriatura'];
+const curvaColunas = ['vd', 'ataque', 'defesaNatural', 'vidaDoPersonagem', 'vidaDeInimigoPadrao', 'modificadorPrincipal', 'ajusteDeArmadura', 'defesaDeCriatura', 'dtDeEfeito'];
 const curvaLinhas = Array.from({ length: VD_MAXIMO }, (_, indice) => {
   const ref = referenciaDoNivel(indice + 1, commonClasses, weapons);
-  return [ref.nivel, ref.bonusDeAtaque, ref.defesaNatural, ref.vida.media, ref.vidaDeInimigoPadrao, ref.modificadorPrincipal, ajusteDeArmadura(ref), ref.defesaDeCriatura];
+  return [ref.nivel, ref.bonusDeAtaque, ref.defesaNatural, ref.vida.media, ref.vidaDeInimigoPadrao, ref.modificadorPrincipal, ajusteDeArmadura(ref), ref.defesaDeCriatura, ref.dt.padrao];
 });
 const curvaCorpo = curvaLinhas.map((linha) => `    ${JSON.stringify(linha)}`).join(',\n');
-const curvaNota = `Gerado por npm run audit:balance a partir da referência de NPCs (${curvaLinhas.length} linhas, VD 1 a ${VD_MAXIMO}). Não edite: mude a fórmula da ficha ou os dados e gere de novo. Colunas: vd, ataque de referência, Defesa natural, Vida média de um personagem, Vida de inimigo padrão (a que aguenta 4,5 rodadas de um grupo de quatro que acerta 75%), modificador do atributo principal, ajuste de armadura (somado só ao golpe e à Luta da criatura, do VD 15 em diante) e Defesa da criatura (ataque de referência + 6: quem investe na perícia de combate acerta 75%).`;
+const curvaNota = `Gerado por npm run audit:balance a partir da referência de NPCs (${curvaLinhas.length} linhas, VD 1 a ${VD_MAXIMO}). Não edite: mude a fórmula da ficha ou os dados e gere de novo. Colunas: vd, ataque de referência, Defesa natural, Vida média de um personagem, Vida de inimigo padrão (a que aguenta 4,5 rodadas de um grupo de quatro que acerta 75%), modificador do atributo principal, ajuste de armadura (somado só ao golpe e à Luta da criatura, do VD 15 em diante) Defesa da criatura (ataque de referência + 6: quem investe na perícia de combate acerta 75%) e DT de efeito da criatura (a maior entre 15 + metade do VD e o bônus de quem investe + 6).`;
 const curvaOutput = `{
   "_nota": ${JSON.stringify(curvaNota)},
   "colunas": ${JSON.stringify(curvaColunas)},

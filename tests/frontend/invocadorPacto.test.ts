@@ -25,7 +25,7 @@ test('o Pacto diz como a invocação joga', () => {
   assert.match(texto, /logo depois do seu turno/);
   assert.match(texto, /teste de conjuração/);
   assert.match(texto, /não custa Mana/);
-  assert.match(texto, /descanso longo/);
+  assert.match(texto, /descanso completo/);
   assert.doesNotMatch(texto, / - /, 'travessão disfarçado');
   assert.match(invocador.descricao, /duas criaturas/);
 });

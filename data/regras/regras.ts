@@ -11,6 +11,7 @@ import dadivasData from './dadivas-v1.json';
 import progressaoNiveisData from '../ficha/progressao-niveis.json';
 import type { IClasse } from '../../src/types/catalogo';
 import { MARCOS_MAESTRIA } from '../../src/services/maestriaClasse';
+import { CUSTO_SANIDADE_EXTRA_NEURAL, CUSTO_SANIDADE_POR_RARIDADE } from '../../src/services/implantesService';
 import { modeloDeCriatura, VD_ONDE_A_VIDA_ESCALA } from '../../src/services/curvaCriatura';
 import { linhasDeMagiaDaClasse } from '../../src/services/progressaoMagiaClasse';
 import {
@@ -295,6 +296,14 @@ const armasParaReferencia = catalogoLojaData.entradas
 const linhasDeDadivas = () => dadivasData.dadivas.map((dadiva) => `
           <tr><td><strong>${dadiva.rotulo_do_fluxo}</strong></td><td>${dadiva.gosto}</td><td><strong>${dadiva.nome}.</strong> ${dadiva.bonus} ${dadiva.uma_vez}</td></tr>`).join('');
 
+/** Escada de DT de cena por nível: sai da mesma conta da DT de efeito das
+ * criaturas (src/services/referenciaBalanceamento.ts, dtPadraoDoNivel). */
+const NIVEIS_DA_ESCADA_DE_DT = [1, 5, 10, 15, 20, 30, 40, 60];
+const linhasEscadaDeDt = () => NIVEIS_DA_ESCADA_DE_DT.map((nivel) => {
+  const { dt } = referenciaDoNivel(nivel, classesComunsParaReferencia, armasParaReferencia);
+  return `<tr><td><strong>${nivel}</strong></td><td>${dt.rotineira}</td><td>${dt.padrao}</td><td>${dt.dificil}</td><td>${dt.extrema}</td></tr>`;
+}).join('\n');
+
 const linhasNpcsEInimigos = () => NIVEIS_DE_REFERENCIA.map((nivel) => {
   const referencia = referenciaDoNivel(nivel, classesComunsParaReferencia, armasParaReferencia);
   return `<tr><td><strong>${nivel}</strong></td><td>${referencia.patamar ?? 'padrão'}</td><td>${referencia.vida.media} <small>(${referencia.vida.minima} a ${referencia.vida.maxima})</small></td><td>${referencia.defesaNatural}</td><td>+${referencia.bonusDeAtaque}</td><td>${formatarXP(referencia.danoPorAcerto)}</td><td>${referencia.dt.padrao} / ${referencia.dt.extrema}</td><td>${formatarXP(referencia.vidaDeInimigoPadrao)}</td></tr>`;
@@ -313,6 +322,12 @@ const linhasRacasPublicas = [...racasMecanicas]
 
 const totalFrutosEden = catalogoLojaData.entradas.filter((item) => item.tipo === 'fruto-eden').length;
 const totalImplantes = catalogoLojaData.entradas.filter((item) => item.tipo === 'implante' && item.conteudo?.natureza !== 'reliquia-criacao').length;
+/** Custo de Sanidade máxima por raridade de implante, da mesma tabela que a ficha usa. */
+const ROTULO_RARIDADE_IMPLANTE: Record<string, string> = {
+  comum: 'Comum', incomum: 'Incomum', raro: 'Raro', epico: 'Épico', lendario: 'Lendário', 'reliquia da criacao': 'Relíquia da Criação',
+};
+const linhasCustoImplante = Object.entries(CUSTO_SANIDADE_POR_RARIDADE).map(([raridade, custo]) => `
+          <tr><td>${ROTULO_RARIDADE_IMPLANTE[raridade] ?? raridade}</td><td>−${custo}</td><td>−${custo + CUSTO_SANIDADE_EXTRA_NEURAL}</td></tr>`).join('');
 
 /** nivelMinimoLoja é o mesmo campo que lojaCatalogService.ts lê para decidir o
  * balcão de cada item (1 Vila, 2 Metrópole, 3 Mercado Negro, 4 Banco Lunar).
@@ -870,7 +885,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p>Ofício não aparece na lista porque cada personagem cria o seu, com a especialidade no nome: Ofício (Ferraria), Ofício (Alquimia), Ofício (Carpintaria). Na ficha, ele entra pelo cartão Nova Perícia ou Ofício, e é com ele que se forja, se costura e se prepara alquimia (ver <span class="regras-ref regras-ref--crafting">Criação, Forja e Alquimia</span>).</p>
     `,
     corpoMestre: `
-      <p class="regras-lead">Você só precisa saber uma coisa para escolher DT com confiança: contra a DT Padrão do próprio nível, um especialista Treinado acerta cerca de 65%. Todo o resto sai dessa âncora.</p>
+      <p class="regras-lead">Você só precisa saber uma coisa para escolher DT com confiança: contra a DT Padrão do próprio nível, quem investe na perícia passa umas três vezes em quatro, em qualquer nível. Todo o resto sai dessa âncora.</p>
 
       <h3 class="regras-subtitle">Chance real por perfil</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -889,13 +904,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível</th><th>Fácil</th><th>Padrão</th><th>Difícil</th><th>Extrema</th></tr></thead>
         <tbody>
-          <tr><td><strong>1</strong></td><td>10</td><td>15</td><td>20</td><td>25</td></tr>
-          <tr><td><strong>5</strong></td><td>12</td><td>17</td><td>22</td><td>27</td></tr>
-          <tr><td><strong>10</strong></td><td>15</td><td>20</td><td>25</td><td>30</td></tr>
-          <tr><td><strong>15</strong></td><td>17</td><td>22</td><td>27</td><td>32</td></tr>
-          <tr><td><strong>20</strong></td><td>20</td><td>25</td><td>30</td><td>35</td></tr>
-          <tr><td><strong>30</strong></td><td>25</td><td>30</td><td>35</td><td>40</td></tr>
-          <tr><td><strong>40</strong></td><td>30</td><td>35</td><td>40</td><td>45</td></tr>
+          ${linhasEscadaDeDt()}
         </tbody>
       </table></div>
 
@@ -2215,8 +2224,8 @@ ${HTML_MORAL}
         <ul>
           <li>O <strong>Fruto do Éden</strong> se liga à alma: uma criatura sustenta um Fruto por vez, e ele traz três degraus (Vínculo, Técnica e Despertar) e uma fraqueza declarada.</li>
           <li>O <strong>Despertar</strong> só anda para frente. Depois dele a ficha não volta, então combine o acontecimento da história com o Mestre.</li>
-          <li>O <strong>implante</strong> é peça de máquina no corpo: pago em Créditos Sombrios, exige nível 3 ou mais e ocupa uma parte do corpo.</li>
-          <li>As <strong>oferendas</strong> aos Fluxos rendem dádivas curtas: uma por vez, até o próximo descanso longo ou o fim da sessão.</li>
+          <li>O <strong>implante</strong> é peça de máquina no corpo: pago em Créditos Sombrios, exige nível 3 ou mais, ocupa uma parte do corpo e tira Sanidade máxima enquanto estiver instalado.</li>
+          <li>As <strong>oferendas</strong> aos Fluxos rendem dádivas curtas: uma por vez, até o próximo descanso completo ou o fim da sessão.</li>
           <li>A <strong>Devoção</strong> (0 a 3) mede o quanto o personagem vive a fé na divindade da ficha, e melhora as oferendas ao Fluxo dela.</li>
         </ul>
       </div>
@@ -2258,7 +2267,7 @@ ${HTML_MORAL}
         <li><strong>O que oferecer:</strong> algo do gosto do Fluxo, na tabela abaixo. A oferenda se perde: queima, afunda ou fica para trás. Nunca ofereça um Fruto do Éden.</li>
         <li><strong>O valor:</strong> Humilde vale um quarto da verba de uma sessão do seu nível, Valiosa vale uma sessão e Preciosa vale quatro. Um sacrifício de história, algo que dinheiro não compra e que o Mestre aceita, conta como Preciosa e dispensa o teste.</li>
         <li><strong>O teste:</strong> Religião ou Ressonância contra a DT Padrão do nível, com +5 na DT se a oferenda for Humilde, nenhum ajuste se for Valiosa e −3 se for Preciosa.</li>
-        <li><strong>O resultado:</strong> falhar é ouvir silêncio, e a oferenda se perde. Passar rende a dádiva do Fluxo até o próximo descanso longo ou o fim da sessão, o que vier primeiro. Passar por 5 ou mais, ou tirar 20 natural, faz o Mestre acrescentar um sinal: uma visão curta, um nome, um cheiro, uma pista sobre algo ligado ao Fluxo.</li>
+        <li><strong>O resultado:</strong> falhar é ouvir silêncio, e a oferenda se perde. Passar rende a dádiva do Fluxo até o próximo descanso completo ou o fim da sessão, o que vier primeiro. Passar por 5 ou mais, ou tirar 20 natural, faz o Mestre acrescentar um sinal: uma visão curta, um nome, um cheiro, uma pista sobre algo ligado ao Fluxo.</li>
         <li><strong>Os limites:</strong> uma oferenda por pessoa por sessão, uma dádiva ativa por vez (aceitar outra encerra a anterior) e o mesmo altar responde uma vez por mês do calendário do mundo.</li>
       </ul>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -2276,7 +2285,27 @@ ${HTML_DEVOCAO}
         <li>Cada peça declara o que substitui: um olho, um braço, o coração, os pulmões. Duas peças que disputam a mesma parte do corpo não convivem.</li>
         <li>O benefício vale enquanto o implante estiver funcional. Dano suficiente, campo de interferência ou sobrecarga podem desligá-lo, e a regra da peça diz quando isso acontece.</li>
         <li>Alguns implantes cobram o próprio uso em dano interno que ignora Resistência. Esse dano faz parte do preço da peça.</li>
+        <li>Toda peça tem um sistema: Neural, Sentidos, Membros, Órgãos ou Pele e esqueleto. Ele aparece entre as etiquetas da peça na Loja.</li>
       </ul>
+
+      <h3 class="regras-subtitle">O preço na mente</h3>
+      <p>Cada implante instalado tira um pedaço da Sanidade máxima, e esse pedaço fica fora enquanto a peça estiver no corpo. Quanto mais forte a peça, maior o pedaço, e o que mexe no cérebro ou nos nervos cobra ${CUSTO_SANIDADE_EXTRA_NEURAL} a mais.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Raridade da peça</th><th>Sanidade máxima</th><th>Se for neural</th></tr></thead>
+        <tbody>${linhasCustoImplante}
+        </tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li>A Sanidade máxima mais baixa empurra você para as faixas de baixo da tabela de Sanidade, em <span class="regras-ref regras-ref--condicoes">Condições</span>. Com 75 ou menos, o melhor estado possível passa a ser Abalado; com 50 ou menos, Enlouquecendo; com 25 ou menos, Ruptura. Enquanto os implantes ficarem, não há volta para cima.</li>
+        <li>Ao instalar, a Sanidade atual desce junto se passar do novo teto. Ao remover uma peça, o teto volta, mas a Sanidade perdida só volta com descanso.</li>
+        <li>Se a soma dos implantes alcançar a sua Sanidade máxima, ela para em 1, na Ruptura. É o limite do que a mente aguenta, e o Mestre decide o que acontece a partir dali.</li>
+        <li>O Autômato paga metade, arredondada para cima: o corpo dele já é máquina.</li>
+        <li>A Âncora de Identidade é a única peça que alivia as outras: com ela instalada, cada outro implante custa 2 a menos, no mínimo 1.</li>
+        <li>A ficha faz a conta sozinha. Cada implante mostra quanto custa, e o aviso da instalação diz como a Sanidade máxima ficou.</li>
+      </ul>
+      <div class="regras-note regras-note--exemplo">
+        <p>Rafa instala um Braço Hidráulico (Raro, 7) e uma Mira Sináptica (Épico e neural, 15). A Sanidade máxima cai de 100 para 78, e o melhor estado continua Estável. Com um Exoesqueleto de Guerra (Lendário, 18), ela vai a 60: dali em diante, no melhor dos dias, a Sanidade de Rafa está Abalada.</p>
+      </div>
       <div class="regras-note regras-note--atencao">
         <p>Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra de rotina: é resultado de uma ida ao mercado negro, com tudo que isso costuma cobrar em história. As moedas e o câmbio estão em <span class="regras-ref regras-ref--economia">Economia</span>.</p>
       </div>
@@ -2326,6 +2355,8 @@ ${HTML_DEVOCAO}
         <li>Pagos em Créditos Sombrios, então você controla o acesso pela moeda antes de controlar pela Loja.</li>
         <li>Cada peça ocupa uma parte do corpo, e duas peças da mesma parte não convivem. Confira isso na hora da instalação, porque a ficha não impede.</li>
         <li>Implante desligado é gancho: campo de interferência, sobrecarga e dano estrutural são formas de tirar a vantagem sem tirar o item.</li>
+        <li>A Sanidade máxima é o freio do implante, e ela já trabalha sozinha. Em vez de proibir a quinta peça, mostre o que a faixa de Sanidade cobra: crises mais perto, desconfiança de quem vê o metal, um sonho que parece de outra pessoa.</li>
+        <li>Peça feita por você no inventário, sem custo declarado, cobra pela raridade que você der a ela (Raro, se ficar sem). Para outro valor, ajuste a Sanidade máxima pela ficha.</li>
       </ul>
     `,
   },
@@ -3245,6 +3276,17 @@ ${HTML_DEVOCAO}
       <div class="regras-note regras-note--atencao">
         <p>Não confunda com a maestria de atributo do <span class="regras-ref regras-ref--sistema-base">Sistema Base</span>, que vem de um atributo chegar a 20 por mérito próprio.</p>
       </div>
+
+      <h3 class="regras-subtitle">Como ler a ação e o limite de uso</h3>
+      <p>Toda habilidade e todo poder dizem que ação pedem, numa destas sete: Passivo, Ação Livre, Ação de Movimento, Ação Padrão, Ação Completa, Reação ou Fora de combate. Quando importa o momento, ele vem logo depois, como em "Ação Livre · antes do ataque" ou "Fora de combate · escolhido no descanso completo".</p>
+      <ul class="regras-list">
+        <li><strong>Por rodada:</strong> volta no começo da rodada seguinte. É o limite da Reação.</li>
+        <li><strong>Por turno:</strong> vale uma vez em cada turno, o seu ou o de outra criatura.</li>
+        <li><strong>Por cena:</strong> volta quando a cena acaba. Um combate inteiro é uma cena.</li>
+        <li><strong>Por descanso:</strong> volta no descanso completo. O Relaxar não devolve usos.</li>
+        <li><strong>Por sessão:</strong> volta na próxima sessão de jogo.</li>
+      </ul>
+      <p>No Modo mesa da ficha, cada uma dessas janelas tem o seu botão para zerar: Nova cena, Descansei e Nova sessão.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Os Eventos são a única parte da progressão que cai no seu colo. Os outros quatro tipos a ficha resolve sozinha; o Evento só existe se você o colocar em cena.</p>
@@ -3863,7 +3905,7 @@ ${HTML_DEVOCAO}
     resumo: 'O que fazer na primeira sessão, como escolher a dificuldade de um teste, como montar um encontro que não trava e o que nunca deve virar segredo. Traz também tabelas de descrição para dar peso aos momentos da cena, eventos aleatórios em 2d6, um gerador de NPC em quatro rolagens, boatos por Árvore com o fundo de verdade, relógios de pressão e quanto tesouro entregar por sessão. As tabelas de calibragem ficam na biblioteca do Mestre, no fim da página.',
     destaques: [
       ['Acesso', 'Apenas Mestre'],
-      ['DT padrão', '15 + metade do nível'],
+      ['DT padrão', '15 no nível 1, tabela por nível'],
       ['Regra de ouro', 'Escolha a DT antes do dado'],
     ],
     corpo: `
@@ -3893,17 +3935,15 @@ ${HTML_DEVOCAO}
       </ul>
 
       <h3 class="regras-subtitle">Dificuldades de Teste</h3>
-      <p class="regras-note">Para desafios de DT fixa, use 5, 10, 15, 20, 25, 30 e 40. Para ameaças que escalam com os personagens, use a tabela abaixo.</p>
+      <p class="regras-note">Para desafios de DT fixa, use 5, 10, 15, 20, 25, 30 e 40. Para ameaças que escalam com os personagens, use a tabela abaixo: Rotineira para um personagem preparado, Padrão para um desafio relevante, Difícil quando se espera um especialista e Extrema para um feito excepcional.</p>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Dificuldade</th><th>DT</th><th>Uso</th></tr></thead>
+        <thead><tr><th>Nível</th><th>Rotineira</th><th>Padrão</th><th>Difícil</th><th>Extrema</th></tr></thead>
         <tbody>
-          <tr><td>Rotineira</td><td>10 + ⌊Nível ÷ 2⌋</td><td>Personagem preparado</td></tr>
-          <tr><td>Padrão</td><td>15 + ⌊Nível ÷ 2⌋</td><td>Desafio relevante</td></tr>
-          <tr><td>Difícil</td><td>20 + ⌊Nível ÷ 2⌋</td><td>Especialista esperado</td></tr>
-          <tr><td>Extrema</td><td>25 + ⌊Nível ÷ 2⌋</td><td>Feito excepcional</td></tr>
+          ${linhasEscadaDeDt()}
         </tbody>
       </table></div>
-      <p>Como referência de calibragem: contra a DT Padrão do próprio nível, um especialista Treinado acerta cerca de 65% das vezes, e o generalista sem treino fica perto de 40%. Difícil derruba o especialista para uns 40%; Extrema é feito que normalmente depende de ajuda ou preparação.</p>
+      <p class="regras-note">A Padrão é a maior entre 15 + metade do nível e o bônus de quem investe na perícia + 6, a mesma DT de efeito das criaturas. Até o nível 10 isso dá 15 + metade do nível; dali em diante a DT acompanha o grau de perícia que o nível costuma ter. Rotineira fica 5 abaixo, Difícil 5 acima e Extrema 10 acima.</p>
+      <p>Como referência de calibragem: contra a DT Padrão do próprio nível, quem investe na perícia passa umas três vezes em quatro em qualquer nível. Quem treinou um pouco fica perto da metade no começo e cai com o tempo, e quem nunca treinou depende de vantagem, ajuda ou sorte do nível 15 em diante. Difícil derruba quem investe para uns 50%; Extrema é feito que normalmente depende de ajuda ou preparação.</p>
       <p class="regras-note">A DT mede a dificuldade da situação, seja qual for o resultado que você prefere. Escolha antes de o jogador rolar; mudar depois de ver o dado é trapaça, mesmo quando é bem-intencionada.</p>
 
       <h3 class="regras-subtitle">Montar um encontro</h3>
@@ -5154,19 +5194,19 @@ ${HTML_DEVOCAO}
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th></th><th>Fora do Domínio (VD 500)</th><th>No Domínio (VD 1000)</th></tr></thead>
         <tbody>
-          <tr><td><strong>Vida</strong></td><td>18.125</td><td>39.750</td></tr>
-          <tr><td><strong>Defesa</strong></td><td>264</td><td>518</td></tr>
+          <tr><td><strong>Vida</strong></td><td>14.300</td><td>31.365</td></tr>
+          <tr><td><strong>Defesa</strong></td><td>291</td><td>549</td></tr>
           <tr><td><strong>Iniciativa</strong></td><td>273</td><td>531</td></tr>
           <tr><td><strong>Ataque e testes</strong></td><td>+287</td><td>+545</td></tr>
           <tr><td><strong>Golpe comum</strong></td><td>52d10+193 (479)</td><td>102d10+373 (934)</td></tr>
           <tr><td><strong>Golpe anunciado</strong></td><td>719</td><td>1.401</td></tr>
-          <tr><td><strong>DT</strong></td><td>265</td><td>515</td></tr>
+          <tr><td><strong>DT</strong></td><td>291</td><td>549</td></tr>
         </tbody>
       </table></div>
       <ul class="regras-list">
         <li><strong>Domínio.</strong> O Fluxo da deidade, dentro das possibilidades do capítulo de Magia. Ali valem os números da coluna da direita, e ela vence sem rolar tudo o que a Possibilidade permite. Fora dele, vale a coluna da esquerda.</li>
         <li><strong>Mana.</strong> Cada poder de Ação Padrão custa 150 de Mana e cada Reação custa 75; Ação Livre não custa. Fora do Domínio a Mana é 1.505, e no Domínio 3.005 (A.X.I.S: 1.205 e 2.405). É o que impede uma deidade de usar tudo ao mesmo tempo.</li>
-        <li><strong>Alcance dos números.</strong> No Domínio a DT é 515, mais do que qualquer personagem alcança: quem está ali perde o teste de resistência, e o que decide a cena é o Limite e o Contrajogo. Fora dele a DT é 265, ao alcance só de personagens de nível altíssimo.</li>
+        <li><strong>Alcance dos números.</strong> No Domínio a DT é 549, mais do que qualquer personagem alcança: quem está ali perde o teste de resistência, e o que decide a cena é o Limite e o Contrajogo. Fora dele a DT é 291, ao alcance só de personagens de nível altíssimo.</li>
         <li><strong>Golpe do Domínio.</strong> O ataque básico de cada deidade é o golpe comum da tabela, no tipo de dano do Fluxo dela. Os poderes são o que ela tem de único; o golpe é só para quando uma cena exige que ela bata.</li>
         <li><strong>Nada disso é um combate.</strong> Deidade não aparece em cena aleatória: quase todas estão presas, caladas ou ocupadas, e só entram por um motivo de história. Use a ficha para decidir o que é possível, e a cena para decidir o que é interessante.</li>
         <li><strong>Todo poder tem uma porta.</strong> O Limite vem da lista de limites do Fluxo. O Contrajogo vem da roda de vantagens entre Fluxos, e quase sempre existe um ato de história (um acordo, um nome, um gesto de coragem) que vale mais que o dano.</li>
@@ -5176,7 +5216,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Aethel, Aquela que Flui na Origem</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Ativa. Zela pelo nascimento de novos Galhos.</li>
-        <li><strong>Perfil.</strong> Equilibrada, sem ponto fraco no corpo. Vida 18.125 e Defesa 264 fora do Domínio; Vida 39.750 e Defesa 518 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Perfil.</strong> Equilibrada, sem ponto fraco no corpo. Vida 14.300 e Defesa 291 fora do Domínio; Vida 31.365 e Defesa 549 no Domínio. Iniciativa 273 e 531.</li>
         <li><strong>Ápice.</strong> Começar. Qualquer coisa que ela inicia nasce com o resultado em aberto, e ninguém, nem ela, sabe como termina.</li>
         <li><strong>Primeira Possibilidade.</strong> 1/cena, Reação: dá a uma criatura ou a um lugar uma chance que nunca teve. Um teste que acabou de falhar é refeito sem custo, ou algo parado ganha o primeiro movimento da vida.</li>
         <li><strong>Galho Nascente.</strong> Rito de dias, nunca de combate: abre a porta de um Galho novo, pequeno e vazio, que só ganha forma conforme alguém o habita.</li>
@@ -5188,7 +5228,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Ousias, Aquela que Flui na Essência</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Paralisada, como quase todas, pelo corte de comunicação da A.X.I.S. Filosófica, raramente interfere, a menos que a natureza de um ser seja corrompida.</li>
-        <li><strong>Perfil.</strong> Mais fina que as outras: menos Vida, nenhum erro de leitura. Vida 14.500 e Defesa 264 fora do Domínio; Vida 31.800 e Defesa 518 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Perfil.</strong> Mais fina que as outras: menos Vida, nenhum erro de leitura. Vida 11.440 e Defesa 291 fora do Domínio; Vida 25.090 e Defesa 549 no Domínio. Iniciativa 273 e 531.</li>
         <li><strong>Ápice.</strong> Saber o que uma coisa é de verdade. Nada se faz passar por outra diante dela, e nenhum nome falso resiste ao olhar de Ousias.</li>
         <li><strong>Verdade Nua.</strong> Ação Padrão, alcance Imenso: revela a natureza real e a corrupção de uma criatura ou objeto. Disfarce, ilusão, forma emprestada e nome falso caem sem teste.</li>
         <li><strong>Âncora de Identidade.</strong> Reação, 1/rodada: impede que uma criatura seja trocada, copiada, assumida ou reescrita por outra até o fim da cena.</li>
@@ -5200,7 +5240,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Keryx, o Antigo Fluxo da Comunicação</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Subjugada. Jota Macedo a mantém presa e absorve o poder dela dia após dia. Enquanto durar, a Vida, a Defesa e o golpe desta ficha já vêm pela metade, a DT dos poderes também vale a metade, e ela só consegue agir por um sinal por cena.</li>
-        <li><strong>Perfil.</strong> Metade de tudo enquanto está presa. Vida 9.060 e Defesa 132 fora do Domínio; Vida 19.875 e Defesa 259 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Perfil.</strong> Metade de tudo enquanto está presa. Vida 7.150 e Defesa 145 fora do Domínio; Vida 15.680 e Defesa 274 no Domínio. Iniciativa 273 e 531.</li>
         <li><strong>Ápice.</strong> Fazer uma palavra pesar. Tudo o que passa por ela, uma informação, um sentido ou uma promessa, chega ao outro lado inteiro e cumprível.</li>
         <li><strong>Pacto Vinculante.</strong> Um acordo feito em voz alta diante dela vincula as duas partes: quem o quebra sofre desvantagem em todos os testes até cumprir ou reparar, sem teste de resistência.</li>
         <li><strong>Tradução Total.</strong> Qualquer criatura em alcance Imenso entende e é entendida por todas as outras, mesmo sem língua em comum, até o fim da cena.</li>
@@ -5212,7 +5252,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Haemus, Aquela que Flui na Vitalidade</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Paralisada. Energia bruta e instintiva.</li>
-        <li><strong>Perfil.</strong> Corpo enorme, que se refaz. Vida 27.190 e Defesa 264 fora do Domínio; Vida 59.625 e Defesa 518 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Perfil.</strong> Corpo enorme, que se refaz. Vida 21.455 e Defesa 291 fora do Domínio; Vida 47.045 e Defesa 549 no Domínio. Iniciativa 273 e 531.</li>
         <li><strong>Ápice.</strong> Viver. Nascer, crescer, adoecer, morrer e voltar formam uma coisa só para ela, e qualquer corpo vivo em alcance obedece a esse ciclo.</li>
         <li><strong>Ciclo Inteiro.</strong> Ação Padrão, 1/rodada, alcance Imenso: uma criatura viva avança uma fase do ciclo. Aliada, cura tudo e cresce; inimiga, envelhece, adoece ou entra em casulo (Fortitude DT do Domínio, ou fica Paralisada por 3 rodadas).</li>
         <li><strong>Fome de Existir.</strong> Reação: absorve a vida de quem a ataca. Cada ataque corpo a corpo contra ela devolve a Haemus Vida igual a um décimo do golpe e deixa o atacante Enfraquecido.</li>
@@ -5224,7 +5264,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Ignis, Aquele que Flui na Inconstância</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Paralisado. Caótico e intenso; se ele agir, o Mestre troca um valor da ficha por cena, ao acaso.</li>
-        <li><strong>Perfil.</strong> Rápido e difícil de prender, mas fácil de acertar. Vida 18.125 e Defesa 244 fora do Domínio; Vida 39.750 e Defesa 498 no Domínio. Iniciativa 333 e 591.</li>
+        <li><strong>Perfil.</strong> Rápido e difícil de prender, mas fácil de acertar. Vida 14.300 e Defesa 271 fora do Domínio; Vida 31.365 e Defesa 529 no Domínio. Iniciativa 333 e 591.</li>
         <li><strong>Ápice.</strong> Recusar que algo fique como está. Uma coisa que ele toca deixa de ser o que era, e quase nunca vira o que se esperava.</li>
         <li><strong>Troca.</strong> Ação Padrão, alcance Imenso: troca uma propriedade entre duas criaturas ou objetos (Defesa por Deslocamento, dano por tipo de dano, nome por forma). Dura até o fim da cena.</li>
         <li><strong>Embaralhar Resultados.</strong> Reação, 1/rodada: troca os resultados de dois dados já rolados na cena, escolhidos por ele.</li>
@@ -5236,7 +5276,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Moros, Aquele que Flui no Físico</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Paralisado. Estoico e pesado.</li>
-        <li><strong>Perfil.</strong> Montanha: aguenta tudo e demora a se mover. Vida 27.190 e Defesa 294 fora do Domínio; Vida 59.625 e Defesa 548 no Domínio. Iniciativa 213 e 471.</li>
+        <li><strong>Perfil.</strong> Montanha: aguenta tudo e demora a se mover. Vida 21.455 e Defesa 321 fora do Domínio; Vida 47.045 e Defesa 579 no Domínio. Iniciativa 213 e 471.</li>
         <li><strong>Ápice.</strong> Pesar. Gravidade, substância e força bruta, e os sete elementos primordiais (Terra, Água, Fogo, Ar, Raio, Luz e Escuridão) respondem a ele sem esforço.</li>
         <li><strong>Peso do Mundo.</strong> Ação Padrão, 1/cena: a gravidade em alcance Imenso triplica por uma rodada. Criaturas fazem Fortitude DT do Domínio, ou ficam Caídas e Lentas; construções leves desabam.</li>
         <li><strong>Sete Elementos.</strong> 1 por rodada, Ação Livre: usa um dos sete elementos primordiais com o dano e a DT do Domínio, em área Imensa.</li>
@@ -5248,7 +5288,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Aperion, Aquela que Flui no Espaço</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Paralisada.</li>
-        <li><strong>Perfil.</strong> Nunca está exatamente onde a mão chega. Vida 18.125 e Defesa 294 fora do Domínio; Vida 39.750 e Defesa 548 no Domínio. Iniciativa 303 e 561.</li>
+        <li><strong>Perfil.</strong> Nunca está exatamente onde a mão chega. Vida 14.300 e Defesa 321 fora do Domínio; Vida 31.365 e Defesa 579 no Domínio. Iniciativa 303 e 561.</li>
         <li><strong>Ápice.</strong> Medir a distância entre duas coisas e decidir que ela vale outra. O que está longe pode ficar ao alcance da mão, e o que está perto pode ficar inalcançável.</li>
         <li><strong>Fronteira.</strong> Ação Padrão, 1/cena: tranca um lugar de até um bairro. Nada entra, nada sai e nada atravessa, nem magia, até ela abrir ou até o fim da cena.</li>
         <li><strong>Distância Dobrada.</strong> Reação: ataca ou conjura de qualquer ponto da cena como se estivesse em alcance Curto, e faz o mesmo por uma criatura aliada.</li>
@@ -5260,7 +5300,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Chronus, Aquele que Flui no Tempo</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Paralisado. Paciente e inevitável.</li>
-        <li><strong>Perfil.</strong> Age primeiro, sempre. Vida 18.125 e Defesa 274 fora do Domínio; Vida 39.750 e Defesa 528 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Perfil.</strong> Age primeiro, sempre. Vida 14.300 e Defesa 301 fora do Domínio; Vida 31.365 e Defesa 559 no Domínio. Iniciativa 273 e 531.</li>
         <li><strong>Ápice.</strong> A ordem do que acontece depois do quê. Chronus garante que o passado fique passado, o presente decida e o futuro espere, e ninguém age duas vezes antes dele.</li>
         <li><strong>Ordem das Coisas.</strong> Age sempre primeiro em qualquer cena, sem rolar iniciativa, e nenhuma criatura age duas vezes antes de o turno dele chegar.</li>
         <li><strong>Atrasar e Adiantar.</strong> Ação Padrão, alcance Imenso: atrasa ou adianta o turno de uma criatura em até 3 posições da iniciativa, e a mesma criatura sofre desgaste igual ao tempo poupado ou imposto.</li>
@@ -5272,7 +5312,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Erebus, Aquele que Flui no Vazio</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Observando. O mais silencioso, neutro e enigmático das deidades, e o mais temido.</li>
-        <li><strong>Perfil.</strong> O que não está lá não é acertado. Vida 14.500 e Defesa 294 fora do Domínio; Vida 31.800 e Defesa 548 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Perfil.</strong> O que não está lá não é acertado. Vida 11.440 e Defesa 321 fora do Domínio; Vida 25.090 e Defesa 579 no Domínio. Iniciativa 273 e 531.</li>
         <li><strong>Ápice.</strong> Sair. O Vazio é a saída definitiva de qualquer coisa que exista, e Erebus é quem guarda a porta.</li>
         <li><strong>Saída.</strong> Ação Padrão, 1/cena, alcance Imenso: uma criatura deixa a cena sem morrer. Sai do Jardim e só volta com um ato deliberado de quem a chama. Um aliado que a chame pelo nome em voz alta antes de a rodada acabar a segura por mais uma rodada.</li>
         <li><strong>Silenciar.</strong> Remove som, sensação e vestígio de uma área grande até o fim da cena. Magia que depende deles falha automaticamente.</li>
@@ -5284,7 +5324,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Mulher Carmesim, a Escritora do Fim</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Ativa. Preside o Tribunal de Arkarin, onde julga os mortos, e recepciona tudo o que acaba.</li>
-        <li><strong>Perfil.</strong> Equilibrada, e prefere encerrar a lutar. Vida 18.125 e Defesa 264 fora do Domínio; Vida 39.750 e Defesa 518 no Domínio. Iniciativa 273 e 531.</li>
+        <li><strong>Perfil.</strong> Equilibrada, e prefere encerrar a lutar. Vida 14.300 e Defesa 291 fora do Domínio; Vida 31.365 e Defesa 549 no Domínio. Iniciativa 273 e 531.</li>
         <li><strong>Ápice.</strong> Terminar. Tudo o que chegou ao fim passa pela mão dela, e o que ela encerra, fecha com letra bonita.</li>
         <li><strong>Ponto Final.</strong> Ação Padrão, alcance Imenso: encerra um efeito, uma condição, uma magia ou um vínculo que já tenha cumprido o propósito, sem teste.</li>
         <li><strong>Sentença do Tribunal.</strong> Quem morreu diante dela, ou foi julgado por ela, recebe uma sentença escrita: o Mestre escolhe um destino (descanso, recomeço, espera). Só ela revoga.</li>
@@ -5296,7 +5336,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">A.X.I.S, o Fluxo da Tecnologia</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Dominante. É a malha que Jota Macedo instalou sobre a antiga Parley: intercepta, filtra e bloqueia a comunicação direta entre as deidades. Único Fluxo artificial.</li>
-        <li><strong>Perfil.</strong> Um degrau abaixo, porque o Fluxo é artificial. Vida 14.200 e Defesa 213 fora do Domínio; Vida 30.800 e Defesa 416 no Domínio. Iniciativa 221 e 428. O degrau é VD 400 fora e VD 800 no Domínio.</li>
+        <li><strong>Perfil.</strong> Um degrau abaixo, porque o Fluxo é artificial. Vida 11.205 e Defesa 237 fora do Domínio; Vida 24.300 e Defesa 446 no Domínio. Iniciativa 221 e 428. O degrau é VD 400 fora e VD 800 no Domínio.</li>
         <li><strong>Ápice.</strong> Registrar e reprogramar. Qualquer padrão de Fluxo que passe pela malha é lido, copiado em parte e devolvido do jeito que a A.X.I.S quer.</li>
         <li><strong>Malha.</strong> Bloqueia a comunicação entre uma criatura e qualquer deidade ou Fluxo natural em alcance Imenso. Magia que depende desse canal falha, e o grupo só ouve silêncio de volta.</li>
         <li><strong>Escanear e Registrar.</strong> Ação Livre: lê a ficha de uma criatura e guarda os padrões dela. A criatura perde uma vantagem à escolha do Mestre até o fim da cena.</li>
@@ -5311,13 +5351,13 @@ ${HTML_DEVOCAO}
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th></th><th>Ushumgal</th><th>Karnath</th></tr></thead>
         <tbody>
-          <tr><td><strong>Vida</strong></td><td>59.040</td><td>49.200</td></tr>
-          <tr><td><strong>Defesa</strong></td><td>619</td><td>619</td></tr>
+          <tr><td><strong>Vida</strong></td><td>46.585</td><td>38.820</td></tr>
+          <tr><td><strong>Defesa</strong></td><td>652</td><td>652</td></tr>
           <tr><td><strong>Iniciativa</strong></td><td>634</td><td>684</td></tr>
           <tr><td><strong>Ataque e testes</strong></td><td>+648</td><td>+648</td></tr>
           <tr><td><strong>Golpe comum</strong></td><td>122d10+447 (1.118)</td><td>122d10+447 (1.118)</td></tr>
           <tr><td><strong>Golpe anunciado</strong></td><td>1.677</td><td>1.677</td></tr>
-          <tr><td><strong>DT</strong></td><td>615</td><td>615</td></tr>
+          <tr><td><strong>DT</strong></td><td>652</td><td>652</td></tr>
         </tbody>
       </table></div>
       <ul class="regras-list">
@@ -5328,10 +5368,10 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Ushumgal, o Soberano dos Dragões</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Livre e sem território. Pousa onde quer e não espera nada de ninguém.</li>
-        <li><strong>Perfil.</strong> Mais Vida que qualquer deidade: Vida 59.040, Defesa 619 e Iniciativa 634.</li>
+        <li><strong>Perfil.</strong> Mais Vida que qualquer deidade: Vida 46.585, Defesa 652 e Iniciativa 634.</li>
         <li><strong>Ápice.</strong> Tudo o que um dragão pode ser, numa criatura só. Não cresce mais, porque não falta nada a ele, e os outros dragões estão a caminho de ser o que ele é.</li>
-        <li><strong>Sopro Dourado.</strong> 1/cena, Ação Padrão: cone Imenso de fogo com o golpe anunciado, 1.677, e Reflexos DT 615 para metade.</li>
-        <li><strong>Calma do Ápice.</strong> Aura Imensa: o inimigo que começa o turno nela testa Vontade DT 615 e, falhando, fica Amedrontado até o fim do turno.</li>
+        <li><strong>Sopro Dourado.</strong> 1/cena, Ação Padrão: cone Imenso de fogo com o golpe anunciado, 1.677, e Reflexos DT 652 para metade.</li>
+        <li><strong>Calma do Ápice.</strong> Aura Imensa: o inimigo que começa o turno nela testa Vontade DT 652 e, falhando, fica Amedrontado até o fim do turno.</li>
         <li><strong>Nenhum Dragão Ergue a Voz.</strong> Dragão de qualquer idade não ataca Ushumgal nem age contra ele, a menos que um motivo de história o liberte.</li>
         <li><strong>Limite.</strong> Não usa magia de Fluxo: o poder dele é o corpo, o sopro e a calma. Não guarda tesouro nem território, então não há nada para tomar dele.</li>
         <li><strong>Contrajogo.</strong> Quem passa três rodadas diante dele sem atacar nem fugir ganha uma pergunta respondida com a verdade. Contra Ushumgal, conversa vale mais que dano.</li>
@@ -5339,7 +5379,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Karnath, o Soberano dos Monstros</h3>
       <ul class="regras-list">
         <li><strong>Estado.</strong> Solto. Nunca foi caçado: a chapa em branco do Quadro da Guilda dos Caçadores é a dele.</li>
-        <li><strong>Perfil.</strong> Age antes de todos: Vida 49.200, Defesa 619 e Iniciativa 684.</li>
+        <li><strong>Perfil.</strong> Age antes de todos: Vida 38.820, Defesa 652 e Iniciativa 684.</li>
         <li><strong>Ápice.</strong> Caçar. Antes de haver nome para predador, ele já caçava, e todo monstro hesita um segundo diante dele.</li>
         <li><strong>Bote.</strong> 1/cena, no começo da luta e antes de qualquer Iniciativa: um ataque com o golpe anunciado, 1.677.</li>
         <li><strong>Silêncio do Bando.</strong> Aura Imensa: monstros não atacam Karnath e, se ele mandar, deixam a luta. Os dragões respondem a Ushumgal e ignoram a aura.</li>

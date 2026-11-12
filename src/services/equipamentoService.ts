@@ -6,6 +6,8 @@ import { resumirLimiteItensEspeciais } from './itensEspeciaisService';
 import { efeitosBrutosDoFrutoEden } from './frutoEdenAwakening';
 import { drenagensAtivas } from './aflicoesFichaService';
 import { temProficienciaEquipamento } from '../pages/Ficha/utils/catalogoResistProf';
+import { CLASSES_COM_GUARDA_ABERTA, defesaSemArmadura } from './defesaSemArmadura';
+import { resumirSanidadeDosImplantes } from './implantesService';
 
 /** Defesa perdida por armadura ou escudo marcial usado sem a proficiência. */
 export const PENALIDADE_DEFESA_SEM_PROFICIENCIA = 2;
@@ -383,6 +385,15 @@ export function resumirEquipamentos(
       }));
   });
 
+  // Implantes cobram Sanidade máxima enquanto estão instalados (equipados).
+  resumirSanidadeDosImplantes(equipados, ficha).implantes.forEach((implante) => {
+    if (implante.cobrado <= 0) return;
+    adicionarEfeitos(
+      [{ categoria: 'recurso', alvo: 'sanidadeMaxima', valor: -implante.cobrado }],
+      { itemId: implante.itemId, itemNome: implante.nome, origem: 'Custo do implante' },
+    );
+  });
+
   // Formas que despertam com o dono: só a forma de agora vale, e só equipado.
   const nivelDoDono = Math.max(1, nivelTotalFicha(ficha));
   const formas: IFormaAtivaItem[] = [];
@@ -489,6 +500,13 @@ export function resumirEquipamentos(
     if (semProficiencia.includes(item)) detalhes.push({ nome: `${nome}: sem proficiência`, valor: -PENALIDADE_DEFESA_SEM_PROFICIENCIA });
     return detalhes;
   });
+  // Guarda Aberta (Lutador): sem armadura, sem malha e sem escudo, soma a
+  // armadura típica do nível. Com qualquer peça vestida, vale só a peça.
+  const temGuardaAberta = Array.isArray(ficha?.classes)
+    && ficha.classes.some((classe: any) => CLASSES_COM_GUARDA_ABERTA.includes(String(classe?.classeId ?? classe?.id ?? '')) && Number(classe?.nivel) > 0);
+  if (temGuardaAberta && validas.length === 0) {
+    defesaItens.push({ nome: 'Guarda Aberta (sem armadura)', valor: defesaSemArmadura(nivelTotalFicha(ficha)) });
+  }
   const defesaEquipamento = defesaItens.reduce((total, item) => total + item.valor, 0);
   const penalidadeArmadura = validas.reduce((total, item) => (
     total + Math.abs(numero(item?.dados?.penalidade)) * (semProficiencia.includes(item) ? 2 : 1)

@@ -30,6 +30,7 @@ import {
 import { confirmar } from '../../../components/avisos/confirmacao';
 import { avisar } from '../../../components/avisos/avisos';
 import { atualizarStatusVital, campoTemporario, obterStatusFicha } from '../../../services/statusService';
+import { sanidadeAtualDaFicha, sanidadeMaximaDaFicha } from '../../../services/sanidadeDaFichaService';
 
 interface IAflicoesSectionProps {
   character: any;
@@ -134,8 +135,9 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
     }
     if (perda <= 0) return;
     const antes = obterStatusFicha(character.ficha);
+    const maxima = sanidadeMaximaDaFicha(character);
     const campoExtra = campoTemporario('sanidadeAtual');
-    const depois = atualizarStatusVital(antes, 'sanidadeAtual', -perda, Number(antes.sanidadeMaxima) || 100, 10);
+    const depois = atualizarStatusVital({ ...antes, sanidadeAtual: sanidadeAtualDaFicha(character, maxima) }, 'sanidadeAtual', -perda, maxima, 10);
     onUpdate(['ficha', 'status', 'sanidadeAtual'], depois.sanidadeAtual);
     if (depois[campoExtra] !== antes[campoExtra]) onUpdate(['ficha', 'status', campoExtra], depois[campoExtra]);
     avisar.info(`${aflicao.titulo}: ${formulas.join(' + ')} deu ${perda}. Você perdeu ${perda} de Sanidade.`, {
@@ -144,7 +146,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
       acao: {
         rotulo: 'Desfazer',
         aoClicar: () => {
-          onUpdate(['ficha', 'status', 'sanidadeAtual'], antes.sanidadeAtual ?? (Number(antes.sanidadeMaxima) || 100));
+          onUpdate(['ficha', 'status', 'sanidadeAtual'], antes.sanidadeAtual ?? maxima);
           if (depois[campoExtra] !== antes[campoExtra]) onUpdate(['ficha', 'status', campoExtra], antes[campoExtra] ?? 0);
         },
       },

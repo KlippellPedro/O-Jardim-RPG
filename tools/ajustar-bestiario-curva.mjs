@@ -14,7 +14,10 @@
 // 3. Vida pelo mesmo acerto: a Vida de inimigo padrão conta com 75% de acerto, em
 //    vez da chance contra a Defesa natural; a Vida da ficha multiplica pela razão
 //    entre as duas. Marca: `fatorDeVidaAcerto`.
-// Testes de resistência, Percepção, dano e DTs não mudam.
+// 4. DT de efeito pelo grau (2026-11-12, coluna `dtDeEfeito`): as DTs escritas
+//    em ataques, habilidades e fases andam a diferença para 15 + metade do VD.
+//    Marca: `ajusteDeDtEfeito`.
+// Testes de resistência, Percepção e dano não mudam.
 //
 // Uso: node --import ./tests/frontend/registerTsLoader.mjs tools/ajustar-bestiario-curva.mjs [--check]
 import fs from 'node:fs';
@@ -25,7 +28,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const catalogoPath = process.env.BESTIARIO_CATALOGO ?? path.join(root, 'data', 'loja', 'catalogo.json');
 const curvaPath = path.join(root, 'data', 'regras', 'curva-criatura-v1.json');
 const check = process.argv.includes('--check');
-const { ajusteDeArmaduraDoVd, PERICIAS_DE_GOLPE, vdValido } = await import('../src/services/curvaCriatura.ts');
+const { ajusteDeArmaduraDoVd, dtPadraoDoVd, PERICIAS_DE_GOLPE, vdValido } = await import('../src/services/curvaCriatura.ts');
 const { ACERTO_CONTRA_CRIATURA } = await import('../src/services/referenciaBalanceamento.ts');
 
 const curva = JSON.parse(fs.readFileSync(curvaPath, 'utf8'));
@@ -51,7 +54,7 @@ const BONUS_NO_FIM = /^(.*?)([+-]\d+)\s*$/;
 
 const original = fs.readFileSync(catalogoPath, 'utf8');
 const catalogo = JSON.parse(original);
-const contagem = { ataque: 0, defesa: 0, vida: 0 };
+const contagem = { ataque: 0, defesa: 0, vida: 0, dt: 0 };
 
 const marcar = (conteudo, campo, valor, neutro) => {
   if (valor === neutro) delete conteudo[campo];
@@ -87,7 +90,42 @@ for (const entrada of catalogo.entradas || []) {
   if (deltaDefesa !== 0 && Number.isFinite(Number(conteudo.defesa))) {
     contagem.defesa += 1;
     conteudo.defesa = Math.max(1, Number(conteudo.defesa) + deltaDefesa);
+    // Partes da criatura com Defesa própria no texto (placa, retrato, coração)
+    // andam junto. "Defesa 5 menor" é relativo e fica como está.
+    const moverDefesa = (texto) => (typeof texto === 'string'
+      ? texto.replace(/\bDefesa (\d+)\b(?! (?:menor|maior))/g, (_inteiro, valor) => `Defesa ${Math.max(1, Number(valor) + deltaDefesa)}`)
+      : texto);
+    conteudo.habilidades = (conteudo.habilidades || []).map(moverDefesa);
+    if (Array.isArray(conteudo.fases)) {
+      conteudo.fases = conteudo.fases.map((fase) => ({
+        ...fase,
+        ...(Array.isArray(fase?.mudancas) ? { mudancas: fase.mudancas.map(moverDefesa) } : {}),
+        ...(typeof fase?.anuncio === 'string' ? { anuncio: moverDefesa(fase.anuncio) } : {}),
+      }));
+    }
     marcar(conteudo, 'ajusteDeDefesaAcerto', alvoDefesa, 0);
+  }
+
+  // 4. DT de efeito (2026-11-12): a maior entre 15 + metade do VD e o bônus de
+  // quem investe + 6. As DTs escritas na ficha andam a diferença para a conta
+  // antiga (15 + metade do VD) no VD dela.
+  const alvoDt = dtPadraoDoVd(vd) - (15 + Math.floor(vdValido(vd) / 2));
+  const deltaDt = alvoDt - (Number(conteudo.ajusteDeDtEfeito ?? 0) || 0);
+  if (deltaDt !== 0) {
+    contagem.dt += 1;
+    const moverDt = (texto) => (typeof texto === 'string'
+      ? texto.replace(/\bDT (\d+)\b/g, (_inteiro, valor) => `DT ${Math.max(1, Number(valor) + deltaDt)}`)
+      : texto);
+    conteudo.ataques = (conteudo.ataques || []).map((ataque) => (ataque && typeof ataque === 'object' ? { ...ataque, detalhe: moverDt(ataque.detalhe) } : ataque));
+    conteudo.habilidades = (conteudo.habilidades || []).map(moverDt);
+    if (Array.isArray(conteudo.fases)) {
+      conteudo.fases = conteudo.fases.map((fase) => ({
+        ...fase,
+        ...(Array.isArray(fase?.mudancas) ? { mudancas: fase.mudancas.map(moverDt) } : {}),
+        ...(typeof fase?.anuncio === 'string' ? { anuncio: moverDt(fase.anuncio) } : {}),
+      }));
+    }
+    marcar(conteudo, 'ajusteDeDtEfeito', alvoDt, 0);
   }
 
   // 3. Vida pelo mesmo acerto.
@@ -103,11 +141,11 @@ for (const entrada of catalogo.entradas || []) {
 const novo = `${JSON.stringify(catalogo, null, 2)}\n`;
 if (check) {
   if (novo !== original) {
-    console.error(`Bestiário fora da curva (golpe ${contagem.ataque}, Defesa ${contagem.defesa}, Vida ${contagem.vida}). Rode: npm run bestiario:ajuste-curva`);
+    console.error(`Bestiário fora da curva (golpe ${contagem.ataque}, Defesa ${contagem.defesa}, Vida ${contagem.vida}, DT ${contagem.dt}). Rode: npm run bestiario:ajuste-curva`);
     process.exit(1);
   }
   console.log('Bestiário em dia com os ajustes da curva.');
 } else {
   fs.writeFileSync(catalogoPath, novo, 'utf8');
-  console.log(`Ajustes da curva aplicados: golpe em ${contagem.ataque}, Defesa em ${contagem.defesa} e Vida em ${contagem.vida} criaturas.`);
+  console.log(`Ajustes da curva aplicados: golpe em ${contagem.ataque}, Defesa em ${contagem.defesa}, Vida em ${contagem.vida} e DT em ${contagem.dt} criaturas.`);
 }

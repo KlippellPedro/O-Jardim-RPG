@@ -31,7 +31,7 @@ test('classifica o texto de ação do catálogo', () => {
   assert.equal(classificarAcaoMesa('Ação Padrão'), 'padrao');
   assert.equal(classificarAcaoMesa('Ação de Movimento para comandar'), 'movimento');
   assert.equal(classificarAcaoMesa('Ação Completa'), 'completa');
-  assert.equal(classificarAcaoMesa('Ação Completa durante um descanso longo'), 'fora');
+  assert.equal(classificarAcaoMesa('Ação Completa durante um descanso completo'), 'fora');
   assert.equal(classificarAcaoMesa('Dez minutos ou durante um descanso'), 'fora');
   assert.equal(classificarAcaoMesa('Declarado ao iniciar o rito'), 'fora');
   assert.equal(classificarAcaoMesa('Passivo'), 'passivo');
@@ -41,9 +41,11 @@ test('classifica o texto de ação do catálogo', () => {
 
 test('lê o limite de uso no campo ou na descrição', () => {
   assert.deepEqual(lerLimiteMesa('Uma vez por cena'), { vezes: 1, janela: 'cena', rotulo: '1× por cena' });
-  assert.deepEqual(lerLimiteMesa('Duas vezes por descanso longo'), { vezes: 2, janela: 'descanso', rotulo: '2× por descanso' });
+  assert.deepEqual(lerLimiteMesa('Duas vezes por descanso completo'), { vezes: 2, janela: 'descanso', rotulo: '2× por descanso' });
   assert.deepEqual(lerLimiteMesa(undefined, 'Uma vez por sessão, repita um teste.'), { vezes: 1, janela: 'sessao', rotulo: '1× por sessão' });
   assert.deepEqual(lerLimiteMesa('1/rodada'), { vezes: 1, janela: 'rodada', rotulo: '1× por rodada' });
+  // Turno e rodada são janelas diferentes: "por turno" vale em cada turno de qualquer criatura.
+  assert.deepEqual(lerLimiteMesa('Uma vez por turno'), { vezes: 1, janela: 'turno', rotulo: '1× por turno' });
   assert.equal(lerLimiteMesa('Sempre'), null);
 });
 
@@ -70,10 +72,10 @@ test('a ficha vira grupos por tipo de ação, com passivos à parte', () => {
 test('traço racial com usos por recuperação vira contador', () => {
   const lista = acoesDeMesa(ficha([['guerreiro', 5]], { racaId: 'anao' }));
   const comContador = lista.filter((item) => item.fonte === 'raca' && item.limite);
-  for (const item of comContador) assert.ok(['cena', 'descanso', 'sessao', 'dia', 'rodada'].includes(item.limite!.janela));
+  for (const item of comContador) assert.ok(['cena', 'descanso', 'sessao', 'dia', 'rodada', 'turno'].includes(item.limite!.janela));
 });
 
-const item = (janela: 'cena' | 'descanso' | 'sessao' | 'rodada', vezes = 2, id = `x-${janela}`): IAcaoMesa => ({
+const item = (janela: 'cena' | 'descanso' | 'sessao' | 'rodada' | 'turno', vezes = 2, id = `x-${janela}`): IAcaoMesa => ({
   id, titulo: id, origem: 'Teste', fonte: 'poder', tipo: 'livre', acao: 'Ação Livre', descricao: '',
   custoMana: 0, custoEstamina: 0, limite: { vezes, janela, rotulo: '' },
 });
@@ -94,6 +96,8 @@ test('contadores marcam até o limite e zeram pela janela', () => {
   assert.deepEqual(desmarcarUso({ [cena.id]: 1 }, cena), {});
   assert.equal(usosRestantes({}, item('rodada')), null, 'por rodada é só lembrete');
   assert.deepEqual(marcarUso({}, item('rodada')), {});
+  assert.equal(usosRestantes({}, item('turno')), null, 'por turno também é só lembrete');
+  assert.deepEqual(marcarUso({}, item('turno')), {});
 });
 
 test('nível 60 de três classes: menos da metade pede decisão de cada vez, e a busca acha sem acento', () => {

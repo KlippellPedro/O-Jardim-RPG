@@ -38,6 +38,7 @@ import { ItensAutomaticosOcultos } from '../components/ItensAutomaticosOcultos';
 import { OcultarItemAutomaticoModal } from '../components/OcultarItemAutomaticoModal';
 import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 import { excluirDaFichaComDesfazer } from '../desfazerNaFicha';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 
 // ---------------------------------------------------------------------------
 // Tipos locais da entidade "habilidade" (traços raciais, talentos, competências)
@@ -467,7 +468,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                         {personalizacao && (
                           <span className="mt-1 inline-block text-[9px] font-black uppercase tracking-wider text-[#c7a44c]/70">Editado por você</span>
                         )}
-                        <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
+                        <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400"><TextoComTermos texto={descricaoExibida} /></p>
                         {custoOficial.recurso !== 'nenhum' && (
                           <div className="mt-3 flex items-center justify-between gap-3 border-t border-white/5 pt-3">
                             <span className={`rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${grupo.paleta.selo}`}>{rotuloCustoDePoder(item as { custoMana?: number; custoEstamina?: number })}</span>

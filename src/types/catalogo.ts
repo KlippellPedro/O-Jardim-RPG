@@ -17,7 +17,11 @@ export interface IProgressaoClasse {
  * define, e o que fica de fora nao aparece na tela. `defesa` guarda o teste que
  * o alvo faz para escapar. */
 export interface IFichaTecnicaClasse {
+  /** Um de sete tipos: Passivo, Ação Livre, Ação de Movimento, Ação Padrão,
+   * Ação Completa, Reação ou Fora de combate (tools/normalizar-acoes-classes.mjs). */
   acao?: string;
+  /** O detalhe da ação, quando importa: "antes do ataque", "escolhido no descanso completo". */
+  momento?: string;
   alcance?: string;
   duracao?: string;
   defesa?: string;

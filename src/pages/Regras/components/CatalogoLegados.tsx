@@ -3,6 +3,7 @@ import { ScrollText, Search, X } from 'lucide-react';
 import { LEGADOS_CATALOGO } from '../../../services/catalogoService';
 import { descreverRequisito } from '../../../services/progressaoFichaService';
 import type { LegadoCatalogo } from '../../../hooks/useResolvedRules';
+import { TextoComTermos } from '../../../components/ui/TextoComTermos';
 
 interface RequisitoLegado {
   atributo?: string;
@@ -101,7 +102,7 @@ export const CatalogoLegados = ({ catalogo = LEGADOS_CATALOGO as LegadoCatalogo[
                 <tr key={legado.id} className="border-t border-white/5 text-sm text-gray-300">
                   <td className="px-5 py-4 font-bold text-[#e1c77e]">{legado.titulo}</td>
                   <td className="px-5 py-4 text-xs text-gray-400">{legado.preRequisitos}</td>
-                  <td className="px-5 py-4 leading-relaxed">{legado.descricao}</td>
+                  <td className="px-5 py-4 leading-relaxed"><TextoComTermos texto={legado.descricao} /></td>
                 </tr>
               ))}
             </tbody>

@@ -102,6 +102,8 @@ interface ILinhaDaCurva {
   ajusteDeArmadura?: number;
   /** Defesa da criatura: ataque de referência + 6 (o jogador investido acerta 75%). */
   defesaDeCriatura?: number;
+  /** DT de efeito: a maior entre 15 + metade do VD e o bônus de quem investe + 6. */
+  dtDeEfeito?: number;
 }
 
 const COLUNAS = curvaData.colunas;
@@ -157,14 +159,22 @@ export function ajusteDeArmaduraDoVd(vd: unknown): number {
   return Number((LINHAS.get(vdValido(vd)) as ILinhaDaCurva).ajusteDeArmadura ?? 0) || 0;
 }
 
+/** Defesa natural de um personagem do nível (a da curva, sem armadura). */
+export function defesaNaturalDoVd(vd: unknown): number {
+  return (LINHAS.get(vdValido(vd)) as ILinhaDaCurva).defesaNatural;
+}
+
 export function vdValido(vd: unknown): number {
   return Math.min(VD_MAXIMO, Math.max(1, Math.trunc(Number(vd) || 1)));
 }
 
-/** DT padrão do VD (15 + metade do VD), a mesma do tópico de balanceamento.
- * O Interceptador também a usa para interceptar poder de criatura. */
+/** DT de efeito da criatura do VD (coluna dtDeEfeito da curva): a maior entre
+ * 15 + metade do VD e o bônus de quem investe + 6, a mesma DT padrão do tópico
+ * de balanceamento. O Interceptador também a usa para interceptar poder de
+ * criatura. Curva antiga sem a coluna: 15 + metade do VD. */
 export function dtPadraoDoVd(vd: unknown): number {
-  return 15 + Math.floor(vdValido(vd) / 2);
+  const alvo = vdValido(vd);
+  return Number((LINHAS.get(alvo) as ILinhaDaCurva | undefined)?.dtDeEfeito) || 15 + Math.floor(alvo / 2);
 }
 
 /** Multiplicador de Vida acima do VD 40: VD/40, nunca abaixo de 1. */
@@ -339,7 +349,7 @@ export function escalarCriatura(
   const papelPara = PAPEIS_CRIATURA[opcoes.papelPara ?? opcoes.papelDe ?? 'solo'];
   const deltaDeTeste = (LINHAS.get(para) as ILinhaDaCurva).ataque - (LINHAS.get(de) as ILinhaDaCurva).ataque + papelPara.ajusteDeAtaque - papelDe.ajusteDeAtaque;
   const deltaDeAtaque = deltaDeTeste + ajusteDeArmaduraDoVd(para) - ajusteDeArmaduraDoVd(de);
-  const deltaDeDt = Math.floor(para / 2) - Math.floor(de / 2);
+  const deltaDeDt = dtPadraoDoVd(para) - dtPadraoDoVd(de);
   const razaoDeDano = (antes.danoMedio > 0 ? depois.danoMedio / antes.danoMedio : 1) * (papelPara.fatiaDeDano / papelDe.fatiaDeDano);
   const fatorDeVida = papelPara.fatiaDeVida / papelDe.fatiaDeVida;
 

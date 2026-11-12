@@ -54,6 +54,15 @@ export const TAMANHO_DO_GRUPO = 4;
 export const ACERTO_CONTRA_CRIATURA = 0.75;
 export const DEFESA_DE_CRIATURA_ACIMA_DO_ATAQUE = Math.round(21 - 20 * ACERTO_CONTRA_CRIATURA);
 
+/** DT padrão do nível (2026-11-12): a maior entre 15 + metade do nível e o bônus
+ * de quem investe + 6. Até o nível 10 é a conta antiga; dali em diante quem
+ * investe passa três vezes em quatro, como no ataque. É a DT de efeito das
+ * criaturas e o centro da escada de cena do Guia (rotineira −5, difícil +5,
+ * extrema +10). Antes, do nível 20 em diante, quem investia só falhava no 1. */
+export function dtPadraoDoNivel(nivel: number, bonusDeQuemInveste: number): number {
+  return Math.max(15 + Math.floor(Math.max(1, nivel) / 2), bonusDeQuemInveste + DEFESA_DE_CRIATURA_ACIMA_DO_ATAQUE);
+}
+
 /** Média de uma expressão de dados ("8d12+20"), ou null se não houver dado. */
 export function mediaDeDados(expressao: unknown): number | null {
   const texto = String(expressao || '').replace(/\s+/g, '');
@@ -168,7 +177,8 @@ export interface IReferenciaDoNivel {
   bonusDeAtaque: number;
   /** Dano por acerto: melhor arma que o nível alcança + modificador. */
   danoPorAcerto: number;
-  /** DT da situação: 10, 15, 20 e 25 mais nível/2 (o Guia do Mestre). */
+  /** DT da situação (o Guia do Mestre): a padrão é `dtPadraoDoNivel`, e a
+   * rotineira, a difícil e a extrema ficam 5 abaixo, 5 e 10 acima. */
   dt: { rotineira: number; padrao: number; dificil: number; extrema: number };
   /** Vida de um inimigo que aguenta 4,5 rodadas de um grupo de quatro. */
   vidaDeInimigoPadrao: number;
@@ -211,10 +221,10 @@ export function referenciaDoNivel(
     bonusDeAtaque,
     danoPorAcerto: Math.round(danoPorAcerto * 10) / 10,
     dt: {
-      rotineira: 10 + bonusDeNivel,
-      padrao: 15 + bonusDeNivel,
-      dificil: 20 + bonusDeNivel,
-      extrema: 25 + bonusDeNivel,
+      rotineira: dtPadraoDoNivel(nivel, bonusDeAtaque) - 5,
+      padrao: dtPadraoDoNivel(nivel, bonusDeAtaque),
+      dificil: dtPadraoDoNivel(nivel, bonusDeAtaque) + 5,
+      extrema: dtPadraoDoNivel(nivel, bonusDeAtaque) + 10,
     },
     vidaDeInimigoPadrao: arredondar(RODADAS_DO_ENCONTRO_PADRAO * danoDoGrupoPorRodada, 10),
   };

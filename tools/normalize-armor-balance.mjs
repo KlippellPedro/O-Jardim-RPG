@@ -19,10 +19,14 @@
 //   - o bônus vai para a faixa da raridade, mantendo a ordem:
 //       armadura  Comum +1..+3, Incomum +2..+6, Raro +4..+8, Épico +10..+15,
 //                 Lendário +16..+22, Relíquia +22..+30;
-//       escudo    Comum +1, Incomum +2..+3, Raro +2..+4, Épico +5..+7,
-//                 Lendário +8..+11, Relíquia +10..+14.
-//     Peças cuja força está em outro lugar (Espiritual, Couraça e Égide
-//     Primordiais, Juggernaut) mantêm o bônus.
+//       escudo    Comum +1, Incomum +1..+2, Raro +1..+2, Épico +2..+3,
+//                 Lendário +2..+3, Relíquia +3..+5 (revisão de 2026-11-12: com
+//                 armadura e escudo no máximo o inimigo só acertava no 20
+//                 natural; a raridade comprada também soma só metade no escudo,
+//                 em plataforma/core/economy_commands.py).
+//     Peças cuja força está em outro lugar (Espiritual, Couraça Primordial,
+//     Juggernaut) mantêm o bônus; a Égide Primordial fica em +3, o teto do
+//     escudo Lendário.
 // Os requisitos seguem a regra da Loja: não bloqueiam a compra, avisam quem
 // compra e registram a infração para o Mestre. A penalidade de cada peça não
 // muda. Contas em docs/propostas/teste-de-builds-2026-11/RELATORIO.md.
@@ -67,11 +71,11 @@ const ESCALA = {
   "armadura-cota-runica": [4, 5, null], // era +5
   "armadura-couro-sombrio": [3, 5, null], // era +3
   // incomum / escudo
-  "redondo": [2, 5, null], // era +2
-  "cacador": [2, 5, null], // era +2
-  "osso": [2, 5, null], // era +2
-  "escudo-couro-esticado": [2, 5, null], // era +2
-  "escudo-targe-aco": [3, 5, null], // era +3
+  "redondo": [1, 5, null], // era +2
+  "cacador": [1, 5, null], // era +2
+  "osso": [1, 5, null], // era +2
+  "escudo-couro-esticado": [1, 5, null], // era +2
+  "escudo-targe-aco": [2, 5, null], // era +3
   // raro / armadura
   "planador": [4, 10, null], // era +5
   "excelente": [5, 10, null], // era +6
@@ -85,18 +89,18 @@ const ESCALA = {
   "armadura-malha-prata": [6, 10, null], // era +8
   "armadura-ceramica-balistica": [7, 10, null], // era +11
   // raro / escudo
-  "ferro-2": [3, 10, null], // era +3
-  "espinhoso": [2, 10, null], // era +2
-  "torre": [3, 10, null], // era +4
-  "luxuoso": [3, 10, null], // era +4
-  "canhao": [3, 10, null], // era +4
-  "barricada": [4, 10, null], // era +5
-  "escudao": [4, 10, null], // era +5
-  "paves": [3, 10, null], // era +4
-  "escudo-vidro-temperado": [3, 10, null], // era +3
-  "escudo-rompe-lancas": [3, 10, null], // era +4
-  "escudo-carapaca": [3, 10, null], // era +4
-  "escudo-campo-magnetico": [3, 10, null], // era +3
+  "ferro-2": [1, 10, null], // era +3
+  "espinhoso": [1, 10, null], // era +2
+  "torre": [2, 10, null], // era +4
+  "luxuoso": [2, 10, null], // era +4
+  "canhao": [2, 10, null], // era +4
+  "barricada": [2, 10, null], // era +5
+  "escudao": [2, 10, null], // era +5
+  "paves": [2, 10, null], // era +4
+  "escudo-vidro-temperado": [1, 10, null], // era +3
+  "escudo-rompe-lancas": [2, 10, null], // era +4
+  "escudo-carapaca": [2, 10, null], // era +4
+  "escudo-campo-magnetico": [1, 10, null], // era +3
   // epico / armadura
   "flexivel": [11, 15, {"constituicao":15}], // era +8
   "guardiao": [15, 15, {"forca":15}], // era +15
@@ -105,14 +109,14 @@ const ESCALA = {
   "armadura-placas-obsidiana": [14, 15, {"forca":15}], // era +14
   "armadura-campo-cinetico": [10, 15, {"constituicao":15}], // era +7
   // epico / escudo
-  "guardiao-2": [5, 15, {"forca":15}], // era +5
-  "anti-magia-2": [6, 15, {"forca":15}], // era +6
-  "lunar": [7, 15, {"forca":15}], // era +8
-  "escudo-espelhado": [6, 15, {"forca":15}], // era +6
-  "escudo-sol-portatil": [6, 15, {"forca":15}], // era +6
-  "escudo-muralha": [7, 15, {"forca":15}], // era +8
-  "escudo-gelo-eterno": [6, 15, {"forca":15}], // era +6
-  "escudo-ressonancia": [6, 15, {"forca":15}], // era +7
+  "guardiao-2": [2, 15, {"forca":15}], // era +5
+  "anti-magia-2": [2, 15, {"forca":15}], // era +6
+  "lunar": [3, 15, {"forca":15}], // era +8
+  "escudo-espelhado": [2, 15, {"forca":15}], // era +6
+  "escudo-sol-portatil": [2, 15, {"forca":15}], // era +6
+  "escudo-muralha": [3, 15, {"forca":15}], // era +8
+  "escudo-gelo-eterno": [2, 15, {"forca":15}], // era +6
+  "escudo-ressonancia": [3, 15, {"forca":15}], // era +7
   // lendario / armadura
   "espiritual": [0, 25, {"constituicao":18}], // era +0
   "anti-magia": [19, 25, {"forca":18}], // era +20
@@ -124,11 +128,11 @@ const ESCALA = {
   "armadura-pele-tita": [21, 25, {"forca":18}], // era +24
   "armadura-nanocasulo": [16, 25, {"constituicao":18}], // era +14
   // lendario / escudo
-  "tecnologico": [10, 25, {"forca":18}], // era +15
-  "egide-primordial": [4, 25, {"forca":18}], // era +4
-  "escudo-ultimo-recuo": [10, 25, {"forca":18}], // era +14
-  "escudo-barreira-fractal": [11, 25, {"forca":18}], // era +16
-  "escudo-prismatico": [8, 25, {"forca":18}], // era +12
+  "tecnologico": [3, 25, {"forca":18}], // era +15
+  "egide-primordial": [3, 25, {"forca":18}], // era +4
+  "escudo-ultimo-recuo": [3, 25, {"forca":18}], // era +14
+  "escudo-barreira-fractal": [3, 25, {"forca":18}], // era +16
+  "escudo-prismatico": [2, 25, {"forca":18}], // era +12
   // reliquia da criacao / armadura
   "reliquia-pele-nemeia": [28, 35, {"forca":20}], // era +30
   "reliquia-armadura-aquiles": [30, 35, {"forca":20}], // era +35
@@ -137,12 +141,12 @@ const ESCALA = {
   "reliquia-placas-golem-praga": [29, 35, {"forca":20}], // era +32
   "reliquia-exocarapaca-anansi": [22, 35, {"constituicao":20}], // era +16
   // reliquia da criacao / escudo
-  "reliquia-escudo-svalinn": [14, 35, {"forca":20}], // era +20
-  "reliquia-escudo-ajax": [13, 35, {"forca":20}], // era +18
-  "reliquia-escudo-solar-ra": [12, 35, {"forca":20}], // era +15
-  "reliquia-broquel-bagda": [10, 35, {"forca":20}], // era +8
-  "reliquia-aspis-heracles": [13, 35, {"forca":20}], // era +17
-  "reliquia-escudo-iris": [12, 35, {"forca":20}], // era +14
+  "reliquia-escudo-svalinn": [5, 35, {"forca":20}], // era +20
+  "reliquia-escudo-ajax": [5, 35, {"forca":20}], // era +18
+  "reliquia-escudo-solar-ra": [4, 35, {"forca":20}], // era +15
+  "reliquia-broquel-bagda": [3, 35, {"forca":20}], // era +8
+  "reliquia-aspis-heracles": [5, 35, {"forca":20}], // era +17
+  "reliquia-escudo-iris": [4, 35, {"forca":20}], // era +14
 };
 
 const formatar = (valor) => (valor > 0 ? `+${valor}` : String(valor));
