@@ -29,6 +29,7 @@ import {
   type ISeloCatalogo,
 } from '../../../services/magiaService';
 import { TextoComTermos } from '../../../components/ui/TextoComTermos';
+import { listasSugeridas } from '../../../services/magiasSugeridas';
 
 type AbaCatalogo = 'magias' | 'rituais' | 'selos' | 'encantamentos' | 'fusoes';
 
@@ -358,6 +359,51 @@ const GrimorioListItem = memo(({ active, item, onSelect }: GrimorioListItemProps
   );
 });
 
+/** Três caminhos de uma magia por círculo para o Fluxo escolhido, para quem não quer ler as 30. */
+const CaminhosSugeridos = ({ fluxo, titulo, selecionadoId, onSelecionar }: {
+  fluxo: FluxoDeMagia;
+  titulo: string;
+  selecionadoId: string;
+  onSelecionar: (id: string) => void;
+}) => {
+  const listas = useMemo(() => listasSugeridas(fluxo), [fluxo]);
+  if (!listas.some((lista) => lista.magias.length)) return null;
+  return (
+    <section aria-label={`Caminhos sugeridos de ${titulo}`} className="mb-6 rounded-2xl border border-[#c7a44c]/25 bg-[#c7a44c]/[0.05] p-4 sm:p-5">
+      <h3 className="text-sm font-bold text-[#f2ead7]">Por onde começar em {titulo}</h3>
+      <p className="mt-1 max-w-[72ch] text-xs leading-5 text-gray-400">
+        Não precisa ler as {listas.reduce((soma, lista) => soma + lista.magias.length, 0)} magias. Escolha um jeito de jogar e siga a coluna: uma magia por círculo, na ordem em que você vai alcançá-las. Toque no nome para ver a magia.
+      </p>
+      <div className="mt-4 grid gap-3 md:grid-cols-3">
+        {listas.map((lista) => (
+          <div key={lista.estilo} className="rounded-xl border border-white/10 bg-black/25 p-3">
+            <strong className="block text-xs font-bold uppercase tracking-[0.16em] text-[#e4ca83]">{lista.titulo}</strong>
+            <p className="mt-1 text-[11px] leading-4 text-gray-500">{lista.para}</p>
+            {lista.noPapel < lista.magias.length / 2 ? (
+              <p className="mt-1 text-[11px] leading-4 text-amber-200/80">{titulo} tem pouca magia desse jeito: o caminho completa com o que o Fluxo tem.</p>
+            ) : null}
+            <ol className="mt-2 space-y-0.5">
+              {lista.magias.map((magia) => (
+                <li key={magia.id}>
+                  <button
+                    type="button"
+                    onClick={() => onSelecionar(magia.id)}
+                    aria-current={selecionadoId === magia.id ? 'true' : undefined}
+                    className={`flex w-full items-baseline gap-2 rounded-md px-2 py-1 text-left text-sm transition-colors ${selecionadoId === magia.id ? 'bg-[#c7a44c]/20 text-[#f3dc8f]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
+                  >
+                    <span className="w-6 shrink-0 font-mono text-[10px] text-gray-600">{magia.circulo}º</span>
+                    <span className="min-w-0 flex-1 truncate">{magia.titulo}</span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
 export const CatalogoMagico = ({
   fluxos = FLUXOS_CATALOGO,
   magias = MAGIAS_CATALOGO,
@@ -527,6 +573,19 @@ export const CatalogoMagico = ({
         </div>
         <p className="mt-2 px-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-700">{itensVisiveis.length} resultado(s)</p>
       </div>
+
+      {aba === 'magias' && fluxo !== 'todos' && fluxo !== 'universal' && !busca.trim() && circulo === 'todos' ? (
+        <CaminhosSugeridos
+          fluxo={fluxo}
+          titulo={fluxos.find((item) => item.id === fluxo)?.titulo ?? String(fluxo)}
+          selecionadoId={selecionado?.id ?? ''}
+          onSelecionar={selecionar}
+        />
+      ) : aba === 'magias' && fluxo === 'todos' && !busca.trim() ? (
+        <p className="mb-5 rounded-xl border border-dashed border-[#c7a44c]/25 px-4 py-3 text-xs leading-5 text-gray-400">
+          Não quer ler tudo? Escolha um Fluxo no filtro acima e o catálogo mostra três caminhos prontos (Ataque, Controle e Apoio), com uma magia por círculo.
+        </p>
+      ) : null}
 
       {itensVisiveis.length && selecionado ? (
         <div className="grid items-start gap-5 md:grid-cols-[minmax(260px,340px)_minmax(0,1fr)]">

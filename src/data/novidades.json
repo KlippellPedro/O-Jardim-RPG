@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-11-12-caminhos-de-magia-e-descanso",
+      "data": "2026-11-12",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Caminhos de magia por Fluxo, e poder de combate volta no descanso",
+      "detalhes": [
+        "Não precisa ler as 30 magias do seu Fluxo: no Catálogo Mágico do Livro, escolha um Fluxo e veja três caminhos prontos, Ataque, Controle e Apoio, com uma magia por círculo. Toque no nome para abrir a magia.",
+        "Na aba Magias da ficha, cada magia mostra de que caminho ela é, e o filtro Caminho sugerido mostra só as de um caminho.",
+        "Habilidades e poderes de combate que eram de uma vez por sessão agora voltam no descanso completo. O que é de história, informação, dinheiro e sorte (um contato, uma pista, uma rerrolagem) continua por sessão."
+      ]
+    },
+    {
       "id": "2026-11-12-modificacoes-por-tipo",
       "data": "2026-11-12",
       "tipo": "novo",
@@ -1041,17 +1053,6 @@
         "Quando uma magia de Tecnologia \"desliga\" máquinas, o dispositivo para de funcionar e o Autômato fica Paralisado. O Autômato sempre tem teste, com Reflexos ou Fortitude, e repete Fortitude no fim de cada turno para se soltar.",
         "A Singularidade de Tecnologia não destrói mais Autômatos nem itens energizados: os itens param de funcionar até o fim da cena, e o Autômato que falhar fica Paralisado por uma rodada.",
         "A Detonação de Núcleo deixa o Autômato Paralisado em vez de Atordoado, porque o Autômato é imune a atordoamento. A Tempestade de Íons pede Reflexos no começo de cada turno, em vez de desligar pela duração inteira."
-      ]
-    },
-    {
-      "id": "2026-10-20-vazio-nao-cria-materia-nem-vida",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Vazio: o que ele forma é ausência",
-      "detalhes": [
-        "O limite do Vazio agora é \"não cria matéria nem vida\". O clone e a criatura que o Vazio convoca são ausência com contorno: não comem, não respiram e, quando somem, não deixam corpo nem resto.",
-        "Os números das duas magias continuam os mesmos."
       ]
     }
   ]

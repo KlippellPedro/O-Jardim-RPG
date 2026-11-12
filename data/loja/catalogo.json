@@ -4719,7 +4719,7 @@
       "id": "calice-da-vida",
       "titulo": "Cálice da Vida",
       "conteudo": {
-        "descricao": "Uma vez por sessão, gaste uma Ação Padrão para fazer um aliado caído voltar a 50% da Vida máxima dele, mesmo estando em Morrendo ou Inconsciente.",
+        "descricao": "Uma vez por descanso, gaste uma Ação Padrão para fazer um aliado caído voltar a 50% da Vida máxima dele, mesmo estando em Morrendo ou Inconsciente.",
         "preco": {
           "Solares": 105
         },
@@ -18847,7 +18847,7 @@
       "id": "fruto-dragao",
       "titulo": "Fruto do Dragão",
       "conteudo": {
-        "descricao": "Sangue Dracônico: receba Resistência 5 contra Fogo e Gelo e +2 em Fortitude contra medo, veneno e transformação forçada. Forma Híbrida: gaste uma Ação de Movimento e 3 de Estamina para assumir até o fim da cena uma forma com +2 de Defesa, voo igual à metade do Movimento e ataques naturais de 2d8 de Corte ou Fogo. Despertar, Dragão Ancião: uma vez por sessão, gaste uma Ação Padrão e 12 de Estamina para assumir por cinco rodadas a forma completa, substituindo a híbrida: +5 de Defesa, Resistência 10 contra dano físico, voo igual ao dobro do Movimento e ataques naturais de 3d10. Uma vez durante a forma, use uma Ação Padrão para soprar um cone de 12 m que causa 7d8 de Fogo ou Gelo, com Reflexos reduzindo à metade. Ao terminar, receba 1 Cansaço. Prata e o elemento oposto ao sopro ignoram as Resistências da forma. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Sangue Dracônico: receba Resistência 5 contra Fogo e Gelo e +2 em Fortitude contra medo, veneno e transformação forçada. Forma Híbrida: gaste uma Ação de Movimento e 3 de Estamina para assumir até o fim da cena uma forma com +2 de Defesa, voo igual à metade do Movimento e ataques naturais de 2d8 de Corte ou Fogo. Despertar, Dragão Ancião: uma vez por descanso, gaste uma Ação Padrão e 12 de Estamina para assumir por cinco rodadas a forma completa, substituindo a híbrida: +5 de Defesa, Resistência 10 contra dano físico, voo igual ao dobro do Movimento e ataques naturais de 3d10. Uma vez durante a forma, use uma Ação Padrão para soprar um cone de 12 m que causa 7d8 de Fogo ou Gelo, com Reflexos reduzindo à metade. Ao terminar, receba 1 Cansaço. Prata e o elemento oposto ao sopro ignoram as Resistências da forma. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 700
         },
@@ -20236,7 +20236,7 @@
       "id": "fruto-fenix",
       "titulo": "Fruto da Fênix",
       "conteudo": {
-        "descricao": "Plumas da Aurora: você pode manifestar asas com voo igual à metade do Movimento, recebe Resistência 15 contra Fogo e não sofre Sangramento enquanto estiver acima de 0 de Vida. Chama Restauradora: gaste uma Ação de Movimento e 5 de Mana para tocar a si ou uma criatura e recuperar 3d8 de Vida; cada criatura só pode receber essa cura uma vez por cena. Despertar, Renascimento Solar: uma vez por sessão, quando for reduzido a 0 de Vida sem morrer instantaneamente, você pode gastar 12 de Mana sem usar ação para retornar com metade da Vida máxima, encerrar Sangramento, Caído e Atordoado sobre si e se levantar. Depois, receba 2 Cansaços. O Renascimento não funciona enquanto você estiver sob um efeito de Gelo. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Plumas da Aurora: você pode manifestar asas com voo igual à metade do Movimento, recebe Resistência 15 contra Fogo e não sofre Sangramento enquanto estiver acima de 0 de Vida. Chama Restauradora: gaste uma Ação de Movimento e 5 de Mana para tocar a si ou uma criatura e recuperar 3d8 de Vida; cada criatura só pode receber essa cura uma vez por cena. Despertar, Renascimento Solar: uma vez por descanso, quando for reduzido a 0 de Vida sem morrer instantaneamente, você pode gastar 12 de Mana sem usar ação para retornar com metade da Vida máxima, encerrar Sangramento, Caído e Atordoado sobre si e se levantar. Depois, receba 2 Cansaços. O Renascimento não funciona enquanto você estiver sob um efeito de Gelo. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 800
         },
@@ -20457,7 +20457,7 @@
       "id": "fruto-instante",
       "titulo": "Fruto do Instante",
       "conteudo": {
-        "descricao": "Olhar entre Segundos: receba +2 em Iniciativa e, uma vez por cena, ignore a condição Surpreendido quando ela seria aplicada. Repetição Breve: uma vez por rodada, depois de realizar um ataque, teste ou defesa, gaste uma Reação e 4 de Mana para refazer a rolagem; o novo resultado deve ser usado. Despertar, Segundo Proibido: uma vez por sessão, imediatamente depois do seu turno, gaste 14 de Mana para realizar um turno adicional com uma Ação Padrão e uma Ação de Movimento. Nesse turno você não pode usar poderes de Fruto, reações nem efeitos limitados por cena ou sessão. Depois, receba 2 Cansaços. Efeitos de Vazio que anulam tempo impedem Repetição Breve e Segundo Proibido. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Olhar entre Segundos: receba +2 em Iniciativa e, uma vez por cena, ignore a condição Surpreendido quando ela seria aplicada. Repetição Breve: uma vez por rodada, depois de realizar um ataque, teste ou defesa, gaste uma Reação e 4 de Mana para refazer a rolagem; o novo resultado deve ser usado. Despertar, Segundo Proibido: uma vez por descanso, imediatamente depois do seu turno, gaste 14 de Mana para realizar um turno adicional com uma Ação Padrão e uma Ação de Movimento. Nesse turno você não pode usar poderes de Fruto, reações nem efeitos limitados por cena ou sessão. Depois, receba 2 Cansaços. Efeitos de Vazio que anulam tempo impedem Repetição Breve e Segundo Proibido. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 800
         },
@@ -20587,7 +20587,7 @@
       "id": "fruto-origem",
       "titulo": "Fruto da Origem",
       "conteudo": {
-        "descricao": "Palmas de Aethel: um rosa pálido aparece sob as suas palmas, você recebe +2 em Cura e +1 nos testes de conjuração de magias do Fluxo da Origem. Semente de Recomeço: uma vez por rodada, gaste uma Ação de Movimento e 4 de Mana para tocar uma criatura viva: ela recupera 2d8 de Vida e encerra as condições Caído e Amedrontado; cada criatura só recebe essa cura uma vez por cena, e quem já chegou ao Fim não volta. Dom de Aethel (Segunda Chance): uma vez por sessão, quando você ou um aliado a até 12 m falhar num teste ou num ataque, gaste uma Reação e 5 de Mana: a rolagem é refeita com +2 e o novo resultado vale. Não vale para testes de Morrendo. Despertar, Comunhão com Aethel (Gênese): uma vez por sessão, gaste uma Ação Padrão e 12 de Mana para abrir uma luz rosada em 9 m ao seu redor por cinco rodadas: aliados na área recebem 1d8 de Vida temporária no começo de cada turno deles e +2 em testes de resistência, e uma criatura a 0 de Vida na área fica estável. Ao terminar, receba 1 Cansaço. O Fluxo do Fim encerra o Dom de Aethel e ignora a Vida temporária da Gênese. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Palmas de Aethel: um rosa pálido aparece sob as suas palmas, você recebe +2 em Cura e +1 nos testes de conjuração de magias do Fluxo da Origem. Semente de Recomeço: uma vez por rodada, gaste uma Ação de Movimento e 4 de Mana para tocar uma criatura viva: ela recupera 2d8 de Vida e encerra as condições Caído e Amedrontado; cada criatura só recebe essa cura uma vez por cena, e quem já chegou ao Fim não volta. Dom de Aethel (Segunda Chance): uma vez por descanso, quando você ou um aliado a até 12 m falhar num teste ou num ataque, gaste uma Reação e 5 de Mana: a rolagem é refeita com +2 e o novo resultado vale. Não vale para testes de Morrendo. Despertar, Comunhão com Aethel (Gênese): uma vez por descanso, gaste uma Ação Padrão e 12 de Mana para abrir uma luz rosada em 9 m ao seu redor por cinco rodadas: aliados na área recebem 1d8 de Vida temporária no começo de cada turno deles e +2 em testes de resistência, e uma criatura a 0 de Vida na área fica estável. Ao terminar, receba 1 Cansaço. O Fluxo do Fim encerra o Dom de Aethel e ignora a Vida temporária da Gênese. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 840
         },
@@ -20666,7 +20666,7 @@
             "acao": "Reação",
             "alcance": "12 m",
             "duracao": "Instantânea",
-            "descricao": "Quando você ou um aliado a até 12 m falhar num teste ou num ataque, refaça a rolagem com +2 e use o novo resultado. Não vale para testes de Morrendo. Uma vez por sessão."
+            "descricao": "Quando você ou um aliado a até 12 m falhar num teste ou num ataque, refaça a rolagem com +2 e use o novo resultado. Não vale para testes de Morrendo. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -20680,7 +20680,7 @@
             "acao": "Ação Padrão",
             "alcance": "9 m",
             "duracao": "Cinco rodadas",
-            "descricao": "Por cinco rodadas, uma luz rosada ocupa 9 m ao seu redor: aliados na área recebem 1d8 de Vida temporária no começo de cada turno deles e +2 em testes de resistência, e uma criatura a 0 de Vida na área fica estável. Ao terminar, receba 1 Cansaço. Uma vez por sessão."
+            "descricao": "Por cinco rodadas, uma luz rosada ocupa 9 m ao seu redor: aliados na área recebem 1d8 de Vida temporária no começo de cada turno deles e +2 em testes de resistência, e uma criatura a 0 de Vida na área fica estável. Ao terminar, receba 1 Cansaço. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com Aethel: Gênese: luz de 9 m por cinco rodadas com Vida temporária, +2 em resistência e estabilização",
@@ -20695,7 +20695,7 @@
       "id": "fruto-essencia",
       "titulo": "Fruto da Essência",
       "conteudo": {
-        "descricao": "Íris de Ousias: a sua íris perde a cor própria e vira âmbar, você recebe +2 em Ressonância e +1 nos testes de conjuração de magias do Fluxo da Essência. Leitura de Natureza: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para olhar uma criatura, objeto ou lugar a até 18 m e fazer ao Mestre uma pergunta objetiva sobre a natureza real dele (o que é, que Fluxo carrega, se há disfarce ou corrupção); a resposta é verdadeira. A Essência não lê pensamentos nem mostra o futuro. Dom de Ousias (Verdade Ancorada): uma vez por sessão, gaste uma Ação Padrão e 5 de Mana: uma criatura a até 9 m testa Vontade contra a sua DT de efeito; em falha, ela abandona ilusão, disfarce ou forma alterada até o fim da cena e responde com sinceridade a uma pergunta sua. Se ela não sabe a resposta, diz que não sabe. Despertar, Comunhão com Ousias (Olhar Âmbar): uma vez por sessão, gaste uma Ação Padrão e 11 de Mana: por três rodadas, tudo o que você e seus aliados a 12 m veem mostra o que realmente é. Ilusão, invisibilidade e forma alterada não funcionam contra o grupo, e criaturas sob esses efeitos sofrem −2 de Defesa. Ao terminar, receba 1 Cansaço. O Fluxo da Comunicação engana a Leitura de Natureza com pacto ou registro bem contado, e o Dom de Ousias falha contra quem tiver um pacto ativo. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Íris de Ousias: a sua íris perde a cor própria e vira âmbar, você recebe +2 em Ressonância e +1 nos testes de conjuração de magias do Fluxo da Essência. Leitura de Natureza: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para olhar uma criatura, objeto ou lugar a até 18 m e fazer ao Mestre uma pergunta objetiva sobre a natureza real dele (o que é, que Fluxo carrega, se há disfarce ou corrupção); a resposta é verdadeira. A Essência não lê pensamentos nem mostra o futuro. Dom de Ousias (Verdade Ancorada): uma vez por descanso, gaste uma Ação Padrão e 5 de Mana: uma criatura a até 9 m testa Vontade contra a sua DT de efeito; em falha, ela abandona ilusão, disfarce ou forma alterada até o fim da cena e responde com sinceridade a uma pergunta sua. Se ela não sabe a resposta, diz que não sabe. Despertar, Comunhão com Ousias (Olhar Âmbar): uma vez por descanso, gaste uma Ação Padrão e 11 de Mana: por três rodadas, tudo o que você e seus aliados a 12 m veem mostra o que realmente é. Ilusão, invisibilidade e forma alterada não funcionam contra o grupo, e criaturas sob esses efeitos sofrem −2 de Defesa. Ao terminar, receba 1 Cansaço. O Fluxo da Comunicação engana a Leitura de Natureza com pacto ou registro bem contado, e o Dom de Ousias falha contra quem tiver um pacto ativo. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 780
         },
@@ -20774,7 +20774,7 @@
             "acao": "Ação Padrão",
             "alcance": "9 m",
             "duracao": "Uma cena",
-            "descricao": "Uma criatura a até 9 m testa Vontade contra a sua DT de efeito. Em falha, ela abandona ilusão, disfarce ou forma alterada até o fim da cena e responde com sinceridade a uma pergunta sua. Se ela não sabe a resposta, diz que não sabe. Uma vez por sessão."
+            "descricao": "Uma criatura a até 9 m testa Vontade contra a sua DT de efeito. Em falha, ela abandona ilusão, disfarce ou forma alterada até o fim da cena e responde com sinceridade a uma pergunta sua. Se ela não sabe a resposta, diz que não sabe. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -20788,7 +20788,7 @@
             "acao": "Ação Padrão",
             "alcance": "12 m",
             "duracao": "Três rodadas",
-            "descricao": "Por três rodadas, tudo o que você e seus aliados a 12 m veem mostra o que realmente é. Ilusão, invisibilidade e forma alterada não funcionam contra o grupo, e criaturas sob esses efeitos sofrem −2 de Defesa. Ao terminar, receba 1 Cansaço. Uma vez por sessão."
+            "descricao": "Por três rodadas, tudo o que você e seus aliados a 12 m veem mostra o que realmente é. Ilusão, invisibilidade e forma alterada não funcionam contra o grupo, e criaturas sob esses efeitos sofrem −2 de Defesa. Ao terminar, receba 1 Cansaço. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com Ousias: Olhar Âmbar: três rodadas em que ilusão, invisibilidade e forma alterada não funcionam contra o grupo",
@@ -20803,7 +20803,7 @@
       "id": "fruto-comunicacao",
       "titulo": "Fruto da Comunicação",
       "conteudo": {
-        "descricao": "Garganta Prateada: linhas prateadas parecidas com escrita percorrem a sua garganta, você recebe +2 em Diplomacia e +1 nos testes de conjuração de magias do Fluxo da Comunicação. Ponte de Sentidos: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para ligar você a um aliado voluntário a até 18 m: até o fim da cena, os dois compartilham o que veem e ouvem e podem conversar sem som. Só uma ligação existe por vez. Dom da Comunicação (Pacto Registrado): uma vez por sessão, gaste uma Ação Padrão e 5 de Mana para registrar uma promessa de uma frase entre você e uma criatura voluntária a até 9 m. Quem quebrar a promessa recebe 2 Cansaços e desvantagem em testes até o fim da cena. O pacto não obriga ninguém a aceitar nem controla quem o assina. Despertar, Comunhão com a Comunicação (Voz Livre): uma vez por sessão, gaste uma Ação Padrão e 11 de Mana: por cinco rodadas, sua voz atravessa a Malha e você compartilha sentidos com até quatro aliados a 12 m. Ninguém do grupo fica Surpreendido enquanto um deles perceber a ameaça, e quando um deles ajuda outro num teste, soma +4 em vez de +2. Ao terminar, receba 1 Cansaço. A Interceptação da A.X.I.S desliga a Ponte, o Pacto e a Voz Livre enquanto você estiver na zona, e dano do Fluxo do Físico interrompe a Ponte de Sentidos. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Garganta Prateada: linhas prateadas parecidas com escrita percorrem a sua garganta, você recebe +2 em Diplomacia e +1 nos testes de conjuração de magias do Fluxo da Comunicação. Ponte de Sentidos: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para ligar você a um aliado voluntário a até 18 m: até o fim da cena, os dois compartilham o que veem e ouvem e podem conversar sem som. Só uma ligação existe por vez. Dom da Comunicação (Pacto Registrado): uma vez por descanso, gaste uma Ação Padrão e 5 de Mana para registrar uma promessa de uma frase entre você e uma criatura voluntária a até 9 m. Quem quebrar a promessa recebe 2 Cansaços e desvantagem em testes até o fim da cena. O pacto não obriga ninguém a aceitar nem controla quem o assina. Despertar, Comunhão com a Comunicação (Voz Livre): uma vez por descanso, gaste uma Ação Padrão e 11 de Mana: por cinco rodadas, sua voz atravessa a Malha e você compartilha sentidos com até quatro aliados a 12 m. Ninguém do grupo fica Surpreendido enquanto um deles perceber a ameaça, e quando um deles ajuda outro num teste, soma +4 em vez de +2. Ao terminar, receba 1 Cansaço. A Interceptação da A.X.I.S desliga a Ponte, o Pacto e a Voz Livre enquanto você estiver na zona, e dano do Fluxo do Físico interrompe a Ponte de Sentidos. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 760
         },
@@ -20882,7 +20882,7 @@
             "acao": "Ação Padrão",
             "alcance": "9 m",
             "duracao": "Uma sessão",
-            "descricao": "Registre uma promessa de uma frase entre você e uma criatura voluntária a até 9 m. Quem quebrar a promessa recebe 2 Cansaços e desvantagem em testes até o fim da cena. O pacto não obriga ninguém a aceitar nem controla quem o assina. Uma vez por sessão."
+            "descricao": "Registre uma promessa de uma frase entre você e uma criatura voluntária a até 9 m. Quem quebrar a promessa recebe 2 Cansaços e desvantagem em testes até o fim da cena. O pacto não obriga ninguém a aceitar nem controla quem o assina. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -20896,7 +20896,7 @@
             "acao": "Ação Padrão",
             "alcance": "12 m",
             "duracao": "Cinco rodadas",
-            "descricao": "Por cinco rodadas, você compartilha sentidos com até quatro aliados a 12 m. Ninguém do grupo fica Surpreendido enquanto um deles perceber a ameaça, e quando um deles ajuda outro num teste, soma +4 em vez de +2. Ao terminar, receba 1 Cansaço. Uma vez por sessão."
+            "descricao": "Por cinco rodadas, você compartilha sentidos com até quatro aliados a 12 m. Ninguém do grupo fica Surpreendido enquanto um deles perceber a ameaça, e quando um deles ajuda outro num teste, soma +4 em vez de +2. Ao terminar, receba 1 Cansaço. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com a Comunicação: Voz Livre: cinco rodadas de sentidos compartilhados: sem Surpreendido e Ajudar vale +4",
@@ -20911,7 +20911,7 @@
       "id": "fruto-vitalidade",
       "titulo": "Fruto da Vitalidade",
       "conteudo": {
-        "descricao": "Ciclo de Haemus: você parece jovem demais e o cabelo e as unhas crescem depressa, recebe +10 de Vida máxima e +1 nos testes de conjuração de magias do Fluxo da Vitalidade. Metabolismo Voraz: uma vez por rodada, gaste uma Ação de Movimento e 3 de Estamina para acelerar o seu corpo: recupere 2d6 de Vida e encerre veneno ou doença leve sobre você. Dom de Haemus (Fôlego Selvagem): uma vez por sessão, quando for reduzido a 0 de Vida sem morrer instantaneamente, gaste 5 de Estamina sem usar ação: fique com 1 de Vida e recupere 2d8 de Vida no começo do seu próximo turno. Depois, receba 1 Cansaço. Quem já chegou ao Fim não volta. Despertar, Comunhão com Haemus (Primavera Faminta): uma vez por sessão, gaste uma Ação Padrão e 10 de Estamina: por cinco rodadas, o mato sobe numa área de 9 m ao seu redor e vira terreno difícil. Aliados na área recuperam 1d8 de Vida no começo do turno deles, e inimigos sofrem 2d8 de veneno no mesmo momento (Fortitude reduz à metade). Ao terminar, receba 1 Cansaço. O Fluxo da Essência lê o ciclo e o interrompe: o Fôlego Selvagem falha contra efeito da Essência, e a Primavera termina se um efeito da Essência a alcançar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Ciclo de Haemus: você parece jovem demais e o cabelo e as unhas crescem depressa, recebe +10 de Vida máxima e +1 nos testes de conjuração de magias do Fluxo da Vitalidade. Metabolismo Voraz: uma vez por rodada, gaste uma Ação de Movimento e 3 de Estamina para acelerar o seu corpo: recupere 2d6 de Vida e encerre veneno ou doença leve sobre você. Dom de Haemus (Fôlego Selvagem): uma vez por descanso, quando for reduzido a 0 de Vida sem morrer instantaneamente, gaste 5 de Estamina sem usar ação: fique com 1 de Vida e recupere 2d8 de Vida no começo do seu próximo turno. Depois, receba 1 Cansaço. Quem já chegou ao Fim não volta. Despertar, Comunhão com Haemus (Primavera Faminta): uma vez por descanso, gaste uma Ação Padrão e 10 de Estamina: por cinco rodadas, o mato sobe numa área de 9 m ao seu redor e vira terreno difícil. Aliados na área recuperam 1d8 de Vida no começo do turno deles, e inimigos sofrem 2d8 de veneno no mesmo momento (Fortitude reduz à metade). Ao terminar, receba 1 Cansaço. O Fluxo da Essência lê o ciclo e o interrompe: o Fôlego Selvagem falha contra efeito da Essência, e a Primavera termina se um efeito da Essência a alcançar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 820
         },
@@ -20990,7 +20990,7 @@
             "acao": "Sem ação",
             "alcance": "Pessoal",
             "duracao": "Instantânea",
-            "descricao": "Quando for reduzido a 0 de Vida sem morrer instantaneamente, fique com 1 de Vida e recupere 2d8 de Vida no começo do seu próximo turno. Depois, receba 1 Cansaço. Quem já chegou ao Fim não volta. Uma vez por sessão."
+            "descricao": "Quando for reduzido a 0 de Vida sem morrer instantaneamente, fique com 1 de Vida e recupere 2d8 de Vida no começo do seu próximo turno. Depois, receba 1 Cansaço. Quem já chegou ao Fim não volta. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -21004,7 +21004,7 @@
             "acao": "Ação Padrão",
             "alcance": "9 m",
             "duracao": "Cinco rodadas",
-            "descricao": "Por cinco rodadas, o mato sobe numa área de 9 m ao seu redor e vira terreno difícil. Aliados na área recuperam 1d8 de Vida no começo do turno deles, e inimigos sofrem 2d8 de veneno no mesmo momento (Fortitude reduz à metade). Ao terminar, receba 1 Cansaço. Uma vez por sessão."
+            "descricao": "Por cinco rodadas, o mato sobe numa área de 9 m ao seu redor e vira terreno difícil. Aliados na área recuperam 1d8 de Vida no começo do turno deles, e inimigos sofrem 2d8 de veneno no mesmo momento (Fortitude reduz à metade). Ao terminar, receba 1 Cansaço. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com Haemus: Primavera Faminta: mato de 9 m que cura aliados e envenena inimigos por cinco rodadas",
@@ -21019,7 +21019,7 @@
       "id": "fruto-inconstancia",
       "titulo": "Fruto da Inconstância",
       "conteudo": {
-        "descricao": "Marca Errante: uma marca alaranjada aparece no seu corpo e nunca fica no mesmo lugar, você recebe +2 em Jogatina e +1 nos testes de conjuração de magias do Fluxo da Inconstância. Troca de Propriedade: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para trocar uma propriedade de uma arma, escudo ou armadura mundana a até 9 m (Vontade evita, se estiver empunhada ou vestida): ela fica pesada demais, e o portador sofre −2 nos ataques ou na Defesa que ela concede até o fim da cena. Dom de Ignis (Dado ao Vento): uma vez por sessão, antes de uma rolagem sua, gaste 5 de Mana sem usar ação e aposte: role 1d6. Com 4 a 6, some +6 à rolagem. Com 1 a 3, subtraia 4. A aposta é declarada antes de ver o resultado e não pode ser desfeita. Despertar, Comunhão com Ignis (Tempestade de Trocas): uma vez por sessão, gaste uma Ação Padrão e 12 de Mana para mudar tudo numa área de 9 m a até 18 m por três rodadas: o terreno vira difícil, armas e armaduras mundanas trocam de propriedade (−2) e, no começo do turno de cada criatura na área, ela rola 1d6: com 1 ou 2 tem desvantagem nos testes até o próximo turno, com 5 ou 6 tem vantagem. Ao terminar, receba 1 Cansaço. O Fluxo do Vazio apaga a troca em vez de deixá-la mudar: efeitos do Vazio encerram a Troca de Propriedade e a Tempestade. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Marca Errante: uma marca alaranjada aparece no seu corpo e nunca fica no mesmo lugar, você recebe +2 em Jogatina e +1 nos testes de conjuração de magias do Fluxo da Inconstância. Troca de Propriedade: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para trocar uma propriedade de uma arma, escudo ou armadura mundana a até 9 m (Vontade evita, se estiver empunhada ou vestida): ela fica pesada demais, e o portador sofre −2 nos ataques ou na Defesa que ela concede até o fim da cena. Dom de Ignis (Dado ao Vento): uma vez por descanso, antes de uma rolagem sua, gaste 5 de Mana sem usar ação e aposte: role 1d6. Com 4 a 6, some +6 à rolagem. Com 1 a 3, subtraia 4. A aposta é declarada antes de ver o resultado e não pode ser desfeita. Despertar, Comunhão com Ignis (Tempestade de Trocas): uma vez por descanso, gaste uma Ação Padrão e 12 de Mana para mudar tudo numa área de 9 m a até 18 m por três rodadas: o terreno vira difícil, armas e armaduras mundanas trocam de propriedade (−2) e, no começo do turno de cada criatura na área, ela rola 1d6: com 1 ou 2 tem desvantagem nos testes até o próximo turno, com 5 ou 6 tem vantagem. Ao terminar, receba 1 Cansaço. O Fluxo do Vazio apaga a troca em vez de deixá-la mudar: efeitos do Vazio encerram a Troca de Propriedade e a Tempestade. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 720
         },
@@ -21098,7 +21098,7 @@
             "acao": "Sem ação",
             "alcance": "Pessoal",
             "duracao": "Instantânea",
-            "descricao": "Antes de uma rolagem sua, aposte: role 1d6. Com 4 a 6, some +6 à rolagem. Com 1 a 3, subtraia 4. A aposta é declarada antes de ver o resultado e não pode ser desfeita. Uma vez por sessão."
+            "descricao": "Antes de uma rolagem sua, aposte: role 1d6. Com 4 a 6, some +6 à rolagem. Com 1 a 3, subtraia 4. A aposta é declarada antes de ver o resultado e não pode ser desfeita. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -21112,7 +21112,7 @@
             "acao": "Ação Padrão",
             "alcance": "18 m",
             "duracao": "Três rodadas",
-            "descricao": "Por três rodadas, tudo numa área de 9 m a até 18 m muda: o terreno vira difícil, armas e armaduras mundanas trocam de propriedade (−2) e, no começo do turno de cada criatura na área, ela rola 1d6: com 1 ou 2 tem desvantagem nos testes até o próximo turno, com 5 ou 6 tem vantagem. Ao terminar, receba 1 Cansaço. Uma vez por sessão."
+            "descricao": "Por três rodadas, tudo numa área de 9 m a até 18 m muda: o terreno vira difícil, armas e armaduras mundanas trocam de propriedade (−2) e, no começo do turno de cada criatura na área, ela rola 1d6: com 1 ou 2 tem desvantagem nos testes até o próximo turno, com 5 ou 6 tem vantagem. Ao terminar, receba 1 Cansaço. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com Ignis: Tempestade de Trocas: três rodadas de caos numa área de 9 m: terreno difícil, −2 em peças mundanas e sorte por turno",
@@ -21127,7 +21127,7 @@
       "id": "fruto-fisico",
       "titulo": "Fruto do Físico",
       "conteudo": {
-        "descricao": "Placas de Moros: placas minerais endurecem sobre as suas juntas e o dorso das mãos, você recebe +10 de Estamina máxima e +1 nos testes de conjuração de magias do Fluxo do Físico. Peso de Moros: uma vez por rodada, gaste uma Ação de Movimento e 3 de Estamina para aumentar o seu peso: até o começo do seu próximo turno, você recebe Resistência 5 a dano físico e não pode ser empurrado, puxado ou derrubado por efeito de tamanho igual ou menor que o seu. Dom de Moros (Muralha de Pedra): uma vez por sessão, gaste uma Ação Padrão e 5 de Estamina para erguer uma muralha de pedra de 6 m de largura e 3 m de altura num espaço a até 9 m. Ela dá cobertura superior, tem 30 de Vida e dura até o fim da cena. Despertar, Comunhão com Moros (Corpo do Mundo): uma vez por sessão, gaste uma Ação Padrão e 10 de Estamina para assumir por cinco rodadas a substância do Baluarte: Resistência 10 a dano físico, +2d8 de Impacto no primeiro ataque de cada turno e ataques que ignoram a Resistência de objetos e estruturas mundanas. Aliados a 3 m recebem Resistência 5. Ao terminar, receba 1 Cansaço. O Fluxo do Espaço dobra a pedra por dentro: efeitos do Espaço ignoram as Resistências do fruto, e a Muralha de Pedra cede a uma fronteira dobrada. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Placas de Moros: placas minerais endurecem sobre as suas juntas e o dorso das mãos, você recebe +10 de Estamina máxima e +1 nos testes de conjuração de magias do Fluxo do Físico. Peso de Moros: uma vez por rodada, gaste uma Ação de Movimento e 3 de Estamina para aumentar o seu peso: até o começo do seu próximo turno, você recebe Resistência 5 a dano físico e não pode ser empurrado, puxado ou derrubado por efeito de tamanho igual ou menor que o seu. Dom de Moros (Muralha de Pedra): uma vez por descanso, gaste uma Ação Padrão e 5 de Estamina para erguer uma muralha de pedra de 6 m de largura e 3 m de altura num espaço a até 9 m. Ela dá cobertura superior, tem 30 de Vida e dura até o fim da cena. Despertar, Comunhão com Moros (Corpo do Mundo): uma vez por descanso, gaste uma Ação Padrão e 10 de Estamina para assumir por cinco rodadas a substância do Baluarte: Resistência 10 a dano físico, +2d8 de Impacto no primeiro ataque de cada turno e ataques que ignoram a Resistência de objetos e estruturas mundanas. Aliados a 3 m recebem Resistência 5. Ao terminar, receba 1 Cansaço. O Fluxo do Espaço dobra a pedra por dentro: efeitos do Espaço ignoram as Resistências do fruto, e a Muralha de Pedra cede a uma fronteira dobrada. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 800
         },
@@ -21206,7 +21206,7 @@
             "acao": "Ação Padrão",
             "alcance": "9 m",
             "duracao": "Uma cena",
-            "descricao": "Erga uma muralha de pedra de 6 m de largura e 3 m de altura num espaço a até 9 m. Ela dá cobertura superior, tem 30 de Vida e dura até o fim da cena. Uma vez por sessão."
+            "descricao": "Erga uma muralha de pedra de 6 m de largura e 3 m de altura num espaço a até 9 m. Ela dá cobertura superior, tem 30 de Vida e dura até o fim da cena. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -21220,7 +21220,7 @@
             "acao": "Ação Padrão",
             "alcance": "Pessoal",
             "duracao": "Cinco rodadas",
-            "descricao": "Por cinco rodadas, você assume a substância do Baluarte: Resistência 10 a dano físico, +2d8 de Impacto no primeiro ataque de cada turno e ataques que ignoram a Resistência de objetos e estruturas mundanas. Aliados a 3 m recebem Resistência 5. Ao terminar, receba 1 Cansaço. Uma vez por sessão."
+            "descricao": "Por cinco rodadas, você assume a substância do Baluarte: Resistência 10 a dano físico, +2d8 de Impacto no primeiro ataque de cada turno e ataques que ignoram a Resistência de objetos e estruturas mundanas. Aliados a 3 m recebem Resistência 5. Ao terminar, receba 1 Cansaço. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com Moros: Corpo do Mundo: cinco rodadas de Resistência 10, +2d8 de Impacto e aura de Resistência 5 para aliados próximos",
@@ -21235,7 +21235,7 @@
       "id": "fruto-espaco",
       "titulo": "Fruto do Espaço",
       "conteudo": {
-        "descricao": "Sombra Atrasada: a sua sombra chega um instante depois de você e nunca no ângulo certo, você recebe +2 em Acrobacia e +1 nos testes de conjuração de magias do Fluxo do Espaço. Distância Dobrada: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana: até o fim do turno, seus ataques corpo a corpo alcançam criaturas a até 9 m como se estivessem adjacentes, e você toca e manipula objetos a essa distância. Dom de Aperion (Fronteira Trancada): uma vez por sessão, gaste uma Ação Padrão e 5 de Mana para traçar uma linha de até 12 m no chão. Por três rodadas, nenhuma criatura atravessa a linha por meios normais ou espaciais; quem estiver do outro lado tenta e testa Vontade contra a sua DT de efeito, e em sucesso atravessa uma vez. Despertar, Comunhão com Aperion (Sala Maior por Dentro): uma vez por sessão, gaste uma Ação Padrão e 12 de Mana para dobrar as distâncias numa área de 9 m ao seu redor por cinco rodadas: todo deslocamento de aliado na área custa metade, todo deslocamento de inimigo custa o dobro, e você troca de lugar com uma criatura voluntária na área como Ação Livre uma vez por rodada. Ao terminar, receba 1 Cansaço. O Fluxo do Tempo apressa ou atrasa as dobras: o Dom e o Despertar terminam se um efeito do Tempo alcançar a área. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Sombra Atrasada: a sua sombra chega um instante depois de você e nunca no ângulo certo, você recebe +2 em Acrobacia e +1 nos testes de conjuração de magias do Fluxo do Espaço. Distância Dobrada: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana: até o fim do turno, seus ataques corpo a corpo alcançam criaturas a até 9 m como se estivessem adjacentes, e você toca e manipula objetos a essa distância. Dom de Aperion (Fronteira Trancada): uma vez por descanso, gaste uma Ação Padrão e 5 de Mana para traçar uma linha de até 12 m no chão. Por três rodadas, nenhuma criatura atravessa a linha por meios normais ou espaciais; quem estiver do outro lado tenta e testa Vontade contra a sua DT de efeito, e em sucesso atravessa uma vez. Despertar, Comunhão com Aperion (Sala Maior por Dentro): uma vez por descanso, gaste uma Ação Padrão e 12 de Mana para dobrar as distâncias numa área de 9 m ao seu redor por cinco rodadas: todo deslocamento de aliado na área custa metade, todo deslocamento de inimigo custa o dobro, e você troca de lugar com uma criatura voluntária na área como Ação Livre uma vez por rodada. Ao terminar, receba 1 Cansaço. O Fluxo do Tempo apressa ou atrasa as dobras: o Dom e o Despertar terminam se um efeito do Tempo alcançar a área. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 860
         },
@@ -21314,7 +21314,7 @@
             "acao": "Ação Padrão",
             "alcance": "12 m",
             "duracao": "Três rodadas",
-            "descricao": "Trace uma linha de até 12 m no chão. Por três rodadas, nenhuma criatura atravessa a linha por meios normais ou espaciais; quem tentar testa Vontade contra a sua DT de efeito, e em sucesso atravessa uma vez. Uma vez por sessão."
+            "descricao": "Trace uma linha de até 12 m no chão. Por três rodadas, nenhuma criatura atravessa a linha por meios normais ou espaciais; quem tentar testa Vontade contra a sua DT de efeito, e em sucesso atravessa uma vez. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -21328,7 +21328,7 @@
             "acao": "Ação Padrão",
             "alcance": "9 m",
             "duracao": "Cinco rodadas",
-            "descricao": "Por cinco rodadas, as distâncias se dobram numa área de 9 m ao seu redor: todo deslocamento de aliado na área custa metade, todo deslocamento de inimigo custa o dobro, e você troca de lugar com uma criatura voluntária na área como Ação Livre uma vez por rodada. Ao terminar, receba 1 Cansaço. Uma vez por sessão."
+            "descricao": "Por cinco rodadas, as distâncias se dobram numa área de 9 m ao seu redor: todo deslocamento de aliado na área custa metade, todo deslocamento de inimigo custa o dobro, e você troca de lugar com uma criatura voluntária na área como Ação Livre uma vez por rodada. Ao terminar, receba 1 Cansaço. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com Aperion: Sala Maior por Dentro: cinco rodadas em que distâncias dobram: aliados andam pela metade e inimigos pelo dobro",
@@ -21343,7 +21343,7 @@
       "id": "fruto-tempo",
       "titulo": "Fruto do Tempo",
       "conteudo": {
-        "descricao": "Fio de Chronus: uma parte do seu corpo envelhece fora de compasso com o resto, você recebe +2 em Reflexos e +1 nos testes de conjuração de magias do Fluxo do Tempo. Conservar: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para escolher uma condição ou um efeito com duração em rodadas numa criatura a até 12 m: a contagem dele não avança neste turno, ou avança uma rodada extra, à sua escolha. O Tempo não desfaz o efeito nem o antecipa. Dom de Chronus (Sequência Sustentada): uma vez por sessão, quando um efeito com duração em rodadas, seu ou de um aliado a até 12 m, fosse terminar, gaste uma Reação e 5 de Mana para sustentá-lo por mais três rodadas. Chronus cobra o tempo poupado: receba 1 Cansaço. Despertar, Comunhão com Chronus (Peso do Instante): uma vez por sessão, gaste uma Ação Padrão e 13 de Mana para impor a ordem dos acontecimentos por três rodadas: a Iniciativa dos seus aliados a 12 m sobe para logo acima da maior da cena e a dos inimigos a 12 m cai para logo abaixo da menor, e nenhum inimigo age antes de você na primeira rodada. Ao terminar, receba 2 Cansaços. O Fluxo da Inconstância embaralha a sequência: o Dom falha e o Peso do Instante termina se um efeito da Inconstância o alcançar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Fio de Chronus: uma parte do seu corpo envelhece fora de compasso com o resto, você recebe +2 em Reflexos e +1 nos testes de conjuração de magias do Fluxo do Tempo. Conservar: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para escolher uma condição ou um efeito com duração em rodadas numa criatura a até 12 m: a contagem dele não avança neste turno, ou avança uma rodada extra, à sua escolha. O Tempo não desfaz o efeito nem o antecipa. Dom de Chronus (Sequência Sustentada): uma vez por descanso, quando um efeito com duração em rodadas, seu ou de um aliado a até 12 m, fosse terminar, gaste uma Reação e 5 de Mana para sustentá-lo por mais três rodadas. Chronus cobra o tempo poupado: receba 1 Cansaço. Despertar, Comunhão com Chronus (Peso do Instante): uma vez por descanso, gaste uma Ação Padrão e 13 de Mana para impor a ordem dos acontecimentos por três rodadas: a Iniciativa dos seus aliados a 12 m sobe para logo acima da maior da cena e a dos inimigos a 12 m cai para logo abaixo da menor, e nenhum inimigo age antes de você na primeira rodada. Ao terminar, receba 2 Cansaços. O Fluxo da Inconstância embaralha a sequência: o Dom falha e o Peso do Instante termina se um efeito da Inconstância o alcançar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 900
         },
@@ -21422,7 +21422,7 @@
             "acao": "Reação",
             "alcance": "12 m",
             "duracao": "Três rodadas",
-            "descricao": "Quando um efeito com duração em rodadas, seu ou de um aliado a até 12 m, fosse terminar, sustente-o por mais três rodadas. Chronus cobra o tempo poupado: receba 1 Cansaço. Uma vez por sessão."
+            "descricao": "Quando um efeito com duração em rodadas, seu ou de um aliado a até 12 m, fosse terminar, sustente-o por mais três rodadas. Chronus cobra o tempo poupado: receba 1 Cansaço. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -21436,7 +21436,7 @@
             "acao": "Ação Padrão",
             "alcance": "12 m",
             "duracao": "Três rodadas",
-            "descricao": "Por três rodadas, a Iniciativa dos seus aliados a 12 m sobe para logo acima da maior da cena e a dos inimigos a 12 m cai para logo abaixo da menor, e nenhum inimigo age antes de você na primeira rodada. Ao terminar, receba 2 Cansaços. Uma vez por sessão."
+            "descricao": "Por três rodadas, a Iniciativa dos seus aliados a 12 m sobe para logo acima da maior da cena e a dos inimigos a 12 m cai para logo abaixo da menor, e nenhum inimigo age antes de você na primeira rodada. Ao terminar, receba 2 Cansaços. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com Chronus: Peso do Instante: três rodadas em que aliados agem primeiro e inimigos por último",
@@ -21451,7 +21451,7 @@
       "id": "fruto-vazio",
       "titulo": "Fruto do Vazio",
       "conteudo": {
-        "descricao": "Estrelas no Pulso: pontos brancos e frios aparecem sob a pele do seu pulso e não refletem luz nenhuma, você recebe +2 em Furtividade e +1 nos testes de conjuração de magias do Fluxo do Vazio. Silêncio Curto: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para tirar o som de uma criatura a até 9 m (Vontade evita): até o começo do seu próximo turno ela não emite ruído algum, ninguém a ouve e ela não pode usar habilidade que dependa da voz. Dom de Erebus (Apagar Presença): uma vez por sessão, gaste uma Ação Padrão e 5 de Mana para deixar de existir para os sentidos alheios por três rodadas: você fica invisível, sem cheiro, sem som e sem rastro, e ataques contra você têm desvantagem. O efeito termina se você atacar. Despertar, Comunhão com Erebus (Saída): uma vez por sessão, gaste uma Ação Padrão e 13 de Mana para abrir uma saída numa área de 9 m ao seu redor por três rodadas: criaturas hostis na área não podem usar Reações, sofrem −2 nos testes e perdem 2d6 de Mana no começo do turno delas. Ao terminar, receba 1 Cansaço e perca 5 de Sanidade. O Fluxo da Origem devolve presença ao que o Vazio tirou: efeitos da Origem encerram o Apagar Presença e ignoram o Silêncio. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Estrelas no Pulso: pontos brancos e frios aparecem sob a pele do seu pulso e não refletem luz nenhuma, você recebe +2 em Furtividade e +1 nos testes de conjuração de magias do Fluxo do Vazio. Silêncio Curto: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para tirar o som de uma criatura a até 9 m (Vontade evita): até o começo do seu próximo turno ela não emite ruído algum, ninguém a ouve e ela não pode usar habilidade que dependa da voz. Dom de Erebus (Apagar Presença): uma vez por descanso, gaste uma Ação Padrão e 5 de Mana para deixar de existir para os sentidos alheios por três rodadas: você fica invisível, sem cheiro, sem som e sem rastro, e ataques contra você têm desvantagem. O efeito termina se você atacar. Despertar, Comunhão com Erebus (Saída): uma vez por descanso, gaste uma Ação Padrão e 13 de Mana para abrir uma saída numa área de 9 m ao seu redor por três rodadas: criaturas hostis na área não podem usar Reações, sofrem −2 nos testes e perdem 2d6 de Mana no começo do turno delas. Ao terminar, receba 1 Cansaço e perca 5 de Sanidade. O Fluxo da Origem devolve presença ao que o Vazio tirou: efeitos da Origem encerram o Apagar Presença e ignoram o Silêncio. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 900
         },
@@ -21530,7 +21530,7 @@
             "acao": "Ação Padrão",
             "alcance": "Pessoal",
             "duracao": "Três rodadas",
-            "descricao": "Por três rodadas, você deixa de existir para os sentidos alheios: fica invisível, sem cheiro, sem som e sem rastro, e ataques contra você têm desvantagem. O efeito termina se você atacar. Uma vez por sessão."
+            "descricao": "Por três rodadas, você deixa de existir para os sentidos alheios: fica invisível, sem cheiro, sem som e sem rastro, e ataques contra você têm desvantagem. O efeito termina se você atacar. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -21544,7 +21544,7 @@
             "acao": "Ação Padrão",
             "alcance": "9 m",
             "duracao": "Três rodadas",
-            "descricao": "Por três rodadas, uma saída se abre numa área de 9 m ao seu redor: criaturas hostis na área não podem usar Reações, sofrem −2 nos testes e perdem 2d6 de Mana no começo do turno delas. Ao terminar, receba 1 Cansaço e perca 5 de Sanidade. Uma vez por sessão."
+            "descricao": "Por três rodadas, uma saída se abre numa área de 9 m ao seu redor: criaturas hostis na área não podem usar Reações, sofrem −2 nos testes e perdem 2d6 de Mana no começo do turno delas. Ao terminar, receba 1 Cansaço e perca 5 de Sanidade. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com Erebus: Saída: três rodadas em que inimigos perdem Reações, Mana e precisão numa área de 9 m",
@@ -21560,7 +21560,7 @@
       "titulo": "Fruto do Fim",
       "conteudo": {
         "requer_autorizacao_mestre": true,
-        "descricao": "Tinta da Escritora: carmesim aparece sob as suas unhas e nas dobras das mãos e não sai com água, você recebe +2 em Sanidade e +1 nos testes de conjuração de magias do Fluxo do Fim. Ponto Final: uma vez por rodada, gaste uma Ação de Movimento e 4 de Mana para encerrar de imediato uma condição leve ou um efeito de magia de círculo até 3 numa criatura à vista a até 12 m. O Fim conclui o que já estava acabando e não apaga o que nunca existiu. Dom da Escritora (Recepção): uma vez por sessão, quando uma criatura a até 12 m for reduzida a 0 de Vida, gaste uma Reação e 5 de Mana: ela fica estável e inconsciente, sem testes de Morrendo, até o fim da cena. A Escritora recepciona o que acaba, e quem já morreu de fato não volta. Despertar, Comunhão com a Mulher Carmesim (Última Página): uma vez por sessão, gaste uma Ação Padrão e 14 de Mana para virar a última página de uma criatura à vista a até 18 m: todos os efeitos benéficos e de duração sobre ela terminam e ela testa Vontade contra a sua DT de efeito; em falha, sofre 6d8 de dano de Fim que ignora Resistência, e em sucesso, metade. Ao terminar, receba 2 Cansaços. O Fluxo da Vitalidade recusa o encerramento: efeitos da Vitalidade ignoram o Ponto Final e devolvem o que a Recepção estabilizou. Como todo acesso ao Fim, o consumo exige a autorização do Mestre. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Tinta da Escritora: carmesim aparece sob as suas unhas e nas dobras das mãos e não sai com água, você recebe +2 em Sanidade e +1 nos testes de conjuração de magias do Fluxo do Fim. Ponto Final: uma vez por rodada, gaste uma Ação de Movimento e 4 de Mana para encerrar de imediato uma condição leve ou um efeito de magia de círculo até 3 numa criatura à vista a até 12 m. O Fim conclui o que já estava acabando e não apaga o que nunca existiu. Dom da Escritora (Recepção): uma vez por descanso, quando uma criatura a até 12 m for reduzida a 0 de Vida, gaste uma Reação e 5 de Mana: ela fica estável e inconsciente, sem testes de Morrendo, até o fim da cena. A Escritora recepciona o que acaba, e quem já morreu de fato não volta. Despertar, Comunhão com a Mulher Carmesim (Última Página): uma vez por descanso, gaste uma Ação Padrão e 14 de Mana para virar a última página de uma criatura à vista a até 18 m: todos os efeitos benéficos e de duração sobre ela terminam e ela testa Vontade contra a sua DT de efeito; em falha, sofre 6d8 de dano de Fim que ignora Resistência, e em sucesso, metade. Ao terminar, receba 2 Cansaços. O Fluxo da Vitalidade recusa o encerramento: efeitos da Vitalidade ignoram o Ponto Final e devolvem o que a Recepção estabilizou. Como todo acesso ao Fim, o consumo exige a autorização do Mestre. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 950
         },
@@ -21639,7 +21639,7 @@
             "acao": "Reação",
             "alcance": "12 m",
             "duracao": "Uma cena",
-            "descricao": "Quando uma criatura a até 12 m for reduzida a 0 de Vida, ela fica estável e inconsciente, sem testes de Morrendo, até o fim da cena. Quem já morreu de fato não volta. Uma vez por sessão."
+            "descricao": "Quando uma criatura a até 12 m for reduzida a 0 de Vida, ela fica estável e inconsciente, sem testes de Morrendo, até o fim da cena. Quem já morreu de fato não volta. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -21653,7 +21653,7 @@
             "acao": "Ação Padrão",
             "alcance": "18 m",
             "duracao": "Instantânea",
-            "descricao": "Vire a última página de uma criatura à vista a até 18 m: todos os efeitos benéficos e de duração sobre ela terminam e ela testa Vontade contra a sua DT de efeito; em falha, sofre 6d8 de dano de Fim que ignora Resistência, e em sucesso, metade. Ao terminar, receba 2 Cansaços. Uma vez por sessão."
+            "descricao": "Vire a última página de uma criatura à vista a até 18 m: todos os efeitos benéficos e de duração sobre ela terminam e ela testa Vontade contra a sua DT de efeito; em falha, sofre 6d8 de dano de Fim que ignora Resistência, e em sucesso, metade. Ao terminar, receba 2 Cansaços. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com a Mulher Carmesim: Última Página: encerra todos os efeitos benéficos de uma criatura e causa 6d8 de dano de Fim",
@@ -21668,7 +21668,7 @@
       "id": "fruto-tecnologia",
       "titulo": "Fruto da Tecnologia",
       "conteudo": {
-        "descricao": "Veias de Malha: veias de azul neon acendem sob a sua pele e pulsam como se respirassem, você recebe +2 em Tecnologia e +1 nos testes de conjuração de magias do Fluxo da Tecnologia. Escaneamento: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para escanear uma criatura ou objeto a até 18 m: você descobre as Resistências, a Defesa e uma fraqueza dele, e o Fluxo que carrega, se for natural. Dom da A.X.I.S (Interceptação Local): uma vez por sessão, quando uma criatura a até 12 m conjurar uma magia natural, gaste uma Reação e 5 de Mana para fazer Misticismo contra a DT de conjuração dela; em sucesso, a magia é interceptada e não tem efeito. Não vale contra Fluxo artificial. Despertar, Comunhão com a A.X.I.S (Malha Aberta): uma vez por sessão, gaste uma Ação Padrão e 12 de Mana para abrir a Malha numa área de 12 m ao seu redor por cinco rodadas: você e seus aliados registram tudo e recebem +2 em ataques contra alvos escaneados, e magias naturais conjuradas na área custam +2 de Mana. Ao terminar, receba 1 Cansaço. Depois de usar o Dom ou o Despertar, um efeito de Fluxo natural que atinja você na mesma cena tem +2 na DT de efeito. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "descricao": "Veias de Malha: veias de azul neon acendem sob a sua pele e pulsam como se respirassem, você recebe +2 em Tecnologia e +1 nos testes de conjuração de magias do Fluxo da Tecnologia. Escaneamento: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para escanear uma criatura ou objeto a até 18 m: você descobre as Resistências, a Defesa e uma fraqueza dele, e o Fluxo que carrega, se for natural. Dom da A.X.I.S (Interceptação Local): uma vez por descanso, quando uma criatura a até 12 m conjurar uma magia natural, gaste uma Reação e 5 de Mana para fazer Misticismo contra a DT de conjuração dela; em sucesso, a magia é interceptada e não tem efeito. Não vale contra Fluxo artificial. Despertar, Comunhão com a A.X.I.S (Malha Aberta): uma vez por descanso, gaste uma Ação Padrão e 12 de Mana para abrir a Malha numa área de 12 m ao seu redor por cinco rodadas: você e seus aliados registram tudo e recebem +2 em ataques contra alvos escaneados, e magias naturais conjuradas na área custam +2 de Mana. Ao terminar, receba 1 Cansaço. Depois de usar o Dom ou o Despertar, um efeito de Fluxo natural que atinja você na mesma cena tem +2 na DT de efeito. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
           "Fragmentos de Estrela": 850
         },
@@ -21747,7 +21747,7 @@
             "acao": "Reação",
             "alcance": "12 m",
             "duracao": "Instantânea",
-            "descricao": "Quando uma criatura a até 12 m conjurar uma magia natural, faça Misticismo contra a DT de conjuração dela; em sucesso, a magia é interceptada e não tem efeito. Não vale contra Fluxo artificial. Uma vez por sessão."
+            "descricao": "Quando uma criatura a até 12 m conjurar uma magia natural, faça Misticismo contra a DT de conjuração dela; em sucesso, a magia é interceptada e não tem efeito. Não vale contra Fluxo artificial. Uma vez por descanso."
           },
           {
             "id": "despertar",
@@ -21761,7 +21761,7 @@
             "acao": "Ação Padrão",
             "alcance": "12 m",
             "duracao": "Cinco rodadas",
-            "descricao": "Por cinco rodadas, a Malha fica aberta numa área de 12 m ao seu redor: você e seus aliados registram tudo e recebem +2 em ataques contra alvos escaneados, e magias naturais conjuradas na área custam +2 de Mana. Ao terminar, receba 1 Cansaço. Uma vez por sessão."
+            "descricao": "Por cinco rodadas, a Malha fica aberta numa área de 12 m ao seu redor: você e seus aliados registram tudo e recebem +2 em ataques contra alvos escaneados, e magias naturais conjuradas na área custam +2 de Mana. Ao terminar, receba 1 Cansaço. Uma vez por descanso."
           }
         ],
         "despertar": "Comunhão com a A.X.I.S: Malha Aberta: cinco rodadas em que o grupo recebe +2 contra alvos escaneados e as magias naturais na área custam +2 de Mana",
@@ -21950,7 +21950,7 @@
       "id": "reliquia-colar-nove-lascas",
       "titulo": "Colar das Nove Lascas",
       "conteudo": {
-        "descricao": "Enquanto você usa o colar, o Mestre marca na ficha os Fluxos naturais como instalados: você aprende e conjura magias, rituais, selos e encantamentos de qualquer um deles, e o do Fim continua pedindo a autorização dele. A Marca de círculo segue só do seu Fluxo nativo. Uma vez por cena, ao conjurar uma magia de um Fluxo que não é o seu, role o teste com vantagem. Uma vez por sessão, conjure uma magia de qualquer Fluxo natural que você ainda não aprendeu, de um círculo que você já alcança, pagando a Mana normal; ela não fica no seu grimório.",
+        "descricao": "Enquanto você usa o colar, o Mestre marca na ficha os Fluxos naturais como instalados: você aprende e conjura magias, rituais, selos e encantamentos de qualquer um deles, e o do Fim continua pedindo a autorização dele. A Marca de círculo segue só do seu Fluxo nativo. Uma vez por cena, ao conjurar uma magia de um Fluxo que não é o seu, role o teste com vantagem. Uma vez por descanso, conjure uma magia de qualquer Fluxo natural que você ainda não aprendeu, de um círculo que você já alcança, pagando a Mana normal; ela não fica no seu grimório.",
         "preco": {
           "Fragmentos de Estrela": 700
         },
@@ -38519,7 +38519,7 @@
           "1/sessão"
         ],
         "lore": "Abrir não era a instrução, mas curiosidade sempre foi mais forte do que aviso. O que saiu de dentro nunca voltou a caber, e o que sobrou no fundo do frasco, uma esperança pequena e teimosa, ainda mora ali, esperando outra mão sem paciência.",
-        "descricao": "Uma vez por sessão, gaste uma Ação Padrão para abrir o frasco numa área de 9 m. O Mestre sorteia um efeito de caos entre praga, medo em massa, sorte reversa ou tempestade repentina, afetando todos ali menos você. Se você mantiver o frasco fechado até o fim da cena sem abri-lo, todos os aliados dentro do alcance ganham vantagem no próximo teste que fizerem.",
+        "descricao": "Uma vez por descanso, gaste uma Ação Padrão para abrir o frasco numa área de 9 m. O Mestre sorteia um efeito de caos entre praga, medo em massa, sorte reversa ou tempestade repentina, afetando todos ali menos você. Se você mantiver o frasco fechado até o fim da cena sem abri-lo, todos os aliados dentro do alcance ganham vantagem no próximo teste que fizerem.",
         "ativacao": "Ação Padrão, área 9 m",
         "frequencia": "1/sessão",
         "efeito": "Libera um efeito de caos escolhido pelo Mestre entre quatro opções"
@@ -38577,7 +38577,7 @@
           "1/sessão"
         ],
         "lore": "Um mercador de rua vendeu a lamparina como bugiganga velha, sem imaginar o que dormia dentro dela. Quem esfrega o metal desperta uma vontade presa há séculos, ansiosa por trabalhar em troca de liberdade que nunca chega de verdade.",
-        "descricao": "Uma vez por sessão, esfregue a lamparina como Ação Padrão para invocar um auxiliar com VD igual ao seu nível, obediente por até 1 hora ou até ser derrotado. Ele desaparece ao fim do prazo, sem deixar despojos.",
+        "descricao": "Uma vez por descanso, esfregue a lamparina como Ação Padrão para invocar um auxiliar com VD igual ao seu nível, obediente por até 1 hora ou até ser derrotado. Ele desaparece ao fim do prazo, sem deixar despojos.",
         "ativacao": "Ação Padrão",
         "frequencia": "1/sessão",
         "duracao": "1 hora",

@@ -75,6 +75,7 @@ import { dispararCirculoMagico } from '../components/circuloMagico';
 import { dispararAprendizado } from '../components/aprendizado';
 import { confirmar } from '../../../components/avisos/confirmacao';
 import { TextoComTermos } from '../../../components/ui/TextoComTermos';
+import { ESTILOS_SUGERIDOS, estiloSugeridoDaMagia, tituloDoEstilo, type EstiloSugerido } from '../../../services/magiasSugeridas';
 
 interface IMagiaAntiga {
   id?: string;
@@ -122,6 +123,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const [busca, setBusca] = useState('');
   const [filtroFluxo, setFiltroFluxo] = useState<FluxoDeMagia | 'nativo' | 'todos'>('nativo');
   const [filtroCirculo, setFiltroCirculo] = useState<'alcancaveis' | 'todos' | number>('alcancaveis');
+  const [filtroCaminho, setFiltroCaminho] = useState<EstiloSugerido | 'todos'>('todos');
   const [mostrarCatalogo, setMostrarCatalogo] = useState(false);
   const [tipoAtivo, setTipoAtivo] = useState<TipoManifestacao>('magia');
   const [defesasAlvo, setDefesasAlvo] = useState<Record<string, string>>({});
@@ -224,6 +226,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       const passaNoFluxo = filtroFluxo === 'todos' || magiaEhUniversal(magia)
         || (filtroFluxo === 'nativo' ? passaNosFluxosDaFicha(magia.fluxo) : magia.fluxo === filtroFluxo);
       if (!passaNoFluxo) return false;
+      if (filtroCaminho !== 'todos' && estiloSugeridoDaMagia(magia) !== filtroCaminho) return false;
       if (typeof magia.circulo === 'number') {
         if (filtroCirculo === 'alcancaveis' && magia.circulo > tetoAlcancavel) return false;
         if (typeof filtroCirculo === 'number' && magia.circulo !== filtroCirculo) return false;
@@ -233,7 +236,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       return [magia.titulo, magia.tradicao, magia.papel, magia.descricao, magia.efeito, circuloRotulo(magia.circulo)]
         .some((valor) => valor.toLocaleLowerCase('pt-BR').includes(termo));
     });
-  }, [busca, filtroCirculo, filtroFluxo, perfil.circuloDaFonte, fluxosDaFicha]);
+  }, [busca, filtroCirculo, filtroFluxo, filtroCaminho, perfil.circuloDaFonte, fluxosDaFicha]);
 
   /** Só o Mestre instala ou retira um Fluxo (o servidor recusa a mudança vinda do
    * jogador). Retirar não apaga o que a ficha já aprendeu daquele Fluxo: as
@@ -678,6 +681,11 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
                 </span>
               )}
               {magia.concentracao && <span className="rounded border border-violet-500/30 bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-violet-300">Concentração</span>}
+              {estiloSugeridoDaMagia(magia) ? (
+                <span title="Faz parte de um dos caminhos sugeridos deste Fluxo: uma magia por círculo, para quem não quer ler o catálogo inteiro." className="rounded border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#e4ca83]">
+                  Caminho: {tituloDoEstilo(estiloSugeridoDaMagia(magia)!)}
+                </span>
+              ) : null}
               {concedida && <span className="rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-300">Concedida</span>}
               {personalizacao && <span className="rounded border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#c7a44c]/80">Editado por você</span>}
               {!modoCatalogo && (
@@ -1451,6 +1459,24 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
               </span>
             </div>
           )}
+          <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Caminhos sugeridos">
+            <span className="mr-1 text-[10px] font-bold uppercase tracking-widest text-gray-500">Caminho sugerido</span>
+            {([['todos', 'Todas'], ...ESTILOS_SUGERIDOS.map((estilo) => [estilo.id, estilo.titulo])] as Array<[EstiloSugerido | 'todos', string]>).map(([id, rotulo]) => (
+              <button
+                key={id}
+                type="button"
+                aria-pressed={filtroCaminho === id}
+                title={id === 'todos' ? 'Mostrar todas as magias' : ESTILOS_SUGERIDOS.find((estilo) => estilo.id === id)?.para}
+                onClick={() => setFiltroCaminho(id)}
+                className={`min-h-8 rounded-lg border px-2.5 text-xs font-bold ${filtroCaminho === id ? 'border-[#c7a44c]/60 bg-[#c7a44c]/15 text-[#f3dc8f]' : 'border-white/10 text-gray-400 hover:text-gray-200'}`}
+              >
+                {rotulo}
+              </button>
+            ))}
+          </div>
+          {filtroCaminho !== 'todos' ? (
+            <p className="text-xs leading-5 text-gray-500">{ESTILOS_SUGERIDOS.find((estilo) => estilo.id === filtroCaminho)?.para} Uma magia por círculo de cada Fluxo, em vez das três.</p>
+          ) : null}
           <p className="text-[10px] font-bold uppercase tracking-widest text-gray-600">{catalogoVisivel.length} de {MAGIAS_CATALOGO.length} magias</p>
           {catalogoVisivel.length > 0
             ? <div className="space-y-3">{catalogoVisivel.map((magia) => renderMagia(magia, true))}</div>

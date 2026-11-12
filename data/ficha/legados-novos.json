@@ -262,7 +262,7 @@
     {
       "id": "eu-ja-vi-isso",
       "titulo": "Eu Já Vi Isso",
-      "descricao": "Uma vez por sessão, ao encontrar uma criatura que o grupo já enfrentou, receba vantagem no primeiro ataque e na primeira resistência contra ela.",
+      "descricao": "Uma vez por descanso, ao encontrar uma criatura que o grupo já enfrentou, receba vantagem no primeiro ataque e na primeira resistência contra ela.",
       "pre_requisitos": [
         {
           "nivel_personagem": 30
@@ -484,7 +484,7 @@
     {
       "id": "coracao-de-muitas-vidas",
       "titulo": "Coração de Muitas Vidas",
-      "descricao": "Uma vez por sessão, ao chegar a 0 de Vida, fique com metade da Vida máxima em vez de cair.",
+      "descricao": "Uma vez por descanso, ao chegar a 0 de Vida, fique com metade da Vida máxima em vez de cair.",
       "pre_requisitos": [
         {
           "nivel_personagem": 60
@@ -832,7 +832,7 @@
     {
       "id": "tempo-emprestado",
       "titulo": "Tempo Emprestado",
-      "descricao": "Uma vez por sessão, encerre a rodada atual e comece uma nova antes de qualquer outra criatura agir. Depois, receba 2 de Cansaço.",
+      "descricao": "Uma vez por descanso, encerre a rodada atual e comece uma nova antes de qualquer outra criatura agir. Depois, receba 2 de Cansaço.",
       "pre_requisitos": [
         {
           "nivel_personagem": 200
@@ -895,7 +895,7 @@
     {
       "id": "golpe-sem-resposta",
       "titulo": "Golpe sem Resposta",
-      "descricao": "Uma vez por sessão, um ataque seu atinge automaticamente e causa o dobro do dano máximo dos dados.",
+      "descricao": "Uma vez por descanso, um ataque seu atinge automaticamente e causa o dobro do dano máximo dos dados.",
       "pre_requisitos": [
         {
           "nivel_personagem": 250
@@ -910,7 +910,7 @@
     {
       "id": "magia-sem-nome",
       "titulo": "Magia sem Nome",
-      "descricao": "Uma vez por sessão, conjure uma magia de qualquer Fluxo que você conjura, de círculo até o seu máximo, sem tê-la aprendido. O Mestre decide o efeito exato.",
+      "descricao": "Uma vez por descanso, conjure uma magia de qualquer Fluxo que você conjura, de círculo até o seu máximo, sem tê-la aprendido. O Mestre decide o efeito exato.",
       "pre_requisitos": [
         {
           "nivel_personagem": 250
@@ -940,7 +940,7 @@
     {
       "id": "o-que-nao-cai",
       "titulo": "O Que Não Cai",
-      "descricao": "Uma vez por sessão, ao receber um dano que o levaria a 0 de Vida, fique com 1 de Vida e recupere um décimo do seu nível total em Vida no fim do turno seguinte.",
+      "descricao": "Uma vez por descanso, ao receber um dano que o levaria a 0 de Vida, fique com 1 de Vida e recupere um décimo do seu nível total em Vida no fim do turno seguinte.",
       "pre_requisitos": [
         {
           "nivel_personagem": 300
@@ -981,7 +981,7 @@
     {
       "id": "tres-rodadas-de-folga",
       "titulo": "Três Rodadas de Folga",
-      "descricao": "Uma vez por sessão, escolha três criaturas: nas próximas 3 rodadas, cada uma delas age por último na iniciativa, independentemente do valor dela.",
+      "descricao": "Uma vez por descanso, escolha três criaturas: nas próximas 3 rodadas, cada uma delas age por último na iniciativa, independentemente do valor dela.",
       "pre_requisitos": [
         {
           "nivel_personagem": 300
@@ -992,7 +992,7 @@
     {
       "id": "peso-de-um-patamar",
       "titulo": "Peso de um Patamar",
-      "descricao": "Uma vez por sessão, escolha uma criatura de nível menor que o seu. Ela não pode atacar você até o fim da cena, a não ser que você a ataque primeiro.",
+      "descricao": "Uma vez por descanso, escolha uma criatura de nível menor que o seu. Ela não pode atacar você até o fim da cena, a não ser que você a ataque primeiro.",
       "pre_requisitos": [
         {
           "nivel_personagem": 400
@@ -1014,7 +1014,7 @@
     {
       "id": "vontade-do-jardim",
       "titulo": "Vontade do Jardim",
-      "descricao": "Uma vez por sessão, anule um efeito de Fluxo em alcance Longo, ativo ou prestes a ser conjurado, de círculo até o seu máximo. Não afeta Domínio de Deidade.",
+      "descricao": "Uma vez por descanso, anule um efeito de Fluxo em alcance Longo, ativo ou prestes a ser conjurado, de círculo até o seu máximo. Não afeta Domínio de Deidade.",
       "pre_requisitos": [
         {
           "nivel_personagem": 400
@@ -1062,7 +1062,7 @@
     {
       "id": "ultima-palavra-do-fluxo",
       "titulo": "Última Palavra do Fluxo",
-      "descricao": "Uma vez por sessão, uma magia sua, de qualquer círculo que você conjure, não pode ser resistida nem anulada por efeito de nível menor que o seu.",
+      "descricao": "Uma vez por descanso, uma magia sua, de qualquer círculo que você conjure, não pode ser resistida nem anulada por efeito de nível menor que o seu.",
       "pre_requisitos": [
         {
           "nivel_personagem": 500

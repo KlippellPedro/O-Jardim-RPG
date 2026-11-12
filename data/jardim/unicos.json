@@ -174,7 +174,7 @@
     "acao": "Ação Padrão",
     "alcance": "18 m para formar; sem limite depois",
     "duracao": "Até ser desfeito",
-    "usos": "Uma vez por sessão para formar o vínculo",
+    "usos": "Uma vez por descanso para formar o vínculo",
     "descricao": "Você amarra sua sorte à de até três aliados, e essa amarra não se importa com distância. Enquanto o vínculo durar, sempre que um deles for reduzido a 0 de Vida na mesma cena que você, gaste sua reação para reduzir pela metade o dano que ele recebeu, sofrendo o restante você mesmo."
   },
   {
@@ -217,7 +217,7 @@
     "alcance": "6 m de raio ao seu redor",
     "duracao": "1 hora ou até sofrer dano",
     "defesa": "Vontade contra DT 8 + seu maior modificador + metade do seu nível (só para hostis)",
-    "usos": "Uma vez por sessão",
+    "usos": "Uma vez por descanso",
     "descricao": "Uma canção sem letra passa pela área e o corpo entende antes da mente resistir. Aliados na área adormecem se quiserem, sem teste; inimigos que falharem em Vontade adormecem profundamente até sofrerem dano ou passar uma hora."
   },
   {
@@ -231,7 +231,7 @@
     "alcance": "9 m de raio ao seu redor",
     "duracao": "3 rodadas",
     "dano": "Acerto automático; dano máximo do dado uma vez por rodada",
-    "usos": "Uma vez por sessão; ao terminar, ganhe 2 níveis de Cansaço",
+    "usos": "Uma vez por descanso; ao terminar, ganhe 2 níveis de Cansaço",
     "descricao": "Por três rodadas, o espaço ao seu redor para de obedecer às regras de todo mundo e passa a obedecer só as suas. Nada que estiver preso dentro consegue sair pelos próprios meios, você incluído, e todo ataque seu contra um alvo preso ali dentro acerta sem precisar rolar, com o dano máximo do dado uma vez por rodada. Quando o território fecha, o preço cai sobre você de uma vez: 2 níveis de Cansaço."
   },
   {
@@ -257,7 +257,7 @@
     "acao": "Ação Padrão",
     "alcance": "12 m",
     "duracao": "Até o fim da cena",
-    "usos": "Uma vez por sessão",
+    "usos": "Uma vez por descanso",
     "descricao": "Você abre mão de ter um corpo só seu por uma cena. Escolha até quatro aliados em alcance: pelo resto da cena, todo dano que qualquer um de vocês sofrer é dividido em partes iguais entre todos os vinculados que ainda estiverem de pé, arredondado para cima."
   },
   {
@@ -272,7 +272,7 @@
     "duracao": "Instantânea",
     "defesa": "Fortitude contra DT 8 + seu maior modificador + metade do seu nível",
     "dano": "6d12 de dano verdadeiro; metade em sucesso",
-    "usos": "Uma vez por sessão",
+    "usos": "Uma vez por descanso",
     "descricao": "Alguma coisa em você nunca comeu o suficiente, e por um segundo ela decide a mesa toda. Cada criatura na área sofre 6d12 de dano verdadeiro, metade em caso de sucesso em Fortitude, e você recupera Vida igual a um quarto do dano total causado a todos os alvos."
   },
   {
@@ -422,7 +422,7 @@
     "acao": "Reação",
     "alcance": "9 m",
     "duracao": "3 rodadas",
-    "usos": "Uma vez por sessão",
+    "usos": "Uma vez por descanso",
     "descricao": "Você recusa o fim de alguém por mais um pouco. Quando um aliado a até 9 m cairia a 0 de Vida, ele continua de pé e agindo por 3 rodadas, sem falhar em testes de morte. Passado esse tempo, ele cai de verdade."
   },
   {
@@ -544,7 +544,7 @@
     "duracao": "3 rodadas",
     "defesa": "Fortitude contra DT 8 + seu maior modificador + metade do seu nível",
     "dano": "4d12; metade em sucesso",
-    "usos": "Uma vez por sessão; ao terminar, ganhe 1 nível de Cansaço",
+    "usos": "Uma vez por descanso; ao terminar, ganhe 1 nível de Cansaço",
     "descricao": "Um único golpe abre o terreno como quem rasga um pano. Quem estiver na linha sofre 4d12 de dano, com metade em caso de sucesso em Fortitude. O campo se parte em dois lados por 3 rodadas, e só quem voa consegue passar de um para o outro."
   },
   {

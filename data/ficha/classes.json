@@ -489,14 +489,14 @@
       {
         "id": "senhor-da-guerra",
         "titulo": "Senhor da Guerra",
-        "descricao": "Uma vez por sessão, use uma Ação Padrão para comandar por três rodadas. Você e até quatro aliados do Batalhão em alcance de 12 metros recebem +2 em Ataque e Defesa, imunidade a Amedrontado e +1 dado de dano no primeiro acerto de cada turno.",
+        "descricao": "Uma vez por descanso, use uma Ação Padrão para comandar por três rodadas. Você e até quatro aliados do Batalhão em alcance de 12 metros recebem +2 em Ataque e Defesa, imunidade a Amedrontado e +1 dado de dano no primeiro acerto de cada turno.",
         "niveis": [
           20
         ],
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -939,10 +939,10 @@
           {
             "nivel": 20,
             "titulo": "Modo Sobrevivente",
-            "descricao": "O bônus sobe para +5. Uma vez por sessão, ligue o modo sobrevivente por uma cena: o veículo recebe +2 de Defesa, vantagem nos testes de perseguição e ignora qualquer penalidade de terreno.",
+            "descricao": "O bônus sobe para +5. Uma vez por descanso, ligue o modo sobrevivente por uma cena: o veículo recebe +2 de Defesa, vantagem nos testes de perseguição e ignora qualquer penalidade de terreno.",
             "acao": "Ação Livre",
             "duracao": "Uma cena",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           }
         ]
       },
@@ -1114,13 +1114,13 @@
       {
         "id": "as-impossivel",
         "titulo": "Ás Impossível",
-        "descricao": "Uma vez por sessão, enquanto conduz um veículo ou montaria, ative esta habilidade sem gastar ação. Por três rodadas, o veículo recebe +4 em Defesa, reduz em 5 o dano de cada golpe que sofre e ignora terreno difícil. Em cada um de seus turnos, você recebe uma Ação de Movimento adicional exclusiva para manobras veiculares. Na primeira vez que o veículo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
+        "descricao": "Uma vez por descanso, enquanto conduz um veículo ou montaria, ative esta habilidade sem gastar ação. Por três rodadas, o veículo recebe +4 em Defesa, reduz em 5 o dano de cada golpe que sofre e ignora terreno difícil. Em cada um de seus turnos, você recebe uma Ação de Movimento adicional exclusiva para manobras veiculares. Na primeira vez que o veículo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
         "niveis": [
           20
         ],
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -1650,13 +1650,13 @@
       {
         "id": "sombra-suprema",
         "titulo": "Sombra Suprema",
-        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, seu deslocamento não provoca reações e o primeiro ataque que realizar em cada turno recebe vantagem e +2 dados de dano. No início de cada turno, até realizar uma ação hostil, você não pode ser escolhido como alvo direto por criaturas que não consigam detectá-lo por um sentido especial. Uma vez durante o efeito, use uma Reação para transformar um acerto contra você em erro.",
+        "descricao": "Uma vez por descanso, ative esta habilidade sem gastar ação. Por três rodadas, seu deslocamento não provoca reações e o primeiro ataque que realizar em cada turno recebe vantagem e +2 dados de dano. No início de cada turno, até realizar uma ação hostil, você não pode ser escolhido como alvo direto por criaturas que não consigam detectá-lo por um sentido especial. Uma vez durante o efeito, use uma Reação para transformar um acerto contra você em erro.",
         "niveis": [
           20
         ],
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -2286,14 +2286,14 @@
       {
         "id": "estrela-eterna",
         "titulo": "Estrela Eterna",
-        "descricao": "Uma vez por sessão, use uma Ação Completa para iniciar uma apresentação que dura três rodadas. Todos os aliados que possam ver ou ouvir você recebem 8 de Mana temporária e 8 de Estamina temporária, vantagem no primeiro teste de cada turno e imunidade a Amedrontado enquanto durar a apresentação. Uma vez durante o efeito, quando um desses aliados cair a 0 de Vida, ele permanece com 1 de Vida. A Mana e a Estamina temporárias desaparecem ao fim da cena e não se acumulam.",
+        "descricao": "Uma vez por descanso, use uma Ação Completa para iniciar uma apresentação que dura três rodadas. Todos os aliados que possam ver ou ouvir você recebem 8 de Mana temporária e 8 de Estamina temporária, vantagem no primeiro teste de cada turno e imunidade a Amedrontado enquanto durar a apresentação. Uma vez durante o efeito, quando um desses aliados cair a 0 de Vida, ele permanece com 1 de Vida. A Mana e a Estamina temporárias desaparecem ao fim da cena e não se acumulam.",
         "niveis": [
           20
         ],
         "acao": "Ação Completa",
         "alcance": "Quem enxerga ou escuta você",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -2713,11 +2713,11 @@
           {
             "nivel": 20,
             "titulo": "Golpe Perfeito",
-            "descricao": "Uma vez por sessão, antes de atacar, declare Golpe Perfeito: se acertar, os dados de dano causam o valor máximo; se errar, o uso é gasto.",
+            "descricao": "Uma vez por descanso, antes de atacar, declare Golpe Perfeito: se acertar, os dados de dano causam o valor máximo; se errar, o uso é gasto.",
             "acao": "Ação Livre",
             "momento": "antes do ataque",
             "dano": "Valor máximo dos dados, se acertar",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           }
         ]
       },
@@ -2821,14 +2821,14 @@
       {
         "id": "espirito-da-espada",
         "titulo": "Espírito da Espada",
-        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação enquanto empunha a espada vinculada por Arte da Espada. Por três rodadas, seus ataques com ela ignoram metade da Resistência do alvo, recebem +2 dados de dano e permitem mover 3 metros após cada acerto sem provocar reações. Uma vez por rodada, você pode repetir um ataque que errou.",
+        "descricao": "Uma vez por descanso, ative esta habilidade sem gastar ação enquanto empunha a espada vinculada por Arte da Espada. Por três rodadas, seus ataques com ela ignoram metade da Resistência do alvo, recebem +2 dados de dano e permitem mover 3 metros após cada acerto sem provocar reações. Uma vez por rodada, você pode repetir um ataque que errou.",
         "niveis": [
           20
         ],
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
         "dano": "+2 dados, ignora metade da Resistência",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -3279,11 +3279,11 @@
           {
             "nivel": 20,
             "titulo": "Aquele Golpe",
-            "descricao": "Uma vez por sessão, ao tirar crítico num ataque desarmado, gaste 8 de Estamina para rolar os dados de dano duas vezes e ignorar metade da Resistência do alvo. Pelas duas rodadas seguintes você recebe +2 em ataques e em Defesa.",
+            "descricao": "Uma vez por descanso, ao tirar crítico num ataque desarmado, gaste 8 de Estamina para rolar os dados de dano duas vezes e ignorar metade da Resistência do alvo. Pelas duas rodadas seguintes você recebe +2 em ataques e em Defesa.",
             "custo_estamina": 8,
             "acao": "Ação Livre",
             "momento": "no crítico",
-            "usos": "Uma vez por sessão, 8 Estamina"
+            "usos": "Uma vez por descanso, 8 Estamina"
           }
         ]
       },
@@ -3463,14 +3463,14 @@
       {
         "id": "kokusen",
         "titulo": "Kokusen",
-        "descricao": "Uma vez por sessão, ative esta habilidade após acertar um ataque desarmado, sem gastar ação. Por três rodadas, seus ataques desarmados recebem +2 dados de dano, ignoram metade da Resistência do alvo e obtêm acerto crítico com resultado natural 19 ou 20. O primeiro acerto crítico de cada rodada recupera 2 de Estamina.",
+        "descricao": "Uma vez por descanso, ative esta habilidade após acertar um ataque desarmado, sem gastar ação. Por três rodadas, seus ataques desarmados recebem +2 dados de dano, ignoram metade da Resistência do alvo e obtêm acerto crítico com resultado natural 19 ou 20. O primeiro acerto crítico de cada rodada recupera 2 de Estamina.",
         "niveis": [
           20
         ],
         "acao": "Ação Livre",
         "momento": "depois de acertar",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -4016,12 +4016,12 @@
       {
         "id": "um-so-disparo",
         "titulo": "Um Só Disparo",
-        "descricao": "Uma vez por sessão, use uma Ação Completa para realizar um ataque à distância contra um alvo que possa perceber. Esse ataque recebe vantagem, ignora cobertura e Resistência, e conta como crítico, usando o multiplicador da arma. O ataque ainda exige munição e pode errar.",
+        "descricao": "Uma vez por descanso, use uma Ação Completa para realizar um ataque à distância contra um alvo que possa perceber. Esse ataque recebe vantagem, ignora cobertura e Resistência, e conta como crítico, usando o multiplicador da arma. O ataque ainda exige munição e pode errar.",
         "niveis": [
           20
         ],
         "acao": "Ação Completa",
-        "usos": "Uma vez por sessão",
+        "usos": "Uma vez por descanso",
         "dano": "Conta como crítico, com o multiplicador da arma"
       }
     ],
@@ -4417,11 +4417,11 @@
           {
             "nivel": 20,
             "titulo": "Último Recurso",
-            "descricao": "Uma vez por sessão, gaste 10 Mana e uma Ação Completa para fazer um aliado a 6 m recuperar metade da Vida máxima e encerrar uma condição grave que possa ser tratada.",
+            "descricao": "Uma vez por descanso, gaste 10 Mana e uma Ação Completa para fazer um aliado a 6 m recuperar metade da Vida máxima e encerrar uma condição grave que possa ser tratada.",
             "custo_mana": 10,
             "acao": "Ação Completa",
             "alcance": "6 m",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           }
         ],
         "escolha_opcoes": {
@@ -4620,7 +4620,7 @@
       {
         "id": "mestre-da-vida",
         "titulo": "Mestre da Vida",
-        "descricao": "Uma vez por sessão, use uma Ação Completa e gaste 10 de Mana. Por três rodadas, nenhum aliado a até 12 m de você morre: quem morreria fica com 1 de Vida, e quem estiver a 0 de Vida se levanta com 1 de Vida no começo do próprio turno. Ao ativar, cada aliado na área recupera 4d8 + Mod. Sabedoria de Vida e encerra uma condição que Cura possa tratar. Esta habilidade não ressuscita mortos.",
+        "descricao": "Uma vez por descanso, use uma Ação Completa e gaste 10 de Mana. Por três rodadas, nenhum aliado a até 12 m de você morre: quem morreria fica com 1 de Vida, e quem estiver a 0 de Vida se levanta com 1 de Vida no começo do próprio turno. Ao ativar, cada aliado na área recupera 4d8 + Mod. Sabedoria de Vida e encerra uma condição que Cura possa tratar. Esta habilidade não ressuscita mortos.",
         "custo_mana": 10,
         "niveis": [
           20
@@ -4628,7 +4628,7 @@
         "acao": "Ação Completa",
         "alcance": "12 m",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão",
+        "usos": "Uma vez por descanso",
         "dano": "4d8 + Mod. Sabedoria de Vida"
       }
     ],
@@ -5008,18 +5008,18 @@
           {
             "nivel": 15,
             "titulo": "Vigília",
-            "descricao": "Uma vez por sessão, por uma cena, você e o protegido recebem +2 de Defesa enquanto estiverem a até 1,5 m um do outro. Aprenda mais um Juramento de Guarda.",
+            "descricao": "Uma vez por descanso, por uma cena, você e o protegido recebem +2 de Defesa enquanto estiverem a até 1,5 m um do outro. Aprenda mais um Juramento de Guarda.",
             "acao": "Ação Livre",
             "duracao": "Uma cena",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           },
           {
             "nivel": 20,
             "titulo": "Último Laço",
-            "descricao": "Escolha um aliado voluntário após descanso completo. Uma vez por sessão, quando um dos dois cair a 0 Vida, o outro pode gastar 8 Estamina para deixá-lo com 1 Vida; o vínculo então termina. Aprenda o último Juramento de Guarda.",
+            "descricao": "Escolha um aliado voluntário após descanso completo. Uma vez por descanso, quando um dos dois cair a 0 Vida, o outro pode gastar 8 Estamina para deixá-lo com 1 Vida; o vínculo então termina. Aprenda o último Juramento de Guarda.",
             "acao": "Reação",
             "duracao": "Até ser usado ou até o próximo descanso completo",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           }
         ],
         "escolha_opcoes": {
@@ -5198,14 +5198,14 @@
       {
         "id": "coracao-unificado",
         "titulo": "Coração Unificado",
-        "descricao": "Uma vez por sessão, use uma Ação Padrão para proteger você e até cinco aliados em alcance de 12 metros por três rodadas. Os alvos reduzem em 10 o dano de cada golpe que sofrerem. Uma vez por rodada, você pode usar uma Reação para receber no lugar de um desses aliados todo o dano de um ataque. Na primeira vez que cada alvo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
+        "descricao": "Uma vez por descanso, use uma Ação Padrão para proteger você e até cinco aliados em alcance de 12 metros por três rodadas. Os alvos reduzem em 10 o dano de cada golpe que sofrerem. Uma vez por rodada, você pode usar uma Reação para receber no lugar de um desses aliados todo o dano de um ataque. Na primeira vez que cada alvo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
         "niveis": [
           20
         ],
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -5600,9 +5600,9 @@
           {
             "nivel": 20,
             "titulo": "Caça Lendária",
-            "descricao": "Uma vez por sessão, trate por uma cena uma criatura que já derrotou como se fosse presa especializada e converta um acerto em crítico, uma única vez.",
+            "descricao": "Uma vez por descanso, trate por uma cena uma criatura que já derrotou como se fosse presa especializada e converta um acerto em crítico, uma única vez.",
             "acao": "Ação Livre",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           }
         ],
         "escolha_opcoes": {
@@ -5922,8 +5922,8 @@
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Uma cena",
-            "usos": "Uma vez por sessão",
-            "descricao": "Uma vez por sessão, você e mais um aliado recebem vantagem no primeiro ataque contra a presa marcada por Presa ou Marca do Caçador.",
+            "usos": "Uma vez por descanso",
+            "descricao": "Uma vez por descanso, você e mais um aliado recebem vantagem no primeiro ataque contra a presa marcada por Presa ou Marca do Caçador.",
             "escalonamento": "Nível 2: vale para você e mais dois aliados. Nível 3: o efeito dura a cena inteira, não só o primeiro ataque. Nível 4: vale para o grupo inteiro."
           },
           {
@@ -5992,14 +5992,14 @@
       {
         "id": "predador-perfeito",
         "titulo": "Predador Perfeito",
-        "descricao": "Uma vez por sessão, use uma Ação de Movimento para marcar uma criatura que possa perceber. Por três rodadas, seus ataques contra ela recebem +2 dados de dano, obtêm acerto crítico com resultado natural 18, 19 ou 20 (em arma x3 ou x4, o crítico continua no 20 e causa +2 dados) e ignoram até 10 pontos de Resistência. Durante o efeito, você conhece a direção e a distância do alvo enquanto ele permanecer na mesma dimensão.",
+        "descricao": "Uma vez por descanso, use uma Ação de Movimento para marcar uma criatura que possa perceber. Por três rodadas, seus ataques contra ela recebem +2 dados de dano, obtêm acerto crítico com resultado natural 18, 19 ou 20 (em arma x3 ou x4, o crítico continua no 20 e causa +2 dados) e ignoram até 10 pontos de Resistência. Durante o efeito, você conhece a direção e a distância do alvo enquanto ele permanecer na mesma dimensão.",
         "niveis": [
           20
         ],
         "acao": "Ação de Movimento",
         "duracao": "Três rodadas",
         "dano": "+2 dados, ignora até 10 de Resistência",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -6811,14 +6811,14 @@
       {
         "id": "engenho-divino",
         "titulo": "Engenho Divino",
-        "descricao": "Uma vez por sessão, use uma Ação Completa para montar um engenho num espaço livre a até 6 metros. Ele fica parado onde foi montado, dura três rodadas, tem Defesa igual à sua e Vida igual a 10 vezes seu nível. Ao criá-lo, escolha um modo: Artilharia causa 4d12 de dano de raio a um alvo em até 24 metros no fim de cada um de seus turnos; Bastião concede +4 de Defesa a aliados em até 6 metros, e eles reduzem em 10 o dano de cada golpe; Reparação recupera 3d10 de Vida de até três itens, construtos ou veículos em até 6 metros no fim de cada um de seus turnos.",
+        "descricao": "Uma vez por descanso, use uma Ação Completa para montar um engenho num espaço livre a até 6 metros. Ele fica parado onde foi montado, dura três rodadas, tem Defesa igual à sua e Vida igual a 10 vezes seu nível. Ao criá-lo, escolha um modo: Artilharia causa 4d12 de dano de raio a um alvo em até 24 metros no fim de cada um de seus turnos; Bastião concede +4 de Defesa a aliados em até 6 metros, e eles reduzem em 10 o dano de cada golpe; Reparação recupera 3d10 de Vida de até três itens, construtos ou veículos em até 6 metros no fim de cada um de seus turnos.",
         "niveis": [
           20
         ],
         "acao": "Ação Completa",
         "alcance": "6 m para montar, 24 m de tiro",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -7520,13 +7520,13 @@
       {
         "id": "pedra-filosofal",
         "titulo": "Pedra Filosofal",
-        "descricao": "Uma vez por sessão, use uma Ação Completa para produzir um dos efeitos: Panaceia faz até cinco criaturas em alcance de 12 metros encerrarem todas as condições que estiverem sofrendo, menos as de longo prazo, e ficarem imunes a veneno, doença e Enjoado até o fim da cena; Reconstrução devolve à vida uma criatura que morreu desde o fim de seu turno anterior, com metade da Vida máxima, 0 de Mana e 0 de Estamina, e ela paga o preço de Voltar da morte, em Ferimentos. A transmutação de matéria fica com a Transmutação Mestra, do nível 18.",
+        "descricao": "Uma vez por descanso, use uma Ação Completa para produzir um dos efeitos: Panaceia faz até cinco criaturas em alcance de 12 metros encerrarem todas as condições que estiverem sofrendo, menos as de longo prazo, e ficarem imunes a veneno, doença e Enjoado até o fim da cena; Reconstrução devolve à vida uma criatura que morreu desde o fim de seu turno anterior, com metade da Vida máxima, 0 de Mana e 0 de Estamina, e ela paga o preço de Voltar da morte, em Ferimentos. A transmutação de matéria fica com a Transmutação Mestra, do nível 18.",
         "niveis": [
           20
         ],
         "acao": "Ação Completa",
         "alcance": "12 m",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -8599,19 +8599,19 @@
           {
             "nivel": 15,
             "titulo": "Melhor Forma",
-            "descricao": "Por três rodadas, uma vez por sessão, receba +2 de Defesa, +1 dado de dano físico e imunidade a Paralisado. O dado extra é fixo: não se soma a outro bônus de dado da mesma fonte.",
+            "descricao": "Por três rodadas, uma vez por descanso, receba +2 de Defesa, +1 dado de dano físico e imunidade a Paralisado. O dado extra é fixo: não se soma a outro bônus de dado da mesma fonte.",
             "acao": "Ação Livre",
             "duracao": "Três rodadas",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           },
           {
             "nivel": 20,
             "titulo": "Último Round",
-            "descricao": "Uma vez por sessão, ao cair a 0 de Vida, permaneça com 1 de Vida e cause 4d12 de dano verdadeiro a inimigos em 6 m; depois, receba 2 Cansaços.",
+            "descricao": "Uma vez por descanso, ao cair a 0 de Vida, permaneça com 1 de Vida e cause 4d12 de dano verdadeiro a inimigos em 6 m; depois, receba 2 Cansaços.",
             "acao": "Passivo",
             "alcance": "6 m",
             "dano": "4d12 verdadeiro",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           }
         ]
       },
@@ -8694,25 +8694,25 @@
       {
         "id": "trono-da-dimensao",
         "titulo": "Trono da Dimensão",
-        "descricao": "Uma vez por sessão, por duas rodadas, seus danos físicos ignoram 10 de Resistência e inimigos a 6 m sofrem −2 em testes físicos.",
+        "descricao": "Uma vez por descanso, por duas rodadas, seus danos físicos ignoram 10 de Resistência e inimigos a 6 m sofrem −2 em testes físicos.",
         "niveis": [
           18
         ],
         "acao": "Ação Livre",
         "alcance": "6 m",
         "duracao": "Duas rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       },
       {
         "id": "pilar-da-dimensao",
         "titulo": "Pilar da Dimensão",
-        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você recebe +4 em Ataque e Defesa, reduz em 10 o dano de cada golpe que sofre e causa +2 dados de dano físico. Você não pode ser derrubado nem movido contra a vontade. Na primeira vez que chegaria a 0 de Vida durante o efeito, permanece com 1 de Vida.",
+        "descricao": "Uma vez por descanso, ative esta habilidade sem gastar ação. Por três rodadas, você recebe +4 em Ataque e Defesa, reduz em 10 o dano de cada golpe que sofre e causa +2 dados de dano físico. Você não pode ser derrubado nem movido contra a vontade. Na primeira vez que chegaria a 0 de Vida durante o efeito, permanece com 1 de Vida.",
         "niveis": [
           20
         ],
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -9380,7 +9380,7 @@
       {
         "id": "senhor-das-profundezas",
         "titulo": "Senhor das Profundezas",
-        "descricao": "Uma vez por sessão, use uma Ação Padrão para criar uma tempestade de 12 m de raio ao seu redor. Ela dura três rodadas. No começo do próprio turno, cada inimigo na área testa Fortitude contra a DT da Maldição: em falha, sofre 4d12 de dano de Água e fica Caído; em sucesso, sofre metade e fica de pé. Seus aliados não são afetados. Você recupera Vida igual à metade do dano causado pela tempestade, até o máximo de 20 de Vida por rodada.",
+        "descricao": "Uma vez por descanso, use uma Ação Padrão para criar uma tempestade de 12 m de raio ao seu redor. Ela dura três rodadas. No começo do próprio turno, cada inimigo na área testa Fortitude contra a DT da Maldição: em falha, sofre 4d12 de dano de Água e fica Caído; em sucesso, sofre metade e fica de pé. Seus aliados não são afetados. Você recupera Vida igual à metade do dano causado pela tempestade, até o máximo de 20 de Vida por rodada.",
         "niveis": [
           20
         ],
@@ -9389,7 +9389,7 @@
         "duracao": "Três rodadas",
         "defesa": "Fortitude contra a DT da Maldição",
         "dano": "4d12 de Água",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -9952,13 +9952,13 @@
       {
         "id": "arcano-absoluto",
         "titulo": "Arcano Absoluto",
-        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você joga duas cartas em cada turno, que podem ser a mesma, e a primeira carta jogada no turno custa 0 de Mana. Ataques de carta (arremessos e magias de ataque) obtêm acerto crítico com 19 ou 20 natural.",
+        "descricao": "Uma vez por descanso, ative esta habilidade sem gastar ação. Por três rodadas, você joga duas cartas em cada turno, que podem ser a mesma, e a primeira carta jogada no turno custa 0 de Mana. Ataques de carta (arremessos e magias de ataque) obtêm acerto crítico com 19 ou 20 natural.",
         "niveis": [
           20
         ],
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -10407,8 +10407,8 @@
             "titulo": "Âncora de Emergência",
             "acao": "Reação",
             "duracao": "Instantâneo",
-            "usos": "Uma vez por sessão",
-            "descricao": "Uma vez por sessão, quando você cai a 0 de Vida, seja transportado na hora para essa âncora, se ela ainda existir.",
+            "usos": "Uma vez por descanso",
+            "descricao": "Uma vez por descanso, quando você cai a 0 de Vida, seja transportado na hora para essa âncora, se ela ainda existir.",
             "alcance": "Pessoal"
           }
         ]
@@ -11086,7 +11086,7 @@
       {
         "id": "bankai",
         "titulo": "Bankai",
-        "descricao": "Uma vez por sessão, use uma Ação Livre e pronuncie Bankai seguida do nome completo da sua Zanpakutō. O Shikai é ativado sem custo e, por três rodadas, seus ataques com a Zanpakutō recebem +2, ignoram metade da Resistência do alvo e o primeiro acerto de cada turno causa +2 dados de dano. Aplique também a evolução de Bankai do Aspecto da Zanpakutō escolhido. Quando o efeito termina, o Shikai também termina e não pode ser ativado novamente neste combate.",
+        "descricao": "Uma vez por descanso, use uma Ação Livre e pronuncie Bankai seguida do nome completo da sua Zanpakutō. O Shikai é ativado sem custo e, por três rodadas, seus ataques com a Zanpakutō recebem +2, ignoram metade da Resistência do alvo e o primeiro acerto de cada turno causa +2 dados de dano. Aplique também a evolução de Bankai do Aspecto da Zanpakutō escolhido. Quando o efeito termina, o Shikai também termina e não pode ser ativado novamente neste combate.",
         "niveis": [
           20
         ],
@@ -11094,7 +11094,7 @@
         "alcance": "Pessoal",
         "duracao": "Três rodadas",
         "dano": "+2 dados no primeiro acerto de cada turno; ignora metade da Resistência",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -11211,7 +11211,7 @@
         "alcance": "Pessoal",
         "duracao": "Três rodadas",
         "dano": "+1 dado com a Zanpakutō; 2d8 em você ao terminar",
-        "usos": "Uma vez por sessão",
+        "usos": "Uma vez por descanso",
         "descricao": "Manifeste uma máscara espiritual corrompida. Por três rodadas, receba +1 nos ataques e +1 dado de dano com a Zanpakutō. Quando a máscara termina, você sofre 2d8 de dano que ignora Resistência e não pode ser reduzido ou transferido.",
         "pre_requisitos": [
           "Nível 12 de Caçador das Almas"
@@ -11596,14 +11596,14 @@
       {
         "id": "ultimo-capitulo",
         "titulo": "Último Capítulo",
-        "descricao": "Uma vez por sessão, use uma Ação Padrão para conduzir a cena por três rodadas. Você e até cinco aliados em alcance de 12 metros recebem vantagem no primeiro teste de cada turno. Uma vez por rodada, depois que um desses alvos falhar em um teste, você pode usar uma Reação para considerar o resultado natural do d20 como 15 antes dos modificadores. Na primeira vez que um alvo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida. Fora de combate, ainda falta escrever o seu conto mais importante. Quando a história pedir, escreva com o Mestre o conto de uma Entidade nova: quem ela é, o que oferece e o que cobra de quem a encontra. Pronto o conto, ela entra no Livro das Entidades e passa a fazer parte do Jardim, nesta mesa e nas outras.",
+        "descricao": "Uma vez por descanso, use uma Ação Padrão para conduzir a cena por três rodadas. Você e até cinco aliados em alcance de 12 metros recebem vantagem no primeiro teste de cada turno. Uma vez por rodada, depois que um desses alvos falhar em um teste, você pode usar uma Reação para considerar o resultado natural do d20 como 15 antes dos modificadores. Na primeira vez que um alvo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida. Fora de combate, ainda falta escrever o seu conto mais importante. Quando a história pedir, escreva com o Mestre o conto de uma Entidade nova: quem ela é, o que oferece e o que cobra de quem a encontra. Pronto o conto, ela entra no Livro das Entidades e passa a fazer parte do Jardim, nesta mesa e nas outras.",
         "niveis": [
           20
         ],
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -12118,13 +12118,13 @@
       {
         "id": "convergencia-primordial",
         "titulo": "Convergência Primordial",
-        "descricao": "Uma vez por sessão, use uma Ação Completa: pelas três rodadas seguintes, a habilidade própria de cada uma das suas invocações (Garras, Golpe, Fagulha, Toque Vital, Mão Extra ou Presa Paralisante, conforme a linha dela) causa ou concede +2 dados a mais do que o normal.",
+        "descricao": "Uma vez por descanso, use uma Ação Completa: pelas três rodadas seguintes, a habilidade própria de cada uma das suas invocações (Garras, Golpe, Fagulha, Toque Vital, Mão Extra ou Presa Paralisante, conforme a linha dela) causa ou concede +2 dados a mais do que o normal.",
         "niveis": [
           20
         ],
         "acao": "Ação Completa",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -12221,8 +12221,8 @@
         "custo_mana": 9,
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão",
-        "descricao": "Uma vez por sessão, por três rodadas, escolha uma invocação sua: ela ganha uma Ação Padrão extra em cada turno dela, Vida temporária igual ao dobro do seu nível de Invocador e +2 de Defesa. A mesma invocação não recebe este poder e a Convergência Primordial ao mesmo tempo.",
+        "usos": "Uma vez por descanso",
+        "descricao": "Uma vez por descanso, por três rodadas, escolha uma invocação sua: ela ganha uma Ação Padrão extra em cada turno dela, Vida temporária igual ao dobro do seu nível de Invocador e +2 de Defesa. A mesma invocação não recebe este poder e a Convergência Primordial ao mesmo tempo.",
         "pre_requisitos": [
           "Nível 12 de Invocador"
         ]
@@ -12785,13 +12785,13 @@
       {
         "id": "sem-fronteiras",
         "titulo": "Sem Fronteiras",
-        "descricao": "Uma vez por sessão, afete você e até cinco aliados por uma cena: os alvos ignoram terreno difícil, recebem +6 metros de Movimento e ficam imunes a dano e condições causados apenas pelo ambiente. Uma vez durante o efeito, cada alvo pode gastar a própria Ação de Movimento para se teleportar até 12 metros para um espaço que possa perceber.",
+        "descricao": "Uma vez por descanso, afete você e até cinco aliados por uma cena: os alvos ignoram terreno difícil, recebem +6 metros de Movimento e ficam imunes a dano e condições causados apenas pelo ambiente. Uma vez durante o efeito, cada alvo pode gastar a própria Ação de Movimento para se teleportar até 12 metros para um espaço que possa perceber.",
         "niveis": [
           20
         ],
         "acao": "Ação Padrão",
         "duracao": "Uma cena",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -12870,7 +12870,7 @@
         "descricao": "Declare uma rota de fuga plausível; o grupo recebe +3 m de Movimento ao segui-la por três rodadas.",
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       },
       {
         "id": "sou-de-fora",
@@ -13312,9 +13312,9 @@
           {
             "nivel": 20,
             "titulo": "Ápice Nativo",
-            "descricao": "Uma vez por sessão, trate o d20 de uma conjuração como 15.",
+            "descricao": "Uma vez por descanso, trate o d20 de uma conjuração como 15.",
             "acao": "Ação Livre",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           }
         ],
         "escolha_opcoes": {
@@ -13447,13 +13447,13 @@
       {
         "id": "voz-da-deidade",
         "titulo": "Voz da Deidade",
-        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, suas conjurações custam 3 de Mana a menos, mínimo 1, e recebem +3 no teste de conjuração e na DT. A primeira falha de Concentração em cada rodada é considerada um sucesso.",
+        "descricao": "Uma vez por descanso, ative esta habilidade sem gastar ação. Por três rodadas, suas conjurações custam 3 de Mana a menos, mínimo 1, e recebem +3 no teste de conjuração e na DT. A primeira falha de Concentração em cada rodada é considerada um sucesso.",
         "niveis": [
           20
         ],
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -13543,8 +13543,8 @@
         "titulo": "Ápice do Fluxo",
         "custo_mana": 8,
         "acao": "Ação Livre",
-        "usos": "Uma vez por sessão",
-        "descricao": "Uma vez por sessão, ao conjurar uma magia que cause dano, ela ignora a Resistência dos alvos ao tipo de dano dela.",
+        "usos": "Uma vez por descanso",
+        "descricao": "Uma vez por descanso, ao conjurar uma magia que cause dano, ela ignora a Resistência dos alvos ao tipo de dano dela.",
         "pre_requisitos": [
           "Nível 12 de Canalizador"
         ]
@@ -14003,9 +14003,9 @@
           {
             "nivel": 20,
             "titulo": "Reacender",
-            "descricao": "Uma vez por sessão, reative na hora um catalisador desativado, sem os dez minutos.",
+            "descricao": "Uma vez por descanso, reative na hora um catalisador desativado, sem os dez minutos.",
             "acao": "Ação Livre",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           }
         ]
       },
@@ -14142,13 +14142,13 @@
       {
         "id": "convergencia-segura",
         "titulo": "Convergência Segura",
-        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você pode sustentar dois catalisadores ativos ao mesmo tempo e usar a fusão de qualquer um deles sem desativá-lo. As magias fundidas custam 3 de Mana a menos, mínimo 1, e você recebe +3 nos testes de conjuração e na Defesa durante o efeito.",
+        "descricao": "Uma vez por descanso, ative esta habilidade sem gastar ação. Por três rodadas, você pode sustentar dois catalisadores ativos ao mesmo tempo e usar a fusão de qualquer um deles sem desativá-lo. As magias fundidas custam 3 de Mana a menos, mínimo 1, e você recebe +3 nos testes de conjuração e na Defesa durante o efeito.",
         "niveis": [
           20
         ],
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -14247,7 +14247,7 @@
         "custo_mana": 8,
         "acao": "Ação Livre",
         "momento": "no momento da conjuração",
-        "usos": "Uma vez por sessão",
+        "usos": "Uma vez por descanso",
         "descricao": "Use uma fusão sem desativar o catalisador.",
         "pre_requisitos": [
           "Nível 12 de Sintonizador"
@@ -15189,11 +15189,11 @@
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, ative sem gastar ação: por três rodadas, toda magia que você perceber revela a DT de conjuração e o efeito completo antes de terminar de ser lançada, o Pacote Descartado custa 0 de Mana e você rola com vantagem o teste de interceptar.",
+            "descricao": "Uma vez por descanso, ative sem gastar ação: por três rodadas, toda magia que você perceber revela a DT de conjuração e o efeito completo antes de terminar de ser lançada, o Pacote Descartado custa 0 de Mana e você rola com vantagem o teste de interceptar.",
             "titulo": "Visão de Código",
             "acao": "Ação Livre",
             "duracao": "Três rodadas",
-            "usos": "Uma vez por sessão"
+            "usos": "Uma vez por descanso"
           }
         ]
       },
@@ -15293,13 +15293,13 @@
       {
         "id": "acesso-administrador",
         "titulo": "Acesso Administrador",
-        "descricao": "Uma vez por sessão, por três rodadas, você recebe +5 em interceptações e reduz o custo delas em 3 de Mana (mínimo 0), e pode realizar uma interceptação por rodada sem gastar sua Reação. Numa interceptação bem-sucedida nesse período, você pode aplicar duas técnicas de Hackear Fluxo ao mesmo tempo, em vez de uma só; no máximo uma delas pode ser das que trocam o cancelamento (Atrasar, Redirecionar ou Isolar).",
+        "descricao": "Uma vez por descanso, por três rodadas, você recebe +5 em interceptações e reduz o custo delas em 3 de Mana (mínimo 0), e pode realizar uma interceptação por rodada sem gastar sua Reação. Numa interceptação bem-sucedida nesse período, você pode aplicar duas técnicas de Hackear Fluxo ao mesmo tempo, em vez de uma só; no máximo uma delas pode ser das que trocam o cancelamento (Atrasar, Redirecionar ou Isolar).",
         "niveis": [
           20
         ],
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [
@@ -15391,14 +15391,14 @@
         "id": "apagao-local",
         "titulo": "Apagão Local",
         "custo_mana": 9,
-        "descricao": "Uma vez por sessão, crie uma zona fixa de 12 m por uma cena: quem conjurar magia natural de dentro dela paga o dobro de Mana. Criatura sem Mana anotada sofre desvantagem no ataque mágico, e os alvos do poder dela têm vantagem para resistir. As criaturas que você escolher ficam de fora.",
+        "descricao": "Uma vez por descanso, crie uma zona fixa de 12 m por uma cena: quem conjurar magia natural de dentro dela paga o dobro de Mana. Criatura sem Mana anotada sofre desvantagem no ataque mágico, e os alvos do poder dela têm vantagem para resistir. As criaturas que você escolher ficam de fora.",
         "pre_requisitos": [
           "Nível 12 de Interceptador"
         ],
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Uma cena",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       },
       {
         "id": "choque-de-malha",
@@ -17362,23 +17362,23 @@
       {
         "id": "territorio-elemental",
         "titulo": "Território Elemental",
-        "descricao": "Uma vez por sessão, faça uma área de 12 m a até 18 m assumir seu elemento de origem por quatro rodadas. A área vira terreno difícil para inimigos. No começo de cada um dos seus turnos, escolha até duas criaturas na área; cada uma testa Reflexos contra a DT da Elementarista. Em falha, você a move até 3 m para um espaço livre dentro da área ou a deixa Caída; em sucesso, ela não é movida nem derrubada. Mesmo um Avatar usa aqui apenas o elemento de origem.",
+        "descricao": "Uma vez por descanso, faça uma área de 12 m a até 18 m assumir seu elemento de origem por quatro rodadas. A área vira terreno difícil para inimigos. No começo de cada um dos seus turnos, escolha até duas criaturas na área; cada uma testa Reflexos contra a DT da Elementarista. Em falha, você a move até 3 m para um espaço livre dentro da área ou a deixa Caída; em sucesso, ela não é movida nem derrubada. Mesmo um Avatar usa aqui apenas o elemento de origem.",
         "niveis": [18],
         "acao": "Ação Padrão",
         "alcance": "18 m; área de 12 m",
         "duracao": "Quatro rodadas",
         "defesa": "Reflexos",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       },
       {
         "id": "apogeu-elemental",
         "titulo": "Apogeu Elemental",
-        "descricao": "Uma vez por sessão, por quatro rodadas, entre no auge da sua afinidade. Se tiver Afinidade única, suas magias do elemento de origem custam 4 Mana a menos, mínimo 1, você manifesta sua derivação sem o custo de +1 Mana e, uma vez por rodada, aprimora uma magia compatível com um dos seguintes efeitos: +2d8 de dano, +3 m de deslocamento forçado ou +3 m em uma dimensão da área. O aprimoramento não cria um componente que a magia não possua. Se for Avatar desperto, entre no Estado de Avatar: suas magias Elementais custam 3 Mana a menos, mínimo 1; ao conjurar, você pode declarar dois elementos aprendidos e usar a relação de vantagem mais favorável e a menor Resistência aplicável ao alvo, sem duplicar dano ou efeitos; além disso, uma vez por rodada, escolha uma criatura que sofreu dano ou falhou na resistência contra uma dessas magias para movê-la em 3 m ou transformar o espaço ocupado por ela em terreno difícil até o começo do seu próximo turno. Descontos de Mana não se acumulam e o Estado de Avatar não concede derivações adicionais.",
+        "descricao": "Uma vez por descanso, por quatro rodadas, entre no auge da sua afinidade. Se tiver Afinidade única, suas magias do elemento de origem custam 4 Mana a menos, mínimo 1, você manifesta sua derivação sem o custo de +1 Mana e, uma vez por rodada, aprimora uma magia compatível com um dos seguintes efeitos: +2d8 de dano, +3 m de deslocamento forçado ou +3 m em uma dimensão da área. O aprimoramento não cria um componente que a magia não possua. Se for Avatar desperto, entre no Estado de Avatar: suas magias Elementais custam 3 Mana a menos, mínimo 1; ao conjurar, você pode declarar dois elementos aprendidos e usar a relação de vantagem mais favorável e a menor Resistência aplicável ao alvo, sem duplicar dano ou efeitos; além disso, uma vez por rodada, escolha uma criatura que sofreu dano ou falhou na resistência contra uma dessas magias para movê-la em 3 m ou transformar o espaço ocupado por ela em terreno difícil até o começo do seu próximo turno. Descontos de Mana não se acumulam e o Estado de Avatar não concede derivações adicionais.",
         "alcance": "Pessoal",
         "niveis": [20],
         "acao": "Ação Livre",
         "duracao": "Quatro rodadas",
-        "usos": "Uma vez por sessão"
+        "usos": "Uma vez por descanso"
       }
     ],
     "eventos": [

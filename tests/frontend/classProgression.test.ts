@@ -104,7 +104,8 @@ test('toda recompensa final resolve para uma habilidade completa de nível 20', 
     assert.ok(habilidade.niveis?.includes(20), `Final fora do nível 20 em ${classe.titulo}`);
     const descricao = habilidade.descricao || '';
     assert.ok(descricao, `Final sem descrição em ${classe.titulo}`);
-    assert.match(descricao, /uma vez por sessão/i, `Final sem limite por sessão em ${classe.titulo}`);
+    // 2026-11-12: final de combate passou a "uma vez por descanso"; a de história segue por sessão.
+    assert.match(descricao, /uma vez por (?:sessão|descanso)/i, `Final sem limite por sessão ou descanso em ${classe.titulo}`);
     assert.doesNotMatch(
       descricao,
       /a critério do mestre|aprovação do mestre|definid[ao] pelo mestre|o mestre arbitra/i,
@@ -1447,7 +1448,7 @@ test('Disparo Calculado chega no nível 18 do Atirador e Um Só Disparo tem fich
   const ultimo = atirador.habilidades?.find(item => item.id === 'um-so-disparo');
   assert.ok(ultimo);
   assert.equal(ultimo.acao, 'Ação Completa');
-  assert.equal(ultimo.usos, 'Uma vez por sessão');
+  assert.equal(ultimo.usos, 'Uma vez por descanso');
 });
 
 test('poderes revisados do Atirador não repetem "Passivo." no texto', () => {
@@ -1518,7 +1519,7 @@ test('Milagre e Mestre da Vida do Médico têm ficha completa', () => {
   const mestre = medico.habilidades?.find(item => item.id === 'mestre-da-vida');
   assert.ok(mestre);
   assert.equal(mestre.acao, 'Ação Completa');
-  assert.equal(mestre.usos, 'Uma vez por sessão');
+  assert.equal(mestre.usos, 'Uma vez por descanso');
   assert.ok(mestre.alcance, 'Sem alcance declarado para Mestre da Vida');
 });
 
@@ -1604,7 +1605,7 @@ test('Espírito da Espada aponta pra Arte da Espada, não pra uma "Maestria em E
   assert.ok(espirito);
   assert.match(espirito.descricao, /vinculada por Arte da Espada/);
   assert.equal(espirito.acao, 'Ação Livre');
-  assert.equal(espirito.usos, 'Uma vez por sessão');
+  assert.equal(espirito.usos, 'Uma vez por descanso');
 });
 
 test('a redução de dano da Arte da Espada e o Combo do Espadachim têm ficha completa', () => {
@@ -2127,7 +2128,7 @@ test('Caçador das Almas publica Zanpakutō, Shikai, as quatro artes e Bankai', 
     ?.recompensas.find(item => item.tipo === 'habilidade_final');
   assert.equal(final?.titulo, 'Bankai');
   const bankai = cacador.habilidades?.find(item => item.id === 'bankai');
-  assert.match(bankai?.descricao || '', /uma vez por sessão/i);
+  assert.match(bankai?.descricao || '', /uma vez por descanso/i);
   assert.match(bankai?.descricao || '', /Shikai/);
 
   for (const id of ['passo-relampago', 'pressao-espiritual', 'hado-raio-branco', 'bakudo-seis-luzes']) {
@@ -2159,7 +2160,7 @@ test('Último Capítulo do Escritor de Contos ganha o gancho de criar uma Entida
   const ultimoCapitulo = escritor.habilidades?.find(item => item.id === 'ultimo-capitulo');
   assert.ok(ultimoCapitulo);
   assert.match(ultimoCapitulo.descricao, /Entidade nova/);
-  assert.match(ultimoCapitulo.descricao, /uma vez por sessão/i);
+  assert.match(ultimoCapitulo.descricao, /uma vez por descanso/i);
   assert.doesNotMatch(
     ultimoCapitulo.descricao,
     /a critério do mestre|aprovação do mestre|definid[ao] pelo mestre|o mestre arbitra/i,
@@ -2331,7 +2332,7 @@ test('Sem Fronteiras do Viajante cobra Ação de Movimento pra teleportar, e Hor
   const viajante = obterClasse('viajante-classe');
   const semFronteiras = viajante.habilidades?.find(item => item.id === 'sem-fronteiras');
   assert.ok(semFronteiras);
-  assert.match(semFronteiras.descricao || '', /uma vez por sessão/i);
+  assert.match(semFronteiras.descricao || '', /uma vez por descanso/i);
   assert.match(semFronteiras.descricao || '', /gastar a própria Ação de Movimento/, 'teleporte precisa custar uma ação, não ser de graça');
   assert.doesNotMatch(semFronteiras.descricao || '', /sem gastar ação/i);
 
@@ -2381,7 +2382,7 @@ test('Interceptador publica Hackear Fluxo como catálogo e distingue a DT do Int
   // listar uma segunda vez com nomes diferentes (cancelar/redirecionar/suspender, como antes).
   const capstone = interceptador.habilidades?.find(item => item.id === 'acesso-administrador');
   assert.match(capstone?.descricao || '', /técnicas? de Hackear Fluxo/i);
-  assert.match(capstone?.descricao || '', /uma vez por sessão/i);
+  assert.match(capstone?.descricao || '', /uma vez por descanso/i);
 });
 
 test('poderes do Interceptador não têm "Passivo." embutido no texto e Cortar Concentração aponta pra DT do Interceptador', () => {

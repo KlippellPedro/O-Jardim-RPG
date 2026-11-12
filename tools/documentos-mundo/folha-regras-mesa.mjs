@@ -234,7 +234,7 @@ const paginaDois = () => `
         <li><b>Por turno:</b> uma vez em cada turno, de qualquer criatura.</li>
         <li><b>Por cena:</b> volta no fim da cena; um combate é uma cena.</li>
         <li><b>Por descanso:</b> volta no descanso completo, nunca no Relaxar.</li>
-        <li><b>Por sessão:</b> volta na próxima sessão.</li>
+        <li><b>Por sessão:</b> volta na próxima sessão; é de história e sorte.</li>
       </ul>`)}
   </div>
 

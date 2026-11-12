@@ -2977,6 +2977,10 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">O que está no catálogo</h3>
       <p>Os filtros abaixo reúnem magias, manifestações de cada Fluxo, rituais, selos, encantamentos e assinaturas de fusão. Escolha primeiro a forma que procura e depois reduza pelos demais campos disponíveis.</p>
 
+
+      <h3 class="regras-subtitle">Caminhos sugeridos</h3>
+      <p>Cada Fluxo tem três magias por círculo, trinta ao todo. Para quem não quer ler todas, o catálogo divide cada Fluxo em três caminhos de uma magia por círculo: <strong>Ataque</strong> (dano direto), <strong>Controle</strong> (prender, atrasar e mudar o campo) e <strong>Apoio</strong> (curar, proteger e mover o grupo). Escolha um Fluxo no filtro e siga a coluna do seu jeito de jogar. Os caminhos não repetem magia, e nada impede de misturar: eles são um ponto de partida. Na ficha, o catálogo da aba Magias marca o caminho de cada magia e filtra por ele.</p>
+
       <h3 class="regras-subtitle">Antes de escolher uma entrada</h3>
       <ul class="regras-list">
         <li>Confirme se o personagem possui a classe, habilidade, item, Legado ou concessão que dá acesso àquela forma.</li>
@@ -3284,7 +3288,7 @@ ${HTML_DEVOCAO}
         <li><strong>Por turno:</strong> vale uma vez em cada turno, o seu ou o de outra criatura.</li>
         <li><strong>Por cena:</strong> volta quando a cena acaba. Um combate inteiro é uma cena.</li>
         <li><strong>Por descanso:</strong> volta no descanso completo. O Relaxar não devolve usos.</li>
-        <li><strong>Por sessão:</strong> volta na próxima sessão de jogo.</li>
+        <li><strong>Por sessão:</strong> volta na próxima sessão de jogo. Fica para o que é de história, informação, dinheiro e sorte (um contato, uma pista, uma rerrolagem). Poder de combate volta no descanso.</li>
       </ul>
       <p>No Modo mesa da ficha, cada uma dessas janelas tem o seu botão para zerar: Nova cena, Descansei e Nova sessão.</p>
     `,

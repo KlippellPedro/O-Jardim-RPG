@@ -4587,6 +4587,10 @@ Este tópico serve para procurar uma entrada específica. As fórmulas de teste,
 
 Os filtros abaixo reúnem magias, manifestações de cada Fluxo, rituais, selos, encantamentos e assinaturas de fusão. Escolha primeiro a forma que procura e depois reduza pelos demais campos disponíveis.
 
+### Caminhos sugeridos
+
+Cada Fluxo tem três magias por círculo, trinta ao todo. Para quem não quer ler todas, o catálogo divide cada Fluxo em três caminhos de uma magia por círculo: **Ataque** (dano direto), **Controle** (prender, atrasar e mudar o campo) e **Apoio** (curar, proteger e mover o grupo). Escolha um Fluxo no filtro e siga a coluna do seu jeito de jogar. Os caminhos não repetem magia, e nada impede de misturar: eles são um ponto de partida. Na ficha, o catálogo da aba Magias marca o caminho de cada magia e filtra por ele.
+
 ### Antes de escolher uma entrada
 
 - Confirme se o personagem possui a classe, habilidade, item, Legado ou concessão que dá acesso àquela forma.
@@ -5605,7 +5609,7 @@ Toda habilidade e todo poder dizem que ação pedem, numa destas sete: Passivo, 
 
 - **Por descanso:** volta no descanso completo. O Relaxar não devolve usos.
 
-- **Por sessão:** volta na próxima sessão de jogo.
+- **Por sessão:** volta na próxima sessão de jogo. Fica para o que é de história, informação, dinheiro e sorte (um contato, uma pista, uma rerrolagem). Poder de combate volta no descanso.
 
 No Modo mesa da ficha, cada uma dessas janelas tem o seu botão para zerar: Nova cena, Descansei e Nova sessão.
 

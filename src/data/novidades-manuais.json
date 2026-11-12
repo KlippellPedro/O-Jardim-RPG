@@ -16,6 +16,18 @@
       ]
     },
     {
+      "id": "2026-11-12-caminhos-de-magia-e-descanso",
+      "data": "2026-11-12",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Caminhos de magia por Fluxo, e poder de combate volta no descanso",
+      "detalhes": [
+        "Não precisa ler as 30 magias do seu Fluxo: no Catálogo Mágico do Livro, escolha um Fluxo e veja três caminhos prontos, Ataque, Controle e Apoio, com uma magia por círculo. Toque no nome para abrir a magia.",
+        "Na aba Magias da ficha, cada magia mostra de que caminho ela é, e o filtro Caminho sugerido mostra só as de um caminho.",
+        "Habilidades e poderes de combate que eram de uma vez por sessão agora voltam no descanso completo. O que é de história, informação, dinheiro e sorte (um contato, uma pista, uma rerrolagem) continua por sessão."
+      ]
+    },
+    {
       "id": "2026-11-12-modificacoes-por-tipo",
       "data": "2026-11-12",
       "tipo": "novo",
