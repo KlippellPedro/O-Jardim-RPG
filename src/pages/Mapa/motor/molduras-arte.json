@@ -1,0 +1,116 @@
+[
+ {
+  "id": "arte-onda-katana",
+  "rotulo": "Onda e katana",
+  "arquivo": "onda-katana.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-espinhos",
+  "rotulo": "Espinhos rubros",
+  "arquivo": "espinhos.webp",
+  "escala": 1.191
+ },
+ {
+  "id": "arte-tinta-negra",
+  "rotulo": "Tinta negra",
+  "arquivo": "tinta-negra.webp",
+  "escala": 1.059
+ },
+ {
+  "id": "arte-pincelada",
+  "rotulo": "Pincelada",
+  "arquivo": "pincelada.webp",
+  "escala": 1.264
+ },
+ {
+  "id": "arte-veias",
+  "rotulo": "Veias rubras",
+  "arquivo": "veias.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-mandibula",
+  "rotulo": "Mandíbula",
+  "arquivo": "mandibula.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-ouroboros",
+  "rotulo": "Ouroboros",
+  "arquivo": "ouroboros.webp",
+  "escala": 1.339
+ },
+ {
+  "id": "arte-vampiro",
+  "rotulo": "Vampiro",
+  "arquivo": "vampiro.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-nuvens",
+  "rotulo": "Nuvens",
+  "arquivo": "nuvens.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-sombra-negra",
+  "rotulo": "Sombra negra",
+  "arquivo": "sombra-negra.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-chifres-do-diabo",
+  "rotulo": "Chifres do diabo",
+  "arquivo": "chifres-do-diabo.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-alienigena",
+  "rotulo": "Alienígena",
+  "arquivo": "alienigena.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-gelo-espesso",
+  "rotulo": "Gelo espesso",
+  "arquivo": "gelo-espesso.webp",
+  "escala": 1.087
+ },
+ {
+  "id": "arte-hera",
+  "rotulo": "Hera",
+  "arquivo": "hera.webp",
+  "escala": 1.082
+ },
+ {
+  "id": "arte-louro",
+  "rotulo": "Louro",
+  "arquivo": "louro.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-coroa-de-espinhos",
+  "rotulo": "Coroa de espinhos",
+  "arquivo": "coroa-de-espinhos.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-rosas-negras",
+  "rotulo": "Rosas negras",
+  "arquivo": "rosas-negras.webp",
+  "escala": 1.0
+ },
+ {
+  "id": "arte-borboletas",
+  "rotulo": "Borboletas",
+  "arquivo": "borboletas.webp",
+  "escala": 1.061
+ },
+ {
+  "id": "arte-paladino-aco",
+  "rotulo": "Paladino de aço",
+  "arquivo": "paladino-aco.webp",
+  "escala": 1.0
+ }
+]

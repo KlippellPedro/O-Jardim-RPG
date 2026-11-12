@@ -10,7 +10,9 @@
 import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import type { IBarraToken, ITokenMapa, LadoToken } from '../../../services/mapaApi';
 import { abreviarNome, escalaDoNome, iniciais, nomeVisivel, siglaDaCondicao } from './geometria';
-import { CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, desenharMoldura } from './molduras';
+import {
+  CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, carregarMolduraDeArte, desenharMoldura, ehMolduraDeArte, escalaDaMolduraDeArte, molduraDeArteCarregada,
+} from './molduras';
 import { texturaDeBrilho } from './luzes';
 import {
   barrasParaDesenhar,
@@ -36,6 +38,17 @@ const LADO_TEXTURA = 256;
 const texturasDeMoldura = new Map<string, Texture>();
 
 function texturaDaMoldura(id: string, nivel: number | null, lado: LadoToken): Texture {
+  if (ehMolduraDeArte(id)) {
+    // Moldura ilustrada: a imagem chega pela rede; até lá o quadro fica vazio e o token se refaz quando ela chegar.
+    const imagem = molduraDeArteCarregada(id);
+    if (!imagem) return Texture.EMPTY;
+    let pronta = texturasDeMoldura.get(id);
+    if (!pronta) {
+      pronta = Texture.from(imagem);
+      texturasDeMoldura.set(id, pronta);
+    }
+    return pronta;
+  }
   const chave = `${id}|${id === 'nivel' ? nivel : ''}|${lado}`;
   let textura = texturasDeMoldura.get(chave);
   if (!textura) {
@@ -243,9 +256,7 @@ export class TokenVisual {
     this.notarVida(dados.barras);
 
     this.desenharRetrato();
-    this.moldura.texture = texturaDaMoldura(dados.moldura ?? 'lado', dados.nivel, dados.lado);
-    this.moldura.width = this.lado * ESCALA_QUADRO;
-    this.moldura.height = this.lado * ESCALA_QUADRO;
+    this.poMoldura(dados);
     this.desenharBarras();
 
     this.tamanhoNome = Math.max(8, Math.min(16, this.lado * 0.16));
@@ -253,6 +264,19 @@ export class TokenVisual {
     this.escreverNome();
     this.desenharCondicoes();
     this.desenharMarcas();
+  }
+
+  private poMoldura(dados: ITokenMapa) {
+    const id = dados.moldura ?? 'lado';
+    this.moldura.texture = texturaDaMoldura(id, dados.nivel, dados.lado);
+    const quadro = this.lado * ESCALA_QUADRO * (ehMolduraDeArte(id) ? escalaDaMolduraDeArte(id) : 1);
+    this.moldura.width = quadro;
+    this.moldura.height = quadro;
+    if (ehMolduraDeArte(id) && !molduraDeArteCarregada(id)) {
+      void carregarMolduraDeArte(id).then((imagem) => {
+        if (imagem && !this.raiz.destroyed && (this.dados.moldura ?? 'lado') === id) this.poMoldura(this.dados);
+      });
+    }
   }
 
   private escreverNome() {

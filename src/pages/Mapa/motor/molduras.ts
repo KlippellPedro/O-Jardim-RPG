@@ -4,6 +4,7 @@
 
 import { molduraDoRetrato, type FormaJoia } from '../../Ficha/utils/retrato';
 import type { LadoToken } from '../../../services/mapaApi';
+import artesJson from './molduras-arte.json';
 
 export type FluxoId = 'origem' | 'essencia' | 'comunicacao' | 'vitalidade' | 'inconstancia'
   | 'fisico' | 'espaco' | 'tempo' | 'vazio' | 'fim' | 'tecnologia';
@@ -39,7 +40,48 @@ export const CORES_LADO: Record<LadoToken, string> = {
 export interface IMolduraCatalogo {
   id: string;
   rotulo: string;
-  grupo: 'padrao' | 'material' | 'fluxo';
+  grupo: 'padrao' | 'material' | 'fluxo' | 'arte';
+}
+
+/** Molduras ilustradas (imagens em public/assets/img/molduras, sem fundo). `escala` é o tamanho da
+ * imagem em relação ao quadro de 1,3 token: o furo de cada uma já vem alinhado ao retrato, e as
+ * que têm chifres, asas ou espinhos largos pedem um quadro maior (escala acima de 1). */
+interface IMolduraDeArte { id: string; rotulo: string; arquivo: string; escala: number }
+const ARTE: IMolduraDeArte[] = artesJson;
+const ARTE_POR_ID = new Map(ARTE.map((a) => [a.id, a]));
+
+export const ehMolduraDeArte = (id: string) => ARTE_POR_ID.has(id);
+export const escalaDaMolduraDeArte = (id: string) => ARTE_POR_ID.get(id)?.escala ?? 1;
+
+const imagensDeArte = new Map<string, HTMLImageElement>();
+const carregandoArte = new Map<string, Promise<HTMLImageElement | null>>();
+
+/** A imagem da moldura, se já chegou. */
+export const molduraDeArteCarregada = (id: string): HTMLImageElement | null => imagensDeArte.get(id) ?? null;
+
+/** Baixa a imagem da moldura (uma vez só). Devolve null se não existir ou falhar. */
+export function carregarMolduraDeArte(id: string): Promise<HTMLImageElement | null> {
+  const arte = ARTE_POR_ID.get(id);
+  if (!arte || typeof Image === 'undefined') return Promise.resolve(null);
+  const pronta = imagensDeArte.get(id);
+  if (pronta) return Promise.resolve(pronta);
+  let espera = carregandoArte.get(id);
+  if (!espera) {
+    espera = new Promise<HTMLImageElement | null>((resolver) => {
+      const imagem = new Image();
+      imagem.onload = () => {
+        imagensDeArte.set(id, imagem);
+        resolver(imagem);
+      };
+      imagem.onerror = () => {
+        carregandoArte.delete(id);
+        resolver(null);
+      };
+      imagem.src = `/assets/img/molduras/${arte.arquivo}`;
+    });
+    carregandoArte.set(id, espera);
+  }
+  return espera;
 }
 
 export const MOLDURAS: IMolduraCatalogo[] = [
@@ -55,6 +97,7 @@ export const MOLDURAS: IMolduraCatalogo[] = [
   { id: 'raiz', rotulo: 'Raiz', grupo: 'material' },
   { id: 'sombra', rotulo: 'Sombra', grupo: 'material' },
   ...(Object.keys(CORES_FLUXO) as FluxoId[]).map((fluxo) => ({ id: `fluxo-${fluxo}`, rotulo: NOMES_FLUXO[fluxo], grupo: 'fluxo' as const })),
+  ...ARTE.map((a) => ({ id: a.id, rotulo: a.rotulo, grupo: 'arte' as const })),
 ];
 
 /** Raio do retrato e espessura do aro, como fração do lado do quadro desenhado.
@@ -144,6 +187,16 @@ export function desenharMoldura(ctx: Contexto, s: number, { id, nivel, lado }: O
 
   // Sem borda: o quadro fica vazio e só o retrato aparece.
   if (id === 'nenhuma') return;
+
+  // Moldura ilustrada: a imagem já vem com o furo alinhado ao retrato. Se ainda não chegou, o quadro fica vazio.
+  if (ehMolduraDeArte(id)) {
+    const imagem = molduraDeArteCarregada(id);
+    if (imagem) {
+      const lado_ = s * escalaDaMolduraDeArte(id);
+      ctx.drawImage(imagem, c - lado_ / 2, c - lado_ / 2, lado_, lado_);
+    }
+    return;
+  }
 
   if (id === 'lado' || (id === 'nivel' && nivel === null)) {
     anel(ctx, c, meio, e, corLado);

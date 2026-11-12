@@ -43,6 +43,11 @@ FLUXOS = (
 #: tira a borda (o retrato fica solto no mapa).
 MOLDURAS = (
     "nivel", "lado", "nenhuma", "ferro", "ouro", "madeira", "osso", "runa", "cristal", "raiz", "sombra",
+    #: Molduras ilustradas (public/assets/img/molduras): os ids são os de src/pages/Mapa/motor/molduras-arte.json.
+    "arte-onda-katana", "arte-espinhos", "arte-tinta-negra", "arte-pincelada", "arte-veias", "arte-mandibula",
+    "arte-ouroboros", "arte-vampiro", "arte-nuvens", "arte-sombra-negra", "arte-chifres-do-diabo",
+    "arte-alienigena", "arte-gelo-espesso", "arte-hera", "arte-louro", "arte-coroa-de-espinhos",
+    "arte-rosas-negras", "arte-borboletas", "arte-paladino-aco",
     *(f"fluxo-{fluxo}" for fluxo in FLUXOS),
 )
 ENQUADRAMENTO_PADRAO = {"zoom": 1.0, "x": 0.0, "y": 0.0}

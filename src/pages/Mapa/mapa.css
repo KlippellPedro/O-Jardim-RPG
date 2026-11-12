@@ -1347,6 +1347,17 @@
   white-space: nowrap;
 }
 
+.mapa-molduras-arte > summary {
+  margin: 8px 0 2px;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.mapa-molduras-arte[open] > summary {
+  color: var(--mapa-texto);
+}
+
 .mapa-menu-token .mapa-molduras {
   grid-template-columns: repeat(4, 1fr);
 }

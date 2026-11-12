@@ -8,7 +8,9 @@ import { acervoApi, type IItemAcervo } from '../../../services/acervoApi';
 import { mapaApi, urlPedaco, type IEstadoMapa, type LadoToken } from '../../../services/mapaApi';
 import { sessaoApi } from '../../../services/sessaoApi';
 import { LADO_LADRILHO, type IPonto } from '../motor/geometria';
-import { desenharMoldura, desenharRetrato, ENQUADRAMENTO_PADRAO, MOLDURAS, RAIO_RETRATO, type Enquadramento } from '../motor/molduras';
+import {
+  carregarMolduraDeArte, desenharMoldura, desenharRetrato, ehMolduraDeArte, ENQUADRAMENTO_PADRAO, MOLDURAS, RAIO_RETRATO, type Enquadramento,
+} from '../motor/molduras';
 import { subirParaOAcervo } from '../acervo/subirImagem';
 import { melhorarQualidade, removerFundo } from './processar';
 import { ComDica } from '../componentes/BotaoFerramenta';
@@ -75,6 +77,7 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
   const [enquadramento, setEnquadramento] = useState<Enquadramento>(ENQUADRAMENTO_PADRAO);
   const [fundo, setFundo] = useState<string>('transparente');
   const [moldura, setMoldura] = useState('lado');
+  const [arteChegou, setArteChegou] = useState(0);
   const [lado, setLado] = useState<LadoToken>('inimigo');
   const [naIniciativa, setNaIniciativa] = useState(true);
   const [vida, setVida] = useState(20);
@@ -142,11 +145,23 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
       ctx.lineWidth = 2;
       ctx.stroke();
     }
-  }, [composta, posicao, modo, fundo, enquadramento, moldura, lado, ferramenta, pincel]);
+  }, [composta, posicao, modo, fundo, enquadramento, moldura, lado, ferramenta, pincel, arteChegou]);
 
   useEffect(() => {
     desenhar();
   }, [desenhar]);
+
+  // Moldura ilustrada: a imagem vem da rede, então a prévia se refaz quando ela chega.
+  useEffect(() => {
+    if (!ehMolduraDeArte(moldura)) return;
+    let vivo = true;
+    void carregarMolduraDeArte(moldura).then(() => {
+      if (vivo) setArteChegou((n) => n + 1);
+    });
+    return () => {
+      vivo = false;
+    };
+  }, [moldura]);
 
   const carregar = (tela: OffscreenCanvas, nomeBase: string) => {
     setFonte(tela);
@@ -494,19 +509,42 @@ export const SeletorDeMoldura = ({ valor, lado, nivel = null, onEscolher, inclui
   nivel?: number | null;
   onEscolher: (id: string) => void;
   incluirNivel?: boolean;
-}) => (
-  <div className="mapa-molduras" role="radiogroup" aria-label="Moldura">
-    {MOLDURAS.filter((m) => incluirNivel || m.id !== 'nivel').map((m) => (
-      <button key={m.id} type="button" role="radio" aria-checked={valor === m.id} className={valor === m.id ? 'ativo' : ''} onClick={() => onEscolher(m.id)}>
-        <PreviaMoldura id={m.id} lado={lado} nivel={nivel} />
-        <small>{m.rotulo}</small>
-      </button>
-    ))}
-  </div>
-);
+}) => {
+  const botao = (m: (typeof MOLDURAS)[number]) => (
+    <button key={m.id} type="button" role="radio" aria-checked={valor === m.id} className={valor === m.id ? 'ativo' : ''} onClick={() => onEscolher(m.id)}>
+      <PreviaMoldura id={m.id} lado={lado} nivel={nivel} />
+      <small>{m.rotulo}</small>
+    </button>
+  );
+  const lista = MOLDURAS.filter((m) => incluirNivel || m.id !== 'nivel');
+  const desenhadas = lista.filter((m) => m.grupo !== 'arte');
+  const ilustradas = lista.filter((m) => m.grupo === 'arte');
+  return (
+    <div role="radiogroup" aria-label="Moldura">
+      <div className="mapa-molduras">{desenhadas.map(botao)}</div>
+      {ilustradas.length > 0 && (
+        <details className="mapa-molduras-arte" open={ehMolduraDeArte(valor)}>
+          <summary>Molduras ilustradas ({ilustradas.length})</summary>
+          <div className="mapa-molduras">{ilustradas.map(botao)}</div>
+        </details>
+      )}
+    </div>
+  );
+};
 
 const PreviaMoldura = ({ id, lado, nivel }: { id: string; lado: LadoToken; nivel: number | null }) => {
   const ref = useRef<HTMLCanvasElement>(null);
+  const [chegou, setChegou] = useState(0);
+  useEffect(() => {
+    if (!ehMolduraDeArte(id)) return;
+    let vivo = true;
+    void carregarMolduraDeArte(id).then(() => {
+      if (vivo) setChegou((n) => n + 1);
+    });
+    return () => {
+      vivo = false;
+    };
+  }, [id]);
   useEffect(() => {
     const ctx = ref.current?.getContext('2d');
     if (!ctx) return;
@@ -516,6 +554,6 @@ const PreviaMoldura = ({ id, lado, nivel }: { id: string; lado: LadoToken; nivel
     ctx.fillStyle = '#2a2333';
     ctx.fill();
     desenharMoldura(ctx, 64, { id, nivel, lado });
-  }, [id, lado, nivel]);
+  }, [id, lado, nivel, chegou]);
   return <canvas ref={ref} width={64} height={64} />;
 };
