@@ -123,7 +123,7 @@ export const Sintonizador = ({ classe }: { classe: IClasse }) => {
             <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento da conjuração: o resultado vira a DT que ele precisa alcançar. É diferente da DT de conjuração normal (7 + 3 × o círculo da magia), que já vale sozinha pra toda magia que você lança.
+              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento da conjuração: o resultado vira a DT que ele precisa alcançar. É diferente da DT de conjuração normal (7 + 2,5 × o círculo da magia, arredondado para baixo), que já vale sozinha pra toda magia que você lança.
             </p>
           </PremiumCard>
         </div>

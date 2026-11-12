@@ -1971,9 +1971,12 @@ test('classes comuns usam cinco graus de Vida/Mana dentro do mesmo orçamento de
     alquimista: [3, 4, 2],
     comerciante: [3, 4, 2],
     cozinheiro: [3, 4, 2],
-    ritualista: [2, 6, 1],
-    canalizador: [2, 6, 1],
-    sintonizador: [2, 6, 1],
+    // 2026-11-11 (teste de builds): as três saíram de 2/6/1 para 3/5/1, o mesmo
+    // perfil das classes especiais de magia; o conjurador ficava com 50 de Vida
+    // no nível 20, contra 118 do Guerreiro.
+    ritualista: [3, 5, 1],
+    canalizador: [3, 5, 1],
+    sintonizador: [3, 5, 1],
   };
 
   const comuns = classes.filter(classe => classe.categoria === 'padrao');

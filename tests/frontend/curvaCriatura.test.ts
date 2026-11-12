@@ -43,15 +43,17 @@ test('valores fora da faixa viram o VD mais próximo', () => {
 test('curva aprovada: ataque, Defesa, dano e Vida solo em VDs de referência', () => {
   // Valores da tabela de docs/plano-vd-e-magia-medicoes-2026-09.md (a Vida arredonda de 5 em 5).
   // O golpe soma o ajuste de armadura de 2026-11-11 (escala de armaduras); os testes não.
+  // A Defesa é o ataque de referência + 6 e a Vida conta 75% de acerto (2026-11-11, acerto do jogador).
+  // O dano é fatia da Vida média do personagem, que subiu um pouco com os conjuradores comuns em 3 de Vida.
   const esperado: Array<[number, { ataque: string; teste: string; defesa: number; dano: number; pv: number }]> = [
-    [10, { ataque: '+14', teste: '+14', defesa: 14, dano: 9, pv: 265 }],
-    [20, { ataque: '+28', teste: '+24', defesa: 19, dano: 17, pv: 410 }],
-    [30, { ataque: '+42', teste: '+31', defesa: 24, dano: 27, pv: 810 }],
-    [40, { ataque: '+48', teste: '+37', defesa: 30, dano: 36, pv: 1055 }],
-    [50, { ataque: '+53', teste: '+42', defesa: 35, dano: 45, pv: 1320 }],
-    [100, { ataque: '+79', teste: '+73', defesa: 61, dano: 81, pv: 2700 }],
-    [200, { ataque: '+130', teste: '+126', defesa: 112, dano: 145, pv: 5480 }],
-    [500, { ataque: '+285', teste: '+285', defesa: 264, dano: 336, pv: 14500 }],
+    [10, { ataque: '+14', teste: '+14', defesa: 20, dano: 10, pv: 225 }],
+    [20, { ataque: '+28', teste: '+24', defesa: 30, dano: 18, pv: 330 }],
+    [30, { ataque: '+42', teste: '+31', defesa: 37, dano: 28, pv: 640 }],
+    [40, { ataque: '+48', teste: '+37', defesa: 43, dano: 37, pv: 830 }],
+    [50, { ataque: '+53', teste: '+42', defesa: 48, dano: 47, pv: 1040 }],
+    [100, { ataque: '+79', teste: '+73', defesa: 79, dano: 83, pv: 2140 }],
+    [200, { ataque: '+130', teste: '+126', defesa: 132, dano: 147, pv: 4320 }],
+    [500, { ataque: '+285', teste: '+285', defesa: 291, dano: 338, pv: 11500 }],
   ];
   for (const [vd, valores] of esperado) {
     const modelo = modeloDeCriatura(vd, 'solo');
@@ -137,7 +139,7 @@ test('nenhum modelo genérico gravado sobrou no catálogo: o gerador cobre todo 
 
 test('Vida de aliado: no máximo 2x a Vida média de um personagem do VD, e nunca acima do catálogo', () => {
   // Mesmos valores em plataforma/tests/test_mercenarios_loja.py.
-  const casos: Array<[number, number, number]> = [[3, 105, 38], [8, 170, 74], [20, 410, 160], [33, 850, 276], [50, 1320, 428], [100, 2700, 772]];
+  const casos: Array<[number, number, number]> = [[3, 105, 38], [8, 170, 76], [20, 410, 168], [33, 850, 288], [50, 1320, 448], [100, 2700, 792]];
   for (const [vd, pv, esperado] of casos) assert.equal(vidaDeAliado(vd, pv), esperado, `VD ${vd}`);
   assert.equal(vidaDeAliado(20, 100), 100, 'criatura já fraca fica como está');
   assert.equal(vidaDeAliado(undefined, 500), 500, 'sem VD mantém a Vida do catálogo');
@@ -148,7 +150,10 @@ test('o aliado comprado tem bem menos Vida que o inimigo do Bestiário, do VD ba
   for (const e of contratáveis) {
     const { vd, pv } = e.conteudo;
     assert.ok(vidaDeAliado(vd, pv) <= pv, `${e.id}: aliado com mais Vida que o catálogo`);
-    if (vd >= 8) assert.ok(vidaDeAliado(vd, pv) <= 0.6 * pv, `${e.id}: aliado ainda com mais de 60% da Vida de inimigo`);
+    // 75%: desde 2026-11-11 a Vida de inimigo conta 75% de acerto (antes 95%) e
+    // ficou menor, e os conjuradores comuns ganharam Vida (a média do personagem
+    // subiu); o aliado continua com 2x a Vida de um personagem.
+    if (vd >= 8) assert.ok(vidaDeAliado(vd, pv) <= 0.75 * pv, `${e.id}: aliado ainda com mais de 75% da Vida de inimigo`);
   }
 });
 

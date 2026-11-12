@@ -58,6 +58,7 @@ import { GastarAumentosModal } from '../components/GastarAumentosModal';
 import { aumentosDeAtributo, gastarAumentosDeAtributo } from '../../../services/progressaoFichaService';
 import { StatusVitaisSection } from '../components/StatusVitaisSection';
 import { ModoMesa } from '../components/ModoMesa';
+import { acoesDeMesa } from '../../../services/acoesDeMesa';
 import { FamaPrestigioSection } from '../components/FamaPrestigioSection';
 import { FrutoEdenSection } from '../components/FrutoEdenSection';
 import { AflicoesSection } from '../components/AflicoesSection';
@@ -1138,6 +1139,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
             onUpdate(['ficha', 'condicoesAtivas'], proximas);
           }}
           onAbrirAba={(aba) => onAbrirAba?.(aba)}
+          acoes={modoMesaAberto ? acoesDeMesa(f) : undefined}
         />
       )}
 

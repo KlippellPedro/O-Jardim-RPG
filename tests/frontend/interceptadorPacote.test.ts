@@ -49,11 +49,11 @@ test('a ficha calcula a interceptação de magia e de poder de criatura', () => 
   assert.equal(dtPadraoDoVd(1), 15);
 
   const nivel5 = interceptacaoDaFicha(5, { tipo: 'magia', circulo: 3 }, { bonusBase: 10 });
-  assert.deepEqual(nivel5, { dt: 16, bonus: 10, custoMana: 4, rotulo: 'magia de 3º círculo', vantagem: false });
+  assert.deepEqual(nivel5, { dt: 14, bonus: 10, custoMana: 4, rotulo: 'magia de 3º círculo', vantagem: false });
 
   // Assinatura Reconhecida soma +2 do nível 10 em diante; o círculo vai até o 10º, seja qual for o Fluxo.
   const nivel10 = interceptacaoDaFicha(10, { tipo: 'magia', circulo: 10 }, { bonusBase: 12 });
-  assert.equal(nivel10.dt, 37);
+  assert.equal(nivel10.dt, 32);
   assert.equal(nivel10.bonus, 14);
 
   const criatura = interceptacaoDaFicha(12, { tipo: 'criatura', vd: 20 }, { bonusBase: 13 });

@@ -4746,11 +4746,11 @@
         },
         "raridade": "comum",
         "categoria": "Animal",
-        "pv": 95,
+        "pv": 90,
         "estamina": 15,
         "nivel": 5,
         "vd": 5,
-        "defesa": 12,
+        "defesa": 16,
         "iniciativa": 17,
         "deslocamento": "12m",
         "atributos": {
@@ -4782,7 +4782,9 @@
         "nivelMinimoLoja": 1,
         "familia": "cao-e-lobo",
         "estagio": "Lobo",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -4802,11 +4804,11 @@
         },
         "raridade": "incomum",
         "categoria": "Animal",
-        "pv": 265,
+        "pv": 220,
         "estamina": 36,
         "nivel": 12,
         "vd": 12,
-        "defesa": 16,
+        "defesa": 22,
         "iniciativa": 17,
         "deslocamento": "9m",
         "atributos": {
@@ -4836,7 +4838,9 @@
         "habilidades": [],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -4856,11 +4860,11 @@
         },
         "raridade": "incomum",
         "categoria": "Animal",
-        "pv": 380,
+        "pv": 300,
         "estamina": 54,
         "nivel": 18,
         "vd": 18,
-        "defesa": 18,
+        "defesa": 26,
         "iniciativa": 26,
         "deslocamento": "9m (Escalar)",
         "atributos": {
@@ -4892,7 +4896,9 @@
         "nivelMinimoLoja": 2,
         "familia": "aranha",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -4912,11 +4918,11 @@
         },
         "raridade": "raro",
         "categoria": "Monstro",
-        "pv": 670,
+        "pv": 530,
         "estamina": 84,
         "nivel": 28,
         "vd": 28,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 26,
         "deslocamento": "6m",
         "atributos": {
@@ -4945,7 +4951,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -4965,10 +4973,10 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 1040,
+        "pv": 820,
         "nivel": 38,
         "vd": 38,
-        "defesa": 26,
+        "defesa": 39,
         "iniciativa": 33,
         "deslocamento": "9m (Voo 12m)",
         "mana": 111,
@@ -5003,7 +5011,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5023,10 +5033,10 @@
         },
         "raridade": "incomum",
         "categoria": "Monstro",
-        "pv": 170,
+        "pv": 160,
         "nivel": 6,
         "vd": 6,
-        "defesa": 14,
+        "defesa": 18,
         "iniciativa": 19,
         "deslocamento": "12m (Voo)",
         "mana": 39,
@@ -5056,7 +5066,9 @@
         ],
         "classe": "Familiar",
         "nivelMinimoLoja": 2,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -5076,10 +5088,10 @@
         },
         "raridade": "raro",
         "categoria": "Espírito",
-        "pv": 265,
+        "pv": 210,
         "nivel": 14,
         "vd": 14,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 25,
         "deslocamento": "9m (Atravessar paredes)",
         "mana": 51,
@@ -5110,7 +5122,9 @@
         "classe": "Familiar",
         "nivelMinimoLoja": 2,
         "familia": "espirito",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5130,10 +5144,10 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 515,
+        "pv": 405,
         "nivel": 22,
         "vd": 22,
-        "defesa": 20,
+        "defesa": 31,
         "iniciativa": 27,
         "deslocamento": "15m (Voo)",
         "mana": 75,
@@ -5168,7 +5182,9 @@
         "familia": "dragao",
         "estagio": "Filhote",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5188,10 +5204,10 @@
         },
         "raridade": "lendario",
         "categoria": "Monstro",
-        "pv": 845,
+        "pv": 665,
         "nivel": 35,
         "vd": 35,
-        "defesa": 24,
+        "defesa": 36,
         "iniciativa": 33,
         "deslocamento": "15m (Voo)",
         "mana": 99,
@@ -5225,7 +5241,9 @@
         "familia": "fenix",
         "estagio": "Menor",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5245,11 +5263,11 @@
         },
         "raridade": "comum",
         "categoria": "Morto-Vivo",
-        "pv": 95,
+        "pv": 90,
         "estamina": 12,
         "nivel": 4,
         "vd": 4,
-        "defesa": 13,
+        "defesa": 17,
         "iniciativa": 14,
         "deslocamento": "9m",
         "atributos": {
@@ -5278,7 +5296,9 @@
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "familia": "morto-vivo",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -5298,11 +5318,11 @@
         },
         "raridade": "comum",
         "categoria": "Morto-Vivo",
-        "pv": 170,
+        "pv": 140,
         "estamina": 30,
         "nivel": 10,
         "vd": 10,
-        "defesa": 13,
+        "defesa": 19,
         "iniciativa": 15,
         "deslocamento": "6m",
         "atributos": {
@@ -5333,7 +5353,9 @@
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "familia": "morto-vivo",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -5353,11 +5375,11 @@
         },
         "raridade": "incomum",
         "categoria": "Morto-Vivo",
-        "pv": 380,
+        "pv": 300,
         "estamina": 48,
         "nivel": 16,
         "vd": 16,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 23,
         "deslocamento": "12m",
         "atributos": {
@@ -5387,7 +5409,9 @@
         "nivelMinimoLoja": 3,
         "familia": "morto-vivo",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5407,10 +5431,10 @@
         },
         "raridade": "raro",
         "categoria": "Morto-Vivo",
-        "pv": 670,
+        "pv": 530,
         "nivel": 30,
         "vd": 30,
-        "defesa": 23,
+        "defesa": 36,
         "iniciativa": 28,
         "deslocamento": "9m",
         "mana": 87,
@@ -5442,7 +5466,9 @@
         "nivelMinimoLoja": 3,
         "familia": "morto-vivo",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5462,10 +5488,10 @@
         },
         "raridade": "comum",
         "categoria": "Elemental",
-        "pv": 170,
+        "pv": 140,
         "nivel": 8,
         "vd": 8,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "9m",
         "mana": 39,
@@ -5497,7 +5523,9 @@
         "nivelMinimoLoja": 2,
         "familia": "elemental",
         "estagio": "Menor",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -5517,11 +5545,11 @@
         },
         "raridade": "raro",
         "categoria": "Constructo",
-        "pv": 380,
+        "pv": 300,
         "estamina": 54,
         "nivel": 18,
         "vd": 18,
-        "defesa": 20,
+        "defesa": 28,
         "iniciativa": 19,
         "deslocamento": "6m",
         "atributos": {
@@ -5551,7 +5579,9 @@
         "nivelMinimoLoja": 2,
         "familia": "golem",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5572,10 +5602,10 @@
         "raridade": "epico",
         "categoria": "Aberração",
         "subtipo": "Demoníaco",
-        "pv": 670,
+        "pv": 530,
         "nivel": 26,
         "vd": 26,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 28,
         "deslocamento": "9m (Voo curto)",
         "mana": 87,
@@ -5606,7 +5636,9 @@
         "classe": "Invocação",
         "nivelMinimoLoja": 3,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5627,10 +5659,10 @@
         "raridade": "lendario",
         "categoria": "Espírito",
         "subtipo": "Angelical",
-        "pv": 1040,
+        "pv": 820,
         "nivel": 40,
         "vd": 40,
-        "defesa": 27,
+        "defesa": 40,
         "iniciativa": 35,
         "deslocamento": "15m (Voo)",
         "mana": 111,
@@ -5663,7 +5695,9 @@
         "requer_autorizacao_mestre": true,
         "familia": "espirito",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5687,7 +5721,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 13,
+        "defesa": 16,
         "iniciativa": 14,
         "deslocamento": "9m",
         "atributos": {
@@ -5714,7 +5748,8 @@
         "classe": "Ajudante",
         "nivelMinimoLoja": 1,
         "funcao": "Escolta",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -5734,10 +5769,10 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 170,
+        "pv": 140,
         "nivel": 10,
         "vd": 10,
-        "defesa": 13,
+        "defesa": 19,
         "iniciativa": 17,
         "deslocamento": "9m",
         "mana": 39,
@@ -5768,7 +5803,9 @@
         "classe": "Ajudante",
         "nivelMinimoLoja": 1,
         "funcao": "Ofício",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -5788,11 +5825,11 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 380,
+        "pv": 300,
         "estamina": 48,
         "nivel": 16,
         "vd": 16,
-        "defesa": 19,
+        "defesa": 27,
         "iniciativa": 22,
         "deslocamento": "9m",
         "atributos": {
@@ -5822,7 +5859,9 @@
         "nivelMinimoLoja": 2,
         "funcao": "Escolta",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5842,11 +5881,11 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 515,
+        "pv": 405,
         "estamina": 66,
         "nivel": 22,
         "vd": 22,
-        "defesa": 18,
+        "defesa": 29,
         "iniciativa": 23,
         "deslocamento": "6m",
         "atributos": {
@@ -5876,7 +5915,9 @@
         "nivelMinimoLoja": 2,
         "funcao": "Ofício",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5896,10 +5937,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 1040,
+        "pv": 820,
         "nivel": 40,
         "vd": 40,
-        "defesa": 28,
+        "defesa": 41,
         "iniciativa": 34,
         "deslocamento": "18m (Voo)",
         "mana": 111,
@@ -5937,7 +5978,9 @@
         "familia": "dragao",
         "estagio": "Ancião",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -5957,11 +6000,11 @@
         },
         "raridade": "lendario",
         "categoria": "Aberração",
-        "pv": 1505,
+        "pv": 1185,
         "estamina": 135,
         "nivel": 45,
         "vd": 45,
-        "defesa": 31,
+        "defesa": 44,
         "iniciativa": 35,
         "deslocamento": "15m (Nado)",
         "atributos": {
@@ -6019,7 +6062,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -6039,10 +6084,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 1490,
+        "pv": 1175,
         "nivel": 50,
         "vd": 50,
-        "defesa": 30,
+        "defesa": 43,
         "iniciativa": 42,
         "deslocamento": "18m (Voo)",
         "mana": 135,
@@ -6097,7 +6142,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -6117,11 +6164,11 @@
         },
         "raridade": "lendario",
         "categoria": "Aberração",
-        "pv": 1505,
+        "pv": 1185,
         "estamina": 126,
         "nivel": 42,
         "vd": 42,
-        "defesa": 31,
+        "defesa": 44,
         "iniciativa": 35,
         "deslocamento": "12m (Nado)",
         "atributos": {
@@ -6177,7 +6224,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -6197,11 +6246,11 @@
         },
         "raridade": "lendario",
         "categoria": "Aberração",
-        "pv": 1140,
+        "pv": 900,
         "estamina": 99,
         "nivel": 33,
         "vd": 33,
-        "defesa": 26,
+        "defesa": 38,
         "iniciativa": 27,
         "deslocamento": "0m (presa ao estreito que habita)",
         "atributos": {
@@ -6259,7 +6308,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -6279,11 +6330,11 @@
         },
         "raridade": "lendario",
         "categoria": "Espírito",
-        "pv": 820,
+        "pv": 645,
         "estamina": 99,
         "nivel": 33,
         "vd": 33,
-        "defesa": 27,
+        "defesa": 39,
         "iniciativa": 33,
         "deslocamento": "18m (Voo)",
         "atributos": {
@@ -6328,7 +6379,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -18580,7 +18633,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 14,
+        "defesa": 17,
         "iniciativa": 12,
         "deslocamento": "6m",
         "atributos": {
@@ -18611,7 +18664,8 @@
         "nivelMinimoLoja": 2,
         "funcao": "Guarda de local",
         "familia": "automato",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -18631,11 +18685,11 @@
         },
         "raridade": "incomum",
         "categoria": "Espírito",
-        "pv": 170,
+        "pv": 140,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 16,
+        "defesa": 22,
         "iniciativa": 18,
         "deslocamento": "12m (Voo)",
         "atributos": {
@@ -18667,7 +18721,9 @@
         "nivelMinimoLoja": 2,
         "funcao": "Escolta",
         "familia": "espirito",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -18687,11 +18743,11 @@
         },
         "raridade": "incomum",
         "categoria": "Aberração",
-        "pv": 265,
+        "pv": 220,
         "estamina": 36,
         "nivel": 12,
         "vd": 12,
-        "defesa": 18,
+        "defesa": 24,
         "iniciativa": 18,
         "deslocamento": "15m",
         "atributos": {
@@ -18722,7 +18778,9 @@
         ],
         "nivelMinimoLoja": 2,
         "familia": "vazio",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -23573,7 +23631,7 @@
         "pv": 70,
         "nivel": 3,
         "vd": 3,
-        "defesa": 13,
+        "defesa": 16,
         "iniciativa": 17,
         "deslocamento": "15m (Voo)",
         "mana": 27,
@@ -23603,7 +23661,8 @@
         ],
         "classe": "Familiar",
         "nivelMinimoLoja": 2,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -23627,7 +23686,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 12,
+        "defesa": 15,
         "iniciativa": 13,
         "deslocamento": "12m",
         "atributos": {
@@ -23657,7 +23716,8 @@
         "habilidades": [],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -23681,7 +23741,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 10,
+        "defesa": 13,
         "iniciativa": 16,
         "deslocamento": "9m",
         "atributos": {
@@ -23709,7 +23769,8 @@
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -23729,10 +23790,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 150,
+        "pv": 125,
         "nivel": 8,
         "vd": 8,
-        "defesa": 13,
+        "defesa": 19,
         "iniciativa": 16,
         "deslocamento": "9m",
         "mana": 39,
@@ -23762,7 +23823,9 @@
         ],
         "classe": "Servo",
         "nivelMinimoLoja": 3,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -23782,11 +23845,11 @@
         },
         "raridade": "comum",
         "categoria": "Animal",
-        "pv": 170,
+        "pv": 140,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 19,
         "deslocamento": "12m",
         "atributos": {
@@ -23815,7 +23878,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "familia": "cao-e-lobo",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -23835,10 +23900,10 @@
         },
         "raridade": "incomum",
         "categoria": "Espírito",
-        "pv": 140,
+        "pv": 115,
         "nivel": 8,
         "vd": 8,
-        "defesa": 16,
+        "defesa": 22,
         "iniciativa": 18,
         "deslocamento": "9m (Atravessar paredes)",
         "mana": 39,
@@ -23869,7 +23934,9 @@
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "familia": "espirito",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -23889,10 +23956,10 @@
         },
         "raridade": "incomum",
         "categoria": "Monstro",
-        "pv": 250,
+        "pv": 195,
         "nivel": 13,
         "vd": 13,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 20,
         "deslocamento": "9m",
         "mana": 51,
@@ -23922,7 +23989,9 @@
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -23942,11 +24011,11 @@
         },
         "raridade": "raro",
         "categoria": "Monstro",
-        "pv": 420,
+        "pv": 330,
         "estamina": 54,
         "nivel": 18,
         "vd": 18,
-        "defesa": 18,
+        "defesa": 26,
         "iniciativa": 21,
         "deslocamento": "12m",
         "atributos": {
@@ -23975,7 +24044,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -23995,10 +24066,10 @@
         },
         "raridade": "raro",
         "categoria": "Aberração",
-        "pv": 380,
+        "pv": 300,
         "nivel": 18,
         "vd": 18,
-        "defesa": 19,
+        "defesa": 27,
         "iniciativa": 22,
         "deslocamento": "9m (Flutuar)",
         "mana": 63,
@@ -24030,7 +24101,9 @@
         "nivelMinimoLoja": 2,
         "familia": "vazio",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24050,11 +24123,11 @@
         },
         "raridade": "incomum",
         "categoria": "Monstro",
-        "pv": 360,
+        "pv": 285,
         "estamina": 54,
         "nivel": 18,
         "vd": 18,
-        "defesa": 19,
+        "defesa": 27,
         "iniciativa": 26,
         "deslocamento": "15m (Voo)",
         "atributos": {
@@ -24083,7 +24156,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24103,11 +24178,11 @@
         },
         "raridade": "raro",
         "categoria": "Constructo",
-        "pv": 600,
+        "pv": 475,
         "estamina": 69,
         "nivel": 23,
         "vd": 23,
-        "defesa": 23,
+        "defesa": 34,
         "iniciativa": 21,
         "deslocamento": "6m",
         "atributos": {
@@ -24137,7 +24212,9 @@
         "nivelMinimoLoja": 3,
         "familia": "golem",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24157,10 +24234,10 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 460,
+        "pv": 365,
         "nivel": 23,
         "vd": 23,
-        "defesa": 19,
+        "defesa": 30,
         "iniciativa": 23,
         "deslocamento": "9m",
         "mana": 75,
@@ -24192,7 +24269,9 @@
         "nivelMinimoLoja": 3,
         "familia": "morto-vivo",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24212,11 +24291,11 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 560,
+        "pv": 440,
         "estamina": 69,
         "nivel": 23,
         "vd": 23,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 27,
         "deslocamento": "18m (Voo)",
         "atributos": {
@@ -24248,7 +24327,9 @@
         "nivelMinimoLoja": 3,
         "familia": "dragao",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24268,10 +24349,10 @@
         },
         "raridade": "epico",
         "categoria": "Espírito",
-        "pv": 480,
+        "pv": 380,
         "nivel": 23,
         "vd": 23,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 26,
         "deslocamento": "9m (Atravessar paredes)",
         "mana": 75,
@@ -24303,7 +24384,9 @@
         "nivelMinimoLoja": 3,
         "familia": "espirito",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24323,11 +24406,11 @@
         },
         "raridade": "raro",
         "categoria": "Monstro",
-        "pv": 700,
+        "pv": 550,
         "estamina": 84,
         "nivel": 28,
         "vd": 28,
-        "defesa": 23,
+        "defesa": 34,
         "iniciativa": 27,
         "deslocamento": "9m",
         "atributos": {
@@ -24360,7 +24443,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24380,11 +24465,11 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 720,
+        "pv": 570,
         "estamina": 84,
         "nivel": 28,
         "vd": 28,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 27,
         "deslocamento": "9m (Nado)",
         "atributos": {
@@ -24415,7 +24500,9 @@
         "papel": "solo",
         "familia": "hidra",
         "estagio": "Duas Cabeças",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24435,10 +24522,10 @@
         },
         "raridade": "epico",
         "categoria": "Elemental",
-        "pv": 800,
+        "pv": 630,
         "nivel": 33,
         "vd": 33,
-        "defesa": 24,
+        "defesa": 36,
         "iniciativa": 29,
         "deslocamento": "12m (Voo)",
         "mana": 99,
@@ -24470,7 +24557,9 @@
         "nivelMinimoLoja": 3,
         "familia": "elemental",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24490,11 +24579,11 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 900,
+        "pv": 710,
         "estamina": 99,
         "nivel": 33,
         "vd": 33,
-        "defesa": 23,
+        "defesa": 35,
         "iniciativa": 27,
         "deslocamento": "12m",
         "atributos": {
@@ -24529,7 +24618,9 @@
         "papel": "solo",
         "familia": "behemoth",
         "estagio": "Planícies",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24549,10 +24640,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 845,
+        "pv": 665,
         "nivel": 33,
         "vd": 33,
-        "defesa": 26,
+        "defesa": 38,
         "iniciativa": 31,
         "deslocamento": "15m (Voo)",
         "mana": 99,
@@ -24604,7 +24695,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24624,11 +24717,11 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 1100,
+        "pv": 870,
         "estamina": 114,
         "nivel": 38,
         "vd": 38,
-        "defesa": 27,
+        "defesa": 40,
         "iniciativa": 30,
         "deslocamento": "9m",
         "atributos": {
@@ -24670,7 +24763,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24690,10 +24785,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 1255,
+        "pv": 990,
         "nivel": 43,
         "vd": 43,
-        "defesa": 28,
+        "defesa": 41,
         "iniciativa": 37,
         "deslocamento": "12m (Atravessar paredes)",
         "mana": 123,
@@ -24737,7 +24832,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24757,10 +24854,10 @@
         },
         "raridade": "lendario",
         "categoria": "Aberração",
-        "pv": 1920,
+        "pv": 1515,
         "nivel": 48,
         "vd": 48,
-        "defesa": 34,
+        "defesa": 47,
         "iniciativa": 39,
         "deslocamento": "12m (Voo)",
         "mana": 150,
@@ -24812,7 +24909,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -24836,7 +24935,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 13,
+        "defesa": 16,
         "iniciativa": 14,
         "deslocamento": "12m",
         "atributos": {
@@ -24868,7 +24967,8 @@
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 1,
         "familia": "cao-e-lobo",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -24892,7 +24992,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 14,
+        "defesa": 17,
         "iniciativa": 11,
         "deslocamento": "9m",
         "atributos": {
@@ -24927,7 +25027,8 @@
         "classe": "Ajudante",
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -24947,11 +25048,11 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 150,
+        "pv": 125,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 19,
         "deslocamento": "9m",
         "atributos": {
@@ -24983,7 +25084,9 @@
         "classe": "Ajudante",
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -25003,11 +25106,11 @@
         },
         "raridade": "comum",
         "categoria": "Animal",
-        "pv": 180,
+        "pv": 150,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 17,
         "deslocamento": "12m",
         "atributos": {
@@ -25042,7 +25145,9 @@
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 1,
         "familia": "cao-e-lobo",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -25062,11 +25167,11 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 240,
+        "pv": 190,
         "estamina": 39,
         "nivel": 13,
         "vd": 13,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "9m",
         "atributos": {
@@ -25101,7 +25206,9 @@
         "classe": "Ajudante",
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 2,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25121,11 +25228,11 @@
         },
         "raridade": "incomum",
         "categoria": "Constructo",
-        "pv": 400,
+        "pv": 315,
         "estamina": 54,
         "nivel": 18,
         "vd": 18,
-        "defesa": 19,
+        "defesa": 27,
         "iniciativa": 18,
         "deslocamento": "9m",
         "atributos": {
@@ -25162,7 +25269,9 @@
         "nivelMinimoLoja": 2,
         "familia": "automato",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25182,10 +25291,10 @@
         },
         "raridade": "incomum",
         "categoria": "Espírito",
-        "pv": 200,
+        "pv": 160,
         "nivel": 13,
         "vd": 13,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 20,
         "deslocamento": "9m (atravessa parede)",
         "mana": 51,
@@ -25221,7 +25330,9 @@
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 2,
         "familia": "espirito",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25241,10 +25352,10 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 440,
+        "pv": 345,
         "nivel": 23,
         "vd": 23,
-        "defesa": 19,
+        "defesa": 30,
         "iniciativa": 22,
         "deslocamento": "9m",
         "mana": 90,
@@ -25279,7 +25390,9 @@
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25299,11 +25412,11 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 700,
+        "pv": 550,
         "estamina": 84,
         "nivel": 28,
         "vd": 28,
-        "defesa": 23,
+        "defesa": 34,
         "iniciativa": 27,
         "deslocamento": "9m",
         "atributos": {
@@ -25340,7 +25453,9 @@
         "funcao": "Guarda de local",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25360,11 +25475,11 @@
         },
         "raridade": "epico",
         "categoria": "Constructo",
-        "pv": 1000,
+        "pv": 790,
         "estamina": 99,
         "nivel": 33,
         "vd": 33,
-        "defesa": 26,
+        "defesa": 38,
         "iniciativa": 24,
         "deslocamento": "6m",
         "atributos": {
@@ -25401,7 +25516,9 @@
         "nivelMinimoLoja": 3,
         "familia": "golem",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25421,11 +25538,11 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 175,
+        "pv": 145,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 16,
         "deslocamento": "9m",
         "atributos": {
@@ -25460,7 +25577,9 @@
         "classe": "Ajudante",
         "funcao": "Escolta",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -25480,11 +25599,11 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 145,
+        "pv": 120,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 20,
         "deslocamento": "12m",
         "atributos": {
@@ -25520,7 +25639,9 @@
         "classe": "Ajudante",
         "funcao": "Escolta",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -25544,7 +25665,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 15,
+        "defesa": 18,
         "iniciativa": 16,
         "deslocamento": "3m (Voo 24m)",
         "atributos": {
@@ -25574,7 +25695,8 @@
         "classe": "Familiar",
         "funcao": "Escolta",
         "nivelMinimoLoja": 2,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -25594,11 +25716,11 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 540,
+        "pv": 425,
         "estamina": 69,
         "nivel": 23,
         "vd": 23,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 25,
         "deslocamento": "9m",
         "atributos": {
@@ -25635,7 +25757,9 @@
         "funcao": "Escolta",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25655,11 +25779,11 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 230,
+        "pv": 180,
         "estamina": 39,
         "nivel": 13,
         "vd": 13,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "9m",
         "atributos": {
@@ -25691,7 +25815,9 @@
         "classe": "Ajudante",
         "funcao": "Tripulação",
         "nivelMinimoLoja": 2,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25711,11 +25837,11 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 250,
+        "pv": 195,
         "estamina": 39,
         "nivel": 13,
         "vd": 13,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 18,
         "deslocamento": "9m",
         "atributos": {
@@ -25750,7 +25876,9 @@
         "classe": "Ajudante",
         "funcao": "Tripulação",
         "nivelMinimoLoja": 2,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25770,11 +25898,11 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 340,
+        "pv": 270,
         "estamina": 54,
         "nivel": 18,
         "vd": 18,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 19,
         "deslocamento": "9m",
         "atributos": {
@@ -25806,7 +25934,9 @@
         "funcao": "Tripulação",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25826,10 +25956,10 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 330,
+        "pv": 260,
         "nivel": 18,
         "vd": 18,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 21,
         "deslocamento": "9m",
         "mana": 63,
@@ -25864,7 +25994,9 @@
         "funcao": "Tripulação",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -25888,7 +26020,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 12,
+        "defesa": 15,
         "iniciativa": 10,
         "deslocamento": "9m",
         "atributos": {
@@ -25919,7 +26051,8 @@
         "classe": "Ajudante",
         "funcao": "Ofício",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -25943,7 +26076,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 12,
+        "defesa": 15,
         "iniciativa": 11,
         "deslocamento": "9m",
         "atributos": {
@@ -25975,7 +26108,8 @@
         "classe": "Ajudante",
         "funcao": "Ofício",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -25995,11 +26129,11 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 130,
+        "pv": 110,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "9m",
         "atributos": {
@@ -26031,7 +26165,9 @@
         "classe": "Ajudante",
         "funcao": "Ofício",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -26051,11 +26187,11 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 180,
+        "pv": 150,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 15,
         "deslocamento": "9m",
         "atributos": {
@@ -26087,7 +26223,9 @@
         "classe": "Ajudante",
         "funcao": "Ofício",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -26107,10 +26245,10 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 300,
+        "pv": 235,
         "nivel": 18,
         "vd": 18,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "9m",
         "mana": 63,
@@ -26149,7 +26287,9 @@
         "funcao": "Ofício",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -26169,10 +26309,10 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 420,
+        "pv": 330,
         "nivel": 23,
         "vd": 23,
-        "defesa": 18,
+        "defesa": 29,
         "iniciativa": 21,
         "deslocamento": "9m",
         "mana": 75,
@@ -26208,7 +26348,9 @@
         "funcao": "Ofício",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -26228,11 +26370,11 @@
         },
         "raridade": "comum",
         "categoria": "Animal",
-        "pv": 165,
+        "pv": 135,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 18,
         "deslocamento": "9m (Escalada 9m)",
         "atributos": {
@@ -26266,7 +26408,9 @@
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -26286,11 +26430,11 @@
         },
         "raridade": "incomum",
         "categoria": "Constructo",
-        "pv": 250,
+        "pv": 195,
         "estamina": 39,
         "nivel": 13,
         "vd": 13,
-        "defesa": 18,
+        "defesa": 26,
         "iniciativa": 17,
         "deslocamento": "9m (Voo 15m)",
         "atributos": {
@@ -26323,7 +26467,9 @@
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -26343,11 +26489,11 @@
         },
         "raridade": "incomum",
         "categoria": "Morto-Vivo",
-        "pv": 400,
+        "pv": 315,
         "estamina": 54,
         "nivel": 18,
         "vd": 18,
-        "defesa": 19,
+        "defesa": 27,
         "iniciativa": 17,
         "deslocamento": "9m",
         "atributos": {
@@ -26382,7 +26528,9 @@
         "nivelMinimoLoja": 3,
         "familia": "morto-vivo",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -26402,11 +26550,11 @@
         },
         "raridade": "raro",
         "categoria": "Aberração",
-        "pv": 500,
+        "pv": 395,
         "estamina": 69,
         "nivel": 23,
         "vd": 23,
-        "defesa": 20,
+        "defesa": 31,
         "iniciativa": 26,
         "deslocamento": "15m",
         "atributos": {
@@ -26442,7 +26590,9 @@
         "nivelMinimoLoja": 3,
         "familia": "cao-e-lobo",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -26462,10 +26612,10 @@
         },
         "raridade": "raro",
         "categoria": "Constructo",
-        "pv": 640,
+        "pv": 505,
         "nivel": 28,
         "vd": 28,
-        "defesa": 24,
+        "defesa": 35,
         "iniciativa": 26,
         "deslocamento": "9m (Flutua)",
         "mana": 87,
@@ -26502,7 +26652,9 @@
         "nivelMinimoLoja": 3,
         "familia": "golem",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -26522,10 +26674,10 @@
         },
         "raridade": "epico",
         "categoria": "Aberração",
-        "pv": 780,
+        "pv": 615,
         "nivel": 33,
         "vd": 33,
-        "defesa": 25,
+        "defesa": 37,
         "iniciativa": 32,
         "deslocamento": "3m (Voo 9m)",
         "mana": 99,
@@ -26564,7 +26716,9 @@
         "nivelMinimoLoja": 3,
         "familia": "vazio",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -26844,11 +26998,11 @@
         },
         "raridade": "epico",
         "categoria": "Humanoide",
-        "pv": 900,
+        "pv": 710,
         "estamina": 99,
         "nivel": 33,
         "vd": 33,
-        "defesa": 25,
+        "defesa": 37,
         "iniciativa": 27,
         "deslocamento": "9m",
         "atributos": {
@@ -26879,7 +27033,9 @@
         "funcao": "Escolta",
         "nivelMinimoLoja": 3,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -26903,7 +27059,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 12,
+        "defesa": 15,
         "iniciativa": 12,
         "deslocamento": "9m",
         "atributos": {
@@ -26932,7 +27088,8 @@
         "classe": "Ajudante",
         "funcao": "Tripulação",
         "nivelMinimoLoja": 1,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -26952,10 +27109,10 @@
         },
         "raridade": "epico",
         "categoria": "Humanoide",
-        "pv": 850,
+        "pv": 670,
         "nivel": 33,
         "vd": 33,
-        "defesa": 24,
+        "defesa": 36,
         "iniciativa": 26,
         "deslocamento": "9m",
         "mana": 90,
@@ -26989,7 +27146,9 @@
         "funcao": "Tripulação",
         "nivelMinimoLoja": 3,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -27009,10 +27168,10 @@
         },
         "raridade": "epico",
         "categoria": "Humanoide",
-        "pv": 820,
+        "pv": 645,
         "nivel": 33,
         "vd": 33,
-        "defesa": 22,
+        "defesa": 34,
         "iniciativa": 24,
         "deslocamento": "6m",
         "mana": 95,
@@ -27045,7 +27204,9 @@
         "funcao": "Ofício",
         "nivelMinimoLoja": 3,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -27065,11 +27226,11 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 245,
+        "pv": 195,
         "estamina": 39,
         "nivel": 13,
         "vd": 13,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 22,
         "deslocamento": "9m",
         "atributos": {
@@ -27101,7 +27262,9 @@
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -27121,10 +27284,10 @@
         },
         "raridade": "epico",
         "categoria": "Humanoide",
-        "pv": 780,
+        "pv": 615,
         "nivel": 33,
         "vd": 33,
-        "defesa": 22,
+        "defesa": 34,
         "iniciativa": 27,
         "deslocamento": "9m",
         "mana": 140,
@@ -27156,7 +27319,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -27176,11 +27341,11 @@
         },
         "raridade": "comum",
         "categoria": "Planta",
-        "pv": 110,
+        "pv": 105,
         "estamina": 15,
         "nivel": 5,
         "vd": 5,
-        "defesa": 12,
+        "defesa": 16,
         "iniciativa": 8,
         "deslocamento": "Nenhum (enraizada)",
         "atributos": {
@@ -27214,7 +27379,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "familia": "planta"
+        "familia": "planta",
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -27234,11 +27401,11 @@
         },
         "raridade": "raro",
         "categoria": "Planta",
-        "pv": 400,
+        "pv": 315,
         "estamina": 60,
         "nivel": 20,
         "vd": 20,
-        "defesa": 16,
+        "defesa": 27,
         "iniciativa": 18,
         "deslocamento": "6m",
         "atributos": {
@@ -27273,7 +27440,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "familia": "planta",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -27293,11 +27462,11 @@
         },
         "raridade": "incomum",
         "categoria": "Feérico",
-        "pv": 160,
+        "pv": 135,
         "estamina": 30,
         "nivel": 10,
         "vd": 10,
-        "defesa": 17,
+        "defesa": 23,
         "iniciativa": 24,
         "deslocamento": "9m (Voo)",
         "atributos": {
@@ -27327,7 +27496,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "familia": "feerico"
+        "familia": "feerico",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -27347,11 +27518,11 @@
         },
         "raridade": "raro",
         "categoria": "Feérico",
-        "pv": 420,
+        "pv": 330,
         "estamina": 60,
         "nivel": 20,
         "vd": 20,
-        "defesa": 18,
+        "defesa": 29,
         "iniciativa": 23,
         "deslocamento": "15m",
         "atributos": {
@@ -27386,7 +27557,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "familia": "feerico",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -27406,11 +27579,11 @@
         },
         "raridade": "incomum",
         "categoria": "Elemental",
-        "pv": 200,
+        "pv": 165,
         "estamina": 30,
         "nivel": 10,
         "vd": 10,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 15,
         "deslocamento": "9m",
         "atributos": {
@@ -27441,7 +27614,9 @@
         "nivelMinimoLoja": 1,
         "familia": "elemental",
         "estagio": "Menor",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -27461,11 +27636,11 @@
         },
         "raridade": "epico",
         "categoria": "Morto-Vivo",
-        "pv": 780,
+        "pv": 615,
         "estamina": 90,
         "nivel": 30,
         "vd": 30,
-        "defesa": 23,
+        "defesa": 36,
         "iniciativa": 22,
         "deslocamento": "9m",
         "atributos": {
@@ -27501,7 +27676,9 @@
         "nivelMinimoLoja": 3,
         "familia": "morto-vivo",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -28531,7 +28708,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 14,
+        "defesa": 17,
         "iniciativa": 10,
         "deslocamento": "6m, 9m (Nado)",
         "atributos": {
@@ -28561,7 +28738,8 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "familia": "mar",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -28582,11 +28760,11 @@
         "raridade": "comum",
         "categoria": "Animal",
         "subtipo": "Marítima",
-        "pv": 170,
+        "pv": 140,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 19,
         "deslocamento": "3m, 12m (Nado)",
         "atributos": {
@@ -28616,7 +28794,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "familia": "mar",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -28637,10 +28817,10 @@
         "raridade": "incomum",
         "categoria": "Animal",
         "subtipo": "Marítima",
-        "pv": 250,
+        "pv": 195,
         "nivel": 13,
         "vd": 13,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 22,
         "deslocamento": "15m (Nado), 9m (Voo por 1 turno após saltar)",
         "mana": 51,
@@ -28672,7 +28852,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "familia": "mar",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -28693,11 +28875,11 @@
         "raridade": "raro",
         "categoria": "Monstro",
         "subtipo": "Marítima",
-        "pv": 560,
+        "pv": 440,
         "estamina": 69,
         "nivel": 23,
         "vd": 23,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 25,
         "deslocamento": "18m (Nado)",
         "atributos": {
@@ -28729,7 +28911,9 @@
         "nivelMinimoLoja": 3,
         "familia": "mar",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -28750,10 +28934,10 @@
         "raridade": "epico",
         "categoria": "Elemental",
         "subtipo": "Marítima",
-        "pv": 900,
+        "pv": 710,
         "nivel": 33,
         "vd": 33,
-        "defesa": 27,
+        "defesa": 39,
         "iniciativa": 27,
         "deslocamento": "6m, 9m (Nado)",
         "mana": 99,
@@ -28787,7 +28971,9 @@
         "nivelMinimoLoja": 3,
         "familia": "elemental",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -28808,10 +28994,10 @@
         "raridade": "lendario",
         "categoria": "Lendário",
         "subtipo": "Marítima",
-        "pv": 1340,
+        "pv": 1055,
         "nivel": 43,
         "vd": 43,
-        "defesa": 29,
+        "defesa": 42,
         "iniciativa": 33,
         "deslocamento": "15m (Nado)",
         "mana": 123,
@@ -28858,7 +29044,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -28882,7 +29070,7 @@
         "pv": 80,
         "nivel": 3,
         "vd": 3,
-        "defesa": 15,
+        "defesa": 18,
         "iniciativa": 16,
         "deslocamento": "12m (Voo)",
         "mana": 27,
@@ -28914,7 +29102,8 @@
         "classe": "Familiar",
         "nivelMinimoLoja": 2,
         "familia": "espirito",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -28935,10 +29124,10 @@
         "raridade": "incomum",
         "categoria": "Espírito",
         "subtipo": "Espírito",
-        "pv": 150,
+        "pv": 125,
         "nivel": 8,
         "vd": 8,
-        "defesa": 16,
+        "defesa": 22,
         "iniciativa": 18,
         "deslocamento": "9m (Flutuar), 15m (Nado)",
         "mana": 39,
@@ -28970,7 +29159,9 @@
         "classe": "Servo",
         "nivelMinimoLoja": 3,
         "familia": "espirito",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -28991,10 +29182,10 @@
         "raridade": "incomum",
         "categoria": "Espírito",
         "subtipo": "Espírito",
-        "pv": 290,
+        "pv": 230,
         "nivel": 13,
         "vd": 13,
-        "defesa": 19,
+        "defesa": 27,
         "iniciativa": 16,
         "deslocamento": "9m",
         "mana": 51,
@@ -29026,7 +29217,9 @@
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
         "familia": "espirito",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29047,10 +29240,10 @@
         "raridade": "raro",
         "categoria": "Espírito",
         "subtipo": "Espírito",
-        "pv": 480,
+        "pv": 380,
         "nivel": 23,
         "vd": 23,
-        "defesa": 24,
+        "defesa": 35,
         "iniciativa": 28,
         "deslocamento": "9m (Flutuar)",
         "mana": 75,
@@ -29084,7 +29277,9 @@
         "nivelMinimoLoja": 3,
         "familia": "espirito",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29105,10 +29300,10 @@
         "raridade": "epico",
         "categoria": "Espírito",
         "subtipo": "Espírito",
-        "pv": 820,
+        "pv": 645,
         "nivel": 33,
         "vd": 33,
-        "defesa": 26,
+        "defesa": 38,
         "iniciativa": 31,
         "deslocamento": "12m (Flutuar)",
         "mana": 110,
@@ -29142,7 +29337,9 @@
         "nivelMinimoLoja": 3,
         "familia": "espirito",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29163,10 +29360,10 @@
         "raridade": "lendario",
         "categoria": "Espírito",
         "subtipo": "Espírito",
-        "pv": 1200,
+        "pv": 945,
         "nivel": 43,
         "vd": 43,
-        "defesa": 30,
+        "defesa": 43,
         "iniciativa": 38,
         "deslocamento": "12m (Flutuar)",
         "mana": 135,
@@ -29213,7 +29410,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29238,7 +29437,7 @@
         "estamina": 9,
         "nivel": 3,
         "vd": 3,
-        "defesa": 13,
+        "defesa": 16,
         "iniciativa": 8,
         "deslocamento": "6m",
         "atributos": {
@@ -29268,7 +29467,8 @@
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
         "familia": "golem",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -29289,11 +29489,11 @@
         "raridade": "comum",
         "categoria": "Constructo",
         "subtipo": "Golem",
-        "pv": 190,
+        "pv": 160,
         "estamina": 24,
         "nivel": 8,
         "vd": 8,
-        "defesa": 16,
+        "defesa": 22,
         "iniciativa": 12,
         "deslocamento": "6m",
         "atributos": {
@@ -29323,7 +29523,9 @@
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
         "familia": "golem",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -29344,10 +29546,10 @@
         "raridade": "incomum",
         "categoria": "Constructo",
         "subtipo": "Golem",
-        "pv": 310,
+        "pv": 245,
         "nivel": 13,
         "vd": 13,
-        "defesa": 20,
+        "defesa": 28,
         "iniciativa": 15,
         "deslocamento": "9m",
         "mana": 51,
@@ -29379,7 +29581,9 @@
         "classe": "Invocação",
         "nivelMinimoLoja": 2,
         "familia": "golem",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29400,10 +29604,10 @@
         "raridade": "raro",
         "categoria": "Constructo",
         "subtipo": "Golem",
-        "pv": 570,
+        "pv": 450,
         "nivel": 23,
         "vd": 23,
-        "defesa": 23,
+        "defesa": 34,
         "iniciativa": 20,
         "deslocamento": "9m",
         "mana": 75,
@@ -29437,7 +29641,9 @@
         "nivelMinimoLoja": 3,
         "familia": "golem",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29458,10 +29664,10 @@
         "raridade": "epico",
         "categoria": "Constructo",
         "subtipo": "Golem",
-        "pv": 880,
+        "pv": 695,
         "nivel": 33,
         "vd": 33,
-        "defesa": 29,
+        "defesa": 41,
         "iniciativa": 32,
         "deslocamento": "9m",
         "mana": 99,
@@ -29495,7 +29701,9 @@
         "nivelMinimoLoja": 3,
         "familia": "golem",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29516,10 +29724,10 @@
         "raridade": "lendario",
         "categoria": "Lendário",
         "subtipo": "Golem",
-        "pv": 1450,
+        "pv": 1145,
         "nivel": 43,
         "vd": 43,
-        "defesa": 32,
+        "defesa": 45,
         "iniciativa": 30,
         "deslocamento": "9m",
         "mana": 123,
@@ -29554,7 +29762,9 @@
         "requer_autorizacao_mestre": true,
         "familia": "golem",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29575,10 +29785,10 @@
         "raridade": "incomum",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 200,
+        "pv": 165,
         "nivel": 8,
         "vd": 8,
-        "defesa": 18,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "12m (Escalar), 9m (Flutuar no Vazio)",
         "mana": 39,
@@ -29614,7 +29824,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "familia": "vazio",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -29635,11 +29847,11 @@
         "raridade": "incomum",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 335,
+        "pv": 265,
         "estamina": 39,
         "nivel": 13,
         "vd": 13,
-        "defesa": 20,
+        "defesa": 28,
         "iniciativa": 23,
         "deslocamento": "15m",
         "atributos": {
@@ -29674,7 +29886,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "familia": "vazio",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29695,10 +29909,10 @@
         "raridade": "raro",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 470,
+        "pv": 370,
         "nivel": 18,
         "vd": 18,
-        "defesa": 23,
+        "defesa": 31,
         "iniciativa": 24,
         "deslocamento": "9m, 15m (entre fendas)",
         "mana": 70,
@@ -29736,7 +29950,9 @@
         "nivelMinimoLoja": 3,
         "familia": "vazio",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29757,10 +29973,10 @@
         "raridade": "epico",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 865,
+        "pv": 680,
         "nivel": 28,
         "vd": 28,
-        "defesa": 27,
+        "defesa": 38,
         "iniciativa": 31,
         "deslocamento": "12m (Escalar), 9m (Flutuar no Vazio)",
         "mana": 87,
@@ -29799,7 +30015,9 @@
         "nivelMinimoLoja": 3,
         "familia": "vazio",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29820,10 +30038,10 @@
         "raridade": "lendario",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 1300,
+        "pv": 1025,
         "nivel": 38,
         "vd": 38,
-        "defesa": 30,
+        "defesa": 43,
         "iniciativa": 35,
         "deslocamento": "12m (Flutuar)",
         "mana": 125,
@@ -29882,7 +30100,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -29903,10 +30123,10 @@
         "raridade": "lendario",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 1900,
+        "pv": 1500,
         "nivel": 48,
         "vd": 48,
-        "defesa": 34,
+        "defesa": 47,
         "iniciativa": 42,
         "deslocamento": "18m (Voo no Vazio)",
         "mana": 160,
@@ -29959,7 +30179,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -31075,7 +31297,7 @@
         "pv": 115,
         "nivel": 3,
         "vd": 3,
-        "defesa": 14,
+        "defesa": 17,
         "iniciativa": 14,
         "deslocamento": "6m (Escalar, só dentro de frestas)",
         "mana": 30,
@@ -31111,7 +31333,8 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
         "familia": "vazio",
-        "papel": "solo"
+        "papel": "solo",
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -31132,10 +31355,10 @@
         "raridade": "epico",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 620,
+        "pv": 490,
         "nivel": 23,
         "vd": 23,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 26,
         "deslocamento": "21m (Nado, inclusive em névoa densa)",
         "mana": 90,
@@ -31174,7 +31397,9 @@
         "nivelMinimoLoja": 3,
         "familia": "vazio",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -31195,10 +31420,10 @@
         "raridade": "epico",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 1015,
+        "pv": 800,
         "nivel": 33,
         "vd": 33,
-        "defesa": 26,
+        "defesa": 38,
         "iniciativa": 32,
         "deslocamento": "9m",
         "mana": 105,
@@ -31236,7 +31461,9 @@
         "requer_autorizacao_mestre": true,
         "familia": "vazio",
         "papel": "solo",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -36857,10 +37084,10 @@
         },
         "raridade": "lendario",
         "categoria": "Constructo",
-        "pv": 1730,
+        "pv": 1365,
         "nivel": 65,
         "vd": 65,
-        "defesa": 42,
+        "defesa": 58,
         "iniciativa": 48,
         "deslocamento": "12m",
         "mana": 200,
@@ -36903,7 +37130,9 @@
         "estagio": "Titânico",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -36923,10 +37152,10 @@
         },
         "raridade": "epico",
         "categoria": "Morto-Vivo",
-        "pv": 1055,
+        "pv": 830,
         "nivel": 37,
         "vd": 37,
-        "defesa": 28,
+        "defesa": 41,
         "iniciativa": 33,
         "deslocamento": "15m",
         "mana": 116,
@@ -36966,7 +37195,9 @@
         "familia": "morto-vivo",
         "estagio": "Cavaleiro",
         "disponivelNaLoja": false,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -36986,10 +37217,10 @@
         },
         "raridade": "lendario",
         "categoria": "Morto-Vivo",
-        "pv": 1615,
+        "pv": 1275,
         "nivel": 49,
         "vd": 49,
-        "defesa": 34,
+        "defesa": 47,
         "iniciativa": 39,
         "deslocamento": "12m",
         "mana": 152,
@@ -37033,7 +37264,9 @@
         "estagio": "Ancião",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37053,10 +37286,10 @@
         },
         "raridade": "lendario",
         "categoria": "Aberração",
-        "pv": 4050,
+        "pv": 3195,
         "nivel": 120,
         "vd": 120,
-        "defesa": 71,
+        "defesa": 89,
         "iniciativa": 77,
         "deslocamento": "18m",
         "mana": 365,
@@ -37121,7 +37354,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 6
+        "ajusteDeAtaqueArmadura": 6,
+        "ajusteDeDefesaAcerto": 18,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37141,10 +37376,10 @@
         },
         "raridade": "lendario",
         "categoria": "Aberração",
-        "pv": 10500,
+        "pv": 8285,
         "nivel": 300,
         "vd": 300,
-        "defesa": 162,
+        "defesa": 186,
         "iniciativa": 170,
         "deslocamento": "24m",
         "mana": 905,
@@ -37208,7 +37443,9 @@
               "Se todos calam e ficam imóveis por uma rodada, ela perde o turno. Quem volta a chamar por ela é Marcado de novo."
             ]
           }
-        ]
+        ],
+        "ajusteDeDefesaAcerto": 24,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37228,10 +37465,10 @@
         },
         "raridade": "lendario",
         "categoria": "Aberração",
-        "pv": 18125,
+        "pv": 14300,
         "nivel": 500,
         "vd": 500,
-        "defesa": 264,
+        "defesa": 291,
         "iniciativa": 273,
         "deslocamento": "30m",
         "mana": 1505,
@@ -37295,7 +37532,9 @@
               "Ninguém consegue falar na cena: a comunicação é só por gestos, escrita ou olhar. Quem tenta falar sofre o dano de Quem Fala Perde em dobro."
             ]
           }
-        ]
+        ],
+        "ajusteDeDefesaAcerto": 27,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37315,10 +37554,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 25,
         "vd": 25,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "12m",
         "mana": 80,
@@ -37356,7 +37595,9 @@
         "geradoPorFamilia": true,
         "familia": "elemental",
         "estagio": "Maior",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37376,10 +37617,10 @@
         },
         "raridade": "lendario",
         "categoria": "Elemental",
-        "pv": 1190,
+        "pv": 940,
         "nivel": 45,
         "vd": 45,
-        "defesa": 32,
+        "defesa": 45,
         "iniciativa": 37,
         "deslocamento": "15m",
         "mana": 140,
@@ -37420,7 +37661,9 @@
         "familia": "elemental",
         "estagio": "Primordial",
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37440,10 +37683,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 28,
         "vd": 28,
-        "defesa": 23,
+        "defesa": 34,
         "iniciativa": 28,
         "deslocamento": "12m",
         "mana": 89,
@@ -37481,7 +37724,9 @@
         "geradoPorFamilia": true,
         "familia": "elemental",
         "estagio": "Maior",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37501,10 +37746,10 @@
         },
         "raridade": "lendario",
         "categoria": "Elemental",
-        "pv": 1265,
+        "pv": 1000,
         "nivel": 48,
         "vd": 48,
-        "defesa": 34,
+        "defesa": 47,
         "iniciativa": 39,
         "deslocamento": "15m",
         "mana": 149,
@@ -37545,7 +37790,9 @@
         "familia": "elemental",
         "estagio": "Primordial",
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37565,10 +37812,10 @@
         },
         "raridade": "lendario",
         "categoria": "Elemental",
-        "pv": 3780,
+        "pv": 2980,
         "nivel": 140,
         "vd": 140,
-        "defesa": 81,
+        "defesa": 99,
         "iniciativa": 87,
         "deslocamento": "30m",
         "mana": 425,
@@ -37611,7 +37858,9 @@
         "estagio": "Ancestral",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 6
+        "ajusteDeAtaqueArmadura": 6,
+        "ajusteDeDefesaAcerto": 18,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37631,10 +37880,10 @@
         },
         "raridade": "lendario",
         "categoria": "Elemental",
-        "pv": 4520,
+        "pv": 3565,
         "nivel": 165,
         "vd": 165,
-        "defesa": 93,
+        "defesa": 114,
         "iniciativa": 100,
         "deslocamento": "30m",
         "mana": 500,
@@ -37676,7 +37925,9 @@
         "estagio": "Ancestral",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 3
+        "ajusteDeAtaqueArmadura": 3,
+        "ajusteDeDefesaAcerto": 21,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37696,10 +37947,10 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 810,
+        "pv": 640,
         "nivel": 30,
         "vd": 30,
-        "defesa": 24,
+        "defesa": 37,
         "iniciativa": 29,
         "deslocamento": "18m (Voo)",
         "mana": 95,
@@ -37737,7 +37988,9 @@
         "geradoPorFamilia": true,
         "familia": "dragao",
         "estagio": "Jovem",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37757,10 +38010,10 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 1040,
+        "pv": 820,
         "nivel": 35,
         "vd": 35,
-        "defesa": 27,
+        "defesa": 39,
         "iniciativa": 31,
         "deslocamento": "18m (Voo)",
         "mana": 110,
@@ -37798,7 +38051,9 @@
         "geradoPorFamilia": true,
         "familia": "dragao",
         "estagio": "Adulto",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37818,10 +38073,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 1595,
+        "pv": 1260,
         "nivel": 60,
         "vd": 60,
-        "defesa": 40,
+        "defesa": 56,
         "iniciativa": 46,
         "deslocamento": "24m (Voo)",
         "mana": 185,
@@ -37863,7 +38118,9 @@
         "familia": "dragao",
         "estagio": "Primordial",
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37883,10 +38140,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 3715,
+        "pv": 2930,
         "nivel": 110,
         "vd": 110,
-        "defesa": 66,
+        "defesa": 84,
         "iniciativa": 72,
         "deslocamento": "30m (Voo)",
         "mana": 335,
@@ -37930,7 +38187,9 @@
         "estagio": "Ancestral",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 6
+        "ajusteDeAtaqueArmadura": 6,
+        "ajusteDeDefesaAcerto": 18,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -37950,10 +38209,10 @@
         },
         "raridade": "raro",
         "categoria": "Espírito",
-        "pv": 810,
+        "pv": 640,
         "nivel": 29,
         "vd": 29,
-        "defesa": 23,
+        "defesa": 36,
         "iniciativa": 28,
         "deslocamento": "18m (Voo)",
         "mana": 92,
@@ -37992,7 +38251,9 @@
         "familia": "espirito",
         "estagio": "Tormenta",
         "disponivelNaLoja": false,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38013,10 +38274,10 @@
         "raridade": "lendario",
         "categoria": "Espírito",
         "subtipo": "Angelical",
-        "pv": 2825,
+        "pv": 2230,
         "nivel": 85,
         "vd": 85,
-        "defesa": 53,
+        "defesa": 68,
         "iniciativa": 58,
         "deslocamento": "24m (Voo)",
         "mana": 260,
@@ -38060,7 +38321,9 @@
         "estagio": "Arcanjo",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 9
+        "ajusteDeAtaqueArmadura": 9,
+        "ajusteDeDefesaAcerto": 15,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38081,10 +38344,10 @@
         "raridade": "lendario",
         "categoria": "Espírito",
         "subtipo": "Angelical",
-        "pv": 5140,
+        "pv": 4055,
         "nivel": 150,
         "vd": 150,
-        "defesa": 86,
+        "defesa": 107,
         "iniciativa": 93,
         "deslocamento": "30m (Voo)",
         "mana": 455,
@@ -38128,7 +38391,9 @@
         "estagio": "Serafim",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 3
+        "ajusteDeAtaqueArmadura": 3,
+        "ajusteDeDefesaAcerto": 21,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38148,10 +38413,10 @@
         },
         "raridade": "incomum",
         "categoria": "Animal",
-        "pv": 400,
+        "pv": 315,
         "nivel": 15,
         "vd": 15,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "12m",
         "mana": 50,
@@ -38189,7 +38454,9 @@
         "geradoPorFamilia": true,
         "familia": "cao-e-lobo",
         "estagio": "Atroz",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38209,10 +38476,10 @@
         },
         "raridade": "raro",
         "categoria": "Animal",
-        "pv": 810,
+        "pv": 640,
         "nivel": 25,
         "vd": 25,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "15m",
         "mana": 80,
@@ -38250,7 +38517,9 @@
         "geradoPorFamilia": true,
         "familia": "cao-e-lobo",
         "estagio": "Alfa",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38270,10 +38539,10 @@
         },
         "raridade": "lendario",
         "categoria": "Monstro",
-        "pv": 1860,
+        "pv": 1470,
         "nivel": 70,
         "vd": 70,
-        "defesa": 45,
+        "defesa": 61,
         "iniciativa": 51,
         "deslocamento": "24m (Nado)",
         "mana": 215,
@@ -38316,7 +38585,9 @@
         "estagio": "Ancestral",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38336,10 +38607,10 @@
         },
         "raridade": "lendario",
         "categoria": "Elemental",
-        "pv": 3510,
+        "pv": 2770,
         "nivel": 130,
         "vd": 130,
-        "defesa": 76,
+        "defesa": 94,
         "iniciativa": 82,
         "deslocamento": "30m (Nado)",
         "mana": 395,
@@ -38382,7 +38653,9 @@
         "estagio": "Maremoto",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 6
+        "ajusteDeAtaqueArmadura": 6,
+        "ajusteDeDefesaAcerto": 18,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38402,10 +38675,10 @@
         },
         "raridade": "comum",
         "categoria": "Animal",
-        "pv": 70,
+        "pv": 80,
         "nivel": 1,
         "vd": 1,
-        "defesa": 9,
+        "defesa": 10,
         "iniciativa": 12,
         "deslocamento": "9m",
         "mana": 8,
@@ -38443,7 +38716,9 @@
         "geradoPorFamilia": true,
         "familia": "roedor",
         "estagio": "Comum",
-        "disponivelNaLoja": false
+        "disponivelNaLoja": false,
+        "ajusteDeDefesaAcerto": 1,
+        "fatorDeVidaAcerto": 1.154
       }
     },
     {
@@ -38463,10 +38738,10 @@
         },
         "raridade": "comum",
         "categoria": "Animal",
-        "pv": 150,
+        "pv": 125,
         "nivel": 7,
         "vd": 7,
-        "defesa": 12,
+        "defesa": 18,
         "iniciativa": 16,
         "deslocamento": "9m",
         "mana": 26,
@@ -38504,7 +38779,9 @@
         "geradoPorFamilia": true,
         "familia": "roedor",
         "estagio": "Gigante",
-        "disponivelNaLoja": false
+        "disponivelNaLoja": false,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -38524,10 +38801,10 @@
         },
         "raridade": "incomum",
         "categoria": "Animal",
-        "pv": 500,
+        "pv": 395,
         "nivel": 17,
         "vd": 17,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 21,
         "deslocamento": "9m",
         "mana": 56,
@@ -38567,7 +38844,9 @@
         "familia": "roedor",
         "estagio": "Rei",
         "disponivelNaLoja": false,
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38587,10 +38866,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 70,
+        "pv": 80,
         "nivel": 2,
         "vd": 2,
-        "defesa": 10,
+        "defesa": 11,
         "iniciativa": 13,
         "deslocamento": "9m",
         "mana": 11,
@@ -38628,7 +38907,9 @@
         "geradoPorFamilia": true,
         "familia": "salteador",
         "estagio": "Salteador",
-        "disponivelNaLoja": false
+        "disponivelNaLoja": false,
+        "ajusteDeDefesaAcerto": 1,
+        "fatorDeVidaAcerto": 1.154
       }
     },
     {
@@ -38648,10 +38929,10 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 165,
+        "pv": 135,
         "nivel": 12,
         "vd": 12,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 19,
         "deslocamento": "9m",
         "mana": 41,
@@ -38689,7 +38970,9 @@
         "geradoPorFamilia": true,
         "familia": "salteador",
         "estagio": "Capitão",
-        "disponivelNaLoja": false
+        "disponivelNaLoja": false,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -38709,10 +38992,10 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 510,
+        "pv": 400,
         "nivel": 24,
         "vd": 24,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "12m",
         "mana": 77,
@@ -38753,7 +39036,9 @@
         "familia": "salteador",
         "estagio": "Senhor",
         "disponivelNaLoja": false,
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38773,10 +39058,10 @@
         },
         "raridade": "comum",
         "categoria": "Monstro",
-        "pv": 150,
+        "pv": 125,
         "nivel": 9,
         "vd": 9,
-        "defesa": 13,
+        "defesa": 19,
         "iniciativa": 17,
         "deslocamento": "9m",
         "mana": 32,
@@ -38814,7 +39099,9 @@
         "geradoPorFamilia": true,
         "familia": "gigante",
         "estagio": "Ogro",
-        "disponivelNaLoja": false
+        "disponivelNaLoja": false,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -38834,10 +39121,10 @@
         },
         "raridade": "raro",
         "categoria": "Monstro",
-        "pv": 410,
+        "pv": 325,
         "nivel": 21,
         "vd": 21,
-        "defesa": 19,
+        "defesa": 30,
         "iniciativa": 24,
         "deslocamento": "12m",
         "mana": 68,
@@ -38876,7 +39163,9 @@
         "familia": "gigante",
         "estagio": "Pedra",
         "disponivelNaLoja": false,
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38896,10 +39185,10 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 810,
+        "pv": 640,
         "nivel": 34,
         "vd": 34,
-        "defesa": 27,
+        "defesa": 39,
         "iniciativa": 31,
         "deslocamento": "15m",
         "mana": 107,
@@ -38938,7 +39227,9 @@
         "familia": "gigante",
         "estagio": "Tormenta",
         "disponivelNaLoja": false,
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -38958,10 +39249,10 @@
         },
         "raridade": "lendario",
         "categoria": "Monstro",
-        "pv": 1450,
+        "pv": 1145,
         "nivel": 55,
         "vd": 55,
-        "defesa": 37,
+        "defesa": 50,
         "iniciativa": 42,
         "deslocamento": "18m",
         "mana": 170,
@@ -39004,7 +39295,9 @@
         "estagio": "Ancestral",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39024,10 +39317,10 @@
         },
         "raridade": "lendario",
         "categoria": "Monstro",
-        "pv": 1240,
+        "pv": 980,
         "nivel": 47,
         "vd": 47,
-        "defesa": 33,
+        "defesa": 46,
         "iniciativa": 38,
         "deslocamento": "12m",
         "mana": 146,
@@ -39070,7 +39363,9 @@
         "estagio": "Sete Cabeças",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39090,10 +39385,10 @@
         },
         "raridade": "lendario",
         "categoria": "Monstro",
-        "pv": 2660,
+        "pv": 2100,
         "nivel": 80,
         "vd": 80,
-        "defesa": 50,
+        "defesa": 66,
         "iniciativa": 56,
         "deslocamento": "15m",
         "mana": 245,
@@ -39137,7 +39432,9 @@
         "estagio": "Primordial",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39157,10 +39454,10 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 1160,
+        "pv": 915,
         "nivel": 44,
         "vd": 44,
-        "defesa": 32,
+        "defesa": 45,
         "iniciativa": 37,
         "deslocamento": "15m",
         "mana": 137,
@@ -39199,7 +39496,9 @@
         "familia": "behemoth",
         "estagio": "Ancião",
         "disponivelNaLoja": false,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39219,10 +39518,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 8690,
+        "pv": 6855,
         "nivel": 250,
         "vd": 250,
-        "defesa": 137,
+        "defesa": 160,
         "iniciativa": 144,
         "deslocamento": "36m (Voo)",
         "mana": 755,
@@ -39284,7 +39583,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 1
+        "ajusteDeAtaqueArmadura": 1,
+        "ajusteDeDefesaAcerto": 23,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39304,10 +39605,10 @@
         },
         "raridade": "comum",
         "categoria": "Constructo",
-        "pv": 265,
+        "pv": 220,
         "nivel": 11,
         "vd": 11,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "9m",
         "mana": 38,
@@ -39343,7 +39644,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "disponivelNaLoja": false
+        "disponivelNaLoja": false,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -39363,10 +39666,10 @@
         },
         "raridade": "raro",
         "categoria": "Monstro",
-        "pv": 410,
+        "pv": 325,
         "nivel": 24,
         "vd": 24,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "12m",
         "mana": 77,
@@ -39403,7 +39706,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "disponivelNaLoja": false,
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39423,10 +39728,10 @@
         },
         "raridade": "lendario",
         "categoria": "Morto-Vivo",
-        "pv": 3040,
+        "pv": 2400,
         "nivel": 90,
         "vd": 90,
-        "defesa": 56,
+        "defesa": 72,
         "iniciativa": 62,
         "deslocamento": "18m",
         "mana": 275,
@@ -39492,7 +39797,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39512,10 +39819,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 3375,
+        "pv": 2665,
         "nivel": 100,
         "vd": 100,
-        "defesa": 61,
+        "defesa": 79,
         "iniciativa": 67,
         "deslocamento": "30m (Nado)",
         "mana": 305,
@@ -39577,7 +39884,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 6
+        "ajusteDeAtaqueArmadura": 6,
+        "ajusteDeDefesaAcerto": 18,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39597,10 +39906,10 @@
         },
         "raridade": "lendario",
         "categoria": "Aberração",
-        "pv": 5140,
+        "pv": 4055,
         "nivel": 150,
         "vd": 150,
-        "defesa": 86,
+        "defesa": 107,
         "iniciativa": 93,
         "deslocamento": "24m",
         "mana": 455,
@@ -39664,7 +39973,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 3
+        "ajusteDeAtaqueArmadura": 3,
+        "ajusteDeDefesaAcerto": 21,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39684,10 +39995,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 6850,
+        "pv": 5405,
         "nivel": 200,
         "vd": 200,
-        "defesa": 112,
+        "defesa": 132,
         "iniciativa": 118,
         "deslocamento": "24m",
         "mana": 605,
@@ -39750,7 +40061,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 20,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39770,10 +40083,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 14200,
+        "pv": 11205,
         "nivel": 400,
         "vd": 400,
-        "defesa": 213,
+        "defesa": 237,
         "iniciativa": 221,
         "deslocamento": "30m",
         "mana": 1205,
@@ -39834,7 +40147,9 @@
               "Se o grupo ajudar a sustentar o céu por uma rodada, Atlarion fica Atordoado e a luta pode terminar em acordo. Se não, o céu pesa de novo sobre todos."
             ]
           }
-        ]
+        ],
+        "ajusteDeDefesaAcerto": 24,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -39854,10 +40169,10 @@
         },
         "raridade": "comum",
         "categoria": "Morto-Vivo",
-        "pv": 135,
+        "pv": 125,
         "nivel": 6,
         "vd": 6,
-        "defesa": 12,
+        "defesa": 16,
         "iniciativa": 16,
         "deslocamento": "12m",
         "mana": 23,
@@ -39894,7 +40209,9 @@
         "nivelMinimoLoja": 1,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "morto-vivo"
+        "familia": "morto-vivo",
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -39914,10 +40231,10 @@
         },
         "raridade": "comum",
         "categoria": "Morto-Vivo",
-        "pv": 265,
+        "pv": 220,
         "nivel": 11,
         "vd": 11,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "9m",
         "mana": 38,
@@ -39953,7 +40270,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "morto-vivo"
+        "familia": "morto-vivo",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -39973,10 +40292,10 @@
         },
         "raridade": "incomum",
         "categoria": "Morto-Vivo",
-        "pv": 400,
+        "pv": 315,
         "nivel": 15,
         "vd": 15,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "9m",
         "mana": 50,
@@ -40014,7 +40333,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "morto-vivo",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -40034,10 +40355,10 @@
         },
         "raridade": "incomum",
         "categoria": "Morto-Vivo",
-        "pv": 400,
+        "pv": 315,
         "nivel": 19,
         "vd": 19,
-        "defesa": 18,
+        "defesa": 28,
         "iniciativa": 22,
         "deslocamento": "9m",
         "mana": 62,
@@ -40075,7 +40396,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "morto-vivo",
-        "ajusteDeAtaqueArmadura": 5
+        "ajusteDeAtaqueArmadura": 5,
+        "ajusteDeDefesaAcerto": 10,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -40095,10 +40418,10 @@
         },
         "raridade": "raro",
         "categoria": "Morto-Vivo",
-        "pv": 810,
+        "pv": 640,
         "nivel": 26,
         "vd": 26,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 27,
         "deslocamento": "12m",
         "mana": 83,
@@ -40136,7 +40459,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "morto-vivo",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -40156,10 +40481,10 @@
         },
         "raridade": "epico",
         "categoria": "Morto-Vivo",
-        "pv": 1080,
+        "pv": 850,
         "nivel": 41,
         "vd": 41,
-        "defesa": 30,
+        "defesa": 43,
         "iniciativa": 35,
         "deslocamento": "12m",
         "mana": 128,
@@ -40198,7 +40523,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "morto-vivo",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -40218,10 +40545,10 @@
         },
         "raridade": "comum",
         "categoria": "Elemental",
-        "pv": 150,
+        "pv": 125,
         "nivel": 9,
         "vd": 9,
-        "defesa": 13,
+        "defesa": 19,
         "iniciativa": 17,
         "deslocamento": "9m",
         "mana": 32,
@@ -40258,7 +40585,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "estagio": "Menor"
+        "estagio": "Menor",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -40278,10 +40607,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 26,
         "vd": 26,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 27,
         "deslocamento": "9m",
         "mana": 83,
@@ -40320,7 +40649,9 @@
         "geradoPorFamilia": true,
         "familia": "elemental",
         "estagio": "Maior",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -40340,10 +40671,10 @@
         },
         "raridade": "comum",
         "categoria": "Elemental",
-        "pv": 150,
+        "pv": 125,
         "nivel": 7,
         "vd": 7,
-        "defesa": 12,
+        "defesa": 18,
         "iniciativa": 16,
         "deslocamento": "12m",
         "mana": 26,
@@ -40380,7 +40711,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "estagio": "Menor"
+        "estagio": "Menor",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -40400,10 +40733,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 27,
         "vd": 27,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 27,
         "deslocamento": "12m",
         "mana": 86,
@@ -40441,7 +40774,9 @@
         "geradoPorFamilia": true,
         "familia": "elemental",
         "estagio": "Maior",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -40461,10 +40796,10 @@
         },
         "raridade": "comum",
         "categoria": "Elemental",
-        "pv": 150,
+        "pv": 125,
         "nivel": 9,
         "vd": 9,
-        "defesa": 13,
+        "defesa": 19,
         "iniciativa": 17,
         "deslocamento": "15m (Voo)",
         "mana": 32,
@@ -40501,7 +40836,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "estagio": "Menor"
+        "estagio": "Menor",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -40521,10 +40858,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 410,
+        "pv": 325,
         "nivel": 24,
         "vd": 24,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "18m (Voo)",
         "mana": 77,
@@ -40563,7 +40900,9 @@
         "geradoPorFamilia": true,
         "familia": "elemental",
         "estagio": "Maior",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -40583,10 +40922,10 @@
         },
         "raridade": "comum",
         "categoria": "Elemental",
-        "pv": 265,
+        "pv": 220,
         "nivel": 11,
         "vd": 11,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "15m",
         "mana": 38,
@@ -40623,7 +40962,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "estagio": "Menor"
+        "estagio": "Menor",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -40643,10 +40984,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 29,
         "vd": 29,
-        "defesa": 23,
+        "defesa": 36,
         "iniciativa": 28,
         "deslocamento": "18m",
         "mana": 92,
@@ -40684,7 +41025,9 @@
         "geradoPorFamilia": true,
         "familia": "elemental",
         "estagio": "Maior",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -40704,10 +41047,10 @@
         },
         "raridade": "incomum",
         "categoria": "Elemental",
-        "pv": 265,
+        "pv": 220,
         "nivel": 12,
         "vd": 12,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 19,
         "deslocamento": "12m (Voo)",
         "mana": 41,
@@ -40744,7 +41087,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "estagio": "Menor"
+        "estagio": "Menor",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -40764,10 +41109,10 @@
         },
         "raridade": "epico",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 30,
         "vd": 30,
-        "defesa": 24,
+        "defesa": 37,
         "iniciativa": 29,
         "deslocamento": "15m (Voo)",
         "mana": 95,
@@ -40806,7 +41151,9 @@
         "geradoPorFamilia": true,
         "familia": "elemental",
         "estagio": "Maior",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -40826,10 +41173,10 @@
         },
         "raridade": "comum",
         "categoria": "Elemental",
-        "pv": 265,
+        "pv": 220,
         "nivel": 11,
         "vd": 11,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "12m",
         "mana": 38,
@@ -40866,7 +41213,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "estagio": "Menor"
+        "estagio": "Menor",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -40886,10 +41235,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 28,
         "vd": 28,
-        "defesa": 23,
+        "defesa": 34,
         "iniciativa": 28,
         "deslocamento": "12m",
         "mana": 89,
@@ -40927,7 +41276,9 @@
         "geradoPorFamilia": true,
         "familia": "elemental",
         "estagio": "Maior",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -40947,10 +41298,10 @@
         },
         "raridade": "incomum",
         "categoria": "Elemental",
-        "pv": 280,
+        "pv": 220,
         "nivel": 14,
         "vd": 14,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "12m",
         "mana": 47,
@@ -40987,7 +41338,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "elemental"
+        "familia": "elemental",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41007,10 +41360,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 410,
+        "pv": 325,
         "nivel": 22,
         "vd": 22,
-        "defesa": 20,
+        "defesa": 31,
         "iniciativa": 25,
         "deslocamento": "9m",
         "mana": 71,
@@ -41048,7 +41401,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41068,10 +41423,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 410,
+        "pv": 325,
         "nivel": 24,
         "vd": 24,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "12m (Nado)",
         "mana": 77,
@@ -41109,7 +41464,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41129,10 +41486,10 @@
         },
         "raridade": "incomum",
         "categoria": "Elemental",
-        "pv": 400,
+        "pv": 315,
         "nivel": 19,
         "vd": 19,
-        "defesa": 18,
+        "defesa": 28,
         "iniciativa": 22,
         "deslocamento": "9m",
         "mana": 62,
@@ -41170,7 +41527,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "ajusteDeAtaqueArmadura": 5
+        "ajusteDeAtaqueArmadura": 5,
+        "ajusteDeDefesaAcerto": 10,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41190,10 +41549,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 26,
         "vd": 26,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 27,
         "deslocamento": "15m (Voo)",
         "mana": 83,
@@ -41230,7 +41589,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41250,10 +41611,10 @@
         },
         "raridade": "incomum",
         "categoria": "Elemental",
-        "pv": 280,
+        "pv": 220,
         "nivel": 13,
         "vd": 13,
-        "defesa": 15,
+        "defesa": 23,
         "iniciativa": 19,
         "deslocamento": "12m (Voo)",
         "mana": 44,
@@ -41289,7 +41650,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "elemental"
+        "familia": "elemental",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41309,10 +41672,10 @@
         },
         "raridade": "epico",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 31,
         "vd": 31,
-        "defesa": 24,
+        "defesa": 37,
         "iniciativa": 29,
         "deslocamento": "12m (Voo)",
         "mana": 98,
@@ -41349,7 +41712,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41369,10 +41734,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 410,
+        "pv": 325,
         "nivel": 21,
         "vd": 21,
-        "defesa": 19,
+        "defesa": 30,
         "iniciativa": 24,
         "deslocamento": "12m (Voo)",
         "mana": 68,
@@ -41409,7 +41774,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41429,10 +41796,10 @@
         },
         "raridade": "raro",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 25,
         "vd": 25,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "9m (Voo)",
         "mana": 80,
@@ -41469,7 +41836,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41489,10 +41858,10 @@
         },
         "raridade": "incomum",
         "categoria": "Elemental",
-        "pv": 400,
+        "pv": 315,
         "nivel": 15,
         "vd": 15,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "12m (Voo)",
         "mana": 50,
@@ -41529,7 +41898,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41549,10 +41920,10 @@
         },
         "raridade": "epico",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 32,
         "vd": 32,
-        "defesa": 26,
+        "defesa": 38,
         "iniciativa": 30,
         "deslocamento": "18m (Voo)",
         "mana": 101,
@@ -41589,7 +41960,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41609,10 +41982,10 @@
         },
         "raridade": "incomum",
         "categoria": "Elemental",
-        "pv": 280,
+        "pv": 220,
         "nivel": 14,
         "vd": 14,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "9m",
         "mana": 47,
@@ -41648,7 +42021,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "elemental"
+        "familia": "elemental",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41668,10 +42043,10 @@
         },
         "raridade": "epico",
         "categoria": "Elemental",
-        "pv": 810,
+        "pv": 640,
         "nivel": 34,
         "vd": 34,
-        "defesa": 27,
+        "defesa": 39,
         "iniciativa": 31,
         "deslocamento": "15m (Voo)",
         "mana": 107,
@@ -41708,7 +42083,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "elemental",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41728,10 +42105,10 @@
         },
         "raridade": "comum",
         "categoria": "Planta",
-        "pv": 150,
+        "pv": 125,
         "nivel": 7,
         "vd": 7,
-        "defesa": 12,
+        "defesa": 18,
         "iniciativa": 16,
         "deslocamento": "6m",
         "mana": 26,
@@ -41767,7 +42144,9 @@
         "nivelMinimoLoja": 1,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "planta"
+        "familia": "planta",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -41787,10 +42166,10 @@
         },
         "raridade": "incomum",
         "categoria": "Planta",
-        "pv": 265,
+        "pv": 220,
         "nivel": 12,
         "vd": 12,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 19,
         "deslocamento": "3m",
         "mana": 41,
@@ -41826,7 +42205,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "planta"
+        "familia": "planta",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -41846,10 +42227,10 @@
         },
         "raridade": "incomum",
         "categoria": "Planta",
-        "pv": 400,
+        "pv": 315,
         "nivel": 15,
         "vd": 15,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "9m",
         "mana": 50,
@@ -41886,7 +42267,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "planta",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41906,10 +42289,10 @@
         },
         "raridade": "raro",
         "categoria": "Planta",
-        "pv": 410,
+        "pv": 325,
         "nivel": 21,
         "vd": 21,
-        "defesa": 19,
+        "defesa": 30,
         "iniciativa": 24,
         "deslocamento": "6m",
         "mana": 68,
@@ -41946,7 +42329,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "planta",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -41966,10 +42351,10 @@
         },
         "raridade": "raro",
         "categoria": "Planta",
-        "pv": 410,
+        "pv": 325,
         "nivel": 24,
         "vd": 24,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "6m",
         "mana": 77,
@@ -42007,7 +42392,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "planta",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42027,10 +42414,10 @@
         },
         "raridade": "epico",
         "categoria": "Planta",
-        "pv": 1055,
+        "pv": 830,
         "nivel": 38,
         "vd": 38,
-        "defesa": 29,
+        "defesa": 42,
         "iniciativa": 34,
         "deslocamento": "12m",
         "mana": 119,
@@ -42068,7 +42455,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "planta",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42088,10 +42477,10 @@
         },
         "raridade": "comum",
         "categoria": "Feérico",
-        "pv": 135,
+        "pv": 125,
         "nivel": 6,
         "vd": 6,
-        "defesa": 12,
+        "defesa": 16,
         "iniciativa": 16,
         "deslocamento": "9m",
         "mana": 23,
@@ -42127,7 +42516,9 @@
         "nivelMinimoLoja": 1,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "feerico"
+        "familia": "feerico",
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -42147,10 +42538,10 @@
         },
         "raridade": "comum",
         "categoria": "Feérico",
-        "pv": 150,
+        "pv": 125,
         "nivel": 9,
         "vd": 9,
-        "defesa": 13,
+        "defesa": 19,
         "iniciativa": 17,
         "deslocamento": "9m",
         "mana": 32,
@@ -42186,7 +42577,9 @@
         "nivelMinimoLoja": 1,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "feerico"
+        "familia": "feerico",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -42206,10 +42599,10 @@
         },
         "raridade": "incomum",
         "categoria": "Feérico",
-        "pv": 280,
+        "pv": 220,
         "nivel": 14,
         "vd": 14,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "15m",
         "mana": 47,
@@ -42245,7 +42638,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "feerico"
+        "familia": "feerico",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42265,10 +42660,10 @@
         },
         "raridade": "incomum",
         "categoria": "Feérico",
-        "pv": 400,
+        "pv": 315,
         "nivel": 17,
         "vd": 17,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 21,
         "deslocamento": "9m (Nado)",
         "mana": 56,
@@ -42305,7 +42700,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "feerico",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42325,10 +42722,10 @@
         },
         "raridade": "raro",
         "categoria": "Feérico",
-        "pv": 810,
+        "pv": 640,
         "nivel": 27,
         "vd": 27,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 27,
         "deslocamento": "18m",
         "mana": 86,
@@ -42366,7 +42763,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "feerico",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42386,10 +42785,10 @@
         },
         "raridade": "epico",
         "categoria": "Feérico",
-        "pv": 1055,
+        "pv": 830,
         "nivel": 36,
         "vd": 36,
-        "defesa": 28,
+        "defesa": 41,
         "iniciativa": 33,
         "deslocamento": "24m",
         "mana": 113,
@@ -42427,7 +42826,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "feerico",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42447,10 +42848,10 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 810,
+        "pv": 640,
         "nivel": 31,
         "vd": 31,
-        "defesa": 24,
+        "defesa": 37,
         "iniciativa": 29,
         "deslocamento": "15m",
         "mana": 98,
@@ -42488,7 +42889,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "cao-e-lobo",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42508,10 +42911,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 2260,
+        "pv": 1785,
         "nivel": 68,
         "vd": 68,
-        "defesa": 44,
+        "defesa": 60,
         "iniciativa": 50,
         "deslocamento": "30m",
         "mana": 209,
@@ -42552,7 +42955,9 @@
         "familia": "cao-e-lobo",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42572,10 +42977,10 @@
         },
         "raridade": "raro",
         "categoria": "Monstro",
-        "pv": 810,
+        "pv": 640,
         "nivel": 25,
         "vd": 25,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "12m",
         "mana": 80,
@@ -42613,7 +43018,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "gigante",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42633,10 +43040,10 @@
         },
         "raridade": "lendario",
         "categoria": "Planta",
-        "pv": 2495,
+        "pv": 1970,
         "nivel": 75,
         "vd": 75,
-        "defesa": 47,
+        "defesa": 63,
         "iniciativa": 53,
         "deslocamento": "6m",
         "mana": 230,
@@ -42677,7 +43084,9 @@
         "familia": "planta",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42697,10 +43106,10 @@
         },
         "raridade": "incomum",
         "categoria": "Feérico",
-        "pv": 280,
+        "pv": 220,
         "nivel": 14,
         "vd": 14,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "18m (Nado)",
         "mana": 47,
@@ -42737,7 +43146,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "familia": "feerico"
+        "familia": "feerico",
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -42757,10 +43168,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 70,
+        "pv": 80,
         "nivel": 1,
         "vd": 1,
-        "defesa": 9,
+        "defesa": 10,
         "iniciativa": 12,
         "deslocamento": "9m",
         "mana": 8,
@@ -42795,7 +43206,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 1,
+        "fatorDeVidaAcerto": 1.154
       }
     },
     {
@@ -42815,10 +43228,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 70,
+        "pv": 80,
         "nivel": 2,
         "vd": 2,
-        "defesa": 10,
+        "defesa": 11,
         "iniciativa": 13,
         "deslocamento": "12m",
         "mana": 11,
@@ -42853,7 +43266,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 1,
+        "fatorDeVidaAcerto": 1.154
       }
     },
     {
@@ -42873,10 +43288,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 70,
+        "pv": 80,
         "nivel": 2,
         "vd": 2,
-        "defesa": 10,
+        "defesa": 11,
         "iniciativa": 13,
         "deslocamento": "9m",
         "mana": 11,
@@ -42911,7 +43326,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 1,
+        "fatorDeVidaAcerto": 1.154
       }
     },
     {
@@ -42931,10 +43348,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 105,
+        "pv": 100,
         "nivel": 4,
         "vd": 4,
-        "defesa": 11,
+        "defesa": 15,
         "iniciativa": 15,
         "deslocamento": "9m",
         "mana": 17,
@@ -42969,7 +43386,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -42989,10 +43408,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 135,
+        "pv": 125,
         "nivel": 5,
         "vd": 5,
-        "defesa": 11,
+        "defesa": 15,
         "iniciativa": 15,
         "deslocamento": "12m",
         "mana": 20,
@@ -43027,7 +43446,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -43047,10 +43468,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 135,
+        "pv": 125,
         "nivel": 6,
         "vd": 6,
-        "defesa": 12,
+        "defesa": 16,
         "iniciativa": 16,
         "deslocamento": "9m",
         "mana": 23,
@@ -43085,7 +43506,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -43105,10 +43528,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 150,
+        "pv": 125,
         "nivel": 7,
         "vd": 7,
-        "defesa": 12,
+        "defesa": 18,
         "iniciativa": 16,
         "deslocamento": "12m",
         "mana": 26,
@@ -43144,7 +43567,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -43164,10 +43589,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 150,
+        "pv": 125,
         "nivel": 8,
         "vd": 8,
-        "defesa": 13,
+        "defesa": 19,
         "iniciativa": 17,
         "deslocamento": "12m",
         "mana": 29,
@@ -43203,7 +43628,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -43223,10 +43650,10 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 265,
+        "pv": 220,
         "nivel": 12,
         "vd": 12,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 19,
         "deslocamento": "12m",
         "mana": 41,
@@ -43262,7 +43689,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -43282,10 +43711,10 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 280,
+        "pv": 220,
         "nivel": 14,
         "vd": 14,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "12m",
         "mana": 47,
@@ -43321,7 +43750,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43341,10 +43772,10 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 400,
+        "pv": 315,
         "nivel": 15,
         "vd": 15,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "9m",
         "mana": 50,
@@ -43381,7 +43812,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43401,10 +43834,10 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 400,
+        "pv": 315,
         "nivel": 16,
         "vd": 16,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 21,
         "deslocamento": "12m",
         "mana": 53,
@@ -43440,7 +43873,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43460,10 +43895,10 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 400,
+        "pv": 315,
         "nivel": 17,
         "vd": 17,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 21,
         "deslocamento": "12m",
         "mana": 56,
@@ -43499,7 +43934,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43519,10 +43956,10 @@
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
-        "pv": 400,
+        "pv": 315,
         "nivel": 19,
         "vd": 19,
-        "defesa": 18,
+        "defesa": 28,
         "iniciativa": 22,
         "deslocamento": "15m",
         "mana": 62,
@@ -43559,7 +43996,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 5
+        "ajusteDeAtaqueArmadura": 5,
+        "ajusteDeDefesaAcerto": 10,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43579,10 +44018,10 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 410,
+        "pv": 325,
         "nivel": 20,
         "vd": 20,
-        "defesa": 19,
+        "defesa": 30,
         "iniciativa": 24,
         "deslocamento": "12m",
         "mana": 65,
@@ -43619,7 +44058,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43639,10 +44080,10 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 410,
+        "pv": 325,
         "nivel": 22,
         "vd": 22,
-        "defesa": 20,
+        "defesa": 31,
         "iniciativa": 25,
         "deslocamento": "12m",
         "mana": 71,
@@ -43679,7 +44120,9 @@
         "nivelMinimoLoja": 3,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43699,10 +44142,10 @@
         },
         "raridade": "raro",
         "categoria": "Humanoide",
-        "pv": 810,
+        "pv": 640,
         "nivel": 25,
         "vd": 25,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "15m",
         "mana": 80,
@@ -43739,7 +44182,9 @@
         "nivelMinimoLoja": 3,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43759,10 +44204,10 @@
         },
         "raridade": "epico",
         "categoria": "Humanoide",
-        "pv": 1320,
+        "pv": 1040,
         "nivel": 38,
         "vd": 38,
-        "defesa": 29,
+        "defesa": 42,
         "iniciativa": 34,
         "deslocamento": "12m",
         "mana": 119,
@@ -43800,7 +44245,9 @@
         "nivelMinimoLoja": 3,
         "papel": "chefe",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43820,10 +44267,10 @@
         },
         "raridade": "epico",
         "categoria": "Humanoide",
-        "pv": 1355,
+        "pv": 1070,
         "nivel": 41,
         "vd": 41,
-        "defesa": 30,
+        "defesa": 43,
         "iniciativa": 35,
         "deslocamento": "12m",
         "mana": 128,
@@ -43860,7 +44307,9 @@
         "nivelMinimoLoja": 4,
         "papel": "chefe",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43880,10 +44329,10 @@
         },
         "raridade": "lendario",
         "categoria": "Humanoide",
-        "pv": 1190,
+        "pv": 940,
         "nivel": 45,
         "vd": 45,
-        "defesa": 32,
+        "defesa": 45,
         "iniciativa": 37,
         "deslocamento": "12m",
         "mana": 140,
@@ -43921,7 +44370,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -43941,10 +44392,10 @@
         },
         "raridade": "lendario",
         "categoria": "Humanoide",
-        "pv": 1320,
+        "pv": 1040,
         "nivel": 50,
         "vd": 50,
-        "defesa": 35,
+        "defesa": 48,
         "iniciativa": 40,
         "deslocamento": "18m",
         "mana": 155,
@@ -43982,7 +44433,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44002,10 +44455,10 @@
         },
         "raridade": "lendario",
         "categoria": "Humanoide",
-        "pv": 1375,
+        "pv": 1085,
         "nivel": 52,
         "vd": 52,
-        "defesa": 36,
+        "defesa": 49,
         "iniciativa": 41,
         "deslocamento": "12m",
         "mana": 161,
@@ -44043,7 +44496,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44063,10 +44518,10 @@
         },
         "raridade": "lendario",
         "categoria": "Humanoide",
-        "pv": 1595,
+        "pv": 1260,
         "nivel": 60,
         "vd": 60,
-        "defesa": 40,
+        "defesa": 56,
         "iniciativa": 46,
         "deslocamento": "12m",
         "mana": 185,
@@ -44105,7 +44560,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44125,10 +44582,10 @@
         },
         "raridade": "lendario",
         "categoria": "Humanoide",
-        "pv": 1730,
+        "pv": 1365,
         "nivel": 65,
         "vd": 65,
-        "defesa": 42,
+        "defesa": 58,
         "iniciativa": 48,
         "deslocamento": "12m",
         "mana": 200,
@@ -44166,7 +44623,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44186,10 +44645,10 @@
         },
         "raridade": "lendario",
         "categoria": "Humanoide",
-        "pv": 2495,
+        "pv": 1970,
         "nivel": 75,
         "vd": 75,
-        "defesa": 47,
+        "defesa": 63,
         "iniciativa": 53,
         "deslocamento": "12m",
         "mana": 230,
@@ -44228,7 +44687,9 @@
         "papel": "chefe",
         "geradoPorFamilia": true,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44248,10 +44709,10 @@
         },
         "raridade": "comum",
         "categoria": "Animal",
-        "pv": 265,
+        "pv": 220,
         "nivel": 10,
         "vd": 10,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "12m",
         "mana": 35,
@@ -44286,7 +44747,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -44306,10 +44769,10 @@
         },
         "raridade": "comum",
         "categoria": "Monstro",
-        "pv": 150,
+        "pv": 125,
         "nivel": 9,
         "vd": 9,
-        "defesa": 13,
+        "defesa": 19,
         "iniciativa": 17,
         "deslocamento": "6m",
         "mana": 32,
@@ -44344,7 +44807,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 1,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -44364,10 +44829,10 @@
         },
         "raridade": "comum",
         "categoria": "Monstro",
-        "pv": 265,
+        "pv": 220,
         "nivel": 11,
         "vd": 11,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "12m",
         "mana": 38,
@@ -44402,7 +44867,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -44422,10 +44889,10 @@
         },
         "raridade": "comum",
         "categoria": "Monstro",
-        "pv": 265,
+        "pv": 220,
         "nivel": 11,
         "vd": 11,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "12m",
         "mana": 38,
@@ -44461,7 +44928,9 @@
         "classe": "Criatura",
         "nivelMinimoLoja": 2,
         "papel": "solo",
-        "geradoPorFamilia": true
+        "geradoPorFamilia": true,
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -44481,10 +44950,10 @@
         },
         "raridade": "incomum",
         "categoria": "Monstro",
-        "pv": 400,
+        "pv": 315,
         "nivel": 16,
         "vd": 16,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 21,
         "deslocamento": "18m (Voo)",
         "mana": 53,
@@ -44520,7 +44989,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44540,10 +45011,10 @@
         },
         "raridade": "incomum",
         "categoria": "Monstro",
-        "pv": 400,
+        "pv": 315,
         "nivel": 19,
         "vd": 19,
-        "defesa": 18,
+        "defesa": 28,
         "iniciativa": 22,
         "deslocamento": "15m",
         "mana": 62,
@@ -44580,7 +45051,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 5
+        "ajusteDeAtaqueArmadura": 5,
+        "ajusteDeDefesaAcerto": 10,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44600,10 +45073,10 @@
         },
         "raridade": "raro",
         "categoria": "Monstro",
-        "pv": 410,
+        "pv": 325,
         "nivel": 20,
         "vd": 20,
-        "defesa": 19,
+        "defesa": 30,
         "iniciativa": 24,
         "deslocamento": "18m",
         "mana": 65,
@@ -44639,7 +45112,9 @@
         "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44659,10 +45134,10 @@
         },
         "raridade": "raro",
         "categoria": "Monstro",
-        "pv": 810,
+        "pv": 640,
         "nivel": 26,
         "vd": 26,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 27,
         "deslocamento": "12m (Escavar)",
         "mana": 83,
@@ -44699,7 +45174,9 @@
         "nivelMinimoLoja": 3,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44719,10 +45196,10 @@
         },
         "raridade": "epico",
         "categoria": "Animal",
-        "pv": 810,
+        "pv": 640,
         "nivel": 32,
         "vd": 32,
-        "defesa": 26,
+        "defesa": 38,
         "iniciativa": 30,
         "deslocamento": "30m (Voo)",
         "mana": 101,
@@ -44759,7 +45236,9 @@
         "nivelMinimoLoja": 3,
         "papel": "solo",
         "geradoPorFamilia": true,
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44779,10 +45258,10 @@
         },
         "raridade": "lendario",
         "categoria": "Monstro",
-        "pv": 1650,
+        "pv": 1300,
         "nivel": 62,
         "vd": 62,
-        "defesa": 41,
+        "defesa": 57,
         "iniciativa": 47,
         "deslocamento": "12m (Escavar)",
         "mana": 191,
@@ -44821,7 +45300,9 @@
         "geradoPorFamilia": true,
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44841,10 +45322,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 2925,
+        "pv": 2310,
         "nivel": 88,
         "vd": 88,
-        "defesa": 55,
+        "defesa": 70,
         "iniciativa": 60,
         "deslocamento": "15m",
         "mana": 269,
@@ -44884,7 +45365,9 @@
         "geradoPorFamilia": true,
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 9
+        "ajusteDeAtaqueArmadura": 9,
+        "ajusteDeDefesaAcerto": 15,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44904,10 +45387,10 @@
         },
         "raridade": "lendario",
         "categoria": "Aberração",
-        "pv": 1480,
+        "pv": 1170,
         "nivel": 56,
         "vd": 56,
-        "defesa": 38,
+        "defesa": 51,
         "iniciativa": 43,
         "deslocamento": "15m (Voo)",
         "mana": 173,
@@ -44946,7 +45429,9 @@
         "geradoPorFamilia": true,
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -44966,10 +45451,10 @@
         },
         "raridade": "lendario",
         "categoria": "Monstro",
-        "pv": 1375,
+        "pv": 1085,
         "nivel": 52,
         "vd": 52,
-        "defesa": 36,
+        "defesa": 49,
         "iniciativa": 41,
         "deslocamento": "15m (Voo)",
         "mana": 161,
@@ -45008,7 +45493,9 @@
         "geradoPorFamilia": true,
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -45690,10 +46177,10 @@
         },
         "raridade": "comum",
         "categoria": "Espírito",
-        "pv": 105,
+        "pv": 100,
         "nivel": 4,
         "vd": 4,
-        "defesa": 11,
+        "defesa": 15,
         "iniciativa": 15,
         "deslocamento": "9m (Flutuar)",
         "mana": 17,
@@ -45730,7 +46217,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "espirito",
-        "subtipo": "Natural"
+        "subtipo": "Natural",
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -45750,10 +46239,10 @@
         },
         "raridade": "comum",
         "categoria": "Espírito",
-        "pv": 265,
+        "pv": 220,
         "nivel": 11,
         "vd": 11,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "9m (Flutuar)",
         "mana": 38,
@@ -45791,7 +46280,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "espirito",
-        "subtipo": "Natural"
+        "subtipo": "Natural",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -45811,10 +46302,10 @@
         },
         "raridade": "incomum",
         "categoria": "Espírito",
-        "pv": 400,
+        "pv": 315,
         "nivel": 19,
         "vd": 19,
-        "defesa": 18,
+        "defesa": 28,
         "iniciativa": 22,
         "deslocamento": "12m",
         "mana": 62,
@@ -45853,7 +46344,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Natural",
-        "ajusteDeAtaqueArmadura": 5
+        "ajusteDeAtaqueArmadura": 5,
+        "ajusteDeDefesaAcerto": 10,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -45873,10 +46366,10 @@
         },
         "raridade": "raro",
         "categoria": "Espírito",
-        "pv": 810,
+        "pv": 640,
         "nivel": 27,
         "vd": 27,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 27,
         "deslocamento": "9m (Flutuar)",
         "mana": 86,
@@ -45915,7 +46408,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Natural",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -45935,10 +46430,10 @@
         },
         "raridade": "epico",
         "categoria": "Espírito",
-        "pv": 1055,
+        "pv": 830,
         "nivel": 37,
         "vd": 37,
-        "defesa": 28,
+        "defesa": 41,
         "iniciativa": 33,
         "deslocamento": "12m",
         "mana": 116,
@@ -45977,7 +46472,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Natural",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -45997,10 +46494,10 @@
         },
         "raridade": "lendario",
         "categoria": "Espírito",
-        "pv": 1715,
+        "pv": 1355,
         "nivel": 52,
         "vd": 52,
-        "defesa": 36,
+        "defesa": 49,
         "iniciativa": 41,
         "deslocamento": "9m",
         "mana": 161,
@@ -46042,7 +46539,9 @@
         "subtipo": "Natural",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46062,10 +46561,10 @@
         },
         "raridade": "comum",
         "categoria": "Espírito",
-        "pv": 135,
+        "pv": 125,
         "nivel": 6,
         "vd": 6,
-        "defesa": 12,
+        "defesa": 16,
         "iniciativa": 16,
         "deslocamento": "9m (Voo)",
         "mana": 23,
@@ -46103,7 +46602,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "espirito",
-        "subtipo": "Demoníaco"
+        "subtipo": "Demoníaco",
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -46123,10 +46624,10 @@
         },
         "raridade": "incomum",
         "categoria": "Espírito",
-        "pv": 265,
+        "pv": 220,
         "nivel": 12,
         "vd": 12,
-        "defesa": 15,
+        "defesa": 21,
         "iniciativa": 19,
         "deslocamento": "9m",
         "mana": 41,
@@ -46164,7 +46665,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "espirito",
-        "subtipo": "Demoníaco"
+        "subtipo": "Demoníaco",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -46184,10 +46687,10 @@
         },
         "raridade": "incomum",
         "categoria": "Espírito",
-        "pv": 400,
+        "pv": 315,
         "nivel": 18,
         "vd": 18,
-        "defesa": 18,
+        "defesa": 26,
         "iniciativa": 22,
         "deslocamento": "9m",
         "mana": 59,
@@ -46226,7 +46729,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Demoníaco",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46246,10 +46751,10 @@
         },
         "raridade": "raro",
         "categoria": "Espírito",
-        "pv": 410,
+        "pv": 325,
         "nivel": 24,
         "vd": 24,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "9m",
         "mana": 77,
@@ -46288,7 +46793,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Demoníaco",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46308,10 +46815,10 @@
         },
         "raridade": "raro",
         "categoria": "Espírito",
-        "pv": 410,
+        "pv": 325,
         "nivel": 21,
         "vd": 21,
-        "defesa": 19,
+        "defesa": 30,
         "iniciativa": 24,
         "deslocamento": "12m",
         "mana": 68,
@@ -46350,7 +46857,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Demoníaco",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46370,10 +46879,10 @@
         },
         "raridade": "epico",
         "categoria": "Espírito",
-        "pv": 810,
+        "pv": 640,
         "nivel": 30,
         "vd": 30,
-        "defesa": 24,
+        "defesa": 37,
         "iniciativa": 29,
         "deslocamento": "12m",
         "mana": 95,
@@ -46412,7 +46921,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Demoníaco",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46432,10 +46943,10 @@
         },
         "raridade": "epico",
         "categoria": "Espírito",
-        "pv": 1055,
+        "pv": 830,
         "nivel": 36,
         "vd": 36,
-        "defesa": 28,
+        "defesa": 41,
         "iniciativa": 33,
         "deslocamento": "9m",
         "mana": 113,
@@ -46474,7 +46985,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Demoníaco",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46494,10 +47007,10 @@
         },
         "raridade": "lendario",
         "categoria": "Espírito",
-        "pv": 1585,
+        "pv": 1250,
         "nivel": 48,
         "vd": 48,
-        "defesa": 34,
+        "defesa": 47,
         "iniciativa": 39,
         "deslocamento": "6m",
         "mana": 149,
@@ -46539,7 +47052,9 @@
         "subtipo": "Demoníaco",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46559,10 +47074,10 @@
         },
         "raridade": "lendario",
         "categoria": "Espírito",
-        "pv": 1930,
+        "pv": 1525,
         "nivel": 58,
         "vd": 58,
-        "defesa": 39,
+        "defesa": 53,
         "iniciativa": 45,
         "deslocamento": "12m",
         "mana": 179,
@@ -46604,7 +47119,9 @@
         "subtipo": "Demoníaco",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 10
+        "ajusteDeAtaqueArmadura": 10,
+        "ajusteDeDefesaAcerto": 14,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46624,10 +47141,10 @@
         },
         "raridade": "lendario",
         "categoria": "Espírito",
-        "pv": 3040,
+        "pv": 2400,
         "nivel": 90,
         "vd": 90,
-        "defesa": 56,
+        "defesa": 72,
         "iniciativa": 62,
         "deslocamento": "15m (Voo)",
         "mana": 275,
@@ -46670,7 +47187,9 @@
         "subtipo": "Demoníaco",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46690,10 +47209,10 @@
         },
         "raridade": "comum",
         "categoria": "Espírito",
-        "pv": 135,
+        "pv": 125,
         "nivel": 5,
         "vd": 5,
-        "defesa": 11,
+        "defesa": 15,
         "iniciativa": 15,
         "deslocamento": "9m (Voo)",
         "mana": 20,
@@ -46731,7 +47250,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "espirito",
-        "subtipo": "Angelical"
+        "subtipo": "Angelical",
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -46751,10 +47272,10 @@
         },
         "raridade": "comum",
         "categoria": "Espírito",
-        "pv": 265,
+        "pv": 220,
         "nivel": 11,
         "vd": 11,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "9m",
         "mana": 38,
@@ -46792,7 +47313,9 @@
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "espirito",
-        "subtipo": "Angelical"
+        "subtipo": "Angelical",
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -46812,10 +47335,10 @@
         },
         "raridade": "incomum",
         "categoria": "Espírito",
-        "pv": 400,
+        "pv": 315,
         "nivel": 16,
         "vd": 16,
-        "defesa": 17,
+        "defesa": 25,
         "iniciativa": 21,
         "deslocamento": "12m (Voo)",
         "mana": 53,
@@ -46854,7 +47377,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Angelical",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46874,10 +47399,10 @@
         },
         "raridade": "raro",
         "categoria": "Espírito",
-        "pv": 410,
+        "pv": 325,
         "nivel": 21,
         "vd": 21,
-        "defesa": 19,
+        "defesa": 30,
         "iniciativa": 24,
         "deslocamento": "9m (Voo)",
         "mana": 68,
@@ -46916,7 +47441,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Angelical",
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46936,10 +47463,10 @@
         },
         "raridade": "raro",
         "categoria": "Espírito",
-        "pv": 810,
+        "pv": 640,
         "nivel": 27,
         "vd": 27,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 27,
         "deslocamento": "9m (Voo)",
         "mana": 86,
@@ -46978,7 +47505,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Angelical",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -46998,10 +47527,10 @@
         },
         "raridade": "epico",
         "categoria": "Espírito",
-        "pv": 810,
+        "pv": 640,
         "nivel": 32,
         "vd": 32,
-        "defesa": 26,
+        "defesa": 38,
         "iniciativa": 30,
         "deslocamento": "9m",
         "mana": 101,
@@ -47040,7 +47569,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Angelical",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -47060,10 +47591,10 @@
         },
         "raridade": "epico",
         "categoria": "Espírito",
-        "pv": 1055,
+        "pv": 830,
         "nivel": 38,
         "vd": 38,
-        "defesa": 29,
+        "defesa": 42,
         "iniciativa": 34,
         "deslocamento": "9m (Voo)",
         "mana": 119,
@@ -47102,7 +47633,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Angelical",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -47122,10 +47655,10 @@
         },
         "raridade": "epico",
         "categoria": "Espírito",
-        "pv": 1160,
+        "pv": 915,
         "nivel": 44,
         "vd": 44,
-        "defesa": 32,
+        "defesa": 45,
         "iniciativa": 37,
         "deslocamento": "12m (Voo)",
         "mana": 137,
@@ -47164,7 +47697,9 @@
         "geradoPorFamilia": true,
         "familia": "espirito",
         "subtipo": "Angelical",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -47184,10 +47719,10 @@
         },
         "raridade": "lendario",
         "categoria": "Espírito",
-        "pv": 1815,
+        "pv": 1430,
         "nivel": 55,
         "vd": 55,
-        "defesa": 37,
+        "defesa": 50,
         "iniciativa": 42,
         "deslocamento": "6m",
         "mana": 170,
@@ -47229,7 +47764,9 @@
         "subtipo": "Angelical",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -47249,10 +47786,10 @@
         },
         "raridade": "lendario",
         "categoria": "Espírito",
-        "pv": 2330,
+        "pv": 1840,
         "nivel": 70,
         "vd": 70,
-        "defesa": 45,
+        "defesa": 61,
         "iniciativa": 51,
         "deslocamento": "18m (Voo)",
         "mana": 215,
@@ -47294,7 +47831,9 @@
         "subtipo": "Angelical",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -47871,10 +48410,10 @@
         },
         "raridade": "incomum",
         "categoria": "Monstro",
-        "pv": 400,
+        "pv": 315,
         "nivel": 15,
         "vd": 15,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "12m (Voo)",
         "mana": 50,
@@ -47912,7 +48451,9 @@
         "geradoPorFamilia": true,
         "familia": "dragao",
         "estagio": "Filhote",
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -47932,10 +48473,10 @@
         },
         "raridade": "raro",
         "categoria": "Monstro",
-        "pv": 810,
+        "pv": 640,
         "nivel": 26,
         "vd": 26,
-        "defesa": 22,
+        "defesa": 33,
         "iniciativa": 27,
         "deslocamento": "15m (Voo)",
         "mana": 83,
@@ -47973,7 +48514,9 @@
         "geradoPorFamilia": true,
         "familia": "dragao",
         "estagio": "Jovem",
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -47993,10 +48536,10 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 810,
+        "pv": 640,
         "nivel": 32,
         "vd": 32,
-        "defesa": 26,
+        "defesa": 38,
         "iniciativa": 30,
         "deslocamento": "12m (Voo), 18m (Nado)",
         "mana": 101,
@@ -48034,7 +48577,9 @@
         "geradoPorFamilia": true,
         "familia": "dragao",
         "estagio": "Adulto",
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -48054,10 +48599,10 @@
         },
         "raridade": "epico",
         "categoria": "Monstro",
-        "pv": 1055,
+        "pv": 830,
         "nivel": 36,
         "vd": 36,
-        "defesa": 28,
+        "defesa": 41,
         "iniciativa": 33,
         "deslocamento": "21m (Voo)",
         "mana": 113,
@@ -48095,7 +48640,9 @@
         "geradoPorFamilia": true,
         "familia": "dragao",
         "estagio": "Adulto",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -48115,10 +48662,10 @@
         },
         "raridade": "epico",
         "categoria": "Morto-Vivo",
-        "pv": 1160,
+        "pv": 915,
         "nivel": 44,
         "vd": 44,
-        "defesa": 32,
+        "defesa": 45,
         "iniciativa": 37,
         "deslocamento": "18m (Voo)",
         "mana": 137,
@@ -48157,7 +48704,9 @@
         "geradoPorFamilia": true,
         "familia": "dragao",
         "estagio": "Ancião",
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -48177,10 +48726,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 1240,
+        "pv": 980,
         "nivel": 47,
         "vd": 47,
-        "defesa": 33,
+        "defesa": 46,
         "iniciativa": 38,
         "deslocamento": "18m (Voo)",
         "mana": 146,
@@ -48220,7 +48769,9 @@
         "familia": "dragao",
         "estagio": "Ancião",
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -48240,10 +48791,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 1425,
+        "pv": 1125,
         "nivel": 54,
         "vd": 54,
-        "defesa": 37,
+        "defesa": 50,
         "iniciativa": 42,
         "deslocamento": "21m (Voo)",
         "mana": 167,
@@ -48283,7 +48834,9 @@
         "familia": "dragao",
         "estagio": "Ancião",
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 11
+        "ajusteDeAtaqueArmadura": 11,
+        "ajusteDeDefesaAcerto": 13,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -48303,10 +48856,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 1755,
+        "pv": 1385,
         "nivel": 66,
         "vd": 66,
-        "defesa": 43,
+        "defesa": 59,
         "iniciativa": 49,
         "deslocamento": "24m (Voo)",
         "mana": 203,
@@ -48347,7 +48900,9 @@
         "estagio": "Primordial",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -48367,10 +48922,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 2075,
+        "pv": 1635,
         "nivel": 78,
         "vd": 78,
-        "defesa": 49,
+        "defesa": 65,
         "iniciativa": 55,
         "deslocamento": "24m (Voo)",
         "mana": 239,
@@ -48411,7 +48966,9 @@
         "estagio": "Primordial",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -48431,10 +48988,10 @@
         },
         "raridade": "lendario",
         "categoria": "Lendário",
-        "pv": 3205,
+        "pv": 2530,
         "nivel": 95,
         "vd": 95,
-        "defesa": 58,
+        "defesa": 74,
         "iniciativa": 64,
         "deslocamento": "27m (Voo)",
         "mana": 290,
@@ -48476,7 +49033,9 @@
         "estagio": "Ancestral",
         "disponivelNaLoja": false,
         "requer_autorizacao_mestre": true,
-        "ajusteDeAtaqueArmadura": 8
+        "ajusteDeAtaqueArmadura": 8,
+        "ajusteDeDefesaAcerto": 16,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -48499,7 +49058,7 @@
         "pv": 110,
         "nivel": 3,
         "vd": 3,
-        "defesa": 10,
+        "defesa": 13,
         "iniciativa": 13,
         "deslocamento": "6m",
         "mana": 14,
@@ -48561,7 +49120,8 @@
               "Quem segura o figo sente a vila inteira dentro dele. Plantar o figo de volta na praça encerra tudo em paz e devolve a sombra à vila; queimar o figo encerra a figueira para sempre, e a vila passa a sentir falta de alguma coisa que ninguém sabe nomear."
             ]
           }
-        ]
+        ],
+        "ajusteDeDefesaAcerto": 3
       }
     },
     {
@@ -48581,10 +49141,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 190,
+        "pv": 160,
         "nivel": 8,
         "vd": 8,
-        "defesa": 13,
+        "defesa": 19,
         "iniciativa": 17,
         "deslocamento": "9m",
         "mana": 29,
@@ -48648,7 +49208,9 @@
               "Quando chegar a um quarto da Vida, foge pela água na primeira chance. Se escapar, volta mais tarde com gente e com rancor."
             ]
           }
-        ]
+        ],
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -48668,10 +49230,10 @@
         },
         "raridade": "incomum",
         "categoria": "Aberração",
-        "pv": 500,
+        "pv": 395,
         "nivel": 15,
         "vd": 15,
-        "defesa": 16,
+        "defesa": 24,
         "iniciativa": 20,
         "deslocamento": "9m",
         "mana": 50,
@@ -48734,7 +49296,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -48754,10 +49318,10 @@
         },
         "raridade": "raro",
         "categoria": "Morto-Vivo",
-        "pv": 1010,
+        "pv": 795,
         "nivel": 25,
         "vd": 25,
-        "defesa": 21,
+        "defesa": 32,
         "iniciativa": 26,
         "deslocamento": "12m",
         "mana": 80,
@@ -48822,7 +49386,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -48842,10 +49408,10 @@
         },
         "raridade": "comum",
         "categoria": "Humanoide",
-        "pv": 170,
+        "pv": 160,
         "nivel": 5,
         "vd": 5,
-        "defesa": 11,
+        "defesa": 15,
         "iniciativa": 15,
         "deslocamento": "6m",
         "mana": 20,
@@ -48910,7 +49476,9 @@
               "Devolver o coração ao peito dela (Ação Padrão, ao lado dela) faz ela envelhecer de uma vez todos os anos que devia. Ela senta, agradece e morre em paz, e no dia seguinte as crianças do Ribeirão acordam coradas."
             ]
           }
-        ]
+        ],
+        "ajusteDeDefesaAcerto": 4,
+        "fatorDeVidaAcerto": 0.938
       }
     },
     {
@@ -48930,10 +49498,10 @@
         },
         "raridade": "comum",
         "categoria": "Elemental",
-        "pv": 330,
+        "pv": 275,
         "nivel": 11,
         "vd": 11,
-        "defesa": 14,
+        "defesa": 20,
         "iniciativa": 18,
         "deslocamento": "6m",
         "mana": 38,
@@ -48998,7 +49566,9 @@
               "Atacar enquanto ele se derrama continua valendo, com casca e tudo. Derrubado antes de terminar, ele vira bronze frio no fundo do fosso, e o sino da catedral fica rachado para sempre."
             ]
           }
-        ]
+        ],
+        "ajusteDeDefesaAcerto": 6,
+        "fatorDeVidaAcerto": 0.833
       }
     },
     {
@@ -49018,10 +49588,10 @@
         },
         "raridade": "incomum",
         "categoria": "Feérico",
-        "pv": 350,
+        "pv": 275,
         "nivel": 13,
         "vd": 13,
-        "defesa": 15,
+        "defesa": 23,
         "iniciativa": 19,
         "deslocamento": "9m",
         "mana": 44,
@@ -49086,7 +49656,9 @@
               "Se o grupo inteiro parar para assistir, sem atacar nem conjurar até o número acabar, e aplaudir no fim, ele agradece, sobe com a lona e não volta mais. Ninguém se fere no número."
             ]
           }
-        ]
+        ],
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -49106,10 +49678,10 @@
         },
         "raridade": "incomum",
         "categoria": "Constructo",
-        "pv": 500,
+        "pv": 395,
         "nivel": 18,
         "vd": 18,
-        "defesa": 18,
+        "defesa": 26,
         "iniciativa": 22,
         "deslocamento": "9m",
         "mana": 59,
@@ -49178,7 +49750,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 7
+        "ajusteDeAtaqueArmadura": 7,
+        "ajusteDeDefesaAcerto": 8,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -49198,10 +49772,10 @@
         },
         "raridade": "raro",
         "categoria": "Espírito",
-        "pv": 510,
+        "pv": 400,
         "nivel": 21,
         "vd": 21,
-        "defesa": 19,
+        "defesa": 30,
         "iniciativa": 24,
         "deslocamento": "9m",
         "mana": 68,
@@ -49267,7 +49841,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 4
+        "ajusteDeAtaqueArmadura": 4,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -49287,10 +49863,10 @@
         },
         "raridade": "raro",
         "categoria": "Aberração",
-        "pv": 1010,
+        "pv": 795,
         "nivel": 28,
         "vd": 28,
-        "defesa": 23,
+        "defesa": 34,
         "iniciativa": 28,
         "deslocamento": "9m",
         "mana": 89,
@@ -49355,7 +49931,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 13
+        "ajusteDeAtaqueArmadura": 13,
+        "ajusteDeDefesaAcerto": 11,
+        "fatorDeVidaAcerto": 0.789
       }
     },
     {
@@ -49375,10 +49953,10 @@
         },
         "raridade": "epico",
         "categoria": "Morto-Vivo",
-        "pv": 1010,
+        "pv": 795,
         "nivel": 32,
         "vd": 32,
-        "defesa": 26,
+        "defesa": 38,
         "iniciativa": 30,
         "deslocamento": "18m",
         "mana": 101,
@@ -49442,7 +50020,9 @@
             ]
           }
         ],
-        "ajusteDeAtaqueArmadura": 12
+        "ajusteDeAtaqueArmadura": 12,
+        "ajusteDeDefesaAcerto": 12,
+        "fatorDeVidaAcerto": 0.789
       }
     }
   ]

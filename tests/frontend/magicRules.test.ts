@@ -61,10 +61,12 @@ test('Fluxo libera os dez círculos nos limiares publicados', () => {
   );
 });
 
-test('DT cresce três pontos por círculo', () => {
+test('DT cresce dois pontos e meio por círculo, arredondada para baixo', () => {
+  // 7 + ⌊2,5 × círculo⌋ desde 2026-11-11: o círculo mais alto sai perto de 65% no
+  // nível em que a fonte o libera (antes 7 + 3 × círculo, 40% a 55%).
   assert.deepEqual(
     Array.from({ length: 10 }, (_, index) => dtConjuracaoPorCirculo(index + 1)),
-    [10, 13, 16, 19, 22, 25, 28, 31, 34, 37],
+    [9, 12, 14, 17, 19, 22, 24, 27, 29, 32],
   );
 });
 
@@ -86,11 +88,11 @@ test('Canalizador combina limite da classe e do Fluxo, e a rolagem soma metade d
   assert.equal(nivel5.vagasConhecidas, 4);
   assert.equal(nivel5.componentesConjuracao.metadeDoNivel, 2);
   assert.equal(nivel5.bonusConjuracao, 5);
-  assert.equal(nivel5.dtMagia, 19, 'DT do círculo mais alto que a fonte libera');
+  assert.equal(nivel5.dtMagia, 17, 'DT do círculo mais alto que a fonte libera');
 
   const nivel20 = obterPerfilMagico(ficha('canalizador', 20, 50));
   assert.equal(nivel20.circuloMaximo, 10);
-  assert.equal(nivel20.dtMagia, 37);
+  assert.equal(nivel20.dtMagia, 32);
   assert.equal(nivel20.bonusConjuracao, 32);
 });
 
@@ -102,7 +104,7 @@ test('Fluxo abaixo do recomendado vira aviso: aprende-se o círculo da fonte e a
   assert.equal(perfil.circuloDoFluxo, 1);
   const aviso = avisoDeFluxoDaMagia(fichaBaixa, magia5);
   assert.match(aviso ?? '', /Fluxo 12 abaixo do recomendado \(15\) para o 4º círculo/);
-  assert.match(aviso ?? '', /DT 19/);
+  assert.match(aviso ?? '', /DT 17/);
   assert.equal(avisoDeFluxoDaMagia(ficha('canalizador', 5, 15), magia5), null);
   const elegivel = magiaElegivelParaAprender(fichaBaixa, magia5);
   assert.doesNotMatch(elegivel.motivo ?? '', /Fluxo insuficiente/);
@@ -210,7 +212,7 @@ test('Interceptador separa capacidade de Fluxo, DT de interceptação e fonte de
   assert.equal(perfil.circuloDaFonte, 0);
   assert.equal(perfil.circuloMaximo, 0);
   assert.equal(perfil.dtMagia, 0);
-  assert.equal(perfil.dtLimiteFluxo, 37);
+  assert.equal(perfil.dtLimiteFluxo, 32);
   assert.equal(perfil.limiteCatalisadores, 1);
   assert.deepEqual(perfil.catalisadoresPreparadosIds, ['tempo']);
   assert.equal(perfil.catalisadorAtivoId, 'tempo');

@@ -195,7 +195,7 @@ Os dois lados têm testes com os mesmos valores de referência.
 | Maestria (21 a 50 da classe) | Igual para as 29 classes, em [maestria-classe.json](../../data/ficha/maestria-classe.json): reforço de Vida, Mana e Estamina nos níveis 25, 35 e 45 (vale 2 níveis do perfil da própria classe) e +1 grau de perícia nos 30, 40 e 50. O orçamento de Graus de Treinamento no servidor inclui esses graus. |
 | Graus de perícia | Doze graus, cada um +2 sobre o anterior: os sete de sempre (Iniciante +0 a Renomado +12) e cinco novos, um por patamar: Lendário +14 (nível 60), Mítico +16 (100), Cósmico +18 (150), Eterno +20 (250) e Absoluto +22 (500). Treino de 90, 120, 180, 270 e 365 dias, com feito, instrutor e item especial como ganchos de história (o servidor só confere o nível mínimo, e só avisa). Do Veterano em diante o grau também dá fontes de vantagem em todo teste da perícia (Veterano 1, Renomado 2, ... Absoluto 7; ficam em `vantagens` no mesmo JSON): como as fontes se cancelam uma a uma e não existe vantagem dupla, o que sobra é resistência a desvantagem. A referência de ataque acima do 60 já usa o grau novo (+2 sobre a tabela antiga nos níveis 60 e 80, +4 no 100 e +6 no 150 e no 200). |
 | Valor de Desafio (VD) | O VD de uma criatura é o nível do grupo que ela desafia sozinha (VD 30 = criatura solo para um grupo de nível 30), de 1 a 1.000 (criaturas únicas podem passar do 100). As fichas do catálogo (hoje 165) migraram com VD = nível; o campo `nivel` continua gravado junto de `vd`, e os dois coincidem. O XP de uma criatura solo é um quinto do custo do nível de mesmo número (200 no VD 1, 2.000 no 10, 12.000 no 60, 20.000 no 100), somado e repartido entre os jogadores da cena. Cenas antigas foram convertidas pela migração 46 (VD antigo 1 a 10 vira 3, 8, 13, ..., 48). Criaturas de qualquer VD saem do gerador (`src/services/curvaCriatura.ts`, aba "Sob medida" do Bestiário da Sessão): ataque e testes iguais ao ataque de referência, Defesa 3 abaixo da natural, dano de 21% da Vida de um personagem, Vida como fatia da Vida de inimigo padrão por papel (solo 80%, lacaio 10%, padrão 25%, elite 50%, chefe 100%) e, acima do VD 40, multiplicada por VD/40. Os 10 "Modelo de Criatura" gravados foram removidos e o gerador ganhou seis arquétipos (Bruto, Ágil, Atirador, Conjurador, Defensor, Assassino) para variar as universais. Famílias, estágios e únicos moram em `data/bestiario/familias-v1.json` (as 121 fichas escritas à mão ficam "solo" e nunca são sobrescritas). Detalhes e medições em [plano-vd-e-magia-medicoes-2026-09.md](../plano-vd-e-magia-medicoes-2026-09.md). |
-| Magia acima do 20 | Decidido em 2026-09-30 (medições em [plano-vd-e-magia-medicoes-2026-09.md](../plano-vd-e-magia-medicoes-2026-09.md)). **Vagas:** Canalizador, Sintonizador e Elementarista ganham +2 vagas de magia a cada 5 níveis do 25 ao 50 (22 no 50); Cartista Arcano +1 a cada 5 (12 no 50, círculo segue 2); Selos e Encantamentos +1 a cada 5 (Canalizador e Sintonizador) ou a cada 10 (Ritualista, Cartista). **Teto por círculo:** do nível 25 em diante, no máximo 4 magias do mesmo círculo (`teto_por_circulo` nos marcos de `classes.json`; abaixo do 25 não há teto). **Fluxo mínimo virou recomendação:** aprende-se qualquer círculo que a classe libera, a ficha avisa (`avisoDeFluxoDaMagia`) e o servidor não gera mais alerta; o portão real é a DT do círculo (7 + 3 × círculo). As Marcas de círculo seguem o círculo que o Fluxo sustenta. **Rolagem:** soma ⌊nível total ÷ 2⌋ como todo teste, senão o conjurador nunca vencia o teste de resistência de uma criatura do mesmo nível a partir do 50. |
+| Magia acima do 20 | Decidido em 2026-09-30 (medições em [plano-vd-e-magia-medicoes-2026-09.md](../plano-vd-e-magia-medicoes-2026-09.md)). **Vagas:** Canalizador, Sintonizador e Elementarista ganham +2 vagas de magia a cada 5 níveis do 25 ao 50 (22 no 50); Cartista Arcano +1 a cada 5 (12 no 50, círculo segue 2); Selos e Encantamentos +1 a cada 5 (Canalizador e Sintonizador) ou a cada 10 (Ritualista, Cartista). **Teto por círculo:** do nível 25 em diante, no máximo 4 magias do mesmo círculo (`teto_por_circulo` nos marcos de `classes.json`; abaixo do 25 não há teto). **Fluxo mínimo virou recomendação:** aprende-se qualquer círculo que a classe libera, a ficha avisa (`avisoDeFluxoDaMagia`) e o servidor não gera mais alerta; o portão real é a DT do círculo (7 + ⌊2,5 × círculo⌋ desde 2026-11-11; antes 7 + 3 × círculo). As Marcas de círculo seguem o círculo que o Fluxo sustenta. **Rolagem:** soma ⌊nível total ÷ 2⌋ como todo teste, senão o conjurador nunca vencia o teste de resistência de uma criatura do mesmo nível a partir do 50. |
 | Criatura comprada ou contratada | Decidido em 2026-09-30. No Bestiário a Vida de uma criatura é a de um inimigo solo (aguenta o grupo inteiro); como aliado ela luta ao lado do grupo, então nasce com no máximo **2× a Vida média de um personagem do VD** (`vida_de_aliado`, `core/curva_criatura.py`, espelhado em `vidaDeAliado`). Um aliado de VD 20 passa de 410 para 160 de Vida, um de VD 50 de 1.320 para 428. O catálogo continua com a Vida de inimigo (é o que o Mestre usa) e a Loja mostra os dois números. O preço segue a escala de raridade e não mudou. |
 | Relíquias da Criação | Decidido em 2026-09-30. As 17 armas ficaram 2,5× mais fortes (de 8d12+20 para 20d12+50, média 180 no topo; a mais fraca, 150), com crítico ×4 mantido, e os dados dos poderes numéricos (ressonâncias, Braço de Nuada, Coração de Ouroboros, Taça de Dioniso, Carruagem de Hélios) foram multiplicados na mesma proporção. São quebradas de propósito: a referência de balanceamento e a Vida das criaturas continuam contando a Relíquia no degrau antigo (72 por acerto, `DANO_DE_RELIQUIA_NA_REFERENCIA`). A fonte do texto é `tools/retrofit-creation-relics.mjs`. |
 | Bestiário completo | Decidido em 2026-09-30. Há criatura em todos os VDs relevantes de 1 a 500: 44 fichas geradas em `data/bestiario/familias-propostas-v1.json` (5 famílias novas, estágios novos em famílias que já existiam, 9 únicas de VD 90 a 500 e criaturas avulsas). As geradas com `disponivelNaLoja: false` (as de VD alto e as únicas) ficam só no Bestiário, fora do balcão. |
@@ -225,10 +225,10 @@ Leituras que a tabela deixa claras, sem mudança de regra:
   disso o dano por acerto só sobe pelo modificador de atributo, e a Vida de
   inimigo padrão fica perto de 1.350 dos níveis 40 a 200, enquanto a Vida dos
   personagens continua subindo.
-- Do nível 29, quem investe na perícia de combate acerta uns 95% contra um
-  inimigo do mesmo nível (o teste de builds de 2026-11 mediu: já do nível 5). A
-  Defesa da tabela é natural, sem armadura; o golpe da criatura soma o ajuste de
-  armadura do VD 15 em diante (ver Escala de armaduras e escudos).
+- A Defesa natural da tabela é a do personagem sem armadura. A criatura tem a
+  própria Defesa (ataque de referência + 6, o jogador investido acerta 75%; ver
+  Acerto do jogador contra criaturas), e o golpe dela soma o ajuste de armadura
+  do VD 15 em diante (ver Escala de armaduras e escudos).
 - O bestiário vai até o nível 50 e acompanha a curva: mediana de 1.490 de Vida na
   faixa 41–50, contra 1.320 da referência.
 
@@ -280,8 +280,8 @@ pagar). Fica +7 no VD 15, +4 do 20 ao 24, +13 no 25, +11 do 30 ao 50, e cai
 devagar depois (+8 no 60, +6 no 100, 0 do 300 em diante). Testes de
 resistência, Percepção, Defesa, dano e DTs não mudam. O gerador de criaturas e o
 "Escalar para outro VD" usam o ajuste; as 194 fichas do Bestiário com VD 15 ou
-mais receberam o ajuste por `tools/ajustar-ataque-bestiario.mjs` (`npm run
-bestiario:ajuste-armadura`, com `check:ajuste-armadura`), que guarda em cada
+mais receberam o ajuste por `tools/ajustar-bestiario-curva.mjs` (`npm run
+bestiario:ajuste-curva`, com `check:ajuste-curva`), que guarda em cada
 ficha `ajusteDeAtaqueArmadura` e só aplica a diferença se a curva mudar.
 Deidades e Soberanos (VD 500 e 1200) ficam com ajuste 0.
 
@@ -307,6 +307,83 @@ Lendários.
 
 Itens já comprados guardam uma cópia do bônus no inventário; a escala nova vale
 para compras novas até uma migração atualizar os antigos.
+
+## Acerto do jogador contra criaturas (2026-11-11)
+
+Aprovado pelo Pedro depois do teste de builds. A Defesa das criaturas era a
+natural menos 3, e o ataque de referência (metade do nível + atributo + maior
+grau) passava dela cedo: quem investe na perícia de combate acertava 95% desde o
+nível 5, e o d20 deixava de decidir.
+
+Agora a Defesa da criatura do mesmo VD é o **ataque de referência + 6**: quem
+investe acerta **75%** em todo nível (`ACERTO_CONTRA_CRIATURA` e
+`DEFESA_DE_CRIATURA_ACIMA_DO_ATAQUE` em `src/services/referenciaBalanceamento.ts`,
+coluna `defesaDeCriatura` da curva). A Vida de inimigo padrão passou a contar
+esse mesmo acerto (antes contava a chance contra a Defesa natural, 95% do nível
+15 em diante), então o encontro padrão continua durando 4,5 rodadas: a Vida cai
+cerca de 21% do nível 15 em diante e sobe um pouco no nível 1.
+
+| VD | Defesa antes | Defesa agora | Vida de inimigo padrão antes | agora |
+| ---: | ---: | ---: | ---: | ---: |
+| 1 | 9 | 10 | 90 | 110 |
+| 10 | 14 | 20 | 330 | 280 |
+| 20 | 19 | 30 | 510 | 410 |
+| 40 | 30 | 43 | 1.320 | 1.040 |
+| 60 | 40 | 56 | 1.330 | 1.050 |
+
+O gerador de criaturas, o "Escalar para outro VD" e o montador de encontro usam a
+conta nova. As fichas do Bestiário andaram a diferença no VD delas pelo mesmo
+script do golpe, agora `tools/ajustar-bestiario-curva.mjs` (`npm run
+bestiario:ajuste-curva`, com `check:ajuste-curva`): Defesa em 298 fichas (marca
+`ajusteDeDefesaAcerto`) e Vida em 282 (marca `fatorDeVidaAcerto`), mantendo o
+que cada uma tinha de próprio. No Bestiário real o jogador investido acerta a
+mediana de 75% em todas as faixas (70% no VD 1 a 10), de 50% a 95% conforme a
+criatura. Os PDFs do kit do Mestre e do Livro foram gerados de novo.
+
+Com a Vida de inimigo menor, o teste do aliado comprado passou a aceitar até 70%
+da Vida do inimigo (era 60%); a Vida de aliado continua 2x a de um personagem.
+
+## Conjuradores: DT de conjuração e Vida (2026-11-11)
+
+Aprovado pelo Pedro depois do teste de builds. A DT de conjuração (7 + 3 ×
+círculo) crescia mais rápido que a rolagem: o círculo mais alto que a fonte
+acabava de liberar saía só de 40% a 55% das vezes, com a Mana gasta mesmo na
+falha, e conjurar dois círculos abaixo rendia mais. Canalizador, Sintonizador e
+Ritualista tinham 2 de Vida por nível (50 no nível 20, contra 118 do Guerreiro).
+
+- **DT de conjuração = 7 + ⌊2,5 × círculo⌋**: 9, 12, 14, 17, 19, 22, 24, 27, 29
+  e 32 (`dt_conjuracao` em `data/ficha/magias.json`). O círculo máximo sai perto
+  de 65% no nível em que a fonte o libera, e os círculos de baixo perto de 75%,
+  como o golpe de arma. A Mana continua saindo na declaração e não volta na
+  falha. A DT de interceptar uma magia (Interceptador, Firewall, Interceptação
+  Ativa e Regional) é a mesma DT, então ficou um pouco mais fácil.
+- **Canalizador, Sintonizador e Ritualista: 3 de Vida, 5 de Mana e 1 de
+  Estamina por nível** (antes 2/6/1), o perfil das classes especiais de magia;
+  o orçamento de 9 continua. O grau "Vida 2" deixou de existir entre as classes
+  comuns (a tabela do personagem de referência perdeu a coluna). Foi avaliado
+  3/6/0, que manteria a Mana, mas deixaria a Estamina parada em 6 o jogo todo.
+- Como a Vida média do personagem de referência subiu, o dano das criaturas do
+  gerador (fatia dessa Vida) subiu cerca de 4%, e a Vida de aliado também. As
+  fichas do Bestiário não mudaram o dano.
+
+Canalizador com Fluxo principal contra a arma de referência, com as criaturas
+atuais (Defesa = ataque de referência + 6): `scripts/conjurar-escala.mjs` do
+relatório do teste de builds.
+
+| Nível | Círculo | Chance | Dano esperado por conjuração | Conjurações até a Mana acabar | Arma de referência por turno | Vida (Canalizador / média) |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 5 | 4 (máx.) | 65% | 13,7 | 2 | 9,0 | 23 / 27 |
+| 5 | 2 | 75% | 9,0 | 6 | 9,0 | 23 / 27 |
+| 10 | 6 (máx.) | 65% | 19,5 | 2 | 15,4 | 38 / 46 |
+| 10 | 4 | 75% | 15,8 | 5 | 15,4 | 38 / 46 |
+| 15 | 8 (máx.) | 60% | 23,4 | 2 | 21,8 | 53 / 65 |
+| 15 | 6 | 75% | 22,5 | 3 | 21,8 | 53 / 65 |
+| 20 | 10 (máx.) | 65% | 38,4 | 1 | 22,5 | 68 / 84 |
+| 20 | 8 | 75% | 30,0 | 3 | 22,5 | 68 / 84 |
+
+A magia de ataque passa pela DT e pela Defesa na mesma rolagem; no círculo
+máximo vale a DT. O conjurador rende mais que a arma por conjuração e a Mana
+segura o ritmo: no nível 20 cabem um 10º círculo e um 8º, ou três 8º.
 
 ## Pendências para a próxima revisão de design
 

@@ -2818,21 +2818,17 @@
         "custo_estamina": 3,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
-        "dano": "+1 dado",
-        "descricao": "Seu próximo ataque com espada causa +1 dado de dano."
+        "dano": "+1 dado (+2 dados no nível 10)",
+        "descricao": "Seu próximo ataque com espada causa +1 dado de dano. Do nível 10 de Espadachim em diante, você pode gastar 6 de Estamina no lugar de 3 para causar +2 dados."
       },
       {
         "id": "golpe-em-w",
-        "titulo": "Golpe em W",
+        "titulo": "Desarme",
         "custo_mana": 0,
-        "custo_estamina": 6,
-        "acao": "Ação Livre antes do ataque",
-        "duracao": "Este ataque",
-        "dano": "+2 dados",
-        "descricao": "Seu próximo ataque com espada causa +2 dados de dano.",
-        "pre_requisitos": [
-          "Golpe em Z"
-        ]
+        "custo_estamina": 4,
+        "acao": "Ação Padrão",
+        "duracao": "Instantânea",
+        "descricao": "Faça um ataque com espada contra uma criatura que empunhe arma ou objeto. Se acertar, em vez de causar dano, o que ela empunha cai a até 3 m, no ponto que você escolher. Arma natural e objeto preso ao corpo não podem ser tirados assim."
       },
       {
         "id": "corte-cirurgico",
@@ -2841,7 +2837,7 @@
         "custo_estamina": 2,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
-        "descricao": "Receba +2 no próximo ataque com espada."
+        "descricao": "Receba +2 no próximo ataque com espada. Do nível 10 de Espadachim em diante, você pode gastar 4 de Estamina no lugar de 2 para receber +5."
       },
       {
         "id": "corte-a-distancia",
@@ -2849,8 +2845,8 @@
         "custo_mana": 0,
         "custo_estamina": 4,
         "acao": "Ação Padrão",
-        "alcance": "9 m",
-        "descricao": "Faça um ataque com espada contra um alvo a até 9 m; ele causa o dano normal da arma."
+        "alcance": "9 m (18 m no nível 10)",
+        "descricao": "Faça um ataque com espada contra um alvo a até 9 m; ele causa o dano normal da arma. Do nível 10 de Espadachim em diante, o alcance passa a 18 m."
       },
       {
         "id": "penetrar-armadura",
@@ -2859,21 +2855,17 @@
         "custo_estamina": 4,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
-        "dano": "Ignora 5 de Resistência",
-        "descricao": "O próximo ataque com espada ignora 5 de Resistência."
+        "dano": "Ignora 5 de Resistência (10 no nível 10)",
+        "descricao": "O próximo ataque com espada ignora 5 de Resistência. Do nível 10 de Espadachim em diante, você pode gastar 6 de Estamina no lugar de 4 para ignorar 10."
       },
       {
         "id": "penetrar-armadura-ii",
-        "titulo": "Penetrar Armadura II",
+        "titulo": "Aparar Projétil",
         "custo_mana": 0,
-        "custo_estamina": 6,
-        "acao": "Ação Livre antes do ataque",
-        "duracao": "Este ataque",
-        "dano": "Ignora 10 de Resistência",
-        "descricao": "O próximo ataque com espada ignora 10 de Resistência.",
-        "pre_requisitos": [
-          "Penetrar Armadura"
-        ]
+        "custo_estamina": 4,
+        "acao": "Reação",
+        "duracao": "Instantânea",
+        "descricao": "Quando um ataque à distância de arma (flecha, bala, lâmina arremessada) acertar você, role Luta. Se o resultado igualar ou superar o total do ataque, você o desvia com a espada e ele erra. Magia e efeito em área não podem ser aparados."
       },
       {
         "id": "protecao-da-espada",
@@ -2883,40 +2875,34 @@
         "acao": "Ação de Movimento",
         "duracao": "Até o começo do próximo turno",
         "defesa": "+3",
-        "descricao": "Gaste uma ação de movimento para receber +3 Defesa até o começo do próximo turno."
+        "descricao": "Gaste uma ação de movimento para receber +3 Defesa até o começo do próximo turno. Do nível 10 de Espadachim em diante, você também pode usar uma Reação e 8 de Estamina para receber +5 de Defesa contra um único ataque, antes de saber se ele acerta."
       },
       {
         "id": "corte-a-distancia-ii",
-        "titulo": "Corte à Distância II",
+        "titulo": "Corte Giratório",
         "custo_mana": 0,
-        "custo_estamina": 0,
-        "acao": "Passivo",
-        "alcance": "18 m",
-        "descricao": "O Corte à Distância passa a alcançar 18 m.",
-        "pre_requisitos": [
-          "Corte à Distância"
-        ]
+        "custo_estamina": 6,
+        "acao": "Ação Padrão",
+        "duracao": "Instantânea",
+        "descricao": "Faça um ataque com espada contra cada inimigo adjacente, com uma rolagem para cada um. Cada acerto causa metade do dano."
       },
       {
         "id": "corte-cirurgico-ii",
-        "titulo": "Corte Cirúrgico II",
+        "titulo": "Finta",
         "custo_mana": 0,
-        "custo_estamina": 4,
-        "acao": "Ação Livre antes do ataque",
-        "duracao": "Este ataque",
-        "descricao": "Receba +5 no próximo ataque com espada.",
-        "pre_requisitos": [
-          "Corte Cirúrgico"
-        ]
+        "custo_estamina": 3,
+        "acao": "Ação de Movimento",
+        "duracao": "Até o fim do seu próximo turno",
+        "descricao": "Escolha um inimigo adjacente que possa ver você. Ele testa Vontade contra a sua DT de Espadachim. Se falhar, fica Exposto até o fim do seu próximo turno."
       },
       {
         "id": "protecao-da-espada-ii",
-        "titulo": "Proteção da Espada II",
+        "titulo": "Riposte",
         "custo_mana": 0,
-        "custo_estamina": 8,
+        "custo_estamina": 4,
         "acao": "Reação",
-        "defesa": "+5",
-        "descricao": "Use uma reação para receber +5 Defesa contra um ataque.",
+        "duracao": "Instantânea",
+        "descricao": "Quando um inimigo adjacente errar um ataque corpo a corpo contra você, use a Reação para fazer um ataque com espada contra ele.",
         "pre_requisitos": [
           "Nível 10 de Espadachim"
         ]
@@ -3491,9 +3477,8 @@
         "id": "eu-te-conheco",
         "titulo": "Eu Te Conheço?",
         "custo_mana": 0,
-        "custo_estamina": 2,
-        "acao": "Ação Livre",
-        "descricao": "Contra uma criatura que você já enfrentou antes, receba +2 no primeiro ataque da cena."
+        "acao": "Passivo",
+        "descricao": "Contra uma criatura que você já enfrentou antes, receba +2 no primeiro ataque de cada cena."
       },
       {
         "id": "errou-foi",
@@ -4010,10 +3995,8 @@
         "id": "high-ground",
         "titulo": "High Ground",
         "custo_mana": 0,
-        "custo_estamina": 2,
-        "acao": "Ação Livre",
-        "duracao": "Até o fim do turno",
-        "descricao": "Até o fim do turno, se estiver em terreno elevado, receba +2 no ataque e +6 m de alcance."
+        "acao": "Passivo",
+        "descricao": "Enquanto estiver em terreno mais alto que o alvo, receba +2 nos ataques à distância contra ele e +6 m de alcance."
       },
       {
         "id": "mira-fria",
@@ -5195,41 +5178,39 @@
       },
       {
         "id": "muralha-de-cobre",
-        "titulo": "Muralha de Cobre",
+        "titulo": "Muralha",
         "custo_mana": 0,
         "acao": "Passivo",
-        "descricao": "Receba Resistência 3 a dano físico."
+        "descricao": "Receba Resistência 3 a dano físico. Ela sobe para 5 no nível 6 de Guardião, para 8 no nível 11 e para 10 no nível 16."
       },
       {
         "id": "muralha-de-ouro",
-        "titulo": "Muralha de Ouro",
+        "titulo": "Postura Firme",
         "custo_mana": 0,
         "acao": "Passivo",
-        "descricao": "Sua Resistência física de Muralha sobe para 5.",
+        "descricao": "Receba +5 nos testes para resistir a ser empurrado, puxado, derrubado ou agarrado.",
         "pre_requisitos": [
-          "Muralha de Cobre",
           "Nível 6 de Guardião"
         ]
       },
       {
         "id": "muralha-de-ferro",
-        "titulo": "Muralha de Ferro",
+        "titulo": "Guarda Compartilhada",
         "custo_mana": 0,
         "acao": "Passivo",
-        "descricao": "Sua Resistência física de Muralha sobe para 8.",
+        "descricao": "Aliados adjacentes a você recebem +2 de Defesa contra ataques à distância, porque você fica entre eles e quem atira.",
         "pre_requisitos": [
-          "Muralha de Ouro",
           "Nível 11 de Guardião"
         ]
       },
       {
         "id": "muralha-de-diamante",
-        "titulo": "Muralha de Diamante",
+        "titulo": "Sentinela",
         "custo_mana": 0,
-        "acao": "Passivo",
-        "descricao": "Sua Resistência física de Muralha sobe para 10.",
+        "custo_estamina": 4,
+        "acao": "Reação",
+        "descricao": "Quando um inimigo adjacente se afastar de você ou atacar outra criatura que não seja você, faça um ataque contra ele. Se acertar, além do dano, ele para de se mover neste turno.",
         "pre_requisitos": [
-          "Muralha de Ferro",
           "Nível 16 de Guardião"
         ]
       },
@@ -5241,7 +5222,8 @@
         "usos": "Uma vez por cena",
         "descricao": "Uma vez por cena, transforme um crítico físico sofrido em acerto normal.",
         "pre_requisitos": [
-          "Muralha de Diamante"
+          "Muralha",
+          "Nível 16 de Guardião"
         ]
       },
       {
@@ -9403,10 +9385,8 @@
         "id": "sussurros-do-fundo",
         "titulo": "Sussurros do Fundo",
         "custo_mana": 0,
-        "custo_estamina": 2,
-        "acao": "Ação Livre",
-        "duracao": "Até o fim da cena",
-        "descricao": "Você tem vantagem no próximo teste de Intimidação ou Enganação que fizer nesta cena."
+        "acao": "Passivo",
+        "descricao": "As vozes do fundo do mar falam por cima da sua. Receba +2 em Intimidação e Enganação."
       },
       {
         "id": "corpo-encharcado",
@@ -9548,7 +9528,7 @@
     "dt_efeitos": {
       "rotulo": "DT do Cartista Arcano",
       "pericia": "misticismo",
-      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Isso é diferente da DT de conjuração normal (7 + 3 × o círculo da magia), que já vale sozinha para toda magia que você lança."
+      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Isso é diferente da DT de conjuração normal (7 + 2,5 × o círculo da magia, arredondado para baixo), que já vale sozinha para toda magia que você lança."
     },
     "progressao": [
       {
@@ -12801,10 +12781,9 @@
       {
         "id": "sou-de-fora",
         "titulo": "Sou de Fora",
-        "custo_mana": 2,
-        "descricao": "Receba +2 em Enganação para evitar uma obrigação cultural que desconhecia.",
-        "acao": "Ação Livre",
-        "usos": "Uma vez por cena"
+        "custo_mana": 0,
+        "acao": "Passivo",
+        "descricao": "Receba +2 em Enganação para escapar de uma obrigação cultural que você não conhecia."
       },
       {
         "id": "horizonte-aberto",
@@ -12859,8 +12838,8 @@
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
-    "vida": 2,
-    "mana": 6,
+    "vida": 3,
+    "mana": 5,
     "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
@@ -12971,7 +12950,7 @@
     "dt_efeitos": {
       "rotulo": "DT do Canalizador",
       "pericia": "misticismo",
-      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que conjura. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Isso é diferente da DT de conjuração normal (7 + 3 × o círculo da magia), que já vale sozinha para toda magia que você lança."
+      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que conjura. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Isso é diferente da DT de conjuração normal (7 + 2,5 × o círculo da magia, arredondado para baixo), que já vale sozinha para toda magia que você lança."
     },
     "progressao": [
       {
@@ -13397,19 +13376,17 @@
     "poderes": [
       {
         "id": "pulso-nativo",
-        "titulo": "Pulso Nativo",
-        "custo_mana": 3,
-        "acao": "Ação Livre antes de conjurar",
-        "duracao": "Este teste",
-        "descricao": "Receba +2 no próximo teste de conjuração."
+        "titulo": "Mente Dividida",
+        "custo_mana": 0,
+        "acao": "Passivo",
+        "descricao": "Você mantém duas magias de Concentração ao mesmo tempo, desde que uma delas seja de até 3º círculo. Um teste de concentração vale para as duas; se falhar, você escolhe qual delas termina."
       },
       {
         "id": "economia-arcana",
         "titulo": "Economia Arcana",
         "custo_mana": 0,
         "acao": "Passivo",
-        "usos": "Uma vez por cena",
-        "descricao": "Uma vez por cena, reduza em 1 o custo de uma magia, mínimo 1."
+        "descricao": "Suas magias de 1º e 2º círculo custam 1 de Mana a menos, mínimo 1."
       },
       {
         "id": "conjuracao-defensiva",
@@ -13485,8 +13462,8 @@
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
-    "vida": 2,
-    "mana": 6,
+    "vida": 3,
+    "mana": 5,
     "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
@@ -13661,7 +13638,7 @@
     "dt_efeitos": {
       "rotulo": "DT do Sintonizador",
       "pericia": "misticismo",
-      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que conjura. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Isso é diferente da DT de conjuração normal (7 + 3 × o círculo da magia), que já vale sozinha para toda magia que você lança."
+      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que conjura. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Isso é diferente da DT de conjuração normal (7 + 2,5 × o círculo da magia, arredondado para baixo), que já vale sozinha para toda magia que você lança."
     },
     "progressao": [
       {
@@ -14111,11 +14088,10 @@
       {
         "id": "ressonancia-compartilhada",
         "titulo": "Ressonância Compartilhada",
-        "custo_mana": 4,
-        "acao": "Ação Livre",
-        "alcance": "Curto",
-        "duracao": "Até o fim da cena",
-        "descricao": "Um aliado recebe +2 na Defesa contra magia."
+        "custo_mana": 0,
+        "acao": "Passivo",
+        "alcance": "3 m",
+        "descricao": "Enquanto você tiver um catalisador ativo, você e os aliados a até 3 m recebem +2 de Defesa contra magia e poder de criatura do mesmo Fluxo dele."
       },
       {
         "id": "foco-reserva",
@@ -14176,8 +14152,8 @@
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
-    "vida": 2,
-    "mana": 6,
+    "vida": 3,
+    "mana": 5,
     "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
@@ -15101,7 +15077,7 @@
       {
         "id": "pacote-descartado",
         "titulo": "Pacote Descartado",
-        "descricao": "Quando perceber uma magia natural sendo conjurada, role Misticismo contra a DT de conjuração dela (7 + 3 × o círculo); em sucesso, você a intercepta e ela não acontece. Contra poder de criatura que venha de Fluxo natural (magia, sopro, maldição; o Mestre diz quando é o caso), a DT é a DT padrão do VD dela: 15 + metade do VD.",
+        "descricao": "Quando perceber uma magia natural sendo conjurada, role Misticismo contra a DT de conjuração dela (7 + 2,5 × o círculo, arredondado para baixo); em sucesso, você a intercepta e ela não acontece. Contra poder de criatura que venha de Fluxo natural (magia, sopro, maldição; o Mestre diz quando é o caso), a DT é a DT padrão do VD dela: 15 + metade do VD.",
         "niveis": [
           1
         ],
@@ -15309,7 +15285,7 @@
     "dt_efeitos": {
       "rotulo": "DT do Interceptador",
       "pericia": "misticismo",
-      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Interceptar uma magia é diferente: você rola Misticismo contra a DT de conjuração que a própria magia já tem (7 + 3× o círculo dela), não contra essa DT do Interceptador. Contra poder de criatura que venha de Fluxo natural, a DT é a DT padrão do VD dela (15 + metade do VD)."
+      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Interceptar uma magia é diferente: você rola Misticismo contra a DT de conjuração que a própria magia já tem (7 + 2,5 × o círculo dela, arredondado para baixo), não contra essa DT do Interceptador. Contra poder de criatura que venha de Fluxo natural, a DT é a DT padrão do VD dela (15 + metade do VD)."
     }
   },
   {
@@ -16414,9 +16390,9 @@
       {
         "id": "blefe-perfeito",
         "titulo": "Blefe Perfeito",
-        "custo_mana": 2,
-        "acao": "Ação Livre",
-        "descricao": "Receba vantagem no próximo teste de Enganação nesta cena."
+        "custo_mana": 0,
+        "acao": "Passivo",
+        "descricao": "Receba +2 em Enganação."
       },
       {
         "id": "memoria-fotografica",

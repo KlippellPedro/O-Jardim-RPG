@@ -7,7 +7,8 @@ import { VD_MAXIMO, xpPorVd } from './progressaoNiveis';
  * (data/regras/curva-criatura-v1.json, gerado por `npm run audit:balance`):
  * testes iguais ao ataque de referência, golpe igual ao ataque de referência mais o
  * ajuste de armadura (do VD 15 em diante, para acompanhar a armadura típica do
- * nível), Defesa 3 abaixo da natural,
+ * nível), Defesa igual ao ataque de referência mais 6 (quem investe na perícia de
+ * combate acerta 75%),
  * dano como fatia da Vida de um personagem e Vida como fatia da "Vida de
  * inimigo padrão" (a que aguenta 4,5 rodadas de um grupo de quatro).
  *
@@ -87,6 +88,7 @@ export const ORDEM_DOS_PAPEIS: readonly PapelCriatura[] = ['lacaio', 'padrao', '
 
 /** Acima deste VD a Vida cresce na proporção do VD (VD 100 tem 2,5 vezes a Vida do VD 40). */
 export const VD_ONDE_A_VIDA_ESCALA = 40;
+/** Só para curvas antigas sem a coluna defesaDeCriatura. */
 const DEFESA_ABAIXO_DA_NATURAL = 3;
 const PERCEPCAO_ABAIXO_DO_ATAQUE = 8;
 
@@ -98,6 +100,8 @@ interface ILinhaDaCurva {
   modificadorPrincipal: number;
   /** Somado só ao golpe e à Luta (0 antes do VD 15 e em curvas antigas sem a coluna). */
   ajusteDeArmadura?: number;
+  /** Defesa da criatura: ataque de referência + 6 (o jogador investido acerta 75%). */
+  defesaDeCriatura?: number;
 }
 
 const COLUNAS = curvaData.colunas;
@@ -210,7 +214,7 @@ export function modeloDeCriatura(vd: unknown, papel: PapelCriatura = 'solo', arq
   // Luta somam o ajuste de armadura.
   const teste = linha.ataque + regra.ajusteDeAtaque + jeito.ajusteDeAtaque;
   const ataque = teste + ajusteDeArmaduraDoVd(alvo);
-  const defesa = Math.max(8, linha.defesaNatural - DEFESA_ABAIXO_DA_NATURAL + jeito.ajusteDeDefesa);
+  const defesa = Math.max(8, (linha.defesaDeCriatura ?? linha.defesaNatural - DEFESA_ABAIXO_DA_NATURAL) + jeito.ajusteDeDefesa);
   const modificador = Math.max(1, linha.modificadorPrincipal);
   const danoMedio = Math.max(2, Math.round(regra.fatiaDeDano * jeito.fatorDeDano * linha.vidaDoPersonagem));
   const golpeAnunciadoMedio = regra.fatiaDoGolpeAnunciado === null

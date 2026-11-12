@@ -4,6 +4,8 @@ import { BookOpen, Dices, Loader2, Package, ShieldAlert, Smartphone, Sparkles, S
 import { registrosApi } from '../../../services/registrosApi';
 import { useWakeLock } from '../../../hooks/useWakeLock';
 import { vibrar } from '../../../utils/vibracaoDoApp';
+import type { IAcaoMesa } from '../../../services/acoesDeMesa';
+import { AcoesDeMesa } from './AcoesDeMesa';
 import {
   PASSOS_RECURSO,
   descreverConta,
@@ -59,6 +61,8 @@ interface IModoMesaProps {
   condicoes: ICondicaoMesa[];
   onRemoverCondicao: (indice: number) => void;
   onAbrirAba: (aba: 'Ataques' | 'Magias' | 'Poderes' | 'Inventário') => void;
+  /** Habilidades, poderes, traços e Legados já classificados por tipo de ação. */
+  acoes?: IAcaoMesa[];
 }
 
 const COR_BARRA: Record<TomBarra, string> = { ok: '#4ade80', alerta: '#facc15', critico: '#f87171' };
@@ -145,6 +149,7 @@ export const ModoMesa = ({
   condicoes,
   onRemoverCondicao,
   onAbrirAba,
+  acoes = [],
 }: IModoMesaProps) => {
   const [manterTela, setManterTela] = useState(true);
   const [bonus, setBonus] = useState(0);
@@ -248,6 +253,14 @@ export const ModoMesa = ({
             </div>
           ))}
         </div>
+
+        <AcoesDeMesa
+          personagemId={personagemId}
+          acoes={acoes}
+          onGastar={(recurso, valor) => (recurso === 'mana'
+            ? onStatus('manaAtual', -valor, mana.max)
+            : onStatus('estaminaAtual', -valor, estamina.max))}
+        />
 
         <section className="rounded-2xl border border-white/10 bg-[#0f0e15] p-4" aria-label="Cansaço">
           <div className="flex items-center justify-between gap-3">

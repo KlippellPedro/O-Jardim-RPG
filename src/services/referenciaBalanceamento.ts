@@ -46,6 +46,13 @@ const ORDEM_DOS_AUMENTOS: TAtributo[] = ['forca', 'constituicao', 'forca', 'dest
  * meia de dano do grupo; o grupo de referência tem quatro personagens. */
 export const RODADAS_DO_ENCONTRO_PADRAO = 4.5;
 export const TAMANHO_DO_GRUPO = 4;
+/** Chance de quem investe na perícia de combate acertar a criatura do mesmo nível
+ * (2026-11-11, teste de builds): a Defesa da criatura é o ataque de referência
+ * mais DEFESA_DE_CRIATURA_ACIMA_DO_ATAQUE, e a Vida de inimigo padrão conta com
+ * este acerto. Antes a Defesa saía da natural menos 3 e o jogador acertava 95%
+ * desde o nível 5. */
+export const ACERTO_CONTRA_CRIATURA = 0.75;
+export const DEFESA_DE_CRIATURA_ACIMA_DO_ATAQUE = Math.round(21 - 20 * ACERTO_CONTRA_CRIATURA);
 
 /** Média de uma expressão de dados ("8d12+20"), ou null se não houver dado. */
 export function mediaDeDados(expressao: unknown): number | null {
@@ -154,6 +161,8 @@ export interface IReferenciaDoNivel {
   /** Vida das 18 classes comuns: a menor, a média e a maior. */
   vida: { minima: number; media: number; maxima: number };
   defesaNatural: number;
+  /** Defesa da criatura do mesmo VD: o ataque de referência + 6 (o jogador investido acerta 75%). */
+  defesaDeCriatura: number;
   /** Bônus de ataque de quem investe os graus na perícia de combate: nível/2 +
    * modificador + o maior grau que o nível permite. */
   bonusDeAtaque: number;
@@ -181,9 +190,10 @@ export function referenciaDoNivel(
   const bonusDeAtaque = bonusDeNivel + modificadorPrincipal + (BONUS_GRAU[grau] ?? 0);
   const danoPorAcerto = melhorDanoDeArmaAteONivel(armas, nivel) + modificadorPrincipal;
   const defesaNatural = derivados[0]?.defesaNatural ?? 10 + bonusDeNivel;
-  // d20 + ataque contra a Defesa do inimigo do mesmo nível: 1 e 20 naturais
+  // d20 + ataque contra a Defesa da criatura do mesmo nível: 1 e 20 naturais
   // sempre contam, então a chance fica entre 5% e 95%.
-  const chanceDeAcertar = Math.min(0.95, Math.max(0.05, (21 - (defesaNatural - bonusDeAtaque)) / 20));
+  const defesaDeCriatura = bonusDeAtaque + DEFESA_DE_CRIATURA_ACIMA_DO_ATAQUE;
+  const chanceDeAcertar = Math.min(0.95, Math.max(0.05, (21 - (defesaDeCriatura - bonusDeAtaque)) / 20));
   const danoDoGrupoPorRodada = TAMANHO_DO_GRUPO * chanceDeAcertar * danoPorAcerto;
   return {
     nivel,
@@ -197,6 +207,7 @@ export function referenciaDoNivel(
       maxima: Math.max(...vidas),
     },
     defesaNatural,
+    defesaDeCriatura,
     bonusDeAtaque,
     danoPorAcerto: Math.round(danoPorAcerto * 10) / 10,
     dt: {

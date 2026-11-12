@@ -15,6 +15,59 @@
       ]
     },
     {
+      "id": "2026-11-11-modo-mesa-no-seu-turno",
+      "data": "2026-11-11",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Modo mesa: o que você pode fazer no seu turno",
+      "detalhes": [
+        "O Modo mesa ganhou a seção No seu turno, com suas habilidades, poderes, escolhas, traços de raça e Legados separados por Ação, Movimento, Reação e Livre. Dentro de cada aba, cada classe fica no seu bloco.",
+        "Os passivos e o que é de fora de combate ficam numa aba à parte, para não atrapalhar na hora de decidir.",
+        "O que tem limite por cena, descanso ou sessão mostra bolinhas para marcar o uso. Os botões Nova cena, Descansei e Nova sessão zeram as marcas certas. As marcas ficam guardadas no seu aparelho.",
+        "O botão Usar já desconta a Mana ou a Estamina do custo. Com muitos itens, uma busca aparece no topo.",
+        "Toque no nome para ler o texto completo."
+      ]
+    },
+    {
+      "id": "2026-11-11-poderes-mais-simples",
+      "data": "2026-11-11",
+      "tipo": "melhoria",
+      "area": "Classes",
+      "titulo": "Poderes com menos conta para fazer",
+      "detalhes": [
+        "Espadachim: cada poder que tinha versão II virou um poder só, que melhora no nível 10. As vagas que sobraram viraram técnicas novas: Desarme, Finta, Aparar Projétil, Corte Giratório e Riposte. Quem tinha uma versão II continua com o efeito dela e ganha a técnica nova no lugar.",
+        "Canalizador: Pulso Nativo virou Mente Dividida, que mantém duas magias de Concentração ao mesmo tempo. Economia Arcana deixa as magias de 1º e 2º círculo 1 de Mana mais baratas, sem limite por cena.",
+        "Guardião: Muralha de Cobre, Ouro, Ferro e Diamante viraram a Muralha, que sobe sozinha com o nível. As vagas que sobraram viraram Postura Firme, Guarda Compartilhada e Sentinela.",
+        "Ressonância Compartilhada (Sintonizador), Eu Te Conheço? (Lutador), High Ground (Atirador), Sou de Fora (Viajante), Sussurros do Fundo (Pirata) e Blefe Perfeito (Detetive) agora funcionam sozinhos, sem gastar recurso nem ação.",
+        "Se o seu personagem tinha um desses poderes e a troca não combina com ele, fale com o Mestre para escolher outro."
+      ]
+    },
+    {
+      "id": "2026-11-11-conjuradores",
+      "data": "2026-11-11",
+      "tipo": "melhoria",
+      "area": "Magia",
+      "titulo": "Magia sai com mais facilidade e conjurador aguenta mais",
+      "detalhes": [
+        "A DT de conjuração ficou menor: 7 mais duas vezes e meia o círculo, arredondado para baixo. O 1º círculo pede 9 e o 10º pede 32.",
+        "O círculo mais alto que você acabou de liberar sai mais ou menos duas vezes em três. Antes saía menos da metade das vezes.",
+        "Canalizador, Sintonizador e Ritualista ganham 3 de Vida e 5 de Mana por nível, em vez de 2 e 6. A ficha recalcula sozinha.",
+        "Interceptar uma magia usa a mesma DT, então também ficou um pouco mais fácil."
+      ]
+    },
+    {
+      "id": "2026-11-11-acerto-contra-criaturas",
+      "data": "2026-11-11",
+      "tipo": "melhoria",
+      "area": "Bestiário",
+      "titulo": "Acertar uma criatura voltou a depender do dado",
+      "detalhes": [
+        "Quem investe na perícia de combate acerta uma criatura do mesmo nível mais ou menos três vezes em quatro. Antes acertava quase sempre desde o nível 5.",
+        "As criaturas ficaram com menos Vida na mesma proporção, então a luta dura o mesmo número de rodadas.",
+        "Cada criatura do Bestiário mantém o que tinha de próprio: a mais esquiva continua mais difícil de acertar que a mais lenta."
+      ]
+    },
+    {
       "id": "2026-11-11-criaturas-acertam-mais",
       "data": "2026-11-11",
       "tipo": "melhoria",
@@ -999,54 +1052,6 @@
         "Magia de efeito não olha a Defesa: o alvo rola a resistência contra o seu total e, se passar, sofre metade do dano.",
         "Na aba Magias, o cartão mostra qual é o caso, o campo de Defesa do alvo aparece só nas magias de ataque, e o resultado da conjuração diz o que o alvo precisa rolar.",
         "As Elementais Impacto, Rajada, Lança, Aríete e Julgamento dos Elementos passaram a ser magias de efeito, porque já reduziam o dano à metade quando o alvo resistia."
-      ]
-    },
-    {
-      "id": "2026-10-20-elementais-pelo-circulo-da-elementarista",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Ficha",
-      "titulo": "Magias Elementais pelo círculo da Elementarista",
-      "detalhes": [
-        "As magias Elementais do Físico agora vão só até o círculo que os seus níveis de Elementarista liberam: o 2º no nível 1, o 4º no 5, o 6º no 10, o 8º no 15 e o 10º no 20. Antes, 1 nível de Elementarista somado a outra classe de magia abria todas, até o 10º.",
-        "O que você já tinha aprendido continua na ficha e pode ser conjurado normalmente."
-      ]
-    },
-    {
-      "id": "2026-10-20-fisico-sem-buracos",
-      "data": "2026-10-20",
-      "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Físico completo para quem não é Elementarista",
-      "detalhes": [
-        "O Canalizador e o Sintonizador do Baluarte agora têm magia do Físico em todos os círculos. Antes, o 2º, o 6º e o 9º só tinham magias Elementais, que são da Elementarista.",
-        "Armadura de Matéria, Muralha do Baluarte e Égide de Moros deixaram de ser Elementais: a armadura e a muralha passam a ser de pedra ou metal, ou do elemento de quem tem um. A Elementarista continua aprendendo as três.",
-        "Magia nova no 6º círculo: Poço de Gravidade. A gravidade dobra numa área, quem falha em Fortitude anda pela metade e mira pior, e quem voa cai. Seus aliados escolhidos passam ilesos."
-      ]
-    },
-    {
-      "id": "2026-10-20-rituais-selos-encantamentos-por-classe",
-      "data": "2026-10-20",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Rituais, selos e encantamentos de outros Fluxos",
-      "detalhes": [
-        "O Ritualista agora aprende rituais, selos e encantamentos de qualquer Fluxo natural, porque rito vem de tradição, pacto ou pergaminho. Os do Fim ainda pedem autorização do Mestre, e a Tecnologia só entra se estiver instalada.",
-        "O Sintonizador aprende selos e encantamentos também dos Fluxos dos catalisadores que tiver preparados na hora de aprender, e o que aprendeu fica mesmo se trocar de catalisador depois.",
-        "Cada Fluxo tem 3 selos e 3 encantamentos, então as vagas desses dois do Canalizador e do Cartista Arcano agora param em 3. As vagas acima disso nunca tinham o que preencher. Quem já tinha aprendido mais mantém tudo."
-      ]
-    },
-    {
-      "id": "2026-10-20-fluxo-nativo-e-instalado",
-      "data": "2026-10-20",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Fluxo nativo da Árvore e Fluxo instalado pelo Mestre",
-      "detalhes": [
-        "O Fluxo nativo agora vem sempre da Árvore em que o personagem nasceu. Quem nasce na A.X.I.S tem Comunicação, o Fluxo da Parley que segue vivo sob a Malha. O Autômato continua com a Tecnologia, que vem no núcleo dele.",
-        "Para os outros, a Tecnologia chega como Fluxo instalado: o Mestre marca na aba Magias da ficha, e a ficha passa a poder aprender as magias desse Fluxo. O Fluxo instalado não dá Marca de círculo.",
-        "Quem nasceu na A.X.I.S e já tinha aprendido algo de Tecnologia recebeu a Tecnologia como Fluxo instalado, e o que conhecia continua funcionando.",
-        "A escolha de Fluxo do Canalizador agora aparece só para ficha sem Árvore. Antes ela aparecia para todo mundo e não mudava nada."
       ]
     }
   ]

@@ -16,6 +16,59 @@
       ]
     },
     {
+      "id": "2026-11-11-modo-mesa-no-seu-turno",
+      "data": "2026-11-11",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Modo mesa: o que você pode fazer no seu turno",
+      "detalhes": [
+        "O Modo mesa ganhou a seção No seu turno, com suas habilidades, poderes, escolhas, traços de raça e Legados separados por Ação, Movimento, Reação e Livre. Dentro de cada aba, cada classe fica no seu bloco.",
+        "Os passivos e o que é de fora de combate ficam numa aba à parte, para não atrapalhar na hora de decidir.",
+        "O que tem limite por cena, descanso ou sessão mostra bolinhas para marcar o uso. Os botões Nova cena, Descansei e Nova sessão zeram as marcas certas. As marcas ficam guardadas no seu aparelho.",
+        "O botão Usar já desconta a Mana ou a Estamina do custo. Com muitos itens, uma busca aparece no topo.",
+        "Toque no nome para ler o texto completo."
+      ]
+    },
+    {
+      "id": "2026-11-11-poderes-mais-simples",
+      "data": "2026-11-11",
+      "tipo": "melhoria",
+      "area": "Classes",
+      "titulo": "Poderes com menos conta para fazer",
+      "detalhes": [
+        "Espadachim: cada poder que tinha versão II virou um poder só, que melhora no nível 10. As vagas que sobraram viraram técnicas novas: Desarme, Finta, Aparar Projétil, Corte Giratório e Riposte. Quem tinha uma versão II continua com o efeito dela e ganha a técnica nova no lugar.",
+        "Canalizador: Pulso Nativo virou Mente Dividida, que mantém duas magias de Concentração ao mesmo tempo. Economia Arcana deixa as magias de 1º e 2º círculo 1 de Mana mais baratas, sem limite por cena.",
+        "Guardião: Muralha de Cobre, Ouro, Ferro e Diamante viraram a Muralha, que sobe sozinha com o nível. As vagas que sobraram viraram Postura Firme, Guarda Compartilhada e Sentinela.",
+        "Ressonância Compartilhada (Sintonizador), Eu Te Conheço? (Lutador), High Ground (Atirador), Sou de Fora (Viajante), Sussurros do Fundo (Pirata) e Blefe Perfeito (Detetive) agora funcionam sozinhos, sem gastar recurso nem ação.",
+        "Se o seu personagem tinha um desses poderes e a troca não combina com ele, fale com o Mestre para escolher outro."
+      ]
+    },
+    {
+      "id": "2026-11-11-conjuradores",
+      "data": "2026-11-11",
+      "tipo": "melhoria",
+      "area": "Magia",
+      "titulo": "Magia sai com mais facilidade e conjurador aguenta mais",
+      "detalhes": [
+        "A DT de conjuração ficou menor: 7 mais duas vezes e meia o círculo, arredondado para baixo. O 1º círculo pede 9 e o 10º pede 32.",
+        "O círculo mais alto que você acabou de liberar sai mais ou menos duas vezes em três. Antes saía menos da metade das vezes.",
+        "Canalizador, Sintonizador e Ritualista ganham 3 de Vida e 5 de Mana por nível, em vez de 2 e 6. A ficha recalcula sozinha.",
+        "Interceptar uma magia usa a mesma DT, então também ficou um pouco mais fácil."
+      ]
+    },
+    {
+      "id": "2026-11-11-acerto-contra-criaturas",
+      "data": "2026-11-11",
+      "tipo": "melhoria",
+      "area": "Bestiário",
+      "titulo": "Acertar uma criatura voltou a depender do dado",
+      "detalhes": [
+        "Quem investe na perícia de combate acerta uma criatura do mesmo nível mais ou menos três vezes em quatro. Antes acertava quase sempre desde o nível 5.",
+        "As criaturas ficaram com menos Vida na mesma proporção, então a luta dura o mesmo número de rodadas.",
+        "Cada criatura do Bestiário mantém o que tinha de próprio: a mais esquiva continua mais difícil de acertar que a mais lenta."
+      ]
+    },
+    {
       "id": "2026-11-11-criaturas-acertam-mais",
       "data": "2026-11-11",
       "tipo": "melhoria",

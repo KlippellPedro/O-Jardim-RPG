@@ -182,7 +182,6 @@ const totalClassesVida6 = contarClassesPorVida(6);
 const totalClassesVida5 = contarClassesPorVida(5);
 const totalClassesVida4 = contarClassesPorVida(4);
 const totalClassesVida3 = contarClassesPorVida(3);
-const totalClassesVida2 = contarClassesPorVida(2);
 
 /** Faixas de ritmo de nível lidas de data/ficha/progressao-niveis.json, a mesma
  * fonte da ficha e do servidor: o livro nunca diverge do que a ficha confere. */
@@ -278,7 +277,7 @@ const vagasDePoderNoNivel = (nivel: number) => (classesData[0]?.progressao || []
   .filter((marco) => marco.nivel <= Math.min(nivel, NIVEL_CONTEUDO_CLASSE))
   .reduce((total, marco) => total + (marco.recompensas || []).filter((recompensa) => recompensa.tipo === 'poder').length, 0);
 const linhasPersonagemDeReferencia = () => [1, 5, 10, 15, 20, 30, 40, 50, 60, 100, 200].map((nivel) => {
-  const colunas = [6, 5, 4, 3, 2].map((vida) => {
+  const colunas = [6, 5, 4, 3].map((vida) => {
     const derivados = derivadosDeReferencia(classeDeVidaParaReferencia(vida), nivel);
     return `<td>${derivados.vida} / ${derivados.mana + derivados.estamina}</td>`;
   }).join('');
@@ -781,12 +780,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">O personagem de referência</h3>
       <p>Todas as ${classesData.length} classes gastam o mesmo orçamento de 9 pontos por nível, distribuído entre Vida, Mana e Estamina. A Vida define a coluna, e o que sobra vira Mana e Estamina somadas. A tabela abaixo é o personagem médio de cada coluna, calculada com Constituição 14, Sabedoria 10 e Destreza 14, pela mesma conta que a ficha faz. Cada classe vai até o nível ${NIVEL_MAXIMO_CLASSE} (com a Maestria dos níveis 25, 35 e 45); depois disso a tabela soma níveis de uma classe neutra, com 3 de Vida e 6 de recurso por nível. Use como piso ao montar encontro.</p>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Nível</th><th>Vida 6 (3 de recurso)</th><th>Vida 5 (4)</th><th>Vida 4 (5)</th><th>Vida 3 (6)</th><th>Vida 2 (7)</th><th>Defesa</th><th>Poderes</th></tr></thead>
+        <thead><tr><th>Nível</th><th>Vida 6 (3 de recurso)</th><th>Vida 5 (4)</th><th>Vida 4 (5)</th><th>Vida 3 (6)</th><th>Defesa</th><th>Poderes</th></tr></thead>
         <tbody>
           ${linhasPersonagemDeReferencia()}
         </tbody>
       </table></div>
-      <p class="regras-note">Classes por Vida: ${totalClassesVida6} com 6, ${totalClassesVida5} com 5, ${totalClassesVida4} com 4, ${totalClassesVida3} com 3 e ${totalClassesVida2} com 2. Nas colunas de Vida alta o recurso vai quase todo para Estamina; nas de Vida baixa, para Mana. Num grupo comum de quatro, some as Vidas da coluna certa e multiplique o dano do grupo por rodada por 4,5: sai a Vida efetiva do encontro padrão.</p>
+      <p class="regras-note">Classes por Vida: ${totalClassesVida6} com 6, ${totalClassesVida5} com 5, ${totalClassesVida4} com 4 e ${totalClassesVida3} com 3. Nas colunas de Vida alta o recurso vai quase todo para Estamina; nas de Vida baixa, para Mana. Num grupo comum de quatro, some as Vidas da coluna certa e multiplique o dano do grupo por rodada por 4,5: sai a Vida efetiva do encontro padrão.</p>
 
       <h3 class="regras-subtitle">Conferir maestria</h3>
       <ul class="regras-list">
@@ -2600,7 +2599,7 @@ ${HTML_DEVOCAO}
       <div class="regras-resumo">
         <ul>
           <li>Cada alma nasce com um Fluxo natural, e só um: o da Árvore em que nasceu. Fluxo alto não ensina magia: o acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.</li>
-          <li>O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus da classe. A DT de conjuração é 7 + (3 × círculo).</li>
+          <li>O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus da classe. A DT de conjuração é 7 + 2,5 × círculo, arredondado para baixo.</li>
           <li>A Mana sai quando você declara a conjuração e não volta se o teste falhar. O Fluxo recomendado de cada círculo é só um aviso.</li>
           <li>Você mantém uma concentração por vez. Ao sofrer dano, role Vontade contra DT 10 ou metade do dano recebido, o que for maior.</li>
         </ul>
@@ -2632,7 +2631,7 @@ ${HTML_DEVOCAO}
       </table></div>
       <h3 class="regras-subtitle">Teste e DT de magia</h3>
       <div class="regras-formula">Teste = d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus de habilidades, poderes e itens</div>
-      <div class="regras-formula">DT de conjuração = 7 + (3 × círculo)</div>
+      <div class="regras-formula">DT de conjuração = 7 + ⌊2,5 × círculo⌋</div>
       <ul class="regras-list">
         <li>Toda magia de círculo precisa alcançar a DT do próprio círculo para se estabilizar.</li>
         <li>Os bônus de habilidades, poderes e itens são os que a própria habilidade, poder ou item diz para somar ao teste de conjuração, como o +2 da Sintonia Catalisada ou o do Círculo de Convocação. Nenhuma classe tem um bônus fixo além desses.</li>
@@ -2642,7 +2641,7 @@ ${HTML_DEVOCAO}
         <li>A Mana sai no momento em que você declara a conjuração, e não volta se o teste falhar.</li>
       </ul>
       <div class="regras-note regras-note--exemplo">
-        <p>Um conjurador de nível total 10 tem Mod. Fluxo +4, um grau de Misticismo que soma +4 e nenhum bônus de habilidade ativo. A metade do nível vale ⌊10 ÷ 2⌋ = 5, então o bônus dele é +4 + 5 + 4 = +13. A DT de uma magia de 3º círculo é 7 + (3 × 3) = 16, e basta tirar 3 ou mais no d20 para ela se estabilizar. Se a magia for de ataque, esse mesmo total é lido contra a Defesa do alvo.</p>
+        <p>Um conjurador de nível total 10 tem Mod. Fluxo +4, um grau de Misticismo que soma +4 e nenhum bônus de habilidade ativo. A metade do nível vale ⌊10 ÷ 2⌋ = 5, então o bônus dele é +4 + 5 + 4 = +13. A DT de uma magia de 4º círculo é 7 + ⌊2,5 × 4⌋ = 17, e basta tirar 4 ou mais no d20 para ela se estabilizar. Se a magia for de ataque, esse mesmo total é lido contra a Defesa do alvo.</p>
       </div>
 
       <h3 class="regras-subtitle">Ataque e resistência</h3>
@@ -2731,10 +2730,10 @@ ${HTML_DEVOCAO}
 
       <h3 class="regras-subtitle">A DT de conjuração trabalha por você</h3>
       <ul class="regras-list">
-        <li>A DT é 7 mais três vezes o círculo, e a Mana sai na declaração, mesmo se o teste falhar. Um conjurador que tenta o círculo máximo dele está apostando recurso, não gastando de graça.</li>
+        <li>A DT é 7 mais duas vezes e meia o círculo, arredondado para baixo, e a Mana sai na declaração, mesmo se o teste falhar. Um conjurador que tenta o círculo máximo dele está apostando recurso, não gastando de graça.</li>
         <li>A mesma rolagem é lida duas vezes: contra a DT do círculo, para estabilizar, e contra o alvo, que rola a resistência dele contra o seu total (ou é comparada com a Defesa, se a magia for de ataque). Estabilizar e ainda assim ser resistido acontece, e vale explicar na primeira vez.</li>
         <li>A metade do nível entra na rolagem, como em todo teste. Ela mantém o conjurador na mesma curva do resto do grupo: sem ela, o teste de resistência de uma criatura do mesmo nível ficaria fora do alcance a partir do nível 50.</li>
-        <li>O Fluxo recomendado é aviso, e a DT é o portão de verdade. A escada (11 + círculo) foi feita para quem investe em Fluxo alcançar o 10º por volta do nível 20; quem deixa o Fluxo baixo vê o aviso e perde as Marcas dos círculos altos. No nível 20, com Fluxo 20 e grau Veterano, a rolagem soma +25: o 10º círculo (DT 37) sai com 12 ou mais no d20, e no nível 10 ele nem alcança a DT. Se quiser mais rigor na sua mesa, peça o Fluxo recomendado como condição para aprender.</li>
+        <li>O Fluxo recomendado é aviso, e a DT é o portão de verdade. A escada (11 + círculo) foi feita para quem investe em Fluxo alcançar o 10º por volta do nível 20; quem deixa o Fluxo baixo vê o aviso e perde as Marcas dos círculos altos. No nível 20, com Fluxo 20 e grau Veterano, a rolagem soma +25: o 10º círculo (DT 32) sai com 7 ou mais no d20, e no nível 10, com +13, pede 19 ou mais. Quem tenta o círculo mais alto que acabou de liberar acerta cerca de duas vezes em três. Se quiser mais rigor na sua mesa, peça o Fluxo recomendado como condição para aprender.</li>
       </ul>
 
     `,
@@ -3944,7 +3943,7 @@ ${HTML_DEVOCAO}
       </table></div>
       <ul class="regras-list">
         <li>O dano da arma para de crescer no nível 35, nas relíquias da criação. Daí em diante o dano por acerto sobe só com o modificador de atributo, e um chefe fica maior com mais Vida, mais Defesa e mais ações, enquanto o dano por golpe fica onde está.</li>
-        <li>A Defesa da tabela é a natural. Do nível 29 em diante quem investe na perícia de combate acerta quase sempre um inimigo do mesmo nível, e é a armadura, o escudo e os efeitos de cena que seguram a Defesa de um NPC forte.</li>
+        <li>A Defesa da tabela é a natural, a de um personagem sem armadura. Uma criatura do mesmo nível tem Defesa igual ao ataque da tabela mais 6, e quem investe na perícia de combate acerta três vezes em quatro; a Vida de inimigo padrão já conta com esse acerto. Para um NPC de armadura, some a armadura e o escudo dele à Defesa natural.</li>
         <li>DT fixa (5 a 40) deixa de ser desafio a partir do nível 40. Acima disso use a DT padrão e a extrema da linha do nível.</li>
         <li>O bestiário escrito vai até o nível 50. A Vida dos monstros dele fica de metade a um pouco acima da coluna de inimigo padrão: criatura de bando é mais frágil que o encontro padrão, e o chefe passa dela.</li>
       </ul>
@@ -4887,7 +4886,7 @@ ${HTML_DEVOCAO}
       <p class="regras-note">A Vida do alvo apropriado é a da linha de frente para golpe físico, e a de quem fica atrás para a ameaça que pune posicionamento. Um golpe anunciado de chefe pode tirar metade da Vida de um personagem, e é justamente por isso que ele precisa ser anunciado na rodada anterior.</p>
 
       <h3 class="regras-subtitle">Criatura de qualquer VD</h3>
-      <p>A conta é a mesma em todo VD: testes iguais ao ataque de um personagem do nível, Defesa três pontos abaixo da natural (criatura não veste armadura) e dano por acerto como fatia da Vida de um personagem, como na tabela de papéis. O golpe é o ataque de um personagem do nível e, do VD 15 em diante, soma o que a armadura típica dos personagens daquele nível tira dele: assim o inimigo padrão acerta perto de metade das vezes quem veste a armadura da sua faixa, e quem luta sem armadura sente o golpe inteiro. A Vida de cada papel é uma fatia da Vida de inimigo padrão do VD. A solo é a criatura que basta sozinha, como as do Bestiário, e vale 80% do encontro. Lacaio subtrai 4 do ataque, padrão subtrai 2 e chefe soma 2.</p>
+      <p>A conta é a mesma em todo VD: testes iguais ao ataque de um personagem do nível, Defesa igual ao ataque de um personagem do nível mais 6 (quem investe na perícia de combate acerta três vezes em quatro, e a Vida já conta com isso) e dano por acerto como fatia da Vida de um personagem, como na tabela de papéis. O golpe é o ataque de um personagem do nível e, do VD 15 em diante, soma o que a armadura típica dos personagens daquele nível tira dele: assim o inimigo padrão acerta perto de metade das vezes quem veste a armadura da sua faixa, e quem luta sem armadura sente o golpe inteiro. A Vida de cada papel é uma fatia da Vida de inimigo padrão do VD. A solo é a criatura que basta sozinha, como as do Bestiário, e vale 80% do encontro. Lacaio subtrai 4 do ataque, padrão subtrai 2 e chefe soma 2.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>VD</th><th>Golpe (solo)</th><th>Testes (solo)</th><th>Defesa</th><th>Dano por acerto</th><th>Golpe anunciado (chefe)</th><th>Vida de lacaio</th><th>Vida de padrão</th><th>Vida de elite</th><th>Vida de chefe</th><th>Vida solo</th><th>XP solo</th></tr></thead>
         <tbody>

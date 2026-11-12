@@ -600,7 +600,7 @@ const leviata3 = () => `
   )}
 
   <h2>A ficha</h2>
-  <p>Use a ficha de <strong>Vaelthor, o Leviatã Espelhado</strong> do Bestiário: VD 45, Vida 1.505, Defesa 31. Acrescente à Sessão com a visibilidade <em>Parcial</em>, para a mesa ver só o estado da Vida. Os números do golpe, a DT 30 do Maremoto e a DT 37 do Reflexo Adiantado estão na ficha.</p>
+  <p>Use a ficha de <strong>Vaelthor, o Leviatã Espelhado</strong> do Bestiário: VD 45, Vida 1.185, Defesa 44. Acrescente à Sessão com a visibilidade <em>Parcial</em>, para a mesa ver só o estado da Vida. Os números do golpe, a DT 30 do Maremoto e a DT 37 do Reflexo Adiantado estão na ficha.</p>
 
   ${caixa('As duas fases', `
     <table>

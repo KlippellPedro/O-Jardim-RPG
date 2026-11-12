@@ -612,12 +612,13 @@ class TestCharacterRules:
 
     def test_rejects_class_power_without_required_power(self):
         anterior = _ficha_criacao()
-        anterior["classeId"] = "espadachim"
-        anterior["classes"] = [{"classeId": "espadachim", "nivel": 20}]
+        anterior["classeId"] = "guardiao"
+        anterior["classes"] = [{"classeId": "guardiao", "nivel": 20}]
         anterior["nivel"] = 20
         anterior["xp"] = 190000
         atual = deepcopy(anterior)
-        atual["poderesClasseSelecionados"] = [{"classeId": "espadachim", "poderId": "golpe-em-w"}]
+        # Muralha de Grafeno exige a Muralha (os pares do Espadachim e a cadeia da Muralha viraram um poder só).
+        atual["poderesClasseSelecionados"] = [{"classeId": "guardiao", "poderId": "muralha-de-grafeno"}]
         erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
         assert "pre-requisitos" in erro
 

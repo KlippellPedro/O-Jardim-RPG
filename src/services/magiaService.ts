@@ -521,7 +521,7 @@ export function dtConjuracaoPorCirculo(circulo: CirculoMagia | number): number {
 }
 
 // Pacote Descartado, a interceptação do Interceptador (decisão de 2026-10-20):
-// habilidade do nível 1; DT da magia (7 + 3 × círculo) ou, contra poder de
+// habilidade do nível 1; DT da magia (7 + ⌊2,5 × círculo⌋) ou, contra poder de
 // criatura, a DT padrão do VD; +2 do nível 10 (Assinatura Reconhecida) e +5 com
 // o Acesso Administrador ativo, que também tira 3 do custo.
 export type AlvoDaInterceptacao = { tipo: 'magia'; circulo: number } | { tipo: 'criatura'; vd: number };

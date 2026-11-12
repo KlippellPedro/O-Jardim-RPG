@@ -2984,8 +2984,8 @@
       "referencias": [
         {
           "nivel": 1,
-          "vida": 10,
-          "mana": 6,
+          "vida": 11,
+          "mana": 5,
           "estamina": 7,
           "defesaNatural": 12,
           "poderes": 0,
@@ -2994,8 +2994,8 @@
         },
         {
           "nivel": 5,
-          "vida": 18,
-          "mana": 30,
+          "vida": 23,
+          "mana": 25,
           "estamina": 11,
           "defesaNatural": 14,
           "poderes": 1,
@@ -3004,8 +3004,8 @@
         },
         {
           "nivel": 10,
-          "vida": 28,
-          "mana": 60,
+          "vida": 38,
+          "mana": 50,
           "estamina": 16,
           "defesaNatural": 17,
           "poderes": 3,
@@ -3014,8 +3014,8 @@
         },
         {
           "nivel": 15,
-          "vida": 38,
-          "mana": 90,
+          "vida": 53,
+          "mana": 75,
           "estamina": 21,
           "defesaNatural": 19,
           "poderes": 5,
@@ -3024,8 +3024,8 @@
         },
         {
           "nivel": 20,
-          "vida": 48,
-          "mana": 120,
+          "vida": 68,
+          "mana": 100,
           "estamina": 26,
           "defesaNatural": 22,
           "poderes": 8,
@@ -3034,8 +3034,8 @@
         },
         {
           "nivel": 30,
-          "vida": 72,
-          "mana": 192,
+          "vida": 104,
+          "mana": 160,
           "estamina": 38,
           "defesaNatural": 27,
           "poderes": 8,
@@ -3044,8 +3044,8 @@
         },
         {
           "nivel": 40,
-          "vida": 96,
-          "mana": 264,
+          "vida": 140,
+          "mana": 220,
           "estamina": 50,
           "defesaNatural": 32,
           "poderes": 8,
@@ -3054,8 +3054,8 @@
         },
         {
           "nivel": 50,
-          "vida": 120,
-          "mana": 336,
+          "vida": 176,
+          "mana": 280,
           "estamina": 62,
           "defesaNatural": 37,
           "poderes": 8,
@@ -3064,8 +3064,8 @@
         },
         {
           "nivel": 60,
-          "vida": 150,
-          "mana": 366,
+          "vida": 206,
+          "mana": 310,
           "estamina": 92,
           "defesaNatural": 42,
           "poderes": 8,
@@ -3074,8 +3074,8 @@
         },
         {
           "nivel": 80,
-          "vida": 216,
-          "mana": 432,
+          "vida": 272,
+          "mana": 376,
           "estamina": 158,
           "defesaNatural": 52,
           "poderes": 8,
@@ -3084,8 +3084,8 @@
         },
         {
           "nivel": 100,
-          "vida": 288,
-          "mana": 504,
+          "vida": 344,
+          "mana": 448,
           "estamina": 230,
           "defesaNatural": 62,
           "poderes": 8,
@@ -3094,8 +3094,8 @@
         },
         {
           "nivel": 150,
-          "vida": 438,
-          "mana": 654,
+          "vida": 494,
+          "mana": 598,
           "estamina": 380,
           "defesaNatural": 87,
           "poderes": 8,
@@ -3104,8 +3104,8 @@
         },
         {
           "nivel": 200,
-          "vida": 588,
-          "mana": 804,
+          "vida": 644,
+          "mana": 748,
           "estamina": 530,
           "defesaNatural": 112,
           "poderes": 8,
@@ -3124,8 +3124,8 @@
       "referencias": [
         {
           "nivel": 1,
-          "vida": 10,
-          "mana": 6,
+          "vida": 11,
+          "mana": 5,
           "estamina": 7,
           "defesaNatural": 12,
           "poderes": 0,
@@ -3134,8 +3134,8 @@
         },
         {
           "nivel": 5,
-          "vida": 18,
-          "mana": 30,
+          "vida": 23,
+          "mana": 25,
           "estamina": 11,
           "defesaNatural": 14,
           "poderes": 1,
@@ -3144,8 +3144,8 @@
         },
         {
           "nivel": 10,
-          "vida": 28,
-          "mana": 60,
+          "vida": 38,
+          "mana": 50,
           "estamina": 16,
           "defesaNatural": 17,
           "poderes": 3,
@@ -3154,8 +3154,8 @@
         },
         {
           "nivel": 15,
-          "vida": 38,
-          "mana": 90,
+          "vida": 53,
+          "mana": 75,
           "estamina": 21,
           "defesaNatural": 19,
           "poderes": 5,
@@ -3164,8 +3164,8 @@
         },
         {
           "nivel": 20,
-          "vida": 48,
-          "mana": 120,
+          "vida": 68,
+          "mana": 100,
           "estamina": 26,
           "defesaNatural": 22,
           "poderes": 8,
@@ -3174,8 +3174,8 @@
         },
         {
           "nivel": 30,
-          "vida": 72,
-          "mana": 192,
+          "vida": 104,
+          "mana": 160,
           "estamina": 38,
           "defesaNatural": 27,
           "poderes": 8,
@@ -3184,8 +3184,8 @@
         },
         {
           "nivel": 40,
-          "vida": 96,
-          "mana": 264,
+          "vida": 140,
+          "mana": 220,
           "estamina": 50,
           "defesaNatural": 32,
           "poderes": 8,
@@ -3194,8 +3194,8 @@
         },
         {
           "nivel": 50,
-          "vida": 120,
-          "mana": 336,
+          "vida": 176,
+          "mana": 280,
           "estamina": 62,
           "defesaNatural": 37,
           "poderes": 8,
@@ -3204,8 +3204,8 @@
         },
         {
           "nivel": 60,
-          "vida": 150,
-          "mana": 366,
+          "vida": 206,
+          "mana": 310,
           "estamina": 92,
           "defesaNatural": 42,
           "poderes": 8,
@@ -3214,8 +3214,8 @@
         },
         {
           "nivel": 80,
-          "vida": 216,
-          "mana": 432,
+          "vida": 272,
+          "mana": 376,
           "estamina": 158,
           "defesaNatural": 52,
           "poderes": 8,
@@ -3224,8 +3224,8 @@
         },
         {
           "nivel": 100,
-          "vida": 288,
-          "mana": 504,
+          "vida": 344,
+          "mana": 448,
           "estamina": 230,
           "defesaNatural": 62,
           "poderes": 8,
@@ -3234,8 +3234,8 @@
         },
         {
           "nivel": 150,
-          "vida": 438,
-          "mana": 654,
+          "vida": 494,
+          "mana": 598,
           "estamina": 380,
           "defesaNatural": 87,
           "poderes": 8,
@@ -3244,8 +3244,8 @@
         },
         {
           "nivel": 200,
-          "vida": 588,
-          "mana": 804,
+          "vida": 644,
+          "mana": 748,
           "estamina": 530,
           "defesaNatural": 112,
           "poderes": 8,
@@ -3264,8 +3264,8 @@
       "referencias": [
         {
           "nivel": 1,
-          "vida": 10,
-          "mana": 6,
+          "vida": 11,
+          "mana": 5,
           "estamina": 7,
           "defesaNatural": 12,
           "poderes": 0,
@@ -3274,8 +3274,8 @@
         },
         {
           "nivel": 5,
-          "vida": 18,
-          "mana": 30,
+          "vida": 23,
+          "mana": 25,
           "estamina": 11,
           "defesaNatural": 14,
           "poderes": 1,
@@ -3284,8 +3284,8 @@
         },
         {
           "nivel": 10,
-          "vida": 28,
-          "mana": 60,
+          "vida": 38,
+          "mana": 50,
           "estamina": 16,
           "defesaNatural": 17,
           "poderes": 3,
@@ -3294,8 +3294,8 @@
         },
         {
           "nivel": 15,
-          "vida": 38,
-          "mana": 90,
+          "vida": 53,
+          "mana": 75,
           "estamina": 21,
           "defesaNatural": 19,
           "poderes": 5,
@@ -3304,8 +3304,8 @@
         },
         {
           "nivel": 20,
-          "vida": 48,
-          "mana": 120,
+          "vida": 68,
+          "mana": 100,
           "estamina": 26,
           "defesaNatural": 22,
           "poderes": 8,
@@ -3314,8 +3314,8 @@
         },
         {
           "nivel": 30,
-          "vida": 72,
-          "mana": 192,
+          "vida": 104,
+          "mana": 160,
           "estamina": 38,
           "defesaNatural": 27,
           "poderes": 8,
@@ -3324,8 +3324,8 @@
         },
         {
           "nivel": 40,
-          "vida": 96,
-          "mana": 264,
+          "vida": 140,
+          "mana": 220,
           "estamina": 50,
           "defesaNatural": 32,
           "poderes": 8,
@@ -3334,8 +3334,8 @@
         },
         {
           "nivel": 50,
-          "vida": 120,
-          "mana": 336,
+          "vida": 176,
+          "mana": 280,
           "estamina": 62,
           "defesaNatural": 37,
           "poderes": 8,
@@ -3344,8 +3344,8 @@
         },
         {
           "nivel": 60,
-          "vida": 150,
-          "mana": 366,
+          "vida": 206,
+          "mana": 310,
           "estamina": 92,
           "defesaNatural": 42,
           "poderes": 8,
@@ -3354,8 +3354,8 @@
         },
         {
           "nivel": 80,
-          "vida": 216,
-          "mana": 432,
+          "vida": 272,
+          "mana": 376,
           "estamina": 158,
           "defesaNatural": 52,
           "poderes": 8,
@@ -3364,8 +3364,8 @@
         },
         {
           "nivel": 100,
-          "vida": 288,
-          "mana": 504,
+          "vida": 344,
+          "mana": 448,
           "estamina": 230,
           "defesaNatural": 62,
           "poderes": 8,
@@ -3374,8 +3374,8 @@
         },
         {
           "nivel": 150,
-          "vida": 438,
-          "mana": 654,
+          "vida": 494,
+          "mana": 598,
           "estamina": 380,
           "defesaNatural": 87,
           "poderes": 8,
@@ -3384,8 +3384,8 @@
         },
         {
           "nivel": 200,
-          "vida": 588,
-          "mana": 804,
+          "vida": 644,
+          "mana": 748,
           "estamina": 530,
           "defesaNatural": 112,
           "poderes": 8,
@@ -4106,11 +4106,12 @@
       "atributoPrincipal": 15,
       "modificadorPrincipal": 2,
       "vida": {
-        "minima": 10,
+        "minima": 11,
         "media": 12,
         "maxima": 14
       },
       "defesaNatural": 12,
+      "defesaDeCriatura": 10,
       "bonusDeAtaque": 4,
       "danoPorAcerto": 8,
       "dt": {
@@ -4119,7 +4120,7 @@
         "dificil": 20,
         "extrema": 25
       },
-      "vidaDeInimigoPadrao": 90
+      "vidaDeInimigoPadrao": 110
     },
     {
       "nivel": 5,
@@ -4128,11 +4129,12 @@
       "atributoPrincipal": 16,
       "modificadorPrincipal": 3,
       "vida": {
-        "minima": 18,
-        "media": 26,
+        "minima": 23,
+        "media": 27,
         "maxima": 38
       },
       "defesaNatural": 14,
+      "defesaDeCriatura": 15,
       "bonusDeAtaque": 9,
       "danoPorAcerto": 12,
       "dt": {
@@ -4141,7 +4143,7 @@
         "dificil": 22,
         "extrema": 27
       },
-      "vidaDeInimigoPadrao": 170
+      "vidaDeInimigoPadrao": 160
     },
     {
       "nivel": 10,
@@ -4150,11 +4152,12 @@
       "atributoPrincipal": 16,
       "modificadorPrincipal": 3,
       "vida": {
-        "minima": 28,
-        "media": 44,
+        "minima": 38,
+        "media": 46,
         "maxima": 68
       },
       "defesaNatural": 17,
+      "defesaDeCriatura": 20,
       "bonusDeAtaque": 14,
       "danoPorAcerto": 20.5,
       "dt": {
@@ -4163,7 +4166,7 @@
         "dificil": 25,
         "extrema": 30
       },
-      "vidaDeInimigoPadrao": 330
+      "vidaDeInimigoPadrao": 280
     },
     {
       "nivel": 15,
@@ -4172,11 +4175,12 @@
       "atributoPrincipal": 17,
       "modificadorPrincipal": 3,
       "vida": {
-        "minima": 38,
-        "media": 62,
+        "minima": 53,
+        "media": 65,
         "maxima": 98
       },
       "defesaNatural": 19,
+      "defesaDeCriatura": 24,
       "bonusDeAtaque": 18,
       "danoPorAcerto": 29,
       "dt": {
@@ -4185,7 +4189,7 @@
         "dificil": 27,
         "extrema": 32
       },
-      "vidaDeInimigoPadrao": 500
+      "vidaDeInimigoPadrao": 390
     },
     {
       "nivel": 20,
@@ -4194,11 +4198,12 @@
       "atributoPrincipal": 18,
       "modificadorPrincipal": 4,
       "vida": {
-        "minima": 48,
-        "media": 80,
+        "minima": 68,
+        "media": 84,
         "maxima": 128
       },
       "defesaNatural": 22,
+      "defesaDeCriatura": 30,
       "bonusDeAtaque": 24,
       "danoPorAcerto": 30,
       "dt": {
@@ -4207,7 +4212,7 @@
         "dificil": 30,
         "extrema": 35
       },
-      "vidaDeInimigoPadrao": 510
+      "vidaDeInimigoPadrao": 410
     },
     {
       "nivel": 30,
@@ -4216,11 +4221,12 @@
       "atributoPrincipal": 19,
       "modificadorPrincipal": 4,
       "vida": {
-        "minima": 76,
-        "media": 128,
+        "minima": 108,
+        "media": 133,
         "maxima": 204
       },
       "defesaNatural": 27,
+      "defesaDeCriatura": 37,
       "bonusDeAtaque": 31,
       "danoPorAcerto": 59,
       "dt": {
@@ -4229,7 +4235,7 @@
         "dificil": 35,
         "extrema": 40
       },
-      "vidaDeInimigoPadrao": 1010
+      "vidaDeInimigoPadrao": 800
     },
     {
       "nivel": 40,
@@ -4238,11 +4244,12 @@
       "atributoPrincipal": 20,
       "modificadorPrincipal": 5,
       "vida": {
-        "minima": 100,
-        "media": 171,
+        "minima": 144,
+        "media": 178,
         "maxima": 276
       },
       "defesaNatural": 33,
+      "defesaDeCriatura": 43,
       "bonusDeAtaque": 37,
       "danoPorAcerto": 77,
       "dt": {
@@ -4251,7 +4258,7 @@
         "dificil": 40,
         "extrema": 45
       },
-      "vidaDeInimigoPadrao": 1320
+      "vidaDeInimigoPadrao": 1040
     },
     {
       "nivel": 50,
@@ -4260,11 +4267,12 @@
       "atributoPrincipal": 21,
       "modificadorPrincipal": 5,
       "vida": {
-        "minima": 124,
-        "media": 214,
+        "minima": 180,
+        "media": 224,
         "maxima": 348
       },
       "defesaNatural": 38,
+      "defesaDeCriatura": 48,
       "bonusDeAtaque": 42,
       "danoPorAcerto": 77,
       "dt": {
@@ -4273,7 +4281,7 @@
         "dificil": 45,
         "extrema": 50
       },
-      "vidaDeInimigoPadrao": 1320
+      "vidaDeInimigoPadrao": 1040
     },
     {
       "nivel": 60,
@@ -4282,11 +4290,12 @@
       "atributoPrincipal": 22,
       "modificadorPrincipal": 6,
       "vida": {
-        "minima": 154,
-        "media": 244,
+        "minima": 210,
+        "media": 254,
         "maxima": 378
       },
       "defesaNatural": 43,
+      "defesaDeCriatura": 56,
       "bonusDeAtaque": 50,
       "danoPorAcerto": 78,
       "dt": {
@@ -4295,7 +4304,7 @@
         "dificil": 50,
         "extrema": 55
       },
-      "vidaDeInimigoPadrao": 1330
+      "vidaDeInimigoPadrao": 1050
     },
     {
       "nivel": 80,
@@ -4304,11 +4313,12 @@
       "atributoPrincipal": 23,
       "modificadorPrincipal": 6,
       "vida": {
-        "minima": 224,
-        "media": 314,
+        "minima": 280,
+        "media": 324,
         "maxima": 448
       },
       "defesaNatural": 53,
+      "defesaDeCriatura": 66,
       "bonusDeAtaque": 60,
       "danoPorAcerto": 78,
       "dt": {
@@ -4317,7 +4327,7 @@
         "dificil": 60,
         "extrema": 65
       },
-      "vidaDeInimigoPadrao": 1330
+      "vidaDeInimigoPadrao": 1050
     },
     {
       "nivel": 100,
@@ -4326,11 +4336,12 @@
       "atributoPrincipal": 24,
       "modificadorPrincipal": 7,
       "vida": {
-        "minima": 296,
-        "media": 386,
+        "minima": 352,
+        "media": 396,
         "maxima": 520
       },
       "defesaNatural": 64,
+      "defesaDeCriatura": 79,
       "bonusDeAtaque": 73,
       "danoPorAcerto": 79,
       "dt": {
@@ -4339,7 +4350,7 @@
         "dificil": 70,
         "extrema": 75
       },
-      "vidaDeInimigoPadrao": 1350
+      "vidaDeInimigoPadrao": 1070
     },
     {
       "nivel": 150,
@@ -4348,11 +4359,12 @@
       "atributoPrincipal": 26,
       "modificadorPrincipal": 8,
       "vida": {
-        "minima": 446,
-        "media": 536,
+        "minima": 502,
+        "media": 546,
         "maxima": 670
       },
       "defesaNatural": 89,
+      "defesaDeCriatura": 107,
       "bonusDeAtaque": 101,
       "danoPorAcerto": 80,
       "dt": {
@@ -4361,7 +4373,7 @@
         "dificil": 95,
         "extrema": 100
       },
-      "vidaDeInimigoPadrao": 1370
+      "vidaDeInimigoPadrao": 1080
     },
     {
       "nivel": 200,
@@ -4370,11 +4382,12 @@
       "atributoPrincipal": 27,
       "modificadorPrincipal": 8,
       "vida": {
-        "minima": 600,
-        "media": 690,
+        "minima": 656,
+        "media": 700,
         "maxima": 824
       },
       "defesaNatural": 115,
+      "defesaDeCriatura": 132,
       "bonusDeAtaque": 126,
       "danoPorAcerto": 80,
       "dt": {
@@ -4383,7 +4396,7 @@
         "dificil": 120,
         "extrema": 125
       },
-      "vidaDeInimigoPadrao": 1370
+      "vidaDeInimigoPadrao": 1080
     }
   ],
   "bestiario": {
@@ -4392,37 +4405,37 @@
       {
         "faixa": "1 a 10",
         "monstros": 66,
-        "vidaMediana": 138,
-        "vidaDeInimigoPadraoNoNivel": 330,
-        "vidaSoloDaCurva": 265
+        "vidaMediana": 125,
+        "vidaDeInimigoPadraoNoNivel": 280,
+        "vidaSoloDaCurva": 225
       },
       {
         "faixa": "11 a 20",
         "monstros": 72,
-        "vidaMediana": 338,
-        "vidaDeInimigoPadraoNoNivel": 510,
-        "vidaSoloDaCurva": 410
+        "vidaMediana": 273,
+        "vidaDeInimigoPadraoNoNivel": 410,
+        "vidaSoloDaCurva": 330
       },
       {
         "faixa": "21 a 30",
         "monstros": 60,
-        "vidaMediana": 670,
-        "vidaDeInimigoPadraoNoNivel": 1010,
-        "vidaSoloDaCurva": 810
+        "vidaMediana": 530,
+        "vidaDeInimigoPadraoNoNivel": 800,
+        "vidaSoloDaCurva": 640
       },
       {
         "faixa": "31 a 40",
         "monstros": 39,
-        "vidaMediana": 900,
-        "vidaDeInimigoPadraoNoNivel": 1320,
-        "vidaSoloDaCurva": 1055
+        "vidaMediana": 710,
+        "vidaDeInimigoPadraoNoNivel": 1040,
+        "vidaSoloDaCurva": 830
       },
       {
         "faixa": "41 a 50",
         "monstros": 22,
-        "vidaMediana": 1293,
-        "vidaDeInimigoPadraoNoNivel": 1320,
-        "vidaSoloDaCurva": 1320
+        "vidaMediana": 1020,
+        "vidaDeInimigoPadraoNoNivel": 1040,
+        "vidaSoloDaCurva": 1040
       }
     ]
   },

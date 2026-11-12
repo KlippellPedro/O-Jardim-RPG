@@ -33,6 +33,32 @@ export interface IConteudoAutomatico {
   subtipo?: 'habilidade' | 'escolha';
   /** Só mexe na ficha: o efeito já entra sozinho nos cálculos, sem ação a lembrar. */
   passivo?: boolean;
+  /** Ação de uso como o catálogo escreve ("Ação Livre", "Reação", "Passivo"...).
+   * Só aparece quando o catálogo declara; o Modo Mesa agrupa por isto. */
+  acao?: string;
+  /** Limite de uso como o catálogo escreve ("Uma vez por cena"...). */
+  usos?: string;
+}
+
+/** Campos de uso (ação e limite) só quando existem, para não criar chaves vazias. */
+const camposDeUso = (fonte: { acao?: unknown; usos?: unknown } | null | undefined): { acao?: string; usos?: string } => ({
+  ...(typeof fonte?.acao === 'string' && fonte.acao.trim() ? { acao: fonte.acao.trim() } : {}),
+  ...(typeof fonte?.usos === 'string' && fonte.usos.trim() ? { usos: fonte.usos.trim() } : {}),
+});
+
+const PASSIVA = /^passiv/i;
+
+/** Ação e limite vigentes de uma habilidade no nível: o último estágio alcançado
+ * que pede ação (os estágios se somam, e o que vale na mesa é o mais recente que
+ * se usa), ou a própria habilidade. */
+export function usoHabilidadeNoNivel(habilidade: IHabilidadeClasse, nivel: number): { acao?: string; usos?: string } {
+  const estagios = [...(habilidade.estagios || [])]
+    .filter((estagio) => estagio.nivel <= nivel)
+    .sort((a, b) => b.nivel - a.nivel);
+  const ativo = estagios.find((estagio) => estagio.acao && !PASSIVA.test(estagio.acao));
+  if (ativo) return camposDeUso({ acao: ativo.acao, usos: ativo.usos || habilidade.usos });
+  if (habilidade.acao) return camposDeUso(habilidade);
+  return camposDeUso(estagios[0] || habilidade);
 }
 
 export interface IOpcaoHabilidadeSelecionada extends IConteudoAutomatico {
@@ -336,6 +362,7 @@ export function opcoesHabilidadeSelecionadas(ficha: any): IOpcaoHabilidadeSeleci
         // Uma escolha sem escada ainda está no degrau-base 1. A escala zero é
         // mantida só para a interface não inventar um rótulo que o catálogo não tem.
         efeitos: efeitosOpcaoHabilidadeNoNivel(opcao, Math.max(1, nivelDaEscada)),
+        ...camposDeUso(opcao),
       }];
     });
   }));
@@ -377,6 +404,7 @@ export function habilidadesAutomaticas(ficha: any): IConteudoAutomatico[] {
       nivel: Math.max(...habilidade.niveis.filter((marco) => marco <= nivel)),
       subtipo: 'habilidade' as const,
       ...custoAtivacaoHabilidadeNoNivel(habilidade, nivel),
+      ...usoHabilidadeNoNivel(habilidade, nivel),
     })));
   return [...habilidades, ...opcoesHabilidadeSelecionadas(ficha)];
 }
@@ -391,6 +419,28 @@ export function eventosDesbloqueados(ficha: any): IConteudoAutomatico[] {
       origem: classe.titulo,
       nivel: Math.max(...evento.niveis.filter((marco) => marco <= nivel)),
     })));
+}
+
+const ACAO_DO_TIPO_RACIAL: Record<string, string> = {
+  acao: 'Ação Padrão',
+  acao_completa: 'Ação Completa',
+  reacao: 'Reação',
+  movimento: 'Ação de Movimento',
+  passiva: 'Passivo',
+};
+const JANELA_RACIAL: Record<string, string> = { cena: 'cena', descanso: 'descanso', sessao: 'sessão' };
+const VEZES_POR_EXTENSO = ['', 'Uma vez', 'Duas vezes', 'Três vezes', 'Quatro vezes', 'Cinco vezes'];
+
+/** Os traços raciais guardam o tipo ("acao", "reacao"...) e os usos em número
+ * com a recuperação à parte; aqui viram o mesmo texto que classe e poder usam. */
+function usoDoTracoRacial(traco: ICaracteristicaRacial): { acao?: string; usos?: string } {
+  const acao = ACAO_DO_TIPO_RACIAL[String(traco.tipo || '')];
+  const vezes = Number(traco.usos);
+  const janela = JANELA_RACIAL[String(traco.recuperacao || '')];
+  const usos = Number.isInteger(vezes) && vezes > 0 && janela
+    ? `${VEZES_POR_EXTENSO[vezes] || `${vezes} vezes`} por ${janela}`
+    : undefined;
+  return camposDeUso({ acao, usos });
 }
 
 export function caracteristicasRaciaisAutomaticas(ficha: any): IConteudoAutomatico[] {
@@ -422,6 +472,7 @@ export function caracteristicasRaciaisAutomaticas(ficha: any): IConteudoAutomati
       descricao: traco.descricao || 'Característica racial registrada no catálogo oficial.',
       origem: raca.titulo,
       nivel: nivelMinimoTraco(traco),
+      ...usoDoTracoRacial(traco),
     }));
 }
 
@@ -444,6 +495,7 @@ export function poderesSelecionados(ficha: any): IConteudoAutomatico[] {
       nivel: referencia.nivel,
       custoMana: Math.max(0, Number(poder.custo_mana) || 0),
       custoEstamina: Math.max(0, Number(poder.custo_estamina) || 0),
+      ...camposDeUso(poder),
     }];
   });
 }
@@ -515,6 +567,7 @@ export function poderesJardimSelecionados(ficha: any): IConteudoAutomatico[] {
       nivel: nivelEstimadoPoder(poder),
       custoMana: Math.max(0, Number(poder.custo_mana) || 0),
       custoEstamina: Math.max(0, Number(poder.custo_estamina) || 0),
+      ...camposDeUso(poder),
     }];
   });
 }
@@ -693,6 +746,7 @@ export function habilidadesJardimSelecionadas(ficha: any): IConteudoAutomatico[]
       nivel: Math.max(...habilidade.niveis.filter((marco) => marco <= nivel)),
       subtipo: 'habilidade' as const,
       ...custoAtivacaoHabilidadeNoNivel(habilidade, nivel),
+      ...usoHabilidadeNoNivel(habilidade, nivel),
     }];
   });
 }

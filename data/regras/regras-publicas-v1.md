@@ -1322,17 +1322,17 @@ No fim de cada fase, quem fez um feito sofre dano do tipo que fizer sentido (cor
 
 - 10 | 20 / 25 | 1d6 | 3d6
 
-- 15 | 22 / 27 | 2d6 | 4d6
+- 15 | 22 / 27 | 2d6 | 5d6
 
 - 20 | 25 / 30 | 2d6 | 6d6
 
-- 30 | 30 / 35 | 4d6 | 9d6
+- 30 | 30 / 35 | 4d6 | 10d6
 
 - 40 | 35 / 40 | 5d6 | 7d12
 
-- 50 | 40 / 45 | 6d6 | 8d12
+- 50 | 40 / 45 | 6d6 | 9d12
 
-- 60 | 45 / 50 | 7d6 | 9d12
+- 60 | 45 / 50 | 7d6 | 10d12
 
 - 80 | 55 / 60 | 9d6 | 12d12
 
@@ -3870,7 +3870,7 @@ A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai d
 
 - Cada alma nasce com um Fluxo natural, e só um: o da Árvore em que nasceu. Fluxo alto não ensina magia: o acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.
 
-- O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus da classe. A DT de conjuração é 7 + (3 × círculo).
+- O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus da classe. A DT de conjuração é 7 + 2,5 × círculo, arredondado para baixo.
 
 - A Mana sai quando você declara a conjuração e não volta se o teste falhar. O Fluxo recomendado de cada círculo é só um aviso.
 
@@ -3914,7 +3914,7 @@ A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai d
 
 Teste = d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus de habilidades, poderes e itens
 
-DT de conjuração = 7 + (3 × círculo)
+DT de conjuração = 7 + ⌊2,5 × círculo⌋
 
 - Toda magia de círculo precisa alcançar a DT do próprio círculo para se estabilizar.
 
@@ -3930,7 +3930,7 @@ DT de conjuração = 7 + (3 × círculo)
 
 **Exemplo:**
 
-Um conjurador de nível total 10 tem Mod. Fluxo +4, um grau de Misticismo que soma +4 e nenhum bônus de habilidade ativo. A metade do nível vale ⌊10 ÷ 2⌋ = 5, então o bônus dele é +4 + 5 + 4 = +13. A DT de uma magia de 3º círculo é 7 + (3 × 3) = 16, e basta tirar 3 ou mais no d20 para ela se estabilizar. Se a magia for de ataque, esse mesmo total é lido contra a Defesa do alvo.
+Um conjurador de nível total 10 tem Mod. Fluxo +4, um grau de Misticismo que soma +4 e nenhum bônus de habilidade ativo. A metade do nível vale ⌊10 ÷ 2⌋ = 5, então o bônus dele é +4 + 5 + 4 = +13. A DT de uma magia de 4º círculo é 7 + ⌊2,5 × 4⌋ = 17, e basta tirar 4 ou mais no d20 para ela se estabilizar. Se a magia for de ataque, esse mesmo total é lido contra a Defesa do alvo.
 
 ### Ataque e resistência
 
@@ -3998,25 +3998,25 @@ Algumas magias usam palavras que valem só para elas. O sentido de cada uma é e
 
 - Círculo | Fluxo recomendado | DT | Mana base
 
-- 1º | 12 | 10 | 2
+- 1º | 12 | 9 | 2
 
-- 2º | 13 | 13 | 4
+- 2º | 13 | 12 | 4
 
-- 3º | 14 | 16 | 7
+- 3º | 14 | 14 | 7
 
-- 4º | 15 | 19 | 10
+- 4º | 15 | 17 | 10
 
-- 5º | 16 | 22 | 14
+- 5º | 16 | 19 | 14
 
-- 6º | 17 | 25 | 19
+- 6º | 17 | 22 | 19
 
-- 7º | 18 | 28 | 25
+- 7º | 18 | 24 | 25
 
-- 8º | 19 | 31 | 32
+- 8º | 19 | 27 | 32
 
-- 9º | 20 | 34 | 42
+- 9º | 20 | 29 | 42
 
-- 10º | 21 | 37 | 55
+- 10º | 21 | 32 | 55
 
 Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa. O 9º e o 10º círculo custam bem mais que os anteriores de propósito: são magias que decidem uma campanha.
 
@@ -5234,25 +5234,25 @@ Toda armadilha tem um nível, quase sempre o do grupo ou o do lugar, e um peso. 
 
 - 10 | 20 / 25 | +14 | 1d6 | 3d6 | 6d6
 
-- 15 | 22 / 27 | +18 | 2d6 | 4d6 | 8d6
+- 15 | 22 / 27 | +18 | 2d6 | 5d6 | 8d6
 
-- 20 | 25 / 30 | +24 | 2d6 | 6d6 | 10d6
+- 20 | 25 / 30 | +24 | 2d6 | 6d6 | 6d12
 
-- 30 | 30 / 35 | +31 | 4d6 | 9d6 | 9d12
+- 30 | 30 / 35 | +31 | 4d6 | 10d6 | 9d12
 
 - 40 | 35 / 40 | +37 | 5d6 | 7d12 | 12d12
 
-- 50 | 40 / 45 | +42 | 6d6 | 8d12 | 15d12
+- 50 | 40 / 45 | +42 | 6d6 | 9d12 | 16d12
 
-- 60 | 45 / 50 | +50 | 7d6 | 9d12 | 17d12
+- 60 | 45 / 50 | +50 | 7d6 | 10d12 | 18d12
 
-- 80 | 55 / 60 | +60 | 9d6 | 12d12 | 20d12+10
+- 80 | 55 / 60 | +60 | 9d6 | 12d12 | 20d12+15
 
-- 100 | 65 / 70 | +73 | 6d12 | 15d12 | 20d12+45
+- 100 | 65 / 70 | +73 | 6d12 | 15d12 | 20d12+50
 
-- 150 | 90 / 95 | +101 | 8d12 | 20d12+5 | 20d12+110
+- 150 | 90 / 95 | +101 | 8d12 | 20d12+5 | 20d12+115
 
-- 200 | 115 / 120 | +126 | 11d12 | 20d12+45 | 20d12+180
+- 200 | 115 / 120 | +126 | 11d12 | 20d12+45 | 20d12+185
 
 - **Achar:** quem anda atento usa 10 + bônus de Percepção contra a DT de achar. Quem para e procura rola, e procurar com calma custa tempo.
 

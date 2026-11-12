@@ -170,6 +170,13 @@ meio do jogo os dois lados rolam d20 sem tensão: o jogador sempre acerta e o
 tanque nunca é acertado. Isso também pesa no "maçante": muita rolagem que não
 decide nada.
 
+**Atualização (2026-11-11, aplicada).** A Defesa da criatura passou a ser o
+ataque de referência + 6, e a Vida de inimigo padrão conta o mesmo acerto, para
+o encontro seguir em 4,5 rodadas. Quem investe acerta 75% em todo nível (no
+Bestiário real, mediana de 75%, de 50% a 95% conforme a criatura). Detalhes no
+[BALANCEAMENTO.md](../../sistema/BALANCEAMENTO.md), seção "Acerto do jogador
+contra criaturas".
+
 ## 4. Conjurador: mais regra, menos efeito
 
 Teste de conjuração = d20 + Fluxo + metade do nível + grau de Misticismo,
@@ -198,6 +205,24 @@ Ressalva: magia em área acerta vários alvos, e controle não aparece nesta
 conta. Ainda assim o conjurador carrega o dobro de regra para render menos no
 turno comum.
 
+**Atualização (2026-11-11, aplicada).** DT de conjuração = 7 + ⌊2,5 ×
+círculo⌋ e Canalizador, Sintonizador e Ritualista com 3 de Vida, 5 de Mana e 1
+de Estamina por nível. Com as criaturas atuais (`scripts/conjurar-escala.mjs`):
+
+| Nível | Círculo | Chance | Dano esperado por conjuração | Conjurações até a Mana acabar | Arma de referência por turno | Vida (Canalizador / média) |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 5 | 4 (máx.) | 65% | 13,7 | 2 | 9,0 | 23 / 27 |
+| 5 | 2 | 75% | 9,0 | 6 | 9,0 | 23 / 27 |
+| 10 | 6 (máx.) | 65% | 19,5 | 2 | 15,4 | 38 / 46 |
+| 10 | 4 | 75% | 15,8 | 5 | 15,4 | 38 / 46 |
+| 15 | 8 (máx.) | 60% | 23,4 | 2 | 21,8 | 53 / 65 |
+| 15 | 6 | 75% | 22,5 | 3 | 21,8 | 53 / 65 |
+| 20 | 10 (máx.) | 65% | 38,4 | 1 | 22,5 | 68 / 84 |
+| 20 | 8 | 75% | 30,0 | 3 | 22,5 | 68 / 84 |
+
+Detalhes no [BALANCEAMENTO.md](../../sistema/BALANCEAMENTO.md), seção
+"Conjuradores: DT de conjuração e Vida".
+
 ## 5. Poderes de classe: pouca escolha, muito detalhe
 
 - Todas as classes têm de 10 a 13 poderes para 8 vagas. Na prática o jogador
@@ -209,6 +234,39 @@ turno comum.
   Cartista, Escritor e Sintonizador têm o mesmo padrão (6 a 8 ações livres).
 - 3 a 4 poderes por classe (Guerreiro, Espadachim, Canalizador...) são "+1 a
   +3 em alguma coisa". Cada um é pouco sozinho e é mais uma coisa a lembrar.
+
+**Atualização (2026-11-11, aplicada).** Seguindo a revisão de classes de
+outubro (`docs/propostas/revisao-classes-2026-10/classes/espadachim.md` e
+`canalizador.md`), sem trocar nenhum id, então nenhuma ficha perde escolha:
+
+- **Espadachim:** os cinco pares viraram um poder que melhora no nível 10 de
+  Espadachim (Golpe em Z, Corte Cirúrgico, Penetrar Armadura, Corte à Distância
+  e Proteção da Espada). As cinco vagas que sobraram viraram técnicas com cara
+  própria: Desarme, Finta (Vontade contra a DT de Espadachim, o alvo fica
+  Exposto), Aparar Projétil, Corte Giratório e Riposte. Quem tinha a versão II
+  continua com o efeito dela dentro do poder base e ganha a técnica nova.
+- **Canalizador:** Pulso Nativo (+2 por 3 de Mana, um dos cinco bônus que mexiam
+  na mesma rolagem) virou Mente Dividida (duas magias de Concentração, uma delas
+  de até 3º círculo). Economia Arcana deixou de ser uma vez por cena: magias de
+  1º e 2º círculo custam 1 de Mana a menos.
+- **Bônus de situação viraram passivos, sem custo nem ação:** Ressonância
+  Compartilhada (Sintonizador, aura de 3 m enquanto houver catalisador ativo),
+  Eu Te Conheço? (Lutador), High Ground (Atirador) e Sou de Fora (Viajante).
+
+- **Guardião (segunda leva):** a Muralha de Cobre, Ouro, Ferro e Diamante (quatro
+  poderes para a mesma Resistência física) virou a Muralha, que sobe sozinha (3,
+  5 no nível 6, 8 no 11 e 10 no 16). As três vagas viraram Postura Firme (+5
+  para não ser empurrado, puxado, derrubado ou agarrado, nível 6), Guarda
+  Compartilhada (+2 de Defesa contra ataque à distância para aliados
+  adjacentes, nível 11) e Sentinela (Reação contra o inimigo que se afasta ou
+  ataca outro, nível 16). A Muralha de Grafeno segue exigindo a Muralha.
+- **Sussurros do Fundo** (Pirata) e **Blefe Perfeito** (Detetive), vantagem no
+  próximo teste social por um custo pequeno, viraram +2 fixo, sem custo nem ação.
+
+No jogo todo: ação livre paga de 97 para 87, contador de 57 para 55, versões II
+de 4 para 0, poder que exige outro poder de 9 para 2 e passivos de 55 para 60.
+O que sobrou de ação livre paga é custo de subsistema (engenhoca, dose, carta,
+invocação), suporte para aliado ou golpe com efeito próprio, e ficou como está.
 
 ## O que está bom
 
@@ -239,20 +297,30 @@ Em ordem do que mais muda a mesa:
      sempre.
    Recomendo a (a): a meta seria o tanque ser acertado perto de 35% a 45% e
    quem não usa armadura perto de 70%.
-2. **Acerto do jogador.** Tirar o "−3" da Defesa das criaturas na curva (ou
+2. **Acerto do jogador.** *Feito em 2026-11-11: Defesa da criatura = ataque de
+   referência + 6 (75%) e Vida de inimigo pelo mesmo acerto; ver a atualização
+   da seção 3.* Proposta original: tirar o "−3" da Defesa das criaturas na curva (ou
    tirar metade dele), para o jogador acertar perto de 70% a 80% no meio do
    jogo. Isso pede gerar a curva de novo (`npm run audit:balance`) e conferir a
    Vida de inimigo padrão, que hoje assume 95% de acerto.
-3. **Conjuração.** Uma de três: DT menor nos círculos altos (por exemplo
+3. **Conjuração.** *Feito em 2026-11-11: DT = 7 + ⌊2,5 × círculo⌋ (o círculo máximo sai perto de 65%); ver a atualização da seção 4.* Proposta original: uma de três: DT menor nos círculos altos (por exemplo
    5 + 3 × círculo), devolver metade da Mana na falha, ou somar o grau de
    Misticismo também à DT da magia do círculo máximo. A meta seria o círculo
    máximo sair perto de 65%.
-4. **Vida do conjurador.** Avaliar 3 de Vida por nível para Canalizador e
+4. **Vida do conjurador.** *Feito em 2026-11-11: Canalizador, Sintonizador e Ritualista em 3/5/1.* Proposta original: avaliar 3 de Vida por nível para Canalizador e
    Sintonizador, tirando 1 de Mana (o orçamento de 9 continua).
-5. **Enxugar poderes de "+2".** Juntar os pequenos bônus de ação livre em menos
+5. **Enxugar poderes de "+2".** *Feito em 2026-11-11 em duas levas (Espadachim, Canalizador, Muralha do Guardião e seis bônus de situação); ver a atualização da seção 5.* Juntar os pequenos bônus de ação livre em menos
    poderes, maiores e sem contador. Começar pelos conjuradores e pelo
    Espadachim.
-6. **Carga do 40 ao 60.** Caminho de tela, sem mudar regra: no Modo Mesa,
+6. **Carga do 40 ao 60.** *Feito em 2026-11-11: seção "No seu turno" do Modo
+   mesa (`src/services/acoesDeMesa.ts` e `src/pages/Ficha/components/AcoesDeMesa.tsx`).
+   Abas Ação, Completa, Movimento, Reação e Livre, separadas por classe dentro
+   de cada aba, com Passivos e Fora de combate à parte; busca a partir de 20
+   itens; marcadores de uso por cena, descanso e sessão guardados no aparelho,
+   com Nova cena, Descansei e Nova sessão; "Usar" gasta a Mana ou a Estamina do
+   custo. Conferido na tela com uma personagem de nível 60 (Canalizador,
+   Sintonizador e Elementarista): 70 itens, 46 pedem decisão (Ação 5, Movimento
+   3, Reação 6, Livre 32) e 24 passivos saem da frente.* Proposta original: Caminho de tela, sem mudar regra: no Modo Mesa,
    mostrar só o que pede decisão, agrupado por ação, reação e ação livre, com
    os contadores de cena à vista. Vale conferir o que o Modo Mesa já mostra
    antes de mexer.

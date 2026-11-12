@@ -64,11 +64,13 @@ test('Legados novos não são marcados como revisados: nunca passaram pela mesma
 });
 
 test('poder dependente exige o poder anterior', () => {
-  const espadachim = CLASSES_CATALOGO.find((item) => item.id === 'espadachim');
-  const golpeW = espadachim?.poderes?.find((item) => item.id === 'golpe-em-w');
-  assert.ok(espadachim && golpeW);
-  assert.equal(podeSelecionarPoder(golpeW, espadachim, 20, [], fichaBase).permitido, false);
-  assert.equal(podeSelecionarPoder(golpeW, espadachim, 20, [{ classeId: 'espadachim', poderId: 'golpe-em-z' }], fichaBase).permitido, true);
+  // Os pares do Espadachim e a cadeia da Muralha viraram um poder só em 2026-11-11;
+  // a Muralha de Grafeno continua exigindo a Muralha.
+  const guardiao = CLASSES_CATALOGO.find((item) => item.id === 'guardiao');
+  const ouro = guardiao?.poderes?.find((item) => item.id === 'muralha-de-grafeno');
+  assert.ok(guardiao && ouro);
+  assert.equal(podeSelecionarPoder(ouro, guardiao, 20, [], fichaBase).permitido, false);
+  assert.equal(podeSelecionarPoder(ouro, guardiao, 20, [{ classeId: 'guardiao', poderId: 'muralha-de-cobre' }], fichaBase).permitido, true);
 });
 
 test('descanso recupera percentuais, Sanidade, Cansaço e trata Ferido uma vez', () => {

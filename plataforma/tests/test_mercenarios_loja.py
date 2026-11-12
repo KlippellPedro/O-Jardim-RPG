@@ -204,7 +204,7 @@ class VidaDeAliadoTests(unittest.TestCase):
     def test_vida_do_aliado_e_no_maximo_o_dobro_da_vida_de_um_personagem(self):
         from core.curva_criatura import vida_de_aliado
         # Mesmos valores de tests/frontend/curvaCriatura.test.ts.
-        for vd, pv, esperado in ((3, 105, 38), (8, 170, 74), (20, 410, 160), (33, 850, 276), (50, 1320, 428), (100, 2700, 772)):
+        for vd, pv, esperado in ((3, 105, 38), (8, 170, 76), (20, 410, 168), (33, 850, 288), (50, 1320, 448), (100, 2700, 792)):
             self.assertEqual(vida_de_aliado(vd, pv), esperado, f"VD {vd}")
         self.assertEqual(vida_de_aliado(20, 100), 100)
         self.assertEqual(vida_de_aliado(None, 500), 500)
@@ -216,5 +216,8 @@ class VidaDeAliadoTests(unittest.TestCase):
                 continue
             with self.subTest(entrada["id"]):
                 aliado = _mercenary_ally_from_catalog_item(entrada)
-                self.assertLessEqual(aliado["vidaMaxima"], 0.6 * conteudo["pv"])
+                # 75%, como em tests/frontend/curvaCriatura.test.ts: desde 2026-11-11 a
+                # Vida de inimigo conta 75% de acerto (antes 95%) e ficou menor, e a
+                # Vida média do personagem subiu com os conjuradores comuns.
+                self.assertLessEqual(aliado["vidaMaxima"], 0.75 * conteudo["pv"])
                 self.assertEqual(aliado["vidaAtual"], aliado["vidaMaxima"])
