@@ -1,6 +1,20 @@
 {
   "itens": [
     {
+      "id": "2026-11-13-ritmos-de-xp-e-maestria-de-fluxo",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Livro de Regras",
+      "titulo": "Três ritmos de XP, marcos novos e maestria de Fluxo",
+      "detalhes": [
+        "A campanha agora tem ritmo: Lento, Médio ou Rápido. O Mestre escolhe e avisa a mesa, e isso muda quanto vale cada marco de história. O XP de combate é o mesmo nos três.",
+        "Chegaram quatro marcos: Cena marcante, Feito pessoal, Desafio vencido sem luta e Marco de campanha. Quem fez, leva: o XP de combate é de quem lutou, e o Feito pessoal é só de quem conquistou.",
+        "Fluxo ganhou maestria de atributo: com Fluxo 20 por mérito próprio, uma vez por cena você repete um teste de conjuração que falhou, sem pagar a Mana de novo.",
+        "Fabricar custa metade do preço em qualquer raridade. O que sobe com a raridade é a DT, o tempo e o material.",
+        "Coreografia, Equipamentos, Rituais e Selos, Legados e Treinamento ganharam a caixa Em resumo, e o livro explica as duas Sanidades (a barra e a perícia)."
+      ]
+    },
+    {
       "id": "2026-11-13-precos-critico-e-morrendo",
       "data": "2026-11-13",
       "tipo": "melhoria",
@@ -1036,19 +1050,6 @@
         "Tudo que encerra efeito tem teto de círculo: o Fechar Ciclo vai até o 4º, a Lâmina do Encerramento até o 5º, e as variações do Fim nas magias universais até o próprio círculo.",
         "Romper Vínculo agora serve contra possessão e controle em curso. Ferida Terminal e Fio do Limiar deixam Sangramento. Marca do Limiar dá +2d6. Zona de Deterioração para em -10 de Defesa.",
         "O Fruto do Fim e o Selo de Fechamento pedem a autorização do Mestre na Loja. O Último Adeus usa o novo ingrediente Lembrança do Morto, e a fusão do Fim passou a se chamar Encerramento Rápido."
-      ]
-    },
-    {
-      "id": "2026-10-20-tempo-rebalanceado",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Tempo: ação extra na medida e desgaste de verdade",
-      "detalhes": [
-        "A Aceleração, a Forma do Tempo e o Passo Canalizado agora dão uma ação de movimento extra, e não mais uma ação padrão. Turno inteiro a mais fica com o Tempo Emprestado, a Parada do Mundo e o Avatar do Tempo, este uma vez por cena.",
-        "Roubar Turno tira um turno, e Exílio Temporal tira dois. A Parada de Instante tira só a ação padrão, e a Conservação Maior repete Vontade a cada turno contra inimigo.",
-        "O Tempo não volta ao passado: Restaurar o Estado devolve Vida até a do começo da cena e conserta um item, sem reviver ninguém, e a Relíquia Conservada repara o objeto em vez de desfazer o dano.",
-        "Desgaste do Tempo: magia de Tempo do 5º círculo em diante que dá ação ou turno extra, tira turno por duas rodadas ou dura a cena sem concentração custa 1 de Cansaço no fim da cena, ou 2 no 9º e no 10º."
       ]
     }
   ]

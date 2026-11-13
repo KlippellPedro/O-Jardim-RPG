@@ -2,6 +2,20 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-13-ritmos-de-xp-e-maestria-de-fluxo",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Livro de Regras",
+      "titulo": "Três ritmos de XP, marcos novos e maestria de Fluxo",
+      "detalhes": [
+        "A campanha agora tem ritmo: Lento, Médio ou Rápido. O Mestre escolhe e avisa a mesa, e isso muda quanto vale cada marco de história. O XP de combate é o mesmo nos três.",
+        "Chegaram quatro marcos: Cena marcante, Feito pessoal, Desafio vencido sem luta e Marco de campanha. Quem fez, leva: o XP de combate é de quem lutou, e o Feito pessoal é só de quem conquistou.",
+        "Fluxo ganhou maestria de atributo: com Fluxo 20 por mérito próprio, uma vez por cena você repete um teste de conjuração que falhou, sem pagar a Mana de novo.",
+        "Fabricar custa metade do preço em qualquer raridade. O que sobe com a raridade é a DT, o tempo e o material.",
+        "Coreografia, Equipamentos, Rituais e Selos, Legados e Treinamento ganharam a caixa Em resumo, e o livro explica as duas Sanidades (a barra e a perícia)."
+      ]
+    },
+    {
       "id": "2026-11-13-precos-critico-e-morrendo",
       "data": "2026-11-13",
       "tipo": "melhoria",
