@@ -4,6 +4,7 @@ import type { IBarraToken, ITokenMapa, TipoBarra } from '../../../services/mapaA
 import { resumoDaNota, temNota } from '../motor/notasDoMestre';
 import { CORES_BARRA_PADRAO } from '../motor/barrasToken';
 import { ComDica } from './BotaoFerramenta';
+import { EstadosDoToken, type AcoesDeEstado } from './EstadosDoToken';
 import './mapasColocados.css';
 
 export type MudancaDeRecurso = { delta?: number; atual?: number };
@@ -26,6 +27,8 @@ interface Props {
   onRecipiente?: () => void;
   /** Só o Mestre: abre a aba Loot, onde se prepara o recipiente (também serve para tornar o token um). */
   onLoot?: () => void;
+  /** O Mestre põe e tira condições e aflições pelo token; nulo quando o token não está ligado a um participante da Sessão. */
+  acoesDeEstado?: AcoesDeEstado | null;
   /** Vira o token de lado (espelha na horizontal). O dono e o Mestre usam. */
   onEspelhar?: () => void;
 }
@@ -92,7 +95,7 @@ const LinhaRecurso = ({ barra, onMudar }: { barra: IBarraToken; onMudar: (mudanc
  * A barra colada no token escolhido (ver BarraAncorada): o que se faz toda hora fica a um clique, e o painel
  * de opções só abre quando se pede, em vez de cobrir a direita do mapa a cada token escolhido.
  */
-export const BarraToken = ({ token, gestor, opcoesAbertas, onOpcoes, onNota, onOculto, onRemover, onFalar, onRecurso, onRecipiente, onLoot, onEspelhar }: Props) => {
+export const BarraToken = ({ token, gestor, opcoesAbertas, onOpcoes, onNota, onOculto, onRemover, onFalar, onRecurso, onRecipiente, onLoot, acoesDeEstado = null, onEspelhar }: Props) => {
   const principal = token.barras[0];
   // Só mexe pela barra quem manda no personagem e só nos recursos que chegam com número (o degrau parcial mostra só o estado).
   const podeMexer = Boolean(onRecurso && token.personagem_id && (token.e_meu || gestor));
@@ -151,6 +154,7 @@ export const BarraToken = ({ token, gestor, opcoesAbertas, onOpcoes, onNota, onO
           </ComDica>
         )}
       </div>
+      <EstadosDoToken token={token} acoes={acoesDeEstado} />
       {editaveis.length > 0 && onRecurso && (
         <ul className="mapa-recursos-token" aria-label={`Recursos de ${token.nome}`}>
           {editaveis.map((barra) => (

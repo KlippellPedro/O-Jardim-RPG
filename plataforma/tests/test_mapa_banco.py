@@ -532,6 +532,44 @@ class MapaBancoTests(unittest.TestCase):
         self.assertEqual(erro.exception.status_code, 422)
         self.assertEqual(len(rec.listar_predefinicoes(self.campanha_id, user=self.mestre, database=self.database)["predefinicoes"]), 7)
 
+    # --------------------------------------------- condições e aflições no token
+
+    def test_token_mostra_condicoes_com_duracao_e_aflicoes_e_esconde_a_que_incuba(self):
+        self._sessao()
+        participante = self._participante("Mira", tipo="jogador", personagem_id=self.mira)
+        with self.database.connection() as connection:
+            connection.execute(
+                "UPDATE sessao_participantes SET condicoes=%s WHERE id=%s",
+                (Jsonb([{"nome": "Caído", "turnos": None}, {"nome": "Queimando", "turnos": 3}]), participante),
+            )
+            connection.execute(
+                "UPDATE personagens SET ficha = ficha || %s WHERE id=%s",
+                (Jsonb({"aflicoesAtivas": [
+                    {"id": "a1", "aflicaoId": "veneno-teste", "estagio": 2, "incubando": False},
+                    {"id": "a2", "aflicaoId": "doenca-secreta", "estagio": 1, "incubando": True},
+                ]}), self.mira),
+            )
+        cena = uuid.UUID(self.criar_cena()["cena"]["id"])
+        mapa.trazer_participantes(self.campanha_id, cena, mapa.PontoInput(x=500, y=500), user=self.mestre, database=self.database)
+
+        def estados(usuario):
+            return next(t for t in self.ver(usuario)["tokens"] if t["nome"] == "Mira")["estados"]
+
+        da_mesa = estados(self.bruno)
+        self.assertEqual(
+            da_mesa,
+            [
+                {"tipo": "condicao", "nome": "Caído", "turnos": None},
+                {"tipo": "condicao", "nome": "Queimando", "turnos": 3},
+                {"tipo": "aflicao", "id": "veneno-teste", "estagio": 2},
+            ],
+        )
+        # A aflição que ainda incuba é segredo: nem o dono recebe. O Mestre vê, marcada.
+        self.assertEqual(estados(self.ana), da_mesa)
+        do_mestre = estados(self.mestre)
+        self.assertIn({"tipo": "aflicao", "id": "doenca-secreta", "estagio": 1, "incubando": True}, do_mestre)
+        self.assertEqual(len(do_mestre), 4)
+
     # --------------------------------------------------------------- acervo
 
     def _item(self, largura=800, altura=600, nome="Caverna"):

@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-11-13-cartas-de-condicao-no-token",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Condições e aflições aparecem no token, com a carta que explica",
+      "detalhes": [
+        "Ao clicar num token, as condições e aflições dele aparecem como etiquetas coloridas na barra do token. Clique numa etiqueta para abrir a carta: efeitos, duração, como acabar e, nas aflições, o estágio atual, o teste e o tratamento. Dali dá para abrir o Livro de Regras.",
+        "O Mestre põe e tira condições e aflições direto pelo token, define as rodadas que faltam e muda o estágio da aflição. Tudo vale também na Sessão e na ficha.",
+        "Uma aflição que ainda está incubando continua só com o Mestre."
+      ]
+    },
+    {
       "id": "2026-11-13-bau-de-loot-no-mapa",
       "data": "2026-11-13",
       "tipo": "novo",
@@ -1040,16 +1052,6 @@
         "Comunicação: os ataques de alvo único somam o Mod. Fluxo, como em todo Fluxo. O Acordo Breve e as redes respeitam o teto de +4 da ajuda, e o Decreto Registrado dá teste de Vontade a quem ouve.",
         "Tecnologia: o Registrar Padrão grava magias até o 8º círculo, com tantos registros quanto o Mod. Fluxo, e as Reproduções dizem quanto custam. O Bloqueio de Fluxo passou a dar desvantagem com teste para sair, e a Rotina Automatizada vigia por oito horas.",
         "Físico: armaduras e domos dão Resistência por tipo de dano, as magias de efeito dizem o que acontece no sucesso, e as Marcas do Fluxo deixam escolher o elemento a quem não é Elementarista."
-      ]
-    },
-    {
-      "id": "2026-10-20-tom-das-magias",
-      "data": "2026-10-20",
-      "tipo": "melhoria",
-      "area": "Regras",
-      "titulo": "Magias e classes com texto mais direto",
-      "detalhes": [
-        "Umas trinta magias e algumas páginas de classe foram reescritas para dizer de uma vez o que fazem. Nenhuma regra mudou: dano, alcance, testes e duração continuam iguais."
       ]
     }
   ]

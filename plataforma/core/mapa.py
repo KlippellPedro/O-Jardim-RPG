@@ -806,6 +806,8 @@ def visao_token(
     nivel: int | None = None,
     tem_retrato: bool = False,
     condicoes: list | None = None,
+    turnos_das_condicoes: dict | None = None,
+    aflicoes: list | None = None,
     moldura: str = "lado",
     enquadramento: dict | None = None,
     na_nevoa: bool = False,
@@ -838,6 +840,11 @@ def visao_token(
         "nivel": nivel if identidade else None,
         "barras": barras_visiveis(token, participante, recursos, quem, degrau),
         "condicoes": (condicoes or []) if identidade else [],
+        # Condições com a duração que resta e aflições com o estágio: o que o jogador abre como carta no token.
+        "estados": (
+            [{"tipo": "condicao", "nome": nome, "turnos": (turnos_das_condicoes or {}).get(nome)} for nome in (condicoes or [])]
+            + list(aflicoes or [])
+        ) if identidade else [],
         "e_meu": e_dono(token, participante, quem),
         "pode_mover": pode_mover(token, participante, quem, livre),
         "desconhecido": degrau == "desconhecido",
@@ -866,6 +873,29 @@ def visao_token(
         saida["visibilidade"] = (participante or {}).get("visibilidade")
         # A nota do Mestre não sai daqui para ninguém que não comande a mesa.
         saida["nota_mestre"] = token.get("nota_mestre") or ""
+    return saida
+
+
+def aflicoes_da_ficha(ficha, *, gestor: bool) -> list[dict]:
+    """Aflições ativas do personagem (ficha.aflicoesAtivas): qual e em que estágio. A que ainda incuba é segredo
+    de quem comanda a mesa, nem o dono sabe; some para os outros."""
+    ativas = ficha.get("aflicoesAtivas") if isinstance(ficha, dict) else None
+    if not isinstance(ativas, list):
+        return []
+    saida = []
+    for item in ativas[:20]:
+        if not isinstance(item, dict) or not isinstance(item.get("aflicaoId"), str):
+            continue
+        incubando = item.get("incubando") is True
+        if incubando and not gestor:
+            continue
+        estagio = item.get("estagio")
+        saida.append({
+            "tipo": "aflicao",
+            "id": item["aflicaoId"][:80],
+            "estagio": int(estagio) if isinstance(estagio, (int, float)) and not isinstance(estagio, bool) else 1,
+            **({"incubando": True} if incubando else {}),
+        })
     return saida
 
 

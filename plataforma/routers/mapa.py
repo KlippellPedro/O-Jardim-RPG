@@ -380,7 +380,8 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador, visao_j
             versao_imagem = f"f{ficha_linha['foto_hash'][:10]}"
         else:
             versao_imagem = None
-        condicoes = [c["nome"] for c in normalizar_condicoes(participante["condicoes"])] if participante else []
+        condicoes_do_participante = normalizar_condicoes(participante["condicoes"]) if participante else []
+        condicoes = [c["nome"] for c in condicoes_do_participante]
         item = mapa.visao_token(
             token,
             participante,
@@ -391,6 +392,8 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador, visao_j
             nivel=_nivel(ficha) if ficha_linha else None,
             tem_retrato=versao_imagem is not None,
             condicoes=condicoes,
+            turnos_das_condicoes={c["nome"]: c["turnos"] for c in condicoes_do_participante},
+            aflicoes=mapa.aflicoes_da_ficha(ficha, gestor=quem.gestor) if ficha_linha else [],
             moldura=mapa.moldura_efetiva(token, personagem, do_personagem.get("moldura"), moldura_mesa),
             # O enquadramento é da foto da ficha; imagem do acervo já vem recortada.
             enquadramento=do_personagem.get("enquadramento") if not token["imagem_id"] else None,

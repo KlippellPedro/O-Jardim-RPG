@@ -22,6 +22,8 @@ import { PainelLateral, tokenDaEntidade, type AbaLateral } from './componentes/P
 import { BotaoFerramenta, ComDica } from './componentes/BotaoFerramenta';
 import { MenuToken, type Aba as AbaDoMenuToken } from './componentes/MenuToken';
 import { JanelaRecipiente } from './componentes/JanelaRecipiente';
+import type { AcoesDeEstado } from './componentes/EstadosDoToken';
+import { sessaoApi } from '../../services/sessaoApi';
 import { BarraToken } from './componentes/BarraToken';
 import { BarraAncorada } from './componentes/BarraAncorada';
 import { ConfigCena, SeletorDeCenas } from './componentes/CenasDoMestre';
@@ -1295,6 +1297,32 @@ export const MapaPage = () => {
     if (resposta) setEstado(resposta);
   };
 
+  /**
+   * O Mestre põe e tira condições e aflições pelo token, pelas mesmas rotas da Sessão (o que muda aqui muda lá e na ficha).
+   * Só quando o token está ligado a um participante da sessão em andamento.
+   */
+  const acoesDeEstadoDoToken = (token: ITokenMapa): AcoesDeEstado | null => {
+    if (!gestor || !sessaoId || !token.participante_id) return null;
+    const participanteId = token.participante_id;
+    const condicoes = (token.estados ?? []).flatMap((e) => (e.tipo === 'condicao' ? [{ nome: e.nome, turnos: e.turnos }] : []));
+    const aplicar = async (acao: () => Promise<unknown>) => {
+      const ok = await comErro(async () => { await acao(); return true; });
+      if (ok) void recarregar();
+    };
+    return {
+      adicionar: (opcao) => void aplicar(() => (opcao.tipo === 'condicao'
+        ? sessaoApi.atualizarParticipante(sessaoId, participanteId, { condicoes: [...condicoes, { nome: opcao.valor, turnos: null }] })
+        : sessaoApi.mexerNaAflicao(sessaoId, participanteId, { acao: 'aplicar', aflicao_id: opcao.valor, estagio: 1 }))),
+      remover: (estado) => void aplicar(() => (estado.tipo === 'condicao'
+        ? sessaoApi.atualizarParticipante(sessaoId, participanteId, { condicoes: condicoes.filter((c) => c.nome !== estado.nome) })
+        : sessaoApi.mexerNaAflicao(sessaoId, participanteId, { acao: 'remover', aflicao_id: estado.id }))),
+      mudarRodadas: (nome, turnos) => void aplicar(() => sessaoApi.atualizarParticipante(sessaoId, participanteId, {
+        condicoes: condicoes.map((c) => (c.nome === nome ? { nome, turnos } : c)),
+      })),
+      mudarEstagio: (id, estagio) => void aplicar(() => sessaoApi.mexerNaAflicao(sessaoId, participanteId, { acao: 'estagio', aflicao_id: id, estagio })),
+    };
+  };
+
   /** Abre o baú (a primeira abertura rola a tabela no servidor) e mostra o que saiu. */
   const abrirRecipiente = async (token: ITokenMapa) => {
     if (!campanhaId || !token.recipiente) return;
@@ -2085,6 +2113,7 @@ export const MapaPage = () => {
               onFalar={gestor ? () => void falarComo(tokenSelecionado) : undefined}
               onRecurso={(tipo, dados) => void mexerNoRecursoDoToken(tipo, dados)}
               onRecipiente={() => void abrirRecipiente(tokenSelecionado)}
+              acoesDeEstado={acoesDeEstadoDoToken(tokenSelecionado)}
               onEspelhar={() => void editarToken({ flip_x: !tokenSelecionado.flip_x })}
               onLoot={gestor ? () => {
                 setPainelRecurso(null);

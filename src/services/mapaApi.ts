@@ -104,6 +104,11 @@ export interface IConfigBarras {
   para: ParaQuem;
 }
 
+/** Condição (com as rodadas que restam, se tiver prazo) ou aflição em algum estágio. Chega a quem vê o token. */
+export type IEstadoToken =
+  | { tipo: 'condicao'; nome: string; turnos: number | null }
+  | { tipo: 'aflicao'; id: string; estagio: number; incubando?: boolean };
+
 /** Uma linha do que saiu de um baú (ou caixote, bolsa). `chance` e `rolagem` só chegam ao Mestre. */
 export interface ILinhaRecipiente {
   linha: string;
@@ -161,6 +166,8 @@ export interface ITokenMapa {
   nivel: number | null;
   barras: IBarraToken[];
   condicoes: string[];
+  /** As mesmas condições com a duração, mais as aflições do personagem: o que vira carta ao clicar no token. */
+  estados?: IEstadoToken[];
   /** Moldura já resolvida (mesa, token, personagem ou padrão); ver motor/molduras.ts. */
   moldura: string;
   /** Zoom e deslocamento da foto da ficha dentro do círculo. */
