@@ -508,8 +508,9 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
             user=self.player,
             database=self.database,
         )
-        self.assertEqual(result["debitos"], [{"moeda": "Lunaris", "valor": 8 * PRECO_ADAGA_LUNARIS,
-           "saldo": SALDO_INICIAL_LUNARIS - 9 * PRECO_ADAGA_LUNARIS}])
+        # Raro custa 16 vezes o Comum (escada x4: 4, 16, 64, 256); com a Comum comprada antes, saem 17.
+        self.assertEqual(result["debitos"], [{"moeda": "Lunaris", "valor": 16 * PRECO_ADAGA_LUNARIS,
+           "saldo": SALDO_INICIAL_LUNARIS - 17 * PRECO_ADAGA_LUNARIS}])
         with self.database.connection() as connection:
             rows = connection.execute(
                 """
@@ -539,8 +540,9 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
             itens=[{"item_id": "adaga::raridade::raro", "quantidade": 1}],
         )
         result = sell_batch(sale, user=self.player, database=self.database)
-        self.assertEqual(result["creditos"], [{"moeda": "Lunaris", "valor": 4 * PRECO_ADAGA_LUNARIS,
-           "saldo": SALDO_INICIAL_LUNARIS - 4 * PRECO_ADAGA_LUNARIS}])
+        # A revenda devolve metade do preço da raridade comprada: 16 vezes na compra, 8 de volta.
+        self.assertEqual(result["creditos"], [{"moeda": "Lunaris", "valor": 8 * PRECO_ADAGA_LUNARIS,
+           "saldo": SALDO_INICIAL_LUNARIS - 8 * PRECO_ADAGA_LUNARIS}])
 
     def test_idempotency_key_cannot_be_reused_with_changed_payload(self):
         purchase_batch(self._purchase_payload(), user=self.player, database=self.database)
