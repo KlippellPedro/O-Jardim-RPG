@@ -135,6 +135,35 @@ class RecursosDaMesaBancoTests(unittest.TestCase):
             rotas.mostrar_documento(self.campanha_id, uuid.uuid4(), pedido(), user=self.mestre, database=self.database)
         self.assertEqual(erro.exception.status_code, 404)
 
+    def test_documento_universal_vai_para_a_mesa_sem_as_notas_do_mestre(self):
+        from fastapi import HTTPException
+        from core import documentos_universais as universais
+        from routers import mapa_recursos as rotas
+
+        universal = universais.listar()["documentos"][0]
+        enviados = []
+        original = tempo_real.anunciar_para
+        tempo_real.anunciar_para = lambda campanha, mensagem, personagens=None: enviados.append((mensagem, personagens))
+        try:
+            pedido = rotas.CompartilharDocumento
+            self.assertTrue(rotas.mostrar_documento_universal(self.campanha_id, universal["id"], pedido(personagens=[self.personagem]), user=self.mestre, database=self.database)["ok"])
+            with self.assertRaises(HTTPException) as erro:
+                rotas.mostrar_documento_universal(self.campanha_id, universal["id"], pedido(), user=self.ana, database=self.database)
+            self.assertEqual(erro.exception.status_code, 403)
+            with self.assertRaises(HTTPException) as erro:
+                rotas.mostrar_documento_universal(self.campanha_id, "nao-existe", pedido(), user=self.mestre, database=self.database)
+            self.assertEqual(erro.exception.status_code, 404)
+            with self.assertRaises(HTTPException) as erro:
+                rotas.mostrar_documento_universal(self.campanha_id, universal["id"], pedido(personagens=[self.fora]), user=self.mestre, database=self.database)
+            self.assertEqual(erro.exception.status_code, 422)
+        finally:
+            tempo_real.anunciar_para = original
+        self.assertEqual(len(enviados), 1)
+        mensagem, personagens = enviados[0]
+        self.assertEqual(personagens, [self.personagem])
+        self.assertEqual(mensagem["documento"], {"id": f"universal-{universal['id']}", "modelo": universal["modelo"], "titulo": universal["titulo"], "campos": universal["campos"]})
+        self.assertNotIn(universal["ensina"], str(mensagem)) if universal["ensina"] else None
+
     def _enviar(self, quem, corpo=OGG, tipo="audio/ogg"):
         from routers import mapa_recursos as rotas
 

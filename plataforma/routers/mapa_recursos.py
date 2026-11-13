@@ -72,6 +72,35 @@ def _estado_trilha(connection, campanha_id: UUID) -> dict:
     }
 
 
+def _validar_destino(connection, campanha_id: UUID, personagens: list[UUID] | None) -> None:
+    """Quando o envio mira personagens, todos precisam ser jogadores da sessão aberta."""
+    if personagens is None:
+        return
+    if not personagens:
+        raise HTTPException(status_code=422, detail="escolha ao menos um personagem ou envie para todos")
+    validos = {
+        linha["personagem_id"]
+        for linha in connection.execute(
+            """
+            SELECT DISTINCT sp.personagem_id
+            FROM sessao_participantes sp
+            JOIN sessoes_mesa s ON s.id=sp.sessao_id
+            WHERE s.campanha_id=%s AND s.status='aberta'
+              AND sp.tipo='jogador' AND sp.personagem_id IS NOT NULL
+              AND sp.personagem_id=ANY(%s::uuid[])
+            """,
+            (campanha_id, personagens),
+        ).fetchall()
+    }
+    if validos != set(personagens):
+        raise HTTPException(status_code=422, detail="um personagem escolhido nao esta na sessao")
+
+
+def _mensagem_de_documento(id_: str, modelo: str, titulo: str, campos: dict) -> dict:
+    # Só o que a mesa vê: as notas do Mestre dos documentos universais nunca entram aqui.
+    return {"t": "documento", "documento": {"id": id_, "modelo": modelo, "titulo": titulo, "campos": campos or {}}}
+
+
 @router.post("/{campanha_id}/documentos/{documento_id}/mostrar")
 def mostrar_documento(
     campanha_id: UUID,
@@ -92,32 +121,34 @@ def mostrar_documento(
         if not documento:
             raise HTTPException(status_code=404, detail="documento nao encontrado")
         personagens = payload.personagens
-        if personagens is not None:
-            if not personagens:
-                raise HTTPException(status_code=422, detail="escolha ao menos um personagem ou envie para todos")
-            validos = {
-                linha["personagem_id"]
-                for linha in connection.execute(
-                    """
-                    SELECT DISTINCT sp.personagem_id
-                    FROM sessao_participantes sp
-                    JOIN sessoes_mesa s ON s.id=sp.sessao_id
-                    WHERE s.campanha_id=%s AND s.status='aberta'
-                      AND sp.tipo='jogador' AND sp.personagem_id IS NOT NULL
-                      AND sp.personagem_id=ANY(%s::uuid[])
-                    """,
-                    (campanha_id, personagens),
-                ).fetchall()
-            }
-            if validos != set(personagens):
-                raise HTTPException(status_code=422, detail="um personagem escolhido nao esta na sessao")
-        mensagem = {
-            "t": "documento",
-            "documento": {
-                "id": str(documento["id"]), "modelo": documento["modelo"],
-                "titulo": documento["titulo"], "campos": documento["campos"] or {},
-            },
-        }
+        _validar_destino(connection, campanha_id, personagens)
+        mensagem = _mensagem_de_documento(str(documento["id"]), documento["modelo"], documento["titulo"], documento["campos"])
+    tempo_real.anunciar_para(campanha_id, mensagem, personagens)
+    return {"ok": True}
+
+
+@router.post("/{campanha_id}/documentos-universais/{documento_id}/mostrar")
+def mostrar_documento_universal(
+    campanha_id: UUID,
+    documento_id: str,
+    payload: CompartilharDocumento,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Mostra um documento universal (lore e missões), com a edição do Criador se houver, sem salvar cópia na mesa."""
+    from core import documentos_universais as universais
+    from routers.documentos import _edicoes  # import tardio: evita ciclo entre os routers
+
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        if not acesso.manages_content:
+            raise HTTPException(status_code=403, detail="permissao de mestre necessaria")
+        documento = next((d for d in universais.listar(_edicoes(connection))["documentos"] if d["id"] == documento_id), None)
+        if not documento:
+            raise HTTPException(status_code=404, detail="documento universal nao encontrado")
+        personagens = payload.personagens
+        _validar_destino(connection, campanha_id, personagens)
+        mensagem = _mensagem_de_documento(f"universal-{documento['id']}", documento["modelo"], documento["titulo"], documento["campos"])
     tempo_real.anunciar_para(campanha_id, mensagem, personagens)
     return {"ok": True}
 

@@ -26,6 +26,16 @@
       ]
     },
     {
+      "id": "2026-11-13-mostrar-documento-universal",
+      "data": "2026-11-13",
+      "tipo": "correcao",
+      "area": "Mapa",
+      "titulo": "Documentos universais agora aparecem em Mostrar um documento",
+      "detalhes": [
+        "No mapa, o botão de mostrar um documento lista os salvos nesta mesa e também os universais, agrupados por tema. O universal vai para a mesa sem criar cópia, e as notas do Mestre ficam de fora."
+      ]
+    },
+    {
       "id": "2026-11-13-ritmos-de-xp-e-maestria-de-fluxo",
       "data": "2026-11-13",
       "tipo": "novo",

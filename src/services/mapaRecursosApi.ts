@@ -24,6 +24,11 @@ export const mapaRecursosApi = {
     api<{ ok: boolean }>(`${base(campanhaId)}/documentos/${encodeURIComponent(documentoId)}/mostrar`, {
       method: 'POST', body: { personagens },
     }),
+  /** Documento universal (lore e missões): vai para a mesa sem virar cópia salva. */
+  mostrarDocumentoUniversal: (campanhaId: string, documentoId: string, personagens: string[] | null) =>
+    api<{ ok: boolean }>(`${base(campanhaId)}/documentos-universais/${encodeURIComponent(documentoId)}/mostrar`, {
+      method: 'POST', body: { personagens },
+    }),
   listarTrilhas: (campanhaId: string) =>
     api<{ faixas: IFaixaMesa[]; estado: ITrilhaMesa; gestor: boolean }>(`${base(campanhaId)}/trilhas`, COM_CORPO),
   enviarTrilha: (campanhaId: string, arquivo: File) => {

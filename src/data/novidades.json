@@ -25,6 +25,16 @@
       ]
     },
     {
+      "id": "2026-11-13-mostrar-documento-universal",
+      "data": "2026-11-13",
+      "tipo": "correcao",
+      "area": "Mapa",
+      "titulo": "Documentos universais agora aparecem em Mostrar um documento",
+      "detalhes": [
+        "No mapa, o botão de mostrar um documento lista os salvos nesta mesa e também os universais, agrupados por tema. O universal vai para a mesa sem criar cópia, e as notas do Mestre ficam de fora."
+      ]
+    },
+    {
       "id": "2026-11-13-ritmos-de-xp-e-maestria-de-fluxo",
       "data": "2026-11-13",
       "tipo": "novo",
@@ -1035,23 +1045,6 @@
         "Renascer passou a se chamar Recomeço Absoluto, e o selo Reviravolta Inscrita virou Sorte Virada.",
         "O Exílio pega chefe com mais dificuldade: chefe resiste com vantagem.",
         "Várias magias ganharam números e regras que faltavam. A Roleta de Fluxo dá a reação extra uma vez na cena, o Autômato Assistente ficou menor, a Forma Elemental pede concentração, o Refúgio de Bolso diz quando o grupo volta, e as curas das magias universais dizem que curam Vida."
-      ]
-    },
-    {
-      "id": "2026-10-20-oito-fluxos-rebalanceados",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Magias de oito Fluxos com regras mais firmes",
-      "detalhes": [
-        "Inconstância: as magias que sorteiam agora usam quatro tabelas no Livro de Regras (tipo, direção, resistência e reescrita). A Detonação Improvável pode estourar no próprio conjurador, a Reviravolta faz todo mundo rolar de novo antes de a jogada valer, e o Mundo Instável sorteia gravidade, clima, som ou cor a cada rodada.",
-        "Espaço: Bolso e Cofre Dobrado contam em espaços de carga. O Portal Maior leva criaturas Médias ou menores, uma por vez, e a Dobra de Exército leva montaria e veículo. A Ruptura Espacial dura três rodadas, e o Passo Selado só leva quem aceitar.",
-        "Vitalidade: o Sopro de Anima cura até seis aliados, o Vigor Desmedido dá menos Vida temporária e cobra Cansaço de cada alvo, e o Colapso Biológico deixa o alvo Paralisado com teste para sair. Os rituais de cuidado pedem Carne de Caça.",
-        "Essência: o Julgamento Essencial dá +2d8 contra quem está disfarçado, a Custódia da Alma e o Espelho Verídico têm teto de círculo, a Palavra Justa pede teste de Vontade e o Nome Verdadeiro revela a natureza do alvo.",
-        "Origem: o Laço de Ajuda e as formas nascentes seguem a regra de Ajudar, a Linhagem Nascente tem números próprios para o guardião Grande, o Recomeço Absoluto dá um começo novo ao corpo e a Gênese Menor germina só madeira, cipó, casca ou fibra.",
-        "Comunicação: os ataques de alvo único somam o Mod. Fluxo, como em todo Fluxo. O Acordo Breve e as redes respeitam o teto de +4 da ajuda, e o Decreto Registrado dá teste de Vontade a quem ouve.",
-        "Tecnologia: o Registrar Padrão grava magias até o 8º círculo, com tantos registros quanto o Mod. Fluxo, e as Reproduções dizem quanto custam. O Bloqueio de Fluxo passou a dar desvantagem com teste para sair, e a Rotina Automatizada vigia por oito horas.",
-        "Físico: armaduras e domos dão Resistência por tipo de dano, as magias de efeito dizem o que acontece no sucesso, e as Marcas do Fluxo deixam escolher o elemento a quem não é Elementarista."
       ]
     }
   ]
