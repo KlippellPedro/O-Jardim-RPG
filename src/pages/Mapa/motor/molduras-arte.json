@@ -39,7 +39,8 @@
   "id": "arte-ouroboros",
   "rotulo": "Ouroboros",
   "arquivo": "ouroboros.webp",
-  "escala": 1.339
+  "escala": 1.2,
+  "dy": -0.044
  },
  {
   "id": "arte-vampiro",

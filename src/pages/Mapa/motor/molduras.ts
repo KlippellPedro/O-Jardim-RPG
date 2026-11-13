@@ -46,12 +46,17 @@ export interface IMolduraCatalogo {
 /** Molduras ilustradas (imagens em public/assets/img/molduras, sem fundo). `escala` é o tamanho da
  * imagem em relação ao quadro de 1,3 token: o furo de cada uma já vem alinhado ao retrato, e as
  * que têm chifres, asas ou espinhos largos pedem um quadro maior (escala acima de 1). */
-interface IMolduraDeArte { id: string; rotulo: string; arquivo: string; escala: number }
+interface IMolduraDeArte { id: string; rotulo: string; arquivo: string; escala: number; dx?: number; dy?: number }
 const ARTE: IMolduraDeArte[] = artesJson;
 const ARTE_POR_ID = new Map(ARTE.map((a) => [a.id, a]));
 
 export const ehMolduraDeArte = (id: string) => ARTE_POR_ID.has(id);
 export const escalaDaMolduraDeArte = (id: string) => ARTE_POR_ID.get(id)?.escala ?? 1;
+/** Quanto a imagem sobe ou desce (e vai para os lados), como fração do lado dela, para o furo cair no centro do retrato. */
+export const deslocamentoDaMolduraDeArte = (id: string): { dx: number; dy: number } => {
+  const arte = ARTE_POR_ID.get(id);
+  return { dx: arte?.dx ?? 0, dy: arte?.dy ?? 0 };
+};
 
 const imagensDeArte = new Map<string, HTMLImageElement>();
 const carregandoArte = new Map<string, Promise<HTMLImageElement | null>>();
@@ -193,7 +198,8 @@ export function desenharMoldura(ctx: Contexto, s: number, { id, nivel, lado }: O
     const imagem = molduraDeArteCarregada(id);
     if (imagem) {
       const lado_ = s * escalaDaMolduraDeArte(id);
-      ctx.drawImage(imagem, c - lado_ / 2, c - lado_ / 2, lado_, lado_);
+      const { dx, dy } = deslocamentoDaMolduraDeArte(id);
+      ctx.drawImage(imagem, c - lado_ / 2 + dx * lado_, c - lado_ / 2 + dy * lado_, lado_, lado_);
     }
     return;
   }

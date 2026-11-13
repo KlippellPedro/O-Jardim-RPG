@@ -11,7 +11,7 @@ import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import type { IBarraToken, ITokenMapa, LadoToken } from '../../../services/mapaApi';
 import { abreviarNome, escalaDoNome, iniciais, nomeVisivel, siglaDaCondicao } from './geometria';
 import {
-  CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, carregarMolduraDeArte, desenharMoldura, ehMolduraDeArte, escalaDaMolduraDeArte, molduraDeArteCarregada,
+  CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, carregarMolduraDeArte, deslocamentoDaMolduraDeArte, desenharMoldura, ehMolduraDeArte, escalaDaMolduraDeArte, molduraDeArteCarregada,
 } from './molduras';
 import { texturaDeBrilho } from './luzes';
 import {
@@ -272,9 +272,21 @@ export class TokenVisual {
     const quadro = this.lado * ESCALA_QUADRO * (ehMolduraDeArte(id) ? escalaDaMolduraDeArte(id) : 1);
     this.moldura.width = quadro;
     this.moldura.height = quadro;
+    // Algumas ilustrações pedem um empurrão para o furo cair no centro do retrato (molduras-arte.json).
+    const { dx, dy } = ehMolduraDeArte(id) ? deslocamentoDaMolduraDeArte(id) : { dx: 0, dy: 0 };
+    this.moldura.position.set(dx * quadro, dy * quadro);
     if (ehMolduraDeArte(id) && !molduraDeArteCarregada(id)) {
       void carregarMolduraDeArte(id).then((imagem) => {
-        if (imagem && !this.raiz.destroyed && (this.dados.moldura ?? 'lado') === id) this.poMoldura(this.dados);
+        if (this.raiz.destroyed || (this.dados.moldura ?? 'lado') !== id) return;
+        if (imagem) {
+          this.poMoldura(this.dados);
+          return;
+        }
+        // A imagem não veio (arquivo ausente, rede fora): o token fica com o aro simples do lado em vez de sem moldura.
+        this.moldura.texture = texturaDaMoldura('lado', dados.nivel, dados.lado);
+        this.moldura.position.set(0, 0);
+        this.moldura.width = this.lado * ESCALA_QUADRO;
+        this.moldura.height = this.lado * ESCALA_QUADRO;
       });
     }
   }

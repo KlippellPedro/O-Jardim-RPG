@@ -108,6 +108,37 @@ test('molduras: as cores de Fluxo batem com FLUXO_TEMAS e os nomes batem com o s
   assert.deepEqual(MOLDURAS.map((m) => m.id).sort(), [...base, ...fluxos].sort());
 });
 
+test('molduras ilustradas: cada id tem a imagem no disco, escala válida, e nada sobra sem uso', async () => {
+  const { readdirSync, existsSync } = await import('node:fs');
+  const artes = (await import('../../src/pages/Mapa/motor/molduras-arte.json', { with: { type: 'json' } })).default as Array<{ id: string; rotulo: string; arquivo: string; escala: number }>;
+  const pasta = new URL('../../public/assets/img/molduras/', import.meta.url);
+  assert.equal(artes.length, 19);
+  assert.equal(new Set(artes.map((a) => a.id)).size, artes.length, 'ids únicos');
+  for (const arte of artes) {
+    assert.match(arte.id, /^arte-[a-z-]+$/);
+    assert.ok(arte.id.length <= 40, `${arte.id}: o banco aceita até 40 caracteres`);
+    assert.ok(existsSync(new URL(arte.arquivo, pasta)), `${arte.arquivo} existe em public/assets/img/molduras`);
+    assert.ok(arte.escala >= 1 && arte.escala <= 1.5, `${arte.id}: escala entre 1 e 1,5`);
+    assert.ok(arte.rotulo.trim(), `${arte.id}: tem rótulo`);
+    for (const eixo of ['dx', 'dy'] as const) {
+      const valor = (arte as unknown as Record<string, number | undefined>)[eixo];
+      assert.ok(valor === undefined || Math.abs(valor) <= 0.1, `${arte.id}: ${eixo} é um empurrão pequeno (até 10% da imagem)`);
+    }
+  }
+  assert.deepEqual(readdirSync(pasta).sort(), artes.map((a) => a.arquivo).sort(), 'nenhuma imagem sem uso nem faltando');
+});
+
+test('molduras: um id que não existe mais cai no aro simples em vez de sumir', async () => {
+  const { desenharMoldura } = await import('../../src/pages/Mapa/motor/molduras');
+  let chamadas = 0;
+  const ctx = new Proxy({}, {
+    get: (_alvo, nome) => (nome === 'createLinearGradient' ? () => ({ addColorStop: () => {} }) : () => { chamadas += 1; }),
+    set: () => true,
+  }) as unknown as CanvasRenderingContext2D;
+  desenharMoldura(ctx, 256, { id: 'moldura-que-saiu', nivel: null, lado: 'jogador' });
+  assert.ok(chamadas > 0);
+});
+
 test('molduras: "Sem borda" não desenha nada e as outras desenham', async () => {
   const { desenharMoldura } = await import('../../src/pages/Mapa/motor/molduras');
   const tracos = (id: string) => {
