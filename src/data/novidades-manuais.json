@@ -2,6 +2,60 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-13-mapa-botao-direito-e-encerrar-turno",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Encerre o seu turno pelo mapa, menu no botão direito e modo imersivo",
+      "detalhes": [
+        "Na sua vez, o cartão do seu personagem no pé do mapa ganha o botão Encerrar turno. Um clique passa a vez para o próximo da iniciativa.",
+        "O alcance de movimento agora usa o Movimento da sua ficha, já contando Cansaço e condições como Lento, Apressado e Paralisado. Se um turno pedir outro valor, mude o número no topo; a seta ao lado volta ao da ficha.",
+        "Clique com o botão direito num token ou num ponto do mapa para abrir um menu com o que dá para fazer ali: pingar, centralizar, abrir a ficha, rolar dados. Arrastar com o botão direito continua levando a tela. No celular, segure o dedo.",
+        "No menu Exibição, o Modo imersivo esconde a interface depois de uns segundos sem mexer e deixa só a cena. Qualquer movimento traz tudo de volta."
+      ]
+    },
+    {
+      "id": "2026-11-13-mapa-alcance-camera-e-guia",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Alcance de movimento, câmera que segue a vez e um guia do mapa",
+      "detalhes": [
+        "Na sua vez, um contorno dourado em volta do seu token mostra até onde ele ainda anda neste turno. Ele encolhe conforme você se move e segue o jeito de medir da cena.",
+        "No topo, o movimento aparece como andado e alcance, por exemplo 3 / 9 m. Clique no segundo número para ajustar quanto o seu personagem anda por turno. Passar do alcance só muda a cor, nada trava.",
+        "No menu Exibição dá para ligar Seguir a vez com a câmera: a tela vai até quem está agindo a cada troca de turno.",
+        "Na primeira visita ao mapa, um guia curto mostra onde fica cada coisa. Ele continua no menu Exibição, em Guia do mapa."
+      ]
+    },
+    {
+      "id": "2026-11-13-mapa-dados-e-nomes",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Dados dentro do mapa e nomes de tokens que não se atropelam",
+      "detalhes": [
+        "Aperte D no mapa (ou o botão Dados da barra) para abrir a bandeja de dados. Clique nos dados para montar a fórmula, ou escreva como 2d6+3, e role sem sair da tela. O resultado entra nas Rolagens da mesa.",
+        "Um d20 sozinho pode ser rolado com Vantagem ou Desvantagem. O jogador rola em nome do personagem dele.",
+        "Quando dois tokens ficam lado a lado, o nome de cada um encurta para caber no espaço. Passe o mouse ou clique no token para ler o nome inteiro.",
+        "Para o Mestre, o painel de pausa, relógios e vista inicial agora abre no mesmo canto dos outros painéis da cena, um de cada vez."
+      ]
+    },
+    {
+      "id": "2026-11-13-mapa-central-de-comandos-e-hud",
+      "data": "2026-11-13",
+      "tipo": "melhoria",
+      "area": "Mapa",
+      "titulo": "Mapa mais fácil de navegar: busca de tudo, menus por assunto e seu personagem sempre à vista",
+      "detalhes": [
+        "Aperte Ctrl+K (ou a tecla /) no mapa e digite o que quer: o nome de um token, de um painel ou de uma ação, como \"régua\" ou \"trilha\". Enter faz. A busca do topo abre a mesma caixa.",
+        "Os botões da barra da esquerda agora têm o nome embaixo do ícone. Quem prefere a barra só com ícones troca no menu Exibição.",
+        "Seu personagem fica no pé do mapa com retrato, Vida, Mana, Estamina, Sanidade e condições. O retrato leva a tela até ele e o botão ao lado abre a ficha.",
+        "Quando chega a sua vez no combate, um aviso aparece no alto do mapa e o seu personagem ganha um brilho dourado.",
+        "Para o Mestre, o menu Mais virou três: Cena (camadas, grade, clima, hora), Mesa (jogadores, pausa, documentos, trilha) e Montar (participantes, Acervo, Construtor, Oficina). Cada item diz em uma linha o que faz.",
+        "Clicar nas bolinhas de quem está na mesa, no topo, abre a lista de jogadores."
+      ]
+    },
+    {
       "id": "2026-11-13-cartas-de-condicao-no-token",
       "data": "2026-11-13",
       "tipo": "novo",

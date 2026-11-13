@@ -28,7 +28,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
-from core import artes_token, calendario, construtor, mapa, mapas_colocados, mesa_extras, nevoa, paredes, recursos_token, tempo_real, visao
+from core import artes_token, calendario, construtor, mapa, mapas_colocados, mesa_extras, movimento_token, nevoa, paredes, recursos_token, tempo_real, visao
 from core.acervo import ler as ler_pedaco
 from core.condicoes import normalizar_condicoes
 from core.database import Database
@@ -390,6 +390,7 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador, visao_j
             recursos_ficha=_session_resources(ficha) if ficha_linha else None,
             sanidade=mapa.sanidade_da_ficha(ficha) if ficha_linha else None,
             nivel=_nivel(ficha) if ficha_linha else None,
+            movimento=movimento_token.da_ficha(ficha, condicoes) if ficha_linha else None,
             tem_retrato=versao_imagem is not None,
             condicoes=condicoes,
             turnos_das_condicoes={c["nome"]: c["turnos"] for c in condicoes_do_participante},

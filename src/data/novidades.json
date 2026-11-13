@@ -1,6 +1,60 @@
 {
   "itens": [
     {
+      "id": "2026-11-13-mapa-botao-direito-e-encerrar-turno",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Encerre o seu turno pelo mapa, menu no botão direito e modo imersivo",
+      "detalhes": [
+        "Na sua vez, o cartão do seu personagem no pé do mapa ganha o botão Encerrar turno. Um clique passa a vez para o próximo da iniciativa.",
+        "O alcance de movimento agora usa o Movimento da sua ficha, já contando Cansaço e condições como Lento, Apressado e Paralisado. Se um turno pedir outro valor, mude o número no topo; a seta ao lado volta ao da ficha.",
+        "Clique com o botão direito num token ou num ponto do mapa para abrir um menu com o que dá para fazer ali: pingar, centralizar, abrir a ficha, rolar dados. Arrastar com o botão direito continua levando a tela. No celular, segure o dedo.",
+        "No menu Exibição, o Modo imersivo esconde a interface depois de uns segundos sem mexer e deixa só a cena. Qualquer movimento traz tudo de volta."
+      ]
+    },
+    {
+      "id": "2026-11-13-mapa-alcance-camera-e-guia",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Alcance de movimento, câmera que segue a vez e um guia do mapa",
+      "detalhes": [
+        "Na sua vez, um contorno dourado em volta do seu token mostra até onde ele ainda anda neste turno. Ele encolhe conforme você se move e segue o jeito de medir da cena.",
+        "No topo, o movimento aparece como andado e alcance, por exemplo 3 / 9 m. Clique no segundo número para ajustar quanto o seu personagem anda por turno. Passar do alcance só muda a cor, nada trava.",
+        "No menu Exibição dá para ligar Seguir a vez com a câmera: a tela vai até quem está agindo a cada troca de turno.",
+        "Na primeira visita ao mapa, um guia curto mostra onde fica cada coisa. Ele continua no menu Exibição, em Guia do mapa."
+      ]
+    },
+    {
+      "id": "2026-11-13-mapa-dados-e-nomes",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Dados dentro do mapa e nomes de tokens que não se atropelam",
+      "detalhes": [
+        "Aperte D no mapa (ou o botão Dados da barra) para abrir a bandeja de dados. Clique nos dados para montar a fórmula, ou escreva como 2d6+3, e role sem sair da tela. O resultado entra nas Rolagens da mesa.",
+        "Um d20 sozinho pode ser rolado com Vantagem ou Desvantagem. O jogador rola em nome do personagem dele.",
+        "Quando dois tokens ficam lado a lado, o nome de cada um encurta para caber no espaço. Passe o mouse ou clique no token para ler o nome inteiro.",
+        "Para o Mestre, o painel de pausa, relógios e vista inicial agora abre no mesmo canto dos outros painéis da cena, um de cada vez."
+      ]
+    },
+    {
+      "id": "2026-11-13-mapa-central-de-comandos-e-hud",
+      "data": "2026-11-13",
+      "tipo": "melhoria",
+      "area": "Mapa",
+      "titulo": "Mapa mais fácil de navegar: busca de tudo, menus por assunto e seu personagem sempre à vista",
+      "detalhes": [
+        "Aperte Ctrl+K (ou a tecla /) no mapa e digite o que quer: o nome de um token, de um painel ou de uma ação, como \"régua\" ou \"trilha\". Enter faz. A busca do topo abre a mesma caixa.",
+        "Os botões da barra da esquerda agora têm o nome embaixo do ícone. Quem prefere a barra só com ícones troca no menu Exibição.",
+        "Seu personagem fica no pé do mapa com retrato, Vida, Mana, Estamina, Sanidade e condições. O retrato leva a tela até ele e o botão ao lado abre a ficha.",
+        "Quando chega a sua vez no combate, um aviso aparece no alto do mapa e o seu personagem ganha um brilho dourado.",
+        "Para o Mestre, o menu Mais virou três: Cena (camadas, grade, clima, hora), Mesa (jogadores, pausa, documentos, trilha) e Montar (participantes, Acervo, Construtor, Oficina). Cada item diz em uma linha o que faz.",
+        "Clicar nas bolinhas de quem está na mesa, no topo, abre a lista de jogadores."
+      ]
+    },
+    {
       "id": "2026-11-13-cartas-de-condicao-no-token",
       "data": "2026-11-13",
       "tipo": "novo",
@@ -988,63 +1042,6 @@
       "detalhes": [
         "Umas quarenta frases da lore, do Livro de Regras, da Loja, do Bestiário e das raças foram reescritas para dizer a coisa de uma vez, sem rodeio. O capítulo de Materiais ficou mais fácil de ler.",
         "Alguns nomes mudaram: Ecos de Séculos Mortos (Desperto) agora é Lembrança dos Séculos Mortos, o legado Eco do Fluxo é Troco do Fluxo, o material Eco do Primeiro Juramento é Sino do Primeiro Juramento, a técnica Eco Reverso do Caçador das Almas é Lâmina de Retorno, e Ecos da Última Refeição do Devorador é Memória da Última Refeição. O que cada um faz continua igual."
-      ]
-    },
-    {
-      "id": "2026-10-27-magias-ultima-rodada",
-      "data": "2026-10-27",
-      "tipo": "melhoria",
-      "area": "Classes",
-      "titulo": "Invocador, Interceptador, Cartista e Sintonizador com o que faltava",
-      "detalhes": [
-        "Na aba Aliados, o Invocador tem o botão Do Catálogo: escolhe a invocação e o nível, e ela entra com a ficha pronta. O cartão mostra o ataque dela, e todo aliado agora tem Vida temporária.",
-        "Depois do nível 20 de Invocador, as invocações continuam crescendo em Vida, Defesa e dano. O Avatar de sua Deidade passou a se chamar Invocação Ascendida e ganhou efeito próprio, e o Retorno ao Pacto vale uma vez por rodada.",
-        "O Interceptador detecta magia a 18 m (36 m no nível 15), ganha +2 contra o Fluxo calibrado, e a Visão de Código deixa o Pacote Descartado de graça e com vantagem por três rodadas.",
-        "O Cartista Arcano encontra o Baralho de Cartas na Loja, e o Cassino Lunar tem mesa e prêmio diferentes nos níveis 4, 7, 12 e 18.",
-        "O catalisador do Sintonizador já ajuda nos níveis 1 e 2, e o Aterramento cresce com o nível.",
-        "O Físico ganhou Golpe Cinético e Pancada Cinética, dois ataques de impacto sem elemento. As magias do Vazio que encerram efeitos cobram Mana de quem os mantinha, e a Marca Nunca Igual premia quem varia as magias na cena."
-      ]
-    },
-    {
-      "id": "2026-10-27-idiomas-com-nome-proprio",
-      "data": "2026-10-27",
-      "tipo": "melhoria",
-      "area": "Mundo",
-      "titulo": "As línguas do Jardim ganharam nome próprio e ficha completa",
-      "detalhes": [
-        "Cada língua tem agora a sua ficha no Alfabeto dos Registros Universais, com o jeito que ela soa, a escrita, onde se ouve e um cumprimento para usar na mesa.",
-        "Os nomes mudaram: os Vampiros falam Noctâr, os Elfos falam Ilvaari, os Gigantes Brontéu, os Goblins Krammel, os Anões Grúndar, os Golens Mudral, as Sereias Talássio, os Animálias Urrân, os Autômatos Axial e as Bruxas Nemético.",
-        "Os Espíritos falam Anemir entre os naturais, Kharum entre os demoníacos e Aurelim entre os angelicais. Universal, Valiriano e Ao Contrário continuam com o mesmo nome.",
-        "De quase todas as línguas ninguém sabe mais quem foi o criador. Só o Universal e o Ilvaari guardam esse nome.",
-        "As raças, o Bestiário e a Loja já usam os nomes novos."
-      ]
-    },
-    {
-      "id": "2026-10-20-pontas-soltas-magia",
-      "data": "2026-10-20",
-      "tipo": "melhoria",
-      "area": "Classes",
-      "titulo": "Interceptador, Elementarista e rituais de viagem com ajustes finos",
-      "detalhes": [
-        "No Interceptador, a Latência deixa o Atrasar segurar a magia por uma rodada a mais, o Proxy pode devolver a magia para quem conjurou, e o Refluxo Hostil cresce 1d6 a cada 5 níveis.",
-        "O poder Muralha Elemental da Elementarista passou a se chamar Parede Elemental, para não confundir com a magia de mesmo nome.",
-        "O Marco de Retorno fixa marcos, que servem de destino para a Passagem Preparada. O Concílio da Verdade reúne até seis pessoas.",
-        "O Sábio voltou a ter voz para os nomes novos de magia."
-      ]
-    },
-    {
-      "id": "2026-10-20-magias-segunda-passada",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Arma de Fluxo, Marca de Caça e o acabamento das magias",
-      "detalhes": [
-        "A Arma de Fluxo passou a causar 2d8 + Mod. Fluxo por golpe, ainda pela cena e com concentração. A Marca de Caça soma +1d6 no primeiro ataque contra o alvo em cada rodada, e o Clone de Fluxo agora ataca.",
-        "Interceptar magia com a Tecnologia pede Misticismo contra a DT da magia, como o Interceptador faz.",
-        "O dano de Fogo das magias cai uma vez e não continua, salvo quando a magia diz que o alvo fica Queimando. O Livro também explica lugar conhecido e mesma dimensão.",
-        "Renascer passou a se chamar Recomeço Absoluto, e o selo Reviravolta Inscrita virou Sorte Virada.",
-        "O Exílio pega chefe com mais dificuldade: chefe resiste com vantagem.",
-        "Várias magias ganharam números e regras que faltavam. A Roleta de Fluxo dá a reação extra uma vez na cena, o Autômato Assistente ficou menor, a Forma Elemental pede concentração, o Refúgio de Bolso diz quando o grupo volta, e as curas das magias universais dizem que curam Vida."
       ]
     }
   ]

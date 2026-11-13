@@ -19,7 +19,7 @@ test('o jogador não vê atalho do Mestre e grupo vazio some', () => {
 
 test('toda tecla de ferramenta da folha existe no tratador de teclado da página', () => {
   const letras = letrasDeFerramenta();
-  assert.deepEqual([...letras].sort(), ['H', 'M', 'N', 'O', 'P', 'R', 'T', 'V']);
+  assert.deepEqual([...letras].sort(), ['D', 'H', 'M', 'N', 'O', 'P', 'R', 'T', 'V']);
   for (const letra of letras) {
     assert.match(PAGINA, new RegExp(`evento\.key === '${letra.toLowerCase()}'`), `falta a tecla ${letra} na página`);
   }
@@ -27,7 +27,7 @@ test('toda tecla de ferramenta da folha existe no tratador de teclado da página
 });
 
 test('cada botão de ferramenta da barra anuncia o atalho que a folha lista', () => {
-  for (const [letra, ferramenta] of [['V', 'Mover tokens e o mapa'], ['R', 'Régua'], ['P', 'Ping'], ['M', 'Efeito de magia'], ['T', 'Escrever no mapa'], ['N', 'Névoa de guerra'], ['O', 'Portais']]) {
+  for (const [letra, ferramenta] of [['V', 'Mover tokens e o mapa'], ['R', 'Régua'], ['P', 'Ping'], ['M', 'Efeito de magia'], ['D', 'Rolar dados'], ['T', 'Escrever no mapa'], ['N', 'Névoa de guerra'], ['O', 'Portais']]) {
     const linha = PAGINA.split('\n').find((l) => l.includes(`rotulo="${ferramenta}`) || l.includes(`rotulo="${ferramenta} `));
     assert.ok(linha, `botão ${ferramenta} não achado`);
     assert.ok(linha.includes(`atalho="${letra}"`), `${ferramenta} deveria anunciar ${letra}`);

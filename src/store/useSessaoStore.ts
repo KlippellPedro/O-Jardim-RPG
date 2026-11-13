@@ -252,6 +252,8 @@ interface SessaoState {
   encerrarCombate: () => Promise<void>;
   proximoTurno: () => Promise<void>;
   turnoAnterior: () => Promise<void>;
+  /** O jogador encerra o próprio turno (só na vez dele). */
+  passarMinhaVez: () => Promise<void>;
   ordenarIniciativa: () => Promise<void>;
   sincronizarIniciativa: () => Promise<void>;
   atualizarEntidade: (id: string, payload: ParticipantePayload) => Promise<void>;
@@ -584,6 +586,13 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     const { sessaoId } = get();
     if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
     await sessaoApi.controlarTurno(sessaoId, 'proximo');
+    await get().fetchEstadoSessao();
+  },
+
+  passarMinhaVez: async () => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    await sessaoApi.passarVez(sessaoId);
     await get().fetchEstadoSessao();
   },
 

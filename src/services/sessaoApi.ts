@@ -357,6 +357,11 @@ export const sessaoApi = {
     });
   },
 
+  /** O jogador encerra o próprio turno; o servidor só aceita quando a vez é de um personagem dele. */
+  passarVez(sessaoId: string) {
+    return api(`/sessao/${sessaoId}/turno/passar`, { method: 'POST' });
+  },
+
   sincronizarIniciativa(sessaoId: string) {
     return api(`/sessao/${sessaoId}/iniciativa`, { method: 'POST' });
   },

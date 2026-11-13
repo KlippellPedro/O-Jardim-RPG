@@ -9,7 +9,7 @@
 
 import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import type { IBarraToken, ITokenMapa, LadoToken } from '../../../services/mapaApi';
-import { abreviarNome, escalaDoNome, iniciais, nomeVisivel, siglaDaCondicao } from './geometria';
+import { LARGURA_MEDIA_DA_LETRA, abreviarNome, escalaDoNome, iniciais, letrasQueCabem, nomeCabe, nomeVisivel, siglaDaCondicao } from './geometria';
 import {
   CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, carregarMolduraDeArte, deslocamentoDaMolduraDeArte, desenharMoldura, ehMolduraDeArte, escalaDaMolduraDeArte, molduraDeArteCarregada,
 } from './molduras';
@@ -217,6 +217,8 @@ export class TokenVisual {
   private clarCura = false;
   private clarAceso = false;
   private sobOMouse = false;
+  /** Largura que o nome pode usar sem entrar no nome do vizinho (o palco calcula); sem vizinho, infinito. */
+  private larguraLivreDoNome = Infinity;
   private preferenciasBarras: IPreferenciasBarrasMapa;
   /** Onde as barras terminam, abaixo do centro do token (0 sem barras). */
   private fimDasBarras = 0;
@@ -322,16 +324,34 @@ export class TokenVisual {
   }
 
   private escreverNome() {
-    const texto = this.sobOMouse || this.selecionado ? this.dados.nome : abreviarNome(this.dados.nome);
+    // Com vizinho na mesma fileira o nome encolhe para não escrever por cima do dele; o mouse ou a seleção mostram inteiro.
+    const escala = escalaDoNome(this.tamanhoNome, this.zoomDoNome);
+    const texto = this.sobOMouse || this.selecionado
+      ? this.dados.nome
+      : abreviarNome(this.dados.nome, letrasQueCabem(this.larguraLivreDoNome, this.tamanhoNome * escala));
     if (this.nome.text !== texto) this.nome.text = texto;
     this.posicionarNome();
+  }
+
+  /** Com o mouse em cima ou escolhido, o nome aparece inteiro: a largura dele (unidades do mapa); senão, nulo. */
+  get larguraDoNomeInteiro(): number | null {
+    if (!this.sobOMouse && !this.selecionado) return null;
+    return this.dados.nome.trim().length * this.tamanhoNome * escalaDoNome(this.tamanhoNome, this.zoomDoNome) * LARGURA_MEDIA_DA_LETRA;
+  }
+
+  /** O palco avisa quanto de largura o nome tem até o vizinho da fileira. */
+  definirLarguraDoNome(largura: number) {
+    if (this.larguraLivreDoNome === largura) return;
+    this.larguraLivreDoNome = largura;
+    this.escreverNome();
   }
 
   /** De longe o nome cresce com o zoom para ficar legível (e some quando o token mal se vê); de perto, tamanho normal. */
   ajustarAoZoom(zoom: number) {
     if (zoom === this.zoomDoNome) return;
     this.zoomDoNome = zoom;
-    this.posicionarNome();
+    // De longe a letra cresce: cabem menos letras até o vizinho.
+    this.escreverNome();
     // O texto das barras só se refaz quando o zoom cruza um degrau de resolução.
     const resolucao = resolucaoDoTexto(zoom);
     if (resolucao !== this.resolucaoTexto) {
@@ -344,7 +364,10 @@ export class TokenVisual {
     const escala = escalaDoNome(this.tamanhoNome, this.zoomDoNome);
     this.nome.scale.set(escala);
     this.nome.y = -this.raioQuadro * 1.1 - this.tamanhoNome * 1.15 * escala;
-    this.nome.visible = nomeVisivel(this.lado, this.zoomDoNome, this.sobOMouse || this.selecionado);
+    const destacado = this.sobOMouse || this.selecionado;
+    // Amontoado e visto de longe, nem o nome curto cabe até o vizinho: some, e volta com o mouse em cima ou a seleção.
+    this.nome.visible = nomeVisivel(this.lado, this.zoomDoNome, destacado)
+      && (destacado || nomeCabe(this.larguraLivreDoNome, this.tamanhoNome * escala));
   }
 
   private desenharBarras() {

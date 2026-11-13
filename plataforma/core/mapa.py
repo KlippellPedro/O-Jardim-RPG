@@ -811,6 +811,7 @@ def visao_token(
     moldura: str = "lado",
     enquadramento: dict | None = None,
     na_nevoa: bool = False,
+    movimento: float | None = None,
 ) -> dict | None:
     """O token como este espectador o recebe, ou None quando não deve nem saber que existe.
 
@@ -865,6 +866,10 @@ def visao_token(
         saida["config_barras"] = normalizar_barras({}, token.get("barras") or {}, saida["lado"])
         # Abre a ficha no painel lateral; só para quem já pode abrir aquela ficha.
         saida["personagem_id"] = personagem_do_token(token, participante)
+        # Quanto o personagem anda por turno (metros da ficha): o mapa desenha o alcance. É dado de ficha,
+        # então só vai para o dono e para quem comanda.
+        if movimento is not None:
+            saida["movimento"] = movimento
     if quem.gestor:
         saida["oculto"] = bool(token.get("oculto"))
         saida["participante_id"] = str(token["participante_id"]) if token.get("participante_id") else None

@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, BookOpenCheck, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, Focus, Grid3x3, Hand, Layers, Loader2, MapPin, Maximize2, Minimize2, Monitor, Moon, Music2, Orbit, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Ruler, Search, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserPlus, UserRound, Users, Wand2, Wifi, WifiOff, X,
+  ArrowLeft, BookOpenCheck, Clock3, Cloud, CloudOff, CloudRain, Crosshair, DraftingCompass, Expand, Eye, Focus, Grid3x3, Hand, Layers, Loader2, MapPin, Maximize2, Minimize2, Monitor, Moon, Music2, Orbit, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Ruler, Search, SlidersHorizontal, Sparkles, Sun, Sunrise, Sunset, Swords, Type, UserPlus, UserRound, Users, Wand2, Wifi, WifiOff,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSessaoStore } from '../../store/useSessaoStore';
@@ -27,8 +27,22 @@ import { sessaoApi } from '../../services/sessaoApi';
 import { BarraToken } from './componentes/BarraToken';
 import { BarraAncorada } from './componentes/BarraAncorada';
 import { ConfigCena, SeletorDeCenas } from './componentes/CenasDoMestre';
-import { MenuMais, type GrupoDoMenu } from './componentes/MenuMais';
+import { MenuMais, type GrupoDoMenu, type ItemDoMenu } from './componentes/MenuMais';
 import { FolhaDeAtalhos } from './componentes/FolhaDeAtalhos';
+import { PaletaDeComandos, type ComandoDoMapa } from './componentes/PaletaDeComandos';
+import { AvisoDaVez, HudDoJogador, meuTokenDaVez } from './componentes/HudDoJogador';
+import { BandejaDeDados } from './componentes/BandejaDeDados';
+import { MovimentoDoTurno } from './componentes/MovimentoDoTurno';
+import { alcanceDoToken, chaveDoMovimento, comMovimento, contornoDoAlcance, lerMovimentos, metrosRestantes, movimentoDaFicha, movimentoPadrao, salvarMovimentos } from './motor/alcanceConta';
+import { MenuDeContexto } from './componentes/MenuDeContexto';
+import { useInterfaceOciosa } from './componentes/interfaceOciosa';
+import { ChevronsRight, EyeOff, MessageSquare, MoonStar, Trash2 } from 'lucide-react';
+import { GuidedTour } from '../../components/ui/GuidedTour';
+import { guiasAutomaticosLigados } from '../../utils/guias';
+import { mapaTourJaVisto, obterPassosTourMapa, serializarMapaTourVisto } from './mapaTourConfig';
+import { Compass, Footprints, Video } from 'lucide-react';
+import { Dices } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clapperboard, Command, FolderOpen, Hammer, ScrollText, Settings2, Tags, UsersRound } from 'lucide-react';
 import { FatiadorFolha } from './fatiador/FatiadorFolha';
 import { AcervoGaveta } from './acervo/AcervoGaveta';
 import { OficinaGaveta } from './oficina/OficinaGaveta';
@@ -68,6 +82,7 @@ import { DocumentoDaMesa, type IDocumentoCompartilhado } from './componentes/Doc
 import { PainelTrilha } from './componentes/PainelTrilha';
 import './mapa.css';
 import './painelDobravel.css';
+import './navegacao.css';
 
 interface Pessoa {
   usuario_id: string;
@@ -114,6 +129,14 @@ const CHAVE_MEDIR_AO_MOVER_LOCAL = 'jardim.mapa.medirAoMover';
 /** Painéis que o aparelho esconde: a barra de ferramentas da esquerda e o painel de iniciativa e fichas. */
 const CHAVE_FERRAMENTAS_LOCAL = 'jardim.mapa.ferramentas';
 const CHAVE_LATERAL_LOCAL = 'jardim.mapa.lateral';
+/** Nome escrito embaixo de cada botão da barra da esquerda (começa ligado: orienta quem chega). */
+const CHAVE_NOMES_BARRA_LOCAL = 'jardim.mapa.nomesNaBarra';
+/** A câmera vai até o token de quem age quando a vez muda (começa desligada: a tela só anda se a pessoa pedir). */
+const CHAVE_SEGUIR_VEZ_LOCAL = 'jardim.mapa.seguirVez';
+/** O contorno de até onde o token da vez ainda anda (começa ligado). */
+const CHAVE_ALCANCE_LOCAL = 'jardim.mapa.alcance';
+/** Modo imersivo: a interface some depois de uns segundos sem mexer (começa desligado). */
+const CHAVE_IMERSIVO_LOCAL = 'jardim.mapa.imersivo';
 
 function lerOpcaoLocal(chave: string, padrao = true): boolean {
   try {
@@ -218,7 +241,6 @@ export const MapaPage = () => {
   const [camadasAberto, setCamadasAberto] = useState(false);
   const [jogadoresAberto, setJogadoresAberto] = useState(false);
   const [painelRecurso, setPainelRecurso] = useState<'documentos' | 'trilha' | 'busca' | null>(null);
-  const [buscaMapa, setBuscaMapa] = useState('');
   const [documentoMesa, setDocumentoMesa] = useState<IDocumentoCompartilhado | null>(null);
   const [trilhaMesa, setTrilhaMesa] = useState<ITrilhaMesa | null>(null);
   const [audioPrecisaAtivar, setAudioPrecisaAtivar] = useState(false);
@@ -234,6 +256,25 @@ export const MapaPage = () => {
   const [versaoAcervo, setVersaoAcervo] = useState(0);
   /** A folha de atalhos (tecla ? ou menu Exibição). */
   const [atalhosAbertos, setAtalhosAbertos] = useState(false);
+  /** A central de comandos (Ctrl+K, a barra / ou a busca do topo): tudo o que dá para fazer no mapa, numa busca só. */
+  const [paletaAberta, setPaletaAberta] = useState(false);
+  /** A bandeja de dados (tecla D): rolar sem sair do mapa. */
+  const [dadosAbertos, setDadosAbertos] = useState(false);
+  const [seguirVez, setSeguirVez] = useState(() => lerOpcaoLocal(CHAVE_SEGUIR_VEZ_LOCAL, false));
+  const [alcanceLigado, setAlcanceLigado] = useState(() => lerOpcaoLocal(CHAVE_ALCANCE_LOCAL));
+  const [imersivo, setImersivo] = useState(() => lerOpcaoLocal(CHAVE_IMERSIVO_LOCAL, false));
+  const interfaceOciosa = useInterfaceOciosa(imersivo);
+  /** O menu do botão direito: onde abriu na janela, o ponto no mapa e o token que estava ali. */
+  const [contexto, setContexto] = useState<{ x: number; y: number; ponto: IPonto; tokenId: string | null } | null>(null);
+  /** Quanto cada personagem anda por turno, ajustado neste aparelho (a ficha não manda esse número ao mapa). */
+  const [movimentos, setMovimentos] = useState(lerMovimentos);
+  /** O guia do mapa: abre sozinho na primeira visita e pelo menu Exibição. */
+  const [tourAberto, setTourAberto] = useState(false);
+  const tourTentado = useRef(false);
+  /** O último token da vez que a câmera seguiu (indefinido até a primeira vez vista, que não move a tela). */
+  const vezSeguida = useRef<string | null | undefined>(undefined);
+  const [nomesNaBarra, setNomesNaBarra] = useState(() => lerOpcaoLocal(CHAVE_NOMES_BARRA_LOCAL));
+  const comandaSessao = useSessaoStore((s) => s.comando);
   /** O fatiador de folhas de assets (abre pela barra de baixo e pelo menu Mais; o Construtor tem o seu). */
   const [fatiando, setFatiando] = useState(false);
   /** O mapa colocado que o Mestre escolheu com a ferramenta de mapas. */
@@ -952,6 +993,7 @@ export const MapaPage = () => {
       aoMoverAnotacao: (id, x, y) => gestos.current.moverAnotacao(id, x, y),
       aoPorta: (porta) => gestos.current.clicarPorta(porta),
       aoSelecionarMapa: setMapaSelecionadoId,
+      aoContexto: (ponto, tela, tokenId) => setContexto({ x: tela.x, y: tela.y, ponto, tokenId }),
       aoMoverMapa: (id, mudancas) => gestos.current.moverMapaColocado(id, mudancas),
     }).then((criado) => {
       if (!vivo) {
@@ -1126,6 +1168,22 @@ export const MapaPage = () => {
   }, [lateralAberta]);
 
   useEffect(() => {
+    guardarOpcaoLocal(CHAVE_NOMES_BARRA_LOCAL, nomesNaBarra);
+  }, [nomesNaBarra]);
+
+  useEffect(() => {
+    guardarOpcaoLocal(CHAVE_SEGUIR_VEZ_LOCAL, seguirVez);
+  }, [seguirVez]);
+
+  useEffect(() => {
+    guardarOpcaoLocal(CHAVE_ALCANCE_LOCAL, alcanceLigado);
+  }, [alcanceLigado]);
+
+  useEffect(() => {
+    guardarOpcaoLocal(CHAVE_IMERSIVO_LOCAL, imersivo);
+  }, [imersivo]);
+
+  useEffect(() => {
     palcoRef.current?.definirClimaLigado(climaLocal);
     try {
       window.localStorage.setItem(CHAVE_CLIMA_LOCAL, climaLocal ? 'ligado' : 'desligado');
@@ -1155,6 +1213,19 @@ export const MapaPage = () => {
     palcoRef.current?.definirVez(tokenDaVez);
   }, [tokenDaVez, palcoPronto, estado]);
 
+  // A vez mudou: quem pediu, vê a tela ir até o token de quem age. A vez que já estava quando a página abriu não
+  // move nada, e a tela não sai do lugar enquanto a própria pessoa arrasta um token.
+  useEffect(() => {
+    if (!palcoPronto) return;
+    const anterior = vezSeguida.current;
+    vezSeguida.current = tokenDaVez;
+    if (!seguirVez || !tokenDaVez || anterior === undefined || anterior === tokenDaVez) return;
+    const palco = palcoRef.current;
+    if (!palco || palco.tokenArrastadoLocal) return;
+    const posicao = palco.posicaoDe(tokenDaVez);
+    if (posicao) palco.centralizar(posicao.x, posicao.y);
+  }, [tokenDaVez, seguirVez, palcoPronto]);
+
   const gestorAgora = estado?.gestor ?? false;
   const permissoes = estado?.permissoes_mesa;
   const podeRegua = gestorAgora || permissoes?.usar_regua !== false;
@@ -1172,11 +1243,16 @@ export const MapaPage = () => {
       const alvo = evento.target as HTMLElement | null;
       if (alvo && ['INPUT', 'SELECT', 'TEXTAREA'].includes(alvo.tagName)) return;
       // O construtor de mapas tem os atalhos dele.
-      if (construtorAberto) return;
+      if (construtorAberto || tourAberto) return;
       const palco = palcoRef.current;
       if ((evento.ctrlKey || evento.metaKey) && evento.shiftKey && (evento.key === 'd' || evento.key === 'D')) {
         evento.preventDefault();
         setMedidorAberto((aberto) => !aberto);
+        return;
+      }
+      if ((evento.ctrlKey || evento.metaKey) && !evento.shiftKey && (evento.key === 'k' || evento.key === 'K')) {
+        evento.preventDefault();
+        setPaletaAberta((aberta) => !aberta);
         return;
       }
       if ((evento.ctrlKey || evento.metaKey) && (evento.key === 'z' || evento.key === 'Z')) {
@@ -1194,8 +1270,17 @@ export const MapaPage = () => {
       if ((evento.key === 'n' || evento.key === 'N') && gestorAgora) setFerramenta('nevoa');
       if ((evento.key === 'o' || evento.key === 'O') && gestorAgora) setFerramenta('portal');
       if ((evento.key === 't' || evento.key === 'T') && gestorAgora) setFerramenta('texto');
+      if (evento.key === 'd' || evento.key === 'D') {
+        // Sem isto a letra cairia dentro do campo da fórmula, que ganha o foco assim que a bandeja abre.
+        evento.preventDefault();
+        setDadosAbertos((v) => !v);
+      }
       if (evento.key === 'h' || evento.key === 'H') setSoMapa((v) => !v);
       if (evento.key === '?') setAtalhosAbertos((v) => !v);
+      if (evento.key === '/') {
+        evento.preventDefault();
+        setPaletaAberta(true);
+      }
       if (evento.key === 'Delete' && ferramenta === 'mover' && mapaSelecionadoId && gestorAgora) apagarMapaColocadoRef.current();
       if (evento.key === 'Enter' && ferramenta === 'nevoa') palco?.fecharPoligono();
       if (evento.key === 'Escape') {
@@ -1218,7 +1303,7 @@ export const MapaPage = () => {
       document.removeEventListener('fullscreenchange', aoTelaCheia);
       document.removeEventListener('visibilitychange', aoMudarAba);
     };
-  }, [ferramenta, gestorAgora, podeRegua, podePing, podeMagia, enviarNevoa, medidor, portalEscolhido, construtorAberto, mapaSelecionadoId]);
+  }, [ferramenta, gestorAgora, podeRegua, podePing, podeMagia, enviarNevoa, medidor, portalEscolhido, construtorAberto, mapaSelecionadoId, tourAberto]);
 
   useEffect(() => {
     palcoRef.current?.pausar(construtorAberto);
@@ -1631,6 +1716,59 @@ export const MapaPage = () => {
   const metrosAndados = movimentoAtual.chave === chaveMovimentoTurno
     ? Object.values(movimentoAtual.porToken).reduce((total, metros) => total + metros, 0)
     : 0;
+  // O alcance de movimento vale para quem pode mover o token da vez: o Mestre sempre, o jogador na vez dele.
+  const tokenDoAlcance = emCombate && tokenDaVez ? tokens.find((t) => t.id === tokenDaVez && t.pode_mover) ?? null : null;
+  const movimentoDaFichaDoToken = tokenDoAlcance && cena ? movimentoDaFicha(tokenDoAlcance.movimento, cena.grade) : null;
+  const alcanceCalculado = tokenDoAlcance && cena
+    ? alcanceDoToken(movimentos[chaveDoMovimento(tokenDoAlcance)], movimentoDaFichaDoToken, movimentoPadrao(cena.grade))
+    : null;
+  const alcanceDoTurno = alcanceCalculado?.alcance ?? null;
+  const andadosDoToken = tokenDoAlcance && movimentoAtual.chave === chaveMovimentoTurno ? movimentoAtual.porToken[tokenDoAlcance.id] ?? 0 : 0;
+  const gradeDaCena = cena?.grade ?? null;
+  const contornoAlcance = useMemo(() => {
+    if (!alcanceLigado || !tokenDoAlcance || !gradeDaCena || alcanceDoTurno === null) return null;
+    const resta = metrosRestantes(alcanceDoTurno, andadosDoToken);
+    return resta > 0 ? contornoDoAlcance({ x: tokenDoAlcance.x, y: tokenDoAlcance.y }, resta, gradeDaCena) : null;
+  }, [alcanceLigado, tokenDoAlcance?.id, tokenDoAlcance?.x, tokenDoAlcance?.y, gradeDaCena, alcanceDoTurno, andadosDoToken]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    palcoRef.current?.definirAlcance(contornoAlcance);
+  }, [contornoAlcance, palcoPronto]);
+  const ajustarAlcance = (metros: number | null) => {
+    if (!tokenDoAlcance || !alcanceCalculado) return;
+    const novos = comMovimento(movimentos, chaveDoMovimento(tokenDoAlcance), metros === null ? null : { m: metros, de: alcanceCalculado.base });
+    setMovimentos(novos);
+    salvarMovimentos(novos);
+  };
+
+  const chaveDoTour = `jardim:mapa-tour:${usuarioId ?? 'local'}`;
+  const iniciarTour = useCallback(() => {
+    tourTentado.current = true;
+    setTourAberto(true);
+  }, []);
+  const encerrarTour = useCallback(() => {
+    try {
+      window.localStorage.setItem(chaveDoTour, serializarMapaTourVisto());
+    } catch {
+      // Sem armazenamento do navegador, o guia continua no menu Exibição.
+    }
+    setTourAberto(false);
+  }, [chaveDoTour]);
+  // Primeira visita ao mapa com uma cena na tela: o guia abre sozinho, uma vez por conta e por aparelho.
+  const temCena = Boolean(cena);
+  useEffect(() => {
+    if (!temCena || !palcoPronto || tourAberto || tourTentado.current || construtorAberto || paletaAberta || !guiasAutomaticosLigados()) return undefined;
+    try {
+      if (mapaTourJaVisto(window.localStorage.getItem(chaveDoTour))) {
+        tourTentado.current = true;
+        return undefined;
+      }
+    } catch {
+      // Sem armazenamento, o guia ainda abre uma vez nesta visita.
+    }
+    const relogio = window.setTimeout(iniciarTour, 1200);
+    return () => window.clearTimeout(relogio);
+  }, [temCena, palcoPronto, tourAberto, construtorAberto, paletaAberta, chaveDoTour, iniciarTour]);
+
   const tokenOrigemDistancia = tokenSelecionado
     ?? tokens.find((token) => token.participante_id === turnoAtualId)
     ?? meuToken;
@@ -1663,8 +1801,8 @@ export const MapaPage = () => {
    * Os painéis do lado esquerdo do mapa abrem um por vez: o que abre fecha os outros (antes alguns ficavam um
    * em cima do outro no mesmo canto). Chamar de novo com o painel aberto fecha ele.
    */
-  const alternarPainel = (qual: 'grade' | 'vista' | 'camadas' | 'jogadores' | 'clima' | 'tempo' | 'config' | 'barras') => {
-    const abertos = { grade: gradeAberta, vista: vistaAberta, camadas: camadasAberto, jogadores: jogadoresAberto, clima: climaAberto, tempo: tempoAberto, config: configAberta, barras: barrasAberto };
+  const alternarPainel = (qual: 'grade' | 'vista' | 'camadas' | 'jogadores' | 'clima' | 'tempo' | 'config' | 'barras' | 'mesa') => {
+    const abertos = { grade: gradeAberta, vista: vistaAberta, camadas: camadasAberto, jogadores: jogadoresAberto, clima: climaAberto, tempo: tempoAberto, config: configAberta, barras: barrasAberto, mesa: mesaAberta };
     const eraAberto = abertos[qual];
     setGradeAberta(false);
     setVistaAberta(false);
@@ -1674,47 +1812,189 @@ export const MapaPage = () => {
     setTempoAberto(false);
     setConfigAberta(false);
     setBarrasAberto(false);
+    setMesaAberta(false);
     if (qual === 'jogadores') setEditorAnotacao(null);
     if (eraAberto) return;
-    ({ grade: setGradeAberta, vista: setVistaAberta, camadas: setCamadasAberto, jogadores: setJogadoresAberto, clima: setClimaAberto, tempo: setTempoAberto, config: setConfigAberta, barras: setBarrasAberto })[qual](true);
+    ({ grade: setGradeAberta, vista: setVistaAberta, camadas: setCamadasAberto, jogadores: setJogadoresAberto, clima: setClimaAberto, tempo: setTempoAberto, config: setConfigAberta, barras: setBarrasAberto, mesa: setMesaAberta })[qual](true);
   };
 
-  // O que não precisa ficar sempre à mão na barra da esquerda: painéis e ferramentas, com texto.
-  const gruposDoMenuMais: GrupoDoMenu[] = [
-    {
-      titulo: 'Painéis',
-      itens: [
-        { icone: Layers, rotulo: 'Camadas do mapa', ativo: camadasAberto, disabled: !cena, onClick: () => alternarPainel('camadas') },
-        { icone: Grid3x3, rotulo: 'Grade e medidas', ativo: gradeAberta, disabled: !cena, onClick: () => alternarPainel('grade') },
-        { icone: LocateFixed, rotulo: 'Vista e sincronização', ativo: vistaAberta, disabled: !cena, onClick: () => alternarPainel('vista') },
-        { icone: Users, rotulo: 'Jogadores e permissões', ativo: jogadoresAberto, disabled: !campanhaId, onClick: () => alternarPainel('jogadores') },
-        { icone: SlidersHorizontal, rotulo: 'Aparência das barras (neste aparelho)', ativo: barrasAberto, onClick: () => alternarPainel('barras') },
-      ],
-    },
-    ...(gestor ? [
-      {
-        titulo: 'Cena',
-        itens: [
-          { icone: CloudRain, rotulo: 'Clima da cena', ativo: climaAberto, disabled: !cena, onClick: () => alternarPainel('clima') },
-          { icone: Clock3, rotulo: 'Tempo do mundo e luz', ativo: tempoAberto, disabled: !tempo, onClick: () => alternarPainel('tempo') },
-          { icone: Hourglass, rotulo: 'Mesa: pausa, relógios e vista inicial', ativo: mesaAberta, disabled: !estado?.mesa, onClick: () => setMesaAberta((v) => !v) },
-          { icone: BookOpenCheck, rotulo: 'Mostrar documento na mesa', ativo: painelRecurso === 'documentos', onClick: () => setPainelRecurso((atual) => (atual === 'documentos' ? null : 'documentos')) },
-        ],
-      },
-      {
-        titulo: 'Montar',
-        itens: [
-          { icone: UserPlus, rotulo: 'Trazer os participantes da Sessão', disabled: !cena, onClick: () => void trazerParticipantes() },
-          { icone: DraftingCompass, rotulo: 'Construtor de mapas', ativo: construtorAberto, onClick: () => setConstrutorAberto(true) },
-          { icone: Wand2, rotulo: 'Oficina de tokens e fundos', ativo: oficinaAberta, onClick: () => setOficinaAberta((v) => !v) },
-          { icone: Scissors, rotulo: 'Fatiar folha de assets', ativo: fatiando, onClick: () => setFatiando(true) },
-        ],
-      },
-    ] : []),
+  const abrirRecurso = (qual: 'documentos' | 'trilha') => setPainelRecurso((atual) => (atual === qual ? null : qual));
+  const mostrarNoPainel = (qual: AbaLateral) => {
+    setAba(qual);
+    setLateralAberta(true);
+  };
+  const tokenDaMinhaVez = !gestor && emCombate ? meuTokenDaVez(tokens, turnoAtualId, personagemDaVez) : null;
+  const tokenDoHud = tokens.find((t) => t.id === tokenDaMinhaVez) ?? meuToken;
+  const encerrarMeuTurno = async () => {
+    try {
+      await useSessaoStore.getState().passarMinhaVez();
+    } catch (falha) {
+      avisar.erro(falha instanceof Error && !(falha instanceof ApiError) ? falha.message : 'Não deu para encerrar o turno agora. A vez pode já ter passado.');
+    }
+  };
+
+  // O menu do botão direito: o que cabe no token clicado ou naquele ponto do mapa.
+  const tokenDoContexto = contexto?.tokenId ? tokens.find((t) => t.id === contexto.tokenId) ?? null : null;
+  const itensDoContexto: ItemDoMenu[] = contexto ? (() => {
+    const { ponto } = contexto;
+    const pingar: ItemDoMenu = { icone: MapPin, rotulo: 'Pingar aqui', disabled: !podePing, onClick: () => conexaoRef.current?.enviar({ t: 'ping', x: ponto.x, y: ponto.y }) };
+    const dados: ItemDoMenu = { icone: Dices, rotulo: 'Rolar dados', atalho: 'D', onClick: () => setDadosAbertos(true) };
+    if (tokenDoContexto) {
+      const alvo = tokenDoContexto;
+      const meu = gestor || alvo.e_meu;
+      return [
+        ...(meu ? [{ icone: SlidersHorizontal, rotulo: 'Opções do token', onClick: () => { setFerramenta('mover'); setSelecionado(alvo.id); setAbaDoMenuToken(undefined); setMenuTokenAberto(true); } }] : []),
+        ...(alvo.personagem_id ? [{ icone: ScrollText, rotulo: 'Abrir a ficha', onClick: () => mostrarNoPainel('fichas') }] : []),
+        { icone: Crosshair, rotulo: 'Centralizar aqui', onClick: () => centralizar(alvo) },
+        ...(gestor ? [
+          { icone: MessageSquare, rotulo: 'Falar como este token', onClick: () => void falarComo(alvo) },
+          { icone: alvo.oculto ? Eye : EyeOff, rotulo: alvo.oculto ? 'Mostrar aos jogadores' : 'Esconder dos jogadores', onClick: () => void comErro(() => mapaApi.editarToken(campanhaId!, alvo.id, { oculto: !alvo.oculto })).then((r) => r && setEstado(r)) },
+        ] : []),
+        ...(alvo.id === tokenDaMinhaVez ? [{ icone: ChevronsRight, rotulo: 'Encerrar o meu turno', onClick: () => void encerrarMeuTurno() }] : []),
+        pingar,
+        ...(gestor ? [{ icone: Trash2, rotulo: 'Tirar do mapa', onClick: () => void (async () => {
+          if (!(await confirmar({ mensagem: `Tirar ${alvo.nome} do mapa?`, rotuloConfirmar: 'Tirar', tom: 'perigo' }))) return;
+          await comErro(() => mapaApi.apagarToken(campanhaId!, alvo.id));
+          if (selecionado === alvo.id) setSelecionado(null);
+          void recarregar();
+        })() }] : []),
+      ];
+    }
+    return [
+      pingar,
+      dados,
+      ...(gestor ? [
+        { icone: Type, rotulo: 'Escrever aqui', onClick: () => criarAnotacao(ponto) },
+        { icone: UserPlus, rotulo: 'Trazer os participantes para cá', onClick: () => void (async () => {
+          if (!cena) return;
+          const resposta = await comErro(() => mapaApi.trazerParticipantes(campanhaId!, cena.id, encaixar(ponto, cena.grade, 1)));
+          if (resposta) setEstado(resposta);
+        })() },
+        { icone: LocateFixed, rotulo: 'Trazer todos para a minha vista', disabled: !(conexao === 'ws' || conexao === 'sse'), onClick: sincronizarVista },
+      ] : []),
+      ...(tokenDoHud && !gestor ? [{ icone: UserRound, rotulo: 'Ir até o meu personagem', onClick: () => centralizar(tokenDoHud) }] : []),
+      { icone: Expand, rotulo: 'Ver o mapa inteiro', onClick: () => palcoRef.current?.enquadrar() },
+    ];
+  })() : [];
+
+  // Os menus da barra da esquerda, por intenção: o que mexe nesta cena, o que mexe na mesa e o que serve para
+  // montar. Cada item diz em uma linha o que faz; a central de comandos (Ctrl+K) usa a mesma lista.
+  const itemCamadas: ItemDoMenu = { icone: Layers, rotulo: 'Camadas do mapa', descricao: gestor ? 'O que aparece e o que os jogadores veem' : 'Esconde ou mostra partes do mapa só para você', palavras: 'esconder mostrar props montarias anotacoes visivel', ativo: camadasAberto, disabled: !cena, onClick: () => alternarPainel('camadas') };
+  const itemGrade: ItemDoMenu = { icone: Grid3x3, rotulo: gestor ? 'Grade e medidas' : 'Encaixe e medidas', descricao: gestor ? 'Tamanho da casa, encaixe e medida ao mover' : 'Encaixar na grade e medir ao mover', palavras: 'grid quadrado hexagono casa metros snap', ativo: gradeAberta, disabled: !cena, onClick: () => alternarPainel('grade') };
+  const itemVista: ItemDoMenu = { icone: LocateFixed, rotulo: 'Vista e sincronização', descricao: gestor ? 'Guardar vistas e trazer todos para a sua' : 'Guardar vistas e seguir a tela de quem chama', palavras: 'camera zoom seguir posicao salva', ativo: vistaAberta, disabled: !cena, onClick: () => alternarPainel('vista') };
+  const itemJogadores: ItemDoMenu = { icone: Users, rotulo: gestor ? 'Jogadores e permissões' : 'Meu nome e cor na mesa', descricao: gestor ? 'Quem está na mesa e o que cada um pode usar' : 'Como você aparece para os outros', palavras: 'permissao convite convidar papel assistente cor apelido', ativo: jogadoresAberto, disabled: !campanhaId, onClick: () => alternarPainel('jogadores') };
+  const itemTrilha: ItemDoMenu = { icone: Music2, rotulo: 'Trilha sonora', descricao: gestor ? 'Música tocando igual para a mesa inteira' : 'O que está tocando e o volume', palavras: 'musica som audio ambiente volume', ativo: painelRecurso === 'trilha', onClick: () => abrirRecurso('trilha') };
+  const itemBarras: ItemDoMenu = { icone: SlidersHorizontal, rotulo: 'Aparência das barras', descricao: 'Como Vida e Mana aparecem neste aparelho', palavras: 'vida mana estamina sanidade numeros tamanho', ativo: barrasAberto, onClick: () => alternarPainel('barras') };
+
+  const itensDaCena: ItemDoMenu[] = gestor ? [
+    itemCamadas,
+    itemGrade,
+    { icone: CloudRain, rotulo: 'Clima da cena', descricao: 'Chuva, neblina, escuridão e outros efeitos', palavras: 'chuva tempestade neve neblina areia calor cinzas folhas vento veu particulas', ativo: climaAberto, disabled: !cena, onClick: () => alternarPainel('clima') },
+    { icone: Clock3, rotulo: 'Tempo do mundo e luz', descricao: 'Avança o relógio e muda a luz da cena', palavras: 'hora dia noite amanhecer entardecer lua calendario ceu', ativo: tempoAberto, disabled: !tempo, onClick: () => alternarPainel('tempo') },
+    { icone: Settings2, rotulo: 'Configurar esta cena', descricao: 'Nome, tamanho, moldura da mesa e apagar', palavras: 'renomear excluir nota do mestre', ativo: configAberta, disabled: !cena, onClick: () => alternarPainel('config') },
+  ] : [];
+  const itensDaMesa: ItemDoMenu[] = gestor ? [
+    itemJogadores,
+    { icone: Hourglass, rotulo: 'Pausa, relógios e vista inicial', descricao: 'Pausa a mesa, conta progresso e tempo', palavras: 'pausar cronometro contagem relogio intervalo', ativo: mesaAberta, disabled: !estado?.mesa, onClick: () => alternarPainel('mesa') },
+    { icone: BookOpenCheck, rotulo: 'Mostrar documento na mesa', descricao: 'Carta, cartaz ou bilhete na tela de todos', palavras: 'carta cartaz bilhete jornal contrato handout', ativo: painelRecurso === 'documentos', onClick: () => abrirRecurso('documentos') },
+    itemTrilha,
+    itemVista,
+  ] : [itemJogadores, itemCamadas, itemGrade, itemVista, itemTrilha];
+  const itensDeMontar: ItemDoMenu[] = gestor ? [
+    { icone: UserPlus, rotulo: 'Trazer os participantes da Sessão', descricao: 'Põe no mapa quem está na iniciativa', palavras: 'tokens jogadores monstros iniciativa colocar', disabled: !cena, onClick: () => void trazerParticipantes() },
+    { icone: FolderOpen, rotulo: 'Abrir o Acervo', descricao: 'Mapas, tokens e objetos guardados', palavras: 'imagem upload subir pasta biblioteca', ativo: acervoAberto, onClick: () => setAcervoAberto((v) => !v) },
+    { icone: DraftingCompass, rotulo: 'Construtor de mapas', descricao: 'Desenhe salas, paredes, portas e luzes', palavras: 'desenhar masmorra sala parede porta piso editor', ativo: construtorAberto, onClick: () => setConstrutorAberto(true) },
+    { icone: Wand2, rotulo: 'Oficina de tokens e fundos', descricao: 'Recorta o fundo, melhora e emoldura imagens', palavras: 'remover fundo moldura recortar melhorar qualidade retrato', ativo: oficinaAberta, onClick: () => setOficinaAberta((v) => !v) },
+    { icone: Scissors, rotulo: 'Fatiar folha de assets', descricao: 'Corta uma folha em peças para o Acervo', palavras: 'spritesheet recortar pecas objetos', ativo: fatiando, onClick: () => setFatiando(true) },
+  ] : [];
+  const exibicaoDaTela: ItemDoMenu[] = [
+    // O celular não usa tela cheia (e o iPhone nem tem): o item só aparece onde o navegador oferece.
+    ...(document.fullscreenEnabled && !window.matchMedia('(max-width: 760px)').matches
+      ? [{ icone: telaCheia ? Minimize2 : Maximize2, rotulo: telaCheia ? 'Sair da tela cheia' : 'Tela cheia', ativo: telaCheia, onClick: alternarTelaCheia }]
+      : []),
+    { icone: Focus, rotulo: 'Só o mapa', atalho: 'H', onClick: () => setSoMapa(true) },
+    { icone: ferramentasAbertas ? PanelLeftClose : PanelLeftOpen, rotulo: ferramentasAbertas ? 'Esconder as ferramentas' : 'Mostrar as ferramentas', onClick: () => setFerramentasAbertas((v) => !v) },
+    { icone: Tags, rotulo: nomesNaBarra ? 'Barra só com ícones' : 'Nomes na barra de ferramentas', onClick: () => setNomesNaBarra((v) => !v) },
+    { icone: MoonStar, rotulo: 'Modo imersivo', descricao: 'A interface some depois de uns segundos sem mexer', palavras: 'esconder sumir cinema limpo narracao', ativo: imersivo, onClick: () => setImersivo((v) => !v) },
   ];
+  const exibicaoDoAparelho: ItemDoMenu[] = [
+    { icone: Video, rotulo: 'Seguir a vez com a câmera', descricao: 'A tela vai até quem está agindo', palavras: 'turno camera acompanhar centralizar', ativo: seguirVez, onClick: () => setSeguirVez((v) => !v) },
+    { icone: Footprints, rotulo: 'Alcance de movimento na vez', descricao: 'Um contorno mostra até onde ainda dá para andar', palavras: 'deslocamento andar distancia turno', ativo: alcanceLigado, onClick: () => setAlcanceLigado((v) => !v) },
+    itemBarras,
+    ...(cena?.clima.efeitos.length
+      ? [{ icone: climaLocal ? CloudOff : Cloud, rotulo: climaLocal ? 'Desligar o clima neste aparelho' : 'Ligar o clima neste aparelho', descricao: 'Chuva, neblina e outros efeitos só nesta tela', onClick: () => setClimaLocal((v) => !v) }]
+      : []),
+  ];
+  const exibicaoDeAjuda: ItemDoMenu[] = [
+    { icone: Command, rotulo: 'Central de comandos', atalho: 'Ctrl K', onClick: () => setPaletaAberta(true) },
+    { icone: Keyboard, rotulo: 'Atalhos do teclado', atalho: '?', onClick: () => setAtalhosAbertos(true) },
+    { icone: Compass, rotulo: 'Guia do mapa', palavras: 'tour ajuda tutorial como usar', onClick: iniciarTour },
+  ];
+  const gruposDeExibicao: GrupoDoMenu[] = [
+    { titulo: 'Tela', itens: exibicaoDaTela },
+    { titulo: 'Neste aparelho', itens: exibicaoDoAparelho },
+    { titulo: 'Ajuda', itens: exibicaoDeAjuda },
+  ];
+  const itensDeExibicao: ItemDoMenu[] = [...exibicaoDaTela, ...exibicaoDoAparelho, ...exibicaoDeAjuda];
+
+  const menuDaCena: GrupoDoMenu[] = [{ titulo: '', itens: itensDaCena }];
+  const menuDaMesa: GrupoDoMenu[] = [{ titulo: '', itens: itensDaMesa }];
+  const menuDeMontar: GrupoDoMenu[] = [{ titulo: '', itens: itensDeMontar }];
+
+  // A central de comandos: a mesma lista dos menus, mais ferramentas, cenas e os tokens que a pessoa pode ver.
+  const comandosDaPaleta: ComandoDoMapa[] = paletaAberta ? (() => {
+    const deItem = (grupo: string, item: ItemDoMenu): ComandoDoMapa => ({
+      id: `${grupo}:${item.rotulo}`, grupo, rotulo: item.rotulo, descricao: item.descricao, palavras: item.palavras,
+      icone: item.icone, atalho: item.atalho, ativo: item.ativo, disabled: item.disabled, executar: item.onClick,
+    });
+    const ferramentaDaPaleta = (qual: Ferramenta, icone: ComandoDoMapa['icone'], rotulo: string, atalho: string, pode: boolean, palavras = ''): ComandoDoMapa => ({
+      id: `ferramenta:${qual}`, grupo: 'Ferramentas', rotulo, atalho, icone, palavras, ativo: ferramenta === qual, disabled: !pode, executar: () => setFerramenta(qual),
+    });
+    const unidade = rotuloUnidade(cena?.grade.unidade);
+    const lista: ComandoDoMapa[] = [
+      ...(emCombate && comandaSessao ? [
+        { id: 'turno:proximo', grupo: 'Combate', rotulo: 'Próximo turno', descricao: nomeDaVez ? `Agora é a vez de ${nomeDaVez}` : undefined, palavras: 'passar a vez iniciativa', icone: ChevronRight, executar: () => void useSessaoStore.getState().proximoTurno() },
+        { id: 'turno:anterior', grupo: 'Combate', rotulo: 'Turno anterior', palavras: 'voltar a vez iniciativa', icone: ChevronLeft, executar: () => void useSessaoStore.getState().turnoAnterior() },
+      ] : []),
+      ...(tokenDaMinhaVez ? [{ id: 'turno:meu', grupo: 'Combate', rotulo: 'Encerrar o meu turno', descricao: 'Passa a vez para o próximo da iniciativa', palavras: 'passar a vez terminar fim', icone: ChevronsRight, executar: () => void encerrarMeuTurno() }] : []),
+      ferramentaDaPaleta('mover', Hand, 'Mover tokens e o mapa', 'V', true, 'mao selecionar arrastar'),
+      ferramentaDaPaleta('regua', Ruler, 'Régua', 'R', podeRegua, 'medir distancia metros'),
+      ferramentaDaPaleta('ping', MapPin, 'Ping', 'P', podePing, 'apontar chamar atencao olhem aqui'),
+      ferramentaDaPaleta('magia', Sparkles, 'Efeito de magia', 'M', Boolean(cena) && podeMagia, 'area cone circulo linha feitico'),
+      { id: 'ferramenta:dados', grupo: 'Ferramentas', rotulo: 'Rolar dados', descricao: 'Monte a fórmula e role sem sair do mapa', atalho: 'D', palavras: 'd20 d6 d4 d8 d10 d12 d100 dado rolagem teste', icone: Dices, ativo: dadosAbertos, disabled: !campanhaId, executar: () => setDadosAbertos(true) },
+      ...(gestor ? [
+        ferramentaDaPaleta('texto', Type, 'Escrever no mapa', 'T', Boolean(cena), 'anotacao placa nota'),
+        ferramentaDaPaleta('nevoa', Eye, 'Névoa de guerra', 'N', Boolean(cena), 'revelar esconder cobrir fog visao'),
+        ferramentaDaPaleta('portal', Orbit, 'Portais', 'O', Boolean(cena), 'teleporte passagem'),
+      ] : []),
+      { id: 'vista:inteiro', grupo: 'Vista', rotulo: 'Ver o mapa inteiro', palavras: 'enquadrar zoom tudo', icone: Expand, disabled: !cena, executar: () => palcoRef.current?.enquadrar() },
+      ...(tokenDoHud && !gestor ? [{ id: 'vista:meu', grupo: 'Vista', rotulo: 'Ir até o meu personagem', palavras: 'onde estou centralizar', icone: UserRound, executar: () => centralizar(tokenDoHud) }] : []),
+      ...(gestor ? [{ id: 'vista:todos', grupo: 'Vista', rotulo: 'Trazer todos para a minha vista', descricao: 'A tela de cada jogador vai para onde você está olhando', palavras: 'sincronizar olhem seguir', icone: LocateFixed, disabled: !(conexao === 'ws' || conexao === 'sse') || !cena, executar: sincronizarVista }] : []),
+      ...itensDaCena.map((item) => deItem('Cena', item)),
+      ...itensDaMesa.map((item) => deItem(gestor ? 'Mesa' : 'Ajustes', item)),
+      ...itensDeMontar.map((item) => deItem('Montar', item)),
+      { id: 'painel:iniciativa', grupo: 'Painel da direita', rotulo: 'Iniciativa', descricao: 'A ordem do combate e de quem é a vez', icone: Swords, executar: () => mostrarNoPainel('iniciativa') },
+      { id: 'painel:fichas', grupo: 'Painel da direita', rotulo: 'Fichas', descricao: 'Os personagens desta cena, com barras e condições', icone: UsersRound, executar: () => mostrarNoPainel('fichas') },
+      { id: 'painel:rolagens', grupo: 'Painel da direita', rotulo: 'Rolagens', descricao: 'Os dados e os poderes usados na mesa', palavras: 'dados registro historico', icone: ScrollText, executar: () => mostrarNoPainel('rolagens') },
+      ...itensDeExibicao.filter((item) => item.rotulo !== 'Central de comandos').map((item) => deItem('Exibição', item)),
+      ...(gestor ? (estado?.cenas ?? []).filter((outra) => outra.id !== cena?.id).map((outra): ComandoDoMapa => ({
+        id: `cena:${outra.id}`, grupo: 'Cenas', rotulo: `Ver a cena ${outra.nome}`, descricao: outra.ativa ? 'É a cena que está na mesa' : 'Só você vê, até pôr na mesa', palavras: 'trocar mapa', icone: Clapperboard, executar: () => setCenaVista(outra.id),
+      })) : []),
+      ...tokens.slice(0, 80).map((token): ComandoDoMapa => {
+        const distancia = tokenOrigemDistancia && token.id !== tokenOrigemDistancia.id ? distanciaEmMetros(tokenOrigemDistancia, token) : null;
+        const tipo = token.camada === 'props' ? 'Item ou objeto' : token.camada === 'montarias' ? 'Montaria' : token.e_meu ? 'Seu personagem' : 'Personagem ou token';
+        return {
+          id: `token:${token.id}`, grupo: 'Ir até', rotulo: token.nome, palavras: 'token achar onde esta',
+          descricao: distancia === null ? tipo : `${tipo} · ${distancia.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} ${unidade} de ${tokenOrigemDistancia!.nome}`,
+          icone: Crosshair, executar: () => centralizar(token),
+        };
+      }),
+    ];
+    return lista;
+  })() : [];
 
   return (
-    <div className={`mapa-pagina${lateralAberta ? ' com-lateral' : ''}${ferramentasAbertas ? '' : ' sem-ferramentas'}${soMapa ? ' so-mapa' : ''}${gestor ? ' do-mestre' : ''}`}>
+    <div className={`mapa-pagina${lateralAberta ? ' com-lateral' : ''}${ferramentasAbertas ? '' : ' sem-ferramentas'}${soMapa ? ' so-mapa' : ''}${gestor ? ' do-mestre' : ''}${nomesNaBarra ? ' com-nomes' : ''}${interfaceOciosa ? ' ociosa' : ''}`}>
       <header className="mapa-topo">
         <button type="button" className="mapa-icone" aria-label="Voltar para a Sessão" onClick={() => navigate('/sessao')}><ArrowLeft size={18} /></button>
         <ComDica dica={ferramentasAbertas ? 'Esconder as ferramentas' : 'Mostrar as ferramentas'}>
@@ -1760,18 +2040,30 @@ export const MapaPage = () => {
             <Swords size={14} />
             <span>Rodada <strong>{rodada}</strong></span>
             {nomeDaVez && <span className="mapa-combate-vez">Vez de <strong>{nomeDaVez}</strong></span>}
-            {nomeDaVez && tokenVisivelDaVez && <span className="mapa-movimento-turno">Movimento <strong>{metrosAndados.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} {rotuloUnidade(cena?.grade.unidade)}</strong></span>}
+            {nomeDaVez && tokenVisivelDaVez && (
+              <MovimentoDoTurno
+                andados={tokenDoAlcance ? andadosDoToken : metrosAndados}
+                alcance={alcanceDoTurno}
+                ajustado={Boolean(alcanceCalculado?.ajustado)}
+                daFicha={movimentoDaFichaDoToken !== null}
+                unidade={rotuloUnidade(cena?.grade.unidade)}
+                onAlcance={ajustarAlcance}
+                onRestaurar={() => ajustarAlcance(null)}
+              />
+            )}
           </div>
         )}
-        <div className="mapa-pessoas" aria-label="Quem está no mapa">
-          {pessoas.map((p) => (
-            <ComDica key={p.usuario_id} dica={`${p.nome}${p.gestor ? ' (Mestre)' : ''}`}>
-              <span className="mapa-pessoa" style={{ borderColor: p.cor, color: p.cor }}>{p.nome.slice(0, 1).toUpperCase()}</span>
-            </ComDica>
-          ))}
-        </div>
-        <ComDica dica="Buscar tokens, personagens e objetos visíveis neste mapa">
-          <button type="button" className={`mapa-icone${painelRecurso === 'busca' ? ' ativo' : ''}`} aria-label="Buscar no mapa" onClick={() => setPainelRecurso((atual) => atual === 'busca' ? null : 'busca')}><Search size={17} /></button>
+        {pessoas.length > 0 && (
+          <ComDica dica={`Na mesa: ${pessoas.map((p) => `${p.nome}${p.gestor ? ' (Mestre)' : ''}`).join(', ')}. Clique para ${gestor ? 'ver jogadores e permissões' : 'mudar seu nome e cor'}.`}>
+            <button type="button" className={`mapa-pessoas${jogadoresAberto ? ' ativo' : ''}`} aria-label="Quem está no mapa" onClick={() => alternarPainel('jogadores')}>
+              {pessoas.map((p) => (
+                <span key={p.usuario_id} className="mapa-pessoa" style={{ borderColor: p.cor, color: p.cor }}>{p.nome.slice(0, 1).toUpperCase()}</span>
+              ))}
+            </button>
+          </ComDica>
+        )}
+        <ComDica dica="Buscar um token, um painel, uma cena ou uma ação">
+          <button type="button" className="mapa-topo-busca" aria-label="Buscar no mapa (central de comandos)" aria-haspopup="dialog" onClick={() => setPaletaAberta(true)}><Search size={15} /><span>Buscar ou fazer</span><kbd>Ctrl K</kbd></button>
         </ComDica>
         <ComDica dica="Trilha de áudio sincronizada">
           <button type="button" className={`mapa-icone${painelRecurso === 'trilha' ? ' ativo' : ''}`} aria-label="Trilha da cena" onClick={() => setPainelRecurso((atual) => atual === 'trilha' ? null : 'trilha')}><Music2 size={17} /></button>
@@ -1790,18 +2082,7 @@ export const MapaPage = () => {
           variante="topo"
           icone={Monitor}
           rotulo="Exibição"
-          grupos={[{
-            titulo: 'Exibição',
-            itens: [
-              // O celular não usa tela cheia (e o iPhone nem tem): o item só aparece onde o navegador oferece.
-              ...(document.fullscreenEnabled && !window.matchMedia('(max-width: 760px)').matches
-                ? [{ icone: telaCheia ? Minimize2 : Maximize2, rotulo: telaCheia ? 'Sair da tela cheia' : 'Tela cheia', ativo: telaCheia, onClick: alternarTelaCheia }]
-                : []),
-              { icone: Focus, rotulo: 'Só o mapa', atalho: 'H', onClick: () => setSoMapa(true) },
-              { icone: ferramentasAbertas ? PanelLeftClose : PanelLeftOpen, rotulo: ferramentasAbertas ? 'Esconder as ferramentas' : 'Mostrar as ferramentas', onClick: () => setFerramentasAbertas((v) => !v) },
-              { icone: Keyboard, rotulo: 'Atalhos do teclado', atalho: '?', onClick: () => setAtalhosAbertos(true) },
-            ],
-          }]}
+          grupos={gruposDeExibicao}
         />
         <ComDica dica={lateralAberta ? 'Recolher o painel' : 'Abrir o painel'}>
           <button type="button" className="mapa-icone" aria-label={lateralAberta ? 'Recolher o painel' : 'Abrir o painel'} onClick={() => setLateralAberta((v) => !v)}>
@@ -1812,42 +2093,60 @@ export const MapaPage = () => {
 
       <nav className="mapa-ferramentas" aria-label="Ferramentas">
         <span className="mapa-grupo-rotulo">Mesa</span>
-        <BotaoFerramenta icone={Hand} rotulo="Mover tokens e o mapa" atalho="V" ativo={ferramenta === 'mover'} onClick={() => setFerramenta('mover')} />
-        <BotaoFerramenta icone={Ruler} rotulo="Régua" atalho="R" disabled={!podeRegua} ativo={ferramenta === 'regua'} onClick={() => setFerramenta('regua')} />
-        <BotaoFerramenta icone={MapPin} rotulo="Ping (ou Alt + clique)" atalho="P" disabled={!podePing} ativo={ferramenta === 'ping'} onClick={() => setFerramenta('ping')} />
-        <BotaoFerramenta icone={Sparkles} rotulo="Efeito de magia" atalho="M" disabled={!cena || !podeMagia} ativo={ferramenta === 'magia'} onClick={() => setFerramenta((f) => (f === 'magia' ? 'mover' : 'magia'))} />
+        <BotaoFerramenta icone={Hand} nome="Mover" rotulo="Mover tokens e o mapa" atalho="V" ativo={ferramenta === 'mover'} onClick={() => setFerramenta('mover')} />
+        <BotaoFerramenta icone={Ruler} nome="Régua" rotulo="Régua" atalho="R" disabled={!podeRegua} ativo={ferramenta === 'regua'} onClick={() => setFerramenta('regua')} />
+        <BotaoFerramenta icone={MapPin} nome="Ping" rotulo="Ping (ou Alt + clique)" atalho="P" disabled={!podePing} ativo={ferramenta === 'ping'} onClick={() => setFerramenta('ping')} />
+        <BotaoFerramenta icone={Sparkles} nome="Magia" rotulo="Efeito de magia" atalho="M" disabled={!cena || !podeMagia} ativo={ferramenta === 'magia'} onClick={() => setFerramenta((f) => (f === 'magia' ? 'mover' : 'magia'))} />
+        <BotaoFerramenta icone={Dices} nome="Dados" rotulo="Rolar dados" atalho="D" disabled={!campanhaId} ativo={dadosAbertos} onClick={() => setDadosAbertos((v) => !v)} />
         <span className="mapa-separador" />
         <span className="mapa-grupo-rotulo">Vista</span>
-        <BotaoFerramenta icone={Expand} rotulo="Ver o mapa inteiro" disabled={!cena} onClick={() => palcoRef.current?.enquadrar()} />
-        {meuToken && !gestor && (
-          <BotaoFerramenta icone={UserRound} rotulo="Ir até o meu personagem" onClick={() => centralizar(meuToken)} />
+        <BotaoFerramenta icone={Expand} nome="Inteiro" rotulo="Ver o mapa inteiro" disabled={!cena} onClick={() => palcoRef.current?.enquadrar()} />
+        {tokenDoHud && !gestor && (
+          <BotaoFerramenta icone={UserRound} nome="Eu" rotulo="Ir até o meu personagem" onClick={() => centralizar(tokenDoHud)} />
         )}
         {selecionado && tokenSelecionado && (
-          <BotaoFerramenta icone={Crosshair} rotulo="Centralizar no token escolhido" onClick={() => centralizar(tokenSelecionado)} />
-        )}
-        {!gestor && Boolean(cena?.clima.efeitos.length) && (
-          <BotaoFerramenta
-            icone={climaLocal ? Cloud : CloudOff}
-            rotulo={climaLocal ? 'Desligar o clima neste aparelho' : 'Ligar o clima neste aparelho'}
-            onClick={() => setClimaLocal((v) => !v)}
-          />
+          <BotaoFerramenta icone={Crosshair} nome="Centrar" rotulo="Centralizar no token escolhido" onClick={() => centralizar(tokenSelecionado)} />
         )}
         {gestor && (
           <>
             <span className="mapa-separador" />
             <span className="mapa-grupo-rotulo">Mestre</span>
-            <BotaoFerramenta icone={Type} rotulo="Escrever no mapa" atalho="T" disabled={!cena} ativo={ferramenta === 'texto'} onClick={() => setFerramenta((f) => (f === 'texto' ? 'mover' : 'texto'))} />
-            <BotaoFerramenta icone={Eye} rotulo="Névoa de guerra" atalho="N" disabled={!cena} ativo={ferramenta === 'nevoa'} onClick={() => setFerramenta((f) => (f === 'nevoa' ? 'mover' : 'nevoa'))} />
-            <BotaoFerramenta icone={Orbit} rotulo="Portais" atalho="O" disabled={!cena} ativo={ferramenta === 'portal'} onClick={() => setFerramenta((f) => (f === 'portal' ? 'mover' : 'portal'))} />
+            <BotaoFerramenta icone={Type} nome="Texto" rotulo="Escrever no mapa" atalho="T" disabled={!cena} ativo={ferramenta === 'texto'} onClick={() => setFerramenta((f) => (f === 'texto' ? 'mover' : 'texto'))} />
+            <BotaoFerramenta icone={Eye} nome="Névoa" rotulo="Névoa de guerra" atalho="N" disabled={!cena} ativo={ferramenta === 'nevoa'} onClick={() => setFerramenta((f) => (f === 'nevoa' ? 'mover' : 'nevoa'))} />
+            <BotaoFerramenta icone={Orbit} nome="Portais" rotulo="Portais" atalho="O" disabled={!cena} ativo={ferramenta === 'portal'} onClick={() => setFerramenta((f) => (f === 'portal' ? 'mover' : 'portal'))} />
           </>
         )}
         <span className="mapa-separador" />
-        <span className="mapa-grupo-rotulo">Mais</span>
-        <MenuMais grupos={gruposDoMenuMais} />
+        <span className="mapa-grupo-rotulo">{gestor ? 'Painéis' : 'Mais'}</span>
+        {gestor ? (
+          <>
+            <MenuMais grupos={menuDaCena} icone={Clapperboard} nome="Cena" rotulo="Cena: camadas, grade, clima, hora e luz" />
+            <MenuMais grupos={menuDaMesa} icone={UsersRound} nome="Mesa" rotulo="Mesa: jogadores, pausa, documentos e trilha" />
+            <MenuMais grupos={menuDeMontar} icone={Hammer} nome="Montar" rotulo="Montar: participantes, Acervo, Construtor e Oficina" />
+          </>
+        ) : (
+          <MenuMais grupos={menuDaMesa} icone={SlidersHorizontal} nome="Ajustes" rotulo="Ajustes: seu nome, camadas, encaixe, vista e trilha" />
+        )}
       </nav>
 
       <main className="mapa-area">
         <div ref={alvoRef} className="mapa-palco" onDragOver={aoArrastarSobreOMapa} onDrop={aoSoltarNoMapa} />
+        {!gestor && tokenDoHud && cena && campanhaId && !soMapa && (
+          <HudDoJogador
+            token={tokenDoHud}
+            campanhaId={campanhaId}
+            minhaVez={Boolean(tokenDaMinhaVez)}
+            onMostrar={() => centralizar(tokenDoHud)}
+            onFicha={() => mostrarNoPainel('fichas')}
+            onEncerrarTurno={encerrarMeuTurno}
+          />
+        )}
+        <AvisoDaVez
+          chave={tokenDaMinhaVez ? chaveMovimentoTurno : ''}
+          nome={tokenDoHud?.nome ?? ''}
+          rodada={rodada}
+          onMostrar={() => tokenDoHud && centralizar(tokenDoHud)}
+        />
         {(soMapa || !ferramentasAbertas) && (
           <button
             type="button"
@@ -1906,20 +2205,6 @@ export const MapaPage = () => {
         {audioPrecisaAtivar && trilhaMesa?.reproduzindo && (
           <button type="button" className="mapa-audio-ativar" onClick={ativarAudioDaMesa}><Music2 size={15} /> Ativar áudio da mesa</button>
         )}
-        {painelRecurso === 'busca' && (
-          <section className="mapa-recurso-painel mapa-busca-painel" aria-label="Buscar no mapa">
-            <header><strong>Buscar no mapa</strong><button type="button" className="mapa-icone" aria-label="Fechar busca" onClick={() => setPainelRecurso(null)}><X size={16} /></button></header>
-            <input autoFocus value={buscaMapa} maxLength={80} placeholder="Nome de personagem ou objeto" onChange={(evento) => setBuscaMapa(evento.target.value)} />
-            <ul className="mapa-busca-resultados">
-              {tokens.filter((token) => token.nome.toLocaleLowerCase('pt-BR').includes(buscaMapa.trim().toLocaleLowerCase('pt-BR')))
-                .slice(0, 40)
-                .map((token) => <li key={token.id}><button type="button" onClick={() => { centralizar(token); setPainelRecurso(null); }}>
-                  <span>{token.nome}</span><small>{token.camada === 'props' ? 'Item ou prop' : token.camada === 'montarias' ? 'Montaria' : 'Personagem ou token'}{tokenOrigemDistancia && token.id !== tokenOrigemDistancia.id ? ` · ${distanciaEmMetros(tokenOrigemDistancia, token)?.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) ?? '—'} ${rotuloUnidade(cena?.grade.unidade)}` : ''}</small>
-                </button></li>)}
-            </ul>
-            {!tokens.some((token) => token.nome.toLocaleLowerCase('pt-BR').includes(buscaMapa.trim().toLocaleLowerCase('pt-BR'))) && <p className="mapa-dica">Nenhum resultado entre os itens que você pode ver.</p>}
-          </section>
-        )}
         {gestor && campanhaId && <PainelDocumentosMesa
           aberto={painelRecurso === 'documentos'}
           campanhaId={campanhaId}
@@ -1964,6 +2249,14 @@ export const MapaPage = () => {
           />
         )}
         {medidorAberto && <MedidorPainel medidor={medidor} interpolador={interpolador} onFechar={() => setMedidorAberto(false)} />}
+        {dadosAbertos && campanhaId && !soMapa && (
+          <BandejaDeDados
+            campanhaId={campanhaId}
+            personagemId={!gestor ? tokenDoHud?.personagem_id ?? null : null}
+            nomeDeQuem={!gestor && tokenDoHud?.personagem_id ? tokenDoHud.nome : gestor ? 'Mestre' : 'você'}
+            onFechar={() => setDadosAbertos(false)}
+          />
+        )}
         {cena && podeMagia && ferramenta === 'magia' && (
           <BarraMagia opcoes={opcoesMagia} naMesa={cena.ativa && Boolean(estado?.ao_vivo)} onOpcoes={setOpcoesMagia} />
         )}
@@ -2229,6 +2522,27 @@ export const MapaPage = () => {
         </aside>
       )}
       {atalhosAbertos && <FolhaDeAtalhos gestor={gestor} onFechar={() => setAtalhosAbertos(false)} />}
+      {paletaAberta && <PaletaDeComandos comandos={comandosDaPaleta} onFechar={() => setPaletaAberta(false)} />}
+      {contexto && itensDoContexto.length > 0 && (
+        <MenuDeContexto
+          x={contexto.x}
+          y={contexto.y}
+          titulo={tokenDoContexto ? tokenDoContexto.nome : 'Aqui no mapa'}
+          itens={itensDoContexto}
+          onFechar={() => setContexto(null)}
+        />
+      )}
+      {tourAberto && (
+        <GuidedTour
+          key={gestor ? 'guia-mapa-mestre' : 'guia-mapa-jogador'}
+          passos={obterPassosTourMapa(gestor)}
+          accent="#c7a44c"
+          nomeGuia="Guia do Mapa"
+          rootSelector=".mapa-pagina"
+          onClose={encerrarTour}
+          onFinish={encerrarTour}
+        />
+      )}
       {fatiando && gestor && <FatiadorFolha onFechar={() => setFatiando(false)} onSalvo={() => setVersaoAcervo((v) => v + 1)} />}
     </div>
   );

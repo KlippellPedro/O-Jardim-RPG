@@ -1,0 +1,936 @@
+/* Navegação do mapa: barra com nomes, menus por intenção, central de comandos e o HUD do jogador. */
+
+/* ------------------------------------------------------------ barra com nomes */
+
+.mapa-ferramenta-nome {
+  display: none;
+}
+
+@media (min-width: 761px) {
+  .mapa-pagina.com-nomes:not(.sem-ferramentas):not(.so-mapa) {
+    grid-template-columns: 64px 1fr 0;
+  }
+
+  .mapa-pagina.com-nomes.com-lateral:not(.sem-ferramentas):not(.so-mapa) {
+    grid-template-columns: 64px 1fr clamp(300px, 26vw, 380px);
+  }
+
+  .mapa-pagina.com-nomes .mapa-ferramentas {
+    gap: 2px;
+    padding: 6px 0;
+  }
+
+  .mapa-pagina.com-nomes .mapa-ferramentas button.mapa-ferramenta {
+    grid-template-rows: 20px auto;
+    align-content: center;
+    gap: 1px;
+    width: 56px;
+    height: 46px;
+  }
+
+  .mapa-pagina.com-nomes .mapa-ferramenta-nome {
+    display: block;
+    max-width: 54px;
+    overflow: hidden;
+    font-size: 9.5px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Com o nome em cada botão, o título de cada grupo sobra: fica só a linha que separa. */
+  .mapa-pagina.com-nomes .mapa-grupo-rotulo {
+    display: none;
+  }
+
+  .mapa-pagina.com-nomes .mapa-separador {
+    width: 34px;
+    margin: 5px 0;
+  }
+}
+
+@media (max-height: 760px) and (min-width: 761px) {
+  .mapa-pagina.com-nomes .mapa-ferramentas {
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .mapa-pagina.com-nomes .mapa-ferramentas::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------- menus com uma linha de ajuda */
+
+.mapa-menu-mais:has(button.com-descricao) {
+  width: 318px;
+}
+
+.mapa-menu-mais button.com-descricao {
+  align-items: flex-start;
+  padding: 8px 10px;
+}
+
+.mapa-menu-mais button.com-descricao > svg {
+  margin-top: 2px;
+}
+
+.mapa-menu-mais-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mapa-menu-mais-texto strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mapa-menu-mais-texto small {
+  color: var(--mapa-apagado);
+  font-size: 11.5px;
+  line-height: 1.3;
+}
+
+.mapa-menu-mais button.com-descricao kbd {
+  align-self: center;
+}
+
+/* O grupo de quem está na mesa vira um botão: abre Jogadores. */
+button.mapa-pessoas {
+  align-items: center;
+  padding: 3px 4px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+button.mapa-pessoas:hover,
+button.mapa-pessoas.ativo {
+  border-color: var(--mapa-linha);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* O campo de busca do topo: abre a central de comandos. */
+.mapa-topo-busca {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 8px 0 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--mapa-apagado);
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.mapa-topo-busca:hover {
+  border-color: rgba(199, 164, 76, 0.5);
+  color: var(--mapa-texto);
+}
+
+.mapa-topo-busca kbd {
+  padding: 0 5px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 10.5px;
+}
+
+@media (max-width: 1180px) {
+  .mapa-topo-busca span,
+  .mapa-topo-busca kbd {
+    display: none;
+  }
+
+  .mapa-topo-busca {
+    padding: 0 8px;
+    border-color: transparent;
+    background: transparent;
+  }
+}
+
+/* ------------------------------------------------------- central de comandos */
+
+.mapa-paleta-fundo {
+  position: fixed;
+  z-index: 96;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: min(14vh, 120px) 12px 12px;
+  background: rgba(5, 4, 8, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+.mapa-paleta {
+  display: flex;
+  flex-direction: column;
+  width: min(600px, 100%);
+  max-height: min(70vh, 560px);
+  overflow: hidden;
+  border: 1px solid rgba(199, 164, 76, 0.35);
+  border-radius: 16px;
+  background: #121019;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.7);
+  color: var(--mapa-texto, #ece9f5);
+  animation: mapa-paleta-entra 0.14s ease-out;
+}
+
+@keyframes mapa-paleta-entra {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.985);
+  }
+}
+
+.mapa-paleta-busca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--mapa-linha, rgba(255, 255, 255, 0.1));
+  color: var(--mapa-apagado, #a19cb3);
+}
+
+.mapa-paleta-busca input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--mapa-texto, #ece9f5);
+  font-size: 15px;
+}
+
+.mapa-paleta-busca input::placeholder {
+  color: var(--mapa-apagado, #a19cb3);
+  opacity: 0.8;
+}
+
+.mapa-paleta kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  padding: 1px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 5px;
+  color: var(--mapa-apagado, #a19cb3);
+  font: inherit;
+  font-size: 11px;
+}
+
+.mapa-paleta-lista {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.mapa-paleta-grupo {
+  display: block;
+  padding: 10px 10px 4px;
+  color: var(--mapa-apagado, #a19cb3);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mapa-paleta-lista button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: left;
+}
+
+.mapa-paleta-lista button > svg {
+  flex: none;
+  color: var(--mapa-apagado, #a19cb3);
+}
+
+.mapa-paleta-lista button.marcado {
+  background: rgba(199, 164, 76, 0.16);
+}
+
+.mapa-paleta-lista button.marcado > svg,
+.mapa-paleta-lista button.ativo > svg {
+  color: var(--mapa-ouro, #c7a44c);
+}
+
+.mapa-paleta-lista button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.mapa-paleta-texto {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.mapa-paleta-texto strong {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-paleta-texto small {
+  overflow: hidden;
+  color: var(--mapa-apagado, #a19cb3);
+  font-size: 11.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-paleta-lista em {
+  color: var(--mapa-ouro, #c7a44c);
+  font-size: 10.5px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mapa-paleta-lista button kbd {
+  border-color: rgba(199, 164, 76, 0.5);
+  color: var(--mapa-ouro, #c7a44c);
+}
+
+.mapa-paleta-vazio {
+  margin: 0;
+  padding: 22px 14px;
+  color: var(--mapa-apagado, #a19cb3);
+  text-align: center;
+}
+
+.mapa-paleta-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--mapa-linha, rgba(255, 255, 255, 0.1));
+  color: var(--mapa-apagado, #a19cb3);
+  font-size: 11px;
+}
+
+.mapa-paleta-rodape span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 760px) {
+  .mapa-paleta-fundo {
+    padding-top: 56px;
+  }
+
+  .mapa-paleta-rodape {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------ HUD do jogador */
+
+.mapa-hud {
+  position: absolute;
+  z-index: 4;
+  bottom: 14px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100% - 20px);
+  padding: 6px 8px 6px 6px;
+  transform: translateX(-50%);
+  border: 1px solid var(--mapa-linha);
+  border-radius: 18px;
+  background: var(--mapa-painel);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mapa-hud.na-vez {
+  border-color: var(--mapa-ouro);
+  box-shadow: 0 0 0 1px rgba(199, 164, 76, 0.35), 0 0 26px rgba(199, 164, 76, 0.28), 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.mapa-hud-retrato {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--mapa-texto);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mapa-hud-retrato img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mapa-hud-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.mapa-hud-titulo {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.mapa-hud-titulo strong {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-hud-titulo small {
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.mapa-hud-vez {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(199, 164, 76, 0.2);
+  color: var(--mapa-ouro);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mapa-hud-barras {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 3px 12px;
+}
+
+.mapa-hud-barra {
+  --cor-barra: #e88a90;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mapa-hud-barra.barra-mana { --cor-barra: #8aa4ef; }
+.mapa-hud-barra.barra-estamina { --cor-barra: #86d4ab; }
+.mapa-hud-barra.barra-sanidade { --cor-barra: #b79be0; }
+
+.mapa-hud-trilho {
+  width: 62px;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.mapa-hud-trilho span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--cor-barra);
+  transition: width 0.3s ease;
+}
+
+.mapa-hud-valor {
+  min-width: 46px;
+  color: var(--mapa-apagado);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mapa-hud-condicoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mapa-hud-condicoes li {
+  padding: 1px 7px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 999px;
+  color: #fca5a5;
+  font-size: 10.5px;
+  white-space: nowrap;
+}
+
+.mapa-hud-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mapa-hud-acoes button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 24px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.mapa-hud-acoes button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mapa-texto);
+}
+
+@media (max-width: 760px) {
+  .mapa-hud {
+    bottom: 8px;
+    gap: 8px;
+  }
+
+  .mapa-hud-retrato {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mapa-hud-trilho {
+    width: 44px;
+  }
+}
+
+/* ----------------------------------------------------------- aviso "Sua vez" */
+
+.mapa-aviso-vez {
+  position: absolute;
+  z-index: 9;
+  top: 18px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100% - 24px);
+  padding: 10px 18px 10px 14px;
+  transform: translateX(-50%);
+  border: 1px solid var(--mapa-ouro);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(40, 32, 14, 0.96), rgba(20, 16, 24, 0.96));
+  box-shadow: 0 0 34px rgba(199, 164, 76, 0.35), 0 16px 48px rgba(0, 0, 0, 0.55);
+  color: var(--mapa-ouro);
+  cursor: pointer;
+  text-align: left;
+  animation: mapa-aviso-vez-entra 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.mapa-aviso-vez span {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.mapa-aviso-vez strong {
+  color: #f6e7b8;
+  font-size: 16px;
+}
+
+.mapa-aviso-vez small {
+  color: var(--mapa-apagado);
+  font-size: 11.5px;
+}
+
+@keyframes mapa-aviso-vez-entra {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -14px) scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mapa-paleta,
+  .mapa-aviso-vez {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------- painel Mesa junto dos outros painéis */
+
+/* Pausa, relógios e vista inicial abre à esquerda, no mesmo lugar e do mesmo tamanho dos outros painéis da cena. */
+.mapa-config.mesa-painel {
+  right: auto;
+  left: 12px;
+  width: min(340px, calc(100% - 24px));
+}
+
+/* ---------------------------------------------------------- bandeja de dados */
+
+.mapa-dados {
+  position: absolute;
+  z-index: 9;
+  /* Acima da barra do Acervo (Mestre) e do personagem (jogador), que ficam no pé do mapa. */
+  bottom: 96px;
+  left: 12px;
+  display: grid;
+  gap: 8px;
+  width: min(292px, calc(100% - 24px));
+  max-height: calc(100% - 110px);
+  overflow-y: auto;
+  padding: 10px 12px 12px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 14px;
+  background: var(--mapa-painel);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+}
+
+.mapa-dados > header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mapa-dados > header strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.mapa-dados > header small {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-dados-faces {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.mapa-dados-faces button,
+.mapa-dados-formula button,
+.mapa-dados-modo button {
+  display: grid;
+  place-items: center;
+  height: 32px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--mapa-texto);
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.mapa-dados-faces button:hover,
+.mapa-dados-formula button:hover:not(:disabled),
+.mapa-dados-modo button:hover {
+  border-color: rgba(199, 164, 76, 0.55);
+  background: rgba(199, 164, 76, 0.1);
+}
+
+.mapa-dados-faces button.limpar {
+  color: var(--mapa-apagado);
+}
+
+.mapa-dados-formula {
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  gap: 5px;
+}
+
+.mapa-dados-formula button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.mapa-dados input {
+  width: 100%;
+  min-width: 0;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  outline: 0;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--mapa-texto);
+  font-size: 13px;
+}
+
+.mapa-dados-formula input {
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.mapa-dados input:focus {
+  border-color: rgba(199, 164, 76, 0.6);
+}
+
+.mapa-dados input[aria-invalid='true'] {
+  border-color: rgba(239, 68, 68, 0.6);
+}
+
+.mapa-dados-modo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.mapa-dados-modo button {
+  height: 28px;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.mapa-dados-modo button.ativo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.18);
+  color: var(--mapa-ouro);
+}
+
+.mapa-dados-rolar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  border: 1px solid var(--mapa-ouro);
+  border-radius: 9px;
+  background: rgba(199, 164, 76, 0.2);
+  color: #f6e7b8;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mapa-dados-rolar:hover:not(:disabled) {
+  background: rgba(199, 164, 76, 0.32);
+}
+
+.mapa-dados-rolar:disabled {
+  border-color: var(--mapa-linha);
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: default;
+}
+
+.mapa-dados-ajuda {
+  margin: 0;
+  color: #fca5a5;
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+
+.mapa-dados-ultimas {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 6px 0 0;
+  border-top: 1px solid var(--mapa-linha);
+  list-style: none;
+}
+
+.mapa-dados-ultimas button {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+  font-size: 12px;
+  text-align: left;
+}
+
+.mapa-dados-ultimas button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.mapa-dados-ultimas strong {
+  color: var(--mapa-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  /* No celular a bandeja sobe para não cobrir o personagem no pé do mapa. */
+  .mapa-dados {
+    bottom: 92px;
+    left: 8px;
+    max-height: calc(100% - 104px);
+  }
+}
+
+/* ------------------------------------------------- movimento do turno, no topo */
+
+.mapa-movimento-alcance {
+  width: 40px;
+  height: 20px;
+  padding: 0 3px;
+  border: 1px solid rgba(252, 211, 77, 0.3);
+  border-radius: 5px;
+  outline: 0;
+  background: rgba(0, 0, 0, 0.28);
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+}
+
+.mapa-movimento-alcance:hover,
+.mapa-movimento-alcance:focus {
+  border-color: var(--mapa-ouro);
+}
+
+/* Andou mais do que o alcance: só um aviso de cor, nada trava. */
+.mapa-movimento-turno.passou,
+.mapa-movimento-turno.passou strong {
+  color: #fca5a5;
+}
+
+.mapa-movimento-alcance.ajustado {
+  border-style: dashed;
+  border-color: var(--mapa-ouro);
+}
+
+.mapa-movimento-restaurar {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.mapa-movimento-restaurar:hover {
+  background: rgba(199, 164, 76, 0.3);
+}
+
+/* ------------------------------------------------- menu do botão direito no mapa */
+
+.mapa-menu-mais.mapa-menu-contexto {
+  z-index: 60;
+  width: 238px;
+  padding: 6px;
+  animation: mapa-paleta-entra 0.1s ease-out;
+}
+
+.mapa-menu-contexto .mapa-menu-mais-grupo {
+  overflow: hidden;
+  padding: 4px 10px 6px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-menu-contexto button {
+  padding: 7px 10px;
+}
+
+/* ------------------------------------------------ encerrar o turno, no HUD */
+
+.mapa-hud-encerrar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+  height: 34px;
+  padding: 0 12px 0 9px;
+  border: 1px solid var(--mapa-ouro);
+  border-radius: 999px;
+  background: rgba(199, 164, 76, 0.2);
+  color: #f6e7b8;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mapa-hud-encerrar:hover:not(:disabled) {
+  background: rgba(199, 164, 76, 0.34);
+}
+
+.mapa-hud-encerrar:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+@media (max-width: 760px) {
+  .mapa-hud-encerrar span {
+    display: none;
+  }
+
+  .mapa-hud-encerrar {
+    padding: 0 9px;
+  }
+}
+
+/* --------------------------------------------- modo imersivo: a interface some */
+
+/* Parado por uns segundos, tudo o que não é a cena some devagar; o primeiro gesto traz de volta na hora. */
+.mapa-pagina.ociosa :is(.mapa-topo, .mapa-ferramentas, .mapa-lateral, .mapa-dock, .mapa-hud, .mapa-alca, .mesa-relogios) {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mapa-pagina.ociosa :is(.mapa-topo, .mapa-ferramentas, .mapa-lateral, .mapa-dock, .mapa-hud, .mapa-alca, .mesa-relogios) {
+    transition: none;
+  }
+
+  .mapa-menu-mais.mapa-menu-contexto {
+    animation: none;
+  }
+}

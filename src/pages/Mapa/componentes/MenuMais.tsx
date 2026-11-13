@@ -4,6 +4,10 @@ import { Ellipsis, type LucideIcon } from 'lucide-react';
 export interface ItemDoMenu {
   icone: LucideIcon;
   rotulo: string;
+  /** Uma linha curta, embaixo do nome, sobre o que o item faz. */
+  descricao?: string;
+  /** Outras palavras que levam a este item na central de comandos ("chuva" acha o clima). */
+  palavras?: string;
   /** Tecla de atalho, mostrada à direita. */
   atalho?: string;
   /** O painel desse item está aberto. */
@@ -26,6 +30,8 @@ interface Props {
   variante?: 'barra' | 'topo';
   icone?: LucideIcon;
   rotulo?: string;
+  /** Nome curto escrito embaixo do ícone na barra da esquerda ("Cena", "Mesa"). */
+  nome?: string;
 }
 
 /**
@@ -33,7 +39,7 @@ interface Props {
  * que não precisam ficar sempre à mão. A lista é `fixed` para não ser cortada quando a barra rola (celular e
  * janela baixa) e fecha ao clicar fora, no Esc ou depois de escolher um item.
  */
-export const MenuMais = ({ grupos, variante = 'barra', icone: Icone = Ellipsis, rotulo = 'Mais painéis e ferramentas' }: Props) => {
+export const MenuMais = ({ grupos, variante = 'barra', icone: Icone = Ellipsis, rotulo = 'Mais painéis e ferramentas', nome }: Props) => {
   const [aberto, setAberto] = useState(false);
   const [posicao, setPosicao] = useState<{ left?: number; right?: number; top?: number; bottom?: number }>({ left: 60, bottom: 12 });
   const raiz = useRef<HTMLDivElement>(null);
@@ -92,19 +98,20 @@ export const MenuMais = ({ grupos, variante = 'barra', icone: Icone = Ellipsis, 
         onClick={alternar}
       >
         <Icone size={variante === 'topo' ? 17 : 18} />
+        {nome && variante === 'barra' && <span className="mapa-ferramenta-nome">{nome}</span>}
         {!aberto && variante === 'barra' && <span className="mapa-dica-flutuante" role="tooltip">{rotulo}</span>}
       </button>
       {aberto && (
         <div ref={lista} className={`mapa-menu-mais${variante === 'topo' ? ' topo' : ''}`} role="menu" aria-label={rotulo} style={posicao}>
           {grupos.filter((grupo) => grupo.itens.length > 0).map((grupo) => (
-            <div key={grupo.titulo} role="group" aria-label={grupo.titulo} className="mapa-menu-mais-secao">
-              <span className="mapa-menu-mais-grupo">{grupo.titulo}</span>
+            <div key={grupo.titulo || rotulo} role="group" aria-label={grupo.titulo || rotulo} className="mapa-menu-mais-secao">
+              {grupo.titulo && <span className="mapa-menu-mais-grupo">{grupo.titulo}</span>}
               {grupo.itens.map((item) => (
                 <button
                   key={item.rotulo}
                   type="button"
                   role="menuitem"
-                  className={item.ativo ? 'ativo' : ''}
+                  className={`${item.ativo ? 'ativo' : ''}${item.descricao ? ' com-descricao' : ''}`}
                   disabled={item.disabled}
                   onClick={() => {
                     setAberto(false);
@@ -112,7 +119,9 @@ export const MenuMais = ({ grupos, variante = 'barra', icone: Icone = Ellipsis, 
                   }}
                 >
                   <item.icone size={17} />
-                  <span>{item.rotulo}</span>
+                  {item.descricao
+                    ? <span className="mapa-menu-mais-texto"><strong>{item.rotulo}</strong><small>{item.descricao}</small></span>
+                    : <span>{item.rotulo}</span>}
                   {item.atalho && <kbd>{item.atalho}</kbd>}
                 </button>
               ))}

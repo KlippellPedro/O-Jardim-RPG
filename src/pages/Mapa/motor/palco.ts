@@ -8,7 +8,7 @@ import { Application, Container, Graphics, Text, Texture, Sprite } from 'pixi.js
 import { Viewport } from 'pixi-viewport';
 import type { CamadaMapaId, CamadaTokenId, FormaMagia, IAberturaCena, IAnotacaoMapa, IAreaClima, ICena, IClima, IFormaNevoa, IMagiaMapa, IMapaColocado, ITokenMapa, OperacaoNevoa } from '../../../services/mapaApi';
 import { urlImagemDoToken, urlPedaco } from '../../../services/mapaApi';
-import { encaixar, medir, segmentosDaGrade, tracejar, LADO_LADRILHO, PADRAO_GRADE, rotuloUnidade, type IGrade, type IPonto } from './geometria';
+import { encaixar, medir, segmentosDaGrade, tracejar, LADO_LADRILHO, PADRAO_GRADE, rotuloUnidade, type IGrade, type IPonto, larguraLivreDosNomes } from './geometria';
 import { TokenVisual, esquecerTexturasDeMoldura } from './token';
 import { desenharRetrato, type Enquadramento } from './molduras';
 import { CamadaNevoa } from './nevoa';
@@ -73,6 +73,8 @@ export interface EventosPalco {
   /** O mapa colocado escolhido (ou nenhum) e o lugar, o tamanho e o giro novos depois do arrasto. */
   aoSelecionarMapa?: (id: string | null) => void;
   aoMoverMapa?: (id: string, mudancas: Pick<IMapaColocado, 'x' | 'y' | 'escala'> & { rotacao: number }) => void;
+  /** Clique parado do botão direito (ou toque longo): o ponto no mapa, o ponto na janela e o token ali, se houver. */
+  aoContexto?: (ponto: IPonto, tela: IPonto, tokenId: string | null) => void;
 }
 
 const COR_REVELAR = '#5eead4';
@@ -147,6 +149,8 @@ export class PalcoMapa {
   /** Portas do mapa montado no construtor, por cima da imagem (que só tem o vão). */
   private aberturas = new CamadaAberturas();
   private auras = new CamadaAuras();
+  /** O contorno até onde o token da vez ainda anda (ajuda de mesa; ninguém clica nele). */
+  private alcance = new Graphics();
   /** A régua que acompanha o token arrastado: quantas casas ele já andou. */
   private medidaArrasto: Regua | null = null;
   /** Água e lava do mapa montado, com movimento (embaixo da névoa). */
@@ -180,6 +184,11 @@ export class PalcoMapa {
   private campanhaId = '';
   private ferramenta: Ferramenta = 'mover';
   private selecionado: string | null = null;
+  /** Algum token mudou de lugar: os nomes vizinhos precisam ser medidos de novo. */
+  private nomesSujos = true;
+  private nomesEm = 0;
+  /** Quem mostra o nome inteiro agora (e com que largura), para notar quando isso muda. */
+  private nomesInteiros = '';
   private anotacaoSelecionada: string | null = null;
   private vez: string | null = null;
   private reguasRemotas = new Map<string, Regua>();
@@ -242,9 +251,10 @@ export class PalcoMapa {
     // Os portais ficam no chão (embaixo dos tokens); a luz do dia e o clima, por cima de tudo que está no mapa.
     viewport.addChild(
       this.camadaFundo, this.anotacoes.raiz, this.nevoaMemoria.raiz, this.nevoa.raiz,
-      this.portais.raiz, this.luzes.raiz, this.auras.raiz, this.camadaTokens, this.ceu.raiz, this.clima.raiz,
+      this.portais.raiz, this.luzes.raiz, this.auras.raiz, this.alcance, this.camadaTokens, this.ceu.raiz, this.clima.raiz,
       this.magias.raiz, this.camadaReguas, this.mapasColocados.sobreposicao, this.previa, this.camadaPings,
     );
+    this.alcance.eventMode = 'none';
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
 
@@ -381,6 +391,7 @@ export class PalcoMapa {
         const y = Math.max(0, Math.min(this.cena?.altura ?? final.y, final.y));
         token.raiz.position.set(x, y);
         token.dados = { ...token.dados, x, y };
+        this.nomesSujos = true;
         this.eventos.aoSoltar(id, x, y);
         return;
       }
@@ -396,6 +407,23 @@ export class PalcoMapa {
     app.stage.on('pointerup', soltar);
     app.stage.on('pointerupoutside', soltar);
 
+    // Botão direito: arrastar continua levando a tela; um clique parado pede o menu de contexto da página.
+    let direito: { x: number; y: number } | null = null;
+    app.canvas.addEventListener('pointerdown', (evento) => {
+      direito = evento.button === 2 ? { x: evento.clientX, y: evento.clientY } : null;
+    });
+    app.canvas.addEventListener('pointerup', (evento) => {
+      if (evento.button !== 2 || !direito) return;
+      const parado = Math.hypot(evento.clientX - direito.x, evento.clientY - direito.y) < 6;
+      direito = null;
+      if (parado) this.pedirContexto(evento.clientX, evento.clientY);
+    });
+    app.canvas.addEventListener('contextmenu', (evento) => {
+      evento.preventDefault();
+      // No toque não há botão direito: o toque longo chega por aqui.
+      if ((evento as PointerEvent).pointerType === 'touch') this.pedirContexto(evento.clientX, evento.clientY);
+    });
+
     viewport.on('moved', () => { this.gradeSuja = true; this.agendarLadrilhos(); });
     viewport.on('zoomed', () => { this.gradeSuja = true; this.agendarLadrilhos(); });
 
@@ -406,6 +434,14 @@ export class PalcoMapa {
         this.desenharGrade(this.gradePrevia ?? this.cena.grade);
       }
       const zoomAgora = viewport.scale.x;
+      // Os nomes dos tokens vizinhos se ajustam quando algo andou (ou enquanto se arrasta), poucas vezes por segundo.
+      // Também quando muda quem mostra o nome inteiro (mouse em cima, seleção): o vizinho cede o espaço.
+      let inteiros = '';
+      for (const token of this.tokens.values()) if (token.larguraDoNomeInteiro !== null) inteiros += `${token.dados.id}:${Math.round(token.larguraDoNomeInteiro)};`;
+      if (inteiros !== this.nomesInteiros) {
+        this.nomesInteiros = inteiros;
+        this.ajustarNomes(agora);
+      } else if ((this.nomesSujos || this.arrasto) && agora - this.nomesEm > 120) this.ajustarNomes(agora);
       for (const token of this.tokens.values()) {
         token.ajustarAoZoom(zoomAgora);
         token.pulsar(agora);
@@ -1162,6 +1198,21 @@ export class PalcoMapa {
       }
     }
     this.cenaTrocada = false;
+    this.nomesSujos = true;
+  }
+
+  /** Dá a cada token a largura que o nome dele tem até o vizinho da mesma fileira, para um nome não cobrir o outro. */
+  private ajustarNomes(agora: number) {
+    this.nomesSujos = false;
+    this.nomesEm = agora;
+    const lista = [...this.tokens.values()].map((token) => ({ id: token.dados.id, x: token.raiz.x, y: token.raiz.y, lado: token.dados.porte * (this.cena?.grade.tamanho ?? 100) }));
+    const inteiros = new Map<string, number>();
+    for (const token of this.tokens.values()) {
+      const largura = token.larguraDoNomeInteiro;
+      if (largura !== null) inteiros.set(token.dados.id, largura);
+    }
+    const livres = larguraLivreDosNomes(lista, inteiros);
+    for (const token of this.tokens.values()) token.definirLarguraDoNome(livres.get(token.dados.id) ?? Infinity);
   }
 
   private containerDaCamada(camada: CamadaTokenId | undefined) {
@@ -1191,6 +1242,8 @@ export class PalcoMapa {
 
   private ligarToken(token: TokenVisual) {
     token.raiz.on('pointerdown', (evento) => {
+      // O botão direito não escolhe nem arrasta o token: arrastado leva a tela, parado abre o menu de contexto.
+      if (evento.button === 2) return;
       if (evento.altKey || this.ferramenta !== 'mover') return;
       evento.stopPropagation();
       const ponto = this.viewport.toWorld(evento.global);
@@ -1206,6 +1259,37 @@ export class PalcoMapa {
     });
   }
 
+  /** O menu de contexto só existe com a ferramenta Mover e sem nada sendo arrastado ou desenhado. */
+  private pedirContexto(clientX: number, clientY: number) {
+    if (!this.eventos.aoContexto || !this.cena || this.ferramenta !== 'mover' || this.arrasto || this.desenhando) return;
+    const caixa = this.app.canvas.getBoundingClientRect();
+    const ponto = this.viewport.toWorld(clientX - caixa.left, clientY - caixa.top);
+    this.eventos.aoContexto({ x: ponto.x, y: ponto.y }, { x: clientX, y: clientY }, this.tokenEm(ponto.x, ponto.y));
+  }
+
+  /** O token desenhado por cima naquele ponto do mapa, ou nulo. */
+  private tokenEm(x: number, y: number): string | null {
+    const tamanho = this.cena?.grade.tamanho ?? 100;
+    let achado: string | null = null;
+    for (const token of this.tokens.values()) {
+      if (!token.raiz.visible || token.raiz.parent?.visible === false) continue;
+      const raio = Math.max(20, token.dados.porte * tamanho) / 2;
+      if (Math.hypot(x - token.raiz.x, y - token.raiz.y) <= raio) achado = token.dados.id;
+    }
+    return achado;
+  }
+
+  /** Desenha (ou apaga, com nulo) o contorno do alcance de movimento do token da vez. */
+  definirAlcance(pontos: IPonto[] | null) {
+    this.alcance.clear();
+    if (!pontos || pontos.length < 3) return;
+    const largura = Math.max(2, (this.cena?.grade.tamanho ?? 100) * 0.03);
+    this.alcance
+      .poly(pontos.flatMap((ponto) => [ponto.x, ponto.y]))
+      .fill({ color: 0xc7a44c, alpha: 0.06 })
+      .stroke({ color: 0xf6e7b8, alpha: 0.55, width: largura });
+  }
+
   /** Posição vinda de outra pessoa (já interpolada). */
   moverToken(id: string, x: number, y: number) {
     if (this.arrasto?.id === id) return;
@@ -1214,6 +1298,7 @@ export class PalcoMapa {
     if (token.raiz.x !== x || token.raiz.y !== y) token.marcarMovimento(performance.now());
     token.raiz.position.set(x, y);
     token.dados = { ...token.dados, x, y };
+    this.nomesSujos = true;
   }
 
   posicaoDe(id: string): IPonto | null {

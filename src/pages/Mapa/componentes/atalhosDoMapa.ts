@@ -23,6 +23,7 @@ export const ATALHOS_DO_MAPA: GrupoDeAtalhos[] = [
       { teclas: ['P'], descricao: 'Ping' },
       { teclas: ['Alt', 'clique'], descricao: 'Ping rápido, com qualquer ferramenta' },
       { teclas: ['M'], descricao: 'Efeito de magia' },
+      { teclas: ['D'], descricao: 'Rolar dados' },
       { teclas: ['T'], descricao: 'Escrever no mapa', soMestre: true },
       { teclas: ['N'], descricao: 'Névoa de guerra', soMestre: true },
       { teclas: ['O'], descricao: 'Portais', soMestre: true },
@@ -31,10 +32,12 @@ export const ATALHOS_DO_MAPA: GrupoDeAtalhos[] = [
   {
     titulo: 'Tela',
     itens: [
+      { teclas: ['Ctrl', 'K'], descricao: 'Central de comandos: buscar um token, um painel, uma cena ou uma ação' },
+      { teclas: ['/'], descricao: 'Central de comandos, com uma tecla só' },
       { teclas: ['H'], descricao: 'Só o mapa (esconde e mostra a interface)' },
       { teclas: ['Roda do mouse'], descricao: 'Zoom' },
       { teclas: ['Botão do meio'], descricao: 'Arrastar a tela (com qualquer ferramenta)' },
-      { teclas: ['Botão direito'], descricao: 'Arrastar a tela (com qualquer ferramenta)' },
+      { teclas: ['Botão direito'], descricao: 'Arrastado leva a tela; um clique parado abre o menu do token ou do ponto' },
       { teclas: ['Ctrl', 'Shift', 'D'], descricao: 'Medidor do tempo real' },
       { teclas: ['?'], descricao: 'Mostrar e esconder esta folha' },
     ],

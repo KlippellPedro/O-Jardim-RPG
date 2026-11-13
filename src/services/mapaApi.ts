@@ -177,6 +177,8 @@ export interface ITokenMapa {
   aura?: IAuraToken | null;
   e_meu: boolean;
   pode_mover: boolean;
+  /** Quanto o personagem anda por turno, em metros, lido da ficha (com Cansaço e condições). Só o dono e o Mestre recebem. */
+  movimento?: number | null;
   desconhecido: boolean;
   /** Baú, caixote ou bolsa: o token guarda itens que os jogadores podem abrir. */
   recipiente?: IRecipienteToken;

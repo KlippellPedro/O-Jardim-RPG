@@ -284,6 +284,62 @@ export function abreviarNome(nome: string, limite = LIMITE_NOME_TOKEN): string {
   return `${(espaco >= limite / 2 ? corte.slice(0, espaco) : corte).trimEnd()}…`;
 }
 
+/** Largura média de uma letra do nome do token, em relação ao tamanho da fonte (system-ui, peso 600). */
+export const LARGURA_MEDIA_DA_LETRA = 0.58;
+/** Por mais apertado que esteja, o nome nunca fica com menos letras que isto. */
+export const NOME_MINIMO_LETRAS = 4;
+/** Dois tokens dividem a fileira do nome quando a diferença de altura entre eles é menor que esta fração do maior. */
+const FILEIRA_DO_NOME = 0.45;
+/** Uma folga entre dois nomes vizinhos, em fração da distância entre os tokens. */
+const FOLGA_ENTRE_NOMES = 0.94;
+
+/** Quantas letras do nome cabem na largura livre (unidades do mapa), com a fonte no tamanho em que ela é desenhada. */
+export function letrasQueCabem(larguraLivre: number, tamanhoDaFonte: number): number {
+  if (!Number.isFinite(larguraLivre) || !(tamanhoDaFonte > 0)) return LIMITE_NOME_TOKEN;
+  const cabem = Math.floor(larguraLivre / (tamanhoDaFonte * LARGURA_MEDIA_DA_LETRA));
+  return Math.max(NOME_MINIMO_LETRAS, Math.min(LIMITE_NOME_TOKEN, cabem));
+}
+
+/** Nem o nome mais curto cabe até o vizinho (tokens amontoados, vistos de longe): melhor não escrever nada. */
+export function nomeCabe(larguraLivre: number, tamanhoDaFonte: number): boolean {
+  if (!Number.isFinite(larguraLivre) || !(tamanhoDaFonte > 0)) return true;
+  return larguraLivre >= NOME_MINIMO_LETRAS * tamanhoDaFonte * LARGURA_MEDIA_DA_LETRA;
+}
+
+/**
+ * Quanto de largura o nome de cada token pode usar sem entrar no nome do vizinho da mesma fileira. Token sem
+ * vizinho na fileira fica fora do mapa devolvido: o nome dele aparece com o tamanho normal.
+ *
+ * `inteiros` traz os tokens que mostram o nome inteiro agora (mouse em cima ou escolhido) e a largura desse nome:
+ * eles não encolhem, e o vizinho fica só com o que sobra até a borda do nome inteiro (ou sem nome, se não sobra).
+ */
+export function larguraLivreDosNomes(
+  tokens: ReadonlyArray<{ id: string; x: number; y: number; lado: number }>,
+  inteiros: ReadonlyMap<string, number> = new Map(),
+): Map<string, number> {
+  const livres = new Map<string, number>();
+  const apertar = (id: string, livre: number) => {
+    if (inteiros.has(id)) return;
+    if (livre < (livres.get(id) ?? Infinity)) livres.set(id, Math.max(0, livre));
+  };
+  for (let i = 0; i < tokens.length; i++) {
+    for (let j = i + 1; j < tokens.length; j++) {
+      const a = tokens[i];
+      const b = tokens[j];
+      if (Math.abs(a.y - b.y) >= FILEIRA_DO_NOME * Math.max(a.lado, b.lado)) continue;
+      const distancia = Math.abs(a.x - b.x);
+      // Longe o bastante para dois nomes inteiros: ninguém aperta.
+      if (distancia > LIMITE_NOME_TOKEN * 16 * LARGURA_MEDIA_DA_LETRA * ESCALA_MAXIMA_DO_NOME) continue;
+      const inteiroA = inteiros.get(a.id);
+      const inteiroB = inteiros.get(b.id);
+      // Ao lado de um nome inteiro, o vizinho usa o dobro do que sobra entre o centro dele e a borda desse nome.
+      apertar(a.id, inteiroB === undefined ? distancia * FOLGA_ENTRE_NOMES : (distancia - inteiroB / 2) * 2 * FOLGA_ENTRE_NOMES);
+      apertar(b.id, inteiroA === undefined ? distancia * FOLGA_ENTRE_NOMES : (distancia - inteiroA / 2) * 2 * FOLGA_ENTRE_NOMES);
+    }
+  }
+  return livres;
+}
+
 /** O nome do token deve ter pelo menos isto de altura na tela, qualquer que seja o zoom (px de tela). */
 export const NOME_MINIMO_NA_TELA_PX = 11;
 /** De tão longe que o nome cresceria mais que isto, ele deixa de acompanhar o zoom (e some, se o token mal se vê). */

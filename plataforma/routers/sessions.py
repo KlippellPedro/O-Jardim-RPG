@@ -2083,6 +2083,171 @@ def _chefes_na_virada_de_turno(connection, sessao_id, acao: str, indice: int) ->
         connection.execute("UPDATE sessao_participantes SET chefe=%s WHERE id=%s", (Jsonb(chefe), chave))
 
 
+def _sessao_do_jogador_da_vez(connection, sessao_id: UUID, user_id: UUID):
+    """A sessão ao vivo, em combate, quando a vez é de um personagem de quem pede. Senão, recusa."""
+    row = connection.execute(
+        """
+        SELECT id, campanha_id, status, rodada, turno_indice, em_combate, versao
+        FROM sessoes_mesa WHERE id=%s AND status='aberta'
+        """,
+        (sessao_id,),
+    ).fetchone()
+    if not row:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="sessao nao encontrada")
+    sessao = dict(row)
+    acesso = campaign_access(connection, sessao["campanha_id"], user_id)
+    if not sessao["em_combate"]:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="nao ha combate em andamento")
+    da_vez = connection.execute(
+        """
+        SELECT pe.dono_usuario_id
+        FROM sessao_participantes p
+        LEFT JOIN personagens pe ON pe.id = p.personagem_id
+        WHERE p.sessao_id=%s
+        ORDER BY p.ordem, p.iniciativa DESC, p.nome
+        OFFSET %s LIMIT 1
+        """,
+        (sessao_id, int(sessao["turno_indice"])),
+    ).fetchone()
+    if not da_vez or da_vez["dono_usuario_id"] != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="so quem esta na vez pode encerrar o proprio turno",
+        )
+    sessao["_papel_comando"] = acesso.role
+    return sessao
+
+
+def _andar_turno(connection, sessao: dict, sessao_id: UUID, acao: str, user_id: UUID) -> dict:
+    """O miolo do controle de turno. Quem chama já conferiu se a pessoa pode fazer isso."""
+    total = connection.execute(
+        "SELECT COUNT(*) AS total FROM sessao_participantes WHERE sessao_id=%s",
+        (sessao_id,),
+    ).fetchone()["total"]
+
+    rodada = int(sessao["rodada"])
+    indice = int(sessao["turno_indice"])
+    em_combate = bool(sessao["em_combate"])
+    nova_rodada = False
+
+    if acao == "ordenar":
+        linhas = connection.execute(
+            """
+            SELECT id FROM sessao_participantes WHERE sessao_id=%s
+            ORDER BY iniciativa DESC, nome
+            """,
+            (sessao_id,),
+        ).fetchall()
+        for posicao, linha in enumerate(linhas):
+            connection.execute(
+                "UPDATE sessao_participantes SET ordem=%s WHERE id=%s",
+                (posicao, linha["id"]),
+            )
+        indice = 0
+    elif acao == "iniciar":
+        if not total:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="adicione participantes antes de iniciar o combate",
+            )
+        em_combate = True
+        rodada = 1
+        indice = 0
+    elif acao == "encerrar":
+        em_combate = False
+        indice = 0
+    elif acao == "proximo" and total:
+        indice += 1
+        if indice >= total:
+            indice = 0
+            rodada += 1
+            nova_rodada = True
+    elif acao == "anterior" and total:
+        indice -= 1
+        if indice < 0:
+            indice = max(0, total - 1)
+            rodada = max(1, rodada - 1)
+
+    connection.execute(
+        """
+        UPDATE sessoes_mesa
+        SET rodada=%s, turno_indice=%s, em_combate=%s,
+            versao=versao+1, atualizado_em=CURRENT_TIMESTAMP
+        WHERE id=%s
+        """,
+        (rodada, indice, em_combate, sessao_id),
+    )
+    if nova_rodada:
+        _passar_rodada_condicoes(connection, sessao_id)
+        if em_combate:
+            _avancar_fases_pela_rodada(connection, sessao_id, rodada)
+    if em_combate and acao in ("iniciar", "proximo", "anterior"):
+        _chefes_na_virada_de_turno(connection, sessao_id, acao, indice)
+    cansados: list[dict] = []
+    if acao == "iniciar":
+        iniciar_marcas(connection, sessao_id)
+    elif acao == "encerrar":
+        cansados = encerrar_combate_e_cansar(connection, sessao_id)
+    atualizada = _sessao_ativa(connection, sessao["campanha_id"])
+    estado = _montar_estado(connection, atualizada, sessao["_papel_comando"], user_id)
+    campanha_id = sessao["campanha_id"]
+    # Quem está na vez, para a ficha do jogador avisar "É a sua vez!". Vai só
+    # o id do personagem (inimigo e NPC ficam sem id): o nome de criatura
+    # escondida nunca sai por aqui.
+    da_vez = connection.execute(
+        """
+        SELECT personagem_id, nome, tipo, visibilidade FROM sessao_participantes
+        WHERE sessao_id=%s
+        ORDER BY ordem, iniciativa DESC, nome
+        OFFSET %s LIMIT 1
+        """,
+        (sessao_id, indice),
+    ).fetchone()
+    # Linha do tempo do replay. Criatura escondida entra sem o nome.
+    if acao == "iniciar":
+        registrar_evento(connection, campanha_id, sessao_id, "combate", "O combate começou.")
+    elif acao == "encerrar":
+        registrar_evento(connection, campanha_id, sessao_id, "combate", "O combate terminou.")
+        if cansados:
+            nomes = ", ".join(item["nome"] for item in cansados)
+            registrar_evento(
+                connection, campanha_id, sessao_id, "combate",
+                f"Combate intenso: {nomes} ganha 1 de Cansaço." if len(cansados) == 1
+                else f"Combate intenso: {nomes} ganham 1 de Cansaço.",
+            )
+    elif acao in ("proximo", "anterior") and em_combate and da_vez:
+        escondida = da_vez["tipo"] == "inimigo" and da_vez["visibilidade"] in ("oculto", "desconhecido")
+        quem = "uma criatura desconhecida" if escondida else da_vez["nome"]
+        registrar_evento(
+            connection, campanha_id, sessao_id, "turno",
+            f"Rodada {rodada}: vez de {quem}.",
+        )
+    return {
+        "estado": estado, "campanha_id": campanha_id, "cansados": cansados, "acao": acao,
+        "em_combate": em_combate, "rodada": rodada, "da_vez": da_vez,
+    }
+
+
+def _publicar_turno(resultado: dict) -> dict:
+    """Avisa a mesa do turno novo, fora da transação, e devolve o estado para quem pediu."""
+    da_vez = resultado["da_vez"]
+    # A ficha de quem cansou mudou no servidor: sem este aviso a ficha aberta
+    # ficaria com a versão antiga e o próximo autosave viraria conflito.
+    _avisar_fichas_alteradas(resultado["campanha_id"], resultado["cansados"])
+    live_session.publicar(
+        resultado["campanha_id"],
+        "turno",
+        resultado["estado"]["sessao"]["versao"],
+        {
+            "acao": resultado["acao"],
+            "em_combate": resultado["em_combate"],
+            "rodada": resultado["rodada"],
+            "personagem_id": str(da_vez["personagem_id"]) if da_vez and da_vez["personagem_id"] else None,
+        },
+    )
+    return resultado["estado"]
+
+
 @router.post("/{sessao_id}/turno")
 def controlar_turno(
     sessao_id: UUID,
@@ -2093,123 +2258,22 @@ def controlar_turno(
     """Inicia o combate, ordena por iniciativa e anda com os turnos."""
     with database.connection() as connection:
         sessao = _sessao_sob_comando(connection, sessao_id, user.id)
-        total = connection.execute(
-            "SELECT COUNT(*) AS total FROM sessao_participantes WHERE sessao_id=%s",
-            (sessao_id,),
-        ).fetchone()["total"]
+        resultado = _andar_turno(connection, sessao, sessao_id, payload.acao, user.id)
+    return _publicar_turno(resultado)
 
-        rodada = int(sessao["rodada"])
-        indice = int(sessao["turno_indice"])
-        em_combate = bool(sessao["em_combate"])
-        nova_rodada = False
 
-        if payload.acao == "ordenar":
-            linhas = connection.execute(
-                """
-                SELECT id FROM sessao_participantes WHERE sessao_id=%s
-                ORDER BY iniciativa DESC, nome
-                """,
-                (sessao_id,),
-            ).fetchall()
-            for posicao, linha in enumerate(linhas):
-                connection.execute(
-                    "UPDATE sessao_participantes SET ordem=%s WHERE id=%s",
-                    (posicao, linha["id"]),
-                )
-            indice = 0
-        elif payload.acao == "iniciar":
-            if not total:
-                raise HTTPException(
-                    status_code=status.HTTP_409_CONFLICT,
-                    detail="adicione participantes antes de iniciar o combate",
-                )
-            em_combate = True
-            rodada = 1
-            indice = 0
-        elif payload.acao == "encerrar":
-            em_combate = False
-            indice = 0
-        elif payload.acao == "proximo" and total:
-            indice += 1
-            if indice >= total:
-                indice = 0
-                rodada += 1
-                nova_rodada = True
-        elif payload.acao == "anterior" and total:
-            indice -= 1
-            if indice < 0:
-                indice = max(0, total - 1)
-                rodada = max(1, rodada - 1)
-
-        connection.execute(
-            """
-            UPDATE sessoes_mesa
-            SET rodada=%s, turno_indice=%s, em_combate=%s,
-                versao=versao+1, atualizado_em=CURRENT_TIMESTAMP
-            WHERE id=%s
-            """,
-            (rodada, indice, em_combate, sessao_id),
-        )
-        if nova_rodada:
-            _passar_rodada_condicoes(connection, sessao_id)
-            if em_combate:
-                _avancar_fases_pela_rodada(connection, sessao_id, rodada)
-        if em_combate and payload.acao in ("iniciar", "proximo", "anterior"):
-            _chefes_na_virada_de_turno(connection, sessao_id, payload.acao, indice)
-        cansados: list[dict] = []
-        if payload.acao == "iniciar":
-            iniciar_marcas(connection, sessao_id)
-        elif payload.acao == "encerrar":
-            cansados = encerrar_combate_e_cansar(connection, sessao_id)
-        atualizada = _sessao_ativa(connection, sessao["campanha_id"])
-        estado = _montar_estado(connection, atualizada, sessao["_papel_comando"], user.id)
-        campanha_id = sessao["campanha_id"]
-        # Quem está na vez, para a ficha do jogador avisar "É a sua vez!". Vai só
-        # o id do personagem (inimigo e NPC ficam sem id): o nome de criatura
-        # escondida nunca sai por aqui.
-        da_vez = connection.execute(
-            """
-            SELECT personagem_id, nome, tipo, visibilidade FROM sessao_participantes
-            WHERE sessao_id=%s
-            ORDER BY ordem, iniciativa DESC, nome
-            OFFSET %s LIMIT 1
-            """,
-            (sessao_id, indice),
-        ).fetchone()
-        # Linha do tempo do replay. Criatura escondida entra sem o nome.
-        if payload.acao == "iniciar":
-            registrar_evento(connection, campanha_id, sessao_id, "combate", "O combate começou.")
-        elif payload.acao == "encerrar":
-            registrar_evento(connection, campanha_id, sessao_id, "combate", "O combate terminou.")
-            if cansados:
-                nomes = ", ".join(item["nome"] for item in cansados)
-                registrar_evento(
-                    connection, campanha_id, sessao_id, "combate",
-                    f"Combate intenso: {nomes} ganha 1 de Cansaço." if len(cansados) == 1
-                    else f"Combate intenso: {nomes} ganham 1 de Cansaço.",
-                )
-        elif payload.acao in ("proximo", "anterior") and em_combate and da_vez:
-            escondida = da_vez["tipo"] == "inimigo" and da_vez["visibilidade"] in ("oculto", "desconhecido")
-            quem = "uma criatura desconhecida" if escondida else da_vez["nome"]
-            registrar_evento(
-                connection, campanha_id, sessao_id, "turno",
-                f"Rodada {rodada}: vez de {quem}.",
-            )
-    # A ficha de quem cansou mudou no servidor: sem este aviso a ficha aberta
-    # ficaria com a versão antiga e o próximo autosave viraria conflito.
-    _avisar_fichas_alteradas(campanha_id, cansados)
-    live_session.publicar(
-        campanha_id,
-        "turno",
-        estado["sessao"]["versao"],
-        {
-            "acao": payload.acao,
-            "em_combate": em_combate,
-            "rodada": rodada,
-            "personagem_id": str(da_vez["personagem_id"]) if da_vez and da_vez["personagem_id"] else None,
-        },
-    )
-    return estado
+@router.post("/{sessao_id}/turno/passar")
+def passar_a_propria_vez(
+    sessao_id: UUID,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """O jogador encerra o próprio turno. Só vale no combate e quando a vez é de um personagem dele;
+    o Mestre continua podendo voltar o turno pela Sessão."""
+    with database.connection() as connection:
+        sessao = _sessao_do_jogador_da_vez(connection, sessao_id, user.id)
+        resultado = _andar_turno(connection, sessao, sessao_id, "proximo", user.id)
+    return _publicar_turno(resultado)
 
 
 @router.post("/{sessao_id}/iniciativa")
