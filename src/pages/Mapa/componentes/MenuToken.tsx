@@ -4,6 +4,7 @@ import type { IAuraToken, ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra,
 import { SeletorDeMoldura } from '../oficina/OficinaGaveta';
 import type { Enquadramento } from '../motor/molduras';
 import { NotaDoMestre } from './NotaDoMestre';
+import { ArtesDoToken } from './ArtesDoToken';
 import '../efeitosMapa.css';
 
 interface Props {
@@ -17,6 +18,10 @@ interface Props {
   onMoldura: (id: string | null) => void;
   onEnquadramento: (enquadramento: Enquadramento) => void;
   onFechar: () => void;
+  /** Campanha aberta: as artes extras do personagem moram nela. */
+  campanhaId?: string | null;
+  /** A arte do token mudou: recarrega o mapa para o token mostrar a nova. */
+  onArteMudou?: () => void;
 }
 
 type Aba = 'geral' | 'barras' | 'visual' | 'luz';
@@ -63,11 +68,11 @@ const ROTULO_DA_ABA: Record<Aba, string> = { geral: 'Geral', barras: 'Barras', v
  * As opções do token, em abas (antes era uma coluna só, com quase 1000 px de altura). O que se faz a toda hora
  * (esconder, falar como, tirar do mapa) está na barra colada no token (BarraToken); aqui ficam os ajustes.
  */
-export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMoldura, onEnquadramento, onFechar }: Props) => {
+export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMoldura, onEnquadramento, onFechar, campanhaId, onArteMudou }: Props) => {
   const config = token.config_barras;
   const podeVisual = gestor || token.e_meu;
   // Enquadramento só para a foto da ficha (imagem do Acervo já vem recortada pela Oficina).
-  const temFotoDaFicha = Boolean(token.personagem_id && token.imagem?.startsWith('f'));
+  const temFotoDaFicha = Boolean(token.personagem_id && /^[fr]/.test(token.imagem ?? ''));
   const abas: Aba[] = ['geral', ...(config ? ['barras' as const] : []), ...(podeVisual ? ['visual' as const, 'luz' as const] : [])];
   const [aba, setAba] = useState<Aba>('geral');
   const abaAtual = abas.includes(aba) ? aba : 'geral';
@@ -219,6 +224,12 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
               <SeletorDeMoldura valor={token.moldura} lado={token.lado} nivel={token.nivel} incluirNivel={Boolean(token.personagem_id)} onEscolher={(id) => onMoldura(id)} />
               <button type="button" className="mapa-botao-leve" onClick={() => onMoldura(null)}>Voltar ao padrão</button>
             </>
+          )}
+          {token.personagem_id && campanhaId && !token.imagem_id && (
+            <fieldset>
+              <legend>Artes do personagem</legend>
+              <ArtesDoToken campanhaId={campanhaId} personagemId={token.personagem_id} nome={token.nome} aoMudarToken={onArteMudou} />
+            </fieldset>
           )}
           {temFotoDaFicha && (
             <>

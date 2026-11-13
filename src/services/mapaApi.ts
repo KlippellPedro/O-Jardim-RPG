@@ -444,6 +444,9 @@ export const mapaApi = {
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/trazer`, { method: 'POST', body: ponto, ...ESTADO }),
   editarToken: (campanhaId: string, tokenId: string, dados: ITokenEdicao) =>
     api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'PUT', body: dados, ...ESTADO }),
+  /** Vida, Mana, Estamina ou Sanidade pela barra do token: `delta` soma (dano é negativo), `atual` define. O servidor grava na Sessão e na ficha. */
+  mexerNoRecurso: (campanhaId: string, tokenId: string, dados: { tipo: TipoBarra; delta?: number; atual?: number }) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}/recurso`, { method: 'POST', body: dados, ...ESTADO }),
   moverToken: (campanhaId: string, tokenId: string, ponto: { x: number; y: number; atravessar?: string }) =>
     api<{ x: number; y: number; versao: number; travessia: ITravessia | null; barrado?: boolean }>(`${base(campanhaId)}/tokens/${tokenId}/mover`, { method: 'POST', body: ponto }),
   /** Abrir, fechar, trancar ou revelar uma porta do mapa montado (o jogador só abre e fecha a que está ao lado). */
@@ -452,8 +455,15 @@ export const mapaApi = {
   apagarToken: (campanhaId: string, tokenId: string) =>
     api<null>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'DELETE' }),
   /** Moldura e enquadramento do personagem: valem em todas as cenas. */
-  editarTokenDoPersonagem: (campanhaId: string, personagemId: string, dados: { moldura?: string; sem_moldura?: boolean; enquadramento?: Partial<{ zoom: number; x: number; y: number }> }) =>
-    api<{ moldura: string | null; enquadramento: { zoom: number; x: number; y: number } }>(`${base(campanhaId)}/personagens/${personagemId}/token`, { method: 'PUT', body: dados }),
+  editarTokenDoPersonagem: (campanhaId: string, personagemId: string, dados: { moldura?: string; sem_moldura?: boolean; enquadramento?: Partial<{ zoom: number; x: number; y: number }>; arte_id?: string; sem_arte?: boolean }) =>
+    api<{ moldura: string | null; enquadramento: { zoom: number; x: number; y: number }; arte_id: string | null }>(`${base(campanhaId)}/personagens/${personagemId}/token`, { method: 'PUT', body: dados }),
+  /** As artes extras do token do personagem (a foto da ficha é a padrão). Só o dono e o Mestre. */
+  listarArtes: (campanhaId: string, personagemId: string) =>
+    api<IArtesDoPersonagem>(`${base(campanhaId)}/personagens/${personagemId}/artes`, { cache: 'no-store' }),
+  criarArte: (campanhaId: string, personagemId: string, dados: { nome?: string; imagem: string }) =>
+    api<IArtesDoPersonagem>(`${base(campanhaId)}/personagens/${personagemId}/artes`, { method: 'POST', body: dados }),
+  apagarArte: (campanhaId: string, personagemId: string, arteId: string) =>
+    api<IArtesDoPersonagem>(`${base(campanhaId)}/personagens/${personagemId}/artes/${arteId}`, { method: 'DELETE' }),
   mudarNevoa: (campanhaId: string, cenaId: string, dados: INevoaPayload) =>
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/nevoa`, { method: 'POST', body: dados, ...ESTADO }),
   mudarClima: (campanhaId: string, cenaId: string, clima: IClima) =>
@@ -485,6 +495,20 @@ export const mapaApi = {
   configurar: (campanhaId: string, dados: { moldura_mesa: string | null }) =>
     api<{ moldura_mesa: string | null }>(`${base(campanhaId)}/config`, { method: 'PUT', body: dados }),
 };
+
+export interface IArtesDoPersonagem {
+  artes: Array<{ id: string; nome: string }>;
+  /** A arte que o token mostra; nula quando vale a foto da ficha. */
+  ativa: string | null;
+  tem_foto_ficha: boolean;
+  versao_foto_ficha: string;
+  maximo: number;
+}
+
+/** A imagem de uma arte (`ficha` é a foto da ficha). Cada arte nunca muda, então o endereço leva só uma versão para a da ficha. */
+export function urlImagemDaArte(campanhaId: string, personagemId: string, arteId: string, versao = ''): string {
+  return `/api/v1/mapa/${campanhaId}/personagens/${personagemId}/artes/${arteId}/imagem${versao ? `?v=${encodeURIComponent(versao)}` : ''}`;
+}
 
 export function urlImagemDoToken(campanhaId: string, tokenId: string, versao: string): string {
   return `/api/v1/mapa/${campanhaId}/tokens/${tokenId}/imagem?v=${encodeURIComponent(versao)}`;

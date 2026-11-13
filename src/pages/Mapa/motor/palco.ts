@@ -802,7 +802,8 @@ export class PalcoMapa {
       const mapa = this.mapasColocados.mapa(alvo.id);
       caixa = mapa ? caixaDoMapa(mapa) : null;
     } else {
-      caixa = this.tokens.get(alvo.id)?.caixa ?? null;
+      // Com as barras do token abaixo dele, a barra de ações cola depois delas.
+      caixa = this.tokens.get(alvo.id)?.caixaDaBarra ?? null;
     }
     if (!caixa) return null;
     const canto = this.viewport.toScreen(caixa.x, caixa.y);

@@ -17,11 +17,20 @@ export interface IPreferenciasBarrasMapa {
   porTipo: Record<TipoBarra, IVisualBarra>;
 }
 
+/** Tons pastel: a barra fica suave sobre o mapa e o texto branco continua legível por cima. */
 export const CORES_BARRA_PADRAO: Record<TipoBarra, string> = {
-  vida: '#e5484d',
-  mana: '#3e63dd',
-  estamina: '#30a46c',
-  sanidade: '#8e4ec6',
+  vida: '#e88a90',
+  mana: '#8aa4ef',
+  estamina: '#86d4ab',
+  sanidade: '#b79be0',
+};
+
+/** Cores vivas do desenho antigo: quem guardou uma delas no aparelho passa para a pastel correspondente. */
+const CORES_ANTIGAS: Record<string, string> = {
+  '#e5484d': CORES_BARRA_PADRAO.vida,
+  '#3e63dd': CORES_BARRA_PADRAO.mana,
+  '#30a46c': CORES_BARRA_PADRAO.estamina,
+  '#8e4ec6': CORES_BARRA_PADRAO.sanidade,
 };
 
 export const PREFERENCIAS_BARRAS_PADRAO: IPreferenciasBarrasMapa = {
@@ -41,9 +50,10 @@ const COR_HEX = /^#[0-9a-f]{6}$/i;
 function normalizarVisualBarra(valor: unknown, padrao: IVisualBarra): IVisualBarra {
   if (!valor || typeof valor !== 'object') return { ...padrao };
   const dados = valor as Partial<IVisualBarra>;
+  const cor = typeof dados.cor === 'string' && COR_HEX.test(dados.cor) ? dados.cor.toLowerCase() : padrao.cor;
   return {
     modo: MODOS_VISUAIS.has(dados.modo as ModoVisualBarra) ? dados.modo as ModoVisualBarra : padrao.modo,
-    cor: typeof dados.cor === 'string' && COR_HEX.test(dados.cor) ? dados.cor.toLowerCase() : padrao.cor,
+    cor: CORES_ANTIGAS[cor] ?? cor,
   };
 }
 
@@ -95,6 +105,15 @@ export function salvarPreferenciasBarras(usuarioId: string | null | undefined, p
   } catch {
     // Sem armazenamento disponível, as preferências valem até fechar a página.
   }
+}
+
+/**
+ * O texto das barras é miúdo no mundo e o mapa dá zoom nele: com a resolução padrão da textura ele fica borrado.
+ * A resolução acompanha o zoom da tela (em degraus de 1, 2 e 4, para não refazer a textura a todo quadro).
+ */
+export function resolucaoDoTexto(zoom: number, dpr = typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1): number {
+  const alvo = Math.max(1, zoom * dpr);
+  return Math.min(4, 2 ** Math.ceil(Math.log2(alvo)));
 }
 
 export interface IBarrasSeparadas {

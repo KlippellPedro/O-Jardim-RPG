@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { mostrarComRecurso, porcentagemDaBarra, recursoEscolhido, separarBarras } from '../../src/pages/Mapa/motor/barrasToken';
+import { CORES_BARRA_PADRAO, mostrarComRecurso, normalizarPreferenciasBarras, porcentagemDaBarra, recursoEscolhido, resolucaoDoTexto, separarBarras } from '../../src/pages/Mapa/motor/barrasToken';
 import type { IBarraToken } from '../../src/services/mapaApi';
 
 const vida: IBarraToken = { tipo: 'vida', atual: 20, maximo: 40 };
@@ -31,4 +31,20 @@ test('o menu troca só o recurso e deixa Vida e Sanidade como estavam', () => {
   assert.equal(recursoEscolhido({ mostrar: ['vida', 'mana', 'estamina'], para: 'todos' }, [vida, estamina]), 'estamina');
   assert.equal(recursoEscolhido({ mostrar: ['vida', 'mana', 'estamina'], para: 'todos' }, [vida, mana]), 'mana');
   assert.equal(recursoEscolhido({ mostrar: ['vida'], para: 'todos' }, [vida]), 'nenhum');
+});
+
+test('quem guardou as cores vivas antigas passa para as pastel; cor escolhida de verdade fica', () => {
+  const antigas = normalizarPreferenciasBarras({ porTipo: { vida: { modo: 'barra', cor: '#E5484D' }, mana: { modo: 'barra', cor: '#3e63dd' }, estamina: { modo: 'barra', cor: '#123456' } } });
+  assert.equal(antigas.porTipo.vida.cor, CORES_BARRA_PADRAO.vida);
+  assert.equal(antigas.porTipo.mana.cor, CORES_BARRA_PADRAO.mana);
+  assert.equal(antigas.porTipo.estamina.cor, '#123456');
+});
+
+test('o texto das barras ganha resolução com o zoom, em degraus, sem passar de 4', () => {
+  assert.equal(resolucaoDoTexto(0.4, 1), 1);
+  assert.equal(resolucaoDoTexto(1, 1), 1);
+  assert.equal(resolucaoDoTexto(1.5, 1), 2);
+  assert.equal(resolucaoDoTexto(3, 1), 4);
+  assert.equal(resolucaoDoTexto(8, 1), 4);
+  assert.equal(resolucaoDoTexto(1, 2), 2);
 });

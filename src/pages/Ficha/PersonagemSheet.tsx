@@ -20,6 +20,7 @@ import {
   Eye,
   EyeOff,
   HelpCircle,
+  ImagePlus,
   Landmark,
   Moon,
   Package,
@@ -35,6 +36,7 @@ import {
   Users,
   WandSparkles,
   WifiOff,
+  X,
 } from 'lucide-react';
 import { carregarCatalogo } from '../../services/catalogoService';
 import { ICatalogo } from '../../types/catalogo';
@@ -70,6 +72,7 @@ import { ExportarFichaModal } from './components/ExportarFichaModal';
 import { AbaErrorBoundary } from './components/AbaErrorBoundary';
 import { AjustarFotoModal } from './components/AjustarFotoModal';
 import { ModalPortal } from './components/ModalPortal';
+import { ArtesDoToken } from '../Mapa/componentes/ArtesDoToken';
 import { perfilDaClasse } from '../../utils/somDeClasse';
 import { sfx } from '../../utils/audioSynth';
 import { resetarEstadoVital } from './estadoVital';
@@ -205,6 +208,7 @@ export const PersonagemSheet: React.FC = () => {
   const [showPendencias, setShowPendencias] = useState(false);
   const [showAnalise, setShowAnalise] = useState(false);
   const [editandoFoto, setEditandoFoto] = useState(false);
+  const [editandoArtes, setEditandoArtes] = useState(false);
   const [showExportar, setShowExportar] = useState(false);
   const [pedidoModoMesa, setPedidoModoMesa] = useState(false);
   const [tourTab, setTourTab] = useState<FichaTourTabId | null>(null);
@@ -796,6 +800,16 @@ export const PersonagemSheet: React.FC = () => {
               <span className="ficha-meta-chip">
                 Nível {character.nivel}
               </span>
+              {!somenteLeitura && campanhaId && (
+                <button
+                  type="button"
+                  className="ficha-meta-chip cursor-pointer hover:brightness-125"
+                  onClick={() => setEditandoArtes(true)}
+                  title="Outras artes para o token deste personagem no mapa"
+                >
+                  <ImagePlus size={12} aria-hidden="true" /> Artes do token
+                </button>
+              )}
             </div>
             {ficha.titulo && <p className="mt-3 text-sm italic text-gray-400">{ficha.titulo}</p>}
           </div>
@@ -1067,6 +1081,30 @@ export const PersonagemSheet: React.FC = () => {
                   setEditandoFoto(false);
                 }}
               />
+            </ModalPortal>
+          ) : null}
+        </AnimatePresence>
+        <AnimatePresence>
+          {editandoArtes && campanhaId ? (
+            <ModalPortal manageFocus={false} onClose={() => setEditandoArtes(false)}>
+              <div
+                role="dialog"
+                aria-modal="true"
+                aria-label={`Artes do token de ${character.nome || 'personagem'}`}
+                className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+                onClick={() => setEditandoArtes(false)}
+              >
+                <div onClick={(event) => event.stopPropagation()} className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-white/10 bg-[#0b0a12] p-6 shadow-2xl">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>Artes do token</h3>
+                    <button type="button" onClick={() => setEditandoArtes(false)} aria-label="Fechar" className="rounded-full p-1.5 text-gray-500 hover:bg-white/10 hover:text-white">
+                      <X size={18} />
+                    </button>
+                  </div>
+                  <p className="mb-4 text-xs text-gray-400">Guarde outras artes do personagem (roupa diferente, disfarce) e escolha qual aparece no token do mapa. A troca vale em todas as cenas.</p>
+                  <ArtesDoToken campanhaId={campanhaId} personagemId={character.id} nome={character.nome || 'personagem'} />
+                </div>
+              </div>
             </ModalPortal>
           ) : null}
         </AnimatePresence>

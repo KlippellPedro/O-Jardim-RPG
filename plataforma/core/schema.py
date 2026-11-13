@@ -2486,4 +2486,24 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "ALTER TABLE mapa_cenas ADD COLUMN IF NOT EXISTS nota_mestre TEXT NOT NULL DEFAULT '' CHECK (length(nota_mestre) <= 4000)",
         ),
     ),
+    (
+        76,
+        "artes_extras_do_token_do_personagem",
+        (
+            # Artes extras do token (core/artes_token.py): a foto da ficha segue como a padrão; estas são
+            # visuais alternativos que o dono escolhe para o token (roupa diferente, por exemplo).
+            """
+            CREATE TABLE IF NOT EXISTS personagem_artes (
+                id UUID PRIMARY KEY,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                nome TEXT NOT NULL CHECK (length(nome) BETWEEN 1 AND 40),
+                imagem TEXT NOT NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS personagem_artes_personagem_idx ON personagem_artes (personagem_id, criado_em)",
+            # A arte que o token mostra agora. Nulo = a foto da ficha. Apagar a arte volta ao padrão.
+            "ALTER TABLE personagem_token ADD COLUMN IF NOT EXISTS arte_id UUID REFERENCES personagem_artes(id) ON DELETE SET NULL",
+        ),
+    ),
 )

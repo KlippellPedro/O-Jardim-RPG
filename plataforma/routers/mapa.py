@@ -28,7 +28,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
-from core import calendario, construtor, mapa, mapas_colocados, mesa_extras, nevoa, paredes, tempo_real, visao
+from core import artes_token, calendario, construtor, mapa, mapas_colocados, mesa_extras, nevoa, paredes, recursos_token, tempo_real, visao
 from core.acervo import ler as ler_pedaco
 from core.condicoes import normalizar_condicoes
 from core.database import Database
@@ -111,10 +111,26 @@ class TokenEdicao(BaseModel):
     nota_mestre: str | None = Field(default=None, max_length=mapa.NOTA_MAXIMA)
 
 
+class RecursoTokenInput(BaseModel):
+    """Mexer num recurso pela barra do token: some `delta` (dano é negativo) ou define o valor `atual`."""
+
+    tipo: str = Field(pattern="^(vida|mana|estamina|sanidade)$")
+    delta: int | None = Field(default=None, ge=-99_999, le=99_999)
+    atual: int | None = Field(default=None, ge=-999, le=99_999)
+
+
 class TokenDoPersonagemInput(BaseModel):
     moldura: str | None = Field(default=None, max_length=40)
     sem_moldura: bool = False
     enquadramento: dict | None = None
+    #: Arte extra que o token mostra; `sem_arte` volta à foto da ficha.
+    arte_id: UUID | None = None
+    sem_arte: bool = False
+
+
+class ArteInput(BaseModel):
+    nome: str | None = Field(default=None, max_length=artes_token.NOME_MAXIMO * 2)
+    imagem: str = Field(min_length=32, max_length=artes_token.MAX_CARACTERES_ARTE + 64)
 
 
 class ConfigMapaInput(BaseModel):
@@ -308,9 +324,10 @@ def _tokens_de_personagem(connection, personagens: set[str]) -> dict[str, dict]:
         str(linha["personagem_id"]): {
             "moldura": linha["moldura"],
             "enquadramento": linha["enquadramento"] if isinstance(linha["enquadramento"], dict) else {},
+            "arte_id": str(linha["arte_id"]) if linha["arte_id"] else None,
         }
         for linha in connection.execute(
-            "SELECT personagem_id, moldura, enquadramento FROM personagem_token WHERE personagem_id = ANY(%s::uuid[])",
+            "SELECT personagem_id, moldura, enquadramento, arte_id FROM personagem_token WHERE personagem_id = ANY(%s::uuid[])",
             (list(personagens),),
         ).fetchall()
     }
@@ -356,6 +373,9 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador, visao_j
         ficha = ficha_linha["ficha"] if ficha_linha and isinstance(ficha_linha["ficha"], dict) else {}
         if token["imagem_id"]:
             versao_imagem = f"a{str(token['imagem_id'])[:8]}"
+        elif do_personagem.get("arte_id"):
+            # Arte extra escolhida pelo dono: a versão é o id dela (a arte nunca muda, só nasce e some).
+            versao_imagem = f"r{do_personagem['arte_id'][:8]}"
         elif ficha_linha and ficha_linha["foto_hash"]:
             versao_imagem = f"f{ficha_linha['foto_hash'][:10]}"
         else:
@@ -1325,6 +1345,248 @@ def editar_token(
     return resposta
 
 
+@router.post("/{campanha_id}/tokens/{token_id}/recurso")
+def mexer_no_recurso_do_token(
+    campanha_id: UUID,
+    token_id: UUID,
+    payload: RecursoTokenInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Vida, Mana, Estamina ou Sanidade pela barra do token. O dono do personagem e o Mestre mexem; o número
+    novo vai para o participante da Sessão (se ele estiver lá) e para a ficha, como no HUD do Mestre."""
+    from routers.sessions import _avisar_fichas_alteradas, _tocar as _tocar_sessao  # import tardio: o router da Sessão é pesado
+    from routers.characters import _session_resources
+    from core import live_session
+    from core.combate_intenso import registrar_minimos
+
+    if (payload.delta is None) == (payload.atual is None):
+        raise HTTPException(status_code=422, detail="informe a mudanca (delta) ou o valor novo (atual)")
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        token = _token(connection, campanha_id, token_id, travar=True)
+        quem = _espectador(connection, campanha_id, acesso, user.id)
+        participante = _participante_do_token(connection, campanha_id, token)
+        if not quem.gestor:
+            if not mapa.e_dono(token, participante, quem):
+                raise HTTPException(status_code=403, detail="este token nao e seu")
+            if not _camadas_visiveis(token["estrutura"], False, quem.permissoes_mesa).get(token["camada"], False):
+                raise HTTPException(status_code=404, detail="token nao encontrado")
+        personagem_id = mapa.personagem_do_token(token, participante)
+        if not personagem_id:
+            raise HTTPException(status_code=422, detail="so o token de um personagem tem recursos para mexer por aqui")
+
+        # Mesma ordem de trava da Sessão: participante primeiro, ficha depois.
+        linha_participante = None
+        if participante:
+            linha_participante = connection.execute(
+                """
+                SELECT id, sessao_id, vida_atual, vida_maxima, vida_temporaria,
+                       mana_atual, mana_maxima, estamina_atual, estamina_maxima
+                FROM sessao_participantes WHERE id=%s FOR UPDATE
+                """,
+                (participante["id"],),
+            ).fetchone()
+        ficha_linha = connection.execute(
+            "SELECT ficha FROM personagens WHERE id=%s AND campanha_id=%s AND status='ativo' FOR UPDATE",
+            (personagem_id, campanha_id),
+        ).fetchone()
+        if not ficha_linha:
+            raise HTTPException(status_code=404, detail="personagem nao encontrado")
+        ficha = ficha_linha["ficha"] if isinstance(ficha_linha["ficha"], dict) else {}
+        status_ficha = ficha.get("status") if isinstance(ficha.get("status"), dict) else {}
+
+        if payload.tipo == "sanidade":
+            sanidade = mapa.sanidade_da_ficha(ficha)
+            atual, maximo = sanidade if sanidade else (0, 0)
+            temporario = 0
+        else:
+            recursos = _session_resources(ficha)
+            fonte = linha_participante if linha_participante else recursos
+            atual = fonte.get(f"{payload.tipo}_atual")
+            maximo = fonte.get(f"{payload.tipo}_maxima")
+            temporario = (
+                int((linha_participante["vida_temporaria"] if linha_participante else status_ficha.get("vidaTemporaria")) or 0)
+                if payload.tipo == "vida" else 0
+            )
+            if atual is None and maximo is not None:
+                atual = maximo
+        try:
+            if atual is None or maximo is None:
+                raise recursos_token.ErroRecurso("este personagem nao tem esse recurso")
+            novo_atual, novo_temp = recursos_token.aplicar(
+                payload.tipo, int(atual), int(maximo), temporario, delta=payload.delta, novo=payload.atual,
+            )
+        except recursos_token.ErroRecurso as erro:
+            raise HTTPException(status_code=422, detail=str(erro)) from None
+
+        versao_sessao = None
+        if linha_participante and payload.tipo != "sanidade":
+            if payload.tipo == "vida":
+                connection.execute(
+                    "UPDATE sessao_participantes SET vida_atual=%s, vida_temporaria=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s",
+                    (novo_atual, novo_temp, linha_participante["id"]),
+                )
+            else:
+                connection.execute(
+                    f"UPDATE sessao_participantes SET {payload.tipo}_atual=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s",
+                    (novo_atual, linha_participante["id"]),
+                )
+            registrar_minimos(connection, linha_participante["sessao_id"])
+            versao_sessao = _tocar_sessao(connection, linha_participante["sessao_id"])
+        campos_status, campos_recursos = recursos_token.campos_da_ficha(payload.tipo, novo_atual, novo_temp)
+        versao_ficha = int(connection.execute(
+            """
+            UPDATE personagens
+            SET ficha=jsonb_set(
+                    jsonb_set(ficha, '{status}', COALESCE(ficha->'status', '{}'::jsonb) || %s, true),
+                    '{recursos}', COALESCE(ficha->'recursos', '{}'::jsonb) || %s, true
+                ),
+                versao=versao+1,
+                atualizado_em=CURRENT_TIMESTAMP
+            WHERE id=%s AND status='ativo'
+            RETURNING versao
+            """,
+            (Jsonb(campos_status), Jsonb(campos_recursos), personagem_id),
+        ).fetchone()["versao"])
+        versao = _tocar(connection, token["cena_id"])
+        resposta = _montar(connection, campanha_id, acesso, user, token["cena_id"] if quem.gestor else None)
+    _avisar(campanha_id, versao)
+    if versao_sessao is not None:
+        live_session.publicar(campanha_id, "participante_atualizado", versao_sessao)
+    # A ficha aberta (do dono, do Mestre) busca a versão nova em vez de brigar com o próprio autosave.
+    _avisar_fichas_alteradas(campanha_id, [{"personagem_id": personagem_id, "versao": versao_ficha}])
+    return resposta
+
+
+def _personagem_do_dono(connection, campanha_id: UUID, user: AuthenticatedUser, personagem_id: UUID):
+    """O personagem ativo da campanha, para o dono ou para quem comanda a mesa."""
+    acesso = campaign_access(connection, campanha_id, user.id)
+    personagem = connection.execute(
+        "SELECT id, dono_usuario_id, md5(ficha->>'foto') AS foto_hash, (ficha->>'foto') IS NOT NULL AS tem_foto "
+        "FROM personagens WHERE id=%s AND campanha_id=%s AND status='ativo'",
+        (personagem_id, campanha_id),
+    ).fetchone()
+    if not personagem:
+        raise HTTPException(status_code=404, detail="personagem nao encontrado")
+    if not acesso.manages_content and personagem["dono_usuario_id"] != user.id:
+        raise HTTPException(status_code=403, detail="este personagem nao e seu")
+    return personagem
+
+
+def _lista_de_artes(connection, personagem) -> dict:
+    """As artes do personagem sem as imagens (cada uma tem a sua rota) e qual está no token."""
+    artes = connection.execute(
+        "SELECT id, nome FROM personagem_artes WHERE personagem_id=%s ORDER BY criado_em, id", (personagem["id"],),
+    ).fetchall()
+    ativa = connection.execute("SELECT arte_id FROM personagem_token WHERE personagem_id=%s", (personagem["id"],)).fetchone()
+    return {
+        "artes": [{"id": str(a["id"]), "nome": a["nome"]} for a in artes],
+        "ativa": str(ativa["arte_id"]) if ativa and ativa["arte_id"] else None,
+        "tem_foto_ficha": bool(personagem["tem_foto"]),
+        "versao_foto_ficha": (personagem["foto_hash"] or "")[:10],
+        "maximo": artes_token.MAX_ARTES,
+    }
+
+
+@router.get("/{campanha_id}/personagens/{personagem_id}/artes")
+def listar_artes_do_personagem(
+    campanha_id: UUID,
+    personagem_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """As artes extras do token do personagem (a foto da ficha é a padrão). Dono ou Mestre."""
+    with database.connection() as connection:
+        personagem = _personagem_do_dono(connection, campanha_id, user, personagem_id)
+        return _lista_de_artes(connection, personagem)
+
+
+@router.get("/{campanha_id}/personagens/{personagem_id}/artes/{arte_id}/imagem")
+def imagem_da_arte(
+    campanha_id: UUID,
+    personagem_id: UUID,
+    arte_id: str,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """A imagem de uma arte; `ficha` é a foto da ficha. Dono ou Mestre."""
+    with database.connection() as connection:
+        personagem = _personagem_do_dono(connection, campanha_id, user, personagem_id)
+        if arte_id == "ficha":
+            achado = _foto_da_ficha(connection, personagem["id"])
+            cache = "private, no-cache"
+        else:
+            try:
+                alvo = UUID(arte_id)
+            except ValueError:
+                raise HTTPException(status_code=404, detail="arte nao encontrada") from None
+            linha = connection.execute(
+                "SELECT imagem FROM personagem_artes WHERE id=%s AND personagem_id=%s", (alvo, personagem["id"]),
+            ).fetchone()
+            achado = artes_token.decodificar(linha["imagem"] if linha else None)
+            cache = "private, max-age=31536000, immutable"
+    if not achado:
+        raise HTTPException(status_code=404, detail="arte nao encontrada")
+    mime, dados = achado
+    return Response(content=dados, media_type=mime, headers={"Cache-Control": cache})
+
+
+@router.post("/{campanha_id}/personagens/{personagem_id}/artes", status_code=status.HTTP_201_CREATED)
+def criar_arte_do_personagem(
+    campanha_id: UUID,
+    personagem_id: UUID,
+    payload: ArteInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Guarda uma arte extra para o token do personagem."""
+    try:
+        imagem = artes_token.conferir_imagem(payload.imagem)
+    except artes_token.ErroArte as erro:
+        raise HTTPException(status_code=422, detail=str(erro)) from None
+    with database.connection() as connection:
+        personagem = _personagem_do_dono(connection, campanha_id, user, personagem_id)
+        # Trava a linha do personagem: dois envios ao mesmo tempo não passam do limite.
+        connection.execute("SELECT 1 FROM personagens WHERE id=%s FOR UPDATE", (personagem["id"],))
+        total = int(connection.execute(
+            "SELECT COUNT(*) AS n FROM personagem_artes WHERE personagem_id=%s", (personagem["id"],),
+        ).fetchone()["n"])
+        if total >= artes_token.MAX_ARTES:
+            raise HTTPException(status_code=409, detail=f"limite de {artes_token.MAX_ARTES} artes por personagem")
+        connection.execute(
+            "INSERT INTO personagem_artes (id, personagem_id, nome, imagem) VALUES (%s, %s, %s, %s)",
+            (uuid4(), personagem["id"], artes_token.nome_da_arte(payload.nome, total + 1), imagem),
+        )
+        resposta = _lista_de_artes(connection, personagem)
+    return resposta
+
+
+@router.delete("/{campanha_id}/personagens/{personagem_id}/artes/{arte_id}")
+def apagar_arte_do_personagem(
+    campanha_id: UUID,
+    personagem_id: UUID,
+    arte_id: UUID,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Apaga uma arte; se era a do token, o token volta à foto da ficha."""
+    with database.connection() as connection:
+        personagem = _personagem_do_dono(connection, campanha_id, user, personagem_id)
+        era_a_ativa = connection.execute(
+            "SELECT 1 FROM personagem_token WHERE personagem_id=%s AND arte_id=%s", (personagem["id"], arte_id),
+        ).fetchone()
+        apagada = connection.execute(
+            "DELETE FROM personagem_artes WHERE id=%s AND personagem_id=%s RETURNING id", (arte_id, personagem["id"]),
+        ).fetchone()
+        if not apagada:
+            raise HTTPException(status_code=404, detail="arte nao encontrada")
+        resposta = _lista_de_artes(connection, personagem)
+    if era_a_ativa:
+        _avisar(campanha_id, int(time.time()))
+    return resposta
+
+
 @router.put("/{campanha_id}/personagens/{personagem_id}/token")
 def editar_token_do_personagem(
     campanha_id: UUID,
@@ -1345,11 +1607,21 @@ def editar_token_do_personagem(
         if not acesso.manages_content and personagem["dono_usuario_id"] != user.id:
             raise HTTPException(status_code=403, detail="este personagem nao e seu")
         atual = connection.execute(
-            "SELECT moldura, enquadramento FROM personagem_token WHERE personagem_id=%s FOR UPDATE",
+            "SELECT moldura, enquadramento, arte_id FROM personagem_token WHERE personagem_id=%s FOR UPDATE",
             (personagem_id,),
         ).fetchone()
         moldura = atual["moldura"] if atual else None
         enquadramento = atual["enquadramento"] if atual and isinstance(atual["enquadramento"], dict) else {}
+        arte_id = atual["arte_id"] if atual else None
+        if payload.sem_arte:
+            arte_id = None
+        elif payload.arte_id is not None:
+            existe = connection.execute(
+                "SELECT 1 FROM personagem_artes WHERE id=%s AND personagem_id=%s", (payload.arte_id, personagem_id),
+            ).fetchone()
+            if not existe:
+                raise HTTPException(status_code=404, detail="arte nao encontrada")
+            arte_id = payload.arte_id
         try:
             if payload.sem_moldura:
                 moldura = None
@@ -1361,14 +1633,19 @@ def editar_token_do_personagem(
             raise _erro_mapa(erro) from None
         connection.execute(
             """
-            INSERT INTO personagem_token (personagem_id, moldura, enquadramento) VALUES (%s, %s, %s)
+            INSERT INTO personagem_token (personagem_id, moldura, enquadramento, arte_id) VALUES (%s, %s, %s, %s)
             ON CONFLICT (personagem_id) DO UPDATE
-            SET moldura = EXCLUDED.moldura, enquadramento = EXCLUDED.enquadramento, atualizado_em = CURRENT_TIMESTAMP
+            SET moldura = EXCLUDED.moldura, enquadramento = EXCLUDED.enquadramento, arte_id = EXCLUDED.arte_id,
+                atualizado_em = CURRENT_TIMESTAMP
             """,
-            (personagem_id, moldura, Jsonb(enquadramento)),
+            (personagem_id, moldura, Jsonb(enquadramento), arte_id),
         )
     _avisar(campanha_id, int(time.time()))
-    return {"moldura": moldura, "enquadramento": mapa.normalizar_enquadramento({}, enquadramento)}
+    return {
+        "moldura": moldura,
+        "enquadramento": mapa.normalizar_enquadramento({}, enquadramento),
+        "arte_id": str(arte_id) if arte_id else None,
+    }
 
 
 @router.put("/{campanha_id}/config")
@@ -1569,17 +1846,20 @@ def apagar_token(
 
 def _foto_da_ficha(connection, personagem_id) -> tuple[str, bytes] | None:
     linha = connection.execute("SELECT ficha->>'foto' AS foto FROM personagens WHERE id=%s", (personagem_id,)).fetchone()
-    foto = linha["foto"] if linha else None
-    if not isinstance(foto, str) or not foto.startswith("data:image/") or ";base64," not in foto:
-        return None
-    cabecalho, conteudo = foto.split(";base64,", 1)
-    mime = cabecalho[len("data:"):]
-    if mime not in ("image/webp", "image/png", "image/jpeg"):
-        return None
-    try:
-        return mime, base64.b64decode(conteudo, validate=True)
-    except (binascii.Error, ValueError):
-        return None
+    return artes_token.decodificar(linha["foto"] if linha else None)
+
+
+def _arte_do_token(connection, personagem_id) -> tuple[str, bytes] | None:
+    """A arte extra que o dono escolheu para o token, ou None (vale a foto da ficha)."""
+    linha = connection.execute(
+        """
+        SELECT a.imagem FROM personagem_token t
+        JOIN personagem_artes a ON a.id = t.arte_id AND a.personagem_id = t.personagem_id
+        WHERE t.personagem_id=%s
+        """,
+        (personagem_id,),
+    ).fetchone()
+    return artes_token.decodificar(linha["imagem"] if linha else None)
 
 
 @router.get("/{campanha_id}/tokens/{token_id}/imagem")
@@ -1612,7 +1892,7 @@ def imagem_do_token(
         else:
             personagem = token["personagem_id"] or (participante or {}).get("personagem_id")
             if personagem:
-                achado = _foto_da_ficha(connection, personagem)
+                achado = _arte_do_token(connection, personagem) or _foto_da_ficha(connection, personagem)
     if not achado:
         raise HTTPException(status_code=404, detail="imagem nao encontrada")
     mime, dados = achado

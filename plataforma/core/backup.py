@@ -97,6 +97,8 @@ TABELAS: tuple[str, ...] = (
     "mapa_cenas",
     "mapa_exploracao",
     "mapa_tokens",
+    # Artes extras do token do personagem (migração 76): antes de `personagem_token`, que aponta para elas.
+    "personagem_artes",
     "personagem_token",
     "mapa_campanha",
     # Construtor de mapas (migração 64).

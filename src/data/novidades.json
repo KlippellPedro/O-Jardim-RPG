@@ -15,6 +15,20 @@
       ]
     },
     {
+      "id": "2026-11-13-token-barras-e-artes",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Barras do token mais bonitas, vida pelo token e várias artes por personagem",
+      "detalhes": [
+        "Nome, barras e anel de seleção ficam colados no token, sem o espaço vazio de antes, e as barras mostram o número de Vida, Mana e Estamina (por exemplo 158/158) em vez da porcentagem.",
+        "As barras embaixo do token ganharam cores mais suaves e o texto ficou nítido, mesmo com muito zoom no mapa.",
+        "Selecione o seu token e use os botões de menos e mais, ou escreva o número, em Vida, Mana, Estamina e Sanidade. A ficha e a Sessão mudam na hora, igual ao que o Mestre faz. Segure Shift para andar de 5 em 5.",
+        "Cada personagem pode guardar até 8 artes extras, por exemplo com outra roupa. Abra Artes do token no topo da ficha, ou a aba Visual do token no mapa, e escolha qual aparece. A troca vale em todas as cenas e some se você apagar a arte.",
+        "A barra do token ganhou um botão para virar o token para o outro lado. Vale para o dono do personagem e para o Mestre."
+      ]
+    },
+    {
       "id": "2026-11-13-precos-critico-e-morrendo",
       "data": "2026-11-13",
       "tipo": "melhoria",
@@ -1037,19 +1051,6 @@
         "Escudo do Vazio, Avatar do Vazio e a Fivela Devoradora consomem só magia hostil, com teto de círculo, e deixam cura e bênção de aliado passarem. Apagar Efeito vai até o 8º círculo, e Apagar do Mapa se desfaz quando o alvo ataca ou faz barulho.",
         "No Buraco Negro e na Singularidade, personagem de jogador cai Morrendo como em qualquer magia, em vez de sumir. O Toque do Abismo leva a Mana atual, e ela volta no descanso.",
         "O Manto do Não-Ser, o encantamento, passou a se chamar Manto do Instante Ausente."
-      ]
-    },
-    {
-      "id": "2026-10-20-fim-rebalanceado",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Fim: a Palavra de Morte tem limiar, e encerrar efeito tem teto",
-      "detalhes": [
-        "A Palavra de Morte só mata quem está com metade ou menos da Vida máxima e falha em Fortitude. Acima disso, o alvo sofre o dano e fica sem receber cura até o fim da cena.",
-        "Tudo que encerra efeito tem teto de círculo: o Fechar Ciclo vai até o 4º, a Lâmina do Encerramento até o 5º, e as variações do Fim nas magias universais até o próprio círculo.",
-        "Romper Vínculo agora serve contra possessão e controle em curso. Ferida Terminal e Fio do Limiar deixam Sangramento. Marca do Limiar dá +2d6. Zona de Deterioração para em -10 de Defesa.",
-        "O Fruto do Fim e o Selo de Fechamento pedem a autorização do Mestre na Loja. O Último Adeus usa o novo ingrediente Lembrança do Morto, e a fusão do Fim passou a se chamar Encerramento Rápido."
       ]
     }
   ]

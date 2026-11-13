@@ -1,0 +1,144 @@
+/* As artes do token (menu do token no mapa e ficha). Usa as variáveis do mapa quando existem e cai em tons neutros fora dele. */
+
+.artes-token {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--mapa-texto, #ece8f5);
+  font-size: 12px;
+}
+
+.artes-token-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.artes-token-grade > li {
+  position: relative;
+}
+
+.artes-token-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 6px 4px;
+  border: 1px solid var(--mapa-linha, rgba(255, 255, 255, 0.14));
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.artes-token-item:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.artes-token-item:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.artes-token-item.ativa {
+  border-color: var(--mapa-ouro, #c7a44c);
+  background: rgba(199, 164, 76, 0.16);
+}
+
+.artes-token-item img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.artes-token-item span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.artes-token-marca {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  padding: 2px;
+  border-radius: 50%;
+  background: var(--mapa-ouro, #c7a44c);
+  color: #1a1408;
+}
+
+.artes-token-apagar {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--mapa-apagado, #a9a3b8);
+  cursor: pointer;
+}
+
+.artes-token-apagar:hover:not(:disabled) {
+  color: var(--mapa-perigo, #f87171);
+}
+
+.artes-token-nova {
+  display: flex;
+  gap: 6px;
+}
+
+.artes-token-nova input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--mapa-linha, rgba(255, 255, 255, 0.14));
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.28);
+  color: inherit;
+  font: inherit;
+}
+
+.artes-token-nova button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: 1px solid var(--mapa-linha, rgba(255, 255, 255, 0.14));
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.artes-token-nova button:disabled,
+.artes-token-nova input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.artes-token-dica {
+  margin: 0;
+  color: var(--mapa-apagado, #a9a3b8);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.artes-token-dica.erro {
+  color: var(--mapa-perigo, #f87171);
+}

@@ -37,7 +37,7 @@ import { PainelPortal } from './componentes/PainelPortal';
 import { MenuPorta } from './componentes/MenuPorta';
 import { FalaNaMesa, PainelMesa, PausaDaMesa, RelogiosDaMesa, type FalaRecebida } from './componentes/MesaExtras';
 import { Hourglass, Keyboard, LocateFixed, Scissors } from 'lucide-react';
-import { urlImagemDoToken, type IMesaExtras } from '../../services/mapaApi';
+import { urlImagemDoToken, type IMesaExtras, type TipoBarra } from '../../services/mapaApi';
 import { cliqueDoJogador } from './motor/portasConta';
 import { ApiError } from '../../services/apiClient';
 import type { IAberturaCena } from '../../services/mapaApi';
@@ -1282,6 +1282,13 @@ export const MapaPage = () => {
     if (resposta) setEstado(resposta);
   };
 
+  /** Vida, Mana, Estamina ou Sanidade pela barra do token: o servidor grava na Sessão e na ficha, e a mesa vê na hora. */
+  const mexerNoRecursoDoToken = async (tipo: TipoBarra, dados: { delta?: number; atual?: number }) => {
+    if (!campanhaId || !selecionado) return;
+    const resposta = await comErro(() => mapaApi.mexerNoRecurso(campanhaId, selecionado, { tipo, ...dados }));
+    if (resposta) setEstado(resposta);
+  };
+
   /**
    * A nota do Mestre de um token. Leva o id do token (e não o `selecionado` do momento): a nota também é guardada
    * quando o menu fecha por a pessoa ter escolhido outro token, e tem de ir para o token em que foi escrita.
@@ -2038,6 +2045,8 @@ export const MapaPage = () => {
               onOculto={ocultarToken}
               onRemover={() => void removerToken()}
               onFalar={gestor ? () => void falarComo(tokenSelecionado) : undefined}
+              onRecurso={(tipo, dados) => void mexerNoRecursoDoToken(tipo, dados)}
+              onEspelhar={() => void editarToken({ flip_x: !tokenSelecionado.flip_x })}
             />
           </BarraAncorada>
         )}
@@ -2051,6 +2060,8 @@ export const MapaPage = () => {
             onMoldura={(id) => void escolherMoldura(id)}
             onEnquadramento={(e) => void mudarEnquadramento(e)}
             onFechar={() => setMenuTokenAberto(false)}
+            campanhaId={campanhaId}
+            onArteMudou={() => void recarregar()}
           />
         )}
         <PreferenciasBarras

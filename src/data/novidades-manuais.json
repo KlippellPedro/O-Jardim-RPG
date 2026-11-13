@@ -16,6 +16,20 @@
       ]
     },
     {
+      "id": "2026-11-13-token-barras-e-artes",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Barras do token mais bonitas, vida pelo token e várias artes por personagem",
+      "detalhes": [
+        "Nome, barras e anel de seleção ficam colados no token, sem o espaço vazio de antes, e as barras mostram o número de Vida, Mana e Estamina (por exemplo 158/158) em vez da porcentagem.",
+        "As barras embaixo do token ganharam cores mais suaves e o texto ficou nítido, mesmo com muito zoom no mapa.",
+        "Selecione o seu token e use os botões de menos e mais, ou escreva o número, em Vida, Mana, Estamina e Sanidade. A ficha e a Sessão mudam na hora, igual ao que o Mestre faz. Segure Shift para andar de 5 em 5.",
+        "Cada personagem pode guardar até 8 artes extras, por exemplo com outra roupa. Abra Artes do token no topo da ficha, ou a aba Visual do token no mapa, e escolha qual aparece. A troca vale em todas as cenas e some se você apagar a arte.",
+        "A barra do token ganhou um botão para virar o token para o outro lado. Vale para o dono do personagem e para o Mestre."
+      ]
+    },
+    {
       "id": "2026-11-13-precos-critico-e-morrendo",
       "data": "2026-11-13",
       "tipo": "melhoria",

@@ -784,10 +784,10 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
-.mapa-menu-numeros .barra-vida { border-color: #e5484d; }
-.mapa-menu-numeros .barra-mana { border-color: #3e63dd; }
-.mapa-menu-numeros .barra-estamina { border-color: #30a46c; }
-.mapa-menu-numeros .barra-sanidade { border-color: #8e4ec6; }
+.mapa-menu-numeros .barra-vida { border-color: #e88a90; }
+.mapa-menu-numeros .barra-mana { border-color: #8aa4ef; }
+.mapa-menu-numeros .barra-estamina { border-color: #86d4ab; }
+.mapa-menu-numeros .barra-sanidade { border-color: #b79be0; }
 
 .mapa-menu-condicoes {
   margin: 0 0 8px;
@@ -1969,7 +1969,7 @@
 }
 
 .mapa-cartao-barra {
-  --cor-barra: #e5484d;
+  --cor-barra: #e88a90;
   display: grid;
   grid-template-columns: 62px 1fr auto;
   gap: 8px;
@@ -1977,9 +1977,9 @@
   font-size: 11.5px;
 }
 
-.mapa-cartao-barra.barra-mana { --cor-barra: #3e63dd; }
-.mapa-cartao-barra.barra-estamina { --cor-barra: #30a46c; }
-.mapa-cartao-barra.barra-sanidade { --cor-barra: #8e4ec6; }
+.mapa-cartao-barra.barra-mana { --cor-barra: #8aa4ef; }
+.mapa-cartao-barra.barra-estamina { --cor-barra: #86d4ab; }
+.mapa-cartao-barra.barra-sanidade { --cor-barra: #b79be0; }
 
 .mapa-cartao-barra-nome {
   color: var(--mapa-apagado);
@@ -2709,10 +2709,81 @@ button.mapa-tempo.ativo {
   margin: 0 6px 0 -2px;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(229, 72, 77, 0.18);
-  color: #fecaca;
+  background: rgba(232, 138, 144, 0.18);
+  color: #fbd5d8;
   font-size: 11px;
   font-variant-numeric: tabular-nums;
+}
+
+/* Vida, Mana, Estamina e Sanidade que o dono (e o Mestre) mexem pela barra do token. */
+.mapa-recursos-token {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 6px 0 0;
+  padding: 6px 8px;
+  list-style: none;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 14px;
+  background: var(--mapa-painel);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.mapa-recurso-linha {
+  display: grid;
+  grid-template-columns: 62px 26px 46px auto 26px;
+  align-items: center;
+  gap: 4px;
+  color: var(--mapa-texto);
+  font-size: 12px;
+}
+
+.mapa-recurso-nome {
+  padding-left: 8px;
+  border-left: 3px solid var(--cor-recurso, #fff);
+  font-weight: 600;
+}
+
+.mapa-recurso-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.mapa-recurso-botao:hover {
+  background: color-mix(in srgb, var(--cor-recurso, #fff) 22%, transparent);
+  color: var(--mapa-texto);
+}
+
+.mapa-recurso-valor {
+  width: 46px;
+  padding: 3px 4px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--mapa-texto);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.mapa-recurso-valor:focus {
+  border-color: var(--cor-recurso, #fff);
+  outline: none;
+}
+
+.mapa-recurso-maximo {
+  color: var(--mapa-apagado);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 /* O menu Exibição, no topo: abre embaixo do ícone, alinhado à direita. */

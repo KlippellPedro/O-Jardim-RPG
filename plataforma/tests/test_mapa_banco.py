@@ -267,6 +267,155 @@ class MapaBancoTests(unittest.TestCase):
         mapa.configurar_mapa(self.campanha_id, mapa.ConfigMapaInput(moldura_mesa=None), user=self.mestre, database=self.database)
         self.assertEqual({t["nome"]: t["moldura"] for t in self.ver(self.ana)["tokens"]}, {"Mira": "fluxo-tempo", "Estatua": "osso"})
 
+    # ------------------------------------------- recursos pela barra do token
+
+    def _ficha_da_mira(self):
+        with self.database.connection() as connection:
+            linha = connection.execute("SELECT ficha, versao FROM personagens WHERE id=%s", (self.mira,)).fetchone()
+        return linha["ficha"], int(linha["versao"])
+
+    def _vida_do_participante(self, participante_id):
+        with self.database.connection() as connection:
+            return connection.execute("SELECT vida_atual, vida_temporaria FROM sessao_participantes WHERE id=%s", (participante_id,)).fetchone()
+
+    def test_dono_mexe_na_vida_pelo_token_e_a_sessao_e_a_ficha_acompanham(self):
+        self._sessao()
+        participante = self._participante("Mira", tipo="jogador", personagem_id=self.mira)
+        cena = uuid.UUID(self.criar_cena()["cena"]["id"])
+        mapa.trazer_participantes(self.campanha_id, cena, mapa.PontoInput(x=500, y=500), user=self.mestre, database=self.database)
+        token_id = uuid.UUID(self.ver(self.ana)["tokens"][0]["id"])
+        _, versao_antes = self._ficha_da_mira()
+
+        resposta = mapa.mexer_no_recurso_do_token(
+            self.campanha_id, token_id, mapa.RecursoTokenInput(tipo="vida", delta=-5), user=self.ana, database=self.database,
+        )
+        vida = next(b for b in resposta["tokens"][0]["barras"] if b["tipo"] == "vida")
+        self.assertEqual((vida["atual"], vida["maximo"]), (7, 40))
+        self.assertEqual(self._vida_do_participante(participante)["vida_atual"], 7)
+        ficha, versao = self._ficha_da_mira()
+        self.assertEqual((ficha["status"]["vidaAtual"], ficha["recursos"]["vidaAtual"]), (7, 7))
+        self.assertGreater(versao, versao_antes)
+
+        # Valor escrito à mão e cura além do máximo (vira extra temporário, como no HUD do Mestre).
+        mapa.mexer_no_recurso_do_token(self.campanha_id, token_id, mapa.RecursoTokenInput(tipo="vida", atual=38), user=self.ana, database=self.database)
+        mapa.mexer_no_recurso_do_token(self.campanha_id, token_id, mapa.RecursoTokenInput(tipo="vida", delta=5), user=self.ana, database=self.database)
+        linha = self._vida_do_participante(participante)
+        self.assertEqual((linha["vida_atual"], linha["vida_temporaria"]), (40, 3))
+        self.assertEqual(self._ficha_da_mira()[0]["status"]["vidaTemporaria"], 3)
+        mapa.mexer_no_recurso_do_token(self.campanha_id, token_id, mapa.RecursoTokenInput(tipo="vida", delta=-10), user=self.ana, database=self.database)
+        linha = self._vida_do_participante(participante)
+        self.assertEqual((linha["vida_atual"], linha["vida_temporaria"]), (33, 0))
+
+    def test_sanidade_mexe_so_na_ficha_e_nao_passa_do_maximo(self):
+        self._sessao()
+        self._participante("Mira", tipo="jogador", personagem_id=self.mira)
+        cena = uuid.UUID(self.criar_cena()["cena"]["id"])
+        mapa.trazer_participantes(self.campanha_id, cena, mapa.PontoInput(x=500, y=500), user=self.mestre, database=self.database)
+        token_id = uuid.UUID(self.ver(self.ana)["tokens"][0]["id"])
+        mapa.mexer_no_recurso_do_token(self.campanha_id, token_id, mapa.RecursoTokenInput(tipo="sanidade", delta=50), user=self.ana, database=self.database)
+        self.assertEqual(self._ficha_da_mira()[0]["status"]["sanidadeAtual"], 80)
+        mapa.mexer_no_recurso_do_token(self.campanha_id, token_id, mapa.RecursoTokenInput(tipo="sanidade", delta=-500), user=self.ana, database=self.database)
+        self.assertEqual(self._ficha_da_mira()[0]["status"]["sanidadeAtual"], 0)
+
+    def test_so_o_dono_e_o_mestre_mexem_e_so_em_token_de_personagem(self):
+        self._sessao()
+        self._participante("Mira", tipo="jogador", personagem_id=self.mira)
+        lobo = self._participante("Lobo")
+        cena = uuid.UUID(self.criar_cena()["cena"]["id"])
+        mapa.trazer_participantes(self.campanha_id, cena, mapa.PontoInput(x=500, y=500), user=self.mestre, database=self.database)
+        tokens = {t["nome"]: uuid.UUID(t["id"]) for t in self.ver(self.mestre)["tokens"]}
+        pedido = mapa.RecursoTokenInput(tipo="vida", delta=-1)
+        with self.assertRaises(HTTPException) as erro:
+            mapa.mexer_no_recurso_do_token(self.campanha_id, tokens["Mira"], pedido, user=self.bruno, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        # Jogador não mexe no token do monstro; o Mestre também não por aqui (Sessão cuida das fases de chefe).
+        with self.assertRaises(HTTPException) as erro:
+            mapa.mexer_no_recurso_do_token(self.campanha_id, tokens["Lobo"], pedido, user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        with self.assertRaises(HTTPException) as erro:
+            mapa.mexer_no_recurso_do_token(self.campanha_id, tokens["Lobo"], pedido, user=self.mestre, database=self.database)
+        self.assertEqual(erro.exception.status_code, 422)
+        self.assertEqual(self._vida_do_participante(lobo)["vida_atual"], 12)
+        mapa.mexer_no_recurso_do_token(self.campanha_id, tokens["Mira"], pedido, user=self.mestre, database=self.database)
+        # Recurso que o personagem não tem (sem Mana) e pedido sem mudança.
+        with self.assertRaises(HTTPException) as erro:
+            mapa.mexer_no_recurso_do_token(self.campanha_id, tokens["Mira"], mapa.RecursoTokenInput(tipo="mana", delta=1), user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 422)
+        with self.assertRaises(HTTPException) as erro:
+            mapa.mexer_no_recurso_do_token(self.campanha_id, tokens["Mira"], mapa.RecursoTokenInput(tipo="vida"), user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 422)
+
+    def test_token_de_personagem_sem_sessao_usa_os_numeros_da_ficha(self):
+        self._sessao()
+        with self.database.connection() as connection:
+            connection.execute(
+                "UPDATE personagens SET ficha = ficha || %s WHERE id=%s",
+                (Jsonb({"derivados": {"vida": 30, "mana": 10}, "status": {"vidaAtual": 20, "manaAtual": 4}}), self.mira),
+            )
+        cena = uuid.UUID(self.criar_cena()["cena"]["id"])
+        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(personagem_id=self.mira, x=150, y=150), user=self.mestre, database=self.database)
+        token_id = uuid.UUID(self.ver(self.ana)["tokens"][0]["id"])
+        mapa.editar_token(self.campanha_id, token_id, mapa.TokenEdicao(barras={"mostrar": ["vida", "mana"]}), user=self.ana, database=self.database)
+        mapa.mexer_no_recurso_do_token(self.campanha_id, token_id, mapa.RecursoTokenInput(tipo="mana", delta=3), user=self.ana, database=self.database)
+        mapa.mexer_no_recurso_do_token(self.campanha_id, token_id, mapa.RecursoTokenInput(tipo="vida", delta=-8), user=self.ana, database=self.database)
+        status = self._ficha_da_mira()[0]["status"]
+        self.assertEqual((status["manaAtual"], status["vidaAtual"]), (7, 12))
+
+    # --------------------------------------------------------- artes do token
+
+    PNG = "data:image/png;base64," + __import__("base64").b64encode(b"\x89PNG\r\n\x1a\n" + b"\x00" * 24).decode()
+
+    def test_jogador_guarda_artes_extras_e_escolhe_qual_aparece_no_token(self):
+        self._sessao()
+        cena = uuid.UUID(self.criar_cena()["cena"]["id"])
+        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(personagem_id=self.mira, x=150, y=150), user=self.mestre, database=self.database)
+        token = self.ver(self.ana)["tokens"][0]
+        self.assertTrue(token["imagem"].startswith("f"))
+
+        lista = mapa.criar_arte_do_personagem(self.campanha_id, self.mira, mapa.ArteInput(nome="Traje de gala", imagem=self.PNG), user=self.ana, database=self.database)
+        self.assertEqual([a["nome"] for a in lista["artes"]], ["Traje de gala"])
+        self.assertIsNone(lista["ativa"])
+        self.assertTrue(lista["tem_foto_ficha"])
+        arte = lista["artes"][0]["id"]
+
+        # Escolher a arte troca a versão da imagem (os aparelhos baixam de novo) e a rota entrega a arte, não a foto.
+        mapa.editar_token_do_personagem(self.campanha_id, self.mira, mapa.TokenDoPersonagemInput(arte_id=uuid.UUID(arte)), user=self.ana, database=self.database)
+        token = self.ver(self.bruno)["tokens"][0]
+        self.assertEqual(token["imagem"], f"r{arte[:8]}")
+        resposta = mapa.imagem_do_token(self.campanha_id, uuid.UUID(token["id"]), user=self.bruno, database=self.database)
+        self.assertEqual(resposta.media_type, "image/png")
+
+        # A tela de artes serve a imagem só para o dono e o Mestre.
+        servida = mapa.imagem_da_arte(self.campanha_id, self.mira, arte, user=self.ana, database=self.database)
+        self.assertEqual(servida.media_type, "image/png")
+        self.assertEqual(mapa.imagem_da_arte(self.campanha_id, self.mira, "ficha", user=self.mestre, database=self.database).media_type, "image/webp")
+        with self.assertRaises(HTTPException) as erro:
+            mapa.imagem_da_arte(self.campanha_id, self.mira, arte, user=self.bruno, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+
+        # Apagar a arte que está no token devolve a foto da ficha.
+        lista = mapa.apagar_arte_do_personagem(self.campanha_id, self.mira, uuid.UUID(arte), user=self.ana, database=self.database)
+        self.assertEqual((lista["artes"], lista["ativa"]), ([], None))
+        self.assertTrue(self.ver(self.ana)["tokens"][0]["imagem"].startswith("f"))
+
+    def test_artes_tem_limite_validacao_e_dono(self):
+        self._sessao()
+        with self.assertRaises(HTTPException) as erro:
+            mapa.criar_arte_do_personagem(self.campanha_id, self.mira, mapa.ArteInput(imagem="data:image/gif;base64," + "A" * 40), user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 422)
+        with self.assertRaises(HTTPException) as erro:
+            mapa.criar_arte_do_personagem(self.campanha_id, self.mira, mapa.ArteInput(imagem=self.PNG), user=self.bruno, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        for _ in range(8):
+            mapa.criar_arte_do_personagem(self.campanha_id, self.mira, mapa.ArteInput(imagem=self.PNG), user=self.ana, database=self.database)
+        with self.assertRaises(HTTPException) as erro:
+            mapa.criar_arte_do_personagem(self.campanha_id, self.mira, mapa.ArteInput(imagem=self.PNG), user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 409)
+        # Arte de outro personagem não vira a do token.
+        with self.assertRaises(HTTPException) as erro:
+            mapa.editar_token_do_personagem(self.campanha_id, self.mira, mapa.TokenDoPersonagemInput(arte_id=uuid.uuid4()), user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 404)
+
     # --------------------------------------------------------------- acervo
 
     def _item(self, largura=800, altura=600, nome="Caverna"):

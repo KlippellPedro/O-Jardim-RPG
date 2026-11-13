@@ -15,9 +15,11 @@ import {
 } from './molduras';
 import { texturaDeBrilho } from './luzes';
 import {
+  CORES_BARRA_PADRAO,
   barrasParaDesenhar,
   fracaoDaBarra,
   porcentagemDaBarra,
+  resolucaoDoTexto,
   type IPreferenciasBarrasMapa,
   PREFERENCIAS_BARRAS_PADRAO,
 } from './barrasToken';
@@ -75,10 +77,19 @@ function valorCurto(barra: IBarraToken): string {
   return `${porcentagemDaBarra(barra)}%`;
 }
 
-function textoPequeno(conteudo: string, tamanho: number, cor = '#fff') {
+function textoPequeno(conteudo: string, tamanho: number, resolucao: number, cor = '#ffffff') {
   const texto = new Text({
     text: conteudo,
-    style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: tamanho, fill: cor, stroke: { color: '#09080d', width: Math.max(2, tamanho * 0.35) } },
+    resolution: resolucao,
+    style: {
+      fontFamily: 'system-ui, "Segoe UI", sans-serif',
+      fontWeight: '700',
+      fontSize: tamanho,
+      fill: cor,
+      // Contorno fino e arredondado: o grosso com ponta aguda "comia" as letras pequenas.
+      stroke: { color: '#14111c', width: Math.max(1, tamanho * 0.2), join: 'round' },
+      letterSpacing: tamanho * 0.02,
+    },
   });
   texto.anchor.set(0.5);
   return texto;
@@ -86,24 +97,26 @@ function textoPequeno(conteudo: string, tamanho: number, cor = '#fff') {
 
 function desenharBarra(g: Graphics, barra: IBarraToken, cor: string, x: number, y: number, largura: number, altura: number) {
   const fracao = fracaoDaBarra(barra);
+  // Trilho suave (não preto chapado) para a cor pastel aparecer limpa.
   g.roundRect(x, y, largura, altura, altura / 2)
-    .fill({ color: '#0d0b12', alpha: 0.9 })
-    .stroke({ width: Math.max(0.5, altura * 0.12), color: '#ffffff', alpha: 0.16 });
+    .fill({ color: '#1b1824', alpha: 0.72 })
+    .stroke({ width: Math.max(0.5, altura * 0.1), color: '#ffffff', alpha: 0.22 });
   const preenchida = largura * fracao;
   if (preenchida > 0) {
     g.roundRect(x, y, preenchida, altura, Math.min(altura / 2, preenchida / 2)).fill(cor);
     if (altura >= 4 && preenchida > 2) {
-      g.roundRect(x + altura * 0.28, y + altura * 0.12, Math.max(0, preenchida - altura * 0.56), altura * 0.24, altura * 0.12)
-        .fill({ color: '#ffffff', alpha: 0.24 });
+      g.roundRect(x + altura * 0.28, y + altura * 0.12, Math.max(0, preenchida - altura * 0.56), altura * 0.22, altura * 0.11)
+        .fill({ color: '#ffffff', alpha: 0.2 });
     }
   }
 }
 
 /** Barras e anéis ficam sob o token; valores completos aparecem ao selecionar ou passar o mouse. */
-function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, ativa: boolean, preferencias: IPreferenciasBarrasMapa) {
+/** `raioQuadro`: até onde vai o quadro do token (foto e moldura). As barras começam logo depois dele. Devolve o fim das barras (0 sem barras). */
+function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, raioQuadro: number, ativa: boolean, preferencias: IPreferenciasBarrasMapa, resolucao: number): number {
   raiz.removeChildren().forEach((filho) => filho.destroy());
   const visiveis = barrasParaDesenhar(barras, preferencias);
-  if (!visiveis.length) return;
+  if (!visiveis.length) return 0;
 
   const largura = Math.max(16, Math.min(lado * 0.9, 180));
   const alturaBarra = Math.max(2, Math.min(8, lado * 0.075));
@@ -116,10 +129,7 @@ function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, at
     if (modo === 'numero') return fonte + 5;
     return alturaBarra;
   });
-  const total = alturas.reduce((soma, altura) => soma + altura, 0) + espacamento * Math.max(0, visiveis.length - 1);
-  let topo = lado * 0.69;
-  // Em tokens pequenos, aproxima as linhas sem deixá-las entrarem na moldura.
-  if (total > lado * 0.5) topo = lado * 0.66;
+  let topo = raioQuadro * 1.08;
 
   visiveis.forEach((barra, indice) => {
     const visual = preferencias.porTipo[barra.tipo];
@@ -133,8 +143,8 @@ function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, at
       const raioCentro = raioAnel - anel / 2;
       const fracao = fracaoDaBarra(barra);
       // Mantém o alerta de Sanidade baixa do desenho anterior.
-      const corAnel = barra.tipo === 'sanidade' && fracao <= 0.25 ? '#e5484d' : visual.cor;
-      g.circle(0, centroY, raioAnel).fill({ color: '#0d0b12', alpha: 0.92 });
+      const corAnel = barra.tipo === 'sanidade' && fracao <= 0.25 ? CORES_BARRA_PADRAO.vida : visual.cor;
+      g.circle(0, centroY, raioAnel).fill({ color: '#1b1824', alpha: 0.8 });
       g.circle(0, centroY, raioCentro).stroke({ width: anel, color: corAnel, alpha: 0.3 });
       if (fracao > 0) {
         const inicio = -Math.PI / 2;
@@ -143,7 +153,8 @@ function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, at
         g.arc(0, centroY, raioCentro, inicio, fim).stroke({ width: anel, color: corAnel, cap: 'round' });
       }
       if (ativa) {
-        const texto = textoPequeno(`${porcentagemDaBarra(barra)}%`, Math.min(fonte, raioAnel * 0.9));
+        // Dentro do anel cabe só o número de agora (o máximo aparece nas outras barras e na barra de ações).
+        const texto = textoPequeno(barra.atual !== undefined ? String(barra.atual) : `${porcentagemDaBarra(barra)}%`, Math.min(fonte, raioAnel * 0.9), resolucao);
         texto.position.set(0, centroY);
         raiz.addChild(texto);
       }
@@ -152,21 +163,22 @@ function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, at
       const larguraPilha = Math.min(largura, Math.max(fonte * 3.2, conteudo.length * fonte * 0.58 + 12));
       const x = -larguraPilha / 2;
       g.roundRect(x, topo, larguraPilha, altura, altura / 2)
-        .fill({ color: '#0d0b12', alpha: 0.9 })
-        .stroke({ width: 1, color: visual.cor, alpha: 0.72 });
-      const texto = textoPequeno(conteudo, fonte, '#f7f4fa');
+        .fill({ color: '#1b1824', alpha: 0.8 })
+        .stroke({ width: 1, color: visual.cor, alpha: 0.8 });
+      const texto = textoPequeno(conteudo, fonte, resolucao, '#f7f4fa');
       texto.position.set(0, centroY);
       raiz.addChild(texto);
     } else {
       desenharBarra(g, barra, visual.cor, -largura / 2, centroY - alturaBarra / 2, largura, alturaBarra);
       if (ativa) {
-        const texto = textoPequeno(`${ROTULOS_BARRA[barra.tipo]} ${porcentagemDaBarra(barra)}%`, fonte);
+        const texto = textoPequeno(`${ROTULOS_BARRA[barra.tipo]} ${valorCurto(barra)}`, fonte, resolucao);
         texto.position.set(0, centroY);
         raiz.addChild(texto);
       }
     }
     topo += altura + espacamento;
   });
+  return topo - espacamento;
 }
 
 export class TokenVisual {
@@ -186,6 +198,8 @@ export class TokenVisual {
   /** Tamanho da letra do nome no mundo (antes de crescer com o zoom) e o zoom da tela em que o nome foi posto. */
   private tamanhoNome = 12;
   private zoomDoNome = 1;
+  /** Resolução da textura do texto das barras (acompanha o zoom; ver resolucaoDoTexto). */
+  private resolucaoTexto = resolucaoDoTexto(1);
   dados: ITokenMapa;
   private lado = 100;
   private texturaAtual: Texture | null = null;
@@ -204,6 +218,8 @@ export class TokenVisual {
   private clarAceso = false;
   private sobOMouse = false;
   private preferenciasBarras: IPreferenciasBarrasMapa;
+  /** Onde as barras terminam, abaixo do centro do token (0 sem barras). */
+  private fimDasBarras = 0;
 
   constructor(dados: ITokenMapa, tamanhoQuadrado: number, preferenciasBarras = PREFERENCIAS_BARRAS_PADRAO) {
     this.dados = dados;
@@ -239,6 +255,20 @@ export class TokenVisual {
   /** O quadrado que o token ocupa no mundo (o centro é a posição dele). */
   get caixa(): { x: number; y: number; w: number; h: number } {
     return { x: this.raiz.position.x - this.lado / 2, y: this.raiz.position.y - this.lado / 2, w: this.lado, h: this.lado };
+  }
+
+  /** Até onde vai o quadro do token: a moldura simples fecha em meio lado; as ilustradas maiores abrem um pouco mais. */
+  private get raioQuadro() {
+    const id = this.dados.moldura ?? 'lado';
+    const folga = ehMolduraDeArte(id) ? 1 + (escalaDaMolduraDeArte(id) - 1) * 0.6 : 1;
+    return this.lado * 0.5 * folga;
+  }
+
+  /** O quadrado do token estendido para baixo até o fim das barras e da marca de escolha: onde a barra de ações se cola. */
+  get caixaDaBarra(): { x: number; y: number; w: number; h: number } {
+    const base = this.caixa;
+    const fundo = Math.max(this.lado / 2, this.raioQuadro * 1.1, this.fimDasBarras);
+    return { ...base, h: base.h / 2 + fundo };
   }
 
   private get raioRetrato() {
@@ -302,17 +332,23 @@ export class TokenVisual {
     if (zoom === this.zoomDoNome) return;
     this.zoomDoNome = zoom;
     this.posicionarNome();
+    // O texto das barras só se refaz quando o zoom cruza um degrau de resolução.
+    const resolucao = resolucaoDoTexto(zoom);
+    if (resolucao !== this.resolucaoTexto) {
+      this.resolucaoTexto = resolucao;
+      this.desenharBarras();
+    }
   }
 
   private posicionarNome() {
     const escala = escalaDoNome(this.tamanhoNome, this.zoomDoNome);
     this.nome.scale.set(escala);
-    this.nome.y = -this.lado * 0.72 - this.tamanhoNome * 1.1 * escala;
+    this.nome.y = -this.raioQuadro * 1.1 - this.tamanhoNome * 1.15 * escala;
     this.nome.visible = nomeVisivel(this.lado, this.zoomDoNome, this.sobOMouse || this.selecionado);
   }
 
   private desenharBarras() {
-    desenharBarras(this.barras, this.dados.barras, this.lado, this.selecionado || this.sobOMouse, this.preferenciasBarras);
+    this.fimDasBarras = desenharBarras(this.barras, this.dados.barras, this.lado, this.raioQuadro, this.selecionado || this.sobOMouse, this.preferenciasBarras, this.resolucaoTexto);
   }
 
   definirPreferenciasBarras(preferencias: IPreferenciasBarrasMapa) {
@@ -332,13 +368,13 @@ export class TokenVisual {
       bolinha.addChild(sigla);
       // Em arco, do alto à direita para baixo.
       const angulo = -Math.PI / 4 + i * (Math.PI / 6);
-      bolinha.position.set(Math.cos(angulo) * this.lado * 0.6, Math.sin(angulo) * this.lado * 0.6);
+      bolinha.position.set(Math.cos(angulo) * this.raioQuadro * 1.1, Math.sin(angulo) * this.raioQuadro * 1.1);
       this.condicoes.addChild(bolinha);
     });
     if (this.dados.condicoes.length > lista.length) {
       const mais = new Text({ text: `+${this.dados.condicoes.length - lista.length}`, style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: raio * 1.1, fill: '#fde68a', stroke: { color: '#000000', width: 3 } } });
       mais.anchor.set(0, 0.5);
-      mais.position.set(this.lado * 0.62, this.lado * 0.4);
+      mais.position.set(this.raioQuadro * 1.14, this.raioQuadro * 0.7);
       this.condicoes.addChild(mais);
     }
   }
@@ -479,7 +515,7 @@ export class TokenVisual {
       this.brilhoVez.height = this.brilhoVez.width;
       this.brilhoVez.alpha = 0.32 + 0.12 * onda;
       this.vez.clear();
-      const alcance = this.lado * 0.64 + this.lado * 0.04 * onda;
+      const alcance = this.raioQuadro * 1.1 + this.lado * 0.03 * onda;
       const largura = Math.max(3, this.lado * 0.05);
       this.vez.circle(0, 0, alcance).stroke({ width: largura * 0.6, color: '#fcd34d', alpha: 0.55 });
       // Três arcos girando por fora do anel.
@@ -497,7 +533,7 @@ export class TokenVisual {
   private desenharMarcas() {
     this.marcas.clear();
     if (this.selecionado) {
-      this.marcas.circle(0, 0, this.lado * 0.6).stroke({ width: Math.max(2, this.lado * 0.03), color: '#ffffff', alpha: 0.9 });
+      this.marcas.circle(0, 0, this.raioQuadro * 1.04).stroke({ width: Math.max(2, this.lado * 0.03), color: '#ffffff', alpha: 0.9 });
     }
   }
 
