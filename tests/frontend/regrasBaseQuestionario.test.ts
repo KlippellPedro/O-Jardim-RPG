@@ -37,7 +37,8 @@ test('a ficha aplica Enjoado e Fascinado nos testes', () => {
 
 test('o Livro traz as regras base novas', () => {
   const condicoes = REGRAS_OFICIAIS.condicoes.corpo;
-  assert.match(condicoes, /<h3 class="regras-subtitle">Gravidade<\/h3>/);
+  // "Gravidade" ficou só com a queda (Ferimentos); a escala das condições se chama Peso da condição.
+  assert.match(condicoes, /<h3 class="regras-subtitle">Peso da condição<\/h3>/);
   for (const grau of ['Leve', 'Média', 'Grave', 'Gravíssima']) assert.match(condicoes, new RegExp(`<strong>${grau}</strong>`));
 
   const dano = REGRAS_OFICIAIS['tipos-de-dano'].corpo;

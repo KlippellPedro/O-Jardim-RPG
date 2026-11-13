@@ -118,6 +118,24 @@ XP), 15 (maestria de Fluxo), 16 (fabricar raridade alta), 17 (salto da DT
 entre 18 e 20), 21 (tamanho Médio nos veículos), 23 a 25 (restos de
 migração, palavras com dois sentidos, caixas "Em resumo").
 
+## Segunda leva de 2026-11-13, a pedido
+
+| Item | O que mudou |
+| --- | --- |
+| 13 | **Três ritmos de XP** (Lento, Médio, Rápido), escolhidos pelo Mestre. O Lento é o de antes. Sete marcos: Cena marcante, Descoberta, Feito pessoal, Desafio vencido sem luta, Missão relevante, Fim de arco e Marco de campanha. "Quem fez, leva": XP de combate é de quem lutou e Feito pessoal é só de quem fez; Cena marcante e Feito pessoal, no máximo um por personagem por sessão. O XP de combate não muda com o ritmo. Só texto: a Sessão já distribui XP para as fichas escolhidas. |
+| 15 | **Maestria de Fluxo:** uma vez por cena, repetir um teste de conjuração que falhou, sem pagar a Mana de novo. |
+| 16 | **Fabricar custa 50% em toda raridade** (era 50% a 90%). DT, tempo e material continuam subindo. |
+| 17 | **DT entre 18 e 20:** a DT Padrão é a mesma conta da Defesa das criaturas, então alisar o degrau mexeria na curva inteira. A tabela pública ganhou a linha do 19 (26, 28, 30) e uma frase explicando que a DT sobe quando um grau novo abre. |
+| 23 | **Restos de migração** tirados de Veículos (campo Dano, preço do T4, índice de chassi). |
+| 24 | **Dois sentidos:** a escala das condições passou a se chamar "Peso da condição", e "Gravidade" ficou só com a queda. Condições ganhou a nota das duas Sanidades (barra e perícia). |
+| 25 | **Caixa "Em resumo"** em Coreografia, Equipamentos, Rituais e Selos, Legados e Treinamento. |
+
+Os PDFs do Livro de Regras foram regerados (331 e 491 páginas, nada cortado).
+
+**Item 21, resolvido:** o Pedro confirmou que o tamanho fica Normal. A tabela de
+colisão agora mostra "Normal (veículo médio)", e o texto de Tamanho diz que
+veículo chama esse degrau de médio, sem falar em "texto antigo".
+
 ## O que pede decisão sua
 
 ### Buracos de regra

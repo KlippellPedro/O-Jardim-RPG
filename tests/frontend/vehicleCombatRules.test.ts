@@ -124,7 +124,7 @@ test('Pilotagem não é exclusiva da classe Piloto e Cavalgar rege montarias', (
 test('tiers preservam os patamares sem definir preços novos', () => {
   assert.deepEqual(PATAMARES_TIER_VEICULO.map(item => item.tier), ['T0', 'T1', 'T2', 'T3', 'T4']);
   assert.match(PATAMARES_TIER_VEICULO[4].uso, /Mestre/i);
-  assert.match(REGRA_VEICULOS.corpo, /preços existentes permanecem no catálogo/i);
+  assert.match(REGRA_VEICULOS.corpo, /T4 não tem preço de catálogo/i);
   assert.doesNotMatch(REGRA_VEICULOS.corpo, /T4[^<]{0,80}\d+[.,]?\d*\s*Lunaris/i);
 });
 

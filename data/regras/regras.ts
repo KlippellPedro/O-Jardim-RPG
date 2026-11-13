@@ -307,7 +307,7 @@ const linhasEscadaDeDt = () => NIVEIS_DA_ESCADA_DE_DT.map((nivel) => {
 /** A mesma escada, só com as duas colunas que o livro do jogador cita ("DT Padrão
  * do nível", "DT Difícil"). Sem ela o jogador lê a expressão em dez tópicos e não
  * acha o número em lugar nenhum. */
-const NIVEIS_DA_DT_PUBLICA = [1, 3, 5, 8, 10, 12, 15, 18, 20, 25, 30, 40, 50, 60];
+const NIVEIS_DA_DT_PUBLICA = [1, 3, 5, 8, 10, 12, 15, 18, 19, 20, 25, 30, 40, 50, 60];
 const linhasDtPublica = () => NIVEIS_DA_DT_PUBLICA.map((nivel) => {
   const { dt } = referenciaDoNivel(nivel, classesComunsParaReferencia, armasParaReferencia);
   return `<tr><td><strong>${nivel}</strong></td><td>${dt.padrao}</td><td>${dt.dificil}</td></tr>`;
@@ -790,6 +790,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Inteligência:</strong> torne-se Aprendiz em duas perícias.</li>
         <li><strong>Sabedoria:</strong> reduza em 2 a primeira perda de Sanidade de cada cena.</li>
         <li><strong>Carisma:</strong> uma vez por cena, repita um teste social; mantenha o novo resultado.</li>
+        <li><strong>Fluxo:</strong> uma vez por cena, repita um teste de conjuração que falhou. A Mana não é cobrada de novo, e vale o novo resultado.</li>
       </ul>
       <div class="regras-note regras-note--atencao">
         <p>Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Não confunda com a Maestria de classe, que vem dos níveis 21 a 50 de uma classe (ver <span class="regras-ref regras-ref--poderes-habilidades">Poderes e Habilidades</span>).</p>
@@ -886,7 +887,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </div>
 
       <h3 class="regras-subtitle">DT Padrão e DT Difícil</h3>
-      <p>Vários tópicos pedem um teste "contra a DT Padrão do nível" ou "contra a DT Difícil". São as duas dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Difícil fica sempre 5 acima da Padrão. Num nível entre duas linhas, vale a linha do nível menor.</p>
+      <p>Vários tópicos pedem um teste "contra a DT Padrão do nível" ou "contra a DT Difícil". São as duas dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Difícil fica sempre 5 acima da Padrão. Num nível entre duas linhas, vale a linha do nível menor. A DT sobe mais depressa nos níveis em que um grau de perícia novo abre, como o Veterano no 19: ela acompanha quem treinou.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível</th><th>DT Padrão</th><th>DT Difícil</th></tr></thead>
         <tbody>
@@ -1132,7 +1133,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p>Agarrado, Caído e Imobilizado são condições, e todas estão em <span class="regras-ref regras-ref--condicoes">Condições</span>.</p>
 
       <h3 class="regras-subtitle">Tamanho</h3>
-      <p>São seis categorias. <strong>Normal</strong> é o tamanho de uma pessoa comum; onde algum texto antigo disser "médio" para tamanho, leia Normal.</p>
+      <p>São seis categorias. <strong>Normal</strong> é o tamanho de uma pessoa comum. Veículo usa a mesma escala e chama esse degrau de médio.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Tamanho</th><th>Espaço que ocupa</th><th>Alcance corpo a corpo</th><th>Exemplos</th></tr></thead>
         <tbody>
@@ -1688,6 +1689,15 @@ ${HTML_MORAL}
     corpo: `
       <p class="regras-lead">Descreva uma jogada de cinema que caiba na cena e escolha o risco <strong>antes</strong> de rolar. A descrição tem que mudar alguma coisa na ficção: pular do lustre, chutar a mesa no meio do caminho, usar o sujeito como escudo. Dizer "uso Arriscado" e rolar o dado não é Coreografia.</p>
 
+      <div class="regras-resumo">
+        <ul>
+          <li>Coreografia é uma jogada de cinema: você descreve algo que muda a cena e escolhe o risco <strong>antes</strong> de rolar. Uma por turno.</li>
+          <li>São cinco riscos, de Seguro a Tudo ou Nada. Quanto maior o prêmio no acerto, pior a conta no erro.</li>
+          <li>Perigoso e Tudo ou Nada valem uma vez por cena cada um.</li>
+          <li>Se a descrição não muda nada na cena, o Mestre pode negar.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Níveis de risco</h3>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Risco</th><th>Se tiver sucesso</th><th>Se falhar</th></tr></thead>
@@ -1829,6 +1839,15 @@ ${HTML_MORAL}
     ],
     corpo: `
       <p class="regras-lead">São dois caminhos diferentes, e vale não os confundir. Quando uma <strong>classe</strong> dá a você um Grau de perícia, escolha uma perícia e suba um grau na hora, sem tempo de treino e sem requisito extra. Só o nível total mínimo do grau continua valendo. Quando você quer subir <strong>por treino</strong>, aí sim cumpre o tempo da linha, o nível total mínimo e o requisito extra, quando existir.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>O grau dado pela classe sobe na hora, sem tempo de treino. Só o nível total mínimo do grau continua valendo.</li>
+          <li>O grau por treino cobra os dias da tabela, o nível total mínimo e, nos degraus altos, instrutor, feito ou item especial.</li>
+          <li>Cada dia de treino são seis horas e deixa 1 de Cansaço, que uma noite de sono resolve.</li>
+          <li>Não se rola nada para treinar: cumpriu o que a linha pede, subiu.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">Progressão</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -2027,7 +2046,8 @@ ${HTML_MORAL}
         <ul>
           <li>XP total do nível N = 500 × N × (N − 1), até o nível 100. Sair do nível N para o N+1 custa N × 1.000 XP.</li>
           <li>O nível total soma os níveis de todas as classes, e a tabela de recompensas olha para ele: multiclasse não recebe nada em dobro.</li>
-          <li>O Mestre recompensa por marco: 10% do próximo nível por descoberta ou objetivo menor, 25% por missão relevante e 50% por fim de arco.</li>
+          <li>O Mestre recompensa por marco, em fatias do próximo nível, e escolhe o ritmo da campanha: Lento, Médio ou Rápido. No Lento, descoberta vale 10%, missão relevante 25% e fim de arco 50%.</li>
+          <li>Quem fez, leva: o XP de combate é de quem lutou, e o Feito pessoal é só de quem fez.</li>
           <li>O nível ${NIVEL_TOTAL_PADRAO} fecha o jogo padrão. Dali em diante o personagem entra em patamares, e a ficha só avisa o Mestre: nada trava.</li>
         </ul>
       </div>
@@ -2045,11 +2065,26 @@ ${HTML_MORAL}
       <p class="regras-note">O XP total acumulado é ${formatarXP(xpParaNivel(60))} no nível 60, ${formatarXP(xpParaNivel(100))} no 100, ${formatarXP(xpParaNivel(150))} no 150, ${formatarXP(xpParaNivel(250))} no 250 e ${formatarXP(xpParaNivel(500))} no 500.</p>
 
       <h3 class="regras-subtitle">Recompensas por marco</h3>
+      <p>Marco é o XP que vem da história. Ele é dado em fatias do próximo nível, e o tamanho da fatia depende do <strong>ritmo</strong> que o Mestre escolhe para a campanha e avisa na primeira sessão. O ritmo só muda os marcos: o XP de combate é o mesmo nos três.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Marco</th><th>Lento</th><th>Médio</th><th>Rápido</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Cena marcante.</strong> Uma interpretação que pesa, uma ideia que muda a cena, um laço posto à prova.</td><td>5%</td><td>10%</td><td>15%</td></tr>
+          <tr><td><strong>Descoberta ou objetivo menor.</strong> Um segredo aberto, um lugar novo, uma pista que fecha uma pergunta.</td><td>10%</td><td>15%</td><td>25%</td></tr>
+          <tr><td><strong>Feito pessoal.</strong> Algo que um personagem conquistou sozinho: um duelo, uma promessa cumprida, um plano dele que deu certo.</td><td>10%</td><td>15%</td><td>25%</td></tr>
+          <tr><td><strong>Desafio vencido sem luta.</strong> Uma infiltração limpa, um conflito social fechado, um caso resolvido, uma perseguição ganha.</td><td>15%</td><td>25%</td><td>35%</td></tr>
+          <tr><td><strong>Missão relevante.</strong> O trabalho que o grupo aceitou e entregou.</td><td>25%</td><td>35%</td><td>50%</td></tr>
+          <tr><td><strong>Fim de arco.</strong> A história que vinha de várias sessões se fecha.</td><td>50%</td><td>75%</td><td>100%</td></tr>
+          <tr><td><strong>Marco de campanha.</strong> Fim de temporada, ou um plano grande de facção que o grupo fechou ou impediu.</td><td>100%</td><td>150%</td><td>200%</td></tr>
+        </tbody>
+      </table></div>
       <ul class="regras-list">
-        <li><strong>Descoberta ou objetivo menor:</strong> 10% do próximo nível.</li>
-        <li><strong>Missão relevante:</strong> 25% do próximo nível.</li>
-        <li><strong>Fim de arco:</strong> 50% do próximo nível.</li>
-        <li>XP de combate se divide pelo grupo. XP de descoberta e de arco vai inteiro para cada um.</li>
+        <li><strong>Lento</strong> dá perto de cinco sessões por nível. É o ritmo padrão do livro, para campanha longa em que cada nível pesa.</li>
+        <li><strong>Médio</strong> dá perto de três sessões por nível.</li>
+        <li><strong>Rápido</strong> dá perto de duas. Serve a campanha curta ou a mesa que joga pouco.</li>
+        <li><strong>Quem fez, leva.</strong> O XP de combate se divide entre quem lutou, e quem derruba a criatura sozinho fica com ele inteiro. O Feito pessoal vai só para quem fez. Os outros marcos vão inteiros para cada personagem que participou.</li>
+        <li><strong>Um por sessão:</strong> cada personagem recebe no máximo uma Cena marcante e um Feito pessoal por sessão.</li>
+        <li>100% é um nível inteiro. O que passar do custo continua contando para o nível seguinte.</li>
       </ul>
 
       <h3 class="regras-subtitle">Progressão do nível total</h3>
@@ -2109,8 +2144,10 @@ ${HTML_MORAL}
 
       <h3 class="regras-subtitle">Distribuir por marco</h3>
       <ul class="regras-list">
-        <li>Descoberta ou objetivo menor vale 10% do próximo nível; missão relevante, 25%; fim de arco, 50%. Trabalhando com esses três, o grupo sobe um nível a cada arco mais algumas conquistas no caminho.</li>
-        <li>XP de combate se divide pelo grupo, mas XP de descoberta e de arco vai inteiro para cada um. Um grupo grande sobe mais devagar pela luta e na mesma velocidade pela história: use isso se a mesa tiver seis pessoas.</li>
+        <li>Escolha o ritmo antes da primeira sessão e diga à mesa: Lento (perto de cinco sessões por nível), Médio (três) ou Rápido (duas). A tabela de marcos do tópico traz as três colunas. No Lento, o grupo sobe um nível a cada arco mais algumas conquistas no caminho.</li>
+        <li>Os marcos pequenos existem para a mesa sentir que avança entre um arco e outro. Cena marcante e Feito pessoal são individuais, no máximo um de cada por personagem por sessão: use para quem carregou a cena, e reveze.</li>
+        <li>Quem fez, leva. Na Sessão, distribua o XP do encontro só para as fichas que lutaram. Um personagem que derrubou a criatura sozinho fica com o XP dela inteiro, e está certo assim.</li>
+        <li>XP de combate se divide por quem lutou, mas XP de descoberta, de missão e de arco vai inteiro para cada um. Um grupo grande sobe mais devagar pela luta e na mesma velocidade pela história: use isso se a mesa tiver seis pessoas.</li>
         <li>O XP de combate por Valor de Desafio acompanha o nível: o VD é o nível do grupo que a criatura desafia sozinha, e uma criatura solo vale um quinto do custo do nível de mesmo número (${formatarXP(xpPorVd(20))} no VD 20, ${formatarXP(xpPorVd(60))} no 60, ${formatarXP(xpPorVd(100))} no 100). Esse total se divide pelo grupo. Criatura mais fraca que o grupo rende o VD dela, então rende menos; mais forte, rende mais. Nos patamares altos o XP por marco continua sendo o caminho mais simples.</li>
         <li>Prefira anunciar o marco quando ele acontece, em vez de somar tudo no fim da sessão. O grupo joga melhor quando sabe que aquilo ali contou.</li>
       </ul>
@@ -2142,6 +2179,15 @@ ${HTML_MORAL}
     ],
     corpo: `
       <p class="regras-lead">Nos níveis totais 5, 10, 15 e assim por diante até o 50, escolha um Legado de Ascensão cujos pré-requisitos você já cumpre. Depois do 50 o ritmo desacelera: um Legado no 60, no 70, no 80, no 90 e no 100, e daí em diante a cada 20 níveis (120, 140, 160 e por aí vai). Algumas raças dão vagas extras, e quando dão está escrito no catálogo racial.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Você escolhe um Legado a cada 5 níveis totais até o 50, a cada 10 até o 100 e a cada 20 depois.</li>
+          <li>A escolha é permanente: Legado não se troca nem se remove.</li>
+          <li>A ficha confere os pré-requisitos na hora. Perder o requisito depois não tira o Legado.</li>
+          <li>Legado vem do nível total, então multiclasse não repete os marcos.</li>
+        </ul>
+      </div>
       <p>A tabela completa do ritmo, com os aumentos de atributo e as vagas de item especial que chegam junto, está em <span class="regras-ref regras-ref--xp">Experiência e Níveis</span>.</p>
 
       <h3 class="regras-subtitle">O que vale para todo Legado</h3>
@@ -2407,6 +2453,15 @@ ${HTML_DEVOCAO}
     ],
     corpo: `
       <p class="regras-lead">Este tópico trata do que você carrega e veste: quanto cabe na mochila, quantas peças de armadura se somam e o que muda quando falta proficiência ou munição. O orçamento de poder dos itens fica nos tópicos seguintes.</p>
+
+      <div class="regras-resumo">
+        <ul>
+          <li>Capacidade de carga = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋. Passou disso, você fica Sobrecarregado.</li>
+          <li>Você veste no máximo uma armadura principal, uma malha por baixo e um escudo, e a Defesa das três soma.</li>
+          <li>A penalidade de armadura cai sobre Acrobacia, Atletismo e Furtividade.</li>
+          <li>Sem proficiência, a arma ataca com −5 e a peça marcial perde 2 de Defesa.</li>
+        </ul>
+      </div>
 
       <h3 class="regras-subtitle">Carga e espaços</h3>
       <div class="regras-formula">Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋</div>
@@ -2952,6 +3007,15 @@ ${HTML_DEVOCAO}
     corpo: `
       <p class="regras-lead">Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de círculo. Consulte cada bloco pelo tipo de preparação que o personagem está tentando realizar.</p>
 
+      <div class="regras-resumo">
+        <ul>
+          <li>Ritual não tem círculo, não entra em combate e prende a Mana desde o começo. Interrompido, a Mana se perde.</li>
+          <li>Fusão aplica um Fluxo secundário por magia, e só um.</li>
+          <li>Selo é efeito escrito antes, quase sempre consumível. Encantamento é permanente, e cabem de 1 a 5 por item, conforme a raridade.</li>
+          <li>Os três se aprendem do Fluxo nativo. Cada Fluxo tem 3 rituais, 3 selos e 3 encantamentos.</li>
+        </ul>
+      </div>
+
       <h3 class="regras-subtitle">Rituais</h3>
       <ul class="regras-list">
         <li>Ritual não pertence a círculo nenhum e não entra em combate.</li>
@@ -3066,6 +3130,9 @@ ${HTML_DEVOCAO}
 
       <h3 class="regras-subtitle">Sanidade</h3>
       <div class="regras-formula">d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25</div>
+      <div class="regras-note regras-note--atencao">
+        <p>Sanidade é o nome de duas coisas. A <strong>barra de Sanidade</strong> vai de 0 a 100 e mede o quanto a mente aguentou. A <strong>perícia Sanidade</strong> é o que você rola para proteger a barra. "Teste de Sanidade" rola a perícia, e "perder Sanidade" tira pontos da barra.</p>
+      </div>
       <ul class="regras-list">
         <li>Falhar custa 1d4, 1d6, 1d8 ou 2d6 de Sanidade, conforme o tamanho do que você viu.</li>
         <li>Sucesso crítico evita a perda inteira; sucesso corta pela metade; falha crítica maximiza os dados.</li>
@@ -3102,8 +3169,8 @@ ${HTML_DEVOCAO}
         <li>Condição que vem de uma fonte instantânea e não diz quanto dura vai até o fim do próximo turno de quem a recebeu.</li>
       </ul>
 
-      <h3 class="regras-subtitle">Gravidade</h3>
-      <p>Quando uma cura, uma receita ou uma habilidade encerra uma condição "leve", "média" ou "grave", é por esta escala. Quem trata um degrau trata também os de baixo: uma cura que encerra condição média encerra uma leve no lugar, se o paciente preferir.</p>
+      <h3 class="regras-subtitle">Peso da condição</h3>
+      <p>Toda condição tem um peso: leve, média, grave ou gravíssima. Ele não tem nada a ver com a Gravidade da queda, de <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>, que vai de 0 a 4 e entra na DT de Morrendo. Quando uma cura, uma receita ou uma habilidade encerra uma condição "leve", "média" ou "grave", é por esta escala. Quem trata um degrau trata também os de baixo: uma cura que encerra condição média encerra uma leve no lugar, se o paciente preferir.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Gravidade</th><th>Condições</th></tr></thead>
         <tbody>
@@ -5515,7 +5582,7 @@ ${HTML_DEVOCAO}
         <li><strong>Um contato que atende.</strong> Uma informante velha que responde a carta no mesmo dia, sempre com um bilhete a mais do que foi perguntado. Economiza uma sessão inteira de investigação.</li>
         <li><strong>Tempo e lugar.</strong> Uma oficina emprestada por uma semana, alguém que aceita ensinar, uma cama num lugar onde ninguém procura vocês. Transforma tempo parado em progresso concreto. Ver Tempo Entre Aventuras.</li>
         <li><strong>Gratidão que fica.</strong> A vila que o grupo salvou lembra. A criança tirada do incêndio cresce, e um dia bate na porta. Não custa nada agora e rende uma cena muito tempo depois.</li>
-        <li><strong>XP por marco</strong> continua correndo por fora, pela tabela de progressão. Descoberta vale 10% do próximo nível, missão relevante 25%, fim de arco 50%.</li>
+        <li><strong>XP por marco</strong> continua correndo por fora, pela tabela de progressão. No ritmo Lento, descoberta vale 10% do próximo nível, missão relevante 25% e fim de arco 50%; as colunas Médio e Rápido estão em Experiência e Níveis.</li>
       </ul>
       <p class="regras-note">Quando o grupo estiver com dinheiro parado e nada para comprar, mexa na prateleira: abra um local novo, cobre a manutenção das bases, deixe uma dívida vencer ou mostre algo caro que eles queiram muito. Tirar o dinheiro de volta é a única saída que a mesa sente como injusta.</p>
 

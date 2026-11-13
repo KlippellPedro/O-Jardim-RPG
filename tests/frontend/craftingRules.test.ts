@@ -28,7 +28,7 @@ test('DT, tempo e custo aumentam até Lendário', () => {
   const fabricaveis = TABELA_CRAFTING_RARIDADE.filter((regra) => regra.dt !== null);
   assert.deepEqual(fabricaveis.map((regra) => regra.dt), [10, 15, 20, 25, 30]);
   assert.deepEqual(fabricaveis.map((regra) => regra.diasTrabalho), [1, 3, 7, 14, 30]);
-  assert.deepEqual(fabricaveis.map((regra) => regra.custoMateriaisPercentual), [50, 60, 70, 80, 90]);
+  assert.deepEqual(fabricaveis.map((regra) => regra.custoMateriaisPercentual), [50, 50, 50, 50, 50]);
   assert.ok(fabricaveis.every((regra, indice, lista) => indice === 0 || (regra.dt ?? 0) > (lista[indice - 1].dt ?? 0)));
 });
 
@@ -52,7 +52,8 @@ test('dia de trabalho possui seis horas e o capítulo publica esse limite', () =
 
 test('custo usa preço normal, arredonda para cima e rejeita entrada inválida', () => {
   assert.equal(calcularCustoMateriais(101, 'comum'), 51);
-  assert.equal(calcularCustoMateriais(101, 'epico'), 81);
+  // Fabricar custa metade em toda raridade (2026-11-13).
+  assert.equal(calcularCustoMateriais(101, 'epico'), 51);
   assert.throws(() => calcularCustoMateriais(100, 'lendario'), /não possui custo comum/);
   assert.throws(() => calcularCustoMateriais(0, 'comum'), /positivo/);
   assert.throws(() => calcularCustoMateriais(Number.NaN, 'comum'), /positivo/);

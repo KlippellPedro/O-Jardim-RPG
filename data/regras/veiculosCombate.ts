@@ -371,7 +371,7 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
       <li>Veículos, montarias, personagens e criaturas usam a mesma escala de Vida e dano.</li>
       <li>Role o dano indicado pela arma. Subtraia a Resistência geral e a resistência específica ao tipo do dano. O restante reduz a Vida.</li>
       <li>Não multiplique dano por causa do tipo do alvo. Uma arma precisa informar dados, bônus, tipo, alcance e crítico antes de entrar em combate.</li>
-      <li>O valor antigo chamado Dano nas peças veiculares indica o patamar da arma. Ele não é dano fixo e não substitui a fórmula de dano da arma.</li>
+      <li>O campo Dano das peças veiculares indica o patamar da arma. Ele não é dano fixo e não substitui a fórmula de dano da arma.</li>
     </ul>
 
     <h3 class="regras-subtitle">Condução e tripulação</h3>
@@ -430,7 +430,7 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
       <li>Ocupante sem fixação faz Reflexos DT 15. Em falha, sofre metade do dano causado ao veículo, arredondado para baixo. Cinto, sela ou fixação adequada concede vantagem.</li>
     </ul>
     <dl class="regras-kv regras-kv--boxed">
-      ${Object.entries(DANO_COLISAO_POR_TAMANHO).map(([tamanho, dano]) => `<dt>${tamanho[0].toUpperCase() + tamanho.slice(1)}</dt><dd>${dano}</dd>`).join('')}
+      ${Object.entries(DANO_COLISAO_POR_TAMANHO).map(([tamanho, dano]) => `<dt>${tamanho === 'médio' ? 'Normal (veículo médio)' : tamanho[0].toUpperCase() + tamanho.slice(1)}</dt><dd>${dano}</dd>`).join('')}
     </dl>
 
     <h3 class="regras-subtitle">Dano e avarias</h3>
@@ -490,8 +490,8 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
     </table></div>
     <ul class="regras-list">
       <li>Núcleo define sistemas ativos; Estrutura ajusta deslocamento e Resistência; Armas precisam de perfil completo; Utilidades aplicam o efeito descrito.</li>
-      <li>Os preços existentes permanecem no catálogo. Esta regra não cria preço para T4 nem altera preços publicados.</li>
-      <li>Deslocamento escrito em metros no veículo completo prevalece sobre índices antigos de chassi ou componente.</li>
+      <li>Componente T4 não tem preço de catálogo: o Mestre combina o custo quando libera a peça.</li>
+      <li>Deslocamento escrito em metros no veículo completo prevalece sobre o índice do chassi ou do componente.</li>
     </ul>
   `,
   corpoMestre: `

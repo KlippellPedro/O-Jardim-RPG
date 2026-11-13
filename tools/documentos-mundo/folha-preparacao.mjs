@@ -138,7 +138,7 @@ const paginaDois = () => `
       <div>${campo('XP concedido')}${campo('Prestígio que mudou')}</div>
       <div>${campo('Relógios que andaram')}${campo('Anotar para a próxima')}</div>
     </div>
-    <small>Marcos de XP: descoberta 10% do próximo nível, missão relevante 25%, fim de arco 50%.</small>`, true)}
+    <small>Marcos de XP no ritmo Lento: descoberta 10% do próximo nível, missão relevante 25%, fim de arco 50%.</small>`, true)}
 
   ${pe('Folha 2 de 2')}
 </section>`;

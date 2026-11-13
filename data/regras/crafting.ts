@@ -77,7 +77,7 @@ export const TABELA_CRAFTING_RARIDADE: RegraRaridadeCrafting[] = [
     titulo: 'Incomum',
     dt: 15,
     diasTrabalho: 3,
-    custoMateriaisPercentual: 60,
+    custoMateriaisPercentual: 50,
     requerAprovacao: false,
     fabricacaoComumPermitida: true,
     requisitoAdicional: 'Receita ou projeto e ferramentas adequadas.',
@@ -87,7 +87,7 @@ export const TABELA_CRAFTING_RARIDADE: RegraRaridadeCrafting[] = [
     titulo: 'Raro',
     dt: 20,
     diasTrabalho: 7,
-    custoMateriaisPercentual: 70,
+    custoMateriaisPercentual: 50,
     requerAprovacao: false,
     fabricacaoComumPermitida: true,
     requisitoAdicional: 'A receita indica ao menos um material específico.',
@@ -97,7 +97,7 @@ export const TABELA_CRAFTING_RARIDADE: RegraRaridadeCrafting[] = [
     titulo: 'Épico',
     dt: 25,
     diasTrabalho: 14,
-    custoMateriaisPercentual: 80,
+    custoMateriaisPercentual: 50,
     requerAprovacao: false,
     fabricacaoComumPermitida: true,
     requisitoAdicional: 'Receita e ao menos um material raro ligado ao efeito.',
@@ -107,7 +107,7 @@ export const TABELA_CRAFTING_RARIDADE: RegraRaridadeCrafting[] = [
     titulo: 'Lendário',
     dt: 30,
     diasTrabalho: 30,
-    custoMateriaisPercentual: 90,
+    custoMateriaisPercentual: 50,
     requerAprovacao: true,
     fabricacaoComumPermitida: false,
     requisitoAdicional: 'Projeto de campanha, instalação adequada e materiais únicos definidos antes do trabalho.',
@@ -330,7 +330,7 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
       <ul>
         <li>Cada dia de trabalho tem <strong>${HORAS_POR_DIA_DE_TRABALHO} horas</strong>. Cada personagem completa um bloco por dia e ganha 1 Cansaço ao final dele.</li>
         <li>O teste vem uma vez só, ao fim do projeto: Ofício para forja e alquimia, Tecnologia para sistemas A.X.I.S e cibernéticos, contra a DT da raridade.</li>
-        <li>Os materiais custam uma porcentagem do preço normal do item, e a porcentagem sobe com a raridade.</li>
+        <li>Os materiais custam metade do preço normal do item, em qualquer raridade. O que sobe com a raridade é a DT, o tempo e a dificuldade de achar o material.</li>
         <li>Falhar custa mais um dia e mais material. Sucesso crítico poupa um pouco de componente, mas não melhora o item.</li>
         <li>Consertar é mais barato que fabricar: ${REGRAS_REPARO.custoPercentual}% do preço normal e uma DT menor.</li>
       </ul>
@@ -357,7 +357,7 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
     </table></div>
     <p>O custo de materiais é uma porcentagem do preço normal do item, arredondada para cima. Promoções não reduzem esse custo.</p>
     <div class="regras-note regras-note--exemplo">
-      <p>Tavi quer fabricar um item Raro de preço normal 1.000 Lunaris, e a receita indica o material específico que a raridade exige. Raro pede DT 20, 7 dias de trabalho e materiais a 70% do preço normal: 700 Lunaris. Ela tem o Kit de Ofício certo. Passados os 7 dias de 6 horas, faz o teste de Ofício contra DT 20. Se falhar, o item não sai, mas o progresso fica guardado: uma nova tentativa custa mais 1 dia e mais 10% do custo inicial de materiais, ou seja, 70 Lunaris.</p>
+      <p>Tavi quer fabricar um item Raro de preço normal 1.000 Lunaris, e a receita indica o material específico que a raridade exige. Raro pede DT 20, 7 dias de trabalho e materiais pela metade do preço normal: 500 Lunaris. Ela tem o Kit de Ofício certo. Passados os 7 dias de 6 horas, faz o teste de Ofício contra DT 20. Se falhar, o item não sai, mas o progresso fica guardado: uma nova tentativa custa mais 1 dia e mais 10% do custo inicial de materiais, ou seja, 50 Lunaris.</p>
     </div>
 
     <h3 class="regras-subtitle">Perícias e ferramentas</h3>
@@ -405,14 +405,14 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
       <thead><tr><th>Raridade</th><th>DT</th><th>Trabalho</th><th>Materiais</th></tr></thead>
       <tbody>
         <tr><td><strong>Comum</strong></td><td>10</td><td>1 dia</td><td>50%</td></tr>
-        <tr><td><strong>Incomum</strong></td><td>15</td><td>3 dias</td><td>60%</td></tr>
-        <tr><td><strong>Raro</strong></td><td>20</td><td>7 dias</td><td>70%</td></tr>
-        <tr><td><strong>Épico</strong></td><td>25</td><td>14 dias</td><td>80%</td></tr>
-        <tr><td><strong>Lendário</strong></td><td>30</td><td>30 dias</td><td>90%</td></tr>
+        <tr><td><strong>Incomum</strong></td><td>15</td><td>3 dias</td><td>50%</td></tr>
+        <tr><td><strong>Raro</strong></td><td>20</td><td>7 dias</td><td>50%</td></tr>
+        <tr><td><strong>Épico</strong></td><td>25</td><td>14 dias</td><td>50%</td></tr>
+        <tr><td><strong>Lendário</strong></td><td>30</td><td>30 dias</td><td>50%</td></tr>
         <tr><td><strong>Mítico e Relíquia</strong></td><td colspan="3">Projeto de campanha. Não se fabrica pelas regras normais.</td></tr>
       </tbody>
     </table></div>
-    <p class="regras-note">Repare que fabricar Lendário custa 30 dias e 90% do preço. O ganho de fabricar é não depender da sorte de encontrar o item, porque dinheiro quase não se poupa. Por isso fabricar não desequilibra a campanha por si só.</p>
+    <p class="regras-note">Fabricar custa metade do preço em toda raridade, e o que segura a conta é o resto: um Lendário pede 30 dias, DT 30, instalação e materiais únicos. Quem fabrica poupa dinheiro e paga em tempo de campanha, e é esse tempo que você controla.</p>
 
     <h3 class="regras-subtitle">Conduzir um projeto</h3>
     <ul class="regras-list">

@@ -332,6 +332,8 @@ Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeit
 
 - **Carisma:** uma vez por cena, repita um teste social; mantenha o novo resultado.
 
+- **Fluxo:** uma vez por cena, repita um teste de conjuração que falhou. A Mana não é cobrada de novo, e vale o novo resultado.
+
 **Atenção:**
 
 Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Não confunda com a Maestria de classe, que vem dos níveis 21 a 50 de uma classe (ver Poderes e Habilidades).
@@ -424,7 +426,7 @@ Você tem três fontes de vantagem e uma de desvantagem. Uma vantagem cancela a 
 
 ### DT Padrão e DT Difícil
 
-Vários tópicos pedem um teste "contra a DT Padrão do nível" ou "contra a DT Difícil". São as duas dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Difícil fica sempre 5 acima da Padrão. Num nível entre duas linhas, vale a linha do nível menor.
+Vários tópicos pedem um teste "contra a DT Padrão do nível" ou "contra a DT Difícil". São as duas dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Difícil fica sempre 5 acima da Padrão. Num nível entre duas linhas, vale a linha do nível menor. A DT sobe mais depressa nos níveis em que um grau de perícia novo abre, como o Veterano no 19: ela acompanha quem treinou.
 
 - Nível | DT Padrão | DT Difícil
 
@@ -443,6 +445,8 @@ Vários tópicos pedem um teste "contra a DT Padrão do nível" ou "contra a DT 
 - 15 | 24 | 29
 
 - 18 | 26 | 31
+
+- 19 | 28 | 33
 
 - 20 | 30 | 35
 
@@ -1628,7 +1632,7 @@ Agarrado, Caído e Imobilizado são condições, e todas estão em Condições.
 
 ### Tamanho
 
-São seis categorias. **Normal** é o tamanho de uma pessoa comum; onde algum texto antigo disser "médio" para tamanho, leia Normal.
+São seis categorias. **Normal** é o tamanho de uma pessoa comum. Veículo usa a mesma escala e chama esse degrau de médio.
 
 - Tamanho | Espaço que ocupa | Alcance corpo a corpo | Exemplos
 
@@ -2128,6 +2132,16 @@ Você escolhe o risco antes do dado. Deu certo, virou cena; deu errado, virou pr
 
 Descreva uma jogada de cinema que caiba na cena e escolha o risco **antes** de rolar. A descrição tem que mudar alguma coisa na ficção: pular do lustre, chutar a mesa no meio do caminho, usar o sujeito como escudo. Dizer "uso Arriscado" e rolar o dado não é Coreografia.
 
+**Em resumo**
+
+- Coreografia é uma jogada de cinema: você descreve algo que muda a cena e escolhe o risco **antes** de rolar. Uma por turno.
+
+- São cinco riscos, de Seguro a Tudo ou Nada. Quanto maior o prêmio no acerto, pior a conta no erro.
+
+- Perigoso e Tudo ou Nada valem uma vez por cena cada um.
+
+- Se a descrição não muda nada na cena, o Mestre pode negar.
+
 ### Níveis de risco
 
 - Risco | Se tiver sucesso | Se falhar
@@ -2235,6 +2249,16 @@ Um combate conta como intenso quando o personagem desce à metade dos PV, gasta 
 Grau dado pela classe sobe na hora. Grau conquistado por treino cobra tempo, nível e, mais para frente, alguém que te ensine.
 
 São dois caminhos diferentes, e vale não os confundir. Quando uma **classe** dá a você um Grau de perícia, escolha uma perícia e suba um grau na hora, sem tempo de treino e sem requisito extra. Só o nível total mínimo do grau continua valendo. Quando você quer subir **por treino**, aí sim cumpre o tempo da linha, o nível total mínimo e o requisito extra, quando existir.
+
+**Em resumo**
+
+- O grau dado pela classe sobe na hora, sem tempo de treino. Só o nível total mínimo do grau continua valendo.
+
+- O grau por treino cobra os dias da tabela, o nível total mínimo e, nos degraus altos, instrutor, feito ou item especial.
+
+- Cada dia de treino são seis horas e deixa 1 de Cansaço, que uma noite de sono resolve.
+
+- Não se rola nada para treinar: cumpriu o que a linha pede, subiu.
 
 ### Progressão
 
@@ -2410,7 +2434,9 @@ Todo personagem acumula XP, e o XP total decide o nível. Este tópico mostra qu
 
 - O nível total soma os níveis de todas as classes, e a tabela de recompensas olha para ele: multiclasse não recebe nada em dobro.
 
-- O Mestre recompensa por marco: 10% do próximo nível por descoberta ou objetivo menor, 25% por missão relevante e 50% por fim de arco.
+- O Mestre recompensa por marco, em fatias do próximo nível, e escolhe o ritmo da campanha: Lento, Médio ou Rápido. No Lento, descoberta vale 10%, missão relevante 25% e fim de arco 50%.
+
+- Quem fez, leva: o XP de combate é de quem lutou, e o Feito pessoal é só de quem fez.
 
 - O nível 60 fecha o jogo padrão. Dali em diante o personagem entra em patamares, e a ficha só avisa o Mestre: nada trava.
 
@@ -2436,13 +2462,35 @@ O XP total acumulado é 1.770.000 no nível 60, 4.950.000 no 100, 9.950.000 no 1
 
 ### Recompensas por marco
 
-- **Descoberta ou objetivo menor:** 10% do próximo nível.
+Marco é o XP que vem da história. Ele é dado em fatias do próximo nível, e o tamanho da fatia depende do **ritmo** que o Mestre escolhe para a campanha e avisa na primeira sessão. O ritmo só muda os marcos: o XP de combate é o mesmo nos três.
 
-- **Missão relevante:** 25% do próximo nível.
+- Marco | Lento | Médio | Rápido
 
-- **Fim de arco:** 50% do próximo nível.
+- Cena marcante. Uma interpretação que pesa, uma ideia que muda a cena, um laço posto à prova. | 5% | 10% | 15%
 
-- XP de combate se divide pelo grupo. XP de descoberta e de arco vai inteiro para cada um.
+- Descoberta ou objetivo menor. Um segredo aberto, um lugar novo, uma pista que fecha uma pergunta. | 10% | 15% | 25%
+
+- Feito pessoal. Algo que um personagem conquistou sozinho: um duelo, uma promessa cumprida, um plano dele que deu certo. | 10% | 15% | 25%
+
+- Desafio vencido sem luta. Uma infiltração limpa, um conflito social fechado, um caso resolvido, uma perseguição ganha. | 15% | 25% | 35%
+
+- Missão relevante. O trabalho que o grupo aceitou e entregou. | 25% | 35% | 50%
+
+- Fim de arco. A história que vinha de várias sessões se fecha. | 50% | 75% | 100%
+
+- Marco de campanha. Fim de temporada, ou um plano grande de facção que o grupo fechou ou impediu. | 100% | 150% | 200%
+
+- **Lento** dá perto de cinco sessões por nível. É o ritmo padrão do livro, para campanha longa em que cada nível pesa.
+
+- **Médio** dá perto de três sessões por nível.
+
+- **Rápido** dá perto de duas. Serve a campanha curta ou a mesa que joga pouco.
+
+- **Quem fez, leva.** O XP de combate se divide entre quem lutou, e quem derruba a criatura sozinho fica com ele inteiro. O Feito pessoal vai só para quem fez. Os outros marcos vão inteiros para cada personagem que participou.
+
+- **Um por sessão:** cada personagem recebe no máximo uma Cena marcante e um Feito pessoal por sessão.
+
+- 100% é um nível inteiro. O que passar do custo continua contando para o nível seguinte.
 
 ### Progressão do nível total
 
@@ -2722,6 +2770,16 @@ Um Legado a cada cinco níveis totais no começo, a cada dez depois do 50 e a ca
 
 Nos níveis totais 5, 10, 15 e assim por diante até o 50, escolha um Legado de Ascensão cujos pré-requisitos você já cumpre. Depois do 50 o ritmo desacelera: um Legado no 60, no 70, no 80, no 90 e no 100, e daí em diante a cada 20 níveis (120, 140, 160 e por aí vai). Algumas raças dão vagas extras, e quando dão está escrito no catálogo racial.
 
+**Em resumo**
+
+- Você escolhe um Legado a cada 5 níveis totais até o 50, a cada 10 até o 100 e a cada 20 depois.
+
+- A escolha é permanente: Legado não se troca nem se remove.
+
+- A ficha confere os pré-requisitos na hora. Perder o requisito depois não tira o Legado.
+
+- Legado vem do nível total, então multiclasse não repete os marcos.
+
 A tabela completa do ritmo, com os aumentos de atributo e as vagas de item especial que chegam junto, está em Experiência e Níveis.
 
 ### O que vale para todo Legado
@@ -2995,6 +3053,16 @@ Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra 
 Quanto você carrega, o que dá para vestir junto e como a Resistência entra na conta do dano. Raridade e modificação ficam nos tópicos seguintes.
 
 Este tópico trata do que você carrega e veste: quanto cabe na mochila, quantas peças de armadura se somam e o que muda quando falta proficiência ou munição. O orçamento de poder dos itens fica nos tópicos seguintes.
+
+**Em resumo**
+
+- Capacidade de carga = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋. Passou disso, você fica Sobrecarregado.
+
+- Você veste no máximo uma armadura principal, uma malha por baixo e um escudo, e a Defesa das três soma.
+
+- A penalidade de armadura cai sobre Acrobacia, Atletismo e Furtividade.
+
+- Sem proficiência, a arma ataca com −5 e a peça marcial perde 2 de Defesa.
 
 ### Carga e espaços
 
@@ -3479,7 +3547,7 @@ Fabricar segue sempre o mesmo caminho: uma receita ou um projeto, materiais, a f
 
 - O teste vem uma vez só, ao fim do projeto: Ofício para forja e alquimia, Tecnologia para sistemas A.X.I.S e cibernéticos, contra a DT da raridade.
 
-- Os materiais custam uma porcentagem do preço normal do item, e a porcentagem sobe com a raridade.
+- Os materiais custam metade do preço normal do item, em qualquer raridade. O que sobe com a raridade é a DT, o tempo e a dificuldade de achar o material.
 
 - Falhar custa mais um dia e mais material. Sucesso crítico poupa um pouco de componente, mas não melhora o item.
 
@@ -3514,13 +3582,13 @@ Trabalho interrompido mantém o progresso e os materiais já investidos. Trocar 
 
 - Comum | 10 | 1 dia | 50% | Receita ou projeto e ferramentas adequadas.
 
-- Incomum | 15 | 3 dias | 60% | Receita ou projeto e ferramentas adequadas.
+- Incomum | 15 | 3 dias | 50% | Receita ou projeto e ferramentas adequadas.
 
-- Raro | 20 | 7 dias | 70% | A receita indica ao menos um material específico.
+- Raro | 20 | 7 dias | 50% | A receita indica ao menos um material específico.
 
-- Épico | 25 | 14 dias | 80% | Receita e ao menos um material raro ligado ao efeito.
+- Épico | 25 | 14 dias | 50% | Receita e ao menos um material raro ligado ao efeito.
 
-- Lendário | 30 | 30 dias | 90% | Projeto de campanha, instalação adequada e materiais únicos definidos antes do trabalho.
+- Lendário | 30 | 30 dias | 50% | Projeto de campanha, instalação adequada e materiais únicos definidos antes do trabalho.
 
 - Mítico | Projeto de campanha | Projeto de campanha | Definido no projeto | Não pode ser reproduzido pelas regras de fabricação. Criação ou restauração ocorre como projeto de campanha.
 
@@ -3530,7 +3598,7 @@ O custo de materiais é uma porcentagem do preço normal do item, arredondada pa
 
 **Exemplo:**
 
-Tavi quer fabricar um item Raro de preço normal 1.000 Lunaris, e a receita indica o material específico que a raridade exige. Raro pede DT 20, 7 dias de trabalho e materiais a 70% do preço normal: 700 Lunaris. Ela tem o Kit de Ofício certo. Passados os 7 dias de 6 horas, faz o teste de Ofício contra DT 20. Se falhar, o item não sai, mas o progresso fica guardado: uma nova tentativa custa mais 1 dia e mais 10% do custo inicial de materiais, ou seja, 70 Lunaris.
+Tavi quer fabricar um item Raro de preço normal 1.000 Lunaris, e a receita indica o material específico que a raridade exige. Raro pede DT 20, 7 dias de trabalho e materiais pela metade do preço normal: 500 Lunaris. Ela tem o Kit de Ofício certo. Passados os 7 dias de 6 horas, faz o teste de Ofício contra DT 20. Se falhar, o item não sai, mas o progresso fica guardado: uma nova tentativa custa mais 1 dia e mais 10% do custo inicial de materiais, ou seja, 50 Lunaris.
 
 ### Perícias e ferramentas
 
@@ -3768,7 +3836,7 @@ A ficha de um veículo registra categoria, tamanho, Vida, Defesa, Resistência g
 
 - Não multiplique dano por causa do tipo do alvo. Uma arma precisa informar dados, bônus, tipo, alcance e crítico antes de entrar em combate.
 
-- O valor antigo chamado Dano nas peças veiculares indica o patamar da arma. Ele não é dano fixo e não substitui a fórmula de dano da arma.
+- O campo Dano das peças veiculares indica o patamar da arma. Ele não é dano fixo e não substitui a fórmula de dano da arma.
 
 ### Condução e tripulação
 
@@ -3888,7 +3956,7 @@ Um ladrão foge de moto e uma viatura o persegue, com a faixa em Média. No fim 
 - Ocupante sem fixação faz Reflexos DT 15. Em falha, sofre metade do dano causado ao veículo, arredondado para baixo. Cinto, sela ou fixação adequada concede vantagem.
 
 - **Pequeno:** 1d6
-- **Médio:** 2d6
+- **Normal (veículo médio):** 2d6
 - **Grande:** 4d6
 - **Enorme:** 6d6
 - **Colossal:** 8d6
@@ -4005,9 +4073,9 @@ Uma nave Rara com duas utilidades instaladas gasta 3 Componentes Veiculares Raro
 
 - Núcleo define sistemas ativos; Estrutura ajusta deslocamento e Resistência; Armas precisam de perfil completo; Utilidades aplicam o efeito descrito.
 
-- Os preços existentes permanecem no catálogo. Esta regra não cria preço para T4 nem altera preços publicados.
+- Componente T4 não tem preço de catálogo: o Mestre combina o custo quando libera a peça.
 
-- Deslocamento escrito em metros no veículo completo prevalece sobre índices antigos de chassi ou componente.
+- Deslocamento escrito em metros no veículo completo prevalece sobre o índice do chassi ou do componente.
 
 ## transporte
 
@@ -4595,6 +4663,16 @@ Como funcionam rituais fora de combate, fusões com um Fluxo secundário, selos 
 
 Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de círculo. Consulte cada bloco pelo tipo de preparação que o personagem está tentando realizar.
 
+**Em resumo**
+
+- Ritual não tem círculo, não entra em combate e prende a Mana desde o começo. Interrompido, a Mana se perde.
+
+- Fusão aplica um Fluxo secundário por magia, e só um.
+
+- Selo é efeito escrito antes, quase sempre consumível. Encantamento é permanente, e cabem de 1 a 5 por item, conforme a raridade.
+
+- Os três se aprendem do Fluxo nativo. Cada Fluxo tem 3 rituais, 3 selos e 3 encantamentos.
+
 ### Rituais
 
 - Ritual não pertence a círculo nenhum e não entra em combate.
@@ -4695,6 +4773,10 @@ A ficha aplica sozinha o que dá para calcular: Enfraquecido tira 2 em testes de
 
 d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
+**Atenção:**
+
+Sanidade é o nome de duas coisas. A **barra de Sanidade** vai de 0 a 100 e mede o quanto a mente aguentou. A **perícia Sanidade** é o que você rola para proteger a barra. "Teste de Sanidade" rola a perícia, e "perder Sanidade" tira pontos da barra.
+
 - Falhar custa 1d4, 1d6, 1d8 ou 2d6 de Sanidade, conforme o tamanho do que você viu.
 
 - Sucesso crítico evita a perda inteira; sucesso corta pela metade; falha crítica maximiza os dados.
@@ -4783,9 +4865,9 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 - Condição que vem de uma fonte instantânea e não diz quanto dura vai até o fim do próximo turno de quem a recebeu.
 
-### Gravidade
+### Peso da condição
 
-Quando uma cura, uma receita ou uma habilidade encerra uma condição "leve", "média" ou "grave", é por esta escala. Quem trata um degrau trata também os de baixo: uma cura que encerra condição média encerra uma leve no lugar, se o paciente preferir.
+Toda condição tem um peso: leve, média, grave ou gravíssima. Ele não tem nada a ver com a Gravidade da queda, de Ferimentos, que vai de 0 a 4 e entra na DT de Morrendo. Quando uma cura, uma receita ou uma habilidade encerra uma condição "leve", "média" ou "grave", é por esta escala. Quem trata um degrau trata também os de baixo: uma cura que encerra condição média encerra uma leve no lugar, se o paciente preferir.
 
 - Gravidade | Condições
 
