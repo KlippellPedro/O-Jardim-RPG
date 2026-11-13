@@ -20,7 +20,8 @@ import { casasDoTrecho, encaixar, rotuloUnidade, type IPonto } from './motor/geo
 import { ConexaoMapa, Interpolador, type EstadoConexao, type MensagemMapa } from './tempoReal';
 import { PainelLateral, tokenDaEntidade, type AbaLateral } from './componentes/PainelLateral';
 import { BotaoFerramenta, ComDica } from './componentes/BotaoFerramenta';
-import { MenuToken } from './componentes/MenuToken';
+import { MenuToken, type Aba as AbaDoMenuToken } from './componentes/MenuToken';
+import { JanelaRecipiente } from './componentes/JanelaRecipiente';
 import { BarraToken } from './componentes/BarraToken';
 import { BarraAncorada } from './componentes/BarraAncorada';
 import { ConfigCena, SeletorDeCenas } from './componentes/CenasDoMestre';
@@ -237,6 +238,11 @@ export const MapaPage = () => {
   const [mapaSelecionadoId, setMapaSelecionadoId] = useState<string | null>(null);
   /** O painel de opções do token (abas) só abre quando se pede, pela barra colada no token. */
   const [menuTokenAberto, setMenuTokenAberto] = useState(false);
+  /** Aba com que o menu do token abre (o botão de baú abre direto no Loot). */
+  const [abaDoMenuToken, setAbaDoMenuToken] = useState<AbaDoMenuToken | undefined>(undefined);
+  /** Token cujo baú (caixote, bolsa) está aberto na janela de loot. */
+  const [recipienteAberto, setRecipienteAberto] = useState<string | null>(null);
+  const [recipienteOcupado, setRecipienteOcupado] = useState(false);
   const [encaixe, setEncaixe] = useState(() => lerOpcaoLocal(CHAVE_ENCAIXE_LOCAL));
   const [medirAoMover, setMedirAoMover] = useState(() => lerOpcaoLocal(CHAVE_MEDIR_AO_MOVER_LOCAL, false));
   const [seguirVista, setSeguirVista] = useState(() => lerOpcaoLocal(CHAVE_SEGUIR_VISTA_LOCAL));
@@ -1289,6 +1295,37 @@ export const MapaPage = () => {
     if (resposta) setEstado(resposta);
   };
 
+  /** Abre o baú (a primeira abertura rola a tabela no servidor) e mostra o que saiu. */
+  const abrirRecipiente = async (token: ITokenMapa) => {
+    if (!campanhaId || !token.recipiente) return;
+    if (token.recipiente.aberto) {
+      setRecipienteAberto(token.id);
+      return;
+    }
+    if (token.recipiente.trancado && !gestor) {
+      avisar.info(`${token.recipiente.rotulo} está trancado. Fale com o Mestre.`);
+      return;
+    }
+    setRecipienteOcupado(true);
+    const resposta = await comErro(() => mapaApi.abrirRecipiente(campanhaId, token.id));
+    setRecipienteOcupado(false);
+    if (resposta) {
+      setEstado(resposta);
+      setRecipienteAberto(token.id);
+    }
+  };
+
+  const pegarDoRecipiente = async (tokenId: string, linhas: string[], personagemId: string | undefined) => {
+    if (!campanhaId) return;
+    setRecipienteOcupado(true);
+    const resposta = await comErro(() => mapaApi.pegarDoRecipiente(campanhaId, tokenId, { linhas, ...(personagemId ? { personagem_id: personagemId } : {}) }));
+    setRecipienteOcupado(false);
+    if (resposta) {
+      setEstado(resposta);
+      avisar.sucesso(linhas.length > 1 ? 'Tudo foi para o seu inventário.' : 'Foi para o seu inventário.');
+    }
+  };
+
   /**
    * A nota do Mestre de um token. Leva o id do token (e não o `selecionado` do momento): a nota também é guardada
    * quando o menu fecha por a pessoa ter escolhido outro token, e tem de ir para o token em que foi escrita.
@@ -2035,6 +2072,7 @@ export const MapaPage = () => {
                   setPainelRecurso(null);
                   setPortaEscolhida(null);
                 }
+                setAbaDoMenuToken(undefined);
                 setMenuTokenAberto((v) => !v);
               }}
               onNota={gestor ? () => {
@@ -2046,7 +2084,14 @@ export const MapaPage = () => {
               onRemover={() => void removerToken()}
               onFalar={gestor ? () => void falarComo(tokenSelecionado) : undefined}
               onRecurso={(tipo, dados) => void mexerNoRecursoDoToken(tipo, dados)}
+              onRecipiente={() => void abrirRecipiente(tokenSelecionado)}
               onEspelhar={() => void editarToken({ flip_x: !tokenSelecionado.flip_x })}
+              onLoot={gestor ? () => {
+                setPainelRecurso(null);
+                setPortaEscolhida(null);
+                setAbaDoMenuToken('loot');
+                setMenuTokenAberto(true);
+              } : undefined}
             />
           </BarraAncorada>
         )}
@@ -2062,8 +2107,27 @@ export const MapaPage = () => {
             onFechar={() => setMenuTokenAberto(false)}
             campanhaId={campanhaId}
             onArteMudou={() => void recarregar()}
+            onEstado={setEstado}
+            abaInicial={abaDoMenuToken}
           />
         )}
+        {recipienteAberto && (() => {
+          const dono = tokens.find((t) => t.id === recipienteAberto);
+          if (!dono?.recipiente?.aberto) return null;
+          // O Mestre escolhe entre todos os personagens da cena; o jogador, entre os próprios.
+          const personagens = [...new Map(tokens
+            .filter((t) => t.personagem_id && (gestor || t.e_meu))
+            .map((t) => [t.personagem_id as string, { id: t.personagem_id as string, nome: t.nome }])).values()];
+          return (
+            <JanelaRecipiente
+              token={dono}
+              personagens={personagens}
+              ocupado={recipienteOcupado}
+              onPegar={(linhas, personagemId) => void pegarDoRecipiente(dono.id, linhas, personagemId)}
+              onFechar={() => setRecipienteAberto(null)}
+            />
+          );
+        })()}
         <PreferenciasBarras
           aberto={barrasAberto}
           preferencias={preferenciasBarras}

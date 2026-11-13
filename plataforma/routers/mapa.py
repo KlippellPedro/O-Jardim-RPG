@@ -265,7 +265,7 @@ def _tokens(connection, cena_id: UUID) -> list[dict]:
             """
             SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome,
                    t.x, t.y, t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura,
-                   t.camada, t.flip_x, t.flip_y, t.nota_mestre,
+                   t.camada, t.flip_x, t.flip_y, t.nota_mestre, t.recipiente,
                    COALESCE(t.personagem_id, sp.personagem_id) AS personagem_efetivo
             FROM mapa_tokens t
             LEFT JOIN sessao_participantes sp ON sp.id = t.participante_id
@@ -1142,7 +1142,7 @@ def _token(connection, campanha_id: UUID, token_id: UUID, *, travar: bool = Fals
     token = connection.execute(
         f"""
         SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome, t.x, t.y,
-               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura, t.camada, t.flip_x, t.flip_y,
+               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura, t.camada, t.flip_x, t.flip_y, t.recipiente,
                c.largura, c.altura, c.livre, c.ativa, c.estrutura
         FROM mapa_tokens t JOIN mapa_cenas c ON c.id = t.cena_id
         WHERE t.id=%s AND c.campanha_id=%s{' FOR UPDATE OF t' if travar else ''}

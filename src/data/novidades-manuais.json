@@ -2,6 +2,18 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-13-bau-de-loot-no-mapa",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Baús de loot no mapa: o que tem dentro e a chance de cada item",
+      "detalhes": [
+        "Qualquer token do mapa pode virar baú, caixote ou bolsa. O Mestre escolhe uma predefinição (Baú comum, incomum, raro, épico, lendário, Caixote de suprimentos ou Bolsa de saque) e ela sorteia itens do catálogo com a chance de cada um. Depois dá para ajustar linha a linha.",
+        "Um token com loot ganha um selo de baú. Quando alguém abre, o sorteio roda uma vez e a mesa inteira vê o que saiu. Cada jogador pega o que quiser e vai direto para o inventário e a carteira do personagem.",
+        "O Mestre pode trancar o baú, fechar e rolar de novo, ou sortear outra tabela. A tabela e as chances ficam só com o Mestre."
+      ]
+    },
+    {
       "id": "2026-11-13-ritmos-de-xp-e-maestria-de-fluxo",
       "data": "2026-11-13",
       "tipo": "novo",

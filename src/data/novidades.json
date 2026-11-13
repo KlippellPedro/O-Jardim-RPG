@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-11-13-bau-de-loot-no-mapa",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Baús de loot no mapa: o que tem dentro e a chance de cada item",
+      "detalhes": [
+        "Qualquer token do mapa pode virar baú, caixote ou bolsa. O Mestre escolhe uma predefinição (Baú comum, incomum, raro, épico, lendário, Caixote de suprimentos ou Bolsa de saque) e ela sorteia itens do catálogo com a chance de cada um. Depois dá para ajustar linha a linha.",
+        "Um token com loot ganha um selo de baú. Quando alguém abre, o sorteio roda uma vez e a mesa inteira vê o que saiu. Cada jogador pega o que quiser e vai direto para o inventário e a carteira do personagem.",
+        "O Mestre pode trancar o baú, fechar e rolar de novo, ou sortear outra tabela. A tabela e as chances ficam só com o Mestre."
+      ]
+    },
+    {
       "id": "2026-11-13-ritmos-de-xp-e-maestria-de-fluxo",
       "data": "2026-11-13",
       "tipo": "novo",
@@ -1038,19 +1050,6 @@
       "titulo": "Magias e classes com texto mais direto",
       "detalhes": [
         "Umas trinta magias e algumas páginas de classe foram reescritas para dizer de uma vez o que fazem. Nenhuma regra mudou: dano, alcance, testes e duração continuam iguais."
-      ]
-    },
-    {
-      "id": "2026-10-20-vazio-rebalanceado",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Vazio: magias novas de sensação e memória, e tetos no que consome magia",
-      "detalhes": [
-        "Nada Pessoal virou Sentido Apagado: apaga a visão ou a audição de um alvo por três rodadas. Silenciar Fluxo virou Esquecimento: apaga uma lembrança ou o nome de alguém da cabeça de quem conhecia. Quem já tinha aprendido alguma das duas fica com a magia nova na mesma vaga.",
-        "Escudo do Vazio, Avatar do Vazio e a Fivela Devoradora consomem só magia hostil, com teto de círculo, e deixam cura e bênção de aliado passarem. Apagar Efeito vai até o 8º círculo, e Apagar do Mapa se desfaz quando o alvo ataca ou faz barulho.",
-        "No Buraco Negro e na Singularidade, personagem de jogador cai Morrendo como em qualquer magia, em vez de sumir. O Toque do Abismo leva a Mana atual, e ela volta no descanso.",
-        "O Manto do Não-Ser, o encantamento, passou a se chamar Manto do Instante Ausente."
       ]
     }
   ]

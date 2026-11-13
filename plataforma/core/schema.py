@@ -2506,4 +2506,13 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "ALTER TABLE personagem_token ADD COLUMN IF NOT EXISTS arte_id UUID REFERENCES personagem_artes(id) ON DELETE SET NULL",
         ),
     ),
+    (
+        77,
+        "recipientes_de_loot_no_mapa",
+        (
+            # Baú, caixote, bolsa: um token que guarda itens (core/recipientes.py). Nulo = token comum. A tabela com
+            # as chances só sai do servidor para quem comanda a mesa; o jogador vê o que saiu depois de aberto.
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS recipiente JSONB",
+        ),
+    ),
 )

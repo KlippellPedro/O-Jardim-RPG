@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
-import type { IAuraToken, ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
+import type { IAuraToken, IEstadoMapa, ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
 import { SeletorDeMoldura } from '../oficina/OficinaGaveta';
 import type { Enquadramento } from '../motor/molduras';
 import { NotaDoMestre } from './NotaDoMestre';
 import { ArtesDoToken } from './ArtesDoToken';
+import { LootDoRecipiente } from './LootDoRecipiente';
 import '../efeitosMapa.css';
 
 interface Props {
@@ -22,9 +23,13 @@ interface Props {
   campanhaId?: string | null;
   /** A arte do token mudou: recarrega o mapa para o token mostrar a nova. */
   onArteMudou?: () => void;
+  /** Aplica o estado do mapa que o servidor devolve depois de mexer no loot do token. */
+  onEstado?: (estado: IEstadoMapa) => void;
+  /** Abre já nesta aba (o botão de baú da barra do token pede a aba Loot). */
+  abaInicial?: Aba;
 }
 
-type Aba = 'geral' | 'barras' | 'visual' | 'luz';
+export type Aba = 'geral' | 'barras' | 'visual' | 'luz' | 'loot';
 
 /** Atalhos de aura, em casas; a cor muda depois. */
 const AURAS: Array<{ rotulo: string; aura: IAuraToken }> = [
@@ -62,19 +67,19 @@ const LADOS: Array<{ id: LadoToken; rotulo: string }> = [
   { id: 'neutro', rotulo: 'Neutro' },
 ];
 
-const ROTULO_DA_ABA: Record<Aba, string> = { geral: 'Geral', barras: 'Barras', visual: 'Visual', luz: 'Luz e aura' };
+const ROTULO_DA_ABA: Record<Aba, string> = { geral: 'Geral', barras: 'Barras', visual: 'Visual', luz: 'Luz e aura', loot: 'Loot' };
 
 /**
  * As opções do token, em abas (antes era uma coluna só, com quase 1000 px de altura). O que se faz a toda hora
  * (esconder, falar como, tirar do mapa) está na barra colada no token (BarraToken); aqui ficam os ajustes.
  */
-export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMoldura, onEnquadramento, onFechar, campanhaId, onArteMudou }: Props) => {
+export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMoldura, onEnquadramento, onFechar, campanhaId, onArteMudou, onEstado, abaInicial }: Props) => {
   const config = token.config_barras;
   const podeVisual = gestor || token.e_meu;
   // Enquadramento só para a foto da ficha (imagem do Acervo já vem recortada pela Oficina).
   const temFotoDaFicha = Boolean(token.personagem_id && /^[fr]/.test(token.imagem ?? ''));
-  const abas: Aba[] = ['geral', ...(config ? ['barras' as const] : []), ...(podeVisual ? ['visual' as const, 'luz' as const] : [])];
-  const [aba, setAba] = useState<Aba>('geral');
+  const abas: Aba[] = ['geral', ...(config ? ['barras' as const] : []), ...(podeVisual ? ['visual' as const, 'luz' as const] : []), ...(gestor && campanhaId && onEstado ? ['loot' as const] : [])];
+  const [aba, setAba] = useState<Aba>(abaInicial ?? 'geral');
   const abaAtual = abas.includes(aba) ? aba : 'geral';
   const [enquadramento, setEnquadramento] = useState<Enquadramento>(token.enquadramento);
   const espera = useRef<number | null>(null);
@@ -85,8 +90,8 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
 
   useEffect(() => {
     setEnquadramento(token.enquadramento);
-    setAba('geral');
-  }, [token.id]); // eslint-disable-line react-hooks/exhaustive-deps
+    setAba(abaInicial ?? 'geral');
+  }, [token.id, abaInicial]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // A luz que vem do servidor vale, menos enquanto um controle ainda vai mandar a sua.
   useEffect(() => {
@@ -238,6 +243,12 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
               <label className="mapa-menu-linha">Foto para cima ou baixo <input type="range" min={-1} max={1} step={0.01} value={enquadramento.y} onChange={(e) => mudarEnquadramento({ y: Number(e.target.value) })} /></label>
             </>
           )}
+        </div>
+      )}
+
+      {abaAtual === 'loot' && gestor && campanhaId && onEstado && (
+        <div className="mapa-menu-token-aba" role="tabpanel">
+          <LootDoRecipiente campanhaId={campanhaId} token={token} onEstado={onEstado} />
         </div>
       )}
 

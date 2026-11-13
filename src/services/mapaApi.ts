@@ -1,4 +1,5 @@
 import { api } from './apiClient';
+import type { TabelaDeLoot } from './sessaoApi';
 import type { IGrade } from '../pages/Mapa/motor/geometria';
 
 export type LadoToken = 'jogador' | 'aliado' | 'inimigo' | 'neutro';
@@ -103,6 +104,47 @@ export interface IConfigBarras {
   para: ParaQuem;
 }
 
+/** Uma linha do que saiu de um baú (ou caixote, bolsa). `chance` e `rolagem` só chegam ao Mestre. */
+export interface ILinhaRecipiente {
+  linha: string;
+  tipo: 'item' | 'moedas';
+  titulo: string;
+  raridade?: string | null;
+  quantidade: number;
+  /** Nome de quem já pegou; nulo enquanto está lá. */
+  entregue_para: string | null;
+  chance?: number;
+  rolagem?: number;
+}
+
+/** Token que guarda itens. Antes de aberto, a mesa só sabe o rótulo; a tabela e as chances são do Mestre. */
+export interface IRecipienteToken {
+  rotulo: string;
+  trancado: boolean;
+  aberto: boolean;
+  linhas: ILinhaRecipiente[];
+  esvaziado: boolean;
+  aberto_por: string | null;
+  /** Só o Mestre. */
+  predefinicao?: string | null;
+  itens_na_tabela?: number;
+}
+
+export interface IPredefinicaoRecipiente {
+  id: string;
+  rotulo: string;
+  descricao: string;
+}
+
+export interface IEdicaoRecipiente {
+  rotulo?: string;
+  predefinicao?: string;
+  tabela?: { itens: Array<{ item_id: string; chance: number; quantidade: string }>; moedas: { moeda: 'Lunaris' | 'Solares'; dados: string; chance: number } | null };
+  trancado?: boolean;
+  reiniciar?: boolean;
+  remover?: boolean;
+}
+
 export interface ITokenMapa {
   id: string;
   x: number;
@@ -129,6 +171,8 @@ export interface ITokenMapa {
   e_meu: boolean;
   pode_mover: boolean;
   desconhecido: boolean;
+  /** Baú, caixote ou bolsa: o token guarda itens que os jogadores podem abrir. */
+  recipiente?: IRecipienteToken;
   /** Só para o dono e o Mestre. */
   config_barras?: IConfigBarras;
   /** Só para o Mestre. */
@@ -447,6 +491,17 @@ export const mapaApi = {
   /** Vida, Mana, Estamina ou Sanidade pela barra do token: `delta` soma (dano é negativo), `atual` define. O servidor grava na Sessão e na ficha. */
   mexerNoRecurso: (campanhaId: string, tokenId: string, dados: { tipo: TipoBarra; delta?: number; atual?: number }) =>
     api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}/recurso`, { method: 'POST', body: dados, ...ESTADO }),
+  predefinicoesDeRecipiente: (campanhaId: string) =>
+    api<{ predefinicoes: IPredefinicaoRecipiente[] }>(`${base(campanhaId)}/recipientes/predefinicoes`),
+  /** A tabela do recipiente com as chances. Só o Mestre. */
+  lerRecipiente: (campanhaId: string, tokenId: string) =>
+    api<{ recipiente: IRecipienteToken | null; tabela: TabelaDeLoot | null }>(`${base(campanhaId)}/tokens/${tokenId}/recipiente`, { cache: 'no-store' }),
+  configurarRecipiente: (campanhaId: string, tokenId: string, dados: IEdicaoRecipiente) =>
+    api<IEstadoMapa & { recipiente_tabela: TabelaDeLoot | null }>(`${base(campanhaId)}/tokens/${tokenId}/recipiente`, { method: 'PUT', body: dados, ...ESTADO }),
+  abrirRecipiente: (campanhaId: string, tokenId: string) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}/recipiente/abrir`, { method: 'POST', ...ESTADO }),
+  pegarDoRecipiente: (campanhaId: string, tokenId: string, dados: { linhas: string[]; personagem_id?: string }) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}/recipiente/pegar`, { method: 'POST', body: dados, ...ESTADO }),
   moverToken: (campanhaId: string, tokenId: string, ponto: { x: number; y: number; atravessar?: string }) =>
     api<{ x: number; y: number; versao: number; travessia: ITravessia | null; barrado?: boolean }>(`${base(campanhaId)}/tokens/${tokenId}/mover`, { method: 'POST', body: ponto }),
   /** Abrir, fechar, trancar ou revelar uma porta do mapa montado (o jogador só abre e fecha a que está ao lado). */

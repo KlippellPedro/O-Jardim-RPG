@@ -416,6 +416,122 @@ class MapaBancoTests(unittest.TestCase):
             mapa.editar_token_do_personagem(self.campanha_id, self.mira, mapa.TokenDoPersonagemInput(arte_id=uuid.uuid4()), user=self.ana, database=self.database)
         self.assertEqual(erro.exception.status_code, 404)
 
+    # ------------------------------------------------- recipientes de loot
+
+    def _catalogo(self, *itens):
+        with self.database.connection() as connection:
+            for id_, tipo, raridade in itens:
+                connection.execute(
+                    "INSERT INTO catalogo_itens (id, tipo, titulo, conteudo, ativo) VALUES (%s, %s, %s, %s, TRUE) ON CONFLICT (id) DO NOTHING",
+                    (id_, tipo, id_.title(), Jsonb({"raridade": raridade, "preco": {"Lunaris": 10}, "descricao": "x"})),
+                )
+
+    def _bau(self):
+        from routers import mapa_recipientes as rec
+
+        self._sessao()
+        cena = uuid.UUID(self.criar_cena()["cena"]["id"])
+        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(nome="Baú", x=300, y=300, camada="props"), user=self.mestre, database=self.database)
+        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(personagem_id=self.mira, x=150, y=150), user=self.mestre, database=self.database)
+        tokens = {t["nome"]: uuid.UUID(t["id"]) for t in self.ver(self.mestre)["tokens"]}
+        return rec, tokens["Baú"]
+
+    @staticmethod
+    def _do_bau(estado):
+        return next(t for t in estado["tokens"] if t["nome"] == "Baú")
+
+    def test_mestre_prepara_o_bau_e_o_jogador_so_ve_o_que_saiu_depois_de_aberto(self):
+        rec, bau = self._bau()
+        self._catalogo(("pocao-a", "consumivel", "comum"))
+        tabela = rec.TabelaInput(itens=[rec.LinhaTabelaInput(item_id="pocao-a", chance=100, quantidade="2")], moedas=rec.MoedasTabelaInput(moeda="Lunaris", dados="3", chance=100))
+        resposta = rec.configurar_recipiente(self.campanha_id, bau, rec.RecipienteInput(rotulo="Baú do capitão", tabela=tabela), user=self.mestre, database=self.database)
+        self.assertEqual(resposta["recipiente_tabela"]["itens"][0]["chance"], 100)
+        # Jogador sabe que o token guarda algo, mas não a tabela nem a chance.
+        recipiente = self._do_bau(self.ver(self.ana))["recipiente"]
+        self.assertEqual((recipiente["rotulo"], recipiente["aberto"], recipiente["linhas"]), ("Baú do capitão", False, []))
+        self.assertNotIn("itens_na_tabela", recipiente)
+        with self.assertRaises(HTTPException) as erro:
+            rec.ler_recipiente(self.campanha_id, bau, user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        with self.assertRaises(HTTPException):
+            rec.configurar_recipiente(self.campanha_id, bau, rec.RecipienteInput(trancado=True), user=self.ana, database=self.database)
+
+        visto = self._do_bau(rec.abrir_recipiente(self.campanha_id, bau, user=self.ana, database=self.database))["recipiente"]
+        self.assertTrue(visto["aberto"])
+        self.assertEqual(sorted((l["tipo"], l["quantidade"]) for l in visto["linhas"]), [("item", 2), ("moedas", 3)])
+        self.assertEqual(visto["aberto_por"], "Mira")
+        self.assertTrue(all("chance" not in l and "rolagem" not in l for l in visto["linhas"]))
+        # Quem vê o token vê o que saiu; abrir de novo não rola outra vez.
+        de_bruno = self._do_bau(self.ver(self.bruno))["recipiente"]
+        self.assertEqual(len(de_bruno["linhas"]), 2)
+        de_novo = self._do_bau(rec.abrir_recipiente(self.campanha_id, bau, user=self.ana, database=self.database))["recipiente"]
+        self.assertEqual([l["linha"] for l in de_novo["linhas"]], [l["linha"] for l in visto["linhas"]])
+
+    def test_pegar_entrega_item_e_moedas_ao_personagem_uma_vez_so(self):
+        rec, bau = self._bau()
+        self._catalogo(("pocao-a", "consumivel", "comum"))
+        tabela = rec.TabelaInput(itens=[rec.LinhaTabelaInput(item_id="pocao-a", chance=100, quantidade="2")], moedas=rec.MoedasTabelaInput(moeda="Lunaris", dados="5", chance=100))
+        rec.configurar_recipiente(self.campanha_id, bau, rec.RecipienteInput(tabela=tabela), user=self.mestre, database=self.database)
+        aberto = rec.abrir_recipiente(self.campanha_id, bau, user=self.ana, database=self.database)
+        linhas = {l["tipo"]: l["linha"] for l in self._do_bau(aberto)["recipiente"]["linhas"]}
+        # Quem não é dono do personagem não pega para ele.
+        with self.assertRaises(HTTPException) as erro:
+            rec.pegar_do_recipiente(self.campanha_id, bau, rec.PegarInput(linhas=[linhas["item"]], personagem_id=self.mira), user=self.bruno, database=self.database)
+        self.assertIn(erro.exception.status_code, (403, 422))
+        _, versao_antes = self._ficha_da_mira()
+        resposta = rec.pegar_do_recipiente(self.campanha_id, bau, rec.PegarInput(linhas=[linhas["item"], linhas["moedas"]]), user=self.ana, database=self.database)
+        visto = self._do_bau(resposta)["recipiente"]
+        self.assertTrue(visto["esvaziado"])
+        self.assertEqual({l["entregue_para"] for l in visto["linhas"]}, {"Mira"})
+        with self.database.connection() as connection:
+            inventario = connection.execute(
+                "SELECT quantidade FROM inventario_personagem WHERE personagem_id=%s AND item_id='pocao-a'", (self.mira,),
+            ).fetchone()
+            extrato = connection.execute(
+                "SELECT COUNT(*) AS n FROM lancamentos_economia WHERE campanha_id=%s AND origem='mapa.recipiente'", (self.campanha_id,),
+            ).fetchone()
+        self.assertEqual(inventario["quantidade"], 2)
+        self.assertEqual(extrato["n"], 1)
+        with self.assertRaises(HTTPException) as erro:
+            rec.pegar_do_recipiente(self.campanha_id, bau, rec.PegarInput(linhas=[linhas["item"]]), user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 409)
+
+    def test_trancado_so_abre_o_mestre_e_reiniciar_rola_de_novo(self):
+        rec, bau = self._bau()
+        self._catalogo(("pelo", "drop", "comum"))
+        tabela = rec.TabelaInput(itens=[rec.LinhaTabelaInput(item_id="pelo", chance=100)])
+        rec.configurar_recipiente(self.campanha_id, bau, rec.RecipienteInput(tabela=tabela, trancado=True), user=self.mestre, database=self.database)
+        with self.assertRaises(HTTPException) as erro:
+            rec.abrir_recipiente(self.campanha_id, bau, user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        rec.configurar_recipiente(self.campanha_id, bau, rec.RecipienteInput(trancado=False), user=self.mestre, database=self.database)
+        rec.abrir_recipiente(self.campanha_id, bau, user=self.ana, database=self.database)
+        reiniciado = rec.configurar_recipiente(self.campanha_id, bau, rec.RecipienteInput(reiniciar=True), user=self.mestre, database=self.database)
+        visto = self._do_bau(reiniciado)["recipiente"]
+        self.assertEqual((visto["aberto"], visto["linhas"]), (False, []))
+        removido = rec.configurar_recipiente(self.campanha_id, bau, rec.RecipienteInput(remover=True), user=self.mestre, database=self.database)
+        self.assertNotIn("recipiente", self._do_bau(removido))
+        with self.assertRaises(HTTPException) as erro:
+            rec.abrir_recipiente(self.campanha_id, bau, user=self.ana, database=self.database)
+        self.assertEqual(erro.exception.status_code, 404)
+
+    def test_predefinicao_sorteia_a_tabela_do_catalogo_e_recusa_item_inexistente(self):
+        rec, bau = self._bau()
+        self._catalogo(("pocao-a", "consumivel", "comum"), ("pelo", "drop", "comum"), ("corda", "equipamento", "comum"), ("adaga", "arma", "comum"))
+        resposta = rec.configurar_recipiente(self.campanha_id, bau, rec.RecipienteInput(predefinicao="bau-comum"), user=self.mestre, database=self.database)
+        tabela = resposta["recipiente_tabela"]
+        self.assertGreaterEqual(len(tabela["itens"]), 3)
+        self.assertEqual(tabela["moedas"]["moeda"], "Lunaris")
+        self.assertTrue(all(linha["chance"] > 0 for linha in tabela["itens"]))
+        self.assertEqual(self._do_bau(resposta)["recipiente"]["predefinicao"], "bau-comum")
+        with self.assertRaises(HTTPException) as erro:
+            rec.configurar_recipiente(self.campanha_id, bau, rec.RecipienteInput(tabela=rec.TabelaInput(itens=[rec.LinhaTabelaInput(item_id="nao-existe", chance=10)])), user=self.mestre, database=self.database)
+        self.assertEqual(erro.exception.status_code, 422)
+        with self.assertRaises(HTTPException) as erro:
+            rec.configurar_recipiente(self.campanha_id, bau, rec.RecipienteInput(predefinicao="bau-de-ouro"), user=self.mestre, database=self.database)
+        self.assertEqual(erro.exception.status_code, 422)
+        self.assertEqual(len(rec.listar_predefinicoes(self.campanha_id, user=self.mestre, database=self.database)["predefinicoes"]), 7)
+
     # --------------------------------------------------------------- acervo
 
     def _item(self, largura=800, altura=600, nome="Caverna"):

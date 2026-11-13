@@ -371,12 +371,31 @@ export class TokenVisual {
       bolinha.position.set(Math.cos(angulo) * this.raioQuadro * 1.1, Math.sin(angulo) * this.raioQuadro * 1.1);
       this.condicoes.addChild(bolinha);
     });
+    this.desenharSelo();
     if (this.dados.condicoes.length > lista.length) {
       const mais = new Text({ text: `+${this.dados.condicoes.length - lista.length}`, style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: raio * 1.1, fill: '#fde68a', stroke: { color: '#000000', width: 3 } } });
       mais.anchor.set(0, 0.5);
       mais.position.set(this.raioQuadro * 1.14, this.raioQuadro * 0.7);
       this.condicoes.addChild(mais);
     }
+  }
+
+  /** Baú, caixote ou bolsa: um selo dourado no alto à esquerda avisa que dá para abrir (apagado quando já esvaziou). */
+  private desenharSelo() {
+    const recipiente = this.dados.recipiente;
+    if (!recipiente) return;
+    const raio = Math.max(8, this.lado * 0.12);
+    const angulo = (-3 * Math.PI) / 4;
+    const selo = new Graphics();
+    selo.circle(0, 0, raio).fill('#2b2236').stroke({ width: Math.max(1, raio * 0.16), color: '#f0c36a' });
+    const l = raio * 0.62;
+    // Caixa com tampa e fecho: lê como baú mesmo bem pequena.
+    selo.roundRect(-l, -l * 0.15, l * 2, l * 0.95, l * 0.14).fill('#f0c36a');
+    selo.roundRect(-l, -l * 0.75, l * 2, l * 0.6, l * 0.3).fill('#d9a24a');
+    selo.rect(-l * 0.14, -l * 0.25, l * 0.28, l * 0.35).fill('#2b2236');
+    selo.position.set(Math.cos(angulo) * this.raioQuadro * 1.1, Math.sin(angulo) * this.raioQuadro * 1.1);
+    selo.alpha = recipiente.esvaziado ? 0.4 : 1;
+    this.condicoes.addChild(selo);
   }
 
   private desenharRetrato() {

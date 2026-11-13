@@ -20,7 +20,7 @@ import re
 from dataclasses import dataclass, field
 from uuid import uuid4
 
-from core import mesa_extras
+from core import mesa_extras, recipientes
 
 #: "hex" é o hexágono pontudo em cima; "hex-plano" é o de lado reto em cima.
 TIPOS_GRADE = ("quadrada", "hex", "hex-plano", "nenhuma")
@@ -847,6 +847,11 @@ def visao_token(
         # A luz se vê de longe: quem enxerga o token enxerga a tocha dele, conhecendo ou não quem é.
         "luz": token.get("luz") if isinstance(token.get("luz"), dict) else None,
     }
+    # Baú, caixote, bolsa: quem enxerga o token sabe que ele guarda algo e vê o que saiu depois de aberto.
+    if identidade:
+        recipiente = recipientes.visao(token.get("recipiente"), gestor=quem.gestor)
+        if recipiente is not None:
+            saida["recipiente"] = recipiente
     # A aura escondida (o Mestre marcando uma área) é só de quem comanda e do dono do token.
     saida["aura"] = mesa_extras.aura_vista(token.get("aura"), gestor=quem.gestor, dono=saida["e_meu"])
     if quem.gestor or saida["e_meu"]:

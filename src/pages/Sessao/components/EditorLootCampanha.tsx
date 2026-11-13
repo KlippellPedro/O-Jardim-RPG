@@ -1,14 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Coins, Plus, RefreshCw, Save, Search, Trash2, X } from 'lucide-react';
-import { sessaoApi, type TabelaDeLoot } from '../../../services/sessaoApi';
+import { sessaoApi, type TabelaDeLoot, type TabelaDeLootPayload } from '../../../services/sessaoApi';
 import { Select } from '../../../components/ui/Select';
 
 interface EditorLootCampanhaProps {
-  campanhaId: string;
-  monstroId: string;
+  /** Tabela de criatura do Bestiário: sem `aoSalvar`, grava pelo ajuste da campanha. */
+  campanhaId?: string;
+  monstroId?: string;
   tabela: TabelaDeLoot;
   onSalvo: (tabela: TabelaDeLoot) => void;
   onCancelar: () => void;
+  /** Outro destino para a tabela (o baú do mapa). Devolve a tabela já como o servidor a guardou. */
+  aoSalvar?: (tabela: TabelaDeLootPayload) => Promise<TabelaDeLoot>;
+  /** Texto de ajuda no topo; o padrão fala da tabela oficial das criaturas. */
+  dica?: string;
+  rotuloSalvar?: string;
 }
 
 interface LinhaEditavel {
@@ -46,7 +52,7 @@ const carregarCatalogo = () => {
 };
 
 /** O Mestre troca a tabela de loot de uma criatura só na campanha dele. */
-export const EditorLootCampanha: React.FC<EditorLootCampanhaProps> = ({ campanhaId, monstroId, tabela, onSalvo, onCancelar }) => {
+export const EditorLootCampanha: React.FC<EditorLootCampanhaProps> = ({ campanhaId, monstroId, tabela, onSalvo, onCancelar, aoSalvar, dica, rotuloSalvar }) => {
   const [linhas, setLinhas] = useState<LinhaEditavel[]>(() => tabela.itens.map((item) => ({
     item_id: item.item_id,
     titulo: item.titulo,
@@ -88,10 +94,11 @@ export const EditorLootCampanha: React.FC<EditorLootCampanhaProps> = ({ campanha
     setBusy(true);
     setErro(null);
     try {
-      const nova = await sessaoApi.ajustarTabelaDeLoot(campanhaId, monstroId, {
+      const payload: TabelaDeLootPayload = {
         itens: linhas.map((linha) => ({ item_id: linha.item_id, chance: linha.chance, quantidade: linha.quantidade })),
         moedas: comMoedas ? { moeda, dados: dadosMoeda, chance: chanceMoeda } : null,
-      });
+      };
+      const nova = aoSalvar ? await aoSalvar(payload) : await sessaoApi.ajustarTabelaDeLoot(campanhaId ?? '', monstroId ?? '', payload);
       onSalvo(nova);
     } catch (error) {
       setErro(error instanceof Error && error.message ? error.message : 'Não foi possível salvar a tabela.');
@@ -104,8 +111,7 @@ export const EditorLootCampanha: React.FC<EditorLootCampanhaProps> = ({ campanha
   return (
     <div className="space-y-3 rounded-xl border border-[#c7a44c]/25 bg-[#c7a44c]/[0.04] p-3">
       <p className="text-[11px] leading-5 text-white/50">
-        Vale só nesta campanha. As outras mesas continuam com a tabela oficial, e você pode voltar para ela quando quiser.
-        Quantidade aceita número fixo (2) ou dados (1d4).
+        {dica ?? 'Vale só nesta campanha. As outras mesas continuam com a tabela oficial, e você pode voltar para ela quando quiser. Quantidade aceita número fixo (2) ou dados (1d4).'}
       </p>
 
       {linhas.length ? (
@@ -193,7 +199,7 @@ export const EditorLootCampanha: React.FC<EditorLootCampanhaProps> = ({ campanha
           <X size={12} /> Cancelar
         </button>
         <button type="button" onClick={() => void salvar()} disabled={busy || invalidas.length > 0 || moedaInvalida} className="flex items-center gap-1.5 rounded-lg bg-[#c7a44c] px-3 py-1.5 text-xs font-bold text-black hover:bg-[#dec269] disabled:opacity-40">
-          {busy ? <RefreshCw size={12} className="animate-spin" /> : <Save size={12} />} Salvar nesta campanha
+          {busy ? <RefreshCw size={12} className="animate-spin" /> : <Save size={12} />} {rotuloSalvar ?? 'Salvar nesta campanha'}
         </button>
       </div>
     </div>

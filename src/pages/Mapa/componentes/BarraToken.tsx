@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Eye, EyeOff, FlipHorizontal2, Minus, MessageSquareQuote, Plus, SlidersHorizontal, StickyNote, Trash2 } from 'lucide-react';
+import { Eye, EyeOff, FlipHorizontal2, Lock, Minus, MessageSquareQuote, Package, Plus, SlidersHorizontal, StickyNote, Trash2 } from 'lucide-react';
 import type { IBarraToken, ITokenMapa, TipoBarra } from '../../../services/mapaApi';
 import { resumoDaNota, temNota } from '../motor/notasDoMestre';
 import { CORES_BARRA_PADRAO } from '../motor/barrasToken';
@@ -22,6 +22,10 @@ interface Props {
   onFalar?: () => void;
   /** Dono do personagem (e o Mestre): muda Vida, Mana, Estamina ou Sanidade direto na barra do token. */
   onRecurso?: (tipo: TipoBarra, mudanca: MudancaDeRecurso) => void;
+  /** O token é um baú, caixote ou bolsa: abre (ou mostra de novo) o que ele guarda. */
+  onRecipiente?: () => void;
+  /** Só o Mestre: abre a aba Loot, onde se prepara o recipiente (também serve para tornar o token um). */
+  onLoot?: () => void;
   /** Vira o token de lado (espelha na horizontal). O dono e o Mestre usam. */
   onEspelhar?: () => void;
 }
@@ -88,7 +92,7 @@ const LinhaRecurso = ({ barra, onMudar }: { barra: IBarraToken; onMudar: (mudanc
  * A barra colada no token escolhido (ver BarraAncorada): o que se faz toda hora fica a um clique, e o painel
  * de opções só abre quando se pede, em vez de cobrir a direita do mapa a cada token escolhido.
  */
-export const BarraToken = ({ token, gestor, opcoesAbertas, onOpcoes, onNota, onOculto, onRemover, onFalar, onRecurso, onEspelhar }: Props) => {
+export const BarraToken = ({ token, gestor, opcoesAbertas, onOpcoes, onNota, onOculto, onRemover, onFalar, onRecurso, onRecipiente, onLoot, onEspelhar }: Props) => {
   const principal = token.barras[0];
   // Só mexe pela barra quem manda no personagem e só nos recursos que chegam com número (o degrau parcial mostra só o estado).
   const podeMexer = Boolean(onRecurso && token.personagem_id && (token.e_meu || gestor));
@@ -122,6 +126,18 @@ export const BarraToken = ({ token, gestor, opcoesAbertas, onOpcoes, onNota, onO
             <button type="button" className={token.flip_x ? 'ativo' : ''} aria-pressed={Boolean(token.flip_x)} aria-label="Virar o token para o outro lado" onClick={onEspelhar}>
               <FlipHorizontal2 size={18} />
             </button>
+          </ComDica>
+        )}
+        {token.recipiente && onRecipiente && (
+          <ComDica lado="cima" dica={token.recipiente.trancado && !gestor ? `${token.recipiente.rotulo}: trancado` : token.recipiente.aberto ? `Ver o que saiu de ${token.recipiente.rotulo}` : `Abrir ${token.recipiente.rotulo}`}>
+            <button type="button" className={token.recipiente.aberto ? 'ativo' : ''} aria-label={`${token.recipiente.aberto ? 'Ver' : 'Abrir'} ${token.recipiente.rotulo}`} onClick={onRecipiente}>
+              {token.recipiente.trancado && !gestor ? <Lock size={18} /> : <Package size={18} />}
+            </button>
+          </ComDica>
+        )}
+        {gestor && onLoot && !token.recipiente && (
+          <ComDica lado="cima" dica="Transformar em baú: o que tem dentro e a chance de cada item">
+            <button type="button" aria-label="Transformar este token em baú" onClick={onLoot}><Package size={18} /></button>
           </ComDica>
         )}
         <ComDica lado="cima" dica="Opções do token: barras, visual, luz, aura e a nota do Mestre">
