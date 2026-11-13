@@ -260,7 +260,7 @@ simples. Como nível e classe, os requisitos da Loja não bloqueiam: avisam quem
 compra e registram a infração para o Mestre (`requisitoAtributo`, conferido em
 `_require_catalog_character_requirements` e em `atributosQueFaltamLoja`). A
 faixa base de preço é a de antes (simples 15 a 40, marcial 50 a 80 Lunaris), e a
-raridade escolhida na compra multiplica por cima (×3, ×8, ×20, ×60). Na Defesa,
+raridade escolhida na compra multiplica por cima (×4, ×16, ×64, ×256, a escada ×4 da Economia; eram ×3, ×8, ×20 e ×60 até 2026-11-13). Na Defesa,
 a raridade soma +0 a +4 na armadura e metade disso no escudo (revisão de
 2026-11-12). Penalidades não mudaram. Espiritual, Couraça Primordial e
 Juggernaut mantêm o bônus, e a Égide Primordial fica em +3;

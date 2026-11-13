@@ -120,7 +120,7 @@ const tituloDaConfianca = (nivel: number) => NIVEIS_DE_CONFIANCA.find((item) => 
 
 const tabelaFavores = FAVORES.map((favor) => `
   <tr>
-    <td><strong>${favor.titulo}</strong><br><small>${tituloDaConfianca(favor.confiancaMinima)} ou mais</small></td>
+    <td><strong>${favor.titulo}</strong><br><small>${tituloDaConfianca(favor.confiancaMinima)}${favor.confiancaMinima >= 3 ? '' : ' ou mais'}</small></td>
     <td>${favor.exemplo}<small class="regras-mecanica"><strong>Teste:</strong> ${favor.teste}. <strong>Custo:</strong> ${favor.custo}</small></td>
   </tr>
 `).join('');

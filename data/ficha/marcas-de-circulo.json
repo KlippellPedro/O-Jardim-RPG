@@ -53,7 +53,7 @@
       { "circulo": 9, "id": "inconstancia-roleta-viva", "titulo": "Roleta Viva", "bonus": "Uma vez por cena, você copia uma habilidade simples que tenha visto naquela cena.", "onus": "Uma habilidade sua, sorteada, fica indisponível até o fim da cena." }
     ],
     "fisico": [
-      { "circulo": 5, "id": "fisico-elemento-na-pele", "titulo": "Elemento na Pele", "bonus": "Resistência 3 a um elemento escolhido ao receber a Marca. A Elementarista usa o de origem.", "onus": "Vulnerabilidade 3 ao elemento oposto, definido pelo Mestre na primeira vez." },
+      { "circulo": 5, "id": "fisico-elemento-na-pele", "titulo": "Elemento na Pele", "bonus": "Resistência 3 a um elemento escolhido ao receber a Marca. A Elementarista usa o de origem.", "onus": "Sofre 3 a mais de dano do elemento oposto, definido pelo Mestre na primeira vez." },
       { "circulo": 6, "id": "fisico-peso-de-pedra", "titulo": "Peso de Pedra", "bonus": "+2 contra empurrão, agarrão e queda.", "onus": "-3 m de deslocamento." },
       { "circulo": 7, "id": "fisico-mao-pesada", "titulo": "Mão Pesada", "bonus": "+1 dado de dano em ataques corpo a corpo.", "onus": "Trabalho delicado, de fechadura a caligrafia, sai com desvantagem." },
       { "circulo": 8, "id": "fisico-corpo-mineral", "titulo": "Corpo Mineral", "bonus": "Redução 3 contra dano físico.", "onus": "Você afunda: nadar e escalar saem com desvantagem." },
@@ -91,7 +91,7 @@
       { "circulo": 5, "id": "tecnologia-leitura-constante", "titulo": "Leitura Constante", "bonus": "Você identifica dispositivo, Autômato e item energizado de imediato.", "onus": "Precisa de um módulo A.X.I.S em mãos. Sem ele, -2 em testes de conjuração." },
       { "circulo": 6, "id": "tecnologia-interferencia", "titulo": "Interferência", "bonus": "+2 em testes contra magia de Fluxo natural.", "onus": "-2 em testes contra dano e efeitos tecnológicos." },
       { "circulo": 7, "id": "tecnologia-registro", "titulo": "Registro", "bonus": "Magia que já acertou você uma vez acerta com -2 nas próximas.", "onus": "A A.X.I.S registra por onde você passa, e quem tem acesso à Malha consegue rastrear você." },
-      { "circulo": 8, "id": "tecnologia-carcaca", "titulo": "Carcaça", "bonus": "Redução 3 contra dano de energia.", "onus": "Pulso eletromagnético derruba você como derruba máquina." },
+      { "circulo": 8, "id": "tecnologia-carcaca", "titulo": "Carcaça", "bonus": "Redução 3 contra dano tecnológico.", "onus": "Pulso eletromagnético derruba você como derruba máquina." },
       { "circulo": 9, "id": "tecnologia-protocolo-vivo", "titulo": "Protocolo Vivo", "bonus": "Uma vez por cena, você intercepta uma magia de até 6º círculo com a reação.", "onus": "Em área sem energia, você conjura com desvantagem." }
     ]
   },
@@ -105,7 +105,7 @@
     { "id": "cicatriz-passo-fora", "titulo": "Passo Fora", "bonus": "Uma vez por cena, você teleporta 9 m com a ação de movimento.", "onus": "Nenhuma magia alheia consegue transportar você junto." },
     { "id": "cicatriz-sono-curto", "titulo": "Sono Curto", "bonus": "Seu descanso completo leva 4 horas.", "onus": "Você sonha com o Fluxo. O Mestre pode dar visões, e nem todas são gentis." },
     { "id": "cicatriz-segunda-sombra", "titulo": "Segunda Sombra", "bonus": "Uma vez por dia, um duplo seu absorve um golpe inteiro.", "onus": "O duplo age por conta própria, e nem sempre a seu favor." },
-    { "id": "cicatriz-pele-de-fluxo", "titulo": "Pele de Fluxo", "bonus": "Redução 5 contra o tipo de dano do seu Fluxo nativo.", "onus": "Vulnerabilidade 5 ao tipo oposto, definido pelo Mestre." },
+    { "id": "cicatriz-pele-de-fluxo", "titulo": "Pele de Fluxo", "bonus": "Redução 5 contra o tipo de dano do seu Fluxo nativo.", "onus": "Sofre 5 a mais de dano do tipo oposto, definido pelo Mestre." },
     { "id": "cicatriz-marca-visivel", "titulo": "Marca Visível", "bonus": "+5 em Intimidação e em testes para impor presença.", "onus": "Você não passa despercebido em lugar nenhum, nunca mais." },
     { "id": "cicatriz-reserva-rachada", "titulo": "Reserva Rachada", "bonus": "Uma vez por cena, você conjura uma magia sem gastar Mana.", "onus": "Ao fim dessa cena, 2 Cansaço." }
   ]

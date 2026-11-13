@@ -54,7 +54,7 @@ export interface IExposicaoAflicao {
 export interface IProgressaoAflicao {
   teste: 'Fortitude';
   sucessoCritico: -1;
-  sucesso: 0;
+  sucesso: 0 | -1;
   falha: 1;
   falhaCritica: 2;
 }
@@ -93,6 +93,15 @@ export interface IAflicao {
   observacoes?: string[];
 }
 
+/** Veneno perde força sozinho: passar no teste do intervalo já desce um estágio. */
+const PROGRESSAO_DE_VENENO: IProgressaoAflicao = {
+  teste: 'Fortitude',
+  sucessoCritico: -1,
+  sucesso: -1,
+  falha: 1,
+  falhaCritica: 2,
+};
+
 const PROGRESSAO_PADRAO: IProgressaoAflicao = {
   teste: 'Fortitude',
   sucessoCritico: -1,
@@ -115,7 +124,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
     dtFortitude: 15,
     incubacao: { quantidade: 0, unidade: 'rodada' },
     intervalo: { quantidade: 1, unidade: 'rodada' },
-    progressao: PROGRESSAO_PADRAO,
+    progressao: PROGRESSAO_DE_VENENO,
     estagios: [
       { numero: 0, efeitos: [] },
       { numero: 1, efeitos: ['Movimento reduzido pela metade.'] },
@@ -144,7 +153,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
     dtFortitude: 16,
     incubacao: { quantidade: 0, unidade: 'rodada' },
     intervalo: { quantidade: 1, unidade: 'rodada' },
-    progressao: PROGRESSAO_PADRAO,
+    progressao: PROGRESSAO_DE_VENENO,
     estagios: [
       { numero: 0, efeitos: [] },
       { numero: 1, efeitos: ['Sofra 1d6 de dano de veneno no fim do intervalo.'] },
@@ -314,7 +323,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
     dtFortitude: 16,
     incubacao: { quantidade: 10, unidade: 'minuto' },
     intervalo: { quantidade: 10, unidade: 'minuto' },
-    progressao: PROGRESSAO_PADRAO,
+    progressao: PROGRESSAO_DE_VENENO,
     estagios: [
       { numero: 0, efeitos: [] },
       { numero: 1, efeitos: ['Visão turva: −1 em Percepção e Pontaria.'] },
@@ -436,7 +445,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
     dtFortitude: 15,
     incubacao: { quantidade: 1, unidade: 'minuto' },
     intervalo: { quantidade: 1, unidade: 'minuto' },
-    progressao: PROGRESSAO_PADRAO,
+    progressao: PROGRESSAO_DE_VENENO,
     estagios: [
       { numero: 0, efeitos: [] },
       { numero: 1, efeitos: ['−1 em Iniciativa e em Percepção.'] },
@@ -711,7 +720,7 @@ export const REGRA_AFLICOES = {
     <div class="regras-resumo">
       <ul>
         <li>Ao sofrer exposição, teste Fortitude contra a DT da aflição. Falha aplica o estágio 1, e falha crítica aplica o estágio 2.</li>
-        <li>No fim de cada intervalo, novo teste: sucesso crítico reduz 1 estágio, sucesso mantém, falha aumenta 1 e falha crítica aumenta 2.</li>
+        <li>No fim de cada intervalo, novo teste: sucesso crítico reduz 1 estágio, sucesso mantém, falha aumenta 1 e falha crítica aumenta 2. Em veneno, o sucesso também reduz 1.</li>
         <li>Cura reduz 1 estágio por sucesso, e o antídoto encerra um veneno ativo. No estágio 0 a aflição acaba.</li>
         <li>Uma nova exposição à mesma aflição pode subir 1 estágio, no máximo uma vez por cena.</li>
       </ul>
@@ -720,7 +729,7 @@ export const REGRA_AFLICOES = {
     <h3 class="regras-subtitle">Aplicação</h3>
     <ol class="regras-steps">
       <li>Ao sofrer exposição, teste Fortitude contra a DT da aflição. Sucesso ou sucesso crítico evita a aflição. Falha aplica o estágio 1 depois da incubação; falha crítica aplica o estágio 2.</li>
-      <li>No fim de cada intervalo, faça outro teste. Sucesso crítico reduz 1 estágio; sucesso mantém; falha aumenta 1; falha crítica aumenta 2.</li>
+      <li>No fim de cada intervalo, faça outro teste. Sucesso crítico reduz 1 estágio; sucesso mantém; falha aumenta 1; falha crítica aumenta 2. Em veneno, o sucesso comum também reduz 1 estágio: o corpo vence a toxina aos poucos, e doença e vício só cedem com tratamento.</li>
       <li>O estágio não passa do maior valor do catálogo. Seus efeitos não se acumulam com os de estágios anteriores, salvo indicação expressa.</li>
       <li>Ao chegar ao estágio 0, remova a aflição e restaure qualquer atributo drenado conforme a recuperação indicada.</li>
     </ol>

@@ -193,8 +193,7 @@ export const REGRAS_FAMA = [
 
 // ---------------------------------------------------------------- Procura
 // A terceira escala: quanto a lei de um lugar procura o personagem. Chama-se
-// Procura, e não Calor, porque Calor já é dano de ambiente no livro e o Calor
-// do Banqueiro (Discord) mede outra coisa, o roubo de cofre entre jogadores.
+// Procura, e não Calor, porque Calor já é dano de ambiente no livro.
 
 export type NivelProcura = 0 | 1 | 2 | 3 | 4 | 5;
 
@@ -267,9 +266,6 @@ export const REGRAS_PROCURA = [
   'Procura é com a lei do lugar. Se a guarda for uma facção, o Prestígio com ela só muda por compromisso, como sempre: o mesmo fato não mexe nas duas escalas.',
   'O ajuste com a lei vale em teste social com quem representa a lei daquele lugar, e nunca passa de −2.',
 ];
-
-export const PROCURA_DO_DISCORD_SEPARADA =
-  'O Calor do Banqueiro, no Discord, mede roubo de cofre entre jogadores. A Procura da mesa não mexe nele, e ele não mexe nela.';
 
 export function limitarProcura(valor: number): NivelProcura {
   if (!Number.isFinite(valor)) throw new RangeError('Procura deve ser um número finito.');
@@ -438,7 +434,7 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
     </div>
 
     <div class="regras-note regras-note--atencao">
-      <p><strong>Sistemas separados:</strong> ${REPUTACAO_BANCARIA_SEPARADA} ${PROCURA_DO_DISCORD_SEPARADA}</p>
+      <p><strong>Sistemas separados:</strong> ${REPUTACAO_BANCARIA_SEPARADA}</p>
     </div>
   `,
   corpoMestre: `

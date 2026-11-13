@@ -121,7 +121,7 @@ export const REGRA_TRANSPORTE: RegraTopicoDe<'Livro do Jogador'> = {
 
     <h3 class="regras-subtitle">Transporte entre reinos e dimensões</h3>
     <div class="regras-table-wrap"><table class="regras-table">
-      <caption class="sr-only">Custos e tempos dos meios de transporte de Lunaris</caption>
+      <caption class="sr-only">Custos em Lunaris e tempos dos meios de transporte</caption>
       <thead><tr><th scope="col">Transporte</th><th scope="col">Mesmo Reino</th><th scope="col">Entre Reinos</th><th scope="col">Entre Dimensões</th></tr></thead>
       <tbody>${linhasTransportes}</tbody>
     </table></div>

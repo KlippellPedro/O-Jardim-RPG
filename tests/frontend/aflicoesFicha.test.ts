@@ -26,10 +26,10 @@ test('exposição: sucesso evita, falha entra no 1, falha crítica no 2', () => 
   assert.equal(estagioDaExposicao(toxina, 'falha critica'), 2);
 });
 
-test('intervalo: crítico desce, sucesso segura, falha sobe 1, falha crítica sobe 2, sem passar do teto', () => {
+test('intervalo: crítico desce, sucesso segura (e desce no veneno), falha sobe 1, falha crítica sobe 2, sem passar do teto', () => {
   const teto = estagioMaximo(toxina);
   assert.equal(estagioDoIntervalo(toxina, 2, 'sucesso critico'), 1);
-  assert.equal(estagioDoIntervalo(toxina, 2, 'sucesso'), 2);
+  assert.equal(estagioDoIntervalo(toxina, 2, 'sucesso'), toxina.tipo === 'veneno' ? 1 : 2);
   assert.equal(estagioDoIntervalo(toxina, 2, 'falha'), 3);
   assert.equal(estagioDoIntervalo(toxina, 2, 'falha critica'), teto);
   assert.equal(estagioDoIntervalo(toxina, 1, 'sucesso critico'), 0, 'estágio 0 remove a aflição');

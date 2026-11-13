@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   AJUSTE_SOCIAL_MAXIMO,
-  PROCURA_DO_DISCORD_SEPARADA,
   REGRAS_PROCURA,
   REGRA_MUNDO_FACCOES,
   TABELA_PROCURA,
@@ -38,7 +37,6 @@ test('Procura vai de 0 a 5, por lugar, e o ajuste com a lei respeita o teto de �
   assert.throws(() => limitarProcura(Number.NaN), /finito/);
   assert.equal(obterFaixaProcura(3).titulo, 'Caçado');
   assert.match(REGRAS_PROCURA.join(' '), /identificado/);
-  assert.match(PROCURA_DO_DISCORD_SEPARADA, /Banqueiro/);
 });
 
 test('o tempo apaga a Procura só até 2', () => {

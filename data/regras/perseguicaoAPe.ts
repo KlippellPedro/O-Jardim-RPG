@@ -205,6 +205,7 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li>O Mestre descreve o terreno da rodada do jeito que quem corre enxerga: rápido e pela metade. Ele rola 1d6 na tabela de obstáculos ou escolhe um.</li>
       <li>Cada lado declara uma manobra, dizendo o que faz com o corpo. Quem foge declara primeiro, porque está de costas.</li>
       <li>Resolvam os testes. Quem vence move uma faixa a favor, e vitória por 10 ou mais move duas.</li>
+      <li>Teste oposto é sempre contra o Atletismo do outro lado, seja qual for a manobra dele. Quando os dois lados passam em testes contra DT, cada um move a própria faixa, e elas se anulam.</li>
       <li>Aplique o obstáculo a quem não lidou com ele na manobra.</li>
       <li>Marque uma parte do relógio da perseguição.</li>
     </ol>

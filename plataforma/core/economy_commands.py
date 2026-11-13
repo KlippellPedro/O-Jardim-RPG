@@ -89,10 +89,10 @@ EQUIPMENT_PURCHASE_RARITIES = ("comum", "incomum", "raro", "epico", "lendario")
 
 _EQUIPMENT_RARITY_PRICE_MULTIPLIERS = {
     "comum": 1,
-    "incomum": 3,
-    "raro": 8,
-    "epico": 20,
-    "lendario": 60,
+    "incomum": 4,
+    "raro": 16,
+    "epico": 64,
+    "lendario": 256,
 }
 
 # Multiplica o preço da versão Comum de uma armadura ou escudo pela raridade
@@ -271,15 +271,24 @@ def equipment_variant_overrides(
         damage = base_damage
         if extra_die and base_damage and normalize_catalog_filter(base_damage) != "hit kill":
             damage = f"{base_damage}+{extra_die}"
-        margin = max(15, _numeric_stat(content.get("margem_ameaca"), 20) - (tier // 2))
-        multiplier = min(5, _numeric_stat(content.get("multiplicador_critico"), 2) + (1 if tier >= 3 else 0))
+        # Margem larga e multiplicador alto não andam juntos (regra do Combate):
+        # arma x2 alarga a margem e fica em x2; arma x3 ou mais fica na margem
+        # do modelo e ganha +1 no multiplicador do Épico em diante.
+        base_margin = _numeric_stat(content.get("margem_ameaca"), 20)
+        base_multiplier = _numeric_stat(content.get("multiplicador_critico"), 2)
+        if base_multiplier <= 2:
+            margin = max(15, base_margin - (tier // 2))
+            multiplier = base_multiplier
+        else:
+            margin = base_margin
+            multiplier = min(5, base_multiplier + (1 if tier >= 3 else 0))
         critical = _format_critical(margin, multiplier)
         improvements = ["Ficha básica do modelo, sem bônus de raridade."]
         if extra_die:
             improvements = [f"+{extra_die} de dano pela raridade."]
-            if tier >= 2:
+            if margin < base_margin:
                 improvements.append(f"Margem de ameaça ampliada para {margin}-20.")
-            if tier >= 3:
+            if multiplier > base_multiplier:
                 improvements.append(f"Multiplicador crítico aumentado para x{multiplier}.")
         return {
             "raridade": target,

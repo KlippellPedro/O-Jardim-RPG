@@ -79,7 +79,7 @@ export const ABORDAGENS_DE_INFILTRACAO: readonly IAbordagemDeInfiltracao[] = [
     id: 'calar',
     titulo: 'Calar alguém',
     cena: 'Uma mão na boca, um golpe na nuca, o corpo arrastado para trás das caixas.',
-    teste: 'Luta ou Atletismo contra a Defesa passiva do alvo, com vantagem se ele não viu você',
+    teste: 'Luta ou Atletismo contra 10 + Reflexos do alvo, com vantagem se ele não viu você',
     efeito: 'Avança uma etapa e tira aquela pessoa do caminho.',
     falha: 'Vira combate ali mesmo, e o Alerta sobe 2.',
   },

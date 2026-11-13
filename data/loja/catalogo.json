@@ -23110,7 +23110,7 @@
         "aplicacao": "Armaduras",
         "nivel_modificacao": "marcial",
         "valor_efeito": 3,
-        "descricao": "Ao sofrer um crítico, quem veste devolve 1 dado de dano de impacto no atacante, sem gastar reação.",
+        "descricao": "Ao sofrer um crítico, quem veste devolve 1d8 de dano de impacto no atacante, sem gastar reação.",
         "atributos": [
           "Aplica em: Armaduras",
           "Nível Marcial",
@@ -23332,7 +23332,7 @@
         "aplicacao": "Escudos",
         "nivel_modificacao": "marcial",
         "valor_efeito": 2,
-        "descricao": "Bloqueio passa a funcionar também contra dano de Energia, incluindo o que vem de Fluxos.",
+        "descricao": "Bloqueio passa a funcionar também contra dano mágico e tecnológico.",
         "atributos": [
           "Aplica em: Escudos",
           "Nível Marcial",
@@ -35716,7 +35716,7 @@
         "aplicacao": "Armas",
         "nivel_modificacao": "marcial",
         "valor_efeito": 2,
-        "descricao": "No crítico, o alvo faz um teste de Constituição ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.",
+        "descricao": "No crítico, o alvo testa Fortitude contra o total do seu ataque ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.",
         "atributos": [
           "Aplica em: Armas",
           "Nível Marcial",

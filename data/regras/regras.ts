@@ -304,6 +304,15 @@ const linhasEscadaDeDt = () => NIVEIS_DA_ESCADA_DE_DT.map((nivel) => {
   return `<tr><td><strong>${nivel}</strong></td><td>${dt.rotineira}</td><td>${dt.padrao}</td><td>${dt.dificil}</td><td>${dt.extrema}</td></tr>`;
 }).join('\n');
 
+/** A mesma escada, só com as duas colunas que o livro do jogador cita ("DT Padrão
+ * do nível", "DT Difícil"). Sem ela o jogador lê a expressão em dez tópicos e não
+ * acha o número em lugar nenhum. */
+const NIVEIS_DA_DT_PUBLICA = [1, 3, 5, 8, 10, 12, 15, 18, 20, 25, 30, 40, 50, 60];
+const linhasDtPublica = () => NIVEIS_DA_DT_PUBLICA.map((nivel) => {
+  const { dt } = referenciaDoNivel(nivel, classesComunsParaReferencia, armasParaReferencia);
+  return `<tr><td><strong>${nivel}</strong></td><td>${dt.padrao}</td><td>${dt.dificil}</td></tr>`;
+}).join('\n');
+
 const linhasNpcsEInimigos = () => NIVEIS_DE_REFERENCIA.map((nivel) => {
   const referencia = referenciaDoNivel(nivel, classesComunsParaReferencia, armasParaReferencia);
   return `<tr><td><strong>${nivel}</strong></td><td>${referencia.patamar ?? 'padrão'}</td><td>${referencia.vida.media} <small>(${referencia.vida.minima} a ${referencia.vida.maxima})</small></td><td>${referencia.defesaNatural}</td><td>+${referencia.bonusDeAtaque}</td><td>${formatarXP(referencia.danoPorAcerto)}</td><td>${referencia.dt.padrao} / ${referencia.dt.extrema}</td><td>${formatarXP(referencia.vidaDeInimigoPadrao)}</td></tr>`;
@@ -634,7 +643,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">4. Divindade</h3>
-      <p>Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo, e junto com ela você escreve dois preceitos com o Mestre. O que essa fé rende em jogo está em Devoção, no capítulo <span class="regras-ref regras-ref--frutos-implantes">Frutos e Implantes</span>; fora disso, ela não concede poderes além dos declarados por raça, classe, item ou outra regra.</p>
+      <p>Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo, e junto com ela você escreve dois preceitos com o Mestre. O que essa fé rende em jogo está em Devoção, no tópico <span class="regras-ref regras-ref--frutos-implantes">Frutos e Implantes</span>; fora disso, ela não concede poderes além dos declarados por raça, classe, item ou outra regra.</p>
 
       <h3 class="regras-subtitle">5. Atributos</h3>
       <p>Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo. Depois disso, a ficha aplica os ajustes raciais. Há três métodos:</p>
@@ -769,7 +778,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>O padrão do jogo é <strong>duas classes comuns e uma especial</strong>, que fecha em ${NIVEL_TOTAL_PADRAO} níveis totais. Passando do ${NIVEL_TOTAL_PADRAO} a ficha aceita mais classes e mais níveis, e só marca o patamar novo (ver <span class="regras-ref regras-ref--xp">Experiência e Níveis</span>).</li>
         <li>Os níveis podem ser intercalados. A segunda classe comum entra depois que uma das suas classes chega ao nível 20.</li>
         <li>Classe especial exige nível total 20, liberação do Mestre e um acontecimento na história que justifique, a não ser que a própria classe abra uma exceção explícita.</li>
-        <li>Classe geral serve a qualquer Árvore. Classe exclusiva só se você pertencer à Árvore indicada.</li>
+        <li>Classe comum serve a qualquer Árvore. Classe especial só aparece nas Árvores indicadas na página dela.</li>
       </ul>
 
       <h3 class="regras-subtitle">Maestria de atributo</h3>
@@ -875,6 +884,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <div class="regras-note regras-note--exemplo">
         <p>Você tem três fontes de vantagem e uma de desvantagem. Uma vantagem cancela a desvantagem, e as duas que sobram valem uma vantagem só: você rola dois d20 e usa o maior.</p>
       </div>
+
+      <h3 class="regras-subtitle">DT Padrão e DT Difícil</h3>
+      <p>Vários tópicos pedem um teste "contra a DT Padrão do nível" ou "contra a DT Difícil". São as duas dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Difícil fica sempre 5 acima da Padrão. Num nível entre duas linhas, vale a linha do nível menor.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível</th><th>DT Padrão</th><th>DT Difícil</th></tr></thead>
+        <tbody>
+          ${linhasDtPublica()}
+        </tbody>
+      </table></div>
+      <p>Quando o texto diz só "DT 15" ou outro número, a dificuldade é fixa e não muda com o nível.</p>
 
       <h3 class="regras-subtitle">Catálogo de perícias</h3>
       <p class="regras-lead">${periciasData.nota}</p>
@@ -1034,7 +1053,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <li>No seu turno você tem uma Ação Padrão e uma Ação de Movimento, além de gestos livres. Uma reação por rodada fica guardada para o turno dos outros.</li>
           <li>O ataque é d20 + Luta ou Pontaria contra a Defesa do alvo: a Defesa Natural somada a armadura, escudo e outros ajustes. Empatar acerta, e um 1 natural sempre erra. A margem de ameaça da arma define o crítico.</li>
           <li>Manobras (agarrar, derrubar, empurrar, desarmar, imobilizar) usam a mesma rolagem, contra 10 mais o bônus da defesa passiva do alvo.</li>
-          <li>As reações são Esquiva, Bloqueio, Contra-Ataque e Proteger.</li>
+          <li>As reações são Esquiva, Bloqueio, Contra-Ataque, Proteger e Ataque de Oportunidade, que pune quem sai do seu alcance sem cuidado.</li>
           <li>Inimigo que perde o líder ou metade do bando testa moral em 2d6, e pode fugir ou se render.</li>
         </ul>
       </div>
@@ -1149,8 +1168,23 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>Bloqueio</td><td>Após sofrer dano físico</td><td>Reduza o dano em 2 + ⌊Nível ÷ 2⌋ + bônus do escudo. Exige escudo ou arma adequada.</td></tr>
           <tr><td>Contra-Ataque</td><td>Inimigo adjacente erra você</td><td>Faça um ataque com −2. Ele não pode gerar crítico.</td></tr>
           <tr><td>Proteger</td><td>Aliado adjacente é atacado</td><td>Você vira o alvo e pode usar Bloqueio, se ainda tiver reação.</td></tr>
+          <tr><td>Ataque de Oportunidade</td><td>Inimigo sai do seu alcance corpo a corpo, ou se levanta dentro dele</td><td>Faça um ataque corpo a corpo com −2 contra ele. Ele não pode gerar crítico.</td></tr>
         </tbody>
       </table></div>
+
+      <h3 class="regras-subtitle">Provocar reação</h3>
+      <p>Virar as costas para quem está com a arma na mão tem preço. Quando um texto diz que um movimento "provoca reação", ele abre espaço para o Ataque de Oportunidade de cada inimigo que alcança você. Quando diz "sem provocar reação", é desse ataque que ele livra.</p>
+      <ul class="regras-list">
+        <li><strong>Provoca:</strong> sair do alcance corpo a corpo de um inimigo andando, correndo, voando ou nadando por conta própria, e levantar do chão dentro desse alcance.</li>
+        <li><strong>Não provoca:</strong> mover-se sem sair do alcance, ser empurrado, puxado, arrastado ou derrubado, cair, e teleportar.</li>
+        <li><strong>Passo cuidadoso:</strong> gaste a Ação de Movimento inteira para andar só 1,5 m. Esse passo não provoca reação.</li>
+        <li><strong>Quem ataca</strong> precisa ver você, ter a reação da rodada e uma arma corpo a corpo na mão, ou o próprio corpo. Arma de disparo não faz Ataque de Oportunidade.</li>
+        <li><strong>O alcance</strong> é o da tabela de Tamanho, ou o da arma, quando ela tem alcance próprio.</li>
+        <li><strong>Uma vez por inimigo:</strong> o mesmo movimento provoca cada inimigo uma vez só, mesmo que você passe por ele duas vezes.</li>
+      </ul>
+      <div class="regras-note regras-note--exemplo">
+        <p>Bia está adjacente a um bandido e quer correr até a porta. Sair dali provoca: o bandido gasta a reação e ataca com −2. Se ela preferir, gasta a Ação de Movimento num passo cuidadoso de 1,5 m, sai do alcance sem levar o golpe e fica com a Ação Padrão para o resto do turno.</p>
+      </div>
 ${HTML_MORAL}
 
       <p>Depois de um combate, o corpo cobra o que ele custou: veja <span class="regras-ref regras-ref--ferimentos">Ferimentos</span> e <span class="regras-ref regras-ref--descanso">Descanso</span>.</p>
@@ -1502,7 +1536,7 @@ ${HTML_MORAL}
           <li>Estabilizar interrompe os testes, mas só quem volta a 1 PV ou mais acorda. Quem acorda ganha Ferido 1.</li>
           <li>Um golpe que tira metade ou mais dos PV máximos, ou uma falha crítica em Morrendo, pede a tabela de trauma (2d6).</li>
           <li>A Mutilação sempre é anunciada antes, e um sucesso no teste evita a perda.</li>
-          <li>Fora de combate, qualquer um trata um ferido: 10 minutos e Cura DT 15 devolvem 1d6 de Vida.</li>
+          <li>Fora de combate, qualquer um trata um ferido: 10 minutos e Cura DT 15 devolvem 1d6 de Vida, ou um décimo da Vida máxima do paciente, o que for maior.</li>
           <li>Voltar da morte existe, mas é raro e cobra caro.</li>
         </ul>
       </div>
@@ -1530,7 +1564,8 @@ ${HTML_MORAL}
       <ol class="regras-steps">
         <li>Ao chegar a 0 PV ou menos, você cai inconsciente e recebe <strong>Morrendo 1</strong>.</li>
         <li>No fim de cada turno seu, role Fortitude contra <strong>DT 12 + (2 × Gravidade) + Ferido</strong>.</li>
-        <li>Sucesso segura onde está; sucesso crítico reduz em 1; falha aumenta em 1; falha crítica aumenta em 2.</li>
+        <li>Sucesso segura onde está, e dois sucessos seguidos estabilizam. Sucesso crítico estabiliza na hora. Falha aumenta em 1. Falha crítica aumenta em 1 e pede a tabela de trauma.</li>
+        <li>Estabilizado, você para de testar e continua inconsciente até voltar a 1 PV ou mais. Sofrer dano de novo recomeça os testes em Morrendo 1.</li>
         <li>Em Morrendo 3, você morre. A maestria de Constituição empurra esse limite para Morrendo 4.</li>
       </ol>
       <div class="regras-note regras-note--atencao">
@@ -1541,7 +1576,7 @@ ${HTML_MORAL}
       </div>
 
       <h3 class="regras-subtitle">Tratar ferimentos</h3>
-      <p>Fora de combate, com dez minutos e um teste de Cura DT 15, qualquer um trata um ferido, que recupera <strong>1d6 de Vida</strong>. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.</p>
+      <p>Fora de combate, com dez minutos e um teste de Cura DT 15, qualquer um trata um ferido, que recupera <strong>1d6 de Vida</strong> ou um décimo da Vida máxima dele, o que for maior. Assim o curativo vale no nível 3 e no nível 30. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.</p>
 
       <h3 class="regras-subtitle">Remover Ferido</h3>
       <ul class="regras-list">
@@ -1648,7 +1683,7 @@ ${HTML_MORAL}
     destaques: [
       ['Uso', '1 vez por turno'],
       ['Declaração', 'antes da rolagem'],
-      ['Tudo ou Nada', '1 vez por cena'],
+      ['Perigoso e Tudo ou Nada', '1 vez por cena cada'],
     ],
     corpo: `
       <p class="regras-lead">Descreva uma jogada de cinema que caiba na cena e escolha o risco <strong>antes</strong> de rolar. A descrição tem que mudar alguma coisa na ficção: pular do lustre, chutar a mesa no meio do caminho, usar o sujeito como escudo. Dizer "uso Arriscado" e rolar o dado não é Coreografia.</p>
@@ -1660,7 +1695,7 @@ ${HTML_MORAL}
           <tr><td>Seguro</td><td>Reposicione-se 1,5 m após a ação.</td><td>Sem consequência adicional.</td></tr>
           <tr><td>Ousado</td><td>+2 no teste e +2 no dano.</td><td>Fica Exposto: −2 Defesa até seu próximo turno.</td></tr>
           <tr><td>Arriscado</td><td>Vantagem e +1 dado da arma no dano.</td><td>Sofre 1d8 de dano e perde a ação de movimento.</td></tr>
-          <tr><td>Perigoso</td><td>O ataque se torna crítico se acertar.</td><td>Cai e o inimigo recebe vantagem no próximo ataque contra você.</td></tr>
+          <tr><td>Perigoso</td><td>O ataque se torna crítico se acertar.</td><td>Cai e o inimigo recebe vantagem no próximo ataque contra você. Uma vez por cena.</td></tr>
           <tr><td>Tudo ou Nada</td><td>Crítico com dados maximizados.</td><td>Sofre um crítico do inimigo e recebe Ferido 1. Uma vez por cena.</td></tr>
         </tbody>
       </table></div>
@@ -1680,7 +1715,7 @@ ${HTML_MORAL}
       <h3 class="regras-subtitle">Deixar o risco pesar</h3>
       <ul class="regras-list">
         <li>A falha de Arriscado para cima já é dura sozinha. Não some consequência narrativa por cima do custo mecânico: o jogador aceitou um preço, e ele já pagou.</li>
-        <li>Tudo ou Nada é uma vez por cena e cobra um crítico do inimigo mais Ferido 1. Quando alguém declarar, confirme em voz alta que a pessoa sabe o tamanho da conta.</li>
+        <li>Perigoso e Tudo ou Nada valem uma vez por cena cada um, acertando ou errando. Tudo ou Nada cobra um crítico do inimigo mais Ferido 1. Quando alguém declarar, confirme em voz alta que a pessoa sabe o tamanho da conta.</li>
         <li>A declaração vem antes do dado, sempre. Deixar escolher o risco depois de ver o resultado desmonta a regra inteira.</li>
         <li>Inimigo também pode usar Coreografia, e é uma das formas mais baratas de tornar um Elite memorável. Descreva o risco dele em voz alta, do mesmo jeito.</li>
       </ul>
@@ -1735,7 +1770,8 @@ ${HTML_MORAL}
       <ul class="regras-list">
         <li>Uma rolagem só: o mesmo valor volta para a Mana e para a Estamina, cada uma até o próprio máximo.</li>
         <li>Exige uma hora em segurança relativa, e vale uma vez só entre dois descansos completos.</li>
-        <li>Se a hora foi gasta em algo que significa alguma coisa para o personagem, o Mestre pode devolver 1 ponto de Cansaço junto.</li>
+        <li>Se a hora foi gasta em algo que significa alguma coisa para o personagem, o Mestre pode tirar 1 ponto de Cansaço junto.</li>
+        <li>Relaxar é o descanso curto do jogo. Quando outra regra fala em descanso curto, é dele que ela fala.</li>
       </ul>
 
       <h3 class="regras-subtitle">Cansaço</h3>
@@ -1792,7 +1828,7 @@ ${HTML_MORAL}
       ['Maior grau', ultimoGrauPericia.rotulo],
     ],
     corpo: `
-      <p class="regras-lead">São dois caminhos diferentes, e vale não os confundir. Quando uma <strong>classe</strong> dá a você um Grau de perícia, escolha uma perícia e suba um grau na hora, sem tempo, sem tabela e sem requisito. Quando você quer subir <strong>por treino</strong>, aí sim cumpre o tempo da linha, o nível total mínimo e o requisito extra, quando existir.</p>
+      <p class="regras-lead">São dois caminhos diferentes, e vale não os confundir. Quando uma <strong>classe</strong> dá a você um Grau de perícia, escolha uma perícia e suba um grau na hora, sem tempo de treino e sem requisito extra. Só o nível total mínimo do grau continua valendo. Quando você quer subir <strong>por treino</strong>, aí sim cumpre o tempo da linha, o nível total mínimo e o requisito extra, quando existir.</p>
 
       <h3 class="regras-subtitle">Progressão</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -1880,8 +1916,8 @@ ${HTML_MORAL}
           <tr><td><strong>Se recuperar em segurança.</strong></td><td>Dormir até tarde sem sonhar com nada. Trocar o curativo e ver que a pele por baixo já está rosada.<small class="regras-mecanica">Custa 1 dia por vez. Rende Vida, Mana, Sanidade e a queda de Ferido. Regra completa em <span class="regras-ref regras-ref--descanso">Descanso</span>.</small></td></tr>
           <tr><td><strong>Cuidar da base.</strong></td><td>Pregar a tábua solta, pagar quem conserta o telhado, pendurar na parede alguma coisa que veio da última aventura.<small class="regras-mecanica">Custa de 1 a vários dias. Rende instalação nova, reparo e conta mensal em dia. Regra completa em <span class="regras-ref regras-ref--bases">Propriedades e Bases</span>.</small></td></tr>
           <tr><td><strong>Fazer um favor a uma facção.</strong></td><td>Levar uma carta sem perguntar o que está escrito, ficar de guarda numa porta, aparecer no lugar certo com a roupa certa.<small class="regras-mecanica">Custa alguns dias, conforme o pedido. Rende Prestígio com ela. Regra completa em <span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>.</small></td></tr>
-          <tr><td><strong>Circular e ouvir a cidade.</strong></td><td>Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.<small class="regras-mecanica">Custa 1 dia por vez. Rende boatos, contatos e preço melhor no balcão. Regra completa em <span class="regras-ref regras-ref--loja">Loja</span>.</small></td></tr>
-          <tr><td><strong>Procurar uma pessoa específica.</strong></td><td>Mostrar o mesmo retrato mal desenhado para cinquenta desconhecidos, até alguém parar, olhar de novo e mudar de expressão.<small class="regras-mecanica">Custa 1 dia por vez. Rende um teste de Investigação ou Diplomacia por dia. Regra completa em <span class="regras-ref regras-ref--pericias">Perícias</span>.</small></td></tr>
+          <tr><td><strong>Circular e ouvir a cidade.</strong></td><td>Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.<small class="regras-mecanica">Custa 1 dia por vez. Rende boatos e a chance de fazer um contato. Regra completa em <span class="regras-ref regras-ref--contatos-lacos">Contatos e Laços</span>.</small></td></tr>
+          <tr><td><strong>Procurar uma pessoa específica.</strong></td><td>Mostrar o mesmo retrato mal desenhado para cinquenta desconhecidos, até alguém parar, olhar de novo e mudar de expressão.<small class="regras-mecanica">Custa 1 dia por vez. Rende um teste de Investigação ou Diplomacia por dia, contra a DT Padrão do lugar. Cada sucesso deixa você um passo mais perto.</small></td></tr>
           <tr><td><strong>Cuidar de quem importa.</strong></td><td>Escrever para casa. Levar flor a um túmulo. Ensinar uma criança a segurar uma espada de pau. Pagar a bebida de um velho amigo que ainda não sabe que você voltou.<small class="regras-mecanica">Custa 1 dia. Rende uma cena com alguém que importa para o seu personagem, e o que vier dela. Essa atividade não tem regra: ela é o próprio jogo.</small></td></tr>
         </tbody>
       </table></div>
@@ -2373,7 +2409,7 @@ ${HTML_DEVOCAO}
       <p class="regras-lead">Este tópico trata do que você carrega e veste: quanto cabe na mochila, quantas peças de armadura se somam e o que muda quando falta proficiência ou munição. O orçamento de poder dos itens fica nos tópicos seguintes.</p>
 
       <h3 class="regras-subtitle">Carga e espaços</h3>
-      <div class="regras-formula">Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋, mínimo 5</div>
+      <div class="regras-formula">Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋</div>
       <ul class="regras-list">
         <li>Cada item ocupa os espaços que o catálogo declara, multiplicados pela quantidade.</li>
         <li>Passou da capacidade, você fica Sobrecarregado: 3 m a menos de movimento e desvantagem em testes físicos.</li>
@@ -2442,26 +2478,26 @@ ${HTML_DEVOCAO}
 
       <div class="regras-resumo">
         <ul>
-          <li>Na Loja, armas, armaduras e escudos aparecem primeiro como Comuns. Encomendar outra raridade multiplica o preço (Incomum ×3, Raro ×8, Épico ×20, Lendário ×60) e melhora as propriedades.</li>
-          <li>Itens de perícia e artefatos dividem um mesmo limite de uso: 1 vaga no começo e mais uma a cada 4 níveis totais até o 50, a cada 8 até o 100 e a cada 16 depois.</li>
+          <li>Na Loja, armas, armaduras e escudos aparecem primeiro como Comuns. Encomendar outra raridade multiplica o preço (cada raridade custa quatro vezes a anterior) e melhora as propriedades.</li>
+          <li>Itens de perícia e artefatos dividem um mesmo limite de uso: 1 vaga até o nível 7, depois uma a cada 4 níveis totais até o 50 (2 no nível 8, 12 no 50), mais uma a cada 8 até o 100 e a cada 16 depois.</li>
           <li>Itens que despertam têm formas por nível do dono: vale a mais alta que ele alcançou, e ela substitui a anterior.</li>
           <li>Peças do mesmo conjunto dão um bônus de coleção quando estão equipadas ao mesmo tempo.</li>
         </ul>
       </div>
 
       <h3 class="regras-subtitle">Raridades e orçamento de poder</h3>
-      <p><strong>Na Loja, armas, armaduras e escudos são anunciados primeiro como Comuns.</strong> O preço Comum vem do modelo e usa a mesma régua nos três: peça simples custa de 15 a 40 Lunaris, peça marcial custa de 50 a 80 Lunaris. Encomendar outra raridade aumenta preço e propriedades, e cada variante fica separada no inventário. Mítico e Relíquia da Criação continuam fora das encomendas normais.</p>
+      <p><strong>Na Loja, armas, armaduras e escudos são anunciados primeiro como Comuns.</strong> O preço Comum vem do modelo e usa a mesma régua nos três: peça simples custa de 15 a 40 Lunaris, peça marcial custa de 50 a 80 Lunaris. Armadura e escudo de modelo mais forte já custam mais na versão Comum, de duas a dezesseis vezes. Encomendar outra raridade aumenta preço e propriedades, e cada variante fica separada no inventário. Mítico e Relíquia da Criação continuam fora das encomendas normais.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Raridade</th><th>Preço</th><th>Armas</th><th>Armaduras e escudos</th></tr></thead>
         <tbody>
           <tr><td><strong>Comum</strong></td><td>×1</td><td>Ficha básica do modelo</td><td>Ficha básica do modelo</td></tr>
-          <tr><td><strong>Incomum</strong></td><td>×3</td><td>+1d4 de dano</td><td>+1 Defesa; Resistência 1 a Corte</td></tr>
-          <tr><td><strong>Raro</strong></td><td>×8</td><td>+1d6 de dano; margem +1</td><td>+2 Defesa; Resistência 2 a Corte e Perfuração; penalidade −1</td></tr>
-          <tr><td><strong>Épico</strong></td><td>×20</td><td>+1d8 de dano; margem +1; crítico +1</td><td>+3 Defesa; Resistência 3 a Corte, Perfuração e Impacto; penalidade −1</td></tr>
-          <tr><td><strong>Lendário</strong></td><td>×60</td><td>+1d10 de dano; margem +2; crítico +1</td><td>+4 Defesa; Resistência 5 a Corte, Perfuração, Impacto e Balístico; penalidade −2</td></tr>
+          <tr><td><strong>Incomum</strong></td><td>×4</td><td>+1d4 de dano</td><td>+1 Defesa; Resistência 1 a Corte</td></tr>
+          <tr><td><strong>Raro</strong></td><td>×16</td><td>+1d6 de dano; margem +1 em arma x2</td><td>+2 Defesa; Resistência 2 a Corte e Perfuração; penalidade −1</td></tr>
+          <tr><td><strong>Épico</strong></td><td>×64</td><td>+1d8 de dano; margem +1 em arma x2, ou multiplicador +1 em arma x3 e x4</td><td>+3 Defesa; Resistência 3 a Corte, Perfuração e Impacto; penalidade −1</td></tr>
+          <tr><td><strong>Lendário</strong></td><td>×256</td><td>+1d10 de dano; margem +2 em arma x2, ou multiplicador +1 em arma x3 e x4</td><td>+4 Defesa; Resistência 5 a Corte, Perfuração, Impacto e Balístico; penalidade −2</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">O dado extra passa a fazer parte do dano da arma e entra no crítico. “Margem +1” reduz em 1 o número inicial: 20 vira 19–20.</p>
+      <p class="regras-note">O dado extra passa a fazer parte do dano da arma e entra no crítico. “Margem +1” reduz em 1 o número inicial: 20 vira 19–20. Arma x3 ou x4 fica na margem do modelo e sobe o multiplicador no lugar, porque margem larga e multiplicador alto não andam juntos (ver <span class="regras-ref regras-ref--combate">Combate</span>).</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Raridade</th><th>Mods.</th><th>Efeitos próprios</th><th>Valor por efeito</th><th>Regra</th></tr></thead>
         <tbody>${tabelaRaridadesEquipamento}</tbody>
@@ -2478,7 +2514,7 @@ ${HTML_DEVOCAO}
       </ul>
 
       <h3 class="regras-subtitle">Quantos itens especiais você pode usar</h3>
-      <p><strong>Itens de perícia</strong> e <strong>artefatos</strong> dividem o mesmo limite de uso: 1 vaga no começo e mais uma a cada <strong>4 níveis totais até o 50, a cada 8 até o 100 e a cada 16 depois</strong>. Só uma peça equipada ou ativa ocupa vaga; comprar, carregar ou guardar não ocupa. Arma, armadura, escudo, consumível e item comum continuam seguindo seus próprios espaços.</p>
+      <p><strong>Itens de perícia</strong> e <strong>artefatos</strong> dividem o mesmo limite de uso: 1 vaga até o nível 7, depois <strong>uma a cada 4 níveis totais até o 50, mais uma a cada 8 até o 100 e a cada 16 depois</strong>. Só uma peça equipada ou ativa ocupa vaga; comprar, carregar ou guardar não ocupa. Arma, armadura, escudo, consumível e item comum continuam seguindo seus próprios espaços.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível total</th><th>Itens de perícia + artefatos em uso</th></tr></thead>
         <tbody>
@@ -2630,7 +2666,7 @@ ${HTML_DEVOCAO}
       <div class="regras-resumo">
         <ul>
           <li>Cada alma nasce com um Fluxo natural, e só um: o da Árvore em que nasceu. Fluxo alto não ensina magia: o acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.</li>
-          <li>O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus da classe. A DT de conjuração é 7 + 2,5 × círculo, arredondado para baixo.</li>
+          <li>O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus de habilidades, poderes e itens. A DT de conjuração é 7 + 2,5 × círculo, arredondado para baixo.</li>
           <li>A Mana sai quando você declara a conjuração e não volta se o teste falhar. O Fluxo recomendado de cada círculo é só um aviso.</li>
           <li>Você mantém uma concentração por vez. Ao sofrer dano, role Vontade contra DT 10 ou metade do dano recebido, o que for maior.</li>
         </ul>
@@ -3258,7 +3294,7 @@ ${HTML_DEVOCAO}
       <p>O fecho da classe, no nível 20, uma por classe. Ela chega sozinha como qualquer habilidade e costuma ser o efeito que define o que aquela classe virou no fim da estrada.</p>
 
       <h3 class="regras-subtitle">Grau de perícia</h3>
-      <p>Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito. É a exceção às regras do tópico <span class="regras-ref regras-ref--treinar">Treinamento</span>, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.</p>
+      <p>Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito extra. O nível total mínimo do grau, em <span class="regras-ref regras-ref--pericias">Perícias</span>, continua valendo. É a exceção às regras do tópico <span class="regras-ref regras-ref--treinar">Treinamento</span>, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.</p>
 
       <h3 class="regras-subtitle">Evento</h3>
       <p>Evento é um gancho que a classe entrega ao Mestre: uma arena que chama o Guerreiro, um clã que cobra o Ninja, um contato que procura o Comerciante. Ele não tem número, não gasta ação e não entra no cálculo de nada.</p>
@@ -3579,7 +3615,7 @@ ${HTML_DEVOCAO}
     resumo: 'Como funcionam as moedas do Jardim, o câmbio entre elas e as regras de segurança e espaço do Cofre Bancário.',
     destaques: [
       ['Moedas', 'Lunaris, Solares, Fragmentos, Créditos'],
-      ['Câmbio', 'Conversão via Banqueiro'],
+      ['Câmbio', 'Conversão pelo Banco Lunar'],
       ['Cofre', 'Proteção e limite de itens'],
     ],
     corpo: `
@@ -3589,7 +3625,7 @@ ${HTML_DEVOCAO}
         <ul>
           <li>As moedas são Lunaris (o dia a dia), Solares, Fragmentos de Estrela e Créditos Sombrios (o mercado negro).</li>
           <li>O salário mínimo é de 300 Lunaris por mês, e cada degrau de raridade custa quatro vezes o anterior.</li>
-          <li>O Banqueiro converte Lunaris, Solares e Fragmentos, sempre passando pelo Solar e com 2% de taxa. Créditos Sombrios não têm câmbio.</li>
+          <li>O Banco Lunar converte Lunaris, Solares e Fragmentos, sempre passando pelo Solar e com 2% de taxa. Créditos Sombrios não têm câmbio.</li>
           <li>O Cofre guarda dinheiro e item, cresce com o uso e pode ser roubado.</li>
           <li>Dá para mandar item e moeda para outro personagem, e para negociar com Propor troca, que só vale depois do aceite.</li>
         </ul>
@@ -3632,13 +3668,13 @@ ${HTML_DEVOCAO}
           <tr><td><strong>Relíquia da Criação</strong></td><td>400 Fragmentos</td><td>fora de alcance</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Dentro de cada faixa o preço vai da metade ao dobro da referência, então os degraus se encostam sem deixar vão e sem se cruzar. Uma arma rara custa sempre mais que qualquer arma incomum, e sempre menos que qualquer arma épica.</p>
+      <p class="regras-note">Dentro de cada faixa o preço vai da metade ao dobro da referência, então os degraus se encostam sem deixar vão e sem se cruzar. Na encomenda de arma, armadura e escudo a conta é a mesma: cada raridade custa quatro vezes a anterior do mesmo modelo.</p>
 
       <h3 class="regras-subtitle">O muro dos Fragmentos</h3>
-      <p>Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 60 Fragmentos, existe um salto de quase vinte vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Acumular Lunaris a vida inteira deixa você parado diante desse muro.</p>
+      <p>Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 50 Fragmentos, existe um salto de mais de quinze vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Acumular Lunaris a vida inteira deixa você parado diante desse muro.</p>
 
       <h3 class="regras-subtitle">Câmbio</h3>
-      <p>O Banqueiro converte Lunaris, Solares e Fragmentos de Estrela no Discord, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa. Créditos Sombrios ficam de fora: o banco não os compra nem os vende.</p>
+      <p>O Banco Lunar converte Lunaris, Solares e Fragmentos de Estrela, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa. Créditos Sombrios ficam de fora: o banco não os compra nem os vende.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Moeda</th><th>Vale em Solares</th><th>Vale em Lunaris</th></tr></thead>
         <tbody>
@@ -3657,11 +3693,11 @@ ${HTML_DEVOCAO}
       <p>Converter resolve o troco, e só isso. Um veículo cotado em Lunaris e uma arma lendária cotada em Solares seguem economias separadas, cada uma pensada para o ritmo da própria categoria. Para um Fruto do Éden, o caminho previsto passa por Fragmentos e Créditos, que costumam vir de relíquia concedida pelo Mestre, de negócio no mercado negro ou de pagamento de quem não usa moeda comum. Ver <span class="regras-ref regras-ref--frutos-implantes">Frutos e Implantes</span>.</p>
 
       <h3 class="regras-subtitle">O Cofre</h3>
-      <p>O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.</p>
+      <p>O Cofre do banco guarda dinheiro e item, e cresce com o quanto você o usa.</p>
       <ul class="regras-list">
         <li>Depositar com frequência rende reputação, e reputação destrava níveis maiores de cofre.</li>
         <li>Cada nível define quantos itens cabem e quanto saldo de cada moeda pode ficar guardado. No último nível, esse teto some.</li>
-        <li>Cofre pode ser roubado: o bot dispara esses eventos sozinho. Investir em segurança aumenta a chance de a tentativa fracassar.</li>
+        <li>Cofre pode ser roubado. Investir em segurança aumenta a chance de a tentativa fracassar.</li>
         <li>Pela página do Cofre você saca o que precisar direto para a ficha do personagem.</li>
       </ul>
 
@@ -3793,7 +3829,7 @@ ${HTML_DEVOCAO}
 
       <h3 class="regras-subtitle">O Cofre e o roubo</h3>
       <ul class="regras-list">
-        <li>Os eventos de roubo são disparados pelo bot, não por você. Vale avisar a mesa que isso existe antes do primeiro, para não parecer decisão sua contra um jogador.</li>
+        <li>Roubo de cofre existe no jogo. Vale avisar a mesa antes do primeiro, para não parecer decisão sua contra um jogador.</li>
         <li>Investir em segurança do cofre é uma escolha econômica legítima. Se o grupo reclama de roubo e nunca investiu, a resposta já está no sistema.</li>
         <li>Reputação bancária cresce com uso. Um grupo que movimenta dinheiro destrava mais espaço, o que premia quem participa da economia em vez de guardar tudo embaixo do colchão.</li>
       </ul>
@@ -3970,7 +4006,7 @@ ${HTML_DEVOCAO}
         <tbody>
           <tr><td>Dois Passageiros</td><td>1</td><td>Relógio de pressão, conflito social e a primeira perseguição a pé.</td></tr>
           <tr><td>O Moinho da Terceira Roda</td><td>5</td><td>Uma escolha sem vilão: quem perde o quê quando ninguém quer ser o culpado.</td></tr>
-          <tr><td>O Leilão da Casa Vazia</td><td>12</td><td>Infiltração, perseguição pelos telhados e mercadoria quente (o Calor do Discord).</td></tr>
+          <tr><td>O Leilão da Casa Vazia</td><td>12</td><td>Infiltração, perseguição pelos telhados e mercadoria quente.</td></tr>
           <tr><td>O Redemoinho de Caribdis</td><td>30</td><td>Viagem de navio e criatura única com fases, com a saída que o Bestiário já escreveu.</td></tr>
           <tr><td>A Queda do Leviatã Espelhado</td><td>45</td><td>Lenda do Bestiário: a Sessão avisa as fases, e a consequência da queda fica por sua conta.</td></tr>
         </tbody>
@@ -5422,7 +5458,7 @@ ${HTML_DEVOCAO}
         <li><strong>A verba é uma média de longo prazo.</strong> Três sessões de mão vazia e uma com o dobro dão uma campanha melhor que quatro sessões pagando igual, porque é a sessão farta que a mesa lembra.</li>
         <li><strong>Divida o arco em três partes:</strong> uma em dinheiro, uma em algo que serve na hora, e uma em algo que só vale se o grupo decidir o que fazer com aquilo, como uma chave sem porta, um mapa pela metade ou um item que alguém quer de volta.</li>
         <li><strong>Item acima da faixa é empréstimo do futuro.</strong> Se entregar, conte como várias sessões de verba adiantadas e pague menos depois.</li>
-        <li><strong>Mítico e Relíquia da Criação ficam fora da escada da compra.</strong> Entre Lendário e Mítico existe um salto de quase vinte vezes, que salário nenhum atravessa. Essas duas faixas chegam por decisão sua, por negócio de Mercado Negro ou por pagamento de quem não usa moeda comum, e cada uma delas deveria ser o assunto de uma sessão inteira. A verba do nível 50 em diante só atravessa esse salto porque você abriu a porta: dinheiro sem balcão aberto continua sem comprar nada.</li>
+        <li><strong>Mítico e Relíquia da Criação ficam fora da escada da compra.</strong> Entre Lendário e Mítico existe um salto de mais de quinze vezes, que salário nenhum atravessa. Essas duas faixas chegam por decisão sua, por negócio de Mercado Negro ou por pagamento de quem não usa moeda comum, e cada uma delas deveria ser o assunto de uma sessão inteira. A verba do nível 50 em diante só atravessa esse salto porque você abriu a porta: dinheiro sem balcão aberto continua sem comprar nada.</li>
       </ul>
 
       <details class="regras-details">

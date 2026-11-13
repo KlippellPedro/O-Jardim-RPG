@@ -87,7 +87,7 @@ const CANSACO = [
 // do catálogo, e uma condição que sumir de lá derruba a geração.
 const RESUMO_DAS_CONDICOES = {
   caido: ['Corpo a corpo contra você +2; seus ataques −2.', 'Ação de Movimento para levantar, que provoca reações.'],
-  agarrado: ['Movimento 0; atacar quem está fora do agarrão dá −2.', 'Ação Padrão e Atletismo ou Acrobacia oposto.'],
+  agarrado: ['Movimento 0; atacar quem está fora do agarrão dá −2.', 'Ação Padrão e Atletismo ou Acrobacia contra 10 + Luta de quem segura.'],
   imobilizado: ['Movimento 0 e nada que exija deslocamento.', 'Ação Padrão e o teste que a fonte pedir.'],
   atordoado: ['Sem ações nem reações; Defesa −5.', 'No fim do próximo turno.'],
   exposto: ['Defesa −2, sem acumular.', 'No começo do seu próximo turno.'],
@@ -99,7 +99,7 @@ const RESUMO_DAS_CONDICOES = {
   sangramento: ['1d6 de dano no fim do turno; cada nova aplicação soma +1, até +5.', 'Cura DT 15 com Ação Padrão, ou qualquer cura.'],
   queimando: ['1d6 de Fogo no fim do turno; pegar fogo de novo não soma.', 'Ação Padrão e Acrobacia ou Atletismo DT 12, ou água.'],
   envenenado: ['1d6 de veneno no fim do turno, ou o estágio da aflição.', 'Antídoto, ou Cura DT 15 com Ação Padrão.'],
-  paralisado: ['Não age, reage nem se move; falha em Força e Destreza; Defesa −2.', 'Fortitude contra a DT da fonte, no fim de cada turno.'],
+  paralisado: ['Não age, reage nem se move; falha em Força e Destreza; Defesa −5.', 'Fortitude contra a DT da fonte, no fim de cada turno.'],
   silenciado: ['Sem fala e sem componente verbal; gesto e escrita valem.', 'Quando a fonte acaba ou é superada.'],
   invisivel: ['Quem não vê você ataca com desvantagem, e você ataca essa criatura com vantagem.', 'Quando a fonte acaba ou você fica Revelado.'],
 };
@@ -179,6 +179,7 @@ const paginaUm = () => `
       <ul class="solta">
         <li><b>Contra-Ataque</b>, quando um inimigo adjacente erra você: um ataque com −2, que não pode ser crítico.</li>
         <li><b>Proteger</b>, quando um aliado adjacente é atacado: você vira o alvo e ainda pode Bloquear, se tiver reação.</li>
+        <li><b>Ataque de Oportunidade</b>, quando um inimigo sai do seu alcance: ataque corpo a corpo com −2, sem crítico.</li>
       </ul>
     </div>`)}
 
@@ -209,10 +210,10 @@ const paginaDois = () => `
     ${caixa('Cair e morrer', `
       <ul>
         <li>Em 0 PV ou menos você cai inconsciente com <b>Morrendo 1</b>. O dano abaixo de 0 é o Déficit de Vida; se ele chegar à Vida máxima, é morte na hora.</li>
-        <li>No fim de cada turno seu: Fortitude contra DT 12 + 2 × Gravidade + Ferido. Sucesso segura, crítico baixa 1, falha sobe 1, falha crítica sobe 2.</li>
+        <li>No fim de cada turno seu: Fortitude contra DT 12 + 2 × Gravidade + Ferido. Sucesso segura, dois seguidos ou um crítico estabilizam, falha sobe 1, falha crítica sobe 1 e pede trauma.</li>
         <li><b>Gravidade</b> pelo Déficit: até 10% da Vida máxima 0, até 25% 1, até 50% 2, até 75% 3, acima disso 4.</li>
         <li>Em <b>Morrendo 3</b> você morre (4 com a maestria de Constituição). Quem volta a 1 PV acorda com Ferido 1.</li>
-        <li>Fora de combate, 10 minutos e Cura DT 15 devolvem 1d6 de Vida.</li>
+        <li>Fora de combate, 10 minutos e Cura DT 15 devolvem 1d6 de Vida ou 10% da Vida máxima.</li>
       </ul>`)}
     ${caixa('Descanso completo e Relaxar', `
       <table>

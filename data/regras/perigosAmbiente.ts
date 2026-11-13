@@ -360,7 +360,7 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
     <p>Debaixo d'água, num quarto tomado de fumaça ou com a mão de alguém fechando a garganta, o corpo paga o ar com o mesmo combustível do esforço: a Estamina.</p>
     <div class="regras-formula">Sem ar, cada rodada custa ⌈Estamina máxima ÷ 10⌉ de Estamina</div>
     <ul class="regras-list">
-      <li><strong>Com a Estamina cheia,</strong> isso dá dez rodadas, mais ou menos um minuto. Quem já gastou Estamina na luta tem menos ar.</li>
+      <li><strong>Com a Estamina cheia,</strong> isso dá até dez rodadas, mais ou menos um minuto. Quem já gastou Estamina na luta tem menos ar.</li>
       <li><strong>Esforço dobra o custo:</strong> a rodada em que você atacou, correu ou nadou com pressa custa duas.</li>
       <li><strong>Sem tempo de puxar o ar</strong> (caiu na água de surpresa, a sala encheu de fumaça de uma vez), a primeira rodada custa o triplo.</li>
       <li><strong>Voltar a respirar não devolve nada na hora.</strong> A Estamina gasta segurando o fôlego volta como qualquer outra, no <span class="regras-ref regras-ref--descanso">Descanso</span>.</li>

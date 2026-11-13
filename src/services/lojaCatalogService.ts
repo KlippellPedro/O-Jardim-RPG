@@ -66,10 +66,10 @@ export const RARIDADES_COMPRA_EQUIPAMENTO: ReadonlyArray<{
 
 const MULTIPLICADOR_PRECO_RARIDADE: Record<RaridadeCompraEquipamento, number> = {
   comum: 1,
-  incomum: 3,
-  raro: 8,
-  epico: 20,
-  lendario: 60,
+  incomum: 4,
+  raro: 16,
+  epico: 64,
+  lendario: 256,
 };
 
 const valorEmLunaris = (preco: PrecoNativoLoja): number | null => {

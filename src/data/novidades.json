@@ -1,6 +1,65 @@
 {
   "itens": [
     {
+      "id": "2026-11-13-precos-critico-e-morrendo",
+      "data": "2026-11-13",
+      "tipo": "melhoria",
+      "area": "Livro de Regras",
+      "titulo": "Preço por raridade, crítico, Morrendo e venenos mais coerentes",
+      "detalhes": [
+        "Encomendar arma, armadura ou escudo em outra raridade agora custa quatro vezes a raridade anterior do mesmo modelo, a mesma escada do resto da Loja. O que você já comprou continua seu.",
+        "Raridade alta deixou de juntar margem larga com multiplicador alto. Arma x2 alarga a margem e fica em x2. Arma x3 ou x4 fica na margem dela e sobe o multiplicador.",
+        "Morrendo ficou menos cruel: dois sucessos seguidos ou um sucesso crítico estabilizam, e a falha crítica sobe 1 e pede a tabela de trauma, em vez de subir 2.",
+        "Veneno perde força sozinho: passar no teste do intervalo já desce um estágio. Doença e vício continuam pedindo tratamento.",
+        "Tratar um ferido devolve 1d6 de Vida ou um décimo da Vida máxima dele, o que for maior. Paralisado passa a tirar 5 de Defesa, como Atordoado."
+      ]
+    },
+    {
+      "id": "2026-11-12-coreografia-perigosa-por-cena",
+      "data": "2026-11-12",
+      "tipo": "melhoria",
+      "area": "Livro de Regras",
+      "titulo": "Coreografia Perigosa agora vale uma vez por cena",
+      "detalhes": [
+        "O risco Perigoso transforma o acerto em crítico. Ele passa a valer uma vez por cena, acertando ou errando, como o Tudo ou Nada já valia.",
+        "Seguro, Ousado e Arriscado continuam livres, uma Coreografia por turno."
+      ]
+    },
+    {
+      "id": "2026-11-12-ataque-de-oportunidade",
+      "data": "2026-11-12",
+      "tipo": "novo",
+      "area": "Livro de Regras",
+      "titulo": "Ataque de Oportunidade: sair de perto do inimigo tem preço",
+      "detalhes": [
+        "O Combate ganhou a quinta reação. Quando um inimigo sai do seu alcance corpo a corpo ou se levanta dentro dele, você pode gastar a reação num ataque corpo a corpo com −2, que não vira crítico.",
+        "Para sair sem levar o golpe, gaste a Ação de Movimento inteira num passo cuidadoso de 1,5 m. Teleporte e movimento forçado (empurrão, queda) também não provocam.",
+        "É disso que os poderes, magias e itens falam quando dizem \"sem provocar reação\"."
+      ]
+    },
+    {
+      "id": "2026-11-12-dt-padrao-no-livro",
+      "data": "2026-11-12",
+      "tipo": "melhoria",
+      "area": "Livro de Regras",
+      "titulo": "A DT Padrão agora tem tabela no livro do jogador",
+      "detalhes": [
+        "Perícias ganhou a tabela de DT Padrão e DT Difícil por nível. É o número que Contatos, Oferendas, Perseguição, Infiltração e outros tópicos pedem quando falam em \"DT Padrão do nível\".",
+        "Alguns trechos ficaram mais claros: Relaxar é o descanso curto do jogo, o grau de perícia dado pela classe respeita o nível total mínimo do grau, e a Criação diz quanto material a mais custa refazer um item que falhou (10%, ou 25% na falha crítica)."
+      ]
+    },
+    {
+      "id": "2026-11-12-molduras-ilustradas",
+      "data": "2026-11-12",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "19 molduras ilustradas para os tokens",
+      "detalhes": [
+        "Na Oficina de tokens, em Molduras ilustradas, há agora aros desenhados à mão: ondas, espinhos, chifres, nuvens, gelo, hera, rosas e mais. Todos já vêm sem fundo.",
+        "A moldura escolhida aparece em volta do retrato no mapa, no tamanho certo, e o Mestre pode travar uma delas para a mesa inteira."
+      ]
+    },
+    {
       "id": "2026-11-12-caminhos-de-magia-e-descanso",
       "data": "2026-11-12",
       "tipo": "melhoria",
@@ -990,69 +1049,6 @@
         "Roubar Turno tira um turno, e Exílio Temporal tira dois. A Parada de Instante tira só a ação padrão, e a Conservação Maior repete Vontade a cada turno contra inimigo.",
         "O Tempo não volta ao passado: Restaurar o Estado devolve Vida até a do começo da cena e conserta um item, sem reviver ninguém, e a Relíquia Conservada repara o objeto em vez de desfazer o dano.",
         "Desgaste do Tempo: magia de Tempo do 5º círculo em diante que dá ação ou turno extra, tira turno por duas rodadas ou dura a cena sem concentração custa 1 de Cansaço no fim da cena, ou 2 no 9º e no 10º."
-      ]
-    },
-    {
-      "id": "2026-10-20-fluxo-recomendado-recalibrado",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Ficha",
-      "titulo": "Fluxo recomendado ao alcance de quem investe em Fluxo",
-      "detalhes": [
-        "O Fluxo recomendado de cada círculo agora é 11 mais o círculo: 12 para o 1º, 16 para o 5º e 21 para o 10º. Antes ia de 14 a 50, e quase ninguém alcançava.",
-        "Quem põe os aumentos de atributo em Fluxo chega ao 10º círculo recomendado por volta do nível 20. As Marcas do 5º ao 9º círculo voltam a aparecer na carreira normal, e o aviso de Fluxo baixo só aparece para quem deixou o Fluxo para trás.",
-        "A fórmula do teste de magia terminava em bônus específico da classe, que nenhuma classe tinha. Agora diz bônus de habilidades, poderes e itens: os que a própria habilidade, poder ou item diz para somar."
-      ]
-    },
-    {
-      "id": "2026-10-20-tipo-de-dano-das-magias",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Toda magia diz o tipo de dano",
-      "detalhes": [
-        "Magia que não dizia o tipo causa o dano do próprio Fluxo: dano de Vazio, dano do Fim, dano de Comunicação e assim por diante. A Tecnologia causa dano tecnológico, e a magia universal causa o dano do Fluxo que a canaliza.",
-        "Na aba Magias, o cartão mostra o tipo junto do dano, como em Dano 2d8 de Vazio.",
-        "Os ataques de Comunicação tiram Vida com dano de Comunicação, e os de Vitalidade causam dano de Vitalidade. O veneno que continua batendo segue escrito onde a magia diz.",
-        "No encantamento Propriedade Mutável, o frio virou gelo."
-      ]
-    },
-    {
-      "id": "2026-10-20-termos-das-magias-e-condicoes",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Termos das magias explicados e condições com saída",
-      "detalhes": [
-        "O tópico Magia e Fluxo ganhou a lista Termos das magias: alcançar o próprio Fim, consolidado, alma própria, reconquista, ausente, fronteira selada e módulo A.X.I.S agora têm sentido escrito.",
-        "Revelado virou condição, ao lado de Exposto: o alvo perde disfarce, transformação e invisibilidade mágicos e não consegue se esconder.",
-        "Imobilizado sem saída indicada se desfaz com uma Ação Padrão e Atletismo ou Acrobacia contra a DT da fonte. Condição de fonte instantânea sem duração escrita vai até o fim do próximo turno de quem a recebeu.",
-        "A Primavera Devastadora e a Chuva de Esporos agora dizem como sair da Imobilizado."
-      ]
-    },
-    {
-      "id": "2026-10-20-controle-de-decimo-circulo-com-teste",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Magias de 10º círculo que travam o inimigo agora têm teste",
-      "detalhes": [
-        "Estase: o inimigo resiste com Vontade e repete o teste no fim de cada turno. Em aliado que aceita, objeto ou lugar, continuam os sete dias, e o conjurador ganha 1 de Cansaço.",
-        "Parada do Mundo: cada criatura na área rola Vontade no começo de cada rodada e, se passar, age normalmente. A magia vale uma vez por descanso longo.",
-        "Âncora do Ser: o inimigo resiste com Vontade e, se falhar, fica ancorado até o fim da cena. As 24 horas valem para quem aceita.",
-        "Zona Morta: Fortitude a cada rodada corta o dano pela metade e evita Cego e Silenciado naquela rodada."
-      ]
-    },
-    {
-      "id": "2026-10-20-tecnologia-contra-automato",
-      "data": "2026-10-20",
-      "tipo": "correcao",
-      "area": "Regras",
-      "titulo": "Tecnologia contra Autômato: sempre com teste",
-      "detalhes": [
-        "Quando uma magia de Tecnologia \"desliga\" máquinas, o dispositivo para de funcionar e o Autômato fica Paralisado. O Autômato sempre tem teste, com Reflexos ou Fortitude, e repete Fortitude no fim de cada turno para se soltar.",
-        "A Singularidade de Tecnologia não destrói mais Autômatos nem itens energizados: os itens param de funcionar até o fim da cena, e o Autômato que falhar fica Paralisado por uma rodada.",
-        "A Detonação de Núcleo deixa o Autômato Paralisado em vez de Atordoado, porque o Autômato é imune a atordoamento. A Tempestade de Íons pede Reflexos no começo de cada turno, em vez de desligar pela duração inteira."
       ]
     }
   ]

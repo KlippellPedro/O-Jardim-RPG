@@ -24,10 +24,10 @@ class EquipmentRarityPriceTests(unittest.TestCase):
             "subtipo": "marcial",
         }
         self.assertEqual(equipment_variant_price(awp, "arma", "comum"), CatalogPrice("Lunaris", 75))
-        self.assertEqual(equipment_variant_price(awp, "arma", "incomum"), CatalogPrice("Lunaris", 225))
-        self.assertEqual(equipment_variant_price(awp, "arma", "raro"), CatalogPrice("Lunaris", 600))
-        self.assertEqual(equipment_variant_price(awp, "arma", "epico"), CatalogPrice("Solares", 15))
-        self.assertEqual(equipment_variant_price(awp, "arma", "lendario"), CatalogPrice("Solares", 45))
+        self.assertEqual(equipment_variant_price(awp, "arma", "incomum"), CatalogPrice("Lunaris", 300))
+        self.assertEqual(equipment_variant_price(awp, "arma", "raro"), CatalogPrice("Lunaris", 1200))
+        self.assertEqual(equipment_variant_price(awp, "arma", "epico"), CatalogPrice("Solares", 48))
+        self.assertEqual(equipment_variant_price(awp, "arma", "lendario"), CatalogPrice("Solares", 192))
 
     def test_simple_and_protection_common_prices_stay_in_requested_bands(self):
         dagger = {"dano": "1d4", "margem_ameaca": 19, "multiplicador_critico": 2, "subtipo": "simples"}
@@ -57,9 +57,12 @@ class EquipmentRarityPriceTests(unittest.TestCase):
         rare = equipment_variant_content(awp, "arma", "raro")
         epic = equipment_variant_content(awp, "arma", "epico")
         self.assertEqual(rare["dano"], "3d12+1d6")
-        self.assertEqual(rare["critico"], "19-20/x3")
+        self.assertEqual(rare["critico"], "20/x3")
         self.assertEqual(epic["dano"], "3d12+1d8")
-        self.assertEqual(epic["critico"], "19-20/x4")
+        self.assertEqual(epic["critico"], "20/x4")
+        sword = {"dano": "1d8", "critico": "19-20/x2", "margem_ameaca": 19, "multiplicador_critico": 2}
+        self.assertEqual(equipment_variant_content(sword, "arma", "epico")["critico"], "18-20/x2")
+        self.assertEqual(equipment_variant_content(sword, "arma", "lendario")["critico"], "17-20/x2")
 
     def test_armor_rarity_improves_defense_penalty_and_typed_resistance(self):
         armor = {"bonus": "+7", "penalidade": "-4", "descricao": "Armadura de aço."}

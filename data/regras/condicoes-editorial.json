@@ -93,7 +93,7 @@
         "Movimento 0.",
         "Ataques contra alvos que não participam do agarrão sofrem -2."
       ],
-      "remocao": "Ação padrão e teste oposto de Atletismo ou Acrobacia."
+      "remocao": "Ação padrão e Atletismo ou Acrobacia contra 10 + Luta de quem segura."
     },
     {
       "tipo": "condicao",
@@ -220,7 +220,7 @@
       "efeitos": [
         "Não pode agir, reagir nem se mover, mas segue consciente e ouve tudo.",
         "Falha automaticamente em testes de Força e Destreza.",
-        "Defesa reduzida em 2."
+        "Defesa reduzida em 5."
       ],
       "remocao": "Fortitude contra a DT da fonte no fim de cada turno encerra a condição."
     },

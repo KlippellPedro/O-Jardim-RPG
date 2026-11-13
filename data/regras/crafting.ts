@@ -216,14 +216,14 @@ export const RESULTADOS_CRAFTING: ResultadoCrafting[] = [
   {
     id: 'falha',
     titulo: 'Falha',
-    efeito: 'O item não é concluído. O progresso permanece; uma nova tentativa exige um dia e materiais adicionais.',
+    efeito: 'O item não é concluído. O progresso permanece; uma nova tentativa exige um dia e mais 10% do custo inicial em materiais.',
     diasAdicionais: 1,
     materiaisAdicionaisPercentual: 10,
   },
   {
     id: 'falha-critica',
     titulo: 'Falha crítica',
-    efeito: 'O item não é concluído. A correção exige dois dias e materiais adicionais. O projeto não é destruído automaticamente.',
+    efeito: 'O item não é concluído. A correção exige dois dias e mais 25% do custo inicial em materiais. O projeto não é destruído automaticamente.',
     diasAdicionais: 2,
     materiaisAdicionaisPercentual: 25,
   },

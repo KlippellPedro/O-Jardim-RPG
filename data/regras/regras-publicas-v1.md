@@ -170,7 +170,7 @@ Escolha o nome do personagem e a Árvore à qual ele pertence. A Árvore determi
 
 ### 4. Divindade
 
-Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo, e junto com ela você escreve dois preceitos com o Mestre. O que essa fé rende em jogo está em Devoção, no capítulo Frutos e Implantes; fora disso, ela não concede poderes além dos declarados por raça, classe, item ou outra regra.
+Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo, e junto com ela você escreve dois preceitos com o Mestre. O que essa fé rende em jogo está em Devoção, no tópico Frutos e Implantes; fora disso, ela não concede poderes além dos declarados por raça, classe, item ou outra regra.
 
 ### 5. Atributos
 
@@ -314,7 +314,7 @@ O **nível total** é a soma dos níveis de todas as suas classes, incluindo as 
 
 - Classe especial exige nível total 20, liberação do Mestre e um acontecimento na história que justifique, a não ser que a própria classe abra uma exceção explícita.
 
-- Classe geral serve a qualquer Árvore. Classe exclusiva só se você pertencer à Árvore indicada.
+- Classe comum serve a qualquer Árvore. Classe especial só aparece nas Árvores indicadas na página dela.
 
 ### Maestria de atributo
 
@@ -421,6 +421,42 @@ Duas palavras iguais: o **grau Mestre** é um degrau de perícia (+8), e o **Mes
 **Exemplo:**
 
 Você tem três fontes de vantagem e uma de desvantagem. Uma vantagem cancela a desvantagem, e as duas que sobram valem uma vantagem só: você rola dois d20 e usa o maior.
+
+### DT Padrão e DT Difícil
+
+Vários tópicos pedem um teste "contra a DT Padrão do nível" ou "contra a DT Difícil". São as duas dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Difícil fica sempre 5 acima da Padrão. Num nível entre duas linhas, vale a linha do nível menor.
+
+- Nível | DT Padrão | DT Difícil
+
+- 1 | 15 | 20
+
+- 3 | 16 | 21
+
+- 5 | 17 | 22
+
+- 8 | 19 | 24
+
+- 10 | 20 | 25
+
+- 12 | 21 | 26
+
+- 15 | 24 | 29
+
+- 18 | 26 | 31
+
+- 20 | 30 | 35
+
+- 25 | 32 | 37
+
+- 30 | 37 | 42
+
+- 40 | 43 | 48
+
+- 50 | 48 | 53
+
+- 60 | 56 | 61
+
+Quando o texto diz só "DT 15" ou outro número, a dificuldade é fixa e não muda com o nível.
 
 ### Catálogo de perícias
 
@@ -675,6 +711,8 @@ Quando alguém corre e alguém vai atrás, a cena muda de ritmo. A respiração 
 - Cada lado declara uma manobra, dizendo o que faz com o corpo. Quem foge declara primeiro, porque está de costas.
 
 - Resolvam os testes. Quem vence move uma faixa a favor, e vitória por 10 ou mais move duas.
+
+- Teste oposto é sempre contra o Atletismo do outro lado, seja qual for a manobra dele. Quando os dois lados passam em testes contra DT, cada um move a própria faixa, e elas se anulam.
 
 - Aplique o obstáculo a quem não lidou com ele na manobra.
 
@@ -954,7 +992,7 @@ Na ficha, o contato é um vínculo das Notas marcado como "faz favores", e a Con
 
 - GrandeAmigo ou mais | Um segredo, uma porta fechada, um item raro, esconder alguém por uma semana.Teste: Diplomacia contra a DT Padrão; o Leal dispensa. Custo: O contato guarda uma Dívida.
 
-- ArriscadoLeal ou mais | Algo que pode custar a vida, o emprego ou o nome dele.Teste: Nenhum: ele faz. Custo: Uma Dívida, e o contato paga o preço do risco: Procura, ferimento, o emprego.
+- ArriscadoLeal | Algo que pode custar a vida, o emprego ou o nome dele.Teste: Nenhum: ele faz. Custo: Uma Dívida, e o contato paga o preço do risco: Procura, ferimento, o emprego.
 
 - **Um favor por intervalo** entre aventuras sai sem desgaste. O segundo no mesmo intervalo conta um tamanho acima: o pequeno vira grande.
 
@@ -1070,7 +1108,7 @@ Diga a cena antes de rolar: ela diz ao Mestre o que pode dar errado. Magia, item
 
 - Abrir caminho | O clique da gazua, a tranca de runas que esfria sob os dedos, o painel que pede uma senha.Teste: Ladinagem (Kit de Arrombamento dá vantagem), Misticismo para selo, Tecnologia para tranca A.X.I.S. Sucesso: Avança uma etapa por uma porta que ninguém vigia. Falha: O Alerta sobe 1. Falhar por 5 ou mais dispara o que protegia a porta.
 
-- Calar alguém | Uma mão na boca, um golpe na nuca, o corpo arrastado para trás das caixas.Teste: Luta ou Atletismo contra a Defesa passiva do alvo, com vantagem se ele não viu você. Sucesso: Avança uma etapa e tira aquela pessoa do caminho. Falha: Vira combate ali mesmo, e o Alerta sobe 2.
+- Calar alguém | Uma mão na boca, um golpe na nuca, o corpo arrastado para trás das caixas.Teste: Luta ou Atletismo contra 10 + Reflexos do alvo, com vantagem se ele não viu você. Sucesso: Avança uma etapa e tira aquela pessoa do caminho. Falha: Vira combate ali mesmo, e o Alerta sobe 2.
 
 - Distrair | Uma garrafa que se quebra no outro corredor, um cavalo solto no pátio, um grito de incêndio.Teste: Atuação, Enganação ou o teste de uma magia. Sucesso: Não avança, e a próxima abordagem desta etapa ganha vantagem. Falha: O Alerta sobe 1, porque alguém foi ver e voltou desconfiado.
 
@@ -1350,7 +1388,7 @@ No fim de cada fase, quem fez um feito sofre dano do tipo que fizer sentido (cor
 
 **Exemplo:**
 
-Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro leva o dano Leve da linha do nível da batalha.
+Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro leva o dano de feito com sucesso, na linha do nível da batalha.
 
 ## viagem
 
@@ -1450,7 +1488,7 @@ Dentro de uma ruína, de uma mata fechada ou de um subterrâneo, o dia vira hora
 
 - Mapear | Sobrevivência ou Conhecimento contra a DT Padrão. Com o mapa, a volta não pede teste; sem ele, sair do lugar pede Sobrevivência contra a DT Padrão.
 
-- Cuidar | Tratar um ferido (Cura DT 15, 1d6 de Vida) ou, numa área segura, Relaxar como no Descanso.
+- Cuidar | Tratar um ferido (Cura DT 15, 1d6 de Vida ou um décimo da Vida máxima) ou, numa área segura, Relaxar como no Descanso.
 
 - Vigiar | Fica de olho enquanto os outros trabalham. Se o evento do turno for um encontro, o grupo não é Surpreendido.
 
@@ -1486,7 +1524,7 @@ Combate começa quando a conversa acaba e alguém decide resolver no golpe. Este
 
 - Manobras (agarrar, derrubar, empurrar, desarmar, imobilizar) usam a mesma rolagem, contra 10 mais o bônus da defesa passiva do alvo.
 
-- As reações são Esquiva, Bloqueio, Contra-Ataque e Proteger.
+- As reações são Esquiva, Bloqueio, Contra-Ataque, Proteger e Ataque de Oportunidade, que pune quem sai do seu alcance sem cuidado.
 
 - Inimigo que perde o líder ou metade do bando testa moral em 2d6, e pode fugir ou se render.
 
@@ -1635,6 +1673,28 @@ Você tem uma reação por rodada e a recupera no começo do seu próprio turno.
 - Contra-Ataque | Inimigo adjacente erra você | Faça um ataque com −2. Ele não pode gerar crítico.
 
 - Proteger | Aliado adjacente é atacado | Você vira o alvo e pode usar Bloqueio, se ainda tiver reação.
+
+- Ataque de Oportunidade | Inimigo sai do seu alcance corpo a corpo, ou se levanta dentro dele | Faça um ataque corpo a corpo com −2 contra ele. Ele não pode gerar crítico.
+
+### Provocar reação
+
+Virar as costas para quem está com a arma na mão tem preço. Quando um texto diz que um movimento "provoca reação", ele abre espaço para o Ataque de Oportunidade de cada inimigo que alcança você. Quando diz "sem provocar reação", é desse ataque que ele livra.
+
+- **Provoca:** sair do alcance corpo a corpo de um inimigo andando, correndo, voando ou nadando por conta própria, e levantar do chão dentro desse alcance.
+
+- **Não provoca:** mover-se sem sair do alcance, ser empurrado, puxado, arrastado ou derrubado, cair, e teleportar.
+
+- **Passo cuidadoso:** gaste a Ação de Movimento inteira para andar só 1,5 m. Esse passo não provoca reação.
+
+- **Quem ataca** precisa ver você, ter a reação da rodada e uma arma corpo a corpo na mão, ou o próprio corpo. Arma de disparo não faz Ataque de Oportunidade.
+
+- **O alcance** é o da tabela de Tamanho, ou o da arma, quando ela tem alcance próprio.
+
+- **Uma vez por inimigo:** o mesmo movimento provoca cada inimigo uma vez só, mesmo que você passe por ele duas vezes.
+
+**Exemplo:**
+
+Bia está adjacente a um bandido e quer correr até a porta. Sair dali provoca: o bandido gasta a reação e ataca com −2. Se ela preferir, gasta a Ação de Movimento num passo cuidadoso de 1,5 m, sai do alcance sem levar o golpe e fica com a Ação Padrão para o resto do turno.
 
 ### Quando o inimigo desiste
 
@@ -1928,7 +1988,7 @@ Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua s
 
 - A Mutilação sempre é anunciada antes, e um sucesso no teste evita a perda.
 
-- Fora de combate, qualquer um trata um ferido: 10 minutos e Cura DT 15 devolvem 1d6 de Vida.
+- Fora de combate, qualquer um trata um ferido: 10 minutos e Cura DT 15 devolvem 1d6 de Vida, ou um décimo da Vida máxima do paciente, o que for maior.
 
 - Voltar da morte existe, mas é raro e cobra caro.
 
@@ -1960,7 +2020,9 @@ Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua s
 
 - No fim de cada turno seu, role Fortitude contra **DT 12 + (2 × Gravidade) + Ferido**.
 
-- Sucesso segura onde está; sucesso crítico reduz em 1; falha aumenta em 1; falha crítica aumenta em 2.
+- Sucesso segura onde está, e dois sucessos seguidos estabilizam. Sucesso crítico estabiliza na hora. Falha aumenta em 1. Falha crítica aumenta em 1 e pede a tabela de trauma.
+
+- Estabilizado, você para de testar e continua inconsciente até voltar a 1 PV ou mais. Sofrer dano de novo recomeça os testes em Morrendo 1.
 
 - Em Morrendo 3, você morre. A maestria de Constituição empurra esse limite para Morrendo 4.
 
@@ -1974,7 +2036,7 @@ Davi tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de 
 
 ### Tratar ferimentos
 
-Fora de combate, com dez minutos e um teste de Cura DT 15, qualquer um trata um ferido, que recupera **1d6 de Vida**. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.
+Fora de combate, com dez minutos e um teste de Cura DT 15, qualquer um trata um ferido, que recupera **1d6 de Vida** ou um décimo da Vida máxima dele, o que for maior. Assim o curativo vale no nível 3 e no nível 30. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.
 
 ### Remover Ferido
 
@@ -2076,7 +2138,7 @@ Descreva uma jogada de cinema que caiba na cena e escolha o risco **antes** de r
 
 - Arriscado | Vantagem e +1 dado da arma no dano. | Sofre 1d8 de dano e perde a ação de movimento.
 
-- Perigoso | O ataque se torna crítico se acertar. | Cai e o inimigo recebe vantagem no próximo ataque contra você.
+- Perigoso | O ataque se torna crítico se acertar. | Cai e o inimigo recebe vantagem no próximo ataque contra você. Uma vez por cena.
 
 - Tudo ou Nada | Crítico com dados maximizados. | Sofre um crítico do inimigo e recebe Ferido 1. Uma vez por cena.
 
@@ -2138,7 +2200,9 @@ Recupere 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina
 
 - Exige uma hora em segurança relativa, e vale uma vez só entre dois descansos completos.
 
-- Se a hora foi gasta em algo que significa alguma coisa para o personagem, o Mestre pode devolver 1 ponto de Cansaço junto.
+- Se a hora foi gasta em algo que significa alguma coisa para o personagem, o Mestre pode tirar 1 ponto de Cansaço junto.
+
+- Relaxar é o descanso curto do jogo. Quando outra regra fala em descanso curto, é dele que ela fala.
 
 ### Cansaço
 
@@ -2170,7 +2234,7 @@ Um combate conta como intenso quando o personagem desce à metade dos PV, gasta 
 
 Grau dado pela classe sobe na hora. Grau conquistado por treino cobra tempo, nível e, mais para frente, alguém que te ensine.
 
-São dois caminhos diferentes, e vale não os confundir. Quando uma **classe** dá a você um Grau de perícia, escolha uma perícia e suba um grau na hora, sem tempo, sem tabela e sem requisito. Quando você quer subir **por treino**, aí sim cumpre o tempo da linha, o nível total mínimo e o requisito extra, quando existir.
+São dois caminhos diferentes, e vale não os confundir. Quando uma **classe** dá a você um Grau de perícia, escolha uma perícia e suba um grau na hora, sem tempo de treino e sem requisito extra. Só o nível total mínimo do grau continua valendo. Quando você quer subir **por treino**, aí sim cumpre o tempo da linha, o nível total mínimo e o requisito extra, quando existir.
 
 ### Progressão
 
@@ -2266,9 +2330,9 @@ Cada atividade abaixo já tem a regra completa em outro tópico. Aqui elas apare
 
 - Fazer um favor a uma facção. | Levar uma carta sem perguntar o que está escrito, ficar de guarda numa porta, aparecer no lugar certo com a roupa certa.Custa alguns dias, conforme o pedido. Rende Prestígio com ela. Regra completa em Prestígio, Fama e Procura.
 
-- Circular e ouvir a cidade. | Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.Custa 1 dia por vez. Rende boatos, contatos e preço melhor no balcão. Regra completa em Loja.
+- Circular e ouvir a cidade. | Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.Custa 1 dia por vez. Rende boatos e a chance de fazer um contato. Regra completa em Contatos e Laços.
 
-- Procurar uma pessoa específica. | Mostrar o mesmo retrato mal desenhado para cinquenta desconhecidos, até alguém parar, olhar de novo e mudar de expressão.Custa 1 dia por vez. Rende um teste de Investigação ou Diplomacia por dia. Regra completa em Perícias.
+- Procurar uma pessoa específica. | Mostrar o mesmo retrato mal desenhado para cinquenta desconhecidos, até alguém parar, olhar de novo e mudar de expressão.Custa 1 dia por vez. Rende um teste de Investigação ou Diplomacia por dia, contra a DT Padrão do lugar. Cada sucesso deixa você um passo mais perto.
 
 - Cuidar de quem importa. | Escrever para casa. Levar flor a um túmulo. Ensinar uma criança a segurar uma espada de pau. Pagar a bebida de um velho amigo que ainda não sabe que você voltou.Custa 1 dia. Rende uma cena com alguém que importa para o seu personagem, e o que vier dela. Essa atividade não tem regra: ela é o próprio jogo.
 
@@ -2934,7 +2998,7 @@ Este tópico trata do que você carrega e veste: quanto cabe na mochila, quantas
 
 ### Carga e espaços
 
-Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋, mínimo 5
+Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋
 
 - Cada item ocupa os espaços que o catálogo declara, multiplicados pela quantidade.
 
@@ -2982,9 +3046,9 @@ Raridade possui duas funções: melhora a ficha própria de armas e proteções 
 
 **Em resumo**
 
-- Na Loja, armas, armaduras e escudos aparecem primeiro como Comuns. Encomendar outra raridade multiplica o preço (Incomum ×3, Raro ×8, Épico ×20, Lendário ×60) e melhora as propriedades.
+- Na Loja, armas, armaduras e escudos aparecem primeiro como Comuns. Encomendar outra raridade multiplica o preço (cada raridade custa quatro vezes a anterior) e melhora as propriedades.
 
-- Itens de perícia e artefatos dividem um mesmo limite de uso: 1 vaga no começo e mais uma a cada 4 níveis totais até o 50, a cada 8 até o 100 e a cada 16 depois.
+- Itens de perícia e artefatos dividem um mesmo limite de uso: 1 vaga até o nível 7, depois uma a cada 4 níveis totais até o 50 (2 no nível 8, 12 no 50), mais uma a cada 8 até o 100 e a cada 16 depois.
 
 - Itens que despertam têm formas por nível do dono: vale a mais alta que ele alcançou, e ela substitui a anterior.
 
@@ -2992,21 +3056,21 @@ Raridade possui duas funções: melhora a ficha própria de armas e proteções 
 
 ### Raridades e orçamento de poder
 
-**Na Loja, armas, armaduras e escudos são anunciados primeiro como Comuns.** O preço Comum vem do modelo e usa a mesma régua nos três: peça simples custa de 15 a 40 Lunaris, peça marcial custa de 50 a 80 Lunaris. Encomendar outra raridade aumenta preço e propriedades, e cada variante fica separada no inventário. Mítico e Relíquia da Criação continuam fora das encomendas normais.
+**Na Loja, armas, armaduras e escudos são anunciados primeiro como Comuns.** O preço Comum vem do modelo e usa a mesma régua nos três: peça simples custa de 15 a 40 Lunaris, peça marcial custa de 50 a 80 Lunaris. Armadura e escudo de modelo mais forte já custam mais na versão Comum, de duas a dezesseis vezes. Encomendar outra raridade aumenta preço e propriedades, e cada variante fica separada no inventário. Mítico e Relíquia da Criação continuam fora das encomendas normais.
 
 - Raridade | Preço | Armas | Armaduras e escudos
 
 - Comum | ×1 | Ficha básica do modelo | Ficha básica do modelo
 
-- Incomum | ×3 | +1d4 de dano | +1 Defesa; Resistência 1 a Corte
+- Incomum | ×4 | +1d4 de dano | +1 Defesa; Resistência 1 a Corte
 
-- Raro | ×8 | +1d6 de dano; margem +1 | +2 Defesa; Resistência 2 a Corte e Perfuração; penalidade −1
+- Raro | ×16 | +1d6 de dano; margem +1 em arma x2 | +2 Defesa; Resistência 2 a Corte e Perfuração; penalidade −1
 
-- Épico | ×20 | +1d8 de dano; margem +1; crítico +1 | +3 Defesa; Resistência 3 a Corte, Perfuração e Impacto; penalidade −1
+- Épico | ×64 | +1d8 de dano; margem +1 em arma x2, ou multiplicador +1 em arma x3 e x4 | +3 Defesa; Resistência 3 a Corte, Perfuração e Impacto; penalidade −1
 
-- Lendário | ×60 | +1d10 de dano; margem +2; crítico +1 | +4 Defesa; Resistência 5 a Corte, Perfuração, Impacto e Balístico; penalidade −2
+- Lendário | ×256 | +1d10 de dano; margem +2 em arma x2, ou multiplicador +1 em arma x3 e x4 | +4 Defesa; Resistência 5 a Corte, Perfuração, Impacto e Balístico; penalidade −2
 
-O dado extra passa a fazer parte do dano da arma e entra no crítico. “Margem +1” reduz em 1 o número inicial: 20 vira 19–20.
+O dado extra passa a fazer parte do dano da arma e entra no crítico. “Margem +1” reduz em 1 o número inicial: 20 vira 19–20. Arma x3 ou x4 fica na margem do modelo e sobe o multiplicador no lugar, porque margem larga e multiplicador alto não andam juntos (ver Combate).
 
 - Raridade | Mods. | Efeitos próprios | Valor por efeito | Regra
 
@@ -3040,7 +3104,7 @@ Fora do bônus automático de armas e proteções, o ganho de uma raridade mais 
 
 ### Quantos itens especiais você pode usar
 
-**Itens de perícia** e **artefatos** dividem o mesmo limite de uso: 1 vaga no começo e mais uma a cada **4 níveis totais até o 50, a cada 8 até o 100 e a cada 16 depois**. Só uma peça equipada ou ativa ocupa vaga; comprar, carregar ou guardar não ocupa. Arma, armadura, escudo, consumível e item comum continuam seguindo seus próprios espaços.
+**Itens de perícia** e **artefatos** dividem o mesmo limite de uso: 1 vaga até o nível 7, depois **uma a cada 4 níveis totais até o 50, mais uma a cada 8 até o 100 e a cada 16 depois**. Só uma peça equipada ou ativa ocupa vaga; comprar, carregar ou guardar não ocupa. Arma, armadura, escudo, consumível e item comum continuam seguindo seus próprios espaços.
 
 - Nível total | Itens de perícia + artefatos em uso
 
@@ -3203,7 +3267,7 @@ Armas
 
 - Implacável | Marcial | 3 | 1.200 L | Nível total 10 | Uma vez por cena, transforme um acerto em crítico, sem precisar cair na Margem de Ameaça. Não combina com a Coreografia Tudo ou Nada no mesmo ataque.
 
-- Atordoante | Marcial | 2 | 290 L | Força 14 | No crítico, o alvo faz um teste de Constituição ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.
+- Atordoante | Marcial | 2 | 290 L | Força 14 | No crítico, o alvo testa Fortitude contra o total do seu ataque ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.
 
 - Trespassante | Marcial | 2 | 290 L | Força 14 | Só em arma corpo a corpo. Quando um ataque com ela leva uma criatura a 0 PV, o dano que sobrou atinge outra criatura adjacente a você, à sua escolha.
 
@@ -3258,7 +3322,7 @@ Armaduras
 
 - Âncora de Sanidade | Marcial | 2 | 290 L | Sabedoria 14 | Resistência 3 contra dano Mental e vantagem nos testes para não perder Sanidade.
 
-- Retaliadora | Marcial | 3 | 1.200 L | Constituição 14 | Ao sofrer um crítico, quem veste devolve 1 dado de dano de impacto no atacante, sem gastar reação.
+- Retaliadora | Marcial | 3 | 1.200 L | Constituição 14 | Ao sofrer um crítico, quem veste devolve 1d8 de dano de impacto no atacante, sem gastar reação.
 
 - Casca do Fim | Marcial | 3 | 1.200 L | Nível total 10 | Enquanto estiver em Morrendo, a DT dos seus testes de Morrendo cai 3.
 
@@ -3307,7 +3371,7 @@ Escudos
 
 - Vingativo | Marcial | 2 | 290 L | Nenhum | Ao usar Bloqueio, cause 1d6 de dano de impacto no atacante, sem gastar ação extra.
 
-- Guarda de Fluxo | Marcial | 2 | 290 L | Fluxo 12 | Bloqueio passa a funcionar também contra dano de Energia, incluindo o que vem de Fluxos.
+- Guarda de Fluxo | Marcial | 2 | 290 L | Fluxo 12 | Bloqueio passa a funcionar também contra dano mágico e tecnológico.
 
 - Contratempo | Marcial | 3 | 1.200 L | Nível total 10 | Depois de um Contra-Ataque bem-sucedido, recupere sua reação. Uma vez por rodada.
 
@@ -3486,8 +3550,8 @@ Sem a ferramenta exigida, o trabalho não começa. Ofício é uma perícia perso
 
 - **Sucesso crítico:** Conclui uma unidade. Preserve componentes comuns de valor máximo igual a 10% do custo de materiais. Não aumenta raridade, quantidade ou efeito.
 - **Sucesso:** Conclui uma unidade conforme a receita ou o projeto.
-- **Falha:** O item não é concluído. O progresso permanece; uma nova tentativa exige um dia e materiais adicionais.
-- **Falha crítica:** O item não é concluído. A correção exige dois dias e materiais adicionais. O projeto não é destruído automaticamente.
+- **Falha:** O item não é concluído. O progresso permanece; uma nova tentativa exige um dia e mais 10% do custo inicial em materiais.
+- **Falha crítica:** O item não é concluído. A correção exige dois dias e mais 25% do custo inicial em materiais. O projeto não é destruído automaticamente.
 
 Materiais adicionais são calculados sobre o custo inicial do projeto. Cada nova tentativa ocorre após o tempo adicional e o pagamento indicado.
 
@@ -3967,7 +4031,7 @@ Escolha o meio de transporte e a extensão da rota. Cada célula mostra primeiro
 
 ### Transporte entre reinos e dimensões
 
-Custos e tempos dos meios de transporte de Lunaris
+Custos em Lunaris e tempos dos meios de transporte
 
 - Transporte | Mesmo Reino | Entre Reinos | Entre Dimensões
 
@@ -4015,7 +4079,7 @@ A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai d
 
 - Cada alma nasce com um Fluxo natural, e só um: o da Árvore em que nasceu. Fluxo alto não ensina magia: o acesso vem de classe, habilidade, item, Legado ou concessão do Mestre.
 
-- O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus da classe. A DT de conjuração é 7 + 2,5 × círculo, arredondado para baixo.
+- O teste de magia é d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo + bônus de habilidades, poderes e itens. A DT de conjuração é 7 + 2,5 × círculo, arredondado para baixo.
 
 - A Mana sai quando você declara a conjuração e não volta se o teste falhar. O Fluxo recomendado de cada círculo é só um aviso.
 
@@ -4413,7 +4477,7 @@ Físico (Baluarte)
 
 - Círculo | Marca | Ganho | Ônus
 
-- 5º | Elemento na Pele | Resistência 3 a um elemento escolhido ao receber a Marca. A Elementarista usa o de origem. | Vulnerabilidade 3 ao elemento oposto, definido pelo Mestre na primeira vez.
+- 5º | Elemento na Pele | Resistência 3 a um elemento escolhido ao receber a Marca. A Elementarista usa o de origem. | Sofre 3 a mais de dano do elemento oposto, definido pelo Mestre na primeira vez.
 
 - 6º | Peso de Pedra | +2 contra empurrão, agarrão e queda. | -3 m de deslocamento.
 
@@ -4489,7 +4553,7 @@ Tecnologia (A.X.I.S)
 
 - 7º | Registro | Magia que já acertou você uma vez acerta com -2 nas próximas. | A A.X.I.S registra por onde você passa, e quem tem acesso à Malha consegue rastrear você.
 
-- 8º | Carcaça | Redução 3 contra dano de energia. | Pulso eletromagnético derruba você como derruba máquina.
+- 8º | Carcaça | Redução 3 contra dano tecnológico. | Pulso eletromagnético derruba você como derruba máquina.
 
 - 9º | Protocolo Vivo | Uma vez por cena, você intercepta uma magia de até 6º círculo com a reação. | Em área sem energia, você conjura com desvantagem.
 
@@ -4515,7 +4579,7 @@ Tecnologia (A.X.I.S)
 
 - Segunda Sombra | Uma vez por dia, um duplo seu absorve um golpe inteiro. | O duplo age por conta própria, e nem sempre a seu favor.
 
-- Pele de Fluxo | Redução 5 contra o tipo de dano do seu Fluxo nativo. | Vulnerabilidade 5 ao tipo oposto, definido pelo Mestre.
+- Pele de Fluxo | Redução 5 contra o tipo de dano do seu Fluxo nativo. | Sofre 5 a mais de dano do tipo oposto, definido pelo Mestre.
 
 - Marca Visível | +5 em Intimidação e em testes para impor presença. | Você não passa despercebido em lugar nenhum, nunca mais.
 
@@ -4685,7 +4749,7 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 - Atordoado | Não pode usar ações nem reações. Defesa reduzida em 5. Veja também Inconsciente: mesmo efeito de base, mas para quando a causa for perder toda a Vida. | Termina ao fim da duração. Uma nova aplicação apenas renova a duração.
 
-- Agarrado | Movimento 0. Ataques contra alvos que não participam do agarrão sofrem -2. | Ação padrão e teste oposto de Atletismo ou Acrobacia.
+- Agarrado | Movimento 0. Ataques contra alvos que não participam do agarrão sofrem -2. | Ação padrão e Atletismo ou Acrobacia contra 10 + Luta de quem segura.
 
 - Cego | Desvantagem em testes que dependem de visão. Ataques contra você recebem +2 se o atacante puder vê-lo. | Remova ou supere a fonte da cegueira.
 
@@ -4705,7 +4769,7 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 - Enfraquecido | −2 em testes de Força e no dano de ataques corpo a corpo. | Termina ao fim da duração da fonte.
 
-- Paralisado | Não pode agir, reagir nem se mover, mas segue consciente e ouve tudo. Falha automaticamente em testes de Força e Destreza. Defesa reduzida em 2. | Fortitude contra a DT da fonte no fim de cada turno encerra a condição.
+- Paralisado | Não pode agir, reagir nem se mover, mas segue consciente e ouve tudo. Falha automaticamente em testes de Força e Destreza. Defesa reduzida em 5. | Fortitude contra a DT da fonte no fim de cada turno encerra a condição.
 
 - Silenciado | Não fala: sem componente verbal em magia e sem ordens faladas. Gestos e escrita continuam funcionando. | Termina ao fim da duração da fonte ou quando a fonte for superada.
 
@@ -4797,7 +4861,7 @@ Condições que duram mais que uma cena já vêm escritas, para ninguém precisa
 
 - Congelamento | 2 descansos completos de qualidade Boa ou melhor, com tratamento. | Dedos dormentes: desvantagem em Ladinagem e Pontaria. Desvantagem em Fortitude contra frio. Um Caldo de Osso Quente dá vantagem em Fortitude contra frio e cancela essa desvantagem por 4 horas. | Cura DT 12 para tratar e iniciar a recuperação. Cada descanso completo de qualidade Boa ou melhor, com tratamento, conta 1; com 2 contados, a lesão termina. Passar uma cena inteira em local aquecido dá vantagem no teste de Cura.
 
-- Lesão Interna | Até ser operada. | No fim de cada cena de esforço intenso, sofre 1d4 de dano que nada evita. Descanso Excelente não recupera nada enquanto a lesão durar. | Cura DT 18, com ferramentas e uma hora de calma, para operar. Cura mágica de pelo menos 1 PV também encerra.
+- Lesão Interna | Até ser operada. | No fim de cada cena de esforço intenso, sofre 1d4 de dano que nada evita. Descanso nenhum fecha a lesão, nem o Excelente: ela continua até ser operada. | Cura DT 18, com ferramentas e uma hora de calma, para operar. Cura mágica de pelo menos 1 PV também encerra.
 
 - Surdo | Conforme a fonte. | Não ouve: falha automaticamente em Percepção que dependa de som. Não recebe ordens faladas nem ouve ataques vindos de fora do campo de visão. | Remova ou supere a fonte. Cura DT 15 trata a causa quando ela for física.
 
@@ -4903,7 +4967,7 @@ Aflição é veneno, doença ou vício: um problema que evolui por estágios com
 
 - Ao sofrer exposição, teste Fortitude contra a DT da aflição. Falha aplica o estágio 1, e falha crítica aplica o estágio 2.
 
-- No fim de cada intervalo, novo teste: sucesso crítico reduz 1 estágio, sucesso mantém, falha aumenta 1 e falha crítica aumenta 2.
+- No fim de cada intervalo, novo teste: sucesso crítico reduz 1 estágio, sucesso mantém, falha aumenta 1 e falha crítica aumenta 2. Em veneno, o sucesso também reduz 1.
 
 - Cura reduz 1 estágio por sucesso, e o antídoto encerra um veneno ativo. No estágio 0 a aflição acaba.
 
@@ -4913,7 +4977,7 @@ Aflição é veneno, doença ou vício: um problema que evolui por estágios com
 
 - Ao sofrer exposição, teste Fortitude contra a DT da aflição. Sucesso ou sucesso crítico evita a aflição. Falha aplica o estágio 1 depois da incubação; falha crítica aplica o estágio 2.
 
-- No fim de cada intervalo, faça outro teste. Sucesso crítico reduz 1 estágio; sucesso mantém; falha aumenta 1; falha crítica aumenta 2.
+- No fim de cada intervalo, faça outro teste. Sucesso crítico reduz 1 estágio; sucesso mantém; falha aumenta 1; falha crítica aumenta 2. Em veneno, o sucesso comum também reduz 1 estágio: o corpo vence a toxina aos poucos, e doença e vício só cedem com tratamento.
 
 - O estágio não passa do maior valor do catálogo. Seus efeitos não se acumulam com os de estágios anteriores, salvo indicação expressa.
 
@@ -5275,7 +5339,7 @@ Debaixo d'água, num quarto tomado de fumaça ou com a mão de alguém fechando 
 
 Sem ar, cada rodada custa ⌈Estamina máxima ÷ 10⌉ de Estamina
 
-- **Com a Estamina cheia,** isso dá dez rodadas, mais ou menos um minuto. Quem já gastou Estamina na luta tem menos ar.
+- **Com a Estamina cheia,** isso dá até dez rodadas, mais ou menos um minuto. Quem já gastou Estamina na luta tem menos ar.
 
 - **Esforço dobra o custo:** a rodada em que você atacou, correu ou nadou com pressa custa duas.
 
@@ -5561,7 +5625,7 @@ O fecho da classe, no nível 20, uma por classe. Ela chega sozinha como qualquer
 
 ### Grau de perícia
 
-Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito. É a exceção às regras do tópico Treinamento, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.
+Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito extra. O nível total mínimo do grau, em Perícias, continua valendo. É a exceção às regras do tópico Treinamento, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.
 
 ### Evento
 
@@ -5737,7 +5801,7 @@ O Jardim tem quatro moedas. Cada uma circula num lugar diferente do mundo, e por
 
 - O salário mínimo é de 300 Lunaris por mês, e cada degrau de raridade custa quatro vezes o anterior.
 
-- O Banqueiro converte Lunaris, Solares e Fragmentos, sempre passando pelo Solar e com 2% de taxa. Créditos Sombrios não têm câmbio.
+- O Banco Lunar converte Lunaris, Solares e Fragmentos, sempre passando pelo Solar e com 2% de taxa. Créditos Sombrios não têm câmbio.
 
 - O Cofre guarda dinheiro e item, cresce com o uso e pode ser roubado.
 
@@ -5793,15 +5857,15 @@ Cada degrau de raridade custa quatro vezes o degrau anterior. Os valores abaixo 
 
 - Relíquia da Criação | 400 Fragmentos | fora de alcance
 
-Dentro de cada faixa o preço vai da metade ao dobro da referência, então os degraus se encostam sem deixar vão e sem se cruzar. Uma arma rara custa sempre mais que qualquer arma incomum, e sempre menos que qualquer arma épica.
+Dentro de cada faixa o preço vai da metade ao dobro da referência, então os degraus se encostam sem deixar vão e sem se cruzar. Na encomenda de arma, armadura e escudo a conta é a mesma: cada raridade custa quatro vezes a anterior do mesmo modelo.
 
 ### O muro dos Fragmentos
 
-Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 60 Fragmentos, existe um salto de quase vinte vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Acumular Lunaris a vida inteira deixa você parado diante desse muro.
+Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 50 Fragmentos, existe um salto de mais de quinze vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Acumular Lunaris a vida inteira deixa você parado diante desse muro.
 
 ### Câmbio
 
-O Banqueiro converte Lunaris, Solares e Fragmentos de Estrela no Discord, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa. Créditos Sombrios ficam de fora: o banco não os compra nem os vende.
+O Banco Lunar converte Lunaris, Solares e Fragmentos de Estrela, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa. Créditos Sombrios ficam de fora: o banco não os compra nem os vende.
 
 - Moeda | Vale em Solares | Vale em Lunaris
 
@@ -5825,13 +5889,13 @@ Converter resolve o troco, e só isso. Um veículo cotado em Lunaris e uma arma 
 
 ### O Cofre
 
-O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
+O Cofre do banco guarda dinheiro e item, e cresce com o quanto você o usa.
 
 - Depositar com frequência rende reputação, e reputação destrava níveis maiores de cofre.
 
 - Cada nível define quantos itens cabem e quanto saldo de cada moeda pode ficar guardado. No último nível, esse teto some.
 
-- Cofre pode ser roubado: o bot dispara esses eventos sozinho. Investir em segurança aumenta a chance de a tentativa fracassar.
+- Cofre pode ser roubado. Investir em segurança aumenta a chance de a tentativa fracassar.
 
 - Pela página do Cofre você saca o que precisar direto para a ficha do personagem.
 
@@ -6219,4 +6283,4 @@ Duda arromba o depósito do porto e a guarda acha a luva dela no chão: crime id
 
 **Atenção:**
 
-**Sistemas separados:** Reputação Bancária continua sendo o valor do Banco usado para cofres, cartão e loja. Prestígio e Fama não alteram esse valor. O Calor do Banqueiro, no Discord, mede roubo de cofre entre jogadores. A Procura da mesa não mexe nele, e ele não mexe nela.
+**Sistemas separados:** Reputação Bancária continua sendo o valor do Banco usado para cofres, cartão e loja. Prestígio e Fama não alteram esse valor.

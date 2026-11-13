@@ -109,10 +109,10 @@ test('arma comum calcula preço e balcão de cada raridade sem alterar o item-ba
   } as const;
   const rara = aplicarRaridadeCompra(item, 'raro');
   const epica = aplicarRaridadeCompra(item, 'epico');
-  // Multiplicadores em Lunaris por raridade: comum 1x, incomum 3x, raro 8x, épico 20x, lendário 60x
+  // Multiplicadores em Lunaris por raridade: comum 1x, incomum 4x, raro 16x, épico 64x, lendário 256x
   // (mesma tabela usada pelo backend em equipment_variant_price). Base 30 Lunaris.
-  assert.deepEqual([rara.valorOriginal, rara.moedaPreco, rara.nivelLoja, rara.raridade], [240, 'Lunaris', 2, 'Raro']);
-  assert.deepEqual([epica.valorOriginal, epica.moedaPreco, epica.nivelLoja, epica.raridade], [6, 'Solares', 3, 'Épico']);
+  assert.deepEqual([rara.valorOriginal, rara.moedaPreco, rara.nivelLoja, rara.raridade], [480, 'Lunaris', 2, 'Raro']);
+  assert.deepEqual([epica.valorOriginal, epica.moedaPreco, epica.nivelLoja, epica.raridade], [19, 'Solares', 3, 'Épico']);
   assert.deepEqual([item.valorOriginal, item.raridade], [30, 'Comum']);
 });
 

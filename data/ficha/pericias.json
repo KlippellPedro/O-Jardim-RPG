@@ -12,7 +12,7 @@
 
   "pericias": [
     { "id": "atletismo",         "titulo": "Atletismo",         "atributo": "forca",          "origem": "Tormenta", "descricao": "Realizar esforços físicos como correr, saltar, escalar, nadar, empurrar ou sustentar peso." },
-    { "id": "luta",              "titulo": "Luta",              "atributo": "forca",          "origem": "Tormenta", "uso": "Ataques corpo a corpo; usada no Contra-Ataque", "descricao": "Atacar e executar manobras em combate corpo a corpo, incluindo agarrar, derrubar e contra-atacar." },
+    { "id": "luta",              "titulo": "Luta",              "atributo": "forca",          "origem": "Tormenta", "uso": "Ataques corpo a corpo; usada no Contra-Ataque e no Ataque de Oportunidade", "descricao": "Atacar e executar manobras em combate corpo a corpo, incluindo agarrar, derrubar e contra-atacar." },
     { "id": "fortitude",         "titulo": "Fortitude",         "atributo": "constituicao",   "origem": "Tormenta", "descricao": "Resistir a doenças, venenos, exaustão, dor e outros efeitos que ameaçam o corpo." },
     { "id": "acrobacia",         "titulo": "Acrobacia",         "atributo": "destreza",       "origem": "Tormenta", "descricao": "Manter o equilíbrio, amortecer quedas, atravessar espaços difíceis e realizar movimentos acrobáticos." },
     { "id": "cavalgar",          "titulo": "Cavalgar",          "atributo": "destreza",       "origem": "Tormenta", "descricao": "Conduzir montarias, permanecer montado sob pressão e executar manobras durante uma cavalgada." },

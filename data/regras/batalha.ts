@@ -213,7 +213,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>Depois:</strong> uma batalha conta como combate intenso para quem lutou (1 de Cansaço, em <span class="regras-ref regras-ref--descanso">Descanso</span>). Cada parte perdida é uma fatia das tropas fora de combate, entre mortos, feridos e fugidos, e o mundo fica sabendo de quem venceu.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro leva o dano Leve da linha do nível da batalha.</p>
+      <p>Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro leva o dano de feito com sucesso, na linha do nível da batalha.</p>
     </div>
   `,
   corpoMestre: `

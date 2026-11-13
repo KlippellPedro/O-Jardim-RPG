@@ -226,7 +226,7 @@ export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
   },
   {
     id: 'retaliadora', titulo: 'Retaliadora', categoria: 'armadura', nivel: 'marcial', valor: 3,
-    efeito: 'Ao sofrer um crítico, quem veste devolve 1 dado de dano de impacto no atacante, sem gastar reação.',
+    efeito: 'Ao sofrer um crítico, quem veste devolve 1d8 de dano de impacto no atacante, sem gastar reação.',
     preRequisito: 'Constituição 14',
   },
   {
@@ -266,7 +266,7 @@ export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
   },
   {
     id: 'guarda-de-fluxo', titulo: 'Guarda de Fluxo', categoria: 'escudo', nivel: 'marcial', valor: 2,
-    efeito: 'Bloqueio passa a funcionar também contra dano de Energia, incluindo o que vem de Fluxos.',
+    efeito: 'Bloqueio passa a funcionar também contra dano mágico e tecnológico.',
     preRequisito: 'Fluxo 12',
   },
   {
@@ -337,7 +337,7 @@ export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
   },
   {
     id: 'atordoante', titulo: 'Atordoante', categoria: 'arma', nivel: 'marcial', valor: 2,
-    efeito: 'No crítico, o alvo faz um teste de Constituição ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.',
+    efeito: 'No crítico, o alvo testa Fortitude contra o total do seu ataque ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.',
     preRequisito: 'Força 14',
   },
   {

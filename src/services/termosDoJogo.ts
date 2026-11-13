@@ -163,7 +163,7 @@ const MECANICAS: IMecanica[] = [
   },
   {
     id: 'morrendo', nome: 'Morrendo', formas: ['Morrendo'], topico: 'ferimentos', secao: 'Morrendo',
-    resumo: 'Quem chega a 0 PV cai com Morrendo 1 e rola Fortitude no fim de cada turno: falha sobe, sucesso segura. Em Morrendo 3, a personagem morre.',
+    resumo: 'Quem chega a 0 PV cai com Morrendo 1 e rola Fortitude no fim de cada turno: falha sobe, sucesso segura, e dois sucessos seguidos ou um crítico estabilizam. Em Morrendo 3, a personagem morre.',
   },
   {
     id: 'ferido', nome: 'Ferido', formas: ['Ferido'], topico: 'ferimentos', secao: 'Remover Ferido',
@@ -191,7 +191,7 @@ const MECANICAS: IMecanica[] = [
   },
   {
     id: 'reacao', nome: 'Reação', formas: ['Reação', 'reação'], topico: 'combate', secao: 'Reações',
-    resumo: 'Uma por rodada, usada no turno de outra criatura. Ela volta no começo do seu turno. As de todo mundo são Esquiva, Bloqueio, Contra-Ataque e Proteger.',
+    resumo: 'Uma por rodada, usada no turno de outra criatura. Ela volta no começo do seu turno. As de todo mundo são Esquiva, Bloqueio, Contra-Ataque, Proteger e Ataque de Oportunidade.',
   },
   {
     id: 'esquiva', nome: 'Esquiva', formas: ['Esquiva'], topico: 'combate', secao: 'Reações',
@@ -209,6 +209,10 @@ const MECANICAS: IMecanica[] = [
   {
     id: 'proteger', nome: 'Proteger', formas: ['Proteger'], topico: 'combate', secao: 'Reações',
     resumo: 'Reação quando um aliado adjacente é atacado: você vira o alvo e ainda pode Bloquear, se tiver reação.',
+  },
+  {
+    id: 'ataque-de-oportunidade', nome: 'Ataque de Oportunidade', formas: ['Ataque de Oportunidade', 'ataque de oportunidade', 'ataques de oportunidade'], topico: 'combate', secao: 'Provocar reação',
+    resumo: 'Reação quando um inimigo sai do seu alcance corpo a corpo ou se levanta dentro dele: um ataque corpo a corpo com −2, que não pode ser crítico. Passo cuidadoso de 1,5 m, teleporte e movimento forçado não provocam.',
   },
   {
     id: 'acao-padrao', nome: 'Ação Padrão', formas: ['Ação Padrão', 'ação padrão'], topico: 'combate', secao: 'Seu turno',
