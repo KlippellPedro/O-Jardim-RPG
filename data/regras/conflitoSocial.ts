@@ -96,7 +96,7 @@ export const ABORDAGENS_SOCIAIS: readonly IAbordagemSocial[] = [
     titulo: 'Puxar posição ou nome',
     fala: 'Minha família serve a esta casa há três gerações. Pergunte ao seu pai.',
     teste: 'Nobreza ou Atuação',
-    efeito: 'Tira 1 de Resistência, e mais 1 com Prestígio positivo na facção dela.',
+    efeito: 'Tira 1 de Resistência, e 2 quando ela deve obediência ou respeito a esse nome: serve à sua casa, jurou à sua ordem ou depende de quem você representa.',
     risco: 'Contra quem odeia o seu nome, enche 1 de Paciência.',
   },
   {
@@ -208,7 +208,7 @@ export const REGRA_CONFLITO_SOCIAL: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li>Repetir a mesma abordagem sem trazer nada novo enche 1 de Paciência, mesmo quando o teste passa.</li>
       <li>A outra parte responde. Ela pergunta, pede garantia, chantageia de volta, e é nessa resposta que o grupo descobre o que ela quer.</li>
     </ol>
-    <p class="regras-note">Prestígio e Fama ajustam a rolagem em no máximo ${AJUSTE_MAXIMO_REPUTACAO}, para cima ou para baixo, pela mesma regra de <span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.</p>
+    <p class="regras-note">O Prestígio com a facção da pessoa ajusta a rolagem de toda abordagem em no máximo ${AJUSTE_MAXIMO_REPUTACAO}, para cima ou para baixo, pela mesma regra de <span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>. Ele entra só na rolagem e nunca tira Resistência a mais: um mesmo fato não gera dois ajustes. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.</p>
 
     <h3 class="regras-subtitle">Abordagens</h3>
     <p>Cada abordagem traz uma fala de exemplo e, embaixo, como se resolve. A fala serve de faísca: diga a sua, do jeito do seu personagem.</p>

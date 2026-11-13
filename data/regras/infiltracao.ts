@@ -222,7 +222,7 @@ export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>Rastro na saída:</strong> se o objetivo deixou marca (cofre aberto, refém levado, corpo no chão), o Alerta sobe 1 quando a saída começa.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem, chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a copeira disfarçada distrai o mordomo, e o cofre abre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.</p>
+      <p>O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem, chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a Pop Star distrai o mordomo (a etapa não avança, e a próxima abordagem ganha vantagem), e na rodada seguinte a Ladinagem com vantagem abre o cofre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.</p>
     </div>
   `,
   corpoMestre: `

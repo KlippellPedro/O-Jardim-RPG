@@ -1,4 +1,11 @@
 import { FAVORES, NIVEIS_DE_CONFIANCA, RAMOS_DE_CONTATO, type IFavor } from '../../../../data/regras/contatosELacos';
+import {
+  PONTOS_DE_RELACAO_MAXIMOS,
+  limitarPontosDeRelacao,
+  sanidadeDaRelacao,
+  usosRestantes,
+  type PontosDeRelacao,
+} from '../../../../data/regras/pontosDeRelacao';
 
 export type TipoVinculo =
   | 'amizade'
@@ -67,6 +74,11 @@ export interface IVinculo {
   laco?: string;
   /** A vantagem do laço já foi usada nesta sessão. */
   lacoUsado?: boolean;
+  /** Personagem do grupo (de jogador ou Aliado): mostra Pontos de Relação no
+   *  lugar da escala de afinidade. Os pontos saem da afinidade. */
+  grupo?: boolean;
+  /** Usos dos Pontos de Relação gastos nesta sessão. */
+  pontosUsados?: number;
   criadoEm: number;
   atualizadoEm: number;
   historico: IMudancaAfinidade[];
@@ -141,8 +153,16 @@ export const RAMOS_CONTATO = RAMOS_DE_CONTATO.map((ramo) => ({
 const RAMOS_VALIDOS = new Set(RAMOS_CONTATO.map((ramo) => ramo.valor));
 
 /** Só grava os campos que existem: vínculo sem contato nem laço continua igual ao de antes. */
-function camposDeContatoELaco(registro: Record<string, unknown>): Pick<IVinculo, 'ramo' | 'divida' | 'laco' | 'lacoUsado'> {
-  const campos: Pick<IVinculo, 'ramo' | 'divida' | 'laco' | 'lacoUsado'> = {};
+function camposDeContatoELaco(registro: Record<string, unknown>): Pick<IVinculo, 'ramo' | 'divida' | 'laco' | 'lacoUsado' | 'grupo' | 'pontosUsados'> {
+  const campos: Pick<IVinculo, 'ramo' | 'divida' | 'laco' | 'lacoUsado' | 'grupo' | 'pontosUsados'> = {};
+  if (registro.grupo === true) {
+    campos.grupo = true;
+    const pontos = pontosDoVinculo(limitarAfinidade(registro.afinidade));
+    const usados = typeof registro.pontosUsados === 'number' && Number.isFinite(registro.pontosUsados)
+      ? Math.max(0, Math.min(pontos, Math.trunc(registro.pontosUsados)))
+      : 0;
+    if (usados > 0) campos.pontosUsados = usados;
+  }
   const ramo = texto(registro.ramo, 40);
   if (RAMOS_VALIDOS.has(ramo)) {
     campos.ramo = ramo;
@@ -204,6 +224,73 @@ export function cumprirDivida(vinculo: IVinculo, agora = Date.now()): IVinculo {
 export function recusarDivida(vinculo: IVinculo, agora = Date.now()): IVinculo {
   const { divida: _recusada, ...resto } = aplicarAfinidade(vinculo, afinidadeAoBaixarConfianca(vinculo.afinidade), 'Dívida recusada', agora);
   return { ...resto, atualizadoEm: agora };
+}
+
+// ------------------------------------------------------- pontos de relação
+
+/** Os Pontos de Relação saem da afinidade pela escada da Confiança:
+ *  1 ou 2 vale 1 ponto, 3 ou 4 vale 2, 5 vale 3. Afinidade 0 ou menos, nenhum. */
+export function pontosDoVinculo(afinidade: number): PontosDeRelacao {
+  return limitarPontosDeRelacao(confiancaDoVinculo(afinidade));
+}
+
+/** Afinidade que corresponde a um número de pontos. Se a afinidade atual já
+ *  está no degrau pedido, ela fica como está (3 e 4 são os dois 2 pontos), e
+ *  0 ponto preserva um atrito negativo que já existia. */
+export function afinidadeDosPontos(afinidadeAtual: number, pontos: number): number {
+  const atual = limitarAfinidade(afinidadeAtual);
+  const alvo = limitarPontosDeRelacao(pontos);
+  if (pontosDoVinculo(atual) === alvo) return atual;
+  return [0, 1, 3, AFINIDADE_MAX][alvo];
+}
+
+export const ehDoGrupo = (vinculo: Pick<IVinculo, 'grupo'>) => vinculo.grupo === true;
+
+/** Usos que ainda restam nesta sessão com essa pessoa. */
+export function usosDoVinculo(vinculo: Pick<IVinculo, 'afinidade' | 'pontosUsados'>): { total: number; restantes: number } {
+  const total = pontosDoVinculo(vinculo.afinidade);
+  return { total, restantes: usosRestantes(total, vinculo.pontosUsados ?? 0) };
+}
+
+/** Gasta um uso (Ajuda certa, Segurar a mão, Entrar junto). Sem uso sobrando, nada muda. */
+export function gastarUsoDePonto(vinculo: IVinculo, agora = Date.now()): IVinculo {
+  const { restantes } = usosDoVinculo(vinculo);
+  if (!ehDoGrupo(vinculo) || restantes <= 0) return vinculo;
+  return { ...vinculo, pontosUsados: (vinculo.pontosUsados ?? 0) + 1, atualizadoEm: agora };
+}
+
+/** Devolve um uso marcado por engano. */
+export function devolverUsoDePonto(vinculo: IVinculo, agora = Date.now()): IVinculo {
+  const usados = vinculo.pontosUsados ?? 0;
+  if (usados <= 0) return vinculo;
+  const { pontosUsados: _antigo, ...resto } = vinculo;
+  return usados - 1 > 0 ? { ...resto, pontosUsados: usados - 1, atualizadoEm: agora } : { ...resto, atualizadoEm: agora };
+}
+
+/** Muda os pontos, registrando no histórico, e corta os usos gastos ao novo teto. */
+export function aplicarPontos(vinculo: IVinculo, pontos: number, motivo: string, agora = Date.now()): IVinculo {
+  const atualizado = aplicarAfinidade(vinculo, afinidadeDosPontos(vinculo.afinidade, pontos), motivo, agora);
+  const teto = pontosDoVinculo(atualizado.afinidade);
+  if ((atualizado.pontosUsados ?? 0) <= teto) return atualizado;
+  const { pontosUsados: _antigo, ...resto } = atualizado;
+  return teto > 0 ? { ...resto, pontosUsados: teto } : resto;
+}
+
+/** O teste de Sanidade que a relação cobra, já pelo número de pontos e pelo laço. */
+export function sanidadeDoVinculo(vinculo: Pick<IVinculo, 'afinidade' | 'grupo' | 'laco'>, evento: 'cai' | 'perde') {
+  const pontos = vinculo.grupo === true ? pontosDoVinculo(vinculo.afinidade) : 0;
+  return sanidadeDaRelacao(evento, pontos, { laco: !!vinculo.laco });
+}
+
+export { PONTOS_DE_RELACAO_MAXIMOS };
+
+/** Começo de sessão: laços voltam a dar vantagem e os usos dos pontos voltam. */
+export function novaSessaoNosVinculos(vinculos: IVinculo[]): IVinculo[] {
+  return liberarLacos(vinculos).map((vinculo) => {
+    if (!vinculo.pontosUsados) return vinculo;
+    const { pontosUsados: _usados, ...resto } = vinculo;
+    return resto;
+  });
 }
 
 /** Uma vez por sessão: no começo da próxima, todo laço volta a dar vantagem. */
@@ -306,7 +393,7 @@ export function posicionarTeia(vinculos: IVinculo[], raioMax: number, raioMin = 
 export interface IFiltroVinculos {
   busca: string;
   tipo: TipoVinculo | 'todos';
-  faixa: 'todos' | 'proximos' | 'neutros' | 'hostis' | 'fixados';
+  faixa: 'todos' | 'proximos' | 'neutros' | 'hostis' | 'fixados' | 'grupo';
 }
 
 const semAcento = (valor: string) =>
@@ -320,6 +407,7 @@ export function filtrarVinculos(vinculos: IVinculo[], filtro: IFiltroVinculos): 
     if (filtro.faixa === 'neutros' && vinculo.afinidade !== 0) return false;
     if (filtro.faixa === 'hostis' && vinculo.afinidade >= 0) return false;
     if (filtro.faixa === 'fixados' && !vinculo.fixado) return false;
+    if (filtro.faixa === 'grupo' && !ehDoGrupo(vinculo)) return false;
     return !termo || semAcento(`${vinculo.nome} ${vinculo.nota}`).includes(termo);
   });
 }

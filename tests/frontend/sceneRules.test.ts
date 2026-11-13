@@ -4,12 +4,17 @@ import {
   ABORDAGENS_SOCIAIS,
   NIVEIS_RESISTENCIA,
   PACIENCIA_MAXIMA,
+  REGRA_CONFLITO_SOCIAL,
   aplicarAbordagem,
 } from '../../data/regras/conflitoSocial';
 import {
+  FAIXAS_MAXIMAS_POR_LADO,
   MANOBRAS_A_PE,
+  MANOBRAS_DE_APOIO,
   OBSTACULOS_PERSEGUICAO,
+  REGRA_PERSEGUICAO_A_PE,
   obstaculoPorD6,
+  passosDaRodada,
   resolverRodadaAPe,
 } from '../../data/regras/perseguicaoAPe';
 import { FAIXAS_PERSEGUICAO } from '../../data/regras/veiculosCombate';
@@ -94,4 +99,24 @@ test('os três níveis de Resistência continuam declarados e em ordem', () => {
     assert.ok(abordagem.teste.trim(), `${abordagem.titulo}: sem teste declarado`);
     assert.ok(abordagem.risco.trim(), `${abordagem.titulo}: sem risco declarado`);
   });
+});
+
+test('na perseguição, só o puxador disputa a faixa e cada lado anda no máximo duas por rodada', () => {
+  assert.equal(FAIXAS_MAXIMAS_POR_LADO, 2);
+  assert.equal(passosDaRodada(1, 0), -1);
+  assert.equal(passosDaRodada(4, 0), -2, 'apoio de um grupo grande não passa do teto');
+  assert.equal(passosDaRodada(2, 1), -1);
+  assert.equal(passosDaRodada(0, 3), 2);
+  assert.equal(passosDaRodada(1, 1), 0);
+  const ids = new Set(MANOBRAS_A_PE.map((manobra) => manobra.id));
+  MANOBRAS_DE_APOIO.forEach((id) => assert.ok(ids.has(id), `manobra de apoio desconhecida: ${id}`));
+  assert.match(REGRA_PERSEGUICAO_A_PE.corpo, /Só a manobra dele disputa a faixa/);
+  assert.match(REGRA_PERSEGUICAO_A_PE.corpo, /no máximo dois ajudantes/);
+});
+
+test('no Conflito Social o Prestígio entra só na rolagem', () => {
+  const posicao = ABORDAGENS_SOCIAIS.find((abordagem) => abordagem.id === 'status');
+  assert.ok(posicao);
+  assert.doesNotMatch(posicao.efeito, /Prestígio/);
+  assert.match(REGRA_CONFLITO_SOCIAL.corpo, /nunca tira Resistência a mais/);
 });

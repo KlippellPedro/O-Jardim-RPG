@@ -2,6 +2,20 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-13-pontos-de-relacao",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Pontos de Relação: o quanto o seu personagem confia em cada um do grupo",
+      "detalhes": [
+        "Página nova no Livro, em Cenas e Grupo. Cada personagem tem de 0 a 3 pontos com cada outro do grupo, e cada ponto vira um uso por sessão: ajudar sem teste e com vantagem, segurar a mão de quem entrou em crise de Sanidade, ou entrar junto num Ataque Combinado.",
+        "O Ataque Combinado agora compensa. Quanto mais pontos cada participante tem com quem lidera, maior o bônus: de +2 no ataque até vantagem, um dado a mais de dano e a Resistência do chefe contando uma vez só. Se todo mundo errar, todo mundo fica Exposto.",
+        "Gostar de alguém pesa: quanto mais pontos, mais Sanidade você perde quando essa pessoa cai, morre, some ou trai.",
+        "Na ficha, em Notas, Vínculos: marque um vínculo como personagem do grupo e ele mostra os pontos, os usos da sessão e o teste de Sanidade de cada caso. Os vínculos que você já tinha continuam iguais.",
+        "Também acertamos detalhes de Perseguição, Batalha em Massa, Moral, Viagem, Infiltração e Laços que estavam confusos no texto."
+      ]
+    },
+    {
       "id": "2026-11-13-mapa-botao-direito-e-encerrar-turno",
       "data": "2026-11-13",
       "tipo": "novo",

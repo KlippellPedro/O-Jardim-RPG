@@ -5,6 +5,7 @@ export const TITULOS_TOPICOS: Record<string, string> = {
   pericias: 'Perícias',
   'acoes-coletivas': 'Ações Coletivas',
   'ataques-combinados': 'Ataques Combinados',
+  'pontos-de-relacao': 'Pontos de Relação',
   combate: 'Combate',
   'tipos-de-dano': 'Tipos de Dano',
   distancias: 'Distâncias',

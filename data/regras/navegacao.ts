@@ -32,7 +32,7 @@ export const GRUPOS_NAVEGACAO: readonly GrupoNavegacaoRegras[] = [
     id: 'cenas',
     titulo: 'Cenas e Grupo',
     descricao: 'Agir junto, correr atrás de alguém, negociar duro, entrar escondido, resolver mistérios, travar batalhas e jogar na mesa ao vivo.',
-    topicos: ['acoes-coletivas', 'ataques-combinados', 'perseguicao-a-pe', 'conflito-social', 'infiltracao', 'investigacao', 'batalha', 'mesa-ao-vivo'],
+    topicos: ['acoes-coletivas', 'pontos-de-relacao', 'ataques-combinados', 'perseguicao-a-pe', 'conflito-social', 'infiltracao', 'investigacao', 'batalha', 'mesa-ao-vivo'],
     cor: 'border-orange-300/20 from-orange-400/10',
   },
   {

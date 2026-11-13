@@ -15,6 +15,7 @@ import {
   Search,
   Trash2,
   UserPlus,
+  Users,
   X,
 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
@@ -48,10 +49,19 @@ import {
   confiancaDoVinculo,
   cumprirDivida,
   favoresDoContato,
-  liberarLacos,
   recusarDivida,
   rotuloConfianca,
   rotuloRamo,
+  PONTOS_DE_RELACAO_MAXIMOS,
+  afinidadeDosPontos,
+  aplicarPontos,
+  devolverUsoDePonto,
+  ehDoGrupo,
+  gastarUsoDePonto,
+  novaSessaoNosVinculos,
+  pontosDoVinculo,
+  sanidadeDoVinculo,
+  usosDoVinculo,
   type IFiltroVinculos,
   type IVinculo,
   type TipoVinculo,
@@ -61,6 +71,10 @@ import { excluirDaFichaComDesfazer } from '../../desfazerNaFicha';
 import { LinkDaRegra } from '../../../../components/ui/LinkDaRegra';
 import { modificador } from '../../../../services/calculoService';
 import { FAVORES, LACOS_MAXIMOS, NIVEIS_DE_CONFIANCA, contatosMantidos } from '../../../../../data/regras/contatosELacos';
+import { DEGRAUS_DE_RELACAO, USOS_DE_PONTO, tituloDoDegrau } from '../../../../../data/regras/pontosDeRelacao';
+
+const COR_PONTOS = '#c4b5fd';
+const PASSOS_PONTOS = Array.from({ length: PONTOS_DE_RELACAO_MAXIMOS }, (_, indice) => indice + 1);
 
 interface IFormVinculo {
   nome: string;
@@ -74,9 +88,11 @@ interface IFormVinculo {
   ramo: string;
   divida: string;
   laco: string;
+  /** Personagem do grupo: mostra Pontos de Relação no lugar da afinidade. */
+  grupo: boolean;
 }
 
-const FORM_VAZIO: IFormVinculo = { nome: '', tipo: 'amizade', afinidade: 1, nota: '', contato: false, ramo: RAMOS_CONTATO[0].valor, divida: '', laco: '' };
+const FORM_VAZIO: IFormVinculo = { nome: '', tipo: 'amizade', afinidade: 1, nota: '', contato: false, ramo: RAMOS_CONTATO[0].valor, divida: '', laco: '', grupo: false };
 
 const COR_TIPO: Record<TipoVinculo, string> = {
   amizade: '#6ee7b7',
@@ -96,6 +112,7 @@ const FAIXAS: { valor: IFiltroVinculos['faixa']; rotulo: string }[] = [
   { valor: 'neutros', rotulo: 'Neutros' },
   { valor: 'hostis', rotulo: 'Hostis' },
   { valor: 'fixados', rotulo: 'Fixados' },
+  { valor: 'grupo', rotulo: 'Do grupo' },
 ];
 
 const ESCALA = Array.from({ length: AFINIDADE_MAX - AFINIDADE_MIN + 1 }, (_, indice) => AFINIDADE_MIN + indice);
@@ -205,6 +222,12 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
   const contatos = vinculos.filter((vinculo) => vinculo.ramo);
   const lacos = vinculos.filter((vinculo) => vinculo.laco);
   const lacosUsados = lacos.filter((vinculo) => vinculo.lacoUsado).length;
+  const doGrupo = vinculos.filter(ehDoGrupo);
+  const usosGastos = doGrupo.reduce((soma, vinculo) => soma + (vinculo.pontosUsados ?? 0), 0);
+  const rotuloNovaSessao = [
+    lacosUsados > 0 ? `${lacosUsados} laço${lacosUsados === 1 ? '' : 's'}` : '',
+    usosGastos > 0 ? `${usosGastos} uso${usosGastos === 1 ? '' : 's'} de pontos` : '',
+  ].filter(Boolean).join(' e ');
   const carisma = Number((character?.ficha?.atributosFinais || character?.atributosFinais || {}).carisma) || 10;
   const limiteContatos = contatosMantidos(modificador(carisma));
 
@@ -251,6 +274,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
       ramo: vinculo.ramo || RAMOS_CONTATO[0].valor,
       divida: vinculo.divida || '',
       laco: vinculo.laco || '',
+      grupo: ehDoGrupo(vinculo),
     });
     setModalAberto(true);
   };
@@ -264,11 +288,14 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
       ramo: form.contato ? form.ramo : undefined,
       divida: form.contato && form.divida.trim() ? form.divida.trim().slice(0, 300) : undefined,
       laco: laco || undefined,
+      grupo: form.grupo || undefined,
     };
     if (editandoId) {
       commit(vinculos.map((vinculo) => {
         if (vinculo.id !== editandoId) return vinculo;
-        const atualizado = aplicarAfinidade(vinculo, form.afinidade, 'Ajustado na edição', agora);
+        const atualizado = form.grupo
+          ? aplicarPontos(vinculo, pontosDoVinculo(form.afinidade), 'Ajustado na edição', agora)
+          : aplicarAfinidade(vinculo, form.afinidade, 'Ajustado na edição', agora);
         return {
           ...atualizado,
           nome,
@@ -278,6 +305,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
           atualizadoEm: agora,
           ...mecanica,
           lacoUsado: laco ? atualizado.lacoUsado : undefined,
+          pontosUsados: form.grupo ? atualizado.pontosUsados : undefined,
         };
       }));
     } else {
@@ -335,23 +363,27 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
       const { laco: _laco, lacoUsado: _usado, ...resto } = item;
       return { ...resto, atualizadoEm: Date.now() };
     });
-    avisar.aviso(`Laço com ${vinculo.nome} rompido: teste Sanidade DT 15, com perda de 1d6. A mesa pode aplicar Luto Profundo, na aba Condições.`);
+    const teste = sanidadeDoVinculo(vinculo, 'perde');
+    avisar.aviso(`Laço com ${vinculo.nome} rompido: teste Sanidade DT ${teste?.dt ?? 15}, com perda de ${teste?.perda ?? '1d6'}. A mesa pode aplicar Luto Profundo, na aba Condições.`);
   };
 
   const iniciarAjuste = (vinculo: IVinculo, delta: number) => {
     const base = ajuste?.id === vinculo.id ? ajuste.para : vinculo.afinidade;
     setAjuste({
       id: vinculo.id,
-      para: limitarAfinidade(base + delta),
+      para: ehDoGrupo(vinculo) ? afinidadeDosPontos(base, pontosDoVinculo(base) + delta) : limitarAfinidade(base + delta),
       motivo: ajuste?.id === vinculo.id ? ajuste.motivo : '',
     });
   };
 
   const confirmarAjuste = () => {
     if (!ajuste) return;
-    commit(vinculos.map((vinculo) => (
-      vinculo.id === ajuste.id ? aplicarAfinidade(vinculo, ajuste.para, ajuste.motivo) : vinculo
-    )));
+    commit(vinculos.map((vinculo) => {
+      if (vinculo.id !== ajuste.id) return vinculo;
+      return ehDoGrupo(vinculo)
+        ? aplicarPontos(vinculo, pontosDoVinculo(ajuste.para), ajuste.motivo)
+        : aplicarAfinidade(vinculo, ajuste.para, ajuste.motivo);
+    }));
     setAjuste(null);
   };
 
@@ -363,6 +395,12 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
     const atual = ajustando?.para ?? vinculo.afinidade;
     const historicoAberto = historicoAbertoId === vinculo.id;
     const aberto = !compacto || expandidoId === vinculo.id;
+    const grupo = ehDoGrupo(vinculo);
+    const pontos = pontosDoVinculo(vinculo.afinidade);
+    const pontosAtuais = pontosDoVinculo(atual);
+    const usos = usosDoVinculo(vinculo);
+    const seCair = sanidadeDoVinculo(vinculo, 'cai');
+    const sePerder = sanidadeDoVinculo(vinculo, 'perde');
 
     return (
       <article
@@ -393,6 +431,11 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
                     <Handshake size={10} aria-hidden="true" /> {rotuloConfianca(confiancaDoVinculo(vinculo.afinidade))}{vinculo.divida ? ' · Dívida' : ''}
                   </span>
                 ) : null}
+                {grupo ? (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-violet-300/35 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-violet-200">
+                    <Users size={10} aria-hidden="true" /> Grupo · {tituloDoDegrau(pontos)}
+                  </span>
+                ) : null}
                 {vinculo.laco ? (
                   <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${vinculo.lacoUsado ? 'border-white/10 text-gray-500' : 'border-sky-300/35 text-sky-200'}`}>
                     <Link2 size={10} aria-hidden="true" /> Laço
@@ -403,8 +446,18 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
           </div>
           {compacto ? (
             <div className="flex shrink-0 items-center gap-3">
-              <span className="hidden text-xs font-bold sm:inline" style={{ color: cor }}>{rotuloAfinidade(vinculo.afinidade)}</span>
-              <span className="w-8 rounded-md border px-1.5 py-0.5 text-center text-xs font-bold" style={{ color: cor, borderColor: `${cor}55` }}>{sinal(vinculo.afinidade)}</span>
+              {grupo ? (
+                <span className="flex items-center gap-1" aria-label={`${pontos} de ${PONTOS_DE_RELACAO_MAXIMOS} Pontos de Relação`}>
+                  {PASSOS_PONTOS.map((passo) => (
+                    <span key={passo} className="h-2.5 w-2.5 rounded-full border" style={{ borderColor: `${COR_PONTOS}80`, backgroundColor: passo <= pontos ? COR_PONTOS : 'transparent' }} />
+                  ))}
+                </span>
+              ) : (
+                <>
+                  <span className="hidden text-xs font-bold sm:inline" style={{ color: cor }}>{rotuloAfinidade(vinculo.afinidade)}</span>
+                  <span className="w-8 rounded-md border px-1.5 py-0.5 text-center text-xs font-bold" style={{ color: cor, borderColor: `${cor}55` }}>{sinal(vinculo.afinidade)}</span>
+                </>
+              )}
               <ChevronDown size={16} className={`text-gray-500 transition-transform ${aberto ? 'rotate-180' : ''}`} />
             </div>
           ) : (
@@ -424,6 +477,64 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
 
         {aberto ? (
           <div className={compacto ? 'space-y-3 border-t border-white/5 px-4 pb-4 pt-3' : 'space-y-3 p-5 pt-4'}>
+            {grupo ? (
+              <div className="space-y-3 rounded-lg border border-violet-300/15 bg-violet-300/[0.04] p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex min-w-0 items-center gap-1.5 text-xs font-bold text-violet-200">
+                    <Users size={13} aria-hidden="true" /> Pontos de Relação · {tituloDoDegrau(pontosAtuais)}
+                  </span>
+                  <LinkDaRegra topico="pontos-de-relacao" rotulo="Regra" />
+                </div>
+                <div className="flex items-center gap-3">
+                  <button type="button" aria-label={`Tirar um ponto com ${vinculo.nome}`} disabled={pontosAtuais <= 0} onClick={() => iniciarAjuste(vinculo, -1)} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/30 text-gray-300 hover:text-white disabled:opacity-30">
+                    <Minus size={15} />
+                  </button>
+                  <div className="flex flex-1 justify-center gap-2" role="group" aria-label={`Pontos de Relação com ${vinculo.nome}`}>
+                    {PASSOS_PONTOS.map((passo) => (
+                      <button
+                        key={passo}
+                        type="button"
+                        aria-label={`Definir ${passo} ponto${passo === 1 ? '' : 's'}`}
+                        aria-pressed={passo <= pontosAtuais}
+                        onClick={() => setAjuste({ id: vinculo.id, para: afinidadeDosPontos(atual, passo === pontosAtuais ? passo - 1 : passo), motivo: ajustando?.motivo ?? '' })}
+                        className="h-7 w-7 rounded-full border-2 transition-colors"
+                        style={{ borderColor: COR_PONTOS, backgroundColor: passo <= pontosAtuais ? COR_PONTOS : 'transparent', boxShadow: passo <= pontosAtuais ? `0 0 10px ${COR_PONTOS}55` : undefined }}
+                      />
+                    ))}
+                  </div>
+                  <button type="button" aria-label={`Dar um ponto com ${vinculo.nome}`} disabled={pontosAtuais >= PONTOS_DE_RELACAO_MAXIMOS} onClick={() => iniciarAjuste(vinculo, 1)} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/30 text-gray-300 hover:text-white disabled:opacity-30">
+                    <Plus size={15} />
+                  </button>
+                </div>
+                <p className="text-center text-xs leading-5 text-gray-400">
+                  {DEGRAUS_DE_RELACAO[pontosAtuais].como}
+                  {atual < 0 ? <span className="ml-1 font-bold text-orange-300">Há atrito entre os dois ({sinal(atual)}).</span> : null}
+                </p>
+                {pontos > 0 ? (
+                  <div className="space-y-2 border-t border-white/5 pt-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-xs text-gray-400">Usos nesta sessão: <strong className="text-white">{usos.restantes}</strong> de {usos.total}</span>
+                      <div className="flex gap-2">
+                        {(vinculo.pontosUsados ?? 0) > 0 ? (
+                          <button type="button" onClick={() => trocar(vinculo.id, (item) => devolverUsoDePonto(item))} className="min-h-8 rounded-lg border border-white/10 px-3 text-xs font-bold text-gray-500 hover:text-gray-200">Devolver</button>
+                        ) : null}
+                        <button type="button" disabled={usos.restantes <= 0} onClick={() => trocar(vinculo.id, (item) => gastarUsoDePonto(item))} className="min-h-8 rounded-lg border border-violet-300/30 bg-violet-300/10 px-3 text-xs font-bold text-violet-100 hover:border-violet-300/50 disabled:opacity-40">Gastar um uso</button>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {USOS_DE_PONTO.map((uso) => (
+                        <span key={uso.id} title={`${uso.quando} ${uso.efeito}`} className="cursor-help rounded-full border border-violet-300/20 px-2 py-0.5 text-[10px] font-bold text-violet-200/90">{uso.titulo}</span>
+                      ))}
+                    </div>
+                    {seCair && sePerder ? (
+                      <p className="text-[11px] leading-4 text-gray-500">Se cair à sua vista: Sanidade DT {seCair.dt}, perda {seCair.perda}. Se morrer, sumir ou trair: DT {sePerder.dt}, perda {sePerder.perda}.</p>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            {grupo ? null : (
             <div className="flex items-center gap-3">
               <button type="button" aria-label={`Diminuir afinidade com ${vinculo.nome}`} disabled={atual <= AFINIDADE_MIN} onClick={() => iniciarAjuste(vinculo, -1)} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/30 text-gray-300 hover:text-white disabled:opacity-30">
                 <Minus size={15} />
@@ -456,6 +567,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
                 <Plus size={15} />
               </button>
             </div>
+            )}
 
             {ajustando ? (
               <div className="space-y-2 rounded-lg border border-white/5 bg-black/20 p-3">
@@ -470,7 +582,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
                 />
                 <div className="flex justify-end gap-2">
                   <button type="button" onClick={() => setAjuste(null)} className="rounded border border-white/10 px-3 py-1.5 text-xs font-bold text-gray-400 hover:text-white">Cancelar</button>
-                  <button type="button" onClick={confirmarAjuste} disabled={ajustando.para === vinculo.afinidade} className="rounded border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-1.5 text-xs font-bold text-[#c7a44c] hover:bg-[#c7a44c]/20 disabled:opacity-40">Confirmar</button>
+                  <button type="button" onClick={confirmarAjuste} disabled={grupo ? pontosAtuais === pontos : ajustando.para === vinculo.afinidade} className="rounded border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-1.5 text-xs font-bold text-[#c7a44c] hover:bg-[#c7a44c]/20 disabled:opacity-40">Confirmar</button>
                 </div>
               </div>
             ) : null}
@@ -536,7 +648,11 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
                   <ul className="mt-2 space-y-1.5">
                     {[...vinculo.historico].reverse().map((mudanca, indice) => (
                       <li key={`${mudanca.em}-${indice}`} className="text-xs leading-5 text-gray-400">
-                        <span className="font-bold" style={{ color: corAfinidade(mudanca.para) }}>{sinal(mudanca.de)} → {sinal(mudanca.para)}</span>
+                        {grupo ? (
+                          <span className="font-bold" style={{ color: COR_PONTOS }}>{pontosDoVinculo(mudanca.de)} → {pontosDoVinculo(mudanca.para)} ponto{pontosDoVinculo(mudanca.para) === 1 ? '' : 's'}</span>
+                        ) : (
+                          <span className="font-bold" style={{ color: corAfinidade(mudanca.para) }}>{sinal(mudanca.de)} → {sinal(mudanca.para)}</span>
+                        )}
                         {mudanca.motivo ? ` · ${mudanca.motivo}` : ''}
                         <span className="ml-1 text-gray-600">{dataCurta(mudanca.em)}</span>
                       </li>
@@ -572,7 +688,8 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
       <div className="flex flex-col gap-3 rounded-2xl border border-white/5 bg-[#0f0e15] p-5 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-xl text-sm leading-6 text-gray-400">
           Quem importa para o seu personagem. A afinidade vai de {AFINIDADE_MIN} a +{AFINIDADE_MAX}: quanto
-          mais perto do centro da teia, mais o personagem confia. Cada mudança fica no histórico.
+          mais perto do centro da teia, mais o personagem confia. Com quem é do grupo, a ficha mostra os
+          Pontos de Relação, de 0 a {PONTOS_DE_RELACAO_MAXIMOS}. Cada mudança fica no histórico.
         </p>
         <button
           type="button"
@@ -599,12 +716,16 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-2xl border border-white/5 bg-[#0f0e15] px-4 py-3 text-xs text-gray-400">
           <span className="flex items-center gap-1.5"><Handshake size={14} className="text-[#c7a44c]" aria-hidden="true" /> Contatos <strong className={contatos.length > limiteContatos ? 'text-amber-300' : 'text-white'}>{contatos.length}</strong> de {limiteContatos}</span>
           <span className="flex items-center gap-1.5"><Link2 size={14} className="text-sky-300" aria-hidden="true" /> Laços <strong className={lacos.length > LACOS_MAXIMOS ? 'text-amber-300' : 'text-white'}>{lacos.length}</strong> de {LACOS_MAXIMOS}</span>
-          {lacosUsados > 0 ? (
-            <button type="button" onClick={() => commit(liberarLacos(vinculos))} className="min-h-8 rounded-lg border border-sky-300/25 bg-sky-300/10 px-3 font-bold text-sky-100 hover:border-sky-300/45">
-              Nova sessão: liberar {lacosUsados} laço{lacosUsados === 1 ? '' : 's'}
+          <span className="flex items-center gap-1.5"><Users size={14} className="text-violet-300" aria-hidden="true" /> Do grupo <strong className="text-white">{doGrupo.length}</strong></span>
+          {rotuloNovaSessao ? (
+            <button type="button" onClick={() => commit(novaSessaoNosVinculos(vinculos))} className="min-h-8 rounded-lg border border-sky-300/25 bg-sky-300/10 px-3 font-bold text-sky-100 hover:border-sky-300/45">
+              Nova sessão: liberar {rotuloNovaSessao}
             </button>
           ) : null}
-          <LinkDaRegra topico="contatos-lacos" rotulo="Contatos e Laços" className="sm:ml-auto" />
+          <span className="flex flex-wrap gap-3 sm:ml-auto">
+            <LinkDaRegra topico="pontos-de-relacao" rotulo="Pontos de Relação" />
+            <LinkDaRegra topico="contatos-lacos" rotulo="Contatos e Laços" />
+          </span>
           {contatos.length > limiteContatos ? <p className="w-full text-[11px] text-amber-200/80">Acima do limite de 2 + Mod.Carisma: um dos contatos esfria e fica sem favores até sobrar vaga.</p> : null}
           {lacos.length > LACOS_MAXIMOS ? <p className="w-full text-[11px] text-amber-200/80">A regra pede no máximo {LACOS_MAXIMOS} laços. Escolha quais continuam.</p> : null}
         </div>
@@ -619,7 +740,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
                 key={aliado.id}
                 type="button"
                 disabled={cheio}
-                onClick={() => abrirNovo({ nome: aliado.nome, tipo: 'aliado', afinidade: 2, aliadoId: aliado.id })}
+                onClick={() => abrirNovo({ nome: aliado.nome, tipo: 'aliado', afinidade: 2, aliadoId: aliado.id, grupo: true })}
                 className="flex min-h-9 items-center gap-1.5 rounded-full border border-white/10 bg-[#121118] px-3 text-xs font-bold text-gray-300 transition-colors hover:border-[#c7a44c]/40 hover:text-white disabled:opacity-40"
               >
                 <UserPlus size={13} /> {aliado.nome}
@@ -723,7 +844,9 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
                           }}
                           style={{ cursor: 'pointer', outline: 'none' }}
                         >
-                          <title>{`${vinculo.nome} · ${rotuloTipo(vinculo.tipo)} · ${rotuloAfinidade(vinculo.afinidade)} (${sinal(vinculo.afinidade)})`}</title>
+                          <title>{ehDoGrupo(vinculo)
+                            ? `${vinculo.nome} · Grupo · ${pontosDoVinculo(vinculo.afinidade)} de ${PONTOS_DE_RELACAO_MAXIMOS} Pontos de Relação`
+                            : `${vinculo.nome} · ${rotuloTipo(vinculo.tipo)} · ${rotuloAfinidade(vinculo.afinidade)} (${sinal(vinculo.afinidade)})`}</title>
                           {ativo ? <circle r={raioNo + 7} fill="none" stroke={cor} strokeOpacity={0.35} strokeWidth={4} /> : null}
                           {vinculo.laco ? <circle r={raioNo + 4} fill="none" stroke="#7dd3fc" strokeOpacity={vinculo.lacoUsado ? 0.25 : 0.7} strokeWidth={1.2} strokeDasharray="2 2" /> : null}
                           <circle r={ativo ? raioNo + 2 : raioNo} fill="#121118" stroke={cor} strokeWidth={ativo ? 3 : 2} />
@@ -922,6 +1045,44 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
             />
           </div>
 
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-violet-300/15 bg-violet-300/[0.04] p-4 text-sm text-gray-300">
+            <input type="checkbox" checked={form.grupo} onChange={(e) => setForm({ ...form, grupo: e.target.checked })} className="mt-1 h-4 w-4 accent-violet-300" />
+            <span>
+              <strong className="text-white">Personagem do grupo</strong>
+              <span className="block text-xs leading-5 text-gray-500">Outro personagem de jogador, ou um Aliado que anda com vocês. A ficha mostra os Pontos de Relação no lugar da afinidade, com os usos da sessão.</span>
+            </span>
+          </label>
+
+          {form.grupo ? (
+            <div className="rounded-xl border border-white/5 bg-black/20 p-4">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Pontos de Relação</span>
+                <span className="rounded-full border px-3 py-1 text-xs font-bold" style={{ color: COR_PONTOS, borderColor: `${COR_PONTOS}55`, backgroundColor: `${COR_PONTOS}14` }}>
+                  {tituloDoDegrau(pontosDoVinculo(form.afinidade))} · {pontosDoVinculo(form.afinidade)}
+                </span>
+              </div>
+              <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label="Pontos de Relação">
+                {DEGRAUS_DE_RELACAO.map((degrau) => {
+                  const marcado = pontosDoVinculo(form.afinidade) === degrau.pontos;
+                  return (
+                    <button
+                      key={degrau.pontos}
+                      type="button"
+                      role="radio"
+                      aria-checked={marcado}
+                      aria-label={`${degrau.pontos} ponto${degrau.pontos === 1 ? '' : 's'}, ${degrau.titulo}`}
+                      onClick={() => setForm({ ...form, afinidade: afinidadeDosPontos(form.afinidade, degrau.pontos) })}
+                      className={`flex min-h-14 flex-col items-center justify-center rounded-lg border px-1 text-center transition-colors ${marcado ? 'border-violet-300/60 bg-violet-300/15 text-white' : 'border-white/10 text-gray-500 hover:text-gray-200'}`}
+                    >
+                      <span className="text-lg font-bold" style={{ fontFamily: 'Cinzel, serif' }}>{degrau.pontos}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider">{degrau.titulo}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="mt-2 text-xs leading-5 text-gray-500">{DEGRAUS_DE_RELACAO[pontosDoVinculo(form.afinidade)].como} Cada ponto é um uso por sessão: Ajuda certa, Segurar a mão ou entrar junto num Ataque Combinado.</p>
+            </div>
+          ) : (
           <div className="rounded-xl border border-white/5 bg-black/20 p-4">
             <div className="mb-3 flex items-center justify-between gap-3">
               <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Afinidade</span>
@@ -966,6 +1127,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
               <span>Confiança</span>
             </div>
           </div>
+          )}
 
           <div className="space-y-3 rounded-xl border border-white/5 bg-black/20 p-4">
             <div className="flex items-center justify-between gap-3">

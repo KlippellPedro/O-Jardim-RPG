@@ -141,7 +141,7 @@ export const ACOES_DE_EXPLORACAO: readonly IAcaoDeExploracao[] = [
   { id: 'avancar', titulo: 'Avançar', efeito: 'O grupo passa para a próxima área. Quem avança na frente é quem dispara a armadilha.' },
   { id: 'procurar', titulo: 'Procurar', efeito: 'Percepção acha armadilha, passagem e esconderijo; Investigação lê o que aconteceu ali. Tudo numa área só.' },
   { id: 'mapear', titulo: 'Mapear', efeito: 'Sobrevivência ou Conhecimento contra a DT Padrão. Com o mapa, a volta não pede teste; sem ele, sair do lugar pede Sobrevivência contra a DT Padrão.' },
-  { id: 'cuidar', titulo: 'Cuidar', efeito: 'Tratar um ferido (Cura DT 15, 1d6 de Vida ou um décimo da Vida máxima) ou, numa área segura, Relaxar como no Descanso.' },
+  { id: 'cuidar', titulo: 'Cuidar', efeito: 'Tratar um ferido (Cura DT 15, 1d6 de Vida ou um décimo da Vida máxima, o que for maior) ou, numa área segura, Relaxar como no Descanso.' },
   { id: 'vigiar', titulo: 'Vigiar', efeito: 'Fica de olho enquanto os outros trabalham. Se o evento do turno for um encontro, o grupo não é Surpreendido.' },
 ];
 

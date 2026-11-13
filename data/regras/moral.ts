@@ -31,7 +31,7 @@ export const FAIXAS_DE_MORAL: readonly IFaixaDeMoral[] = [
     minimo: 6,
     rotulo: '6 a 8',
     titulo: 'Vacila',
-    efeito: 'Na próxima rodada luta na defensiva: busca cobertura, recua para perto dos outros ou tenta negociar. O próximo teste de moral desta cena tem −2.',
+    efeito: 'Na próxima rodada luta na defensiva: busca cobertura, recua para perto dos outros ou tenta negociar. O próximo teste de moral desta cena leva o −2 de quem já vacilou, da tabela de ajustes.',
   },
   {
     resultado: 'segura',

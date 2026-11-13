@@ -347,6 +347,7 @@ test('toda mecânica do sistema tem uma página', () => {
     ['aflicoes', 'veneno, doença e vício'],
     ['perigos', 'queda, fôlego, fome e sede, clima e armadilhas'],
     ['acoes-coletivas', 'ajudar e teste de grupo'],
+    ['pontos-de-relacao', 'confiança entre os personagens do grupo'],
     ['ataques-combinados', 'ataque sincronizado'],
     ['perseguicao-a-pe', 'alguém correu e alguém foi atrás'],
     ['conflito-social', 'interrogatório, negociação e audiência em rodadas'],

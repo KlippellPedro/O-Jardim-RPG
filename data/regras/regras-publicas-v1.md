@@ -570,6 +570,8 @@ Nem toda ação coletiva usa a mesma resolução. Se uma pessoa executa a tarefa
 
 - Ajudar não transfere proficiência, poder, imunidade ou permissão especial ao líder.
 
+- Quem tem Pontos de Relação com o líder pode gastar um uso para a Ajuda certa: a ajuda passa sem teste, dá vantagem no lugar do +2 e, em combate, custa a reação no lugar da Ação Padrão.
+
 ### Teste de Grupo
 
 Use quando todos precisam atravessar o mesmo perigo: o grupo inteiro se esgueirando, escalando, resistindo a uma tempestade ou mantendo uma história convincente diante de vários observadores.
@@ -600,23 +602,131 @@ Quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conse
 
 Projetos de vários dias usam as regras da atividade correspondente, como treinamento, ritual ou fabricação. Ataques sincronizados usam Ataques Combinados. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.
 
+## pontos-de-relacao
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+O quanto cada personagem do grupo confia em cada outro, de 0 a 3. Os pontos viram ajuda na hora certa, mão estendida na crise e Sintonia no Ataque Combinado, e cobram Sanidade quando algo acontece com quem importa.
+
+Quem já dividiu a última ração, quem segurou a corda, quem sabe o nome verdadeiro do outro. Os Pontos de Relação medem isso entre os personagens do grupo: quanto um confia no outro quando a coisa aperta. Eles servem para agir junto, e também cobram o preço de gostar de alguém num mundo que machuca.
+
+**Em resumo**
+
+- Cada personagem tem de 0 a 3 pontos com cada outro personagem do grupo: os dos jogadores e os Aliados que andam com vocês.
+
+- Cada ponto é um uso por sessão com aquela pessoa: **Ajuda certa**, **Segurar a mão** ou entrar num Ataque Combinado com Sintonia. Os usos voltam no começo da sessão seguinte.
+
+- Quanto mais pontos, maior a perda de Sanidade quando a pessoa cai, morre, some ou trai.
+
+- Ganha-se no máximo 1 ponto com a mesma pessoa por aventura, numa cena que importa. Mentira descoberta e abandono tiram 1; traição grave zera.
+
+### Os pontos
+
+- Pontos | Degrau | Como os dois estão
+
+- 0 | Estranhos | Andam juntos, e ainda não sabem o que o outro faz numa hora ruim.
+
+- 1 | Companheiros | Já dividiram um perigo e uma fogueira. Um sabe onde o outro vai estar.
+
+- 2 | Próximos | Um guarda um segredo do outro. Um olhar basta para combinar o próximo passo.
+
+- 3 | Inseparáveis | Lutam como um só corpo, e perder o outro é perder um pedaço de si.
+
+- **Os pontos são de quem sente.** Você anota os seus pontos com cada pessoa, e ela anota os dela com você. Quase sempre andam juntos, e quando um sente mais que o outro, a diferença rende cena.
+
+- **O máximo é 3** com cada pessoa, sem limite de quantas pessoas. É a mesma escada dos contatos (Conhecido, Amigo e Leal), e cada degrau vale um passo que a mesa sente.
+
+- **Gente de fora do grupo** usa a Confiança de Contatos e Laços. Quando alguém passa a andar com vocês, os pontos começam pelo degrau da Confiança dele.
+
+Na ficha, os pontos moram nos Vínculos das Notas: marque o vínculo como alguém do grupo, e os pontos saem da afinidade pela mesma escada da Confiança. 1 ou 2 vale 1 ponto, 3 ou 4 vale 2 e 5 vale 3.
+
+### Usar os pontos
+
+Cada ponto que você tem com alguém é **um uso por sessão** com essa pessoa, que precisa estar na cena. Com 2 pontos com a Duda, você usa duas vezes por sessão. Gastar um uso não tira o ponto: ele volta no começo da próxima sessão.
+
+- Uso | Quando, e o que faz
+
+- Ajuda certa | Você Ajuda essa pessoa num teste.A ajuda passa sem teste e dá vantagem no lugar do +2. Em combate, custa a sua reação no lugar da Ação Padrão. Continua contando no limite de dois ajudantes.
+
+- Segurar a mão | Essa pessoa falha num teste de Sanidade ou está numa crise, e ouve a sua voz.Ela refaz o teste de Sanidade e fica com o melhor resultado, ou testa Vontade na hora para sair da crise, com vantagem. Em combate, custa a sua reação.
+
+- Entrar junto | Essa pessoa lidera um Ataque Combinado de que você participa.Os seus pontos com ela entram na Sintonia do ataque, que dá bônus a todas as contribuições.
+
+- **A Ajuda certa segue Ações Coletivas**: a contribuição ainda precisa ser possível na ficção, e o líder continua com no máximo dois ajudantes.
+
+- **Segurar a mão** vale uma vez por teste ou por crise, mesmo que mais de uma pessoa queira ajudar.
+
+- **No Ataque Combinado,** a Sintonia é o menor número de pontos que cada participante tem com o líder, e cada participante gasta um uso com ele. A tabela de bônus está no tópico do Ataque Combinado.
+
+### O preço
+
+Gostar de alguém pesa. Quando algo acontece com uma pessoa com quem você tem pontos, teste Sanidade pela tabela. Cada pessoa pede no máximo um teste de cada linha por cena, e a regra de Condições vale como sempre: sucesso corta a perda pela metade, e sucesso crítico evita tudo.
+
+- O que acontece | DT | 1 ponto | 2 pontos | 3 pontos
+
+- A pessoa cai à sua vista (fica Morrendo) | 10 | 1d4 | 1d6 | 1d8
+
+- A pessoa morre, some ou trai você | 15 | 1d6 | 1d8 | 2d6
+
+- **Laço e pontos com a mesma pessoa:** role uma vez só, pela linha dos pontos. O laço rompido sem pontos continua sendo a linha de 1 ponto (DT 15, 1d6), como em Contatos e Laços.
+
+- **Morte ou perda com 3 pontos** costuma trazer Luto Profundo, uma condição de longo prazo. A mesa decide junto com quem joga.
+
+- **Traição** cobra o teste da segunda linha e leva os pontos a 0 no mesmo momento.
+
+### Ganhar e perder pontos
+
+**Ganha-se 1 ponto** com uma pessoa quando os dois vivem uma cena que muda o que um é para o outro. No máximo 1 ponto novo com a mesma pessoa por aventura.
+
+- Salvar a vida da pessoa, ou ter a vida salva por ela.
+
+- Guardar um segredo dela que custaria caro se saísse.
+
+- Uma conversa de verdade, daquelas que mudam o que um sabe do outro.
+
+- Um dia de Cuidar de quem importa, no Tempo Entre Aventuras, passado com ela.
+
+- Atravessar junto uma cena que quase acabou com os dois.
+
+**Perde-se 1 ponto** quando a relação leva um golpe:
+
+- Mentir para ela de um jeito que custa, e ela descobrir.
+
+- Deixá-la para trás numa hora em que dava para voltar.
+
+- Quebrar uma promessa feita a ela.
+
+- **Traição grave** (vender a pessoa, atacar de propósito, deixar morrer podendo salvar) leva os pontos a 0.
+
+- **Na criação,** se a história de dois personagens se cruza antes da aventura, cada um começa com 1 ponto com o outro, até 2 pontos no total por personagem.
+
+- **Quem propõe a mudança é a mesa.** O jogador pode pedir o ponto, e o Mestre confirma quando a cena pediu.
+
+**Exemplo:**
+
+Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade DT 10, com perda de 1d6 na falha.
+
 ## ataques-combinados
 
 **Categoria:** Combate e Mecânicas
 
 **Status:** Regra oficial
 
-Regras para sincronizar ataques contra um alvo sem criar ações, recursos ou efeitos adicionais.
+Dois a quatro personagens atacam o mesmo alvo no mesmo instante. Quanto mais eles confiam no líder, maior o bônus: a Sintonia sai dos Pontos de Relação.
 
-Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo tempo. Cada participante continua usando sua própria arma, magia, teste e recurso.
+Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo tempo. Cada participante continua usando sua própria arma, magia, teste e recurso, e o que o grupo ganha por esperar o momento certo depende de quanto cada um confia em quem puxa o golpe.
 
 **Em resumo**
 
 - Participam de 2 a 4 voluntários, todos contra o mesmo alvo, e cada um gasta a própria Ação Padrão e uma reação na preparação.
 
-- O ataque é resolvido no primeiro turno do líder depois que todos se prepararam. O líder só escolhe o momento e não empresta bônus a ninguém.
+- O ataque é resolvido no primeiro turno do líder depois que todos se prepararam.
 
-- Cada acerto causa o dano normal da contribuição, e cada erro não causa dano nem devolve ações ou recursos. Resistência e vulnerabilidade valem por contribuição.
+- A **Sintonia** é o menor número de Pontos de Relação que cada participante tem com o líder. Ela dá de +2 no ataque até vantagem e um dado a mais de dano em todas as contribuições.
+
+- Se todas as contribuições errarem, todos os participantes ficam Expostos até o começo do próprio turno.
 
 - Quem for derrubado antes da resolução perde a contribuição, e se o líder cair outro participante preparado assume.
 
@@ -628,7 +738,27 @@ Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo
 
 - Somente ataques que causam dano a um único alvo podem entrar. Cura, área, invocação e controle são resolvidos separadamente.
 
-- O grupo escolhe um líder apenas para definir o momento da resolução. O líder não empresta bônus aos demais.
+- O grupo escolhe um líder. Ele define o momento da resolução, e é com ele que se conta a Sintonia.
+
+### Sintonia
+
+Olhe quantos Pontos de Relação cada participante tem com o líder. O menor deles é a Sintonia do ataque, e o bônus dela vale para todas as contribuições, inclusive a do líder. O grupo anda no passo de quem confia menos.
+
+- Sintonia | Degrau | Ataque | Dano de cada acerto
+
+- 0 | Desencontrados | Nenhum | Nenhum
+
+- 1 | Entrosados | +2 | Nenhum
+
+- 2 | Afinados | +2 | +2
+
+- 3 | Uníssono | Vantagem | +1 dadoA Resistência do alvo vale uma vez só, contra a soma.
+
+- **Com Sintonia 1 ou mais,** cada participante gasta um uso dos pontos que tem com o líder. Quem não quiser gastar entra com 0, e a Sintonia do ataque vira 0.
+
+- **O dado a mais do Uníssono** é do mesmo tipo que a contribuição já rola: o da arma, ou o da magia. Ele entra uma vez só e não multiplica no crítico. O +2 de dano dos Afinados segue a mesma regra.
+
+- **Coreografia** pode entrar em uma contribuição, mas o bônus no teste não soma com o da Sintonia: fica o maior.
 
 ### Preparação e resolução
 
@@ -636,11 +766,11 @@ Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo
 
 - O ataque é resolvido no primeiro turno do líder depois que todos se prepararem. A preparação de um participante expira no início do próximo turno dele. Alcance, linha de efeito e alvo precisam continuar válidos.
 
-- Na resolução, cada participante consome munição ou carga usada pelo ataque e faz a própria rolagem. Nenhum custo é pago duas vezes.
+- Na resolução, cada participante consome munição ou carga usada pelo ataque e faz a própria rolagem, com o bônus da Sintonia. Nenhum custo é pago duas vezes.
 
-- Cada acerto causa o dano normal da contribuição. Cada erro não causa dano e não devolve ações ou recursos.
+- Cada acerto causa o dano normal da contribuição, mais o da Sintonia. Cada erro não causa dano e não devolve ações ou recursos.
 
-- Aplique vulnerabilidade, redução percentual e Resistência separadamente a cada contribuição. Depois, some o dano final dos acertos.
+- Aplique vulnerabilidade, redução percentual e Resistência separadamente a cada contribuição. Depois, some o dano final dos acertos. No Uníssono, aplique vulnerabilidade e redução percentual em cada contribuição, some, e só então tire a Resistência do alvo, uma vez.
 
 ### Críticos, reações e efeitos
 
@@ -650,15 +780,17 @@ Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo
 
 - Efeitos adicionais de acerto são resolvidos por contribuição, mas efeitos iguais não acumulam além do limite da própria condição.
 
-- Se todas as contribuições errarem, o Ataque Combinado falha. Custos e ações permanecem gastos.
+- **Se todas as contribuições errarem,** o Ataque Combinado falha: custos, ações e usos de pontos continuam gastos, e cada participante fica Exposto até o começo do próprio turno.
 
 ### Interrupção
 
 - Uma contribuição é perdida se o participante ficar inconsciente, incapaz de agir ou sem um ataque válido antes da resolução.
 
-- Se o líder perder a contribuição, outro participante preparado assume a liderança. Se nenhum puder, o ataque é cancelado.
+- Se o líder perder a contribuição, outro participante preparado assume a liderança, e a Sintonia é contada de novo com ele. Se nenhum puder, o ataque é cancelado.
 
-- Quando o ataque é cancelado antes da resolução, ações, reações e custos pagos na declaração continuam gastos. Munição e cargas ainda não usadas são preservadas.
+- Quando o ataque é cancelado antes da resolução, ações, reações, usos de pontos e custos pagos na declaração continuam gastos. Munição e cargas ainda não usadas são preservadas.
+
+- Ver um participante cair durante a preparação cobra Sanidade de quem tem pontos com ele, como em Pontos de Relação.
 
 ### Magias e Fluxos
 
@@ -667,6 +799,10 @@ Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo
 - Somar danos não altera tipo, alcance, área, duração ou efeito das magias.
 
 - Ataque Combinado entre personagens não é Fusão de Fluxos (ver Rituais, Selos e Fusão). Ele não cria um novo efeito.
+
+**Exemplo:**
+
+Duda lidera. Rafa tem 3 pontos com ela e o Guerreiro tem 2: a Sintonia é 2, Afinados. Cada um gasta um uso com a Duda, e as três contribuições ganham +2 no ataque e +2 no dano. Se o Guerreiro tivesse 3 pontos com ela, seria Uníssono: vantagem, um dado a mais em cada acerto e a Resistência 5 do chefe tirada uma vez da soma, e não três.
 
 ## perseguicao-a-pe
 
@@ -682,7 +818,9 @@ Quando alguém corre e alguém vai atrás, a cena muda de ritmo. A respiração 
 
 - A distância usa as mesmas faixas da perseguição de veículos (ver Perseguições e Combate Veicular), de Contato a Escapou. Quem persegue quer chegar a Contato, e quem foge quer chegar a Escapou.
 
-- A cada rodada o Mestre descreve o terreno e um obstáculo, cada lado declara uma manobra e testa. Quem vence move uma faixa a favor, ou duas se vencer por 10 ou mais.
+- A cada rodada o Mestre descreve o terreno e um obstáculo, e cada lado escolhe quem puxa a corrida. Os dois puxadores declaram uma manobra e testam. Quem vence move uma faixa a favor, ou duas se vencer por 10 ou mais.
+
+- Quem não puxa ajuda o puxador ou faz uma manobra de apoio. Somando tudo, a faixa anda no máximo 2 a favor de cada lado por rodada.
 
 - A perseguição dura 6 rodadas. A partir da rodada 4, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.
 
@@ -706,17 +844,19 @@ Quando alguém corre e alguém vai atrás, a cena muda de ritmo. A respiração 
 
 - **Os dois lados sabem o que querem.** Quem persegue quer chegar a Contato. Quem foge quer chegar a Escapou.
 
-- **O grupo corre no passo de quem está mais atrás.** Quem quiser disparar sozinho passa a ter faixa própria, e vê o resto do grupo ficar para trás.
+- **Cada lado tem uma faixa só.** O grupo corre no passo de quem está mais atrás. Quem quiser disparar sozinho passa a ter faixa própria, e vê o resto do grupo ficar para trás.
+
+- **Cada lado tem um puxador por rodada:** quem vai na frente e decide o caminho. Só a manobra dele disputa a faixa. O puxador pode mudar de uma rodada para outra.
 
 ### A rodada
 
 - O Mestre descreve o terreno da rodada do jeito que quem corre enxerga: rápido e pela metade. Ele rola 1d6 na tabela de obstáculos ou escolhe um.
 
-- Cada lado declara uma manobra, dizendo o que faz com o corpo. Quem foge declara primeiro, porque está de costas.
+- Cada lado escolhe o puxador, e cada personagem declara o que faz com o corpo: o puxador, uma manobra; os outros, Ajudar o puxador ou uma manobra de apoio. Quem foge declara primeiro, porque está de costas.
 
-- Resolvam os testes. Quem vence move uma faixa a favor, e vitória por 10 ou mais move duas.
+- Resolvam primeiro as ajudas e o apoio, depois os puxadores. Quem vence move uma faixa a favor, e vitória por 10 ou mais move duas. Somando o apoio, cada lado ganha no máximo 2 faixas na rodada.
 
-- Teste oposto é sempre contra o Atletismo do outro lado, seja qual for a manobra dele. Quando os dois lados passam em testes contra DT, cada um move a própria faixa, e elas se anulam.
+- Teste oposto é sempre contra o Atletismo do puxador do outro lado, seja qual for a manobra dele. Quando os dois puxadores passam em testes contra DT, cada um move a faixa a seu favor, e os passos se anulam.
 
 - Aplique o obstáculo a quem não lidou com ele na manobra.
 
@@ -734,7 +874,7 @@ Cada manobra traz o que o corpo faz e, embaixo, como se resolve. Diga a cena ant
 
 - Cortar caminho | Um beco que parece sem saída, uma cerca baixa, a porta dos fundos de uma padaria que você conhece. Se der certo, você sai na frente dele.Teste: Investigação na cidade, Sobrevivência no ermo. Sucesso: Move uma faixa a favor e ignora o obstáculo desta rodada. Com vantagem, se o personagem conhece o lugar. Falha: O atalho não existia, e a parede no fim do beco move uma faixa contra você.
 
-- Salto arriscado | De um telhado para outro, por cima de uma carroça, através do vão de uma ponte quebrada. Por um segundo, só existe o ar.Teste: Acrobacia contra a DT Difícil. Sucesso: Move duas faixas a favor de uma vez. Falha: Você cai: fica Caído e perde a rodada. Quem estava atrás move uma faixa.
+- Salto arriscado | De um telhado para outro, por cima de uma carroça, através do vão de uma ponte quebrada. Por um segundo, só existe o ar.Teste: Acrobacia contra a DT Difícil. Sucesso: Move duas faixas a favor de uma vez. Falha: Você cai: fica Caído, perde a rodada e a faixa move uma contra você.
 
 - Derrubar um obstáculo | Uma pilha de barris, a barraca de frutas, um varal cheio de roupa. Tudo que cai atrás de você vira problema de quem vem atrás.Teste: Atletismo ou Luta contra a DT Padrão. Sucesso: Quem vem atrás testa Reflexos na DT Padrão ou move uma faixa contra si. Falha: Você gasta a rodada puxando uma coisa que não cede, e nada sai do lugar.
 
@@ -746,7 +886,11 @@ Cada manobra traz o que o corpo faz e, embaixo, como se resolve. Diga a cena ant
 
 - AgarrarSó em Contato | A mão fecha no colarinho, os dois perdem o equilíbrio, e o chão chega rápido.Teste: Atletismo oposto, apenas em Contato. Sucesso: Aplica Agarrado e encerra a perseguição. Falha: Os dedos escorregam no tecido, e você passa direto: move uma faixa contra si.
 
-- **Uma manobra por personagem, por rodada.** Ajudar alguém segue as regras de Ações Coletivas e conta como a sua manobra.
+- **Uma manobra por personagem, por rodada.** Ajudar o puxador segue as regras de Ações Coletivas (no máximo dois ajudantes) e conta como a sua manobra.
+
+- **Apoio é para quem não puxa:** Derrubar um obstáculo, Atravessar gente no caminho e Acertar de longe. Elas atrapalham o outro lado sem disputar a faixa, e o puxador também pode escolher uma delas como a manobra dele. Cortar caminho, Salto arriscado, Correr solto, Sumir de vista e Agarrar são só do puxador.
+
+- **Falha de apoio pesa no grupo.** Quando uma manobra de apoio diz que a faixa move contra você, ela move contra o seu lado inteiro, porque a faixa é uma só.
 
 - **Magia, item e habilidade de classe entram como manobra,** com o teste que já usam. Um efeito que tire o movimento do outro lado move uma faixa a seu favor.
 
@@ -826,7 +970,7 @@ Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo par
 
 - A outra parte responde. Ela pergunta, pede garantia, chantageia de volta, e é nessa resposta que o grupo descobre o que ela quer.
 
-Prestígio e Fama ajustam a rolagem em no máximo 2, para cima ou para baixo, pela mesma regra de Prestígio, Fama e Procura. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.
+O Prestígio com a facção da pessoa ajusta a rolagem de toda abordagem em no máximo 2, para cima ou para baixo, pela mesma regra de Prestígio, Fama e Procura. Ele entra só na rolagem e nunca tira Resistência a mais: um mesmo fato não gera dois ajustes. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.
 
 ### Abordagens
 
@@ -844,7 +988,7 @@ Cada abordagem traz uma fala de exemplo e, embaixo, como se resolve. A fala serv
 
 - Ler a pessoa | “Você olhou para a porta duas vezes quando eu falei do porto.”Teste: Intuição. Sucesso: Não tira Resistência. Em troca, entrega o que ela quer de verdade ou revela o Limite dela. Risco: Falha entrega uma leitura errada, que o Mestre diz com a mesma convicção.
 
-- Puxar posição ou nome | “Minha família serve a esta casa há três gerações. Pergunte ao seu pai.”Teste: Nobreza ou Atuação. Sucesso: Tira 1 de Resistência, e mais 1 com Prestígio positivo na facção dela. Risco: Contra quem odeia o seu nome, enche 1 de Paciência.
+- Puxar posição ou nome | “Minha família serve a esta casa há três gerações. Pergunte ao seu pai.”Teste: Nobreza ou Atuação. Sucesso: Tira 1 de Resistência, e 2 quando ela deve obediência ou respeito a esse nome: serve à sua casa, jurou à sua ordem ou depende de quem você representa. Risco: Contra quem odeia o seu nome, enche 1 de Paciência.
 
 - Oferecer algo concreto | “A dívida com o Banco some amanhã, e ninguém precisa saber de onde veio o dinheiro.”Teste: nenhum. Sucesso: Tira 1 de Resistência por oferta que custe de verdade ao grupo: dinheiro, favor, segredo, Prestígio. Risco: Oferta pequena demais enche 1 de Paciência e queima a ideia.
 
@@ -1040,9 +1184,9 @@ Um laço é uma frase, na voz do personagem, sobre alguém que importa: outro pe
 
 - **Até 3 laços** por personagem. Um laço com outro personagem do grupo ajuda a mesa a começar junta.
 
-- **Uma vez por sessão,** num teste feito por causa de um laço (para proteger, ajudar, alcançar ou vingar aquela pessoa), role com vantagem.
+- **Uma vez por sessão para cada laço,** num teste feito por causa dele (para proteger, ajudar, alcançar ou vingar aquela pessoa), role com vantagem.
 
-- **Laço rompido:** quando a pessoa morre, trai ou some, o personagem testa Sanidade contra DT 15, com perda de 1d6 (Condições). A mesa pode aplicar Luto Profundo, uma condição de longo prazo.
+- **Laço rompido:** quando a pessoa morre, trai ou some, o personagem testa Sanidade contra DT 15, com perda de 1d6 (Condições). A mesa pode aplicar Luto Profundo, uma condição de longo prazo. Se a pessoa é do grupo e você tem Pontos de Relação com ela, role uma vez só, pela tabela dos pontos.
 
 - **Laço muda:** no fim de cada arco, cada um pode reescrever ou trocar um laço. O rompido costuma virar outro: "vou achar quem fez isso".
 
@@ -1138,7 +1282,7 @@ Diga a cena antes de rolar: ela diz ao Mestre o que pode dar errado. Magia, item
 
 **Exemplo:**
 
-O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem, chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a copeira disfarçada distrai o mordomo, e o cofre abre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.
+O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem, chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a Pop Star distrai o mordomo (a etapa não avança, e a próxima abordagem ganha vantagem), e na rodada seguinte a Ladinagem com vantagem abre o cofre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.
 
 ## investigacao
 
@@ -1338,11 +1482,11 @@ As três primeiras se vencem em roda: Avançar vence Flanquear, Flanquear vence 
 
 - Contra o comando | Furtividade ou Luta contra a DT Difícil.O choque do inimigo nesta fase tem desvantagem. Por 10 ou mais, o comandante dele cai ou foge, e o lado dele testa moral.
 
-- Segurar a brecha | Atletismo ou Fortitude contra a DT Padrão.O seu lado recupera 1 parte que perdeu nesta fase.
+- Segurar a brecha | Atletismo ou Fortitude contra a DT Padrão.No passo das Perdas, o seu lado devolve 1 das partes que perdeu nesta fase.
 
 - Artilharia e magia de área | Pontaria, Tecnologia ou o teste da magia contra a DT Difícil.O inimigo perde 1 parte de Força.
 
-- Ao lado do comandante | Ajudar, contra DT 10.+2 no choque do seu lado, ou vantagem se o sucesso for crítico.
+- Ao lado do comandante | Ajudar, contra DT 10.+2 no choque do seu lado, ou vantagem se o sucesso for crítico. No máximo dois personagens, como em Ajudar.
 
 - **Somados, os feitos tiram no máximo 2 partes do inimigo por fase.** O resto da batalha é dos exércitos.
 
@@ -1492,7 +1636,7 @@ Dentro de uma ruína, de uma mata fechada ou de um subterrâneo, o dia vira hora
 
 - Mapear | Sobrevivência ou Conhecimento contra a DT Padrão. Com o mapa, a volta não pede teste; sem ele, sair do lugar pede Sobrevivência contra a DT Padrão.
 
-- Cuidar | Tratar um ferido (Cura DT 15, 1d6 de Vida ou um décimo da Vida máxima) ou, numa área segura, Relaxar como no Descanso.
+- Cuidar | Tratar um ferido (Cura DT 15, 1d6 de Vida ou um décimo da Vida máxima, o que for maior) ou, numa área segura, Relaxar como no Descanso.
 
 - Vigiar | Fica de olho enquanto os outros trabalham. Se o evento do turno for um encontro, o grupo não é Surpreendido.
 
@@ -1716,7 +1860,7 @@ Nem toda luta acaba no último ponto de Vida. Quando o lado inimigo sofre um gol
 
 - 5 ou menos | Desiste. Foge pela saída mais próxima, larga a arma e se rende, ou pede trégua, do jeito que combinar com quem é.
 
-- 6 a 8 | Vacila. Na próxima rodada luta na defensiva: busca cobertura, recua para perto dos outros ou tenta negociar. O próximo teste de moral desta cena tem −2.
+- 6 a 8 | Vacila. Na próxima rodada luta na defensiva: busca cobertura, recua para perto dos outros ou tenta negociar. O próximo teste de moral desta cena leva o −2 de quem já vacilou, da tabela de ajustes.
 
 - 9 ou mais | Segura a linha. Continua lutando, e este gatilho não pede outro teste na mesma cena.
 

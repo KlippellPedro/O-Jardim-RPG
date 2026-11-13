@@ -38,6 +38,22 @@ export const RODADAS_DE_PERSEGUICAO = 6;
  *  na mesma lógica do combate intenso da página de Descanso. */
 export const RODADA_DO_FOLEGO = 4;
 
+/** Somando a manobra do puxador e os efeitos de apoio, a faixa anda no máximo
+ *  isto a favor de cada lado numa rodada: o mesmo que uma vitória por 10. */
+export const FAIXAS_MAXIMAS_POR_LADO = 2;
+
+/** Manobras que quem não puxa a corrida pode fazer. Elas atrapalham o outro
+ *  lado sem disputar a faixa com o Atletismo. */
+export const MANOBRAS_DE_APOIO = ['derrubar', 'ajuda', 'alcance'] as const;
+
+/** Passos líquidos da rodada, em direção a Contato (negativo) ou a Escapou
+ *  (positivo). Cada lado soma o que ganhou na rodada, com teto de
+ *  FAIXAS_MAXIMAS_POR_LADO, e os dois se descontam. */
+export function passosDaRodada(aFavorDoPerseguidor: number, aFavorDoFugitivo: number): number {
+  const teto = (valor: number) => Math.max(0, Math.min(FAIXAS_MAXIMAS_POR_LADO, Math.trunc(valor)));
+  return teto(aFavorDoFugitivo) - teto(aFavorDoPerseguidor);
+}
+
 /** O que cada faixa parece para quem está correndo. A distância em metros mora
  *  na escala compartilhada com os veículos; isto é só o jeito de contar. */
 const SENSACAO_DA_FAIXA: Record<FaixaPerseguicaoId, string> = {
@@ -74,7 +90,7 @@ export const MANOBRAS_A_PE: readonly IManobraAPe[] = [
     teste: 'Acrobacia contra a DT Difícil',
     faixas: 'qualquer',
     efeito: 'Move duas faixas a favor de uma vez.',
-    falha: 'Você cai: fica Caído e perde a rodada. Quem estava atrás move uma faixa.',
+    falha: 'Você cai: fica Caído, perde a rodada e a faixa move uma contra você.',
   },
   {
     id: 'derrubar',
@@ -183,7 +199,8 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
     <div class="regras-resumo">
       <ul>
         <li>A distância usa as mesmas faixas da perseguição de veículos (ver <span class="regras-ref regras-ref--veiculos-cenas">Perseguições e Combate Veicular</span>), de Contato a Escapou. Quem persegue quer chegar a Contato, e quem foge quer chegar a Escapou.</li>
-        <li>A cada rodada o Mestre descreve o terreno e um obstáculo, cada lado declara uma manobra e testa. Quem vence move uma faixa a favor, ou duas se vencer por 10 ou mais.</li>
+        <li>A cada rodada o Mestre descreve o terreno e um obstáculo, e cada lado escolhe quem puxa a corrida. Os dois puxadores declaram uma manobra e testam. Quem vence move uma faixa a favor, ou duas se vencer por 10 ou mais.</li>
+        <li>Quem não puxa ajuda o puxador ou faz uma manobra de apoio. Somando tudo, a faixa anda no máximo ${FAIXAS_MAXIMAS_POR_LADO} a favor de cada lado por rodada.</li>
         <li>A perseguição dura ${RODADAS_DE_PERSEGUICAO} rodadas. A partir da rodada ${RODADA_DO_FOLEGO}, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.</li>
         <li>Contato leva ao combate, Escapou encerra a cena, e o relógio fechado deixa os dois lados sabendo mais um do outro.</li>
       </ul>
@@ -197,15 +214,16 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
     <ul class="regras-list">
       <li><strong>A perseguição começa onde os dois estavam</strong> quando um deles saiu correndo. Fuga de uma conversa começa em Contato; fuga de uma emboscada avistada de longe começa em Longa.</li>
       <li><strong>Os dois lados sabem o que querem.</strong> Quem persegue quer chegar a Contato. Quem foge quer chegar a Escapou.</li>
-      <li><strong>O grupo corre no passo de quem está mais atrás.</strong> Quem quiser disparar sozinho passa a ter faixa própria, e vê o resto do grupo ficar para trás.</li>
+      <li><strong>Cada lado tem uma faixa só.</strong> O grupo corre no passo de quem está mais atrás. Quem quiser disparar sozinho passa a ter faixa própria, e vê o resto do grupo ficar para trás.</li>
+      <li><strong>Cada lado tem um puxador por rodada:</strong> quem vai na frente e decide o caminho. Só a manobra dele disputa a faixa. O puxador pode mudar de uma rodada para outra.</li>
     </ul>
 
     <h3 class="regras-subtitle">A rodada</h3>
     <ol class="regras-steps">
       <li>O Mestre descreve o terreno da rodada do jeito que quem corre enxerga: rápido e pela metade. Ele rola 1d6 na tabela de obstáculos ou escolhe um.</li>
-      <li>Cada lado declara uma manobra, dizendo o que faz com o corpo. Quem foge declara primeiro, porque está de costas.</li>
-      <li>Resolvam os testes. Quem vence move uma faixa a favor, e vitória por 10 ou mais move duas.</li>
-      <li>Teste oposto é sempre contra o Atletismo do outro lado, seja qual for a manobra dele. Quando os dois lados passam em testes contra DT, cada um move a própria faixa, e elas se anulam.</li>
+      <li>Cada lado escolhe o puxador, e cada personagem declara o que faz com o corpo: o puxador, uma manobra; os outros, Ajudar o puxador ou uma manobra de apoio. Quem foge declara primeiro, porque está de costas.</li>
+      <li>Resolvam primeiro as ajudas e o apoio, depois os puxadores. Quem vence move uma faixa a favor, e vitória por 10 ou mais move duas. Somando o apoio, cada lado ganha no máximo ${FAIXAS_MAXIMAS_POR_LADO} faixas na rodada.</li>
+      <li>Teste oposto é sempre contra o Atletismo do puxador do outro lado, seja qual for a manobra dele. Quando os dois puxadores passam em testes contra DT, cada um move a faixa a seu favor, e os passos se anulam.</li>
       <li>Aplique o obstáculo a quem não lidou com ele na manobra.</li>
       <li>Marque uma parte do relógio da perseguição.</li>
     </ol>
@@ -218,7 +236,9 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
       <tbody>${tabelaManobras}</tbody>
     </table></div>
     <ul class="regras-list">
-      <li><strong>Uma manobra por personagem, por rodada.</strong> Ajudar alguém segue as regras de <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span> e conta como a sua manobra.</li>
+      <li><strong>Uma manobra por personagem, por rodada.</strong> Ajudar o puxador segue as regras de <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span> (no máximo dois ajudantes) e conta como a sua manobra.</li>
+      <li><strong>Apoio é para quem não puxa:</strong> Derrubar um obstáculo, Atravessar gente no caminho e Acertar de longe. Elas atrapalham o outro lado sem disputar a faixa, e o puxador também pode escolher uma delas como a manobra dele. Cortar caminho, Salto arriscado, Correr solto, Sumir de vista e Agarrar são só do puxador.</li>
+      <li><strong>Falha de apoio pesa no grupo.</strong> Quando uma manobra de apoio diz que a faixa move contra você, ela move contra o seu lado inteiro, porque a faixa é uma só.</li>
       <li><strong>Magia, item e habilidade de classe entram como manobra,</strong> com o teste que já usam. Um efeito que tire o movimento do outro lado move uma faixa a seu favor.</li>
       <li><strong>O fôlego acaba.</strong> A partir da rodada ${RODADA_DO_FOLEGO}, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.</li>
     </ul>
@@ -249,7 +269,8 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
 
     <h3 class="regras-subtitle">Calibrar a dificuldade</h3>
     <ul class="regras-list">
-      <li>Um fugitivo com o mesmo bônus do grupo termina em Contato na maioria das vezes, porque o grupo tenta várias manobras por rodada. Para segurar alguém por seis rodadas, dê a ele conhecimento do terreno, vantagem em uma manobra ou alguém atrapalhando atrás.</li>
+      <li>Um fugitivo sozinho com o mesmo bônus do grupo perde uns dois terços das rodadas, porque o puxador do grupo recebe a Ajuda de dois companheiros (+4). Para segurar alguém por seis rodadas, dê a ele conhecimento do terreno, vantagem em uma manobra ou alguém atrapalhando atrás.</li>
+      <li>O teto de ${FAIXAS_MAXIMAS_POR_LADO} faixas por lado existe para o grupo grande não atropelar a cena com apoio. Quatro personagens rendem uma rodada mais rica, e a perseguição continua decidida por quem puxa.</li>
       <li>O obstáculo é o seu botão de ajuste. Rolar 1d6 por rodada mantém a cena honesta; escolher o obstáculo aperta ou alivia sem mudar número nenhum.</li>
       <li>Terreno que favorece um lado deve ser dito antes da declaração de manobras. Quem foge para o telhado precisa saber que o telhado é vantagem dele.</li>
     </ul>

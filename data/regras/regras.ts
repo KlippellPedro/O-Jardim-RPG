@@ -52,6 +52,7 @@ import { REGRA_MATERIAIS } from './materiais';
 import { HTML_MORAL } from './moral';
 import { REGRA_PERIGOS } from './perigosAmbiente';
 import { REGRA_PERSEGUICAO_A_PE } from './perseguicaoAPe';
+import { REGRA_PONTOS_DE_RELACAO } from './pontosDeRelacao';
 import { REGRA_TRANSPORTE } from './transporte';
 import { REGRA_VIAGEM } from './viagem';
 import {
@@ -971,6 +972,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>O líder precisa aceitar a ajuda e só rola depois que os ajudantes resolverem suas tentativas.</li>
         <li>O Mestre pode dispensar o teste do ajudante quando a contribuição é automática, mas ela continua ocupando ação ou tempo.</li>
         <li>Ajudar não transfere proficiência, poder, imunidade ou permissão especial ao líder.</li>
+        <li>Quem tem <span class="regras-ref regras-ref--pontos-de-relacao">Pontos de Relação</span> com o líder pode gastar um uso para a Ajuda certa: a ajuda passa sem teste, dá vantagem no lugar do +2 e, em combate, custa a reação no lugar da Ação Padrão.</li>
       </ul>
 
       <h3 class="regras-subtitle">Teste de Grupo</h3>
@@ -1017,6 +1019,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p>Se o grupo se preparou bem e a tarefa não tem mais risco, deixe passar. Ajudar e Teste de Grupo existem para distribuir tensão, e chamar rolagem numa cena sem tensão só ensina a mesa que rolar dado é perda de tempo.</p>
     `,
   },
+
+  'pontos-de-relacao': REGRA_PONTOS_DE_RELACAO,
 
   'ataques-combinados': REGRA_ATAQUES_COMBINADOS,
 
