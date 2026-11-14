@@ -26,6 +26,10 @@ export interface ICreateCharacterPayload {
   lunarisInicial?: number;
   pericias?: Record<string, any>;
   inventarioInicial?: any[];
+  /** Ofício de antes da aventura (data/economia/oficios-v1.json). Decide Lunaris e itens iniciais. */
+  oficio?: { id: string; titulo: string; faixa: string };
+  /** Vínculos com que a ficha nasce: os contatos do ofício. */
+  vinculos?: unknown[];
   escolhaRacial?: {
     varianteId?: string | null;
     naturezaDivinaId?: string | null;

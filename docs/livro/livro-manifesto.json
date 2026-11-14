@@ -4,11 +4,11 @@
     "jogador": {
       "arquivo": "O-Jardim-Livro-de-Regras.pdf",
       "titulo": "O Jardim · Livro de Regras",
-      "paginas": 337,
-      "bytes": 10993441,
-      "sha256": "43e7f5e28454eafb8922a62f99b46c38e7c6a7e8ffbf6d6707e022f01d92cc88",
-      "gerado_em": "2026-11-13T22:52:24.377Z",
-      "conteudo_sha256": "a7a020b6f2e1b03df7fa47277f4905d196cee6776035273c27a7e5250844de96",
+      "paginas": 340,
+      "bytes": 11085067,
+      "sha256": "3ca50e49eb867d9761526a26d8c39e65255bc5f8f9cf364a57217b9de69c03e2",
+      "gerado_em": "2026-11-14T02:54:17.934Z",
+      "conteudo_sha256": "610ba3a5adf6a552b523f6ebabb9cf9024c93b524c1b6ca1232ed674d7010a83",
       "capitulos": [
         {
           "id": "primeiros-passos",
@@ -20,67 +20,67 @@
           "id": "personagem",
           "numero": 2,
           "rotulo": "Capítulo 2",
-          "pagina": 14
+          "pagina": 17
         },
         {
           "id": "combate",
           "numero": 3,
           "rotulo": "Capítulo 3",
-          "pagina": 36
+          "pagina": 39
         },
         {
           "id": "cenas",
           "numero": 4,
           "rotulo": "Capítulo 4",
-          "pagina": 66
+          "pagina": 69
         },
         {
           "id": "magia",
           "numero": 5,
           "rotulo": "Capítulo 5",
-          "pagina": 84
+          "pagina": 87
         },
         {
           "id": "itens",
           "numero": 6,
           "rotulo": "Capítulo 6",
-          "pagina": 98
+          "pagina": 101
         },
         {
           "id": "veiculos",
           "numero": 7,
           "rotulo": "Capítulo 7",
-          "pagina": 115
+          "pagina": 118
         },
         {
           "id": "mundo",
           "numero": 8,
           "rotulo": "Capítulo 8",
-          "pagina": 125
+          "pagina": 128
         },
         {
           "id": "compendio-classes",
           "numero": null,
           "rotulo": "Compêndio A",
-          "pagina": 140
+          "pagina": 143
         },
         {
           "id": "compendio-racas",
           "numero": null,
           "rotulo": "Compêndio B",
-          "pagina": 204
+          "pagina": 207
         },
         {
           "id": "compendio-legados",
           "numero": null,
           "rotulo": "Compêndio C",
-          "pagina": 232
+          "pagina": 235
         },
         {
           "id": "compendio-magias",
           "numero": null,
           "rotulo": "Compêndio D",
-          "pagina": 239
+          "pagina": 242
         }
       ],
       "topicos": [
@@ -97,503 +97,503 @@
         {
           "id": "sistema-base",
           "numero": "1.3",
-          "pagina": 11
+          "pagina": 14
         },
         {
           "id": "racas",
           "numero": "2.1",
-          "pagina": 15
+          "pagina": 18
         },
         {
           "id": "classes",
           "numero": "2.2",
-          "pagina": 16
+          "pagina": 19
         },
         {
           "id": "poderes-habilidades",
           "numero": "2.3",
-          "pagina": 18
+          "pagina": 21
         },
         {
           "id": "pericias",
           "numero": "2.4",
-          "pagina": 20
+          "pagina": 23
         },
         {
           "id": "treinar",
           "numero": "2.5",
-          "pagina": 23
+          "pagina": 26
         },
         {
           "id": "entre-aventuras",
           "numero": "2.6",
-          "pagina": 24
+          "pagina": 27
         },
         {
           "id": "xp",
           "numero": "2.7",
-          "pagina": 27
+          "pagina": 30
         },
         {
           "id": "legados",
           "numero": "2.8",
-          "pagina": 30
+          "pagina": 33
         },
         {
           "id": "aliados",
           "numero": "2.9",
-          "pagina": 30
+          "pagina": 33
         },
         {
           "id": "frutos-implantes",
           "numero": "2.10",
-          "pagina": 31
+          "pagina": 34
         },
         {
           "id": "combate",
           "numero": "3.1",
-          "pagina": 37
+          "pagina": 40
         },
         {
           "id": "tipos-de-dano",
           "numero": "3.2",
-          "pagina": 40
+          "pagina": 43
         },
         {
           "id": "distancias",
           "numero": "3.3",
-          "pagina": 42
+          "pagina": 45
         },
         {
           "id": "ferimentos",
           "numero": "3.4",
-          "pagina": 43
+          "pagina": 46
         },
         {
           "id": "coreografia",
           "numero": "3.5",
-          "pagina": 45
+          "pagina": 48
         },
         {
           "id": "descanso",
           "numero": "3.6",
-          "pagina": 46
+          "pagina": 49
         },
         {
           "id": "condicoes",
           "numero": "3.7",
-          "pagina": 47
+          "pagina": 50
         },
         {
           "id": "aflicoes",
           "numero": "3.8",
-          "pagina": 55
+          "pagina": 58
         },
         {
           "id": "perigos",
           "numero": "3.9",
-          "pagina": 61
+          "pagina": 64
         },
         {
           "id": "acoes-coletivas",
           "numero": "4.1",
-          "pagina": 67
+          "pagina": 70
         },
         {
           "id": "pontos-de-relacao",
           "numero": "4.2",
-          "pagina": 68
+          "pagina": 71
         },
         {
           "id": "ataques-combinados",
           "numero": "4.3",
-          "pagina": 70
+          "pagina": 73
         },
         {
           "id": "perseguicao-a-pe",
           "numero": "4.4",
-          "pagina": 72
+          "pagina": 75
         },
         {
           "id": "conflito-social",
           "numero": "4.5",
-          "pagina": 75
+          "pagina": 78
         },
         {
           "id": "infiltracao",
           "numero": "4.6",
-          "pagina": 77
+          "pagina": 80
         },
         {
           "id": "investigacao",
           "numero": "4.7",
-          "pagina": 78
+          "pagina": 81
         },
         {
           "id": "batalha",
           "numero": "4.8",
-          "pagina": 80
+          "pagina": 83
         },
         {
           "id": "mesa-ao-vivo",
           "numero": "4.9",
-          "pagina": 82
+          "pagina": 85
         },
         {
           "id": "magia-fluxo",
           "numero": "5.1",
-          "pagina": 85
+          "pagina": 88
         },
         {
           "id": "elementos",
           "numero": "5.2",
-          "pagina": 88
+          "pagina": 91
         },
         {
           "id": "marcas-cicatrizes",
           "numero": "5.3",
-          "pagina": 91
+          "pagina": 94
         },
         {
           "id": "rituais-selos",
           "numero": "5.4",
-          "pagina": 95
+          "pagina": 98
         },
         {
           "id": "catalogo-magico",
           "numero": "5.5",
-          "pagina": 96
+          "pagina": 99
         },
         {
           "id": "equipamentos",
           "numero": "6.1",
-          "pagina": 99
+          "pagina": 102
         },
         {
           "id": "raridades-modificacoes",
           "numero": "6.2",
-          "pagina": 100
+          "pagina": 103
         },
         {
           "id": "modificacoes-equipamentos",
           "numero": "6.3",
-          "pagina": 102
+          "pagina": 105
         },
         {
           "id": "crafting",
           "numero": "6.4",
-          "pagina": 109
+          "pagina": 112
         },
         {
           "id": "materiais",
           "numero": "6.5",
-          "pagina": 112
+          "pagina": 115
         },
         {
           "id": "veiculos",
           "numero": "7.1",
-          "pagina": 116
+          "pagina": 119
         },
         {
           "id": "veiculos-cenas",
           "numero": "7.2",
-          "pagina": 117
+          "pagina": 120
         },
         {
           "id": "veiculos-manutencao",
           "numero": "7.3",
-          "pagina": 119
+          "pagina": 122
         },
         {
           "id": "transporte",
           "numero": "7.4",
-          "pagina": 121
+          "pagina": 124
         },
         {
           "id": "viagem",
           "numero": "7.5",
-          "pagina": 122
+          "pagina": 125
         },
         {
           "id": "bestiario",
           "numero": "8.1",
-          "pagina": 126
+          "pagina": 129
         },
         {
           "id": "economia",
           "numero": "8.2",
-          "pagina": 127
+          "pagina": 130
         },
         {
           "id": "loja",
           "numero": "8.3",
-          "pagina": 129
+          "pagina": 132
         },
         {
           "id": "bases",
           "numero": "8.4",
-          "pagina": 130
+          "pagina": 133
         },
         {
           "id": "mundo-faccoes",
           "numero": "8.5",
-          "pagina": 133
+          "pagina": 136
         },
         {
           "id": "faccoes-em-movimento",
           "numero": "8.6",
-          "pagina": 136
+          "pagina": 139
         },
         {
           "id": "contatos-lacos",
           "numero": "8.7",
-          "pagina": 137
+          "pagina": 140
         },
         {
           "id": "classe-alquimista",
           "numero": "A.1",
-          "pagina": 141
+          "pagina": 144
         },
         {
           "id": "classe-atirador",
           "numero": "A.2",
-          "pagina": 146
+          "pagina": 149
         },
         {
           "id": "classe-cacador",
           "numero": "A.3",
-          "pagina": 149
+          "pagina": 152
         },
         {
           "id": "classe-canalizador",
           "numero": "A.4",
-          "pagina": 153
+          "pagina": 156
         },
         {
           "id": "classe-cozinheiro",
           "numero": "A.5",
-          "pagina": 156
+          "pagina": 159
         },
         {
           "id": "classe-comerciante",
           "numero": "A.6",
-          "pagina": 160
+          "pagina": 163
         },
         {
           "id": "classe-detetive",
           "numero": "A.7",
-          "pagina": 164
+          "pagina": 167
         },
         {
           "id": "classe-engenheiro",
           "numero": "A.8",
-          "pagina": 167
+          "pagina": 170
         },
         {
           "id": "classe-espadachim",
           "numero": "A.9",
-          "pagina": 173
+          "pagina": 176
         },
         {
           "id": "classe-guardiao",
           "numero": "A.10",
-          "pagina": 175
+          "pagina": 178
         },
         {
           "id": "classe-guerreiro",
           "numero": "A.11",
-          "pagina": 178
+          "pagina": 181
         },
         {
           "id": "classe-lutador",
           "numero": "A.12",
-          "pagina": 181
+          "pagina": 184
         },
         {
           "id": "classe-medico",
           "numero": "A.13",
-          "pagina": 184
+          "pagina": 187
         },
         {
           "id": "classe-ninja",
           "numero": "A.14",
-          "pagina": 187
+          "pagina": 190
         },
         {
           "id": "classe-piloto",
           "numero": "A.15",
-          "pagina": 190
+          "pagina": 193
         },
         {
           "id": "classe-pop-star",
           "numero": "A.16",
-          "pagina": 194
+          "pagina": 197
         },
         {
           "id": "classe-ritualista",
           "numero": "A.17",
-          "pagina": 198
+          "pagina": 201
         },
         {
           "id": "classe-sintonizador",
           "numero": "A.18",
-          "pagina": 201
+          "pagina": 204
         },
         {
           "id": "raca-anao",
           "numero": "B.1",
-          "pagina": 205
+          "pagina": 208
         },
         {
           "id": "raca-animalia",
           "numero": "B.2",
-          "pagina": 207
+          "pagina": 210
         },
         {
           "id": "raca-feerico",
           "numero": "B.3",
-          "pagina": 212
+          "pagina": 215
         },
         {
           "id": "raca-gigante",
           "numero": "B.4",
-          "pagina": 213
+          "pagina": 216
         },
         {
           "id": "raca-goblim",
           "numero": "B.5",
-          "pagina": 215
+          "pagina": 218
         },
         {
           "id": "raca-golem",
           "numero": "B.6",
-          "pagina": 217
+          "pagina": 220
         },
         {
           "id": "raca-humano",
           "numero": "B.7",
-          "pagina": 219
+          "pagina": 222
         },
         {
           "id": "raca-mimico",
           "numero": "B.8",
-          "pagina": 221
+          "pagina": 224
         },
         {
           "id": "raca-sereia",
           "numero": "B.9",
-          "pagina": 223
+          "pagina": 226
         },
         {
           "id": "raca-simbionte",
           "numero": "B.10",
-          "pagina": 225
+          "pagina": 228
         },
         {
           "id": "raca-slime",
           "numero": "B.11",
-          "pagina": 227
+          "pagina": 230
         },
         {
           "id": "raca-vampiro",
           "numero": "B.12",
-          "pagina": 229
+          "pagina": 232
         },
         {
           "id": "legados-catalogo",
           "numero": "C.1",
-          "pagina": 233
+          "pagina": 236
         },
         {
           "id": "magias-universal",
           "numero": "D.1",
-          "pagina": 240
+          "pagina": 243
         },
         {
           "id": "magias-origem",
           "numero": "D.2",
-          "pagina": 250
+          "pagina": 253
         },
         {
           "id": "magias-essencia",
           "numero": "D.3",
-          "pagina": 255
+          "pagina": 258
         },
         {
           "id": "magias-comunicacao",
           "numero": "D.4",
-          "pagina": 260
+          "pagina": 263
         },
         {
           "id": "magias-vitalidade",
           "numero": "D.5",
-          "pagina": 265
+          "pagina": 268
         },
         {
           "id": "magias-inconstancia",
           "numero": "D.6",
-          "pagina": 270
+          "pagina": 273
         },
         {
           "id": "magias-fisico",
           "numero": "D.7",
-          "pagina": 275
+          "pagina": 278
         },
         {
           "id": "magias-espaco",
           "numero": "D.8",
-          "pagina": 281
+          "pagina": 284
         },
         {
           "id": "magias-tempo",
           "numero": "D.9",
-          "pagina": 286
+          "pagina": 289
         },
         {
           "id": "magias-vazio",
           "numero": "D.10",
-          "pagina": 291
+          "pagina": 294
         },
         {
           "id": "magias-fim",
           "numero": "D.11",
-          "pagina": 296
+          "pagina": 299
         },
         {
           "id": "magias-tecnologia",
           "numero": "D.12",
-          "pagina": 302
+          "pagina": 305
         },
         {
           "id": "magias-rituais",
           "numero": "D.13",
-          "pagina": 307
+          "pagina": 310
         },
         {
           "id": "magias-selos",
           "numero": "D.14",
-          "pagina": 316
+          "pagina": 319
         },
         {
           "id": "magias-encantamentos",
           "numero": "D.15",
-          "pagina": 320
+          "pagina": 323
         },
         {
           "id": "magias-fusoes",
           "numero": "D.16",
-          "pagina": 324
+          "pagina": 327
         }
       ]
     },
     "mestre": {
       "arquivo": "O-Jardim-Livro-de-Regras-MESTRE.pdf",
       "titulo": "O Jardim · Livro de Regras (edição do Mestre)",
-      "paginas": 495,
-      "bytes": 15849505,
-      "sha256": "1ae79c303c08d149f999c2328713285964d9035564a2ebfe96ea2edafd8573f1",
-      "gerado_em": "2026-11-13T22:52:44.584Z",
-      "conteudo_sha256": "b9b8444c0b6a9bc474765704a4be930f15e242bfa94c67c796bf6d9f128ca117",
+      "paginas": 498,
+      "bytes": 15935506,
+      "sha256": "429a48b2574ef0f712670c31a1a867618a260090df82bd8945522196f90c6162",
+      "gerado_em": "2026-11-14T02:54:35.607Z",
+      "conteudo_sha256": "2f7fdc45e3cc591d106670dfa5ecefa7ed23e9c912e90e461299285e1ee3a3ff",
       "capitulos": [
         {
           "id": "primeiros-passos",
@@ -605,73 +605,73 @@
           "id": "personagem",
           "numero": 2,
           "rotulo": "Capítulo 2",
-          "pagina": 17
+          "pagina": 20
         },
         {
           "id": "combate",
           "numero": 3,
           "rotulo": "Capítulo 3",
-          "pagina": 47
+          "pagina": 50
         },
         {
           "id": "cenas",
           "numero": 4,
           "rotulo": "Capítulo 4",
-          "pagina": 82
+          "pagina": 85
         },
         {
           "id": "magia",
           "numero": 5,
           "rotulo": "Capítulo 5",
-          "pagina": 105
+          "pagina": 108
         },
         {
           "id": "itens",
           "numero": 6,
           "rotulo": "Capítulo 6",
-          "pagina": 120
+          "pagina": 123
         },
         {
           "id": "veiculos",
           "numero": 7,
           "rotulo": "Capítulo 7",
-          "pagina": 140
+          "pagina": 143
         },
         {
           "id": "mundo",
           "numero": 8,
           "rotulo": "Capítulo 8",
-          "pagina": 151
+          "pagina": 154
         },
         {
           "id": "mestre",
           "numero": 9,
           "rotulo": "Capítulo 9",
-          "pagina": 175
+          "pagina": 178
         },
         {
           "id": "compendio-classes",
           "numero": null,
           "rotulo": "Compêndio A",
-          "pagina": 224
+          "pagina": 227
         },
         {
           "id": "compendio-racas",
           "numero": null,
           "rotulo": "Compêndio B",
-          "pagina": 323
+          "pagina": 326
         },
         {
           "id": "compendio-legados",
           "numero": null,
           "rotulo": "Compêndio C",
-          "pagina": 386
+          "pagina": 389
         },
         {
           "id": "compendio-magias",
           "numero": null,
           "rotulo": "Compêndio D",
-          "pagina": 393
+          "pagina": 396
         }
       ],
       "topicos": [
@@ -688,610 +688,610 @@
         {
           "id": "sistema-base",
           "numero": "1.3",
-          "pagina": 14
+          "pagina": 17
         },
         {
           "id": "racas",
           "numero": "2.1",
-          "pagina": 18
+          "pagina": 21
         },
         {
           "id": "classes",
           "numero": "2.2",
-          "pagina": 20
+          "pagina": 23
         },
         {
           "id": "poderes-habilidades",
           "numero": "2.3",
-          "pagina": 23
+          "pagina": 26
         },
         {
           "id": "pericias",
           "numero": "2.4",
-          "pagina": 25
+          "pagina": 28
         },
         {
           "id": "treinar",
           "numero": "2.5",
-          "pagina": 30
+          "pagina": 33
         },
         {
           "id": "entre-aventuras",
           "numero": "2.6",
-          "pagina": 32
+          "pagina": 35
         },
         {
           "id": "xp",
           "numero": "2.7",
-          "pagina": 35
+          "pagina": 38
         },
         {
           "id": "legados",
           "numero": "2.8",
-          "pagina": 39
+          "pagina": 42
         },
         {
           "id": "aliados",
           "numero": "2.9",
-          "pagina": 40
+          "pagina": 43
         },
         {
           "id": "frutos-implantes",
           "numero": "2.10",
-          "pagina": 42
+          "pagina": 45
         },
         {
           "id": "combate",
           "numero": "3.1",
-          "pagina": 48
+          "pagina": 51
         },
         {
           "id": "tipos-de-dano",
           "numero": "3.2",
-          "pagina": 52
+          "pagina": 55
         },
         {
           "id": "distancias",
           "numero": "3.3",
-          "pagina": 54
+          "pagina": 57
         },
         {
           "id": "ferimentos",
           "numero": "3.4",
-          "pagina": 55
+          "pagina": 58
         },
         {
           "id": "coreografia",
           "numero": "3.5",
-          "pagina": 58
+          "pagina": 61
         },
         {
           "id": "descanso",
           "numero": "3.6",
-          "pagina": 59
+          "pagina": 62
         },
         {
           "id": "condicoes",
           "numero": "3.7",
-          "pagina": 61
+          "pagina": 64
         },
         {
           "id": "aflicoes",
           "numero": "3.8",
-          "pagina": 71
+          "pagina": 74
         },
         {
           "id": "perigos",
           "numero": "3.9",
-          "pagina": 77
+          "pagina": 80
         },
         {
           "id": "acoes-coletivas",
           "numero": "4.1",
-          "pagina": 83
+          "pagina": 86
         },
         {
           "id": "pontos-de-relacao",
           "numero": "4.2",
-          "pagina": 84
+          "pagina": 87
         },
         {
           "id": "ataques-combinados",
           "numero": "4.3",
-          "pagina": 87
+          "pagina": 90
         },
         {
           "id": "perseguicao-a-pe",
           "numero": "4.4",
-          "pagina": 89
+          "pagina": 92
         },
         {
           "id": "conflito-social",
           "numero": "4.5",
-          "pagina": 92
+          "pagina": 95
         },
         {
           "id": "infiltracao",
           "numero": "4.6",
-          "pagina": 95
+          "pagina": 98
         },
         {
           "id": "investigacao",
           "numero": "4.7",
-          "pagina": 97
+          "pagina": 100
         },
         {
           "id": "batalha",
           "numero": "4.8",
-          "pagina": 99
+          "pagina": 102
         },
         {
           "id": "mesa-ao-vivo",
           "numero": "4.9",
-          "pagina": 102
+          "pagina": 105
         },
         {
           "id": "magia-fluxo",
           "numero": "5.1",
-          "pagina": 106
+          "pagina": 109
         },
         {
           "id": "elementos",
           "numero": "5.2",
-          "pagina": 110
+          "pagina": 113
         },
         {
           "id": "marcas-cicatrizes",
           "numero": "5.3",
-          "pagina": 112
+          "pagina": 115
         },
         {
           "id": "rituais-selos",
           "numero": "5.4",
-          "pagina": 117
+          "pagina": 120
         },
         {
           "id": "catalogo-magico",
           "numero": "5.5",
-          "pagina": 118
+          "pagina": 121
         },
         {
           "id": "equipamentos",
           "numero": "6.1",
-          "pagina": 121
+          "pagina": 124
         },
         {
           "id": "raridades-modificacoes",
           "numero": "6.2",
-          "pagina": 122
+          "pagina": 125
         },
         {
           "id": "modificacoes-equipamentos",
           "numero": "6.3",
-          "pagina": 126
+          "pagina": 129
         },
         {
           "id": "crafting",
           "numero": "6.4",
-          "pagina": 134
+          "pagina": 137
         },
         {
           "id": "materiais",
           "numero": "6.5",
-          "pagina": 137
+          "pagina": 140
         },
         {
           "id": "veiculos",
           "numero": "7.1",
-          "pagina": 141
+          "pagina": 144
         },
         {
           "id": "veiculos-cenas",
           "numero": "7.2",
-          "pagina": 142
+          "pagina": 145
         },
         {
           "id": "veiculos-manutencao",
           "numero": "7.3",
-          "pagina": 145
+          "pagina": 148
         },
         {
           "id": "transporte",
           "numero": "7.4",
-          "pagina": 147
+          "pagina": 150
         },
         {
           "id": "viagem",
           "numero": "7.5",
-          "pagina": 148
+          "pagina": 151
         },
         {
           "id": "bestiario",
           "numero": "8.1",
-          "pagina": 152
+          "pagina": 155
         },
         {
           "id": "economia",
           "numero": "8.2",
-          "pagina": 155
+          "pagina": 158
         },
         {
           "id": "loja",
           "numero": "8.3",
-          "pagina": 160
+          "pagina": 163
         },
         {
           "id": "bases",
           "numero": "8.4",
-          "pagina": 163
+          "pagina": 166
         },
         {
           "id": "mundo-faccoes",
           "numero": "8.5",
-          "pagina": 166
+          "pagina": 169
         },
         {
           "id": "faccoes-em-movimento",
           "numero": "8.6",
-          "pagina": 170
+          "pagina": 173
         },
         {
           "id": "contatos-lacos",
           "numero": "8.7",
-          "pagina": 172
+          "pagina": 175
         },
         {
           "id": "mestre",
           "numero": "9.1",
-          "pagina": 176
+          "pagina": 179
         },
         {
           "id": "classe-alquimista",
           "numero": "A.1",
-          "pagina": 225
+          "pagina": 228
         },
         {
           "id": "classe-atirador",
           "numero": "A.2",
-          "pagina": 230
+          "pagina": 233
         },
         {
           "id": "classe-cacador",
           "numero": "A.3",
-          "pagina": 233
+          "pagina": 236
         },
         {
           "id": "classe-canalizador",
           "numero": "A.4",
-          "pagina": 237
+          "pagina": 240
         },
         {
           "id": "classe-cozinheiro",
           "numero": "A.5",
-          "pagina": 240
+          "pagina": 243
         },
         {
           "id": "classe-comerciante",
           "numero": "A.6",
-          "pagina": 244
+          "pagina": 247
         },
         {
           "id": "classe-detetive",
           "numero": "A.7",
-          "pagina": 248
+          "pagina": 251
         },
         {
           "id": "classe-engenheiro",
           "numero": "A.8",
-          "pagina": 251
+          "pagina": 254
         },
         {
           "id": "classe-espadachim",
           "numero": "A.9",
-          "pagina": 257
+          "pagina": 260
         },
         {
           "id": "classe-guardiao",
           "numero": "A.10",
-          "pagina": 259
+          "pagina": 262
         },
         {
           "id": "classe-guerreiro",
           "numero": "A.11",
-          "pagina": 262
+          "pagina": 265
         },
         {
           "id": "classe-lutador",
           "numero": "A.12",
-          "pagina": 265
+          "pagina": 268
         },
         {
           "id": "classe-medico",
           "numero": "A.13",
-          "pagina": 268
+          "pagina": 271
         },
         {
           "id": "classe-ninja",
           "numero": "A.14",
-          "pagina": 271
+          "pagina": 274
         },
         {
           "id": "classe-piloto",
           "numero": "A.15",
-          "pagina": 274
+          "pagina": 277
         },
         {
           "id": "classe-pop-star",
           "numero": "A.16",
-          "pagina": 278
+          "pagina": 281
         },
         {
           "id": "classe-ritualista",
           "numero": "A.17",
-          "pagina": 282
+          "pagina": 285
         },
         {
           "id": "classe-sintonizador",
           "numero": "A.18",
-          "pagina": 285
+          "pagina": 288
         },
         {
           "id": "classe-cacador-das-almas",
           "numero": "A.19",
-          "pagina": 288
+          "pagina": 291
         },
         {
           "id": "classe-campeao-dimensional",
           "numero": "A.20",
-          "pagina": 293
+          "pagina": 296
         },
         {
           "id": "classe-cartista-arcano",
           "numero": "A.21",
-          "pagina": 295
+          "pagina": 298
         },
         {
           "id": "classe-devorador",
           "numero": "A.22",
-          "pagina": 298
+          "pagina": 301
         },
         {
           "id": "classe-elementarista",
           "numero": "A.23",
-          "pagina": 300
+          "pagina": 303
         },
         {
           "id": "classe-escritor-de-contos",
           "numero": "A.24",
-          "pagina": 305
+          "pagina": 308
         },
         {
           "id": "classe-guia-dimensional",
           "numero": "A.25",
-          "pagina": 307
+          "pagina": 310
         },
         {
           "id": "classe-interceptador",
           "numero": "A.26",
-          "pagina": 309
+          "pagina": 312
         },
         {
           "id": "classe-invocador",
           "numero": "A.27",
-          "pagina": 312
+          "pagina": 315
         },
         {
           "id": "classe-pirata-amaldicoado",
           "numero": "A.28",
-          "pagina": 316
+          "pagina": 319
         },
         {
           "id": "classe-viajante-classe",
           "numero": "A.29",
-          "pagina": 320
+          "pagina": 323
         },
         {
           "id": "raca-anao",
           "numero": "B.1",
-          "pagina": 324
+          "pagina": 327
         },
         {
           "id": "raca-animalia",
           "numero": "B.2",
-          "pagina": 326
+          "pagina": 329
         },
         {
           "id": "raca-feerico",
           "numero": "B.3",
-          "pagina": 331
+          "pagina": 334
         },
         {
           "id": "raca-gigante",
           "numero": "B.4",
-          "pagina": 332
+          "pagina": 335
         },
         {
           "id": "raca-goblim",
           "numero": "B.5",
-          "pagina": 334
+          "pagina": 337
         },
         {
           "id": "raca-golem",
           "numero": "B.6",
-          "pagina": 336
+          "pagina": 339
         },
         {
           "id": "raca-humano",
           "numero": "B.7",
-          "pagina": 338
+          "pagina": 341
         },
         {
           "id": "raca-mimico",
           "numero": "B.8",
-          "pagina": 340
+          "pagina": 343
         },
         {
           "id": "raca-sereia",
           "numero": "B.9",
-          "pagina": 342
+          "pagina": 345
         },
         {
           "id": "raca-simbionte",
           "numero": "B.10",
-          "pagina": 344
+          "pagina": 347
         },
         {
           "id": "raca-slime",
           "numero": "B.11",
-          "pagina": 346
+          "pagina": 349
         },
         {
           "id": "raca-vampiro",
           "numero": "B.12",
-          "pagina": 348
+          "pagina": 351
         },
         {
           "id": "raca-amalgamo",
           "numero": "B.13",
-          "pagina": 351
+          "pagina": 354
         },
         {
           "id": "raca-anomalia",
           "numero": "B.14",
-          "pagina": 352
+          "pagina": 355
         },
         {
           "id": "raca-auleth",
           "numero": "B.15",
-          "pagina": 353
+          "pagina": 356
         },
         {
           "id": "raca-automato",
           "numero": "B.16",
-          "pagina": 356
+          "pagina": 359
         },
         {
           "id": "raca-bruxa",
           "numero": "B.17",
-          "pagina": 358
+          "pagina": 361
         },
         {
           "id": "raca-clone",
           "numero": "B.18",
-          "pagina": 360
+          "pagina": 363
         },
         {
           "id": "raca-desperto",
           "numero": "B.19",
-          "pagina": 362
+          "pagina": 365
         },
         {
           "id": "raca-divino",
           "numero": "B.20",
-          "pagina": 364
+          "pagina": 367
         },
         {
           "id": "raca-elfo",
           "numero": "B.21",
-          "pagina": 368
+          "pagina": 371
         },
         {
           "id": "raca-espirito",
           "numero": "B.22",
-          "pagina": 371
+          "pagina": 374
         },
         {
           "id": "raca-onirico",
           "numero": "B.23",
-          "pagina": 383
+          "pagina": 386
         },
         {
           "id": "legados-catalogo",
           "numero": "C.1",
-          "pagina": 387
+          "pagina": 390
         },
         {
           "id": "magias-universal",
           "numero": "D.1",
-          "pagina": 394
+          "pagina": 397
         },
         {
           "id": "magias-origem",
           "numero": "D.2",
-          "pagina": 404
+          "pagina": 407
         },
         {
           "id": "magias-essencia",
           "numero": "D.3",
-          "pagina": 409
+          "pagina": 412
         },
         {
           "id": "magias-comunicacao",
           "numero": "D.4",
-          "pagina": 414
+          "pagina": 417
         },
         {
           "id": "magias-vitalidade",
           "numero": "D.5",
-          "pagina": 419
+          "pagina": 422
         },
         {
           "id": "magias-inconstancia",
           "numero": "D.6",
-          "pagina": 424
+          "pagina": 427
         },
         {
           "id": "magias-fisico",
           "numero": "D.7",
-          "pagina": 429
+          "pagina": 432
         },
         {
           "id": "magias-espaco",
           "numero": "D.8",
-          "pagina": 435
+          "pagina": 438
         },
         {
           "id": "magias-tempo",
           "numero": "D.9",
-          "pagina": 440
+          "pagina": 443
         },
         {
           "id": "magias-vazio",
           "numero": "D.10",
-          "pagina": 445
+          "pagina": 448
         },
         {
           "id": "magias-fim",
           "numero": "D.11",
-          "pagina": 450
+          "pagina": 453
         },
         {
           "id": "magias-tecnologia",
           "numero": "D.12",
-          "pagina": 456
+          "pagina": 459
         },
         {
           "id": "magias-rituais",
           "numero": "D.13",
-          "pagina": 461
+          "pagina": 464
         },
         {
           "id": "magias-selos",
           "numero": "D.14",
-          "pagina": 470
+          "pagina": 473
         },
         {
           "id": "magias-encantamentos",
           "numero": "D.15",
-          "pagina": 474
+          "pagina": 477
         },
         {
           "id": "magias-fusoes",
           "numero": "D.16",
-          "pagina": 478
+          "pagina": 481
         }
       ]
     }
   },
-  "gerado_em": "2026-11-13T22:52:44.584Z"
+  "gerado_em": "2026-11-14T02:54:35.607Z"
 }

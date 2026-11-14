@@ -1,17 +1,16 @@
 {
   "itens": [
     {
-      "id": "2026-11-13-pontos-de-relacao",
+      "id": "2026-11-13-revisao-das-regras-novas",
       "data": "2026-11-13",
-      "tipo": "novo",
+      "tipo": "correcao",
       "area": "Regras",
-      "titulo": "Pontos de Relação: o quanto o seu personagem confia em cada um do grupo",
+      "titulo": "Acertos nas regras novas do Livro",
       "detalhes": [
-        "Página nova no Livro, em Cenas e Grupo. Cada personagem tem de 0 a 3 pontos com cada outro do grupo, e cada ponto vira um uso por sessão: ajudar sem teste e com vantagem, segurar a mão de quem entrou em crise de Sanidade, ou entrar junto num Ataque Combinado.",
-        "O Ataque Combinado agora compensa. Quanto mais pontos cada participante tem com quem lidera, maior o bônus: de +2 no ataque até vantagem, um dado a mais de dano e a Resistência do chefe contando uma vez só. Se todo mundo errar, todo mundo fica Exposto.",
-        "Gostar de alguém pesa: quanto mais pontos, mais Sanidade você perde quando essa pessoa cai, morre, some ou trai.",
-        "Na ficha, em Notas, Vínculos: marque um vínculo como personagem do grupo e ele mostra os pontos, os usos da sessão e o teste de Sanidade de cada caso. Os vínculos que você já tinha continuam iguais.",
-        "Também acertamos detalhes de Perseguição, Batalha em Massa, Moral, Viagem, Infiltração e Laços que estavam confusos no texto."
+        "O kit inicial do ofício só aceita itens que a Loja venderia a um personagem de nível 1. As armaduras incomuns pedem nível 5 e saíram da lista.",
+        "As Ferramentas do Mestre, dentro do Guia, mostram a mesma escada de DT do Livro, com o ajuste de nível. A tabela antiga marcava DT 25 no nível 20, e o Livro marca 30.",
+        "A verba de aventura passa a ser contada em Fragmentos do nível 50 em diante, como a tabela já mostrava. Duas notas falavam em nível 41.",
+        "Na Batalha em Massa, ficar ao lado do comandante usa a DT de Ajudar que sobe com o nível da batalha."
       ]
     },
     {
@@ -26,6 +25,34 @@
         "Vale para Sanidade e crises, fobias e traumas, lesões, aflições, clima, fôlego, comida na estrada, queda, viagem forçada, veículos e o teste de Morrendo.",
         "Na ficha, as seções de Aflições e de Ambiente já mostram e rolam a DT com o ajuste do seu nível.",
         "Conjuração, rituais, fabricar, invadir uma base e manter concentração continuam como estavam, porque já sobem por outro caminho."
+      ]
+    },
+    {
+      "id": "2026-11-13-pontos-de-relacao",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Pontos de Relação: o quanto o seu personagem confia em cada um do grupo",
+      "detalhes": [
+        "Página nova no Livro, em Cenas e Grupo. Cada personagem tem de 0 a 3 pontos com cada outro do grupo, e cada ponto vira um uso por sessão: ajudar sem teste e com vantagem, segurar a mão de quem entrou em crise de Sanidade, ou entrar junto num Ataque Combinado.",
+        "O Ataque Combinado agora compensa. Quanto mais pontos cada participante tem com quem lidera, maior o bônus: de +2 no ataque até vantagem, um dado a mais de dano e a Resistência do chefe contando uma vez só. Se todo mundo errar, todo mundo fica Exposto.",
+        "Gostar de alguém pesa: quanto mais pontos, mais Sanidade você perde quando essa pessoa cai, morre, some ou trai.",
+        "Na ficha, em Notas, Vínculos: marque um vínculo como personagem do grupo e ele mostra os pontos, os usos da sessão e o teste de Sanidade de cada caso. Os vínculos que você já tinha continuam iguais.",
+        "Também acertamos detalhes de Perseguição, Batalha em Massa, Moral, Viagem, Infiltração e Laços que estavam confusos no texto."
+      ]
+    },
+    {
+      "id": "2026-11-13-oficio-na-criacao",
+      "data": "2026-11-13",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Seu personagem agora tem um ofício, e ele decide com o que você começa",
+      "detalhes": [
+        "Na criação, um passo novo pergunta o que o seu personagem fazia para viver antes da aventura. São 38 ofícios prontos, de pedinte a médico, e você pode escrever o seu.",
+        "O ofício decide o dinheiro inicial (de 5 a 150 Lunaris), quantos itens você escolhe e de que raridade. Os itens agora saem da Loja de verdade, com dano e defesa prontos, e você ainda pode escrever um item seu.",
+        "Quem vem de baixo começa com pouco no bolso e mais gente conhecida: os contatos do seu ofício já entram nos Vínculos. Quem estudou começa com um item incomum e alguém esperando o retorno do que pagou.",
+        "Na Carteira da ficha, o cartão do ofício mostra quanto você ganha por dia e quanto sobra depois de comer e dormir. Trabalhou no tempo entre aventuras? Diga quantos dias e aperte Receber: entra a sobra. Personagem antigo pode escolher o ofício ali mesmo.",
+        "A renda cheia pede grau numa das duas perícias do ofício: Aprendiz para o Trabalhador, Treinado para o Artesão ou soldado e Especialista para o Especialista. Até lá você ganha na linha de baixo, e a renda cresce quando você treina."
       ]
     },
     {
@@ -1019,32 +1046,6 @@
         "Três condições novas: Fascinado, Enjoado e Invisível. As condições agora têm gravidade (leve, média, grave e gravíssima), que é o que as curas usam para saber o que encerram.",
         "O dano verdadeiro entrou nos Tipos de Dano: nenhuma Resistência reduz esse dano. O dano espiritual do Caçador das Almas passou a ser dano de Essência, e o dano psíquico virou dano mental, que tira Sanidade.",
         "Efeitos que davam Resistência contra todo dano agora reduzem o dano de cada golpe. Voltar da morte ganhou regra em Ferimentos: é raro e cobra caro."
-      ]
-    },
-    {
-      "id": "2026-10-28-o-que-todo-povo-carrega",
-      "data": "2026-10-28",
-      "tipo": "novo",
-      "area": "Regras",
-      "titulo": "O que todo povo carrega",
-      "detalhes": [
-        "A página de cada raça ganhou a seção O que todo povo carrega: três ou quatro linhas sobre o que o corpo e a natureza da raça mudam na vida de qualquer povo dela, em qualquer Árvore. Todo vampiro precisa de sangue, o golem não come, o elfo não esquece.",
-        "O jeito de viver de cada lugar continua com o reino de onde o povo é, como Khazad, Salém ou Nadalon. Em outra Árvore, o mesmo povo pode viver de outro jeito, e o Mestre monta essa cultura com a mesa.",
-        "O Livro de Regras também traz essas linhas junto de cada raça."
-      ]
-    },
-    {
-      "id": "2026-10-27-revisao-classes-correcoes",
-      "data": "2026-10-27",
-      "tipo": "correcao",
-      "area": "Ficha",
-      "titulo": "Classes com bônus somados e nomes certos",
-      "detalhes": [
-        "A ficha passou a somar bônus que estavam só no texto: a Pele Curtida e os Reflexos de Predador do Devorador, o Hohō do Caçador das Almas e o atributo do Além do Comum do Campeão Dimensional.",
-        "O Frasco Congelante do Alquimista causa dano de gelo, a Artilharia do Engenho Divino do Engenheiro causa dano de raio, e o Couro Grosso do Guerreiro resiste a fogo, a gelo e a frio.",
-        "O Cuscuz Nordestino do Chef agora dá +2 de Iniciativa no próximo combate, porque a Iniciativa é um número da ficha e não se rola.",
-        "A Pop Star usa a DT de Palco em todos os poderes, e a Especialização do Caçador fala em raça em todos os estágios.",
-        "Imunidades e testes contra medo e paralisia usam o nome das condições: Amedrontado e Paralisado."
       ]
     }
   ]

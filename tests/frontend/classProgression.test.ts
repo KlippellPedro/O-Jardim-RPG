@@ -447,7 +447,8 @@ test('guia de criação acompanha o assistente e fixa classe especial no nível 
   const guia = REGRAS_OFICIAIS['criacao-personagem'];
   assert.ok(guia);
   assert.match(guia.corpo, /1\. Nome e Árvore de origem/i);
-  assert.match(guia.corpo, /7\. Conferência da ficha/i);
+  assert.match(guia.corpo, /7\. Ofício e equipamento inicial/i);
+  assert.match(guia.corpo, /8\. Conferência da ficha/i);
   assert.match(guia.corpo, /seis perícias/i);
   assert.match(guia.corpo, /20 Lunaris/i);
   assert.match(guia.corpo, /Sanidade[\s\S]{0,80}100 de 100/i);

@@ -7,6 +7,7 @@ import re
 import unicodedata
 from pathlib import Path
 
+from core import oficios
 from core.maestria_classe import graus_de_maestria
 from core.progressao_niveis import (
     GRAUS_PERICIA,
@@ -1388,15 +1389,28 @@ def validar_regras_ficha(
         return erro_manifestacoes
 
     if criacao:
-        if _inteiro(ficha.get("lunarisInicial")) != 20:
-            return "personagens comecam com 20 Lunaris"
+        # O ofício decide os Lunaris e os itens iniciais (data/economia/oficios-v1.json).
+        # Sem ofício, vale a faixa de aprendiz: 20 Lunaris e um item comum.
+        erro_oficio = oficios.validar_oficio(ficha.get("oficio"))
+        if erro_oficio:
+            return erro_oficio
+        faixa = oficios.faixa_do_oficio(ficha.get("oficio"))
+        if _inteiro(ficha.get("lunarisInicial")) != int(faixa["lunaris_iniciais"]):
+            return f"a faixa {faixa['titulo']} comeca com {faixa['lunaris_iniciais']} Lunaris"
         inventario = ficha.get("inventarioInicial")
-        if not isinstance(inventario, list) or len(inventario) != 1:
-            return "escolha exatamente um item comum inicial"
-        item = inventario[0]
-        titulo = item.get("titulo") if isinstance(item, dict) else None
-        if not isinstance(titulo, str) or not 2 <= len(" ".join(titulo.split())) <= 200:
-            return "o item comum inicial precisa de um nome valido"
+        if not isinstance(inventario, list) or not inventario:
+            return "escolha pelo menos um item inicial"
+        limite = int(faixa["itens"]["comum"]) + int(faixa["itens"]["incomum"])
+        if len(inventario) > limite:
+            return f"a faixa {faixa['titulo']} escolhe no maximo {limite} itens"
+        for item in inventario:
+            if not isinstance(item, dict):
+                return "item inicial invalido"
+            if item.get("item_id"):
+                continue
+            titulo = item.get("titulo")
+            if not isinstance(titulo, str) or not 2 <= len(" ".join(titulo.split())) <= 200:
+                return "o item inicial precisa de um nome valido"
     return None
 
 

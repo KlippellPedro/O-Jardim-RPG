@@ -7,7 +7,7 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, Depends, HTTPException, status
 from psycopg.types.json import Jsonb
 
-from core import live_session
+from core import live_session, oficios
 from core.audit import record_audit
 from core.combate_intenso import registrar_minimos
 from core.progressao_niveis import NIVEL_TOTAL_PADRAO, patamar_novo, rotulo_do_patamar
@@ -692,6 +692,45 @@ def create_character(
         ).fetchone()
         if not owner:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail="o dono deve ser membro da campanha")
+        # O ofício decide o kit inicial (data/economia/oficios-v1.json). Os
+        # Lunaris saem da faixa e a raridade de cada item sai do catálogo da
+        # campanha: o navegador só diz o que a pessoa escolheu.
+        from routers.shop import (
+            _require_catalog_character_requirements,
+            _visible_catalog_rows,
+            conceder_itens_do_catalogo,
+        )
+
+        oficio_ficha = payload.ficha.get("oficio")
+        erro_oficio = oficios.validar_oficio(oficio_ficha)
+        if erro_oficio:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=erro_oficio)
+        faixa_inicial = oficios.faixa_do_oficio(oficio_ficha)
+        lunaris_iniciais = int(faixa_inicial["lunaris_iniciais"])
+        pedidos_iniciais = payload.ficha.get("inventarioInicial")
+        kit_inicial: list[oficios.EscolhaInicial] = []
+        if isinstance(pedidos_iniciais, list) and pedidos_iniciais:
+            ids_pedidos = sorted({
+                str(entrada.get("item_id")).strip()
+                for entrada in pedidos_iniciais
+                if isinstance(entrada, dict) and str(entrada.get("item_id") or "").strip()
+            })
+            catalogo_kit = {
+                row["id"]: row
+                for row in (_visible_catalog_rows(connection, payload.campanha_id, ids_pedidos) if ids_pedidos else [])
+            }
+            try:
+                kit_inicial = oficios.conferir_kit(oficio_ficha, pedidos_iniciais, catalogo_kit)
+            except oficios.KitInvalido as erro:
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(erro)) from erro
+            # O kit entra como se fosse comprado: classe e atributo pedidos pelo
+            # item valem como na Loja.
+            for escolha in kit_inicial:
+                if not escolha.item_id:
+                    continue
+                infracoes = _require_catalog_character_requirements(catalogo_kit[escolha.item_id], {"ficha": payload.ficha})
+                if infracoes:
+                    raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=infracoes[0]["mensagem"])
         connection.execute(
             """
             INSERT INTO personagens
@@ -710,36 +749,45 @@ def create_character(
         connection.execute(
             """
             INSERT INTO saldos_personagem (campanha_id, personagem_id, moeda, saldo)
-            VALUES (%s, %s, 'Lunaris', 20)
+            VALUES (%s, %s, 'Lunaris', %s)
             """,
-            (payload.campanha_id, character_id),
+            (payload.campanha_id, character_id, lunaris_iniciais),
         )
         connection.execute(
             """
             INSERT INTO lancamentos_economia
                 (id, campanha_id, personagem_id, moeda, delta, saldo_apos,
                  motivo, origem, ator_usuario_id)
-            VALUES (%s, %s, %s, 'Lunaris', 20, 20, %s, %s, %s)
+            VALUES (%s, %s, %s, 'Lunaris', %s, %s, %s, %s, %s)
             """,
             (
                 uuid4(),
                 payload.campanha_id,
                 character_id,
-                "beneficio inicial da criacao",
+                lunaris_iniciais,
+                lunaris_iniciais,
+                f"beneficio inicial da criacao ({faixa_inicial['titulo']})",
                 "criacao-personagem",
                 user.id,
             ),
         )
-        inventario_inicial = payload.ficha.get("inventarioInicial")
-        item_inicial = inventario_inicial[0] if isinstance(inventario_inicial, list) and inventario_inicial else None
-        titulo_inicial = (
-            " ".join(str(item_inicial.get("titulo") or "").split())[:200]
-            if isinstance(item_inicial, dict)
-            else ""
-        )
-        item_inicial_id = f"manual:{uuid4()}" if titulo_inicial else None
-        if item_inicial_id:
-            dados_iniciais = {"origem": "criacao", "raridade": "comum", "equipado": False}
+        economia_versao = 1
+        itens_lancados: list[tuple[str, str]] = []
+        linhas_catalogo = [(escolha.item_id, 1) for escolha in kit_inicial if escolha.item_id]
+        if linhas_catalogo:
+            # Mesmo caminho da concessão do Mestre: o item entra com os dados do
+            # catálogo e se comporta como um item comprado na Loja.
+            concedidos, economia_versao, _versao = conceder_itens_do_catalogo(
+                connection,
+                payload.campanha_id,
+                {"id": character_id, "ficha": _sheet_without_central_fields(payload.ficha)},
+                linhas_catalogo,
+            )
+            itens_lancados.extend((item["item_id"], item["titulo"]) for item in concedidos)
+        for escolha in kit_inicial:
+            if escolha.item_id:
+                continue
+            item_manual_id = f"manual:{uuid4()}"
             connection.execute(
                 """
                 INSERT INTO inventario_personagem
@@ -749,11 +797,13 @@ def create_character(
                 (
                     payload.campanha_id,
                     character_id,
-                    item_inicial_id,
-                    titulo_inicial,
-                    Jsonb(dados_iniciais),
+                    item_manual_id,
+                    escolha.titulo,
+                    Jsonb({"origem": "criacao", "raridade": "comum", "equipado": False}),
                 ),
             )
+            itens_lancados.append((item_manual_id, escolha.titulo))
+        for item_id_lancado, _titulo in itens_lancados:
             connection.execute(
                 """
                 INSERT INTO lancamentos_economia
@@ -765,12 +815,24 @@ def create_character(
                     uuid4(),
                     payload.campanha_id,
                     character_id,
-                    item_inicial_id,
-                    "item comum inicial da criacao",
+                    item_id_lancado,
+                    "item inicial da criacao",
                     "criacao-personagem",
                     user.id,
                 ),
             )
+        inventario_criado = [
+            dict(row)
+            for row in connection.execute(
+                """
+                SELECT item_id, titulo, quantidade, dados
+                FROM inventario_personagem
+                WHERE campanha_id=%s AND personagem_id=%s
+                ORDER BY titulo, item_id
+                """,
+                (payload.campanha_id, character_id),
+            ).fetchall()
+        ]
         record_audit(
             connection,
             action="personagem.criado",
@@ -778,7 +840,12 @@ def create_character(
             campaign_id=payload.campanha_id,
             target_type="personagem",
             target_id=str(character_id),
-            details={"dono_usuario_id": str(owner_id), "nome": payload.nome},
+            details={
+                "dono_usuario_id": str(owner_id),
+                "nome": payload.nome,
+                "faixa": faixa_inicial["id"],
+                "lunaris_iniciais": lunaris_iniciais,
+            },
         )
     return {
         "id": character_id,
@@ -787,14 +854,9 @@ def create_character(
         "nome": payload.nome,
         "ficha": _sheet_without_central_fields(payload.ficha),
         "versao": 1,
-        "economia_versao": 1,
-        "carteira": [{"moeda": "Lunaris", "saldo": 20}],
-        "inventario_central": ([{
-            "item_id": item_inicial_id,
-            "titulo": titulo_inicial,
-            "quantidade": 1,
-            "dados": {"origem": "criacao", "raridade": "comum", "equipado": False},
-        }] if item_inicial_id else []),
+        "economia_versao": int(economia_versao),
+        "carteira": [{"moeda": "Lunaris", "saldo": lunaris_iniciais}],
+        "inventario_central": inventario_criado,
         "status": "ativo",
     }
 

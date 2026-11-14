@@ -74,3 +74,20 @@ test('a busca do guia ignora acento e aponta estante, seção e tabela', () => {
 
   assert.ok(buscarNoGuia(guia, 'boato').length <= 12, 'a busca precisa respeitar o limite de resultados');
 });
+
+// As Ferramentas do Mestre (mestre-v1.json) aparecem dentro do Guia, ao lado da
+// escada do Livro. Em 2026-11 a DT Padrão passou a acompanhar quem investe e a
+// tabela delas ficou na conta antiga (25 no nível 20, contra 30 no Livro).
+test('a escada de DT das Ferramentas do Mestre é a mesma do Livro', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { dtPadraoDoVd, ajusteDeDtDoNivel } = await import('../../src/services/curvaCriatura');
+  const biblioteca = JSON.parse(readFileSync(new URL('../../data/regras/mestre-v1.json', import.meta.url), 'utf8'));
+  const secao = biblioteca.secoes.find((item: { titulo?: string }) => item.titulo === 'DT por nível do desafio');
+  assert.ok(secao, 'a tabela de DT sumiu das Ferramentas do Mestre');
+  assert.deepEqual(secao.colunas, ['Nível', 'Ajuste', 'Rotineira', 'Padrão', 'Difícil', 'Extrema']);
+  for (const [nivel, ajuste, rotineira, padrao, dificil, extrema] of secao.linhas) {
+    const esperada = dtPadraoDoVd(nivel);
+    assert.equal(padrao, esperada, `nível ${nivel}`);
+    assert.deepEqual([ajuste, rotineira, dificil, extrema], [`+${ajusteDeDtDoNivel(nivel)}`, esperada - 5, esperada + 5, esperada + 10], `nível ${nivel}`);
+  }
+});

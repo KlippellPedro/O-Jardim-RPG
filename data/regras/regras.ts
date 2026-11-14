@@ -34,6 +34,7 @@ import {
 } from '../../src/services/referenciaBalanceamento';
 import { ARVORES } from '../mundo/arvoresCatalog';
 import { REGRA_AFLICOES } from './aflicoes';
+import { FAIXA_MAIS_POBRE, FAIXA_MAIS_RICA, LISTA_DE_OFICIOS, SOBRA_MAXIMA, SOBRA_MINIMA, TABELA_FAIXAS_DE_OFICIO, TOTAL_DE_OFICIOS, sobraDaFaixa } from './oficios';
 import { REGRA_ATAQUES_COMBINADOS } from './ataquesCombinados';
 import { REGRA_BASES } from './bases';
 import { REGRA_BATALHA } from './batalha';
@@ -603,19 +604,20 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     status: 'Regra oficial',
     resumo: 'Um roteiro completo para criar um personagem de nível 1, escolher suas opções e conferir todos os valores da ficha.',
     destaques: [
-      ['Etapas', '7 passos'],
+      ['Etapas', '8 passos'],
       ['Perícias', '6 em Aprendiz'],
-      ['Recursos', '1 item comum + 20 Lunaris'],
+      ['Recursos', 'Pelo ofício: Lunaris, itens e renda'],
     ],
     corpo: `
-      <p class="regras-lead">Criar um personagem leva sete etapas, e o assistente da ficha acompanha todas elas. Este tópico explica o que cada etapa pede e termina com a conferência dos números que a ficha pronta precisa mostrar. Faça as escolhas na ordem apresentada, porque as opções de cada etapa dependem da Árvore, da raça e da classe que você escolheu antes.</p>
+      <p class="regras-lead">Criar um personagem leva oito etapas, e o assistente da ficha acompanha todas elas. Este tópico explica o que cada etapa pede e termina com a conferência dos números que a ficha pronta precisa mostrar. Faça as escolhas na ordem apresentada, porque as opções de cada etapa dependem da Árvore, da raça e da classe que você escolheu antes.</p>
 
       <div class="regras-resumo">
         <ul>
           <li>O personagem nasce no <strong>nível 1</strong>, com uma classe comum. Raça ou classe especial só entra com liberação do Mestre.</li>
-          <li>As sete etapas, nesta ordem: nome e Árvore, raça, classe, divindade, atributos, perícias e equipamento, e a conferência da ficha.</li>
+          <li>As oito etapas, nesta ordem: nome e Árvore, raça, classe, divindade, atributos, perícias, ofício e equipamento, e a conferência da ficha.</li>
           <li>Atributos pelo conjunto padrão (15, 14, 13, 12, 10, 8 e 8) ou por compra de pontos (24 pontos). O método de 7d20 só vale com a concordância da mesa.</li>
-          <li>Você começa com seis perícias em Aprendiz (Humano escolhe sete), um item comum e 20 Lunaris.</li>
+          <li>Você começa com seis perícias em Aprendiz (Humano escolhe sete).</li>
+          <li>O ofício que o personagem tinha antes da aventura decide o dinheiro inicial (de ${FAIXA_MAIS_POBRE.lunaris_iniciais} a ${FAIXA_MAIS_RICA.lunaris_iniciais} Lunaris), quantos itens da Loja ele escolhe e de que raridade, quanto ganha trabalhando e quem ele conhece.</li>
         </ul>
       </div>
 
@@ -654,15 +656,28 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Variante aleatória:</strong> role 7d20 e distribua os sete resultados, cada dado uma vez. Esse método não é equivalente aos anteriores e só deve ser usado com concordância da mesa.</li>
       </ul>
 
-      <h3 class="regras-subtitle">6. Perícias e equipamento inicial</h3>
+      <h3 class="regras-subtitle">6. Perícias</h3>
       <ul class="regras-list">
         <li>Escolha exatamente <strong>seis perícias</strong> para começar em Aprendiz. Humano escolhe sete por Adaptabilidade.</li>
-        <li>Escolha um item comum aprovado pelo Mestre. Ele entra no inventário como item de criação e não possui preço de revenda.</li>
-        <li>Registre <strong>20 Lunaris</strong>. Nenhuma nova classe escolhida no futuro concede outro equipamento ou dinheiro inicial.</li>
       </ul>
       <p>As perícias e o que cada grau significa estão em <span class="regras-ref regras-ref--pericias">Perícias</span>. As contas de Vida, Mana e Estamina estão em <span class="regras-ref regras-ref--sistema-base">Sistema Base</span>.</p>
 
-      <h3 class="regras-subtitle">7. Conferência da ficha</h3>
+      <h3 class="regras-subtitle">7. Ofício e equipamento inicial</h3>
+      <p>Antes de virar aventureiro, o seu personagem vivia de alguma coisa. Escolha o ofício que ele tinha até a história começar. O ofício encaixa o personagem numa <strong>faixa</strong>, e a faixa decide com quanto dinheiro ele começa, quantos itens escolhe e de que raridade, quanto ganha quando volta a trabalhar e quem ele conhece.</p>
+      ${TABELA_FAIXAS_DE_OFICIO}
+      <ul class="regras-list">
+        <li><strong>Os itens saem da Loja.</strong> Escolha armas, armaduras, equipamentos e consumíveis vendidos na Feira, na raridade que a faixa permite. Eles entram no inventário como se tivessem sido comprados. A vaga de incomum aceita um comum no lugar.</li>
+        <li><strong>Item escrito por você conta como comum.</strong> Um alaúde gasto, a tesoura do alfaiate, a pena do escriba. O Mestre aprova o que não estiver no catálogo.</li>
+        <li><strong>Os contatos entram nos seus Vínculos.</strong> Amigo e Conhecido seguem a Confiança de <span class="regras-ref regras-ref--contatos-lacos">Contatos e Laços</span>. Dê nome e rosto a cada um.</li>
+        <li><strong>O Especialista começa devendo.</strong> Alguém pagou a formação dele, e essa pessoa entra nos Vínculos como uma Dívida para você combinar com o Mestre.</li>
+        <li><strong>A renda vale no tempo entre aventuras.</strong> Cada dia trabalhando no ofício paga o valor da faixa, pela atividade Trabalhar no ofício de <span class="regras-ref regras-ref--entre-aventuras">Tempo Entre Aventuras</span>, e quase tudo vai no custo de vida. O que chega à carteira é a sobra. Na Carteira da ficha, o botão Receber soma a sobra dos dias trabalhados e deixa o registro no extrato.</li>
+        <li><strong>A renda cheia pede grau.</strong> As duas perícias ao lado de cada ofício são as dele. O Trabalhador ganha a linha dele com Aprendiz numa delas, o Artesão ou soldado com Treinado e o Especialista com Especialista. Sem o grau, você trabalha na linha de baixo até treinar. O dinheiro, os itens e os contatos da faixa valem desde o começo.</li>
+        <li>Nenhuma nova classe escolhida no futuro concede outro equipamento ou dinheiro inicial.</li>
+      </ul>
+      <p>Há ${TOTAL_DE_OFICIOS} ofícios prontos para escolher. Se o seu não estiver na lista, escreva o nome dele e escolha a faixa que mais combina: o que manda é quanto aquele trabalho rende, e a tabela acima já responde. Combine com o Mestre quais perícias contam para a renda dele.</p>
+      ${LISTA_DE_OFICIOS}
+
+      <h3 class="regras-subtitle">8. Conferência da ficha</h3>
       <p>Com tudo escolhido, a ficha mostra os números abaixo. Confira cada um contra a conta:</p>
       <dl class="regras-kv regras-kv--boxed">
         <dt>Nível e XP</dt><dd>nível total 1 e 0 XP</dd>
@@ -689,7 +704,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Os sete atributos usam um método válido e os ajustes raciais aparecem uma única vez.</li>
         <li>Seis perícias estão em Aprendiz, ou sete se o personagem for Humano.</li>
         <li>Vida, Mana, Estamina, Sanidade, Cansaço, Defesa, Movimento e Iniciativa conferem com o resumo.</li>
-        <li>O inventário contém um item comum de criação e a carteira contém 20 Lunaris.</li>
+        <li>O ofício está escolhido, e a carteira e o inventário mostram os Lunaris e os itens da faixa dele.</li>
         <li>O personagem possui um motivo para participar da campanha e trabalhar com o grupo.</li>
       </ul>
     `,
@@ -714,7 +729,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Combine o tom antes das fichas. Investigação sombria e comédia de estrada usam estas mesmas regras e produzem mesas incompatíveis.</li>
         <li>Peça um motivo concreto para o personagem trabalhar com o grupo. O checklist da página cobra isso, e é a linha que mais evita sessão travada.</li>
-        <li>Nível 1 com um item comum e 20 Lunaris é pouco de propósito. Se a sua campanha começa depois disso, entregue o extra de forma igual para todos e anuncie.</li>
+        <li>O ofício cria desigualdade de propósito: quem vem da rua começa com ${FAIXA_MAIS_POBRE.lunaris_iniciais} Lunaris e o Especialista com ${FAIXA_MAIS_RICA.lunaris_iniciais} e um item incomum. A compensação está nos contatos e na Dívida. Se a sua mesa prefere todo mundo igual, peça a todos a mesma faixa e deixe o ofício só como história.</li>
+        <li>Ofício escrito pelo jogador entra numa faixa à escolha dele. Confira se a faixa faz sentido: um coveiro que pede a faixa de Especialista precisa de uma história que explique o salário. Combine também as duas perícias do ofício. Até lá, a ficha conta o maior grau dele para a renda.</li>
+        <li>A renda do ofício só entra quando o personagem gasta dias trabalhando no tempo entre aventuras, e entra só a sobra: de ${SOBRA_MINIMA} a ${SOBRA_MAXIMA} Lunaris por dia. É pouco perto da verba de aventura, e de propósito. O botão Receber na Carteira deixa cada ganho no extrato, então você consegue conferir quem trabalhou quanto.</li>
+        <li>Nível 1 continua apertado de propósito. Se a sua campanha começa depois disso, entregue o extra de forma igual para todos e anuncie.</li>
       </ul>
     `,
   },
@@ -1914,7 +1932,7 @@ ${HTML_MORAL}
         <ul>
           <li>Entre dois arcos o Mestre diz quantos dias vocês têm, e cada personagem gasta os seus como quiser, em dias inteiros.</li>
           <li>Um dia de atividade são seis horas, e cada personagem faz uma atividade por dia. Treino e fabricação deixam 1 de Cansaço por dia, e uma noite de sono resolve.</li>
-          <li>Trabalhar rende de 5 a 65 Lunaris por dia, conforme o ofício, e a tabela de custo de vida mostra para onde esse dinheiro vai.</li>
+          <li>Trabalhar rende de 5 a 65 Lunaris por dia, conforme o ofício e o grau, e quase tudo vai no custo de vida: na carteira sobra de ${SOBRA_MINIMA} a ${SOBRA_MAXIMA} por dia.</li>
           <li>Se você não souber o que o seu personagem faz com o tempo, as perguntas do fim do tópico ajudam.</li>
         </ul>
       </div>
@@ -1936,7 +1954,7 @@ ${HTML_MORAL}
           <tr><td><strong>Treinar uma perícia.</strong></td><td>Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.<small class="regras-mecanica">Custa de ${diasTreinoMinimo} a ${diasTreinoMaximo} dias, conforme o grau. Rende um grau de perícia. Regra completa em <span class="regras-ref regras-ref--treinar">Treinamento</span>.</small></td></tr>
           <tr><td><strong>Fabricar ou reparar.</strong></td><td>Cheiro de metal quente, farpa no dedo, uma peça que não encaixa e depois encaixa. No fim, a coisa existe porque você fez.<small class="regras-mecanica">Custa os dias do projeto. Rende o item pronto, com um teste no fim. Regra completa em <span class="regras-ref regras-ref--crafting">Criação, Forja e Alquimia</span>.</small></td></tr>
           <tr><td><strong>Preparar ritual, selo ou encantamento.</strong></td><td>Velas acesas sempre nas mesmas horas, símbolos redesenhados até saírem perfeitos, e uma paciência que ninguém de fora entende.<small class="regras-mecanica">Custa o tempo da própria obra. Rende o efeito preparado, pronto para usar. Regra completa em <span class="regras-ref regras-ref--rituais-selos">Rituais, Selos e Fusão</span>.</small></td></tr>
-          <tr><td><strong>Trabalhar no ofício.</strong></td><td>Acordar cedo, voltar cansado com moeda no bolso e conhecer gente que nem imagina que você já enfrentou um monstro.<small class="regras-mecanica">Custa 1 dia por vez. Rende dinheiro, pela tabela Trabalhar pelo dia. Regra completa em <span class="regras-ref regras-ref--economia">Economia</span>.</small></td></tr>
+          <tr><td><strong>Trabalhar no ofício.</strong></td><td>Acordar cedo, voltar cansado com moeda no bolso e conhecer gente que nem imagina que você já enfrentou um monstro.<small class="regras-mecanica">Custa 1 dia por vez. Rende a sobra da faixa do seu ofício, na tabela Trabalhar pelo dia. O ofício está em <span class="regras-ref regras-ref--criacao-personagem">Criação de Personagem</span>.</small></td></tr>
           <tr><td><strong>Tratar veneno, doença ou vício.</strong></td><td>Chá amargo de hora em hora, febre de madrugada, e alguém sentado ao lado da cama contando os dias junto com você.<small class="regras-mecanica">Custa dias de cuidado contínuo. Rende a queda de estágio da aflição. Regra completa em <span class="regras-ref regras-ref--aflicoes">Venenos, Doenças e Vícios</span>.</small></td></tr>
           <tr><td><strong>Se recuperar em segurança.</strong></td><td>Dormir até tarde sem sonhar com nada. Trocar o curativo e ver que a pele por baixo já está rosada.<small class="regras-mecanica">Custa 1 dia por vez. Rende Vida, Mana, Sanidade e a queda de Ferido. Regra completa em <span class="regras-ref regras-ref--descanso">Descanso</span>.</small></td></tr>
           <tr><td><strong>Cuidar da base.</strong></td><td>Pregar a tábua solta, pagar quem conserta o telhado, pendurar na parede alguma coisa que veio da última aventura.<small class="regras-mecanica">Custa de 1 a vários dias. Rende instalação nova, reparo e conta mensal em dia. Regra completa em <span class="regras-ref regras-ref--bases">Propriedades e Bases</span>.</small></td></tr>
@@ -1949,15 +1967,16 @@ ${HTML_MORAL}
 
       <h3 class="regras-subtitle">Trabalhar pelo dia</h3>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Trabalho que você consegue arranjar</th><th>Por dia</th><th>Como costuma ser</th></tr></thead>
+        <thead><tr><th>Trabalho que você consegue arranjar</th><th>Por dia</th><th>Sobra</th><th>Como costuma ser</th></tr></thead>
         <tbody>
-          <tr><td>Serviço braçal, sem ofício nenhum</td><td>5 Lunaris</td><td>Carregar saco no porto, capinar, lavar louça de taverna.</td></tr>
-          <tr><td>Ofício comum, com uma perícia útil</td><td>10 Lunaris</td><td>Cuidar de cavalo, escrever carta para quem não sabe, remendar rede de pesca.</td></tr>
-          <tr><td>Artesão ou soldado, com perícia Treinada</td><td>25 Lunaris</td><td>Guardar uma caravana, forjar ferradura, costurar uniforme.</td></tr>
-          <tr><td>Especialista com nome na cidade</td><td>65 Lunaris</td><td>Tratar o filho de um mercador rico, avaliar uma joia, ensinar esgrima a um herdeiro.</td></tr>
+          <tr><td>Serviço braçal, sem ofício nenhum</td><td>5 Lunaris</td><td>${sobraDaFaixa('rua')} Lunaris</td><td>Carregar saco no porto, capinar, lavar louça de taverna.</td></tr>
+          <tr><td>Ofício comum, com uma perícia útil</td><td>10 Lunaris</td><td>${sobraDaFaixa('trabalhador')} Lunaris</td><td>Cuidar de cavalo, escrever carta para quem não sabe, remendar rede de pesca.</td></tr>
+          <tr><td>Artesão ou soldado, com perícia Treinada</td><td>25 Lunaris</td><td>${sobraDaFaixa('artesao')} Lunaris</td><td>Guardar uma caravana, forjar ferradura, costurar uniforme.</td></tr>
+          <tr><td>Especialista com nome na cidade, com perícia em grau Especialista</td><td>65 Lunaris</td><td>${sobraDaFaixa('especialista')} Lunaris</td><td>Tratar o filho de um mercador rico, avaliar uma joia, ensinar esgrima a um herdeiro.</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Trabalhar paga o custo de vida, e sobra pouco. Um dia de ofício comum rende 10 Lunaris, uma noite de estalagem custa 3, e a bota nova vai ter que esperar. Nenhum personagem enriquece assim, e é por isso que a estrada continua chamando.</p>
+      <p>Quem tem ofício trabalha na faixa dele, e a faixa é o teto: cada linha pede o grau escrito nela numa das duas perícias do ofício (a do ofício comum pede Aprendiz). Sem o grau, você trabalha na linha de baixo até treinar. O Aprendiz e quem vive na rua ganham a primeira linha. Sem ofício, ou longe de onde ele vale alguma coisa, sobra o serviço braçal.</p>
+      <p class="regras-note">Trabalhar paga o custo de vida, e sobra pouco. A coluna Sobra é o que chega à carteira depois de comer, dormir e se vestir como o trabalho pede, e é ela que o botão Receber da Carteira soma. Um dia de ofício comum rende 10 Lunaris, uma noite de estalagem custa 3, e a bota nova vai ter que esperar. Nenhum personagem enriquece assim, e é por isso que a estrada continua chamando.</p>
 
       <h3 class="regras-subtitle">Quanto custa viver</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -3821,7 +3840,8 @@ ${HTML_DEVOCAO}
           <tr><td><strong>500 ou mais</strong></td><td>Relíquia</td><td>450 Fragmentos</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Do nível 41 em diante a escada de compra acaba e a verba passa a ser contada em Fragmentos de Estrela. Ela mede o que o grupo tem para gastar quando você abre a porta do Mítico e da Relíquia, e a conta é a mesma de antes: quatro sessões pagam uma peça nova da raridade da faixa. A última linha vale para qualquer nível acima dela. A conversão é a de sempre, 1 Fragmento para 5.000 Lunaris, então 20 Fragmentos por sessão são 100 mil Lunaris.</p>
+      <p class="regras-note">Do nível 20 ao 49 a verba passa dessa conta, de propósito: ali uma arma da faixa sai por uma sessão ou menos. O resto paga o que custa muitas vezes uma arma da mesma raridade, como implante (25 vezes), veículo completo (20 vezes) e propriedade (40 vezes), e vai juntando para o salto até o Mítico no nível 50.</p>
+      <p class="regras-note">Do nível 50 em diante a escada de compra acaba e a verba passa a ser contada em Fragmentos de Estrela. Ela mede o que o grupo tem para gastar quando você abre a porta do Mítico e da Relíquia, e a conta é a mesma de antes: quatro sessões pagam uma peça nova da raridade da faixa. A última linha vale para qualquer nível acima dela. A conversão é a de sempre, 1 Fragmento para 5.000 Lunaris, então 20 Fragmentos por sessão são 100 mil Lunaris.</p>
       <p class="regras-note">Se o grupo está sentado numa pilha de dinheiro sem ter o que comprar, confira o patamar de Loja que você abriu antes de mexer na verba. Os dois números precisam andar juntos.</p>
       <p>Um implante custa de 20 a 1.000 Créditos Sombrios conforme a raridade, então distribuir Crédito é decidir o ritmo de acesso ao mercado negro. Trate a mesma escada de quatro vezes por degrau ao improvisar preço de qualquer coisa que não esteja no catálogo: parta da referência da raridade e ajuste pela categoria.</p>
 
@@ -5528,7 +5548,8 @@ ${HTML_DEVOCAO}
           <tr><td>500 ou mais</td><td>Relíquia</td><td>450 Fragmentos</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Do nível 41 em diante a verba passa a ser contada em Fragmentos de Estrela (1 Fragmento são 5.000 Lunaris) e mede o que o grupo tem para gastar quando você abre a porta do Mítico e da Relíquia. A conta é a mesma: quatro sessões pagam uma peça nova da raridade da faixa. A última linha vale para qualquer nível acima.</p>
+      <p class="regras-note">Do nível 20 ao 49 a verba passa dessa conta, de propósito: ali uma arma da faixa sai por uma sessão ou menos. O resto paga o que custa muitas vezes uma arma da mesma raridade, como implante (25 vezes), veículo completo (20 vezes) e propriedade (40 vezes), e vai juntando para o salto até o Mítico no nível 50.</p>
+      <p class="regras-note">Do nível 50 em diante a verba passa a ser contada em Fragmentos de Estrela (1 Fragmento são 5.000 Lunaris) e mede o que o grupo tem para gastar quando você abre a porta do Mítico e da Relíquia. A conta é a mesma: quatro sessões pagam uma peça nova da raridade da faixa. A última linha vale para qualquer nível acima.</p>
       <ul class="regras-list">
         <li><strong>A verba é uma média de longo prazo.</strong> Três sessões de mão vazia e uma com o dobro dão uma campanha melhor que quatro sessões pagando igual, porque é a sessão farta que a mesa lembra.</li>
         <li><strong>Divida o arco em três partes:</strong> uma em dinheiro, uma em algo que serve na hora, e uma em algo que só vale se o grupo decidir o que fazer com aquilo, como uma chave sem porta, um mapa pela metade ou um item que alguém quer de volta.</li>

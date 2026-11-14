@@ -227,7 +227,7 @@ export const REGRA_PONTOS_DE_RELACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>Quem propõe a mudança é a mesa.</strong> O jogador pode pedir o ponto, e o Mestre confirma quando a cena pediu.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do nível dela (10 no nível 1), com perda de 1d6 na falha.</p>
+      <p>Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do próprio nível (10 no nível 1), com perda de 1d6 na falha.</p>
     </div>
   `,
   corpoMestre: `

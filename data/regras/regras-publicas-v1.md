@@ -128,17 +128,19 @@ O livro não precisa ser lido de ponta a ponta. Escolha o caminho que combina co
 
 Um roteiro completo para criar um personagem de nível 1, escolher suas opções e conferir todos os valores da ficha.
 
-Criar um personagem leva sete etapas, e o assistente da ficha acompanha todas elas. Este tópico explica o que cada etapa pede e termina com a conferência dos números que a ficha pronta precisa mostrar. Faça as escolhas na ordem apresentada, porque as opções de cada etapa dependem da Árvore, da raça e da classe que você escolheu antes.
+Criar um personagem leva oito etapas, e o assistente da ficha acompanha todas elas. Este tópico explica o que cada etapa pede e termina com a conferência dos números que a ficha pronta precisa mostrar. Faça as escolhas na ordem apresentada, porque as opções de cada etapa dependem da Árvore, da raça e da classe que você escolheu antes.
 
 **Em resumo**
 
 - O personagem nasce no **nível 1**, com uma classe comum. Raça ou classe especial só entra com liberação do Mestre.
 
-- As sete etapas, nesta ordem: nome e Árvore, raça, classe, divindade, atributos, perícias e equipamento, e a conferência da ficha.
+- As oito etapas, nesta ordem: nome e Árvore, raça, classe, divindade, atributos, perícias, ofício e equipamento, e a conferência da ficha.
 
 - Atributos pelo conjunto padrão (15, 14, 13, 12, 10, 8 e 8) ou por compra de pontos (24 pontos). O método de 7d20 só vale com a concordância da mesa.
 
-- Você começa com seis perícias em Aprendiz (Humano escolhe sete), um item comum e 20 Lunaris.
+- Você começa com seis perícias em Aprendiz (Humano escolhe sete).
+
+- O ofício que o personagem tinha antes da aventura decide o dinheiro inicial (de 5 a 150 Lunaris), quantos itens da Loja ele escolhe e de que raridade, quanto ganha trabalhando e quem ele conhece.
 
 ### Antes de começar
 
@@ -182,17 +184,169 @@ Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabe
 
 - **Variante aleatória:** role 7d20 e distribua os sete resultados, cada dado uma vez. Esse método não é equivalente aos anteriores e só deve ser usado com concordância da mesa.
 
-### 6. Perícias e equipamento inicial
+### 6. Perícias
 
 - Escolha exatamente **seis perícias** para começar em Aprendiz. Humano escolhe sete por Adaptabilidade.
 
-- Escolha um item comum aprovado pelo Mestre. Ele entra no inventário como item de criação e não possui preço de revenda.
-
-- Registre **20 Lunaris**. Nenhuma nova classe escolhida no futuro concede outro equipamento ou dinheiro inicial.
-
 As perícias e o que cada grau significa estão em Perícias. As contas de Vida, Mana e Estamina estão em Sistema Base.
 
-### 7. Conferência da ficha
+### 7. Ofício e equipamento inicial
+
+Antes de virar aventureiro, o seu personagem vivia de alguma coisa. Escolha o ofício que ele tinha até a história começar. O ofício encaixa o personagem numa **faixa**, e a faixa decide com quanto dinheiro ele começa, quantos itens escolhe e de que raridade, quanto ganha quando volta a trabalhar e quem ele conhece.
+
+- Faixa | No bolso | Itens iniciais | Trabalhando | Contatos
+
+- Vida na ruaSem patrão e sem teto certo. Pouco no bolso, muita gente conhecida. | 5 Lunaris | 1 comum | 5 por dia, sobra 1só o serviço braçal que aparecer | 2: Amigo e Amigo
+
+- Aprendiz ou servoTrabalha para alguém e ainda está aprendendo. Ganha pouco e tem alguém que confia em você. | 20 Lunaris | 1 comum | 5 por dia, sobra 1cerca de 150 por mês | 2: Amigo e Conhecido
+
+- Trabalhador de ofícioTem um trabalho de verdade e vive dele, sem luxo e sem passar fome. | 40 Lunaris | 2 comuns | 10 por dia, sobram 2cerca de 300 por mês, com Aprendiz numa perícia do ofício | 1 Amigo
+
+- Artesão ou soldadoDomina um ofício ou já serviu em armas. Tem ferramenta própria e nome na rua. | 80 Lunaris | 3 comuns | 25 por dia, sobram 5cerca de 750 por mês, com Treinado numa perícia do ofício | 1 Conhecido
+
+- EspecialistaEstudou para o que faz e cobra caro por isso. Alguém pagou essa formação e ainda espera o retorno. | 150 Lunaris | 2 comuns e 1 incomum | 65 por dia, sobram 13cerca de 2.000 por mês, com Especialista numa perícia do ofício | 1 Conhecido, e uma Dívida
+
+- **Os itens saem da Loja.** Escolha armas, armaduras, equipamentos e consumíveis vendidos na Feira, na raridade que a faixa permite. Eles entram no inventário como se tivessem sido comprados. A vaga de incomum aceita um comum no lugar.
+
+- **Item escrito por você conta como comum.** Um alaúde gasto, a tesoura do alfaiate, a pena do escriba. O Mestre aprova o que não estiver no catálogo.
+
+- **Os contatos entram nos seus Vínculos.** Amigo e Conhecido seguem a Confiança de Contatos e Laços. Dê nome e rosto a cada um.
+
+- **O Especialista começa devendo.** Alguém pagou a formação dele, e essa pessoa entra nos Vínculos como uma Dívida para você combinar com o Mestre.
+
+- **A renda vale no tempo entre aventuras.** Cada dia trabalhando no ofício paga o valor da faixa, pela atividade Trabalhar no ofício de Tempo Entre Aventuras, e quase tudo vai no custo de vida. O que chega à carteira é a sobra. Na Carteira da ficha, o botão Receber soma a sobra dos dias trabalhados e deixa o registro no extrato.
+
+- **A renda cheia pede grau.** As duas perícias ao lado de cada ofício são as dele. O Trabalhador ganha a linha dele com Aprendiz numa delas, o Artesão ou soldado com Treinado e o Especialista com Especialista. Sem o grau, você trabalha na linha de baixo até treinar. O dinheiro, os itens e os contatos da faixa valem desde o começo.
+
+- Nenhuma nova classe escolhida no futuro concede outro equipamento ou dinheiro inicial.
+
+Há 38 ofícios prontos para escolher. Se o seu não estiver na lista, escreva o nome dele e escolha a faixa que mais combina: o que manda é quanto aquele trabalho rende, e a tabela acima já responde. Combine com o Mestre quais perícias contam para a renda dele.
+
+**Vida na rua**
+
+- **Pedinte.** Você sabe qual esquina rende mais na saída do templo e qual padeiro dá o pão de ontem sem reclamar.
+(Percepção e Enganação)
+
+- **Batedor de carteira.** Você trabalha nos mercados mais cheios e tem três rotas de fuga decoradas em cada um deles.
+(Ladinagem e Furtividade)
+
+- **Mensageiro de rua.** Você corre recado por uma moeda e por isso sabe quem escreve para quem.
+(Atletismo e Percepção)
+
+- **Catador de sucata.** O que a cidade joga fora vira o seu jantar, depois de pesado e vendido.
+(Sobrevivência e Tecnologia)
+
+- **Fugitivo.** Alguém procura você. Você troca de nome a cada cidade e dorme de bota calçada.
+(Furtividade e Sobrevivência)
+
+**Aprendiz ou servo**
+
+- **Criado de casa rica.** Você serviu a mesa de gente importante e ouviu o que eles diziam achando que ninguém ouvia.
+(Nobreza e Intuição)
+
+- **Aprendiz de oficina.** Você varre o chão, segura a peça para o mestre e aprende um pouco a cada bronca.
+(Tecnologia e Atletismo)
+
+- **Cavalariço.** Você cuida dos animais dos outros e entende cavalo melhor do que gente.
+(Adestramento e Cavalgar)
+
+- **Ajudante de cozinha.** Você descasca, mexe o caldo e fica sabendo dos boatos da casa antes de o jantar ir para a mesa.
+(Sobrevivência e Intuição)
+
+- **Acólito.** Você acende velas, limpa o altar e decorou rezas que ainda não entende por inteiro.
+(Religião e Vontade)
+
+- **Estivador.** Você carrega saco do nascer ao pôr do sol, e o porto inteiro sabe o seu nome.
+(Atletismo e Fortitude)
+
+**Trabalhador de ofício**
+
+- **Lavrador.** Você planta, colhe e olha o céu de manhã para saber se vai chover até a tarde.
+(Sobrevivência e Adestramento)
+
+- **Pescador.** Você sai antes do sol num barco pequeno e volta com o que a rede remendada conseguiu segurar.
+(Sobrevivência e Atletismo)
+
+- **Guarda de portão.** Você vê todo mundo que entra e sai, e lembra de quem tentou passar sem pagar.
+(Percepção e Intimidação)
+
+- **Taverneiro.** Você serve cerveja atrás do balcão e escuta o que os fregueses contam depois da terceira caneca.
+(Diplomacia e Intuição)
+
+- **Caçador.** Você segue rastro contra o vento, e a carne que você traz é a que a vila come no inverno.
+(Sobrevivência e Pontaria)
+
+- **Carroceiro.** Você leva a carga dos outros por estrada de terra, ao lado de uma mula teimosa que é a sua melhor amiga.
+(Cavalgar e Adestramento)
+
+- **Mineiro.** Você trabalha no escuro, respira pó e sabe ouvir quando a pedra vai ceder.
+(Fortitude e Atletismo)
+
+- **Escriba.** Você escreve carta para quem não sabe e por isso conhece o segredo de meia cidade.
+(Conhecimento e Investigação)
+
+- **Músico de taverna.** Você toca por moeda e por bebida, e sabe a hora certa de mudar de música.
+(Atuação e Diplomacia)
+
+- **Apostador.** Você ganha a vida nas mesas de carta e de dado, lendo a cara de quem aposta contra você.
+(Jogatina e Enganação)
+
+**Artesão ou soldado**
+
+- **Ferreiro.** Você bate ferro o dia inteiro, e metade da cidade anda com uma faca, uma ferradura ou um prego da sua forja.
+(Tecnologia e Atletismo)
+
+- **Soldado.** Você marchou, montou guarda e viu gente cair. Saiu do quartel com o equipamento e as lembranças.
+(Guerra e Luta)
+
+- **Carpinteiro.** Você faz telhado, carroça, porta e caixão, e sabe de cabeça quanta madeira cada um pede.
+(Tecnologia e Percepção)
+
+- **Alfaiate.** Você veste nobres e mendigos, e pela costura de uma roupa sabe de que cidade a pessoa veio.
+(Nobreza e Enganação)
+
+- **Guia de caravana.** Você leva caravanas por estrada ruim e sabe onde tem água, abrigo e bandido em cada trecho.
+(Sobrevivência e Percepção)
+
+- **Mercenário.** Você luta por quem paga, cobra metade adiantado e sempre lê o contrato antes de assinar.
+(Luta e Intimidação)
+
+- **Marinheiro.** Você passou anos no convés, faz qualquer nó de olho fechado e tem conhecido em quase todo porto.
+(Atletismo e Pilotagem)
+
+- **Mecânico.** Você vive com graxa até o cotovelo, entre engrenagem e caldeira, e conserta o que os outros já deram por perdido.
+(Tecnologia e Pilotagem)
+
+- **Herbalista.** Você colhe erva no mato e sabe qual folha baixa a febre e qual deixa a pessoa de cama por uma semana.
+(Cura e Sobrevivência)
+
+**Especialista**
+
+- **Médico.** Você estudou anos numa escola de medicina, costura ferida sem tremer a mão e cobra caro por isso.
+(Cura e Conhecimento)
+
+- **Alquimista.** Você passa a noite entre frascos e fogo baixo, com anotações que só você entende e duas cicatrizes de mistura errada.
+(Misticismo e Cura)
+
+- **Oficial da guarda.** Você dava ordens, assinava papéis e respondia por gente armada.
+(Guerra e Nobreza)
+
+- **Investigador.** Você é pago para descobrir o que os outros escondem e sabe seguir alguém por meia cidade sem ser notado.
+(Investigação e Intuição)
+
+- **Mestre de esgrima.** Você ensina herdeiros a segurar uma lâmina e sabe usar a sua melhor que eles.
+(Luta e Acrobacia)
+
+- **Erudito.** Você passou mais tempo em biblioteca do que na rua e sabe em que estante procurar quase tudo.
+(Conhecimento e Misticismo)
+
+- **Avaliador de joias.** Você avalia joias com uma lupa e já disse a mais de um nobre que a joia da família era falsa.
+(Investigação e Diplomacia)
+
+- **Piloto.** Você já pilotou barco, dirigível e máquina sem nome, e aprende a mexer num leme novo numa tarde.
+(Pilotagem e Tecnologia)
+
+### 8. Conferência da ficha
 
 Com tudo escolhido, a ficha mostra os números abaixo. Confira cada um contra a conta:
 
@@ -234,7 +388,7 @@ Não some os ajustes duas vezes. A ficha calcula os derivados e aplica raça e e
 
 - Vida, Mana, Estamina, Sanidade, Cansaço, Defesa, Movimento e Iniciativa conferem com o resumo.
 
-- O inventário contém um item comum de criação e a carteira contém 20 Lunaris.
+- O ofício está escolhido, e a carteira e o inventário mostram os Lunaris e os itens da faixa dele.
 
 - O personagem possui um motivo para participar da campanha e trabalhar com o grupo.
 
@@ -710,7 +864,7 @@ Gostar de alguém pesa. Quando algo acontece com uma pessoa com quem você tem p
 
 **Exemplo:**
 
-Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do nível dela (10 no nível 1), com perda de 1d6 na falha.
+Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do próprio nível (10 no nível 1), com perda de 1d6 na falha.
 
 ## ataques-combinados
 
@@ -1490,7 +1644,7 @@ As três primeiras se vencem em roda: Avançar vence Flanquear, Flanquear vence 
 
 - Artilharia e magia de área | Pontaria, Tecnologia ou o teste da magia contra a DT Difícil.O inimigo perde 1 parte de Força.
 
-- Ao lado do comandante | Ajudar, contra DT 10.+2 no choque do seu lado, ou vantagem se o sucesso for crítico. No máximo dois personagens, como em Ajudar.
+- Ao lado do comandante | Ajudar, contra DT 10 + metade do nível da batalha, como em Ações Coletivas.+2 no choque do seu lado, ou vantagem se o sucesso for crítico. No máximo dois personagens, como em Ajudar.
 
 - **Somados, os feitos tiram no máximo 2 partes do inimigo por fase.** O resto da batalha é dos exércitos.
 
@@ -2464,7 +2618,7 @@ Cada personagem escolhe o que fazer com eles, em separado. É aqui que o tempo p
 
 - Um dia de atividade são seis horas, e cada personagem faz uma atividade por dia. Treino e fabricação deixam 1 de Cansaço por dia, e uma noite de sono resolve.
 
-- Trabalhar rende de 5 a 65 Lunaris por dia, conforme o ofício, e a tabela de custo de vida mostra para onde esse dinheiro vai.
+- Trabalhar rende de 5 a 65 Lunaris por dia, conforme o ofício e o grau, e quase tudo vai no custo de vida: na carteira sobra de 1 a 13 por dia.
 
 - Se você não souber o que o seu personagem faz com o tempo, as perguntas do fim do tópico ajudam.
 
@@ -2492,7 +2646,7 @@ Cada atividade abaixo já tem a regra completa em outro tópico. Aqui elas apare
 
 - Preparar ritual, selo ou encantamento. | Velas acesas sempre nas mesmas horas, símbolos redesenhados até saírem perfeitos, e uma paciência que ninguém de fora entende.Custa o tempo da própria obra. Rende o efeito preparado, pronto para usar. Regra completa em Rituais, Selos e Fusão.
 
-- Trabalhar no ofício. | Acordar cedo, voltar cansado com moeda no bolso e conhecer gente que nem imagina que você já enfrentou um monstro.Custa 1 dia por vez. Rende dinheiro, pela tabela Trabalhar pelo dia. Regra completa em Economia.
+- Trabalhar no ofício. | Acordar cedo, voltar cansado com moeda no bolso e conhecer gente que nem imagina que você já enfrentou um monstro.Custa 1 dia por vez. Rende a sobra da faixa do seu ofício, na tabela Trabalhar pelo dia. O ofício está em Criação de Personagem.
 
 - Tratar veneno, doença ou vício. | Chá amargo de hora em hora, febre de madrugada, e alguém sentado ao lado da cama contando os dias junto com você.Custa dias de cuidado contínuo. Rende a queda de estágio da aflição. Regra completa em Venenos, Doenças e Vícios.
 
@@ -2510,17 +2664,19 @@ Cada atividade abaixo já tem a regra completa em outro tópico. Aqui elas apare
 
 ### Trabalhar pelo dia
 
-- Trabalho que você consegue arranjar | Por dia | Como costuma ser
+- Trabalho que você consegue arranjar | Por dia | Sobra | Como costuma ser
 
-- Serviço braçal, sem ofício nenhum | 5 Lunaris | Carregar saco no porto, capinar, lavar louça de taverna.
+- Serviço braçal, sem ofício nenhum | 5 Lunaris | 1 Lunaris | Carregar saco no porto, capinar, lavar louça de taverna.
 
-- Ofício comum, com uma perícia útil | 10 Lunaris | Cuidar de cavalo, escrever carta para quem não sabe, remendar rede de pesca.
+- Ofício comum, com uma perícia útil | 10 Lunaris | 2 Lunaris | Cuidar de cavalo, escrever carta para quem não sabe, remendar rede de pesca.
 
-- Artesão ou soldado, com perícia Treinada | 25 Lunaris | Guardar uma caravana, forjar ferradura, costurar uniforme.
+- Artesão ou soldado, com perícia Treinada | 25 Lunaris | 5 Lunaris | Guardar uma caravana, forjar ferradura, costurar uniforme.
 
-- Especialista com nome na cidade | 65 Lunaris | Tratar o filho de um mercador rico, avaliar uma joia, ensinar esgrima a um herdeiro.
+- Especialista com nome na cidade, com perícia em grau Especialista | 65 Lunaris | 13 Lunaris | Tratar o filho de um mercador rico, avaliar uma joia, ensinar esgrima a um herdeiro.
 
-Trabalhar paga o custo de vida, e sobra pouco. Um dia de ofício comum rende 10 Lunaris, uma noite de estalagem custa 3, e a bota nova vai ter que esperar. Nenhum personagem enriquece assim, e é por isso que a estrada continua chamando.
+Quem tem ofício trabalha na faixa dele, e a faixa é o teto: cada linha pede o grau escrito nela numa das duas perícias do ofício (a do ofício comum pede Aprendiz). Sem o grau, você trabalha na linha de baixo até treinar. O Aprendiz e quem vive na rua ganham a primeira linha. Sem ofício, ou longe de onde ele vale alguma coisa, sobra o serviço braçal.
+
+Trabalhar paga o custo de vida, e sobra pouco. A coluna Sobra é o que chega à carteira depois de comer, dormir e se vestir como o trabalho pede, e é ela que o botão Receber da Carteira soma. Um dia de ofício comum rende 10 Lunaris, uma noite de estalagem custa 3, e a bota nova vai ter que esperar. Nenhum personagem enriquece assim, e é por isso que a estrada continua chamando.
 
 ### Quanto custa viver
 

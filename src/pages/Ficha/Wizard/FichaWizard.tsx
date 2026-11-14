@@ -36,6 +36,8 @@ import { EscolhaImpactoHost } from '../components/EscolhaImpactoHost';
 import { animarDadosLocais } from '../../../components/dados/rolagemDados';
 import { EmblemaDoCartao } from './EmblemaDoCartao';
 import { NascimentoDoPersonagem, type DadosDoNascimento } from './NascimentoDoPersonagem';
+import { PassoOficio, ESTADO_OFICIO_INICIAL, faixaDoEstado, tituloDoEstado, type IEstadoOficio } from './PassoOficio';
+import { OFICIO_PERSONALIZADO, kitValido, obterOficio, pedidoDoKit, vinculosIniciais } from '../../../services/oficios';
 
 const MENSAGEM_FALHA_CRIACAO = 'Não foi possível criar o personagem agora. Confira a conexão e tente de novo.';
 
@@ -93,7 +95,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
   const [classeId, setClasseId] = useState<string | null>(null);
   const [divindade, setDivindade] = useState('');
   const [periciasIniciais, setPericiasIniciais] = useState<string[]>([]);
-  const [itemInicial, setItemInicial] = useState('');
+  const [oficio, setOficio] = useState<IEstadoOficio>(ESTADO_OFICIO_INICIAL);
   
   // Atributos State
   const [metodoAtributos, setMetodoAtributos] = useState<TMetodoAtributos>('padrao');
@@ -274,6 +276,9 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
       escolhaRacialFinal,
     );
 
+    const faixaDoOficio = faixaDoEstado(oficio);
+    const tituloOficio = tituloDoEstado(oficio);
+
     // BUG-07: payload explicitamente tipado com ICreateCharacterPayload
     const payload: ICreateCharacterPayload = {
       nome,
@@ -287,9 +292,11 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
       atributosBase: atribuicao,
       atributosFinais,
       derivados,
-      lunarisInicial: 20,
+      lunarisInicial: faixaDoOficio.lunaris_iniciais,
       pericias: Object.fromEntries(periciasIniciais.map(id => [id, 'aprendiz'])),
-      inventarioInicial: [{ titulo: itemInicial.trim(), quantidade: 1 }],
+      inventarioInicial: pedidoDoKit(oficio.kit),
+      oficio: { id: oficio.oficioId, titulo: tituloOficio, faixa: faixaDoOficio.id },
+      vinculos: vinculosIniciais(obterOficio(oficio.oficioId), faixaDoOficio, tituloOficio),
       escolhaRacial: escolhaRacialFinal,
       ...(racaId === RACA_PERSONALIZADA_ID ? { racaNomePersonalizado: racaNomePersonalizado.trim() } : {}),
     };
@@ -813,9 +820,8 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             return [...atuais, periciaId];
           });
         };
-        // O passo 6 é o mais alto do wizard: em vez de somar alturas fixas (que
-        // estouravam o modal e escondiam o campo do item atrás do rodapé), só a
-        // grade de perícias encolhe e rola.
+        // Só a grade de perícias encolhe e rola: somar alturas fixas estourava o
+        // modal e escondia o fim do passo atrás do rodapé.
         return (
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -825,7 +831,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
           >
             <div className="shrink-0 bg-black/30 p-4 rounded-2xl border border-white/5">
               <div className="flex items-center gap-2">
-                <h3 className="text-xl text-white font-bold">Perícias e equipamento inicial</h3>
+                <h3 className="text-xl text-white font-bold">Perícias iniciais</h3>
                 <InfoButton
                   label="Como funcionam as perícias?"
                   onClick={() => setInfoModal({
@@ -835,7 +841,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                 />
               </div>
               <p className="text-sm text-gray-400 mt-1">
-                Escolha exatamente {limitePericias} perícias para começar em Aprendiz e informe um item comum aprovado pelo Mestre.
+                Escolha exatamente {limitePericias} perícias para começar em Aprendiz. O equipamento vem no próximo passo, junto com o ofício.
               </p>
               <p className={`text-xs font-bold mt-2 ${periciasIniciais.length === limitePericias ? 'text-green-400' : 'text-primary'}`}>
                 {periciasIniciais.length} de {limitePericias} perícias escolhidas
@@ -871,21 +877,20 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
               </div>
             </div>
 
-            <div className="shrink-0">
-              <label className="block text-sm font-medium text-gray-400 mb-2">Seu item comum inicial</label>
-              <input
-                type="text"
-                value={itemInicial}
-                onChange={event => setItemInicial(event.target.value)}
-                maxLength={200}
-                placeholder="Ex: espada curta, kit de cura ou mochila"
-                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary/50"
-              />
-              <p className="text-xs text-gray-500 mt-2">O item entra no inventário central com origem de criação e sem preço de revenda.</p>
-            </div>
           </motion.div>
         );
       case 7:
+        return (
+          <PassoOficio
+            campanhaId={campanhaAtiva?.id ?? null}
+            estado={oficio}
+            onChange={setOficio}
+            tituloPericia={(id) => catalogo?.pericias?.find((pericia) => pericia.id === id)?.titulo || id}
+            pericias={Object.fromEntries(periciasIniciais.map((id) => [id, 'aprendiz']))}
+            onAjuda={(titulo, texto) => setInfoModal({ titulo, texto })}
+          />
+        );
+      case 8:
         // Calculos em tempo real da Preview
         const previewRaca = catalogo?.racas.find(r => r.id === racaId);
         const previewClasse = catalogo?.classes.find(c => c.id === classeId);
@@ -907,6 +912,11 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             <p className="text-lg text-gray-400 mb-8 capitalize">
               {nomeExibicaoRaca(racaId || undefined, racaNomePersonalizado, previewRaca?.titulo)} · {previewClasse?.titulo} · {arvoreSelecionada?.nome || 'Sem Árvore'}
             </p>
+            {tituloDoEstado(oficio) ? (
+              <p className="-mt-6 mb-8 text-sm text-amber-200/80">
+                {tituloDoEstado(oficio)} · começa com {faixaDoEstado(oficio).lunaris_iniciais} Lunaris e {oficio.kit.length} {oficio.kit.length === 1 ? 'item' : 'itens'}
+              </p>
+            ) : null}
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-3xl mb-8">
               <div className="bg-green-500/10 border border-green-500/30 rounded-3xl p-6 flex flex-col items-center justify-center text-center">
@@ -960,7 +970,12 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
     if (step === 6) {
       const raca = catalogo?.racas.find(item => item.id === racaId);
       const limite = 6 + Math.max(0, Number(raca?.pericias_iniciais_adicionais) || 0);
-      return periciasIniciais.length !== limite || itemInicial.trim().length < 2;
+      return periciasIniciais.length !== limite;
+    }
+    if (step === 7) {
+      if (!oficio.oficioId) return true;
+      if (oficio.oficioId === OFICIO_PERSONALIZADO && tituloDoEstado(oficio).length < 2) return true;
+      return !kitValido(faixaDoEstado(oficio), oficio.kit);
     }
     return false;
   };
@@ -982,8 +997,8 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
         <div className="relative flex items-center justify-between overflow-hidden border-b border-white/5 p-4 sm:p-6 md:p-8">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-transparent opacity-50"></div>
           <div className="relative z-10 flex flex-col gap-3">
-            <div className="grid w-full grid-cols-7 gap-1 sm:gap-2">
-              {[1, 2, 3, 4, 5, 6, 7].map(i => (
+            <div className="grid w-full grid-cols-8 gap-1 sm:gap-2">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
                 <div key={i} className={`h-1.5 min-w-0 rounded-full transition-colors ${i < step ? 'bg-primary' : i === step ? 'bg-primary/50 animate-pulse shadow-[0_0_10px_rgba(var(--color-primary),0.8)]' : 'bg-white/10'}`} />
               ))}
             </div>
@@ -992,7 +1007,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             </h2>
           </div>
           <div className="relative z-10 flex shrink-0 items-center gap-2">
-            {step < 7 && (
+            {step < 8 && (
               <button
                 type="button"
                 onClick={handleCriarRapido}
@@ -1037,7 +1052,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             <ChevronLeft size={20} /> Retornar
           </button>
           
-          {step < 7 ? (
+          {step < 8 ? (
             <button 
               onClick={() => setStep(s => s + 1)}
               disabled={isNextDisabled()}

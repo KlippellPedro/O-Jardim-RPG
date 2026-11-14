@@ -345,7 +345,7 @@
     "Fragmentos de Estrela": 50
   },
   "verba_de_aventura": {
-    "_nota": "Quanto pagar por sessao, por jogador, para que o grupo acompanhe a propria faixa de equipamento sem estourar a escada. A conta e simples: cerca de 1/4 de um item da raridade que aquela faixa de nivel deveria estar usando, entao ~4 sessoes compram uma peca nova. Dobre num fim de arco, triplique num fim de temporada. Do nivel 41 em diante a escada de compra acaba e a verba passa a medir o que o grupo tem para gastar quando o Mestre abre a porta do Mitico e da Reliquia: a conta continua a mesma (4 sessoes, uma peca), so que a peca agora vem das faixas de Fragmentos. A partir do 41 a verba nao tem teto de nivel: a ultima faixa vale para qualquer nivel acima dela.",
+    "_nota": "Quanto pagar por sessao, por jogador, para que o grupo acompanhe a propria faixa de equipamento sem estourar a escada. A conta e simples: cerca de 1/4 de um item da raridade que aquela faixa de nivel deveria estar usando, entao ~4 sessoes compram uma peca nova. Dobre num fim de arco, triplique num fim de temporada. Do nivel 50 em diante a escada de compra acaba e a verba passa a medir o que o grupo tem para gastar quando o Mestre abre a porta do Mitico e da Reliquia: a conta continua a mesma (4 sessoes, uma peca), so que a peca agora vem das faixas de Fragmentos. Do 20 ao 49 a verba passa de proposito da conta de 1/4 de arma: o resto paga implante, veiculo completo e propriedade (multiplicador_por_categoria) e junta para o salto do Mitico. A verba nao tem teto de nivel: a ultima faixa vale para qualquer nivel acima dela.",
     "faixas": [
       {
         "niveis": "1-4",

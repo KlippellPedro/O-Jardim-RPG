@@ -49,6 +49,7 @@ import type { ItemTrocavel } from '../../../services/trocasApi';
 import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 import { SaldoAnimado } from '../components/SaldoAnimado';
+import { CartaoOficio } from '../components/CartaoOficio';
 import { BonecoEquipamento } from '../components/BonecoEquipamento';
 import { ResumoFormasEConjuntos } from '../components/ResumoFormasEConjuntos';
 import { GaragemPessoal } from '../components/bens/GaragemPessoal';
@@ -944,6 +945,12 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
               );
             })}
           </div>
+          <CartaoOficio
+            oficio={character?.ficha?.oficio}
+            pericias={character?.ficha?.pericias}
+            onEscolher={onUpdate ? (oficio) => onUpdate(['ficha', 'oficio'], oficio) : undefined}
+            onTrabalhar={(lunaris) => handleAjustarMoeda('Lunaris', lunaris)}
+          />
         </div>}
       </div>
 

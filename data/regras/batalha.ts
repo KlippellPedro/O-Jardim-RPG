@@ -96,7 +96,7 @@ export const FEITOS_DE_BATALHA: readonly IFeitoDeBatalha[] = [
   { id: 'comando', titulo: 'Contra o comando', teste: 'Furtividade ou Luta contra a DT Difícil', efeito: 'O choque do inimigo nesta fase tem desvantagem. Por 10 ou mais, o comandante dele cai ou foge, e o lado dele testa moral.' },
   { id: 'brecha', titulo: 'Segurar a brecha', teste: 'Atletismo ou Fortitude contra a DT Padrão', efeito: 'No passo das Perdas, o seu lado devolve 1 das partes que perdeu nesta fase.' },
   { id: 'artilharia', titulo: 'Artilharia e magia de área', teste: 'Pontaria, Tecnologia ou o teste da magia contra a DT Difícil', efeito: 'O inimigo perde 1 parte de Força.' },
-  { id: 'comandante', titulo: 'Ao lado do comandante', teste: 'Ajudar, contra DT 10', efeito: '+2 no choque do seu lado, ou vantagem se o sucesso for crítico. No máximo dois personagens, como em Ajudar.' },
+  { id: 'comandante', titulo: 'Ao lado do comandante', teste: 'Ajudar, contra DT 10 + metade do nível da batalha, como em Ações Coletivas', efeito: '+2 no choque do seu lado, ou vantagem se o sucesso for crítico. No máximo dois personagens, como em Ajudar.' },
 ];
 
 /** Somados, os feitos do grupo tiram no máximo esta Força do inimigo por fase:

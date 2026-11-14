@@ -1,0 +1,444 @@
+{
+  "_nota": "Ofícios da criação de personagem. O ofício encaixa o personagem numa faixa, e a faixa decide os Lunaris iniciais, quantos itens ele escolhe da Loja (e de que raridade), quanto ele ganha trabalhando no tempo entre aventuras e os contatos com que começa. As faixas reaproveitam a tabela Trabalhar pelo dia (5, 10, 25 e 65 Lunaris) e os salários de salarios_mensais em escala-precos-v1.json. 'sobra_por_dia' é o que chega à carteira depois do custo de vida (cerca de um quinto do ganho: num mês dá o 'compra_no_maximo' da classe social), e é o que o botão Receber da ficha soma. 'grau_minimo' é o grau que a renda cheia pede numa das perícias do ofício; sem ele, vale a faixa de baixo. A faixa 'aprendiz' é a regra antiga (20 Lunaris e um item comum): ficha sem ofício cai nela. Lido pelo site (src/services/oficios.ts) e pela plataforma (plataforma/core/oficios.py). Para acrescentar um ofício, basta uma entrada nova em 'oficios' apontando para uma faixa existente; os itens sugeridos precisam existir no catálogo da Loja com a raridade da faixa e sem requisito de nível acima de 1, e um teste confere.",
+  "versao": 1,
+  "itens": {
+    "_nota": "O que vale escolher como item inicial: tipos da Loja, raridade nativa do catálogo, o patamar máximo (nivelMinimoLoja) e o requisito de nível do item (requisitoNivel), que não passa do nível do personagem novo. Item escrito à mão conta sempre como comum.",
+    "tipos": ["arma", "armadura", "equipamento", "consumivel"],
+    "nivel_loja_maximo": 1,
+    "nivel_do_personagem": 1,
+    "titulo_maximo": 80
+  },
+  "faixas": [
+    {
+      "id": "rua",
+      "titulo": "Vida na rua",
+      "classe_social": "Miserável",
+      "resumo": "Sem patrão e sem teto certo. Pouco no bolso, muita gente conhecida.",
+      "por_dia": 5,
+      "por_mes": null,
+      "sobra_por_dia": 1,
+      "grau_minimo": null,
+      "renda_rotulo": "Sem renda fixa. O serviço braçal que aparecer paga 5 Lunaris por dia, e sobra 1 depois de comer e dormir.",
+      "lunaris_iniciais": 5,
+      "itens": { "comum": 1, "incomum": 0 },
+      "contatos": [
+        { "confianca": 2, "origem": "oficio" },
+        { "confianca": 2, "quem": "Quem já escondeu você uma vez", "ramo": "Proteção" }
+      ],
+      "obrigacao": null
+    },
+    {
+      "id": "aprendiz",
+      "titulo": "Aprendiz ou servo",
+      "classe_social": "Servo ou aprendiz",
+      "resumo": "Trabalha para alguém e ainda está aprendendo. Ganha pouco e tem alguém que confia em você.",
+      "por_dia": 5,
+      "por_mes": 150,
+      "sobra_por_dia": 1,
+      "grau_minimo": null,
+      "renda_rotulo": "5 Lunaris por dia de trabalho, cerca de 150 por mês. Sobra 1 por dia depois do custo de vida.",
+      "lunaris_iniciais": 20,
+      "itens": { "comum": 1, "incomum": 0 },
+      "contatos": [
+        { "confianca": 2, "origem": "oficio" },
+        { "confianca": 1, "quem": "Um colega de serviço", "ramo": "Informação" }
+      ],
+      "obrigacao": null
+    },
+    {
+      "id": "trabalhador",
+      "titulo": "Trabalhador de ofício",
+      "classe_social": "Trabalhador comum",
+      "resumo": "Tem um trabalho de verdade e vive dele, sem luxo e sem passar fome.",
+      "por_dia": 10,
+      "por_mes": 300,
+      "sobra_por_dia": 2,
+      "grau_minimo": "aprendiz",
+      "renda_rotulo": "10 Lunaris por dia de trabalho, cerca de 300 por mês. Sobram 2 por dia depois do custo de vida.",
+      "lunaris_iniciais": 40,
+      "itens": { "comum": 2, "incomum": 0 },
+      "contatos": [
+        { "confianca": 2, "origem": "oficio" }
+      ],
+      "obrigacao": null
+    },
+    {
+      "id": "artesao",
+      "titulo": "Artesão ou soldado",
+      "classe_social": "Artesão ou soldado veterano",
+      "resumo": "Domina um ofício ou já serviu em armas. Tem ferramenta própria e nome na rua.",
+      "por_dia": 25,
+      "por_mes": 750,
+      "sobra_por_dia": 5,
+      "grau_minimo": "treinado",
+      "renda_rotulo": "25 Lunaris por dia de trabalho, cerca de 750 por mês. Sobram 5 por dia depois do custo de vida.",
+      "lunaris_iniciais": 80,
+      "itens": { "comum": 3, "incomum": 0 },
+      "contatos": [
+        { "confianca": 1, "origem": "oficio" }
+      ],
+      "obrigacao": null
+    },
+    {
+      "id": "especialista",
+      "titulo": "Especialista",
+      "classe_social": "Especialista ou oficial",
+      "resumo": "Estudou para o que faz e cobra caro por isso. Alguém pagou essa formação e ainda espera o retorno.",
+      "por_dia": 65,
+      "por_mes": 2000,
+      "sobra_por_dia": 13,
+      "grau_minimo": "especialista",
+      "renda_rotulo": "65 Lunaris por dia de trabalho, cerca de 2.000 por mês. Sobram 13 por dia depois do custo de vida.",
+      "lunaris_iniciais": 150,
+      "itens": { "comum": 2, "incomum": 1 },
+      "contatos": [
+        { "confianca": 1, "origem": "oficio" }
+      ],
+      "obrigacao": "Quem pagou a sua formação e ainda espera o retorno"
+    }
+  ],
+  "oficios": [
+    {
+      "id": "pedinte",
+      "titulo": "Pedinte",
+      "faixa": "rua",
+      "descricao": "Você sabe qual esquina rende mais na saída do templo e qual padeiro dá o pão de ontem sem reclamar.",
+      "pericias": ["percepcao", "enganacao"],
+      "itens": ["algibeira", "faca"],
+      "contato": { "quem": "A velha que divide a esquina com você", "ramo": "Informação" }
+    },
+    {
+      "id": "batedor-de-carteira",
+      "titulo": "Batedor de carteira",
+      "faixa": "rua",
+      "descricao": "Você trabalha nos mercados mais cheios e tem três rotas de fuga decoradas em cada um deles.",
+      "pericias": ["ladinagem", "furtividade"],
+      "itens": ["adaga", "bomba-de-fumaca"],
+      "contato": { "quem": "O receptador que compra sem perguntar", "ramo": "Mercadoria" }
+    },
+    {
+      "id": "menino-de-recado",
+      "titulo": "Mensageiro de rua",
+      "faixa": "rua",
+      "descricao": "Você corre recado por uma moeda e por isso sabe quem escreve para quem.",
+      "pericias": ["atletismo", "percepcao"],
+      "itens": ["funda", "algibeira"],
+      "contato": { "quem": "O taverneiro que paga o recado com sopa", "ramo": "Informação" }
+    },
+    {
+      "id": "catador",
+      "titulo": "Catador de sucata",
+      "faixa": "rua",
+      "descricao": "O que a cidade joga fora vira o seu jantar, depois de pesado e vendido.",
+      "pericias": ["sobrevivencia", "tecnologia"],
+      "itens": ["improvisado", "lampiao"],
+      "contato": { "quem": "O sucateiro que pesa o que você traz", "ramo": "Mercadoria" }
+    },
+    {
+      "id": "fugitivo",
+      "titulo": "Fugitivo",
+      "faixa": "rua",
+      "descricao": "Alguém procura você. Você troca de nome a cada cidade e dorme de bota calçada.",
+      "pericias": ["furtividade", "sobrevivencia"],
+      "itens": ["saco-de-dormir", "faca"],
+      "contato": { "quem": "Quem ajudou você a fugir", "ramo": "Proteção" }
+    },
+    {
+      "id": "criado",
+      "titulo": "Criado de casa rica",
+      "faixa": "aprendiz",
+      "descricao": "Você serviu a mesa de gente importante e ouviu o que eles diziam achando que ninguém ouvia.",
+      "pericias": ["nobreza", "intuicao"],
+      "itens": ["lampiao", "algibeira"],
+      "contato": { "quem": "A governanta da casa", "ramo": "Passagem" }
+    },
+    {
+      "id": "aprendiz-de-oficina",
+      "titulo": "Aprendiz de oficina",
+      "faixa": "aprendiz",
+      "descricao": "Você varre o chão, segura a peça para o mestre e aprende um pouco a cada bronca.",
+      "pericias": ["tecnologia", "atletismo"],
+      "itens": ["kit-de-ferramentas", "martelo-leve"],
+      "contato": { "quem": "O mestre que ensinou você", "ramo": "Ofício" }
+    },
+    {
+      "id": "cavalarico",
+      "titulo": "Cavalariço",
+      "faixa": "aprendiz",
+      "descricao": "Você cuida dos animais dos outros e entende cavalo melhor do que gente.",
+      "pericias": ["adestramento", "cavalgar"],
+      "itens": ["corda-de-escalada", "racao-de-viagem"],
+      "contato": { "quem": "O dono do estábulo", "ramo": "Passagem" }
+    },
+    {
+      "id": "ajudante-de-cozinha",
+      "titulo": "Ajudante de cozinha",
+      "faixa": "aprendiz",
+      "descricao": "Você descasca, mexe o caldo e fica sabendo dos boatos da casa antes de o jantar ir para a mesa.",
+      "pericias": ["sobrevivencia", "intuicao"],
+      "itens": ["faca", "consumivel-ensopado-viajante"],
+      "contato": { "quem": "A cozinheira-chefe", "ramo": "Informação" }
+    },
+    {
+      "id": "acolito",
+      "titulo": "Acólito",
+      "faixa": "aprendiz",
+      "descricao": "Você acende velas, limpa o altar e decorou rezas que ainda não entende por inteiro.",
+      "pericias": ["religiao", "vontade"],
+      "itens": ["simbolo-sagrado", "incenso-de-meditacao"],
+      "contato": { "quem": "O sacerdote que acolheu você", "ramo": "Proteção" }
+    },
+    {
+      "id": "estivador",
+      "titulo": "Estivador",
+      "faixa": "aprendiz",
+      "descricao": "Você carrega saco do nascer ao pôr do sol, e o porto inteiro sabe o seu nome.",
+      "pericias": ["atletismo", "fortitude"],
+      "itens": ["porrete", "corda-de-escalada"],
+      "contato": { "quem": "O capataz do porto", "ramo": "Informação" }
+    },
+    {
+      "id": "lavrador",
+      "titulo": "Lavrador",
+      "faixa": "trabalhador",
+      "descricao": "Você planta, colhe e olha o céu de manhã para saber se vai chover até a tarde.",
+      "pericias": ["sobrevivencia", "adestramento"],
+      "itens": ["foice-curta", "kit-de-pesca-e-forrageamento"],
+      "contato": { "quem": "O vizinho de cerca que divide a ferramenta", "ramo": "Mercadoria" }
+    },
+    {
+      "id": "pescador",
+      "titulo": "Pescador",
+      "faixa": "trabalhador",
+      "descricao": "Você sai antes do sol num barco pequeno e volta com o que a rede remendada conseguiu segurar.",
+      "pericias": ["sobrevivencia", "atletismo"],
+      "itens": ["tridente", "kit-de-pesca-e-forrageamento"],
+      "contato": { "quem": "A dona da peixaria do cais", "ramo": "Informação" }
+    },
+    {
+      "id": "guarda-de-portao",
+      "titulo": "Guarda de portão",
+      "faixa": "trabalhador",
+      "descricao": "Você vê todo mundo que entra e sai, e lembra de quem tentou passar sem pagar.",
+      "pericias": ["percepcao", "intimidacao"],
+      "itens": ["lanca", "couro"],
+      "contato": { "quem": "O sargento do seu turno", "ramo": "Passagem" }
+    },
+    {
+      "id": "taverneiro",
+      "titulo": "Taverneiro",
+      "faixa": "trabalhador",
+      "descricao": "Você serve cerveja atrás do balcão e escuta o que os fregueses contam depois da terceira caneca.",
+      "pericias": ["diplomacia", "intuicao"],
+      "itens": ["porrete", "consumivel-cerveja-coragem"],
+      "contato": { "quem": "O fornecedor de bebida", "ramo": "Mercadoria" }
+    },
+    {
+      "id": "cacador",
+      "titulo": "Caçador",
+      "faixa": "trabalhador",
+      "descricao": "Você segue rastro contra o vento, e a carne que você traz é a que a vila come no inverno.",
+      "pericias": ["sobrevivencia", "pontaria"],
+      "itens": ["arco-curto", "faca"],
+      "contato": { "quem": "O curtidor que compra as suas peles", "ramo": "Mercadoria" }
+    },
+    {
+      "id": "carroceiro",
+      "titulo": "Carroceiro",
+      "faixa": "trabalhador",
+      "descricao": "Você leva a carga dos outros por estrada de terra, ao lado de uma mula teimosa que é a sua melhor amiga.",
+      "pericias": ["cavalgar", "adestramento"],
+      "itens": ["lampiao", "saco-de-dormir"],
+      "contato": { "quem": "O mercador que sempre contrata você", "ramo": "Passagem" }
+    },
+    {
+      "id": "mineiro",
+      "titulo": "Mineiro",
+      "faixa": "trabalhador",
+      "descricao": "Você trabalha no escuro, respira pó e sabe ouvir quando a pedra vai ceder.",
+      "pericias": ["fortitude", "atletismo"],
+      "itens": ["martelo-leve", "lampiao"],
+      "contato": { "quem": "O capataz da mina", "ramo": "Ofício" }
+    },
+    {
+      "id": "escriba",
+      "titulo": "Escriba",
+      "faixa": "trabalhador",
+      "descricao": "Você escreve carta para quem não sabe e por isso conhece o segredo de meia cidade.",
+      "pericias": ["conhecimento", "investigacao"],
+      "itens": ["lampiao", { "titulo": "Pena, tinta e um maço de papel" }],
+      "contato": { "quem": "O cartorário que repassa serviço", "ramo": "Passagem" }
+    },
+    {
+      "id": "musico-de-taverna",
+      "titulo": "Músico de taverna",
+      "faixa": "trabalhador",
+      "descricao": "Você toca por moeda e por bebida, e sabe a hora certa de mudar de música.",
+      "pericias": ["atuacao", "diplomacia"],
+      "itens": [{ "titulo": "Alaúde gasto" }, "baralho-de-cartas"],
+      "contato": { "quem": "A dona da taverna onde você toca", "ramo": "Informação" }
+    },
+    {
+      "id": "apostador",
+      "titulo": "Apostador",
+      "faixa": "trabalhador",
+      "descricao": "Você ganha a vida nas mesas de carta e de dado, lendo a cara de quem aposta contra você.",
+      "pericias": ["jogatina", "enganacao"],
+      "itens": ["baralho-de-cartas", "adaga"],
+      "contato": { "quem": "O dono da mesa de jogo", "ramo": "Informação" }
+    },
+    {
+      "id": "ferreiro",
+      "titulo": "Ferreiro",
+      "faixa": "artesao",
+      "descricao": "Você bate ferro o dia inteiro, e metade da cidade anda com uma faca, uma ferradura ou um prego da sua forja.",
+      "pericias": ["tecnologia", "atletismo"],
+      "itens": ["martelo-leve", "kit-de-ferramentas", "padrao"],
+      "contato": { "quem": "O fornecedor de ferro", "ramo": "Mercadoria" }
+    },
+    {
+      "id": "soldado",
+      "titulo": "Soldado",
+      "faixa": "artesao",
+      "descricao": "Você marchou, montou guarda e viu gente cair. Saiu do quartel com o equipamento e as lembranças.",
+      "pericias": ["guerra", "luta"],
+      "itens": ["espada-curta", "padrao", "madeira"],
+      "contato": { "quem": "O antigo companheiro de pelotão", "ramo": "Proteção" }
+    },
+    {
+      "id": "carpinteiro",
+      "titulo": "Carpinteiro",
+      "faixa": "artesao",
+      "descricao": "Você faz telhado, carroça, porta e caixão, e sabe de cabeça quanta madeira cada um pede.",
+      "pericias": ["tecnologia", "percepcao"],
+      "itens": ["kit-de-ferramentas", "machadinha", "corda-de-escalada"],
+      "contato": { "quem": "O madeireiro da serraria", "ramo": "Mercadoria" }
+    },
+    {
+      "id": "alfaiate",
+      "titulo": "Alfaiate",
+      "faixa": "artesao",
+      "descricao": "Você veste nobres e mendigos, e pela costura de uma roupa sabe de que cidade a pessoa veio.",
+      "pericias": ["nobreza", "enganacao"],
+      "itens": [{ "titulo": "Agulhas, linhas e tesoura de alfaiate" }, "gambeson", "algibeira"],
+      "contato": { "quem": "A cliente rica que sempre volta", "ramo": "Passagem" }
+    },
+    {
+      "id": "guia-de-caravana",
+      "titulo": "Guia de caravana",
+      "faixa": "artesao",
+      "descricao": "Você leva caravanas por estrada ruim e sabe onde tem água, abrigo e bandido em cada trecho.",
+      "pericias": ["sobrevivencia", "percepcao"],
+      "itens": ["bussola-de-precisao", "barraca-de-campanha", "lanca"],
+      "contato": { "quem": "O mestre de caravana que contrata você", "ramo": "Passagem" }
+    },
+    {
+      "id": "mercenario",
+      "titulo": "Mercenário",
+      "faixa": "artesao",
+      "descricao": "Você luta por quem paga, cobra metade adiantado e sempre lê o contrato antes de assinar.",
+      "pericias": ["luta", "intimidacao"],
+      "itens": ["chuco", "gambeson", "pocao-cura-infima"],
+      "contato": { "quem": "O agenciador de contratos", "ramo": "Ofício" }
+    },
+    {
+      "id": "marinheiro",
+      "titulo": "Marinheiro",
+      "faixa": "artesao",
+      "descricao": "Você passou anos no convés, faz qualquer nó de olho fechado e tem conhecido em quase todo porto.",
+      "pericias": ["atletismo", "pilotagem"],
+      "itens": ["corda-de-escalada", "gancho-de-escalada", "espada-curta"],
+      "contato": { "quem": "O contramestre do seu antigo navio", "ramo": "Passagem" }
+    },
+    {
+      "id": "mecanico",
+      "titulo": "Mecânico",
+      "faixa": "artesao",
+      "descricao": "Você vive com graxa até o cotovelo, entre engrenagem e caldeira, e conserta o que os outros já deram por perdido.",
+      "pericias": ["tecnologia", "pilotagem"],
+      "itens": ["kit-de-ferramentas", "lampiao", "martelo-leve"],
+      "contato": { "quem": "O dono da oficina vizinha", "ramo": "Ofício" }
+    },
+    {
+      "id": "herbalista",
+      "titulo": "Herbalista",
+      "faixa": "artesao",
+      "descricao": "Você colhe erva no mato e sabe qual folha baixa a febre e qual deixa a pessoa de cama por uma semana.",
+      "pericias": ["cura", "sobrevivencia"],
+      "itens": ["pocao-cura-infima", "kit-de-pesca-e-forrageamento", "foice-de-mao"],
+      "contato": { "quem": "O boticário que compra as suas ervas", "ramo": "Mercadoria" }
+    },
+    {
+      "id": "medico",
+      "titulo": "Médico",
+      "faixa": "especialista",
+      "descricao": "Você estudou anos numa escola de medicina, costura ferida sem tremer a mão e cobra caro por isso.",
+      "pericias": ["cura", "conhecimento"],
+      "itens": ["pomada-restauradora", "pocao-cura-infima", "kit-de-ferramentas"],
+      "contato": { "quem": "O professor da escola de medicina", "ramo": "Ofício" }
+    },
+    {
+      "id": "alquimista",
+      "titulo": "Alquimista",
+      "faixa": "especialista",
+      "descricao": "Você passa a noite entre frascos e fogo baixo, com anotações que só você entende e duas cicatrizes de mistura errada.",
+      "pericias": ["misticismo", "cura"],
+      "itens": ["frasco-incendiario", "pocao-mana-infima", "pocao-vigor-infima"],
+      "contato": { "quem": "O fornecedor de reagentes raros", "ramo": "Mercadoria" }
+    },
+    {
+      "id": "oficial-da-guarda",
+      "titulo": "Oficial da guarda",
+      "faixa": "especialista",
+      "descricao": "Você dava ordens, assinava papéis e respondia por gente armada.",
+      "pericias": ["guerra", "nobreza"],
+      "itens": ["algemas", "espada-curta", "apito-de-sinalizacao"],
+      "contato": { "quem": "O capitão que ainda deve um favor a você", "ramo": "Passagem" }
+    },
+    {
+      "id": "investigador",
+      "titulo": "Investigador",
+      "faixa": "especialista",
+      "descricao": "Você é pago para descobrir o que os outros escondem e sabe seguir alguém por meia cidade sem ser notado.",
+      "pericias": ["investigacao", "intuicao"],
+      "itens": ["equipamento-lentes-de-leitura", "lampiao", "adaga"],
+      "contato": { "quem": "O informante que vende boato bom", "ramo": "Informação" }
+    },
+    {
+      "id": "mestre-de-esgrima",
+      "titulo": "Mestre de esgrima",
+      "faixa": "especialista",
+      "descricao": "Você ensina herdeiros a segurar uma lâmina e sabe usar a sua melhor que eles.",
+      "pericias": ["luta", "acrobacia"],
+      "itens": ["traje", "espada-curta", "pocao-vigor-infima"],
+      "contato": { "quem": "Um aluno de família nobre", "ramo": "Passagem" }
+    },
+    {
+      "id": "erudito",
+      "titulo": "Erudito",
+      "faixa": "especialista",
+      "descricao": "Você passou mais tempo em biblioteca do que na rua e sabe em que estante procurar quase tudo.",
+      "pericias": ["conhecimento", "misticismo"],
+      "itens": ["equipamento-livro-de-bolso-anotado", "lampiao", "incenso-de-meditacao"],
+      "contato": { "quem": "O bibliotecário da academia", "ramo": "Informação" }
+    },
+    {
+      "id": "avaliador",
+      "titulo": "Avaliador de joias",
+      "faixa": "especialista",
+      "descricao": "Você avalia joias com uma lupa e já disse a mais de um nobre que a joia da família era falsa.",
+      "pericias": ["investigacao", "diplomacia"],
+      "itens": ["equipamento-lentes-de-leitura", "algibeira", "adaga"],
+      "contato": { "quem": "O banqueiro que confia na sua palavra", "ramo": "Mercadoria" }
+    },
+    {
+      "id": "piloto",
+      "titulo": "Piloto",
+      "faixa": "especialista",
+      "descricao": "Você já pilotou barco, dirigível e máquina sem nome, e aprende a mexer num leme novo numa tarde.",
+      "pericias": ["pilotagem", "tecnologia"],
+      "itens": ["binoculo-longo-alcance", "kit-de-ferramentas", "bussola-de-precisao"],
+      "contato": { "quem": "O dono do hangar", "ramo": "Passagem" }
+    }
+  ]
+}
