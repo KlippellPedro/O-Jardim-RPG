@@ -19,6 +19,8 @@ interface Props {
   onPorNaCena: (item: IItemAcervo) => void;
   /** Mostra a imagem na tela de todos (carta, retrato de NPC, ilustração do lugar). */
   onMostrar?: (item: IItemAcervo) => void;
+  /** O Mestre está escolhendo o fundo da cena narrativa: toda imagem (mapa também) ganha um botão só, "Usar de fundo". */
+  modoFundo?: boolean;
 }
 
 const TIPOS: Array<{ id: TipoItemAcervo; rotulo: string }> = [
@@ -73,7 +75,7 @@ const InfoDaImagem = ({ item, onSalvo, onFechar }: { item: IItemAcervo; onSalvo:
   );
 };
 
-export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColocarMapa, onNovaCena, onPorNaCena, onMostrar }: Props) => {
+export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColocarMapa, onNovaCena, onPorNaCena, onMostrar, modoFundo }: Props) => {
   const [acervo, setAcervo] = useState<IAcervo | null>(null);
   const [erro, setErro] = useState('');
   const [pasta, setPasta] = useState<string | null | 'todas'>('todas');
@@ -256,7 +258,9 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
                   {(!item.licenca || item.licenca === 'desconhecida') && <span className="mapa-acervo-sem-licenca">sem licença</span>}
                 </small>
                 <div className="mapa-acervo-acoes">
-                  {item.tipo === 'mapa' ? (
+                  {modoFundo ? (
+                    <button type="button" className="mapa-acervo-usar-fundo" onClick={() => onPorNaCena(item)}><Eye size={13} /> Usar de fundo</button>
+                  ) : item.tipo === 'mapa' ? (
                     <>
                       {temCena && <button type="button" title="Põe o mapa na cena como um objeto: dá para arrastar, mudar o tamanho, trancar e esconder dos jogadores" onClick={() => onColocarMapa(item)}><MapaIcone size={13} /> Colocar</button>}
                       {temCena && <button type="button" title="Troca o mapa de fundo da cena por este" onClick={() => onUsarComoMapa(item)}>Trocar fundo</button>}
@@ -265,7 +269,7 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
                   ) : (
                     temCena && <button type="button" onClick={() => onPorNaCena(item)}><User size={13} /> Pôr na cena</button>
                   )}
-                  {onMostrar && item.tipo !== 'mapa' && <button type="button" aria-label={`Mostrar ${item.nome} à mesa`} title="Mostra esta imagem na tela de todos" onClick={() => onMostrar(item)}><Eye size={13} /> Mostrar</button>}
+                  {onMostrar && !modoFundo && <button type="button" aria-label={`Mostrar ${item.nome} à mesa`} title="Mostra esta imagem na tela de todos" onClick={() => onMostrar(item)}><Eye size={13} /> Mostrar</button>}
                   <button type="button" aria-label={`Origem e licença de ${item.nome}`} onClick={() => setInfoDe(item)}><Info size={13} /></button>
                   <button type="button" aria-label={`Apagar ${item.nome}`} onClick={() => void apagarItem(item)}><Trash2 size={13} /></button>
                 </div>

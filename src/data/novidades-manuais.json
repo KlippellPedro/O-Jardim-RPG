@@ -72,17 +72,6 @@
       ]
     },
     {
-      "id": "2026-11-14-mapa-efeitos-sonoros-do-mestre",
-      "data": "2026-11-14",
-      "tipo": "novo",
-      "area": "Mapa",
-      "titulo": "Efeitos sonoros que a mesa ouve junto",
-      "detalhes": [
-        "Mestre: na Trilha sonora existe a aba Efeitos, com 12 sons para soltar na hora certa: Trovão, Sino, Porta batendo, Pancada, Explosão, Aço contra aço, Moedas, Alarme, Magia, Gota d’água, Susto e Batimentos. A mesa inteira ouve ao mesmo tempo.",
-        "Os sons são feitos na hora pelo navegador, sem arquivo para baixar. Quem silenciou o som da mesa neste aparelho também não ouve os efeitos."
-      ]
-    },
-    {
       "id": "2026-11-14-mapa-quadro-de-investigacao",
       "data": "2026-11-14",
       "tipo": "novo",

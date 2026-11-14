@@ -21,7 +21,7 @@ quem joga ou assiste; para o Mestre a página abre normal com um aviso, em vez d
 gatilhos de terreno (B1), altura e telhado (B2), condições com contorno e
 lembrete na virada (B3), cobertura completa pela régua (C2, agora também a
 parcial e a superior, por zonas), quadro de investigação (C3), nota do jogador
-no token (D2) e efeitos pontuais no mixer (A1). Os desenhos das seções abaixo
+no token (D2) e efeitos pontuais no mixer (A1, feito e retirado: os sons sintetizados soavam falsos). Os desenhos das seções abaixo
 são os do plano; o que mudou na prática está na "Quinta rodada" de
 `INSPIRACAO_OWLBEAR_TTS.md`. Duas decisões que tomei sozinha por sua autorização:
 a nota do jogador ganhou coluna própria no token (240 caracteres) em vez de

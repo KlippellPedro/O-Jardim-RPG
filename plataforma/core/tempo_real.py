@@ -43,7 +43,7 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable
 
-from core.mapa import EFEITOS_SONOROS, ErroMapa, normalizar_magia, normalizar_traco, normalizar_vista_mesa, portal_atingido
+from core.mapa import ErroMapa, normalizar_magia, normalizar_traco, normalizar_vista_mesa, portal_atingido
 from core.paredes import caminho
 from core.nevoa import Nevoa
 from core import visao, zonas as zonas_da_cena
@@ -65,9 +65,6 @@ TRACOS_POR_JANELA = 8
 JANELA_TRACO_S = 5.0
 #: "Todo mundo na minha vista": 2 a cada 5 segundos por pessoa.
 VISTAS_POR_JANELA = 2
-#: Efeitos sonoros do Mestre: no máximo SFX_POR_JANELA a cada JANELA_SFX_S segundos (não vira metralhadora de som).
-SFX_POR_JANELA = 6
-JANELA_SFX_S = 5.0
 JANELA_VISTA_S = 5.0
 #: As regras (quem vê, quem move) valem por alguns segundos e são recarregadas:
 #: mudar a visibilidade de um participante na Sessão chega aqui no máximo nesse tempo.
@@ -123,8 +120,6 @@ class Conexao:
     magias: deque = field(default_factory=deque)
     #: Horários dos últimos pedidos de "todo mundo para a minha vista".
     vistas: deque = field(default_factory=deque)
-    #: Horários dos últimos efeitos sonoros que esta conexão disparou.
-    sfx: deque = field(default_factory=deque)
     #: Horários dos últimos traços de desenho livre que esta conexão mandou.
     tracos: deque = field(default_factory=deque)
     #: Horários das últimas perguntas de linha de visão.
@@ -214,16 +209,6 @@ class Conexao:
         if len(self.tracos) >= TRACOS_POR_JANELA:
             return False
         self.tracos.append(agora)
-        return True
-
-    def sfx_liberado(self) -> bool:
-        """Um efeito sonoro toca na mesa toda: no máximo SFX_POR_JANELA a cada JANELA_SFX_S segundos."""
-        agora = time.monotonic()
-        while self.sfx and agora - self.sfx[0] > JANELA_SFX_S:
-            self.sfx.popleft()
-        if len(self.sfx) >= SFX_POR_JANELA:
-            return False
-        self.sfx.append(agora)
         return True
 
     def vista_liberada(self) -> bool:
@@ -987,18 +972,6 @@ async def processar(
             "t": tipo, "por": conexao.usuario_id,
             **({"id": identificador} if tipo == "traco_apagar" else {}),
         })
-        return None
-
-    if tipo == "sfx":
-        # Efeito sonoro pontual (trovão, sino, susto...): só quem comanda dispara, a mesa inteira ouve e nada é gravado.
-        if not conexao.gestor:
-            return {"t": "erro", "motivo": "so o mestre toca efeitos sonoros"}
-        identificador = mensagem.get("id")
-        if identificador not in EFEITOS_SONOROS:
-            return {"t": "erro", "motivo": "efeito sonoro desconhecido"}
-        if not conexao.sfx_liberado():
-            return {"t": "erro", "motivo": "efeitos sonoros demais seguidos"}
-        _repassar(sala, conexao, {"t": "sfx", "id": identificador, "ts": agora_ms(), "por": conexao.usuario_id, "nome": conexao.nome})
         return None
 
     if tipo == "vista":

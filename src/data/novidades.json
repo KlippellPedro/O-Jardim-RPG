@@ -71,17 +71,6 @@
       ]
     },
     {
-      "id": "2026-11-14-mapa-efeitos-sonoros-do-mestre",
-      "data": "2026-11-14",
-      "tipo": "novo",
-      "area": "Mapa",
-      "titulo": "Efeitos sonoros que a mesa ouve junto",
-      "detalhes": [
-        "Mestre: na Trilha sonora existe a aba Efeitos, com 12 sons para soltar na hora certa: Trovão, Sino, Porta batendo, Pancada, Explosão, Aço contra aço, Moedas, Alarme, Magia, Gota d’água, Susto e Batimentos. A mesa inteira ouve ao mesmo tempo.",
-        "Os sons são feitos na hora pelo navegador, sem arquivo para baixar. Quem silenciou o som da mesa neste aparelho também não ouve os efeitos."
-      ]
-    },
-    {
       "id": "2026-11-14-mapa-quadro-de-investigacao",
       "data": "2026-11-14",
       "tipo": "novo",
@@ -1027,6 +1016,20 @@
         "Chegou o clima: chuva, tempestade com relâmpagos, neve, neblina, tempestade de areia, cinzas e brasas, folhas ao vento, escuridão com luz em volta dos personagens, o véu do Vazio e partículas na cor de um Fluxo.",
         "O clima acompanha o vento que o Mestre escolher e pode cobrir o mapa inteiro ou só um pedaço dele.",
         "Se o seu aparelho sofrer com os efeitos, o botão da nuvem na barra da esquerda desliga o clima só para você."
+      ]
+    },
+    {
+      "id": "2026-11-02-molduras-e-oficina",
+      "data": "2026-11-02",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mapa: molduras para o seu token e a Oficina do Mestre",
+      "detalhes": [
+        "Clique no token do seu personagem para escolher a moldura: a do seu nível, Ferro, Ouro, Madeira, Osso, Runa, Cristal, Raiz, Sombra ou uma de cada Fluxo.",
+        "No mesmo lugar dá para ajustar a foto dentro do círculo, com zoom e posição. A escolha vale em todas as cenas.",
+        "O Mestre pode pôr uma moldura única para a mesa inteira, e aí todo mundo usa a mesma.",
+        "Os tokens mostram as condições em bolinhas com as iniciais, ao lado do retrato.",
+        "Para o Mestre chegou a Oficina: remove o fundo de uma imagem, melhora a qualidade de mapas e retratos e transforma tudo em token, que já pode entrar no mapa e na iniciativa."
       ]
     }
   ]

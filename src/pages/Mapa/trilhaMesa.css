@@ -247,21 +247,3 @@
   justify-content: center;
   gap: 6px;
 }
-
-.mapa-efeitos-sonoros {
-  display: grid;
-  gap: 10px;
-}
-
-.mapa-efeitos-grade {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 6px;
-}
-
-.mapa-efeitos-grade .mapa-botao-leve {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 6px;
-}

@@ -209,13 +209,14 @@ export const QuadroDeInvestigacao = ({ aberto, campanhaId, quadro, usuarioId, ge
       )}
 
       {rascunho && (
-        <form className="mapa-quadro-form" onSubmit={(evento) => { evento.preventDefault(); void salvar(); }}>
+        <div className="mapa-quadro-compositor" onPointerDown={(evento) => { if (evento.target === evento.currentTarget) setRascunho(null); }}>
+        <form className="mapa-quadro-form" style={{ background: corDaCarta(rascunho.cor).fundo, borderColor: corDaCarta(rascunho.cor).borda }} onSubmit={(evento) => { evento.preventDefault(); void salvar(); }}>
           <label>
-            Título
+            <span>Título</span>
             <input value={rascunho.titulo} maxLength={TITULO_MAXIMO} placeholder="O mordomo, a faca, a carta sem selo" autoFocus onChange={(e) => setRascunho({ ...rascunho, titulo: e.target.value })} />
           </label>
           <label>
-            O que se sabe
+            <span>O que se sabe</span>
             <textarea value={rascunho.texto} rows={3} maxLength={TEXTO_MAXIMO} placeholder="Uma frase curta já vale." onChange={(e) => setRascunho({ ...rascunho, texto: e.target.value })} />
             <small>{rascunho.texto.length} de {TEXTO_MAXIMO}</small>
           </label>
@@ -235,6 +236,7 @@ export const QuadroDeInvestigacao = ({ aberto, campanhaId, quadro, usuarioId, ge
             <button type="button" className="mapa-botao-leve" onClick={() => setRascunho(null)}>Cancelar</button>
           </div>
         </form>
+        </div>
       )}
 
       <div className="mapa-quadro-mural" ref={muralRef}>

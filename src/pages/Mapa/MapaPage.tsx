@@ -46,7 +46,6 @@ import { QuadroDeInvestigacao } from './componentes/QuadroDeInvestigacao';
 import { avisoDoGatilho, zonaNova } from './motor/zonasConta';
 import { quedaDe } from './motor/elevacaoConta';
 import { resultadoFlutuante } from './motor/resultadoFlutuante';
-import { efeitoSonoroPorId, tocarEfeito } from './motor/efeitosSonoros';
 import { DURACAO_FIXA_MS, OPCOES_DE_DESENHO_PADRAO, opcoesDeDesenhoValidas, type FormaDeTraco, type OpcoesDeDesenho } from './motor/tracosConta';
 import { animarDadoDaMesa } from '../../components/dados/rolagemDados';
 import { MovimentoDoTurno } from './componentes/MovimentoDoTurno';
@@ -698,12 +697,6 @@ export const MapaPage = () => {
         // A resposta à pergunta da régua entre dois tokens: a cobertura que a linha atravessa (nunca onde fica).
         palco?.respostaDaLinha(String(mensagem.de), String(mensagem.para), mensagem.cobertura === 'total' || mensagem.cobertura === 'superior' || mensagem.cobertura === 'parcial' ? mensagem.cobertura : null);
         break;
-      case 'sfx': {
-        // O Mestre tocou um efeito pontual: toca aqui no volume deste aparelho (mudo é mudo).
-        const ajuste = lerAjusteLocal();
-        if (typeof mensagem.id === 'string' && efeitoSonoroPorId(mensagem.id) && !ajuste.mudo) tocarEfeito(mensagem.id, ajuste.volume);
-        break;
-      }
       case 'gatilho':
         // O meu token pisou numa zona com gatilho: o texto é só meu.
         if (typeof mensagem.texto === 'string') avisar.aviso(mensagem.texto, { duracaoMs: 9000 });
@@ -2765,11 +2758,6 @@ export const MapaPage = () => {
           ajuste={ajusteDoAmbiente}
           onAjuste={(ajuste) => { setAjusteDoAmbiente(ajuste); guardarAjusteLocal(ajuste); }}
           falhas={ambienteComFalha}
-          onEfeito={gestor ? (id) => {
-            // Quem toca ouve na hora (o servidor não devolve para quem mandou) e a mesa recebe junto.
-            tocarEfeito(id, lerAjusteLocal().volume);
-            conexaoRef.current?.enviar({ t: 'sfx', id });
-          } : undefined}
         />}
         {documentoMesa && <DocumentoDaMesa documento={documentoMesa} onFechar={() => setDocumentoMesa(null)} />}
         {!estado && !erro && <div className="mapa-aviso"><Loader2 className="girando" size={20} /> Abrindo o mapa...</div>}
@@ -2894,7 +2882,7 @@ export const MapaPage = () => {
             onGuardar={gestor ? guardarImagemDaMesa : undefined}
           />
         )}
-        {escolhendoFundo && <div className="mapa-aviso-topo">Escolha no Acervo a imagem de fundo da cena narrativa. Esc cancela.</div>}
+        {escolhendoFundo && <div className="mapa-aviso-topo">Clique em "Usar de fundo" na imagem do Acervo que vai ser o fundo da cena. Esc cancela.</div>}
         {gestor && cena && ferramenta === 'area' && (
           <div className="mapa-aviso-topo">Arraste no mapa a área do efeito. Esc cancela.</div>
         )}
@@ -3132,6 +3120,7 @@ export const MapaPage = () => {
           onNovaCena={(item) => void novaCena(item)}
           onPorNaCena={(item) => void porNaCena(item)}
           onMostrar={(item) => void mostrarImagemDoAcervo(item)}
+          modoFundo={escolhendoFundo}
         />
         {gestor && campanhaId && construtorAberto && (
           <ConstrutorMapa

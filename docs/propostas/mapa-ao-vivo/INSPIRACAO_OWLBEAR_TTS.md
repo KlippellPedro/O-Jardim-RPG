@@ -131,10 +131,9 @@ decide, e o jogador só recebe o que o Mestre deixou à vista.
   token de quem mostrou o dado, com CRÍTICO! e FALHA! só no 20 e no 1 naturais. O
   servidor manda o `token_id` junto do dado público. Nunca diz se passou da Defesa
   ou da DT.
-- **Efeitos sonoros do Mestre** (A1, `motor/efeitosSonoros.ts`): 12 sons
-  sintetizados no navegador (WebAudio), sem arquivo, tocados na mesa toda por uma
-  mensagem `sfx` que só o Mestre manda (lista fixa travada com o servidor, no máximo
-  6 a cada 5 s).
+- **Efeitos sonoros pontuais (A1): feitos e RETIRADOS no mesmo dia.** Os 12 sons sintetizados
+  soavam falsos; o Pedro preferiu ficar só com sons de ambiente e música (que ele
+  mesmo envia). Se voltar, que seja com arquivos de som reais.
 - **Quadro de investigação** (C3, `core/quadro.py`, `routers/mapa_quadro.py`, em
   `mesa.quadro`): mural de cortiça com cartas e barbantes, ao vivo. Cada jogador
   pode ter 12 cartas, qualquer um move e liga, só o autor e o Mestre editam e

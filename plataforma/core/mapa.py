@@ -96,11 +96,6 @@ LUZ_MAXIMA_CASAS = 30
 ESTILOS_DE_LUZ = ("fixa", "chama", "pulsa", "cintila")
 #: Efeitos de magia que a mesa inteira vê no mapa (src/pages/Mapa/motor/magia.ts).
 FORMAS_MAGIA = ("circulo", "cone", "linha", "impacto")
-#: Efeitos sonoros pontuais que o Mestre dispara para a mesa (sintetizados no navegador; só o id passa por aqui).
-#: A lista do site é a mesma (motor/efeitosSonoros.ts); um teste trava as duas.
-EFEITOS_SONOROS = (
-    "trovao", "sino", "porta", "pancada", "explosao", "aco", "moedas", "alarme", "magia", "gota", "susto", "coracao",
-)
 #: Uma magia pode começar ou terminar um pouco fora do mapa, mas não longe dele.
 FOLGA_MAGIA = 2000.0
 #: Direção para onde o vento sopra, em graus na tela: 0 vai para a direita, 90 para baixo.
