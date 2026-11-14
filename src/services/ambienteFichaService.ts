@@ -169,7 +169,8 @@ export function gastarFolego(status: IStatusVital, estaminaMaxima: number, rodad
   return { status: { ...status, estaminaAtual: Math.max(0, atual - custo) }, sufocando: false };
 }
 
-export const dtDaRodadaSufocando = (rodadasSufocando: number) => dtDeSufocar(rodadasSufocando + 1);
+/** A DT do livro é a do nível 1; a ficha soma o ajuste do nível do personagem. */
+export const dtDaRodadaSufocando = (rodadasSufocando: number, ajusteDeDt = 0) => dtDeSufocar(rodadasSufocando + 1) + ajusteDeDt;
 
 /** A primeira falha sem ar: a Vida cai a 0 e começa o Morrendo 1. */
 export function apagarSemAr(status: IStatusVital, vidaMaxima: number, constituicao: unknown): IStatusVital {

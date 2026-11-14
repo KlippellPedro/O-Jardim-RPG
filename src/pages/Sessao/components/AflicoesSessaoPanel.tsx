@@ -10,7 +10,7 @@ const OPCOES_AFLICAO: SelectOption[] = REGIOES_AFLICAO.flatMap((regiao) => {
   return daRegiao.length
     ? [
       { value: `regiao:${regiao}`, label: regiao, disabled: true, labelClassName: 'text-[10px] font-bold uppercase tracking-widest text-lime-300/70' },
-      ...daRegiao.map((aflicao) => ({ value: aflicao.id, label: `${aflicao.titulo} (DT ${aflicao.dtFortitude})` })),
+      ...daRegiao.map((aflicao) => ({ value: aflicao.id, label: `${aflicao.titulo} (DT ${aflicao.dtFortitude} + ajuste)` })),
     ]
     : [];
 });
@@ -109,7 +109,7 @@ export const AflicoesSessaoPanel: React.FC<{ entity: EntidadeIniciativa }> = ({ 
                 const maximo = estagioMaximo(aflicao);
                 return (
                   <li key={item.aflicaoId} className="flex items-center gap-2 rounded-md bg-lime-300/[0.05] px-2 py-1.5 text-[11px]">
-                    <span className="min-w-0 flex-1 truncate text-lime-100/85" title={`Fortitude DT ${aflicao.dtFortitude}`}>
+                    <span className="min-w-0 flex-1 truncate text-lime-100/85" title={`Fortitude DT ${aflicao.dtFortitude} mais o ajuste de nível`}>
                       {aflicao.titulo}{item.incubando ? <span className="text-amber-200/70"> · incubando</span> : null}
                     </span>
                     <div className="flex items-center rounded-md border border-white/10">

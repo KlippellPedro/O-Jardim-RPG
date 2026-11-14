@@ -96,9 +96,9 @@ const RESUMO_DAS_CONDICOES = {
   desorientado: ['Desvantagem em ataques e em Percepção.', 'Fortitude ou Vontade contra a DT da fonte, no fim do turno.'],
   lento: ['Movimento pela metade, sem correr; Iniciativa −2.', 'Quando a fonte acaba.'],
   enfraquecido: ['−2 em testes de Força e no dano corpo a corpo.', 'Quando a fonte acaba.'],
-  sangramento: ['1d6 de dano no fim do turno; cada nova aplicação soma +1, até +5.', 'Cura DT 15 com Ação Padrão, ou qualquer cura.'],
-  queimando: ['1d6 de Fogo no fim do turno; pegar fogo de novo não soma.', 'Ação Padrão e Acrobacia ou Atletismo DT 12, ou água.'],
-  envenenado: ['1d6 de veneno no fim do turno, ou o estágio da aflição.', 'Antídoto, ou Cura DT 15 com Ação Padrão.'],
+  sangramento: ['1d6 de dano no fim do turno; cada nova aplicação soma +1, até +5.', 'Ação Padrão e Cura na DT Padrão, ou outra cura.'],
+  queimando: ['1d6 de Fogo no fim do turno; pegar fogo de novo não soma.', 'Ação Padrão e Acrobacia ou Atletismo (Rotineira), ou água.'],
+  envenenado: ['1d6 de veneno no fim do turno, ou o estágio da aflição.', 'Antídoto, ou Ação Padrão e Cura (DT Padrão).'],
   paralisado: ['Não age, reage nem se move; falha em Força e Destreza; Defesa −5.', 'Fortitude contra a DT da fonte, no fim de cada turno.'],
   silenciado: ['Sem fala e sem componente verbal; gesto e escrita valem.', 'Quando a fonte acaba ou é superada.'],
   invisivel: ['Quem não vê você ataca com desvantagem, e você ataca essa criatura com vantagem.', 'Quando a fonte acaba ou você fica Revelado.'],
@@ -210,10 +210,10 @@ const paginaDois = () => `
     ${caixa('Cair e morrer', `
       <ul>
         <li>Em 0 PV ou menos você cai inconsciente com <b>Morrendo 1</b>. O dano abaixo de 0 é o Déficit de Vida; se ele chegar à Vida máxima, é morte na hora.</li>
-        <li>No fim de cada turno seu: Fortitude contra DT 12 + 2 × Gravidade + Ferido. Sucesso segura, dois seguidos ou um crítico estabilizam, falha sobe 1, falha crítica sobe 1 e pede trauma.</li>
+        <li>No fim de cada turno seu: Fortitude contra DT 12 + ajuste + 2 × Gravidade + Ferido. Sucesso segura, dois seguidos ou um crítico estabilizam, falha sobe 1, falha crítica sobe 1 e pede trauma.</li>
         <li><b>Gravidade</b> pelo Déficit: até 10% da Vida máxima 0, até 25% 1, até 50% 2, até 75% 3, acima disso 4.</li>
         <li>Em <b>Morrendo 3</b> você morre (4 com a maestria de Constituição). Quem volta a 1 PV acorda com Ferido 1.</li>
-        <li>Fora de combate, 10 minutos e Cura DT 15 devolvem 1d6 de Vida ou 10% da Vida máxima.</li>
+        <li>Fora de combate, 10 minutos e Cura na DT Padrão devolvem 1d6 de Vida ou 10% da Vida máxima.</li>
       </ul>`)}
     ${caixa('Descanso completo e Relaxar', `
       <table>
@@ -245,14 +245,14 @@ const paginaDois = () => `
       ${listaDeCondicoes(condicoes.slice(metadeDasCondicoes))}
     </div>`)}
 
-  ${caixa('Para quem conduz: DT pelo nível do grupo', `
+  ${caixa('Para quem conduz: DT pelo nível do grupo (Extrema: Difícil + 5)', `
     <table>
       <thead><tr><th>Nível</th>${ESCADA_DE_DT.map((linha) => `<th>${linha.nivel}</th>`).join('')}</tr></thead>
       <tbody>
+        <tr><td>Ajuste</td>${ESCADA_DE_DT.map((linha) => `<td>+${linha.padrao - 15}</td>`).join('')}</tr>
         <tr><td>Rotineira</td>${ESCADA_DE_DT.map((linha) => `<td>${linha.rotineira}</td>`).join('')}</tr>
         <tr><td><b>Padrão</b></td>${ESCADA_DE_DT.map((linha) => `<td><b>${linha.padrao}</b></td>`).join('')}</tr>
         <tr><td>Difícil</td>${ESCADA_DE_DT.map((linha) => `<td>${linha.dificil}</td>`).join('')}</tr>
-        <tr><td>Extrema</td>${ESCADA_DE_DT.map((linha) => `<td>${linha.extrema}</td>`).join('')}</tr>
       </tbody>
     </table>
 `, true)}

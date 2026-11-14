@@ -66,7 +66,7 @@
         "Sofra 1d6 de dano no fim do turno.",
         "Novas aplicações aumentam o dano em +1, até +5, mas não adicionam dados."
       ],
-      "remocao": "Cura DT 15 com ação padrão ou qualquer cura de pelo menos 1 PV."
+      "remocao": "Cura contra a DT Padrão do nível da fonte, com ação padrão, ou qualquer cura de pelo menos 1 PV."
     },
     {
       "tipo": "condicao",
@@ -170,7 +170,7 @@
         "Sofra 1d6 de dano de Fogo no fim do turno.",
         "Pegar fogo de novo não soma: continua 1d6."
       ],
-      "remocao": "Ação padrão e Acrobacia ou Atletismo DT 12 rolando no chão, ou entrar em água."
+      "remocao": "Ação padrão e Acrobacia ou Atletismo rolando no chão, contra a DT Rotineira do nível da fonte, ou entrar em água."
     },
     {
       "tipo": "condicao",
@@ -183,7 +183,7 @@
         "Sofra 1d6 de dano de veneno no fim do turno.",
         "Se o veneno for uma aflição do catálogo, use o estágio dela em vez deste dano."
       ],
-      "remocao": "O Antídoto da Loja encerra. Cura DT 15, gastando uma ação padrão, também."
+      "remocao": "O Antídoto da Loja encerra. Cura contra a DT Padrão do nível da fonte, gastando uma ação padrão, também."
     },
     {
       "tipo": "condicao",
@@ -376,7 +376,7 @@
       "efeitos": [
         "Fique Amedrontado pela fonte e use o movimento para se afastar dela."
       ],
-      "remocao": "Vontade DT 15 no fim de cada turno encerra a crise."
+      "remocao": "Vontade contra a DT Padrão do seu nível, no fim de cada turno, encerra a crise."
     },
     {
       "tipo": "crise",
@@ -387,7 +387,7 @@
       "efeitos": [
         "Não pode usar reações e sofre -2 em testes de Percepção e de interação."
       ],
-      "remocao": "Vontade DT 15 no fim de cada turno encerra a crise."
+      "remocao": "Vontade contra a DT Padrão do seu nível, no fim de cada turno, encerra a crise."
     },
     {
       "tipo": "crise",
@@ -396,7 +396,7 @@
       "categoria": "mental",
       "duracao": "Até o fim da cena.",
       "efeitos": [
-        "Não recebe bônus de ajuda e testa Vontade DT 15 para aceitar cura de outra criatura."
+        "Não recebe bônus de ajuda e testa Vontade contra a DT Padrão do seu nível para aceitar cura de outra criatura."
       ],
       "remocao": "Termina em segurança ao fim da cena."
     },
@@ -409,7 +409,7 @@
       "efeitos": [
         "Fique Atordoado, mas receba +5 contra empurrões e agarrões."
       ],
-      "remocao": "Um aliado pode usar uma ação padrão e Cura ou Diplomacia DT 15."
+      "remocao": "Um aliado pode usar uma ação padrão e Cura ou Diplomacia contra a DT Padrão do nível de quem está em crise."
     },
     {
       "tipo": "crise",
@@ -420,7 +420,7 @@
       "efeitos": [
         "No turno, deve realizar a ação compulsiva definida pela fonte antes de outras ações."
       ],
-      "remocao": "Vontade DT 15 no começo do turno permite agir normalmente."
+      "remocao": "Vontade contra a DT Padrão do seu nível, no começo do turno, permite agir normalmente."
     },
     {
       "tipo": "crise",
@@ -432,7 +432,7 @@
         "Receba +2 no dano corpo a corpo e -2 Defesa.",
         "Deve atacar uma ameaça visível se puder."
       ],
-      "remocao": "Vontade DT 15 no fim do turno encerra a crise."
+      "remocao": "Vontade contra a DT Padrão do seu nível, no fim do turno, encerra a crise."
     }
   ]
 }

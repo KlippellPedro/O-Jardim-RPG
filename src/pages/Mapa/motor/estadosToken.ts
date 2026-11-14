@@ -109,11 +109,11 @@ export function cartaDaAflicao(id: string, estagio = 1, incubando = false): ICar
   }
   blocos.push({
     rotulo: 'A cada intervalo',
-    linhas: [`Teste de Fortitude DT ${aflicao.dtFortitude} a cada ${textoDoPeriodo(aflicao.intervalo)}. Falhar sobe o estágio; passar ${aflicao.progressao.sucesso === -1 ? 'desce um estágio' : 'mantém o estágio'}.`],
+    linhas: [`Teste de Fortitude DT ${aflicao.dtFortitude} mais o ajuste de nível, a cada ${textoDoPeriodo(aflicao.intervalo)}. Falhar sobe o estágio; passar ${aflicao.progressao.sucesso === -1 ? 'desce um estágio' : 'mantém o estágio'}.`],
   });
   blocos.push({
     rotulo: 'Tratamento',
-    linhas: [`${aflicao.tratamento.pericia} DT ${aflicao.tratamento.dt}, ${aflicao.tratamento.tempo.replace(/\.$/, '').toLowerCase()}. ${aflicao.tratamento.efeitoSucesso}`],
+    linhas: [`${aflicao.tratamento.pericia} DT ${aflicao.tratamento.dt} mais o ajuste de nível, ${aflicao.tratamento.tempo.replace(/\.$/, '').toLowerCase()}. ${aflicao.tratamento.efeitoSucesso}`],
   });
   if (aflicao.observacoes?.length) blocos.push({ rotulo: 'Observações', linhas: aflicao.observacoes });
   return {

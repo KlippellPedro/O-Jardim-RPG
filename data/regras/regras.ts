@@ -12,7 +12,7 @@ import progressaoNiveisData from '../ficha/progressao-niveis.json';
 import type { IClasse } from '../../src/types/catalogo';
 import { MARCOS_MAESTRIA } from '../../src/services/maestriaClasse';
 import { CUSTO_SANIDADE_EXTRA_NEURAL, CUSTO_SANIDADE_POR_RARIDADE } from '../../src/services/implantesService';
-import { modeloDeCriatura, VD_ONDE_A_VIDA_ESCALA } from '../../src/services/curvaCriatura';
+import { DT_PADRAO_DO_NIVEL_1, dtPadraoDoVd, modeloDeCriatura, VD_ONDE_A_VIDA_ESCALA } from '../../src/services/curvaCriatura';
 import { linhasDeMagiaDaClasse } from '../../src/services/progressaoMagiaClasse';
 import {
   GRAUS_PERICIA_DADOS,
@@ -311,7 +311,7 @@ const linhasEscadaDeDt = () => NIVEIS_DA_ESCADA_DE_DT.map((nivel) => {
 const NIVEIS_DA_DT_PUBLICA = [1, 3, 5, 8, 10, 12, 15, 18, 19, 20, 25, 30, 40, 50, 60];
 const linhasDtPublica = () => NIVEIS_DA_DT_PUBLICA.map((nivel) => {
   const { dt } = referenciaDoNivel(nivel, classesComunsParaReferencia, armasParaReferencia);
-  return `<tr><td><strong>${nivel}</strong></td><td>${dt.padrao}</td><td>${dt.dificil}</td></tr>`;
+  return `<tr><td><strong>${nivel}</strong></td><td>+${dt.padrao - DT_PADRAO_DO_NIVEL_1}</td><td>${dt.rotineira}</td><td>${dt.padrao}</td><td>${dt.dificil}</td></tr>`;
 }).join('\n');
 
 const linhasNpcsEInimigos = () => NIVEIS_DE_REFERENCIA.map((nivel) => {
@@ -887,15 +887,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <p>Você tem três fontes de vantagem e uma de desvantagem. Uma vantagem cancela a desvantagem, e as duas que sobram valem uma vantagem só: você rola dois d20 e usa o maior.</p>
       </div>
 
-      <h3 class="regras-subtitle">DT Padrão e DT Difícil</h3>
-      <p>Vários tópicos pedem um teste "contra a DT Padrão do nível" ou "contra a DT Difícil". São as duas dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Difícil fica sempre 5 acima da Padrão. Num nível entre duas linhas, vale a linha do nível menor. A DT sobe mais depressa nos níveis em que um grau de perícia novo abre, como o Veterano no 19: ela acompanha quem treinou.</p>
+      <h3 class="regras-subtitle">DT Padrão, DT Difícil e ajuste de nível</h3>
+      <p>Vários tópicos pedem um teste "contra a DT Padrão do nível", "contra a DT Difícil" ou "contra a DT Rotineira". São dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Rotineira fica 5 abaixo da Padrão, e a Difícil, 5 acima. Num nível entre duas linhas, vale a linha do nível menor. A DT sobe mais depressa nos níveis em que um grau de perícia novo abre, como o Veterano no 19: ela acompanha quem treinou.</p>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Nível</th><th>DT Padrão</th><th>DT Difícil</th></tr></thead>
+        <thead><tr><th>Nível</th><th>Ajuste</th><th>DT Rotineira</th><th>DT Padrão</th><th>DT Difícil</th></tr></thead>
         <tbody>
           ${linhasDtPublica()}
         </tbody>
       </table></div>
-      <p>Quando o texto diz só "DT 15" ou outro número, a dificuldade é fixa e não muda com o nível.</p>
+      <p><strong>Ajuste de nível.</strong> Quando uma regra de perigo, Sanidade, condição, lesão ou aflição traz a DT como número, como "Vontade DT 12", esse número é a DT do nível 1. Na mesa, some o ajuste da linha do nível que vale para o teste. Uma fobia de Vontade DT 12 pede 12 no nível 1, 27 no nível 20 e 53 no nível 60. Por isso o medo, o veneno e a nevasca continuam pesando para quem já subiu muito. A conta fecha com os nomes: DT 10 mais o ajuste é a Rotineira, DT 15 mais o ajuste é a Padrão, e DT 20 mais o ajuste é a Difícil.</p>
+      <p><strong>Que nível usar.</strong> O da ameaça: o VD da criatura, o nível do lugar ou o da cena. Quando o problema mora no próprio personagem, como uma crise, uma fobia, um trauma, uma lesão ou Morrendo, vale o nível dele. Na dúvida, o nível do grupo. Quando a ficha calcula sozinha, ela usa o nível do personagem.</p>
+      <p><strong>O que não soma ajuste.</strong> Algumas DTs já crescem por outro caminho: a de conjuração e a de rituais sobem com o círculo, a de fabricar com a raridade, a de invadir uma base com o nível da base, e a de manter concentração com o dano sofrido. Ajudar tem a sua própria versão por nível, e o esconderijo ou a trava de um item segue a raridade dele.</p>
 
       <h3 class="regras-subtitle">Catálogo de perícias</h3>
       <p class="regras-lead">${periciasData.nota}</p>
@@ -1529,7 +1531,7 @@ ${HTML_MORAL}
     destaques: [
       ['Queda', '0 PV ou menos'],
       ['Morte', 'Morrendo 3'],
-      ['DT', '12 + Gravidade × 2 + Ferido'],
+      ['DT', '12 + ajuste de nível + Gravidade × 2 + Ferido'],
     ],
     corpo: `
       <p class="regras-lead">Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua sendo anotado abaixo de zero, e é esse número que decide se a queda foi um tropeço ou um desastre. Depois entra o relógio de Morrendo, que dá ao grupo algumas rodadas para resgatar quem caiu. Este tópico trata ainda de Ferido, de ferimento crítico e de mutilação.</p>
@@ -1537,11 +1539,11 @@ ${HTML_MORAL}
       <div class="regras-resumo">
         <ul>
           <li>Ao chegar a 0 PV você cai inconsciente. O dano que passou de 0 é o seu <strong>Déficit de Vida</strong>, e se ele chegar à sua Vida máxima você morre na hora.</li>
-          <li>Você recebe Morrendo 1 e, no fim de cada turno seu, rola Fortitude contra <strong>DT 12 + (2 × Gravidade) + Ferido</strong>. Em Morrendo 3 você morre.</li>
+          <li>Você recebe Morrendo 1 e, no fim de cada turno seu, rola Fortitude contra <strong>DT 12 + (2 × Gravidade) + Ferido</strong>, mais o ajuste do seu nível. Em Morrendo 3 você morre.</li>
           <li>Estabilizar interrompe os testes, mas só quem volta a 1 PV ou mais acorda. Quem acorda ganha Ferido 1.</li>
           <li>Um golpe que tira metade ou mais dos PV máximos, ou uma falha crítica em Morrendo, pede a tabela de trauma (2d6).</li>
           <li>A Mutilação sempre é anunciada antes, e um sucesso no teste evita a perda.</li>
-          <li>Fora de combate, qualquer um trata um ferido: 10 minutos e Cura DT 15 devolvem 1d6 de Vida, ou um décimo da Vida máxima do paciente, o que for maior.</li>
+          <li>Fora de combate, qualquer um trata um ferido: 10 minutos e Cura contra a DT Padrão do nível do paciente devolvem 1d6 de Vida, ou um décimo da Vida máxima do paciente, o que for maior.</li>
           <li>Voltar da morte existe, mas é raro e cobra caro.</li>
         </ul>
       </div>
@@ -1557,18 +1559,18 @@ ${HTML_MORAL}
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Déficit em relação à Vida máxima</th><th>Gravidade</th><th>DT base</th></tr></thead>
         <tbody>
-          <tr><td>0% a 10%</td><td>0</td><td>12 + Ferido</td></tr>
-          <tr><td>Acima de 10% até 25%</td><td>1</td><td>14 + Ferido</td></tr>
-          <tr><td>Acima de 25% até 50%</td><td>2</td><td>16 + Ferido</td></tr>
-          <tr><td>Acima de 50% até 75%</td><td>3</td><td>18 + Ferido</td></tr>
-          <tr><td>Acima de 75%</td><td>4</td><td>20 + Ferido</td></tr>
+          <tr><td>0% a 10%</td><td>0</td><td>12 + ajuste + Ferido</td></tr>
+          <tr><td>Acima de 10% até 25%</td><td>1</td><td>14 + ajuste + Ferido</td></tr>
+          <tr><td>Acima de 25% até 50%</td><td>2</td><td>16 + ajuste + Ferido</td></tr>
+          <tr><td>Acima de 50% até 75%</td><td>3</td><td>18 + ajuste + Ferido</td></tr>
+          <tr><td>Acima de 75%</td><td>4</td><td>20 + ajuste + Ferido</td></tr>
         </tbody>
       </table></div>
 
       <h3 class="regras-subtitle">Morrendo</h3>
       <ol class="regras-steps">
         <li>Ao chegar a 0 PV ou menos, você cai inconsciente e recebe <strong>Morrendo 1</strong>.</li>
-        <li>No fim de cada turno seu, role Fortitude contra <strong>DT 12 + (2 × Gravidade) + Ferido</strong>.</li>
+        <li>No fim de cada turno seu, role Fortitude contra <strong>DT 12 + (2 × Gravidade) + Ferido</strong>, mais o ajuste do seu nível (em Perícias, na tabela de DT).</li>
         <li>Sucesso segura onde está, e dois sucessos seguidos estabilizam. Sucesso crítico estabiliza na hora. Falha aumenta em 1. Falha crítica aumenta em 1 e pede a tabela de trauma.</li>
         <li>Estabilizado, você para de testar e continua inconsciente até voltar a 1 PV ou mais. Sofrer dano de novo recomeça os testes em Morrendo 1.</li>
         <li>Em Morrendo 3, você morre. A maestria de Constituição empurra esse limite para Morrendo 4.</li>
@@ -1577,11 +1579,11 @@ ${HTML_MORAL}
         <p>Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes de Morrendo. Mas acordar é outra coisa: só cura suficiente para chegar a 1 PV traz a pessoa de volta. Quem acorda ganha Ferido 1.</p>
       </div>
       <div class="regras-note regras-note--exemplo">
-        <p>Davi tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de Vida é 12, ou 30% da Vida máxima: Gravidade 2. Ele cai inconsciente com Morrendo 1. No fim do turno dele, rola Fortitude contra DT 12 + (2 × 2) + 0 = 16, porque ainda não tem Ferido. Falhou: Morrendo 2. Uma aliada o estabiliza com um teste de Cura contra a mesma DT 16, e os testes de Morrendo param. Ele só acorda quando alguém curar o bastante para levá-lo de volta a 1 PV, e então ganha Ferido 1.</p>
+        <p>Davi está no nível 3 (ajuste +1), tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de Vida é 12, ou 30% da Vida máxima: Gravidade 2. Ele cai inconsciente com Morrendo 1. No fim do turno dele, rola Fortitude contra DT 12 + (2 × 2) + 0 + 1 = 17, porque ainda não tem Ferido. Falhou: Morrendo 2. Uma aliada o estabiliza com um teste de Cura contra a mesma DT 17, e os testes de Morrendo param. Ele só acorda quando alguém curar o bastante para levá-lo de volta a 1 PV, e então ganha Ferido 1.</p>
       </div>
 
       <h3 class="regras-subtitle">Tratar ferimentos</h3>
-      <p>Fora de combate, com dez minutos e um teste de Cura DT 15, qualquer um trata um ferido, que recupera <strong>1d6 de Vida</strong> ou um décimo da Vida máxima dele, o que for maior. Assim o curativo vale no nível 3 e no nível 30. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.</p>
+      <p>Fora de combate, com dez minutos e um teste de Cura contra a DT Padrão do nível do paciente, qualquer um trata um ferido, que recupera <strong>1d6 de Vida</strong> ou um décimo da Vida máxima dele, o que for maior. Assim o curativo vale no nível 3 e no nível 30. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.</p>
 
       <h3 class="regras-subtitle">Remover Ferido</h3>
       <ul class="regras-list">
@@ -1617,7 +1619,7 @@ ${HTML_MORAL}
       <ul class="regras-list">
         <li>A Mutilação sempre é <strong>anunciada</strong> na rodada anterior ou vem de um gatilho que a própria ficha descreve, como estar Agarrado, Imobilizado ou Marcado. Ninguém perde um membro por um golpe que a mesa não teve chance de ver.</li>
         <li>Sucesso no teste evita a perda e deixa apenas <strong>Sangramento</strong>. Sucesso crítico não deixa nada.</li>
-        <li>Se a ficha não disser qual membro, role 1d6 na tabela abaixo. Ver o próprio membro sumir custa <strong>1d6 de Sanidade</strong>, e Vontade DT 15 corta a perda pela metade.</li>
+        <li>Se a ficha não disser qual membro, role 1d6 na tabela abaixo. Ver o próprio membro sumir custa <strong>1d6 de Sanidade</strong>, e Vontade contra a DT Padrão do seu nível corta a perda pela metade.</li>
       </ul>
       <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
         <thead><tr><th>1d6</th><th>Membro</th><th>O que muda</th></tr></thead>
@@ -3133,7 +3135,7 @@ ${HTML_DEVOCAO}
       <p class="regras-note">A ficha aplica sozinha o que dá para calcular: Enfraquecido tira 2 em testes de Força e no dano corpo a corpo, Favorecido soma 1 em Fortitude, Reflexos e Vontade, Desorientado e Cego dão desvantagem onde o cartão manda, e Lento, Apressado e as lesões de perna mudam o Movimento. As lesões e sequelas com número fixo também entram: braço ou mão dominante, ombro, olho, pernas, costelas, mandíbula, concussão, tremor e congelamento. Sangramento, Queimando, Envenenado e Revigorado ganham um botão que rola o efeito do turno e já desconta a Resistência da ficha. Inspirado aparece na hora de rolar ataque ou perícia, e sai da ficha depois do teste. O que depende da cena, como "para escalar" ou "diante do gatilho", continua com a mesa.</p>
 
       <h3 class="regras-subtitle">Sanidade</h3>
-      <div class="regras-formula">d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25</div>
+      <div class="regras-formula">d20 + bônus da perícia Sanidade ou Vontade contra DT 10, 15, 20 ou 25, mais o ajuste de nível da ameaça</div>
       <div class="regras-note regras-note--atencao">
         <p>Sanidade é o nome de duas coisas. A <strong>barra de Sanidade</strong> vai de 0 a 100 e mede o quanto a mente aguentou. A <strong>perícia Sanidade</strong> é o que você rola para proteger a barra. "Teste de Sanidade" rola a perícia, e "perder Sanidade" tira pontos da barra.</p>
       </div>
@@ -3147,14 +3149,14 @@ ${HTML_DEVOCAO}
           <tr><td>76–100</td><td>Estável</td><td>Sem efeito.</td></tr>
           <tr><td>51–75</td><td>Abalado</td><td>−1 no primeiro teste mental após perder Sanidade.</td></tr>
           <tr><td>26–50</td><td>Enlouquecendo</td><td>Desvantagem para manter concentração sob ameaça.</td></tr>
-          <tr><td>1–25</td><td>Ruptura</td><td>Ao sofrer nova perda, teste Vontade DT 15 ou ganhe uma condição de crise.</td></tr>
+          <tr><td>1–25</td><td>Ruptura</td><td>Ao sofrer nova perda, teste Vontade contra a DT Padrão do seu nível ou ganhe uma condição de crise.</td></tr>
           <tr><td>0</td><td>Quebra</td><td>Crise imediata e uma condição permanente definida com o jogador.</td></tr>
         </tbody>
       </table></div>
 
       <h3 class="regras-subtitle">Crises</h3>
       <ul class="regras-list">
-        <li>Em Ruptura, cada nova perda de Sanidade cobra Vontade DT 15; falhou, vem uma das crises abaixo.</li>
+        <li>Em Ruptura, cada nova perda de Sanidade cobra Vontade contra a DT Padrão do seu nível; falhou, vem uma das crises abaixo.</li>
         <li>Em Sanidade 0 a crise é imediata, sem teste. Passada a cena, o personagem continua em 0 até descansar e ser tratado em segurança.</li>
         <li>A condição permanente da Quebra é definida junto com o jogador, e só muda por resolução na história ou tratamento longo.</li>
       </ul>
@@ -3200,6 +3202,7 @@ ${HTML_DEVOCAO}
         <li><strong>Perdas de membro e sentido</strong> espelham a tabela de Mutilação em Ferimentos. Sem Regeneração ou implante, ficam para sempre.</li>
         <li><strong>Condições mentais permanentes</strong> não somem com descanso. Com acompanhamento profissional, cada uma fica mais leve do jeito que o próprio texto explica. Só uma resolução na história ou um tratamento longo encerra.</li>
         <li>Na Quebra de Sanidade, a condição permanente definida com o jogador pode sair daqui.</li>
+        <li>Toda DT escrita como número nestas tabelas é a do nível 1. Some o ajuste do nível do personagem, da tabela de DT em <span class="regras-ref regras-ref--pericias">Perícias</span>: a fobia de Vontade DT 12 pede 27 no nível 20. Quando o teste é de quem trata, como Cura para recolocar um ombro, vale o nível do paciente.</li>
       </ul>${tabelasCondicoesLongoPrazo}
     `,
     corpoMestre: `
@@ -3209,6 +3212,7 @@ ${HTML_DEVOCAO}
       <ul class="regras-list">
         <li>Peça quando o personagem encara algo que reorganiza o que ele achava do mundo, não quando a cena é só desagradável. Sangue não custa Sanidade; entender o que fez aquele sangue, sim.</li>
         <li>Escolha a DT e o dado da perda antes de descrever a cena, e diga a DT em voz alta. Escolher depois da reação da mesa é o mesmo erro de mudar DT depois do dado.</li>
+        <li>Some o ajuste de nível da ameaça, que está na tabela de DT de Perícias. A DT 15 de um horror de nível 30 é 37: sem isso, o grupo veterano passa por qualquer pavor sem sentir.</li>
         <li>Uma cena, um teste. Repetir o teste porque a criatura continua na sala transforma horror em contabilidade.</li>
         <li>Em campanha de tom leve, é legítimo não usar a barra. Diga isso na primeira sessão em vez de simplesmente nunca pedir.</li>
       </ul>
@@ -3216,7 +3220,7 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Aplicar uma crise</h3>
       <ul class="regras-list">
         <li>Crise é mecânica, não interpretação obrigatória. Aplique o efeito e deixe o jogador decidir como o personagem se comporta dentro dele.</li>
-        <li>Pânico, Dissociação, Catatonia e Fúria duram 1d4 rodadas e saem com Vontade DT 15. Lembre o jogador de que ele tem o teste no fim do turno: crise que ninguém sabe como sair vira só frustração.</li>
+        <li>Pânico, Dissociação, Catatonia e Fúria duram 1d4 rodadas e saem com Vontade contra a DT Padrão do nível do personagem. Lembre o jogador de que ele tem o teste no fim do turno: crise que ninguém sabe como sair vira só frustração.</li>
         <li>A condição permanente da Quebra em Sanidade 0 é definida com o jogador, nunca imposta. Se ele não quiser aquele tipo de sequela, escolham outra juntos.</li>
       </ul>
 
@@ -4428,7 +4432,7 @@ ${HTML_DEVOCAO}
           <tbody>
             <tr><td>2</td><td><strong>Ataque na madrugada.</strong> O fogo virou brasa. Quem está de vigia conta estrelas para não dormir, e é assim que percebe a coruja parando de piar no meio do canto. Um galho estala perto demais. Depois, todos de uma vez.<small class="regras-mecanica">Quem estava de vigia age normalmente. Quem dormia começa Surpreendido e sem tempo de vestir armadura. O descanso da noite cai para qualidade Péssima.</small></td></tr>
             <tr><td>3</td><td><strong>Algo levou suprimentos.</strong> No meio da noite, um barulho de pano rasgando. Quando alguém acende a tocha, a bolsa de comida está aberta e vazia, e as marcas no chão entram no mato: pegadas pequenas, muitas, e um rastro de farinha feito migalha de conto de criança.<small class="regras-mecanica">Some a comida ou um item que não estava equipado. Ir atrás agora custa o resto da noite. O descanso cai para qualidade Ruim.</small></td></tr>
-            <tr><td>4</td><td><strong>Pesadelo compartilhado.</strong> Dois de vocês acordam ao mesmo tempo, suados, com o coração disparado. Um começa a contar o sonho: uma porta vermelha, um corredor cheio de água, alguém chamando lá de trás. O outro termina a frase antes dele.<small class="regras-mecanica">Os dois testam Sanidade na DT 10, com perda de 1d4 na falha. O sonho contém uma pista verdadeira.</small></td></tr>
+            <tr><td>4</td><td><strong>Pesadelo compartilhado.</strong> Dois de vocês acordam ao mesmo tempo, suados, com o coração disparado. Um começa a contar o sonho: uma porta vermelha, um corredor cheio de água, alguém chamando lá de trás. O outro termina a frase antes dele.<small class="regras-mecanica">Os dois testam Sanidade na DT Rotineira, com perda de 1d4 na falha. O sonho contém uma pista verdadeira.</small></td></tr>
             <tr><td>5</td><td><strong>Frio, chuva ou insetos.</strong> A garoa começa fina e não para. Entra pela lona, pela gola, pelo cobertor, e à meia-noite não sobra nenhuma parte seca no corpo de ninguém. Ou é um enxame de mosquitos que não deixa ninguém fechar os olhos.<small class="regras-mecanica">Ninguém dorme direito. O descanso cai uma qualidade.</small></td></tr>
             <tr><td>6</td><td><strong>Barulhos lá fora.</strong> A noite inteira alguma coisa anda em volta do acampamento, sempre no limite da luz do fogo. Um galho quebra à esquerda. Depois à direita. Uma respiração. Nunca chega perto, e nunca vai embora.<small class="regras-mecanica">Quem ficou de vigia termina com 1 de Cansaço, e ninguém descobre o que era.</small></td></tr>
             <tr><td>7</td><td><strong>Noite comum.</strong> O fogo estala, alguém tira as botas com um suspiro, e o céu está tão limpo que aparecem estrelas que a cidade esconde. É o tipo de silêncio em que as pessoas acabam contando coisas.<small class="regras-mecanica">Pergunte a um jogador o que o personagem dele conta sobre o lugar onde cresceu.</small></td></tr>
@@ -4467,7 +4471,7 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>2d6</th><th>Evento</th></tr></thead>
           <tbody>
-            <tr><td>2</td><td><strong>Ruptura.</strong> O ar se rasga com um barulho de pano velho. Por alguns segundos existe um corte no meio da sala, e do outro lado dá para ver um lugar que não deveria estar ali. Alguma coisa atravessa antes de o corte fechar, e parece tão assustada quanto vocês.<small class="regras-mecanica">Todos testam Sanidade na DT 20, com perda de 1d8 na falha, e a criatura que passou está confusa e hostil.</small></td></tr>
+            <tr><td>2</td><td><strong>Ruptura.</strong> O ar se rasga com um barulho de pano velho. Por alguns segundos existe um corte no meio da sala, e do outro lado dá para ver um lugar que não deveria estar ali. Alguma coisa atravessa antes de o corte fechar, e parece tão assustada quanto vocês.<small class="regras-mecanica">Todos testam Sanidade na DT Difícil, com perda de 1d8 na falha, e a criatura que passou está confusa e hostil.</small></td></tr>
             <tr><td>3</td><td><strong>A Mana azeda.</strong> Quem conjura sente primeiro um gosto amargo no fundo da língua, depois um peso atrás dos olhos. A Mana sai rasgando, como água passando por um cano enferrujado.<small class="regras-mecanica">Até o fim da cena, toda conjuração custa 2 de Mana a mais.</small></td></tr>
             <tr><td>4</td><td><strong>A magia escapa.</strong> A magia sai da mão de quem conjura e hesita no ar, como um cachorro que não sabe qual dono seguir. Depois escolhe, sozinha, um segundo caminho.<small class="regras-mecanica">A próxima magia conjurada atinge também um alvo extra ao alcance, escolhido por você, seja aliado ou inimigo.</small></td></tr>
             <tr><td>5</td><td><strong>O tempo escorrega.</strong> A vela que vocês acenderam ao entrar já virou um toco. A barba de alguém cresceu. Quando saem, o sol está no lugar errado do céu, e o pão na mochila endureceu.<small class="regras-mecanica">Quando o grupo sai do lugar, descobre que passou um dia inteiro lá dentro.</small></td></tr>
@@ -5280,16 +5284,16 @@ ${HTML_DEVOCAO}
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>VD</th><th>Presença Aterradora</th><th>Golpe comum</th><th>Golpe anunciado</th></tr></thead>
         <tbody>
-          <tr><td>3</td><td>Vontade DT 15, 1d6</td><td>2d6+3 (10)</td><td>4d6 (14)</td></tr>
-          <tr><td>8</td><td>Vontade DT 15, 1d6</td><td>3d6+5 (15)</td><td>4d8+3 (21)</td></tr>
-          <tr><td>13</td><td>Vontade DT 15, 1d6</td><td>3d8+7 (20)</td><td>5d8+6 (28)</td></tr>
-          <tr><td>18</td><td>Vontade DT 20, 1d8</td><td>4d8+8 (26)</td><td>6d8+8 (35)</td></tr>
-          <tr><td>23</td><td>Vontade DT 20, 1d8</td><td>4d10+10 (32)</td><td>6d10+11 (44)</td></tr>
-          <tr><td>28</td><td>Vontade DT 20, 1d8</td><td>5d10+10 (37)</td><td>7d10+13 (51)</td></tr>
-          <tr><td>33</td><td>Vontade DT 25, 2d6</td><td>6d10+10 (43)</td><td>9d10+11 (60)</td></tr>
-          <tr><td>38</td><td>Vontade DT 25, 2d6</td><td>7d10+10 (48)</td><td>10d10+11 (66)</td></tr>
-          <tr><td>43</td><td>Vontade DT 25, 2d6</td><td>8d10+10 (54)</td><td>11d10+14 (74)</td></tr>
-          <tr><td>48</td><td>Vontade DT 25, 2d6</td><td>9d10+10 (59)</td><td>12d10+16 (82)</td></tr>
+          <tr><td>3</td><td>Vontade DT ${dtPadraoDoVd(3)}, 1d6</td><td>2d6+3 (10)</td><td>4d6 (14)</td></tr>
+          <tr><td>8</td><td>Vontade DT ${dtPadraoDoVd(8)}, 1d6</td><td>3d6+5 (15)</td><td>4d8+3 (21)</td></tr>
+          <tr><td>13</td><td>Vontade DT ${dtPadraoDoVd(13)}, 1d6</td><td>3d8+7 (20)</td><td>5d8+6 (28)</td></tr>
+          <tr><td>18</td><td>Vontade DT ${dtPadraoDoVd(18)}, 1d8</td><td>4d8+8 (26)</td><td>6d8+8 (35)</td></tr>
+          <tr><td>23</td><td>Vontade DT ${dtPadraoDoVd(23)}, 1d8</td><td>4d10+10 (32)</td><td>6d10+11 (44)</td></tr>
+          <tr><td>28</td><td>Vontade DT ${dtPadraoDoVd(28)}, 1d8</td><td>5d10+10 (37)</td><td>7d10+13 (51)</td></tr>
+          <tr><td>33</td><td>Vontade DT ${dtPadraoDoVd(33)}, 2d6</td><td>6d10+10 (43)</td><td>9d10+11 (60)</td></tr>
+          <tr><td>38</td><td>Vontade DT ${dtPadraoDoVd(38)}, 2d6</td><td>7d10+10 (48)</td><td>10d10+11 (66)</td></tr>
+          <tr><td>43</td><td>Vontade DT ${dtPadraoDoVd(43)}, 2d6</td><td>8d10+10 (54)</td><td>11d10+14 (74)</td></tr>
+          <tr><td>48</td><td>Vontade DT ${dtPadraoDoVd(48)}, 2d6</td><td>9d10+10 (59)</td><td>12d10+16 (82)</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">A Vida da criatura do Vazio fica cerca de 20% acima da Vida solo do mesmo VD (a do Bestiário e a da aba Sob medida), e a Defesa dois pontos acima. As linhas cobrem os VD das fichas do Vazio do Bestiário (3, 8, 13, 18, 23, 28, 33, 38, 43 e 48); entre dois degraus, use o de baixo. Servem para você montar uma criatura nova que se comporte como as do Bestiário.</p>

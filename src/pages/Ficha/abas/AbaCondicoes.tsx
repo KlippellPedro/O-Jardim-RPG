@@ -356,7 +356,7 @@ export const AbaCondicoes = ({ character, onUpdate, onOpenConditions }: AbaCondi
             <div className="mb-5">
               <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-500">Quando a mente cede</p>
               <h3 className="mt-1 flex items-center gap-2 text-lg font-bold text-white"><Brain size={19} className="text-fuchsia-300" />Crises de Sanidade</h3>
-              <p className="mt-2 max-w-3xl text-xs leading-relaxed text-gray-500">Em Ruptura, uma nova perda exige Vontade DT 15. Na Quebra, a crise é imediata. Aplique a crise aqui e ela entra em “Em vigor agora”.</p>
+              <p className="mt-2 max-w-3xl text-xs leading-relaxed text-gray-500">Em Ruptura, uma nova perda exige Vontade contra a DT Padrão do seu nível. Na Quebra, a crise é imediata. Aplique a crise aqui e ela entra em “Em vigor agora”.</p>
             </div>
             <div className="grid gap-3 lg:grid-cols-2">{CRISES_SANIDADE.map((item) => renderCondicao(item, true))}</div>
             <div className="mt-4 flex items-start gap-3 rounded-2xl border border-emerald-400/10 bg-emerald-400/[0.035] p-4 text-xs leading-relaxed text-gray-400">

@@ -148,7 +148,7 @@ export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
   },
   {
     id: 'sedenta', titulo: 'Sedenta', categoria: 'arma', nivel: 'marcial', valor: 2,
-    efeito: 'No crítico, o alvo recebe a condição Sangramento (usa o dado de dano da arma no lugar do 1d6 padrão, no fim de cada turno). Reaplicar segue a regra normal de Sangramento: +1 de dano por aplicação, até +5, sem novos dados. Remove-se como qualquer Sangramento: Cura DT 15 ou qualquer cura de pelo menos 1 PV.',
+    efeito: 'No crítico, o alvo recebe a condição Sangramento (usa o dado de dano da arma no lugar do 1d6 padrão, no fim de cada turno). Reaplicar segue a regra normal de Sangramento: +1 de dano por aplicação, até +5, sem novos dados. Remove-se como qualquer Sangramento: Cura contra a DT Padrão do nível da fonte ou qualquer cura de pelo menos 1 PV.',
   },
   {
     id: 'vampirica', titulo: 'Vampírica', categoria: 'arma', nivel: 'marcial', valor: 2,

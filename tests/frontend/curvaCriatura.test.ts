@@ -7,6 +7,8 @@ import {
   ORDEM_DOS_PAPEIS,
   PAPEIS_CRIATURA,
   ajusteDeArmaduraDoVd,
+  ajusteDeDtDoNivel,
+  dtNoNivel,
   dtPadraoDoVd,
   escalaDeVida,
   escalarCriatura,
@@ -264,4 +266,19 @@ test('escalar leva junto a DT escrita no texto do ataque, a mesma distância que
   assert.match(feita.ataques[0].detalhe, new RegExp(`Fortitude DT ${15 + dtPadraoDoVd(40) - dtPadraoDoVd(18)}$`));
   const mesmo = escalarCriatura({ vd: 18, pv: 380, iniciativa: 26, ataques: [{ nome: 'Picada', detalhe: 'DT 15' }], pericias: [] }, 19);
   assert.equal(mesmo.ataques[0].detalhe, `DT ${15 + dtPadraoDoVd(19) - dtPadraoDoVd(18)}`);
+});
+
+test('ajuste de nível da DT: a DT do nível 1 vira a Padrão, a Difícil e a Rotineira de qualquer nível', () => {
+  assert.equal(ajusteDeDtDoNivel(1), 0);
+  assert.equal(dtNoNivel(12, 1), 12);
+  for (const nivel of [1, 5, 10, 19, 20, 40, 60, 200]) {
+    assert.equal(dtNoNivel(15, nivel), dtPadraoDoVd(nivel), `nível ${nivel}`);
+    assert.ok(ajusteDeDtDoNivel(nivel) >= 0);
+  }
+  // A régua só sobe: nenhuma DT de perigo fica mais fácil com o nível.
+  for (let nivel = 2; nivel <= 120; nivel += 1) {
+    assert.ok(ajusteDeDtDoNivel(nivel) >= ajusteDeDtDoNivel(nivel - 1), `nível ${nivel}`);
+  }
+  assert.equal(dtNoNivel(12, 20), 27);
+  assert.equal(dtNoNivel(12, 60), 53);
 });

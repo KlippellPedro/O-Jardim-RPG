@@ -86,7 +86,7 @@ test('contatos: Confiança decide o favor, e o segundo no intervalo sobe um tama
 test('laços: até três, e o Luto Profundo que a página cita existe', () => {
   assert.equal(LACOS_MAXIMOS, 3);
   assert.ok(CONDICOES_LONGO_PRAZO.some((condicao) => condicao.titulo === 'Luto Profundo'));
-  assert.match(REGRAS_OFICIAIS['contatos-lacos'].corpo, /Sanidade contra DT 15/);
+  assert.match(REGRAS_OFICIAIS['contatos-lacos'].corpo, /Sanidade contra a DT Padrão do nível dele/);
 });
 
 test('Devoção: 0 a 3, sobe no máximo um degrau por arco', () => {

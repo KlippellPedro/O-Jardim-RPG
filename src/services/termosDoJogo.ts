@@ -130,7 +130,7 @@ const termosDeCondicao = (): ITermoDoJogo[] => [
       id,
       nome: aflicao.titulo,
       categoria: 'aflicao' as const,
-      resumo: encurtar(`${ROTULO_TIPO_AFLICAO[aflicao.tipo].replace(/^./, (letra) => letra.toUpperCase())}, Fortitude DT ${aflicao.dtFortitude}. Primeiro estágio: ${primeiro}`),
+      resumo: encurtar(`${ROTULO_TIPO_AFLICAO[aflicao.tipo].replace(/^./, (letra) => letra.toUpperCase())}, Fortitude DT ${aflicao.dtFortitude} mais o ajuste de nível. Primeiro estágio: ${primeiro}`),
       topico: 'aflicoes',
       rota: rotaDaAncora('aflicoes', id),
       formas: [aflicao.titulo],

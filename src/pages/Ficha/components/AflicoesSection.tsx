@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { BookOpen, Dices, FlaskConical, Minus, Plus, RefreshCw, ShieldCheck, Skull, X } from 'lucide-react';
 import { CATALOGO_AFLICOES, REGIOES_AFLICAO, type IAflicao } from '../../../../data/regras/aflicoes';
 import { carregarCatalogo } from '../../../services/catalogoService';
+import { ajusteDeDtDoNivel } from '../../../services/curvaCriatura';
+import { nivelTotalFicha } from '../../../services/progressaoFichaService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { calcularTestePericia } from '../../../services/testePericiaService';
@@ -41,12 +43,13 @@ const ROTULO_TIPO: Record<IAflicao['tipo'], string> = { veneno: 'Veneno', doenca
 
 // Separadas por região: o nome da região entra como linha desabilitada, no
 // lugar do <optgroup> (o menu nativo abre branco no Windows).
-const OPCOES_AFLICAO: SelectOption[] = REGIOES_AFLICAO.flatMap((regiao) => {
+// A DT do catálogo é a do nível 1; a ficha soma o ajuste do nível do personagem.
+const opcoesDeAflicao = (ajuste: number): SelectOption[] => REGIOES_AFLICAO.flatMap((regiao) => {
   const daRegiao = CATALOGO_AFLICOES.filter((aflicao) => aflicao.regiao === regiao);
   return daRegiao.length
     ? [
       { value: `regiao:${regiao}`, label: regiao, disabled: true, labelClassName: 'text-[10px] font-bold uppercase tracking-widest text-lime-300/70' },
-      ...daRegiao.map((aflicao) => ({ value: aflicao.id, label: `${aflicao.titulo} (DT ${aflicao.dtFortitude})` })),
+      ...daRegiao.map((aflicao) => ({ value: aflicao.id, label: `${aflicao.titulo} (DT ${aflicao.dtFortitude + ajuste})` })),
     ]
     : [];
 });
@@ -66,6 +69,8 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
   const campanhaAtiva = useAuthStore((state) => state.campanhaAtiva);
   const f = character.ficha || {};
   const ativas = useMemo(() => normalizarAflicoesAtivas(f.aflicoesAtivas), [f.aflicoesAtivas]);
+  const ajusteDeDt = ajusteDeDtDoNivel(Math.max(1, nivelTotalFicha(f)));
+  const opcoesAflicao = useMemo(() => opcoesDeAflicao(ajusteDeDt), [ajusteDeDt]);
   const [racas, setRacas] = useState<IRaca[]>([]);
   const [escolhendo, setEscolhendo] = useState(false);
   const [escolhida, setEscolhida] = useState('');
@@ -95,7 +100,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
       bonus: teste.bonus,
       vantagens: teste.vantagens,
       desvantagens: teste.desvantagens,
-      dt: aflicao.dtFortitude,
+      dt: aflicao.dtFortitude + ajusteDeDt,
       origem: { tipo: 'aflicao', aflicaoId: aflicao.id, motivo },
     });
     const grau = grauValido(registro.detalhes?.grau);
@@ -264,7 +269,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
                 <div className="min-w-0">
                   <strong className="block text-sm text-lime-100">{aflicao.titulo}</strong>
                   <span className="text-[11px] text-gray-500">
-                    {ROTULO_TIPO[aflicao.tipo]}{aflicao.classificacao === 'sobrenatural' ? ' sobrenatural' : ''} · DT {aflicao.dtFortitude} · teste a cada {textoDoPeriodo(aflicao.intervalo)}
+                    {ROTULO_TIPO[aflicao.tipo]}{aflicao.classificacao === 'sobrenatural' ? ' sobrenatural' : ''} · DT {aflicao.dtFortitude + ajusteDeDt} · teste a cada {textoDoPeriodo(aflicao.intervalo)}
                   </span>
                 </div>
                 <div className="flex shrink-0 items-center gap-1" aria-label={`Estágio ${ativa.estagio} de ${maximo}`}>
@@ -296,7 +301,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
                 <button type="button" disabled={!!rolando} onClick={() => testarIntervalo(ativa, aflicao)} className={`${botao} border-lime-300/30 bg-lime-300/10 text-lime-200 hover:bg-lime-300/20`}>
                   {rolando === ativa.id ? <RefreshCw size={12} className="animate-spin" /> : <Dices size={12} />} Teste do intervalo
                 </button>
-                <button type="button" onClick={() => mudarEstagio(ativa, aflicao, -1)} title={`Cura DT ${aflicao.tratamento.dt} (${aflicao.tratamento.tempo.replace(/\.$/, '')}). ${aflicao.tratamento.limite}`} className={`${botao} border-white/10 text-gray-300 hover:text-white`}>
+                <button type="button" onClick={() => mudarEstagio(ativa, aflicao, -1)} title={`Cura DT ${aflicao.tratamento.dt + ajusteDeDt} (${aflicao.tratamento.tempo.replace(/\.$/, '')}). ${aflicao.tratamento.limite}`} className={`${botao} border-white/10 text-gray-300 hover:text-white`}>
                   <ShieldCheck size={12} /> Tratou (−1)
                 </button>
                 <div className="flex items-center rounded-lg border border-white/10">
@@ -321,7 +326,7 @@ export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) 
               value={escolhida}
               onChange={setEscolhida}
               placeholder="Escolha a aflição..."
-              options={OPCOES_AFLICAO}
+              options={opcoesAflicao}
               className="w-full bg-[#121118]"
             />
             {aflicaoEscolhida ? (

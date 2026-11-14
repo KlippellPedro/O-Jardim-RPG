@@ -727,6 +727,7 @@ export const REGRA_AFLICOES = {
     </div>
 
     <h3 class="regras-subtitle">Aplicação</h3>
+    <p>A DT do catálogo, de Fortitude e de Cura, é a do nível 1. Na mesa, some o ajuste de nível do lugar ou de quem envenenou, da tabela de DT em <span class="regras-ref regras-ref--pericias">Perícias</span>: uma doença de DT 16 pede 31 numa região de nível 20. A ficha soma sozinha o ajuste do nível do personagem.</p>
     <ol class="regras-steps">
       <li>Ao sofrer exposição, teste Fortitude contra a DT da aflição. Sucesso ou sucesso crítico evita a aflição. Falha aplica o estágio 1 depois da incubação; falha crítica aplica o estágio 2.</li>
       <li>No fim de cada intervalo, faça outro teste. Sucesso crítico reduz 1 estágio; sucesso mantém; falha aumenta 1; falha crítica aumenta 2. Em veneno, o sucesso comum também reduz 1 estágio: o corpo vence a toxina aos poucos, e doença e vício só cedem com tratamento.</li>
@@ -760,7 +761,7 @@ export const REGRA_AFLICOES = {
     <h3 class="regras-subtitle">Aflições por região</h3>
     <p>Cada região do Jardim tem as próprias doenças e venenos. A tabela diz onde cada aflição costuma ser pega, para o grupo saber o que levar antes de entrar: pano no rosto em Baluarte, sombra para os olhos em Alétheia, companhia no Vazio. Fora da região, só vale se alguém levou a exposição junto, como um pó, uma amostra ou um ferimento aberto.</p>
     <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Região</th><th>Aflição</th><th>Tipo</th><th>DT</th><th>Como se pega</th></tr></thead>
+      <thead><tr><th>Região</th><th>Aflição</th><th>Tipo</th><th>DT no nível 1</th><th>Como se pega</th></tr></thead>
       <tbody>${tabelaAflicoesPorRegiao}
       </tbody>
     </table></div>
@@ -773,7 +774,7 @@ export const REGRA_AFLICOES = {
     <h3 class="regras-subtitle">Escolher a aflição certa</h3>
     <ul class="regras-list">
       <li>Quem decide o peso é o intervalo, mais que a DT. Veneno de combate cobra teste a cada rodada e resolve dentro da cena; doença cobra a cada dia e atravessa sessões.</li>
-      <li>O catálogo publicado anda entre DT 14 e DT 20. Fique nessa faixa: acima dela a aflição vira sentença, porque o alvo falha em quase todo intervalo.</li>
+      <li>O catálogo publicado anda entre DT 14 e DT 20 no nível 1, e todas sobem com o ajuste de nível. Fique nessa faixa de base: acima dela a aflição vira sentença, porque o alvo falha em quase todo intervalo. Um veneno de lugar fraco pode ficar no nível do lugar; quem anda por ali já bem acima dele mal sente.</li>
       <li>Falha crítica na exposição já entra direto no estágio 2. Isso é duro, e é o motivo para não distribuir exposição em cena banal.</li>
       <li>Use a tabela por região. A aflição de um lugar funciona melhor quando o grupo foi avisado do perigo antes: quem ouviu falar do Pulmão de Pedra em Baluarte leva pano para o rosto, e aí a escolha passa a ser dele.</li>
       <li>As aflições sobrenaturais das regiões (Alétheia, Vórtice, Matriz, Éon, Limiar e o Vazio) pedem tratamento que o grupo nem sempre alcança. Antes de aplicar uma, tenha na cabeça como a mesa vai sair dela.</li>

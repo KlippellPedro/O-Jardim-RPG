@@ -36,6 +36,8 @@ import {
   type RodadaSemAr,
 } from '../../../services/ambienteFichaService';
 import { modificador } from '../../../services/calculoService';
+import { ajusteDeDtDoNivel } from '../../../services/curvaCriatura';
+import { nivelTotalFicha } from '../../../services/progressaoFichaService';
 import {
   adicionarCondicaoOficial,
   atualizarStatusVital,
@@ -98,6 +100,8 @@ const Linha = ({ rotulo, valor }: { rotulo: string; valor: ReactNode }) => (
 
 export const AmbienteSection = ({ character, onUpdate }: AmbienteSectionProps) => {
   const ficha = character.ficha || {};
+  // As DTs de perigo do livro são do nível 1; a ficha soma o ajuste do nível.
+  const ajusteDeDt = ajusteDeDtDoNivel(Math.max(1, nivelTotalFicha(ficha)));
   const status = obterStatusFicha(ficha);
   const ambiente = useMemo(() => normalizarAmbiente(ficha.ambiente), [ficha.ambiente]);
   const derivados = character.derivados || ficha.derivados || {};
@@ -188,7 +192,7 @@ export const AmbienteSection = ({ character, onUpdate }: AmbienteSectionProps) =
   };
   const passouFortitude = () => {
     salvarAmbiente({ ...ambiente, folego: { semAr: true, rodadasSufocando: folego.rodadasSufocando + 1 } });
-    setMensagem(`Aguentou mais uma rodada. A próxima pede DT ${dtDaRodadaSufocando(folego.rodadasSufocando + 1)}.`);
+    setMensagem(`Aguentou mais uma rodada. A próxima pede DT ${dtDaRodadaSufocando(folego.rodadasSufocando + 1, ajusteDeDt)}.`);
   };
   const falhouFortitude = () => {
     aplicarCondicao(CONDICOES_OFICIAIS, 'inconsciente');
@@ -241,7 +245,7 @@ export const AmbienteSection = ({ character, onUpdate }: AmbienteSectionProps) =
               <Linha rotulo="Vale agora" valor={resumoClima.efetivo ? resumoClima.efetivo.titulo : 'Sem efeito'} />
               {resumoClima.efetivo ? (
                 <Linha
-                  rotulo={resumoClima.efetivo.dt === null ? 'No fim de cada turno' : `Fortitude DT ${resumoClima.efetivo.dt}`}
+                  rotulo={resumoClima.efetivo.dt === null ? 'No fim de cada turno' : `Fortitude DT ${resumoClima.efetivo.dt + ajusteDeDt}`}
                   valor={resumoClima.efetivo.dt === null ? `${resumoClima.dano} de dano` : resumoClima.efetivo.intervalo}
                 />
               ) : null}
@@ -307,7 +311,7 @@ export const AmbienteSection = ({ character, onUpdate }: AmbienteSectionProps) =
             </div>
           ) : (
             <div className="space-y-2 rounded-xl border border-red-400/20 bg-red-400/[0.06] p-3">
-              <p className="text-xs font-bold text-red-100">Sufocando: Fortitude DT {dtDaRodadaSufocando(folego.rodadasSufocando)} no fim do turno{pulmoes ? ', com desvantagem (Pulmões Danificados)' : ''}.</p>
+              <p className="text-xs font-bold text-red-100">Sufocando: Fortitude DT {dtDaRodadaSufocando(folego.rodadasSufocando, ajusteDeDt)} no fim do turno{pulmoes ? ', com desvantagem (Pulmões Danificados)' : ''}.</p>
               <div className="flex flex-wrap gap-2">
                 <Botao tom="bom" onClick={passouFortitude}>Passou</Botao>
                 <Botao tom="perigo" onClick={falhouFortitude}>Falhou: apagou</Botao>
@@ -335,7 +339,7 @@ export const AmbienteSection = ({ character, onUpdate }: AmbienteSectionProps) =
             />
           </label>
           <Linha rotulo="Dano" valor={dadosQueda ? `${dadosQueda}d6 de impacto${dadosQueda >= DADOS_MAXIMOS_DE_QUEDA ? ' (teto)' : ''}` : 'Nenhum (fica Caído se não quis cair)'} />
-          <p className="text-[11px] leading-relaxed text-gray-500">Chão macio corta pela metade. Quem pulou por vontade própria testa Acrobacia DT {DT_CAIR_DE_PE}: o sucesso tira 1d6 e cai de pé.</p>
+          <p className="text-[11px] leading-relaxed text-gray-500">Chão macio corta pela metade. Quem pulou por vontade própria testa Acrobacia DT {DT_CAIR_DE_PE + ajusteDeDt}: o sucesso tira 1d6 e cai de pé.</p>
           <div className="mt-auto flex gap-2 pt-1">
             <input
               type="number"

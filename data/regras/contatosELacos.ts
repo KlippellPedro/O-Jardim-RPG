@@ -94,7 +94,8 @@ export function confiancaDepoisDaRecusa(confianca: number): number {
 // ------------------------------------------------------------------ laços
 
 export const LACOS_MAXIMOS = 3;
-/** Teste de Sanidade quando um laço se rompe: DT 15, perda de 1d6. */
+/** Teste de Sanidade quando um laço se rompe: DT 15 no nível 1 (a DT Padrão do
+ * nível do personagem), perda de 1d6. */
 export const DT_DE_LACO_ROMPIDO = 15;
 export const PERDA_DE_LACO_ROMPIDO = '1d6';
 
@@ -194,7 +195,7 @@ export const REGRA_CONTATOS_LACOS: RegraTopicoDe<'Livro do Jogador'> = {
     <ul class="regras-list">
       <li><strong>Até ${LACOS_MAXIMOS} laços</strong> por personagem. Um laço com outro personagem do grupo ajuda a mesa a começar junta.</li>
       <li><strong>Uma vez por sessão para cada laço,</strong> num teste feito por causa dele (para proteger, ajudar, alcançar ou vingar aquela pessoa), role com vantagem.</li>
-      <li><strong>Laço rompido:</strong> quando a pessoa morre, trai ou some, o personagem testa Sanidade contra DT ${DT_DE_LACO_ROMPIDO}, com perda de ${PERDA_DE_LACO_ROMPIDO} (<span class="regras-ref regras-ref--condicoes">Condições</span>). A mesa pode aplicar Luto Profundo, uma condição de longo prazo. Se a pessoa é do grupo e você tem <span class="regras-ref regras-ref--pontos-de-relacao">Pontos de Relação</span> com ela, role uma vez só, pela tabela dos pontos.</li>
+      <li><strong>Laço rompido:</strong> quando a pessoa morre, trai ou some, o personagem testa Sanidade contra a DT Padrão do nível dele, com perda de ${PERDA_DE_LACO_ROMPIDO} (<span class="regras-ref regras-ref--condicoes">Condições</span>). A mesa pode aplicar Luto Profundo, uma condição de longo prazo. Se a pessoa é do grupo e você tem <span class="regras-ref regras-ref--pontos-de-relacao">Pontos de Relação</span> com ela, role uma vez só, pela tabela dos pontos.</li>
       <li><strong>Laço muda:</strong> no fim de cada arco, cada um pode reescrever ou trocar um laço. O rompido costuma virar outro: "vou achar quem fez isso".</li>
       <li><strong>Laço é de quem escreve.</strong> A outra pessoa não precisa sentir o mesmo, e a diferença costuma render as melhores cenas.</li>
     </ul>

@@ -144,7 +144,7 @@ export const MANOBRAS_VEICULARES: readonly IManobraVeicular[] = [
     id: 'conduzir',
     titulo: 'Conduzir',
     acao: 'movimento',
-    teste: 'Sem teste em condições normais; Pilotagem ou Cavalgar DT 15 sob perigo, salvo DT expressa da fonte.',
+    teste: 'Sem teste em condições normais; Pilotagem ou Cavalgar contra a DT Padrão do nível da cena sob perigo, salvo DT expressa da fonte.',
     efeito: 'Mova até o deslocamento e altere a direção do veículo ou da montaria.',
     falha: 'O veículo mantém o curso anterior e o condutor não executa outra manobra neste turno.',
   },
@@ -152,7 +152,7 @@ export const MANOBRAS_VEICULARES: readonly IManobraVeicular[] = [
     id: 'acelerar',
     titulo: 'Acelerar',
     acao: 'padrão',
-    teste: 'Pilotagem ou Cavalgar, DT 15.',
+    teste: 'Pilotagem ou Cavalgar, contra a DT Padrão do nível da cena.',
     efeito: 'Mova metade do deslocamento adicional ou receba vantagem no próximo teste de perseguição desta rodada.',
     falha: 'Não recebe o benefício e sofre −2 de Defesa até o início do próximo turno do condutor.',
   },
@@ -160,7 +160,7 @@ export const MANOBRAS_VEICULARES: readonly IManobraVeicular[] = [
     id: 'evasao',
     titulo: 'Evasão',
     acao: 'padrão',
-    teste: 'Pilotagem ou Cavalgar, DT 15.',
+    teste: 'Pilotagem ou Cavalgar, contra a DT Padrão do nível da cena.',
     efeito: 'Receba +2 de Defesa até o início do próximo turno do condutor.',
     falha: 'Sofra −2 de Defesa pelo mesmo período.',
   },
@@ -195,7 +195,7 @@ export const MANOBRAS_VEICULARES: readonly IManobraVeicular[] = [
     id: 'recuperar-controle',
     titulo: 'Recuperar controle',
     acao: 'movimento',
-    teste: 'Pilotagem ou Cavalgar, DT 15.',
+    teste: 'Pilotagem ou Cavalgar, contra a DT Padrão do nível da cena.',
     efeito: 'Remova a perda de controle e escolha a direção do movimento restante.',
     falha: 'O veículo mantém direção e velocidade até o próximo turno do condutor.',
   },
@@ -427,7 +427,7 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
       <li>Abalroar exige a faixa Contato. Colidir com obstáculo imóvel não exige ataque quando não houver como evitá-lo.</li>
       <li>Cada envolvido sofre o dano correspondente ao tamanho do outro. Role separadamente e aplique Resistência.</li>
       <li>Velocidade não altera os dados da tabela. Uma manobra, queda ou perigo só altera o dano quando sua própria regra informar os novos dados.</li>
-      <li>Ocupante sem fixação faz Reflexos DT 15. Em falha, sofre metade do dano causado ao veículo, arredondado para baixo. Cinto, sela ou fixação adequada concede vantagem.</li>
+      <li>Ocupante sem fixação faz Reflexos contra a DT Padrão do nível da cena. Em falha, sofre metade do dano causado ao veículo, arredondado para baixo. Cinto, sela ou fixação adequada concede vantagem.</li>
     </ul>
     <dl class="regras-kv regras-kv--boxed">
       ${Object.entries(DANO_COLISAO_POR_TAMANHO).map(([tamanho, dano]) => `<dt>${tamanho === 'médio' ? 'Normal (veículo médio)' : tamanho[0].toUpperCase() + tamanho.slice(1)}</dt><dd>${dano}</dd>`).join('')}
@@ -450,8 +450,8 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
 
     <h3 class="regras-subtitle">Reparo</h3>
     <ul class="regras-list">
-      <li><strong>Reparo emergencial:</strong> adjacente ao componente, ferramentas adequadas, Ação Padrão e Tecnologia ou Ofício apropriado contra DT 15. Sucesso suspende uma avaria até o fim da cena. Cada avaria aceita uma tentativa por cena.</li>
-      <li><strong>Manutenção corretiva:</strong> seis horas, ferramentas, local de trabalho e 1 Componente Veicular da raridade do veículo. Faça Tecnologia ou Ofício apropriado contra DT 10 + número de avarias ativas. Sucesso remove uma avaria e restaura 10% da Vida máxima, arredondado para baixo, mínimo 1.</li>
+      <li><strong>Reparo emergencial:</strong> adjacente ao componente, ferramentas adequadas, Ação Padrão e Tecnologia ou Ofício apropriado contra a DT Padrão do nível do grupo. Sucesso suspende uma avaria até o fim da cena. Cada avaria aceita uma tentativa por cena.</li>
+      <li><strong>Manutenção corretiva:</strong> seis horas, ferramentas, local de trabalho e 1 Componente Veicular da raridade do veículo. Faça Tecnologia ou Ofício apropriado contra a DT Rotineira do nível do grupo mais o número de avarias ativas. Sucesso remove uma avaria e restaura 10% da Vida máxima, arredondado para baixo, mínimo 1.</li>
       <li>Um veículo incapacitado volta a operar quando fica com pelo menos 1 de Vida e remove ao menos uma avaria adquirida ao chegar a 0.</li>
       <li>Habilidades, oficinas e sistemas de reparo que indiquem outro tempo ou valor substituem esta regra.</li>
     </ul>

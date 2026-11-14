@@ -177,6 +177,20 @@ export function dtPadraoDoVd(vd: unknown): number {
   return Number((LINHAS.get(alvo) as ILinhaDaCurva | undefined)?.dtDeEfeito) || 15 + Math.floor(alvo / 2);
 }
 
+/** Ajuste de nível da DT (2026-11-13): quanto a DT Padrão do nível passa de 15.
+ * Regra de perigo, Sanidade, condição ou aflição que traz a DT como número é a
+ * DT do nível 1, e soma este ajuste (0 no 1, +15 no 20, +41 no 60). Assim a DT
+ * 15 vira a Padrão, a 20 a Difícil e a 10 a Rotineira de qualquer nível. */
+export const DT_PADRAO_DO_NIVEL_1 = 15;
+export function ajusteDeDtDoNivel(nivel: unknown): number {
+  return Math.max(0, dtPadraoDoVd(nivel) - DT_PADRAO_DO_NIVEL_1);
+}
+
+/** DT de base (a do nível 1) somada ao ajuste do nível. */
+export function dtNoNivel(dtDeBase: number, nivel: unknown): number {
+  return dtDeBase + ajusteDeDtDoNivel(nivel);
+}
+
 /** Multiplicador de Vida acima do VD 40: VD/40, nunca abaixo de 1. */
 export function escalaDeVida(vd: number): number {
   return Math.max(1, vdValido(vd) / VD_ONDE_A_VIDA_ESCALA);

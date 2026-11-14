@@ -157,7 +157,7 @@ function CardAflicao({ aflicao }: { aflicao: IAflicao }) {
         <dl className="mt-5 grid grid-cols-3 overflow-hidden rounded-2xl border border-white/10 bg-black/25">
           <div className="border-r border-white/10 p-3 text-center">
             <dt className="text-[9px] font-bold uppercase tracking-wider text-gray-600">Resistência</dt>
-            <dd className="mt-1 text-sm font-black text-gray-200">Fortitude {aflicao.dtFortitude}</dd>
+            <dd className="mt-1 text-sm font-black text-gray-200">Fortitude {aflicao.dtFortitude} + ajuste</dd>
           </div>
           <div className="border-r border-white/10 p-3 text-center">
             <dt className="text-[9px] font-bold uppercase tracking-wider text-gray-600">Incubação</dt>
@@ -182,7 +182,7 @@ function CardAflicao({ aflicao }: { aflicao: IAflicao }) {
 
         <section className="mt-5 rounded-2xl border border-sky-300/15 bg-sky-300/[0.045] p-4">
           <h4 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-sky-200"><Stethoscope size={15} /> Tratamento</h4>
-          <p className="mt-2.5 text-sm leading-6 text-gray-300"><strong>Cura DT {aflicao.tratamento.dt}:</strong> {aflicao.tratamento.tempo} {aflicao.tratamento.efeitoSucesso}</p>
+          <p className="mt-2.5 text-sm leading-6 text-gray-300"><strong>Cura DT {aflicao.tratamento.dt} + ajuste:</strong> {aflicao.tratamento.tempo} {aflicao.tratamento.efeitoSucesso}</p>
           <div className="mt-3 grid gap-2 text-[11px] leading-5 text-gray-500 sm:grid-cols-2">
             <span>{aflicao.tratamento.limite}</span>
             <span>{textoAntidoto(aflicao)}</span>

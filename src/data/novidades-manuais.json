@@ -16,6 +16,20 @@
       ]
     },
     {
+      "id": "2026-11-13-dt-acompanha-o-nivel",
+      "data": "2026-11-13",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Medo, veneno e nevasca continuam pesando lá no alto",
+      "detalhes": [
+        "Muitas regras tinham DT fixa, como Vontade DT 15 para sair do Pânico ou Fortitude DT 15 no frio. No nível 30 isso passava sozinho. Agora esses números são a DT do nível 1, e a mesa soma o ajuste do nível, que está na tabela de DT em Perícias.",
+        "Do nível 1 ao 10 quase nada muda. No nível 20 a DT sobe 15, e no 60 sobe 41. Quem investe na perícia continua passando umas três vezes em quatro.",
+        "Vale para Sanidade e crises, fobias e traumas, lesões, aflições, clima, fôlego, comida na estrada, queda, viagem forçada, veículos e o teste de Morrendo.",
+        "Na ficha, as seções de Aflições e de Ambiente já mostram e rolam a DT com o ajuste do seu nível.",
+        "Conjuração, rituais, fabricar, invadir uma base e manter concentração continuam como estavam, porque já sobem por outro caminho."
+      ]
+    },
+    {
       "id": "2026-11-13-mapa-botao-direito-e-encerrar-turno",
       "data": "2026-11-13",
       "tipo": "novo",

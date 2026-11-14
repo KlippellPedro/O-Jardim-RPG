@@ -22,7 +22,8 @@ import type { RegraTopicoDe } from './tipos';
 
 export const METROS_POR_DADO_DE_QUEDA = 3;
 export const DADOS_MAXIMOS_DE_QUEDA = 20;
-/** DT fixa de Acrobacia para cair de pé quando a queda foi escolhida. */
+/** DT de Acrobacia para cair de pé quando a queda foi escolhida, no nível 1:
+ *  soma o ajuste de nível (curvaCriatura.ajusteDeDtDoNivel). */
 export const DT_CAIR_DE_PE = 15;
 
 /** Quantos d6 de impacto uma queda causa. Menos de 3 m não machuca. */
@@ -49,7 +50,8 @@ export function custoDeFolego(
   return base * (surpresa ? 3 : 1) * (esforco ? 2 : 1);
 }
 
-/** DT de Fortitude na enésima rodada sem ar depois que a Estamina acabou. */
+/** DT de Fortitude na enésima rodada sem ar depois que a Estamina acabou, no
+ *  nível 1: quem usa soma o ajuste de nível. */
 export function dtDeSufocar(rodadaSemEstamina: number): number {
   return DT_INICIAL_DE_SUFOCAR + PASSO_DA_DT_DE_SUFOCAR * Math.max(0, Math.trunc(rodadaSemEstamina) - 1);
 }
@@ -346,10 +348,10 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
     </table></div>
     <ul class="regras-list">
       <li><strong>Menos de ${METROS_POR_DADO_DE_QUEDA} m</strong> não causa dano, mas quem cai sem querer fica Caído.</li>
-      <li><strong>Quem cai fica Caído.</strong> Se você pulou por vontade própria, ou teve um instante para se preparar, teste Acrobacia contra DT ${DT_CAIR_DE_PE}: o sucesso tira 1d6 do dano e você cai de pé.</li>
+      <li><strong>Quem cai fica Caído.</strong> Se você pulou por vontade própria, ou teve um instante para se preparar, teste Acrobacia contra DT ${DT_CAIR_DE_PE} mais o ajuste do seu nível: o sucesso tira 1d6 do dano e você cai de pé.</li>
       <li><strong>Chão macio</strong> (água funda, neve fofa, monte de feno, lona esticada) recebe a queda com metade do dano. Água rasa conta como chão.</li>
       <li><strong>A queda é rápida:</strong> até 150 m numa rodada. Voo, magia ou poder que segure alguém precisa agir antes do chão.</li>
-      <li><strong>Cair em cima de alguém</strong> divide o dano ao meio entre os dois, e os dois ficam Caídos. Quem está embaixo e vê a queda vindo sai do caminho com Reflexos DT 15.</li>
+      <li><strong>Cair em cima de alguém</strong> divide o dano ao meio entre os dois, e os dois ficam Caídos. Quem está embaixo e vê a queda vindo sai do caminho com Reflexos contra a DT Padrão do seu nível.</li>
       <li><strong>Queda que tira metade ou mais da Vida máxima</strong> conta como golpe para a tabela de trauma de <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
@@ -368,7 +370,7 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
     </ul>
     <p>Quando a Estamina acaba e você continua sem ar:</p>
     <ol class="regras-steps">
-      <li>No fim de cada turno, teste Fortitude contra DT ${DT_INICIAL_DE_SUFOCAR}. A DT sobe ${PASSO_DA_DT_DE_SUFOCAR} a cada rodada seguinte.</li>
+      <li>No fim de cada turno, teste Fortitude contra DT ${DT_INICIAL_DE_SUFOCAR} mais o ajuste do seu nível. A DT sobe ${PASSO_DA_DT_DE_SUFOCAR} a cada rodada seguinte.</li>
       <li>Na primeira falha você apaga: fica Inconsciente, a Vida cai a 0 e você recebe Morrendo 1.</li>
       <li>Enquanto continuar sem ar, o Morrendo sobe 1 no fim de cada turno seu, sem teste, e ninguém consegue estabilizar você.</li>
       <li>Tirado para o ar, você segue a regra normal de Morrendo, em <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>.</li>
@@ -392,19 +394,19 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>Em Colapso por fome ou sede,</strong> quem não receber comida e água até o fim do dia seguinte morre.</li>
       <li><strong>Uma noite com fome ou sede</strong> também piora o descanso: é o fator "Sem comida ou água boa" do <span class="regras-ref regras-ref--descanso">Descanso</span>.</li>
     </ul>
-    <p><strong>Buscar comida e água.</strong> São seis horas de procura, como uma atividade de Tempo Entre Aventuras. Na estrada, o grupo que gasta essas horas procurando faz só metade do caminho do dia. Teste Sobrevivência contra a DT do terreno.</p>
+    <p><strong>Buscar comida e água.</strong> São seis horas de procura, como uma atividade de Tempo Entre Aventuras. Na estrada, o grupo que gasta essas horas procurando faz só metade do caminho do dia. Teste Sobrevivência contra a DT do terreno, mais o ajuste de nível do lugar. Um campo comum de nível 20 pede 30.</p>
     <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Terreno</th><th>DT</th><th>Onde</th></tr></thead>
+      <thead><tr><th>Terreno</th><th>DT no nível 1</th><th>Onde</th></tr></thead>
       <tbody>${tabelaTerrenos}</tbody>
     </table></div>
     <ul class="regras-list">
       <li><strong>Sucesso</strong> alimenta e dá água a você por um dia, e a mais uma pessoa a cada 5 pontos acima da DT.</li>
       <li><strong>O Kit de Pesca e Forrageamento</strong> dá vantagem, e Ajudar vale como em <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span>.</li>
-      <li><strong>Falha crítica:</strong> alguém come o que não devia. Fortitude DT 15 ou fica Enjoado até o próximo descanso completo.</li>
+      <li><strong>Falha crítica:</strong> alguém come o que não devia. Fortitude contra a DT Padrão do lugar ou fica Enjoado até o próximo descanso completo.</li>
     </ul>
 
     <h3 class="regras-subtitle">Clima</h3>
-    <p>Frio e Calor são dano de ambiente (<span class="regras-ref regras-ref--tipos-de-dano">Tipos de Dano</span>). A tabela diz com que ritmo eles cobram de quem está exposto sem proteção.</p>
+    <p>Frio e Calor são dano de ambiente (<span class="regras-ref regras-ref--tipos-de-dano">Tipos de Dano</span>). A tabela diz com que ritmo eles cobram de quem está exposto sem proteção. As DTs dela são do nível 1: some o ajuste de nível do lugar, da tabela de DT em <span class="regras-ref regras-ref--pericias">Perícias</span>. A ficha soma o do seu nível.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Grau</th><th>Frio</th><th>Calor</th><th>Sem proteção</th></tr></thead>
       <tbody>${tabelaClima}</tbody>
@@ -455,7 +457,7 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
     <ul class="regras-list">
       <li><strong>Fome e sede só merecem contagem</strong> quando a cena é sobre sobreviver: travessia de deserto, cerco, naufrágio. Numa viagem comum, pergunte se compraram ração e siga.</li>
       <li><strong>Clima Severo dura dias</strong> e cansa devagar. Use para dar peso a uma viagem. Extremo e Mortal são lugares onde o grupo entra sabendo, e por isso merecem aviso antes.</li>
-      <li><strong>Clima de outro mundo</strong> (o frio do Vazio, o calor do Abismo) pode usar a DT Difícil do nível do grupo no lugar de 15 e 20, para continuar pesando em quem já passou do nível 20.</li>
+      <li><strong>Nível do clima.</strong> A nevasca comum de uma serra de nível 5 fica no nível 5: o grupo de nível 30 que passa por ela quase não sente, e isso é justo. Clima de outro mundo (o frio do Vazio, o calor do Abismo) usa o nível do grupo, ou mais, para continuar pesando em quem já subiu muito.</li>
       <li><strong>Queda a partir do nível 20</strong> deixa de ameaçar sozinha: ${DADOS_MAXIMOS_DE_QUEDA}d6 contra uns 80 de Vida. O que pesa é onde se cai: no rio de lava, no meio do bando, longe do resto do grupo.</li>
     </ul>
 

@@ -424,43 +424,47 @@ Duas palavras iguais: o **grau Mestre** é um degrau de perícia (+8), e o **Mes
 
 Você tem três fontes de vantagem e uma de desvantagem. Uma vantagem cancela a desvantagem, e as duas que sobram valem uma vantagem só: você rola dois d20 e usa o maior.
 
-### DT Padrão e DT Difícil
+### DT Padrão, DT Difícil e ajuste de nível
 
-Vários tópicos pedem um teste "contra a DT Padrão do nível" ou "contra a DT Difícil". São as duas dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Difícil fica sempre 5 acima da Padrão. Num nível entre duas linhas, vale a linha do nível menor. A DT sobe mais depressa nos níveis em que um grau de perícia novo abre, como o Veterano no 19: ela acompanha quem treinou.
+Vários tópicos pedem um teste "contra a DT Padrão do nível", "contra a DT Difícil" ou "contra a DT Rotineira". São dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Rotineira fica 5 abaixo da Padrão, e a Difícil, 5 acima. Num nível entre duas linhas, vale a linha do nível menor. A DT sobe mais depressa nos níveis em que um grau de perícia novo abre, como o Veterano no 19: ela acompanha quem treinou.
 
-- Nível | DT Padrão | DT Difícil
+- Nível | Ajuste | DT Rotineira | DT Padrão | DT Difícil
 
-- 1 | 15 | 20
+- 1 | +0 | 10 | 15 | 20
 
-- 3 | 16 | 21
+- 3 | +1 | 11 | 16 | 21
 
-- 5 | 17 | 22
+- 5 | +2 | 12 | 17 | 22
 
-- 8 | 19 | 24
+- 8 | +4 | 14 | 19 | 24
 
-- 10 | 20 | 25
+- 10 | +5 | 15 | 20 | 25
 
-- 12 | 21 | 26
+- 12 | +6 | 16 | 21 | 26
 
-- 15 | 24 | 29
+- 15 | +9 | 19 | 24 | 29
 
-- 18 | 26 | 31
+- 18 | +11 | 21 | 26 | 31
 
-- 19 | 28 | 33
+- 19 | +13 | 23 | 28 | 33
 
-- 20 | 30 | 35
+- 20 | +15 | 25 | 30 | 35
 
-- 25 | 32 | 37
+- 25 | +17 | 27 | 32 | 37
 
-- 30 | 37 | 42
+- 30 | +22 | 32 | 37 | 42
 
-- 40 | 43 | 48
+- 40 | +28 | 38 | 43 | 48
 
-- 50 | 48 | 53
+- 50 | +33 | 43 | 48 | 53
 
-- 60 | 56 | 61
+- 60 | +41 | 51 | 56 | 61
 
-Quando o texto diz só "DT 15" ou outro número, a dificuldade é fixa e não muda com o nível.
+**Ajuste de nível.** Quando uma regra de perigo, Sanidade, condição, lesão ou aflição traz a DT como número, como "Vontade DT 12", esse número é a DT do nível 1. Na mesa, some o ajuste da linha do nível que vale para o teste. Uma fobia de Vontade DT 12 pede 12 no nível 1, 27 no nível 20 e 53 no nível 60. Por isso o medo, o veneno e a nevasca continuam pesando para quem já subiu muito. A conta fecha com os nomes: DT 10 mais o ajuste é a Rotineira, DT 15 mais o ajuste é a Padrão, e DT 20 mais o ajuste é a Difícil.
+
+**Que nível usar.** O da ameaça: o VD da criatura, o nível do lugar ou o da cena. Quando o problema mora no próprio personagem, como uma crise, uma fobia, um trauma, uma lesão ou Morrendo, vale o nível dele. Na dúvida, o nível do grupo. Quando a ficha calcula sozinha, ela usa o nível do personagem.
+
+**O que não soma ajuste.** Algumas DTs já crescem por outro caminho: a de conjuração e a de rituais sobem com o círculo, a de fabricar com a raridade, a de invadir uma base com o nível da base, e a de manter concentração com o dano sofrido. Ajudar tem a sua própria versão por nível, e o esconderijo ou a trava de um item segue a raridade dele.
 
 ### Catálogo de perícias
 
@@ -1186,7 +1190,7 @@ Um laço é uma frase, na voz do personagem, sobre alguém que importa: outro pe
 
 - **Uma vez por sessão para cada laço,** num teste feito por causa dele (para proteger, ajudar, alcançar ou vingar aquela pessoa), role com vantagem.
 
-- **Laço rompido:** quando a pessoa morre, trai ou some, o personagem testa Sanidade contra DT 15, com perda de 1d6 (Condições). A mesa pode aplicar Luto Profundo, uma condição de longo prazo. Se a pessoa é do grupo e você tem Pontos de Relação com ela, role uma vez só, pela tabela dos pontos.
+- **Laço rompido:** quando a pessoa morre, trai ou some, o personagem testa Sanidade contra a DT Padrão do nível dele, com perda de 1d6 (Condições). A mesa pode aplicar Luto Profundo, uma condição de longo prazo. Se a pessoa é do grupo e você tem Pontos de Relação com ela, role uma vez só, pela tabela dos pontos.
 
 - **Laço muda:** no fim de cada arco, cada um pode reescrever ou trocar um laço. O rompido costuma virar outro: "vou achar quem fez isso".
 
@@ -1582,7 +1586,7 @@ Cada dia de viagem passa no calendário do mundo. Uma estrada de oito dias leva 
 
 - Normal | inteiro | Sem ajuste. O Forrageiro busca com desvantagem, porque procura andando.
 
-- Forçado | uma vez e meia | Sem Batedor nem Forrageiro. No fim do dia, Fortitude DT 15 ou 1 de Cansaço.
+- Forçado | uma vez e meia | Sem Batedor nem Forrageiro. No fim do dia, Fortitude contra a DT Padrão do nível do grupo ou 1 de Cansaço.
 
 ### Terreno
 
@@ -1636,7 +1640,7 @@ Dentro de uma ruína, de uma mata fechada ou de um subterrâneo, o dia vira hora
 
 - Mapear | Sobrevivência ou Conhecimento contra a DT Padrão. Com o mapa, a volta não pede teste; sem ele, sair do lugar pede Sobrevivência contra a DT Padrão.
 
-- Cuidar | Tratar um ferido (Cura DT 15, 1d6 de Vida ou um décimo da Vida máxima, o que for maior) ou, numa área segura, Relaxar como no Descanso.
+- Cuidar | Tratar um ferido (Cura contra a DT Padrão do nível do paciente, 1d6 de Vida ou um décimo da Vida máxima, o que for maior) ou, numa área segura, Relaxar como no Descanso.
 
 - Vigiar | Fica de olho enquanto os outros trabalham. Se o evento do turno for um encontro, o grupo não é Surpreendido.
 
@@ -2128,7 +2132,7 @@ Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua s
 
 - Ao chegar a 0 PV você cai inconsciente. O dano que passou de 0 é o seu **Déficit de Vida**, e se ele chegar à sua Vida máxima você morre na hora.
 
-- Você recebe Morrendo 1 e, no fim de cada turno seu, rola Fortitude contra **DT 12 + (2 × Gravidade) + Ferido**. Em Morrendo 3 você morre.
+- Você recebe Morrendo 1 e, no fim de cada turno seu, rola Fortitude contra **DT 12 + (2 × Gravidade) + Ferido**, mais o ajuste do seu nível. Em Morrendo 3 você morre.
 
 - Estabilizar interrompe os testes, mas só quem volta a 1 PV ou mais acorda. Quem acorda ganha Ferido 1.
 
@@ -2136,7 +2140,7 @@ Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua s
 
 - A Mutilação sempre é anunciada antes, e um sucesso no teste evita a perda.
 
-- Fora de combate, qualquer um trata um ferido: 10 minutos e Cura DT 15 devolvem 1d6 de Vida, ou um décimo da Vida máxima do paciente, o que for maior.
+- Fora de combate, qualquer um trata um ferido: 10 minutos e Cura contra a DT Padrão do nível do paciente devolvem 1d6 de Vida, ou um décimo da Vida máxima do paciente, o que for maior.
 
 - Voltar da morte existe, mas é raro e cobra caro.
 
@@ -2152,21 +2156,21 @@ Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua s
 
 - Déficit em relação à Vida máxima | Gravidade | DT base
 
-- 0% a 10% | 0 | 12 + Ferido
+- 0% a 10% | 0 | 12 + ajuste + Ferido
 
-- Acima de 10% até 25% | 1 | 14 + Ferido
+- Acima de 10% até 25% | 1 | 14 + ajuste + Ferido
 
-- Acima de 25% até 50% | 2 | 16 + Ferido
+- Acima de 25% até 50% | 2 | 16 + ajuste + Ferido
 
-- Acima de 50% até 75% | 3 | 18 + Ferido
+- Acima de 50% até 75% | 3 | 18 + ajuste + Ferido
 
-- Acima de 75% | 4 | 20 + Ferido
+- Acima de 75% | 4 | 20 + ajuste + Ferido
 
 ### Morrendo
 
 - Ao chegar a 0 PV ou menos, você cai inconsciente e recebe **Morrendo 1**.
 
-- No fim de cada turno seu, role Fortitude contra **DT 12 + (2 × Gravidade) + Ferido**.
+- No fim de cada turno seu, role Fortitude contra **DT 12 + (2 × Gravidade) + Ferido**, mais o ajuste do seu nível (em Perícias, na tabela de DT).
 
 - Sucesso segura onde está, e dois sucessos seguidos estabilizam. Sucesso crítico estabiliza na hora. Falha aumenta em 1. Falha crítica aumenta em 1 e pede a tabela de trauma.
 
@@ -2180,11 +2184,11 @@ Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes 
 
 **Exemplo:**
 
-Davi tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de Vida é 12, ou 30% da Vida máxima: Gravidade 2. Ele cai inconsciente com Morrendo 1. No fim do turno dele, rola Fortitude contra DT 12 + (2 × 2) + 0 = 16, porque ainda não tem Ferido. Falhou: Morrendo 2. Uma aliada o estabiliza com um teste de Cura contra a mesma DT 16, e os testes de Morrendo param. Ele só acorda quando alguém curar o bastante para levá-lo de volta a 1 PV, e então ganha Ferido 1.
+Davi está no nível 3 (ajuste +1), tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de Vida é 12, ou 30% da Vida máxima: Gravidade 2. Ele cai inconsciente com Morrendo 1. No fim do turno dele, rola Fortitude contra DT 12 + (2 × 2) + 0 + 1 = 17, porque ainda não tem Ferido. Falhou: Morrendo 2. Uma aliada o estabiliza com um teste de Cura contra a mesma DT 17, e os testes de Morrendo param. Ele só acorda quando alguém curar o bastante para levá-lo de volta a 1 PV, e então ganha Ferido 1.
 
 ### Tratar ferimentos
 
-Fora de combate, com dez minutos e um teste de Cura DT 15, qualquer um trata um ferido, que recupera **1d6 de Vida** ou um décimo da Vida máxima dele, o que for maior. Assim o curativo vale no nível 3 e no nível 30. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.
+Fora de combate, com dez minutos e um teste de Cura contra a DT Padrão do nível do paciente, qualquer um trata um ferido, que recupera **1d6 de Vida** ou um décimo da Vida máxima dele, o que for maior. Assim o curativo vale no nível 3 e no nível 30. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.
 
 ### Remover Ferido
 
@@ -2230,7 +2234,7 @@ Algumas criaturas querem levar uma parte de quem enfrentam. Quando a ficha de um
 
 - Sucesso no teste evita a perda e deixa apenas **Sangramento**. Sucesso crítico não deixa nada.
 
-- Se a ficha não disser qual membro, role 1d6 na tabela abaixo. Ver o próprio membro sumir custa **1d6 de Sanidade**, e Vontade DT 15 corta a perda pela metade.
+- Se a ficha não disser qual membro, role 1d6 na tabela abaixo. Ver o próprio membro sumir custa **1d6 de Sanidade**, e Vontade contra a DT Padrão do seu nível corta a perda pela metade.
 
 - 1d6 | Membro | O que muda
 
@@ -3465,7 +3469,7 @@ Armas
 
 - Elemental | Marcial | 2 | 290 L | Nenhum | +1d6 de dano de um tipo elemental escolhido na criação do item. Esse dado extra também multiplica no crítico.
 
-- Sedenta | Marcial | 2 | 290 L | Nenhum | No crítico, o alvo recebe a condição Sangramento (usa o dado de dano da arma no lugar do 1d6 padrão, no fim de cada turno). Reaplicar segue a regra normal de Sangramento: +1 de dano por aplicação, até +5, sem novos dados. Remove-se como qualquer Sangramento: Cura DT 15 ou qualquer cura de pelo menos 1 PV.
+- Sedenta | Marcial | 2 | 290 L | Nenhum | No crítico, o alvo recebe a condição Sangramento (usa o dado de dano da arma no lugar do 1d6 padrão, no fim de cada turno). Reaplicar segue a regra normal de Sangramento: +1 de dano por aplicação, até +5, sem novos dados. Remove-se como qualquer Sangramento: Cura contra a DT Padrão do nível da fonte ou qualquer cura de pelo menos 1 PV.
 
 - Vampírica | Marcial | 2 | 290 L | Nível total 7 | Uma vez por turno, ao causar dano, role um dado do tipo da arma e recupere esse tanto de PV.
 
@@ -4065,11 +4069,11 @@ Um ladrão foge de moto e uma viatura o persegue, com a faixa em Média. No fim 
 
 - Manobra | Teste | Sucesso | Falha
 
-- ConduzirAção de Movimento | Sem teste em condições normais; Pilotagem ou Cavalgar DT 15 sob perigo, salvo DT expressa da fonte. | Mova até o deslocamento e altere a direção do veículo ou da montaria. | O veículo mantém o curso anterior e o condutor não executa outra manobra neste turno.
+- ConduzirAção de Movimento | Sem teste em condições normais; Pilotagem ou Cavalgar contra a DT Padrão do nível da cena sob perigo, salvo DT expressa da fonte. | Mova até o deslocamento e altere a direção do veículo ou da montaria. | O veículo mantém o curso anterior e o condutor não executa outra manobra neste turno.
 
-- AcelerarAção Padrão | Pilotagem ou Cavalgar, DT 15. | Mova metade do deslocamento adicional ou receba vantagem no próximo teste de perseguição desta rodada. | Não recebe o benefício e sofre −2 de Defesa até o início do próximo turno do condutor.
+- AcelerarAção Padrão | Pilotagem ou Cavalgar, contra a DT Padrão do nível da cena. | Mova metade do deslocamento adicional ou receba vantagem no próximo teste de perseguição desta rodada. | Não recebe o benefício e sofre −2 de Defesa até o início do próximo turno do condutor.
 
-- EvasãoAção Padrão | Pilotagem ou Cavalgar, DT 15. | Receba +2 de Defesa até o início do próximo turno do condutor. | Sofra −2 de Defesa pelo mesmo período.
+- EvasãoAção Padrão | Pilotagem ou Cavalgar, contra a DT Padrão do nível da cena. | Receba +2 de Defesa até o início do próximo turno do condutor. | Sofra −2 de Defesa pelo mesmo período.
 
 - Fechar passagemAção Padrão | Teste oposto de Pilotagem ou Cavalgar. | O alvo não pode aumentar a distância na resolução desta rodada. | O alvo recebe vantagem no teste de perseguição desta rodada.
 
@@ -4077,7 +4081,7 @@ Um ladrão foge de moto e uma viatura o persegue, com a faixa em Média. No fim 
 
 - Preparar abordagemAção Padrão | Teste oposto de Pilotagem ou Cavalgar. | Mantenha o Contato até o início do próximo turno do condutor. A travessia usa o movimento de cada ocupante. | A distância muda para Curta.
 
-- Recuperar controleAção de Movimento | Pilotagem ou Cavalgar, DT 15. | Remova a perda de controle e escolha a direção do movimento restante. | O veículo mantém direção e velocidade até o próximo turno do condutor.
+- Recuperar controleAção de Movimento | Pilotagem ou Cavalgar, contra a DT Padrão do nível da cena. | Remova a perda de controle e escolha a direção do movimento restante. | O veículo mantém direção e velocidade até o próximo turno do condutor.
 
 ### Ataques e ocupantes
 
@@ -4097,7 +4101,7 @@ Um ladrão foge de moto e uma viatura o persegue, com a faixa em Média. No fim 
 
 - Velocidade não altera os dados da tabela. Uma manobra, queda ou perigo só altera o dano quando sua própria regra informar os novos dados.
 
-- Ocupante sem fixação faz Reflexos DT 15. Em falha, sofre metade do dano causado ao veículo, arredondado para baixo. Cinto, sela ou fixação adequada concede vantagem.
+- Ocupante sem fixação faz Reflexos contra a DT Padrão do nível da cena. Em falha, sofre metade do dano causado ao veículo, arredondado para baixo. Cinto, sela ou fixação adequada concede vantagem.
 
 - **Pequeno:** 1d6
 - **Normal (veículo médio):** 2d6
@@ -4159,9 +4163,9 @@ Depois da cena, o veículo precisa voltar a funcionar. Aqui estão o reparo das 
 
 ### Reparo
 
-- **Reparo emergencial:** adjacente ao componente, ferramentas adequadas, Ação Padrão e Tecnologia ou Ofício apropriado contra DT 15. Sucesso suspende uma avaria até o fim da cena. Cada avaria aceita uma tentativa por cena.
+- **Reparo emergencial:** adjacente ao componente, ferramentas adequadas, Ação Padrão e Tecnologia ou Ofício apropriado contra a DT Padrão do nível do grupo. Sucesso suspende uma avaria até o fim da cena. Cada avaria aceita uma tentativa por cena.
 
-- **Manutenção corretiva:** seis horas, ferramentas, local de trabalho e 1 Componente Veicular da raridade do veículo. Faça Tecnologia ou Ofício apropriado contra DT 10 + número de avarias ativas. Sucesso remove uma avaria e restaura 10% da Vida máxima, arredondado para baixo, mínimo 1.
+- **Manutenção corretiva:** seis horas, ferramentas, local de trabalho e 1 Componente Veicular da raridade do veículo. Faça Tecnologia ou Ofício apropriado contra a DT Rotineira do nível do grupo mais o número de avarias ativas. Sucesso remove uma avaria e restaura 10% da Vida máxima, arredondado para baixo, mínimo 1.
 
 - Um veículo incapacitado volta a operar quando fica com pelo menos 1 de Vida e remove ao menos uma avaria adquirida ao chegar a 0.
 
@@ -4915,7 +4919,7 @@ A ficha aplica sozinha o que dá para calcular: Enfraquecido tira 2 em testes de
 
 ### Sanidade
 
-d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
+d20 + bônus da perícia Sanidade ou Vontade contra DT 10, 15, 20 ou 25, mais o ajuste de nível da ameaça
 
 **Atenção:**
 
@@ -4933,13 +4937,13 @@ Sanidade é o nome de duas coisas. A **barra de Sanidade** vai de 0 a 100 e mede
 
 - 26–50 | Enlouquecendo | Desvantagem para manter concentração sob ameaça.
 
-- 1–25 | Ruptura | Ao sofrer nova perda, teste Vontade DT 15 ou ganhe uma condição de crise.
+- 1–25 | Ruptura | Ao sofrer nova perda, teste Vontade contra a DT Padrão do seu nível ou ganhe uma condição de crise.
 
 - 0 | Quebra | Crise imediata e uma condição permanente definida com o jogador.
 
 ### Crises
 
-- Em Ruptura, cada nova perda de Sanidade cobra Vontade DT 15; falhou, vem uma das crises abaixo.
+- Em Ruptura, cada nova perda de Sanidade cobra Vontade contra a DT Padrão do seu nível; falhou, vem uma das crises abaixo.
 
 - Em Sanidade 0 a crise é imediata, sem teste. Passada a cena, o personagem continua em 0 até descansar e ser tratado em segurança.
 
@@ -4947,17 +4951,17 @@ Sanidade é o nome de duas coisas. A **barra de Sanidade** vai de 0 a 100 e mede
 
 - Crise | Duração | Efeito | Remoção
 
-- Pânico | 1d4 rodadas. | Fique Amedrontado pela fonte e use o movimento para se afastar dela. | Vontade DT 15 no fim de cada turno encerra a crise.
+- Pânico | 1d4 rodadas. | Fique Amedrontado pela fonte e use o movimento para se afastar dela. | Vontade contra a DT Padrão do seu nível, no fim de cada turno, encerra a crise.
 
-- Dissociação | 1d4 rodadas. | Não pode usar reações e sofre -2 em testes de Percepção e de interação. | Vontade DT 15 no fim de cada turno encerra a crise.
+- Dissociação | 1d4 rodadas. | Não pode usar reações e sofre -2 em testes de Percepção e de interação. | Vontade contra a DT Padrão do seu nível, no fim de cada turno, encerra a crise.
 
-- Paranoia | Até o fim da cena. | Não recebe bônus de ajuda e testa Vontade DT 15 para aceitar cura de outra criatura. | Termina em segurança ao fim da cena.
+- Paranoia | Até o fim da cena. | Não recebe bônus de ajuda e testa Vontade contra a DT Padrão do seu nível para aceitar cura de outra criatura. | Termina em segurança ao fim da cena.
 
-- Catatonia | 1d4 rodadas. | Fique Atordoado, mas receba +5 contra empurrões e agarrões. | Um aliado pode usar uma ação padrão e Cura ou Diplomacia DT 15.
+- Catatonia | 1d4 rodadas. | Fique Atordoado, mas receba +5 contra empurrões e agarrões. | Um aliado pode usar uma ação padrão e Cura ou Diplomacia contra a DT Padrão do nível de quem está em crise.
 
-- Compulsão | Até cumprir uma ação simples ou superar a crise. | No turno, deve realizar a ação compulsiva definida pela fonte antes de outras ações. | Vontade DT 15 no começo do turno permite agir normalmente.
+- Compulsão | Até cumprir uma ação simples ou superar a crise. | No turno, deve realizar a ação compulsiva definida pela fonte antes de outras ações. | Vontade contra a DT Padrão do seu nível, no começo do turno, permite agir normalmente.
 
-- Fúria | 1d4 rodadas. | Receba +2 no dano corpo a corpo e -2 Defesa. Deve atacar uma ameaça visível se puder. | Vontade DT 15 no fim do turno encerra a crise.
+- Fúria | 1d4 rodadas. | Receba +2 no dano corpo a corpo e -2 Defesa. Deve atacar uma ameaça visível se puder. | Vontade contra a DT Padrão do seu nível, no fim do turno, encerra a crise.
 
 ### Condições gerais
 
@@ -4971,7 +4975,7 @@ Sanidade é o nome de duas coisas. A **barra de Sanidade** vai de 0 a 100 e mede
 
 - Caído | Ataques corpo a corpo contra você recebem +2. Seus ataques sofrem -2. Levantar consome a ação de movimento e provoca reações. | Gaste a ação de movimento para levantar.
 
-- Sangramento | Sofra 1d6 de dano no fim do turno. Novas aplicações aumentam o dano em +1, até +5, mas não adicionam dados. | Cura DT 15 com ação padrão ou qualquer cura de pelo menos 1 PV.
+- Sangramento | Sofra 1d6 de dano no fim do turno. Novas aplicações aumentam o dano em +1, até +5, mas não adicionam dados. | Cura contra a DT Padrão do nível da fonte, com ação padrão, ou qualquer cura de pelo menos 1 PV.
 
 - Atordoado | Não pode usar ações nem reações. Defesa reduzida em 5. Veja também Inconsciente: mesmo efeito de base, mas para quando a causa for perder toda a Vida. | Termina ao fim da duração. Uma nova aplicação apenas renova a duração.
 
@@ -4987,9 +4991,9 @@ Sanidade é o nome de duas coisas. A **barra de Sanidade** vai de 0 a 100 e mede
 
 - Concentrando | Só pode manter um efeito de concentração por vez. Ao sofrer dano, teste Vontade DT 10 ou metade do dano, o que for maior. Falha encerra o efeito. | Encerre voluntariamente, fique incapacitado ou falhe no teste de concentração.
 
-- Queimando | Sofra 1d6 de dano de Fogo no fim do turno. Pegar fogo de novo não soma: continua 1d6. | Ação padrão e Acrobacia ou Atletismo DT 12 rolando no chão, ou entrar em água.
+- Queimando | Sofra 1d6 de dano de Fogo no fim do turno. Pegar fogo de novo não soma: continua 1d6. | Ação padrão e Acrobacia ou Atletismo rolando no chão, contra a DT Rotineira do nível da fonte, ou entrar em água.
 
-- Envenenado | Sofra 1d6 de dano de veneno no fim do turno. Se o veneno for uma aflição do catálogo, use o estágio dela em vez deste dano. | O Antídoto da Loja encerra. Cura DT 15, gastando uma ação padrão, também.
+- Envenenado | Sofra 1d6 de dano de veneno no fim do turno. Se o veneno for uma aflição do catálogo, use o estágio dela em vez deste dano. | O Antídoto da Loja encerra. Cura contra a DT Padrão do nível da fonte, gastando uma ação padrão, também.
 
 - Lento | Movimento pela metade e sem correr. Iniciativa reduzida em 2. | Termina ao fim da duração da fonte.
 
@@ -5056,6 +5060,8 @@ Condições que duram mais que uma cena já vêm escritas, para ninguém precisa
 - **Condições mentais permanentes** não somem com descanso. Com acompanhamento profissional, cada uma fica mais leve do jeito que o próprio texto explica. Só uma resolução na história ou um tratamento longo encerra.
 
 - Na Quebra de Sanidade, a condição permanente definida com o jogador pode sair daqui.
+
+- Toda DT escrita como número nestas tabelas é a do nível 1. Some o ajuste do nível do personagem, da tabela de DT em Perícias: a fobia de Vontade DT 12 pede 27 no nível 20. Quando o teste é de quem trata, como Cura para recolocar um ombro, vale o nível do paciente.
 
 ### Ossos e articulações
 
@@ -5201,6 +5207,8 @@ Aflição é veneno, doença ou vício: um problema que evolui por estágios com
 
 ### Aplicação
 
+A DT do catálogo, de Fortitude e de Cura, é a do nível 1. Na mesa, some o ajuste de nível do lugar ou de quem envenenou, da tabela de DT em Perícias: uma doença de DT 16 pede 31 numa região de nível 20. A ficha soma sozinha o ajuste do nível do personagem.
+
 - Ao sofrer exposição, teste Fortitude contra a DT da aflição. Sucesso ou sucesso crítico evita a aflição. Falha aplica o estágio 1 depois da incubação; falha crítica aplica o estágio 2.
 
 - No fim de cada intervalo, faça outro teste. Sucesso crítico reduz 1 estágio; sucesso mantém; falha aumenta 1; falha crítica aumenta 2. Em veneno, o sucesso comum também reduz 1 estágio: o corpo vence a toxina aos poucos, e doença e vício só cedem com tratamento.
@@ -5249,7 +5257,7 @@ A ficha tem uma seção Aflições para acompanhar o que o personagem carrega. E
 
 Cada região do Jardim tem as próprias doenças e venenos. A tabela diz onde cada aflição costuma ser pega, para o grupo saber o que levar antes de entrar: pano no rosto em Baluarte, sombra para os olhos em Alétheia, companhia no Vazio. Fora da região, só vale se alguém levou a exposição junto, como um pó, uma amostra ou um ferimento aberto.
 
-- Região | Aflição | Tipo | DT | Como se pega
+- Região | Aflição | Tipo | DT no nível 1 | Como se pega
 
 - Em qualquer lugar | Toxina Paralisante | veneno, comum | 15 | Contato da toxina com o sangue ou ingestão de uma dose.
 
@@ -5545,13 +5553,13 @@ Dano de queda = 1d6 de impacto a cada 3 m, até 20d6
 
 - **Menos de 3 m** não causa dano, mas quem cai sem querer fica Caído.
 
-- **Quem cai fica Caído.** Se você pulou por vontade própria, ou teve um instante para se preparar, teste Acrobacia contra DT 15: o sucesso tira 1d6 do dano e você cai de pé.
+- **Quem cai fica Caído.** Se você pulou por vontade própria, ou teve um instante para se preparar, teste Acrobacia contra DT 15 mais o ajuste do seu nível: o sucesso tira 1d6 do dano e você cai de pé.
 
 - **Chão macio** (água funda, neve fofa, monte de feno, lona esticada) recebe a queda com metade do dano. Água rasa conta como chão.
 
 - **A queda é rápida:** até 150 m numa rodada. Voo, magia ou poder que segure alguém precisa agir antes do chão.
 
-- **Cair em cima de alguém** divide o dano ao meio entre os dois, e os dois ficam Caídos. Quem está embaixo e vê a queda vindo sai do caminho com Reflexos DT 15.
+- **Cair em cima de alguém** divide o dano ao meio entre os dois, e os dois ficam Caídos. Quem está embaixo e vê a queda vindo sai do caminho com Reflexos contra a DT Padrão do seu nível.
 
 - **Queda que tira metade ou mais da Vida máxima** conta como golpe para a tabela de trauma de Ferimentos.
 
@@ -5577,7 +5585,7 @@ Sem ar, cada rodada custa ⌈Estamina máxima ÷ 10⌉ de Estamina
 
 Quando a Estamina acaba e você continua sem ar:
 
-- No fim de cada turno, teste Fortitude contra DT 10. A DT sobe 2 a cada rodada seguinte.
+- No fim de cada turno, teste Fortitude contra DT 10 mais o ajuste do seu nível. A DT sobe 2 a cada rodada seguinte.
 
 - Na primeira falha você apaga: fica Inconsciente, a Vida cai a 0 e você recebe Morrendo 1.
 
@@ -5611,9 +5619,9 @@ Um personagem com 30 de Estamina máxima gasta 3 por rodada sem ar. Depois de um
 
 - **Uma noite com fome ou sede** também piora o descanso: é o fator "Sem comida ou água boa" do Descanso.
 
-**Buscar comida e água.** São seis horas de procura, como uma atividade de Tempo Entre Aventuras. Na estrada, o grupo que gasta essas horas procurando faz só metade do caminho do dia. Teste Sobrevivência contra a DT do terreno.
+**Buscar comida e água.** São seis horas de procura, como uma atividade de Tempo Entre Aventuras. Na estrada, o grupo que gasta essas horas procurando faz só metade do caminho do dia. Teste Sobrevivência contra a DT do terreno, mais o ajuste de nível do lugar. Um campo comum de nível 20 pede 30.
 
-- Terreno | DT | Onde
+- Terreno | DT no nível 1 | Onde
 
 - Farto | 10 | Mata com rio, beira de lago, campo na época da colheita.
 
@@ -5627,11 +5635,11 @@ Um personagem com 30 de Estamina máxima gasta 3 por rodada sem ar. Depois de um
 
 - **O Kit de Pesca e Forrageamento** dá vantagem, e Ajudar vale como em Ações Coletivas.
 
-- **Falha crítica:** alguém come o que não devia. Fortitude DT 15 ou fica Enjoado até o próximo descanso completo.
+- **Falha crítica:** alguém come o que não devia. Fortitude contra a DT Padrão do lugar ou fica Enjoado até o próximo descanso completo.
 
 ### Clima
 
-Frio e Calor são dano de ambiente (Tipos de Dano). A tabela diz com que ritmo eles cobram de quem está exposto sem proteção.
+Frio e Calor são dano de ambiente (Tipos de Dano). A tabela diz com que ritmo eles cobram de quem está exposto sem proteção. As DTs dela são do nível 1: some o ajuste de nível do lugar, da tabela de DT em Perícias. A ficha soma o do seu nível.
 
 - Grau | Frio | Calor | Sem proteção
 

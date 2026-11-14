@@ -15,6 +15,20 @@
       ]
     },
     {
+      "id": "2026-11-13-dt-acompanha-o-nivel",
+      "data": "2026-11-13",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Medo, veneno e nevasca continuam pesando lá no alto",
+      "detalhes": [
+        "Muitas regras tinham DT fixa, como Vontade DT 15 para sair do Pânico ou Fortitude DT 15 no frio. No nível 30 isso passava sozinho. Agora esses números são a DT do nível 1, e a mesa soma o ajuste do nível, que está na tabela de DT em Perícias.",
+        "Do nível 1 ao 10 quase nada muda. No nível 20 a DT sobe 15, e no 60 sobe 41. Quem investe na perícia continua passando umas três vezes em quatro.",
+        "Vale para Sanidade e crises, fobias e traumas, lesões, aflições, clima, fôlego, comida na estrada, queda, viagem forçada, veículos e o teste de Morrendo.",
+        "Na ficha, as seções de Aflições e de Ambiente já mostram e rolam a DT com o ajuste do seu nível.",
+        "Conjuração, rituais, fabricar, invadir uma base e manter concentração continuam como estavam, porque já sobem por outro caminho."
+      ]
+    },
+    {
       "id": "2026-11-13-mapa-botao-direito-e-encerrar-turno",
       "data": "2026-11-13",
       "tipo": "novo",
@@ -1031,20 +1045,6 @@
         "O Cuscuz Nordestino do Chef agora dá +2 de Iniciativa no próximo combate, porque a Iniciativa é um número da ficha e não se rola.",
         "A Pop Star usa a DT de Palco em todos os poderes, e a Especialização do Caçador fala em raça em todos os estágios.",
         "Imunidades e testes contra medo e paralisia usam o nome das condições: Amedrontado e Paralisado."
-      ]
-    },
-    {
-      "id": "2026-10-27-revisao-racas-correcoes",
-      "data": "2026-10-27",
-      "tipo": "correcao",
-      "area": "Ficha",
-      "titulo": "Raças com perícias, danos e condições certos",
-      "detalhes": [
-        "Algumas raças citavam perícias que não existem. Agora o Vampiro usa Diplomacia, o Golem e o Amálgamo usam Cura, e o Desperto e o Auleth usam Religião no lugar dos antigos Ritos de Arkarin.",
-        "Os raios do Gigante de Tempestade, do Elfo de Tempestades, do Auleth Pulsar e do Divino da Tempestade causam dano de raio. O gelo do Gigante de Gelo e do Sepulcro do Elfo causa dano de gelo.",
-        "Quem fica preso numa armadilha do Anão, nas raízes do Golem de Madeira ou no gelo do Slime Glacial fica Imobilizado, com a regra da condição.",
-        "A ficha passou a somar o Movimento da Pelagem Noturna do Pricolici e a Defesa do Ectoplasma Firme e do Respirar Fundo do Espírito.",
-        "O Compartimento de Carga do Autômato dá 15 espaços, e o Núcleo Autônomo lembra que a Tecnologia é o Fluxo nativo dele."
       ]
     }
   ]
