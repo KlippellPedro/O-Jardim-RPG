@@ -13,6 +13,7 @@ import {
   type SessaoParticipanteResponse,
 } from '../services/sessaoApi';
 import { registrosApi, type IRegistro } from '../services/registrosApi';
+import type { IDadoDaMesa } from '../components/dados/rolagemDados';
 import { assinarEventosDaCampanha } from '../services/campanhaEventos';
 import { houveDanoNosMeus, mudancaDeCombate, type AvisoDeCombate } from '../pages/Sessao/combateVivo';
 import { vibrar } from '../utils/vibracaoDoApp';
@@ -221,6 +222,8 @@ interface SessaoState {
   /** O 20 e o 1 natural de quem rolou na mesa ao vivo, ainda na tela (só o mais recente). */
   destaquesDaMesa: DestaqueDaMesa[];
   dispensarDestaque: (chave: string) => void;
+  /** O último dado que outra pessoa mostrou à mesa: quem tem tela para ele (o mapa) o faz cair e some sozinho. */
+  dadoDaMesa: { n: number; dado: IDadoDaMesa } | null;
   turnoAtualIndex: number;
   turnoAtualId: string | null;
   emCombate: boolean;
@@ -297,6 +300,7 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
   dispensarAvisoDeCombate: (chave) => set((estado) => ({ avisosDeCombate: estado.avisosDeCombate.filter((aviso) => aviso.chave !== chave) })),
   destaquesDaMesa: [],
   dispensarDestaque: (chave) => set((estado) => ({ destaquesDaMesa: estado.destaquesDaMesa.filter((destaque) => destaque.chave !== chave) })),
+  dadoDaMesa: null,
   turnoAtualIndex: 0,
   turnoAtualId: null,
   emCombate: false,
@@ -337,6 +341,12 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
         } else if (tipo === 'mesa') {
           // Mapa, relógios, votação e bilhetes não mexem em iniciativa nem rolagens.
           void useMesaStore.getState().sincronizar();
+        } else if (tipo === 'dado_mesa') {
+          // O dado de quem rolou já caiu na tela dele; os outros veem o mesmo resultado, que o servidor já sorteou.
+          const dado = carga as unknown as IDadoDaMesa;
+          if (dado && typeof dado.autor === 'string' && dado.usuario_id !== useAuthStore.getState().usuario?.id) {
+            set((estado) => ({ dadoDaMesa: { n: (estado.dadoDaMesa?.n ?? 0) + 1, dado } }));
+          }
         } else if (tipo === 'registro') {
           void get().fetchRolagens();
         } else if (tipo === 'calendario') {
@@ -364,6 +374,7 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
       iniciativa: [],
       avisosDeCombate: [],
       destaquesDaMesa: [],
+      dadoDaMesa: null,
       turnoAtualIndex: 0,
       turnoAtualId: null,
       emCombate: false,

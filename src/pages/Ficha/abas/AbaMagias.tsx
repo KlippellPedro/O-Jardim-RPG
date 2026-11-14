@@ -3,6 +3,7 @@ import {
   AlertCircle,
   BookOpen,
   CheckCircle2,
+  Crosshair,
   Dices,
   Flame,
   LockKeyhole,
@@ -98,6 +99,9 @@ const CIRCULO_CORES: Record<string, string> = {
   '10': 'border-cyan-200/40 bg-cyan-100/10 text-cyan-100',
   ritual: 'border-red-500/30 bg-red-500/10 text-red-300',
 };
+
+/** A ficha aberta dentro do painel do mapa (`?embutida=1`): só ali o botão de mirar a magia no mapa faz sentido. */
+const FICHA_EMBUTIDA = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('embutida');
 
 const formatarBonus = (valor: number) => valor >= 0 ? `+${valor}` : String(valor);
 
@@ -635,6 +639,13 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
     }
   };
 
+  /** A ficha dentro do mapa pede para mirar a magia: o mapa abre a ferramenta com o alcance e a área dela. */
+  const mirarNoMapa = (magia: IMagiaCatalogo) => {
+    window.parent.postMessage({
+      tipo: 'jardim:mirar-magia', personagemId: character.id, titulo: magia.titulo, fluxo: magia.fluxo, alcance: magia.alcance, alvo: magia.alvo,
+    }, window.location.origin);
+  };
+
   const renderMagia = (magia: IMagiaCatalogo, modoCatalogo = false) => {
     const conhecida = perfil.conhecidasIds.includes(magia.id);
     const concedida = perfil.concedidasIds.includes(magia.id);
@@ -760,6 +771,16 @@ ${avisoFluxoDaManifestacao(ficha, item)}` : ''}`,
               >
                 <Dices size={14} /> {conjurandoId === magia.id ? 'Conjurando...' : 'Conjurar'}
               </button>
+              {FICHA_EMBUTIDA && (
+                <button
+                  type="button"
+                  onClick={() => mirarNoMapa(magia)}
+                  title="Abre a ferramenta de magia do mapa com o alcance e a área desta magia. É só o efeito visual: o custo e o dano seguem por aqui."
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/10 px-4 py-2 text-xs font-bold text-violet-300 transition-colors hover:bg-violet-500/20"
+                >
+                  <Crosshair size={14} /> Mirar no mapa
+                </button>
+              )}
             </div>
           )}
         </div>

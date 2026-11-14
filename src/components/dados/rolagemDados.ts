@@ -17,6 +17,8 @@ export interface CenaRolagem {
   destaque: 'critico' | 'falha' | null;
   /** Rolagem local de vários dados sem soma (ex.: os sete atributos): o resultado mostra os valores em vez do total. */
   lista?: number[];
+  /** Dado de outra pessoa que a mesa vê: não tampa a tela, não pede clique e some sozinho. */
+  mesa?: { autor: string };
 }
 
 type Apresentador = (cena: CenaRolagem, terminar: () => void) => void;
@@ -106,19 +108,53 @@ export const cenaDeDadosLocais = ({ titulo, valores, faces = 20, formula = '' }:
   };
 };
 
+/** A cena que está na tela agora é de outra pessoa (o dado da mesa). */
+let atualEhDaMesa = false;
+
 const apresentar = (cena: CenaRolagem | null): Promise<void> => {
   if (!cena || !apresentador || semMovimento()) return Promise.resolve();
+  // O dado de outra pessoa nunca atropela o de quem está rolando: se há um dado na tela, o dela é pulado.
+  if (cena.mesa && terminarAtual && !atualEhDaMesa) return Promise.resolve();
   // Uma rolagem nova encerra a anterior em vez de empilhar.
   terminarAtual?.();
   return new Promise<void>((resolver) => {
     const terminar = () => {
-      if (terminarAtual === terminar) terminarAtual = null;
+      if (terminarAtual === terminar) {
+        terminarAtual = null;
+        atualEhDaMesa = false;
+      }
       resolver();
     };
     terminarAtual = terminar;
+    atualEhDaMesa = Boolean(cena.mesa);
     apresentador?.(cena, terminar);
   });
 };
+
+/** O que o servidor manda quando alguém mostra o dado à mesa (evento `dado_mesa`). */
+export interface IDadoDaMesa {
+  autor: string;
+  titulo: string;
+  formula: string;
+  usuario_id: string;
+  detalhes: Record<string, any>;
+  /** O token do personagem na cena da mesa (o resultado sobe sobre ele no mapa). */
+  token_id?: string | null;
+}
+
+/** O dado de outra pessoa como cena 3D, ou null se o pacote veio quebrado ou não cabe em 3D. */
+export const cenaDoDadoDaMesa = (dado: IDadoDaMesa): CenaRolagem | null => {
+  if (!dado || typeof dado.autor !== 'string' || !dado.detalhes || typeof dado.detalhes !== 'object') return null;
+  const cena = extrairCena({
+    id: '', tipo: 'rolagem', titulo: String(dado.titulo ?? ''), formula: String(dado.formula ?? ''),
+    resultado: typeof dado.detalhes.total === 'number' ? dado.detalhes.total : null,
+    detalhes: dado.detalhes, autor_nome: dado.autor, criado_em: '',
+  });
+  return cena ? { ...cena, titulo: `${dado.autor} · ${cena.titulo}`, mesa: { autor: dado.autor } } : null;
+};
+
+/** O dado cai na tela de quem assiste: resolve quando some. Sem host, com "reduzir movimento" ou com um dado seu na tela, não mostra. */
+export const animarDadoDaMesa = (dado: IDadoDaMesa): Promise<void> => apresentar(cenaDoDadoDaMesa(dado));
 
 /** Roda a cena e resolve quando ela termina (ou é pulada). Sem host, sem
  * suporte ou com "reduzir movimento", resolve na hora para o chamador seguir. */

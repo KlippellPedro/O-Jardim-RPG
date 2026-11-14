@@ -1,0 +1,289 @@
+/* Imagem montada de pedaços do Acervo (o visor e o fundo da cena narrativa). */
+.imagem-montada {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.imagem-montada img {
+  position: absolute;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* A imagem que o Mestre mostrou à mesa. */
+.visor-mesa {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  place-items: center;
+  gap: 10px;
+  padding: 28px 24px 18px;
+  background: radial-gradient(circle at 50% 45%, rgba(8, 7, 14, 0.82), rgba(2, 2, 6, 0.94));
+  animation: visor-entrada 0.45s ease-out both;
+}
+
+.visor-mesa-quadro {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  /* A imagem se ajusta ao tamanho desta área (ver ImagemMontada). */
+  container-type: size;
+}
+
+.visor-mesa-quadro .imagem-montada {
+  border-radius: 6px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(199, 164, 76, 0.35);
+}
+
+.visor-mesa-legenda {
+  max-width: min(46rem, 92%);
+  margin: 0;
+  color: #f4ecd2;
+  font-family: Cinzel, serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.visor-mesa-acoes {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.visor-mesa-acoes button {
+  display: inline-grid;
+  place-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(10, 9, 16, 0.8);
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.visor-mesa-acoes .visor-mesa-fechar {
+  width: 34px;
+  padding: 0;
+}
+
+@keyframes visor-entrada {
+  from { opacity: 0; transform: scale(1.02); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* A cena narrativa: a arte no fundo, os personagens embaixo, a fala como legenda. */
+.narrativa {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  overflow: hidden;
+  background: #05040a;
+  animation: visor-entrada 0.7s ease-out both;
+}
+
+.narrativa-fundo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.narrativa-movimento {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  animation: narrativa-passeio 48s ease-in-out infinite alternate;
+}
+
+.narrativa-movimento .imagem-montada {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes narrativa-passeio {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.09) translate(-1.2%, -0.8%); }
+}
+
+.narrativa-vinheta {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(4, 3, 8, 0.92) 0%, rgba(4, 3, 8, 0.45) 30%, transparent 55%),
+    radial-gradient(circle at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.5) 100%);
+  pointer-events: none;
+}
+
+.narrativa-titulo {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  color: #f4ecd2;
+  font-family: Cinzel, serif;
+  font-size: clamp(1rem, 2.4vw, 1.6rem);
+  letter-spacing: 0.32em;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+.narrativa-voltar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(10, 9, 16, 0.78);
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.narrativa-rodape {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 0 16px 18px;
+}
+
+.narrativa-fala {
+  max-width: min(52rem, 94%);
+  margin: 0;
+  padding: 12px 20px 14px;
+  border: 1px solid rgba(199, 164, 76, 0.4);
+  border-radius: 12px;
+  background: rgba(8, 7, 14, 0.78);
+  color: #fff;
+  text-align: center;
+  animation: narrativa-fala-entrada 0.35s ease-out both;
+}
+
+.narrativa-fala strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #d7bb72;
+  font-family: Cinzel, serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.narrativa-fala p {
+  margin: 0;
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  line-height: 1.45;
+}
+
+@keyframes narrativa-fala-entrada {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.narrativa-falantes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.narrativa-falantes li {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  opacity: 0.72;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.narrativa-falantes li.falando {
+  opacity: 1;
+  transform: translateY(-8px) scale(1.12);
+}
+
+.narrativa-falantes li button {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.narrativa-retrato {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  width: 72px;
+  height: 72px;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  background: rgba(20, 18, 30, 0.9);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+}
+
+.narrativa-falantes li.falando .narrativa-retrato {
+  border-color: #d7bb72;
+  box-shadow: 0 0 0 3px rgba(215, 187, 114, 0.4), 0 8px 24px rgba(0, 0, 0, 0.7);
+}
+
+.narrativa-retrato img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.narrativa-falantes small {
+  max-width: 96px;
+  overflow: hidden;
+  color: #fff;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visor-mesa,
+  .narrativa,
+  .narrativa-fala { animation: none; }
+
+  .narrativa-movimento { animation: none; }
+}
+
+@media (max-width: 760px) {
+  .narrativa-retrato { width: 52px; height: 52px; }
+}

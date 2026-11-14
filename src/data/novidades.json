@@ -1,6 +1,162 @@
 {
   "itens": [
     {
+      "id": "2026-11-14-mapa-desenho-fixo-do-mestre",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Desenho fixo do Mestre",
+      "detalhes": [
+        "Mestre: na ferramenta Desenhar existe a duração Fixo. O traço que você faz assim fica na cena até você apagar, em vez de sumir em 1 minuto. Serve para marcar a rota de uma fuga, o alcance de uma armadilha ou o lugar de um segredo.",
+        "O traço fixo vai para a tela de todos, ou fica só como anotação sua se você escolher Só eu vejo. Ctrl + Z desfaz o último fixo, e o botão Apagar os fixos limpa a cena toda. Cada cena guarda até 80 desenhos."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-zonas-de-terreno",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Zonas de terreno: cobertura, armadilhas escondidas e telhados",
+      "detalhes": [
+        "Mestre: a nova ferramenta Zonas (tecla Z) desenha um retângulo no mapa que pode ter até quatro funções ao mesmo tempo. Cobertura parcial (+2 de Defesa) ou superior (+5), um gatilho escondido, uma marca de terreno à vista e o jeito de telhado.",
+        "A régua entre dois tokens agora diz a cobertura que a linha atravessa, com o valor do Livro de Regras. O mapa das zonas continua só com o servidor: o jogador nunca recebe onde elas ficam.",
+        "O gatilho dispara quando um token entra na zona. Quem pisou lê um texto só dele, a mesa lê outro, e o Mestre recebe o aviso com o cartão de uma das 6 armadilhas prontas do Livro. O dano e a condição nunca saem sozinhos: quem rola e decide é o Mestre. Cada gatilho pode valer uma vez só, e dá para rearmar.",
+        "O terreno (Molhado, Lama, Gelo escorregadio, Em chamas, Eletrificado, Fumaça, Escuridão, Veneno, Terreno sagrado, Vazio) pinta o chão com uma cor e uma ideia de uso para o Mestre. Os jogadores só veem as marcas que o Mestre deixar à vista.",
+        "Telhado: as telhas cobrem tudo o que está dentro, até alguém do grupo entrar. Aí elas somem devagar, e voltam quando todos saem. O Mestre enxerga através delas."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-imagem-na-mesa-e-cena-narrativa",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Imagem na mesa e cena narrativa",
+      "detalhes": [
+        "Mestre: no Acervo, o botão Mostrar põe uma imagem na tela de todos (ou só de quem você escolher), com uma legenda. Serve para um retrato, um mapa do tesouro, uma carta. Dá para guardar a imagem no Acervo ou fechá-la para todos.",
+        "Mestre: a Cena narrativa, no menu Mesa, troca o mapa por uma arte em tela cheia com os personagens falando embaixo, como numa história em quadrinhos. Boa para diálogo longo, viagem e investigação. Clicar num retrato faz o Mestre falar como aquele personagem, e o mapa volta exatamente como estava quando a cena acaba."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-condicoes-com-contorno-e-dano-por-turno",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Condições que se veem no token",
+      "detalhes": [
+        "O token com uma condição ganha um contorno animado: labaredas para Queimando, bolhas verdes para Envenenado, gotas para Sangramento, faíscas para Paralisado, cristais para Lento, estrelas girando para Atordoado e brilho dourado para as condições boas. No máximo duas por token, e quem pediu menos movimento no aparelho vê o desenho parado.",
+        "Mestre: quando o turno de alguém com Queimando, Envenenado ou Sangramento termina, um lembrete aparece com o dano do Livro e o botão Rolar e aplicar. O dado cai na vista da mesa e o dano entra na Vida do participante."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-magia-por-fluxo-e-resultado-do-dado",
+      "data": "2026-11-14",
+      "tipo": "melhoria",
+      "area": "Mapa",
+      "titulo": "Cada Fluxo se mexe de um jeito, e o dado sobe sobre o token",
+      "detalhes": [
+        "Os efeitos de magia agora têm o movimento do Fluxo, além da cor. O Anima solta brotos que sobem, o Vazio puxa tudo para dentro, o Baluarte joga estilhaços, o Vórtice faz um redemoinho, o Éon mostra um relógio, a A.X.I.S desenha pixels e varredura, e assim por diante. Como o dano da magia segue o Fluxo dela, o efeito já diz de relance que tipo de golpe vem.",
+        "Quando alguém mostra o dado à mesa, o resultado sobe sobre o token de quem rolou: o número, com CRÍTICO! no 20 natural e FALHA! no 1. Dano e cura aparecem com cor própria. O número nunca diz se passou da Defesa ou da DT: isso continua com o Mestre."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-altura-queda-e-lembrete",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Altura no token, queda e lembrete do jogador",
+      "detalhes": [
+        "Mestre: no menu do token existe o campo Altura, em metros (negativo para um fosso). A mesa vê um selo ↑ 6 m no token, e a régua entre dois tokens de alturas diferentes soma a diferença: Em 3D, em linha reta.",
+        "Mestre: o botão Deixar cair leva o token de volta ao chão e mostra o dano de queda do Livro (1d6 a cada 3 m, até 20d6), com o botão Rolar e aplicar. Menos de 3 m não causa dano, mas derruba.",
+        "Cada token de personagem ganhou um Lembrete do jogador, de até 240 caracteres, para anotar o que o personagem quer, deve ou desconfia. Só o dono do personagem e o Mestre leem."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-efeitos-sonoros-do-mestre",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Efeitos sonoros que a mesa ouve junto",
+      "detalhes": [
+        "Mestre: na Trilha sonora existe a aba Efeitos, com 12 sons para soltar na hora certa: Trovão, Sino, Porta batendo, Pancada, Explosão, Aço contra aço, Moedas, Alarme, Magia, Gota d’água, Susto e Batimentos. A mesa inteira ouve ao mesmo tempo.",
+        "Os sons são feitos na hora pelo navegador, sem arquivo para baixar. Quem silenciou o som da mesa neste aparelho também não ouve os efeitos."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-quadro-de-investigacao",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Quadro de investigação",
+      "detalhes": [
+        "No menu Mesa, o Quadro de investigação abre um mural de cortiça onde a mesa prega cartas de pista (título, uma frase, uma cor) e liga com barbantes vermelhos. Todo mundo prega as suas cartas, arrasta as dos outros e liga ou desliga os barbantes, tudo ao vivo para a mesa inteira.",
+        "Cada jogador pode ter até 12 cartas no quadro. Só o autor e o Mestre mudam o texto e apagam uma carta.",
+        "Mestre: dá para pregar uma carta escondida, uma pista que o grupo ainda não achou, e revelar na hora certa. Enquanto estiver escondida, nem a carta nem os barbantes que chegam nela saem do servidor para os jogadores. Limpar o quadro é só do Mestre."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-formas-e-fonte-de-token",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Formas do token e token-fonte que gera cópias",
+      "detalhes": [
+        "Mestre: o token de criatura, NPC ou objeto ganhou a aba Formas, com até 8 imagens do Acervo que ele pode vestir (um lobo, o mesmo lobo ferido, o lobisomem). Com o token escolhido, as teclas 1 a 9 trocam a forma, e o 1 volta à imagem de base. A mesa vê a troca na hora, e o jogador só recebe a imagem que está valendo.",
+        "Mestre: na mesma aba dá para ligar o token como fonte de cópias, com limite opcional. Arraste a fonte e solte onde quiser: uma cópia numerada fica lá (e entra na iniciativa, se for uma criatura da Sessão), e a fonte volta para o lugar. Com Shift apertado, ela se move de verdade. Um \"+\" dourado marca as fontes, e \"Recarregar a fonte\" zera o contador."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-mirar-magia-da-ficha",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Mirar a magia no mapa direto da ficha",
+      "detalhes": [
+        "Com a ficha aberta dentro do mapa, cada magia ganha o botão \"Mirar no mapa\". Ele abre a ferramenta de magia já na forma, na cor do Fluxo e com o alcance e a área da própria magia: um anel mostra até onde ela alcança a partir do seu token, o círculo cai com o raio certo, e o cone e a linha saem de você com o tamanho dela.",
+        "É só o efeito que a mesa vê. O custo de Mana e o teste continuam no botão Conjurar da ficha, como sempre."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-encontros-copias-e-parede",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Encontros salvos, cópias de token e régua que avisa da parede",
+      "detalhes": [
+        "Mestre: Ctrl + D duplica o token escolhido, e o menu do botão direito faz vários de uma vez (de 2 a 20). As cópias saem numeradas (Lobo 2, Lobo 3...) em casas livres ao lado, e a criatura também entra na iniciativa com a Vida cheia.",
+        "Mestre: o painel Encontros, no menu Mesa, guarda os inimigos da cena como um grupo e solta o grupo inteiro em qualquer mapa, à vista ou escondido, para uma emboscada. Um botão revela de uma vez todos os escondidos e outro limpa os inimigos da cena. Personagens de jogador nunca entram nisso.",
+        "A régua reta de um token a outro agora diz se há parede no caminho. Parede ou porta fechada no meio dá cobertura total, e janela ou porta aberta deixam a linha livre. Só aparece quando você enxerga os dois tokens, e o mapa das paredes continua só com o servidor."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-desenho-regua-ping-dado",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Desenho livre, régua que dobra, ping de perigo e dado que todos veem cair",
+      "detalhes": [
+        "Nova ferramenta Desenhar (tecla L): lápis, linha, seta, círculo e retângulo, na sua cor. O traço some sozinho em 5 s, 10 s, 30 s ou 1 minuto, e Ctrl + Z desfaz o último. O Mestre também pode fazer um rascunho que só ele vê.",
+        "A régua agora dobra: com a régua escolhida, Shift + clique fixa pontos de passagem, e o rótulo mostra o total e o último trecho. Clicar de novo no mesmo ponto ou apertar Esc termina.",
+        "Ping de perigo: Alt + Shift + clique faz um alerta vermelho com ponto de exclamação. O Mestre pode chamar todo mundo com Alt + Ctrl + clique: um ping dourado e a tela de todos vai para aquele ponto.",
+        "Na bandeja de dados, a chave \"A mesa vê o dado\" faz os outros verem o seu dado cair e o total, sem tampar o mapa. A DT e se o teste passou continuam com o Mestre. Quem joga começa mostrando; o Mestre começa rolando só para si.",
+        "No alto do mapa, durante o combate, uma faixa com os retratos mostra a ordem do turno, com quem age agora aceso. Clicar num retrato leva a tela até o token.",
+        "Com o token do seu personagem escolhido, as teclas 1 a 9 trocam a arte do token (1 é a foto da ficha, 2 em diante são as artes extras).",
+        "Abrir /mapa?limpo=1 com a conta de quem joga ou assiste mostra só o mapa, sem menus, ideal para transmitir a sessão. A régua de quem sai da mesa também deixa de ficar parada na tela dos outros."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-token-bolinhas-e-ajustes",
+      "data": "2026-11-14",
+      "tipo": "melhoria",
+      "area": "Mapa",
+      "titulo": "Sanidade e Defesa nas bolinhas do token, zoom da arte e barras de deslizar novas",
+      "detalhes": [
+        "A Sanidade fica numa bolinha no canto de baixo à esquerda do token e a Defesa num escudo no canto à direita. A Vida e a Mana ficam nas barras logo abaixo. A Defesa só aparece para o dono do personagem e para o Mestre.",
+        "No campo de Vida, Mana, Estamina e Sanidade do token, escrever +5 soma e escrever -10 tira, como na barra da ficha. Sem sinal, o número vira o valor atual.",
+        "O Mestre pode dar zoom e deslocar a arte de um token vindo do Acervo, e a foto agora preenche o furo da moldura sem sobrar fundo. O zoom aparece na hora, enquanto você mexe.",
+        "Mapa trancado só se escolhe com duplo clique, para não atrapalhar o que está em volta. As barras de deslizar do site ganharam trilho e bolinha dourados."
+      ]
+    },
+    {
       "id": "2026-11-14-mapa-sons-luzes-e-menus",
       "data": "2026-11-14",
       "tipo": "melhoria",
@@ -871,184 +1027,6 @@
         "Chegou o clima: chuva, tempestade com relâmpagos, neve, neblina, tempestade de areia, cinzas e brasas, folhas ao vento, escuridão com luz em volta dos personagens, o véu do Vazio e partículas na cor de um Fluxo.",
         "O clima acompanha o vento que o Mestre escolher e pode cobrir o mapa inteiro ou só um pedaço dele.",
         "Se o seu aparelho sofrer com os efeitos, o botão da nuvem na barra da esquerda desliga o clima só para você."
-      ]
-    },
-    {
-      "id": "2026-11-02-molduras-e-oficina",
-      "data": "2026-11-02",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Mapa: molduras para o seu token e a Oficina do Mestre",
-      "detalhes": [
-        "Clique no token do seu personagem para escolher a moldura: a do seu nível, Ferro, Ouro, Madeira, Osso, Runa, Cristal, Raiz, Sombra ou uma de cada Fluxo.",
-        "No mesmo lugar dá para ajustar a foto dentro do círculo, com zoom e posição. A escolha vale em todas as cenas.",
-        "O Mestre pode pôr uma moldura única para a mesa inteira, e aí todo mundo usa a mesma.",
-        "Os tokens mostram as condições em bolinhas com as iniciais, ao lado do retrato.",
-        "Para o Mestre chegou a Oficina: remove o fundo de uma imagem, melhora a qualidade de mapas e retratos e transforma tudo em token, que já pode entrar no mapa e na iniciativa."
-      ]
-    },
-    {
-      "id": "2026-11-02-mapa-ao-vivo",
-      "data": "2026-11-02",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Mapa ao vivo: tokens que andam na tela de todo mundo",
-      "detalhes": [
-        "Na Sessão há um botão novo, Mapa. Ele abre o mapa da cena em tela cheia, feito para jogar no PC.",
-        "Arraste o token do seu personagem e a mesa inteira vê ele andando na hora. Ao soltar, ele encaixa na casa da grade.",
-        "O token usa a foto da sua ficha, com a moldura do seu nível. Em cima dele ficam as barras de Vida, Mana, Estamina e Sanidade.",
-        "Clique no seu token para escolher quais barras aparecem e quem vê: todo mundo, só você e o Mestre, ou ninguém.",
-        "Régua em casas e metros, e ping para apontar um lugar: segure Alt e clique, ou use a ferramenta de ping.",
-        "Do lado do mapa ficam a iniciativa, as rolagens da mesa e a sua ficha inteira, sem precisar trocar de página.",
-        "O mapa abre para os jogadores quando a sessão estiver ao vivo."
-      ]
-    },
-    {
-      "id": "2026-11-01-documentos-objetos-e-astratech",
-      "data": "2026-11-01",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Documentos novos: chave, fita, celular e a versão AstraTech",
-      "detalhes": [
-        "A aba Documentos do Mestre passou de 9 para 20 modelos: chave com etiqueta, fita cassete ou VHS, fotografia, frasco de poção com rótulo, passagem de viagem, convite, comprovante do Banco Lunar e página de diário.",
-        "Para mesa com tecnologia, chegaram as telas de celular da AstraTech: post de rede social com respostas, conversa de mensagens e tela de bloqueio com notificações.",
-        "Cartaz de procurado, carta, edital, contrato, relatório e jornal agora também saem num tablet da AstraTech, com tela escura ou clara. A credencial vira crachá, e o cartão de visita, a passagem e o convite ganharam versão AstraTech.",
-        "Chave e fita também têm versão de tecnologia: cartão de acesso e pen drive."
-      ]
-    },
-    {
-      "id": "2026-11-01-documentos-do-mestre",
-      "data": "2026-11-01",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "O Painel do Mestre ganhou a aba Documentos",
-      "detalhes": [
-        "O Mestre escolhe um modelo, troca os textos e a imagem, e o papel fica pronto para a mesa: cartaz de procurado, carta com lacre, bilhete rasgado, cartão de visita, credencial com foto, edital, contrato, relatório com trechos tarjados e recorte de jornal.",
-        "Cada documento sai como imagem para colar no Discord, ou vai para a impressora no tamanho real. Os cartões saem oito por folha, prontos para recortar.",
-        "Os documentos ficam guardados na campanha, e quem joga só vê o papel quando o Mestre mostrar."
-      ]
-    },
-    {
-      "id": "2026-10-31-ficha-mecanicas-de-mesa",
-      "data": "2026-10-31",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "A ficha ganhou clima, fome, fôlego, contatos, laços, Procura e Devoção",
-      "detalhes": [
-        "Condições tem a parte Ambiente: marque o clima, conte os dias sem comer e sem beber, gaste o fôlego debaixo d'água e calcule uma queda. Quando o teste falhar, um botão aplica o Cansaço, o dano e a condição.",
-        "Nos Vínculos das Notas, uma pessoa pode fazer favores: a Confiança sai da afinidade, a Dívida fica anotada e cumpri-la sobe a Confiança. O laço mostra a frase e marca a vantagem da sessão.",
-        "Na aba Ficha, ao lado de Fama e Prestígio, ficam a Procura de cada lugar e a Devoção, com os dois preceitos da sua fé.",
-        "Cada aba tem o botão Regra da aba, e as partes novas têm um botão Regra que abre o livro direto na seção certa."
-      ]
-    },
-    {
-      "id": "2026-10-31-campanha-viva",
-      "data": "2026-10-31",
-      "tipo": "novo",
-      "area": "Regras",
-      "titulo": "Facções que andam sozinhas, contatos, laços, Procura e Devoção",
-      "detalhes": [
-        "Facções em Movimento: cada facção ativa tem um objetivo e um relógio, e entre uma aventura e outra o mundo anda. O que vocês fazem acelera ou atrasa o plano delas.",
-        "Contatos e Laços: o contato atende quando vocês chamam e cobra os favores grandes em Dívida. O laço é a pessoa por quem o personagem faz as coisas, e rende vantagem uma vez por sessão.",
-        "Procura: a página de Prestígio e Fama ganhou uma terceira escala, de 0 a 5, que mede quanto a lei de cada lugar está atrás de vocês.",
-        "Devoção: a divindade da ficha agora pesa. Com dois preceitos escritos com o Mestre, a fé melhora as oferendas ao Fluxo dela."
-      ]
-    },
-    {
-      "id": "2026-10-31-cenas-novas",
-      "data": "2026-10-31",
-      "tipo": "novo",
-      "area": "Regras",
-      "titulo": "Viagem, infiltração, mistérios e batalhas",
-      "detalhes": [
-        "Viagem e Exploração: cada dia de estrada tem ritmo, terreno e um papel para cada um (Guia, Batedor, Forrageiro e Vigia). Dentro de uma ruína, o tempo corre de hora em hora, e a tocha acaba.",
-        "Infiltração: o lugar tem Etapas até o objetivo e um Alerta que vai enchendo. Na falha, dá para forçar a passagem e pagar com mais Alerta.",
-        "Investigações: quem procura no lugar certo acha a pista sem rolar. O dado decide o que vem junto e quanto custou, e do outro lado corre o relógio do caso.",
-        "Batalha em Massa: cada exército tem uma Força, os comandantes escolhem ordens em segredo e testam Guerra, e vocês fazem feitos no meio da luta."
-      ]
-    },
-    {
-      "id": "2026-10-31-perigos-do-ambiente",
-      "data": "2026-10-31",
-      "tipo": "novo",
-      "area": "Regras",
-      "titulo": "Perigos do Ambiente e inimigos que desistem",
-      "detalhes": [
-        "Página nova no capítulo de Combate: queda, fôlego, fome e sede, clima e armadilhas, cada um com uma regra curta.",
-        "Sem ar, o corpo gasta Estamina. Com ela cheia, dá para aguentar uns dez turnos debaixo d'água.",
-        "As armadilhas ganharam uma tabela por nível, três pesos (Leve, Séria e Mortal) e seis prontas para rolar no 1d6.",
-        "No Combate, o bando inimigo testa moral quando perde o líder ou metade dos seus, e pode fugir ou se render. Intimidar o bando também força o teste."
-      ]
-    },
-    {
-      "id": "2026-10-28-mundo-questionario",
-      "data": "2026-10-28",
-      "tipo": "melhoria",
-      "area": "Mundo",
-      "titulo": "Blanc, um boato entre os dragões e uma Relíquia nova",
-      "detalhes": [
-        "A história de Blanc nos Registros Universais conta agora de onde vêm os espíritos e para onde ela os leva no fim.",
-        "Entre os dragões do Bestiário corre um boato novo. Vale perguntar a um ancião.",
-        "A Loja ganhou uma Relíquia da Criação: o Colar das Nove Lascas, que abre as magias de todos os Fluxos naturais. Como toda Relíquia, pede a autorização do Mestre.",
-        "Cada mesa escolhe em que ano a sua campanha se passa. Combine com o Mestre."
-      ]
-    },
-    {
-      "id": "2026-10-28-espirito-pecados-virtudes",
-      "data": "2026-10-28",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Pecados e Virtudes do Espírito mais justos",
-      "detalhes": [
-        "Quem é possuído contra a vontade tenta expulsar o demônio no fim de cada turno dele. A Possessão continua forte, e agora o alvo tem chance de se soltar.",
-        "Promessa Doce, Vício Irresistível e Eternidade Parada deixam o alvo repetir o teste no fim de cada turno, e o Vício dura até 3 rodadas em vez de 1 minuto.",
-        "Pecado Absoluto e Virtude Absoluta agora fazem a mesma coisa, cada um do seu lado: custo zero, um uso a mais, alcance de 30 m e preço dobrado.",
-        "A Castidade e a Luxúria falam em controle mental e Fascinado, que são os nomes das regras. O Banquete Final e a Fome que Devora o Mundo da Gula agora dão teste, e quem passa sofre metade.",
-        "As habilidades de dano e cura mais fortes do Espírito passaram a custar o que uma magia do mesmo tamanho custa. A Chuva do Inferno foi de 12 para 56 Mana, o Coro dos Céus e a Ceifa para 70, e a Labareda Infernal para 25.",
-        "Quando um Espírito está num corpo, o dano que o corpo sofre sai da Vida do Espírito."
-      ]
-    },
-    {
-      "id": "2026-10-28-classes-polidas",
-      "data": "2026-10-28",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Classes com mais o que fazer na luta e um nível 20 de verdade",
-      "detalhes": [
-        "Viajante, Guia Dimensional, Pop Star, Comerciante, Detetive e Interceptador ganharam poderes de combate no próprio tema: Golpe Baixo, Corte de Coordenada, Refrão, Saque e Uso, Já Vi Esse Golpe, Choque de Malha e outros. O Rito Guardado do Ritualista chega no nível 5.",
-        "No nível 20, ninguém repete mais a habilidade final: o Atirador ganha Duas Marcas, o Pirata ganha a Âncora Maldita, o Guia planta âncora em aliado e a Invenção Suprema do Engenheiro vira ferramenta de todo dia. O Mestre da Vida do Médico impede que alguém morra por três rodadas, e a Panaceia do Alquimista limpa todas as condições.",
-        "O Guardião provoca uma vez por rodada, e quem cai na provocação só se livra passando na Vontade. As Muralhas sobem com o nível (6, 11 e 16).",
-        "O Caçador pode se especializar numa família do Bestiário, como dragões ou mortos-vivos. O Xodó do Piloto pode ser uma montaria, usando Cavalgar. O Devorador também devora criaturas do Bestiário, até o VD do seu nível.",
-        "Guerreiro, Piloto e Ritualista ganharam habilidade no nível 18: Bandeira Fincada, Piloto de Fuga e Círculo Permanente. Toda habilidade em degraus agora tem nome em cada degrau.",
-        "Vários ajustes pequenos: alcances na grade de 1,5 m, queimaduras e venenos usando as condições Queimando e Envenenado, e números que faltavam em vários poderes."
-      ]
-    },
-    {
-      "id": "2026-10-28-racas-que-crescem",
-      "data": "2026-10-28",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "Raças que crescem, Autômato novo e a língua de cada povo",
-      "detalhes": [
-        "Humano, Goblim e Feérico ganharam escada de três degraus, com Vida, Mana, Estamina e um poder novo em cada degrau. A Sereia e o Anão ficaram mais fortes no meio e no topo da escada.",
-        "Desperto, Clone, Anomalia, Amálgamo e Bruxa ganharam um degrau no nível 20, que faz crescer o que a raça já tinha.",
-        "O Autômato foi refeito: o Corpo Maciço começa menor e cresce com o nível, as armas do núcleo causam dano tecnológico, o Raio Inferno e o Eletrificar têm usos por cena, o limite de modificações para em 8 e o chassi pequeno ganhou vantagem em Furtividade e Reflexos. Os chassis bípedes agora têm altura de gente: 1 m, 1,8 m, 3 m e 4,5 m.",
-        "O Semideus ganhou um Legado a mais, da família mortal, e uma Bênção por sessão sem gastar Mana. O Domínio da Morte do Divino causa dano do Fim.",
-        "O Espírito natural conjura o Fluxo da própria marca, em qualquer Árvore.",
-        "A página de cada raça diz a língua do povo. Quem não tem língua própria fala o Universal, como todo mundo. A Noite Eterna dos vampiros e a dos elfos são a mesma noite."
-      ]
-    },
-    {
-      "id": "2026-10-28-dt-das-racas-e-critico",
-      "data": "2026-10-28",
-      "tipo": "melhoria",
-      "area": "Ficha",
-      "titulo": "DT das raças, crítico e dano em área mais justo",
-      "detalhes": [
-        "As raças que mandam alguém testar ganharam uma DT própria, como as classes: o Vampiro rola Intimidação, a Sereia rola Atuação, o Divino rola Religião, o Gigante e o Golem rolam Atletismo, e Elfo, Bruxa, Onírico, Espírito, Feérico e Auleth rolam Misticismo. A página de cada raça mostra qual é.",
-        "Quem alarga a margem de crítico (Golpe Certeiro do Ninja, Fio Afiado do Espadachim, Ponto Fraco do Atirador, Predador Perfeito do Caçador) só alarga em arma x2. Em arma x3 ou x4, ganha dados a mais no crítico.",
-        "Zonas e golpes em área de raças e classes passaram a dar teste com metade do dano para quem passa, e efeitos que prendiam por várias rodadas deixam repetir o teste no fim de cada turno.",
-        "Alguns poderes que rendiam mais que magia foram ajustados: o Hadō e o Kidō de Cura do Caçador das Almas, o Soco e o Impacto do Campeão Dimensional e a Investida Predatória do Devorador agora crescem com o nível ou com o custo."
       ]
     }
   ]

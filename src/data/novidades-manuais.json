@@ -2,6 +2,162 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-14-mapa-desenho-fixo-do-mestre",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Desenho fixo do Mestre",
+      "detalhes": [
+        "Mestre: na ferramenta Desenhar existe a duração Fixo. O traço que você faz assim fica na cena até você apagar, em vez de sumir em 1 minuto. Serve para marcar a rota de uma fuga, o alcance de uma armadilha ou o lugar de um segredo.",
+        "O traço fixo vai para a tela de todos, ou fica só como anotação sua se você escolher Só eu vejo. Ctrl + Z desfaz o último fixo, e o botão Apagar os fixos limpa a cena toda. Cada cena guarda até 80 desenhos."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-zonas-de-terreno",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Zonas de terreno: cobertura, armadilhas escondidas e telhados",
+      "detalhes": [
+        "Mestre: a nova ferramenta Zonas (tecla Z) desenha um retângulo no mapa que pode ter até quatro funções ao mesmo tempo. Cobertura parcial (+2 de Defesa) ou superior (+5), um gatilho escondido, uma marca de terreno à vista e o jeito de telhado.",
+        "A régua entre dois tokens agora diz a cobertura que a linha atravessa, com o valor do Livro de Regras. O mapa das zonas continua só com o servidor: o jogador nunca recebe onde elas ficam.",
+        "O gatilho dispara quando um token entra na zona. Quem pisou lê um texto só dele, a mesa lê outro, e o Mestre recebe o aviso com o cartão de uma das 6 armadilhas prontas do Livro. O dano e a condição nunca saem sozinhos: quem rola e decide é o Mestre. Cada gatilho pode valer uma vez só, e dá para rearmar.",
+        "O terreno (Molhado, Lama, Gelo escorregadio, Em chamas, Eletrificado, Fumaça, Escuridão, Veneno, Terreno sagrado, Vazio) pinta o chão com uma cor e uma ideia de uso para o Mestre. Os jogadores só veem as marcas que o Mestre deixar à vista.",
+        "Telhado: as telhas cobrem tudo o que está dentro, até alguém do grupo entrar. Aí elas somem devagar, e voltam quando todos saem. O Mestre enxerga através delas."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-imagem-na-mesa-e-cena-narrativa",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Imagem na mesa e cena narrativa",
+      "detalhes": [
+        "Mestre: no Acervo, o botão Mostrar põe uma imagem na tela de todos (ou só de quem você escolher), com uma legenda. Serve para um retrato, um mapa do tesouro, uma carta. Dá para guardar a imagem no Acervo ou fechá-la para todos.",
+        "Mestre: a Cena narrativa, no menu Mesa, troca o mapa por uma arte em tela cheia com os personagens falando embaixo, como numa história em quadrinhos. Boa para diálogo longo, viagem e investigação. Clicar num retrato faz o Mestre falar como aquele personagem, e o mapa volta exatamente como estava quando a cena acaba."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-condicoes-com-contorno-e-dano-por-turno",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Condições que se veem no token",
+      "detalhes": [
+        "O token com uma condição ganha um contorno animado: labaredas para Queimando, bolhas verdes para Envenenado, gotas para Sangramento, faíscas para Paralisado, cristais para Lento, estrelas girando para Atordoado e brilho dourado para as condições boas. No máximo duas por token, e quem pediu menos movimento no aparelho vê o desenho parado.",
+        "Mestre: quando o turno de alguém com Queimando, Envenenado ou Sangramento termina, um lembrete aparece com o dano do Livro e o botão Rolar e aplicar. O dado cai na vista da mesa e o dano entra na Vida do participante."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-magia-por-fluxo-e-resultado-do-dado",
+      "data": "2026-11-14",
+      "tipo": "melhoria",
+      "area": "Mapa",
+      "titulo": "Cada Fluxo se mexe de um jeito, e o dado sobe sobre o token",
+      "detalhes": [
+        "Os efeitos de magia agora têm o movimento do Fluxo, além da cor. O Anima solta brotos que sobem, o Vazio puxa tudo para dentro, o Baluarte joga estilhaços, o Vórtice faz um redemoinho, o Éon mostra um relógio, a A.X.I.S desenha pixels e varredura, e assim por diante. Como o dano da magia segue o Fluxo dela, o efeito já diz de relance que tipo de golpe vem.",
+        "Quando alguém mostra o dado à mesa, o resultado sobe sobre o token de quem rolou: o número, com CRÍTICO! no 20 natural e FALHA! no 1. Dano e cura aparecem com cor própria. O número nunca diz se passou da Defesa ou da DT: isso continua com o Mestre."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-altura-queda-e-lembrete",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Altura no token, queda e lembrete do jogador",
+      "detalhes": [
+        "Mestre: no menu do token existe o campo Altura, em metros (negativo para um fosso). A mesa vê um selo ↑ 6 m no token, e a régua entre dois tokens de alturas diferentes soma a diferença: Em 3D, em linha reta.",
+        "Mestre: o botão Deixar cair leva o token de volta ao chão e mostra o dano de queda do Livro (1d6 a cada 3 m, até 20d6), com o botão Rolar e aplicar. Menos de 3 m não causa dano, mas derruba.",
+        "Cada token de personagem ganhou um Lembrete do jogador, de até 240 caracteres, para anotar o que o personagem quer, deve ou desconfia. Só o dono do personagem e o Mestre leem."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-efeitos-sonoros-do-mestre",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Efeitos sonoros que a mesa ouve junto",
+      "detalhes": [
+        "Mestre: na Trilha sonora existe a aba Efeitos, com 12 sons para soltar na hora certa: Trovão, Sino, Porta batendo, Pancada, Explosão, Aço contra aço, Moedas, Alarme, Magia, Gota d’água, Susto e Batimentos. A mesa inteira ouve ao mesmo tempo.",
+        "Os sons são feitos na hora pelo navegador, sem arquivo para baixar. Quem silenciou o som da mesa neste aparelho também não ouve os efeitos."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-quadro-de-investigacao",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Quadro de investigação",
+      "detalhes": [
+        "No menu Mesa, o Quadro de investigação abre um mural de cortiça onde a mesa prega cartas de pista (título, uma frase, uma cor) e liga com barbantes vermelhos. Todo mundo prega as suas cartas, arrasta as dos outros e liga ou desliga os barbantes, tudo ao vivo para a mesa inteira.",
+        "Cada jogador pode ter até 12 cartas no quadro. Só o autor e o Mestre mudam o texto e apagam uma carta.",
+        "Mestre: dá para pregar uma carta escondida, uma pista que o grupo ainda não achou, e revelar na hora certa. Enquanto estiver escondida, nem a carta nem os barbantes que chegam nela saem do servidor para os jogadores. Limpar o quadro é só do Mestre."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-formas-e-fonte-de-token",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Formas do token e token-fonte que gera cópias",
+      "detalhes": [
+        "Mestre: o token de criatura, NPC ou objeto ganhou a aba Formas, com até 8 imagens do Acervo que ele pode vestir (um lobo, o mesmo lobo ferido, o lobisomem). Com o token escolhido, as teclas 1 a 9 trocam a forma, e o 1 volta à imagem de base. A mesa vê a troca na hora, e o jogador só recebe a imagem que está valendo.",
+        "Mestre: na mesma aba dá para ligar o token como fonte de cópias, com limite opcional. Arraste a fonte e solte onde quiser: uma cópia numerada fica lá (e entra na iniciativa, se for uma criatura da Sessão), e a fonte volta para o lugar. Com Shift apertado, ela se move de verdade. Um \"+\" dourado marca as fontes, e \"Recarregar a fonte\" zera o contador."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-mirar-magia-da-ficha",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Mirar a magia no mapa direto da ficha",
+      "detalhes": [
+        "Com a ficha aberta dentro do mapa, cada magia ganha o botão \"Mirar no mapa\". Ele abre a ferramenta de magia já na forma, na cor do Fluxo e com o alcance e a área da própria magia: um anel mostra até onde ela alcança a partir do seu token, o círculo cai com o raio certo, e o cone e a linha saem de você com o tamanho dela.",
+        "É só o efeito que a mesa vê. O custo de Mana e o teste continuam no botão Conjurar da ficha, como sempre."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-encontros-copias-e-parede",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Encontros salvos, cópias de token e régua que avisa da parede",
+      "detalhes": [
+        "Mestre: Ctrl + D duplica o token escolhido, e o menu do botão direito faz vários de uma vez (de 2 a 20). As cópias saem numeradas (Lobo 2, Lobo 3...) em casas livres ao lado, e a criatura também entra na iniciativa com a Vida cheia.",
+        "Mestre: o painel Encontros, no menu Mesa, guarda os inimigos da cena como um grupo e solta o grupo inteiro em qualquer mapa, à vista ou escondido, para uma emboscada. Um botão revela de uma vez todos os escondidos e outro limpa os inimigos da cena. Personagens de jogador nunca entram nisso.",
+        "A régua reta de um token a outro agora diz se há parede no caminho. Parede ou porta fechada no meio dá cobertura total, e janela ou porta aberta deixam a linha livre. Só aparece quando você enxerga os dois tokens, e o mapa das paredes continua só com o servidor."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-desenho-regua-ping-dado",
+      "data": "2026-11-14",
+      "tipo": "novo",
+      "area": "Mapa",
+      "titulo": "Desenho livre, régua que dobra, ping de perigo e dado que todos veem cair",
+      "detalhes": [
+        "Nova ferramenta Desenhar (tecla L): lápis, linha, seta, círculo e retângulo, na sua cor. O traço some sozinho em 5 s, 10 s, 30 s ou 1 minuto, e Ctrl + Z desfaz o último. O Mestre também pode fazer um rascunho que só ele vê.",
+        "A régua agora dobra: com a régua escolhida, Shift + clique fixa pontos de passagem, e o rótulo mostra o total e o último trecho. Clicar de novo no mesmo ponto ou apertar Esc termina.",
+        "Ping de perigo: Alt + Shift + clique faz um alerta vermelho com ponto de exclamação. O Mestre pode chamar todo mundo com Alt + Ctrl + clique: um ping dourado e a tela de todos vai para aquele ponto.",
+        "Na bandeja de dados, a chave \"A mesa vê o dado\" faz os outros verem o seu dado cair e o total, sem tampar o mapa. A DT e se o teste passou continuam com o Mestre. Quem joga começa mostrando; o Mestre começa rolando só para si.",
+        "No alto do mapa, durante o combate, uma faixa com os retratos mostra a ordem do turno, com quem age agora aceso. Clicar num retrato leva a tela até o token.",
+        "Com o token do seu personagem escolhido, as teclas 1 a 9 trocam a arte do token (1 é a foto da ficha, 2 em diante são as artes extras).",
+        "Abrir /mapa?limpo=1 com a conta de quem joga ou assiste mostra só o mapa, sem menus, ideal para transmitir a sessão. A régua de quem sai da mesa também deixa de ficar parada na tela dos outros."
+      ]
+    },
+    {
+      "id": "2026-11-14-mapa-token-bolinhas-e-ajustes",
+      "data": "2026-11-14",
+      "tipo": "melhoria",
+      "area": "Mapa",
+      "titulo": "Sanidade e Defesa nas bolinhas do token, zoom da arte e barras de deslizar novas",
+      "detalhes": [
+        "A Sanidade fica numa bolinha no canto de baixo à esquerda do token e a Defesa num escudo no canto à direita. A Vida e a Mana ficam nas barras logo abaixo. A Defesa só aparece para o dono do personagem e para o Mestre.",
+        "No campo de Vida, Mana, Estamina e Sanidade do token, escrever +5 soma e escrever -10 tira, como na barra da ficha. Sem sinal, o número vira o valor atual.",
+        "O Mestre pode dar zoom e deslocar a arte de um token vindo do Acervo, e a foto agora preenche o furo da moldura sem sobrar fundo. O zoom aparece na hora, enquanto você mexe.",
+        "Mapa trancado só se escolhe com duplo clique, para não atrapalhar o que está em volta. As barras de deslizar do site ganharam trilho e bolinha dourados."
+      ]
+    },
+    {
       "id": "2026-11-14-mapa-sons-luzes-e-menus",
       "data": "2026-11-14",
       "tipo": "melhoria",

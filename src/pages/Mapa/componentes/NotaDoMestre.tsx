@@ -11,6 +11,10 @@ interface Props {
   rotulo?: string;
   placeholder?: string;
   linhas?: number;
+  /** O teto de caracteres (o da nota do Mestre, se não vier). */
+  maximo?: number;
+  /** Quem lê além de quem escreve ("Só você vê." se não vier). */
+  quemVe?: string;
 }
 
 /** Quanto tempo depois da última tecla a nota é guardada. */
@@ -22,7 +26,7 @@ const ESPERA_MS = 700;
  * entra quando não há nada por salvar nem a caixa está em uso. Esta caixa nunca aparece para jogador (o servidor
  * nem manda o texto); quem a monta só precisa chamá-la no que é do Mestre.
  */
-export const NotaDoMestre = ({ valor, onSalvar, rotulo = 'Nota do Mestre', placeholder = 'Descrição, lembretes, segredos…', linhas = 5 }: Props) => {
+export const NotaDoMestre = ({ valor, onSalvar, rotulo = 'Nota do Mestre', placeholder = 'Descrição, lembretes, segredos…', linhas = 5, maximo = NOTA_MAXIMA, quemVe = 'Só você vê.' }: Props) => {
   const [texto, setTexto] = useState(valor);
   /** O que está na caixa agora (para o que roda fora de uma renderização). */
   const atual = useRef(valor);
@@ -63,7 +67,7 @@ export const NotaDoMestre = ({ valor, onSalvar, rotulo = 'Nota do Mestre', place
     }, ESPERA_MS);
   };
 
-  const perto = texto.length >= NOTA_MAXIMA * 0.9;
+  const perto = texto.length >= maximo * 0.9;
 
   return (
     <section className="mapa-nota-mestre" aria-label={rotulo}>
@@ -72,7 +76,7 @@ export const NotaDoMestre = ({ valor, onSalvar, rotulo = 'Nota do Mestre', place
         <textarea
           value={texto}
           rows={linhas}
-          maxLength={NOTA_MAXIMA}
+          maxLength={maximo}
           placeholder={placeholder}
           spellCheck
           onFocus={() => { emUso.current = true; }}
@@ -82,7 +86,7 @@ export const NotaDoMestre = ({ valor, onSalvar, rotulo = 'Nota do Mestre', place
         />
       </label>
       <small className={perto ? 'cheia' : ''}>
-        {perto ? `${texto.length} de ${NOTA_MAXIMA} caracteres. ` : ''}Só você vê. Guarda sozinha.
+        {perto ? `${texto.length} de ${maximo} caracteres. ` : ''}{quemVe} Guarda sozinha.
       </small>
     </section>
   );

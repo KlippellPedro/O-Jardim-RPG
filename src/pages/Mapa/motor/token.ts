@@ -14,6 +14,9 @@ import {
   CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, carregarMolduraDeArte, deslocamentoDaMolduraDeArte, desenharMoldura, ehMolduraDeArte, escalaDaMolduraDeArte, furoDaMolduraDeArte, molduraDeArteCarregada,
 } from './molduras';
 import { texturaDeBrilho } from './luzes';
+import { ContornoDeCondicao } from './contornoCondicao';
+import { contornosDoToken } from './condicoesVisuais';
+import { rotuloDaElevacao } from './elevacaoConta';
 import {
   CORES_BARRA_PADRAO,
   barrasParaDesenhar,
@@ -156,11 +159,63 @@ function desenharBarra(g: Graphics, barra: IBarraToken, cor: string, x: number, 
   }
 }
 
+/** As bolinhas dos cantos de baixo do token: Sanidade à esquerda e Defesa à direita, com o número sempre à vista. */
+function desenharBolinhas(raiz: Container, lado: number, sanidade: { barra: IBarraToken; cor: string } | null, defesa: number | null, resolucao: number) {
+  if (!sanidade && defesa === null) return;
+  const raio = Math.max(6, Math.min(14, lado * 0.14));
+  // Na borda do retrato, a uns 40 graus abaixo da horizontal.
+  const alcance = lado * ESCALA_QUADRO * RAIO_RETRATO;
+  const x = Math.cos((40 * Math.PI) / 180) * alcance;
+  const y = Math.sin((40 * Math.PI) / 180) * alcance;
+  const numero = (valor: string, cx: number, cy: number) => {
+    const tamanho = raio * (valor.length >= 3 ? 0.8 : 1.05);
+    const texto = textoPequeno(valor, tamanho, resolucao, '#f7f4fa');
+    texto.position.set(cx, cy);
+    raiz.addChild(texto);
+  };
+  if (sanidade) {
+    const { barra, cor } = sanidade;
+    const fracao = fracaoDaBarra(barra);
+    // Mantém o alerta de Sanidade baixa do desenho anterior.
+    const corAnel = fracao <= 0.25 ? CORES_BARRA_PADRAO.vida : cor;
+    const g = new Graphics();
+    const anel = Math.max(1.6, raio * 0.26);
+    const raioCentro = raio - anel / 2;
+    g.circle(-x, y, raio).fill({ color: '#1b1824', alpha: 0.92 });
+    g.circle(-x, y, raioCentro).stroke({ width: anel, color: corAnel, alpha: 0.3 });
+    if (fracao > 0) {
+      const inicio = -Math.PI / 2;
+      g.moveTo(-x + Math.cos(inicio) * raioCentro, y + Math.sin(inicio) * raioCentro);
+      g.arc(-x, y, raioCentro, inicio, inicio + Math.PI * 2 * Math.min(fracao, 0.9999), false).stroke({ width: anel, color: corAnel, cap: 'round' });
+    }
+    raiz.addChild(g);
+    numero(barra.atual !== undefined ? String(barra.atual) : `${porcentagemDaBarra(barra)}`, -x, y);
+  }
+  if (defesa !== null) {
+    const g = new Graphics();
+    // Um escudo pequeno: topo reto e ponta embaixo.
+    g.moveTo(x - raio * 0.95, y - raio * 0.9)
+      .lineTo(x + raio * 0.95, y - raio * 0.9)
+      .lineTo(x + raio * 0.95, y + raio * 0.1)
+      .quadraticCurveTo(x + raio * 0.95, y + raio * 0.8, x, y + raio * 1.12)
+      .quadraticCurveTo(x - raio * 0.95, y + raio * 0.8, x - raio * 0.95, y + raio * 0.1)
+      .closePath()
+      .fill({ color: '#1b2230', alpha: 0.94 })
+      .stroke({ width: Math.max(1.4, raio * 0.2), color: '#9fb6d3' });
+    raiz.addChild(g);
+    numero(String(Math.round(defesa)), x, y - raio * 0.05);
+  }
+}
+
 /** Barras e anéis ficam sob o token; valores completos aparecem ao selecionar ou passar o mouse. */
 /** `raioQuadro`: até onde vai o quadro do token (foto e moldura). As barras começam logo depois dele. Devolve o fim das barras (0 sem barras). */
-function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, raioQuadro: number, ativa: boolean, preferencias: IPreferenciasBarrasMapa, resolucao: number): number {
+function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, raioQuadro: number, ativa: boolean, preferencias: IPreferenciasBarrasMapa, resolucao: number, defesa?: number | null): number {
   raiz.removeChildren().forEach((filho) => filho.destroy());
-  const visiveis = barrasParaDesenhar(barras, preferencias);
+  const todas = barrasParaDesenhar(barras, preferencias);
+  // Sanidade e Defesa são bolinhas nos cantos de baixo do token; as barras (Vida, Mana, Estamina) ficam embaixo.
+  const sanidade = todas.find((barra) => barra.tipo === 'sanidade');
+  desenharBolinhas(raiz, lado, sanidade ? { barra: sanidade, cor: preferencias.porTipo.sanidade.cor } : null, defesa ?? null, resolucao);
+  const visiveis = todas.filter((barra) => barra.tipo !== 'sanidade');
   if (!visiveis.length) return 0;
 
   const { largura, altura: alturaBarra, fonteNaBarra, raioAnel, fonte, espacamento } = medidasDasBarras(lado);
@@ -244,6 +299,8 @@ export class TokenVisual {
   private barras = new Container();
   private marcas = new Graphics();
   private vez = new Graphics();
+  /** Fogo, veneno, gelo, estrelas: o contorno animado das condições que o token tem. */
+  private contorno = new ContornoDeCondicao();
   private brilhoVez: Sprite;
   private sombra: Sprite;
   private condicoes = new Container();
@@ -292,7 +349,7 @@ export class TokenVisual {
     this.brilhoVez.blendMode = 'add';
     this.brilhoVez.visible = false;
     this.corpo.addChild(this.retrato, this.clarao, this.moldura, this.marcas);
-    this.raiz.addChild(this.sombra, this.brilhoVez, this.vez, this.corpo, this.barras, this.condicoes, this.nome);
+    this.raiz.addChild(this.sombra, this.brilhoVez, this.contorno.raiz, this.vez, this.corpo, this.barras, this.condicoes, this.nome);
     this.raiz.eventMode = 'static';
     this.raiz.label = dados.id;
     // O nome inteiro aparece com o mouse em cima; fora disso fica abreviado para não cobrir os vizinhos.
@@ -350,6 +407,7 @@ export class TokenVisual {
     this.nome.style.fontSize = this.tamanhoNome;
     this.escreverNome();
     this.desenharCondicoes();
+    this.contorno.definir(contornosDoToken(dados.condicoes));
     this.desenharMarcas();
   }
 
@@ -427,7 +485,7 @@ export class TokenVisual {
   }
 
   private desenharBarras() {
-    this.fimDasBarras = desenharBarras(this.barras, this.dados.barras, this.lado, this.raioQuadro, this.selecionado || this.sobOMouse, this.preferenciasBarras, this.resolucaoTexto);
+    this.fimDasBarras = desenharBarras(this.barras, this.dados.barras, this.lado, this.raioQuadro, this.selecionado || this.sobOMouse, this.preferenciasBarras, this.resolucaoTexto, this.dados.defesa);
   }
 
   definirPreferenciasBarras(preferencias: IPreferenciasBarrasMapa) {
@@ -451,12 +509,29 @@ export class TokenVisual {
       this.condicoes.addChild(bolinha);
     });
     this.desenharSelo();
+    this.desenharElevacao();
     if (this.dados.condicoes.length > lista.length) {
       const mais = new Text({ text: `+${this.dados.condicoes.length - lista.length}`, style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: raio * 1.1, fill: '#fde68a', stroke: { color: '#000000', width: 3 } } });
       mais.anchor.set(0, 0.5);
       mais.position.set(this.raioQuadro * 1.14, this.raioQuadro * 0.7);
       this.condicoes.addChild(mais);
     }
+  }
+
+  /** A altura do token ("↑ 6 m"): uma pílula escura no meio do lado esquerdo, para a mesa ler de relance. */
+  private desenharElevacao() {
+    const rotulo = rotuloDaElevacao(this.dados.elevacao);
+    if (!rotulo) return;
+    const tamanho = Math.max(9, this.lado * 0.13);
+    const texto = new Text({ text: rotulo, style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: tamanho, fill: this.dados.elevacao! > 0 ? '#bae6fd' : '#fca5a5' } });
+    texto.anchor.set(0.5);
+    const largura = texto.width + tamanho * 0.9;
+    const altura = tamanho * 1.5;
+    const fundo = new Graphics().roundRect(-largura / 2, -altura / 2, largura, altura, altura / 2).fill({ color: '#1b1824', alpha: 0.92 }).stroke({ width: Math.max(1, tamanho * 0.1), color: this.dados.elevacao! > 0 ? '#7dd3fc' : '#f87171' });
+    const pilula = new Container();
+    pilula.addChild(fundo, texto);
+    pilula.position.set(-this.raioQuadro * 0.98 - largura * 0.1, 0);
+    this.condicoes.addChild(pilula);
   }
 
   /** Baú, caixote ou bolsa: um selo dourado no alto à esquerda avisa que dá para abrir (apagado quando já esvaziou). */
@@ -647,6 +722,7 @@ export class TokenVisual {
         this.vez.stroke({ width: largura, color: '#fde68a', alpha: 0.9, cap: 'round' });
       }
     }
+    if (this.contorno.ativo) this.contorno.quadro(tempo, this.raioQuadro);
     return false;
   }
 
@@ -654,6 +730,15 @@ export class TokenVisual {
     this.marcas.clear();
     if (this.selecionado) {
       this.marcas.circle(0, 0, this.raioQuadro * 1.04).stroke({ width: Math.max(2, this.lado * 0.03), color: '#ffffff', alpha: 0.9 });
+    }
+    // Token-fonte (só o Mestre recebe isto): um "+" dourado no canto de cima à direita. Arrastar deixa uma cópia.
+    if (this.dados.fonte) {
+      const r = this.lado * 0.14;
+      const cx = this.raioQuadro * 0.78;
+      const cy = -this.raioQuadro * 0.78;
+      const traco = Math.max(1.5, r * 0.28);
+      this.marcas.circle(cx, cy, r).fill('#c7a44c').stroke({ width: Math.max(1, r * 0.14), color: '#1a1405' });
+      this.marcas.moveTo(cx - r * 0.5, cy).lineTo(cx + r * 0.5, cy).moveTo(cx, cy - r * 0.5).lineTo(cx, cy + r * 0.5).stroke({ width: traco, color: '#1a1405', cap: 'round' });
     }
   }
 

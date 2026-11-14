@@ -1,9 +1,17 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { NOTA_MAXIMA, resumoDaNota, temNota } from '../../src/pages/Mapa/motor/notasDoMestre';
+import { NOTA_DO_JOGADOR_MAXIMA, NOTA_MAXIMA, resumoDaNota, temNota } from '../../src/pages/Mapa/motor/notasDoMestre';
+import { ELEVACAO_MAXIMA, ELEVACAO_MINIMA } from '../../src/pages/Mapa/motor/elevacaoConta';
 
 const ler = (caminho: string) => readFileSync(new URL(`../../${caminho}`, import.meta.url), 'utf-8');
+
+test('os limites do lembrete do jogador e da altura do token são os mesmos do servidor', () => {
+  const mapa = ler('plataforma/core/mapa.py');
+  assert.equal(NOTA_DO_JOGADOR_MAXIMA, Number(mapa.match(/^NOTA_DO_JOGADOR_MAXIMA = (\d+)/m)![1]));
+  assert.equal(ELEVACAO_MINIMA, Number(mapa.match(/^ELEVACAO_MINIMA = (-?\d+)/m)![1]));
+  assert.equal(ELEVACAO_MAXIMA, Number(mapa.match(/^ELEVACAO_MAXIMA = (\d+)/m)![1]));
+});
 
 test('nota do Mestre: o teto do site é o mesmo do servidor', () => {
   const servidor = ler('plataforma/core/mapa.py').match(/^NOTA_MAXIMA = (\d+)/m);
@@ -32,7 +40,9 @@ test('nota do Mestre: as telas só montam a nota onde o Mestre comanda', () => {
   const menu = ler('src/pages/Mapa/componentes/MenuToken.tsx');
   const bloco = menu.slice(menu.indexOf('{gestor && ('), menu.indexOf("abaAtual === 'barras'"));
   assert.ok(bloco.includes('<NotaDoMestre'), 'a nota do token precisa ficar dentro do bloco do Mestre');
-  assert.equal((menu.match(/<NotaDoMestre/g) ?? []).length, 1);
+  // A segunda caixa é o lembrete do jogador (o servidor só o entrega ao dono e ao Mestre), de propósito fora do bloco do Mestre.
+  assert.equal((menu.match(/<NotaDoMestre/g) ?? []).length, 2);
+  assert.match(menu, /\(gestor \|\| token\.e_meu\) && onNotaDoJogador && \(\s*<NotaDoMestre\s+key=\{`jogador-/);
   assert.match(ler('src/pages/Mapa/componentes/BarraToken.tsx'), /gestor && onNota && temNota\(token\.nota_mestre\)/);
   // Cena e mapa colocado: as duas telas são do Mestre (ConfigCena abre só para ele; a barra do mapa idem).
   const pagina = ler('src/pages/Mapa/MapaPage.tsx');

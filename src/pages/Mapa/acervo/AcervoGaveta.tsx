@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Folder, FolderPlus, FolderUp, ImagePlus, Info, Loader2, Map as MapaIcone, Scissors, Search, Trash2, User, X } from 'lucide-react';
+import { Eye, Folder, FolderPlus, FolderUp, ImagePlus, Info, Loader2, Map as MapaIcone, Scissors, Search, Trash2, User, X } from 'lucide-react';
 import { acervoApi, LICENCAS_ACERVO, type IAcervo, type IItemAcervo, type LicencaAcervo, type TipoItemAcervo } from '../../../services/acervoApi';
 import { urlPedaco } from '../../../services/mapaApi';
 import { confirmar, pedirTexto } from '../../../components/avisos/confirmacao';
@@ -17,6 +17,8 @@ interface Props {
   onColocarMapa: (item: IItemAcervo) => void;
   onNovaCena: (item: IItemAcervo) => void;
   onPorNaCena: (item: IItemAcervo) => void;
+  /** Mostra a imagem na tela de todos (carta, retrato de NPC, ilustração do lugar). */
+  onMostrar?: (item: IItemAcervo) => void;
 }
 
 const TIPOS: Array<{ id: TipoItemAcervo; rotulo: string }> = [
@@ -71,7 +73,7 @@ const InfoDaImagem = ({ item, onSalvo, onFechar }: { item: IItemAcervo; onSalvo:
   );
 };
 
-export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColocarMapa, onNovaCena, onPorNaCena }: Props) => {
+export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColocarMapa, onNovaCena, onPorNaCena, onMostrar }: Props) => {
   const [acervo, setAcervo] = useState<IAcervo | null>(null);
   const [erro, setErro] = useState('');
   const [pasta, setPasta] = useState<string | null | 'todas'>('todas');
@@ -263,6 +265,7 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
                   ) : (
                     temCena && <button type="button" onClick={() => onPorNaCena(item)}><User size={13} /> Pôr na cena</button>
                   )}
+                  {onMostrar && item.tipo !== 'mapa' && <button type="button" aria-label={`Mostrar ${item.nome} à mesa`} title="Mostra esta imagem na tela de todos" onClick={() => onMostrar(item)}><Eye size={13} /> Mostrar</button>}
                   <button type="button" aria-label={`Origem e licença de ${item.nome}`} onClick={() => setInfoDe(item)}><Info size={13} /></button>
                   <button type="button" aria-label={`Apagar ${item.nome}`} onClick={() => void apagarItem(item)}><Trash2 size={13} /></button>
                 </div>

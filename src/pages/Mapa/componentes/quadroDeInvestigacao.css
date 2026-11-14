@@ -1,0 +1,275 @@
+/* O quadro de investigação: um mural de cortiça com cartas e barbantes vermelhos. */
+.mapa-quadro {
+  position: absolute;
+  inset: 3% 3% 3% 3%;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 14px;
+  background: var(--mapa-painel, #1b1824);
+  color: var(--mapa-texto);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6);
+}
+
+.mapa-quadro > header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--mapa-linha);
+}
+
+.mapa-quadro-titulo {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.mapa-quadro-titulo svg {
+  align-self: center;
+}
+
+.mapa-quadro-titulo small {
+  color: var(--mapa-texto-fraco, rgba(255, 255, 255, 0.6));
+  font-size: 12px;
+}
+
+.mapa-quadro-ferramentas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.mapa-quadro-ferramentas .mapa-botao-leve {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mapa-quadro-ferramentas .mapa-botao-leve.ativo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.2);
+}
+
+.mapa-quadro-zoom {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+}
+
+.mapa-quadro-zoom span {
+  min-width: 38px;
+  text-align: center;
+}
+
+.mapa-quadro-dica {
+  margin: 0;
+  padding: 6px 12px;
+  background: rgba(199, 164, 76, 0.14);
+  font-size: 12px;
+}
+
+.mapa-quadro-form {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--mapa-linha);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mapa-quadro-form label {
+  display: grid;
+  gap: 3px;
+  font-size: 12px;
+}
+
+.mapa-quadro-form textarea {
+  resize: vertical;
+}
+
+.mapa-quadro-form small {
+  color: var(--mapa-texto-fraco, rgba(255, 255, 255, 0.6));
+  justify-self: end;
+}
+
+.mapa-quadro-cores {
+  display: flex;
+  gap: 6px;
+}
+
+.mapa-quadro-cores button {
+  width: 26px;
+  height: 26px;
+  border: 2px solid;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.mapa-quadro-cores button.ativa {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.mapa-quadro-form .mapa-quadro-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mapa-quadro-acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.mapa-quadro-mural {
+  flex: 1;
+  overflow: auto;
+  background: #6b4f33;
+}
+
+.mapa-quadro-moldura {
+  position: relative;
+}
+
+/* A cortiça: pontinhos escuros e claros sobre marrom. */
+.mapa-quadro-tela {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  background-color: #a9794a;
+  background-image:
+    radial-gradient(rgba(60, 35, 15, 0.35) 1.2px, transparent 1.6px),
+    radial-gradient(rgba(255, 220, 170, 0.25) 1px, transparent 1.4px);
+  background-size: 22px 22px, 31px 31px;
+  background-position: 0 0, 11px 14px;
+  box-shadow: inset 0 0 60px rgba(40, 20, 5, 0.5);
+}
+
+.mapa-quadro-barbantes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.mapa-quadro-carta {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+  padding: 18px 10px 8px;
+  border: 2px solid;
+  border-radius: 4px;
+  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.45);
+  color: #2b2118;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  transform: rotate(-0.6deg);
+}
+
+.mapa-quadro-carta:nth-child(even) {
+  transform: rotate(0.8deg);
+}
+
+.mapa-quadro-carta:active {
+  cursor: grabbing;
+  z-index: 5;
+}
+
+.mapa-quadro-carta.ligavel {
+  cursor: crosshair;
+}
+
+.mapa-quadro-carta.escolhida {
+  outline: 3px solid #c0392b;
+  outline-offset: 3px;
+}
+
+.mapa-quadro-carta.escondida {
+  border-style: dashed;
+  opacity: 0.8;
+}
+
+.mapa-quadro-carta h4 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.mapa-quadro-carta p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.3;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.mapa-quadro-alfinete {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ff8a7a, #a82d22 70%);
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
+  transform: translateX(-50%);
+}
+
+.mapa-quadro-selo {
+  align-self: flex-start;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(43, 33, 24, 0.85);
+  color: #fde68a;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.mapa-quadro-carta footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.mapa-quadro-carta footer span {
+  display: inline-flex;
+}
+
+.mapa-quadro-carta footer .mapa-icone {
+  width: 22px;
+  height: 22px;
+  color: #2b2118;
+}
+
+.mapa-quadro-vazio {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  margin: 0;
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: rgba(27, 24, 36, 0.8);
+  color: #fff;
+  font-size: 22px;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 760px) {
+  .mapa-quadro {
+    inset: 0;
+    border-radius: 0;
+  }
+}

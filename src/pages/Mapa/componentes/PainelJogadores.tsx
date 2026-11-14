@@ -178,7 +178,7 @@ const LinhaJogador = ({
         <details className="mapa-jogador-permissoes">
           <summary>Permissões</summary>
           <label><input type="checkbox" checked={permissoes.mover_tokens} disabled={ocupado} onChange={(evento) => onPermissao(membro, { mover_tokens: evento.target.checked })} /> Mover tokens</label>
-          <label><input type="checkbox" checked={permissoes.usar_ping} disabled={ocupado} onChange={(evento) => onPermissao(membro, { usar_ping: evento.target.checked })} /> Usar ping</label>
+          <label><input type="checkbox" checked={permissoes.usar_ping} disabled={ocupado} onChange={(evento) => onPermissao(membro, { usar_ping: evento.target.checked })} /> Usar ping e desenhar</label>
           <label><input type="checkbox" checked={permissoes.usar_regua} disabled={ocupado} onChange={(evento) => onPermissao(membro, { usar_regua: evento.target.checked })} /> Usar régua</label>
           <label><input type="checkbox" checked={permissoes.usar_magia} disabled={ocupado} onChange={(evento) => onPermissao(membro, { usar_magia: evento.target.checked })} /> Lançar efeitos de magia</label>
           <span className="mapa-jogador-permissoes-rotulo">Pode ver</span>

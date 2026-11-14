@@ -140,3 +140,16 @@ html[data-performance-mode='reduced'] .rolagem__brilho {
   .rolagem, .rolagem__resultado, .rolagem--tremor .rolagem__resultado, .rolagem__dica { animation: none; }
   .rolagem--clarao-critico::after, .rolagem--clarao-falha::after { animation: none; opacity: 0; }
 }
+
+/* O dado de outra pessoa (a mesa vê): por cima do mapa, sem escurecer, sem pegar clique e sem pedir nada. */
+.rolagem--mesa,
+.rolagem--mesa * { pointer-events: none; cursor: default; }
+
+.rolagem--mesa .rolagem__brilho {
+  background: radial-gradient(circle at 50% 46%, rgba(5, 4, 10, 0.34), rgba(2, 2, 6, 0) 72%);
+  backdrop-filter: none;
+}
+
+.rolagem--mesa .rolagem__titulo { font-size: 0.72rem; letter-spacing: 0.22em; }
+.rolagem--mesa .rolagem__resultado { bottom: max(1rem, 6vh); }
+.rolagem--mesa .rolagem__total { font-size: clamp(2.2rem, 7vw, 3.6rem); }

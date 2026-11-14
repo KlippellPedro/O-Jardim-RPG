@@ -934,3 +934,139 @@ button.mapa-pessoas.ativo {
     animation: none;
   }
 }
+
+/* A chave "a mesa vê o dado": uma linha só, ligada em dourado. */
+.mapa-dados-mesa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 28px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--mapa-apagado);
+  cursor: pointer;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.mapa-dados-mesa.ativo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.14);
+  color: var(--mapa-texto);
+}
+
+/* A ordem do turno em retratos, no alto do mapa. Quem age agora é o primeiro e fica aceso. */
+.mapa-faixa-iniciativa {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100% - 340px);
+  padding: 5px 10px 5px 12px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mapa-painel) 88%, transparent);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%);
+}
+
+.mapa-faixa-rodada {
+  flex: none;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mapa-faixa-rodada strong {
+  color: var(--mapa-texto);
+}
+
+.mapa-faixa-iniciativa ol {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+}
+
+.mapa-faixa-iniciativa li button {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+}
+
+.mapa-faixa-iniciativa li button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.mapa-faixa-iniciativa li button small {
+  font-size: 9.5px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.mapa-faixa-retrato {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--mapa-linha);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--mapa-texto);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mapa-faixa-retrato img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mapa-faixa-iniciativa li.vez .mapa-faixa-retrato {
+  width: 38px;
+  height: 38px;
+  box-shadow: 0 0 0 2px rgba(199, 164, 76, 0.9), 0 0 14px rgba(199, 164, 76, 0.55);
+}
+
+.mapa-faixa-iniciativa li.vez button small {
+  color: var(--mapa-ouro);
+  font-weight: 700;
+}
+
+.mapa-faixa-iniciativa li.mais {
+  flex: none;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+}
+
+/* O aviso do alto desce quando a faixa está na tela. */
+.mapa-faixa-iniciativa ~ .mapa-aviso-topo {
+  top: 66px;
+}
+
+@media (max-width: 760px) {
+  .mapa-faixa-iniciativa {
+    max-width: calc(100% - 24px);
+  }
+
+  .mapa-faixa-rodada {
+    display: none;
+  }
+}

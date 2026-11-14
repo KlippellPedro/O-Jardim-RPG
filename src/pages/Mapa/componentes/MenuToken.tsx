@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { X } from 'lucide-react';
+import { ArrowDownToLine, X } from 'lucide-react';
 import type { EstiloDeAura, EstiloDeLuz, IAuraToken, IEstadoMapa, ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
 import { SeletorDeMoldura } from '../oficina/OficinaGaveta';
 import type { Enquadramento } from '../motor/molduras';
 import { NotaDoMestre } from './NotaDoMestre';
+import { NOTA_DO_JOGADOR_MAXIMA } from '../motor/notasDoMestre';
+import { ELEVACAO_MAXIMA, ELEVACAO_MINIMA, quedaDe } from '../motor/elevacaoConta';
 import { ArtesDoToken } from './ArtesDoToken';
 import { LootDoRecipiente } from './LootDoRecipiente';
+import { FormasEFonte } from './FormasEFonte';
 import { ESTILOS_DE_AURA } from '../motor/auras';
 import { ESTILOS_DE_LUZ, estiloDaLuz } from '../motor/luzesConta';
 import {
@@ -40,9 +43,15 @@ interface Props {
   onEstado?: (estado: IEstadoMapa) => void;
   /** Abre já nesta aba (o botão de baú da barra do token pede a aba Loot). */
   abaInicial?: Aba;
+  /** O Mestre quer uma forma nova para o token: a página abre o Acervo para ele escolher a imagem. */
+  onEscolherForma?: () => void;
+  /** Guarda o lembrete do jogador neste token (leva o id do token, como a nota do Mestre). */
+  onNotaDoJogador?: (texto: string) => void;
+  /** O Mestre soltou o token de uma altura: a página zera a altura e mostra o dano de queda. */
+  onQueda?: (metros: number) => void;
 }
 
-export type Aba = 'geral' | 'barras' | 'visual' | 'luz' | 'loot';
+export type Aba = 'geral' | 'barras' | 'visual' | 'luz' | 'formas' | 'loot';
 
 const BARRAS: Array<{ id: TipoBarra; rotulo: string }> = [
   { id: 'vida', rotulo: 'Vida' },
@@ -64,19 +73,21 @@ const LADOS: Array<{ id: LadoToken; rotulo: string }> = [
   { id: 'neutro', rotulo: 'Neutro' },
 ];
 
-const ROTULO_DA_ABA: Record<Aba, string> = { geral: 'Geral', barras: 'Barras', visual: 'Visual', luz: 'Luz e aura', loot: 'Loot' };
+const ROTULO_DA_ABA: Record<Aba, string> = { geral: 'Geral', barras: 'Barras', visual: 'Visual', luz: 'Luz e aura', formas: 'Formas', loot: 'Loot' };
 
 /**
  * As opções do token, em abas (antes era uma coluna só, com quase 1000 px de altura). O que se faz a toda hora
  * (esconder, falar como, tirar do mapa) está na barra colada no token (BarraToken); aqui ficam os ajustes.
  */
-export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMoldura, onEnquadramento, onFechar, campanhaId, onArteMudou, onEstado, abaInicial }: Props) => {
+export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMoldura, onEnquadramento, onFechar, campanhaId, onArteMudou, onEstado, abaInicial, onEscolherForma, onNotaDoJogador, onQueda }: Props) => {
   const config = token.config_barras;
   const podeVisual = gestor || token.e_meu;
   // A foto da ficha tem o enquadramento do personagem (vale em todas as cenas); a arte do Acervo tem o do próprio token.
   const temArteDoAcervo = Boolean(token.imagem_id && token.imagem);
   const temFotoDaFicha = Boolean(token.personagem_id && /^[fr]/.test(token.imagem ?? '')) || temArteDoAcervo;
-  const abas: Aba[] = ['geral', ...(config ? ['barras' as const] : []), ...(podeVisual ? ['visual' as const, 'luz' as const] : []), ...(gestor && campanhaId && onEstado ? ['loot' as const] : [])];
+  // Formas e fonte são do token do Mestre (criatura, NPC, objeto); o de personagem de jogador usa as artes da ficha.
+  const comFormas = gestor && Boolean(campanhaId) && Boolean(onEstado) && Boolean(onEscolherForma) && !token.personagem_id;
+  const abas: Aba[] = ['geral', ...(config ? ['barras' as const] : []), ...(podeVisual ? ['visual' as const, 'luz' as const] : []), ...(comFormas ? ['formas' as const] : []), ...(gestor && campanhaId && onEstado ? ['loot' as const] : [])];
   const [aba, setAba] = useState<Aba>(abaInicial ?? 'geral');
   const abaAtual = abas.includes(aba) ? aba : 'geral';
   const [enquadramento, setEnquadramento] = useState<Enquadramento>(token.enquadramento);
@@ -213,8 +224,41 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
               {token.visibilidade && token.visibilidade !== 'total' && (
                 <p className="mapa-dica">Na Sessão este participante está como "{token.visibilidade}": os jogadores veem só o que esse degrau deixa.</p>
               )}
+              <label className="mapa-menu-linha">
+                Altura (m)
+                <input
+                  key={`${token.id}-${token.elevacao ?? 0}`}
+                  type="number"
+                  min={ELEVACAO_MINIMA}
+                  max={ELEVACAO_MAXIMA}
+                  defaultValue={token.elevacao ?? 0}
+                  title="Metros acima do chão (negativo, abaixo). Aparece no token e entra na conta da régua."
+                  onBlur={(e) => {
+                    const valor = Math.max(ELEVACAO_MINIMA, Math.min(ELEVACAO_MAXIMA, Math.trunc(Number(e.target.value)) || 0));
+                    if (valor !== (token.elevacao ?? 0)) onEditar({ elevacao: valor });
+                  }}
+                  onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
+                />
+              </label>
+              {(token.elevacao ?? 0) > 0 && onQueda && (
+                <button type="button" className="mapa-botao-leve" onClick={() => onQueda(token.elevacao ?? 0)}>
+                  <ArrowDownToLine size={14} aria-hidden="true" /> Deixar cair ({quedaDe(token.elevacao ?? 0).formula ?? 'sem dano'})
+                </button>
+              )}
               <NotaDoMestre key={token.id} valor={token.nota_mestre ?? ''} onSalvar={onNota} />
             </>
+          )}
+          {(gestor || token.e_meu) && onNotaDoJogador && (
+            <NotaDoMestre
+              key={`jogador-${token.id}`}
+              rotulo="Lembrete do jogador"
+              placeholder="Um recado para você mesmo: o que este personagem quer, deve ou desconfia."
+              valor={token.nota_jogador ?? ''}
+              onSalvar={onNotaDoJogador}
+              maximo={NOTA_DO_JOGADOR_MAXIMA}
+              quemVe="Só o dono do personagem e o Mestre veem."
+              linhas={3}
+            />
           )}
         </div>
       )}
@@ -265,6 +309,12 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
               <label className="mapa-menu-linha">Foto para cima ou baixo <input type="range" min={-1} max={1} step={0.01} value={enquadramento.y} onChange={(e) => mudarEnquadramento({ y: Number(e.target.value) })} /></label>
             </>
           )}
+        </div>
+      )}
+
+      {abaAtual === 'formas' && comFormas && campanhaId && onEstado && onEscolherForma && (
+        <div className="mapa-menu-token-aba" role="tabpanel">
+          <FormasEFonte campanhaId={campanhaId} token={token} onEstado={onEstado} onEscolherImagem={onEscolherForma} />
         </div>
       )}
 

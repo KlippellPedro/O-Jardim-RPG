@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Bird, Castle, CloudRain, Flame, Loader2, Music2, Pause, Play, Search, Square, Trash2, Trees, Upload, Volume2, VolumeX, Wind, X, type LucideIcon } from 'lucide-react';
+import { Bird, Castle, CloudRain, Flame, Loader2, Music2, Pause, Play, Search, Square, Trash2, Trees, Upload, Volume2, VolumeX, Wind, X, Zap, type LucideIcon } from 'lucide-react';
 import { avisarErro } from '../../../components/avisos/avisos';
 import { confirmar } from '../../../components/avisos/confirmacao';
 import { mapaRecursosApi, type IFaixaMesa, type ITrilhaMesa } from '../../../services/mapaRecursosApi';
@@ -15,6 +15,7 @@ import {
   type IAjusteLocalDoAmbiente,
   type ICamadaAmbiente,
 } from '../motor/sonsAmbiente';
+import { EFEITOS_SONOROS } from '../motor/efeitosSonoros';
 import '../trilhaMesa.css';
 
 const FORMATOS = 'audio/mpeg,audio/ogg,audio/wav,audio/webm';
@@ -28,10 +29,10 @@ const ICONE_DA_CATEGORIA: Record<string, LucideIcon> = {
   lugares: Castle,
 };
 
-type Aba = 'ambiente' | 'musica';
+type Aba = 'ambiente' | 'musica' | 'efeitos';
 
 export const PainelTrilha = ({
-  aberto, campanhaId, gestor, estado, onEstado, onTocar, onFechar, ambiente, onAmbiente, ajuste, onAjuste, falhas,
+  aberto, campanhaId, gestor, estado, onEstado, onTocar, onFechar, ambiente, onAmbiente, ajuste, onAjuste, falhas, onEfeito,
 }: {
   aberto: boolean;
   campanhaId: string;
@@ -48,6 +49,8 @@ export const PainelTrilha = ({
   onAjuste: (ajuste: IAjusteLocalDoAmbiente) => void;
   /** Sons que não carregaram. */
   falhas: string[];
+  /** O Mestre tocou um efeito pontual (trovão, sino...): toca aqui e na mesa inteira. */
+  onEfeito?: (id: string) => void;
 }) => {
   const arquivoRef = useRef<HTMLInputElement>(null);
   const envioDoAmbiente = useRef<number | null>(null);
@@ -152,7 +155,26 @@ export const PainelTrilha = ({
         <button type="button" role="tab" aria-selected={aba === 'musica'} className={aba === 'musica' ? 'ativo' : ''} onClick={() => setAba('musica')}>
           Músicas{estado?.reproduzindo && <small>tocando</small>}
         </button>
+        {gestor && onEfeito && (
+          <button type="button" role="tab" aria-selected={aba === 'efeitos'} className={aba === 'efeitos' ? 'ativo' : ''} onClick={() => setAba('efeitos')}>
+            Efeitos
+          </button>
+        )}
       </div>
+
+      {aba === 'efeitos' && gestor && onEfeito && (
+        <div className="mapa-efeitos-sonoros" role="tabpanel">
+          <p className="mapa-dica">Um toque e a mesa inteira ouve ao mesmo tempo: bom para o trovão na hora certa, a porta que bate, o susto. Os sons são feitos na hora pelo navegador, sem arquivo.</p>
+          <div className="mapa-efeitos-grade">
+            {EFEITOS_SONOROS.map((efeito) => (
+              <button key={efeito.id} type="button" className="mapa-botao-leve" title={efeito.dica} onClick={() => onEfeito(efeito.id)}>
+                <Zap size={13} aria-hidden="true" /> {efeito.rotulo}
+              </button>
+            ))}
+          </div>
+          <p className="mapa-dica">Quem silenciou os sons de ambiente neste aparelho também não ouve os efeitos.</p>
+        </div>
+      )}
 
       {aba === 'ambiente' && (
         <div className="mapa-ambiente" role="tabpanel">

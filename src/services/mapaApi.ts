@@ -70,11 +70,68 @@ export interface ICronometroMesa {
   visivel: boolean;
 }
 
-/** Pausa, relógios e cronômetro da campanha (plataforma/core/mesa_extras.py). */
+/** A cena narrativa: a arte vira o fundo, o mapa some e os falantes aparecem embaixo (plataforma/core/mesa_extras.py). */
+export interface INarrativa {
+  ligada: boolean;
+  imagem_id: string | null;
+  largura: number;
+  altura: number;
+  titulo: string;
+  /** Ids de token: só aparecem para quem enxerga o token. */
+  falantes: string[];
+}
+
+/** Uma imagem do Acervo que o Mestre mostrou à mesa. */
+export interface IImagemDaMesa {
+  id: string;
+  nome: string;
+  largura: number;
+  altura: number;
+}
+
+/** Pausa, relógios, cronômetro e cena narrativa da campanha (plataforma/core/mesa_extras.py). */
 export interface IMesaExtras {
   pausa: { ligada: boolean; texto: string };
   relogios: IRelogioMesa[];
   cronometro: ICronometroMesa | null;
+  narrativa?: INarrativa;
+  /** O quadro de investigação: cartas e barbantes que a mesa monta junto. O jogador não recebe o que o Mestre escondeu. */
+  quadro?: IQuadro;
+}
+
+export type CorDaCarta = 'papel' | 'amarelo' | 'vermelho' | 'azul' | 'verde' | 'roxo';
+
+export interface ICartaDoQuadro {
+  id: string;
+  titulo: string;
+  texto: string;
+  cor: CorDaCarta;
+  x: number;
+  y: number;
+  /** Quem pregou a carta (só o autor e o Mestre editam). Nulo numa carta antiga. */
+  autor: string | null;
+  autor_nome: string;
+  /** Escondida dos jogadores (só o Mestre cria e revela). */
+  visivel: boolean;
+}
+
+export interface IQuadro {
+  cartas: ICartaDoQuadro[];
+  ligacoes: Array<{ de: string; para: string }>;
+}
+
+/** Uma ação do quadro; cada uma usa só alguns campos (ver plataforma/core/quadro.py). */
+export interface IAcaoDoQuadro {
+  acao: 'carta' | 'mover' | 'apagar' | 'ligar' | 'desligar' | 'revelar' | 'limpar';
+  id?: string;
+  de?: string;
+  para?: string;
+  titulo?: string;
+  texto?: string;
+  cor?: CorDaCarta;
+  x?: number;
+  y?: number;
+  visivel?: boolean;
 }
 
 /** Onde a tela abre a cena: centro e zoom. */
@@ -176,6 +233,10 @@ export interface ITokenMapa {
   /** Nível do personagem: escolhe a moldura. */
   nivel: number | null;
   barras: IBarraToken[];
+  /** Metros acima do chão (negativo, abaixo): um selo no token e a conta da régua. Só o Mestre muda. */
+  elevacao?: number;
+  /** Lembrete do jogador sobre o próprio token. Só o dono e o Mestre recebem. */
+  nota_jogador?: string;
   condicoes: string[];
   /** As mesmas condições com a duração, mais as aflições do personagem: o que vira carta ao clicar no token. */
   estados?: IEstadoToken[];
@@ -188,6 +249,8 @@ export interface ITokenMapa {
   aura?: IAuraToken | null;
   e_meu: boolean;
   pode_mover: boolean;
+  /** Defesa do personagem (a da Sessão ou a da ficha): a bolinha ao lado do token. Só o dono e o Mestre recebem. */
+  defesa?: number | null;
   /** Quanto o personagem anda por turno, em metros, lido da ficha (com Cansaço e condições). Só o dono e o Mestre recebem. */
   movimento?: number | null;
   desconhecido: boolean;
@@ -203,6 +266,11 @@ export interface ITokenMapa {
   visibilidade?: string | null;
   /** Só o Mestre recebe: descrição e lembretes que os jogadores nunca veem. */
   nota_mestre?: string;
+  /** Só o Mestre: as imagens do Acervo que o token pode vestir (a de base é a 1) e a que vale agora (nulo: a de base). */
+  formas?: Array<{ id: string; nome: string }>;
+  forma_ativa?: string | null;
+  /** Só o Mestre: o token gera cópias ao ser arrastado (limite nulo: sem limite; `usados` já saíram). */
+  fonte?: { limite: number | null; usados: number } | null;
 }
 
 export interface IMapaDaCena {
@@ -370,6 +438,41 @@ export interface IMapaColocadoEdicao {
 
 export type AcaoOrdemMapa = 'frente' | 'tras' | 'acima' | 'abaixo';
 
+/** Um traço que o Mestre deixou na cena até apagar. O jogador só recebe os públicos (sem o campo `publico`). */
+export interface IDesenhoFixo {
+  id: string;
+  forma: 'lapis' | 'linha' | 'seta' | 'circulo' | 'retangulo';
+  pontos: number[][];
+  cor: string;
+  publico?: boolean;
+}
+
+export type CoberturaDaZona = 'parcial' | 'superior';
+
+export interface IGatilhoDaZona {
+  texto_pisador: string;
+  texto_mesa: string;
+  quem: 'jogadores' | 'todos';
+  uma_vez: boolean;
+  /** O número (1 a 6) da armadilha pronta do Livro de Regras que o Mestre recebe junto do aviso. */
+  armadilha: number | null;
+}
+
+/** Uma zona de terreno da cena: cobertura, gatilho e terreno (plataforma/core/zonas.py). O jogador só recebe o terreno à vista. */
+export interface IZona {
+  id: string;
+  nome: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  cobertura: CoberturaDaZona | null;
+  gatilho: IGatilhoDaZona | null;
+  terreno: { rotulo: string; visivel: boolean } | null;
+  /** Telhado: o retângulo cobre o que tem dentro e some quando alguém do grupo entra. Chega ao jogador, sem nome. */
+  telhado?: boolean;
+}
+
 export interface ICena extends IResumoCena {
   largura: number;
   altura: number;
@@ -382,6 +485,8 @@ export interface ICena extends IResumoCena {
   nevoa: INevoa;
   clima: IClima;
   portais: IPortal[];
+  zonas?: IZona[];
+  desenhos?: IDesenhoFixo[];
   /** Só nas cenas publicadas pelo construtor de mapas. */
   aberturas?: IAberturaCena[];
   /** Luzes fixas do mapa montado (px; raio em casas). O jogador recebe só as que a névoa mostra. */
@@ -484,6 +589,10 @@ export interface ITokenEdicao {
   sem_aura?: boolean;
   /** Só o Mestre muda; vazio apaga a nota. */
   nota_mestre?: string;
+  /** Metros acima do chão (negativo, abaixo). Só o Mestre muda. */
+  elevacao?: number;
+  /** O lembrete do jogador sobre o token: o dono e o Mestre escrevem (vazio apaga). */
+  nota_jogador?: string;
 }
 
 const base =(campanhaId: string) => `/mapa/${campanhaId}`;
@@ -508,6 +617,46 @@ export const mapaApi = {
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/tokens`, { method: 'POST', body: dados, ...ESTADO }),
   trazerParticipantes: (campanhaId: string, cenaId: string, ponto: { x: number; y: number }) =>
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/trazer`, { method: 'POST', body: ponto, ...ESTADO }),
+  /** Mostra uma imagem do Acervo na tela de todos (ou dos jogadores escolhidos). Só o Mestre. */
+  mostrarImagem: (campanhaId: string, itemId: string, dados: { personagens?: string[] | null; legenda?: string } = {}) =>
+    api<{ ok: boolean }>(`${base(campanhaId)}/imagens/${itemId}/mostrar`, { method: 'POST', body: { personagens: dados.personagens ?? null, legenda: dados.legenda ?? null } }),
+  fecharImagem: (campanhaId: string) => api<{ ok: boolean }>(`${base(campanhaId)}/imagens/fechar`, { method: 'POST', body: {} }),
+  /** Liga, desliga e monta a cena narrativa (fundo, título e quem aparece embaixo). Devolve a mesa nova. */
+  mudarNarrativa: (campanhaId: string, dados: { ligada?: boolean; imagem_id?: string; titulo?: string; falantes?: string[]; sem_imagem?: boolean }) =>
+    api<IMesaExtras>(`${base(campanhaId)}/narrativa`, { method: 'PUT', body: dados }),
+  /** Uma ação no quadro de investigação (criar, mover, ligar...). Devolve a mesa nova, no recorte de quem pediu. */
+  mexerNoQuadro: (campanhaId: string, dados: IAcaoDoQuadro) =>
+    api<IMesaExtras>(`${base(campanhaId)}/quadro`, { method: 'POST', body: dados }),
+  /** Formas do token (imagens do Acervo que ele pode vestir): só o Mestre, e não no token de personagem. */
+  adicionarForma: (campanhaId: string, tokenId: string, dados: { imagem_id: string; nome?: string }) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}/formas`, { method: 'POST', body: dados, ...ESTADO }),
+  renomearForma: (campanhaId: string, tokenId: string, formaId: string, nome: string) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}/formas/${formaId}`, { method: 'PUT', body: { nome }, ...ESTADO }),
+  apagarForma: (campanhaId: string, tokenId: string, formaId: string) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}/formas/${formaId}`, { method: 'DELETE', ...ESTADO }),
+  /** Troca a forma que o token veste agora; nulo volta à imagem de base. */
+  escolherForma: (campanhaId: string, tokenId: string, forma: string | null) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}/forma`, { method: 'PUT', body: { forma }, ...ESTADO }),
+  /** Liga ou desliga o token como fonte de cópias (limite opcional); `reiniciar` zera o contador. */
+  configurarFonte: (campanhaId: string, tokenId: string, dados: { ativa: boolean; limite?: number | null; reiniciar?: boolean }) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}/fonte`, { method: 'PUT', body: dados, ...ESTADO }),
+  /** Arrastar a fonte deixa uma cópia numerada onde foi solta; a fonte fica onde estava. */
+  soltarDaFonte: (campanhaId: string, tokenId: string, ponto: { x: number; y: number }) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}/fonte/soltar`, { method: 'POST', body: ponto, ...ESTADO }),
+  /** Cópias do token em volta dele, com nome numerado (e a criatura na Sessão, se há). Só o Mestre. */
+  duplicarToken: (campanhaId: string, tokenId: string, quantidade = 1) =>
+    api<IEstadoMapa & { copias: number }>(`${base(campanhaId)}/tokens/${tokenId}/duplicar`, { method: 'POST', body: { quantidade }, ...ESTADO }),
+  listarEncontros: (campanhaId: string) => api<{ encontros: IResumoEncontro[] }>(`${base(campanhaId)}/encontros`, { cache: 'no-store' }),
+  salvarEncontro: (campanhaId: string, cenaId: string, dados: { nome: string; tokens?: string[]; lados?: string[] }) =>
+    api<{ encontros: IResumoEncontro[]; salvo: string }>(`${base(campanhaId)}/cenas/${cenaId}/encontros`, { method: 'POST', body: dados }),
+  apagarEncontro: (campanhaId: string, encontroId: string) =>
+    api<{ encontros: IResumoEncontro[] }>(`${base(campanhaId)}/encontros/${encontroId}`, { method: 'DELETE' }),
+  soltarEncontro: (campanhaId: string, cenaId: string, encontroId: string, dados: { x: number; y: number; escondidos: boolean }) =>
+    api<IEstadoMapa & { soltos: number }>(`${base(campanhaId)}/cenas/${cenaId}/encontros/${encontroId}/soltar`, { method: 'POST', body: dados, ...ESTADO }),
+  revelarEscondidos: (campanhaId: string, cenaId: string, lados?: string[]) =>
+    api<IEstadoMapa & { revelados: number }>(`${base(campanhaId)}/cenas/${cenaId}/revelar`, { method: 'POST', body: lados ? { lados } : {}, ...ESTADO }),
+  limparCena: (campanhaId: string, cenaId: string, dados: { lados?: string[]; tirar_da_iniciativa?: boolean } = {}) =>
+    api<IEstadoMapa & { removidos: number }>(`${base(campanhaId)}/cenas/${cenaId}/limpar`, { method: 'POST', body: dados, ...ESTADO }),
   editarToken: (campanhaId: string, tokenId: string, dados: ITokenEdicao) =>
     api<IEstadoMapa>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'PUT', body: dados, ...ESTADO }),
   /** Vida, Mana, Estamina ou Sanidade pela barra do token: `delta` soma (dano é negativo), `atual` define. O servidor grava na Sessão e na ficha. */
@@ -545,6 +694,19 @@ export const mapaApi = {
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/nevoa`, { method: 'POST', body: dados, ...ESTADO }),
   mudarClima: (campanhaId: string, cenaId: string, clima: IClima) =>
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/clima`, { method: 'PUT', body: clima, ...ESTADO }),
+  /** Prende um traço na cena (o Mestre): ele fica até ser apagado. Devolve o mapa já com o desenho. */
+  prenderDesenho: (campanhaId: string, cenaId: string, dados: { forma: IDesenhoFixo['forma']; pontos: number[][]; cor?: string; publico: boolean }) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/desenhos`, { method: 'POST', body: dados, ...ESTADO }),
+  apagarDesenho: (campanhaId: string, cenaId: string, desenhoId: string) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/desenhos/${desenhoId}`, { method: 'DELETE', ...ESTADO }),
+  limparDesenhos: (campanhaId: string, cenaId: string) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/desenhos`, { method: 'DELETE', ...ESTADO }),
+  /** A lista inteira de zonas da cena (o Mestre desenha, edita e apaga). */
+  mudarZonas: (campanhaId: string, cenaId: string, zonas: IZona[]) =>
+    api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/zonas`, { method: 'PUT', body: { zonas }, ...ESTADO }),
+  /** Rearma os gatilhos de uma vez só (uma zona ou todas): eles disparam de novo na próxima entrada. */
+  rearmarZonas: (campanhaId: string, cenaId: string, zona?: string) =>
+    api<{ ok: boolean }>(`${base(campanhaId)}/cenas/${cenaId}/zonas/rearmar`, { method: 'POST', body: { zona: zona ?? null } }),
   mudarPortais: (campanhaId: string, cenaId: string, portais: IPortal[]) =>
     api<IEstadoMapa>(`${base(campanhaId)}/cenas/${cenaId}/portais`, { method: 'PUT', body: { portais }, ...ESTADO }),
   mudarCamadas: (campanhaId: string, cenaId: string, jogadores: Partial<Record<CamadaMapaId, boolean>>) =>
@@ -572,6 +734,16 @@ export const mapaApi = {
   configurar: (campanhaId: string, dados: { moldura_mesa: string | null }) =>
     api<{ moldura_mesa: string | null }>(`${base(campanhaId)}/config`, { method: 'PUT', body: dados }),
 };
+
+/** Um encontro guardado, como a lista mostra: o conteúdo completo nunca sai do servidor. */
+export interface IResumoEncontro {
+  id: string;
+  nome: string;
+  total: number;
+  /** Quantos tokens são criaturas que entram na iniciativa da Sessão. */
+  criaturas: number;
+  resumo: string;
+}
 
 export interface IArtesDoPersonagem {
   artes: Array<{ id: string; nome: string }>;

@@ -29,6 +29,8 @@ export const registrosApi = {
     dadosExtras?: string | null;
     formula?: string | null;
     origem?: Record<string, any>;
+    /** A mesa vê o dado cair (só os dados e o total). Vale só com a sessão aberta. */
+    publica?: boolean;
   }) {
     const resposta = await api<{ registro: IRegistro; conquistas_novas?: IConquistaNova[] }>('/registros/rolagem', {
       method: 'POST',
@@ -43,6 +45,7 @@ export const registrosApi = {
         dados_extras: payload.dadosExtras?.trim() || null,
         formula: payload.formula ?? null,
         origem: payload.origem ?? {},
+        publica: payload.publica ?? false,
       },
     });
     // O dado já foi sorteado no servidor; a cena 3D só o mostra rolando e

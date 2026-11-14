@@ -1,0 +1,69 @@
+/* O painel do Mestre para montar a cena narrativa. */
+.mapa-narrativa-painel {
+  display: grid;
+  gap: 10px;
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+}
+
+.mapa-narrativa-fundo,
+.mapa-narrativa-liga {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.mapa-narrativa-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mapa-narrativa-lista button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 8px 4px 4px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--mapa-texto);
+  cursor: pointer;
+  font-size: 12px;
+  text-align: left;
+}
+
+.mapa-narrativa-lista button.marcado {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.16);
+}
+
+.mapa-narrativa-lista button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.mapa-narrativa-mini {
+  display: grid;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.mapa-narrativa-mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

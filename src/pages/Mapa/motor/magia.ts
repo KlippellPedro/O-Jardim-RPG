@@ -9,6 +9,7 @@
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import type { FormaMagia, IMagiaMapa } from '../../../services/mapaApi';
 import { CORES_FLUXO, type FluxoId } from './molduras';
+import { estiloDoFluxo, ruidoFixo, type EstiloDeEfeito } from './estiloDeMagia';
 import { texturaDeBrilho } from './luzes';
 import type { IPonto } from './geometria';
 
@@ -52,6 +53,128 @@ export function desenharMira(g: Graphics, forma: FormaMagia, o: IPonto, a: IPont
   g.circle(o.x, o.y, largura * 2.5).fill(cor);
 }
 
+/** A área em que o estilo do Fluxo brinca: onde a magia está, no tamanho dela. */
+interface Regiao { cx: number; cy: number; raio: number }
+
+const QUANTIDADE_DE_EXTRAS = 14;
+
+/**
+ * O movimento próprio do Fluxo, por cima do desenho da forma. `t` é a fração do efeito (0 a 1) e `apagar` o esmaecer do fim.
+ * Tudo sai de números repetíveis (ruidoFixo): o mesmo efeito se move igual em todas as telas.
+ */
+function desenharEstilo(g: Graphics, estilo: EstiloDeEfeito, regiao: Regiao, t: number, apagar: number, casa: number, cor: number, clara: number) {
+  const { cx, cy, raio } = regiao;
+  const n = QUANTIDADE_DE_EXTRAS;
+  const traco = Math.max(1.2, casa * 0.05);
+  for (let i = 0; i < n; i++) {
+    const a = ruidoFixo(i, 1) * Math.PI * 2;
+    const r = Math.sqrt(ruidoFixo(i, 2)) * raio;
+    const px = cx + Math.cos(a) * r;
+    const py = cy + Math.sin(a) * r;
+    switch (estilo) {
+      case 'petalas': {
+        const subida = t * raio * (0.25 + 0.4 * ruidoFixo(i, 3));
+        const x = px + Math.sin(t * 5 + i) * casa * 0.18;
+        g.ellipse(x, py - subida, casa * 0.1, casa * 0.2).fill({ color: i % 2 ? clara : cor, alpha: 0.7 * apagar * (1 - t * 0.5) });
+        break;
+      }
+      case 'brilho': {
+        const brilho = Math.max(0, Math.sin(t * 9 + i * 1.3)) ** 2;
+        const s = casa * (0.06 + 0.2 * brilho);
+        g.moveTo(px, py - s).lineTo(px + s * 0.25, py - s * 0.25).lineTo(px + s, py).lineTo(px + s * 0.25, py + s * 0.25)
+          .lineTo(px, py + s).lineTo(px - s * 0.25, py + s * 0.25).lineTo(px - s, py).lineTo(px - s * 0.25, py - s * 0.25).closePath()
+          .fill({ color: 0xffffff, alpha: 0.9 * brilho * apagar });
+        break;
+      }
+      case 'ondas': {
+        if (i >= 3) break;
+        const onda = (t * 1.6 + i / 3) % 1;
+        g.circle(cx, cy, raio * (0.2 + 0.8 * onda)).stroke({ width: traco, color: clara, alpha: (1 - onda) * 0.8 * apagar });
+        break;
+      }
+      case 'brotos': {
+        const subida = ((t * 1.1 + ruidoFixo(i, 3)) % 1) * raio * 0.7;
+        const x = px + Math.sin(t * 4 + i) * casa * 0.1;
+        const y = py - subida;
+        const s = casa * 0.09;
+        g.moveTo(x - s, y).lineTo(x + s, y).moveTo(x, y - s).lineTo(x, y + s)
+          .stroke({ width: traco * 1.2, color: clara, alpha: 0.85 * apagar * (1 - subida / (raio * 0.7 + 1)), cap: 'round' });
+        break;
+      }
+      case 'redemoinho': {
+        const fase = (i / n + t * 0.7) % 1;
+        const ang = a + t * 9 + fase * 4;
+        g.circle(cx + Math.cos(ang) * raio * fase, cy + Math.sin(ang) * raio * fase, casa * 0.07).fill({ color: i % 3 ? cor : clara, alpha: 0.85 * apagar * (1 - fase * 0.4) });
+        break;
+      }
+      case 'estilhacos': {
+        const velocidade = (0.5 + ruidoFixo(i, 3)) * raio * 0.8;
+        const x = cx + Math.cos(a) * velocidade * t * 1.4;
+        const y = cy + Math.sin(a) * velocidade * t * 1.4 + casa * 1.2 * t * t;
+        const s = casa * (0.08 + 0.1 * ruidoFixo(i, 4));
+        const giro = t * 8 + i;
+        g.poly([x + Math.cos(giro) * s, y + Math.sin(giro) * s, x + Math.cos(giro + 2.4) * s, y + Math.sin(giro + 2.4) * s, x + Math.cos(giro + 4.2) * s * 0.7, y + Math.sin(giro + 4.2) * s * 0.7], true)
+          .fill({ color: i % 2 ? cor : clara, alpha: 0.9 * apagar * (1 - t * 0.5) });
+        break;
+      }
+      case 'grade': {
+        if (i >= 6) break;
+        const passo = (raio * 2) / 6;
+        const deslize = Math.floor(t * 18 + i) % 2 ? casa * 0.05 : 0;
+        const pos = -raio + passo * (i + 0.5);
+        g.moveTo(cx + pos + deslize, cy - raio).lineTo(cx + pos + deslize, cy + raio).stroke({ width: traco * 0.7, color: clara, alpha: 0.35 * apagar });
+        g.moveTo(cx - raio, cy + pos - deslize).lineTo(cx + raio, cy + pos - deslize).stroke({ width: traco * 0.7, color: clara, alpha: 0.35 * apagar });
+        break;
+      }
+      case 'relogio': {
+        if (i > 0) break;
+        const aro = Math.max(casa * 0.6, raio * 0.7);
+        g.circle(cx, cy, aro).stroke({ width: traco, color: clara, alpha: 0.6 * apagar });
+        for (let marca = 0; marca < 12; marca++) {
+          const ang = (marca / 12) * Math.PI * 2;
+          g.moveTo(cx + Math.cos(ang) * aro * 0.9, cy + Math.sin(ang) * aro * 0.9).lineTo(cx + Math.cos(ang) * aro, cy + Math.sin(ang) * aro)
+            .stroke({ width: traco, color: clara, alpha: 0.7 * apagar });
+        }
+        const ponteiro = t * Math.PI * 6;
+        g.moveTo(cx, cy).lineTo(cx + Math.cos(ponteiro) * aro * 0.85, cy + Math.sin(ponteiro) * aro * 0.85).stroke({ width: traco * 1.4, color: 0xffffff, alpha: 0.85 * apagar, cap: 'round' });
+        break;
+      }
+      case 'implosao': {
+        const fase = (t * 1.3 + i / n) % 1;
+        const rr = raio * (1 - fase);
+        g.circle(cx + Math.cos(a + fase * 2) * rr, cy + Math.sin(a + fase * 2) * rr, casa * 0.08 * (1 - fase * 0.5)).fill({ color: clara, alpha: 0.8 * apagar * fase });
+        break;
+      }
+      case 'cinzas': {
+        const queda = ((t * 0.9 + ruidoFixo(i, 3)) % 1) * raio * 0.6;
+        const s = casa * 0.07;
+        g.rect(px - s / 2, py - raio * 0.3 + queda, s, s).fill({ color: i % 2 ? clara : cor, alpha: 0.8 * apagar * (1 - queda / (raio * 0.6 + 1)) });
+        if (i < 3) {
+          // Rachaduras que partem do centro.
+          g.moveTo(cx, cy);
+          for (let passo = 1; passo <= 4; passo++) {
+            const desvio = (ruidoFixo(i * 7 + passo, 5) - 0.5) * 0.7;
+            g.lineTo(cx + Math.cos(a + desvio) * (raio * 0.28 * passo), cy + Math.sin(a + desvio) * (raio * 0.28 * passo));
+          }
+          g.stroke({ width: traco, color: clara, alpha: 0.5 * apagar * Math.min(1, t * 4) });
+        }
+        break;
+      }
+      case 'pixels': {
+        const quadrado = casa / 5;
+        const x = Math.round(px / quadrado) * quadrado;
+        const y = Math.round(py / quadrado) * quadrado;
+        if (ruidoFixo(i, Math.floor(t * 14)) > 0.35) g.rect(x, y, quadrado * 0.9, quadrado * 0.9).fill({ color: i % 2 ? clara : cor, alpha: 0.85 * apagar });
+        if (i === 0) {
+          const varredura = cy - raio + ((t * 1.8) % 1) * raio * 2;
+          g.moveTo(cx - raio, varredura).lineTo(cx + raio, varredura).stroke({ width: traco, color: clara, alpha: 0.6 * apagar });
+        }
+        break;
+      }
+    }
+  }
+}
+
 interface Faisca {
   sprite: Sprite;
   x: number;
@@ -82,6 +205,7 @@ class Efeito {
     this.duracao = DURACAO_MS[magia.forma];
     this.cor = corDoFluxo(magia.fluxo);
     this.clara = clarear(this.cor, 0.55);
+    this.estilo = estiloDoFluxo(magia.fluxo);
     // Luz de magia soma: o mapa clareia na cor do Fluxo.
     this.raiz.blendMode = 'add';
     this.raiz.eventMode = 'none';
@@ -94,6 +218,18 @@ class Efeito {
       this.rotulo.blendMode = 'normal';
       this.raiz.addChild(this.rotulo);
     }
+  }
+
+  private readonly estilo: EstiloDeEfeito | null;
+
+  /** Onde o estilo do Fluxo se move: a área da magia (o círculo, o miolo do cone, a linha, o ponto do impacto). */
+  private get regiao(): Regiao {
+    const { forma, x, y, ax, ay } = this.magia;
+    const d = this.distancia;
+    if (forma === 'circulo') return { cx: x, cy: y, raio: Math.max(this.casa * 0.6, d) };
+    if (forma === 'cone') return { cx: x + Math.cos(this.angulo) * d * 0.55, cy: y + Math.sin(this.angulo) * d * 0.55, raio: Math.max(this.casa * 0.6, d * 0.45) };
+    if (forma === 'linha') return { cx: (x + ax) / 2, cy: (y + ay) / 2, raio: Math.max(this.casa * 0.6, d / 2) };
+    return { cx: ax, cy: ay, raio: this.casa * 1.5 };
   }
 
   private get distancia() {
@@ -211,6 +347,12 @@ class Efeito {
         g.circle(ax, ay, casa * (0.6 + 0.8 * estouro)).fill({ color: this.clara, alpha: 0.6 * (1 - estouro) });
         g.circle(ax, ay, casa * (0.3 + 2.2 * suaveSaida(estouro))).stroke({ width: casa * 0.12, color: this.cor, alpha: 1 - estouro });
       }
+    }
+
+    // O impacto só começa o estilo quando chega ao alvo.
+    const comecoDoEstilo = this.magia.forma === 'impacto' ? this.viagem : 0;
+    if (this.estilo && t >= comecoDoEstilo) {
+      desenharEstilo(g, this.estilo, this.regiao, (t - comecoDoEstilo) / (1 - comecoDoEstilo), apagar, casa, this.cor, this.clara);
     }
 
     for (const faisca of this.faiscas) {

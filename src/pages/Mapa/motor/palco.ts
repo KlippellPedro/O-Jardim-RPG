@@ -6,7 +6,7 @@
 
 import { Application, Container, Graphics, Text, Texture, Sprite } from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
-import type { CamadaMapaId, CamadaTokenId, FormaMagia, IAberturaCena, IAnotacaoMapa, IAreaClima, ICena, IClima, IFormaNevoa, IMagiaMapa, IMapaColocado, ITokenMapa, OperacaoNevoa } from '../../../services/mapaApi';
+import type { CamadaMapaId, CamadaTokenId, FormaMagia, IAberturaCena, IAnotacaoMapa, IAreaClima, ICena, IClima, IDesenhoFixo, IFormaNevoa, IMagiaMapa, IMapaColocado, ITokenMapa, OperacaoNevoa } from '../../../services/mapaApi';
 import { urlImagemDoToken, urlPedaco } from '../../../services/mapaApi';
 import { encaixar, medir, segmentosDaGrade, tracejar, LADO_LADRILHO, PADRAO_GRADE, rotuloUnidade, type IGrade, type IPonto, larguraLivreDosNomes } from './geometria';
 import { TokenVisual, esquecerTexturasDeMoldura } from './token';
@@ -15,6 +15,7 @@ import { CamadaNevoa } from './nevoa';
 import { CamadaClima, esquecerTexturasDoClima } from './clima';
 import { CamadaLuzes, fonteDoToken, type FonteDeLuz } from './luzes';
 import { EfeitosDeMagia, corDoFluxo, desenharMira } from './magia';
+import { ajustarMira } from './miraDaMagia';
 import { CamadaCeu } from './ceu';
 import type { ILuzDoCeu } from './ceuConta';
 import { CamadaPortais } from './portais';
@@ -22,6 +23,14 @@ import { CamadaAberturas } from './aberturas';
 import { CamadaLiquidos } from './liquidos';
 import { CamadaAuras, type AuraNoMapa } from './auras';
 import { CamadaAnotacoes } from './anotacoes';
+import { CamadaTracos } from './tracos';
+import { CamadaZonas } from './zonas';
+import { textoDaCobertura, type CoberturaDaLinha } from './zonasConta';
+import { textoDaDistanciaEm3D } from './elevacaoConta';
+import { NumerosFlutuantes } from './numerosFlutuantes';
+import type { IResultadoFlutuante } from './resultadoFlutuante';
+import {
+  DURACAO_DO_TRACO_FIXO_NA_TELA_MS, DURACAO_FIXA_MS, MAX_PONTOS_DO_TRACO, OPCOES_DE_DESENHO_PADRAO, acrescentarPontoDoLapis, reduzirPontos, tracoValeAPena, type FormaDeTraco, type OpcoesDeDesenho } from './tracosConta';
 import { CamadaMapasColocados } from './mapasColocados';
 import { acharAlcaDeGiro, acharCanto, acharMapaEm, caixaDoMapa, girarMapa, manterDentroDaCena, moverMapa, redimensionarMapa, type Canto } from './mapasColocadosConta';
 import { corDaLuz, faseDe, tremor } from './luzesConta';
@@ -37,13 +46,16 @@ import {
  * `portal`: o Mestre cria portais (dois cliques) e arrasta as bocas;
  * Com `mover`, o Mestre também clica num mapa colocado na cena para escolher, arrasta para mudar de lugar,
  * puxa um canto para mudar o tamanho e gira pela alça de cima. */
-export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia' | 'portal' | 'texto';
+export type Ferramenta = 'mover' | 'regua' | 'ping' | 'nevoa' | 'area' | 'magia' | 'portal' | 'texto' | 'desenho' | 'zona';
 
 export interface OpcoesMagia {
   forma: FormaMagia;
   fluxo: string;
 }
 export type FormaDeDesenho = 'pincel' | 'retangulo' | 'poligono';
+
+/** `perigo`: alerta vermelho (Shift); `olhar`: o Mestre chama todos para um ponto (Ctrl). */
+export type TipoDePing = 'normal' | 'perigo' | 'olhar';
 
 export interface OpcoesNevoa {
   op: OperacaoNevoa;
@@ -55,11 +67,21 @@ export interface OpcoesNevoa {
 export interface EventosPalco {
   aoArrastar: (id: string, x: number, y: number) => void;
   aoSoltar: (id: string, x: number, y: number) => void;
+  /** Soltou um token-fonte (sem Shift): a página pede a cópia no lugar onde caiu, e a fonte volta para onde estava. */
+  aoSoltarFonte?: (id: string, x: number, y: number) => void;
   aoSelecionar: (id: string | null) => void;
-  aoPing: (x: number, y: number) => void;
+  aoPing: (x: number, y: number, tipo: TipoDePing) => void;
+  /** Mestre: Alt + Ctrl + clique. A tela de todos vai para o ponto; o palco só avisa a página. */
+  aoOlhemAqui?: (ponto: IPonto) => void;
   aoRegua: (pontos: IPonto[] | null) => void;
+  /** A régua reta vai de um token a outro: a página pergunta ao servidor se há parede no caminho (cobertura total). */
+  aoPerguntarLinha?: (de: string, para: string) => void;
+  /** Soltou um traço do desenho livre: a página manda para a mesa (o palco já o desenhou). */
+  aoTraco?: (traco: { id: string; forma: FormaDeTraco; pontos: IPonto[]; duracao: number; privado: boolean; cor: string }) => void;
   aoNevoa: (forma: IFormaNevoa) => void;
   aoArea: (area: IAreaClima) => void;
+  /** O Mestre desenhou um retângulo com a ferramenta de zona: a página cria a zona e abre o painel dela. */
+  aoZona?: (retangulo: { x: number; y: number; w: number; h: number }) => void;
   aoMagia: (magia: IMagiaMapa) => void;
   /** Ferramenta de portal: as duas bocas de um portal novo, um portal escolhido e uma boca movida. */
   aoPortalNovo: (a: IPonto, b: IPonto) => void;
@@ -80,6 +102,7 @@ export interface EventosPalco {
 const COR_REVELAR = '#5eead4';
 const COR_ESCONDER = '#f87171';
 const COR_AREA = '#93c5fd';
+const COR_ZONA = '#e879f9';
 
 interface Regua {
   linha: Graphics;
@@ -87,6 +110,10 @@ interface Regua {
 }
 
 const ZOOM_DETALHE = 0.3;
+const COR_PERIGO = '#ef4444';
+const COR_OLHAR = '#fcd34d';
+/** Quanto cada tipo de ping fica na tela (ms). */
+const DURACAO_DO_PING: Record<TipoDePing, number> = { normal: 1800, perigo: 2800, olhar: 2600 };
 
 async function texturaDe(url: string): Promise<Texture> {
   const resposta = await fetch(url, { credentials: 'same-origin' });
@@ -158,6 +185,19 @@ export class PalcoMapa {
   private luzes = new CamadaLuzes();
   private camadaReguas = new Container();
   private camadaPings = new Container();
+  /** Desenho livre: traços de todos, que somem sozinhos. */
+  private tracos = new CamadaTracos();
+  private opcoesDesenho: OpcoesDeDesenho = OPCOES_DE_DESENHO_PADRAO;
+  /** O traço que a mão está fazendo agora. */
+  private tracoLocal: { forma: FormaDeTraco; pontos: IPonto[] } | null = null;
+  /** A cor e o dono dos meus traços (a cor do ping e da régua desta pessoa). */
+  private corPropria = '#f6ad55';
+  private usuarioPropria = '';
+  /** Os meus traços, do mais antigo ao mais novo, para o Ctrl + Z desfazer o último. */
+  private meusTracos: string[] = [];
+  /** Os desenhos fixos que estão na tela e a lista que os gerou (para só mexer quando ela muda). */
+  private fixosNaTela = new Set<string>();
+  private assinaturaDosFixos = '';
   private previa = new Graphics();
   private nevoa!: CamadaNevoa;
   /** Escurece o que ainda não foi explorado; a névoa principal deixa a memória visível. */
@@ -166,6 +206,10 @@ export class PalcoMapa {
   /** Luz do dia: a escuridão e a tinta da hora, por cima dos tokens. */
   private ceu!: CamadaCeu;
   private portais = new CamadaPortais();
+  /** Zonas de terreno (cobertura, gatilho, terreno): o Mestre vê o contorno; o jogador, só o terreno à vista. */
+  private zonas = new CamadaZonas();
+  /** O resultado do dado subindo sobre o token de quem rolou. */
+  private numeros = new NumerosFlutuantes();
   /** Portas do mapa montado no construtor, por cima da imagem (que só tem o vão). */
   private aberturas = new CamadaAberturas();
   private auras = new CamadaAuras();
@@ -192,6 +236,8 @@ export class PalcoMapa {
   /** A mira da magia: da origem (já no meio da casa) até onde a mão está. */
   private mira: { inicio: IPonto; fim: IPonto } | null = null;
   private rotuloMira: Text | null = null;
+  /** A ficha pediu para mirar uma magia: o conjurador, até onde ela alcança e o tamanho dela (metros). Nulo: mira livre. */
+  private restricaoMira: { origemId: string | null; alcanceM: number | null; tamanhoM: number | null } | null = null;
   private tokens = new Map<string, TokenVisual>();
   private preferenciasBarras = PREFERENCIAS_BARRAS_PADRAO;
   /** Tokens que saíram e ainda estão encolhendo na tela. */
@@ -212,9 +258,13 @@ export class PalcoMapa {
   private anotacaoSelecionada: string | null = null;
   private vez: string | null = null;
   private reguasRemotas = new Map<string, Regua>();
-  private pings = new Map<Container, { nascimento: number; cor: string }>();
+  private pings = new Map<Container, { nascimento: number; cor: string; tipo: TipoDePing }>();
   private reguaLocal: Regua | null = null;
   private pontosRegua: IPonto[] | null = null;
+  /** Régua com pontos de passagem (Shift + clique): cada clique fixa um ponto, o mesmo ponto de novo ou Esc termina. */
+  private reguaEmCaminho = false;
+  /** A última pergunta de linha de visão da régua, e a resposta do servidor (null enquanto não veio). */
+  private perguntaDaLinha: { de: string; para: string; cobertura: CoberturaDaLinha | undefined; em: number } | null = null;
   private arrasto: { id: string; dx: number; dy: number; inicio: IPonto; moveu: boolean } | null = null;
   private arrastoAnotacao: { id: string; dx: number; dy: number; moveu: boolean } | null = null;
   private quadroCallbacks: Array<() => void> = [];
@@ -271,8 +321,8 @@ export class PalcoMapa {
     // Os portais ficam no chão (embaixo dos tokens); a luz do dia e o clima, por cima de tudo que está no mapa.
     viewport.addChild(
       this.camadaFundo, this.anotacoes.raiz, this.nevoaMemoria.raiz, this.nevoa.raiz,
-      this.portais.raiz, this.luzes.raiz, this.auras.raiz, this.alcance, this.camadaTokens, this.ceu.raiz, this.clima.raiz,
-      this.magias.raiz, this.camadaReguas, this.mapasColocados.sobreposicao, this.previa, this.camadaPings,
+      this.zonas.raiz, this.portais.raiz, this.luzes.raiz, this.auras.raiz, this.alcance, this.camadaTokens, this.zonas.telhados, this.ceu.raiz, this.clima.raiz,
+      this.magias.raiz, this.numeros.raiz, this.tracos.raiz, this.camadaReguas, this.mapasColocados.sobreposicao, this.previa, this.camadaPings,
     );
     this.alcance.eventMode = 'none';
     app.stage.eventMode = 'static';
@@ -282,16 +332,39 @@ export class PalcoMapa {
       if (this.arrasto) return;
       const ponto = viewport.toWorld(evento.global);
       if (evento.altKey || this.ferramenta === 'ping') {
-        this.pingLocal(ponto.x, ponto.y);
+        if (evento.ctrlKey && this.gestor && this.eventos.aoOlhemAqui) {
+          this.pingLocal(ponto.x, ponto.y, 'olhar');
+          this.eventos.aoOlhemAqui({ x: ponto.x, y: ponto.y });
+          return;
+        }
+        this.pingLocal(ponto.x, ponto.y, evento.shiftKey ? 'perigo' : 'normal');
         return;
       }
       if (this.ferramenta === 'regua' && evento.button === 0) {
-        this.pontosRegua = [this.encaixarPonto(ponto), this.encaixarPonto(ponto)];
-        viewport.plugins.pause('drag');
+        const clique = this.encaixarPonto(ponto);
+        if (this.pontosRegua && this.reguaEmCaminho) {
+          // O último ponto acompanha o mouse: o clique o fixa e abre outro. Clicar de novo no mesmo ponto termina.
+          const fixado = this.pontosRegua[this.pontosRegua.length - 2];
+          if (fixado && Math.hypot(clique.x - fixado.x, clique.y - fixado.y) < 1) {
+            this.terminarRegua();
+            return;
+          }
+          this.pontosRegua[this.pontosRegua.length - 1] = clique;
+          this.pontosRegua.push({ x: clique.x, y: clique.y });
+        } else {
+          this.pontosRegua = [clique, { x: clique.x, y: clique.y }];
+          this.reguaEmCaminho = Boolean((evento as { shiftKey?: boolean }).shiftKey);
+          viewport.plugins.pause('drag');
+        }
         this.desenharReguaLocal();
+        if (this.reguaEmCaminho) this.eventos.aoRegua(this.pontosRegua);
         return;
       }
-      if (this.ferramenta === 'nevoa' || this.ferramenta === 'area' || this.ferramenta === 'magia') {
+      if (this.ferramenta === 'desenho') {
+        if (evento.button === 0) this.comecarTraco({ x: ponto.x, y: ponto.y });
+        return;
+      }
+      if (this.ferramenta === 'nevoa' || this.ferramenta === 'area' || this.ferramenta === 'zona' || this.ferramenta === 'magia') {
         // Botão do meio e o direito continuam arrastando o mapa.
         if (evento.button === 0) this.comecarDesenho({ x: ponto.x, y: ponto.y });
         return;
@@ -331,7 +404,11 @@ export class PalcoMapa {
         this.anotacoes.moverTemporariamente(this.arrastoAnotacao.id, ponto.x - this.arrastoAnotacao.dx, ponto.y - this.arrastoAnotacao.dy);
         return;
       }
-      if (this.ferramenta === 'nevoa' || this.ferramenta === 'area' || this.ferramenta === 'magia') {
+      if (this.tracoLocal) {
+        this.continuarTraco({ x: ponto.x, y: ponto.y });
+        return;
+      }
+      if (this.ferramenta === 'nevoa' || this.ferramenta === 'area' || this.ferramenta === 'zona' || this.ferramenta === 'magia') {
         this.continuarDesenho({ x: ponto.x, y: ponto.y });
         return;
       }
@@ -350,7 +427,8 @@ export class PalcoMapa {
         const x = ponto.x - this.arrasto.dx;
         const y = ponto.y - this.arrasto.dy;
         token.raiz.position.set(x, y);
-        this.eventos.aoArrastar(this.arrasto.id, x, y);
+        // A fonte só deixa uma cópia ao ser solta: quem olha não a vê andar por aí.
+        if (!token.dados.fonte) this.eventos.aoArrastar(this.arrasto.id, x, y);
         if (this.medirAoMover) this.desenharMedidaArrasto({ x: this.arrasto.inicio.x - this.arrasto.dx, y: this.arrasto.inicio.y - this.arrasto.dy }, { x, y });
         return;
       }
@@ -361,9 +439,13 @@ export class PalcoMapa {
       }
     });
 
-    const soltar = () => {
+    const soltar = (evento?: { shiftKey?: boolean }) => {
       if (this.arrastoMapa) {
         this.soltarMapa();
+        return;
+      }
+      if (this.tracoLocal) {
+        this.terminarTraco();
         return;
       }
       if (this.traco || this.retangulo || this.mira) {
@@ -409,20 +491,21 @@ export class PalcoMapa {
         const final = this.cena && this.encaixe ? encaixar({ x: token.raiz.x, y: token.raiz.y }, this.cena.grade, token.dados.porte) : { x: token.raiz.x, y: token.raiz.y };
         const x = Math.max(0, Math.min(this.cena?.largura ?? final.x, final.x));
         const y = Math.max(0, Math.min(this.cena?.altura ?? final.y, final.y));
+        // Token-fonte: a cópia nasce onde foi solta e a fonte volta para onde estava. Com Shift ela se move de verdade.
+        if (token.dados.fonte && this.eventos.aoSoltarFonte && !evento?.shiftKey) {
+          token.raiz.position.set(token.dados.x, token.dados.y);
+          this.nomesSujos = true;
+          this.eventos.aoSoltarFonte(id, x, y);
+          return;
+        }
         token.raiz.position.set(x, y);
         token.dados = { ...token.dados, x, y };
         this.nomesSujos = true;
         this.eventos.aoSoltar(id, x, y);
         return;
       }
-      if (this.pontosRegua) {
-        this.pontosRegua = null;
-        viewport.plugins.resume('drag');
-        this.reguaLocal?.linha.destroy();
-        this.reguaLocal?.rotulo.destroy();
-        this.reguaLocal = null;
-        this.eventos.aoRegua(null);
-      }
+      // Régua com pontos de passagem fica na tela depois de soltar o botão: quem a termina é o clique repetido ou o Esc.
+      if (this.pontosRegua && !this.reguaEmCaminho) this.terminarRegua();
     };
     app.stage.on('pointerup', soltar);
     app.stage.on('pointerupoutside', soltar);
@@ -475,6 +558,10 @@ export class PalcoMapa {
       for (const callback of this.quadroCallbacks) callback();
       this.animarPings(agora);
       this.magias.quadro(agora);
+      this.numeros.quadro(agora);
+      this.tracos.quadro(agora, viewport.scale.x);
+      // O telhado se apaga quando alguém do grupo (jogadores e aliados) está debaixo dele.
+      this.zonas.quadro(viewport.scale.x, this.zonas.temTelhado ? this.centrosDoGrupo() : undefined);
       this.nevoa.quadro(agora);
       this.nevoaMemoria.quadro(agora);
       this.portais.quadro(agora, viewport.scale.x);
@@ -552,6 +639,7 @@ export class PalcoMapa {
         this.anotacaoSelecionada = null;
         this.mapasColocados.selecionar(null);
         this.cancelarDesenho();
+        this.limparTodosOsTracos();
         this.abrirNaVista();
         this.cenaTrocada = true;
       }
@@ -566,6 +654,8 @@ export class PalcoMapa {
     this.nevoaMemoria.definir(cena.nevoa ?? null, cena.largura, cena.altura, gestor, cena.grade.tamanho);
     this.clima.definir(cena.clima ?? null, cena.largura, cena.altura, gestor);
     this.portais.definir(cena.portais ?? [], cena.grade.tamanho, gestor);
+    this.zonas.definir(cena.zonas ?? [], gestor);
+    this.definirDesenhosFixos(cena.desenhos ?? []);
     this.aberturas.definir(cena.aberturas ?? [], cena.grade.tamanho, gestor);
     this.liquidos.definir(cena.liquidos, cena.largura, cena.altura, cena.grade.tamanho);
     this.anotacoes.definir(cena.anotacoes ?? [], this.anotacaoSelecionada, (id, global) => this.selecionarAnotacao(id, global));
@@ -986,7 +1076,11 @@ export class PalcoMapa {
   }
 
   definirFerramenta(ferramenta: Ferramenta) {
-    if (ferramenta !== this.ferramenta) this.cancelarDesenho();
+    if (ferramenta !== this.ferramenta) {
+      this.cancelarDesenho();
+      this.terminarRegua();
+      if (ferramenta !== 'magia') this.restricaoMira = null;
+    }
     if (ferramenta !== 'mover') {
       this.mapasColocados.selecionar(null);
       this.eventos.aoSelecionarMapa?.(null);
@@ -1017,10 +1111,14 @@ export class PalcoMapa {
   }
 
   get desenhando(): boolean {
-    return Boolean(this.traco || this.retangulo || this.poligono || this.mira || this.bocaPendente);
+    return Boolean(this.traco || this.retangulo || this.poligono || this.mira || this.bocaPendente || this.tracoLocal);
   }
 
   cancelarDesenho() {
+    if (this.tracoLocal) {
+      this.tracoLocal = null;
+      this.tracos.limparPrevia();
+    }
     this.traco = null;
     this.retangulo = null;
     this.poligono = null;
@@ -1055,9 +1153,9 @@ export class PalcoMapa {
     if (this.ferramenta === 'nevoa' && !this.nevoa.ligada) return;
     if (this.ferramenta === 'magia') {
       // A magia sai do meio de uma casa, como o alcance das regras é contado.
-      this.mira = { inicio: this.encaixarPonto(ponto), fim: ponto };
+      this.mira = this.restricaoMira ? this.miraAjustada(ponto) : { inicio: this.encaixarPonto(ponto), fim: ponto };
       this.viewport.plugins.pause('drag');
-    } else if (this.ferramenta === 'area') {
+    } else if (this.ferramenta === 'area' || this.ferramenta === 'zona') {
       this.retangulo = { inicio: ponto, fim: ponto };
       this.viewport.plugins.pause('drag');
     } else if (this.opcoesNevoa.forma === 'pincel') {
@@ -1090,7 +1188,7 @@ export class PalcoMapa {
       }
     }
     if (this.retangulo) this.retangulo.fim = ponto;
-    if (this.mira) this.mira.fim = ponto;
+    if (this.mira) this.mira = this.restricaoMira ? this.miraAjustada(ponto) : { inicio: this.mira.inicio, fim: ponto };
     this.desenharPrevia();
   }
 
@@ -1118,7 +1216,10 @@ export class PalcoMapa {
       const { inicio, fim } = this.retangulo;
       this.retangulo = null;
       const minimo = 8 / this.viewport.scale.x;
-      if (this.ferramenta === 'area') {
+      if (this.ferramenta === 'zona') {
+        const forma = formaDoRetangulo('revelar', inicio, fim, minimo);
+        if (forma && forma.tipo === 'retangulo') this.eventos.aoZona?.({ x: forma.x, y: forma.y, w: forma.w, h: forma.h });
+      } else if (this.ferramenta === 'area') {
         const forma = formaDoRetangulo('revelar', inicio, fim, minimo);
         if (forma && forma.tipo === 'retangulo') this.eventos.aoArea({ x: forma.x, y: forma.y, w: forma.w, h: forma.h });
       } else {
@@ -1134,8 +1235,53 @@ export class PalcoMapa {
     this.eventos.aoNevoa(forma);
   }
 
+  /** Metros do mapa em px (a casa tem `grade.metros` metros e `grade.tamanho` px). */
+  private metrosEmPx(metros: number): number {
+    const grade = this.cena?.grade;
+    return grade ? (metros / Math.max(0.1, grade.metros)) * grade.tamanho : metros;
+  }
+
+  /** O token do conjurador que a ficha indicou, ou nulo (a mira sai da mão). */
+  private origemDaMira(): IPonto | null {
+    const id = this.restricaoMira?.origemId;
+    const token = id ? this.tokens.get(id) : null;
+    return token ? { x: token.raiz.x, y: token.raiz.y } : null;
+  }
+
+  /** A mira de uma magia vinda da ficha: o círculo cai dentro do alcance, o cone e a linha saem do conjurador. */
+  private miraAjustada(mao: IPonto): { inicio: IPonto; fim: IPonto } {
+    const restricao = this.restricaoMira;
+    const forma = this.opcoesMagia.forma;
+    const alvo = forma === 'circulo' ? this.encaixarPonto(mao) : mao;
+    return ajustarMira(
+      forma, this.origemDaMira(), alvo,
+      restricao?.alcanceM != null ? this.metrosEmPx(restricao.alcanceM) : null,
+      restricao?.tamanhoM != null ? this.metrosEmPx(restricao.tamanhoM) : null,
+    );
+  }
+
+  /** A ficha pede (ou tira) a mira de uma magia. Com a ferramenta de magia, o alcance aparece como um anel em volta do conjurador. */
+  definirMiraDaMagia(restricao: { origemId: string | null; alcanceM: number | null; tamanhoM: number | null } | null) {
+    // O mesmo pedido de novo (a página repete a chamada a cada mudança do mapa) não interrompe uma mira em andamento.
+    if (JSON.stringify(restricao) === JSON.stringify(this.restricaoMira)) return;
+    this.restricaoMira = restricao;
+    if (this.mira) this.cancelarDesenho();
+    this.desenharPrevia();
+  }
+
+  /** O anel do alcance da magia em volta de quem a conjura. */
+  private desenharAlcanceDaMira() {
+    const restricao = this.restricaoMira;
+    const origem = this.origemDaMira();
+    if (!restricao || restricao.alcanceM === null || !origem) return;
+    const raio = this.metrosEmPx(restricao.alcanceM);
+    const cor = corDoFluxo(this.opcoesMagia.fluxo);
+    this.previa.circle(origem.x, origem.y, raio).fill({ color: cor, alpha: 0.05 }).stroke({ width: 2 / this.viewport.scale.x, color: cor, alpha: 0.45 });
+  }
+
   /** Contorno da área da magia e o tamanho em casas e metros, enquanto a pessoa mira. */
   private desenharMira() {
+    this.desenharAlcanceDaMira();
     if (!this.mira || !this.cena) return;
     const { inicio, fim } = this.mira;
     const escala = 1 / this.viewport.scale.x;
@@ -1159,15 +1305,15 @@ export class PalcoMapa {
       this.desenharMira();
       return;
     }
-    if (this.ferramenta !== 'nevoa' && this.ferramenta !== 'area') return;
+    if (this.ferramenta !== 'nevoa' && this.ferramenta !== 'area' && this.ferramenta !== 'zona') return;
     const largura = 2 / this.viewport.scale.x;
-    const cor = this.ferramenta === 'area' ? COR_AREA : this.opcoesNevoa.op === 'revelar' ? COR_REVELAR : COR_ESCONDER;
+    const cor = this.ferramenta === 'zona' ? COR_ZONA : this.ferramenta === 'area' ? COR_AREA : this.opcoesNevoa.op === 'revelar' ? COR_REVELAR : COR_ESCONDER;
     if (this.retangulo) {
       const { inicio, fim } = this.retangulo;
       g.rect(Math.min(inicio.x, fim.x), Math.min(inicio.y, fim.y), Math.abs(fim.x - inicio.x), Math.abs(fim.y - inicio.y))
         .fill({ color: cor, alpha: 0.12 }).stroke({ width: largura, color: cor });
     }
-    if (this.ferramenta === 'area') return;
+    if (this.ferramenta === 'area' || this.ferramenta === 'zona') return;
     if (this.traco && this.traco.length) {
       const raio = this.opcoesNevoa.raio;
       if (this.traco.length === 1) g.circle(this.traco[0].x, this.traco[0].y, raio).fill({ color: cor, alpha: 0.25 });
@@ -1343,6 +1489,30 @@ export class PalcoMapa {
     return token ? { x: token.raiz.x, y: token.raiz.y } : null;
   }
 
+  /** Faz o resultado de um dado subir sobre o token (se ele está na tela de quem olha). */
+  flutuarResultado(tokenId: string, resultado: IResultadoFlutuante) {
+    const token = this.tokens.get(tokenId);
+    if (!token) return;
+    const caixa = token.caixa;
+    this.numeros.adicionar(resultado, caixa.x + caixa.w / 2, caixa.y, this.cena?.grade.tamanho ?? 100, performance.now());
+  }
+
+  /** Os centros dos tokens do grupo (jogadores e aliados), onde eles estão agora (andando incluso). */
+  private centrosDoGrupo(): Array<{ x: number; y: number }> {
+    const centros: Array<{ x: number; y: number }> = [];
+    for (const token of this.tokens.values()) {
+      if (token.dados.lado !== 'jogador' && token.dados.lado !== 'aliado') continue;
+      const caixa = token.caixa;
+      centros.push({ x: caixa.x + caixa.w / 2, y: caixa.y + caixa.h / 2 });
+    }
+    return centros;
+  }
+
+  /** A zona que o Mestre está editando fica mais forte no mapa. */
+  selecionarZona(id: string | null) {
+    this.zonas.selecionar(id);
+  }
+
   definirSelecionado(id: string | null) {
     this.selecionado = id;
     for (const [tokenId, token] of this.tokens) token.definirSelecionado(tokenId === id);
@@ -1363,7 +1533,7 @@ export class PalcoMapa {
     return { linha, rotulo };
   }
 
-  private desenharRegua(regua: Regua, pontos: IPonto[], cor: string, nome?: string) {
+  private desenharRegua(regua: Regua, pontos: IPonto[], cor: string, nome?: string, extra?: string) {
     if (!this.cena) return;
     const escala = 1 / this.viewport.scale.x;
     regua.linha.clear();
@@ -1373,7 +1543,10 @@ export class PalcoMapa {
     for (const ponto of pontos) regua.linha.circle(ponto.x, ponto.y, 5 * escala).fill(cor);
     const { metros } = medir(pontos, this.cena.grade);
     const fim = pontos[pontos.length - 1];
-    regua.rotulo.text = `${nome ? `${nome}: ` : ''}${metros.toLocaleString('pt-BR')} ${rotuloUnidade(this.cena.grade.unidade)}`;
+    const unidade = rotuloUnidade(this.cena.grade.unidade);
+    // Com pontos de passagem, o rótulo diz o total e o último trecho.
+    const ultimo = pontos.length > 2 ? medir(pontos.slice(-2), this.cena.grade).metros : null;
+    regua.rotulo.text = `${nome ? `${nome}: ` : ''}${metros.toLocaleString('pt-BR')} ${unidade}${ultimo !== null ? ` (trecho ${ultimo.toLocaleString('pt-BR')})` : ''}${extra ? `\n${extra}` : ''}`;
     regua.rotulo.scale.set(escala);
     regua.rotulo.position.set(fim.x, fim.y - 10 * escala);
   }
@@ -1381,7 +1554,46 @@ export class PalcoMapa {
   private desenharReguaLocal() {
     if (!this.pontosRegua) return;
     this.reguaLocal ??= this.criarRegua('#f6ad55');
-    this.desenharRegua(this.reguaLocal, this.pontosRegua, '#f6ad55');
+    this.perguntarLinhaDaRegua();
+    this.desenharRegua(this.reguaLocal, this.pontosRegua, '#f6ad55', undefined, this.textoDaLinha());
+  }
+
+  /** Régua reta de um token a outro: pergunta (no máximo uma vez por par de tokens) se há parede entre eles. */
+  private perguntarLinhaDaRegua() {
+    const pontos = this.pontosRegua;
+    if (!this.eventos.aoPerguntarLinha || !pontos || pontos.length !== 2) {
+      this.perguntaDaLinha = null;
+      return;
+    }
+    const de = this.tokenEm(pontos[0].x, pontos[0].y);
+    const para = this.tokenEm(pontos[1].x, pontos[1].y);
+    if (!de || !para || de === para) {
+      this.perguntaDaLinha = null;
+      return;
+    }
+    const atual = this.perguntaDaLinha;
+    if (atual && atual.de === de && atual.para === para) return;
+    this.perguntaDaLinha = { de, para, cobertura: undefined, em: performance.now() };
+    this.eventos.aoPerguntarLinha(de, para);
+  }
+
+  /** A resposta do servidor à pergunta da régua: vale só se a régua ainda está entre os mesmos dois tokens. */
+  respostaDaLinha(de: string, para: string, cobertura: CoberturaDaLinha) {
+    const atual = this.perguntaDaLinha;
+    if (!atual || atual.de !== de || atual.para !== para) return;
+    atual.cobertura = cobertura;
+    this.desenharReguaLocal();
+  }
+
+  private textoDaLinha(): string | undefined {
+    const cobertura = textoDaCobertura(this.perguntaDaLinha?.cobertura);
+    // Entre dois tokens de alturas diferentes, a régua soma o desnível (a distância em linha reta, em 3D).
+    const pergunta = this.perguntaDaLinha;
+    if (!pergunta || !this.cena || !this.pontosRegua) return cobertura;
+    const de = this.tokens.get(pergunta.de)?.dados.elevacao;
+    const para = this.tokens.get(pergunta.para)?.dados.elevacao;
+    const emTres = textoDaDistanciaEm3D(medir(this.pontosRegua, this.cena.grade).metros, de, para, rotuloUnidade(this.cena.grade.unidade));
+    return [cobertura, emTres].filter(Boolean).join('\n') || undefined;
   }
 
   reguaRemota(por: string, pontos: IPonto[] | null, cor: string, nome: string) {
@@ -1399,42 +1611,184 @@ export class PalcoMapa {
     this.desenharRegua(regua, pontos, cor, nome);
   }
 
-  private pingLocal(x: number, y: number) {
-    this.ping(x, y, '#f6ad55');
-    this.eventos.aoPing(x, y);
+  // ------------------------------------------------------ desenho livre
+
+  definirOpcoesDesenho(opcoes: OpcoesDeDesenho) {
+    if (opcoes.forma !== this.opcoesDesenho.forma && this.tracoLocal) this.cancelarDesenho();
+    this.opcoesDesenho = opcoes;
   }
 
-  ping(x: number, y: number, cor: string, nome?: string) {
+  /** A cor e o dono dos traços desta pessoa: os dos outros chegam com a cor deles. */
+  definirQuemDesenha(usuarioId: string, cor: string) {
+    this.usuarioPropria = usuarioId;
+    this.corPropria = cor;
+  }
+
+  private comecarTraco(ponto: IPonto) {
+    this.tracoLocal = { forma: this.opcoesDesenho.forma, pontos: [ponto, { x: ponto.x, y: ponto.y }] };
+    this.desenharPreviaDoTraco();
+  }
+
+  private continuarTraco(ponto: IPonto) {
+    const traco = this.tracoLocal;
+    if (!traco) return;
+    if (traco.forma === 'lapis') {
+      // O passo é de uns 3 px de tela: liso sem pesar.
+      const novos = acrescentarPontoDoLapis(traco.pontos.slice(0, -1), ponto, 3 / this.viewport.scale.x);
+      traco.pontos = [...novos, { x: ponto.x, y: ponto.y }];
+    } else {
+      traco.pontos = [traco.pontos[0], ponto];
+    }
+    this.desenharPreviaDoTraco();
+  }
+
+  private desenharPreviaDoTraco() {
+    if (!this.tracoLocal) return;
+    this.tracos.definirPrevia(this.tracoLocal.forma, this.tracoLocal.pontos, this.corPropria, this.viewport.scale.x);
+  }
+
+  private terminarTraco() {
+    const traco = this.tracoLocal;
+    this.tracoLocal = null;
+    this.tracos.limparPrevia();
+    if (!traco) return;
+    // Um clique sem arrastar não é um desenho (4 px de tela).
+    if (!tracoValeAPena(traco.forma, traco.pontos, 4 / this.viewport.scale.x)) return;
+    const pontos = traco.forma === 'lapis' ? reduzirPontos(traco.pontos, MAX_PONTOS_DO_TRACO) : [traco.pontos[0], traco.pontos[traco.pontos.length - 1]];
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    const { duracao, privado } = this.opcoesDesenho;
+    // O traço fixo só aparece quando o servidor o guarda e devolve (senão ficaria duplicado), e não entra no "desfazer" local.
+    if (duracao !== DURACAO_FIXA_MS) {
+      this.tracos.adicionar({ id, por: this.usuarioPropria, cor: this.corPropria, forma: traco.forma, pontos, duracao, privado }, performance.now(), this.viewport.scale.x);
+      this.meusTracos.push(id);
+      if (this.meusTracos.length > 50) this.meusTracos.shift();
+    }
+    this.eventos.aoTraco?.({ id, forma: traco.forma, pontos, duracao, privado, cor: this.corPropria });
+  }
+
+  /** Traço de outra pessoa (ou o meu, devolvido): desenhado como chegou, com a cor de quem fez. */
+  tracoRemoto(traco: { id: string; por: string; cor: string; forma: FormaDeTraco; pontos: IPonto[]; duracao: number; privado?: boolean }) {
+    this.tracos.adicionar(traco, performance.now(), this.viewport.scale.x);
+  }
+
+  apagarTraco(id: string) {
+    this.tracos.remover(id);
+  }
+
+  limparTracosDe(por: string) {
+    this.tracos.removerDe(por);
+  }
+
+  /** Desfaz o meu último traço e devolve o id (a página avisa a mesa); nulo se não há nenhum. */
+  desfazerMeuTraco(): string | null {
+    const id = this.meusTracos.pop() ?? null;
+    if (id) this.tracos.remover(id);
+    return id;
+  }
+
+  limparMeusTracos() {
+    this.tracos.removerDe(this.usuarioPropria);
+    this.meusTracos = [];
+  }
+
+  /** Os traços desta cena somem quando a cena muda. */
+  limparTodosOsTracos() {
+    this.tracos.limpar();
+    this.meusTracos = [];
+    this.fixosNaTela.clear();
+    this.assinaturaDosFixos = '';
+  }
+
+  /** Os desenhos fixos do Mestre: ficam na tela de quem os recebe até serem apagados (o servidor manda a lista inteira). */
+  private definirDesenhosFixos(lista: readonly IDesenhoFixo[]) {
+    const assinatura = JSON.stringify(lista);
+    if (assinatura === this.assinaturaDosFixos) return;
+    this.assinaturaDosFixos = assinatura;
+    const agora = performance.now();
+    const escala = this.viewport.scale.x;
+    const ids = new Set(lista.map((desenho) => `fixo:${desenho.id}`));
+    for (const id of [...this.fixosNaTela]) {
+      if (ids.has(id)) continue;
+      this.tracos.remover(id);
+      this.fixosNaTela.delete(id);
+    }
+    for (const desenho of lista) {
+      const id = `fixo:${desenho.id}`;
+      if (this.fixosNaTela.has(id)) continue;
+      this.fixosNaTela.add(id);
+      this.tracos.adicionar({
+        id, por: 'fixo', cor: desenho.cor, forma: desenho.forma, pontos: desenho.pontos.map(([x, y]) => ({ x, y })),
+        duracao: DURACAO_DO_TRACO_FIXO_NA_TELA_MS, privado: desenho.publico === false,
+      }, agora, escala);
+    }
+  }
+
+  /** Termina a régua que está na tela (a do arrasto curto ou a com pontos de passagem) e avisa a mesa. */
+  terminarRegua() {
+    if (!this.pontosRegua && !this.reguaLocal) return;
+    this.pontosRegua = null;
+    this.reguaEmCaminho = false;
+    this.perguntaDaLinha = null;
+    this.viewport.plugins.resume('drag');
+    this.reguaLocal?.linha.destroy();
+    this.reguaLocal?.rotulo.destroy();
+    this.reguaLocal = null;
+    this.eventos.aoRegua(null);
+  }
+
+  /** A régua com pontos de passagem está aberta: o Esc a termina antes de qualquer outra coisa. */
+  get reguaAberta(): boolean {
+    return this.reguaEmCaminho && this.pontosRegua !== null;
+  }
+
+  private pingLocal(x: number, y: number, tipo: TipoDePing) {
+    this.ping(x, y, tipo === 'perigo' ? COR_PERIGO : tipo === 'olhar' ? COR_OLHAR : '#f6ad55', undefined, tipo);
+    this.eventos.aoPing(x, y, tipo);
+  }
+
+  ping(x: number, y: number, cor: string, nome?: string, tipo: TipoDePing = 'normal') {
+    const corFinal = tipo === 'perigo' ? COR_PERIGO : tipo === 'olhar' ? COR_OLHAR : cor;
     const grupo = new Container();
     grupo.position.set(x, y);
     grupo.addChild(new Graphics());
+    if (tipo === 'perigo') {
+      // O ponto de exclamação no meio: o aviso se lê mesmo sem som.
+      const marca = new Text({ text: '!', style: { fontFamily: 'system-ui, sans-serif', fontWeight: '900', fontSize: 22, fill: '#ffffff', stroke: { color: COR_PERIGO, width: 5 } } });
+      marca.anchor.set(0.5);
+      marca.scale.set(1 / this.viewport.scale.x);
+      grupo.addChild(marca);
+    }
     if (nome) {
-      const rotulo = new Text({ text: nome, style: { fontFamily: 'system-ui, sans-serif', fontWeight: '700', fontSize: 14, fill: '#ffffff', stroke: { color: cor, width: 4 } } });
+      const rotulo = new Text({ text: tipo === 'olhar' ? `${nome}: olhem aqui` : nome, style: { fontFamily: 'system-ui, sans-serif', fontWeight: '700', fontSize: 14, fill: '#ffffff', stroke: { color: corFinal, width: 4 } } });
       rotulo.anchor.set(0.5, 0);
       rotulo.scale.set(1 / this.viewport.scale.x);
       rotulo.y = 30 / this.viewport.scale.x;
       grupo.addChild(rotulo);
     }
-    this.pings.set(grupo, { nascimento: performance.now(), cor });
+    this.pings.set(grupo, { nascimento: performance.now(), cor: corFinal, tipo });
     this.camadaPings.addChild(grupo);
   }
 
   private animarPings(agora: number) {
     const escala = 1 / this.viewport.scale.x;
-    for (const [grupo, { nascimento, cor }] of this.pings) {
+    for (const [grupo, { nascimento, cor, tipo }] of this.pings) {
       const idade = agora - nascimento;
-      if (idade > 1800) {
+      if (idade > DURACAO_DO_PING[tipo]) {
         this.pings.delete(grupo);
         grupo.destroy({ children: true });
         continue;
       }
       const anel = grupo.children[0] as Graphics;
       anel.clear();
-      for (let onda = 0; onda < 2; onda++) {
-        const t = ((idade / 900) + onda * 0.5) % 1;
-        anel.circle(0, 0, (12 + t * 60) * escala).stroke({ width: 4 * escala, color: cor, alpha: 1 - t });
+      // O perigo bate mais depressa e com três ondas; o "olhem aqui" é largo e dourado.
+      const ondas = tipo === 'perigo' ? 3 : 2;
+      const ciclo = tipo === 'perigo' ? 600 : 900;
+      const alcance = tipo === 'olhar' ? 110 : 60;
+      for (let onda = 0; onda < ondas; onda++) {
+        const t = ((idade / ciclo) + onda / ondas) % 1;
+        anel.circle(0, 0, (12 + t * alcance) * escala).stroke({ width: 4 * escala, color: cor, alpha: 1 - t });
       }
-      anel.circle(0, 0, 6 * escala).fill(cor);
+      anel.circle(0, 0, (tipo === 'perigo' ? 13 : 6) * escala).fill(cor);
     }
   }
 
@@ -1444,6 +1798,7 @@ export class PalcoMapa {
     this.clima.destruir();
     this.luzes.destruir();
     this.magias.destruir();
+    this.numeros.destruir();
     esquecerTexturasDeMoldura();
     this.app.destroy({ removeView: true }, { children: true, texture: true, textureSource: true });
     // O que sobrou da névoa e do clima vai depois do renderizador, que já não desenha nada com elas.

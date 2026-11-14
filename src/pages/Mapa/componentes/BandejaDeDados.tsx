@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Dices, Minus, Plus, RotateCcw, X } from 'lucide-react';
+import { Dices, Eye, EyeOff, Minus, Plus, RotateCcw, X } from 'lucide-react';
 import { registrosApi, type IRegistro } from '../../../services/registrosApi';
 import { avisar } from '../../../components/avisos/avisos';
 import { FACES_DA_BANDEJA, LIMITE_DA_FORMULA, acrescentarDado, ajustarModificador, formulaValida, limparFormula, resumoDaRolagem, testeDeD20 } from './dadosConta';
 
 /** A última fórmula usada neste aparelho. */
 const CHAVE_DADOS_LOCAL = 'jardim.mapa.dados';
+/** Se a pessoa quer que a mesa veja os dados dela: jogador começa mostrando, o Mestre começa rolando só para si. */
+const CHAVE_DADOS_MESA = 'jardim.mapa.dados.mesa';
 type Modo = 'normal' | 'vantagem' | 'desvantagem';
 
 function lerFormulaLocal(): string {
@@ -18,12 +20,27 @@ function lerFormulaLocal(): string {
   return '1d20';
 }
 
+function lerMostrarLocal(gestor: boolean): boolean {
+  try {
+    const salvo = window.localStorage.getItem(CHAVE_DADOS_MESA);
+    if (salvo === '1') return true;
+    if (salvo === '0') return false;
+  } catch {
+    // Sem armazenamento do navegador: vale o padrão do papel.
+  }
+  return !gestor;
+}
+
 interface Props {
   campanhaId: string;
+  /** O Mestre começa rolando só para si; o jogador, mostrando à mesa. */
+  gestor: boolean;
   /** O personagem em nome de quem o jogador rola; o Mestre rola com o próprio nome. */
   personagemId: string | null;
   /** Como o nome aparece nas Rolagens. */
   nomeDeQuem: string;
+  /** Rolou mostrando à mesa: a página faz o resultado subir sobre o token de quem rolou. */
+  onRolou?: (registro: IRegistro) => void;
   onFechar: () => void;
 }
 
@@ -31,12 +48,23 @@ interface Props {
  * A bandeja de dados do mapa (tecla D): monta a fórmula clicando nos dados ou escrevendo, e rola sem sair da
  * tela. O sorteio é do servidor e o resultado entra nas Rolagens da mesa, como o da ficha.
  */
-export const BandejaDeDados = ({ campanhaId, personagemId, nomeDeQuem, onFechar }: Props) => {
+export const BandejaDeDados = ({ campanhaId, gestor, personagemId, nomeDeQuem, onRolou, onFechar }: Props) => {
   const [formula, setFormula] = useState(lerFormulaLocal);
   const [motivo, setMotivo] = useState('');
   const [modo, setModo] = useState<Modo>('normal');
   const [ocupado, setOcupado] = useState(false);
   const [ultimas, setUltimas] = useState<IRegistro[]>([]);
+  const [mostrar, setMostrar] = useState(() => lerMostrarLocal(gestor));
+
+  const alternarMostrar = () => {
+    const proximo = !mostrar;
+    setMostrar(proximo);
+    try {
+      window.localStorage.setItem(CHAVE_DADOS_MESA, proximo ? '1' : '0');
+    } catch {
+      // Sem armazenamento do navegador, a escolha vale até fechar a aba.
+    }
+  };
 
   const valida = formulaValida(formula);
   const teste = valida ? testeDeD20(formula) : null;
@@ -52,9 +80,10 @@ export const BandejaDeDados = ({ campanhaId, personagemId, nomeDeQuem, onFechar 
     setOcupado(true);
     try {
       const { registro } = await registrosApi.rolar(teste
-        ? { campanhaId, personagemId, titulo, bonus: teste.bonus, vantagens: modo === 'vantagem' ? 1 : 0, desvantagens: modo === 'desvantagem' ? 1 : 0, origem: { tela: 'mapa' } }
-        : { campanhaId, personagemId, titulo, formula: limpa, origem: { tela: 'mapa' } });
+        ? { campanhaId, personagemId, titulo, bonus: teste.bonus, vantagens: modo === 'vantagem' ? 1 : 0, desvantagens: modo === 'desvantagem' ? 1 : 0, origem: { tela: 'mapa' }, publica: mostrar }
+        : { campanhaId, personagemId, titulo, formula: limpa, origem: { tela: 'mapa' }, publica: mostrar });
       setUltimas((antes) => [registro, ...antes].slice(0, 5));
+      if (mostrar) onRolou?.(registro);
       try {
         window.localStorage.setItem(CHAVE_DADOS_LOCAL, limpa);
       } catch {
@@ -116,6 +145,16 @@ export const BandejaDeDados = ({ campanhaId, personagemId, nomeDeQuem, onFechar 
         </div>
       )}
       <input className="mapa-dados-motivo" value={motivo} maxLength={80} placeholder="Para quê? (opcional)" aria-label="Motivo da rolagem" onChange={(evento) => setMotivo(evento.target.value)} />
+      <button
+        type="button"
+        role="switch"
+        aria-checked={mostrar}
+        className={`mapa-dados-mesa${mostrar ? ' ativo' : ''}`}
+        title={mostrar ? 'A mesa vê os dados caírem e o total. A DT e o resultado do teste ficam com o Mestre.' : 'Só você vê este dado e o resultado.'}
+        onClick={alternarMostrar}
+      >
+        {mostrar ? <Eye size={14} /> : <EyeOff size={14} />} {mostrar ? 'A mesa vê o dado' : 'Só eu vejo o dado'}
+      </button>
       <button type="button" className="mapa-dados-rolar" disabled={!valida || ocupado} onClick={() => void rolar()}>
         <Dices size={15} /> {ocupado ? 'Rolando...' : valida ? `Rolar ${limparFormula(formula)}` : 'Escolha um dado'}
       </button>

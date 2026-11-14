@@ -5,6 +5,9 @@
 /** O mesmo teto do servidor (NOTA_MAXIMA em plataforma/core/mapa.py); um teste trava os dois. */
 export const NOTA_MAXIMA = 4000;
 
+/** O lembrete curto do jogador no próprio token (NOTA_DO_JOGADOR_MAXIMA no servidor, o mesmo número). */
+export const NOTA_DO_JOGADOR_MAXIMA = 240;
+
 /** Há texto na nota (só espaço e quebra de linha não conta). */
 export const temNota = (texto: string | null | undefined): boolean => typeof texto === 'string' && texto.trim().length > 0;
 

@@ -8,6 +8,8 @@ import './rolagem.css';
 
 const SAIDA_MS = 320;
 const LIMITE_SEM_POUSAR_MS = 9000;
+/** Quanto o dado de outra pessoa fica à vista depois de pousar. */
+const TEMPO_DO_DADO_DA_MESA_MS = 3600;
 
 const ROTULO_GRAU: Record<GrauRolagem, string> = {
   'sucesso critico': 'Sucesso crítico',
@@ -36,7 +38,15 @@ export const RolagemHost = memo(function RolagemHost() {
   const contador = useRef(0);
   const aoClicarRef = useRef<() => void>(() => undefined);
 
+  const emCenaRef = useRef<EmCena | null>(null);
+  emCenaRef.current = emCena;
+
   useEffect(() => registrarApresentadorRolagem((cena, terminar) => {
+    // O resultado de quem rolou fica na tela até ele fechar: o dado de outra pessoa não passa por cima.
+    if (cena.mesa && emCenaRef.current && !emCenaRef.current.cena.mesa) {
+      terminar();
+      return;
+    }
     contador.current += 1;
     setPousou(false);
     setSaindo(false);
@@ -52,6 +62,8 @@ export const RolagemHost = memo(function RolagemHost() {
     let saindoLocal = false;
     const timers: number[] = [];
     let seguranca = 0;
+    // O dado de outra pessoa passa por cima do mapa sem pedir nada: nenhuma tecla é capturada e some sozinho.
+    const daMesa = Boolean(cena.mesa);
 
     const encerrar = () => {
       if (cancelado) return;
@@ -84,7 +96,11 @@ export const RolagemHost = memo(function RolagemHost() {
         if (cena.destaque === 'critico') sfx.playCritSound();
         else if (cena.destaque === 'falha') sfx.play('error');
         else sfx.playDiceClack();
-        vibrar(cena.destaque === 'critico' ? 'critico' : cena.destaque === 'falha' ? 'falha' : 'toque');
+        if (daMesa) {
+          timers.push(window.setTimeout(fecharComSaida, TEMPO_DO_DADO_DA_MESA_MS));
+        } else {
+          vibrar(cena.destaque === 'critico' ? 'critico' : cena.destaque === 'falha' ? 'falha' : 'toque');
+        }
         // O fluxo de quem rolou (modal de resultado, registros) segue por
         // baixo; o resultado continua na tela até a pessoa fechar.
         terminar();
@@ -102,13 +118,13 @@ export const RolagemHost = memo(function RolagemHost() {
       evento.stopPropagation();
       aoClicar();
     };
-    document.addEventListener('keydown', aoTecla, true);
+    if (!daMesa) document.addEventListener('keydown', aoTecla, true);
     // Segurança: se o dado nunca pousar, não prende a tela. Depois do pouso
-    // não há prazo: o resultado fica até a pessoa fechar.
+    // não há prazo: o resultado fica até a pessoa fechar (o de outra pessoa some sozinho).
     seguranca = window.setTimeout(encerrar, LIMITE_SEM_POUSAR_MS);
     timers.push(seguranca);
     return () => {
-      document.removeEventListener('keydown', aoTecla, true);
+      if (!daMesa) document.removeEventListener('keydown', aoTecla, true);
       if (!cancelado) {
         cancelado = true;
         timers.forEach((timer) => window.clearTimeout(timer));
@@ -129,7 +145,7 @@ export const RolagemHost = memo(function RolagemHost() {
     <div
       role="status"
       aria-label={`${cena.titulo}: ${cena.total ?? ''}`}
-      className={`rolagem${saindo ? ' rolagem--saindo' : ''}${cena.destaque === 'falha' && pousou ? ' rolagem--tremor' : ''}${pousou && cena.destaque ? ` rolagem--clarao-${cena.destaque}` : ''}`}
+      className={`rolagem${cena.mesa ? ' rolagem--mesa' : ''}${saindo ? ' rolagem--saindo' : ''}${cena.destaque === 'falha' && pousou ? ' rolagem--tremor' : ''}${pousou && cena.destaque ? ` rolagem--clarao-${cena.destaque}` : ''}`}
       style={estilo}
       onClick={() => aoClicarRef.current()}
     >
@@ -152,7 +168,7 @@ export const RolagemHost = memo(function RolagemHost() {
           )}
           {cena.natural === null && cena.formula && <div className="rolagem__conta">{cena.formula}</div>}
           {cena.grau && <div className={`rolagem__grau ${classeGrau}`}>{ROTULO_GRAU[cena.grau]}</div>}
-          <div className="rolagem__dica">Toque na tela para fechar</div>
+          {!cena.mesa && <div className="rolagem__dica">Toque na tela para fechar</div>}
         </div>
       )}
     </div>,
