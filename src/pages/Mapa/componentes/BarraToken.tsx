@@ -36,7 +36,8 @@ interface Props {
 const ROTULOS: Record<TipoBarra, string> = { vida: 'Vida', mana: 'Mana', estamina: 'Estamina', sanidade: 'Sanidade' };
 const ORDEM: TipoBarra[] = ['vida', 'mana', 'estamina', 'sanidade'];
 
-/** Uma linha do painel: − e + andam de 1 em 1 (Shift anda de 5 em 5); o número do meio também se escreve. */
+/** Uma linha do painel: − e + andam de 1 em 1 (Shift anda de 5 em 5); o número do meio também se escreve
+ *  (valor puro troca o atual; com + ou - na frente soma ou tira, como na ficha). */
 const LinhaRecurso = ({ barra, onMudar }: { barra: IBarraToken; onMudar: (mudanca: MudancaDeRecurso) => void }) => {
   const atual = barra.atual ?? 0;
   const maximo = barra.maximo ?? 0;
@@ -49,12 +50,19 @@ const LinhaRecurso = ({ barra, onMudar }: { barra: IBarraToken; onMudar: (mudanc
 
   const confirmar = () => {
     setEditando(false);
-    const valor = Number(texto.trim().replace(',', '.'));
-    if (!texto.trim() || !Number.isFinite(valor)) {
+    const limpo = texto.trim().replace(',', '.');
+    const valor = Number(limpo);
+    if (!limpo || !Number.isFinite(valor)) {
       setTexto(String(atual));
       return;
     }
     const arredondado = Math.round(valor);
+    // Com sinal na frente (+5, -10) o número é quanto soma ou tira, como na barra da ficha.
+    if (/^[+-]/.test(limpo)) {
+      setTexto(String(atual));
+      if (arredondado !== 0) onMudar({ delta: arredondado });
+      return;
+    }
     if (arredondado === atual) {
       setTexto(String(atual));
       return;
