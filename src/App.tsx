@@ -6,6 +6,7 @@ import { useGlobalSfx } from './hooks/useGlobalSfx';
 import { PerformancePreferencesBridge } from './hooks/usePerformance';
 import AtmosphericBackground from './AtmosphericBackground';
 import { AvisosHost } from './components/avisos/AvisosHost';
+import { MenusDeSelecaoHost } from './components/ui/MenusDeSelecaoHost';
 import { ClimaDoMundoHost } from './components/clima/ClimaDoMundoHost';
 import { SituacaoDaMesaHost } from './components/sessao/SituacaoDaMesaHost';
 import { BuscaDoJardimHost } from './components/busca/BuscaDoJardimHost';
@@ -195,6 +196,8 @@ function App() {
           </ForaDoMapa>
 
           <AvisosHost />
+
+          <MenusDeSelecaoHost />
 
           <ForaDoMapa>
             {usuario && <ClimaDoMundoHost />}

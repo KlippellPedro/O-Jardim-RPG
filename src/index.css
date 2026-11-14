@@ -45,6 +45,19 @@
     font: inherit;
   }
 
+  /* A lista de um <select> é do sistema: no Windows abre branca com a letra branca do site por cima.
+     O MenusDeSelecaoHost troca a lista por uma do site; isto cobre o resto (toque, select que pediu
+     data-menu-nativo): controles escuros e opções com fundo e letra legíveis. */
+  select {
+    color-scheme: dark;
+  }
+
+  select option,
+  select optgroup {
+    background-color: #17151f;
+    color: #e6e2f0;
+  }
+
   button,
   a,
   [role='button'] {
