@@ -13,7 +13,9 @@ from __future__ import annotations
 import math
 import re
 import time
-from uuid import uuid4
+from uuid import UUID, uuid4
+
+from core import quadro as quadro_da_mesa
 
 AURA_MAXIMA_CASAS = 30
 #: Como a aura se desenha (src/pages/Mapa/motor/auras.ts): campo (preenchido), anel (só o contorno), suave (esmaece
@@ -86,7 +88,70 @@ def aura_vista(aura, *, gestor: bool, dono: bool) -> dict | None:
 # ------------------------------------------------------------------ mesa
 
 def mesa_vazia() -> dict:
-    return {"pausa": {"ligada": False, "texto": ""}, "relogios": [], "cronometro": None}
+    return {"pausa": {"ligada": False, "texto": ""}, "relogios": [], "cronometro": None, "narrativa": narrativa_vazia(), "quadro": quadro_da_mesa.quadro_vazio()}
+
+
+# ------------------------------------------------------------------ cena narrativa
+
+TITULO_NARRATIVA_MAX = 80
+MAX_FALANTES = 6
+
+
+def narrativa_vazia() -> dict:
+    return {"ligada": False, "imagem_id": None, "largura": 0, "altura": 0, "titulo": "", "falantes": []}
+
+
+def _uuid_texto(valor) -> str | None:
+    try:
+        return str(UUID(str(valor)))
+    except (ValueError, AttributeError, TypeError):
+        return None
+
+
+def ler_narrativa(dados) -> dict:
+    """A cena narrativa gravada; registro quebrado vira "desligada" (a mesa nunca fica presa numa tela de história)."""
+    saida = narrativa_vazia()
+    if not isinstance(dados, dict):
+        return saida
+    imagem = _uuid_texto(dados.get("imagem_id")) if dados.get("imagem_id") else None
+    saida["ligada"] = bool(dados.get("ligada")) and imagem is not None
+    saida["imagem_id"] = imagem
+    for campo in ("largura", "altura"):
+        valor = dados.get(campo)
+        saida[campo] = int(valor) if isinstance(valor, (int, float)) and not isinstance(valor, bool) and 0 <= valor <= 32768 else 0
+    saida["titulo"] = _texto(dados.get("titulo"), TITULO_NARRATIVA_MAX)
+    falantes = []
+    for bruto in dados.get("falantes") or []:
+        token = _uuid_texto(bruto)
+        if token and token not in falantes:
+            falantes.append(token)
+    saida["falantes"] = falantes[:MAX_FALANTES]
+    return saida
+
+
+def normalizar_narrativa(dados, atual: dict | None = None) -> dict:
+    """Junta o que veio (ligar, imagem, título, falantes) com a cena narrativa que já estava."""
+    if not isinstance(dados, dict):
+        raise ErroMesa("cena narrativa invalida")
+    base = ler_narrativa(atual)
+    if "imagem_id" in dados:
+        base["imagem_id"] = _uuid_texto(dados["imagem_id"]) if dados["imagem_id"] else None
+        if base["imagem_id"] is None and dados["imagem_id"]:
+            raise ErroMesa("imagem invalida")
+    for campo in ("largura", "altura"):
+        if campo in dados:
+            base[campo] = int(_numero(dados[campo], campo, 0, 32768))
+    if "titulo" in dados:
+        base["titulo"] = _texto(dados["titulo"], TITULO_NARRATIVA_MAX)
+    if "falantes" in dados:
+        if not isinstance(dados["falantes"], list) or len(dados["falantes"]) > MAX_FALANTES * 4:
+            raise ErroMesa("falantes invalidos")
+        base = ler_narrativa({**base, "falantes": dados["falantes"]})
+    if "ligada" in dados:
+        base["ligada"] = bool(dados["ligada"])
+    if base["ligada"] and not base["imagem_id"]:
+        raise ErroMesa("escolha a imagem de fundo da cena narrativa")
+    return base
 
 
 def _relogios(dados) -> list[dict]:
@@ -152,6 +217,8 @@ def normalizar_mesa(dados, atual: dict | None = None) -> dict:
         mesa["relogios"] = _relogios(dados["relogios"])
     if "cronometro" in dados:
         mesa["cronometro"] = _cronometro(dados["cronometro"])
+    if "narrativa" in dados:
+        mesa["narrativa"] = normalizar_narrativa(dados["narrativa"], mesa["narrativa"])
     return mesa
 
 
@@ -167,6 +234,8 @@ def ler_mesa(dados) -> dict:
         mesa["relogios"] = _relogios(dados.get("relogios") or [])
     except ErroMesa:
         mesa["relogios"] = []
+    mesa["narrativa"] = ler_narrativa(dados.get("narrativa"))
+    mesa["quadro"] = quadro_da_mesa.ler_quadro(dados.get("quadro"))
     cronometro = dados.get("cronometro")
     if isinstance(cronometro, dict):
         fim = cronometro.get("fim")
@@ -183,6 +252,8 @@ def ler_mesa(dados) -> dict:
 def mesa_de(mesa: dict, *, gestor: bool) -> dict:
     """O que cada um recebe da mesa (o navegador conta o cronômetro pelo relógio do servidor)."""
     saida = dict(mesa)
+    # O quadro de investigação tem o recorte dele: o jogador não recebe a carta escondida nem os barbantes que chegam nela.
+    saida["quadro"] = quadro_da_mesa.quadro_de(mesa["quadro"], gestor=gestor)
     if gestor:
         return saida
     saida["relogios"] = [relogio for relogio in mesa["relogios"] if relogio["visivel"]]

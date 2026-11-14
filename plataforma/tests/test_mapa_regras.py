@@ -355,3 +355,11 @@ def test_desconhecido_nao_entrega_a_moldura_do_personagem():
     assert visto["enquadramento"] == mapa.ENQUADRAMENTO_PADRAO
     visivel = mapa.visao_token(token(participante_id="pa1"), participante(), ANA, livre=False, moldura="arte-hera", enquadramento={"zoom": 3})
     assert visivel["moldura"] == "arte-hera" and visivel["enquadramento"]["zoom"] == 3.0
+
+
+def test_defesa_so_vai_para_o_dono_e_para_o_mestre():
+    meu = token(personagem_id="p-ana", lado="jogador")
+    assert mapa.visao_token(meu, None, ANA, livre=False, defesa=17)["defesa"] == 17
+    assert mapa.visao_token(meu, None, MESTRE, livre=False, defesa=17)["defesa"] == 17
+    assert "defesa" not in mapa.visao_token(meu, None, BRUNO, livre=False, defesa=17)
+    assert "defesa" not in mapa.visao_token(meu, None, ANA, livre=False)

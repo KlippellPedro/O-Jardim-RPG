@@ -28,8 +28,9 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
-from core import artes_token, calendario, construtor, mapa, mapas_colocados, mesa_extras, movimento_token, nevoa, paredes, recursos_token, tempo_real, visao
+from core import artes_token, calendario, construtor, desenhos_fixos, formas_token, zonas as zonas_da_cena, mapa, mapas_colocados, mesa_extras, movimento_token, nevoa, paredes, recursos_token, tempo_real, visao
 from core.acervo import ler as ler_pedaco
+from core.character_summary import bonus_escolhas_habilidade
 from core.condicoes import normalizar_condicoes
 from core.database import Database
 from core.dependencies import (
@@ -111,6 +112,10 @@ class TokenEdicao(BaseModel):
     sem_aura: bool = False
     #: Nota só do Mestre sobre este token (vazio apaga). O dono do personagem não mexe nela.
     nota_mestre: str | None = Field(default=None, max_length=mapa.NOTA_MAXIMA)
+    #: Metros acima do chão (negativo, abaixo). Só o Mestre muda; todos que veem o token veem a altura.
+    elevacao: int | None = Field(default=None, ge=mapa.ELEVACAO_MINIMA, le=mapa.ELEVACAO_MAXIMA)
+    #: Lembrete curto do jogador sobre o próprio token; só o dono e o Mestre leem (vazio apaga).
+    nota_jogador: str | None = Field(default=None, max_length=mapa.NOTA_DO_JOGADOR_MAXIMA)
 
 
 class RecursoTokenInput(BaseModel):
@@ -250,7 +255,7 @@ def _participantes(connection, campanha_id: UUID) -> list[dict]:
             """
             SELECT p.id, p.personagem_id, p.nome, p.tipo, p.visibilidade, p.condicoes,
                    p.vida_atual, p.vida_maxima, p.mana_atual, p.mana_maxima,
-                   p.estamina_atual, p.estamina_maxima
+                   p.estamina_atual, p.estamina_maxima, p.defesa
             FROM sessao_participantes p
             JOIN sessoes_mesa s ON s.id = p.sessao_id
             WHERE s.campanha_id=%s AND s.status IN ('preparacao', 'aberta')
@@ -262,12 +267,13 @@ def _participantes(connection, campanha_id: UUID) -> list[dict]:
 
 def _tokens(connection, cena_id: UUID) -> list[dict]:
     return [
-        dict(linha)
+        formas_token.aplicar_forma(dict(linha))
         for linha in connection.execute(
             """
             SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome,
                    t.x, t.y, t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura,
-                   t.camada, t.flip_x, t.flip_y, t.enquadramento, t.nota_mestre, t.recipiente,
+                   t.camada, t.flip_x, t.flip_y, t.enquadramento, t.nota_mestre, t.recipiente, t.formas, t.forma_ativa, t.fonte,
+                   t.elevacao, t.nota_jogador,
                    COALESCE(t.personagem_id, sp.personagem_id) AS personagem_efetivo
             FROM mapa_tokens t
             LEFT JOIN sessao_participantes sp ON sp.id = t.participante_id
@@ -295,6 +301,20 @@ def _fichas(connection, campanha_id: UUID, ids: set[str]) -> dict[str, dict]:
             (campanha_id, list(ids)),
         ).fetchall()
     }
+
+
+def _defesa_do_token(participante: dict | None, ficha) -> int | None:
+    """A Defesa que a bolinha do token mostra: a que o Mestre pôs no participante da Sessão ou, sem ela, a da ficha
+    (Defesa natural mais as escolhas de habilidade, como o HUD da Sessão lê)."""
+    if participante and isinstance(participante.get("defesa"), int) and not isinstance(participante["defesa"], bool):
+        return participante["defesa"]
+    if not isinstance(ficha, dict) or not ficha:
+        return None
+    derivados = ficha.get("derivados") if isinstance(ficha.get("derivados"), dict) else {}
+    natural = derivados.get("defesaNatural")
+    if isinstance(natural, bool) or not isinstance(natural, (int, float)):
+        return None
+    return int(natural) + bonus_escolhas_habilidade(ficha, "combate", "defesa")
 
 
 def _nivel(ficha) -> int | None:
@@ -393,6 +413,7 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador, visao_j
             sanidade=mapa.sanidade_da_ficha(ficha) if ficha_linha else None,
             nivel=_nivel(ficha) if ficha_linha else None,
             movimento=movimento_token.da_ficha(ficha, condicoes) if ficha_linha else None,
+            defesa=_defesa_do_token(participante, ficha) if (participante or ficha_linha) else None,
             tem_retrato=versao_imagem is not None,
             condicoes=condicoes,
             turnos_das_condicoes={c["nome"]: c["turnos"] for c in condicoes_do_participante},
@@ -721,6 +742,14 @@ def _resumo_cena(
             "portais": mapa.portais_de(
                 _portais(cena) if camadas_visiveis["mapa"] else [], gestor=gestor,
                 revelado=revelado,
+            ),
+            # Zonas de terreno: o Mestre vê tudo; o jogador só o terreno marcado como à vista (nunca cobertura nem gatilho).
+            "zonas": zonas_da_cena.zonas_de(
+                zonas_da_cena.ler_zonas(cena["estrutura"], int(cena["largura"]), int(cena["altura"])) if camadas_visiveis["mapa"] else [], gestor=gestor,
+            ),
+            # Desenhos fixos do Mestre (que ficam até ele apagar): o jogador só recebe os que ficaram à mostra.
+            "desenhos": desenhos_fixos.desenhos_de(
+                desenhos_fixos.ler_desenhos(cena["estrutura"]) if camadas_visiveis["mapa"] else [], gestor=gestor,
             ),
             # Portas e janelas do mapa montado no construtor; a porta secreta é só do Mestre.
             "aberturas": (
@@ -1151,7 +1180,7 @@ def _token(connection, campanha_id: UUID, token_id: UUID, *, travar: bool = Fals
     token = connection.execute(
         f"""
         SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome, t.x, t.y,
-               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura, t.camada, t.flip_x, t.flip_y, t.enquadramento, t.recipiente,
+               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura, t.camada, t.flip_x, t.flip_y, t.enquadramento, t.recipiente, t.formas, t.forma_ativa, t.fonte,
                c.largura, c.altura, c.livre, c.ativa, c.estrutura
         FROM mapa_tokens t JOIN mapa_cenas c ON c.id = t.cena_id
         WHERE t.id=%s AND c.campanha_id=%s{' FOR UPDATE OF t' if travar else ''}
@@ -1160,7 +1189,7 @@ def _token(connection, campanha_id: UUID, token_id: UUID, *, travar: bool = Fals
     ).fetchone()
     if not token:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="token nao encontrado")
-    return dict(token)
+    return formas_token.aplicar_forma(dict(token))
 
 
 def _participante_do_token(connection, campanha_id: UUID, token: dict) -> dict | None:
@@ -1295,7 +1324,7 @@ def editar_token(
         dono = mapa.e_dono(token, participante, quem)
         if not quem.gestor and not _camadas_visiveis(token["estrutura"], False, quem.permissoes_mesa).get(token["camada"], False):
             raise HTTPException(status_code=404, detail="token nao encontrado")
-        estruturais = (payload.nome, payload.porte, payload.lado, payload.oculto, payload.imagem_id, payload.moldura, payload.camada, payload.nota_mestre)
+        estruturais = (payload.nome, payload.porte, payload.lado, payload.oculto, payload.imagem_id, payload.moldura, payload.camada, payload.nota_mestre, payload.elevacao)
         if not quem.gestor and (any(v is not None for v in estruturais) or payload.sem_imagem or payload.sem_moldura):
             raise HTTPException(status_code=403, detail="so o mestre muda isso")
         if not quem.gestor and not dono:
@@ -1318,6 +1347,10 @@ def editar_token(
                 mudancas["camada"] = payload.camada
             if payload.nota_mestre is not None:
                 mudancas["nota_mestre"] = mapa.normalizar_nota(payload.nota_mestre)
+            if payload.elevacao is not None:
+                mudancas["elevacao"] = mapa.normalizar_elevacao(payload.elevacao)
+            if payload.nota_jogador is not None:
+                mudancas["nota_jogador"] = mapa.normalizar_nota_do_jogador(payload.nota_jogador)
             if payload.flip_x is not None:
                 mudancas["flip_x"] = payload.flip_x
             if payload.flip_y is not None:
@@ -1973,7 +2006,8 @@ def _regras_sync(database: Database, campanha_id: UUID) -> tempo_real.Regras:
         cena_id=str(cena["id"]), livre=bool(cena["livre"]),
         largura=int(cena["largura"]), altura=int(cena["altura"]), tokens=regras,
         carregadas_em=time.monotonic(), nevoa=cobertura, portais=portais, casa=float(casa),
-        barram=barram, vaos=vaos,
+        barram=barram, vaos=vaos, estrutura=cena["estrutura"],
+        zonas=zonas_da_cena.ler_zonas(cena["estrutura"], int(cena["largura"]), int(cena["altura"])),
         visao_pelas_paredes=estado_nevoa["visao_pelas_paredes"],
         visiveis_por_usuario=visiveis_por_usuario,
     )

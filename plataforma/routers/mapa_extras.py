@@ -31,6 +31,8 @@ def mudar_mesa(
     database: Database = Depends(get_database),
 ):
     """Pausa, relógios e cronômetro da campanha. Só o que vier no pedido muda."""
+    # A cena narrativa e o quadro de investigação têm rota própria (conferem quem pode o quê): aqui não entram.
+    payload = {chave: valor for chave, valor in payload.items() if chave not in ("narrativa", "quadro")} if isinstance(payload, dict) else payload
     with database.connection() as connection:
         require_campaign_manager(connection, campanha_id, user.id)
         linha = connection.execute(

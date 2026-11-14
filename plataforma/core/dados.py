@@ -98,6 +98,36 @@ def rolar_teste(
     return resultado
 
 
+def resumo_publico(tipo: str, dados: dict) -> dict | None:
+    """O que a mesa recebe de um dado mostrado a todos: os dados que caíram, o bônus e o total.
+
+    A DT e o grau (sucesso ou falha) ficam de fora: quem rola pode não ter dito a DT, e o Mestre
+    é quem diz o que o número significa. Devolve None quando não há o que mostrar em 3D
+    (várias rolagens separadas, por exemplo).
+    """
+    if tipo == "rolagem" and isinstance(dados.get("natural"), int):
+        resumo = {
+            "dados": [int(valor) for valor in dados.get("dados", [])],
+            "natural": int(dados["natural"]),
+            "bonus": int(dados.get("bonus", 0)),
+            "total": int(dados["total"]),
+            "critico_natural": bool(dados.get("critico_natural")),
+            "falha_natural": bool(dados.get("falha_natural")),
+        }
+        if dados.get("extras"):
+            resumo["extras"] = {"formula": str(dados["extras"]["formula"]), "total": int(dados["extras"]["total"])}
+        return resumo
+    if tipo == "dano" and isinstance(dados.get("termos"), list):
+        termos = [
+            {"tipo": "dado", "faces": int(termo["faces"]), "valores": [int(v) for v in termo["valores"]]}
+            for termo in dados["termos"] if termo.get("tipo") == "dado"
+        ]
+        if not termos:
+            return None
+        return {"termos": termos, "bonus": int(dados.get("bonus", 0)), "total": int(dados["total"])}
+    return None
+
+
 def _classificar(total: int, natural: int, dt: int) -> str:
     """Somente o d20 natural gera crítico; a distância até a DT não altera o grau."""
     if natural == 20:

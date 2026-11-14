@@ -283,3 +283,55 @@ def test_mestre_avisa_a_cena_que_olha_e_jogador_nao_escolhe():
         assert ana.vendo is None
 
     asyncio.run(cenario())
+
+
+def test_ping_de_perigo_e_de_todos_e_olhem_aqui_so_do_mestre():
+    async def cenario():
+        mestre, ana, regras = _mesa()
+
+        async def carregar():
+            return regras
+
+        # Qualquer pessoa pode dar o ping de perigo.
+        await tempo_real.processar("camp", ana, {"t": "ping", "x": 10, "y": 20, "tipo": "perigo"}, carregar, None)
+        assert [(m["t"], m["tipo"]) for m in _mensagens(mestre)] == [("ping", "perigo")]
+        # "Olhem aqui" chama a mesa para um ponto: só quem comanda. No jogador vira um ping comum.
+        await tempo_real.processar("camp", ana, {"t": "ping", "x": 10, "y": 20, "tipo": "olhar"}, carregar, None)
+        assert [m["tipo"] for m in _mensagens(mestre)] == ["normal"]
+        await tempo_real.processar("camp", mestre, {"t": "ping", "x": 30, "y": 40, "tipo": "olhar"}, carregar, None)
+        assert [m["tipo"] for m in _mensagens(ana)] == ["olhar"]
+        # Tipo desconhecido ou ausente não vira nada especial.
+        await tempo_real.processar("camp", mestre, {"t": "ping", "x": 30, "y": 40, "tipo": "qualquer"}, carregar, None)
+        await tempo_real.processar("camp", mestre, {"t": "ping", "x": 30, "y": 40}, carregar, None)
+        assert [m["tipo"] for m in _mensagens(ana)] == ["normal", "normal"]
+
+    asyncio.run(cenario())
+
+
+def test_efeito_sonoro_so_do_mestre_so_da_lista_e_sem_metralhadora():
+    async def cenario():
+        mestre, ana, regras = _mesa()
+
+        async def carregar():
+            return regras
+
+        # O jogador não toca efeitos, e o pedido dele não chega a ninguém.
+        resposta = await tempo_real.processar("camp", ana, {"t": "sfx", "id": "trovao"}, carregar, None)
+        assert resposta["t"] == "erro"
+        assert _mensagens(mestre) == []
+        # Fora da lista nunca passa (o id vai direto para a tela dos outros).
+        resposta = await tempo_real.processar("camp", mestre, {"t": "sfx", "id": "<script>"}, carregar, None)
+        assert resposta["t"] == "erro"
+        assert _mensagens(ana) == []
+        # O do Mestre chega à mesa, com quem tocou, e não volta para ele.
+        assert await tempo_real.processar("camp", mestre, {"t": "sfx", "id": "trovao"}, carregar, None) is None
+        recebido = _mensagens(ana)
+        assert [(m["t"], m["id"], m["por"]) for m in recebido] == [("sfx", "trovao", "m")]
+        assert _mensagens(mestre) == []
+        # Depois do limite da janela, o seguinte é recusado.
+        for _ in range(tempo_real.SFX_POR_JANELA):
+            await tempo_real.processar("camp", mestre, {"t": "sfx", "id": "sino"}, carregar, None)
+        resposta = await tempo_real.processar("camp", mestre, {"t": "sfx", "id": "sino"}, carregar, None)
+        assert resposta["t"] == "erro"
+
+    asyncio.run(cenario())

@@ -43,9 +43,10 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable
 
-from core.mapa import ErroMapa, normalizar_magia, normalizar_vista_mesa, portal_atingido
+from core.mapa import EFEITOS_SONOROS, ErroMapa, normalizar_magia, normalizar_traco, normalizar_vista_mesa, portal_atingido
 from core.paredes import caminho
 from core.nevoa import Nevoa
+from core import visao, zonas as zonas_da_cena
 
 log = logging.getLogger("jardim-plataforma")
 
@@ -57,8 +58,16 @@ MAX_PONTOS_REGUA = 24
 #: Efeitos de magia por pessoa: no máximo 3 a cada 2 segundos (o resto não chega à mesa).
 MAGIAS_POR_JANELA = 3
 JANELA_MAGIA_S = 2.0
+#: Perguntas de linha de visão por pessoa por segundo (a régua pergunta enquanto anda).
+LINHAS_POR_SEGUNDO = 8
+#: Desenho livre: no máximo 8 traços a cada 5 segundos por pessoa (desfazer e limpar não contam).
+TRACOS_POR_JANELA = 8
+JANELA_TRACO_S = 5.0
 #: "Todo mundo na minha vista": 2 a cada 5 segundos por pessoa.
 VISTAS_POR_JANELA = 2
+#: Efeitos sonoros do Mestre: no máximo SFX_POR_JANELA a cada JANELA_SFX_S segundos (não vira metralhadora de som).
+SFX_POR_JANELA = 6
+JANELA_SFX_S = 5.0
 JANELA_VISTA_S = 5.0
 #: As regras (quem vê, quem move) valem por alguns segundos e são recarregadas:
 #: mudar a visibilidade de um participante na Sessão chega aqui no máximo nesse tempo.
@@ -75,6 +84,15 @@ CORES = ("#4fd1c5", "#f6ad55", "#f687b3", "#90cdf4", "#9ae6b4", "#fbd38d", "#b79
 
 def agora_ms() -> float:
     return time.time() * 1000
+
+
+def tipo_de_ping(bruto, gestor: bool) -> str:
+    """`perigo` (alerta vermelho) é de todos; `olhar` ("olhem aqui") é só de quem comanda. O resto é um ping comum."""
+    if bruto == "perigo":
+        return "perigo"
+    if bruto == "olhar" and gestor:
+        return "olhar"
+    return "normal"
 
 
 def cor_de(usuario_id: str) -> str:
@@ -105,6 +123,12 @@ class Conexao:
     magias: deque = field(default_factory=deque)
     #: Horários dos últimos pedidos de "todo mundo para a minha vista".
     vistas: deque = field(default_factory=deque)
+    #: Horários dos últimos efeitos sonoros que esta conexão disparou.
+    sfx: deque = field(default_factory=deque)
+    #: Horários dos últimos traços de desenho livre que esta conexão mandou.
+    tracos: deque = field(default_factory=deque)
+    #: Horários das últimas perguntas de linha de visão.
+    linhas: deque = field(default_factory=deque)
 
     @property
     def cor(self) -> str:
@@ -172,6 +196,36 @@ class Conexao:
         self.magias.append(agora)
         return True
 
+    def linha_liberada(self) -> bool:
+        """A pergunta "há parede entre estes dois?" vem enquanto a régua anda: no máximo LINHAS_POR_JANELA por segundo."""
+        agora = time.monotonic()
+        while self.linhas and agora - self.linhas[0] > 1.0:
+            self.linhas.popleft()
+        if len(self.linhas) >= LINHAS_POR_SEGUNDO:
+            return False
+        self.linhas.append(agora)
+        return True
+
+    def traco_liberado(self) -> bool:
+        """Desenho livre vai para a mesa toda: no máximo TRACOS_POR_JANELA a cada JANELA_TRACO_S segundos."""
+        agora = time.monotonic()
+        while self.tracos and agora - self.tracos[0] > JANELA_TRACO_S:
+            self.tracos.popleft()
+        if len(self.tracos) >= TRACOS_POR_JANELA:
+            return False
+        self.tracos.append(agora)
+        return True
+
+    def sfx_liberado(self) -> bool:
+        """Um efeito sonoro toca na mesa toda: no máximo SFX_POR_JANELA a cada JANELA_SFX_S segundos."""
+        agora = time.monotonic()
+        while self.sfx and agora - self.sfx[0] > JANELA_SFX_S:
+            self.sfx.popleft()
+        if len(self.sfx) >= SFX_POR_JANELA:
+            return False
+        self.sfx.append(agora)
+        return True
+
     def vista_liberada(self) -> bool:
         """Puxar a mesa para a própria vista tira a câmera dos outros: no máximo VISTAS_POR_JANELA a cada JANELA_VISTA_S."""
         agora = time.monotonic()
@@ -222,6 +276,17 @@ class Regras:
     visao_pelas_paredes: bool = False
     #: Tokens à vista agora para cada conexão, usados também para impedir interação às cegas.
     visiveis_por_usuario: dict[str, frozenset[str]] = field(default_factory=dict)
+    #: A estrutura da cena (paredes, aberturas), para a pergunta "há parede entre estes dois tokens?".
+    estrutura: dict | None = None
+    #: As zonas de terreno da cena (core/zonas.py): cobertura que a régua avisa e gatilhos que disparam ao entrar.
+    zonas: list = field(default_factory=list)
+    _indice: object | None = field(default=None, repr=False)
+
+    def indice_de_paredes(self):
+        """O índice de paredes (com janelas e portas abertas como vãos), montado na primeira pergunta e guardado."""
+        if self._indice is None and isinstance(self.estrutura, dict):
+            self._indice = visao.indice_da_estrutura(self.estrutura, self.largura, self.altura)
+        return self._indice
 
     def vencidas(self) -> bool:
         return time.monotonic() - self.carregadas_em > VALIDADE_REGRAS_S
@@ -240,6 +305,8 @@ class Sala:
     empurrando: bool = False
     #: Chegou mudança enquanto um envio era calculado: outro sai logo depois.
     de_novo: bool = False
+    #: Gatilhos de uma vez só já disparados (cena:zona). Mora na sala, não nas regras: sobrevive às mudanças da cena.
+    gatilhos_usados: set = field(default_factory=set)
 
 
 #: Calcula o estado do mapa de cada conexão (None para quem perdeu o acesso). Registrado pela
@@ -281,6 +348,11 @@ def sair(campanha_id, conexao: Conexao) -> None:
     if not sala.conexoes:
         _salas.pop(str(campanha_id), None)
         return
+    # A régua de quem saiu não fica parada na tela dos outros (a com pontos de passagem não some sozinha).
+    if not any(outra.usuario_id == conexao.usuario_id for outra in sala.conexoes):
+        texto = json.dumps({"t": "regua", "pontos": None, "por": conexao.usuario_id, "nome": conexao.nome, "cor": conexao.cor})
+        for outra in list(sala.conexoes):
+            outra.entregar(texto, f"r:{conexao.usuario_id}")
     _avisar_presenca(sala)
 
 
@@ -563,6 +635,55 @@ def _pode_mover(conexao: Conexao, regra: RegraToken, regras: Regras, token_id: s
     return regras.livre and regra.movivel_livre and regra.quem_ve == "todos"
 
 
+def _visivel_para(conexao: Conexao, regras: Regras, token_id: str, regra: RegraToken) -> bool:
+    """O token está à vista desta pessoa agora: pela regra do papel, pela névoa e pela visão por paredes."""
+    if conexao.gestor:
+        return True
+    a_vista = regras.nevoa is None or not regra.some_na_nevoa or regras.nevoa.revelado(regra.x, regra.y)
+    if not _pode_ver(conexao, regra, a_vista):
+        return False
+    if regras.visao_pelas_paredes and token_id not in regras.visiveis_por_usuario.get(conexao.usuario_id, frozenset()):
+        return False
+    return True
+
+
+def _disparar_gatilhos(sala: Sala, conexao: Conexao, regras: Regras, antes: tuple[float, float], depois: tuple[float, float]) -> None:
+    """Um token acabou de ser solto em `depois`: os gatilhos das zonas em que ele entrou agora disparam.
+
+    Quem pisou recebe o texto dele (e só ele), a mesa recebe o texto da mesa, e quem comanda recebe um aviso com o nome da
+    zona e o cartão da armadilha do Livro, se a zona tem uma. Nada é aplicado sozinho: dano e condição são do Mestre.
+    """
+    usados = {chave.split(":", 1)[1] for chave in sala.gatilhos_usados if chave.startswith(f"{regras.cena_id}:")}
+    for zona in zonas_da_cena.gatilhos_disparados(regras.zonas, antes, depois, gestor=conexao.gestor, usados=usados):
+        gatilho = zona["gatilho"]
+        if gatilho["uma_vez"]:
+            sala.gatilhos_usados.add(f"{regras.cena_id}:{zona['id']}")
+        if gatilho["texto_pisador"]:
+            conexao.entregar(json.dumps({"t": "gatilho", "nome": zona["nome"], "texto": gatilho["texto_pisador"]}, ensure_ascii=False))
+        if gatilho["texto_mesa"]:
+            texto = json.dumps({"t": "gatilho_mesa", "nome": zona["nome"], "texto": gatilho["texto_mesa"]}, ensure_ascii=False)
+            for outra in list(sala.conexoes):
+                outra.entregar(texto)
+        aviso = json.dumps({
+            "t": "gatilho_mestre", "zona": zona["nome"], "zona_id": zona["id"], "quem": conexao.nome,
+            "armadilha": gatilho["armadilha"], "uma_vez": gatilho["uma_vez"],
+        }, ensure_ascii=False)
+        for outra in list(sala.conexoes):
+            if outra.gestor:
+                outra.entregar(aviso)
+
+
+def rearmar_gatilho(campanha_id, cena_id, zona_id: str | None = None) -> None:
+    """O Mestre rearma um gatilho de uma vez só (ou todos os da cena): ele dispara de novo na próxima vez."""
+    sala = _salas.get(str(campanha_id))
+    if sala is None:
+        return
+    if zona_id is None:
+        sala.gatilhos_usados = {c for c in sala.gatilhos_usados if not c.startswith(f"{cena_id}:")}
+    else:
+        sala.gatilhos_usados.discard(f"{cena_id}:{zona_id}")
+
+
 def _numero(valor) -> float | None:
     if isinstance(valor, bool) or not isinstance(valor, (int, float)) or not math.isfinite(valor):
         return None
@@ -691,6 +812,7 @@ async def processar(
                 de_vista = regras.nevoa is None or not regra.some_na_nevoa or regras.nevoa.revelado(x, y)
                 travessia = {"portal": portal["id"], "fluxo": portal["fluxo"], "de": [round(x, 2), round(y, 2)] if de_vista else None}
                 x, y = float(px), float(py)
+        posicao_antes = (regra.x, regra.y)
         a_vista, antes = True, True
         if regras.nevoa is not None and regra.some_na_nevoa and regra.quem_ve == "todos":
             a_vista = regras.nevoa.revelado(x, y)
@@ -727,6 +849,8 @@ async def processar(
                 return {"t": "erro", "motivo": "o token saiu da cena", "token": token_id}
             if tipo == "soltar":
                 regra.x, regra.y = x, y
+                if regras.zonas:
+                    _disparar_gatilhos(sala, conexao, regras, posicao_antes, (x, y))
                 if regras.visao_pelas_paredes:
                     _invalidar(str(campanha_id), int(agora_ms()))
         if saiu_da_nevoa:
@@ -754,6 +878,7 @@ async def processar(
         _repassar(sala, conexao, {
             "t": "ping", "x": round(x, 1), "y": round(y, 1), "ts": agora_ms(),
             "por": conexao.usuario_id, "nome": conexao.nome, "cor": conexao.cor,
+            "tipo": tipo_de_ping(mensagem.get("tipo"), conexao.gestor),
         })
         return None
 
@@ -805,6 +930,75 @@ async def processar(
                     outra.entregar(texto)
         else:
             _repassar(sala, conexao, repasse)
+        return None
+
+    if tipo == "linha":
+        # "Há parede entre estes dois tokens?" A régua pergunta enquanto mede de um token a outro. Só quem vê os dois
+        # tokens recebe resposta, e a resposta é só sim ou não: onde estão as paredes nunca sai do servidor.
+        if not conexao.linha_liberada():
+            return None
+        de, para = str(mensagem.get("de") or ""), str(mensagem.get("para") or "")
+        origem, destino = regras.tokens.get(de), regras.tokens.get(para)
+        if origem is None or destino is None or de == para:
+            return None
+        if not (_visivel_para(conexao, regras, de, origem) and _visivel_para(conexao, regras, para, destino)):
+            return None
+        indice = regras.indice_de_paredes()
+        bloqueada = bool(indice.bloqueada(origem.x, origem.y, destino.x, destino.y)) if indice is not None else False
+        # Parede é cobertura total; sem parede, a maior cobertura das zonas que a linha toca (+2 parcial, +5 superior).
+        cobertura = "total" if bloqueada else zonas_da_cena.cobertura_no_caminho(regras.zonas, origem.x, origem.y, destino.x, destino.y)
+        return {"t": "linha", "de": de, "para": para, "bloqueada": bloqueada, "cobertura": cobertura}
+
+    if tipo == "traco":
+        # Desenho livre: passa por aqui e some sozinho, nada é gravado. O Mestre pode fazer um traço só dele
+        # (rascunho tático) e um traço de jogador que começa na névoa fica entre quem comanda.
+        if not _pode_usar(conexao, "usar_ping"):
+            return {"t": "erro", "motivo": "desenho bloqueado pelo mestre"}
+        if not conexao.traco_liberado():
+            return {"t": "erro", "motivo": "desenhos demais seguidos"}
+        try:
+            traco = normalizar_traco(mensagem, regras.largura, regras.altura)
+        except ErroMapa as erro:
+            return {"t": "erro", "motivo": erro.mensagem}
+        repasse = {
+            "t": "traco", **traco, "ts": agora_ms(),
+            "por": conexao.usuario_id, "nome": conexao.nome, "cor": conexao.cor,
+        }
+        privado = conexao.gestor and mensagem.get("privado") is True
+        coberto = (
+            not conexao.gestor and regras.nevoa is not None
+            and not regras.nevoa.revelado(traco["pontos"][0][0], traco["pontos"][0][1])
+        )
+        if privado or coberto:
+            texto = json.dumps(repasse, ensure_ascii=False)
+            for outra in list(sala.conexoes):
+                if outra is not conexao and outra.gestor:
+                    outra.entregar(texto)
+        else:
+            _repassar(sala, conexao, repasse)
+        return None
+
+    if tipo in ("traco_apagar", "traco_limpar"):
+        # Desfazer o último traço (`id`) ou limpar os meus. Quem não recebeu o traço ignora o pedido.
+        identificador = mensagem.get("id")
+        if tipo == "traco_apagar" and (not isinstance(identificador, str) or not 0 < len(identificador) <= 40):
+            return {"t": "erro", "motivo": "traco sem identificador"}
+        _repassar(sala, conexao, {
+            "t": tipo, "por": conexao.usuario_id,
+            **({"id": identificador} if tipo == "traco_apagar" else {}),
+        })
+        return None
+
+    if tipo == "sfx":
+        # Efeito sonoro pontual (trovão, sino, susto...): só quem comanda dispara, a mesa inteira ouve e nada é gravado.
+        if not conexao.gestor:
+            return {"t": "erro", "motivo": "so o mestre toca efeitos sonoros"}
+        identificador = mensagem.get("id")
+        if identificador not in EFEITOS_SONOROS:
+            return {"t": "erro", "motivo": "efeito sonoro desconhecido"}
+        if not conexao.sfx_liberado():
+            return {"t": "erro", "motivo": "efeitos sonoros demais seguidos"}
+        _repassar(sala, conexao, {"t": "sfx", "id": identificador, "ts": agora_ms(), "por": conexao.usuario_id, "nome": conexao.nome})
         return None
 
     if tipo == "vista":

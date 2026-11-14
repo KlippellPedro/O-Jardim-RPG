@@ -1013,6 +1013,8 @@ class RollInput(BaseModel):
     # Preenchido para dano/cura; quando presente, ignora o teste de d20.
     formula: str | None = Field(default=None, max_length=60)
     origem: dict[str, Any] = Field(default_factory=dict)
+    # A pessoa quer que a mesa veja o dado cair (só os dados e o total; a DT e o grau ficam no registro).
+    publica: bool = False
 
     @field_validator("titulo")
     @classmethod

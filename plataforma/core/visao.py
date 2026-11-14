@@ -10,7 +10,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
-from core import nevoa, paredes
+from core import construtor, nevoa, paredes
 
 MAX_CANDIDATOS_POR_RAIO = 4096
 #: O índice de paredes usa baldes maiores que a célula da névoa: o raio anda menos casas.
@@ -188,6 +188,16 @@ class IndiceParedes:
                 t_max_y += t_delta_y
             if not (0 <= coluna < self.colunas and 0 <= linha < self.linhas):
                 return melhor
+
+
+def indice_da_estrutura(estrutura, largura: int, altura: int) -> IndiceParedes:
+    """O índice de paredes de uma cena para conferir linha de visão: paredes e portas fechadas barram; porta aberta
+    e janela deixam passar (a janela barra o movimento, mas não a vista)."""
+    barram, vaos = paredes.barreiras(estrutura)
+    for abertura in construtor.ler_aberturas(estrutura):
+        if abertura.get("tipo") == "janela":
+            vaos.append([float(abertura[campo]) for campo in ("x1", "y1", "x2", "y2")])
+    return IndiceParedes(largura, altura, nevoa.tamanho_da_celula(largura, altura), barram, vaos)
 
 
 def _raios_do_leque(celula: int, alcance_maximo: float) -> int:

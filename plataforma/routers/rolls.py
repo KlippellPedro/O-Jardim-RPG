@@ -8,7 +8,7 @@ from psycopg.types.json import Jsonb
 from core import live_session
 from core.combate_intenso import registrar_minimos
 from core.conquistas import avaliar_sem_quebrar
-from core.dados import rolar_formula, rolar_teste
+from core.dados import resumo_publico, rolar_formula, rolar_teste
 from core.database import Database
 from core.discord_avisos import avisar_discord
 from core.notifications import campaign_member_ids, notify
@@ -158,6 +158,17 @@ def rolar(
         conquistas_novas = avaliar_sem_quebrar(connection, personagem_id, user.id)
         # 20 e 1 natural no teste de d20 durante a sessão ao vivo aparecem na mesa toda (ver `destaque_mesa` abaixo).
         destaque_da_mesa = _destaque_da_mesa(tipo, dados, sessao)
+        # O token do personagem na cena que está na mesa: o resultado sobe flutuando sobre ele na tela de todos.
+        token_do_personagem = None
+        if payload.publica and personagem_id:
+            achado = connection.execute(
+                """
+                SELECT t.id FROM mapa_tokens t JOIN mapa_cenas c ON c.id = t.cena_id
+                WHERE c.campanha_id=%s AND c.ativa AND t.personagem_id=%s ORDER BY t.criado_em LIMIT 1
+                """,
+                (payload.campanha_id, personagem_id),
+            ).fetchone()
+            token_do_personagem = str(achado["id"]) if achado else None
         # 20 natural durante a sessão ao vivo: a mesa toda fica sabendo (site e, se o Mestre quiser, Discord).
         if tipo == "rolagem" and dados.get("critico_natural") and sessao and sessao["status"] == "aberta":
             notify(
@@ -172,6 +183,14 @@ def rolar(
             )
             avisar_discord(connection, payload.campanha_id, "critico", f"🎯 **{autor_nome}** tirou **20 natural** em {payload.titulo[:80]}!")
     live_session.publicar(payload.campanha_id, "registro", 0)
+    if payload.publica and sessao and sessao["status"] == "aberta":
+        resumo = resumo_publico(tipo, dados)
+        if resumo:
+            # O dado cai na tela da mesa toda. Quem rolou já viu o próprio: o `usuario_id` deixa o cliente dele não repetir.
+            live_session.publicar(payload.campanha_id, "dado_mesa", 0, {
+                "autor": autor_nome, "titulo": payload.titulo[:80], "formula": formula_usada,
+                "usuario_id": str(user.id), "detalhes": resumo, "token_id": token_do_personagem,
+            })
     if destaque_da_mesa:
         # Só o suficiente para a faixa da Sessão: quem rolou, o que rolou e se foi 20 ou 1. O resultado, a DT e o
         # bônus continuam no registro, que cada um lê pelo recorte que o papel permite. Quem rolou já viu o próprio

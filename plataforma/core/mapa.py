@@ -20,7 +20,7 @@ import re
 from dataclasses import dataclass, field
 from uuid import uuid4
 
-from core import mesa_extras, recipientes
+from core import formas_token, mesa_extras, recipientes
 
 #: "hex" é o hexágono pontudo em cima; "hex-plano" é o de lado reto em cima.
 TIPOS_GRADE = ("quadrada", "hex", "hex-plano", "nenhuma")
@@ -96,6 +96,11 @@ LUZ_MAXIMA_CASAS = 30
 ESTILOS_DE_LUZ = ("fixa", "chama", "pulsa", "cintila")
 #: Efeitos de magia que a mesa inteira vê no mapa (src/pages/Mapa/motor/magia.ts).
 FORMAS_MAGIA = ("circulo", "cone", "linha", "impacto")
+#: Efeitos sonoros pontuais que o Mestre dispara para a mesa (sintetizados no navegador; só o id passa por aqui).
+#: A lista do site é a mesma (motor/efeitosSonoros.ts); um teste trava as duas.
+EFEITOS_SONOROS = (
+    "trovao", "sino", "porta", "pancada", "explosao", "aco", "moedas", "alarme", "magia", "gota", "susto", "coracao",
+)
 #: Uma magia pode começar ou terminar um pouco fora do mapa, mas não longe dele.
 FOLGA_MAGIA = 2000.0
 #: Direção para onde o vento sopra, em graus na tela: 0 vai para a direita, 90 para baixo.
@@ -664,6 +669,47 @@ def normalizar_magia(dados, largura: int, altura: int) -> dict:
     return {"forma": forma, "fluxo": fluxo, "x": x, "y": y, "ax": ax, "ay": ay}
 
 
+#: Desenho livre na mesa (lápis, linha, seta, círculo, retângulo): só passa pelo tempo real, nada é gravado.
+FORMAS_TRACO = ("lapis", "linha", "seta", "circulo", "retangulo")
+MAX_PONTOS_TRACO = 64
+#: O traço some sozinho: de 3 a 60 segundos na tela de todos.
+DURACAO_MIN_TRACO_MS = 3000
+DURACAO_MAX_TRACO_MS = 60000
+DURACAO_PADRAO_TRACO_MS = 10000
+
+
+def normalizar_traco(dados, largura: int, altura: int) -> dict:
+    """Um traço desenhado no mapa: id (para desfazer), forma, pontos e quanto tempo fica na tela.
+    Lápis tem de 2 a 64 pontos; linha, seta, círculo e retângulo têm 2 (o começo e o fim)."""
+    if not isinstance(dados, dict):
+        raise ErroMapa("traco invalido")
+    id_traco = dados.get("id")
+    if not isinstance(id_traco, str) or not 0 < len(id_traco) <= 40:
+        raise ErroMapa("traco sem identificador")
+    forma = dados.get("forma")
+    if forma not in FORMAS_TRACO:
+        raise ErroMapa("o traco e lapis, linha, seta, circulo ou retangulo")
+    bruto = dados.get("pontos")
+    if not isinstance(bruto, list):
+        raise ErroMapa("traco sem pontos")
+    esperado = (2, MAX_PONTOS_TRACO) if forma == "lapis" else (2, 2)
+    if not esperado[0] <= len(bruto) <= esperado[1]:
+        raise ErroMapa("traco com pontos demais ou de menos")
+    pontos = []
+    for ponto in bruto:
+        if not isinstance(ponto, (list, tuple)) or len(ponto) != 2:
+            raise ErroMapa("ponto do traco invalido")
+        pontos.append([
+            round(_numero(ponto[0], "x", -FOLGA_MAGIA, largura + FOLGA_MAGIA), 1),
+            round(_numero(ponto[1], "y", -FOLGA_MAGIA, altura + FOLGA_MAGIA), 1),
+        ])
+    duracao = dados.get("duracao")
+    if isinstance(duracao, bool) or not isinstance(duracao, (int, float)) or not math.isfinite(duracao):
+        duracao = DURACAO_PADRAO_TRACO_MS
+    duracao = int(max(DURACAO_MIN_TRACO_MS, min(DURACAO_MAX_TRACO_MS, duracao)))
+    return {"id": id_traco, "forma": forma, "pontos": pontos, "duracao": duracao}
+
+
 def moldura_efetiva(token: dict, personagem: str | None, moldura_personagem: str | None, moldura_mesa: str | None) -> str:
     """A da mesa (o Mestre travou) vale acima de tudo; depois a do token; depois a do personagem;
     sem escolha, o aro do lado. Uma moldura que saiu do catálogo (as desenhadas em código) conta
@@ -678,6 +724,34 @@ def moldura_efetiva(token: dict, personagem: str | None, moldura_personagem: str
 
 
 # ------------------------------------------------------------ quem é dono
+
+#: Quantos metros um token pode estar acima do chão (ou abaixo, num fosso). Só o Mestre muda.
+ELEVACAO_MINIMA = -50
+ELEVACAO_MAXIMA = 300
+NOTA_DO_JOGADOR_MAXIMA = 240
+
+
+def elevacao_valida(valor) -> int:
+    """A elevação em metros inteiros, dentro dos limites; o que não é número vale zero (no chão)."""
+    if isinstance(valor, bool) or not isinstance(valor, (int, float)):
+        return 0
+    return max(ELEVACAO_MINIMA, min(ELEVACAO_MAXIMA, int(round(valor))))
+
+
+def normalizar_elevacao(valor) -> int:
+    if isinstance(valor, bool) or not isinstance(valor, (int, float)):
+        raise ErroMapa("a elevacao e um numero de metros")
+    if valor < ELEVACAO_MINIMA or valor > ELEVACAO_MAXIMA:
+        raise ErroMapa(f"a elevacao vai de {ELEVACAO_MINIMA} a {ELEVACAO_MAXIMA} metros")
+    return int(round(valor))
+
+
+def normalizar_nota_do_jogador(valor) -> str:
+    """O lembrete do jogador no token: texto simples, até o limite, sem espaços sobrando."""
+    if not isinstance(valor, str):
+        raise ErroMapa("a nota precisa ser um texto")
+    return valor.strip()[:NOTA_DO_JOGADOR_MAXIMA]
+
 
 def personagem_do_token(token: dict, participante: dict | None) -> str | None:
     if token.get("personagem_id"):
@@ -824,6 +898,7 @@ def visao_token(
     enquadramento: dict | None = None,
     na_nevoa: bool = False,
     movimento: float | None = None,
+    defesa: int | None = None,
 ) -> dict | None:
     """O token como este espectador o recebe, ou None quando não deve nem saber que existe.
 
@@ -846,6 +921,7 @@ def visao_token(
         "porte": int(token.get("porte") or 1),
         "lado": token.get("lado") or "neutro",
         "camada": token.get("camada") if token.get("camada") in CAMADAS_TOKEN else "personagens",
+        "elevacao": elevacao_valida(token.get("elevacao")),
         "flip_x": bool(token.get("flip_x", False)),
         "flip_y": bool(token.get("flip_y", False)),
         "nome": nome,
@@ -876,17 +952,25 @@ def visao_token(
     saida["aura"] = mesa_extras.aura_vista(token.get("aura"), gestor=quem.gestor, dono=saida["e_meu"])
     if quem.gestor or saida["e_meu"]:
         saida["config_barras"] = normalizar_barras({}, token.get("barras") or {}, saida["lado"])
+        # O lembrete do jogador sobre o token: só o dono do personagem e o Mestre leem.
+        saida["nota_jogador"] = token.get("nota_jogador") or ""
         # Abre a ficha no painel lateral; só para quem já pode abrir aquela ficha.
         saida["personagem_id"] = personagem_do_token(token, participante)
         # Quanto o personagem anda por turno (metros da ficha): o mapa desenha o alcance. É dado de ficha,
         # então só vai para o dono e para quem comanda.
         if movimento is not None:
             saida["movimento"] = movimento
+        # A Defesa aparece numa bolinha ao lado do token para quem joga com ele e para o Mestre; é dado de ficha.
+        if defesa is not None and identidade:
+            saida["defesa"] = defesa
     if quem.gestor:
         saida["oculto"] = bool(token.get("oculto"))
         saida["participante_id"] = str(token["participante_id"]) if token.get("participante_id") else None
         saida["personagem_id"] = personagem_do_token(token, participante)
         saida["imagem_id"] = str(token["imagem_id"]) if token.get("imagem_id") else None
+        # As formas do token (nome e qual vale agora) e se ele é uma fonte de cópias: só de quem comanda.
+        saida.update(formas_token.lista_do_mestre(token))
+        saida["fonte"] = formas_token.ler_fonte(token.get("fonte"))
         saida["visibilidade"] = (participante or {}).get("visibilidade")
         # A nota do Mestre não sai daqui para ninguém que não comande a mesa.
         saida["nota_mestre"] = token.get("nota_mestre") or ""

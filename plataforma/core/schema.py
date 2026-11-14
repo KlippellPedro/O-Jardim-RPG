@@ -2533,4 +2533,34 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS enquadramento JSONB NOT NULL DEFAULT '{}'::jsonb",
         ),
     ),
+    (
+        80,
+        "encontros_salvos_do_mapa",
+        (
+            # Grupos de criaturas (token mais a criatura da Sessão) que o Mestre guarda para soltar de uma vez
+            # (core/encontros.py). Só o Mestre lê; o jogador nunca recebe esta coluna.
+            "ALTER TABLE mapa_campanha ADD COLUMN IF NOT EXISTS encontros JSONB NOT NULL DEFAULT '[]'::jsonb",
+        ),
+    ),
+    (
+        81,
+        "formas_e_fonte_do_token",
+        (
+            # Formas: as imagens do Acervo que o token do Mestre pode vestir (core/formas_token.py), e qual vale agora.
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS formas JSONB NOT NULL DEFAULT '[]'::jsonb",
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS forma_ativa TEXT",
+            # Fonte: o token que gera cópias ao ser arrastado ({"limite": n ou null, "usados": n}).
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS fonte JSONB",
+        ),
+    ),
+    (
+        82,
+        "elevacao_e_nota_do_jogador_no_token",
+        (
+            # Elevação: quantos metros o token está acima (ou abaixo) do chão; só o Mestre muda, todos veem.
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS elevacao SMALLINT NOT NULL DEFAULT 0",
+            # Nota do jogador: um lembrete curto preso ao token, que só o dono do personagem e o Mestre leem.
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS nota_jogador TEXT NOT NULL DEFAULT ''",
+        ),
+    ),
 )
