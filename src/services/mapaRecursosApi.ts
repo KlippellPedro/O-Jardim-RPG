@@ -9,6 +9,12 @@ export interface ITrilhaMesa {
   servidor_ms: number;
 }
 
+/** Um som de ambiente ligado na mesa (chuva, vento, fogueira...) e o volume que o Mestre deu a ele, de 0 a 1. */
+export interface ICamadaAmbiente {
+  id: string;
+  volume: number;
+}
+
 export interface IFaixaMesa {
   id: string;
   nome: string;
@@ -30,7 +36,7 @@ export const mapaRecursosApi = {
       method: 'POST', body: { personagens },
     }),
   listarTrilhas: (campanhaId: string) =>
-    api<{ faixas: IFaixaMesa[]; estado: ITrilhaMesa; gestor: boolean }>(`${base(campanhaId)}/trilhas`, COM_CORPO),
+    api<{ faixas: IFaixaMesa[]; estado: ITrilhaMesa; ambiente?: ICamadaAmbiente[]; gestor: boolean }>(`${base(campanhaId)}/trilhas`, COM_CORPO),
   enviarTrilha: (campanhaId: string, arquivo: File) => {
     const mimePorExtensao: Record<string, string> = {
       mp3: 'audio/mpeg', ogg: 'audio/ogg', oga: 'audio/ogg', wav: 'audio/wav', webm: 'audio/webm',
@@ -49,6 +55,9 @@ export const mapaRecursosApi = {
   },
   definirTrilha: (campanhaId: string, estado: Pick<ITrilhaMesa, 'faixa_id' | 'reproduzindo' | 'posicao_ms'>) =>
     api<ITrilhaMesa>(`${base(campanhaId)}/trilha`, { method: 'PUT', body: estado, ...COM_CORPO }),
+  /** O Mestre liga e desliga os sons de ambiente. Lista vazia desliga tudo. */
+  definirAmbiente: (campanhaId: string, camadas: ICamadaAmbiente[]) =>
+    api<{ camadas: ICamadaAmbiente[] }>(`${base(campanhaId)}/ambiente`, { method: 'PUT', body: { camadas }, ...COM_CORPO }),
   apagarTrilha: (campanhaId: string, faixaId: string) =>
     api<{ ok: boolean }>(`${base(campanhaId)}/trilhas/${encodeURIComponent(faixaId)}`, { method: 'DELETE' }),
   audioUrl: (campanhaId: string, faixaId: string) =>

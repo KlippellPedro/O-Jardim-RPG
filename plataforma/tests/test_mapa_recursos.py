@@ -276,6 +276,65 @@ class RecursosDaMesaBancoTests(unittest.TestCase):
         finally:
             rotas.MAX_TRILHAS = anterior
 
+    def test_o_mestre_liga_sons_de_ambiente_e_so_entram_ids_do_catalogo(self):
+        from fastapi import HTTPException
+        from core import sons_ambiente
+        from routers import mapa_recursos as rotas
+
+        mensagens: list[dict] = []
+        anunciar = tempo_real.anunciar
+        tempo_real.anunciar = lambda campanha, mensagem: mensagens.append(mensagem)  # type: ignore[assignment]
+        try:
+            vazio = rotas.listar_trilhas(self.campanha_id, user=self.mestre, database=self.database)
+            self.assertEqual(vazio["ambiente"], [])
+
+            pedido = rotas.AmbienteInput(camadas=[
+                rotas.CamadaAmbienteInput(id="chuva-forte", volume=0.4),
+                rotas.CamadaAmbienteInput(id="fogueira"),
+            ])
+            with self.assertRaises(HTTPException) as erro:
+                rotas.definir_ambiente(self.campanha_id, pedido, user=self.ana, database=self.database)
+            self.assertEqual(erro.exception.status_code, 403, "só o Mestre liga os sons")
+
+            resposta = rotas.definir_ambiente(self.campanha_id, pedido, user=self.mestre, database=self.database)
+            self.assertEqual(resposta["camadas"], [{"id": "chuva-forte", "volume": 0.4}, {"id": "fogueira", "volume": 0.6}])
+            self.assertEqual(mensagens[-1], {"t": "ambiente", "camadas": resposta["camadas"]})
+
+            # O jogador na sessão ouve o mesmo, e a trilha de música não é mexida.
+            lista = rotas.listar_trilhas(self.campanha_id, user=self.ana, database=self.database)
+            self.assertEqual(lista["ambiente"], resposta["camadas"])
+            self.assertIsNone(lista["estado"]["faixa_id"])
+
+            for ruim in ("trovao-inventado", "https://exemplo.com/som.mp3", "../x"):
+                with self.assertRaises(HTTPException) as erro:
+                    rotas.definir_ambiente(
+                        self.campanha_id, rotas.AmbienteInput(camadas=[rotas.CamadaAmbienteInput(id=ruim)]),
+                        user=self.mestre, database=self.database,
+                    )
+                self.assertEqual(erro.exception.status_code, 422, ruim)
+            with self.assertRaises(HTTPException) as erro:
+                rotas.definir_ambiente(
+                    self.campanha_id,
+                    rotas.AmbienteInput(camadas=[rotas.CamadaAmbienteInput(id="vento"), rotas.CamadaAmbienteInput(id="vento")]),
+                    user=self.mestre, database=self.database,
+                )
+            self.assertEqual(erro.exception.status_code, 422, "o mesmo som duas vezes")
+            self.assertEqual(rotas.listar_trilhas(self.campanha_id, user=self.mestre, database=self.database)["ambiente"], resposta["camadas"], "o pedido ruim não mexe no que toca")
+
+            # Música e ambiente convivem: mexer em um não apaga o outro.
+            faixa = self._enviar(self.mestre)
+            rotas.definir_trilha(self.campanha_id, rotas.EstadoTrilhaInput(faixa_id=faixa["id"], reproduzindo=True), user=self.mestre, database=self.database)
+            self.assertEqual(rotas.listar_trilhas(self.campanha_id, user=self.mestre, database=self.database)["ambiente"], resposta["camadas"])
+            rotas.apagar_trilha(self.campanha_id, uuid.UUID(faixa["id"]), user=self.mestre, database=self.database)
+            self.assertEqual(rotas.listar_trilhas(self.campanha_id, user=self.mestre, database=self.database)["ambiente"], resposta["camadas"])
+
+            # Lista vazia desliga tudo.
+            rotas.definir_ambiente(self.campanha_id, rotas.AmbienteInput(camadas=[]), user=self.mestre, database=self.database)
+            self.assertEqual(rotas.listar_trilhas(self.campanha_id, user=self.mestre, database=self.database)["ambiente"], [])
+        finally:
+            tempo_real.anunciar = anunciar  # type: ignore[assignment]
+            self.assertTrue(sons_ambiente.MAX_CAMADAS >= 4)
+
 
 def test_trilhas_ficam_fora_do_backup_em_jsonl():
     """O áudio de até 20 MB por faixa não cabe no backup montado em memória (ver core/backup.py)."""
@@ -284,3 +343,45 @@ def test_trilhas_ficam_fora_do_backup_em_jsonl():
     for tabela in ("mapa_trilhas", "mapa_trilha_estado"):
         assert tabela in TABELAS_IGNORADAS
         assert tabela not in TABELAS
+
+
+def test_catalogo_de_sons_de_ambiente_so_aponta_para_o_repositorio_fixado():
+    """Os sons tocam de fora (GitHub via jsDelivr): o catálogo precisa ter commit fixado e ids certos."""
+    import re
+
+    from core import sons_ambiente
+
+    dados = sons_ambiente._DADOS
+    assert re.fullmatch(r"[0-9a-f]{40}", dados["fonte"]["commit"]), "commit inteiro, não um branch que muda"
+    assert dados["fonte"]["base"].startswith("https://cdn.jsdelivr.net/gh/")
+    assert dados["fonte"]["commit"] in dados["fonte"]["base"]
+    categorias = {c["id"] for c in dados["categorias"]}
+    ids = [som["id"] for som in dados["sons"]]
+    assert len(ids) == len(set(ids)) and set(sons_ambiente.SONS) == set(ids)
+    for som in dados["sons"]:
+        assert re.fullmatch(r"[a-z0-9-]+", som["id"]) and len(som["id"]) <= 60, som["id"]
+        assert som["categoria"] in categorias, som["id"]
+        assert re.fullmatch(r"[a-z]+/[a-z0-9-]+\.mp3", som["arquivo"]), som["arquivo"]
+        assert 0 <= som["volume"] <= 1
+
+
+def test_normalizar_camadas_confere_id_volume_e_limite():
+    import pytest
+
+    from core import sons_ambiente as sa
+
+    assert sa.normalizar_camadas([]) == []
+    assert sa.normalizar_camadas([{"id": "rio", "volume": 1.7}, {"id": "vento", "volume": -3}]) == [
+        {"id": "rio", "volume": 1.0}, {"id": "vento", "volume": 0.0},
+    ]
+    assert sa.normalizar_camadas([{"id": "rio"}])[0]["volume"] == sa.SONS["rio"]
+    for ruim in (None, "rio", {"id": "rio"}, [None], [{"id": 7}], [{"id": "nao-existe"}], [{"id": "rio", "volume": "alto"}],
+                 [{"id": "rio", "volume": True}], [{"id": "rio", "volume": float("nan")}], [{"id": "rio"}, {"id": "rio"}]):
+        with pytest.raises(sa.ErroAmbiente):
+            sa.normalizar_camadas(ruim)
+    todos = [{"id": som_id} for som_id in list(sa.SONS)[: sa.MAX_CAMADAS + 1]]
+    with pytest.raises(sa.ErroAmbiente):
+        sa.normalizar_camadas(todos)
+    assert len(sa.normalizar_camadas(todos[: sa.MAX_CAMADAS])) == sa.MAX_CAMADAS
+    # O que está guardado e quebrou vira silêncio, não erro.
+    assert sa.ler_camadas("lixo") == [] and sa.ler_camadas([{"id": "sumiu"}]) == []

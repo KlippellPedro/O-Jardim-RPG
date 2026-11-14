@@ -1,0 +1,249 @@
+/* Painel Trilha sonora: sons de ambiente (do GitHub) e músicas da mesa. */
+
+.mapa-trilha-abas {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.mapa-trilha-abas button {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mapa-apagado);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.mapa-trilha-abas button small {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(199, 164, 76, 0.22);
+  color: var(--mapa-ouro);
+  font-size: 10px;
+}
+
+.mapa-trilha-abas button.ativo {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mapa-texto);
+}
+
+.mapa-ambiente,
+.mapa-trilha-musica {
+  display: grid;
+  gap: 10px;
+}
+
+.mapa-ambiente-local {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.mapa-ambiente-local label {
+  display: grid;
+  gap: 2px;
+}
+
+.mapa-ambiente-local > span {
+  min-width: 34px;
+  color: var(--mapa-texto);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.mapa-ambiente-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.mapa-ambiente-titulo strong {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mapa-ambiente-titulo .mapa-botao-leve {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+
+.mapa-ambiente-agora ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mapa-ambiente-agora li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(70px, 110px) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid rgba(199, 164, 76, 0.3);
+  border-radius: 9px;
+  background: rgba(199, 164, 76, 0.08);
+  font-size: 13px;
+}
+
+.mapa-ambiente-agora li.falhou {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.09);
+}
+
+.mapa-ambiente-agora li > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-ambiente-agora meter {
+  width: 100%;
+}
+
+.mapa-ambiente-aviso {
+  margin: 6px 0 0;
+  color: #fca5a5;
+}
+
+.mapa-ambiente-catalogo {
+  display: grid;
+  gap: 8px;
+}
+
+.mapa-ambiente-busca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--mapa-apagado);
+}
+
+.mapa-ambiente-busca:focus-within {
+  border-color: rgba(199, 164, 76, 0.6);
+}
+
+.mapa-ambiente-busca input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--mapa-texto);
+  font: inherit;
+}
+
+.mapa-ambiente-categorias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.mapa-ambiente-categorias button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--mapa-apagado);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.mapa-ambiente-categorias button.ativo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.14);
+  color: var(--mapa-texto);
+}
+
+.mapa-ambiente-sons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.mapa-ambiente-sons button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  padding: 8px 9px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--mapa-texto);
+  cursor: pointer;
+  font-size: 12.5px;
+  text-align: left;
+}
+
+.mapa-ambiente-sons button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapa-ambiente-sons button:hover:not(:disabled) {
+  border-color: rgba(199, 164, 76, 0.55);
+}
+
+.mapa-ambiente-sons button.ativo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.16);
+}
+
+.mapa-ambiente-sons button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.mapa-ambiente-sons .mapa-dica {
+  grid-column: 1 / -1;
+}
+
+.mapa-ambiente-credito {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.mapa-ambiente-credito a {
+  color: var(--mapa-ouro);
+}
+
+.mapa-trilha-musica .mapa-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}

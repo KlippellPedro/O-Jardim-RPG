@@ -1,0 +1,328 @@
+{
+  "_nota": "Sons de ambiente da mesa (chuva, vento, fogueira, taverna...). Não ficam guardados no site nem no banco: tocam direto de um repositório público do GitHub, servidos pelo jsDelivr, e o Mestre liga e desliga cada um pelo painel Trilha sonora. O commit está fixado para o arquivo não mudar nem sumir de uma hora para outra. Para acrescentar um som, ponha uma entrada em 'sons' com o caminho do arquivo dentro de 'fonte.pasta' e confira se o link abre. O servidor só aceita os ids daqui (plataforma/core/sons_ambiente.py).",
+  "versao": 1,
+  "fonte": {
+    "nome": "Moodist, de remvze",
+    "repositorio": "https://github.com/remvze/moodist",
+    "commit": "11c0be2200116a3635880d600fd6953899cc51a3",
+    "base": "https://cdn.jsdelivr.net/gh/remvze/moodist@11c0be2200116a3635880d600fd6953899cc51a3/public/sounds/",
+    "licenca": "Pixabay Content License ou CC0, conforme o README do repositório",
+    "licenca_url": "https://github.com/remvze/moodist#third-party-assets"
+  },
+  "maximo_ao_mesmo_tempo": 6,
+  "categorias": [
+    {
+      "id": "chuva",
+      "nome": "Chuva e trovão"
+    },
+    {
+      "id": "vento",
+      "nome": "Vento"
+    },
+    {
+      "id": "fogo-e-agua",
+      "nome": "Fogo e água"
+    },
+    {
+      "id": "natureza",
+      "nome": "Natureza"
+    },
+    {
+      "id": "animais",
+      "nome": "Animais"
+    },
+    {
+      "id": "lugares",
+      "nome": "Lugares"
+    }
+  ],
+  "sons": [
+    {
+      "id": "chuva-leve",
+      "nome": "Chuva leve",
+      "categoria": "chuva",
+      "arquivo": "rain/light-rain.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "chuva-forte",
+      "nome": "Chuva forte",
+      "categoria": "chuva",
+      "arquivo": "rain/heavy-rain.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "chuva-nas-folhas",
+      "nome": "Chuva nas folhas",
+      "categoria": "chuva",
+      "arquivo": "rain/rain-on-leaves.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "chuva-na-barraca",
+      "nome": "Chuva na barraca",
+      "categoria": "chuva",
+      "arquivo": "rain/rain-on-tent.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "chuva-na-janela",
+      "nome": "Chuva na janela",
+      "categoria": "chuva",
+      "arquivo": "rain/rain-on-window.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "trovoes",
+      "nome": "Trovões",
+      "categoria": "chuva",
+      "arquivo": "rain/thunder.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "vento",
+      "nome": "Vento",
+      "categoria": "vento",
+      "arquivo": "nature/wind.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "vento-uivante",
+      "nome": "Vento uivante",
+      "categoria": "vento",
+      "arquivo": "nature/howling-wind.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "vento-nas-arvores",
+      "nome": "Vento nas árvores",
+      "categoria": "vento",
+      "arquivo": "nature/wind-in-trees.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "sinos-de-vento",
+      "nome": "Sinos de vento",
+      "categoria": "vento",
+      "arquivo": "things/wind-chimes.mp3",
+      "volume": 0.5
+    },
+    {
+      "id": "fogueira",
+      "nome": "Fogueira",
+      "categoria": "fogo-e-agua",
+      "arquivo": "nature/campfire.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "caldeirao-fervendo",
+      "nome": "Caldeirão fervendo",
+      "categoria": "fogo-e-agua",
+      "arquivo": "things/boiling-water.mp3",
+      "volume": 0.5
+    },
+    {
+      "id": "rio",
+      "nome": "Rio",
+      "categoria": "fogo-e-agua",
+      "arquivo": "nature/river.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "cachoeira",
+      "nome": "Cachoeira",
+      "categoria": "fogo-e-agua",
+      "arquivo": "nature/waterfall.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "ondas-do-mar",
+      "nome": "Ondas do mar",
+      "categoria": "fogo-e-agua",
+      "arquivo": "nature/waves.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "gotas-na-caverna",
+      "nome": "Gotas na caverna",
+      "categoria": "fogo-e-agua",
+      "arquivo": "nature/droplets.mp3",
+      "volume": 0.5
+    },
+    {
+      "id": "debaixo-dagua",
+      "nome": "Debaixo d'água",
+      "categoria": "fogo-e-agua",
+      "arquivo": "places/underwater.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "barco-a-remo",
+      "nome": "Barco a remo",
+      "categoria": "fogo-e-agua",
+      "arquivo": "transport/rowing-boat.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "veleiro",
+      "nome": "Veleiro",
+      "categoria": "fogo-e-agua",
+      "arquivo": "transport/sailboat.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "selva",
+      "nome": "Selva",
+      "categoria": "natureza",
+      "arquivo": "nature/jungle.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "passos-nas-folhas",
+      "nome": "Passos nas folhas",
+      "categoria": "natureza",
+      "arquivo": "nature/walk-on-leaves.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "passos-no-cascalho",
+      "nome": "Passos no cascalho",
+      "categoria": "natureza",
+      "arquivo": "nature/walk-on-gravel.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "passos-na-neve",
+      "nome": "Passos na neve",
+      "categoria": "natureza",
+      "arquivo": "nature/walk-in-snow.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "passaros",
+      "nome": "Pássaros",
+      "categoria": "animais",
+      "arquivo": "animals/birds.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "grilos",
+      "nome": "Grilos à noite",
+      "categoria": "animais",
+      "arquivo": "animals/crickets.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "sapos",
+      "nome": "Sapos",
+      "categoria": "animais",
+      "arquivo": "animals/frog.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "coruja",
+      "nome": "Coruja",
+      "categoria": "animais",
+      "arquivo": "animals/owl.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "lobos",
+      "nome": "Lobos",
+      "categoria": "animais",
+      "arquivo": "animals/wolf.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "corvos",
+      "nome": "Corvos",
+      "categoria": "animais",
+      "arquivo": "animals/crows.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "gaivotas",
+      "nome": "Gaivotas",
+      "categoria": "animais",
+      "arquivo": "animals/seagulls.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "taverna-cheia",
+      "nome": "Taverna cheia",
+      "categoria": "lugares",
+      "arquivo": "places/crowded-bar.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "vila-a-noite",
+      "nome": "Vila à noite",
+      "categoria": "lugares",
+      "arquivo": "places/night-village.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "igreja",
+      "nome": "Igreja",
+      "categoria": "lugares",
+      "arquivo": "places/church.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "templo",
+      "nome": "Templo",
+      "categoria": "lugares",
+      "arquivo": "places/temple.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "biblioteca",
+      "nome": "Biblioteca",
+      "categoria": "lugares",
+      "arquivo": "places/library.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "multidao",
+      "nome": "Multidão",
+      "categoria": "lugares",
+      "arquivo": "urban/crowd.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "rua-movimentada",
+      "nome": "Rua movimentada",
+      "categoria": "lugares",
+      "arquivo": "urban/busy-street.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "laboratorio",
+      "nome": "Laboratório",
+      "categoria": "lugares",
+      "arquivo": "places/laboratory.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "metro",
+      "nome": "Estação de metrô",
+      "categoria": "lugares",
+      "arquivo": "places/subway-station.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "dentro-do-trem",
+      "nome": "Dentro de um trem",
+      "categoria": "lugares",
+      "arquivo": "transport/inside-a-train.mp3",
+      "volume": 0.6
+    },
+    {
+      "id": "submarino",
+      "nome": "Submarino",
+      "categoria": "lugares",
+      "arquivo": "transport/submarine.mp3",
+      "volume": 0.6
+    }
+  ]
+}

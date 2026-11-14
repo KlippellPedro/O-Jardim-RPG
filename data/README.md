@@ -16,6 +16,9 @@ podem ser espelhadas em `editorial/campanhas/`; veja
 - `documentos/`: os Documentos universais (`universais.json`), papéis prontos que explicam a lore
   para o Mestre mandar aos jogadores. Só o servidor lê e só quem comanda a mesa recebe
   (a fronteira de conteúdo barra o navegador); o ZIP da plataforma leva a pasta.
+- `mapa/`: o catálogo dos sons de ambiente do mapa (`sons-ambiente-v1.json`: chuva, vento, fogueira,
+  taverna...). Os áudios não ficam aqui: tocam de um repositório do GitHub pelo jsDelivr, com o commit
+  fixado. O site e o servidor leem o mesmo arquivo (o servidor só aceita os ids dele).
 - `editorial/`: snapshots das publicações por campanha para revisão no Git; não
   são consumidos automaticamente pelo site.
 

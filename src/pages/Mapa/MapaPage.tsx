@@ -76,10 +76,12 @@ import { EditorAnotacao } from './componentes/EditorAnotacao';
 import { PainelJogadores } from './componentes/PainelJogadores';
 import type { Enquadramento } from './motor/molduras';
 import { lerPreferenciasBarras, normalizarPreferenciasBarras, salvarPreferenciasBarras, type IPreferenciasBarrasMapa } from './motor/barrasToken';
-import { mapaRecursosApi, type ITrilhaMesa } from '../../services/mapaRecursosApi';
+import { mapaRecursosApi, type ICamadaAmbiente, type ITrilhaMesa } from '../../services/mapaRecursosApi';
 import { PainelDocumentosMesa } from './componentes/PainelDocumentosMesa';
 import { DocumentoDaMesa, type IDocumentoCompartilhado } from './componentes/DocumentoDaMesa';
 import { PainelTrilha } from './componentes/PainelTrilha';
+import { AmbienteDaMesa } from './componentes/AmbienteDaMesa';
+import { guardarAjusteLocal, lerAjusteLocal, normalizarCamadas, type IAjusteLocalDoAmbiente } from './motor/sonsAmbiente';
 import './mapa.css';
 import './painelDobravel.css';
 import './navegacao.css';
@@ -245,6 +247,12 @@ export const MapaPage = () => {
   const [trilhaMesa, setTrilhaMesa] = useState<ITrilhaMesa | null>(null);
   const [audioPrecisaAtivar, setAudioPrecisaAtivar] = useState(false);
   const audioMesaRef = useRef<HTMLAudioElement>(null);
+  // Sons de ambiente (chuva, vento...): o que o Mestre ligou, o ajuste deste aparelho e o estado do alto-falante.
+  const [ambienteMesa, setAmbienteMesa] = useState<ICamadaAmbiente[]>([]);
+  const [ajusteDoAmbiente, setAjusteDoAmbiente] = useState<IAjusteLocalDoAmbiente>(() => lerAjusteLocal());
+  const [ambienteBloqueado, setAmbienteBloqueado] = useState(false);
+  const [ambienteComFalha, setAmbienteComFalha] = useState<string[]>([]);
+  const [tentativaDoAmbiente, setTentativaDoAmbiente] = useState(0);
   const [camadasLocais, setCamadasLocais] = useState<Record<CamadaMapaId, boolean>>({ ...TODAS_CAMADAS_VISIVEIS });
   const [camadaAtiva, setCamadaAtiva] = useState<CamadaMapaId>('personagens');
   const [editorAnotacao, setEditorAnotacao] = useState<{ anotacao: IAnotacaoMapa; existente: boolean; cenaId: string } | null>(null);
@@ -356,11 +364,16 @@ export const MapaPage = () => {
   useEffect(() => {
     if (!campanhaId) {
       setTrilhaMesa(null);
+      setAmbienteMesa([]);
       return undefined;
     }
     let vivo = true;
     void mapaRecursosApi.listarTrilhas(campanhaId)
-      .then((resposta) => { if (vivo) setTrilhaMesa(resposta.estado); })
+      .then((resposta) => {
+        if (!vivo) return;
+        setTrilhaMesa(resposta.estado);
+        setAmbienteMesa(normalizarCamadas(resposta.ambiente));
+      })
       .catch(() => { /* O mapa continua utilizável quando a trilha não está disponível. */ });
     return () => { vivo = false; };
   }, [campanhaId]);
@@ -655,6 +668,9 @@ export const MapaPage = () => {
         }
         break;
       }
+      case 'ambiente':
+        setAmbienteMesa(normalizarCamadas(mensagem.camadas));
+        break;
       case 'regua':
         palco?.reguaRemota(String(mensagem.por), (mensagem.pontos as number[][] | null)?.map(([x, y]) => ({ x, y })) ?? null, String(mensagem.cor), String(mensagem.nome));
         break;
@@ -2202,8 +2218,23 @@ export const MapaPage = () => {
             else setTrilhaMesa({ ...trilhaMesa, reproduzindo: false, posicao_ms: 0 });
           }}
         />
-        {audioPrecisaAtivar && trilhaMesa?.reproduzindo && (
-          <button type="button" className="mapa-audio-ativar" onClick={ativarAudioDaMesa}><Music2 size={15} /> Ativar áudio da mesa</button>
+        <AmbienteDaMesa
+          camadas={ambienteMesa}
+          ajuste={ajusteDoAmbiente.volume}
+          mudo={ajusteDoAmbiente.mudo}
+          tentativa={tentativaDoAmbiente}
+          onBloqueado={setAmbienteBloqueado}
+          onFalhas={setAmbienteComFalha}
+        />
+        {((audioPrecisaAtivar && trilhaMesa?.reproduzindo) || (ambienteBloqueado && ambienteMesa.length > 0 && !ajusteDoAmbiente.mudo)) && (
+          <button
+            type="button"
+            className="mapa-audio-ativar"
+            onClick={() => {
+              ativarAudioDaMesa();
+              setTentativaDoAmbiente((n) => n + 1);
+            }}
+          ><Music2 size={15} /> Ativar áudio da mesa</button>
         )}
         {gestor && campanhaId && <PainelDocumentosMesa
           aberto={painelRecurso === 'documentos'}
@@ -2219,6 +2250,11 @@ export const MapaPage = () => {
           onEstado={setTrilhaMesa}
           onTocar={controlarTrilha}
           onFechar={() => setPainelRecurso(null)}
+          ambiente={ambienteMesa}
+          onAmbiente={setAmbienteMesa}
+          ajuste={ajusteDoAmbiente}
+          onAjuste={(ajuste) => { setAjusteDoAmbiente(ajuste); guardarAjusteLocal(ajuste); }}
+          falhas={ambienteComFalha}
         />}
         {documentoMesa && <DocumentoDaMesa documento={documentoMesa} onFechar={() => setDocumentoMesa(null)} />}
         {!estado && !erro && <div className="mapa-aviso"><Loader2 className="girando" size={20} /> Abrindo o mapa...</div>}

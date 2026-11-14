@@ -8,9 +8,10 @@ from urllib.parse import unquote
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 
-from core import tempo_real
+from core import sons_ambiente, tempo_real
 from core.database import Database
 from core.dependencies import AuthenticatedUser, campaign_access, get_current_user, get_database, require_csrf
 
@@ -31,6 +32,16 @@ class EstadoTrilhaInput(BaseModel):
     faixa_id: UUID | None = None
     reproduzindo: bool = False
     posicao_ms: int = Field(default=0, ge=0, le=MAX_AUDIO_MS)
+
+
+class CamadaAmbienteInput(BaseModel):
+    id: str = Field(max_length=60)
+    volume: float = Field(default=sons_ambiente.VOLUME_PADRAO, ge=0, le=1)
+
+
+class AmbienteInput(BaseModel):
+    #: Os sons ligados agora, com o volume de cada um. Lista vazia desliga tudo.
+    camadas: list[CamadaAmbienteInput] = Field(default_factory=list, max_length=sons_ambiente.MAX_CAMADAS)
 
 
 def _acesso_de_mesa(connection, campanha_id: UUID, user_id: UUID):
@@ -70,6 +81,13 @@ def _estado_trilha(connection, campanha_id: UUID) -> dict:
         "reproduzindo": bool(linha["reproduzindo"]), "posicao_ms": min(posicao, MAX_AUDIO_MS),
         "servidor_ms": servidor_ms,
     }
+
+
+def _ambiente(connection, campanha_id: UUID) -> list[dict]:
+    linha = connection.execute(
+        "SELECT ambiente FROM mapa_trilha_estado WHERE campanha_id=%s", (campanha_id,),
+    ).fetchone()
+    return sons_ambiente.ler_camadas(linha["ambiente"] if linha else None)
 
 
 def _validar_destino(connection, campanha_id: UUID, personagens: list[UUID] | None) -> None:
@@ -162,6 +180,7 @@ def listar_trilhas(
     with database.connection() as connection:
         acesso = _acesso_de_mesa(connection, campanha_id, user.id)
         estado = _estado_trilha(connection, campanha_id)
+        ambiente = _ambiente(connection, campanha_id)
         faixas = []
         if acesso.manages_content:
             faixas = [
@@ -171,7 +190,7 @@ def listar_trilhas(
                     (campanha_id,),
                 ).fetchall()
             ]
-    return {"faixas": faixas, "estado": estado, "gestor": acesso.manages_content}
+    return {"faixas": faixas, "estado": estado, "ambiente": ambiente, "gestor": acesso.manages_content}
 
 
 @router.post("/{campanha_id}/trilhas", status_code=status.HTTP_201_CREATED)
@@ -261,6 +280,35 @@ def definir_trilha(
         estado = _estado_trilha(connection, campanha_id)
     tempo_real.anunciar(campanha_id, {"t": "trilha", "estado": estado})
     return estado
+
+
+@router.put("/{campanha_id}/ambiente")
+def definir_ambiente(
+    campanha_id: UUID,
+    payload: AmbienteInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """O Mestre liga e desliga os sons de ambiente. A mesa inteira ouve o mesmo."""
+
+    try:
+        camadas = sons_ambiente.normalizar_camadas([camada.model_dump() for camada in payload.camadas])
+    except sons_ambiente.ErroAmbiente as erro:
+        raise HTTPException(status_code=422, detail=str(erro)) from None
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        if not acesso.manages_content:
+            raise HTTPException(status_code=403, detail="permissao de mestre necessaria")
+        connection.execute(
+            """
+            INSERT INTO mapa_trilha_estado (campanha_id, ambiente, atualizado_em)
+            VALUES (%s, %s, CURRENT_TIMESTAMP)
+            ON CONFLICT (campanha_id) DO UPDATE SET ambiente=EXCLUDED.ambiente
+            """,
+            (campanha_id, Jsonb(camadas)),
+        )
+    tempo_real.anunciar(campanha_id, {"t": "ambiente", "camadas": camadas})
+    return {"camadas": camadas}
 
 
 @router.delete("/{campanha_id}/trilhas/{faixa_id}")

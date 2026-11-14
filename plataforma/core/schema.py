@@ -2515,4 +2515,13 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS recipiente JSONB",
         ),
     ),
+    (
+        78,
+        "sons_de_ambiente_da_mesa",
+        (
+            # Os sons ligados agora na mesa (chuva, vento, fogueira...): [{"id", "volume"}]. Os arquivos não
+            # ficam no banco: tocam de um repositório do GitHub (core/sons_ambiente.py).
+            "ALTER TABLE mapa_trilha_estado ADD COLUMN IF NOT EXISTS ambiente JSONB NOT NULL DEFAULT '[]'::jsonb",
+        ),
+    ),
 )
