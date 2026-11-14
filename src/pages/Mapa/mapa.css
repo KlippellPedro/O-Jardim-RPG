@@ -362,6 +362,8 @@
   color: var(--mapa-apagado);
   text-align: center;
   pointer-events: none;
+  /* Acima da janela do Acervo (20): o recado de "mapa colocado" não pode sumir por baixo dela. */
+  z-index: 25;
 }
 
 .mapa-medidor {
@@ -429,6 +431,8 @@
   flex-direction: column;
   border-color: rgba(239, 68, 68, 0.45);
   color: #fecaca;
+  /* O aviso comum deixa o clique passar para o mapa; este tem o botão "Tentar agora" e precisa receber o clique. */
+  pointer-events: auto;
 }
 
 .mapa-erro {
@@ -677,6 +681,9 @@
   border-radius: 12px;
   background: var(--mapa-painel);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  /* Acima da barra do token e da barra de baixo (5), da janela do Acervo (6) e dos relógios (6); abaixo da bandeja
+     de dados (9), que é menor e fica no pé. Sem isso o painel ficava por baixo de tudo isso. */
+  z-index: 7;
 }
 
 /* Os painéis da esquerda têm todos a mesma largura. */
@@ -820,10 +827,6 @@
   margin-bottom: 6px;
 }
 
-.mapa-camadas {
-  z-index: 3;
-}
-
 .mapa-camadas header > div {
   display: flex;
   align-items: center;
@@ -900,7 +903,6 @@
   right: 12px;
   left: auto;
   width: min(var(--mapa-largura-painel), calc(100% - 24px));
-  z-index: 4;
 }
 
 .mapa-editor-anotacao textarea {
@@ -991,7 +993,9 @@
   border-radius: 14px;
   background: var(--mapa-painel);
   box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
-  z-index: 2;
+  /* Tela cheia por cima de tudo o que mora no palco: barra do token (5), botões redondos do painel (6),
+     avisos (9) e a bandeja de dados (9). Só a pausa da mesa (30) e as janelas em tela cheia ficam acima. */
+  z-index: 20;
 }
 
 .mapa-acervo > header {
@@ -1175,7 +1179,7 @@
   border-radius: 14px;
   background: var(--mapa-painel);
   box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
-  z-index: 3;
+  z-index: 20;
 }
 
 .mapa-oficina > header {
@@ -1383,6 +1387,8 @@
   background: var(--mapa-painel);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
   font-size: 12px;
+  /* Acima dos relógios da mesa (6), que ficam no mesmo canto. */
+  z-index: 7;
 }
 
 .mapa-barra-nevoa-linha {
@@ -1490,10 +1496,16 @@
   width: min(var(--mapa-largura-painel), calc(100% - 24px));
 }
 
-/* Com a barra da névoa aberta, os painéis da esquerda descem para não ficar por baixo dela. */
-.mapa-barra-nevoa ~ .mapa-config {
-  top: 104px;
-  max-height: calc(100% - 116px);
+/* Com a barra da névoa (88 px de altura) ou da magia (71 px) aberta, os painéis da esquerda descem para não ficar por
+   baixo dela. A conta parte de --mapa-topo-esq: com as ferramentas escondidas a barra começa mais embaixo. */
+.mapa-area:has(.mapa-barra-nevoa) .mapa-config {
+  top: calc(var(--mapa-topo-esq) + 92px);
+  max-height: calc(100% - var(--mapa-topo-esq) - 104px);
+}
+
+.mapa-area:has(.mapa-barra-magia) .mapa-config {
+  top: calc(var(--mapa-topo-esq) + 79px);
+  max-height: calc(100% - var(--mapa-topo-esq) - 91px);
 }
 
 .mapa-clima-efeito {
@@ -2200,10 +2212,6 @@ button.mapa-tempo.ativo {
 }
 
 /* Jogadores da mesa, papéis, permissões e convites. */
-.mapa-config.mapa-jogadores {
-  z-index: 6;
-}
-
 .mapa-jogadores-titulo {
   display: flex;
   align-items: center;

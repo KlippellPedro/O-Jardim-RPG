@@ -16,6 +16,8 @@
   background: var(--mapa-painel);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
   font-size: 12px;
+  /* Acima dos relógios da mesa (6), que ficam no mesmo canto. */
+  z-index: 7;
 }
 
 .mapa-barra-magia .mapa-dica {
