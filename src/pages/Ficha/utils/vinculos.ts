@@ -276,10 +276,11 @@ export function aplicarPontos(vinculo: IVinculo, pontos: number, motivo: string,
   return teto > 0 ? { ...resto, pontosUsados: teto } : resto;
 }
 
-/** O teste de Sanidade que a relação cobra, já pelo número de pontos e pelo laço. */
-export function sanidadeDoVinculo(vinculo: Pick<IVinculo, 'afinidade' | 'grupo' | 'laco'>, evento: 'cai' | 'perde') {
+/** O teste de Sanidade que a relação cobra, já pelo número de pontos, pelo
+ *  laço e, quando a ficha sabe, pelo nível do personagem (ajuste de nível). */
+export function sanidadeDoVinculo(vinculo: Pick<IVinculo, 'afinidade' | 'grupo' | 'laco'>, evento: 'cai' | 'perde', nivel?: number) {
   const pontos = vinculo.grupo === true ? pontosDoVinculo(vinculo.afinidade) : 0;
-  return sanidadeDaRelacao(evento, pontos, { laco: !!vinculo.laco });
+  return sanidadeDaRelacao(evento, pontos, { laco: !!vinculo.laco, nivel });
 }
 
 export { PONTOS_DE_RELACAO_MAXIMOS };

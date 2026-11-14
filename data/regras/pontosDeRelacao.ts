@@ -8,11 +8,14 @@
  *
  * Cada ponto é um uso por sessão com aquela pessoa (Ajuda certa, Segurar a
  * mão, entrar no Ataque Combinado com Sintonia), e quanto mais pontos, mais a
- * Sanidade cobra quando algo acontece com ela. O laço rompido sem pontos é
- * exatamente a linha de 1 ponto (DT 15, 1d6), então a regra de Contatos e
- * Laços continua valendo como está. Na ficha, os pontos saem da afinidade do
+ * Sanidade cobra quando algo acontece com ela. As DTs são as do nível 1 (10 e
+ * 15) e somam o ajuste de nível do personagem, como toda DT de Sanidade:
+ * viram a Rotineira e a Padrão do nível dele. O laço rompido sem pontos é
+ * exatamente a linha de 1 ponto (DT Padrão, 1d6), então a regra de Contatos
+ * e Laços continua valendo como está. Na ficha, os pontos saem da afinidade do
  * vínculo pela mesma escada da Confiança dos contatos (1 ou 2, 3 ou 4, 5).
  */
+import { dtNoNivel } from '../../src/services/curvaCriatura';
 import type { RegraTopicoDe } from './tipos';
 
 export const PONTOS_DE_RELACAO_MAXIMOS = 3;
@@ -83,30 +86,35 @@ export type EventoDeRelacao = 'cai' | 'perde';
 export interface ILinhaDeSanidadeDaRelacao {
   evento: EventoDeRelacao;
   titulo: string;
+  /** DT do nível 1; na mesa soma o ajuste de nível do personagem. */
   dt: number;
+  /** Nome da DT no nível do personagem: 10 é a Rotineira e 15 a Padrão. */
+  nomeDaDt: 'Rotineira' | 'Padrão';
   /** Perda na falha, por 1, 2 e 3 pontos. */
   perdas: readonly [string, string, string];
 }
 
 export const SANIDADE_DA_RELACAO: readonly ILinhaDeSanidadeDaRelacao[] = [
-  { evento: 'cai', titulo: 'A pessoa cai à sua vista (fica Morrendo)', dt: 10, perdas: ['1d4', '1d6', '1d8'] },
-  { evento: 'perde', titulo: 'A pessoa morre, some ou trai você', dt: 15, perdas: ['1d6', '1d8', '2d6'] },
+  { evento: 'cai', titulo: 'A pessoa cai à sua vista (fica Morrendo)', dt: 10, nomeDaDt: 'Rotineira', perdas: ['1d4', '1d6', '1d8'] },
+  { evento: 'perde', titulo: 'A pessoa morre, some ou trai você', dt: 15, nomeDaDt: 'Padrão', perdas: ['1d6', '1d8', '2d6'] },
 ];
 
 /** O teste de Sanidade que a relação cobra. Sem pontos não há teste, a menos
  *  que haja um laço e a pessoa se perca: aí vale a linha de 1 ponto, que é a
- *  regra do laço rompido. Laço e pontos juntos rolam uma vez, pelos pontos. */
+ *  regra do laço rompido. Laço e pontos juntos rolam uma vez, pelos pontos.
+ *  Sem `nivel`, a DT é a do nível 1; com ele, já soma o ajuste de nível. */
 export function sanidadeDaRelacao(
   evento: EventoDeRelacao,
   pontos: number,
-  { laco = false }: { laco?: boolean } = {},
-): { dt: number; perda: string } | null {
+  { laco = false, nivel }: { laco?: boolean; nivel?: number } = {},
+): { dt: number; perda: string; nomeDaDt: ILinhaDeSanidadeDaRelacao['nomeDaDt'] } | null {
   const linha = SANIDADE_DA_RELACAO.find((item) => item.evento === evento);
   if (!linha) return null;
   let degrau: number = limitarPontosDeRelacao(pontos);
   if (degrau === 0 && laco && evento === 'perde') degrau = 1;
   if (degrau === 0) return null;
-  return { dt: linha.dt, perda: linha.perdas[degrau - 1] };
+  const dt = nivel === undefined ? linha.dt : dtNoNivel(linha.dt, Math.max(1, nivel));
+  return { dt, perda: linha.perdas[degrau - 1], nomeDaDt: linha.nomeDaDt };
 }
 
 // ---------------------------------------------------------- ganhar e perder
@@ -142,7 +150,7 @@ const tabelaUsos = USOS_DE_PONTO.map((uso) => `
 `).join('');
 
 const tabelaSanidade = SANIDADE_DA_RELACAO.map((linha) => `
-  <tr><td><strong>${linha.titulo}</strong></td><td>${linha.dt}</td><td>${linha.perdas[0]}</td><td>${linha.perdas[1]}</td><td>${linha.perdas[2]}</td></tr>
+  <tr><td><strong>${linha.titulo}</strong></td><td>${linha.nomeDaDt}<br><small>${linha.dt} no nível 1</small></td><td>${linha.perdas[0]}</td><td>${linha.perdas[1]}</td><td>${linha.perdas[2]}</td></tr>
 `).join('');
 
 const lista = (itens: readonly string[]) => itens.map((item) => `<li>${item}</li>`).join('\n      ');
@@ -193,13 +201,13 @@ export const REGRA_PONTOS_DE_RELACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
     </ul>
 
     <h3 class="regras-subtitle">O preço</h3>
-    <p>Gostar de alguém pesa. Quando algo acontece com uma pessoa com quem você tem pontos, teste Sanidade pela tabela. Cada pessoa pede no máximo um teste de cada linha por cena, e a regra de <span class="regras-ref regras-ref--condicoes">Condições</span> vale como sempre: sucesso corta a perda pela metade, e sucesso crítico evita tudo.</p>
+    <p>Gostar de alguém pesa. Quando algo acontece com uma pessoa com quem você tem pontos, teste Sanidade pela tabela, contra a DT do seu nível: a Rotineira quando ela cai e a Padrão quando ela se perde. No nível 1 são 10 e 15, e em qualquer outro nível some o ajuste da tabela de DT em <span class="regras-ref regras-ref--pericias">Perícias</span>. Cada pessoa pede no máximo um teste de cada linha por cena, e a regra de <span class="regras-ref regras-ref--condicoes">Condições</span> vale como sempre: sucesso corta a perda pela metade, e sucesso crítico evita tudo.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>O que acontece</th><th>DT</th><th>1 ponto</th><th>2 pontos</th><th>3 pontos</th></tr></thead>
       <tbody>${tabelaSanidade}</tbody>
     </table></div>
     <ul class="regras-list">
-      <li><strong>Laço e pontos com a mesma pessoa:</strong> role uma vez só, pela linha dos pontos. O laço rompido sem pontos continua sendo a linha de 1 ponto (DT 15, 1d6), como em Contatos e Laços.</li>
+      <li><strong>Laço e pontos com a mesma pessoa:</strong> role uma vez só, pela linha dos pontos. O laço rompido sem pontos continua sendo a linha de 1 ponto (DT Padrão do seu nível, 1d6), como em Contatos e Laços.</li>
       <li><strong>Morte ou perda com 3 pontos</strong> costuma trazer Luto Profundo, uma condição de longo prazo. A mesa decide junto com quem joga.</li>
       <li><strong>Traição</strong> cobra o teste da segunda linha e leva os pontos a 0 no mesmo momento.</li>
     </ul>
@@ -219,7 +227,7 @@ export const REGRA_PONTOS_DE_RELACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>Quem propõe a mudança é a mesa.</strong> O jogador pode pedir o ponto, e o Mestre confirma quando a cena pediu.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade DT 10, com perda de 1d6 na falha.</p>
+      <p>Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do nível dela (10 no nível 1), com perda de 1d6 na falha.</p>
     </div>
   `,
   corpoMestre: `

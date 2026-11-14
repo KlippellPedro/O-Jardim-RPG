@@ -70,6 +70,7 @@ import { avisar } from '../../../../components/avisos/avisos';
 import { excluirDaFichaComDesfazer } from '../../desfazerNaFicha';
 import { LinkDaRegra } from '../../../../components/ui/LinkDaRegra';
 import { modificador } from '../../../../services/calculoService';
+import { nivelTotalFicha } from '../../../../services/progressaoFichaService';
 import { FAVORES, LACOS_MAXIMOS, NIVEIS_DE_CONFIANCA, contatosMantidos } from '../../../../../data/regras/contatosELacos';
 import { DEGRAUS_DE_RELACAO, USOS_DE_PONTO, tituloDoDegrau } from '../../../../../data/regras/pontosDeRelacao';
 
@@ -230,6 +231,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
   ].filter(Boolean).join(' e ');
   const carisma = Number((character?.ficha?.atributosFinais || character?.atributosFinais || {}).carisma) || 10;
   const limiteContatos = contatosMantidos(modificador(carisma));
+  const nivelDoPersonagem = Math.max(1, nivelTotalFicha(character?.ficha ?? {}) || 1);
 
   // Depois de escolher alguém na teia, leva o cartão até a tela quando ele já estiver desenhado.
   useEffect(() => {
@@ -363,7 +365,7 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
       const { laco: _laco, lacoUsado: _usado, ...resto } = item;
       return { ...resto, atualizadoEm: Date.now() };
     });
-    const teste = sanidadeDoVinculo(vinculo, 'perde');
+    const teste = sanidadeDoVinculo(vinculo, 'perde', nivelDoPersonagem);
     avisar.aviso(`Laço com ${vinculo.nome} rompido: teste Sanidade DT ${teste?.dt ?? 15}, com perda de ${teste?.perda ?? '1d6'}. A mesa pode aplicar Luto Profundo, na aba Condições.`);
   };
 
@@ -399,8 +401,8 @@ export const PainelVinculos = ({ character, onUpdate }: IPainelVinculosProps) =>
     const pontos = pontosDoVinculo(vinculo.afinidade);
     const pontosAtuais = pontosDoVinculo(atual);
     const usos = usosDoVinculo(vinculo);
-    const seCair = sanidadeDoVinculo(vinculo, 'cai');
-    const sePerder = sanidadeDoVinculo(vinculo, 'perde');
+    const seCair = sanidadeDoVinculo(vinculo, 'cai', nivelDoPersonagem);
+    const sePerder = sanidadeDoVinculo(vinculo, 'perde', nivelDoPersonagem);
 
     return (
       <article

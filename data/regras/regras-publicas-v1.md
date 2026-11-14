@@ -666,15 +666,15 @@ Cada ponto que você tem com alguém é **um uso por sessão** com essa pessoa, 
 
 ### O preço
 
-Gostar de alguém pesa. Quando algo acontece com uma pessoa com quem você tem pontos, teste Sanidade pela tabela. Cada pessoa pede no máximo um teste de cada linha por cena, e a regra de Condições vale como sempre: sucesso corta a perda pela metade, e sucesso crítico evita tudo.
+Gostar de alguém pesa. Quando algo acontece com uma pessoa com quem você tem pontos, teste Sanidade pela tabela, contra a DT do seu nível: a Rotineira quando ela cai e a Padrão quando ela se perde. No nível 1 são 10 e 15, e em qualquer outro nível some o ajuste da tabela de DT em Perícias. Cada pessoa pede no máximo um teste de cada linha por cena, e a regra de Condições vale como sempre: sucesso corta a perda pela metade, e sucesso crítico evita tudo.
 
 - O que acontece | DT | 1 ponto | 2 pontos | 3 pontos
 
-- A pessoa cai à sua vista (fica Morrendo) | 10 | 1d4 | 1d6 | 1d8
+- A pessoa cai à sua vista (fica Morrendo) | Rotineira10 no nível 1 | 1d4 | 1d6 | 1d8
 
-- A pessoa morre, some ou trai você | 15 | 1d6 | 1d8 | 2d6
+- A pessoa morre, some ou trai você | Padrão15 no nível 1 | 1d6 | 1d8 | 2d6
 
-- **Laço e pontos com a mesma pessoa:** role uma vez só, pela linha dos pontos. O laço rompido sem pontos continua sendo a linha de 1 ponto (DT 15, 1d6), como em Contatos e Laços.
+- **Laço e pontos com a mesma pessoa:** role uma vez só, pela linha dos pontos. O laço rompido sem pontos continua sendo a linha de 1 ponto (DT Padrão do seu nível, 1d6), como em Contatos e Laços.
 
 - **Morte ou perda com 3 pontos** costuma trazer Luto Profundo, uma condição de longo prazo. A mesa decide junto com quem joga.
 
@@ -710,7 +710,7 @@ Gostar de alguém pesa. Quando algo acontece com uma pessoa com quem você tem p
 
 **Exemplo:**
 
-Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade DT 10, com perda de 1d6 na falha.
+Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do nível dela (10 no nível 1), com perda de 1d6 na falha.
 
 ## ataques-combinados
 

@@ -14,6 +14,7 @@ import {
 import { DT_DE_LACO_ROMPIDO, PERDA_DE_LACO_ROMPIDO } from '../../data/regras/contatosELacos';
 import { REGRAS_OFICIAIS } from '../../data/regras/regras';
 import { GRUPOS_NAVEGACAO } from '../../data/regras/navegacao';
+import { dtNoNivel, dtPadraoDoVd } from '../../src/services/curvaCriatura';
 import {
   afinidadeDosPontos,
   aplicarPontos,
@@ -66,14 +67,25 @@ test('ganhar e perder andam de 1 em 1, e a traição zera', () => {
 });
 
 test('mais pontos, mais perda de Sanidade; laço rompido sem pontos é a linha de 1 ponto', () => {
-  assert.deepEqual(sanidadeDaRelacao('cai', 1), { dt: 10, perda: '1d4' });
-  assert.deepEqual(sanidadeDaRelacao('cai', 3), { dt: 10, perda: '1d8' });
-  assert.deepEqual(sanidadeDaRelacao('perde', 2), { dt: 15, perda: '1d8' });
-  assert.deepEqual(sanidadeDaRelacao('perde', 3), { dt: 15, perda: '2d6' });
+  assert.deepEqual(sanidadeDaRelacao('cai', 1), { dt: 10, perda: '1d4', nomeDaDt: 'Rotineira' });
+  assert.deepEqual(sanidadeDaRelacao('cai', 3), { dt: 10, perda: '1d8', nomeDaDt: 'Rotineira' });
+  assert.deepEqual(sanidadeDaRelacao('perde', 2), { dt: 15, perda: '1d8', nomeDaDt: 'Padrão' });
+  assert.deepEqual(sanidadeDaRelacao('perde', 3), { dt: 15, perda: '2d6', nomeDaDt: 'Padrão' });
   assert.equal(sanidadeDaRelacao('cai', 0), null);
   assert.equal(sanidadeDaRelacao('cai', 0, { laco: true }), null);
-  assert.deepEqual(sanidadeDaRelacao('perde', 0, { laco: true }), { dt: DT_DE_LACO_ROMPIDO, perda: PERDA_DE_LACO_ROMPIDO });
-  assert.deepEqual(sanidadeDaRelacao('perde', 2, { laco: true }), { dt: 15, perda: '1d8' });
+  assert.deepEqual(sanidadeDaRelacao('perde', 0, { laco: true }), { dt: DT_DE_LACO_ROMPIDO, perda: PERDA_DE_LACO_ROMPIDO, nomeDaDt: 'Padrão' });
+  assert.deepEqual(sanidadeDaRelacao('perde', 2, { laco: true }), { dt: 15, perda: '1d8', nomeDaDt: 'Padrão' });
+});
+
+test('as DTs de Sanidade da relação somam o ajuste de nível, como toda DT de Sanidade', () => {
+  assert.equal(sanidadeDaRelacao('cai', 2, { nivel: 1 })?.dt, 10);
+  assert.equal(sanidadeDaRelacao('perde', 2, { nivel: 1 })?.dt, 15);
+  assert.equal(sanidadeDaRelacao('cai', 2, { nivel: 20 })?.dt, dtNoNivel(10, 20));
+  assert.equal(sanidadeDaRelacao('perde', 2, { nivel: 20 })?.dt, dtNoNivel(15, 20));
+  assert.equal(sanidadeDaRelacao('perde', 2, { nivel: 20 })?.dt, dtPadraoDoVd(20), 'a linha de perder é a DT Padrão do nível');
+  assert.ok(dtNoNivel(15, 20) > 15);
+  assert.doesNotMatch(REGRA_PONTOS_DE_RELACAO.corpo, /DT 15, 1d6/);
+  assert.match(REGRA_PONTOS_DE_RELACAO.corpo, /some o ajuste/);
 });
 
 test('a página existe, mora em Cenas e Grupo e conversa com as regras vizinhas', () => {
@@ -144,7 +156,8 @@ test('mudar os pontos vai para o histórico e corta os usos ao novo teto', () =>
 });
 
 test('o aviso de Sanidade da ficha usa os pontos e o laço', () => {
-  assert.deepEqual(sanidadeDoVinculo(vinculo({ afinidade: 5 }), 'perde'), { dt: 15, perda: '2d6' });
-  assert.deepEqual(sanidadeDoVinculo(vinculo({ afinidade: 5, grupo: undefined, laco: 'x' }), 'perde'), { dt: 15, perda: '1d6' });
+  assert.deepEqual(sanidadeDoVinculo(vinculo({ afinidade: 5 }), 'perde'), { dt: 15, perda: '2d6', nomeDaDt: 'Padrão' });
+  assert.deepEqual(sanidadeDoVinculo(vinculo({ afinidade: 5, grupo: undefined, laco: 'x' }), 'perde'), { dt: 15, perda: '1d6', nomeDaDt: 'Padrão' });
+  assert.equal(sanidadeDoVinculo(vinculo({ afinidade: 5 }), 'cai', 20)?.dt, dtNoNivel(10, 20));
   assert.equal(sanidadeDoVinculo(vinculo({ afinidade: 0 }), 'cai'), null);
 });
