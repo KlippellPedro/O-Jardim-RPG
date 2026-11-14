@@ -96,14 +96,32 @@ async function texturaDe(url: string): Promise<Texture> {
 }
 
 /** Retrato quadrado vira redondo (com o enquadramento escolhido) antes de virar textura: o motor não precisa de máscara. */
+// A foto baixada fica na memória: mexer no zoom refaz só o recorte, sem baixar a imagem de novo a cada passo.
+const fotosBaixadas = new Map<string, Promise<ImageBitmap>>();
+
+function fotoBaixada(url: string): Promise<ImageBitmap> {
+  let foto = fotosBaixadas.get(url);
+  if (!foto) {
+    foto = fetch(url, { credentials: 'same-origin' }).then(async (resposta) => {
+      if (!resposta.ok) throw new Error(`retrato ${resposta.status}`);
+      return createImageBitmap(await resposta.blob());
+    });
+    foto.catch(() => fotosBaixadas.delete(url));
+    fotosBaixadas.set(url, foto);
+    // Poucas fotos de cada vez: as mais antigas saem.
+    if (fotosBaixadas.size > 40) {
+      const primeira = fotosBaixadas.keys().next().value;
+      if (primeira !== undefined) void fotosBaixadas.get(primeira)?.then((f) => f.close(), () => undefined), fotosBaixadas.delete(primeira);
+    }
+  }
+  return foto;
+}
+
 async function retratoRedondo(url: string, enquadramento: Enquadramento): Promise<Texture> {
-  const resposta = await fetch(url, { credentials: 'same-origin' });
-  if (!resposta.ok) throw new Error(`retrato ${resposta.status}`);
-  const imagem = await createImageBitmap(await resposta.blob());
-  const lado = 256;
+  const imagem = await fotoBaixada(url);
+  const lado = 384;
   const tela = new OffscreenCanvas(lado, lado);
   desenharRetrato(tela.getContext('2d')!, lado, imagem, enquadramento);
-  imagem.close();
   return Texture.from(tela.transferToImageBitmap());
 }
 
@@ -116,6 +134,8 @@ export class PalcoMapa {
   private mapasColocados = new CamadaMapasColocados();
   /** O cursor que o palco pôs no canvas (alça de giro, canto), para só mexer no estilo quando muda. */
   private cursorAtual = '';
+  /** O último clique solto num mapa trancado: o segundo, logo em seguida, é o duplo clique que o escolhe. */
+  private ultimoCliqueTrancado: { t: number; ponto: IPonto } | null = null;
   private arrastoMapa: { id: string; modo: 'mover' | 'giro' | Canto; dx: number; dy: number; inicio: IPonto; moveu: boolean } | null = null;
   /** A grade cobre só o que a tela mostra; ao andar ou dar zoom ela é refeita (no máximo uma vez por quadro). */
   private gradeSuja = false;
@@ -873,7 +893,17 @@ export class PalcoMapa {
         return true;
       }
     }
-    const id = acharMapaEm(camada.lista(), ponto);
+    // Mapa trancado só se escolhe com duplo clique: com um clique ele não atrapalha o que está em volta
+    // (tokens, outros mapas, a mão que anda pela tela). O que já está escolhido continua respondendo.
+    const agora = performance.now();
+    const ultimo = this.ultimoCliqueTrancado;
+    const duplo = Boolean(ultimo && agora - ultimo.t < 450 && Math.hypot(ponto.x - ultimo.ponto.x, ponto.y - ultimo.ponto.y) * this.viewport.scale.x < 8);
+    let id = acharMapaEm(camada.lista(), ponto);
+    this.ultimoCliqueTrancado = null;
+    if (id && id !== camada.idSelecionado && camada.mapa(id)?.trancado && !duplo) {
+      this.ultimoCliqueTrancado = { t: agora, ponto };
+      id = acharMapaEm(camada.lista().filter((m) => !m.trancado), ponto);
+    }
     if (id !== camada.idSelecionado) {
       camada.selecionar(id);
       this.eventos.aoSelecionarMapa?.(id);
@@ -1235,7 +1265,14 @@ export class PalcoMapa {
     const url = urlImagemDoToken(this.campanhaId, id, imagem);
     const { enquadramento } = token.dados;
     const chave = `${url}|${enquadramento.zoom}|${enquadramento.x}|${enquadramento.y}`;
-    if (!this.retratos.has(chave)) this.retratos.set(chave, retratoRedondo(url, enquadramento).catch(() => null));
+    if (!this.retratos.has(chave)) {
+      this.retratos.set(chave, retratoRedondo(url, enquadramento).catch(() => null));
+      // Cada passo do zoom é um recorte novo: os mais antigos saem da lista (quem ainda usa um segue com ele).
+      if (this.retratos.size > 80) {
+        const antiga = this.retratos.keys().next().value;
+        if (antiga !== undefined) this.retratos.delete(antiga);
+      }
+    }
     const textura = await this.retratos.get(chave)!;
     if (this.tokens.get(id) === token && token.dados.imagem === imagem && token.dados.enquadramento === enquadramento) token.definirRetrato(textura);
   }

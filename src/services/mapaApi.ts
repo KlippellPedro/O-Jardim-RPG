@@ -471,6 +471,8 @@ export interface ITokenEdicao {
   camada?: CamadaTokenId;
   flip_x?: boolean;
   flip_y?: boolean;
+  /** Zoom e deslocamento da arte do Acervo neste token (a foto da ficha usa o enquadramento do personagem). */
+  enquadramento?: Partial<{ zoom: number; x: number; y: number }>;
   imagem_id?: string;
   sem_imagem?: boolean;
   barras?: Partial<IConfigBarras>;

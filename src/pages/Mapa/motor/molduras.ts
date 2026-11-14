@@ -95,6 +95,88 @@ export function carregarMolduraDeArte(id: string): Promise<HTMLImageElement | nu
   return espera;
 }
 
+export interface FuroDaMoldura {
+  /** A imagem da moldura inteira (mesmo alinhamento dela): opaco onde é furo, transparente onde é tinta ou fora. */
+  mascara: HTMLCanvasElement;
+  /** Distância do centro do retrato ao ponto mais longe do furo, como fração do lado da imagem. */
+  raioMax: number;
+}
+
+const furosDeArte = new Map<string, FuroDaMoldura | null>();
+const LADO_DA_MASCARA = 256;
+
+/**
+ * O furo de uma moldura ilustrada, medido na própria imagem: o que se enche a partir do centro do retrato sem
+ * passar por tinta. Molduras irregulares (tinta, pincelada) deixavam o retrato redondo curto em cima e dos lados;
+ * com a máscara a foto preenche o furo inteiro e a moldura, por cima, fecha a borda. Nulo se a moldura ainda não
+ * chegou ou se o furo vaza para fora (aí o retrato fica redondo, como antes).
+ */
+export function furoDaMolduraDeArte(id: string): FuroDaMoldura | null {
+  if (furosDeArte.has(id)) return furosDeArte.get(id) ?? null;
+  const imagem = molduraDeArteCarregada(id);
+  if (!imagem || typeof document === 'undefined') return null;
+  const n = LADO_DA_MASCARA;
+  const tela = document.createElement('canvas');
+  tela.width = n;
+  tela.height = n;
+  const ctx = tela.getContext('2d', { willReadFrequently: true });
+  if (!ctx) return null;
+  ctx.drawImage(imagem, 0, 0, n, n);
+  const pixels = ctx.getImageData(0, 0, n, n).data;
+  const { dx, dy } = deslocamentoDaMolduraDeArte(id);
+  const cx = Math.round(n * (0.5 - dx));
+  const cy = Math.round(n * (0.5 - dy));
+  const livre = (x: number, y: number) => pixels[(y * n + x) * 4 + 3] < 80;
+  let furo: Uint8Array | null = null;
+  if (cx >= 0 && cy >= 0 && cx < n && cy < n && livre(cx, cy)) {
+    furo = new Uint8Array(n * n);
+    const fila = [cy * n + cx];
+    furo[cy * n + cx] = 1;
+    let vazou = false;
+    while (fila.length) {
+      const atual = fila.pop()!;
+      const x = atual % n;
+      const y = (atual - x) / n;
+      if (x === 0 || y === 0 || x === n - 1 || y === n - 1) { vazou = true; break; }
+      for (const [vx, vy] of [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]]) {
+        const i = vy * n + vx;
+        if (!furo[i] && livre(vx, vy)) { furo[i] = 1; fila.push(i); }
+      }
+    }
+    if (vazou) furo = null;
+  }
+  let resultado: FuroDaMoldura | null = null;
+  if (furo) {
+    // Alarga 2 px: a foto passa um pouco por baixo da tinta, sem frestas na borda.
+    for (let volta = 0; volta < 2; volta++) {
+      const copia = furo.slice();
+      for (let y = 1; y < n - 1; y++) {
+        for (let x = 1; x < n - 1; x++) {
+          const i = y * n + x;
+          if (!copia[i] && (copia[i - 1] || copia[i + 1] || copia[i - n] || copia[i + n])) furo[i] = 1;
+        }
+      }
+    }
+    const saida = ctx.createImageData(n, n);
+    let maisLonge = 0;
+    for (let i = 0; i < n * n; i++) {
+      if (!furo[i]) continue;
+      saida.data[i * 4] = 255;
+      saida.data[i * 4 + 1] = 255;
+      saida.data[i * 4 + 2] = 255;
+      saida.data[i * 4 + 3] = 255;
+      const x = i % n;
+      const y = (i - x) / n;
+      maisLonge = Math.max(maisLonge, Math.hypot(x - cx, y - cy));
+    }
+    ctx.putImageData(saida, 0, 0);
+    // Um furo maior que isso é suspeito (anel aberto): melhor o retrato redondo de sempre.
+    if (maisLonge / n < 0.42) resultado = { mascara: tela, raioMax: maisLonge / n };
+  }
+  furosDeArte.set(id, resultado);
+  return resultado;
+}
+
 /** O que a gente escolhe na tela: "Sem borda" e as molduras ilustradas. */
 export const MOLDURAS: IMolduraCatalogo[] = [
   { id: 'nenhuma', rotulo: 'Sem borda', grupo: 'padrao' },

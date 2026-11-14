@@ -1478,11 +1478,28 @@ export const MapaPage = () => {
     if (resposta) setEstado(resposta);
   };
 
-  const mudarEnquadramento = async (enquadramento: Enquadramento) => {
+  const esperaEnquadramento = useRef<number | null>(null);
+  /**
+   * Zoom e deslocamento da foto: o token na tela muda na hora (prévia) e o servidor só recebe quando a mão para.
+   * Foto da ficha vale para o personagem em todas as cenas; arte do Acervo vale só para o token.
+   */
+  const mudarEnquadramento = (enquadramento: Enquadramento) => {
     const token = tokens.find((t) => t.id === selecionado);
-    if (!campanhaId || !token?.personagem_id) return;
-    await comErro(() => mapaApi.editarTokenDoPersonagem(campanhaId, token.personagem_id!, { enquadramento }));
-    void recarregar();
+    if (!campanhaId || !token) return;
+    const doAcervo = Boolean(token.imagem_id);
+    const personagemId = token.personagem_id;
+    if (!doAcervo && !personagemId) return;
+    setEstado((atual) => (atual ? {
+      ...atual,
+      tokens: atual.tokens.map((t) => ((doAcervo ? t.id === token.id : t.personagem_id === personagemId && !t.imagem_id) ? { ...t, enquadramento } : t)),
+    } : atual));
+    if (esperaEnquadramento.current !== null) window.clearTimeout(esperaEnquadramento.current);
+    esperaEnquadramento.current = window.setTimeout(() => {
+      esperaEnquadramento.current = null;
+      void (doAcervo
+        ? comErro(() => mapaApi.editarToken(campanhaId, token.id, { enquadramento }))
+        : comErro(() => mapaApi.editarTokenDoPersonagem(campanhaId, personagemId!, { enquadramento })));
+    }, 450);
   };
 
   const removerToken = async () => {

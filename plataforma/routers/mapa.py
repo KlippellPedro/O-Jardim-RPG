@@ -96,6 +96,8 @@ class TokenEdicao(BaseModel):
     camada: str | None = None
     flip_x: bool | None = None
     flip_y: bool | None = None
+    #: Zoom e deslocamento da arte do Acervo neste token ({"zoom", "x", "y"}).
+    enquadramento: dict | None = None
     imagem_id: UUID | None = None
     sem_imagem: bool = False
     barras: dict | None = None
@@ -265,7 +267,7 @@ def _tokens(connection, cena_id: UUID) -> list[dict]:
             """
             SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome,
                    t.x, t.y, t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura,
-                   t.camada, t.flip_x, t.flip_y, t.nota_mestre, t.recipiente,
+                   t.camada, t.flip_x, t.flip_y, t.enquadramento, t.nota_mestre, t.recipiente,
                    COALESCE(t.personagem_id, sp.personagem_id) AS personagem_efetivo
             FROM mapa_tokens t
             LEFT JOIN sessao_participantes sp ON sp.id = t.participante_id
@@ -396,8 +398,11 @@ def _visao_tokens(connection, campanha_id: UUID, cena, quem: Espectador, visao_j
             turnos_das_condicoes={c["nome"]: c["turnos"] for c in condicoes_do_participante},
             aflicoes=mapa.aflicoes_da_ficha(ficha, gestor=quem.gestor) if ficha_linha else [],
             moldura=mapa.moldura_efetiva(token, personagem, do_personagem.get("moldura"), moldura_mesa),
-            # O enquadramento é da foto da ficha; imagem do acervo já vem recortada.
-            enquadramento=do_personagem.get("enquadramento") if not token["imagem_id"] else None,
+            # Foto da ficha: o enquadramento é do personagem. Imagem do Acervo: é do próprio token.
+            enquadramento=(
+                (token.get("enquadramento") if isinstance(token.get("enquadramento"), dict) else None)
+                if token["imagem_id"] else do_personagem.get("enquadramento")
+            ),
             na_nevoa=(
                 False if proprio and visao_jogador is not None
                 else cobertura is not None and not cobertura.revelado(float(token["x"]), float(token["y"]))
@@ -1146,7 +1151,7 @@ def _token(connection, campanha_id: UUID, token_id: UUID, *, travar: bool = Fals
     token = connection.execute(
         f"""
         SELECT t.id, t.cena_id, t.personagem_id, t.participante_id, t.imagem_id, t.nome, t.x, t.y,
-               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura, t.camada, t.flip_x, t.flip_y, t.recipiente,
+               t.porte, t.lado, t.oculto, t.barras, t.moldura, t.luz, t.aura, t.camada, t.flip_x, t.flip_y, t.enquadramento, t.recipiente,
                c.largura, c.altura, c.livre, c.ativa, c.estrutura
         FROM mapa_tokens t JOIN mapa_cenas c ON c.id = t.cena_id
         WHERE t.id=%s AND c.campanha_id=%s{' FOR UPDATE OF t' if travar else ''}
@@ -1317,6 +1322,9 @@ def editar_token(
                 mudancas["flip_x"] = payload.flip_x
             if payload.flip_y is not None:
                 mudancas["flip_y"] = payload.flip_y
+            if payload.enquadramento is not None:
+                atual = token.get("enquadramento") if isinstance(token.get("enquadramento"), dict) else {}
+                mudancas["enquadramento"] = Jsonb(mapa.normalizar_enquadramento(payload.enquadramento, atual))
             if payload.barras is not None:
                 mudancas["barras"] = Jsonb(mapa.normalizar_barras(payload.barras, token["barras"] or {}, mudancas.get("lado", token["lado"])))
             if payload.sem_moldura:

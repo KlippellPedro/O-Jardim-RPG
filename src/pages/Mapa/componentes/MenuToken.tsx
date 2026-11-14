@@ -73,13 +73,13 @@ const ROTULO_DA_ABA: Record<Aba, string> = { geral: 'Geral', barras: 'Barras', v
 export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMoldura, onEnquadramento, onFechar, campanhaId, onArteMudou, onEstado, abaInicial }: Props) => {
   const config = token.config_barras;
   const podeVisual = gestor || token.e_meu;
-  // Enquadramento só para a foto da ficha (imagem do Acervo já vem recortada pela Oficina).
-  const temFotoDaFicha = Boolean(token.personagem_id && /^[fr]/.test(token.imagem ?? ''));
+  // A foto da ficha tem o enquadramento do personagem (vale em todas as cenas); a arte do Acervo tem o do próprio token.
+  const temArteDoAcervo = Boolean(token.imagem_id && token.imagem);
+  const temFotoDaFicha = Boolean(token.personagem_id && /^[fr]/.test(token.imagem ?? '')) || temArteDoAcervo;
   const abas: Aba[] = ['geral', ...(config ? ['barras' as const] : []), ...(podeVisual ? ['visual' as const, 'luz' as const] : []), ...(gestor && campanhaId && onEstado ? ['loot' as const] : [])];
   const [aba, setAba] = useState<Aba>(abaInicial ?? 'geral');
   const abaAtual = abas.includes(aba) ? aba : 'geral';
   const [enquadramento, setEnquadramento] = useState<Enquadramento>(token.enquadramento);
-  const espera = useRef<number | null>(null);
   const [luz, setLuz] = useState<ILuzToken | null>(token.luz);
   const esperaLuz = useRef<number | null>(null);
   const [aura, setAura] = useState<IAuraToken | null>(token.aura ?? null);
@@ -149,8 +149,8 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
   const mudarEnquadramento = (parcial: Partial<Enquadramento>) => {
     const novo = { ...enquadramento, ...parcial };
     setEnquadramento(novo);
-    if (espera.current !== null) window.clearTimeout(espera.current);
-    espera.current = window.setTimeout(() => onEnquadramento(novo), 300);
+    // A tela mostra na hora (a página mexe no token sem esperar o servidor) e grava quando a mão para.
+    onEnquadramento(novo);
   };
 
   const alternarBarra = (tipo: TipoBarra) => {

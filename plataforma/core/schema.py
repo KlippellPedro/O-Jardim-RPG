@@ -2524,4 +2524,13 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "ALTER TABLE mapa_trilha_estado ADD COLUMN IF NOT EXISTS ambiente JSONB NOT NULL DEFAULT '[]'::jsonb",
         ),
     ),
+    (
+        79,
+        "enquadramento_da_arte_do_token",
+        (
+            # Zoom e deslocamento da arte de um token com imagem própria do Acervo ({"zoom", "x", "y"}).
+            # A foto da ficha segue com o enquadramento do personagem (personagem_token.enquadramento).
+            "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS enquadramento JSONB NOT NULL DEFAULT '{}'::jsonb",
+        ),
+    ),
 )

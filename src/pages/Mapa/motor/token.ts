@@ -11,7 +11,7 @@ import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import type { IBarraToken, ITokenMapa, LadoToken } from '../../../services/mapaApi';
 import { LARGURA_MEDIA_DA_LETRA, abreviarNome, escalaDoNome, iniciais, letrasQueCabem, nomeCabe, nomeVisivel, siglaDaCondicao } from './geometria';
 import {
-  CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, carregarMolduraDeArte, deslocamentoDaMolduraDeArte, desenharMoldura, ehMolduraDeArte, escalaDaMolduraDeArte, molduraDeArteCarregada,
+  CORES_LADO, ESCALA_QUADRO, RAIO_RETRATO, carregarMolduraDeArte, deslocamentoDaMolduraDeArte, desenharMoldura, ehMolduraDeArte, escalaDaMolduraDeArte, furoDaMolduraDeArte, molduraDeArteCarregada,
 } from './molduras';
 import { texturaDeBrilho } from './luzes';
 import {
@@ -65,9 +65,24 @@ function texturaDaMoldura(id: string, lado: LadoToken): Texture {
   return textura;
 }
 
+const texturasDeFuro = new Map<string, Texture>();
+
+/** A máscara do furo da moldura ilustrada (ver furoDaMolduraDeArte), já como textura. */
+function texturaDoFuro(id: string): Texture | null {
+  let textura = texturasDeFuro.get(id);
+  if (!textura) {
+    const furo = furoDaMolduraDeArte(id);
+    if (!furo) return null;
+    textura = Texture.from(furo.mascara);
+    texturasDeFuro.set(id, textura);
+  }
+  return textura;
+}
+
 /** As texturas morrem com o palco; a próxima abertura do mapa desenha de novo. */
 export function esquecerTexturasDeMoldura() {
   texturasDeMoldura.clear();
+  texturasDeFuro.clear();
 }
 
 const ROTULOS_BARRA: Record<IBarraToken['tipo'], string> = {
@@ -260,6 +275,8 @@ export class TokenVisual {
   private preferenciasBarras: IPreferenciasBarrasMapa;
   /** Onde as barras terminam, abaixo do centro do token (0 sem barras). */
   private fimDasBarras = 0;
+  /** O furo da moldura ilustrada, usado como máscara do retrato (ver desenharRetrato). */
+  private mascaraDoRetrato: Sprite | null = null;
 
   constructor(dados: ITokenMapa, tamanhoQuadrado: number, preferenciasBarras = PREFERENCIAS_BARRAS_PADRAO) {
     this.dados = dados;
@@ -350,6 +367,7 @@ export class TokenVisual {
         if (this.raiz.destroyed || (this.dados.moldura ?? 'lado') !== id) return;
         if (imagem) {
           this.poMoldura(this.dados);
+          this.desenharRetrato();
           return;
         }
         // A imagem não veio (arquivo ausente, rede fora): o token fica com o aro simples do lado em vez de sem moldura.
@@ -464,12 +482,34 @@ export class TokenVisual {
     const raio = this.raioRetrato;
     const fundo = new Graphics().circle(0, 0, raio).fill('#1b1b24');
     this.retrato.addChild(fundo);
+    this.retrato.mask = null;
+    this.mascaraDoRetrato?.destroy();
+    this.mascaraDoRetrato = null;
     if (this.texturaAtual) {
       const foto = new Sprite(this.texturaAtual);
       foto.anchor.set(0.5);
       foto.width = raio * 2;
       foto.height = raio * 2;
       this.retrato.addChild(foto);
+      // Moldura ilustrada com furo irregular: a foto cresce até cobrir o furo todo e a máscara (o furo da moldura)
+      // aparou o excesso; assim não sobra fundo em cima nem dos lados.
+      const id = this.dados.moldura ?? 'lado';
+      const textura = ehMolduraDeArte(id) ? texturaDoFuro(id) : null;
+      const furo = textura ? furoDaMolduraDeArte(id) : null;
+      if (textura && furo) {
+        const quadro = this.lado * ESCALA_QUADRO * escalaDaMolduraDeArte(id);
+        foto.width = furo.raioMax * quadro * 2;
+        foto.height = furo.raioMax * quadro * 2;
+        const mascara = new Sprite({ texture: textura, anchor: 0.5 });
+        mascara.width = quadro;
+        mascara.height = quadro;
+        const { dx, dy } = deslocamentoDaMolduraDeArte(id);
+        mascara.position.set(dx * quadro, dy * quadro);
+        // Fora do retrato, que pode estar virado: a máscara acompanha a moldura, não a foto.
+        this.corpo.addChild(mascara);
+        this.mascaraDoRetrato = mascara;
+        this.retrato.mask = mascara;
+      }
     } else {
       const cor = this.dados.desconhecido ? '#2a2333' : CORES_LADO[this.dados.lado];
       fundo.clear().circle(0, 0, raio).fill({ color: cor, alpha: 0.35 }).circle(0, 0, raio * 0.92).fill('#16131d');
