@@ -2,6 +2,23 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-14-mapa-sons-luzes-e-menus",
+      "data": "2026-11-14",
+      "tipo": "melhoria",
+      "area": "Mapa",
+      "titulo": "Sons de ambiente, mais luzes e auras, documentos em janela e listas que dá para ler",
+      "detalhes": [
+        "O Mestre liga sons de ambiente para a mesa inteira: chuva, trovão, vento, fogueira, rio, taverna cheia e mais de trinta outros, cada um com o seu volume, em Trilha sonora. Eles tocam da internet, então não pesam no site, e cada pessoa ajusta ou silencia o som no próprio aparelho.",
+        "A luz do token tem mais de quinze tipos prontos, como fogueira, luz sagrada, fogo-fátuo e neon, e um efeito para escolher: fixa, chama, pulsa ou cintila.",
+        "A aura também tem tipos prontos (proteção, cura, medo, veneno, fogo, gelo e outros) e sete estilos de desenho, do campo cheio à borda de chamas.",
+        "Mostrar um documento virou uma janela grande, com busca, filtro e a prévia do documento antes de mandar para a mesa.",
+        "As barras de Vida, Mana e Estamina abaixo do token ficaram mais altas, com o nome na ponta esquerda e o valor na direita, dentro da barra.",
+        "As listas de escolha, como Camada, Lado e Mostrar para, abrem escuras, no estilo do site, em todas as telas. As mais compridas ganharam busca.",
+        "As molduras do token ficaram só com Sem borda e as ilustradas. Ferro, Ouro, Runa, as dos Fluxos e a do nível saíram, e quem usava uma delas passa a ver o aro simples na cor do lado.",
+        "Os painéis de configuração do mapa ficaram mais largos, com letra maior."
+      ]
+    },
+    {
       "id": "2026-11-13-revisao-das-regras-novas",
       "data": "2026-11-13",
       "tipo": "correcao",

@@ -134,7 +134,7 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
         ctx.fill();
       }
       desenharRetrato(ctx, LADO_PALCO, composta, enquadramento, posicao.raio);
-      desenharMoldura(ctx, LADO_PALCO, { id: moldura, nivel: null, lado });
+      desenharMoldura(ctx, LADO_PALCO, { id: moldura, lado });
     } else {
       ctx.drawImage(composta, posicao.x, posicao.y, composta.width * posicao.escala, composta.height * posicao.escala);
     }
@@ -503,36 +503,25 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
 };
 
 /** Grade de molduras com prévia de cada uma, desenhada pelo mesmo código do mapa. */
-export const SeletorDeMoldura = ({ valor, lado, nivel = null, onEscolher, incluirNivel = false }: {
+export const SeletorDeMoldura = ({ valor, lado, onEscolher }: {
   valor: string;
   lado: LadoToken;
-  nivel?: number | null;
   onEscolher: (id: string) => void;
-  incluirNivel?: boolean;
 }) => {
   const botao = (m: (typeof MOLDURAS)[number]) => (
     <button key={m.id} type="button" role="radio" aria-checked={valor === m.id} className={valor === m.id ? 'ativo' : ''} onClick={() => onEscolher(m.id)}>
-      <PreviaMoldura id={m.id} lado={lado} nivel={nivel} />
+      <PreviaMoldura id={m.id} lado={lado} />
       <small>{m.rotulo}</small>
     </button>
   );
-  const lista = MOLDURAS.filter((m) => incluirNivel || m.id !== 'nivel');
-  const desenhadas = lista.filter((m) => m.grupo !== 'arte');
-  const ilustradas = lista.filter((m) => m.grupo === 'arte');
   return (
     <div role="radiogroup" aria-label="Moldura">
-      <div className="mapa-molduras">{desenhadas.map(botao)}</div>
-      {ilustradas.length > 0 && (
-        <details className="mapa-molduras-arte" open={ehMolduraDeArte(valor)}>
-          <summary>Molduras ilustradas ({ilustradas.length})</summary>
-          <div className="mapa-molduras">{ilustradas.map(botao)}</div>
-        </details>
-      )}
+      <div className="mapa-molduras">{MOLDURAS.map(botao)}</div>
     </div>
   );
 };
 
-const PreviaMoldura = ({ id, lado, nivel }: { id: string; lado: LadoToken; nivel: number | null }) => {
+const PreviaMoldura = ({ id, lado }: { id: string; lado: LadoToken }) => {
   const ref = useRef<HTMLCanvasElement>(null);
   const [chegou, setChegou] = useState(0);
   useEffect(() => {
@@ -553,7 +542,7 @@ const PreviaMoldura = ({ id, lado, nivel }: { id: string; lado: LadoToken; nivel
     ctx.arc(32, 32, 64 * RAIO_RETRATO, 0, Math.PI * 2);
     ctx.fillStyle = '#2a2333';
     ctx.fill();
-    desenharMoldura(ctx, 64, { id, nivel, lado });
-  }, [id, lado, nivel, chegou]);
+    desenharMoldura(ctx, 64, { id, lado });
+  }, [id, lado, chegou]);
   return <canvas ref={ref} width={64} height={64} />;
 };

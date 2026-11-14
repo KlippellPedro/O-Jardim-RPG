@@ -3,7 +3,7 @@ import {
   ArrowRight, Cloud, CloudFog, CloudLightning, CloudOff, CloudRain, Cloudy, Flame, Haze, Leaf, Moon, Orbit, Snowflake, Sparkles, Wind, X,
 } from 'lucide-react';
 import type { IAreaClima, IClima, IEfeitoClima, TipoEfeitoClima } from '../../../services/mapaApi';
-import { MOLDURAS } from '../motor/molduras';
+import { FLUXOS_DO_MAPA } from '../motor/molduras';
 import { EFEITOS_CLIMA, MAX_EFEITOS_CLIMA } from '../motor/climaCatalogo';
 
 const ICONES: Record<TipoEfeitoClima, typeof Cloud> = {
@@ -23,7 +23,7 @@ const ICONES: Record<TipoEfeitoClima, typeof Cloud> = {
 
 const EFEITOS = EFEITOS_CLIMA.map((e) => ({ ...e, Icone: ICONES[e.id] }));
 
-const FLUXOS = MOLDURAS.filter((m) => m.grupo === 'fluxo').map((m) => ({ id: m.id.slice('fluxo-'.length), rotulo: m.rotulo }));
+const FLUXOS = FLUXOS_DO_MAPA;
 
 const RUMOS = ['para a direita', 'para baixo e à direita', 'para baixo', 'para baixo e à esquerda', 'para a esquerda', 'para cima e à esquerda', 'para cima', 'para cima e à direita'];
 

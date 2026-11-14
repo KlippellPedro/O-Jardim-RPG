@@ -40,8 +40,10 @@ test('luz: os atalhos e o controle do menu cabem no limite do servidor', () => {
   const menu = readFileSync(new URL('../../src/pages/Mapa/componentes/MenuToken.tsx', import.meta.url), 'utf-8');
   const servidor = readFileSync(new URL('../../plataforma/core/mapa.py', import.meta.url), 'utf-8');
   const maximo = Number(servidor.match(/LUZ_MAXIMA_CASAS = (\d+)/)![1]);
-  const raios = [...menu.matchAll(/raio: ([\d.]+), cor: '#[0-9a-f]{6}'/g)].map((m) => Number(m[1]));
-  assert.ok(raios.length >= 4 && raios.every((r) => r >= 0.5 && r <= maximo));
+  // As luzes prontas moram em luzesEAuras.ts: `luz(alcance, cor, estilo)`.
+  const prontas = readFileSync(new URL('../../src/pages/Mapa/motor/luzesEAuras.ts', import.meta.url), 'utf-8');
+  const raios = [...prontas.matchAll(/luz\(([\d.]+), '#[0-9a-f]{6}'/g)].map((m) => Number(m[1]));
+  assert.ok(raios.length >= 16 && raios.every((r) => r >= 0.5 && r <= maximo));
   const controle = menu.match(/min=\{0\.5\} max=\{(\d+)\} step=\{0\.5\} value=\{luz\.raio\}/);
   assert.ok(controle && Number(controle[1]) <= maximo);
 });

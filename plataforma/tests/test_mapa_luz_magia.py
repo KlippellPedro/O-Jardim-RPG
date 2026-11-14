@@ -20,11 +20,22 @@ ANA = Espectador(usuario_id="ana", gestor=False, personagens=frozenset({"p-ana"}
 
 def test_luz_confere_raio_e_cor_e_none_tira_a_luz():
     assert mapa.normalizar_luz(None) is None
-    assert mapa.normalizar_luz({}) == {"raio": 4.0, "cor": "#ffb35c", "tremula": False}
-    assert mapa.normalizar_luz({"raio": 2.26, "cor": "#AABBCC", "tremula": 1}) == {"raio": 2.3, "cor": "#aabbcc", "tremula": True}
-    for ruim in ({"raio": 0}, {"raio": mapa.LUZ_MAXIMA_CASAS + 1}, {"cor": "laranja"}, {"raio": float("nan")}, "tocha"):
+    assert mapa.normalizar_luz({}) == {"raio": 4.0, "cor": "#ffb35c", "tremula": False, "estilo": "fixa"}
+    assert mapa.normalizar_luz({"raio": 2.26, "cor": "#AABBCC", "tremula": 1}) == {"raio": 2.3, "cor": "#aabbcc", "tremula": True, "estilo": "chama"}
+    for ruim in ({"raio": 0}, {"raio": mapa.LUZ_MAXIMA_CASAS + 1}, {"cor": "laranja"}, {"raio": float("nan")}, "tocha", {"estilo": "disco"}, {"estilo": 3}):
         with pytest.raises(ErroMapa):
             mapa.normalizar_luz(ruim)
+
+
+def test_luz_tem_estilo_e_o_campo_antigo_continua_valendo():
+    for estilo in ("fixa", "chama", "pulsa", "cintila"):
+        luz = mapa.normalizar_luz({"raio": 3, "cor": "#9ecbff", "estilo": estilo})
+        assert luz["estilo"] == estilo
+        assert luz["tremula"] is (estilo != "fixa"), "tremula acompanha o estilo para quem ainda lê só ele"
+    # O estilo manda sobre o campo antigo.
+    assert mapa.normalizar_luz({"tremula": True, "estilo": "fixa"})["tremula"] is False
+    assert mapa.normalizar_luz({"tremula": False, "estilo": "pulsa"})["tremula"] is True
+    assert mapa.ESTILOS_DE_LUZ == ("fixa", "chama", "pulsa", "cintila")
 
 
 def test_quem_ve_o_token_ve_a_luz_dele_mesmo_sem_saber_quem_e():
@@ -127,7 +138,7 @@ class LuzNoBancoTests(unittest.TestCase):
 
         rotas.editar_token(b.campanha_id, mira, rotas.TokenEdicao(luz={"raio": 4, "cor": "#ff9a3c", "tremula": True}), user=b.ana, database=b.database)
         visto = {t["nome"]: t for t in b.ver(b.bruno)["tokens"]}
-        self.assertEqual(visto["Mira"]["luz"], {"raio": 4.0, "cor": "#ff9a3c", "tremula": True})
+        self.assertEqual(visto["Mira"]["luz"], {"raio": 4.0, "cor": "#ff9a3c", "tremula": True, "estilo": "chama"})
 
         with self.assertRaises(HTTPException) as erro:
             rotas.editar_token(b.campanha_id, brasa, rotas.TokenEdicao(luz={"raio": 2}), user=b.ana, database=b.database)

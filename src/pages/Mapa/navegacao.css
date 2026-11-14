@@ -596,7 +596,7 @@ button.mapa-pessoas.ativo {
 .mapa-config.mesa-painel {
   right: auto;
   left: 12px;
-  width: min(340px, calc(100% - 24px));
+  width: min(var(--mapa-largura-painel), calc(100% - 24px));
 }
 
 /* ---------------------------------------------------------- bandeja de dados */

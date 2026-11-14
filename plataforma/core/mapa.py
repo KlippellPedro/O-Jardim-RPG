@@ -38,17 +38,18 @@ FLUXOS = (
     "origem", "essencia", "comunicacao", "vitalidade", "inconstancia", "fisico",
     "espaco", "tempo", "vazio", "fim", "tecnologia",
 )
-#: Molduras que o site sabe desenhar (src/pages/Mapa/motor/molduras.ts). "nivel" é a
-#: escada do retrato da ficha; "lado" é o aro simples na cor do lado do token; "nenhuma"
-#: tira a borda (o retrato fica solto no mapa).
+#: Molduras que o site desenha (src/pages/Mapa/motor/molduras.ts): "lado" é o aro simples na cor
+#: do lado do token (o padrão de todo mundo), "nenhuma" tira a borda (o retrato fica solto no mapa)
+#: e as outras são as ilustradas. As desenhadas em código (nivel, ferro, ouro, madeira, osso, runa,
+#: cristal, raiz, sombra e fluxo-*) saíram em 2026-11-14: não se escolhem mais, e quem já tinha uma
+#: guardada passa a ver o aro do lado (moldura_efetiva).
 MOLDURAS = (
-    "nivel", "lado", "nenhuma", "ferro", "ouro", "madeira", "osso", "runa", "cristal", "raiz", "sombra",
+    "lado", "nenhuma",
     #: Molduras ilustradas (public/assets/img/molduras): os ids são os de src/pages/Mapa/motor/molduras-arte.json.
     "arte-onda-katana", "arte-espinhos", "arte-tinta-negra", "arte-pincelada", "arte-veias", "arte-mandibula",
     "arte-ouroboros", "arte-vampiro", "arte-nuvens", "arte-sombra-negra", "arte-chifres-do-diabo",
     "arte-alienigena", "arte-gelo-espesso", "arte-hera", "arte-louro", "arte-coroa-de-espinhos",
     "arte-rosas-negras", "arte-borboletas", "arte-paladino-aco",
-    *(f"fluxo-{fluxo}" for fluxo in FLUXOS),
 )
 ENQUADRAMENTO_PADRAO = {"zoom": 1.0, "x": 0.0, "y": 0.0}
 
@@ -89,8 +90,10 @@ EFEITOS_CLIMA = (
     "chuva", "tempestade", "nuvens", "neve", "neblina", "areia", "cinzas", "calor", "folhas", "escuridao", "vazio", "fluxo",
 )
 MAX_EFEITOS_CLIMA = 4
-#: Luz de um token: raio em casas, cor e se tremula como chama.
+#: Luz de um token: raio em casas, cor e o jeito de a luz se comportar (src/pages/Mapa/motor/luzesConta.ts):
+#: fixa (não mexe), chama (treme rápido), pulsa (vai e volta devagar) e cintila (pisca, como fogo-fátuo).
 LUZ_MAXIMA_CASAS = 30
+ESTILOS_DE_LUZ = ("fixa", "chama", "pulsa", "cintila")
 #: Efeitos de magia que a mesa inteira vê no mapa (src/pages/Mapa/motor/magia.ts).
 FORMAS_MAGIA = ("circulo", "cone", "linha", "impacto")
 #: Uma magia pode começar ou terminar um pouco fora do mapa, mas não longe dele.
@@ -408,7 +411,10 @@ def ler_clima(dados, largura: int, altura: int) -> dict:
 
 
 def normalizar_luz(dados) -> dict | None:
-    """None tira a luz; senão raio (casas), cor e se tremula, conferidos."""
+    """None tira a luz; senão raio (casas), cor e o estilo, conferidos.
+
+    `tremula` é o campo de antes (só chama ou fixa): sem `estilo`, ele decide. Os dois saem sempre
+    juntos, e `tremula` fica verdadeiro em todo estilo que se mexe, para quem ainda lê só ele."""
     if dados is None:
         return None
     if not isinstance(dados, dict):
@@ -417,7 +423,12 @@ def normalizar_luz(dados) -> dict | None:
     cor = dados.get("cor", "#ffb35c")
     if not isinstance(cor, str) or not COR.match(cor):
         raise ErroMapa("cor da luz invalida")
-    return {"raio": round(raio, 1), "cor": cor.lower(), "tremula": bool(dados.get("tremula", False))}
+    estilo = dados.get("estilo")
+    if estilo is None:
+        estilo = "chama" if dados.get("tremula", False) else "fixa"
+    if estilo not in ESTILOS_DE_LUZ:
+        raise ErroMapa("estilo da luz invalido")
+    return {"raio": round(raio, 1), "cor": cor.lower(), "tremula": estilo != "fixa", "estilo": estilo}
 
 
 def normalizar_camadas_jogadores(dados, atual: dict | None = None) -> dict[str, bool]:
@@ -655,13 +666,14 @@ def normalizar_magia(dados, largura: int, altura: int) -> dict:
 
 def moldura_efetiva(token: dict, personagem: str | None, moldura_personagem: str | None, moldura_mesa: str | None) -> str:
     """A da mesa (o Mestre travou) vale acima de tudo; depois a do token; depois a do personagem;
-    sem escolha, personagem usa a escada do nível e o resto, o aro do lado."""
-    if moldura_mesa:
+    sem escolha, o aro do lado. Uma moldura que saiu do catálogo (as desenhadas em código) conta
+    como sem escolha, para o token não ficar com um id que o site não desenha mais."""
+    if moldura_mesa in MOLDURAS:
         return moldura_mesa
-    if token.get("moldura"):
+    if token.get("moldura") in MOLDURAS:
         return token["moldura"]
-    if personagem:
-        return moldura_personagem or "nivel"
+    if personagem and moldura_personagem in MOLDURAS:
+        return moldura_personagem
     return "lado"
 
 

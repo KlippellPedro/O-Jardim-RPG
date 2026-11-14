@@ -17,7 +17,10 @@ import { texturaDeBrilho } from './luzes';
 import {
   CORES_BARRA_PADRAO,
   barrasParaDesenhar,
+  cabeLadoALado,
   fracaoDaBarra,
+  medidasDasBarras,
+  misturarCor,
   porcentagemDaBarra,
   resolucaoDoTexto,
   type IPreferenciasBarrasMapa,
@@ -39,7 +42,7 @@ export { CORES_LADO };
 const LADO_TEXTURA = 256;
 const texturasDeMoldura = new Map<string, Texture>();
 
-function texturaDaMoldura(id: string, nivel: number | null, lado: LadoToken): Texture {
+function texturaDaMoldura(id: string, lado: LadoToken): Texture {
   if (ehMolduraDeArte(id)) {
     // Moldura ilustrada: a imagem chega pela rede; até lá o quadro fica vazio e o token se refaz quando ela chegar.
     const imagem = molduraDeArteCarregada(id);
@@ -51,11 +54,11 @@ function texturaDaMoldura(id: string, nivel: number | null, lado: LadoToken): Te
     }
     return pronta;
   }
-  const chave = `${id}|${id === 'nivel' ? nivel : ''}|${lado}`;
+  const chave = `${id}|${lado}`;
   let textura = texturasDeMoldura.get(chave);
   if (!textura) {
     const tela = new OffscreenCanvas(LADO_TEXTURA, LADO_TEXTURA);
-    desenharMoldura(tela.getContext('2d')!, LADO_TEXTURA, { id, nivel, lado });
+    desenharMoldura(tela.getContext('2d')!, LADO_TEXTURA, { id, lado });
     textura = Texture.from(tela.transferToImageBitmap());
     texturasDeMoldura.set(chave, textura);
   }
@@ -77,7 +80,7 @@ function valorCurto(barra: IBarraToken): string {
   return `${porcentagemDaBarra(barra)}%`;
 }
 
-function textoPequeno(conteudo: string, tamanho: number, resolucao: number, cor = '#ffffff') {
+function textoPequeno(conteudo: string, tamanho: number, resolucao: number, cor = '#ffffff', ancora = 0.5) {
   const texto = new Text({
     text: conteudo,
     resolution: resolucao,
@@ -91,23 +94,50 @@ function textoPequeno(conteudo: string, tamanho: number, resolucao: number, cor 
       letterSpacing: tamanho * 0.02,
     },
   });
-  texto.anchor.set(0.5);
+  texto.anchor.set(ancora, 0.5);
   return texto;
 }
 
+/**
+ * A barra: trilho escuro com um fio claro, preenchimento em degradê (topo mais claro, pé mais fundo), brilho
+ * por cima, risquinhos nos quartos e um fecho claro na ponta, para ver de longe onde a barra termina.
+ */
 function desenharBarra(g: Graphics, barra: IBarraToken, cor: string, x: number, y: number, largura: number, altura: number) {
   const fracao = fracaoDaBarra(barra);
-  // Trilho suave (não preto chapado) para a cor pastel aparecer limpa.
-  g.roundRect(x, y, largura, altura, altura / 2)
-    .fill({ color: '#1b1824', alpha: 0.72 })
-    .stroke({ width: Math.max(0.5, altura * 0.1), color: '#ffffff', alpha: 0.22 });
+  const raio = altura / 2;
+  g.roundRect(x, y, largura, altura, raio)
+    .fill({ color: '#14111b', alpha: 0.82 })
+    .stroke({ width: Math.max(0.6, altura * 0.09), color: '#ffffff', alpha: 0.2 });
+  // Sombra interna no topo do trilho: dá fundo, como uma calha.
+  if (altura >= 6) {
+    g.roundRect(x + raio * 0.6, y + altura * 0.08, Math.max(0, largura - raio * 1.2), altura * 0.16, altura * 0.08)
+      .fill({ color: '#000000', alpha: 0.35 });
+  }
   const preenchida = largura * fracao;
   if (preenchida > 0) {
-    g.roundRect(x, y, preenchida, altura, Math.min(altura / 2, preenchida / 2)).fill(cor);
-    if (altura >= 4 && preenchida > 2) {
-      g.roundRect(x + altura * 0.28, y + altura * 0.12, Math.max(0, preenchida - altura * 0.56), altura * 0.22, altura * 0.11)
-        .fill({ color: '#ffffff', alpha: 0.2 });
+    g.roundRect(x, y, preenchida, altura, Math.min(raio, preenchida / 2)).fill(misturarCor(cor, '#000000', 0.12));
+    if (altura >= 6 && preenchida > altura) {
+      // O pé da barra, mais fundo.
+      g.roundRect(x + altura * 0.3, y + altura * 0.58, Math.max(0, preenchida - altura * 0.6), altura * 0.34, altura * 0.17)
+        .fill({ color: misturarCor(cor, '#000000', 0.38), alpha: 0.55 });
     }
+    // O corpo claro da barra, no meio, e o brilho do topo.
+    g.roundRect(x, y, preenchida, altura * 0.62, Math.min(raio, preenchida / 2)).fill({ color: misturarCor(cor, '#ffffff', 0.1), alpha: 0.9 });
+    if (altura >= 4 && preenchida > 2) {
+      g.roundRect(x + altura * 0.28, y + altura * 0.1, Math.max(0, preenchida - altura * 0.56), altura * 0.2, altura * 0.1)
+        .fill({ color: '#ffffff', alpha: 0.3 });
+    }
+  }
+  // Risquinhos nos quartos (25, 50, 75%): só onde a altura aguenta.
+  if (altura >= 7) {
+    for (const quarto of [0.25, 0.5, 0.75]) {
+      g.roundRect(x + largura * quarto - 0.4, y + altura * 0.18, 0.8, altura * 0.64, 0.4).fill({ color: '#0d0b12', alpha: 0.32 });
+    }
+  }
+  // O fecho: um traço claro na ponta, enquanto a barra não está cheia nem vazia.
+  if (preenchida > altura * 1.1 && fracao < 0.995) {
+    g.roundRect(x + preenchida - Math.max(1, altura * 0.14), y + altura * 0.16, Math.max(1, altura * 0.14), altura * 0.68, 0.5)
+      .fill({ color: '#ffffff', alpha: 0.55 });
   }
 }
 
@@ -118,11 +148,7 @@ function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, ra
   const visiveis = barrasParaDesenhar(barras, preferencias);
   if (!visiveis.length) return 0;
 
-  const largura = Math.max(16, Math.min(lado * 0.9, 180));
-  const alturaBarra = Math.max(2, Math.min(8, lado * 0.075));
-  const raioAnel = Math.max(3, Math.min(8, lado * 0.09));
-  const fonte = Math.max(6, Math.min(9, lado * 0.09));
-  const espacamento = Math.max(1, lado * 0.018);
+  const { largura, altura: alturaBarra, fonteNaBarra, raioAnel, fonte, espacamento } = medidasDasBarras(lado);
   const alturas = visiveis.map((barra) => {
     const modo = preferencias.porTipo[barra.tipo].modo;
     if (modo === 'anel') return raioAnel * 2;
@@ -171,9 +197,21 @@ function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, ra
     } else {
       desenharBarra(g, barra, visual.cor, -largura / 2, centroY - alturaBarra / 2, largura, alturaBarra);
       if (ativa) {
-        const texto = textoPequeno(`${ROTULOS_BARRA[barra.tipo]} ${valorCurto(barra)}`, fonte, resolucao);
-        texto.position.set(0, centroY);
-        raiz.addChild(texto);
+        // O rótulo vai na ponta esquerda e o valor na direita, dentro da barra. Sem largura para os dois, o texto vai junto no meio.
+        const rotulo = textoPequeno(ROTULOS_BARRA[barra.tipo], fonteNaBarra, resolucao, '#ffffff', 0);
+        const valor = textoPequeno(valorCurto(barra), fonteNaBarra, resolucao, '#ffffff', 1);
+        const folga = alturaBarra * 0.45;
+        if (cabeLadoALado(largura, rotulo.width, valor.width, folga)) {
+          rotulo.position.set(-largura / 2 + folga, centroY);
+          valor.position.set(largura / 2 - folga, centroY);
+          raiz.addChild(rotulo, valor);
+        } else {
+          rotulo.destroy();
+          valor.destroy();
+          const junto = textoPequeno(`${ROTULOS_BARRA[barra.tipo]} ${valorCurto(barra)}`, fonteNaBarra, resolucao);
+          junto.position.set(0, centroY);
+          raiz.addChild(junto);
+        }
       }
     }
     topo += altura + espacamento;
@@ -300,7 +338,7 @@ export class TokenVisual {
 
   private poMoldura(dados: ITokenMapa) {
     const id = dados.moldura ?? 'lado';
-    this.moldura.texture = texturaDaMoldura(id, dados.nivel, dados.lado);
+    this.moldura.texture = texturaDaMoldura(id, dados.lado);
     const quadro = this.lado * ESCALA_QUADRO * (ehMolduraDeArte(id) ? escalaDaMolduraDeArte(id) : 1);
     this.moldura.width = quadro;
     this.moldura.height = quadro;
@@ -315,7 +353,7 @@ export class TokenVisual {
           return;
         }
         // A imagem não veio (arquivo ausente, rede fora): o token fica com o aro simples do lado em vez de sem moldura.
-        this.moldura.texture = texturaDaMoldura('lado', dados.nivel, dados.lado);
+        this.moldura.texture = texturaDaMoldura('lado', dados.lado);
         this.moldura.position.set(0, 0);
         this.moldura.width = this.lado * ESCALA_QUADRO;
         this.moldura.height = this.lado * ESCALA_QUADRO;

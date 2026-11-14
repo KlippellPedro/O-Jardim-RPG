@@ -95,7 +95,7 @@ test('interpolador: o relógio do desenho alcança um colchão menor aos poucos,
 });
 
 test('molduras: as cores de Fluxo batem com FLUXO_TEMAS e os nomes batem com o servidor', async () => {
-  const { CORES_FLUXO, MOLDURAS } = await import('../../src/pages/Mapa/motor/molduras');
+  const { CORES_FLUXO, FLUXOS_DO_MAPA, MOLDURAS } = await import('../../src/pages/Mapa/motor/molduras');
   const { FLUXO_TEMAS } = await import('../../src/services/magiaService');
   for (const [fluxo, cor] of Object.entries(CORES_FLUXO)) {
     assert.equal(cor, FLUXO_TEMAS[fluxo as keyof typeof FLUXO_TEMAS].destaque, fluxo);
@@ -103,9 +103,21 @@ test('molduras: as cores de Fluxo batem com FLUXO_TEMAS e os nomes batem com o s
   assert.equal(Object.keys(CORES_FLUXO).length, Object.keys(FLUXO_TEMAS).length);
   const { readFileSync } = await import('node:fs');
   const servidor = readFileSync(new URL('../../plataforma/core/mapa.py', import.meta.url), 'utf-8');
-  const base = servidor.match(/MOLDURAS = \(\s*([\s\S]*?)\*\(/)![1].match(/"([a-z-]+)"/g)!.map((m) => m.slice(1, -1));
-  const fluxos = servidor.match(/FLUXOS = \(([\s\S]*?)\)/)![1].match(/"([a-z]+)"/g)!.map((m) => `fluxo-${m.slice(1, -1)}`);
-  assert.deepEqual(MOLDURAS.map((m) => m.id).sort(), [...base, ...fluxos].sort());
+  const noServidor = servidor.match(/MOLDURAS = \(([\s\S]*?)\n\)/)![1].match(/"([a-z-]+)"/g)!.map((m) => m.slice(1, -1));
+  const fluxos = servidor.match(/FLUXOS = \(([\s\S]*?)\)/)![1].match(/"([a-z]+)"/g)!.map((m) => m.slice(1, -1));
+  // O servidor aceita também "lado", o aro simples que todo token usa sem escolha: ele não é uma opção da tela.
+  assert.deepEqual(MOLDURAS.map((m) => m.id).sort(), noServidor.filter((id) => id !== 'lado').sort());
+  assert.deepEqual(FLUXOS_DO_MAPA.map((f) => f.id).sort(), [...fluxos].sort());
+});
+
+test('molduras: só "Sem borda" e as ilustradas aparecem para escolher', async () => {
+  const { MOLDURAS } = await import('../../src/pages/Mapa/motor/molduras');
+  assert.equal(MOLDURAS[0].id, 'nenhuma');
+  assert.ok(MOLDURAS.slice(1).every((m) => m.id.startsWith('arte-') && m.grupo === 'arte'));
+  assert.equal(MOLDURAS.length, 20);
+  for (const saiu of ['nivel', 'lado', 'ferro', 'ouro', 'madeira', 'osso', 'runa', 'cristal', 'raiz', 'sombra', 'fluxo-tempo']) {
+    assert.ok(!MOLDURAS.some((m) => m.id === saiu), `${saiu} não é mais uma escolha`);
+  }
 });
 
 test('molduras ilustradas: cada id tem a imagem no disco, escala válida, e nada sobra sem uso', async () => {
@@ -135,7 +147,7 @@ test('molduras: um id que não existe mais cai no aro simples em vez de sumir', 
     get: (_alvo, nome) => (nome === 'createLinearGradient' ? () => ({ addColorStop: () => {} }) : () => { chamadas += 1; }),
     set: () => true,
   }) as unknown as CanvasRenderingContext2D;
-  desenharMoldura(ctx, 256, { id: 'moldura-que-saiu', nivel: null, lado: 'jogador' });
+  desenharMoldura(ctx, 256, { id: 'moldura-que-saiu', lado: 'jogador' });
   assert.ok(chamadas > 0);
 });
 
@@ -147,11 +159,12 @@ test('molduras: "Sem borda" não desenha nada e as outras desenham', async () =>
       get: (_alvo, nome) => (nome === 'createLinearGradient' ? () => ({ addColorStop: () => {} }) : () => { chamadas += 1; }),
       set: () => true,
     }) as unknown as CanvasRenderingContext2D;
-    desenharMoldura(ctx, 256, { id, nivel: null, lado: 'jogador' });
+    desenharMoldura(ctx, 256, { id, lado: 'jogador' });
     return chamadas;
   };
   assert.equal(tracos('nenhuma'), 0);
   assert.ok(tracos('lado') > 0);
+  // Uma moldura desenhada que saiu do catálogo (como a de ouro) vira o aro simples.
   assert.ok(tracos('ouro') > 0);
 });
 

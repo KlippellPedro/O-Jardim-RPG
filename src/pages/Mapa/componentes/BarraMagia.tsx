@@ -1,7 +1,7 @@
 import { Circle, Slash, Triangle, Zap } from 'lucide-react';
 import type { FormaMagia } from '../../../services/mapaApi';
 import type { OpcoesMagia } from '../motor/palco';
-import { CORES_FLUXO, MOLDURAS, type FluxoId } from '../motor/molduras';
+import { CORES_FLUXO, FLUXOS_DO_MAPA } from '../motor/molduras';
 import { ComDica } from './BotaoFerramenta';
 import '../efeitosMapa.css';
 
@@ -19,10 +19,7 @@ const FORMAS: Array<{ id: FormaMagia; rotulo: string; dica: string; Icone: typeo
   { id: 'impacto', rotulo: 'Impacto', dica: 'Arraste de quem lança até o alvo, ou clique no alvo.', Icone: Zap },
 ];
 
-const FLUXOS = MOLDURAS.filter((m) => m.grupo === 'fluxo').map((m) => {
-  const id = m.id.slice('fluxo-'.length) as FluxoId;
-  return { id, rotulo: m.rotulo, cor: CORES_FLUXO[id] };
-});
+const FLUXOS = FLUXOS_DO_MAPA.map((fluxo) => ({ ...fluxo, cor: CORES_FLUXO[fluxo.id] }));
 
 /** Barra da magia: escolher a forma e o Fluxo (a cor), e arrastar no mapa. A mesa inteira vê. */
 export const BarraMagia = ({ opcoes, naMesa, onOpcoes }: Props) => {

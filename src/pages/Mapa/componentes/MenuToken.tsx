@@ -1,11 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
-import type { IAuraToken, IEstadoMapa, ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
+import type { EstiloDeAura, EstiloDeLuz, IAuraToken, IEstadoMapa, ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
 import { SeletorDeMoldura } from '../oficina/OficinaGaveta';
 import type { Enquadramento } from '../motor/molduras';
 import { NotaDoMestre } from './NotaDoMestre';
 import { ArtesDoToken } from './ArtesDoToken';
 import { LootDoRecipiente } from './LootDoRecipiente';
+import { ESTILOS_DE_AURA } from '../motor/auras';
+import { ESTILOS_DE_LUZ, estiloDaLuz } from '../motor/luzesConta';
+import {
+  AURAS_PRONTAS,
+  DICAS_DO_ESTILO_DE_LUZ,
+  GRUPOS_DE_LUZ,
+  LUZES_PRONTAS,
+  ROTULOS_DO_ESTILO_DE_AURA,
+  ROTULOS_DO_ESTILO_DE_LUZ,
+  TAMANHOS_DE_AURA,
+  auraProntaDe,
+  luzProntaDe,
+} from '../motor/luzesEAuras';
 import '../efeitosMapa.css';
 
 interface Props {
@@ -31,14 +44,6 @@ interface Props {
 
 export type Aba = 'geral' | 'barras' | 'visual' | 'luz' | 'loot';
 
-/** Atalhos de aura, em casas; a cor muda depois. */
-const AURAS: Array<{ rotulo: string; aura: IAuraToken }> = [
-  { rotulo: '1 casa', aura: { raio: 1, cor: '#facc15', visivel: true } },
-  { rotulo: '2 casas', aura: { raio: 2, cor: '#7dd3fc', visivel: true } },
-  { rotulo: '3 casas', aura: { raio: 3, cor: '#a78bfa', visivel: true } },
-  { rotulo: '6 casas', aura: { raio: 6, cor: '#f87171', visivel: true } },
-];
-
 const BARRAS: Array<{ id: TipoBarra; rotulo: string }> = [
   { id: 'vida', rotulo: 'Vida' },
   { id: 'mana', rotulo: 'Mana' },
@@ -50,14 +55,6 @@ const PARA: Array<{ id: ParaQuem; rotulo: string }> = [
   { id: 'todos', rotulo: 'Todos' },
   { id: 'dono', rotulo: 'Só o dono e o Mestre' },
   { id: 'ninguem', rotulo: 'Ninguém' },
-];
-
-/** Atalhos de luz: o Mestre ou o jogador ajusta depois o alcance e a cor. */
-const LUZES: Array<{ rotulo: string; luz: ILuzToken }> = [
-  { rotulo: 'Vela', luz: { raio: 1.5, cor: '#ffc46b', tremula: true } },
-  { rotulo: 'Tocha', luz: { raio: 4, cor: '#ff9a3c', tremula: true } },
-  { rotulo: 'Lanterna', luz: { raio: 6, cor: '#ffe2a8', tremula: false } },
-  { rotulo: 'Luz mágica', luz: { raio: 3, cor: '#9ecbff', tremula: false } },
 ];
 
 const LADOS: Array<{ id: LadoToken; rotulo: string }> = [
@@ -122,6 +119,31 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
       esperaLuz.current = null;
       onEditar({ luz: nova });
     }, 300);
+  };
+
+  const estiloLuz = luz ? estiloDaLuz(luz) : null;
+  const luzPronta = luzProntaDe(luz, estiloLuz);
+  const auraPronta = auraProntaDe(aura);
+
+  const mudarEstiloDaLuz = (estilo: EstiloDeLuz) => {
+    if (!luz) return;
+    const nova = { ...luz, estilo, tremula: estilo !== 'fixa' };
+    setLuz(nova);
+    onEditar({ luz: nova });
+  };
+
+  const mudarEstiloDaAura = (estilo: EstiloDeAura) => {
+    if (!aura) return;
+    const nova = { ...aura, estilo };
+    setAura(nova);
+    onEditar({ aura: nova });
+  };
+
+  /** Os tamanhos 1, 2, 3 e 6 casas: com aura, só trocam o alcance; sem aura, ligam a Proteção naquele tamanho. */
+  const tamanhoDaAura = (raio: number) => {
+    const nova: IAuraToken = aura ? { ...aura, raio } : { ...AURAS_PRONTAS[0].aura, raio, visivel: true };
+    setAura(nova);
+    onEditar({ aura: nova });
   };
 
   const mudarEnquadramento = (parcial: Partial<Enquadramento>) => {
@@ -226,7 +248,7 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
             <p className="mapa-dica">O Mestre escolheu uma moldura única para a mesa. A sua escolha volta quando ele liberar.</p>
           ) : (
             <>
-              <SeletorDeMoldura valor={token.moldura} lado={token.lado} nivel={token.nivel} incluirNivel={Boolean(token.personagem_id)} onEscolher={(id) => onMoldura(id)} />
+              <SeletorDeMoldura valor={token.moldura} lado={token.lado} onEscolher={(id) => onMoldura(id)} />
               <button type="button" className="mapa-botao-leve" onClick={() => onMoldura(null)}>Voltar ao padrão</button>
             </>
           )}
@@ -258,28 +280,42 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
             <legend>Luz</legend>
             <div className="mapa-luz-atalhos">
               <button type="button" className={!luz ? 'ativo' : ''} onClick={() => { setLuz(null); onEditar({ sem_luz: true }); }}>Sem luz</button>
-              {LUZES.map((atalho) => (
-                <button
-                  key={atalho.rotulo}
-                  type="button"
-                  className={luz && luz.cor === atalho.luz.cor && luz.raio === atalho.luz.raio ? 'ativo' : ''}
-                  onClick={() => { setLuz(atalho.luz); onEditar({ luz: atalho.luz }); }}
-                >
-                  <span className="mapa-luz-ponto" style={{ background: atalho.luz.cor }} /> {atalho.rotulo}
-                </button>
-              ))}
             </div>
-            {luz && (
+            {GRUPOS_DE_LUZ.map((grupo) => (
+              <div key={grupo.id} className="mapa-luz-grupo">
+                <span className="mapa-luz-grupo-titulo">{grupo.rotulo}</span>
+                <div className="mapa-luz-atalhos">
+                  {LUZES_PRONTAS.filter((pronta) => pronta.grupo === grupo.id).map((pronta) => (
+                    <button
+                      key={pronta.id}
+                      type="button"
+                      className={luzPronta === pronta.id ? 'ativo' : ''}
+                      onClick={() => { setLuz(pronta.luz); onEditar({ luz: pronta.luz }); }}
+                    >
+                      <span className="mapa-luz-ponto" style={{ background: pronta.luz.cor, color: pronta.luz.cor }} /> {pronta.rotulo}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {luz && estiloLuz && (
               <>
                 <label className="mapa-menu-linha">
                   Alcance <span>{luz.raio.toLocaleString('pt-BR')} {luz.raio === 1 ? 'casa' : 'casas'}</span>
                   <input type="range" min={0.5} max={15} step={0.5} value={luz.raio} onChange={(e) => mudarLuz({ raio: Number(e.target.value) })} />
                 </label>
+                <div className="mapa-menu-linha">
+                  Efeito <span>{DICAS_DO_ESTILO_DE_LUZ[estiloLuz]}</span>
+                  <div className="mapa-estilos" role="radiogroup" aria-label="Efeito da luz">
+                    {ESTILOS_DE_LUZ.map((estilo) => (
+                      <button key={estilo} type="button" role="radio" aria-checked={estiloLuz === estilo} className={estiloLuz === estilo ? 'ativo' : ''} onClick={() => mudarEstiloDaLuz(estilo)}>
+                        {ROTULOS_DO_ESTILO_DE_LUZ[estilo]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <label className="mapa-menu-linha">
                   Cor <input type="color" value={luz.cor} onChange={(e) => mudarLuz({ cor: e.target.value })} />
-                </label>
-                <label className="mapa-menu-linha">
-                  <span><input type="checkbox" checked={luz.tremula} onChange={(e) => mudarLuz({ tremula: e.target.checked })} /> Tremula como chama</span>
                 </label>
               </>
             )}
@@ -290,20 +326,30 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
             <legend>Aura</legend>
             <div className="mapa-luz-atalhos">
               <button type="button" className={!aura ? 'ativo' : ''} onClick={() => { setAura(null); onEditar({ sem_aura: true }); }}>Sem aura</button>
-              {AURAS.map((atalho) => (
+              {AURAS_PRONTAS.map((pronta) => (
                 <button
-                  key={atalho.rotulo}
+                  key={pronta.id}
                   type="button"
-                  className={aura && aura.raio === atalho.aura.raio ? 'ativo' : ''}
+                  className={auraPronta === pronta.id ? 'ativo' : ''}
                   onClick={() => {
-                    const nova = { ...atalho.aura, cor: aura?.cor ?? atalho.aura.cor, visivel: aura?.visivel ?? true };
+                    const nova: IAuraToken = { ...pronta.aura, visivel: aura?.visivel ?? true };
                     setAura(nova);
                     onEditar({ aura: nova });
                   }}
                 >
-                  <span className="mapa-luz-ponto" style={{ background: aura?.cor ?? atalho.aura.cor }} /> {atalho.rotulo}
+                  <span className="mapa-luz-ponto" style={{ background: pronta.aura.cor, color: pronta.aura.cor }} /> {pronta.rotulo}
                 </button>
               ))}
+            </div>
+            <div className="mapa-menu-linha">
+              Tamanho
+              <div className="mapa-estilos" role="group" aria-label="Tamanho da aura">
+                {TAMANHOS_DE_AURA.map((raio) => (
+                  <button key={raio} type="button" aria-pressed={aura?.raio === raio} className={aura?.raio === raio ? 'ativo' : ''} onClick={() => tamanhoDaAura(raio)}>
+                    {raio} {raio === 1 ? 'casa' : 'casas'}
+                  </button>
+                ))}
+              </div>
             </div>
             {aura && (
               <>
@@ -311,6 +357,16 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
                   Raio <span>{aura.raio.toLocaleString('pt-BR')} {aura.raio === 1 ? 'casa' : 'casas'}</span>
                   <input type="range" min={0.5} max={12} step={0.5} value={aura.raio} onChange={(e) => mudarAura({ raio: Number(e.target.value) })} />
                 </label>
+                <div className="mapa-menu-linha">
+                  Estilo
+                  <div className="mapa-estilos" role="radiogroup" aria-label="Estilo da aura">
+                    {ESTILOS_DE_AURA.map((estilo) => (
+                      <button key={estilo} type="button" role="radio" aria-checked={(aura.estilo ?? 'campo') === estilo} className={(aura.estilo ?? 'campo') === estilo ? 'ativo' : ''} onClick={() => mudarEstiloDaAura(estilo)}>
+                        {ROTULOS_DO_ESTILO_DE_AURA[estilo]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <label className="mapa-menu-linha">
                   Cor <input type="color" value={aura.cor} onChange={(e) => mudarAura({ cor: e.target.value })} />
                 </label>

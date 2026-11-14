@@ -116,6 +116,46 @@ export function resolucaoDoTexto(zoom: number, dpr = typeof window === 'undefine
   return Math.min(4, 2 ** Math.ceil(Math.log2(alvo)));
 }
 
+export interface IMedidasDasBarras {
+  /** Comprimento de cada barra. */
+  largura: number;
+  /** Altura da barra: com o rótulo dentro, ele cabe sem passar das bordas. */
+  altura: number;
+  /** Letra do texto que vai dentro da barra. */
+  fonteNaBarra: number;
+  /** Letra do número solto e do que vai dentro do anel. */
+  fonte: number;
+  raioAnel: number;
+  espacamento: number;
+}
+
+/** Tamanho das barras e do texto a partir do lado do token (em px do mapa). O texto da barra acompanha a altura dela. */
+export function medidasDasBarras(lado: number): IMedidasDasBarras {
+  const altura = Math.max(4, Math.min(11, lado * 0.105));
+  return {
+    largura: Math.max(16, Math.min(lado * 0.9, 180)),
+    altura,
+    fonteNaBarra: Math.min(altura, Math.max(5, Math.min(9, altura * 0.78))),
+    fonte: Math.max(6, Math.min(9, lado * 0.09)),
+    raioAnel: Math.max(3, Math.min(8, lado * 0.09)),
+    espacamento: Math.max(1.5, lado * 0.024),
+  };
+}
+
+/** Mistura `cor` (#rrggbb) com `alvo` na proporção `t` (0 fica na cor, 1 vira o alvo). */
+export function misturarCor(cor: string, alvo: string, t: number): string {
+  const ler = (hex: string) => [1, 3, 5].map((i) => Number.parseInt(hex.slice(i, i + 2), 16) || 0);
+  const a = ler(COR_HEX.test(cor) ? cor : '#808080');
+  const b = ler(COR_HEX.test(alvo) ? alvo : '#000000');
+  const k = Math.max(0, Math.min(1, t));
+  return `#${a.map((valor, i) => Math.round(valor + (b[i] - valor) * k).toString(16).padStart(2, '0')).join('')}`;
+}
+
+/** O rótulo e o valor cabem lado a lado dentro da barra? Senão o texto vai junto, no meio. */
+export function cabeLadoALado(larguraBarra: number, larguraRotulo: number, larguraValor: number, folga: number): boolean {
+  return larguraRotulo + larguraValor + folga * 3 <= larguraBarra;
+}
+
 export interface IBarrasSeparadas {
   vida: IBarraToken | null;
   recurso: IBarraToken | null;

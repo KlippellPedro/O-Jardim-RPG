@@ -1,8 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
-import { valoresComPadrao } from '../../Mestre/documentos/modelo';
-import { modeloPorId } from '../../Mestre/documentos/modelos';
-import { carregarImagens, garantirFontes, renderizar } from '../../Mestre/documentos/render';
+import { useDocumentoNoCanvas } from './documentoNoCanvas';
 
 export interface IDocumentoCompartilhado {
   id: string;
@@ -12,22 +9,7 @@ export interface IDocumentoCompartilhado {
 }
 
 export const DocumentoDaMesa = ({ documento, onFechar }: { documento: IDocumentoCompartilhado; onFechar: () => void }) => {
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const [falha, setFalha] = useState('');
-  const modelo = modeloPorId(documento.modelo);
-
-  useEffect(() => {
-    let vivo = true;
-    setFalha('');
-    if (!modelo) return () => { vivo = false; };
-    const valores = valoresComPadrao(modelo, documento.campos);
-    void Promise.all([garantirFontes(), carregarImagens(modelo, valores)])
-      .then(([, imagens]) => {
-        if (vivo && canvas.current) renderizar(canvas.current, modelo, valores, imagens);
-      })
-      .catch(() => { if (vivo) setFalha('Não foi possível desenhar este documento neste aparelho.'); });
-    return () => { vivo = false; };
-  }, [documento, modelo]);
+  const { canvas, modelo, falha } = useDocumentoNoCanvas(documento.modelo, documento.campos);
 
   return (
     <div className="mapa-documento-fundo" role="presentation" onMouseDown={(evento) => evento.target === evento.currentTarget && onFechar()}>

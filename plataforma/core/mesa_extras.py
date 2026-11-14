@@ -16,6 +16,9 @@ import time
 from uuid import uuid4
 
 AURA_MAXIMA_CASAS = 30
+#: Como a aura se desenha (src/pages/Mapa/motor/auras.ts): campo (preenchido), anel (só o contorno), suave (esmaece
+#: para fora), pulso (ondas que se abrem), tracejada (gira), ondas (borda que ondula) e chamas (borda de fogo).
+ESTILOS_DE_AURA = ("campo", "anel", "suave", "pulso", "tracejada", "ondas", "chamas")
 COR = re.compile(r"^#[0-9a-fA-F]{6}$")
 ID_ITEM = re.compile(r"^[A-Za-z0-9_-]{1,40}$")
 MAX_RELOGIOS = 12
@@ -52,7 +55,7 @@ def agora_ms() -> int:
 # ------------------------------------------------------------------ aura
 
 def normalizar_aura(dados) -> dict | None:
-    """None tira a aura; senão raio (casas), cor e se os jogadores veem."""
+    """None tira a aura; senão raio (casas), cor, estilo e se os jogadores veem. Sem estilo, é o campo de sempre."""
     if dados is None:
         return None
     if not isinstance(dados, dict):
@@ -61,7 +64,10 @@ def normalizar_aura(dados) -> dict | None:
     cor = dados.get("cor", "#7dd3fc")
     if not isinstance(cor, str) or not COR.fullmatch(cor):
         raise ErroMesa("cor da aura invalida")
-    return {"raio": round(raio, 1), "cor": cor.lower(), "visivel": bool(dados.get("visivel", True))}
+    estilo = dados.get("estilo", "campo")
+    if estilo not in ESTILOS_DE_AURA:
+        raise ErroMesa("estilo da aura invalido")
+    return {"raio": round(raio, 1), "cor": cor.lower(), "visivel": bool(dados.get("visivel", True)), "estilo": estilo}
 
 
 def aura_vista(aura, *, gestor: bool, dono: bool) -> dict | None:

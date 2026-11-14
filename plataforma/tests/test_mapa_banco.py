@@ -242,16 +242,16 @@ class MapaBancoTests(unittest.TestCase):
         cena = uuid.UUID(self.criar_cena()["cena"]["id"])
         mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(personagem_id=self.mira, x=150, y=150),
                          user=self.mestre, database=self.database)
-        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(nome="Estatua", x=450, y=150, moldura="osso"),
+        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(nome="Estatua", x=450, y=150, moldura="arte-louro"),
                          user=self.mestre, database=self.database)
         molduras = {t["nome"]: t["moldura"] for t in self.ver(self.ana)["tokens"]}
-        self.assertEqual(molduras, {"Mira": "nivel", "Estatua": "osso"})
-        mapa.editar_token_do_personagem(self.campanha_id, self.mira, mapa.TokenDoPersonagemInput(moldura="fluxo-tempo", enquadramento={"zoom": 1.5}),
+        self.assertEqual(molduras, {"Mira": "lado", "Estatua": "arte-louro"})
+        mapa.editar_token_do_personagem(self.campanha_id, self.mira, mapa.TokenDoPersonagemInput(moldura="arte-vampiro", enquadramento={"zoom": 1.5}),
                                         user=self.ana, database=self.database)
         da_ana = next(t for t in self.ver(self.bruno)["tokens"] if t["nome"] == "Mira")
-        self.assertEqual((da_ana["moldura"], da_ana["enquadramento"]["zoom"]), ("fluxo-tempo", 1.5))
+        self.assertEqual((da_ana["moldura"], da_ana["enquadramento"]["zoom"]), ("arte-vampiro", 1.5))
         with self.assertRaises(HTTPException) as erro:
-            mapa.editar_token_do_personagem(self.campanha_id, self.mira, mapa.TokenDoPersonagemInput(moldura="ouro"),
+            mapa.editar_token_do_personagem(self.campanha_id, self.mira, mapa.TokenDoPersonagemInput(moldura="arte-hera"),
                                             user=self.bruno, database=self.database)
         self.assertEqual(erro.exception.status_code, 403)
         with self.assertRaises(HTTPException) as erro:
@@ -259,13 +259,13 @@ class MapaBancoTests(unittest.TestCase):
                                             user=self.ana, database=self.database)
         self.assertEqual(erro.exception.status_code, 422)
         with self.assertRaises(HTTPException):
-            mapa.configurar_mapa(self.campanha_id, mapa.ConfigMapaInput(moldura_mesa="ferro"), user=self.ana, database=self.database)
-        mapa.configurar_mapa(self.campanha_id, mapa.ConfigMapaInput(moldura_mesa="ferro"), user=self.mestre, database=self.database)
+            mapa.configurar_mapa(self.campanha_id, mapa.ConfigMapaInput(moldura_mesa="arte-ouroboros"), user=self.ana, database=self.database)
+        mapa.configurar_mapa(self.campanha_id, mapa.ConfigMapaInput(moldura_mesa="arte-ouroboros"), user=self.mestre, database=self.database)
         visto = self.ver(self.ana)
-        self.assertEqual(visto["moldura_mesa"], "ferro")
-        self.assertEqual({t["moldura"] for t in visto["tokens"]}, {"ferro"})
+        self.assertEqual(visto["moldura_mesa"], "arte-ouroboros")
+        self.assertEqual({t["moldura"] for t in visto["tokens"]}, {"arte-ouroboros"})
         mapa.configurar_mapa(self.campanha_id, mapa.ConfigMapaInput(moldura_mesa=None), user=self.mestre, database=self.database)
-        self.assertEqual({t["nome"]: t["moldura"] for t in self.ver(self.ana)["tokens"]}, {"Mira": "fluxo-tempo", "Estatua": "osso"})
+        self.assertEqual({t["nome"]: t["moldura"] for t in self.ver(self.ana)["tokens"]}, {"Mira": "arte-vampiro", "Estatua": "arte-louro"})
 
     # ------------------------------------------- recursos pela barra do token
 

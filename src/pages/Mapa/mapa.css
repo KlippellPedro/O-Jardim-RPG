@@ -8,6 +8,8 @@
   --mapa-apagado: #a19cb3;
   --mapa-ouro: #c7a44c;
   --mapa-perigo: #ef4444;
+  /* A largura dos painéis de configuração (token, clima, grade, trilha...): era 280 a 340 px, pequeno para ler e clicar. */
+  --mapa-largura-painel: 400px;
   position: fixed;
   inset: 0;
   z-index: 40;
@@ -666,10 +668,11 @@
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 280px;
+  width: min(var(--mapa-largura-painel), calc(100% - 24px));
   max-height: calc(100% - 24px);
   overflow: auto;
-  padding: 12px;
+  padding: 14px;
+  font-size: 14px;
   border: 1px solid var(--mapa-linha);
   border-radius: 12px;
   background: var(--mapa-painel);
@@ -681,7 +684,7 @@
   top: var(--mapa-topo-esq);
   right: auto;
   left: 12px;
-  width: min(340px, calc(100% - 24px));
+  width: min(var(--mapa-largura-painel), calc(100% - 24px));
   max-height: calc(100% - var(--mapa-topo-esq) - 12px);
 }
 
@@ -695,7 +698,7 @@
 }
 
 .mapa-config-barras {
-  width: min(340px, calc(100% - 24px));
+  width: min(var(--mapa-largura-painel), calc(100% - 24px));
 }
 
 .mapa-config-barras > .mapa-dica {
@@ -896,7 +899,7 @@
 .mapa-editor-anotacao {
   right: 12px;
   left: auto;
-  width: min(340px, calc(100% - 24px));
+  width: min(var(--mapa-largura-painel), calc(100% - 24px));
   z-index: 4;
 }
 
@@ -1484,7 +1487,7 @@
 }
 
 .mapa-clima {
-  width: min(340px, calc(100% - 24px));
+  width: min(var(--mapa-largura-painel), calc(100% - 24px));
 }
 
 /* Com a barra da névoa aberta, os painéis da esquerda descem para não ficar por baixo dela. */
@@ -1736,10 +1739,11 @@
   right: 12px;
   display: grid;
   gap: 10px;
-  width: min(340px, calc(100% - 24px));
+  width: min(var(--mapa-largura-painel), calc(100% - 24px));
   max-height: calc(100% - var(--mapa-topo-dir) - 12px);
   overflow: auto;
-  padding: 12px;
+  padding: 14px;
+  font-size: 14px;
   border: 1px solid var(--mapa-linha);
   border-radius: 14px;
   background: var(--mapa-painel);
@@ -1936,7 +1940,7 @@
   .mapa-recurso-painel {
     top: var(--mapa-topo-dir);
     right: 8px;
-    width: min(320px, calc(100% - 16px));
+    width: min(var(--mapa-largura-painel), calc(100% - 16px));
   }
 
   .mapa-documento-fundo {
@@ -2068,7 +2072,7 @@ button.mapa-tempo.ativo {
 
 /* Painel Tempo do Mestre. */
 .mapa-tempo-painel {
-  width: min(340px, calc(100% - 24px));
+  width: min(var(--mapa-largura-painel), calc(100% - 24px));
 }
 
 .mapa-tempo-painel fieldset,
@@ -2131,7 +2135,7 @@ button.mapa-tempo.ativo {
 .mapa-config.mapa-portal-painel {
   left: auto;
   right: 12px;
-  width: 290px;
+  width: min(var(--mapa-largura-painel), calc(100% - 24px));
 }
 
 .mapa-portal-painel .mapa-fluxos,
@@ -2188,7 +2192,7 @@ button.mapa-tempo.ativo {
 .mapa-config.mapa-porta-painel {
   left: auto;
   right: 12px;
-  width: 270px;
+  width: min(var(--mapa-largura-painel), calc(100% - 24px));
 }
 
 .mapa-porta-painel .mapa-menu-botoes {

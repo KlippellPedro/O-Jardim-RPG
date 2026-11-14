@@ -7,7 +7,7 @@
 import { Container, Sprite, Texture } from 'pixi.js';
 import type { FonteDeLuz } from './luzesConta';
 
-export { corDaLuz, faseDe, fonteDoToken, tremor, type FonteDeLuz } from './luzesConta';
+export { corDaLuz, estiloDaLuz, faseDe, fonteDoToken, forcaDaLuz, tremor, type FonteDeLuz } from './luzesConta';
 
 let brilho: Texture | null = null;
 

@@ -42,10 +42,15 @@ export interface IBarraToken {
 
 /** Luz que o token carrega: raio em casas, cor e se tremula como chama. */
 /** Aura presa ao token, em casas. A escondida (`visivel: false`) só chega a quem comanda e ao dono. */
+/** Como a aura se desenha: campo (preenchido), anel, suave (esmaece para fora), pulso (ondas), tracejada (gira), ondas (borda que ondula) e chamas. */
+export type EstiloDeAura = 'campo' | 'anel' | 'suave' | 'pulso' | 'tracejada' | 'ondas' | 'chamas';
+
 export interface IAuraToken {
   raio: number;
   cor: string;
   visivel: boolean;
+  /** Sem estilo (aura de antes dos estilos), é o campo. */
+  estilo?: EstiloDeAura;
 }
 
 export interface IRelogioMesa {
@@ -79,10 +84,16 @@ export interface IVistaCena {
   zoom: number;
 }
 
+/** Como a luz se comporta: fixa, chama (treme rápido), pulsa (vai e volta devagar) ou cintila (pisca como fogo-fátuo). */
+export type EstiloDeLuz = 'fixa' | 'chama' | 'pulsa' | 'cintila';
+
 export interface ILuzToken {
   raio: number;
   cor: string;
+  /** Campo de antes dos estilos: verdadeiro em todo estilo que se mexe. */
   tremula: boolean;
+  /** Sem estilo (luz de antes), vale `tremula`: chama ou fixa. */
+  estilo?: EstiloDeLuz;
 }
 
 export type FormaMagia = 'circulo' | 'cone' | 'linha' | 'impacto';

@@ -21,7 +21,7 @@ TEST_DSN = (os.getenv("TEST_DATABASE_URL") or "").strip()
 
 def test_aura_confere_raio_e_cor_e_a_escondida_e_so_de_quem_comanda():
     aura = mesa_extras.normalizar_aura({"raio": 99, "cor": "#ABCDEF"})
-    assert aura == {"raio": 30.0, "cor": "#abcdef", "visivel": True}
+    assert aura == {"raio": 30.0, "cor": "#abcdef", "visivel": True, "estilo": "campo"}
     assert mesa_extras.normalizar_aura(None) is None
     with pytest.raises(ErroMesa):
         mesa_extras.normalizar_aura({"cor": "vermelho"})
@@ -30,6 +30,19 @@ def test_aura_confere_raio_e_cor_e_a_escondida_e_so_de_quem_comanda():
     assert mesa_extras.aura_vista(escondida, gestor=False, dono=True)["raio"] == 3
     assert mesa_extras.aura_vista(escondida, gestor=True, dono=False)["raio"] == 3
     assert mesa_extras.aura_vista({"raio": "x"}, gestor=True, dono=True) is None
+
+
+def test_aura_tem_estilo_e_sem_estilo_e_o_campo_de_sempre():
+    for estilo in mesa_extras.ESTILOS_DE_AURA:
+        assert mesa_extras.normalizar_aura({"raio": 2, "cor": "#7dd3fc", "estilo": estilo})["estilo"] == estilo
+    assert mesa_extras.normalizar_aura({"raio": 2})["estilo"] == "campo"
+    # Uma aura guardada antes dos estilos aparece como campo, sem erro.
+    antiga = {"raio": 3, "cor": "#ff0000", "visivel": True}
+    assert mesa_extras.aura_vista(antiga, gestor=False, dono=False)["estilo"] == "campo"
+    for ruim in ("fogo", 3, ["campo"]):
+        with pytest.raises(ErroMesa):
+            mesa_extras.normalizar_aura({"estilo": ruim})
+    assert len(mesa_extras.ESTILOS_DE_AURA) == 7
 
 
 def test_mesa_junta_o_que_mudou_e_o_jogador_so_ve_o_que_esta_a_vista():
