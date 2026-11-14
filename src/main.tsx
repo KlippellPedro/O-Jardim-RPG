@@ -4,10 +4,12 @@ import App from './App.tsx'
 import './index.css'
 import { iniciarCapturaDeInstalacao } from './pwa/instalacao'
 import { registrarServiceWorker } from './pwa/registrarServiceWorker'
+import { preencherBarrasDeDeslizar } from './utils/barrasDeDeslizar'
 
 // O navegador oferece a instalação cedo, antes da tela montar: a escuta começa já.
 iniciarCapturaDeInstalacao()
 registrarServiceWorker()
+preencherBarrasDeDeslizar()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

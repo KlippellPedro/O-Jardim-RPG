@@ -780,6 +780,66 @@ input[type="checkbox"]:not(.sr-only):disabled {
   opacity: 0.45;
 }
 
+/* Barras de deslizar no visual do Jardim: trilho escuro com a parte já percorrida em dourado e bolinha dourada
+   (o navegador desenharia uma barra clara e grossa). `:where` zera a especificidade: quem tem estilo próprio
+   (.mesa-range) continua valendo. O preenchimento acompanha o valor por --pct, posto por
+   src/utils/barrasDeDeslizar.ts. */
+:where(input[type="range"]) {
+  --pct: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1.25rem;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+:where(input[type="range"])::-webkit-slider-runnable-track {
+  height: 0.3rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #c7a44c var(--pct), rgba(255, 255, 255, 0.16) var(--pct));
+}
+:where(input[type="range"])::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-top: -0.325rem;
+  border: 2px solid #1a1508;
+  border-radius: 999px;
+  background: #f3dc8f;
+  box-shadow: 0 0 0 2px rgba(199, 164, 76, 0.25), 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+:where(input[type="range"])::-moz-range-track {
+  height: 0.3rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+:where(input[type="range"])::-moz-range-progress {
+  height: 0.3rem;
+  border-radius: 999px;
+  background: #c7a44c;
+}
+:where(input[type="range"])::-moz-range-thumb {
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 2px solid #1a1508;
+  border-radius: 999px;
+  background: #f3dc8f;
+  box-shadow: 0 0 0 2px rgba(199, 164, 76, 0.25);
+}
+:where(input[type="range"]):disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+:where(input[type="range"]):focus-visible {
+  outline: none;
+}
+:where(input[type="range"]):focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px rgba(243, 220, 143, 0.45);
+}
+
 /* Termos do jogo no texto (condições, aflições, mecânicas): link discreto que
    abre o Livro numa guia nova. Sublinhado pontilhado para não pesar a leitura. */
 .termo-do-jogo {
