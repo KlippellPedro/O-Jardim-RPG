@@ -9,6 +9,12 @@ export const LADO_MAXIMO_DO_TOKEN = 1024;
 /** O maior lado que o melhorador aceita no resultado (o mesmo de oficina/processar.ts). */
 export const LADO_MAXIMO_DO_RESULTADO = 16384;
 
+/**
+ * Teto de pixels do resultado (100 milhões, como 10000 x 10000). Acima disso o navegador fica sem memória para o
+ * desenho e o melhorador levaria uma eternidade.
+ */
+export const MAX_PIXELS_DO_RESULTADO = 100_000_000;
+
 export type EscalaDeMelhoria = 2 | 4;
 
 /** Tamanho que a imagem teria ao caber em `ladoMaximo` (nunca aumenta). */
@@ -17,9 +23,25 @@ export function tamanhoQueCabe(largura: number, altura: number, ladoMaximo: numb
   return { largura: Math.max(1, Math.round(largura * escala)), altura: Math.max(1, Math.round(altura * escala)) };
 }
 
-/** O resultado do melhorador passaria do limite de tamanho? */
+/** O tamanho que a imagem teria depois de ampliada. */
+export function tamanhoDoResultado(largura: number, altura: number, escala: EscalaDeMelhoria): { largura: number; altura: number } {
+  return { largura: largura * escala, altura: altura * escala };
+}
+
+/** O resultado do melhorador cabe no limite de lado e no de pixels? */
 export function cabeNoMelhorador(largura: number, altura: number, escala: EscalaDeMelhoria, limite = LADO_MAXIMO_DO_RESULTADO): boolean {
-  return Math.max(largura, altura) * escala <= limite;
+  const resultado = tamanhoDoResultado(largura, altura, escala);
+  return Math.max(resultado.largura, resultado.altura) <= limite && resultado.largura * resultado.altura <= MAX_PIXELS_DO_RESULTADO;
+}
+
+/** Quantos pedaços de 256 px o melhorador processa numa imagem (é o que decide quanto tempo ele leva). */
+export function pedacosDoMelhorador(largura: number, altura: number): number {
+  return Math.ceil(largura / 256) * Math.ceil(altura / 256);
+}
+
+/** Imagem que leva alguns minutos para melhorar: vale avisar antes de começar. */
+export function melhoriaDemorada(largura: number, altura: number): boolean {
+  return pedacosDoMelhorador(largura, altura) > 160;
 }
 
 /**

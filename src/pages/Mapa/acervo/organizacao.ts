@@ -81,16 +81,19 @@ export function itensQueMudam(itens: readonly IItemAcervo[], ids: readonly strin
 }
 
 export interface ContagemDasPastas {
-  /** Imagens prontas de cada pasta, contando as das subpastas. */
+  /** Imagens prontas de cada pasta, contando as das subpastas (para dizer o que some ao apagar a pasta). */
   porPasta: Map<string, number>;
+  /** Imagens prontas que estão na própria pasta, sem as das subpastas: é o que a grade mostra ao abrir a pasta. */
+  diretas: Map<string, number>;
   foraDePasta: number;
   total: number;
 }
 
-/** Quantas imagens prontas há em cada pasta (e nas de dentro dela), fora de pasta e no total. */
+/** Quantas imagens prontas há em cada pasta (com e sem as de dentro das subpastas), fora de pasta e no total. */
 export function contarPorPasta(pastas: readonly IPastaAcervo[], itens: readonly IItemAcervo[]): ContagemDasPastas {
   const pai = new Map(pastas.map((p) => [p.id, p.pai_id]));
   const porPasta = new Map<string, number>();
+  const diretas = new Map<string, number>();
   let foraDePasta = 0;
   let total = 0;
   for (const item of itens) {
@@ -100,6 +103,7 @@ export function contarPorPasta(pastas: readonly IPastaAcervo[], itens: readonly 
       foraDePasta++;
       continue;
     }
+    if (pai.has(item.pasta_id)) diretas.set(item.pasta_id, (diretas.get(item.pasta_id) ?? 0) + 1);
     const vistas = new Set<string>();
     let atual: string | null | undefined = item.pasta_id;
     while (atual && pai.has(atual) && !vistas.has(atual)) {
@@ -108,7 +112,7 @@ export function contarPorPasta(pastas: readonly IPastaAcervo[], itens: readonly 
       atual = pai.get(atual);
     }
   }
-  return { porPasta, foraDePasta, total };
+  return { porPasta, diretas, foraDePasta, total };
 }
 
 export interface OpcaoDePasta {

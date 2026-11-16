@@ -6,7 +6,7 @@ import {
   MAX_ITENS_POR_ARRASTO, MIME_MOVER_ITENS, MIME_MOVER_PASTA, opcoesDePasta, ordenarItens, podarSelecao, podeMoverPasta, quantasImagens, trilhaDaPasta,
 } from '../../src/pages/Mapa/acervo/organizacao';
 import {
-  caixaDoDesenho, cabeNoMelhorador, escalaSugerida, espalharCorDaBorda, LADO_MAXIMO_DO_TOKEN, tamanhoQueCabe, temTransparencia, tokenGrandeDemais,
+  caixaDoDesenho, cabeNoMelhorador, escalaSugerida, espalharCorDaBorda, LADO_MAXIMO_DO_TOKEN, melhoriaDemorada, pedacosDoMelhorador, tamanhoDoResultado, tamanhoQueCabe, temTransparencia, tokenGrandeDemais,
 } from '../../src/pages/Mapa/acervo/imagemConta';
 import {
   ALTURA_MAXIMA_LIVRE, ETIQUETA_FORMATO_LIVRE, etiquetasComFormato, etiquetasDoTexto, formatoDasEtiquetas, formatoDoEnquadramento, medidasDoTokenLivre,
@@ -83,7 +83,12 @@ test('a contagem de uma pasta soma as imagens prontas das subpastas, e as que ai
     item('5', 'E', { pasta_id: null }),
     item('6', 'F', { pasta_id: 'pasta-que-sumiu' }),
   ];
-  const { porPasta, foraDePasta, total } = contarPorPasta(pastas, itens);
+  const { porPasta, diretas, foraDePasta, total } = contarPorPasta(pastas, itens);
+  // A grade de uma pasta mostra só o que está nela: a contagem direta não soma as subpastas.
+  assert.equal(diretas.get('cidades'), 1);
+  assert.equal(diretas.get('porto'), 1);
+  assert.equal(diretas.get('docas'), 1);
+  assert.equal(diretas.get('masmorras') ?? 0, 0);
   assert.equal(porPasta.get('cidades'), 3);
   assert.equal(porPasta.get('porto'), 2);
   assert.equal(porPasta.get('docas'), 1);
@@ -177,9 +182,16 @@ test('a escala sugerida acompanha o tamanho e o tipo, e respeita o limite do res
   assert.equal(escalaSugerida(200, 300, 'token'), 2, '300 x 4 passa de 1024');
   assert.equal(escalaSugerida(200, 250, 'token'), 4);
   assert.equal(escalaSugerida(600, 700, 'token'), null);
-  assert.equal(cabeNoMelhorador(4000, 3000, 4), true);
+  assert.equal(cabeNoMelhorador(4000, 3000, 4), false, '16000 x 12000 passa de 100 milhões de pixels');
+  assert.equal(cabeNoMelhorador(4000, 3000, 2), true);
   assert.equal(cabeNoMelhorador(5000, 3000, 4), false, '20000 passa de 16384');
   assert.equal(cabeNoMelhorador(5000, 3000, 2), true);
+  assert.equal(cabeNoMelhorador(8000, 8000, 2), false, '16000 x 16000 passa de 100 milhões de pixels');
+  assert.deepEqual(tamanhoDoResultado(300, 200, 4), { largura: 1200, altura: 800 });
+  assert.equal(pedacosDoMelhorador(256, 256), 1);
+  assert.equal(pedacosDoMelhorador(257, 512), 4);
+  assert.equal(melhoriaDemorada(800, 600), false);
+  assert.equal(melhoriaDemorada(3000, 4000), true, '12 x 16 = 192 pedaços');
 });
 
 test('a transparência se reconhece, e a cor suja sob ela é trocada pela da borda sem mexer no alfa', () => {

@@ -62,7 +62,7 @@ export async function melhorarItemDoAcervo(
   aoEnviar?: (p: ProgressoEnvio) => void,
 ): Promise<ResultadoDaMelhoria> {
   if (!cabeNoMelhorador(item.largura, item.altura, escala, LADO_MAXIMO_MELHORADO)) {
-    throw new Error(`O resultado passaria de ${LADO_MAXIMO_MELHORADO} px de lado. Use 2x ou uma imagem menor.`);
+    throw new Error('O resultado ficaria grande demais para o navegador (mais de 100 milhões de pixels). Use 2x ou uma imagem menor.');
   }
   aoProgresso?.('Abrindo a imagem do Acervo...');
   const fonte = await imagemDoAcervo(item);

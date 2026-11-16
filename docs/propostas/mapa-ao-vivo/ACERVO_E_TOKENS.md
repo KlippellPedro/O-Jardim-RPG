@@ -22,6 +22,11 @@ proteção contra ciclo); faltava a tela. Tudo é do navegador.
 - `DetalhesDaImagem.tsx` junta nome, tipo, pasta, etiquetas, formato do token e origem/licença.
   Etiquetas do sistema (`casas:N`, `formato:livre`) não aparecem na edição, mas voltam ao salvar.
 - `DockAcervo.tsx` (barra de baixo): cartões de pasta, caminho e botões de pasta recebem o arrasto.
+- Detalhes que já pegaram na prática: só arquivo do computador acende a tela "Solte para subir" (imagem do
+  Acervo arrastada por cima da grade não); a barra de lote flutua embaixo, para aparecer e sumir sem empurrar
+  a grade; arrastar um cartão não mexe na seleção; Escape cancela o renomear (e fecha os painéis); a contagem
+  de uma pasta é só do que está nela, igual ao que a grade mostra; o mapa aceita o arrasto já no dragenter
+  (soltar rápido, sem mover o mouse antes, também vale).
 
 ## 2. Token de corpo inteiro
 
@@ -37,6 +42,10 @@ proteção contra ciclo); faltava a tela. Tudo é do navegador.
   zera o enquadramento nesse caso, então o formato não vaza pista.
 - Onde se escolhe: menu do token (aba Visual), edição da imagem no Acervo e Oficina (que antes sempre
   cortava em círculo ao salvar; agora guarda o corpo inteiro, com opção de aparar o transparente).
+  Ao subir token (gaveta, janela de baixo ou arquivo solto no mapa) o site pergunta "redondo ou corpo inteiro?"
+  e grava a etiqueta `formato:livre` na imagem nova.
+- Condição, altura e baú do token de corpo inteiro ficam ao lado da arte (coluna à direita, pílula e selo à
+  esquerda), não em arco no meio do personagem.
 
 ## 3. Qualidade
 
@@ -65,6 +74,8 @@ Ferramentas novas:
 
 ## Limites conhecidos
 
+- O Melhorar recusa resultado acima de 100 milhões de pixels (10000 x 10000, por exemplo) e avisa quando a
+  imagem leva alguns minutos (mais de 160 pedaços de 256 px). Não dá para cancelar no meio.
 - Melhorar e Ajustar criam uma imagem nova: cenas e tokens que já usavam a original continuam com ela.
   Trocar no lugar exigiria reapontar `imagem_id` em cenas, tokens, formas e projetos.
 - Token entre 1025 e 2048 px que já estava no Acervo ainda cai na miniatura até passar pelo Ajustar.

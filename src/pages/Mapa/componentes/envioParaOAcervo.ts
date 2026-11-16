@@ -5,6 +5,7 @@
 import type { IItemAcervo, TipoItemAcervo } from '../../../services/acervoApi';
 import { escolher } from '../../../components/avisos/confirmacao';
 import { imagensDaSelecao, subirParaOAcervo } from '../acervo/subirImagem';
+import { ETIQUETA_FORMATO_LIVRE, type FormatoDoToken } from '../motor/formatoToken';
 
 /** Quantas imagens um envio aceita de uma vez (soltar uma pasta inteira de mapas pesaria o navegador). */
 export const MAX_IMAGENS_POR_ENVIO = 24;
@@ -41,7 +42,7 @@ export function arrastaArquivos(tipos: readonly string[] | DOMStringList): boole
 /** Sobe as imagens uma a uma. Uma que falha não para as outras: vai para `falhas`. */
 export async function enviarImagens(
   imagens: File[],
-  opcoes: { tipo: TipoItemAcervo; pastaId: string | null; aoAndamento?: (andamento: AndamentoDoEnvio) => void },
+  opcoes: { tipo: TipoItemAcervo; pastaId: string | null; etiquetas?: string[]; aoAndamento?: (andamento: AndamentoDoEnvio) => void },
 ): Promise<Omit<ResultadoDoEnvio, 'deixadas'>> {
   const itens: IItemAcervo[] = [];
   const falhas: string[] = [];
@@ -51,6 +52,7 @@ export async function enviarImagens(
       itens.push(await subirParaOAcervo(arquivo, {
         tipo: opcoes.tipo,
         pastaId: opcoes.pastaId,
+        ...(opcoes.etiquetas?.length ? { etiquetas: opcoes.etiquetas } : {}),
         aoProgresso: (p) => opcoes.aoAndamento?.({ indice: i + 1, total: imagens.length, nome: arquivo.name, feitos: p.feitos, pedacos: p.total }),
       }));
     } catch (falha) {
@@ -74,6 +76,31 @@ export async function perguntarTipoDaImagem(quantas: number, nome: string): Prom
   if (resposta === 'confirmar') return 'mapa';
   if (resposta === 'alternativa') return 'token';
   return null;
+}
+
+/**
+ * "Redondo ou corpo inteiro?" para tokens que vão subir. Redondo recorta o retrato num círculo com moldura; corpo inteiro
+ * mostra a imagem toda, sem círculo. A escolha vira uma etiqueta da imagem (e vale para todo token novo feito dela).
+ * Nulo se o Mestre desistir.
+ */
+export async function perguntarFormatoDoToken(quantas: number, nome: string): Promise<FormatoDoToken | null> {
+  const resposta = await escolher({
+    titulo: 'Como o token aparece no mapa?',
+    mensagem: quantas === 1
+      ? `"${nome}": redondo recorta o retrato num círculo, com moldura. Corpo inteiro mostra a imagem toda, de pé na casa (o melhor para bonecos e criaturas com fundo transparente).`
+      : `Para estas ${quantas} imagens: redondo recorta o retrato num círculo, com moldura. Corpo inteiro mostra a imagem toda, de pé na casa (o melhor para bonecos e criaturas com fundo transparente). Dá para mudar depois, em Editar.`,
+    rotuloConfirmar: 'Redondo',
+    alternativa: { rotulo: 'Corpo inteiro' },
+    rotuloCancelar: 'Cancelar',
+  });
+  if (resposta === 'confirmar') return 'redondo';
+  if (resposta === 'alternativa') return 'livre';
+  return null;
+}
+
+/** As etiquetas que o formato escolhido pede para a imagem nova (nenhuma, no redondo). */
+export function etiquetasDoFormato(formato: FormatoDoToken): string[] | undefined {
+  return formato === 'livre' ? [ETIQUETA_FORMATO_LIVRE] : undefined;
 }
 
 /** A frase de andamento para a janela ou para o aviso. */

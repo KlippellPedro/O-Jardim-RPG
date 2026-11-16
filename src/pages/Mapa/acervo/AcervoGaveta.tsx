@@ -8,8 +8,8 @@ import { confirmar, pedirTexto } from '../../../components/avisos/confirmacao';
 import { imagensDaSelecao, pastaDoArquivo, subirParaOAcervo, type ProgressoEnvio } from './subirImagem';
 import { FatiadorFolha } from '../fatiador/FatiadorFolha';
 import { casasDaEtiqueta } from '../fatiador/escala';
-import { formatoDasEtiquetas } from '../motor/formatoToken';
-import { arrastaArquivos } from '../componentes/envioParaOAcervo';
+import { ETIQUETA_FORMATO_LIVRE, formatoDasEtiquetas } from '../motor/formatoToken';
+import { arrastaArquivos, perguntarFormatoDoToken } from '../componentes/envioParaOAcervo';
 import { MIME_ACERVO, empacotarItem } from '../componentes/dockAcervoConta';
 import { ArvoreDePastas, type PropsDeAlvo } from './ArvoreDePastas';
 import { DetalhesDaImagem } from './DetalhesDaImagem';
@@ -75,7 +75,7 @@ function lerTamanho(): number {
 
 /** O toque ou clique veio de um controle de dentro do cartão (botão, campo) e não deve escolher o cartão. */
 function veioDeControle(alvo: EventTarget | null): boolean {
-  return alvo instanceof HTMLElement && Boolean(alvo.closest('button, input, select, textarea, a, label'));
+  return alvo instanceof HTMLElement && Boolean(alvo.closest('button, input, select, textarea, a, label, figcaption'));
 }
 
 export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColocarMapa, onNovaCena, onPorNaCena, onMostrar, onAbrirNaOficina, modoFundo }: Props) => {
@@ -94,6 +94,8 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
   const [painel, setPainel] = useState<PainelAberto | null>(null);
   const [renomeandoItem, setRenomeandoItem] = useState<string | null>(null);
   const [nomeDoItem, setNomeDoItem] = useState('');
+  /** O campo de nome já foi resolvido (Enter ou Escape): o desfoque que vem com o fechamento dele não faz nada. */
+  const nomeResolvido = useRef(false);
   const [alvo, setAlvo] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [fatiando, setFatiando] = useState(false);
@@ -176,6 +178,17 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
       if (lista && lista.length) setErro('Só imagens (png, jpg, webp ou gif) sobem para o Acervo.');
       return;
     }
+    // Token tem dois jeitos de aparecer no mapa: pergunta uma vez, antes de começar a subir.
+    let etiquetas: string[] | undefined;
+    if (tipo === 'token') {
+      const formato = await perguntarFormatoDoToken(arquivos.length, arquivos[0].name);
+      if (!formato) {
+        if (arquivosRef.current) arquivosRef.current.value = '';
+        if (pastaRef.current) pastaRef.current.value = '';
+        return;
+      }
+      if (formato === 'livre') etiquetas = [ETIQUETA_FORMATO_LIVRE];
+    }
     setEnviando(true);
     setEnvios([]);
     setErro('');
@@ -192,14 +205,18 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
         await subirParaOAcervo(arquivo, {
           tipo,
           pastaId: destino,
+          ...(etiquetas ? { etiquetas } : {}),
           aoProgresso: (progresso) => setEnvios((atual) => [progresso, ...atual.filter((p) => p.arquivo !== progresso.arquivo)].slice(0, 6)),
         });
       }
       await carregar();
+      avisar(`${quantasImagens(arquivos.length)} ${arquivos.length === 1 ? 'subiu' : 'subiram'} para o Acervo.`);
     } catch (falha) {
       setErro(falha instanceof Error ? falha.message : 'Uma imagem não subiu.');
     } finally {
       setEnviando(false);
+      // A lista de pedaços enviados some sozinha depois de um instante.
+      window.setTimeout(() => setEnvios([]), 3500);
       if (arquivosRef.current) arquivosRef.current.value = '';
       if (pastaRef.current) pastaRef.current.value = '';
     }
@@ -282,6 +299,7 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
     // A tela muda na hora; se o servidor recusar alguma, a lista é pedida de novo.
     const idsQueMudam = new Set(mudam.map((i) => i.id));
     setAcervo((atual) => atual && { ...atual, itens: atual.itens.map((i) => (idsQueMudam.has(i.id) ? { ...i, pasta_id: destino } : i)) });
+    setSelecao(new Set());
     const falhas = await acervoApi.moverItens(mudam.map((i) => i.id), destino);
     if (falhas.length) {
       setErro(`${quantasImagens(falhas.length)} não ${falhas.length === 1 ? 'pôde' : 'puderam'} mudar de pasta.`);
@@ -374,9 +392,9 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
   // ----------------------------------------------------------- arrasto
 
   const comecarArrasto = (item: IItemAcervo, evento: React.DragEvent) => {
-    // Arrastar uma imagem da seleção leva a seleção toda; arrastar uma de fora leva só ela (e a escolhe).
+    // Arrastar uma imagem da seleção leva a seleção toda; arrastar uma de fora leva só ela, sem mexer na seleção
+    // (a barra de lote aparecendo no meio do arrasto faria a tela pular).
     const ids = selecao.has(item.id) ? idsVisiveis.filter((id) => selecao.has(id)) : [item.id];
-    if (!selecao.has(item.id)) setSelecao(new Set([item.id]));
     evento.dataTransfer.setData(MIME_MOVER_ITENS, empacotarIds(ids));
     // O mesmo arrasto vale para o mapa: solto lá, a imagem entra na cena.
     evento.dataTransfer.setData(MIME_ACERVO, empacotarItem(item));
@@ -432,10 +450,11 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
     ? pastas.filter((p) => p.pai_id === pasta).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { numeric: true }))
     : [];
   const soltandoArquivos = alvo === 'painel';
-  const painelProps = propsDeAlvo('painel', typeof pasta === 'string' && pasta !== 'todas' ? pasta : null);
+  const pastaDoEnvio: string | null = typeof pasta === 'string' && pasta !== 'todas' ? pasta : null;
+  const destinoDoEnvio = `${ROTULO_DO_TIPO[tipo]} ${pastaDoEnvio ? `na pasta ${nomeDaPasta(pastaDoEnvio)}` : 'fora de pasta'}`;
 
   return (
-    <aside className="mapa-acervo" aria-label="Acervo" onKeyDown={aoTeclar}>
+    <aside className="mapa-acervo" aria-label="Acervo" onKeyDown={aoTeclar} onDragEnd={() => setAlvo(null)}>
       <header>
         <strong>Acervo</strong>
         <span className={uso > (acervo?.aviso_bytes ?? Infinity) ? 'mapa-acervo-uso alerta' : 'mapa-acervo-uso'}>
@@ -469,12 +488,23 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
 
         <section
           className={`mapa-acervo-itens${soltandoArquivos ? ' soltando' : ''}`}
-          onDragOver={painelProps.onDragOver}
-          onDragEnter={painelProps.onDragEnter}
-          onDragLeave={painelProps.onDragLeave}
+          data-destino={`Solte para subir como ${destinoDoEnvio}`}
+          // Só arquivos do computador acendem o painel todo (sobem para a pasta aberta). Imagens e pastas do Acervo só se
+          // soltam em pastas; arrastar uma por cima da grade não pode mostrar a tela de envio.
+          onDragOver={(evento) => {
+            if (!arrastaArquivos(evento.dataTransfer.types)) return;
+            evento.preventDefault();
+            evento.dataTransfer.dropEffect = 'copy';
+            if (alvo !== 'painel') setAlvo('painel');
+          }}
+          onDragLeave={(evento) => {
+            if (!evento.currentTarget.contains(evento.relatedTarget as Node | null)) setAlvo((atual) => (atual === 'painel' ? null : atual));
+          }}
           onDrop={(evento) => {
-            // Só arquivos do computador caem no painel todo (vão para a pasta aberta); imagens e pastas só caem em pasta.
-            if (arrastaArquivos(evento.dataTransfer.types)) painelProps.onDrop(evento);
+            if (!arrastaArquivos(evento.dataTransfer.types)) return;
+            evento.preventDefault();
+            setAlvo(null);
+            void soltar(pastaDoEnvio, evento.dataTransfer);
           }}
         >
           <div className="mapa-acervo-barra">
@@ -540,7 +570,7 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
             <button type="button" className="mapa-botao" disabled={enviando} title="Corta uma folha com vários objetos em peças soltas, com fundo transparente" onClick={() => setFatiando(true)}>
               <Scissors size={15} /> Fatiar folha
             </button>
-            <span className="acervo-dica-envio">Solte arquivos do computador aqui para subir{typeof pasta === 'string' && pasta !== 'todas' ? ' nesta pasta' : ''}.</span>
+            <span className="acervo-dica-envio">Solte arquivos do computador aqui para subir como {destinoDoEnvio}.</span>
             <input ref={arquivosRef} type="file" accept="image/*" multiple hidden onChange={(e) => void subir(e.target.files, false)} />
             <input ref={pastaRef} type="file" multiple hidden onChange={(e) => void subir(e.target.files, true)} />
           </div>
@@ -629,7 +659,7 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
                 >
                   <Folder size={34} />
                   <span>{sub.nome}</span>
-                  <small>{quantasImagens(contagem.porPasta.get(sub.id) ?? 0)}</small>
+                  <small>{quantasImagens(contagem.diretas.get(sub.id) ?? 0)}{pastas.some((p) => p.pai_id === sub.id) ? ` · ${pastas.filter((p) => p.pai_id === sub.id).length === 1 ? '1 subpasta' : `${pastas.filter((p) => p.pai_id === sub.id).length} subpastas`}` : ''}</small>
                 </div>
               );
             })}
@@ -670,23 +700,36 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
                       maxLength={120}
                       aria-label={`Novo nome de ${item.nome}`}
                       onChange={(e) => setNomeDoItem(e.target.value)}
-                      onBlur={() => void renomearItem(item, nomeDoItem)}
+                      onBlur={() => {
+                        if (nomeResolvido.current) return;
+                        nomeResolvido.current = true;
+                        void renomearItem(item, nomeDoItem);
+                      }}
                       onKeyDown={(e) => {
-                        if (e.key === 'Enter') void renomearItem(item, nomeDoItem);
-                        if (e.key === 'Escape') setRenomeandoItem(null);
+                        if (e.key === 'Enter' && !nomeResolvido.current) {
+                          nomeResolvido.current = true;
+                          void renomearItem(item, nomeDoItem);
+                        }
+                        if (e.key === 'Escape') {
+                          e.stopPropagation();
+                          nomeResolvido.current = true;
+                          setRenomeandoItem(null);
+                        }
                       }}
                     />
                   ) : (
-                    <figcaption title={`${item.nome} (duplo clique renomeia)`} onDoubleClick={() => { setRenomeandoItem(item.id); setNomeDoItem(item.nome); }}>{item.nome}</figcaption>
+                    <figcaption title={`${item.nome} (duplo clique renomeia)`} onDoubleClick={() => { nomeResolvido.current = false; setRenomeandoItem(item.id); setNomeDoItem(item.nome); }}>{item.nome}</figcaption>
                   )}
                   <small>
-                    {buscando && <span className="acervo-selo">{ROTULO_DO_TIPO[item.tipo]}</span>}
                     {item.largura} x {item.altura}
                     {casasDaEtiqueta(item.etiquetas) !== null && ` · ${casasDaEtiqueta(item.etiquetas)} casas`}
+                  </small>
+                  <div className="acervo-selos">
+                    {buscando && <span className="acervo-selo">{ROTULO_DO_TIPO[item.tipo]}</span>}
                     {livre && <span className="acervo-selo" title="Entra na cena como a imagem inteira, sem círculo">corpo inteiro</span>}
                     {grande && <span className="acervo-selo aviso" title="Passa de 1024 px: no mapa aparece como miniatura. Use Melhorar > Ajustar para o mapa.">grande demais</span>}
                     {(!item.licenca || item.licenca === 'desconhecida') && <span className="mapa-acervo-sem-licenca">sem licença</span>}
-                  </small>
+                  </div>
                   <div className="mapa-acervo-acoes">
                     {modoFundo ? (
                       <button type="button" className="mapa-acervo-usar-fundo" onClick={() => onPorNaCena(item)}><Eye size={13} /> Usar de fundo</button>
@@ -738,8 +781,12 @@ export const AcervoGaveta = ({ aberto, onFechar, temCena, onUsarComoMapa, onColo
           item={painel.item}
           pastas={pastas}
           onSalvo={(salvo) => {
+            const antes = painel.item;
             setAcervo((atual) => atual && { ...atual, itens: atual.itens.map((i) => (i.id === salvo.id ? salvo : i)) });
             setPainel(null);
+            // Mudou de tipo ou de pasta: a imagem sai da lista de agora, então a tela diz para onde ela foi.
+            if (salvo.tipo !== antes.tipo && !buscando) setTipo(salvo.tipo);
+            if (salvo.pasta_id !== antes.pasta_id && pasta !== 'todas') avisar(`"${salvo.nome}" foi para ${nomeDaPasta(salvo.pasta_id)}.`);
           }}
           onFechar={() => setPainel(null)}
         />

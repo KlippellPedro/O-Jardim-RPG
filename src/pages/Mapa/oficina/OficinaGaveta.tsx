@@ -165,7 +165,8 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
     setAlfa(null);
     setEnquadramento(ENQUADRAMENTO_PADRAO);
     setNome(nomeBase);
-    setFerramenta('mover');
+    // No corpo inteiro não há o que arrastar dentro do círculo: a ferramenta de começo é o pincel que apaga.
+    setFerramenta(modo === 'token' && formato === 'livre' ? 'apagar' : 'mover');
     setErro('');
   };
 
@@ -188,7 +189,9 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
       carregar(await imagemDoAcervo(item), item.nome);
       setModo(item.tipo === 'token' ? 'token' : 'imagem');
       setTipoImagem(item.tipo === 'objeto' ? 'objeto' : 'mapa');
-      setFormato(item.tipo === 'token' ? formatoDasEtiquetas(item.etiquetas) : 'redondo');
+      const formatoDoItem = item.tipo === 'token' ? formatoDasEtiquetas(item.etiquetas) : 'redondo';
+      setFormato(formatoDoItem);
+      setFerramenta(formatoDoItem === 'livre' ? 'apagar' : 'mover');
     } catch {
       setErro('Não deu para abrir esta imagem do Acervo.');
     } finally {

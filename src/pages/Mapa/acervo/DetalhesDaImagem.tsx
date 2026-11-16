@@ -5,6 +5,7 @@ import {
   etiquetasComFormato, etiquetasDoTexto, formatoDasEtiquetas, FORMATOS_DO_TOKEN, separarEtiquetas, type FormatoDoToken,
 } from '../motor/formatoToken';
 import { opcoesDePasta } from './organizacao';
+import { useFecharComEscape } from './useFecharComEscape';
 
 interface Props {
   item: IItemAcervo;
@@ -38,6 +39,7 @@ export const DetalhesDaImagem = ({ item, pastas, onSalvo, onFechar }: Props) => 
   const opcoes = useMemo(() => opcoesDePasta(pastas), [pastas]);
   const dicaDaLicenca = LICENCAS_ACERVO.find((l) => l.id === licenca)?.dica;
   const usaFormato = tipo === 'token' || tipo === 'objeto';
+  useFecharComEscape(onFechar);
 
   const salvar = async () => {
     const nomeLimpo = nome.trim();

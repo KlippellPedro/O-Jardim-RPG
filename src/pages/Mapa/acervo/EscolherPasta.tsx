@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Folder, Inbox, Search, X } from 'lucide-react';
 import type { IPastaAcervo } from '../../../services/acervoApi';
 import { opcoesDePasta } from './organizacao';
+import { useFecharComEscape } from './useFecharComEscape';
 
 interface Props {
   titulo: string;
@@ -17,6 +18,7 @@ interface Props {
 /** O "Mover para...": a lista das pastas do Acervo com recuo, para quem prefere escolher a arrastar. */
 export const EscolherPasta = ({ titulo, pastas, excluir, atual, onEscolher, onFechar }: Props) => {
   const [busca, setBusca] = useState('');
+  useFecharComEscape(onFechar);
   const opcoes = useMemo(() => opcoesDePasta(pastas, excluir), [pastas, excluir]);
   const termo = busca.trim().toLowerCase();
   const visiveis = termo ? opcoes.filter((o) => o.caminho.toLowerCase().includes(termo)) : opcoes;

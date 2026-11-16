@@ -128,7 +128,7 @@
 /* ---- Barra e área das imagens ---- */
 
 .mapa-acervo-itens.soltando::after {
-  content: 'Solte para subir nesta pasta';
+  content: attr(data-destino);
   position: absolute;
   inset: 4px;
   z-index: 4;
@@ -217,19 +217,27 @@
   color: #6ee7b7;
 }
 
+/* A barra de lote flutua embaixo: aparecer e sumir não empurra a grade (nem o cartão que está sendo arrastado). */
 .acervo-selecao {
-  position: sticky;
-  top: 0;
-  z-index: 2;
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  left: 14px;
+  z-index: 3;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 6px 10px;
-  margin-bottom: 8px;
-  padding: 6px 10px;
-  border: 1px solid rgba(199, 164, 76, 0.5);
-  border-radius: 10px;
-  background: rgba(30, 26, 14, 0.96);
+  padding: 8px 12px;
+  border: 1px solid rgba(199, 164, 76, 0.55);
+  border-radius: 12px;
+  background: rgba(30, 26, 14, 0.97);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.6);
+}
+
+.acervo-selecao ~ .mapa-acervo-grade {
+  padding-bottom: 96px;
 }
 
 .acervo-selecao .mapa-botao-leve {
@@ -350,8 +358,34 @@
   color: #fcd34d;
 }
 
-.acervo-acoes-icones {
+.mapa-acervo-item {
+  display: flex;
+  flex-direction: column;
+}
+
+/* As ações de baixo ficam todas na mesma linha da fileira, mesmo com selos que quebram em duas linhas. */
+.acervo-selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
   margin-top: 4px;
+}
+
+.acervo-selos .acervo-selo,
+.acervo-selos .mapa-acervo-sem-licenca {
+  margin: 0;
+}
+
+.acervo-selos:empty {
+  display: none;
+}
+
+.mapa-acervo-item > .mapa-acervo-acoes:not(.acervo-acoes-icones) {
+  margin-bottom: 6px;
+}
+
+.acervo-acoes-icones {
+  margin-top: auto !important;
   padding-top: 4px;
   border-top: 1px solid var(--mapa-linha);
 }

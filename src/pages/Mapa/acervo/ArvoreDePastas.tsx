@@ -40,20 +40,30 @@ export const ArvoreDePastas = ({
   const [renomeando, setRenomeando] = useState<string | null>(null);
   const [nomeNovo, setNomeNovo] = useState('');
   const temporizador = useRef<number | null>(null);
+  /** O campo de nome já foi resolvido (Enter ou Escape): o desfoque que vem com o fechamento dele não faz nada. */
+  const resolvido = useRef(false);
 
   useEffect(() => () => {
     if (temporizador.current !== null) window.clearTimeout(temporizador.current);
   }, []);
 
   const iniciarRenomear = (pasta: IPastaAcervo) => {
+    resolvido.current = false;
     setRenomeando(pasta.id);
     setNomeNovo(pasta.nome);
   };
 
   const concluirRenomear = (pasta: IPastaAcervo) => {
+    if (resolvido.current) return;
+    resolvido.current = true;
     const nome = nomeNovo.trim();
     setRenomeando(null);
     if (nome && nome !== pasta.nome) onRenomear(pasta.id, nome);
+  };
+
+  const cancelarRenomear = () => {
+    resolvido.current = true;
+    setRenomeando(null);
   };
 
   const abrirAoPassar = (pastaId: string, temFilhas: boolean, aberta: boolean) => {
@@ -121,7 +131,10 @@ export const ArvoreDePastas = ({
               onBlur={() => concluirRenomear(pasta)}
               onKeyDown={(evento) => {
                 if (evento.key === 'Enter') concluirRenomear(pasta);
-                if (evento.key === 'Escape') setRenomeando(null);
+                if (evento.key === 'Escape') {
+                  evento.stopPropagation();
+                  cancelarRenomear();
+                }
               }}
             />
           ) : (
@@ -134,7 +147,7 @@ export const ArvoreDePastas = ({
             >
               {ativa || aberta ? <FolderOpen size={14} /> : <Folder size={14} />}
               <span>{pasta.nome}</span>
-              <small>{contagem.porPasta.get(pasta.id) ?? 0}</small>
+              {(contagem.diretas.get(pasta.id) ?? 0) > 0 && <small title="Imagens que estão nesta pasta (as das subpastas ficam nelas)">{contagem.diretas.get(pasta.id)}</small>}
             </button>
           )}
           <span className="acervo-pasta-acoes">

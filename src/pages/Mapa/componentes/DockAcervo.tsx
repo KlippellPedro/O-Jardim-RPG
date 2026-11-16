@@ -8,7 +8,7 @@ import {
   type ItemParaCena, type ListasDoDock, type VistaDoDock,
 } from './dockAcervoConta';
 import {
-  arrastaArquivos, enviarImagens, imagensParaEnviar, perguntarTipoDaImagem, textoDoAndamento, textoDoResultado, type AndamentoDoEnvio,
+  arrastaArquivos, enviarImagens, etiquetasDoFormato, imagensParaEnviar, perguntarFormatoDoToken, perguntarTipoDaImagem, textoDoAndamento, textoDoResultado, type AndamentoDoEnvio,
 } from './envioParaOAcervo';
 import {
   MIME_MOVER_ITENS, MIME_MOVER_PASTA, arrastaItens, arrastaOrganizacao, arrastaPasta, descendentesDaPasta, empacotarIds, itensQueMudam, lerIds, podeMoverPasta, quantasImagens,
@@ -147,9 +147,16 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
       return;
     }
     setResultado('');
+    // Token tem dois jeitos de aparecer no mapa: pergunta uma vez, antes de começar a subir.
+    let etiquetas: string[] | undefined;
+    if (tipo === 'token') {
+      const formato = await perguntarFormatoDoToken(imagens.length, imagens[0].name);
+      if (!formato) return;
+      etiquetas = etiquetasDoFormato(formato);
+    }
     setAndamento({ indice: 1, total: imagens.length, nome: imagens[0].name, feitos: 0, pedacos: 0 });
     const pastaId = pastaDestino !== undefined ? pastaDestino : vista?.modo === 'pasta' ? vista.pastaId : null;
-    const feito = await enviarImagens(imagens, { tipo, pastaId, aoAndamento: setAndamento });
+    const feito = await enviarImagens(imagens, { tipo, pastaId, etiquetas, aoAndamento: setAndamento });
     await carregar();
     setAndamento(null);
     setResultado(textoDoResultado({ ...feito, deixadas }));
@@ -295,6 +302,7 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
         <section
           className={`mapa-dock-janela${soltando ? ' soltando' : ''}`}
           aria-label={titulo}
+          onDragEnd={() => setAlvo(null)}
           onKeyDown={(evento) => {
             if (evento.key === 'Escape') {
               evento.stopPropagation();
@@ -462,7 +470,7 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
         </section>
       )}
 
-      <nav className="mapa-dock" aria-label="Acervo: mapas, tokens e pastas">
+      <nav className="mapa-dock" aria-label="Acervo: mapas, tokens e pastas" onDragEnd={() => setAlvo(null)}>
         <button type="button" className={vista?.modo === 'busca' ? 'ativo' : ''} aria-pressed={vista?.modo === 'busca'} onClick={() => abrir({ modo: 'busca' })}>
           <Search size={16} /><span>Buscar</span>
         </button>

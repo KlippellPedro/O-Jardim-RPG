@@ -87,7 +87,7 @@ import { PainelVista } from './componentes/PainelVista';
 import { PainelGrade } from './componentes/PainelGrade';
 import { BarraMapaColocado } from './componentes/BarraMapaColocado';
 import { DockAcervo } from './componentes/DockAcervo';
-import { arrastaArquivos, enviarImagens, imagensParaEnviar, perguntarTipoDaImagem, textoDoAndamento, textoDoResultado } from './componentes/envioParaOAcervo';
+import { arrastaArquivos, enviarImagens, etiquetasDoFormato, imagensParaEnviar, perguntarFormatoDoToken, perguntarTipoDaImagem, textoDoAndamento, textoDoResultado } from './componentes/envioParaOAcervo';
 import { MIME_ACERVO, lerItemArrastado, type ItemParaCena } from './componentes/dockAcervoConta';
 import { EditorAnotacao } from './componentes/EditorAnotacao';
 import { PainelJogadores } from './componentes/PainelJogadores';
@@ -2034,12 +2034,20 @@ export const MapaPage = () => {
     }
     const tipo = await perguntarTipoDaImagem(imagens.length, imagens[0].name);
     if (!tipo) return;
+    // Token solto no mapa: redondo ou corpo inteiro (a escolha vira etiqueta da imagem e o token já entra assim na cena).
+    let etiquetas: string[] | undefined;
+    if (tipo === 'token') {
+      const formato = await perguntarFormatoDoToken(imagens.length, imagens[0].name);
+      if (!formato) return;
+      etiquetas = etiquetasDoFormato(formato);
+    }
     // O aviso de andamento fica na tela até o fim e troca de texto a cada imagem (não a cada pedaço, para não piscar).
     let imagemDoAviso = 1;
     let idAviso = avisar.info(textoDoAndamento({ indice: 1, total: imagens.length, nome: imagens[0].name, feitos: 0, pedacos: 0 }), { chave: 'envio-no-mapa-1', duracaoMs: 0 });
     const resultado = await enviarImagens(imagens, {
       tipo,
       pastaId: null,
+      etiquetas,
       aoAndamento: (andamento) => {
         if (andamento.indice === imagemDoAviso) return;
         imagemDoAviso = andamento.indice;
@@ -2662,7 +2670,7 @@ export const MapaPage = () => {
       </nav>
 
       <main className="mapa-area">
-        <div ref={alvoRef} className="mapa-palco" onDragOver={aoArrastarSobreOMapa} onDrop={aoSoltarNoMapa} />
+        <div ref={alvoRef} className="mapa-palco" onDragEnter={aoArrastarSobreOMapa} onDragOver={aoArrastarSobreOMapa} onDrop={aoSoltarNoMapa} />
         {!gestor && tokenDoHud && cena && campanhaId && !soMapa && (
           <HudDoJogador
             token={tokenDoHud}

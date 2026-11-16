@@ -523,9 +523,15 @@ export class TokenVisual {
       const sigla = new Text({ text: siglaDaCondicao(nome), style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: raio * 1.05, fill: '#fde68a' } });
       sigla.anchor.set(0.5);
       bolinha.addChild(sigla);
-      // Em arco, do alto à direita para baixo.
-      const angulo = -Math.PI / 4 + i * (Math.PI / 6);
-      bolinha.position.set(Math.cos(angulo) * this.raioQuadro * 1.1, Math.sin(angulo) * this.raioQuadro * 1.1);
+      const area = this.areaLivre;
+      if (area) {
+        // Corpo inteiro: uma coluna ao lado da arte, do alto para baixo, para as marcas não taparem o personagem.
+        bolinha.position.set(area.pesX + area.largura / 2 + raio * 1.2, area.topo + raio * 1.3 + i * raio * 2.35);
+      } else {
+        // Em arco, do alto à direita para baixo.
+        const angulo = -Math.PI / 4 + i * (Math.PI / 6);
+        bolinha.position.set(Math.cos(angulo) * this.raioQuadro * 1.1, Math.sin(angulo) * this.raioQuadro * 1.1);
+      }
       this.condicoes.addChild(bolinha);
     });
     this.desenharSelo();
@@ -533,7 +539,9 @@ export class TokenVisual {
     if (this.dados.condicoes.length > lista.length) {
       const mais = new Text({ text: `+${this.dados.condicoes.length - lista.length}`, style: { fontFamily: 'system-ui, sans-serif', fontWeight: '800', fontSize: raio * 1.1, fill: '#fde68a', stroke: { color: '#000000', width: 3 } } });
       mais.anchor.set(0, 0.5);
-      mais.position.set(this.raioQuadro * 1.14, this.raioQuadro * 0.7);
+      const area = this.areaLivre;
+      if (area) mais.position.set(area.pesX + area.largura / 2 + raio * 0.5, area.topo + raio * 1.3 + lista.length * raio * 2.35);
+      else mais.position.set(this.raioQuadro * 1.14, this.raioQuadro * 0.7);
       this.condicoes.addChild(mais);
     }
   }
@@ -550,7 +558,10 @@ export class TokenVisual {
     const fundo = new Graphics().roundRect(-largura / 2, -altura / 2, largura, altura, altura / 2).fill({ color: '#1b1824', alpha: 0.92 }).stroke({ width: Math.max(1, tamanho * 0.1), color: this.dados.elevacao! > 0 ? '#7dd3fc' : '#f87171' });
     const pilula = new Container();
     pilula.addChild(fundo, texto);
-    pilula.position.set(-this.raioQuadro * 0.98 - largura * 0.1, 0);
+    const area = this.areaLivre;
+    // Corpo inteiro: a pílula fica ao lado da arte, mais para cima (o meio do quadrado seria em cima das pernas).
+    if (area) pilula.position.set(area.pesX - area.largura / 2 - largura * 0.55, area.topo + area.altura * 0.3);
+    else pilula.position.set(-this.raioQuadro * 0.98 - largura * 0.1, 0);
     this.condicoes.addChild(pilula);
   }
 
@@ -567,7 +578,9 @@ export class TokenVisual {
     selo.roundRect(-l, -l * 0.15, l * 2, l * 0.95, l * 0.14).fill('#f0c36a');
     selo.roundRect(-l, -l * 0.75, l * 2, l * 0.6, l * 0.3).fill('#d9a24a');
     selo.rect(-l * 0.14, -l * 0.25, l * 0.28, l * 0.35).fill('#2b2236');
-    selo.position.set(Math.cos(angulo) * this.raioQuadro * 1.1, Math.sin(angulo) * this.raioQuadro * 1.1);
+    const area = this.areaLivre;
+    if (area) selo.position.set(area.pesX - area.largura / 2 - raio * 0.9, area.topo + raio * 1.1);
+    else selo.position.set(Math.cos(angulo) * this.raioQuadro * 1.1, Math.sin(angulo) * this.raioQuadro * 1.1);
     selo.alpha = recipiente.esvaziado ? 0.4 : 1;
     this.condicoes.addChild(selo);
   }
@@ -656,8 +669,9 @@ export class TokenVisual {
     this.ladoDoRetrato = lado;
     this.formatoDaTextura = formato;
     this.desenharRetrato();
-    // A arte de corpo inteiro muda onde o nome fica e o contorno da seleção.
+    // A arte de corpo inteiro muda onde ficam o nome, as marcas de condição e o contorno da seleção.
     this.escreverNome();
+    this.desenharCondicoes();
     this.desenharMarcas();
   }
 
