@@ -661,6 +661,14 @@
   background: rgba(239, 68, 68, 0.1);
 }
 
+/* Opção escolhida de um grupo de botões (formato do token, realce, tipo). */
+.mapa-botao.ativo,
+.mapa-botao[aria-checked='true'] {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.32);
+  color: #fff3cf;
+}
+
 .mapa-botao-leve {
   border: 0;
   background: transparent;
@@ -1021,52 +1029,19 @@
 
 .mapa-acervo-corpo {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 250px minmax(0, 1fr);
   flex: 1;
   min-height: 0;
-}
-
-.mapa-acervo-pastas {
-  padding: 8px;
-  border-right: 1px solid var(--mapa-linha);
-  overflow: auto;
-}
-
-.mapa-acervo-pastas ul {
-  margin: 0 0 8px;
-  padding: 0;
-  list-style: none;
-}
-
-.mapa-acervo-pastas li {
-  display: flex;
-  align-items: center;
-}
-
-.mapa-acervo-pastas li > button:first-child {
-  display: flex;
-  flex: 1;
-  gap: 6px;
-  align-items: center;
-  padding: 5px 8px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--mapa-apagado);
-  text-align: left;
-  cursor: pointer;
-}
-
-.mapa-acervo-pastas li > button.ativo {
-  background: rgba(199, 164, 76, 0.14);
-  color: var(--mapa-ouro);
 }
 
 .mapa-acervo-itens {
+  position: relative;
   display: flex;
   flex-direction: column;
+  min-width: 0;
   min-height: 0;
   padding: 10px;
+  overflow: hidden;
 }
 
 .mapa-acervo-barra {
@@ -1104,8 +1079,11 @@
 
 .mapa-acervo-grade {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  flex: 1;
+  grid-template-columns: repeat(auto-fill, minmax(var(--acervo-cartao, 170px), 1fr));
+  align-content: start;
   gap: 10px;
+  min-height: 0;
   overflow: auto;
   padding-bottom: 8px;
 }
@@ -1661,11 +1639,7 @@
   }
 
   .mapa-acervo-corpo {
-    grid-template-columns: 1fr;
-  }
-
-  .mapa-acervo-pastas {
-    display: none;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .mapa-oficina-corpo {

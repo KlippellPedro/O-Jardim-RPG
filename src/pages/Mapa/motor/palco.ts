@@ -10,7 +10,12 @@ import type { CamadaMapaId, CamadaTokenId, FormaMagia, IAberturaCena, IAnotacaoM
 import { urlImagemDoToken, urlPedaco } from '../../../services/mapaApi';
 import { encaixar, medir, segmentosDaGrade, tracejar, LADO_LADRILHO, PADRAO_GRADE, rotuloUnidade, type IGrade, type IPonto, larguraLivreDosNomes } from './geometria';
 import { TokenVisual, esquecerTexturasDeMoldura } from './token';
-import { desenharRetrato, type Enquadramento } from './molduras';
+import { desenharRetrato, ESCALA_QUADRO, RAIO_RETRATO, type Enquadramento } from './molduras';
+import { texturaNitida } from './texturas';
+import { FiltroNitidez } from './nitidez';
+import type { NivelDeRealce } from './realceConta';
+import { formatoDoEnquadramento, LADO_MAXIMO_DA_TEXTURA_LIVRE } from './formatoToken';
+import { areaDeCarga, zoomDeDetalhe } from './detalheConta';
 import { CamadaNevoa } from './nevoa';
 import { CamadaClima, esquecerTexturasDoClima } from './clima';
 import { CamadaLuzes, fonteDoToken, type FonteDeLuz } from './luzes';
@@ -109,7 +114,6 @@ interface Regua {
   rotulo: Text;
 }
 
-const ZOOM_DETALHE = 0.3;
 const COR_PERIGO = '#ef4444';
 const COR_OLHAR = '#fcd34d';
 /** Quanto cada tipo de ping fica na tela (ms). */
@@ -119,7 +123,7 @@ async function texturaDe(url: string): Promise<Texture> {
   const resposta = await fetch(url, { credentials: 'same-origin' });
   if (!resposta.ok) throw new Error(`imagem ${resposta.status}`);
   const imagem = await createImageBitmap(await resposta.blob());
-  return Texture.from(imagem);
+  return texturaNitida(imagem);
 }
 
 /** Retrato quadrado vira redondo (com o enquadramento escolhido) antes de virar textura: o motor não precisa de máscara. */
@@ -144,12 +148,38 @@ function fotoBaixada(url: string): Promise<ImageBitmap> {
   return foto;
 }
 
-async function retratoRedondo(url: string, enquadramento: Enquadramento): Promise<Texture> {
+/** Lados em que o retrato redondo é assado: o normal e o de perto (token grande na tela ou zoom alto). */
+const LADO_RETRATO_NORMAL = 512;
+const LADO_RETRATO_DE_PERTO = 1024;
+/** Acima deste diâmetro na tela (em pixels do aparelho) o retrato normal já estaria sendo esticado. */
+const DIAMETRO_PARA_RETRATO_DE_PERTO = 440;
+
+/** Que lado de retrato um token pede: o de perto só quando o círculo dele ocupa muitos pixels da tela. */
+export function ladoDoRetrato(ladoDoToken: number, zoom: number, densidade: number): number {
+  const diametro = ladoDoToken * ESCALA_QUADRO * RAIO_RETRATO * 2 * zoom * densidade;
+  return diametro > DIAMETRO_PARA_RETRATO_DE_PERTO ? LADO_RETRATO_DE_PERTO : LADO_RETRATO_NORMAL;
+}
+
+async function retratoRedondo(url: string, enquadramento: Enquadramento, lado = LADO_RETRATO_NORMAL): Promise<Texture> {
   const imagem = await fotoBaixada(url);
-  const lado = 384;
   const tela = new OffscreenCanvas(lado, lado);
-  desenharRetrato(tela.getContext('2d')!, lado, imagem, enquadramento);
-  return Texture.from(tela.transferToImageBitmap());
+  const ctx = tela.getContext('2d')!;
+  ctx.imageSmoothingQuality = 'high';
+  desenharRetrato(ctx, lado, imagem, enquadramento);
+  return texturaNitida(tela.transferToImageBitmap());
+}
+
+/** Corpo inteiro: a arte como veio (com a transparência), no máximo em LADO_MAXIMO_DA_TEXTURA_LIVRE; zoom e deslocamento valem na tela. */
+async function retratoLivre(url: string): Promise<Texture> {
+  const imagem = await fotoBaixada(url);
+  const escala = Math.min(1, LADO_MAXIMO_DA_TEXTURA_LIVRE / Math.max(imagem.width, imagem.height, 1));
+  const largura = Math.max(1, Math.round(imagem.width * escala));
+  const altura = Math.max(1, Math.round(imagem.height * escala));
+  const tela = new OffscreenCanvas(largura, altura);
+  const ctx = tela.getContext('2d')!;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(imagem, 0, 0, largura, altura);
+  return texturaNitida(tela.transferToImageBitmap());
 }
 
 export class PalcoMapa {
@@ -245,6 +275,9 @@ export class PalcoMapa {
   /** Cena nova: os tokens da anterior somem na hora, sem animação. */
   private cenaTrocada = false;
   private retratos = new Map<string, Promise<Texture | null>>();
+  private reavaliarRetratosEm: number | null = null;
+  /** O filtro de realce das imagens do mapa (nitidez, contraste e cor), criado na primeira vez que se liga. */
+  private nitidez: FiltroNitidez | null = null;
   private ladrilhosPedidos = new Set<string>();
   private cena: ICena | null = null;
   private campanhaId = '';
@@ -528,7 +561,16 @@ export class PalcoMapa {
     });
 
     viewport.on('moved', () => { this.gradeSuja = true; this.agendarLadrilhos(); });
-    viewport.on('zoomed', () => { this.gradeSuja = true; this.agendarLadrilhos(); });
+    viewport.on('zoomed', () => {
+      this.gradeSuja = true;
+      this.agendarLadrilhos();
+      // Parou de dar zoom: os retratos se refazem no tamanho que a tela pede.
+      if (this.reavaliarRetratosEm !== null) window.clearTimeout(this.reavaliarRetratosEm);
+      this.reavaliarRetratosEm = window.setTimeout(() => {
+        this.reavaliarRetratosEm = null;
+        this.reavaliarRetratos();
+      }, 280);
+    });
 
     app.ticker.add((ticker) => {
       const agora = performance.now();
@@ -787,9 +829,9 @@ export class PalcoMapa {
     if (this.mapasColocados.tem) void this.mapasColocados.atualizar(this.viewport.getVisibleBounds(), this.viewport.scale.x);
     const mapa = this.cena?.mapa;
     if (!mapa || !mapa.chaves.some((c) => c.startsWith('n2/'))) return;
-    const perto = this.viewport.scale.x >= ZOOM_DETALHE;
+    const perto = this.viewport.scale.x >= zoomDeDetalhe();
     if (!perto && !this.liberados) return;
-    const visivel = this.viewport.getVisibleBounds();
+    const visivel = areaDeCarga(this.viewport.getVisibleBounds());
     const pedidos: string[] = [];
     for (const chave of mapa.chaves) {
       if (!chave.startsWith('n0/') || this.ladrilhosPedidos.has(chave)) continue;
@@ -1402,6 +1444,31 @@ export class PalcoMapa {
     for (const token of this.tokens.values()) token.definirPreferenciasBarras(preferencias);
   }
 
+  /**
+   * O Realce (preferência do aparelho): um filtro de nitidez, contraste e cor só nas imagens do mapa (o fundo e os mapas
+   * colocados). Os tokens, a grade e as marcas ficam como são.
+   */
+  definirRealce(nivel: NivelDeRealce) {
+    if (nivel === 'desligado') {
+      this.camadaMapa.filters = null;
+      this.mapasColocados.raiz.filters = null;
+      return;
+    }
+    this.nitidez ??= new FiltroNitidez();
+    this.nitidez.definir(nivel, window.devicePixelRatio || 1);
+    this.camadaMapa.filters = [this.nitidez.filtro];
+    this.mapasColocados.raiz.filters = [this.nitidez.filtro];
+  }
+
+  /** O zoom parou de mudar: tokens que agora ocupam muitos pixels da tela pedem o retrato de perto (ou voltam ao normal). */
+  private reavaliarRetratos() {
+    for (const token of this.tokens.values()) {
+      if (formatoDoEnquadramento(token.dados.enquadramento) === 'livre' || !token.dados.imagem) continue;
+      const lado = ladoDoRetrato(token.dados.porte * (this.cena?.grade.tamanho ?? 100), this.viewport.scale.x, window.devicePixelRatio || 1);
+      if (lado !== token.ladoDoRetrato) void this.carregarRetrato(token);
+    }
+  }
+
   private async carregarRetrato(token: TokenVisual) {
     const { imagem, id } = token.dados;
     if (!imagem) {
@@ -1410,9 +1477,11 @@ export class PalcoMapa {
     }
     const url = urlImagemDoToken(this.campanhaId, id, imagem);
     const { enquadramento } = token.dados;
-    const chave = `${url}|${enquadramento.zoom}|${enquadramento.x}|${enquadramento.y}`;
+    const livre = formatoDoEnquadramento(enquadramento) === 'livre';
+    const lado = livre ? 0 : ladoDoRetrato(token.dados.porte * (this.cena?.grade.tamanho ?? 100), this.viewport.scale.x, window.devicePixelRatio || 1);
+    const chave = livre ? `${url}|livre` : `${url}|${lado}|${enquadramento.zoom}|${enquadramento.x}|${enquadramento.y}`;
     if (!this.retratos.has(chave)) {
-      this.retratos.set(chave, retratoRedondo(url, enquadramento).catch(() => null));
+      this.retratos.set(chave, (livre ? retratoLivre(url) : retratoRedondo(url, enquadramento, lado)).catch(() => null));
       // Cada passo do zoom é um recorte novo: os mais antigos saem da lista (quem ainda usa um segue com ele).
       if (this.retratos.size > 80) {
         const antiga = this.retratos.keys().next().value;
@@ -1420,7 +1489,7 @@ export class PalcoMapa {
       }
     }
     const textura = await this.retratos.get(chave)!;
-    if (this.tokens.get(id) === token && token.dados.imagem === imagem && token.dados.enquadramento === enquadramento) token.definirRetrato(textura);
+    if (this.tokens.get(id) === token && token.dados.imagem === imagem && token.dados.enquadramento === enquadramento) token.definirRetrato(textura, lado, livre ? 'livre' : 'redondo');
   }
 
   private ligarToken(token: TokenVisual) {
@@ -1795,6 +1864,8 @@ export class PalcoMapa {
   destruir() {
     this.observador?.disconnect();
     if (this.carregarVisiveis !== null) window.clearTimeout(this.carregarVisiveis);
+    if (this.reavaliarRetratosEm !== null) window.clearTimeout(this.reavaliarRetratosEm);
+    // O filtro de realce vai embora junto com o renderizador (destruí-lo antes, com o desenho ainda ligado a ele, dá aviso de textura em uso).
     this.clima.destruir();
     this.luzes.destruir();
     this.magias.destruir();

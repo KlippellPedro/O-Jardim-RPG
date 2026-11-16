@@ -236,6 +236,8 @@ export interface Enquadramento {
   zoom: number;
   x: number;
   y: number;
+  /** "livre": a arte inteira, sem círculo nem moldura (ver formatoToken.ts). Ausente: redondo. */
+  formato?: 'livre';
 }
 
 export const ENQUADRAMENTO_PADRAO: Enquadramento = { zoom: 1, x: 0, y: 0 };

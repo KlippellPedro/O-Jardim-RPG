@@ -5,6 +5,7 @@ import {
   ehHex, medicaoEfetiva, PADRAO_GRADE,
   type IGrade, type LinhaGrade, type MedicaoGrade, type TipoGrade, type UnidadeGrade,
 } from '../motor/geometria';
+import { NIVEIS_DE_REALCE, type NivelDeRealce } from '../motor/realceConta';
 import './gradePainel.css';
 
 interface Props {
@@ -17,6 +18,9 @@ interface Props {
   /** Preferência do aparelho: mostrar a distância andada enquanto o token é arrastado. */
   medirAoMover: boolean;
   onMedirAoMover: (ligado: boolean) => void;
+  /** Preferência do aparelho: nitidez, contraste e cor das imagens do mapa (os tokens ficam como são). */
+  realce: NivelDeRealce;
+  onRealce: (nivel: NivelDeRealce) => void;
   /** A grade ainda não salva, para a tela mostrar na hora enquanto o Mestre ajusta. */
   onPrever: (grade: IGrade) => void;
   onSalvarGrade: (mudancas: Partial<IGrade>) => void;
@@ -56,7 +60,7 @@ const arredondar = (valor: number, casas = 0) => {
 };
 
 /** A grade da cena: o que muda a cena é do Mestre; o encaixe vale para cada aparelho. A vista da tela tem painel próprio. */
-export const PainelGrade = ({ aberto, gestor, cena, encaixe, onEncaixe, medirAoMover, onMedirAoMover, onPrever, onSalvarGrade, onFechar }: Props) => {
+export const PainelGrade = ({ aberto, gestor, cena, encaixe, onEncaixe, medirAoMover, onMedirAoMover, realce, onRealce, onPrever, onSalvarGrade, onFechar }: Props) => {
   const [grade, setGrade] = useState<IGrade | null>(cena?.grade ?? null);
   const espera = useRef<number | null>(null);
   const pendente = useRef<Partial<IGrade>>({});
@@ -122,6 +126,18 @@ export const PainelGrade = ({ aberto, gestor, cena, encaixe, onEncaixe, medirAoM
         <span>Medir ao mover o token<small>Só neste aparelho. Desligado, o token anda livre, sem linha de distância atrás dele.</small></span>
         <input type="checkbox" role="switch" checked={medirAoMover} onChange={(e) => onMedirAoMover(e.target.checked)} />
       </label>
+
+      <fieldset className="grade-grupo">
+        <legend>Realce da imagem</legend>
+        <div role="radiogroup" aria-label="Realce da imagem do mapa" className="grade-botoes">
+          {NIVEIS_DE_REALCE.map((nivel) => (
+            <button key={nivel.id} type="button" role="radio" aria-checked={realce === nivel.id} className={`mapa-botao${realce === nivel.id ? ' ativo' : ''}`} title={nivel.dica} onClick={() => onRealce(nivel.id)}>
+              {nivel.rotulo}
+            </button>
+          ))}
+        </div>
+        <small className="mapa-dica">Só neste aparelho. Dá mais foco, contraste e cor às imagens do mapa, sem mudar o arquivo. {NIVEIS_DE_REALCE.find((n) => n.id === realce)?.dica}</small>
+      </fieldset>
 
       <fieldset className="grade-grupo" disabled={!gestor}>
         <legend>Grade da cena{!gestor && ' (só o Mestre muda)'}</legend>

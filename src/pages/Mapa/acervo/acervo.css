@@ -1,0 +1,457 @@
+/* Gaveta do Acervo: árvore de pastas que recebe arrasto, seleção em lote, painéis de detalhe, mover e melhorar. */
+
+/* ---- Árvore de pastas ---- */
+
+.acervo-lateral {
+  min-height: 0;
+  overflow: auto;
+  border-right: 1px solid var(--mapa-linha);
+}
+
+.acervo-arvore {
+  padding: 8px;
+}
+
+.acervo-arvore ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.acervo-arvore > ul {
+  margin-bottom: 8px;
+}
+
+.acervo-pasta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 30px;
+  padding-right: 4px;
+  border: 1px dashed transparent;
+  border-radius: 7px;
+  color: var(--mapa-apagado);
+}
+
+.acervo-pasta:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.acervo-pasta.ativa {
+  background: rgba(199, 164, 76, 0.14);
+  color: var(--mapa-ouro);
+}
+
+.acervo-pasta.alvo,
+.acervo-pasta-tile.alvo,
+.acervo-caminho button.alvo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.22);
+  color: var(--mapa-texto);
+}
+
+.acervo-pasta-seta,
+.acervo-pasta-acoes button {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.acervo-pasta-nome {
+  display: flex;
+  flex: 1;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+  padding: 5px 4px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.acervo-pasta-nome svg {
+  flex: none;
+}
+
+.acervo-pasta-nome span {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.acervo-pasta-nome small {
+  flex: none;
+  color: var(--mapa-apagado);
+  font-variant-numeric: tabular-nums;
+}
+
+.acervo-pasta-nome-campo {
+  flex: 1;
+  min-width: 0;
+  margin: 2px 0;
+}
+
+.acervo-pasta-acoes {
+  display: none;
+  flex: none;
+  gap: 1px;
+}
+
+.acervo-pasta:hover .acervo-pasta-acoes,
+.acervo-pasta:focus-within .acervo-pasta-acoes {
+  display: inline-flex;
+}
+
+.acervo-pasta-acoes button:hover,
+.acervo-pasta-seta:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--mapa-texto);
+}
+
+.acervo-nova-pasta {
+  width: 100%;
+  justify-content: center;
+  border: 1px dashed var(--mapa-linha);
+}
+
+/* ---- Barra e área das imagens ---- */
+
+.mapa-acervo-itens.soltando::after {
+  content: 'Solte para subir nesta pasta';
+  position: absolute;
+  inset: 4px;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  border: 2px dashed var(--mapa-ouro);
+  border-radius: 12px;
+  background: rgba(17, 15, 23, 0.8);
+  color: var(--mapa-ouro);
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.acervo-pasta-select {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  color: var(--mapa-apagado);
+}
+
+.acervo-ordem,
+.acervo-tamanho,
+.acervo-tipo-lote {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mapa-apagado);
+  font-size: 12px;
+}
+
+.acervo-tamanho input {
+  width: 90px;
+}
+
+.acervo-dica-envio {
+  flex: 1;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+  text-align: right;
+}
+
+.mapa-abas button small {
+  color: var(--mapa-apagado);
+  font-variant-numeric: tabular-nums;
+}
+
+.acervo-caminho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 8px;
+  color: var(--mapa-apagado);
+}
+
+.acervo-caminho span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.acervo-caminho button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border: 1px dashed transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.acervo-caminho button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.acervo-caminho button.atual {
+  color: var(--mapa-ouro);
+}
+
+.acervo-mensagem {
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(110, 231, 183, 0.1);
+  color: #6ee7b7;
+}
+
+.acervo-selecao {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border: 1px solid rgba(199, 164, 76, 0.5);
+  border-radius: 10px;
+  background: rgba(30, 26, 14, 0.96);
+}
+
+.acervo-selecao .mapa-botao-leve {
+  border: 1px solid var(--mapa-linha);
+}
+
+.acervo-selecao .mapa-botao-leve.perigo {
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}
+
+/* Subpasta como cartão: entra na pasta ao clicar, solta imagens e se arrasta para outra pasta. */
+.acervo-pasta-tile {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+  min-height: 120px;
+  padding: 10px;
+  border: 1px dashed var(--mapa-linha);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--mapa-apagado);
+  text-align: center;
+  cursor: pointer;
+}
+
+.acervo-pasta-tile:hover {
+  border-color: rgba(199, 164, 76, 0.5);
+  color: var(--mapa-texto);
+}
+
+.acervo-pasta-tile span {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--mapa-texto);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.acervo-pasta-tile small {
+  font-size: 11px;
+}
+
+/* ---- Cartão da imagem ---- */
+
+.mapa-acervo-item {
+  position: relative;
+  cursor: grab;
+  user-select: none;
+}
+
+.mapa-acervo-item:active {
+  cursor: grabbing;
+}
+
+.mapa-acervo-item.escolhido {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.1);
+  box-shadow: 0 0 0 1px var(--mapa-ouro);
+}
+
+.mapa-acervo-item img[data-tipo='token'] {
+  object-fit: contain;
+  padding: 4px;
+  background: repeating-conic-gradient(#1d1a25 0% 25%, #24212c 0% 50%) 50% / 16px 16px;
+}
+
+.mapa-acervo-item img[data-tipo='objeto'] {
+  background: repeating-conic-gradient(#1d1a25 0% 25%, #24212c 0% 50%) 50% / 16px 16px;
+}
+
+.acervo-marca {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(10, 9, 14, 0.78);
+  opacity: 0;
+  cursor: pointer;
+}
+
+.mapa-acervo-item:hover .acervo-marca,
+.mapa-acervo-item:focus-within .acervo-marca,
+.mapa-acervo-item.escolhido .acervo-marca,
+.acervo-selecao ~ .mapa-acervo-grade .acervo-marca {
+  opacity: 1;
+}
+
+.acervo-marca input {
+  margin: 0;
+  cursor: pointer;
+}
+
+.acervo-nome-campo {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.acervo-selo {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mapa-texto);
+  font-size: 10px;
+}
+
+.acervo-selo.aviso {
+  margin-left: 6px;
+  background: rgba(251, 191, 36, 0.16);
+  color: #fcd34d;
+}
+
+.acervo-acoes-icones {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--mapa-linha);
+}
+
+.acervo-acoes-icones button {
+  padding: 4px 8px;
+}
+
+/* ---- Painéis de cima: detalhes, mover, melhorar ---- */
+
+.acervo-detalhes,
+.acervo-escolher,
+.acervo-melhorar {
+  z-index: 5;
+  max-height: calc(100% - 72px);
+  overflow: auto;
+  align-content: start;
+}
+
+.acervo-detalhes {
+  width: 340px;
+}
+
+.acervo-formato {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--mapa-linha);
+  border-radius: 10px;
+}
+
+.acervo-formato legend {
+  padding: 0 6px;
+  color: var(--mapa-apagado);
+  font-size: 11px;
+}
+
+.acervo-escolher-lista {
+  display: grid;
+  gap: 2px;
+  max-height: 46vh;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.acervo-escolher-lista button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--mapa-texto);
+  text-align: left;
+  cursor: pointer;
+}
+
+.acervo-escolher-lista button:hover:not(:disabled) {
+  background: rgba(199, 164, 76, 0.14);
+}
+
+.acervo-escolher-lista button:disabled {
+  color: var(--mapa-apagado);
+  cursor: default;
+}
+
+.acervo-progresso {
+  position: static;
+  width: auto;
+  transform: none;
+}
+
+/* ---- Telas estreitas: a árvore some e a lista de pastas vira um seletor ---- */
+
+@media (max-width: 900px) {
+  .mapa-acervo-corpo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .acervo-lateral {
+    display: none;
+  }
+
+  .acervo-pasta-select {
+    display: inline-flex;
+  }
+
+  .acervo-dica-envio {
+    display: none;
+  }
+
+  .acervo-detalhes,
+  .acervo-escolher,
+  .acervo-melhorar {
+    top: 48px;
+    right: 8px;
+    left: 8px;
+    width: auto;
+  }
+}

@@ -16,6 +16,7 @@ import type { IItemAcervo } from '../../services/acervoApi';
 import { confirmar, pedirTexto } from '../../components/avisos/confirmacao';
 import { avisar, avisarErro, dispensarAviso } from '../../components/avisos/avisos';
 import { PalcoMapa, type Ferramenta, type OpcoesMagia, type OpcoesNevoa } from './motor/palco';
+import { lerNivelDeRealce, type NivelDeRealce } from './motor/realceConta';
 import { casasDoTrecho, encaixar, rotuloUnidade, type IPonto } from './motor/geometria';
 import { ConexaoMapa, Interpolador, type EstadoConexao, type MensagemMapa } from './tempoReal';
 import { PainelLateral, tokenDaEntidade, type AbaLateral } from './componentes/PainelLateral';
@@ -145,6 +146,7 @@ const CHAVE_ENCAIXE_LOCAL = 'jardim.mapa.encaixe';
 const CHAVE_SEGUIR_VISTA_LOCAL = 'jardim.mapa.seguirVista';
 /** Começa desligada: o token anda livre, sem a linha de medida atrás dele. */
 const CHAVE_MEDIR_AO_MOVER_LOCAL = 'jardim.mapa.medirAoMover';
+const CHAVE_REALCE_LOCAL = 'jardim.mapa.realce';
 /** Painéis que o aparelho esconde: a barra de ferramentas da esquerda e o painel de iniciativa e fichas. */
 const CHAVE_FERRAMENTAS_LOCAL = 'jardim.mapa.ferramentas';
 const CHAVE_LATERAL_LOCAL = 'jardim.mapa.lateral';
@@ -267,6 +269,8 @@ export const MapaPage = () => {
   const [aba, setAba] = useState<AbaLateral>('iniciativa');
   const [acervoAberto, setAcervoAberto] = useState(false);
   const [oficinaAberta, setOficinaAberta] = useState(false);
+  /** Imagem do Acervo que a Oficina abre assim que aparece (botão "Abrir na Oficina"). */
+  const [itemDaOficina, setItemDaOficina] = useState<IItemAcervo | null>(null);
   const [configAberta, setConfigAberta] = useState(false);
   const [telaCheia, setTelaCheia] = useState(false);
   const [palcoPronto, setPalcoPronto] = useState(false);
@@ -349,6 +353,14 @@ export const MapaPage = () => {
   const [recipienteOcupado, setRecipienteOcupado] = useState(false);
   const [encaixe, setEncaixe] = useState(() => lerOpcaoLocal(CHAVE_ENCAIXE_LOCAL));
   const [medirAoMover, setMedirAoMover] = useState(() => lerOpcaoLocal(CHAVE_MEDIR_AO_MOVER_LOCAL, false));
+  /** Realce das imagens do mapa (nitidez, contraste e cor): preferência deste aparelho. */
+  const [realce, setRealce] = useState<NivelDeRealce>(() => {
+    try {
+      return lerNivelDeRealce(window.localStorage.getItem(CHAVE_REALCE_LOCAL));
+    } catch {
+      return lerNivelDeRealce(null);
+    }
+  });
   const [seguirVista, setSeguirVista] = useState(() => lerOpcaoLocal(CHAVE_SEGUIR_VISTA_LOCAL));
   const seguirVistaRef = useRef(seguirVista);
   seguirVistaRef.current = seguirVista;
@@ -1372,6 +1384,15 @@ export const MapaPage = () => {
   }, [medirAoMover, palcoPronto]);
 
   useEffect(() => {
+    palcoRef.current?.definirRealce(realce);
+    try {
+      window.localStorage.setItem(CHAVE_REALCE_LOCAL, realce);
+    } catch {
+      // Sem armazenamento do navegador, a escolha vale até fechar a aba.
+    }
+  }, [realce, palcoPronto]);
+
+  useEffect(() => {
     guardarOpcaoLocal(CHAVE_SEGUIR_VISTA_LOCAL, seguirVista);
   }, [seguirVista]);
 
@@ -1850,11 +1871,13 @@ export const MapaPage = () => {
       tokens: atual.tokens.map((t) => ((doAcervo ? t.id === token.id : t.personagem_id === personagemId && !t.imagem_id) ? { ...t, enquadramento } : t)),
     } : atual));
     if (esperaEnquadramento.current !== null) window.clearTimeout(esperaEnquadramento.current);
+    // O servidor guarda só o formato livre; para voltar ao redondo ele precisa receber o "redondo" de forma explícita.
+    const paraOServidor = { ...enquadramento, formato: enquadramento.formato ?? 'redondo' } as const;
     esperaEnquadramento.current = window.setTimeout(() => {
       esperaEnquadramento.current = null;
       void (doAcervo
-        ? comErro(() => mapaApi.editarToken(campanhaId, token.id, { enquadramento }))
-        : comErro(() => mapaApi.editarTokenDoPersonagem(campanhaId, personagemId!, { enquadramento })));
+        ? comErro(() => mapaApi.editarToken(campanhaId, token.id, { enquadramento: paraOServidor }))
+        : comErro(() => mapaApi.editarTokenDoPersonagem(campanhaId, personagemId!, { enquadramento: paraOServidor })));
     }, 450);
   };
 
@@ -2937,6 +2960,8 @@ export const MapaPage = () => {
           onEncaixe={setEncaixe}
           medirAoMover={medirAoMover}
           onMedirAoMover={setMedirAoMover}
+          realce={realce}
+          onRealce={setRealce}
           onPrever={(grade) => palcoRef.current?.previaGrade(grade)}
           onSalvarGrade={(grade) => cena && campanhaId && void comErro(() => mapaApi.editarCena(campanhaId, cena.id, { grade })).then((r) => r && setEstado(r))}
           onFechar={() => setGradeAberta(false)}
@@ -3120,6 +3145,11 @@ export const MapaPage = () => {
           onNovaCena={(item) => void novaCena(item)}
           onPorNaCena={(item) => void porNaCena(item)}
           onMostrar={(item) => void mostrarImagemDoAcervo(item)}
+          onAbrirNaOficina={(item) => {
+            setItemDaOficina(item);
+            setOficinaAberta(true);
+            setAcervoAberto(false);
+          }}
           modoFundo={escolhendoFundo}
         />
         {gestor && campanhaId && construtorAberto && (
@@ -3143,6 +3173,8 @@ export const MapaPage = () => {
             sessaoId={sessaoId}
             centro={centroNaGrade}
             onCena={setEstado}
+            itemInicial={itemDaOficina}
+            onItemInicialAberto={() => setItemDaOficina(null)}
           />
         )}
       </main>

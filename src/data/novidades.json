@@ -1,6 +1,19 @@
 {
   "itens": [
     {
+      "id": "2026-11-16-mapa-acervo-organizado-token-corpo-inteiro-e-nitidez",
+      "data": "2026-11-16",
+      "tipo": "melhoria",
+      "area": "Mapa",
+      "titulo": "Acervo com pastas de arrastar, token de corpo inteiro e mapa mais nítido",
+      "detalhes": [
+        "Mestre: no Acervo dá para arrastar imagens e pastas para dentro de outras pastas, escolher várias imagens de uma vez (Ctrl ou Shift) e mover, mudar o tipo, melhorar ou apagar o grupo todo. Duplo clique no nome renomeia a pasta ou a imagem. O mesmo arrasto funciona na janela da barra de baixo do mapa, e arquivos do computador soltos numa pasta já sobem para ela.",
+        "Mestre: o token pode ser de corpo inteiro. No menu do token, aba Visual, escolha Corpo inteiro: a imagem aparece inteira, sem círculo nem moldura, de pé na casa, com uma base na cor do lado sob os pés. No Acervo, em Editar, a imagem já pode nascer assim para todo token novo, e a Oficina guarda o corpo inteiro sem cortar em círculo.",
+        "Mestre: o botão Melhorar do Acervo amplia uma imagem que já está guardada (2x ou 4x, com a transparência mantida) e a guarda como uma nova ao lado da original. Para token grande demais, que no mapa aparecia como miniatura borrada, existe o Ajustar para o mapa.",
+        "Todos: tokens e mapas ficam mais nítidos no zoom, e mapas grandes passam para a versão cheia mais cedo em tela de alta densidade. Em Grade e medidas há o Realce da imagem (Desligado, Suave ou Forte), uma escolha só do seu aparelho que dá mais foco, contraste e cor ao mapa."
+      ]
+    },
+    {
       "id": "2026-11-14-mapa-desenho-fixo-do-mestre",
       "data": "2026-11-14",
       "tipo": "novo",
@@ -1016,20 +1029,6 @@
         "Chegou o clima: chuva, tempestade com relâmpagos, neve, neblina, tempestade de areia, cinzas e brasas, folhas ao vento, escuridão com luz em volta dos personagens, o véu do Vazio e partículas na cor de um Fluxo.",
         "O clima acompanha o vento que o Mestre escolher e pode cobrir o mapa inteiro ou só um pedaço dele.",
         "Se o seu aparelho sofrer com os efeitos, o botão da nuvem na barra da esquerda desliga o clima só para você."
-      ]
-    },
-    {
-      "id": "2026-11-02-molduras-e-oficina",
-      "data": "2026-11-02",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Mapa: molduras para o seu token e a Oficina do Mestre",
-      "detalhes": [
-        "Clique no token do seu personagem para escolher a moldura: a do seu nível, Ferro, Ouro, Madeira, Osso, Runa, Cristal, Raiz, Sombra ou uma de cada Fluxo.",
-        "No mesmo lugar dá para ajustar a foto dentro do círculo, com zoom e posição. A escolha vale em todas as cenas.",
-        "O Mestre pode pôr uma moldura única para a mesa inteira, e aí todo mundo usa a mesma.",
-        "Os tokens mostram as condições em bolinhas com as iniciais, ao lado do retrato.",
-        "Para o Mestre chegou a Oficina: remove o fundo de uma imagem, melhora a qualidade de mapas e retratos e transforma tudo em token, que já pode entrar no mapa e na iniciativa."
       ]
     }
   ]

@@ -242,8 +242,8 @@ export interface ITokenMapa {
   estados?: IEstadoToken[];
   /** Moldura já resolvida (mesa, token, personagem ou padrão); ver motor/molduras.ts. */
   moldura: string;
-  /** Zoom e deslocamento da foto da ficha dentro do círculo. */
-  enquadramento: { zoom: number; x: number; y: number };
+  /** Zoom e deslocamento da foto da ficha dentro do círculo; `formato: 'livre'` mostra a arte inteira, sem círculo nem moldura. */
+  enquadramento: { zoom: number; x: number; y: number; formato?: 'livre' };
   /** Tocha, lanterna ou luz mágica; null sem luz própria. */
   luz: ILuzToken | null;
   aura?: IAuraToken | null;
@@ -577,7 +577,7 @@ export interface ITokenEdicao {
   flip_x?: boolean;
   flip_y?: boolean;
   /** Zoom e deslocamento da arte do Acervo neste token (a foto da ficha usa o enquadramento do personagem). */
-  enquadramento?: Partial<{ zoom: number; x: number; y: number }>;
+  enquadramento?: Partial<{ zoom: number; x: number; y: number; formato: 'redondo' | 'livre' }>;
   imagem_id?: string;
   sem_imagem?: boolean;
   barras?: Partial<IConfigBarras>;
@@ -681,7 +681,7 @@ export const mapaApi = {
   apagarToken: (campanhaId: string, tokenId: string) =>
     api<null>(`${base(campanhaId)}/tokens/${tokenId}`, { method: 'DELETE' }),
   /** Moldura e enquadramento do personagem: valem em todas as cenas. */
-  editarTokenDoPersonagem: (campanhaId: string, personagemId: string, dados: { moldura?: string; sem_moldura?: boolean; enquadramento?: Partial<{ zoom: number; x: number; y: number }>; arte_id?: string; sem_arte?: boolean }) =>
+  editarTokenDoPersonagem: (campanhaId: string, personagemId: string, dados: { moldura?: string; sem_moldura?: boolean; enquadramento?: Partial<{ zoom: number; x: number; y: number; formato: 'redondo' | 'livre' }>; arte_id?: string; sem_arte?: boolean }) =>
     api<{ moldura: string | null; enquadramento: { zoom: number; x: number; y: number }; arte_id: string | null }>(`${base(campanhaId)}/personagens/${personagemId}/token`, { method: 'PUT', body: dados }),
   /** As artes extras do token do personagem (a foto da ficha é a padrão). Só o dono e o Mestre. */
   listarArtes: (campanhaId: string, personagemId: string) =>

@@ -5,13 +5,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Brush, Eraser, ImagePlus, Loader2, Move, Sparkles, Wand2, X } from 'lucide-react';
 import { acervoApi, type IItemAcervo } from '../../../services/acervoApi';
-import { mapaApi, urlPedaco, type IEstadoMapa, type LadoToken } from '../../../services/mapaApi';
+import { mapaApi, type IEstadoMapa, type LadoToken } from '../../../services/mapaApi';
 import { sessaoApi } from '../../../services/sessaoApi';
-import { LADO_LADRILHO, type IPonto } from '../motor/geometria';
+import type { IPonto } from '../motor/geometria';
 import {
   carregarMolduraDeArte, desenharMoldura, desenharRetrato, ehMolduraDeArte, ENQUADRAMENTO_PADRAO, MOLDURAS, RAIO_RETRATO, type Enquadramento,
 } from '../motor/molduras';
 import { subirParaOAcervo } from '../acervo/subirImagem';
+import { imagemDoAcervo } from '../acervo/imagemDoAcervo';
+import { caixaDoDesenho } from '../acervo/imagemConta';
+import { ETIQUETA_FORMATO_LIVRE, FORMATOS_DO_TOKEN, formatoDasEtiquetas, type FormatoDoToken } from '../motor/formatoToken';
 import { melhorarQualidade, removerFundo } from './processar';
 import { ComDica } from '../componentes/BotaoFerramenta';
 
@@ -24,13 +27,18 @@ interface Props {
   /** Onde o token novo nasce (meio da tela, já encaixado na grade). */
   centro: () => IPonto | null;
   onCena: (estado: IEstadoMapa) => void;
+  /** Imagem do Acervo para abrir assim que a Oficina abre (o botão "Abrir na Oficina" do Acervo). */
+  itemInicial?: IItemAcervo | null;
+  onItemInicialAberto?: () => void;
 }
 
 type Ferramenta = 'mover' | 'apagar' | 'restaurar';
 type Modo = 'token' | 'imagem';
 
 const LADO_PALCO = 520;
-const LADO_TOKEN = 512;
+const LADO_TOKEN = 768;
+/** Margem, em pixels, que sobra em volta da arte de corpo inteiro depois de aparar o transparente. */
+const MARGEM_DO_CORPO = 6;
 
 function xadrez(ctx: CanvasRenderingContext2D, lado: number) {
   const passo = 16;
@@ -55,24 +63,13 @@ function comporImagem(fonte: OffscreenCanvas, alfa: Uint8ClampedArray | null): O
   return tela;
 }
 
-async function imagemDoAcervo(item: IItemAcervo): Promise<OffscreenCanvas> {
-  const tela = new OffscreenCanvas(item.largura, item.altura);
-  const ctx = tela.getContext('2d')!;
-  await Promise.all(item.chaves.filter((c) => c.startsWith('n0/')).map(async (chave) => {
-    const [, coluna, linha] = chave.split('/').map(Number);
-    const resposta = await fetch(urlPedaco(item.id, chave), { credentials: 'same-origin' });
-    const pedaco = await createImageBitmap(await resposta.blob());
-    ctx.drawImage(pedaco, coluna * LADO_LADRILHO, linha * LADO_LADRILHO);
-    pedaco.close();
-  }));
-  return tela;
-}
-
-export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, centro, onCena }: Props) => {
+export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, centro, onCena, itemInicial, onItemInicialAberto }: Props) => {
   const [fonte, setFonte] = useState<OffscreenCanvas | null>(null);
   const [alfa, setAlfa] = useState<Uint8ClampedArray | null>(null);
   const [nome, setNome] = useState('');
   const [modo, setModo] = useState<Modo>('token');
+  const [formato, setFormato] = useState<FormatoDoToken>('redondo');
+  const [aparar, setAparar] = useState(true);
   const [tipoImagem, setTipoImagem] = useState<'mapa' | 'objeto'>('mapa');
   const [enquadramento, setEnquadramento] = useState<Enquadramento>(ENQUADRAMENTO_PADRAO);
   const [fundo, setFundo] = useState<string>('transparente');
@@ -107,7 +104,7 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
   /** Onde a imagem fica no palco: escala e canto, nos dois modos. */
   const posicao = useMemo(() => {
     if (!fonte) return null;
-    if (modo === 'token') {
+    if (modo === 'token' && formato === 'redondo') {
       const raio = LADO_PALCO * RAIO_RETRATO;
       const escala = ((raio * 2) / Math.min(fonte.width, fonte.height)) * enquadramento.zoom;
       const w = fonte.width * escala;
@@ -116,14 +113,14 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
     }
     const escala = Math.min(LADO_PALCO / fonte.width, LADO_PALCO / fonte.height);
     return { escala, x: (LADO_PALCO - fonte.width * escala) / 2, y: (LADO_PALCO - fonte.height * escala) / 2, raio: 0 };
-  }, [fonte, modo, enquadramento]);
+  }, [fonte, modo, formato, enquadramento]);
 
   const desenhar = useCallback(() => {
     const ctx = palcoRef.current?.getContext('2d');
     if (!ctx) return;
     xadrez(ctx, LADO_PALCO);
     if (!composta || !posicao) return;
-    if (modo === 'token') {
+    if (modo === 'token' && formato === 'redondo') {
       ctx.globalAlpha = 0.25;
       ctx.drawImage(composta, posicao.x, posicao.y, composta.width * posicao.escala, composta.height * posicao.escala);
       ctx.globalAlpha = 1;
@@ -145,7 +142,7 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
       ctx.lineWidth = 2;
       ctx.stroke();
     }
-  }, [composta, posicao, modo, fundo, enquadramento, moldura, lado, ferramenta, pincel, arteChegou]);
+  }, [composta, posicao, modo, formato, fundo, enquadramento, moldura, lado, ferramenta, pincel, arteChegou]);
 
   useEffect(() => {
     desenhar();
@@ -185,19 +182,31 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
     }
   };
 
-  const escolherDoAcervo = async (id: string) => {
-    const item = acervo.find((i) => i.id === id);
-    if (!item) return;
+  const abrirItemDoAcervo = async (item: IItemAcervo) => {
     setOcupado({ texto: 'Abrindo a imagem do Acervo...' });
     try {
       carregar(await imagemDoAcervo(item), item.nome);
-      if (item.tipo !== 'token') setModo('imagem');
+      setModo(item.tipo === 'token' ? 'token' : 'imagem');
+      setTipoImagem(item.tipo === 'objeto' ? 'objeto' : 'mapa');
+      setFormato(item.tipo === 'token' ? formatoDasEtiquetas(item.etiquetas) : 'redondo');
     } catch {
       setErro('Não deu para abrir esta imagem do Acervo.');
     } finally {
       setOcupado(null);
     }
   };
+
+  const escolherDoAcervo = async (id: string) => {
+    const item = acervo.find((i) => i.id === id);
+    if (item) await abrirItemDoAcervo(item);
+  };
+
+  // "Abrir na Oficina", no Acervo: a imagem escolhida já chega aberta.
+  useEffect(() => {
+    if (!aberto || !itemInicial) return;
+    void abrirItemDoAcervo(itemInicial);
+    onItemInicialAberto?.();
+  }, [aberto, itemInicial]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Uma ação por vez: os botões travam no clique, antes de a biblioteca terminar de carregar.
   const executar = async (textoInicial: string, acao: () => Promise<void>) => {
@@ -287,7 +296,7 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
     const p = local(evento);
     cursor.current = p;
     if (arrasto.current) {
-      if (ferramenta === 'mover' && modo === 'token' && posicao) {
+      if (ferramenta === 'mover' && modo === 'token' && formato === 'redondo' && posicao) {
         const dx = (p.x - arrasto.current.x) / posicao.raio;
         const dy = (p.y - arrasto.current.y) / posicao.raio;
         setEnquadramento((e) => ({ ...e, x: Math.max(-1, Math.min(1, e.x + dx)), y: Math.max(-1, Math.min(1, e.y + dy)) }));
@@ -300,7 +309,7 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
   };
 
   const aoRodinha = (evento: React.WheelEvent<HTMLCanvasElement>) => {
-    if (modo !== 'token') return;
+    if (modo !== 'token' || formato !== 'redondo') return;
     setEnquadramento((e) => ({ ...e, zoom: Math.max(1, Math.min(4, e.zoom * (evento.deltaY < 0 ? 1.08 : 1 / 1.08))) }));
   };
 
@@ -308,6 +317,19 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
 
   const arquivoDoResultado = async (): Promise<File | null> => {
     if (!composta) return null;
+    if (modo === 'token' && formato === 'livre') {
+      // Corpo inteiro: a arte como está, sem círculo. O transparente em volta é aparado para os pés ficarem na borda de baixo do token.
+      let origem: OffscreenCanvas = composta;
+      if (aparar) {
+        const pixels = composta.getContext('2d', { willReadFrequently: true })!.getImageData(0, 0, composta.width, composta.height);
+        const caixa = caixaDoDesenho(pixels.data, composta.width, composta.height, MARGEM_DO_CORPO);
+        if (caixa.largura < composta.width || caixa.altura < composta.height) {
+          origem = new OffscreenCanvas(caixa.largura, caixa.altura);
+          origem.getContext('2d')!.drawImage(composta, caixa.x, caixa.y, caixa.largura, caixa.altura, 0, 0, caixa.largura, caixa.altura);
+        }
+      }
+      return new File([await origem.convertToBlob({ type: 'image/png' })], `${nome || 'token'}.png`, { type: 'image/png' });
+    }
     if (modo === 'token') {
       const tela = new OffscreenCanvas(LADO_TOKEN, LADO_TOKEN);
       const ctx = tela.getContext('2d')!;
@@ -329,6 +351,7 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
     return subirParaOAcervo(arquivo, {
       tipo: modo === 'token' ? 'token' : tipoImagem,
       pastaId: null,
+      ...(modo === 'token' && formato === 'livre' ? { etiquetas: [ETIQUETA_FORMATO_LIVRE] } : {}),
       aoProgresso: (p) => setOcupado({ texto: `Guardando no Acervo: ${p.feitos} de ${p.total}`, fracao: p.feitos / p.total }),
     });
   };
@@ -366,7 +389,7 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
       x: ponto.x,
       y: ponto.y,
       lado,
-      moldura,
+      ...(formato === 'redondo' ? { moldura } : {}),
     });
     onCena(estado);
     onFechar();
@@ -429,9 +452,11 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
             </div>
             <small className="mapa-dica">A ampliação por IA recria detalhes plausíveis e pode alterar texturas. Confira o resultado antes de salvar; detalhes ausentes na imagem original não podem ser recuperados.</small>
             <div className="mapa-ferramentas-oficina" role="radiogroup" aria-label="Ferramenta">
-              <ComDica lado="cima" dica="Arrastar a foto dentro do círculo">
-                <button type="button" className={ferramenta === 'mover' ? 'ativo' : ''} aria-label="Arrastar a foto" onClick={() => setFerramenta('mover')}><Move size={15} /></button>
-              </ComDica>
+              {!(modo === 'token' && formato === 'livre') && (
+                <ComDica lado="cima" dica="Arrastar a foto dentro do círculo">
+                  <button type="button" className={ferramenta === 'mover' ? 'ativo' : ''} aria-label="Arrastar a foto" onClick={() => setFerramenta('mover')}><Move size={15} /></button>
+                </ComDica>
+              )}
               <ComDica lado="cima" dica="Pincel que apaga">
                 <button type="button" className={ferramenta === 'apagar' ? 'ativo' : ''} aria-label="Pincel que apaga" onClick={() => setFerramenta('apagar')}><Eraser size={15} /></button>
               </ComDica>
@@ -446,15 +471,47 @@ export const OficinaGaveta = ({ aberto, onFechar, campanhaId, cenaId, sessaoId, 
           {modo === 'token' ? (
             <fieldset disabled={!fonte}>
               <legend>Token</legend>
-              <label className="mapa-menu-linha">Zoom <input type="range" min={1} max={4} step={0.02} value={enquadramento.zoom} onChange={(e) => setEnquadramento({ ...enquadramento, zoom: Number(e.target.value) })} /></label>
-              <label className="mapa-menu-linha">
-                Fundo do círculo
-                <span className="mapa-menu-botoes">
-                  <button type="button" className={fundo === 'transparente' ? 'mapa-botao' : 'mapa-botao-leve'} onClick={() => setFundo('transparente')}>Transparente</button>
-                  <input type="color" value={fundo === 'transparente' ? '#2a2333' : fundo} onChange={(e) => setFundo(e.target.value)} />
-                </span>
-              </label>
-              <SeletorDeMoldura valor={moldura} lado={lado} onEscolher={setMoldura} />
+              <div role="radiogroup" aria-label="Formato do token" className="mapa-menu-botoes">
+                {FORMATOS_DO_TOKEN.map((f) => (
+                  <button
+                    key={f.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={formato === f.id}
+                    className={formato === f.id ? 'mapa-botao ativo' : 'mapa-botao-leve'}
+                    title={f.dica}
+                    onClick={() => {
+                      setFormato(f.id);
+                      if (f.id === 'livre' && ferramenta === 'mover') setFerramenta('apagar');
+                      if (f.id === 'redondo') setFerramenta('mover');
+                    }}
+                  >
+                    {f.rotulo}
+                  </button>
+                ))}
+              </div>
+              {formato === 'livre' ? (
+                <>
+                  <small className="mapa-dica">
+                    A imagem fica inteira, sem círculo nem moldura. Use Remover fundo para só o personagem aparecer, de pé na casa do mapa.
+                  </small>
+                  <label className="mapa-menu-linha">
+                    <span><input type="checkbox" checked={aparar} onChange={(e) => setAparar(e.target.checked)} /> Aparar a área transparente em volta</span>
+                  </label>
+                </>
+              ) : (
+                <>
+                  <label className="mapa-menu-linha">Zoom <input type="range" min={1} max={4} step={0.02} value={enquadramento.zoom} onChange={(e) => setEnquadramento({ ...enquadramento, zoom: Number(e.target.value) })} /></label>
+                  <label className="mapa-menu-linha">
+                    Fundo do círculo
+                    <span className="mapa-menu-botoes">
+                      <button type="button" className={fundo === 'transparente' ? 'mapa-botao' : 'mapa-botao-leve'} onClick={() => setFundo('transparente')}>Transparente</button>
+                      <input type="color" value={fundo === 'transparente' ? '#2a2333' : fundo} onChange={(e) => setFundo(e.target.value)} />
+                    </span>
+                  </label>
+                  <SeletorDeMoldura valor={moldura} lado={lado} onEscolher={setMoldura} />
+                </>
+              )}
               <label className="mapa-menu-linha">
                 Lado
                 <select value={lado} onChange={(e) => setLado(e.target.value as LadoToken)}>

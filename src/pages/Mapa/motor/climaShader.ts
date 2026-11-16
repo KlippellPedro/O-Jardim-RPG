@@ -358,7 +358,7 @@ export class Atmosfera {
 // ----------------------------------------------------------------- calor
 
 // O vértice padrão dos filtros do Pixi (o mesmo de pixi.js, MIT).
-const VERTICE_FILTRO_GL = `#version 300 es
+export const VERTICE_FILTRO_GL = `#version 300 es
 in vec2 aPosition;
 out vec2 vTextureCoord;
 uniform vec4 uInputSize;

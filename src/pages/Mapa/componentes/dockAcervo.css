@@ -402,3 +402,24 @@
     max-height: 58%;
   }
 }
+
+/* Arrastar para uma pasta: o lugar que vai receber a imagem (ou pasta) acende. */
+.mapa-dock-pasta.alvo,
+.mapa-dock-caminho button.alvo,
+.mapa-dock-pastas button.alvo,
+.mapa-dock-raiz.alvo {
+  border-color: var(--mapa-ouro);
+  background: rgba(199, 164, 76, 0.28);
+  color: var(--mapa-texto);
+  outline: 2px dashed var(--mapa-ouro);
+  outline-offset: -2px;
+}
+
+.mapa-dock-caminho .mapa-dock-raiz {
+  display: inline-grid;
+  place-items: center;
+}
+
+.mapa-dock-pasta {
+  cursor: grab;
+}

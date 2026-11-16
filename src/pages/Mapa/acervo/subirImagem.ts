@@ -4,6 +4,7 @@
 
 import { acervoApi, type IItemAcervo, type TipoItemAcervo } from '../../../services/acervoApi';
 import { chavesEsperadas, LADO_LADRILHO } from '../motor/geometria';
+import { LADO_MAXIMO_DO_TOKEN, tamanhoQueCabe } from './imagemConta';
 
 const LADO_MINIATURA = 320;
 const QUALIDADE = 0.9;
@@ -68,8 +69,29 @@ export interface OpcoesDeEnvio {
   aoProgresso?: (p: ProgressoEnvio) => void;
 }
 
+/** Token grande demais é reduzido (com boa suavização) ao que o mapa entrega inteiro; as outras imagens sobem como são. */
+async function reduzirSeForToken(imagem: ImageBitmap, tipo: TipoItemAcervo): Promise<{ imagem: ImageBitmap; reduzida: boolean }> {
+  if (tipo !== 'token') return { imagem, reduzida: false };
+  const { largura, altura } = tamanhoQueCabe(imagem.width, imagem.height, LADO_MAXIMO_DO_TOKEN);
+  if (largura === imagem.width && altura === imagem.height) return { imagem, reduzida: false };
+  const tela = new OffscreenCanvas(largura, altura);
+  const ctx = tela.getContext('2d')!;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(imagem, 0, 0, largura, altura);
+  return { imagem: tela.transferToImageBitmap(), reduzida: true };
+}
+
 /** Sobe uma imagem já decodificada (quem chama fecha o bitmap). Serve para peças recortadas no navegador. */
-export async function subirImagemPronta(imagem: ImageBitmap, nome: string, opcoes: OpcoesDeEnvio): Promise<IItemAcervo> {
+export async function subirImagemPronta(original: ImageBitmap, nome: string, opcoes: OpcoesDeEnvio): Promise<IItemAcervo> {
+  const { imagem, reduzida } = await reduzirSeForToken(original, opcoes.tipo);
+  try {
+    return await enviarBitmap(imagem, nome, opcoes);
+  } finally {
+    if (reduzida) imagem.close();
+  }
+}
+
+async function enviarBitmap(imagem: ImageBitmap, nome: string, opcoes: OpcoesDeEnvio): Promise<IItemAcervo> {
   const { id, chaves } = await acervoApi.criarItem({
     nome,
     tipo: opcoes.tipo,

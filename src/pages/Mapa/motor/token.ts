@@ -17,6 +17,7 @@ import { texturaDeBrilho } from './luzes';
 import { ContornoDeCondicao } from './contornoCondicao';
 import { contornosDoToken } from './condicoesVisuais';
 import { rotuloDaElevacao } from './elevacaoConta';
+import { formatoDoEnquadramento, medidasDoTokenLivre, type FormatoDoToken, type MedidasDoTokenLivre } from './formatoToken';
 import {
   CORES_BARRA_PADRAO,
   barrasParaDesenhar,
@@ -160,11 +161,11 @@ function desenharBarra(g: Graphics, barra: IBarraToken, cor: string, x: number, 
 }
 
 /** As bolinhas dos cantos de baixo do token: Sanidade à esquerda e Defesa à direita, com o número sempre à vista. */
-function desenharBolinhas(raiz: Container, lado: number, sanidade: { barra: IBarraToken; cor: string } | null, defesa: number | null, resolucao: number) {
+function desenharBolinhas(raiz: Container, lado: number, sanidade: { barra: IBarraToken; cor: string } | null, defesa: number | null, resolucao: number, alcanceFixo?: number) {
   if (!sanidade && defesa === null) return;
   const raio = Math.max(6, Math.min(14, lado * 0.14));
-  // Na borda do retrato, a uns 40 graus abaixo da horizontal.
-  const alcance = lado * ESCALA_QUADRO * RAIO_RETRATO;
+  // Na borda do retrato, a uns 40 graus abaixo da horizontal (no corpo inteiro, fora do quadrado do token, para não cobrir a arte).
+  const alcance = alcanceFixo ?? lado * ESCALA_QUADRO * RAIO_RETRATO;
   const x = Math.cos((40 * Math.PI) / 180) * alcance;
   const y = Math.sin((40 * Math.PI) / 180) * alcance;
   const numero = (valor: string, cx: number, cy: number) => {
@@ -209,12 +210,12 @@ function desenharBolinhas(raiz: Container, lado: number, sanidade: { barra: IBar
 
 /** Barras e anéis ficam sob o token; valores completos aparecem ao selecionar ou passar o mouse. */
 /** `raioQuadro`: até onde vai o quadro do token (foto e moldura). As barras começam logo depois dele. Devolve o fim das barras (0 sem barras). */
-function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, raioQuadro: number, ativa: boolean, preferencias: IPreferenciasBarrasMapa, resolucao: number, defesa?: number | null): number {
+function desenharBarras(raiz: Container, barras: IBarraToken[], lado: number, raioQuadro: number, ativa: boolean, preferencias: IPreferenciasBarrasMapa, resolucao: number, defesa?: number | null, alcanceDasBolinhas?: number): number {
   raiz.removeChildren().forEach((filho) => filho.destroy());
   const todas = barrasParaDesenhar(barras, preferencias);
   // Sanidade e Defesa são bolinhas nos cantos de baixo do token; as barras (Vida, Mana, Estamina) ficam embaixo.
   const sanidade = todas.find((barra) => barra.tipo === 'sanidade');
-  desenharBolinhas(raiz, lado, sanidade ? { barra: sanidade, cor: preferencias.porTipo.sanidade.cor } : null, defesa ?? null, resolucao);
+  desenharBolinhas(raiz, lado, sanidade ? { barra: sanidade, cor: preferencias.porTipo.sanidade.cor } : null, defesa ?? null, resolucao, alcanceDasBolinhas);
   const visiveis = todas.filter((barra) => barra.tipo !== 'sanidade');
   if (!visiveis.length) return 0;
 
@@ -334,6 +335,11 @@ export class TokenVisual {
   private fimDasBarras = 0;
   /** O furo da moldura ilustrada, usado como máscara do retrato (ver desenharRetrato). */
   private mascaraDoRetrato: Sprite | null = null;
+  /** O lado e o formato do retrato que está na textura (o palco refaz o retrato quando o token ocupa mais pixels, e quando o formato muda). */
+  ladoDoRetrato = 0;
+  private formatoDaTextura: FormatoDoToken = 'redondo';
+  /** Onde a arte de corpo inteiro ficou (relativo ao centro do token); nulo no formato redondo ou sem a imagem. */
+  private areaLivre: MedidasDoTokenLivre | null = null;
 
   constructor(dados: ITokenMapa, tamanhoQuadrado: number, preferenciasBarras = PREFERENCIAS_BARRAS_PADRAO) {
     this.dados = dados;
@@ -374,8 +380,14 @@ export class TokenVisual {
   /** Até onde vai o quadro do token: a moldura simples fecha em meio lado; as ilustradas maiores abrem um pouco mais. */
   private get raioQuadro() {
     const id = this.dados.moldura ?? 'lado';
-    const folga = ehMolduraDeArte(id) ? 1 + (escalaDaMolduraDeArte(id) - 1) * 0.6 : 1;
+    // Corpo inteiro não tem moldura: o quadro é o quadrado do token.
+    const folga = !this.livre && ehMolduraDeArte(id) ? 1 + (escalaDaMolduraDeArte(id) - 1) * 0.6 : 1;
     return this.lado * 0.5 * folga;
+  }
+
+  /** O token é de corpo inteiro (a arte sem círculo nem moldura)? */
+  get livre(): boolean {
+    return formatoDoEnquadramento(this.dados.enquadramento) === 'livre';
   }
 
   /** O quadrado do token estendido para baixo até o fim das barras e da marca de escolha: onde a barra de ações se cola. */
@@ -412,6 +424,9 @@ export class TokenVisual {
   }
 
   private poMoldura(dados: ITokenMapa) {
+    // Corpo inteiro: sem aro e sem moldura (a cor do lado vai na base, sob os pés).
+    this.moldura.visible = !this.livre;
+    if (this.livre) return;
     const id = dados.moldura ?? 'lado';
     this.moldura.texture = texturaDaMoldura(id, dados.lado);
     const quadro = this.lado * ESCALA_QUADRO * (ehMolduraDeArte(id) ? escalaDaMolduraDeArte(id) : 1);
@@ -477,7 +492,9 @@ export class TokenVisual {
   private posicionarNome() {
     const escala = escalaDoNome(this.tamanhoNome, this.zoomDoNome);
     this.nome.scale.set(escala);
-    this.nome.y = -this.raioQuadro * 1.1 - this.tamanhoNome * 1.15 * escala;
+    // O nome fica acima da arte quando ela passa do quadrado do token (boneco alto).
+    const acima = this.areaLivre ? Math.min(-this.raioQuadro * 1.1, this.areaLivre.topo - this.lado * 0.05) : -this.raioQuadro * 1.1;
+    this.nome.y = acima - this.tamanhoNome * 1.15 * escala;
     const destacado = this.sobOMouse || this.selecionado;
     // Amontoado e visto de longe, nem o nome curto cabe até o vizinho: some, e volta com o mouse em cima ou a seleção.
     this.nome.visible = nomeVisivel(this.lado, this.zoomDoNome, destacado)
@@ -485,7 +502,10 @@ export class TokenVisual {
   }
 
   private desenharBarras() {
-    this.fimDasBarras = desenharBarras(this.barras, this.dados.barras, this.lado, this.raioQuadro, this.selecionado || this.sobOMouse, this.preferenciasBarras, this.resolucaoTexto, this.dados.defesa);
+    this.fimDasBarras = desenharBarras(
+      this.barras, this.dados.barras, this.lado, this.raioQuadro, this.selecionado || this.sobOMouse, this.preferenciasBarras, this.resolucaoTexto, this.dados.defesa,
+      this.livre ? this.lado * 0.6 : undefined,
+    );
   }
 
   definirPreferenciasBarras(preferencias: IPreferenciasBarrasMapa) {
@@ -552,15 +572,46 @@ export class TokenVisual {
     this.condicoes.addChild(selo);
   }
 
+  /** Corpo inteiro: a base sob os pés (na cor do lado) e a arte em pé, com a largura no quadrado do token. */
+  private desenharRetratoLivre(textura: Texture) {
+    const medidas = medidasDoTokenLivre(textura.width, textura.height, this.lado, this.dados.enquadramento);
+    this.areaLivre = medidas;
+    const cor = this.dados.desconhecido ? '#a0a0b8' : CORES_LADO[this.dados.lado];
+    const rx = this.lado * 0.4;
+    const ry = this.lado * 0.1;
+    const base = new Graphics()
+      .ellipse(medidas.pesX, medidas.pesY - ry * 0.35, rx, ry)
+      .fill({ color: '#000000', alpha: 0.32 })
+      .ellipse(medidas.pesX, medidas.pesY - ry * 0.35, rx, ry)
+      .stroke({ width: Math.max(1.6, this.lado * 0.028), color: cor, alpha: 0.95 });
+    this.retrato.addChild(base);
+    const arte = new Sprite(textura);
+    arte.anchor.set(0.5, 1);
+    arte.position.set(medidas.pesX, medidas.pesY);
+    arte.width = medidas.largura;
+    arte.height = medidas.altura;
+    // O espelhar vira o desenho em torno dos pés (o contêiner do retrato fica sem escala).
+    arte.scale.x = Math.abs(arte.scale.x) * (this.dados.flip_x ? -1 : 1);
+    arte.scale.y = Math.abs(arte.scale.y) * (this.dados.flip_y ? -1 : 1);
+    this.retrato.addChild(arte);
+  }
+
   private desenharRetrato() {
     this.retrato.removeChildren().forEach((filho) => filho.destroy());
-    const raio = this.raioRetrato;
-    const fundo = new Graphics().circle(0, 0, raio).fill('#1b1b24');
-    this.retrato.addChild(fundo);
+    this.areaLivre = null;
     this.retrato.mask = null;
     this.mascaraDoRetrato?.destroy();
     this.mascaraDoRetrato = null;
-    if (this.texturaAtual) {
+    if (this.livre && this.texturaAtual && this.formatoDaTextura === 'livre') {
+      this.retrato.scale.set(1, 1);
+      this.desenharRetratoLivre(this.texturaAtual);
+      return;
+    }
+    const raio = this.raioRetrato;
+    const fundo = new Graphics().circle(0, 0, raio).fill('#1b1b24');
+    this.retrato.addChild(fundo);
+    // Esperando a arte de corpo inteiro (ou sem arte): só entra a textura redonda, nunca a de outro formato.
+    if (this.texturaAtual && this.formatoDaTextura === (this.livre ? 'livre' : 'redondo')) {
       const foto = new Sprite(this.texturaAtual);
       foto.anchor.set(0.5);
       foto.width = raio * 2;
@@ -599,10 +650,15 @@ export class TokenVisual {
   }
 
   /** O retrato chega depois (carregado à parte); null volta para as iniciais. */
-  definirRetrato(textura: Texture | null) {
-    if (this.texturaAtual === textura) return;
+  definirRetrato(textura: Texture | null, lado = 0, formato: FormatoDoToken = 'redondo') {
+    if (this.texturaAtual === textura && this.ladoDoRetrato === lado && this.formatoDaTextura === formato) return;
     this.texturaAtual = textura;
+    this.ladoDoRetrato = lado;
+    this.formatoDaTextura = formato;
     this.desenharRetrato();
+    // A arte de corpo inteiro muda onde o nome fica e o contorno da seleção.
+    this.escreverNome();
+    this.desenharMarcas();
   }
 
   definirSelecionado(sim: boolean) {
@@ -695,11 +751,16 @@ export class TokenVisual {
     if (clarao < 1) {
       this.clarAceso = true;
       const raio = this.raioRetrato;
+      // O clarão acompanha o formato: círculo no retrato redondo, elipse em volta da arte de corpo inteiro.
+      const area = this.areaLivre;
+      const forma = (fator: number) => (area
+        ? this.clarao.ellipse(area.pesX, area.pesY - area.altura / 2, area.largura * 0.5 * fator, area.altura * 0.5 * fator)
+        : this.clarao.circle(0, 0, raio * fator));
       if (this.clarCura) {
-        this.clarao.circle(0, 0, raio * (1 + 0.5 * clarao)).stroke({ width: Math.max(2, raio * 0.18), color: '#4ade80', alpha: 1 - clarao });
-        this.clarao.circle(0, 0, raio).fill({ color: '#4ade80', alpha: 0.25 * (1 - clarao) });
+        forma(1 + 0.5 * clarao).stroke({ width: Math.max(2, raio * 0.18), color: '#4ade80', alpha: 1 - clarao });
+        forma(1).fill({ color: '#4ade80', alpha: 0.25 * (1 - clarao) });
       } else {
-        this.clarao.circle(0, 0, raio).fill({ color: '#ff3b3b', alpha: 0.6 * (1 - clarao) });
+        forma(1).fill({ color: '#ff3b3b', alpha: 0.6 * (1 - clarao) });
         this.corpo.x = Math.sin(clarao * 42) * this.lado * 0.045 * (1 - clarao);
       }
     }
@@ -729,7 +790,17 @@ export class TokenVisual {
   private desenharMarcas() {
     this.marcas.clear();
     if (this.selecionado) {
-      this.marcas.circle(0, 0, this.raioQuadro * 1.04).stroke({ width: Math.max(2, this.lado * 0.03), color: '#ffffff', alpha: 0.9 });
+      const area = this.areaLivre;
+      const largura = Math.max(2, this.lado * 0.03);
+      if (area) {
+        // Corpo inteiro: um retângulo arredondado em volta da arte e da base, em vez do círculo.
+        const folga = this.lado * 0.05;
+        const x = area.pesX - area.largura / 2 - folga;
+        const y = area.topo - folga;
+        this.marcas.roundRect(x, y, area.largura + folga * 2, area.altura + folga * 2 + this.lado * 0.02, this.lado * 0.08).stroke({ width: largura, color: '#ffffff', alpha: 0.9 });
+      } else {
+        this.marcas.circle(0, 0, this.raioQuadro * 1.04).stroke({ width: largura, color: '#ffffff', alpha: 0.9 });
+      }
     }
     // Token-fonte (só o Mestre recebe isto): um "+" dourado no canto de cima à direita. Arrastar deixa uma cópia.
     if (this.dados.fonte) {

@@ -3,6 +3,7 @@ import { ArrowDownToLine, X } from 'lucide-react';
 import type { EstiloDeAura, EstiloDeLuz, IAuraToken, IEstadoMapa, ILuzToken, ITokenMapa, LadoToken, ParaQuem, TipoBarra, ITokenEdicao } from '../../../services/mapaApi';
 import { SeletorDeMoldura } from '../oficina/OficinaGaveta';
 import type { Enquadramento } from '../motor/molduras';
+import { FORMATOS_DO_TOKEN, formatoDoEnquadramento, type FormatoDoToken } from '../motor/formatoToken';
 import { NotaDoMestre } from './NotaDoMestre';
 import { NOTA_DO_JOGADOR_MAXIMA } from '../motor/notasDoMestre';
 import { ELEVACAO_MAXIMA, ELEVACAO_MINIMA, quedaDe } from '../motor/elevacaoConta';
@@ -164,6 +165,17 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
     onEnquadramento(novo);
   };
 
+  const formato = formatoDoEnquadramento(enquadramento);
+  const mudarFormato = (novo: FormatoDoToken) => {
+    if (novo === formato) return;
+    // O formato "redondo" é a ausência da chave: sai do enquadramento em vez de ficar escrito.
+    const { formato: _formatoAntigo, ...resto } = enquadramento;
+    const sem: Enquadramento = resto;
+    const completo: Enquadramento = novo === 'livre' ? { ...sem, formato: 'livre' } : sem;
+    setEnquadramento(completo);
+    onEnquadramento(completo);
+  };
+
   const alternarBarra = (tipo: TipoBarra) => {
     if (!config) return;
     const mostrar = config.mostrar.includes(tipo) ? config.mostrar.filter((b) => b !== tipo) : [...config.mostrar, tipo];
@@ -288,7 +300,22 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
             <button type="button" className={`mapa-botao${token.flip_x ? ' ativo' : ''}`} aria-pressed={token.flip_x} onClick={() => onEditar({ flip_x: !token.flip_x })}>Espelhar na horizontal</button>
             <button type="button" className={`mapa-botao${token.flip_y ? ' ativo' : ''}`} aria-pressed={token.flip_y} onClick={() => onEditar({ flip_y: !token.flip_y })}>Espelhar na vertical</button>
           </div>
-          {molduraMesa ? (
+          {temFotoDaFicha && (
+            <fieldset className="mapa-formato-token">
+              <legend>Formato do token</legend>
+              <div role="radiogroup" aria-label="Formato do token" className="mapa-menu-botoes">
+                {FORMATOS_DO_TOKEN.map((f) => (
+                  <button key={f.id} type="button" role="radio" aria-checked={formato === f.id} className={`mapa-botao${formato === f.id ? ' ativo' : ''}`} title={f.dica} onClick={() => mudarFormato(f.id)}>
+                    {f.rotulo}
+                  </button>
+                ))}
+              </div>
+              <small className="mapa-dica">{FORMATOS_DO_TOKEN.find((f) => f.id === formato)?.dica}</small>
+            </fieldset>
+          )}
+          {formato === 'livre' ? (
+            <p className="mapa-dica">No corpo inteiro não há moldura: a cor do lado aparece numa base sob os pés.</p>
+          ) : molduraMesa ? (
             <p className="mapa-dica">O Mestre escolheu uma moldura única para a mesa. A sua escolha volta quando ele liberar.</p>
           ) : (
             <>
@@ -304,9 +331,9 @@ export const MenuToken = ({ token, gestor, molduraMesa, onEditar, onNota, onMold
           )}
           {temFotoDaFicha && (
             <>
-              <label className="mapa-menu-linha">Zoom da foto <input type="range" min={1} max={4} step={0.02} value={enquadramento.zoom} onChange={(e) => mudarEnquadramento({ zoom: Number(e.target.value) })} /></label>
-              <label className="mapa-menu-linha">Foto para os lados <input type="range" min={-1} max={1} step={0.01} value={enquadramento.x} onChange={(e) => mudarEnquadramento({ x: Number(e.target.value) })} /></label>
-              <label className="mapa-menu-linha">Foto para cima ou baixo <input type="range" min={-1} max={1} step={0.01} value={enquadramento.y} onChange={(e) => mudarEnquadramento({ y: Number(e.target.value) })} /></label>
+              <label className="mapa-menu-linha">{formato === 'livre' ? 'Tamanho da arte' : 'Zoom da foto'} <input type="range" min={1} max={4} step={0.02} value={enquadramento.zoom} onChange={(e) => mudarEnquadramento({ zoom: Number(e.target.value) })} /></label>
+              <label className="mapa-menu-linha">{formato === 'livre' ? 'Arte para os lados' : 'Foto para os lados'} <input type="range" min={-1} max={1} step={0.01} value={enquadramento.x} onChange={(e) => mudarEnquadramento({ x: Number(e.target.value) })} /></label>
+              <label className="mapa-menu-linha">{formato === 'livre' ? 'Arte para cima ou baixo' : 'Foto para cima ou baixo'} <input type="range" min={-1} max={1} step={0.01} value={enquadramento.y} onChange={(e) => mudarEnquadramento({ y: Number(e.target.value) })} /></label>
             </>
           )}
         </div>

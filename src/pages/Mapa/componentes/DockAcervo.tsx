@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronRight, Clock3, Folder, FolderOpen, ImagePlus, Loader2, Map as MapaIcone, Package, Scissors, Search, Star, UserRound, X } from 'lucide-react';
+import { ChevronRight, Clock3, Folder, FolderOpen, ImagePlus, Inbox, Loader2, Map as MapaIcone, Package, Scissors, Search, Star, UserRound, X } from 'lucide-react';
 import { acervoApi, type IAcervo, type IItemAcervo, type TipoItemAcervo } from '../../../services/acervoApi';
 import { urlPedaco } from '../../../services/mapaApi';
 import { ComDica } from './BotaoFerramenta';
@@ -10,6 +10,9 @@ import {
 import {
   arrastaArquivos, enviarImagens, imagensParaEnviar, perguntarTipoDaImagem, textoDoAndamento, textoDoResultado, type AndamentoDoEnvio,
 } from './envioParaOAcervo';
+import {
+  MIME_MOVER_ITENS, MIME_MOVER_PASTA, arrastaItens, arrastaOrganizacao, arrastaPasta, descendentesDaPasta, empacotarIds, itensQueMudam, lerIds, podeMoverPasta, quantasImagens,
+} from '../acervo/organizacao';
 import './dockAcervo.css';
 
 interface Props {
@@ -69,6 +72,8 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
   const [andamento, setAndamento] = useState<AndamentoDoEnvio | null>(null);
   const [resultado, setResultado] = useState('');
   const [soltando, setSoltando] = useState(false);
+  /** O lugar (pasta, caminho ou botão da barra) por cima do qual há algo sendo arrastado. */
+  const [alvo, setAlvo] = useState<string | null>(null);
   const entrada = useRef<HTMLInputElement>(null);
   const tipoPendente = useRef<TipoItemAcervo>('mapa');
   const enviando = andamento !== null;
@@ -135,7 +140,7 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
   };
 
   /** Sobe as imagens para o Acervo, na pasta que a janela está mostrando (se for uma pasta). */
-  const subir = async (arquivos: FileList | File[], tipo: TipoItemAcervo) => {
+  const subir = async (arquivos: FileList | File[], tipo: TipoItemAcervo, pastaDestino?: string | null) => {
     const { imagens, deixadas } = imagensParaEnviar(arquivos);
     if (!imagens.length) {
       setResultado(textoDoResultado({ itens: [], falhas: [], deixadas: 0 }));
@@ -143,7 +148,8 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
     }
     setResultado('');
     setAndamento({ indice: 1, total: imagens.length, nome: imagens[0].name, feitos: 0, pedacos: 0 });
-    const feito = await enviarImagens(imagens, { tipo, pastaId: vista?.modo === 'pasta' ? vista.pastaId : null, aoAndamento: setAndamento });
+    const pastaId = pastaDestino !== undefined ? pastaDestino : vista?.modo === 'pasta' ? vista.pastaId : null;
+    const feito = await enviarImagens(imagens, { tipo, pastaId, aoAndamento: setAndamento });
     await carregar();
     setAndamento(null);
     setResultado(textoDoResultado({ ...feito, deixadas }));
@@ -174,6 +180,81 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
     }
     const tipo = vista?.modo === 'tipo' ? vista.tipo : await perguntarTipoDaImagem(imagens.length, imagens[0].name);
     if (tipo) await subir(arquivos, tipo);
+  };
+
+  const nomeDaPasta = (id: string | null) => (id === null ? 'fora de pasta' : `"${pastas.find((p) => p.id === id)?.nome ?? 'pasta'}"`);
+
+  /** Imagens soltas numa pasta mudam para ela; a tela muda na hora e, se o servidor recusar alguma, a lista é pedida de novo. */
+  const moverImagens = async (ids: string[], destino: string | null) => {
+    if (!acervo) return;
+    const mudam = itensQueMudam(acervo.itens, ids, destino);
+    if (!mudam.length) {
+      setResultado(`Já está em ${nomeDaPasta(destino)}.`);
+      return;
+    }
+    const idsQueMudam = new Set(mudam.map((i) => i.id));
+    setAcervo((atual) => atual && { ...atual, itens: atual.itens.map((i) => (idsQueMudam.has(i.id) ? { ...i, pasta_id: destino } : i)) });
+    const falhas = await acervoApi.moverItens(mudam.map((i) => i.id), destino);
+    if (falhas.length) await carregar();
+    const feitas = mudam.length - falhas.length;
+    setResultado(falhas.length ? `${quantasImagens(falhas.length)} não ${falhas.length === 1 ? 'pôde' : 'puderam'} mudar de pasta.` : `${quantasImagens(feitas)} ${feitas === 1 ? 'foi' : 'foram'} para ${nomeDaPasta(destino)}.`);
+  };
+
+  const moverPasta = async (id: string, destino: string | null) => {
+    if (!podeMoverPasta(pastas, id, destino)) {
+      if (destino === id || (destino !== null && descendentesDaPasta(pastas, id).has(destino))) setResultado('Uma pasta não cabe dentro dela mesma nem de uma das suas subpastas.');
+      return;
+    }
+    try {
+      await acervoApi.moverPasta(id, destino);
+      await carregar();
+      setResultado(`A pasta ${nomeDaPasta(id)} foi para ${nomeDaPasta(destino)}.`);
+    } catch (falha) {
+      setResultado(falha instanceof Error ? falha.message : 'Não deu para mover a pasta.');
+    }
+  };
+
+  /** Eventos de um lugar que recebe imagens, pastas ou arquivos do computador soltos em cima dele. */
+  const alvoDeSoltar = (chave: string, destino: string | null) => {
+    const aceita = (evento: React.DragEvent) => {
+      const tipos = evento.dataTransfer.types;
+      if (!arrastaOrganizacao(tipos) && !arrastaArquivos(tipos)) return false;
+      evento.preventDefault();
+      evento.dataTransfer.dropEffect = arrastaArquivos(tipos) ? 'copy' : 'move';
+      return true;
+    };
+    return {
+      onDragOver: (evento: React.DragEvent) => {
+        if (aceita(evento) && alvo !== chave) setAlvo(chave);
+      },
+      onDragEnter: (evento: React.DragEvent) => {
+        if (aceita(evento) && alvo !== chave) setAlvo(chave);
+      },
+      onDragLeave: (evento: React.DragEvent) => {
+        if (!evento.currentTarget.contains(evento.relatedTarget as Node | null)) setAlvo((atual) => (atual === chave ? null : atual));
+      },
+      onDrop: (evento: React.DragEvent) => {
+        const tipos = Array.from(evento.dataTransfer.types);
+        if (!arrastaOrganizacao(tipos) && !arrastaArquivos(tipos)) return;
+        evento.preventDefault();
+        evento.stopPropagation();
+        setAlvo(null);
+        setSoltando(false);
+        // O conteúdo do arrasto só se lê enquanto o evento ainda é síncrono.
+        const ids = arrastaItens(tipos) ? lerIds(evento.dataTransfer.getData(MIME_MOVER_ITENS)) : [];
+        const pastaArrastada = arrastaPasta(tipos) ? evento.dataTransfer.getData(MIME_MOVER_PASTA) : '';
+        const arquivos = arrastaArquivos(tipos) ? Array.from(evento.dataTransfer.files) : [];
+        if (ids.length) void moverImagens(ids, destino);
+        else if (pastaArrastada) void moverPasta(pastaArrastada, destino);
+        else if (arquivos.length && !enviando) {
+          void (async () => {
+            const tipo = vista?.modo === 'tipo' ? vista.tipo : await perguntarTipoDaImagem(arquivos.length, arquivos[0].name);
+            if (tipo) await subir(arquivos, tipo, destino);
+          })();
+        }
+      },
+      className: alvo === chave ? ' alvo' : '',
+    };
   };
 
   const titulo = !vista
@@ -234,12 +315,23 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
           <header>
             {vista.modo === 'pasta' ? (
               <nav className="mapa-dock-caminho" aria-label="Caminho da pasta">
-                {caminho.map((p, indice) => (
-                  <span key={p.id}>
-                    {indice > 0 && <ChevronRight size={13} />}
-                    <button type="button" className={p.id === pastaAtual ? 'atual' : ''} onClick={() => setVista({ modo: 'pasta', pastaId: p.id })}>{p.nome}</button>
-                  </span>
-                ))}
+                {(() => {
+                  const raiz = alvoDeSoltar('caminho:raiz', null);
+                  return (
+                    <button type="button" className={`mapa-dock-raiz${raiz.className}`} title="Fora de pasta (solte aqui para tirar da pasta)" aria-label="Voltar aos mapas, tokens e objetos" onClick={() => abrir({ modo: 'tipo', tipo: 'mapa' })} onDragOver={raiz.onDragOver} onDragEnter={raiz.onDragEnter} onDragLeave={raiz.onDragLeave} onDrop={raiz.onDrop}>
+                      <Inbox size={13} />
+                    </button>
+                  );
+                })()}
+                {caminho.map((p) => {
+                  const soltar = alvoDeSoltar(`caminho:${p.id}`, p.id);
+                  return (
+                    <span key={p.id}>
+                      <ChevronRight size={13} />
+                      <button type="button" className={`${p.id === pastaAtual ? 'atual' : ''}${soltar.className}`} onClick={() => setVista({ modo: 'pasta', pastaId: p.id })} onDragOver={soltar.onDragOver} onDragEnter={soltar.onDragEnter} onDragLeave={soltar.onDragLeave} onDrop={soltar.onDrop}>{p.nome}</button>
+                    </span>
+                  );
+                })}
               </nav>
             ) : (
               <strong>{titulo}</strong>
@@ -287,12 +379,30 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
             {acervo && buscaVazia(vista, busca) && <p className="mapa-dock-vazio">Digite o nome (ou uma etiqueta) da imagem que você quer pôr na cena.</p>}
             {acervo && !buscaVazia(vista, busca) && (
               <div className="mapa-dock-grade">
-                {filhas.map((pasta) => (
-                  <button key={pasta.id} type="button" className="mapa-dock-pasta" onClick={() => { setVista({ modo: 'pasta', pastaId: pasta.id }); setBusca(''); }}>
-                    <Folder size={26} />
-                    <span>{pasta.nome}</span>
-                  </button>
-                ))}
+                {filhas.map((pasta) => {
+                  const soltar = alvoDeSoltar(`tile:${pasta.id}`, pasta.id);
+                  return (
+                    <button
+                      key={pasta.id}
+                      type="button"
+                      className={`mapa-dock-pasta${soltar.className}`}
+                      draggable
+                      title={`${pasta.nome} (solte imagens aqui; arraste a pasta para outra)`}
+                      onClick={() => { setVista({ modo: 'pasta', pastaId: pasta.id }); setBusca(''); }}
+                      onDragStart={(evento) => {
+                        evento.dataTransfer.setData(MIME_MOVER_PASTA, pasta.id);
+                        evento.dataTransfer.effectAllowed = 'move';
+                      }}
+                      onDragOver={soltar.onDragOver}
+                      onDragEnter={soltar.onDragEnter}
+                      onDragLeave={soltar.onDragLeave}
+                      onDrop={soltar.onDrop}
+                    >
+                      <Folder size={26} />
+                      <span>{pasta.nome}</span>
+                    </button>
+                  );
+                })}
                 {itens.map((item) => {
                   const favorito = listas.favoritos.includes(item.id);
                   return (
@@ -306,7 +416,9 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
                         onDragStart={(evento) => {
                           lembrar(item.id);
                           evento.dataTransfer.setData(MIME_ACERVO, empacotarItem(item));
-                          evento.dataTransfer.effectAllowed = 'copy';
+                          // Solta no mapa: entra na cena. Solta numa pasta: muda de pasta.
+                          evento.dataTransfer.setData(MIME_MOVER_ITENS, empacotarIds([item.id]));
+                          evento.dataTransfer.effectAllowed = 'copyMove';
                         }}
                         onClick={() => escolher(item)}
                         onKeyDown={(evento) => {
@@ -379,8 +491,9 @@ export const DockAcervo = ({ gavetaAberta, versao = 0, onColocarMapa, onPorNaCen
           <div className="mapa-dock-pastas">
             {raizes.map((pasta) => {
               const ativo = raizAtiva === pasta.id;
+              const soltar = alvoDeSoltar(`dock:${pasta.id}`, pasta.id);
               return (
-                <button key={pasta.id} type="button" className={ativo ? 'ativo' : ''} aria-pressed={ativo} title={pasta.nome} onClick={() => abrir({ modo: 'pasta', pastaId: pasta.id })}>
+                <button key={pasta.id} type="button" className={`${ativo ? 'ativo' : ''}${soltar.className}`} aria-pressed={ativo} title={`${pasta.nome} (solte imagens aqui para guardar nesta pasta)`} onClick={() => abrir({ modo: 'pasta', pastaId: pasta.id })} onDragOver={soltar.onDragOver} onDragEnter={soltar.onDragEnter} onDragLeave={soltar.onDragLeave} onDrop={soltar.onDrop}>
                   <Folder size={16} /><span>{pasta.nome}</span>
                 </button>
               );

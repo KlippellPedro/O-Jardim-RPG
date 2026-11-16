@@ -4,14 +4,14 @@
 // cantos e gira pela alça de cima; o desenho da seleção mora numa camada própria, por cima dos tokens.
 
 import { Container, Graphics, Rectangle, Sprite, Texture } from 'pixi.js';
+import { areaDeCarga, zoomDeDetalhe } from './detalheConta';
+import { texturaNitida } from './texturas';
 import type { IMapaColocado } from '../../../services/mapaApi';
 import { urlPedaco } from '../../../services/mapaApi';
 import { LADO_LADRILHO } from './geometria';
 import { chavesDoFundo, detalheSempre } from './nevoaGeometria';
 import { cantosDoMapa, liberadosDoMapa, paraODesenho, pontoDaAlcaDeGiro } from './mapasColocadosConta';
 
-/** Com a tela mais perto que isso (escala da tela vezes a do mapa), vêm os ladrilhos cheios. */
-const ZOOM_DETALHE = 0.3;
 const COR_SELECAO = 0xc7a44c;
 const COR_TRANCADO = 0x8b8799;
 const LADO_AGARRE_PX = 11;
@@ -20,7 +20,7 @@ const RAIO_ALCA_PX = 12;
 async function texturaDe(url: string): Promise<Texture> {
   const resposta = await fetch(url, { credentials: 'same-origin' });
   if (!resposta.ok) throw new Error(`imagem ${resposta.status}`);
-  return Texture.from(await createImageBitmap(await resposta.blob()));
+  return texturaNitida(await createImageBitmap(await resposta.blob()));
 }
 
 /** Um mapa na tela: a imagem em ladrilhos, dentro de um contêiner que leva o lugar e a escala dele. */
@@ -92,12 +92,14 @@ class MapaVisual {
   async carregarDetalhe(visivel: Rectangle, zoomDaTela: number) {
     const { chaves, imagem_id: imagem, escala } = this.dados;
     if (!chaves.some((chave) => chave.startsWith('n2/'))) return;
-    const perto = zoomDaTela * escala >= ZOOM_DETALHE;
+    // Escala da tela vezes a do mapa: o limite desce em tela densa (ver zoomDeDetalhe).
+    const perto = zoomDaTela * escala >= zoomDeDetalhe();
     if (!perto && !this.liberados) return;
-    // A tela, nas coordenadas do desenho do mapa (com o mapa girado, a caixa dos quatro cantos da tela).
+    // A tela com uma folga em volta, nas coordenadas do desenho do mapa (com o mapa girado, a caixa dos quatro cantos).
+    const area = areaDeCarga(visivel);
     const cantosDaTela = [
-      { x: visivel.left, y: visivel.top }, { x: visivel.right, y: visivel.top },
-      { x: visivel.left, y: visivel.bottom }, { x: visivel.right, y: visivel.bottom },
+      { x: area.left, y: area.top }, { x: area.right, y: area.top },
+      { x: area.left, y: area.bottom }, { x: area.right, y: area.bottom },
     ].map((ponto) => paraODesenho(this.dados, ponto));
     const esquerda = Math.min(...cantosDaTela.map((p) => p.x));
     const direita = Math.max(...cantosDaTela.map((p) => p.x));
