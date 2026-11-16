@@ -53,6 +53,24 @@ def nome_limpo(valor, limite: int, campo: str) -> str:
     return texto[:limite]
 
 
+def chave_do_retrato(largura: int, altura: int) -> str:
+    """O pedaço que serve de retrato de token: a imagem inteira num arquivo só, no maior tamanho que isso permite.
+
+    Até 1024 px de lado é o ladrilho cheio. Acima disso, a versão em 1/4 (que só existe passando de 2048 px) cobre a
+    imagem toda até 4096 px de lado; o que passa disso só tem a miniatura inteira.
+    """
+    maior = max(largura, altura)
+    if maior <= LADO_LADRILHO:
+        return "n0/0/0"
+    if (
+        maior > LIMIAR_NIVEL_REDUZIDO
+        and math.ceil(largura / 4) <= LADO_LADRILHO
+        and math.ceil(altura / 4) <= LADO_LADRILHO
+    ):
+        return "n2/0/0"
+    return "mini"
+
+
 def etiquetas_limpas(valor) -> list[str]:
     if valor is None:
         return []

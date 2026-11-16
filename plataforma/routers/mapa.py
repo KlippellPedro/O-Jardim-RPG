@@ -29,7 +29,7 @@ from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
 from core import artes_token, calendario, construtor, desenhos_fixos, formas_token, zonas as zonas_da_cena, mapa, mapas_colocados, mesa_extras, movimento_token, nevoa, paredes, recursos_token, tempo_real, visao
-from core.acervo import ler as ler_pedaco
+from core.acervo import chave_do_retrato, ler as ler_pedaco
 from core.character_summary import bonus_escolhas_habilidade
 from core.condicoes import normalizar_condicoes
 from core.database import Database
@@ -852,7 +852,7 @@ def obter_mapa(
 
 def _item_do_mestre(connection, item_id: UUID, user: AuthenticatedUser):
     item = connection.execute(
-        "SELECT id, largura, altura, estado, dono_id FROM acervo_itens WHERE id=%s",
+        "SELECT id, largura, altura, estado, dono_id, etiquetas FROM acervo_itens WHERE id=%s",
         (item_id,),
     ).fetchone()
     if not item or (item["dono_id"] != user.id and not user.is_creator):
@@ -1234,8 +1234,11 @@ def criar_token(
             if not participante:
                 raise HTTPException(status_code=404, detail="participante nao encontrado")
             lado = payload.lado or participante["tipo"]
+        enquadramento: dict = {}
         if payload.imagem_id:
-            _item_do_mestre(connection, payload.imagem_id, user)
+            item = _item_do_mestre(connection, payload.imagem_id, user)
+            # A imagem pode pedir o formato do token (corpo inteiro): o token novo já nasce assim.
+            enquadramento = mapa.enquadramento_do_item(item["etiquetas"])
         if lado not in mapa.LADOS:
             raise HTTPException(status_code=422, detail="lado invalido")
         if payload.camada not in mapa.CAMADAS_TOKEN:
@@ -1248,11 +1251,12 @@ def criar_token(
             raise _erro_mapa(erro) from None
         connection.execute(
             """
-            INSERT INTO mapa_tokens (id, cena_id, personagem_id, participante_id, imagem_id, nome, x, y, porte, lado, oculto, barras, moldura, camada)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO mapa_tokens (id, cena_id, personagem_id, participante_id, imagem_id, nome, x, y, porte, lado, oculto, barras, moldura, camada, enquadramento)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (uuid4(), cena_id, payload.personagem_id, payload.participante_id, payload.imagem_id,
-             (payload.nome or "").strip() or None, x, y, porte, lado, payload.oculto, Jsonb(mapa.barras_padrao(lado)), moldura, payload.camada),
+             (payload.nome or "").strip() or None, x, y, porte, lado, payload.oculto, Jsonb(mapa.barras_padrao(lado)), moldura, payload.camada,
+             Jsonb(enquadramento)),
         )
         versao = _tocar(connection, cena_id)
         resposta = _montar(connection, campanha_id, acesso, user, cena_id)
@@ -1932,8 +1936,9 @@ def imagem_do_token(
         if token["imagem_id"]:
             item = connection.execute("SELECT largura, altura FROM acervo_itens WHERE id=%s", (token["imagem_id"],)).fetchone()
             if item:
-                chave = "n0/0/0" if max(item["largura"], item["altura"]) <= 1024 else "mini"
-                achado = ler_pedaco(connection, token["imagem_id"], chave)
+                # Antes só o ladrilho de até 1024 px passava inteiro; maior que isso virava a miniatura de 320 px, e o token
+                # ficava borrado no zoom. Agora a versão em 1/4 serve de retrato quando cobre a imagem toda.
+                achado = ler_pedaco(connection, token["imagem_id"], chave_do_retrato(item["largura"], item["altura"]))
         else:
             personagem = token["personagem_id"] or (participante or {}).get("personagem_id")
             if personagem:

@@ -176,6 +176,22 @@ def test_chaves_esperadas_cobrem_o_mapa_e_a_versao_reduzida():
         acervo.chaves_esperadas(0, 10)
 
 
+def test_retrato_do_token_usa_o_maior_pedaco_que_cobre_a_imagem_inteira():
+    # Até 1024 px: o ladrilho cheio é a imagem inteira.
+    assert acervo.chave_do_retrato(512, 768) == "n0/0/0"
+    assert acervo.chave_do_retrato(1024, 1024) == "n0/0/0"
+    # De 1025 a 2048 px não há versão em 1/4 e o ladrilho cheio é só um pedaço: sobra a miniatura.
+    assert acervo.chave_do_retrato(1536, 2048) == "mini"
+    # Acima de 2048 px a versão em 1/4 cobre tudo até 4096 px de lado (1024 px no pedaço).
+    assert acervo.chave_do_retrato(4096, 3000) == "n2/0/0"
+    assert acervo.chave_do_retrato(2100, 2100) == "n2/0/0"
+    # Passou de 4096: a versão em 1/4 tem mais de um ladrilho, então só a miniatura é inteira.
+    assert acervo.chave_do_retrato(5000, 3000) == "mini"
+    # O pedaço escolhido sempre existe na lista de chaves da imagem.
+    for largura, altura in ((512, 768), (1536, 2048), (4096, 3000), (5000, 3000)):
+        assert acervo.chave_do_retrato(largura, altura) in acervo.chaves_esperadas(largura, altura)
+
+
 def test_pedaco_confere_tipo_pelos_bytes():
     webp = b"RIFF\x10\x00\x00\x00WEBPVP8 " + b"\x00" * 8
     esperadas = ["mini", "n0/0/0"]
@@ -346,6 +362,35 @@ def test_enquadramento_tem_limites():
     for ruim in ({"zoom": 0.5}, {"zoom": 9}, {"x": 2}, {"y": "meio"}):
         with pytest.raises(ErroMapa):
             mapa.normalizar_enquadramento(ruim)
+
+
+def test_formato_do_token_so_e_guardado_quando_e_livre():
+    assert mapa.normalizar_enquadramento({"formato": "livre"}) == {"zoom": 1.0, "x": 0.0, "y": 0.0, "formato": "livre"}
+    livre = mapa.normalizar_enquadramento({"formato": "livre", "zoom": 2})
+    # Mexer no zoom ou no deslocamento não perde o formato.
+    assert mapa.normalizar_enquadramento({"x": 0.5}, livre) == {"zoom": 2.0, "x": 0.5, "y": 0.0, "formato": "livre"}
+    # Voltar ao redondo apaga a chave: o padrão é a ausência dela.
+    assert mapa.normalizar_enquadramento({"formato": "redondo"}, livre) == {"zoom": 2.0, "x": 0.0, "y": 0.0}
+    with pytest.raises(ErroMapa):
+        mapa.normalizar_enquadramento({"formato": "quadrado"})
+    # Chave que o servidor não conhece, vinda de dado antigo, não atravessa para a tela.
+    assert mapa.normalizar_enquadramento({}, {"zoom": 2, "lixo": 1, "formato": "outro"}) == {"zoom": 2, "x": 0.0, "y": 0.0}
+
+
+def test_imagem_do_acervo_pode_pedir_o_formato_livre_do_token():
+    assert mapa.enquadramento_do_item(["lobo", "formato:livre"]) == {"formato": "livre"}
+    assert mapa.enquadramento_do_item(["lobo", "casas:2"]) == {}
+    assert mapa.enquadramento_do_item(None) == {}
+    assert mapa.enquadramento_do_item([]) == {}
+
+
+def test_token_desconhecido_nao_entrega_o_formato():
+    # O formato livre mostra a arte inteira: quem não conhece o personagem vê o aro padrão, sem pista.
+    desconhecido = mapa.visao_token(token(participante_id="pa1"), participante(visibilidade="desconhecido"), ANA,
+                                    livre=False, enquadramento={"formato": "livre"})
+    assert desconhecido["enquadramento"] == mapa.ENQUADRAMENTO_PADRAO
+    conhecido = mapa.visao_token(token(participante_id="pa1"), participante(), ANA, livre=False, enquadramento={"formato": "livre"})
+    assert conhecido["enquadramento"]["formato"] == "livre"
 
 
 def test_desconhecido_nao_entrega_a_moldura_do_personagem():

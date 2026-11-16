@@ -52,6 +52,12 @@ MOLDURAS = (
     "arte-rosas-negras", "arte-borboletas", "arte-paladino-aco",
 )
 ENQUADRAMENTO_PADRAO = {"zoom": 1.0, "x": 0.0, "y": 0.0}
+#: Formato do token: "redondo" (o retrato recortado num círculo, com moldura: o padrão) ou "livre" (a arte inteira,
+#: sem círculo nem moldura: boneco de corpo inteiro, criatura comprida). Só "livre" é guardado no enquadramento
+#: (chave `formato`); o padrão é a ausência da chave. A mesma regra vive em src/pages/Mapa/motor/formatoToken.ts.
+FORMATOS_TOKEN = ("redondo", "livre")
+#: Etiqueta de uma imagem do Acervo que faz os tokens novos feitos dela nascerem no formato livre.
+ETIQUETA_FORMATO_LIVRE = "formato:livre"
 
 GRADE_PADRAO = {
     "tipo": "quadrada",
@@ -322,9 +328,17 @@ def normalizar_moldura(valor) -> str | None:
 
 
 def normalizar_enquadramento(dados, atual: dict | None = None) -> dict:
-    """Zoom de 1 a 4 e deslocamento de -1 a 1 (fração do raio) da foto dentro do círculo."""
+    """Zoom de 1 a 4 e deslocamento de -1 a 1 (fração do raio) da foto dentro do círculo, e o formato do token.
+
+    No formato livre o zoom aumenta a arte inteira (1 é o ajuste automático) e x e y a empurram.
+    """
     enquadramento = dict(ENQUADRAMENTO_PADRAO)
-    enquadramento.update(atual or {})
+    # Do que já estava guardado só entram as chaves conhecidas: lixo antigo não atravessa para a tela.
+    for chave in ("zoom", "x", "y"):
+        if isinstance(atual, dict) and chave in atual:
+            enquadramento[chave] = atual[chave]
+    if isinstance(atual, dict) and atual.get("formato") == "livre":
+        enquadramento["formato"] = "livre"
     if not isinstance(dados, dict):
         raise ErroMapa("enquadramento invalido")
     if "zoom" in dados:
@@ -332,7 +346,21 @@ def normalizar_enquadramento(dados, atual: dict | None = None) -> dict:
     for eixo in ("x", "y"):
         if eixo in dados:
             enquadramento[eixo] = _numero(dados[eixo], f"deslocamento {eixo}", -1, 1)
+    if "formato" in dados:
+        if dados["formato"] not in FORMATOS_TOKEN:
+            raise ErroMapa("formato do token invalido")
+        if dados["formato"] == "livre":
+            enquadramento["formato"] = "livre"
+        else:
+            enquadramento.pop("formato", None)
     return enquadramento
+
+
+def enquadramento_do_item(etiquetas) -> dict:
+    """O enquadramento com que um token novo nasce de uma imagem do Acervo: livre se a imagem pede, senão vazio (o padrão)."""
+    if isinstance(etiquetas, (list, tuple)) and ETIQUETA_FORMATO_LIVRE in etiquetas:
+        return {"formato": "livre"}
+    return {}
 
 
 def _area_do_clima(dados, largura: int, altura: int) -> dict | None:

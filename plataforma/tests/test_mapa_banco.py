@@ -235,6 +235,64 @@ class MapaBancoTests(unittest.TestCase):
         with self.assertRaises(HTTPException):
             mapa.imagem_do_token(self.campanha_id, token_id, user=self.bruno, database=self.database)
 
+    def _item_marcado(self, largura, altura, nome):
+        """Como `_item`, mas cada pedaço leva o nome da própria chave nos bytes: dá para saber qual deles foi servido."""
+        criado = acervo.criar_item(acervo.ItemInput(nome=nome, largura=largura, altura=altura), user=self.mestre, database=self.database)
+        item_id = uuid.UUID(criado["id"])
+        with self.database.connection() as connection:
+            for chave in criado["chaves"]:
+                acervo_core.salvar(connection, item_id, chave, "image/webp", WEBP + chave.encode())
+        acervo.concluir_item(item_id, user=self.mestre, database=self.database)
+        return item_id
+
+    def test_retrato_do_token_de_imagem_grande_usa_a_versao_reduzida_inteira_e_nao_a_miniatura(self):
+        self._sessao()
+        cena = uuid.UUID(self.criar_cena()["cena"]["id"])
+        esperado = {"Pequeno": (800, 600, b"n0/0/0"), "Medio": (1536, 1024, b"mini"), "Grande": (2400, 1200, b"n2/0/0"), "Enorme": (5000, 3000, b"mini")}
+        for nome, (largura, altura, _) in esperado.items():
+            item_id = self._item_marcado(largura, altura, nome)
+            mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(imagem_id=item_id, nome=nome, x=100, y=100), user=self.mestre, database=self.database)
+        for token in self.ver(self.mestre)["tokens"]:
+            resposta = mapa.imagem_do_token(self.campanha_id, uuid.UUID(token["id"]), user=self.mestre, database=self.database)
+            self.assertTrue(resposta.body.endswith(esperado[token["nome"]][2]), f'{token["nome"]}: {resposta.body[-8:]!r}')
+
+    def test_token_de_imagem_com_a_etiqueta_nasce_em_corpo_inteiro_e_o_formato_se_troca(self):
+        self._sessao()
+        item_id = self._item_marcado(500, 1000, "Guerreiro")
+        acervo.editar_item(item_id, acervo.ItemEdicao(etiquetas=["heroi", "formato:livre"]), user=self.mestre, database=self.database)
+        cena = uuid.UUID(self.criar_cena()["cena"]["id"])
+        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(imagem_id=item_id, nome="Guerreiro", x=100, y=100), user=self.mestre, database=self.database)
+        token = self.ver(self.mestre)["tokens"][0]
+        self.assertEqual(token["enquadramento"], {"zoom": 1.0, "x": 0.0, "y": 0.0, "formato": "livre"})
+        # Tirada a etiqueta, o token novo da mesma imagem nasce redondo; o que já existe não muda.
+        acervo.editar_item(item_id, acervo.ItemEdicao(etiquetas=["heroi"]), user=self.mestre, database=self.database)
+        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(imagem_id=item_id, nome="Segundo", x=300, y=100), user=self.mestre, database=self.database)
+        por_nome = {t["nome"]: t for t in self.ver(self.mestre)["tokens"]}
+        self.assertNotIn("formato", por_nome["Segundo"]["enquadramento"])
+        self.assertEqual(por_nome["Guerreiro"]["enquadramento"]["formato"], "livre")
+        # O Mestre troca o formato de um token pelo menu dele (o zoom escolhido fica).
+        token_id = uuid.UUID(token["id"])
+        mapa.editar_token(self.campanha_id, token_id, mapa.TokenEdicao(enquadramento={"formato": "redondo", "zoom": 2}), user=self.mestre, database=self.database)
+        mudado = next(t for t in self.ver(self.mestre)["tokens"] if t["id"] == token["id"])
+        self.assertEqual(mudado["enquadramento"], {"zoom": 2.0, "x": 0.0, "y": 0.0})
+        mapa.editar_token(self.campanha_id, token_id, mapa.TokenEdicao(enquadramento={"formato": "livre"}), user=self.mestre, database=self.database)
+        volta = next(t for t in self.ver(self.mestre)["tokens"] if t["id"] == token["id"])
+        self.assertEqual(volta["enquadramento"], {"zoom": 2.0, "x": 0.0, "y": 0.0, "formato": "livre"})
+        with self.assertRaises(HTTPException) as erro:
+            mapa.editar_token(self.campanha_id, token_id, mapa.TokenEdicao(enquadramento={"formato": "quadrado"}), user=self.mestre, database=self.database)
+        self.assertEqual(erro.exception.status_code, 422)
+
+    def test_personagem_pode_usar_o_corpo_inteiro_nas_artes_dele(self):
+        self._sessao()
+        cena = uuid.UUID(self.criar_cena()["cena"]["id"])
+        mapa.criar_token(self.campanha_id, cena, mapa.TokenInput(personagem_id=self.mira, x=150, y=150), user=self.mestre, database=self.database)
+        mapa.editar_token_do_personagem(self.campanha_id, self.mira, mapa.TokenDoPersonagemInput(enquadramento={"formato": "livre"}), user=self.ana, database=self.database)
+        da_ana = next(t for t in self.ver(self.bruno)["tokens"] if t["nome"] == "Mira")
+        self.assertEqual(da_ana["enquadramento"]["formato"], "livre")
+        mapa.editar_token_do_personagem(self.campanha_id, self.mira, mapa.TokenDoPersonagemInput(enquadramento={"formato": "redondo"}), user=self.ana, database=self.database)
+        da_ana = next(t for t in self.ver(self.bruno)["tokens"] if t["nome"] == "Mira")
+        self.assertNotIn("formato", da_ana["enquadramento"])
+
     # ------------------------------------------------------------- molduras
 
     def test_jogador_escolhe_moldura_do_proprio_personagem_e_mestre_trava_a_da_mesa(self):
