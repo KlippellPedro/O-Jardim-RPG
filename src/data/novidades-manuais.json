@@ -2,6 +2,31 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-17-livro-cenas-e-grupo-texto-simples",
+      "data": "2026-11-17",
+      "tipo": "melhoria",
+      "area": "Livro de Regras",
+      "titulo": "Capítulo Cenas e Grupo mais fácil de ler",
+      "detalhes": [
+        "Os nove tópicos do capítulo 4 (Ações Coletivas, Pontos de Relação, Ataques Combinados, Perseguições a Pé, Conflito Social, Infiltração, Investigações, Batalha em Massa e Mesa ao Vivo) foram reescritos em linguagem mais direta, com menos descrição de cena e mais explicação de como a regra funciona.",
+        "Nas tabelas de manobras, abordagens e ordens, cada linha agora diz em uma frase simples o que o personagem faz, com o teste e o resultado logo embaixo.",
+        "Nenhuma regra mudou: números, testes e efeitos continuam os mesmos."
+      ]
+    },
+    {
+      "id": "2026-11-17-livro-revisao-de-texto-geral",
+      "data": "2026-11-17",
+      "tipo": "melhoria",
+      "area": "Livro de Regras",
+      "titulo": "Texto do Livro mais direto em todos os capítulos",
+      "detalhes": [
+        "As aberturas de Viagem, Perigos do Ambiente, Tempo Entre Aventuras, Facções em Movimento, Contatos e Laços, Ferimentos, Combate, Marcas e Cicatrizes, Frutos e Implantes e outros tópicos agora dizem logo para que a regra serve, sem rodeio.",
+        "Frases de efeito no meio das regras foram trocadas por explicações simples.",
+        "Os bônus dos conjuntos de equipamento (Caminhante, Estudioso e Sentinela) mostram só o efeito, como \"+5 de Estamina máxima\".",
+        "Nenhuma regra mudou: números, testes e efeitos continuam os mesmos."
+      ]
+    },
+    {
       "id": "2026-11-16-mapa-acervo-organizado-token-corpo-inteiro-e-nitidez",
       "data": "2026-11-16",
       "tipo": "melhoria",

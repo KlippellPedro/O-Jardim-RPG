@@ -112,7 +112,7 @@ export const REGRA_FACCOES_EM_MOVIMENTO: RegraTopicoDe<'Livro do Jogador'> = {
     ['Quando', 'a cada intervalo'],
   ],
   corpo: `
-    <p class="regras-lead">Enquanto vocês dormem na estalagem, a guilda compra mais um armazém no cais, a ordem manda mais uma carta ao conselho e alguém, num porão, risca mais um nome da lista. As facções têm os próprios planos, e eles andam com ou sem o grupo. Esta página mostra como.</p>
+    <p class="regras-lead">As facções têm planos próprios e avançam neles com ou sem o grupo. Esta página mostra como o Mestre acompanha esses planos com relógios, e como o grupo pode ajudar ou atrapalhar.</p>
 
     <div class="regras-resumo">
       <ul>
@@ -165,7 +165,7 @@ export const REGRA_FACCOES_EM_MOVIMENTO: RegraTopicoDe<'Livro do Jogador'> = {
     <h3 class="regras-subtitle">Escrever o objetivo</h3>
     <ul class="regras-list">
       <li>Um verbo e uma coisa concreta: controlar o cais, achar o Fruto perdido, casar a herdeira com o filho do cônsul. "Ficar mais forte" não fecha relógio nenhum.</li>
-      <li>Decida o que muda no mundo quando o relógio fechar antes de começar. É isso que você vai contar na hora, e é isso que dá motivo à mesa para agir.</li>
+      <li>Decida o que muda no mundo quando o relógio fechar antes de começar. Assim você tem o que contar na hora, e o grupo tem um motivo para agir antes.</li>
       <li>Escolha o rótulo que a mesa vê antes da descoberta: uma pista do plano, sem a solução.</li>
     </ul>
 

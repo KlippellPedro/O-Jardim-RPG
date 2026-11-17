@@ -138,7 +138,7 @@ export const REGRA_CONTATOS_LACOS: RegraTopicoDe<'Livro do Jogador'> = {
     ['Laços', `até ${LACOS_MAXIMOS}`],
   ],
   corpo: `
-    <p class="regras-lead">A velha que responde a carta no mesmo dia, o escrivão que carimba sem ler, o amigo de infância que você jurou proteger. Ninguém atravessa o Jardim sozinho. Esta página dá peso a essas pessoas: o contato é quem atende quando vocês chamam, e o laço é quem faz o personagem levantar quando seria mais fácil ficar sentado.</p>
+    <p class="regras-lead">Esta página trata das pessoas que o grupo conhece. Um contato é alguém que ajuda quando vocês pedem, como um informante ou um escrivão. Um laço é alguém importante para o personagem, que dá a ele um motivo para agir.</p>
 
     <div class="regras-resumo">
       <ul>
@@ -197,22 +197,22 @@ export const REGRA_CONTATOS_LACOS: RegraTopicoDe<'Livro do Jogador'> = {
       <li><strong>Uma vez por sessão para cada laço,</strong> num teste feito por causa dele (para proteger, ajudar, alcançar ou vingar aquela pessoa), role com vantagem.</li>
       <li><strong>Laço rompido:</strong> quando a pessoa morre, trai ou some, o personagem testa Sanidade contra a DT Padrão do nível dele, com perda de ${PERDA_DE_LACO_ROMPIDO} (<span class="regras-ref regras-ref--condicoes">Condições</span>). A mesa pode aplicar Luto Profundo, uma condição de longo prazo. Se a pessoa é do grupo e você tem <span class="regras-ref regras-ref--pontos-de-relacao">Pontos de Relação</span> com ela, role uma vez só, pela tabela dos pontos.</li>
       <li><strong>Laço muda:</strong> no fim de cada arco, cada um pode reescrever ou trocar um laço. O rompido costuma virar outro: "vou achar quem fez isso".</li>
-      <li><strong>Laço é de quem escreve.</strong> A outra pessoa não precisa sentir o mesmo, e a diferença costuma render as melhores cenas.</li>
+      <li><strong>Laço é de quem escreve.</strong> A outra pessoa não precisa sentir o mesmo.</li>
     </ul>
   `,
   corpoMestre: `
-    <p class="regras-lead">Contatos e laços são as cordas que prendem o grupo ao mundo. Puxe por elas: o contato que pede ajuda e a pessoa do laço em perigo abrem sessão melhor que qualquer cartaz de missão.</p>
+    <p class="regras-lead">Contatos e laços ligam o grupo ao mundo. Use os dois para começar aventuras: um contato que pede ajuda ou a pessoa de um laço em perigo dão ao grupo um motivo pessoal para agir.</p>
 
     <h3 class="regras-subtitle">Contatos na mesa</h3>
     <ul class="regras-list">
-      <li>Dê ao contato um desejo próprio e um defeito. O escrivão quer se aposentar; a informante bebe demais. É isso que faz a Dívida ter cara.</li>
+      <li>Dê ao contato um desejo próprio e um defeito. O escrivão quer se aposentar; a informante bebe demais. Assim, quando o grupo ficar devendo, você já sabe o que esse contato vai pedir.</li>
       <li>Cobre a Dívida num momento em que custe, sem tornar impossível. O pedido bom chega quando o grupo está ocupado com outra coisa.</li>
       <li>Um contato ameaçado é gancho pronto: quando a Procura sobe ou uma facção inimiga avança, é por ele que o mundo chega ao grupo.</li>
     </ul>
 
     <h3 class="regras-subtitle">Laços na mesa</h3>
     <ul class="regras-list">
-      <li>Leia os laços antes de preparar a sessão. Uma cena por arco com a pessoa de um laço vale mais que qualquer tesouro.</li>
+      <li>Leia os laços antes de preparar a sessão. Tente pôr uma cena por arco com a pessoa de algum laço.</li>
       <li>Romper um laço é a coisa mais forte que você pode fazer com um personagem. Faça raramente, com aviso na ficção, e nunca só para punir.</li>
       <li>A vantagem é pequena de propósito. O valor do laço está na decisão que ele provoca, e a regra só lembra a mesa de que ele existe.</li>
     </ul>

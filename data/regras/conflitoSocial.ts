@@ -17,9 +17,8 @@ export interface INivelResistencia {
 export interface IAbordagemSocial {
   id: string;
   titulo: string;
-  /** Uma fala de exemplo, para o jogador lembrar que abordagem é o que o
-   *  personagem diz, e não só o nome da perícia. */
-  fala: string;
+  /** O que o personagem faz, em uma frase simples. */
+  descricao: string;
   teste: string;
   efeito: string;
   risco: string;
@@ -35,18 +34,18 @@ export const AJUSTE_MAXIMO_REPUTACAO = 2;
 export const NIVEIS_RESISTENCIA: readonly INivelResistencia[] = [
   {
     pontos: 3,
-    quando: 'A pessoa até quer ajudar, e só precisa de um motivo que a proteja depois.',
-    exemplo: 'Um escriba que odeia o patrão e está esperando a desculpa certa; uma guarda que acha a ordem injusta e tem filho para criar.',
+    quando: 'A pessoa até quer ajudar, só precisa de um bom motivo.',
+    exemplo: 'Um escriba que não gosta do patrão; uma guarda que acha a ordem injusta.',
   },
   {
     pontos: 5,
-    quando: 'Ceder custa alguma coisa concreta a ela: dinheiro, tempo, posição ou risco.',
-    exemplo: 'Uma mercadora que perde o contrato do ano se vender para vocês; um capitão que vai responder pelo portão que abrir.',
+    quando: 'Ceder custa alguma coisa a ela: dinheiro, tempo, posição ou risco.',
+    exemplo: 'Uma mercadora que perde um bom contrato se vender para vocês; um capitão que vai ser punido se abrir o portão.',
   },
   {
     pontos: 8,
-    quando: 'A posição dela é pública, jurada, ou foi imposta por alguém mais forte.',
-    exemplo: 'Um juiz numa audiência cheia de gente olhando; alguém com a família nas mãos de terceiros, que sorri para não chorar.',
+    quando: 'Ela tem uma posição pública ou um juramento a defender, ou está sendo forçada por alguém mais forte.',
+    exemplo: 'Um juiz numa audiência pública; alguém que tem a família ameaçada por outra pessoa.',
   },
 ];
 
@@ -54,7 +53,7 @@ export const ABORDAGENS_SOCIAIS: readonly IAbordagemSocial[] = [
   {
     id: 'interesse',
     titulo: 'Mostrar o interesse dela',
-    fala: 'Pense no que acontece com o seu negócio se ele ganhar essa disputa.',
+    descricao: 'Mostrar o que ela ganha ou perde com a decisão.',
     teste: 'Diplomacia',
     efeito: 'Tira 1 de Resistência. Tira 2 se o argumento usa algo que o grupo descobriu sobre ela.',
     risco: 'Falha só custa a rodada.',
@@ -62,7 +61,7 @@ export const ABORDAGENS_SOCIAIS: readonly IAbordagemSocial[] = [
   {
     id: 'pressao',
     titulo: 'Pressionar',
-    fala: 'Eu sei onde a sua irmã mora. E você sabe que eu sei.',
+    descricao: 'Ameaçar ou intimidar a pessoa.',
     teste: 'Intimidação',
     efeito: 'Tira 1 de Resistência, e 2 quando a ameaça é verdadeira e a pessoa sabe disso.',
     risco: 'Falha enche 1 de Paciência. Ameaça vazia enche 1 mesmo em sucesso.',
@@ -70,7 +69,7 @@ export const ABORDAGENS_SOCIAIS: readonly IAbordagemSocial[] = [
   {
     id: 'mentira',
     titulo: 'Mentir com utilidade',
-    fala: 'O conselho já decidiu. A gente só veio avisar por educação.',
+    descricao: 'Contar uma mentira que ajude a convencer.',
     teste: 'Enganação contra Intuição',
     efeito: 'Tira 1 de Resistência agora.',
     risco: 'Mentira descoberta depois devolve toda a Resistência que ela tirou.',
@@ -78,7 +77,7 @@ export const ABORDAGENS_SOCIAIS: readonly IAbordagemSocial[] = [
   {
     id: 'prova',
     titulo: 'Apresentar prova',
-    fala: 'Esta carta tem a sua letra e o seu selo. Quer ler em voz alta, ou eu leio?',
+    descricao: 'Mostrar um documento, objeto ou registro que prove o que vocês dizem.',
     teste: 'Investigação, Conhecimento ou Tecnologia',
     efeito: 'Tira 2 de Resistência. Vale uma vez por prova.',
     risco: 'Prova fraca enche 1 de Paciência.',
@@ -86,15 +85,15 @@ export const ABORDAGENS_SOCIAIS: readonly IAbordagemSocial[] = [
   {
     id: 'ler',
     titulo: 'Ler a pessoa',
-    fala: 'Você olhou para a porta duas vezes quando eu falei do porto.',
+    descricao: 'Prestar atenção nas reações da pessoa para entender o que ela quer.',
     teste: 'Intuição',
     efeito: 'Não tira Resistência. Em troca, entrega o que ela quer de verdade ou revela o Limite dela.',
-    risco: 'Falha entrega uma leitura errada, que o Mestre diz com a mesma convicção.',
+    risco: 'Na falha, o Mestre dá uma leitura errada sem avisar que ela está errada.',
   },
   {
     id: 'status',
     titulo: 'Puxar posição ou nome',
-    fala: 'Minha família serve a esta casa há três gerações. Pergunte ao seu pai.',
+    descricao: 'Usar o seu título, família, cargo ou fama para pesar na conversa.',
     teste: 'Nobreza ou Atuação',
     efeito: 'Tira 1 de Resistência, e 2 quando ela deve obediência ou respeito a esse nome: serve à sua casa, jurou à sua ordem ou depende de quem você representa.',
     risco: 'Contra quem odeia o seu nome, enche 1 de Paciência.',
@@ -102,18 +101,18 @@ export const ABORDAGENS_SOCIAIS: readonly IAbordagemSocial[] = [
   {
     id: 'oferta',
     titulo: 'Oferecer algo concreto',
-    fala: 'A dívida com o Banco some amanhã, e ninguém precisa saber de onde veio o dinheiro.',
+    descricao: 'Oferecer dinheiro, um favor ou algo de valor em troca.',
     teste: 'nenhum',
     efeito: 'Tira 1 de Resistência por oferta que custe de verdade ao grupo: dinheiro, favor, segredo, Prestígio.',
-    risco: 'Oferta pequena demais enche 1 de Paciência e queima a ideia.',
+    risco: 'Oferta pequena demais enche 1 de Paciência, e essa oferta não pode ser feita de novo.',
   },
   {
     id: 'ceder',
     titulo: 'Ceder alguma coisa',
-    fala: 'Fique com a carga. A gente só quer o nome de quem mandou.',
+    descricao: 'Abrir mão de algo que o grupo queria para fechar o acordo.',
     teste: 'nenhum',
     efeito: 'Tira 2 de Resistência quando o grupo abre mão de algo que queria nesta negociação.',
-    risco: 'A concessão vale, e a outra parte vai cobrar exatamente o que foi prometido.',
+    risco: 'A outra parte vai cobrar o que foi prometido.',
   },
 ];
 
@@ -165,25 +164,25 @@ const tabelaResistencia = NIVEIS_RESISTENCIA.map((nivel) => `
 `).join('');
 
 const tabelaAbordagens = ABORDAGENS_SOCIAIS.map((abordagem) => `
-  <tr><td><strong>${abordagem.titulo}</strong></td><td>“${abordagem.fala}”<small class="regras-mecanica"><strong>Teste:</strong> ${abordagem.teste}. <strong>Sucesso:</strong> ${abordagem.efeito} <strong>Risco:</strong> ${abordagem.risco}</small></td></tr>
+  <tr><td><strong>${abordagem.titulo}</strong></td><td>${abordagem.descricao}<small class="regras-mecanica"><strong>Teste:</strong> ${abordagem.teste}. <strong>Sucesso:</strong> ${abordagem.efeito} <strong>Risco:</strong> ${abordagem.risco}</small></td></tr>
 `).join('');
 
 export const REGRA_CONFLITO_SOCIAL: RegraTopicoDe<'Combate e Mecânicas'> = {
   categoria: 'Combate e Mecânicas',
   status: 'Regra oficial',
-  resumo: 'Interrogatório, negociação e audiência resolvidos em rodadas, com a Resistência de quem está do outro lado descendo a cada bom argumento e a Paciência dele subindo a cada palavra errada.',
+  resumo: 'Interrogatório, negociação e audiência resolvidos em rodadas: bons argumentos baixam a Resistência da outra pessoa, e erros enchem a Paciência dela.',
   destaques: [
     ['Resistência', '3, 5 ou 8'],
     ['Paciência', `${PACIENCIA_MAXIMA} partes`],
     ['Por rodada', 'Uma abordagem por personagem'],
   ],
   corpo: `
-    <p class="regras-lead">Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo para dizer, e cada palavra errada fecha uma porta. Um pedido simples continua sendo um teste só. Este tópico é para as outras conversas: arrancar a verdade de um preso, fechar preço com quem não precisa vender, convencer um conselho que já decidiu antes de vocês entrarem.</p>
+    <p class="regras-lead">Um pedido simples se resolve com um teste só. Esta regra é para conversas difíceis, em que a outra pessoa tem motivo para dizer não: um interrogatório, uma negociação dura ou uma audiência.</p>
 
     <div class="regras-resumo">
       <ul>
         <li>A conversa difícil é resolvida em rodadas, com duas contagens: a <strong>Resistência</strong> da pessoa desce a cada argumento que funciona, e a <strong>Paciência</strong> dela sobe a cada erro.</li>
-        <li>Cada personagem faz uma abordagem por rodada: diga o que fala, com a voz do personagem, e só depois role. A DT é a Padrão do nível do grupo, ou a Difícil quando a pessoa tem posição a defender.</li>
+        <li>Cada personagem faz uma abordagem por rodada: diga o que o personagem fala e só depois role. A DT é a Padrão do nível do grupo, ou a Difícil quando a pessoa tem posição a defender.</li>
         <li>Resistência a 0 faz a pessoa ceder, sempre dentro do <strong>Limite</strong>, que é o que ela não faz de jeito nenhum. Paciência cheia encerra a conversa pior do que ela começou.</li>
         <li>A Paciência tem ${PACIENCIA_MAXIMA} partes. Num interrogatório, cada ponto de Resistência que cai entrega uma informação na hora.</li>
       </ul>
@@ -191,9 +190,9 @@ export const REGRA_CONFLITO_SOCIAL: RegraTopicoDe<'Combate e Mecânicas'> = {
 
     <h3 class="regras-subtitle">As duas contagens</h3>
     <ul class="regras-list">
-      <li><strong>Resistência</strong> é o quanto falta para a pessoa ceder. Ela desce com argumento, prova, pressão e concessão, e a mesa vê isso acontecer: a pessoa senta, serve uma bebida, baixa a voz.</li>
-      <li><strong>Paciência</strong> é o quanto falta para ela encerrar a conversa. São ${PACIENCIA_MAXIMA} partes, e elas enchem com erro, ameaça vazia, repetição e insistência no assunto errado. A mesa vê isso também: braços cruzados, um olhar para o guarda, respostas de uma palavra.</li>
-      <li><strong>Limite</strong> é a única coisa que ela não faz de jeito nenhum. Entregar o próprio filho, trair o juramento, assinar a própria prisão. Resistência zerada nunca atravessa o Limite.</li>
+      <li><strong>Resistência</strong> é o quanto falta para a pessoa ceder. Ela desce com bons argumentos, provas, pressão e ofertas.</li>
+      <li><strong>Paciência</strong> é o quanto falta para ela encerrar a conversa. São ${PACIENCIA_MAXIMA} partes, que enchem com erros, ameaças vazias, repetição e insistência num assunto que a incomoda.</li>
+      <li><strong>Limite</strong> é o que ela não faz de jeito nenhum, como trair a família ou confessar um crime que a levaria à prisão. Mesmo com a Resistência a 0, ela não passa do Limite.</li>
     </ul>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Resistência</th><th>Quando usar</th></tr></thead>
@@ -202,32 +201,32 @@ export const REGRA_CONFLITO_SOCIAL: RegraTopicoDe<'Combate e Mecânicas'> = {
 
     <h3 class="regras-subtitle">A rodada</h3>
     <ol class="regras-steps">
-      <li>Cada personagem faz uma abordagem por rodada, na ordem que a conversa pedir. Primeiro diz o que fala, com a voz do personagem, e só depois rola. Ajudar alguém segue as regras de <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span>.</li>
+      <li>Cada personagem faz uma abordagem por rodada, na ordem que fizer sentido na conversa. Primeiro você diz o que o personagem fala, e só depois rola. Ajudar alguém segue as regras de <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span>.</li>
       <li>A DT é a Padrão do nível do grupo. Use a Difícil quando a pessoa tem posição pública a defender ou já foi enganada antes.</li>
       <li>Sucesso tira Resistência. Falha custa a rodada, e as abordagens agressivas ainda enchem a Paciência.</li>
       <li>Repetir a mesma abordagem sem trazer nada novo enche 1 de Paciência, mesmo quando o teste passa.</li>
-      <li>A outra parte responde. Ela pergunta, pede garantia, chantageia de volta, e é nessa resposta que o grupo descobre o que ela quer.</li>
+      <li>A outra pessoa responde: faz perguntas, pede garantias ou faz uma contraproposta. Pela resposta, o grupo vai descobrindo o que ela quer.</li>
     </ol>
-    <p class="regras-note">O Prestígio com a facção da pessoa ajusta a rolagem de toda abordagem em no máximo ${AJUSTE_MAXIMO_REPUTACAO}, para cima ou para baixo, pela mesma regra de <span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>. Ele entra só na rolagem e nunca tira Resistência a mais: um mesmo fato não gera dois ajustes. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.</p>
+    <p class="regras-note">O Prestígio com a facção da pessoa ajusta a rolagem de toda abordagem em no máximo ${AJUSTE_MAXIMO_REPUTACAO}, para cima ou para baixo, pela mesma regra de <span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>. Ele entra só na rolagem e nunca tira Resistência a mais.</p>
 
     <h3 class="regras-subtitle">Abordagens</h3>
-    <p>Cada abordagem traz uma fala de exemplo e, embaixo, como se resolve. A fala serve de faísca: diga a sua, do jeito do seu personagem.</p>
+    <p>Cada abordagem diz o que o personagem faz e, embaixo, o teste e o resultado.</p>
     <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Abordagem</th><th>Uma fala, e como se resolve</th></tr></thead>
+      <thead><tr><th>Abordagem</th><th>O que é, e como se resolve</th></tr></thead>
       <tbody>${tabelaAbordagens}</tbody>
     </table></div>
 
     <h3 class="regras-subtitle">Como termina</h3>
     <ul class="regras-list">
-      <li><strong>Resistência a 0:</strong> a pessoa cede do jeito dela, dentro do que ela pode e dentro do Limite. Ela diz o que quer em troca, e cumprir isso passa a ser problema do grupo.</li>
-      <li><strong>Paciência cheia:</strong> a conversa acaba pior do que começou. A cadeira arrasta, a porta fecha, e reabrir exige uma pessoa nova, uma prova nova ou tempo.</li>
-      <li><strong>Ninguém chegou ao fim:</strong> a conversa fica em aberto. Guardem as duas contagens: quando o assunto voltar, ele volta de onde parou.</li>
-      <li><strong>Num interrogatório,</strong> cada ponto de Resistência que cai entrega uma informação na hora. A verdade sai em pedaços, e o grupo decide quando já ouviu o bastante.</li>
+      <li><strong>Resistência a 0:</strong> a pessoa cede, dentro do que pode fazer e sem passar do Limite. Ela pode pedir algo em troca, e o grupo precisa cumprir.</li>
+      <li><strong>Paciência cheia:</strong> a pessoa encerra a conversa e fica menos disposta do que antes. Para tentar de novo, vocês precisam de outra pessoa para falar, de uma prova nova ou de esperar um tempo.</li>
+      <li><strong>Nenhuma das duas chegou ao fim:</strong> a conversa fica em aberto. Anotem as duas contagens: quando o assunto voltar, a conversa continua de onde parou.</li>
+      <li><strong>Num interrogatório,</strong> cada ponto de Resistência que cai entrega uma informação na hora, e o grupo pode parar quando já tiver o que precisa.</li>
     </ul>
-    <p class="regras-note">Nenhuma dessas rolagens controla a mente de ninguém. Elas mudam a posição de uma pessoa que continua decidindo por conta própria, e é por isso que o Limite existe.</p>
+    <p class="regras-note">Essas rolagens não controlam a mente de ninguém. A pessoa continua decidindo por conta própria, e por isso existe o Limite.</p>
   `,
   corpoMestre: `
-    <p class="regras-lead">Escreva três coisas antes de a conversa começar: quanto de Resistência, qual o Limite e o que essa pessoa quer de verdade. Com as três na mão, você improvisa a cena inteira sem travar, e a pessoa do outro lado da mesa parece ter uma vida inteira atrás dela.</p>
+    <p class="regras-lead">Escreva três coisas antes de a conversa começar: quanto de Resistência, qual o Limite e o que essa pessoa quer de verdade. Com as três na mão, você consegue improvisar a conversa inteira sem travar.</p>
 
     <h3 class="regras-subtitle">Escolher os números</h3>
     <ul class="regras-list">

@@ -54,12 +54,12 @@ export const CONJUNTOS_EQUIPAMENTO: IConjuntoEquipamento[] = [
     bonus: [
       {
         pecas: 2,
-        descricao: 'O corpo aprende o ritmo da viagem: +5 de Estamina máxima.',
+        descricao: '+5 de Estamina máxima.',
         efeitos: [{ categoria: 'recurso', alvo: 'estaminaMaxima', modo: 'bonus', valor: 5 }],
       },
       {
         pecas: 3,
-        descricao: 'Tudo no lugar e nenhum passo desperdiçado: +3 m de Movimento.',
+        descricao: '+3 m de Movimento.',
         efeitos: [{ categoria: 'combate', alvo: 'movimento', modo: 'bonus', valor: 3 }],
       },
     ],
@@ -72,12 +72,12 @@ export const CONJUNTOS_EQUIPAMENTO: IConjuntoEquipamento[] = [
     bonus: [
       {
         pecas: 2,
-        descricao: 'Anotar rende: +5 de Mana máxima.',
+        descricao: '+5 de Mana máxima.',
         efeitos: [{ categoria: 'recurso', alvo: 'manaMaxima', modo: 'bonus', valor: 5 }],
       },
       {
         pecas: 3,
-        descricao: 'Com tudo à mão, pensar fica mais fácil: +1 em Inteligência.',
+        descricao: '+1 em Inteligência.',
         efeitos: [{ categoria: 'atributo', alvo: 'inteligencia', modo: 'bonus', valor: 1 }],
       },
     ],
@@ -95,17 +95,17 @@ export const CONJUNTOS_EQUIPAMENTO: IConjuntoEquipamento[] = [
     bonus: [
       {
         pecas: 2,
-        descricao: 'Pronto antes do alarme: +1 em Iniciativa.',
+        descricao: '+1 em Iniciativa.',
         efeitos: [{ categoria: 'combate', alvo: 'iniciativa', modo: 'bonus', valor: 1 }],
       },
       {
         pecas: 3,
-        descricao: 'Quem faz ronda aprende a não dar as costas: +1 de Defesa.',
+        descricao: '+1 de Defesa.',
         efeitos: [{ categoria: 'combate', alvo: 'defesa', modo: 'bonus', valor: 1 }],
       },
       {
         pecas: 4,
-        descricao: 'Nada passa despercebido: vantagem em Percepção.',
+        descricao: 'Vantagem em Percepção.',
         efeitos: [{ categoria: 'pericia', alvo: 'percepcao', modo: 'vantagem', valor: 1 }],
       },
     ],

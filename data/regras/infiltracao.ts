@@ -54,7 +54,7 @@ export const ABORDAGENS_DE_INFILTRACAO: readonly IAbordagemDeInfiltracao[] = [
   {
     id: 'escondido',
     titulo: 'Passar escondido',
-    cena: 'Rente à parede, na sombra do toldo, no tempo exato em que o guarda vira a cabeça.',
+    cena: 'Passar sem ser visto, aproveitando as sombras e a hora em que ninguém está olhando.',
     teste: 'Teste de Grupo de Furtividade',
     efeito: 'O grupo avança uma etapa.',
     falha: 'O Alerta sobe 1.',
@@ -62,7 +62,7 @@ export const ABORDAGENS_DE_INFILTRACAO: readonly IAbordagemDeInfiltracao[] = [
   {
     id: 'disfarce',
     titulo: 'Ser quem não é',
-    cena: 'O avental de copeiro, a bandeja na mão, o passo de quem está atrasado e não quer bronca.',
+    cena: 'Se passar por alguém que pode estar ali, como um criado ou um guarda.',
     teste: 'Enganação ou Atuação; o Kit de Disfarce dá vantagem',
     efeito: 'Avança uma etapa, e o disfarce vale nas próximas onde aquele papel é esperado.',
     falha: 'O Alerta sobe 1 e o disfarce fica queimado daqui para frente.',
@@ -70,7 +70,7 @@ export const ABORDAGENS_DE_INFILTRACAO: readonly IAbordagemDeInfiltracao[] = [
   {
     id: 'abrir',
     titulo: 'Abrir caminho',
-    cena: 'O clique da gazua, a tranca de runas que esfria sob os dedos, o painel que pede uma senha.',
+    cena: 'Abrir uma porta, tranca ou selo para passar por um caminho sem vigia.',
     teste: 'Ladinagem (Kit de Arrombamento dá vantagem), Misticismo para selo, Tecnologia para tranca A.X.I.S',
     efeito: 'Avança uma etapa por uma porta que ninguém vigia.',
     falha: 'O Alerta sobe 1. Falhar por 5 ou mais dispara o que protegia a porta.',
@@ -78,7 +78,7 @@ export const ABORDAGENS_DE_INFILTRACAO: readonly IAbordagemDeInfiltracao[] = [
   {
     id: 'calar',
     titulo: 'Calar alguém',
-    cena: 'Uma mão na boca, um golpe na nuca, o corpo arrastado para trás das caixas.',
+    cena: 'Derrubar ou imobilizar alguém sem fazer barulho.',
     teste: 'Luta ou Atletismo contra 10 + Reflexos do alvo, com vantagem se ele não viu você',
     efeito: 'Avança uma etapa e tira aquela pessoa do caminho.',
     falha: 'Vira combate ali mesmo, e o Alerta sobe 2.',
@@ -86,15 +86,15 @@ export const ABORDAGENS_DE_INFILTRACAO: readonly IAbordagemDeInfiltracao[] = [
   {
     id: 'distrair',
     titulo: 'Distrair',
-    cena: 'Uma garrafa que se quebra no outro corredor, um cavalo solto no pátio, um grito de incêndio.',
+    cena: 'Chamar a atenção dos guardas para outro lugar.',
     teste: 'Atuação, Enganação ou o teste de uma magia',
     efeito: 'Não avança, e a próxima abordagem desta etapa ganha vantagem.',
-    falha: 'O Alerta sobe 1, porque alguém foi ver e voltou desconfiado.',
+    falha: 'O Alerta sobe 1, porque alguém foi ver o que era e voltou desconfiado.',
   },
   {
     id: 'estudar',
     titulo: 'Estudar o caminho',
-    cena: 'Contar os passos da ronda, ler a planta pela janela, ouvir a troca de turno.',
+    cena: 'Observar a ronda, o caminho ou a troca de turno antes de agir.',
     teste: 'Investigação ou Percepção',
     efeito: 'Não avança. Revela o que há na próxima etapa (guarda, armadilha, rota) e dá vantagem na abordagem seguinte. Uma vez por etapa.',
     falha: 'Só custa o tempo.',
@@ -161,14 +161,14 @@ const etapasDoTamanho = TAMANHOS_DE_LUGAR.map((tamanho) => `${tamanho.etapas} nu
 export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
   categoria: 'Combate e Mecânicas',
   status: 'Regra oficial',
-  resumo: 'Entrar onde não se é bem-vindo, pegar o que se veio buscar e sair antes de alguém perceber. Duas contagens à vista: as Etapas até o objetivo e o Alerta do lugar.',
+  resumo: 'Entrar escondido num lugar, pegar o que veio buscar e sair sem ser pego. A cena usa duas contagens: as Etapas até o objetivo e o Alerta do lugar.',
   destaques: [
     ['Etapas', '2 a 4, mais a saída'],
     ['Alerta', '4, 6 ou 8 partes'],
     ['Teste base', 'Furtividade em grupo'],
   ],
   corpo: `
-    <p class="regras-lead">O plano parecia simples na mesa da taverna. Agora tem uma ronda que não estava no mapa, uma porta com tranca nova e um cachorro que levantou a orelha. A infiltração anda em rodadas curtas, e cada uma pergunta a mesma coisa: vocês passam por mais esse pedaço, ou alguém percebe?</p>
+    <p class="regras-lead">Use esta regra quando o grupo precisa entrar escondido num lugar vigiado, como uma mansão, um quartel ou um cofre. O caminho é dividido em etapas, e a cada rodada o grupo tenta passar por mais uma sem ser percebido.</p>
 
     <div class="regras-resumo">
       <ul>
@@ -189,26 +189,26 @@ export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
     <ul class="regras-list">
       <li><strong>Etapas:</strong> ${etapasDoTamanho}. A saída é sempre mais ${ETAPAS_DE_SAIDA}, depois do objetivo.</li>
       <li><strong>DT:</strong> a Padrão do nível do lugar. A etapa do objetivo, e todas num lugar Fechado, usam a Difícil.</li>
-      <li><strong>Preparo vale:</strong> uma planta do lugar, um uniforme roubado, um guarda subornado. Cada preparo bom dá vantagem numa etapa ou apaga 1 de Alerta antes de começar.</li>
+      <li><strong>Preparação ajuda:</strong> uma planta do lugar, um uniforme roubado, um guarda subornado. Cada preparo bom dá vantagem numa etapa ou apaga 1 de Alerta antes de começar.</li>
     </ul>
 
     <h3 class="regras-subtitle">A rodada</h3>
     <ol class="regras-steps">
       <li>O Mestre descreve o que há entre o grupo e a próxima etapa: um pátio aberto, um corredor com ronda, uma porta trancada, uma sala cheia de gente.</li>
-      <li>O grupo escolhe uma abordagem e quem a lidera, dizendo o que faz com o corpo e com a voz.</li>
+      <li>O grupo escolhe uma abordagem e quem vai liderar, e diz como vai fazer.</li>
       <li>Resolvam o teste. Os outros podem Ajudar, como em <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span>, quando a abordagem permite.</li>
-      <li>Sucesso avança uma etapa. Sucesso por 10 ou mais avança e o Mestre entrega um presente: um atalho, uma chave, uma conversa ouvida.</li>
+      <li>Sucesso avança uma etapa. Sucesso por 10 ou mais avança e o grupo ganha algo a mais, como um atalho, uma chave ou uma informação.</li>
       <li>Falha sobe o Alerta em 1, e a falha crítica em 2. O grupo escolhe se fica onde está ou força a passagem.</li>
     </ol>
 
     <h3 class="regras-subtitle">Abordagens</h3>
-    <p>Diga a cena antes de rolar: ela diz ao Mestre o que pode dar errado. Magia, item e habilidade de classe entram como abordagem, com o teste que já usam.</p>
+    <p>Diga como você faz antes de rolar. Magia, item e habilidade de classe também contam como abordagem, com o teste que já usam.</p>
     <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Abordagem</th><th>Como é, e como se resolve</th></tr></thead>
+      <thead><tr><th>Abordagem</th><th>O que é, e como se resolve</th></tr></thead>
       <tbody>${tabelaAbordagens}</tbody>
     </table></div>
     <ul class="regras-list">
-      <li><strong>Passar escondido é de todo mundo:</strong> todos os expostos testam, e o grupo passa se pelo menos metade passar. Quem tem armadura com penalidade sente aqui.</li>
+      <li><strong>Em Passar escondido, todo mundo testa:</strong> o grupo passa se pelo menos metade passar. Armadura com penalidade atrapalha aqui.</li>
       <li><strong>O grupo pode se separar.</strong> Cada parte vira uma infiltração com as suas próprias Etapas, e o Alerta continua um só, porque o lugar é um só.</li>
       <li><strong>Armadilhas no caminho</strong> seguem <span class="regras-ref regras-ref--perigos">Perigos do Ambiente</span>. Disparar uma sobe o Alerta em 1.</li>
     </ul>
@@ -216,13 +216,13 @@ export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
     <h3 class="regras-subtitle">O Alerta</h3>
     <ul class="regras-list">
       <li><strong>Calmo:</strong> menos da metade pintada. O lugar segue a rotina.</li>
-      <li><strong>Desconfiança:</strong> metade ou mais. As rondas dobram, alguém foi chamar o capitão, e todas as etapas passam a usar a DT Difícil.</li>
+      <li><strong>Desconfiança:</strong> metade ou mais. Os guardas ficam atentos, e todas as etapas passam a usar a DT Difícil.</li>
       <li><strong>Alarme:</strong> cheio. O lugar inteiro sabe. O grupo escolhe entre fugir (uma <span class="regras-ref regras-ref--perseguicao-a-pe">Perseguição a Pé</span> que começa em Curta), lutar (com reforço chegando a cada rodada) ou se render.</li>
-      <li><strong>O Alerta só desce</strong> com ação concreta: esconder o corpo, devolver a chave antes que sintam falta, convencer o guarda de que foi o gato. Cada ação dessas apaga 1, e é uma rodada inteira.</li>
+      <li><strong>O Alerta só desce</strong> com uma ação concreta, como esconder alguém desacordado, devolver uma chave ou convencer um guarda de que não foi nada. Cada ação dessas leva uma rodada inteira e apaga 1.</li>
       <li><strong>Rastro na saída:</strong> se o objetivo deixou marca (cofre aberto, refém levado, corpo no chão), o Alerta sobe 1 quando a saída começa.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem, chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a Pop Star distrai o mordomo (a etapa não avança, e a próxima abordagem ganha vantagem), e na rodada seguinte a Ladinagem com vantagem abre o cofre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.</p>
+      <p>O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a Pop Star distrai o mordomo (a etapa não avança, e a próxima abordagem ganha vantagem), e na rodada seguinte a Ladinagem com vantagem abre o cofre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.</p>
     </div>
   `,
   corpoMestre: `
@@ -245,7 +245,7 @@ export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
     <h3 class="regras-subtitle">Mostrar o Alerta</h3>
     <ul class="regras-list">
       <li>Cada parte pintada aparece na ficção: uma vela acesa num quarto que estava escuro, um guarda que para e escuta, um cachorro que late uma vez só.</li>
-      <li>Diga em voz alta o que acontece quando o Alerta encher, antes da primeira rodada. Ameaça conhecida é a que faz a mesa sussurrar.</li>
+      <li>Diga em voz alta o que acontece quando o Alerta encher, antes da primeira rodada. Saber o que está em jogo deixa a cena mais tensa.</li>
     </ul>
   `,
 };

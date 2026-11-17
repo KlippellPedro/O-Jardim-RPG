@@ -70,9 +70,9 @@ export const romano = (numero: number): string => {
 /** Apresentação de cada capítulo: abre a página do capítulo no PDF e o cartão dele no site. */
 export const APRESENTACAO_DOS_CAPITULOS: Record<string, string> = {
   'primeiros-passos': 'Se esta é a sua primeira vez, comece por aqui. Os três tópicos explicam o que é o jogo, levam você pela criação de um personagem de nível 1 e reúnem as contas que a ficha faz sozinha.',
-  personagem: 'Quem o seu personagem é e no que ele vira. Raças e classes dão a base, perícias e poderes dizem o que ele sabe fazer, e o resto cuida do que acontece entre uma aventura e outra: treino, descanso, experiência, aliados e escolhas permanentes.',
-  combate: 'A luta, do primeiro turno à cicatriz que fica depois. Estão aqui as ações de cada turno, os tipos de dano, o que acontece quando alguém cai, como o corpo se recupera, o que pode grudar em quem apanha e o que o próprio caminho cobra: queda, falta de ar, fome, clima e armadilhas.',
-  cenas: 'Nem toda tensão vira combate. Estes tópicos tratam das cenas em que o grupo age junto: ajudar, atacar ao mesmo tempo, correr atrás de alguém, negociar duro, entrar onde não é bem-vindo, resolver um mistério, lutar no meio de um exército e jogar com a mesa ao vivo no site.',
+  personagem: 'Raças e classes dão a base do personagem, perícias e poderes dizem o que ele sabe fazer, e o resto cuida do que acontece entre uma aventura e outra: treino, descanso, experiência, aliados e escolhas permanentes.',
+  combate: 'Tudo sobre luta: as ações de cada turno, os tipos de dano, o que acontece quando alguém cai, como o corpo se recupera, as condições que afetam quem é atingido e os perigos do caminho, como queda, falta de ar, fome, clima e armadilhas.',
+  cenas: 'Regras para as cenas em que o grupo age junto: ajudar, confiar uns nos outros, atacar ao mesmo tempo, correr atrás de alguém, negociar, entrar escondido, resolver um mistério, lutar no meio de um exército e jogar com a mesa ao vivo no site.',
   magia: 'Como a magia funciona no Jardim: de onde ela vem, quanto custa conjurar, como os elementos se derivam e o que rituais, selos e marcas acrescentam. A lista completa de magias está no Catálogo Mágico.',
   itens: 'Tudo o que se carrega, se melhora e se fabrica: equipamentos, raridades, modificações, criação e os materiais que entram nelas.',
   veiculos: 'Quem dirige, o que acontece numa perseguição, quanto custa manter uma máquina rodando, como se paga uma viagem e como se atravessa a estrada por conta própria.',

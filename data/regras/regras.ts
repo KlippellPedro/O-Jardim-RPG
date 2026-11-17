@@ -495,7 +495,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">O que é um RPG de mesa</h3>
       <p>Um grupo de pessoas conta uma história junto. Cada jogador controla um personagem e decide o que ele tenta fazer. Uma pessoa, o Mestre, descreve o mundo, interpreta todo o resto e diz o que acontece depois de cada escolha.</p>
-      <p>Ninguém ganha e ninguém perde. O que existe é uma história que sai melhor quando todo mundo empurra junto. As regras deste livro entram só quando o resultado de uma tentativa é incerto e ninguém quer decidir no dedo: aí o dado decide.</p>
+      <p>Ninguém ganha nem perde. O objetivo é contar juntos uma história boa para todo mundo. As regras deste livro entram só quando o resultado de uma tentativa é incerto e ninguém quer decidir no dedo: aí o dado decide.</p>
 
       <h3 class="regras-subtitle">Quem faz o quê</h3>
       <ul class="regras-list">
@@ -522,7 +522,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </div>
 
       <h3 class="regras-subtitle">Como uma sessão anda</h3>
-      <p>Fora de combate o jogo é conversa: o Mestre descreve, você responde, e só se rola dado quando há risco de verdade. Quando a briga começa, o tempo é fatiado para caber todo mundo.</p>
+      <p>Fora de combate o jogo é conversa: o Mestre descreve, você responde, e só se rola dado quando há risco de verdade. Quando começa uma luta, o tempo é dividido em rodadas para que todos possam agir.</p>
       <ul class="regras-list">
         <li><strong>Cena:</strong> um trecho contínuo de história. A conversa com o guarda é uma cena; a emboscada logo depois é outra.</li>
         <li><strong>Rodada:</strong> dentro de um combate, o intervalo em que todo mundo age uma vez. São mais ou menos seis segundos de ficção.</li>
@@ -667,7 +667,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ${TABELA_FAIXAS_DE_OFICIO}
       <ul class="regras-list">
         <li><strong>Os itens saem da Loja.</strong> Escolha armas, armaduras, equipamentos e consumíveis vendidos na Feira, na raridade que a faixa permite. Eles entram no inventário como se tivessem sido comprados. A vaga de incomum aceita um comum no lugar.</li>
-        <li><strong>Item escrito por você conta como comum.</strong> Um alaúde gasto, a tesoura do alfaiate, a pena do escriba. O Mestre aprova o que não estiver no catálogo.</li>
+        <li><strong>Item escrito por você conta como comum.</strong> Por exemplo: um alaúde, uma tesoura de alfaiate, uma pena de escrever. O Mestre aprova o que não estiver no catálogo.</li>
         <li><strong>Os contatos entram nos seus Vínculos.</strong> Amigo e Conhecido seguem a Confiança de <span class="regras-ref regras-ref--contatos-lacos">Contatos e Laços</span>. Dê nome e rosto a cada um.</li>
         <li><strong>O Especialista começa devendo.</strong> Alguém pagou a formação dele, e essa pessoa entra nos Vínculos como uma Dívida para você combinar com o Mestre.</li>
         <li><strong>A renda vale no tempo entre aventuras.</strong> Cada dia trabalhando no ofício paga o valor da faixa, pela atividade Trabalhar no ofício de <span class="regras-ref regras-ref--entre-aventuras">Tempo Entre Aventuras</span>, e quase tudo vai no custo de vida. O que chega à carteira é a sobra. Na Carteira da ficha, o botão Receber soma a sobra dos dias trabalhados e deixa o registro no extrato.</li>
@@ -859,7 +859,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Crítico', '20 natural'],
     ],
     corpo: `
-      <p class="regras-lead">É esta conta, e é sempre esta conta. Perícia, ataque, resistência: muda o atributo e muda o grau, o resto é igual.</p>
+      <p class="regras-lead">Todo teste usa a mesma conta, seja de perícia, de ataque ou de resistência. Só mudam o atributo e o grau.</p>
       <div class="regras-formula">d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau</div>
 
       <div class="regras-resumo">
@@ -968,7 +968,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Declaração', 'antes da rolagem'],
     ],
     corpo: `
-      <p class="regras-lead">Nem toda ação coletiva usa a mesma resolução. Se uma pessoa executa a tarefa e as outras dão suporte, use <strong>Ajudar</strong>. Se todos estão expostos ao mesmo desafio e cada integrante importa, use um <strong>Teste de Grupo</strong>.</p>
+      <p class="regras-lead">Quando o grupo age junto, use uma destas duas regras. Se uma pessoa faz a tarefa e as outras ajudam, use <strong>Ajudar</strong>. Se todos enfrentam o mesmo desafio ao mesmo tempo, use um <strong>Teste de Grupo</strong>.</p>
 
       <div class="regras-resumo">
         <ul>
@@ -980,28 +980,28 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Ajudar</h3>
       <ol class="regras-steps">
-        <li>Antes da rolagem principal, o ajudante descreve uma contribuição concreta e escolhe uma perícia adequada. Ela pode ser a mesma do líder ou outra que realmente ajude naquela situação.</li>
-        <li>Em combate, ajudar gasta uma <strong>Ação Padrão</strong>. Fora de combate, gasta tempo compatível com a tarefa.</li>
+        <li>Antes da rolagem principal, o ajudante diz como vai ajudar e escolhe uma perícia. Ela pode ser a mesma do líder ou outra que faça sentido na situação.</li>
+        <li>Em combate, ajudar gasta uma <strong>Ação Padrão</strong>. Fora de combate, gasta o mesmo tempo da tarefa.</li>
         <li>O ajudante faz seu teste contra DT 10 em uma tarefa fixa. Em um desafio que escala por nível, use DT 10 + ⌊nível do desafio ÷ 2⌋.</li>
         <li>Em sucesso, o teste principal recebe +2. Em sucesso crítico, recebe vantagem em vez de +2.</li>
-        <li>Falha não concede bônus. Falha crítica também não impõe penalidade automática, mas pode produzir uma complicação quando a tentativa já envolvia risco real.</li>
+        <li>Falha não dá bônus. Falha crítica também não dá penalidade automática, mas pode causar uma complicação se a tarefa já era arriscada.</li>
       </ol>
       <ul class="regras-list">
-        <li>No máximo <strong>dois ajudantes</strong> concedem bônus ao mesmo teste. Dois sucessos comuns chegam a +4.</li>
-        <li>Cada contribuição precisa ser diferente e possível na ficção. Repetir a mesma ideia com mais pessoas não multiplica o bônus.</li>
+        <li>No máximo <strong>dois ajudantes</strong> dão bônus ao mesmo teste. Dois sucessos comuns chegam a +4.</li>
+        <li>Cada ajuda precisa ser diferente e fazer sentido na cena. Várias pessoas fazendo a mesma coisa contam como uma ajuda só.</li>
         <li>O líder precisa aceitar a ajuda e só rola depois que os ajudantes resolverem suas tentativas.</li>
-        <li>O Mestre pode dispensar o teste do ajudante quando a contribuição é automática, mas ela continua ocupando ação ou tempo.</li>
-        <li>Ajudar não transfere proficiência, poder, imunidade ou permissão especial ao líder.</li>
+        <li>O Mestre pode dispensar o teste do ajudante quando a ajuda é garantida, mas ela continua gastando a ação ou o tempo.</li>
+        <li>Ajudar não passa proficiência, poder, imunidade ou permissão especial para o líder.</li>
         <li>Quem tem <span class="regras-ref regras-ref--pontos-de-relacao">Pontos de Relação</span> com o líder pode gastar um uso para a Ajuda certa: a ajuda passa sem teste, dá vantagem no lugar do +2 e, em combate, custa a reação no lugar da Ação Padrão.</li>
       </ul>
 
       <h3 class="regras-subtitle">Teste de Grupo</h3>
-      <p>Use quando todos precisam atravessar o mesmo perigo: o grupo inteiro se esgueirando, escalando, resistindo a uma tempestade ou mantendo uma história convincente diante de vários observadores.</p>
+      <p>Use quando todos precisam passar pelo mesmo desafio: o grupo inteiro se escondendo, escalando, resistindo a uma tempestade ou sustentando uma mentira na frente de várias pessoas.</p>
       <ol class="regras-steps">
-        <li>Todos os participantes expostos fazem o teste indicado contra a mesma DT.</li>
-        <li>O grupo vence se pelo menos metade dos participantes, arredondada para cima, obtiver sucesso.</li>
+        <li>Todos os participantes fazem o mesmo teste contra a mesma DT.</li>
+        <li>O grupo passa se pelo menos metade dos participantes, arredondada para cima, tiver sucesso.</li>
         <li>Cada sucesso crítico conta como dois sucessos. Cada falha crítica cancela um sucesso antes da contagem.</li>
-        <li>Se o grupo falhar, a consequência atinge o grupo ou apenas quem falhou, conforme a natureza do perigo. O Mestre informa qual leitura vale antes das rolagens.</li>
+        <li>Se o grupo falhar, a consequência atinge o grupo todo ou só quem falhou, conforme o perigo. O Mestre avisa qual das duas vale antes das rolagens.</li>
       </ol>
       <div class="regras-note regras-note--exemplo">
         <p>Quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conseguir dois sucessos comuns e uma falha crítica, a falha crítica cancela um deles e o grupo falha.</p>
@@ -1011,12 +1011,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Se só uma pessoa precisa executar a tarefa, escolha um líder e use Ajudar.</li>
         <li>Se cada falha gera uma consequência individual independente, resolva os testes separadamente.</li>
-        <li>Se a ação exige treinamento ou permissão que parte do grupo não possui, quem não cumpre o requisito não pode ser escondido dentro da média.</li>
+        <li>Se a ação exige um treinamento ou permissão que parte do grupo não tem, quem não cumpre o requisito não pode contar com os sucessos dos outros para passar.</li>
         <li>Não combine Ajudar e Teste de Grupo na mesma resolução, salvo quando uma habilidade disser expressamente que pode.</li>
       </ul>
 
       <h3 class="regras-subtitle">Ações coletivas maiores</h3>
-      <p>Projetos de vários dias usam as regras da atividade correspondente, como <span class="regras-ref regras-ref--treinar">treinamento</span>, ritual ou <span class="regras-ref regras-ref--crafting">fabricação</span>. Ataques sincronizados usam <span class="regras-ref regras-ref--ataques-combinados">Ataques Combinados</span>. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.</p>
+      <p>Projetos de vários dias usam as regras da própria atividade, como <span class="regras-ref regras-ref--treinar">treinamento</span>, ritual ou <span class="regras-ref regras-ref--crafting">fabricação</span>. Ataques sincronizados usam <span class="regras-ref regras-ref--ataques-combinados">Ataques Combinados</span>. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">A pergunta que resolve quase toda dúvida aqui é uma só: uma pessoa executa e as outras apoiam, ou todo mundo está exposto ao mesmo perigo? A primeira é Ajudar, a segunda é Teste de Grupo, e misturar as duas é o erro comum.</p>
@@ -1070,7 +1070,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Ataque', 'Luta/Pontaria vs. Defesa'],
     ],
     corpo: `
-      <p class="regras-lead">Combate começa quando a conversa acaba e alguém decide resolver no golpe. Este tópico reúne o que você faz no seu turno, como acertar um ataque, como segurar ou derrubar alguém, como se defender e o que as reações permitem. Dano, ferimentos e condições têm tópicos próprios, indicados ao longo do texto.</p>
+      <p class="regras-lead">O combate começa quando alguém parte para a briga. Este tópico reúne o que você faz no seu turno, como acertar um ataque, como segurar ou derrubar alguém, como se defender e o que as reações permitem. Dano, ferimentos e condições têm tópicos próprios, indicados ao longo do texto.</p>
 
       <div class="regras-resumo">
         <ul>
@@ -1215,7 +1215,7 @@ ${HTML_MORAL}
       <p>Depois de um combate, o corpo cobra o que ele custou: veja <span class="regras-ref regras-ref--ferimentos">Ferimentos</span> e <span class="regras-ref regras-ref--descanso">Descanso</span>.</p>
     `,
     corpoMestre: `
-      <p class="regras-lead">Um encontro se monta de trás para frente: você decide quantas rodadas ele deve durar, e daí sai a Vida dos inimigos. Começar escolhendo o monstro e torcer é o caminho mais curto para um combate de dez rodadas que ninguém queria.</p>
+      <p class="regras-lead">Um encontro se monta de trás para frente: você decide quantas rodadas ele deve durar, e daí sai a Vida dos inimigos. Se você escolhe o monstro primeiro e torce para dar certo, é fácil acabar com um combate de dez rodadas.</p>
 
       <h3 class="regras-subtitle">Papéis de inimigo</h3>
       <p>Cada papel tem uma faixa de acerto e de dano calibrada contra o alvo apropriado, que costuma ser um personagem de linha de frente para golpe físico e um personagem exposto para ameaça de posicionamento.</p>
@@ -1229,7 +1229,7 @@ ${HTML_MORAL}
           <tr><td><strong>Efeito de área</strong></td><td>DT padrão do nível</td><td>15% a 25% por alvo</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Golpe de chefe que tira metade da Vida precisa ser anunciado na rodada anterior. Sem aviso, ele deixa de ser desafio e vira imposto.</p>
+      <p class="regras-note">Golpe de chefe que tira metade da Vida precisa ser anunciado na rodada anterior. Sem aviso, os jogadores não têm como reagir, e o golpe parece injusto.</p>
 
       <h3 class="regras-subtitle">Orçamento do encontro</h3>
       <ul class="regras-list">
@@ -1365,7 +1365,7 @@ ${HTML_MORAL}
       ['Dado', 'Rolado no servidor e registrado'],
     ],
     corpo: `
-      <p class="regras-lead">Dá para jogar O Jardim inteiro no papel. Mas a mesa ao vivo existe para resolver as três coisas que sempre travam um combate: quem age agora, quanta vida sobrou em quem e se aquele 19 foi mesmo um 19.</p>
+      <p class="regras-lead">Dá para jogar O Jardim inteiro no papel. A mesa ao vivo do site ajuda no combate: mostra a ordem de iniciativa e a Vida de cada um para todo mundo, e rola os dados no servidor, onde ninguém consegue mexer no resultado.</p>
 
       <div class="regras-resumo">
         <ul>
@@ -1381,7 +1381,7 @@ ${HTML_MORAL}
         <li>Quem conduz a campanha abre a sessão e escolhe quais personagens entram. Aliados e inimigos já preparados continuam de uma sessão para a outra.</li>
         <li>Todo participante vira uma linha na lista: personagem, aliado ou inimigo, cada um com Vida, Defesa, Iniciativa e condições ativas.</li>
         <li>Venenos, doenças e vícios que um personagem carrega aparecem no cartão dele, com o estágio em que estão.</li>
-        <li>A ordem sai da Iniciativa da ficha, que aqui não se rola. Quem comanda pode reordenar à mão quando a ficção pedir.</li>
+        <li>A ordem vem da Iniciativa da ficha, sem rolar. Quem comanda pode mudar a ordem à mão quando precisar.</li>
       </ul>
 
       <h3 class="regras-subtitle">Turno e rodada</h3>
@@ -1404,14 +1404,14 @@ ${HTML_MORAL}
           </tbody>
         </table>
       </div>
-      <p class="regras-note">Quem comanda a mesa vê tudo sempre, e o dono de um personagem vê o próprio personagem por inteiro, seja qual for o grau. O segredo é entre o Mestre e o resto da mesa, nunca entre o jogador e a ficha dele.</p>
+      <p class="regras-note">Quem comanda a mesa sempre vê tudo, e o dono de um personagem sempre vê o próprio personagem por inteiro, seja qual for o grau.</p>
 
       <h3 class="regras-subtitle">Rolagens registradas</h3>
       <ul class="regras-list">
-        <li>O dado é rolado no servidor. O site mostra o resultado, mas quem o produziu foi o servidor, então nenhum lado da mesa consegue escolher o número.</li>
+        <li>O dado é rolado no servidor, e o site só mostra o resultado. Assim, ninguém na mesa consegue escolher o número.</li>
         <li>Cada rolagem fica gravada com autor, personagem, título, fórmula, o que saiu em cada dado e a DT, quando havia uma.</li>
         <li>Vantagem e desvantagem entram na própria rolagem: os dois d20 ficam registrados, e dá para conferir depois qual foi usado.</li>
-        <li>Usos de poder entram no mesmo registro das rolagens, então o histórico da sessão conta a cena em ordem.</li>
+        <li>Usos de poder entram no mesmo registro das rolagens, então o histórico da sessão fica todo em ordem.</li>
         <li>Quem está assistindo a campanha como observador não rola dados.</li>
       </ul>
       <p>Rolar fora do site continua valendo: quem prefere dado físico anuncia o resultado e a mesa aceita, como sempre foi. O registro está ali para quando alguém quiser conferir.</p>
@@ -1424,7 +1424,7 @@ ${HTML_MORAL}
       </ul>
     `,
     corpoMestre: `
-      <p class="regras-lead">O sigilo é decidido no servidor, então você pode confiar nele. O que a ferramenta não decide é qual grau cabe em cada cena, e errar isso custa mais tensão do que qualquer número de inimigo.</p>
+      <p class="regras-lead">O sigilo é decidido no servidor, então você pode confiar nele. O que a ferramenta não decide é qual grau cabe em cada cena, e escolher o grau certo faz muita diferença na tensão do combate.</p>
 
       <h3 class="regras-subtitle">Qual grau usar</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -1552,7 +1552,7 @@ ${HTML_MORAL}
       ['DT', '12 + ajuste de nível + Gravidade × 2 + Ferido'],
     ],
     corpo: `
-      <p class="regras-lead">Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua sendo anotado abaixo de zero, e é esse número que decide se a queda foi um tropeço ou um desastre. Depois entra o relógio de Morrendo, que dá ao grupo algumas rodadas para resgatar quem caiu. Este tópico trata ainda de Ferido, de ferimento crítico e de mutilação.</p>
+      <p class="regras-lead">Quando a Vida chega a 0, o dano continua sendo anotado abaixo de zero, e esse número decide se a queda foi leve ou grave. Depois entra o relógio de Morrendo, que dá ao grupo algumas rodadas para resgatar quem caiu. Este tópico trata ainda de Ferido, de ferimento crítico e de mutilação.</p>
 
       <div class="regras-resumo">
         <ul>
@@ -1562,7 +1562,7 @@ ${HTML_MORAL}
           <li>Um golpe que tira metade ou mais dos PV máximos, ou uma falha crítica em Morrendo, pede a tabela de trauma (2d6).</li>
           <li>A Mutilação sempre é anunciada antes, e um sucesso no teste evita a perda.</li>
           <li>Fora de combate, qualquer um trata um ferido: 10 minutos e Cura contra a DT Padrão do nível do paciente devolvem 1d6 de Vida, ou um décimo da Vida máxima do paciente, o que for maior.</li>
-          <li>Voltar da morte existe, mas é raro e cobra caro.</li>
+          <li>Voltar da morte é possível, mas é raro e caro.</li>
         </ul>
       </div>
 
@@ -1633,7 +1633,7 @@ ${HTML_MORAL}
       </table></div>
 
       <h3 class="regras-subtitle">Mutilação</h3>
-      <p>Algumas criaturas querem levar uma parte de quem enfrentam. Quando a ficha de uma criatura tem a habilidade <strong>Arrancar</strong>, ela diz o que dispara e qual teste você faz. Falhou, você perde um membro na hora, e ele não volta com descanso.</p>
+      <p>Algumas criaturas conseguem arrancar uma parte do corpo de quem enfrentam. Quando a ficha de uma criatura tem a habilidade <strong>Arrancar</strong>, ela diz o que dispara e qual teste você faz. Falhou, você perde um membro na hora, e ele não volta com descanso.</p>
       <ul class="regras-list">
         <li>A Mutilação sempre é <strong>anunciada</strong> na rodada anterior ou vem de um gatilho que a própria ficha descreve, como estar Agarrado, Imobilizado ou Marcado. Ninguém perde um membro por um golpe que a mesa não teve chance de ver.</li>
         <li>Sucesso no teste evita a perda e deixa apenas <strong>Sangramento</strong>. Sucesso crítico não deixa nada.</li>
@@ -1655,11 +1655,11 @@ ${HTML_MORAL}
       <ul class="regras-list">
         <li><strong>Regeneração:</strong> só um efeito de Fluxo que diga, com todas as letras, que restaura um membro perdido.</li>
         <li><strong>Implante:</strong> Braço Hidráulico Titânico, Pernas Pneumáticas e Olho Biônico Mk-II cobrem o que sumiu e anulam a penalidade daquele membro enquanto estiverem funcionando. O Mestre decide se a Laringe Sintética Camaleão devolve a fala.</li>
-        <li>Sem uma dessas portas, a perda é permanente. O personagem continua inteiro para tudo que a tabela não cita.</li>
+        <li>Sem uma dessas opções, a perda é permanente. O personagem continua inteiro para tudo que a tabela não cita.</li>
       </ul>
 
       <h3 class="regras-subtitle">Voltar da morte</h3>
-      <p>Quem morre vai para Arkarin, e de lá quase ninguém volta. Voltar existe, mas é raro e cobra caro.</p>
+      <p>Quem morre vai para Arkarin, e de lá quase ninguém volta. Voltar é possível, mas é raro e caro.</p>
       <ul class="regras-list">
         <li><strong>Só por efeito que diga:</strong> nenhuma cura, poção ou teste de Morrendo traz alguém de volta. Só um efeito que diga com todas as letras que devolve a vida, como a Reconstrução da Pedra Filosofal do Alquimista, ou uma cena que o Mestre conduza como história.</li>
         <li><strong>Pouco tempo:</strong> o próprio efeito diz até quando ainda dá. Passado esse tempo, a alma já atravessou.</li>
@@ -1693,10 +1693,10 @@ ${HTML_MORAL}
 
       <h3 class="regras-subtitle">Mutilação na mesa</h3>
       <ul class="regras-list">
-        <li>Perder um membro é o preço de uma decisão que a mesa teve chance de evitar. Anuncie o golpe, diga a DT em voz alta e deixe alguém tentar proteger, empurrar ou tirar o alvo da frente antes do dado.</li>
+        <li>Perder um membro só deve acontecer quando o grupo teve chance de evitar. Anuncie o golpe, diga a DT em voz alta e deixe alguém tentar proteger, empurrar ou tirar o alvo da frente antes do dado.</li>
         <li>O livro avisa desde a primeira sessão que existe mutilação. Pergunte a quem joga se tem algum membro ou sentido que não quer ver perdido, e respeite sem negociar. Nesse caso, troque a perda por Sangramento e Sanidade.</li>
         <li>Não mutile na primeira rodada de uma criatura desconhecida. Deixe os Sinais aparecerem antes, para que a mesa tenha visto o perigo e decidido ficar.</li>
-        <li>Quem perde um membro ainda é o mesmo personagem. Dê a ele uma cena para viver com isso: um implante que alguém oferece, uma forma nova de lutar, um pedido de desculpas que ninguém sabia como fazer. A perda rende história quando deixa de ser só punição.</li>
+        <li>Quem perde um membro ainda é o mesmo personagem. Dê a ele uma cena para viver com isso: um implante que alguém oferece, uma forma nova de lutar, um pedido de desculpas que ninguém sabia como fazer.</li>
       </ul>
     `,
   },
@@ -1736,13 +1736,13 @@ ${HTML_MORAL}
       <p class="regras-note">Se a descrição não muda nada na cena, ou se é a mesma de sempre só para pegar o bônus, o Mestre pode negar a Coreografia.</p>
     `,
     corpoMestre: `
-      <p class="regras-lead">Esta é a única regra do livro em que você é o filtro. O sistema entrega os bônus, e cabe a você decidir se a descrição merece. Um Mestre que aceita tudo transforma Coreografia num imposto de bônus; um que nunca aceita mata a melhor regra da mesa.</p>
+      <p class="regras-lead">Esta é a única regra do livro em que você é o filtro. O sistema entrega os bônus, e cabe a você decidir se a descrição merece. Se você aceitar tudo, Coreografia vira bônus de graça; se nunca aceitar, a regra deixa de existir na mesa.</p>
 
       <h3 class="regras-subtitle">Quando aceitar</h3>
       <ul class="regras-list">
         <li>Aceite quando a descrição muda alguma coisa no mundo: a mesa vira, o lustre cai, o inimigo fica sem cobertura. Se a cena continua idêntica depois, não foi Coreografia.</li>
         <li>Aceite descrição repetida quando a situação mudou. Pular do parapeito de novo, numa sala diferente, continua valendo.</li>
-        <li>Negue quando a fala for só o nome do risco. "Uso Arriscado" com um ataque comum atrás é exatamente o que a regra existe para não premiar.</li>
+        <li>Negue quando a fala for só o nome do risco. Dizer "uso Arriscado" e fazer um ataque comum não vale.</li>
         <li>Negue quando a descrição não cabe fisicamente na cena. Não há lustre numa caverna, e apontar isso é condução, não implicância.</li>
       </ul>
 
@@ -1891,7 +1891,7 @@ ${HTML_MORAL}
       </ul>
     `,
     corpoMestre: `
-      <p class="regras-lead">Treinar não custa dado nenhum: custa dias. Isso transfere a decisão inteira para você, porque quem controla o calendário da campanha controla se essa regra existe ou não.</p>
+      <p class="regras-lead">Treinar pede dias livres, sem nenhum teste. Como você controla o calendário da campanha, é você quem decide se o grupo tem tempo para treinar.</p>
 
       <h3 class="regras-subtitle">Conceder tempo</h3>
       <ul class="regras-list">
@@ -1925,8 +1925,8 @@ ${HTML_MORAL}
       ['Renda comum', '10 Lunaris por dia'],
     ],
     corpo: `
-      <p class="regras-lead">Terminado um arco, a vida volta a ter barulho de rua. As feridas fecham devagar, alguém finalmente dorme numa cama de verdade, e a espada vai para o ferreiro antes da próxima briga. O Mestre diz quantos dias vocês têm até o próximo chamado, e esses dias são seus.</p>
-      <p>Cada personagem escolhe o que fazer com eles, em separado. É aqui que o tempo parado vira progresso concreto, e é aqui também que o personagem mostra quem é quando ninguém está atacando: para onde volta, com quem janta, o que faz com as mãos quando elas não seguram uma arma.</p>
+      <p class="regras-lead">Entre um arco e outro, o grupo tem um tempo livre para descansar, treinar, trabalhar e cuidar da vida. O Mestre diz quantos dias vocês têm até a próxima aventura.</p>
+      <p>Cada personagem escolhe o que fazer com esses dias, em separado. Algumas atividades dão progresso na ficha, como treinar e fabricar, e outras servem para mostrar a vida do personagem fora das aventuras.</p>
 
       <div class="regras-resumo">
         <ul>
@@ -1976,7 +1976,7 @@ ${HTML_MORAL}
         </tbody>
       </table></div>
       <p>Quem tem ofício trabalha na faixa dele, e a faixa é o teto: cada linha pede o grau escrito nela numa das duas perícias do ofício (a do ofício comum pede Aprendiz). Sem o grau, você trabalha na linha de baixo até treinar. O Aprendiz e quem vive na rua ganham a primeira linha. Sem ofício, ou longe de onde ele vale alguma coisa, sobra o serviço braçal.</p>
-      <p class="regras-note">Trabalhar paga o custo de vida, e sobra pouco. A coluna Sobra é o que chega à carteira depois de comer, dormir e se vestir como o trabalho pede, e é ela que o botão Receber da Carteira soma. Um dia de ofício comum rende 10 Lunaris, uma noite de estalagem custa 3, e a bota nova vai ter que esperar. Nenhum personagem enriquece assim, e é por isso que a estrada continua chamando.</p>
+      <p class="regras-note">Trabalhar paga o custo de vida, e sobra pouco. A coluna Sobra é o que chega à carteira depois de comer, dormir e se vestir como o trabalho pede, e é ela que o botão Receber da Carteira soma. Um dia de ofício comum rende 10 Lunaris, uma noite de estalagem custa 3, e a bota nova vai ter que esperar. Ninguém fica rico só trabalhando no ofício.</p>
 
       <h3 class="regras-subtitle">Quanto custa viver</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -2008,11 +2008,11 @@ ${HTML_MORAL}
       <ul class="regras-list">
         <li><strong>Confira os requisitos.</strong> Subir de Especialista para Mestre pede instrutor, e achar um instrutor costuma render uma sessão inteira de procura.</li>
         <li><strong>Combine com o grupo.</strong> Quatro personagens em quatro cidades diferentes transformam a próxima sessão em quatro começos separados, e sempre tem alguém esperando a vez.</li>
-        <li><strong>Corpo primeiro.</strong> Ferimento e Cansaço vêm antes de qualquer projeto. Chegar ao arco seguinte com Ferido 2 pesa mais que qualquer item fabricado no intervalo.</li>
+        <li><strong>Corpo primeiro.</strong> Ferimento e Cansaço vêm antes de qualquer projeto. Chegar ao próximo arco ainda com Ferido 2 costuma atrapalhar mais do que um item novo ajuda.</li>
       </ul>
     `,
     corpoMestre: `
-      <p class="regras-lead">O calendário é seu, e ele decide quais regras da campanha existem de verdade. Sem intervalo declarado, treino, fabricação e ritual viram texto morto no livro, e os personagens nunca ganham a chance de ter uma vida fora da estrada.</p>
+      <p class="regras-lead">Você decide quanto tempo livre o grupo tem entre as aventuras. Sem esse tempo, regras como treino, fabricação e ritual nunca entram em jogo, e os personagens não têm chance de mostrar a vida fora da estrada.</p>
 
       <h3 class="regras-subtitle">Quanto tempo entregar</h3>
       <ul class="regras-list">
@@ -2325,7 +2325,7 @@ ${HTML_MORAL}
       ['Catálogo', `${totalFrutosEden} frutos · ${totalImplantes} implantes`],
     ],
     corpo: `
-      <p class="regras-lead">Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o caminho caro: você compra, aceita o que vem junto e não desfaz depois.</p>
+      <p class="regras-lead">O jeito normal de ficar mais forte é subir de nível e ganhar Legados. Frutos e implantes são outro jeito, mais caro: você compra, aceita o custo que vem junto e não pode desfazer depois.</p>
 
       <div class="regras-resumo">
         <ul>
@@ -2368,13 +2368,13 @@ ${HTML_MORAL}
       <p>Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos ${totalFrutosEden} está no catálogo da Loja.</p>
 
       <h3 class="regras-subtitle">Dádivas e oferendas</h3>
-      <p>Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feito diante do que o Fluxo aprecia, e o que ele devolve é uma dádiva: pequena, curta e uma por vez. A dádiva não substitui o Fruto. O Fruto muda você para sempre, e a dádiva dura o tempo de uma jornada.</p>
+      <p>Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feito diante do que o Fluxo aprecia, e o que ele devolve é uma dádiva: pequena, curta e uma por vez. A dádiva e o Fruto são coisas diferentes: o Fruto é permanente, e a dádiva dura pouco.</p>
       <ul class="regras-list">
         <li><strong>Onde:</strong> num lugar em que o Fluxo se faz sentir (o Mestre diz qual) ou, se você carrega o Fruto do mesmo Fluxo, em qualquer lugar: quem comeu o fruto leva o altar no corpo.</li>
         <li><strong>O que oferecer:</strong> algo do gosto do Fluxo, na tabela abaixo. A oferenda se perde: queima, afunda ou fica para trás. Nunca ofereça um Fruto do Éden.</li>
         <li><strong>O valor:</strong> Humilde vale um quarto da verba de uma sessão do seu nível, Valiosa vale uma sessão e Preciosa vale quatro. Um sacrifício de história, algo que dinheiro não compra e que o Mestre aceita, conta como Preciosa e dispensa o teste.</li>
         <li><strong>O teste:</strong> Religião ou Ressonância contra a DT Padrão do nível, com +5 na DT se a oferenda for Humilde, nenhum ajuste se for Valiosa e −3 se for Preciosa.</li>
-        <li><strong>O resultado:</strong> falhar é ouvir silêncio, e a oferenda se perde. Passar rende a dádiva do Fluxo até o próximo descanso completo ou o fim da sessão, o que vier primeiro. Passar por 5 ou mais, ou tirar 20 natural, faz o Mestre acrescentar um sinal: uma visão curta, um nome, um cheiro, uma pista sobre algo ligado ao Fluxo.</li>
+        <li><strong>O resultado:</strong> na falha, nada acontece e a oferenda se perde. Passar rende a dádiva do Fluxo até o próximo descanso completo ou o fim da sessão, o que vier primeiro. Passar por 5 ou mais, ou tirar 20 natural, faz o Mestre acrescentar um sinal: uma visão curta, um nome, um cheiro, uma pista sobre algo ligado ao Fluxo.</li>
         <li><strong>Os limites:</strong> uma oferenda por pessoa por sessão, uma dádiva ativa por vez (aceitar outra encerra a anterior) e o mesmo altar responde uma vez por mês do calendário do mundo.</li>
       </ul>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -2382,11 +2382,11 @@ ${HTML_MORAL}
         <tbody>${linhasDeDadivas()}
         </tbody>
       </table></div>
-      <p class="regras-note">Quem carrega o Fruto do mesmo Fluxo recebe a dádiva ampliada: o bônus passa de +2 para +3 (de +3 m para +5 m no Passo Curto), o efeito de uma vez pode ser usado duas vezes e ela dura até o fim da sessão. A dádiva do Fim exige a autorização do Mestre, como todo acesso ao Fim. Algumas deidades respondem pouco, e o silêncio também é resposta: quem decide é o Mestre.</p>
+      <p class="regras-note">Quem carrega o Fruto do mesmo Fluxo recebe a dádiva ampliada: o bônus passa de +2 para +3 (de +3 m para +5 m no Passo Curto), o efeito de uma vez pode ser usado duas vezes e ela dura até o fim da sessão. A dádiva do Fim exige a autorização do Mestre, como todo acesso ao Fim. Algumas deidades quase nunca respondem. Quem decide é o Mestre.</p>
 ${HTML_DEVOCAO}
 
       <h3 class="regras-subtitle">Implantes cibernéticos</h3>
-      <p>Enquanto o Fruto mexe na alma, o implante mexe na carne. São ${totalImplantes} peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.</p>
+      <p>O implante é uma peça instalada no corpo. São ${totalImplantes} peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.</p>
       <ul class="regras-list">
         <li>Implante não vai na mochila. Ele fica numa seção própria do inventário, porque está instalado no corpo e ocupa uma parte dele.</li>
         <li>Cada peça declara o que substitui: um olho, um braço, o coração, os pulmões. Duas peças que disputam a mesma parte do corpo não convivem.</li>
@@ -2414,14 +2414,14 @@ ${HTML_DEVOCAO}
         <p>Rafa instala um Braço Hidráulico (Raro, 7) e uma Mira Sináptica (Épico e neural, 15). A Sanidade máxima cai de 100 para 78, e o melhor estado continua Estável. Com um Exoesqueleto de Guerra (Lendário, 18), ela vai a 60: dali em diante, no melhor dos dias, a Sanidade de Rafa está Abalada.</p>
       </div>
       <div class="regras-note regras-note--atencao">
-        <p>Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra de rotina: é resultado de uma ida ao mercado negro, com tudo que isso costuma cobrar em história. As moedas e o câmbio estão em <span class="regras-ref regras-ref--economia">Economia</span>.</p>
+        <p>Créditos Sombrios não se compram com Lunaris. Por isso, comprar um implante exige ir ao mercado negro, e isso costuma trazer complicações na história. As moedas e o câmbio estão em <span class="regras-ref regras-ref--economia">Economia</span>.</p>
       </div>
 
       <h3 class="regras-subtitle">Os dois juntos</h3>
       <ul class="regras-list">
         <li>Fruto e implante não competem entre si: o mesmo personagem pode carregar um fruto e vários implantes.</li>
         <li>Nenhum dos dois ocupa vaga de Legado nem conta como magia aprendida.</li>
-        <li>Os dois são visíveis para quem olhar. Braço de metal e pele de brasa mudam como o mundo trata seu personagem, e essa parte não tem número.</li>
+        <li>Os dois são visíveis para quem olhar. Um braço de metal ou uma pele de brasa mudam o jeito como as pessoas tratam o seu personagem, e isso fica por conta da interpretação.</li>
       </ul>
     `,
     corpoMestre: `
@@ -2520,7 +2520,7 @@ ${HTML_DEVOCAO}
       <p>Orçamento de poder fica em <span class="regras-ref regras-ref--raridades-modificacoes">Raridades de Equipamento</span>; as opções prontas e seus preços ficam em <span class="regras-ref regras-ref--modificacoes-equipamentos">Modificações de Equipamento</span>.</p>
     `,
     corpoMestre: `
-      <p class="regras-lead">Equipamento é o eixo que você controla sem tocar na ficha de ninguém. Vida e Defesa vêm do nível; dano e Resistência vêm do que o grupo carrega, e é aí que você mexe.</p>
+      <p class="regras-lead">Equipamento é a parte do poder do grupo que você controla sem mexer na ficha de ninguém. Vida e Defesa vêm do nível; dano e Resistência vêm dos itens, e são os itens que você libera ou segura.</p>
 
       <h3 class="regras-subtitle">O teto do arsenal</h3>
       <p>A referência de balanceamento mede as armas publicadas, e o topo é bem alto. Use estes números antes de soltar qualquer arma acima de Épico.</p>
@@ -2536,7 +2536,7 @@ ${HTML_DEVOCAO}
 
       <h3 class="regras-subtitle">Carga e Resistência</h3>
       <ul class="regras-list">
-        <li>Carga só vira decisão se você pesar o inventário de vez em quando. Se ninguém nunca conferiu, a regra não existe, e tudo bem: só não a invoque de surpresa num momento ruim.</li>
+        <li>Carga só vira decisão se você pesar o inventário de vez em quando. Se ninguém confere, tudo bem, mas aí não cobre a carga de surpresa num momento ruim.</li>
         <li>Resistência entra depois do multiplicador crítico. A ordem importa muito: subtrair antes daria um número completamente diferente, e a mesa erra isso com frequência.</li>
         <li>Resistência física geral não cobre balístico, de propósito. Se a sua campanha tem arma de fogo, esse detalhe decide o equilíbrio entre armadura e tiro.</li>
         <li>Sem proficiência são menos 5 e as propriedades da arma desligam. É punição suficiente: não some nada por cima.</li>
@@ -2639,7 +2639,7 @@ ${HTML_DEVOCAO}
 
       <h3 class="regras-subtitle">Aprovar bem</h3>
       <ul class="regras-list">
-        <li>A diferença entre Épico e Relíquia é quase o dobro de orçamento. Ao subir uma faixa, você não está dando um item melhor: está dando um item que faz mais coisas ao mesmo tempo.</li>
+        <li>A diferença entre Épico e Relíquia é quase o dobro de orçamento. Cada faixa a mais dá um item que faz mais coisas ao mesmo tempo.</li>
         <li>Efeito de raridade é o que muda a matemática; modificação costuma mudar o uso. Se quiser dar sabor sem inflar o poder, aprove modificação e segure o efeito.</li>
         <li>Cada modificação tem preço de encomenda publicado. Deixar o grupo encomendar é mais saudável que você sortear item: eles pagam, escolhem e ninguém fica com peça inútil.</li>
         <li>Item que o grupo montou peça por peça vale mais na mesa que item achado pronto, e custa menos do seu orçamento de poder.</li>
@@ -2866,7 +2866,7 @@ ${HTML_DEVOCAO}
 
     `,
     corpoMestre: `
-      <p class="regras-lead">Magia aqui tem dois portões, e os dois são seus: quem tem acesso a um Fluxo e quem chega ao círculo alto. Fluxo alto sozinho não ensina magia nenhuma, então a torneira nunca abre por acidente.</p>
+      <p class="regras-lead">Na magia, você controla duas coisas: quem tem acesso a um Fluxo e quem chega aos círculos altos. Fluxo alto sozinho não ensina magia nenhuma, então ninguém ganha magia sem você saber.</p>
 
       <h3 class="regras-subtitle">Conceder acesso</h3>
       <ul class="regras-list">
@@ -2897,7 +2897,7 @@ ${HTML_DEVOCAO}
       ['Relação', 'vantagem e desvantagem só em disputa direta'],
     ],
     corpo: `
-      <p class="regras-lead">O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos primordiais moram nele: Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Não existe um oitavo elemento. Gelo, magma, magnetismo e afins são <strong>derivações</strong>: cada uma nasce de um dos sete e é, ela mesma, um tipo de dano. É isso que este tópico explica.</p>
+      <p class="regras-lead">O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos primordiais moram nele: Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Não existe um oitavo elemento. Gelo, magma, magnetismo e afins são <strong>derivações</strong>: cada uma nasce de um dos sete e é, ela mesma, um tipo de dano.</p>
 
       <div class="regras-resumo">
         <ul>
@@ -2979,7 +2979,7 @@ ${HTML_DEVOCAO}
       ['Registro', 'contam como Legado sem ocupar vaga'],
     ],
     corpo: `
-      <p class="regras-lead">Magia grande não sai de graça. A partir do 5º círculo, o Fluxo começa a deixar marca em quem o carrega, e no 10º ele cobra por magia aprendida. Todo preço tem os dois lados: um ganho concreto e um ônus concreto.</p>
+      <p class="regras-lead">Magias de círculo alto têm um custo extra. A partir do 5º círculo, o Fluxo deixa marcas em quem o usa, e no 10º cada magia aprendida traz uma Cicatriz. Cada Marca e cada Cicatriz trazem um ganho e um ônus.</p>
 
       <div class="regras-resumo">
         <ul>
@@ -3208,7 +3208,7 @@ ${HTML_DEVOCAO}
       <p class="regras-note">Inconsciente e Concentrando ficam fora da escala: a primeira acaba quando a causa acaba, e a segunda é escolha de quem conjura. As condições benéficas também ficam de fora, porque ninguém quer se curar delas.</p>
 
       <h3 class="regras-subtitle">Condições benéficas</h3>
-      <p class="regras-lead">São as condições que ajudam. Vêm de uma palavra de ânimo, de uma magia de apoio ou de um escudo erguido na hora certa. Duram pouco e nenhuma soma com ela mesma.</p>
+      <p class="regras-lead">São as condições que ajudam. Vêm de um incentivo, de uma magia de apoio ou de um escudo erguido a tempo. Duram pouco, e a mesma condição não se soma com ela mesma.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Condição</th><th>Efeito principal</th><th>Remoção</th></tr></thead>
         <tbody>${tabelaCondicoesBeneficas}</tbody>
@@ -3225,7 +3225,7 @@ ${HTML_DEVOCAO}
       </ul>${tabelasCondicoesLongoPrazo}
     `,
     corpoMestre: `
-      <p class="regras-lead">Sanidade é a única barra do jogo que você controla sozinho: nada a consome sem você pedir um teste. Por isso ela vira ferramenta de tom, e não de dano.</p>
+      <p class="regras-lead">Sanidade é a única barra que só cai quando você pede um teste. Use esses testes para dar peso às cenas de medo e horror, e evite tratá-los como dano comum.</p>
 
       <h3 class="regras-subtitle">Quando pedir teste de Sanidade</h3>
       <ul class="regras-list">
@@ -3430,13 +3430,13 @@ ${HTML_DEVOCAO}
         <li>São quatro por classe, nos níveis 4, 7, 12 e 18. Num grupo de quatro personagens isso dá dezesseis ganchos ao longo da campanha, prontos e alinhados com o que cada jogador escolheu ser.</li>
         <li>Trate como oferta, não como roteiro. Encaixe quando a campanha der espaço e avise o jogador de que aquilo é o Evento dele: metade do valor está em ele reconhecer.</li>
         <li>Não deixe o Evento sequestrar o arco do grupo. Um gancho pessoal que toma três sessões inteiras cobra caro dos outros três jogadores.</li>
-        <li>Se dois personagens atingirem o nível de Evento ao mesmo tempo, junte os dois numa cena só quando der. Vale mais que resolver em série.</li>
+        <li>Se dois personagens atingirem o nível de Evento ao mesmo tempo, junte os dois numa cena só quando der. Fica melhor do que resolver um de cada vez.</li>
         <li>A recompensa é sua. O texto do Evento diz explicitamente que não concede nível nem recurso infinito: use reconhecimento, acesso, contato, item específico.</li>
       </ul>
 
       <h3 class="regras-subtitle">Aprovar escolha de Poder</h3>
       <ul class="regras-list">
-        <li>Você não escolhe pelo jogador, mas vale ler a lista da classe dele antes do nível 2. Poder passivo de custo zero muda a matemática do encontro em silêncio, e é bom você saber qual entrou.</li>
+        <li>Você não escolhe pelo jogador, mas vale ler a lista da classe dele antes do nível 2. Poder passivo de custo zero muda a força do grupo sem aparecer na mesa, então é bom você saber qual entrou.</li>
         <li>Troca de poder já escolhido só por regra que autorize ou por decisão sua. Deixe claro na primeira sessão qual dos dois vale na sua mesa, porque isso muda como o jogador planeja a build.</li>
         <li>Um pedido de poder de outra classe é sempre não por padrão. Se abrir exceção, cobre o preço em história, e lembre que isso abre precedente para os outros jogadores.</li>
       </ul>
@@ -3765,7 +3765,7 @@ ${HTML_DEVOCAO}
       <p class="regras-note">Dentro de cada faixa o preço vai da metade ao dobro da referência, então os degraus se encostam sem deixar vão e sem se cruzar. Na encomenda de arma, armadura e escudo a conta é a mesma: cada raridade custa quatro vezes a anterior do mesmo modelo.</p>
 
       <h3 class="regras-subtitle">O muro dos Fragmentos</h3>
-      <p>Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 50 Fragmentos, existe um salto de mais de quinze vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Acumular Lunaris a vida inteira deixa você parado diante desse muro.</p>
+      <p>Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 50 Fragmentos, existe um salto de mais de quinze vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Só juntando Lunaris, você nunca chega a esses itens.</p>
 
       <h3 class="regras-subtitle">Câmbio</h3>
       <p>O Banco Lunar converte Lunaris, Solares e Fragmentos de Estrela, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa. Créditos Sombrios ficam de fora: o banco não os compra nem os vende.</p>
@@ -3778,7 +3778,7 @@ ${HTML_DEVOCAO}
         </tbody>
       </table></div>
       <div class="regras-note regras-note--atencao">
-        <p>Créditos Sombrios ♆ são a moeda do mercado negro, das ruas que o Banco Lunar finge não ver. Não existe câmbio para eles: nenhum balcão do banco devolve Lunaris por Créditos, e nenhum vende Créditos por Lunaris. Eles chegam por negócio sujo, como vender uma mercadoria a um doleiro, e é no mercado negro que se gastam.</p>
+        <p>Créditos Sombrios ♆ são a moeda do mercado negro, fora do controle do Banco Lunar. Não existe câmbio para eles: nenhum balcão do banco devolve Lunaris por Créditos, e nenhum vende Créditos por Lunaris. Eles chegam por negócio sujo, como vender uma mercadoria a um doleiro, e é no mercado negro que se gastam.</p>
       </div>
       <p>A conta é sempre a mesma: converta para Solares, converta para a moeda de destino e desconte os 2%.</p>
       <div class="regras-note regras-note--exemplo">
@@ -3897,7 +3897,7 @@ ${HTML_DEVOCAO}
           <tr><td>Mestre de caravana</td><td>Especialista ou oficial</td></tr>
         </tbody>
       </table></div>
-      <p>A Guilda paga por entrega confirmada, e a conta é simples: <strong>o contrato vale metade do preço de catálogo daquela criatura</strong>, e a Guilda fica com a outra metade. Para um alvo específico, pegue o preço dele na Loja e divida por dois. A tabela abaixo mostra a criatura típica de cada raridade, para quando você precisar de um número na hora. Urgência encarece para quem contrata, e nunca barateia para quem caça.</p>
+      <p>A Guilda paga por entrega confirmada, e a conta é simples: <strong>o contrato vale metade do preço de catálogo daquela criatura</strong>, e a Guilda fica com a outra metade. Para um alvo específico, pegue o preço dele na Loja e divida por dois. A tabela abaixo mostra a criatura típica de cada raridade, para quando você precisar de um número na hora. A pressa aumenta o valor do contrato e nunca reduz o pagamento de quem caça.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Alvo do contrato</th><th>Paga ao caçador</th><th>Em salário mínimo</th></tr></thead>
         <tbody>
@@ -3909,7 +3909,7 @@ ${HTML_DEVOCAO}
         </tbody>
       </table></div>
       <p class="regras-note">Aqui está a resposta para por que um grupo de aventureiros anda com dinheiro de nobre e origem de trabalhador: um único contrato de criatura Rara paga mais de um ano de salário mínimo. A contradição é boa matéria de cena, e o custo de vida triplicado do Vazio é o freio natural dela.</p>
-      <p class="regras-note">Até o nível 49 nenhum desses degraus se alcança acumulando: a verba topa em 600 Solares por jogador por sessão, e um grupo de quatro no nível 40 junta 40 Fragmentos por sessão, longe dos 400 de uma Realeza. Do 50 em diante a conta vira: a verba passa a ser contada em Fragmentos, e um grupo de quatro que junte tudo sem gastar tem o patrimônio de uma Realeza em cerca de 5 sessões no nível 50, em 3 no nível 60 e em 2 no nível 100. O de um Dono de Dimensão, 1.600 Fragmentos, fica a umas 5 sessões no nível 100, 3 no nível 150 e 2 no nível 200. O Governante nunca se alcança, porque quem governa uma Árvore requisita e não compra. Por isso, no nível alto, o dinheiro deixa de ser o obstáculo e quem manda é o título, o território e o pacto: não ofereça moeda para destravar uma cena que pede um favor.</p>
+      <p class="regras-note">Até o nível 49 nenhum desses degraus se alcança acumulando: a verba topa em 600 Solares por jogador por sessão, e um grupo de quatro no nível 40 junta 40 Fragmentos por sessão, longe dos 400 de uma Realeza. Do 50 em diante a conta vira: a verba passa a ser contada em Fragmentos, e um grupo de quatro que junte tudo sem gastar tem o patrimônio de uma Realeza em cerca de 5 sessões no nível 50, em 3 no nível 60 e em 2 no nível 100. O de um Dono de Dimensão, 1.600 Fragmentos, fica a umas 5 sessões no nível 100, 3 no nível 150 e 2 no nível 200. O Governante nunca se alcança, porque quem governa uma Árvore requisita e não compra. Por isso, no nível alto, o que abre portas é o título, o território e os pactos. Quando a cena pede um favor, não resolva com moeda.</p>
 
       <p class="regras-note">A Guilda dos Caçadores também tem teto: paga no máximo 1.600 Solares por criatura, o contrato de uma Lendária. Toda criatura Lendária do Bestiário de VD 45 a 49 custa entre 2.500 e 3.200 Solares no catálogo, então o contrato de Vaelthor e o de Ignarrak ficam entre 1.250 e 1.600 Solares. A partir do VD 50 o preço de catálogo sobe com a verba (dezenas a milhares de Fragmentos de Estrela), e o contrato continua parando no teto. Acima desse porte a Guilda paga em título, terra ou favor, e nunca em moeda. Contratar gente de nível alto segue a fórmula de preço do capítulo de Bestiário, com os degraus de 100 e de 300, e acima do 500 ninguém aceita salário: convence-se, ou se deve um favor.</p>
 
@@ -3999,11 +3999,11 @@ ${HTML_DEVOCAO}
       </div>
     `,
     corpoMestre: `
-      <p class="regras-lead">A Loja é o seu controle de ritmo mais direto: o balcão que você abre decide o que o grupo alcança, seja qual for o tamanho da carteira.</p>
+      <p class="regras-lead">Os locais da Loja que você libera decidem o que o grupo consegue comprar, seja qual for o dinheiro que ele tem.</p>
 
       <h3 class="regras-subtitle">Abrir os locais</h3>
       <ul class="regras-list">
-        <li>Mercado Negro e Banco Lunar nascem trancados em toda campanha. Isso é padrão do sistema, não esquecimento: abrir os dois cedo entrega implante, artefato e relíquia antes de a campanha ter contexto para eles.</li>
+        <li>Mercado Negro e Banco Lunar nascem trancados em toda campanha. Isso é de propósito: abrir os dois cedo entrega implante, artefato e relíquia antes de a campanha ter contexto para eles.</li>
         <li>Abra por acontecimento, nunca por nível. O grupo conheceu um contato, pagou uma dívida, chegou à cidade certa. Assim a abertura vira recompensa em vez de virar aviso de sistema.</li>
         <li>Abrir não precisa ser permanente. Um Mercado Negro que existe numa cidade e não existe na próxima é mais interessante que uma chave que nunca mais se fecha.</li>
       </ul>
@@ -4142,15 +4142,15 @@ ${HTML_DEVOCAO}
       <section class="regras-estante regras-estante--cena">
       <div class="regras-estante-cabeca">
         <h4 class="regras-estante-titulo">Dar peso à cena</h4>
-        <p class="regras-estante-quando">Para quando a mesa precisa sentir: descrições prontas para criaturas, mortes, magias, chegadas e silêncios.</p>
+        <p class="regras-estante-quando">Para os momentos importantes: descrições prontas para criaturas, mortes, magias, chegadas e pausas.</p>
       </div>
 
       <h3 class="regras-subtitle">Descrever momentos</h3>
-      <p>Tem momento que um teste não resolve: a criatura saindo da água, o amigo caído no chão, o silêncio depois da última espada. É aí que a mesa decide se vai só jogar ou se vai sentir. As tabelas abaixo guardam descrições prontas para esses momentos. Role 1d6 quando der branco no meio da sessão, ou leia a tabela antes e guarde a linha que combina com a cena que você já sabe que vem.</p>
+      <p>Alguns momentos pedem uma boa descrição, mais do que um teste: a criatura saindo da água, o amigo caído no chão, o fim de uma luta difícil. As tabelas abaixo guardam descrições prontas para esses momentos. Role 1d6 quando der branco no meio da sessão, ou leia a tabela antes e guarde a linha que combina com a cena que você já sabe que vem.</p>
       <p>Nenhuma delas precisa ser lida palavra por palavra. Troque o bicho, o lugar, o nome. O que importa é o jeito: um detalhe pequeno e verdadeiro, um corpo reagindo, e espaço para quem joga respirar antes de responder.</p>
       <ul class="regras-list">
         <li><strong>Comece por um sentido que não seja a visão.</strong> Som, cheiro e temperatura chegam antes da imagem, e deixam a mesa alerta antes de ela saber por quê.</li>
-        <li><strong>Um detalhe pequeno vale mais que três adjetivos.</strong> "Tem uma formiga carregando uma migalha perto da sua mão" pesa mais que "o momento é terrível e sombrio", porque é o tipo de coisa que a gente repara quando está com medo.</li>
+        <li><strong>Prefira um detalhe concreto a vários adjetivos.</strong> "Tem uma formiga carregando uma migalha perto da sua mão" funciona melhor que "o momento é terrível e sombrio", porque é o tipo de coisa que a gente repara quando está com medo.</li>
         <li><strong>Mostre o corpo antes da emoção.</strong> Mão que não acha o cabo da espada, respiração que entra pela metade, joelho que falha. Quem joga sente pelo personagem quando o corpo do personagem sente primeiro.</li>
         <li><strong>Fale mais devagar do que parece necessário.</strong> Faça uma pausa antes da última frase. O silêncio da mesa, naquele segundo, é parte da descrição.</li>
         <li><strong>Use o nome do personagem, e não o do jogador.</strong> "O peito do Tavo sobe e desce" coloca todo mundo dentro da cena. "O personagem do Lucas está morrendo" tira todo mundo dela.</li>
@@ -4184,8 +4184,8 @@ ${HTML_DEVOCAO}
             <tr><td>2</td><td>Ninguém ouviu a porta abrir. Vocês só percebem agora, com o sangue ainda quente nas mãos, que ele estava sentado no trono o tempo inteiro, com o queixo apoiado no punho, assistindo à luta como quem assiste a um ensaio. Ele bate palmas duas vezes, devagar, e se levanta.</td></tr>
             <tr><td>3</td><td>O chão treme em intervalos regulares. A cada passo, um fio de poeira escorre do teto e cai no ombro de alguém. Vocês contam sem querer, um, dois, três, e percebem que o intervalo entre um passo e outro está ficando menor, e que ninguém do grupo está respirando alto.</td></tr>
             <tr><td>4</td><td>Os capangas param de lutar no meio do golpe. Baixam as armas, recuam contra as paredes e abrem um corredor sem que ninguém tenha dado ordem. O mais novo deles fecha os olhos. É pelo medo no rosto dos próprios aliados que vocês entendem quem acabou de chegar.</td></tr>
-            <tr><td>5</td><td>Ele diz o nome de um de vocês. O nome verdadeiro, com a pronúncia que só a sua mãe usava, aquele que ninguém nesta cidade deveria conhecer. Ele sorri com o canto da boca, como quem devolve uma coisa que você perdeu faz muito tempo, e espera para ver o que você faz com ela.</td></tr>
-            <tr><td>6</td><td>Quem conjura sente antes de ver. O Fluxo do lugar inteiro começa a escorrer na direção dele, como água descendo para um ralo, e a Mana pesa no peito feito roupa molhada. As magias que ainda estavam acesas piscam, e por um segundo parecem pedir desculpa a ele.</td></tr>
+            <tr><td>5</td><td>Ele diz o nome de um de vocês. O nome verdadeiro, com a pronúncia que só a sua mãe usava, aquele que ninguém nesta cidade deveria conhecer. Ele sorri com o canto da boca e espera para ver o que você faz com isso.</td></tr>
+            <tr><td>6</td><td>Quem conjura sente antes de ver. O Fluxo do lugar inteiro começa a escorrer na direção dele, como água descendo para um ralo, e a Mana pesa no peito feito roupa molhada. As magias que ainda estavam acesas piscam e enfraquecem.</td></tr>
           </tbody>
         </table></div>
       </details>
@@ -4224,16 +4224,16 @@ ${HTML_DEVOCAO}
 
       <details class="regras-details">
         <summary>Uma morte <span class="regras-details-contagem">1d6</span></summary>
-        <p>Para quando acabou de verdade. Aqui, menos é mais: diga uma linha, e depois deixe a mesa em silêncio pelo tempo que ela precisar.</p>
+        <p>Para quando acabou de verdade. Diga uma linha só e deixe a mesa reagir no tempo dela.</p>
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
             <tr><td>1</td><td>Não há última frase. Não há olhar demorado nem recado guardado para o fim. A mão que segurava a sua simplesmente para de segurar, no meio do aperto, e o peso dela muda nos seus dedos de um jeito que você vai reconhecer pelo resto da vida.</td></tr>
             <tr><td>2</td><td>Ele ainda consegue sorrir, com os dentes vermelhos, e pede que alguém termine o que ele começou. Tenta dizer mais alguma coisa, uma piada talvez, porque sempre tinha uma, e a frase fica no meio do caminho.</td></tr>
-            <tr><td>3</td><td>O vento muda de direção naquele exato momento. As folhas em volta param, todas juntas, e por um segundo inteiro a mata parece calada por respeito, antes de voltar a ser só mata.</td></tr>
+            <tr><td>3</td><td>O vento muda de direção naquele exato momento. As folhas em volta param, todas juntas, e a mata fica quieta por um instante.</td></tr>
             <tr><td>4</td><td>O corpo fica mais leve nos seus braços, e você entende antes de qualquer um dizer. Continua segurando mesmo assim, tirando o cabelo dela de cima do rosto com cuidado, porque ainda não sabe o que mais fazer com as mãos.</td></tr>
             <tr><td>5</td><td>A coisa que ela carregava para todo lado, o amuleto barato, o caderno de bordas gastas, escorrega dos dedos e rola pelo chão até parar nos pés de quem estava mais longe. Ninguém se abaixa para pegar. Ainda não.</td></tr>
-            <tr><td>6</td><td>A batalha continua em volta, indiferente. Alguém ainda grita ordens, uma espada ainda bate num escudo, um pássaro canta em algum lugar. O mundo seguiu andando sem pedir licença, e é exatamente isso que mais dói.</td></tr>
+            <tr><td>6</td><td>A batalha continua em volta, indiferente. Alguém ainda grita ordens, uma espada ainda bate num escudo, um pássaro canta em algum lugar.</td></tr>
           </tbody>
         </table></div>
         <p class="regras-note">Quando quem morre é personagem de jogador, pergunte antes se ele quer uma última fala ou um último gesto. A tabela entra depois, para o que o resto da mesa vê.</p>
@@ -4245,10 +4245,10 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>A lâmina entra, e por um segundo nada acontece. Ele olha para baixo, surpreso, quase ofendido, como quem não acredita que aquilo aconteceu justo com ele. Depois olha para você, e nos olhos dele tem uma pergunta que ele não vai ter tempo de fazer.</td></tr>
+            <tr><td>1</td><td>A lâmina entra, e por um segundo nada acontece. Ele olha para baixo, surpreso, quase ofendido. Depois olha para você, e nos olhos dele tem uma pergunta que ele não vai ter tempo de fazer.</td></tr>
             <tr><td>2</td><td>O monstro solta um último som, baixo e quase triste, parecido demais com o de um bicho ferido que só queria voltar para a toca. Desaba de lado, e a nuvem de poeira que ele levanta demora muito para assentar.</td></tr>
             <tr><td>3</td><td>A magia atravessa a criatura de lado a lado e deixa um buraco de luz por onde dá para ver a parede do outro lado. Ela ainda dá dois passos na sua direção. No terceiro, esquece como se anda.</td></tr>
-            <tr><td>4</td><td>Ele cai de joelhos, larga a arma e, sem raiva nenhuma, pergunta quem mandou vocês. Quando ninguém responde, ri baixinho, como quem finalmente entende uma piada que demorou anos para chegar, e fecha os olhos.</td></tr>
+            <tr><td>4</td><td>Ele cai de joelhos, larga a arma e, sem raiva nenhuma, pergunta quem mandou vocês. Quando ninguém responde, ri baixinho e fecha os olhos.</td></tr>
             <tr><td>5</td><td>O corpo se desfaz em cinza e Mana solta, que sobe em espiral como faísca de fogueira em noite fria. Por um instante é bonito. Some antes de chegar ao teto, e o cheiro de queimado fica.</td></tr>
             <tr><td>6</td><td>Silêncio. A respiração de vocês é o único barulho da sala. Só agora dá para sentir o quanto os braços tremem, o quanto a boca está seca, e o quanto ninguém quer ser o primeiro a baixar a arma.</td></tr>
           </tbody>
@@ -4366,7 +4366,7 @@ ${HTML_DEVOCAO}
         <li><strong>Cidade:</strong> uma rolagem por dia inteiro circulando, comprando ou investigando.</li>
         <li><strong>Acampamento:</strong> uma rolagem por noite fora de lugar seguro, antes de você definir a qualidade do descanso.</li>
         <li><strong>Combate:</strong> uma rolagem no começo da terceira rodada, ou quando a luta empacar.</li>
-        <li>Nunca role no meio de uma cena que já tem tensão própria. O evento aleatório existe para dar vida à mesa parada, e interromper um clímax com ele só tira o peso do clímax.</li>
+        <li>Nunca role no meio de uma cena que já tem tensão própria. O evento aleatório serve para movimentar uma mesa parada. No meio de um clímax, ele só atrapalha.</li>
         <li>O dado fica com os jogadores, e quem rola muda a cada vez. Com o dado na mão de quem joga, a mesa aceita o azar como coisa do mundo, e ninguém acha que você escolheu castigar alguém.</li>
         <li>Você lê o resultado e descreve. Se o evento esconde alguma coisa, como um espião ou uma armadilha, conte só o que os personagens percebem.</li>
         <li>Um 2 nunca mata ninguém sozinho. Ele coloca o grupo numa posição ruim da qual ainda dá para sair, e a saída é a parte divertida.</li>
@@ -4394,7 +4394,7 @@ ${HTML_DEVOCAO}
             <tr><td>3</td><td><strong>Passagem cortada.</strong> A ponte do mapa virou três tábuas penduradas numa corda, balançando sobre um rio marrom e barulhento que arrasta galhos inteiros. Do outro lado, a estrada continua, tão perto que dá raiva.<small class="regras-mecanica">Contornar custa um dia a mais e 1 de Cansaço para todos. Atravessar direto pede Atletismo na DT Padrão, e quem falha perde para a correnteza um item que não esteja equipado, escolhido pelo próprio jogador.</small></td></tr>
             <tr><td>4</td><td><strong>Quebra no caminho.</strong> Um estalo seco debaixo da carroça, e depois o som de madeira arrastando na pedra. A roda rachou bem no meio, ou o cavalo começou a mancar da pata de trás, e o sol já passou do meio do céu.<small class="regras-mecanica">Tecnologia, Adestramento ou Sobrevivência na DT Padrão resolve em uma hora. Na falha, o grupo perde meio dia parado no meio do nada.</small></td></tr>
             <tr><td>5</td><td><strong>O tempo fecha.</strong> O céu escurece de um lado só, rápido demais, e o cheiro de terra molhada chega antes da primeira gota. Em minutos a estrada vira lama até o tornozelo, a capa pesa o dobro e ninguém enxerga o próximo marco. Ou é o contrário: um calor parado que não deixa ninguém pensar.<small class="regras-mecanica">A viagem rende metade do dia, e quem estiver sem abrigo adequado termina com 1 de Cansaço.</small></td></tr>
-            <tr><td>6</td><td><strong>Pedágio improvisado.</strong> Uma corrente esticada entre duas estacas, uma mesa de campanha e quatro pessoas armadas que não usam o mesmo uniforme. A que está sentada sorri e diz o preço como quem lembra um costume antigo. As outras três não sorriem.<small class="regras-mecanica">Pagar sai barato. Discutir pede Diplomacia ou Intimidação na DT Padrão, e o resultado ruim deixa para trás alguém que vai lembrar do grupo.</small></td></tr>
+            <tr><td>6</td><td><strong>Pedágio improvisado.</strong> Uma corrente esticada entre duas estacas, uma mesa de campanha e quatro pessoas armadas que não usam o mesmo uniforme. A que está sentada sorri e diz o preço. As outras três não sorriem.<small class="regras-mecanica">Pagar sai barato. Discutir pede Diplomacia ou Intimidação na DT Padrão, e o resultado ruim deixa para trás alguém que vai lembrar do grupo.</small></td></tr>
             <tr><td>7</td><td><strong>Estrada comum.</strong> Poeira, sol e o barulho dos próprios passos. Um velho sentado num marco de pedra conta, sem ninguém perguntar, que viu luzes no morro ontem. Mais adiante, um altar de beira de estrada tem flores frescas e uma vela que ainda não apagou.<small class="regras-mecanica">Use um desses detalhes para plantar alguma coisa da próxima sessão.</small></td></tr>
             <tr><td>8</td><td><strong>Caravana no mesmo sentido.</strong> Primeiro o sino, depois a poeira, depois as carroças coloridas de uma caravana ou uma fila de peregrinos cantando baixo. Uma mulher de chapéu largo acena, oferece lugar no fogo da noite e olha com atenção demais para as armas de vocês.<small class="regras-mecanica">Viajar junto dá +1 na próxima rolagem desta tabela, e em troca eles vão pedir um favor antes do fim da estrada.</small></td></tr>
             <tr><td>9</td><td><strong>Atalho.</strong> Um pastor de mãos rachadas aponta com o cajado uma trilha de cabras que some entre as pedras e garante que por ali se chega antes do almoço de amanhã. Ou alguém do grupo reconhece aquele morro, de uma vida antiga, e sabe o caminho sem saber de onde.<small class="regras-mecanica">A viagem encurta meio dia.</small></td></tr>
@@ -4415,7 +4415,7 @@ ${HTML_DEVOCAO}
             <tr><td>4</td><td><strong>Perdidos.</strong> A marca de giz que vocês fizeram está ali. Só que está na parede errada, virada para o lado errado, e ninguém lembra de ter passado por esta sala. A tocha começa a parecer mais curta do que estava.<small class="regras-mecanica">Sobrevivência ou Investigação na DT Padrão reencontra o caminho. Na falha, o grupo perde uma hora e todos ganham 1 de Cansaço.</small></td></tr>
             <tr><td>5</td><td><strong>A luz falha ou o ar pesa.</strong> As tochas começam a chiar como se alguém tivesse jogado água nelas, e a chama fica azulada e baixa. O ar ganha um cheiro doce de fruta passada, e a cabeça de todo mundo fica leve, lenta, distraída.<small class="regras-mecanica">Até resolverem, testes de Percepção têm desvantagem.</small></td></tr>
             <tr><td>6</td><td><strong>Rastros frescos.</strong> Na lama, pegadas largas com marca de garra, tão novas que a água ainda está escorrendo para dentro delas. Um galho quebrado na altura do ombro ainda solta seiva. Ela passou por aqui agorinha, e estava carregando alguma coisa pesada.<small class="regras-mecanica">Seguir leva ao covil e ao que ela guarda. Desviar custa meia hora.</small></td></tr>
-            <tr><td>7</td><td><strong>Passagem tranquila.</strong> Por um tempo, nada. Só o som dos passos e da água pingando. Então a luz passa por uma inscrição riscada na pedra com pressa, ou por um esqueleto encostado na parede com o dedo apontando para o fundo do corredor, como quem avisa.<small class="regras-mecanica">Pode não significar nada, ou pode significar tudo na próxima sala. Decida depois de ver como o grupo reage.</small></td></tr>
+            <tr><td>7</td><td><strong>Passagem tranquila.</strong> Por um tempo, nada. Só o som dos passos e da água pingando. Então a luz passa por uma inscrição riscada na pedra com pressa, ou por um esqueleto encostado na parede com o dedo apontando para o fundo do corredor.<small class="regras-mecanica">Pode não significar nada, ou pode significar tudo na próxima sala. Decida depois de ver como o grupo reage.</small></td></tr>
             <tr><td>8</td><td><strong>Outro grupo explorando.</strong> Vozes adiante, abafadas, e o brilho de uma lanterna que não é de vocês. Quatro pessoas com equipamento bom, sujas do mesmo pó, param no meio do salão e olham para vocês do mesmo jeito que vocês olham para elas: calculando.<small class="regras-mecanica">Aventureiros rivais, saqueadores ou uma expedição de facção. Ainda ninguém decidiu se vão ser aliados ou inimigos.</small></td></tr>
             <tr><td>9</td><td><strong>Depósito esquecido.</strong> Atrás de uma porta emperrada, uma sala pequena e seca, com prateleiras que ninguém toca há anos. Tem um cheiro bom de óleo velho e corda, e numa caixa de madeira, enrolado num pano, um frasco ainda lacrado.<small class="regras-mecanica">Suprimentos antigos ainda úteis: corda, óleo, uma ferramenta e uma poção comum.</small></td></tr>
             <tr><td>10</td><td><strong>Posição vantajosa.</strong> O corredor se abre num mirante sobre a sala de baixo, com uma mureta que parece feita para isso: quem está em cima vê tudo e quase não é visto. A porta do fundo tem uma tranca pesada, do lado de dentro.<small class="regras-mecanica">Se o próximo encontro acontecer aqui, os inimigos começam Surpreendidos.</small></td></tr>
@@ -4480,7 +4480,7 @@ ${HTML_DEVOCAO}
             <tr><td>9</td><td><strong>O terreno ajuda.</strong> Um golpe errado acerta a coluna, e metade da parede desaba levantando poeira, deixando um monte de pedra na altura do peito, perfeito para se abrigar. Ou uma porta trancada cede com o impacto e abre uma saída.<small class="regras-mecanica">Uma parede cai e vira cobertura, uma passagem se abre ou uma plataforma fica ao alcance.</small></td></tr>
             <tr><td>10</td><td><strong>Aliado inesperado.</strong> Um grito de guerra que não é de nenhum dos lados. Na porta, sem fôlego e de espada na mão, está alguém que vocês ajudaram muito tempo atrás, ou um guarda atraído pelo barulho, ou uma criatura que odeia esses inimigos mais do que odeia vocês.<small class="regras-mecanica">Ele age uma vez nesta rodada, na última posição da Iniciativa.</small></td></tr>
             <tr><td>11</td><td><strong>Abertura.</strong> O inimigo principal gira rápido demais para acompanhar um golpe e deixa o flanco inteiro aberto por um segundo. Todo mundo que já lutou alguma vez na vida vê. Ele também vê, e o rosto dele mostra.<small class="regras-mecanica">O inimigo principal fica Exposto até o começo do próximo turno dele.</small></td></tr>
-            <tr><td>12</td><td><strong>Virada.</strong> O chefe pisa numa poça de sangue, o pé escorrega meio palmo, e a guarda cai. Ou ele solta um grito de dor que revela, finalmente, onde a armadura não protege. Por um segundo, o monstro parece só alguém cansado.<small class="regras-mecanica">O próximo ataque contra ele tem vantagem e causa +1 dado da arma no dano.</small></td></tr>
+            <tr><td>12</td><td><strong>Virada.</strong> O chefe pisa numa poça de sangue, o pé escorrega meio palmo, e a guarda cai. Ou ele solta um grito de dor que revela, finalmente, onde a armadura não protege.<small class="regras-mecanica">O próximo ataque contra ele tem vantagem e causa +1 dado da arma no dano.</small></td></tr>
           </tbody>
         </table></div>
       </details>
@@ -4511,10 +4511,10 @@ ${HTML_DEVOCAO}
       <p>Um NPC fica de pé quando parece ter uma vida que continua depois que o grupo vai embora. Ninguém estava esperando por vocês: a pessoa estava no meio de alguma coisa quando a porta abriu.</p>
       <ul class="regras-list">
         <li><strong>Comece pelas mãos.</strong> Diga o que ela está fazendo quando o grupo chega: contando moedas, remendando uma rede, tirando uma farpa do dedo. É o jeito mais rápido de mostrar que ela tem vida própria.</li>
-        <li><strong>Fale com a voz dela.</strong> Use a fala pronta da tabela como primeira frase e siga dali. Uma frase dita com voz vale mais que três frases descritas.</li>
+        <li><strong>Fale com a voz dela.</strong> Use a fala pronta da tabela como primeira frase e siga dali. Falar como o NPC funciona melhor do que descrever o que ele diz.</li>
         <li><strong>Só role o que a cena vai usar.</strong> Para quem vende uma corda, nome e jeito bastam.</li>
         <li><strong>O segredo quase nunca sai nessa conversa.</strong> Ele existe para você saber por que a pessoa desconversa. A linha "Deixa escapar" traz o sinal pequeno que denuncia o segredo para quem prestar atenção, e é essa atenção que o jogador merece ver recompensada.</li>
-        <li><strong>Se o NPC ganhar a mesa, anote e traga de volta.</strong> NPC que volta lembrando do que o grupo disse da última vez vale mais que três NPCs novos.</li>
+        <li><strong>Se o NPC ganhar a mesa, anote e traga de volta.</strong> Um NPC que volta lembrando do que o grupo disse da última vez costuma marcar mais do que vários NPCs novos.</li>
       </ul>
 
       <details class="regras-details">
@@ -4567,7 +4567,7 @@ ${HTML_DEVOCAO}
           <thead><tr><th>1d12</th><th>Quem é</th><th>O jeito, e uma fala</th></tr></thead>
           <tbody>
             <tr><td>1</td><td><strong>Taverneira que também empresta dinheiro.</strong> Conhece a dívida de metade da rua pelo nome, e serve a dose mais forte para quem deve mais.</td><td>Enxuga o mesmo copo o tempo inteiro e fala olhando para as mãos de quem chega, nunca para o rosto, como quem avalia anel e calo.<small class="regras-mecanica"><strong>Fala:</strong> “Primeira dose é por conta da casa. A segunda a gente conversa.”</small></td></tr>
-            <tr><td>2</td><td><strong>Guarda de portão no fim do turno.</strong> Doze horas em pé, botas encharcadas, e ainda falta uma hora até alguém vir render.</td><td>Repete devagar a última palavra de quem fala com ele, como quem confere se ouviu direito, e boceja no meio das próprias frases.<small class="regras-mecanica"><strong>Fala:</strong> “Negócios. Sei. Negócios de que tipo?”</small></td></tr>
+            <tr><td>2</td><td><strong>Guarda de portão no fim do turno.</strong> Doze horas em pé, botas encharcadas, e ainda falta uma hora até alguém vir render.</td><td>Repete devagar a última palavra de quem fala com ele e boceja no meio das próprias frases.<small class="regras-mecanica"><strong>Fala:</strong> “Negócios. Sei. Negócios de que tipo?”</small></td></tr>
             <tr><td>3</td><td><strong>Escriba de guilda, contratada por semana.</strong> Tinta nos dedos, óculos remendados com linha e uma pilha de documentos que não são dela para cuidar.</td><td>Ri baixinho antes de dar qualquer notícia ruim, e o riso fica mais nervoso quanto pior é a notícia.<small class="regras-mecanica"><strong>Fala:</strong> “Tem uma coisinha engraçada sobre o registro de vocês.”</small></td></tr>
             <tr><td>4</td><td><strong>Caçador que conhece a mata inteira.</strong> Passa mais tempo fora de casa do que dentro, e conversa melhor com cachorro do que com gente.</td><td>Cheira o ar antes de responder qualquer pergunta e não explica por quê. Às vezes, depois de cheirar, muda a resposta.<small class="regras-mecanica"><strong>Fala:</strong> “Amanhã chove. E não vai ser água boa.”</small></td></tr>
             <tr><td>5</td><td><strong>Curandeira sem licença.</strong> Atende nos fundos de uma padaria, cobra o que a pessoa pode pagar e já foi presa duas vezes por isso.</td><td>Mãos sempre ocupadas: amassando folha, dobrando pano, tomando o pulso de quem conversa com ela sem pedir licença.<small class="regras-mecanica"><strong>Fala:</strong> “Senta. Você está sangrando e nem percebeu, não é?”</small></td></tr>
@@ -4612,7 +4612,7 @@ ${HTML_DEVOCAO}
             <tr><td>2</td><td><strong>Hostil.</strong> Os olhos endurecem assim que vocês abrem a boca. A mão desce para baixo do balcão, ou para a corda do sino, ou para a maçaneta, e a conversa acaba antes de começar.<small class="regras-mecanica">Chama a guarda, saca a arma ou fecha a porta na cara. Para conversar, o grupo precisa antes mudar a situação, e depois encarar um Conflito Social com Resistência 8.</small></td></tr>
             <tr><td>3–5</td><td><strong>Desconfiado.</strong> Responde de braços cruzados, com uma palavra por pergunta, e confere as mãos de vocês a cada frase. Se ajudar, a ajuda vem com preço e com prazo.<small class="regras-mecanica">Qualquer ajuda custa alguma coisa. Se a conversa ficar difícil, use Conflito Social com Resistência 5.</small></td></tr>
             <tr><td>6–8</td><td><strong>Indiferente.</strong> Trata vocês como mais um cliente numa tarde comum: educado, cansado e com a cabeça em outro lugar. Faz o que o trabalho pede, e nada além.<small class="regras-mecanica">Coopera no que faz parte do trabalho, sem teste. Pedido fora disso vira Conflito Social com Resistência 3.</small></td></tr>
-            <tr><td>9–11</td><td><strong>Simpático.</strong> Abre um sorriso de verdade, puxa uma cadeira e pergunta de onde vocês vêm como quem quer mesmo saber. Ainda avisa o que não vale a pena comprar na cidade.<small class="regras-mecanica">Ajuda de graça no que é fácil, sem teste, e conta um boato da Árvore onde vocês estão.</small></td></tr>
+            <tr><td>9–11</td><td><strong>Simpático.</strong> Abre um sorriso de verdade, puxa uma cadeira e pergunta de onde vocês vêm, com interesse de verdade. Ainda avisa o que não vale a pena comprar na cidade.<small class="regras-mecanica">Ajuda de graça no que é fácil, sem teste, e conta um boato da Árvore onde vocês estão.</small></td></tr>
             <tr><td>12</td><td><strong>Aliado.</strong> Alguma coisa em vocês lembra alguém que essa pessoa perdeu, ou alguém que ela gostaria de ter sido. Fecha a porta mais cedo, baixa a voz e oferece uma ajuda que ninguém pediu.<small class="regras-mecanica">Se arrisca pelo grupo hoje, dentro do próprio Limite, e vai cobrar isso um dia.</small></td></tr>
           </tbody>
         </table></div>
@@ -4625,11 +4625,11 @@ ${HTML_DEVOCAO}
             <tr><td>Prestígio negativo com a facção dele, ou fama de ter feito algo na cidade</td><td>−2</td></tr>
           </tbody>
         </table></div>
-        <p class="regras-note">Role a atitude uma vez por NPC, e não uma vez por conversa. Depois disso, quem muda a atitude é o que o grupo faz: uma gentileza lembrada, uma promessa cumprida, uma ameaça que não precisava ter sido feita. Isso vale mais do que qualquer teste de Diplomacia.</p>
+        <p class="regras-note">Role a atitude uma vez por NPC, e não uma vez por conversa. Depois disso, quem muda a atitude é o que o grupo faz: uma gentileza lembrada, uma promessa cumprida, uma ameaça que não precisava ter sido feita. Um teste de Diplomacia, sozinho, não muda a atitude.</p>
       </details>
 
       <h3 class="regras-subtitle">Boatos por Árvore</h3>
-      <p>Boato é a forma mais barata de ensinar o mundo. O grupo passa um dia circulando numa cidade, conversa com o NPC que você acabou de rolar, e sai de lá com três frases que valem mais que qualquer explicação sua sobre como aquela Árvore funciona. Cada tabela abaixo é da Árvore onde a mesa está.</p>
+      <p>Boato é a forma mais barata de ensinar o mundo. O grupo passa um dia circulando numa cidade, conversa com o NPC que você acabou de rolar, e aprende como aquela Árvore funciona pelos boatos, sem você precisar explicar. Cada tabela abaixo é da Árvore onde a mesa está.</p>
       <ul class="regras-list">
         <li><strong>O boato vem na voz de alguém.</strong> Faça a voz. Uma lavadeira desconfiada e um engenheiro com as mãos tremendo contam a mesma cidade de jeitos diferentes, e é esse jeito que a mesa lembra.</li>
         <li><strong>A coluna do fundo de verdade é só sua.</strong> Entregue o boato inteiro e guarde o resto para quando alguém for atrás. Embaixo de cada verdade há um gancho pronto, se o grupo quiser transformar o boato em aventura.</li>
@@ -4649,7 +4649,7 @@ ${HTML_DEVOCAO}
             <tr><td>3</td><td>Uma criança de rua garante que em Întuneric existe uma porta que devolve a pessoa como ela era aos dez anos. Ela conhece alguém que conhece alguém que passou.</td><td>A porta existe. O que volta por ela tem dez anos, o rosto certo e as lembranças certas, e nunca foi aquela pessoa.<small class="regras-mecanica"><strong>Gancho:</strong> uma família recebeu de volta um filho perdido, e não quer ouvir o que o grupo tem a dizer.</small></td></tr>
             <tr><td>4</td><td>No mercado de gado, um vaqueiro cobra uma moeda de quem quer ver o bezerro que nasceu com dois corações, depois de a mãe beber de uma poça no pasto.</td><td>Verdade. Água de Origem nunca pergunta se aquilo é uma boa ideia antes de começar alguma coisa.<small class="regras-mecanica"><strong>Gancho:</strong> a poça continua lá, e alguém começou a vender aquela água em garrafas.</small></td></tr>
             <tr><td>5</td><td>“Quem chega em Realidade 0 chega cedo demais, e volta velho”, diz um viajante de cabelo todo branco e rosto de quem não tem trinta anos.</td><td>Boato falso. O viajante envelheceu por um motivo bem menos bonito, e prefere a história que conta.<small class="regras-mecanica"><strong>Gancho:</strong> o motivo verdadeiro continua atrás dele, e acabou de chegar na cidade.</small></td></tr>
-            <tr><td>6</td><td>Na porta de um templo vazio, uma devota de joelhos gastos conta que reza para Aethel há quarenta anos e nunca ouviu nada de volta. Ela diz isso sem raiva nenhuma, como quem conta o tempo.</td><td>Verdade. Gênese abre a primeira brecha para que alguma coisa exista, e o que vem depois nunca foi assunto dela.<small class="regras-mecanica"><strong>Gancho:</strong> a devota quer que alguém lhe mostre, com alguma prova, se valeu a pena.</small></td></tr>
+            <tr><td>6</td><td>Na porta de um templo vazio, uma devota de joelhos gastos conta que reza para Aethel há quarenta anos e nunca ouviu nada de volta. Ela diz isso sem raiva nenhuma.</td><td>Verdade. Gênese abre a primeira brecha para que alguma coisa exista, e o que vem depois nunca foi assunto dela.<small class="regras-mecanica"><strong>Gancho:</strong> a devota quer que alguém lhe mostre, com alguma prova, se valeu a pena.</small></td></tr>
           </tbody>
         </table></div>
       </details>
@@ -4791,7 +4791,7 @@ ${HTML_DEVOCAO}
 
       <h3 class="regras-subtitle">Relógios de pressão</h3>
       <p>A página de descanso diz que o custo de parar vem do mundo continuar andando. O relógio é esse mundo andando na frente de todo mundo, onde dá para ver. Desenhe um círculo dividido em partes num papel no meio da mesa e diga em voz alta o que acontece quando ele fechar. Toda vez que o gatilho acontecer, pinte uma parte devagar, e deixe a mesa olhar você pintando.</p>
-      <p>O relógio assusta de verdade quando cada parte pintada aparece também na ficção. Diga o número, e logo depois mostre o que mudou no mundo: um guarda que olha para o corredor, uma vela que apaga sozinha, um padeiro que fecha mais cedo. É isso que transforma uma contagem em medo. Os oito relógios abaixo já trazem o que acontece em cada parte.</p>
+      <p>O relógio assusta de verdade quando cada parte pintada aparece também na ficção. Diga o número, e logo depois mostre o que mudou no mundo: um guarda que olha para o corredor, uma vela que apaga sozinha, um padeiro que fecha mais cedo. Os oito relógios abaixo já trazem o que acontece em cada parte.</p>
       <ul class="regras-list">
         <li><strong>Escolha o tamanho pelo fôlego da ameaça.</strong> Quatro partes para o que está quase acontecendo, seis para a pressão de uma sessão, oito para algo que atravessa o arco. Uma ameaça enorme e lenta continua tendo oito partes.</li>
         <li><strong>Anuncie o resultado antes de pintar a primeira parte.</strong> Relógio com destino secreto vira ameaça vaga, e a mesa não consegue decidir contra uma coisa que não conhece.</li>
@@ -5036,7 +5036,7 @@ ${HTML_DEVOCAO}
       </div>
 
       <h3 class="regras-subtitle">Montar uma ameaça sob medida</h3>
-      <p>Toda ameaça boa começa por uma pergunta sem número nenhum: o que a mesa deveria sentir quando ela aparece? Medo de ser caçado. Raiva de uma injustiça. Pena de uma coisa que só está com fome. Os números vêm depois, e existem para fazer esse sentimento durar o tempo certo, sem acabar em duas rodadas nem se arrastar por dez.</p>
+      <p>Antes dos números, decida o que a mesa deve sentir quando a ameaça aparece. Medo de ser caçado. Raiva de uma injustiça. Pena de uma coisa que só está com fome. Os números vêm depois, e existem para fazer esse sentimento durar o tempo certo, sem acabar em duas rodadas nem se arrastar por dez.</p>
       <p>O bestiário resolve a maior parte das noites. Quando a criatura que a história pede não existe lá, monte a sua em oito passos, a partir dos números de calibragem da biblioteca do Mestre. São seis decisões e duas contas, e nenhuma delas pede planilha.</p>
       <ol class="regras-steps">
         <li><strong>Escreva o que a mesa deve sentir, numa linha só.</strong> "Eles precisam fugir e não conseguem" pede uma criatura. "Eles vão se arrepender de ter matado" pede outra. Essa linha decide todo o resto, inclusive a hora em que a ameaça deve cair.</li>
@@ -5084,7 +5084,7 @@ ${HTML_DEVOCAO}
             <tr><td>5</td><td><strong>Cenário: derrubar o teto.</strong> Ela bate com o corpo inteiro na coluna mais velha da sala. A pedra geme, e cai poeira nos ombros de todo mundo.<small class="regras-mecanica">Anuncia numa rodada. Na seguinte, a área em volta da coluna desaba: Reflexos na DT Padrão, ou sofre o dano de um ataque dela e fica Caído.</small></td></tr>
             <tr><td>6</td><td><strong>Cenário: apagar a luz.</strong> Ela engole a chama da tocha, ou quebra o lampião com um tapa, e por um instante só dá para ver os olhos dela.<small class="regras-mecanica">A sala fica escura até alguém gastar uma ação para reacender. Enquanto isso, ataques à distância têm desvantagem.</small></td></tr>
             <tr><td>7</td><td><strong>Golpe anunciado.</strong> Ela recua dois passos, baixa a cabeça, e o corpo inteiro se enche de ar como um fole. Todo mundo na sala entende que o próximo golpe vai ser diferente.<small class="regras-mecanica">Anuncie na rodada anterior. Acerta de 40% a 50% da Vida do alvo, e quem sair da frente a tempo não sofre nada.</small></td></tr>
-            <tr><td>8</td><td><strong>Fraqueza que se descobre.</strong> Toda vez que ouve uma certa canção, ou vê o próprio reflexo numa lâmina limpa, ela hesita, como quem lembra de alguma coisa.<small class="regras-mecanica">Percepção ou Conhecimento na DT Padrão revela a fraqueza em cena. Explorar tira a reação dela por uma rodada.</small></td></tr>
+            <tr><td>8</td><td><strong>Fraqueza que se descobre.</strong> Toda vez que ouve uma certa canção, ou vê o próprio reflexo numa lâmina limpa, ela hesita por um instante.<small class="regras-mecanica">Percepção ou Conhecimento na DT Padrão revela a fraqueza em cena. Explorar tira a reação dela por uma rodada.</small></td></tr>
           </tbody>
         </table></div>
       </details>
@@ -5103,7 +5103,7 @@ ${HTML_DEVOCAO}
             <tr><td>6</td><td>Chora de verdade quando é ferida, com lágrimas.</td><td>Parar de existir, e não consegue fazer isso sozinha.</td></tr>
           </tbody>
         </table></div>
-        <p class="regras-note">Mostre o desejo pelo comportamento, sem explicar. A criatura que fica olhando para a carroça em vez de atacar diz mais do que qualquer frase sua.</p>
+        <p class="regras-note">Mostre o desejo pelo comportamento, sem explicar. Uma criatura que fica olhando para a carroça em vez de atacar já mostra o que ela quer.</p>
       </details>
 
       <h3 class="regras-subtitle">Um exemplo fechado</h3>
@@ -5242,7 +5242,7 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>A lei</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td><strong>Vantagem do avesso.</strong> O chão pende para o lado errado por um segundo, e cada um erra o passo que acertaria.<small class="regras-mecanica">Quem teria vantagem rola com desvantagem, e quem teria desvantagem rola com vantagem.</small></td></tr>
+            <tr><td>1</td><td><strong>Vantagem do avesso.</strong> O chão pende para o lado errado por um instante, e cada um erra o passo que acertaria.<small class="regras-mecanica">Quem teria vantagem rola com desvantagem, e quem teria desvantagem rola com vantagem.</small></td></tr>
             <tr><td>2</td><td><strong>Cura que fere.</strong> As feridas abertas brilham, e a luz dói.<small class="regras-mecanica">Toda cura nesta rodada causa dano igual em quem a recebe. Vida temporária continua valendo.</small></td></tr>
             <tr><td>3</td><td><strong>A fila ao contrário.</strong> O último a se mexer sente que já se mexeu.<small class="regras-mecanica">Nesta rodada, a fila anda do último para o primeiro.</small></td></tr>
             <tr><td>4</td><td><strong>Magia de graça.</strong> O ar fica tão carregado que basta pensar para o Fluxo responder.<small class="regras-mecanica">Magias não custam Mana nesta rodada, e cada uma faz quem conjurou rolar na tabela Fluxo instável.</small></td></tr>
@@ -5257,7 +5257,7 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d4</th><th>O segredo e o sinal</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td><strong>O chefe aprende.</strong> Cada fase nova traz a lição da anterior. <em>Sinal: depois de cada golpe forte, ele passa os dedos na ferida, como quem estuda.</em><small class="regras-mecanica">A cada fase nova, ele passa a sofrer só três quartos do dano do tipo que mais o feriu na fase anterior. Anuncie com o corpo: a pele escurece onde o fogo bateu, o escudo vira para o lado das flechas.</small></td></tr>
+            <tr><td>1</td><td><strong>O chefe aprende.</strong> Cada fase nova traz a lição da anterior. <em>Sinal: depois de cada golpe forte, ele passa os dedos na ferida e observa.</em><small class="regras-mecanica">A cada fase nova, ele passa a sofrer só três quartos do dano do tipo que mais o feriu na fase anterior. Anuncie com o corpo: a pele escurece onde o fogo bateu, o escudo vira para o lado das flechas.</small></td></tr>
             <tr><td>2</td><td><strong>O reflexo.</strong> O chefe é a cópia de um personagem do grupo. <em>Sinal: o jeito de segurar a arma, o tique antes de atacar: alguém da mesa já viu isso no espelho.</em><small class="regras-mecanica">Use a ficha desse personagem com a Vida de chefe do VD. Por bilhete, o próprio jogador escolhe uma ação da cópia por rodada, e você joga o resto. Combine antes, em particular, com o jogador cuja ficha vai virar chefe.</small></td></tr>
             <tr><td>3</td><td><strong>O chefe dança.</strong> Ele joga com as regras dos jogadores. <em>Sinal: ele aplaude a Coreografia bem feita do grupo, sinceramente.</em><small class="regras-mecanica">Antes de cada ataque, ele escolhe um risco da Coreografia e ganha ou sofre o mesmo da tabela. No começo ele anuncia o risco. Na fase secreta, anota em segredo e só revela depois do dado. Valdo Três-Palavras é o exemplo inteiro.</small></td></tr>
             <tr><td>4</td><td><strong>O preço.</strong> Na última fase, a força não basta. <em>Sinal: ele pergunta, mais de uma vez, o que cada um ama.</em><small class="regras-mecanica">Ele só cai se alguém entregar uma coisa permanente: um Laço, um Legado, um ponto de Devoção. Sem o preço, ele não morre, mas pode ser preso, expulso ou posto para dormir até a próxima vez. Diga o que está à venda quando a fase começar.</small></td></tr>
@@ -5266,7 +5266,7 @@ ${HTML_DEVOCAO}
       </details>
 
       <h3 class="regras-subtitle">Três cenas para o clímax</h3>
-      <p>Nem toda luta grande se vence no dano. As três cenas abaixo usam regras que o livro já tem, numa forma pronta para o fim de um arco.</p>
+      <p>Algumas lutas grandes não se vencem com dano. As três cenas abaixo usam regras que o livro já tem, numa forma pronta para o fim de um arco.</p>
       <p><strong>Ritual sob fogo.</strong> Ritual não entra em combate, então quem conduz não ataca, não conjura e não reage enquanto conduz. A luta acontece em volta dele: o grupo segura a porta enquanto o ritual anda, ou corre para impedir o ritual do inimigo.</p>
       <ul class="regras-list">
         <li>O ritual tem Etapas: 3 no simples, 4 no complexo, 5 no grandioso e 6 no monumental.</li>
@@ -5482,7 +5482,7 @@ ${HTML_DEVOCAO}
       </ul>
 
       <h3 class="regras-subtitle">Fichas dos Soberanos</h3>
-      <p>Os dez Soberanos são os seres mais fortes do Jardim, e alguns passam das deidades. Dois já têm ficha, no VD 1200, acima da deidade no Domínio: Ushumgal e Karnath. Como as deidades, eles não são um combate. A ficha diz onde fica o limite, e a cena decide o que é interessante. Os outros Soberanos ganham ficha quando a história pedir.</p>
+      <p>Os dez Soberanos são os seres mais fortes do Jardim, e alguns passam das deidades. Dois já têm ficha, no VD 1200, acima da deidade no Domínio: Ushumgal e Karnath. Como as deidades, eles não são um combate. A ficha serve para saber até onde vai o poder deles, e a cena em si se resolve pela história. Os outros Soberanos ganham ficha quando a história pedir.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th></th><th>Ushumgal</th><th>Karnath</th></tr></thead>
         <tbody>
@@ -5509,7 +5509,7 @@ ${HTML_DEVOCAO}
         <li><strong>Calma do Ápice.</strong> Aura Imensa: o inimigo que começa o turno nela testa Vontade DT 652 e, falhando, fica Amedrontado até o fim do turno.</li>
         <li><strong>Nenhum Dragão Ergue a Voz.</strong> Dragão de qualquer idade não ataca Ushumgal nem age contra ele, a menos que um motivo de história o liberte.</li>
         <li><strong>Limite.</strong> Não usa magia de Fluxo: o poder dele é o corpo, o sopro e a calma. Não guarda tesouro nem território, então não há nada para tomar dele.</li>
-        <li><strong>Contrajogo.</strong> Quem passa três rodadas diante dele sem atacar nem fugir ganha uma pergunta respondida com a verdade. Contra Ushumgal, conversa vale mais que dano.</li>
+        <li><strong>Contrajogo.</strong> Quem passa três rodadas diante dele sem atacar nem fugir ganha uma pergunta respondida com a verdade. Contra Ushumgal, conversar funciona melhor que atacar.</li>
       </ul>
       <h3 class="regras-subtitle">Karnath, o Soberano dos Monstros</h3>
       <ul class="regras-list">
@@ -5606,14 +5606,14 @@ ${HTML_DEVOCAO}
       <h3 class="regras-subtitle">Recompensa que não é dinheiro</h3>
       <p>As melhores recompensas raramente cabem na carteira. Elas mudam como o mundo trata o grupo, e o grupo sente isso toda vez que volta a um lugar.</p>
       <ul class="regras-list">
-        <li><strong>Prestígio com uma facção.</strong> O porteiro que antes pedia documento agora abre a porta antes de vocês baterem. Vale mais que uma bolsa, porque abre preço, porta e informação por muitas sessões. Ver Prestígio, Fama e Procura.</li>
+        <li><strong>Prestígio com uma facção.</strong> O porteiro que antes pedia documento agora abre a porta antes de vocês baterem. Costuma valer mais que dinheiro, porque dá desconto, acesso e informação por muitas sessões. Ver Prestígio, Fama e Procura.</li>
         <li><strong>Um balcão que abre.</strong> O dono do Mercado Negro manda avisar, por um menino de recados, que a porta dos fundos está destrancada para vocês. É a recompensa mais barata de dar e a mais sentida na mesa.</li>
         <li><strong>Um contato que atende.</strong> Uma informante velha que responde a carta no mesmo dia, sempre com um bilhete a mais do que foi perguntado. Economiza uma sessão inteira de investigação.</li>
         <li><strong>Tempo e lugar.</strong> Uma oficina emprestada por uma semana, alguém que aceita ensinar, uma cama num lugar onde ninguém procura vocês. Transforma tempo parado em progresso concreto. Ver Tempo Entre Aventuras.</li>
         <li><strong>Gratidão que fica.</strong> A vila que o grupo salvou lembra. A criança tirada do incêndio cresce, e um dia bate na porta. Não custa nada agora e rende uma cena muito tempo depois.</li>
         <li><strong>XP por marco</strong> continua correndo por fora, pela tabela de progressão. No ritmo Lento, descoberta vale 10% do próximo nível, missão relevante 25% e fim de arco 50%; as colunas Médio e Rápido estão em Experiência e Níveis.</li>
       </ul>
-      <p class="regras-note">Quando o grupo estiver com dinheiro parado e nada para comprar, mexa na prateleira: abra um local novo, cobre a manutenção das bases, deixe uma dívida vencer ou mostre algo caro que eles queiram muito. Tirar o dinheiro de volta é a única saída que a mesa sente como injusta.</p>
+      <p class="regras-note">Quando o grupo estiver com dinheiro parado e nada para comprar, mexa na prateleira: abra um local novo, cobre a manutenção das bases, deixe uma dívida vencer ou mostre algo caro que eles queiram muito. Só não tome o dinheiro de volta: a mesa sente isso como injusto.</p>
 
       <p class="regras-note">As tabelas completas de calibragem, orçamento de encontro, dano de inimigos, descanso, XP e vida negativa ficam na Biblioteca da campanha, no fim deste guia. Ela é sincronizada com a campanha ativa e só aparece para quem conduz a mesa.</p>
       </section>

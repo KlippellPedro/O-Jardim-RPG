@@ -418,7 +418,7 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
     <ul class="regras-list">
       <li>O teste é no fim, com a DT anunciada antes do primeiro gasto. Nunca mude a DT depois de o grupo comprar material: isso é o mesmo que mudar DT depois do dado.</li>
       <li>Materiais raros são o seu ponto de controle real, não a DT. Um Épico pede pelo menos um material raro ligado ao efeito, e de onde ele vem é aventura.</li>
-      <li>Mítico e Relíquia viram projeto de campanha por regra. Aproveite: um item desses construído ao longo de um arco vale mais que qualquer tesouro entregue.</li>
+      <li>Mítico e Relíquia viram projeto de campanha por regra. Aproveite para fazer da fabricação uma parte da história do arco.</li>
       <li>Cibernético exige Sala de Implante e respeita compatibilidade e pré-requisito. Fabricar não é atalho para instalar o que o corpo não comporta.</li>
     </ul>
   `,

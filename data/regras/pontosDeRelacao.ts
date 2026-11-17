@@ -34,10 +34,10 @@ export interface IDegrauDeRelacao {
 }
 
 export const DEGRAUS_DE_RELACAO: readonly IDegrauDeRelacao[] = [
-  { pontos: 0, titulo: 'Estranhos', como: 'Andam juntos, e ainda não sabem o que o outro faz numa hora ruim.' },
-  { pontos: 1, titulo: 'Companheiros', como: 'Já dividiram um perigo e uma fogueira. Um sabe onde o outro vai estar.' },
-  { pontos: 2, titulo: 'Próximos', como: 'Um guarda um segredo do outro. Um olhar basta para combinar o próximo passo.' },
-  { pontos: 3, titulo: 'Inseparáveis', como: 'Lutam como um só corpo, e perder o outro é perder um pedaço de si.' },
+  { pontos: 0, titulo: 'Estranhos', como: 'Andam juntos, mas ainda não se conhecem direito.' },
+  { pontos: 1, titulo: 'Companheiros', como: 'Já passaram por um perigo juntos e contam um com o outro.' },
+  { pontos: 2, titulo: 'Próximos', como: 'São amigos de verdade e se entendem sem precisar falar muito.' },
+  { pontos: 3, titulo: 'Inseparáveis', como: 'Confiam totalmente um no outro. Perder essa pessoa pesa muito.' },
 ];
 
 export const tituloDoDegrau = (pontos: number) => DEGRAUS_DE_RELACAO[limitarPontosDeRelacao(pontos)].titulo;
@@ -61,7 +61,7 @@ export const USOS_DE_PONTO: readonly IUsoDePonto[] = [
   {
     id: 'mao',
     titulo: 'Segurar a mão',
-    quando: 'Essa pessoa falha num teste de Sanidade ou está numa crise, e ouve a sua voz.',
+    quando: 'Essa pessoa falha num teste de Sanidade ou está numa crise, e consegue ouvir você.',
     efeito: 'Ela refaz o teste de Sanidade e fica com o melhor resultado, ou testa Vontade na hora para sair da crise, com vantagem. Em combate, custa a sua reação.',
   },
   {
@@ -122,14 +122,14 @@ export function sanidadeDaRelacao(
 export const COMO_GANHAR: readonly string[] = [
   'Salvar a vida da pessoa, ou ter a vida salva por ela.',
   'Guardar um segredo dela que custaria caro se saísse.',
-  'Uma conversa de verdade, daquelas que mudam o que um sabe do outro.',
+  'Ter uma conversa séria em que um conta ao outro algo importante sobre si.',
   'Um dia de Cuidar de quem importa, no Tempo Entre Aventuras, passado com ela.',
-  'Atravessar junto uma cena que quase acabou com os dois.',
+  'Sobreviver junto a uma cena em que os dois quase morreram.',
 ];
 
 export const COMO_PERDER: readonly string[] = [
-  'Mentir para ela de um jeito que custa, e ela descobrir.',
-  'Deixá-la para trás numa hora em que dava para voltar.',
+  'Mentir para ela sobre algo sério, e ela descobrir.',
+  'Deixá-la para trás quando dava para voltar e ajudar.',
   'Quebrar uma promessa feita a ela.',
 ];
 
@@ -158,21 +158,21 @@ const lista = (itens: readonly string[]) => itens.map((item) => `<li>${item}</li
 export const REGRA_PONTOS_DE_RELACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
   categoria: 'Combate e Mecânicas',
   status: 'Regra oficial',
-  resumo: 'O quanto cada personagem do grupo confia em cada outro, de 0 a 3. Os pontos viram ajuda na hora certa, mão estendida na crise e Sintonia no Ataque Combinado, e cobram Sanidade quando algo acontece com quem importa.',
+  resumo: 'O quanto cada personagem do grupo confia em cada outro, de 0 a 3. Os pontos dão bônus para ajudar, para tirar alguém de uma crise de Sanidade e para o Ataque Combinado, e fazem você perder Sanidade quando algo ruim acontece com essa pessoa.',
   destaques: [
     ['Pontos', `0 a ${PONTOS_DE_RELACAO_MAXIMOS} por pessoa`],
     ['Usos', '1 por ponto, por sessão'],
     ['Sanidade', 'mais pontos, mais perda'],
   ],
   corpo: `
-    <p class="regras-lead">Quem já dividiu a última ração, quem segurou a corda, quem sabe o nome verdadeiro do outro. Os Pontos de Relação medem isso entre os personagens do grupo: quanto um confia no outro quando a coisa aperta. Eles servem para agir junto, e também cobram o preço de gostar de alguém num mundo que machuca.</p>
+    <p class="regras-lead">Os Pontos de Relação mostram o quanto um personagem do grupo confia em outro, de 0 a ${PONTOS_DE_RELACAO_MAXIMOS}. Eles dão bônus quando vocês agem juntos, mas também fazem você perder mais Sanidade quando algo ruim acontece com essa pessoa.</p>
 
     <div class="regras-resumo">
       <ul>
         <li>Cada personagem tem de 0 a ${PONTOS_DE_RELACAO_MAXIMOS} pontos com cada outro personagem do grupo: os dos jogadores e os Aliados que andam com vocês.</li>
-        <li>Cada ponto é um uso por sessão com aquela pessoa: <strong>Ajuda certa</strong>, <strong>Segurar a mão</strong> ou entrar num <span class="regras-ref regras-ref--ataques-combinados">Ataque Combinado</span> com Sintonia. Os usos voltam no começo da sessão seguinte.</li>
+        <li>Cada ponto é um uso por sessão com aquela pessoa: <strong>Ajuda certa</strong>, <strong>Segurar a mão</strong> ou entrar num <span class="regras-ref regras-ref--ataques-combinados">Ataque Combinado</span> com Sintonia. Os usos voltam no começo da próxima sessão.</li>
         <li>Quanto mais pontos, maior a perda de Sanidade quando a pessoa cai, morre, some ou trai.</li>
-        <li>Ganha-se no máximo 1 ponto com a mesma pessoa por aventura, numa cena que importa. Mentira descoberta e abandono tiram 1; traição grave zera.</li>
+        <li>Você ganha no máximo 1 ponto com a mesma pessoa por aventura. Mentira descoberta e abandono tiram 1 ponto, e traição grave zera tudo.</li>
       </ul>
     </div>
 
@@ -182,60 +182,60 @@ export const REGRA_PONTOS_DE_RELACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
       <tbody>${tabelaDegraus}</tbody>
     </table></div>
     <ul class="regras-list">
-      <li><strong>Os pontos são de quem sente.</strong> Você anota os seus pontos com cada pessoa, e ela anota os dela com você. Quase sempre andam juntos, e quando um sente mais que o outro, a diferença rende cena.</li>
-      <li><strong>O máximo é ${PONTOS_DE_RELACAO_MAXIMOS}</strong> com cada pessoa, sem limite de quantas pessoas. É a mesma escada dos contatos (Conhecido, Amigo e Leal), e cada degrau vale um passo que a mesa sente.</li>
-      <li><strong>Gente de fora do grupo</strong> usa a Confiança de <span class="regras-ref regras-ref--contatos-lacos">Contatos e Laços</span>. Quando alguém passa a andar com vocês, os pontos começam pelo degrau da Confiança dele.</li>
+      <li><strong>Cada um anota os seus.</strong> Você anota os seus pontos com cada pessoa, e ela anota os dela com você. Normalmente os números são iguais, mas podem ser diferentes.</li>
+      <li><strong>O máximo é ${PONTOS_DE_RELACAO_MAXIMOS}</strong> com cada pessoa, e você pode ter pontos com quantas pessoas quiser. É a mesma escada dos contatos (Conhecido, Amigo e Leal).</li>
+      <li><strong>Quem é de fora do grupo</strong> usa a Confiança de <span class="regras-ref regras-ref--contatos-lacos">Contatos e Laços</span>. Quando alguém passa a andar com vocês, os pontos começam no mesmo degrau da Confiança dele.</li>
     </ul>
-    <p class="regras-note">Na ficha, os pontos moram nos Vínculos das Notas: marque o vínculo como alguém do grupo, e os pontos saem da afinidade pela mesma escada da Confiança. 1 ou 2 vale 1 ponto, 3 ou 4 vale 2 e 5 vale 3.</p>
+    <p class="regras-note">Na ficha, os pontos ficam nos Vínculos, dentro das Notas. Marque o vínculo como alguém do grupo, e os pontos são calculados pela afinidade: 1 ou 2 vale 1 ponto, 3 ou 4 vale 2 e 5 vale 3.</p>
 
     <h3 class="regras-subtitle">Usar os pontos</h3>
-    <p>Cada ponto que você tem com alguém é <strong>um uso por sessão</strong> com essa pessoa, que precisa estar na cena. Com 2 pontos com a Duda, você usa duas vezes por sessão. Gastar um uso não tira o ponto: ele volta no começo da próxima sessão.</p>
+    <p>Cada ponto que você tem com alguém vale <strong>um uso por sessão</strong> com essa pessoa, e ela precisa estar na cena. Se você tem 2 pontos com a Duda, pode usar duas vezes por sessão. Gastar um uso não tira o ponto, e o uso volta na próxima sessão.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Uso</th><th>Quando, e o que faz</th></tr></thead>
       <tbody>${tabelaUsos}</tbody>
     </table></div>
     <ul class="regras-list">
-      <li><strong>A Ajuda certa segue <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span></strong>: a contribuição ainda precisa ser possível na ficção, e o líder continua com no máximo dois ajudantes.</li>
-      <li><strong>Segurar a mão</strong> vale uma vez por teste ou por crise, mesmo que mais de uma pessoa queira ajudar.</li>
-      <li><strong>No Ataque Combinado,</strong> a Sintonia é o menor número de pontos que cada participante tem com o líder, e cada participante gasta um uso com ele. A tabela de bônus está no tópico do Ataque Combinado.</li>
+      <li><strong>A Ajuda certa segue as regras de <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span></strong>: a ajuda precisa fazer sentido na cena, e o teste continua com no máximo dois ajudantes.</li>
+      <li><strong>Segurar a mão</strong> só pode ser usado uma vez por teste ou por crise, mesmo que mais de uma pessoa queira ajudar.</li>
+      <li><strong>No Ataque Combinado,</strong> a Sintonia é o menor número de pontos que os participantes têm com o líder, e cada participante gasta um uso com ele. A tabela de bônus está no tópico do Ataque Combinado.</li>
     </ul>
 
-    <h3 class="regras-subtitle">O preço</h3>
-    <p>Gostar de alguém pesa. Quando algo acontece com uma pessoa com quem você tem pontos, teste Sanidade pela tabela, contra a DT do seu nível: a Rotineira quando ela cai e a Padrão quando ela se perde. No nível 1 são 10 e 15, e em qualquer outro nível some o ajuste da tabela de DT em <span class="regras-ref regras-ref--pericias">Perícias</span>. Cada pessoa pede no máximo um teste de cada linha por cena, e a regra de <span class="regras-ref regras-ref--condicoes">Condições</span> vale como sempre: sucesso corta a perda pela metade, e sucesso crítico evita tudo.</p>
+    <h3 class="regras-subtitle">Perda de Sanidade</h3>
+    <p>Quando algo acontece com uma pessoa com quem você tem pontos, você testa Sanidade pela tabela abaixo, contra a DT do seu nível: a Rotineira quando ela cai e a Padrão quando você a perde. No nível 1 as DTs são 10 e 15. Em outros níveis, some o ajuste da tabela de DT em <span class="regras-ref regras-ref--pericias">Perícias</span>. Cada pessoa causa no máximo um teste de cada linha por cena. Como sempre em <span class="regras-ref regras-ref--condicoes">Condições</span>, sucesso corta a perda pela metade e sucesso crítico evita a perda.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>O que acontece</th><th>DT</th><th>1 ponto</th><th>2 pontos</th><th>3 pontos</th></tr></thead>
       <tbody>${tabelaSanidade}</tbody>
     </table></div>
     <ul class="regras-list">
-      <li><strong>Laço e pontos com a mesma pessoa:</strong> role uma vez só, pela linha dos pontos. O laço rompido sem pontos continua sendo a linha de 1 ponto (DT Padrão do seu nível, 1d6), como em Contatos e Laços.</li>
-      <li><strong>Morte ou perda com 3 pontos</strong> costuma trazer Luto Profundo, uma condição de longo prazo. A mesa decide junto com quem joga.</li>
-      <li><strong>Traição</strong> cobra o teste da segunda linha e leva os pontos a 0 no mesmo momento.</li>
+      <li><strong>Se você tem laço e pontos com a mesma pessoa,</strong> role uma vez só, pela linha dos pontos. Um laço rompido sem pontos usa a linha de 1 ponto (DT Padrão do seu nível, 1d6), como em Contatos e Laços.</li>
+      <li><strong>Perder alguém com quem você tem 3 pontos</strong> normalmente causa Luto Profundo, uma condição de longo prazo. O Mestre decide junto com o jogador.</li>
+      <li><strong>Traição</strong> pede o teste da segunda linha e zera os pontos na hora.</li>
     </ul>
 
     <h3 class="regras-subtitle">Ganhar e perder pontos</h3>
-    <p><strong>Ganha-se 1 ponto</strong> com uma pessoa quando os dois vivem uma cena que muda o que um é para o outro. No máximo 1 ponto novo com a mesma pessoa por aventura.</p>
+    <p><strong>Você ganha 1 ponto</strong> com uma pessoa quando os dois passam por algo importante juntos, como nos exemplos abaixo. No máximo 1 ponto novo com a mesma pessoa por aventura.</p>
     <ul class="regras-list">
       ${lista(COMO_GANHAR)}
     </ul>
-    <p><strong>Perde-se 1 ponto</strong> quando a relação leva um golpe:</p>
+    <p><strong>Você perde 1 ponto</strong> quando faz algo que quebra a confiança:</p>
     <ul class="regras-list">
       ${lista(COMO_PERDER)}
     </ul>
     <ul class="regras-list">
-      <li><strong>Traição grave</strong> (vender a pessoa, atacar de propósito, deixar morrer podendo salvar) leva os pontos a 0.</li>
-      <li><strong>Na criação,</strong> se a história de dois personagens se cruza antes da aventura, cada um começa com 1 ponto com o outro, até 2 pontos no total por personagem.</li>
-      <li><strong>Quem propõe a mudança é a mesa.</strong> O jogador pode pedir o ponto, e o Mestre confirma quando a cena pediu.</li>
+      <li><strong>Traição grave</strong> (vender a pessoa, atacar de propósito, deixar morrer quando dava para salvar) zera os pontos.</li>
+      <li><strong>Na criação,</strong> se dois personagens já se conheciam antes da aventura, cada um começa com 1 ponto com o outro, até 2 pontos no total por personagem.</li>
+      <li><strong>O jogador pode pedir o ponto</strong>, e o Mestre confirma se a cena justificou.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do próprio nível (10 no nível 1), com perda de 1d6 na falha.</p>
+      <p>Rafa tem 2 pontos com a Duda. Duda falha num teste de Sanidade ao ver uma criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, então cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do próprio nível (10 no nível 1). Se falhar, perde 1d6.</p>
     </div>
   `,
   corpoMestre: `
-    <p class="regras-lead">Os pontos existem para que o grupo seja um grupo na ficha, e não só na conversa. O que eles pedem de você é atenção: perceber a cena que mereceu um ponto, e lembrar que a pessoa com 3 pontos é a que mais dói quando cai.</p>
+    <p class="regras-lead">Os pontos fazem a relação entre os personagens aparecer na ficha. Preste atenção nas cenas que merecem um ponto, e lembre que perder alguém com 3 pontos pesa muito para o personagem.</p>
 
     <h3 class="regras-subtitle">Dar e tirar pontos</h3>
     <ul class="regras-list">
-      <li>No fim de cada aventura, pergunte à mesa quem ficou mais perto de quem. A resposta costuma ser óbvia, e é aí que o ponto entra.</li>
+      <li>No fim de cada aventura, pergunte à mesa quem ficou mais perto de quem. Normalmente a resposta é fácil, e ela diz quem ganha o ponto.</li>
       <li>Um ponto por aventura com a mesma pessoa é o teto, de propósito. Chegar a 3 leva umas três aventuras, e é isso que dá peso ao Uníssono do Ataque Combinado.</li>
       <li>Tirar ponto é para quando a ficção já tirou. Não use como castigo por jogada ruim: quem perde o ponto deveria sentir que a mesa só anotou o que aconteceu.</li>
     </ul>

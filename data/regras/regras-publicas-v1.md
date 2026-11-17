@@ -28,7 +28,7 @@ Este é o tópico de entrada do livro e o único que não pressupõe nada. Se vo
 
 Um grupo de pessoas conta uma história junto. Cada jogador controla um personagem e decide o que ele tenta fazer. Uma pessoa, o Mestre, descreve o mundo, interpreta todo o resto e diz o que acontece depois de cada escolha.
 
-Ninguém ganha e ninguém perde. O que existe é uma história que sai melhor quando todo mundo empurra junto. As regras deste livro entram só quando o resultado de uma tentativa é incerto e ninguém quer decidir no dedo: aí o dado decide.
+Ninguém ganha nem perde. O objetivo é contar juntos uma história boa para todo mundo. As regras deste livro entram só quando o resultado de uma tentativa é incerto e ninguém quer decidir no dedo: aí o dado decide.
 
 ### Quem faz o quê
 
@@ -64,7 +64,7 @@ Você não precisa saber de cabeça qual perícia usar. Diga o que o seu persona
 
 ### Como uma sessão anda
 
-Fora de combate o jogo é conversa: o Mestre descreve, você responde, e só se rola dado quando há risco de verdade. Quando a briga começa, o tempo é fatiado para caber todo mundo.
+Fora de combate o jogo é conversa: o Mestre descreve, você responde, e só se rola dado quando há risco de verdade. Quando começa uma luta, o tempo é dividido em rodadas para que todos possam agir.
 
 - **Cena:** um trecho contínuo de história. A conversa com o guarda é uma cena; a emboscada logo depois é outra.
 
@@ -208,7 +208,7 @@ Antes de virar aventureiro, o seu personagem vivia de alguma coisa. Escolha o of
 
 - **Os itens saem da Loja.** Escolha armas, armaduras, equipamentos e consumíveis vendidos na Feira, na raridade que a faixa permite. Eles entram no inventário como se tivessem sido comprados. A vaga de incomum aceita um comum no lugar.
 
-- **Item escrito por você conta como comum.** Um alaúde gasto, a tesoura do alfaiate, a pena do escriba. O Mestre aprova o que não estiver no catálogo.
+- **Item escrito por você conta como comum.** Por exemplo: um alaúde, uma tesoura de alfaiate, uma pena de escrever. O Mestre aprova o que não estiver no catálogo.
 
 - **Os contatos entram nos seus Vínculos.** Amigo e Conhecido seguem a Confiança de Contatos e Laços. Dê nome e rosto a cada um.
 
@@ -504,7 +504,7 @@ Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, 
 
 Uma fórmula só, usada em perícia, ataque e resistência. Doze graus, e vantagem e desvantagem que se cancelam uma a uma.
 
-É esta conta, e é sempre esta conta. Perícia, ataque, resistência: muda o atributo e muda o grau, o resto é igual.
+Todo teste usa a mesma conta, seja de perícia, de ataque ou de resistência. Só mudam o atributo e o grau.
 
 d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau
 
@@ -696,7 +696,7 @@ Ofício não aparece na lista porque cada personagem cria o seu, com a especiali
 
 Como ajudar outro personagem e como resolver situações em que o grupo inteiro precisa passar pelo mesmo desafio.
 
-Nem toda ação coletiva usa a mesma resolução. Se uma pessoa executa a tarefa e as outras dão suporte, use **Ajudar**. Se todos estão expostos ao mesmo desafio e cada integrante importa, use um **Teste de Grupo**.
+Quando o grupo age junto, use uma destas duas regras. Se uma pessoa faz a tarefa e as outras ajudam, use **Ajudar**. Se todos enfrentam o mesmo desafio ao mesmo tempo, use um **Teste de Grupo**.
 
 **Em resumo**
 
@@ -708,39 +708,39 @@ Nem toda ação coletiva usa a mesma resolução. Se uma pessoa executa a tarefa
 
 ### Ajudar
 
-- Antes da rolagem principal, o ajudante descreve uma contribuição concreta e escolhe uma perícia adequada. Ela pode ser a mesma do líder ou outra que realmente ajude naquela situação.
+- Antes da rolagem principal, o ajudante diz como vai ajudar e escolhe uma perícia. Ela pode ser a mesma do líder ou outra que faça sentido na situação.
 
-- Em combate, ajudar gasta uma **Ação Padrão**. Fora de combate, gasta tempo compatível com a tarefa.
+- Em combate, ajudar gasta uma **Ação Padrão**. Fora de combate, gasta o mesmo tempo da tarefa.
 
 - O ajudante faz seu teste contra DT 10 em uma tarefa fixa. Em um desafio que escala por nível, use DT 10 + ⌊nível do desafio ÷ 2⌋.
 
 - Em sucesso, o teste principal recebe +2. Em sucesso crítico, recebe vantagem em vez de +2.
 
-- Falha não concede bônus. Falha crítica também não impõe penalidade automática, mas pode produzir uma complicação quando a tentativa já envolvia risco real.
+- Falha não dá bônus. Falha crítica também não dá penalidade automática, mas pode causar uma complicação se a tarefa já era arriscada.
 
-- No máximo **dois ajudantes** concedem bônus ao mesmo teste. Dois sucessos comuns chegam a +4.
+- No máximo **dois ajudantes** dão bônus ao mesmo teste. Dois sucessos comuns chegam a +4.
 
-- Cada contribuição precisa ser diferente e possível na ficção. Repetir a mesma ideia com mais pessoas não multiplica o bônus.
+- Cada ajuda precisa ser diferente e fazer sentido na cena. Várias pessoas fazendo a mesma coisa contam como uma ajuda só.
 
 - O líder precisa aceitar a ajuda e só rola depois que os ajudantes resolverem suas tentativas.
 
-- O Mestre pode dispensar o teste do ajudante quando a contribuição é automática, mas ela continua ocupando ação ou tempo.
+- O Mestre pode dispensar o teste do ajudante quando a ajuda é garantida, mas ela continua gastando a ação ou o tempo.
 
-- Ajudar não transfere proficiência, poder, imunidade ou permissão especial ao líder.
+- Ajudar não passa proficiência, poder, imunidade ou permissão especial para o líder.
 
 - Quem tem Pontos de Relação com o líder pode gastar um uso para a Ajuda certa: a ajuda passa sem teste, dá vantagem no lugar do +2 e, em combate, custa a reação no lugar da Ação Padrão.
 
 ### Teste de Grupo
 
-Use quando todos precisam atravessar o mesmo perigo: o grupo inteiro se esgueirando, escalando, resistindo a uma tempestade ou mantendo uma história convincente diante de vários observadores.
+Use quando todos precisam passar pelo mesmo desafio: o grupo inteiro se escondendo, escalando, resistindo a uma tempestade ou sustentando uma mentira na frente de várias pessoas.
 
-- Todos os participantes expostos fazem o teste indicado contra a mesma DT.
+- Todos os participantes fazem o mesmo teste contra a mesma DT.
 
-- O grupo vence se pelo menos metade dos participantes, arredondada para cima, obtiver sucesso.
+- O grupo passa se pelo menos metade dos participantes, arredondada para cima, tiver sucesso.
 
 - Cada sucesso crítico conta como dois sucessos. Cada falha crítica cancela um sucesso antes da contagem.
 
-- Se o grupo falhar, a consequência atinge o grupo ou apenas quem falhou, conforme a natureza do perigo. O Mestre informa qual leitura vale antes das rolagens.
+- Se o grupo falhar, a consequência atinge o grupo todo ou só quem falhou, conforme o perigo. O Mestre avisa qual das duas vale antes das rolagens.
 
 **Exemplo:**
 
@@ -752,13 +752,13 @@ Quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conse
 
 - Se cada falha gera uma consequência individual independente, resolva os testes separadamente.
 
-- Se a ação exige treinamento ou permissão que parte do grupo não possui, quem não cumpre o requisito não pode ser escondido dentro da média.
+- Se a ação exige um treinamento ou permissão que parte do grupo não tem, quem não cumpre o requisito não pode contar com os sucessos dos outros para passar.
 
 - Não combine Ajudar e Teste de Grupo na mesma resolução, salvo quando uma habilidade disser expressamente que pode.
 
 ### Ações coletivas maiores
 
-Projetos de vários dias usam as regras da atividade correspondente, como treinamento, ritual ou fabricação. Ataques sincronizados usam Ataques Combinados. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.
+Projetos de vários dias usam as regras da própria atividade, como treinamento, ritual ou fabricação. Ataques sincronizados usam Ataques Combinados. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.
 
 ## pontos-de-relacao
 
@@ -766,61 +766,61 @@ Projetos de vários dias usam as regras da atividade correspondente, como treina
 
 **Status:** Regra oficial
 
-O quanto cada personagem do grupo confia em cada outro, de 0 a 3. Os pontos viram ajuda na hora certa, mão estendida na crise e Sintonia no Ataque Combinado, e cobram Sanidade quando algo acontece com quem importa.
+O quanto cada personagem do grupo confia em cada outro, de 0 a 3. Os pontos dão bônus para ajudar, para tirar alguém de uma crise de Sanidade e para o Ataque Combinado, e fazem você perder Sanidade quando algo ruim acontece com essa pessoa.
 
-Quem já dividiu a última ração, quem segurou a corda, quem sabe o nome verdadeiro do outro. Os Pontos de Relação medem isso entre os personagens do grupo: quanto um confia no outro quando a coisa aperta. Eles servem para agir junto, e também cobram o preço de gostar de alguém num mundo que machuca.
+Os Pontos de Relação mostram o quanto um personagem do grupo confia em outro, de 0 a 3. Eles dão bônus quando vocês agem juntos, mas também fazem você perder mais Sanidade quando algo ruim acontece com essa pessoa.
 
 **Em resumo**
 
 - Cada personagem tem de 0 a 3 pontos com cada outro personagem do grupo: os dos jogadores e os Aliados que andam com vocês.
 
-- Cada ponto é um uso por sessão com aquela pessoa: **Ajuda certa**, **Segurar a mão** ou entrar num Ataque Combinado com Sintonia. Os usos voltam no começo da sessão seguinte.
+- Cada ponto é um uso por sessão com aquela pessoa: **Ajuda certa**, **Segurar a mão** ou entrar num Ataque Combinado com Sintonia. Os usos voltam no começo da próxima sessão.
 
 - Quanto mais pontos, maior a perda de Sanidade quando a pessoa cai, morre, some ou trai.
 
-- Ganha-se no máximo 1 ponto com a mesma pessoa por aventura, numa cena que importa. Mentira descoberta e abandono tiram 1; traição grave zera.
+- Você ganha no máximo 1 ponto com a mesma pessoa por aventura. Mentira descoberta e abandono tiram 1 ponto, e traição grave zera tudo.
 
 ### Os pontos
 
 - Pontos | Degrau | Como os dois estão
 
-- 0 | Estranhos | Andam juntos, e ainda não sabem o que o outro faz numa hora ruim.
+- 0 | Estranhos | Andam juntos, mas ainda não se conhecem direito.
 
-- 1 | Companheiros | Já dividiram um perigo e uma fogueira. Um sabe onde o outro vai estar.
+- 1 | Companheiros | Já passaram por um perigo juntos e contam um com o outro.
 
-- 2 | Próximos | Um guarda um segredo do outro. Um olhar basta para combinar o próximo passo.
+- 2 | Próximos | São amigos de verdade e se entendem sem precisar falar muito.
 
-- 3 | Inseparáveis | Lutam como um só corpo, e perder o outro é perder um pedaço de si.
+- 3 | Inseparáveis | Confiam totalmente um no outro. Perder essa pessoa pesa muito.
 
-- **Os pontos são de quem sente.** Você anota os seus pontos com cada pessoa, e ela anota os dela com você. Quase sempre andam juntos, e quando um sente mais que o outro, a diferença rende cena.
+- **Cada um anota os seus.** Você anota os seus pontos com cada pessoa, e ela anota os dela com você. Normalmente os números são iguais, mas podem ser diferentes.
 
-- **O máximo é 3** com cada pessoa, sem limite de quantas pessoas. É a mesma escada dos contatos (Conhecido, Amigo e Leal), e cada degrau vale um passo que a mesa sente.
+- **O máximo é 3** com cada pessoa, e você pode ter pontos com quantas pessoas quiser. É a mesma escada dos contatos (Conhecido, Amigo e Leal).
 
-- **Gente de fora do grupo** usa a Confiança de Contatos e Laços. Quando alguém passa a andar com vocês, os pontos começam pelo degrau da Confiança dele.
+- **Quem é de fora do grupo** usa a Confiança de Contatos e Laços. Quando alguém passa a andar com vocês, os pontos começam no mesmo degrau da Confiança dele.
 
-Na ficha, os pontos moram nos Vínculos das Notas: marque o vínculo como alguém do grupo, e os pontos saem da afinidade pela mesma escada da Confiança. 1 ou 2 vale 1 ponto, 3 ou 4 vale 2 e 5 vale 3.
+Na ficha, os pontos ficam nos Vínculos, dentro das Notas. Marque o vínculo como alguém do grupo, e os pontos são calculados pela afinidade: 1 ou 2 vale 1 ponto, 3 ou 4 vale 2 e 5 vale 3.
 
 ### Usar os pontos
 
-Cada ponto que você tem com alguém é **um uso por sessão** com essa pessoa, que precisa estar na cena. Com 2 pontos com a Duda, você usa duas vezes por sessão. Gastar um uso não tira o ponto: ele volta no começo da próxima sessão.
+Cada ponto que você tem com alguém vale **um uso por sessão** com essa pessoa, e ela precisa estar na cena. Se você tem 2 pontos com a Duda, pode usar duas vezes por sessão. Gastar um uso não tira o ponto, e o uso volta na próxima sessão.
 
 - Uso | Quando, e o que faz
 
 - Ajuda certa | Você Ajuda essa pessoa num teste.A ajuda passa sem teste e dá vantagem no lugar do +2. Em combate, custa a sua reação no lugar da Ação Padrão. Continua contando no limite de dois ajudantes.
 
-- Segurar a mão | Essa pessoa falha num teste de Sanidade ou está numa crise, e ouve a sua voz.Ela refaz o teste de Sanidade e fica com o melhor resultado, ou testa Vontade na hora para sair da crise, com vantagem. Em combate, custa a sua reação.
+- Segurar a mão | Essa pessoa falha num teste de Sanidade ou está numa crise, e consegue ouvir você.Ela refaz o teste de Sanidade e fica com o melhor resultado, ou testa Vontade na hora para sair da crise, com vantagem. Em combate, custa a sua reação.
 
 - Entrar junto | Essa pessoa lidera um Ataque Combinado de que você participa.Os seus pontos com ela entram na Sintonia do ataque, que dá bônus a todas as contribuições.
 
-- **A Ajuda certa segue Ações Coletivas**: a contribuição ainda precisa ser possível na ficção, e o líder continua com no máximo dois ajudantes.
+- **A Ajuda certa segue as regras de Ações Coletivas**: a ajuda precisa fazer sentido na cena, e o teste continua com no máximo dois ajudantes.
 
-- **Segurar a mão** vale uma vez por teste ou por crise, mesmo que mais de uma pessoa queira ajudar.
+- **Segurar a mão** só pode ser usado uma vez por teste ou por crise, mesmo que mais de uma pessoa queira ajudar.
 
-- **No Ataque Combinado,** a Sintonia é o menor número de pontos que cada participante tem com o líder, e cada participante gasta um uso com ele. A tabela de bônus está no tópico do Ataque Combinado.
+- **No Ataque Combinado,** a Sintonia é o menor número de pontos que os participantes têm com o líder, e cada participante gasta um uso com ele. A tabela de bônus está no tópico do Ataque Combinado.
 
-### O preço
+### Perda de Sanidade
 
-Gostar de alguém pesa. Quando algo acontece com uma pessoa com quem você tem pontos, teste Sanidade pela tabela, contra a DT do seu nível: a Rotineira quando ela cai e a Padrão quando ela se perde. No nível 1 são 10 e 15, e em qualquer outro nível some o ajuste da tabela de DT em Perícias. Cada pessoa pede no máximo um teste de cada linha por cena, e a regra de Condições vale como sempre: sucesso corta a perda pela metade, e sucesso crítico evita tudo.
+Quando algo acontece com uma pessoa com quem você tem pontos, você testa Sanidade pela tabela abaixo, contra a DT do seu nível: a Rotineira quando ela cai e a Padrão quando você a perde. No nível 1 as DTs são 10 e 15. Em outros níveis, some o ajuste da tabela de DT em Perícias. Cada pessoa causa no máximo um teste de cada linha por cena. Como sempre em Condições, sucesso corta a perda pela metade e sucesso crítico evita a perda.
 
 - O que acontece | DT | 1 ponto | 2 pontos | 3 pontos
 
@@ -828,43 +828,43 @@ Gostar de alguém pesa. Quando algo acontece com uma pessoa com quem você tem p
 
 - A pessoa morre, some ou trai você | Padrão15 no nível 1 | 1d6 | 1d8 | 2d6
 
-- **Laço e pontos com a mesma pessoa:** role uma vez só, pela linha dos pontos. O laço rompido sem pontos continua sendo a linha de 1 ponto (DT Padrão do seu nível, 1d6), como em Contatos e Laços.
+- **Se você tem laço e pontos com a mesma pessoa,** role uma vez só, pela linha dos pontos. Um laço rompido sem pontos usa a linha de 1 ponto (DT Padrão do seu nível, 1d6), como em Contatos e Laços.
 
-- **Morte ou perda com 3 pontos** costuma trazer Luto Profundo, uma condição de longo prazo. A mesa decide junto com quem joga.
+- **Perder alguém com quem você tem 3 pontos** normalmente causa Luto Profundo, uma condição de longo prazo. O Mestre decide junto com o jogador.
 
-- **Traição** cobra o teste da segunda linha e leva os pontos a 0 no mesmo momento.
+- **Traição** pede o teste da segunda linha e zera os pontos na hora.
 
 ### Ganhar e perder pontos
 
-**Ganha-se 1 ponto** com uma pessoa quando os dois vivem uma cena que muda o que um é para o outro. No máximo 1 ponto novo com a mesma pessoa por aventura.
+**Você ganha 1 ponto** com uma pessoa quando os dois passam por algo importante juntos, como nos exemplos abaixo. No máximo 1 ponto novo com a mesma pessoa por aventura.
 
 - Salvar a vida da pessoa, ou ter a vida salva por ela.
 
 - Guardar um segredo dela que custaria caro se saísse.
 
-- Uma conversa de verdade, daquelas que mudam o que um sabe do outro.
+- Ter uma conversa séria em que um conta ao outro algo importante sobre si.
 
 - Um dia de Cuidar de quem importa, no Tempo Entre Aventuras, passado com ela.
 
-- Atravessar junto uma cena que quase acabou com os dois.
+- Sobreviver junto a uma cena em que os dois quase morreram.
 
-**Perde-se 1 ponto** quando a relação leva um golpe:
+**Você perde 1 ponto** quando faz algo que quebra a confiança:
 
-- Mentir para ela de um jeito que custa, e ela descobrir.
+- Mentir para ela sobre algo sério, e ela descobrir.
 
-- Deixá-la para trás numa hora em que dava para voltar.
+- Deixá-la para trás quando dava para voltar e ajudar.
 
 - Quebrar uma promessa feita a ela.
 
-- **Traição grave** (vender a pessoa, atacar de propósito, deixar morrer podendo salvar) leva os pontos a 0.
+- **Traição grave** (vender a pessoa, atacar de propósito, deixar morrer quando dava para salvar) zera os pontos.
 
-- **Na criação,** se a história de dois personagens se cruza antes da aventura, cada um começa com 1 ponto com o outro, até 2 pontos no total por personagem.
+- **Na criação,** se dois personagens já se conheciam antes da aventura, cada um começa com 1 ponto com o outro, até 2 pontos no total por personagem.
 
-- **Quem propõe a mudança é a mesa.** O jogador pode pedir o ponto, e o Mestre confirma quando a cena pediu.
+- **O jogador pode pedir o ponto**, e o Mestre confirma se a cena justificou.
 
 **Exemplo:**
 
-Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, e cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do próprio nível (10 no nível 1), com perda de 1d6 na falha.
+Rafa tem 2 pontos com a Duda. Duda falha num teste de Sanidade ao ver uma criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, então cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do próprio nível (10 no nível 1). Se falhar, perde 1d6.
 
 ## ataques-combinados
 
@@ -872,9 +872,9 @@ Rafa tem 2 pontos com a Duda. Na ponte, Duda falha na Sanidade diante da criatur
 
 **Status:** Regra oficial
 
-Dois a quatro personagens atacam o mesmo alvo no mesmo instante. Quanto mais eles confiam no líder, maior o bônus: a Sintonia sai dos Pontos de Relação.
+De dois a quatro personagens atacam o mesmo alvo ao mesmo tempo. Quanto mais eles confiam no líder do ataque, maior o bônus. Esse bônus se chama Sintonia e vem dos Pontos de Relação.
 
-Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo tempo. Cada participante continua usando sua própria arma, magia, teste e recurso, e o que o grupo ganha por esperar o momento certo depende de quanto cada um confia em quem puxa o golpe.
+No Ataque Combinado, de 2 a 4 personagens atacam o mesmo alvo juntos, e o dano de todos é resolvido de uma vez. Cada um usa a própria arma ou magia e faz o próprio teste. O bônus do ataque depende de quanto os participantes confiam no líder.
 
 **Em resumo**
 
@@ -882,7 +882,7 @@ Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo
 
 - O ataque é resolvido no primeiro turno do líder depois que todos se prepararam.
 
-- A **Sintonia** é o menor número de Pontos de Relação que cada participante tem com o líder. Ela dá de +2 no ataque até vantagem e um dado a mais de dano em todas as contribuições.
+- A **Sintonia** é o menor número de Pontos de Relação que cada participante tem com o líder. O bônus vai de +2 no ataque até vantagem e um dado a mais de dano, e vale para todos os participantes.
 
 - Se todas as contribuições errarem, todos os participantes ficam Expostos até o começo do próprio turno.
 
@@ -896,11 +896,11 @@ Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo
 
 - Somente ataques que causam dano a um único alvo podem entrar. Cura, área, invocação e controle são resolvidos separadamente.
 
-- O grupo escolhe um líder. Ele define o momento da resolução, e é com ele que se conta a Sintonia.
+- O grupo escolhe um líder. Ele decide quando o ataque acontece, e a Sintonia é contada com base nos pontos que os outros têm com ele.
 
 ### Sintonia
 
-Olhe quantos Pontos de Relação cada participante tem com o líder. O menor deles é a Sintonia do ataque, e o bônus dela vale para todas as contribuições, inclusive a do líder. O grupo anda no passo de quem confia menos.
+Veja quantos Pontos de Relação cada participante tem com o líder. O menor desses números é a Sintonia do ataque, e o bônus dela vale para todas as contribuições, inclusive a do líder.
 
 - Sintonia | Degrau | Ataque | Dano de cada acerto
 
@@ -914,13 +914,13 @@ Olhe quantos Pontos de Relação cada participante tem com o líder. O menor del
 
 - **Com Sintonia 1 ou mais,** cada participante gasta um uso dos pontos que tem com o líder. Quem não quiser gastar entra com 0, e a Sintonia do ataque vira 0.
 
-- **O dado a mais do Uníssono** é do mesmo tipo que a contribuição já rola: o da arma, ou o da magia. Ele entra uma vez só e não multiplica no crítico. O +2 de dano dos Afinados segue a mesma regra.
+- **O dado a mais do Uníssono** é do mesmo tipo que você já rola: o da arma ou o da magia. Ele entra uma vez só e não é multiplicado no crítico. O +2 de dano dos Afinados funciona do mesmo jeito.
 
-- **Coreografia** pode entrar em uma contribuição, mas o bônus no teste não soma com o da Sintonia: fica o maior.
+- **Coreografia** pode ser usada numa contribuição, mas o bônus no teste não soma com o da Sintonia: use o maior.
 
 ### Preparação e resolução
 
-- No próprio turno, cada participante declara a contribuição, reserva a Ação Padrão e gasta a reação. Mana e custos que a ação exige na declaração são pagos nesse momento. Quem já gastou uma dessas ações não pode participar.
+- No próprio turno, cada participante declara a contribuição, reserva a Ação Padrão e gasta a reação. Mana e custos que a ação exige na declaração são pagos nesse momento. Quem já gastou a Ação Padrão ou a reação não pode participar.
 
 - O ataque é resolvido no primeiro turno do líder depois que todos se prepararem. A preparação de um participante expira no início do próximo turno dele. Alcance, linha de efeito e alvo precisam continuar válidos.
 
@@ -948,7 +948,7 @@ Olhe quantos Pontos de Relação cada participante tem com o líder. O menor del
 
 - Quando o ataque é cancelado antes da resolução, ações, reações, usos de pontos e custos pagos na declaração continuam gastos. Munição e cargas ainda não usadas são preservadas.
 
-- Ver um participante cair durante a preparação cobra Sanidade de quem tem pontos com ele, como em Pontos de Relação.
+- Quem tem pontos com um participante que cai durante a preparação testa Sanidade, como em Pontos de Relação.
 
 ### Magias e Fluxos
 
@@ -968,9 +968,9 @@ Duda lidera. Rafa tem 3 pontos com ela e o Guerreiro tem 2: a Sintonia é 2, Afi
 
 **Status:** Regra oficial
 
-Alguém correu, e a cena vira uma disputa de faixas de distância, com a cidade inteira no caminho. Vale para fuga, captura e para a perseguição que atravessa metade de um bairro.
+Regras para quando alguém foge a pé e alguém vai atrás. A distância é medida em faixas, e a cada rodada cada lado tenta ganhar terreno.
 
-Quando alguém corre e alguém vai atrás, a cena muda de ritmo. A respiração fica curta, a cidade vira obstáculo e cada esquina pode ser a última chance de alcançar, ou de sumir. A perseguição usa as mesmas faixas de distância da perseguição de veículos, e cada rodada move essas faixas conforme o que cada lado tentou.
+Use esta regra quando alguém foge a pé e alguém vai atrás. A distância entre os dois é medida em faixas, as mesmas da perseguição de veículos, e a cada rodada cada lado faz uma manobra para ganhar ou perder distância.
 
 **Em resumo**
 
@@ -982,103 +982,101 @@ Quando alguém corre e alguém vai atrás, a cena muda de ritmo. A respiração 
 
 - A perseguição dura 6 rodadas. A partir da rodada 4, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.
 
-- Contato leva ao combate, Escapou encerra a cena, e o relógio fechado deixa os dois lados sabendo mais um do outro.
+- Em Contato, começa o combate. Em Escapou, quem fugia some. Se as rodadas acabarem antes, ninguém consegue o que queria.
 
 ### As faixas
 
 - Faixa | Como parece, e a distância
 
-- Contato | Dá para ouvir a respiração do outro e agarrar a ponta do casaco.Até 1,5 m. Permite colisão e abordagem.
+- Contato | Colado no outro. Dá para agarrar.Até 1,5 m. Permite colisão e abordagem.
 
-- Curta | Dá para ver a nuca dele e ouvir as botas batendo na pedra logo à frente.Até 5 m. Use a faixa Curto das regras de distância.
+- Curta | Logo atrás, a poucos passos.Até 5 m. Use a faixa Curto das regras de distância.
 
-- Média | Ele vira as esquinas antes de você, e some por um segundo a cada curva.Até 15 m. Use a faixa Médio das regras de distância.
+- Média | Ainda dá para ver o outro, mas ele some de vista nas curvas.Até 15 m. Use a faixa Médio das regras de distância.
 
-- Longa | Só se vê um casaco mudando de rua ao longe, e a multidão fecha no meio.Até 25 m. Use a faixa Longo das regras de distância.
+- Longa | O outro está longe e quase sumindo no meio das pessoas.Até 25 m. Use a faixa Longo das regras de distância.
 
-- Escapou | A rua está cheia de gente comum, e nenhuma delas é quem vocês procuram.O alvo saiu da perseguição e não pode ser alcançado nesta cena.
+- Escapou | Quem fugia sumiu de vista.O alvo saiu da perseguição e não pode ser alcançado nesta cena.
 
-- **A perseguição começa onde os dois estavam** quando um deles saiu correndo. Fuga de uma conversa começa em Contato; fuga de uma emboscada avistada de longe começa em Longa.
+- **A perseguição começa na distância em que os dois estavam** quando a corrida começou. Quem foge no meio de uma conversa começa em Contato; quem foge de alguém visto de longe começa em Longa.
 
-- **Os dois lados sabem o que querem.** Quem persegue quer chegar a Contato. Quem foge quer chegar a Escapou.
+- **Cada lado tem uma faixa só.** O grupo anda na velocidade de quem está mais atrás. Quem quiser correr na frente sozinho passa a ter uma faixa própria, separada do grupo.
 
-- **Cada lado tem uma faixa só.** O grupo corre no passo de quem está mais atrás. Quem quiser disparar sozinho passa a ter faixa própria, e vê o resto do grupo ficar para trás.
-
-- **Cada lado tem um puxador por rodada:** quem vai na frente e decide o caminho. Só a manobra dele disputa a faixa. O puxador pode mudar de uma rodada para outra.
+- **Cada lado tem um puxador por rodada,** que vai na frente e decide o caminho. Só a manobra dele disputa a faixa. O puxador pode mudar de uma rodada para outra.
 
 ### A rodada
 
-- O Mestre descreve o terreno da rodada do jeito que quem corre enxerga: rápido e pela metade. Ele rola 1d6 na tabela de obstáculos ou escolhe um.
+- O Mestre descreve o terreno da rodada e rola 1d6 na tabela de obstáculos, ou escolhe um.
 
-- Cada lado escolhe o puxador, e cada personagem declara o que faz com o corpo: o puxador, uma manobra; os outros, Ajudar o puxador ou uma manobra de apoio. Quem foge declara primeiro, porque está de costas.
+- Cada lado escolhe o puxador. O puxador declara uma manobra, e os outros declaram se vão Ajudar o puxador ou fazer uma manobra de apoio. Quem foge declara primeiro.
 
 - Resolvam primeiro as ajudas e o apoio, depois os puxadores. Quem vence move uma faixa a favor, e vitória por 10 ou mais move duas. Somando o apoio, cada lado ganha no máximo 2 faixas na rodada.
 
 - Teste oposto é sempre contra o Atletismo do puxador do outro lado, seja qual for a manobra dele. Quando os dois puxadores passam em testes contra DT, cada um move a faixa a seu favor, e os passos se anulam.
 
-- Aplique o obstáculo a quem não lidou com ele na manobra.
+- Quem não passou pelo obstáculo na própria manobra testa para passar por ele (veja Obstáculos).
 
-- Marque uma parte do relógio da perseguição.
+- Marque uma rodada no relógio da perseguição.
 
-A perseguição dura 6 rodadas. Se ninguém chegou a Contato nem a Escapou quando o relógio fechar, quem foge conseguiu se perder no meio da cidade, e quem perseguia continua com o rastro fresco, que já é outra cena.
+A perseguição dura 6 rodadas. Se ninguém chegou a Contato nem a Escapou quando elas acabarem, quem fugia sai de vista, mas quem perseguia ainda sabe para que lado ele foi e pode continuar procurando em outra cena.
 
 ### Manobras
 
-Cada manobra traz o que o corpo faz e, embaixo, como se resolve. Diga a cena antes de rolar: é ela que diz ao Mestre onde a perseguição está acontecendo.
+Cada manobra diz o que o personagem faz e, embaixo, o teste e o resultado. Diga rapidamente o que você faz antes de rolar.
 
-- Manobra | Como é, e como se resolve
+- Manobra | O que é, e como se resolve
 
-- Correr solto | Cabeça baixa, braços trabalhando, o peito queimando. Nada de truque: só perna e vontade.Teste: Atletismo oposto. Sucesso: Quem vence move uma faixa a favor. Vitória por 10 ou mais move duas. Falha: A faixa não muda, e o outro lado escolhe a manobra da rodada seguinte antes de você.
+- Correr solto | Correr o mais rápido que conseguir, sem truque.Teste: Atletismo oposto. Sucesso: Quem vence move uma faixa a favor. Vitória por 10 ou mais move duas. Falha: A faixa não muda, e o outro lado escolhe a manobra da rodada seguinte antes de você.
 
-- Cortar caminho | Um beco que parece sem saída, uma cerca baixa, a porta dos fundos de uma padaria que você conhece. Se der certo, você sai na frente dele.Teste: Investigação na cidade, Sobrevivência no ermo. Sucesso: Move uma faixa a favor e ignora o obstáculo desta rodada. Com vantagem, se o personagem conhece o lugar. Falha: O atalho não existia, e a parede no fim do beco move uma faixa contra você.
+- Cortar caminho | Pegar um beco, pular uma cerca ou passar por dentro de um prédio para sair na frente.Teste: Investigação na cidade, Sobrevivência no ermo. Sucesso: Move uma faixa a favor e ignora o obstáculo desta rodada. Com vantagem, se o personagem conhece o lugar. Falha: O atalho não leva a lugar nenhum, e a faixa move uma contra você.
 
-- Salto arriscado | De um telhado para outro, por cima de uma carroça, através do vão de uma ponte quebrada. Por um segundo, só existe o ar.Teste: Acrobacia contra a DT Difícil. Sucesso: Move duas faixas a favor de uma vez. Falha: Você cai: fica Caído, perde a rodada e a faixa move uma contra você.
+- Salto arriscado | Pular de um telhado para outro, por cima de uma carroça ou por um vão.Teste: Acrobacia contra a DT Difícil. Sucesso: Move duas faixas a favor de uma vez. Falha: Você cai: fica Caído, perde a rodada e a faixa move uma contra você.
 
-- Derrubar um obstáculo | Uma pilha de barris, a barraca de frutas, um varal cheio de roupa. Tudo que cai atrás de você vira problema de quem vem atrás.Teste: Atletismo ou Luta contra a DT Padrão. Sucesso: Quem vem atrás testa Reflexos na DT Padrão ou move uma faixa contra si. Falha: Você gasta a rodada puxando uma coisa que não cede, e nada sai do lugar.
+- Derrubar um obstáculo | Derrubar barris, uma barraca ou qualquer coisa no caminho de quem vem atrás.Teste: Atletismo ou Luta contra a DT Padrão. Sucesso: Quem vem atrás testa Reflexos na DT Padrão ou move uma faixa contra si. Falha: Nada cai, e você perde a rodada.
 
-- Acertar de longeSó em Contato, Curta, Média | Parar meio segundo, respirar, mirar entre as cabeças da multidão e torcer para acertar a pessoa certa.Teste: Pontaria, magia ou o que alcançar. Sucesso: Resolve normalmente. Condição que tire o movimento move uma faixa a favor de quem atirou. Falha: A faixa não muda. Mirar correndo custa a rodada de qualquer jeito.
+- Acertar de longeSó em Contato, Curta, Média | Parar um instante para atirar, arremessar algo ou lançar uma magia.Teste: Pontaria, magia ou o que alcançar. Sucesso: Resolve normalmente. Condição que tire o movimento move uma faixa a favor de quem atirou. Falha: A faixa não muda. Mirar correndo custa a rodada de qualquer jeito.
 
-- Sumir de vistaSó em Longa | Entrar numa procissão, tirar o casaco, sentar numa mesa de taverna como quem está ali há horas e pedir uma bebida com a voz calma.Teste: Furtividade oposta à Percepção. Sucesso: Encerra a cena: o fugitivo Escapou. Falha: Você foi visto entrando no esconderijo, e quem persegue move uma faixa.
+- Sumir de vistaSó em Longa | Se misturar na multidão, entrar num lugar cheio ou trocar de roupa para não ser reconhecido.Teste: Furtividade oposta à Percepção. Sucesso: Encerra a cena: o fugitivo Escapou. Falha: Alguém viu onde você se escondeu, e quem persegue ganha uma faixa.
 
-- Atravessar gente no caminho | Gritar "pega ladrão", mostrar um distintivo, pedir licença com a voz certa. A rua abre para você e fecha para o outro.Teste: Diplomacia ou Intimidação contra a DT Padrão. Sucesso: A rua atrapalha o outro lado, e ele sofre desvantagem na manobra seguinte. Falha: A multidão fecha bem na sua frente, e você move uma faixa contra si.
+- Atravessar gente no caminho | Gritar "pega ladrão", mostrar um distintivo ou pedir passagem para as pessoas abrirem caminho.Teste: Diplomacia ou Intimidação contra a DT Padrão. Sucesso: A rua atrapalha o outro lado, e ele sofre desvantagem na manobra seguinte. Falha: As pessoas atrapalham você, e a faixa move uma contra você.
 
-- AgarrarSó em Contato | A mão fecha no colarinho, os dois perdem o equilíbrio, e o chão chega rápido.Teste: Atletismo oposto, apenas em Contato. Sucesso: Aplica Agarrado e encerra a perseguição. Falha: Os dedos escorregam no tecido, e você passa direto: move uma faixa contra si.
+- AgarrarSó em Contato | Segurar quem você alcançou e derrubar no chão.Teste: Atletismo oposto, apenas em Contato. Sucesso: Aplica Agarrado e encerra a perseguição. Falha: Você não consegue segurar e passa direto: a faixa move uma contra você.
 
 - **Uma manobra por personagem, por rodada.** Ajudar o puxador segue as regras de Ações Coletivas (no máximo dois ajudantes) e conta como a sua manobra.
 
-- **Apoio é para quem não puxa:** Derrubar um obstáculo, Atravessar gente no caminho e Acertar de longe. Elas atrapalham o outro lado sem disputar a faixa, e o puxador também pode escolher uma delas como a manobra dele. Cortar caminho, Salto arriscado, Correr solto, Sumir de vista e Agarrar são só do puxador.
+- **Manobras de apoio** são para quem não puxa: Derrubar um obstáculo, Atravessar gente no caminho e Acertar de longe. Elas atrapalham o outro lado sem disputar a faixa, e o puxador também pode escolher uma delas como a manobra dele. Cortar caminho, Salto arriscado, Correr solto, Sumir de vista e Agarrar são só do puxador.
 
-- **Falha de apoio pesa no grupo.** Quando uma manobra de apoio diz que a faixa move contra você, ela move contra o seu lado inteiro, porque a faixa é uma só.
+- **A falha no apoio vale para o grupo todo.** Quando uma manobra de apoio diz que a faixa move contra você, ela move contra o seu lado inteiro, porque a faixa é uma só.
 
 - **Magia, item e habilidade de classe entram como manobra,** com o teste que já usam. Um efeito que tire o movimento do outro lado move uma faixa a seu favor.
 
-- **O fôlego acaba.** A partir da rodada 4, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.
+- **Cansaço:** a partir da rodada 4, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.
 
 ### Obstáculos
 
 - 1d6 | Na cidade | No ermo
 
-- 1 | Uma feira montada no meio da rua: barracas de pano, galinhas soltas e uma velha que não vai sair da frente de jeito nenhum. | Raízes grossas e um tronco caído, tudo coberto de musgo escorregadio.
+- 1 | Uma feira no meio da rua, cheia de barracas e de gente. | Raízes grossas e um tronco caído no caminho.
 
-- 2 | Uma escada estreita de pedra, gasta no meio dos degraus, onde só passa uma pessoa de cada vez. | Um barranco de terra solta, alto demais para subir andando, que desmancha na mão.
+- 2 | Uma escada estreita, onde só passa uma pessoa por vez. | Um barranco de terra solta, difícil de subir.
 
-- 3 | Os telhados acabam, e o vão até o próximo beiral é grande demais para quem pensa antes de pular. | Um riacho gelado na altura da cintura, com pedras lisas no fundo.
+- 3 | Um vão entre dois telhados. | Um riacho com água na cintura e pedras escorregadias.
 
-- 4 | Uma carroça atravessada na rua, a carga espalhada e o carroceiro gritando com todo mundo. | Mato alto até o peito, que esconde o chão e o que está no chão.
+- 4 | Uma carroça parada atravessada na rua. | Mato alto que esconde o chão.
 
-- 5 | Um portão de ferro que alguém acabou de fechar, com o cadeado ainda balançando. | Uma neblina baixa, que engole quem fica mais de uma faixa para trás.
+- 5 | Um portão de ferro que alguém acabou de fechar. | Uma neblina baixa que atrapalha a visão.
 
-- 6 | Um guarda no fim da rua, com a mão no cabo da espada, decidindo quem dos dois é o problema. | Um bicho grande, que estava ali antes dos dois e não gostou nada da visita.
+- 6 | Um guarda no fim da rua, querendo saber o que está acontecendo. | Um animal grande e irritado no caminho.
 
 Quem não resolveu o obstáculo na própria manobra testa Acrobacia, Atletismo ou Reflexos contra a DT Padrão. A falha move uma faixa contra ele.
 
 ### Como a cena termina
 
-- **Contato:** a perseguição acaba e o combate começa ali mesmo, no terreno da última rodada, com os dois ofegantes. Quem foi alcançado em plena corrida fica Exposto até o começo do próximo turno dele.
+- **Contato:** a perseguição acaba e o combate começa ali mesmo, no terreno da última rodada. Quem foi alcançado fica Exposto até o começo do próximo turno dele.
 
-- **Escapou:** quem fugia sumiu nesta cena. Reencontrar aquela pessoa vira investigação, informante ou uma pista nova.
+- **Escapou:** quem fugia sumiu. Para achar essa pessoa de novo, o grupo vai precisar investigar ou conseguir uma pista.
 
-- **Relógio fechado:** ninguém conseguiu o que queria, e os dois lados ficam sabendo mais um do outro do que sabiam antes de correr: o rosto, o jeito de correr, o bairro para onde ele foi.
+- **As rodadas acabaram:** ninguém conseguiu o que queria, mas os dois lados descobrem algo um do outro, como o rosto ou para que lado ele foi.
 
 ## conflito-social
 
@@ -1086,15 +1084,15 @@ Quem não resolveu o obstáculo na própria manobra testa Acrobacia, Atletismo o
 
 **Status:** Regra oficial
 
-Interrogatório, negociação e audiência resolvidos em rodadas, com a Resistência de quem está do outro lado descendo a cada bom argumento e a Paciência dele subindo a cada palavra errada.
+Interrogatório, negociação e audiência resolvidos em rodadas: bons argumentos baixam a Resistência da outra pessoa, e erros enchem a Paciência dela.
 
-Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo para dizer, e cada palavra errada fecha uma porta. Um pedido simples continua sendo um teste só. Este tópico é para as outras conversas: arrancar a verdade de um preso, fechar preço com quem não precisa vender, convencer um conselho que já decidiu antes de vocês entrarem.
+Um pedido simples se resolve com um teste só. Esta regra é para conversas difíceis, em que a outra pessoa tem motivo para dizer não: um interrogatório, uma negociação dura ou uma audiência.
 
 **Em resumo**
 
 - A conversa difícil é resolvida em rodadas, com duas contagens: a **Resistência** da pessoa desce a cada argumento que funciona, e a **Paciência** dela sobe a cada erro.
 
-- Cada personagem faz uma abordagem por rodada: diga o que fala, com a voz do personagem, e só depois role. A DT é a Padrão do nível do grupo, ou a Difícil quando a pessoa tem posição a defender.
+- Cada personagem faz uma abordagem por rodada: diga o que o personagem fala e só depois role. A DT é a Padrão do nível do grupo, ou a Difícil quando a pessoa tem posição a defender.
 
 - Resistência a 0 faz a pessoa ceder, sempre dentro do **Limite**, que é o que ela não faz de jeito nenhum. Paciência cheia encerra a conversa pior do que ela começou.
 
@@ -1102,23 +1100,23 @@ Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo par
 
 ### As duas contagens
 
-- **Resistência** é o quanto falta para a pessoa ceder. Ela desce com argumento, prova, pressão e concessão, e a mesa vê isso acontecer: a pessoa senta, serve uma bebida, baixa a voz.
+- **Resistência** é o quanto falta para a pessoa ceder. Ela desce com bons argumentos, provas, pressão e ofertas.
 
-- **Paciência** é o quanto falta para ela encerrar a conversa. São 4 partes, e elas enchem com erro, ameaça vazia, repetição e insistência no assunto errado. A mesa vê isso também: braços cruzados, um olhar para o guarda, respostas de uma palavra.
+- **Paciência** é o quanto falta para ela encerrar a conversa. São 4 partes, que enchem com erros, ameaças vazias, repetição e insistência num assunto que a incomoda.
 
-- **Limite** é a única coisa que ela não faz de jeito nenhum. Entregar o próprio filho, trair o juramento, assinar a própria prisão. Resistência zerada nunca atravessa o Limite.
+- **Limite** é o que ela não faz de jeito nenhum, como trair a família ou confessar um crime que a levaria à prisão. Mesmo com a Resistência a 0, ela não passa do Limite.
 
 - Resistência | Quando usar
 
-- 3 | A pessoa até quer ajudar, e só precisa de um motivo que a proteja depois.Por exemplo: Um escriba que odeia o patrão e está esperando a desculpa certa; uma guarda que acha a ordem injusta e tem filho para criar.
+- 3 | A pessoa até quer ajudar, só precisa de um bom motivo.Por exemplo: Um escriba que não gosta do patrão; uma guarda que acha a ordem injusta.
 
-- 5 | Ceder custa alguma coisa concreta a ela: dinheiro, tempo, posição ou risco.Por exemplo: Uma mercadora que perde o contrato do ano se vender para vocês; um capitão que vai responder pelo portão que abrir.
+- 5 | Ceder custa alguma coisa a ela: dinheiro, tempo, posição ou risco.Por exemplo: Uma mercadora que perde um bom contrato se vender para vocês; um capitão que vai ser punido se abrir o portão.
 
-- 8 | A posição dela é pública, jurada, ou foi imposta por alguém mais forte.Por exemplo: Um juiz numa audiência cheia de gente olhando; alguém com a família nas mãos de terceiros, que sorri para não chorar.
+- 8 | Ela tem uma posição pública ou um juramento a defender, ou está sendo forçada por alguém mais forte.Por exemplo: Um juiz numa audiência pública; alguém que tem a família ameaçada por outra pessoa.
 
 ### A rodada
 
-- Cada personagem faz uma abordagem por rodada, na ordem que a conversa pedir. Primeiro diz o que fala, com a voz do personagem, e só depois rola. Ajudar alguém segue as regras de Ações Coletivas.
+- Cada personagem faz uma abordagem por rodada, na ordem que fizer sentido na conversa. Primeiro você diz o que o personagem fala, e só depois rola. Ajudar alguém segue as regras de Ações Coletivas.
 
 - A DT é a Padrão do nível do grupo. Use a Difícil quando a pessoa tem posição pública a defender ou já foi enganada antes.
 
@@ -1126,43 +1124,43 @@ Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo par
 
 - Repetir a mesma abordagem sem trazer nada novo enche 1 de Paciência, mesmo quando o teste passa.
 
-- A outra parte responde. Ela pergunta, pede garantia, chantageia de volta, e é nessa resposta que o grupo descobre o que ela quer.
+- A outra pessoa responde: faz perguntas, pede garantias ou faz uma contraproposta. Pela resposta, o grupo vai descobrindo o que ela quer.
 
-O Prestígio com a facção da pessoa ajusta a rolagem de toda abordagem em no máximo 2, para cima ou para baixo, pela mesma regra de Prestígio, Fama e Procura. Ele entra só na rolagem e nunca tira Resistência a mais: um mesmo fato não gera dois ajustes. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.
+O Prestígio com a facção da pessoa ajusta a rolagem de toda abordagem em no máximo 2, para cima ou para baixo, pela mesma regra de Prestígio, Fama e Procura. Ele entra só na rolagem e nunca tira Resistência a mais.
 
 ### Abordagens
 
-Cada abordagem traz uma fala de exemplo e, embaixo, como se resolve. A fala serve de faísca: diga a sua, do jeito do seu personagem.
+Cada abordagem diz o que o personagem faz e, embaixo, o teste e o resultado.
 
-- Abordagem | Uma fala, e como se resolve
+- Abordagem | O que é, e como se resolve
 
-- Mostrar o interesse dela | “Pense no que acontece com o seu negócio se ele ganhar essa disputa.”Teste: Diplomacia. Sucesso: Tira 1 de Resistência. Tira 2 se o argumento usa algo que o grupo descobriu sobre ela. Risco: Falha só custa a rodada.
+- Mostrar o interesse dela | Mostrar o que ela ganha ou perde com a decisão.Teste: Diplomacia. Sucesso: Tira 1 de Resistência. Tira 2 se o argumento usa algo que o grupo descobriu sobre ela. Risco: Falha só custa a rodada.
 
-- Pressionar | “Eu sei onde a sua irmã mora. E você sabe que eu sei.”Teste: Intimidação. Sucesso: Tira 1 de Resistência, e 2 quando a ameaça é verdadeira e a pessoa sabe disso. Risco: Falha enche 1 de Paciência. Ameaça vazia enche 1 mesmo em sucesso.
+- Pressionar | Ameaçar ou intimidar a pessoa.Teste: Intimidação. Sucesso: Tira 1 de Resistência, e 2 quando a ameaça é verdadeira e a pessoa sabe disso. Risco: Falha enche 1 de Paciência. Ameaça vazia enche 1 mesmo em sucesso.
 
-- Mentir com utilidade | “O conselho já decidiu. A gente só veio avisar por educação.”Teste: Enganação contra Intuição. Sucesso: Tira 1 de Resistência agora. Risco: Mentira descoberta depois devolve toda a Resistência que ela tirou.
+- Mentir com utilidade | Contar uma mentira que ajude a convencer.Teste: Enganação contra Intuição. Sucesso: Tira 1 de Resistência agora. Risco: Mentira descoberta depois devolve toda a Resistência que ela tirou.
 
-- Apresentar prova | “Esta carta tem a sua letra e o seu selo. Quer ler em voz alta, ou eu leio?”Teste: Investigação, Conhecimento ou Tecnologia. Sucesso: Tira 2 de Resistência. Vale uma vez por prova. Risco: Prova fraca enche 1 de Paciência.
+- Apresentar prova | Mostrar um documento, objeto ou registro que prove o que vocês dizem.Teste: Investigação, Conhecimento ou Tecnologia. Sucesso: Tira 2 de Resistência. Vale uma vez por prova. Risco: Prova fraca enche 1 de Paciência.
 
-- Ler a pessoa | “Você olhou para a porta duas vezes quando eu falei do porto.”Teste: Intuição. Sucesso: Não tira Resistência. Em troca, entrega o que ela quer de verdade ou revela o Limite dela. Risco: Falha entrega uma leitura errada, que o Mestre diz com a mesma convicção.
+- Ler a pessoa | Prestar atenção nas reações da pessoa para entender o que ela quer.Teste: Intuição. Sucesso: Não tira Resistência. Em troca, entrega o que ela quer de verdade ou revela o Limite dela. Risco: Na falha, o Mestre dá uma leitura errada sem avisar que ela está errada.
 
-- Puxar posição ou nome | “Minha família serve a esta casa há três gerações. Pergunte ao seu pai.”Teste: Nobreza ou Atuação. Sucesso: Tira 1 de Resistência, e 2 quando ela deve obediência ou respeito a esse nome: serve à sua casa, jurou à sua ordem ou depende de quem você representa. Risco: Contra quem odeia o seu nome, enche 1 de Paciência.
+- Puxar posição ou nome | Usar o seu título, família, cargo ou fama para pesar na conversa.Teste: Nobreza ou Atuação. Sucesso: Tira 1 de Resistência, e 2 quando ela deve obediência ou respeito a esse nome: serve à sua casa, jurou à sua ordem ou depende de quem você representa. Risco: Contra quem odeia o seu nome, enche 1 de Paciência.
 
-- Oferecer algo concreto | “A dívida com o Banco some amanhã, e ninguém precisa saber de onde veio o dinheiro.”Teste: nenhum. Sucesso: Tira 1 de Resistência por oferta que custe de verdade ao grupo: dinheiro, favor, segredo, Prestígio. Risco: Oferta pequena demais enche 1 de Paciência e queima a ideia.
+- Oferecer algo concreto | Oferecer dinheiro, um favor ou algo de valor em troca.Teste: nenhum. Sucesso: Tira 1 de Resistência por oferta que custe de verdade ao grupo: dinheiro, favor, segredo, Prestígio. Risco: Oferta pequena demais enche 1 de Paciência, e essa oferta não pode ser feita de novo.
 
-- Ceder alguma coisa | “Fique com a carga. A gente só quer o nome de quem mandou.”Teste: nenhum. Sucesso: Tira 2 de Resistência quando o grupo abre mão de algo que queria nesta negociação. Risco: A concessão vale, e a outra parte vai cobrar exatamente o que foi prometido.
+- Ceder alguma coisa | Abrir mão de algo que o grupo queria para fechar o acordo.Teste: nenhum. Sucesso: Tira 2 de Resistência quando o grupo abre mão de algo que queria nesta negociação. Risco: A outra parte vai cobrar o que foi prometido.
 
 ### Como termina
 
-- **Resistência a 0:** a pessoa cede do jeito dela, dentro do que ela pode e dentro do Limite. Ela diz o que quer em troca, e cumprir isso passa a ser problema do grupo.
+- **Resistência a 0:** a pessoa cede, dentro do que pode fazer e sem passar do Limite. Ela pode pedir algo em troca, e o grupo precisa cumprir.
 
-- **Paciência cheia:** a conversa acaba pior do que começou. A cadeira arrasta, a porta fecha, e reabrir exige uma pessoa nova, uma prova nova ou tempo.
+- **Paciência cheia:** a pessoa encerra a conversa e fica menos disposta do que antes. Para tentar de novo, vocês precisam de outra pessoa para falar, de uma prova nova ou de esperar um tempo.
 
-- **Ninguém chegou ao fim:** a conversa fica em aberto. Guardem as duas contagens: quando o assunto voltar, ele volta de onde parou.
+- **Nenhuma das duas chegou ao fim:** a conversa fica em aberto. Anotem as duas contagens: quando o assunto voltar, a conversa continua de onde parou.
 
-- **Num interrogatório,** cada ponto de Resistência que cai entrega uma informação na hora. A verdade sai em pedaços, e o grupo decide quando já ouviu o bastante.
+- **Num interrogatório,** cada ponto de Resistência que cai entrega uma informação na hora, e o grupo pode parar quando já tiver o que precisa.
 
-Nenhuma dessas rolagens controla a mente de ninguém. Elas mudam a posição de uma pessoa que continua decidindo por conta própria, e é por isso que o Limite existe.
+Essas rolagens não controlam a mente de ninguém. A pessoa continua decidindo por conta própria, e por isso existe o Limite.
 
 ## faccoes-em-movimento
 
@@ -1172,7 +1170,7 @@ Nenhuma dessas rolagens controla a mente de ninguém. Elas mudam a posição de 
 
 As facções não esperam o grupo. Cada uma ativa tem um objetivo e um relógio, e no intervalo entre aventuras o mundo anda: o que o grupo faz muda o ritmo.
 
-Enquanto vocês dormem na estalagem, a guilda compra mais um armazém no cais, a ordem manda mais uma carta ao conselho e alguém, num porão, risca mais um nome da lista. As facções têm os próprios planos, e eles andam com ou sem o grupo. Esta página mostra como.
+As facções têm planos próprios e avançam neles com ou sem o grupo. Esta página mostra como o Mestre acompanha esses planos com relógios, e como o grupo pode ajudar ou atrapalhar.
 
 **Em resumo**
 
@@ -1250,7 +1248,7 @@ Uma companhia mercante (Poder 2) quer "algo no cais", num relógio de 6, com 3 p
 
 As pessoas que atendem quando o grupo chama, e as pessoas por quem cada personagem faz as coisas. Contatos fazem favores e cobram Dívidas; laços dão vantagem quando você age por alguém.
 
-A velha que responde a carta no mesmo dia, o escrivão que carimba sem ler, o amigo de infância que você jurou proteger. Ninguém atravessa o Jardim sozinho. Esta página dá peso a essas pessoas: o contato é quem atende quando vocês chamam, e o laço é quem faz o personagem levantar quando seria mais fácil ficar sentado.
+Esta página trata das pessoas que o grupo conhece. Um contato é alguém que ajuda quando vocês pedem, como um informante ou um escrivão. Um laço é alguém importante para o personagem, que dá a ele um motivo para agir.
 
 **Em resumo**
 
@@ -1348,7 +1346,7 @@ Um laço é uma frase, na voz do personagem, sobre alguém que importa: outro pe
 
 - **Laço muda:** no fim de cada arco, cada um pode reescrever ou trocar um laço. O rompido costuma virar outro: "vou achar quem fez isso".
 
-- **Laço é de quem escreve.** A outra pessoa não precisa sentir o mesmo, e a diferença costuma render as melhores cenas.
+- **Laço é de quem escreve.** A outra pessoa não precisa sentir o mesmo.
 
 ## infiltracao
 
@@ -1356,9 +1354,9 @@ Um laço é uma frase, na voz do personagem, sobre alguém que importa: outro pe
 
 **Status:** Regra oficial
 
-Entrar onde não se é bem-vindo, pegar o que se veio buscar e sair antes de alguém perceber. Duas contagens à vista: as Etapas até o objetivo e o Alerta do lugar.
+Entrar escondido num lugar, pegar o que veio buscar e sair sem ser pego. A cena usa duas contagens: as Etapas até o objetivo e o Alerta do lugar.
 
-O plano parecia simples na mesa da taverna. Agora tem uma ronda que não estava no mapa, uma porta com tranca nova e um cachorro que levantou a orelha. A infiltração anda em rodadas curtas, e cada uma pergunta a mesma coisa: vocês passam por mais esse pedaço, ou alguém percebe?
+Use esta regra quando o grupo precisa entrar escondido num lugar vigiado, como uma mansão, um quartel ou um cofre. O caminho é dividido em etapas, e a cada rodada o grupo tenta passar por mais uma sem ser percebido.
 
 **Em resumo**
 
@@ -1388,39 +1386,39 @@ Antes da primeira rodada, o Mestre diz o tamanho do lugar e a vigilância dele, 
 
 - **DT:** a Padrão do nível do lugar. A etapa do objetivo, e todas num lugar Fechado, usam a Difícil.
 
-- **Preparo vale:** uma planta do lugar, um uniforme roubado, um guarda subornado. Cada preparo bom dá vantagem numa etapa ou apaga 1 de Alerta antes de começar.
+- **Preparação ajuda:** uma planta do lugar, um uniforme roubado, um guarda subornado. Cada preparo bom dá vantagem numa etapa ou apaga 1 de Alerta antes de começar.
 
 ### A rodada
 
 - O Mestre descreve o que há entre o grupo e a próxima etapa: um pátio aberto, um corredor com ronda, uma porta trancada, uma sala cheia de gente.
 
-- O grupo escolhe uma abordagem e quem a lidera, dizendo o que faz com o corpo e com a voz.
+- O grupo escolhe uma abordagem e quem vai liderar, e diz como vai fazer.
 
 - Resolvam o teste. Os outros podem Ajudar, como em Ações Coletivas, quando a abordagem permite.
 
-- Sucesso avança uma etapa. Sucesso por 10 ou mais avança e o Mestre entrega um presente: um atalho, uma chave, uma conversa ouvida.
+- Sucesso avança uma etapa. Sucesso por 10 ou mais avança e o grupo ganha algo a mais, como um atalho, uma chave ou uma informação.
 
 - Falha sobe o Alerta em 1, e a falha crítica em 2. O grupo escolhe se fica onde está ou força a passagem.
 
 ### Abordagens
 
-Diga a cena antes de rolar: ela diz ao Mestre o que pode dar errado. Magia, item e habilidade de classe entram como abordagem, com o teste que já usam.
+Diga como você faz antes de rolar. Magia, item e habilidade de classe também contam como abordagem, com o teste que já usam.
 
-- Abordagem | Como é, e como se resolve
+- Abordagem | O que é, e como se resolve
 
-- Passar escondido | Rente à parede, na sombra do toldo, no tempo exato em que o guarda vira a cabeça.Teste: Teste de Grupo de Furtividade. Sucesso: O grupo avança uma etapa. Falha: O Alerta sobe 1.
+- Passar escondido | Passar sem ser visto, aproveitando as sombras e a hora em que ninguém está olhando.Teste: Teste de Grupo de Furtividade. Sucesso: O grupo avança uma etapa. Falha: O Alerta sobe 1.
 
-- Ser quem não é | O avental de copeiro, a bandeja na mão, o passo de quem está atrasado e não quer bronca.Teste: Enganação ou Atuação; o Kit de Disfarce dá vantagem. Sucesso: Avança uma etapa, e o disfarce vale nas próximas onde aquele papel é esperado. Falha: O Alerta sobe 1 e o disfarce fica queimado daqui para frente.
+- Ser quem não é | Se passar por alguém que pode estar ali, como um criado ou um guarda.Teste: Enganação ou Atuação; o Kit de Disfarce dá vantagem. Sucesso: Avança uma etapa, e o disfarce vale nas próximas onde aquele papel é esperado. Falha: O Alerta sobe 1 e o disfarce fica queimado daqui para frente.
 
-- Abrir caminho | O clique da gazua, a tranca de runas que esfria sob os dedos, o painel que pede uma senha.Teste: Ladinagem (Kit de Arrombamento dá vantagem), Misticismo para selo, Tecnologia para tranca A.X.I.S. Sucesso: Avança uma etapa por uma porta que ninguém vigia. Falha: O Alerta sobe 1. Falhar por 5 ou mais dispara o que protegia a porta.
+- Abrir caminho | Abrir uma porta, tranca ou selo para passar por um caminho sem vigia.Teste: Ladinagem (Kit de Arrombamento dá vantagem), Misticismo para selo, Tecnologia para tranca A.X.I.S. Sucesso: Avança uma etapa por uma porta que ninguém vigia. Falha: O Alerta sobe 1. Falhar por 5 ou mais dispara o que protegia a porta.
 
-- Calar alguém | Uma mão na boca, um golpe na nuca, o corpo arrastado para trás das caixas.Teste: Luta ou Atletismo contra 10 + Reflexos do alvo, com vantagem se ele não viu você. Sucesso: Avança uma etapa e tira aquela pessoa do caminho. Falha: Vira combate ali mesmo, e o Alerta sobe 2.
+- Calar alguém | Derrubar ou imobilizar alguém sem fazer barulho.Teste: Luta ou Atletismo contra 10 + Reflexos do alvo, com vantagem se ele não viu você. Sucesso: Avança uma etapa e tira aquela pessoa do caminho. Falha: Vira combate ali mesmo, e o Alerta sobe 2.
 
-- Distrair | Uma garrafa que se quebra no outro corredor, um cavalo solto no pátio, um grito de incêndio.Teste: Atuação, Enganação ou o teste de uma magia. Sucesso: Não avança, e a próxima abordagem desta etapa ganha vantagem. Falha: O Alerta sobe 1, porque alguém foi ver e voltou desconfiado.
+- Distrair | Chamar a atenção dos guardas para outro lugar.Teste: Atuação, Enganação ou o teste de uma magia. Sucesso: Não avança, e a próxima abordagem desta etapa ganha vantagem. Falha: O Alerta sobe 1, porque alguém foi ver o que era e voltou desconfiado.
 
-- Estudar o caminho | Contar os passos da ronda, ler a planta pela janela, ouvir a troca de turno.Teste: Investigação ou Percepção. Sucesso: Não avança. Revela o que há na próxima etapa (guarda, armadilha, rota) e dá vantagem na abordagem seguinte. Uma vez por etapa. Falha: Só custa o tempo.
+- Estudar o caminho | Observar a ronda, o caminho ou a troca de turno antes de agir.Teste: Investigação ou Percepção. Sucesso: Não avança. Revela o que há na próxima etapa (guarda, armadilha, rota) e dá vantagem na abordagem seguinte. Uma vez por etapa. Falha: Só custa o tempo.
 
-- **Passar escondido é de todo mundo:** todos os expostos testam, e o grupo passa se pelo menos metade passar. Quem tem armadura com penalidade sente aqui.
+- **Em Passar escondido, todo mundo testa:** o grupo passa se pelo menos metade passar. Armadura com penalidade atrapalha aqui.
 
 - **O grupo pode se separar.** Cada parte vira uma infiltração com as suas próprias Etapas, e o Alerta continua um só, porque o lugar é um só.
 
@@ -1430,17 +1428,17 @@ Diga a cena antes de rolar: ela diz ao Mestre o que pode dar errado. Magia, item
 
 - **Calmo:** menos da metade pintada. O lugar segue a rotina.
 
-- **Desconfiança:** metade ou mais. As rondas dobram, alguém foi chamar o capitão, e todas as etapas passam a usar a DT Difícil.
+- **Desconfiança:** metade ou mais. Os guardas ficam atentos, e todas as etapas passam a usar a DT Difícil.
 
 - **Alarme:** cheio. O lugar inteiro sabe. O grupo escolhe entre fugir (uma Perseguição a Pé que começa em Curta), lutar (com reforço chegando a cada rodada) ou se render.
 
-- **O Alerta só desce** com ação concreta: esconder o corpo, devolver a chave antes que sintam falta, convencer o guarda de que foi o gato. Cada ação dessas apaga 1, e é uma rodada inteira.
+- **O Alerta só desce** com uma ação concreta, como esconder alguém desacordado, devolver uma chave ou convencer um guarda de que não foi nada. Cada ação dessas leva uma rodada inteira e apaga 1.
 
 - **Rastro na saída:** se o objetivo deixou marca (cofre aberto, refém levado, corpo no chão), o Alerta sobe 1 quando a saída começa.
 
 **Exemplo:**
 
-O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem, chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a Pop Star distrai o mordomo (a etapa não avança, e a próxima abordagem ganha vantagem), e na rodada seguinte a Ladinagem com vantagem abre o cofre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.
+O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a Pop Star distrai o mordomo (a etapa não avança, e a próxima abordagem ganha vantagem), e na rodada seguinte a Ladinagem com vantagem abre o cofre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.
 
 ## investigacao
 
@@ -1448,9 +1446,9 @@ O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e
 
 **Status:** Regra oficial
 
-Um mistério quebrado em perguntas, três pistas para cada uma e um relógio do outro lado. A pista essencial vem de procurar no lugar certo, e o dado decide o que vem junto.
+Como resolver mistérios: o caso é dividido em perguntas, cada pergunta tem três pistas, e um relógio mostra o culpado agindo. Procurar no lugar certo sempre acha a pista principal.
 
-Alguém morreu, alguma coisa sumiu, um nome apareceu onde não devia. O grupo tem perguntas, o mundo tem respostas espalhadas, e do outro lado alguém trabalha para que elas continuem espalhadas. Esta página diz como achar o que está escondido sem que um dado ruim encerre a história.
+Use esta regra para resolver mistérios. O caso é dividido em perguntas menores, cada uma com pistas espalhadas, e procurar no lugar certo sempre encontra a pista principal. O dado decide só o que vem junto com ela.
 
 **Em resumo**
 
@@ -1460,7 +1458,7 @@ Alguém morreu, alguma coisa sumiu, um nome apareceu onde não devia. O grupo te
 
 - Quem procura no lugar certo, do jeito certo, acha a pista essencial sem rolar. O teste vem depois e decide o que vem junto e quanto custou.
 
-- O relógio do caso é o outro lado agindo. Ele pinta com cada custo e cada dia parado, e quando fecha o culpado faz alguma coisa.
+- O relógio do caso mostra o culpado agindo. Ele avança com custos de falha e com dias sem pista nova, e quando enche o culpado faz alguma coisa.
 
 - Quando o grupo travar, Ligar os pontos aponta a pergunta aberta e onde procurar.
 
@@ -1474,13 +1472,13 @@ Alguém morreu, alguma coisa sumiu, um nome apareceu onde não devia. O grupo te
 
 - De um arco | 4 | 8 partes | Quem está apagando os nomes do registro da cidade, como, por que, e quem é o próximo.
 
-O Mestre diz as perguntas em voz alta quando o caso começa, ou deixa o grupo chegar nelas. Responder todas fecha o caso; o que fazer com a resposta é outra cena.
+O Mestre pode dizer as perguntas no começo do caso ou deixar o grupo descobrir quais são. Quando todas são respondidas, o caso está resolvido.
 
 ### Achar uma pista
 
-- **Diga o que procura e onde.** Abrir a gaveta, cheirar o copo, perguntar ao cocheiro quem desceu na esquina. "Procuro pistas na sala" é pouco: a sala tem dez lugares.
+- **Diga o que procura e onde.** Por exemplo: abrir a gaveta, cheirar o copo, perguntar ao cocheiro quem passou por ali. "Procuro pistas na sala" é vago demais.
 
-- **Lugar certo, pista na mão.** Se ali há uma pista essencial e a ideia alcança, o personagem acha sem rolar.
+- **Procurou no lugar certo, achou.** Se ali tem uma pista essencial e a sua ideia faz sentido, você acha sem rolar.
 
 - **O teste decide o resto,** contra a DT Padrão do nível do caso:
 
@@ -1496,15 +1494,15 @@ Os custos de falha:
 
 - Demorou: pinte 1 parte do relógio do caso.
 
-- Alguém percebeu a pergunta, e o culpado fica sabendo que vocês estão perto.
+- Alguém percebeu o que vocês estão investigando, e o culpado fica sabendo que vocês estão perto.
 
 - O lugar fica marcado: voltar ali depois vai ser mais difícil.
 
 - A testemunha se fecha: a próxima conversa com ela começa com 1 de Paciência.
 
-- A pista vem estragada: ela aponta a direção certa, e a confirmação exige uma segunda.
+- A pista vem incompleta: aponta a direção certa, mas vocês precisam de outra para confirmar.
 
-Pistas que não são essenciais (o detalhe que enriquece, a conexão com outro caso) podem depender do teste. Só as essenciais nunca dependem.
+Pistas que não são essenciais (um detalhe a mais, a ligação com outro caso) podem depender do teste. As essenciais nunca dependem.
 
 ### Que perícia acha o quê
 
@@ -1532,21 +1530,21 @@ Pistas que não são essenciais (o detalhe que enriquece, a conexão com outro c
 
 ### O relógio do caso
 
-- **Pinta uma parte** por custo de falha que diga "demorou", por dia inteiro sem pista nova e por barulho do grupo (uma invasão mal feita, um suspeito acusado em público).
+- **Pinta uma parte** por custo de falha que diga "demorou", por dia inteiro sem pista nova e quando o grupo chama atenção (uma invasão malfeita, acusar um suspeito em público).
 
-- **Quando fecha,** o culpado age: foge da cidade, queima o arquivo, cala uma testemunha, ataca de novo. O caso continua, e a ação dele deixa pistas novas.
+- **Quando enche,** o culpado age: foge da cidade, queima documentos, cala uma testemunha ou ataca de novo. O caso continua, e o que ele fez deixa pistas novas.
 
-- **O relógio zera** depois que o culpado age, e o Mestre diz o que ele fará quando fechar de novo.
+- **O relógio zera** depois que o culpado age, e o Mestre diz o que ele fará quando encher de novo.
 
 ### Ligar os pontos
 
 - **Quando o grupo travar,** um personagem passa uma hora revendo o que tem e testa Investigação contra a DT Padrão. Sucesso: o Mestre diz qual pergunta ainda está aberta e aponta um lugar ou uma pessoa onde há pista dela. Uma vez por pergunta.
 
-- **Apontar o culpado é escolha do grupo.** O Mestre não confirma antes, e errar tem consequência na história. Quem se interroga entra em Conflito Social, onde cada ponto de Resistência que cai num interrogatório entrega uma informação.
+- **Quem decide o culpado é o grupo.** O Mestre não confirma antes, e acusar a pessoa errada tem consequências. Quem se interroga entra em Conflito Social, onde cada ponto de Resistência que cai num interrogatório entrega uma informação.
 
 - **O Detetive vai além:** a Dedução Metódica arranca detalhes que ninguém mais vê, o Golpe de Vista aponta o que está fora do lugar e o Caso Encerrado confirma uma acusação.
 
-- **Anotem as pistas** num lugar que a mesa inteira vê. Mistério se perde mais por esquecimento que por falta de pista.
+- **Anotem as pistas** num lugar que todos vejam. É fácil esquecer uma pista importante entre uma sessão e outra.
 
 **Exemplo:**
 
@@ -1560,7 +1558,7 @@ O cônsul morreu na ceia. A Médica pede para ver o corpo: há uma pista essenci
 
 Quando centenas lutam: cada lado tem uma Força, os comandantes disputam fases com Guerra e os personagens fazem feitos no meio da batalha que mudam o resultado.
 
-A neblina levanta e o outro lado está lá, mais perto do que o batedor disse. Ninguém rola ataque por soldado: cada exército vira uma contagem de Força, os comandantes medem a batalha fase a fase e os personagens estão no meio dela, onde um feito certo vale mais que cem lanças.
+Use esta regra quando exércitos inteiros lutam. Ninguém rola ataque por soldado: cada lado tem uma Força, os comandantes disputam a batalha em fases com a perícia Guerra, e os personagens fazem feitos no meio da luta para ajudar o próprio lado.
 
 **Em resumo**
 
@@ -1568,7 +1566,7 @@ A neblina levanta e o outro lado está lá, mais perto do que o batedor disse. N
 
 - A cada fase, os comandantes escolhem uma ordem em segredo e fazem um teste oposto de **Guerra**. Quem vence tira Força do outro.
 
-- Os personagens escolhem onde estão na fase e fazem um **feito**: acertou, ajuda o próprio lado; falhou, sai mais machucado.
+- Os personagens escolhem onde vão lutar na fase e fazem um **feito**. No sucesso, ajudam o próprio lado; na falha, levam mais dano.
 
 - Na metade da Força e num quarto dela, o lado testa moral, como no Combate. Quem desiste foge do campo.
 
@@ -1600,13 +1598,13 @@ Cada vantagem clara de um lado dá +2 no choque dele, até +6:
 
 - **Tropa sem comandante** faz o choque com o d20 puro, sem bônus nenhum.
 
-- **As tropas do grupo** vêm de onde a história trouxer: uma facção que confia em vocês (Prestígio, Fama e Procura), aliados e contratados, a guarnição de uma Fortaleza.
+- **O grupo consegue tropas** pela história: uma facção que confia em vocês (Prestígio, Fama e Procura), aliados e contratados, a guarnição de uma Fortaleza.
 
 ### A fase
 
 - **Ordens.** Cada comandante escolhe uma ordem em segredo, e as duas são reveladas juntas. O Mestre anota a dele antes de ouvir a do grupo.
 
-- **Feitos.** Cada personagem diz onde está nesta fase e faz o feito escolhido. O Mestre pode transformar um feito num combate curto quando a cena pedir.
+- **Feitos.** Cada personagem diz onde vai lutar nesta fase e faz o feito escolhido. O Mestre pode transformar um feito num combate curto quando a cena pedir.
 
 - **Choque.** Teste oposto de Guerra dos comandantes, com as vantagens, a ordem e o que os feitos deram.
 
@@ -1622,15 +1620,15 @@ Uma fase é mais ou menos meia hora de luta. A maioria das batalhas termina entr
 
 As três primeiras se vencem em roda: Avançar vence Flanquear, Flanquear vence Segurar a linha e Segurar a linha vence Avançar. Quem acertou a ordem ganha +2 no choque.
 
-- Ordem | Como é, e o que vence
+- Ordem | O que é, e o que vence
 
-- Avançar | A carga vai reto, e pega no meio da curva quem tentava dar a volta.Vence Flanquear: +2 no choque.
+- Avançar | Atacar de frente, com tudo.Vence Flanquear: +2 no choque.
 
-- Flanquear | Metade da tropa dá a volta pela mata e cai de lado sobre quem ficou parado.Vence Segurar a linha: +2 no choque.
+- Flanquear | Dar a volta e atacar o inimigo pelo lado.Vence Segurar a linha: +2 no choque.
 
-- Segurar a linha | Escudo colado em escudo: a carga quebra na parede e volta pela metade.Vence Avançar: +2 no choque.
+- Segurar a linha | Ficar em formação e aguentar o ataque.Vence Avançar: +2 no choque.
 
-- Recuar | Recuo em ordem, com a retaguarda segurando para o resto sair.Não vence nenhuma. Quem recua perde no máximo 1 parte por fase e, se vencer o choque, pode sair do campo no fim dela.
+- Recuar | Sair da batalha em ordem, com a retaguarda protegendo a saída.Não vence nenhuma. Quem recua perde no máximo 1 parte por fase e, se vencer o choque, pode sair do campo no fim dela.
 
 ### Feitos
 
@@ -1646,7 +1644,7 @@ As três primeiras se vencem em roda: Avançar vence Flanquear, Flanquear vence 
 
 - Ao lado do comandante | Ajudar, contra DT 10 + metade do nível da batalha, como em Ações Coletivas.+2 no choque do seu lado, ou vantagem se o sucesso for crítico. No máximo dois personagens, como em Ajudar.
 
-- **Somados, os feitos tiram no máximo 2 partes do inimigo por fase.** O resto da batalha é dos exércitos.
+- **Somados, os feitos tiram no máximo 2 partes do inimigo por fase.**
 
 - **Quem prefere ficar atrás das linhas** não faz feito e não leva dano.
 
@@ -1690,7 +1688,7 @@ No fim de cada fase, quem fez um feito sofre dano do tipo que fizer sentido (cor
 
 - **Recuo:** quem recua e vence o choque pode sair do campo no fim da fase, com a Força que ainda tem.
 
-- **Depois:** uma batalha conta como combate intenso para quem lutou (1 de Cansaço, em Descanso). Cada parte perdida é uma fatia das tropas fora de combate, entre mortos, feridos e fugidos, e o mundo fica sabendo de quem venceu.
+- **Depois:** uma batalha conta como combate intenso para quem lutou (1 de Cansaço, em Descanso). Cada parte perdida representa tropas fora de combate (mortos, feridos e fugidos).
 
 **Exemplo:**
 
@@ -1704,7 +1702,7 @@ Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saque
 
 A jornada por conta própria, dia a dia: ritmo, terreno, um papel para cada um e o que a estrada traz. E a hora a hora dentro de uma ruína, uma mata ou um subterrâneo.
 
-Entre a cidade e o lugar onde a história acontece existe a estrada, e a estrada também pode contar. Esta página transforma cada dia de viagem numa pequena cena: o grupo escolhe o ritmo, cada um assume um papel, o Mestre rola o que o caminho traz e a noite cobra o seu preço. Quando o grupo chega a um lugar perigoso, o tempo passa a correr de hora em hora.
+Esta regra é para quando o grupo viaja por conta própria. Cada dia de viagem vira uma pequena cena: o grupo escolhe o ritmo, cada um assume um papel, o Mestre rola o que acontece no caminho e, à noite, o grupo acampa. Em lugares perigosos, como ruínas e subterrâneos, o tempo passa a ser contado em horas.
 
 **Em resumo**
 
@@ -1730,7 +1728,7 @@ Entre a cidade e o lugar onde a história acontece existe a estrada, e a estrada
 
 - **A noite.** O grupo monta acampamento, o Vigia testa, o Mestre rola o evento da noite e o descanso sai com os fatores do Descanso.
 
-Cada dia de viagem passa no calendário do mundo. Uma estrada de oito dias leva oito dias, e o mundo anda junto.
+Cada dia de viagem passa no calendário do mundo, e o que acontece no mundo continua acontecendo enquanto vocês viajam.
 
 ### Ritmo
 
@@ -1784,7 +1782,7 @@ Cada personagem faz um papel por dia. Com gente de menos, um personagem pode faz
 
 ### Exploração
 
-Dentro de uma ruína, de uma mata fechada ou de um subterrâneo, o dia vira hora. Cada turno de exploração dura uma hora, e nele cada personagem faz uma coisa.
+Dentro de uma ruína, de uma mata fechada ou de um subterrâneo, o tempo passa a ser contado em horas. Cada turno de exploração dura uma hora, e nele cada personagem faz uma coisa.
 
 - Ação | O que faz
 
@@ -1802,7 +1800,7 @@ Dentro de uma ruína, de uma mata fechada ou de um subterrâneo, o dia vira hora
 
 - **O Mestre rola um evento por turno,** e mais um sempre que o grupo faz barulho alto: luta, porta arrombada, grito.
 
-- **Armadilhas e perigos do lugar** seguem Perigos do Ambiente. Procurar antes de avançar é o jeito de achar antes de pisar.
+- **Armadilhas e perigos do lugar** seguem Perigos do Ambiente. Procurar antes de avançar ajuda a achar armadilhas antes de pisar nelas.
 
 - **Dez minutos bastam** para uma coisa pequena (abrir um baú, ler uma inscrição). O turno inteiro é para o que muda o lugar.
 
@@ -1818,7 +1816,7 @@ Num subterrâneo, a Caçadora procura na sala seguinte enquanto o Guerreiro vigi
 
 O que você faz no seu turno, como acertar, quando dá para reagir e de que jeito o dano entra.
 
-Combate começa quando a conversa acaba e alguém decide resolver no golpe. Este tópico reúne o que você faz no seu turno, como acertar um ataque, como segurar ou derrubar alguém, como se defender e o que as reações permitem. Dano, ferimentos e condições têm tópicos próprios, indicados ao longo do texto.
+O combate começa quando alguém parte para a briga. Este tópico reúne o que você faz no seu turno, como acertar um ataque, como segurar ou derrubar alguém, como se defender e o que as reações permitem. Dano, ferimentos e condições têm tópicos próprios, indicados ao longo do texto.
 
 **Em resumo**
 
@@ -2150,7 +2148,7 @@ Resistência física geral cobre corte, perfuração e impacto. Balístico fica 
 
 Como o combate roda na tela compartilhada: ordem de iniciativa, vida em tempo real, o que cada pessoa enxerga do inimigo e por que o dado é rolado no servidor.
 
-Dá para jogar O Jardim inteiro no papel. Mas a mesa ao vivo existe para resolver as três coisas que sempre travam um combate: quem age agora, quanta vida sobrou em quem e se aquele 19 foi mesmo um 19.
+Dá para jogar O Jardim inteiro no papel. A mesa ao vivo do site ajuda no combate: mostra a ordem de iniciativa e a Vida de cada um para todo mundo, e rola os dados no servidor, onde ninguém consegue mexer no resultado.
 
 **Em resumo**
 
@@ -2170,7 +2168,7 @@ Dá para jogar O Jardim inteiro no papel. Mas a mesa ao vivo existe para resolve
 
 - Venenos, doenças e vícios que um personagem carrega aparecem no cartão dele, com o estágio em que estão.
 
-- A ordem sai da Iniciativa da ficha, que aqui não se rola. Quem comanda pode reordenar à mão quando a ficção pedir.
+- A ordem vem da Iniciativa da ficha, sem rolar. Quem comanda pode mudar a ordem à mão quando precisar.
 
 ### Turno e rodada
 
@@ -2194,17 +2192,17 @@ O sigilo do inimigo é decidido no servidor, e o navegador de quem olha só rece
 
 - Total | Tudo, inclusive a Vida exata, os ataques e as perícias. | Aliado do grupo, ou inimigo já estudado.
 
-Quem comanda a mesa vê tudo sempre, e o dono de um personagem vê o próprio personagem por inteiro, seja qual for o grau. O segredo é entre o Mestre e o resto da mesa, nunca entre o jogador e a ficha dele.
+Quem comanda a mesa sempre vê tudo, e o dono de um personagem sempre vê o próprio personagem por inteiro, seja qual for o grau.
 
 ### Rolagens registradas
 
-- O dado é rolado no servidor. O site mostra o resultado, mas quem o produziu foi o servidor, então nenhum lado da mesa consegue escolher o número.
+- O dado é rolado no servidor, e o site só mostra o resultado. Assim, ninguém na mesa consegue escolher o número.
 
 - Cada rolagem fica gravada com autor, personagem, título, fórmula, o que saiu em cada dado e a DT, quando havia uma.
 
 - Vantagem e desvantagem entram na própria rolagem: os dois d20 ficam registrados, e dá para conferir depois qual foi usado.
 
-- Usos de poder entram no mesmo registro das rolagens, então o histórico da sessão conta a cena em ordem.
+- Usos de poder entram no mesmo registro das rolagens, então o histórico da sessão fica todo em ordem.
 
 - Quem está assistindo a campanha como observador não rola dados.
 
@@ -2280,7 +2278,7 @@ Uma arqueira tem um arco com alcance Médio (até 15 m) e mira um alvo em Longo 
 
 Cair a 0 ainda deixa saída: o quanto você passou de 0 define o tamanho do buraco, e Morrendo dá ao grupo algumas rodadas para resolver.
 
-Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua sendo anotado abaixo de zero, e é esse número que decide se a queda foi um tropeço ou um desastre. Depois entra o relógio de Morrendo, que dá ao grupo algumas rodadas para resgatar quem caiu. Este tópico trata ainda de Ferido, de ferimento crítico e de mutilação.
+Quando a Vida chega a 0, o dano continua sendo anotado abaixo de zero, e esse número decide se a queda foi leve ou grave. Depois entra o relógio de Morrendo, que dá ao grupo algumas rodadas para resgatar quem caiu. Este tópico trata ainda de Ferido, de ferimento crítico e de mutilação.
 
 **Em resumo**
 
@@ -2296,7 +2294,7 @@ Chegar a 0 de Vida não é o fim, e também não zera a conta. O dano continua s
 
 - Fora de combate, qualquer um trata um ferido: 10 minutos e Cura contra a DT Padrão do nível do paciente devolvem 1d6 de Vida, ou um décimo da Vida máxima do paciente, o que for maior.
 
-- Voltar da morte existe, mas é raro e cobra caro.
+- Voltar da morte é possível, mas é raro e caro.
 
 ### Vida negativa
 
@@ -2382,7 +2380,7 @@ Fora de combate, com dez minutos e um teste de Cura contra a DT Padrão do níve
 
 ### Mutilação
 
-Algumas criaturas querem levar uma parte de quem enfrentam. Quando a ficha de uma criatura tem a habilidade **Arrancar**, ela diz o que dispara e qual teste você faz. Falhou, você perde um membro na hora, e ele não volta com descanso.
+Algumas criaturas conseguem arrancar uma parte do corpo de quem enfrentam. Quando a ficha de uma criatura tem a habilidade **Arrancar**, ela diz o que dispara e qual teste você faz. Falhou, você perde um membro na hora, e ele não volta com descanso.
 
 - A Mutilação sempre é **anunciada** na rodada anterior ou vem de um gatilho que a própria ficha descreve, como estar Agarrado, Imobilizado ou Marcado. Ninguém perde um membro por um golpe que a mesa não teve chance de ver.
 
@@ -2410,11 +2408,11 @@ Algumas criaturas querem levar uma parte de quem enfrentam. Quando a ficha de um
 
 - **Implante:** Braço Hidráulico Titânico, Pernas Pneumáticas e Olho Biônico Mk-II cobrem o que sumiu e anulam a penalidade daquele membro enquanto estiverem funcionando. O Mestre decide se a Laringe Sintética Camaleão devolve a fala.
 
-- Sem uma dessas portas, a perda é permanente. O personagem continua inteiro para tudo que a tabela não cita.
+- Sem uma dessas opções, a perda é permanente. O personagem continua inteiro para tudo que a tabela não cita.
 
 ### Voltar da morte
 
-Quem morre vai para Arkarin, e de lá quase ninguém volta. Voltar existe, mas é raro e cobra caro.
+Quem morre vai para Arkarin, e de lá quase ninguém volta. Voltar é possível, mas é raro e caro.
 
 - **Só por efeito que diga:** nenhuma cura, poção ou teste de Morrendo traz alguém de volta. Só um efeito que diga com todas as letras que devolve a vida, como a Reconstrução da Pedra Filosofal do Alquimista, ou uma cena que o Mestre conduza como história.
 
@@ -2608,9 +2606,9 @@ Os dias de treino saem do tempo que o grupo tem entre as aventuras (ver Tempo En
 
 Os dias que sobram entre um arco e outro, e o que cada personagem faz com eles: treinar, fabricar, trabalhar, se curar, cuidar da base, ganhar espaço com uma facção ou só viver um pouco, tudo no mesmo calendário.
 
-Terminado um arco, a vida volta a ter barulho de rua. As feridas fecham devagar, alguém finalmente dorme numa cama de verdade, e a espada vai para o ferreiro antes da próxima briga. O Mestre diz quantos dias vocês têm até o próximo chamado, e esses dias são seus.
+Entre um arco e outro, o grupo tem um tempo livre para descansar, treinar, trabalhar e cuidar da vida. O Mestre diz quantos dias vocês têm até a próxima aventura.
 
-Cada personagem escolhe o que fazer com eles, em separado. É aqui que o tempo parado vira progresso concreto, e é aqui também que o personagem mostra quem é quando ninguém está atacando: para onde volta, com quem janta, o que faz com as mãos quando elas não seguram uma arma.
+Cada personagem escolhe o que fazer com esses dias, em separado. Algumas atividades dão progresso na ficha, como treinar e fabricar, e outras servem para mostrar a vida do personagem fora das aventuras.
 
 **Em resumo**
 
@@ -2676,7 +2674,7 @@ Cada atividade abaixo já tem a regra completa em outro tópico. Aqui elas apare
 
 Quem tem ofício trabalha na faixa dele, e a faixa é o teto: cada linha pede o grau escrito nela numa das duas perícias do ofício (a do ofício comum pede Aprendiz). Sem o grau, você trabalha na linha de baixo até treinar. O Aprendiz e quem vive na rua ganham a primeira linha. Sem ofício, ou longe de onde ele vale alguma coisa, sobra o serviço braçal.
 
-Trabalhar paga o custo de vida, e sobra pouco. A coluna Sobra é o que chega à carteira depois de comer, dormir e se vestir como o trabalho pede, e é ela que o botão Receber da Carteira soma. Um dia de ofício comum rende 10 Lunaris, uma noite de estalagem custa 3, e a bota nova vai ter que esperar. Nenhum personagem enriquece assim, e é por isso que a estrada continua chamando.
+Trabalhar paga o custo de vida, e sobra pouco. A coluna Sobra é o que chega à carteira depois de comer, dormir e se vestir como o trabalho pede, e é ela que o botão Receber da Carteira soma. Um dia de ofício comum rende 10 Lunaris, uma noite de estalagem custa 3, e a bota nova vai ter que esperar. Ninguém fica rico só trabalhando no ofício.
 
 ### Quanto custa viver
 
@@ -2720,7 +2718,7 @@ Nem todo dia livre precisa render número. Se você não souber o que o seu pers
 
 - **Combine com o grupo.** Quatro personagens em quatro cidades diferentes transformam a próxima sessão em quatro começos separados, e sempre tem alguém esperando a vez.
 
-- **Corpo primeiro.** Ferimento e Cansaço vêm antes de qualquer projeto. Chegar ao arco seguinte com Ferido 2 pesa mais que qualquer item fabricado no intervalo.
+- **Corpo primeiro.** Ferimento e Cansaço vêm antes de qualquer projeto. Chegar ao próximo arco ainda com Ferido 2 costuma atrapalhar mais do que um item novo ajuda.
 
 ## xp
 
@@ -3168,7 +3166,7 @@ Um grupo com muitos aliados atrasa a mesa inteira. Combine um teto com o Mestre 
 
 Duas formas de ganhar poder sem subir de nível: comer um Fruto do Éden, que se liga à alma, ou instalar um implante, que é peça de máquina no corpo. Traz também as oferendas aos Fluxos e as dádivas que elas rendem.
 
-Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o caminho caro: você compra, aceita o que vem junto e não desfaz depois.
+O jeito normal de ficar mais forte é subir de nível e ganhar Legados. Frutos e implantes são outro jeito, mais caro: você compra, aceita o custo que vem junto e não pode desfazer depois.
 
 **Em resumo**
 
@@ -3224,7 +3222,7 @@ Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na
 
 ### Dádivas e oferendas
 
-Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feito diante do que o Fluxo aprecia, e o que ele devolve é uma dádiva: pequena, curta e uma por vez. A dádiva não substitui o Fruto. O Fruto muda você para sempre, e a dádiva dura o tempo de uma jornada.
+Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feito diante do que o Fluxo aprecia, e o que ele devolve é uma dádiva: pequena, curta e uma por vez. A dádiva e o Fruto são coisas diferentes: o Fruto é permanente, e a dádiva dura pouco.
 
 - **Onde:** num lugar em que o Fluxo se faz sentir (o Mestre diz qual) ou, se você carrega o Fruto do mesmo Fluxo, em qualquer lugar: quem comeu o fruto leva o altar no corpo.
 
@@ -3234,7 +3232,7 @@ Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feit
 
 - **O teste:** Religião ou Ressonância contra a DT Padrão do nível, com +5 na DT se a oferenda for Humilde, nenhum ajuste se for Valiosa e −3 se for Preciosa.
 
-- **O resultado:** falhar é ouvir silêncio, e a oferenda se perde. Passar rende a dádiva do Fluxo até o próximo descanso completo ou o fim da sessão, o que vier primeiro. Passar por 5 ou mais, ou tirar 20 natural, faz o Mestre acrescentar um sinal: uma visão curta, um nome, um cheiro, uma pista sobre algo ligado ao Fluxo.
+- **O resultado:** na falha, nada acontece e a oferenda se perde. Passar rende a dádiva do Fluxo até o próximo descanso completo ou o fim da sessão, o que vier primeiro. Passar por 5 ou mais, ou tirar 20 natural, faz o Mestre acrescentar um sinal: uma visão curta, um nome, um cheiro, uma pista sobre algo ligado ao Fluxo.
 
 - **Os limites:** uma oferenda por pessoa por sessão, uma dádiva ativa por vez (aceitar outra encerra a anterior) e o mesmo altar responde uma vez por mês do calendário do mundo.
 
@@ -3262,7 +3260,7 @@ Os Fluxos respondem a quem lhes dá algo. Uma oferenda é um gesto de valor feit
 
 - Tecnologia | uma peça de máquina que funciona, um registro bem guardado, um código copiado | Registro. +2 em Tecnologia e em Investigação. Uma vez, como Ação Livre, leia uma criatura que você veja: o Mestre diz a Defesa dela e uma fraqueza, se houver.
 
-Quem carrega o Fruto do mesmo Fluxo recebe a dádiva ampliada: o bônus passa de +2 para +3 (de +3 m para +5 m no Passo Curto), o efeito de uma vez pode ser usado duas vezes e ela dura até o fim da sessão. A dádiva do Fim exige a autorização do Mestre, como todo acesso ao Fim. Algumas deidades respondem pouco, e o silêncio também é resposta: quem decide é o Mestre.
+Quem carrega o Fruto do mesmo Fluxo recebe a dádiva ampliada: o bônus passa de +2 para +3 (de +3 m para +5 m no Passo Curto), o efeito de uma vez pode ser usado duas vezes e ela dura até o fim da sessão. A dádiva do Fim exige a autorização do Mestre, como todo acesso ao Fim. Algumas deidades quase nunca respondem. Quem decide é o Mestre.
 
 ### Devoção
 
@@ -3290,7 +3288,7 @@ A Devoção vale para o Fluxo da divindade que o personagem cultua. As travas da
 
 ### Implantes cibernéticos
 
-Enquanto o Fruto mexe na alma, o implante mexe na carne. São 52 peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.
+O implante é uma peça instalada no corpo. São 52 peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.
 
 - Implante não vai na mochila. Ele fica numa seção própria do inventário, porque está instalado no corpo e ocupa uma parte dele.
 
@@ -3338,7 +3336,7 @@ Rafa instala um Braço Hidráulico (Raro, 7) e uma Mira Sináptica (Épico e neu
 
 **Atenção:**
 
-Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra de rotina: é resultado de uma ida ao mercado negro, com tudo que isso costuma cobrar em história. As moedas e o câmbio estão em Economia.
+Créditos Sombrios não se compram com Lunaris. Por isso, comprar um implante exige ir ao mercado negro, e isso costuma trazer complicações na história. As moedas e o câmbio estão em Economia.
 
 ### Os dois juntos
 
@@ -3346,7 +3344,7 @@ Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra 
 
 - Nenhum dos dois ocupa vaga de Legado nem conta como magia aprendida.
 
-- Os dois são visíveis para quem olhar. Braço de metal e pele de brasa mudam como o mundo trata seu personagem, e essa parte não tem número.
+- Os dois são visíveis para quem olhar. Um braço de metal ou uma pele de brasa mudam o jeito como as pessoas tratam o seu personagem, e isso fica por conta da interpretação.
 
 ## equipamentos
 
@@ -3514,11 +3512,11 @@ Peças do mesmo conjunto dão um **bônus de coleção** quando estão equipadas
 
 - Conjunto | Peças | Bônus
 
-- Conjunto do Caminhante | Capa de Caminhante, Botas de Longa Marcha, Cinto de Alforjes | 2 peças: O corpo aprende o ritmo da viagem: +5 de Estamina máxima. 3 peças: Tudo no lugar e nenhum passo desperdiçado: +3 m de Movimento.
+- Conjunto do Caminhante | Capa de Caminhante, Botas de Longa Marcha, Cinto de Alforjes | 2 peças: +5 de Estamina máxima. 3 peças: +3 m de Movimento.
 
-- Conjunto do Estudioso | Lentes de Leitura, Tinteiro de Viagem, Livro de Bolso Anotado | 2 peças: Anotar rende: +5 de Mana máxima. 3 peças: Com tudo à mão, pensar fica mais fácil: +1 em Inteligência.
+- Conjunto do Estudioso | Lentes de Leitura, Tinteiro de Viagem, Livro de Bolso Anotado | 2 peças: +5 de Mana máxima. 3 peças: +1 em Inteligência.
 
-- Conjunto do Sentinela | Apito de Sentinela, Manto de Vigília, Luvas de Ronda, Braçadeira de Ronda | 2 peças: Pronto antes do alarme: +1 em Iniciativa. 3 peças: Quem faz ronda aprende a não dar as costas: +1 de Defesa. 4 peças: Nada passa despercebido: vantagem em Percepção.
+- Conjunto do Sentinela | Apito de Sentinela, Manto de Vigília, Luvas de Ronda, Braçadeira de Ronda | 2 peças: +1 em Iniciativa. 3 peças: +1 de Defesa. 4 peças: Vantagem em Percepção.
 
 Cada peça de conjunto também tem um efeito próprio de valor 1, que a ficha aplica sozinha. O bônus de coleção vem por cima.
 
@@ -3978,7 +3976,7 @@ Alquimista e Engenheiro fabricam com as habilidades descritas nas próprias prog
 
 Todo material vira um de seis estoques: Componentes Químicos, Componentes Ritualísticos, Componentes Veiculares, Sucata, Mantimentos ou Matéria-prima.
 
-O nome exato de um material conta a história; o **lote genérico** é o que entra na ficha. Ervas, venenos e sais podem virar Componentes Químicos. Fios, placas e engrenagens podem virar Sucata. Assim o grupo ainda encontra coisas interessantes sem transformar cada preparo numa lista de compras.
+O nome específico de um material serve para a história; na ficha, ele entra como um **lote genérico**. Ervas, venenos e sais podem virar Componentes Químicos. Fios, placas e engrenagens podem virar Sucata. Assim o grupo ainda encontra coisas interessantes sem transformar cada preparo numa lista de compras.
 
 **Em resumo**
 
@@ -4657,7 +4655,7 @@ Cada marco libera um círculo mais alto e mais vagas. A vaga é o total de magia
 
 Os sete elementos do Fluxo Físico, quem os domina, como eles se enfrentam e as quatorze derivações que o Elementarista pode despertar.
 
-O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos primordiais moram nele: Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Não existe um oitavo elemento. Gelo, magma, magnetismo e afins são **derivações**: cada uma nasce de um dos sete e é, ela mesma, um tipo de dano. É isso que este tópico explica.
+O Fluxo Físico é o Fluxo da matéria, da força e do peso, e os sete elementos primordiais moram nele: Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Não existe um oitavo elemento. Gelo, magma, magnetismo e afins são **derivações**: cada uma nasce de um dos sete e é, ela mesma, um tipo de dano.
 
 **Em resumo**
 
@@ -4751,7 +4749,7 @@ A partir do 13º nível (Domínio da Derivação), uma vez por rodada, ao conjur
 
 Os ganhos e os ônus que surgem do 5º ao 10º círculo, com as Marcas fixas de cada Fluxo e a tabela comum de Cicatrizes.
 
-Magia grande não sai de graça. A partir do 5º círculo, o Fluxo começa a deixar marca em quem o carrega, e no 10º ele cobra por magia aprendida. Todo preço tem os dois lados: um ganho concreto e um ônus concreto.
+Magias de círculo alto têm um custo extra. A partir do 5º círculo, o Fluxo deixa marcas em quem o usa, e no 10º cada magia aprendida traz uma Cicatriz. Cada Marca e cada Cicatriz trazem um ganho e um ônus.
 
 **Em resumo**
 
@@ -5187,7 +5185,7 @@ Inconsciente e Concentrando ficam fora da escala: a primeira acaba quando a caus
 
 ### Condições benéficas
 
-São as condições que ajudam. Vêm de uma palavra de ânimo, de uma magia de apoio ou de um escudo erguido na hora certa. Duram pouco e nenhuma soma com ela mesma.
+São as condições que ajudam. Vêm de um incentivo, de uma magia de apoio ou de um escudo erguido a tempo. Duram pouco, e a mesma condição não se soma com ela mesma.
 
 - Condição | Efeito principal | Remoção
 
@@ -5680,7 +5678,7 @@ Apagamento
 
 O que machuca sem que ninguém ataque: a queda, o ar que acaba, a fome e a sede, o frio e o calor, e o mecanismo escondido no corredor.
 
-Nem tudo que machuca ataca. O chão some, o ar acaba, a comida não chega, o frio entra pela roupa e o corredor esconde um mecanismo esperando um pé distraído. Cada um desses perigos tem aqui uma regra curta, para a mesa resolver sem parar a cena.
+Esta página reúne os perigos que machucam sem ser um ataque: queda, falta de ar, fome e sede, clima e armadilhas. Cada um tem uma regra curta, para a mesa resolver rápido e seguir com a cena.
 
 **Em resumo**
 
@@ -5932,13 +5930,13 @@ O catálogo mostra a progressão nível a nível, e as classes que conjuram most
 - **Médico** *(comum)*. Segura o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e manda de volta para luta. Só não consegue desfazer o que já aconteceu.
 - **Ninja** *(comum)*. Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Rende muito mais quando ninguém percebeu que ele chegou.
 - **Piloto** *(comum)*. Luta de dentro de um veículo que ele mesmo vai melhorando peça por peça. Quanto mais o personagem sobe, mais o veículo cresce junto.
-- **Pop Star** *(comum)*. Onde os outros partem para briga, ele sobe no palco. A fama abre portas, a presença prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.
+- **Pop Star** *(comum)*. Resolve as coisas com fama e carisma em vez de briga. A presença dele prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.
 - **Ritualista** *(comum)*. Trabalha longe do combate. Ritual não tem círculo, leva tempo e prende a Mana desde o primeiro minuto. Se alguém interromper, a Mana já era.
 - **Sintonizador** *(comum)*. Junta o próprio Fluxo com catalisadores de fora para conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.
 - **Caçador das Almas** *(especial, Anima)*. Liga a própria alma a uma Zanpakutō e passa a vida patrulhando a fronteira entre vivos e mortos, purificando espíritos corrompidos. Quem descobre o nome da lâmina abre o Shikai, e quem a domina por completo desperta a Bankai.
 - **Campeão Dimensional** *(especial, qualquer Árvore)*. O título fica com quem passa dos limites da própria dimensão. Os picos de poder duram pouco, são contados, e nenhum deles salva ninguém da morte.
 - **Cartista Arcano** *(especial, qualquer Árvore)*. Conjura com cartas: cada magia que conhece é uma carta do baralho, e o Fluxo nativo dele define quais cartas existem. Também arremessa cartas comuns como arma. Só conjura até o segundo círculo, e as vagas dele só guardam magias desse limite.
-- **Devorador** *(especial, Limiar)*. Nasce sem poder nenhum e pega emprestado de quem morreu. Mata, ou chega perto de um corpo ainda quente, devora o que sobrou, e uma parte de verdade da força da vítima passa a ocupar um espaço vazio dentro dele.
+- **Devorador** *(especial, Limiar)*. Nasce sem poder nenhum e pega emprestado de quem morreu. Quando mata alguém ou encontra um corpo recente, devora o que sobrou e guarda dentro de si uma parte da força da vítima.
 - **Elementarista** *(especial, Baluarte)*. Escolhe um único elemento primordial e vai aprofundando esse laço até chegar numa derivação, usando esse elemento para mudar o campo de batalha. Aprender os outros elementos só é possível para quem tem a aptidão de Avatar, que é raríssima.
 - **Escritor de Contos** *(especial, Limiar)*. Conta histórias, presságios e pequenas verdades que ajudam o grupo. O incômodo é que o que ele conta costuma acontecer.
 - **Guia Dimensional** *(especial, Matriz)*. Conhece as rotas, os portais e as âncoras. Quando o grupo chega num lugar sem estrada nenhuma, foi ele quem levou.
@@ -6251,7 +6249,7 @@ Dentro de cada faixa o preço vai da metade ao dobro da referência, então os d
 
 ### O muro dos Fragmentos
 
-Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 50 Fragmentos, existe um salto de mais de quinze vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Acumular Lunaris a vida inteira deixa você parado diante desse muro.
+Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 50 Fragmentos, existe um salto de mais de quinze vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Só juntando Lunaris, você nunca chega a esses itens.
 
 ### Câmbio
 
@@ -6267,7 +6265,7 @@ O Banco Lunar converte Lunaris, Solares e Fragmentos de Estrela, sempre passando
 
 **Atenção:**
 
-Créditos Sombrios ♆ são a moeda do mercado negro, das ruas que o Banco Lunar finge não ver. Não existe câmbio para eles: nenhum balcão do banco devolve Lunaris por Créditos, e nenhum vende Créditos por Lunaris. Eles chegam por negócio sujo, como vender uma mercadoria a um doleiro, e é no mercado negro que se gastam.
+Créditos Sombrios ♆ são a moeda do mercado negro, fora do controle do Banco Lunar. Não existe câmbio para eles: nenhum balcão do banco devolve Lunaris por Créditos, e nenhum vende Créditos por Lunaris. Eles chegam por negócio sujo, como vender uma mercadoria a um doleiro, e é no mercado negro que se gastam.
 
 A conta é sempre a mesma: converta para Solares, converta para a moeda de destino e desconte os 2%.
 

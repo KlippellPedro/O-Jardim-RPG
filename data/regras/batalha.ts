@@ -54,10 +54,10 @@ export interface IOrdemDeBatalha {
 }
 
 export const ORDENS_DE_BATALHA: readonly IOrdemDeBatalha[] = [
-  { id: 'avancar', titulo: 'Avançar', vence: 'flanquear', cena: 'A carga vai reto, e pega no meio da curva quem tentava dar a volta.' },
-  { id: 'flanquear', titulo: 'Flanquear', vence: 'segurar', cena: 'Metade da tropa dá a volta pela mata e cai de lado sobre quem ficou parado.' },
-  { id: 'segurar', titulo: 'Segurar a linha', vence: 'avancar', cena: 'Escudo colado em escudo: a carga quebra na parede e volta pela metade.' },
-  { id: 'recuar', titulo: 'Recuar', vence: null, cena: 'Recuo em ordem, com a retaguarda segurando para o resto sair.' },
+  { id: 'avancar', titulo: 'Avançar', vence: 'flanquear', cena: 'Atacar de frente, com tudo.' },
+  { id: 'flanquear', titulo: 'Flanquear', vence: 'segurar', cena: 'Dar a volta e atacar o inimigo pelo lado.' },
+  { id: 'segurar', titulo: 'Segurar a linha', vence: 'avancar', cena: 'Ficar em formação e aguentar o ataque.' },
+  { id: 'recuar', titulo: 'Recuar', vence: null, cena: 'Sair da batalha em ordem, com a retaguarda protegendo a saída.' },
 ];
 
 export const BONUS_DA_ORDEM = 2;
@@ -142,13 +142,13 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
     ['Feitos', `até ${PARTES_MAXIMAS_POR_FEITOS} partes por fase`],
   ],
   corpo: `
-    <p class="regras-lead">A neblina levanta e o outro lado está lá, mais perto do que o batedor disse. Ninguém rola ataque por soldado: cada exército vira uma contagem de Força, os comandantes medem a batalha fase a fase e os personagens estão no meio dela, onde um feito certo vale mais que cem lanças.</p>
+    <p class="regras-lead">Use esta regra quando exércitos inteiros lutam. Ninguém rola ataque por soldado: cada lado tem uma Força, os comandantes disputam a batalha em fases com a perícia Guerra, e os personagens fazem feitos no meio da luta para ajudar o próprio lado.</p>
 
     <div class="regras-resumo">
       <ul>
         <li>Cada lado tem uma <strong>Força</strong> de 4 a 10 partes, pelo tamanho. Perdeu todas, perdeu a batalha.</li>
         <li>A cada fase, os comandantes escolhem uma ordem em segredo e fazem um teste oposto de <strong>Guerra</strong>. Quem vence tira Força do outro.</li>
-        <li>Os personagens escolhem onde estão na fase e fazem um <strong>feito</strong>: acertou, ajuda o próprio lado; falhou, sai mais machucado.</li>
+        <li>Os personagens escolhem onde vão lutar na fase e fazem um <strong>feito</strong>. No sucesso, ajudam o próprio lado; na falha, levam mais dano.</li>
         <li>Na metade da Força e num quarto dela, o lado testa moral, como no <span class="regras-ref regras-ref--combate">Combate</span>. Quem desiste foge do campo.</li>
       </ul>
     </div>
@@ -165,13 +165,13 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
     <ul class="regras-list">
       <li><strong>O nível da batalha</strong> é o das tropas inimigas: ele escolhe a DT dos feitos e o dano que os personagens levam.</li>
       <li><strong>Tropa sem comandante</strong> faz o choque com o d20 puro, sem bônus nenhum.</li>
-      <li><strong>As tropas do grupo</strong> vêm de onde a história trouxer: uma facção que confia em vocês (<span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>), aliados e contratados, a guarnição de uma Fortaleza.</li>
+      <li><strong>O grupo consegue tropas</strong> pela história: uma facção que confia em vocês (<span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>), aliados e contratados, a guarnição de uma Fortaleza.</li>
     </ul>
 
     <h3 class="regras-subtitle">A fase</h3>
     <ol class="regras-steps">
       <li><strong>Ordens.</strong> Cada comandante escolhe uma ordem em segredo, e as duas são reveladas juntas. O Mestre anota a dele antes de ouvir a do grupo.</li>
-      <li><strong>Feitos.</strong> Cada personagem diz onde está nesta fase e faz o feito escolhido. O Mestre pode transformar um feito num combate curto quando a cena pedir.</li>
+      <li><strong>Feitos.</strong> Cada personagem diz onde vai lutar nesta fase e faz o feito escolhido. O Mestre pode transformar um feito num combate curto quando a cena pedir.</li>
       <li><strong>Choque.</strong> Teste oposto de Guerra dos comandantes, com as vantagens, a ordem e o que os feitos deram.</li>
       <li><strong>Perdas.</strong> Quem vence o choque tira 1 parte da Força do outro, e 2 se vencer por 10 ou mais. Empate tira 1 dos dois. Somam-se as partes que os feitos tiraram.</li>
       <li><strong>Moral.</strong> O lado que chegou à metade da Força, ou a um quarto dela, testa moral.</li>
@@ -182,7 +182,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
     <h3 class="regras-subtitle">Ordens</h3>
     <p>As três primeiras se vencem em roda: Avançar vence Flanquear, Flanquear vence Segurar a linha e Segurar a linha vence Avançar. Quem acertou a ordem ganha +${BONUS_DA_ORDEM} no choque.</p>
     <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Ordem</th><th>Como é, e o que vence</th></tr></thead>
+      <thead><tr><th>Ordem</th><th>O que é, e o que vence</th></tr></thead>
       <tbody>${tabelaOrdens}</tbody>
     </table></div>
 
@@ -192,7 +192,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
       <tbody>${tabelaFeitos}</tbody>
     </table></div>
     <ul class="regras-list">
-      <li><strong>Somados, os feitos tiram no máximo ${PARTES_MAXIMAS_POR_FEITOS} partes do inimigo por fase.</strong> O resto da batalha é dos exércitos.</li>
+      <li><strong>Somados, os feitos tiram no máximo ${PARTES_MAXIMAS_POR_FEITOS} partes do inimigo por fase.</strong></li>
       <li><strong>Quem prefere ficar atrás das linhas</strong> não faz feito e não leva dano.</li>
       <li><strong>Duelo de campeões:</strong> quando dois heróis se encontram no meio da batalha, vira combate normal. Quem vence tira 1 parte do outro lado, e se o derrotado era o comandante ou o campeão dele, o lado dele testa moral.</li>
       <li><strong>Magia, item e habilidade de classe</strong> entram como feito, com o teste que já usam.</li>
@@ -210,14 +210,14 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>Força 0:</strong> o lado se desfaz. Quem sobrou foge, se rende ou é cercado.</li>
       <li><strong>Moral:</strong> na metade da Força e num quarto dela, o lado testa 2d6 com os ajustes do Combate. Desiste: foge do campo. Vacila: na próxima fase, o comandante dele só pode ordenar Segurar a linha ou Recuar.</li>
       <li><strong>Recuo:</strong> quem recua e vence o choque pode sair do campo no fim da fase, com a Força que ainda tem.</li>
-      <li><strong>Depois:</strong> uma batalha conta como combate intenso para quem lutou (1 de Cansaço, em <span class="regras-ref regras-ref--descanso">Descanso</span>). Cada parte perdida é uma fatia das tropas fora de combate, entre mortos, feridos e fugidos, e o mundo fica sabendo de quem venceu.</li>
+      <li><strong>Depois:</strong> uma batalha conta como combate intenso para quem lutou (1 de Cansaço, em <span class="regras-ref regras-ref--descanso">Descanso</span>). Cada parte perdida representa tropas fora de combate (mortos, feridos e fugidos).</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
       <p>Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro leva o dano de feito com sucesso, na linha do nível da batalha.</p>
     </div>
   `,
   corpoMestre: `
-    <p class="regras-lead">A batalha é o palco, e os personagens são a cena. Os números existem para dizer quem está ganhando e quanto tempo falta; o que a mesa vai lembrar é o feito na ponte, o estandarte que caiu e o duelo no meio da lama.</p>
+    <p class="regras-lead">Na batalha, os números dizem quem está ganhando e quanto tempo falta. O que mais importa para a mesa são os feitos dos personagens: segurar a ponte, derrubar o estandarte, vencer o duelo no meio da lama.</p>
 
     <h3 class="regras-subtitle">Preparar</h3>
     <ul class="regras-list">

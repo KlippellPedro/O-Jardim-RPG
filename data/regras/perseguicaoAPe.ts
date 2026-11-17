@@ -57,18 +57,18 @@ export function passosDaRodada(aFavorDoPerseguidor: number, aFavorDoFugitivo: nu
 /** O que cada faixa parece para quem está correndo. A distância em metros mora
  *  na escala compartilhada com os veículos; isto é só o jeito de contar. */
 const SENSACAO_DA_FAIXA: Record<FaixaPerseguicaoId, string> = {
-  contato: 'Dá para ouvir a respiração do outro e agarrar a ponta do casaco.',
-  curta: 'Dá para ver a nuca dele e ouvir as botas batendo na pedra logo à frente.',
-  média: 'Ele vira as esquinas antes de você, e some por um segundo a cada curva.',
-  longa: 'Só se vê um casaco mudando de rua ao longe, e a multidão fecha no meio.',
-  escapou: 'A rua está cheia de gente comum, e nenhuma delas é quem vocês procuram.',
+  contato: 'Colado no outro. Dá para agarrar.',
+  curta: 'Logo atrás, a poucos passos.',
+  média: 'Ainda dá para ver o outro, mas ele some de vista nas curvas.',
+  longa: 'O outro está longe e quase sumindo no meio das pessoas.',
+  escapou: 'Quem fugia sumiu de vista.',
 };
 
 export const MANOBRAS_A_PE: readonly IManobraAPe[] = [
   {
     id: 'correr',
     titulo: 'Correr solto',
-    cena: 'Cabeça baixa, braços trabalhando, o peito queimando. Nada de truque: só perna e vontade.',
+    cena: 'Correr o mais rápido que conseguir, sem truque.',
     teste: 'Atletismo oposto',
     faixas: 'qualquer',
     efeito: 'Quem vence move uma faixa a favor. Vitória por 10 ou mais move duas.',
@@ -77,16 +77,16 @@ export const MANOBRAS_A_PE: readonly IManobraAPe[] = [
   {
     id: 'atalho',
     titulo: 'Cortar caminho',
-    cena: 'Um beco que parece sem saída, uma cerca baixa, a porta dos fundos de uma padaria que você conhece. Se der certo, você sai na frente dele.',
+    cena: 'Pegar um beco, pular uma cerca ou passar por dentro de um prédio para sair na frente.',
     teste: 'Investigação na cidade, Sobrevivência no ermo',
     faixas: 'qualquer',
     efeito: 'Move uma faixa a favor e ignora o obstáculo desta rodada. Com vantagem, se o personagem conhece o lugar.',
-    falha: 'O atalho não existia, e a parede no fim do beco move uma faixa contra você.',
+    falha: 'O atalho não leva a lugar nenhum, e a faixa move uma contra você.',
   },
   {
     id: 'salto',
     titulo: 'Salto arriscado',
-    cena: 'De um telhado para outro, por cima de uma carroça, através do vão de uma ponte quebrada. Por um segundo, só existe o ar.',
+    cena: 'Pular de um telhado para outro, por cima de uma carroça ou por um vão.',
     teste: 'Acrobacia contra a DT Difícil',
     faixas: 'qualquer',
     efeito: 'Move duas faixas a favor de uma vez.',
@@ -95,16 +95,16 @@ export const MANOBRAS_A_PE: readonly IManobraAPe[] = [
   {
     id: 'derrubar',
     titulo: 'Derrubar um obstáculo',
-    cena: 'Uma pilha de barris, a barraca de frutas, um varal cheio de roupa. Tudo que cai atrás de você vira problema de quem vem atrás.',
+    cena: 'Derrubar barris, uma barraca ou qualquer coisa no caminho de quem vem atrás.',
     teste: 'Atletismo ou Luta contra a DT Padrão',
     faixas: 'qualquer',
     efeito: 'Quem vem atrás testa Reflexos na DT Padrão ou move uma faixa contra si.',
-    falha: 'Você gasta a rodada puxando uma coisa que não cede, e nada sai do lugar.',
+    falha: 'Nada cai, e você perde a rodada.',
   },
   {
     id: 'alcance',
     titulo: 'Acertar de longe',
-    cena: 'Parar meio segundo, respirar, mirar entre as cabeças da multidão e torcer para acertar a pessoa certa.',
+    cena: 'Parar um instante para atirar, arremessar algo ou lançar uma magia.',
     teste: 'Pontaria, magia ou o que alcançar',
     faixas: ['contato', 'curta', 'média'],
     efeito: 'Resolve normalmente. Condição que tire o movimento move uma faixa a favor de quem atirou.',
@@ -113,39 +113,39 @@ export const MANOBRAS_A_PE: readonly IManobraAPe[] = [
   {
     id: 'sumir',
     titulo: 'Sumir de vista',
-    cena: 'Entrar numa procissão, tirar o casaco, sentar numa mesa de taverna como quem está ali há horas e pedir uma bebida com a voz calma.',
+    cena: 'Se misturar na multidão, entrar num lugar cheio ou trocar de roupa para não ser reconhecido.',
     teste: 'Furtividade oposta à Percepção',
     faixas: ['longa'],
     efeito: 'Encerra a cena: o fugitivo Escapou.',
-    falha: 'Você foi visto entrando no esconderijo, e quem persegue move uma faixa.',
+    falha: 'Alguém viu onde você se escondeu, e quem persegue ganha uma faixa.',
   },
   {
     id: 'ajuda',
     titulo: 'Atravessar gente no caminho',
-    cena: 'Gritar "pega ladrão", mostrar um distintivo, pedir licença com a voz certa. A rua abre para você e fecha para o outro.',
+    cena: 'Gritar "pega ladrão", mostrar um distintivo ou pedir passagem para as pessoas abrirem caminho.',
     teste: 'Diplomacia ou Intimidação contra a DT Padrão',
     faixas: 'qualquer',
     efeito: 'A rua atrapalha o outro lado, e ele sofre desvantagem na manobra seguinte.',
-    falha: 'A multidão fecha bem na sua frente, e você move uma faixa contra si.',
+    falha: 'As pessoas atrapalham você, e a faixa move uma contra você.',
   },
   {
     id: 'agarrar',
     titulo: 'Agarrar',
-    cena: 'A mão fecha no colarinho, os dois perdem o equilíbrio, e o chão chega rápido.',
+    cena: 'Segurar quem você alcançou e derrubar no chão.',
     teste: 'Atletismo oposto, apenas em Contato',
     faixas: ['contato'],
     efeito: 'Aplica Agarrado e encerra a perseguição.',
-    falha: 'Os dedos escorregam no tecido, e você passa direto: move uma faixa contra si.',
+    falha: 'Você não consegue segurar e passa direto: a faixa move uma contra você.',
   },
 ];
 
 export const OBSTACULOS_PERSEGUICAO: readonly IObstaculoPerseguicao[] = [
-  { d6: 1, cidade: 'Uma feira montada no meio da rua: barracas de pano, galinhas soltas e uma velha que não vai sair da frente de jeito nenhum.', ermo: 'Raízes grossas e um tronco caído, tudo coberto de musgo escorregadio.' },
-  { d6: 2, cidade: 'Uma escada estreita de pedra, gasta no meio dos degraus, onde só passa uma pessoa de cada vez.', ermo: 'Um barranco de terra solta, alto demais para subir andando, que desmancha na mão.' },
-  { d6: 3, cidade: 'Os telhados acabam, e o vão até o próximo beiral é grande demais para quem pensa antes de pular.', ermo: 'Um riacho gelado na altura da cintura, com pedras lisas no fundo.' },
-  { d6: 4, cidade: 'Uma carroça atravessada na rua, a carga espalhada e o carroceiro gritando com todo mundo.', ermo: 'Mato alto até o peito, que esconde o chão e o que está no chão.' },
-  { d6: 5, cidade: 'Um portão de ferro que alguém acabou de fechar, com o cadeado ainda balançando.', ermo: 'Uma neblina baixa, que engole quem fica mais de uma faixa para trás.' },
-  { d6: 6, cidade: 'Um guarda no fim da rua, com a mão no cabo da espada, decidindo quem dos dois é o problema.', ermo: 'Um bicho grande, que estava ali antes dos dois e não gostou nada da visita.' },
+  { d6: 1, cidade: 'Uma feira no meio da rua, cheia de barracas e de gente.', ermo: 'Raízes grossas e um tronco caído no caminho.' },
+  { d6: 2, cidade: 'Uma escada estreita, onde só passa uma pessoa por vez.', ermo: 'Um barranco de terra solta, difícil de subir.' },
+  { d6: 3, cidade: 'Um vão entre dois telhados.', ermo: 'Um riacho com água na cintura e pedras escorregadias.' },
+  { d6: 4, cidade: 'Uma carroça parada atravessada na rua.', ermo: 'Mato alto que esconde o chão.' },
+  { d6: 5, cidade: 'Um portão de ferro que alguém acabou de fechar.', ermo: 'Uma neblina baixa que atrapalha a visão.' },
+  { d6: 6, cidade: 'Um guarda no fim da rua, querendo saber o que está acontecendo.', ermo: 'Um animal grande e irritado no caminho.' },
 ];
 
 export function obstaculoPorD6(valor: number): IObstaculoPerseguicao {
@@ -187,14 +187,14 @@ const tabelaObstaculos = OBSTACULOS_PERSEGUICAO.map((obstaculo) => `
 export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
   categoria: 'Combate e Mecânicas',
   status: 'Regra oficial',
-  resumo: 'Alguém correu, e a cena vira uma disputa de faixas de distância, com a cidade inteira no caminho. Vale para fuga, captura e para a perseguição que atravessa metade de um bairro.',
+  resumo: 'Regras para quando alguém foge a pé e alguém vai atrás. A distância é medida em faixas, e a cada rodada cada lado tenta ganhar terreno.',
   destaques: [
     ['Faixas', 'Contato a Escapou'],
     ['Duração', `${RODADAS_DE_PERSEGUICAO} rodadas`],
     ['Teste base', 'Atletismo oposto'],
   ],
   corpo: `
-    <p class="regras-lead">Quando alguém corre e alguém vai atrás, a cena muda de ritmo. A respiração fica curta, a cidade vira obstáculo e cada esquina pode ser a última chance de alcançar, ou de sumir. A perseguição usa as mesmas faixas de distância da perseguição de veículos, e cada rodada move essas faixas conforme o que cada lado tentou.</p>
+    <p class="regras-lead">Use esta regra quando alguém foge a pé e alguém vai atrás. A distância entre os dois é medida em faixas, as mesmas da perseguição de veículos, e a cada rodada cada lado faz uma manobra para ganhar ou perder distância.</p>
 
     <div class="regras-resumo">
       <ul>
@@ -202,7 +202,7 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
         <li>A cada rodada o Mestre descreve o terreno e um obstáculo, e cada lado escolhe quem puxa a corrida. Os dois puxadores declaram uma manobra e testam. Quem vence move uma faixa a favor, ou duas se vencer por 10 ou mais.</li>
         <li>Quem não puxa ajuda o puxador ou faz uma manobra de apoio. Somando tudo, a faixa anda no máximo ${FAIXAS_MAXIMAS_POR_LADO} a favor de cada lado por rodada.</li>
         <li>A perseguição dura ${RODADAS_DE_PERSEGUICAO} rodadas. A partir da rodada ${RODADA_DO_FOLEGO}, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.</li>
-        <li>Contato leva ao combate, Escapou encerra a cena, e o relógio fechado deixa os dois lados sabendo mais um do outro.</li>
+        <li>Em Contato, começa o combate. Em Escapou, quem fugia some. Se as rodadas acabarem antes, ninguém consegue o que queria.</li>
       </ul>
     </div>
 
@@ -212,35 +212,34 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
       <tbody>${tabelaFaixas}</tbody>
     </table></div>
     <ul class="regras-list">
-      <li><strong>A perseguição começa onde os dois estavam</strong> quando um deles saiu correndo. Fuga de uma conversa começa em Contato; fuga de uma emboscada avistada de longe começa em Longa.</li>
-      <li><strong>Os dois lados sabem o que querem.</strong> Quem persegue quer chegar a Contato. Quem foge quer chegar a Escapou.</li>
-      <li><strong>Cada lado tem uma faixa só.</strong> O grupo corre no passo de quem está mais atrás. Quem quiser disparar sozinho passa a ter faixa própria, e vê o resto do grupo ficar para trás.</li>
-      <li><strong>Cada lado tem um puxador por rodada:</strong> quem vai na frente e decide o caminho. Só a manobra dele disputa a faixa. O puxador pode mudar de uma rodada para outra.</li>
+      <li><strong>A perseguição começa na distância em que os dois estavam</strong> quando a corrida começou. Quem foge no meio de uma conversa começa em Contato; quem foge de alguém visto de longe começa em Longa.</li>
+      <li><strong>Cada lado tem uma faixa só.</strong> O grupo anda na velocidade de quem está mais atrás. Quem quiser correr na frente sozinho passa a ter uma faixa própria, separada do grupo.</li>
+      <li><strong>Cada lado tem um puxador por rodada,</strong> que vai na frente e decide o caminho. Só a manobra dele disputa a faixa. O puxador pode mudar de uma rodada para outra.</li>
     </ul>
 
     <h3 class="regras-subtitle">A rodada</h3>
     <ol class="regras-steps">
-      <li>O Mestre descreve o terreno da rodada do jeito que quem corre enxerga: rápido e pela metade. Ele rola 1d6 na tabela de obstáculos ou escolhe um.</li>
-      <li>Cada lado escolhe o puxador, e cada personagem declara o que faz com o corpo: o puxador, uma manobra; os outros, Ajudar o puxador ou uma manobra de apoio. Quem foge declara primeiro, porque está de costas.</li>
+      <li>O Mestre descreve o terreno da rodada e rola 1d6 na tabela de obstáculos, ou escolhe um.</li>
+      <li>Cada lado escolhe o puxador. O puxador declara uma manobra, e os outros declaram se vão Ajudar o puxador ou fazer uma manobra de apoio. Quem foge declara primeiro.</li>
       <li>Resolvam primeiro as ajudas e o apoio, depois os puxadores. Quem vence move uma faixa a favor, e vitória por 10 ou mais move duas. Somando o apoio, cada lado ganha no máximo ${FAIXAS_MAXIMAS_POR_LADO} faixas na rodada.</li>
       <li>Teste oposto é sempre contra o Atletismo do puxador do outro lado, seja qual for a manobra dele. Quando os dois puxadores passam em testes contra DT, cada um move a faixa a seu favor, e os passos se anulam.</li>
-      <li>Aplique o obstáculo a quem não lidou com ele na manobra.</li>
-      <li>Marque uma parte do relógio da perseguição.</li>
+      <li>Quem não passou pelo obstáculo na própria manobra testa para passar por ele (veja Obstáculos).</li>
+      <li>Marque uma rodada no relógio da perseguição.</li>
     </ol>
-    <p class="regras-note">A perseguição dura ${RODADAS_DE_PERSEGUICAO} rodadas. Se ninguém chegou a Contato nem a Escapou quando o relógio fechar, quem foge conseguiu se perder no meio da cidade, e quem perseguia continua com o rastro fresco, que já é outra cena.</p>
+    <p class="regras-note">A perseguição dura ${RODADAS_DE_PERSEGUICAO} rodadas. Se ninguém chegou a Contato nem a Escapou quando elas acabarem, quem fugia sai de vista, mas quem perseguia ainda sabe para que lado ele foi e pode continuar procurando em outra cena.</p>
 
     <h3 class="regras-subtitle">Manobras</h3>
-    <p>Cada manobra traz o que o corpo faz e, embaixo, como se resolve. Diga a cena antes de rolar: é ela que diz ao Mestre onde a perseguição está acontecendo.</p>
+    <p>Cada manobra diz o que o personagem faz e, embaixo, o teste e o resultado. Diga rapidamente o que você faz antes de rolar.</p>
     <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Manobra</th><th>Como é, e como se resolve</th></tr></thead>
+      <thead><tr><th>Manobra</th><th>O que é, e como se resolve</th></tr></thead>
       <tbody>${tabelaManobras}</tbody>
     </table></div>
     <ul class="regras-list">
       <li><strong>Uma manobra por personagem, por rodada.</strong> Ajudar o puxador segue as regras de <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span> (no máximo dois ajudantes) e conta como a sua manobra.</li>
-      <li><strong>Apoio é para quem não puxa:</strong> Derrubar um obstáculo, Atravessar gente no caminho e Acertar de longe. Elas atrapalham o outro lado sem disputar a faixa, e o puxador também pode escolher uma delas como a manobra dele. Cortar caminho, Salto arriscado, Correr solto, Sumir de vista e Agarrar são só do puxador.</li>
-      <li><strong>Falha de apoio pesa no grupo.</strong> Quando uma manobra de apoio diz que a faixa move contra você, ela move contra o seu lado inteiro, porque a faixa é uma só.</li>
+      <li><strong>Manobras de apoio</strong> são para quem não puxa: Derrubar um obstáculo, Atravessar gente no caminho e Acertar de longe. Elas atrapalham o outro lado sem disputar a faixa, e o puxador também pode escolher uma delas como a manobra dele. Cortar caminho, Salto arriscado, Correr solto, Sumir de vista e Agarrar são só do puxador.</li>
+      <li><strong>A falha no apoio vale para o grupo todo.</strong> Quando uma manobra de apoio diz que a faixa move contra você, ela move contra o seu lado inteiro, porque a faixa é uma só.</li>
       <li><strong>Magia, item e habilidade de classe entram como manobra,</strong> com o teste que já usam. Um efeito que tire o movimento do outro lado move uma faixa a seu favor.</li>
-      <li><strong>O fôlego acaba.</strong> A partir da rodada ${RODADA_DO_FOLEGO}, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.</li>
+      <li><strong>Cansaço:</strong> a partir da rodada ${RODADA_DO_FOLEGO}, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.</li>
     </ul>
 
     <h3 class="regras-subtitle">Obstáculos</h3>
@@ -252,13 +251,13 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
 
     <h3 class="regras-subtitle">Como a cena termina</h3>
     <ul class="regras-list">
-      <li><strong>Contato:</strong> a perseguição acaba e o combate começa ali mesmo, no terreno da última rodada, com os dois ofegantes. Quem foi alcançado em plena corrida fica Exposto até o começo do próximo turno dele.</li>
-      <li><strong>Escapou:</strong> quem fugia sumiu nesta cena. Reencontrar aquela pessoa vira investigação, informante ou uma pista nova.</li>
-      <li><strong>Relógio fechado:</strong> ninguém conseguiu o que queria, e os dois lados ficam sabendo mais um do outro do que sabiam antes de correr: o rosto, o jeito de correr, o bairro para onde ele foi.</li>
+      <li><strong>Contato:</strong> a perseguição acaba e o combate começa ali mesmo, no terreno da última rodada. Quem foi alcançado fica Exposto até o começo do próximo turno dele.</li>
+      <li><strong>Escapou:</strong> quem fugia sumiu. Para achar essa pessoa de novo, o grupo vai precisar investigar ou conseguir uma pista.</li>
+      <li><strong>As rodadas acabaram:</strong> ninguém conseguiu o que queria, mas os dois lados descobrem algo um do outro, como o rosto ou para que lado ele foi.</li>
     </ul>
   `,
   corpoMestre: `
-    <p class="regras-lead">Perseguição dá à mesa um segundo lugar onde ganhar ou perder sem que ninguém morra, e é uma das poucas cenas em que a cidade inteira vira personagem. Pedir um teste de Atletismo, comparar dois números e encerrar em dez segundos desperdiça tudo isso.</p>
+    <p class="regras-lead">A perseguição deixa o grupo ganhar ou perder sem que ninguém morra, e é uma boa chance de mostrar a cidade. Resolver tudo com um único teste de Atletismo desperdiça a cena.</p>
 
     <h3 class="regras-subtitle">Quando abrir as faixas</h3>
     <ul class="regras-list">
@@ -278,9 +277,9 @@ export const REGRA_PERSEGUICAO_A_PE: RegraTopicoDe<'Combate e Mecânicas'> = {
     <h3 class="regras-subtitle">Contar a corrida</h3>
     <ul class="regras-list">
       <li>Descreva a faixa pelo que se vê, e deixe o nome dela de lado: "você ainda vê o casaco dele virando a esquina" diz Média sem soar tabela.</li>
-      <li>Frases curtas. Perseguição contada devagar perde a pressa, e a mesa sente o ritmo pela sua voz antes de sentir pelas regras.</li>
+      <li>Use frases curtas. Narrar devagar tira a pressa da cena.</li>
       <li>Toda rodada precisa de uma escolha nova. Se as três últimas foram Correr solto contra Correr solto, jogue um obstáculo grande e feche a cena na rodada seguinte.</li>
-      <li>Perseguição é a melhor hora para mostrar a cidade: a feira, o telhado, o beco com cheiro de peixe. Cada rodada é um lugar novo, e três desses lugares vão voltar na campanha.</li>
+      <li>Aproveite para mostrar a cidade: a feira, os telhados, os becos. Cada rodada pode passar por um lugar novo, e alguns deles podem voltar mais tarde na campanha.</li>
     </ul>
   `,
 };

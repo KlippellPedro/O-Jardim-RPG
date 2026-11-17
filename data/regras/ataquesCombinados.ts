@@ -53,20 +53,20 @@ const tabelaSintonia = DEGRAUS_DE_SINTONIA.map((degrau) => `
 export const REGRA_ATAQUES_COMBINADOS = {
   categoria: 'Combate e Mecânicas' as const,
   status: 'Regra oficial',
-  resumo: 'Dois a quatro personagens atacam o mesmo alvo no mesmo instante. Quanto mais eles confiam no líder, maior o bônus: a Sintonia sai dos Pontos de Relação.',
+  resumo: 'De dois a quatro personagens atacam o mesmo alvo ao mesmo tempo. Quanto mais eles confiam no líder do ataque, maior o bônus. Esse bônus se chama Sintonia e vem dos Pontos de Relação.',
   destaques: [
     ['Participantes', '2 a 4'],
     ['Custo', 'ação + reação'],
     ['Bônus', 'pela Sintonia, de 0 a 3'],
   ],
   corpo: `
-    <p class="regras-lead">Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo tempo. Cada participante continua usando sua própria arma, magia, teste e recurso, e o que o grupo ganha por esperar o momento certo depende de quanto cada um confia em quem puxa o golpe.</p>
+    <p class="regras-lead">No Ataque Combinado, de ${LIMITES_ATAQUE_COMBINADO.participantesMinimos} a ${LIMITES_ATAQUE_COMBINADO.participantesMaximos} personagens atacam o mesmo alvo juntos, e o dano de todos é resolvido de uma vez. Cada um usa a própria arma ou magia e faz o próprio teste. O bônus do ataque depende de quanto os participantes confiam no líder.</p>
 
     <div class="regras-resumo">
       <ul>
         <li>Participam de ${LIMITES_ATAQUE_COMBINADO.participantesMinimos} a ${LIMITES_ATAQUE_COMBINADO.participantesMaximos} voluntários, todos contra o mesmo alvo, e cada um gasta a própria Ação Padrão e uma reação na preparação.</li>
         <li>O ataque é resolvido no primeiro turno do líder depois que todos se prepararam.</li>
-        <li>A <strong>Sintonia</strong> é o menor número de <span class="regras-ref regras-ref--pontos-de-relacao">Pontos de Relação</span> que cada participante tem com o líder. Ela dá de +2 no ataque até vantagem e um dado a mais de dano em todas as contribuições.</li>
+        <li>A <strong>Sintonia</strong> é o menor número de <span class="regras-ref regras-ref--pontos-de-relacao">Pontos de Relação</span> que cada participante tem com o líder. O bônus vai de +2 no ataque até vantagem e um dado a mais de dano, e vale para todos os participantes.</li>
         <li>Se todas as contribuições errarem, todos os participantes ficam Expostos até o começo do próprio turno.</li>
         <li>Quem for derrubado antes da resolução perde a contribuição, e se o líder cair outro participante preparado assume.</li>
       </ul>
@@ -77,24 +77,24 @@ export const REGRA_ATAQUES_COMBINADOS = {
       <li>Participam de ${LIMITES_ATAQUE_COMBINADO.participantesMinimos} a ${LIMITES_ATAQUE_COMBINADO.participantesMaximos} criaturas voluntárias que possam perceber e atingir o mesmo alvo.</li>
       <li>Cada participante precisa ter uma Ação Padrão e uma reação disponíveis.</li>
       <li>Somente ataques que causam dano a um único alvo podem entrar. Cura, área, invocação e controle são resolvidos separadamente.</li>
-      <li>O grupo escolhe um líder. Ele define o momento da resolução, e é com ele que se conta a Sintonia.</li>
+      <li>O grupo escolhe um líder. Ele decide quando o ataque acontece, e a Sintonia é contada com base nos pontos que os outros têm com ele.</li>
     </ul>
 
     <h3 class="regras-subtitle">Sintonia</h3>
-    <p>Olhe quantos Pontos de Relação cada participante tem com o líder. O menor deles é a Sintonia do ataque, e o bônus dela vale para todas as contribuições, inclusive a do líder. O grupo anda no passo de quem confia menos.</p>
+    <p>Veja quantos Pontos de Relação cada participante tem com o líder. O menor desses números é a Sintonia do ataque, e o bônus dela vale para todas as contribuições, inclusive a do líder.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Sintonia</th><th>Degrau</th><th>Ataque</th><th>Dano de cada acerto</th></tr></thead>
       <tbody>${tabelaSintonia}</tbody>
     </table></div>
     <ul class="regras-list">
       <li><strong>Com Sintonia 1 ou mais,</strong> cada participante gasta um uso dos pontos que tem com o líder. Quem não quiser gastar entra com 0, e a Sintonia do ataque vira 0.</li>
-      <li><strong>O dado a mais do Uníssono</strong> é do mesmo tipo que a contribuição já rola: o da arma, ou o da magia. Ele entra uma vez só e não multiplica no crítico. O +2 de dano dos Afinados segue a mesma regra.</li>
-      <li><strong>Coreografia</strong> pode entrar em uma contribuição, mas o bônus no teste não soma com o da Sintonia: fica o maior.</li>
+      <li><strong>O dado a mais do Uníssono</strong> é do mesmo tipo que você já rola: o da arma ou o da magia. Ele entra uma vez só e não é multiplicado no crítico. O +2 de dano dos Afinados funciona do mesmo jeito.</li>
+      <li><strong>Coreografia</strong> pode ser usada numa contribuição, mas o bônus no teste não soma com o da Sintonia: use o maior.</li>
     </ul>
 
     <h3 class="regras-subtitle">Preparação e resolução</h3>
     <ol class="regras-steps">
-      <li>No próprio turno, cada participante declara a contribuição, reserva a Ação Padrão e gasta a reação. Mana e custos que a ação exige na declaração são pagos nesse momento. Quem já gastou uma dessas ações não pode participar.</li>
+      <li>No próprio turno, cada participante declara a contribuição, reserva a Ação Padrão e gasta a reação. Mana e custos que a ação exige na declaração são pagos nesse momento. Quem já gastou a Ação Padrão ou a reação não pode participar.</li>
       <li>O ataque é resolvido no primeiro turno do líder depois que todos se prepararem. A preparação de um participante expira no início do próximo turno dele. Alcance, linha de efeito e alvo precisam continuar válidos.</li>
       <li>Na resolução, cada participante consome munição ou carga usada pelo ataque e faz a própria rolagem, com o bônus da Sintonia. Nenhum custo é pago duas vezes.</li>
       <li>Cada acerto causa o dano normal da contribuição, mais o da Sintonia. Cada erro não causa dano e não devolve ações ou recursos.</li>
@@ -114,7 +114,7 @@ export const REGRA_ATAQUES_COMBINADOS = {
       <li>Uma contribuição é perdida se o participante ficar inconsciente, incapaz de agir ou sem um ataque válido antes da resolução.</li>
       <li>Se o líder perder a contribuição, outro participante preparado assume a liderança, e a Sintonia é contada de novo com ele. Se nenhum puder, o ataque é cancelado.</li>
       <li>Quando o ataque é cancelado antes da resolução, ações, reações, usos de pontos e custos pagos na declaração continuam gastos. Munição e cargas ainda não usadas são preservadas.</li>
-      <li>Ver um participante cair durante a preparação cobra Sanidade de quem tem pontos com ele, como em Pontos de Relação.</li>
+      <li>Quem tem pontos com um participante que cai durante a preparação testa Sanidade, como em Pontos de Relação.</li>
     </ul>
 
     <h3 class="regras-subtitle">Magias e Fluxos</h3>
@@ -128,7 +128,7 @@ export const REGRA_ATAQUES_COMBINADOS = {
     </div>
   `,
   corpoMestre: `
-    <p class="regras-lead">Ataque Combinado custa caro em tempo de mesa: quatro pessoas declaram, esperam, e só então resolvem. A Sintonia é o que faz a espera valer, e ela vem dos Pontos de Relação que a mesa conquistou na história.</p>
+    <p class="regras-lead">Ataque Combinado custa caro em tempo de mesa: quatro pessoas declaram, esperam, e só então resolvem. A Sintonia compensa essa espera, e ela vem dos Pontos de Relação que os personagens ganharam na história.</p>
 
     <h3 class="regras-subtitle">Quando vale a pena</h3>
     <ul class="regras-list">

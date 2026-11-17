@@ -438,7 +438,7 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
     </div>
   `,
   corpoMestre: `
-    <p class="regras-lead">Prestígio e Fama são os dois relógios lentos da campanha. Eles quase nunca mudam dentro de uma sessão, e é isso que os torna úteis: registram o que o grupo vem fazendo há meses.</p>
+    <p class="regras-lead">Prestígio e Fama mudam devagar. Quase nunca sobem ou descem dentro de uma sessão, porque registram o que o grupo vem fazendo ao longo de meses.</p>
 
     <h3 class="regras-subtitle">Mover os números</h3>
     <ul class="regras-list">

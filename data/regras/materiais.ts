@@ -454,7 +454,7 @@ export const REGRA_MATERIAIS: RegraTopicoDe<'Livro do Jogador'> = {
     ['Ritual', '1 Incomum a 2 Lendários'],
   ],
   corpo: `
-    <p class="regras-lead">O nome exato de um material conta a história; o <strong>lote genérico</strong> é o que entra na ficha. Ervas, venenos e sais podem virar Componentes Químicos. Fios, placas e engrenagens podem virar Sucata. Assim o grupo ainda encontra coisas interessantes sem transformar cada preparo numa lista de compras.</p>
+    <p class="regras-lead">O nome específico de um material serve para a história; na ficha, ele entra como um <strong>lote genérico</strong>. Ervas, venenos e sais podem virar Componentes Químicos. Fios, placas e engrenagens podem virar Sucata. Assim o grupo ainda encontra coisas interessantes sem transformar cada preparo numa lista de compras.</p>
 
     <div class="regras-resumo">
       <ul>

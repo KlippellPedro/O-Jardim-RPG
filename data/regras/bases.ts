@@ -269,7 +269,7 @@ export const REGRA_BASES = {
     <p>A ficha da plataforma precisa informar quantos espaços de base suporta; sem esse campo, ela não recebe instalações de base. Quando uma peça veicular e uma instalação forem equivalentes, use o efeito publicado da peça e não aplique o efeito-base. Movimento, perseguição, colisão, dano e reparo continuam sob as regras da plataforma, que estão em <span class="regras-ref regras-ref--veiculos">Condução e Tripulação</span> e <span class="regras-ref regras-ref--veiculos-cenas">Perseguições e Combate Veicular</span>.</p>
   `,
   corpoMestre: `
-    <p class="regras-lead">Base é o botão de ritmo da campanha: ela transforma tempo livre em capacidade, e por isso é você quem decide quando o grupo pode comprar uma.</p>
+    <p class="regras-lead">A base transforma tempo livre em vantagens para o grupo, e por isso é você quem decide quando o grupo pode comprar uma.</p>
 
     <h3 class="regras-subtitle">Liberar uma base</h3>
     <ul class="regras-list">

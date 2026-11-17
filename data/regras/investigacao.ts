@@ -59,10 +59,10 @@ export function resultadoDaBusca(resultado: number, dt: number, { falhaCritica =
 
 export const CUSTOS_DE_BUSCA: readonly string[] = [
   'Demorou: pinte 1 parte do relógio do caso.',
-  'Alguém percebeu a pergunta, e o culpado fica sabendo que vocês estão perto.',
+  'Alguém percebeu o que vocês estão investigando, e o culpado fica sabendo que vocês estão perto.',
   'O lugar fica marcado: voltar ali depois vai ser mais difícil.',
   'A testemunha se fecha: a próxima conversa com ela começa com 1 de Paciência.',
-  'A pista vem estragada: ela aponta a direção certa, e a confirmação exige uma segunda.',
+  'A pista vem incompleta: aponta a direção certa, mas vocês precisam de outra para confirmar.',
 ];
 
 // ------------------------------------------------------------------ página
@@ -80,21 +80,21 @@ const listaCustos = CUSTOS_DE_BUSCA.map((custo) => `<li>${custo}</li>`).join('\n
 export const REGRA_INVESTIGACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
   categoria: 'Combate e Mecânicas',
   status: 'Regra oficial',
-  resumo: 'Um mistério quebrado em perguntas, três pistas para cada uma e um relógio do outro lado. A pista essencial vem de procurar no lugar certo, e o dado decide o que vem junto.',
+  resumo: 'Como resolver mistérios: o caso é dividido em perguntas, cada pergunta tem três pistas, e um relógio mostra o culpado agindo. Procurar no lugar certo sempre acha a pista principal.',
   destaques: [
     ['Perguntas', '2 a 4 por caso'],
     ['Pistas', `${PISTAS_POR_PERGUNTA} por pergunta`],
     ['Relógio do caso', '4, 6 ou 8 partes'],
   ],
   corpo: `
-    <p class="regras-lead">Alguém morreu, alguma coisa sumiu, um nome apareceu onde não devia. O grupo tem perguntas, o mundo tem respostas espalhadas, e do outro lado alguém trabalha para que elas continuem espalhadas. Esta página diz como achar o que está escondido sem que um dado ruim encerre a história.</p>
+    <p class="regras-lead">Use esta regra para resolver mistérios. O caso é dividido em perguntas menores, cada uma com pistas espalhadas, e procurar no lugar certo sempre encontra a pista principal. O dado decide só o que vem junto com ela.</p>
 
     <div class="regras-resumo">
       <ul>
         <li>Todo caso é uma pergunta grande quebrada em ${TAMANHOS_DE_CASO[0].perguntas} a ${TAMANHOS_DE_CASO[TAMANHOS_DE_CASO.length - 1].perguntas} perguntas menores: quem, como, por quê, onde está agora.</li>
         <li>Cada pergunta tem pelo menos ${PISTAS_POR_PERGUNTA} pistas, em lugares diferentes. Uma basta para seguir.</li>
         <li>Quem procura no lugar certo, do jeito certo, acha a pista essencial sem rolar. O teste vem depois e decide o que vem junto e quanto custou.</li>
-        <li>O relógio do caso é o outro lado agindo. Ele pinta com cada custo e cada dia parado, e quando fecha o culpado faz alguma coisa.</li>
+        <li>O relógio do caso mostra o culpado agindo. Ele avança com custos de falha e com dias sem pista nova, e quando enche o culpado faz alguma coisa.</li>
         <li>Quando o grupo travar, Ligar os pontos aponta a pergunta aberta e onde procurar.</li>
       </ul>
     </div>
@@ -104,12 +104,12 @@ export const REGRA_INVESTIGACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
       <thead><tr><th>Tamanho</th><th>Perguntas</th><th>Relógio</th><th>Exemplo</th></tr></thead>
       <tbody>${tabelaTamanhos}</tbody>
     </table></div>
-    <p>O Mestre diz as perguntas em voz alta quando o caso começa, ou deixa o grupo chegar nelas. Responder todas fecha o caso; o que fazer com a resposta é outra cena.</p>
+    <p>O Mestre pode dizer as perguntas no começo do caso ou deixar o grupo descobrir quais são. Quando todas são respondidas, o caso está resolvido.</p>
 
     <h3 class="regras-subtitle">Achar uma pista</h3>
     <ol class="regras-steps">
-      <li><strong>Diga o que procura e onde.</strong> Abrir a gaveta, cheirar o copo, perguntar ao cocheiro quem desceu na esquina. "Procuro pistas na sala" é pouco: a sala tem dez lugares.</li>
-      <li><strong>Lugar certo, pista na mão.</strong> Se ali há uma pista essencial e a ideia alcança, o personagem acha sem rolar.</li>
+      <li><strong>Diga o que procura e onde.</strong> Por exemplo: abrir a gaveta, cheirar o copo, perguntar ao cocheiro quem passou por ali. "Procuro pistas na sala" é vago demais.</li>
+      <li><strong>Procurou no lugar certo, achou.</strong> Se ali tem uma pista essencial e a sua ideia faz sentido, você acha sem rolar.</li>
       <li><strong>O teste decide o resto,</strong> contra a DT Padrão do nível do caso:
         <ul class="regras-list">
           <li><strong>Sucesso por 10 ou mais:</strong> a pista e um extra (um segundo nome, o horário exato, vantagem no próximo teste contra o suspeito).</li>
@@ -123,7 +123,7 @@ export const REGRA_INVESTIGACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
     <ul class="regras-list">
         ${listaCustos}
     </ul>
-    <p class="regras-note">Pistas que não são essenciais (o detalhe que enriquece, a conexão com outro caso) podem depender do teste. Só as essenciais nunca dependem.</p>
+    <p class="regras-note">Pistas que não são essenciais (um detalhe a mais, a ligação com outro caso) podem depender do teste. As essenciais nunca dependem.</p>
 
     <h3 class="regras-subtitle">Que perícia acha o quê</h3>
     <div class="regras-table-wrap"><table class="regras-table">
@@ -133,17 +133,17 @@ export const REGRA_INVESTIGACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
 
     <h3 class="regras-subtitle">O relógio do caso</h3>
     <ul class="regras-list">
-      <li><strong>Pinta uma parte</strong> por custo de falha que diga "demorou", por dia inteiro sem pista nova e por barulho do grupo (uma invasão mal feita, um suspeito acusado em público).</li>
-      <li><strong>Quando fecha,</strong> o culpado age: foge da cidade, queima o arquivo, cala uma testemunha, ataca de novo. O caso continua, e a ação dele deixa pistas novas.</li>
-      <li><strong>O relógio zera</strong> depois que o culpado age, e o Mestre diz o que ele fará quando fechar de novo.</li>
+      <li><strong>Pinta uma parte</strong> por custo de falha que diga "demorou", por dia inteiro sem pista nova e quando o grupo chama atenção (uma invasão malfeita, acusar um suspeito em público).</li>
+      <li><strong>Quando enche,</strong> o culpado age: foge da cidade, queima documentos, cala uma testemunha ou ataca de novo. O caso continua, e o que ele fez deixa pistas novas.</li>
+      <li><strong>O relógio zera</strong> depois que o culpado age, e o Mestre diz o que ele fará quando encher de novo.</li>
     </ul>
 
     <h3 class="regras-subtitle">Ligar os pontos</h3>
     <ul class="regras-list">
       <li><strong>Quando o grupo travar,</strong> um personagem passa uma hora revendo o que tem e testa Investigação contra a DT Padrão. Sucesso: o Mestre diz qual pergunta ainda está aberta e aponta um lugar ou uma pessoa onde há pista dela. Uma vez por pergunta.</li>
-      <li><strong>Apontar o culpado é escolha do grupo.</strong> O Mestre não confirma antes, e errar tem consequência na história. Quem se interroga entra em <span class="regras-ref regras-ref--conflito-social">Conflito Social</span>, onde cada ponto de Resistência que cai num interrogatório entrega uma informação.</li>
+      <li><strong>Quem decide o culpado é o grupo.</strong> O Mestre não confirma antes, e acusar a pessoa errada tem consequências. Quem se interroga entra em <span class="regras-ref regras-ref--conflito-social">Conflito Social</span>, onde cada ponto de Resistência que cai num interrogatório entrega uma informação.</li>
       <li><strong>O Detetive vai além:</strong> a Dedução Metódica arranca detalhes que ninguém mais vê, o Golpe de Vista aponta o que está fora do lugar e o Caso Encerrado confirma uma acusação.</li>
-      <li><strong>Anotem as pistas</strong> num lugar que a mesa inteira vê. Mistério se perde mais por esquecimento que por falta de pista.</li>
+      <li><strong>Anotem as pistas</strong> num lugar que todos vejam. É fácil esquecer uma pista importante entre uma sessão e outra.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
       <p>O cônsul morreu na ceia. A Médica pede para ver o corpo: há uma pista essencial ali (o lábio arroxeado de Beladona Destilada), e ela acha sem rolar. Ela testa Cura e passa por 10: além do veneno, sabe que ele foi posto no vinho e não na comida. Depois, o Guerreiro pergunta aos criados quem serviu o vinho e falha: recebe o nome do copeiro, mas o mordomo ouviu a pergunta, e o relógio do caso pinta uma parte.</p>

@@ -328,7 +328,7 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
     ['Armadilhas', 'Leve, Séria ou Mortal'],
   ],
   corpo: `
-    <p class="regras-lead">Nem tudo que machuca ataca. O chão some, o ar acaba, a comida não chega, o frio entra pela roupa e o corredor esconde um mecanismo esperando um pé distraído. Cada um desses perigos tem aqui uma regra curta, para a mesa resolver sem parar a cena.</p>
+    <p class="regras-lead">Esta página reúne os perigos que machucam sem ser um ataque: queda, falta de ar, fome e sede, clima e armadilhas. Cada um tem uma regra curta, para a mesa resolver rápido e seguir com a cena.</p>
 
     <div class="regras-resumo">
       <ul>

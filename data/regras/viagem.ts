@@ -182,7 +182,7 @@ export const REGRA_VIAGEM: RegraTopicoDe<'Livro do Jogador'> = {
     ['Exploração', `turnos de ${MINUTOS_DO_TURNO_DE_EXPLORACAO} minutos`],
   ],
   corpo: `
-    <p class="regras-lead">Entre a cidade e o lugar onde a história acontece existe a estrada, e a estrada também pode contar. Esta página transforma cada dia de viagem numa pequena cena: o grupo escolhe o ritmo, cada um assume um papel, o Mestre rola o que o caminho traz e a noite cobra o seu preço. Quando o grupo chega a um lugar perigoso, o tempo passa a correr de hora em hora.</p>
+    <p class="regras-lead">Esta regra é para quando o grupo viaja por conta própria. Cada dia de viagem vira uma pequena cena: o grupo escolhe o ritmo, cada um assume um papel, o Mestre rola o que acontece no caminho e, à noite, o grupo acampa. Em lugares perigosos, como ruínas e subterrâneos, o tempo passa a ser contado em horas.</p>
 
     <div class="regras-resumo">
       <ul>
@@ -202,7 +202,7 @@ export const REGRA_VIAGEM: RegraTopicoDe<'Livro do Jogador'> = {
       <li><strong>Comida.</strong> O Forrageiro testa a busca, e o grupo come do que achou ou do que carrega (<span class="regras-ref regras-ref--perigos">Perigos do Ambiente</span>).</li>
       <li><strong>A noite.</strong> O grupo monta acampamento, o Vigia testa, o Mestre rola o evento da noite e o descanso sai com os fatores do <span class="regras-ref regras-ref--descanso">Descanso</span>.</li>
     </ol>
-    <p class="regras-note">Cada dia de viagem passa no calendário do mundo. Uma estrada de oito dias leva oito dias, e o mundo anda junto.</p>
+    <p class="regras-note">Cada dia de viagem passa no calendário do mundo, e o que acontece no mundo continua acontecendo enquanto vocês viajam.</p>
 
     <h3 class="regras-subtitle">Ritmo</h3>
     <div class="regras-table-wrap"><table class="regras-table">
@@ -234,7 +234,7 @@ export const REGRA_VIAGEM: RegraTopicoDe<'Livro do Jogador'> = {
     </ul>
 
     <h3 class="regras-subtitle">Exploração</h3>
-    <p>Dentro de uma ruína, de uma mata fechada ou de um subterrâneo, o dia vira hora. Cada turno de exploração dura uma hora, e nele cada personagem faz uma coisa.</p>
+    <p>Dentro de uma ruína, de uma mata fechada ou de um subterrâneo, o tempo passa a ser contado em horas. Cada turno de exploração dura uma hora, e nele cada personagem faz uma coisa.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Ação</th><th>O que faz</th></tr></thead>
       <tbody>${tabelaExploracao}</tbody>
@@ -242,7 +242,7 @@ export const REGRA_VIAGEM: RegraTopicoDe<'Livro do Jogador'> = {
     <ul class="regras-list">
       <li><strong>Uma tocha dura um turno</strong> e ilumina 6 m. Sem luz, quem não enxerga no escuro fica Cego para o que está nela (Ver e ser visto, em <span class="regras-ref regras-ref--combate">Combate</span>).</li>
       <li><strong>O Mestre rola um evento por turno,</strong> e mais um sempre que o grupo faz barulho alto: luta, porta arrombada, grito.</li>
-      <li><strong>Armadilhas e perigos do lugar</strong> seguem <span class="regras-ref regras-ref--perigos">Perigos do Ambiente</span>. Procurar antes de avançar é o jeito de achar antes de pisar.</li>
+      <li><strong>Armadilhas e perigos do lugar</strong> seguem <span class="regras-ref regras-ref--perigos">Perigos do Ambiente</span>. Procurar antes de avançar ajuda a achar armadilhas antes de pisar nelas.</li>
       <li><strong>Dez minutos bastam</strong> para uma coisa pequena (abrir um baú, ler uma inscrição). O turno inteiro é para o que muda o lugar.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">

@@ -1,6 +1,31 @@
 {
   "itens": [
     {
+      "id": "2026-11-17-livro-cenas-e-grupo-texto-simples",
+      "data": "2026-11-17",
+      "tipo": "melhoria",
+      "area": "Livro de Regras",
+      "titulo": "Capítulo Cenas e Grupo mais fácil de ler",
+      "detalhes": [
+        "Os nove tópicos do capítulo 4 (Ações Coletivas, Pontos de Relação, Ataques Combinados, Perseguições a Pé, Conflito Social, Infiltração, Investigações, Batalha em Massa e Mesa ao Vivo) foram reescritos em linguagem mais direta, com menos descrição de cena e mais explicação de como a regra funciona.",
+        "Nas tabelas de manobras, abordagens e ordens, cada linha agora diz em uma frase simples o que o personagem faz, com o teste e o resultado logo embaixo.",
+        "Nenhuma regra mudou: números, testes e efeitos continuam os mesmos."
+      ]
+    },
+    {
+      "id": "2026-11-17-livro-revisao-de-texto-geral",
+      "data": "2026-11-17",
+      "tipo": "melhoria",
+      "area": "Livro de Regras",
+      "titulo": "Texto do Livro mais direto em todos os capítulos",
+      "detalhes": [
+        "As aberturas de Viagem, Perigos do Ambiente, Tempo Entre Aventuras, Facções em Movimento, Contatos e Laços, Ferimentos, Combate, Marcas e Cicatrizes, Frutos e Implantes e outros tópicos agora dizem logo para que a regra serve, sem rodeio.",
+        "Frases de efeito no meio das regras foram trocadas por explicações simples.",
+        "Os bônus dos conjuntos de equipamento (Caminhante, Estudioso e Sentinela) mostram só o efeito, como \"+5 de Estamina máxima\".",
+        "Nenhuma regra mudou: números, testes e efeitos continuam os mesmos."
+      ]
+    },
+    {
       "id": "2026-11-16-mapa-acervo-organizado-token-corpo-inteiro-e-nitidez",
       "data": "2026-11-16",
       "tipo": "melhoria",
@@ -1001,34 +1026,6 @@
         "A névoa agora parece fumaça: se move devagar, tem tons diferentes e a borda treme e se desfaz em fiapos.",
         "Quando o Mestre revela um pedaço do mapa, a névoa se dissolve aos poucos, e ao esconder de novo ela volta do mesmo jeito.",
         "Ligar e desligar a névoa também acontece com calma, sem piscar a tela."
-      ]
-    },
-    {
-      "id": "2026-11-02-clima-vivo",
-      "data": "2026-11-02",
-      "tipo": "melhoria",
-      "area": "Sessão",
-      "titulo": "Mapa: clima com mais profundidade e dois efeitos novos",
-      "detalhes": [
-        "A chuva cai em camadas, umas mais perto e outras mais longe, e de perto dá para ver os respingos no chão.",
-        "Na tempestade, sombras de nuvens passam pelo mapa e o relâmpago clareia o chão, mais forte onde as nuvens abrem.",
-        "A neblina ficou macia e ondula devagar, a areia corre em faixas com o vento e o véu do Vazio pulsa.",
-        "Efeitos novos para o Mestre: Sombras de nuvens, que passam sobre o mapa sem chuva, e Calor, que faz o chão tremer como ar quente perto do fogo ou no deserto."
-      ]
-    },
-    {
-      "id": "2026-11-02-nevoa-e-clima",
-      "data": "2026-11-02",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Mapa: névoa de guerra e clima na cena",
-      "detalhes": [
-        "O Mestre pode cobrir o mapa com névoa e ir revelando o que o grupo descobre, com pincel, retângulo ou polígono.",
-        "O que ainda está na névoa nem chega ao seu aparelho: não adianta procurar, o pedaço escondido do mapa fica com o Mestre.",
-        "Monstros e figuras dentro da névoa somem da sua tela e aparecem quando saem dela. Os personagens do grupo continuam sempre à vista.",
-        "Chegou o clima: chuva, tempestade com relâmpagos, neve, neblina, tempestade de areia, cinzas e brasas, folhas ao vento, escuridão com luz em volta dos personagens, o véu do Vazio e partículas na cor de um Fluxo.",
-        "O clima acompanha o vento que o Mestre escolher e pode cobrir o mapa inteiro ou só um pedaço dele.",
-        "Se o seu aparelho sofrer com os efeitos, o botão da nuvem na barra da esquerda desliga o clima só para você."
       ]
     }
   ]

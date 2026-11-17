@@ -1813,7 +1813,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Onde os outros partem para briga, ele sobe no palco. A fama abre portas, a presença prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.",
+    "descricao": "Resolve as coisas com fama e carisma em vez de briga. A presença dele prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.",
     "dt_efeitos": {
       "rotulo": "DT de Palco",
       "pericia": "atuacao",
@@ -16633,7 +16633,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Nasce sem poder nenhum e pega emprestado de quem morreu. Mata, ou chega perto de um corpo ainda quente, devora o que sobrou, e uma parte de verdade da força da vítima passa a ocupar um espaço vazio dentro dele.",
+    "descricao": "Nasce sem poder nenhum e pega emprestado de quem morreu. Quando mata alguém ou encontra um corpo recente, devora o que sobrou e guarda dentro de si uma parte da força da vítima.",
     "dt_efeitos": {
       "rotulo": "DT do Devorador",
       "pericia": "luta",
