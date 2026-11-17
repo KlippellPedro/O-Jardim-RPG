@@ -4045,7 +4045,7 @@ ${HTML_DEVOCAO}
     ],
     corpo: `
       <p class="regras-lead">Este guia é só para quem conduz a mesa. Se você nunca mestrou, a boa notícia é que este sistema pede pouca preparação numérica: uma DT, um punhado de inimigos e a disposição de dizer "sim, e" com mais frequência do que "não".</p>
-      <p>Ele está dividido em quatro estantes, na ordem em que costumam ser usadas. <strong>Conduzir a mesa</strong> tem o básico de qualquer sessão. <strong>Dar peso à cena</strong> guarda descrições para quando a mesa precisa sentir. <strong>O mundo reage</strong> cuida de viagem, cidade, NPC, boato e relógio. <strong>Ameaça e recompensa</strong> ajuda a montar o inimigo e a decidir o que o grupo leva. A Biblioteca da campanha, com as tabelas de calibragem, fica no fim.</p>
+      <p>Ele está dividido em quatro estantes, na ordem em que costumam ser usadas. <strong>Conduzir a mesa</strong> tem o básico de qualquer sessão. <strong>Dar peso à cena</strong> guarda descrições prontas para os momentos importantes. <strong>O mundo reage</strong> cuida de viagem, cidade, NPC, boato e relógio. <strong>Ameaça e recompensa</strong> ajuda a montar o inimigo e a decidir o que o grupo leva. A Biblioteca da campanha, com as tabelas de calibragem, fica no fim.</p>
 
       <section class="regras-estante regras-estante--conduzir">
       <div class="regras-estante-cabeca">
@@ -4147,29 +4147,29 @@ ${HTML_DEVOCAO}
 
       <h3 class="regras-subtitle">Descrever momentos</h3>
       <p>Alguns momentos pedem uma boa descrição, mais do que um teste: a criatura saindo da água, o amigo caído no chão, o fim de uma luta difícil. As tabelas abaixo guardam descrições prontas para esses momentos. Role 1d6 quando der branco no meio da sessão, ou leia a tabela antes e guarde a linha que combina com a cena que você já sabe que vem.</p>
-      <p>Nenhuma delas precisa ser lida palavra por palavra. Troque o bicho, o lugar, o nome. O que importa é o jeito: um detalhe pequeno e verdadeiro, um corpo reagindo, e espaço para quem joga respirar antes de responder.</p>
+      <p>Nenhuma precisa ser lida palavra por palavra. Troque o bicho, o lugar e os nomes à vontade. O que funciona é o jeito: um detalhe concreto, uma reação do corpo e uma pausa para quem joga responder.</p>
       <ul class="regras-list">
-        <li><strong>Comece por um sentido que não seja a visão.</strong> Som, cheiro e temperatura chegam antes da imagem, e deixam a mesa alerta antes de ela saber por quê.</li>
+        <li><strong>Comece por um sentido que não seja a visão.</strong> Som, cheiro e temperatura chegam antes da imagem e deixam a mesa alerta.</li>
         <li><strong>Prefira um detalhe concreto a vários adjetivos.</strong> "Tem uma formiga carregando uma migalha perto da sua mão" funciona melhor que "o momento é terrível e sombrio", porque é o tipo de coisa que a gente repara quando está com medo.</li>
-        <li><strong>Mostre o corpo antes da emoção.</strong> Mão que não acha o cabo da espada, respiração que entra pela metade, joelho que falha. Quem joga sente pelo personagem quando o corpo do personagem sente primeiro.</li>
-        <li><strong>Fale mais devagar do que parece necessário.</strong> Faça uma pausa antes da última frase. O silêncio da mesa, naquele segundo, é parte da descrição.</li>
+        <li><strong>Mostre o corpo antes da emoção.</strong> Mão que não acha o cabo da espada, respiração curta, joelho que falha. Assim fica mais fácil para quem joga se colocar no lugar do personagem.</li>
+        <li><strong>Fale mais devagar do que parece necessário.</strong> Faça uma pausa antes da última frase.</li>
         <li><strong>Use o nome do personagem, e não o do jogador.</strong> "O peito do Tavo sobe e desce" coloca todo mundo dentro da cena. "O personagem do Lucas está morrendo" tira todo mundo dela.</li>
-        <li><strong>Termine devolvendo a vez.</strong> A última frase deixa uma pergunta aberta, e a próxima fala é de quem joga. Se ninguém falar logo, espere. Eles estão sentindo.</li>
+        <li><strong>Termine devolvendo a vez.</strong> A última frase deixa uma pergunta aberta, e a próxima fala é de quem joga. Se ninguém falar logo, espere um pouco.</li>
         <li><strong>Guarde a descrição longa para o que importa.</strong> Se todo capanga chega com três frases, o chefe chega com as mesmas três e ninguém percebe a diferença.</li>
       </ul>
 
       <details class="regras-details">
         <summary>Uma criatura aparece <span class="regras-details-contagem">1d6</span></summary>
-        <p>Para o instante antes de a iniciativa ser rolada, quando a ameaça ainda é mais sensação do que ficha.</p>
+        <p>Para o momento antes de rolar a iniciativa, quando a ameaça ainda não apareceu inteira.</p>
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>Os grilos param. Depois a coruja. Depois o vento, como se alguém tivesse fechado uma janela do tamanho da mata. No silêncio que sobra, vocês escutam uma respiração grande e úmida atrás das árvores, lenta demais para uma coisa com pressa, e entendem que ela já estava ali antes de vocês chegarem.</td></tr>
-            <tr><td>2</td><td>A fogueira se deita toda para o mesmo lado, sem vento nenhum, e a sombra de vocês na pedra fica maior do que deveria. Ninguém ouviu asas. Quando alguém finalmente olha para cima, ela está pousada no galho mais alto, quieta, com a cabeça inclinada do jeito que um cachorro faz quando tenta entender uma palavra.</td></tr>
-            <tr><td>3</td><td>O cheiro chega primeiro e gruda no fundo da garganta: carne esquecida no sol, ferro molhado e, por baixo, alguma coisa doce, doce como fruta passando do ponto. O cavalo refuga e bate os cascos. Quando você puxa a rédea, sente pela primeira vez o animal tremendo inteiro debaixo da sua mão.</td></tr>
-            <tr><td>4</td><td>O que vocês achavam que era uma pedra coberta de musgo abre um olho amarelo e lento. Ela não se assusta. Pisca uma vez, abre um segundo olho, e então um terceiro, num lugar onde bicho nenhum deveria ter olho, e os três se viram para quem está mais atrás no grupo.</td></tr>
-            <tr><td>5</td><td>A água do lago estava parada fazia tanto tempo que vocês pararam de olhar para ela. Agora ela se abre sem espuma nenhuma, e a criatura sai devagar, escorrendo, com a calma de quem já sabe que a trilha atrás de vocês é estreita e que recuar vai levar tempo.</td></tr>
-            <tr><td>6</td><td>Vocês escutam passos acompanhando os seus, no mesmo ritmo, só um pouco atrasados, como alguém que aprende a andar olhando. Quando o grupo para, os outros passos dão mais um. Depois vem o silêncio, e a certeza fria de que, seja o que for, ela parou exatamente onde vocês não conseguem ver.</td></tr>
+            <tr><td>1</td><td>Os grilos param, depois a coruja, depois o vento. Na quietude, vocês escutam uma respiração grande e lenta atrás das árvores. Ela já estava ali antes de vocês chegarem.</td></tr>
+            <tr><td>2</td><td>A fogueira se inclina toda para um lado, sem vento nenhum. Quando alguém olha para cima, a criatura está pousada no galho mais alto, quieta, com a cabeça inclinada, observando vocês.</td></tr>
+            <tr><td>3</td><td>O cheiro chega primeiro: carne podre, ferro molhado e algo doce, como fruta passada. O cavalo refuga, e você sente o animal tremendo inteiro debaixo da sua mão.</td></tr>
+            <tr><td>4</td><td>A pedra coberta de musgo abre um olho amarelo. Depois um segundo, e um terceiro num lugar onde bicho nenhum tem olho. Os três se viram para quem está mais atrás no grupo.</td></tr>
+            <tr><td>5</td><td>A água do lago, parada até agora, se abre sem fazer espuma. A criatura sai devagar, escorrendo, sem pressa nenhuma: a trilha atrás de vocês é estreita, e recuar vai demorar.</td></tr>
+            <tr><td>6</td><td>Vocês ouvem passos acompanhando os seus, no mesmo ritmo, só um pouco atrasados. Quando o grupo para, os outros passos dão mais um e param também, em algum lugar que vocês não conseguem ver.</td></tr>
           </tbody>
         </table></div>
       </details>
@@ -4180,12 +4180,12 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>As chamas de todas as tochas se inclinam ao mesmo tempo na direção da porta, como se o fogo quisesse sair antes que ele entrasse. Ele entra sem pressa. Os passos dele não fazem barulho nenhum no chão de pedra, e é isso que arrepia a nuca de vocês.</td></tr>
-            <tr><td>2</td><td>Ninguém ouviu a porta abrir. Vocês só percebem agora, com o sangue ainda quente nas mãos, que ele estava sentado no trono o tempo inteiro, com o queixo apoiado no punho, assistindo à luta como quem assiste a um ensaio. Ele bate palmas duas vezes, devagar, e se levanta.</td></tr>
-            <tr><td>3</td><td>O chão treme em intervalos regulares. A cada passo, um fio de poeira escorre do teto e cai no ombro de alguém. Vocês contam sem querer, um, dois, três, e percebem que o intervalo entre um passo e outro está ficando menor, e que ninguém do grupo está respirando alto.</td></tr>
-            <tr><td>4</td><td>Os capangas param de lutar no meio do golpe. Baixam as armas, recuam contra as paredes e abrem um corredor sem que ninguém tenha dado ordem. O mais novo deles fecha os olhos. É pelo medo no rosto dos próprios aliados que vocês entendem quem acabou de chegar.</td></tr>
-            <tr><td>5</td><td>Ele diz o nome de um de vocês. O nome verdadeiro, com a pronúncia que só a sua mãe usava, aquele que ninguém nesta cidade deveria conhecer. Ele sorri com o canto da boca e espera para ver o que você faz com isso.</td></tr>
-            <tr><td>6</td><td>Quem conjura sente antes de ver. O Fluxo do lugar inteiro começa a escorrer na direção dele, como água descendo para um ralo, e a Mana pesa no peito feito roupa molhada. As magias que ainda estavam acesas piscam e enfraquecem.</td></tr>
+            <tr><td>1</td><td>Todas as tochas se inclinam ao mesmo tempo na direção da porta. Ele entra sem pressa, e os passos dele não fazem barulho nenhum no chão de pedra.</td></tr>
+            <tr><td>2</td><td>Ninguém ouviu a porta abrir. Só agora vocês percebem que ele estava sentado no trono o tempo todo, assistindo à luta. Ele bate palmas duas vezes, devagar, e se levanta.</td></tr>
+            <tr><td>3</td><td>O chão treme em intervalos regulares, e a cada passo cai poeira do teto. Vocês contam sem querer e percebem que os passos estão cada vez mais perto.</td></tr>
+            <tr><td>4</td><td>Os capangas param de lutar no meio do golpe, baixam as armas e recuam contra as paredes, abrindo caminho sem ninguém mandar. Pelo medo no rosto deles, vocês entendem quem chegou.</td></tr>
+            <tr><td>5</td><td>Ele diz o nome de um de vocês. O nome verdadeiro, com a pronúncia que só a família usava, um nome que ninguém nesta cidade deveria conhecer. Depois sorri e espera a reação.</td></tr>
+            <tr><td>6</td><td>Quem conjura sente primeiro: a Mana do lugar inteiro começa a ser puxada na direção dele, e as magias que ainda estavam ativas piscam e enfraquecem.</td></tr>
           </tbody>
         </table></div>
       </details>
@@ -4196,12 +4196,12 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>O mundo perde o som de repente. Você vê a boca de alguém do grupo se mexendo, gritando o seu nome, e só escuta o próprio coração, alto demais e lento demais, dentro dos ouvidos. É como se alguém tivesse baixado uma tampa sobre a luta, e você tivesse ficado do lado de dentro.</td></tr>
-            <tr><td>2</td><td>Sua mão procura o cabo da arma e demora a encontrar. Os dedos estão frios e desajeitados, como se fossem de outra pessoa, e o cabo escorrega de um jeito que não tem nada a ver com suor. Você olha para baixo e entende de onde vem tanto vermelho.</td></tr>
-            <tr><td>3</td><td>Você cai de joelhos sem ter decidido cair. E pela primeira vez desde que a luta começou repara em coisas pequenas: o chão está gelado, tem uma formiga carregando uma migalha perto da sua mão, e o ar tem gosto de uma chuva que ainda não chegou.</td></tr>
-            <tr><td>4</td><td>A dor vai embora de uma vez, e é justamente isso que assusta. O corpo parou de avisar. Você se sente leve, quase bem, e uma parte muito antiga de você, a que ainda lembra como é ter medo do escuro, grita que esse é o pior sinal de todos.</td></tr>
-            <tr><td>5</td><td>Tem gosto de moeda velha na sua boca. Cada respiração entra pela metade e sai chiando, e você começa a contar as respirações sem querer, como se contar pudesse fazer com que durassem mais.</td></tr>
-            <tr><td>6</td><td>Por um instante você está em outro lugar. A cozinha de casa, a luz da tarde entrando torta pela janela, uma voz que você não escuta há anos chamando para a mesa. Você quase responde. Então o barulho da luta volta todo de uma vez, e a saudade dói mais que o ferimento.</td></tr>
+            <tr><td>1</td><td>O som some de repente. Você vê alguém do grupo gritando o seu nome, mas só escuta o próprio coração, alto e lento.</td></tr>
+            <tr><td>2</td><td>Sua mão procura o cabo da arma e demora a encontrar. Os dedos estão frios e o cabo escorrega. Você olha para baixo e vê de onde vem tanto sangue.</td></tr>
+            <tr><td>3</td><td>Você cai de joelhos sem querer. De repente repara em coisas pequenas: o chão gelado, uma formiga carregando uma migalha perto da sua mão, o cheiro de chuva.</td></tr>
+            <tr><td>4</td><td>A dor some de uma vez. Você se sente leve, quase bem, e sabe que isso é um péssimo sinal.</td></tr>
+            <tr><td>5</td><td>A boca tem gosto de sangue. Cada respiração entra pela metade e sai chiando, e você começa a contar as respirações sem querer.</td></tr>
+            <tr><td>6</td><td>Por um instante você está em casa: a cozinha, a luz da tarde, uma voz que você não ouve há anos chamando para a mesa. Então o barulho da luta volta de uma vez.</td></tr>
           </tbody>
         </table></div>
       </details>
@@ -4212,12 +4212,12 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Para quem caiu</th><th>Para quem vê</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>O frio sobe pelas pernas devagar, como água enchendo uma banheira, e você não consegue lembrar se era para estar com medo.</td><td>O peito sobe e desce, e cada vez sobe um pouco menos. Vocês se pegam prendendo a respiração junto, como se isso ajudasse.</td></tr>
-            <tr><td>2</td><td>Você ouve seu nome muito longe, do fundo de um poço, e responder parece um esforço grande demais para alguém tão cansado.</td><td>Os olhos continuam abertos, fixos num ponto do céu que ninguém mais enxerga. Quando alguém passa a mão na frente deles, eles não acompanham.</td></tr>
-            <tr><td>3</td><td>Uma luz estreita, como a fresta de uma porta de madrugada. Do outro lado, alguém que você perdeu levanta a mão, sem sorrir, e faz sinal para você esperar mais um pouco.</td><td>A mão ainda aperta a arma, sem força nenhuma, só por teimosia. Alguém tenta tirar, e os dedos não soltam.</td></tr>
-            <tr><td>4</td><td>Nada dói. Você só está muito cansado, do jeito que ficava quando criança depois de um dia inteiro no rio. Seria tão fácil dormir.</td><td>O sangue parou de correr rápido. Ninguém ali tem coragem de dizer em voz alta o que isso quer dizer.</td></tr>
-            <tr><td>5</td><td>Você lembra de uma promessa que ainda não cumpriu, e ela pesa mais que o corpo inteiro. É a única coisa que ainda segura você aqui.</td><td>Os lábios se mexem sem som. Quem chegar perto o bastante para sentir o hálito frio ouve um nome, e não é o de ninguém do grupo.</td></tr>
-            <tr><td>6</td><td>O céu, ou o teto, gira devagar e parece mais perto do que deveria, como se estivesse descendo para ver você melhor.</td><td>Um tremor atravessa o corpo inteiro e para. Por um instante longo demais, ninguém no grupo sabe se aquele foi o último.</td></tr>
+            <tr><td>1</td><td>O frio sobe devagar pelas pernas, e você não consegue lembrar se devia estar com medo.</td><td>O peito sobe e desce, e cada vez sobe um pouco menos.</td></tr>
+            <tr><td>2</td><td>Você ouve o seu nome muito longe, e responder parece difícil demais.</td><td>Os olhos continuam abertos, parados num ponto do céu. Quando alguém passa a mão na frente deles, eles não acompanham.</td></tr>
+            <tr><td>3</td><td>Você vê uma luz estreita, como uma porta entreaberta. Do outro lado, alguém que você perdeu faz sinal para você esperar mais um pouco.</td><td>A mão ainda segura a arma, sem força nenhuma. Alguém tenta tirar, e os dedos não soltam.</td></tr>
+            <tr><td>4</td><td>Nada dói. Você só está muito cansado, e seria fácil dormir.</td><td>O sangue parou de correr rápido. Ninguém tem coragem de dizer o que isso quer dizer.</td></tr>
+            <tr><td>5</td><td>Você lembra de uma promessa que ainda não cumpriu, e é ela que segura você aqui.</td><td>Os lábios se mexem sem som. Quem chegar bem perto ouve um nome, e não é de ninguém do grupo.</td></tr>
+            <tr><td>6</td><td>O céu, ou o teto, gira devagar e parece mais perto do que deveria.</td><td>Um tremor atravessa o corpo e para. Por um instante, ninguém sabe se foi o último.</td></tr>
           </tbody>
         </table></div>
       </details>
@@ -4228,12 +4228,12 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>Não há última frase. Não há olhar demorado nem recado guardado para o fim. A mão que segurava a sua simplesmente para de segurar, no meio do aperto, e o peso dela muda nos seus dedos de um jeito que você vai reconhecer pelo resto da vida.</td></tr>
-            <tr><td>2</td><td>Ele ainda consegue sorrir, com os dentes vermelhos, e pede que alguém termine o que ele começou. Tenta dizer mais alguma coisa, uma piada talvez, porque sempre tinha uma, e a frase fica no meio do caminho.</td></tr>
-            <tr><td>3</td><td>O vento muda de direção naquele exato momento. As folhas em volta param, todas juntas, e a mata fica quieta por um instante.</td></tr>
-            <tr><td>4</td><td>O corpo fica mais leve nos seus braços, e você entende antes de qualquer um dizer. Continua segurando mesmo assim, tirando o cabelo dela de cima do rosto com cuidado, porque ainda não sabe o que mais fazer com as mãos.</td></tr>
-            <tr><td>5</td><td>A coisa que ela carregava para todo lado, o amuleto barato, o caderno de bordas gastas, escorrega dos dedos e rola pelo chão até parar nos pés de quem estava mais longe. Ninguém se abaixa para pegar. Ainda não.</td></tr>
-            <tr><td>6</td><td>A batalha continua em volta, indiferente. Alguém ainda grita ordens, uma espada ainda bate num escudo, um pássaro canta em algum lugar.</td></tr>
+            <tr><td>1</td><td>Não há última frase. A mão que segurava a sua simplesmente para de apertar, e o peso dela muda nos seus dedos.</td></tr>
+            <tr><td>2</td><td>Ele ainda consegue sorrir, com os dentes vermelhos, e pede que alguém termine o que ele começou. Tenta fazer uma última piada, e a frase fica pela metade.</td></tr>
+            <tr><td>3</td><td>O vento muda de direção nesse exato momento, e a mata em volta fica quieta por um instante.</td></tr>
+            <tr><td>4</td><td>O corpo fica mais leve nos seus braços, e você entende antes de qualquer um dizer. Continua segurando mesmo assim, tirando o cabelo de cima do rosto dela com cuidado.</td></tr>
+            <tr><td>5</td><td>O amuleto barato que ela levava para todo lado escorrega dos dedos e rola pelo chão até os pés de alguém do grupo. Ninguém se abaixa para pegar.</td></tr>
+            <tr><td>6</td><td>A batalha continua em volta, como se nada tivesse acontecido. Alguém ainda grita ordens, e uma espada ainda bate num escudo.</td></tr>
           </tbody>
         </table></div>
         <p class="regras-note">Quando quem morre é personagem de jogador, pergunte antes se ele quer uma última fala ou um último gesto. A tabela entra depois, para o que o resto da mesa vê.</p>
@@ -4241,48 +4241,48 @@ ${HTML_DEVOCAO}
 
       <details class="regras-details">
         <summary>O golpe final <span class="regras-details-contagem">1d6</span></summary>
-        <p>Para o último acerto de uma luta que custou caro. Quem acertou merece ouvir o que fez.</p>
+        <p>Para o último acerto de uma luta difícil. Descreva para quem acertou.</p>
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>A lâmina entra, e por um segundo nada acontece. Ele olha para baixo, surpreso, quase ofendido. Depois olha para você, e nos olhos dele tem uma pergunta que ele não vai ter tempo de fazer.</td></tr>
-            <tr><td>2</td><td>O monstro solta um último som, baixo e quase triste, parecido demais com o de um bicho ferido que só queria voltar para a toca. Desaba de lado, e a nuvem de poeira que ele levanta demora muito para assentar.</td></tr>
-            <tr><td>3</td><td>A magia atravessa a criatura de lado a lado e deixa um buraco de luz por onde dá para ver a parede do outro lado. Ela ainda dá dois passos na sua direção. No terceiro, esquece como se anda.</td></tr>
-            <tr><td>4</td><td>Ele cai de joelhos, larga a arma e, sem raiva nenhuma, pergunta quem mandou vocês. Quando ninguém responde, ri baixinho e fecha os olhos.</td></tr>
-            <tr><td>5</td><td>O corpo se desfaz em cinza e Mana solta, que sobe em espiral como faísca de fogueira em noite fria. Por um instante é bonito. Some antes de chegar ao teto, e o cheiro de queimado fica.</td></tr>
-            <tr><td>6</td><td>Silêncio. A respiração de vocês é o único barulho da sala. Só agora dá para sentir o quanto os braços tremem, o quanto a boca está seca, e o quanto ninguém quer ser o primeiro a baixar a arma.</td></tr>
+            <tr><td>1</td><td>A lâmina entra, e por um momento nada acontece. Ele olha para baixo, surpreso. Depois olha para você, tenta dizer alguma coisa e não consegue.</td></tr>
+            <tr><td>2</td><td>O monstro solta um último som, baixo, parecido com o de um bicho ferido. Desaba de lado e levanta uma nuvem de poeira.</td></tr>
+            <tr><td>3</td><td>A magia atravessa a criatura de lado a lado. Ela ainda dá dois passos na sua direção e cai no terceiro.</td></tr>
+            <tr><td>4</td><td>Ele cai de joelhos, larga a arma e pergunta, sem raiva, quem mandou vocês. Quando ninguém responde, ri baixinho e fecha os olhos.</td></tr>
+            <tr><td>5</td><td>O corpo se desfaz em cinza e faíscas de Mana, que sobem em espiral e somem antes de chegar ao teto. Fica só o cheiro de queimado.</td></tr>
+            <tr><td>6</td><td>A sala fica quieta, só com a respiração de vocês. Agora dá para sentir os braços tremendo e a boca seca, e ninguém quer ser o primeiro a baixar a arma.</td></tr>
           </tbody>
         </table></div>
       </details>
 
       <details class="regras-details">
         <summary>Algo está errado <span class="regras-details-contagem">1d6</span></summary>
-        <p>Para a cena antes do perigo, quando nada aconteceu ainda e a mesa precisa sentir que vai acontecer. Não explique nada. O desconforto é o ponto.</p>
+        <p>Para a cena antes do perigo, quando nada aconteceu ainda. Não explique nada: a ideia é deixar a mesa desconfiada.</p>
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>A vila está com as janelas abertas, as cortinas se mexendo, a mesa posta e a sopa ainda morna nos pratos. Tem uma cadeira caída. Tem um brinquedo de madeira no meio da rua. Não tem ninguém, e nenhum cachorro late.</td></tr>
-            <tr><td>2</td><td>O guia para de falar no meio de uma história e não retoma. Quando alguém pergunta como ela terminava, ele franze a testa, confuso de verdade, e diz que não estava contando história nenhuma. Depois continua andando, um pouco mais rápido.</td></tr>
+            <tr><td>1</td><td>A vila está com as janelas abertas, a mesa posta e a sopa ainda morna nos pratos. Tem uma cadeira caída e um brinquedo de madeira no meio da rua. Não tem ninguém, e nenhum cachorro late.</td></tr>
+            <tr><td>2</td><td>O guia para de falar no meio de uma história. Quando alguém pergunta como ela terminava, ele fica confuso e diz que não estava contando história nenhuma. Depois volta a andar, um pouco mais rápido.</td></tr>
             <tr><td>3</td><td>Todas as pegadas na lama da estrada vão na mesma direção, para dentro da mata. Pés grandes, pés pequenos, marcas de casco, de bota, de pé descalço. Nenhuma volta.</td></tr>
-            <tr><td>4</td><td>O mapa está certo. Vocês conferiram três vezes, cada curva do rio, cada morro. As estrelas é que estão erradas, e quem sabe ler o céu sente o estômago afundar devagar.</td></tr>
-            <tr><td>5</td><td>O cachorro da casa late sem parar para o canto vazio do quarto, com o pelo das costas em pé. De repente, no meio de um latido, ele fica quieto, deita com o rabo entre as pernas e não tira mais os olhos daquele canto.</td></tr>
-            <tr><td>6</td><td>De longe, por cima do vento, vocês escutam alguém cantarolando. É a mesma melodia que um de vocês cantarolava ontem à noite, sozinho e baixinho, quando achava que todo mundo estava dormindo.</td></tr>
+            <tr><td>4</td><td>O mapa está certo: vocês conferiram três vezes cada curva do rio. As estrelas é que estão no lugar errado, e quem sabe ler o céu percebe na hora.</td></tr>
+            <tr><td>5</td><td>O cachorro da casa late sem parar para um canto vazio do quarto, com o pelo arrepiado. De repente para de latir, deita com o rabo entre as pernas e não tira os olhos daquele canto.</td></tr>
+            <tr><td>6</td><td>De longe, vocês escutam alguém cantarolando. É a mesma música que um de vocês cantarolava sozinho ontem à noite, quando achava que todo mundo estava dormindo.</td></tr>
           </tbody>
         </table></div>
       </details>
 
       <details class="regras-details">
         <summary>Uma revelação horrível <span class="regras-details-contagem">1d6</span></summary>
-        <p>Descreva primeiro e peça o teste de Sanidade logo depois, com a DT escolhida antes de começar a falar. Deixe a última frase cair sozinha.</p>
+        <p>Descreva primeiro e peça o teste de Sanidade logo depois, com a DT escolhida antes de começar a falar. Faça uma pausa depois da última frase.</p>
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>De longe, a parede parecia pintada de um vermelho escuro e feio, vermelho de casa velha. Vocês chegam perto o bastante para ver as marcas de dedos, pequenos, em fileiras, e o cheiro confirma o resto antes que alguém precise dizer.</td></tr>
-            <tr><td>2</td><td>O rosto no retrato da sala é o seu. Mais velho, mais magro, com uma cicatriz que você ainda não tem. A data escrita embaixo, em tinta desbotada, é de cem anos atrás.</td></tr>
-            <tr><td>3</td><td>A criança responde com a voz da mãe. Do outro cômodo, a mãe responde com a voz da criança. As duas seguem conversando normalmente, rindo nos mesmos lugares, e nenhuma delas parece perceber.</td></tr>
-            <tr><td>4</td><td>Os ossos na vala foram arrumados com cuidado, por tamanho, do maior para o menor, do jeito que alguém arruma sapatos. No fim da fileira ficou um espaço vazio, do tamanho exato de mais três.</td></tr>
-            <tr><td>5</td><td>O diário termina na data de hoje. Na última página, com a mesma letra apressada, está escrito que vocês entrariam por aquela porta, quem entraria primeiro e o que essa pessoa diria. Ela acabou de dizer.</td></tr>
-            <tr><td>6</td><td>Vocês entendem de uma vez, todos juntos, para que servia a máquina. E só então percebem o zumbido baixo que estava ali desde que entraram, tão constante que tinham parado de ouvir. Ela ainda está ligada.</td></tr>
+            <tr><td>1</td><td>De longe, a parede parecia pintada de vermelho escuro. De perto, dá para ver marcas de dedos pequenos, em fileiras, e o cheiro confirma o resto.</td></tr>
+            <tr><td>2</td><td>O rosto no retrato da sala é o seu, mais velho, com uma cicatriz que você ainda não tem. A data embaixo é de cem anos atrás.</td></tr>
+            <tr><td>3</td><td>A criança responde com a voz da mãe. Do outro cômodo, a mãe responde com a voz da criança. As duas seguem conversando normalmente, e nenhuma delas parece perceber.</td></tr>
+            <tr><td>4</td><td>Os ossos na vala foram arrumados por tamanho, do maior para o menor. No fim da fileira há um espaço vazio, do tamanho exato de mais três.</td></tr>
+            <tr><td>5</td><td>O diário termina na data de hoje. A última página diz que vocês entrariam por aquela porta, quem entraria primeiro e o que essa pessoa diria. Ela acabou de dizer.</td></tr>
+            <tr><td>6</td><td>De repente vocês entendem para que servia a máquina. Só então notam o zumbido baixo que estava ali desde que entraram. Ela ainda está ligada.</td></tr>
           </tbody>
         </table></div>
       </details>
@@ -4293,12 +4293,12 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>O ar em volta de quem conjura fica pesado como a hora antes de uma tempestade de verão. Os pelos dos braços de todo mundo se arrepiam, o cabelo flutua um pouco, e a boca ganha gosto de metal.</td></tr>
-            <tr><td>2</td><td>As palavras saem numa língua que ninguém ali aprendeu, uma língua que parece mais antiga que as paredes. Ninguém entende as primeiras. A última, todo mundo entende, e ninguém vai conseguir repetir depois.</td></tr>
-            <tr><td>3</td><td>Toda a luz da sala é puxada para a mão dela, como fumaça sugada por uma chaminé. Por um instante longo, só aquela mão ilumina alguma coisa, e o rosto dela, aceso de baixo para cima, parece o rosto de outra pessoa.</td></tr>
-            <tr><td>4</td><td>Um círculo que ninguém desenhou vai se marcando sozinho no chão, sob os pés de quem conjura. A poeira dentro dele para de cair e fica suspensa no ar, parada, esperando.</td></tr>
-            <tr><td>5</td><td>Uma gota de sangue escorre do nariz de quem conjura, depois outra. Ela não para para limpar. O Fluxo sempre cobra adiantado, e ela sabia disso quando começou.</td></tr>
-            <tr><td>6</td><td>Tudo fica em silêncio, um silêncio tão completo que dá para ouvir o próprio sangue correndo, durante um segundo inteiro. Então o som volta de uma vez, alto demais, e a magia vem junto com ele.</td></tr>
+            <tr><td>1</td><td>O ar em volta de quem conjura fica pesado, como antes de uma tempestade. Os pelos dos braços se arrepiam e a boca fica com gosto de metal.</td></tr>
+            <tr><td>2</td><td>As palavras saem numa língua que ninguém ali aprendeu. Ninguém entende as primeiras; a última, todos entendem, mas ninguém consegue repetir depois.</td></tr>
+            <tr><td>3</td><td>Toda a luz da sala é puxada para a mão de quem conjura. Por um momento, só essa mão ilumina alguma coisa.</td></tr>
+            <tr><td>4</td><td>Um círculo vai se desenhando sozinho no chão, sob os pés de quem conjura, e a poeira dentro dele fica parada no ar.</td></tr>
+            <tr><td>5</td><td>Uma gota de sangue escorre do nariz de quem conjura, depois outra. Ela não para para limpar.</td></tr>
+            <tr><td>6</td><td>Todo o som some por um instante. Depois volta de uma vez, alto demais, e a magia vem junto.</td></tr>
           </tbody>
         </table></div>
       </details>
@@ -4309,28 +4309,28 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>A cidade chega primeiro como cheiro: pão saindo do forno, esgoto, fumaça de ferraria e flor de laranjeira, tudo misturado. Só depois da curva aparecem as muralhas, e depois delas o barulho, que parece o de um bicho enorme respirando.</td></tr>
-            <tr><td>2</td><td>A ruína é muito maior do que qualquer mapa sugeria. Árvores cresceram dentro das salas e atravessaram os telhados, e agora são os galhos que seguram o teto no lugar, como mãos que não souberam soltar.</td></tr>
-            <tr><td>3</td><td>O mercado é um barulho só. Dez sotaques, gente pechinchando, uma galinha fugindo, uma briga num canto e alguém cantando por cima de tudo, desafinado e feliz. Em dois minutos, alguém já tentou vender alguma coisa para vocês.</td></tr>
-            <tr><td>4</td><td>A estrada termina numa ponte que ninguém conserta há anos, com tábuas faltando e cordas cinzentas de tão velhas. Do outro lado, as lanternas estão acesas, todas elas, e alguém varreu a entrada hoje de manhã.</td></tr>
-            <tr><td>5</td><td>O templo está limpo demais. Nem uma folha seca no chão, nem uma teia nos cantos, e as velas são novas. Alguém cuida deste lugar todos os dias, com carinho, e em canto nenhum há sinal de gente.</td></tr>
-            <tr><td>6</td><td>Do alto da colina, o vale inteiro aparece de uma vez: o rio brilhando, as plantações em quadrados, fumaça subindo de três chaminés. Parece um lugar onde enfim dá para descansar. Alguém do grupo, sem saber explicar por quê, põe a mão na arma.</td></tr>
+            <tr><td>1</td><td>A cidade chega primeiro pelo cheiro: pão, esgoto, fumaça de ferraria e flor de laranjeira. Depois da curva aparecem as muralhas e, atrás delas, o barulho de muita gente.</td></tr>
+            <tr><td>2</td><td>A ruína é muito maior do que o mapa sugeria. Árvores cresceram dentro das salas e atravessaram os telhados, e agora são os galhos que seguram o teto.</td></tr>
+            <tr><td>3</td><td>O mercado é puro barulho: dez sotaques, gente pechinchando, uma galinha fugindo, uma briga num canto e alguém cantando desafinado. Em dois minutos, alguém já tentou vender alguma coisa para vocês.</td></tr>
+            <tr><td>4</td><td>A estrada termina numa ponte que ninguém conserta há anos, com tábuas faltando e cordas velhas. Do outro lado, as lanternas estão acesas e alguém varreu a entrada hoje de manhã.</td></tr>
+            <tr><td>5</td><td>O templo está limpo demais: nenhuma folha no chão, nenhuma teia nos cantos, velas novas. Alguém cuida deste lugar todo dia, mas não há sinal de gente.</td></tr>
+            <tr><td>6</td><td>Do alto da colina, vocês veem o vale inteiro: o rio, as plantações, fumaça saindo de três chaminés. Parece um bom lugar para descansar, mas alguém do grupo põe a mão na arma sem saber por quê.</td></tr>
           </tbody>
         </table></div>
       </details>
 
       <details class="regras-details">
         <summary>Depois da luta <span class="regras-details-contagem">1d6</span></summary>
-        <p>Para o respiro. É aqui que o grupo lembra que é um grupo, então não corte direto para o saque.</p>
+        <p>Para o momento logo depois da luta. Dê um tempo ao grupo antes de passar para o saque.</p>
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d6</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>A adrenalina vai embora e deixa as mãos tremendo tanto que ninguém consegue guardar a espada de primeira. Alguém ri sem motivo, um riso nervoso, e o riso vai pegando nos outros até quase virar choro.</td></tr>
-            <tr><td>2</td><td>O primeiro a sentar percebe um corte fundo que não tinha sentido durante a luta. Fica olhando para ele com uma curiosidade estranha, como se fosse no corpo de outra pessoa. Amanhã vai doer, e muito.</td></tr>
-            <tr><td>3</td><td>O silêncio volta aos poucos, e com cuidado. Primeiro um pássaro, depois outro, depois o vento nas folhas, como se a mata esperasse ter certeza de que acabou antes de voltar a respirar.</td></tr>
-            <tr><td>4</td><td>Um dos inimigos caídos tem uma carta dobrada no bolso do casaco, com a letra torta de uma criança. Começa com "pai". Ninguém lê o resto em voz alta.</td></tr>
-            <tr><td>5</td><td>A fogueira que ninguém apagou continua estalando no meio de tudo, como se nada tivesse acontecido, e a chaleira esquecida em cima dela começa a apitar.</td></tr>
-            <tr><td>6</td><td>Vocês se olham e contam as cabeças sem dizer nada. Todo mundo faz a conta. Todo mundo refaz a conta, só para ter certeza.</td></tr>
+            <tr><td>1</td><td>As mãos tremem tanto que ninguém consegue guardar a espada de primeira. Alguém ri de nervoso, e o riso vai passando para os outros.</td></tr>
+            <tr><td>2</td><td>O primeiro a sentar percebe um corte fundo que nem sentiu durante a luta. Amanhã vai doer muito.</td></tr>
+            <tr><td>3</td><td>Os sons voltam aos poucos: um pássaro, depois outro, depois o vento nas folhas.</td></tr>
+            <tr><td>4</td><td>Um dos inimigos caídos tem no bolso uma carta com a letra torta de uma criança. Começa com "pai". Ninguém lê o resto em voz alta.</td></tr>
+            <tr><td>5</td><td>A fogueira que ninguém apagou continua estalando, e a chaleira esquecida em cima dela começa a apitar.</td></tr>
+            <tr><td>6</td><td>Vocês se olham e contam quem está de pé, sem dizer nada. Todo mundo conta duas vezes, só para ter certeza.</td></tr>
           </tbody>
         </table></div>
       </details>
@@ -4349,12 +4349,12 @@ ${HTML_DEVOCAO}
       <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
         <thead><tr><th>2d6</th><th>Chance</th><th>O que costuma sair</th></tr></thead>
         <tbody>
-          <tr><td>2</td><td>2,8%</td><td><strong>Desastre.</strong> O dia que o grupo vai contar por anos, com a voz baixa.<small class="regras-mecanica">Posição muito ruim, e ainda com uma saída.</small></td></tr>
+          <tr><td>2</td><td>2,8%</td><td><strong>Desastre.</strong> O pior resultado possível.<small class="regras-mecanica">Posição muito ruim, e ainda com uma saída.</small></td></tr>
           <tr><td>3–4</td><td>13,9%</td><td><strong>Complicação séria.</strong> Alguma coisa quebra, some ou se volta contra vocês.<small class="regras-mecanica">Custa recurso, tempo ou posição.</small></td></tr>
           <tr><td>5–6</td><td>25%</td><td><strong>Contratempo.</strong> Chuva, fila, lama, um animal teimoso.<small class="regras-mecanica">Atrapalha, pede um teste e passa.</small></td></tr>
           <tr><td>7</td><td>16,7%</td><td><strong>Dia comum com um detalhe.</strong> Nada acontece, e uma coisa pequena chama atenção.<small class="regras-mecanica">Use o detalhe para plantar um gancho.</small></td></tr>
           <tr><td>8–9</td><td>25%</td><td><strong>Encontro ou oportunidade pequena.</strong> Alguém cruza o caminho, e tem alguma coisa para oferecer ou pedir.<small class="regras-mecanica">Uma escolha pequena, com retorno pequeno.</small></td></tr>
-          <tr><td>10–11</td><td>13,9%</td><td><strong>Boa sorte.</strong> O mundo, por um momento, fica do lado de vocês.<small class="regras-mecanica">Algo útil cai no colo do grupo.</small></td></tr>
+          <tr><td>10–11</td><td>13,9%</td><td><strong>Boa sorte.</strong> As coisas dão certo para o grupo.<small class="regras-mecanica">Algo útil cai no colo do grupo.</small></td></tr>
           <tr><td>12</td><td>2,8%</td><td><strong>Achado raro.</strong> Um lugar, uma pessoa ou um objeto que ninguém esperava encontrar.<small class="regras-mecanica">Algo que o grupo vai lembrar pelo resto da campanha.</small></td></tr>
         </tbody>
       </table></div>
@@ -4390,15 +4390,15 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>2d6</th><th>Evento</th></tr></thead>
           <tbody>
-            <tr><td>2</td><td><strong>Emboscada preparada.</strong> O tronco atravessado na estrada parece ter caído com a última chuva, até alguém notar que o corte é reto demais. O mato dos dois lados está quieto do jeito errado, sem um pássaro, e a primeira flecha acerta a carroça antes de qualquer grito.<small class="regras-mecanica">O grupo começa Surpreendido, a menos que alguém passe em Percepção na DT Difícil. Mesmo vencendo, a estrada à frente continua vigiada até alguém descobrir quem mandou.</small></td></tr>
-            <tr><td>3</td><td><strong>Passagem cortada.</strong> A ponte do mapa virou três tábuas penduradas numa corda, balançando sobre um rio marrom e barulhento que arrasta galhos inteiros. Do outro lado, a estrada continua, tão perto que dá raiva.<small class="regras-mecanica">Contornar custa um dia a mais e 1 de Cansaço para todos. Atravessar direto pede Atletismo na DT Padrão, e quem falha perde para a correnteza um item que não esteja equipado, escolhido pelo próprio jogador.</small></td></tr>
+            <tr><td>2</td><td><strong>Emboscada preparada.</strong> Um tronco atravessado na estrada parece ter caído com a chuva, até alguém notar que o corte é reto demais. O mato dos dois lados está quieto, sem um pássaro, e a primeira flecha acerta a carroça antes de qualquer aviso.<small class="regras-mecanica">O grupo começa Surpreendido, a menos que alguém passe em Percepção na DT Difícil. Mesmo vencendo, a estrada à frente continua vigiada até alguém descobrir quem mandou.</small></td></tr>
+            <tr><td>3</td><td><strong>Passagem cortada.</strong> A ponte do mapa virou três tábuas penduradas numa corda, sobre um rio cheio que arrasta galhos inteiros. A estrada continua logo do outro lado.<small class="regras-mecanica">Contornar custa um dia a mais e 1 de Cansaço para todos. Atravessar direto pede Atletismo na DT Padrão, e quem falha perde para a correnteza um item que não esteja equipado, escolhido pelo próprio jogador.</small></td></tr>
             <tr><td>4</td><td><strong>Quebra no caminho.</strong> Um estalo seco debaixo da carroça, e depois o som de madeira arrastando na pedra. A roda rachou bem no meio, ou o cavalo começou a mancar da pata de trás, e o sol já passou do meio do céu.<small class="regras-mecanica">Tecnologia, Adestramento ou Sobrevivência na DT Padrão resolve em uma hora. Na falha, o grupo perde meio dia parado no meio do nada.</small></td></tr>
-            <tr><td>5</td><td><strong>O tempo fecha.</strong> O céu escurece de um lado só, rápido demais, e o cheiro de terra molhada chega antes da primeira gota. Em minutos a estrada vira lama até o tornozelo, a capa pesa o dobro e ninguém enxerga o próximo marco. Ou é o contrário: um calor parado que não deixa ninguém pensar.<small class="regras-mecanica">A viagem rende metade do dia, e quem estiver sem abrigo adequado termina com 1 de Cansaço.</small></td></tr>
+            <tr><td>5</td><td><strong>O tempo fecha.</strong> O céu fecha rápido, e em minutos a estrada vira lama até o tornozelo e ninguém enxerga o próximo marco. Ou é o contrário: um calor abafado que deixa todo mundo mole.<small class="regras-mecanica">A viagem rende metade do dia, e quem estiver sem abrigo adequado termina com 1 de Cansaço.</small></td></tr>
             <tr><td>6</td><td><strong>Pedágio improvisado.</strong> Uma corrente esticada entre duas estacas, uma mesa de campanha e quatro pessoas armadas que não usam o mesmo uniforme. A que está sentada sorri e diz o preço. As outras três não sorriem.<small class="regras-mecanica">Pagar sai barato. Discutir pede Diplomacia ou Intimidação na DT Padrão, e o resultado ruim deixa para trás alguém que vai lembrar do grupo.</small></td></tr>
             <tr><td>7</td><td><strong>Estrada comum.</strong> Poeira, sol e o barulho dos próprios passos. Um velho sentado num marco de pedra conta, sem ninguém perguntar, que viu luzes no morro ontem. Mais adiante, um altar de beira de estrada tem flores frescas e uma vela que ainda não apagou.<small class="regras-mecanica">Use um desses detalhes para plantar alguma coisa da próxima sessão.</small></td></tr>
             <tr><td>8</td><td><strong>Caravana no mesmo sentido.</strong> Primeiro o sino, depois a poeira, depois as carroças coloridas de uma caravana ou uma fila de peregrinos cantando baixo. Uma mulher de chapéu largo acena, oferece lugar no fogo da noite e olha com atenção demais para as armas de vocês.<small class="regras-mecanica">Viajar junto dá +1 na próxima rolagem desta tabela, e em troca eles vão pedir um favor antes do fim da estrada.</small></td></tr>
-            <tr><td>9</td><td><strong>Atalho.</strong> Um pastor de mãos rachadas aponta com o cajado uma trilha de cabras que some entre as pedras e garante que por ali se chega antes do almoço de amanhã. Ou alguém do grupo reconhece aquele morro, de uma vida antiga, e sabe o caminho sem saber de onde.<small class="regras-mecanica">A viagem encurta meio dia.</small></td></tr>
-            <tr><td>10</td><td><strong>Viajante em apuros.</strong> Uma carroça tombada de lado, frutas rolando pela estrada, e um mercador de joelhos tentando levantar o eixo sozinho, xingando baixinho para não chorar. Ou uma mensageira sentada no barranco, apertando uma bolsa lacrada contra um ferimento que não para de sangrar.<small class="regras-mecanica">Ajudar custa uma hora e rende um contato, uma informação útil ou um favor na próxima cidade.</small></td></tr>
+            <tr><td>9</td><td><strong>Atalho.</strong> Um pastor de mãos rachadas aponta com o cajado uma trilha de cabras que some entre as pedras e garante que por ali se chega antes do almoço de amanhã. Ou alguém do grupo reconhece a região e lembra de um caminho mais curto.<small class="regras-mecanica">A viagem encurta meio dia.</small></td></tr>
+            <tr><td>10</td><td><strong>Viajante em apuros.</strong> Uma carroça tombada de lado, frutas rolando pela estrada, e um mercador de joelhos tentando levantar o eixo sozinho, xingando baixinho. Ou uma mensageira sentada no barranco, apertando uma bolsa lacrada contra um ferimento que não para de sangrar.<small class="regras-mecanica">Ajudar custa uma hora e rende um contato, uma informação útil ou um favor na próxima cidade.</small></td></tr>
             <tr><td>11</td><td><strong>Achado na beira da estrada.</strong> Um acampamento desfeito às pressas: a panela ainda em cima do fogo apagado, um cobertor largado, pegadas correndo para o mato. Debaixo de uma lona, alguém esqueceu suprimentos e uma bolsa de couro pesada. Ninguém responde quando vocês chamam.<small class="regras-mecanica">Dentro há suprimentos e uma bolsa com 10 Lunaris por nível médio do grupo. Quem largou isso ali pode voltar para buscar.</small></td></tr>
             <tr><td>12</td><td><strong>Um lugar fora dos mapas.</strong> No fim de um dia longo, uma luz amarela entre as árvores: uma estalagem antiga que não aparece em mapa nenhum, com cheiro de pão e uma dona que já pôs na mesa o número exato de pratos. Ninguém ali pergunta de onde vocês vêm.<small class="regras-mecanica">O descanso ali tem qualidade Maravilhosa, e quem cuida do lugar sabe algo de que o grupo precisa.</small></td></tr>
           </tbody>
@@ -4410,16 +4410,16 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>2d6</th><th>Evento</th></tr></thead>
           <tbody>
-            <tr><td>2</td><td><strong>Desabamento ou armadilha antiga.</strong> Um clique baixo debaixo da bota, quase educado. Depois o teto inteiro geme, a poeira escorre pelas frestas como areia de ampulheta, e sobra exatamente um segundo para decidir para que lado pular.<small class="regras-mecanica">Todos testam Reflexos na DT Difícil. Quem falha sofre o dano de um ataque inimigo do nível do grupo e fica Caído, e o caminho por onde vocês vieram fica fechado.</small></td></tr>
+            <tr><td>2</td><td><strong>Desabamento ou armadilha antiga.</strong> Um clique baixo debaixo da bota. Depois o teto range, a poeira começa a cair pelas frestas, e só dá tempo de decidir para que lado pular.<small class="regras-mecanica">Todos testam Reflexos na DT Difícil. Quem falha sofre o dano de um ataque inimigo do nível do grupo e fica Caído, e o caminho por onde vocês vieram fica fechado.</small></td></tr>
             <tr><td>3</td><td><strong>Vocês acordaram alguma coisa.</strong> O zumbido começa baixo, dentro da parede, e vai crescendo até dar para sentir nos dentes. No canto escuro, alguma coisa grande se desenrola devagar, ainda meio dormindo, e vira a cabeça na direção da luz de vocês.<small class="regras-mecanica">Ela ainda não atacou. O grupo tem uma rodada para escolher entre recuar em silêncio, com todos passando em Furtividade na DT Padrão, ou lutar num terreno que não escolheu.</small></td></tr>
             <tr><td>4</td><td><strong>Perdidos.</strong> A marca de giz que vocês fizeram está ali. Só que está na parede errada, virada para o lado errado, e ninguém lembra de ter passado por esta sala. A tocha começa a parecer mais curta do que estava.<small class="regras-mecanica">Sobrevivência ou Investigação na DT Padrão reencontra o caminho. Na falha, o grupo perde uma hora e todos ganham 1 de Cansaço.</small></td></tr>
-            <tr><td>5</td><td><strong>A luz falha ou o ar pesa.</strong> As tochas começam a chiar como se alguém tivesse jogado água nelas, e a chama fica azulada e baixa. O ar ganha um cheiro doce de fruta passada, e a cabeça de todo mundo fica leve, lenta, distraída.<small class="regras-mecanica">Até resolverem, testes de Percepção têm desvantagem.</small></td></tr>
+            <tr><td>5</td><td><strong>A luz falha ou o ar pesa.</strong> As tochas chiam, e a chama fica azulada e baixa. O ar ganha um cheiro doce, e todo mundo fica tonto e distraído.<small class="regras-mecanica">Até resolverem, testes de Percepção têm desvantagem.</small></td></tr>
             <tr><td>6</td><td><strong>Rastros frescos.</strong> Na lama, pegadas largas com marca de garra, tão novas que a água ainda está escorrendo para dentro delas. Um galho quebrado na altura do ombro ainda solta seiva. Ela passou por aqui agorinha, e estava carregando alguma coisa pesada.<small class="regras-mecanica">Seguir leva ao covil e ao que ela guarda. Desviar custa meia hora.</small></td></tr>
             <tr><td>7</td><td><strong>Passagem tranquila.</strong> Por um tempo, nada. Só o som dos passos e da água pingando. Então a luz passa por uma inscrição riscada na pedra com pressa, ou por um esqueleto encostado na parede com o dedo apontando para o fundo do corredor.<small class="regras-mecanica">Pode não significar nada, ou pode significar tudo na próxima sala. Decida depois de ver como o grupo reage.</small></td></tr>
             <tr><td>8</td><td><strong>Outro grupo explorando.</strong> Vozes adiante, abafadas, e o brilho de uma lanterna que não é de vocês. Quatro pessoas com equipamento bom, sujas do mesmo pó, param no meio do salão e olham para vocês do mesmo jeito que vocês olham para elas: calculando.<small class="regras-mecanica">Aventureiros rivais, saqueadores ou uma expedição de facção. Ainda ninguém decidiu se vão ser aliados ou inimigos.</small></td></tr>
             <tr><td>9</td><td><strong>Depósito esquecido.</strong> Atrás de uma porta emperrada, uma sala pequena e seca, com prateleiras que ninguém toca há anos. Tem um cheiro bom de óleo velho e corda, e numa caixa de madeira, enrolado num pano, um frasco ainda lacrado.<small class="regras-mecanica">Suprimentos antigos ainda úteis: corda, óleo, uma ferramenta e uma poção comum.</small></td></tr>
             <tr><td>10</td><td><strong>Posição vantajosa.</strong> O corredor se abre num mirante sobre a sala de baixo, com uma mureta que parece feita para isso: quem está em cima vê tudo e quase não é visto. A porta do fundo tem uma tranca pesada, do lado de dentro.<small class="regras-mecanica">Se o próximo encontro acontecer aqui, os inimigos começam Surpreendidos.</small></td></tr>
-            <tr><td>11</td><td><strong>Pista importante.</strong> Um corpo antigo, encolhido num canto como quem se escondeu, ainda segura um diário contra o peito. A última página foi escrita com a mão tremendo, e responde, sem querer, uma pergunta que vocês vêm fazendo há dias.<small class="regras-mecanica">Responde uma pergunta que o grupo já fez e vale como descoberta menor em XP.</small></td></tr>
+            <tr><td>11</td><td><strong>Pista importante.</strong> Um corpo antigo, encolhido num canto, ainda segura um diário contra o peito. A última página, escrita com a mão tremendo, responde uma pergunta que vocês vêm fazendo há dias.<small class="regras-mecanica">Responde uma pergunta que o grupo já fez e vale como descoberta menor em XP.</small></td></tr>
             <tr><td>12</td><td><strong>Esconderijo intocado.</strong> Uma pedra solta na parede soa oca quando alguém encosta. Atrás dela, um relicário coberto de poeira fina, com o selo inteiro. Ninguém abriu isto em séculos, e quem guardou fez questão de que ninguém achasse.<small class="regras-mecanica">Dentro há um item de raridade escolhida por você, dentro das faixas que a campanha já liberou na Loja.</small></td></tr>
           </tbody>
         </table></div>
@@ -4450,15 +4450,15 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>2d6</th><th>Evento</th></tr></thead>
           <tbody>
-            <tr><td>2</td><td><strong>Ataque na madrugada.</strong> O fogo virou brasa. Quem está de vigia conta estrelas para não dormir, e é assim que percebe a coruja parando de piar no meio do canto. Um galho estala perto demais. Depois, todos de uma vez.<small class="regras-mecanica">Quem estava de vigia age normalmente. Quem dormia começa Surpreendido e sem tempo de vestir armadura. O descanso da noite cai para qualidade Péssima.</small></td></tr>
-            <tr><td>3</td><td><strong>Algo levou suprimentos.</strong> No meio da noite, um barulho de pano rasgando. Quando alguém acende a tocha, a bolsa de comida está aberta e vazia, e as marcas no chão entram no mato: pegadas pequenas, muitas, e um rastro de farinha feito migalha de conto de criança.<small class="regras-mecanica">Some a comida ou um item que não estava equipado. Ir atrás agora custa o resto da noite. O descanso cai para qualidade Ruim.</small></td></tr>
+            <tr><td>2</td><td><strong>Ataque na madrugada.</strong> O fogo virou brasa. Quem está de vigia percebe que a coruja parou de piar e que um galho estalou perto demais. Logo depois, o ataque.<small class="regras-mecanica">Quem estava de vigia age normalmente. Quem dormia começa Surpreendido e sem tempo de vestir armadura. O descanso da noite cai para qualidade Péssima.</small></td></tr>
+            <tr><td>3</td><td><strong>Algo levou suprimentos.</strong> No meio da noite, um barulho de pano rasgando. Quando alguém acende a tocha, a bolsa de comida está aberta e vazia, e as marcas no chão entram no mato: pegadas pequenas, muitas, e um rastro de farinha.<small class="regras-mecanica">Some a comida ou um item que não estava equipado. Ir atrás agora custa o resto da noite. O descanso cai para qualidade Ruim.</small></td></tr>
             <tr><td>4</td><td><strong>Pesadelo compartilhado.</strong> Dois de vocês acordam ao mesmo tempo, suados, com o coração disparado. Um começa a contar o sonho: uma porta vermelha, um corredor cheio de água, alguém chamando lá de trás. O outro termina a frase antes dele.<small class="regras-mecanica">Os dois testam Sanidade na DT Rotineira, com perda de 1d4 na falha. O sonho contém uma pista verdadeira.</small></td></tr>
             <tr><td>5</td><td><strong>Frio, chuva ou insetos.</strong> A garoa começa fina e não para. Entra pela lona, pela gola, pelo cobertor, e à meia-noite não sobra nenhuma parte seca no corpo de ninguém. Ou é um enxame de mosquitos que não deixa ninguém fechar os olhos.<small class="regras-mecanica">Ninguém dorme direito. O descanso cai uma qualidade.</small></td></tr>
             <tr><td>6</td><td><strong>Barulhos lá fora.</strong> A noite inteira alguma coisa anda em volta do acampamento, sempre no limite da luz do fogo. Um galho quebra à esquerda. Depois à direita. Uma respiração. Nunca chega perto, e nunca vai embora.<small class="regras-mecanica">Quem ficou de vigia termina com 1 de Cansaço, e ninguém descobre o que era.</small></td></tr>
-            <tr><td>7</td><td><strong>Noite comum.</strong> O fogo estala, alguém tira as botas com um suspiro, e o céu está tão limpo que aparecem estrelas que a cidade esconde. É o tipo de silêncio em que as pessoas acabam contando coisas.<small class="regras-mecanica">Pergunte a um jogador o que o personagem dele conta sobre o lugar onde cresceu.</small></td></tr>
+            <tr><td>7</td><td><strong>Noite comum.</strong> O fogo estala, alguém tira as botas com um suspiro, e o céu está tão limpo que aparecem estrelas que a cidade esconde. É uma boa noite para conversar.<small class="regras-mecanica">Pergunte a um jogador o que o personagem dele conta sobre o lugar onde cresceu.</small></td></tr>
             <tr><td>8</td><td><strong>Visita inofensiva.</strong> Uma raposa se senta no limite da luz e fica olhando o fogo, curiosa, sem medo nenhum. Ou um andarilho de barba branca pede licença para esquentar as mãos, conta uma história boa e vai embora antes do amanhecer sem que ninguém o veja sair.<small class="regras-mecanica">Nada mais acontece. Deixe a visita ser só o que ela é, ou use o andarilho para plantar um boato.</small></td></tr>
             <tr><td>9</td><td><strong>Lugar melhor do que parecia.</strong> O que parecia só uma pedra grande é a entrada de uma gruta seca, com chão de areia fina e um teto baixo que segura o calor do fogo. Lá fora a noite esfria, e aqui dentro dá para dormir de botas tiradas.<small class="regras-mecanica">O descanso sobe uma qualidade, até no máximo Boa.</small></td></tr>
-            <tr><td>10</td><td><strong>Céu limpo e silêncio.</strong> Nenhum vento, nenhum bicho, nenhum barulho além do fogo. O céu está tão claro que dá para ler pela luz das estrelas, e todo mundo dorme o sono pesado de quem não dormia assim fazia semanas.<small class="regras-mecanica">O descanso sobe uma qualidade, e todos tiram 1 de Cansaço a mais.</small></td></tr>
+            <tr><td>10</td><td><strong>Céu limpo e silêncio.</strong> Nenhum vento, nenhum bicho, nenhum barulho além do fogo. O céu está tão claro que dá para ler pela luz das estrelas, e todo mundo dorme como não dormia há semanas.<small class="regras-mecanica">O descanso sobe uma qualidade, e todos tiram 1 de Cansaço a mais.</small></td></tr>
             <tr><td>11</td><td><strong>Sonho útil.</strong> Um de vocês sonha com uma conversa de anos atrás, palavra por palavra. Acorda antes do sol com uma frase na cabeça, e só na hora de lavar o rosto entende o que ela tem a ver com o que vocês estão procurando.<small class="regras-mecanica">Esse personagem tem vantagem no primeiro teste de perícia do dia que envolva o objetivo atual.</small></td></tr>
             <tr><td>12</td><td><strong>Presença benevolente.</strong> De manhã, ao lado das brasas, alguém deixou pão ainda morno embrulhado num pano, curativos limpos dobrados com cuidado e, riscado na terra com um graveto, um aviso curto sobre o caminho de hoje. Ninguém viu ninguém chegar.<small class="regras-mecanica">O descanso da noite tem qualidade Maravilhosa.</small></td></tr>
           </tbody>
@@ -4471,15 +4471,15 @@ ${HTML_DEVOCAO}
           <thead><tr><th>2d6</th><th>Evento</th></tr></thead>
           <tbody>
             <tr><td>2</td><td><strong>Reforços inimigos.</strong> Um assobio agudo do lado de trás, onde ninguém estava olhando, e o som de botas descendo a escada. Os inimigos que já estavam lutando sorriem pela primeira vez.<small class="regras-mecanica">Chegam metade do número de inimigos do começo da luta, ou um único inimigo forte, pelo lado que ninguém vigiava.</small></td></tr>
-            <tr><td>3</td><td><strong>O cenário cede.</strong> Um estalo longo debaixo dos pés, como gelo de lago em fim de inverno. Uma rachadura corre de parede a parede, ou o fogo pula da tapeçaria para as vigas, ou a água sobe até os joelhos em segundos.<small class="regras-mecanica">Uma área do campo vira terreno perigoso, e quem terminar o turno nela testa Reflexos na DT Padrão ou fica Caído.</small></td></tr>
+            <tr><td>3</td><td><strong>O cenário cede.</strong> Um estalo longo debaixo dos pés. Uma rachadura corre de parede a parede, ou o fogo pula da tapeçaria para as vigas, ou a água sobe até os joelhos em segundos.<small class="regras-mecanica">Uma área do campo vira terreno perigoso, e quem terminar o turno nela testa Reflexos na DT Padrão ou fica Caído.</small></td></tr>
             <tr><td>4</td><td><strong>A arma falha.</strong> No meio do golpe, o cabo gira na mão suada, ou a corda do arco arrebenta com um estalo que corta o dedo, ou o mecanismo trava com um clique seco na pior hora possível.<small class="regras-mecanica">O jogador que rolou escolhe de quem é a arma, e esse personagem gasta a ação de movimento para recuperá-la.</small></td></tr>
             <tr><td>5</td><td><strong>O inimigo muda de tática.</strong> O líder deles grita uma palavra curta, e o combate muda de forma na hora. Todos passam a olhar para o mesmo alvo: quem está sangrando mais. Ou um deles agarra a coisa que vocês vieram buscar e corre para a janela.<small class="regras-mecanica">Passam a focar quem está mais ferido, ou tentam fugir levando algo importante.</small></td></tr>
             <tr><td>6</td><td><strong>A visão cai.</strong> Um barril de óleo tomba, alguém derruba o candelabro, e em dois segundos a sala se enche de uma fumaça grossa que arde nos olhos. As silhuetas viram manchas, e quem atira de longe não sabe mais em quem está mirando.<small class="regras-mecanica">Ataques à distância têm desvantagem até o fim da próxima rodada.</small></td></tr>
-            <tr><td>7</td><td><strong>O campo continua igual.</strong> Por um instante a luta respira. Todo mundo ofegante, se medindo. É nesse segundo que alguém repara no lustre de ferro pendurado por uma corda só, no barril de óleo encostado na porta, na alavanca enferrujada na parede.<small class="regras-mecanica">Descreva um detalhe do cenário que alguém pode usar na próxima rodada.</small></td></tr>
+            <tr><td>7</td><td><strong>O campo continua igual.</strong> A luta para por um instante, com todo mundo ofegante. Nessa pausa, alguém repara no lustre de ferro pendurado por uma corda só, no barril de óleo encostado na porta, na alavanca enferrujada na parede.<small class="regras-mecanica">Descreva um detalhe do cenário que alguém pode usar na próxima rodada.</small></td></tr>
             <tr><td>8</td><td><strong>Um inimigo hesita.</strong> O mais novo deles para no meio do avanço. Olha para os companheiros caídos, olha para a porta, e a ponta da espada abaixa um pouco, sem que ele mesmo perceba.<small class="regras-mecanica">Com uma ação padrão e Intimidação ou Diplomacia na DT Padrão, ele larga a arma e sai da luta.</small></td></tr>
             <tr><td>9</td><td><strong>O terreno ajuda.</strong> Um golpe errado acerta a coluna, e metade da parede desaba levantando poeira, deixando um monte de pedra na altura do peito, perfeito para se abrigar. Ou uma porta trancada cede com o impacto e abre uma saída.<small class="regras-mecanica">Uma parede cai e vira cobertura, uma passagem se abre ou uma plataforma fica ao alcance.</small></td></tr>
             <tr><td>10</td><td><strong>Aliado inesperado.</strong> Um grito de guerra que não é de nenhum dos lados. Na porta, sem fôlego e de espada na mão, está alguém que vocês ajudaram muito tempo atrás, ou um guarda atraído pelo barulho, ou uma criatura que odeia esses inimigos mais do que odeia vocês.<small class="regras-mecanica">Ele age uma vez nesta rodada, na última posição da Iniciativa.</small></td></tr>
-            <tr><td>11</td><td><strong>Abertura.</strong> O inimigo principal gira rápido demais para acompanhar um golpe e deixa o flanco inteiro aberto por um segundo. Todo mundo que já lutou alguma vez na vida vê. Ele também vê, e o rosto dele mostra.<small class="regras-mecanica">O inimigo principal fica Exposto até o começo do próximo turno dele.</small></td></tr>
+            <tr><td>11</td><td><strong>Abertura.</strong> O inimigo principal gira rápido demais para acompanhar um golpe e deixa o flanco inteiro aberto por um segundo. Todo mundo percebe, e ele também.<small class="regras-mecanica">O inimigo principal fica Exposto até o começo do próximo turno dele.</small></td></tr>
             <tr><td>12</td><td><strong>Virada.</strong> O chefe pisa numa poça de sangue, o pé escorrega meio palmo, e a guarda cai. Ou ele solta um grito de dor que revela, finalmente, onde a armadura não protege.<small class="regras-mecanica">O próximo ataque contra ele tem vantagem e causa +1 dado da arma no dano.</small></td></tr>
           </tbody>
         </table></div>
@@ -4492,28 +4492,28 @@ ${HTML_DEVOCAO}
           <thead><tr><th>2d6</th><th>Evento</th></tr></thead>
           <tbody>
             <tr><td>2</td><td><strong>Ruptura.</strong> O ar se rasga com um barulho de pano velho. Por alguns segundos existe um corte no meio da sala, e do outro lado dá para ver um lugar que não deveria estar ali. Alguma coisa atravessa antes de o corte fechar, e parece tão assustada quanto vocês.<small class="regras-mecanica">Todos testam Sanidade na DT Difícil, com perda de 1d8 na falha, e a criatura que passou está confusa e hostil.</small></td></tr>
-            <tr><td>3</td><td><strong>A Mana azeda.</strong> Quem conjura sente primeiro um gosto amargo no fundo da língua, depois um peso atrás dos olhos. A Mana sai rasgando, como água passando por um cano enferrujado.<small class="regras-mecanica">Até o fim da cena, toda conjuração custa 2 de Mana a mais.</small></td></tr>
-            <tr><td>4</td><td><strong>A magia escapa.</strong> A magia sai da mão de quem conjura e hesita no ar, como um cachorro que não sabe qual dono seguir. Depois escolhe, sozinha, um segundo caminho.<small class="regras-mecanica">A próxima magia conjurada atinge também um alvo extra ao alcance, escolhido por você, seja aliado ou inimigo.</small></td></tr>
+            <tr><td>3</td><td><strong>A Mana azeda.</strong> Quem conjura sente primeiro um gosto amargo no fundo da língua, depois um peso atrás dos olhos. A Mana sai com esforço, e cada magia pesa mais.<small class="regras-mecanica">Até o fim da cena, toda conjuração custa 2 de Mana a mais.</small></td></tr>
+            <tr><td>4</td><td><strong>A magia escapa.</strong> A magia sai da mão de quem conjura, hesita no ar e se divide, procurando um segundo alvo por conta própria.<small class="regras-mecanica">A próxima magia conjurada atinge também um alvo extra ao alcance, escolhido por você, seja aliado ou inimigo.</small></td></tr>
             <tr><td>5</td><td><strong>O tempo escorrega.</strong> A vela que vocês acenderam ao entrar já virou um toco. A barba de alguém cresceu. Quando saem, o sol está no lugar errado do céu, e o pão na mochila endureceu.<small class="regras-mecanica">Quando o grupo sai do lugar, descobre que passou um dia inteiro lá dentro.</small></td></tr>
             <tr><td>6</td><td><strong>Sussurros.</strong> Quem tem Mana começa a ouvir vozes baixas, logo atrás da orelha, dizendo coisas verdadeiras e sem importância: a cor da primeira casa, o nome de um cachorro antigo. Até que uma delas, no mesmo tom, diz algo que importa.<small class="regras-mecanica">Só quem tem Mana escuta. Decida qual verdade útil vem por último.</small></td></tr>
             <tr><td>7</td><td><strong>Brilho no ar.</strong> Pontinhos de luz sobem do chão como poeira num raio de sol. Uma moeda flutua um palmo acima da mão de alguém, gira devagar e cai de volta. É bonito, e ninguém sabe se deveria ter medo.<small class="regras-mecanica">Nenhum efeito, por enquanto.</small></td></tr>
-            <tr><td>8</td><td><strong>Cena fantasma.</strong> O lugar lembra de si mesmo. Pessoas translúcidas atravessam a sala fazendo o que faziam no último dia: uma mulher põe a mesa, uma criança corre, alguém olha pela janela esperando uma coisa que nunca chegou. Nenhuma delas vê vocês.<small class="regras-mecanica">A lembrança mostra o último dia do lugar e pode esconder uma pista.</small></td></tr>
-            <tr><td>9</td><td><strong>Fonte de Mana.</strong> Num canto da sala, o ar tremula como em cima de estrada quente, e quem se aproxima sente um formigamento bom subindo pelos braços, parecido com voltar para casa depois de muito tempo fora.<small class="regras-mecanica">Cada personagem que conjurar aqui nesta cena recupera 1d6 de Mana, uma vez.</small></td></tr>
-            <tr><td>10</td><td><strong>Clareza.</strong> Por um momento, tudo faz sentido. Os desenhos no chão, as marcas na parede, o jeito como a luz se dobra. Quem estuda o Fluxo sente a cabeça limpa como água de nascente.<small class="regras-mecanica">Testes de Misticismo e Ressonância têm vantagem nesta cena, e quem estudar o lugar descobre de onde vem a instabilidade.</small></td></tr>
-            <tr><td>11</td><td><strong>O Fluxo favorece o grupo.</strong> O Fluxo do lugar se inclina na direção de vocês, como uma plateia que escolheu para quem torcer. As magias saem leves, quase sozinhas, com um calor gostoso na ponta dos dedos.<small class="regras-mecanica">A próxima magia de cada personagem custa 2 de Mana a menos, com mínimo de 1.</small></td></tr>
-            <tr><td>12</td><td><strong>Presente do lugar.</strong> Quando a instabilidade finalmente se acalma, alguma coisa fica para trás no chão, brilhando fraco: um cristal pequeno, morno ao toque, que pulsa no mesmo ritmo do coração de quem o segura. Ou uma voz, uma única vez, responde clara a uma pergunta.<small class="regras-mecanica">Um material especial do catálogo de Materiais, dentro das faixas que a campanha liberou, ou uma resposta direta e verdadeira a uma pergunta sobre o Fluxo.</small></td></tr>
+            <tr><td>8</td><td><strong>Cena fantasma.</strong> Pessoas translúcidas atravessam a sala fazendo o que faziam no último dia: uma mulher põe a mesa, uma criança corre, alguém olha pela janela esperando uma coisa que nunca chegou. Nenhuma delas vê vocês.<small class="regras-mecanica">A lembrança mostra o último dia do lugar e pode esconder uma pista.</small></td></tr>
+            <tr><td>9</td><td><strong>Fonte de Mana.</strong> Num canto da sala, o ar tremula como em cima de estrada quente, e quem se aproxima sente um formigamento bom subindo pelos braços.<small class="regras-mecanica">Cada personagem que conjurar aqui nesta cena recupera 1d6 de Mana, uma vez.</small></td></tr>
+            <tr><td>10</td><td><strong>Clareza.</strong> Por um momento, tudo faz sentido. Os desenhos no chão, as marcas na parede, o jeito como a luz se dobra. Quem estuda o Fluxo sente a cabeça clara.<small class="regras-mecanica">Testes de Misticismo e Ressonância têm vantagem nesta cena, e quem estudar o lugar descobre de onde vem a instabilidade.</small></td></tr>
+            <tr><td>11</td><td><strong>O Fluxo favorece o grupo.</strong> O Fluxo do lugar passa a ajudar o grupo. As magias saem fáceis, quase sozinhas.<small class="regras-mecanica">A próxima magia de cada personagem custa 2 de Mana a menos, com mínimo de 1.</small></td></tr>
+            <tr><td>12</td><td><strong>Presente do lugar.</strong> Quando a instabilidade finalmente se acalma, alguma coisa fica para trás no chão, brilhando fraco: um cristal pequeno e morno ao toque. Ou uma voz, uma única vez, responde clara a uma pergunta.<small class="regras-mecanica">Um material especial do catálogo de Materiais, dentro das faixas que a campanha liberou, ou uma resposta direta e verdadeira a uma pergunta sobre o Fluxo.</small></td></tr>
           </tbody>
         </table></div>
       </details>
 
       <h3 class="regras-subtitle">Um NPC na hora</h3>
       <p>O grupo puxa conversa com quem está atrás do balcão, e essa pessoa precisa existir em dez segundos. Role um nome, quem ela é, o que quer agora e o que esconde. São quatro rolagens, e o resultado já dá para interpretar. A atitude sai de 2d6 depois que ela souber com quem está falando.</p>
-      <p>Um NPC fica de pé quando parece ter uma vida que continua depois que o grupo vai embora. Ninguém estava esperando por vocês: a pessoa estava no meio de alguma coisa quando a porta abriu.</p>
+      <p>Um NPC parece real quando tem uma vida própria. Quando o grupo chega, a pessoa já estava no meio de alguma coisa.</p>
       <ul class="regras-list">
         <li><strong>Comece pelas mãos.</strong> Diga o que ela está fazendo quando o grupo chega: contando moedas, remendando uma rede, tirando uma farpa do dedo. É o jeito mais rápido de mostrar que ela tem vida própria.</li>
         <li><strong>Fale com a voz dela.</strong> Use a fala pronta da tabela como primeira frase e siga dali. Falar como o NPC funciona melhor do que descrever o que ele diz.</li>
         <li><strong>Só role o que a cena vai usar.</strong> Para quem vende uma corda, nome e jeito bastam.</li>
-        <li><strong>O segredo quase nunca sai nessa conversa.</strong> Ele existe para você saber por que a pessoa desconversa. A linha "Deixa escapar" traz o sinal pequeno que denuncia o segredo para quem prestar atenção, e é essa atenção que o jogador merece ver recompensada.</li>
+        <li><strong>O segredo quase nunca sai nessa conversa.</strong> Ele existe para você saber por que a pessoa desconversa. A linha "Deixa escapar" traz o sinal pequeno que denuncia o segredo para quem prestar atenção, e quem repara merece ser recompensado.</li>
         <li><strong>Se o NPC ganhar a mesa, anote e traga de volta.</strong> Um NPC que volta lembrando do que o grupo disse da última vez costuma marcar mais do que vários NPCs novos.</li>
       </ul>
 
@@ -4525,7 +4525,7 @@ ${HTML_DEVOCAO}
           <li><strong>Dura e antiga:</strong> consoante forte e um sobrenome ganho em vida, por ofício, por feito ou por vexame.</li>
           <li><strong>Longa e cantada:</strong> vogal aberta e um lugar no lugar do sobrenome, de quem se apresenta pela água ou pela árvore de onde veio.</li>
           <li><strong>Curta e áspera:</strong> apelido que pegou, quase sempre dado por outra pessoa e usado com orgulho.</li>
-          <li><strong>Nobre e velha:</strong> título antes do nome e uma casa depois dele. Quem tem pressa de dizer o nome inteiro ainda não é tão nobre assim.</li>
+          <li><strong>Nobre e velha:</strong> título antes do nome e uma casa depois dele.</li>
           <li><strong>Sem origem:</strong> um nome que é função, lembrança ou hora do dia, porque ninguém deu um nome de verdade, ou porque o de verdade se perdeu.</li>
         </ul>
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
@@ -4566,7 +4566,7 @@ ${HTML_DEVOCAO}
         <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
           <thead><tr><th>1d12</th><th>Quem é</th><th>O jeito, e uma fala</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td><strong>Taverneira que também empresta dinheiro.</strong> Conhece a dívida de metade da rua pelo nome, e serve a dose mais forte para quem deve mais.</td><td>Enxuga o mesmo copo o tempo inteiro e fala olhando para as mãos de quem chega, nunca para o rosto, como quem avalia anel e calo.<small class="regras-mecanica"><strong>Fala:</strong> “Primeira dose é por conta da casa. A segunda a gente conversa.”</small></td></tr>
+            <tr><td>1</td><td><strong>Taverneira que também empresta dinheiro.</strong> Conhece a dívida de metade da rua pelo nome, e serve a dose mais forte para quem deve mais.</td><td>Enxuga o mesmo copo o tempo inteiro e fala olhando para as mãos de quem chega, nunca para o rosto.<small class="regras-mecanica"><strong>Fala:</strong> “Primeira dose é por conta da casa. A segunda a gente conversa.”</small></td></tr>
             <tr><td>2</td><td><strong>Guarda de portão no fim do turno.</strong> Doze horas em pé, botas encharcadas, e ainda falta uma hora até alguém vir render.</td><td>Repete devagar a última palavra de quem fala com ele e boceja no meio das próprias frases.<small class="regras-mecanica"><strong>Fala:</strong> “Negócios. Sei. Negócios de que tipo?”</small></td></tr>
             <tr><td>3</td><td><strong>Escriba de guilda, contratada por semana.</strong> Tinta nos dedos, óculos remendados com linha e uma pilha de documentos que não são dela para cuidar.</td><td>Ri baixinho antes de dar qualquer notícia ruim, e o riso fica mais nervoso quanto pior é a notícia.<small class="regras-mecanica"><strong>Fala:</strong> “Tem uma coisinha engraçada sobre o registro de vocês.”</small></td></tr>
             <tr><td>4</td><td><strong>Caçador que conhece a mata inteira.</strong> Passa mais tempo fora de casa do que dentro, e conversa melhor com cachorro do que com gente.</td><td>Cheira o ar antes de responder qualquer pergunta e não explica por quê. Às vezes, depois de cheirar, muda a resposta.<small class="regras-mecanica"><strong>Fala:</strong> “Amanhã chove. E não vai ser água boa.”</small></td></tr>
@@ -4576,7 +4576,7 @@ ${HTML_DEVOCAO}
             <tr><td>8</td><td><strong>Mercadora de rota, só de passagem.</strong> Três cidades por mês, uma carroça cheia e nenhum endereço fixo há onze anos.</td><td>Transforma qualquer assunto em preço. Pergunte do tempo e ela conta quanto a chuva vai encarecer o sal.<small class="regras-mecanica"><strong>Fala:</strong> “Tudo tem preço. Até essa pergunta, mas essa eu faço de graça.”</small></td></tr>
             <tr><td>9</td><td><strong>Estudioso do Fluxo, de reputação duvidosa.</strong> Foi expulso de uma academia por causa de um experimento que ele ainda jura que teria dado certo.</td><td>Corrige os outros com carinho, com a mão no ombro, e não percebe o quanto irrita. Anota tudo o que o grupo diz num caderno.<small class="regras-mecanica"><strong>Fala:</strong> “Na verdade, tecnicamente, isso que vocês chamam de magia é...”</small></td></tr>
             <tr><td>10</td><td><strong>Cobradora de dívida de alguém maior.</strong> Nunca levanta a voz, nunca carrega arma à vista e nunca volta de mão vazia.</td><td>Educada demais, com sorriso de funcionária, e nunca pisca primeiro. Sabe o nome de todo mundo antes de ser apresentada.<small class="regras-mecanica"><strong>Fala:</strong> “Não estou aqui por vocês. Ainda.”</small></td></tr>
-            <tr><td>11</td><td><strong>Sacerdote de um templo quase vazio.</strong> Varre um templo em que ninguém entra há meses, e ainda acende todas as velas toda noite.</td><td>Toca no braço de quem está falando com ele, com uma ternura que desarma, e escuta muito mais do que fala.<small class="regras-mecanica"><strong>Fala:</strong> “Faz tempo que alguém entra aqui. Vocês vieram pedir alguma coisa, ou só descansar?”</small></td></tr>
+            <tr><td>11</td><td><strong>Sacerdote de um templo quase vazio.</strong> Varre um templo em que ninguém entra há meses, e ainda acende todas as velas toda noite.</td><td>Toca no braço de quem está falando com ele, com carinho, e escuta muito mais do que fala.<small class="regras-mecanica"><strong>Fala:</strong> “Faz tempo que alguém entra aqui. Vocês vieram pedir alguma coisa, ou só descansar?”</small></td></tr>
             <tr><td>12</td><td><strong>Ladra que hoje trabalha de honesta.</strong> Largou o ofício faz um ano, e ainda repara em todas as bolsas mal fechadas da rua.</td><td>Conta uma história própria sem ninguém pedir, cheia de detalhe, sempre com um final bom demais para ser verdade.<small class="regras-mecanica"><strong>Fala:</strong> “Eu? Eu só vendo fita. Olha que fita bonita.”</small></td></tr>
           </tbody>
         </table></div>
@@ -4634,7 +4634,7 @@ ${HTML_DEVOCAO}
         <li><strong>O boato vem na voz de alguém.</strong> Faça a voz. Uma lavadeira desconfiada e um engenheiro com as mãos tremendo contam a mesma cidade de jeitos diferentes, e é esse jeito que a mesa lembra.</li>
         <li><strong>A coluna do fundo de verdade é só sua.</strong> Entregue o boato inteiro e guarde o resto para quando alguém for atrás. Embaixo de cada verdade há um gancho pronto, se o grupo quiser transformar o boato em aventura.</li>
         <li><strong>Cobre barato.</strong> Uma bebida paga, um favor pequeno ou um dia gasto na cidade, pela regra de Tempo Entre Aventuras. Boato não deveria exigir teste.</li>
-        <li><strong>Boato falso ainda serve.</strong> Ele mostra o que aquela gente teme, e medo de uma cidade inteira é informação verdadeira sobre a cidade.</li>
+        <li><strong>Boato falso ainda serve.</strong> Ele mostra o que aquela gente teme, e isso já diz muito sobre a cidade.</li>
         <li><strong>Anote o que foi dito.</strong> Se o grupo investir uma sessão atrás de um boato, ele merece virar cena, mesmo quando a resposta for que a história não era bem aquela.</li>
         <li>Dois boatos por cidade bastam. O terceiro em diante vira lista, e a mesa para de ouvir.</li>
       </ul>
@@ -4647,7 +4647,7 @@ ${HTML_DEVOCAO}
             <tr><td>1</td><td>“Quem dorme perto de um Galho de Gênese acorda lembrando de uma vida que não viveu”, conta a dona da estalagem. Ela jura que passou uma semana inteira acordando capaz de tocar um instrumento que nunca tinha visto.</td><td>Acontece. O sonho é uma possibilidade que a Árvore abriu e ninguém pegou, oferecida a quem estiver dormindo por perto.<small class="regras-mecanica"><strong>Gancho:</strong> alguém do grupo acorda sabendo uma coisa útil, e não consegue dizer de onde veio.</small></td></tr>
             <tr><td>2</td><td>Os carroceiros juram que, onde no ano passado só havia pasto, agora tem uma aldeia inteira, com cachorro, horta e sino, e que ninguém lá dentro sabe dizer há quanto tempo mora ali.</td><td>Verdade. A aldeia nasceu sem supervisão, com lembranças que parecem de verdade e não vêm de lugar nenhum.<small class="regras-mecanica"><strong>Gancho:</strong> os moradores começaram a perceber, e estão com medo do que isso diz sobre eles.</small></td></tr>
             <tr><td>3</td><td>Uma criança de rua garante que em Întuneric existe uma porta que devolve a pessoa como ela era aos dez anos. Ela conhece alguém que conhece alguém que passou.</td><td>A porta existe. O que volta por ela tem dez anos, o rosto certo e as lembranças certas, e nunca foi aquela pessoa.<small class="regras-mecanica"><strong>Gancho:</strong> uma família recebeu de volta um filho perdido, e não quer ouvir o que o grupo tem a dizer.</small></td></tr>
-            <tr><td>4</td><td>No mercado de gado, um vaqueiro cobra uma moeda de quem quer ver o bezerro que nasceu com dois corações, depois de a mãe beber de uma poça no pasto.</td><td>Verdade. Água de Origem nunca pergunta se aquilo é uma boa ideia antes de começar alguma coisa.<small class="regras-mecanica"><strong>Gancho:</strong> a poça continua lá, e alguém começou a vender aquela água em garrafas.</small></td></tr>
+            <tr><td>4</td><td>No mercado de gado, um vaqueiro cobra uma moeda de quem quer ver o bezerro que nasceu com dois corações, depois de a mãe beber de uma poça no pasto.</td><td>Verdade. Água de Origem faz coisas novas começarem, sem medir se é uma boa ideia.<small class="regras-mecanica"><strong>Gancho:</strong> a poça continua lá, e alguém começou a vender aquela água em garrafas.</small></td></tr>
             <tr><td>5</td><td>“Quem chega em Realidade 0 chega cedo demais, e volta velho”, diz um viajante de cabelo todo branco e rosto de quem não tem trinta anos.</td><td>Boato falso. O viajante envelheceu por um motivo bem menos bonito, e prefere a história que conta.<small class="regras-mecanica"><strong>Gancho:</strong> o motivo verdadeiro continua atrás dele, e acabou de chegar na cidade.</small></td></tr>
             <tr><td>6</td><td>Na porta de um templo vazio, uma devota de joelhos gastos conta que reza para Aethel há quarenta anos e nunca ouviu nada de volta. Ela diz isso sem raiva nenhuma.</td><td>Verdade. Gênese abre a primeira brecha para que alguma coisa exista, e o que vem depois nunca foi assunto dela.<small class="regras-mecanica"><strong>Gancho:</strong> a devota quer que alguém lhe mostre, com alguma prova, se valeu a pena.</small></td></tr>
           </tbody>
@@ -4662,7 +4662,7 @@ ${HTML_DEVOCAO}
             <tr><td>1</td><td>“Tem uma sala onde você diz o próprio nome em voz alta, e ele para de servir”, sussurra um escriba, olhando para os lados como quem já disse o dele uma vez.</td><td>É a Sala dos Nomes. O nome some da boca de quem o diz, e ninguém garante o que passa a responder no lugar dele.<small class="regras-mecanica"><strong>Gancho:</strong> o escriba perdeu o nome e quer de volta. Ele assina tudo com uma cruz.</small></td></tr>
             <tr><td>2</td><td>A vizinha do mercador de tecidos garante que ele é outra pessoa desde o inverno. Mesma cara, mesmo nome, mesmo jeito de contar moeda. “Só que o cachorro dele não entra mais em casa.”</td><td>O nome ficou no lugar. Quem usava o nome foi embora, e o que ficou aprendeu depressa.<small class="regras-mecanica"><strong>Gancho:</strong> o mercador verdadeiro está em algum lugar, sem nome, tentando voltar para casa.</small></td></tr>
             <tr><td>3</td><td>Uma faxineira velha do palácio conta que os espelhos de Alétheia mostravam a pessoa como ela é, sem roupa nem título, e que por isso quebraram todos numa única noite.</td><td>Os espelhos existiram. Foram quebrados por ordem de alguém com um título grande demais para proteger, e um deles sobrou.<small class="regras-mecanica"><strong>Gancho:</strong> o último espelho está à venda, e o dono atual evita passar na frente dele.</small></td></tr>
-            <tr><td>4</td><td>“Quem jura falso perto de um Galho de Alétheia perde a voz por um dia inteiro”, avisa o juiz da vila, muito sério, antes de cada audiência.</td><td>Mentira útil. Meia cidade acredita, e meia cidade mente menos. O juiz sabe muito bem disso.<small class="regras-mecanica"><strong>Gancho:</strong> um réu pediu para ser julgado ao lado do Galho, e ninguém entende por que ele está tão tranquilo.</small></td></tr>
+            <tr><td>4</td><td>“Quem jura falso perto de um Galho de Alétheia perde a voz por um dia inteiro”, avisa o juiz da vila, muito sério, antes de cada audiência.</td><td>Mentira útil: como metade da cidade acredita, as pessoas mentem menos. O juiz sabe disso.<small class="regras-mecanica"><strong>Gancho:</strong> um réu pediu para ser julgado ao lado do Galho, e ninguém entende por que ele está tão tranquilo.</small></td></tr>
             <tr><td>5</td><td>Um estudante de bolsos vazios oferece, por pouco, a notícia de que existe um livro com o nome verdadeiro de cada Deidade, guardado em algum canto de Anámnesis.</td><td>O livro existe. Os nomes que ele traz já não servem para chamar ninguém, e mesmo assim tem gente disposta a matar por ele.<small class="regras-mecanica"><strong>Gancho:</strong> o estudante sabe onde o livro está porque foi ele quem arrancou a última página.</small></td></tr>
             <tr><td>6</td><td>Num bar de sábios, depois do terceiro copo, alguém sempre diz que Ousias parou porque descobriu uma verdade sobre si mesmo e não aguentou.</td><td>Ninguém confirmou nada disso. A história volta sempre, e há quem pague muito bem por uma confirmação.<small class="regras-mecanica"><strong>Gancho:</strong> um colecionador oferece uma fortuna por qualquer registro de antes da paralisação.</small></td></tr>
           </tbody>
@@ -4721,7 +4721,7 @@ ${HTML_DEVOCAO}
           <tbody>
             <tr><td>1</td><td>Um mineiro velho, com o pulmão chiando, garante que lá embaixo existem sete salões, um para cada elemento, e que todos estão abertos.</td><td>Os sete existem. Quantos estão abertos hoje é outra conversa, e de um deles vem barulho de porta batendo.<small class="regras-mecanica"><strong>Gancho:</strong> o mineiro sabe o caminho até o primeiro, e não quer ir sozinho de novo.</small></td></tr>
             <tr><td>2</td><td>Na feira, um pedreiro põe pedras de Baluarte na mão de quem passa e explica que cada pessoa sente um peso diferente. “Tem gente que não levanta nem uma pedrinha.”</td><td>Verdade, e há quem julgue o caráter das pessoas por essa balança, inclusive em tribunal.<small class="regras-mecanica"><strong>Gancho:</strong> um réu inocente não consegue levantar a pedra, e o julgamento é amanhã.</small></td></tr>
-            <tr><td>3</td><td>Os engenheiros de ponte falam baixo quando o assunto é o Alicerce: rachado desde antes de qualquer registro.</td><td>Verdade. É por isso que a Árvore segue de pé por inércia, e nada garante por quanto tempo.<small class="regras-mecanica"><strong>Gancho:</strong> a rachadura andou um dedo este ano, e alguém mandou abafar a medição.</small></td></tr>
+            <tr><td>3</td><td>Os engenheiros de ponte falam baixo quando o assunto é o Alicerce: rachado desde antes de qualquer registro.</td><td>Verdade. A Árvore segue de pé por inércia, e ninguém sabe por quanto tempo.<small class="regras-mecanica"><strong>Gancho:</strong> a rachadura andou um dedo este ano, e alguém mandou abafar a medição.</small></td></tr>
             <tr><td>4</td><td>Os cavadores de poço têm uma regra que passa de pai para filho: não cavar fundo demais, porque lá embaixo fica o começo do peso.</td><td>Alguma coisa há no fundo. O que falta é gente que tenha voltado para contar o que é.<small class="regras-mecanica"><strong>Gancho:</strong> um poço novo foi fundo demais, e a vila inteira está ficando pesada para andar.</small></td></tr>
             <tr><td>5</td><td>Um vendedor de armas oferece, pelo preço de uma casa, uma lâmina forjada com material dos Sete Salões que nunca perde o fio.</td><td>Perde o fio igual às outras, e amolar custa o preço de outra casa.<small class="regras-mecanica"><strong>Gancho:</strong> o vendedor não sabe que a lâmina é verdadeira, e o dono original quer de volta.</small></td></tr>
             <tr><td>6</td><td>Um peregrino diz que Moros nunca falou com ninguém. “Ele só carrega. Se falasse, teria que soltar alguma coisa.”</td><td>É o que consta, e ninguém apresentou prova em contrário.<small class="regras-mecanica"><strong>Gancho:</strong> uma seita acredita que ele vai falar, e está tentando tirar peso do mundo para ajudar.</small></td></tr>
@@ -4738,7 +4738,7 @@ ${HTML_DEVOCAO}
             <tr><td>2</td><td>Um menino cobra uma moeda para mostrar a porta do mercado que dá em outro reino e fecha de novo ao meio-dia.</td><td>A porta dá em outro lugar mesmo. O horário é invenção do menino, que cobra de quem chega atrasado.<small class="regras-mecanica"><strong>Gancho:</strong> alguém atravessou e não voltou, e o menino está com medo de contar.</small></td></tr>
             <tr><td>3</td><td>Os guias de travessia avisam, antes de cobrar: perto dos Vãos, a sombra da gente chega atrasada.</td><td>Verdade, e é o primeiro sinal de que a distância ali parou de conferir.<small class="regras-mecanica"><strong>Gancho:</strong> a sombra de um dos guias parou de chegar.</small></td></tr>
             <tr><td>4</td><td>Um contrabandista bêbado jura que existe um atalho entre Árvores que dispensa travessia paga.</td><td>Existe, e quem vive de cobrar travessia mata por falar dele em voz alta.<small class="regras-mecanica"><strong>Gancho:</strong> o contrabandista falou alto demais, e alguém já saiu atrás dele.</small></td></tr>
-            <tr><td>5</td><td>Os guias oficiais contam, com gosto, que quem atravessa sem guia chega dois dedos fora do próprio corpo.</td><td>Exagero vendido pelos próprios guias, que cobram pelo susto. O risco de verdade é outro, e bem mais quieto.<small class="regras-mecanica"><strong>Gancho:</strong> um viajante sem guia chegou inteiro e se recusa a dizer o que viu no meio do caminho.</small></td></tr>
+            <tr><td>5</td><td>Os guias oficiais contam, com gosto, que quem atravessa sem guia chega dois dedos fora do próprio corpo.</td><td>Exagero vendido pelos próprios guias, que cobram pelo susto. O risco de verdade é outro, e ninguém fala dele.<small class="regras-mecanica"><strong>Gancho:</strong> um viajante sem guia chegou inteiro e se recusa a dizer o que viu no meio do caminho.</small></td></tr>
             <tr><td>6</td><td>Os mais velhos dizem que Aperion segura todas as fronteiras sozinho, e está cansado.</td><td>Ninguém confirma. As fronteiras continuam cedendo de qualquer forma.<small class="regras-mecanica"><strong>Gancho:</strong> uma fronteira cedeu dentro de uma casa, e metade da sala agora fica em outro lugar.</small></td></tr>
           </tbody>
         </table></div>
@@ -4751,7 +4751,7 @@ ${HTML_DEVOCAO}
           <tbody>
             <tr><td>1</td><td>Os tropeiros da estrada velha avisam que ali o som chega depois da resposta. Você ouve alguém dizer “sim”, e só depois a pergunta.</td><td>Verdade. Quem se acostuma consegue ouvir o próprio nome antes de ser chamado, e alguns ouvem coisa pior.<small class="regras-mecanica"><strong>Gancho:</strong> um tropeiro ouviu um grito que ainda não aconteceu.</small></td></tr>
             <tr><td>2</td><td>Um poeta descreve, para quem pagar a bebida, um lugar onde a poeira fica parada no ar, como se esperasse autorização para cair.</td><td>É O Passo, e ele está exatamente onde dizem que está.<small class="regras-mecanica"><strong>Gancho:</strong> alguém deixou lá dentro uma carta parada no ar, endereçada a um dos personagens.</small></td></tr>
-            <tr><td>3</td><td>Em Sucessão, dizem, dá para comprar um dia a mais de vida.</td><td>O que se negocia ali é ritmo, e ritmo nunca esticou prazo de ninguém. Quem compra vive o mesmo tanto, só que mais devagar.<small class="regras-mecanica"><strong>Gancho:</strong> um nobre doente comprou ritmo, e agora vive um dia a cada semana dos outros.</small></td></tr>
+            <tr><td>3</td><td>Em Sucessão, dizem, dá para comprar um dia a mais de vida.</td><td>O que se negocia ali é o ritmo da vida. Quem compra vive o mesmo tanto, só que mais devagar.<small class="regras-mecanica"><strong>Gancho:</strong> um nobre doente comprou ritmo, e agora vive um dia a cada semana dos outros.</small></td></tr>
             <tr><td>4</td><td>Uma avó conta que o avô dela partiu numa marcha e voltou três gerações depois, igualzinho, e ainda procurou a esposa na porta de casa.</td><td>Está registrado, e os nomes conferem com a lista de partida. O resto do exército ainda não voltou.<small class="regras-mecanica"><strong>Gancho:</strong> o resto do exército está começando a chegar.</small></td></tr>
             <tr><td>5</td><td>Os monges de Éon ensinam às crianças que quem tenta desfazer um erro paga com um erro maior.</td><td>O que passou continua passado. O preço vem da tentativa, e ele é alto.<small class="regras-mecanica"><strong>Gancho:</strong> alguém tentou desfazer uma morte, e o preço começou a aparecer pela cidade.</small></td></tr>
             <tr><td>6</td><td>Nos templos, dizem que Chronus conta em voz alta os dias de cada pessoa.</td><td>História de templo, que serve para manter os fiéis pontuais.<small class="regras-mecanica"><strong>Gancho:</strong> um sacerdote jura que ouviu a contagem, e o número dele é baixo.</small></td></tr>
@@ -4780,7 +4780,7 @@ ${HTML_DEVOCAO}
           <thead><tr><th>1d6</th><th>O que se conta</th><th>O fundo de verdade</th></tr></thead>
           <tbody>
             <tr><td>1</td><td>Um arquivista aposentado diz que todo fim tem registro, e que o registro pode ser lido, se você souber pedir.</td><td>A Biblioteca Carmesim existe, e o acesso a ela é julgado antes. Quem pede errado é registrado também.<small class="regras-mecanica"><strong>Gancho:</strong> o grupo precisa ler o fim de alguém, e não tem nada para oferecer ao julgamento.</small></td></tr>
-            <tr><td>2</td><td>Os assassinos de aluguel têm medo de morrer por um motivo prático: dizem que o Tribunal julga quem chegou e também quem mandou a pessoa para lá.</td><td>Verdade, e é por isso que certos assassinos fazem de tudo para não morrer.<small class="regras-mecanica"><strong>Gancho:</strong> um assassino velho procura proteção, e paga bem por ela.</small></td></tr>
+            <tr><td>2</td><td>Os assassinos de aluguel têm medo de morrer por um motivo prático: dizem que o Tribunal julga quem chegou e também quem mandou a pessoa para lá.</td><td>Verdade. Por isso certos assassinos fazem de tudo para não morrer.<small class="regras-mecanica"><strong>Gancho:</strong> um assassino velho procura proteção, e paga bem por ela.</small></td></tr>
             <tr><td>3</td><td>Uma família de Arkarin recebe cartas de gente que já morreu, sempre no aniversário de cada um.</td><td>Recebe mesmo. A letra é de escriba do Castelo Carmesim, e o conteúdo é verdadeiro.<small class="regras-mecanica"><strong>Gancho:</strong> a última carta falava de um dos personagens.</small></td></tr>
             <tr><td>4</td><td>Os ambiciosos de Arkarin cochicham que quem chega vivo a Limiar sai de lá com um cargo.</td><td>Conversa de ambicioso. Alguns foram tentar, e ninguém voltou com cargo nenhum.<small class="regras-mecanica"><strong>Gancho:</strong> um deles voltou, sem cargo e sem memória de quem era.</small></td></tr>
             <tr><td>5</td><td>Parteiras e coveiros concordam num ponto: a Mulher Carmesim aparece quando alguém importante está para morrer.</td><td>O trabalho dela começa depois, quando já acabou. Quem a vê antes viu outra coisa usando a cor dela.<small class="regras-mecanica"><strong>Gancho:</strong> alguém anda se vestindo de carmesim e aparecendo em quartos de doentes.</small></td></tr>
@@ -4790,17 +4790,17 @@ ${HTML_DEVOCAO}
       </details>
 
       <h3 class="regras-subtitle">Relógios de pressão</h3>
-      <p>A página de descanso diz que o custo de parar vem do mundo continuar andando. O relógio é esse mundo andando na frente de todo mundo, onde dá para ver. Desenhe um círculo dividido em partes num papel no meio da mesa e diga em voz alta o que acontece quando ele fechar. Toda vez que o gatilho acontecer, pinte uma parte devagar, e deixe a mesa olhar você pintando.</p>
-      <p>O relógio assusta de verdade quando cada parte pintada aparece também na ficção. Diga o número, e logo depois mostre o que mudou no mundo: um guarda que olha para o corredor, uma vela que apaga sozinha, um padeiro que fecha mais cedo. Os oito relógios abaixo já trazem o que acontece em cada parte.</p>
+      <p>A página de descanso diz que o custo de parar vem do mundo continuar andando. O relógio mostra isso à vista de todos. Desenhe um círculo dividido em partes num papel no meio da mesa e diga em voz alta o que acontece quando ele fechar. Toda vez que o gatilho acontecer, pinte uma parte na frente da mesa.</p>
+      <p>O relógio funciona melhor quando cada parte pintada aparece também na ficção. Diga o número, e logo depois mostre o que mudou no mundo: um guarda que olha para o corredor, uma vela que apaga sozinha, um padeiro que fecha mais cedo. Os oito relógios abaixo já trazem o que acontece em cada parte.</p>
       <ul class="regras-list">
         <li><strong>Escolha o tamanho pelo fôlego da ameaça.</strong> Quatro partes para o que está quase acontecendo, seis para a pressão de uma sessão, oito para algo que atravessa o arco. Uma ameaça enorme e lenta continua tendo oito partes.</li>
         <li><strong>Anuncie o resultado antes de pintar a primeira parte.</strong> Relógio com destino secreto vira ameaça vaga, e a mesa não consegue decidir contra uma coisa que não conhece.</li>
         <li><strong>Pinte uma parte por gatilho declarado:</strong> uma falha em teste, uma hora gasta, barulho alto, um sucesso que você comprou com custo. Falha crítica pinta duas.</li>
         <li><strong>Relógio não esvazia sozinho.</strong> O grupo apaga uma parte com ação concreta no mundo: despistar a patrulha, quebrar o foco do ritual, subornar quem ia contar. Quando apagar, mostre isso também.</li>
         <li><strong>Deixe o relógio do grupo correndo ao lado do seu.</strong> Um marca quanto falta para eles conseguirem, o outro quanto falta para o mundo cobrar. Com os dois à vista, a mesa decide sozinha quando arriscar.</li>
-        <li><strong>Um relógio por cena, dois no máximo.</strong> Com três, a tensão vira contabilidade.</li>
+        <li><strong>Um relógio por cena, dois no máximo.</strong> Com três, fica difícil acompanhar.</li>
         <li>Morrendo já é um relógio pronto, com regra própria. Não desenhe outro por cima dele.</li>
-        <li>Num resultado 2 a 4 de qualquer tabela de evento aleatório, pintar uma parte do relógio ativo costuma ser a consequência mais elegante.</li>
+        <li>Num resultado 2 a 4 de qualquer tabela de evento aleatório, pintar uma parte do relógio ativo costuma ser uma boa consequência.</li>
       </ul>
 
       <details class="regras-details">
@@ -4846,7 +4846,7 @@ ${HTML_DEVOCAO}
           <li>O suor fica frio, e a boca ganha gosto de ferro.</li>
           <li>As cores parecem mais fortes do que deveriam, e a luz começa a incomodar.</li>
           <li>As mãos tremem o bastante para derrubar um copo.</li>
-          <li>Cada respiração parece ter que atravessar uma parede.</li>
+          <li>Respirar fica difícil.</li>
         </ol>
         <p class="regras-note"><strong>Ao fechar:</strong> A aflição sobe de estágio, pela regra de Venenos, Doenças e Vícios. Se ainda houver estágio acima, o relógio pode recomeçar.</p>
       </details>
@@ -4905,7 +4905,7 @@ ${HTML_DEVOCAO}
         <p class="regras-note"><strong>Ao fechar:</strong> Eles chegam, e chegam antes do que vinha atrás deles. Use junto com um relógio do mundo, de quatro ou seis partes, para decidir quem chega primeiro.</p>
       </details>
 
-      <p class="regras-note">Na Mesa ao Vivo, fale em voz alta quantas partes estão pintadas a cada mudança. O relógio só assusta enquanto todo mundo lembra exatamente em quanto ele está.</p>
+      <p class="regras-note">Na Mesa ao Vivo, fale em voz alta quantas partes estão pintadas a cada mudança. Assim todo mundo sabe em quanto ele está.</p>
 
       <h3 class="regras-subtitle">O ano da campanha</h3>
       <p>A contagem dos anos começa no Cataclismo do Ano Zero, e o último marco datado é Lionês, em 1.595. Cada mesa escolhe o próprio "agora": diga aos jogadores em que ano a campanha começa e use esse número em cartas, lápides e registros. Quem lançou a magia do Cataclismo, e o que ela queria, fica em segredo de propósito. Se a sua campanha for atrás disso, a resposta é sua.</p>
@@ -5018,12 +5018,12 @@ ${HTML_DEVOCAO}
       <p class="regras-note"><strong>Exemplo:</strong> anões numa Árvore onde Khazad não existe. O corpo diz que o ofício define cada um e que uma peça bem feita é herança. O Mestre rola Protetor no governo, Máquina primeiro no Fluxo, Enterrados com as ferramentas nos mortos, Escassez na comida, Prova de entrada nos estrangeiros e Torneio na festa. Em três frases: um povo de forjadores que segue quem segura longe uma ameaça antiga; guarda pouco para comer e muito para a forja, e enterra cada mestre com o próprio martelo; para ficar entre eles, o estrangeiro faz uma peça na frente de todo mundo, e o torneio do ano decide quem forja para o protetor.</p>
 
       <h3 class="regras-subtitle">Escrever as tabelas da sua campanha</h3>
-      <p>As tabelas deste guia servem para qualquer campanha, e é justamente por isso que elas são o começo. A melhor tabela é a que só existe na sua mesa: a que cita a facção que o grupo irritou, a taverna onde eles sempre param e o NPC que eles juraram nunca mais ver.</p>
+      <p>As tabelas deste guia servem para qualquer campanha, então são só um ponto de partida. A melhor tabela é a que só existe na sua mesa: a que cita a facção que o grupo irritou, a taverna onde eles sempre param e o NPC que eles juraram nunca mais ver.</p>
       <ul class="regras-list">
-        <li><strong>Troque o genérico pelo que a mesa já conhece.</strong> "Um viajante conta um boato" vira "Um desertor da guarda de Salém jura que o capitão que vocês humilharam está oferecendo recompensa". A estrutura é a mesma, e o peso é outro.</li>
+        <li><strong>Troque o genérico pelo que a mesa já conhece.</strong> "Um viajante conta um boato" vira "Um desertor da guarda de Salém jura que o capitão que vocês humilharam está oferecendo recompensa". A estrutura é a mesma, mas agora a linha mexe com o que o grupo fez.</li>
         <li><strong>Mantenha a forma da curva.</strong> O pior no 2, o melhor no 12, o comum no 7, e os contratempos e as oportunidades pequenas em volta dele.</li>
-        <li><strong>Toda linha pede uma decisão ou muda a situação.</strong> Evento que só tira Vida vira imposto, e a mesa esquece em cinco minutos. Evento que obriga a escolher vira história.</li>
-        <li><strong>Escreva a cena primeiro e a regra depois.</strong> Se a linha não tem uma imagem, ela vai ser lida como número, e ninguém na mesa vai sentir nada.</li>
+        <li><strong>Toda linha pede uma decisão ou muda a situação.</strong> Evento que só tira Vida é esquecido logo. Evento que obriga o grupo a escolher rende história.</li>
+        <li><strong>Escreva a cena primeiro e a regra depois.</strong> Sem uma imagem, a linha vira só um número na mesa.</li>
         <li><strong>Deixe o mundo se lembrar.</strong> Quando um resultado virar história de verdade, risque a linha e escreva outra no lugar, com a consequência dela. A caravana que o grupo salvou volta como a caravana que agora conhece o grupo.</li>
       </ul>
 
@@ -5046,7 +5046,7 @@ ${HTML_DEVOCAO}
         <li><strong>Feche a Vida do encontro inteiro.</strong> Encontro padrão aguenta o dano do grupo vezes 4,5. Use 3 para confronto curto e 6 para chefe resistente. Divida esse total entre os corpos que vão entrar.</li>
         <li><strong>Ajuste ataque e dano pelo papel</strong>, com a tabela abaixo. O dano vem escrito como fatia da Vida do alvo, porque é assim que ele continua valendo do nível 1 ao 40.</li>
         <li><strong>Conte as ações.</strong> As ações inimigas por rodada ficam entre 80% e 110% das ações relevantes do grupo. Quatro jogadores pedem de três a quatro ações do outro lado, venham elas de um corpo ou de cinco. O chefe que luta sozinho chega lá com o Ímpeto, em O chefe contra o grupo inteiro.</li>
-        <li><strong>Dê a ela uma decisão e um rosto.</strong> Uma reação, uma fase ou uma ação de cenário, e um detalhe físico que a mesa vá lembrar. Criatura que só tem Vida alta produz combate longo e parado, e criatura sem rosto vira um saco de Vida com nome esquisito. As duas tabelas logo abaixo ajudam nas duas coisas.</li>
+        <li><strong>Dê a ela uma decisão e um rosto.</strong> Uma reação, uma fase ou uma ação de cenário, e um detalhe físico que a mesa vá lembrar. Criatura que só tem Vida alta deixa o combate longo e parado, e sem um detalhe marcante ela não fica na memória de ninguém. As duas tabelas logo abaixo ajudam nas duas coisas.</li>
       </ol>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Papel</th><th>Fatia da Vida do encontro</th><th>Acerta o alvo apropriado</th><th>Dano por acerto</th></tr></thead>
@@ -5058,7 +5058,7 @@ ${HTML_DEVOCAO}
           <tr><td>Efeito de área</td><td>Não ocupa fatia</td><td>DT Padrão do nível</td><td>15% a 25% por alvo</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">A Vida do alvo apropriado é a da linha de frente para golpe físico, e a de quem fica atrás para a ameaça que pune posicionamento. Um golpe anunciado de chefe pode tirar metade da Vida de um personagem, e é justamente por isso que ele precisa ser anunciado na rodada anterior.</p>
+      <p class="regras-note">A Vida do alvo apropriado é a da linha de frente para golpe físico, e a de quem fica atrás para a ameaça que pune posicionamento. Um golpe anunciado de chefe pode tirar metade da Vida de um personagem, e por isso ele precisa ser anunciado na rodada anterior.</p>
 
       <h3 class="regras-subtitle">Criatura de qualquer VD</h3>
       <p>A conta é a mesma em todo VD: testes iguais ao ataque de um personagem do nível, Defesa igual ao ataque de um personagem do nível mais 6 (quem investe na perícia de combate acerta três vezes em quatro, e a Vida já conta com isso) e dano por acerto como fatia da Vida de um personagem, como na tabela de papéis. O golpe é o ataque de um personagem do nível e, do VD 15 em diante, soma o que a armadura típica dos personagens daquele nível tira dele: assim o inimigo padrão acerta perto de metade das vezes quem veste a armadura da sua faixa, e quem luta sem armadura sente o golpe inteiro. A Vida de cada papel é uma fatia da Vida de inimigo padrão do VD. A solo é a criatura que basta sozinha, como as do Bestiário, e vale 80% do encontro. Lacaio subtrai 4 do ataque, padrão subtrai 2 e chefe soma 2.</p>
@@ -5083,7 +5083,7 @@ ${HTML_DEVOCAO}
             <tr><td>4</td><td><strong>Fase: ela chama.</strong> Quando cai pela primeira vez, solta um uivo longo e desesperado. Longe, alguma coisa responde, e depois outra.<small class="regras-mecanica">Ao chegar à metade da Vida, anuncia reforços. Eles entram no começo da segunda rodada seguinte, pelo lado que o grupo não vigia.</small></td></tr>
             <tr><td>5</td><td><strong>Cenário: derrubar o teto.</strong> Ela bate com o corpo inteiro na coluna mais velha da sala. A pedra geme, e cai poeira nos ombros de todo mundo.<small class="regras-mecanica">Anuncia numa rodada. Na seguinte, a área em volta da coluna desaba: Reflexos na DT Padrão, ou sofre o dano de um ataque dela e fica Caído.</small></td></tr>
             <tr><td>6</td><td><strong>Cenário: apagar a luz.</strong> Ela engole a chama da tocha, ou quebra o lampião com um tapa, e por um instante só dá para ver os olhos dela.<small class="regras-mecanica">A sala fica escura até alguém gastar uma ação para reacender. Enquanto isso, ataques à distância têm desvantagem.</small></td></tr>
-            <tr><td>7</td><td><strong>Golpe anunciado.</strong> Ela recua dois passos, baixa a cabeça, e o corpo inteiro se enche de ar como um fole. Todo mundo na sala entende que o próximo golpe vai ser diferente.<small class="regras-mecanica">Anuncie na rodada anterior. Acerta de 40% a 50% da Vida do alvo, e quem sair da frente a tempo não sofre nada.</small></td></tr>
+            <tr><td>7</td><td><strong>Golpe anunciado.</strong> Ela recua dois passos, baixa a cabeça, e enche o corpo de ar. Todo mundo percebe que o próximo golpe vai ser mais forte.<small class="regras-mecanica">Anuncie na rodada anterior. Acerta de 40% a 50% da Vida do alvo, e quem sair da frente a tempo não sofre nada.</small></td></tr>
             <tr><td>8</td><td><strong>Fraqueza que se descobre.</strong> Toda vez que ouve uma certa canção, ou vê o próprio reflexo numa lâmina limpa, ela hesita por um instante.<small class="regras-mecanica">Percepção ou Conhecimento na DT Padrão revela a fraqueza em cena. Explorar tira a reação dela por uma rodada.</small></td></tr>
           </tbody>
         </table></div>
@@ -5114,7 +5114,7 @@ ${HTML_DEVOCAO}
         <li><strong>Dois filhotes, padrões, 45 de Vida cada.</strong> Somam os outros 90. Do tamanho de cachorros, rápidos, e sempre voltando para perto da mãe.</li>
         <li><strong>Três corpos, três ações por rodada.</strong> Se você quiser a quarta ação, tire 20 de Vida da Mãe e acrescente um filhote menor, como lacaio.</li>
         <li><strong>A decisão dela é puxar de volta.</strong> Quando alguém corre para a carroça, um braço de barro agarra o tornozelo e arrasta a pessoa de volta para a margem. Agora chegar às crianças custa alguma coisa.</li>
-        <li><strong>O rosto e o desejo.</strong> Ela protege os filhotes. Se um deles cair, ela para de lutar por uma rodada inteira para cobrir o corpo com a lama. É a janela que o grupo tem, e a cena que ninguém na mesa esquece.</li>
+        <li><strong>O rosto e o desejo.</strong> Ela protege os filhotes. Se um deles cair, ela para de lutar por uma rodada inteira para cobrir o corpo com a lama. É a chance do grupo.</li>
         <li><strong>O relógio.</strong> A carroça queima em três rodadas. O combate tem pressa, tem objetivo, e pode terminar com a caravana salva e a Mãe da Lama voltando para o rio.</li>
       </ul>
 
@@ -5122,9 +5122,9 @@ ${HTML_DEVOCAO}
       <ul class="regras-list">
         <li><strong>Confira o bloco de atributos.</strong> Criatura usa Força, Agilidade, Vigor, Presença e Intelecto, que é outro bloco, com outros nomes e outra escala. Copiar os seis atributos de uma ficha de jogador para um monstro é erro de ficha.</li>
         <li><strong>Escreva a primeira frase da aparição antes da segunda habilidade.</strong> Se você ainda não sabe como ela chega na cena, ainda não sabe quem ela é. A tabela "Uma criatura aparece", em Dar peso à cena, tem seis começos prontos.</li>
-        <li><strong>Deixe uma fraqueza para o grupo descobrir em cena.</strong> Descobrir é o que transforma o combate em conversa entre jogadores, e é a melhor sensação que um combate pode dar.</li>
-        <li><strong>Decida como ela sai da luta sem morrer.</strong> Fugir, se render, ser convencida, conseguir o que queria. Combate que só termina em morte tira da mesa a escolha mais interessante. Quando você não souber a hora, o teste de moral do Combate decide.</li>
-        <li><strong>Se faltar tempo,</strong> use a criatura do VD certo direto, da aba Sob medida ou da tabela acima: troque o nome, troque um ataque por algo que combine com a história, role uma decisão e um rosto nas tabelas acima. É uma ameaça pronta em três minutos, e com alma.</li>
+        <li><strong>Deixe uma fraqueza para o grupo descobrir em cena.</strong> Descobrir a fraqueza faz os jogadores conversarem e planejarem juntos.</li>
+        <li><strong>Decida como ela sai da luta sem morrer.</strong> Fugir, se render, ser convencida, conseguir o que queria. Se o combate só pode terminar em morte, o grupo perde uma escolha importante. Quando você não souber a hora, o teste de moral do Combate decide.</li>
+        <li><strong>Se faltar tempo,</strong> use a criatura do VD certo direto, da aba Sob medida ou da tabela acima: troque o nome, troque um ataque por algo que combine com a história, role uma decisão e um rosto nas tabelas acima. É uma ameaça pronta em três minutos.</li>
       </ul>
 
       <h3 class="regras-subtitle">O chefe contra o grupo inteiro</h3>
@@ -5168,7 +5168,7 @@ ${HTML_DEVOCAO}
         <li>Use um efeito por rodada, e nunca o mesmo em duas rodadas seguidas.</li>
         <li>O covil vale meia ação na conta do passo sete. Chefe com covil tem 1 ponto de Ímpeto a menos.</li>
         <li>O efeito nunca atinge o dono do covil. Atinge os capangas dele, e um grupo esperto usa isso.</li>
-        <li>Dê ao grupo um jeito de calar o covil: destruir o altar, abrir a comporta, apagar o braseiro. Calar o covil vira objetivo de cena, e o jogador que corre para lá enquanto os outros seguram o chefe tem a melhor rodada da noite.</li>
+        <li>Dê ao grupo um jeito de calar o covil: destruir o altar, abrir a comporta, apagar o braseiro. Calar o covil vira objetivo de cena, e quem corre para lá enquanto os outros seguram o chefe tem um papel importante na luta.</li>
       </ul>
       <details class="regras-details">
         <summary>Efeitos de covil <span class="regras-details-contagem">1d8</span></summary>
@@ -5178,7 +5178,7 @@ ${HTML_DEVOCAO}
           <tbody>
             <tr><td>1</td><td><strong>A água sobe.</strong> A água entra pelas frestas do chão e já cobre os tornozelos. Ninguém viu de onde ela vem.<small class="regras-mecanica">A parte baixa do covil vira terreno difícil até o fim da luta. Quem fica Caído na água começa a perder o fôlego, como em Perigos do Ambiente, até se levantar.</small></td></tr>
             <tr><td>2</td><td><strong>A parede respira.</strong> As pedras de uma parede incham e encolhem, devagar, como um peito.<small class="regras-mecanica">Quem está encostado nessa parede é empurrado 3 metros e faz Reflexos na DT Padrão ou fica Caído.</small></td></tr>
-            <tr><td>3</td><td><strong>As vozes do lugar.</strong> Começa um sussurro sem boca, e cada um ouve o próprio nome, dito por alguém que já morreu.<small class="regras-mecanica">Todos fazem Vontade na DT Padrão ou ficam Desorientados, até passar no teste do fim do turno.</small></td></tr>
+            <tr><td>3</td><td><strong>As vozes do lugar.</strong> Vozes começam a sussurrar sem que ninguém fale, e cada um ouve o próprio nome, dito por alguém que já morreu.<small class="regras-mecanica">Todos fazem Vontade na DT Padrão ou ficam Desorientados, até passar no teste do fim do turno.</small></td></tr>
             <tr><td>4</td><td><strong>Raízes e correntes.</strong> O chão estala, e alguma coisa se mexe embaixo da terra, na direção de quem está parado.<small class="regras-mecanica">Quem não se moveu no último turno faz Reflexos na DT Padrão ou fica Imobilizado. Soltar-se segue a regra de Imobilizado.</small></td></tr>
             <tr><td>5</td><td><strong>O vento arrasta.</strong> As chamas se deitam todas para o mesmo lado, e a capa de cada um estala na direção do buraco.<small class="regras-mecanica">Todos são empurrados 3 metros na direção do vento, menos quem passar em Atletismo na DT Padrão. Quem passa da beira sofre o dano da queda.</small></td></tr>
             <tr><td>6</td><td><strong>O chão esquenta.</strong> Fumaça sobe entre as lajes, e a sola das botas começa a grudar.<small class="regras-mecanica">Até o fim da luta, quem termina o turno no mesmo lugar onde começou sofre dano de Calor igual ao de uma armadilha Leve do nível, em Perigos do Ambiente. Abrir a saída do vapor encerra o efeito.</small></td></tr>
@@ -5194,7 +5194,7 @@ ${HTML_DEVOCAO}
         <li>Divida a Vida de chefe do encontro entre os dois, e dê fases aos dois. O Ímpeto é um bolso só, gasto por qualquer um deles.</li>
         <li>Dê a eles uma ligação pública: um protege o outro, um cura o outro, ou um só ataca quem o outro marcou. O grupo precisa enxergar a ligação para tentar cortá-la.</li>
         <li>Quando um cai, o outro sobe uma fase na hora (troque à mão no editor da criatura) e herda uma habilidade do parceiro, a que mais combina com o luto ou com a raiva.</li>
-        <li>A queda muda a cena. Se o irmão mais velho cai primeiro, o mais novo foge chorando. Se o mais novo cai primeiro, o mais velho para de se defender. A mesa que entende isso escolhe quem derrubar, e essa escolha é a cena.</li>
+        <li>A queda muda a cena. Se o irmão mais velho cai primeiro, o mais novo foge chorando. Se o mais novo cai primeiro, o mais velho para de se defender. Quando a mesa percebe isso, escolher quem derrubar primeiro vira a decisão mais importante da luta.</li>
       </ul>
 
       <h3 class="regras-subtitle">Fase por rodada e por acontecimento</h3>
@@ -5282,7 +5282,7 @@ ${HTML_DEVOCAO}
         <li>A Paciência é uma só, a do tribunal, com 4 partes. Em cada rodada, cada personagem faz um argumento, sempre dirigido a um jurado. A abordagem certa tira Resistência dele, e tocar no Limite dele enche a Paciência.</li>
         <li>Do outro lado há um acusador. No fim de cada rodada, ele devolve 1 de Resistência a um jurado, à escolha dele, ou enche 1 de Paciência.</li>
         <li>O grupo ganha quando zera a Resistência de dois jurados. Se a Paciência encher antes, o tribunal decide com os votos como estão, e jurado que ainda tem Resistência vota contra.</li>
-        <li>Diga a Resistência de cada jurado em voz alta e deixe a mesa descobrir o Limite. Ver a conversa andando é o que dá tensão a esta cena.</li>
+        <li>Diga a Resistência de cada jurado em voz alta e deixe a mesa descobrir o Limite. Acompanhar a Resistência baixando é o que dá tensão à cena.</li>
       </ul>
       <p><strong>Interlúdio.</strong> Uma pausa no meio da luta grande, quando o chefe muda de fase ou quando a mesa está perto de cair.</p>
       <ul class="regras-list">
@@ -5293,13 +5293,13 @@ ${HTML_DEVOCAO}
       </ul>
 
       <h3 class="regras-subtitle">Criatura que ninguém quer enfrentar</h3>
-      <p>As criaturas do Vazio são feitas com outra promessa: o combate é o último recurso. O grupo deve sair da cena sabendo que ganhar custa caro e que a boa jogada era não ter lutado. Guardas, mercenários e gente comum continuam nas tabelas normais acima. Terror é para o que não devia existir.</p>
+      <p>As criaturas do Vazio são feitas para que o combate seja o último recurso. O grupo deve sair da cena sabendo que vencer custa caro e que o melhor era não ter lutado. Guardas, mercenários e gente comum continuam nas tabelas normais acima. Use as regras de terror só para essas criaturas.</p>
       <ol class="regras-steps">
         <li><strong>Sinais antes da aparição.</strong> Dê dois sinais antes de a criatura entrar em cena. Toda ficha do Vazio traz os seus, e eles são o aviso justo que permite ao grupo escolher ficar ou ir embora.</li>
         <li><strong>Pavor com número.</strong> A habilidade Presença Aterradora cobra um teste de Sanidade uma vez por cena, seguindo a regra de Condições: uma cena, um teste.</li>
         <li><strong>Dano que assusta.</strong> O golpe comum tira cerca de 40% da Vida de quem está na linha de frente, e o golpe anunciado passa de 55%. O grupo entende o perigo antes do segundo turno.</li>
         <li><strong>Um preço que a mesa reconhece.</strong> Arrancar leva um membro, e Mutilação está em Ferimentos. A criatura só cobra o preço quando o teste foi anunciado.</li>
-        <li><strong>Uma saída conhecida.</strong> Toda ficha traz um Como Evitar. Terror sem saída vira sentença, e o grupo só sente medo de verdade quando sabe que existe uma escolha melhor que a luta.</li>
+        <li><strong>Uma saída conhecida.</strong> Toda ficha traz um Como Evitar. Sem saída, o encontro vira uma sentença. O medo funciona quando o grupo sabe que existe uma escolha melhor que lutar.</li>
       </ol>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>VD</th><th>Presença Aterradora</th><th>Golpe comum</th><th>Golpe anunciado</th></tr></thead>
@@ -5524,7 +5524,7 @@ ${HTML_DEVOCAO}
       </ul>
 
       <h3 class="regras-subtitle">Tesouro e recompensa</h3>
-      <p>Tesouro é a parte da sessão que os jogadores contam depois. Uma bolsa de moedas vira número na ficha e some em uma semana. A espada tirada da mão de quem quase matou o grupo vira história e fica. Por isso, antes de decidir quanto entregar, decida como aquilo chega às mãos deles.</p>
+      <p>Tesouro é uma das partes da sessão que os jogadores mais lembram. Uma bolsa de moedas vira só um número na ficha; a espada tirada de quem quase matou o grupo vira história. Por isso, antes de decidir quanto entregar, decida como aquilo chega às mãos deles.</p>
       <p>Para decidir quanto, pague por sessão olhando o grupo inteiro, e esqueça a conta por monstro derrotado. A tabela abaixo é o que cada jogador deveria receber em média por sessão para acompanhar a própria faixa de equipamento. A conta por trás dela é simples: cerca de um quarto de um item da raridade que aquele nível deveria estar usando, então quatro sessões compram uma peça nova. Dobre num fim de arco e triplique num fim de temporada.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível</th><th>Raridade alvo</th><th>Por sessão, por jogador</th></tr></thead>
@@ -5553,7 +5553,7 @@ ${HTML_DEVOCAO}
       <ul class="regras-list">
         <li><strong>A verba é uma média de longo prazo.</strong> Três sessões de mão vazia e uma com o dobro dão uma campanha melhor que quatro sessões pagando igual, porque é a sessão farta que a mesa lembra.</li>
         <li><strong>Divida o arco em três partes:</strong> uma em dinheiro, uma em algo que serve na hora, e uma em algo que só vale se o grupo decidir o que fazer com aquilo, como uma chave sem porta, um mapa pela metade ou um item que alguém quer de volta.</li>
-        <li><strong>Item acima da faixa é empréstimo do futuro.</strong> Se entregar, conte como várias sessões de verba adiantadas e pague menos depois.</li>
+        <li><strong>Item acima da faixa conta como verba adiantada.</strong> Se entregar, conte como várias sessões de verba adiantadas e pague menos depois.</li>
         <li><strong>Mítico e Relíquia da Criação ficam fora da escada da compra.</strong> Entre Lendário e Mítico existe um salto de mais de quinze vezes, que salário nenhum atravessa. Essas duas faixas chegam por decisão sua, por negócio de Mercado Negro ou por pagamento de quem não usa moeda comum, e cada uma delas deveria ser o assunto de uma sessão inteira. A verba do nível 50 em diante só atravessa esse salto porque você abriu a porta: dinheiro sem balcão aberto continua sem comprar nada.</li>
       </ul>
 
@@ -5577,7 +5577,7 @@ ${HTML_DEVOCAO}
 
       <details class="regras-details">
         <summary>Quanto um NPC carrega <span class="regras-details-contagem">Bolsa por classe social</span></summary>
-        <p>Serve para o que um inimigo tem no bolso, o que um batedor de carteira leva e quanto um NPC consegue pagar por um serviço. A bolsa também diz como a pessoa vive: um guarda carregando dinheiro de oficial é uma pergunta andando pela rua.</p>
+        <p>Serve para o que um inimigo tem no bolso, o que um batedor de carteira leva e quanto um NPC consegue pagar por um serviço. A bolsa também diz como a pessoa vive: um guarda com dinheiro de oficial no bolso já levanta suspeita.</p>
         <div class="regras-table-wrap"><table class="regras-table">
           <thead><tr><th>Classe</th><th>Exemplo</th><th>À mão</th><th>Compra no máximo</th></tr></thead>
           <tbody>
@@ -5604,10 +5604,10 @@ ${HTML_DEVOCAO}
       </details>
 
       <h3 class="regras-subtitle">Recompensa que não é dinheiro</h3>
-      <p>As melhores recompensas raramente cabem na carteira. Elas mudam como o mundo trata o grupo, e o grupo sente isso toda vez que volta a um lugar.</p>
+      <p>Algumas das melhores recompensas não são dinheiro. Elas mudam o jeito como o mundo trata o grupo.</p>
       <ul class="regras-list">
         <li><strong>Prestígio com uma facção.</strong> O porteiro que antes pedia documento agora abre a porta antes de vocês baterem. Costuma valer mais que dinheiro, porque dá desconto, acesso e informação por muitas sessões. Ver Prestígio, Fama e Procura.</li>
-        <li><strong>Um balcão que abre.</strong> O dono do Mercado Negro manda avisar, por um menino de recados, que a porta dos fundos está destrancada para vocês. É a recompensa mais barata de dar e a mais sentida na mesa.</li>
+        <li><strong>Um balcão que abre.</strong> O dono do Mercado Negro manda avisar, por um menino de recados, que a porta dos fundos está destrancada para vocês. É barata de dar e faz diferença na mesa.</li>
         <li><strong>Um contato que atende.</strong> Uma informante velha que responde a carta no mesmo dia, sempre com um bilhete a mais do que foi perguntado. Economiza uma sessão inteira de investigação.</li>
         <li><strong>Tempo e lugar.</strong> Uma oficina emprestada por uma semana, alguém que aceita ensinar, uma cama num lugar onde ninguém procura vocês. Transforma tempo parado em progresso concreto. Ver Tempo Entre Aventuras.</li>
         <li><strong>Gratidão que fica.</strong> A vila que o grupo salvou lembra. A criança tirada do incêndio cresce, e um dia bate na porta. Não custa nada agora e rende uma cena muito tempo depois.</li>
