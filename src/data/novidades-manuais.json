@@ -2,6 +2,63 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-18-livro-em-partes",
+      "data": "2026-11-18",
+      "tipo": "melhoria",
+      "area": "Livro de Regras",
+      "titulo": "Tópicos do Livro divididos em partes, mais fáceis de ler",
+      "detalhes": [
+        "Cada tópico abre numa visão geral com a abertura, o Em resumo e a lista das partes, cada uma com a primeira frase dela.",
+        "Cada parte ocupa uma página só, com o botão da próxima parte no fim e a barra mostrando em que ponto do tópico você está.",
+        "As partes do tópico aberto aparecem no menu do Livro, embaixo do nome dele, e no celular também.",
+        "Catálogos como o de condições e o de legados viraram a última parte do tópico.",
+        "Prefere rolar tudo de uma vez? No botão da letra, escolha Inteiro: o tópico volta a ser uma página só, agora com as seções numeradas.",
+        "O texto ficou mais leve: menos caixas no cabeçalho, linhas mais curtas e os dados clicáveis sem moldura no meio da frase.",
+        "Links da ficha e dos termos continuam abrindo o Livro no lugar certo, já na parte que explica o assunto."
+      ]
+    },
+    {
+      "id": "2026-11-18-pagina-da-campanha-repaginada",
+      "data": "2026-11-18",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Página da campanha virou o estandarte da mesa",
+      "detalhes": [
+        "O topo ganhou um brasão com a inicial da campanha na cor dela, a capa e a frase, e embaixo os números da campanha: noites jogadas, horas de história, dados rolados e 20 naturais.",
+        "Os atalhos para Ficha, Sessão, Quadro, Mundo, Loja, Livro e Frota viraram portais com ícone e uma linha dizendo o que tem em cada um.",
+        "A próxima sessão aparece numa folhinha de calendário, e o cartão Hoje no mundo fica na cor da estação.",
+        "O Anteriormente virou uma linha do tempo das sessões, com duração, rolagens e 20 naturais de cada noite.",
+        "A Crônica ganhou cara de livro, com letra grande no começo de cada página e um botão para escrever.",
+        "Na lista da mesa, uma bolinha mostra quem está por aqui agora, e o cartão Destaques mostra quem mais foi MVP e os títulos do Rank."
+      ]
+    },
+    {
+      "id": "2026-11-18-quadro-da-campanha-repaginado",
+      "data": "2026-11-18",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Quadro da campanha com cara nova",
+      "detalhes": [
+        "O topo do Quadro mostra o nome, a frase, a cor e a capa da sua campanha, junto com o dia e a hora da próxima sessão.",
+        "O Mural virou um quadro de cortiça: as frases ficam em papéis presos com alfinete e as fotos viram polaroides com fita. Dá para ver tudo junto ou só frases ou só fotos.",
+        "O MVP da noite ganhou uma placa dourada com o placar da votação.",
+        "No Rank, cada título virou uma medalha, e o Livro da mesa marca com uma coroa quem lidera cada coluna.",
+        "Nas Descobertas, um anel mostra quantos segredos você já achou, e os que ninguém achou aparecem lacrados.",
+        "O calendário das sessões ficou mais fácil de ler, no Quadro e na página inicial."
+      ]
+    },
+    {
+      "id": "2026-11-18-ficha-cartaz-em-branco",
+      "data": "2026-11-18",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Lista de personagens vazia mostra um cartaz em branco",
+      "detalhes": [
+        "Sem personagem na campanha, a lista mostra um cartaz de procurado ainda em branco. Toque nele ou no botão ao lado para criar o seu.",
+        "A busca avisa quando nenhum cartaz tem o nome procurado e oferece limpar o campo."
+      ]
+    },
+    {
       "id": "2026-11-18-segunda-leva-de-regras-simples",
       "data": "2026-11-18",
       "tipo": "melhoria",
