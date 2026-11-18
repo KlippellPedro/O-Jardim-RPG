@@ -2563,4 +2563,53 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             "ALTER TABLE mapa_tokens ADD COLUMN IF NOT EXISTS nota_jogador TEXT NOT NULL DEFAULT ''",
         ),
     ),
+    (
+        83,
+        "quadro_de_procurados_da_loja",
+        (
+            # Cartazes da aba Caçadores da Loja (core/procurados.py): o ser que a campanha procura, com
+            # a imagem tirada do acervo do Mestre. Rascunho (publicado=false) e notas_mestre nunca
+            # chegam ao jogador. `pagamento` guarda quem recebeu a recompensa, para nunca pagar duas vezes.
+            """
+            CREATE TABLE IF NOT EXISTS procurados (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                nome TEXT NOT NULL CHECK (length(nome) BETWEEN 1 AND 80),
+                especie TEXT NOT NULL DEFAULT '',
+                descricao TEXT NOT NULL DEFAULT '',
+                local TEXT NOT NULL DEFAULT '',
+                condicao TEXT NOT NULL DEFAULT 'vivo-ou-morto'
+                    CHECK (condicao IN ('vivo', 'morto', 'vivo-ou-morto')),
+                ameaca TEXT NOT NULL DEFAULT 'desconhecida'
+                    CHECK (ameaca IN ('baixa', 'media', 'alta', 'extrema', 'desconhecida')),
+                vd SMALLINT CHECK (vd IS NULL OR vd BETWEEN 0 AND 999),
+                recompensa_valor BIGINT NOT NULL DEFAULT 0 CHECK (recompensa_valor >= 0),
+                recompensa_moeda TEXT NOT NULL DEFAULT 'Lunaris',
+                imagem_id UUID REFERENCES acervo_itens(id) ON DELETE SET NULL,
+                imagem_foco SMALLINT NOT NULL DEFAULT 35 CHECK (imagem_foco BETWEEN 0 AND 100),
+                status TEXT NOT NULL DEFAULT 'aberto'
+                    CHECK (status IN ('aberto', 'capturado', 'abatido', 'cancelado')),
+                publicado BOOLEAN NOT NULL DEFAULT FALSE,
+                publicado_em TIMESTAMPTZ,
+                notas_mestre TEXT NOT NULL DEFAULT '',
+                pagamento JSONB,
+                criado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS procurados_campanha_idx ON procurados (campanha_id, publicado, status)",
+            "CREATE INDEX IF NOT EXISTS procurados_imagem_idx ON procurados (imagem_id) WHERE imagem_id IS NOT NULL",
+            # Quem entrou na caçada: um personagem por linha. Sai sozinho quando o personagem é apagado.
+            """
+            CREATE TABLE IF NOT EXISTS procurados_cacadores (
+                procurado_id UUID NOT NULL REFERENCES procurados(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                usuario_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (procurado_id, personagem_id)
+            )
+            """,
+        ),
+    ),
 )

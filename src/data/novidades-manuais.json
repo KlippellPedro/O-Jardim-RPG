@@ -2,6 +2,35 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-17-loja-novo-visual-e-balcao-de-venda",
+      "data": "2026-11-17",
+      "tipo": "melhoria",
+      "area": "Loja",
+      "titulo": "Loja com visual novo e balcão de venda que mostra a bolsa inteira",
+      "detalhes": [
+        "A Loja ficou mais leve: o nome do mercado no topo, as prateleiras numa coluna ao lado com quantos itens cada uma tem, as raridades em botões e cartões de item mais limpos.",
+        "A bolsa de quem negocia fica no topo, com cada moeda na sua cor.",
+        "As regras rápidas viraram uma faixa curta; o botão Regras do balcão abre a explicação completa.",
+        "Quando há algo no lote, um botão no canto da tela mostra quantos itens e o total, sem precisar subir a página.",
+        "Vender agora lista tudo que o personagem carrega e quanto o balcão paga por unidade (metade do preço novo). Dá para escolher a quantidade de cada item, vender todos de uma vez ou pôr a bolsa inteira no lote, menos o que está equipado.",
+        "Itens que o balcão não compra aparecem no fim da lista com o motivo: feitos à mão na ficha, fora do catálogo ou com modificação instalada."
+      ]
+    },
+    {
+      "id": "2026-11-17-loja-quadro-de-procurados",
+      "data": "2026-11-17",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Quadro de Procurados na aba Caçadores",
+      "detalhes": [
+        "A aba Caçadores virou o quadro da Guilda: cartazes de papel velho com o retrato do ser procurado, a recompensa, a ameaça e onde ele foi visto.",
+        "Abra um cartaz para ler o que se sabe e aceitar o contrato com o personagem escolhido no topo da Loja. O cartaz mostra quantos caçadores estão no rastro.",
+        "Quando a caçada termina, o Mestre divide a recompensa entre quem caçou e as moedas caem direto na bolsa. O cartaz ganha o carimbo de Capturado, Abatido ou Cancelado.",
+        "Mestre: o botão Pregar cartaz cria o cartaz com imagem do Acervo ou enviada do computador, recompensa, ameaça e notas que só você vê. Dá para guardar como rascunho antes de pregar no quadro.",
+        "As recompensas entre jogadores do Banco Lunar continuam no mesmo quadro."
+      ]
+    },
+    {
       "id": "2026-11-17-livro-cenas-e-grupo-texto-simples",
       "data": "2026-11-17",
       "tipo": "melhoria",

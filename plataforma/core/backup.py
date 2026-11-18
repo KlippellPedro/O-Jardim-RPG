@@ -105,6 +105,10 @@ TABELAS: tuple[str, ...] = (
     "mapa_projetos",
     # Nome e cor do Criador na mesa, quando ele não é membro da campanha (migração 71).
     "mesa_identidade_criador",
+    # Quadro de procurados da Loja (migração 83): o cartaz aponta para a imagem do acervo e os
+    # caçadores apontam para o cartaz, então os dois entram depois de `acervo_itens` e nesta ordem.
+    "procurados",
+    "procurados_cacadores",
 
     # Cassino do Gambler (site) — ver plataforma/routers/casino.py.
     "cassino_gambler_rodadas",

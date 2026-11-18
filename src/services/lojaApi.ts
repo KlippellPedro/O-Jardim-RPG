@@ -111,6 +111,36 @@ export interface CheckoutAttempt {
   payload: LojaCommandInput;
 }
 
+/** Por que um item do inventário não tem preço no balcão (ver `quote_sale` em routers/shop.py). */
+export type MotivoSemVenda = 'sem_origem' | 'fora_do_catalogo' | 'sem_preco' | 'modificado';
+
+/** Um item do inventário como o balcão de venda enxerga: o preço é o mesmo que a venda credita. */
+export interface ItemCotacaoVenda {
+  item_id: string;
+  titulo: string;
+  quantidade: number;
+  /** Quantas unidades dá para vender agora (o último exemplar modificado fica). */
+  max_venda: number;
+  vendavel: boolean;
+  motivo: MotivoSemVenda | null;
+  motivo_texto: string | null;
+  preco_unitario: { moeda: string; valor: number } | null;
+  preco_compra: { moeda: string; valor: number } | null;
+  tipo: string | null;
+  categoria: string | null;
+  raridade: string | null;
+  equipado: boolean;
+  modificacoes: string[];
+  catalogo_item_id: string | null;
+  descricao: string;
+}
+
+export interface CotacaoVenda {
+  personagem_id: string;
+  economia_versao: number;
+  itens: ItemCotacaoVenda[];
+}
+
 export function hasVerifiableShopOrigin(item: { item_id: string; dados?: unknown }): boolean {
   if (!item.dados || typeof item.dados !== 'object' || Array.isArray(item.dados)) return false;
   const data = item.dados as Record<string, unknown>;
@@ -269,6 +299,14 @@ export const lojaApi = {
 
   vender(payload: LojaCommandInput) {
     return api<LojaCommandResult>('/loja/vendas', { method: 'POST', body: payload });
+  },
+
+  /** Todo o inventário do personagem com o preço que o balcão paga (ou o motivo de não pagar). */
+  cotarVenda(campanhaId: string, personagemId: string, signal?: AbortSignal) {
+    return api<CotacaoVenda>(
+      `/loja/vendas/cotacao?campanha_id=${encodeURIComponent(campanhaId)}&personagem_id=${encodeURIComponent(personagemId)}`,
+      { signal },
+    );
   },
 
   conceder(payload: LojaGrantCommandInput) {

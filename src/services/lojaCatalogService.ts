@@ -326,6 +326,31 @@ const mapCategoriaBaseReliquia = (item: any): ItemCategoria | undefined => (
   ehReliquiaCriacao({ ...item.conteudo, tipo: item.tipo }) ? mapCategoriaPorTipo(item) : undefined
 );
 
+/** Categoria da Loja de um item que já está no inventário (o `dados` guarda o
+ * conteúdo do catálogo copiado na compra). Sem tipo conhecido, cai em Outros. */
+export const categoriaDoInventario = (
+  tipo: string | null | undefined,
+  dados: Record<string, unknown> | null | undefined,
+  catalogoId?: string | null,
+  titulo?: string,
+): ItemCategoria => (
+  tipo ? mapCategoria({ tipo, id: catalogoId ?? '', titulo: titulo ?? '', conteudo: dados ?? {} }) : 'Outros'
+);
+
+/** Cor de cada raridade para filetes, pontos e textos (mesma escala da vitrine). */
+export const corDaRaridade = (raridade: unknown): string => {
+  switch (lerRaridadeChave(raridade)) {
+    case 'incomum': return '#34d399';
+    case 'raro': return '#60a5fa';
+    case 'epico': return '#c084fc';
+    case 'lendario': return '#fbbf24';
+    case 'reliquia': return '#f87171';
+    case 'reliquia da criacao': return '#e0f2fe';
+    case 'comum': return '#94a3b8';
+    default: return '#fda4af';
+  }
+};
+
 /** Etiqueta de categoria da vitrine. Numa Relíquia da Criação a raridade já
  * anuncia "Relíquia da Criação", então repetir isso na categoria gasta uma
  * etiqueta sem dizer nada: aqui ela mostra o que a peça é (Armas, Implantes

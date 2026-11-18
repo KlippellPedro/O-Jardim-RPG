@@ -2083,6 +2083,134 @@ def grant_batch(
     return result
 
 
+def _has_verifiable_shop_origin(item_id: str, data: dict[str, Any]) -> bool:
+    """Item que veio do fluxo da Loja (compra, concessão do Mestre ou saque): só esses têm preço de balcão."""
+    catalog_item_id = str(data.get("catalogo_item_id") or "").strip()
+    stored_inventory_id = str(data.get("loja_item_id") or "").strip()
+    return (
+        data.get("origem") == "loja"
+        and bool(catalog_item_id)
+        and (stored_inventory_id == item_id if stored_inventory_id else catalog_item_id == item_id)
+    )
+
+
+def _sale_base_price(stock: dict[str, Any], catalog_item: dict[str, Any]) -> tuple[CatalogPrice | None, str | None]:
+    """Preço de compra que serve de base para a revenda deste exemplar, ou o motivo de não haver."""
+    price = resolve_catalog_price(catalog_item["conteudo"])
+    if price is None:
+        return None, f"{catalog_item['titulo']} possui preco invalido no catalogo"
+    if _is_configurable_equipment(catalog_item):
+        stock_dados = stock.get("dados") if isinstance(stock.get("dados"), dict) else {}
+        selected_rarity = normalize_equipment_rarity(stock_dados.get("raridade"))
+        price = equipment_variant_price(catalog_item["conteudo"], catalog_item["tipo"], selected_rarity)
+        if price is None:
+            return None, f"{stock['titulo']} possui raridade ou preco de compra invalido"
+    return price, None
+
+
+def _installed_modification_names(stock_dados: dict[str, Any]) -> list[str]:
+    mods = stock_dados.get("modificacoes") or []
+    if not isinstance(mods, list):
+        return []
+    return [str(m.get("nome") or m.get("id") or "?") if isinstance(m, dict) else str(m) for m in mods]
+
+
+#: Por que um item do inventário não tem preço no balcão. O texto vai para o jogador.
+_SALE_BLOCK_REASONS = {
+    "sem_origem": "Este item não veio da Loja nem de uma entrega do Mestre, então o balcão não tem preço para ele. Combine a venda com o Mestre.",
+    "fora_do_catalogo": "Este item saiu do catálogo da campanha e o balcão não compra mais.",
+    "sem_preco": "O catálogo não tem um preço válido para este item.",
+    "modificado": "Tem modificações instaladas. Tire as modificações antes de vender o último exemplar.",
+}
+
+
+@router.get("/vendas/cotacao")
+def quote_sale(
+    campanha_id: UUID = Query(),
+    personagem_id: UUID = Query(),
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Todo o inventário do personagem com o preço que o balcão paga por unidade.
+
+    Usa a mesma conta da venda (catálogo ativo da campanha, raridade escolhida
+    na compra e resale_value), então o número que a tela mostra é o que a venda
+    credita. Itens sem preço vêm com o motivo, para o jogador saber por que não
+    dá para vender.
+    """
+    with database.connection() as connection:
+        campaign_access(connection, campanha_id, user.id)
+        character = _owned_character(connection, campanha_id, personagem_id, user.id, lock=False)
+        rows = connection.execute(
+            """
+            SELECT item_id, titulo, quantidade, dados
+            FROM inventario_personagem
+            WHERE campanha_id=%s AND personagem_id=%s AND quantidade > 0
+            ORDER BY titulo, item_id
+            """,
+            (campanha_id, personagem_id),
+        ).fetchall()
+        stocks = [dict(row) for row in rows]
+        catalog_ids = sorted({
+            str(row["dados"].get("catalogo_item_id"))
+            for row in stocks
+            if isinstance(row["dados"], dict) and _has_verifiable_shop_origin(row["item_id"], row["dados"])
+        })
+        catalog = {
+            row["id"]: row
+            for row in (_active_catalog_rows(connection, campanha_id, catalog_ids) if catalog_ids else [])
+        }
+
+    items = []
+    for stock in stocks:
+        data = stock["dados"] if isinstance(stock["dados"], dict) else {}
+        quantity = int(stock["quantidade"])
+        mods = _installed_modification_names(data)
+        reason = None
+        unit = None
+        purchase = None
+        catalog_item = None
+        if not _has_verifiable_shop_origin(stock["item_id"], data):
+            reason = "sem_origem"
+        else:
+            catalog_item = catalog.get(str(data.get("catalogo_item_id")))
+            if catalog_item is None:
+                reason = "fora_do_catalogo"
+            else:
+                price, _error = _sale_base_price(stock, catalog_item)
+                if price is None:
+                    reason = "sem_preco"
+                else:
+                    purchase = price
+                    unit = resale_value(price)
+        max_sale = quantity - 1 if mods else quantity
+        if reason is None and max_sale <= 0:
+            reason = "modificado"
+        items.append({
+            "item_id": stock["item_id"],
+            "titulo": stock["titulo"],
+            "quantidade": quantity,
+            "max_venda": max(0, max_sale) if reason is None else 0,
+            "vendavel": reason is None,
+            "motivo": reason,
+            "motivo_texto": _SALE_BLOCK_REASONS.get(reason) if reason else None,
+            "preco_unitario": {"moeda": unit.moeda, "valor": unit.valor} if unit else None,
+            "preco_compra": {"moeda": purchase.moeda, "valor": purchase.valor} if purchase else None,
+            "tipo": (catalog_item or {}).get("tipo") or data.get("tipo"),
+            "categoria": data.get("categoria"),
+            "raridade": data.get("raridade"),
+            "equipado": bool(data.get("equipado")),
+            "modificacoes": mods,
+            "catalogo_item_id": data.get("catalogo_item_id"),
+            "descricao": str(data.get("descricao") or "")[:400],
+        })
+    return {
+        "personagem_id": str(personagem_id),
+        "economia_versao": int(character["economia_versao"]),
+        "itens": items,
+    }
+
+
 @router.post("/vendas", status_code=status.HTTP_201_CREATED)
 def sell_batch(
     payload: ShopBatchCommandInput,
@@ -2139,14 +2267,7 @@ def sell_batch(
 
         for item_id, item in inventory.items():
             data = item["dados"] if isinstance(item["dados"], dict) else {}
-            catalog_item_id = str(data.get("catalogo_item_id") or "").strip()
-            stored_inventory_id = str(data.get("loja_item_id") or "").strip()
-            if (
-                data.get("origem") != "loja"
-                or not catalog_item_id
-                or (stored_inventory_id and stored_inventory_id != item_id)
-                or (not stored_inventory_id and catalog_item_id != item_id)
-            ):
+            if not _has_verifiable_shop_origin(item_id, data):
                 raise HTTPException(
                     status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail=f"o item {item_id} nao possui origem de loja verificavel",
@@ -2196,22 +2317,12 @@ def sell_batch(
                 )
             catalog_item_id = str(stock_dados.get("catalogo_item_id"))
             catalog_item = catalog[catalog_item_id]
-            price = resolve_catalog_price(catalog_item["conteudo"])
+            price, price_error = _sale_base_price(stock, catalog_item)
             if price is None:
                 raise HTTPException(
                     status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
-                    detail=f"{catalog_item['titulo']} possui preco invalido no catalogo",
+                    detail=price_error,
                 )
-            if _is_configurable_equipment(catalog_item):
-                selected_rarity = normalize_equipment_rarity(stock_dados.get("raridade"))
-                price = equipment_variant_price(
-                    catalog_item["conteudo"], catalog_item["tipo"], selected_rarity,
-                )
-                if price is None:
-                    raise HTTPException(
-                        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
-                        detail=f"{stock['titulo']} possui raridade ou preco de compra invalido",
-                    )
             reward = resale_value(price)
             _add_total(totals, reward.moeda, reward.valor * line.quantidade)
             sold_items.append(

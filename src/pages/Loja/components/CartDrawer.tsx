@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
 import { LojaItem, getCurrencySymbol, rotuloCategoriaItem, somarPrecosNativos } from '../../../services/lojaCatalogService';
+import { COR_MOEDA } from './ItemCard';
 import { MAX_SHOP_UNITS } from '../../../services/lojaApi';
 import { useModalSfx } from '../../../hooks/useSfx';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
@@ -63,16 +64,16 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="cart-drawer settings-panel fixed bottom-0 right-0 top-0 z-[100] flex w-full max-w-md flex-col border-l border-white/10 bg-[#0b0a12] shadow-2xl"
+            className="cart-drawer loja-gaveta settings-panel fixed bottom-0 right-0 top-0 z-[100] flex w-full max-w-md flex-col shadow-2xl"
             role="dialog"
             aria-modal="true"
             aria-labelledby="loja-cart-title"
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/10 bg-black/40 p-4 sm:p-6">
-              <h2 id="loja-cart-title" className="flex min-w-0 items-center gap-2 text-xl font-bold uppercase tracking-widest text-[#c7a44c] sm:gap-3 sm:text-2xl" style={{fontFamily: 'Cinzel, serif'}}>
-                <ShoppingCart size={24} />
-                {isVenda ? 'Lote de Venda' : 'Carrinho'}
+            <div className="flex items-center justify-between border-b border-white/10 p-4 sm:p-6">
+              <h2 id="loja-cart-title" className="loja-gaveta__titulo">
+                <ShoppingCart size={20} />
+                {isVenda ? 'Lote de venda' : 'Lote de compra'}
               </h2>
               <button ref={closeButtonRef} onClick={onClose} aria-label="Fechar carrinho" data-sfx="off" className="p-2 text-gray-500 hover:text-white hover:bg-white/10 rounded-full transition-colors">
                 <X size={24} />
@@ -84,14 +85,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               {cart.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-gray-500">
                   <ShoppingCart size={48} className="mb-4 opacity-20" />
-                  <p className="uppercase tracking-widest text-sm font-bold">Vazio</p>
+                  <p className="text-sm font-bold">O lote está vazio</p>
                 </div>
               ) : (
                 cart.map((cartItem) => {
                   const { item, quantidade, alvoItemId, alvoItemNome, modo } = cartItem;
                   const cartKey = cartItemKey(cartItem);
                   return (
-                  <div key={cartKey} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4">
+                  <div key={cartKey} className="loja-gaveta__item flex gap-4">
                     <div className="min-w-0 flex-1">
                       <div className="text-xs uppercase tracking-widest text-gray-500 mb-1">{rotuloCategoriaItem(item)}</div>
                       <h4 className="text-white font-bold mb-1">{item.nome}</h4>
@@ -114,7 +115,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           Servo/escravo permanente
                         </div>
                       ) : null}
-                      <div className="flex items-center gap-1 text-lg font-bold text-yellow-400">
+                      <div className="flex items-center gap-1 text-lg font-bold" style={{ color: COR_MOEDA[item.moedaPreco] ?? '#e5e7eb' }}>
                         {(item.valorOriginal * quantidade).toLocaleString('pt-BR')} <span className="text-xs">{getCurrencySymbol(item.moedaPreco)}</span>
                       </div>
                     </div>
@@ -141,9 +142,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
             {/* Footer */}
             {cart.length > 0 && (
-              <div className="border-t border-white/10 bg-black/60 p-4 backdrop-blur-xl sm:p-6">
+              <div className="border-t border-white/10 bg-black/40 p-4 sm:p-6">
                 <div className="flex justify-between items-end mb-6">
-                  <div className="text-gray-400 uppercase tracking-widest text-xs font-bold">Estimativa</div>
+                  <div className="text-gray-400 uppercase tracking-widest text-xs font-bold">{isVenda ? 'Você recebe' : 'Total'}</div>
                   <div className="flex flex-col items-end gap-1 text-xl font-bold text-gray-200">
                     {totais.map((total) => (
                       <span key={total.moeda}>
@@ -157,14 +158,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   onClick={onCheckout}
                   disabled={isProcessing}
                   data-sfx="confirm"
-                  className={`w-full py-4 rounded-xl font-bold tracking-widest uppercase transition-all shadow-xl flex items-center justify-center gap-2 ${
-                    isProcessing
-                      ? 'bg-gray-800 text-gray-500 cursor-wait'
-                      : isVenda ? 'bg-red-500 text-white hover:bg-red-400' : 'bg-[#c7a44c] hover:bg-yellow-400 text-black'
-                  }`}
+                  className="loja-botao w-full !min-h-[3.25rem] !text-sm"
+                  style={{ cursor: isProcessing ? 'wait' : undefined }}
                 >
                   <ShoppingCart size={20} />
-                  {isProcessing ? 'Processando...' : (isVenda ? 'Vender Tudo' : 'Finalizar Compra')}
+                  {isProcessing ? 'Processando...' : (isVenda ? 'Vender o lote' : 'Fechar a compra')}
                 </button>
               </div>
             )}

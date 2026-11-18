@@ -1,62 +1,66 @@
 import type { GuidedTourStep } from '../../components/ui/GuidedTour';
 
-export const LOJA_TOUR_STORAGE_VERSION = 2;
+// Versão 3: a Loja ganhou layout novo (2026-11-17), então o guia volta a abrir uma vez.
+export const LOJA_TOUR_STORAGE_VERSION = 3;
 
 export const LOJA_TOUR_STEPS: GuidedTourStep[] = [
   {
     id: 'mercados',
     titulo: 'Cada mercado tem uma prateleira',
-    descricao: 'Feira, Metrópole, Mercado Negro e Banco Lunar são patamares cumulativos. Um lugar avançado também mostra os itens dos anteriores; mercados fechados dependem da campanha.',
+    descricao: 'Feira, Metrópole, Mercado Negro e Banco Lunar são patamares que se somam: um mercado mais alto também vende o que os de baixo vendem. A campanha decide quais estão abertos.',
     alvos: ['[data-tour="loja-locais"]'],
   },
   {
-    id: 'operacoes',
-    titulo: 'Comprar, vender ou procurar contratos',
-    descricao: 'Comprar usa o catálogo publicado, Vender mostra apenas itens com origem verificável da Loja e Caçadores abre as recompensas ativas. Trocar de operação limpa o lote para evitar uma compra ou venda acidental.',
-    alvos: ['[data-tour="loja-modos"]'],
-  },
-  {
     id: 'comprador',
-    titulo: 'A operação pertence a um personagem',
-    descricao: 'Escolha quem compra ou vende. A carteira mostra as quatro moedas sem converter valores silenciosamente, e a compra sempre volta para o inventário desse personagem.',
+    titulo: 'Quem negocia',
+    descricao: 'Escolha o personagem que compra, vende ou caça. A bolsa ao lado mostra as moedas dele, cada uma na sua cor.',
     alvos: ['[data-tour="loja-comprador"]'],
     opcional: true,
   },
   {
+    id: 'operacoes',
+    titulo: 'Comprar, vender ou caçar',
+    descricao: 'Comprar abre a vitrine. Vender mostra tudo que o personagem carrega e quanto o balcão paga por cada coisa. Caçadores abre o quadro de procurados. Trocar de aba esvazia o lote, para nada ser comprado ou vendido sem querer.',
+    alvos: ['[data-tour="loja-modos"]'],
+  },
+  {
     id: 'regras',
-    titulo: 'Regras antes do preço',
-    descricao: 'Este painel resume o limite de itens especiais, o orçamento de modificações por raridade e a função dos mercados. Os links abrem o capítulo completo do Livro de Regras.',
+    titulo: 'As regras do balcão',
+    descricao: 'Esta faixa resume o limite de itens especiais, a raridade sob encomenda e como os mercados se somam. Abra Regras do balcão para ler mais e ir ao Livro de Regras.',
     alvos: ['[data-tour="loja-regras"]'],
+    opcional: true,
   },
   {
     id: 'filtros',
-    titulo: 'Encontre uma coisa de cada vez',
-    descricao: 'Busca, categoria, tipo e raridade trabalham juntos. Os filtros ativos aparecem no resumo; Limpar devolve o catálogo ao estado inicial.',
+    titulo: 'As prateleiras',
+    descricao: 'Cada prateleira mostra quantos itens tem neste mercado. A busca e as raridades ao lado afinam a procura.',
     alvos: ['[data-tour="loja-filtros"]'],
+    opcional: true,
   },
   {
     id: 'catalogo',
-    titulo: 'A prateleira atual',
-    descricao: 'O título explica o balcão selecionado e mostra quantos resultados restaram. Cada cartão deixa visíveis só identidade, regra essencial e preço; a ficha completa abre em detalhes.',
+    titulo: 'A vitrine',
+    descricao: 'Cada cartão mostra o essencial e o preço. Abra o item para ler a regra inteira antes de pôr no lote.',
     alvos: ['[data-tour="loja-catalogo"]'],
   },
   {
     id: 'item',
-    titulo: 'Leia antes de colocar no lote',
-    descricao: 'Armas, armaduras e escudos aparecem pelo preço Comum; abra o item para escolher uma raridade maior e ver o novo preço, capacidade e balcão exigido. Modificações sempre pedem o equipamento de destino.',
+    titulo: 'Leia antes de levar',
+    descricao: 'Armas, armaduras e escudos aparecem pelo preço Comum; no detalhe dá para encomendar uma raridade maior e ver o preço novo. Modificações sempre pedem o equipamento de destino.',
     alvos: ['[data-tour="loja-item"]'],
     opcional: true,
   },
   {
     id: 'carrinho',
-    titulo: 'O servidor confirma a compra',
-    descricao: 'O carrinho reúne o lote por moeda. Ao finalizar, o servidor confere preço publicado, disponibilidade, saldo, alvo da modificação e versão do inventário antes de alterar qualquer coisa. Arma, armadura ou escudo que cabe numa vaga livre já sai equipado, com um aviso e o botão Desfazer.',
+    titulo: 'O servidor confere o lote',
+    descricao: 'O lote soma os preços por moeda e fica flutuando no canto enquanto tiver algo dentro. Ao fechar, o servidor confere preço, saldo e inventário antes de mexer em qualquer coisa. Arma, armadura ou escudo que cabe numa vaga livre já sai equipado, com o botão Desfazer.',
     alvos: ['[data-tour="loja-carrinho"]'],
+    opcional: true,
   },
   {
     id: 'recompensas',
-    titulo: 'Contratos de Caçadores',
-    descricao: 'Reivindicar uma recompensa cria um pedido para a equipe da campanha. O pagamento só ocorre depois da aprovação; o valor exibido no pedido fica registrado.',
+    titulo: 'O quadro dos Caçadores',
+    descricao: 'O Mestre prega cartazes dos seres procurados. Abra um cartaz para ler o contrato e aceitar a caçada com o seu personagem; a recompensa cai na bolsa quando o Mestre encerra.',
     alvos: ['[data-tour="loja-recompensas"]'],
     opcional: true,
   },

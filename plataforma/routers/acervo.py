@@ -15,7 +15,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
-from core import acervo, imagens_mostradas
+from core import acervo, imagens_mostradas, procurados
 from core.acervo import ErroAcervo
 from core.database import Database
 from core.dependencies import AuthenticatedUser, get_current_user, get_database, require_csrf
@@ -617,7 +617,12 @@ def ler_pedaco(
         raise HTTPException(status_code=404, detail="pedaco nao encontrado")
     with database.connection() as connection:
         # Uma imagem que o Mestre mostrou à mesa não está em cena nenhuma: vale a liberação dele (core/imagens_mostradas.py).
-        if not pode_ler_item(connection, item_id, user, chave) and not imagens_mostradas.pode_ler(connection, item_id, user.id):
+        # A de um cartaz publicado no quadro de procurados da Loja vale para a campanha do cartaz (core/procurados.py).
+        if (
+            not pode_ler_item(connection, item_id, user, chave)
+            and not imagens_mostradas.pode_ler(connection, item_id, user.id)
+            and not procurados.pode_ler_imagem(connection, item_id, user.id)
+        ):
             raise HTTPException(status_code=404, detail="pedaco nao encontrado")
         achado = acervo.ler(connection, item_id, chave)
     if not achado:
