@@ -32,6 +32,27 @@ export function dispositivoFraco(sinais: ISinaisDoAparelho): boolean {
   return Boolean(sinais.toque && sinais.larguraTela !== undefined && sinais.larguraTela <= 480 && sinais.memoriaGb !== undefined && sinais.memoriaGb <= 6);
 }
 
+/** Abaixo disso (uns 25 quadros por segundo) o site já parece travado. */
+export const QUADRO_LENTO_MS = 40;
+/** Um quadro assim é um tranco visível. */
+export const QUADRO_TRAVADO_MS = 70;
+
+/**
+ * Lê os intervalos entre quadros (requestAnimationFrame, em ms) medidos com a
+ * página aberta e diz se o aparelho está engasgando. Pega o que os sinais do
+ * navegador não mostram: placa de vídeo fraca num PC de processador bom, ou
+ * navegador que não informa a memória (Firefox, Safari).
+ * Precisa de amostra suficiente; com pouca, nunca acusa.
+ */
+export function aparelhoEngasgando(intervalos: number[]): boolean {
+  const validos = intervalos.filter((ms) => Number.isFinite(ms) && ms > 0 && ms < 1000);
+  if (validos.length < 30) return false;
+  const ordenados = [...validos].sort((a, b) => a - b);
+  const mediana = ordenados[Math.floor(ordenados.length / 2)];
+  const travados = validos.filter((ms) => ms >= QUADRO_TRAVADO_MS).length / validos.length;
+  return mediana >= QUADRO_LENTO_MS || travados >= 0.2;
+}
+
 export function sinaisDoAparelho(): ISinaisDoAparelho {
   if (typeof navigator === 'undefined') return {};
   const conexao = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;

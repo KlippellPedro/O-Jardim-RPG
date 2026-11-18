@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { categoriaDoSom, CATEGORIAS_PADRAO } from '../../src/utils/categoriasSom';
-import { dispositivoFraco } from '../../src/utils/movimento';
+import { aparelhoEngasgando, dispositivoFraco } from '../../src/utils/movimento';
 
 test('cada efeito sonoro cai na sua categoria e o resto e interface', () => {
   assert.equal(categoriaDoSom('gongo'), 'eventos');
@@ -22,4 +22,20 @@ test('modo leve automatico so para aparelho que parece fraco', () => {
   assert.equal(dispositivoFraco({ toque: true, larguraTela: 390, memoriaGb: 8, nucleos: 8 }), false);
   // Sem nenhum sinal (navegador que não informa nada) nunca liga sozinho.
   assert.equal(dispositivoFraco({}), false);
+});
+
+test('aparelho engasgando: quadros lentos ou trancos frequentes ligam o modo leve', () => {
+  const repetir = (ms: number, vezes: number) => Array.from({ length: vezes }, () => ms);
+  // 60 e 30 quadros por segundo estão bem; o Chrome em economia de bateria fica em 30.
+  assert.equal(aparelhoEngasgando(repetir(16.7, 200)), false);
+  assert.equal(aparelhoEngasgando(repetir(33.3, 120)), false);
+  // Uns 20 quadros por segundo o tempo todo já é travado.
+  assert.equal(aparelhoEngasgando(repetir(50, 80)), true);
+  // Fluido na maior parte, mas um tranco a cada quatro quadros também conta.
+  assert.equal(aparelhoEngasgando([...repetir(16.7, 75), ...repetir(90, 25)]), true);
+  // Poucos trancos soltos (carregou uma imagem) não contam.
+  assert.equal(aparelhoEngasgando([...repetir(16.7, 95), ...repetir(120, 5)]), false);
+  // Amostra pequena nunca acusa; intervalos absurdos (aba escondida) são ignorados.
+  assert.equal(aparelhoEngasgando(repetir(80, 10)), false);
+  assert.equal(aparelhoEngasgando([...repetir(16.7, 60), 5000, 8000, NaN]), false);
 });

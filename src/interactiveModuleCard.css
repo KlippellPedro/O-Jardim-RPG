@@ -1,0 +1,45 @@
+/* Cartões dos módulos na Home: cada um na sua cor (`--card-cor`), sem ícone.
+   A cor tinge a moldura, o degradê do fundo, o brilho ao passar o mouse, os
+   cantos e o dado. Ficha dourada, Mundo verde-água, Livro violeta, Loja
+   âmbar, Sessão vermelha (as mesmas cores dos portais da página da campanha). */
+
+.cartao-modulo {
+  --card-cor: #c7a44c;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--card-cor) 55%, transparent), color-mix(in srgb, var(--card-cor) 8%, transparent) 70%);
+}
+
+.cartao-modulo__aura {
+  background: radial-gradient(circle at 30% 0%, color-mix(in srgb, var(--card-cor) 35%, transparent), transparent 70%);
+}
+
+.cartao-modulo__corpo {
+  border: 1px solid color-mix(in srgb, var(--card-cor) 16%, rgb(255 255 255 / .06));
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--card-cor) 26%, transparent), transparent 62%),
+    radial-gradient(90% 80% at 100% 100%, color-mix(in srgb, var(--card-cor) 12%, transparent), transparent 70%),
+    linear-gradient(170deg, rgb(20 18 28 / .82), rgb(10 9 14 / .88));
+}
+.cartao-modulo:hover .cartao-modulo__corpo {
+  border-color: color-mix(in srgb, var(--card-cor) 45%, transparent);
+}
+
+.cartao-modulo__faixa {
+  background: linear-gradient(90deg, transparent, var(--card-cor), transparent);
+  box-shadow: 0 0 .9rem var(--card-cor);
+  opacity: .7;
+}
+
+.cartao-modulo__dado-fundo { color: color-mix(in srgb, var(--card-cor) 11%, transparent); }
+.cartao-modulo:hover .cartao-modulo__dado-fundo { color: color-mix(in srgb, var(--card-cor) 22%, transparent); }
+
+.cartao-modulo__canto { border-color: color-mix(in srgb, var(--card-cor) 35%, transparent); }
+
+.cartao-modulo__dado {
+  border-color: color-mix(in srgb, var(--card-cor) 45%, transparent);
+  color: color-mix(in srgb, var(--card-cor) 85%, white);
+}
+
+.cartao-modulo__traco { background: var(--card-cor); box-shadow: 0 0 .6rem var(--card-cor); }
+
+html[data-performance-mode='reduced'] .cartao-modulo__faixa,
+html[data-performance-mode='reduced'] .cartao-modulo__traco { box-shadow: none; }

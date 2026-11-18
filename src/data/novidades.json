@@ -1,6 +1,20 @@
 {
   "itens": [
     {
+      "id": "2026-11-18-site-mais-leve",
+      "data": "2026-11-18",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Site mais leve em computador fraco",
+      "detalhes": [
+        "Quando o site percebe que está travando no seu aparelho, ele liga o modo leve sozinho e avisa. Se você mesmo escolheu o modo em Preferências, ele não mexe.",
+        "O modo leve agora tira o desfoque de todos os painéis, o efeito que mais pesa em placa de vídeo fraca.",
+        "O fundo de estrelas gasta menos para ser desenhado, com o mesmo visual.",
+        "As artes de fundo de raças e classes ficaram mais leves para baixar, sem perder qualidade.",
+        "Os cartões da página inicial ficaram sem os ícones ilustrados, e cada um ganhou a sua cor: Ficha dourada, Mundo verde-água, Livro violeta, Loja laranja e Sessão vermelha."
+      ]
+    },
+    {
       "id": "2026-11-18-livro-em-partes",
       "data": "2026-11-18",
       "tipo": "melhoria",
@@ -1023,18 +1037,6 @@
         "Separe itens do Acervo, montarias e personagens em camadas e escolha o que cada jogador pode ver.",
         "Escreva plaquinhas no mapa, escolha a letra, o tamanho e as cores, e arraste para mudar de lugar.",
         "Espelhe um token na horizontal ou na vertical pelo menu Visual."
-      ]
-    },
-    {
-      "id": "2026-11-03-jogadores-papeis-e-permissoes-na-mesa",
-      "data": "2026-11-03",
-      "tipo": "melhoria",
-      "area": "Sessão",
-      "titulo": "Mapa: convide jogadores e ajuste as permissões da mesa",
-      "detalhes": [
-        "No painel Jogadores, o Mestre vê quem está conectado, muda papéis, remove acessos e cria convites para a campanha.",
-        "As permissões podem ser ajustadas por pessoa: mover tokens, usar ping e régua, lançar efeitos de magia e ver cada camada do mapa.",
-        "Cada pessoa pode personalizar o nome e a cor que aparecem nesta mesa sem alterar o perfil da conta."
       ]
     }
   ]

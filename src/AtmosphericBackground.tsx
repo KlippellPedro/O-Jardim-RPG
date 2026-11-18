@@ -31,6 +31,15 @@ const STAR_COLORS = [
   [225, 210, 255],
 ] as const;
 
+// A cor de cada estrela vira texto uma vez só. A transparência vai por
+// globalAlpha: antes cada estrela montava até quatro strings rgba() por quadro,
+// o que em 500 estrelas a 30 quadros dava dezenas de milhares de strings por segundo.
+const STAR_FILLS = new Map<readonly [number, number, number], string>(
+  STAR_COLORS.map((cor) => [cor, `rgb(${cor[0]}, ${cor[1]}, ${cor[2]})`]),
+);
+// Abaixo disso um círculo e um quadrado são iguais na tela, e o quadrado é bem mais barato.
+const RAIO_DE_PONTO = 1.1;
+
 function createRandom(seed = 0x6d2b79f5) {
   let state = seed >>> 0;
   return () => {
@@ -174,11 +183,13 @@ export default function AtmosphericBackground() {
         const twinkle = 0.78 + Math.sin(elapsed * 0.001 * star.twinkleSpeed + star.phase) * 0.22;
         const opacity = Math.min(0.92, (0.2 + depth * 0.72) * twinkle);
         const radius = Math.min(2.35, star.size * (0.45 + depth * 1.25));
-        const [red, green, blue] = star.color;
+        const cor = STAR_FILLS.get(star.color) ?? 'rgb(255, 255, 255)';
+        context.fillStyle = cor;
+        context.strokeStyle = cor;
 
         if (radius > 1.35) {
+          context.globalAlpha = opacity * 0.12;
           context.beginPath();
-          context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${opacity * 0.12})`;
           context.arc(projectedX, projectedY, radius * 3.1, 0, Math.PI * 2);
           context.fill();
         }
@@ -186,30 +197,36 @@ export default function AtmosphericBackground() {
         if (travel > 0 && star.z < 0.28) {
           const previousX = centerX + (star.x / previousZ) * width * 0.66;
           const previousY = centerY + (star.y / previousZ) * height * 0.66;
+          context.globalAlpha = opacity * 0.42;
           context.beginPath();
           context.moveTo(previousX, previousY);
           context.lineTo(projectedX, projectedY);
-          context.strokeStyle = `rgba(${red}, ${green}, ${blue}, ${opacity * 0.42})`;
           context.lineWidth = Math.max(0.45, radius * 0.55);
           context.stroke();
         }
 
-        context.beginPath();
-        context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${opacity})`;
-        context.arc(projectedX, projectedY, Math.max(0.42, radius), 0, Math.PI * 2);
-        context.fill();
+        context.globalAlpha = opacity;
+        const raio = Math.max(0.42, radius);
+        if (raio < RAIO_DE_PONTO) {
+          context.fillRect(projectedX - raio, projectedY - raio, raio * 2, raio * 2);
+        } else {
+          context.beginPath();
+          context.arc(projectedX, projectedY, raio, 0, Math.PI * 2);
+          context.fill();
+        }
 
         if (radius > 1.8) {
+          context.globalAlpha = opacity * 0.35;
           context.beginPath();
           context.moveTo(projectedX - radius * 2.4, projectedY);
           context.lineTo(projectedX + radius * 2.4, projectedY);
           context.moveTo(projectedX, projectedY - radius * 2.4);
           context.lineTo(projectedX, projectedY + radius * 2.4);
-          context.strokeStyle = `rgba(${red}, ${green}, ${blue}, ${opacity * 0.35})`;
           context.lineWidth = 0.55;
           context.stroke();
         }
       }
+      context.globalAlpha = 1;
 
       for (let indice = particulas.length - 1; indice >= 0; indice -= 1) {
         const particula = particulas[indice];

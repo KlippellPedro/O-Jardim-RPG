@@ -684,9 +684,15 @@ html[data-performance-mode='reduced'] .performance-ambient-motion {
   transition-duration: 0.01ms !important;
 }
 
+/* O desfoque de fundo é o efeito mais caro para placa de vídeo fraca (o
+   site usa em centenas de lugares, quase sempre sobre o fundo animado). No
+   modo leve ele sai de tudo; os painéis já têm fundo semitransparente, então
+   o texto continua legível. */
 html[data-performance-mode='reduced'] *,
 html[data-performance-mode='reduced'] *::before,
 html[data-performance-mode='reduced'] *::after {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
   animation-duration: 0.01ms !important;
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;

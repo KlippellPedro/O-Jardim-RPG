@@ -1,6 +1,56 @@
 import { useEffect, useMemo, useSyncExternalStore } from 'react';
 import { usePerformanceStore } from '../store/usePerformanceStore';
-import { dispositivoFraco, sinaisDoAparelho } from '../utils/movimento';
+import { aparelhoEngasgando, dispositivoFraco, sinaisDoAparelho } from '../utils/movimento';
+import { avisar } from '../components/avisos/avisos';
+
+/** Espera o site terminar de abrir (os primeiros segundos sempre têm trancos) e mede por um tempo. */
+const ESPERA_ANTES_DE_MEDIR_MS = 4000;
+const TEMPO_DE_MEDIDA_MS = 6000;
+
+/** Mede os quadros uma vez por abertura do site. Devolve a função que cancela a medida. */
+function vigiarFluidez(): () => void {
+  let quadro = 0;
+  let espera = 0;
+  let cancelado = false;
+  const podeMedir = () => {
+    const estado = usePerformanceStore.getState();
+    return !estado.performanceMode && !estado.escolhaManual && typeof window.requestAnimationFrame === 'function';
+  };
+
+  const medir = () => {
+    if (cancelado || !podeMedir()) return;
+    // Aba escondida: o navegador para os quadros, e a medida não diria nada. Tenta quando ela voltar.
+    if (document.hidden) {
+      document.addEventListener('visibilitychange', () => { espera = window.setTimeout(medir, ESPERA_ANTES_DE_MEDIR_MS); }, { once: true });
+      return;
+    }
+    const intervalos: number[] = [];
+    let anterior = performance.now();
+    const inicio = anterior;
+    const passo = (agora: number) => {
+      if (cancelado) return;
+      if (document.hidden) return; // a pessoa saiu da aba no meio: descarta esta medida
+      intervalos.push(agora - anterior);
+      anterior = agora;
+      if (agora - inicio < TEMPO_DE_MEDIDA_MS) {
+        quadro = window.requestAnimationFrame(passo);
+        return;
+      }
+      if (podeMedir() && aparelhoEngasgando(intervalos)) {
+        usePerformanceStore.getState().aplicarModoLeveAutomatico();
+        avisar.info('O site estava travando neste aparelho, então ligamos o modo leve. Dá para desligar em Preferências.', { titulo: 'Modo leve ligado', duracaoMs: 9000, chave: 'modo-leve-automatico' });
+      }
+    };
+    quadro = window.requestAnimationFrame((agora) => { anterior = agora; quadro = window.requestAnimationFrame(passo); });
+  };
+
+  espera = window.setTimeout(medir, ESPERA_ANTES_DE_MEDIR_MS);
+  return () => {
+    cancelado = true;
+    window.clearTimeout(espera);
+    window.cancelAnimationFrame(quadro);
+  };
+}
 
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 const LARGE_VIEWPORT_QUERY = '(min-width: 2560px)';
@@ -97,6 +147,11 @@ export function PerformancePreferencesBridge() {
       // Sem armazenamento, o modo leve continua manual.
     }
   }, []);
+
+  // A cada vez que o site abre, mede a fluidez de verdade por alguns segundos.
+  // Se o aparelho engasga (placa de vídeo fraca, navegador que não informa a
+  // memória), liga o modo leve e avisa. Nunca mexe depois de uma escolha manual.
+  useEffect(() => vigiarFluidez(), []);
 
   useEffect(() => {
     const root = document.documentElement;

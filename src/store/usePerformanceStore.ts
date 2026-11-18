@@ -22,6 +22,8 @@ interface PerformanceState {
   setEfeito: (efeito: 'celebracoes' | 'dado3d' | 'notificarSuaVez' | 'climaDoMundo' | 'guiasAutomaticos' | 'destaquesDaMesa' | 'vibracao', ligado: boolean) => void;
   /** O modo de desempenho foi ligado sozinho por o aparelho parecer fraco (avisa uma vez). */
   ligadoAutomaticamente: boolean;
+  /** A pessoa ligou ou desligou o modo à mão: a detecção automática não mexe mais. */
+  escolhaManual: boolean;
   aplicarModoLeveAutomatico: () => void;
   setPerformanceMode: (enabled: boolean) => void;
   togglePerformanceMode: () => void;
@@ -39,16 +41,17 @@ export const usePerformanceStore = create<PerformanceState>()(
       vibracao: true,
       notificarSuaVez: false,
       ligadoAutomaticamente: false,
+      escolhaManual: false,
       setEfeito: (efeito, ligado) => set({ [efeito]: ligado }),
       aplicarModoLeveAutomatico: () => set({ performanceMode: true, ligadoAutomaticamente: true }),
-      setPerformanceMode: (performanceMode) => set({ performanceMode, ligadoAutomaticamente: false }),
-      togglePerformanceMode: () => set((state) => ({ performanceMode: !state.performanceMode, ligadoAutomaticamente: false })),
+      setPerformanceMode: (performanceMode) => set({ performanceMode, ligadoAutomaticamente: false, escolhaManual: true }),
+      togglePerformanceMode: () => set((state) => ({ performanceMode: !state.performanceMode, ligadoAutomaticamente: false, escolhaManual: true })),
     }),
     {
       name: 'jardim-performance-store',
       storage: createJSONStorage(() => localStorage),
-      partialize: ({ performanceMode, celebracoes, dado3d, climaDoMundo, guiasAutomaticos, destaquesDaMesa, vibracao, notificarSuaVez, ligadoAutomaticamente }) => (
-        { performanceMode, celebracoes, dado3d, climaDoMundo, guiasAutomaticos, destaquesDaMesa, vibracao, notificarSuaVez, ligadoAutomaticamente }
+      partialize: ({ performanceMode, celebracoes, dado3d, climaDoMundo, guiasAutomaticos, destaquesDaMesa, vibracao, notificarSuaVez, ligadoAutomaticamente, escolhaManual }) => (
+        { performanceMode, celebracoes, dado3d, climaDoMundo, guiasAutomaticos, destaquesDaMesa, vibracao, notificarSuaVez, ligadoAutomaticamente, escolhaManual }
       ),
     },
   ),

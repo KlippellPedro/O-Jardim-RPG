@@ -2,6 +2,20 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-18-site-mais-leve",
+      "data": "2026-11-18",
+      "tipo": "melhoria",
+      "area": "Jardim",
+      "titulo": "Site mais leve em computador fraco",
+      "detalhes": [
+        "Quando o site percebe que está travando no seu aparelho, ele liga o modo leve sozinho e avisa. Se você mesmo escolheu o modo em Preferências, ele não mexe.",
+        "O modo leve agora tira o desfoque de todos os painéis, o efeito que mais pesa em placa de vídeo fraca.",
+        "O fundo de estrelas gasta menos para ser desenhado, com o mesmo visual.",
+        "As artes de fundo de raças e classes ficaram mais leves para baixar, sem perder qualidade.",
+        "Os cartões da página inicial ficaram sem os ícones ilustrados, e cada um ganhou a sua cor: Ficha dourada, Mundo verde-água, Livro violeta, Loja laranja e Sessão vermelha."
+      ]
+    },
+    {
       "id": "2026-11-18-livro-em-partes",
       "data": "2026-11-18",
       "tipo": "melhoria",

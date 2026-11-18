@@ -21,7 +21,6 @@ const DescobertasHost = lazy(() => import('./components/descobertas/DescobertasH
 const RolagemHost = lazy(() => import('./components/dados/RolagemHost').then((modulo) => ({ default: modulo.RolagemHost })));
 const Home = lazy(() => import('./pages/Home'));
 const FichaList = lazy(() => import('./pages/Ficha/FichaList'));
-const PreviewGallery = lazy(() => import('./redesign/PreviewGallery'));
 const Login = lazy(() => import('./pages/Auth/Login').then((module) => ({ default: module.Login })));
 const Cadastro = lazy(() => import('./pages/Auth/Cadastro').then((module) => ({ default: module.Cadastro })));
 const CampanhasList = lazy(() => import('./pages/Campanhas/CampanhasList').then((module) => ({ default: module.CampanhasList })));
@@ -264,9 +263,6 @@ function App() {
           <Suspense fallback={<EsqueletoDePagina />}>
             <TransicaoDeRota>
               <Routes>
-                {/* Rota de teste do redesign (desprotegida) */}
-                <Route path="/redesign-preview" element={<PreviewGallery />} />
-              
                 {/* Rotas públicas - redirecionam se já logado */}
                 <Route path="/login" element={!usuario ? <Login /> : <Navigate to="/" replace />} />
                 <Route path="/cadastro" element={!usuario ? <Cadastro /> : <Navigate to="/" replace />} />

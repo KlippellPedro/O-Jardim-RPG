@@ -255,7 +255,7 @@ export const PreferenciasPanel: React.FC = () => {
 
         {ligadoAutomaticamente && performanceMode ? (
           <p className="rounded-2xl border border-emerald-400/20 bg-emerald-400/5 px-4 py-3 text-xs leading-5 text-emerald-200/90" role="status">
-            Ligamos o modo de desempenho sozinhos porque este aparelho parece limitado (pouca memória ou poucos núcleos). Se ele aguentar bem, é só desligar acima.
+            Ligamos o modo de desempenho sozinhos porque este aparelho parece limitado ou o site estava travando nele. Se ele aguentar bem, é só desligar acima.
           </p>
         ) : null}
 
