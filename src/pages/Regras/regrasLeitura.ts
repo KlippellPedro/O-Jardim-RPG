@@ -17,13 +17,17 @@ export interface LeituraSalva {
 
 export type FonteDoLeitor = 'serifa' | 'sem';
 export type TamanhoDoLeitor = 1 | 2 | 3 | 4;
+/** "partes": cada seção do tópico numa página, com índice e próxima/anterior. "inteiro": o tópico todo
+ *  numa página só, para quem prefere rolar (ou procurar com Ctrl+F). */
+export type ModoDoLeitor = 'partes' | 'inteiro';
 
 export interface PreferenciasDeLeitura {
   tamanho: TamanhoDoLeitor;
   fonte: FonteDoLeitor;
+  modo: ModoDoLeitor;
 }
 
-export const PREFERENCIAS_PADRAO: PreferenciasDeLeitura = { tamanho: 2, fonte: 'serifa' };
+export const PREFERENCIAS_PADRAO: PreferenciasDeLeitura = { tamanho: 2, fonte: 'serifa', modo: 'partes' };
 
 /** Abaixo disto a pessoa só abriu o tópico; acima de 97% ela chegou ao fim. Nos dois casos não vale "continuar". */
 export const PROGRESSO_MINIMO_PARA_CONTINUAR = 0.04;
@@ -64,9 +68,11 @@ export function lerPreferencias(bruto: string | null): PreferenciasDeLeitura {
     const dado = JSON.parse(bruto) as Partial<PreferenciasDeLeitura> | null;
     const tamanho = dado?.tamanho;
     const fonte = dado?.fonte;
+    const modo = dado?.modo;
     return {
       tamanho: tamanho === 1 || tamanho === 2 || tamanho === 3 || tamanho === 4 ? tamanho : PREFERENCIAS_PADRAO.tamanho,
       fonte: fonte === 'serifa' || fonte === 'sem' ? fonte : PREFERENCIAS_PADRAO.fonte,
+      modo: modo === 'partes' || modo === 'inteiro' ? modo : PREFERENCIAS_PADRAO.modo,
     };
   } catch {
     return PREFERENCIAS_PADRAO;
@@ -74,7 +80,7 @@ export function lerPreferencias(bruto: string | null): PreferenciasDeLeitura {
 }
 
 export function serializarPreferencias(preferencias: PreferenciasDeLeitura): string {
-  return JSON.stringify({ tamanho: preferencias.tamanho, fonte: preferencias.fonte });
+  return JSON.stringify({ tamanho: preferencias.tamanho, fonte: preferencias.fonte, modo: preferencias.modo });
 }
 
 /** Progresso de rolagem de um elemento: 0 no topo, 1 no fim. Conteúdo que cabe inteiro na tela conta como 0. */

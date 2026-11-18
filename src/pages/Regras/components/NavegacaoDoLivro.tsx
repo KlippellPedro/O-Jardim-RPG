@@ -160,7 +160,8 @@ export const NavegacaoDoLivro = ({
                       {subtopicos[topico.id]?.length ? (
                         <ul className="mb-1 ml-3 mt-1 space-y-0.5 border-l border-[rgb(var(--acento)/0.2)] pl-2" aria-label={`Partes de ${topico.titulo}`}>
                           {subtopicos[topico.id].map((subtopico, indice) => {
-                            const ativo = topicoAtivo === topico.id && (subtopicoAtivo ?? subtopicos[topico.id][0].id) === subtopico.id;
+                            // Quem chama já resolve o ativo (a primeira estante do Guia, ou nenhuma parte na visão geral).
+                            const ativo = topicoAtivo === topico.id && subtopicoAtivo === subtopico.id;
                             return (
                               <li key={subtopico.id}>
                                 <button

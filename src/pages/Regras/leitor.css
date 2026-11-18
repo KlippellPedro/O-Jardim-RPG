@@ -28,6 +28,14 @@
 .regras-leitor[data-tamanho='4'] { --leitura-tamanho: 1.3125rem; }
 .regras-leitor[data-fonte='sem'] { --leitura-fonte: 'Inter', system-ui, sans-serif; }
 
+/* No celular a coluna é estreita: a mesma escala, um degrau menor, cabe mais palavra por linha. */
+@media (max-width: 40rem) {
+  .regras-leitor[data-tamanho='1'] { --leitura-tamanho: 0.9375rem; }
+  .regras-leitor[data-tamanho='2'] { --leitura-tamanho: 1rem; }
+  .regras-leitor[data-tamanho='3'] { --leitura-tamanho: 1.125rem; }
+  .regras-leitor[data-tamanho='4'] { --leitura-tamanho: 1.25rem; }
+}
+
 /* ------------------------------------------------------------------ */
 /* Corpo do texto                                                      */
 /* ------------------------------------------------------------------ */
@@ -36,25 +44,26 @@
   max-width: 62rem;
   font-family: var(--leitura-fonte);
   font-size: var(--leitura-tamanho);
-  line-height: 1.8;
-  color: rgb(226 221 235 / 0.93);
+  line-height: 1.75;
+  color: rgb(222 217 231 / 0.9);
   font-variant-numeric: lining-nums;
   hyphens: auto;
   -webkit-hyphens: auto;
   text-wrap: pretty;
 }
 
-/* O texto corrido fica numa medida de leitura; tabelas e quadros usam a largura toda. */
-.regras-content > p,
-.regras-content > ul,
-.regras-content > ol,
-.regras-content > h3,
-.regras-content > h4,
-.regras-content > .regras-note,
-.regras-content > .regras-resumo,
-.regras-content > .regras-formula,
-.regras-content > .regras-quadro {
-  max-width: 46rem;
+/* O texto corrido fica numa medida de leitura (uns 70 caracteres por linha); tabelas e quadros usam a
+   largura toda. Cada seção mora numa .regras-parte, montada pelo leitor em volta de cada h3. */
+:is(.regras-content, .regras-parte) > p,
+:is(.regras-content, .regras-parte) > ul,
+:is(.regras-content, .regras-parte) > ol,
+:is(.regras-content, .regras-parte) > h3,
+:is(.regras-content, .regras-parte) > h4,
+:is(.regras-content, .regras-parte) > .regras-note,
+:is(.regras-content, .regras-parte) > .regras-resumo,
+:is(.regras-content, .regras-parte) > .regras-formula,
+:is(.regras-content, .regras-parte) > .regras-quadro {
+  max-width: 42rem;
 }
 
 .regras-content p {
@@ -72,7 +81,7 @@
 
 .regras-content strong {
   font-weight: 600;
-  color: #f4eddb;
+  color: rgb(241 233 214);
 }
 
 .regras-content em {
@@ -85,22 +94,25 @@
   color: rgb(190 184 205 / 0.8);
 }
 
-/* Abertura do tópico: a frase que diz para que ele serve. */
+/* Abertura do tópico: a frase que diz para que ele serve. Faz as vezes de subtítulo da página. */
 .regras-content p.regras-lead {
-  margin-bottom: 1.6em;
-  font-size: 1.13em;
-  line-height: 1.75;
-  color: rgb(242 236 224 / 0.97);
+  margin-bottom: 1.5em;
+  font-size: 1.08em;
+  line-height: 1.7;
+  color: rgb(238 232 220 / 0.95);
 }
 
-.regras-content > p.regras-lead:first-child::first-letter {
-  float: left;
-  padding: 0.07em 0.11em 0 0;
-  font-family: 'Cinzel', serif;
-  font-size: 3.7em;
-  font-weight: 700;
-  line-height: 0.78;
-  color: rgb(var(--acento-forte));
+/* A capitular só no computador: no celular ela ocupava meia tela antes da primeira frase. */
+@media (min-width: 48rem) {
+  :is(.regras-content, .regras-parte--abertura) > p.regras-lead:first-child::first-letter {
+    float: left;
+    padding: 0.08em 0.1em 0 0;
+    font-family: 'Cinzel', serif;
+    font-size: 3.1em;
+    font-weight: 700;
+    line-height: 0.8;
+    color: rgb(var(--acento-forte));
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -112,9 +124,9 @@
   margin: 3.4rem 0 1.15rem;
   padding-bottom: 0.7rem;
   scroll-margin-top: 5.5rem;
-  border-bottom: 1px solid rgb(var(--acento) / 0.3);
+  border-bottom: 1px solid rgb(var(--acento) / 0.22);
   font-family: 'Cinzel', serif;
-  font-size: 1.55rem;
+  font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.55rem);
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: 0.02em;
@@ -136,8 +148,69 @@
 .regras-content > .regras-resumo + h3.regras-subtitle {
   margin-top: 2.4rem;
 }
-.regras-content > h3.regras-subtitle:first-child {
+.regras-content > h3.regras-subtitle:first-child,
+.regras-parte--abertura:empty + .regras-parte > h3.regras-subtitle:first-child {
   margin-top: 0;
+}
+
+/* Lido inteiro, cada seção leva o número dela no lugar do losango e fica mais longe da anterior: dá para
+   ver onde um assunto acaba e o outro começa. */
+.regras-content--numerado .regras-parte + .regras-parte > h3.regras-subtitle:first-child {
+  margin-top: 4.4rem;
+}
+.regras-content--numerado .regras-parte--abertura:empty + .regras-parte > h3.regras-subtitle:first-child {
+  margin-top: 0;
+}
+.regras-content--numerado h3.regras-subtitle[data-numero]::before {
+  content: attr(data-numero);
+  display: inline-block;
+  width: auto;
+  height: auto;
+  margin: 0 0.75rem 0 0;
+  padding: 0.18rem 0.45rem;
+  border: 1px solid rgb(var(--acento) / 0.35);
+  border-radius: 0.45rem;
+  background: rgb(var(--acento) / 0.1);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  color: rgb(var(--acento-forte));
+  vertical-align: 0.3em;
+  transform: none;
+}
+
+/* Lido em partes, o título da seção é o título da página. */
+.regras-content--partes .regras-parte > h3.regras-subtitle:first-child {
+  margin: 0 0 1.5rem;
+  padding-bottom: 0;
+  border-bottom: 0;
+  font-size: clamp(1.7rem, 1.25rem + 1.6vw, 2.35rem);
+  line-height: 1.15;
+  color: #f2ead7;
+}
+.regras-content--partes .regras-parte > h3.regras-subtitle:first-child::before {
+  display: none;
+}
+.regras-content--partes .regras-parte > :last-child {
+  margin-bottom: 0;
+}
+
+/* Catálogo ou bloco do Mestre que aparece sozinho numa parte: sem a margem e o filete de quem vinha
+   depois do texto. */
+.regras-parte-extra--sozinha > section:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+.regras-parte-extra__titulo {
+  margin: 0 0 1.5rem;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.7rem, 1.25rem + 1.6vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #f2ead7;
 }
 
 .regras-content h4,
@@ -315,6 +388,35 @@
   margin-bottom: 0;
 }
 
+@media (max-width: 40rem) {
+  .regras-content .regras-note {
+    padding: 0.9rem 1rem 0.9rem 2.4rem;
+  }
+  .regras-content .regras-note::before {
+    left: 0.85rem;
+    top: 0.85rem;
+  }
+  .regras-content .regras-note--exemplo,
+  .regras-content .regras-note--atencao,
+  .regras-content .regras-note--dica,
+  .regras-content .regras-note--regra {
+    padding: 2.2rem 1rem 0.95rem;
+  }
+  .regras-content .regras-note--exemplo::before,
+  .regras-content .regras-note--atencao::before,
+  .regras-content .regras-note--dica::before,
+  .regras-content .regras-note--regra::before {
+    left: 1rem;
+  }
+  .regras-content .regras-resumo {
+    padding: 1rem 1.05rem 1.1rem;
+  }
+  .regras-content .regras-formula {
+    padding: 0.9rem 1rem;
+    font-size: 0.92rem;
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Fórmulas e pares nome/valor                                         */
 /* ------------------------------------------------------------------ */
@@ -322,6 +424,7 @@
 .regras-content .regras-formula {
   margin: 1.7rem 0;
   padding: 1.05rem 1.3rem;
+  overflow-wrap: anywhere;
   border: 1px solid rgb(var(--acento) / 0.38);
   border-radius: 0.9rem;
   background: linear-gradient(180deg, rgb(var(--acento) / 0.11), rgb(0 0 0 / 0.26));
@@ -793,30 +896,39 @@
   outline-offset: 2px;
 }
 
+/* O dado clicável parece texto: a cor do capítulo e um fundo leve. Antes era um botão com moldura e
+   ícone, e uma frase com três dados virava uma fileira de caixinhas. O mínimo de toque do app (44 px)
+   não vale aqui: no meio da linha ele empurrava as linhas de cima e de baixo. */
 .regras-content .dice-roll-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.28em;
-  margin: 0 0.05em;
-  padding: 0 0.42em;
-  border: 1px solid rgb(var(--acento) / 0.4);
-  border-radius: 0.4em;
-  background: rgb(var(--acento) / 0.1);
-  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
-  font-size: 0.86em;
-  font-weight: 700;
-  line-height: 1.55;
+  display: inline;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0.05em 0.22em;
+  border: 0;
+  border-radius: 0.3em;
+  background: rgb(var(--acento) / 0.12);
+  font: inherit;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: inherit;
   color: rgb(var(--acento-forte));
-  vertical-align: baseline;
+  white-space: nowrap;
+  cursor: pointer;
   transition: background-color 0.15s, color 0.15s;
 }
 .regras-content .dice-roll-btn:hover {
   background: rgb(var(--acento-forte));
   color: #181208;
 }
-.regras-content .dice-roll-btn svg {
-  flex-shrink: 0;
-  opacity: 0.85;
+.regras-content .dice-roll-btn:focus-visible {
+  outline: 2px solid rgb(var(--acento-forte));
+  outline-offset: 1px;
+}
+
+/* Termos que viram link: o sublinhado mais apagado, para o texto não ficar riscado de ponta a ponta. */
+.regras-content .termo-do-jogo {
+  text-decoration-color: rgb(var(--acento) / 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {

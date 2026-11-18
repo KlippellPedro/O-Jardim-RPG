@@ -23,6 +23,8 @@ interface CabecalhoDoTopicoProps {
   linkDoPdf: { href: string; pagina: number } | null;
   /** Para onde o botão Editar leva; ausente quando a pessoa não edita conteúdo. */
   linkDeEdicao: string | null;
+  /** Quantas partes o tópico tem quando é lido em partes; 0 quando aparece inteiro. */
+  totalDePartes?: number;
 }
 
 export const CabecalhoDoTopico = ({
@@ -35,17 +37,24 @@ export const CabecalhoDoTopico = ({
   onAbrirTopico,
   linkDoPdf,
   linkDeEdicao,
+  totalDePartes = 0,
 }: CabecalhoDoTopicoProps) => {
   const minutos = tempoDeLeituraEmMinutos(topico.corpo);
+  // Quando o texto já abre com a frase de abertura, o resumo diria a mesma coisa duas vezes seguidas.
+  // Ele continua nas listas, no "próximo tópico" e na busca.
+  const mostrarResumo = !/^\s*<p class="[^"]*\bregras-lead\b/.test(topico.corpo);
   const soMestre = topico.categoria === 'Guia do Mestre';
   const rotulo = rotuloDoSelo(idDoTopico, topico.status);
   const selo = seloDoTopico(idDoTopico);
   const eModulo = rotulo === SELOS_DO_LIVRO.modulo.rotulo;
 
   return (
-    <header className="mb-10 border-b border-[rgb(var(--acento)/0.28)] pb-8">
-      <div className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-[10px] font-bold uppercase tracking-[0.22em]">
-        <span className="text-[rgb(var(--acento-forte))]">Capítulo {capitulo.numero} · {capitulo.titulo}</span>
+    <header className="mb-9 border-b border-[rgb(var(--acento)/0.24)] pb-7">
+      <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-[10px] font-bold uppercase tracking-[0.22em]">
+        <span className="text-[rgb(var(--acento-forte))]">
+          <span className="hidden sm:inline">Capítulo {capitulo.numero} · {capitulo.titulo}</span>
+          <span className="sm:hidden">{capitulo.titulo}</span>
+        </span>
         <span aria-hidden="true" className="text-gray-700">◆</span>
         <span className="text-gray-500">Tópico {numero}</span>
         <span className="ml-auto flex flex-wrap items-center gap-2">
@@ -59,7 +68,7 @@ export const CabecalhoDoTopico = ({
           ) : null}
           <span
             title={selo && rotulo === SELOS_DO_LIVRO[selo].rotulo ? SELOS_DO_LIVRO[selo].explicacao : undefined}
-            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 ${eModulo
+            className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 ${eModulo
               ? 'border-white/15 bg-white/[0.04] text-gray-300'
               : 'border-[rgb(var(--acento)/0.3)] bg-[rgb(var(--acento)/0.12)] text-[rgb(var(--acento-forte))]'}`}
           >
@@ -68,14 +77,15 @@ export const CabecalhoDoTopico = ({
         </span>
       </div>
 
-      <h1 className="text-3xl font-bold leading-tight text-[#f2ead7] sm:text-4xl lg:text-5xl" style={{ fontFamily: 'Cinzel, serif' }}>
+      <h1 className="text-[2rem] font-bold leading-tight text-[#f2ead7] sm:text-4xl lg:text-5xl" style={{ fontFamily: 'Cinzel, serif' }}>
         {titulo}
       </h1>
-      <p className="mt-5 max-w-[68ch] text-base leading-8 text-gray-300/85 sm:text-lg">{topico.resumo}</p>
+      {mostrarResumo ? <p className="mt-4 max-w-[62ch] text-base leading-7 text-gray-300/85 sm:text-lg sm:leading-8">{topico.resumo}</p> : null}
 
-      <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-gray-500">
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-500">
         <span className="inline-flex items-center gap-1.5">
           <Clock size={13} aria-hidden="true" /> {minutos} {minutos === 1 ? 'minuto' : 'minutos'} de leitura
+          {totalDePartes > 0 ? <span className="text-gray-600">· {totalDePartes} partes</span> : null}
         </span>
         {linkDoPdf ? (
           <a
@@ -89,32 +99,15 @@ export const CabecalhoDoTopico = ({
         ) : null}
       </div>
 
-      {topico.destaques?.length ? (
-        <dl
-          aria-label="O essencial deste tópico"
-          className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(min(100%,12.5rem),1fr))] gap-2.5"
-        >
-          {topico.destaques.map(([rotulo, valor]) => (
-            <div
-              key={`${rotulo}-${valor}`}
-              className="rounded-xl border border-[rgb(var(--acento)/0.25)] bg-[rgb(var(--acento)/0.07)] px-3.5 py-2.5"
-            >
-              <dt className="text-[9px] font-bold uppercase tracking-[0.18em] text-[rgb(var(--acento-forte))]">{rotulo}</dt>
-              <dd className="mt-1 text-sm font-semibold leading-5 text-gray-100">{valor}</dd>
-            </div>
-          ))}
-        </dl>
-      ) : null}
-
       {antesDeLer.length ? (
-        <nav aria-label="Antes de ler" className="mt-6 flex flex-wrap items-center gap-2 text-xs">
-          <span className="font-bold uppercase tracking-[0.16em] text-gray-500">Antes de ler</span>
+        <nav aria-label="Antes de ler" className="mt-4 flex flex-wrap items-center gap-2 text-xs">
+          <span className="mr-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-500">Antes de ler</span>
           {antesDeLer.map((item) => (
             <button
               key={item.id}
               type="button"
               onClick={() => onAbrirTopico(item.id)}
-              className="rounded-full border border-white/12 px-3 py-1 text-gray-300 transition hover:border-[rgb(var(--acento)/0.5)] hover:text-[rgb(var(--acento-forte))]"
+              className="min-h-0 min-w-0 rounded-full border border-white/12 px-2.5 py-1 leading-4 text-gray-300 transition hover:border-[rgb(var(--acento)/0.5)] hover:text-[rgb(var(--acento-forte))]"
             >
               {item.titulo}
             </button>

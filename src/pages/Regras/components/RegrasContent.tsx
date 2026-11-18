@@ -1,10 +1,26 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown, Dices, List, X } from 'lucide-react';
 import { sanitizeRuleHtml } from '../../../services/sanitizeRuleHtml';
 import { idDaSecao } from '../secaoDoLivro';
 import { ancoraDoTermo, dicaDoTermo, dividirEmTermos, termoPeloNome } from '../../../services/termosDoJogo';
+import {
+  ID_DA_ABERTURA,
+  idDaParte,
+  resumoDaParte,
+  topicoSeDivide,
+  type ParteDoTopico,
+} from '../partesDoTopico';
 import '../leitor.css';
+
+/** Parte que não vem do texto: um catálogo ou o bloco de quem conduz a mesa. */
+export interface ExtraDoTopico {
+  id: string;
+  titulo: string;
+  conteudo: ReactNode;
+  /** O catálogo já traz o próprio título; o resto ganha um quando aparece sozinho numa parte. */
+  comTitulo?: boolean;
+}
 
 interface RegrasContentProps {
   htmlContent: string;
@@ -20,7 +36,61 @@ interface RegrasContentProps {
   titulosDosTopicos?: Record<string, string>;
   /** Tópico aberto: os termos que ele mesmo explica não viram link. */
   topicoAtual?: string;
+  /** Lê o tópico em partes (uma seção por vez) quando ele tem partes suficientes. Sem isso, inteiro. */
+  paginado?: boolean;
+  /** Parte à mostra quando o tópico se divide; vazia ou desconhecida é a visão geral. */
+  parteAtiva?: string | null;
+  /** Catálogos e o bloco do Mestre, que entram depois do texto (e viram partes próprias). */
+  extras?: ExtraDoTopico[];
+  /** Avisa quais partes o tópico tem, na ordem, com a visão geral em primeiro. */
+  onPartes?: (partes: ParteDoTopico[]) => void;
+  /** Seção ou termo pedido no endereço (`secao=`): a parte que o contém é aberta. */
+  secaoAlvo?: string | null;
+  onIrParaParte?: (idDaParte: string) => void;
 }
+
+interface SecoesMontadas {
+  html: string;
+  secoes: ParteDoTopico[];
+}
+
+/** Junta cada h3 do primeiro nível e o que vem depois dele numa `<section>` própria; o que vem antes do
+ * primeiro h3 fica na visão geral. Um h3 dentro de outro bloco continua onde está. */
+const envolverPartes = (container: HTMLElement, leitor: string): ParteDoTopico[] => {
+  const fragmento = document.createDocumentFragment();
+  const novaParte = (id: string) => {
+    const secao = document.createElement('section');
+    secao.className = id === ID_DA_ABERTURA ? 'regras-parte regras-parte--abertura' : 'regras-parte';
+    secao.dataset.parte = id;
+    secao.dataset.leitor = leitor;
+    fragmento.appendChild(secao);
+    return secao;
+  };
+  const partes: ParteDoTopico[] = [{ id: ID_DA_ABERTURA, titulo: 'Visão geral', resumo: '' }];
+  let atual = novaParte(ID_DA_ABERTURA);
+  Array.from(container.childNodes).forEach((no) => {
+    // Espaço em branco entre os blocos não conta: assim uma visão geral sem texto fica vazia de verdade.
+    if (no.nodeType === Node.TEXT_NODE && !(no.nodeValue || '').trim()) return;
+    if (no instanceof HTMLHeadingElement && no.tagName === 'H3' && no.id) {
+      // Dois títulos iguais no mesmo tópico ganhariam o mesmo id: a segunda parte leva um número.
+      const base = idDaParte(no.id);
+      let id = base;
+      for (let n = 2; partes.some((parte) => parte.id === id); n += 1) id = `${base}-${n}`;
+      atual = novaParte(id);
+      partes.push({ id, titulo: (no.textContent || '').trim(), resumo: '' });
+    }
+    atual.appendChild(no);
+  });
+  container.replaceChildren(fragmento);
+  // A primeira frase de cada parte serve de chamada no índice e no botão de "próxima".
+  container.querySelectorAll<HTMLElement>(':scope > .regras-parte').forEach((secao) => {
+    const parte = partes.find((item) => item.id === secao.dataset.parte);
+    if (!parte || parte.id === ID_DA_ABERTURA) return;
+    const primeiro = secao.querySelector('p, li, dd');
+    parte.resumo = resumoDaParte(primeiro?.textContent || '');
+  });
+  return partes;
+};
 
 /** Onde um termo do texto não vira link: títulos, botões, remissões, fórmulas. */
 const SEM_LINK_DE_TERMO = 'a, button, h1, h2, h3, h4, th, .regras-ref, .regras-formula';
@@ -100,6 +170,7 @@ export const topicoDaRemissao = (elemento: Element): string | null => {
   return classe ? classe.slice(PREFIXO_REMISSAO.length) : null;
 };
 
+
 export const RegrasContent = ({
   htmlContent,
   ocultarCatalogoAflicoes = false,
@@ -108,11 +179,25 @@ export const RegrasContent = ({
   onAbrirTopico,
   titulosDosTopicos,
   topicoAtual,
+  paginado = false,
+  parteAtiva = null,
+  extras = [],
+  onPartes,
+  secaoAlvo = null,
+  onIrParaParte,
 }: RegrasContentProps) => {
+  const leitor = useId();
   const contentRef = useRef<HTMLDivElement>(null);
+  const raizRef = useRef<HTMLDivElement>(null);
   const toastTimerRef = useRef<number | null>(null);
   const abrirTopicoRef = useRef(onAbrirTopico);
   const titulosRef = useRef(titulosDosTopicos);
+  const onPartesRef = useRef(onPartes);
+  const irParaParteRef = useRef(onIrParaParte);
+  const paginadoRef = useRef(paginado);
+  const parteAtivaRef = useRef(parteAtiva);
+  const extrasRef = useRef(extras);
+  const [montadas, setMontadas] = useState<SecoesMontadas>({ html: '', secoes: [] });
   const [toc, setToc] = useState<TocItem[]>([]);
   const [secaoAtiva, setSecaoAtiva] = useState<string>('');
   const [sumarioMovelAberto, setSumarioMovelAberto] = useState(false);
@@ -120,6 +205,36 @@ export const RegrasContent = ({
 
   abrirTopicoRef.current = onAbrirTopico;
   titulosRef.current = titulosDosTopicos;
+  onPartesRef.current = onPartes;
+  irParaParteRef.current = onIrParaParte;
+  paginadoRef.current = paginado;
+  parteAtivaRef.current = parteAtiva;
+  extrasRef.current = extras;
+
+  // As partes do tópico: as seções do texto e, depois delas, os extras (catálogo, bloco do Mestre).
+  const chaveDosExtras = extras.map((extra) => `${extra.id}\u0000${extra.titulo}`).join('\u0001');
+  const partes = useMemo<ParteDoTopico[]>(
+    () => [
+      ...montadas.secoes,
+      ...(montadas.secoes.length ? extras.map((extra) => ({ id: extra.id, titulo: extra.titulo, resumo: '', extra: true })) : []),
+    ],
+    // `extras` muda de identidade a cada render; a chave guarda o que importa (id e título).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [montadas.secoes, chaveDosExtras],
+  );
+  const montado = montadas.html === htmlContent && montadas.secoes.length > 0;
+  const dividido = paginado && montado && topicoSeDivide(partes);
+  const parteVisivel = dividido
+    ? (partes.some((parte) => parte.id === parteAtiva) ? parteAtiva as string : ID_DA_ABERTURA)
+    : null;
+  const parteVisivelRef = useRef(parteVisivel);
+  parteVisivelRef.current = parteVisivel;
+  // Enquanto o texto não foi montado, quem lê em partes ainda não sabe onde cada extra cai: ficam guardados.
+  const extraOculto = (id: string) => (paginado && !montado) || (dividido && parteVisivel !== id);
+
+  useEffect(() => {
+    if (montado) onPartesRef.current?.(partes);
+  }, [montado, partes]);
 
   useEffect(() => {
     const container = contentRef.current;
@@ -146,10 +261,24 @@ export const RegrasContent = ({
     const novoToc = headers.map((header, index) => {
       const id = slugTitulo(header.textContent || 'Tópico', index);
       header.id = id;
+      header.dataset.numero = String(index + 1).padStart(2, '0');
       return { id, text: header.textContent || 'Tópico' };
     });
     setToc(novoToc);
     setSecaoAtiva(novoToc[0]?.id || '');
+
+    // Cada seção numa `<section>` própria. Quem lê em partes já vê só a parte certa no primeiro desenho:
+    // sem isso o tópico inteiro piscava na tela antes de encolher para a parte.
+    const secoes = envolverPartes(container, leitor);
+    const extrasAgora = extrasRef.current;
+    const divideAgora = paginadoRef.current && secoes.length - 1 + extrasAgora.length >= 2;
+    const idsAgora = [...secoes.map((secao) => secao.id), ...extrasAgora.map((extra) => extra.id)];
+    const pedida = parteAtivaRef.current;
+    const visivelAgora = divideAgora ? (pedida && idsAgora.includes(pedida) ? pedida : ID_DA_ABERTURA) : null;
+    container.querySelectorAll<HTMLElement>(':scope > .regras-parte').forEach((secao) => {
+      secao.hidden = Boolean(visivelAgora) && secao.dataset.parte !== visivelAgora;
+    });
+    setMontadas({ html: htmlContent, secoes });
 
     // Remissões: só viram link quando quem renderiza sabe abrir um tópico e o tópico existe para
     // este leitor (o Guia do Mestre, por exemplo, não aparece para quem não conduz a mesa).
@@ -182,21 +311,15 @@ export const RegrasContent = ({
           const index = match.index ?? cursor;
           fragment.appendChild(document.createTextNode(rawText.slice(cursor, index)));
           const expression = match[0];
+          // O dado clicável fica com cara de texto (só a cor e um sublinhado): no meio da frase, um botão
+          // com ícone e moldura enchia a linha de caixinhas.
           const button = document.createElement('button');
           button.type = 'button';
           button.setAttribute('aria-label', `Rolar ${expression}`);
+          button.title = `Rolar ${expression}`;
           button.className = 'dice-roll-btn';
           button.dataset.dice = expression;
-          const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-          icon.setAttribute('aria-hidden', 'true');
-          icon.setAttribute('width', '12');
-          icon.setAttribute('height', '12');
-          icon.setAttribute('viewBox', '0 0 24 24');
-          icon.setAttribute('fill', 'none');
-          icon.setAttribute('stroke', 'currentColor');
-          icon.setAttribute('stroke-width', '2');
-          icon.innerHTML = '<rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/>';
-          button.append(icon, document.createTextNode(expression));
+          button.textContent = expression;
           fragment.appendChild(button);
           cursor = index + expression.length;
         });
@@ -251,6 +374,7 @@ export const RegrasContent = ({
       { root: reader, rootMargin: '-12% 0px -72% 0px', threshold: 0 },
     ) : null;
     headers.forEach((header) => observer?.observe(header));
+    raizRef.current?.querySelectorAll<HTMLElement>(`.regras-parte-extra[data-leitor="${leitor}"]`).forEach((extra) => observer?.observe(extra));
 
     return () => {
       container.removeEventListener('click', handleClick);
@@ -258,7 +382,36 @@ export const RegrasContent = ({
       observer?.disconnect();
       if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
     };
-  }, [htmlContent, ocultarCatalogoAflicoes, ocultarCatalogoPericias, topicoAtual]);
+  }, [htmlContent, ocultarCatalogoAflicoes, ocultarCatalogoPericias, topicoAtual, leitor]);
+
+  // Troca de parte: só uma seção do texto fica à mostra.
+  useEffect(() => {
+    const container = contentRef.current;
+    if (!container || !montado) return;
+    container.querySelectorAll<HTMLElement>(':scope > .regras-parte').forEach((secao) => {
+      secao.hidden = Boolean(parteVisivel) && secao.dataset.parte !== parteVisivel;
+    });
+  }, [montado, parteVisivel]);
+
+  // Um link de seção ou de termo (`secao=`) abre a parte que o contém. O catálogo pode chegar depois do
+  // texto (os dados da campanha), então a procura insiste por alguns instantes.
+  useEffect(() => {
+    if (!dividido || !secaoAlvo) return undefined;
+    let tentativas = 0;
+    let espera = 0;
+    const procurar = () => {
+      const raiz = raizRef.current;
+      const alvo = document.getElementById(secaoAlvo);
+      if (raiz && alvo && raiz.contains(alvo)) {
+        const parte = alvo.closest<HTMLElement>(`[data-leitor="${leitor}"]`)?.dataset.parte;
+        if (parte && parte !== parteVisivelRef.current) irParaParteRef.current?.(parte);
+        return;
+      }
+      if (tentativas++ < 20) espera = window.setTimeout(procurar, 150);
+    };
+    procurar();
+    return () => window.clearTimeout(espera);
+  }, [dividido, secaoAlvo, leitor]);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -266,27 +419,35 @@ export const RegrasContent = ({
     setSumarioMovelAberto(false);
   };
 
-  const sumario = toc.length ? (
-    <ul className="space-y-1">
-      {toc.map((item) => (
+  // Lido inteiro, o sumário leva às seções e também aos catálogos que vêm depois do texto.
+  const itensDoSumario: TocItem[] = [
+    ...toc,
+    ...extras.map((extra) => ({ id: `parte-${extra.id}`, text: extra.titulo })),
+  ];
+  const mostrarSumario = !semSumario && !dividido && itensDoSumario.length > 0;
+
+  const sumario = mostrarSumario ? (
+    <ol className="space-y-1">
+      {itensDoSumario.map((item, indice) => (
         <li key={item.id}>
           <button
             type="button"
             onClick={() => scrollTo(item.id)}
             aria-current={secaoAtiva === item.id ? 'location' : undefined}
-            className={`w-full rounded-lg border-l-2 px-3 py-2 text-left text-xs leading-relaxed transition-colors ${secaoAtiva === item.id
+            className={`flex w-full items-baseline gap-2.5 rounded-lg border-l-2 px-3 py-2 text-left text-xs leading-relaxed transition-colors ${secaoAtiva === item.id
               ? 'border-[rgb(var(--acento))] bg-[rgb(var(--acento)/0.12)] text-[rgb(var(--acento-forte))]'
               : 'border-transparent text-gray-500 hover:bg-white/5 hover:text-gray-300'}`}
           >
-            {item.text}
+            <span className="w-4 shrink-0 text-right font-mono text-[10px] text-gray-600">{indice + 1}</span>
+            <span className="min-w-0">{item.text}</span>
           </button>
         </li>
       ))}
-    </ul>
+    </ol>
   ) : null;
 
   return (
-    <div className="relative flex items-start gap-10">
+    <div ref={raizRef} className="relative flex items-start gap-10">
       {toastMessage ? createPortal(
         <div role="status" className="fixed bottom-6 right-6 z-[9999] flex min-w-[280px] max-w-[calc(100vw-3rem)] items-center gap-3 rounded-xl border border-[#c7a44c]/40 bg-[#111017]/95 p-4 text-white shadow-2xl backdrop-blur-xl">
           <span className="rounded-full bg-[#c7a44c]/20 p-2 text-[#d8bd75]"><Dices size={21} /></span>
@@ -297,7 +458,7 @@ export const RegrasContent = ({
       ) : null}
 
       <div className="min-w-0 flex-1">
-        {toc.length && !semSumario ? (
+        {mostrarSumario ? (
           <div className="sticky top-0 z-20 mb-7 rounded-xl border border-white/10 bg-[#121018]/95 p-2 shadow-xl backdrop-blur-xl 2xl:hidden">
             <button
               type="button"
@@ -312,10 +473,27 @@ export const RegrasContent = ({
           </div>
         ) : null}
 
-        <div ref={contentRef} className="regras-content" />
+        <div
+          ref={contentRef}
+          className={`regras-content${dividido ? ' regras-content--partes' : ''}${!dividido && !semSumario ? ' regras-content--numerado' : ''}`}
+        />
+
+        {extras.map((extra) => (
+          <section
+            key={extra.id}
+            id={`parte-${extra.id}`}
+            data-parte={extra.id}
+            data-leitor={leitor}
+            hidden={extraOculto(extra.id)}
+            className={`regras-parte-extra${dividido ? ' regras-parte-extra--sozinha' : ''}`}
+          >
+            {dividido && extra.comTitulo ? <h2 className="regras-parte-extra__titulo">{extra.titulo}</h2> : null}
+            {extra.conteudo}
+          </section>
+        ))}
       </div>
 
-      {toc.length && !semSumario ? (
+      {mostrarSumario ? (
         <aside className="sticky top-6 hidden w-56 shrink-0 2xl:block" aria-label="Sumário deste tópico">
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <h2 className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">

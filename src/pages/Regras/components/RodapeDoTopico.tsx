@@ -54,7 +54,7 @@ export const RodapeDoTopico = ({ anterior, proximo, vejaTambem = [], onAbrirTopi
           <span className="min-w-0">
             <small className="block text-[9px] font-bold uppercase tracking-[0.18em] text-[rgb(var(--acento-forte))]">Próximo · {proximo.numero}</small>
             <strong className="mt-1 block text-base text-[#f2ead7]" style={{ fontFamily: 'Cinzel, serif' }}>{proximo.titulo}</strong>
-            <span className="mt-1.5 line-clamp-2 block text-xs leading-5 text-gray-400">{proximo.resumo}</span>
+            <span className="mt-1.5 line-clamp-2 text-xs leading-5 text-gray-400">{proximo.resumo}</span>
           </span>
           <ArrowRight size={18} className="mt-0.5 shrink-0 text-[rgb(var(--acento-forte))] transition group-hover:translate-x-0.5" />
         </button>

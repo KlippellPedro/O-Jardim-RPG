@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import { Minus, Plus, Type } from 'lucide-react';
-import type { FonteDoLeitor, PreferenciasDeLeitura, TamanhoDoLeitor } from '../regrasLeitura';
+import { Minus, Plus, Rows3, StickyNote, Type } from 'lucide-react';
+import type { FonteDoLeitor, ModoDoLeitor, PreferenciasDeLeitura, TamanhoDoLeitor } from '../regrasLeitura';
 
 interface ControlesDeLeituraProps {
   preferencias: PreferenciasDeLeitura;
   onMudar: (proximas: PreferenciasDeLeitura) => void;
+  /** Mostra a escolha entre ler em partes ou o tópico inteiro (só nos tópicos de texto). */
+  comModo?: boolean;
 }
+
+const MODOS: Array<{ id: ModoDoLeitor; rotulo: string; dica: string; Icone: typeof Rows3 }> = [
+  { id: 'partes', rotulo: 'Em partes', dica: 'Uma seção por vez', Icone: StickyNote },
+  { id: 'inteiro', rotulo: 'Inteiro', dica: 'Tudo numa página', Icone: Rows3 },
+];
 
 const FONTES: Array<{ id: FonteDoLeitor; rotulo: string; exemplo: string }> = [
   { id: 'serifa', rotulo: 'Com serifa', exemplo: 'Livro' },
@@ -13,7 +20,7 @@ const FONTES: Array<{ id: FonteDoLeitor; rotulo: string; exemplo: string }> = [
 ];
 
 /** Tamanho e tipo da letra do texto dos tópicos. Fica num balão para não pesar na barra. */
-export const ControlesDeLeitura = ({ preferencias, onMudar }: ControlesDeLeituraProps) => {
+export const ControlesDeLeitura = ({ preferencias, onMudar, comModo = false }: ControlesDeLeituraProps) => {
   const [aberto, setAberto] = useState(false);
   const raizRef = useRef<HTMLDivElement>(null);
 
@@ -45,8 +52,8 @@ export const ControlesDeLeitura = ({ preferencias, onMudar }: ControlesDeLeitura
         onClick={() => setAberto((valor) => !valor)}
         aria-expanded={aberto}
         aria-haspopup="true"
-        aria-label="Ajustar a letra"
-        title="Ajustar a letra"
+        aria-label="Ajustar a leitura"
+        title="Ajustar a leitura"
         className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-gray-300 transition hover:border-[rgb(var(--acento)/0.5)] hover:text-[rgb(var(--acento-forte))]"
       >
         <Type size={16} />
@@ -55,9 +62,30 @@ export const ControlesDeLeitura = ({ preferencias, onMudar }: ControlesDeLeitura
       {aberto ? (
         <div
           role="group"
-          aria-label="Ajustes da letra"
+          aria-label="Ajustes da leitura"
           className="absolute right-0 top-11 z-40 w-64 rounded-2xl border border-white/12 bg-[#14121b] p-4 shadow-2xl"
         >
+          {comModo ? (
+            <>
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">Como ler o tópico</p>
+              <div className="mb-4 mt-2 grid grid-cols-2 gap-2">
+                {MODOS.map(({ id, rotulo, dica, Icone }) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => onMudar({ ...preferencias, modo: id })}
+                    aria-pressed={preferencias.modo === id}
+                    className={`rounded-xl border px-3 py-2 text-left transition ${preferencias.modo === id
+                      ? 'border-[rgb(var(--acento)/0.6)] bg-[rgb(var(--acento)/0.14)] text-[rgb(var(--acento-forte))]'
+                      : 'border-white/10 text-gray-300 hover:border-white/25'}`}
+                  >
+                    <span className="flex items-center gap-1.5 whitespace-nowrap text-[13px] font-semibold"><Icone size={14} aria-hidden="true" /> {rotulo}</span>
+                    <span className="mt-0.5 block text-[11px] text-gray-500">{dica}</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : null}
           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">Tamanho</p>
           <div className="mt-2 flex items-center gap-3">
             <button

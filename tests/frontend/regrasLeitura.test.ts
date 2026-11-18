@@ -14,6 +14,20 @@ import {
 } from '../../src/pages/Regras/regrasLeitura';
 import { casaComBusca, normalizar, textoSemMarcas } from '../../src/pages/Regras/regrasBusca';
 import {
+  ID_DA_ABERTURA,
+  idDaParte,
+  indiceDaParte,
+  parteDoTitulo,
+  partesDoIndice,
+  posicaoNasPartes,
+  progressoNasPartes,
+  resumoDaParte,
+  topicoSeDivide,
+  type ParteDoTopico,
+} from '../../src/pages/Regras/partesDoTopico';
+import { REGRAS_OFICIAIS } from '../../data/regras/regras';
+import { SECOES_DAS_MECANICAS } from '../../src/services/termosDoJogo';
+import {
   formatarDataDaEdicao,
   formatarTamanhoDoArquivo,
   paginaDoTopico,
@@ -60,9 +74,93 @@ test('só vale "continuar" depois do começo e antes do fim', () => {
 test('preferências de leitura: padrão, valores válidos e lixo', () => {
   assert.deepEqual(lerPreferencias(null), PREFERENCIAS_PADRAO);
   assert.deepEqual(lerPreferencias('{nao e json'), PREFERENCIAS_PADRAO);
-  assert.deepEqual(lerPreferencias(serializarPreferencias({ tamanho: 4, fonte: 'sem' })), { tamanho: 4, fonte: 'sem' });
-  assert.deepEqual(lerPreferencias(JSON.stringify({ tamanho: 9, fonte: 'comic' })), PREFERENCIAS_PADRAO);
-  assert.deepEqual(lerPreferencias(JSON.stringify({ tamanho: 1 })), { tamanho: 1, fonte: PREFERENCIAS_PADRAO.fonte });
+  assert.deepEqual(
+    lerPreferencias(serializarPreferencias({ tamanho: 4, fonte: 'sem', modo: 'inteiro' })),
+    { tamanho: 4, fonte: 'sem', modo: 'inteiro' },
+  );
+  assert.deepEqual(lerPreferencias(JSON.stringify({ tamanho: 9, fonte: 'comic', modo: 'rolo' })), PREFERENCIAS_PADRAO);
+  assert.deepEqual(
+    lerPreferencias(JSON.stringify({ tamanho: 1 })),
+    { tamanho: 1, fonte: PREFERENCIAS_PADRAO.fonte, modo: PREFERENCIAS_PADRAO.modo },
+  );
+});
+
+test('quem já tinha preferências salvas antes do modo de leitura passa a ler em partes', () => {
+  assert.equal(PREFERENCIAS_PADRAO.modo, 'partes');
+  assert.deepEqual(lerPreferencias(JSON.stringify({ tamanho: 3, fonte: 'serifa' })), { tamanho: 3, fonte: 'serifa', modo: 'partes' });
+});
+
+const parte = (id: string, extra = false): ParteDoTopico => ({ id, titulo: id, resumo: '', extra });
+
+test('a parte usa o id da seção sem o prefixo, para os links antigos de seção continuarem valendo', () => {
+  assert.equal(idDaParte('secao-fome-e-sede'), 'fome-e-sede');
+  assert.equal(idDaParte('catalogo'), 'catalogo');
+  assert.equal(parteDoTitulo('Fome e sede'), 'fome-e-sede');
+  assert.equal(parteDoTitulo('Reações'), 'reacoes');
+});
+
+test('o resumo de uma parte é a primeira frase, cortada numa palavra quando é longa', () => {
+  assert.equal(resumoDaParte('Iniciativa aqui não se rola: é um número da ficha.'), 'Iniciativa aqui não se rola.');
+  assert.equal(resumoDaParte('  São seis   categorias. Normal é o tamanho comum. '), 'São seis categorias.');
+  assert.equal(resumoDaParte(''), '');
+  const longa = resumoDaParte('Quando alguém age contra sua Fortitude, Reflexos ou Vontade sem pedir rolagem, use dez mais o bônus total, e quando você resiste ativamente a um perigo role o d20', 80);
+  assert.ok(longa.length <= 81, longa);
+  assert.ok(longa.endsWith('…'));
+  assert.doesNotMatch(longa, /\s…$/);
+});
+
+test('o tópico só se divide com duas partes além da visão geral', () => {
+  assert.equal(topicoSeDivide([parte(ID_DA_ABERTURA)]), false);
+  assert.equal(topicoSeDivide([parte(ID_DA_ABERTURA), parte('unica')]), false);
+  assert.equal(topicoSeDivide([parte(ID_DA_ABERTURA), parte('texto'), parte('catalogo', true)]), true);
+  assert.deepEqual(partesDoIndice([parte(ID_DA_ABERTURA), parte('a'), parte('b')]).map((item) => item.id), ['a', 'b']);
+});
+
+test('parte pedida que não existe cai na visão geral', () => {
+  const partes = [parte(ID_DA_ABERTURA), parte('iniciativa'), parte('seu-turno')];
+  assert.equal(indiceDaParte(partes, 'seu-turno'), 2);
+  assert.equal(indiceDaParte(partes, 'parte-que-sumiu'), 0);
+  assert.equal(indiceDaParte(partes, null), 0);
+});
+
+test('o progresso em partes vai e volta sem perder a parte nem a rolagem', () => {
+  assert.equal(progressoNasPartes(0, 1, 0.5), 0.5);
+  assert.equal(progressoNasPartes(0, 4, 0), 0);
+  assert.equal(progressoNasPartes(3, 4, 1), 1);
+  assert.equal(progressoNasPartes(1, 4, 0.5), 0.375);
+  assert.equal(progressoNasPartes(9, 4, Number.NaN), 0.75);
+  assert.deepEqual(posicaoNasPartes(0.375, 4), { indice: 1, fracao: 0.5 });
+  assert.deepEqual(posicaoNasPartes(1, 4), { indice: 3, fracao: 1 });
+  assert.deepEqual(posicaoNasPartes(0.55, 1), { indice: 0, fracao: 0.55 });
+  for (let indice = 0; indice < 11; indice += 1) {
+    const volta = posicaoNasPartes(progressoNasPartes(indice, 11, 0.3), 11);
+    assert.equal(volta.indice, indice);
+    assert.ok(Math.abs(volta.fracao - 0.3) < 1e-9);
+  }
+});
+
+const titulosDeSecao = (html: string) => Array.from(html.matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>/g))
+  .map((achado) => achado[1].replace(/<[^>]+>/g, '').trim());
+
+test('as seções de cada tópico viram partes com endereço único', () => {
+  Object.entries(REGRAS_OFICIAIS).forEach(([id, topico]) => {
+    if (id === 'mestre') return;
+    const partes = titulosDeSecao(topico.corpo).map((titulo, indice) => parteDoTitulo(titulo, indice));
+    // As partes extras (catálogo e bloco do Mestre) e a visão geral não podem ter o mesmo endereço de uma seção.
+    ['catalogo', 'para-o-mestre', ID_DA_ABERTURA].forEach((reservado) => {
+      assert.ok(!partes.includes(reservado), `${id}: uma seção ganharia o endereço reservado "${reservado}"`);
+    });
+    assert.equal(new Set(partes).size, partes.length, `${id}: duas seções com o mesmo título viram a mesma parte`);
+  });
+});
+
+test('todo termo de mecânica cai numa parte do tópico dele', () => {
+  SECOES_DAS_MECANICAS.forEach((mecanica) => {
+    const topico = REGRAS_OFICIAIS[mecanica.topico];
+    assert.ok(topico, `${mecanica.id}: tópico ${mecanica.topico} não existe`);
+    const partes = titulosDeSecao(topico.corpo).map((titulo) => parteDoTitulo(titulo));
+    assert.ok(partes.includes(parteDoTitulo(mecanica.secao)), `${mecanica.id}: a seção "${mecanica.secao}" não é parte de ${mecanica.topico}`);
+  });
 });
 
 test('cada conta tem as próprias chaves, e sem conta vale "local"', () => {
