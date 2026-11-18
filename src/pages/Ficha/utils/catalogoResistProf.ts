@@ -38,7 +38,7 @@ export const GRUPOS_RESISTENCIA: ReadonlyArray<IGrupoCatalogo> = [
   {
     titulo: 'Dano físico',
     itens: [
-      item('fisico-geral', 'Físico geral', 'Corte, Perfuração e Impacto. Balístico fica de fora.'),
+      item('fisico-geral', 'Físico geral', 'Corte, Perfuração, Impacto e Balístico.'),
       item('corte', 'Corte'),
       item('perfuracao', 'Perfuração'),
       item('impacto', 'Impacto'),

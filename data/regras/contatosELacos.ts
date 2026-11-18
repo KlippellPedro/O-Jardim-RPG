@@ -76,8 +76,7 @@ export function contatosMantidos(modCarisma: number): number {
   return Math.max(1, 2 + Math.trunc(modCarisma));
 }
 
-/** O que um contato aceita fazer pela Confiança. O segundo favor no mesmo
- *  intervalo conta um tamanho acima. */
+/** O que um contato aceita fazer pela Confiança. */
 export function podePedir(confianca: number, favor: TamanhoDeFavor, { segundoNoIntervalo = false } = {}): boolean {
   const ordem: TamanhoDeFavor[] = ['pequeno', 'grande', 'arriscado'];
   const indice = Math.min(ordem.length, ordem.indexOf(favor) + (segundoNoIntervalo ? 1 : 0));
@@ -168,7 +167,6 @@ export const REGRA_CONTATOS_LACOS: RegraTopicoDe<'Livro do Jogador'> = {
       <tbody>${tabelaFavores}</tbody>
     </table></div>
     <ul class="regras-list">
-      <li><strong>Um favor por intervalo</strong> entre aventuras sai sem desgaste. O segundo no mesmo intervalo conta um tamanho acima: o pequeno vira grande.</li>
       <li><strong>O favor fica no ramo dele.</strong> O escrivão carimba o documento; esconder alguém é outro contato.</li>
       <li><strong>A Dívida é do contato.</strong> O Mestre traz o pedido quando ele precisar: uma carta, um recado, alguém batendo na porta. Cumprir apaga a Dívida. Recusar baixa a Confiança em 1, e em 0 o contato se perde.</li>
     </ul>

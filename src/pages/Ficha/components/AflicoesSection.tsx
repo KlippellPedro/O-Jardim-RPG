@@ -63,7 +63,7 @@ const ROTULO_GRAU: Record<GrauTeste, string> = {
 /**
  * Venenos, doenças e vícios que o personagem carrega. O teste de Fortitude
  * sai do servidor (vale como prova no log da mesa) e o estágio anda sozinho
- * conforme o grau: crítico desce, sucesso segura, falha sobe.
+ * conforme o grau: sucesso desce, falha sobe.
  */
 export const AflicoesSection = ({ character, onUpdate }: IAflicoesSectionProps) => {
   const campanhaAtiva = useAuthStore((state) => state.campanhaAtiva);

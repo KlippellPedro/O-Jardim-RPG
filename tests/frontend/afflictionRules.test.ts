@@ -38,13 +38,13 @@ test('DTs e períodos permanecem dentro dos limites publicados', () => {
     assert.equal(aflicao.tratamento.dt, aflicao.dtFortitude, aflicao.id);
     assert.ok(aflicao.incubacao.quantidade >= 0, aflicao.id);
     assert.ok(aflicao.intervalo.quantidade > 0, aflicao.id);
-    // Veneno perde força sozinho (sucesso desce 1); doença e vício só cedem com tratamento.
+    // Toda aflição: sucesso desce 1, falha sobe 1, e o crítico não muda nada a mais.
     assert.deepEqual(aflicao.progressao, {
       teste: 'Fortitude',
       sucessoCritico: -1,
-      sucesso: aflicao.tipo === 'veneno' ? -1 : 0,
+      sucesso: -1,
       falha: 1,
-      falhaCritica: 2,
+      falhaCritica: 1,
     });
   }
 });

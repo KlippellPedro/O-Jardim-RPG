@@ -17351,7 +17351,7 @@
         "id": "dominio-da-derivacao",
         "titulo": "Domínio da Derivação",
         "niveis": [13],
-        "descricao": "Uma vez por rodada, ao conjurar uma magia Elemental do seu elemento de origem, você pode gastar +1 Mana para manifestar a derivação escolhida e aplicar o Efeito harmônico escrito nela a um único alvo, ponto ou espaço válido da magia. Se o efeito exigir que uma criatura falhe na resistência, uma magia sem resistência não o ativa contra criatura hostil. A Resistência ao elemento base vale pela metade contra o dano da magia, arredondada para baixo; imunidade continua valendo. A derivação conta como o elemento de origem para vantagens e desvantagens e não ganha propriedades além das escritas no Efeito harmônico."
+        "descricao": "Uma vez por rodada, ao conjurar uma magia Elemental do seu elemento de origem, você pode gastar +1 Mana para manifestar a derivação escolhida e aplicar o Efeito harmônico escrito nela a um único alvo, ponto ou espaço válido da magia. Se o efeito exigir que uma criatura falhe na resistência, uma magia sem resistência não o ativa contra criatura hostil. A Resistência e a imunidade ao elemento base valem por inteiro contra o dano da magia. A derivação conta como o elemento de origem para vantagens e desvantagens e não ganha propriedades além das escritas no Efeito harmônico."
       },
       {
         "id": "soberania-elemental",
@@ -17544,7 +17544,7 @@
         "dano": "5d6",
         "defesa": "Reflexos",
         "usos": "Uma vez por cena",
-        "descricao": "Manifeste a derivação escolhida numa ruptura do seu elemento de origem. Criaturas hostis na área testam Reflexos contra a DT da Elementarista. Em falha, sofrem 5d6 do elemento derivado e ficam Caídas; em sucesso, sofrem metade e não caem. Resistência ao elemento base vale pela metade, mas imunidade continua valendo.",
+        "descricao": "Manifeste a derivação escolhida numa ruptura do seu elemento de origem. Criaturas hostis na área testam Reflexos contra a DT da Elementarista. Em falha, sofrem 5d6 do elemento derivado e ficam Caídas; em sucesso, sofrem metade e não caem. Resistência e imunidade ao elemento base valem por inteiro.",
         "pre_requisitos": [
           "Nível 13 de Elementarista",
           "Derivações Harmônicas 1"

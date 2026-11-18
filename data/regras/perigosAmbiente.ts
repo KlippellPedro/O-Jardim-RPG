@@ -1,21 +1,14 @@
 /** Perigos do ambiente: queda, fôlego, fome e sede, clima e armadilhas.
  *
- * Tudo o que machuca sem que ninguém ataque. O dano das armadilhas sai da
- * mesma referência do Guia do Mestre (src/services/referenciaBalanceamento.ts),
- * em fração da Vida média de um personagem do nível, para a tabela não descolar
- * da ficha quando as classes mudarem. O clima cobra em fração da Vida de quem
+ * Tudo o que machuca sem que ninguém ataque. O dano das armadilhas é uma conta
+ * de cabeça, sem tabela: 1 dado a cada 3 níveis, em d6 ou d12 pelo peso. Ela
+ * acompanha de perto a antiga referência por Vida média do nível (a Séria fica
+ * perto de um quarto dessa Vida). O clima cobra em fração da Vida de quem
  * está exposto, porque a nevasca não sabe o nível de ninguém. A queda é a
  * exceção de propósito: ela cai por metro, e o mesmo tombo pesa menos para quem
  * tem mais Vida.
  */
-import classesData from '../ficha/classes.json';
-import catalogoLojaData from '../loja/catalogo.json';
-import type { IClasse } from '../../src/types/catalogo';
-import {
-  NIVEIS_DE_REFERENCIA,
-  mediaDeDados,
-  referenciaDoNivel,
-} from '../../src/services/referenciaBalanceamento';
+import { dtPadraoDoVd } from '../../src/services/curvaCriatura';
 import type { RegraTopicoDe } from './tipos';
 
 // ------------------------------------------------------------------ queda
@@ -153,72 +146,42 @@ export function danoDeClima(grau: GrauDeClima, vidaMaxima: number): number {
 // ------------------------------------------------------------- armadilhas
 
 export type PesoDeArmadilha = 'leve' | 'seria' | 'mortal';
-type DtDoGuia = 'padrao' | 'dificil';
 
 export interface IPesoDeArmadilha {
   id: PesoDeArmadilha;
   titulo: string;
-  /** Fração da Vida média de um personagem do nível: os degraus de lacaio,
-   *  inimigo padrão e golpe de chefe anunciado do Combate. */
-  fracaoDaVida: number;
-  achar: DtDoGuia;
-  desarmar: DtDoGuia;
-  resistir: DtDoGuia;
+  /** Dado que o peso rola. */
+  dado: 'd6' | 'd12';
+  /** A Leve rola só metade dos dados. */
+  metadeDosDados: boolean;
+  /** DT de achar, desarmar e resistir. */
+  dt: 'padrao' | 'dificil';
   sentido: string;
 }
 
 export const PESOS_DE_ARMADILHA: readonly IPesoDeArmadilha[] = [
-  { id: 'leve', titulo: 'Leve', fracaoDaVida: 0.1, achar: 'padrao', desarmar: 'padrao', resistir: 'padrao', sentido: 'Atrasa, faz barulho e machuca pouco.' },
-  { id: 'seria', titulo: 'Séria', fracaoDaVida: 0.25, achar: 'padrao', desarmar: 'dificil', resistir: 'padrao', sentido: 'Tira um bom pedaço da Vida e muda o plano.' },
-  { id: 'mortal', titulo: 'Mortal', fracaoDaVida: 0.45, achar: 'dificil', desarmar: 'dificil', resistir: 'dificil', sentido: 'Feita para matar quem entra sem cuidado. Sempre deixa um sinal.' },
+  { id: 'leve', titulo: 'Leve', dado: 'd6', metadeDosDados: true, dt: 'padrao', sentido: 'Atrasa, faz barulho e machuca pouco.' },
+  { id: 'seria', titulo: 'Séria', dado: 'd6', metadeDosDados: false, dt: 'padrao', sentido: 'Tira um bom pedaço da Vida e muda o plano.' },
+  { id: 'mortal', titulo: 'Mortal', dado: 'd12', metadeDosDados: false, dt: 'dificil', sentido: 'Feita para matar quem entra sem cuidado. Sempre deixa um sinal.' },
 ];
 
-/** Dados de d6 para uma média de dano; d12 quando os d6 passariam de dez, e um
- *  valor fixo por cima dos 20d12, como as armas de topo do arsenal. */
-export function dadosParaMedia(media: number): string {
-  if (media < 3) return '1d4';
-  const d6 = Math.max(1, Math.round(media / 3.5));
-  if (d6 <= 10) return `${d6}d6`;
-  const d12 = Math.round(media / 6.5);
-  if (d12 <= 20) return `${d12}d12`;
-  return `20d12+${Math.max(5, Math.round((media - 130) / 5) * 5)}`;
+/** Níveis por dado de dano das armadilhas (e dos feitos da Batalha). */
+export const NIVEIS_POR_DADO_DE_ARMADILHA = 3;
+
+/** Quantos dados a armadilha rola: 1 a cada 3 níveis, arredondando para cima;
+ *  a Leve rola metade deles, também arredondando para cima. */
+export function quantosDadosDeArmadilha(nivel: number, peso: PesoDeArmadilha): number {
+  const dados = Math.max(1, Math.ceil(Math.max(1, Math.trunc(nivel) || 1) / NIVEIS_POR_DADO_DE_ARMADILHA));
+  const regra = PESOS_DE_ARMADILHA.find((item) => item.id === peso);
+  return regra?.metadeDosDados ? Math.ceil(dados / 2) : dados;
 }
 
-export interface ILinhaDeArmadilha {
-  nivel: number;
-  dtPadrao: number;
-  dtDificil: number;
-  ataque: number;
-  vidaMedia: number;
-  dano: Record<PesoDeArmadilha, string>;
+/** Dano da armadilha em dados, como "4d6" ou "4d12". */
+export function danoDeArmadilha(nivel: number, peso: PesoDeArmadilha): string {
+  const regra = PESOS_DE_ARMADILHA.find((item) => item.id === peso) ?? PESOS_DE_ARMADILHA[1];
+  return `${quantosDadosDeArmadilha(nivel, peso)}${regra.dado}`;
 }
 
-const classesComuns = classesData.filter((classe) => classe.categoria === 'padrao') as unknown as IClasse[];
-const armasDeReferencia = catalogoLojaData.entradas
-  .filter((item) => item.tipo === 'arma')
-  .map((item) => ({
-    nivelRecomendado: Number(item.conteudo?.nivel_recomendado) || null,
-    raridade: String(item.conteudo?.raridade ?? ''),
-    mediaNormal: mediaDeDados(item.conteudo?.dano),
-  }));
-
-export function linhaDeArmadilha(nivel: number): ILinhaDeArmadilha {
-  const referencia = referenciaDoNivel(nivel, classesComuns, armasDeReferencia);
-  const vidaMedia = referencia.vida.media;
-  const dano = Object.fromEntries(
-    PESOS_DE_ARMADILHA.map((peso) => [peso.id, dadosParaMedia(vidaMedia * peso.fracaoDaVida)]),
-  ) as Record<PesoDeArmadilha, string>;
-  return {
-    nivel,
-    dtPadrao: referencia.dt.padrao,
-    dtDificil: referencia.dt.dificil,
-    ataque: referencia.bonusDeAtaque,
-    vidaMedia,
-    dano,
-  };
-}
-
-export const LINHAS_DE_ARMADILHA: readonly ILinhaDeArmadilha[] = NIVEIS_DE_REFERENCIA.map(linhaDeArmadilha);
 
 export interface IArmadilhaPronta {
   d6: number;
@@ -232,13 +195,13 @@ export const ARMADILHAS_PRONTAS: readonly IArmadilhaPronta[] = [
     d6: 1,
     titulo: 'Fosso coberto',
     cena: 'Uma laje igual às outras, só que oca. O pé afunda, a pedra gira no eixo e o escuro lá embaixo cheira a terra molhada.',
-    regra: 'Reflexos. Sucesso: você se agarra na borda e fica Caído. Falha: você cai e sofre o dano de queda pela altura do fosso no lugar do dano da tabela.',
+    regra: 'Reflexos. Sucesso: você se agarra na borda e fica Caído. Falha: você cai e sofre o dano de queda pela altura do fosso no lugar do dano da armadilha.',
   },
   {
     d6: 2,
     titulo: 'Dardo na parede',
     cena: 'Um furo do tamanho de uma ervilha na altura do pescoço, e uma placa solta no chão bem embaixo dele.',
-    regra: 'Ataque contra a Defesa. Acerto: dano de perfuração do peso da armadilha e exposição à Toxina Paralisante.',
+    regra: 'Reflexos. Falha: dano de perfuração do peso da armadilha e exposição à Toxina Paralisante. Sucesso: metade do dano, sem a toxina.',
   },
   {
     d6: 3,
@@ -283,25 +246,12 @@ const tabelaTerrenos = TERRENOS_DE_BUSCA.map((terreno) => `
   <tr><td><strong>${terreno.titulo}</strong></td><td>${terreno.dt}</td><td>${terreno.exemplos}</td></tr>
 `).join('');
 
-const ROTULO_DT: Record<DtDoGuia, string> = { padrao: 'Padrão', dificil: 'Difícil' };
-
 const tabelaPesos = PESOS_DE_ARMADILHA.map((peso) => `
   <tr>
     <td><strong>${peso.titulo}</strong><br><small>${peso.sentido}</small></td>
-    <td>${ROTULO_DT[peso.achar]}</td>
-    <td>${ROTULO_DT[peso.desarmar]}</td>
-    <td>${ROTULO_DT[peso.resistir]}</td>
-  </tr>
-`).join('');
-
-const tabelaArmadilhas = LINHAS_DE_ARMADILHA.map((linha) => `
-  <tr>
-    <td><strong>${linha.nivel}</strong></td>
-    <td>${linha.dtPadrao} / ${linha.dtDificil}</td>
-    <td>+${linha.ataque}</td>
-    <td>${linha.dano.leve}</td>
-    <td>${linha.dano.seria}</td>
-    <td>${linha.dano.mortal}</td>
+    <td>${peso.dt === 'dificil' ? 'Difícil' : 'Padrão'}</td>
+    <td>${peso.metadeDosDados ? `metade dos dados, em ${peso.dado}` : `os dados em ${peso.dado}`}</td>
+    <td>${danoDeArmadilha(10, peso.id)}</td>
   </tr>
 `).join('');
 
@@ -309,7 +259,7 @@ const tabelaProntas = ARMADILHAS_PRONTAS.map((armadilha) => `
   <tr><td>${armadilha.d6}</td><td><strong>${armadilha.titulo}.</strong> ${armadilha.cena}<small class="regras-mecanica">${armadilha.regra}</small></td></tr>
 `).join('');
 
-const exemploNivel10 = linhaDeArmadilha(10);
+const DT_DO_NIVEL_10 = dtPadraoDoVd(10);
 
 export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
   categoria: 'Combate e Mecânicas',
@@ -329,7 +279,7 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
         <li><strong>Fôlego:</strong> sem ar, cada rodada gasta um décimo da sua Estamina máxima. Quando ela acaba, a próxima rodada sem ar faz você apagar e começar a morrer.</li>
         <li><strong>Fome e sede:</strong> uma porção de comida e água por dia. Sem água, 1 de Cansaço por dia; sem comida, depois de alguns dias, também.</li>
         <li><strong>Clima:</strong> Severo e Extremo cobram Fortitude e Cansaço, e o Mortal tira Vida a cada turno. Roupa certa, Traje e abrigo baixam o grau.</li>
-        <li><strong>Armadilhas:</strong> cada uma tem nível e peso (Leve, Séria ou Mortal). Percepção acha, Ladinagem, Misticismo ou Tecnologia desarmam, e a tabela dá DT, ataque e dano.</li>
+        <li><strong>Armadilhas:</strong> cada uma tem nível e peso (Leve, Séria ou Mortal). Percepção acha, Ladinagem, Misticismo ou Tecnologia desarmam, e o dano é 1 dado a cada 3 níveis, em d6 ou d12 pelo peso.</li>
       </ul>
     </div>
 
@@ -413,28 +363,25 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
     </ul>
 
     <h3 class="regras-subtitle">Armadilhas</h3>
-    <p>Toda armadilha tem um nível, quase sempre o do grupo ou o do lugar, e um peso. O nível escolhe a linha da tabela de baixo, e o peso escolhe a DT de cada etapa e a coluna de dano.</p>
+    <p>Toda armadilha tem um nível, quase sempre o do grupo ou o do lugar, e um peso: Leve, Séria ou Mortal.</p>
+    <div class="regras-formula">Dano: 1 dado a cada ${NIVEIS_POR_DADO_DE_ARMADILHA} níveis da armadilha, arredondando para cima</div>
     <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Peso</th><th>Achar</th><th>Desarmar</th><th>Resistir</th></tr></thead>
+      <thead><tr><th>Peso</th><th>DT para achar, desarmar e resistir</th><th>Dano</th><th>No nível 10</th></tr></thead>
       <tbody>${tabelaPesos}</tbody>
     </table></div>
-    <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Nível</th><th>DT Padrão / Difícil</th><th>Ataque</th><th>Leve</th><th>Séria</th><th>Mortal</th></tr></thead>
-      <tbody>${tabelaArmadilhas}</tbody>
-    </table></div>
+    <p>A DT Padrão e a Difícil são as do nível da armadilha, na tabela de DT de <span class="regras-ref regras-ref--pericias">Perícias</span>. Uma armadilha de nível 10 conta 4 dados: a Leve rola 2d6, a Séria 4d6 e a Mortal 4d12.</p>
     <ul class="regras-list">
       <li><strong>Achar:</strong> quem anda atento usa 10 + bônus de Percepção contra a DT de achar. Quem para e procura rola, e procurar com calma custa tempo.</li>
       <li><strong>A Mortal sempre deixa um sinal</strong> que qualquer um percebe sem teste: ossos, manchas, um aviso riscado na parede. O sinal avisa que há perigo, e o teste mostra onde ele está e como funciona.</li>
       <li><strong>Desarmar:</strong> Ladinagem para mecanismo, Misticismo para selo ou ritual, Tecnologia para sistema A.X.I.S. Leva um minuto; em combate, uma Ação Padrão com desvantagem. O Kit de Ferramentas dá vantagem nos mecanismos. Falhar por 5 ou mais dispara a armadilha em quem estava mexendo.</li>
       <li><strong>Desarmar é um caminho entre vários.</strong> Contornar, disparar de longe com uma vara ou uma pedra, ou passar correndo e aguentar também resolvem, cada um com o seu preço.</li>
-      <li><strong>Resistir:</strong> Reflexos contra lâmina, fosso e pedra; Fortitude contra dardo, agulha e gás; Vontade contra selo que mexe com a mente. O sucesso leva metade do dano e nenhum efeito extra. A falha leva o dano inteiro e o efeito.</li>
-      <li><strong>Armadilha que atira</strong> (besta, dardo, lança) faz um ataque: d20 + Ataque da tabela contra a Defesa. Acerto leva o dano inteiro e o efeito; erro não leva nada.</li>
+      <li><strong>Resistir:</strong> Reflexos contra lâmina, fosso, pedra, dardo e flecha; Fortitude contra agulha e gás; Vontade contra selo que mexe com a mente. O sucesso leva metade do dano e nenhum efeito extra. A falha leva o dano inteiro e o efeito.</li>
       <li><strong>O tipo de dano</strong> é o do mecanismo: corte, perfuração, impacto, o Fogo de um selo. O veneno vem como aflição, e a aflição se resolve do jeito dela.</li>
       <li><strong>Dano que tira metade ou mais da Vida máxima</strong> num golpe só pede a tabela de trauma, como em <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>.</li>
-      <li><strong>As armadilhas vendidas na Loja,</strong> como a Armadilha de Corda e Sino, trazem o próprio número e não usam esta tabela.</li>
+      <li><strong>As armadilhas vendidas na Loja,</strong> como a Armadilha de Corda e Sino, trazem o próprio número e não usam esta conta.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>Um grupo de nível 10 entra num corredor com uma lâmina de pêndulo Séria. Achar pede DT ${exemploNivel10.dtPadrao} de Percepção, desarmar pede DT ${exemploNivel10.dtDificil} de Ladinagem e resistir pede Reflexos DT ${exemploNivel10.dtPadrao}. Quem falha leva ${exemploNivel10.dano.seria} de corte e fica Caído; quem passa leva metade.</p>
+      <p>Um grupo de nível 10 entra num corredor com uma lâmina de pêndulo Séria. Achar, desarmar e resistir pedem DT ${DT_DO_NIVEL_10}: Percepção, Ladinagem e Reflexos. Quem falha leva ${danoDeArmadilha(10, 'seria')} de corte e fica Caído; quem passa leva metade.</p>
     </div>
     <p><strong>Armadilhas prontas.</strong> Para quando o Mestre precisa de uma na hora, ou para inspirar a sua. Use o peso que a cena pedir.</p>
     <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
@@ -455,7 +402,7 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
 
     <h3 class="regras-subtitle">Calibrar armadilha</h3>
     <ul class="regras-list">
-      <li>Leve tira cerca de 10% da Vida de um personagem do nível, Séria 25% e Mortal 45%: os mesmos degraus de lacaio, inimigo padrão e golpe de chefe anunciado na tabela de papéis de inimigo do <span class="regras-ref regras-ref--combate">Combate</span>.</li>
+      <li>Pela conta de dados, a Leve tira pouco, a Séria tira perto de um terço da Vida de um personagem do nível e a Mortal, perto da metade. Se quiser uma armadilha mais branda ou mais dura, mude o peso, não a conta.</li>
       <li>Armadilha que só pede um teste e tira Vida vira imposto. A boa dá escolha: o sinal está à vista, o caminho alternativo custa tempo, o mecanismo pode ser virado contra quem vem atrás.</li>
       <li>Uma armadilha por sala cansa a mesa. Duas ou três num lugar inteiro, uma delas visível de longe, já fazem o grupo andar devagar.</li>
       <li>Armadilha combina com relógio. "A guarda percebe a invasão" pinta uma parte quando alguém dispara uma, e o relógio do grupo anda a cada uma desarmada (ver Relógios de pressão, no Guia do Mestre).</li>

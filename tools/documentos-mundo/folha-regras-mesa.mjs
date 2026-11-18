@@ -142,7 +142,7 @@ const paginaUm = () => `
   ${caixa('Seu turno', `
     <div class="grade2">
       <ul>
-        <li><b>Ação Padrão:</b> atacar, usar uma habilidade, ajudar alguém ou tentar uma manobra.</li>
+        <li><b>Ação Padrão:</b> atacar, usar uma habilidade, ajudar alguém (+2 no teste dele, sem rolar) ou tentar uma manobra.</li>
         <li><b>Ação de Movimento:</b> se deslocar, levantar, sacar algo ou mexer num objeto que importe.</li>
         <li><b>Ação Completa:</b> gasta a Padrão e a de Movimento; só começa se nenhuma das duas foi usada.</li>
       </ul>
@@ -166,7 +166,7 @@ const paginaUm = () => `
       <ul>
         <li><b>Crítico:</b> o d20 natural caiu na margem da arma (20, 19-20...). Sem rolagem de confirmação.</li>
         <li>O multiplicador repete só os dados da arma: em x3, 2d6+4 vira 6d6+4. Bônus de habilidade e dado extra entram uma vez.</li>
-        <li><b>Ordem do dano:</b> primeiro o multiplicador do crítico, depois a Resistência do alvo.</li>
+        <li><b>Ordem do dano:</b> role tudo, com o crítico; dobre se o alvo for vulnerável; depois tire a Resistência.</li>
       </ul>
     </div>`)}
 
@@ -222,7 +222,7 @@ const paginaDois = () => `
           ${REGRAS_DESCANSO.map((regra) => `<tr><td>${esc(regra.titulo)}</td><td>${porcento(regra.recuperacao)}</td><td>${porcento(regra.recuperacaoSanidade)}</td><td>${regra.reduzCansaco >= 99 ? 'zera' : `−${regra.reduzCansaco}`}</td></tr>`).join('')}
         </tbody>
       </table>
-      <p><b>Relaxar:</b> uma hora em segurança, uma vez entre dois descansos completos. Recupera 1d6 + Mod. Sabedoria + ⌊nível ÷ 4⌋ de Mana e de Estamina, numa rolagem só.</p>`)}
+      <p><b>Relaxar:</b> uma hora em segurança, uma vez entre dois descansos completos. Recupera um quarto da Mana máxima e um quarto da Estamina máxima, sem rolar dado.</p>`)}
   </div>
 
   <div class="grade2">

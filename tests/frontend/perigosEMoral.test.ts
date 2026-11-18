@@ -4,19 +4,22 @@ import { FAIXAS_DE_MORAL, resolverMoral } from '../../data/regras/moral';
 import {
   ARMADILHAS_PRONTAS,
   DADOS_MAXIMOS_DE_QUEDA,
-  LINHAS_DE_ARMADILHA,
   PESOS_DE_ARMADILHA,
   REGRA_PERIGOS,
   TERRENOS_DE_BUSCA,
   custoDeFolego,
   dadosDeQueda,
-  dadosParaMedia,
+  danoDeArmadilha,
   danoDeClima,
   diasDeFolgaSemComida,
   grauEfetivoDeClima,
   pessoasAlimentadas,
 } from '../../data/regras/perigosAmbiente';
-import { mediaDeDados } from '../../src/services/referenciaBalanceamento';
+import { mediaDeDados, referenciaDoNivel } from '../../src/services/referenciaBalanceamento';
+import type { IClasse } from '../../src/types/catalogo';
+import classesData from '../../data/ficha/classes.json';
+
+const classesComuns = (classesData as any[]).filter((classe) => classe.categoria === 'padrao') as unknown as IClasse[];
 import { CONDICOES_OFICIAIS } from '../../data/regras/condicoes';
 import { REGRA_AFLICOES } from '../../data/regras/aflicoes';
 import { REGRAS_OFICIAIS } from '../../data/regras/regras';
@@ -74,27 +77,30 @@ test('o Traje que o clima cita existe na Loja com Resistência a Frio ou Calor',
   assert.match(String(traje.conteudo?.descricao ?? ''), /Resistência \d+ contra Frio ou Calor/);
 });
 
-test('armadilhas: o dano segue a fração da Vida média do nível e cresce com ele', () => {
-  const pesos = PESOS_DE_ARMADILHA.map((peso) => peso.fracaoDaVida);
-  assert.deepEqual(pesos, [...pesos].sort((a, b) => a - b), 'os pesos precisam subir de Leve a Mortal');
+test('armadilhas: 1 dado a cada 3 níveis, d6 ou d12 pelo peso, e a Leve rola metade', () => {
+  assert.equal(danoDeArmadilha(1, 'leve'), '1d6');
+  assert.equal(danoDeArmadilha(1, 'seria'), '1d6');
+  assert.equal(danoDeArmadilha(1, 'mortal'), '1d12');
+  assert.equal(danoDeArmadilha(10, 'leve'), '2d6');
+  assert.equal(danoDeArmadilha(10, 'seria'), '4d6');
+  assert.equal(danoDeArmadilha(10, 'mortal'), '4d12');
+  assert.equal(danoDeArmadilha(30, 'seria'), '10d6');
+  assert.deepEqual(PESOS_DE_ARMADILHA.map((peso) => peso.dt), ['padrao', 'padrao', 'dificil']);
 
-  let anterior = 0;
-  LINHAS_DE_ARMADILHA.forEach((linha) => {
+  // A conta fica perto da antiga referência por Vida média: a Séria anda perto
+  // de um quarto a um terço da Vida de um personagem comum do nível.
+  [5, 10, 20, 40, 60].forEach((nivel) => {
+    const vida = referenciaDoNivel(nivel, classesComuns, []).vida.media;
+    const seria = mediaDeDados(danoDeArmadilha(nivel, 'seria')) ?? 0;
+    assert.ok(seria >= vida * 0.15 && seria <= vida * 0.45, `nível ${nivel}: ${danoDeArmadilha(nivel, 'seria')} contra Vida ${vida}`);
+    let anterior = 0;
     PESOS_DE_ARMADILHA.forEach((peso) => {
-      const media = mediaDeDados(linha.dano[peso.id]) ?? 0;
-      const alvo = linha.vidaMedia * peso.fracaoDaVida;
-      // Arredondar para dados inteiros erra pouco: no nível 1 a Vida é tão
-      // pequena que até 1d4 passa do alvo, então a folga mínima é de 3 pontos.
-      assert.ok(Math.abs(media - alvo) <= Math.max(3, alvo * 0.25), `nível ${linha.nivel}, ${peso.titulo}: ${linha.dano[peso.id]} longe de ${alvo.toFixed(1)}`);
+      const media = mediaDeDados(danoDeArmadilha(nivel, peso.id)) ?? 0;
+      assert.ok(media >= anterior, `nível ${nivel}: ${peso.titulo} ficou mais fraca que o peso de baixo`);
+      anterior = media;
     });
-    const mortal = mediaDeDados(linha.dano.mortal) ?? 0;
-    assert.ok(mortal >= anterior, `nível ${linha.nivel}: a armadilha Mortal ficou mais fraca que a do nível anterior`);
-    anterior = mortal;
-    assert.equal(linha.dtDificil, linha.dtPadrao + 5);
   });
-  assert.equal(dadosParaMedia(2), '1d4');
-  assert.equal(dadosParaMedia(35), '10d6');
-  assert.equal(dadosParaMedia(130), '20d12');
+  assert.doesNotMatch(REGRA_PERIGOS.corpo, /Ataque da tabela/);
 });
 
 test('as armadilhas prontas cobrem 1d6 e citam condições e aflições que existem', () => {

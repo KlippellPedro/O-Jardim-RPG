@@ -3235,7 +3235,7 @@
             "titulo": "Cobiça de Talento",
             "tipo": "reacao",
             "nivel_minimo": 1,
-            "descricao": "Uma vez por cena, quando uma criatura a até 18 m passar num teste de perícia à sua vista, gaste uma reação e 2 Mana: no seu próximo teste dessa perícia na cena, use o bônus dela no lugar do seu, se for maior. Até lá, você tem desvantagem em testes para ajudar essa criatura.",
+            "descricao": "Uma vez por cena, quando uma criatura a até 18 m passar num teste de perícia à sua vista, gaste uma reação e 2 Mana: no seu próximo teste dessa perícia na cena, use o bônus dela no lugar do seu, se for maior. Até lá, você não pode Ajudar essa criatura.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 2,

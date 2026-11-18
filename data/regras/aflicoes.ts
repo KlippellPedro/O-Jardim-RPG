@@ -54,9 +54,9 @@ export interface IExposicaoAflicao {
 export interface IProgressaoAflicao {
   teste: 'Fortitude';
   sucessoCritico: -1;
-  sucesso: 0 | -1;
+  sucesso: -1;
   falha: 1;
-  falhaCritica: 2;
+  falhaCritica: 1;
 }
 
 export interface ITratamentoAflicao {
@@ -93,21 +93,15 @@ export interface IAflicao {
   observacoes?: string[];
 }
 
-/** Veneno perde força sozinho: passar no teste do intervalo já desce um estágio. */
-const PROGRESSAO_DE_VENENO: IProgressaoAflicao = {
+/** Toda aflição segue a mesma regra no fim do intervalo: sucesso desce 1
+ *  estágio e falha sobe 1. O crítico não muda nada a mais, e veneno, doença e
+ *  vício andam do mesmo jeito. */
+const PROGRESSAO_PADRAO: IProgressaoAflicao = {
   teste: 'Fortitude',
   sucessoCritico: -1,
   sucesso: -1,
   falha: 1,
-  falhaCritica: 2,
-};
-
-const PROGRESSAO_PADRAO: IProgressaoAflicao = {
-  teste: 'Fortitude',
-  sucessoCritico: -1,
-  sucesso: 0,
-  falha: 1,
-  falhaCritica: 2,
+  falhaCritica: 1,
 };
 
 export const CATALOGO_AFLICOES: IAflicao[] = [
@@ -124,7 +118,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
     dtFortitude: 15,
     incubacao: { quantidade: 0, unidade: 'rodada' },
     intervalo: { quantidade: 1, unidade: 'rodada' },
-    progressao: PROGRESSAO_DE_VENENO,
+    progressao: PROGRESSAO_PADRAO,
     estagios: [
       { numero: 0, efeitos: [] },
       { numero: 1, efeitos: ['Movimento reduzido pela metade.'] },
@@ -153,7 +147,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
     dtFortitude: 16,
     incubacao: { quantidade: 0, unidade: 'rodada' },
     intervalo: { quantidade: 1, unidade: 'rodada' },
-    progressao: PROGRESSAO_DE_VENENO,
+    progressao: PROGRESSAO_PADRAO,
     estagios: [
       { numero: 0, efeitos: [] },
       { numero: 1, efeitos: ['Sofra 1d6 de dano de veneno no fim do intervalo.'] },
@@ -323,7 +317,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
     dtFortitude: 16,
     incubacao: { quantidade: 10, unidade: 'minuto' },
     intervalo: { quantidade: 10, unidade: 'minuto' },
-    progressao: PROGRESSAO_DE_VENENO,
+    progressao: PROGRESSAO_PADRAO,
     estagios: [
       { numero: 0, efeitos: [] },
       { numero: 1, efeitos: ['Visão turva: −1 em Percepção e Pontaria.'] },
@@ -445,7 +439,7 @@ export const CATALOGO_AFLICOES: IAflicao[] = [
     dtFortitude: 15,
     incubacao: { quantidade: 1, unidade: 'minuto' },
     intervalo: { quantidade: 1, unidade: 'minuto' },
-    progressao: PROGRESSAO_DE_VENENO,
+    progressao: PROGRESSAO_PADRAO,
     estagios: [
       { numero: 0, efeitos: [] },
       { numero: 1, efeitos: ['−1 em Iniciativa e em Percepção.'] },
@@ -719,8 +713,8 @@ export const REGRA_AFLICOES = {
 
     <div class="regras-resumo">
       <ul>
-        <li>Ao sofrer exposição, teste Fortitude contra a DT da aflição. Falha aplica o estágio 1, e falha crítica aplica o estágio 2.</li>
-        <li>No fim de cada intervalo, novo teste: sucesso crítico reduz 1 estágio, sucesso mantém, falha aumenta 1 e falha crítica aumenta 2. Em veneno, o sucesso também reduz 1.</li>
+        <li>Ao sofrer exposição, teste Fortitude contra a DT da aflição. Falha aplica o estágio 1.</li>
+        <li>No fim de cada intervalo, novo teste: sucesso reduz 1 estágio, e falha aumenta 1.</li>
         <li>Cura reduz 1 estágio por sucesso, e o antídoto encerra um veneno ativo. No estágio 0 a aflição acaba.</li>
         <li>Uma nova exposição à mesma aflição pode subir 1 estágio, no máximo uma vez por cena.</li>
       </ul>
@@ -729,8 +723,8 @@ export const REGRA_AFLICOES = {
     <h3 class="regras-subtitle">Aplicação</h3>
     <p>A DT do catálogo, de Fortitude e de Cura, é a do nível 1. Na mesa, some o ajuste de nível do lugar ou de quem envenenou, da tabela de DT em <span class="regras-ref regras-ref--pericias">Perícias</span>: uma doença de DT 16 pede 31 numa região de nível 20. A ficha soma sozinha o ajuste do nível do personagem.</p>
     <ol class="regras-steps">
-      <li>Ao sofrer exposição, teste Fortitude contra a DT da aflição. Sucesso ou sucesso crítico evita a aflição. Falha aplica o estágio 1 depois da incubação; falha crítica aplica o estágio 2.</li>
-      <li>No fim de cada intervalo, faça outro teste. Sucesso crítico reduz 1 estágio; sucesso mantém; falha aumenta 1; falha crítica aumenta 2. Em veneno, o sucesso comum também reduz 1 estágio: o corpo vence a toxina aos poucos, e doença e vício só cedem com tratamento.</li>
+      <li>Ao sofrer exposição, teste Fortitude contra a DT da aflição. Sucesso evita a aflição. Falha aplica o estágio 1 depois da incubação.</li>
+      <li>No fim de cada intervalo, faça outro teste. Sucesso reduz 1 estágio, e falha aumenta 1. O crítico não muda nada a mais, e a regra vale igual para veneno, doença e vício.</li>
       <li>O estágio não passa do maior valor do catálogo. Seus efeitos não se acumulam com os de estágios anteriores, salvo indicação expressa.</li>
       <li>Ao chegar ao estágio 0, remova a aflição e restaure qualquer atributo drenado conforme a recuperação indicada.</li>
     </ol>
@@ -775,7 +769,7 @@ export const REGRA_AFLICOES = {
     <ul class="regras-list">
       <li>Quem decide o peso é o intervalo, mais que a DT. Veneno de combate cobra teste a cada rodada e resolve dentro da cena; doença cobra a cada dia e atravessa sessões.</li>
       <li>O catálogo publicado anda entre DT 14 e DT 20 no nível 1, e todas sobem com o ajuste de nível. Fique nessa faixa de base: acima dela a aflição vira sentença, porque o alvo falha em quase todo intervalo. Um veneno de lugar fraco pode ficar no nível do lugar; quem anda por ali já bem acima dele mal sente.</li>
-      <li>Falha crítica na exposição já entra direto no estágio 2. Isso é duro, e é o motivo para não distribuir exposição em cena banal.</li>
+      <li>Toda falha na exposição já aplica a aflição. Por isso, não distribua exposição em cena banal.</li>
       <li>Use a tabela por região. A aflição de um lugar funciona melhor quando o grupo foi avisado do perigo antes: quem ouviu falar do Pulmão de Pedra em Baluarte leva pano para o rosto, e aí a escolha passa a ser dele.</li>
       <li>As aflições sobrenaturais das regiões (Alétheia, Vórtice, Matriz, Éon, Limiar e o Vazio) pedem tratamento que o grupo nem sempre alcança. Antes de aplicar uma, tenha na cabeça como a mesa vai sair dela.</li>
     </ul>

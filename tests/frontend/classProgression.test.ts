@@ -385,7 +385,7 @@ test('publica Elementarista como especial de Baluarte e mantém as classes mági
   const dominio = elementarista.habilidades?.find(item => item.id === 'dominio-da-derivacao');
   assert.match(dominio?.descricao || '', /uma vez por rodada/i);
   assert.match(dominio?.descricao || '', /um único alvo, ponto ou espaço válido/i);
-  assert.match(dominio?.descricao || '', /arredondada para baixo/i);
+  assert.match(dominio?.descricao || '', /Resistência e a imunidade ao elemento base valem por inteiro/i);
   const apogeu = elementarista.habilidades?.find(item => item.id === 'apogeu-elemental');
   assert.match(apogeu?.descricao || '', /Afinidade única/i);
   assert.match(apogeu?.descricao || '', /Avatar desperto/i);

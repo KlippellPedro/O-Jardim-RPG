@@ -8,7 +8,7 @@ import {
   TAMANHOS_DE_EXERCITO,
   bonusDasOrdens,
   bonusDeVantagens,
-  perdaDoFeito,
+  danoDoFeito,
   perdasDoChoque,
   pontosDeMoral,
 } from '../../data/regras/batalha';
@@ -111,12 +111,13 @@ test('batalha: perdas do choque, teto das vantagens e pontos de moral', () => {
   assert.deepEqual(pontosDeMoral(10), [5, 2]);
   assert.deepEqual(TAMANHOS_DE_EXERCITO.map((tamanho) => tamanho.forca), [4, 6, 8, 10]);
   assert.equal(PARTES_MAXIMAS_POR_FEITOS, 2);
-  // A Vida perdida no feito é fração da Vida máxima, e falhar sempre machuca mais.
-  assert.equal(perdaDoFeito(60, true), 6);
-  assert.equal(perdaDoFeito(60, false), 15);
-  assert.equal(perdaDoFeito(33, true), 4, 'arredonda para cima');
-  [10, 47, 200].forEach((vida) => assert.ok(perdaDoFeito(vida, false) > perdaDoFeito(vida, true)));
-  assert.doesNotMatch(REGRA_BATALHA.corpo, /DT 10 \+ metade do nível/);
+  // O dano do feito é 1d6 a cada 3 níveis da batalha, e metade no sucesso.
+  assert.equal(danoDoFeito(1, true), '1d6');
+  assert.equal(danoDoFeito(10, false), '4d6');
+  assert.equal(danoDoFeito(10, true), '2d6');
+  assert.equal(danoDoFeito(30, false), '10d6');
+  [5, 20, 60].forEach((nivel) => assert.ok(parseInt(danoDoFeito(nivel, false), 10) >= parseInt(danoDoFeito(nivel, true), 10)));
+  assert.doesNotMatch(REGRA_BATALHA.corpo, /DT 10 \+ metade do nível|da Vida máxima/);
 });
 
 test('as quatro cenas novas moram nos capítulos certos e citam só o que existe', () => {

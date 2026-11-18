@@ -153,7 +153,7 @@ const paginaTres = () => `
     </table>`)}
 
   <h2>A conversa</h2>
-  <p>Se o grupo encarar a cópia, use Conflito Social. Ela tem <strong>Resistência 3</strong> e <strong>Paciência 4</strong>.</p>
+  <p>Se o grupo encarar a cópia, use Conflito Social. Ela tem <strong>Resistência 3</strong> e <strong>Paciência 3</strong>.</p>
   <ul>
     <li><strong>O que ela quer:</strong> existir com nome próprio. Ela ainda não entende que isso custa o nome da outra.</li>
     <li><strong>Como ela fala:</strong> devagar, com as palavras de Ilda e um carinho que Ilda não tem. “Diz o meu nome. Só uma vez. Depois eu vou embora, eu prometo.”</li>
@@ -211,7 +211,7 @@ const paginaQuatro = () => `
       <li><strong>Item:</strong> uma peça de equipamento comum, da bagagem de Ilda ou dos sucateiros.</li>
       <li><strong>XP:</strong> missão relevante, 25% do próximo nível. Descobrir a fraqueza em cena vale mais 10%.</li>
       <li><strong>Prestígio:</strong> +1 com a Caravana do Limiar para quem levar o relato ao posto.</li>
-      <li><strong>Se a cópia correr:</strong> use Perseguições a Pé, começando em Curta, no escuro, com os obstáculos da coluna do ermo. Chegando a Longa, ela tenta Sumir de vista.</li>
+      <li><strong>Se a cópia correr:</strong> use Perseguições a Pé, começando na distância 1, no escuro, com os obstáculos da coluna do ermo. Chegando à distância 3, ela tenta Sumir de vista.</li>
       <li><strong>Se faltar tempo:</strong> corte a Cena 2 inteira. Se sobrar, jogue a volta a Salém com uma rolagem de evento de estrada.</li>
     </ul>`, true)}
 

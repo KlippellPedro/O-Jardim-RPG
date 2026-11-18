@@ -2,6 +2,22 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-18-segunda-leva-de-regras-simples",
+      "data": "2026-11-18",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Mais regras simplificadas: armadilhas, aflições e dano",
+      "detalhes": [
+        "Armadilhas sem tabela: conte 1 dado a cada 3 níveis. A Séria rola esses dados em d6, a Mortal em d12, e a Leve rola metade em d6. Leve e Séria usam a DT Padrão, e a Mortal usa a Difícil.",
+        "Na Batalha em Massa, o dano do feito volta a ser rolado: 1d6 a cada 3 níveis da batalha, ou metade desses dados se o feito deu certo.",
+        "Venenos, doenças e vícios: no fim de cada intervalo, sucesso baixa 1 estágio e falha sobe 1. A ficha já faz essa conta.",
+        "Resistência a um elemento vale inteira contra as derivações dele, e Resistência física cobre também o balístico.",
+        "XP por marco em três tamanhos: pequeno, médio e grande.",
+        "Treinar perícia ficou sem o desconto de instrutor e sem o dia de revisão. Contatos não cobram mais a mais pelo segundo favor no mesmo intervalo.",
+        "A folha de regras de mesa, os cartões de condição e as aventuras prontas do Mestre já trazem as regras novas."
+      ]
+    },
+    {
       "id": "2026-11-18-mecanicas-de-mesa-mais-simples",
       "data": "2026-11-18",
       "tipo": "melhoria",

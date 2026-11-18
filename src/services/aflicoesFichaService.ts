@@ -60,14 +60,12 @@ export function normalizarAflicoesAtivas(valor: unknown): IAflicaoAtiva[] {
   });
 }
 
-/** Estágio depois da exposição: sucesso evita, falha entra no 1, falha crítica no 2. */
-export function estagioDaExposicao(aflicao: IAflicao, grau: GrauTeste): number {
-  if (grau === 'falha critica') return Math.min(2, estagioMaximo(aflicao));
-  if (grau === 'falha') return 1;
-  return 0;
+/** Estágio depois da exposição: sucesso evita, falha (crítica ou não) entra no 1. */
+export function estagioDaExposicao(_aflicao: IAflicao, grau: GrauTeste): number {
+  return grau === 'falha' || grau === 'falha critica' ? 1 : 0;
 }
 
-/** Fim do intervalo: crítico desce 1, sucesso mantém, falha sobe 1, falha crítica sobe 2. */
+/** Fim do intervalo, pela progressão do catálogo: sucesso desce 1, falha sobe 1. */
 export function estagioDoIntervalo(aflicao: IAflicao, atual: number, grau: GrauTeste): number {
   const passo = grau === 'sucesso critico'
     ? aflicao.progressao.sucessoCritico

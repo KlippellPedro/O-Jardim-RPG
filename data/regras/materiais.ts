@@ -492,44 +492,19 @@ export const REGRA_MATERIAIS: RegraTopicoDe<'Livro do Jogador'> = {
     </table></div>
     <p>O símbolo ou oferenda exata pode combinar com a cena, mas a quantidade e a raridade não mudam. Um lote superior substitui um inferior; lotes inferiores <strong>não podem ser somados</strong> para alcançar outra raridade. A Mana indicada no ritual também fica comprometida ao começar e não volta se o rito falhar ou for interrompido.</p>
 
-    <h3 class="regras-subtitle">Quando os Componentes Químicos aumentam</h3>
+    <h3 class="regras-subtitle">Quando o lote dos preparos aumenta</h3>
+    <p>Alquimista, Engenheiro e Chef usam a mesma escada. O nível da fórmula, do projeto ou da receita decide a raridade do lote que ela gasta: Componentes Químicos, Sucata ou Mantimentos.</p>
     <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Nível da fórmula</th><th>Nível de Alquimista</th><th>Componente exigido</th></tr></thead>
+      <thead><tr><th>Nível da fórmula, do projeto ou da receita</th><th>Nível na classe</th><th>Lote exigido</th></tr></thead>
       <tbody>
-        <tr><td>1</td><td>1–4</td><td>Comum</td></tr>
-        <tr><td>2</td><td>5–8</td><td>Incomum</td></tr>
-        <tr><td>3</td><td>9–12</td><td>Raro</td></tr>
-        <tr><td>4</td><td>13–16</td><td>Épico</td></tr>
-        <tr><td>5</td><td>17–20</td><td>Lendário</td></tr>
+        <tr><td>1</td><td>1 a 4 (Engenheiro começa no 3)</td><td>Comum</td></tr>
+        <tr><td>2</td><td>5 a 8</td><td>Incomum</td></tr>
+        <tr><td>3</td><td>9 a 12</td><td>Raro</td></tr>
+        <tr><td>4</td><td>13 a 16</td><td>Épico</td></tr>
+        <tr><td>5</td><td>17 a 20</td><td>Lendário</td></tr>
       </tbody>
     </table></div>
-    <p>Um componente de raridade superior pode substituir um inferior. Componentes inferiores <strong>não podem ser somados</strong> para alcançar uma raridade maior. Assim, Água Pura Comum abastece fórmulas de nível 1, mas nunca uma fórmula de nível 2 ou superior.</p>
-
-    <h3 class="regras-subtitle">Quando a Sucata aumenta</h3>
-    <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Nível do projeto</th><th>Nível de Engenheiro</th><th>Sucata exigida</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>3–4</td><td>Comum</td></tr>
-        <tr><td>2</td><td>5–8</td><td>Incomum</td></tr>
-        <tr><td>3</td><td>9–12</td><td>Rara</td></tr>
-        <tr><td>4</td><td>13–16</td><td>Épica</td></tr>
-        <tr><td>5</td><td>17–20</td><td>Lendária</td></tr>
-      </tbody>
-    </table></div>
-    <p>Sucata superior pode substituir uma inferior. Lotes inferiores não se somam para alcançar um patamar maior. Todos os projetos conhecidos melhoram automaticamente com o nível do Engenheiro; as vagas de Engenhoca continuam sendo liberadas separadamente.</p>
-
-    <h3 class="regras-subtitle">Quando os Mantimentos aumentam</h3>
-    <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Nível da receita</th><th>Nível de Chef</th><th>Mantimento exigido</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>1–4</td><td>Comum</td></tr>
-        <tr><td>2</td><td>5–8</td><td>Incomum</td></tr>
-        <tr><td>3</td><td>9–12</td><td>Raro</td></tr>
-        <tr><td>4</td><td>13–16</td><td>Épico</td></tr>
-        <tr><td>5</td><td>17–20</td><td>Lendário</td></tr>
-      </tbody>
-    </table></div>
-    <p>Um Mantimento superior pode substituir um inferior. Mantimentos inferiores não se somam para criar uma raridade maior. Todas as receitas conhecidas sobem automaticamente com o nível do Chef.</p>
+    <p>Um lote de raridade maior substitui um menor, mas lotes menores <strong>não podem ser somados</strong> para chegar a uma raridade maior. Assim, Água Pura Comum abastece fórmulas de nível 1, mas nunca uma fórmula de nível 2 ou superior. Tudo o que o personagem já conhece sobe sozinho com o nível na classe; as vagas de Engenhoca continuam sendo liberadas separadamente.</p>
 
     <h3 class="regras-subtitle">Manutenção de veículos</h3>
     <p>Veículo usado no mês gasta Componentes Veiculares da própria raridade: <strong>1 lote pelo veículo</strong> e mais <strong>1 por módulo de utilidade instalado</strong>, mesmo que o módulo esteja desligado. Sem o pagamento, o veículo fica parado até a manutenção ser paga; o custo atrasado não acumula e o veículo não é destruído. A regra completa, com exemplo, está em <span class="regras-ref regras-ref--veiculos-manutencao">Manutenção e Componentes</span>.</p>

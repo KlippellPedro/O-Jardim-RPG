@@ -618,7 +618,7 @@ Vários tópicos pedem um teste "contra a DT Padrão do nível", "contra a DT Di
 
 **Que nível usar.** O da ameaça: o VD da criatura, o nível do lugar ou o da cena. Quando o problema mora no próprio personagem, como uma crise, uma fobia, um trauma, uma lesão ou Morrendo, vale o nível dele. Na dúvida, o nível do grupo. Quando a ficha calcula sozinha, ela usa o nível do personagem.
 
-**O que não soma ajuste.** Algumas DTs já crescem por outro caminho: a de conjuração e a de rituais sobem com o círculo, a de fabricar com a raridade, a de invadir uma base com o nível da base, e a de manter concentração com o dano sofrido. Ajudar tem a sua própria versão por nível, e o esconderijo ou a trava de um item segue a raridade dele.
+**O que não soma ajuste.** Algumas DTs já crescem por outro caminho: a de conjuração e a de rituais sobem com o círculo, a de fabricar com a raridade, a de invadir uma base com o nível da base, e a de manter concentração com o dano sofrido. O esconderijo ou a trava de um item segue a raridade dele.
 
 ### Catálogo de perícias
 
@@ -1248,8 +1248,6 @@ Na ficha, o contato é um vínculo das Notas marcado como "faz favores", e a Con
 
 - ArriscadoLeal | Algo que pode custar a vida, o emprego ou o nome dele.Teste: Nenhum: ele faz. Custo: Uma Dívida, e o contato paga o preço do risco: Procura, ferimento, o emprego.
 
-- **Um favor por intervalo** entre aventuras sai sem desgaste. O segundo no mesmo intervalo conta um tamanho acima: o pequeno vira grande.
-
 - **O favor fica no ramo dele.** O escrivão carimba o documento; esconder alguém é outro contato.
 
 - **A Dívida é do contato.** O Mestre traz o pedido quando ele precisar: uma carta, um recado, alguém batendo na porta. Cumprir apaga a Dívida. Recusar baixa a Confiança em 1, e em 0 o contato se perde.
@@ -1512,7 +1510,7 @@ Use esta regra quando exércitos inteiros lutam. Ninguém rola ataque por soldad
 
 - A cada fase, os comandantes escolhem uma ordem em segredo e fazem um teste oposto de **Guerra**. Quem vence tira Força do outro.
 
-- Os personagens escolhem onde vão lutar na fase e fazem um **feito**. No fim da fase, quem fez um feito perde 10% da Vida máxima se acertou e 25% se falhou.
+- Os personagens escolhem onde vão lutar na fase e fazem um **feito**. No fim da fase, quem fez um feito sofre 1d6 a cada 3 níveis da batalha, ou metade desses dados se acertou o feito.
 
 - Na metade da Força e num quarto dela, o lado testa moral, como no Combate. Quem desiste foge do campo.
 
@@ -1558,7 +1556,7 @@ Cada vantagem clara de um lado dá +2 no choque dele, até +6:
 
 - **Moral.** O lado que chegou à metade da Força, ou a um quarto dela, testa moral.
 
-- **Vida.** Cada personagem que fez um feito perde Vida, como em Dano na batalha, logo abaixo.
+- **Dano.** Cada personagem que fez um feito sofre dano, como em Dano na batalha, logo abaixo.
 
 Uma fase é mais ou menos meia hora de luta. A maioria das batalhas termina entre a terceira e a sexta.
 
@@ -1600,13 +1598,13 @@ As três primeiras se vencem em roda: Avançar vence Flanquear, Flanquear vence 
 
 ### Dano na batalha
 
-No fim de cada fase, quem fez um feito perde Vida, em qualquer nível:
+No fim de cada fase, quem fez um feito sofre dano do tipo que fizer sentido (corte, perfuração, impacto, o Fogo da magia inimiga). Conte 1 dado a cada 3 níveis da batalha, arredondando para cima:
 
-- **Feito com sucesso:** 10% da sua Vida máxima.
+- **Feito com falha:** todos esses dados, em d6.
 
-- **Feito com falha:** 25% da sua Vida máxima.
+- **Feito com sucesso:** metade dos dados, arredondando para cima, em d6.
 
-- Arredonde para cima. Resistência não reduz essa perda, porque ela junta todos os golpes da fase numa conta só.
+- É a mesma conta das armadilhas Séria e Leve, em Perigos do Ambiente. Numa batalha de nível 10, são 4d6 na falha e 2d6 no sucesso.
 
 ### Como termina
 
@@ -1620,7 +1618,7 @@ No fim de cada fase, quem fez um feito perde Vida, em qualquer nível:
 
 **Exemplo:**
 
-Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro tem 60 de Vida máxima e acertou o feito, então perde 6 de Vida no fim da fase.
+Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. A batalha é de nível 5, e o Guerreiro acertou o feito: no fim da fase, ele sofre 1d6 de dano.
 
 ## viagem
 
@@ -1982,7 +1980,7 @@ Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade
 
 - Frio e Calor são dano de ambiente. Eles vêm do lugar, e Gelo e Fogo vêm de um golpe: são tipos diferentes.
 
-- Resistência vale sempre por tipo específico, e entra por último na conta: multiplicador crítico, dados extras, vulnerabilidade e só então a Resistência, até o mínimo 0.
+- Resistência vale sempre por tipo específico, e entra por último: role o dano inteiro, dobre se o alvo for vulnerável e só então tire a Resistência, até o mínimo 0.
 
 - Dano verdadeiro fica fora das famílias. Nenhuma Resistência reduz esse dano, e por isso ele é um dos mais fortes do jogo.
 
@@ -2038,7 +2036,7 @@ Cada elemento tem duas derivações, e cada derivação é um tipo de dano próp
 
 - Resistência, vulnerabilidade e imunidade a uma derivação valem só para ela, por inteiro.
 
-- Resistência ao elemento base vale pela metade contra o dano da derivação, arredondada para baixo. Imunidade ao elemento base continua valendo por inteiro.
+- Resistência e imunidade ao elemento base também valem, por inteiro, contra as derivações dele. Quem resiste a Água resiste a Gelo.
 
 ### Dano de ambiente: Frio e Calor
 
@@ -2050,23 +2048,17 @@ Dano verdadeiro não pertence a nenhuma das cinco famílias. Nenhuma Resistênci
 
 ### Resistência e ordem de aplicação
 
-A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.
+São dois passos, sempre nesta ordem:
 
-- Role o dano e aplique o multiplicador crítico aos dados e modificadores que fazem parte do ataque.
+- **Role o dano inteiro,** com o crítico e os dados extras do ataque. Se o alvo for vulnerável àquele tipo, dobre.
 
-- Some os dados extras declarados pelo efeito. Dado extra só multiplica se a fonte disser que multiplica.
-
-- Aplique vulnerabilidade, que dobra o dano daquele tipo, ou redução percentual.
-
-- Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.
-
-- Por fim, aplique a redução de dano, quando um efeito manda "reduzir em X o dano de cada golpe". Ela vale para qualquer tipo, menos o dano verdadeiro, até o mínimo 0.
+- **Tire a Resistência** do tipo de dano e a redução de dano, se houver, até o mínimo 0. A redução de dano vale contra qualquer tipo, menos o dano verdadeiro.
 
 **Exemplo:**
 
 Um ataque de Fogo causa 10 de dano. O alvo é vulnerável a Fogo e tem Resistência 5 a Fogo. Primeiro a vulnerabilidade dobra o dano para 20, e só então a Resistência tira 5: o alvo sofre 15. Subtraindo a Resistência antes de dobrar, o resultado seria 10.
 
-Resistência física geral cobre corte, perfuração e impacto. Balístico fica de fora, de propósito. E Resistência de um tipo específico não faz nada contra os outros tipos.
+Resistência física geral cobre todos os danos físicos: corte, perfuração, impacto e balístico. Resistência de um tipo específico não faz nada contra os outros tipos.
 
 ## mesa-ao-vivo
 
@@ -2516,9 +2508,9 @@ Os dias de treino saem do tempo que o grupo tem entre as aventuras (ver Tempo En
 
 - Cada dia custa seis horas e deixa 1 de Cansaço no fim. Uma noite normal de sono resolve.
 
-- Instrutor é alguém que já tem o grau que você quer alcançar, ou um maior. Quando a linha da tabela pede instrutor, sem ele você não sobe; nas outras linhas, ter um de grau superior ao seu corta 20% do tempo, arredondando para cima.
+- Instrutor é alguém que já tem o grau que você quer alcançar, ou um maior. Ele só importa nas linhas da tabela que pedem instrutor: nelas, sem ele você não sobe.
 
-- Parar no meio não apaga o que já foi feito, mas quem passa mais de 30 dias sem treinar precisa de um dia de revisão antes de continuar.
+- Parar no meio não apaga o que já foi feito. Você retoma de onde parou, quando quiser.
 
 - Não se rola nada para treinar. Cumpriu o tempo, o Nível Total e o requisito da linha, subiu.
 
@@ -2660,9 +2652,9 @@ Todo personagem acumula XP, e o XP total decide o nível. Este tópico mostra qu
 
 - O nível total soma os níveis de todas as classes, e a tabela de recompensas olha para ele: multiclasse não recebe nada em dobro.
 
-- O Mestre recompensa por marco, em fatias do próximo nível, e escolhe o ritmo da campanha: Lento, Médio ou Rápido. No Lento, descoberta vale 10%, missão relevante 25% e fim de arco 50%.
+- O Mestre recompensa por marco, em fatias do próximo nível, e escolhe o ritmo da campanha: Lento, Médio ou Rápido. Há três tamanhos de marco: no Lento, o pequeno vale 10%, o médio 25% e o grande 50%.
 
-- Quem fez, leva: o XP de combate é de quem lutou, e o Feito pessoal é só de quem fez.
+- Quem fez, leva: o XP de combate é de quem lutou, e o marco pessoal é só de quem fez.
 
 - O nível 60 fecha o jogo padrão. Dali em diante o personagem entra em patamares, e a ficha só avisa o Mestre: nada trava.
 
@@ -2692,19 +2684,11 @@ Marco é o XP que vem da história. Ele é dado em fatias do próximo nível, e 
 
 - Marco | Lento | Médio | Rápido
 
-- Cena marcante. Uma interpretação que pesa, uma ideia que muda a cena, um laço posto à prova. | 5% | 10% | 15%
+- Pequeno. Uma cena marcante, uma descoberta ou um feito pessoal: uma interpretação que pesa, um segredo aberto, um duelo vencido, uma promessa cumprida. | 10% | 15% | 25%
 
-- Descoberta ou objetivo menor. Um segredo aberto, um lugar novo, uma pista que fecha uma pergunta. | 10% | 15% | 25%
+- Médio. Um desafio vencido ou uma missão entregue: uma infiltração limpa, um conflito social fechado, um caso resolvido, o trabalho que o grupo aceitou. | 25% | 35% | 50%
 
-- Feito pessoal. Algo que um personagem conquistou sozinho: um duelo, uma promessa cumprida, um plano dele que deu certo. | 10% | 15% | 25%
-
-- Desafio vencido sem luta. Uma infiltração limpa, um conflito social fechado, um caso resolvido, uma perseguição ganha. | 15% | 25% | 35%
-
-- Missão relevante. O trabalho que o grupo aceitou e entregou. | 25% | 35% | 50%
-
-- Fim de arco. A história que vinha de várias sessões se fecha. | 50% | 75% | 100%
-
-- Marco de campanha. Fim de temporada, ou um plano grande de facção que o grupo fechou ou impediu. | 100% | 150% | 200%
+- Grande. O fim de um arco: a história que vinha de várias sessões se fecha. | 50% | 75% | 100%
 
 - **Lento** dá perto de cinco sessões por nível. É o ritmo padrão do livro, para campanha longa em que cada nível pesa.
 
@@ -2712,9 +2696,11 @@ Marco é o XP que vem da história. Ele é dado em fatias do próximo nível, e 
 
 - **Rápido** dá perto de duas. Serve a campanha curta ou a mesa que joga pouco.
 
-- **Quem fez, leva.** O XP de combate se divide entre quem lutou, e quem derruba a criatura sozinho fica com ele inteiro. O Feito pessoal vai só para quem fez. Os outros marcos vão inteiros para cada personagem que participou.
+- **Fim de temporada**, ou um plano grande de facção que o grupo fechou ou impediu, vale dois marcos grandes.
 
-- **Um por sessão:** cada personagem recebe no máximo uma Cena marcante e um Feito pessoal por sessão.
+- **Quem fez, leva.** O XP de combate se divide entre quem lutou, e quem derruba a criatura sozinho fica com ele inteiro. A cena marcante e o feito pessoal vão só para quem fez. Os outros marcos vão inteiros para cada personagem que participou.
+
+- **Um por sessão:** cada personagem recebe no máximo um marco pequeno pessoal (cena marcante ou feito) por sessão.
 
 - 100% é um nível inteiro. O que passar do custo continua contando para o nível seguinte.
 
@@ -3946,53 +3932,23 @@ O nome específico de um material serve para a história; na ficha, ele entra co
 
 O símbolo ou oferenda exata pode combinar com a cena, mas a quantidade e a raridade não mudam. Um lote superior substitui um inferior; lotes inferiores **não podem ser somados** para alcançar outra raridade. A Mana indicada no ritual também fica comprometida ao começar e não volta se o rito falhar ou for interrompido.
 
-### Quando os Componentes Químicos aumentam
+### Quando o lote dos preparos aumenta
 
-- Nível da fórmula | Nível de Alquimista | Componente exigido
+Alquimista, Engenheiro e Chef usam a mesma escada. O nível da fórmula, do projeto ou da receita decide a raridade do lote que ela gasta: Componentes Químicos, Sucata ou Mantimentos.
 
-- 1 | 1–4 | Comum
+- Nível da fórmula, do projeto ou da receita | Nível na classe | Lote exigido
 
-- 2 | 5–8 | Incomum
+- 1 | 1 a 4 (Engenheiro começa no 3) | Comum
 
-- 3 | 9–12 | Raro
+- 2 | 5 a 8 | Incomum
 
-- 4 | 13–16 | Épico
+- 3 | 9 a 12 | Raro
 
-- 5 | 17–20 | Lendário
+- 4 | 13 a 16 | Épico
 
-Um componente de raridade superior pode substituir um inferior. Componentes inferiores **não podem ser somados** para alcançar uma raridade maior. Assim, Água Pura Comum abastece fórmulas de nível 1, mas nunca uma fórmula de nível 2 ou superior.
+- 5 | 17 a 20 | Lendário
 
-### Quando a Sucata aumenta
-
-- Nível do projeto | Nível de Engenheiro | Sucata exigida
-
-- 1 | 3–4 | Comum
-
-- 2 | 5–8 | Incomum
-
-- 3 | 9–12 | Rara
-
-- 4 | 13–16 | Épica
-
-- 5 | 17–20 | Lendária
-
-Sucata superior pode substituir uma inferior. Lotes inferiores não se somam para alcançar um patamar maior. Todos os projetos conhecidos melhoram automaticamente com o nível do Engenheiro; as vagas de Engenhoca continuam sendo liberadas separadamente.
-
-### Quando os Mantimentos aumentam
-
-- Nível da receita | Nível de Chef | Mantimento exigido
-
-- 1 | 1–4 | Comum
-
-- 2 | 5–8 | Incomum
-
-- 3 | 9–12 | Raro
-
-- 4 | 13–16 | Épico
-
-- 5 | 17–20 | Lendário
-
-Um Mantimento superior pode substituir um inferior. Mantimentos inferiores não se somam para criar uma raridade maior. Todas as receitas conhecidas sobem automaticamente com o nível do Chef.
+Um lote de raridade maior substitui um menor, mas lotes menores **não podem ser somados** para chegar a uma raridade maior. Assim, Água Pura Comum abastece fórmulas de nível 1, mas nunca uma fórmula de nível 2 ou superior. Tudo o que o personagem já conhece sobe sozinho com o nível na classe; as vagas de Engenhoca continuam sendo liberadas separadamente.
 
 ### Manutenção de veículos
 
@@ -4663,7 +4619,7 @@ A partir do 13º nível (Domínio da Derivação), uma vez por rodada, ao conjur
 
 - Eclipse rara | Apaga a luz mundana e suprime a luz mágica de círculo igual ou inferior ao da magia, numa área afetada de 3 m, até o começo do seu próximo turno. Eclipse não é o Fluxo do Vazio.
 
-**Derivação é tipo de dano.** Dano de Gelo, de Magma, de Areia e das outras tem Resistência, vulnerabilidade e imunidade próprias, que valem só para ela. A Resistência ao elemento base vale pela metade contra o dano da derivação (arredondada para baixo), e a imunidade ao elemento base continua valendo por inteiro. Para vantagens e desvantagens, a derivação conta como o elemento de origem, e ela não ganha nada além do que está escrito no efeito harmônico. Frio e Calor ficam de fora: são dano de ambiente, descrito em **Tipos de Dano**. Se o efeito exige que a criatura falhe na resistência, uma magia sem resistência não o ativa contra criatura hostil.
+**Derivação é tipo de dano.** Dano de Gelo, de Magma, de Areia e das outras tem Resistência, vulnerabilidade e imunidade próprias, que valem só para ela. A Resistência e a imunidade ao elemento base também valem, por inteiro, contra o dano da derivação. Para vantagens e desvantagens, a derivação conta como o elemento de origem, e ela não ganha nada além do que está escrito no efeito harmônico. Frio e Calor ficam de fora: são dano de ambiente, descrito em **Tipos de Dano**. Se o efeito exige que a criatura falhe na resistência, uma magia sem resistência não o ativa contra criatura hostil.
 
 ## marcas-cicatrizes
 
@@ -5275,9 +5231,9 @@ Aflição é veneno, doença ou vício: um problema que evolui por estágios com
 
 **Em resumo**
 
-- Ao sofrer exposição, teste Fortitude contra a DT da aflição. Falha aplica o estágio 1, e falha crítica aplica o estágio 2.
+- Ao sofrer exposição, teste Fortitude contra a DT da aflição. Falha aplica o estágio 1.
 
-- No fim de cada intervalo, novo teste: sucesso crítico reduz 1 estágio, sucesso mantém, falha aumenta 1 e falha crítica aumenta 2. Em veneno, o sucesso também reduz 1.
+- No fim de cada intervalo, novo teste: sucesso reduz 1 estágio, e falha aumenta 1.
 
 - Cura reduz 1 estágio por sucesso, e o antídoto encerra um veneno ativo. No estágio 0 a aflição acaba.
 
@@ -5287,9 +5243,9 @@ Aflição é veneno, doença ou vício: um problema que evolui por estágios com
 
 A DT do catálogo, de Fortitude e de Cura, é a do nível 1. Na mesa, some o ajuste de nível do lugar ou de quem envenenou, da tabela de DT em Perícias: uma doença de DT 16 pede 31 numa região de nível 20. A ficha soma sozinha o ajuste do nível do personagem.
 
-- Ao sofrer exposição, teste Fortitude contra a DT da aflição. Sucesso ou sucesso crítico evita a aflição. Falha aplica o estágio 1 depois da incubação; falha crítica aplica o estágio 2.
+- Ao sofrer exposição, teste Fortitude contra a DT da aflição. Sucesso evita a aflição. Falha aplica o estágio 1 depois da incubação.
 
-- No fim de cada intervalo, faça outro teste. Sucesso crítico reduz 1 estágio; sucesso mantém; falha aumenta 1; falha crítica aumenta 2. Em veneno, o sucesso comum também reduz 1 estágio: o corpo vence a toxina aos poucos, e doença e vício só cedem com tratamento.
+- No fim de cada intervalo, faça outro teste. Sucesso reduz 1 estágio, e falha aumenta 1. O crítico não muda nada a mais, e a regra vale igual para veneno, doença e vício.
 
 - O estágio não passa do maior valor do catálogo. Seus efeitos não se acumulam com os de estágios anteriores, salvo indicação expressa.
 
@@ -5614,7 +5570,7 @@ Esta página reúne os perigos que machucam sem ser um ataque: queda, falta de a
 
 - **Clima:** Severo e Extremo cobram Fortitude e Cansaço, e o Mortal tira Vida a cada turno. Roupa certa, Traje e abrigo baixam o grau.
 
-- **Armadilhas:** cada uma tem nível e peso (Leve, Séria ou Mortal). Percepção acha, Ladinagem, Misticismo ou Tecnologia desarmam, e a tabela dá DT, ataque e dano.
+- **Armadilhas:** cada uma tem nível e peso (Leve, Séria ou Mortal). Percepção acha, Ladinagem, Misticismo ou Tecnologia desarmam, e o dano é 1 dado a cada 3 níveis, em d6 ou d12 pelo peso.
 
 ### Queda
 
@@ -5739,43 +5695,19 @@ Frio e Calor são dano de ambiente (Tipos de Dano). A tabela diz com que ritmo e
 
 ### Armadilhas
 
-Toda armadilha tem um nível, quase sempre o do grupo ou o do lugar, e um peso. O nível escolhe a linha da tabela de baixo, e o peso escolhe a DT de cada etapa e a coluna de dano.
+Toda armadilha tem um nível, quase sempre o do grupo ou o do lugar, e um peso: Leve, Séria ou Mortal.
 
-- Peso | Achar | Desarmar | Resistir
+Dano: 1 dado a cada 3 níveis da armadilha, arredondando para cima
 
-- LeveAtrasa, faz barulho e machuca pouco. | Padrão | Padrão | Padrão
+- Peso | DT para achar, desarmar e resistir | Dano | No nível 10
 
-- SériaTira um bom pedaço da Vida e muda o plano. | Padrão | Difícil | Padrão
+- LeveAtrasa, faz barulho e machuca pouco. | Padrão | metade dos dados, em d6 | 2d6
 
-- MortalFeita para matar quem entra sem cuidado. Sempre deixa um sinal. | Difícil | Difícil | Difícil
+- SériaTira um bom pedaço da Vida e muda o plano. | Padrão | os dados em d6 | 4d6
 
-- Nível | DT Padrão / Difícil | Ataque | Leve | Séria | Mortal
+- MortalFeita para matar quem entra sem cuidado. Sempre deixa um sinal. | Difícil | os dados em d12 | 4d12
 
-- 1 | 15 / 20 | +4 | 1d4 | 1d6 | 2d6
-
-- 5 | 17 / 22 | +9 | 1d4 | 2d6 | 3d6
-
-- 10 | 20 / 25 | +14 | 1d6 | 3d6 | 6d6
-
-- 15 | 24 / 29 | +18 | 2d6 | 5d6 | 8d6
-
-- 20 | 30 / 35 | +24 | 2d6 | 6d6 | 6d12
-
-- 30 | 37 / 42 | +31 | 4d6 | 10d6 | 9d12
-
-- 40 | 43 / 48 | +37 | 5d6 | 7d12 | 12d12
-
-- 50 | 48 / 53 | +42 | 6d6 | 9d12 | 16d12
-
-- 60 | 56 / 61 | +50 | 7d6 | 10d12 | 18d12
-
-- 80 | 66 / 71 | +60 | 9d6 | 12d12 | 20d12+15
-
-- 100 | 79 / 84 | +73 | 6d12 | 15d12 | 20d12+50
-
-- 150 | 107 / 112 | +101 | 8d12 | 20d12+5 | 20d12+115
-
-- 200 | 132 / 137 | +126 | 11d12 | 20d12+45 | 20d12+185
+A DT Padrão e a Difícil são as do nível da armadilha, na tabela de DT de Perícias. Uma armadilha de nível 10 conta 4 dados: a Leve rola 2d6, a Séria 4d6 e a Mortal 4d12.
 
 - **Achar:** quem anda atento usa 10 + bônus de Percepção contra a DT de achar. Quem para e procura rola, e procurar com calma custa tempo.
 
@@ -5785,27 +5717,25 @@ Toda armadilha tem um nível, quase sempre o do grupo ou o do lugar, e um peso. 
 
 - **Desarmar é um caminho entre vários.** Contornar, disparar de longe com uma vara ou uma pedra, ou passar correndo e aguentar também resolvem, cada um com o seu preço.
 
-- **Resistir:** Reflexos contra lâmina, fosso e pedra; Fortitude contra dardo, agulha e gás; Vontade contra selo que mexe com a mente. O sucesso leva metade do dano e nenhum efeito extra. A falha leva o dano inteiro e o efeito.
-
-- **Armadilha que atira** (besta, dardo, lança) faz um ataque: d20 + Ataque da tabela contra a Defesa. Acerto leva o dano inteiro e o efeito; erro não leva nada.
+- **Resistir:** Reflexos contra lâmina, fosso, pedra, dardo e flecha; Fortitude contra agulha e gás; Vontade contra selo que mexe com a mente. O sucesso leva metade do dano e nenhum efeito extra. A falha leva o dano inteiro e o efeito.
 
 - **O tipo de dano** é o do mecanismo: corte, perfuração, impacto, o Fogo de um selo. O veneno vem como aflição, e a aflição se resolve do jeito dela.
 
 - **Dano que tira metade ou mais da Vida máxima** num golpe só pede a tabela de trauma, como em Ferimentos.
 
-- **As armadilhas vendidas na Loja,** como a Armadilha de Corda e Sino, trazem o próprio número e não usam esta tabela.
+- **As armadilhas vendidas na Loja,** como a Armadilha de Corda e Sino, trazem o próprio número e não usam esta conta.
 
 **Exemplo:**
 
-Um grupo de nível 10 entra num corredor com uma lâmina de pêndulo Séria. Achar pede DT 20 de Percepção, desarmar pede DT 25 de Ladinagem e resistir pede Reflexos DT 20. Quem falha leva 3d6 de corte e fica Caído; quem passa leva metade.
+Um grupo de nível 10 entra num corredor com uma lâmina de pêndulo Séria. Achar, desarmar e resistir pedem DT 20: Percepção, Ladinagem e Reflexos. Quem falha leva 4d6 de corte e fica Caído; quem passa leva metade.
 
 **Armadilhas prontas.** Para quando o Mestre precisa de uma na hora, ou para inspirar a sua. Use o peso que a cena pedir.
 
 - 1d6 | Como é, e como se resolve
 
-- 1 | Fosso coberto. Uma laje igual às outras, só que oca. O pé afunda, a pedra gira no eixo e o escuro lá embaixo cheira a terra molhada.Reflexos. Sucesso: você se agarra na borda e fica Caído. Falha: você cai e sofre o dano de queda pela altura do fosso no lugar do dano da tabela.
+- 1 | Fosso coberto. Uma laje igual às outras, só que oca. O pé afunda, a pedra gira no eixo e o escuro lá embaixo cheira a terra molhada.Reflexos. Sucesso: você se agarra na borda e fica Caído. Falha: você cai e sofre o dano de queda pela altura do fosso no lugar do dano da armadilha.
 
-- 2 | Dardo na parede. Um furo do tamanho de uma ervilha na altura do pescoço, e uma placa solta no chão bem embaixo dele.Ataque contra a Defesa. Acerto: dano de perfuração do peso da armadilha e exposição à Toxina Paralisante.
+- 2 | Dardo na parede. Um furo do tamanho de uma ervilha na altura do pescoço, e uma placa solta no chão bem embaixo dele.Reflexos. Falha: dano de perfuração do peso da armadilha e exposição à Toxina Paralisante. Sucesso: metade do dano, sem a toxina.
 
 - 3 | Lâmina de pêndulo. Um rangido de corrente no teto, e uma lâmina do tamanho de uma porta descendo em arco pelo corredor.Reflexos. Dano de corte do peso da armadilha. A falha também deixa Caído.
 

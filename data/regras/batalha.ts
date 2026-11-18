@@ -4,10 +4,11 @@
  * contagem de Força (o mesmo jeito de contar da Resistência do Conflito
  * Social), os comandantes disputam fases com a perícia Guerra, que até aqui
  * não tinha casa, e os personagens fazem feitos no meio da batalha. A moral é
- * a do Combate (2d6 por bando) e o dano que os heróis levam é uma fração da
- * Vida máxima, como o descanso: vale igual no nível 3 e no nível 30, sem
- * tabela por nível.
+ * a do Combate (2d6 por bando) e o dano que os heróis levam é a conta das
+ * armadilhas de Perigos do Ambiente, no nível da batalha: Leve no feito com
+ * sucesso e Séria na falha. Nada de tabela por nível.
  */
+import { NIVEIS_POR_DADO_DE_ARMADILHA, danoDeArmadilha } from './perigosAmbiente';
 import type { RegraTopicoDe } from './tipos';
 
 export interface ITamanhoDeExercito {
@@ -106,17 +107,11 @@ export function pontosDeMoral(forcaMaxima: number): number[] {
   return [Math.floor(forcaMaxima / 2), Math.floor(forcaMaxima / 4)].filter((ponto, indice, lista) => ponto > 0 && lista.indexOf(ponto) === indice);
 }
 
-/** Vida que cada personagem que fez um feito perde no fim da fase, como fração
- *  da Vida máxima dele: falhar sempre machuca mais que acertar. */
-export const PERDA_DE_VIDA_DO_FEITO = { sucesso: 0.1, falha: 0.25 } as const;
-
-/** Vida perdida pelo feito, arredondada para cima. Resistência não reduz. */
-export function perdaDoFeito(vidaMaxima: number, sucesso: boolean): number {
-  const fracao = sucesso ? PERDA_DE_VIDA_DO_FEITO.sucesso : PERDA_DE_VIDA_DO_FEITO.falha;
-  return Math.ceil(Math.max(0, Number(vidaMaxima) || 0) * fracao);
+/** Dano que cada personagem que fez um feito sofre no fim da fase: 1 dado a
+ *  cada 3 níveis da batalha, em d6, e metade dos dados quando o feito deu certo. */
+export function danoDoFeito(nivelDaBatalha: number, sucesso: boolean): string {
+  return danoDeArmadilha(nivelDaBatalha, sucesso ? 'leve' : 'seria');
 }
-
-const porcento = (fracao: number) => `${Math.round(fracao * 100)}%`;
 
 // ------------------------------------------------------------------ página
 
@@ -152,7 +147,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
       <ul>
         <li>Cada lado tem uma <strong>Força</strong> de 4 a 10 partes, pelo tamanho. Perdeu todas, perdeu a batalha.</li>
         <li>A cada fase, os comandantes escolhem uma ordem em segredo e fazem um teste oposto de <strong>Guerra</strong>. Quem vence tira Força do outro.</li>
-        <li>Os personagens escolhem onde vão lutar na fase e fazem um <strong>feito</strong>. No fim da fase, quem fez um feito perde ${porcento(PERDA_DE_VIDA_DO_FEITO.sucesso)} da Vida máxima se acertou e ${porcento(PERDA_DE_VIDA_DO_FEITO.falha)} se falhou.</li>
+        <li>Os personagens escolhem onde vão lutar na fase e fazem um <strong>feito</strong>. No fim da fase, quem fez um feito sofre 1d6 a cada ${NIVEIS_POR_DADO_DE_ARMADILHA} níveis da batalha, ou metade desses dados se acertou o feito.</li>
         <li>Na metade da Força e num quarto dela, o lado testa moral, como no <span class="regras-ref regras-ref--combate">Combate</span>. Quem desiste foge do campo.</li>
       </ul>
     </div>
@@ -179,7 +174,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>Choque.</strong> Teste oposto de Guerra dos comandantes, com as vantagens, a ordem e o que os feitos deram.</li>
       <li><strong>Perdas.</strong> Quem vence o choque tira 1 parte da Força do outro, e 2 se vencer por 10 ou mais. Empate tira 1 dos dois. Somam-se as partes que os feitos tiraram.</li>
       <li><strong>Moral.</strong> O lado que chegou à metade da Força, ou a um quarto dela, testa moral.</li>
-      <li><strong>Vida.</strong> Cada personagem que fez um feito perde Vida, como em Dano na batalha, logo abaixo.</li>
+      <li><strong>Dano.</strong> Cada personagem que fez um feito sofre dano, como em Dano na batalha, logo abaixo.</li>
     </ol>
     <p class="regras-note">Uma fase é mais ou menos meia hora de luta. A maioria das batalhas termina entre a terceira e a sexta.</p>
 
@@ -203,11 +198,11 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
     </ul>
 
     <h3 class="regras-subtitle">Dano na batalha</h3>
-    <p>No fim de cada fase, quem fez um feito perde Vida, em qualquer nível:</p>
+    <p>No fim de cada fase, quem fez um feito sofre dano do tipo que fizer sentido (corte, perfuração, impacto, o Fogo da magia inimiga). Conte 1 dado a cada ${NIVEIS_POR_DADO_DE_ARMADILHA} níveis da batalha, arredondando para cima:</p>
     <ul class="regras-list">
-      <li><strong>Feito com sucesso:</strong> ${porcento(PERDA_DE_VIDA_DO_FEITO.sucesso)} da sua Vida máxima.</li>
-      <li><strong>Feito com falha:</strong> ${porcento(PERDA_DE_VIDA_DO_FEITO.falha)} da sua Vida máxima.</li>
-      <li>Arredonde para cima. Resistência não reduz essa perda, porque ela junta todos os golpes da fase numa conta só.</li>
+      <li><strong>Feito com falha:</strong> todos esses dados, em d6.</li>
+      <li><strong>Feito com sucesso:</strong> metade dos dados, arredondando para cima, em d6.</li>
+      <li>É a mesma conta das armadilhas Séria e Leve, em <span class="regras-ref regras-ref--perigos">Perigos do Ambiente</span>. Numa batalha de nível 10, são ${danoDoFeito(10, false)} na falha e ${danoDoFeito(10, true)} no sucesso.</li>
     </ul>
 
     <h3 class="regras-subtitle">Como termina</h3>
@@ -218,7 +213,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>Depois:</strong> uma batalha conta como combate intenso para quem lutou (1 de Cansaço, em <span class="regras-ref regras-ref--descanso">Descanso</span>). Cada parte perdida representa tropas fora de combate (mortos, feridos e fugidos).</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro tem 60 de Vida máxima e acertou o feito, então perde 6 de Vida no fim da fase.</p>
+      <p>Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. A batalha é de nível 5, e o Guerreiro acertou o feito: no fim da fase, ele sofre ${danoDoFeito(5, true)} de dano.</p>
     </div>
   `,
   corpoMestre: `

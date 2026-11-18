@@ -192,7 +192,7 @@ const pagina5 = () => `
   </ul>
 
   ${caixa('A negociação com Keryx', `
-    <p>Use Conflito Social. Ela tem <strong>Resistência 2</strong> e <strong>Paciência 5</strong>: confia nos pactos e não confia em ninguém que chegue gritando. O que ela quer é um acordo claro, com preço dito de antemão. Ela oferece: uma frase verdadeira por sessão, uma vez, entregue ao grupo por qualquer canal que ainda funcione. Ela pede: que o grupo quebre o último Nó, o da máscara de Jota, e que nenhuma palavra do grupo seja usada contra ela.</p>
+    <p>Use Conflito Social. Ela tem <strong>Resistência 2</strong> e <strong>Paciência 3</strong>: confia nos pactos e não confia em ninguém que chegue gritando. O que ela quer é um acordo claro, com preço dito de antemão. Ela oferece: uma frase verdadeira por sessão, uma vez, entregue ao grupo por qualquer canal que ainda funcione. Ela pede: que o grupo quebre o último Nó, o da máscara de Jota, e que nenhuma palavra do grupo seja usada contra ela.</p>
     <p><small>Se o grupo prometer o que não pode cumprir, o Pacto Vinculante cobra: desvantagem em todos os testes até a quebra ser reparada. Deixe a promessa errada ter um preço real, mas oferecer uma saída.</small></p>`)}
 
   <h2>Os guardas do Núcleo</h2>
@@ -235,7 +235,7 @@ const pagina6 = () => `
   <p>Jota não é criatura única do Bestiário, então não tem fases na ficha. Use o editor do participante na Sessão para trocar a fase à mão, ou anote o número dos Nós quebrados no campo de anotação. Jota cai a 0 de Vida na Fase 3, e nunca antes: antes disso ele recua para o corredor, e a perseguição é Longa, na dimensão que ele conhece melhor.</p>
 
   ${caixa('O que o grupo pode fazer sem lutar', `
-    <p>Se os seis Nós já caíram e o grupo tem a palavra de Keryx, Jota pode ser derrotado em Conflito Social: <strong>Resistência 5</strong> e <strong>Paciência 5</strong>. Ele não aceita derrota: sua última Resistência é a máscara. Ao chegar a 0, ele a retira, e a máscara cai com um som que o grupo escuta como um sino de igreja.</p>`, true)}
+    <p>Se os seis Nós já caíram e o grupo tem a palavra de Keryx, Jota pode ser derrotado em Conflito Social: <strong>Resistência 5</strong> e <strong>Paciência 3</strong>. Ele não aceita derrota: sua última Resistência é a máscara. Ao chegar a 0, ele a retira, e a máscara cai com um som que o grupo escuta como um sino de igreja.</p>`, true)}
 
   ${pe('Página 6 de 8')}
 </section>`;

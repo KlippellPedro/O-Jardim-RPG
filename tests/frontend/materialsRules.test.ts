@@ -325,7 +325,7 @@ test('raridade dos Mantimentos acompanha os cinco níveis das receitas do Chef',
   assert.equal(raridadeMantimentoPorNivelReceita(3), 'raro');
   assert.equal(raridadeMantimentoPorNivelReceita(99), 'lendario');
   assert.ok(RECEITAS_MATERIAIS_COZINHEIRO.every((receita) => receita.custoRecurso?.progressaoRaridade === 'nivel-receita-cozinheiro'));
-  assert.match(REGRA_MATERIAIS.corpo, /Quando os Mantimentos aumentam/i);
+  assert.match(REGRA_MATERIAIS.corpo, /Quando o lote dos preparos aumenta/i);
 });
 
 test('raridade da Sucata acompanha os cinco níveis dos projetos do Engenheiro', () => {
@@ -337,7 +337,7 @@ test('raridade da Sucata acompanha os cinco níveis dos projetos do Engenheiro',
   assert.equal(raridadeSucataPorNivelProjeto(3), 'raro');
   assert.equal(raridadeSucataPorNivelProjeto(99), 'lendario');
   assert.ok(PROJETOS_MATERIAIS_ENGENHEIRO.every((receita) => receita.custoRecurso?.progressaoRaridade === 'nivel-projeto-engenheiro'));
-  assert.match(REGRA_MATERIAIS.corpo, /Quando a Sucata aumenta/i);
+  assert.match(REGRA_MATERIAIS.corpo, /Engenheiro começa no 3/i);
 });
 
 test('manutenção veicular usa a raridade do veículo e soma as utilidades instaladas', () => {

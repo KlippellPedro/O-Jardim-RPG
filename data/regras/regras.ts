@@ -915,7 +915,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </table></div>
       <p><strong>Ajuste de nível.</strong> Quando uma regra de perigo, Sanidade, condição, lesão ou aflição traz a DT como número, como "Vontade DT 12", esse número é a DT do nível 1. Na mesa, some o ajuste da linha do nível que vale para o teste. Uma fobia de Vontade DT 12 pede 12 no nível 1, 27 no nível 20 e 53 no nível 60. Por isso o medo, o veneno e a nevasca continuam pesando para quem já subiu muito. A conta fecha com os nomes: DT 10 mais o ajuste é a Rotineira, DT 15 mais o ajuste é a Padrão, e DT 20 mais o ajuste é a Difícil.</p>
       <p><strong>Que nível usar.</strong> O da ameaça: o VD da criatura, o nível do lugar ou o da cena. Quando o problema mora no próprio personagem, como uma crise, uma fobia, um trauma, uma lesão ou Morrendo, vale o nível dele. Na dúvida, o nível do grupo. Quando a ficha calcula sozinha, ela usa o nível do personagem.</p>
-      <p><strong>O que não soma ajuste.</strong> Algumas DTs já crescem por outro caminho: a de conjuração e a de rituais sobem com o círculo, a de fabricar com a raridade, a de invadir uma base com o nível da base, e a de manter concentração com o dano sofrido. Ajudar tem a sua própria versão por nível, e o esconderijo ou a trava de um item segue a raridade dele.</p>
+      <p><strong>O que não soma ajuste.</strong> Algumas DTs já crescem por outro caminho: a de conjuração e a de rituais sobem com o círculo, a de fabricar com a raridade, a de invadir uma base com o nível da base, e a de manter concentração com o dano sofrido. O esconderijo ou a trava de um item segue a raridade dele.</p>
 
       <h3 class="regras-subtitle">Catálogo de perícias</h3>
       <p class="regras-lead">${periciasData.nota}</p>
@@ -1272,7 +1272,7 @@ ${HTML_MORAL}
           <li>Todo dano pertence a uma de cinco famílias: Físico, Persistente, Mágico, Tecnológico e Mental.</li>
           <li>São sete elementos fixos, sem oitavo. Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio.</li>
           <li>Frio e Calor são dano de ambiente. Eles vêm do lugar, e Gelo e Fogo vêm de um golpe: são tipos diferentes.</li>
-          <li>Resistência vale sempre por tipo específico, e entra por último na conta: multiplicador crítico, dados extras, vulnerabilidade e só então a Resistência, até o mínimo 0.</li>
+          <li>Resistência vale sempre por tipo específico, e entra por último: role o dano inteiro, dobre se o alvo for vulnerável e só então tire a Resistência, até o mínimo 0.</li>
           <li>Dano verdadeiro fica fora das famílias. Nenhuma Resistência reduz esse dano, e por isso ele é um dos mais fortes do jogo.</li>
         </ul>
       </div>
@@ -1316,7 +1316,7 @@ ${HTML_MORAL}
       <p>Cada elemento tem duas derivações, e cada derivação é um tipo de dano próprio, do mesmo jeito que o elemento: existe dano de Gelo, de Magma, de Areia, de Plasma, de Sangue, e assim por diante. Gelo é derivação de Água e tem Resistência própria. A lista completa, com o que cada derivação faz, está em <span class="regras-ref regras-ref--elementos">Elementos e Derivações</span>.</p>
       <ul class="regras-list">
         <li>Resistência, vulnerabilidade e imunidade a uma derivação valem só para ela, por inteiro.</li>
-        <li>Resistência ao elemento base vale pela metade contra o dano da derivação, arredondada para baixo. Imunidade ao elemento base continua valendo por inteiro.</li>
+        <li>Resistência e imunidade ao elemento base também valem, por inteiro, contra as derivações dele. Quem resiste a Água resiste a Gelo.</li>
       </ul>
 
       <h3 class="regras-subtitle">Dano de ambiente: Frio e Calor</h3>
@@ -1326,18 +1326,15 @@ ${HTML_MORAL}
       <p>Dano verdadeiro não pertence a nenhuma das cinco famílias. Nenhuma Resistência reduz esse dano, não existe Resistência a ele, e a redução de dano também não vale contra ele. Por isso é um dos danos mais fortes do jogo, e só aparece quando a fonte escreve com todas as letras "dano verdadeiro", quase sempre numa habilidade de topo.</p>
 
       <h3 class="regras-subtitle">Resistência e ordem de aplicação</h3>
-      <p>A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.</p>
+      <p>São dois passos, sempre nesta ordem:</p>
       <ol class="regras-steps">
-        <li>Role o dano e aplique o multiplicador crítico aos dados e modificadores que fazem parte do ataque.</li>
-        <li>Some os dados extras declarados pelo efeito. Dado extra só multiplica se a fonte disser que multiplica.</li>
-        <li>Aplique vulnerabilidade, que dobra o dano daquele tipo, ou redução percentual.</li>
-        <li>Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.</li>
-        <li>Por fim, aplique a redução de dano, quando um efeito manda "reduzir em X o dano de cada golpe". Ela vale para qualquer tipo, menos o dano verdadeiro, até o mínimo 0.</li>
+        <li><strong>Role o dano inteiro,</strong> com o crítico e os dados extras do ataque. Se o alvo for vulnerável àquele tipo, dobre.</li>
+        <li><strong>Tire a Resistência</strong> do tipo de dano e a redução de dano, se houver, até o mínimo 0. A redução de dano vale contra qualquer tipo, menos o dano verdadeiro.</li>
       </ol>
       <div class="regras-note regras-note--exemplo">
         <p>Um ataque de Fogo causa 10 de dano. O alvo é vulnerável a Fogo e tem Resistência 5 a Fogo. Primeiro a vulnerabilidade dobra o dano para 20, e só então a Resistência tira 5: o alvo sofre 15. Subtraindo a Resistência antes de dobrar, o resultado seria 10.</p>
       </div>
-      <p class="regras-note">Resistência física geral cobre corte, perfuração e impacto. Balístico fica de fora, de propósito. E Resistência de um tipo específico não faz nada contra os outros tipos.</p>
+      <p class="regras-note">Resistência física geral cobre todos os danos físicos: corte, perfuração, impacto e balístico. Resistência de um tipo específico não faz nada contra os outros tipos.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Tipo de dano é a etiqueta que faz Resistência, vulnerabilidade e imunidade funcionarem sem ambiguidade. Ao criar monstro, item ou poder novo, escolha o tipo daqui em vez de inventar um rótulo solto.</p>
@@ -1878,8 +1875,8 @@ ${HTML_MORAL}
       <p>Os dias de treino saem do tempo que o grupo tem entre as aventuras (ver <span class="regras-ref regras-ref--entre-aventuras">Tempo Entre Aventuras</span>), e a perícia treinada é a das <span class="regras-ref regras-ref--pericias">Perícias</span>.</p>
       <ul class="regras-list">
         <li>Cada dia custa seis horas e deixa 1 de Cansaço no fim. Uma noite normal de sono resolve.</li>
-        <li>Instrutor é alguém que já tem o grau que você quer alcançar, ou um maior. Quando a linha da tabela pede instrutor, sem ele você não sobe; nas outras linhas, ter um de grau superior ao seu corta 20% do tempo, arredondando para cima.</li>
-        <li>Parar no meio não apaga o que já foi feito, mas quem passa mais de 30 dias sem treinar precisa de um dia de revisão antes de continuar.</li>
+        <li>Instrutor é alguém que já tem o grau que você quer alcançar, ou um maior. Ele só importa nas linhas da tabela que pedem instrutor: nelas, sem ele você não sobe.</li>
+        <li>Parar no meio não apaga o que já foi feito. Você retoma de onde parou, quando quiser.</li>
         <li>Não se rola nada para treinar. Cumpriu o tempo, o Nível Total e o requisito da linha, subiu.</li>
       </ul>
     `,
@@ -1899,8 +1896,8 @@ ${HTML_MORAL}
         <li>Trate cada um desses como aventura pequena. Encontrar quem ensina, provar o feito e conseguir o item são três sessões prontas que o próprio jogador pediu.</li>
         <li>${nomesDosGrausDoPatamar} seguem a mesma lógica, com o pedido crescendo junto com o nome: feito à altura do grau (lendário, mítico, de alcance cósmico, que o tempo não apaga, absoluto), e em alguns deles instrutor e item especial. Quase ninguém tem grau para ensinar aí, e é justamente por isso que o instrutor vira um NPC importante da campanha.</li>
         <li>Esses degraus custam de ${diasTreinoDoPatamar} a ${diasTreinoMaximo} dias, o que ocupa um arco inteiro da campanha. Ou o mundo dá uma pausa grande de propósito, ou o personagem carrega o treino durante várias aventuras. O servidor só avisa você quando o nível ainda não permite o grau; o resto fica com a mesa.</li>
-        <li>Instrutor é quem já tem o grau que o jogador quer, ou um maior; corta 20% do tempo e, nas linhas que pedem instrutor, é condição para subir. Nos graus mais altos quase ninguém tem grau para ensinar, e o NPC professor vira uma recompensa concreta, e não só um nome no mapa.</li>
-        <li>Interromper não apaga o progresso. Mas passar de 30 dias largado cobra um dia de revisão, o que é motivo suficiente para o jogador querer voltar.</li>
+        <li>Instrutor é quem já tem o grau que o jogador quer, ou um maior, e só é exigido nas linhas que pedem um. Nos graus mais altos quase ninguém tem grau para ensinar, e achar um professor vira uma recompensa da história.</li>
+        <li>Interromper não apaga o progresso. O jogador retoma de onde parou, sem custo.</li>
       </ul>
 
       <h3 class="regras-subtitle">Não confundir com o grau da classe</h3>
@@ -2064,8 +2061,8 @@ ${HTML_MORAL}
         <ul>
           <li>XP total do nível N = 500 × N × (N − 1), até o nível 100. Sair do nível N para o N+1 custa N × 1.000 XP.</li>
           <li>O nível total soma os níveis de todas as classes, e a tabela de recompensas olha para ele: multiclasse não recebe nada em dobro.</li>
-          <li>O Mestre recompensa por marco, em fatias do próximo nível, e escolhe o ritmo da campanha: Lento, Médio ou Rápido. No Lento, descoberta vale 10%, missão relevante 25% e fim de arco 50%.</li>
-          <li>Quem fez, leva: o XP de combate é de quem lutou, e o Feito pessoal é só de quem fez.</li>
+          <li>O Mestre recompensa por marco, em fatias do próximo nível, e escolhe o ritmo da campanha: Lento, Médio ou Rápido. Há três tamanhos de marco: no Lento, o pequeno vale 10%, o médio 25% e o grande 50%.</li>
+          <li>Quem fez, leva: o XP de combate é de quem lutou, e o marco pessoal é só de quem fez.</li>
           <li>O nível ${NIVEL_TOTAL_PADRAO} fecha o jogo padrão. Dali em diante o personagem entra em patamares, e a ficha só avisa o Mestre: nada trava.</li>
         </ul>
       </div>
@@ -2087,21 +2084,18 @@ ${HTML_MORAL}
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Marco</th><th>Lento</th><th>Médio</th><th>Rápido</th></tr></thead>
         <tbody>
-          <tr><td><strong>Cena marcante.</strong> Uma interpretação que pesa, uma ideia que muda a cena, um laço posto à prova.</td><td>5%</td><td>10%</td><td>15%</td></tr>
-          <tr><td><strong>Descoberta ou objetivo menor.</strong> Um segredo aberto, um lugar novo, uma pista que fecha uma pergunta.</td><td>10%</td><td>15%</td><td>25%</td></tr>
-          <tr><td><strong>Feito pessoal.</strong> Algo que um personagem conquistou sozinho: um duelo, uma promessa cumprida, um plano dele que deu certo.</td><td>10%</td><td>15%</td><td>25%</td></tr>
-          <tr><td><strong>Desafio vencido sem luta.</strong> Uma infiltração limpa, um conflito social fechado, um caso resolvido, uma perseguição ganha.</td><td>15%</td><td>25%</td><td>35%</td></tr>
-          <tr><td><strong>Missão relevante.</strong> O trabalho que o grupo aceitou e entregou.</td><td>25%</td><td>35%</td><td>50%</td></tr>
-          <tr><td><strong>Fim de arco.</strong> A história que vinha de várias sessões se fecha.</td><td>50%</td><td>75%</td><td>100%</td></tr>
-          <tr><td><strong>Marco de campanha.</strong> Fim de temporada, ou um plano grande de facção que o grupo fechou ou impediu.</td><td>100%</td><td>150%</td><td>200%</td></tr>
+          <tr><td><strong>Pequeno.</strong> Uma cena marcante, uma descoberta ou um feito pessoal: uma interpretação que pesa, um segredo aberto, um duelo vencido, uma promessa cumprida.</td><td>10%</td><td>15%</td><td>25%</td></tr>
+          <tr><td><strong>Médio.</strong> Um desafio vencido ou uma missão entregue: uma infiltração limpa, um conflito social fechado, um caso resolvido, o trabalho que o grupo aceitou.</td><td>25%</td><td>35%</td><td>50%</td></tr>
+          <tr><td><strong>Grande.</strong> O fim de um arco: a história que vinha de várias sessões se fecha.</td><td>50%</td><td>75%</td><td>100%</td></tr>
         </tbody>
       </table></div>
       <ul class="regras-list">
         <li><strong>Lento</strong> dá perto de cinco sessões por nível. É o ritmo padrão do livro, para campanha longa em que cada nível pesa.</li>
         <li><strong>Médio</strong> dá perto de três sessões por nível.</li>
         <li><strong>Rápido</strong> dá perto de duas. Serve a campanha curta ou a mesa que joga pouco.</li>
-        <li><strong>Quem fez, leva.</strong> O XP de combate se divide entre quem lutou, e quem derruba a criatura sozinho fica com ele inteiro. O Feito pessoal vai só para quem fez. Os outros marcos vão inteiros para cada personagem que participou.</li>
-        <li><strong>Um por sessão:</strong> cada personagem recebe no máximo uma Cena marcante e um Feito pessoal por sessão.</li>
+        <li><strong>Fim de temporada</strong>, ou um plano grande de facção que o grupo fechou ou impediu, vale dois marcos grandes.</li>
+        <li><strong>Quem fez, leva.</strong> O XP de combate se divide entre quem lutou, e quem derruba a criatura sozinho fica com ele inteiro. A cena marcante e o feito pessoal vão só para quem fez. Os outros marcos vão inteiros para cada personagem que participou.</li>
+        <li><strong>Um por sessão:</strong> cada personagem recebe no máximo um marco pequeno pessoal (cena marcante ou feito) por sessão.</li>
         <li>100% é um nível inteiro. O que passar do custo continua contando para o nível seguinte.</li>
       </ul>
 
@@ -2163,7 +2157,7 @@ ${HTML_MORAL}
       <h3 class="regras-subtitle">Distribuir por marco</h3>
       <ul class="regras-list">
         <li>Escolha o ritmo antes da primeira sessão e diga à mesa: Lento (perto de cinco sessões por nível), Médio (três) ou Rápido (duas). A tabela de marcos do tópico traz as três colunas. No Lento, o grupo sobe um nível a cada arco mais algumas conquistas no caminho.</li>
-        <li>Os marcos pequenos existem para a mesa sentir que avança entre um arco e outro. Cena marcante e Feito pessoal são individuais, no máximo um de cada por personagem por sessão: use para quem carregou a cena, e reveze.</li>
+        <li>Os marcos pequenos existem para a mesa sentir que avança entre um arco e outro. A cena marcante e o feito pessoal são individuais, no máximo um marco pequeno pessoal por personagem por sessão: use para quem carregou a cena, e reveze.</li>
         <li>Quem fez, leva. Na Sessão, distribua o XP do encontro só para as fichas que lutaram. Um personagem que derrubou a criatura sozinho fica com o XP dela inteiro, e está certo assim.</li>
         <li>XP de combate se divide por quem lutou, mas XP de descoberta, de missão e de arco vai inteiro para cada um. Um grupo grande sobe mais devagar pela luta e na mesma velocidade pela história: use isso se a mesa tiver seis pessoas.</li>
         <li>O XP de combate por Valor de Desafio acompanha o nível: o VD é o nível do grupo que a criatura desafia sozinha, e uma criatura solo vale um quinto do custo do nível de mesmo número (${formatarXP(xpPorVd(20))} no VD 20, ${formatarXP(xpPorVd(60))} no 60, ${formatarXP(xpPorVd(100))} no 100). Esse total se divide pelo grupo. Criatura mais fraca que o grupo rende o VD dela, então rende menos; mais forte, rende mais. Nos patamares altos o XP por marco continua sendo o caminho mais simples.</li>
@@ -2531,7 +2525,7 @@ ${HTML_DEVOCAO}
       <ul class="regras-list">
         <li>Carga só vira decisão se você pesar o inventário de vez em quando. Se ninguém confere, tudo bem, mas aí não cobre a carga de surpresa num momento ruim.</li>
         <li>Resistência entra depois do multiplicador crítico. A ordem importa muito: subtrair antes daria um número completamente diferente, e a mesa erra isso com frequência.</li>
-        <li>Resistência física geral não cobre balístico, de propósito. Se a sua campanha tem arma de fogo, esse detalhe decide o equilíbrio entre armadura e tiro.</li>
+        <li>Resistência física geral cobre também o balístico. Se quiser que arma de fogo atravesse armadura na sua campanha, use a propriedade da arma, não uma exceção na Resistência.</li>
         <li>Sem proficiência são menos 5 e as propriedades da arma desligam. É punição suficiente: não some nada por cima.</li>
       </ul>
     `,
@@ -2950,7 +2944,7 @@ ${HTML_DEVOCAO}
           <tr><td>Eclipse <small>rara</small></td><td>Apaga a luz mundana e suprime a luz mágica de círculo igual ou inferior ao da magia, numa área afetada de 3 m, até o começo do seu próximo turno. Eclipse não é o Fluxo do Vazio.</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note"><strong>Derivação é tipo de dano.</strong> Dano de Gelo, de Magma, de Areia e das outras tem Resistência, vulnerabilidade e imunidade próprias, que valem só para ela. A Resistência ao elemento base vale pela metade contra o dano da derivação (arredondada para baixo), e a imunidade ao elemento base continua valendo por inteiro. Para vantagens e desvantagens, a derivação conta como o elemento de origem, e ela não ganha nada além do que está escrito no efeito harmônico. Frio e Calor ficam de fora: são dano de ambiente, descrito em <strong>Tipos de Dano</strong>. Se o efeito exige que a criatura falhe na resistência, uma magia sem resistência não o ativa contra criatura hostil.</p>
+      <p class="regras-note"><strong>Derivação é tipo de dano.</strong> Dano de Gelo, de Magma, de Areia e das outras tem Resistência, vulnerabilidade e imunidade próprias, que valem só para ela. A Resistência e a imunidade ao elemento base também valem, por inteiro, contra o dano da derivação. Para vantagens e desvantagens, a derivação conta como o elemento de origem, e ela não ganha nada além do que está escrito no efeito harmônico. Frio e Calor ficam de fora: são dano de ambiente, descrito em <strong>Tipos de Dano</strong>. Se o efeito exige que a criatura falhe na resistência, uma magia sem resistência não o ativa contra criatura hostil.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Ao criar criatura, item ou cenário com um elemento, escolha um dos sete. Gelo, magma, areia e os outros são derivações, e cada uma é um tipo de dano próprio. Um elemental de gelo causa dano de Gelo e é Resistente a Gelo, e quem tem Resistência a Água resiste só à metade contra ele.</p>
@@ -5272,8 +5266,8 @@ ${HTML_DEVOCAO}
       <ul class="regras-list">
         <li>Monte três jurados com Resistência de 3, 5 e 8, a régua do Conflito Social, e escreva o que move cada um: prova, sentimento, lei ou interesse.</li>
         <li>A Paciência é uma só, a do tribunal, com 4 marcas, uma a mais que numa conversa comum. Em cada rodada, cada personagem faz um argumento, sempre dirigido a um jurado. Sucesso tira Resistência dele, e falha marca 1 de Paciência.</li>
-        <li>Do outro lado há um acusador. No fim de cada rodada, ele devolve 1 de Resistência a um jurado, à escolha dele, ou enche 1 de Paciência.</li>
-        <li>O grupo ganha quando zera a Resistência de dois jurados. Se a Paciência encher antes, o tribunal decide com os votos como estão, e jurado que ainda tem Resistência vota contra.</li>
+        <li>Do outro lado há um acusador. No fim de cada rodada, ele devolve 1 de Resistência a um jurado, à escolha dele, ou marca 1 de Paciência.</li>
+        <li>O grupo ganha quando zera a Resistência de dois jurados. Se a Paciência chegar ao fim antes, o tribunal decide com os votos como estão, e jurado que ainda tem Resistência vota contra.</li>
         <li>Diga a Resistência de cada jurado em voz alta e deixe a mesa descobrir o Limite. Acompanhar a Resistência baixando é o que dá tensão à cena.</li>
       </ul>
       <p><strong>Interlúdio.</strong> Uma pausa no meio da luta grande, quando o chefe muda de fase ou quando a mesa está perto de cair.</p>

@@ -128,7 +128,7 @@ const moinho3 = () => `
     </table>`)}
 
   <h2>A conversa</h2>
-  <p>Se o grupo encarar Teodora, use Conflito Social. Ela tem <strong>Resistência 3</strong> e <strong>Paciência 4</strong>.</p>
+  <p>Se o grupo encarar Teodora, use Conflito Social. Ela tem <strong>Resistência 3</strong> e <strong>Paciência 3</strong>.</p>
   <ul>
     <li><strong>O que ela quer:</strong> que Anselmo continue. Não pede nada à vila, e acha que o preço é pequeno.</li>
     <li><strong>Como ela fala:</strong> baixo, sem levantar os olhos. “Ele me chama pelo nome toda manhã. O que a vila perde, a vila nem sente.”</li>
@@ -307,7 +307,7 @@ const leilao4 = () => `
     <div class="selo">Perseguição a pé e desfecho</div>
   </div>
 
-  <p>Com a caixa na mão ou sem ela, a casa acorda. Use <strong>Perseguições a Pé</strong>, começando em Média: os guardas descem a escada pelos fundos, e quem corre pelo telhado enfrenta lampiões, calhas e a distância entre uma casa e outra. Cada rodada o grupo escolhe um obstáculo ou larga o Códice para ir mais leve.</p>
+  <p>Com a caixa na mão ou sem ela, a casa acorda. Use <strong>Perseguições a Pé</strong>, começando na distância 2: os guardas descem a escada pelos fundos, e quem corre pelo telhado enfrenta lampiões, calhas e a distância entre uma casa e outra. Cada rodada o grupo escolhe um obstáculo ou larga o Códice para ir mais leve.</p>
 
   <h2>Os desfechos</h2>
   <table>
@@ -408,7 +408,7 @@ const redemoinho2 = () => `
 
   <h2>A tripulação</h2>
   <ul>
-    <li><strong>Ívia Saldanha:</strong> capitã e quem dá a ordem final. Sabe mais do que diz. Conflito Social: <strong>Resistência 3</strong> e <strong>Paciência 4</strong>.</li>
+    <li><strong>Ívia Saldanha:</strong> capitã e quem dá a ordem final. Sabe mais do que diz. Conflito Social: <strong>Resistência 3</strong> e <strong>Paciência 3</strong>.</li>
     <li><strong>O contramestre Tavão:</strong> forte e supersticioso. Se alguém tocar na água com sangue na mão, ele para o navio e faz o grupo desembarcar na margem mais próxima.</li>
     <li><strong>Mica, a grumete:</strong> a única que viu o outro navio ser puxado. Fala pouco, desenha muito.</li>
   </ul>
@@ -546,7 +546,7 @@ const leviata1 = () => `
   <h2>Cena 1 · O cais</h2>
   <ul>
     <li><strong>O contrato:</strong> o conselho dos pescadores paga 1.200 Solares por pessoa, mais as redes de seda da guilda, se o mar voltar a ser mar.</li>
-    <li><strong>A astrônoma:</strong> Conflito Social, <strong>Resistência 3</strong> e <strong>Paciência 4</strong>. Quer uma semana de observação. Em troca, entrega ao grupo um mapa do céu errado, com o ponto do mar onde a serpente respira.</li>
+    <li><strong>A astrônoma:</strong> Conflito Social, <strong>Resistência 3</strong> e <strong>Paciência 3</strong>. Quer uma semana de observação. Em troca, entrega ao grupo um mapa do céu errado, com o ponto do mar onde a serpente respira.</li>
     <li><strong>Sinais, de graça:</strong> o mar reflete estrelas em pleno dia, e ondas correm contra o vento.</li>
     <li><strong>Como Evitar:</strong> barulho, sangue e explosões atraem. Um casco silencioso, sem fogo e sem feridos a bordo passa por cima dele.</li>
   </ul>
