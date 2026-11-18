@@ -4,12 +4,10 @@
  * contagem de Força (o mesmo jeito de contar da Resistência do Conflito
  * Social), os comandantes disputam fases com a perícia Guerra, que até aqui
  * não tinha casa, e os personagens fazem feitos no meio da batalha. A moral é
- * a do Combate (2d6 por bando) e o dano que os heróis levam é a tabela de
- * Perigos do Ambiente, na linha do nível da batalha: nada de número novo onde
- * já havia um.
+ * a do Combate (2d6 por bando) e o dano que os heróis levam é uma fração da
+ * Vida máxima, como o descanso: vale igual no nível 3 e no nível 30, sem
+ * tabela por nível.
  */
-import { NIVEIS_DE_REFERENCIA } from '../../src/services/referenciaBalanceamento';
-import { linhaDeArmadilha } from './perigosAmbiente';
 import type { RegraTopicoDe } from './tipos';
 
 export interface ITamanhoDeExercito {
@@ -96,7 +94,7 @@ export const FEITOS_DE_BATALHA: readonly IFeitoDeBatalha[] = [
   { id: 'comando', titulo: 'Contra o comando', teste: 'Furtividade ou Luta contra a DT Difícil', efeito: 'O choque do inimigo nesta fase tem desvantagem. Por 10 ou mais, o comandante dele cai ou foge, e o lado dele testa moral.' },
   { id: 'brecha', titulo: 'Segurar a brecha', teste: 'Atletismo ou Fortitude contra a DT Padrão', efeito: 'No passo das Perdas, o seu lado devolve 1 das partes que perdeu nesta fase.' },
   { id: 'artilharia', titulo: 'Artilharia e magia de área', teste: 'Pontaria, Tecnologia ou o teste da magia contra a DT Difícil', efeito: 'O inimigo perde 1 parte de Força.' },
-  { id: 'comandante', titulo: 'Ao lado do comandante', teste: 'Ajudar, contra DT 10 + metade do nível da batalha, como em Ações Coletivas', efeito: '+2 no choque do seu lado, ou vantagem se o sucesso for crítico. No máximo dois personagens, como em Ajudar.' },
+  { id: 'comandante', titulo: 'Ao lado do comandante', teste: 'Ajudar, como em Ações Coletivas: diga como você apoia o comando, sem rolar', efeito: '+2 no choque do seu lado. No máximo dois personagens, como em Ajudar.' },
 ];
 
 /** Somados, os feitos do grupo tiram no máximo esta Força do inimigo por fase:
@@ -108,7 +106,17 @@ export function pontosDeMoral(forcaMaxima: number): number[] {
   return [Math.floor(forcaMaxima / 2), Math.floor(forcaMaxima / 4)].filter((ponto, indice, lista) => ponto > 0 && lista.indexOf(ponto) === indice);
 }
 
-export const LINHAS_DE_DANO_NA_BATALHA = NIVEIS_DE_REFERENCIA.filter((nivel) => nivel <= 100).map(linhaDeArmadilha);
+/** Vida que cada personagem que fez um feito perde no fim da fase, como fração
+ *  da Vida máxima dele: falhar sempre machuca mais que acertar. */
+export const PERDA_DE_VIDA_DO_FEITO = { sucesso: 0.1, falha: 0.25 } as const;
+
+/** Vida perdida pelo feito, arredondada para cima. Resistência não reduz. */
+export function perdaDoFeito(vidaMaxima: number, sucesso: boolean): number {
+  const fracao = sucesso ? PERDA_DE_VIDA_DO_FEITO.sucesso : PERDA_DE_VIDA_DO_FEITO.falha;
+  return Math.ceil(Math.max(0, Number(vidaMaxima) || 0) * fracao);
+}
+
+const porcento = (fracao: number) => `${Math.round(fracao * 100)}%`;
 
 // ------------------------------------------------------------------ página
 
@@ -124,10 +132,6 @@ const tabelaOrdens = ORDENS_DE_BATALHA.map((ordem) => `
 
 const tabelaFeitos = FEITOS_DE_BATALHA.map((feito) => `
   <tr><td><strong>${feito.titulo}</strong></td><td>${feito.teste}.<small class="regras-mecanica">${feito.efeito}</small></td></tr>
-`).join('');
-
-const tabelaDano = LINHAS_DE_DANO_NA_BATALHA.map((linha) => `
-  <tr><td><strong>${linha.nivel}</strong></td><td>${linha.dtPadrao} / ${linha.dtDificil}</td><td>${linha.dano.leve}</td><td>${linha.dano.seria}</td></tr>
 `).join('');
 
 const listaVantagens = VANTAGENS_DE_BATALHA.map((vantagem) => `<li>${vantagem}</li>`).join('\n      ');
@@ -148,7 +152,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
       <ul>
         <li>Cada lado tem uma <strong>Força</strong> de 4 a 10 partes, pelo tamanho. Perdeu todas, perdeu a batalha.</li>
         <li>A cada fase, os comandantes escolhem uma ordem em segredo e fazem um teste oposto de <strong>Guerra</strong>. Quem vence tira Força do outro.</li>
-        <li>Os personagens escolhem onde vão lutar na fase e fazem um <strong>feito</strong>. No sucesso, ajudam o próprio lado; na falha, levam mais dano.</li>
+        <li>Os personagens escolhem onde vão lutar na fase e fazem um <strong>feito</strong>. No fim da fase, quem fez um feito perde ${porcento(PERDA_DE_VIDA_DO_FEITO.sucesso)} da Vida máxima se acertou e ${porcento(PERDA_DE_VIDA_DO_FEITO.falha)} se falhou.</li>
         <li>Na metade da Força e num quarto dela, o lado testa moral, como no <span class="regras-ref regras-ref--combate">Combate</span>. Quem desiste foge do campo.</li>
       </ul>
     </div>
@@ -163,7 +167,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
       ${listaVantagens}
     </ul>
     <ul class="regras-list">
-      <li><strong>O nível da batalha</strong> é o das tropas inimigas: ele escolhe a DT dos feitos e o dano que os personagens levam.</li>
+      <li><strong>O nível da batalha</strong> é o das tropas inimigas: os feitos usam a DT Padrão ou a Difícil desse nível, da tabela de DT em <span class="regras-ref regras-ref--pericias">Perícias</span>.</li>
       <li><strong>Tropa sem comandante</strong> faz o choque com o d20 puro, sem bônus nenhum.</li>
       <li><strong>O grupo consegue tropas</strong> pela história: uma facção que confia em vocês (<span class="regras-ref regras-ref--mundo-faccoes">Prestígio, Fama e Procura</span>), aliados e contratados, a guarnição de uma Fortaleza.</li>
     </ul>
@@ -175,7 +179,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>Choque.</strong> Teste oposto de Guerra dos comandantes, com as vantagens, a ordem e o que os feitos deram.</li>
       <li><strong>Perdas.</strong> Quem vence o choque tira 1 parte da Força do outro, e 2 se vencer por 10 ou mais. Empate tira 1 dos dois. Somam-se as partes que os feitos tiraram.</li>
       <li><strong>Moral.</strong> O lado que chegou à metade da Força, ou a um quarto dela, testa moral.</li>
-      <li><strong>Dano.</strong> Cada personagem que fez um feito sofre o dano da fase pela tabela de baixo.</li>
+      <li><strong>Vida.</strong> Cada personagem que fez um feito perde Vida, como em Dano na batalha, logo abaixo.</li>
     </ol>
     <p class="regras-note">Uma fase é mais ou menos meia hora de luta. A maioria das batalhas termina entre a terceira e a sexta.</p>
 
@@ -199,11 +203,12 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
     </ul>
 
     <h3 class="regras-subtitle">Dano na batalha</h3>
-    <p>No fim de cada fase, quem fez um feito sofre dano do tipo que fizer sentido (corte, perfuração, impacto, o Fogo da magia inimiga), pela linha do nível da batalha.</p>
-    <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Nível</th><th>DT Padrão / Difícil</th><th>Feito com sucesso</th><th>Feito com falha</th></tr></thead>
-      <tbody>${tabelaDano}</tbody>
-    </table></div>
+    <p>No fim de cada fase, quem fez um feito perde Vida, em qualquer nível:</p>
+    <ul class="regras-list">
+      <li><strong>Feito com sucesso:</strong> ${porcento(PERDA_DE_VIDA_DO_FEITO.sucesso)} da sua Vida máxima.</li>
+      <li><strong>Feito com falha:</strong> ${porcento(PERDA_DE_VIDA_DO_FEITO.falha)} da sua Vida máxima.</li>
+      <li>Arredonde para cima. Resistência não reduz essa perda, porque ela junta todos os golpes da fase numa conta só.</li>
+    </ul>
 
     <h3 class="regras-subtitle">Como termina</h3>
     <ul class="regras-list">
@@ -213,7 +218,7 @@ export const REGRA_BATALHA: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>Depois:</strong> uma batalha conta como combate intenso para quem lutou (1 de Cansaço, em <span class="regras-ref regras-ref--descanso">Descanso</span>). Cada parte perdida representa tropas fora de combate (mortos, feridos e fugidos).</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro leva o dano de feito com sucesso, na linha do nível da batalha.</p>
+      <p>Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro tem 60 de Vida máxima e acertou o feito, então perde 6 de Vida no fim da fase.</p>
     </div>
   `,
   corpoMestre: `

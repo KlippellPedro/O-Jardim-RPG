@@ -114,7 +114,7 @@ export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
   },
   {
     id: 'coreografada', titulo: 'Coreografada', categoria: 'arma', nivel: 'comum', valor: 1,
-    efeito: 'Ao falhar numa Coreografia de risco Ousado ou maior com esta arma, sofra a consequência do risco imediatamente abaixo. Não vale para Tudo ou Nada.',
+    efeito: 'Ao falhar numa Coreografia Arriscada com esta arma, você sofre só a consequência do Ousado. Não vale para Tudo ou Nada.',
   },
   {
     id: 'drenante', titulo: 'Drenante', categoria: 'arma', nivel: 'comum', valor: 1,

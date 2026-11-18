@@ -2,6 +2,25 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-11-18-mecanicas-de-mesa-mais-simples",
+      "data": "2026-11-18",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Regras de mesa mais simples de lembrar",
+      "detalhes": [
+        "Ajudar não rola mais dado: diga como você ajuda e o teste do colega ganha +2, até +4 com dois ajudantes. No Teste de Grupo, o grupo passa se metade passar.",
+        "A Coreografia agora tem três riscos: Ousado, Arriscado e Tudo ou Nada.",
+        "O Ataque Combinado acontece todo no turno de quem lidera. Cada aliado com pelo menos 1 Ponto de Relação gasta a reação e um uso de ponto e ataca junto, na hora.",
+        "Relaxar devolve um quarto da Mana e da Estamina máximas, sem rolar dado. A ficha já faz essa conta.",
+        "Sem ar, cada rodada gasta 10% da Estamina máxima, ou 20% com esforço. Quando ela acaba, a próxima rodada sem ar faz você apagar, sem teste de Fortitude.",
+        "Na Perseguição a pé, a distância vai de 0 a 4. Uma pessoa de cada lado rola, e os outros ajudam com +2 ou atrapalham com −2.",
+        "No Conflito Social, cada sucesso tira Resistência e cada falha marca Paciência. Três falhas encerram a conversa.",
+        "Na Infiltração, o lugar aguenta 3, 4 ou 5 falhas antes do alarme.",
+        "Na Batalha em Massa, quem faz um feito perde 10% da Vida máxima se acertar e 25% se falhar, em qualquer nível.",
+        "Na Viagem, o caminho é contado em dias, e o terreno tem três tipos: Fácil, Ermo e Difícil."
+      ]
+    },
+    {
       "id": "2026-11-17-loja-novo-visual-e-balcao-de-venda",
       "data": "2026-11-17",
       "tipo": "melhoria",

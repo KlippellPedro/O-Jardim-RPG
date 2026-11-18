@@ -6,13 +6,13 @@ import {
   DADOS_MAXIMOS_DE_QUEDA,
   LINHAS_DE_ARMADILHA,
   PESOS_DE_ARMADILHA,
+  REGRA_PERIGOS,
   TERRENOS_DE_BUSCA,
   custoDeFolego,
   dadosDeQueda,
   dadosParaMedia,
   danoDeClima,
   diasDeFolgaSemComida,
-  dtDeSufocar,
   grauEfetivoDeClima,
   pessoasAlimentadas,
 } from '../../data/regras/perigosAmbiente';
@@ -31,15 +31,15 @@ test('queda: 1d6 a cada 3 m, nada abaixo de 3 m e teto de 20d6', () => {
   assert.equal(dadosDeQueda(Number.NaN), 0);
 });
 
-test('fôlego: tanque cheio dura dez rodadas, esforço dobra e surpresa triplica a primeira', () => {
+test('fôlego: tanque cheio dura dez rodadas, esforço dobra e Pulmões Danificados dobra de novo', () => {
   assert.equal(custoDeFolego(30), 3);
   assert.equal(Math.floor(30 / custoDeFolego(30)), 10);
   assert.equal(custoDeFolego(30, { esforco: true }), 6);
-  assert.equal(custoDeFolego(30, { surpresa: true }), 9);
+  assert.equal(custoDeFolego(30, { pulmoesDanificados: true }), 6);
+  assert.equal(custoDeFolego(30, { esforco: true, pulmoesDanificados: true }), 12);
   // Estamina pequena ainda paga pelo menos 1 por rodada.
   assert.equal(custoDeFolego(4), 1);
-  assert.equal(dtDeSufocar(1), 10);
-  assert.equal(dtDeSufocar(4), 16);
+  assert.doesNotMatch(REGRA_PERIGOS.corpo, /triplo|Fortitude contra DT/);
 });
 
 test('fome e sede: folga pela Constituição e busca que alimenta por margem', () => {

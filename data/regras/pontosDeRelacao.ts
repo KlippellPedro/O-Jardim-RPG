@@ -2,7 +2,7 @@
  *
  * O quanto um personagem do grupo confia em outro, de 0 a 3. Três porque é a
  * escada que o livro já usa para gente (Conhecido, Amigo e Leal nos contatos;
- * Seguro, Ousado e Arriscado na Coreografia; até três laços), e porque num
+ * Ousado, Arriscado e Tudo ou Nada na Coreografia; até três laços), e porque num
  * d20 cada degrau precisa valer alguma coisa sentida na mesa: +2, depois +2 no
  * dano, depois vantagem. Mais que três viraria contabilidade.
  *
@@ -56,7 +56,7 @@ export const USOS_DE_PONTO: readonly IUsoDePonto[] = [
     id: 'ajuda',
     titulo: 'Ajuda certa',
     quando: 'Você Ajuda essa pessoa num teste.',
-    efeito: 'A ajuda passa sem teste e dá vantagem no lugar do +2. Em combate, custa a sua reação no lugar da Ação Padrão. Continua contando no limite de dois ajudantes.',
+    efeito: 'A ajuda dá vantagem no lugar do +2. Em combate, custa a sua reação no lugar da Ação Padrão. Continua contando no limite de dois ajudantes.',
   },
   {
     id: 'mao',
@@ -67,8 +67,8 @@ export const USOS_DE_PONTO: readonly IUsoDePonto[] = [
   {
     id: 'combinado',
     titulo: 'Entrar junto',
-    quando: 'Essa pessoa lidera um Ataque Combinado de que você participa.',
-    efeito: 'Os seus pontos com ela entram na Sintonia do ataque, que dá bônus a todas as contribuições.',
+    quando: 'Essa pessoa lidera um Ataque Combinado e chama você.',
+    efeito: 'Você gasta a reação e ataca junto, na hora. Os seus pontos com ela entram na Sintonia do ataque, que dá bônus a todos os ataques.',
   },
 ];
 
@@ -197,7 +197,7 @@ export const REGRA_PONTOS_DE_RELACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
     <ul class="regras-list">
       <li><strong>A Ajuda certa segue as regras de <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span></strong>: a ajuda precisa fazer sentido na cena, e o teste continua com no máximo dois ajudantes.</li>
       <li><strong>Segurar a mão</strong> só pode ser usado uma vez por teste ou por crise, mesmo que mais de uma pessoa queira ajudar.</li>
-      <li><strong>No Ataque Combinado,</strong> a Sintonia é o menor número de pontos que os participantes têm com o líder, e cada participante gasta um uso com ele. A tabela de bônus está no tópico do Ataque Combinado.</li>
+      <li><strong>No Ataque Combinado,</strong> só entra quem tem pelo menos 1 ponto com o líder. A Sintonia é o menor número de pontos que os aliados têm com ele, e cada aliado gasta um uso. A tabela de bônus está no tópico do Ataque Combinado.</li>
     </ul>
 
     <h3 class="regras-subtitle">Perda de Sanidade</h3>
@@ -227,7 +227,7 @@ export const REGRA_PONTOS_DE_RELACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li><strong>O jogador pode pedir o ponto</strong>, e o Mestre confirma se a cena justificou.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>Rafa tem 2 pontos com a Duda. Duda falha num teste de Sanidade ao ver uma criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, então cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do próprio nível (10 no nível 1). Se falhar, perde 1d6.</p>
+      <p>Rafa tem 2 pontos com a Duda. Duda falha num teste de Sanidade ao ver uma criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado e chama Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, então cada ataque ganha +2. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do próprio nível (10 no nível 1). Se falhar, perde 1d6.</p>
     </div>
   `,
   corpoMestre: `

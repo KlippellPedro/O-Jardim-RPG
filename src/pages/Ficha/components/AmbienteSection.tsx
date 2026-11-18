@@ -23,7 +23,6 @@ import {
   apagarSemAr,
   consequenciaDoClima,
   custoDaRodadaSemAr,
-  dtDaRodadaSufocando,
   fimDoDiaSemBeber,
   fimDoDiaSemComer,
   fomeOuSedePesando,
@@ -181,27 +180,23 @@ export const AmbienteSection = ({ character, onUpdate }: AmbienteSectionProps) =
   const sufocando = folego.semAr && estamina <= 0;
   const pulmoes = condicaoAtiva(condicoesAtivas, 'pulmoes-danificados');
   const rodadaSemAr = (tipo: RodadaSemAr) => {
-    const resultado = gastarFolego(status, estaminaMaxima, tipo);
-    salvarAmbiente({ ...ambiente, folego: { ...folego, semAr: true } });
+    const resultado = gastarFolego(status, estaminaMaxima, tipo, pulmoes);
+    salvarAmbiente({ ...ambiente, folego: { semAr: true } });
     if (resultado.sufocando) {
-      setMensagem('A Estamina acabou: agora cada rodada pede Fortitude.');
+      apagou();
       return;
     }
     const custo = Number(status.estaminaAtual ?? estaminaMaxima) - Number(resultado.status.estaminaAtual);
-    salvarStatus(resultado.status, `Rodada sem ar: −${custo} Estamina.${Number(resultado.status.estaminaAtual) <= 0 ? ' Acabou o fôlego.' : ''}`);
+    salvarStatus(resultado.status, `Rodada sem ar: −${custo} Estamina.${Number(resultado.status.estaminaAtual) <= 0 ? ' Acabou o fôlego: a próxima rodada sem ar apaga.' : ''}`);
   };
-  const passouFortitude = () => {
-    salvarAmbiente({ ...ambiente, folego: { semAr: true, rodadasSufocando: folego.rodadasSufocando + 1 } });
-    setMensagem(`Aguentou mais uma rodada. A próxima pede DT ${dtDaRodadaSufocando(folego.rodadasSufocando + 1, ajusteDeDt)}.`);
-  };
-  const falhouFortitude = () => {
+  const apagou = () => {
     aplicarCondicao(CONDICOES_OFICIAIS, 'inconsciente');
-    salvarAmbiente({ ...ambiente, folego: { semAr: true, rodadasSufocando: folego.rodadasSufocando + 1 } });
+    salvarAmbiente({ ...ambiente, folego: { semAr: true } });
     salvarStatus(apagarSemAr(status, vidaMaxima, constituicao), 'Apagou: Inconsciente, Vida a 0 e Morrendo 1. Enquanto continuar sem ar, o Morrendo sobe sozinho.');
   };
   const fimDeTurnoApagado = () => salvarStatus(morrendoSemAr(status, constituicao), 'Mais um turno sem ar: Morrendo +1, sem teste.');
   const voltouARespirar = () => {
-    salvarAmbiente({ ...ambiente, folego: { semAr: false, rodadasSufocando: 0 } });
+    salvarAmbiente({ ...ambiente, folego: { semAr: false } });
     setMensagem('Voltou a respirar. Se apagou, segue a regra normal de Morrendo; a Estamina volta no descanso.');
   };
 
@@ -294,27 +289,26 @@ export const AmbienteSection = ({ character, onUpdate }: AmbienteSectionProps) =
         </Cartao>
 
         <Cartao icone={<Wind size={18} className="text-cyan-300" />} titulo="Fôlego" apoio="Sem ar, o corpo paga com a Estamina." secao="Fôlego">
-          <div className="grid grid-cols-3 gap-2 text-center">
-            {([['Normal', 'normal'], ['Com esforço', 'esforco'], ['De surpresa', 'surpresa']] as const).map(([rotulo, tipo]) => (
+          <div className="grid grid-cols-2 gap-2 text-center">
+            {([['Normal', 'normal'], ['Com esforço', 'esforco']] as const).map(([rotulo, tipo]) => (
               <div key={tipo} className="rounded-xl border border-white/[0.06] bg-black/20 px-2 py-2.5">
                 <span className="block text-[9px] font-bold uppercase tracking-widest text-gray-500">{rotulo}</span>
-                <strong className="mt-1 block text-base text-white">−{custoDaRodadaSemAr(estaminaMaxima, tipo)}</strong>
+                <strong className="mt-1 block text-base text-white">−{custoDaRodadaSemAr(estaminaMaxima, tipo, pulmoes)}</strong>
               </div>
             ))}
           </div>
+          {pulmoes ? <p className="text-[11px] text-amber-200/80">Pulmões Danificados: cada rodada sem ar custa o dobro.</p> : null}
           <Linha rotulo="Estamina agora" valor={`${estamina} de ${estaminaMaxima}`} />
           {!sufocando ? (
-            <div className="grid grid-cols-3 gap-2">
-              <Botao onClick={() => rodadaSemAr('normal')} disabled={estamina <= 0 && folego.semAr}>Rodada sem ar</Botao>
-              <Botao onClick={() => rodadaSemAr('esforco')} disabled={estamina <= 0 && folego.semAr}>Com esforço</Botao>
-              <Botao onClick={() => rodadaSemAr('surpresa')} disabled={estamina <= 0 && folego.semAr}>De surpresa</Botao>
+            <div className="grid grid-cols-2 gap-2">
+              <Botao onClick={() => rodadaSemAr('normal')}>Rodada sem ar</Botao>
+              <Botao onClick={() => rodadaSemAr('esforco')}>Com esforço</Botao>
             </div>
           ) : (
             <div className="space-y-2 rounded-xl border border-red-400/20 bg-red-400/[0.06] p-3">
-              <p className="text-xs font-bold text-red-100">Sufocando: Fortitude DT {dtDaRodadaSufocando(folego.rodadasSufocando, ajusteDeDt)} no fim do turno{pulmoes ? ', com desvantagem (Pulmões Danificados)' : ''}.</p>
+              <p className="text-xs font-bold text-red-100">Sem fôlego: a próxima rodada sem ar apaga, sem teste.</p>
               <div className="flex flex-wrap gap-2">
-                <Botao tom="bom" onClick={passouFortitude}>Passou</Botao>
-                <Botao tom="perigo" onClick={falhouFortitude}>Falhou: apagou</Botao>
+                <Botao tom="perigo" onClick={apagou} disabled={Number(status.morrendo) > 0}>Mais uma rodada: apagou</Botao>
                 <Botao tom="perigo" onClick={fimDeTurnoApagado} disabled={!(Number(status.morrendo) > 0)}>Turno apagado: Morrendo +1</Botao>
               </div>
             </div>

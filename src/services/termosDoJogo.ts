@@ -183,7 +183,7 @@ const MECANICAS: IMecanica[] = [
   },
   {
     id: 'relaxar', nome: 'Relaxar', formas: ['Relaxar'], topico: 'descanso', secao: 'Relaxar',
-    resumo: 'Uma hora em segurança, uma vez entre dois descansos completos: recupera 1d6 + Mod. Sabedoria + ⌊nível ÷ 4⌋ de Mana e de Estamina.',
+    resumo: 'Uma hora em segurança, uma vez entre dois descansos completos: recupera um quarto da Mana máxima e um quarto da Estamina máxima.',
   },
   {
     id: 'descanso-completo', nome: 'Descanso completo', formas: ['descanso completo', 'Descanso completo', 'descansos completos'], topico: 'descanso', secao: 'Descanso completo',

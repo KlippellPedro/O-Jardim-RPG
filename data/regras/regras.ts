@@ -963,7 +963,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     status: 'Regra oficial',
     resumo: 'Como ajudar outro personagem e como resolver situações em que o grupo inteiro precisa passar pelo mesmo desafio.',
     destaques: [
-      ['Ajudar', '+2, máximo +4'],
+      ['Ajudar', '+2 sem rolar, máximo +4'],
       ['Teste de Grupo', 'metade do grupo'],
       ['Declaração', 'antes da rolagem'],
     ],
@@ -972,27 +972,24 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <div class="regras-resumo">
         <ul>
-          <li><strong>Ajudar:</strong> o ajudante descreve uma contribuição concreta e testa contra DT 10. Em sucesso, o teste principal ganha +2, ou vantagem se o sucesso for crítico. No máximo dois ajudantes por teste.</li>
-          <li><strong>Teste de Grupo:</strong> todos os expostos testam contra a mesma DT, e o grupo vence se pelo menos metade dos participantes, arredondada para cima, tiver sucesso.</li>
+          <li><strong>Ajudar:</strong> o ajudante diz o que faz para ajudar, e o teste de quem faz a tarefa ganha +2. O ajudante não rola nada. No máximo dois ajudantes por teste, então o bônus vai até +4.</li>
+          <li><strong>Teste de Grupo:</strong> todos testam contra a mesma DT, e o grupo passa se pelo menos metade dos participantes, arredondada para cima, tiver sucesso.</li>
           <li>Ajudar e Teste de Grupo não se misturam na mesma resolução, e nenhum dos dois permite somar dano, fundir magias nem transferir efeitos.</li>
         </ul>
       </div>
 
       <h3 class="regras-subtitle">Ajudar</h3>
       <ol class="regras-steps">
-        <li>Antes da rolagem principal, o ajudante diz como vai ajudar e escolhe uma perícia. Ela pode ser a mesma do líder ou outra que faça sentido na situação.</li>
+        <li>Antes da rolagem, o ajudante diz o que faz para ajudar. Precisa ser algo concreto que caiba na cena: segurar a corda, distrair o guarda, iluminar a fechadura.</li>
         <li>Em combate, ajudar gasta uma <strong>Ação Padrão</strong>. Fora de combate, gasta o mesmo tempo da tarefa.</li>
-        <li>O ajudante faz seu teste contra DT 10 em uma tarefa fixa. Em um desafio que escala por nível, use DT 10 + ⌊nível do desafio ÷ 2⌋.</li>
-        <li>Em sucesso, o teste principal recebe +2. Em sucesso crítico, recebe vantagem em vez de +2.</li>
-        <li>Falha não dá bônus. Falha crítica também não dá penalidade automática, mas pode causar uma complicação se a tarefa já era arriscada.</li>
+        <li>Quem faz a tarefa soma <strong>+2</strong> no teste para cada ajudante. O ajudante não faz teste.</li>
       </ol>
       <ul class="regras-list">
-        <li>No máximo <strong>dois ajudantes</strong> dão bônus ao mesmo teste. Dois sucessos comuns chegam a +4.</li>
-        <li>Cada ajuda precisa ser diferente e fazer sentido na cena. Várias pessoas fazendo a mesma coisa contam como uma ajuda só.</li>
-        <li>O líder precisa aceitar a ajuda e só rola depois que os ajudantes resolverem suas tentativas.</li>
-        <li>O Mestre pode dispensar o teste do ajudante quando a ajuda é garantida, mas ela continua gastando a ação ou o tempo.</li>
-        <li>Ajudar não passa proficiência, poder, imunidade ou permissão especial para o líder.</li>
-        <li>Quem tem <span class="regras-ref regras-ref--pontos-de-relacao">Pontos de Relação</span> com o líder pode gastar um uso para a Ajuda certa: a ajuda passa sem teste, dá vantagem no lugar do +2 e, em combate, custa a reação no lugar da Ação Padrão.</li>
+        <li>No máximo <strong>dois ajudantes</strong> dão bônus ao mesmo teste, então o máximo é +4.</li>
+        <li>Cada ajuda precisa ser diferente. Várias pessoas fazendo a mesma coisa contam como uma ajuda só.</li>
+        <li>Se a ajuda não faz sentido na cena, como ajudar a convencer alguém que nem está ouvindo você, o Mestre diz que não dá antes da rolagem, e a ação não é gasta.</li>
+        <li>Ajudar não passa proficiência, poder, imunidade ou permissão especial para quem faz a tarefa.</li>
+        <li>Quem tem <span class="regras-ref regras-ref--pontos-de-relacao">Pontos de Relação</span> com quem faz a tarefa pode gastar um uso para a Ajuda certa: ela dá vantagem no lugar do +2 e, em combate, custa a reação no lugar da Ação Padrão.</li>
       </ul>
 
       <h3 class="regras-subtitle">Teste de Grupo</h3>
@@ -1000,19 +997,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ol class="regras-steps">
         <li>Todos os participantes fazem o mesmo teste contra a mesma DT.</li>
         <li>O grupo passa se pelo menos metade dos participantes, arredondada para cima, tiver sucesso.</li>
-        <li>Cada sucesso crítico conta como dois sucessos. Cada falha crítica cancela um sucesso antes da contagem.</li>
-        <li>Se o grupo falhar, a consequência atinge o grupo todo ou só quem falhou, conforme o perigo. O Mestre avisa qual das duas vale antes das rolagens.</li>
+        <li>Antes das rolagens, o Mestre diz se a falha atinge o grupo todo ou só quem falhou.</li>
       </ol>
       <div class="regras-note regras-note--exemplo">
-        <p>Quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conseguir dois sucessos comuns e uma falha crítica, a falha crítica cancela um deles e o grupo falha.</p>
+        <p>Quatro personagens fazem Furtividade, então o grupo precisa de dois sucessos. Dois passam e dois falham: o grupo passa sem ser visto. Se só um tivesse passado, o grupo inteiro seria visto.</p>
       </div>
 
       <h3 class="regras-subtitle">Quando não usar Teste de Grupo</h3>
       <ul class="regras-list">
-        <li>Se só uma pessoa precisa executar a tarefa, escolha um líder e use Ajudar.</li>
-        <li>Se cada falha gera uma consequência individual independente, resolva os testes separadamente.</li>
+        <li>Se só uma pessoa precisa executar a tarefa, ela faz o teste e os outros podem Ajudar.</li>
+        <li>Se cada falha gera uma consequência só para quem falhou, resolva os testes separadamente.</li>
         <li>Se a ação exige um treinamento ou permissão que parte do grupo não tem, quem não cumpre o requisito não pode contar com os sucessos dos outros para passar.</li>
-        <li>Não combine Ajudar e Teste de Grupo na mesma resolução, salvo quando uma habilidade disser expressamente que pode.</li>
       </ul>
 
       <h3 class="regras-subtitle">Ações coletivas maiores</h3>
@@ -1025,13 +1020,13 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Quando todos podem tentar e um sucesso resolve a cena, o teste vira uma questão de quantas pessoas há na mesa. Suba a DT ou decida quem tem contexto para tentar, e diga qual dos dois você escolheu antes das rolagens.</li>
         <li>Ajudar tem teto de dois ajudantes, então o máximo é mais 4. Esse teto existe justamente para que o grupo grande não anule a DT: não abra exceção sem motivo forte.</li>
-        <li>Cobre a contribuição em voz alta antes de aceitar o bônus. Três pessoas segurando a mesma corda é uma ajuda só, e é você quem faz essa conta.</li>
+        <li>Como a ajuda não rola dado, a descrição é o único filtro. Peça a contribuição em voz alta antes de aceitar o bônus. Três pessoas segurando a mesma corda é uma ajuda só, e é você quem faz essa conta.</li>
       </ul>
 
       <h3 class="regras-subtitle">Conduzir o Teste de Grupo</h3>
       <ul class="regras-list">
         <li>Diga antes das rolagens se a consequência da falha atinge o grupo todo ou só quem falhou. Decidir depois parece ajuste de resultado, mesmo quando não é.</li>
-        <li>Metade dos participantes, arredondando para cima, precisa passar. Falha crítica cancela um sucesso, então um grupo grande não é automaticamente mais seguro.</li>
+        <li>Metade dos participantes, arredondando para cima, precisa passar. Num grupo de cinco, são três sucessos.</li>
         <li>Quem não cumpre um requisito de treinamento não se esconde na média. Se a tarefa exige proficiência, quem não tem fica de fora da contagem.</li>
       </ul>
 
@@ -1704,11 +1699,11 @@ ${HTML_MORAL}
   coreografia: {
     categoria: 'Combate e Mecânicas',
     status: 'Regra oficial',
-    resumo: 'Você escolhe o risco antes do dado. Deu certo, virou cena; deu errado, virou problema, e o problema nunca encerra o combate sozinho.',
+    resumo: 'Uma jogada de cinema por turno: você descreve o que faz, escolhe um de três riscos antes do dado e ganha um bônus se acertar ou paga um preço se errar.',
     destaques: [
       ['Uso', '1 vez por turno'],
       ['Declaração', 'antes da rolagem'],
-      ['Perigoso e Tudo ou Nada', '1 vez por cena cada'],
+      ['Tudo ou Nada', '1 vez por cena'],
     ],
     corpo: `
       <p class="regras-lead">Descreva uma jogada de cinema que caiba na cena e escolha o risco <strong>antes</strong> de rolar. A descrição tem que mudar alguma coisa na ficção: pular do lustre, chutar a mesa no meio do caminho, usar o sujeito como escudo. Dizer "uso Arriscado" e rolar o dado não é Coreografia.</p>
@@ -1716,21 +1711,19 @@ ${HTML_MORAL}
       <div class="regras-resumo">
         <ul>
           <li>Coreografia é uma jogada de cinema: você descreve algo que muda a cena e escolhe o risco <strong>antes</strong> de rolar. Uma por turno.</li>
-          <li>São cinco riscos, de Seguro a Tudo ou Nada. Quanto maior o prêmio no acerto, pior a conta no erro.</li>
-          <li>Perigoso e Tudo ou Nada valem uma vez por cena cada um.</li>
+          <li>São três riscos: Ousado, Arriscado e Tudo ou Nada. Quanto maior o prêmio no acerto, pior a conta no erro.</li>
+          <li>Tudo ou Nada vale uma vez por cena.</li>
           <li>Se a descrição não muda nada na cena, o Mestre pode negar.</li>
         </ul>
       </div>
 
-      <h3 class="regras-subtitle">Níveis de risco</h3>
+      <h3 class="regras-subtitle">Riscos</h3>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Risco</th><th>Se tiver sucesso</th><th>Se falhar</th></tr></thead>
+        <thead><tr><th>Risco</th><th>Se acertar</th><th>Se errar</th></tr></thead>
         <tbody>
-          <tr><td>Seguro</td><td>Reposicione-se 1,5 m após a ação.</td><td>Sem consequência adicional.</td></tr>
-          <tr><td>Ousado</td><td>+2 no teste e +2 no dano.</td><td>Fica Exposto: −2 Defesa até seu próximo turno.</td></tr>
-          <tr><td>Arriscado</td><td>Vantagem e +1 dado da arma no dano.</td><td>Sofre 1d8 de dano e perde a ação de movimento.</td></tr>
-          <tr><td>Perigoso</td><td>O ataque se torna crítico se acertar.</td><td>Cai e o inimigo recebe vantagem no próximo ataque contra você. Uma vez por cena.</td></tr>
-          <tr><td>Tudo ou Nada</td><td>Crítico com dados maximizados.</td><td>Sofre um crítico do inimigo e recebe Ferido 1. Uma vez por cena.</td></tr>
+          <tr><td>Ousado</td><td>+2 no teste e +2 no dano.</td><td>Você fica Exposto: −2 de Defesa até o seu próximo turno.</td></tr>
+          <tr><td>Arriscado</td><td>Vantagem no teste e +1 dado da arma no dano.</td><td>Você sofre 1d8 de dano e perde a Ação de Movimento do turno.</td></tr>
+          <tr><td>Tudo ou Nada</td><td>O ataque é crítico. Uma vez por cena.</td><td>O próximo ataque que acertar você, até o começo do seu próximo turno, é crítico.</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">Se a descrição não muda nada na cena, ou se é a mesma de sempre só para pegar o bônus, o Mestre pode negar a Coreografia.</p>
@@ -1748,8 +1741,8 @@ ${HTML_MORAL}
 
       <h3 class="regras-subtitle">Deixar o risco pesar</h3>
       <ul class="regras-list">
-        <li>A falha de Arriscado para cima já é dura sozinha. Não some consequência narrativa por cima do custo mecânico: o jogador aceitou um preço, e ele já pagou.</li>
-        <li>Perigoso e Tudo ou Nada valem uma vez por cena cada um, acertando ou errando. Tudo ou Nada cobra um crítico do inimigo mais Ferido 1. Quando alguém declarar, confirme em voz alta que a pessoa sabe o tamanho da conta.</li>
+        <li>A falha de Arriscado e de Tudo ou Nada já é dura sozinha. Não some consequência narrativa por cima do custo mecânico: o jogador aceitou um preço, e ele já pagou.</li>
+        <li>Tudo ou Nada vale uma vez por cena, acertando ou errando, e na falha o próximo golpe que acertar o personagem é crítico. Quando alguém declarar, confirme em voz alta que a pessoa sabe o tamanho da conta.</li>
         <li>A declaração vem antes do dado, sempre. Deixar escolher o risco depois de ver o resultado desmonta a regra inteira.</li>
         <li>Inimigo também pode usar Coreografia, e é uma das formas mais baratas de tornar um Elite memorável. Descreva o risco dele em voz alta, do mesmo jeito.</li>
       </ul>
@@ -1771,7 +1764,7 @@ ${HTML_MORAL}
       <div class="regras-resumo">
         <ul>
           <li>Um descanso completo dura 8 horas, e a qualidade (de Péssima a Excelente) decide quanto de Vida, Mana, Estamina e Sanidade volta e quanto Cansaço sai.</li>
-          <li>Relaxar é uma hora em segurança: recupera 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina, uma vez entre dois descansos completos.</li>
+          <li>Relaxar é uma hora em segurança: recupera um quarto da Mana máxima e um quarto da Estamina máxima, uma vez entre dois descansos completos.</li>
           <li>O Cansaço vai de 0 a 6, sem meio-termo. Combate intenso, seis horas de treino e uma noite em claro valem 1 cada.</li>
           <li>Um descanso completo de qualidade Boa ou melhor também pode tirar 1 de Ferido (ver <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>).</li>
         </ul>
@@ -1800,9 +1793,9 @@ ${HTML_MORAL}
       </div>
 
       <h3 class="regras-subtitle">Relaxar</h3>
-      <div class="regras-formula">Recupere 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina</div>
+      <div class="regras-formula">Recupere 25% da Mana máxima e 25% da Estamina máxima</div>
       <ul class="regras-list">
-        <li>Uma rolagem só: o mesmo valor volta para a Mana e para a Estamina, cada uma até o próprio máximo.</li>
+        <li>Não rola dado. A conta é em porcentagem, como no descanso completo, e arredonda para cima.</li>
         <li>Exige uma hora em segurança relativa, e vale uma vez só entre dois descansos completos.</li>
         <li>Se a hora foi gasta em algo que significa alguma coisa para o personagem, o Mestre pode tirar 1 ponto de Cansaço junto.</li>
         <li>Relaxar é o descanso curto do jogo. Quando outra regra fala em descanso curto, é dele que ela fala.</li>
@@ -4867,11 +4860,10 @@ ${HTML_DEVOCAO}
       </details>
 
       <details class="regras-details">
-        <summary>A negociação azeda <span class="regras-details-contagem">4 partes</span></summary>
-        <p><strong>Pinta uma parte quando:</strong> ameaça, mentira desmascarada, desrespeito, alguém do grupo rindo na hora errada.</p>
+        <summary>A negociação azeda <span class="regras-details-contagem">3 partes</span></summary>
+        <p><strong>Pinta uma parte quando:</strong> o grupo falha numa abordagem, repete o mesmo argumento ou insiste no Limite da pessoa.</p>
         <ol class="regras-steps">
-          <li>O sorriso do outro lado fica um pouco mais fino.</li>
-          <li>A pessoa se encosta para trás na cadeira e para de tocar na bebida.</li>
+          <li>O sorriso do outro lado fica um pouco mais fino, e a pessoa para de tocar na bebida.</li>
           <li>Um dos guardas dela muda de posição, e agora está entre o grupo e a porta.</li>
         </ol>
         <p class="regras-note"><strong>Ao fechar:</strong> O outro lado levanta da mesa, a porta fecha e o acordo vira problema. Este relógio é a Paciência do Conflito Social, contada em voz alta.</p>
@@ -5232,7 +5224,7 @@ ${HTML_DEVOCAO}
             <tr><td>Tempo</td><td><strong>O dano atrasado.</strong> Os golpes acertam, e nada acontece. <em>Sinal: a sombra dele chega um instante depois do corpo.</em><small class="regras-mecanica">Todo dano que ele sofre só entra duas rodadas depois. Anote o dano de cada rodada na anotação da criatura e aplique no começo da rodada certa. A Vida fica parada, e a mesa acha que ele é imune. Nada volta ao passado: o golpe só chega tarde. A fase também atrasa, porque a Sessão lê a Vida atual. O Mensageiro que Chegou Tarde (VD 32) usa este segredo.</small></td></tr>
             <tr><td>Vazio</td><td><strong>Só quem está quebrado vê.</strong> Ele some para todo mundo, menos para quem está pior. <em>Sinal: quem está com a Sanidade mais baixa ouve uma respiração que os outros não ouvem.</em><small class="regras-mecanica">Ele fica invisível para todos, menos para o personagem com a menor Sanidade na mesa. Mande a posição dele por bilhete a esse jogador a cada rodada, e o jogador decide se conta e como conta. Se outro personagem passar a ter a menor Sanidade, o bilhete passa para ele. O Monge que Esqueceu de Existir (VD 28) usa este segredo.</small></td></tr>
             <tr><td>Fim</td><td><strong>A morte emprestada.</strong> O primeiro que cai não fica no chão. <em>Sinal: os mortos do lugar estão de olhos fechados e mãos cruzadas, como se alguém os tivesse arrumado.</em><small class="regras-mecanica">O primeiro personagem que cai a 0 de Vida levanta ao lado do chefe por duas rodadas, com metade da Vida e um objetivo secreto por bilhete. O jogador continua jogando. O efeito acaba antes se um aliado gastar uma Ação Padrão dizendo em voz alta um Laço desse personagem. A Recolhedora usa este segredo.</small></td></tr>
-            <tr><td>Tecnologia</td><td><strong>Protocolo de contenção.</strong> Um terminal na arena controla os módulos dele. <em>Sinal: um painel na parede pisca com a mesma luz do olho dele.</em><small class="regras-mecanica">O terminal tem três Etapas de invasão contra um Alerta de 6, como em Infiltração. Cada Etapa vencida desliga um módulo do chefe: o escudo, a arma de longe, o reparo. Quem está no terminal tem 30 segundos de verdade, no cronômetro do painel Mesa, para declarar a ação, e passado o tempo a ação conta como falha. Alerta cheio tranca o terminal até o fim da luta. O Zelador da Represa Velha (VD 18) usa este segredo.</small></td></tr>
+            <tr><td>Tecnologia</td><td><strong>Protocolo de contenção.</strong> Um terminal na arena controla os módulos dele. <em>Sinal: um painel na parede pisca com a mesma luz do olho dele.</em><small class="regras-mecanica">O terminal tem três Etapas de invasão contra um Alerta de 4, como em Infiltração. Cada Etapa vencida desliga um módulo do chefe: o escudo, a arma de longe, o reparo. Quem está no terminal tem 30 segundos de verdade, no cronômetro do painel Mesa, para declarar a ação, e passado o tempo a ação conta como falha. Alerta cheio tranca o terminal até o fim da luta. O Zelador da Represa Velha (VD 18) usa este segredo.</small></td></tr>
           </tbody>
         </table></div>
       </details>
@@ -5279,7 +5271,7 @@ ${HTML_DEVOCAO}
       <p><strong>Julgamento.</strong> Um conflito social em que a decisão é de três pessoas, cada uma com a própria Resistência e o próprio Limite. Serve para júri, conselho de anciãos, banca de guilda e tribunal de deidade.</p>
       <ul class="regras-list">
         <li>Monte três jurados com Resistência de 3, 5 e 8, a régua do Conflito Social, e escreva o que move cada um: prova, sentimento, lei ou interesse.</li>
-        <li>A Paciência é uma só, a do tribunal, com 4 partes. Em cada rodada, cada personagem faz um argumento, sempre dirigido a um jurado. A abordagem certa tira Resistência dele, e tocar no Limite dele enche a Paciência.</li>
+        <li>A Paciência é uma só, a do tribunal, com 4 marcas, uma a mais que numa conversa comum. Em cada rodada, cada personagem faz um argumento, sempre dirigido a um jurado. Sucesso tira Resistência dele, e falha marca 1 de Paciência.</li>
         <li>Do outro lado há um acusador. No fim de cada rodada, ele devolve 1 de Resistência a um jurado, à escolha dele, ou enche 1 de Paciência.</li>
         <li>O grupo ganha quando zera a Resistência de dois jurados. Se a Paciência encher antes, o tribunal decide com os votos como estão, e jurado que ainda tem Resistência vota contra.</li>
         <li>Diga a Resistência de cada jurado em voz alta e deixe a mesa descobrir o Limite. Acompanhar a Resistência baixando é o que dá tensão à cena.</li>

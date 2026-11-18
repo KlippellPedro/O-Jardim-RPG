@@ -118,24 +118,23 @@ export function aplicarDescansoCompleto(
   };
 }
 
-/** Relaxar rola uma vez e o mesmo valor volta para Mana e para Estamina, cada
- * um limitado ao próprio máximo. Sem `estaminaMaxima`, só a Mana é tocada. */
+/** Relaxar devolve um quarto da Mana máxima e um quarto da Estamina máxima,
+ * em porcentagem como o descanso completo, e não rola dado. */
+export const RECUPERACAO_RELAXAR = 0.25;
+
+/** Sem `estaminaMaxima`, só a Mana é tocada. */
 export function aplicarRelaxamento(
   status: Record<string, any>,
   manaMaxima: number,
-  sabedoria: number,
-  nivel: number,
-  dado: number,
   estaminaMaxima?: number,
 ) {
   if (status.relaxouDesdeDescanso) return { status, recuperado: 0, recuperadoEstamina: 0, erro: 'Relaxar só funciona uma vez entre descansos completos.' };
-  const modificador = Math.floor((Number(sabedoria || 10) - 10) / 2);
-  const recuperado = Math.max(0, limitar(Math.trunc(dado), 1, 6) + modificador + Math.floor(Math.max(1, nivel) / 4));
-  const atual = Number(status.manaAtual ?? manaMaxima);
-  const final = limitar(atual + recuperado, 0, Math.max(0, manaMaxima));
+  const manaMax = Math.max(0, Number(manaMaxima) || 0);
+  const atual = Number(status.manaAtual ?? manaMax);
+  const final = limitar(atual + Math.ceil(manaMax * RECUPERACAO_RELAXAR), 0, manaMax);
   const recuperaEstamina = typeof estaminaMaxima === 'number' && estaminaMaxima > 0;
   const estaminaAtual = recuperaEstamina ? Number(status.estaminaAtual ?? estaminaMaxima) : 0;
-  const estaminaFinal = recuperaEstamina ? limitar(estaminaAtual + recuperado, 0, estaminaMaxima) : 0;
+  const estaminaFinal = recuperaEstamina ? limitar(estaminaAtual + Math.ceil(estaminaMaxima * RECUPERACAO_RELAXAR), 0, estaminaMaxima) : 0;
   return {
     status: {
       ...status,

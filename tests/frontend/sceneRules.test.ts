@@ -8,13 +8,13 @@ import {
   aplicarAbordagem,
 } from '../../data/regras/conflitoSocial';
 import {
-  FAIXAS_MAXIMAS_POR_LADO,
+  APOIOS_MAXIMOS_POR_LADO,
+  BONUS_DE_APOIO,
   MANOBRAS_A_PE,
-  MANOBRAS_DE_APOIO,
   OBSTACULOS_PERSEGUICAO,
   REGRA_PERSEGUICAO_A_PE,
+  distanciaDaFaixa,
   obstaculoPorD6,
-  passosDaRodada,
   resolverRodadaAPe,
 } from '../../data/regras/perseguicaoAPe';
 import { FAIXAS_PERSEGUICAO } from '../../data/regras/veiculosCombate';
@@ -44,6 +44,13 @@ test('vitória por 10 ou mais vale duas faixas, e as pontas da escala seguram', 
   assert.equal(resolverRodadaAPe('curta', { vencedor: 'perseguidor', margem: 18 }), 'contato');
   // Escapou encerra a cena: nada devolve alguém que já sumiu.
   assert.equal(resolverRodadaAPe('escapou', { vencedor: 'perseguidor', margem: 20 }), 'escapou');
+  // O Salto muda 2 mesmo sem vencer por 10.
+  assert.equal(resolverRodadaAPe('curta', { vencedor: 'fugitivo', margem: 1, passos: 2 }), 'longa');
+});
+
+test('a distância da perseguição a pé vai de 0 (Contato) a 4 (Escapou)', () => {
+  assert.deepEqual(['contato', 'curta', 'média', 'longa', 'escapou'].map((id) => distanciaDaFaixa(id as any)), [0, 1, 2, 3, 4]);
+  assert.deepEqual(MANOBRAS_A_PE.map((manobra) => manobra.id), ['correr', 'atalho', 'salto', 'sumir']);
 });
 
 test('a tabela de obstáculos cobre 1d6 nos dois terrenos', () => {
@@ -55,7 +62,7 @@ test('a tabela de obstáculos cobre 1d6 nos dois terrenos', () => {
   assert.throws(() => obstaculoPorD6(7), /inválido/);
 });
 
-test('conflito social: sucesso desce Resistência e falha agressiva enche Paciência', () => {
+test('conflito social: sucesso tira Resistência e toda falha marca 1 de Paciência', () => {
   const inicio = { resistencia: 3, paciencia: 0 };
   const argumento = aplicarAbordagem(inicio, { sucesso: true });
   assert.deepEqual(argumento, { resistencia: 2, paciencia: 0, desfecho: null });
@@ -64,30 +71,32 @@ test('conflito social: sucesso desce Resistência e falha agressiva enche Paciê
   assert.equal(prova.resistencia, 0);
   assert.equal(prova.desfecho, 'cedeu');
 
-  const pressao = aplicarAbordagem(inicio, { sucesso: false, custoDePaciencia: 1 });
-  assert.deepEqual(pressao, { resistencia: 3, paciencia: 1, desfecho: null });
+  const falha = aplicarAbordagem(inicio, { sucesso: false });
+  assert.deepEqual(falha, { resistencia: 3, paciencia: 1, desfecho: null });
+  assert.equal(PACIENCIA_MAXIMA, 3, 'três falhas encerram a conversa');
 });
 
-test('repetir a abordagem e tocar no Limite cobram Paciência mesmo em sucesso', () => {
-  const estado = { resistencia: 5, paciencia: 1 };
+test('repetir o argumento conta como falha, e insistir no Limite marca 1 a mais', () => {
+  const estado = { resistencia: 5, paciencia: 0 };
   const repetida = aplicarAbordagem(estado, { sucesso: true, repetida: true });
-  assert.equal(repetida.resistencia, 4);
-  assert.equal(repetida.paciencia, 2);
+  assert.equal(repetida.resistencia, 5);
+  assert.equal(repetida.paciencia, 1);
 
-  const limite = aplicarAbordagem(estado, { sucesso: true, tocouOLimite: true, repetida: true });
-  assert.equal(limite.paciencia, 3);
+  const limite = aplicarAbordagem(estado, { sucesso: true, tocouOLimite: true });
+  assert.equal(limite.resistencia, 4);
+  assert.equal(limite.paciencia, 1);
 });
 
 test('a Paciência cheia encerra a conversa mesmo com a Resistência no último ponto', () => {
   const beirada = { resistencia: 1, paciencia: PACIENCIA_MAXIMA - 1 };
-  const aposta = aplicarAbordagem(beirada, { sucesso: true, repetida: true });
+  const aposta = aplicarAbordagem(beirada, { sucesso: true, tocouOLimite: true });
 
   assert.equal(aposta.resistencia, 0);
   assert.equal(aposta.paciencia, PACIENCIA_MAXIMA);
   assert.equal(aposta.desfecho, 'rompeu', 'levantar da mesa vale antes de ceder o último ponto');
 
-  // A contagem nunca passa do relógio nem desce abaixo de zero.
-  const estourada = aplicarAbordagem(aposta, { sucesso: true, reducao: 5, custoDePaciencia: 3, tocouOLimite: true });
+  // A contagem nunca passa do máximo nem desce abaixo de zero.
+  const estourada = aplicarAbordagem(aposta, { sucesso: false, custoDePaciencia: 3, tocouOLimite: true });
   assert.equal(estourada.resistencia, 0);
   assert.equal(estourada.paciencia, PACIENCIA_MAXIMA);
 });
@@ -101,17 +110,14 @@ test('os três níveis de Resistência continuam declarados e em ordem', () => {
   });
 });
 
-test('na perseguição, só o puxador disputa a faixa e cada lado anda no máximo duas por rodada', () => {
-  assert.equal(FAIXAS_MAXIMAS_POR_LADO, 2);
-  assert.equal(passosDaRodada(1, 0), -1);
-  assert.equal(passosDaRodada(4, 0), -2, 'apoio de um grupo grande não passa do teto');
-  assert.equal(passosDaRodada(2, 1), -1);
-  assert.equal(passosDaRodada(0, 3), 2);
-  assert.equal(passosDaRodada(1, 1), 0);
-  const ids = new Set(MANOBRAS_A_PE.map((manobra) => manobra.id));
-  MANOBRAS_DE_APOIO.forEach((id) => assert.ok(ids.has(id), `manobra de apoio desconhecida: ${id}`));
-  assert.match(REGRA_PERSEGUICAO_A_PE.corpo, /Só a manobra dele disputa a faixa/);
-  assert.match(REGRA_PERSEGUICAO_A_PE.corpo, /no máximo dois ajudantes/);
+test('na perseguição, uma pessoa de cada lado rola, e os outros só Ajudam ou Atrapalham', () => {
+  assert.equal(BONUS_DE_APOIO, 2);
+  assert.equal(APOIOS_MAXIMOS_POR_LADO, 2);
+  const corpo = REGRA_PERSEGUICAO_A_PE.corpo;
+  assert.match(corpo, /cada lado escolhe uma pessoa para rolar/);
+  assert.match(corpo, /Atrapalhar/);
+  assert.doesNotMatch(corpo, /puxador/i);
+  assert.match(corpo, /Ninguém rola só para passar por ele/);
 });
 
 test('no Conflito Social o Prestígio entra só na rolagem', () => {

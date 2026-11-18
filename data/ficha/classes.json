@@ -11509,7 +11509,7 @@
           {
             "nivel": 1,
             "titulo": "Primeira Linha",
-            "descricao": "Escreva um Motivo após descanso: coragem (ataques e Vontade contra medo), perda (Fortitude e testes de Morrendo) ou esperança (Cura, Diplomacia e testes para ajudar alguém); uma vez por cena, dê +1d4 a um teste desses de um aliado.",
+            "descricao": "Escreva um Motivo após descanso: coragem (ataques e Vontade contra medo), perda (Fortitude e testes de Morrendo) ou esperança (Cura e Diplomacia); uma vez por cena, dê +1d4 a um teste desses de um aliado.",
             "acao": "Ação Livre",
             "usos": "Uma vez por cena"
           },

@@ -22451,7 +22451,7 @@
         "aplicacao": "Armas",
         "nivel_modificacao": "comum",
         "valor_efeito": 1,
-        "descricao": "Ao falhar numa Coreografia de risco Ousado ou maior com esta arma, sofra a consequência do risco imediatamente abaixo. Não vale para Tudo ou Nada.",
+        "descricao": "Ao falhar numa Coreografia Arriscada com esta arma, você sofre só a consequência do Ousado. Não vale para Tudo ou Nada.",
         "atributos": [
           "Aplica em: Armas",
           "Nível Comum",
@@ -51347,7 +51347,7 @@
         ],
         "habilidades": [
           "Estocada de Encerramento (Golpe Anunciado: anuncie na rodada anterior; acerta 2d10+6, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
-          "Teatro do Duelo (Passivo: antes de cada ataque, ele diz em voz alta o risco da Coreografia que vai usar, de Seguro a Perigoso, e recebe o ganho ou o castigo da tabela como qualquer personagem. Uma vez por cena pode anunciar Tudo ou Nada)",
+          "Teatro do Duelo (Passivo: antes de cada ataque, ele diz em voz alta o risco da Coreografia que vai usar, Ousado ou Arriscado, e recebe o ganho ou o castigo da tabela como qualquer personagem. Uma vez por cena pode anunciar Tudo ou Nada)",
           "Reverência (Reação, 1/rodada: quando um ataque corpo a corpo o erra, ele agradece com uma mesura e faz um Contra-Ataque sem o redutor de sempre)",
           "Sinais (cartazes de dívida colados pelo cais com o nome de gente que ninguém viu mais, e estivadores que param de cantar quando alguém pergunta por ele)",
           "Como Evitar (ele só quer a carga: entregar o que ele veio buscar, ou mostrar um papel assinado que prove que a carga já é dele, encerra a cena sem luta)"
@@ -51904,9 +51904,9 @@
             "nome": "Protocolo de Contenção",
             "anuncio": "Uma sirene grave enche a casa de máquinas, as portas de aço descem, e o painel da parede acende na mesma cor do olho dele.",
             "mudancas": [
-              "O segredo dele: o painel da parede é o terminal que controla os módulos. Quem estiver ao lado dele pode invadir: são três Etapas contra um Alerta de 6, como em Infiltração, com Tecnologia ou Ladinagem DT 26, uma tentativa por Ação Padrão.",
+              "O segredo dele: o painel da parede é o terminal que controla os módulos. Quem estiver ao lado dele pode invadir: são três Etapas contra um Alerta de 4, como em Infiltração, com Tecnologia ou Ladinagem DT 26, uma tentativa por Ação Padrão.",
               "Cada Etapa vencida desliga um módulo, na ordem que quem invade escolher: o Escudo de Contenção, o Canhão de Pressão (ele fica só com a Chave de Manivela) ou o Reparo.",
-              "Quem está no terminal tem 30 segundos de verdade para declarar a ação, no cronômetro do painel Mesa. Passado o tempo, a ação conta como falha. Falha sobe o Alerta em 1, a falha crítica em 2, e com o Alerta cheio o terminal tranca até o fim da luta.",
+              "Quem está no terminal tem 30 segundos de verdade para declarar a ação, no cronômetro do painel Mesa. Passado o tempo, a ação conta como falha. Falha marca 1 de Alerta, e com o Alerta cheio o terminal tranca até o fim da luta.",
               "Ele sabe do terminal: enquanto houver alguém no painel, o Alvo Prioritário é sempre essa pessoa.",
               "As portas de aço ficam fechadas até ele cair ou até as três Etapas serem vencidas."
             ]

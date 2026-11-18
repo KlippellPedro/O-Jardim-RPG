@@ -7,145 +7,115 @@ export const LIMITES_ATAQUE_COMBINADO = {
   alvosMaximos: 1,
 } as const;
 
-/** Sintonia: o menor número de Pontos de Relação que cada participante tem
- *  com o líder. Os degraus 2 e 3 repetem Ousado e Arriscado da Coreografia,
- *  para a mesa não aprender um vocabulário novo de bônus. */
+/** Sintonia: o menor número de Pontos de Relação que cada aliado tem com o
+ *  líder. Só entra no ataque quem tem pelo menos 1 ponto, então a tabela vai
+ *  de 1 a 3. Os degraus 2 e 3 repetem Ousado e Arriscado da Coreografia, para
+ *  a mesa não aprender um vocabulário novo de bônus. */
 export interface IDegrauDeSintonia {
   sintonia: PontosDeRelacao;
   titulo: string;
   ataque: string;
   dano: string;
-  extra?: string;
 }
 
 export const DEGRAUS_DE_SINTONIA: readonly IDegrauDeSintonia[] = [
-  { sintonia: 0, titulo: 'Desencontrados', ataque: 'Nenhum', dano: 'Nenhum' },
   { sintonia: 1, titulo: 'Entrosados', ataque: '+2', dano: 'Nenhum' },
   { sintonia: 2, titulo: 'Afinados', ataque: '+2', dano: '+2' },
-  { sintonia: 3, titulo: 'Uníssono', ataque: 'Vantagem', dano: '+1 dado', extra: 'A Resistência do alvo vale uma vez só, contra a soma.' },
+  { sintonia: 3, titulo: 'Uníssono', ataque: 'Vantagem', dano: '+1 dado' },
 ];
 
-/** Sintonia do ataque pelos pontos que cada participante (fora o líder) tem
- *  com o líder. Quem não gasta o uso entra com 0. Sem ninguém, 0. */
+/** Sintonia do ataque pelos pontos que cada aliado (fora o líder) tem com o
+ *  líder. Sem aliado, ou com um aliado sem pontos, dá 0: não há ataque. */
 export function sintoniaDoAtaque(pontosComOLider: readonly number[]): PontosDeRelacao {
   if (!pontosComOLider.length) return 0;
   return limitarPontosDeRelacao(Math.min(...pontosComOLider.map(limitarPontosDeRelacao)));
 }
 
-export const degrauDeSintonia = (sintonia: number): IDegrauDeSintonia =>
-  DEGRAUS_DE_SINTONIA[limitarPontosDeRelacao(sintonia)];
+/** Degrau da tabela. Sintonia 0 não tem degrau, porque ninguém entra sem ponto. */
+export const degrauDeSintonia = (sintonia: number): IDegrauDeSintonia | null =>
+  DEGRAUS_DE_SINTONIA.find((degrau) => degrau.sintonia === limitarPontosDeRelacao(sintonia)) || null;
 
-/** Dano final do ataque: cada contribuição que acertou já com vulnerabilidade
- *  e redução percentual, e a Resistência do alvo. Em Uníssono ela sai uma vez
- *  da soma; nos outros degraus, de cada contribuição. */
-export function danoDoAtaqueCombinado(danos: readonly number[], resistencia: number, sintonia: number): number {
+/** Dano final do ataque: a Resistência do alvo sai de cada acerto, como em
+ *  qualquer ataque, e os acertos se somam. */
+export function danoDoAtaqueCombinado(danos: readonly number[], resistencia: number): number {
   const rd = Math.max(0, Math.trunc(resistencia));
-  if (limitarPontosDeRelacao(sintonia) >= 3) {
-    return Math.max(0, danos.reduce((soma, dano) => soma + Math.max(0, dano), 0) - rd);
-  }
   return danos.reduce((soma, dano) => soma + Math.max(0, Math.max(0, dano) - rd), 0);
 }
 
 const tabelaSintonia = DEGRAUS_DE_SINTONIA.map((degrau) => `
-  <tr><td><strong>${degrau.sintonia}</strong></td><td>${degrau.titulo}</td><td>${degrau.ataque}</td><td>${degrau.dano}${degrau.extra ? `<small class="regras-mecanica">${degrau.extra}</small>` : ''}</td></tr>
+  <tr><td><strong>${degrau.sintonia}</strong></td><td>${degrau.titulo}</td><td>${degrau.ataque}</td><td>${degrau.dano}</td></tr>
 `).join('');
+
+const ALIADOS_MAXIMOS = LIMITES_ATAQUE_COMBINADO.participantesMaximos - 1;
 
 export const REGRA_ATAQUES_COMBINADOS = {
   categoria: 'Combate e Mecânicas' as const,
   status: 'Regra oficial',
-  resumo: 'De dois a quatro personagens atacam o mesmo alvo ao mesmo tempo. Quanto mais eles confiam no líder do ataque, maior o bônus. Esse bônus se chama Sintonia e vem dos Pontos de Relação.',
+  resumo: `O líder ataca no turno dele e chama até ${ALIADOS_MAXIMOS} aliados para atacar junto, na hora. Cada aliado gasta a reação e um uso dos Pontos de Relação com o líder, e todos ganham o bônus da Sintonia.`,
   destaques: [
-    ['Participantes', '2 a 4'],
-    ['Custo', 'ação + reação'],
-    ['Bônus', 'pela Sintonia, de 0 a 3'],
+    ['Participantes', `o líder e até ${ALIADOS_MAXIMOS} aliados`],
+    ['Custo de cada aliado', 'reação e 1 uso de ponto'],
+    ['Bônus', 'pela Sintonia, de 1 a 3'],
   ],
   corpo: `
-    <p class="regras-lead">No Ataque Combinado, de ${LIMITES_ATAQUE_COMBINADO.participantesMinimos} a ${LIMITES_ATAQUE_COMBINADO.participantesMaximos} personagens atacam o mesmo alvo juntos, e o dano de todos é resolvido de uma vez. Cada um usa a própria arma ou magia e faz o próprio teste. O bônus do ataque depende de quanto os participantes confiam no líder.</p>
+    <p class="regras-lead">Use esta regra quando o grupo quer atacar o mesmo alvo ao mesmo tempo. Tudo acontece no turno de quem lidera, e cada um rola o próprio ataque.</p>
 
     <div class="regras-resumo">
       <ul>
-        <li>Participam de ${LIMITES_ATAQUE_COMBINADO.participantesMinimos} a ${LIMITES_ATAQUE_COMBINADO.participantesMaximos} voluntários, todos contra o mesmo alvo, e cada um gasta a própria Ação Padrão e uma reação na preparação.</li>
-        <li>O ataque é resolvido no primeiro turno do líder depois que todos se prepararam.</li>
-        <li>A <strong>Sintonia</strong> é o menor número de <span class="regras-ref regras-ref--pontos-de-relacao">Pontos de Relação</span> que cada participante tem com o líder. O bônus vai de +2 no ataque até vantagem e um dado a mais de dano, e vale para todos os participantes.</li>
-        <li>Se todas as contribuições errarem, todos os participantes ficam Expostos até o começo do próprio turno.</li>
-        <li>Quem for derrubado antes da resolução perde a contribuição, e se o líder cair outro participante preparado assume.</li>
+        <li>No seu turno, você ataca com a Ação Padrão e chama de 1 a ${ALIADOS_MAXIMOS} aliados que alcancem o mesmo alvo. Você é o líder.</li>
+        <li>Cada aliado precisa ter pelo menos 1 <span class="regras-ref regras-ref--pontos-de-relacao">Ponto de Relação</span> com você. Ele gasta a reação e um uso desses pontos e ataca junto, na hora.</li>
+        <li>A <strong>Sintonia</strong> é o menor número de pontos que os aliados têm com você. Ela dá o bônus da tabela a todos os ataques, inclusive o seu.</li>
+        <li>Cada um faz a própria rolagem e causa o próprio dano. Quem errar não causa dano.</li>
       </ul>
     </div>
 
-    <h3 class="regras-subtitle">Requisitos</h3>
-    <ul class="regras-list">
-      <li>Participam de ${LIMITES_ATAQUE_COMBINADO.participantesMinimos} a ${LIMITES_ATAQUE_COMBINADO.participantesMaximos} criaturas voluntárias que possam perceber e atingir o mesmo alvo.</li>
-      <li>Cada participante precisa ter uma Ação Padrão e uma reação disponíveis.</li>
-      <li>Somente ataques que causam dano a um único alvo podem entrar. Cura, área, invocação e controle são resolvidos separadamente.</li>
-      <li>O grupo escolhe um líder. Ele decide quando o ataque acontece, e a Sintonia é contada com base nos pontos que os outros têm com ele.</li>
-    </ul>
+    <h3 class="regras-subtitle">Como fazer</h3>
+    <ol class="regras-steps">
+      <li>No seu turno, diga que vai liderar um Ataque Combinado e contra quem.</li>
+      <li>Chame os aliados. Cada um precisa ter a reação disponível, alcançar o alvo e ter pelo menos 1 ponto com você.</li>
+      <li>Cada aliado gasta a reação e <strong>um uso dos pontos que tem com o líder</strong>. Mana, munição e outros custos do ataque são pagos como num ataque comum.</li>
+      <li>Vejam a Sintonia na tabela abaixo.</li>
+      <li>Cada um faz a própria rolagem, com o bônus da Sintonia. O dano de cada acerto entra separado no alvo.</li>
+    </ol>
 
     <h3 class="regras-subtitle">Sintonia</h3>
-    <p>Veja quantos Pontos de Relação cada participante tem com o líder. O menor desses números é a Sintonia do ataque, e o bônus dela vale para todas as contribuições, inclusive a do líder.</p>
+    <p>Veja quantos pontos cada aliado tem com o líder. O menor desses números é a Sintonia do ataque. Se a Rafa tem 3 pontos com você e o Guerreiro tem 1, a Sintonia é 1.</p>
     <div class="regras-table-wrap"><table class="regras-table">
       <thead><tr><th>Sintonia</th><th>Degrau</th><th>Ataque</th><th>Dano de cada acerto</th></tr></thead>
       <tbody>${tabelaSintonia}</tbody>
     </table></div>
-    <ul class="regras-list">
-      <li><strong>Com Sintonia 1 ou mais,</strong> cada participante gasta um uso dos pontos que tem com o líder. Quem não quiser gastar entra com 0, e a Sintonia do ataque vira 0.</li>
-      <li><strong>O dado a mais do Uníssono</strong> é do mesmo tipo que você já rola: o da arma ou o da magia. Ele entra uma vez só e não é multiplicado no crítico. O +2 de dano dos Afinados funciona do mesmo jeito.</li>
-      <li><strong>Coreografia</strong> pode ser usada numa contribuição, mas o bônus no teste não soma com o da Sintonia: use o maior.</li>
-    </ul>
+    <p>O dado a mais do Uníssono é do mesmo tipo que você já rola, o da arma ou o da magia. Ele não é multiplicado no crítico, e o +2 de dano dos Afinados também não.</p>
 
-    <h3 class="regras-subtitle">Preparação e resolução</h3>
-    <ol class="regras-steps">
-      <li>No próprio turno, cada participante declara a contribuição, reserva a Ação Padrão e gasta a reação. Mana e custos que a ação exige na declaração são pagos nesse momento. Quem já gastou a Ação Padrão ou a reação não pode participar.</li>
-      <li>O ataque é resolvido no primeiro turno do líder depois que todos se prepararem. A preparação de um participante expira no início do próximo turno dele. Alcance, linha de efeito e alvo precisam continuar válidos.</li>
-      <li>Na resolução, cada participante consome munição ou carga usada pelo ataque e faz a própria rolagem, com o bônus da Sintonia. Nenhum custo é pago duas vezes.</li>
-      <li>Cada acerto causa o dano normal da contribuição, mais o da Sintonia. Cada erro não causa dano e não devolve ações ou recursos.</li>
-      <li>Aplique vulnerabilidade, redução percentual e Resistência separadamente a cada contribuição. Depois, some o dano final dos acertos. No Uníssono, aplique vulnerabilidade e redução percentual em cada contribuição, some, e só então tire a Resistência do alvo, uma vez.</li>
-    </ol>
-
-    <h3 class="regras-subtitle">Críticos, reações e efeitos</h3>
+    <h3 class="regras-subtitle">Regras do ataque</h3>
     <ul class="regras-list">
-      <li>Cada contribuição verifica a própria margem de ameaça e o próprio multiplicador. O crítico de um participante não multiplica o dano dos demais.</li>
-      <li>O alvo usa as reações que tiver disponíveis. Cada reação afeta apenas a contribuição que acionou seu gatilho, salvo texto expresso em contrário.</li>
-      <li>Efeitos adicionais de acerto são resolvidos por contribuição, mas efeitos iguais não acumulam além do limite da própria condição.</li>
-      <li><strong>Se todas as contribuições errarem,</strong> o Ataque Combinado falha: custos, ações e usos de pontos continuam gastos, e cada participante fica Exposto até o começo do próprio turno.</li>
-    </ul>
-
-    <h3 class="regras-subtitle">Interrupção</h3>
-    <ul class="regras-list">
-      <li>Uma contribuição é perdida se o participante ficar inconsciente, incapaz de agir ou sem um ataque válido antes da resolução.</li>
-      <li>Se o líder perder a contribuição, outro participante preparado assume a liderança, e a Sintonia é contada de novo com ele. Se nenhum puder, o ataque é cancelado.</li>
-      <li>Quando o ataque é cancelado antes da resolução, ações, reações, usos de pontos e custos pagos na declaração continuam gastos. Munição e cargas ainda não usadas são preservadas.</li>
-      <li>Quem tem pontos com um participante que cai durante a preparação testa Sanidade, como em Pontos de Relação.</li>
-    </ul>
-
-    <h3 class="regras-subtitle">Magias e Fluxos</h3>
-    <ul class="regras-list">
-      <li>Cada magia precisa alcançar a própria DT de conjuração e a defesa do alvo normalmente.</li>
-      <li>Somar danos não altera tipo, alcance, área, duração ou efeito das magias.</li>
-      <li>Ataque Combinado entre personagens não é Fusão de Fluxos (ver <span class="regras-ref regras-ref--rituais-selos">Rituais, Selos e Fusão</span>). Ele não cria um novo efeito.</li>
+      <li>Só entram ataques que causam dano a um único alvo. Cura, área, invocação e controle são feitos separadamente, no turno de cada um.</li>
+      <li>Cada ataque tem o próprio crítico. O crítico de um participante não multiplica o dano dos demais.</li>
+      <li>A Resistência do alvo vale contra cada acerto, como em qualquer ataque.</li>
+      <li>O alvo pode usar a reação dele contra um dos ataques, normalmente.</li>
+      <li>Coreografia não entra no Ataque Combinado.</li>
+      <li>Cada magia precisa alcançar a própria DT de conjuração. Atacar junto não altera tipo, alcance, área, duração ou efeito das magias, e Ataque Combinado entre personagens não é Fusão de Fluxos (ver <span class="regras-ref regras-ref--rituais-selos">Rituais, Selos e Fusão</span>).</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>Duda lidera. Rafa tem 3 pontos com ela e o Guerreiro tem 2: a Sintonia é 2, Afinados. Cada um gasta um uso com a Duda, e as três contribuições ganham +2 no ataque e +2 no dano. Se o Guerreiro tivesse 3 pontos com ela, seria Uníssono: vantagem, um dado a mais em cada acerto e a Resistência 5 do chefe tirada uma vez da soma, e não três.</p>
+      <p>Duda ataca o chefe no turno dela e chama a Rafa, que tem 3 pontos com ela, e o Guerreiro, que tem 2. A Sintonia é 2, Afinados. Rafa e Guerreiro gastam a reação e um uso cada, e os três atacam na hora, com +2 no ataque e +2 no dano de cada acerto. O chefe tem Resistência 5, que sai de cada acerto.</p>
     </div>
   `,
   corpoMestre: `
-    <p class="regras-lead">Ataque Combinado custa caro em tempo de mesa: quatro pessoas declaram, esperam, e só então resolvem. A Sintonia compensa essa espera, e ela vem dos Pontos de Relação que os personagens ganharam na história.</p>
+    <p class="regras-lead">O Ataque Combinado acontece todo no turno do líder e não deixa ninguém esperando. Quem limita o uso são os Pontos de Relação: cada aliado gasta um uso por ataque, e os usos só voltam na sessão seguinte.</p>
 
     <h3 class="regras-subtitle">Quando vale a pena</h3>
     <ul class="regras-list">
-      <li>Com Sintonia 0, atacar separado quase sempre rende mais. Deixe a mesa descobrir isso: é o empurrão para eles cuidarem uns dos outros na história.</li>
-      <li>Dos Afinados para cima, o golpe combinado é a melhor rodada do grupo contra um alvo único: chefe, elite, veículo. O Uníssono, com a Resistência tirada uma vez, é a resposta ao chefe blindado.</li>
-      <li>Custa ação padrão, reação e um uso de ponto de cada participante. Um grupo que combina ataque numa rodada fica sem reação até o próprio turno seguinte, e isso é uma abertura sua.</li>
+      <li>É a melhor rodada do grupo contra um alvo só: chefe, elite, veículo. Os aliados atacam fora do próprio turno, então o grupo bate mais vezes na mesma rodada.</li>
+      <li>O preço é a reação. Quem entrou no ataque fica sem Esquiva, Bloqueio e Proteger até o próprio turno, e isso é uma abertura sua.</li>
+      <li>Grupo que ainda não tem pontos entre si não consegue combinar. É o empurrão para eles cuidarem uns dos outros na história.</li>
     </ul>
 
-    <h3 class="regras-subtitle">Conduzir a resolução</h3>
+    <h3 class="regras-subtitle">Conduzir</h3>
     <ul class="regras-list">
-      <li>Pergunte a Sintonia em voz alta antes das rolagens: quem lidera, e quantos pontos cada um tem com essa pessoa. Escolher o líder certo é parte da tática.</li>
-      <li>A preparação de cada participante expira no início do próximo turno dele. Deixe o relógio correr de verdade: tirar o chefe do alcance é resposta legítima.</li>
-      <li>Se todas errarem, o ataque falha, os usos ficam gastos e todos ficam Expostos. Avise que isso é possível antes da primeira vez que a mesa tentar.</li>
-      <li>O alvo usa as reações que tiver, e cada uma afeta só a contribuição que a acionou. Um chefe com Bloqueio derruba uma contribuição, nunca a soma inteira.</li>
+      <li>Pergunte quem lidera e quantos pontos cada aliado tem com essa pessoa. Escolher o líder certo é parte da tática.</li>
+      <li>Resolva os ataques um por vez, na ordem que a mesa preferir. O alvo pode usar a reação dele contra um deles, e ela afeta só esse ataque.</li>
     </ul>
 
     <h3 class="regras-subtitle">O que fica de fora</h3>
-    <p>Somar dano não é Fusão de Fluxos e não cria efeito novo. Se um jogador propuser que duas magias combinadas produzam um terceiro efeito, isso é decisão sua de mesa, tomada fora desta regra.</p>
+    <p>Atacar junto não é Fusão de Fluxos e não cria efeito novo. Se um jogador propuser que duas magias combinadas produzam um terceiro efeito, isso é decisão sua de mesa, tomada fora desta regra.</p>
   `,
 };

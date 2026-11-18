@@ -2,10 +2,10 @@
  *
  * Entrar onde não se é bem-vindo, pegar o que se veio buscar e sair antes que
  * alguém perceba. Mesmo molde do Conflito Social: duas contagens à vista da
- * mesa. As Etapas dizem quanto falta até o objetivo, e o Alerta é o relógio do
- * lugar (o mesmo "A guarda percebe a invasão" do Guia do Mestre, com o tamanho
- * escolhido pela vigilância). Fechou o Alerta, a infiltração acabou e a cena
- * vira fuga, luta ou rendição.
+ * mesa. As Etapas dizem quanto falta até o objetivo, e o Alerta é quantas
+ * falhas o lugar aguenta (o relógio "A guarda percebe a invasão" do Guia do
+ * Mestre, com o tamanho escolhido pela vigilância). Toda falha marca 1, e na
+ * última a infiltração acaba e a cena vira fuga, luta ou rendição.
  */
 import type { RegraTopicoDe } from './tipos';
 
@@ -14,15 +14,15 @@ export type Vigilancia = 'descuidada' | 'vigiada' | 'fechada';
 export interface INivelDeVigilancia {
   id: Vigilancia;
   titulo: string;
-  /** Partes do relógio de Alerta. */
+  /** Falhas que o lugar aguenta: na última, toca o alarme. */
   alerta: number;
   exemplos: string;
 }
 
 export const NIVEIS_DE_VIGILANCIA: readonly INivelDeVigilancia[] = [
-  { id: 'descuidada', titulo: 'Descuidada', alerta: 8, exemplos: 'Armazém de porto, casa de campo, festa barulhenta, acampamento de bandidos.' },
-  { id: 'vigiada', titulo: 'Vigiada', alerta: 6, exemplos: 'Mansão com guardas, quartel em tempo de paz, templo à noite, sede de guilda.' },
-  { id: 'fechada', titulo: 'Fechada', alerta: 4, exemplos: 'Cofre do Banco Lunar, palácio em alerta, prisão, laboratório da A.X.I.S.' },
+  { id: 'descuidada', titulo: 'Descuidada', alerta: 5, exemplos: 'Armazém de porto, casa de campo, festa barulhenta, acampamento de bandidos.' },
+  { id: 'vigiada', titulo: 'Vigiada', alerta: 4, exemplos: 'Mansão com guardas, quartel em tempo de paz, templo à noite, sede de guilda.' },
+  { id: 'fechada', titulo: 'Fechada', alerta: 3, exemplos: 'Cofre do Banco Lunar, palácio em alerta, prisão, laboratório da A.X.I.S.' },
 ];
 
 export interface ITamanhoDeLugar {
@@ -57,7 +57,7 @@ export const ABORDAGENS_DE_INFILTRACAO: readonly IAbordagemDeInfiltracao[] = [
     cena: 'Passar sem ser visto, aproveitando as sombras e a hora em que ninguém está olhando.',
     teste: 'Teste de Grupo de Furtividade',
     efeito: 'O grupo avança uma etapa.',
-    falha: 'O Alerta sobe 1.',
+    falha: 'Marca 1 de Alerta.',
   },
   {
     id: 'disfarce',
@@ -65,7 +65,7 @@ export const ABORDAGENS_DE_INFILTRACAO: readonly IAbordagemDeInfiltracao[] = [
     cena: 'Se passar por alguém que pode estar ali, como um criado ou um guarda.',
     teste: 'Enganação ou Atuação; o Kit de Disfarce dá vantagem',
     efeito: 'Avança uma etapa, e o disfarce vale nas próximas onde aquele papel é esperado.',
-    falha: 'O Alerta sobe 1 e o disfarce fica queimado daqui para frente.',
+    falha: 'Marca 1 de Alerta, e o disfarce fica queimado daqui para frente.',
   },
   {
     id: 'abrir',
@@ -73,7 +73,7 @@ export const ABORDAGENS_DE_INFILTRACAO: readonly IAbordagemDeInfiltracao[] = [
     cena: 'Abrir uma porta, tranca ou selo para passar por um caminho sem vigia.',
     teste: 'Ladinagem (Kit de Arrombamento dá vantagem), Misticismo para selo, Tecnologia para tranca A.X.I.S',
     efeito: 'Avança uma etapa por uma porta que ninguém vigia.',
-    falha: 'O Alerta sobe 1. Falhar por 5 ou mais dispara o que protegia a porta.',
+    falha: 'Marca 1 de Alerta, e a armadilha da porta, se houver, dispara.',
   },
   {
     id: 'calar',
@@ -81,23 +81,15 @@ export const ABORDAGENS_DE_INFILTRACAO: readonly IAbordagemDeInfiltracao[] = [
     cena: 'Derrubar ou imobilizar alguém sem fazer barulho.',
     teste: 'Luta ou Atletismo contra 10 + Reflexos do alvo, com vantagem se ele não viu você',
     efeito: 'Avança uma etapa e tira aquela pessoa do caminho.',
-    falha: 'Vira combate ali mesmo, e o Alerta sobe 2.',
+    falha: 'Marca 1 de Alerta, e vira combate ali mesmo.',
   },
   {
-    id: 'distrair',
-    titulo: 'Distrair',
-    cena: 'Chamar a atenção dos guardas para outro lugar.',
-    teste: 'Atuação, Enganação ou o teste de uma magia',
-    efeito: 'Não avança, e a próxima abordagem desta etapa ganha vantagem.',
-    falha: 'O Alerta sobe 1, porque alguém foi ver o que era e voltou desconfiado.',
-  },
-  {
-    id: 'estudar',
-    titulo: 'Estudar o caminho',
-    cena: 'Observar a ronda, o caminho ou a troca de turno antes de agir.',
-    teste: 'Investigação ou Percepção',
-    efeito: 'Não avança. Revela o que há na próxima etapa (guarda, armadilha, rota) e dá vantagem na abordagem seguinte. Uma vez por etapa.',
-    falha: 'Só custa o tempo.',
+    id: 'preparar',
+    titulo: 'Preparar o terreno',
+    cena: 'Distrair os guardas, ou observar a ronda e a troca de turno antes de agir.',
+    teste: 'Atuação ou Enganação para distrair, Investigação ou Percepção para observar',
+    efeito: 'Não avança. A próxima abordagem desta etapa ganha vantagem, e o Mestre conta o que há pela frente (guarda, armadilha, rota). Uma vez por etapa.',
+    falha: 'Marca 1 de Alerta.',
   },
 ];
 
@@ -110,28 +102,25 @@ export interface IEstadoDeInfiltracao {
 
 export type DesfechoDeInfiltracao = 'saiu' | 'alarme' | null;
 
-/** Estado do lugar pelo Alerta: metade pintada deixa os guardas desconfiados. */
-export function estadoDoAlerta(alerta: number, alertaMaximo: number): 'calmo' | 'desconfianca' | 'alarme' {
-  if (alerta >= alertaMaximo) return 'alarme';
-  return alerta >= Math.ceil(alertaMaximo / 2) ? 'desconfianca' : 'calmo';
+/** Estado do lugar pelo Alerta: calmo até a última marca, que toca o alarme. */
+export function estadoDoAlerta(alerta: number, alertaMaximo: number): 'calmo' | 'alarme' {
+  return alerta >= alertaMaximo ? 'alarme' : 'calmo';
 }
 
 /** Resolve uma rodada.
  *
- * Sucesso avança uma etapa. Falha sobe o Alerta (2 na falha crítica). Na
- * falha, o grupo pode escolher forçar a passagem: avança mesmo assim e o
- * Alerta sobe 1 a mais. `custoDeAlerta` cobre abordagens que sobem mais que 1
- * na falha, como Calar alguém. */
+ * Sucesso avança uma etapa. Toda falha marca 1 de Alerta. Na falha, o grupo
+ * pode escolher forçar a passagem: avança mesmo assim e marca 1 a mais. */
 export function resolverRodadaDeInfiltracao(
   estado: IEstadoDeInfiltracao,
-  rodada: { sucesso: boolean; falhaCritica?: boolean; forcar?: boolean; avanca?: boolean; custoDeAlerta?: number },
+  rodada: { sucesso: boolean; forcar?: boolean; avanca?: boolean },
 ): IEstadoDeInfiltracao & { desfecho: DesfechoDeInfiltracao } {
   const avanca = rodada.avanca ?? true;
   let { etapas, alerta } = estado;
   if (rodada.sucesso) {
     if (avanca) etapas -= 1;
   } else {
-    alerta += (rodada.custoDeAlerta ?? 1) + (rodada.falhaCritica ? 1 : 0);
+    alerta += 1;
     if (rodada.forcar && avanca) {
       etapas -= 1;
       alerta += 1;
@@ -146,7 +135,7 @@ export function resolverRodadaDeInfiltracao(
 // ------------------------------------------------------------------ página
 
 const tabelaVigilancia = NIVEIS_DE_VIGILANCIA.map((nivel) => `
-  <tr><td><strong>${nivel.titulo}</strong></td><td>${nivel.alerta} partes</td><td>${nivel.exemplos}</td></tr>
+  <tr><td><strong>${nivel.titulo}</strong></td><td>${nivel.alerta} falhas</td><td>${nivel.exemplos}</td></tr>
 `).join('');
 
 const tabelaAbordagens = ABORDAGENS_DE_INFILTRACAO.map((abordagem) => `
@@ -164,7 +153,7 @@ export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
   resumo: 'Entrar escondido num lugar, pegar o que veio buscar e sair sem ser pego. A cena usa duas contagens: as Etapas até o objetivo e o Alerta do lugar.',
   destaques: [
     ['Etapas', '2 a 4, mais a saída'],
-    ['Alerta', '4, 6 ou 8 partes'],
+    ['Alerta', '3, 4 ou 5 falhas'],
     ['Teste base', 'Furtividade em grupo'],
   ],
   corpo: `
@@ -173,9 +162,9 @@ export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
     <div class="regras-resumo">
       <ul>
         <li>O lugar tem <strong>Etapas</strong> até o objetivo (${etapasDoTamanho}) e mais ${ETAPAS_DE_SAIDA} de saída.</li>
-        <li>O lugar tem um <strong>Alerta</strong> de 4, 6 ou 8 partes, conforme a vigilância. Com metade pintada os guardas desconfiam, e cheio vira alarme.</li>
-        <li>A cada rodada o grupo escolhe uma abordagem para a etapa e testa. Sucesso avança; falha sobe o Alerta.</li>
-        <li>Na falha, o grupo pode forçar a passagem: avança mesmo assim, e o Alerta sobe 1 a mais.</li>
+        <li>O lugar aguenta 3, 4 ou 5 falhas, conforme a vigilância: é o <strong>Alerta</strong>. Toda falha marca 1, e na última marca toca o alarme.</li>
+        <li>A cada rodada o grupo escolhe uma abordagem para a etapa e testa. Sucesso avança; falha marca 1 de Alerta.</li>
+        <li>Na falha, o grupo pode forçar a passagem: avança mesmo assim e marca 1 a mais.</li>
         <li>Saiu com o objetivo, a infiltração deu certo. Alarme vira fuga, luta ou rendição.</li>
       </ul>
     </div>
@@ -183,12 +172,12 @@ export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
     <h3 class="regras-subtitle">O lugar</h3>
     <p>Antes da primeira rodada, o Mestre diz o tamanho do lugar e a vigilância dele, e o grupo pode tentar descobrir mais com uma noite de observação, um mapa comprado ou alguém de dentro.</p>
     <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Vigilância</th><th>Alerta</th><th>Onde</th></tr></thead>
+      <thead><tr><th>Vigilância</th><th>O lugar aguenta</th><th>Onde</th></tr></thead>
       <tbody>${tabelaVigilancia}</tbody>
     </table></div>
     <ul class="regras-list">
       <li><strong>Etapas:</strong> ${etapasDoTamanho}. A saída é sempre mais ${ETAPAS_DE_SAIDA}, depois do objetivo.</li>
-      <li><strong>DT:</strong> a Padrão do nível do lugar. A etapa do objetivo, e todas num lugar Fechado, usam a Difícil.</li>
+      <li><strong>DT:</strong> a Padrão do nível do lugar. A etapa do objetivo usa a Difícil.</li>
       <li><strong>Preparação ajuda:</strong> uma planta do lugar, um uniforme roubado, um guarda subornado. Cada preparo bom dá vantagem numa etapa ou apaga 1 de Alerta antes de começar.</li>
     </ul>
 
@@ -198,7 +187,7 @@ export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
       <li>O grupo escolhe uma abordagem e quem vai liderar, e diz como vai fazer.</li>
       <li>Resolvam o teste. Os outros podem Ajudar, como em <span class="regras-ref regras-ref--acoes-coletivas">Ações Coletivas</span>, quando a abordagem permite.</li>
       <li>Sucesso avança uma etapa. Sucesso por 10 ou mais avança e o grupo ganha algo a mais, como um atalho, uma chave ou uma informação.</li>
-      <li>Falha sobe o Alerta em 1, e a falha crítica em 2. O grupo escolhe se fica onde está ou força a passagem.</li>
+      <li>Falha marca 1 de Alerta. O grupo escolhe se fica onde está, para tentar de novo, ou força a passagem e marca mais 1.</li>
     </ol>
 
     <h3 class="regras-subtitle">Abordagens</h3>
@@ -210,19 +199,18 @@ export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
     <ul class="regras-list">
       <li><strong>Em Passar escondido, todo mundo testa:</strong> o grupo passa se pelo menos metade passar. Armadura com penalidade atrapalha aqui.</li>
       <li><strong>O grupo pode se separar.</strong> Cada parte vira uma infiltração com as suas próprias Etapas, e o Alerta continua um só, porque o lugar é um só.</li>
-      <li><strong>Armadilhas no caminho</strong> seguem <span class="regras-ref regras-ref--perigos">Perigos do Ambiente</span>. Disparar uma sobe o Alerta em 1.</li>
+      <li><strong>Armadilhas no caminho</strong> seguem <span class="regras-ref regras-ref--perigos">Perigos do Ambiente</span>. Disparar uma marca 1 de Alerta.</li>
     </ul>
 
     <h3 class="regras-subtitle">O Alerta</h3>
     <ul class="regras-list">
-      <li><strong>Calmo:</strong> menos da metade pintada. O lugar segue a rotina.</li>
-      <li><strong>Desconfiança:</strong> metade ou mais. Os guardas ficam atentos, e todas as etapas passam a usar a DT Difícil.</li>
-      <li><strong>Alarme:</strong> cheio. O lugar inteiro sabe. O grupo escolhe entre fugir (uma <span class="regras-ref regras-ref--perseguicao-a-pe">Perseguição a Pé</span> que começa em Curta), lutar (com reforço chegando a cada rodada) ou se render.</li>
-      <li><strong>O Alerta só desce</strong> com uma ação concreta, como esconder alguém desacordado, devolver uma chave ou convencer um guarda de que não foi nada. Cada ação dessas leva uma rodada inteira e apaga 1.</li>
-      <li><strong>Rastro na saída:</strong> se o objetivo deixou marca (cofre aberto, refém levado, corpo no chão), o Alerta sobe 1 quando a saída começa.</li>
+      <li><strong>Antes da última marca,</strong> o lugar segue a rotina, e o Mestre mostra cada marca na ficção: uma vela acesa, um guarda que para e escuta.</li>
+      <li><strong>Na última marca, toca o alarme.</strong> O lugar inteiro sabe. O grupo escolhe entre fugir (uma <span class="regras-ref regras-ref--perseguicao-a-pe">Perseguição a Pé</span> que começa na distância 1), lutar (com reforço chegando a cada rodada) ou se render.</li>
+      <li><strong>Dá para apagar uma marca</strong> com uma ação concreta, como esconder alguém desacordado, devolver uma chave ou convencer um guarda de que não foi nada. Cada ação dessas leva uma rodada inteira e apaga 1.</li>
+      <li><strong>Rastro na saída:</strong> se o objetivo deixou marca (cofre aberto, refém levado, corpo no chão), marque 1 de Alerta quando a saída começa.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
-      <p>O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a Pop Star distrai o mordomo (a etapa não avança, e a próxima abordagem ganha vantagem), e na rodada seguinte a Ladinagem com vantagem abre o cofre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.</p>
+      <p>O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e o lugar aguenta 4 falhas. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a Pop Star prepara o terreno distraindo o mordomo (a etapa não avança, e a próxima abordagem ganha vantagem), e na rodada seguinte a Ladinagem com vantagem abre o cofre. Na saída, o cofre vazio deixa rastro: Alerta 3. Mais uma falha, e o alarme toca.</p>
     </div>
   `,
   corpoMestre: `
@@ -232,19 +220,19 @@ export const REGRA_INFILTRACAO: RegraTopicoDe<'Combate e Mecânicas'> = {
     <ul class="regras-list">
       <li>Uma porta só, com um guarda, é um teste, e a cena segue. Use as Etapas quando o caminho tem várias partes e o lugar pode acordar.</li>
       <li>Escolha a vigilância pelo que o lugar guarda e pelo momento. A mansão é Vigiada numa noite comum e Fechada na noite do leilão.</li>
-      <li>O relógio "A guarda percebe a invasão" do Guia é exatamente um Alerta de 4 partes, com os sinais da ficção prontos para cada uma.</li>
+      <li>O relógio "A guarda percebe a invasão" do Guia é exatamente o Alerta de um lugar Vigiado, com 4 marcas e os sinais da ficção prontos para cada uma.</li>
     </ul>
 
     <h3 class="regras-subtitle">Calibrar</h3>
     <ul class="regras-list">
-      <li>Contra a DT Padrão, um grupo com um especialista e Ajuda passa em uns dois terços das rodadas. Num lugar Médio e Vigiado, isso costuma terminar com o Alerta entre 2 e 4: tenso, sem alarme.</li>
+      <li>Contra a DT Padrão, um grupo com um especialista e Ajuda passa em uns dois terços das rodadas. Num lugar Médio e Vigiado, isso costuma terminar com 1 ou 2 marcas de Alerta: tenso, sem alarme.</li>
       <li>O Teste de Grupo de Furtividade pune o grupo de armadura pesada. Se a mesa tem um Guerreiro e uma Ninja, a abordagem escolhida diz muito: deixe a escolha com eles.</li>
       <li>Forçar a passagem é a decisão mais interessante da cena. Lembre a mesa dela na primeira falha.</li>
     </ul>
 
     <h3 class="regras-subtitle">Mostrar o Alerta</h3>
     <ul class="regras-list">
-      <li>Cada parte pintada aparece na ficção: uma vela acesa num quarto que estava escuro, um guarda que para e escuta, um cachorro que late uma vez só.</li>
+      <li>Cada marca aparece na ficção: uma vela acesa num quarto que estava escuro, um guarda que para e escuta, um cachorro que late uma vez só.</li>
       <li>Diga em voz alta o que acontece quando o Alerta encher, antes da primeira rodada. Saber o que está em jogo deixa a cena mais tensa.</li>
     </ul>
   `,

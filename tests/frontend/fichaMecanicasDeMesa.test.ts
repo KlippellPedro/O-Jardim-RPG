@@ -70,10 +70,11 @@ test('fome e sede: folga pela Constituição antes do Cansaço, sede cobra todo 
   assert.equal(racoesNoInventario([{ nome: 'Ração de viagem', quantidade: 3 }, { nome: 'Tocha', quantidade: 2 }, { nome: 'RAÇÃO DE VIAGEM' }]), 4);
 });
 
-test('fôlego: Estamina paga a rodada; acabou, vem a Fortitude, e apagar leva a Morrendo', () => {
+test('fôlego: Estamina paga a rodada; acabou, a próxima rodada apaga e leva a Morrendo', () => {
   const primeira = gastarFolego({ estaminaAtual: 30 }, 30, 'normal');
   assert.equal(primeira.status.estaminaAtual, 27);
-  assert.equal(gastarFolego({ estaminaAtual: 30 }, 30, 'surpresa').status.estaminaAtual, 21);
+  assert.equal(gastarFolego({ estaminaAtual: 30 }, 30, 'esforco').status.estaminaAtual, 24);
+  assert.equal(gastarFolego({ estaminaAtual: 30 }, 30, 'normal', true).status.estaminaAtual, 24, 'Pulmões Danificados dobra');
   assert.equal(gastarFolego({ estaminaAtual: 2 }, 30, 'esforco').status.estaminaAtual, 0);
   assert.equal(gastarFolego({ estaminaAtual: 0 }, 30, 'normal').sufocando, true);
 

@@ -700,35 +700,29 @@ Quando o grupo age junto, use uma destas duas regras. Se uma pessoa faz a tarefa
 
 **Em resumo**
 
-- **Ajudar:** o ajudante descreve uma contribuição concreta e testa contra DT 10. Em sucesso, o teste principal ganha +2, ou vantagem se o sucesso for crítico. No máximo dois ajudantes por teste.
+- **Ajudar:** o ajudante diz o que faz para ajudar, e o teste de quem faz a tarefa ganha +2. O ajudante não rola nada. No máximo dois ajudantes por teste, então o bônus vai até +4.
 
-- **Teste de Grupo:** todos os expostos testam contra a mesma DT, e o grupo vence se pelo menos metade dos participantes, arredondada para cima, tiver sucesso.
+- **Teste de Grupo:** todos testam contra a mesma DT, e o grupo passa se pelo menos metade dos participantes, arredondada para cima, tiver sucesso.
 
 - Ajudar e Teste de Grupo não se misturam na mesma resolução, e nenhum dos dois permite somar dano, fundir magias nem transferir efeitos.
 
 ### Ajudar
 
-- Antes da rolagem principal, o ajudante diz como vai ajudar e escolhe uma perícia. Ela pode ser a mesma do líder ou outra que faça sentido na situação.
+- Antes da rolagem, o ajudante diz o que faz para ajudar. Precisa ser algo concreto que caiba na cena: segurar a corda, distrair o guarda, iluminar a fechadura.
 
 - Em combate, ajudar gasta uma **Ação Padrão**. Fora de combate, gasta o mesmo tempo da tarefa.
 
-- O ajudante faz seu teste contra DT 10 em uma tarefa fixa. Em um desafio que escala por nível, use DT 10 + ⌊nível do desafio ÷ 2⌋.
+- Quem faz a tarefa soma **+2** no teste para cada ajudante. O ajudante não faz teste.
 
-- Em sucesso, o teste principal recebe +2. Em sucesso crítico, recebe vantagem em vez de +2.
+- No máximo **dois ajudantes** dão bônus ao mesmo teste, então o máximo é +4.
 
-- Falha não dá bônus. Falha crítica também não dá penalidade automática, mas pode causar uma complicação se a tarefa já era arriscada.
+- Cada ajuda precisa ser diferente. Várias pessoas fazendo a mesma coisa contam como uma ajuda só.
 
-- No máximo **dois ajudantes** dão bônus ao mesmo teste. Dois sucessos comuns chegam a +4.
+- Se a ajuda não faz sentido na cena, como ajudar a convencer alguém que nem está ouvindo você, o Mestre diz que não dá antes da rolagem, e a ação não é gasta.
 
-- Cada ajuda precisa ser diferente e fazer sentido na cena. Várias pessoas fazendo a mesma coisa contam como uma ajuda só.
+- Ajudar não passa proficiência, poder, imunidade ou permissão especial para quem faz a tarefa.
 
-- O líder precisa aceitar a ajuda e só rola depois que os ajudantes resolverem suas tentativas.
-
-- O Mestre pode dispensar o teste do ajudante quando a ajuda é garantida, mas ela continua gastando a ação ou o tempo.
-
-- Ajudar não passa proficiência, poder, imunidade ou permissão especial para o líder.
-
-- Quem tem Pontos de Relação com o líder pode gastar um uso para a Ajuda certa: a ajuda passa sem teste, dá vantagem no lugar do +2 e, em combate, custa a reação no lugar da Ação Padrão.
+- Quem tem Pontos de Relação com quem faz a tarefa pode gastar um uso para a Ajuda certa: ela dá vantagem no lugar do +2 e, em combate, custa a reação no lugar da Ação Padrão.
 
 ### Teste de Grupo
 
@@ -738,23 +732,19 @@ Use quando todos precisam passar pelo mesmo desafio: o grupo inteiro se esconden
 
 - O grupo passa se pelo menos metade dos participantes, arredondada para cima, tiver sucesso.
 
-- Cada sucesso crítico conta como dois sucessos. Cada falha crítica cancela um sucesso antes da contagem.
-
-- Se o grupo falhar, a consequência atinge o grupo todo ou só quem falhou, conforme o perigo. O Mestre avisa qual das duas vale antes das rolagens.
+- Antes das rolagens, o Mestre diz se a falha atinge o grupo todo ou só quem falhou.
 
 **Exemplo:**
 
-Quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conseguir dois sucessos comuns e uma falha crítica, a falha crítica cancela um deles e o grupo falha.
+Quatro personagens fazem Furtividade, então o grupo precisa de dois sucessos. Dois passam e dois falham: o grupo passa sem ser visto. Se só um tivesse passado, o grupo inteiro seria visto.
 
 ### Quando não usar Teste de Grupo
 
-- Se só uma pessoa precisa executar a tarefa, escolha um líder e use Ajudar.
+- Se só uma pessoa precisa executar a tarefa, ela faz o teste e os outros podem Ajudar.
 
-- Se cada falha gera uma consequência individual independente, resolva os testes separadamente.
+- Se cada falha gera uma consequência só para quem falhou, resolva os testes separadamente.
 
 - Se a ação exige um treinamento ou permissão que parte do grupo não tem, quem não cumpre o requisito não pode contar com os sucessos dos outros para passar.
-
-- Não combine Ajudar e Teste de Grupo na mesma resolução, salvo quando uma habilidade disser expressamente que pode.
 
 ### Ações coletivas maiores
 
@@ -806,17 +796,17 @@ Cada ponto que você tem com alguém vale **um uso por sessão** com essa pessoa
 
 - Uso | Quando, e o que faz
 
-- Ajuda certa | Você Ajuda essa pessoa num teste.A ajuda passa sem teste e dá vantagem no lugar do +2. Em combate, custa a sua reação no lugar da Ação Padrão. Continua contando no limite de dois ajudantes.
+- Ajuda certa | Você Ajuda essa pessoa num teste.A ajuda dá vantagem no lugar do +2. Em combate, custa a sua reação no lugar da Ação Padrão. Continua contando no limite de dois ajudantes.
 
 - Segurar a mão | Essa pessoa falha num teste de Sanidade ou está numa crise, e consegue ouvir você.Ela refaz o teste de Sanidade e fica com o melhor resultado, ou testa Vontade na hora para sair da crise, com vantagem. Em combate, custa a sua reação.
 
-- Entrar junto | Essa pessoa lidera um Ataque Combinado de que você participa.Os seus pontos com ela entram na Sintonia do ataque, que dá bônus a todas as contribuições.
+- Entrar junto | Essa pessoa lidera um Ataque Combinado e chama você.Você gasta a reação e ataca junto, na hora. Os seus pontos com ela entram na Sintonia do ataque, que dá bônus a todos os ataques.
 
 - **A Ajuda certa segue as regras de Ações Coletivas**: a ajuda precisa fazer sentido na cena, e o teste continua com no máximo dois ajudantes.
 
 - **Segurar a mão** só pode ser usado uma vez por teste ou por crise, mesmo que mais de uma pessoa queira ajudar.
 
-- **No Ataque Combinado,** a Sintonia é o menor número de pontos que os participantes têm com o líder, e cada participante gasta um uso com ele. A tabela de bônus está no tópico do Ataque Combinado.
+- **No Ataque Combinado,** só entra quem tem pelo menos 1 ponto com o líder. A Sintonia é o menor número de pontos que os aliados têm com ele, e cada aliado gasta um uso. A tabela de bônus está no tópico do Ataque Combinado.
 
 ### Perda de Sanidade
 
@@ -864,7 +854,7 @@ Quando algo acontece com uma pessoa com quem você tem pontos, você testa Sanid
 
 **Exemplo:**
 
-Rafa tem 2 pontos com a Duda. Duda falha num teste de Sanidade ao ver uma criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado com Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, então cada contribuição ganha +2 no ataque. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do próprio nível (10 no nível 1). Se falhar, perde 1d6.
+Rafa tem 2 pontos com a Duda. Duda falha num teste de Sanidade ao ver uma criatura, e Rafa gasta um uso para Segurar a mão: ela refaz o teste e passa. Duas rodadas depois, Duda lidera um Ataque Combinado e chama Rafa e o Guerreiro, que tem só 1 ponto com ela. A Sintonia é 1, então cada ataque ganha +2. No fim da luta, Duda cai Morrendo, e Rafa testa Sanidade contra a DT Rotineira do próprio nível (10 no nível 1). Se falhar, perde 1d6.
 
 ## ataques-combinados
 
@@ -872,95 +862,63 @@ Rafa tem 2 pontos com a Duda. Duda falha num teste de Sanidade ao ver uma criatu
 
 **Status:** Regra oficial
 
-De dois a quatro personagens atacam o mesmo alvo ao mesmo tempo. Quanto mais eles confiam no líder do ataque, maior o bônus. Esse bônus se chama Sintonia e vem dos Pontos de Relação.
+O líder ataca no turno dele e chama até 3 aliados para atacar junto, na hora. Cada aliado gasta a reação e um uso dos Pontos de Relação com o líder, e todos ganham o bônus da Sintonia.
 
-No Ataque Combinado, de 2 a 4 personagens atacam o mesmo alvo juntos, e o dano de todos é resolvido de uma vez. Cada um usa a própria arma ou magia e faz o próprio teste. O bônus do ataque depende de quanto os participantes confiam no líder.
+Use esta regra quando o grupo quer atacar o mesmo alvo ao mesmo tempo. Tudo acontece no turno de quem lidera, e cada um rola o próprio ataque.
 
 **Em resumo**
 
-- Participam de 2 a 4 voluntários, todos contra o mesmo alvo, e cada um gasta a própria Ação Padrão e uma reação na preparação.
+- No seu turno, você ataca com a Ação Padrão e chama de 1 a 3 aliados que alcancem o mesmo alvo. Você é o líder.
 
-- O ataque é resolvido no primeiro turno do líder depois que todos se prepararam.
+- Cada aliado precisa ter pelo menos 1 Ponto de Relação com você. Ele gasta a reação e um uso desses pontos e ataca junto, na hora.
 
-- A **Sintonia** é o menor número de Pontos de Relação que cada participante tem com o líder. O bônus vai de +2 no ataque até vantagem e um dado a mais de dano, e vale para todos os participantes.
+- A **Sintonia** é o menor número de pontos que os aliados têm com você. Ela dá o bônus da tabela a todos os ataques, inclusive o seu.
 
-- Se todas as contribuições errarem, todos os participantes ficam Expostos até o começo do próprio turno.
+- Cada um faz a própria rolagem e causa o próprio dano. Quem errar não causa dano.
 
-- Quem for derrubado antes da resolução perde a contribuição, e se o líder cair outro participante preparado assume.
+### Como fazer
 
-### Requisitos
+- No seu turno, diga que vai liderar um Ataque Combinado e contra quem.
 
-- Participam de 2 a 4 criaturas voluntárias que possam perceber e atingir o mesmo alvo.
+- Chame os aliados. Cada um precisa ter a reação disponível, alcançar o alvo e ter pelo menos 1 ponto com você.
 
-- Cada participante precisa ter uma Ação Padrão e uma reação disponíveis.
+- Cada aliado gasta a reação e **um uso dos pontos que tem com o líder**. Mana, munição e outros custos do ataque são pagos como num ataque comum.
 
-- Somente ataques que causam dano a um único alvo podem entrar. Cura, área, invocação e controle são resolvidos separadamente.
+- Vejam a Sintonia na tabela abaixo.
 
-- O grupo escolhe um líder. Ele decide quando o ataque acontece, e a Sintonia é contada com base nos pontos que os outros têm com ele.
+- Cada um faz a própria rolagem, com o bônus da Sintonia. O dano de cada acerto entra separado no alvo.
 
 ### Sintonia
 
-Veja quantos Pontos de Relação cada participante tem com o líder. O menor desses números é a Sintonia do ataque, e o bônus dela vale para todas as contribuições, inclusive a do líder.
+Veja quantos pontos cada aliado tem com o líder. O menor desses números é a Sintonia do ataque. Se a Rafa tem 3 pontos com você e o Guerreiro tem 1, a Sintonia é 1.
 
 - Sintonia | Degrau | Ataque | Dano de cada acerto
-
-- 0 | Desencontrados | Nenhum | Nenhum
 
 - 1 | Entrosados | +2 | Nenhum
 
 - 2 | Afinados | +2 | +2
 
-- 3 | Uníssono | Vantagem | +1 dadoA Resistência do alvo vale uma vez só, contra a soma.
+- 3 | Uníssono | Vantagem | +1 dado
 
-- **Com Sintonia 1 ou mais,** cada participante gasta um uso dos pontos que tem com o líder. Quem não quiser gastar entra com 0, e a Sintonia do ataque vira 0.
+O dado a mais do Uníssono é do mesmo tipo que você já rola, o da arma ou o da magia. Ele não é multiplicado no crítico, e o +2 de dano dos Afinados também não.
 
-- **O dado a mais do Uníssono** é do mesmo tipo que você já rola: o da arma ou o da magia. Ele entra uma vez só e não é multiplicado no crítico. O +2 de dano dos Afinados funciona do mesmo jeito.
+### Regras do ataque
 
-- **Coreografia** pode ser usada numa contribuição, mas o bônus no teste não soma com o da Sintonia: use o maior.
+- Só entram ataques que causam dano a um único alvo. Cura, área, invocação e controle são feitos separadamente, no turno de cada um.
 
-### Preparação e resolução
+- Cada ataque tem o próprio crítico. O crítico de um participante não multiplica o dano dos demais.
 
-- No próprio turno, cada participante declara a contribuição, reserva a Ação Padrão e gasta a reação. Mana e custos que a ação exige na declaração são pagos nesse momento. Quem já gastou a Ação Padrão ou a reação não pode participar.
+- A Resistência do alvo vale contra cada acerto, como em qualquer ataque.
 
-- O ataque é resolvido no primeiro turno do líder depois que todos se prepararem. A preparação de um participante expira no início do próximo turno dele. Alcance, linha de efeito e alvo precisam continuar válidos.
+- O alvo pode usar a reação dele contra um dos ataques, normalmente.
 
-- Na resolução, cada participante consome munição ou carga usada pelo ataque e faz a própria rolagem, com o bônus da Sintonia. Nenhum custo é pago duas vezes.
+- Coreografia não entra no Ataque Combinado.
 
-- Cada acerto causa o dano normal da contribuição, mais o da Sintonia. Cada erro não causa dano e não devolve ações ou recursos.
-
-- Aplique vulnerabilidade, redução percentual e Resistência separadamente a cada contribuição. Depois, some o dano final dos acertos. No Uníssono, aplique vulnerabilidade e redução percentual em cada contribuição, some, e só então tire a Resistência do alvo, uma vez.
-
-### Críticos, reações e efeitos
-
-- Cada contribuição verifica a própria margem de ameaça e o próprio multiplicador. O crítico de um participante não multiplica o dano dos demais.
-
-- O alvo usa as reações que tiver disponíveis. Cada reação afeta apenas a contribuição que acionou seu gatilho, salvo texto expresso em contrário.
-
-- Efeitos adicionais de acerto são resolvidos por contribuição, mas efeitos iguais não acumulam além do limite da própria condição.
-
-- **Se todas as contribuições errarem,** o Ataque Combinado falha: custos, ações e usos de pontos continuam gastos, e cada participante fica Exposto até o começo do próprio turno.
-
-### Interrupção
-
-- Uma contribuição é perdida se o participante ficar inconsciente, incapaz de agir ou sem um ataque válido antes da resolução.
-
-- Se o líder perder a contribuição, outro participante preparado assume a liderança, e a Sintonia é contada de novo com ele. Se nenhum puder, o ataque é cancelado.
-
-- Quando o ataque é cancelado antes da resolução, ações, reações, usos de pontos e custos pagos na declaração continuam gastos. Munição e cargas ainda não usadas são preservadas.
-
-- Quem tem pontos com um participante que cai durante a preparação testa Sanidade, como em Pontos de Relação.
-
-### Magias e Fluxos
-
-- Cada magia precisa alcançar a própria DT de conjuração e a defesa do alvo normalmente.
-
-- Somar danos não altera tipo, alcance, área, duração ou efeito das magias.
-
-- Ataque Combinado entre personagens não é Fusão de Fluxos (ver Rituais, Selos e Fusão). Ele não cria um novo efeito.
+- Cada magia precisa alcançar a própria DT de conjuração. Atacar junto não altera tipo, alcance, área, duração ou efeito das magias, e Ataque Combinado entre personagens não é Fusão de Fluxos (ver Rituais, Selos e Fusão).
 
 **Exemplo:**
 
-Duda lidera. Rafa tem 3 pontos com ela e o Guerreiro tem 2: a Sintonia é 2, Afinados. Cada um gasta um uso com a Duda, e as três contribuições ganham +2 no ataque e +2 no dano. Se o Guerreiro tivesse 3 pontos com ela, seria Uníssono: vantagem, um dado a mais em cada acerto e a Resistência 5 do chefe tirada uma vez da soma, e não três.
+Duda ataca o chefe no turno dela e chama a Rafa, que tem 3 pontos com ela, e o Guerreiro, que tem 2. A Sintonia é 2, Afinados. Rafa e Guerreiro gastam a reação e um uso cada, e os três atacam na hora, com +2 no ataque e +2 no dano de cada acerto. O chefe tem Resistência 5, que sai de cada acerto.
 
 ## perseguicao-a-pe
 
@@ -968,89 +926,71 @@ Duda lidera. Rafa tem 3 pontos com ela e o Guerreiro tem 2: a Sintonia é 2, Afi
 
 **Status:** Regra oficial
 
-Regras para quando alguém foge a pé e alguém vai atrás. A distância é medida em faixas, e a cada rodada cada lado tenta ganhar terreno.
+Regras para quando alguém foge a pé e alguém vai atrás. A cada rodada, uma pessoa de cada lado rola, e quem tirar mais ganha distância ou encurta.
 
-Use esta regra quando alguém foge a pé e alguém vai atrás. A distância entre os dois é medida em faixas, as mesmas da perseguição de veículos, e a cada rodada cada lado faz uma manobra para ganhar ou perder distância.
+Use esta regra quando alguém foge a pé e alguém vai atrás. A distância entre os dois é um número de 0 a 4, e a cada rodada cada lado tenta mudar esse número a seu favor.
 
 **Em resumo**
 
-- A distância usa as mesmas faixas da perseguição de veículos (ver Perseguições e Combate Veicular), de Contato a Escapou. Quem persegue quer chegar a Contato, e quem foge quer chegar a Escapou.
+- A distância vai de **0, Contato,** a **4, Escapou**. Quem persegue quer chegar a 0, e quem foge quer chegar a 4.
 
-- A cada rodada o Mestre descreve o terreno e um obstáculo, e cada lado escolhe quem puxa a corrida. Os dois puxadores declaram uma manobra e testam. Quem vence move uma faixa a favor, ou duas se vencer por 10 ou mais.
+- A cada rodada, cada lado escolhe uma pessoa para rolar Atletismo, ou outra manobra da lista. Quem tirar mais muda a distância em 1 a favor do seu lado, ou em 2 se vencer por 10 ou mais.
 
-- Quem não puxa ajuda o puxador ou faz uma manobra de apoio. Somando tudo, a faixa anda no máximo 2 a favor de cada lado por rodada.
+- Quem não rola pode **Ajudar** quem rola do seu lado (+2) ou **Atrapalhar** quem rola do outro lado (−2). Não rola dado, e são no máximo 2 pessoas de cada lado.
 
-- A perseguição dura 6 rodadas. A partir da rodada 4, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.
+- A perseguição dura 6 rodadas. Em 0 começa o combate, em 4 quem fugia some, e se as rodadas acabarem antes ninguém consegue o que queria.
 
-- Em Contato, começa o combate. Em Escapou, quem fugia some. Se as rodadas acabarem antes, ninguém consegue o que queria.
+### A distância
 
-### As faixas
+- Distância | Faixa | Como parece
 
-- Faixa | Como parece, e a distância
+- 0 | Contato | Colado no outro. A perseguição acaba e começa a luta.Até 1,5 m. Permite colisão e abordagem.
 
-- Contato | Colado no outro. Dá para agarrar.Até 1,5 m. Permite colisão e abordagem.
+- 1 | Curta | Logo atrás, a poucos passos.Até 5 m. Use a faixa Curto das regras de distância.
 
-- Curta | Logo atrás, a poucos passos.Até 5 m. Use a faixa Curto das regras de distância.
+- 2 | Média | Ainda dá para ver o outro, mas ele some de vista nas curvas.Até 15 m. Use a faixa Médio das regras de distância.
 
-- Média | Ainda dá para ver o outro, mas ele some de vista nas curvas.Até 15 m. Use a faixa Médio das regras de distância.
+- 3 | Longa | O outro está longe e quase sumindo no meio das pessoas.Até 25 m. Use a faixa Longo das regras de distância.
 
-- Longa | O outro está longe e quase sumindo no meio das pessoas.Até 25 m. Use a faixa Longo das regras de distância.
+- 4 | Escapou | Quem fugia sumiu de vista.O alvo saiu da perseguição e não pode ser alcançado nesta cena.
 
-- Escapou | Quem fugia sumiu de vista.O alvo saiu da perseguição e não pode ser alcançado nesta cena.
+- **A perseguição começa na distância em que os dois estavam.** Quem foge no meio de uma conversa começa em 1, e quem foge de alguém visto de longe começa em 3.
 
-- **A perseguição começa na distância em que os dois estavam** quando a corrida começou. Quem foge no meio de uma conversa começa em Contato; quem foge de alguém visto de longe começa em Longa.
+- **Cada lado anda junto,** com uma distância só. Quem quiser correr na frente sozinho vira um lado separado, com a própria distância.
 
-- **Cada lado tem uma faixa só.** O grupo anda na velocidade de quem está mais atrás. Quem quiser correr na frente sozinho passa a ter uma faixa própria, separada do grupo.
-
-- **Cada lado tem um puxador por rodada,** que vai na frente e decide o caminho. Só a manobra dele disputa a faixa. O puxador pode mudar de uma rodada para outra.
+- As faixas são as mesmas da perseguição de veículos (ver Perseguições e Combate Veicular).
 
 ### A rodada
 
-- O Mestre descreve o terreno da rodada e rola 1d6 na tabela de obstáculos, ou escolhe um.
+- O Mestre descreve o lugar e o obstáculo da rodada: rola 1d6 na tabela de obstáculos ou escolhe um.
 
-- Cada lado escolhe o puxador. O puxador declara uma manobra, e os outros declaram se vão Ajudar o puxador ou fazer uma manobra de apoio. Quem foge declara primeiro.
+- Cada lado escolhe quem vai rolar e com qual manobra. Quem foge escolhe primeiro.
 
-- Resolvam primeiro as ajudas e o apoio, depois os puxadores. Quem vence move uma faixa a favor, e vitória por 10 ou mais move duas. Somando o apoio, cada lado ganha no máximo 2 faixas na rodada.
+- Os outros dizem como vão Ajudar quem rola do seu lado (+2) ou Atrapalhar quem rola do outro lado (−2), como em Ações Coletivas. No máximo 2 pessoas de cada lado.
 
-- Teste oposto é sempre contra o Atletismo do puxador do outro lado, seja qual for a manobra dele. Quando os dois puxadores passam em testes contra DT, cada um move a faixa a seu favor, e os passos se anulam.
+- Os dois rolam. Quem tirar mais muda a distância em 1 a seu favor, ou em 2 se vencer por 10 ou mais. Empate não muda nada.
 
-- Quem não passou pelo obstáculo na própria manobra testa para passar por ele (veja Obstáculos).
-
-- Marque uma rodada no relógio da perseguição.
-
-A perseguição dura 6 rodadas. Se ninguém chegou a Contato nem a Escapou quando elas acabarem, quem fugia sai de vista, mas quem perseguia ainda sabe para que lado ele foi e pode continuar procurando em outra cena.
+- Marque uma rodada. Depois da rodada 6, a perseguição acaba.
 
 ### Manobras
 
-Cada manobra diz o que o personagem faz e, embaixo, o teste e o resultado. Diga rapidamente o que você faz antes de rolar.
+A manobra é o que faz quem rola. Diga rapidamente o que o personagem faz antes de rolar.
 
 - Manobra | O que é, e como se resolve
 
-- Correr solto | Correr o mais rápido que conseguir, sem truque.Teste: Atletismo oposto. Sucesso: Quem vence move uma faixa a favor. Vitória por 10 ou mais move duas. Falha: A faixa não muda, e o outro lado escolhe a manobra da rodada seguinte antes de você.
+- Correr | Correr o mais rápido que conseguir.Teste: Atletismo. O resultado normal: quem tirar mais muda a distância em 1, ou em 2 vencendo por 10 ou mais.
 
-- Cortar caminho | Pegar um beco, pular uma cerca ou passar por dentro de um prédio para sair na frente.Teste: Investigação na cidade, Sobrevivência no ermo. Sucesso: Move uma faixa a favor e ignora o obstáculo desta rodada. Com vantagem, se o personagem conhece o lugar. Falha: O atalho não leva a lugar nenhum, e a faixa move uma contra você.
+- Cortar caminho | Pegar um beco, pular uma cerca ou passar por dentro de um prédio.Teste: Investigação na cidade, Sobrevivência no ermo, com vantagem se você conhece o lugar. O resultado normal, com a perícia do atalho no lugar do Atletismo.
 
-- Salto arriscado | Pular de um telhado para outro, por cima de uma carroça ou por um vão.Teste: Acrobacia contra a DT Difícil. Sucesso: Move duas faixas a favor de uma vez. Falha: Você cai: fica Caído, perde a rodada e a faixa move uma contra você.
+- Salto arriscado | Pular de um telhado para outro, por cima de uma carroça ou por um vão.Teste: Acrobacia. Se vencer, a distância muda 2 a seu favor. Se perder, você cai, fica Caído, e a distância muda 2 contra você.
 
-- Derrubar um obstáculo | Derrubar barris, uma barraca ou qualquer coisa no caminho de quem vem atrás.Teste: Atletismo ou Luta contra a DT Padrão. Sucesso: Quem vem atrás testa Reflexos na DT Padrão ou move uma faixa contra si. Falha: Nada cai, e você perde a rodada.
+- Sumir de vistaSó na distância 3 | Se misturar na multidão, entrar num lugar cheio ou se esconder.Teste: Furtividade contra a Percepção de quem rola do outro lado. Só para quem foge. Se vencer, a distância vai direto a 4 e quem fugia escapou. Se perder, a distância muda 1 contra você.
 
-- Acertar de longeSó em Contato, Curta, Média | Parar um instante para atirar, arremessar algo ou lançar uma magia.Teste: Pontaria, magia ou o que alcançar. Sucesso: Resolve normalmente. Condição que tire o movimento move uma faixa a favor de quem atirou. Falha: A faixa não muda. Mirar correndo custa a rodada de qualquer jeito.
+- **Atirar:** quem não rola pode, no lugar de Ajudar ou Atrapalhar, atacar alguém do outro lado que esteja ao alcance, normalmente. Se o ataque deixar o alvo Caído, Agarrado, Imobilizado ou sem movimento, a distância muda 1 a favor do seu lado.
 
-- Sumir de vistaSó em Longa | Se misturar na multidão, entrar num lugar cheio ou trocar de roupa para não ser reconhecido.Teste: Furtividade oposta à Percepção. Sucesso: Encerra a cena: o fugitivo Escapou. Falha: Alguém viu onde você se escondeu, e quem persegue ganha uma faixa.
+- **Magia, item e habilidade de classe** podem ser a manobra de quem rola, com o teste que já usam.
 
-- Atravessar gente no caminho | Gritar "pega ladrão", mostrar um distintivo ou pedir passagem para as pessoas abrirem caminho.Teste: Diplomacia ou Intimidação contra a DT Padrão. Sucesso: A rua atrapalha o outro lado, e ele sofre desvantagem na manobra seguinte. Falha: As pessoas atrapalham você, e a faixa move uma contra você.
-
-- AgarrarSó em Contato | Segurar quem você alcançou e derrubar no chão.Teste: Atletismo oposto, apenas em Contato. Sucesso: Aplica Agarrado e encerra a perseguição. Falha: Você não consegue segurar e passa direto: a faixa move uma contra você.
-
-- **Uma manobra por personagem, por rodada.** Ajudar o puxador segue as regras de Ações Coletivas (no máximo dois ajudantes) e conta como a sua manobra.
-
-- **Manobras de apoio** são para quem não puxa: Derrubar um obstáculo, Atravessar gente no caminho e Acertar de longe. Elas atrapalham o outro lado sem disputar a faixa, e o puxador também pode escolher uma delas como a manobra dele. Cortar caminho, Salto arriscado, Correr solto, Sumir de vista e Agarrar são só do puxador.
-
-- **A falha no apoio vale para o grupo todo.** Quando uma manobra de apoio diz que a faixa move contra você, ela move contra o seu lado inteiro, porque a faixa é uma só.
-
-- **Magia, item e habilidade de classe entram como manobra,** com o teste que já usam. Um efeito que tire o movimento do outro lado move uma faixa a seu favor.
-
-- **Cansaço:** a partir da rodada 4, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.
+- **Cansaço:** se a perseguição passar da rodada 4, quem correu ganha 1 de Cansaço no fim da cena, uma vez só.
 
 ### Obstáculos
 
@@ -1068,15 +1008,19 @@ Cada manobra diz o que o personagem faz e, embaixo, o teste e o resultado. Diga 
 
 - 6 | Um guarda no fim da rua, querendo saber o que está acontecendo. | Um animal grande e irritado no caminho.
 
-Quem não resolveu o obstáculo na própria manobra testa Acrobacia, Atletismo ou Reflexos contra a DT Padrão. A falha move uma faixa contra ele.
+O obstáculo dá cor à rodada e sugere a manobra: o vão entre telhados pede um salto, a feira cheia pede cortar caminho ou sumir. Ninguém rola só para passar por ele.
 
 ### Como a cena termina
 
-- **Contato:** a perseguição acaba e o combate começa ali mesmo, no terreno da última rodada. Quem foi alcançado fica Exposto até o começo do próximo turno dele.
+- **Distância 0, Contato:** a perseguição acaba e o combate começa ali mesmo, no lugar da última rodada.
 
-- **Escapou:** quem fugia sumiu. Para achar essa pessoa de novo, o grupo vai precisar investigar ou conseguir uma pista.
+- **Distância 4, Escapou:** quem fugia sumiu. Para achar essa pessoa de novo, o grupo vai precisar investigar ou conseguir uma pista.
 
 - **As rodadas acabaram:** ninguém conseguiu o que queria, mas os dois lados descobrem algo um do outro, como o rosto ou para que lado ele foi.
+
+**Exemplo:**
+
+Um ladrão foge da Caçadora pela feira, começando na distância 2. Na primeira rodada ela rola Atletismo e o Guerreiro Ajuda (+2), abrindo caminho entre as barracas. O ladrão tenta Cortar caminho por um beco e perde por 3: distância 1. Na segunda rodada, o vão entre dois telhados aparece, o ladrão arrisca o Salto e perde de novo. Ele cai, fica Caído, e a distância vai a 0: começa a luta.
 
 ## conflito-social
 
@@ -1084,27 +1028,29 @@ Quem não resolveu o obstáculo na própria manobra testa Acrobacia, Atletismo o
 
 **Status:** Regra oficial
 
-Interrogatório, negociação e audiência resolvidos em rodadas: bons argumentos baixam a Resistência da outra pessoa, e erros enchem a Paciência dela.
+Interrogatório, negociação e audiência resolvidos em rodadas: cada sucesso baixa a Resistência da outra pessoa, e 3 falhas encerram a conversa.
 
 Um pedido simples se resolve com um teste só. Esta regra é para conversas difíceis, em que a outra pessoa tem motivo para dizer não: um interrogatório, uma negociação dura ou uma audiência.
 
 **Em resumo**
 
-- A conversa difícil é resolvida em rodadas, com duas contagens: a **Resistência** da pessoa desce a cada argumento que funciona, e a **Paciência** dela sobe a cada erro.
+- A pessoa tem uma **Resistência** de 3, 5 ou 8. Quando ela chega a 0, a pessoa cede.
 
-- Cada personagem faz uma abordagem por rodada: diga o que o personagem fala e só depois role. A DT é a Padrão do nível do grupo, ou a Difícil quando a pessoa tem posição a defender.
+- Cada personagem faz uma abordagem por rodada: diz o que fala e rola a perícia. **Sucesso tira 1 de Resistência**, ou 2 com algo forte: uma prova, um segredo dela, uma ameaça verdadeira ou um nome que ela respeita.
 
-- Resistência a 0 faz a pessoa ceder, sempre dentro do **Limite**, que é o que ela não faz de jeito nenhum. Paciência cheia encerra a conversa pior do que ela começou.
+- **Cada falha marca 1 de Paciência.** Na 3ª falha, a pessoa encerra a conversa.
 
-- A Paciência tem 4 partes. Num interrogatório, cada ponto de Resistência que cai entrega uma informação na hora.
+- Oferecer algo de valor tira 1 de Resistência, e ceder algo que o grupo queria tira 2, sem teste.
 
-### As duas contagens
+- A pessoa nunca passa do próprio **Limite**, que é o que ela não faz de jeito nenhum.
 
-- **Resistência** é o quanto falta para a pessoa ceder. Ela desce com bons argumentos, provas, pressão e ofertas.
+### As contagens
 
-- **Paciência** é o quanto falta para ela encerrar a conversa. São 4 partes, que enchem com erros, ameaças vazias, repetição e insistência num assunto que a incomoda.
+- **Resistência** é o quanto falta para a pessoa ceder. Escolha pela tabela abaixo.
 
-- **Limite** é o que ela não faz de jeito nenhum, como trair a família ou confessar um crime que a levaria à prisão. Mesmo com a Resistência a 0, ela não passa do Limite.
+- **Paciência** são 3 marcas, iguais para todo mundo. Cada falha do grupo marca uma.
+
+- **Limite** é o que ela não faz de jeito nenhum, como trair a família ou confessar um crime que a levaria à prisão. Mesmo com a Resistência a 0, ela não passa do Limite. Insistir nele marca 1 de Paciência.
 
 - Resistência | Quando usar
 
@@ -1120,9 +1066,9 @@ Um pedido simples se resolve com um teste só. Esta regra é para conversas dif�
 
 - A DT é a Padrão do nível do grupo. Use a Difícil quando a pessoa tem posição pública a defender ou já foi enganada antes.
 
-- Sucesso tira Resistência. Falha custa a rodada, e as abordagens agressivas ainda enchem a Paciência.
+- Sucesso tira 1 de Resistência, ou 2 com algo forte. Falha marca 1 de Paciência.
 
-- Repetir a mesma abordagem sem trazer nada novo enche 1 de Paciência, mesmo quando o teste passa.
+- Repetir o mesmo argumento sem trazer nada novo conta como falha.
 
 - A outra pessoa responde: faz perguntas, pede garantias ou faz uma contraproposta. Pela resposta, o grupo vai descobrindo o que ela quer.
 
@@ -1130,25 +1076,25 @@ O Prestígio com a facção da pessoa ajusta a rolagem de toda abordagem em no m
 
 ### Abordagens
 
-Cada abordagem diz o que o personagem faz e, embaixo, o teste e o resultado.
+Escolha a que combina com o que o personagem diz. Todas seguem a mesma regra: sucesso tira Resistência, falha marca Paciência.
 
 - Abordagem | O que é, e como se resolve
 
-- Mostrar o interesse dela | Mostrar o que ela ganha ou perde com a decisão.Teste: Diplomacia. Sucesso: Tira 1 de Resistência. Tira 2 se o argumento usa algo que o grupo descobriu sobre ela. Risco: Falha só custa a rodada.
+- Convencer | Mostrar o que ela ganha ou perde com a decisão.Teste: Diplomacia. Sucesso tira 1 de Resistência. Falha marca 1 de Paciência. Tira 2 se o argumento usa algo que o grupo descobriu sobre ela.
 
-- Pressionar | Ameaçar ou intimidar a pessoa.Teste: Intimidação. Sucesso: Tira 1 de Resistência, e 2 quando a ameaça é verdadeira e a pessoa sabe disso. Risco: Falha enche 1 de Paciência. Ameaça vazia enche 1 mesmo em sucesso.
+- Pressionar | Ameaçar ou intimidar a pessoa.Teste: Intimidação. Sucesso tira 1 de Resistência. Falha marca 1 de Paciência. Tira 2 quando a ameaça é verdadeira e a pessoa sabe disso.
 
-- Mentir com utilidade | Contar uma mentira que ajude a convencer.Teste: Enganação contra Intuição. Sucesso: Tira 1 de Resistência agora. Risco: Mentira descoberta depois devolve toda a Resistência que ela tirou.
+- Enganar | Contar uma mentira que ajude a convencer.Teste: Enganação. Sucesso tira 1 de Resistência. Falha marca 1 de Paciência. Se a mentira for descoberta depois, a pessoa volta atrás no que cedeu por causa dela.
 
-- Apresentar prova | Mostrar um documento, objeto ou registro que prove o que vocês dizem.Teste: Investigação, Conhecimento ou Tecnologia. Sucesso: Tira 2 de Resistência. Vale uma vez por prova. Risco: Prova fraca enche 1 de Paciência.
+- Provar | Mostrar um documento, objeto ou registro que prove o que vocês dizem.Teste: Investigação, Conhecimento ou Tecnologia. Sucesso tira 1 de Resistência. Falha marca 1 de Paciência. Tira 2. Cada prova vale uma vez.
 
-- Ler a pessoa | Prestar atenção nas reações da pessoa para entender o que ela quer.Teste: Intuição. Sucesso: Não tira Resistência. Em troca, entrega o que ela quer de verdade ou revela o Limite dela. Risco: Na falha, o Mestre dá uma leitura errada sem avisar que ela está errada.
+- Usar o nome | Usar o seu título, família, cargo ou fama para pesar na conversa.Teste: Nobreza ou Atuação. Sucesso tira 1 de Resistência. Falha marca 1 de Paciência. Tira 2 quando ela deve obediência ou respeito a esse nome: serve à sua casa, jurou à sua ordem ou depende de quem você representa.
 
-- Puxar posição ou nome | Usar o seu título, família, cargo ou fama para pesar na conversa.Teste: Nobreza ou Atuação. Sucesso: Tira 1 de Resistência, e 2 quando ela deve obediência ou respeito a esse nome: serve à sua casa, jurou à sua ordem ou depende de quem você representa. Risco: Contra quem odeia o seu nome, enche 1 de Paciência.
+- Oferecer algo | Oferecer dinheiro, um favor ou algo de valor em troca.Teste: nenhum. Tira 1 de Resistência, se a oferta custa de verdade ao grupo: dinheiro, favor, segredo, Prestígio. Oferta pequena demais marca 1 de Paciência.
 
-- Oferecer algo concreto | Oferecer dinheiro, um favor ou algo de valor em troca.Teste: nenhum. Sucesso: Tira 1 de Resistência por oferta que custe de verdade ao grupo: dinheiro, favor, segredo, Prestígio. Risco: Oferta pequena demais enche 1 de Paciência, e essa oferta não pode ser feita de novo.
+- Ceder alguma coisa | Abrir mão de algo que o grupo queria para fechar o acordo.Teste: nenhum. Tira 2 de Resistência. A outra parte vai cobrar o que foi prometido.
 
-- Ceder alguma coisa | Abrir mão de algo que o grupo queria para fechar o acordo.Teste: nenhum. Sucesso: Tira 2 de Resistência quando o grupo abre mão de algo que queria nesta negociação. Risco: A outra parte vai cobrar o que foi prometido.
+**Ler a pessoa.** No lugar de uma abordagem, um personagem pode prestar atenção nas reações dela e rolar Intuição. Sucesso: o Mestre diz o que ela quer de verdade ou qual é o Limite dela. Falha não marca Paciência, só gasta a vez.
 
 ### Como termina
 
@@ -1159,6 +1105,10 @@ Cada abordagem diz o que o personagem faz e, embaixo, o teste e o resultado.
 - **Nenhuma das duas chegou ao fim:** a conversa fica em aberto. Anotem as duas contagens: quando o assunto voltar, a conversa continua de onde parou.
 
 - **Num interrogatório,** cada ponto de Resistência que cai entrega uma informação na hora, e o grupo pode parar quando já tiver o que precisa.
+
+**Exemplo:**
+
+O grupo quer que o capitão abra o portão (Resistência 5). A Pop Star Convence e passa: 4. O Guerreiro Pressiona com uma ameaça vazia e falha: 1 de Paciência. A Detetive mostra a ordem assinada pelo governador, Prova e passa: tira 2, e a Resistência vai a 2. Na rodada seguinte, o grupo oferece 200 Lunaris pelo silêncio dele: 1. Mais um sucesso, e o portão abre.
 
 Essas rolagens não controlam a mente de ninguém. A pessoa continua decidindo por conta própria, e por isso existe o Limite.
 
@@ -1362,11 +1312,11 @@ Use esta regra quando o grupo precisa entrar escondido num lugar vigiado, como u
 
 - O lugar tem **Etapas** até o objetivo (2 num lugar pequeno, 3 num lugar médio, 4 num lugar grande) e mais 1 de saída.
 
-- O lugar tem um **Alerta** de 4, 6 ou 8 partes, conforme a vigilância. Com metade pintada os guardas desconfiam, e cheio vira alarme.
+- O lugar aguenta 3, 4 ou 5 falhas, conforme a vigilância: é o **Alerta**. Toda falha marca 1, e na última marca toca o alarme.
 
-- A cada rodada o grupo escolhe uma abordagem para a etapa e testa. Sucesso avança; falha sobe o Alerta.
+- A cada rodada o grupo escolhe uma abordagem para a etapa e testa. Sucesso avança; falha marca 1 de Alerta.
 
-- Na falha, o grupo pode forçar a passagem: avança mesmo assim, e o Alerta sobe 1 a mais.
+- Na falha, o grupo pode forçar a passagem: avança mesmo assim e marca 1 a mais.
 
 - Saiu com o objetivo, a infiltração deu certo. Alarme vira fuga, luta ou rendição.
 
@@ -1374,17 +1324,17 @@ Use esta regra quando o grupo precisa entrar escondido num lugar vigiado, como u
 
 Antes da primeira rodada, o Mestre diz o tamanho do lugar e a vigilância dele, e o grupo pode tentar descobrir mais com uma noite de observação, um mapa comprado ou alguém de dentro.
 
-- Vigilância | Alerta | Onde
+- Vigilância | O lugar aguenta | Onde
 
-- Descuidada | 8 partes | Armazém de porto, casa de campo, festa barulhenta, acampamento de bandidos.
+- Descuidada | 5 falhas | Armazém de porto, casa de campo, festa barulhenta, acampamento de bandidos.
 
-- Vigiada | 6 partes | Mansão com guardas, quartel em tempo de paz, templo à noite, sede de guilda.
+- Vigiada | 4 falhas | Mansão com guardas, quartel em tempo de paz, templo à noite, sede de guilda.
 
-- Fechada | 4 partes | Cofre do Banco Lunar, palácio em alerta, prisão, laboratório da A.X.I.S.
+- Fechada | 3 falhas | Cofre do Banco Lunar, palácio em alerta, prisão, laboratório da A.X.I.S.
 
 - **Etapas:** 2 num lugar pequeno, 3 num lugar médio, 4 num lugar grande. A saída é sempre mais 1, depois do objetivo.
 
-- **DT:** a Padrão do nível do lugar. A etapa do objetivo, e todas num lugar Fechado, usam a Difícil.
+- **DT:** a Padrão do nível do lugar. A etapa do objetivo usa a Difícil.
 
 - **Preparação ajuda:** uma planta do lugar, um uniforme roubado, um guarda subornado. Cada preparo bom dá vantagem numa etapa ou apaga 1 de Alerta antes de começar.
 
@@ -1398,7 +1348,7 @@ Antes da primeira rodada, o Mestre diz o tamanho do lugar e a vigilância dele, 
 
 - Sucesso avança uma etapa. Sucesso por 10 ou mais avança e o grupo ganha algo a mais, como um atalho, uma chave ou uma informação.
 
-- Falha sobe o Alerta em 1, e a falha crítica em 2. O grupo escolhe se fica onde está ou força a passagem.
+- Falha marca 1 de Alerta. O grupo escolhe se fica onde está, para tentar de novo, ou força a passagem e marca mais 1.
 
 ### Abordagens
 
@@ -1406,39 +1356,35 @@ Diga como você faz antes de rolar. Magia, item e habilidade de classe também c
 
 - Abordagem | O que é, e como se resolve
 
-- Passar escondido | Passar sem ser visto, aproveitando as sombras e a hora em que ninguém está olhando.Teste: Teste de Grupo de Furtividade. Sucesso: O grupo avança uma etapa. Falha: O Alerta sobe 1.
+- Passar escondido | Passar sem ser visto, aproveitando as sombras e a hora em que ninguém está olhando.Teste: Teste de Grupo de Furtividade. Sucesso: O grupo avança uma etapa. Falha: Marca 1 de Alerta.
 
-- Ser quem não é | Se passar por alguém que pode estar ali, como um criado ou um guarda.Teste: Enganação ou Atuação; o Kit de Disfarce dá vantagem. Sucesso: Avança uma etapa, e o disfarce vale nas próximas onde aquele papel é esperado. Falha: O Alerta sobe 1 e o disfarce fica queimado daqui para frente.
+- Ser quem não é | Se passar por alguém que pode estar ali, como um criado ou um guarda.Teste: Enganação ou Atuação; o Kit de Disfarce dá vantagem. Sucesso: Avança uma etapa, e o disfarce vale nas próximas onde aquele papel é esperado. Falha: Marca 1 de Alerta, e o disfarce fica queimado daqui para frente.
 
-- Abrir caminho | Abrir uma porta, tranca ou selo para passar por um caminho sem vigia.Teste: Ladinagem (Kit de Arrombamento dá vantagem), Misticismo para selo, Tecnologia para tranca A.X.I.S. Sucesso: Avança uma etapa por uma porta que ninguém vigia. Falha: O Alerta sobe 1. Falhar por 5 ou mais dispara o que protegia a porta.
+- Abrir caminho | Abrir uma porta, tranca ou selo para passar por um caminho sem vigia.Teste: Ladinagem (Kit de Arrombamento dá vantagem), Misticismo para selo, Tecnologia para tranca A.X.I.S. Sucesso: Avança uma etapa por uma porta que ninguém vigia. Falha: Marca 1 de Alerta, e a armadilha da porta, se houver, dispara.
 
-- Calar alguém | Derrubar ou imobilizar alguém sem fazer barulho.Teste: Luta ou Atletismo contra 10 + Reflexos do alvo, com vantagem se ele não viu você. Sucesso: Avança uma etapa e tira aquela pessoa do caminho. Falha: Vira combate ali mesmo, e o Alerta sobe 2.
+- Calar alguém | Derrubar ou imobilizar alguém sem fazer barulho.Teste: Luta ou Atletismo contra 10 + Reflexos do alvo, com vantagem se ele não viu você. Sucesso: Avança uma etapa e tira aquela pessoa do caminho. Falha: Marca 1 de Alerta, e vira combate ali mesmo.
 
-- Distrair | Chamar a atenção dos guardas para outro lugar.Teste: Atuação, Enganação ou o teste de uma magia. Sucesso: Não avança, e a próxima abordagem desta etapa ganha vantagem. Falha: O Alerta sobe 1, porque alguém foi ver o que era e voltou desconfiado.
-
-- Estudar o caminho | Observar a ronda, o caminho ou a troca de turno antes de agir.Teste: Investigação ou Percepção. Sucesso: Não avança. Revela o que há na próxima etapa (guarda, armadilha, rota) e dá vantagem na abordagem seguinte. Uma vez por etapa. Falha: Só custa o tempo.
+- Preparar o terreno | Distrair os guardas, ou observar a ronda e a troca de turno antes de agir.Teste: Atuação ou Enganação para distrair, Investigação ou Percepção para observar. Sucesso: Não avança. A próxima abordagem desta etapa ganha vantagem, e o Mestre conta o que há pela frente (guarda, armadilha, rota). Uma vez por etapa. Falha: Marca 1 de Alerta.
 
 - **Em Passar escondido, todo mundo testa:** o grupo passa se pelo menos metade passar. Armadura com penalidade atrapalha aqui.
 
 - **O grupo pode se separar.** Cada parte vira uma infiltração com as suas próprias Etapas, e o Alerta continua um só, porque o lugar é um só.
 
-- **Armadilhas no caminho** seguem Perigos do Ambiente. Disparar uma sobe o Alerta em 1.
+- **Armadilhas no caminho** seguem Perigos do Ambiente. Disparar uma marca 1 de Alerta.
 
 ### O Alerta
 
-- **Calmo:** menos da metade pintada. O lugar segue a rotina.
+- **Antes da última marca,** o lugar segue a rotina, e o Mestre mostra cada marca na ficção: uma vela acesa, um guarda que para e escuta.
 
-- **Desconfiança:** metade ou mais. Os guardas ficam atentos, e todas as etapas passam a usar a DT Difícil.
+- **Na última marca, toca o alarme.** O lugar inteiro sabe. O grupo escolhe entre fugir (uma Perseguição a Pé que começa na distância 1), lutar (com reforço chegando a cada rodada) ou se render.
 
-- **Alarme:** cheio. O lugar inteiro sabe. O grupo escolhe entre fugir (uma Perseguição a Pé que começa em Curta), lutar (com reforço chegando a cada rodada) ou se render.
+- **Dá para apagar uma marca** com uma ação concreta, como esconder alguém desacordado, devolver uma chave ou convencer um guarda de que não foi nada. Cada ação dessas leva uma rodada inteira e apaga 1.
 
-- **O Alerta só desce** com uma ação concreta, como esconder alguém desacordado, devolver uma chave ou convencer um guarda de que não foi nada. Cada ação dessas leva uma rodada inteira e apaga 1.
-
-- **Rastro na saída:** se o objetivo deixou marca (cofre aberto, refém levado, corpo no chão), o Alerta sobe 1 quando a saída começa.
+- **Rastro na saída:** se o objetivo deixou marca (cofre aberto, refém levado, corpo no chão), marque 1 de Alerta quando a saída começa.
 
 **Exemplo:**
 
-O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e Alerta de 6. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a Pop Star distrai o mordomo (a etapa não avança, e a próxima abordagem ganha vantagem), e na rodada seguinte a Ladinagem com vantagem abre o cofre. Na saída, o cofre vazio deixa rastro (Alerta 3, Desconfiança) e o muro do jardim agora pede a DT Difícil.
+O grupo invade uma mansão Vigiada de tamanho Médio: 3 etapas, mais a saída, e o lugar aguenta 4 falhas. No jardim, passam escondidos. No corredor, a porta do escritório resiste e a Ladinagem falha: Alerta 1. Eles forçam a passagem chutando a porta, e o Alerta vai a 2. No escritório, a etapa do objetivo, a Pop Star prepara o terreno distraindo o mordomo (a etapa não avança, e a próxima abordagem ganha vantagem), e na rodada seguinte a Ladinagem com vantagem abre o cofre. Na saída, o cofre vazio deixa rastro: Alerta 3. Mais uma falha, e o alarme toca.
 
 ## investigacao
 
@@ -1566,7 +1512,7 @@ Use esta regra quando exércitos inteiros lutam. Ninguém rola ataque por soldad
 
 - A cada fase, os comandantes escolhem uma ordem em segredo e fazem um teste oposto de **Guerra**. Quem vence tira Força do outro.
 
-- Os personagens escolhem onde vão lutar na fase e fazem um **feito**. No sucesso, ajudam o próprio lado; na falha, levam mais dano.
+- Os personagens escolhem onde vão lutar na fase e fazem um **feito**. No fim da fase, quem fez um feito perde 10% da Vida máxima se acertou e 25% se falhou.
 
 - Na metade da Força e num quarto dela, o lado testa moral, como no Combate. Quem desiste foge do campo.
 
@@ -1594,7 +1540,7 @@ Cada vantagem clara de um lado dá +2 no choque dele, até +6:
 
 - Uma criatura enorme ou uma máquina de guerra que o outro lado não tem como enfrentar.
 
-- **O nível da batalha** é o das tropas inimigas: ele escolhe a DT dos feitos e o dano que os personagens levam.
+- **O nível da batalha** é o das tropas inimigas: os feitos usam a DT Padrão ou a Difícil desse nível, da tabela de DT em Perícias.
 
 - **Tropa sem comandante** faz o choque com o d20 puro, sem bônus nenhum.
 
@@ -1612,7 +1558,7 @@ Cada vantagem clara de um lado dá +2 no choque dele, até +6:
 
 - **Moral.** O lado que chegou à metade da Força, ou a um quarto dela, testa moral.
 
-- **Dano.** Cada personagem que fez um feito sofre o dano da fase pela tabela de baixo.
+- **Vida.** Cada personagem que fez um feito perde Vida, como em Dano na batalha, logo abaixo.
 
 Uma fase é mais ou menos meia hora de luta. A maioria das batalhas termina entre a terceira e a sexta.
 
@@ -1642,7 +1588,7 @@ As três primeiras se vencem em roda: Avançar vence Flanquear, Flanquear vence 
 
 - Artilharia e magia de área | Pontaria, Tecnologia ou o teste da magia contra a DT Difícil.O inimigo perde 1 parte de Força.
 
-- Ao lado do comandante | Ajudar, contra DT 10 + metade do nível da batalha, como em Ações Coletivas.+2 no choque do seu lado, ou vantagem se o sucesso for crítico. No máximo dois personagens, como em Ajudar.
+- Ao lado do comandante | Ajudar, como em Ações Coletivas: diga como você apoia o comando, sem rolar.+2 no choque do seu lado. No máximo dois personagens, como em Ajudar.
 
 - **Somados, os feitos tiram no máximo 2 partes do inimigo por fase.**
 
@@ -1654,31 +1600,13 @@ As três primeiras se vencem em roda: Avançar vence Flanquear, Flanquear vence 
 
 ### Dano na batalha
 
-No fim de cada fase, quem fez um feito sofre dano do tipo que fizer sentido (corte, perfuração, impacto, o Fogo da magia inimiga), pela linha do nível da batalha.
+No fim de cada fase, quem fez um feito perde Vida, em qualquer nível:
 
-- Nível | DT Padrão / Difícil | Feito com sucesso | Feito com falha
+- **Feito com sucesso:** 10% da sua Vida máxima.
 
-- 1 | 15 / 20 | 1d4 | 1d6
+- **Feito com falha:** 25% da sua Vida máxima.
 
-- 5 | 17 / 22 | 1d4 | 2d6
-
-- 10 | 20 / 25 | 1d6 | 3d6
-
-- 15 | 24 / 29 | 2d6 | 5d6
-
-- 20 | 30 / 35 | 2d6 | 6d6
-
-- 30 | 37 / 42 | 4d6 | 10d6
-
-- 40 | 43 / 48 | 5d6 | 7d12
-
-- 50 | 48 / 53 | 6d6 | 9d12
-
-- 60 | 56 / 61 | 7d6 | 10d12
-
-- 80 | 66 / 71 | 9d6 | 12d12
-
-- 100 | 79 / 84 | 6d12 | 15d12
+- Arredonde para cima. Resistência não reduz essa perda, porque ela junta todos os golpes da fase numa conta só.
 
 ### Como termina
 
@@ -1692,7 +1620,7 @@ No fim de cada fase, quem fez um feito sofre dano do tipo que fizer sentido (cor
 
 **Exemplo:**
 
-Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro leva o dano de feito com sucesso, na linha do nível da batalha.
+Uma Companhia de milícia (Força 6) defende a ponte contra uma Legião de saqueadores (Força 8). A milícia tem Posição (+2), os saqueadores têm Mais gente (+2). Na primeira fase, a milícia escolhe Segurar a linha e os saqueadores, Avançar: +2 para a milícia. O Guerreiro do grupo vai para a linha de frente e acerta o feito, e os saqueadores perdem 1 parte. No choque, a milícia vence por 4 e tira mais 1: Legião em 6. O Guerreiro tem 60 de Vida máxima e acertou o feito, então perde 6 de Vida no fim da fase.
 
 ## viagem
 
@@ -1708,7 +1636,7 @@ Esta regra é para quando o grupo viaja por conta própria. Cada dia de viagem v
 
 - A viagem paga (trem, aeronave) está em Transporte e Viagens. Aqui está a jornada por conta própria.
 
-- Um dia de estrada rende 30 km a pé, 50 km de montaria e 25 km de carroça. O terreno e o ritmo (Cauteloso, Normal ou Forçado) mudam esse número.
+- O Mestre diz quantos dias de caminho a viagem tem. Num dia de ritmo Normal o grupo vence 1 dia de caminho, no Cauteloso vence meio e no Forçado, um e meio. Terreno Difícil corta o dia pela metade.
 
 - Cada personagem faz um papel por dia: Guia, Batedor, Forrageiro ou Vigia. Cada papel tem o seu teste.
 
@@ -1720,7 +1648,7 @@ Esta regra é para quando o grupo viaja por conta própria. Cada dia de viagem v
 
 - **Ritmo e papéis.** O grupo escolhe o ritmo do dia e quem faz cada papel.
 
-- **O caminho.** O Guia testa contra a DT do terreno, e o resultado diz quanto do dia vira caminho.
+- **O caminho.** O Guia testa contra a DT do terreno. Passou, o dia rende o que o ritmo e o terreno dão; falhou, rende metade.
 
 - **O que a estrada traz.** O Mestre rola o evento do dia. Se for um encontro, o resultado do Batedor diz quem vê quem primeiro.
 
@@ -1732,33 +1660,33 @@ Cada dia de viagem passa no calendário do mundo, e o que acontece no mundo cont
 
 ### Ritmo
 
-- Ritmo | Caminho do dia | Efeito
+- Ritmo | O dia rende | Efeito
 
-- Cauteloso | metade | Guia e Batedor têm vantagem, e o Forrageiro busca sem desvantagem.
+- Cauteloso | meio dia de caminho | Guia e Batedor têm vantagem, e o Forrageiro busca sem desvantagem.
 
-- Normal | inteiro | Sem ajuste. O Forrageiro busca com desvantagem, porque procura andando.
+- Normal | 1 dia de caminho | Sem ajuste. O Forrageiro busca com desvantagem, porque procura andando.
 
-- Forçado | uma vez e meia | Sem Batedor nem Forrageiro. No fim do dia, Fortitude contra a DT Padrão do nível do grupo ou 1 de Cansaço.
+- Forçado | 1 dia e meio de caminho | Sem Batedor nem Forrageiro. No fim do dia, Fortitude contra a DT Padrão do nível do grupo ou 1 de Cansaço.
 
 ### Terreno
 
-- Terreno | DT do Guia | Caminho do dia | Onde
+- Terreno | DT do Guia | O dia rende | Onde
 
-- Estrada | Sem teste | inteiro | Estrada calçada, trilho do trem, rio com margem limpa.
+- Fácil | Sem teste | normal | Estrada, trilha marcada, campo aberto, rio com margem limpa.
 
-- Trilha | 10 | inteiro | Trilha de caçador, campo aberto, litoral.
+- Ermo | 15 | normal | Mata fechada, colinas, charneca e litoral sem caminho marcado.
 
-- Ermo | 15 | três quartos | Mata fechada, colinas, charneca sem caminho marcado.
+- Difícil | 20 | metade | Montanha, pântano, deserto, neve funda, névoa que não levanta.
 
-- Difícil | 20 | metade | Montanha, pântano, deserto, neve funda.
-
-- Sem referência | 25 | metade | Névoa que não levanta, mar de dunas à noite, um lugar que muda de forma.
-
-- **Terreno e ritmo se multiplicam.** No Ermo, a pé e no ritmo Normal, o grupo anda 23 km.
+- **Quantos dias de caminho:** um dia de caminho é uns 30 km a pé, 50 km de montaria ou 25 km de carroça. O Mestre faz essa conta uma vez, antes de partir, e diz o número ao grupo.
 
 - **O grupo anda no passo de quem está mais devagar.** Um personagem a pé segura a caravana inteira.
 
 - **Viagem por água ou pelo ar** usa o veículo (Condução e Tripulação), e o Guia testa Pilotagem no lugar de Sobrevivência quando não há referência.
+
+**Exemplo:**
+
+A cidade fica a 4 dias de caminho, atravessando mata fechada (Ermo). No ritmo Normal, o grupo chega em 4 dias se o Guia passar em todos os testes. No segundo dia o Guia falha: o dia rende meio dia de caminho, e a viagem passa a levar 5 dias.
 
 ### Papéis
 
@@ -1766,7 +1694,7 @@ Cada personagem faz um papel por dia. Com gente de menos, um personagem pode faz
 
 - Papel | Teste, e o que ele decide
 
-- Guia | Sobrevivência contra a DT do terreno.Sucesso: O grupo anda o caminho do ritmo. Falha: Anda metade. Falhar por 5 ou mais perde o dia inteiro, e o grupo só percebe quando ele acaba.
+- Guia | Sobrevivência contra a DT do terreno.Sucesso: O dia rende o que o ritmo e o terreno dão. Falha: O grupo se atrasa, e o dia rende metade.
 
 - Batedor | Percepção contra a DT Padrão, ou Furtividade para passar sem ser visto.Sucesso: Se o dia trouxer um encontro, o grupo vê primeiro e escolhe: evitar, esperar, emboscar ou chegar conversando. Falha: O encontro vê vocês primeiro. Falha crítica deixa o grupo Surpreendido se ele for hostil.
 
@@ -2428,7 +2356,7 @@ Quem morre vai para Arkarin, e de lá quase ninguém volta. Voltar é possível,
 
 **Status:** Regra oficial
 
-Você escolhe o risco antes do dado. Deu certo, virou cena; deu errado, virou problema, e o problema nunca encerra o combate sozinho.
+Uma jogada de cinema por turno: você descreve o que faz, escolhe um de três riscos antes do dado e ganha um bônus se acertar ou paga um preço se errar.
 
 Descreva uma jogada de cinema que caiba na cena e escolha o risco **antes** de rolar. A descrição tem que mudar alguma coisa na ficção: pular do lustre, chutar a mesa no meio do caminho, usar o sujeito como escudo. Dizer "uso Arriscado" e rolar o dado não é Coreografia.
 
@@ -2436,25 +2364,21 @@ Descreva uma jogada de cinema que caiba na cena e escolha o risco **antes** de r
 
 - Coreografia é uma jogada de cinema: você descreve algo que muda a cena e escolhe o risco **antes** de rolar. Uma por turno.
 
-- São cinco riscos, de Seguro a Tudo ou Nada. Quanto maior o prêmio no acerto, pior a conta no erro.
+- São três riscos: Ousado, Arriscado e Tudo ou Nada. Quanto maior o prêmio no acerto, pior a conta no erro.
 
-- Perigoso e Tudo ou Nada valem uma vez por cena cada um.
+- Tudo ou Nada vale uma vez por cena.
 
 - Se a descrição não muda nada na cena, o Mestre pode negar.
 
-### Níveis de risco
+### Riscos
 
-- Risco | Se tiver sucesso | Se falhar
+- Risco | Se acertar | Se errar
 
-- Seguro | Reposicione-se 1,5 m após a ação. | Sem consequência adicional.
+- Ousado | +2 no teste e +2 no dano. | Você fica Exposto: −2 de Defesa até o seu próximo turno.
 
-- Ousado | +2 no teste e +2 no dano. | Fica Exposto: −2 Defesa até seu próximo turno.
+- Arriscado | Vantagem no teste e +1 dado da arma no dano. | Você sofre 1d8 de dano e perde a Ação de Movimento do turno.
 
-- Arriscado | Vantagem e +1 dado da arma no dano. | Sofre 1d8 de dano e perde a ação de movimento.
-
-- Perigoso | O ataque se torna crítico se acertar. | Cai e o inimigo recebe vantagem no próximo ataque contra você. Uma vez por cena.
-
-- Tudo ou Nada | Crítico com dados maximizados. | Sofre um crítico do inimigo e recebe Ferido 1. Uma vez por cena.
+- Tudo ou Nada | O ataque é crítico. Uma vez por cena. | O próximo ataque que acertar você, até o começo do seu próximo turno, é crítico.
 
 Se a descrição não muda nada na cena, ou se é a mesma de sempre só para pegar o bônus, o Mestre pode negar a Coreografia.
 
@@ -2472,7 +2396,7 @@ Descanso é como você recupera Vida, Mana, Estamina e Sanidade e como baixa o C
 
 - Um descanso completo dura 8 horas, e a qualidade (de Péssima a Excelente) decide quanto de Vida, Mana, Estamina e Sanidade volta e quanto Cansaço sai.
 
-- Relaxar é uma hora em segurança: recupera 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina, uma vez entre dois descansos completos.
+- Relaxar é uma hora em segurança: recupera um quarto da Mana máxima e um quarto da Estamina máxima, uma vez entre dois descansos completos.
 
 - O Cansaço vai de 0 a 6, sem meio-termo. Combate intenso, seis horas de treino e uma noite em claro valem 1 cada.
 
@@ -2508,9 +2432,9 @@ Uma personagem com 80 de Vida máxima, 40 de Mana e 20 de Estamina dorme 8 horas
 
 ### Relaxar
 
-Recupere 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina
+Recupere 25% da Mana máxima e 25% da Estamina máxima
 
-- Uma rolagem só: o mesmo valor volta para a Mana e para a Estamina, cada uma até o próprio máximo.
+- Não rola dado. A conta é em porcentagem, como no descanso completo, e arredonda para cima.
 
 - Exige uma hora em segurança relativa, e vale uma vez só entre dois descansos completos.
 
@@ -3587,7 +3511,7 @@ Armas
 
 - Margem Ampla | Comum | 1 | 70 L | Nenhum | Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, para não furar a regra de margem larga com multiplicador alto.
 
-- Coreografada | Comum | 1 | 70 L | Nenhum | Ao falhar numa Coreografia de risco Ousado ou maior com esta arma, sofra a consequência do risco imediatamente abaixo. Não vale para Tudo ou Nada.
+- Coreografada | Comum | 1 | 70 L | Nenhum | Ao falhar numa Coreografia Arriscada com esta arma, você sofre só a consequência do Ousado. Não vale para Tudo ou Nada.
 
 - Drenante | Comum | 1 | 70 L | Nenhum | Uma vez por turno, ao acertar, o alvo perde 1d4 de Mana.
 
@@ -5281,7 +5205,7 @@ Condições que duram mais que uma cena já vêm escritas, para ninguém precisa
 
 - Manqueira | Permanente. | Desvantagem em Acrobacia e em Atletismo para saltar. Em perseguição a pé, o teste oposto sofre -2. | Cirurgia de Cura DT 20 pode corrigir a perna, ao custo de 3 descansos de recuperação. Implante ou Regeneração também encerram.
 
-- Pulmões Danificados | Permanente. | Desvantagem em Fortitude contra fumaça, gases e afogamento. Esforço longo, como correr ou nadar por uma cena, exige Fortitude DT 12 ou +1 Cansaço. | Só cura de Fluxo explícita, implante respiratório ou resolução na história encerra.
+- Pulmões Danificados | Permanente. | Sem ar, cada rodada custa o dobro de Estamina, e você tem desvantagem em Fortitude contra fumaça e gases. Esforço longo, como correr ou nadar por uma cena, exige Fortitude DT 12 ou +1 Cansaço. | Só cura de Fluxo explícita, implante respiratório ou resolução na história encerra.
 
 - Sensibilidade à Luz | Permanente. | Desvantagem em Percepção sob luz forte. Lentes escuras ou capuz removem a desvantagem, mas o personagem ouve melhor do que vê nesses lugares. | Tratamento com Cura DT 18 ao longo de um arco deixa a sensibilidade só como um incômodo, sem efeito mecânico.
 
@@ -5684,7 +5608,7 @@ Esta página reúne os perigos que machucam sem ser um ataque: queda, falta de a
 
 - **Queda:** 1d6 de impacto a cada 3 m, até 20d6. Quem pulou por vontade própria pode cair de pé com Acrobacia.
 
-- **Fôlego:** sem ar, cada rodada gasta um décimo da sua Estamina máxima. Quando ela acaba, vem o teste de Fortitude, e quem falha apaga e começa a morrer.
+- **Fôlego:** sem ar, cada rodada gasta um décimo da sua Estamina máxima. Quando ela acaba, a próxima rodada sem ar faz você apagar e começar a morrer.
 
 - **Fome e sede:** uma porção de comida e água por dia. Sem água, 1 de Cansaço por dia; sem comida, depois de alguns dias, também.
 
@@ -5723,25 +5647,23 @@ Uma personagem de nível 5, com 26 de Vida, despenca de uma ponte de 12 m: 4d6 d
 
 ### Fôlego
 
-Debaixo d'água, num quarto tomado de fumaça ou com a mão de alguém fechando a garganta, o corpo paga o ar com o mesmo combustível do esforço: a Estamina.
+Debaixo d'água, num quarto tomado de fumaça ou com a mão de alguém fechando a garganta, você segura o ar gastando Estamina.
 
-Sem ar, cada rodada custa ⌈Estamina máxima ÷ 10⌉ de Estamina
+Sem ar, cada rodada custa 10% da sua Estamina máxima, ou 20% com esforço
 
 - **Com a Estamina cheia,** isso dá até dez rodadas, mais ou menos um minuto. Quem já gastou Estamina na luta tem menos ar.
 
-- **Esforço dobra o custo:** a rodada em que você atacou, correu ou nadou com pressa custa duas.
+- **Esforço dobra o custo:** a rodada em que você atacou, correu ou nadou com pressa custa 20%.
 
-- **Sem tempo de puxar o ar** (caiu na água de surpresa, a sala encheu de fumaça de uma vez), a primeira rodada custa o triplo.
+- **Arredonde para cima.** Toda rodada sem ar custa pelo menos 1 de Estamina.
 
 - **Voltar a respirar não devolve nada na hora.** A Estamina gasta segurando o fôlego volta como qualquer outra, no Descanso.
 
 - **Quem não respira,** por raça, forma ou efeito, ignora esta seção. Quem respira debaixo d'água ignora dentro da água.
 
-Quando a Estamina acaba e você continua sem ar:
+Quando a Estamina acaba e você passa mais uma rodada sem ar:
 
-- No fim de cada turno, teste Fortitude contra DT 10 mais o ajuste do seu nível. A DT sobe 2 a cada rodada seguinte.
-
-- Na primeira falha você apaga: fica Inconsciente, a Vida cai a 0 e você recebe Morrendo 1.
+- Você apaga: fica Inconsciente, a Vida cai a 0 e você recebe Morrendo 1. Não há teste.
 
 - Enquanto continuar sem ar, o Morrendo sobe 1 no fim de cada turno seu, sem teste, e ninguém consegue estabilizar você.
 
@@ -5751,7 +5673,7 @@ Quando a Estamina acaba e você continua sem ar:
 
 - **Gás venenoso** é uma aflição (Venenos, Doenças e Vícios). Prender o fôlego evita a exposição enquanto o ar durar.
 
-- **Pulmões Danificados** dá desvantagem nesses testes de Fortitude, como diz a condição.
+- **Pulmões Danificados** dobra o custo de cada rodada sem ar, como diz a condição.
 
 **Exemplo:**
 

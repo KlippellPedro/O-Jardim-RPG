@@ -67,7 +67,6 @@ export const AbaDescanso = ({ character, onUpdate, onAbrirAba }: AbaDescansoProp
   const campanha = useAuthStore((state) => state.campanhaAtiva);
   const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador'
     || campanha?.papel === 'mestre' || campanha?.papel === 'assistente';
-  const atributos = ficha.atributosFinais || character.atributosFinais || {};
   const derivados = character.derivados || ficha.derivados || {};
   const [qualidade, setQualidade] = useState<QualidadeDescanso>('boa');
   const [tratamento, setTratamento] = useState(false);
@@ -145,19 +144,11 @@ export const AbaDescanso = ({ character, onUpdate, onAbrirAba }: AbaDescansoProp
   };
 
   const relaxar = () => {
-    const dado = Math.floor(Math.random() * 6) + 1;
-    const resultado = aplicarRelaxamento(
-      status,
-      maximos.mana,
-      Number(atributos.sabedoria) || 10,
-      Number(ficha.nivel) || Number(character.nivel) || 1,
-      dado,
-      maximos.estamina,
-    );
+    const resultado = aplicarRelaxamento(status, maximos.mana, maximos.estamina);
     if (resultado.erro) setMensagem(resultado.erro);
     else {
       onUpdate(['ficha', 'status'], resultado.status);
-      setMensagem(`Relaxamento: d6 = ${dado}; ${resultado.recuperado} Mana e ${resultado.recuperadoEstamina} Estamina recuperadas.`);
+      setMensagem(`Relaxamento: ${resultado.recuperado} Mana e ${resultado.recuperadoEstamina} Estamina recuperadas (um quarto do máximo).`);
     }
   };
 

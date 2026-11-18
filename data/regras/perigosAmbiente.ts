@@ -37,23 +37,16 @@ export function dadosDeQueda(metros: number): number {
 /** Sem ar, cada rodada custa esta fração da Estamina máxima: de tanque cheio,
  *  dez rodadas, mais ou menos um minuto de ficção. */
 export const FRACAO_DE_FOLEGO_POR_RODADA = 0.1;
-export const DT_INICIAL_DE_SUFOCAR = 10;
-export const PASSO_DA_DT_DE_SUFOCAR = 2;
 
-/** Estamina que uma rodada sem ar custa. Esforço dobra; ser pego sem tempo de
- *  puxar o ar faz a primeira rodada custar o triplo. */
+/** Estamina que uma rodada sem ar custa, arredondada para cima e nunca menos
+ *  de 1. Esforço dobra, e Pulmões Danificados dobra de novo. Sem teste: quando
+ *  a Estamina acaba, a próxima rodada sem ar apaga o personagem. */
 export function custoDeFolego(
   estaminaMaxima: number,
-  { esforco = false, surpresa = false }: { esforco?: boolean; surpresa?: boolean } = {},
+  { esforco = false, pulmoesDanificados = false }: { esforco?: boolean; pulmoesDanificados?: boolean } = {},
 ): number {
   const base = Math.max(1, Math.ceil(estaminaMaxima * FRACAO_DE_FOLEGO_POR_RODADA));
-  return base * (surpresa ? 3 : 1) * (esforco ? 2 : 1);
-}
-
-/** DT de Fortitude na enésima rodada sem ar depois que a Estamina acabou, no
- *  nível 1: quem usa soma o ajuste de nível. */
-export function dtDeSufocar(rodadaSemEstamina: number): number {
-  return DT_INICIAL_DE_SUFOCAR + PASSO_DA_DT_DE_SUFOCAR * Math.max(0, Math.trunc(rodadaSemEstamina) - 1);
+  return base * (esforco ? 2 : 1) * (pulmoesDanificados ? 2 : 1);
 }
 
 // ---------------------------------------------------------- fome e sede
@@ -333,7 +326,7 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
     <div class="regras-resumo">
       <ul>
         <li><strong>Queda:</strong> 1d6 de impacto a cada ${METROS_POR_DADO_DE_QUEDA} m, até ${DADOS_MAXIMOS_DE_QUEDA}d6. Quem pulou por vontade própria pode cair de pé com Acrobacia.</li>
-        <li><strong>Fôlego:</strong> sem ar, cada rodada gasta um décimo da sua Estamina máxima. Quando ela acaba, vem o teste de Fortitude, e quem falha apaga e começa a morrer.</li>
+        <li><strong>Fôlego:</strong> sem ar, cada rodada gasta um décimo da sua Estamina máxima. Quando ela acaba, a próxima rodada sem ar faz você apagar e começar a morrer.</li>
         <li><strong>Fome e sede:</strong> uma porção de comida e água por dia. Sem água, 1 de Cansaço por dia; sem comida, depois de alguns dias, também.</li>
         <li><strong>Clima:</strong> Severo e Extremo cobram Fortitude e Cansaço, e o Mortal tira Vida a cada turno. Roupa certa, Traje e abrigo baixam o grau.</li>
         <li><strong>Armadilhas:</strong> cada uma tem nível e peso (Leve, Séria ou Mortal). Percepção acha, Ladinagem, Misticismo ou Tecnologia desarmam, e a tabela dá DT, ataque e dano.</li>
@@ -359,26 +352,25 @@ export const REGRA_PERIGOS: RegraTopicoDe<'Combate e Mecânicas'> = {
     </div>
 
     <h3 class="regras-subtitle">Fôlego</h3>
-    <p>Debaixo d'água, num quarto tomado de fumaça ou com a mão de alguém fechando a garganta, o corpo paga o ar com o mesmo combustível do esforço: a Estamina.</p>
-    <div class="regras-formula">Sem ar, cada rodada custa ⌈Estamina máxima ÷ 10⌉ de Estamina</div>
+    <p>Debaixo d'água, num quarto tomado de fumaça ou com a mão de alguém fechando a garganta, você segura o ar gastando Estamina.</p>
+    <div class="regras-formula">Sem ar, cada rodada custa 10% da sua Estamina máxima, ou 20% com esforço</div>
     <ul class="regras-list">
       <li><strong>Com a Estamina cheia,</strong> isso dá até dez rodadas, mais ou menos um minuto. Quem já gastou Estamina na luta tem menos ar.</li>
-      <li><strong>Esforço dobra o custo:</strong> a rodada em que você atacou, correu ou nadou com pressa custa duas.</li>
-      <li><strong>Sem tempo de puxar o ar</strong> (caiu na água de surpresa, a sala encheu de fumaça de uma vez), a primeira rodada custa o triplo.</li>
+      <li><strong>Esforço dobra o custo:</strong> a rodada em que você atacou, correu ou nadou com pressa custa 20%.</li>
+      <li><strong>Arredonde para cima.</strong> Toda rodada sem ar custa pelo menos 1 de Estamina.</li>
       <li><strong>Voltar a respirar não devolve nada na hora.</strong> A Estamina gasta segurando o fôlego volta como qualquer outra, no <span class="regras-ref regras-ref--descanso">Descanso</span>.</li>
       <li><strong>Quem não respira,</strong> por raça, forma ou efeito, ignora esta seção. Quem respira debaixo d'água ignora dentro da água.</li>
     </ul>
-    <p>Quando a Estamina acaba e você continua sem ar:</p>
+    <p>Quando a Estamina acaba e você passa mais uma rodada sem ar:</p>
     <ol class="regras-steps">
-      <li>No fim de cada turno, teste Fortitude contra DT ${DT_INICIAL_DE_SUFOCAR} mais o ajuste do seu nível. A DT sobe ${PASSO_DA_DT_DE_SUFOCAR} a cada rodada seguinte.</li>
-      <li>Na primeira falha você apaga: fica Inconsciente, a Vida cai a 0 e você recebe Morrendo 1.</li>
+      <li>Você apaga: fica Inconsciente, a Vida cai a 0 e você recebe Morrendo 1. Não há teste.</li>
       <li>Enquanto continuar sem ar, o Morrendo sobe 1 no fim de cada turno seu, sem teste, e ninguém consegue estabilizar você.</li>
       <li>Tirado para o ar, você segue a regra normal de Morrendo, em <span class="regras-ref regras-ref--ferimentos">Ferimentos</span>.</li>
     </ol>
     <ul class="regras-list">
       <li><strong>Fumaça densa</strong> conta como sem ar para quem fica nela sem cobrir o rosto.</li>
       <li><strong>Gás venenoso</strong> é uma aflição (<span class="regras-ref regras-ref--aflicoes">Venenos, Doenças e Vícios</span>). Prender o fôlego evita a exposição enquanto o ar durar.</li>
-      <li><strong>Pulmões Danificados</strong> dá desvantagem nesses testes de Fortitude, como diz a condição.</li>
+      <li><strong>Pulmões Danificados</strong> dobra o custo de cada rodada sem ar, como diz a condição.</li>
     </ul>
     <div class="regras-note regras-note--exemplo">
       <p>Um personagem com 30 de Estamina máxima gasta 3 por rodada sem ar. Depois de uma luta em que gastou 18, ele tem 12: quatro rodadas nadando com calma, ou duas nadando com pressa.</p>

@@ -11,7 +11,6 @@ import {
   custoDeFolego,
   danoDeClima,
   diasDeFolgaSemComida,
-  dtDeSufocar,
   grauEfetivoDeClima,
   type GrauDeClima,
   type IGrauDeClima,
@@ -37,8 +36,6 @@ export interface IFomeFicha {
 
 export interface IFolegoFicha {
   semAr: boolean;
-  /** Rodadas seguidas sem ar depois que a Estamina acabou. */
-  rodadasSufocando: number;
 }
 
 export interface IAmbienteFicha {
@@ -53,7 +50,7 @@ export const RESISTENCIA_DO_TRAJE = 5;
 export const AMBIENTE_PADRAO: IAmbienteFicha = {
   clima: { grau: null, tipo: 'frio', roupaCerta: false, traje: false, abrigo: false },
   fome: { diasSemComer: 0, diasSemBeber: 0 },
-  folego: { semAr: false, rodadasSufocando: 0 },
+  folego: { semAr: false },
 };
 
 const GRAUS_VALIDOS = new Set<string>(GRAUS_DE_CLIMA.map((grau) => grau.id));
@@ -82,7 +79,6 @@ export function normalizarAmbiente(bruto: unknown): IAmbienteFicha {
     },
     folego: {
       semAr: folego.semAr === true,
-      rodadasSufocando: inteiroPositivo(folego.rodadasSufocando),
     },
   };
 }
@@ -154,25 +150,27 @@ export function fomeOuSedePesando(fome: IFomeFicha, modConstituicao: number): bo
 
 // ----------------------------------------------------------------- fôlego
 
-export type RodadaSemAr = 'normal' | 'esforco' | 'surpresa';
+export type RodadaSemAr = 'normal' | 'esforco';
 
-export function custoDaRodadaSemAr(estaminaMaxima: number, rodada: RodadaSemAr): number {
-  return custoDeFolego(estaminaMaxima, { esforco: rodada === 'esforco', surpresa: rodada === 'surpresa' });
+export function custoDaRodadaSemAr(estaminaMaxima: number, rodada: RodadaSemAr, pulmoesDanificados = false): number {
+  return custoDeFolego(estaminaMaxima, { esforco: rodada === 'esforco', pulmoesDanificados });
 }
 
 /** Gasta a Estamina de uma rodada sem ar. Quando ela já está em 0, a rodada
- *  passa a pedir Fortitude, e quem chama deve contar `rodadasSufocando`. */
-export function gastarFolego(status: IStatusVital, estaminaMaxima: number, rodada: RodadaSemAr): { status: IStatusVital; sufocando: boolean } {
+ *  apaga o personagem (`sufocando`), e quem chama aplica `apagarSemAr`. */
+export function gastarFolego(
+  status: IStatusVital,
+  estaminaMaxima: number,
+  rodada: RodadaSemAr,
+  pulmoesDanificados = false,
+): { status: IStatusVital; sufocando: boolean } {
   const atual = Math.max(0, Number(status.estaminaAtual ?? estaminaMaxima) || 0);
   if (atual <= 0) return { status, sufocando: true };
-  const custo = custoDaRodadaSemAr(estaminaMaxima, rodada);
+  const custo = custoDaRodadaSemAr(estaminaMaxima, rodada, pulmoesDanificados);
   return { status: { ...status, estaminaAtual: Math.max(0, atual - custo) }, sufocando: false };
 }
 
-/** A DT do livro é a do nível 1; a ficha soma o ajuste do nível do personagem. */
-export const dtDaRodadaSufocando = (rodadasSufocando: number, ajusteDeDt = 0) => dtDeSufocar(rodadasSufocando + 1) + ajusteDeDt;
-
-/** A primeira falha sem ar: a Vida cai a 0 e começa o Morrendo 1. */
+/** A rodada sem ar depois que a Estamina acabou: a Vida cai a 0 e começa o Morrendo 1. */
 export function apagarSemAr(status: IStatusVital, vidaMaxima: number, constituicao: unknown): IStatusVital {
   const vida = Number(status.vidaAtual ?? vidaMaxima) || 0;
   if (vida > 0) return atualizarStatusVital(status, 'vidaAtual', -vida, vidaMaxima, constituicao, { ignorarTemporario: true });

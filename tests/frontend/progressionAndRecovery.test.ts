@@ -87,8 +87,8 @@ test('descanso recupera percentuais, Sanidade, Cansaço e trata Ferido uma vez',
     { vida: resultado.vidaAtual, mana: resultado.manaAtual, sanidade: resultado.sanidadeAtual, cansaco: resultado.cansacoAtual, ferido: resultado.ferido },
     { vida: 60, mana: 20, sanidade: 50, cansaco: 2, ferido: 1 },
   );
-  const relaxado = aplicarRelaxamento({ manaAtual: 2 }, 20, 14, 8, 4);
-  assert.equal(relaxado.recuperado, 8);
+  const relaxado = aplicarRelaxamento({ manaAtual: 2 }, 20);
+  assert.equal(relaxado.recuperado, 5);
   assert.equal(relaxado.status.relaxouDesdeDescanso, true);
 });
 

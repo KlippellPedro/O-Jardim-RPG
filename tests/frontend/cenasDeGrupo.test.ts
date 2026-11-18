@@ -2,12 +2,13 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   BONUS_MAXIMO_DE_VANTAGEM,
-  LINHAS_DE_DANO_NA_BATALHA,
   ORDENS_DE_BATALHA,
   PARTES_MAXIMAS_POR_FEITOS,
+  REGRA_BATALHA,
   TAMANHOS_DE_EXERCITO,
   bonusDasOrdens,
   bonusDeVantagens,
+  perdaDoFeito,
   perdasDoChoque,
   pontosDeMoral,
 } from '../../data/regras/batalha';
@@ -22,7 +23,7 @@ import {
   PAPEIS_DE_VIAGEM,
   RITMOS_DE_VIAGEM,
   TERRENOS_DE_VIAGEM,
-  caminhoDoDia,
+  diasDeCaminho,
   resultadoDoGuia,
 } from '../../data/regras/viagem';
 import { CONDICOES_OFICIAIS } from '../../data/regras/condicoes';
@@ -30,55 +31,52 @@ import { GRUPOS_NAVEGACAO } from '../../data/regras/navegacao';
 import { REGRA_AFLICOES } from '../../data/regras/aflicoes';
 import { REGRAS_OFICIAIS } from '../../data/regras/regras';
 import { FATORES_DESCANSO } from '../../src/services/descansoService';
-import { mediaDeDados } from '../../src/services/referenciaBalanceamento';
 import catalogoLoja from '../../data/loja/catalogo.json';
 import classesData from '../../data/ficha/classes.json';
 
-test('viagem: terreno e ritmo se multiplicam sobre o dia de estrada', () => {
-  assert.equal(caminhoDoDia('pe', 'estrada'), 30);
-  assert.equal(caminhoDoDia('pe', 'ermo'), 23);
-  assert.equal(caminhoDoDia('montaria', 'dificil', 'forcado'), 38);
-  assert.equal(caminhoDoDia('pe', 'estrada', 'cauteloso'), 15);
+test('viagem: o dia rende pelo ritmo, e só o terreno Difícil corta pela metade', () => {
+  assert.equal(diasDeCaminho('facil'), 1);
+  assert.equal(diasDeCaminho('ermo'), 1);
+  assert.equal(diasDeCaminho('dificil'), 0.5);
+  assert.equal(diasDeCaminho('facil', 'forcado'), 1.5);
+  assert.equal(diasDeCaminho('facil', 'cauteloso'), 0.5);
   assert.deepEqual(RITMOS_DE_VIAGEM.map((ritmo) => ritmo.fracao), [0.5, 1, 1.5]);
+  assert.deepEqual(TERRENOS_DE_VIAGEM.map((terreno) => terreno.titulo), ['Fácil', 'Ermo', 'Difícil']);
   // Quanto pior o terreno, mais alta a DT do Guia.
   const dts = TERRENOS_DE_VIAGEM.map((terreno) => terreno.dtGuia ?? 0);
   assert.deepEqual(dts, [...dts].sort((a, b) => a - b));
+  assert.doesNotMatch(REGRAS_OFICIAIS.viagem.corpo, /se multiplicam/);
 });
 
-test('viagem: o Guia anda o dia, atrasa na falha e se perde falhando por 5', () => {
-  assert.equal(resultadoDoGuia(3, null), 'no-caminho', 'estrada não pede teste');
+test('viagem: o Guia faz o dia render inteiro ou metade', () => {
+  assert.equal(resultadoDoGuia(3, null), 'no-caminho', 'terreno Fácil não pede teste');
   assert.equal(resultadoDoGuia(15, 15), 'no-caminho');
-  assert.equal(resultadoDoGuia(11, 15), 'atrasou');
-  assert.equal(resultadoDoGuia(10, 15), 'perdido');
-  assert.equal(resultadoDoGuia(30, 15, { falhaCritica: true }), 'perdido');
-  assert.deepEqual(Object.values(FRACAO_DO_DIA_PELO_GUIA), [1, 0.5, 0]);
+  assert.equal(resultadoDoGuia(10, 15), 'atrasou');
+  assert.deepEqual(Object.values(FRACAO_DO_DIA_PELO_GUIA), [1, 0.5]);
   assert.deepEqual(PAPEIS_DE_VIAGEM.map((papel) => papel.titulo), ['Guia', 'Batedor', 'Forrageiro', 'Vigia']);
 });
 
-test('infiltração: sucesso avança, falha pinta o Alerta e forçar cobra 1 a mais', () => {
-  const inicio = { etapas: 4, alerta: 0, alertaMaximo: 6 };
-  assert.deepEqual(resolverRodadaDeInfiltracao(inicio, { sucesso: true }), { etapas: 3, alerta: 0, alertaMaximo: 6, desfecho: null });
+test('infiltração: sucesso avança, toda falha marca 1 de Alerta e forçar marca 1 a mais', () => {
+  const inicio = { etapas: 4, alerta: 0, alertaMaximo: 4 };
+  assert.deepEqual(resolverRodadaDeInfiltracao(inicio, { sucesso: true }), { etapas: 3, alerta: 0, alertaMaximo: 4, desfecho: null });
   assert.equal(resolverRodadaDeInfiltracao(inicio, { sucesso: false }).alerta, 1);
-  assert.equal(resolverRodadaDeInfiltracao(inicio, { sucesso: false, falhaCritica: true }).alerta, 2);
   const forcado = resolverRodadaDeInfiltracao(inicio, { sucesso: false, forcar: true });
   assert.equal(forcado.etapas, 3);
   assert.equal(forcado.alerta, 2);
-  // Distrair e Estudar não avançam nem quando dão certo.
+  // Preparar o terreno não avança nem quando dá certo.
   assert.equal(resolverRodadaDeInfiltracao(inicio, { sucesso: true, avanca: false }).etapas, 4);
-  // Calar alguém que falha sobe 2.
-  assert.equal(resolverRodadaDeInfiltracao(inicio, { sucesso: false, custoDeAlerta: 2 }).alerta, 2);
 });
 
-test('infiltração: o Alerta cheio vence até a última etapa, e metade deixa desconfiado', () => {
-  const beirada = { etapas: 1, alerta: 5, alertaMaximo: 6 };
+test('infiltração: o lugar aguenta 3, 4 ou 5 falhas, e a última toca o alarme', () => {
+  const beirada = { etapas: 1, alerta: 3, alertaMaximo: 4 };
   const forcou = resolverRodadaDeInfiltracao(beirada, { sucesso: false, forcar: true });
   assert.equal(forcou.desfecho, 'alarme');
-  assert.equal(forcou.alerta, 6, 'o Alerta nunca passa do relógio');
+  assert.equal(forcou.alerta, 4, 'o Alerta nunca passa do máximo');
   assert.equal(resolverRodadaDeInfiltracao(beirada, { sucesso: true }).desfecho, 'saiu');
-  assert.equal(estadoDoAlerta(2, 6), 'calmo');
-  assert.equal(estadoDoAlerta(3, 6), 'desconfianca');
-  assert.equal(estadoDoAlerta(6, 6), 'alarme');
-  assert.deepEqual(NIVEIS_DE_VIGILANCIA.map((nivel) => nivel.alerta), [8, 6, 4]);
+  assert.equal(estadoDoAlerta(3, 4), 'calmo');
+  assert.equal(estadoDoAlerta(4, 4), 'alarme');
+  assert.deepEqual(NIVEIS_DE_VIGILANCIA.map((nivel) => nivel.alerta), [5, 4, 3]);
+  assert.doesNotMatch(REGRAS_OFICIAIS.infiltracao.corpo, /Desconfiança/);
 });
 
 test('investigação: a pista vem sempre e o dado decide o extra e o custo', () => {
@@ -113,10 +111,12 @@ test('batalha: perdas do choque, teto das vantagens e pontos de moral', () => {
   assert.deepEqual(pontosDeMoral(10), [5, 2]);
   assert.deepEqual(TAMANHOS_DE_EXERCITO.map((tamanho) => tamanho.forca), [4, 6, 8, 10]);
   assert.equal(PARTES_MAXIMAS_POR_FEITOS, 2);
-  // Falhar um feito sempre machuca mais que acertar.
-  LINHAS_DE_DANO_NA_BATALHA.forEach((linha) => {
-    assert.ok((mediaDeDados(linha.dano.seria) ?? 0) > (mediaDeDados(linha.dano.leve) ?? 0), `nível ${linha.nivel}`);
-  });
+  // A Vida perdida no feito é fração da Vida máxima, e falhar sempre machuca mais.
+  assert.equal(perdaDoFeito(60, true), 6);
+  assert.equal(perdaDoFeito(60, false), 15);
+  assert.equal(perdaDoFeito(33, true), 4, 'arredonda para cima');
+  [10, 47, 200].forEach((vida) => assert.ok(perdaDoFeito(vida, false) > perdaDoFeito(vida, true)));
+  assert.doesNotMatch(REGRA_BATALHA.corpo, /DT 10 \+ metade do nível/);
 });
 
 test('as quatro cenas novas moram nos capítulos certos e citam só o que existe', () => {

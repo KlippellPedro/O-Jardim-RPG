@@ -126,33 +126,33 @@ test('descanso sem máximo de Estamina não escreve campo novo na ficha', () => 
   assert.equal('estaminaTemporaria' in resultado, false);
 });
 
-test('Relaxar rola uma vez e o mesmo valor volta para Mana e para Estamina', () => {
-  // d6 = 4, Sabedoria 14 (+2), nível 8 (+2) = 8 recuperados em cada pool.
-  const resultado = aplicarRelaxamento({ manaAtual: 2, estaminaAtual: 1 }, 20, 14, 8, 4, 10);
-  assert.equal(resultado.recuperado, 8);
-  assert.equal(resultado.recuperadoEstamina, 8);
-  assert.equal(resultado.status.manaAtual, 10);
-  assert.equal(resultado.status.estaminaAtual, 9);
+test('Relaxar devolve um quarto da Mana e um quarto da Estamina máximas', () => {
+  // Mana máxima 20 e Estamina máxima 10: 5 e 3 (arredonda para cima, como o descanso).
+  const resultado = aplicarRelaxamento({ manaAtual: 2, estaminaAtual: 1 }, 20, 10);
+  assert.equal(resultado.recuperado, 5);
+  assert.equal(resultado.recuperadoEstamina, 3);
+  assert.equal(resultado.status.manaAtual, 7);
+  assert.equal(resultado.status.estaminaAtual, 4);
   assert.equal(resultado.status.relaxouDesdeDescanso, true);
 });
 
 test('Relaxar respeita o máximo de cada pool separadamente', () => {
-  const resultado = aplicarRelaxamento({ manaAtual: 2, estaminaAtual: 8 }, 20, 14, 8, 4, 10);
-  assert.equal(resultado.recuperado, 8, 'Mana tem folga pra receber tudo');
-  assert.equal(resultado.recuperadoEstamina, 2, 'Estamina só cabe mais 2 até o máximo');
+  const resultado = aplicarRelaxamento({ manaAtual: 2, estaminaAtual: 9 }, 20, 10);
+  assert.equal(resultado.recuperado, 5, 'Mana tem folga pra receber tudo');
+  assert.equal(resultado.recuperadoEstamina, 1, 'Estamina só cabe mais 1 até o máximo');
   assert.equal(resultado.status.estaminaAtual, 10);
 });
 
 test('Relaxar sem máximo de Estamina continua mexendo só na Mana', () => {
-  const resultado = aplicarRelaxamento({ manaAtual: 2 }, 20, 14, 8, 4);
-  assert.equal(resultado.recuperado, 8);
+  const resultado = aplicarRelaxamento({ manaAtual: 2 }, 20);
+  assert.equal(resultado.recuperado, 5);
   assert.equal(resultado.recuperadoEstamina, 0);
   assert.equal('estaminaAtual' in resultado.status, false);
 });
 
 test('Relaxar continua limitado a uma vez entre descansos, para os dois recursos', () => {
-  const primeira = aplicarRelaxamento({ manaAtual: 0, estaminaAtual: 0 }, 20, 14, 8, 4, 10);
-  const segunda = aplicarRelaxamento(primeira.status, 20, 14, 8, 4, 10);
+  const primeira = aplicarRelaxamento({ manaAtual: 0, estaminaAtual: 0 }, 20, 10);
+  const segunda = aplicarRelaxamento(primeira.status, 20, 10);
   assert.ok(segunda.erro);
   assert.equal(segunda.recuperadoEstamina, 0);
   assert.equal(segunda.status.estaminaAtual, primeira.status.estaminaAtual);
